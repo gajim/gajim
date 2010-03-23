@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Gajim - A Jabber Instant Messager 0.13.10.2-dev\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-03-19 15:01+0100\n"
-"PO-Revision-Date: 2010-03-23 14:26+0100\n"
+"PO-Revision-Date: 2010-03-23 21:34+0100\n"
 "Last-Translator: Ferdi Kunzmann <shegman@tablatures.de>\n"
 "Language-Team: Turkish\n"
 "MIME-Version: 1.0\n"
@@ -197,7 +197,7 @@ msgstr "Yönetim işlemleri"
 
 #: ../data/gui/accounts_window.ui.h:9
 msgid "Anonymous authentication"
-msgstr "Anonim doğrulama"
+msgstr "Kimliksiz kimlik doğrulaması"
 
 #: ../data/gui/accounts_window.ui.h:10
 msgid "Auto-reconnect when connection is lost"
@@ -524,7 +524,7 @@ msgstr ""
 
 #: ../data/gui/advanced_configuration_window.ui.h:3
 msgid "Advanced Configuration Editor"
-msgstr "İlerlemiş ayarlama editörü"
+msgstr "İlerlemiş Ayarlama Editörü"
 
 #: ../data/gui/advanced_configuration_window.ui.h:4
 msgid "Filter:"
@@ -571,9 +571,8 @@ msgid " a window/tab opened with that contact "
 msgstr ""
 
 #: ../data/gui/advanced_notifications_window.ui.h:2
-#, fuzzy
 msgid "<b>Actions</b>"
-msgstr "Eylemler"
+msgstr "<b>Aksiyonlar</b>"
 
 #: ../data/gui/advanced_notifications_window.ui.h:3
 #, fuzzy
@@ -586,14 +585,12 @@ msgid "<b>Sounds</b>"
 msgstr "<b>Sesler</b>"
 
 #: ../data/gui/advanced_notifications_window.ui.h:5
-#, fuzzy
 msgid "Advanced Actions"
-msgstr "Özel Eylemler"
+msgstr "İlerlemiş aksiyonlar"
 
 #: ../data/gui/advanced_notifications_window.ui.h:6
-#, fuzzy
 msgid "Advanced Notifications Control"
-msgstr "Gelişmiş Görüntü Kontrolü"
+msgstr "İlerlemiş bildirim kontrolü"
 
 #: ../data/gui/advanced_notifications_window.ui.h:7
 msgid "All statuses"
@@ -634,14 +631,12 @@ msgid "File Transfer Started "
 msgstr "Dosya gönderme başlandı"
 
 #: ../data/gui/advanced_notifications_window.ui.h:16
-#, fuzzy
 msgid "Group Chat Message Highlight "
-msgstr "Geçersiz grup sohbet Jabber kimliği"
+msgstr "Grup Sohbet İleti Vurgula"
 
 #: ../data/gui/advanced_notifications_window.ui.h:17
-#, fuzzy
 msgid "Group Chat Message Received "
-msgstr "İleti alındığında sohbet başlar"
+msgstr "Grup Sohbet İleti Alındı"
 
 #: ../data/gui/advanced_notifications_window.ui.h:18
 msgid "Have "
@@ -653,9 +648,8 @@ msgid "Invisible"
 msgstr "Görünmez"
 
 #: ../data/gui/advanced_notifications_window.ui.h:20
-#, fuzzy
 msgid "Launch a command"
-msgstr "Kabuk ya da kabuk komutunu başlat\n"
+msgstr "Bir komut yürüt"
 
 #: ../data/gui/advanced_notifications_window.ui.h:21
 #: ../src/common/helpers.py:216
@@ -704,7 +698,7 @@ msgstr "Kişi listedeki olayları _engelle"
 
 #: ../data/gui/advanced_notifications_window.ui.h:32
 msgid "_Disable showing event in systray"
-msgstr ""
+msgstr "Sistem tepsisinde gösterilen olayları _engelle"
 
 #: ../data/gui/advanced_notifications_window.ui.h:33
 msgid "_Inform me with a popup window"
@@ -719,9 +713,8 @@ msgid "_Show event in roster"
 msgstr "Kişi listesindeki olayları göster"
 
 #: ../data/gui/advanced_notifications_window.ui.h:36
-#, fuzzy
 msgid "_Show event in systray"
-msgstr "Filtre Menüsünde Göster"
+msgstr "Sistem tepsisinde gösterilen olayları göster"
 
 #: ../data/gui/advanced_notifications_window.ui.h:37
 msgid "and I "
@@ -748,48 +741,42 @@ msgid "when I'm in"
 msgstr "ben burdaysam"
 
 #: ../data/gui/atom_entry_window.ui.h:1
-#, fuzzy
 msgid "Entry:"
-msgstr "girdi"
+msgstr "Kayıt:"
 
 #: ../data/gui/atom_entry_window.ui.h:2
 #, fuzzy
 msgid "Feed name:"
-msgstr "Dahili adı"
+msgstr "İlk Ad:"
 
 #: ../data/gui/atom_entry_window.ui.h:3
 msgid "Last modified:"
 msgstr "Son değişiklik:"
 
 #: ../data/gui/atom_entry_window.ui.h:4
-#, fuzzy
 msgid "New entry received"
-msgstr "  yeni Dosya Tablosu girdisi tanımlar\n"
+msgstr "Yeni kayıt alındı"
 
 #: ../data/gui/atom_entry_window.ui.h:5
 #: ../src/atom_window.py:124
-#, fuzzy
 msgid "You have received new entry:"
-msgstr "$_'de yeni postanız var"
+msgstr "Yeni bir kayıt alındı:"
 
 #: ../data/gui/blocked_contacts_window.ui.h:1
-#, fuzzy
 msgid "Blocked Contacts"
-msgstr "Kişiler/Adresler Rehberi"
+msgstr "Engellenmiş Kişiler"
 
 #: ../data/gui/change_activity_dialog.ui.h:1
 msgid "<b>Message:</b> "
 msgstr "<b>Mesaj:</b> "
 
 #: ../data/gui/change_activity_dialog.ui.h:2
-#, fuzzy
 msgid "Set Activity"
-msgstr "Çalışmayı sürdürür"
+msgstr "Etkinlik ayarla"
 
 #: ../data/gui/change_activity_dialog.ui.h:3
-#, fuzzy
 msgid "Set an activity"
-msgstr "Çalışmayı sürdürür"
+msgstr "Bir etkinlik ayarla"
 
 #: ../data/gui/change_mood_dialog.ui.h:1
 msgid "<b>Message:</b>"
@@ -817,9 +804,8 @@ msgstr "<b>Yeni durum ileti yaz</b>"
 
 #: ../data/gui/change_status_message_dialog.ui.h:2
 #: ../src/tooltips.py:657
-#, fuzzy
 msgid "Activity:"
-msgstr "&Çalışma"
+msgstr "Etkinlik:"
 
 #: ../data/gui/change_status_message_dialog.ui.h:3
 #: ../src/tooltips.py:652
@@ -827,14 +813,12 @@ msgid "Mood:"
 msgstr "Ruh Hali:"
 
 #: ../data/gui/change_status_message_dialog.ui.h:4
-#, fuzzy
 msgid "Preset messages:"
-msgstr "%1$s [ %3$d iletiden %2$d ileti okundu]"
+msgstr "Önceden hazırlanmış iletleri:"
 
 #: ../data/gui/change_status_message_dialog.ui.h:5
-#, fuzzy
 msgid "Save as Preset..."
-msgstr "Seçimi _Farklı Kaydet..."
+msgstr "Önceden hazırlanmış olarak kaydet:"
 
 #. # means number
 #: ../data/gui/chat_control.ui.h:1
@@ -888,14 +872,12 @@ msgid "9"
 msgstr "9"
 
 #: ../data/gui/chat_control.ui.h:13
-#, fuzzy
 msgid "Mic volume:"
-msgstr "--Bölüm Başlığı--\n"
+msgstr "Mikrofon ses şiddeti:"
 
 #: ../data/gui/chat_control.ui.h:14
-#, fuzzy
 msgid "Sound volume:"
-msgstr "Ses Efektleri Ses Düzeyi"
+msgstr "Ses şiddeti:"
 
 #. Make sure the character after "_" is not M/m (conflicts with Alt+M that is supposed to show the Emoticon Selector)
 #: ../data/gui/chat_control.ui.h:16
@@ -937,23 +919,20 @@ msgid "A_sk to see his/her status"
 msgstr "Onun durumu görmeye _sor"
 
 #: ../data/gui/contact_context_menu.ui.h:2
-#, fuzzy
 msgid "Add Special _Notification..."
-msgstr "bildiri bekleme durumuna geç"
+msgstr "Özel Bildirim Ekle"
 
 #: ../data/gui/contact_context_menu.ui.h:3
-#, fuzzy
 msgid "Assign Open_PGP Key..."
-msgstr "bir PGP resmi anahtarı ekle"
+msgstr "Open_PGP anahtarı havale et…"
 
 #: ../data/gui/contact_context_menu.ui.h:4
 msgid "E_xecute Command..."
 msgstr "Bir komut y_ürüt"
 
 #: ../data/gui/contact_context_menu.ui.h:5
-#, fuzzy
 msgid "Edit _Groups..."
-msgstr "/Dü_zenle/Tü_m Grupları Seç"
+msgstr "_Grupları biçimle…"
 
 #. Invite to
 #. Invite to Groupchat
@@ -986,28 +965,24 @@ msgid "Send _File..."
 msgstr "_Dosya Gönder…"
 
 #: ../data/gui/contact_context_menu.ui.h:12
-#, fuzzy
 msgid "Set Custom _Avatar..."
-msgstr "Özel Simge Ayarla"
+msgstr "Özel Resim Biçimle…"
 
 #: ../data/gui/contact_context_menu.ui.h:13
 msgid "Start _Chat"
 msgstr "Sohbet _Başla"
 
 #: ../data/gui/contact_context_menu.ui.h:14
-#, fuzzy
 msgid "Toggle End to End Encryption"
-msgstr "  Uçtan uca şifreleme varsayılıyor.\n"
+msgstr "Uçtan uca şifrelemeyi değiştir"
 
 #: ../data/gui/contact_context_menu.ui.h:15
-#, fuzzy
 msgid "Toggle Open_PGP Encryption"
-msgstr "PGP altişlemi açılamıyor!"
+msgstr "Open_PGP şifrelemeyi değiştir"
 
 #: ../data/gui/contact_context_menu.ui.h:16
-#, fuzzy
 msgid "_Add to Roster..."
-msgstr "%(category)s katagorisine ekle"
+msgstr "Kişi listeye _ekle…"
 
 #: ../data/gui/contact_context_menu.ui.h:17
 msgid "_Allow him/her to see my status"
@@ -1034,9 +1009,8 @@ msgid "_Ignore"
 msgstr "_Yoksay"
 
 #: ../data/gui/contact_context_menu.ui.h:22
-#, fuzzy
 msgid "_Manage Contact"
-msgstr "Takma Ad"
+msgstr "Kişiyi _işlet"
 
 #: ../data/gui/contact_context_menu.ui.h:23
 msgid "_Rename..."
@@ -1058,29 +1032,24 @@ msgid "_Unignore"
 msgstr "_Yoksaymaktan kadır"
 
 #: ../data/gui/data_form_window.ui.h:1
-#, fuzzy
 msgid "Fill in the form."
-msgstr "Alanları doldurun."
+msgstr "Formu doldur."
 
 #: ../data/gui/data_form_window.ui.h:2
-#, fuzzy
 msgid "Room Configuration"
-msgstr "Oda Düzenleme Hatası"
+msgstr "Oda Yerleştirme"
 
 #: ../data/gui/edit_groups_dialog.ui.h:1
-#, fuzzy
 msgid "Edit Groups"
-msgstr "/Dü_zenle/Tü_m Grupları Seç"
+msgstr "Grupları biçimle"
 
 #: ../data/gui/esession_info_window.ui.h:1
-#, fuzzy
 msgid "(<b>ESession</b> info)"
-msgstr "Proje Bilgisi"
+msgstr "(<b>EOturum</b> bilgi)"
 
 #: ../data/gui/esession_info_window.ui.h:2
-#, fuzzy
 msgid "_Verify"
-msgstr "Doğrulama "
+msgstr "_Doğrula"
 
 #: ../data/gui/features_window.ui.h:2
 msgid "<b>List of possible features in Gajim:</b>"
@@ -1099,9 +1068,8 @@ msgid "Cancel file transfer"
 msgstr "Dosya transferi iptal et"
 
 #: ../data/gui/filetransfers.ui.h:3
-#, fuzzy
 msgid "Cancels the selected file transfer"
-msgstr "Dosya aktarımı sırasında hata"
+msgstr "Seçilmiş dosya aktarımı iptal ediyor"
 
 #: ../data/gui/filetransfers.ui.h:4
 msgid "Cancels the selected file transfer and removes incomplete file"
@@ -1116,14 +1084,12 @@ msgid "File Transfers"
 msgstr "Dosya Aktarımları"
 
 #: ../data/gui/filetransfers.ui.h:7
-#, fuzzy
 msgid "Hides the window"
-msgstr "Pencereyi Kapat"
+msgstr "Pencereyi gizler"
 
 #: ../data/gui/filetransfers.ui.h:8
-#, fuzzy
 msgid "Remove file transfer from the list."
-msgstr "Eklenti Listesinden Bir Dosya Kaldırılıyor"
+msgstr "Dosya aktarımları listeden sil."
 
 #: ../data/gui/filetransfers.ui.h:9
 msgid "Removes completed, cancelled and failed file transfers from the list"
@@ -1150,19 +1116,16 @@ msgid "_Pause"
 msgstr "_Durakla"
 
 #: ../data/gui/filetransfers.ui.h:15
-#, fuzzy
 msgid "file transfers list"
-msgstr " C - Günlük dosyası aktarımı"
+msgstr "dosya aktarımların listesi"
 
 #: ../data/gui/gajim_themes_window.ui.h:1
-#, fuzzy
 msgid "<b>Chatstate Tab Colors</b>"
-msgstr "Tüm renkleri ayarla"
+msgstr "<b>Sohbetdurum Tab Renkleri</b>"
 
 #: ../data/gui/gajim_themes_window.ui.h:2
-#, fuzzy
 msgid "Account row"
-msgstr "(%lu satır)"
+msgstr "Hesap sırası"
 
 #: ../data/gui/gajim_themes_window.ui.h:3
 #: ../src/chat_control.py:883
@@ -1170,49 +1133,42 @@ msgid "Bold"
 msgstr "Kalın"
 
 #: ../data/gui/gajim_themes_window.ui.h:4
-#, fuzzy
 msgid "Chat Banner"
-msgstr "Sohbet Ekle"
+msgstr "Sohbet Sancak"
 
 #: ../data/gui/gajim_themes_window.ui.h:5
-#, fuzzy
 msgid "Composing"
-msgstr "Düzenleme"
+msgstr "Yazar"
 
 #: ../data/gui/gajim_themes_window.ui.h:6
-#, fuzzy
 msgid "Contact row"
-msgstr "(%lu satır)"
+msgstr "Kişi sırası"
 
 #: ../data/gui/gajim_themes_window.ui.h:7
 msgid "Font style:"
 msgstr "Yazıtipi tarzı:"
 
 #: ../data/gui/gajim_themes_window.ui.h:8
-#, fuzzy
 msgid "Gajim Themes Customization"
-msgstr "_Ağ Sayfası Temaları"
+msgstr "Gajim Tema Uyarlamak"
 
 #: ../data/gui/gajim_themes_window.ui.h:9
 msgid "Gone"
 msgstr "Gitti"
 
 #: ../data/gui/gajim_themes_window.ui.h:10
-#, fuzzy
 msgid "Group row"
-msgstr "(%lu satır)"
+msgstr "Grup sırası"
 
 #: ../data/gui/gajim_themes_window.ui.h:11
 #: ../src/common/pep.py:150
-#, fuzzy
 msgid "Inactive"
-msgstr "pasif"
+msgstr "Pasif"
 
 #: ../data/gui/gajim_themes_window.ui.h:12
 #: ../src/chat_control.py:884
-#, fuzzy
 msgid "Italic"
-msgstr "Eğik"
+msgstr "Italik"
 
 #: ../data/gui/gajim_themes_window.ui.h:13
 msgid ""
@@ -1223,39 +1179,35 @@ msgstr ""
 "İletler"
 
 #: ../data/gui/gajim_themes_window.ui.h:15
+#, fuzzy
 msgid ""
 "MUC Directed\n"
 "Messages"
-msgstr ""
+msgstr "Sohbet odasına katıl"
 
 #: ../data/gui/gajim_themes_window.ui.h:17
 msgid "Paused"
 msgstr "Duraklatıldı"
 
 #: ../data/gui/gajim_themes_window.ui.h:18
-#, fuzzy
 msgid "Text _color:"
-msgstr "Metin rengi"
+msgstr "Metin _rengi"
 
 #: ../data/gui/gajim_themes_window.ui.h:19
-#, fuzzy
 msgid "Text _font:"
-msgstr "Metin Yazıyüzü:"
+msgstr "Metin _yazıtipi:"
 
 #: ../data/gui/gajim_themes_window.ui.h:20
-#, fuzzy
 msgid "_Background:"
 msgstr "_Artalan:"
 
 #: ../data/gui/gc_control_popup_menu.ui.h:1
-#, fuzzy
 msgid "_Minimize on close"
-msgstr "Küçültme /Açma /Kapatma durumunda Solsun"
+msgstr "Kapatınca küçült"
 
 #: ../data/gui/gc_occupants_menu.ui.h:1
-#, fuzzy
 msgid "Mo_derator"
-msgstr "  DOSYA ...                   girdi .mo dosyaları\n"
+msgstr "Mo_deratör"
 
 #: ../data/gui/gc_occupants_menu.ui.h:2
 #, fuzzy
@@ -1267,18 +1219,16 @@ msgid "_Admin"
 msgstr "_Yönetici"
 
 #: ../data/gui/gc_occupants_menu.ui.h:4
-#, fuzzy
 msgid "_Ban"
-msgstr "Ban"
+msgstr ""
 
 #: ../data/gui/gc_occupants_menu.ui.h:5
 msgid "_Kick"
 msgstr ""
 
 #: ../data/gui/gc_occupants_menu.ui.h:6
-#, fuzzy
 msgid "_Member"
-msgstr "Üyesidir"
+msgstr "_Üyesidir"
 
 #: ../data/gui/gc_occupants_menu.ui.h:7
 msgid "_Owner"
@@ -1289,15 +1239,13 @@ msgid "_Voice"
 msgstr "_Ses"
 
 #: ../data/gui/groups_post_window.ui.h:1
-#, fuzzy
 msgid "Create new post"
-msgstr "yeni veritabanı oluştur"
+msgstr "Yeni posta yarat"
 
 #: ../data/gui/groups_post_window.ui.h:2
 #: ../src/common/helpers.py:258
-#, fuzzy
 msgid "From"
-msgstr "Kaynak"
+msgstr "Gönderen"
 
 #. holds subject
 #: ../data/gui/groups_post_window.ui.h:3
@@ -1317,7 +1265,6 @@ msgid "<big><b>Welcome to Gajim History Logs Manager</b></big>"
 msgstr ""
 
 #: ../data/gui/history_manager.ui.h:4
-#, fuzzy
 msgid "Export"
 msgstr "Dışa Aktar"
 
@@ -1333,20 +1280,17 @@ msgid ""
 msgstr ""
 
 #: ../data/gui/history_manager.ui.h:9
-#, fuzzy
 msgid "_Search Database"
-msgstr "veritabanını değiştir"
+msgstr "Veritabanı _Ara"
 
 #: ../data/gui/history_window.ui.h:1
-#, fuzzy
 msgid "All Chat Histories"
-msgstr "/Arkadaşlar/Sohbet Ekle..."
+msgstr "Bütün Sohbet Kayıtları"
 
 #: ../data/gui/history_window.ui.h:2
 #: ../src/history_window.py:323
-#, fuzzy
 msgid "Conversation History"
-msgstr "<b>Geçmiş Dosyaları</b>"
+msgstr "Sohbet Kayıtları"
 
 #: ../data/gui/history_window.ui.h:3
 msgid "Enter JID or Contact name"
@@ -1362,20 +1306,17 @@ msgstr "Ara:"
 
 #: ../data/gui/history_window.ui.h:6
 #: ../data/gui/zeroconf_information_window.ui.h:10
-#, fuzzy
 msgid "_Log conversation history"
-msgstr "/Sohbet/Kayıtlara Bak"
+msgstr "Sohbet kayıtı _kaydet"
 
 #: ../data/gui/join_groupchat_window.ui.h:2
-#, fuzzy
 msgid "Bro_wse Rooms"
-msgstr "list:  Yahoo ağındaki kanalları listele"
+msgstr "Odalara Göz At"
 
 #: ../data/gui/join_groupchat_window.ui.h:3
 #: ../src/dialogs.py:2171
-#, fuzzy
 msgid "Join Group Chat"
-msgstr "/Kişiler/_Sohbete Katıl..."
+msgstr "Grup Sohbete Katıl"
 
 #: ../data/gui/join_groupchat_window.ui.h:4
 msgid "Join this room _automatically when I connect"
@@ -1407,9 +1348,8 @@ msgid "Server:"
 msgstr "Sunuc:"
 
 #: ../data/gui/join_groupchat_window.ui.h:10
-#, fuzzy
 msgid "_Bookmark this room"
-msgstr "Bu yer imi silinsin mi?"
+msgstr "Bu odayi yer imle"
 
 #: ../data/gui/join_groupchat_window.ui.h:11
 #: ../src/disco.py:1343
@@ -1426,91 +1366,76 @@ msgid "If checked, Gajim will join this group chat on startup"
 msgstr ""
 
 #: ../data/gui/manage_bookmarks_window.ui.h:3
-#, fuzzy
 msgid "Manage Bookmarks"
-msgstr "Yer imlerini yönet"
+msgstr "Yer imlerini işlet"
 
 #: ../data/gui/manage_bookmarks_window.ui.h:4
-#, fuzzy
 msgid "Minimize on Auto Join"
-msgstr "Ters çevirme modu \"[0=kapalı, 1=açık, -1=otomatik]"
+msgstr "Kendilinden Katılınca Küçült"
 
 #: ../data/gui/manage_bookmarks_window.ui.h:7
-#, fuzzy
 msgid "Print status:"
-msgstr "kart durumunu basar"
+msgstr "Durumu göster:"
 
 #: ../data/gui/manage_bookmarks_window.ui.h:10
-#, fuzzy
 msgid "Title:"
 msgstr "Başlık:"
 
 #: ../data/gui/manage_pep_services_window.ui.h:1
-#, fuzzy
 msgid "PEP Service Configuration"
-msgstr "Metin arama yapılandırması \"%s\""
+msgstr "PEP Servis Yerleştirme"
 
 #: ../data/gui/manage_pep_services_window.ui.h:2
-#, fuzzy
 msgid "_Configure"
-msgstr "_Yapılandır..."
+msgstr "_Yerleştir"
 
 #: ../data/gui/manage_proxies_window.ui.h:1
-#, fuzzy
 msgid "<b>Properties</b>"
-msgstr "%s Özellikleri"
+msgstr "<b>Ayarları</b>"
 
 #: ../data/gui/manage_proxies_window.ui.h:2
-#, fuzzy
 msgid "<b>Settings</b>"
-msgstr "_Ayarlar"
+msgstr "<b>Ayarları</b>"
 
 #: ../data/gui/manage_proxies_window.ui.h:3
 msgid "BOSH"
 msgstr "BOSH"
 
 #: ../data/gui/manage_proxies_window.ui.h:4
-#, fuzzy
 msgid "HTTP Connect"
-msgstr "Vuruşları Bağla"
+msgstr "HTTP Bağlantı"
 
 #: ../data/gui/manage_proxies_window.ui.h:5
-#, fuzzy
 msgid "Manage Proxy Profiles"
-msgstr "Ekran profillerini değiştir"
+msgstr "Vekil Sunuc Profili İşlet"
 
 #: ../data/gui/manage_proxies_window.ui.h:6
 msgid "Pass_word:"
 msgstr "Şif_re:"
 
 #: ../data/gui/manage_proxies_window.ui.h:7
-#, fuzzy
 msgid "Proxy _Host:"
-msgstr " \"%s\" sistemi"
+msgstr "Vekil _Makine:"
 
 #: ../data/gui/manage_proxies_window.ui.h:8
-#, fuzzy
 msgid "Proxy _Port:"
-msgstr " \"%s\" portunda"
+msgstr "Vekil _Portası:"
 
 #: ../data/gui/manage_proxies_window.ui.h:9
 msgid "SOCKS5"
 msgstr "SOCKS5"
 
 #: ../data/gui/manage_proxies_window.ui.h:10
-#, fuzzy
 msgid "Use HTTP prox_y"
-msgstr "HTTP Metodunu Kullan"
+msgstr "HTTP _vekili kullan"
 
 #: ../data/gui/manage_proxies_window.ui.h:11
-#, fuzzy
 msgid "Use proxy auth_entication"
-msgstr "GNOME Vekil Ayarlarını Kullan"
+msgstr "Vergil do_ğrulama kullan"
 
 #: ../data/gui/manage_proxies_window.ui.h:12
-#, fuzzy
 msgid "_BOSH URL:"
-msgstr "Temel URL"
+msgstr "_BOSH URL:"
 
 #: ../data/gui/manage_proxies_window.ui.h:13
 msgid "_Name:"
@@ -1529,38 +1454,32 @@ msgid "Passphrase"
 msgstr "Şifre"
 
 #: ../data/gui/preferences_window.ui.h:1
-#, fuzzy
 msgid "<b>Advanced Configuration Editor</b>"
-msgstr "nano metin editörü"
+msgstr "<b>İlerlemiş Ayarlama Editörü</b>"
 
 #: ../data/gui/preferences_window.ui.h:2
-#, fuzzy
 msgid "<b>Applications</b>"
-msgstr "Uygulamalar"
+msgstr "<b>Uygulamalar</b>"
 
 #: ../data/gui/preferences_window.ui.h:3
 msgid "<b>Audio</b>"
 msgstr "<b>Ses</b>"
 
 #: ../data/gui/preferences_window.ui.h:4
-#, fuzzy
 msgid "<b>Auto Status</b>"
-msgstr "Durum: etkin %s"
+msgstr "<b>Otomatik Durumlar</b>"
 
 #: ../data/gui/preferences_window.ui.h:5
-#, fuzzy
 msgid "<b>Chat Appearance</b>"
-msgstr "GTK+ Görünümü"
+msgstr "<b>Sohbet Görünümü</b>"
 
 #: ../data/gui/preferences_window.ui.h:6
-#, fuzzy
 msgid "<b>Chat Line Colors</b>"
-msgstr "Tüm renkleri ayarla"
+msgstr "<b>Sohbet Çizgi Renkleri</b>"
 
 #: ../data/gui/preferences_window.ui.h:7
-#, fuzzy
 msgid "<b>Chat state notifications</b>"
-msgstr "Beliren Bildirimler"
+msgstr "<b>Sohbet durum bildirimler</b>"
 
 #: ../data/gui/preferences_window.ui.h:8
 msgid "<b>Connection</b>"
@@ -1604,29 +1523,24 @@ msgid "<b>Video</b>"
 msgstr "<b>Video</b>"
 
 #: ../data/gui/preferences_window.ui.h:21
-#, fuzzy
 msgid "<b>Visual Notifications</b>"
-msgstr "Hata Bildirimleri"
+msgstr "<b>Görsel Bildirimler</b>"
 
 #: ../data/gui/preferences_window.ui.h:22
-#, fuzzy
 msgid "<i>(example: stunserver.org)</i>"
-msgstr "_Classic.Gimp.Org"
+msgstr "<i>(örnek: stunserver.org)</i>"
 
 #: ../data/gui/preferences_window.ui.h:23
-#, fuzzy
 msgid "Advanced"
-msgstr "Gelişmiş"
+msgstr "İlerlemiş"
 
 #: ../data/gui/preferences_window.ui.h:24
-#, fuzzy
 msgid "Advanced..."
-msgstr "Gelişmiş"
+msgstr "İlerlemiş…"
 
 #: ../data/gui/preferences_window.ui.h:25
-#, fuzzy
 msgid "All chat states"
-msgstr "GNU %s %s için durumlar"
+msgstr "Bütün sohbet durumlar"
 
 #: ../data/gui/preferences_window.ui.h:26
 msgid "Allow _OS information to be sent"
@@ -1664,7 +1578,7 @@ msgstr ""
 #: ../data/gui/preferences_window.ui.h:34
 #, fuzzy
 msgid "Ask status message when I:"
-msgstr "Boşken durumu değ_iştir"
+msgstr "<b>Yeni durum ileti yaz</b>"
 
 #: ../data/gui/preferences_window.ui.h:35
 #: ../src/features_window.py:104
@@ -1680,8 +1594,9 @@ msgid "Audio output device"
 msgstr "Ses çıkış aygıtı"
 
 #: ../data/gui/preferences_window.ui.h:38
+#, fuzzy
 msgid "Autodetect on every Gajim startup"
-msgstr ""
+msgstr "Gajim açılırken bağlan"
 
 #: ../data/gui/preferences_window.ui.h:39
 msgid "Chat message:"
@@ -1867,7 +1782,6 @@ msgid "Never"
 msgstr "Asla"
 
 #: ../data/gui/preferences_window.ui.h:84
-#, fuzzy
 msgid "Notifications"
 msgstr "Bildirimler"
 
@@ -1896,17 +1810,17 @@ msgstr "Sadece erişilebilir değilken"
 #: ../data/gui/preferences_window.ui.h:90
 #, fuzzy
 msgid "Personal Events"
-msgstr "Klavye Olayları"
+msgstr "<b>Kişisel ilanlar sayfası</b>"
 
 #: ../data/gui/preferences_window.ui.h:91
 #, fuzzy
 msgid "Play _sounds"
-msgstr "Sesleri Etkinleştir"
+msgstr "Sesi Kapat"
 
 #: ../data/gui/preferences_window.ui.h:92
 #, fuzzy
 msgid "Pop it up"
-msgstr "Devam et!"
+msgstr "Olaylamak için bir daha tuşla:"
 
 #: ../data/gui/preferences_window.ui.h:93
 #, fuzzy
@@ -1926,22 +1840,22 @@ msgstr "STUN Sunuc:"
 #: ../data/gui/preferences_window.ui.h:97
 #, fuzzy
 msgid "Show only in roster"
-msgstr "sadece başlık dosyası içinde"
+msgstr "Kişi listesindeki olayları göster"
 
 #: ../data/gui/preferences_window.ui.h:98
 #, fuzzy
 msgid "Show systray:"
-msgstr "Sistem tepsisi simgesi"
+msgstr "_XML Konsolu Göster"
 
 #: ../data/gui/preferences_window.ui.h:99
 #, fuzzy
 msgid "Sign _in"
-msgstr "in assignment"
+msgstr "ben burdaysam"
 
 #: ../data/gui/preferences_window.ui.h:100
 #, fuzzy
 msgid "Sign _out"
-msgstr "yetersiz bellek"
+msgstr "%(nickname)s Çıktı"
 
 #: ../data/gui/preferences_window.ui.h:101
 #, fuzzy
@@ -1965,12 +1879,12 @@ msgstr "Durum"
 #: ../data/gui/preferences_window.ui.h:105
 #, fuzzy
 msgid "Status _iconset:"
-msgstr "Durum: etkin %s"
+msgstr "<b>Durum İletler</b>"
 
 #: ../data/gui/preferences_window.ui.h:106
 #, fuzzy
 msgid "Style"
-msgstr "Tarz"
+msgstr "Yazıtipi tarzı:"
 
 #: ../data/gui/preferences_window.ui.h:107
 msgid "T_heme:"
@@ -1993,22 +1907,22 @@ msgstr ""
 #: ../data/gui/preferences_window.ui.h:114
 #, fuzzy
 msgid "Use _transports icons"
-msgstr "Simge _Altında Metin"
+msgstr "G_PG acenta kullan"
 
 #: ../data/gui/preferences_window.ui.h:115
 #, fuzzy
 msgid "Use system _default"
-msgstr "Öntanımlı sistem dili:"
+msgstr "G_PG acenta kullan"
 
 #: ../data/gui/preferences_window.ui.h:116
 #, fuzzy
 msgid "Video input device"
-msgstr "Tam-ekran Video Aygıtı"
+msgstr "Ses giriş aygıtı"
 
 #: ../data/gui/preferences_window.ui.h:117
 #, fuzzy
 msgid "Video output device"
-msgstr "varsayılan çıkış aygıtı"
+msgstr "Ses çıkış aygıtı"
 
 #: ../data/gui/preferences_window.ui.h:118
 msgid "When new event is received:"
@@ -2025,7 +1939,7 @@ msgstr "Senin takma adın:"
 #: ../data/gui/preferences_window.ui.h:121
 #, fuzzy
 msgid "_Away after:"
-msgstr "Sayfadan Sonra"
+msgstr "Uzun süreli uzakta"
 
 #: ../data/gui/preferences_window.ui.h:122
 #, fuzzy
@@ -2034,7 +1948,7 @@ msgstr "_Tarayıcı:"
 
 #: ../data/gui/preferences_window.ui.h:123
 msgid "_Display chat state notifications:"
-msgstr "Sohbet durum haberleri _göster:"
+msgstr "Sohbet durum bildirimleri _göster:"
 
 #: ../data/gui/preferences_window.ui.h:124
 #, fuzzy
@@ -2044,7 +1958,7 @@ msgstr "Duygu simgeleri gönder"
 #: ../data/gui/preferences_window.ui.h:125
 #, fuzzy
 msgid "_File manager:"
-msgstr "Paket Yöneticisi"
+msgstr "_Dosya Gönder…"
 
 #: ../data/gui/preferences_window.ui.h:126
 msgid "_Highlight misspelled words"
@@ -2066,12 +1980,12 @@ msgstr "Tüm _durum değişikliklerini sistem günlüğüne kaydet"
 #: ../data/gui/preferences_window.ui.h:130
 #, fuzzy
 msgid "_Mail client:"
-msgstr "istemci %d: '%s' [type=%s]\n"
+msgstr "?Client:Bilinmez"
 
 #: ../data/gui/preferences_window.ui.h:131
 #, fuzzy
 msgid "_Not available after:"
-msgstr "<em>Kullanılabilir değil</em>"
+msgstr "Hiç bir hesap bulunmiyor"
 
 #: ../data/gui/preferences_window.ui.h:132
 msgid "_Open..."
@@ -2085,32 +1999,32 @@ msgstr "Öntanımlı değerlerine geri al"
 #: ../data/gui/preferences_window.ui.h:134
 #, fuzzy
 msgid "_Send chat state notifications:"
-msgstr "Sohbet gönderilemedi %s,%s,%s"
+msgstr "Sohbet durum haberleri _göster:"
 
 #: ../data/gui/preferences_window.ui.h:135
 #, fuzzy
 msgid "_Status message:"
-msgstr "Ileti alınıyor..."
+msgstr "durum ileti"
 
 #: ../data/gui/preferences_window.ui.h:136
 #, fuzzy
 msgid "_URL highlight:"
-msgstr "Vurgulama Rengi"
+msgstr "Yazım hatalarını _vurgula"
 
 #: ../data/gui/preferences_window.ui.h:137
 #, fuzzy
 msgid "_Window behavior:"
-msgstr "Çoklu monitör davranışı"
+msgstr "Varolan açılan penceryi _engelle"
 
 #: ../data/gui/preferences_window.ui.h:138
 #, fuzzy
 msgid "in _group chats"
-msgstr "Sohbetlerde Uygula"
+msgstr "grupdaki herkez"
 
 #: ../data/gui/preferences_window.ui.h:139
 #, fuzzy
 msgid "in _roster"
-msgstr "in assignment"
+msgstr "Kişi listesindeki olayları göster"
 
 #: ../data/gui/preferences_window.ui.h:140
 msgid "minutes"
@@ -2119,32 +2033,32 @@ msgstr "dakika"
 #: ../data/gui/privacy_lists_window.ui.h:1
 #, fuzzy
 msgid "Privacy Lists:"
-msgstr "%u bitset_lists\n"
+msgstr "Kişisel Gizlilik Listesini biçimle"
 
 #: ../data/gui/privacy_list_window.ui.h:1
 #, fuzzy
 msgid "<b>Add / Edit a rule</b>"
-msgstr "Pan: Kuralı Düzenle"
+msgstr "Kişisel ilanlar sayfayı yazımla"
 
 #: ../data/gui/privacy_list_window.ui.h:2
 #, fuzzy
 msgid "<b>List of rules</b>"
-msgstr "Devre dışı bırakılmış rule'lar:"
+msgstr "Geçersiz Liste İsmi"
 
 #: ../data/gui/privacy_list_window.ui.h:3
 #, fuzzy
 msgid "<i>Privacy List</i>"
-msgstr "Castlerin listesi"
+msgstr "Geçersiz Liste İsmi"
 
 #: ../data/gui/privacy_list_window.ui.h:4
 #, fuzzy
 msgid "Active for this session"
-msgstr "Bu harita dosyasının ayarları"
+msgstr "Bu olay için varolan sesi _engelle"
 
 #: ../data/gui/privacy_list_window.ui.h:5
 #, fuzzy
 msgid "Active on each startup"
-msgstr "/subst başlangıçta çalıştırılır"
+msgstr "Gajim açılırken bağlan"
 
 #: ../data/gui/privacy_list_window.ui.h:6
 msgid "All"
@@ -2153,7 +2067,7 @@ msgstr "Hepsi"
 #: ../data/gui/privacy_list_window.ui.h:7
 #, fuzzy
 msgid "All (including subscription)"
-msgstr "%(realname)s üyelik bildirimi"
+msgstr "Üyelik ileti _kaydet"
 
 #: ../data/gui/privacy_list_window.ui.h:8
 msgid "Allow"
@@ -2175,12 +2089,12 @@ msgstr "Sıralama:"
 #: ../src/dialogs.py:3428
 #, fuzzy
 msgid "Privacy List"
-msgstr "Castlerin listesi"
+msgstr "Geçersiz Liste İsmi"
 
 #: ../data/gui/privacy_list_window.ui.h:13
 #, fuzzy
 msgid "all by subscription"
-msgstr "Öntanımlı olarak tüm konumları _aç"
+msgstr "Üyelik ileti _kaydet"
 
 #: ../data/gui/privacy_list_window.ui.h:14
 msgid "all in the group"
@@ -2193,7 +2107,7 @@ msgstr "ikiside"
 #: ../data/gui/privacy_list_window.ui.h:16
 #, fuzzy
 msgid "from"
-msgstr "Kaynak"
+msgstr "Gönderen:"
 
 #: ../data/gui/privacy_list_window.ui.h:17
 msgid "none"
@@ -2202,7 +2116,7 @@ msgstr "hiç biri"
 #: ../data/gui/privacy_list_window.ui.h:18
 #, fuzzy
 msgid "to"
-msgstr "Hedef"
+msgstr "Kime:"
 
 #: ../data/gui/privacy_list_window.ui.h:19
 msgid "to send me messages"
@@ -2221,7 +2135,7 @@ msgstr "bana mesaj göndermek için"
 #: ../data/gui/privacy_list_window.ui.h:22
 #, fuzzy
 msgid "to view my status"
-msgstr "'%s'in durumu alınamıyor."
+msgstr "Onun durumu görmeye _sor"
 
 #: ../data/gui/profile_window.ui.h:1
 #: ../data/gui/vcard_information_window.ui.h:1
@@ -2283,7 +2197,7 @@ msgstr "<b>Bütün isim</b>"
 #: ../data/gui/vcard_information_window.ui.h:17
 #, fuzzy
 msgid "<b>Given:</b>"
-msgstr "Görünen Ad"
+msgstr "Adres verilmedi"
 
 #: ../data/gui/profile_window.ui.h:15
 #: ../data/gui/vcard_information_window.ui.h:18
@@ -2383,7 +2297,7 @@ msgstr "İş"
 #: ../data/gui/remove_account_window.ui.h:1
 #, fuzzy
 msgid "<b>What do you want to do?</b>"
-msgstr "Yapmak istediğiniz şey bu mu?"
+msgstr "Ne yapmak istiyorsun?"
 
 #: ../data/gui/remove_account_window.ui.h:2
 #, fuzzy
@@ -2402,7 +2316,7 @@ msgstr ""
 #: ../src/roster_window.py:5619
 #, fuzzy
 msgid "_Remove"
-msgstr "_Kaldır"
+msgstr "kaldır"
 
 #: ../data/gui/roster_item_exchange_window.ui.h:1
 msgid "<b>someone@somewhere.com</b> would like you to <b>add</b> some contacts in your roster."
@@ -2415,7 +2329,7 @@ msgstr ""
 #: ../data/gui/roster_item_exchange_window.ui.h:3
 #, fuzzy
 msgid "Roster Item Exchange"
-msgstr "Crendential takası tamamlandı\n"
+msgstr "Kişi listesindeki olayları göster"
 
 #: ../data/gui/roster_item_exchange_window.ui.h:4
 #: ../data/gui/service_registration_window.ui.h:3
@@ -2430,28 +2344,28 @@ msgstr "Sık sorulan soruların bir listesini görüntüler"
 #: ../data/gui/roster_window.ui.h:3
 #, fuzzy
 msgid "Help online"
-msgstr "/Yardım/Çevrim_içi Yardım"
+msgstr "Çevrede / Sohbete hazır"
 
 #: ../data/gui/roster_window.ui.h:4
 #, fuzzy
 msgid "Show Only _Active Contacts"
-msgstr "Yalnızca bu projeyi göster"
+msgstr "sadece bu hesapın kişilerini göster"
 
 #: ../data/gui/roster_window.ui.h:5
 #, fuzzy
 msgid "Show Trans_ports"
-msgstr "Say&damlığı Göster"
+msgstr "_XML Konsolu Göster"
 
 #: ../data/gui/roster_window.ui.h:6
 #, fuzzy
 msgid "Show _Offline Contacts"
-msgstr "/Kişiler/Göster/Çevrimdışı Kişileri Göster"
+msgstr "sadece bu hesapın kişilerini göster"
 
 #: ../data/gui/roster_window.ui.h:7
 #: ../src/statusicon.py:326
 #, fuzzy
 msgid "Show _Roster"
-msgstr "_Ayrıntıları göster"
+msgstr "Kişi listesindeki olayları göster"
 
 #. Make sure the character after "_" is not M/m (conflicts with Alt+M that is supposed to show the Emoticon Selector)
 #: ../data/gui/roster_window.ui.h:8
@@ -2474,8 +2388,9 @@ msgid "_View"
 msgstr "_Görünüm"
 
 #: ../data/gui/search_window.ui.h:1
+#, fuzzy
 msgid "Please wait while retrieving search form..."
-msgstr ""
+msgstr "Lütfen bekle komuta listesini alırken…"
 
 #: ../data/gui/search_window.ui.h:2
 msgid "Search"
@@ -2484,7 +2399,7 @@ msgstr "Ara"
 #: ../data/gui/search_window.ui.h:3
 #, fuzzy
 msgid "_Add contact"
-msgstr "Takma Ad"
+msgstr "Yeni Kişi Ekle"
 
 #. Information
 #: ../data/gui/search_window.ui.h:4
@@ -2508,7 +2423,7 @@ msgstr "_Adres:"
 #: ../data/gui/service_registration_window.ui.h:1
 #, fuzzy
 msgid "Register to"
-msgstr "Kayıt hatası: %s\n"
+msgstr "Bunu %s buna %s gönder"
 
 #: ../data/gui/service_registration_window.ui.h:2
 msgid "_Cancel"
@@ -2585,7 +2500,7 @@ msgstr "(Burada %d seçtiğiniz varsayılıyor)\n"
 #: ../data/gui/synchronise_select_contacts_dialog.ui.h:2
 #, fuzzy
 msgid "Synchronise : select contacts"
-msgstr "Kişiler/Adresler Rehberi"
+msgstr "<b>Lütfen sunucu seçiniz</b>"
 
 #: ../data/gui/systray_context_menu.ui.h:1
 msgid "Mute Sounds"
@@ -2606,12 +2521,12 @@ msgstr "<b>Sor:</b>"
 #: ../data/gui/vcard_information_window.ui.h:6
 #, fuzzy
 msgid "<b>Client:</b>"
-msgstr "İstemci"
+msgstr "?Client:Bilinmez"
 
 #: ../data/gui/vcard_information_window.ui.h:8
 #, fuzzy
 msgid "<b>Contact time:</b>"
-msgstr " (şu anki tarih: %c)"
+msgstr "?Time:Bilinmez"
 
 #: ../data/gui/vcard_information_window.ui.h:19
 msgid "<b>Jabber ID:</b>"
@@ -2642,15 +2557,13 @@ msgstr "Yorumlar"
 #: ../data/gui/vcard_information_window.ui.h:42
 #, fuzzy
 msgid "Configured avatar:"
-msgstr ""
-"%s\n"
-"seçenekleriyle yapılandırıldı.\n"
+msgstr "Avatarı değiştir"
 
 #: ../data/gui/vcard_information_window.ui.h:43
 #: ../data/gui/zeroconf_information_window.ui.h:1
 #, fuzzy
 msgid "Contact"
-msgstr "Takma Ad"
+msgstr "kişi(ler)"
 
 #: ../data/gui/vcard_information_window.ui.h:44
 msgid "Contact Information"
@@ -2663,7 +2576,7 @@ msgstr "Daha Fazla"
 #: ../data/gui/vcard_information_window.ui.h:48
 #, fuzzy
 msgid "User avatar:"
-msgstr " \"%s\" kullanıcısı"
+msgstr "Avatarı değiştir"
 
 #: ../data/gui/xml_console_window.ui.h:1
 msgid "<b>Filter</b>"
@@ -2672,37 +2585,37 @@ msgstr "<b>Filtre</b>"
 #: ../data/gui/xml_console_window.ui.h:2
 #, fuzzy
 msgid "<b>Jabber Traffic</b>"
-msgstr "<b>Jabber kimliği:</b>"
+msgstr "_Jabber kimliği:"
 
 #: ../data/gui/xml_console_window.ui.h:3
 #, fuzzy
 msgid "<b>XML Input</b>"
-msgstr "Giriş/Çıkış\n"
+msgstr "ses girdisi"
 
 #: ../data/gui/xml_console_window.ui.h:4
 #, fuzzy
 msgid "Hide IN stanzas"
-msgstr "Sergi alanlarında Panelleri ve Yüzen pencereleri gizle"
+msgstr "Buna davet _et"
 
 #: ../data/gui/xml_console_window.ui.h:5
 #, fuzzy
 msgid "Hide IQ stanzas"
-msgstr "Irak (ar_IQ)"
+msgstr "Menüyi gizle"
 
 #: ../data/gui/xml_console_window.ui.h:6
 #, fuzzy
 msgid "Hide Message stanzas"
-msgstr "%d : geçersiz ileti numarası.\n"
+msgstr "Üyelik ileti _kaydet"
 
 #: ../data/gui/xml_console_window.ui.h:7
 #, fuzzy
 msgid "Hide OUT stanzas"
-msgstr "tam sayı kapsam dışı: %s"
+msgstr "%(nickname)s Çıktı"
 
 #: ../data/gui/xml_console_window.ui.h:8
 #, fuzzy
 msgid "Hide Presence stanzas"
-msgstr "Sunucuda Bulunma Bildirimini İptal Et"
+msgstr "Menüyi gizle"
 
 #: ../data/gui/xml_console_window.ui.h:9
 msgid "Info/Query"
@@ -2740,22 +2653,22 @@ msgstr "Durum:"
 #: ../data/gajim.desktop.in.in.h:1
 #, fuzzy
 msgid "A GTK+ Jabber client"
-msgstr "istemci/sunucu protokolü"
+msgstr "Geçersiz Jabber kimliği"
 
 #: ../data/gajim.desktop.in.in.h:2
 #, fuzzy
 msgid "Gajim Instant Messenger"
-msgstr "Empathy Internet Messenger"
+msgstr "Gajim'den gerçekten çıkılsın mı?"
 
 #: ../data/gajim.desktop.in.in.h:3
 #, fuzzy
 msgid "Jabber IM Client"
-msgstr "istemci/sunucu protokolü"
+msgstr "Geçersiz Jabber kimliği"
 
 #: ../src/adhoc_commands.py:298
 #, fuzzy
 msgid "Cancel confirmation"
-msgstr "Onay dizgisi:"
+msgstr "Dosya transferi iptal et"
 
 #: ../src/adhoc_commands.py:299
 msgid "You are in process of executing command. Do you really want to cancel it?"
@@ -2776,7 +2689,7 @@ msgstr "geçerli oturumun geçerli kullanıcısını tanımla"
 #: ../src/adhoc_commands.py:441
 #, fuzzy
 msgid "Service returned an error."
-msgstr "%s tüneli %d hatası üretti (%s)"
+msgstr "<b>Bir hata oluştu:</b>"
 
 #. For i18n
 #: ../src/advanced_configuration_window.py:91
@@ -2799,7 +2712,6 @@ msgid "Integer"
 msgstr "Tamsayı"
 
 #: ../src/advanced_configuration_window.py:95
-#, fuzzy
 msgid "Text"
 msgstr "Metin"
 
@@ -2811,17 +2723,17 @@ msgstr "Renk"
 #: ../src/advanced_configuration_window.py:107
 #, fuzzy
 msgid "Preference Name"
-msgstr "Dahili adı"
+msgstr "İlk Ad:"
 
 #: ../src/advanced_configuration_window.py:113
 #, fuzzy
 msgid "Value"
-msgstr "Değer"
+msgstr "anahtar=değer"
 
 #: ../src/advanced_configuration_window.py:121
 #, fuzzy
 msgid "Type"
-msgstr "Veri tipi"
+msgstr "_Türü:"
 
 #. we talk about option description in advanced configuration editor
 #: ../src/advanced_configuration_window.py:176
@@ -2954,7 +2866,7 @@ msgstr "Tercih ettiğiniz dil:"
 #: ../src/chat_control.py:691
 #, fuzzy
 msgid "A connection is not available"
-msgstr "SSL erişilir değil.\n"
+msgstr "Klasör \"%s\" yazılabilir değil"
 
 #: ../src/chat_control.py:483
 #: ../src/chat_control.py:692
@@ -2982,7 +2894,7 @@ msgstr "Işareti temizle"
 #: ../src/chat_control.py:996
 #, fuzzy
 msgid "Really send file?"
-msgstr "/_Dosya/Sonra Gönder"
+msgstr "%s size bir dosya göndermek istiyor:"
 
 #: ../src/chat_control.py:997
 #, python-format
@@ -2993,7 +2905,7 @@ msgstr ""
 #: ../src/chat_control.py:1947
 #, fuzzy
 msgid "GPG encryption enabled"
-msgstr "Üyelik yeniden etkinleştirildi."
+msgstr "Bu anahtarın kullanım süresi dolmuş"
 
 #. Add to roster
 #: ../src/chat_control.py:1475
@@ -3014,7 +2926,7 @@ msgstr "Üyelik yeniden etkinleştirildi."
 #: ../src/roster_window.py:3313
 #, fuzzy
 msgid "Not in Roster"
-msgstr "Boşluk değil.\n"
+msgstr "Kişi listesindeki olayları göster"
 
 #: ../src/chat_control.py:1519
 msgid "This contact does not support file transfer."
@@ -3027,7 +2939,7 @@ msgstr ""
 #: ../src/chat_control.py:1611
 #, fuzzy, python-format
 msgid "%(type)s state : %(state)s, reason: %(reason)s"
-msgstr "Sebep yok"
+msgstr "Sohbet durum haberleri _göster:"
 
 #: ../src/chat_control.py:1812
 #, python-format
@@ -3039,7 +2951,7 @@ msgstr ""
 #: ../src/dialogs.py:4814
 #, fuzzy
 msgid "No GPG key assigned"
-msgstr "%s Anahtar Oluşturma Bağlamı Atandı."
+msgstr "GPG anahtara güvenilmiyor"
 
 #: ../src/chat_control.py:1928
 msgid "No GPG key is assigned to this contact. So you cannot encrypt messages with GPG."
@@ -3048,7 +2960,7 @@ msgstr ""
 #: ../src/chat_control.py:1937
 #, fuzzy
 msgid "GPG encryption disabled"
-msgstr "  Spam engelleme etkin değil\n"
+msgstr "Bu anahtarın kullanım süresi dolmuş"
 
 #: ../src/chat_control.py:1963
 #, fuzzy
@@ -3077,19 +2989,19 @@ msgstr "olacak"
 #: ../src/chat_control.py:1984
 #, fuzzy
 msgid "will NOT"
-msgstr "değil "
+msgstr "Mevcut Değil"
 
 #. About encrypted chat session
 #: ../src/chat_control.py:1988
 #, fuzzy
 msgid "and authenticated"
-msgstr "DOĞRULANMAMIŞ"
+msgstr "bir ses ve video"
 
 #. About encrypted chat session
 #: ../src/chat_control.py:1992
 #, fuzzy
 msgid "and NOT authenticated"
-msgstr "&& ve || dizgelerde desteklenmez\n"
+msgstr "Rahatsız etmeyin"
 
 #. status will become 'is' or 'is not', authentificaed will become
 #. 'and authentificated' or 'and not authentificated', logged will become
@@ -3114,7 +3026,7 @@ msgstr "      --ssl         ssl ile şifrelenmiş oturumu etkinleştir\n"
 #: ../src/chat_control.py:2151
 #, fuzzy
 msgid " and WILL be logged"
-msgstr "portlar %d ile %d arasında olmalıdır."
+msgstr "bir ses ve video"
 
 #: ../src/chat_control.py:2153
 #, fuzzy
@@ -3161,7 +3073,7 @@ msgstr ""
 #: ../src/session.py:134
 #, fuzzy
 msgid "Database Error"
-msgstr "Veritabanı hatası: %s"
+msgstr "Hata açıklaması…"
 
 #: ../src/chat_control.py:2620
 #, python-format
@@ -3171,7 +3083,7 @@ msgstr ""
 #: ../src/chat_control.py:2858
 #, fuzzy, python-format
 msgid "%(name)s is now %(status)s"
-msgstr "sertifika durumu bilinmiyor"
+msgstr "%(nick)s durumu şimdi %(status)s"
 
 #: ../src/common/check_paths.py:37
 #, fuzzy
@@ -3205,7 +3117,7 @@ msgstr ""
 #: ../src/common/check_paths.py:333
 #, fuzzy
 msgid "Gajim will now exit"
-msgstr "bu mönüden çık"
+msgstr "Gajim'den gerçekten çıkılsın mı?"
 
 #: ../src/common/check_paths.py:317
 #: ../src/common/check_paths.py:332
@@ -3216,7 +3128,7 @@ msgstr ""
 #: ../src/common/check_paths.py:337
 #, fuzzy, python-format
 msgid "creating %s directory"
-msgstr "dizin %s oluşturuluyor"
+msgstr "Klasör \"%s\" yazılabilir değil"
 
 #: ../src/common/commands.py:82
 msgid "Change status information"
@@ -3254,12 +3166,12 @@ msgstr "çevrimdışı"
 #: ../src/common/commands.py:114
 #, fuzzy
 msgid "Presence description:"
-msgstr "Yazıyüzü Açıklaması"
+msgstr "Hata açıklaması…"
 
 #: ../src/common/commands.py:149
 #, fuzzy
 msgid "The status has been changed."
-msgstr "Disk değiştirildi.\n"
+msgstr "Yeni bir oda yaratılmıştır"
 
 #: ../src/common/commands.py:181
 #: ../src/common/commands.py:207
@@ -3301,7 +3213,7 @@ msgstr "Sobetten ayrıldınız."
 #: ../src/common/commands.py:265
 #, fuzzy
 msgid "Forward unread messages"
-msgstr "Okunmamış ileti yok"
+msgstr "Okunmamış iletler var"
 
 #: ../src/common/commands.py:287
 msgid "All unread messages have been forwarded."
@@ -3350,12 +3262,12 @@ msgstr ""
 #: ../src/common/config.py:93
 #, fuzzy
 msgid "Incoming nickname color."
-msgstr "%s : böyle bir renk yok"
+msgstr "Kullanıcak takma ad"
 
 #: ../src/common/config.py:94
 #, fuzzy
 msgid "Outgoing nickname color."
-msgstr "%s : böyle bir renk yok"
+msgstr "Kullanıcak takma ad"
 
 #: ../src/common/config.py:95
 #, fuzzy
@@ -3370,17 +3282,17 @@ msgstr "Metin dolgusu rengi"
 #: ../src/common/config.py:97
 #, fuzzy
 msgid "Status message text color."
-msgstr "GdkColor olarak metin rengi"
+msgstr "<b>Yeni durum ileti yaz</b>"
 
 #: ../src/common/config.py:100
 #, fuzzy
 msgid "Incoming nickname font."
-msgstr "Başka bir yazıtipi kullan:"
+msgstr "Kullanıcak takma ad"
 
 #: ../src/common/config.py:101
 #, fuzzy
 msgid "Outgoing nickname font."
-msgstr "Başka bir yazıtipi kullan:"
+msgstr "Kullanıcak takma ad"
 
 #: ../src/common/config.py:102
 #, fuzzy
@@ -3395,7 +3307,7 @@ msgstr "Seçilen metnin yazıyüzü"
 #: ../src/common/config.py:104
 #, fuzzy
 msgid "Status message text font."
-msgstr "Mesajda orijinal metin yok!"
+msgstr "<b>Yeni durum ileti yaz</b>"
 
 #: ../src/common/config.py:105
 msgid "List (space separated) of rows (accounts and groups) that are collapsed."
@@ -3897,7 +3809,7 @@ msgstr "Cevap \"evet\" ya da \"hayır\""
 #: ../src/common/config.py:451
 #, fuzzy
 msgid "'yes', 'no' or ''"
-msgstr "Cevap \"evet\" ya da \"hayır\""
+msgstr "Hiçbir anahtar seçilmedi"
 
 #: ../src/common/config.py:457
 #: ../src/common/pep.py:157
@@ -3956,12 +3868,12 @@ msgstr "Dış"
 #: ../src/common/config.py:463
 #, fuzzy
 msgid "I'm out enjoying life."
-msgstr "Gerçekte: "
+msgstr "%(nickname)s Çıktı"
 
 #: ../src/common/config.py:474
 #, fuzzy
 msgid "I'm available."
-msgstr "Kullanılabilir"
+msgstr "Mevcut Değil"
 
 #: ../src/common/config.py:475
 msgid "I'm free for chat."
@@ -3976,7 +3888,7 @@ msgstr "Hemen Dönecek"
 #: ../src/common/config.py:477
 #, fuzzy
 msgid "I'm not available."
-msgstr "kullanılamıyor"
+msgstr "Mevcut Değil"
 
 #: ../src/common/config.py:478
 msgid "Do not disturb."
@@ -4037,7 +3949,7 @@ msgstr "vekil ile problem - vekil kullanımı iptal ediliyor\n"
 #: ../src/common/connection_handlers.py:133
 #, fuzzy
 msgid "Registration failed"
-msgstr "Kayıt Başarısız Oldu"
+msgstr "Bağlantı Kurulamıyor"
 
 #: ../src/common/connection_handlers.py:133
 #, python-format
@@ -4053,13 +3965,13 @@ msgstr ""
 #: ../src/gajim.py:345
 #, fuzzy
 msgid "Disk Write Error"
-msgstr "%s için yazma hatası"
+msgstr "<b>Bir hata oluştu:</b>"
 
 #: ../src/common/connection_handlers.py:666
 #: ../src/common/connection.py:1455
 #, fuzzy
 msgid "Invisibility not supported"
-msgstr "'%s' makinesi desteklenmiyor"
+msgstr "Rahatsız etmeyin"
 
 #: ../src/common/connection_handlers.py:667
 #: ../src/common/connection.py:1456
@@ -4096,7 +4008,7 @@ msgstr ""
 #: ../src/common/connection_handlers.py:1676
 #, fuzzy, python-format
 msgid "Nickname not allowed: %s"
-msgstr "işleme izin yok: %s"
+msgstr "Rahatsız etmeyin"
 
 #. maximum user number reached
 #. we are banned
@@ -4146,7 +4058,7 @@ msgstr ""
 #: ../src/common/connection_handlers.py:1840
 #, fuzzy
 msgid "Room has been destroyed"
-msgstr "Bir toplu mesaj gönderildi."
+msgstr "Yeni bir oda yaratılmıştır"
 
 #: ../src/common/connection_handlers.py:1848
 #, python-format
@@ -4166,7 +4078,7 @@ msgstr "Şu an \"%s\" veritabanına bağlısınız"
 #: ../src/common/connection_handlers.py:1907
 #, fuzzy, python-format
 msgid "unsubscribe request from %s"
-msgstr "%s tarafından gönderilen dosyayı kabul ediyor musunuz?"
+msgstr "Dosya Gönderme Soru"
 
 #: ../src/common/connection_handlers.py:1909
 #, python-format
@@ -4219,7 +4131,7 @@ msgstr "Sertifika henüz geçerli değil"
 #: ../src/common/connection.py:76
 #, fuzzy
 msgid "Certificate has expired"
-msgstr "sertifika kullanım süresi dolmuş"
+msgstr "Bu anahtarın kullanım süresi dolmuş"
 
 #: ../src/common/connection.py:77
 #, fuzzy
@@ -4229,7 +4141,7 @@ msgstr "Sertifika henüz geçerli değil"
 #: ../src/common/connection.py:78
 #, fuzzy
 msgid "CRL has expired"
-msgstr "sertifika kullanım süresi dolmuş"
+msgstr "Bu anahtarın kullanım süresi dolmuş"
 
 #: ../src/common/connection.py:79
 msgid "Format error in certificate's notBefore field"
@@ -4250,12 +4162,12 @@ msgstr ""
 #: ../src/common/connection.py:83
 #, fuzzy
 msgid "Out of memory"
-msgstr "Yetersiz hafıza"
+msgstr "%(nickname)s Çıktı"
 
 #: ../src/common/connection.py:84
 #, fuzzy
 msgid "Self signed certificate"
-msgstr "Sertifika doğrulama hatası (%s)"
+msgstr "%(nickname)s Girdi"
 
 #: ../src/common/connection.py:85
 #, fuzzy
@@ -4285,7 +4197,7 @@ msgstr "sertifika hükümsüz kılınmış"
 #: ../src/common/connection.py:90
 #, fuzzy
 msgid "Invalid CA certificate"
-msgstr "geçersiz doğrulukla sertifika"
+msgstr "Geçersiz Jabber kimliği"
 
 #: ../src/common/connection.py:91
 #, fuzzy
@@ -4300,7 +4212,7 @@ msgstr "Sertifika doğrulama hatası (%s)"
 #: ../src/common/connection.py:93
 #, fuzzy
 msgid "Certificate not trusted"
-msgstr "sertifikaya güvenilmiyor"
+msgstr "GPG anahtara güvenilmiyor"
 
 #: ../src/common/connection.py:94
 #, fuzzy
@@ -4355,7 +4267,7 @@ msgstr ""
 msgid ""
 "Subject: %(subject)s\n"
 "%(message)s"
-msgstr "bu iletini konusunu düzenle"
+msgstr "iletinin konusu"
 
 #: ../src/common/connection.py:789
 #, python-format
@@ -4380,13 +4292,13 @@ msgstr ""
 #: ../src/common/connection.py:849
 #, fuzzy, python-format
 msgid "Unknown SSL error: %d"
-msgstr "Bilinmeyen SSL Hatası"
+msgstr "<b>Bir hata oluştu:</b>"
 
 #. wrong answer
 #: ../src/common/connection.py:864
 #, fuzzy
 msgid "Invalid answer"
-msgstr "Geçersiz cevap"
+msgstr "Geçersiz takma ad"
 
 #: ../src/common/connection.py:865
 #, python-format
@@ -4399,7 +4311,7 @@ msgstr ""
 #: ../src/common/zeroconf/connection_zeroconf.py:189
 #, fuzzy, python-format
 msgid "Could not connect to \"%s\""
-msgstr "%s (%s)'e bağlanılınamadı."
+msgstr "Resim acılamadı"
 
 #: ../src/common/connection.py:1147
 #: ../src/gui_interface.py:754
@@ -4409,7 +4321,7 @@ msgstr ""
 #: ../src/common/connection.py:1152
 #, fuzzy, python-format
 msgid "Server replied: %s"
-msgstr "FTP Sunucusu"
+msgstr "MUC sunucusu"
 
 #: ../src/common/connection.py:1165
 #, fuzzy
@@ -4438,14 +4350,14 @@ msgstr "sertifika elde edilemedi: %s\n"
 msgid ""
 "\n"
 "SSL Error: <b>%s</b>"
-msgstr "hata (birleşmeli değil)\n"
+msgstr "Hata açıklaması…"
 
 #: ../src/common/connection.py:1227
 #, fuzzy, python-format
 msgid ""
 "\n"
 "Unknown SSL error: %d"
-msgstr "SSL SYSCALL hatası: %s\n"
+msgstr "<b>Bir hata oluştu:</b>"
 
 #: ../src/common/connection.py:1276
 msgid "Check your connection or try again later"
@@ -4454,7 +4366,7 @@ msgstr ""
 #: ../src/common/connection.py:1307
 #, fuzzy, python-format
 msgid "Authentication failed with \"%s\""
-msgstr "APOP doğrulaması başarısız oldu."
+msgstr "Kimliksiz kimlik doğrulaması"
 
 #: ../src/common/connection.py:1309
 msgid "Please check your login and password for correctness."
@@ -4472,12 +4384,12 @@ msgstr ""
 #: ../src/common/connection.py:1632
 #, fuzzy, python-format
 msgid "Sent contact: \"%s\" (%s)"
-msgstr "Takma Ad"
+msgstr "Kişinin bağlantısı kesildi"
 
 #: ../src/common/connection.py:1635
 #, fuzzy
 msgid "Sent contacts:"
-msgstr "eposta gönderildi."
+msgstr "Kişileri eşzamana getir"
 
 #: ../src/common/connection.py:1781
 #: ../src/common/connection.py:1804
@@ -4487,7 +4399,7 @@ msgstr ""
 #: ../src/common/connection.py:2219
 #, fuzzy
 msgid "Unregister failed"
-msgstr "Cılızkodu başarısız"
+msgstr "Bağlantı Kurulamıyor"
 
 #: ../src/common/connection.py:2220
 #, fuzzy, python-format
@@ -4518,7 +4430,7 @@ msgstr "Taşıma"
 #: ../src/common/contacts.py:374
 #, fuzzy
 msgid "Not in roster"
-msgstr "Boşluk değil.\n"
+msgstr "Kişi listesindeki olayları göster"
 
 #. only say that to non Windows users
 #: ../src/common/dbus_support.py:40
@@ -4658,29 +4570,27 @@ msgstr "Önceki Çevirmenler"
 #: ../src/common/fuzzyclock.py:46
 #, fuzzy, python-format
 msgid "twenty five to %(1)s"
-msgstr ""
-"Yazılım hatalarını %s adresine,\n"
-"çeviri hatalarını <gnu-tr@belgeler.org> adresine bildirin\n"
+msgstr "Durumu a_yarla"
 
 #: ../src/common/fuzzyclock.py:46
 #, fuzzy, python-format
 msgid "twenty to %(1)s"
-msgstr "Dizine geç: "
+msgstr "Bunu %s buna %s gönder"
 
 #: ../src/common/fuzzyclock.py:47
 #, fuzzy, python-format
 msgid "quarter to %(1)s"
-msgstr "Dizine geç: "
+msgstr "Bunu %s buna %s gönder"
 
 #: ../src/common/fuzzyclock.py:47
 #, fuzzy, python-format
 msgid "ten to %(1)s"
-msgstr "Dizine geç: "
+msgstr "Bunu %s buna %s gönder"
 
 #: ../src/common/fuzzyclock.py:47
 #, fuzzy, python-format
 msgid "five to %(1)s"
-msgstr "Dizine geç: "
+msgstr "Bunu %s buna %s gönder"
 
 #: ../src/common/fuzzyclock.py:47
 #, fuzzy, python-format
@@ -4725,7 +4635,7 @@ msgstr "Geciken kareleri düşür"
 #: ../src/common/fuzzyclock.py:53
 #, fuzzy
 msgid "Start of week"
-msgstr "Ayrıştırmayı başlat"
+msgstr "Sohbet _Başla"
 
 #: ../src/common/fuzzyclock.py:53
 #: ../src/common/fuzzyclock.py:54
@@ -4750,7 +4660,7 @@ msgstr "İpucunda geçersiz %s karakteri"
 #: ../src/common/helpers.py:156
 #, fuzzy
 msgid "Server address required."
-msgstr "<guilabel>Sunucu</guilabel> bölümüne sunucu adresini girin."
+msgstr "<b>Lütfen sunucu seçiniz</b>"
 
 #: ../src/common/helpers.py:162
 #, fuzzy
@@ -4771,9 +4681,8 @@ msgid "Busy"
 msgstr "Meşgul"
 
 #: ../src/common/helpers.py:214
-#, fuzzy
 msgid "_Not Available"
-msgstr "kullanılamıyor"
+msgstr "_Mevcut Değil"
 
 #: ../src/common/helpers.py:219
 msgid "_Free for Chat"
@@ -4784,25 +4693,21 @@ msgid "Free for Chat"
 msgstr "Sohbet için Hazır"
 
 #: ../src/common/helpers.py:224
-#, fuzzy
 msgid "_Available"
-msgstr "Kullanılabilir"
+msgstr "_Mevcut Değil"
 
 #: ../src/common/helpers.py:226
 #: ../src/features_window.py:114
-#, fuzzy
 msgid "Available"
-msgstr "Kullanılabilir"
+msgstr "Mevcut"
 
 #: ../src/common/helpers.py:228
-#, fuzzy
 msgid "Connecting"
-msgstr "Bağlanılıyor"
+msgstr "Connecting"
 
 #: ../src/common/helpers.py:231
-#, fuzzy
 msgid "A_way"
-msgstr "_Dışarıda durumundayken"
+msgstr "_Uzakta"
 
 #: ../src/common/helpers.py:236
 msgid "_Offline"
@@ -4817,40 +4722,32 @@ msgid "_Invisible"
 msgstr "Görünmez"
 
 #: ../src/common/helpers.py:247
-#, fuzzy
 msgid "?contact has status:Unknown"
-msgstr "%s başarısız oldu: bilinmeyen durum 0x%x"
+msgstr "?contact has status:Bilinmez"
 
 #: ../src/common/helpers.py:249
-#, fuzzy
 msgid "?contact has status:Has errors"
-msgstr ""
-"\n"
-"%s: ********** UYARI: Dosya sistemi hala hatalı **********\n"
-"\n"
+msgstr "?contact has status:Hatalı"
 
 #: ../src/common/helpers.py:254
 msgid "?Subscription we already have:None"
 msgstr "?Subscription we already have:Hiç biri"
 
 #: ../src/common/helpers.py:256
-#, fuzzy
 msgid "To"
-msgstr "Hedef"
+msgstr "Kime"
 
 #: ../src/common/helpers.py:260
 msgid "Both"
 msgstr "İkisi de"
 
 #: ../src/common/helpers.py:268
-#, fuzzy
 msgid "?Ask (for Subscription):None"
-msgstr "her eylemden önce doğrulama istenir"
+msgstr "?Ask (for Subscription):Hiç biri"
 
 #: ../src/common/helpers.py:270
-#, fuzzy
 msgid "Subscribe"
-msgstr "Üye Yap"
+msgstr "Üye yap"
 
 #: ../src/common/helpers.py:279
 msgid "?Group Chat Contact Role:None"
@@ -4893,7 +4790,6 @@ msgid "Administrator"
 msgstr "Yönetici"
 
 #: ../src/common/helpers.py:306
-#, fuzzy
 msgid "Member"
 msgstr "Üye"
 
@@ -4902,20 +4798,17 @@ msgid "is paying attention to the conversation"
 msgstr "sobete dikkat veriyor"
 
 #: ../src/common/helpers.py:347
-#, fuzzy
 msgid "is doing something else"
-msgstr "bir önceki \"else\" burada"
+msgstr "başka bir şey yapıyor"
 
 #: ../src/common/helpers.py:349
-#, fuzzy
 msgid "is composing a message..."
-msgstr "Hata mesajı '%s'"
+msgstr "ilet yazıyor…"
 
 #. paused means he or she was composing but has stopped for a while
 #: ../src/common/helpers.py:352
-#, fuzzy
 msgid "paused composing a message"
-msgstr "%d : geçersiz ileti numarası.\n"
+msgstr "ilet yazarken durdu"
 
 #: ../src/common/helpers.py:354
 msgid "has closed the chat window or tab"
@@ -4968,30 +4861,30 @@ msgstr "%s B"
 #, fuzzy, python-format
 msgid "%d message pending"
 msgid_plural "%d messages pending"
-msgstr[0] "Gönderme kuyrukta"
+msgstr[0] "Ileti alınıyor"
 
 #: ../src/common/helpers.py:1121
-#, fuzzy, python-format
+#, python-format
 msgid " from room %s"
-msgstr "Oda dolu"
+msgstr " gönderen oda %s"
 
 #: ../src/common/helpers.py:1124
 #: ../src/common/helpers.py:1143
-#, fuzzy, python-format
+#, python-format
 msgid " from user %s"
-msgstr "Gruptan kullanıcı çıkart:"
+msgstr " gönderen kişi %s"
 
 #: ../src/common/helpers.py:1126
-#, fuzzy, python-format
+#, python-format
 msgid " from %s"
-msgstr "Kaynak"
+msgstr " gönderen %s"
 
 #: ../src/common/helpers.py:1133
 #: ../src/common/helpers.py:1140
 #, fuzzy, python-format
 msgid "%d event pending"
 msgid_plural "%d events pending"
-msgstr[0] "Gönderme kuyrukta"
+msgstr[0] "Kişi listesindeki olayları göster"
 
 #: ../src/common/helpers.py:1173
 #, python-format
@@ -4999,14 +4892,13 @@ msgid "Gajim - %s"
 msgstr "Gajim - %s"
 
 #: ../src/common/helpers.py:1341
-#, fuzzy
 msgid "Hello, I am $name."
-msgstr "CLOSE { name | ALL }"
+msgstr "Merhaba, benim adım $name."
 
 #: ../src/common/jingle_rtp.py:106
 #, fuzzy, python-format
 msgid "%s configuration error"
-msgstr "yapılandırma hatası: %s:%d: %s"
+msgstr "Hata açıklaması…"
 
 #: ../src/common/jingle_rtp.py:107
 #, python-format
@@ -5039,17 +4931,17 @@ msgstr "video çıktısı"
 #: ../src/common/latex.py:109
 #, fuzzy, python-format
 msgid "Error executing \"%(command)s\": %(error)s"
-msgstr "bilinmeyen komut hatası"
+msgstr "<b>Bir hata oluştu:</b>"
 
 #: ../src/common/logging_helpers.py:33
 #, fuzzy, python-format
 msgid "%s is not a valid loglevel"
-msgstr "Bu anahtar numarasına güvenilmiyor."
+msgstr "Klasör \"%s\" yazılabilir değil"
 
 #: ../src/common/multimedia_helpers.py:37
 #, fuzzy
 msgid " Default device"
-msgstr "%s: öntanımlı aygıt: `%s'\n"
+msgstr "Ses giriş aygıtı"
 
 #. Test src
 #: ../src/common/multimedia_helpers.py:53
@@ -5071,9 +4963,9 @@ msgstr "Otomatik belirle"
 #. Alsa sink
 #: ../src/common/multimedia_helpers.py:59
 #: ../src/common/multimedia_helpers.py:71
-#, fuzzy, python-format
+#, python-format
 msgid "ALSA: %s"
-msgstr "ALSA Aygıt Adı"
+msgstr "ALSA: %s"
 
 #. Fake sink
 #. Fake video output
@@ -5081,7 +4973,7 @@ msgstr "ALSA Aygıt Adı"
 #: ../src/common/multimedia_helpers.py:94
 #, fuzzy
 msgid "Fake audio output"
-msgstr "ALSA ses çıktısı"
+msgstr "Ses çıkış aygıtı"
 
 #. Test src
 #: ../src/common/multimedia_helpers.py:79
@@ -5090,9 +4982,9 @@ msgstr "Video testi"
 
 #. V4L2 src
 #: ../src/common/multimedia_helpers.py:84
-#, fuzzy, python-format
+#, python-format
 msgid "V4L2: %s"
-msgstr "v4l2 kontrolleri"
+msgstr "V4L2: %s"
 
 #. Auto sink
 #: ../src/common/multimedia_helpers.py:96
@@ -5102,15 +4994,14 @@ msgstr "X Pencere Sistemi (X11/XShm/Xv): %s"
 
 #. ximagesink
 #: ../src/common/multimedia_helpers.py:98
-#, fuzzy
 msgid "X Window System (without Xv)"
-msgstr "Önyüklemede X Pencere Sistemini başlat"
+msgstr "X Window System (Xv'sis)"
 
 #. we talk about a file
 #: ../src/common/optparser.py:53
 #, fuzzy, python-format
 msgid "error: cannot open %s for reading"
-msgstr "`%s' okumak için açılamıyor (%s)"
+msgstr "Hata: %s okumak için açılamıyor"
 
 #: ../src/common/optparser.py:296
 #: ../src/common/optparser.py:297
@@ -5503,7 +5394,7 @@ msgstr "Bahçecilik"
 #: ../src/common/pep.py:121
 #, fuzzy
 msgid "Running an Errand"
-msgstr "\"%s\" çalıştırılırken bir hata oluştu!"
+msgstr "Başka bir Gajim zaten çalışıyor "
 
 #: ../src/common/pep.py:122
 #, fuzzy
@@ -5521,7 +5412,7 @@ msgstr "Bir Birada"
 #: ../src/common/pep.py:125
 #, fuzzy
 msgid "Having Coffee"
-msgstr "Bir fincan ekspresso."
+msgstr "Bir Birada"
 
 #: ../src/common/pep.py:126
 msgid "Having Tea"
@@ -5586,7 +5477,7 @@ msgstr "Yüzmekte"
 #: ../src/common/pep.py:141
 #, fuzzy
 msgid "Working out"
-msgstr "yetersiz bellek"
+msgstr "%(nickname)s Çıktı"
 
 #: ../src/common/pep.py:142
 msgid "Grooming"
@@ -5627,12 +5518,12 @@ msgstr "Bir Buluşmada"
 #: ../src/common/pep.py:151
 #, fuzzy
 msgid "Day Off"
-msgstr "Flaş kapalı"
+msgstr "Günün İletisini Sil"
 
 #: ../src/common/pep.py:152
 #, fuzzy
 msgid "Hanging out"
-msgstr "yetersiz bellek"
+msgstr "%(nickname)s Çıktı"
 
 #: ../src/common/pep.py:153
 msgid "Hiding"
@@ -5641,7 +5532,7 @@ msgstr "Saklanmada"
 #: ../src/common/pep.py:154
 #, fuzzy
 msgid "On Vacation"
-msgstr "%s giriş yaptı"
+msgstr "Telefondayım"
 
 #: ../src/common/pep.py:155
 msgid "Praying"
@@ -5671,7 +5562,7 @@ msgstr "Oyunda"
 #: ../src/common/pep.py:162
 #, fuzzy
 msgid "Going out"
-msgstr "yetersiz bellek"
+msgstr "%(nickname)s Çıktı"
 
 #: ../src/common/pep.py:163
 msgid "Partying"
@@ -5680,7 +5571,7 @@ msgstr "Eğlencede"
 #: ../src/common/pep.py:164
 #, fuzzy
 msgid "Reading"
-msgstr "Okunuyor"
+msgstr "Dosya okunurken hata:"
 
 #: ../src/common/pep.py:165
 msgid "Rehearsing"
@@ -5705,7 +5596,7 @@ msgstr "Güneşlencede"
 #: ../src/common/pep.py:170
 #, fuzzy
 msgid "Watching TV"
-msgstr "Freebox TV"
+msgstr "Bir filim bakiyorum."
 
 #: ../src/common/pep.py:171
 msgid "Watching a Movie"
@@ -5719,7 +5610,7 @@ msgstr "%s'le konuşurken hata oldu (%s)"
 #: ../src/common/pep.py:173
 #, fuzzy
 msgid "In Real Life"
-msgstr "Gerçekte: "
+msgstr "Buna davet _et"
 
 #: ../src/common/pep.py:174
 msgid "On the Phone"
@@ -5728,7 +5619,7 @@ msgstr "Telefondayım"
 #: ../src/common/pep.py:175
 #, fuzzy
 msgid "On Video Phone"
-msgstr "Video üzerinde altyazıyı göster"
+msgstr "bir ses ve video"
 
 #: ../src/common/pep.py:176
 msgid "Traveling"
@@ -5746,27 +5637,27 @@ msgstr "Sürülüm:"
 #: ../src/common/pep.py:180
 #, fuzzy
 msgid "In a Car"
-msgstr "Bir yarış arabası."
+msgstr "ben burdaysam"
 
 #: ../src/common/pep.py:181
 #, fuzzy
 msgid "On a Bus"
-msgstr "Yeşil bir otobüs."
+msgstr "Telefondayım"
 
 #: ../src/common/pep.py:182
 #, fuzzy
 msgid "On a Plane"
-msgstr "V-düzlemi rengi"
+msgstr "Telefondayım"
 
 #: ../src/common/pep.py:183
 #, fuzzy
 msgid "On a Train"
-msgstr "Bir tren trafik işareti."
+msgstr "Telefondayım"
 
 #: ../src/common/pep.py:184
 #, fuzzy
 msgid "On a Trip"
-msgstr "Trip-Hop"
+msgstr "Telefondayım"
 
 #: ../src/common/pep.py:185
 #, fuzzy
@@ -5780,7 +5671,7 @@ msgstr "Kodlamada"
 #: ../src/common/pep.py:188
 #, fuzzy
 msgid "In a Meeting"
-msgstr "in assignment"
+msgstr "ben burdaysam"
 
 #: ../src/common/pep.py:189
 msgid "Studying"
@@ -5794,17 +5685,17 @@ msgstr "%s yazılıyor..."
 #: ../src/common/pep.py:340
 #, fuzzy
 msgid "Unknown Artist"
-msgstr "Sanatçı Ayarı"
+msgstr "?Client:Bilinmez"
 
 #: ../src/common/pep.py:343
 #, fuzzy
 msgid "Unknown Title"
-msgstr "Başlık \"%s\".\n"
+msgstr "?Client:Bilinmez"
 
 #: ../src/common/pep.py:346
 #, fuzzy
 msgid "Unknown Source"
-msgstr "Bilinmeyen kaynak çeşidi"
+msgstr "?Client:Bilinmez"
 
 #: ../src/common/pep.py:349
 #, python-format
@@ -5831,7 +5722,7 @@ msgstr ""
 #: ../src/common/zeroconf/connection_zeroconf.py:178
 #, fuzzy
 msgid "Avahi error"
-msgstr "hata (birleşmeli değil)\n"
+msgstr "Hata açıklaması…"
 
 #: ../src/common/zeroconf/connection_zeroconf.py:179
 #, python-format
@@ -5893,7 +5784,7 @@ msgstr "Eklentilerin etkinleştirilmesinde hata #%d."
 #: ../src/config.py:397
 #, fuzzy
 msgid "Default Message"
-msgstr "Ileti alınıyor..."
+msgstr "Ileti alınıyor"
 
 #: ../src/config.py:406
 #, fuzzy
@@ -5914,12 +5805,12 @@ msgstr ""
 #: ../src/config.py:1190
 #, fuzzy
 msgid "status message title"
-msgstr "iletinin durumunu temizle"
+msgstr "Durum ileti değiştir"
 
 #: ../src/config.py:1190
 #, fuzzy
 msgid "status message text"
-msgstr "Boş mesaj metni"
+msgstr "Durum ileti değiştir"
 
 #. Name column
 #: ../src/config.py:1490
@@ -5936,7 +5827,7 @@ msgstr "Adı"
 #: ../src/config.py:1585
 #, fuzzy
 msgid "Relogin now?"
-msgstr "Roller değişiliyor...\n"
+msgstr "%(nick)s durumu şimdi %(status)s"
 
 #: ../src/config.py:1586
 msgid "If you want all the changes to apply instantly, you must relogin."
@@ -5951,7 +5842,7 @@ msgstr ""
 #: ../src/config.py:1934
 #, fuzzy
 msgid "Unread events"
-msgstr "Klavye Olayları"
+msgstr "Okunmamış iletler var"
 
 #: ../src/config.py:1888
 msgid "Read all pending events before removing this account."
@@ -5971,7 +5862,7 @@ msgstr ""
 #: ../src/config.py:2490
 #, fuzzy
 msgid "You are currently connected to the server"
-msgstr "Şu anda bir veritabanına bağlı değilsiniz.\n"
+msgstr "Şuanda bu sunuca bağlanmış kişilere bir ilet gönder"
 
 #: ../src/config.py:1931
 msgid "To change the account name, you must be disconnected."
@@ -5984,7 +5875,7 @@ msgstr ""
 #: ../src/config.py:1941
 #, fuzzy
 msgid "Account Name Already Used"
-msgstr "'%s' adı zaten kullanımda!"
+msgstr "Benim _kullanmak istediyim bir hesapım var bile"
 
 #: ../src/config.py:1942
 msgid "This name is already used by another of your accounts. Please choose another name."
@@ -5994,7 +5885,7 @@ msgstr ""
 #: ../src/config.py:1950
 #, fuzzy
 msgid "Invalid account name"
-msgstr "Geçersiz profil adı"
+msgstr "Geçersiz Liste İsmi"
 
 #: ../src/config.py:1947
 #, fuzzy
@@ -6008,12 +5899,12 @@ msgstr ""
 #: ../src/config.py:2026
 #, fuzzy
 msgid "Rename Account"
-msgstr "AIM Hesabı"
+msgstr "XMPP hesabı %s@%s"
 
 #: ../src/config.py:2027
 #, fuzzy, python-format
 msgid "Enter a new name for account %s"
-msgstr "Yeni Servis için bir İsim Gir"
+msgstr "Grup %s için yeni isim giriniz: "
 
 #: ../src/config.py:2055
 msgid "A Jabber ID must be in the form \"user@servername\"."
@@ -6023,7 +5914,7 @@ msgstr ""
 #: ../src/config.py:3548
 #, fuzzy
 msgid "Invalid entry"
-msgstr "Giriş noktası "
+msgstr "Geçersiz takma ad"
 
 #: ../src/config.py:2264
 #: ../src/config.py:3549
@@ -6044,7 +5935,7 @@ msgstr "İzleyen anahtar kimlikleri için kullanılır hiçbir genel anahtar yok
 #: ../src/config.py:2320
 #, fuzzy
 msgid "OpenPGP Key Selection"
-msgstr "Paylaşılan Kaynak Seçimi"
+msgstr "Hiçbir anahtar seçilmedi"
 
 #: ../src/config.py:2321
 #, fuzzy
@@ -6090,7 +5981,7 @@ msgstr ""
 #: ../src/config.py:2460
 #, fuzzy
 msgid "Account Local already exists."
-msgstr "Belirlenen ölçütleri içeren bir hesap zaten var."
+msgstr "Dosyası zaten var"
 
 #: ../src/config.py:2461
 msgid "Please rename or remove it before enabling link-local messaging."
@@ -6104,28 +5995,28 @@ msgstr "Düz_en"
 #: ../src/config.py:2620
 #, fuzzy, python-format
 msgid "Register to %s"
-msgstr "Kayıt hatası: %s\n"
+msgstr "Bunu %s buna %s gönder"
 
 #. list at the beginning
 #: ../src/config.py:2656
 #, fuzzy
 msgid "Ban List"
-msgstr "liste-öğesi"
+msgstr "Geçersiz Liste İsmi"
 
 #: ../src/config.py:2657
 #, fuzzy
 msgid "Member List"
-msgstr "Castlerin listesi"
+msgstr "Geçersiz Liste İsmi"
 
 #: ../src/config.py:2658
 #, fuzzy
 msgid "Owner List"
-msgstr "Liste Sahibine İlet"
+msgstr "Geçersiz Liste İsmi"
 
 #: ../src/config.py:2659
 #, fuzzy
 msgid "Administrator List"
-msgstr "liste yöneticisi"
+msgstr "Geçersiz Liste İsmi"
 
 #. Address column
 #. holds JID (who said this)
@@ -6146,7 +6037,7 @@ msgstr "Takma Ad"
 #: ../src/config.py:2731
 #, fuzzy
 msgid "Role"
-msgstr "Ünvan"
+msgstr "<b>rol:</b>"
 
 #: ../src/config.py:2758
 msgid "Banning..."
@@ -6158,7 +6049,7 @@ msgstr ""
 msgid ""
 "<b>Whom do you want to ban?</b>\n"
 "\n"
-msgstr "Synaptic'ten çıkmak istiyor musunuz?"
+msgstr "%s grupu kişi listesinden silmek istiyor musun?"
 
 #: ../src/config.py:2762
 #, fuzzy
@@ -6206,12 +6097,12 @@ msgstr ""
 #: ../src/config.py:2871
 #, fuzzy, python-format
 msgid "Removing %s account"
-msgstr "AIM Hesabı"
+msgstr "XMPP hesabı %s@%s"
 
 #: ../src/config.py:2886
 #, fuzzy
 msgid "Account is disabled"
-msgstr "%s zaten devre dışı"
+msgstr "Dosya boş"
 
 #: ../src/config.py:2887
 msgid "To unregister from a server, account must be enabled."
@@ -6222,7 +6113,7 @@ msgstr ""
 #: ../src/gui_interface.py:1227
 #, fuzzy
 msgid "Password Required"
-msgstr "lynx: Parola zorunludur!!!"
+msgstr "Şifre gerekli"
 
 #: ../src/config.py:2901
 #: ../src/gui_interface.py:1207
@@ -6234,7 +6125,7 @@ msgstr "Gadu-Gudu hesabı için parola değiştir"
 #: ../src/gui_interface.py:1227
 #, fuzzy
 msgid "Save password"
-msgstr "Parolayı kaydet"
+msgstr "Parolayı Değiştir"
 
 #: ../src/config.py:2912
 #, fuzzy, python-format
@@ -6248,12 +6139,15 @@ msgstr ""
 #: ../src/config.py:2927
 #, fuzzy, python-format
 msgid "Connection to server %s failed"
-msgstr "'%(server)s' e-posta sunucusuna bağlanılamadı: %(reason)s"
+msgstr ""
+"<b>Sucucuya bağlanılıyor</b>\n"
+"\n"
+"Bekleyiniz lütfen..."
 
 #: ../src/config.py:2928
 #, fuzzy
 msgid "What would you like to do?"
-msgstr "FAT32 kullanmak ister misiniz?"
+msgstr "Seni benim kişi listeye eklemek isterdim"
 
 #: ../src/config.py:2929
 #, fuzzy
@@ -6272,7 +6166,7 @@ msgstr "Varsayılan"
 #: ../src/config.py:3023
 #, fuzzy
 msgid "?print_status:All"
-msgstr "kart durumunu basar"
+msgstr "grupdaki herkez"
 
 #: ../src/config.py:3024
 #, fuzzy
@@ -6282,12 +6176,12 @@ msgstr "ve 'boşluk' ya da 'enter' tuşuna bas."
 #: ../src/config.py:3025
 #, fuzzy
 msgid "?print_status:None"
-msgstr "kart durumunu basar"
+msgstr "Durumu a_yarla"
 
 #: ../src/config.py:3095
 #, fuzzy
 msgid "New Group Chat"
-msgstr "Yeni grup \"%s\" ekleniyor (%d) ...\n"
+msgstr "_Yeni Bir Grup Sohbeti"
 
 #: ../src/config.py:3128
 msgid "This bookmark has invalid data"
@@ -6308,7 +6202,7 @@ msgstr "Geçersiz takma ad"
 #: ../src/config.py:3276
 #, fuzzy
 msgid "Character not allowed"
-msgstr "öndeyiş içinde %1 karakterine izin verilmez"
+msgstr "Rahatsız etmeyin"
 
 #: ../src/config.py:3261
 #: ../src/config.py:3524
@@ -6349,7 +6243,7 @@ msgstr ""
 #: ../src/gui_interface.py:1886
 #, fuzzy
 msgid "Certificate Already in File"
-msgstr "%s: UYARI: `%s' zaten `%s' içine kaydedilmiş\n"
+msgstr "Dosyası zaten var"
 
 #: ../src/config.py:3582
 #: ../src/gui_interface.py:1887
@@ -6405,49 +6299,47 @@ msgstr "Olay"
 #: ../src/config.py:3988
 #, fuzzy
 msgid "First Message Received"
-msgstr "İleti alındığında sohbet başlar"
+msgstr "Üyelik ileti _kaydet"
 
 #: ../src/config.py:3989
 #, fuzzy
 msgid "Next Message Received Focused"
-msgstr "İleti alındığında sohbet başlar"
+msgstr "\"%s\"den yeni bir ileti aldın"
 
 #: ../src/config.py:3991
 #, fuzzy
 msgid "Next Message Received Unfocused"
-msgstr "İleti alındığında sohbet başlar"
+msgstr "\"%s\"den yeni bir ileti aldın"
 
 #: ../src/config.py:3992
 #, fuzzy
 msgid "Contact Connected"
-msgstr "Şuradan Bağlanmış:"
+msgstr "Kişinin bağlantısı kesildi"
 
 #: ../src/config.py:3993
 #, fuzzy
 msgid "Contact Disconnected"
-msgstr "Bağlantı kesildi, tekrar bağlanıyor ...\n"
+msgstr "Kişinin bağlantısı kesildi"
 
 #: ../src/config.py:3994
 #, fuzzy
 msgid "Message Sent"
-msgstr "İleti gönderildi"
+msgstr "Ileti alınıyor"
 
 #: ../src/config.py:3995
 #, fuzzy
 msgid "Group Chat Message Highlight"
-msgstr "Geçersiz grup sohbet Jabber kimliği"
+msgstr "%s grup sohbete katıldı"
 
 #: ../src/config.py:3996
 #, fuzzy
 msgid "Group Chat Message Received"
-msgstr "İleti alındığında sohbet başlar"
+msgstr "%s grup sohbete katıldı"
 
 #: ../src/config.py:3997
 #, fuzzy
 msgid "GMail Email Received"
-msgstr ""
-"'Received' satırı çözümleniyor:\n"
-"%s"
+msgstr "Yeni _GMail e-postadan haber ver"
 
 #: ../src/conversation_textview.py:599
 msgid ""
@@ -6470,7 +6362,7 @@ msgstr "Alıntı"
 #: ../src/conversation_textview.py:745
 #, fuzzy, python-format
 msgid "_Actions for \"%s\""
-msgstr "bir %s anahtarı için olası eylemler: "
+msgstr "%s hesapına"
 
 #: ../src/conversation_textview.py:757
 #, fuzzy
@@ -6495,12 +6387,12 @@ msgstr ""
 #: ../src/conversation_textview.py:795
 #, fuzzy
 msgid "Web _Search for it"
-msgstr "Bir dizge okur ve (onu) arar"
+msgstr "Olaylamak için bir daha tuşla:"
 
 #: ../src/conversation_textview.py:801
 #, fuzzy
 msgid "Open as _Link"
-msgstr "_Bağlantıyı aç:"
+msgstr "Dosya Farklı Kaydet..."
 
 #. %i is day in year (1-365)
 #: ../src/conversation_textview.py:1292
@@ -6538,7 +6430,7 @@ msgstr "yeni%d@jabber.kimliği"
 #: ../src/dialogs.py:81
 #, fuzzy, python-format
 msgid "Contact name: <i>%s</i>"
-msgstr "Dahili adı"
+msgstr "İlk Ad:"
 
 #: ../src/dialogs.py:83
 #, python-format
@@ -6561,7 +6453,7 @@ msgstr "%s için anahtar numarasını belirleyin: "
 #: ../src/dialogs.py:297
 #, fuzzy
 msgid "Contact name"
-msgstr "Dahili adı"
+msgstr "İlk Ad:"
 
 #: ../src/dialogs.py:469
 msgid "Set Mood"
@@ -6570,17 +6462,17 @@ msgstr "Ruh Halini Ayarla"
 #: ../src/dialogs.py:589
 #, fuzzy, python-format
 msgid "%s Status Message"
-msgstr "Ileti alınıyor..."
+msgstr "durum ileti"
 
 #: ../src/dialogs.py:603
 #, fuzzy
 msgid "Status Message"
-msgstr "Ileti alınıyor..."
+msgstr "durum ileti"
 
 #: ../src/dialogs.py:793
 #, fuzzy
 msgid "Overwrite Status Message?"
-msgstr "iletinin durumunu temizle"
+msgstr "Durum ileti değiştir"
 
 #: ../src/dialogs.py:794
 msgid "This name is already used. Do you want to overwrite this status message?"
@@ -6628,7 +6520,7 @@ msgstr ""
 #: ../src/dialogs.py:1050
 #, fuzzy
 msgid "Invalid User ID"
-msgstr "bilinmeyen kullanıcı kimliği: %s"
+msgstr "Geçersiz Jabber kimliği"
 
 #: ../src/dialogs.py:1046
 msgid "The user ID must not contain a resource."
@@ -6641,7 +6533,7 @@ msgstr ""
 #: ../src/dialogs.py:1065
 #, fuzzy
 msgid "Contact already in roster"
-msgstr "imleç \"%s\" zaten kullanımda"
+msgstr "Kişi listesindeki olayları göster"
 
 #: ../src/dialogs.py:1066
 msgid "This contact is already listed in your roster."
@@ -6654,7 +6546,7 @@ msgstr "Kullanıcı kimliği:"
 #: ../src/dialogs.py:1175
 #, fuzzy
 msgid "A GTK+ jabber client"
-msgstr "istemci/sunucu protokolü"
+msgstr "Geçersiz Jabber kimliği"
 
 #: ../src/dialogs.py:1176
 #, fuzzy
@@ -6713,7 +6605,7 @@ msgstr ""
 #: ../src/dialogs.py:2047
 #, fuzzy, python-format
 msgid "Subscription request from %s"
-msgstr "Üyelik isteğini onaylayın"
+msgstr "Dosya Gönderme Soru"
 
 #: ../src/dialogs.py:2122
 #: ../src/gui_interface.py:2670
@@ -6733,7 +6625,7 @@ msgstr ""
 #: ../src/dialogs.py:2300
 #, fuzzy
 msgid "Invalid Account"
-msgstr "AIM Hesabı"
+msgstr "XMPP hesabı %s@%s"
 
 #: ../src/dialogs.py:2301
 msgid "You have to choose an account from which you want to join the groupchat."
@@ -6776,7 +6668,7 @@ msgstr "Bağlantızıs kişisel ilanlar sayfayı yazımlayanmiyor"
 #: ../src/dialogs.py:2377
 #, fuzzy
 msgid "Server"
-msgstr "Sunucu"
+msgstr "_Sunuc:"
 
 #: ../src/dialogs.py:2412
 msgid "This account is not connected to the server"
@@ -6787,18 +6679,19 @@ msgid "You cannot synchronize with an account unless it is connected."
 msgstr ""
 
 #: ../src/dialogs.py:2437
+#, fuzzy
 msgid "Synchronise"
-msgstr ""
+msgstr "Kişileri eşzamana getir"
 
 #: ../src/dialogs.py:2498
 #, fuzzy, python-format
 msgid "Start Chat with account %s"
-msgstr "register:  Sohbet odasına kayıt ol"
+msgstr "Kişiyle sohbet pencere _aç"
 
 #: ../src/dialogs.py:2500
 #, fuzzy
 msgid "Start Chat"
-msgstr "Sohbet Ekle"
+msgstr "Sohbet _Başla"
 
 #: ../src/dialogs.py:2501
 msgid ""
@@ -6812,7 +6705,7 @@ msgstr ""
 #: ../src/dialogs.py:3122
 #, fuzzy
 msgid "Connection not available"
-msgstr "<em>Kullanılabilir değil</em>"
+msgstr "Hiç bir hesap bulunmiyor"
 
 #: ../src/dialogs.py:2528
 #: ../src/dialogs.py:2909
@@ -6825,12 +6718,12 @@ msgstr ""
 #: ../src/dialogs.py:2540
 #, fuzzy
 msgid "Invalid JID"
-msgstr "%s: geçersiz seçenek -- %c\n"
+msgstr "Yerel jid:"
 
 #: ../src/dialogs.py:2540
 #, fuzzy, python-format
 msgid "Unable to parse \"%s\"."
-msgstr "%s kalıbı ayrıştırılamıyor"
+msgstr "Durumu a_yarla"
 
 #: ../src/dialogs.py:2549
 #, fuzzy
@@ -6840,17 +6733,17 @@ msgstr "Bağlantızıs kişisel ilanlar sayfayı yazımlayanmiyor"
 #: ../src/dialogs.py:2568
 #, fuzzy
 msgid "Invalid password"
-msgstr "geçersiz rol şifresi \"%s\""
+msgstr "Parolayı Değiştir"
 
 #: ../src/dialogs.py:2568
 #, fuzzy
 msgid "You must enter a password."
-msgstr "Daha uzun bir parola girmelisiniz"
+msgstr "Odaya girmek için gerekli parola"
 
 #: ../src/dialogs.py:2572
 #, fuzzy
 msgid "Passwords do not match"
-msgstr "Üzgünüm, parolalar birbirine uymuyor."
+msgstr "Bu iletişim kutusunu bir daha _gösterme"
 
 #: ../src/dialogs.py:2573
 msgid "The passwords typed in both fields must be identical."
@@ -6862,14 +6755,14 @@ msgstr ""
 #: ../src/notify.py:503
 #, fuzzy
 msgid "Contact Signed In"
-msgstr "\"%s\" içindeki veri imzalı kabul ediliyor\n"
+msgstr "%(nickname)s Girdi"
 
 #: ../src/dialogs.py:2612
 #: ../src/notify.py:273
 #: ../src/notify.py:505
 #, fuzzy
 msgid "Contact Signed Out"
-msgstr "tam sayı kapsam dışı: %s"
+msgstr "%(nickname)s Çıktı"
 
 #. chat message
 #: ../src/dialogs.py:2614
@@ -6886,7 +6779,7 @@ msgstr "Yeni Mesaj"
 #: ../src/notify.py:507
 #, fuzzy
 msgid "New Single Message"
-msgstr "tek bir bekletilen mesaj."
+msgstr "Tek Bir İleti Gönder…"
 
 #. private message
 #: ../src/dialogs.py:2615
@@ -6907,7 +6800,7 @@ msgstr "Yeni E-mail"
 #: ../src/notify.py:510
 #, fuzzy
 msgid "File Transfer Request"
-msgstr "%s tarafından gönderilen dosyayı kabul ediyor musunuz?"
+msgstr "Dosya Gönderme Soru"
 
 #: ../src/dialogs.py:2619
 #: ../src/gui_interface.py:1309
@@ -6915,7 +6808,7 @@ msgstr "%s tarafından gönderilen dosyayı kabul ediyor musunuz?"
 #: ../src/notify.py:512
 #, fuzzy
 msgid "File Transfer Error"
-msgstr "Dosya aktarımı sırasında hata"
+msgstr "Dosya okunurken hata:"
 
 #: ../src/dialogs.py:2621
 #: ../src/gui_interface.py:1451
@@ -6924,14 +6817,14 @@ msgstr "Dosya aktarımı sırasında hata"
 #: ../src/notify.py:514
 #, fuzzy
 msgid "File Transfer Completed"
-msgstr "Otomatik olarak kabul edilen \"%s\" dosyasının \"%s\" kişisinden aktarımı tamamlandı."
+msgstr "Dosya Gönderme Tamamlandı"
 
 #: ../src/dialogs.py:2622
 #: ../src/gui_interface.py:1454
 #: ../src/notify.py:515
 #, fuzzy
 msgid "File Transfer Stopped"
-msgstr "%s dosya transferini iptal etti"
+msgstr "Dosya Gönderme Tamamlandı"
 
 #: ../src/dialogs.py:2624
 #: ../src/gui_interface.py:1150
@@ -6945,7 +6838,7 @@ msgstr "Sadece davetliler"
 #: ../src/notify.py:521
 #, fuzzy
 msgid "Contact Changed Status"
-msgstr "%s (%s) kişisi %s durumundan %s durumuna geçti"
+msgstr "%(nick)s Durumu değiştirdi"
 
 #: ../src/dialogs.py:2827
 #, fuzzy, python-format
@@ -6960,7 +6853,7 @@ msgstr "Ileti cevap da içerilsin mi?"
 #: ../src/dialogs.py:2831
 #, fuzzy
 msgid "Single Message"
-msgstr "tek bir bekletilen mesaj."
+msgstr "Tek Bir İleti Gönder…"
 
 #. prepare UI for Sending
 #: ../src/dialogs.py:2834
@@ -6984,7 +6877,7 @@ msgstr "Form"
 #: ../src/dialogs.py:2959
 #, fuzzy, python-format
 msgid "RE: %s"
-msgstr "_Kırmızı"
+msgstr "Adı _değiştir"
 
 #: ../src/dialogs.py:2960
 #, fuzzy, python-format
@@ -6994,12 +6887,12 @@ msgstr "Yazıldı: %s\n"
 #: ../src/dialogs.py:3018
 #, fuzzy, python-format
 msgid "XML Console for %s"
-msgstr "Paket bilgisi XML için URL"
+msgstr "_XML Konsolu Göster"
 
 #: ../src/dialogs.py:3020
 #, fuzzy
 msgid "XML Console"
-msgstr "Betik Uçbirimi"
+msgstr "_XML Konsolu Göster"
 
 #. Action that can be done with an incoming list of contacts
 #: ../src/dialogs.py:3151
@@ -7057,22 +6950,22 @@ msgstr ""
 #: ../src/dialogs.py:3332
 #, fuzzy, python-format
 msgid "Added  %s contacts"
-msgstr "Kural eklendi"
+msgstr "Kişileri eşzamana getir"
 
 #: ../src/dialogs.py:3369
 #, fuzzy, python-format
 msgid "Removed  %s contacts"
-msgstr "<b>%s</b> kaldırılacak\n"
+msgstr "Kişileri eşzamana getir"
 
 #: ../src/dialogs.py:3422
 #, fuzzy, python-format
 msgid "Privacy List <b><i>%s</i></b>"
-msgstr "Castlerin listesi"
+msgstr "Geçersiz Liste İsmi"
 
 #: ../src/dialogs.py:3426
 #, fuzzy, python-format
 msgid "Privacy List for %s"
-msgstr "Gizlilik ayarı:"
+msgstr "Sohbet için Hazır"
 
 #: ../src/dialogs.py:3482
 #, fuzzy, python-format
@@ -7087,7 +6980,7 @@ msgstr "Desteklenmeyen eylem '%s'"
 #: ../src/dialogs.py:3531
 #, fuzzy
 msgid "<b>Edit a rule</b>"
-msgstr "Pan: Kuralı Düzenle"
+msgstr "<b>Kural ekle</b>"
 
 #: ../src/dialogs.py:3642
 msgid "<b>Add a rule</b>"
@@ -7096,12 +6989,12 @@ msgstr "<b>Kural ekle</b>"
 #: ../src/dialogs.py:3742
 #, fuzzy, python-format
 msgid "Privacy Lists for %s"
-msgstr "Gizlilik ayarı:"
+msgstr "Kişisel Gizlilik Listesini biçimle"
 
 #: ../src/dialogs.py:3744
 #, fuzzy
 msgid "Privacy Lists"
-msgstr "%u bitset_lists\n"
+msgstr "Kişisel Gizlilik Listesini biçimle"
 
 #: ../src/dialogs.py:3814
 msgid "Invalid List Name"
@@ -7135,7 +7028,7 @@ msgstr "Yorum:"
 #: ../src/dialogs.py:3862
 #, fuzzy
 msgid "Do you want to accept the invitation?"
-msgstr "Synaptic'ten çıkmak istiyor musunuz?"
+msgstr "%s grupu kişi listesinden silmek istiyor musun?"
 
 #: ../src/dialogs.py:3923
 msgid "Choose Sound"
@@ -7149,7 +7042,7 @@ msgstr "Tüm dosyalar"
 #: ../src/dialogs.py:3938
 #, fuzzy
 msgid "Wav Sounds"
-msgstr "Sesleri Etkinleştir"
+msgstr "Sesi Kapat"
 
 #: ../src/dialogs.py:3976
 msgid "Choose Image"
@@ -7162,7 +7055,7 @@ msgstr "Resimler"
 #: ../src/dialogs.py:4061
 #, fuzzy, python-format
 msgid "When %s becomes:"
-msgstr "_Boştayken"
+msgstr "ben burdaysam"
 
 #: ../src/dialogs.py:4063
 #, fuzzy, python-format
@@ -7177,7 +7070,7 @@ msgstr "Tanımlanmamış Koşul"
 #: ../src/dialogs.py:4258
 #, fuzzy
 msgid "when I am "
-msgstr "AM radyo"
+msgstr "ben burdaysam"
 
 #: ../src/dialogs.py:4734
 #, python-format
@@ -7195,7 +7088,7 @@ msgstr ""
 #: ../src/dialogs.py:4827
 #, fuzzy
 msgid "Contact's identity verified"
-msgstr "Passport onaylanmadı"
+msgstr "Yeni Kişi Ekle"
 
 #: ../src/dialogs.py:4749
 #, fuzzy
@@ -7305,7 +7198,7 @@ msgstr ""
 #: ../src/disco.py:1084
 #, fuzzy
 msgid "The service is not browsable"
-msgstr "İşlenen bir sembol değil"
+msgstr "Klasör \"%s\" yazılabilir değil"
 
 #: ../src/disco.py:749
 msgid "This type of service does not contain any items to browse."
@@ -7315,7 +7208,7 @@ msgstr ""
 #: ../src/disco.py:798
 #, fuzzy
 msgid "Invalid Server Name"
-msgstr "Geçersiz Sunucu Adı"
+msgstr "Geçersiz Liste İsmi"
 
 #: ../src/disco.py:852
 #, python-format
@@ -7331,15 +7224,14 @@ msgid "This service does not contain any items to browse."
 msgstr ""
 
 #: ../src/disco.py:1325
-#, fuzzy
 msgid "_Execute Command"
-msgstr "Komut Çalıştır"
+msgstr "Komuta _Yürüt"
 
 #: ../src/disco.py:1335
 #: ../src/disco.py:1506
 #, fuzzy
 msgid "Re_gister"
-msgstr "B<--regex=>I<RE>"
+msgstr "Adı _değiştir"
 
 #: ../src/disco.py:1547
 #, fuzzy, python-format
@@ -7358,20 +7250,17 @@ msgstr "Açıklama"
 
 #. Id column
 #: ../src/disco.py:1753
-#, fuzzy
 msgid "Id"
 msgstr "Id"
 
 #: ../src/disco.py:1783
-#, fuzzy
 msgid "_Bookmark"
-msgstr "Yer imi"
+msgstr "_Yer imi"
 
 #: ../src/disco.py:1818
 #: ../src/gui_interface.py:3180
-#, fuzzy
 msgid "Bookmark already set"
-msgstr "(imleyici atanmamış)"
+msgstr "Yer imi zaten kuruldu"
 
 #: ../src/disco.py:1819
 #: ../src/gui_interface.py:3181
@@ -7381,9 +7270,8 @@ msgstr ""
 
 #: ../src/disco.py:1828
 #: ../src/gui_interface.py:3195
-#, fuzzy
 msgid "Bookmark has been added successfully"
-msgstr "'%s' (%d) öğesi zaten bir görüntüye eklenmiş"
+msgstr "Yer imi başarılı eklendi"
 
 #: ../src/disco.py:1829
 #: ../src/gui_interface.py:3196
@@ -7391,9 +7279,8 @@ msgid "You can manage your bookmarks via Actions menu in your roster."
 msgstr ""
 
 #: ../src/disco.py:2038
-#, fuzzy
 msgid "Subscribed"
-msgstr "Üye"
+msgstr "Üyeldi"
 
 #: ../src/disco.py:2046
 #, fuzzy
@@ -7401,9 +7288,8 @@ msgid "Node"
 msgstr "Ağ Sil"
 
 #: ../src/disco.py:2110
-#, fuzzy
 msgid "New post"
-msgstr "Post Verisi:"
+msgstr "Yeni posta"
 
 #: ../src/disco.py:2116
 msgid "_Subscribe"
@@ -7448,7 +7334,7 @@ msgstr ""
 #: ../src/features_window.py:56
 #, fuzzy
 msgid "Command line"
-msgstr "komut satırı"
+msgstr "Bir komut y_ürüt"
 
 #: ../src/features_window.py:57
 msgid "A script to control Gajim via commandline."
@@ -7473,7 +7359,7 @@ msgstr ""
 #: ../src/features_window.py:60
 #, fuzzy
 msgid "OpenGPG message encryption"
-msgstr "Parola şifrleme hatası.\n"
+msgstr "Üyelik ileti _kaydet"
 
 #: ../src/features_window.py:61
 msgid "Encrypting chat messages with gpg keys."
@@ -7491,7 +7377,7 @@ msgstr "Paket Yöneticisi"
 #: ../src/features_window.py:65
 #, fuzzy
 msgid "Autodetection of network status."
-msgstr "%s: bilinmeyen transaction durumu\n"
+msgstr "Durumu a_yarla"
 
 #: ../src/features_window.py:66
 msgid "Requires gnome-network-manager and python-dbus."
@@ -7514,7 +7400,7 @@ msgstr "Python Programlama Dili"
 #: ../src/features_window.py:72
 #, fuzzy
 msgid "Password encryption"
-msgstr "Parola şifrleme hatası.\n"
+msgstr "Parolayı Değiştir"
 
 #: ../src/features_window.py:73
 msgid "Passwords can be stored securely and not just in plaintext."
@@ -7549,7 +7435,7 @@ msgstr "Tamamlanmamış yazım denetimi kaydı"
 #: ../src/features_window.py:81
 #, fuzzy
 msgid "Spellchecking of composed messages."
-msgstr "Iletiler %s'e eklensin mi?"
+msgstr "<b>Önceden hazırlanmış Durum İletleri</b>"
 
 #: ../src/features_window.py:82
 #, fuzzy
@@ -7572,7 +7458,7 @@ msgstr ""
 #: ../src/features_window.py:88
 #, fuzzy
 msgid "Automatic status"
-msgstr "Durum: etkin %s"
+msgstr "<b>Durum İletler</b>"
 
 #: ../src/features_window.py:89
 msgid "Ability to measure idle time, in order to set auto status."
@@ -7612,7 +7498,7 @@ msgstr "  Uçtan uca şifreleme varsayılıyor.\n"
 #: ../src/features_window.py:97
 #, fuzzy
 msgid "Encrypting chat messages."
-msgstr "Iletiler %s'e eklensin mi?"
+msgstr "<b>Önceden hazırlanmış Durum İletleri</b>"
 
 #: ../src/features_window.py:98
 #: ../src/features_window.py:99
@@ -7694,23 +7580,23 @@ msgstr "Alıcı:"
 #: ../src/filetransfers_window.py:201
 #, fuzzy, python-format
 msgid "Saved in: %s"
-msgstr "Ekran e$lemi `%s' dosyasina kaydedildi\n"
+msgstr "ben burdaysam"
 
 #: ../src/filetransfers_window.py:203
 #, fuzzy
 msgid "File transfer completed"
-msgstr "Otomatik olarak kabul edilen \"%s\" dosyasının \"%s\" kişisinden aktarımı tamamlandı."
+msgstr "Dosya Gönderme Tamamlandı"
 
 #: ../src/filetransfers_window.py:205
 #, fuzzy
 msgid "_Open Containing Folder"
-msgstr "başka bir dizin yarat"
+msgstr "Gmail Gelen Kutusunu _Aç"
 
 #: ../src/filetransfers_window.py:218
 #: ../src/filetransfers_window.py:225
 #, fuzzy
 msgid "File transfer cancelled"
-msgstr "Dosya aktarımından vazgeçildi"
+msgstr "Dosya Gönderme Tamamlandı"
 
 #: ../src/filetransfers_window.py:218
 #: ../src/filetransfers_window.py:226
@@ -7725,17 +7611,17 @@ msgstr "Alıcı: %s"
 #: ../src/filetransfers_window.py:237
 #, fuzzy, python-format
 msgid "Error message: %s"
-msgstr "hata iletisi: '%s'"
+msgstr "Ileti alınıyor"
 
 #: ../src/filetransfers_window.py:238
 #, fuzzy
 msgid "File transfer stopped"
-msgstr "%s dosya transferini iptal etti"
+msgstr "Dosya Gönderme Tamamlandı"
 
 #: ../src/filetransfers_window.py:257
 #, fuzzy
 msgid "Choose File to Send..."
-msgstr "çıktıyı DOSYA'ya gönderir"
+msgstr "%s size bir dosya göndermek istiyor:"
 
 #: ../src/filetransfers_window.py:273
 #: ../src/tooltips.py:738
@@ -7759,7 +7645,7 @@ msgstr "Dosya: %s"
 #: ../src/filetransfers_window.py:326
 #, fuzzy, python-format
 msgid "Type: %s"
-msgstr "Veri tipi"
+msgstr "_Türü:"
 
 #: ../src/filetransfers_window.py:328
 #, python-format
@@ -7863,7 +7749,7 @@ msgstr ""
 #: ../src/gajim.py:143
 #, fuzzy, python-format
 msgid "importing PyGTK failed: %s"
-msgstr "Arkadaşları içeri aktarma işlemi başarısız oldu"
+msgstr "Kişisel ilet gönderimi başarısız"
 
 #: ../src/gajim.py:183
 msgid "Gajim needs PyGTK 2.16 or above"
@@ -8121,7 +8007,7 @@ msgstr ""
 #: ../src/gajim-remote.py:207
 #, fuzzy
 msgid "Deletes a preference item"
-msgstr "Seçilen ögeyi siler"
+msgstr "Günün İletisini Sil"
 
 #: ../src/gajim-remote.py:209
 msgid "key"
@@ -8199,7 +8085,7 @@ msgstr ""
 #: ../src/gajim-remote.py:277
 #, fuzzy
 msgid "Handle a xmpp:/ uri"
-msgstr "Geçmiş nesnesinin URI'sı"
+msgstr "Adres verilmedi"
 
 #: ../src/gajim-remote.py:279
 msgid "uri"
@@ -8208,7 +8094,7 @@ msgstr "uri"
 #: ../src/gajim-remote.py:279
 #, fuzzy
 msgid "URI to handle"
-msgstr "anahtar veritabanı eylemcisine yer ayrılması başarısız oldu\n"
+msgstr "Durumu a_yarla"
 
 #: ../src/gajim-remote.py:280
 msgid "Account in which you want to handle it"
@@ -8262,7 +8148,7 @@ msgstr ""
 #: ../src/gajim-remote.py:327
 #, fuzzy
 msgid "Missing argument \"contact_jid\""
-msgstr "%s için %s:%d de argüman eksik\n"
+msgstr "JID veya Kişi adı girdir"
 
 #: ../src/gajim-remote.py:348
 #, python-format
@@ -8587,7 +8473,7 @@ msgstr "Dosya okunurken hata:"
 #: ../src/gtkgui_helpers.py:403
 #, fuzzy
 msgid "Error parsing file:"
-msgstr "Dosya ayrılırken hata"
+msgstr "Dosya okunurken hata:"
 
 #. do not traceback (could be a permission problem)
 #. we talk about a file here
@@ -8612,7 +8498,7 @@ msgstr ""
 #: ../src/gtkgui_helpers.py:887
 #, fuzzy
 msgid "Extension not supported"
-msgstr "\"%s\" uzantısı desteklenmiyor."
+msgstr "Rahatsız etmeyin"
 
 #: ../src/gtkgui_helpers.py:888
 #, python-format
@@ -8664,7 +8550,7 @@ msgstr "Hata %(code)s: %(msg)s"
 #: ../src/gui_interface.py:635
 #, fuzzy, python-format
 msgid "error while sending %(message)s ( %(error)s )"
-msgstr "Ileti gönderilirken hata oldu, altişlem %d ile iptal bitirildi (%s)."
+msgstr "Kişisel ilet gönderimi başarısız"
 
 #: ../src/gui_interface.py:662
 #: ../src/notify.py:525
@@ -8682,9 +8568,9 @@ msgid "The contact \"%s\" has authorized you to see his or her status."
 msgstr ""
 
 #: ../src/gui_interface.py:701
-#, python-format
+#, fuzzy, python-format
 msgid "Contact \"%s\" removed subscription from you"
-msgstr ""
+msgstr "\"%s\" kişi listesinden silincek"
 
 #: ../src/gui_interface.py:702
 msgid ""
@@ -8775,15 +8661,15 @@ msgid "Gnome Keyring is installed but not                 correctly started (env
 msgstr ""
 
 #: ../src/gui_interface.py:1319
-#, python-format
+#, fuzzy, python-format
 msgid "New mail on %(gmail_mail_address)s"
-msgstr ""
+msgstr "Yeni _GMail e-postadan haber ver"
 
 #: ../src/gui_interface.py:1321
 #, fuzzy, python-format
 msgid "You have %d new mail conversation"
 msgid_plural "You have %d new mail conversations"
-msgstr[0] "$_'de yeni postanız var"
+msgstr[0] "\"%s\"den yeni bir ileti aldın"
 
 #: ../src/gui_interface.py:1334
 #, python-format
@@ -8882,7 +8768,7 @@ msgstr ""
 #: ../src/gui_interface.py:1803
 #, fuzzy
 msgid "Voice Chat Request"
-msgstr "Üyelik isteğini onaylayın"
+msgstr "Dosya Gönderme Soru"
 
 #: ../src/gui_interface.py:1909
 #, fuzzy
@@ -8904,7 +8790,7 @@ msgstr "Bu imza için bir yürürlükten kaldırma sertifikası oluşturulsun mu
 #: ../src/gui_interface.py:1938
 #, fuzzy
 msgid "SSL certificate error"
-msgstr "SSL Sertifika Hatası"
+msgstr "<b>Bir hata oluştu:</b>"
 
 #: ../src/gui_interface.py:1939
 #, python-format
@@ -9007,8 +8893,9 @@ msgid "_New Group Chat"
 msgstr "_Yeni Bir Grup Sohbeti"
 
 #: ../src/gui_menu_builder.py:409
+#, fuzzy
 msgid "I would like to add you to my roster"
-msgstr ""
+msgstr "Seni benim kişi listeye eklemek isterdim"
 
 #: ../src/history_manager.py:114
 msgid "Cannot find history logs database"
@@ -9080,12 +8967,12 @@ msgstr[0] "Seçilen anahtarları gerçekten silmek istiyor musunuz? "
 #: ../src/history_window.py:305
 #, fuzzy, python-format
 msgid "Conversation History with %s"
-msgstr "<h1>%s ile yazışma</h1>\n"
+msgstr "Beni bir açılan pencereyle _haberle"
 
 #: ../src/history_window.py:350
 #, fuzzy
 msgid "Disk Error"
-msgstr "hata (birleşmeli değil)\n"
+msgstr "Hata açıklaması…"
 
 #: ../src/history_window.py:438
 #, python-format
@@ -9104,18 +8991,18 @@ msgstr "Hata"
 #: ../src/history_window.py:453
 #, fuzzy, python-format
 msgid "Status is now: %(status)s: %(status_msg)s"
-msgstr "%s adını değiştirdi: %s"
+msgstr "%(nick)s durumu şimdi %(status)s"
 
 #: ../src/history_window.py:456
 #, fuzzy, python-format
 msgid "Status is now: %(status)s"
-msgstr "%s adını değiştirdi: %s"
+msgstr "%(nick)s durumu şimdi %(status)s"
 
 #: ../src/htmltextview.py:515
 #: ../src/htmltextview.py:525
 #, fuzzy
 msgid "Timeout loading image"
-msgstr "Yüklendikten resmi sonra taramasız yap."
+msgstr "Resimi Farklı Kaydet..."
 
 #: ../src/htmltextview.py:535
 msgid "Image is too big"
@@ -9149,7 +9036,7 @@ msgstr "İletler"
 #: ../src/negotiation.py:34
 #, fuzzy
 msgid "- messages will be logged"
-msgstr "Log mesajlarının ayrıntı düzei belirtiyor."
+msgstr "<b>Önceden hazırlanmış Durum İletleri</b>"
 
 #: ../src/negotiation.py:36
 #, fuzzy
@@ -9172,9 +9059,9 @@ msgid "%(nickname)s Signed Out"
 msgstr "%(nickname)s Çıktı"
 
 #: ../src/notify.py:279
-#, python-format
+#, fuzzy, python-format
 msgid "New Single Message from %(nickname)s"
-msgstr ""
+msgstr "\"%s\"den yeni bir ileti aldın"
 
 #: ../src/notify.py:286
 #, python-format
@@ -9238,12 +9125,12 @@ msgstr "Profil gönderiliyor…"
 #: ../src/profile_window.py:354
 #, fuzzy
 msgid "Information NOT published"
-msgstr "tür bilgisi yetersiz"
+msgstr "Rahatsız etmeyin"
 
 #: ../src/profile_window.py:361
 #, fuzzy
 msgid "vCard publication failed"
-msgstr "Dizgi hazırlığı iptal edildi"
+msgstr "Kişisel ilet gönderimi başarısız"
 
 #: ../src/profile_window.py:362
 msgid "There was an error while publishing your personal information, try again later."
@@ -9253,17 +9140,17 @@ msgstr "Kişisel ilanlar sayfayı yayınlarken bir hata çıktı, sonra bir daha
 #: ../src/roster_window.py:1028
 #, fuzzy
 msgid "Merged accounts"
-msgstr "/Hesaplar/Hesapları Yönet"
+msgstr "Hesapları bir_leştir"
 
 #: ../src/roster_window.py:1916
 #, fuzzy
 msgid "Authorization has been sent"
-msgstr "Bir toplu mesaj gönderildi."
+msgstr "Yeni bir oda yaratılmıştır"
 
 #: ../src/roster_window.py:1917
 #, fuzzy, python-format
 msgid "Now \"%s\" will know your status."
-msgstr "Resmini şimdi yazdırayım mı?"
+msgstr "%(nick)s durumu şimdi %(status)s"
 
 #: ../src/roster_window.py:1940
 #, fuzzy
@@ -9278,7 +9165,7 @@ msgstr ""
 #: ../src/roster_window.py:1955
 #, fuzzy
 msgid "Authorization has been removed"
-msgstr "Bir toplu mesaj gönderildi."
+msgstr "Yeni bir oda yaratılmıştır"
 
 #: ../src/roster_window.py:1956
 #, python-format
@@ -9325,7 +9212,7 @@ msgstr "Gajimi her zaman kapat"
 #: ../src/roster_window.py:2370
 #, fuzzy
 msgid "You have running file transfers"
-msgstr "%s Yapılandırma dosyasını kaldırdınız"
+msgstr "%s size bir dosya göndermek istiyor:"
 
 #: ../src/roster_window.py:2371
 msgid "If you quit now, the file(s) being transfered will be stopped. Do you still want to quit?"
@@ -9406,7 +9293,7 @@ msgstr "Bide bütün grupdaki kişileri listeden sil"
 #: ../src/roster_window.py:2919
 #, fuzzy
 msgid "Assign OpenPGP Key"
-msgstr "İkincil anahtar sınırlamaları:"
+msgstr "Hiçbir anahtar seçilmedi"
 
 #: ../src/roster_window.py:2920
 #, fuzzy
@@ -9442,8 +9329,9 @@ msgstr "Silindikten sonra bu kişi benim durumu bilsin"
 
 #. several contact to remove at the same time
 #: ../src/roster_window.py:3327
+#, fuzzy
 msgid "Contacts will be removed from your roster"
-msgstr ""
+msgstr "\"%s\" kişi listesinden silincek"
 
 #: ../src/roster_window.py:3332
 #, python-format
@@ -9488,7 +9376,7 @@ msgstr ""
 #: ../src/roster_window.py:4231
 #, fuzzy
 msgid "Invalid file URI:"
-msgstr "%d: dosya tanıtıcı geçersiz: %s"
+msgstr "Adres verilmedi"
 
 #: ../src/roster_window.py:4243
 #, fuzzy, python-format
@@ -9504,7 +9392,7 @@ msgstr "Bunu %s buna %s gönder"
 #: ../src/roster_window.py:4364
 #, fuzzy, python-format
 msgid "Make %s and %s metacontacts"
-msgstr "çözülmüş kopyasını yarat ve sil"
+msgstr "bir ses ve video"
 
 #. new chat
 #. single message
@@ -9573,13 +9461,13 @@ msgstr "Çevrimiçi Servisler"
 #: ../src/roster_window.py:5249
 #, fuzzy
 msgid "_Maximize All"
-msgstr "Tümünün İşaretini _Kaldır"
+msgstr "Bütün durumlar"
 
 #: ../src/roster_window.py:5259
 #: ../src/roster_window.py:5433
 #, fuzzy
 msgid "Send Group M_essage"
-msgstr "grup gösterge başlığı"
+msgstr "grupdaki herkez"
 
 #: ../src/roster_window.py:5267
 msgid "To all users"
@@ -9593,13 +9481,13 @@ msgstr "Tüm çevredeki kullanıcılara"
 #: ../src/roster_window.py:5453
 #, fuzzy
 msgid "_Manage Contacts"
-msgstr "Görüntüleri Yönet"
+msgstr "Kişileri eşzamana getir"
 
 #. Edit Groups
 #: ../src/roster_window.py:5462
 #, fuzzy
 msgid "Edit _Groups"
-msgstr "/Dü_zenle/Tü_m Grupları Seç"
+msgstr "Kişisel ilanlar sayfayı yazımla"
 
 #. Send single message
 #: ../src/roster_window.py:5517
@@ -9610,7 +9498,7 @@ msgstr "Tek bir İlet gönder"
 #: ../src/roster_window.py:5564
 #, fuzzy
 msgid "Execute Command..."
-msgstr "Komut Çalıştır"
+msgstr "<b>Yürütecek komutayı seç</b>"
 
 #. Manage Transport submenu
 #: ../src/roster_window.py:5574
@@ -9655,12 +9543,12 @@ msgstr "Yeni grup sohbete _katıl"
 #: ../src/roster_window.py:5934
 #, fuzzy
 msgid "Change Status Message..."
-msgstr "Durumu şuna _değiştir:"
+msgstr "Durum ileti değiştir"
 
 #: ../src/search_window.py:94
 #, fuzzy
 msgid "Waiting for results"
-msgstr "Arama Sonuçları: "
+msgstr "Sohbet için Hazır"
 
 #: ../src/search_window.py:132
 #: ../src/search_window.py:210
@@ -9673,7 +9561,7 @@ msgstr "Komuta satrında hata: %s\n"
 #: ../src/search_window.py:202
 #, fuzzy
 msgid "No result"
-msgstr "%1 diye bir sonuç eleman türü yok"
+msgstr "<b>Telefon numara:</b>"
 
 #: ../src/session.py:132
 #, fuzzy
@@ -9713,12 +9601,12 @@ msgstr ""
 #: ../src/statusicon.py:210
 #, fuzzy
 msgid "_Change Status Message..."
-msgstr "Durumu şuna _değiştir:"
+msgstr "Durum ileti değiştir"
 
 #: ../src/statusicon.py:322
 #, fuzzy
 msgid "Hide _Roster"
-msgstr "Detayları Gizl_e"
+msgstr "<b>Kişi Listesi Görünümü</b>"
 
 #: ../src/statusicon.py:333
 msgid "Hide this menu"
@@ -9733,7 +9621,7 @@ msgstr "Jabber kimliği:"
 #: ../src/tooltips.py:566
 #, fuzzy
 msgid "Resource: "
-msgstr "Kaynak"
+msgstr "<b>Kaynak:</b>"
 
 #: ../src/tooltips.py:359
 #, python-format
@@ -9804,7 +9692,7 @@ msgstr "Gönder"
 #: ../src/tooltips.py:706
 #, fuzzy
 msgid "Type: "
-msgstr "Veri tipi"
+msgstr "_Türü:"
 
 #: ../src/tooltips.py:710
 #, fuzzy
@@ -9871,7 +9759,7 @@ msgstr "Üye olduğu süre:"
 #: ../src/vcard.py:335
 #, fuzzy
 msgid "<b>Affiliation:</b>"
-msgstr "Bilinmeyen ilişkilendirme: \"%s\""
+msgstr "üyelik değişti"
 
 #: ../src/vcard.py:343
 msgid "This contact is interested in your presence information, but you are not interested in his/her presence"
@@ -9903,5 +9791,5 @@ msgstr "Bekleyen üyelemek soru yok."
 #: ../src/vcard.py:539
 #, fuzzy
 msgid " resource with priority "
-msgstr "Öncelik bulunamadı"
+msgstr "Beni bir açılan pencereyle _haberle"
 
