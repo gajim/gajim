@@ -8,13 +8,14 @@ msgstr ""
 "Project-Id-Version: Gajim - A Jabber Instant Messager 0.13.10.2-dev\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-03-19 15:01+0100\n"
-"PO-Revision-Date: 2010-03-23 21:34+0100\n"
+"PO-Revision-Date: 2010-03-24 22:29+0100\n"
 "Last-Translator: Ferdi Kunzmann <shegman@tablatures.de>\n"
 "Language-Team: Turkish\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Poedit-Bookmarks: -1,-1,66,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: ../data/gui/account_context_menu.ui.h:1
 msgid "_Open Gmail Inbox"
@@ -575,9 +576,8 @@ msgid "<b>Actions</b>"
 msgstr "<b>Aksiyonlar</b>"
 
 #: ../data/gui/advanced_notifications_window.ui.h:3
-#, fuzzy
 msgid "<b>Conditions</b>"
-msgstr "  %d/%d başlangıç şartları\n"
+msgstr "<b>Şartlar</b>"
 
 #: ../data/gui/advanced_notifications_window.ui.h:4
 #: ../data/gui/preferences_window.ui.h:17
@@ -1179,11 +1179,12 @@ msgstr ""
 "İletler"
 
 #: ../data/gui/gajim_themes_window.ui.h:15
-#, fuzzy
 msgid ""
 "MUC Directed\n"
 "Messages"
-msgstr "Sohbet odasına katıl"
+msgstr ""
+"Yönetilmiş MUC\n"
+"İletler"
 
 #: ../data/gui/gajim_themes_window.ui.h:17
 msgid "Paused"
@@ -1567,18 +1568,16 @@ msgid "Always use GNOME default applications"
 msgstr ""
 
 #: ../data/gui/preferences_window.ui.h:32
-#, fuzzy
 msgid "Always use KDE default applications"
-msgstr "GTK+ uygulamalarında KDE &yazıtiplerimi kullan"
+msgstr "Herzaman öntanımlı KDE uygulamaları kullan"
 
 #: ../data/gui/preferences_window.ui.h:33
 msgid "Always use Xfce default applications"
 msgstr ""
 
 #: ../data/gui/preferences_window.ui.h:34
-#, fuzzy
 msgid "Ask status message when I:"
-msgstr "<b>Yeni durum ileti yaz</b>"
+msgstr "Durum ileti sor ben buysam:"
 
 #: ../data/gui/preferences_window.ui.h:35
 #: ../src/features_window.py:104
@@ -1594,9 +1593,8 @@ msgid "Audio output device"
 msgstr "Ses çıkış aygıtı"
 
 #: ../data/gui/preferences_window.ui.h:38
-#, fuzzy
 msgid "Autodetect on every Gajim startup"
-msgstr "Gajim açılırken bağlan"
+msgstr "Gajim açılırken kendilinden belirle"
 
 #: ../data/gui/preferences_window.ui.h:39
 msgid "Chat message:"
@@ -1607,9 +1605,8 @@ msgid "Check on startup if Gajim is the _default Jabber client"
 msgstr ""
 
 #: ../data/gui/preferences_window.ui.h:41
-#, fuzzy
 msgid "Composing only"
-msgstr "Sadece _Simgeler"
+msgstr "Sadece yazıştırıyor"
 
 #: ../data/gui/preferences_window.ui.h:42
 msgid "Configure color and font of the interface"
@@ -1646,9 +1643,8 @@ msgstr ""
 #: ../data/gui/preferences_window.ui.h:50
 #: ../src/config.py:170
 #: ../src/config.py:653
-#, fuzzy
 msgid "Disabled"
-msgstr "Devre Dışı"
+msgstr "Geçersizleşti"
 
 #: ../data/gui/preferences_window.ui.h:51
 msgid "Display _activity of contacts in roster"
@@ -1764,18 +1760,16 @@ msgid "If not disabled, Gajim will replace ascii smilies like ':)' with equivale
 msgstr ""
 
 #: ../data/gui/preferences_window.ui.h:80
-#, fuzzy
 msgid "Log _encrypted chat session"
-msgstr "      --ssl         ssl ile şifrelenmiş oturumu etkinleştir\n"
+msgstr "Şifrelenmiş sohbet oturumu kaygıtla"
 
 #: ../data/gui/preferences_window.ui.h:81
 msgid "Ma_ke message windows compact"
 msgstr ""
 
 #: ../data/gui/preferences_window.ui.h:82
-#, fuzzy
 msgid "Ma_nage..."
-msgstr "&Ekranı kapla"
+msgstr "Yön_et..."
 
 #: ../data/gui/preferences_window.ui.h:83
 msgid "Never"
@@ -1794,28 +1788,24 @@ msgid "Notify me about contacts that sign _out"
 msgstr "_Çıkan kişilerden haber ver"
 
 #: ../data/gui/preferences_window.ui.h:87
-#, fuzzy
 msgid "Notify me about it"
-msgstr "Sadece kullanılabilir güncellemeleri _bildir"
+msgstr "Ona dair bana haber ver"
 
 #: ../data/gui/preferences_window.ui.h:88
 msgid "Notify on new _GMail email"
 msgstr "Yeni _GMail e-postadan haber ver"
 
 #: ../data/gui/preferences_window.ui.h:89
-#, fuzzy
 msgid "Only when pending events"
-msgstr "Sadece erişilebilir değilken"
+msgstr "Sadece bekleyen olaylarda"
 
 #: ../data/gui/preferences_window.ui.h:90
-#, fuzzy
 msgid "Personal Events"
-msgstr "<b>Kişisel ilanlar sayfası</b>"
+msgstr "Kişisel Olaylar"
 
 #: ../data/gui/preferences_window.ui.h:91
-#, fuzzy
 msgid "Play _sounds"
-msgstr "Sesi Kapat"
+msgstr "_Sesleri çal"
 
 #: ../data/gui/preferences_window.ui.h:92
 #, fuzzy
@@ -1848,14 +1838,12 @@ msgid "Show systray:"
 msgstr "_XML Konsolu Göster"
 
 #: ../data/gui/preferences_window.ui.h:99
-#, fuzzy
 msgid "Sign _in"
-msgstr "ben burdaysam"
+msgstr "_Bağlan"
 
 #: ../data/gui/preferences_window.ui.h:100
-#, fuzzy
 msgid "Sign _out"
-msgstr "%(nickname)s Çıktı"
+msgstr "_Çık"
 
 #: ../data/gui/preferences_window.ui.h:101
 #, fuzzy
@@ -1877,14 +1865,12 @@ msgid "Status"
 msgstr "Durum"
 
 #: ../data/gui/preferences_window.ui.h:105
-#, fuzzy
 msgid "Status _iconset:"
-msgstr "<b>Durum İletler</b>"
+msgstr "Durum simgeler:"
 
 #: ../data/gui/preferences_window.ui.h:106
-#, fuzzy
 msgid "Style"
-msgstr "Yazıtipi tarzı:"
+msgstr "Biçem"
 
 #: ../data/gui/preferences_window.ui.h:107
 msgid "T_heme:"
@@ -1910,19 +1896,16 @@ msgid "Use _transports icons"
 msgstr "G_PG acenta kullan"
 
 #: ../data/gui/preferences_window.ui.h:115
-#, fuzzy
 msgid "Use system _default"
-msgstr "G_PG acenta kullan"
+msgstr "Sistem _öntanımlıyı kullan"
 
 #: ../data/gui/preferences_window.ui.h:116
-#, fuzzy
 msgid "Video input device"
-msgstr "Ses giriş aygıtı"
+msgstr "Video giriş aygıtı"
 
 #: ../data/gui/preferences_window.ui.h:117
-#, fuzzy
 msgid "Video output device"
-msgstr "Ses çıkış aygıtı"
+msgstr "Video çıkış aygıtı"
 
 #: ../data/gui/preferences_window.ui.h:118
 msgid "When new event is received:"
@@ -1937,9 +1920,8 @@ msgid "Your nickname:"
 msgstr "Senin takma adın:"
 
 #: ../data/gui/preferences_window.ui.h:121
-#, fuzzy
 msgid "_Away after:"
-msgstr "Uzun süreli uzakta"
+msgstr "Bu zamandan sonra _uzakta:"
 
 #: ../data/gui/preferences_window.ui.h:122
 #, fuzzy
@@ -1951,14 +1933,12 @@ msgid "_Display chat state notifications:"
 msgstr "Sohbet durum bildirimleri _göster:"
 
 #: ../data/gui/preferences_window.ui.h:124
-#, fuzzy
 msgid "_Emoticons:"
-msgstr "Duygu simgeleri gönder"
+msgstr "Duygu _Simgeler:"
 
 #: ../data/gui/preferences_window.ui.h:125
-#, fuzzy
 msgid "_File manager:"
-msgstr "_Dosya Gönder…"
+msgstr "_Dosya yönetici"
 
 #: ../data/gui/preferences_window.ui.h:126
 msgid "_Highlight misspelled words"
@@ -2002,9 +1982,8 @@ msgid "_Send chat state notifications:"
 msgstr "Sohbet durum haberleri _göster:"
 
 #: ../data/gui/preferences_window.ui.h:135
-#, fuzzy
 msgid "_Status message:"
-msgstr "durum ileti"
+msgstr "_Durum ileti:"
 
 #: ../data/gui/preferences_window.ui.h:136
 #, fuzzy
@@ -2031,9 +2010,8 @@ msgid "minutes"
 msgstr "dakika"
 
 #: ../data/gui/privacy_lists_window.ui.h:1
-#, fuzzy
 msgid "Privacy Lists:"
-msgstr "Kişisel Gizlilik Listesini biçimle"
+msgstr "Kişisel Gizlilik Listesi:"
 
 #: ../data/gui/privacy_list_window.ui.h:1
 #, fuzzy
@@ -2105,18 +2083,16 @@ msgid "both"
 msgstr "ikiside"
 
 #: ../data/gui/privacy_list_window.ui.h:16
-#, fuzzy
 msgid "from"
-msgstr "Gönderen:"
+msgstr "gönderen"
 
 #: ../data/gui/privacy_list_window.ui.h:17
 msgid "none"
 msgstr "hiç biri"
 
 #: ../data/gui/privacy_list_window.ui.h:18
-#, fuzzy
 msgid "to"
-msgstr "Kime:"
+msgstr "kime"
 
 #: ../data/gui/privacy_list_window.ui.h:19
 msgid "to send me messages"
@@ -2295,9 +2271,8 @@ msgid "Work"
 msgstr "İş"
 
 #: ../data/gui/remove_account_window.ui.h:1
-#, fuzzy
 msgid "<b>What do you want to do?</b>"
-msgstr "Ne yapmak istiyorsun?"
+msgstr "<b>Ne yapmak istiyorsun?</b>"
 
 #: ../data/gui/remove_account_window.ui.h:2
 #, fuzzy
@@ -2314,9 +2289,8 @@ msgstr ""
 #: ../src/roster_window.py:5363
 #: ../src/roster_window.py:5489
 #: ../src/roster_window.py:5619
-#, fuzzy
 msgid "_Remove"
-msgstr "kaldır"
+msgstr "_Kaldır"
 
 #: ../data/gui/roster_item_exchange_window.ui.h:1
 msgid "<b>someone@somewhere.com</b> would like you to <b>add</b> some contacts in your roster."
@@ -2347,9 +2321,8 @@ msgid "Help online"
 msgstr "Çevrede / Sohbete hazır"
 
 #: ../data/gui/roster_window.ui.h:4
-#, fuzzy
 msgid "Show Only _Active Contacts"
-msgstr "sadece bu hesapın kişilerini göster"
+msgstr "Sadece _Çecredeki Kişileri Göster"
 
 #: ../data/gui/roster_window.ui.h:5
 #, fuzzy
@@ -2357,22 +2330,19 @@ msgid "Show Trans_ports"
 msgstr "_XML Konsolu Göster"
 
 #: ../data/gui/roster_window.ui.h:6
-#, fuzzy
 msgid "Show _Offline Contacts"
-msgstr "sadece bu hesapın kişilerini göster"
+msgstr "_Çevredışı Kişileri Göster"
 
 #: ../data/gui/roster_window.ui.h:7
 #: ../src/statusicon.py:326
-#, fuzzy
 msgid "Show _Roster"
-msgstr "Kişi listesindeki olayları göster"
+msgstr "Kişi Listesini Göster"
 
 #. Make sure the character after "_" is not M/m (conflicts with Alt+M that is supposed to show the Emoticon Selector)
 #: ../data/gui/roster_window.ui.h:8
 #: ../data/gui/subscription_request_window.ui.h:6
-#, fuzzy
 msgid "_Actions"
-msgstr "Eylemler"
+msgstr "_Aktionlar"
 
 #: ../data/gui/roster_window.ui.h:10
 #: ../src/disco.py:1504
@@ -2388,18 +2358,16 @@ msgid "_View"
 msgstr "_Görünüm"
 
 #: ../data/gui/search_window.ui.h:1
-#, fuzzy
 msgid "Please wait while retrieving search form..."
-msgstr "Lütfen bekle komuta listesini alırken…"
+msgstr "Lütfen bekle arama formu alırken…"
 
 #: ../data/gui/search_window.ui.h:2
 msgid "Search"
 msgstr "Ara"
 
 #: ../data/gui/search_window.ui.h:3
-#, fuzzy
 msgid "_Add contact"
-msgstr "Yeni Kişi Ekle"
+msgstr "Kişi _ekle"
 
 #. Information
 #: ../data/gui/search_window.ui.h:4
@@ -2434,9 +2402,8 @@ msgid "From:"
 msgstr "Gönderen:"
 
 #: ../data/gui/single_message_window.ui.h:3
-#, fuzzy
 msgid "Reply to this message"
-msgstr "bu iletiye ileti ekle"
+msgstr "Bu ilete cevapla"
 
 #: ../data/gui/single_message_window.ui.h:4
 msgid "Sen_d"
@@ -2447,9 +2414,8 @@ msgid "Send message"
 msgstr "Mesajı gönder"
 
 #: ../data/gui/single_message_window.ui.h:6
-#, fuzzy
 msgid "Send message and close window"
-msgstr "Bu görüntüyü kaydet ve penceresini kapat"
+msgstr "Bu ileti gönder ve pencereyi kapat"
 
 #: ../data/gui/single_message_window.ui.h:7
 msgid "Subject:"
@@ -2507,11 +2473,8 @@ msgid "Mute Sounds"
 msgstr "Sesi Kapat"
 
 #: ../data/gui/systray_context_menu.ui.h:2
-#, fuzzy
 msgid "Show All Pending _Events"
-msgstr ""
-"SHOW name\n"
-"SHOW ALL"
+msgstr "Bütün Bekleyen _Olayları Göster"
 
 #. Given Name
 #: ../data/gui/vcard_information_window.ui.h:3
@@ -3320,7 +3283,6 @@ msgstr ""
 #: ../src/common/optparser.py:483
 #: ../src/common/optparser.py:517
 #: ../src/gui_interface.py:3370
-#, fuzzy
 msgid "default"
 msgstr "öntanımlı"
 
@@ -5782,9 +5744,8 @@ msgid "Error while adding service. %s"
 msgstr "Eklentilerin etkinleştirilmesinde hata #%d."
 
 #: ../src/config.py:397
-#, fuzzy
 msgid "Default Message"
-msgstr "Ileti alınıyor"
+msgstr "Öntanımlı İlet"
 
 #: ../src/config.py:406
 #, fuzzy
@@ -6159,9 +6120,8 @@ msgid "Don't remove anything. I'll try again later"
 msgstr ""
 
 #: ../src/config.py:3023
-#, fuzzy
 msgid "Default"
-msgstr "Varsayılan"
+msgstr "Öntanımlı"
 
 #: ../src/config.py:3023
 #, fuzzy
@@ -6288,9 +6248,8 @@ msgid "You already have an account using this name."
 msgstr ""
 
 #: ../src/config.py:3945
-#, fuzzy
 msgid "Active"
-msgstr "Etkin"
+msgstr "Aktif"
 
 #: ../src/config.py:3953
 msgid "Event"
@@ -7384,7 +7343,6 @@ msgid "Requires gnome-network-manager and python-dbus."
 msgstr ""
 
 #: ../src/features_window.py:68
-#, fuzzy
 msgid "Session Management"
 msgstr "Oturum Yönetimi"
 
@@ -7443,9 +7401,8 @@ msgid "Requires libgtkspell."
 msgstr " (yetki gerektirir)"
 
 #: ../src/features_window.py:84
-#, fuzzy
 msgid "Notification"
-msgstr "bildiri üret"
+msgstr "Bildirim"
 
 #: ../src/features_window.py:85
 msgid "Passive popups notifying for new events."
@@ -7456,9 +7413,8 @@ msgid "Requires python-notify or instead python-dbus in conjunction with notific
 msgstr ""
 
 #: ../src/features_window.py:88
-#, fuzzy
 msgid "Automatic status"
-msgstr "<b>Durum İletler</b>"
+msgstr "Otomatik durum"
 
 #: ../src/features_window.py:89
 msgid "Ability to measure idle time, in order to set auto status."
@@ -9423,9 +9379,8 @@ msgstr "%s hesapı kullanıp"
 
 #: ../src/roster_window.py:4945
 #: ../src/statusicon.py:309
-#, fuzzy
 msgid "_Manage Bookmarks..."
-msgstr "Yer imlerini yönet"
+msgstr "Yer İmlerini _Yönet"
 
 #. profile, avatar
 #: ../src/roster_window.py:4965
