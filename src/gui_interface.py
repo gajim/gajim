@@ -1250,8 +1250,6 @@ class Interface:
             gajim.contacts.add_contact(account, contact)
             self.roster.add_contact(jid, account)
         else:
-            # it is an existing contact that might has changed
-            re_place = False
             # If contact has changed (sub, ask or group) update roster
             # Mind about observer status changes:
             #   According to xep 0162, a contact is not an observer anymore when
@@ -1259,7 +1257,6 @@ class Interface:
             old_groups = contacts[0].groups
             if contacts[0].sub != sub or contacts[0].ask != ask\
             or old_groups != groups:
-                re_place = True
                 # c.get_shown_groups() has changed. Reflect that in
                 # roster_winodow
                 self.roster.remove_contact(jid, account, force=True)
@@ -1268,13 +1265,11 @@ class Interface:
                 contact.sub = sub
                 contact.ask = ask
                 contact.groups = groups or []
-            if re_place:
-                self.roster.add_contact(jid, account)
-                # Refilter and update old groups
-                for group in old_groups:
-                    self.roster.draw_group(group, account)
-            else:
-                self.roster.draw_contact(jid, account)
+            self.roster.add_contact(jid, account)
+            # Refilter and update old groups
+            for group in old_groups:
+                self.roster.draw_group(group, account)
+            self.roster.draw_contact(jid, account)
 
         if self.remote_ctrl:
             self.remote_ctrl.raise_signal('RosterInfo', (account, array))
