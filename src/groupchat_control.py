@@ -1735,8 +1735,8 @@ class GroupchatControl(ChatControlBase):
             title = _('Changing Nickname')
             prompt = _('Please specify the new nickname you want to use:')
             gajim.interface.instances['change_nick_dialog'] = \
-                    dialogs.ChangeNickDialog(self.account, self.room_jid, title,
-                    prompt)
+                dialogs.ChangeNickDialog(self.account, self.room_jid, title,
+                prompt, change_nick=True)
 
     def _on_configure_room_menuitem_activate(self, widget):
         c = gajim.contacts.get_gc_contact(self.account, self.room_jid, self.nick)

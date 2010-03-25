@@ -1870,10 +1870,15 @@ class ChangeNickDialog(InputDialogCheck):
     Class for changing room nickname in case of conflict
     """
 
-    def __init__(self, account, room_jid, title, prompt, check_text=None):
+    def __init__(self, account, room_jid, title, prompt, check_text=None,
+    change_nick=False):
+        """
+        change_nick must be set to True when we are already occupant of the room
+        and we are changing our nick
+        """
         InputDialogCheck.__init__(self, title, '', checktext=check_text,
                 input_str='', is_modal=True, ok_handler=None, cancel_handler=None)
-        self.room_queue = [(account, room_jid, prompt)]
+        self.room_queue = [(account, room_jid, prompt, change_nick)]
         self.check_next()
 
     def on_input_dialog_delete_event(self, widget, event):
@@ -1902,7 +1907,8 @@ class ChangeNickDialog(InputDialogCheck):
             if 'change_nick_dialog' in gajim.interface.instances:
                 del gajim.interface.instances['change_nick_dialog']
             return
-        self.account, self.room_jid, self.prompt = self.room_queue.pop(0)
+        self.account, self.room_jid, self.prompt, self.change_nick = \
+            self.room_queue.pop(0)
         self.setup_dialog()
 
         if gajim.new_room_nick is not None and not gajim.gc_connected[
@@ -1931,7 +1937,7 @@ class ChangeNickDialog(InputDialogCheck):
         if is_checked:
             gajim.new_room_nick = nick
         gajim.connections[self.account].join_gc(nick, self.room_jid, None,
-                change_nick=True)
+            change_nick=self.change_nick)
         if gajim.gc_connected[self.account][self.room_jid]:
             # We are changing nick, we will change self.nick when we receive
             # presence that inform that it works
@@ -1946,9 +1952,9 @@ class ChangeNickDialog(InputDialogCheck):
         self.gc_control.new_nick = ''
         self.check_next()
 
-    def add_room(self, account, room_jid, prompt):
-        if (account, room_jid, prompt) not in self.room_queue:
-            self.room_queue.append((account, room_jid, prompt))
+    def add_room(self, account, room_jid, prompt, change_nick=False):
+        if (account, room_jid, prompt, change_nick) not in self.room_queue:
+            self.room_queue.append((account, room_jid, prompt, change_nick))
 
 class InputTextDialog(CommonInputDialog):
     """
