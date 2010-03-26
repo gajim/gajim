@@ -182,8 +182,8 @@ class StandardCommonChatCommands(CommandContainer):
     def dtmf(self, events):
         if not self.audio_sid:
             raise CommandError(_("There is no open audio session with this contact"))
-        # Valid values for DTMF tones are *, # or a number
-        events = filter(lambda e: e in ('*', '#') or e.isdigit (), events)
+        # Valid values for DTMF tones are *, # or a number.
+        events = [e for e in events if e in ('*', '#') or e.isdigit()]
         if events:
             session = gajim.connections[self.account].get_jingle_session(
                 self.contact.get_full_jid(), self.audio_sid)
