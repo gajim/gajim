@@ -3282,8 +3282,8 @@ msgstr ""
 #: ../src/common/config.py:88
 msgid "When to show systray icon. Can be 'never', 'on_event', 'always'."
 msgstr ""
-"Kiedy pokazać ikonę w obszarze powiadomienia. Może być 'nigdy', "
-"'podczas_zdarzenia', 'zawsze'."
+"Kiedy pokazać ikonę w obszarze powiadomienia. Dostępne wartości to "
+"'never' (nigdy), 'on_event' (podczas zdarzenia), 'always' (zawsze)."
 
 #: ../src/common/config.py:93
 msgid "Incoming nickname color."
