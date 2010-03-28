@@ -1767,10 +1767,11 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
                     self.dispatch('NOTIFY', (jid_stripped, 'error', errmsg, resource,
                             prio, keyID, timestamp, None))
                 elif (errcode == '503'):
-                    # maximum user number reached
-                    self.dispatch('ERROR', (_('Unable to join group chat'),
-                            _('Maximum number of users for %s has been reached') % \
-                            room_jid))
+                    if gc_control is None or gc_control.autorejoin is None:
+                        # maximum user number reached
+                        self.dispatch('ERROR', (_('Unable to join group chat'),
+                                _('Maximum number of users for %s has been reached') % \
+                                room_jid))
                 elif (errcode == '401') or (errcon == 'not-authorized'):
                     # password required to join
                     self.dispatch('GC_PASSWORD_REQUIRED', (room_jid, nick))
