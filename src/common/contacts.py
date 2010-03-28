@@ -590,13 +590,10 @@ class Contacts:
 			return False
 		return True
 
-	def get_contacts_jid_list(self, account):
-		return self._accounts[account].contacts._get_contacts_jid_list()
-
 	def get_jid_list(self, account):
 		return self._contacts[account].keys()
 
-	def _get_contacts_jid_list(self):
+	def get_contacts_jid_list(self):
 		return [jid for jid, contact in self._contacts.iteritems() if not
 				contact[0].is_groupchat()]
 
