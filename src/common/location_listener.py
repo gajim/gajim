@@ -37,28 +37,6 @@ class LocationListener:
         self._data = {}
 
     def get_data(self):
-        self._get_address()
-        self._get_position()
-
-    def _get_address(self):
-        bus = dbus.SessionBus()
-        if 'org.freedesktop.Geoclue.Master' not in bus.list_names():
-            self._on_geoclue_address_changed()
-            return
-        obj = bus.get_object('org.freedesktop.Geoclue.Master',
-                '/org/freedesktop/Geoclue/Master')
-        # get MasterClient path
-        path = obj.Create()
-        # get MasterClient
-        cli = bus.get_object('org.freedesktop.Geoclue.Master', path)
-        cli.AddressStart()
-        # Check that there is a provider
-        name, description, service, path = cli.GetAddressProvider()
-        if path:
-            timestamp, address, accuracy = cli.GetAddress()
-            self._on_geoclue_address_changed(timestamp, address, accuracy)
-
-    def _get_position(self):
         bus = dbus.SessionBus()
         if 'org.freedesktop.Geoclue.Master' not in bus.list_names():
             self._on_geoclue_position_changed()
@@ -69,11 +47,29 @@ class LocationListener:
         path = obj.Create()
         # get MasterClient
         cli = bus.get_object('org.freedesktop.Geoclue.Master', path)
+        cli.SetRequirements(1, 0, True, 1023)
+
+        self._get_address(cli)
+        self._get_position(cli)
+
+    def _get_address(self, cli):
+        bus = dbus.SessionBus()
+        cli.AddressStart()
+        # Check that there is a provider
+        name, description, service, path = cli.GetAddressProvider()
+        if path:
+            provider = bus.get_object(service, path)
+            timestamp, address, accuracy = provider.GetAddress()
+            self._on_geoclue_address_changed(timestamp, address, accuracy)
+
+    def _get_position(self, cli):
+        bus = dbus.SessionBus()
         cli.PositionStart()
         # Check that there is a provider
         name, description, service, path = cli.GetPositionProvider()
         if path:
-            fields, timestamp, lat, lon, alt, accuray = cli.GetPosition()
+            provider = bus.get_object(service, path)
+            fields, timestamp, lat, lon, alt, accuray = provider.GetPosition()
             self._on_geoclue_position_changed(fields, timestamp, lat, lon, alt,
                     accuracy)
 
