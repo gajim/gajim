@@ -1671,6 +1671,7 @@ class ToplevelAgentBrowser(AgentBrowser):
 
         # Search for an icon and category we can display
         pix = self.cache.get_icon(identities)
+        cat, type_ = None, None
         for identity in identities:
             try:
                 cat, type_ = identity['category'], identity['type']
