@@ -33,6 +33,7 @@ import gobject
 import os
 import time
 import locale
+from datetime import datetime
 
 import gtkgui_helpers
 
@@ -584,21 +585,17 @@ class RosterTooltip(NotificationAreaTooltip):
                         gobject.markup_escape_text(keyID)))
 
         if contact.last_activity_time:
-            text = _(' since %s')
+            text = _("Idle since: %s")
 
-            if time.strftime('%j', time.localtime())== \
-                            time.strftime('%j', contact.last_activity_time):
-            # it's today, show only the locale hour representation
-                local_time = time.strftime('%I:%M %p',
-                        contact.last_activity_time)
+            last_active = datetime(*contact.last_activity_time[:6])
+            current = datetime.now()
+
+            if last_active.date() == current.date():
+                formatted = last_active.strftime("%X")
             else:
-                # time.strftime returns locale encoded string
-                local_time = time.strftime('%c',
-                        contact.last_activity_time)
-            local_time = local_time.decode(
-                    locale.getpreferredencoding())
-            text = text % local_time
-            properties.append(('Idle' + text, None))
+                formatted = last_active.strftime("%c")
+
+            properties.append((text % formatted, None))
 
         while properties:
             property_ = properties.pop(0)
