@@ -650,23 +650,19 @@ class RosterTooltip(NotificationAreaTooltip):
         """
         if 'mood' in contact.pep:
             mood = contact.pep['mood'].asMarkupText()
-            mood_string = _('Mood:') + ' %s' % mood
-            properties.append((mood_string, None))
+            properties.append((_("Mood: %s") % mood, None))
 
         if 'activity' in contact.pep:
             activity = contact.pep['activity'].asMarkupText()
-            activity_string = _('Activity:') + ' %s' % activity
-            properties.append((activity_string, None))
+            properties.append((_("Activity: %s") % activity, None))
 
         if 'tune' in contact.pep:
             tune = contact.pep['tune'].asMarkupText()
-            tune_string = _('Tune:') + ' %s' % tune
-            properties.append((tune_string, None))
+            properties.append((_("Tune: %s")) % tune, None))
 
         if 'location' in contact.pep:
             location = contact.pep['location'].asMarkupText()
-            location_string = _('Location:') + ' %s' % location
-            properties.append((location_string, None))
+            properties.append((_("Location: %s") % location, None))
 
 
 class FileTransfersTooltip(BaseTooltip):
