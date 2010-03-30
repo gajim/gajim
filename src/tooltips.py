@@ -34,6 +34,7 @@ import os
 import time
 import locale
 from datetime import datetime
+from datetime import timedelta
 
 import gtkgui_helpers
 
@@ -585,17 +586,22 @@ class RosterTooltip(NotificationAreaTooltip):
                         gobject.markup_escape_text(keyID)))
 
         if contact.last_activity_time:
-            text = _("Idle since: %s")
+            text_since = _("Idle since %s")
+            text_for = _("Idle for %s")
 
             last_active = datetime(*contact.last_activity_time[:6])
             current = datetime.now()
+
+            diff = current - last_active
+            diff = timedelta(diff.days, diff.seconds)
 
             if last_active.date() == current.date():
                 formatted = last_active.strftime("%X")
             else:
                 formatted = last_active.strftime("%c")
 
-            properties.append((text % formatted, None))
+            properties.append((text_since % formatted, None))
+            properties.append((text_for % str(diff), None))
 
         while properties:
             property_ = properties.pop(0)
