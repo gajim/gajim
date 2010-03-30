@@ -598,8 +598,8 @@ class RosterTooltip(NotificationAreaTooltip):
                 formatted = last_active.strftime("%c")
 
             properties.append((str(), None))
-            properties.append(("Idle since %s" % formatted, None))
-            properties.append(("Idle for %s" % str(diff), None))
+            properties.append((_("Idle since %s") % formatted, None))
+            properties.append((_("Idle for %s") % str(diff), None))
 
         while properties:
             property_ = properties.pop(0)
