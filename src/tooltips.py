@@ -586,9 +586,6 @@ class RosterTooltip(NotificationAreaTooltip):
                         gobject.markup_escape_text(keyID)))
 
         if contact.last_activity_time:
-            text_since = _("Idle since %s")
-            text_for = _("Idle for %s")
-
             last_active = datetime(*contact.last_activity_time[:6])
             current = datetime.now()
 
@@ -600,8 +597,9 @@ class RosterTooltip(NotificationAreaTooltip):
             else:
                 formatted = last_active.strftime("%c")
 
-            properties.append((text_since % formatted, None))
-            properties.append((text_for % str(diff), None))
+            properties.append((str(), None))
+            properties.append(("Idle since %s" % formatted, None))
+            properties.append(("Idle for %s" % str(diff), None))
 
         while properties:
             property_ = properties.pop(0)
