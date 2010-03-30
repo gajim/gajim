@@ -658,7 +658,7 @@ class RosterTooltip(NotificationAreaTooltip):
 
         if 'tune' in contact.pep:
             tune = contact.pep['tune'].asMarkupText()
-            properties.append((_("Tune: %s")) % tune, None))
+            properties.append((_("Tune: %s") % tune, None))
 
         if 'location' in contact.pep:
             location = contact.pep['location'].asMarkupText()
