@@ -135,6 +135,7 @@ if os.name == 'nt':
 # PyGTK2.10+ only throws a warning
 warnings.filterwarnings('error', module='gtk')
 try:
+    import gobject
     import gtk
 except Warning, msg2:
     if str(msg2) == 'could not open display':
@@ -143,6 +144,8 @@ except Warning, msg2:
         print >> sys.stderr, _('importing PyGTK failed: %s') % str(msg2)
     sys.exit()
 warnings.resetwarnings()
+
+gobject.set_prgname('gajim')
 
 if os.name == 'nt':
     warnings.filterwarnings(action='ignore')
@@ -217,8 +220,6 @@ if not hasattr(gobject, 'timeout_add_seconds'):
     def timeout_add_seconds_fake(time_sec, *args):
         return gobject.timeout_add(time_sec * 1000, *args)
     gobject.timeout_add_seconds = timeout_add_seconds_fake
-
-gobject.set_prgname('gajim')
 
 import signal
 import gtkgui_helpers
