@@ -218,6 +218,7 @@ if not hasattr(gobject, 'timeout_add_seconds'):
         return gobject.timeout_add(time_sec * 1000, *args)
     gobject.timeout_add_seconds = timeout_add_seconds_fake
 
+gobject.set_prgname('gajim')
 
 import signal
 import gtkgui_helpers
