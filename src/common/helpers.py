@@ -1342,11 +1342,11 @@ def get_subscription_request_msg(account=None):
         our_jid = gajim.get_jid_from_account(account)
         vcard = gajim.connections[account].get_cached_vcard(our_jid)
         name = ''
-        if 'N' in vcard:
-            if 'GIVEN' in vcard['N'] and 'FAMILY' in vcard['N']:
-                name = vcard['N']['GIVEN'] + ' ' + vcard['N']['FAMILY']
-        if not name:
-            if 'FN' in vcard:
+        if vcard:
+            if 'N' in vcard:
+                if 'GIVEN' in vcard['N'] and 'FAMILY' in vcard['N']:
+                    name = vcard['N']['GIVEN'] + ' ' + vcard['N']['FAMILY']
+            if not name and 'FN' in vcard:
                 name = vcard['FN']
         nick = gajim.nicks[account]
         if name and nick:
