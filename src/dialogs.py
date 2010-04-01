@@ -3007,10 +3007,11 @@ class XMLConsoleWindow:
         self.tagOutIq.set_property('foreground', color)
         buffer_.create_tag('') # Default tag
 
-        self.enabled = False
+        self.enabled = True
+        self.xml.get_object('enable_checkbutton').set_active(True)
 
         self.input_textview.modify_text(
-                gtk.STATE_NORMAL, gtk.gdk.color_parse(color))
+            gtk.STATE_NORMAL, gtk.gdk.color_parse(color))
 
         if len(gajim.connections) > 1:
             title = _('XML Console for %s') % self.account
@@ -3022,9 +3023,8 @@ class XMLConsoleWindow:
 
         self.xml.connect_signals(self)
 
-    def on_xml_console_window_delete_event(self, widget, event):
-        self.window.hide()
-        return True # do NOT destroy the window
+    def on_xml_console_window_destroy(self, widget):
+        del gajim.interface.instances[self.account]['xml_console']
 
     def on_clear_button_clicked(self, widget):
         buffer_ = self.stanzas_log_textview.get_buffer()
@@ -3103,42 +3103,41 @@ class XMLConsoleWindow:
             type_ = kind # 'incoming' or 'outgoing'
 
         if kind == 'incoming':
-            buffer.insert_with_tags_by_name(end_iter, '<!-- In -->\n',
-                    type_)
+            buffer.insert_with_tags_by_name(end_iter, '<!-- In -->\n', type_)
         elif kind == 'outgoing':
-            buffer.insert_with_tags_by_name(end_iter, '<!-- Out -->\n',
-                    type_)
+            buffer.insert_with_tags_by_name(end_iter, '<!-- Out -->\n', type_)
         end_iter = buffer.get_end_iter()
-        buffer.insert_with_tags_by_name(end_iter, stanza.replace('><', '>\n<') +\
-                '\n\n', type_)
+        buffer.insert_with_tags_by_name(end_iter, stanza.replace('><', '>\n<') \
+            + '\n\n', type_)
         if at_the_end:
             gobject.idle_add(self.scroll_to_end)
 
     def on_send_button_clicked(self, widget):
         if gajim.connections[self.account].connected <= 1:
-            #if offline or connecting
+            # if offline or connecting
             ErrorDialog(_('Connection not available'),
-                    _('Please make sure you are connected with "%s".') % self.account)
+                _('Please make sure you are connected with "%s".') % \
+                self.account)
             return
         begin_iter, end_iter = self.input_tv_buffer.get_bounds()
         stanza = self.input_tv_buffer.get_text(begin_iter, end_iter).decode(
-                'utf-8')
+            'utf-8')
         if stanza:
             gajim.connections[self.account].send_stanza(stanza)
             self.input_tv_buffer.set_text('') # we sent ok, clear the textview
 
     def on_presence_button_clicked(self, widget):
         self.input_tv_buffer.set_text(
-                '<presence><show></show><status></status><priority></priority>'
-                '</presence>')
+            '<presence><show></show><status></status><priority></priority>'
+            '</presence>')
 
     def on_iq_button_clicked(self, widget):
         self.input_tv_buffer.set_text(
-                '<iq to="" type=""><query xmlns=""></query></iq>')
+            '<iq to="" type=""><query xmlns=""></query></iq>')
 
     def on_message_button_clicked(self, widget):
         self.input_tv_buffer.set_text(
-                '<message to="" type=""><body></body></message>')
+            '<message to="" type=""><body></body></message>')
 
     def on_expander_activate(self, widget):
         if not widget.get_expanded(): # it's the opposite!
@@ -3147,7 +3146,7 @@ class XMLConsoleWindow:
 
 #Action that can be done with an incoming list of contacts
 TRANSLATED_ACTION = {'add': _('add'), 'modify': _('modify'),
-        'remove': _('remove')}
+    'remove': _('remove')}
 class RosterItemExchangeWindow:
     """
     Windows used when someone send you a exchange contact suggestion
