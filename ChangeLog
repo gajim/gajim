@@ -1,4 +1,5 @@
-Gajim 0.13.4 (23 February 2010)
+Gajim 0.13.4 (02 April 2010)
+
   * Add japanese translation
   * Fix some TLS connection
   * Don't raise a lot of "DB Error" dialog
