@@ -178,6 +178,31 @@ class BaseTooltip:
         self.cur_data = None
         self.check_last_time = None
 
+    @staticmethod
+    def colorize_status(status):
+        """
+        Colorize the status message inside the tooltip by it's
+        semantics. Color palette is the Tango.
+        """
+        formatted = "<span foreground='%s'>%s</span>"
+        if status.startswith("Available"):
+            return formatted % ('#73D216', status)
+        elif status.startswith("Free for Chat"):
+            return formatted % ('#3465A4', status)
+        elif status.startswith("Away"):
+            return formatted % ('#EDD400', status)
+        elif status.startswith("Busy"):
+            return formatted % ('#F57900', status)
+        elif status.startswith("Not Available"):
+            return formatted % ('#CC0000', status)
+        elif status.startswith("Offline"):
+            return formatted % ('#555753', status)
+        else:
+            # A fallback reserved for probable changes that might occur
+            # in the future, so if status names will change -- tooltip
+            # population should not fail.
+            return status
+
 class StatusTable:
     """
     Contains methods for creating status table. This is used in Roster and
@@ -346,7 +371,7 @@ class GCTooltip(BaseTooltip):
                 properties.append((status, None))
         else: # no status message, show SHOW instead
             show = helpers.get_uf_show(contact.show)
-            show = '<i>' + show + '</i>'
+            show = self.colorize_status(show)
             properties.append((show, None))
 
         if contact.jid.strip() != '':
@@ -544,8 +569,7 @@ class RosterTooltip(NotificationAreaTooltip):
                         show = _('Connected')
                     else:
                         show = _('Disconnected')
-                show = '<i>' + show + '</i>'
-                # we append show below
+                show = self.colorize_status(show)
 
                 if contact.status:
                     status = contact.status.strip()
@@ -561,7 +585,7 @@ class RosterTooltip(NotificationAreaTooltip):
 
         self._append_pep_info(contact, properties)
 
-        properties.append((_('Jabber ID: '), prim_contact.jid ))
+        properties.append((_('Jabber ID: '), "<b>%s</b>" % prim_contact.jid ))
 
         # contact has only one ressource
         if num_resources == 1 and contact.resource:
@@ -597,9 +621,10 @@ class RosterTooltip(NotificationAreaTooltip):
             else:
                 formatted = last_active.strftime("%c")
 
+            cs = "<span foreground='#888A85'>%s</span>"
             properties.append((str(), None))
-            properties.append((_("Idle since %s") % formatted, None))
-            properties.append((_("Idle for %s") % str(diff), None))
+            properties.append(((cs % _("Idle since %s")) % formatted, None))
+            properties.append(((cs % _("Idle for %s")) % str(diff), None))
 
         while properties:
             property_ = properties.pop(0)
