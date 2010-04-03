@@ -200,6 +200,23 @@ class BaseTooltip:
             status = formatted % ('#555753', status)
         return status
 
+    @staticmethod
+    def colorize_affiliation(affiliation):
+        """
+        Color the affiliation of a MUC participant inside the tooltip by
+        it's semantics. Color palette is the Tango.
+        """
+        formatted = "<span foreground='%s'>%s</span>"
+        if affiliation.startswith(Q_("?Group Chat Contact Affiliation:None")):
+            affiliation = formatted % ('#555753', affiliation)
+        elif affiliation.startswith(_("Member")):
+            affiliation = formatted % ('#73D216', affiliation)
+        elif affiliation.startswith(_("Administrator")):
+            affiliation = formatted % ('#F57900', affiliation)
+        elif affiliation.startswith(_("Owner")):
+            affiliation = formatted % ('#CC0000', affiliation)
+        return affiliation
+
 class StatusTable:
     """
     Contains methods for creating status table. This is used in Roster and
@@ -371,18 +388,20 @@ class GCTooltip(BaseTooltip):
         show = self.colorize_status(show)
         properties.append((show, None))
 
-        if contact.jid.strip() != '':
-            properties.append((_('Jabber ID: '), contact.jid))
+        if contact.jid.strip():
+            properties.append((_('Jabber ID: '), "<b>%s</b>" % contact.jid))
 
-        if hasattr(contact, 'resource') and contact.resource.strip() != '':
+        if hasattr(contact, 'resource') and contact.resource.strip():
             properties.append((_('Resource: '),
-                    gobject.markup_escape_text(contact.resource) ))
+                    gobject.markup_escape_text(contact.resource)))
+
         if contact.affiliation != 'none':
             uf_affiliation = helpers.get_uf_affiliation(contact.affiliation)
-            affiliation_str = \
+            uf_affiliation =\
                     _('%(owner_or_admin_or_member)s of this group chat') %\
                     {'owner_or_admin_or_member': uf_affiliation}
-            properties.append((affiliation_str, None))
+            uf_affiliation = self.colorize_affiliation(uf_affiliation)
+            properties.append((uf_affiliation, None))
 
         # Add avatar
         puny_name = helpers.sanitize_filename(contact.name)
@@ -582,7 +601,7 @@ class RosterTooltip(NotificationAreaTooltip):
 
         self._append_pep_info(contact, properties)
 
-        properties.append((_('Jabber ID: '), "<b>%s</b>" % prim_contact.jid ))
+        properties.append((_('Jabber ID: '), "<b>%s</b>" % prim_contact.jid))
 
         # contact has only one ressource
         if num_resources == 1 and contact.resource:
