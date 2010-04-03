@@ -185,17 +185,17 @@ class BaseTooltip:
         semantics. Color palette is the Tango.
         """
         formatted = "<span foreground='%s'>%s</span>"
-        if status.startswith("Available"):
+        if status.startswith(_("Available")):
             return formatted % ('#73D216', status)
-        elif status.startswith("Free for Chat"):
+        elif status.startswith(_("Free for Chat")):
             return formatted % ('#3465A4', status)
-        elif status.startswith("Away"):
+        elif status.startswith(_("Away")):
             return formatted % ('#EDD400', status)
         elif status.startswith("Busy"):
             return formatted % ('#F57900', status)
-        elif status.startswith("Not Available"):
+        elif status.startswith(_("Not Available")):
             return formatted % ('#CC0000', status)
-        elif status.startswith("Offline"):
+        elif status.startswith(_("Offline")):
             return formatted % ('#555753', status)
         else:
             # A fallback reserved for probable changes that might occur
