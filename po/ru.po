@@ -20,9 +20,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Poedit-Basepath: /home/test/gajim\n"
-"X-Generator: KBabel 1.11.4\n"
 
 #: ../data/gui/account_context_menu.ui.h:1 ../data/gui/roster_window.ui.h:7
 msgid "Join _Group Chat..."
@@ -8446,7 +8446,6 @@ msgid "You are about to send your password on an insecure connection. You should
 msgstr "Вы хотите отправить пароль через небезопасное соединение. Вы уверены? (Установите PyOpenSSL, чтобы этого не происходило.)"
 
 #: ../src/gui_interface.py:2040
-#, fuzzy
 msgid "You are about to send your password unencrypted on an insecure connection. Are you sure you want to do that?"
 msgstr "Вы хотите отправить пароль через небезопасное соединение. Вы уверены?"
 
@@ -8936,12 +8935,11 @@ msgstr ""
 "Одновременно вы удалите и авторизацию, то есть они всегда будут видеть вас в оффлайне."
 
 #: ../src/roster_window.py:3390
-#, fuzzy
 msgid "You are about to send a custom status. Are you sure you want  to continue?"
 msgstr "Вы точно хотите послать другой статус?"
 
 #: ../src/roster_window.py:3392
-#, fuzzy, python-format
+#, python-format
 msgid "This contact will temporarily see you as %(status)s, but only until you change your status. Then he or she will see your global status."
 msgstr "Этот контакт будет временно видеть ваш статус как %(status)s, но лишь пока вы не измените свой глобальный статус. Тогда этому контакту станет виден глобальный статус."
 
@@ -9243,34 +9241,34 @@ msgid "OpenPGP: "
 msgstr "OpenPGP: "
 
 #: ../src/tooltips.py:601
-#, fuzzy, python-format
+#, python-format
 msgid "Idle since %s"
-msgstr " с %s"
+msgstr "не активен с %s"
 
 #: ../src/tooltips.py:602
-#, fuzzy, python-format
+#, python-format
 msgid "Idle for %s"
-msgstr " от %s"
+msgstr "время неактивности %s"
 
 #: ../src/tooltips.py:653
-#, fuzzy, python-format
+#, python-format
 msgid "Mood: %s"
-msgstr "Настроение:"
+msgstr "Настроение: %s"
 
 #: ../src/tooltips.py:657
-#, fuzzy, python-format
+#, python-format
 msgid "Activity: %s"
-msgstr "Занятие:"
+msgstr "Занятие: %s"
 
 #: ../src/tooltips.py:661
-#, fuzzy, python-format
+#, python-format
 msgid "Tune: %s"
-msgstr "Слушаю:"
+msgstr "Слушаю: %s"
 
 #: ../src/tooltips.py:665
-#, fuzzy, python-format
+#, python-format
 msgid "Location: %s"
-msgstr "Местоположение:"
+msgstr "Местоположение: %s"
 
 #: ../src/tooltips.py:690
 msgid "Download"
