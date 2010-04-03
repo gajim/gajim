@@ -41,6 +41,7 @@ import gtkgui_helpers
 from common import gajim
 from common import helpers
 from common.pep import MOODS, ACTIVITIES
+from common.i18n import Q_
 
 class BaseTooltip:
     """
@@ -185,7 +186,7 @@ class BaseTooltip:
         semantics. Color palette is the Tango.
         """
         formatted = "<span foreground='%s'>%s</span>"
-        if status.startswith(_("Available")):
+        if status.startswith(Q_("?user status:Available")):
             status = formatted % ('#73D216', status)
         elif status.startswith(_("Free for Chat")):
             status = formatted % ('#3465A4', status)
