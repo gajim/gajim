@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-04-03 00:56+0400\n"
-"PO-Revision-Date: 2010-04-03 12:36+0300\n"
+"POT-Creation-Date: 2010-04-03 20:12+0400\n"
+"PO-Revision-Date: 2010-04-03 20:20+0300\n"
 "Last-Translator: Fomin Denis <fominde@mail.ru>\n"
 "Language-Team: Русский <ru@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -302,8 +302,7 @@ msgid "Gajim"
 msgstr "Gajim"
 
 #. FIXME: Ugly workaround.
-#. FIXME: Ugly workaround. Maybe we haven't been in any group (defaults to
-#. General)
+#. FIXME: Ugly workaround. Maybe we haven't been in any group (defaults to General)
 #. General group cannot be changed
 #: ../data/gui/accounts_window.ui.h:22
 #: ../data/gui/preferences_window.ui.h:61
@@ -659,6 +658,7 @@ msgstr "Все статусы"
 #: ../data/gui/advanced_notifications_window.ui.h:8
 #: ../src/common/commands.py:106
 #: ../src/common/helpers.py:233
+#: ../src/tooltips.py:192
 msgid "Away"
 msgstr "Ушел"
 
@@ -715,6 +715,7 @@ msgstr "Выполнить команду"
 
 #: ../data/gui/advanced_notifications_window.ui.h:21
 #: ../src/common/helpers.py:216
+#: ../src/tooltips.py:196
 msgid "Not Available"
 msgstr "Недоступен"
 
@@ -983,8 +984,7 @@ msgstr "Микрофон:"
 msgid "Sound volume:"
 msgstr "Громкость:"
 
-#. Make sure the character after "_" is not M/m (conflicts with Alt+M that is
-#. supposed to show the Emoticon Selector)
+#. Make sure the character after "_" is not M/m (conflicts with Alt+M that is supposed to show the Emoticon Selector)
 #: ../data/gui/chat_control.ui.h:16
 #: ../data/gui/groupchat_control.ui.h:2
 #: ../data/gui/xml_console_window.ui.h:16
@@ -1652,8 +1652,7 @@ msgstr "<b>Уведомления</b>"
 msgid "<b>Connection</b>"
 msgstr "<b>Подключение</b>"
 
-#. a header for custom browser/client/file manager. so translate sth like:
-#. Custom Settings
+#. a header for custom browser/client/file manager. so translate sth like: Custom Settings
 #: ../data/gui/preferences_window.ui.h:10
 msgid "<b>Custom</b>"
 msgstr "<b>Пользовательские настройки</b>"
@@ -1747,7 +1746,7 @@ msgid "Ask status message when I:"
 msgstr "Запрашивать сообщение о статусе, когда я: "
 
 #: ../data/gui/preferences_window.ui.h:35
-#: ../src/features_window.py:104
+#: ../src/features_window.py:105
 msgid "Audio / Video"
 msgstr "Звук / Изображение"
 
@@ -2363,7 +2362,6 @@ msgstr "<b>Префикс:</b>"
 
 #: ../data/gui/profile_window.ui.h:25
 #: ../data/gui/vcard_information_window.ui.h:30
-#: ../src/vcard.py:331
 msgid "<b>Role:</b>"
 msgstr "<b>Обязанности:</b>"
 
@@ -2491,8 +2489,7 @@ msgstr "Показать _ростер"
 msgid "_Accounts"
 msgstr "Учётные _записи"
 
-#. Make sure the character after "_" is not M/m (conflicts with Alt+M that is
-#. supposed to show the Emoticon Selector)
+#. Make sure the character after "_" is not M/m (conflicts with Alt+M that is supposed to show the Emoticon Selector)
 #: ../data/gui/roster_window.ui.h:14
 #: ../data/gui/subscription_request_window.ui.h:6
 msgid "_Actions"
@@ -2746,9 +2743,7 @@ msgstr ""
 msgid "Info/Query"
 msgstr "Информация/Запрос"
 
-#. Info/Query: all(?) jabber xml start with <iq Leaving it _IQ is not a bad
-#. idea unless you are sure your lang has this somehow else translated (NOTE:
-#. xml still will still say <iq in your language (of course))
+#. Info/Query: all(?) jabber xml start with <iq Leaving it _IQ is not a bad idea unless you are sure your lang has this somehow else translated (NOTE: xml still will still say <iq in your language (of course))
 #: ../data/gui/xml_console_window.ui.h:13
 msgid "_IQ"
 msgstr "_IQ"
@@ -2873,8 +2868,7 @@ msgstr[2] "Вы получили новые записи (и %d не отобр�
 #. the next script, executed in the "po" directory,
 #. generates the following list.
 #. #!/bin/sh
-#. LANG=$(for i in *.po; do j=${i/.po/}; echo -n "_('"$j"')":" '"$j"', " ;
-#. done)
+#. LANG=$(for i in *.po; do j=${i/.po/}; echo -n "_('"$j"')":" '"$j"', " ; done)
 #. echo "{_('en'):'en'",$LANG"}"
 #: ../src/chat_control.py:75
 msgid "English"
@@ -4579,8 +4573,7 @@ msgstr "десять"
 msgid "eleven"
 msgstr "одиннадцать"
 
-#. Strings to use for the output. %(0)s will be replaced with the preceding
-#. hour
+#. Strings to use for the output. %(0)s will be replaced with the preceding hour
 #. (e.g. "x PAST %(0)s"), %(1)s with the coming hour (e.g. "x TO %(0)s"). '''
 #: ../src/common/fuzzyclock.py:44
 #, python-format
@@ -4718,6 +4711,7 @@ msgid "_Busy"
 msgstr "_Занят"
 
 #: ../src/common/helpers.py:211
+#: ../src/tooltips.py:194
 msgid "Busy"
 msgstr "Занят"
 
@@ -4730,6 +4724,7 @@ msgid "_Free for Chat"
 msgstr "_Готов поболтать"
 
 #: ../src/common/helpers.py:221
+#: ../src/tooltips.py:190
 msgid "Free for Chat"
 msgstr "Готов поболтать"
 
@@ -4738,8 +4733,7 @@ msgid "_Available"
 msgstr "_Доступен"
 
 #: ../src/common/helpers.py:226
-#: ../src/features_window.py:114
-msgid "Available"
+msgid "?user status:Available"
 msgstr "Доступен"
 
 #: ../src/common/helpers.py:228
@@ -4755,6 +4749,7 @@ msgid "_Offline"
 msgstr "_Отключен"
 
 #: ../src/common/helpers.py:238
+#: ../src/tooltips.py:198
 msgid "Offline"
 msgstr "Отключен"
 
@@ -7218,213 +7213,217 @@ msgstr "_Подписаться"
 msgid "_Unsubscribe"
 msgstr "_Отписаться"
 
-#: ../src/features_window.py:48
+#: ../src/features_window.py:49
 msgid "SSL certificat validation"
 msgstr "Подтверждение SSL сертификата"
 
-#: ../src/features_window.py:49
+#: ../src/features_window.py:50
 msgid "A library used to validate server certificates to ensure a secure connection."
 msgstr "Библиотека используется для подтверждения действительности сертификатов сервера для того, чтобы удостовериться в защищенности соединения."
 
-#: ../src/features_window.py:50
 #: ../src/features_window.py:51
+#: ../src/features_window.py:52
 msgid "Requires python-pyopenssl."
 msgstr "Требует python-pyopenssl."
 
-#: ../src/features_window.py:52
+#: ../src/features_window.py:53
 msgid "Bonjour / Zeroconf"
 msgstr "Bonjour / Zeroconf"
 
-#: ../src/features_window.py:53
+#: ../src/features_window.py:54
 msgid "Serverless chatting with autodetected clients in a local network."
 msgstr "Не требующее сервера общение между автоматически обнаруживаемыми клиентами в локальной сети."
 
-#: ../src/features_window.py:54
+#: ../src/features_window.py:55
 msgid "Requires python-avahi."
 msgstr "Требует python-avahi."
 
-#: ../src/features_window.py:55
+#: ../src/features_window.py:56
 msgid "Requires pybonjour (http://o2s.csail.mit.edu/o2s-wiki/pybonjour)."
 msgstr "Требует pybonjour (http://o2s.csail.mit.edu/o2s-wiki/pybonjour)."
 
-#: ../src/features_window.py:56
+#: ../src/features_window.py:57
 msgid "Command line"
 msgstr "Командная строка"
 
-#: ../src/features_window.py:57
+#: ../src/features_window.py:58
 msgid "A script to control Gajim via commandline."
 msgstr "Скрипт для управления Gajim'ом через командную строку."
 
-#: ../src/features_window.py:58
+#: ../src/features_window.py:59
 msgid "Requires python-dbus."
 msgstr "Требует python-dbus."
 
-#: ../src/features_window.py:59
-#: ../src/features_window.py:63
-#: ../src/features_window.py:67
-#: ../src/features_window.py:71
-#: ../src/features_window.py:75
-#: ../src/features_window.py:83
-#: ../src/features_window.py:87
-#: ../src/features_window.py:107
+#: ../src/features_window.py:60
+#: ../src/features_window.py:64
+#: ../src/features_window.py:68
+#: ../src/features_window.py:72
+#: ../src/features_window.py:76
+#: ../src/features_window.py:84
+#: ../src/features_window.py:88
+#: ../src/features_window.py:108
 msgid "Feature not available under Windows."
 msgstr "Эта возможность отсутствует в Windows."
 
-#: ../src/features_window.py:60
+#: ../src/features_window.py:61
 msgid "OpenGPG message encryption"
 msgstr "OpenPGP шифрование"
 
-#: ../src/features_window.py:61
+#: ../src/features_window.py:62
 msgid "Encrypting chat messages with gpg keys."
 msgstr "Шифрование сообщений при помощи gpg ключей."
 
-#: ../src/features_window.py:62
+#: ../src/features_window.py:63
 msgid "Requires gpg and python-GnuPGInterface."
 msgstr "Требует gpg и python-GnuPGInterface."
 
-#: ../src/features_window.py:64
+#: ../src/features_window.py:65
 msgid "Network-manager"
 msgstr "Network-manager"
 
-#: ../src/features_window.py:65
+#: ../src/features_window.py:66
 msgid "Autodetection of network status."
 msgstr "Автоопределение состояния соединения с сетью."
 
-#: ../src/features_window.py:66
+#: ../src/features_window.py:67
 msgid "Requires gnome-network-manager and python-dbus."
 msgstr "Требует gnome-network-manager и python-dbus."
 
-#: ../src/features_window.py:68
+#: ../src/features_window.py:69
 msgid "Session Management"
 msgstr "Управление сеансами"
 
-#: ../src/features_window.py:69
+#: ../src/features_window.py:70
 msgid "Gajim session is stored on logout and restored on login."
 msgstr "Сеанс Gajim сохраняется при выходе (logout) и восстанавливается при входе (login)."
 
-#: ../src/features_window.py:70
+#: ../src/features_window.py:71
 msgid "Requires python-gnome2."
 msgstr "Требует python-gnome2."
 
-#: ../src/features_window.py:72
+#: ../src/features_window.py:73
 msgid "Password encryption"
 msgstr "Шифрование паролей"
 
-#: ../src/features_window.py:73
+#: ../src/features_window.py:74
 msgid "Passwords can be stored securely and not just in plaintext."
 msgstr "Пароли могут храниться безопасно, а не просто открытым текстом."
 
-#: ../src/features_window.py:74
+#: ../src/features_window.py:75
 msgid "Requires gnome-keyring and python-gnome2-desktop, or kwalletcli."
 msgstr "Требует gnome-keyring и python-gnome2-desktop или kwalletcli."
 
-#: ../src/features_window.py:76
+#: ../src/features_window.py:77
 msgid "SRV"
 msgstr "SRV"
 
-#: ../src/features_window.py:77
+#: ../src/features_window.py:78
 msgid "Ability to connect to servers which are using SRV records."
 msgstr "Возможность соединяться с серверами, использующими SRV записи."
 
-#: ../src/features_window.py:78
+#: ../src/features_window.py:79
 msgid "Requires dnsutils."
 msgstr "Требует dnsutils."
 
-#: ../src/features_window.py:79
+#: ../src/features_window.py:80
 msgid "Requires nslookup to use SRV records."
 msgstr "Требует nslookup для использования SRV записей."
 
-#: ../src/features_window.py:80
+#: ../src/features_window.py:81
 msgid "Spell Checker"
 msgstr "Проверка орфографии"
 
-#: ../src/features_window.py:81
+#: ../src/features_window.py:82
 msgid "Spellchecking of composed messages."
 msgstr "Проверка орфографии набираемых сообщений"
 
-#: ../src/features_window.py:82
+#: ../src/features_window.py:83
 msgid "Requires libgtkspell."
 msgstr "Требует библиотеку libgtkspell."
 
-#: ../src/features_window.py:84
+#: ../src/features_window.py:85
 msgid "Notification"
 msgstr "Уведомления"
 
-#: ../src/features_window.py:85
+#: ../src/features_window.py:86
 msgid "Passive popups notifying for new events."
 msgstr "Пассивные всплывающие окна для уведомления о новых событиях."
 
-#: ../src/features_window.py:86
+#: ../src/features_window.py:87
 msgid "Requires python-notify or instead python-dbus in conjunction with notification-daemon."
 msgstr "Требует python-notify или python-dbus совместно с notification-daemon."
 
-#: ../src/features_window.py:88
+#: ../src/features_window.py:89
 msgid "Automatic status"
 msgstr "Авто статус"
 
-#: ../src/features_window.py:89
+#: ../src/features_window.py:90
 msgid "Ability to measure idle time, in order to set auto status."
 msgstr "Возможность определения времени бездействия для того, чтобы установить автостатус."
 
-#: ../src/features_window.py:90
+#: ../src/features_window.py:91
 msgid "Requires libxss library."
 msgstr "Требует библиотеку libxss."
 
-#: ../src/features_window.py:91
+#: ../src/features_window.py:92
 msgid "Requires python2.5."
 msgstr "Требует python2.5."
 
-#: ../src/features_window.py:92
+#: ../src/features_window.py:93
 msgid "LaTeX"
 msgstr "LaTeX"
 
-#: ../src/features_window.py:93
+#: ../src/features_window.py:94
 msgid "Transform LaTeX expressions between $$ $$."
 msgstr "Преобразовывать LaTeX выражения, заключенные в $$ $$"
 
-#: ../src/features_window.py:94
+#: ../src/features_window.py:95
 msgid "Requires texlive-latex-base and dvipng. You have to set 'use_latex' to True in the Advanced Configuration Editor."
 msgstr "Требует texlive-latex-base и dvipng. Необходимо присвоить пункту 'use_latex' значение «Активно» в Расширенном редакторе настроек."
 
-#: ../src/features_window.py:95
+#: ../src/features_window.py:96
 msgid "Requires texlive-latex-base and dvipng (All is in MikTeX). You have to set 'use_latex' to True in the Advanced Configuration Editor."
 msgstr "Требует texlive-latex-base и dvipng (оба есть в MikTeX). Необходимо присвоить пункту 'use_latex' значение «Активно» в Расширенном редакторе настроек."
 
-#: ../src/features_window.py:96
+#: ../src/features_window.py:97
 msgid "End to End message encryption"
 msgstr "End to end шифрование"
 
-#: ../src/features_window.py:97
+#: ../src/features_window.py:98
 msgid "Encrypting chat messages."
 msgstr "Шифрование сообщений чата."
 
-#: ../src/features_window.py:98
 #: ../src/features_window.py:99
+#: ../src/features_window.py:100
 msgid "Requires python-crypto."
 msgstr "Требует python-crypto."
 
-#: ../src/features_window.py:100
+#: ../src/features_window.py:101
 msgid "RST Generator"
 msgstr "Генератор RST"
 
-#: ../src/features_window.py:101
+#: ../src/features_window.py:102
 msgid "Generate XHTML output from RST code (see http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html)."
 msgstr "Генерировать XHTML вывод из кода RST (см. http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html)."
 
-#: ../src/features_window.py:102
 #: ../src/features_window.py:103
+#: ../src/features_window.py:104
 msgid "Requires python-docutils."
 msgstr "Требует python-docutils."
 
-#: ../src/features_window.py:105
+#: ../src/features_window.py:106
 msgid "Ability to start audio and video chat."
 msgstr "Возможность голосового и видео общения."
 
-#: ../src/features_window.py:106
+#: ../src/features_window.py:107
 msgid "Requires python-farsight."
 msgstr "Требует python-farsight."
 
-#: ../src/features_window.py:121
+#: ../src/features_window.py:115
+msgid "?features:Available"
+msgstr "Доступен"
+
+#: ../src/features_window.py:122
 msgid "Feature"
 msgstr "Функции"
 
@@ -7467,7 +7466,7 @@ msgstr "Отправитель: %s"
 
 #: ../src/filetransfers_window.py:190
 #: ../src/filetransfers_window.py:617
-#: ../src/tooltips.py:697
+#: ../src/tooltips.py:726
 msgid "Recipient: "
 msgstr "Получатель:"
 
@@ -7509,7 +7508,7 @@ msgid "Choose File to Send..."
 msgstr "Выбрать файл для отправки..."
 
 #: ../src/filetransfers_window.py:273
-#: ../src/tooltips.py:735
+#: ../src/tooltips.py:764
 msgid "Description: "
 msgstr "Описание: "
 
@@ -7609,12 +7608,12 @@ msgid "It is not possible to send empty files"
 msgstr "Нельзя отсылать пустые файлы"
 
 #: ../src/filetransfers_window.py:613
-#: ../src/tooltips.py:687
+#: ../src/tooltips.py:716
 msgid "Name: "
 msgstr "Имя: "
 
 #: ../src/filetransfers_window.py:615
-#: ../src/tooltips.py:691
+#: ../src/tooltips.py:720
 msgid "Sender: "
 msgstr "Отправитель:"
 
@@ -9484,139 +9483,143 @@ msgstr "Скрыть _ростер"
 msgid "Hide this menu"
 msgstr "Скрыть это меню"
 
-#: ../src/tooltips.py:353
-#: ../src/tooltips.py:564
+#: ../src/tooltips.py:188
+msgid "Available"
+msgstr "Доступен"
+
+#: ../src/tooltips.py:378
+#: ../src/tooltips.py:588
 msgid "Jabber ID: "
 msgstr "Jabber ID: "
 
-#: ../src/tooltips.py:356
-#: ../src/tooltips.py:568
+#: ../src/tooltips.py:381
+#: ../src/tooltips.py:592
 msgid "Resource: "
 msgstr "Ресурс: "
 
-#: ../src/tooltips.py:361
+#: ../src/tooltips.py:386
 #, python-format
 msgid "%(owner_or_admin_or_member)s of this group chat"
 msgstr "%(owner_or_admin_or_member)s этой комнаты"
 
-#: ../src/tooltips.py:461
+#: ../src/tooltips.py:486
 msgid " [blocked]"
 msgstr "[заблокировано]"
 
-#: ../src/tooltips.py:465
+#: ../src/tooltips.py:490
 msgid " [minimized]"
 msgstr "[свернуто]"
 
-#: ../src/tooltips.py:480
-#: ../src/tooltips.py:732
+#: ../src/tooltips.py:505
+#: ../src/tooltips.py:761
 msgid "Status: "
 msgstr "Статус: "
 
-#: ../src/tooltips.py:524
+#: ../src/tooltips.py:549
 #, python-format
 msgid "Last status: %s"
 msgstr "Последний статус: %s"
 
-#: ../src/tooltips.py:526
+#: ../src/tooltips.py:551
 #, python-format
 msgid " since %s"
 msgstr " с %s"
 
-#: ../src/tooltips.py:544
+#: ../src/tooltips.py:569
 msgid "Connected"
 msgstr "Соединение"
 
-#: ../src/tooltips.py:546
+#: ../src/tooltips.py:571
 msgid "Disconnected"
 msgstr "Контакт отключился"
 
 #. ('both' is the normal sub so we don't show it)
-#: ../src/tooltips.py:575
+#: ../src/tooltips.py:599
 msgid "Subscription: "
 msgstr "Подписка: "
 
-#: ../src/tooltips.py:585
+#: ../src/tooltips.py:609
 msgid "OpenPGP: "
 msgstr "OpenPGP: "
 
-#: ../src/tooltips.py:601
+#: ../src/tooltips.py:630
 #, python-format
 msgid "Idle since %s"
 msgstr "не активен с %s"
 
-#: ../src/tooltips.py:602
+#: ../src/tooltips.py:631
 #, python-format
 msgid "Idle for %s"
 msgstr "время неактивности %s"
 
-#: ../src/tooltips.py:653
+#: ../src/tooltips.py:682
 #, python-format
 msgid "Mood: %s"
 msgstr "Настроение: %s"
 
-#: ../src/tooltips.py:657
+#: ../src/tooltips.py:686
 #, python-format
 msgid "Activity: %s"
 msgstr "Занятие: %s"
 
-#: ../src/tooltips.py:661
+#: ../src/tooltips.py:690
 #, python-format
 msgid "Tune: %s"
 msgstr "Слушаю: %s"
 
-#: ../src/tooltips.py:665
+#: ../src/tooltips.py:694
 #, python-format
 msgid "Location: %s"
 msgstr "Местоположение: %s"
 
-#: ../src/tooltips.py:690
+#: ../src/tooltips.py:719
 msgid "Download"
 msgstr "Скачать"
 
-#: ../src/tooltips.py:696
+#: ../src/tooltips.py:725
 msgid "Upload"
 msgstr "Загрузить"
 
-#: ../src/tooltips.py:703
+#: ../src/tooltips.py:732
 msgid "Type: "
 msgstr "Тип: "
 
-#: ../src/tooltips.py:707
+#: ../src/tooltips.py:736
 msgid "Transferred: "
 msgstr "Передано: "
 
-#: ../src/tooltips.py:710
-#: ../src/tooltips.py:731
+#: ../src/tooltips.py:739
+#: ../src/tooltips.py:760
 msgid "Not started"
 msgstr "Не начато"
 
-#: ../src/tooltips.py:714
+#: ../src/tooltips.py:743
 msgid "Stopped"
 msgstr "Остановлено"
 
-#: ../src/tooltips.py:716
-#: ../src/tooltips.py:719
+#: ../src/tooltips.py:745
+#: ../src/tooltips.py:748
 msgid "Completed"
 msgstr "Завершено"
 
-#: ../src/tooltips.py:723
+#: ../src/tooltips.py:752
 msgid "?transfer status:Paused"
 msgstr "Приостановлено"
 
 #. stalled is not paused. it is like 'frozen' it stopped alone
-#: ../src/tooltips.py:727
+#: ../src/tooltips.py:756
 msgid "Stalled"
 msgstr "Ожидание"
 
-#: ../src/tooltips.py:729
+#: ../src/tooltips.py:758
 msgid "Transferring"
 msgstr "Передается"
 
-#: ../src/tooltips.py:767
+#: ../src/tooltips.py:796
 msgid "This service has not yet responded with detailed information"
 msgstr "Этот сервис еще не сообщил информацию о себе"
 
-#: ../src/tooltips.py:770
+#: ../src/tooltips.py:799
 msgid ""
 "This service could not respond with detailed information.\n"
 "It is most likely legacy or broken"
@@ -9642,6 +9645,10 @@ msgstr "?Time:Неизвестно"
 #, python-format
 msgid "since %s"
 msgstr "с %s"
+
+#: ../src/vcard.py:331
+msgid "?Role in Group Chat:<b>Role:</b>"
+msgstr ""
 
 #: ../src/vcard.py:335
 msgid "<b>Affiliation:</b>"
@@ -9680,14 +9687,26 @@ msgstr " ресурс с приоритетом "
 
 #~ msgid "Account Modification"
 #~ msgstr "Изменение учетной записи"
-#~ msgid "Check this so Gajim will connect in port 5223 where legacy servers are expected to have SSL capabilities. Note that Gajim uses TLS encryption by default if broadcasted by the server, and with this option enabled TLS will be disabled"
-#~ msgstr "Если отмечено, то Gajim будет соединяться с портом 5223, на котором старые сервера обычно ожидают подключения по SSL. Заметьте, что Gajim использует TLS шифрование по умолчанию, если сервер предоставляет такую возможность, с этой же опцией TLS отключается"
+#~ msgid ""
+#~ "Check this so Gajim will connect in port 5223 where legacy servers are "
+#~ "expected to have SSL capabilities. Note that Gajim uses TLS encryption by "
+#~ "default if broadcasted by the server, and with this option enabled TLS "
+#~ "will be disabled"
+#~ msgstr ""
+#~ "Если отмечено, то Gajim будет соединяться с портом 5223, на котором "
+#~ "старые сервера обычно ожидают подключения по SSL. Заметьте, что Gajim "
+#~ "использует TLS шифрование по умолчанию, если сервер предоставляет такую "
+#~ "возможность, с этой же опцией TLS отключается"
 #~ msgid "Edit Personal Information..."
 #~ msgstr "Редактировать личную информацию..."
 #~ msgid "Hostname: "
 #~ msgstr "Хост: "
-#~ msgid "If checked, Gajim will store the password in ~/.gajim/config with 'read' permission only for you"
-#~ msgstr "Если отмечено, то Gajim сохранит пароль в ~/.gajim/config с доступом на чтение только для вас"
+#~ msgid ""
+#~ "If checked, Gajim will store the password in ~/.gajim/config with 'read' "
+#~ "permission only for you"
+#~ msgstr ""
+#~ "Если отмечено, то Gajim сохранит пароль в ~/.gajim/config с доступом на "
+#~ "чтение только для вас"
 #~ msgid "Port: "
 #~ msgstr "Порт: "
 #~ msgid "Proxy:"
@@ -9846,9 +9865,14 @@ msgstr " ресурс с приоритетом "
 #~ msgstr "Требует python-sexy."
 #~ msgid "GTK+ runtime is missing libglade support"
 #~ msgstr "У GTK отсутствует поддержка libglade."
-#~ msgid "Please remove your current GTK+ runtime and install the latest stable version from %s"
-#~ msgstr "Удалите вашу текущую версию GTK и установите последнюю стабильную версию с %s"
-#~ msgid "Please make sure that GTK+ and PyGTK have libglade support in your system."
+#~ msgid ""
+#~ "Please remove your current GTK+ runtime and install the latest stable "
+#~ "version from %s"
+#~ msgstr ""
+#~ "Удалите вашу текущую версию GTK и установите последнюю стабильную версию "
+#~ "с %s"
+#~ msgid ""
+#~ "Please make sure that GTK+ and PyGTK have libglade support in your system."
 #~ msgstr "Удостоверьтесь, что GTK+ и PyGTK поддерживают libglade."
 #~ msgid "Gajim needs PySQLite2 to run"
 #~ msgstr "Gajim для запуска требуется PySQLite2"
@@ -9864,22 +9888,35 @@ msgstr " ресурс с приоритетом "
 #~ msgstr "Неправильный локальный адрес? :-O"
 #~ msgid "pysqlite2 (aka python-pysqlite2) dependency is missing. Exiting..."
 #~ msgstr "отсутствует библиотека pysqlite2 (или python-pysqlite2). Выход..."
-#~ msgid "The host %s you configured as the ft_add_hosts_to_send advanced option is not valid, so ignored."
-#~ msgstr "Хост %s, который настроен как ft_add_hosts_to_send, не действителен, поэтому игнорируется."
+#~ msgid ""
+#~ "The host %s you configured as the ft_add_hosts_to_send advanced option is "
+#~ "not valid, so ignored."
+#~ msgstr ""
+#~ "Хост %s, который настроен как ft_add_hosts_to_send, не действителен, "
+#~ "поэтому игнорируется."
 #~ msgid "OpenPGP passphrase was not given"
 #~ msgstr "Не задана парольная фраза OpenPGP"
-#~ msgid "To continue sending and receiving messages, you will need to reconnect."
-#~ msgstr "Требуется переподключение для продолжения приема и отправки сообщений."
-#~ msgid "You are not connected or not visible to others. Your message could not be sent."
-#~ msgstr "Вы не подключены или невидимы для других. Ваше сообщение нельзя отправить."
+#~ msgid ""
+#~ "To continue sending and receiving messages, you will need to reconnect."
+#~ msgstr ""
+#~ "Требуется переподключение для продолжения приема и отправки сообщений."
+#~ msgid ""
+#~ "You are not connected or not visible to others. Your message could not be "
+#~ "sent."
+#~ msgstr ""
+#~ "Вы не подключены или невидимы для других. Ваше сообщение нельзя отправить."
 #~ msgid "[This message is encrypted]"
 #~ msgstr "[Это сообщение зашифровано]"
 #~ msgid "Trayicon"
 #~ msgstr "Иконка в системном трее"
 #~ msgid "A icon in systemtray reflecting the current presence."
 #~ msgstr "Иконка в системном лотке отображающая текущий статус."
-#~ msgid "Requires python-gnome2-extras or compiled trayicon module from Gajim sources."
-#~ msgstr "Требует python-gnome2-extras или скомпилированного модуля trayicon из исходных кодов Gajim."
+#~ msgid ""
+#~ "Requires python-gnome2-extras or compiled trayicon module from Gajim "
+#~ "sources."
+#~ msgstr ""
+#~ "Требует python-gnome2-extras или скомпилированного модуля trayicon из "
+#~ "исходных кодов Gajim."
 #~ msgid "Requires PyGTK >= 2.10."
 #~ msgstr "Требует PyGTK >= 2.10."
 #~ msgid "%i days ago"
@@ -9888,7 +9925,9 @@ msgstr " ресурс с приоритетом "
 #~ msgstr[1] "%i дня назад"
 #~ msgstr[2] "%i дней назад"
 #~ msgid "Enable link-local/zeroconf messaging"
-#~ msgstr "Приём и отправка локальных (link-local) сообщений и сообщений в сетях zeroconf"
+#~ msgstr ""
+#~ "Приём и отправка локальных (link-local) сообщений и сообщений в сетях "
+#~ "zeroconf"
 #~ msgid "Command not supported for zeroconf account."
 #~ msgstr "Команда не поддерживается учетной записью zeroconf."
 #~ msgid "Commands: %s"
@@ -9897,8 +9936,12 @@ msgstr " ресурс с приоритетом "
 #~ msgstr "Использование: /%s, очищает текстовое окно."
 #~ msgid "Usage: /%s, hide the chat buttons."
 #~ msgstr "Использование: /%s, скрывает кнопки беседы."
-#~ msgid "Usage: /%(command)s <action>, sends action to the current group chat. Use third person. (e.g. /%(command)s explodes.)"
-#~ msgstr "Использование: /%(command)s <действие>, совершает действие в текущей комнате. Используйте третье лицо (например, «/%(command)s взрывается».)"
+#~ msgid ""
+#~ "Usage: /%(command)s <action>, sends action to the current group chat. Use "
+#~ "third person. (e.g. /%(command)s explodes.)"
+#~ msgstr ""
+#~ "Использование: /%(command)s <действие>, совершает действие в текущей "
+#~ "комнате. Используйте третье лицо (например, «/%(command)s взрывается».)"
 #~ msgid "Usage: /%s, sends a ping to the contact"
 #~ msgstr "Использование: /%s, посылает пинг контакту"
 #~ msgid "Usage: /%s, send the message to the contact"
@@ -9925,31 +9968,69 @@ msgstr " ресурс с приоритетом "
 #~ msgstr ""
 #~ "Неоднозначность: %d ника совпадают.\n"
 #~ " Используйте графический интерфейс"
-#~ msgid "Usage: /%s <nickname|JID> [reason], bans the JID from the group chat. The nickname of an occupant may be substituted, but not if it contains \"@\". If the JID is currently in the group chat, he/she/it will also be kicked."
-#~ msgstr "Использование: /%s <ник|JID> [причина], запрещает JID заходить в комнату. Ник посетителя можно подставить, если он не содержит «@». Если JID в данный момент находится в комнате, то он/она/оно также будет выгнан."
-#~ msgid "Usage: /%s <nickname>, opens a private chat window with the specified occupant."
-#~ msgstr "Использование: /%s <ник>, открывает окно привата с указанным посетителем."
-#~ msgid "Usage: /%s [reason], closes the current window or tab, displaying reason if specified."
-#~ msgstr "Использование: /%s [причина], закрывает текущее окно или вкладку, приводя причину, если она указана."
-#~ msgid "Usage: /%s <JID> [reason], invites JID to the current group chat, optionally providing a reason."
-#~ msgstr "Использование: /%s <JID> [причина], приглашает JID в текущую комнату, с возможным указанием причины."
-#~ msgid "Usage: /%s <room>@<server>[/nickname], offers to join room@server optionally using specified nickname."
-#~ msgstr "Использование: /%s <комната>@<сервер>[/ник], предлагает подключиться к комната@сервер, с возможным указанием ника."
-#~ msgid "Usage: /%s <nickname> [reason], removes the occupant specified by nickname from the group chat and optionally displays a reason."
-#~ msgstr "Использование: /%s <ник> [причина], удаляет посетителя с указанным ником из комнаты с возможным указанием причины."
-#~ msgid "Usage: /%s <nickname> [message], opens a private message window and sends message to the occupant specified by nickname."
-#~ msgstr "Использование: /%s <ник> [сообщение], открывает окно личной беседы и отсылает сообщение посетителю с указанным ником."
+#~ msgid ""
+#~ "Usage: /%s <nickname|JID> [reason], bans the JID from the group chat. The "
+#~ "nickname of an occupant may be substituted, but not if it contains \"@\". "
+#~ "If the JID is currently in the group chat, he/she/it will also be kicked."
+#~ msgstr ""
+#~ "Использование: /%s <ник|JID> [причина], запрещает JID заходить в комнату. "
+#~ "Ник посетителя можно подставить, если он не содержит «@». Если JID в "
+#~ "данный момент находится в комнате, то он/она/оно также будет выгнан."
+#~ msgid ""
+#~ "Usage: /%s <nickname>, opens a private chat window with the specified "
+#~ "occupant."
+#~ msgstr ""
+#~ "Использование: /%s <ник>, открывает окно привата с указанным посетителем."
+#~ msgid ""
+#~ "Usage: /%s [reason], closes the current window or tab, displaying reason "
+#~ "if specified."
+#~ msgstr ""
+#~ "Использование: /%s [причина], закрывает текущее окно или вкладку, приводя "
+#~ "причину, если она указана."
+#~ msgid ""
+#~ "Usage: /%s <JID> [reason], invites JID to the current group chat, "
+#~ "optionally providing a reason."
+#~ msgstr ""
+#~ "Использование: /%s <JID> [причина], приглашает JID в текущую комнату, с "
+#~ "возможным указанием причины."
+#~ msgid ""
+#~ "Usage: /%s <room>@<server>[/nickname], offers to join room@server "
+#~ "optionally using specified nickname."
+#~ msgstr ""
+#~ "Использование: /%s <комната>@<сервер>[/ник], предлагает подключиться к "
+#~ "комната@сервер, с возможным указанием ника."
+#~ msgid ""
+#~ "Usage: /%s <nickname> [reason], removes the occupant specified by "
+#~ "nickname from the group chat and optionally displays a reason."
+#~ msgstr ""
+#~ "Использование: /%s <ник> [причина], удаляет посетителя с указанным ником "
+#~ "из комнаты с возможным указанием причины."
+#~ msgid ""
+#~ "Usage: /%s <nickname> [message], opens a private message window and sends "
+#~ "message to the occupant specified by nickname."
+#~ msgstr ""
+#~ "Использование: /%s <ник> [сообщение], открывает окно личной беседы и "
+#~ "отсылает сообщение посетителю с указанным ником."
 #~ msgid "Usage: /%s <nickname>, changes your nickname in current group chat."
 #~ msgstr "Использование: /%s <ник>, меняет ваш ник в текущей комнате."
 #~ msgid "Usage: /%s , display the names of group chat occupants."
 #~ msgstr "Использование: /%s, показывает список присутствующих в комнате."
-#~ msgid "Usage: /%s [topic], displays or updates the current group chat topic."
-#~ msgstr "Использование: /%s [тема], показывает или изменяет текущую тему комнаты."
-#~ msgid "Usage: /%s <message>, sends a message without looking for other commands."
-#~ msgstr "Использование: /%s <сообщение>, отсылает сообщение без поиска других команд в нем."
-#~ msgid "Usage: /%s <nickname>, prevent <nickname> to send you messages or private messages."
+#~ msgid ""
+#~ "Usage: /%s [topic], displays or updates the current group chat topic."
+#~ msgstr ""
+#~ "Использование: /%s [тема], показывает или изменяет текущую тему комнаты."
+#~ msgid ""
+#~ "Usage: /%s <message>, sends a message without looking for other commands."
+#~ msgstr ""
+#~ "Использование: /%s <сообщение>, отсылает сообщение без поиска других "
+#~ "команд в нем."
+#~ msgid ""
+#~ "Usage: /%s <nickname>, prevent <nickname> to send you messages or private "
+#~ "messages."
 #~ msgstr "Использование: /%s <ник>, запретить <ник> отправлять вам сообщения."
-#~ msgid "Usage: /%s <nickname>, allow <nickname> to send you messages and private messages."
+#~ msgid ""
+#~ "Usage: /%s <nickname>, allow <nickname> to send you messages and private "
+#~ "messages."
 #~ msgstr "Использование: /%s <ник>, разрешить <ник> отправлять вам сообщения."
 #~ msgid "Add Special _Notification"
 #~ msgstr "Добавить специальное _уведомление"
@@ -9981,8 +10062,12 @@ msgstr " ресурс с приоритетом "
 #~ msgstr "Занятие"
 #~ msgid "Your JID:"
 #~ msgstr "Ваш JID:"
-#~ msgid "Requires python-gnome2-extras or compilation of gtkspell module from Gajim sources."
-#~ msgstr "Требует python-gnome2-extras или скомпилированного модуля gtkspell из исходных кодов Gajim."
+#~ msgid ""
+#~ "Requires python-gnome2-extras or compilation of gtkspell module from "
+#~ "Gajim sources."
+#~ msgstr ""
+#~ "Требует python-gnome2-extras или скомпилированного модуля gtkspell из "
+#~ "исходных кодов Gajim."
 #~ msgid "OS version"
 #~ msgstr "Версия GTK+:"
 #~ msgid "Client name"
@@ -10012,7 +10097,9 @@ msgstr " ресурс с приоритетом "
 #~ msgid "_Host:"
 #~ msgstr "_Хост:"
 #~ msgid "Click to see features (like MSN, ICQ transports) of jabber servers"
-#~ msgstr "Щелкните, чтобы просмотреть сервисы предоставляемые jabber сервером (например, MSN, ICQ транспорты)"
+#~ msgstr ""
+#~ "Щелкните, чтобы просмотреть сервисы предоставляемые jabber сервером "
+#~ "(например, MSN, ICQ транспорты)"
 #~ msgid "Servers Features"
 #~ msgstr "Параметры сервера"
 #~ msgid "Requires compilation of the idle module from Gajim sources."
@@ -10022,11 +10109,16 @@ msgstr " ресурс с приоритетом "
 #~ msgid "Network Manager support not available"
 #~ msgstr "Network Manager не используется"
 #~ msgid "Session Management support not available (missing gnome.ui module)"
-#~ msgstr "Отсутствует поддержка управления сеансами (отсутствует модуль gnome.ui)"
+#~ msgstr ""
+#~ "Отсутствует поддержка управления сеансами (отсутствует модуль gnome.ui)"
 #~ msgid "Thoughtful"
 #~ msgstr "В раздумье"
-#~ msgid "If checked, Gajim will sort contacts in roster window and groupchats by their status and not by the shown name"
-#~ msgstr "Если отмечено, то Gajim будет сортировать контакты в окне ростера и в окнах комнат по статусу, а не по имени"
+#~ msgid ""
+#~ "If checked, Gajim will sort contacts in roster window and groupchats by "
+#~ "their status and not by the shown name"
+#~ msgstr ""
+#~ "Если отмечено, то Gajim будет сортировать контакты в окне ростера и в "
+#~ "окнах комнат по статусу, а не по имени"
 #~ msgid "E2E encryption enabled"
 #~ msgstr "E2E шифрование включено"
 #~ msgid "A_ccounts"
@@ -10065,8 +10157,12 @@ msgstr " ресурс с приоритетом "
 #~ msgstr "<b>Путешествую</b>"
 #~ msgid "<b>Working</b>"
 #~ msgstr "<b>Работаю</b>"
-#~ msgid "Usage: /%(command)s <action>, sends action to the current group chat. Use third person. (e.g. /%s explodes.)"
-#~ msgstr "Использование: /% <действие>, совершает действие в текущей комнате. Используйте третье лицо (например, «/%s взрывается».)"
+#~ msgid ""
+#~ "Usage: /%(command)s <action>, sends action to the current group chat. Use "
+#~ "third person. (e.g. /%s explodes.)"
+#~ msgstr ""
+#~ "Использование: /% <действие>, совершает действие в текущей комнате. "
+#~ "Используйте третье лицо (например, «/%s взрывается».)"
 #~ msgid "%s is now %s"
 #~ msgstr "%s %s"
 #~ msgid ""
@@ -10111,8 +10207,12 @@ msgstr " ресурс с приоритетом "
 #~ msgstr "Создать парольную фразу"
 #~ msgid "Passphrases did not match.\n"
 #~ msgstr "Пароли не совпадают.\n"
-#~ msgid "When negotiating an encrypted session, should Gajim prefer to use public keys for identification?"
-#~ msgstr "Когда устанавливается зашифрованная сессия, дожен ли Gajim предпочитать использовать открытый ключ для идентификации?"
+#~ msgid ""
+#~ "When negotiating an encrypted session, should Gajim prefer to use public "
+#~ "keys for identification?"
+#~ msgstr ""
+#~ "Когда устанавливается зашифрованная сессия, дожен ли Gajim предпочитать "
+#~ "использовать открытый ключ для идентификации?"
 #~ msgid "Click to see past conversations with this contact"
 #~ msgstr "Щелкните для просмотра последних бесед с этим человеком"
 #~ msgid "Click to see past conversation in this room"
@@ -10131,17 +10231,24 @@ msgstr " ресурс с приоритетом "
 #~ msgstr ""
 #~ "\n"
 #~ "От: %(from_address)s"
-#~ msgid "If checked, Gajim can regularly poll a Last.fm account and sends recently played songs through PEP."
-#~ msgstr "Если включено, Gajim будет проверять аккаунт на Last.fm и менять ваш PEP статус на имя проигрываемого трека. "
+#~ msgid ""
+#~ "If checked, Gajim can regularly poll a Last.fm account and sends recently "
+#~ "played songs through PEP."
+#~ msgstr ""
+#~ "Если включено, Gajim будет проверять аккаунт на Last.fm и менять ваш PEP "
+#~ "статус на имя проигрываемого трека. "
 #~ msgid "No such command: /%s (if you want to send this, prefix it with /say)"
-#~ msgstr "Нет такой команды: /%s (если вы хотите её просто передать, то добавьте к ней префикс /say)"
+#~ msgstr ""
+#~ "Нет такой команды: /%s (если вы хотите её просто передать, то добавьте к "
+#~ "ней префикс /say)"
 #~ msgid "<b>History Viewer</b>"
 #~ msgstr "<b>Менеджер истории</b>"
 #~ msgid "<b>JID Selection</b>"
 #~ msgstr "<b>Выбор JID</b>"
 #~ msgid ""
 #~ "Choose the chatlog you want to view. \n"
-#~ "Enter the jid of a groupchat or a contact here. For online accounts you can even enter a a contact's nickname."
+#~ "Enter the jid of a groupchat or a contact here. For online accounts you "
+#~ "can even enter a a contact's nickname."
 #~ msgstr ""
 #~ "Выберите лог чата, который хотите посмотреть. \n"
 #~ "Введите jid чата или контакта. Для онлайн контактов можете ввести ники."
@@ -10153,7 +10260,8 @@ msgstr " ресурс с приоритетом "
 #~ msgstr "Ранг:"
 #~ msgid "Connection to host could not be established"
 #~ msgstr "Не удалось соединиться с хостом"
-#~ msgid "Connection to host could not be established: Incorrect answer from server."
+#~ msgid ""
+#~ "Connection to host could not be established: Incorrect answer from server."
 #~ msgstr "Нельзя подключиться к хосту: Неверный ответ от сервера."
 #~ msgid "_Services"
 #~ msgstr "_Сервисы"
