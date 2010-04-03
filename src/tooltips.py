@@ -624,7 +624,7 @@ class RosterTooltip(NotificationAreaTooltip):
             # Do not show the "Idle since" and "Idle for" items if there
             # is no meaningful difference between last activity time and
             # current time.
-            if diff.days > 0 and diff.seconds > 0:
+            if diff.days > 0 or diff.seconds > 0:
                 cs = "<span foreground='#888A85'>%s</span>"
                 properties.append((str(), None))
                 properties.append(((cs % _("Idle since %s")) % formatted, None))
