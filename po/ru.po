@@ -9235,7 +9235,7 @@ msgstr "OpenPGP: "
 #: ../src/tooltips.py:630
 #, python-format
 msgid "Idle since %s"
-msgstr "не активен с %s"
+msgstr "бездействует с %s"
 
 #: ../src/tooltips.py:631
 #, python-format
