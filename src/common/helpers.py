@@ -221,7 +221,7 @@ def get_uf_show(show, use_mnemonic = False):
             uf_show = _('Free for Chat')
     elif show == 'online':
         if use_mnemonic:
-            uf_show = _('_Available')
+            uf_show = Q_('?user status:_Available')
         else:
             uf_show = Q_('?user status:Available')
     elif show == 'connecting':
