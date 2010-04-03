@@ -186,22 +186,18 @@ class BaseTooltip:
         """
         formatted = "<span foreground='%s'>%s</span>"
         if status.startswith(_("Available")):
-            return formatted % ('#73D216', status)
+            status = formatted % ('#73D216', status)
         elif status.startswith(_("Free for Chat")):
-            return formatted % ('#3465A4', status)
+            status = formatted % ('#3465A4', status)
         elif status.startswith(_("Away")):
-            return formatted % ('#EDD400', status)
+            status = formatted % ('#EDD400', status)
         elif status.startswith(_("Busy")):
-            return formatted % ('#F57900', status)
+            status = formatted % ('#F57900', status)
         elif status.startswith(_("Not Available")):
-            return formatted % ('#CC0000', status)
+            status = formatted % ('#CC0000', status)
         elif status.startswith(_("Offline")):
-            return formatted % ('#555753', status)
-        else:
-            # A fallback reserved for probable changes that might occur
-            # in the future, so if status names will change -- tooltip
-            # population should not fail.
-            return status
+            status = formatted % ('#555753', status)
+        return status
 
 class StatusTable:
     """
