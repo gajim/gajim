@@ -621,10 +621,14 @@ class RosterTooltip(NotificationAreaTooltip):
             else:
                 formatted = last_active.strftime("%c")
 
-            cs = "<span foreground='#888A85'>%s</span>"
-            properties.append((str(), None))
-            properties.append(((cs % _("Idle since %s")) % formatted, None))
-            properties.append(((cs % _("Idle for %s")) % str(diff), None))
+            # Do not show the "Idle since" and "Idle for" items if there
+            # is no meaningful difference between last activity time and
+            # current time.
+            if diff.days > 0 and diff.seconds > 0:
+                cs = "<span foreground='#888A85'>%s</span>"
+                properties.append((str(), None))
+                properties.append(((cs % _("Idle since %s")) % formatted, None))
+                properties.append(((cs % _("Idle for %s")) % str(diff), None))
 
         while properties:
             property_ = properties.pop(0)
