@@ -366,10 +366,10 @@ class GCTooltip(BaseTooltip):
                 status = '<i>' +\
                         gobject.markup_escape_text(status) + '</i>'
                 properties.append((status, None))
-        else: # no status message, show SHOW instead
-            show = helpers.get_uf_show(contact.show)
-            show = self.colorize_status(show)
-            properties.append((show, None))
+
+        show = helpers.get_uf_show(contact.show)
+        show = self.colorize_status(show)
+        properties.append((show, None))
 
         if contact.jid.strip() != '':
             properties.append((_('Jabber ID: '), contact.jid))
