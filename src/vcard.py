@@ -328,7 +328,7 @@ class VcardWindow:
         subscription_label = self.xml.get_object('subscription_label')
         ask_label = self.xml.get_object('ask_label')
         if self.gc_contact:
-            self.xml.get_object('subscription_title_label').set_markup(_("<b>Role:</b>"))
+            self.xml.get_object('subscription_title_label').set_markup(Q_("?Role in Group Chat:<b>Role:</b>"))
             uf_role = helpers.get_uf_role(self.gc_contact.role)
             subscription_label.set_text(uf_role)
 

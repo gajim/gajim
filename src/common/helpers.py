@@ -223,7 +223,7 @@ def get_uf_show(show, use_mnemonic = False):
         if use_mnemonic:
             uf_show = _('_Available')
         else:
-            uf_show = _('Available')
+            uf_show = Q_('?user status:Available')
     elif show == 'connecting':
         uf_show = _('Connecting')
     elif show == 'away':
