@@ -9235,12 +9235,12 @@ msgstr "OpenPGP: "
 #: ../src/tooltips.py:630
 #, python-format
 msgid "Idle since %s"
-msgstr "бездействует с %s"
+msgstr "Бездействует с %s"
 
 #: ../src/tooltips.py:631
 #, python-format
 msgid "Idle for %s"
-msgstr "время бездействия %s"
+msgstr "Время бездействия %s"
 
 #: ../src/tooltips.py:682
 #, python-format
