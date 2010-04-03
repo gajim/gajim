@@ -191,7 +191,7 @@ class BaseTooltip:
             return formatted % ('#3465A4', status)
         elif status.startswith(_("Away")):
             return formatted % ('#EDD400', status)
-        elif status.startswith("Busy"):
+        elif status.startswith(_("Busy")):
             return formatted % ('#F57900', status)
         elif status.startswith(_("Not Available")):
             return formatted % ('#CC0000', status)
