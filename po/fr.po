@@ -605,9 +605,8 @@ msgid "Don't have "
 msgstr "N'ai pas"
 
 #: ../data/gui/advanced_notifications_window.ui.h:13
-#, fuzzy
 msgid "File Transfer Finished"
-msgstr "Transfert de fichiers"
+msgstr "Transfert de fichier terminé"
 
 #: ../data/gui/advanced_notifications_window.ui.h:14
 #, fuzzy
