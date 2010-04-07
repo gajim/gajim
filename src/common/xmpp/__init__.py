@@ -15,5 +15,3 @@ import dispatcher_nb, features_nb, idlequeue, bosh, tls_nb, proxy_connectors
 from client_nb import NonBlockingClient
 from plugin import PlugIn
 from protocol import *
-
-# vim: se ts=3:

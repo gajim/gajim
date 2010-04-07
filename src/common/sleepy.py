@@ -28,98 +28,96 @@ import os, sys
 STATE_UNKNOWN  = 'OS probably not supported'
 STATE_XA   = 'extended away'
 STATE_AWAY   = 'away'
-STATE_AWAKE	= 'awake'
+STATE_AWAKE     = 'awake'
 
 SUPPORTED = True
 try:
-	if os.name == 'nt':
-		import ctypes
+    if os.name == 'nt':
+        import ctypes
 
-		GetTickCount = ctypes.windll.kernel32.GetTickCount
-		GetLastInputInfo = ctypes.windll.user32.GetLastInputInfo
+        GetTickCount = ctypes.windll.kernel32.GetTickCount
+        GetLastInputInfo = ctypes.windll.user32.GetLastInputInfo
 
-		class LASTINPUTINFO(ctypes.Structure):
-			_fields_ = [('cbSize', ctypes.c_uint), ('dwTime', ctypes.c_uint)]
+        class LASTINPUTINFO(ctypes.Structure):
+            _fields_ = [('cbSize', ctypes.c_uint), ('dwTime', ctypes.c_uint)]
 
-		lastInputInfo = LASTINPUTINFO()
-		lastInputInfo.cbSize = ctypes.sizeof(lastInputInfo)
+        lastInputInfo = LASTINPUTINFO()
+        lastInputInfo.cbSize = ctypes.sizeof(lastInputInfo)
 
-	elif sys.platform == 'darwin':
-		import osx.idle as idle
-	else: # unix
-		from common import idle
+    elif sys.platform == 'darwin':
+        import osx.idle as idle
+    else: # unix
+        from common import idle
 except Exception:
-	gajim.log.debug('Unable to load idle module')
-	SUPPORTED = False
+    gajim.log.debug('Unable to load idle module')
+    SUPPORTED = False
 
 class SleepyWindows:
-	def __init__(self, away_interval = 60, xa_interval = 120):
-		self.away_interval = away_interval
-		self.xa_interval = xa_interval
-		self.state = STATE_AWAKE # assume we are awake
+    def __init__(self, away_interval = 60, xa_interval = 120):
+        self.away_interval = away_interval
+        self.xa_interval = xa_interval
+        self.state = STATE_AWAKE # assume we are awake
 
-	def getIdleSec(self):
-		GetLastInputInfo(ctypes.byref(lastInputInfo))
-		idleDelta = float(GetTickCount() - lastInputInfo.dwTime) / 1000
-		return idleDelta
+    def getIdleSec(self):
+        GetLastInputInfo(ctypes.byref(lastInputInfo))
+        idleDelta = float(GetTickCount() - lastInputInfo.dwTime) / 1000
+        return idleDelta
 
-	def poll(self):
-		'''checks to see if we should change state'''
-		if not SUPPORTED:
-			return False
+    def poll(self):
+        '''checks to see if we should change state'''
+        if not SUPPORTED:
+            return False
 
-		idleTime = self.getIdleSec()
+        idleTime = self.getIdleSec()
 
-		# xa is stronger than away so check for xa first
-		if idleTime > self.xa_interval:
-			self.state = STATE_XA
-		elif idleTime > self.away_interval:
-			self.state = STATE_AWAY
-		else:
-			self.state = STATE_AWAKE
-		return True
+        # xa is stronger than away so check for xa first
+        if idleTime > self.xa_interval:
+            self.state = STATE_XA
+        elif idleTime > self.away_interval:
+            self.state = STATE_AWAY
+        else:
+            self.state = STATE_AWAKE
+        return True
 
-	def getState(self):
-		return self.state
+    def getState(self):
+        return self.state
 
-	def setState(self, val):
-		self.state = val
+    def setState(self, val):
+        self.state = val
 
 class SleepyUnix:
-	def __init__(self, away_interval = 60, xa_interval = 120):
-		global SUPPORTED
-		self.away_interval = away_interval
-		self.xa_interval = xa_interval
-		self.state = STATE_AWAKE # assume we are awake
+    def __init__(self, away_interval = 60, xa_interval = 120):
+        global SUPPORTED
+        self.away_interval = away_interval
+        self.xa_interval = xa_interval
+        self.state = STATE_AWAKE # assume we are awake
 
-	def getIdleSec(self):
-		return idle.getIdleSec()
+    def getIdleSec(self):
+        return idle.getIdleSec()
 
-	def poll(self):
-		'''checks to see if we should change state'''
-		if not SUPPORTED:
-			return False
+    def poll(self):
+        '''checks to see if we should change state'''
+        if not SUPPORTED:
+            return False
 
-		idleTime = self.getIdleSec()
+        idleTime = self.getIdleSec()
 
-		# xa is stronger than away so check for xa first
-		if idleTime > self.xa_interval:
-			self.state = STATE_XA
-		elif idleTime > self.away_interval:
-			self.state = STATE_AWAY
-		else:
-			self.state = STATE_AWAKE
-		return True
+        # xa is stronger than away so check for xa first
+        if idleTime > self.xa_interval:
+            self.state = STATE_XA
+        elif idleTime > self.away_interval:
+            self.state = STATE_AWAY
+        else:
+            self.state = STATE_AWAKE
+        return True
 
-	def getState(self):
-		return self.state
+    def getState(self):
+        return self.state
 
-	def setState(self, val):
-		self.state = val
+    def setState(self, val):
+        self.state = val
 
 if os.name == 'nt':
-	Sleepy = SleepyWindows
+    Sleepy = SleepyWindows
 else:
-	Sleepy = SleepyUnix
-
-# vim: se ts=3:
+    Sleepy = SleepyUnix

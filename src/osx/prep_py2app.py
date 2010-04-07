@@ -8,18 +8,16 @@ py = -1
 lib_dyn = -1
 site_zip = -1
 for index in xrange(len(sys.path)):
-	if 'Contents/Resources' in sys.path[index]:
-		if sys.path[index].endswith('lib/python2.5'):
-			py = index
-		if sys.path[index].endswith('lib-dynload'):
-			lib_dyn = index
-		elif sys.path[index].endswith('site-packages.zip'):
-			site_zip = index
+    if 'Contents/Resources' in sys.path[index]:
+        if sys.path[index].endswith('lib/python2.5'):
+            py = index
+        if sys.path[index].endswith('lib-dynload'):
+            lib_dyn = index
+        elif sys.path[index].endswith('site-packages.zip'):
+            site_zip = index
 if ((lib_dyn > -1) and (site_zip > -1)):
-	tmp = sys.path[lib_dyn]
-	sys.path[lib_dyn] = sys.path[site_zip]
-	sys.path[site_zip] = tmp
+    tmp = sys.path[lib_dyn]
+    sys.path[lib_dyn] = sys.path[site_zip]
+    sys.path[site_zip] = tmp
 if py > -1:
-	del sys.path[py]
-
-# vim: se ts=3:
+    del sys.path[py]

@@ -3,10 +3,10 @@ from distutils.core import setup, Extension
 import sys
 
 _growl = Extension('_growl',
-                    extra_link_args = ["-framework","CoreFoundation"],
+                    extra_link_args = ["-framework", "CoreFoundation"],
                     sources = ['libgrowl.c'])
 _growlImage = Extension('_growlImage',
-                        extra_link_args = ["-framework","Cocoa"],
+                        extra_link_args = ["-framework", "Cocoa"],
                         sources = ['growlImage.m'])
 
 if sys.platform.startswith("darwin"):
@@ -22,6 +22,3 @@ setup(name="py-Growl",
       url="http://growl.info",
       py_modules=["Growl"],
       ext_modules = modules )
-
-
-# vim: se ts=3:

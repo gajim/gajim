@@ -63,7 +63,7 @@ class netgrowl:
     def __init__(self, hostname, password ):
         self.hostname = hostname
         self.password = password
-        self.socket = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+        self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
     def send(self, data):
         self.socket.sendto(data, (self.hostname, GROWL_UDP_PORT))
@@ -214,7 +214,7 @@ class GrowlNotifier(object):
         regInfo = {GROWL_APP_NAME: self.applicationName,
                    GROWL_NOTIFICATIONS_ALL: self.notifications,
                    GROWL_NOTIFICATIONS_DEFAULT: self.defaultNotifications,
-                   GROWL_APP_ICON:self.applicationIcon,
+                   GROWL_APP_ICON: self.applicationIcon,
                   }
         self._notifyMethod.PostRegistration(regInfo)
 
@@ -241,5 +241,3 @@ class GrowlNotifier(object):
 
     def notifyCB(self, userdata):
         print "Got notify in pyland", userdata
-
-# vim: se ts=3:
