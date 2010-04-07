@@ -438,7 +438,7 @@ class SASL(PlugIn):
             self.scram_soup = 'n=' + self.username + ',r=' + nonce
             self.scram_gs2 = 'n,,' # No CB yet.
             sasl_data = (self.scram_gs2 + self.scram_soup).encode('base64').\
-                replace('\n','')
+                replace('\n', '')
             node = Node('auth', attrs={'xmlns': NS_SASL,
                 'mechanism': self.mechanism}, payload=[sasl_data])
         elif self.mechanism == 'DIGEST-MD5':

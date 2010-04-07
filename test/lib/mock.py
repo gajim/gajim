@@ -461,6 +461,3 @@ def HASMETHOD(method):
     return testFn
 
 CALLABLE = callable
-
-
-
