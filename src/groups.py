@@ -25,51 +25,49 @@ from common import gajim, xmpp
 import gtkgui_helpers
 
 class GroupsPostWindow:
-	def __init__(self, account, servicejid, groupid):
-		"""
-		Open new 'create post' window to create message for groupid on servicejid
-		service
-		"""
-		assert isinstance(servicejid, basestring)
-		assert isinstance(groupid, basestring)
+    def __init__(self, account, servicejid, groupid):
+        """
+        Open new 'create post' window to create message for groupid on servicejid
+        service
+        """
+        assert isinstance(servicejid, basestring)
+        assert isinstance(groupid, basestring)
 
-		self.account = account
-		self.servicejid = servicejid
-		self.groupid = groupid
+        self.account = account
+        self.servicejid = servicejid
+        self.groupid = groupid
 
-		self.xml = gtkgui_helpers.get_gtk_builder('groups_post_window.ui')
-		self.window = self.xml.get_object('groups_post_window')
-		for name in ('from_entry', 'subject_entry', 'contents_textview'):
-			self.__dict__[name] = self.xml.get_object(name)
+        self.xml = gtkgui_helpers.get_gtk_builder('groups_post_window.ui')
+        self.window = self.xml.get_object('groups_post_window')
+        for name in ('from_entry', 'subject_entry', 'contents_textview'):
+            self.__dict__[name] = self.xml.get_object(name)
 
-		self.xml.connect_signals(self)
-		self.window.show_all()
+        self.xml.connect_signals(self)
+        self.window.show_all()
 
-	def on_cancel_button_clicked(self, w):
-		"""
-		Close window
-		"""
-		self.window.destroy()
+    def on_cancel_button_clicked(self, w):
+        """
+        Close window
+        """
+        self.window.destroy()
 
-	def on_send_button_clicked(self, w):
-		"""
-		Gather info from widgets and send it as a message
-		"""
-		# constructing item to publish... that's atom:entry element
-		item = xmpp.Node('entry', {'xmlns':'http://www.w3.org/2005/Atom'})
-		author = item.addChild('author')
-		author.addChild('name', {}, [self.from_entry.get_text()])
-		item.addChild('generator', {}, ['Gajim'])
-		item.addChild('title', {}, [self.subject_entry.get_text()])
-		item.addChild('id', {}, ['0'])
+    def on_send_button_clicked(self, w):
+        """
+        Gather info from widgets and send it as a message
+        """
+        # constructing item to publish... that's atom:entry element
+        item = xmpp.Node('entry', {'xmlns':'http://www.w3.org/2005/Atom'})
+        author = item.addChild('author')
+        author.addChild('name', {}, [self.from_entry.get_text()])
+        item.addChild('generator', {}, ['Gajim'])
+        item.addChild('title', {}, [self.subject_entry.get_text()])
+        item.addChild('id', {}, ['0'])
 
-		buf = self.contents_textview.get_buffer()
-		item.addChild('content', {}, [buf.get_text(buf.get_start_iter(), buf.get_end_iter())])
+        buf = self.contents_textview.get_buffer()
+        item.addChild('content', {}, [buf.get_text(buf.get_start_iter(), buf.get_end_iter())])
 
-		# publish it to node
-		gajim.connections[self.account].send_pb_publish(self.servicejid, self.groupid, item, '0')
+        # publish it to node
+        gajim.connections[self.account].send_pb_publish(self.servicejid, self.groupid, item, '0')
 
-		# close the window
-		self.window.destroy()
-
-# vim: se ts=3:
+        # close the window
+        self.window.destroy()

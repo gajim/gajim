@@ -21,29 +21,27 @@ C_NAME, C_DOMAIN, C_INTERFACE, C_PROTOCOL, C_HOST, \
 C_ADDRESS, C_PORT, C_BARE_NAME, C_TXT = range(9)
 
 def test_avahi():
-	try:
-		import avahi
-	except ImportError:
-		return False
-	return True
+    try:
+        import avahi
+    except ImportError:
+        return False
+    return True
 
 def test_bonjour():
-	try:
-		import pybonjour
-	except ImportError:
-		return False
-	except WindowsError:
-		return False
-	return True
+    try:
+        import pybonjour
+    except ImportError:
+        return False
+    except WindowsError:
+        return False
+    return True
 
 def test_zeroconf():
-	return test_avahi() or test_bonjour()
+    return test_avahi() or test_bonjour()
 
 if test_avahi():
-	from common.zeroconf import zeroconf_avahi
-	Zeroconf = zeroconf_avahi.Zeroconf
+    from common.zeroconf import zeroconf_avahi
+    Zeroconf = zeroconf_avahi.Zeroconf
 elif test_bonjour():
-	from common.zeroconf import zeroconf_bonjour
-	Zeroconf = zeroconf_bonjour.Zeroconf
-
-# vim: se ts=3:
+    from common.zeroconf import zeroconf_bonjour
+    Zeroconf = zeroconf_bonjour.Zeroconf

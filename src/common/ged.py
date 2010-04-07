@@ -33,33 +33,32 @@ POSTCORE = 50
 
 class GlobalEventsDispatcher(object):
 
-	def __init__(self):
-		self.handlers = {}
+    def __init__(self):
+        self.handlers = {}
 
-	def register_event_handler(self, event_name, priority, handler):
-		if event_name in self.handlers:
-			handlers_list = self.handlers[event_name]
-			i = 0
-			for i,h in enumerate(handlers_list):
-				if priority < h[0]:
-					break
+    def register_event_handler(self, event_name, priority, handler):
+        if event_name in self.handlers:
+            handlers_list = self.handlers[event_name]
+            i = 0
+            for i, h in enumerate(handlers_list):
+                if priority < h[0]:
+                    break
 
-			handlers_list.insert(i, (priority, handler))
-		else:
-			self.handlers[event_name] = [(priority, handler)]
+            handlers_list.insert(i, (priority, handler))
+        else:
+            self.handlers[event_name] = [(priority, handler)]
 
-	def remove_event_handler(self, event_name, priority, handler):
-		if event_name in self.handlers:
-			try:
-				self.handlers[event_name].remove((priority, handler))
-			except ValueError, error:
-				log.warn('''Function (%s) with priority "%s" never registered 
-				as handler of event "%s". Couldn\'t remove. Error: %s'''
-						  %(handler, priority, event_name, error))
+    def remove_event_handler(self, event_name, priority, handler):
+        if event_name in self.handlers:
+            try:
+                self.handlers[event_name].remove((priority, handler))
+            except ValueError, error:
+                log.warn('''Function (%s) with priority "%s" never registered
+                as handler of event "%s". Couldn\'t remove. Error: %s'''
+                                  %(handler, priority, event_name, error))
 
-	def raise_event(self, event_name, *args, **kwargs):
-		log.debug('%s\nArgs: %s'%(event_name, str(args)))
-		if event_name in self.handlers:
-			for priority, handler in self.handlers[event_name]:
-				handler(*args, **kwargs)
-	
+    def raise_event(self, event_name, *args, **kwargs):
+        log.debug('%s\nArgs: %s'%(event_name, str(args)))
+        if event_name in self.handlers:
+            for priority, handler in self.handlers[event_name]:
+                handler(*args, **kwargs)

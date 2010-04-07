@@ -30,106 +30,105 @@ from pprint import pformat
 from common import gajim
 
 class NetworkEventsController(object):
-	
-	def __init__(self):
-		self.incoming_events_generators = {}
-		'''
-		Keys: names of events
-		Values: list of class objects that are subclasses 
-		of `NetworkIncomingEvent`
-		'''
-	
-	def register_incoming_event(self, event_class):
-		for base_event_name in event_class.base_network_events:
-			self.incoming_events_generators.setdefault(base_event_name,[]).append(event_class)
-	
-	def unregister_incoming_event(self, event_class):
-		for base_event_name in event_class.base_network_events:
-			if base_event_name in self.incoming_events_generators:
-				self.incoming_events_generators[base_event_name].remove(event_class)
-	
-	def register_outgoing_event(self, event_class):
-		pass
-	
-	def unregister_outgoing_event(self, event_class):
-		pass
-	
-	def push_incoming_event(self, event_object):
-		if self._generate_events_based_on_incoming_event(event_object):
-			gajim.ged.raise_event(event_object.name, event_object)
-	
-	def push_outgoing_event(self, event_object):
-		pass
-	
-	def _generate_events_based_on_incoming_event(self, event_object):
-		'''
-		:return: True if even_object should be dispatched through Global
-		Events Dispatcher, False otherwise. This can be used to replace
-		base events with those that more data computed (easier to use 
-		by handlers).
-		:note: replacing mechanism is not implemented currently, but will be 
-		based on attribute in new network events object.
-		'''
-		base_event_name = event_object.name
-		if base_event_name in self.incoming_events_generators:
-			for new_event_class in self.incoming_events_generators[base_event_name]:
-				new_event_object = new_event_class(None, base_event=event_object)
-				if new_event_object.generate():
-					if self._generate_events_based_on_incoming_event(new_event_object):
-						gajim.ged.raise_event(new_event_object.name, new_event_object)
-		return True
-	
-class NetworkEvent(object):
-	name = ''
 
-	def __init__(self, new_name, **kwargs):
-		if new_name:
-			self.name = new_name
-			
-		self._set_kwargs_as_attributes(**kwargs)
-		
-		self.init()
-		
-	def init(self):
-		pass
-	
-	def _set_kwargs_as_attributes(self, **kwargs):
-		for k,v in kwargs.iteritems():
-			setattr(self, k, v)
-			
-	def __str__(self):
-		return '<NetworkEvent object> Attributes: %s'%(pformat(self.__dict__))
-	
-	def __repr__(self):
-		return '<NetworkEvent object> Attributes: %s'%(pformat(self.__dict__))
-	
+    def __init__(self):
+        self.incoming_events_generators = {}
+        '''
+        Keys: names of events
+        Values: list of class objects that are subclasses
+        of `NetworkIncomingEvent`
+        '''
+
+    def register_incoming_event(self, event_class):
+        for base_event_name in event_class.base_network_events:
+            self.incoming_events_generators.setdefault(base_event_name, []).append(event_class)
+
+    def unregister_incoming_event(self, event_class):
+        for base_event_name in event_class.base_network_events:
+            if base_event_name in self.incoming_events_generators:
+                self.incoming_events_generators[base_event_name].remove(event_class)
+
+    def register_outgoing_event(self, event_class):
+        pass
+
+    def unregister_outgoing_event(self, event_class):
+        pass
+
+    def push_incoming_event(self, event_object):
+        if self._generate_events_based_on_incoming_event(event_object):
+            gajim.ged.raise_event(event_object.name, event_object)
+
+    def push_outgoing_event(self, event_object):
+        pass
+
+    def _generate_events_based_on_incoming_event(self, event_object):
+        '''
+        :return: True if even_object should be dispatched through Global
+        Events Dispatcher, False otherwise. This can be used to replace
+        base events with those that more data computed (easier to use
+        by handlers).
+        :note: replacing mechanism is not implemented currently, but will be
+        based on attribute in new network events object.
+        '''
+        base_event_name = event_object.name
+        if base_event_name in self.incoming_events_generators:
+            for new_event_class in self.incoming_events_generators[base_event_name]:
+                new_event_object = new_event_class(None, base_event=event_object)
+                if new_event_object.generate():
+                    if self._generate_events_based_on_incoming_event(new_event_object):
+                        gajim.ged.raise_event(new_event_object.name, new_event_object)
+        return True
+
+class NetworkEvent(object):
+    name = ''
+
+    def __init__(self, new_name, **kwargs):
+        if new_name:
+            self.name = new_name
+
+        self._set_kwargs_as_attributes(**kwargs)
+
+        self.init()
+
+    def init(self):
+        pass
+
+    def _set_kwargs_as_attributes(self, **kwargs):
+        for k, v in kwargs.iteritems():
+            setattr(self, k, v)
+
+    def __str__(self):
+        return '<NetworkEvent object> Attributes: %s'%(pformat(self.__dict__))
+
+    def __repr__(self):
+        return '<NetworkEvent object> Attributes: %s'%(pformat(self.__dict__))
+
 class NetworkIncomingEvent(NetworkEvent):
-	base_network_events = []
-	'''
-	Names of base network events that new event is going to be generated on.
-	'''
-		
-	def init(self):
-		pass
-	
-	def generate(self):
-		'''
-		Generates new event (sets it's attributes) based on event object.
-		
-		Base event object name is one of those in `base_network_events`.
-		
-		Reference to base event object is stored in `self.base_event` attribute.
-		
-		Note that this is a reference, so modifications to that event object
-		are possible before dispatching to Global Events Dispatcher.
-		
-		:return: True if generated event should be dispatched, False otherwise.
-		'''
-		pass
-	
+    base_network_events = []
+    '''
+    Names of base network events that new event is going to be generated on.
+    '''
+
+    def init(self):
+        pass
+
+    def generate(self):
+        '''
+        Generates new event (sets it's attributes) based on event object.
+
+        Base event object name is one of those in `base_network_events`.
+
+        Reference to base event object is stored in `self.base_event` attribute.
+
+        Note that this is a reference, so modifications to that event object
+        are possible before dispatching to Global Events Dispatcher.
+
+        :return: True if generated event should be dispatched, False otherwise.
+        '''
+        pass
+
 
 class NetworkOutgoingEvent(NetworkEvent):
-	
-	def init(self):
-		pass
-	
+
+    def init(self):
+        pass

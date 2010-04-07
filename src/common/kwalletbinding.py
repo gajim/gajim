@@ -25,56 +25,56 @@ import subprocess
 
 
 def kwallet_available():
-	"""
-	Return True if kwalletcli can be run, False otherwise
-	"""
-	try:
-		p = subprocess.Popen(["kwalletcli", "-qV"])
-	except Exception:
-		return False
-	p.communicate()
-	if p.returncode == 0:
-		return True
-	return False
+    """
+    Return True if kwalletcli can be run, False otherwise
+    """
+    try:
+        p = subprocess.Popen(["kwalletcli", "-qV"])
+    except Exception:
+        return False
+    p.communicate()
+    if p.returncode == 0:
+        return True
+    return False
 
 
 def kwallet_get(folder, entry):
-	"""
-	Retrieve a passphrase from the KDE Wallet via kwalletcli
+    """
+    Retrieve a passphrase from the KDE Wallet via kwalletcli
 
-	Arguments:
-	• folder: The top-level category to use (normally the programme name)
-	• entry: The key of the entry to retrieve
+    Arguments:
+    • folder: The top-level category to use (normally the programme name)
+    • entry: The key of the entry to retrieve
 
-	Returns the passphrase as unicode, False if it cannot be found,
-	or None if an error occured.
-	"""
-	p = subprocess.Popen(["kwalletcli", "-q", "-f", folder.encode('utf-8'),
-	 "-e", entry.encode('utf-8')], stdout=subprocess.PIPE)
-	pw = p.communicate()[0]
-	if p.returncode == 0:
-		return unicode(pw.decode('utf-8'))
-	if p.returncode == 1 or p.returncode == 4:
-		# ENOENT
-		return False
-	# error
-	return None
+    Returns the passphrase as unicode, False if it cannot be found,
+    or None if an error occured.
+    """
+    p = subprocess.Popen(["kwalletcli", "-q", "-f", folder.encode('utf-8'),
+     "-e", entry.encode('utf-8')], stdout=subprocess.PIPE)
+    pw = p.communicate()[0]
+    if p.returncode == 0:
+        return unicode(pw.decode('utf-8'))
+    if p.returncode == 1 or p.returncode == 4:
+        # ENOENT
+        return False
+    # error
+    return None
 
 
 def kwallet_put(folder, entry, passphrase):
-	"""
-	Store a passphrase into the KDE Wallet via kwalletcli
+    """
+    Store a passphrase into the KDE Wallet via kwalletcli
 
-	Arguments:
-	• folder: The top-level category to use (normally the programme name)
-	• entry: The key of the entry to store
-	• passphrase: The value to store
+    Arguments:
+    • folder: The top-level category to use (normally the programme name)
+    • entry: The key of the entry to store
+    • passphrase: The value to store
 
-	Returns True on success, False otherwise.
-	"""
-	p = subprocess.Popen(["kwalletcli", "-q", "-f", folder.encode('utf-8'),
-	 "-e", entry.encode('utf-8'), "-P"], stdin=subprocess.PIPE)
-	p.communicate(passphrase.encode('utf-8'))
-	if p.returncode == 0:
-		return True
-	return False
+    Returns True on success, False otherwise.
+    """
+    p = subprocess.Popen(["kwalletcli", "-q", "-f", folder.encode('utf-8'),
+     "-e", entry.encode('utf-8'), "-P"], stdin=subprocess.PIPE)
+    p.communicate(passphrase.encode('utf-8'))
+    if p.returncode == 0:
+        return True
+    return False

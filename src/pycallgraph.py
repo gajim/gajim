@@ -402,11 +402,9 @@ def simple_memoize(callable_object):
 
     return wrapper
 
-    
+
 settings = {}
 graph_attributes = {}
 reset_settings()
 reset_trace()
 inspect.getmodule = simple_memoize(inspect.getmodule)
-
-# vim:set shiftwidth=4 tabstop=4 expandtab textwidth=79:

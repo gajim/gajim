@@ -38,110 +38,110 @@ from common import ged
 from common import nec
 
 class NewEventsExamplePlugin(GajimPlugin):
-	name = u'New Events Example'
-	short_name = u'new_events_example'
-	version = u'0.1'
-	description = u'''Shows how to generate new network events based on existing one using Network Events Controller.'''
-	authors = [u'Mateusz Biliński <mateusz@bilinski.it>']
-	homepage = u'http://blog.bilinski.it'
-	
-	@log_calls('NewEventsExamplePlugin')
-	def init(self):
-		self.config_dialog = None
-		#self.gui_extension_points = {}
-		#self.config_default_values = {}
-		
-		self.events_handlers = {'raw-message-received' : 
-									(ged.POSTCORE,
-									 self.raw_message_received),
-								'customized-message-received' : 
-									(ged.POSTCORE,
-									 self.customized_message_received),
-								'enriched-chat-message-received' :
-									(ged.POSTCORE,
-									 self.enriched_chat_message_received)}
-		
-		self.events = [CustomizedMessageReceivedEvent,
-			MoreCustomizedMessageReceivedEvent,
-			ModifyOnlyMessageReceivedEvent,
-			EnrichedChatMessageReceivedEvent]
-		
-	def enriched_chat_message_received(self, event_object):
-		pass
-		#print "Event '%s' occured. Event object: %s\n\n===\n"%(event_object.name, 
-														#event_object)
-		
-	def raw_message_received(self, event_object):
-		pass
-		#print "Event '%s' occured. Event object: %s\n\n===\n"%(event_object.name, 
-														#event_object)
-		
-	def customized_message_received(self, event_object):
-		pass
-		#print "Event '%s' occured. Event object: %s\n\n===\n"%(event_object.name, 
-														#event_object
-														
-	@log_calls('NewEventsExamplePlugin')
-	def activate(self):
-		pass
+    name = u'New Events Example'
+    short_name = u'new_events_example'
+    version = u'0.1'
+    description = u'''Shows how to generate new network events based on existing one using Network Events Controller.'''
+    authors = [u'Mateusz Biliński <mateusz@bilinski.it>']
+    homepage = u'http://blog.bilinski.it'
 
-	@log_calls('NewEventsExamplePlugin')
-	def deactivate(self):
-		pass
-	
+    @log_calls('NewEventsExamplePlugin')
+    def init(self):
+        self.config_dialog = None
+        #self.gui_extension_points = {}
+        #self.config_default_values = {}
+
+        self.events_handlers = {'raw-message-received' :
+                                                                (ged.POSTCORE,
+                                                                 self.raw_message_received),
+                                                        'customized-message-received' :
+                                                                (ged.POSTCORE,
+                                                                 self.customized_message_received),
+                                                        'enriched-chat-message-received' :
+                                                                (ged.POSTCORE,
+                                                                 self.enriched_chat_message_received)}
+
+        self.events = [CustomizedMessageReceivedEvent,
+                MoreCustomizedMessageReceivedEvent,
+                ModifyOnlyMessageReceivedEvent,
+                EnrichedChatMessageReceivedEvent]
+
+    def enriched_chat_message_received(self, event_object):
+        pass
+        #print "Event '%s' occured. Event object: %s\n\n===\n"%(event_object.name,
+                                                                                                        #event_object)
+
+    def raw_message_received(self, event_object):
+        pass
+        #print "Event '%s' occured. Event object: %s\n\n===\n"%(event_object.name,
+                                                                                                        #event_object)
+
+    def customized_message_received(self, event_object):
+        pass
+        #print "Event '%s' occured. Event object: %s\n\n===\n"%(event_object.name,
+                                                                                                        #event_object
+
+    @log_calls('NewEventsExamplePlugin')
+    def activate(self):
+        pass
+
+    @log_calls('NewEventsExamplePlugin')
+    def deactivate(self):
+        pass
+
 class CustomizedMessageReceivedEvent(nec.NetworkIncomingEvent):
-	name = 'customized-message-received'
-	base_network_events = ['raw-message-received']
-	
-	def generate(self):
-		return True
-	
+    name = 'customized-message-received'
+    base_network_events = ['raw-message-received']
+
+    def generate(self):
+        return True
+
 class MoreCustomizedMessageReceivedEvent(nec.NetworkIncomingEvent):
-	'''
-	Shows chain of custom created events.
-	
-	This one is based on custom 'customized-messsage-received'.
-	'''
-	name = 'more-customized-message-received'
-	base_network_events = ['customized-message-received']
-	
-	def generate(self):
-		return True
-	
+    '''
+    Shows chain of custom created events.
+
+    This one is based on custom 'customized-messsage-received'.
+    '''
+    name = 'more-customized-message-received'
+    base_network_events = ['customized-message-received']
+
+    def generate(self):
+        return True
+
 class ModifyOnlyMessageReceivedEvent(nec.NetworkIncomingEvent):
-	name = 'modify-only-message-received'
-	base_network_events = ['raw-message-received']
-	
-	def generate(self):
-		msg_type = self.base_event.xmpp_msg.attrs.get('type', None)
-		if msg_type == u'chat':
-			msg_text = "".join(self.base_event.xmpp_msg.kids[0].data)
-			self.base_event.xmpp_msg.kids[0].setData(
-				u'%s [MODIFIED BY CUSTOM NETWORK EVENT]'%(msg_text))
-			
-		return False
-	
+    name = 'modify-only-message-received'
+    base_network_events = ['raw-message-received']
+
+    def generate(self):
+        msg_type = self.base_event.xmpp_msg.attrs.get('type', None)
+        if msg_type == u'chat':
+            msg_text = "".join(self.base_event.xmpp_msg.kids[0].data)
+            self.base_event.xmpp_msg.kids[0].setData(
+                    u'%s [MODIFIED BY CUSTOM NETWORK EVENT]'%(msg_text))
+
+        return False
+
 class EnrichedChatMessageReceivedEvent(nec.NetworkIncomingEvent):
-	'''
-	Generates more friendly (in use by handlers) network event for 
-	received chat message.
-	'''
-	name = 'enriched-chat-message-received'
-	base_network_events = ['raw-message-received']
-	
-	def generate(self):
-		msg_type = self.base_event.xmpp_msg.attrs.get('type', None)
-		if msg_type == u'chat':
-			self.xmpp_msg = self.base_event.xmpp_msg
-			self.conn = self.base_event.conn
-			self.from_jid = helpers.get_full_jid_from_iq(self.xmpp_msg)
-			self.from_jid_without_resource = gajim.get_jid_without_resource(self.from_jid)
-			self.account = self.base_event.account
-			self.from_nickname = gajim.get_contact_name_from_jid(
-				self.account, 
-				self.from_jid_without_resource)
-			self.msg_text = "".join(self.xmpp_msg.kids[0].data)
-			
-			return True
-		
-		return False
+    '''
+    Generates more friendly (in use by handlers) network event for
+    received chat message.
+    '''
+    name = 'enriched-chat-message-received'
+    base_network_events = ['raw-message-received']
+
+    def generate(self):
+        msg_type = self.base_event.xmpp_msg.attrs.get('type', None)
+        if msg_type == u'chat':
+            self.xmpp_msg = self.base_event.xmpp_msg
+            self.conn = self.base_event.conn
+            self.from_jid = helpers.get_full_jid_from_iq(self.xmpp_msg)
+            self.from_jid_without_resource = gajim.get_jid_without_resource(self.from_jid)
+            self.account = self.base_event.account
+            self.from_nickname = gajim.get_contact_name_from_jid(
+                    self.account,
+                    self.from_jid_without_resource)
+            self.msg_text = "".join(self.xmpp_msg.kids[0].data)
+
+            return True
+
+        return False

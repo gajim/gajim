@@ -34,54 +34,53 @@ from plugins import GajimPlugin
 from plugins.helpers import log, log_calls
 
 class RosterButtonsPlugin(GajimPlugin):
-	name = u'Roster Buttons'
-	short_name = u'roster_buttons'
-	version = u'0.1'
-	description = u'''Adds quick action buttons to roster window.'''
-	authors = [u'Mateusz Biliński <mateusz@bilinski.it>']
-	homepage = u'http://blog.bilinski.it'
+    name = u'Roster Buttons'
+    short_name = u'roster_buttons'
+    version = u'0.1'
+    description = u'''Adds quick action buttons to roster window.'''
+    authors = [u'Mateusz Biliński <mateusz@bilinski.it>']
+    homepage = u'http://blog.bilinski.it'
 
-	@log_calls('RosterButtonsPlugin')	
-	def init(self):
-		self.GTK_BUILDER_FILE_PATH = self.local_file_path('roster_buttons.ui')
-		self.roster_vbox = gajim.interface.roster.xml.get_object('roster_vbox2')
-		self.show_offline_contacts_menuitem = gajim.interface.roster.xml.get_object('show_offline_contacts_menuitem')
-		
-		self.config_dialog = None
-	
-	@log_calls('RosterButtonsPlugin')
-	def activate(self):
-		self.xml = gtk.Builder()
-		self.xml.set_translation_domain(i18n.APP)
-		self.xml.add_objects_from_file(self.GTK_BUILDER_FILE_PATH,
-			['roster_buttons_buttonbox'])
-		self.buttonbox = self.xml.get_object('roster_buttons_buttonbox')
-		
-		self.roster_vbox.pack_start(self.buttonbox, expand=False)
-		self.roster_vbox.reorder_child(self.buttonbox, 0)
-		self.xml.connect_signals(self)
-		
-	@log_calls('RosterButtonsPlugin')
-	def deactivate(self):
-		self.roster_vbox.remove(self.buttonbox)
-		
-		self.buttonbox = None
-		self.xml = None
-		
-	@log_calls('RosterButtonsPlugin')
-	def on_roster_button_1_clicked(self, button):
-		#gajim.interface.roster.on_show_offline_contacts_menuitem_activate(None)
-		self.show_offline_contacts_menuitem.set_active(not self.show_offline_contacts_menuitem.get_active())
-	
-	@log_calls('RosterButtonsPlugin')
-	def on_roster_button_2_clicked(self, button):
-		pass
-	
-	@log_calls('RosterButtonsPlugin')
-	def on_roster_button_3_clicked(self, button):
-		pass
-	
-	@log_calls('RosterButtonsPlugin')
-	def on_roster_button_4_clicked(self, button):
-		pass
-	
+    @log_calls('RosterButtonsPlugin')
+    def init(self):
+        self.GTK_BUILDER_FILE_PATH = self.local_file_path('roster_buttons.ui')
+        self.roster_vbox = gajim.interface.roster.xml.get_object('roster_vbox2')
+        self.show_offline_contacts_menuitem = gajim.interface.roster.xml.get_object('show_offline_contacts_menuitem')
+
+        self.config_dialog = None
+
+    @log_calls('RosterButtonsPlugin')
+    def activate(self):
+        self.xml = gtk.Builder()
+        self.xml.set_translation_domain(i18n.APP)
+        self.xml.add_objects_from_file(self.GTK_BUILDER_FILE_PATH,
+                ['roster_buttons_buttonbox'])
+        self.buttonbox = self.xml.get_object('roster_buttons_buttonbox')
+
+        self.roster_vbox.pack_start(self.buttonbox, expand=False)
+        self.roster_vbox.reorder_child(self.buttonbox, 0)
+        self.xml.connect_signals(self)
+
+    @log_calls('RosterButtonsPlugin')
+    def deactivate(self):
+        self.roster_vbox.remove(self.buttonbox)
+
+        self.buttonbox = None
+        self.xml = None
+
+    @log_calls('RosterButtonsPlugin')
+    def on_roster_button_1_clicked(self, button):
+        #gajim.interface.roster.on_show_offline_contacts_menuitem_activate(None)
+        self.show_offline_contacts_menuitem.set_active(not self.show_offline_contacts_menuitem.get_active())
+
+    @log_calls('RosterButtonsPlugin')
+    def on_roster_button_2_clicked(self, button):
+        pass
+
+    @log_calls('RosterButtonsPlugin')
+    def on_roster_button_3_clicked(self, button):
+        pass
+
+    @log_calls('RosterButtonsPlugin')
+    def on_roster_button_4_clicked(self, button):
+        pass

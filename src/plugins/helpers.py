@@ -49,14 +49,14 @@ class log_calls(object):
     '''
     Decorator class for functions to easily log when they are entered and left.
     '''
-    
+
     filter_out_classes = ['GajimPluginConfig', 'PluginManager',
                           'GajimPluginConfigDialog', 'PluginsWindow']
     '''
     List of classes from which no logs should be emited when methods are called,
     eventhough `log_calls` decorator is used.
     '''
-    
+
     def __init__(self, classname='', log=log):
         '''
         :Keywords:
@@ -65,46 +65,46 @@ class log_calls(object):
           log : logging.Logger
             Logger to use when outputing debug information on when function has
             been entered and when left. By default: `plugins.helpers.log`
-            is used.            
+            is used.
         '''
-        
+
         self.full_func_name = ''
         '''
-        Full name of function, with class name (as prefix) if given 
+        Full name of function, with class name (as prefix) if given
         to decorator.
-        
+
         Otherwise, it's only function name retrieved from function object
         for which decorator was called.
-        
+
         :type: str
         '''
         self.log_this_class = True
         '''
         Determines whether wrapper of given function should log calls of this
         function or not.
-        
+
         :type: bool
         '''
-        
+
         if classname:
             self.full_func_name = classname+'.'
-            
+
         if classname in self.filter_out_classes:
             self.log_this_class = False
-        
+
     def __call__(self, f):
         '''
         :param f: function to be wrapped with logging statements
-        
+
         :return: given function wrapped by *log.debug* statements
         :rtype: function
         '''
-        
+
         self.full_func_name += f.func_name
         if self.log_this_class:
             @functools.wraps(f)
             def wrapper(*args, **kwargs):
-                
+
                 log.debug('%(funcname)s() <entered>'%{
                     'funcname': self.full_func_name})
                 result = f(*args, **kwargs)
@@ -116,25 +116,25 @@ class log_calls(object):
             def wrapper(*args, **kwargs):
                 result = f(*args, **kwargs)
                 return result
-            
+
         return wrapper
 
 class Singleton(type):
     '''
     Singleton metaclass.
     '''
-    def __init__(cls,name,bases,dic):
-        super(Singleton,cls).__init__(name,bases,dic)
+    def __init__(cls, name, bases, dic):
+        super(Singleton, cls).__init__(name, bases, dic)
         cls.instance=None
-        
+
     def __call__(cls,*args,**kw):
         if cls.instance is None:
-            cls.instance=super(Singleton,cls).__call__(*args,**kw)
+            cls.instance=super(Singleton, cls).__call__(*args,**kw)
             #log.debug('%(classname)s - new instance created'%{
                 #'classname' : cls.__name__})
         else:
             pass
             #log.debug('%(classname)s - returning already existing instance'%{
                 #'classname' : cls.__name__})
-            
+
         return cls.instance

@@ -44,8 +44,8 @@ __builtin__._ = lambda x: x
 # wipe config directory
 import os
 if os.path.isdir(configdir):
-	import shutil
-	shutil.rmtree(configdir)
+    import shutil
+    shutil.rmtree(configdir)
 
 os.mkdir(configdir)
 
@@ -67,27 +67,27 @@ account_name = 'test'
 from plugins import PluginManager
 
 class PluginManagerTestCase(unittest.TestCase):
-	def setUp(self):
-		self.pluginmanager = PluginManager()
+    def setUp(self):
+        self.pluginmanager = PluginManager()
 
-	def tearDown(self):
-		pass
+    def tearDown(self):
+        pass
 
-	def test_01_Singleton(self):
-		""" 1. Checking whether PluginManger class is singleton. """
-		self.pluginmanager.test_arg = 1
-		secondPluginManager = PluginManager()
+    def test_01_Singleton(self):
+        """ 1. Checking whether PluginManger class is singleton. """
+        self.pluginmanager.test_arg = 1
+        secondPluginManager = PluginManager()
 
-		self.failUnlessEqual(id(secondPluginManager), id(self.pluginmanager),
-							 'Different IDs in references to PluginManager objects (not a singleton)')
-		self.failUnlessEqual(secondPluginManager.test_arg, 1, 
-							 'References point to different PluginManager objects (not a singleton')
+        self.failUnlessEqual(id(secondPluginManager), id(self.pluginmanager),
+                                                 'Different IDs in references to PluginManager objects (not a singleton)')
+        self.failUnlessEqual(secondPluginManager.test_arg, 1,
+                                                 'References point to different PluginManager objects (not a singleton')
 
 def suite():
-	suite = unittest.TestLoader().loadTestsFromTestCase(PluginManagerTestCase)
-	return suite
+    suite = unittest.TestLoader().loadTestsFromTestCase(PluginManagerTestCase)
+    return suite
 
 if __name__=='__main__':
-	runner = unittest.TextTestRunner()
-	test_suite = suite()
-	runner.run(test_suite)
+    runner = unittest.TextTestRunner()
+    test_suite = suite()
+    runner.run(test_suite)
