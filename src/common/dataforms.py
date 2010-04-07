@@ -555,4 +555,3 @@ class MultipleDataForm(DataForm):
 #                       record.setName('reported')
 #                       self.addChild(node=record)
 #               return locals()
-

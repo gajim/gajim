@@ -5123,4 +5123,3 @@ class VoIPCallReceivedDialog(object):
                     session.reject_content(content)
 
         dialog.destroy()
-

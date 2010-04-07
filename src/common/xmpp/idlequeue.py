@@ -511,4 +511,3 @@ class GlibIdleQueue(IdleQueue):
 
     def process(self):
         self._check_time_events()
-

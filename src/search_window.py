@@ -230,4 +230,3 @@ class SearchWindow:
         if self.data_form_widget.title:
             self.window.set_title('%s - Search - Gajim' % \
                     self.data_form_widget.title)
-
