@@ -990,9 +990,10 @@ class Connection(CommonConnection, ConnectionHandlers):
                     proxy['port'] = 3128
 
                 if len(login) == 2:
-                    proxy['password'] = login[1]
+                    proxy['pass'] = login[1]
+                    proxy['useauth'] = True
                 else:
-                    proxy['password'] = u''
+                    proxy['pass'] = u''
 
             except Exception:
                 proxy = None
