@@ -534,4 +534,3 @@ class IPythonView(ConsoleView, IterableIPShell):
         if rv: rv = rv.strip('\n')
         self.showReturned(rv)
         self.cout.truncate(0)
-

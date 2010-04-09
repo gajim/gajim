@@ -97,4 +97,3 @@ class VideoOutputManager(DeviceManager):
         # ximagesink
         self.detect_element('ximagesink', _('X Window System (without Xv)'))
         self.detect_element('autovideosink', _('Autodetect'))
-

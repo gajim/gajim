@@ -330,4 +330,3 @@ class Zeroconf:
         except pybonjour.BonjourError:
             return False
         return True
-

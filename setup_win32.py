@@ -52,7 +52,8 @@ if 'gtk' in os.listdir('.'):
 opts = {
     'py2exe': {
         # ConfigParser,UserString,roman are needed for docutils
-        'includes': 'pango,atk,gobject,cairo,pangocairo,gtk.keysyms,encodings,encodings.*,ConfigParser,UserString',
+        'includes': ('pango,atk,gobject,cairo,pangocairo,gtk.keysyms,'
+                     'encodings,encodings.*,ConfigParser,UserString'),
         'dll_excludes': [
             'iconv.dll', 'intl.dll', 'libatk-1.0-0.dll',
             'libgdk_pixbuf-2.0-0.dll', 'libgdk-win32-2.0-0.dll',
@@ -78,7 +79,6 @@ setup(
     url='http://www.gajim.org/',
     download_url='http://www.gajim.org/downloads.php',
     license='GPL',
-
     windows=[{'script': 'src/gajim.py',
               'icon_resources': [(1, 'data/pixmaps/gajim.ico')]},
              {'script': 'src/history_manager.py',
