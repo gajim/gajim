@@ -990,10 +990,14 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
         if not self.connection or self.connected < 2:
             return
         if answer == 'yes':
-            self.connection.send(iq_obj.buildReply('result'))
+            confirm = iq_obj.getTag('confirm')
+            reply = iq_obj.buildReply('result')
+            if iq_obj.getType() == 'message':
+                reply.addChild(node=confirm)
+            self.connection.send(reply)
         elif answer == 'no':
             err = common.xmpp.Error(iq_obj,
-                    common.xmpp.protocol.ERR_NOT_AUTHORIZED)
+                common.xmpp.protocol.ERR_NOT_AUTHORIZED)
             self.connection.send(err)
 
     def _HttpAuthCB(self, con, iq_obj):
