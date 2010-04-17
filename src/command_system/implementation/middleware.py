@@ -36,13 +36,14 @@ class ChatCommandProcessor(CommandProcessor):
 
     def process_as_command(self, text):
         flag = super(ChatCommandProcessor, self).process_as_command(text)
-        if flag:
+        if flag and self.command_succeded:
             self.add_history(text)
             self.clear_input()
         return flag
 
     def execute_command(self, name, arguments):
         try:
+            self.command_succeded = False
             super(ChatCommandProcessor, self).execute_command(name, arguments)
         except NoCommandError, error:
             details = dict(name=error.name, message=error.message)
@@ -55,6 +56,8 @@ class ChatCommandProcessor(CommandProcessor):
         except Exception:
             self.echo("An error occured while trying to execute the command", 'error')
             print_exc()
+        else:
+            self.command_succeded = True
 
     def looks_like_command(self, text, body, name, arguments):
         # Command escape stuff ggoes here. If text was prepended by the
