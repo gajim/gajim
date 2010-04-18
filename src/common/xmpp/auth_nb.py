@@ -213,9 +213,12 @@ class SASL(PlugIn):
             raise NodeProcessed
         if "EXTERNAL" in self.mecs:
             self.mecs.remove('EXTERNAL')
-            node = Node('auth', attrs={'xmlns': NS_SASL, 'mechanism': 'EXTERNAL'},
-                    payload=[base64.encodestring('%s@%s' % (self.username,
-                    self._owner.Server)).replace('\n', '')])
+            sasl_data = u'%s@%s' % (self.username, self._owner.Server)
+            sasl_data = sasl_data.encode('utf-8').encode('base64').replace(
+                '\n', '')
+            node = Node('auth', attrs={'xmlns': NS_SASL,
+                'mechanism': 'EXTERNAL'}, payload=[sasl_data])
+            self.mechanism = 'EXTERNAL'
             self.startsasl = SASL_IN_PROCESS
             self._owner.send(str(node))
             raise NodeProcessed
