@@ -1612,13 +1612,15 @@ class AccountsWindow:
             focused_widget = self.window.get_focus()
             focused_widget_name = focused_widget.get_name()
             if focused_widget_name in ('jid_entry1', 'resource_entry1',
-            'custom_port_entry'):
+            'custom_port_entry', 'cert_entry1'):
                 if focused_widget_name == 'jid_entry1':
                     func = self.on_jid_entry1_focus_out_event
                 elif focused_widget_name == 'resource_entry1':
                     func = self.on_resource_entry1_focus_out_event
                 elif focused_widget_name == 'custom_port_entry':
                     func = self.on_custom_port_entry_focus_out_event
+                elif focused_widget_name == 'cert_entry1':
+                    func = self.on_cert_entry1_focus_out_event
                 if func(focused_widget, None):
                     # Error detected in entry, don't change account, re-put cursor on
                     # previous row
@@ -1640,6 +1642,22 @@ class AccountsWindow:
                 self.remove_button.set_sensitive(False)
         self.init_account()
         self.update_proxy_list()
+
+    def on_browse_for_client_cert_button_clicked(self, widget, data=None):
+        def on_ok(widget, path_to_clientcert_file):
+            self.dialog.destroy()
+            if not path_to_clientcert_file:
+                return
+            self.xml.get_widget('cert_entry1').set_text(path_to_clientcert_file)
+            gajim.config.set_per('accounts', self.current_account,
+                'client_cert', path_to_clientcert_file)
+
+        def on_cancel(widget):
+            self.dialog.destroy()
+
+        path_to_clientcert_file = self.xml.get_widget('cert_entry1').get_text()
+        self.dialog = dialogs.ClientCertChooserDialog(path_to_clientcert_file,
+            on_ok, on_cancel)
 
     def update_proxy_list(self):
         if self.current_account:
@@ -1796,10 +1814,14 @@ class AccountsWindow:
         # Account tab
         self.draw_normal_jid()
         self.xml.get_object('resource_entry1').set_text(gajim.config.get_per(
-                'accounts', account, 'resource'))
+            'accounts', account, 'resource'))
+
+        client_cert = gajim.config.get_per('accounts', account, 'client_cert')
+        self.xml.get_widget('cert_entry1').set_text(client_cert)
+
         self.xml.get_object('adjust_priority_with_status_checkbutton1').\
-                set_active(gajim.config.get_per('accounts', account,
-                'adjust_priority_with_status'))
+            set_active(gajim.config.get_per('accounts', account,
+            'adjust_priority_with_status'))
         spinbutton = self.xml.get_object('priority_spinbutton1')
         if gajim.config.get('enable_negative_priority'):
             spinbutton.set_range(-128, 127)
@@ -2073,6 +2095,15 @@ class AccountsWindow:
                     jid_splited[0])
             gajim.config.set_per('accounts', self.current_account, 'hostname',
                     jid_splited[1])
+
+    def on_cert_entry1_focus_out_event(self, widget, event):
+        if self.ignore_events:
+            return
+        client_cert = widget.get_text()
+        if self.option_changed('client_cert', client_cert):
+            self.need_relogin = True
+        gajim.config.set_per('accounts', self.current_account, 'client_cert',
+            client_cert)
 
     def on_anonymous_checkbutton1_toggled(self, widget):
         if self.ignore_events:

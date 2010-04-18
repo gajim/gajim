@@ -289,6 +289,7 @@ class Config:
                     'name': [ opt_str, '', '', True ],
                     'hostname': [ opt_str, '', '', True ],
                     'anonymous_auth': [ opt_bool, False ],
+                    'client_cert': [ opt_str, '', '', True ],
                     'savepass': [ opt_bool, False ],
                     'password': [ opt_str, '' ],
                     'resource': [ opt_str, 'gajim', '', True ],

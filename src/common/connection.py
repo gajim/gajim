@@ -701,6 +701,8 @@ class Connection(CommonConnection, ConnectionHandlers):
                     'ping_alive_every_foo_secs')
         else:
             self.pingalives = 0
+        self.client_cert = gajim.config.get_per('accounts', self.name,
+            'client_cert')
 
     def check_jid(self, jid):
         return helpers.parse_jid(jid)
