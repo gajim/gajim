@@ -355,6 +355,7 @@ class NonBlockingTLS(PlugIn):
             # If we are going to use a client cert/key pair for authentication,
             # we choose TLSv1 method.
             tcpsock._sslContext = OpenSSL.SSL.Context(OpenSSL.SSL.TLSv1_METHOD)
+            client_cert_path = self._owner._owner._caller.client_cert
             log.debug('Using client cert and key from %s' % conn.client_cert)
             try:
                 p12 = OpenSSL.crypto.load_pkcs12(open(client_cert_path).read())
