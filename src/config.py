@@ -1648,14 +1648,14 @@ class AccountsWindow:
             self.dialog.destroy()
             if not path_to_clientcert_file:
                 return
-            self.xml.get_widget('cert_entry1').set_text(path_to_clientcert_file)
+            self.xml.get_object('cert_entry1').set_text(path_to_clientcert_file)
             gajim.config.set_per('accounts', self.current_account,
                 'client_cert', path_to_clientcert_file)
 
         def on_cancel(widget):
             self.dialog.destroy()
 
-        path_to_clientcert_file = self.xml.get_widget('cert_entry1').get_text()
+        path_to_clientcert_file = self.xml.get_object('cert_entry1').get_text()
         self.dialog = dialogs.ClientCertChooserDialog(path_to_clientcert_file,
             on_ok, on_cancel)
 
@@ -1817,7 +1817,7 @@ class AccountsWindow:
             'accounts', account, 'resource'))
 
         client_cert = gajim.config.get_per('accounts', account, 'client_cert')
-        self.xml.get_widget('cert_entry1').set_text(client_cert)
+        self.xml.get_object('cert_entry1').set_text(client_cert)
 
         self.xml.get_object('adjust_priority_with_status_checkbutton1').\
             set_active(gajim.config.get_per('accounts', account,
