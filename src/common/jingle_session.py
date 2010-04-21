@@ -278,7 +278,7 @@ class JingleSession(object):
             # it's a jingle action
             action = jingle.getAttr('action')
             if action not in self.callbacks:
-                self.__send_error(stanza, 'bad_request')
+                self.__send_error(stanza, 'bad-request')
                 return
             # FIXME: If we aren't initiated and it's not a session-initiate...
             if action != 'session-initiate' and self.state == JingleStates.ended:
@@ -353,7 +353,7 @@ class JingleSession(object):
         # TODO: ringing, active, (un)hold, (un)mute
         payload = jingle.getPayload()
         if payload:
-            self.__send_error(stanza, 'feature-not-implemented', 'unsupported-info')
+            self.__send_error(stanza, 'feature-not-implemented', 'unsupported-info', type_='modify')
             raise xmpp.NodeProcessed
 
     def __on_content_remove(self, stanza, jingle, error, action):
@@ -555,13 +555,16 @@ class JingleSession(object):
         jingle = stanza.addChild('jingle', attrs=attrs, namespace=xmpp.NS_JINGLE)
         return stanza, jingle
 
-    def __send_error(self, stanza, error, jingle_error=None, text=None):
-        err = xmpp.Error(stanza, '%s %s' % (xmpp.NS_STANZAS, error))
+    def __send_error(self, stanza, error, jingle_error=None, text=None, type_=None):
+        err_stanza = xmpp.Error(stanza, '%s %s' % (xmpp.NS_STANZAS, error))
+        err = err_stanza.getTag('error')
+        if type_:
+            err.setAttr('type', type_)
         if jingle_error:
             err.setTag(jingle_error, namespace=xmpp.NS_JINGLE_ERRORS)
         if text:
             err.setTagData('text', text)
-        self.connection.connection.send(err)
+        self.connection.connection.send(err_stanza)
         self.__dispatch_error(error, jingle_error, text)
 
     def __append_content(self, jingle, content):
