@@ -992,7 +992,7 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
         if answer == 'yes':
             confirm = iq_obj.getTag('confirm')
             reply = iq_obj.buildReply('result')
-            if iq_obj.getType() == 'message':
+            if iq_obj.getName() == 'message':
                 reply.addChild(node=confirm)
             self.connection.send(reply)
         elif answer == 'no':
