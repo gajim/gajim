@@ -342,6 +342,7 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
         # variable for errno symbol that will be found from exception raised
         # from connect()
         errnum = 0
+        errstr = str()
 
         # set timeout for TCP connecting - if nonblocking connect() fails, pollend
         # is called. If if succeeds pollout is called.
