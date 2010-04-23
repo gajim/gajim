@@ -69,7 +69,7 @@ class LocationListener:
         name, description, service, path = cli.GetPositionProvider()
         if path:
             provider = bus.get_object(service, path)
-            fields, timestamp, lat, lon, alt, accuray = provider.GetPosition()
+            fields, timestamp, lat, lon, alt, accuracy = provider.GetPosition()
             self._on_geoclue_position_changed(fields, timestamp, lat, lon, alt,
                     accuracy)
 
