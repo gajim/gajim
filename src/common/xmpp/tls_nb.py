@@ -349,8 +349,10 @@ class NonBlockingTLS(PlugIn):
     def _startSSL_pyOpenSSL(self):
         log.debug("_startSSL_pyOpenSSL called")
         tcpsock = self._owner
-        conn = tcpsock._owner._caller
-        if conn.client_cert and os.path.exists(conn.client_cert):
+        # NonBlockingHTTPBOSH instance has no attribute _owner
+        if hasattr(tcpsock, '_owner') and tcpsock._owner._caller.client_cert \
+        and os.path.exists(tcpsock._owner._caller.client_cert):
+            conn = tcpsock._owner._caller
             # FIXME make a checkbox for Client Cert / SSLv23 / TLSv1
             # If we are going to use a client cert/key pair for authentication,
             # we choose TLSv1 method.
