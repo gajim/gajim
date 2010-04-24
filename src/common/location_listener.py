@@ -38,19 +38,22 @@ class LocationListener:
 
     def get_data(self):
         bus = dbus.SessionBus()
-        if 'org.freedesktop.Geoclue.Master' not in bus.list_names():
+        try:
+            # Initializes Geoclue.
+            obj = bus.get_object('org.freedesktop.Geoclue.Master',
+                    '/org/freedesktop/Geoclue/Master')
+            # get MasterClient path
+            path = obj.Create()
+            # get MasterClient
+            cli = bus.get_object('org.freedesktop.Geoclue.Master', path)
+            cli.SetRequirements(1, 0, True, 1023)
+    
+            self._get_address(cli)
+            self._get_position(cli)
+        except:
             self._on_geoclue_position_changed()
             return
-        obj = bus.get_object('org.freedesktop.Geoclue.Master',
-                '/org/freedesktop/Geoclue/Master')
-        # get MasterClient path
-        path = obj.Create()
-        # get MasterClient
-        cli = bus.get_object('org.freedesktop.Geoclue.Master', path)
-        cli.SetRequirements(1, 0, True, 1023)
-
-        self._get_address(cli)
-        self._get_position(cli)
+        
 
     def _get_address(self, cli):
         bus = dbus.SessionBus()
