@@ -2,15 +2,15 @@
 # Ukrainian translations for Gajim - A Jabber Instant Messager package.
 # Copyright (C) 2008 THE Gajim - A Jabber Instant Messager'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the Gajim - A Jabber Instant Messager package.
-# 
-# Sergiy Yegorov <prapor@unixzone.org.ua>, 2009.
+#
+# Sergiy Yegorov <prapor@unixzone.org.ua>, 2009, 2010.
 # Yuri Chornoivan <yurchor@ukr.net>, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: uk\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: prapor@unixzone.org.ua\n"
 "POT-Creation-Date: 2010-03-19 11:27+0100\n"
-"PO-Revision-Date: 2009-10-30 00:24+0200\n"
+"PO-Revision-Date: 2010-04-26 00:26+0300\n"
 "Last-Translator: Sergiy Yegorov <prapor@unixzone.org.ua>\n"
 "Language-Team: Ukrainian <kde-i18n-doc@kde.org>\n"
 "MIME-Version: 1.0\n"
@@ -840,19 +840,19 @@ msgstr "7"
 
 #: ../data/gui/chat_control.ui.h:11
 msgid "8"
-msgstr ""
+msgstr "8"
 
 #: ../data/gui/chat_control.ui.h:12
 msgid "9"
-msgstr ""
+msgstr "9"
 
 #: ../data/gui/chat_control.ui.h:13
 msgid "Mic volume:"
-msgstr ""
+msgstr "Гучність мікрофону"
 
 #: ../data/gui/chat_control.ui.h:14
 msgid "Sound volume:"
-msgstr ""
+msgstr "Гучність звуку"
 
 #. Make sure the character after "_" is not M/m (conflicts with Alt+M that is
 #. supposed to show the Emoticon Selector)
@@ -863,7 +863,7 @@ msgstr "_Надіслати"
 
 #: ../data/gui/chat_control.ui.h:17 ../data/gui/groupchat_control.ui.h:3
 msgid "label"
-msgstr ""
+msgstr "мітка"
 
 #: ../data/gui/chat_to_muc_window.ui.h:1
 msgid "In_vite"
@@ -1092,9 +1092,8 @@ msgid "<b>Chatstate Tab Colors</b>"
 msgstr "<b>Кольори вкладки стану балачки</b>"
 
 #: ../data/gui/gajim_themes_window.ui.h:2
-#, fuzzy
 msgid "Account row"
-msgstr "Обліковий запис"
+msgstr "Стрічка облікового запису"
 
 #: ../data/gui/gajim_themes_window.ui.h:3 ../src/chat_control.py:883
 msgid "Bold"
@@ -1102,16 +1101,15 @@ msgstr "Жирний"
 
 #: ../data/gui/gajim_themes_window.ui.h:4
 msgid "Chat Banner"
-msgstr ""
+msgstr "Шапка балачки"
 
 #: ../data/gui/gajim_themes_window.ui.h:5
 msgid "Composing"
 msgstr "Створення"
 
 #: ../data/gui/gajim_themes_window.ui.h:6
-#, fuzzy
 msgid "Contact row"
-msgstr "Контакт"
+msgstr "Стрічка контакту"
 
 #: ../data/gui/gajim_themes_window.ui.h:7
 msgid "Font style:"
@@ -1126,9 +1124,8 @@ msgid "Gone"
 msgstr "Пішов"
 
 #: ../data/gui/gajim_themes_window.ui.h:10
-#, fuzzy
 msgid "Group row"
-msgstr "Група"
+msgstr "Стрічка групи"
 
 #: ../data/gui/gajim_themes_window.ui.h:11 ../src/common/pep.py:150
 msgid "Inactive"
@@ -1255,23 +1252,20 @@ msgid "_Search Database"
 msgstr "_Шукати у базі даних"
 
 #: ../data/gui/history_window.ui.h:1
-#, fuzzy
 msgid "All Chat Histories"
-msgstr "Усі стани"
+msgstr "Усі журнали балачок"
 
 #: ../data/gui/history_window.ui.h:2 ../src/history_window.py:323
 msgid "Conversation History"
 msgstr "Журнал спілкування"
 
 #: ../data/gui/history_window.ui.h:3
-#, fuzzy
 msgid "Enter JID or Contact name"
-msgstr "Ім'я контакту"
+msgstr "Введіть JID або ім’я контакту"
 
 #: ../data/gui/history_window.ui.h:4
-#, fuzzy
 msgid "Groupchat Histories"
-msgstr "Групові балачки"
+msgstr "Історія групових балачок"
 
 #: ../data/gui/history_window.ui.h:5
 msgid "Search:"
@@ -1283,16 +1277,14 @@ msgid "_Log conversation history"
 msgstr "_Зберігати журнал спілкування"
 
 #: ../data/gui/join_groupchat_window.ui.h:2
-#, fuzzy
 msgid "Bro_wse Rooms"
-msgstr "_Перегляд"
+msgstr "_Перегляд кімнат"
 
 #: ../data/gui/join_groupchat_window.ui.h:3 ../src/dialogs.py:2171
 msgid "Join Group Chat"
 msgstr "Приєднатись до групової балачки"
 
 #: ../data/gui/join_groupchat_window.ui.h:4
-#, fuzzy
 msgid "Join this room _automatically when I connect"
 msgstr "Автоматично заходити до цієї кімнати після з’єднання"
 
@@ -1321,7 +1313,6 @@ msgid "Server:"
 msgstr "Сервер:"
 
 #: ../data/gui/join_groupchat_window.ui.h:10
-#, fuzzy
 msgid "_Bookmark this room"
 msgstr "Зробити закладку на цій кімнаті"
 
@@ -1372,15 +1363,11 @@ msgstr "<b>Параметри</b>"
 
 #: ../data/gui/manage_proxies_window.ui.h:3
 msgid "BOSH"
-msgstr ""
+msgstr "BOSH"
 
 #: ../data/gui/manage_proxies_window.ui.h:4
-#, fuzzy
 msgid "HTTP Connect"
-msgstr ""
-"HTTP-з’єднання\n"
-"SOCKS5\n"
-"BOSH"
+msgstr "HTTP-з’єднання"
 
 #: ../data/gui/manage_proxies_window.ui.h:5
 msgid "Manage Proxy Profiles"
@@ -1400,7 +1387,7 @@ msgstr "Проксі-п_орт:"
 
 #: ../data/gui/manage_proxies_window.ui.h:9
 msgid "SOCKS5"
-msgstr ""
+msgstr "SOCKS5"
 
 #: ../data/gui/manage_proxies_window.ui.h:10
 msgid "Use HTTP prox_y"
@@ -1439,9 +1426,8 @@ msgid "<b>Applications</b>"
 msgstr "<b>Програми</b>"
 
 #: ../data/gui/preferences_window.ui.h:3
-#, fuzzy
 msgid "<b>Audio</b>"
-msgstr "<b>Дії</b>"
+msgstr "<b>Аудіо</b>"
 
 #: ../data/gui/preferences_window.ui.h:4
 msgid "<b>Auto Status</b>"
@@ -1460,9 +1446,8 @@ msgid "<b>Chat state notifications</b>"
 msgstr "<b>Сповіщення про стан у балачці</b>"
 
 #: ../data/gui/preferences_window.ui.h:8
-#, fuzzy
 msgid "<b>Connection</b>"
-msgstr "<b>Умови</b>"
+msgstr "<b>З’єднання</b>"
 
 #. a header for custom browser/client/file manager. so translate sth like:
 #. Custom Settings
@@ -1499,9 +1484,8 @@ msgid "<b>Themes</b>"
 msgstr "<b>Теми</b>"
 
 #: ../data/gui/preferences_window.ui.h:20
-#, fuzzy
 msgid "<b>Video</b>"
-msgstr "<b>По батькові:</b>"
+msgstr "<b>Відео</b>"
 
 #: ../data/gui/preferences_window.ui.h:21
 msgid "<b>Visual Notifications</b>"
@@ -1509,7 +1493,7 @@ msgstr "<b>Візуальні сповіщення</b>"
 
 #: ../data/gui/preferences_window.ui.h:22
 msgid "<i>(example: stunserver.org)</i>"
-msgstr ""
+msgstr "<i>(приклад: stunserver.org)</i>"
 
 #: ../data/gui/preferences_window.ui.h:23
 msgid "Advanced"
@@ -1520,18 +1504,16 @@ msgid "Advanced..."
 msgstr "Додатково..."
 
 #: ../data/gui/preferences_window.ui.h:25
-#, fuzzy
 msgid "All chat states"
-msgstr "Усі стани"
+msgstr "Усі стани балачок"
 
 #: ../data/gui/preferences_window.ui.h:26
 msgid "Allow _OS information to be sent"
 msgstr "Дозволити надсилання інформації про _операційну систему"
 
 #: ../data/gui/preferences_window.ui.h:27
-#, fuzzy
 msgid "Allow my _idle time to be sent"
-msgstr "Дозволити надсилання інформації про _операційну систему"
+msgstr "Дозволити надсилання часу бездіяльності"
 
 #: ../data/gui/preferences_window.ui.h:28
 msgid "Allow popup/notifications when I'm _away/na/busy/invisible"
@@ -1542,24 +1524,20 @@ msgid "Allow sound when I'm _busy"
 msgstr "Дозволити звуки у стані _зайнятий."
 
 #: ../data/gui/preferences_window.ui.h:30
-#, fuzzy
 msgid "Always"
-msgstr "Далеко"
+msgstr "Завжди"
 
 #: ../data/gui/preferences_window.ui.h:31
-#, fuzzy
 msgid "Always use GNOME default applications"
-msgstr "Завжди використовувати типові програми OS/X"
+msgstr "Завжди використовувати типові програми GNOME"
 
 #: ../data/gui/preferences_window.ui.h:32
-#, fuzzy
 msgid "Always use KDE default applications"
-msgstr "Завжди використовувати типові програми OS/X"
+msgstr "Завжди використовувати типові програми KDE"
 
 #: ../data/gui/preferences_window.ui.h:33
-#, fuzzy
 msgid "Always use Xfce default applications"
-msgstr "Завжди використовувати типові програми OS/X"
+msgstr "Завжди використовувати типові програми Xfce"
 
 #: ../data/gui/preferences_window.ui.h:34
 msgid "Ask status message when I:"
@@ -1567,20 +1545,19 @@ msgstr "Запитувати щодо повідомлення про стан, 
 
 #: ../data/gui/preferences_window.ui.h:35 ../src/features_window.py:104
 msgid "Audio / Video"
-msgstr ""
+msgstr "Аудіо/Відео"
 
 #: ../data/gui/preferences_window.ui.h:36
 msgid "Audio input device"
-msgstr ""
+msgstr "Пристрій введення звуку"
 
 #: ../data/gui/preferences_window.ui.h:37
 msgid "Audio output device"
-msgstr ""
+msgstr "Пристрій відтворення звуку"
 
 #: ../data/gui/preferences_window.ui.h:38
-#, fuzzy
 msgid "Autodetect on every Gajim startup"
-msgstr "_З'єднуватись після запуску Gajim"
+msgstr "Автоматично визначати при кожному старті Gajim"
 
 #: ../data/gui/preferences_window.ui.h:39
 msgid "Chat message:"
@@ -1591,23 +1568,20 @@ msgid "Check on startup if Gajim is the _default Jabber client"
 msgstr "Перевіряти при запуску, чи є Gajim _типовим клієнтом Jabber"
 
 #: ../data/gui/preferences_window.ui.h:41
-#, fuzzy
 msgid "Composing only"
-msgstr "Створення"
+msgstr "Лише друк"
 
 #: ../data/gui/preferences_window.ui.h:42
 msgid "Configure color and font of the interface"
 msgstr "Налаштувати шрифт та колір інтерфейсу"
 
 #: ../data/gui/preferences_window.ui.h:43
-#, fuzzy
 msgid "Contact's message:"
-msgstr "Повідомлення балачки:"
+msgstr "Повідомлення контакту:"
 
 #: ../data/gui/preferences_window.ui.h:44
-#, fuzzy
 msgid "Contact's nickname:"
-msgstr "Ім'я контакту"
+msgstr "Псевдонім контакту:"
 
 #: ../data/gui/preferences_window.ui.h:45
 msgid "Custom"
@@ -1615,19 +1589,19 @@ msgstr "Нетиповий"
 
 #: ../data/gui/preferences_window.ui.h:46
 msgid "Detached roster with chat grouped by account"
-msgstr ""
+msgstr "Відокремлений реєстр з балачками згуртованими відповідно облікових записів"
 
 #: ../data/gui/preferences_window.ui.h:47
 msgid "Detached roster with chat grouped by type"
-msgstr ""
+msgstr "Відокремлений реєстр з балачками згуртованими відповідно типу"
 
 #: ../data/gui/preferences_window.ui.h:48
 msgid "Detached roster with detached chats"
-msgstr ""
+msgstr "Відокремлений реєстр з окремими балачками"
 
 #: ../data/gui/preferences_window.ui.h:49
 msgid "Detached roster with single chat"
-msgstr ""
+msgstr "Відокремлений реєстр з єдиним вікном балачок"
 
 #: ../data/gui/preferences_window.ui.h:50 ../src/config.py:170
 #: ../src/config.py:653
@@ -1643,9 +1617,8 @@ msgid "Display _extra email details"
 msgstr "Показати _подробиці щодо скриньки"
 
 #: ../data/gui/preferences_window.ui.h:53
-#, fuzzy
 msgid "Display _location of contacts in roster"
-msgstr "Показувати _настрій контактів у реєстрі"
+msgstr "Показувати _положення контактів у реєстрі"
 
 #: ../data/gui/preferences_window.ui.h:54
 msgid "Display _tunes of contacts in roster"
@@ -1708,9 +1681,8 @@ msgid "If checked, Gajim will display the activity of contacts in the roster win
 msgstr "Якщо буде позначено цей пункт, Gajim показуватиме рід занять контактів у вікні реєстру"
 
 #: ../data/gui/preferences_window.ui.h:70
-#, fuzzy
 msgid "If checked, Gajim will display the location of contacts in the roster window"
-msgstr "Якщо буде позначено цей пункт, Gajim показуватиме настрій контактів у вікні реєстру"
+msgstr "Якщо буде позначено цей пункт, Gajim показуватиме положення контактів у вікні реєстру"
 
 #: ../data/gui/preferences_window.ui.h:71
 msgid "If checked, Gajim will display the mood of contacts in the roster window"
@@ -1761,9 +1733,8 @@ msgid "Ma_nage..."
 msgstr "Ке_рування..."
 
 #: ../data/gui/preferences_window.ui.h:83
-#, fuzzy
 msgid "Never"
-msgstr "Сервер"
+msgstr "Ніколи"
 
 #: ../data/gui/preferences_window.ui.h:84
 msgid "Notifications"
@@ -1778,21 +1749,16 @@ msgid "Notify me about contacts that sign _out"
 msgstr "Сповіщати мене про в_ихід контактів з мережі"
 
 #: ../data/gui/preferences_window.ui.h:87
-#, fuzzy
 msgid "Notify me about it"
-msgstr "Сповіщати мене про в_ихід контактів з мережі"
+msgstr "Сповіщати мене про це"
 
 #: ../data/gui/preferences_window.ui.h:88
 msgid "Notify on new _GMail email"
 msgstr "Сповіщати про нові листи _GMail"
 
 #: ../data/gui/preferences_window.ui.h:89
-#, fuzzy
 msgid "Only when pending events"
-msgstr ""
-"Ніколи\n"
-"Лише події, що очікують уваги\n"
-"Завжди"
+msgstr "Лише події, що очікують уваги"
 
 #: ../data/gui/preferences_window.ui.h:90
 msgid "Personal Events"
@@ -1804,7 +1770,7 @@ msgstr "Відтворювати _звуки"
 
 #: ../data/gui/preferences_window.ui.h:92
 msgid "Pop it up"
-msgstr ""
+msgstr "Підняти це"
 
 #: ../data/gui/preferences_window.ui.h:93
 msgid "Preferences"
@@ -1815,16 +1781,16 @@ msgid ""
 "STUN server hostname. If none given, Gajim will try\n"
 "to discover one from server."
 msgstr ""
+"Ім’я серверу STUN. Якщо нічого не вказано\n"
+"Gajim спробує отримати значення з серверу."
 
 #: ../data/gui/preferences_window.ui.h:96
-#, fuzzy
 msgid "STUN server:"
-msgstr "Сервер:"
+msgstr "Сервер STUN:"
 
 #: ../data/gui/preferences_window.ui.h:97
-#, fuzzy
 msgid "Show only in roster"
-msgstr "_Показати подію у реєстрі"
+msgstr "_Показати лише у реєстрі"
 
 #: ../data/gui/preferences_window.ui.h:98
 msgid "Show systray:"
@@ -1840,7 +1806,7 @@ msgstr "Вий_ти"
 
 #: ../data/gui/preferences_window.ui.h:101
 msgid "Single window for everything"
-msgstr ""
+msgstr "Єдине вікно для усього"
 
 #: ../data/gui/preferences_window.ui.h:102
 msgid "Some messages may include rich content (formatting, colors etc). If checked, Gajim will just display the raw message text."
@@ -1890,25 +1856,23 @@ msgstr "Використовувати _типове для системи"
 
 #: ../data/gui/preferences_window.ui.h:116
 msgid "Video input device"
-msgstr ""
+msgstr "Пристрій введення відео"
 
 #: ../data/gui/preferences_window.ui.h:117
 msgid "Video output device"
-msgstr ""
+msgstr "Пристрій відтворення відео"
 
 #: ../data/gui/preferences_window.ui.h:118
 msgid "When new event is received:"
 msgstr "Якщо отримано нову подію:"
 
 #: ../data/gui/preferences_window.ui.h:119
-#, fuzzy
 msgid "Your message:"
-msgstr "Повідомлення про помилку: %s"
+msgstr "Ваше повідомлення:"
 
 #: ../data/gui/preferences_window.ui.h:120
-#, fuzzy
 msgid "Your nickname:"
-msgstr "Псевдонім:"
+msgstr "Ваш псевдонім:"
 
 #: ../data/gui/preferences_window.ui.h:121
 msgid "_Away after:"
@@ -2051,24 +2015,20 @@ msgid "all in the group"
 msgstr "всі у групі"
 
 #: ../data/gui/privacy_list_window.ui.h:15
-#, fuzzy
 msgid "both"
-msgstr "Обидва"
+msgstr "обидві"
 
 #: ../data/gui/privacy_list_window.ui.h:16
-#, fuzzy
 msgid "from"
-msgstr "Від"
+msgstr "від"
 
 #: ../data/gui/privacy_list_window.ui.h:17
-#, fuzzy
 msgid "none"
-msgstr "перша"
+msgstr "нічого"
 
 #: ../data/gui/privacy_list_window.ui.h:18
-#, fuzzy
 msgid "to"
-msgstr "друга"
+msgstr "до"
 
 #: ../data/gui/privacy_list_window.ui.h:19
 msgid "to send me messages"
@@ -2487,9 +2447,8 @@ msgid "User avatar:"
 msgstr "Аватар користувача:"
 
 #: ../data/gui/xml_console_window.ui.h:1
-#, fuzzy
 msgid "<b>Filter</b>"
-msgstr "<b>Шрифт</b>"
+msgstr "<b>Фільтр</b>"
 
 #: ../data/gui/xml_console_window.ui.h:2
 msgid "<b>Jabber Traffic</b>"
@@ -2501,23 +2460,23 @@ msgstr "<b>Ввід XML</b>"
 
 #: ../data/gui/xml_console_window.ui.h:4
 msgid "Hide IN stanzas"
-msgstr ""
+msgstr "Ховати станси IN"
 
 #: ../data/gui/xml_console_window.ui.h:5
 msgid "Hide IQ stanzas"
-msgstr ""
+msgstr "Ховати станси IQ"
 
 #: ../data/gui/xml_console_window.ui.h:6
 msgid "Hide Message stanzas"
-msgstr ""
+msgstr "Ховати станси повідомлення"
 
 #: ../data/gui/xml_console_window.ui.h:7
 msgid "Hide OUT stanzas"
-msgstr ""
+msgstr "Ховати станси OUT"
 
 #: ../data/gui/xml_console_window.ui.h:8
 msgid "Hide Presence stanzas"
-msgstr ""
+msgstr "Ховати станси присутності"
 
 #: ../data/gui/xml_console_window.ui.h:9
 msgid "Info/Query"
@@ -2634,12 +2593,12 @@ msgid "Hidden"
 msgstr "Сховано"
 
 #: ../src/atom_window.py:119
-#, fuzzy, python-format
+#, python-format
 msgid "You have received new entries (and %d not displayed):"
 msgid_plural "You have received new entries (and %d not displayed):"
-msgstr[0] "Ви отримали нові записи (та %(count)d не була показана):"
-msgstr[1] "Ви отримали нові записи (та %(count)d не була показана):"
-msgstr[2] "Ви отримали нові записи (та %(count)d не була показана):"
+msgstr[0] "Ви отримали нові записи (та %d не було показано):"
+msgstr[1] "Ви отримали нові записи (та %d не було показано):"
+msgstr[2] "Ви отримали нові записи (та %d не було показано):"
 
 #. the next script, executed in the "po" directory,
 #. generates the following list.
@@ -2812,7 +2771,7 @@ msgstr "Ви маєте знати справжній JID контакту, що
 #: ../src/chat_control.py:1611
 #, python-format
 msgid "%(type)s state : %(state)s, reason: %(reason)s"
-msgstr ""
+msgstr "%(type)s стан : %(state)s, причина: %(reason)s"
 
 #: ../src/chat_control.py:1812
 #, python-format
@@ -2945,9 +2904,8 @@ msgid "creating logs database"
 msgstr "створення бази даних журналів"
 
 #: ../src/common/check_paths.py:85
-#, fuzzy
 msgid "creating cache database"
-msgstr "створення бази даних журналів"
+msgstr "створення бази даних кешу"
 
 #: ../src/common/check_paths.py:274 ../src/common/check_paths.py:281
 #: ../src/common/check_paths.py:288 ../src/common/check_paths.py:295
@@ -3501,15 +3459,15 @@ msgstr "Коли показувати запис власного контакт
 
 #: ../src/common/config.py:282
 msgid "If True, Gajim will try to use a STUN server when using jingle. The one in \"stun_server\" option, or the one given by the jabber server."
-msgstr ""
+msgstr "Якщо ввімкнено, Gajim спробує використати STUN-сервер для Jingle. Буде використано значення параметру \"stun_server\", або отримане з серверу Jabber."
 
 #: ../src/common/config.py:283
 msgid "STUN server to use when using jingle"
-msgstr ""
+msgstr "Сервер STUN для використання з Jingle"
 
 #: ../src/common/config.py:284
 msgid "If True, Gajim will show affiliation of groupchat occupants by adding a colored square to the status icon"
-msgstr ""
+msgstr "Якщо увімкнено, Gajim покаже членство учасників балачки додаванням кольорового квадрату до піктограми стану."
 
 #: ../src/common/config.py:296
 msgid "Priority will change automatically according to your status. Priorities are defined in autopriority_* options."
@@ -3556,9 +3514,8 @@ msgid "Show a warning dialog before using standard SSL library."
 msgstr "Показувати діалогове вікно попередження, перш ніж користуватися стандартною бібліотекою SSL."
 
 #: ../src/common/config.py:318
-#, fuzzy
 msgid "Show a warning dialog before sending PLAIN password over a plain conenction."
-msgstr "Показувати діалогове вікно попередження, перш ніж надсилати пароль нешифрованим з’єднанням."
+msgstr "Показувати діалогове вікно попередження, перш ніж надсилати відкритий пароль незашифрованим з’єднанням."
 
 #: ../src/common/config.py:320
 msgid "Space separated list of ssl errors to ignore."
@@ -3598,9 +3555,8 @@ msgid "When negotiating an encrypted session, should Gajim assume you want your 
 msgstr "Під час налаштування сеансу з шифруванням, чи слід Gajim припускати, що ви бажаєте вести запис повідомлень?"
 
 #: ../src/common/config.py:369
-#, fuzzy
 msgid "Message that is sent to contacts you want to add"
-msgstr "Будь ласка, вкажіть дані контакту, який ви бажаєте додати"
+msgstr "Повідомлення що буде надіслано контакту який ви бажаєте додати"
 
 #: ../src/common/config.py:431
 msgid "Is OpenPGP enabled for this contact?"
@@ -4196,14 +4152,12 @@ msgid "D-Bus does not run correctly on this machine"
 msgstr "D-Bus не працює коректно на цій машині."
 
 #: ../src/common/dbus_support.py:54
-#, fuzzy
 msgid "D-Bus does not run correctly on this machine: system bus not present"
-msgstr "D-Bus не працює коректно на цій машині."
+msgstr "D-Bus не працює коректно на цій машині: системна шина відсутня."
 
 #: ../src/common/dbus_support.py:57
-#, fuzzy
 msgid "D-Bus does not run correctly on this machine: session bus not present"
-msgstr "D-Bus не працює коректно на цій машині."
+msgstr "D-Bus не працює коректно на цій машині: шина сеансу відсутня."
 
 #: ../src/common/exceptions.py:45
 msgid "Database cannot be read."
@@ -4218,22 +4172,22 @@ msgid "D-Bus is not present on this machine or python module is missing"
 msgstr "У цій системі немає D-Bus або відсутній потрібний модуль python"
 
 #: ../src/common/exceptions.py:78
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Session bus is not available.\n"
 "Try reading %(url)s"
 msgstr ""
 "Шина сеансів недоступна.\n"
-"Спробуйте ознайомитися з вмістом сторінки http://trac.gajim.org/wiki/GajimDBus"
+"Спробуйте ознайомитися з %(url)s"
 
 #: ../src/common/exceptions.py:90
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "System bus is not available.\n"
 "Try reading %(url)s"
 msgstr ""
-"Шина сеансів недоступна.\n"
-"Спробуйте ознайомитися з вмістом сторінки http://trac.gajim.org/wiki/GajimDBus"
+"Шина системи недоступна.\n"
+"Спробуйте ознайомитися з %(url)s"
 
 #: ../src/common/fuzzyclock.py:38
 msgid "twelve"
@@ -4636,12 +4590,12 @@ msgstr "Gajim - %s"
 
 #: ../src/common/helpers.py:1341
 msgid "Hello, I am $name."
-msgstr ""
+msgstr "Привіт, я $name."
 
 #: ../src/common/jingle_rtp.py:106
-#, fuzzy, python-format
+#, python-format
 msgid "%s configuration error"
-msgstr "Налаштування кімнати"
+msgstr "%s помилка конфігурації"
 
 #: ../src/common/jingle_rtp.py:107
 #, python-format
@@ -4654,22 +4608,29 @@ msgid ""
 "Error was:\n"
 "%s"
 msgstr ""
+"Не можу налаштувати %s. Перевірте вашу конфігурацію.\n"
+"\n"
+"Команда:\n"
+"%s\n"
+"\n"
+"Помилка:\n"
+"%s"
 
 #: ../src/common/jingle_rtp.py:299
 msgid "audio input"
-msgstr ""
+msgstr "аудіо вхід"
 
 #: ../src/common/jingle_rtp.py:302
 msgid "audio output"
-msgstr ""
+msgstr "аудіо вихід"
 
 #: ../src/common/jingle_rtp.py:331
 msgid "video input"
-msgstr ""
+msgstr "відео вхід"
 
 #: ../src/common/jingle_rtp.py:339
 msgid "video output"
-msgstr ""
+msgstr "відео вихід"
 
 #: ../src/common/latex.py:109
 #, python-format
@@ -4682,14 +4643,13 @@ msgid "%s is not a valid loglevel"
 msgstr "%s не є коректним рівнем журналювання"
 
 #: ../src/common/multimedia_helpers.py:37
-#, fuzzy
 msgid " Default device"
-msgstr "Типове повідомлення"
+msgstr "Типовий пристрій"
 
 #. Test src
 #: ../src/common/multimedia_helpers.py:53
 msgid "Audio test"
-msgstr ""
+msgstr "Тест аудіо"
 
 #. Auto src
 #. Auto sink
@@ -4699,44 +4659,44 @@ msgstr ""
 #: ../src/common/multimedia_helpers.py:82
 #: ../src/common/multimedia_helpers.py:99
 msgid "Autodetect"
-msgstr ""
+msgstr "Автовизначення"
 
 #. Alsa src
 #. Alsa sink
 #: ../src/common/multimedia_helpers.py:59
 #: ../src/common/multimedia_helpers.py:71
-#, fuzzy, python-format
+#, python-format
 msgid "ALSA: %s"
-msgstr "Розмір: %s"
+msgstr "ALSA: %s"
 
 #. Fake sink
 #. Fake video output
 #: ../src/common/multimedia_helpers.py:67
 #: ../src/common/multimedia_helpers.py:94
 msgid "Fake audio output"
-msgstr ""
+msgstr "Фальшивий вихід аудіо"
 
 #. Test src
 #: ../src/common/multimedia_helpers.py:79
 msgid "Video test"
-msgstr ""
+msgstr "Тест відео"
 
 #. V4L2 src
 #: ../src/common/multimedia_helpers.py:84
 #, python-format
 msgid "V4L2: %s"
-msgstr ""
+msgstr "V4L2: %s"
 
 #. Auto sink
 #: ../src/common/multimedia_helpers.py:96
 #, python-format
 msgid "X Window System (X11/XShm/Xv): %s"
-msgstr ""
+msgstr "Система X Window (X11/XShm/Xv): %s"
 
 #. ximagesink
 #: ../src/common/multimedia_helpers.py:98
 msgid "X Window System (without Xv)"
-msgstr ""
+msgstr "Система X Window (без Xv)"
 
 #. we talk about a file
 #: ../src/common/optparser.py:53
@@ -5765,13 +5725,12 @@ msgid "Removing %s account"
 msgstr "Вилучення облікового запису %s"
 
 #: ../src/config.py:2886
-#, fuzzy
 msgid "Account is disabled"
-msgstr "Емоційки вимкнено"
+msgstr "Обліковий запис вимкнено"
 
 #: ../src/config.py:2887
 msgid "To unregister from a server, account must be enabled."
-msgstr ""
+msgstr "Щоб зняти реєстрацію з серверу, обліковий запис має бути активним."
 
 #: ../src/config.py:2900 ../src/gui_interface.py:1130
 #: ../src/gui_interface.py:1227
@@ -5797,23 +5756,21 @@ msgid "If you remove it, the connection will be lost."
 msgstr "Якщо ви вилучите його, з’єднання буде розірвано."
 
 #: ../src/config.py:2927
-#, fuzzy, python-format
+#, python-format
 msgid "Connection to server %s failed"
-msgstr "Спроба встановити з'єднання з проксі-сервером завершилася невдало"
+msgstr "Спроба встановити з'єднання з сервером %s завершилася невдало"
 
 #: ../src/config.py:2928
-#, fuzzy
 msgid "What would you like to do?"
 msgstr "Що ви хочете зробити?"
 
 #: ../src/config.py:2929
-#, fuzzy
 msgid "Remove only from Gajim"
-msgstr "Вилучити обліковий запис _лише з Gajim"
+msgstr "Вилучити _лише з Gajim"
 
 #: ../src/config.py:2930
 msgid "Don't remove anything. I'll try again later"
-msgstr ""
+msgstr "Не видаляти нічого. Я спробую пізніше ще раз."
 
 #: ../src/config.py:3023
 msgid "Default"
@@ -6031,12 +5988,12 @@ msgstr "Відкрити як _посилання"
 
 #. %i is day in year (1-365)
 #: ../src/conversation_textview.py:1292
-#, fuzzy, python-format
+#, python-format
 msgid "Yesterday"
 msgid_plural "%i days ago"
-msgstr[0] "Вчора"
-msgstr[1] "Вчора"
-msgstr[2] "Вчора"
+msgstr[0] "Вчора (%i день тому)"
+msgstr[1] "%i днів тому"
+msgstr[2] "%i днів тому"
 
 #. if we have subject, show it too!
 #: ../src/conversation_textview.py:1327 ../src/history_window.py:475
@@ -6203,7 +6160,7 @@ msgstr "Нарешті, але ані трохи не менше, ми вдяч�
 #. here you write your name in the form Name FamilyName <someone@somewhere>
 #: ../src/dialogs.py:1213
 msgid "translator-credits"
-msgstr "Raven's fans <translation@linux.org.ua>"
+msgstr "Сергій Єгоров <prapor@unixzone.org.ua>"
 
 #: ../src/dialogs.py:1395
 #, python-format
@@ -6262,9 +6219,8 @@ msgid "Invalid group chat Jabber ID"
 msgstr "Некоректний ідентифікатор Jabber групової балачки"
 
 #: ../src/dialogs.py:2318
-#, fuzzy
 msgid "Please enter the group chat Jabber ID as room@server."
-msgstr "У ідентифікаторі Jabber групової балачки містяться недозволені символи."
+msgstr "Будь ласка, вкажіть Jabber ID групової балачки у вигляді кімната@сервер."
 
 #: ../src/dialogs.py:2324 ../src/groupchat_control.py:1759
 msgid "The group chat Jabber ID has not allowed characters."
@@ -6467,24 +6423,21 @@ msgstr "Консоль XML"
 
 #. Action that can be done with an incoming list of contacts
 #: ../src/dialogs.py:3151
-#, fuzzy
 msgid "add"
-msgstr "Сумний"
+msgstr "додати"
 
 #: ../src/dialogs.py:3151
-#, fuzzy
 msgid "modify"
-msgstr "Змінити"
+msgstr "змінити"
 
 #: ../src/dialogs.py:3152
-#, fuzzy
 msgid "remove"
-msgstr "В_илучити"
+msgstr "вилучити"
 
 #: ../src/dialogs.py:3180
-#, fuzzy, python-format
+#, python-format
 msgid "<b>%(jid)s</b> would like you to <b>%(action)s</b> some contacts in your roster."
-msgstr "<b>%s</b> бажає додати вас до <b>%s</b> контактів у своєму реєстрі."
+msgstr "<b>%(jid)s</b> бажає <b>%(action)s</b> кілька контактів у вашому реєстрі."
 
 #. Change label for accept_button to action name instead of 'OK'.
 #: ../src/dialogs.py:3196 ../src/dialogs.py:3242
@@ -6517,14 +6470,14 @@ msgid "%s suggested me to add you in my roster."
 msgstr "%s підказав мені додати вас до мого реєстру."
 
 #: ../src/dialogs.py:3332
-#, fuzzy, python-format
+#, python-format
 msgid "Added  %s contacts"
-msgstr "Дод_ати контакт"
+msgstr "Додано %s контактів"
 
 #: ../src/dialogs.py:3369
-#, fuzzy, python-format
+#, python-format
 msgid "Removed  %s contacts"
-msgstr "Вилучає контакт з реєстру"
+msgstr "Вилучено %s контактів"
 
 #: ../src/dialogs.py:3422
 #, python-format
@@ -6704,20 +6657,20 @@ msgstr "З цим контактом пов’язано ключ GPG, ви вв
 
 #: ../src/dialogs.py:4893
 msgid "an audio and video"
-msgstr ""
+msgstr "аудіо та відео"
 
 #: ../src/dialogs.py:4895
 msgid "an audio"
-msgstr ""
+msgstr "аудіо"
 
 #: ../src/dialogs.py:4897
 msgid "a video"
-msgstr ""
+msgstr "відео"
 
 #: ../src/dialogs.py:4901
 #, python-format
 msgid "%(contact)s wants to start %(type)s session with you. Do you want to answer the call?"
-msgstr ""
+msgstr "%(contact)s бажають розпочати %(type)s розмову з вами. Ви бажаєте відповісти на запит?"
 
 #: ../src/disco.py:119
 msgid "Others"
@@ -7036,12 +6989,11 @@ msgstr "Потрібні python-docutils."
 
 #: ../src/features_window.py:105
 msgid "Ability to start audio and video chat."
-msgstr ""
+msgstr "Можливість розпочати аудіо та відео розмову."
 
 #: ../src/features_window.py:106
-#, fuzzy
 msgid "Requires python-farsight."
-msgstr "Потрібен python-avahi."
+msgstr "Потрібен python-farsight."
 
 #: ../src/features_window.py:121
 msgid "Feature"
@@ -7243,24 +7195,20 @@ msgid "importing PyGTK failed: %s"
 msgstr "імпорт PyGTK не вдався: %s"
 
 #: ../src/gajim.py:183
-#, fuzzy
 msgid "Gajim needs PyGTK 2.16 or above"
-msgstr "Для роботи Gajim потрібен PyGTK 2.12 або новіша версія"
+msgstr "Для роботи Gajim потрібен PyGTK 2.16 або новіша версія"
 
 #: ../src/gajim.py:184
-#, fuzzy
 msgid "Gajim needs PyGTK 2.16 or above to run. Quiting..."
-msgstr "Для запуску Gajim потрібен PyGTK 2.12 або новіша версія. Завершення роботи..."
+msgstr "Для запуску Gajim потрібен PyGTK 2.16 або новіша версія. Завершення роботи..."
 
 #: ../src/gajim.py:186
-#, fuzzy
 msgid "Gajim needs GTK 2.16 or above"
-msgstr "Для роботи Gajim потрібна бібліотека GTK 2.12 або новіша версія"
+msgstr "Для роботи Gajim потрібна бібліотека GTK 2.16 або новіша версія"
 
 #: ../src/gajim.py:187
-#, fuzzy
 msgid "Gajim needs GTK 2.16 or above to run. Quiting..."
-msgstr "Для запуску Gajim потрібна бібліотека GTK 2.12 або новіша версія. Завершення роботи..."
+msgstr "Для запуску Gajim потрібна бібліотека GTK 2.16 або новіша версія. Завершення роботи..."
 
 #: ../src/gajim.py:196
 msgid "Gajim needs pywin32 to run"
@@ -7338,9 +7286,8 @@ msgid "status"
 msgstr "стан"
 
 #: ../src/gajim-remote.py:109
-#, fuzzy
 msgid "one of: offline, online, chat, away, xa, dnd, invisible. If not set, use accoun't previous status"
-msgstr "одне зі значень: offline, online, chat, away, xa, dnd, invisible "
+msgstr "одне зі значень: поза мережею, доступний, балачка, пішов, далеко, не турбувати, невидимий. Якщо не вказано, буде використано попередній стан облікового запису."
 
 #: ../src/gajim-remote.py:110 ../src/gajim-remote.py:133
 #: ../src/gajim-remote.py:144 ../src/gajim-remote.py:158
@@ -7548,19 +7495,16 @@ msgid "Account in which the xml will be sent; if not specified, xml will be sent
 msgstr "Обліковий запис, на який буде надіслано xml; якщо не вказано, xml буде надіслано до всіх облікових записів"
 
 #: ../src/gajim-remote.py:268
-#, fuzzy
 msgid "Change the avatar"
-msgstr "Змінити стан"
+msgstr "Змінити аватар"
 
 #: ../src/gajim-remote.py:270
-#, fuzzy
 msgid "Picture to use"
-msgstr "Псевдонім, який слід використовувати"
+msgstr "Картинка, яку слід використовувати"
 
 #: ../src/gajim-remote.py:271
-#, fuzzy
 msgid "Account in which the avatar will be set; if not specified, the avatar will be set for all accounts"
-msgstr "Обліковий запис, на який буде надіслано xml; якщо не вказано, xml буде надіслано до всіх облікових записів"
+msgstr "Обліковий запис, на для якого буде встановлено аватар; якщо не вказано, аватар буде встановлено до всіх облікових записів"
 
 #: ../src/gajim-remote.py:277
 msgid "Handle a xmpp:/ uri"
@@ -7690,7 +7634,7 @@ msgstr ""
 
 #: ../src/gajim-remote.py:538
 msgid "No uri given"
-msgstr ""
+msgstr "Не надано універсальний ідентифікатор ресурсу"
 
 #: ../src/gajim-remote.py:540
 msgid "Wrong uri"
@@ -8123,9 +8067,8 @@ msgid "The GPG key used to encrypt this chat is not trusted. Do you really want 
 msgstr "З цим контактом не пов’язано жодних ключів GPG. Отже шифрування повідомлень буде неможливим."
 
 #: ../src/gui_interface.py:1210
-#, fuzzy
 msgid "Gnome Keyring is installed but not                 correctly started (environment variable probably not                 correctly set)"
-msgstr "Gnome Keyring встановлено, але не \t\t\t\t\tзапущено належним чином (ймовірно, змінну середовища вказано \t\t\t\t\tнеправильно)"
+msgstr "Gnome Keyring встановлено, але не                 запущено належним чином (ймовірно, змінну середовища вказано                  неправильно)"
 
 #: ../src/gui_interface.py:1319
 #, python-format
@@ -8234,14 +8177,13 @@ msgstr "Ваш клієнт вже з’єднано з цим облікови�
 
 #. TODO: we should use another pixmap ;-)
 #: ../src/gui_interface.py:1800
-#, fuzzy, python-format
+#, python-format
 msgid "%s wants to start a voice chat."
-msgstr "%s бажає надіслати вам файл."
+msgstr "%s бажає розпочати голосову розмову."
 
 #: ../src/gui_interface.py:1803
-#, fuzzy
 msgid "Voice Chat Request"
-msgstr "Запит на передавання файла"
+msgstr "Запит на голосову розмову"
 
 #: ../src/gui_interface.py:1909
 msgid "Error verifying SSL certificate"
@@ -8285,9 +8227,8 @@ msgid "Insecure connection"
 msgstr "Небезпечне з’єднання"
 
 #: ../src/gui_interface.py:1970
-#, fuzzy
 msgid "You are about to connect to the server with an insecure connection. This means all your conversations will be exchanged unencrypted. Are you sure you want to do that?"
-msgstr "Ви маєте намір надіслати ваш пароль незахищеним з’єднанням. Щоб покращити безпеку з’єднання, вам слід встановити PyOpenSSL. Виконати надсилання пароля зараз?"
+msgstr "Ви маєте намір надіслати з’єднатись незахищеним з’єднанням. Весь ваш обмін повідомленнями буде незашифрованим. Виконати надсилання пароля зараз?"
 
 #: ../src/gui_interface.py:1973 ../src/gui_interface.py:2010
 #: ../src/gui_interface.py:2045
@@ -8299,9 +8240,8 @@ msgid "You are about to send your password on an insecure connection. You should
 msgstr "Ви маєте намір надіслати ваш пароль незахищеним з’єднанням. Щоб покращити безпеку з’єднання, вам слід встановити PyOpenSSL. Виконати надсилання пароля зараз?"
 
 #: ../src/gui_interface.py:2043
-#, fuzzy
 msgid "You are about to send your password unencrypted on an insecure connection. Are you sure you want to do that?"
-msgstr "Ви маєте намір надіслати ваш пароль нешифрованим з’єднанням. Виконати надсилання пароля?"
+msgstr "Ви маєте намір надіслати ваш пароль незашифрованим з’єднанням у відкритому вигляді. Виконати надсилання пароля?"
 
 #: ../src/gui_interface.py:2064
 msgid "PEP node was not removed"
@@ -8349,9 +8289,9 @@ msgid "GPG key expired"
 msgstr "Немає ключа GPG"
 
 #: ../src/gui_interface.py:3608
-#, fuzzy, python-format
+#, python-format
 msgid "Your GPG key has expired, you will be connected to %s without OpenPGP."
-msgstr "З’єднання з %s буде встановлено без OpenPGP."
+msgstr "Ваш ключ GPG застарів. З’єднання з %s буде встановлено без OpenPGP."
 
 #. ask again
 #: ../src/gui_interface.py:3617
@@ -8662,13 +8602,12 @@ msgid "Always close Gajim"
 msgstr "Завжди закривати Gajim"
 
 #: ../src/roster_window.py:2370
-#, fuzzy
 msgid "You have running file transfers"
-msgstr "Скасувати передавання файла"
+msgstr "Ви маєте активні перенесення файлів"
 
 #: ../src/roster_window.py:2371
 msgid "If you quit now, the file(s) being transfered will be stopped. Do you still want to quit?"
-msgstr ""
+msgstr "Якщо ви вийдете зараз, усі передачі файлів буде зупинено. Ви все ще бажаєте вийти?"
 
 #: ../src/roster_window.py:2402 ../src/roster_window.py:2650
 msgid "You have unread messages"
@@ -8790,12 +8729,11 @@ msgstr ""
 "призведе до вилучення уповноваження, отже для них ви завжди залишатиметеся поза мережею."
 
 #: ../src/roster_window.py:3390
-#, fuzzy
 msgid "You are about to send a custom status. Are you sure you want  to continue?"
 msgstr "Ви маєте намір надіслати особливий статус. Ви справді цього бажаєте?"
 
 #: ../src/roster_window.py:3392
-#, fuzzy, python-format
+#, python-format
 msgid "This contact will temporarily see you as %(status)s, but only until you change your status. Then he or she will see your global status."
 msgstr "Цей контакт тимчасово бачитиме вас як %(status)s, но лише до зміни вашого статусу. Потім він бачитиме ваш глобальний статус."
 
@@ -8893,9 +8831,8 @@ msgid "Publish Tune"
 msgstr "Оприлюднити музику"
 
 #: ../src/roster_window.py:5101
-#, fuzzy
 msgid "Publish Location"
-msgstr "Оприлюднити музику"
+msgstr "Оприлюднити положення"
 
 #: ../src/roster_window.py:5104
 msgid "Configure Services..."
@@ -9004,7 +8941,7 @@ msgid "Confirm these session options"
 msgstr "Підтвердити параметри цих сеансів"
 
 #: ../src/session.py:431
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "The remote client wants to negotiate an session with these features:\n"
 "\n"
@@ -9014,7 +8951,7 @@ msgid ""
 msgstr ""
 "Віддалений клієнт бажає розпочати сеанс з такими можливостями:\n"
 "\n"
-"\t%s\n"
+"%s\n"
 "\n"
 "\tЧи всі вказані параметри є прийнятними?"
 
@@ -9038,9 +8975,8 @@ msgid "_Change Status Message..."
 msgstr "_Змінити повідомлення про стан..."
 
 #: ../src/statusicon.py:322
-#, fuzzy
 msgid "Hide _Roster"
-msgstr "у _реєстрі"
+msgstr "Сховати реєстр"
 
 #: ../src/statusicon.py:333
 msgid "Hide this menu"
@@ -9103,9 +9039,8 @@ msgid "Tune:"
 msgstr "Музика:"
 
 #: ../src/tooltips.py:667
-#, fuzzy
 msgid "Location:"
-msgstr "Сповіщення"
+msgstr "Положення:"
 
 #: ../src/tooltips.py:693
 msgid "Download"
