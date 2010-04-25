@@ -467,8 +467,10 @@ class GroupchatControl(ChatControlBase):
         for account in gajim.gc_connected:
             for room_jid in [i for i in gajim.gc_connected[account] if \
             gajim.gc_connected[account][i] and i != self.room_jid]:
-                ctrl = gajim.interface.msg_win_mgr.get_gc_control(room_jid, account)
-                if not ctrl:
+                ctrl = gajim.interface.msg_win_mgr.get_gc_control(room_jid,
+                    account)
+                if not ctrl and room_jid in \
+                gajim.interface.minimized_controls[account]:
                     ctrl = gajim.interface.minimized_controls[account][room_jid]
                 if ctrl:
                     ctrl.resize_occupant_treeview(hpaned_position)
