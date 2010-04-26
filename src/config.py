@@ -3354,13 +3354,13 @@ class AccountCreationWizardWindow:
         server_comboboxentry = self.xml.get_object('server_comboboxentry')
         entry = server_comboboxentry.child
         entry.connect('key_press_event',
-                self.on_server_comboboxentry_key_press_event, server_comboboxentry)
+            self.on_server_comboboxentry_key_press_event, server_comboboxentry)
         entry.set_completion(completion)
         # Do the same for the other server comboboxentry
         server_comboboxentry1 = self.xml.get_object('server_comboboxentry1')
         entry = server_comboboxentry1.child
         entry.connect('key_press_event',
-                self.on_server_comboboxentry_key_press_event, server_comboboxentry1)
+            self.on_server_comboboxentry_key_press_event, server_comboboxentry1)
         entry.set_completion(completion)
 
         self.update_proxy_list()
@@ -3391,9 +3391,9 @@ class AccountCreationWizardWindow:
         self.advanced_button = self.xml.get_object('advanced_button')
         self.finish_label = self.xml.get_object('finish_label')
         self.go_online_checkbutton = self.xml.get_object(
-                'go_online_checkbutton')
+            'go_online_checkbutton')
         self.show_vcard_checkbutton = self.xml.get_object(
-                'show_vcard_checkbutton')
+            'show_vcard_checkbutton')
         self.progressbar = self.xml.get_object('progressbar')
 
         # some vars
@@ -3403,33 +3403,33 @@ class AccountCreationWizardWindow:
         self.xml.connect_signals(self)
         self.window.show_all()
         gajim.ged.register_event_handler('NEW_ACC_CONNECTED', ged.CORE,
-                self.new_acc_connected)
+            self.new_acc_connected)
         gajim.ged.register_event_handler('NEW_ACC_NOT_CONNECTED', ged.CORE,
-                self.new_acc_not_connected)
+            self.new_acc_not_connected)
         gajim.ged.register_event_handler('ACC_OK', ged.CORE, self.acc_is_ok)
         gajim.ged.register_event_handler('ACC_NOT_OK', ged.CORE,
-                self.acc_is_not_ok)
+            self.acc_is_not_ok)
 
     def on_wizard_window_destroy(self, widget):
         page = self.notebook.get_current_page()
         if page in (4, 5) and self.account in gajim.connections:
-            # connection instance is saved in gajim.connections and we canceled the
-            # addition of the account
+            # connection instance is saved in gajim.connections and we canceled
+            # the addition of the account
             del gajim.connections[self.account]
             if self.account in gajim.config.get_per('accounts'):
                 gajim.config.del_per('accounts', self.account)
         gajim.ged.remove_event_handler('NEW_ACC_CONNECTED', ged.CORE,
-                self.new_acc_connected)
+            self.new_acc_connected)
         gajim.ged.remove_event_handler('NEW_ACC_NOT_CONNECTED', ged.CORE,
-                self.new_acc_not_connected)
+            self.new_acc_not_connected)
         gajim.ged.remove_event_handler('ACC_OK', ged.CORE, self.acc_is_ok)
         gajim.ged.remove_event_handler('ACC_NOT_OK', ged.CORE,
-                self.acc_is_not_ok)
+            self.acc_is_not_ok)
         del gajim.interface.instances['account_creation_wizard']
 
     def on_register_server_features_button_clicked(self, widget):
         helpers.launch_browser_mailer('url',
-                'http://www.jabber.org/network/oldnetwork.shtml')
+            'http://www.jabber.org/network/oldnetwork.shtml')
 
     def on_save_password_checkbutton_toggled(self, widget):
         self.xml.get_object('password_entry').grab_focus()
@@ -3461,7 +3461,8 @@ class AccountCreationWizardWindow:
         active = widget.get_active()
         self.xml.get_object('username_entry').set_sensitive(not active)
         self.xml.get_object('password_entry').set_sensitive(not active)
-        self.xml.get_object('save_password_checkbutton').set_sensitive(not active)
+        self.xml.get_object('save_password_checkbutton').set_sensitive(
+            not active)
 
     def show_finish_page(self):
         self.cancel_button.hide()
@@ -3469,16 +3470,16 @@ class AccountCreationWizardWindow:
         self.forward_button.hide()
         if self.modify:
             finish_text = '<big><b>%s</b></big>\n\n%s' % (
-                    _('Account has been added successfully'),
-                    _('You can set advanced account options by pressing the '
-                    'Advanced button, or later by choosing the Accounts menu item '
-                    'under the Edit menu from the main window.'))
+                _('Account has been added successfully'),
+                _('You can set advanced account options by pressing the '
+                'Advanced button, or later by choosing the Accounts menu item '
+                'under the Edit menu from the main window.'))
         else:
             finish_text = '<big><b>%s</b></big>\n\n%s' % (
-                    _('Your new account has been created successfully'),
-                    _('You can set advanced account options by pressing the Advanced '
-                    'button, or later by choosing the Accounts menu item under the Edit'
-                    ' menu from the main window.'))
+                _('Your new account has been created successfully'),
+                _('You can set advanced account options by pressing the '
+                'Advanced button, or later by choosing the Accounts menu item '
+                'under the Edit menu from the main window.'))
         self.finish_label.set_markup(finish_text)
         self.finish_button.show()
         self.finish_button.set_property('has-default', True)
@@ -3509,21 +3510,22 @@ class AccountCreationWizardWindow:
 
         elif cur_page == 1:
             # We are adding an existing account
-            anonymous = self.xml.get_object('anonymous_checkbutton1').get_active()
+            anonymous = self.xml.get_object('anonymous_checkbutton1').\
+                get_active()
             username = self.xml.get_object('username_entry').get_text().decode(
-                    'utf-8').strip()
+                'utf-8').strip()
             if not username and not anonymous:
                 pritext = _('Invalid username')
                 sectext = _(
-                        'You must provide a username to configure this account.')
+                    'You must provide a username to configure this account.')
                 dialogs.ErrorDialog(pritext, sectext)
                 return
-            server = self.xml.get_object('server_comboboxentry').child.get_text().\
-                    decode('utf-8').strip()
+            server = self.xml.get_object('server_comboboxentry').child.\
+                get_text().decode('utf-8').strip()
             savepass = self.xml.get_object('save_password_checkbutton').\
-                    get_active()
+                get_active()
             password = self.xml.get_object('password_entry').get_text().decode(
-                    'utf-8')
+                'utf-8')
 
             jid = username + '@' + server
             # check if jid is conform to RFC and stringprep it
@@ -3548,12 +3550,12 @@ class AccountCreationWizardWindow:
             self.show_finish_page()
         elif cur_page == 2:
             # We are creating a new account
-            server = self.xml.get_object('server_comboboxentry1').child.get_text()\
-                    .decode('utf-8')
+            server = self.xml.get_object('server_comboboxentry1').child.\
+                get_text().decode('utf-8')
 
             if not server:
                 dialogs.ErrorDialog(_('Invalid server'),
-                        _('Please provide a server on which you want to register.'))
+                    _('Please provide a server on which you want to register.'))
                 return
             self.account = server
             i = 1
@@ -3571,17 +3573,17 @@ class AccountCreationWizardWindow:
             config['proxy'] = proxy
 
             config['use_custom_host'] = self.xml.get_object(
-                    'custom_host_port_checkbutton').get_active()
+                'custom_host_port_checkbutton').get_active()
             custom_port = self.xml.get_object('custom_port_entry').get_text()
             try:
                 custom_port = int(custom_port)
             except Exception:
                 dialogs.ErrorDialog(_('Invalid entry'),
-                        _('Custom port must be a port number.'))
+                    _('Custom port must be a port number.'))
                 return
             config['custom_port'] = custom_port
             config['custom_host'] = self.xml.get_object(
-                    'custom_host_entry').get_text().decode('utf-8')
+                'custom_host_entry').get_text().decode('utf-8')
 
             if self.xml.get_object('anonymous_checkbutton2').get_active():
                 self.modify = True
@@ -3592,7 +3594,7 @@ class AccountCreationWizardWindow:
                 self.back_button.hide()
                 self.forward_button.hide()
                 self.update_progressbar_timeout_id = gobject.timeout_add(100,
-                        self.update_progressbar)
+                    self.update_progressbar)
                 # Get form from serveur
                 con = connection.Connection(self.account)
                 gajim.connections[self.account] = con
@@ -3601,7 +3603,7 @@ class AccountCreationWizardWindow:
             checked = self.xml.get_object('ssl_checkbutton').get_active()
             if checked:
                 hostname = gajim.connections[self.account].new_account_info[
-                        'hostname']
+                    'hostname']
                 # Check if cert is already in file
                 certs = ''
                 if os.path.isfile(gajim.MY_CACERTS):
@@ -3610,14 +3612,15 @@ class AccountCreationWizardWindow:
                     f.close()
                 if self.ssl_cert in certs:
                     dialogs.ErrorDialog(_('Certificate Already in File'),
-                            _('This certificate is already in file %s, so it\'s not added again.') % gajim.MY_CACERTS)
+                        _('This certificate is already in file %s, so it\'s '
+                        'not added again.') % gajim.MY_CACERTS)
                 else:
                     f = open(gajim.MY_CACERTS, 'a')
                     f.write(hostname + '\n')
                     f.write(self.ssl_cert + '\n\n')
                     f.close()
                     gajim.connections[self.account].new_account_info[
-                            'ssl_fingerprint_sha1'] = self.ssl_fingerprint
+                        'ssl_fingerprint_sha1'] = self.ssl_fingerprint
             self.notebook.set_current_page(4) # show fom page
         elif cur_page == 4:
             if self.is_form:
@@ -3625,14 +3628,15 @@ class AccountCreationWizardWindow:
             else:
                 form = self.data_form_widget.get_infos()
             gajim.connections[self.account].send_new_account_infos(form,
-                    self.is_form)
+                self.is_form)
             self.xml.get_object('form_vbox').remove(self.data_form_widget)
-            self.xml.get_object('progressbar_label').set_markup('<b>Account is being created</b>\n\nPlease wait...')
+            self.xml.get_object('progressbar_label').set_markup(
+                '<b>Account is being created</b>\n\nPlease wait...')
             self.notebook.set_current_page(5) # show creating page
             self.back_button.hide()
             self.forward_button.hide()
             self.update_progressbar_timeout_id = gobject.timeout_add(100,
-                    self.update_progressbar)
+                self.update_progressbar)
 
     def update_proxy_list(self):
         proxies_combobox = self.xml.get_object('proxies_combobox')
@@ -3649,10 +3653,11 @@ class AccountCreationWizardWindow:
             gajim.interface.instances['manage_proxies'].window.present()
         else:
             gajim.interface.instances['manage_proxies'] = \
-                    ManageProxiesWindow()
+                ManageProxiesWindow()
 
     def on_custom_host_port_checkbutton_toggled(self, widget):
-        self.xml.get_object('custom_host_hbox').set_sensitive(widget.get_active())
+        self.xml.get_object('custom_host_hbox').set_sensitive(widget.\
+            get_active())
 
     def update_progressbar(self):
         self.progressbar.pulse()
@@ -3683,13 +3688,16 @@ class AccountCreationWizardWindow:
         if ssl_msg:
             # An SSL warning occured, show it
             hostname = gajim.connections[self.account].new_account_info['hostname']
-            self.xml.get_object('ssl_label').set_markup(_('<b>Security Warning</b>'
-                    '\n\nThe authenticity of the %(hostname)s SSL certificate could be '
-                    'invalid.\nSSL Error: %(error)s\n'
-                    'Do you still want to connect to this server?') % {
-                    'hostname': hostname, 'error': ssl_msg})
+            self.xml.get_object('ssl_label').set_markup(_(
+                '<b>Security Warning</b>'
+                '\n\nThe authenticity of the %(hostname)s SSL certificate could'
+                ' be invalid.\nSSL Error: %(error)s\n'
+                'Do you still want to connect to this server?') % {
+                'hostname': hostname, 'error': ssl_msg})
             if ssl_err in (18, 27):
-                text = _('Add this certificate to the list of trusted certificates.\nSHA1 fingerprint of the certificate:\n%s') % ssl_fingerprint
+                text = _('Add this certificate to the list of trusted '
+                    'certificates.\nSHA1 fingerprint of the certificate:\n%s') \
+                    % ssl_fingerprint
                 self.xml.get_object('ssl_checkbutton').set_label(text)
             else:
                 self.xml.get_object('ssl_checkbutton').set_no_show_all(True)
@@ -3719,7 +3727,7 @@ class AccountCreationWizardWindow:
         img = self.xml.get_object('finish_image')
         img.set_from_stock(gtk.STOCK_DIALOG_ERROR, gtk.ICON_SIZE_DIALOG)
         finish_text = '<big><b>%s</b></big>\n\n%s' % (
-                _('An error occurred during account creation'), reason)
+            _('An error occurred during account creation'), reason)
         self.finish_label.set_markup(finish_text)
         self.notebook.set_current_page(6) # show finish page
 
@@ -3752,8 +3760,8 @@ class AccountCreationWizardWindow:
             gajim.config.del_per('accounts', self.account)
         img = self.xml.get_object('finish_image')
         img.set_from_stock(gtk.STOCK_DIALOG_ERROR, gtk.ICON_SIZE_DIALOG)
-        finish_text = '<big><b>%s</b></big>\n\n%s' % (_('An error occurred during '
-                'account creation'), reason)
+        finish_text = '<big><b>%s</b></big>\n\n%s' % (_(
+            'An error occurred during account creation'), reason)
         self.finish_label.set_markup(finish_text)
         self.notebook.set_current_page(6) # show finish page
 
@@ -3765,8 +3773,7 @@ class AccountCreationWizardWindow:
             gajim.interface.instances['accounts'].window.present()
         else:
             gajim.interface.instances['accounts'] = AccountsWindow()
-        gajim.interface.instances['accounts'].select_account(
-                self.account)
+        gajim.interface.instances['accounts'].select_account(self.account)
         self.window.destroy()
 
     def on_finish_button_clicked(self, widget):
@@ -3820,7 +3827,7 @@ class AccountCreationWizardWindow:
     def save_account(self, login, server, savepass, password, anonymous=False):
         if self.account in gajim.connections:
             dialogs.ErrorDialog(_('Account name is in use'),
-                    _('You already have an account using this name.'))
+                _('You already have an account using this name.'))
             return
         con = connection.Connection(self.account)
         con.password = password
@@ -3844,11 +3851,11 @@ class AccountCreationWizardWindow:
 
         # update variables
         gajim.interface.instances[self.account] = {'infos': {}, 'disco': {},
-                'gc_config': {}, 'search': {}, 'online_dialog': {}}
+            'gc_config': {}, 'search': {}, 'online_dialog': {}}
         gajim.interface.minimized_controls[self.account] = {}
         gajim.connections[self.account].connected = 0
         gajim.connections[self.account].keepalives = gajim.config.get_per(
-                'accounts', self.account, 'keep_alive_every_foo_secs')
+            'accounts', self.account, 'keep_alive_every_foo_secs')
         gajim.groups[self.account] = {}
         gajim.contacts.add_account(self.account)
         gajim.gc_connected[self.account] = {}
@@ -3868,7 +3875,8 @@ class AccountCreationWizardWindow:
         if 'accounts' in gajim.interface.instances:
             gajim.interface.instances['accounts'].init_accounts()
         # refresh roster
-        if len(gajim.connections) >= 2: # Do not merge accounts if only one exists
+        if len(gajim.connections) >= 2:
+            # Do not merge accounts if only one exists
             gajim.interface.roster.regroup = gajim.config.get('mergeaccounts')
         else:
             gajim.interface.roster.regroup = False
