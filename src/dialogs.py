@@ -2243,10 +2243,10 @@ class JoinGroupchatWindow:
         else:
             if widget in self._empty_required_widgets:
                 self._empty_required_widgets.remove(widget)
-            if len(self._empty_required_widgets) == 0 and self.account:
+            if not self._empty_required_widgets and self.account:
                 self.xml.get_object('join_button').set_sensitive(True)
             text = self._room_jid_entry.get_text()
-            if widget == self._room_jid_entry and text.find('@') > -1:
+            if widget == self._room_jid_entry and '@' in text:
                 # Don't allow @ char in room entry
                 room_jid, server = text.split('@', 1)
                 self._room_jid_entry.set_text(room_jid)
