@@ -3350,6 +3350,7 @@ class AccountCreationWizardWindow:
         self.window.set_transient_for(gajim.interface.roster.window)
 
         completion = gtk.EntryCompletion()
+        completion1 = gtk.EntryCompletion()
         # Connect events from comboboxentry.child
         server_comboboxentry = self.xml.get_object('server_comboboxentry')
         entry = server_comboboxentry.child
@@ -3359,9 +3360,7 @@ class AccountCreationWizardWindow:
         # Do the same for the other server comboboxentry
         server_comboboxentry1 = self.xml.get_object('server_comboboxentry1')
         entry = server_comboboxentry1.child
-        entry.connect('key_press_event',
-            self.on_server_comboboxentry_key_press_event, server_comboboxentry1)
-        entry.set_completion(completion)
+        entry.set_completion(completion1)
 
         self.update_proxy_list()
 
@@ -3375,6 +3374,8 @@ class AccountCreationWizardWindow:
 
         completion.set_model(servers_model)
         completion.set_text_column(0)
+        completion1.set_model(servers_model)
+        completion1.set_text_column(0)
 
         # Put servers into comboboxentries
         server_comboboxentry.set_model(servers_model)
