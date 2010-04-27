@@ -1606,11 +1606,12 @@ class Connection(CommonConnection, ConnectionHandlers):
     def send_message(self, jid, msg, keyID, type_='chat', subject='',
     chatstate=None, msg_id=None, composing_xep=None, resource=None,
     user_nick=None, xhtml=None, session=None, forward_from=None, form_node=None,
-    original_message=None, delayed=None, callback=None, callback_args=[]):
+    original_message=None, delayed=None, callback=None, callback_args=[],
+    now=False):
 
-        def cb(jid, msg, keyID, forward_from, session, original_message, subject,
-        type_, msg_iq):
-            msg_id = self.connection.send(msg_iq)
+        def cb(jid, msg, keyID, forward_from, session, original_message,
+        subject, type_, msg_iq):
+            msg_id = self.connection.send(msg_iq, now=now)
             jid = helpers.parse_jid(jid)
             self.dispatch('MSGSENT', (jid, msg, keyID))
             if callback:

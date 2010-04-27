@@ -290,6 +290,41 @@ class ForwardMessagesCommand(AdHocCommand):
 
         return False    # finish the session
 
+class FwdMsgThenDisconnectCommand(AdHocCommand):
+    commandnode = 'fwd-msd-disconnect'
+    commandname = _('Forward unread message then disconnect')
+
+    @staticmethod
+    def isVisibleFor(samejid):
+        """
+        Change status is visible only if the entity has the same bare jid
+        """
+        return samejid
+
+    def execute(self, request):
+        account = self.connection.name
+        # Forward messages
+        events = gajim.events.get_events(account, types=['chat', 'normal'])
+        j, resource = gajim.get_room_and_nick_from_fjid(self.jid)
+        for jid in events:
+            for event in events[jid]:
+                self.connection.send_message(j, event.parameters[0], '',
+                    type_=event.type_, subject=event.parameters[1],
+                    resource=resource, forward_from=jid, delayed=event.time_,
+                    now=True)
+
+        response, cmd = self.buildResponse(request, status = 'completed')
+        cmd.addChild('note', {}, _('The status has been changed.'))
+
+        # if going offline, we need to push response so it won't go into
+        # queue and disappear
+        self.connection.connection.send(response, now = True)
+
+        # send new status
+        gajim.interface.roster.send_status(self.connection.name, 'offline', '')
+        # finish the session
+        return False
+
 class ConnectionCommands:
     """
     This class depends on that it is a part of Connection() class
@@ -299,7 +334,7 @@ class ConnectionCommands:
         # a list of all commands exposed: node -> command class
         self.__commands = {}
         for cmdobj in (ChangeStatusCommand, ForwardMessagesCommand,
-        LeaveGroupchatsCommand):
+        LeaveGroupchatsCommand, FwdMsgThenDisconnectCommand):
             self.__commands[cmdobj.commandnode] = cmdobj
 
         # a list of sessions; keys are tuples (jid, sessionid, node)
