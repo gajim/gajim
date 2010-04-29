@@ -18,6 +18,8 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
+from datetime import datetime
+
 from common import gajim
 from common import pep
 from common import dbus_support
@@ -95,7 +97,7 @@ class LocationListener:
         'region', 'street']:
             self._data[field] = address.get(field, None)
         if timestamp:
-            self._data['timestamp'] = timestamp
+            self._data['timestamp'] = self._timestamp_to_utc(timestamp)
         if accuracy:
             # in PEP it's horizontal accuracy
             self._data['accuracy'] = accuracy[1]
@@ -109,7 +111,7 @@ class LocationListener:
             if _dict[field] is not None:
                 self._data[field] = _dict[field]
         if timestamp:
-            self._data['timestamp'] = timestamp
+            self._data['timestamp'] = self._timestamp_to_utc(timestamp)
         if accuracy:
             # in PEP it's horizontal accuracy
             self._data['accuracy'] = accuracy[1]
@@ -126,6 +128,10 @@ class LocationListener:
                 continue
             gajim.connections[acct].send_location(self._data)
             gajim.connections[acct].location_info = self._data
+
+    def _timestamp_to_utc(self, timestamp):
+        time = datetime.utcfromtimestamp(timestamp)
+        return time.strftime('%Y-%m-%dT%H:%MZ')
 
 def enable():
     listener = LocationListener.get()
