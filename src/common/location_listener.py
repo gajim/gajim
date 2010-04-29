@@ -79,6 +79,7 @@ class LocationListener:
                     accuracy)
 
     def start(self):
+        self.location_info = {}
         self.get_data()
         bus = dbus.SessionBus()
         # Geoclue
@@ -124,10 +125,10 @@ class LocationListener:
                 continue
             if not gajim.config.get_per('accounts', acct, 'publish_location'):
                 continue
-            if gajim.connections[acct].location_info == self._data:
+            if self.location_info == self._data:
                 continue
             gajim.connections[acct].send_location(self._data)
-            gajim.connections[acct].location_info = self._data
+            self.location_info = self._data.copy()
 
     def _timestamp_to_utc(self, timestamp):
         time = datetime.utcfromtimestamp(timestamp)
