@@ -1467,7 +1467,7 @@ class GroupchatControl(ChatControlBase):
                 self.print_conversation(st, tim=tim, graphics=False)
 
     def add_contact_to_roster(self, nick, show, role, affiliation, status,
-                    jid=''):
+    jid=''):
         model = self.list_treeview.get_model()
         role_name = helpers.get_uf_role(role, plural=True)
 
@@ -1485,14 +1485,16 @@ class GroupchatControl(ChatControlBase):
         role_iter = self.get_role_iter(role)
         if not role_iter:
             role_iter = model.append(None,
-                    (gajim.interface.jabber_state_images['16']['closed'], role,
-                    'role', role_name,  None))
+                (gajim.interface.jabber_state_images['16']['closed'], role,
+                'role', role_name,  None))
             self.draw_all_roles()
         iter_ = model.append(role_iter, (None, nick, 'contact', name, None))
-        if not nick in gajim.contacts.get_nick_list(self.account, self.room_jid):
-            gc_contact = gajim.contacts.create_gc_contact(room_jid=self.room_jid, account=self.account,
-                    name=nick, show=show, status=status, role=role,
-                    affiliation=affiliation, jid=j, resource=resource)
+        if not nick in gajim.contacts.get_nick_list(self.account,
+        self.room_jid):
+            gc_contact = gajim.contacts.create_gc_contact(
+                room_jid=self.room_jid, account=self.account,
+                name=nick, show=show, status=status, role=role,
+                affiliation=affiliation, jid=j, resource=resource)
             gajim.contacts.add_gc_contact(self.account, gc_contact)
         self.draw_contact(nick)
         self.draw_avatar(nick)
@@ -1503,13 +1505,11 @@ class GroupchatControl(ChatControlBase):
             fake_jid = self.room_jid + '/' + nick
             pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(fake_jid)
             if pixbuf == 'ask':
-                if j:
-                    fjid = j
-                    if resource:
-                        fjid += '/' + resource
-                    gajim.connections[self.account].request_vcard(fjid, fake_jid)
+                if j and not self.is_anonymous:
+                    gajim.connections[self.account].request_vcard(j, fake_jid)
                 else:
-                    gajim.connections[self.account].request_vcard(fake_jid, fake_jid)
+                    gajim.connections[self.account].request_vcard(fake_jid,
+                        fake_jid)
         if nick == self.nick: # we became online
             self.got_connected()
         self.list_treeview.expand_row((model.get_path(role_iter)), False)
