@@ -1672,9 +1672,10 @@ class Interface:
     def handle_event_zc_name_conflict(self, account, data):
         def on_ok(new_name):
             gajim.config.set_per('accounts', account, 'name', new_name)
+            show = gajim.connections[account].old_show
             status = gajim.connections[account].status
             gajim.connections[account].username = new_name
-            gajim.connections[account].change_status(status, '')
+            gajim.connections[account].change_status(show, status)
         def on_cancel():
             gajim.connections[account].change_status('offline', '')
 
