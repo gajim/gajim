@@ -127,6 +127,13 @@ class LocationListener:
                 continue
             if self.location_info == self._data:
                 continue
+            if 'timestamp' in self.location_info and 'timestamp' in self._data:
+                last_data = self.location_info.copy()
+                del last_data['timestamp']
+                new_data = self._data.copy()
+                del new_data['timestamp']
+                if last_data == new_data:
+                    continue
             gajim.connections[acct].send_location(self._data)
             self.location_info = self._data.copy()
 
