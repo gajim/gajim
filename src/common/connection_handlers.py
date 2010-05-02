@@ -643,6 +643,11 @@ class ConnectionVcard:
             namespace=common.xmpp.NS_ROSTER_VER):
                 version = gajim.config.get_per('accounts', self.name,
                     'roster_version')
+                if version and not len(gajim.contacts.get_contacts_jid_list(
+                self.name)):
+                    gajim.config.set_per('accounts', self.name,
+                        'roster_version', '')
+                    version = None
 
             iq_id = self.connection.initRoster(version=version)
             self.awaiting_answers[iq_id] = (ROSTER_ARRIVED, )
