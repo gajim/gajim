@@ -44,6 +44,10 @@ class JingleRTPContent(JingleContent):
         self.farsight_media = {'audio': farsight.MEDIA_TYPE_AUDIO,
                                                         'video': farsight.MEDIA_TYPE_VIDEO}[media]
 
+        self.pipeline = None
+        self.src_bin = None
+        self.stream_failed_once = False
+
         self.candidates_ready = False # True when local candidates are prepared
 
         self.callbacks['session-initiate'] += [self.__on_remote_codecs]
@@ -199,6 +203,39 @@ class JingleRTPContent(JingleContent):
                 print 'Debug: %s' % message.structure['debug-msg']
             else:
                 print name
+        elif message.type == gst.MESSAGE_ERROR:
+            # TODO: Fix it to fallback to videotestsrc anytime an error occur,
+            # or raise an error, Jingle way
+            # or maybe one-sided stream?
+            if not self.stream_failed_once:
+                self.session.connection.dispatch('ERROR',
+                        (_("GStreamer error"),
+                         _("Error: %s\nDebug: %s" % (message.structure['gerror'],
+                                message.structure['debug']))))
+
+            sink_pad = self.p2psession.get_property('sink-pad')
+
+            # Remove old source
+            self.src_bin.get_pad('src').unlink(sink_pad)
+            self.pipeline.remove(self.src_bin)
+
+            if not self.stream_failed_once:
+                # Add fallback source
+                self.src_bin = self.get_fallback_src()
+                self.pipeline.add(self.src_bin)
+                self.src_bin.get_pad('src').link(sink_pad)
+                self.stream_failed_once = True
+            else:
+                # TODO: remove content, don't kill session
+                reason = xmpp.Node('reason')
+                reason.setTag('failed-application')
+                self.session._session_terminate(reason)
+
+            # Start playing again
+            self.pipeline.set_state(gst.STATE_PLAYING)
+
+    def get_fallback_src(self):
+        return gst.element_factory_make('fakesrc')
 
     def __on_content_accept(self, stanza, content, error, action):
         if self.accepted:
@@ -298,19 +335,19 @@ class JingleAudio(JingleRTPContent):
 
         # the local parts
         # TODO: Add queues?
-        src_bin = self.make_bin_from_config('audio_input_device',
+        self.src_bin = self.make_bin_from_config('audio_input_device',
                 '%s ! audioconvert', _("audio input"))
 
         self.sink = self.make_bin_from_config('audio_output_device',
                 'audioconvert ! volume name=gajim_out_vol ! %s', _("audio output"))
 
-        self.mic_volume = src_bin.get_by_name('gajim_vol')
+        self.mic_volume = self.src_bin.get_by_name('gajim_vol')
         self.out_volume = self.sink.get_by_name('gajim_out_vol')
 
         # link gst elements
-        self.pipeline.add(self.sink, src_bin)
+        self.pipeline.add(self.sink, self.src_bin)
 
-        src_bin.get_pad('src').link(self.p2psession.get_property(
+        self.src_bin.get_pad('src').link(self.p2psession.get_property(
                 'sink-pad'))
         self.p2pstream.connect('src-pad-added', self._on_src_pad_added)
 
@@ -330,24 +367,28 @@ class JingleVideo(JingleRTPContent):
         JingleRTPContent.setup_stream(self)
 
         # the local parts
-        src_bin = self.make_bin_from_config('video_input_device',
+        self.src_bin = self.make_bin_from_config('video_input_device',
                 '%s ! videoscale ! ffmpegcolorspace', _("video input"))
         #caps = gst.element_factory_make('capsfilter')
         #caps.set_property('caps', gst.caps_from_string('video/x-raw-yuv, width=320, height=240'))
 
-        self.pipeline.add(src_bin)#, caps)
+        self.pipeline.add(self.src_bin)#, caps)
         #src_bin.link(caps)
 
         self.sink = self.make_bin_from_config('video_output_device',
                 'videoscale ! ffmpegcolorspace ! %s', _("video output"))
         self.pipeline.add(self.sink)
 
-        src_bin.get_pad('src').link(self.p2psession.get_property('sink-pad'))
+        self.src_bin.get_pad('src').link(self.p2psession.get_property('sink-pad'))
         self.p2pstream.connect('src-pad-added', self._on_src_pad_added)
 
         # The following is needed for farsight to process ICE requests:
         self.pipeline.set_state(gst.STATE_PLAYING)
 
+    def get_fallback_src(self):
+        # TODO: Use avatar?
+        pipeline = 'videotestsrc is-live=true ! video/x-raw-yuv,framerate=10/1 ! ffmpegcolorspace'
+        return gst.parse_bin_from_description(pipeline, True)
 
 def get_content(desc):
     if desc['media'] == 'audio':
