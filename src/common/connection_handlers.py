@@ -643,8 +643,8 @@ class ConnectionVcard:
             namespace=common.xmpp.NS_ROSTER_VER):
                 version = gajim.config.get_per('accounts', self.name,
                     'roster_version')
-                if version and not len(gajim.contacts.get_contacts_jid_list(
-                self.name)):
+                if version and not gajim.contacts.get_contacts_jid_list(
+                self.name):
                     gajim.config.set_per('accounts', self.name,
                         'roster_version', '')
                     version = None
