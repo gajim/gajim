@@ -183,7 +183,7 @@ class JingleRTPContent(JingleContent):
             elif name == 'farsight-new-local-candidate':
                 candidate = message.structure['candidate']
                 self.transport.candidates.append(candidate)
-                if self.candidates_ready:
+                if self.sent:
                     # FIXME: Is this case even possible?
                     self.send_candidate(candidate)
             elif name == 'farsight-component-state-changed':
