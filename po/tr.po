@@ -1218,7 +1218,7 @@ msgstr ""
 
 #: ../data/gui/history_manager.ui.h:3
 msgid "<big><b>Welcome to Gajim History Logs Manager</b></big>"
-msgstr ""
+msgstr "<big><b>Gajim Kayıt Tarihleri Yöneticisine Hoşgeldiniz</b></big>"
 
 #: ../data/gui/history_manager.ui.h:4
 msgid "Export"
@@ -1226,7 +1226,7 @@ msgstr "Dışa Aktar"
 
 #: ../data/gui/history_manager.ui.h:5
 msgid "Gajim History Logs Manager"
-msgstr ""
+msgstr "Kayıt Tarihleri Yöneticisi"
 
 #: ../data/gui/history_manager.ui.h:6
 msgid ""
@@ -1517,7 +1517,7 @@ msgstr "Herzaman"
 
 #: ../data/gui/preferences_window.ui.h:31
 msgid "Always use GNOME default applications"
-msgstr ""
+msgstr "Daima Gnome varsayılan programlarını kullan"
 
 #: ../data/gui/preferences_window.ui.h:32
 msgid "Always use KDE default applications"
@@ -1525,7 +1525,7 @@ msgstr "Herzaman öntanımlı KDE uygulamaları kullan"
 
 #: ../data/gui/preferences_window.ui.h:33
 msgid "Always use Xfce default applications"
-msgstr ""
+msgstr "Daima Xfce varsayılan programlarını kullan"
 
 #: ../data/gui/preferences_window.ui.h:34
 msgid "Ask status message when I:"
@@ -1639,7 +1639,7 @@ msgstr ""
 
 #: ../data/gui/preferences_window.ui.h:62
 msgid "Hide all buttons in chat windows"
-msgstr ""
+msgstr "Konuşma penceresinde tüm düğmeleri gizle"
 
 #: ../data/gui/preferences_window.ui.h:63
 msgid "If checked, Gajim will allow others to detect the operation system you are using"
