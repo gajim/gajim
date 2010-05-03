@@ -79,7 +79,7 @@ class VideoInputManager(DeviceManager):
         self.devices = {}
         # Test src
         self.detect_element('videotestsrc', _('Video test'),
-                '%s is-live=true')
+                '%s is-live=true ! video/x-raw-yuv,framerate=10/1')
         # Auto src
         self.detect_element('autovideosrc', _('Autodetect'))
         # V4L2 src
