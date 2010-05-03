@@ -459,8 +459,13 @@ class JingleSession(object):
         for content in jingle.iterTags('content'):
             name = content['name']
             creator = content['creator']
-            cn = self.contents[(creator, name)]
-            cn.on_stanza(stanza, content, error, action)
+            if (creator, name) not in self.contents:
+                text = 'Content %s (created by %s) does not exist' % (name, creator)
+                self.__send_error(stanza, 'bad-request', text=text, type_='_modify')
+                raise xmpp.NodeProcessed
+            else:
+                cn = self.contents[(creator, name)]
+                cn.on_stanza(stanza, content, error, action)
 
     def __on_session_terminate(self, stanza, jingle, error, action):
         self.connection.delete_jingle_session(self.sid)
