@@ -184,17 +184,18 @@ class JingleSession(object):
             # The content is from us, accept it
             content.accepted = True
 
-    def remove_content(self, creator, name):
+    def remove_content(self, creator, name, reason=None):
         """
-        We do not need this now
+        Remove the content `name` created by `creator`
+        by sending content-remove, or by sending session-terminate if
+        there is no content left.
         """
-        #TODO:
         if (creator, name) in self.contents:
             content = self.contents[(creator, name)]
             if len(self.contents) > 1:
-                self.__content_remove(content)
+                self.__content_remove(content, reason)
             self.contents[(creator, name)].destroy()
-        if len(self.contents) == 0:
+        if not self.contents:
             self.end_session()
 
     def modify_content(self, creator, name, *someother):
@@ -549,7 +550,7 @@ class JingleSession(object):
                     break
         return (reason, text)
 
-    def __make_jingle(self, action):
+    def __make_jingle(self, action, reason=None):
         stanza = xmpp.Iq(typ='set', to=xmpp.JID(self.peerjid))
         attrs = {'action': action,
                 'sid': self.sid}
@@ -558,6 +559,8 @@ class JingleSession(object):
         elif action == 'session-accept':
             attrs['responder'] = self.responder
         jingle = stanza.addChild('jingle', attrs=attrs, namespace=xmpp.NS_JINGLE)
+        if reason is not None:
+            jingle.addChild(node=reason)
         return stanza, jingle
 
     def __send_error(self, stanza, error, jingle_error=None, text=None, type_=None):
@@ -614,9 +617,7 @@ class JingleSession(object):
 
     def _session_terminate(self, reason=None):
         assert self.state != JingleStates.ended
-        stanza, jingle = self.__make_jingle('session-terminate')
-        if reason is not None:
-            jingle.addChild(node=reason)
+        stanza, jingle = self.__make_jingle('session-terminate', reason=reason)
         self.__broadcast_all(stanza, jingle, None, 'session-terminate-sent')
         self.connection.connection.send(stanza)
         # TODO: Move to GUI?
@@ -659,9 +660,9 @@ class JingleSession(object):
     def __content_modify(self):
         assert self.state != JingleStates.ended
 
-    def __content_remove(self, content):
+    def __content_remove(self, content, reason=None):
         assert self.state != JingleStates.ended
-        stanza, jingle = self.__make_jingle('content-remove')
+        stanza, jingle = self.__make_jingle('content-remove', reason=reason)
         self.__append_content(jingle, content)
         self.connection.connection.send(stanza)
         # TODO: this will fail if content is not an RTP content

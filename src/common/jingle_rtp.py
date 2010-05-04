@@ -196,7 +196,7 @@ class JingleRTPContent(JingleContent):
                 if state == farsight.STREAM_STATE_FAILED:
                     reason = xmpp.Node('reason')
                     reason.setTag('failed-transport')
-                    self.session._session_terminate(reason)
+                    self.session.remove_content(self.creator, self.name, reason)
             elif name == 'farsight-error':
                 print 'Farsight error #%d!' % message.structure['error-no']
                 print 'Message: %s' % message.structure['error-msg']
@@ -217,6 +217,7 @@ class JingleRTPContent(JingleContent):
 
             # Remove old source
             self.src_bin.get_pad('src').unlink(sink_pad)
+            self.src_bin.set_state(gst.STATE_NULL)
             self.pipeline.remove(self.src_bin)
 
             if not self.stream_failed_once:
@@ -229,7 +230,7 @@ class JingleRTPContent(JingleContent):
                 # TODO: remove content, don't kill session
                 reason = xmpp.Node('reason')
                 reason.setTag('failed-application')
-                self.session._session_terminate(reason)
+                self.session.remove_content(self.creator, self.name, reason)
 
             # Start playing again
             self.pipeline.set_state(gst.STATE_PLAYING)
