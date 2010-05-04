@@ -99,8 +99,7 @@ class JingleRTPContent(JingleContent):
                 farsight.DIRECTION_RECV, 'nice', params)
 
     def is_ready(self):
-        return (JingleContent.is_ready(self) and self.candidates_ready
-                and self.p2psession.get_property('codecs-ready'))
+        return (JingleContent.is_ready(self) and self.candidates_ready)
 
     def make_bin_from_config(self, config_key, pipeline, text):
         pipeline = pipeline % gajim.config.get(config_key)
@@ -177,9 +176,8 @@ class JingleRTPContent(JingleContent):
             elif name == 'farsight-recv-codecs-changed':
                 pass
             elif name == 'farsight-codecs-changed':
-                if self.is_ready():
-                    self.session.on_session_state_changed(self)
-                # TODO: description-info
+                if self.sent and self.p2psession.get_property('codecs-ready'):
+                    self.send_description_info()
             elif name == 'farsight-local-candidates-prepared':
                 self.candidates_ready = True
                 if self.is_ready():

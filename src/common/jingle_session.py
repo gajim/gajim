@@ -264,6 +264,12 @@ class JingleSession(object):
         jingle.addChild(node=content)
         self.connection.connection.send(stanza)
 
+    def send_description_info(self, content):
+        assert self.state != JingleStates.ended
+        stanza, jingle = self.__make_jingle('description-info')
+        jingle.addChild(node=content)
+        self.connection.connection.send(stanza)
+
     def on_stanza(self, stanza):
         """
         A callback for ConnectionJingle. It gets stanza, then tries to send it to
