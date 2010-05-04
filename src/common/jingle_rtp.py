@@ -225,7 +225,6 @@ class JingleRTPContent(JingleContent):
                 self.src_bin.get_pad('src').link(sink_pad)
                 self.stream_failed_once = True
             else:
-                # TODO: remove content, don't kill session
                 reason = xmpp.Node('reason')
                 reason.setTag('failed-application')
                 self.session.remove_content(self.creator, self.name, reason)
