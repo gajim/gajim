@@ -674,7 +674,13 @@ class ConnectionVcard:
             # Ask metacontacts before roster
             self.get_metacontacts()
         elif self.awaiting_answers[id_][0] == PEP_CONFIG:
+            if iq_obj.getType() == 'error':
+                return
+            if not iq_obj.getTag('pubsub'):
+                return
             conf = iq_obj.getTag('pubsub').getTag('configure')
+            if not conf:
+                return
             node = conf.getAttr('node')
             form_tag = conf.getTag('x', namespace=common.xmpp.NS_DATA)
             if form_tag:
