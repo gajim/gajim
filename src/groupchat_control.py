@@ -1319,9 +1319,9 @@ class GroupchatControl(ChatControlBase):
                             'reason': _('room configuration changed to members-only') }
                     self.print_conversation(s, 'info', tim=tim, graphics=False)
                 elif '332' in statusCode:
-                    s = _('%(nick)s has been removed from the room (%(reason)s)') % {
-                            'nick': nick,
-                            'reason': _('system shutdown') }
+                    s = _('%(nick)s has been removed from the room '
+                        '(%(reason)s)') % {'nick': nick,
+                        'reason': _('system shutdown') }
                     self.print_conversation(s, 'info', tim=tim, graphics=False)
                 # Room has been destroyed.
                 elif 'destroyed' in statusCode:
@@ -1333,16 +1333,19 @@ class GroupchatControl(ChatControlBase):
                 self.remove_contact(nick)
                 self.draw_all_roles()
             else:
-                c = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
+                c = gajim.contacts.get_gc_contact(self.account, self.room_jid,
+                    nick)
                 c.show = show
                 c.status = status
             if nick == self.nick and (not statusCode or \
             '303' not in statusCode): # We became offline
                 self.got_disconnected()
                 contact = gajim.contacts.\
-                        get_contact_with_highest_priority(self.account, self.room_jid)
+                    get_contact_with_highest_priority(self.account,
+                    self.room_jid)
                 if contact:
-                    gajim.interface.roster.draw_contact(self.room_jid, self.account)
+                    gajim.interface.roster.draw_contact(self.room_jid,
+                        self.account)
                 if self.parent_win:
                     self.parent_win.redraw_tab(self)
         else:
@@ -1353,21 +1356,24 @@ class GroupchatControl(ChatControlBase):
                     self.nick = nick
                     s = _('You are now known as %s') % nick
                     self.print_conversation(s, 'info', tim=tim, graphics=False)
-                iter_ = self.add_contact_to_roster(nick, show, role, affiliation,
-                        status, jid)
+                iter_ = self.add_contact_to_roster(nick, show, role,
+                    affiliation, status, jid)
                 newly_created = True
                 self.draw_all_roles()
-                if statusCode and '201' in statusCode: # We just created the room
-                    gajim.connections[self.account].request_gc_config(self.room_jid)
+                if statusCode and '201' in statusCode:
+                    # We just created the room
+                    gajim.connections[self.account].request_gc_config(
+                        self.room_jid)
             else:
-                gc_c = gajim.contacts.get_gc_contact(self.account, self.room_jid,
-                        nick)
+                gc_c = gajim.contacts.get_gc_contact(self.account,
+                    self.room_jid, nick)
                 if not gc_c:
-                    log.error('%s has an iter, but no gc_contact instance')
+                    log.error('%s has an iter, but no gc_contact instance' % \
+                        nick)
                     return
                 # Re-get vcard if avatar has changed
-                # We do that here because we may request it to the real JID if we
-                # knows it. connections.py doesn't know it.
+                # We do that here because we may request it to the real JID if
+                # we knows it. connections.py doesn't know it.
                 con = gajim.connections[self.account]
                 if gc_c and gc_c.jid:
                     real_jid = gc_c.jid
