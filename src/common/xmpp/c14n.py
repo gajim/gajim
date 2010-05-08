@@ -57,4 +57,3 @@ def normalise_attr(val):
 
 def normalise_text(val):
     return val.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;').replace('\r', '&#xD;')
-

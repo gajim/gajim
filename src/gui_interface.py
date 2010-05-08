@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ## src/gajim.py
 ##
-## Copyright (C) 2003-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2003-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2004-2005 Vincent Hanquez <tab AT snarc.org>
 ## Copyright (C) 2005 Alex Podaras <bigpod AT gmail.com>
 ##                    Norman Rasmussen <norman AT rasmussen.co.za>
@@ -118,6 +118,15 @@ class Interface:
     def handle_event_error(self, unused, data):
         #('ERROR', account, (title_text, section_text))
         dialogs.ErrorDialog(data[0], data[1])
+
+    def handle_event_db_error(self, unused, data):
+        #('DB_ERROR', account, (title_text, section_text))
+        if self.db_error_dialog:
+            return
+        self.db_error_dialog = dialogs.ErrorDialog(data[0], data[1])
+        def destroyed(win):
+            self.db_error_dialog = None
+        self.db_error_dialog.connect('destroy', destroyed)
 
     def handle_event_information(self, unused, data):
         #('INFORMATION', account, (title_text, section_text))
@@ -1241,8 +1250,6 @@ class Interface:
             gajim.contacts.add_contact(account, contact)
             self.roster.add_contact(jid, account)
         else:
-            # it is an existing contact that might has changed
-            re_place = False
             # If contact has changed (sub, ask or group) update roster
             # Mind about observer status changes:
             #   According to xep 0162, a contact is not an observer anymore when
@@ -1250,7 +1257,6 @@ class Interface:
             old_groups = contacts[0].groups
             if contacts[0].sub != sub or contacts[0].ask != ask\
             or old_groups != groups:
-                re_place = True
                 # c.get_shown_groups() has changed. Reflect that in
                 # roster_winodow
                 self.roster.remove_contact(jid, account, force=True)
@@ -1259,13 +1265,11 @@ class Interface:
                 contact.sub = sub
                 contact.ask = ask
                 contact.groups = groups or []
-            if re_place:
-                self.roster.add_contact(jid, account)
-                # Refilter and update old groups
-                for group in old_groups:
-                    self.roster.draw_group(group, account)
-            else:
-                self.roster.draw_contact(jid, account)
+            self.roster.add_contact(jid, account)
+            # Refilter and update old groups
+            for group in old_groups:
+                self.roster.draw_group(group, account)
+            self.roster.draw_contact(jid, account)
 
         if self.remote_ctrl:
             self.remote_ctrl.raise_signal('RosterInfo', (account, array))
@@ -1668,9 +1672,10 @@ class Interface:
     def handle_event_zc_name_conflict(self, account, data):
         def on_ok(new_name):
             gajim.config.set_per('accounts', account, 'name', new_name)
+            show = gajim.connections[account].old_show
             status = gajim.connections[account].status
             gajim.connections[account].username = new_name
-            gajim.connections[account].change_status(status, '')
+            gajim.connections[account].change_status(show, status)
         def on_cancel():
             gajim.connections[account].change_status('offline', '')
 
@@ -1766,9 +1771,8 @@ class Interface:
 
         jid = gajim.get_jid_without_resource(peerjid)
         resource = gajim.get_resource_from_jid(peerjid)
-        ctrl = self.msg_win_mgr.get_control(peerjid, account)
-        if not ctrl:
-            ctrl = self.msg_win_mgr.get_control(jid, account)
+        ctrl = (self.msg_win_mgr.get_control(peerjid, account)
+                or self.msg_win_mgr.get_control(jid, account))
         if ctrl:
             if 'audio' in content_types:
                 ctrl.set_audio_state('connection_received', sid)
@@ -1802,9 +1806,8 @@ class Interface:
         if media in ('audio', 'video'):
             jid = gajim.get_jid_without_resource(peerjid)
             resource = gajim.get_resource_from_jid(peerjid)
-            ctrl = self.msg_win_mgr.get_control(peerjid, account)
-            if not ctrl:
-                ctrl = self.msg_win_mgr.get_control(jid, account)
+            ctrl = (self.msg_win_mgr.get_control(peerjid, account)
+                or self.msg_win_mgr.get_control(jid, account))
             if ctrl:
                 if media == 'audio':
                     ctrl.set_audio_state('connected', sid)
@@ -1816,26 +1819,29 @@ class Interface:
         peerjid, sid, media, reason = data
         jid = gajim.get_jid_without_resource(peerjid)
         resource = gajim.get_resource_from_jid(peerjid)
-        ctrl = self.msg_win_mgr.get_control(peerjid, account)
-        if not ctrl:
-            ctrl = self.msg_win_mgr.get_control(jid, account)
+        ctrl = (self.msg_win_mgr.get_control(peerjid, account)
+            or self.msg_win_mgr.get_control(jid, account))
         if ctrl:
-            if media in ('audio', None):
+            if media is None:
+                ctrl.stop_jingle(sid=sid, reason=reason)
+            elif media == 'audio':
                 ctrl.set_audio_state('stop', sid=sid, reason=reason)
-            if media in ('video', None):
+            elif media == 'video':
                 ctrl.set_video_state('stop', sid=sid, reason=reason)
         dialog = dialogs.VoIPCallReceivedDialog.get_dialog(peerjid, sid)
         if dialog:
-            dialog.dialog.destroy()
+            if media is None:
+                dialog.dialog.destroy()
+            else:
+                dialog.remove_contents((media, ))
 
     def handle_event_jingle_error(self, account, data):
         # ('JINGLE_ERROR', account, (peerjid, sid, reason))
         peerjid, sid, reason = data
         jid = gajim.get_jid_without_resource(peerjid)
         resource = gajim.get_resource_from_jid(peerjid)
-        ctrl = self.msg_win_mgr.get_control(peerjid, account)
-        if not ctrl:
-            ctrl = self.msg_win_mgr.get_control(jid, account)
+        ctrl = (self.msg_win_mgr.get_control(peerjid, account)
+            or self.msg_win_mgr.get_control(jid, account))
         if ctrl:
             ctrl.set_audio_state('error', reason=reason)
 
@@ -2090,6 +2096,7 @@ class Interface:
             'ROSTER': [self.handle_event_roster],
             'WARNING': [self.handle_event_warning],
             'ERROR': [self.handle_event_error],
+            'DB_ERROR': [self.handle_event_db_error],
             'INFORMATION': [self.handle_event_information],
             'ERROR_ANSWER': [self.handle_event_error_answer],
             'STATUS': [self.handle_event_status],
@@ -2455,8 +2462,7 @@ class Interface:
         # FIXME: recognize xmpp: and treat it specially
         links = r"((?<=\()[A-Za-z][A-Za-z0-9\+\.\-]*:"\
             r"([\w\.\-_~:/\?#\[\]@!\$&'\(\)\*\+,;=]|%[A-Fa-f0-9]{2})+"\
-            r"(?=\)))|([A-Za-z][A-Za-z0-9\+\.\-]*:([\w\.\-_~:/\?#\[\]@!\$"\
-            r"&'\(\)\*\+,;=]|%[A-Fa-f0-9]{2})+)"
+            r"(?=\)))|(\w[\w\+\.\-]*:(\S|%[A-Fa-f0-9]{2})+)"
 
         # 2nd one: at_least_one_char@at_least_one_char.at_least_one_char
         mail = r'\bmailto:\S*[^\s\W]|' r'\b\S+@\S+\.\S*[^\s\W]'
@@ -2473,7 +2479,7 @@ class Interface:
         basic_pattern = links + '|' + mail + '|' + legacy_prefixes
 
         link_pattern = basic_pattern
-        self.link_pattern_re = re.compile(link_pattern, re.IGNORECASE)
+        self.link_pattern_re = re.compile(link_pattern, re.I | re.U)
 
         if gajim.config.get('use_latex'):
             basic_pattern += latex
@@ -2800,6 +2806,8 @@ class Interface:
         if added_to_roster:
             ctrl.user_nick = gajim.nicks[account]
         gobject.idle_add(mw.window.grab_focus)
+
+        return ctrl
 
     def on_open_chat_window(self, widget, contact, account, resource=None,
     session=None):
@@ -3281,6 +3289,7 @@ class Interface:
         self.status_sent_to_groups = {}
         self.gpg_passphrase = {}
         self.pass_dialog = {}
+        self.db_error_dialog = None
         self.default_colors = {
                 'inmsgcolor': gajim.config.get('inmsgcolor'),
                 'outmsgcolor': gajim.config.get('outmsgcolor'),

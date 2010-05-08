@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ## src/gajim.py
 ##
-## Copyright (C) 2003-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2003-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2004-2005 Vincent Hanquez <tab AT snarc.org>
 ## Copyright (C) 2005 Alex Podaras <bigpod AT gmail.com>
 ##                    Norman Rasmussen <norman AT rasmussen.co.za>
@@ -135,6 +135,7 @@ if os.name == 'nt':
 # PyGTK2.10+ only throws a warning
 warnings.filterwarnings('error', module='gtk')
 try:
+    import gobject
     import gtk
 except Warning, msg2:
     if str(msg2) == 'could not open display':
@@ -143,6 +144,8 @@ except Warning, msg2:
         print >> sys.stderr, _('importing PyGTK failed: %s') % str(msg2)
     sys.exit()
 warnings.resetwarnings()
+
+gobject.set_prgname('gajim')
 
 if os.name == 'nt':
     warnings.filterwarnings(action='ignore')
@@ -211,13 +214,6 @@ if pritext:
 del pritext
 
 import gtkexcepthook
-
-import gobject
-if not hasattr(gobject, 'timeout_add_seconds'):
-    def timeout_add_seconds_fake(time_sec, *args):
-        return gobject.timeout_add(time_sec * 1000, *args)
-    gobject.timeout_add_seconds = timeout_add_seconds_fake
-
 
 import signal
 import gtkgui_helpers
@@ -533,7 +529,7 @@ def pid_alive():
     if os.name == 'nt':
         try:
             from ctypes import (windll, c_ulong, c_int, Structure, c_char)
-            from ctypes import (POINTER, pointer, )
+            from ctypes import (POINTER, pointer, sizeof)
         except Exception:
             return True
 
@@ -550,26 +546,26 @@ def pid_alive():
                     ('dwFlags', c_ulong, ),
                     ('szExeFile', c_char*512, ),
                     ]
-            def __init__(self):
-                super(PROCESSENTRY32, self).__init__(self, 512+9*4)
 
-        k = windll.kernel32
-        k.CreateToolhelp32Snapshot.argtypes = c_ulong, c_ulong,
-        k.CreateToolhelp32Snapshot.restype = c_int
-        k.Process32First.argtypes = c_int, POINTER(PROCESSENTRY32),
-        k.Process32First.restype = c_int
-        k.Process32Next.argtypes = c_int, POINTER(PROCESSENTRY32),
-        k.Process32Next.restype = c_int
+        kernel = windll.kernel32
+        kernel.CreateToolhelp32Snapshot.argtypes = c_ulong, c_ulong,
+        kernel.CreateToolhelp32Snapshot.restype = c_int
+        kernel.Process32First.argtypes = c_int, POINTER(PROCESSENTRY32),
+        kernel.Process32First.restype = c_int
+        kernel.Process32Next.argtypes = c_int, POINTER(PROCESSENTRY32),
+        kernel.Process32Next.restype = c_int
 
         def get_p(pid_):
-            h = k.CreateToolhelp32Snapshot(2, 0) # TH32CS_SNAPPROCESS
-            assert h > 0, 'CreateToolhelp32Snapshot failed'
-            b = pointer(PROCESSENTRY32())
-            f3 = k.Process32First(h, b)
+            TH32CS_SNAPPROCESS = 2
+            CreateToolhelp32Snapshot = kernel.CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0)
+            assert CreateToolhelp32Snapshot > 0, 'CreateToolhelp32Snapshot failed'
+            pe32 = PROCESSENTRY32()
+            pe32.dwSize = sizeof( PROCESSENTRY32 )
+            f3 = kernel.Process32First(CreateToolhelp32Snapshot, pointer(pe32))
             while f3:
-                if b.contents.th32ProcessID == pid_:
-                    return b.contents.szExeFile
-                f3 = k.Process32Next(h, b)
+                if pe32.th32ProcessID == pid_:
+                    return pe32.szExeFile
+                f3 = kernel.Process32Next(CreateToolhelp32Snapshot, pointer(pe32))
 
         if get_p(pid) in ('python.exe', 'gajim.exe'):
             return True

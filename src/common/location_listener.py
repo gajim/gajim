@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ## src/common/location_listener.py
 ##
-## Copyright (C) 2009 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2009-2010 Yann Leboulanger <asterix AT lagaule.org>
 ##
 ## This file is part of Gajim.
 ##
@@ -17,6 +17,8 @@
 ## You should have received a copy of the GNU General Public License
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
+
+from datetime import datetime
 
 from common import gajim
 from common import pep
@@ -37,47 +39,47 @@ class LocationListener:
         self._data = {}
 
     def get_data(self):
-        self._get_address()
-        self._get_position()
-
-    def _get_address(self):
         bus = dbus.SessionBus()
-        if 'org.freedesktop.Geoclue.Master' not in bus.list_names():
-            self._on_geoclue_address_changed()
+        try:
+            # Initializes Geoclue.
+            obj = bus.get_object('org.freedesktop.Geoclue.Master',
+                    '/org/freedesktop/Geoclue/Master')
+            # get MasterClient path
+            path = obj.Create()
+            # get MasterClient
+            cli = bus.get_object('org.freedesktop.Geoclue.Master', path)
+            cli.SetRequirements(1, 0, True, 1023)
+    
+            self._get_address(cli)
+            self._get_position(cli)
+        except:
+            self._on_geoclue_position_changed()
             return
-        obj = bus.get_object('org.freedesktop.Geoclue.Master',
-                '/org/freedesktop/Geoclue/Master')
-        # get MasterClient path
-        path = obj.Create()
-        # get MasterClient
-        cli = bus.get_object('org.freedesktop.Geoclue.Master', path)
+        
+
+    def _get_address(self, cli):
+        bus = dbus.SessionBus()
         cli.AddressStart()
         # Check that there is a provider
         name, description, service, path = cli.GetAddressProvider()
         if path:
-            timestamp, address, accuracy = cli.GetAddress()
+            provider = bus.get_object(service, path)
+            timestamp, address, accuracy = provider.GetAddress()
             self._on_geoclue_address_changed(timestamp, address, accuracy)
 
-    def _get_position(self):
+    def _get_position(self, cli):
         bus = dbus.SessionBus()
-        if 'org.freedesktop.Geoclue.Master' not in bus.list_names():
-            self._on_geoclue_position_changed()
-            return
-        obj = bus.get_object('org.freedesktop.Geoclue.Master',
-                '/org/freedesktop/Geoclue/Master')
-        # get MasterClient path
-        path = obj.Create()
-        # get MasterClient
-        cli = bus.get_object('org.freedesktop.Geoclue.Master', path)
         cli.PositionStart()
         # Check that there is a provider
         name, description, service, path = cli.GetPositionProvider()
         if path:
-            fields, timestamp, lat, lon, alt, accuray = cli.GetPosition()
+            provider = bus.get_object(service, path)
+            fields, timestamp, lat, lon, alt, accuracy = provider.GetPosition()
             self._on_geoclue_position_changed(fields, timestamp, lat, lon, alt,
                     accuracy)
 
     def start(self):
+        self.location_info = {}
         self.get_data()
         bus = dbus.SessionBus()
         # Geoclue
@@ -96,7 +98,7 @@ class LocationListener:
         'region', 'street']:
             self._data[field] = address.get(field, None)
         if timestamp:
-            self._data['timestamp'] = timestamp
+            self._data['timestamp'] = self._timestamp_to_utc(timestamp)
         if accuracy:
             # in PEP it's horizontal accuracy
             self._data['accuracy'] = accuracy[1]
@@ -110,7 +112,7 @@ class LocationListener:
             if _dict[field] is not None:
                 self._data[field] = _dict[field]
         if timestamp:
-            self._data['timestamp'] = timestamp
+            self._data['timestamp'] = self._timestamp_to_utc(timestamp)
         if accuracy:
             # in PEP it's horizontal accuracy
             self._data['accuracy'] = accuracy[1]
@@ -123,10 +125,21 @@ class LocationListener:
                 continue
             if not gajim.config.get_per('accounts', acct, 'publish_location'):
                 continue
-            if gajim.connections[acct].location_info == self._data:
+            if self.location_info == self._data:
                 continue
+            if 'timestamp' in self.location_info and 'timestamp' in self._data:
+                last_data = self.location_info.copy()
+                del last_data['timestamp']
+                new_data = self._data.copy()
+                del new_data['timestamp']
+                if last_data == new_data:
+                    continue
             gajim.connections[acct].send_location(self._data)
-            gajim.connections[acct].location_info = self._data
+            self.location_info = self._data.copy()
+
+    def _timestamp_to_utc(self, timestamp):
+        time = datetime.utcfromtimestamp(timestamp)
+        return time.strftime('%Y-%m-%dT%H:%MZ')
 
 def enable():
     listener = LocationListener.get()

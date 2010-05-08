@@ -1,8 +1,8 @@
 # -*- coding:utf-8 -*-
 ## src/session.py
 ##
-## Copyright (C) 2008 Yann Leboulanger <asterix AT lagaule.org>
-##                    Brendan Taylor <whateley AT gmail.com>
+## Copyright (C) 2008-2010 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2008 Brendan Taylor <whateley AT gmail.com>
 ##                    Jonathan Schleifer <js-gajim AT webkeks.org>
 ##                    Stephan Erb <steve-e AT h3c.de>
 ##

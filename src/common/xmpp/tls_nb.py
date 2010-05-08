@@ -349,10 +349,44 @@ class NonBlockingTLS(PlugIn):
     def _startSSL_pyOpenSSL(self):
         log.debug("_startSSL_pyOpenSSL called")
         tcpsock = self._owner
-        # See http://docs.python.org/dev/library/ssl.html
-        tcpsock._sslContext = OpenSSL.SSL.Context(OpenSSL.SSL.SSLv23_METHOD)
-        tcpsock._sslContext.set_options(OpenSSL.SSL.OP_NO_SSLv2 | \
-            OpenSSL.SSL.OP_NO_TICKET)
+        # NonBlockingHTTPBOSH instance has no attribute _owner
+        if hasattr(tcpsock, '_owner') and tcpsock._owner._caller.client_cert \
+        and os.path.exists(tcpsock._owner._caller.client_cert):
+            conn = tcpsock._owner._caller
+            # FIXME make a checkbox for Client Cert / SSLv23 / TLSv1
+            # If we are going to use a client cert/key pair for authentication,
+            # we choose TLSv1 method.
+            tcpsock._sslContext = OpenSSL.SSL.Context(OpenSSL.SSL.TLSv1_METHOD)
+            log.debug('Using client cert and key from %s' % conn.client_cert)
+            try:
+                p12 = OpenSSL.crypto.load_pkcs12(open(conn.client_cert).read())
+            except OpenSSL.crypto.Error, exception_obj:
+                log.warning('Unable to load client pkcs12 certificate from '
+                    'file %s: %s ... Is it a valid PKCS12 cert?' % \
+                (conn.client_cert, exception_obj.args))
+            except:
+                log.warning('Unknown error while loading certificate from file '
+                    '%s' % conn.client_cert)
+            else:
+                log.info('PKCS12 Client cert loaded OK')
+                try:
+                    tcpsock._sslContext.use_certificate(p12.get_certificate())
+                    tcpsock._sslContext.use_privatekey(p12.get_privatekey())
+                    log.info('p12 cert and key loaded')
+                except OpenSSL.crypto.Error, exception_obj:
+                    log.warning('Unable to extract client certificate from '
+                        'file %s' % conn.client_cert)
+                except Exception, msg:
+                    log.warning('Unknown error extracting client certificate '
+                        'from file %s: %s' % (conn.client_cert, msg))
+                else:
+                    log.info('client cert and key loaded OK')
+        else:
+            # See http://docs.python.org/dev/library/ssl.html
+            tcpsock._sslContext = OpenSSL.SSL.Context(OpenSSL.SSL.SSLv23_METHOD)
+            tcpsock._sslContext.set_options(OpenSSL.SSL.OP_NO_SSLv2 | \
+                OpenSSL.SSL.OP_NO_TICKET)
+
         tcpsock.ssl_errnum = 0
         tcpsock._sslContext.set_verify(OpenSSL.SSL.VERIFY_PEER,
                 self._ssl_verify_callback)

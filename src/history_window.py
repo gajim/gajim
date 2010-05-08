@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ## src/history_window.py
 ##
-## Copyright (C) 2003-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2003-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2005 Vincent Hanquez <tab AT snarc.org>
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem AT gmail.com>
 ## Copyright (C) 2006 Dimitur Kirov <dkirov AT gmail.com>
@@ -337,6 +337,11 @@ class HistoryWindow:
         if not self.jid:
             return
         year, month, day = widget.get_date() # integers
+        if year < 1900:
+            widget.select_month(0, 1900)
+            widget.select_day(1)
+            return
+
         # in gtk January is 1, in python January is 0,
         # I want the second
         # first day of month is 1 not 0
@@ -345,7 +350,7 @@ class HistoryWindow:
         days_in_this_month = calendar.monthrange(year, month)[1]
         try:
             log_days = gajim.logger.get_days_with_logs(self.jid, year, month,
-                    days_in_this_month, self.account)
+                days_in_this_month, self.account)
         except exceptions.PysqliteOperationalError, e:
             dialogs.ErrorDialog(_('Disk Error'), str(e))
             return

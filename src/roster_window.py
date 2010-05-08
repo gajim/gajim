@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ## src/roster_window.py
 ##
-## Copyright (C) 2003-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2003-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2005 Alex Mauer <hawke AT hawkesnest.net>
 ##                    Stéphan Kochen <stephan AT kochen.nl>
 ## Copyright (C) 2005-2006 Dimitur Kirov <dkirov AT gmail.com>
@@ -1398,7 +1398,7 @@ class RosterWindow:
                 self.on_modelfilter_row_has_child_toggled)
         self.tree.set_model(self.modelfilter)
 
-        for acct in gajim.connections:
+        for acct in gajim.contacts.get_accounts():
             self.add_account(acct)
             self.add_account_contacts(acct)
         # Recalculate column width for ellipsizing
@@ -2343,7 +2343,7 @@ class RosterWindow:
             self.quit_on_next_offline = 0
             accounts_to_disconnect = []
             for acct in accounts:
-                if gajim.connections[acct].connected:
+                if gajim.connections[acct].connected > 1:
                     self.quit_on_next_offline += 1
                     accounts_to_disconnect.append(acct)
 

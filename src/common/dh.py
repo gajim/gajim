@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ## src/common/dh.py
 ##
-## Copyright (C) 2007 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2007-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2008 Brendan Taylor <whateley AT gmail.com>
 ##
 ## This file is part of Gajim.
@@ -28,28 +28,27 @@ These constants have been obtained from RFC2409 and RFC3526.
 
 import string
 
-generators = [  None, # one to get the right offset
-                                                                2,
-                                                                2,
-                                                                None,
-                                                                None,
-                                                                2,
-                                                                None,
-                                                                None,
-                                                                None,
-                                                                None,
-                                                                None,
-                                                                None,
-                                                                None,
-                                                                None,
-                                                                2,                      # group 14
-                                                                2,
-                                                                2,
-                                                                2,
-                                                                2,
-                                                                                        ]
+generators = [None, # one to get the right offset
+              2,
+              2,
+              None,
+              None,
+              2,
+              None,
+              None,
+              None,
+              None,
+              None,
+              None,
+              None,
+              None,
+              2, # group 14
+              2,
+              2,
+              2,
+              2]
 
-hex_primes = [  None,
+hex_primes = [None,
 
 # group 1
 '''FFFFFFFF FFFFFFFF C90FDAA2 2168C234 C4C6628B 80DC1CD1

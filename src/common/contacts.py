@@ -4,7 +4,7 @@
 ## Copyright (C) 2006 Dimitur Kirov <dkirov AT gmail.com>
 ##                    Travis Shirk <travis AT pobox.com>
 ##                    Nikos Kouremenos <kourem AT gmail.com>
-## Copyright (C) 2006-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2006-2010 Yann Leboulanger <asterix AT lagaule.org>
 ##                         Jean-Marie Traissard <jim AT lapin.org>
 ## Copyright (C) 2007 Lukas Petrovicky <lukas AT petrovicky.net>
 ##                    Tomasz Melcer <liori AT exroot.org>
@@ -496,11 +496,8 @@ class Contacts():
         return self._contacts.keys()
 
     def get_contacts_jid_list(self):
-        contacts = self._contacts.keys()
-        for jid in self._contacts.keys():
-            if self._contacts[jid][0].is_groupchat():
-                contacts.remove(jid)
-        return contacts
+        return [jid for jid, contact in self._contacts.iteritems() if not
+                contact[0].is_groupchat()]
 
     def get_contact_from_full_jid(self, fjid):
         """

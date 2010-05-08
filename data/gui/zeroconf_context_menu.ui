@@ -5,7 +5,7 @@
   <object class="GtkMenu" id="zeroconf_context_menu">
     <child>
       <object class="GtkImageMenuItem" id="status_menuitem">
-        <property name="label">_Status</property>
+        <property name="label" translatable="yes">_Status</property>
         <property name="visible">True</property>
         <property name="use_underline">True</property>
         <property name="image">image1</property>
@@ -20,7 +20,7 @@
     </child>
     <child>
       <object class="GtkImageMenuItem" id="zeroconf_properties_menuitem">
-        <property name="label">_Modify Account...</property>
+        <property name="label" translatable="yes">_Modify Account...</property>
         <property name="visible">True</property>
         <property name="use_underline">True</property>
         <property name="image">image2</property>

@@ -72,11 +72,12 @@ class ConnectionVcard(connection_handlers.ConnectionVcard):
 
 class ConnectionHandlersZeroconf(ConnectionVcard,
 ConnectionSocks5BytestreamZeroconf, ConnectionCommands, ConnectionPEP,
-connection_handlers.ConnectionHandlersBase):
+connection_handlers.ConnectionHandlersBase, connection_handlers.ConnectionJingle):
     def __init__(self):
         ConnectionVcard.__init__(self)
         ConnectionSocks5BytestreamZeroconf.__init__(self)
         ConnectionCommands.__init__(self)
+        connection_handlers.ConnectionJingle.__init__(self)
         connection_handlers.ConnectionHandlersBase.__init__(self)
 
         try:

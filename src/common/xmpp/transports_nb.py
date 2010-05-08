@@ -342,6 +342,7 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
         # variable for errno symbol that will be found from exception raised
         # from connect()
         errnum = 0
+        errstr = str()
 
         # set timeout for TCP connecting - if nonblocking connect() fails, pollend
         # is called. If if succeeds pollout is called.
@@ -542,7 +543,7 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
                         readable=True)
                 self.raise_event(DATA_SENT, sent_data)
 
-        except socket.error, e:
+        except Exception:
             log.error('_do_send:', exc_info=True)
             traceback.print_exc()
             self.disconnect()

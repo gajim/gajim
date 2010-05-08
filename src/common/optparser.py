@@ -2,7 +2,7 @@
 ## src/common/optparser.py
 ##
 ## Copyright (C) 2003-2005 Vincent Hanquez <tab AT snarc.org>
-## Copyright (C) 2003-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2003-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2005-2006 Dimitur Kirov <dkirov AT gmail.com>
 ##                         Nikos Kouremenos <kourem AT gmail.com>
 ## Copyright (C) 2006-2008 Jean-Marie Traissard <jim AT lapin.org>
@@ -704,9 +704,9 @@ class OptionsParser:
         """
         Remove hardcoded ../data/sounds from config
         """
-        dirs = ('../data', gajim.gajimpaths.data_root, gajim.DATA_DIR)
+        dirs = ['../data', gajim.gajimpaths.data_root, gajim.DATA_DIR]
         if os.name != 'nt':
-            dirs += (os.path.expanduser(u'~/.gajim'))
+            dirs.append(os.path.expanduser(u'~/.gajim'))
         for evt in gajim.config.get_per('soundevents'):
             path = gajim.config.get_per('soundevents', evt, 'path')
             # absolute and relative passes are necessary

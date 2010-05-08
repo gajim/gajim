@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ## src/dataforms_widget.py
 ##
-## Copyright (C) 2003-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2003-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2006 Tomasz Melcer <liori AT exroot.org>
 ## Copyright (C) 2006-2007 Jean-Marie Traissard <jim AT lapin.org>
 ##
@@ -400,7 +400,7 @@ class SingleForm(gtk.Table, object):
                         check.set_active(value in field.values)
                         check.connect('toggled',
                                 self.on_list_multi_checkbutton_toggled, field, value)
-                    widget.pack_start(check, expand=False)
+                        widget.pack_start(check, expand=False)
                 else:
                     # more than 5 options: show combobox
                     def on_list_multi_treeview_changed(selection, f):

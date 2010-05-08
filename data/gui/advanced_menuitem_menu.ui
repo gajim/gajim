@@ -26,7 +26,7 @@
           <object class="GtkMenu" id="administrator_menuitem_menu">
             <child>
               <object class="GtkImageMenuItem" id="send_server_message_menuitem">
-                <property name="label">_Send Server Message...</property>
+                <property name="label" translatable="yes">_Send Server Message...</property>
                 <property name="tooltip_text" translatable="yes">Sends a message to users currently connected to this server</property>
                 <property name="use_underline">True</property>
                 <property name="image">image1</property>
@@ -54,7 +54,7 @@
             </child>
             <child>
               <object class="GtkImageMenuItem" id="delete_motd_menuitem">
-                <property name="label">Delete MOTD</property>
+                <property name="label" translatable="yes">Delete MOTD</property>
                 <property name="tooltip_text" translatable="yes">Deletes Message of the Day</property>
                 <property name="image">image2</property>
                 <property name="use_stock">False</property>

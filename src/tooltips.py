@@ -5,7 +5,7 @@
 ##                    Stéphan Kochen <stephan AT kochen.nl>
 ## Copyright (C) 2005-2006 Dimitur Kirov <dkirov AT gmail.com>
 ## Copyright (C) 2005-2007 Nikos Kouremenos <kourem AT gmail.com>
-## Copyright (C) 2005-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2005-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2006 Travis Shirk <travis AT pobox.com>
 ##                    Stefan Bethge <stefan AT lanpartei.de>
 ## Copyright (C) 2006-2007 Jean-Marie Traissard <jim AT lapin.org>
@@ -33,12 +33,15 @@ import gobject
 import os
 import time
 import locale
+from datetime import datetime
+from datetime import timedelta
 
 import gtkgui_helpers
 
 from common import gajim
 from common import helpers
 from common.pep import MOODS, ACTIVITIES
+from common.i18n import Q_
 
 class BaseTooltip:
     """
@@ -175,6 +178,44 @@ class BaseTooltip:
         self.id = None
         self.cur_data = None
         self.check_last_time = None
+
+    @staticmethod
+    def colorize_status(status):
+        """
+        Colorize the status message inside the tooltip by it's
+        semantics. Color palette is the Tango.
+        """
+        formatted = "<span foreground='%s'>%s</span>"
+        if status.startswith(Q_("?user status:Available")):
+            status = formatted % ('#73D216', status)
+        elif status.startswith(_("Free for Chat")):
+            status = formatted % ('#3465A4', status)
+        elif status.startswith(_("Away")):
+            status = formatted % ('#EDD400', status)
+        elif status.startswith(_("Busy")):
+            status = formatted % ('#F57900', status)
+        elif status.startswith(_("Not Available")):
+            status = formatted % ('#CC0000', status)
+        elif status.startswith(_("Offline")):
+            status = formatted % ('#555753', status)
+        return status
+
+    @staticmethod
+    def colorize_affiliation(affiliation):
+        """
+        Color the affiliation of a MUC participant inside the tooltip by
+        it's semantics. Color palette is the Tango.
+        """
+        formatted = "<span foreground='%s'>%s</span>"
+        if affiliation.startswith(Q_("?Group Chat Contact Affiliation:None")):
+            affiliation = formatted % ('#555753', affiliation)
+        elif affiliation.startswith(_("Member")):
+            affiliation = formatted % ('#73D216', affiliation)
+        elif affiliation.startswith(_("Administrator")):
+            affiliation = formatted % ('#F57900', affiliation)
+        elif affiliation.startswith(_("Owner")):
+            affiliation = formatted % ('#CC0000', affiliation)
+        return affiliation
 
 class StatusTable:
     """
@@ -342,23 +383,25 @@ class GCTooltip(BaseTooltip):
                 status = '<i>' +\
                         gobject.markup_escape_text(status) + '</i>'
                 properties.append((status, None))
-        else: # no status message, show SHOW instead
-            show = helpers.get_uf_show(contact.show)
-            show = '<i>' + show + '</i>'
-            properties.append((show, None))
 
-        if contact.jid.strip() != '':
-            properties.append((_('Jabber ID: '), contact.jid))
+        show = helpers.get_uf_show(contact.show)
+        show = self.colorize_status(show)
+        properties.append((show, None))
 
-        if hasattr(contact, 'resource') and contact.resource.strip() != '':
+        if contact.jid.strip():
+            properties.append((_('Jabber ID: '), "<b>%s</b>" % contact.jid))
+
+        if hasattr(contact, 'resource') and contact.resource.strip():
             properties.append((_('Resource: '),
-                    gobject.markup_escape_text(contact.resource) ))
+                    gobject.markup_escape_text(contact.resource)))
+
         if contact.affiliation != 'none':
             uf_affiliation = helpers.get_uf_affiliation(contact.affiliation)
-            affiliation_str = \
+            uf_affiliation =\
                     _('%(owner_or_admin_or_member)s of this group chat') %\
                     {'owner_or_admin_or_member': uf_affiliation}
-            properties.append((affiliation_str, None))
+            uf_affiliation = self.colorize_affiliation(uf_affiliation)
+            properties.append((uf_affiliation, None))
 
         # Add avatar
         puny_name = helpers.sanitize_filename(contact.name)
@@ -542,8 +585,7 @@ class RosterTooltip(NotificationAreaTooltip):
                         show = _('Connected')
                     else:
                         show = _('Disconnected')
-                show = '<i>' + show + '</i>'
-                # we append show below
+                show = self.colorize_status(show)
 
                 if contact.status:
                     status = contact.status.strip()
@@ -559,7 +601,7 @@ class RosterTooltip(NotificationAreaTooltip):
 
         self._append_pep_info(contact, properties)
 
-        properties.append((_('Jabber ID: '), prim_contact.jid ))
+        properties.append((_('Jabber ID: '), "<b>%s</b>" % prim_contact.jid))
 
         # contact has only one ressource
         if num_resources == 1 and contact.resource:
@@ -584,21 +626,25 @@ class RosterTooltip(NotificationAreaTooltip):
                         gobject.markup_escape_text(keyID)))
 
         if contact.last_activity_time:
-            text = _(' since %s')
+            last_active = datetime(*contact.last_activity_time[:6])
+            current = datetime.now()
 
-            if time.strftime('%j', time.localtime())== \
-                            time.strftime('%j', contact.last_activity_time):
-            # it's today, show only the locale hour representation
-                local_time = time.strftime('%I:%M %p',
-                        contact.last_activity_time)
+            diff = current - last_active
+            diff = timedelta(diff.days, diff.seconds)
+
+            if last_active.date() == current.date():
+                formatted = last_active.strftime("%X")
             else:
-                # time.strftime returns locale encoded string
-                local_time = time.strftime('%c',
-                        contact.last_activity_time)
-            local_time = local_time.decode(
-                    locale.getpreferredencoding())
-            text = text % local_time
-            properties.append(('Idle' + text, None))
+                formatted = last_active.strftime("%c")
+
+            # Do not show the "Idle since" and "Idle for" items if there
+            # is no meaningful difference between last activity time and
+            # current time.
+            if diff.days > 0 or diff.seconds > 0:
+                cs = "<span foreground='#888A85'>%s</span>"
+                properties.append((str(), None))
+                properties.append(((cs % _("Idle since %s")) % formatted, None))
+                properties.append(((cs % _("Idle for %s")) % str(diff), None))
 
         while properties:
             property_ = properties.pop(0)
@@ -649,23 +695,19 @@ class RosterTooltip(NotificationAreaTooltip):
         """
         if 'mood' in contact.pep:
             mood = contact.pep['mood'].asMarkupText()
-            mood_string = _('Mood:') + ' %s' % mood
-            properties.append((mood_string, None))
+            properties.append((_("Mood: %s") % mood, None))
 
         if 'activity' in contact.pep:
             activity = contact.pep['activity'].asMarkupText()
-            activity_string = _('Activity:') + ' %s' % activity
-            properties.append((activity_string, None))
+            properties.append((_("Activity: %s") % activity, None))
 
         if 'tune' in contact.pep:
             tune = contact.pep['tune'].asMarkupText()
-            tune_string = _('Tune:') + ' %s' % tune
-            properties.append((tune_string, None))
+            properties.append((_("Tune: %s") % tune, None))
 
         if 'location' in contact.pep:
             location = contact.pep['location'].asMarkupText()
-            location_string = _('Location:') + ' %s' % location
-            properties.append((location_string, None))
+            properties.append((_("Location: %s") % location, None))
 
 
 class FileTransfersTooltip(BaseTooltip):

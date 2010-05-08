@@ -3,7 +3,7 @@
 ##
 ## Copyright (C) 2006 Nikos Kouremenos <kourem AT gmail.com>
 ## Copyright (C) 2006-2007 Jean-Marie Traissard <jim AT lapin.org>
-## Copyright (C) 2006-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2006-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2007 Lukas Petrovicky <lukas AT petrovicky.net>
 ##                    Julien Pivotto <roidelapluie AT gmail.com>
 ## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
@@ -384,7 +384,8 @@ class StatusIcon:
             else:
                 if not win.get_property('visible'):
                     win.show_all()
-                    win.move(gajim.config.get('roster_x-position'),
+                    gtkgui_helpers.move_window(win,
+                        gajim.config.get('roster_x-position'),
                         gajim.config.get('roster_y-position'))
                 if not gajim.config.get('roster_window_skip_taskbar'):
                     win.set_property('skip-taskbar-hint', False)

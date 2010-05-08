@@ -6,7 +6,7 @@
 ## Copyright (C) 2006-2007 Tomasz Melcer <liori AT exroot.org>
 ##                         Travis Shirk <travis AT pobox.com>
 ##                         Nikos Kouremenos <kourem AT gmail.com>
-## Copyright (C) 2006-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2006-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2007 Julien Pivotto <roidelapluie AT gmail.com>
 ## Copyright (C) 2007-2008 Brendan Taylor <whateley AT gmail.com>
 ##                         Jean-Marie Traissard <jim AT lapin.org>
@@ -643,6 +643,11 @@ class ConnectionVcard:
             namespace=common.xmpp.NS_ROSTER_VER):
                 version = gajim.config.get_per('accounts', self.name,
                     'roster_version')
+                if version and not gajim.contacts.get_contacts_jid_list(
+                self.name):
+                    gajim.config.set_per('accounts', self.name,
+                        'roster_version', '')
+                    version = None
 
             iq_id = self.connection.initRoster(version=version)
             self.awaiting_answers[iq_id] = (ROSTER_ARRIVED, )
@@ -669,7 +674,13 @@ class ConnectionVcard:
             # Ask metacontacts before roster
             self.get_metacontacts()
         elif self.awaiting_answers[id_][0] == PEP_CONFIG:
+            if iq_obj.getType() == 'error':
+                return
+            if not iq_obj.getTag('pubsub'):
+                return
             conf = iq_obj.getTag('pubsub').getTag('configure')
+            if not conf:
+                return
             node = conf.getAttr('node')
             form_tag = conf.getTag('x', namespace=common.xmpp.NS_DATA)
             if form_tag:
@@ -782,12 +793,44 @@ class ConnectionHandlersBase:
         # keep the jids we auto added (transports contacts) to not send the
         # SUBSCRIBED event to gui
         self.automatically_added = []
+        # IDs of jabber:iq:last requests
+        self.last_ids = []
 
         # keep track of sessions this connection has with other JIDs
         self.sessions = {}
 
         if gajim.otr_module:
             self.otr_userstates = gajim.otr_module.otrl_userstate_create()
+
+    def _ErrorCB(self, con, iq_obj):
+        log.debug('ErrorCB')
+        jid_from = helpers.get_full_jid_from_iq(iq_obj)
+        jid_stripped, resource = gajim.get_room_and_nick_from_fjid(jid_from)
+        id_ = unicode(iq_obj.getID())
+        if id_ in self.last_ids:
+            self.dispatch('LAST_STATUS_TIME', (jid_stripped, resource, -1, ''))
+            self.last_ids.remove(id_)
+            return
+
+    def _LastResultCB(self, con, iq_obj):
+        log.debug('LastResultCB')
+        qp = iq_obj.getTag('query')
+        seconds = qp.getAttr('seconds')
+        status = qp.getData()
+        try:
+            seconds = int(seconds)
+        except Exception:
+            return
+        id_ = iq_obj.getID()
+        if id_ in self.groupchat_jids:
+            who = self.groupchat_jids[id_]
+            del self.groupchat_jids[id_]
+        else:
+            who = helpers.get_full_jid_from_iq(iq_obj)
+        if id_ in self.last_ids:
+            self.last_ids.remove(id_)
+        jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
+        self.dispatch('LAST_STATUS_TIME', (jid_stripped, resource, seconds, status))
 
     def get_sessions(self, jid):
         """
@@ -939,8 +982,6 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
         # keep the latest subscribed event for each jid to prevent loop when we
         # acknowledge presences
         self.subscribed_events = {}
-        # IDs of jabber:iq:last requests
-        self.last_ids = []
         # IDs of jabber:iq:version requests
         self.version_ids = []
         # IDs of urn:xmpp:time requests
@@ -963,10 +1004,14 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
         if not self.connection or self.connected < 2:
             return
         if answer == 'yes':
-            self.connection.send(iq_obj.buildReply('result'))
+            confirm = iq_obj.getTag('confirm')
+            reply = iq_obj.buildReply('result')
+            if iq_obj.getName() == 'message':
+                reply.addChild(node=confirm)
+            self.connection.send(reply)
         elif answer == 'no':
             err = common.xmpp.Error(iq_obj,
-                    common.xmpp.protocol.ERR_NOT_AUTHORIZED)
+                common.xmpp.protocol.ERR_NOT_AUTHORIZED)
             self.connection.send(err)
 
     def _HttpAuthCB(self, con, iq_obj):
@@ -984,16 +1029,13 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
 
     def _ErrorCB(self, con, iq_obj):
         log.debug('ErrorCB')
+        ConnectionHandlersBase._ErrorCB(self, con, iq_obj)
         jid_from = helpers.get_full_jid_from_iq(iq_obj)
         jid_stripped, resource = gajim.get_room_and_nick_from_fjid(jid_from)
         id_ = unicode(iq_obj.getID())
         if id_ in self.version_ids:
             self.dispatch('OS_INFO', (jid_stripped, resource, '', ''))
             self.version_ids.remove(id_)
-            return
-        if id_ in self.last_ids:
-            self.dispatch('LAST_STATUS_TIME', (jid_stripped, resource, -1, ''))
-            self.last_ids.remove(id_)
             return
         if id_ in self.entity_time_ids:
             self.dispatch('ENTITY_TIME', (jid_stripped, resource, ''))
@@ -1134,26 +1176,6 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
 
         self.connection.send(iq_obj)
         raise common.xmpp.NodeProcessed
-
-    def _LastResultCB(self, con, iq_obj):
-        log.debug('LastResultCB')
-        qp = iq_obj.getTag('query')
-        seconds = qp.getAttr('seconds')
-        status = qp.getData()
-        try:
-            seconds = int(seconds)
-        except Exception:
-            return
-        id_ = iq_obj.getID()
-        if id_ in self.groupchat_jids:
-            who = self.groupchat_jids[id_]
-            del self.groupchat_jids[id_]
-        else:
-            who = helpers.get_full_jid_from_iq(iq_obj)
-        if id_ in self.last_ids:
-            self.last_ids.remove(id_)
-        jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
-        self.dispatch('LAST_STATUS_TIME', (jid_stripped, resource, seconds, status))
 
     def _VersionResultCB(self, con, iq_obj):
         log.debug('VersionResultCB')
@@ -1675,13 +1697,13 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
                 gajim.logger.write('error', frm, error_msg, tim=tim,
                         subject=subject)
             except exceptions.PysqliteOperationalError, e:
-                self.dispatch('ERROR', (_('Disk Write Error'), str(e)))
+                self.dispatch('DB_ERROR', (_('Disk Write Error'), str(e)))
             except exceptions.DatabaseMalformed:
                 pritext = _('Database Error')
                 sectext = _('The database file (%s) cannot be read. Try to repair '
                         'it (see http://trac.gajim.org/wiki/DatabaseBackup) or remove '
                         'it (all history will be lost).') % common.logger.LOG_DB_PATH
-                self.dispatch('ERROR', (pritext, sectext))
+                self.dispatch('DB_ERROR', (pritext, sectext))
         self.dispatch('MSGERROR', (frm, msg.getErrorCode(), error_msg, msgtxt,
                 tim, session))
 
@@ -1726,13 +1748,13 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
                 self.last_history_time[jid] = mktime(tim)
 
             except exceptions.PysqliteOperationalError, e:
-                self.dispatch('ERROR', (_('Disk Write Error'), str(e)))
+                self.dispatch('DB_ERROR', (_('Disk Write Error'), str(e)))
             except exceptions.DatabaseMalformed:
                 pritext = _('Database Error')
                 sectext = _('The database file (%s) cannot be read. Try to repair '
                         'it (see http://trac.gajim.org/wiki/DatabaseBackup) or remove '
                         'it (all history will be lost).') % common.logger.LOG_DB_PATH
-                self.dispatch('ERROR', (pritext, sectext))
+                self.dispatch('DB_ERROR', (pritext, sectext))
 
     def dispatch_invite_message(self, invite, frm):
         item = invite.getTag('invite')
@@ -1869,10 +1891,11 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
                     self.dispatch('NOTIFY', (jid_stripped, 'error', errmsg, resource,
                             prio, keyID, timestamp, None))
                 elif (errcode == '503'):
-                    # maximum user number reached
-                    self.dispatch('ERROR', (_('Unable to join group chat'),
-                            _('Maximum number of users for %s has been reached') % \
-                            room_jid))
+                    if gc_control is None or gc_control.autorejoin is None:
+                        # maximum user number reached
+                        self.dispatch('ERROR', (_('Unable to join group chat'),
+                                _('Maximum number of users for %s has been reached') % \
+                                room_jid))
                 elif (errcode == '401') or (errcon == 'not-authorized'):
                     # password required to join
                     self.dispatch('GC_PASSWORD_REQUIRED', (room_jid, nick))
@@ -1920,14 +1943,15 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
                     try:
                         gajim.logger.write('gcstatus', who, st, show)
                     except exceptions.PysqliteOperationalError, e:
-                        self.dispatch('ERROR', (_('Disk Write Error'), str(e)))
+                        self.dispatch('DB_ERROR', (_('Disk Write Error'),
+                            str(e)))
                     except exceptions.DatabaseMalformed:
                         pritext = _('Database Error')
                         sectext = _('The database file (%s) cannot be read. Try to '
                                 'repair it (see http://trac.gajim.org/wiki/DatabaseBackup)'
                                 ' or remove it (all history will be lost).') % \
                                 common.logger.LOG_DB_PATH
-                        self.dispatch('ERROR', (pritext, sectext))
+                        self.dispatch('DB_ERROR', (pritext, sectext))
                 if avatar_sha or avatar_sha == '':
                     if avatar_sha == '':
                         # contact has no avatar
@@ -2070,14 +2094,14 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
                 try:
                     gajim.logger.write('status', jid_stripped, status, show)
                 except exceptions.PysqliteOperationalError, e:
-                    self.dispatch('ERROR', (_('Disk Write Error'), str(e)))
+                    self.dispatch('DB_ERROR', (_('Disk Write Error'), str(e)))
                 except exceptions.DatabaseMalformed:
                     pritext = _('Database Error')
                     sectext = _('The database file (%s) cannot be read. Try to '
                             'repair it (see http://trac.gajim.org/wiki/DatabaseBackup) '
                             'or remove it (all history will be lost).') % \
                             common.logger.LOG_DB_PATH
-                    self.dispatch('ERROR', (pritext, sectext))
+                    self.dispatch('DB_ERROR', (pritext, sectext))
             our_jid = gajim.get_jid_from_account(self.name)
             if jid_stripped == our_jid and resource == self.server_resource:
                 # We got our own presence

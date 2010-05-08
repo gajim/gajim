@@ -41,9 +41,6 @@ Select the contacts you want to invite</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="headers_visible">False</property>
-                <signal name="drag_end" handler="on_guests_treeview_drag_end"/>
-                <signal name="drag_data_get" handler="on_guests_treeview_drag_data_get"/>
-                <signal name="drag_data_received" handler="on_guests_treeview_drag_data_received"/>
               </object>
             </child>
           </object>

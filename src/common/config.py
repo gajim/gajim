@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ## src/common/config.py
 ##
-## Copyright (C) 2003-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2003-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2004-2005 Vincent Hanquez <tab AT snarc.org>
 ## Copyright (C) 2005 Stéphan Kochen <stephan AT kochen.nl>
 ## Copyright (C) 2005-2006 Dimitur Kirov <dkirov AT gmail.com>
@@ -289,6 +289,7 @@ class Config:
                     'name': [ opt_str, '', '', True ],
                     'hostname': [ opt_str, '', '', True ],
                     'anonymous_auth': [ opt_bool, False ],
+                    'client_cert': [ opt_str, '', '', True ],
                     'savepass': [ opt_bool, False ],
                     'password': [ opt_str, '' ],
                     'resource': [ opt_str, 'gajim', '', True ],

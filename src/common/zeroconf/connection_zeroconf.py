@@ -7,11 +7,9 @@
 ##      - Travis Shirk <travis@pobox.com>
 ## - Stefan Bethge <stefan@lanpartei.de>
 ##
-## Copyright (C) 2003-2004 Yann Leboulanger <asterix@lagaule.org>
-##                         Vincent Hanquez <tab@snarc.org>
-## Copyright (C) 2006 Yann Leboulanger <asterix@lagaule.org>
-##                    Vincent Hanquez <tab@snarc.org>
-##                    Nikos Kouremenos <nkour@jabber.org>
+## Copyright (C) 2003-2010 Yann Leboulanger <asterix@lagaule.org>
+## Copyright (C) 2003-2004 Vincent Hanquez <tab@snarc.org>
+## Copyright (C) 2006 Nikos Kouremenos <nkour@jabber.org>
 ##                    Dimitur Kirov <dkirov@gmail.com>
 ##                    Travis Shirk <travis@pobox.com>
 ##                    Norman Rasmussen <norman@rasmussen.co.za>
@@ -312,7 +310,8 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
     def send_message(self, jid, msg, keyID, type_='chat', subject='',
     chatstate=None, msg_id=None, composing_xep=None, resource=None,
     user_nick=None, xhtml=None, session=None, forward_from=None, form_node=None,
-    original_message=None, delayed=None, callback=None, callback_args=[]):
+    original_message=None, delayed=None, callback=None, callback_args=[],
+    now=True):
 
         def on_send_ok(msg_id):
             self.dispatch('MSGSENT', (jid, msg, keyID))

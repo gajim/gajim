@@ -1,4 +1,4 @@
-# Copyright (C) 2009  Alexander Cherniuk <ts33kr@gmail.com>
+# Copyright (C) 2009-2010  Alexander Cherniuk <ts33kr@gmail.com>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -43,5 +43,11 @@ class DefinitionError(BaseError):
 class CommandError(BaseError):
     """
     Used to indicate errors occured during command execution.
+    """
+    pass
+
+class NoCommandError(BaseError):
+    """
+    Used to indicate an inability to find the specified command.
     """
     pass

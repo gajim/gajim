@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 ## src/ipython_view.py
 ##
-## Copyright (C) 2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2008-2010 Yann Leboulanger <asterix AT lagaule.org>
 ##
 ## This file is part of Gajim.
 ##
@@ -534,4 +534,3 @@ class IPythonView(ConsoleView, IterableIPShell):
         if rv: rv = rv.strip('\n')
         self.showReturned(rv)
         self.cout.truncate(0)
-

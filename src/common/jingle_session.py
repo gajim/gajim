@@ -68,8 +68,9 @@ class JingleSession(object):
         self.connection = con # connection to use
         # our full jid
         #FIXME: Get rid of gajim here?
-        self.ourjid = gajim.get_jid_from_account(self.connection.name) + '/' + \
-                con.server_resource
+        self.ourjid = gajim.get_jid_from_account(self.connection.name)
+        if con.server_resource:
+            self.ourjid = self.ourjid + '/' + con.server_resource
         self.peerjid = jid # jid we connect to
         # jid we use as the initiator
         self.initiator = weinitiate and self.ourjid or self.peerjid
@@ -183,17 +184,18 @@ class JingleSession(object):
             # The content is from us, accept it
             content.accepted = True
 
-    def remove_content(self, creator, name):
+    def remove_content(self, creator, name, reason=None):
         """
-        We do not need this now
+        Remove the content `name` created by `creator`
+        by sending content-remove, or by sending session-terminate if
+        there is no content left.
         """
-        #TODO:
         if (creator, name) in self.contents:
             content = self.contents[(creator, name)]
             if len(self.contents) > 1:
-                self.__content_remove(content)
+                self.__content_remove(content, reason)
             self.contents[(creator, name)].destroy()
-        if len(self.contents) == 0:
+        if not self.contents:
             self.end_session()
 
     def modify_content(self, creator, name, *someother):
@@ -262,6 +264,12 @@ class JingleSession(object):
         jingle.addChild(node=content)
         self.connection.connection.send(stanza)
 
+    def send_description_info(self, content):
+        assert self.state != JingleStates.ended
+        stanza, jingle = self.__make_jingle('description-info')
+        jingle.addChild(node=content)
+        self.connection.connection.send(stanza)
+
     def on_stanza(self, stanza):
         """
         A callback for ConnectionJingle. It gets stanza, then tries to send it to
@@ -277,7 +285,7 @@ class JingleSession(object):
             # it's a jingle action
             action = jingle.getAttr('action')
             if action not in self.callbacks:
-                self.__send_error(stanza, 'bad_request')
+                self.__send_error(stanza, 'bad-request')
                 return
             # FIXME: If we aren't initiated and it's not a session-initiate...
             if action != 'session-initiate' and self.state == JingleStates.ended:
@@ -319,8 +327,6 @@ class JingleSession(object):
                 xmpp_error = child.getName()
         self.__dispatch_error(xmpp_error, jingle_error, text)
         # FIXME: Not sure when we would want to do that...
-        if xmpp_error == 'item-not-found':
-            self.connection.delete_jingle_session(self.peerjid, self.sid)
 
     def __on_transport_replace(self, stanza, jingle, error, action):
         for content in jingle.iterTags('content'):
@@ -354,7 +360,7 @@ class JingleSession(object):
         # TODO: ringing, active, (un)hold, (un)mute
         payload = jingle.getPayload()
         if payload:
-            self.__send_error(stanza, 'feature-not-implemented', 'unsupported-info')
+            self.__send_error(stanza, 'feature-not-implemented', 'unsupported-info', type_='modify')
             raise xmpp.NodeProcessed
 
     def __on_content_remove(self, stanza, jingle, error, action):
@@ -425,14 +431,24 @@ class JingleSession(object):
         # Jingle with unknown entities, it SHOULD return a <service-unavailable/>
         # error.
 
+        # Check if there's already a session with this user:
+        for session in self.connection.iter_jingle_sessions(self.peerjid):
+            if not session is self:
+                reason = xmpp.Node('reason')
+                alternative_session = reason.setTag('alternative-session')
+                alternative_session.setTagData('sid', session.sid)
+                self.__ack(stanza, jingle, error, action)
+                self._session_terminate(reason)
+                raise xmpp.NodeProcessed
+
         # Lets check what kind of jingle session does the peer want
-        contents, contents_rejected, reason = self.__parse_contents(jingle)
+        contents, contents_rejected, reason_txt = self.__parse_contents(jingle)
 
         # If there's no content we understand...
         if not contents:
             # TODO: http://xmpp.org/extensions/xep-0166.html#session-terminate
             reason = xmpp.Node('reason')
-            reason.setTag(reason)
+            reason.setTag(reason_txt)
             self.__ack(stanza, jingle, error, action)
             self._session_terminate(reason)
             raise xmpp.NodeProcessed
@@ -450,11 +466,16 @@ class JingleSession(object):
         for content in jingle.iterTags('content'):
             name = content['name']
             creator = content['creator']
-            cn = self.contents[(creator, name)]
-            cn.on_stanza(stanza, content, error, action)
+            if (creator, name) not in self.contents:
+                text = 'Content %s (created by %s) does not exist' % (name, creator)
+                self.__send_error(stanza, 'bad-request', text=text, type_='_modify')
+                raise xmpp.NodeProcessed
+            else:
+                cn = self.contents[(creator, name)]
+                cn.on_stanza(stanza, content, error, action)
 
     def __on_session_terminate(self, stanza, jingle, error, action):
-        self.connection.delete_jingle_session(self.peerjid, self.sid)
+        self.connection.delete_jingle_session(self.sid)
         reason, text = self.__reason_from_stanza(jingle)
         if reason not in ('success', 'cancel', 'decline'):
             self.__dispatch_error(reason, reason, text)
@@ -496,7 +517,7 @@ class JingleSession(object):
                     reasons.add('failed-application')
             else:
                 contents_rejected.append((element['name'], 'peer'))
-                failed.add('unsupported-applications')
+                reasons.add('unsupported-applications')
 
         failure_reason = None
 
@@ -519,6 +540,7 @@ class JingleSession(object):
         self.connection.dispatch('JINGLE_ERROR', (self.peerjid, self.sid, text))
 
     def __reason_from_stanza(self, stanza):
+        # TODO: Move to GUI?
         reason = 'success'
         reasons = ['success', 'busy', 'cancel', 'connectivity-error',
                 'decline', 'expired', 'failed-application', 'failed-transport',
@@ -534,7 +556,7 @@ class JingleSession(object):
                     break
         return (reason, text)
 
-    def __make_jingle(self, action):
+    def __make_jingle(self, action, reason=None):
         stanza = xmpp.Iq(typ='set', to=xmpp.JID(self.peerjid))
         attrs = {'action': action,
                 'sid': self.sid}
@@ -543,15 +565,20 @@ class JingleSession(object):
         elif action == 'session-accept':
             attrs['responder'] = self.responder
         jingle = stanza.addChild('jingle', attrs=attrs, namespace=xmpp.NS_JINGLE)
+        if reason is not None:
+            jingle.addChild(node=reason)
         return stanza, jingle
 
-    def __send_error(self, stanza, error, jingle_error=None, text=None):
-        err = xmpp.Error(stanza, '%s %s' % (xmpp.NS_STANZAS, error))
+    def __send_error(self, stanza, error, jingle_error=None, text=None, type_=None):
+        err_stanza = xmpp.Error(stanza, '%s %s' % (xmpp.NS_STANZAS, error))
+        err = err_stanza.getTag('error')
+        if type_:
+            err.setAttr('type', type_)
         if jingle_error:
             err.setTag(jingle_error, namespace=xmpp.NS_JINGLE_ERRORS)
         if text:
             err.setTagData('text', text)
-        self.connection.connection.send(err)
+        self.connection.connection.send(err_stanza)
         self.__dispatch_error(error, jingle_error, text)
 
     def __append_content(self, jingle, content):
@@ -596,11 +623,10 @@ class JingleSession(object):
 
     def _session_terminate(self, reason=None):
         assert self.state != JingleStates.ended
-        stanza, jingle = self.__make_jingle('session-terminate')
-        if reason is not None:
-            jingle.addChild(node=reason)
+        stanza, jingle = self.__make_jingle('session-terminate', reason=reason)
         self.__broadcast_all(stanza, jingle, None, 'session-terminate-sent')
         self.connection.connection.send(stanza)
+        # TODO: Move to GUI?
         reason, text = self.__reason_from_stanza(jingle)
         if reason not in ('success', 'cancel', 'decline'):
             self.__dispatch_error(reason, reason, text)
@@ -608,7 +634,7 @@ class JingleSession(object):
             text = '%s (%s)' % (reason, text)
         else:
             text = reason
-        self.connection.delete_jingle_session(self.peerjid, self.sid)
+        self.connection.delete_jingle_session(self.sid)
         self.connection.dispatch('JINGLE_DISCONNECTED',
                 (self.peerjid, self.sid, None, text))
 
@@ -640,9 +666,9 @@ class JingleSession(object):
     def __content_modify(self):
         assert self.state != JingleStates.ended
 
-    def __content_remove(self, content):
+    def __content_remove(self, content, reason=None):
         assert self.state != JingleStates.ended
-        stanza, jingle = self.__make_jingle('content-remove')
+        stanza, jingle = self.__make_jingle('content-remove', reason=reason)
         self.__append_content(jingle, content)
         self.connection.connection.send(stanza)
         # TODO: this will fail if content is not an RTP content

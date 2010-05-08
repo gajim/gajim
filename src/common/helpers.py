@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ## src/common/helpers.py
 ##
-## Copyright (C) 2003-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2003-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2005-2006 Dimitur Kirov <dkirov AT gmail.com>
 ##                         Nikos Kouremenos <kourem AT gmail.com>
 ## Copyright (C) 2006 Alex Mauer <hawke AT hawkesnest.net>
@@ -29,6 +29,7 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
+import sys
 import re
 import locale
 import os
@@ -220,9 +221,9 @@ def get_uf_show(show, use_mnemonic = False):
             uf_show = _('Free for Chat')
     elif show == 'online':
         if use_mnemonic:
-            uf_show = _('_Available')
+            uf_show = Q_('?user status:_Available')
         else:
-            uf_show = _('Available')
+            uf_show = Q_('?user status:Available')
     elif show == 'connecting':
         uf_show = _('Connecting')
     elif show == 'away':
@@ -1341,11 +1342,11 @@ def get_subscription_request_msg(account=None):
         our_jid = gajim.get_jid_from_account(account)
         vcard = gajim.connections[account].get_cached_vcard(our_jid)
         name = ''
-        if 'N' in vcard:
-            if 'GIVEN' in vcard['N'] and 'FAMILY' in vcard['N']:
-                name = vcard['N']['GIVEN'] + ' ' + vcard['N']['FAMILY']
-        if not name:
-            if 'FN' in vcard:
+        if vcard:
+            if 'N' in vcard:
+                if 'GIVEN' in vcard['N'] and 'FAMILY' in vcard['N']:
+                    name = vcard['N']['GIVEN'] + ' ' + vcard['N']['FAMILY']
+            if not name and 'FN' in vcard:
                 name = vcard['FN']
         nick = gajim.nicks[account]
         if name and nick:

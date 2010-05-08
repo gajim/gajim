@@ -281,7 +281,7 @@ If you plan to do massive deletions, please make sure Gajim is not running. Gene
     </child>
     <child>
       <object class="GtkImageMenuItem" id="delete_menuitem">
-        <property name="label">Delete</property>
+        <property name="label" translatable="yes">Delete</property>
         <property name="visible">True</property>
         <property name="use_underline">True</property>
         <property name="use_stock">True</property>

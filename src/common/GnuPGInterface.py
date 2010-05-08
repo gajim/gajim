@@ -3,7 +3,7 @@
 ##
 ## Copyright (C) 2001 Frank J. Tobin <ftobin AT neverending.org>
 ## Copyright (C) 2005 Nikos Kouremenos <kourem AT gmail.com>
-## Copyright (C) 2006-2007 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2006-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2008 Jean-Marie Traissard <jim AT lapin.org>
 ##
 ## This file is part of Gajim.
