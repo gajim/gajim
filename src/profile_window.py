@@ -203,6 +203,20 @@ class ProfileWindow:
         elif event.button == 1: # left click
             self.on_set_avatar_button_clicked(widget)
 
+    def on_BDAY_entry_focus_out_event(self, widget, event):
+        txt = widget.get_text()
+        if not txt:
+            return
+        try:
+            time.strptime(txt, '%Y-%m-%d')
+        except ValueError:
+            if not widget.is_focus():
+                pritext = _('Wrong date format')
+                dialogs.ErrorDialog(pritext, _('Format of the date must be '
+                    'YYYY-MM-DD'))
+                gobject.idle_add(lambda: widget.grab_focus())
+            return True
+
     def set_value(self, entry_name, value):
         try:
             self.xml.get_object(entry_name).set_text(value)
