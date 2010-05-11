@@ -50,24 +50,6 @@ try:
 except ImportError:
     USER_HAS_PYNOTIFY = False
 
-if gajim.HAVE_INDICATOR:
-    import indicate
-
-def setup_indicator_server():
-    server = indicate.indicate_server_ref_default()
-    server.set_type('message.im')
-    server.set_desktop_file('/usr/share/applications/gajim.desktop')
-    server.connect('server-display', server_display)
-    server.show()
-
-def display(indicator, account, jid, msg_type):
-    gajim.interface.handle_event(account, jid, msg_type)
-    indicator.hide()
-
-def server_display(server):
-    win = gajim.interface.roster.window
-    win.present()
-
 def get_show_in_roster(event, account, contact, session=None):
     """
     Return True if this event must be shown in roster, else False
@@ -343,18 +325,6 @@ text=None):
     # default image
     if not path_to_image:
         path_to_image = gtkgui_helpers.get_icon_path('gajim-chat_msg_recv', 48)
-
-    if gajim.HAVE_INDICATOR and event_type in (_('New Message'),
-    _('New Single Message'), _('New Private Message')):
-        indicator = indicate.Indicator()
-        indicator.set_property('subtype', 'im')
-        indicator.set_property('sender', jid)
-        indicator.set_property('body', text)
-        indicator.set_property_time('time', time.time())
-        pixbuf = gtk.gdk.pixbuf_new_from_file(path_to_image)
-        indicator.set_property_icon('icon', pixbuf)
-        indicator.connect('user-display', display, account, jid, msg_type)
-        indicator.show()
 
     # Try to show our popup via D-Bus and notification daemon
     if gajim.config.get('use_notif_daemon') and dbus_support.supported:

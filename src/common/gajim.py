@@ -181,12 +181,6 @@ else:
 # read.
 HAVE_LATEX = False
 
-HAVE_INDICATOR = True
-try:
-    import indicate
-except ImportError:
-    HAVE_INDICATOR = False
-
 HAVE_FARSIGHT = True
 try:
     import farsight, gst
