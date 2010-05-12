@@ -55,22 +55,15 @@ class CommandWindow:
         # an account object
         self.account = gajim.connections[account]
         self.jid = jid
-
-        self.pulse_id = None      # to satisfy self.setup_pulsing()
-        self.commandlist = None   # a list of (commandname, commanddescription)
-
-        # command's data
         self.commandnode = commandnode
-        self.sessionid = None
-        self.dataform = None
-        self.allow_stage3_close = False
+        self.data_form_widget = None
 
         # retrieving widgets from xml
         self.xml = gtkgui_helpers.get_gtk_builder('adhoc_commands_window.ui')
         self.window = self.xml.get_object('adhoc_commands_window')
         self.window.connect('delete-event',
             self.on_adhoc_commands_window_delete_event)
-        for name in ('back_button', 'forward_button',
+        for name in ('restart_button', 'back_button', 'forward_button',
                 'execute_button', 'close_button', 'stages_notebook',
                 'retrieving_commands_stage_vbox',
                 'command_list_stage_vbox', 'command_list_vbox',
@@ -79,7 +72,22 @@ class CommandWindow:
                 'error_description_label'):
             self.__dict__[name] = self.xml.get_object(name)
 
+        self.initiate()
+
+    def initiate(self):
+
+        self.pulse_id = None      # to satisfy self.setup_pulsing()
+        self.commandlist = None   # a list of (commandname, commanddescription)
+
+        # command's data
+        self.sessionid = None
+        self.dataform = None
+        self.allow_stage3_close = False
+
         # creating data forms widget
+        if self.data_form_widget:
+            self.sending_form_stage_vbox.remove(self.data_form_widget)
+            self.data_form_widget.destroy()
         self.data_form_widget = dataforms_widget.DataFormWidget()
         self.data_form_widget.show()
         self.sending_form_stage_vbox.pack_start(self.data_form_widget)
@@ -94,6 +102,8 @@ class CommandWindow:
         # displaying the window
         self.xml.connect_signals(self)
         self.window.show_all()
+
+        self.restart_button.set_sensitive(False)
 
     # These functions are set up by appropriate stageX methods.
     def stage_finish(self, *anything):
@@ -377,6 +387,7 @@ class CommandWindow:
 
         if self.form_status == 'completed':
             self.close_button.set_sensitive(True)
+            self.restart_button.set_sensitive(True)
             self.back_button.hide()
             self.forward_button.hide()
             self.execute_button.hide()
@@ -392,6 +403,10 @@ class CommandWindow:
         else:
             self.notes_label.set_no_show_all(True)
             self.notes_label.hide()
+
+    def on_restart_button_clicked(self, widget):
+        self.commandnode = None
+        self.initiate()
 
 # stage 4: no commands are exposed
     def stage4(self):
