@@ -1266,8 +1266,8 @@ class GroupchatControl(ChatControlBase):
                             '%(reason)s') % { 'nick': nick, 'who': actor,
                             'reason': reason }
                     self.print_conversation(s, 'info', tim=tim, graphics=False)
-#                    if nick == self.nick:
-#                        self.autorejoin = False
+                    if nick == self.nick:
+                        self.autorejoin = False
                 elif '303' in statusCode: # Someone changed his or her nick
                     if new_nick == self.new_nick or nick == self.nick:
                         # We changed our nick
