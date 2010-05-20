@@ -216,6 +216,9 @@ class GroupchatControl(ChatControlBase):
         #       state in got_connected()).
         self.autorejoin = None
 
+        # Keep error dialog instance to be sure to have only once at a time
+        self.error_dialog = None
+
         self.actions_button = self.xml.get_object('muc_window_actions_button')
         id_ = self.actions_button.connect('clicked',
             self.on_actions_button_clicked)
@@ -1263,8 +1266,8 @@ class GroupchatControl(ChatControlBase):
                             '%(reason)s') % { 'nick': nick, 'who': actor,
                             'reason': reason }
                     self.print_conversation(s, 'info', tim=tim, graphics=False)
-                    if nick == self.nick:
-                        self.autorejoin = False
+#                    if nick == self.nick:
+#                        self.autorejoin = False
                 elif '303' in statusCode: # Someone changed his or her nick
                     if new_nick == self.new_nick or nick == self.nick:
                         # We changed our nick

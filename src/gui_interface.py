@@ -1151,6 +1151,20 @@ class Interface:
             notify.popup(event_type, jid, account, 'gc-invitation', path,
                     event_type, room_jid)
 
+    def handle_event_gc_error(self, account, data):
+        #('ERROR', account, (gc_control, title_text, section_text))
+        gc_control, pritext, sectext = data
+        if gc_control:
+            if gc_control.error_dialog:
+                gc_control.error_dialog.destroy()
+            def on_close(dummy):
+                gc_control.error_dialog.destroy()
+                gc_control.error_dialog = None
+            gc_control.error_dialog = dialogs.ErrorDialog(pritext, sectext,
+                on_response_ok=on_close, on_response_cancel=on_close)
+        else:
+            dialogs.ErrorDialog(pritext, sectext)
+
     def forget_gpg_passphrase(self, keyid):
         if keyid in self.gpg_passphrase:
             del self.gpg_passphrase[keyid]
@@ -2126,6 +2140,7 @@ class Interface:
             'GC_INVITATION': [self.handle_event_gc_invitation],
             'GC_AFFILIATION': [self.handle_event_gc_affiliation],
             'GC_PASSWORD_REQUIRED': [self.handle_event_gc_password_required],
+            'GC_ERROR': [self.handle_event_gc_error],
             'BAD_PASSPHRASE': [self.handle_event_bad_passphrase],
             'ROSTER_INFO': [self.handle_event_roster_info],
             'BOOKMARKS': [self.handle_event_bookmarks],

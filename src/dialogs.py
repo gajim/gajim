@@ -1242,8 +1242,9 @@ class AboutDialog:
 
 class Dialog(gtk.Dialog):
     def __init__(self, parent, title, buttons, default=None,
-                             on_response_ok=None, on_response_cancel=None):
-        gtk.Dialog.__init__(self, title, parent, gtk.DIALOG_DESTROY_WITH_PARENT | gtk.DIALOG_NO_SEPARATOR)
+    on_response_ok=None, on_response_cancel=None):
+        gtk.Dialog.__init__(self, title, parent,
+            gtk.DIALOG_DESTROY_WITH_PARENT | gtk.DIALOG_NO_SEPARATOR)
 
         self.user_response_ok = on_response_ok
         self.user_response_cancel = on_response_cancel
@@ -1480,8 +1481,8 @@ class InformationDialog(HigDialog):
     """
 
     def __init__(self, pritext, sectext=''):
-        HigDialog.__init__(self, None,
-                                           gtk.MESSAGE_INFO, gtk.BUTTONS_OK, pritext, sectext)
+        HigDialog.__init__(self, None, gtk.MESSAGE_INFO, gtk.BUTTONS_OK,
+            pritext, sectext)
         self.set_modal(False)
         self.set_transient_for(gajim.interface.roster.window)
         self.popup()
@@ -1491,9 +1492,11 @@ class ErrorDialog(HigDialog):
     HIG compliant error dialog
     """
 
-    def __init__(self, pritext, sectext=''):
-        HigDialog.__init__( self, None,
-                                                gtk.MESSAGE_ERROR, gtk.BUTTONS_OK, pritext, sectext)
+    def __init__(self, pritext, sectext='', on_response_ok=None,
+    on_response_cancel=None):
+        HigDialog.__init__( self, None, gtk.MESSAGE_ERROR, gtk.BUTTONS_OK,
+            pritext, sectext, on_response_ok=on_response_ok,
+            on_response_cancel=on_response_cancel)
         self.popup()
 
 class YesNoDialog(HigDialog):
