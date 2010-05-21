@@ -2733,7 +2733,7 @@ class RosterWindow:
         sectext = _('This contact will see you offline and you will not '
             'receive messages he will send you.')
         dialogs.ConfirmationDialogCheck(pritext, sectext,
-            _('Do _not ask me again'), on_response_ok=_block_it)
+            _('_Do not ask me again'), on_response_ok=_block_it)
 
     def on_unblock(self, widget, list_, group=None):
         """
@@ -3393,7 +3393,7 @@ class RosterWindow:
             'but only until you change your status. Then he or she will see '
             'your global status.') % {'status': show}
         dialogs.ConfirmationDialogCheck(pritext, sectext,
-            _('Do _not ask me again'), on_response_ok=send_it)
+            _('_Do not ask me again'), on_response_ok=send_it)
 
     def on_status_combobox_changed(self, widget):
         """
@@ -4117,7 +4117,7 @@ class RosterWindow:
             'line. Generally it is used when the same person has several '
             'Jabber accounts or transport accounts.')
         dlg = dialogs.ConfirmationDialogCheck(pritext, sectext,
-            _('Do _not ask me again'), on_response_ok=merge_contacts)
+            _('_Do not ask me again'), on_response_ok=merge_contacts)
         if not confirm_metacontacts: # First time we see this window
             dlg.checkbutton.set_active(True)
 

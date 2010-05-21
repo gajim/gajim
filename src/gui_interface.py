@@ -1211,7 +1211,7 @@ class Interface:
 
         dialogs.YesNoDialog(_('GPG key not trusted'), _('The GPG key used to '
             'encrypt this chat is not trusted. Do you really want to encrypt '
-            'this message?'), checktext=_('Do _not ask me again'),
+            'this message?'), checktext=_('_Do not ask me again'),
             on_response_yes=on_yes, on_response_no=on_no)
 
     def handle_event_password_required(self, account, array):
@@ -1983,7 +1983,7 @@ class Interface:
                 'connection. This means all your conversations will be '
                 'exchanged unencrypted. Are you sure you want to do that?')
         checktext1 = _('Yes, I really want to connect insecurely')
-        checktext2 = _('Do _not ask me again')
+        checktext2 = _('_Do not ask me again')
         if 'plain_connection' in self.instances[account]['online_dialog']:
             self.instances[account]['online_dialog']['plain_connection'].\
                 destroy()
@@ -2020,7 +2020,7 @@ class Interface:
             'connection. You should install PyOpenSSL to prevent that. Are you '
             'sure you want to do that?')
         checktext1 = _('Yes, I really want to connect insecurely')
-        checktext2 = _('Do _not ask me again')
+        checktext2 = _('_Do not ask me again')
         if 'insecure_ssl' in self.instances[account]['online_dialog']:
             self.instances[account]['online_dialog']['insecure_ssl'].destroy()
         self.instances[account]['online_dialog']['insecure_ssl'] = \
@@ -2055,7 +2055,7 @@ class Interface:
         sectext = _('You are about to send your password unencrypted on an '
             'insecure connection. Are you sure you want to do that?')
         checktext1 = _('Yes, I really want to connect insecurely')
-        checktext2 = _('Do _not ask me again')
+        checktext2 = _('_Do not ask me again')
         if 'insecure_password' in self.instances[account]['online_dialog']:
             self.instances[account]['online_dialog']['insecure_password'].\
                 destroy()

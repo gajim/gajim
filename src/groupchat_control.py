@@ -1723,7 +1723,7 @@ class GroupchatControl(ChatControlBase):
                 'from this group chat.')
 
             dialogs.ConfirmationDialogCheck(pritext, sectext,
-                _('Do _not ask me again'), on_response_ok=on_ok,
+                _('_Do not ask me again'), on_response_ok=on_ok,
                 on_response_cancel=on_cancel)
             return
 

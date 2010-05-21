@@ -219,7 +219,7 @@ class MessageWindow(object):
             dialogs.YesNoDialog(
                     _('You are going to close several tabs'),
 _('Do you really want to close them all?'),
-                    checktext=_('Do _not ask me again'), on_response_yes=on_yes1)
+                    checktext=_('_Do not ask me again'), on_response_yes=on_yes1)
             return True
 
         def on_yes(ctrl):
