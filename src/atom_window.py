@@ -131,7 +131,7 @@ class AtomWindow:
     def on_next_button_clicked(self, widget):
         self.displayNextEntry()
 
-    def on_entry_title_button_press_event(self, widget, event):
+    def on_entry_title_eventbox_button_press_event(self, widget, event):
         #FIXME: make it using special gtk2.10 widget
         if event.button == 1:   # left click
             uri = self.entry.uri
@@ -139,7 +139,7 @@ class AtomWindow:
                 helpers.launch_browser_mailer('url', uri)
         return True
 
-    def on_feed_title_button_press_event(self, widget, event):
+    def on_feed_title_eventbox_button_press_event(self, widget, event):
         #FIXME: make it using special gtk2.10 widget
         if event.button == 1:   # left click
             uri = self.entry.feed_uri
