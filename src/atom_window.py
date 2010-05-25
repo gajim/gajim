@@ -53,15 +53,16 @@ class AtomWindow:
         """
         Create new window... only if we have anything to show
         """
-        assert len(self.__class__.entries)>0
+        assert len(self.__class__.entries)
 
-        self.entry = None       # the entry actually displayed
+        self.entry = None # the entry actually displayed
 
         self.xml = gtkgui_helpers.get_gtk_builder('atom_entry_window.ui')
         self.window = self.xml.get_object('atom_entry_window')
-        for name in ('new_entry_label', 'feed_title_label', 'feed_title_eventbox',
-                'feed_tagline_label', 'entry_title_label', 'entry_title_eventbox',
-                'last_modified_label', 'close_button', 'next_button'):
+        for name in ('new_entry_label', 'feed_title_label',
+        'feed_title_eventbox', 'feed_tagline_label', 'entry_title_label',
+        'entry_title_eventbox', 'last_modified_label', 'close_button',
+        'next_button'):
             self.__dict__[name] = self.xml.get_object(name)
 
         self.displayNextEntry()
@@ -83,23 +84,23 @@ class AtomWindow:
         # fill the fields
         if newentry.feed_link is not None:
             self.feed_title_label.set_markup(
-                    u'<span foreground="blue" underline="single">%s</span>' % \
-                    gobject.markup_escape_text(newentry.feed_title))
+                u'<span foreground="blue" underline="single">%s</span>' % \
+                gobject.markup_escape_text(newentry.feed_title))
         else:
             self.feed_title_label.set_markup(
-                    gobject.markup_escape_text(newentry.feed_title))
+                gobject.markup_escape_text(newentry.feed_title))
 
         self.feed_tagline_label.set_markup(
-                u'<small>%s</small>' % \
-                gobject.markup_escape_text(newentry.feed_tagline))
+            u'<small>%s</small>' % \
+            gobject.markup_escape_text(newentry.feed_tagline))
 
         if newentry.uri is not None:
             self.entry_title_label.set_markup(
-                    u'<span foreground="blue" underline="single">%s</span>' % \
-                    gobject.markup_escape_text(newentry.title))
+                u'<span foreground="blue" underline="single">%s</span>' % \
+                gobject.markup_escape_text(newentry.title))
         else:
             self.entry_title_label.set_markup(
-                    gobject.markup_escape_text(newentry.title))
+                gobject.markup_escape_text(newentry.title))
 
         self.last_modified_label.set_text(newentry.updated)
 
@@ -114,11 +115,11 @@ class AtomWindow:
         changed
         """
         count = len(self.__class__.entries)
-        if count>0:
+        if count:
             self.new_entry_label.set_text(i18n.ngettext(
-                    'You have received new entries (and %d not displayed):',
-                    'You have received new entries (and %d not displayed):', count,
-                    count, count))
+                'You have received new entries (and %d not displayed):',
+                'You have received new entries (and %d not displayed):', count,
+                count, count))
             self.next_button.set_sensitive(True)
         else:
             self.new_entry_label.set_text(_('You have received new entry:'))
