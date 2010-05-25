@@ -144,6 +144,8 @@ class MessageWindow(object):
         self.notebook.set_show_border(gajim.config.get('tabs_border'))
         self.show_icon()
 
+        gobject.idle_add(lambda: self.notebook.grab_focus())
+
     def change_account_name(self, old_name, new_name):
         if old_name in self._controls:
             self._controls[new_name] = self._controls[old_name]
