@@ -1,8 +1,8 @@
 # -*- coding:utf-8 -*-
 ## src/groups.py
 ##
-## Copyright (C) 2006 Yann Leboulanger <asterix AT lagaule.org>
-##                    Tomasz Melcer <liori AT exroot.org>
+## Copyright (C) 2006-2010 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2006 Tomasz Melcer <liori AT exroot.org>
 ##
 ## This file is part of Gajim.
 ##
@@ -37,12 +37,12 @@ class GroupsPostWindow:
         self.servicejid = servicejid
         self.groupid = groupid
 
-        self.xml = gtkgui_helpers.get_glade('groups_post_window.glade')
-        self.window = self.xml.get_widget('groups_post_window')
+        self.xml = gtkgui_helpers.get_gtk_builder('groups_post_window.ui')
+        self.window = self.xml.get_object('groups_post_window')
         for name in ('from_entry', 'subject_entry', 'contents_textview'):
-            self.__dict__[name] = self.xml.get_widget(name)
+            self.__dict__[name] = self.xml.get_object(name)
 
-        self.xml.signal_autoconnect(self)
+        self.xml.connect_signals(self)
         self.window.show_all()
 
     def on_cancel_button_clicked(self, w):

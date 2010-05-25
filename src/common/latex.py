@@ -5,7 +5,7 @@
 ## Copyright (C) 2005-2006 Alex Mauer <hawke AT hawkesnest.net>
 ##                         Travis Shirk <travis AT pobox.com>
 ## Copyright (C) 2005-2007 Nikos Kouremenos <kourem AT gmail.com>
-## Copyright (C) 2005-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2005-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2006 Dimitur Kirov <dkirov AT gmail.com>
 ## Copyright (C) 2006-2008 Jean-Marie Traissard <jim AT lapin.org>
 ## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
@@ -86,8 +86,9 @@ def popen_nt_friendly(command):
         return Popen(command, cwd=gettempdir(), stdout=PIPE)
 
 def check_for_latex_support():
-    '''check is latex is available and if it can create a picture.'''
-
+    """
+    Check if latex is available and if it can create a picture
+    """
     try:
         filename = latex_to_image("test")
         if filename:

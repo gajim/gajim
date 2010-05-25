@@ -1,0 +1,111 @@
+<?xml version="1.0"?>
+<interface>
+  <requires lib="gtk+" version="2.16"/>
+  <!-- interface-naming-policy toplevel-contextual -->
+  <object class="GtkMenu" id="chat_context_menu">
+    <child>
+      <object class="GtkImageMenuItem" id="copy_link_location_menuitem">
+        <property name="label" translatable="yes">_Copy Link Location</property>
+        <property name="visible">True</property>
+        <property name="use_underline">True</property>
+        <property name="image">image1</property>
+        <property name="use_stock">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkImageMenuItem" id="open_link_in_browser_menuitem">
+        <property name="label" translatable="yes">_Open Link in Browser</property>
+        <property name="visible">True</property>
+        <property name="use_underline">True</property>
+        <property name="image">image2</property>
+        <property name="use_stock">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkImageMenuItem" id="copy_email_address_menuitem">
+        <property name="label" translatable="yes">_Copy JID/Email Address</property>
+        <property name="visible">True</property>
+        <property name="use_underline">True</property>
+        <property name="image">image3</property>
+        <property name="use_stock">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkImageMenuItem" id="open_email_composer_menuitem">
+        <property name="label" translatable="yes">_Open Email Composer</property>
+        <property name="visible">True</property>
+        <property name="use_underline">True</property>
+        <property name="image">image4</property>
+        <property name="use_stock">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="jid_section_separator">
+        <property name="visible">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkImageMenuItem" id="start_chat_menuitem">
+        <property name="label" translatable="yes">_Start Chat</property>
+        <property name="visible">True</property>
+        <property name="use_underline">True</property>
+        <property name="image">image5</property>
+        <property name="use_stock">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkImageMenuItem" id="join_group_chat_menuitem">
+        <property name="label" translatable="yes">Join _Group Chat</property>
+        <property name="visible">True</property>
+        <property name="use_underline">True</property>
+        <property name="image">image6</property>
+        <property name="use_stock">False</property>
+        <signal name="activate" handler="on_join_group_chat_menuitem_activate"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkImageMenuItem" id="add_to_roster_menuitem">
+        <property name="label" translatable="yes">_Add to Roster...</property>
+        <property name="visible">True</property>
+        <property name="use_underline">True</property>
+        <property name="image">image7</property>
+        <property name="use_stock">False</property>
+      </object>
+    </child>
+  </object>
+  <object class="GtkImage" id="image1">
+    <property name="visible">True</property>
+    <property name="stock">gtk-copy</property>
+    <property name="icon-size">1</property>
+  </object>
+  <object class="GtkImage" id="image2">
+    <property name="visible">True</property>
+    <property name="stock">gtk-jump-to</property>
+    <property name="icon-size">1</property>
+  </object>
+  <object class="GtkImage" id="image3">
+    <property name="visible">True</property>
+    <property name="stock">gtk-copy</property>
+    <property name="icon-size">1</property>
+  </object>
+  <object class="GtkImage" id="image4">
+    <property name="visible">True</property>
+    <property name="stock">gtk-jump-to</property>
+    <property name="icon-size">1</property>
+  </object>
+  <object class="GtkImage" id="image5">
+    <property name="visible">True</property>
+    <property name="stock">gtk-jump-to</property>
+    <property name="icon-size">1</property>
+  </object>
+  <object class="GtkImage" id="image6">
+    <property name="visible">True</property>
+    <property name="stock">gtk-connect</property>
+    <property name="icon-size">1</property>
+  </object>
+  <object class="GtkImage" id="image7">
+    <property name="visible">True</property>
+    <property name="stock">gtk-add</property>
+    <property name="icon-size">1</property>
+  </object>
+</interface>

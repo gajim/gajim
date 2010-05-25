@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ## src/gui_menu_builder.py
 ##
-## Copyright (C) 2009 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2009-2010 Yann Leboulanger <asterix AT lagaule.org>
 ##
 ## This file is part of Gajim.
 ##
@@ -95,7 +95,7 @@ def build_invite_submenu(invite_menuitem, list_):
     invite_to_new_room_menuitem.set_image(icon)
     if len(contact_list) > 1: # several resources
         invite_to_new_room_menuitem.set_submenu(build_resources_submenu(
-                contact_list, account, roster.on_invite_to_new_room, cap=NS_MUC))
+            contact_list, account, roster.on_invite_to_new_room, cap=NS_MUC))
     elif len(list_) == 1 and contact.supports(NS_MUC):
         invite_menuitem.set_sensitive(True)
         # use resource if it's self contact
@@ -104,9 +104,9 @@ def build_invite_submenu(invite_menuitem, list_):
         else:
             resource = None
         invite_to_new_room_menuitem.connect('activate',
-                roster.on_invite_to_new_room, list_, resource)
+            roster.on_invite_to_new_room, list_, resource)
     else:
-        invite_menuitem.set_sensitive(False)
+        invite_menuitem.set_sensitive(True)
     # transform None in 'jabber'
     c_t = contacts_transport or 'jabber'
     muc_jid = {}
@@ -120,7 +120,8 @@ def build_invite_submenu(invite_menuitem, list_):
     rooms = [] # a list of (room_jid, account) tuple
     minimized_controls = []
     for account in connected_accounts:
-        minimized_controls += gajim.interface.minimized_controls[account].values()
+        minimized_controls += \
+            gajim.interface.minimized_controls[account].values()
     for gc_control in gajim.interface.msg_win_mgr.get_controls(
     message_control.TYPE_GC) + minimized_controls:
         acct = gc_control.account
@@ -149,8 +150,8 @@ def build_invite_submenu(invite_menuitem, list_):
             invite_to_submenu.append(menuitem)
 
 def get_contact_menu(contact, account, use_multiple_contacts=True,
-                show_start_chat=True, show_encryption=False, show_buttonbar_items=True,
-                control=None):
+show_start_chat=True, show_encryption=False, show_buttonbar_items=True,
+control=None):
     """
     Build contact popup menu for roster and chat window. If control is not set,
     we hide invite_contacts_menuitem
@@ -162,56 +163,52 @@ def get_contact_menu(contact, account, use_multiple_contacts=True,
     our_jid = jid == gajim.get_jid_from_account(account)
     roster = gajim.interface.roster
 
-    xml = gtkgui_helpers.get_glade('contact_context_menu.glade')
-    contact_context_menu = xml.get_widget('contact_context_menu')
+    xml = gtkgui_helpers.get_gtk_builder('contact_context_menu.ui')
+    contact_context_menu = xml.get_object('contact_context_menu')
 
-    start_chat_menuitem = xml.get_widget('start_chat_menuitem')
-    execute_command_menuitem = xml.get_widget('execute_command_menuitem')
-    rename_menuitem = xml.get_widget('rename_menuitem')
-    edit_groups_menuitem = xml.get_widget('edit_groups_menuitem')
-    send_file_menuitem = xml.get_widget('send_file_menuitem')
-    assign_openpgp_key_menuitem = xml.get_widget('assign_openpgp_key_menuitem')
-    add_special_notification_menuitem = xml.get_widget(
+    start_chat_menuitem = xml.get_object('start_chat_menuitem')
+    execute_command_menuitem = xml.get_object('execute_command_menuitem')
+    rename_menuitem = xml.get_object('rename_menuitem')
+    edit_groups_menuitem = xml.get_object('edit_groups_menuitem')
+    send_file_menuitem = xml.get_object('send_file_menuitem')
+    assign_openpgp_key_menuitem = xml.get_object('assign_openpgp_key_menuitem')
+    add_special_notification_menuitem = xml.get_object(
             'add_special_notification_menuitem')
-    information_menuitem = xml.get_widget('information_menuitem')
-    history_menuitem = xml.get_widget('history_menuitem')
-    send_custom_status_menuitem = xml.get_widget('send_custom_status_menuitem')
-    send_single_message_menuitem = xml.get_widget('send_single_message_menuitem')
-    invite_menuitem = xml.get_widget('invite_menuitem')
-    block_menuitem = xml.get_widget('block_menuitem')
-    unblock_menuitem = xml.get_widget('unblock_menuitem')
-    ignore_menuitem = xml.get_widget('ignore_menuitem')
-    unignore_menuitem = xml.get_widget('unignore_menuitem')
-    set_custom_avatar_menuitem = xml.get_widget('set_custom_avatar_menuitem')
+    information_menuitem = xml.get_object('information_menuitem')
+    history_menuitem = xml.get_object('history_menuitem')
+    send_custom_status_menuitem = xml.get_object('send_custom_status_menuitem')
+    send_single_message_menuitem = xml.get_object('send_single_message_menuitem')
+    invite_menuitem = xml.get_object('invite_menuitem')
+    block_menuitem = xml.get_object('block_menuitem')
+    unblock_menuitem = xml.get_object('unblock_menuitem')
+    ignore_menuitem = xml.get_object('ignore_menuitem')
+    unignore_menuitem = xml.get_object('unignore_menuitem')
+    set_custom_avatar_menuitem = xml.get_object('set_custom_avatar_menuitem')
     # Subscription submenu
-    subscription_menuitem = xml.get_widget('subscription_menuitem')
+    subscription_menuitem = xml.get_object('subscription_menuitem')
     send_auth_menuitem, ask_auth_menuitem, revoke_auth_menuitem = \
             subscription_menuitem.get_submenu().get_children()
-    add_to_roster_menuitem = xml.get_widget('add_to_roster_menuitem')
-    remove_from_roster_menuitem = xml.get_widget(
+    add_to_roster_menuitem = xml.get_object('add_to_roster_menuitem')
+    remove_from_roster_menuitem = xml.get_object(
             'remove_from_roster_menuitem')
-    manage_contact_menuitem = xml.get_widget('manage_contact')
-    convert_to_gc_menuitem = xml.get_widget('convert_to_groupchat_menuitem')
-    encryption_separator = xml.get_widget('encryption_separator')
-    toggle_gpg_menuitem = xml.get_widget('toggle_gpg_menuitem')
-    toggle_e2e_menuitem = xml.get_widget('toggle_e2e_menuitem')
-    last_separator = xml.get_widget('last_separator')
+    manage_contact_menuitem = xml.get_object('manage_contact')
+    convert_to_gc_menuitem = xml.get_object('convert_to_groupchat_menuitem')
+    encryption_separator = xml.get_object('encryption_separator')
+    toggle_gpg_menuitem = xml.get_object('toggle_gpg_menuitem')
+    toggle_e2e_menuitem = xml.get_object('toggle_e2e_menuitem')
+    last_separator = xml.get_object('last_separator')
 
     items_to_hide = []
 
     # add a special img for send file menuitem
-    path_to_upload_img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'upload.png')
+    path_to_upload_img = gtkgui_helpers.get_icon_path('gajim-upload')
     img = gtk.Image()
     img.set_from_file(path_to_upload_img)
     send_file_menuitem.set_image(img)
 
     if not our_jid:
         # add a special img for rename menuitem
-        path_to_kbd_input_img = os.path.join(gajim.DATA_DIR, 'pixmaps',
-                'kbd_input.png')
-        img = gtk.Image()
-        img.set_from_file(path_to_kbd_input_img)
-        rename_menuitem.set_image(img)
+        gtkgui_helpers.add_image_to_menuitem(rename_menuitem, 'gajim-kbd_input')
 
     muc_icon = gtkgui_helpers.load_icon('muc_active')
     if muc_icon:

@@ -54,13 +54,17 @@ def gattr(obj, attr, default=None):
 
 
 class SSLWrapper:
-    '''
+    """
     Abstract SSLWrapper base class
-    '''
+    """
+
     class Error(IOError):
-        ''' Generic SSL Error Wrapper '''
+        """
+        Generic SSL Error Wrapper
+        """
+
         def __init__(self, sock=None, exc=None, errno=None, strerror=None,
-        peer=None):
+                        peer=None):
             self.parent = IOError
 
             errno = errno or gattr(exc, 'errno') or exc[0]
@@ -122,7 +126,7 @@ class SSLWrapper:
         log.debug("%s.__init__ called with %s", self.__class__, sslobj)
 
     def recv(self, data, flags=None):
-        '''
+        """
         Receive wrapper for SSL object
 
         We can return None out of this function to signal that no data is
@@ -130,16 +134,20 @@ class SSLWrapper:
         depending on which SSL lib we're using. Unfortunately returning ''
         can indicate that the socket has been closed, so to be sure, we avoid
         this by returning None.
-        '''
+        """
         raise NotImplementedError
 
     def send(self, data, flags=None, now=False):
-        ''' Send wrapper for SSL object '''
+        """
+        Send wrapper for SSL object
+        """
         raise NotImplementedError
 
 
 class PyOpenSSLWrapper(SSLWrapper):
-    '''Wrapper class for PyOpenSSL's recv() and send() methods'''
+    """
+    Wrapper class for PyOpenSSL's recv() and send() methods
+    """
 
     def __init__(self, *args):
         self.parent = SSLWrapper
@@ -202,7 +210,9 @@ class PyOpenSSLWrapper(SSLWrapper):
 
 
 class StdlibSSLWrapper(SSLWrapper):
-    '''Wrapper class for Python socket.ssl read() and write() methods'''
+    """
+    Wrapper class for Python socket.ssl read() and write() methods
+    """
 
     def __init__(self, *args):
         self.parent = SSLWrapper
@@ -230,18 +240,18 @@ class StdlibSSLWrapper(SSLWrapper):
 
 
 class NonBlockingTLS(PlugIn):
-    '''
-    TLS connection used to encrypts already estabilished tcp connection.
+    """
+    TLS connection used to encrypts already estabilished tcp connection
 
     Can be plugged into NonBlockingTCP and will make use of StdlibSSLWrapper or
     PyOpenSSLWrapper.
-    '''
+    """
 
     def __init__(self, cacerts, mycerts):
-        '''
+        """
         :param cacerts: path to pem file with certificates of known XMPP servers
         :param mycerts: path to pem file with certificates of user trusted servers
-        '''
+        """
         PlugIn.__init__(self)
         self.cacerts = cacerts
         self.mycerts = mycerts
@@ -254,10 +264,10 @@ class NonBlockingTLS(PlugIn):
                     "SSL_CB_HANDSHAKE_START": 0x10, "SSL_CB_HANDSHAKE_DONE": 0x20}
 
     def plugin(self, owner):
-        '''
-        Use to PlugIn TLS into transport and start establishing immediately
-        Returns True if TLS/SSL was established correctly, otherwise False.
-        '''
+        """
+        Use to PlugIn TLS into transport and start establishing immediately.
+        Returns True if TLS/SSL was established correctly, otherwise False
+        """
         log.info('Starting TLS estabilishing')
         try:
             res = self._startSSL()
@@ -289,7 +299,9 @@ class NonBlockingTLS(PlugIn):
                 "Unknown"), pkey.type())
 
     def _startSSL(self):
-        ''' Immediatedly switch socket to TLS mode. Used internally.'''
+        """
+        Immediatedly switch socket to TLS mode. Used internally
+        """
         log.debug("_startSSL called")
 
         if USE_PYOPENSSL:
@@ -337,8 +349,44 @@ class NonBlockingTLS(PlugIn):
     def _startSSL_pyOpenSSL(self):
         log.debug("_startSSL_pyOpenSSL called")
         tcpsock = self._owner
-        # See http://docs.python.org/dev/library/ssl.html
-        tcpsock._sslContext = OpenSSL.SSL.Context(OpenSSL.SSL.SSLv23_METHOD)
+        # NonBlockingHTTPBOSH instance has no attribute _owner
+        if hasattr(tcpsock, '_owner') and tcpsock._owner._caller.client_cert \
+        and os.path.exists(tcpsock._owner._caller.client_cert):
+            conn = tcpsock._owner._caller
+            # FIXME make a checkbox for Client Cert / SSLv23 / TLSv1
+            # If we are going to use a client cert/key pair for authentication,
+            # we choose TLSv1 method.
+            tcpsock._sslContext = OpenSSL.SSL.Context(OpenSSL.SSL.TLSv1_METHOD)
+            log.debug('Using client cert and key from %s' % conn.client_cert)
+            try:
+                p12 = OpenSSL.crypto.load_pkcs12(open(conn.client_cert).read())
+            except OpenSSL.crypto.Error, exception_obj:
+                log.warning('Unable to load client pkcs12 certificate from '
+                    'file %s: %s ... Is it a valid PKCS12 cert?' % \
+                (conn.client_cert, exception_obj.args))
+            except:
+                log.warning('Unknown error while loading certificate from file '
+                    '%s' % conn.client_cert)
+            else:
+                log.info('PKCS12 Client cert loaded OK')
+                try:
+                    tcpsock._sslContext.use_certificate(p12.get_certificate())
+                    tcpsock._sslContext.use_privatekey(p12.get_privatekey())
+                    log.info('p12 cert and key loaded')
+                except OpenSSL.crypto.Error, exception_obj:
+                    log.warning('Unable to extract client certificate from '
+                        'file %s' % conn.client_cert)
+                except Exception, msg:
+                    log.warning('Unknown error extracting client certificate '
+                        'from file %s: %s' % (conn.client_cert, msg))
+                else:
+                    log.info('client cert and key loaded OK')
+        else:
+            # See http://docs.python.org/dev/library/ssl.html
+            tcpsock._sslContext = OpenSSL.SSL.Context(OpenSSL.SSL.SSLv23_METHOD)
+            tcpsock._sslContext.set_options(OpenSSL.SSL.OP_NO_SSLv2 | \
+                OpenSSL.SSL.OP_NO_TICKET)
+
         tcpsock.ssl_errnum = 0
         tcpsock._sslContext.set_verify(OpenSSL.SSL.VERIFY_PEER,
                 self._ssl_verify_callback)

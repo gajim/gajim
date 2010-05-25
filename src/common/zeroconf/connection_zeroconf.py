@@ -5,13 +5,11 @@
 ##      - Nikos Kouremenos <nkour@jabber.org>
 ##      - Dimitur Kirov <dkirov@gmail.com>
 ##      - Travis Shirk <travis@pobox.com>
-##  - Stefan Bethge <stefan@lanpartei.de>
+## - Stefan Bethge <stefan@lanpartei.de>
 ##
-## Copyright (C) 2003-2004 Yann Leboulanger <asterix@lagaule.org>
-##                         Vincent Hanquez <tab@snarc.org>
-## Copyright (C) 2006 Yann Leboulanger <asterix@lagaule.org>
-##                    Vincent Hanquez <tab@snarc.org>
-##                    Nikos Kouremenos <nkour@jabber.org>
+## Copyright (C) 2003-2010 Yann Leboulanger <asterix@lagaule.org>
+## Copyright (C) 2003-2004 Vincent Hanquez <tab@snarc.org>
+## Copyright (C) 2006 Nikos Kouremenos <nkour@jabber.org>
 ##                    Dimitur Kirov <dkirov@gmail.com>
 ##                    Travis Shirk <travis@pobox.com>
 ##                    Norman Rasmussen <norman@rasmussen.co.za>
@@ -51,24 +49,24 @@ from common.zeroconf import zeroconf
 from connection_handlers_zeroconf import *
 
 class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
-    '''Connection class'''
     def __init__(self, name):
         ConnectionHandlersZeroconf.__init__(self)
         # system username
         self.username = None
         self.server_resource = '' # zeroconf has no resource, fake an empty one
-        self.is_zeroconf = True
         self.call_resolve_timeout = False
         # we don't need a password, but must be non-empty
         self.password = 'zeroconf'
         self.autoconnect = False
 
         CommonConnection.__init__(self, name)
+        self.is_zeroconf = True
 
     def get_config_values_or_default(self):
-        ''' get name, host, port from config, or
-        create zeroconf account with default values'''
-
+        """
+        Get name, host, port from config, or create zeroconf account with default
+        values
+        """
         if not gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'name'):
             gajim.log.debug('Creating zeroconf account')
             gajim.config.add_per('accounts', gajim.ZEROCONF_ACC_NAME)
@@ -157,8 +155,10 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
         self.dispatch('NOTIFY', (jid, 'offline', '', 'local', 0, None, 0, None))
 
     def _disconnectedReconnCB(self):
-        '''Called when we are disconnected. Comes from network manager for example
-        we don't try to reconnect, network manager will tell us when we can'''
+        """
+        Called when we are disconnected. Comes from network manager for example
+        we don't try to reconnect, network manager will tell us when we can
+        """
         if gajim.account_is_connected(self.name):
             # we cannot change our status to offline or connecting
             # after we auth to server
@@ -310,7 +310,8 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
     def send_message(self, jid, msg, keyID, type_='chat', subject='',
     chatstate=None, msg_id=None, composing_xep=None, resource=None,
     user_nick=None, xhtml=None, session=None, forward_from=None, form_node=None,
-    original_message=None, delayed=None, callback=None, callback_args=[]):
+    original_message=None, delayed=None, callback=None, callback_args=[],
+    now=True):
 
         def on_send_ok(msg_id):
             self.dispatch('MSGSENT', (jid, msg, keyID))

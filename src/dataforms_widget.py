@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ## src/dataforms_widget.py
 ##
-## Copyright (C) 2003-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2003-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2006 Tomasz Melcer <liori AT exroot.org>
 ## Copyright (C) 2006-2007 Jean-Marie Traissard <jim AT lapin.org>
 ##
@@ -48,17 +48,17 @@ class DataFormWidget(gtk.Alignment, object):
 
         self._data_form = None
 
-        self.xml = gtkgui_helpers.get_glade('data_form_window.glade',
+        self.xml = gtkgui_helpers.get_gtk_builder('data_form_window.ui',
                 'data_form_vbox')
-        self.xml.signal_autoconnect(self)
+        self.xml.connect_signals(self)
         for name in ('instructions_label', 'instructions_hseparator',
                         'single_form_viewport', 'data_form_types_notebook',
                         'single_form_scrolledwindow', 'multiple_form_hbox',
                         'records_treeview', 'buttons_vbox', 'add_button', 'remove_button',
                         'edit_button', 'up_button', 'down_button', 'clear_button'):
-            self.__dict__[name] = self.xml.get_widget(name)
+            self.__dict__[name] = self.xml.get_object(name)
 
-        self.add(self.xml.get_widget('data_form_vbox'))
+        self.add(self.xml.get_object('data_form_vbox'))
 
         if dataformnode is not None:
             self.set_data_form(dataformnode)
@@ -400,7 +400,7 @@ class SingleForm(gtk.Table, object):
                         check.set_active(value in field.values)
                         check.connect('toggled',
                                 self.on_list_multi_checkbutton_toggled, field, value)
-                    widget.pack_start(check, expand=False)
+                        widget.pack_start(check, expand=False)
                 else:
                     # more than 5 options: show combobox
                     def on_list_multi_treeview_changed(selection, f):
@@ -427,10 +427,10 @@ class SingleForm(gtk.Table, object):
             elif field.type == 'jid-multi':
                 commonwidget = False
 
-                xml = gtkgui_helpers.get_glade('data_form_window.glade',
-                        'item_list_table')
-                widget = xml.get_widget('item_list_table')
-                treeview = xml.get_widget('item_treeview')
+                xml = gtkgui_helpers.get_gtk_builder('data_form_window.ui',
+                    'multiple_form_hbox')
+                widget = xml.get_object('multiple_form_hbox')
+                treeview = xml.get_object('records_treeview')
 
                 listmodel = gtk.ListStore(str)
                 for value in field.iter_values():
@@ -450,16 +450,16 @@ class SingleForm(gtk.Table, object):
 
                 decorate_with_tooltip(treeview, field)
 
-                add_button=xml.get_widget('add_button')
+                add_button=xml.get_object('add_button')
                 add_button.connect('clicked',
                         self.on_jid_multi_add_button_clicked, treeview, listmodel, field)
-                edit_button=xml.get_widget('edit_button')
+                edit_button=xml.get_object('edit_button')
                 edit_button.connect('clicked',
                         self.on_jid_multi_edit_button_clicked, treeview)
-                remove_button=xml.get_widget('remove_button')
+                remove_button=xml.get_object('remove_button')
                 remove_button.connect('clicked',
                         self.on_jid_multi_remove_button_clicked, treeview, field)
-                clear_button=xml.get_widget('clear_button')
+                clear_button=xml.get_object('clear_button')
                 clear_button.connect('clicked',
                         self.on_jid_multi_clean_button_clicked, listmodel, field)
                 if not readwrite:

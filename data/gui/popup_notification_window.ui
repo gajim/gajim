@@ -1,0 +1,105 @@
+<?xml version="1.0"?>
+<interface>
+  <requires lib="gtk+" version="2.16"/>
+  <!-- interface-naming-policy toplevel-contextual -->
+  <object class="GtkWindow" id="popup_notification_window">
+    <property name="width_request">312</property>
+    <property name="height_request">95</property>
+    <property name="border_width">1</property>
+    <property name="type">popup</property>
+    <property name="resizable">False</property>
+    <property name="skip_taskbar_hint">True</property>
+    <property name="skip_pager_hint">True</property>
+    <property name="decorated">False</property>
+    <property name="gravity">south-east</property>
+    <signal name="button_press_event" handler="on_popup_notification_window_button_press_event"/>
+    <child>
+      <object class="GtkEventBox" id="eventbox">
+        <property name="visible">True</property>
+        <child>
+          <object class="GtkHBox" id="hbox3019">
+            <property name="visible">True</property>
+            <property name="border_width">4</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkImage" id="notification_image">
+                <property name="width_request">68</property>
+                <property name="height_request">86</property>
+                <property name="visible">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkVBox" id="vbox111">
+                <property name="visible">True</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkHBox" id="hbox3020">
+                    <property name="visible">True</property>
+                    <child>
+                      <object class="GtkLabel" id="event_type_label">
+                        <property name="width_request">196</property>
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Event Type</property>
+                        <property name="use_markup">True</property>
+                        <property name="wrap">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="close_button">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="receives_default">False</property>
+                        <property name="relief">none</property>
+                        <signal name="clicked" handler="on_close_button_clicked"/>
+                        <child>
+                          <object class="GtkImage" id="image496">
+                            <property name="visible">True</property>
+                            <property name="stock">gtk-close</property>
+                            <property name="icon-size">1</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="event_description_label">
+                    <property name="width_request">218</property>
+                    <property name="height_request">64</property>
+                    <property name="visible">True</property>
+                    <property name="label" translatable="yes">Event desc</property>
+                    <property name="wrap">True</property>
+                  </object>
+                  <packing>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

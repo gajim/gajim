@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ## src/negotiation.py
 ##
-## Copyright (C) 2007 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2007-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2007-2008 Brendan Taylor <whateley AT gmail.com>
 ##
 ## This file is part of Gajim.
@@ -27,30 +27,31 @@ from common import gajim
 from common import xmpp
 
 def describe_features(features):
-    '''a human-readable description of the features that have been negotiated'''
+    """
+    A human-readable description of the features that have been negotiated
+    """
     if features['logging'] == 'may':
         return _('- messages will be logged')
     elif features['logging'] == 'mustnot':
         return _('- messages will not be logged')
 
 class FeatureNegotiationWindow:
-    '''FeatureNegotiotionWindow class'''
     def __init__(self, account, jid, session, form):
         self.account = account
         self.jid = jid
         self.form = form
         self.session = session
 
-        self.xml = gtkgui_helpers.get_glade('data_form_window.glade', 'data_form_window')
-        self.window = self.xml.get_widget('data_form_window')
+        self.xml = gtkgui_helpers.get_gtk_builder('data_form_window.ui', 'data_form_window')
+        self.window = self.xml.get_object('data_form_window')
 
-        config_vbox = self.xml.get_widget('config_vbox')
+        config_vbox = self.xml.get_object('config_vbox')
         dataform = dataforms.ExtendForm(node = self.form)
         self.data_form_widget = dataforms_widget.DataFormWidget(dataform)
         self.data_form_widget.show()
         config_vbox.pack_start(self.data_form_widget)
 
-        self.xml.signal_autoconnect(self)
+        self.xml.connect_signals(self)
         self.window.show_all()
 
     def on_ok_button_clicked(self, widget):

@@ -23,8 +23,14 @@ import re
 import logging
 log = logging.getLogger('gajim.c.resolver')
 
+if __name__ == '__main__':
+    sys.path.append('..')
+    from common import i18n
+    import common.configpaths
+    common.configpaths.gajimpaths.init(None)
+
 from common import helpers
-from xmpp.idlequeue import IdleCommand
+from common.xmpp.idlequeue import IdleCommand
 
 # it is good to check validity of arguments, when calling system commands
 ns_type_pattern = re.compile('^[a-z]+$')
@@ -56,6 +62,7 @@ class CommonResolver():
         self.handlers = {}
 
     def resolve(self, host, on_ready, type='srv'):
+        log.debug('resolve %s type=%s' % (host, type))
         assert(type in ['srv', 'txt'])
         if not host:
             # empty host, return empty list of srv records
@@ -63,19 +70,23 @@ class CommonResolver():
             return
         if self.resolved_hosts.has_key(host+type):
             # host is already resolved, return cached values
+            log.debug('%s already resolved: %s')
             on_ready(host, self.resolved_hosts[host+type])
             return
         if self.handlers.has_key(host+type):
             # host is about to be resolved by another connection,
             # attach our callback
+            log.debug('already resolving %s' % host)
             self.handlers[host+type].append(on_ready)
         else:
             # host has never been resolved, start now
+            log.debug('Starting to resolve %s using %s' % (host, self))
             self.handlers[host+type] = [on_ready]
             self.start_resolve(host, type)
 
     def _on_ready(self, host, type, result_list):
         # practically it is impossible to be the opposite, but who knows :)
+        log.debug('Resolving result for %s: %s' % (host, result_list))
         if not self.resolved_hosts.has_key(host+type):
             self.resolved_hosts[host+type] = result_list
         if self.handlers.has_key(host+type):
@@ -88,11 +99,12 @@ class CommonResolver():
 
 # FIXME: API usage is not consistent! This one requires that process is called
 class LibAsyncNSResolver(CommonResolver):
-    '''
+    """
     Asynchronous resolver using libasyncns-python. process() method has to be
-    called in order to proceed the pending requests.
-    Based on patch submitted by Damien Thebault.
-    '''
+    called in order to proceed the pending requests. Based on patch submitted by
+    Damien Thebault.
+    """
+
     def __init__(self):
         self.asyncns = libasyncns.Asyncns()
         CommonResolver.__init__(self)
@@ -125,18 +137,23 @@ class LibAsyncNSResolver(CommonResolver):
             while resq is not None:
                 try:
                     rl = resq.get_done()
-                except:
+                except Exception:
                     rl = []
+                hosts = []
+                requested_type = resq.userdata['type']
+                requested_host = resq.userdata['host']
                 if rl:
                     for r in rl:
+                        if r['type'] != requested_type:
+                            # Answer doesn't contain valid SRV data
+                            continue
                         r['prio'] = r['pref']
-                self._on_ready(
-                        host = resq.userdata['host'],
-                        type = resq.userdata['type'],
-                        result_list = rl)
+                        hosts.append(r)
+                self._on_ready(host=requested_host, type=requested_type,
+                        result_list=hosts)
                 try:
                     resq = self.asyncns.get_next()
-                except:
+                except Exception:
                     resq = None
         elif type(resq) == libasyncns.AddrInfoQuery:
             # getaddrinfo result (A or AAAA)
@@ -146,20 +163,22 @@ class LibAsyncNSResolver(CommonResolver):
 
 
 class NSLookupResolver(CommonResolver):
-    '''
+    """
     Asynchronous DNS resolver calling nslookup. Processing of pending requests
-    is invoked from idlequeue which is watching file descriptor of pipe of stdout
-    of nslookup process.
-    '''
+    is invoked from idlequeue which is watching file descriptor of pipe of
+    stdout of nslookup process.
+    """
+
     def __init__(self, idlequeue):
         self.idlequeue = idlequeue
         self.process = False
         CommonResolver.__init__(self)
 
     def parse_srv_result(self, fqdn, result):
-        ''' parse the output of nslookup command and return list of
-        properties: 'host', 'port','weight', 'priority' corresponding to the found
-        srv hosts '''
+        """
+        Parse the output of nslookup command and return list of properties:
+        'host', 'port','weight', 'priority'     corresponding to the found srv hosts
+        """
         if os.name == 'nt':
             return self._parse_srv_result_nt(fqdn, result)
         elif os.name == 'posix':
@@ -260,10 +279,12 @@ class NSLookupResolver(CommonResolver):
         CommonResolver._on_ready(self, host, type, result_list)
 
     def start_resolve(self, host, type):
-        ''' spawn new nslookup process and start waiting for results '''
+        """
+        Spawn new nslookup process and start waiting for results
+        """
         ns = NsLookup(self._on_ready, host, type)
         ns.set_idlequeue(self.idlequeue)
-        ns.commandtimeout = 10
+        ns.commandtimeout = 20
         ns.start()
 
 
@@ -319,4 +340,6 @@ if __name__ == '__main__':
     win.add(hbox)
     win.show_all()
     gobject.timeout_add(200, idlequeue.process)
+    if USE_LIBASYNCNS:
+        gobject.timeout_add(200, resolver.process)
     gtk.main()

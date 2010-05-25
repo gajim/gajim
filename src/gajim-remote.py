@@ -3,7 +3,7 @@
 ##
 ## Copyright (C) 2005-2006 Dimitur Kirov <dkirov AT gmail.com>
 ##                         Nikos Kouremenos <kourem AT gmail.com>
-## Copyright (C) 2005-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2005-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2006 Junglecow <junglecow AT gmail.com>
 ##                    Travis Shirk <travis AT pobox.com>
 ## Copyright (C) 2006-2008 Jean-Marie Traissard <jim AT lapin.org>
@@ -106,7 +106,7 @@ class GajimRemote:
                                 _('Changes the status of account or accounts'),
                                 [
 #offline, online, chat, away, xa, dnd, invisible should not be translated
-                                        (_('status'), _('one of: offline, online, chat, away, xa, dnd, invisible '), True),
+                                        (_('status'), _('one of: offline, online, chat, away, xa, dnd, invisible. If not set, use accoun\'t previous status'), False),
                                         (_('message'), _('status message'), False),
                                         (_('account'), _('change status of account "account". '
         'If not specified, try to change status of all accounts that have '
@@ -261,6 +261,15 @@ class GajimRemote:
                                         ('xml', _('XML to send'), True),
                                         ('account', _('Account in which the xml will be sent; '
                                         'if not specified, xml will be sent to all accounts'),
+                                                False)
+                                ]
+                        ],
+                'change_avatar': [
+                                _('Change the avatar'),
+                                [
+                                        ('picture', _('Picture to use'), True),
+                                        ('account', _('Account in which the avatar will be set; '
+                                        'if not specified, the avatar will be set for all accounts'),
                                                 False)
                                 ]
                         ],
@@ -525,6 +534,8 @@ class GajimRemote:
         self.arguments += ['']*(len(args)-i)
 
     def handle_uri(self):
+        if len(sys.argv) < 3:
+            send_error(_('No uri given'))
         if not sys.argv[2].startswith('xmpp:'):
             send_error(_('Wrong uri'))
         sys.argv[2] = sys.argv[2][5:]

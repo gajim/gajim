@@ -2,8 +2,8 @@
 ## src/common/defs.py
 ##
 ## Copyright (C) 2006 Nikos Kouremenos <kourem AT gmail.com>
-## Copyright (C) 2006-2008 Yann Leboulanger <asterix AT lagaule.org>
-##                         Jean-Marie Traissard <jim AT lapin.org>
+## Copyright (C) 2006-2010 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2006-2008 Jean-Marie Traissard <jim AT lapin.org>
 ## Copyright (C) 2007 Brendan Taylor <whateley AT gmail.com>
 ##                    Tomasz Melcer <liori AT exroot.org>
 ## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
@@ -24,10 +24,10 @@
 ##
 
 docdir = '../'
-datadir = '../'
+basedir   = '../'
 localedir = '../po'
 
-version = '0.13.0.1-dev'
+version = '0.13.10.2-dev'
 
 import sys, os.path
 for base in ('.', 'common'):

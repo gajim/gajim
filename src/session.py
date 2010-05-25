@@ -1,8 +1,8 @@
 # -*- coding:utf-8 -*-
 ## src/session.py
 ##
-## Copyright (C) 2008 Yann Leboulanger <asterix AT lagaule.org>
-##                    Brendan Taylor <whateley AT gmail.com>
+## Copyright (C) 2008-2010 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2008 Brendan Taylor <whateley AT gmail.com>
 ##                    Jonathan Schleifer <js-gajim AT webkeks.org>
 ##                    Stephan Erb <steve-e AT h3c.de>
 ##
@@ -57,7 +57,9 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
         self.detach_from_control()
 
     def get_chatstate(self, msg, msgtxt):
-        '''extracts chatstate from a <message/> stanza'''
+        """
+        Extract chatstate from a <message/> stanza
+        """
         composing_xep = None
         chatstate = None
 
@@ -83,7 +85,9 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
         return (composing_xep, chatstate)
 
     def received(self, full_jid_with_resource, msgtxt, tim, encrypted, msg):
-        '''dispatch a received <message> stanza'''
+        """
+        Dispatch a received <message> stanza
+        """
         msg_type = msg.getType()
         subject = msg.getSubject()
         resource = gajim.get_resource_from_jid(full_jid_with_resource)
@@ -265,9 +269,11 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
                     chatstate, msg_id, composing_xep, user_nick, xhtml, form_node]))
 
     def roster_message(self, jid, msg, tim, encrypted=False, msg_type='',
-    subject=None, resource='', msg_id=None, user_nick='',
-    advanced_notif_num=None, xhtml=None, form_node=None):
-        '''display the message or show notification in the roster'''
+                    subject=None, resource='', msg_id=None, user_nick='',
+                    advanced_notif_num=None, xhtml=None, form_node=None):
+        """
+        Display the message or show notification in the roster
+        """
         contact = None
         # if chat window will be for specific resource
         resource_for_chat = resource
@@ -399,7 +405,8 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 
         try:
             if form.getType() == 'form' and 'security' in form.asDict():
-                security_options = [x[1] for x in form.getField('security').getOptions()]
+                security_options = [x[1] for x in form.getField('security').\
+                    getOptions()]
                 if security_options == ['none']:
                     self.respond_archiving(form)
                 else:
@@ -407,34 +414,37 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 
                     # we don't support 3-message negotiation as the responder
                     if 'dhkeys' in form.asDict():
-                        self.fail_bad_negotiation('3 message negotiation not supported '
-                                'when responding', ('dhkeys',))
+                        self.fail_bad_negotiation('3 message negotiation not '
+                            'supported when responding', ('dhkeys',))
                         return
 
-                    negotiated, not_acceptable, ask_user = self.verify_options_bob(form)
+                    negotiated, not_acceptable, ask_user = \
+                        self.verify_options_bob(form)
 
                     if ask_user:
                         def accept_nondefault_options(is_checked):
                             self.dialog.destroy()
                             negotiated.update(ask_user)
-                            self.respond_e2e_bob(form, negotiated, not_acceptable)
+                            self.respond_e2e_bob(form, negotiated,
+                                not_acceptable)
 
                         def reject_nondefault_options():
                             self.dialog.destroy()
                             for key in ask_user.keys():
                                 not_acceptable.append(key)
-                            self.respond_e2e_bob(form, negotiated, not_acceptable)
+                            self.respond_e2e_bob(form, negotiated,
+                                not_acceptable)
 
-                        self.dialog = dialogs.YesNoDialog(_('Confirm these session '
-                                'options'),
-                                _('''The remote client wants to negotiate an session with these features:
+                        self.dialog = dialogs.YesNoDialog(_('Confirm these '
+                            'session options'), _('''The remote client wants '
+                            'to negotiate an session with these features:
 
 %s
 
 Are these options acceptable?''') % (negotiation.describe_features(
-                                ask_user)),
-                                on_response_yes=accept_nondefault_options,
-                                on_response_no=reject_nondefault_options)
+                            ask_user)),
+                            on_response_yes=accept_nondefault_options,
+                            on_response_no=reject_nondefault_options)
                     else:
                         self.respond_e2e_bob(form, negotiated, not_acceptable)
 

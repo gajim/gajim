@@ -3,7 +3,7 @@
 ##
 ## Copyright (C) 2006 Dimitur Kirov <dkirov AT gmail.com>
 ##                    Jean-Marie Traissard <jim AT lapin.org>
-## Copyright (C) 2007 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2007-2010 Yann Leboulanger <asterix AT lagaule.org>
 ##
 ## This file is part of Gajim.
 ##
@@ -41,10 +41,13 @@ S_FINISHED = 4
 CONNECT_TIMEOUT = 20
 
 class Proxy65Manager:
-    ''' keep records for file transfer proxies. Each time account
-    establishes a connection to its server call proxy65manger.resolve(proxy)
-    for every proxy that is convigured within the account. The class takes
-    care to resolve and test each proxy only once.'''
+    """
+    Keep records for file transfer proxies. Each time account establishes a
+    connection to its server call proxy65manger.resolve(proxy) for every proxy
+    that is convigured within the account. The class takes care to resolve and
+    test each proxy only once
+    """
+
     def __init__(self, idlequeue):
         # dict {proxy: proxy properties}
         self.idlequeue = idlequeue
@@ -53,7 +56,9 @@ class Proxy65Manager:
         self.default_proxies = {}
 
     def resolve(self, proxy, connection, sender_jid, default=None):
-        ''' start '''
+        """
+        Start
+        """
         if proxy in self.proxies:
             resolver = self.proxies[proxy]
         else:
@@ -78,6 +83,8 @@ class Proxy65Manager:
                 host = item.getAttr('host')
                 port = item.getAttr('port')
                 jid = item.getAttr('jid')
+                if not host or not port or not jid:
+                    self.proxies[proxy]._on_connect_failure()
                 self.proxies[proxy].resolve_result(host, port, jid)
                 # we can have only one streamhost
                 raise common.xmpp.NodeProcessed
@@ -102,12 +109,13 @@ class Proxy65Manager:
 
 class ProxyResolver:
     def resolve_result(self, host, port, jid):
-        ''' test if host has a real proxy65 listening on port '''
+        """
+        Test if host has a real proxy65 listening on port
+        """
         self.host = str(host)
         self.port = int(port)
         self.jid = unicode(jid)
-        self.state = S_RESOLVED
-        #FIXME: re-enable proxy testing
+        self.state = S_INITIAL
         log.info('start resolving %s:%s' % (self.host, self.port))
         self.receiver_tester = ReceiverTester(self.host, self.port, self.jid,
                 self.sid, self.sender_jid, self._on_receiver_success,
@@ -175,19 +183,25 @@ class ProxyResolver:
                 self.try_next_connection()
 
     def try_next_connection(self):
-        ''' try to resolve proxy with the next possible connection '''
+        """
+        Try to resolve proxy with the next possible connection
+        """
         if self.connections:
             connection = self.connections.pop(0)
             self.start_resolve(connection)
 
     def add_connection(self, connection):
-        ''' add a new connection in case the first fails '''
+        """
+        Add a new connection in case the first fails
+        """
         self.connections.append(connection)
         if self.state == S_INITIAL:
             self.start_resolve(connection)
 
     def start_resolve(self, connection):
-        ''' request network address from proxy '''
+        """
+        Request network address from proxy
+        """
         self.state = S_STARTED
         self.active_connection = connection
         iq = common.xmpp.Protocol(name='iq', to=self.proxy, typ='get')
@@ -209,10 +223,16 @@ class ProxyResolver:
         self.sender_jid = sender_jid
 
 class HostTester(Socks5, IdleObject):
-    ''' fake proxy tester. '''
+    """
+    Fake proxy tester
+    """
+
     def __init__(self, host, port, jid, sid, sender_jid, on_success, on_failure):
-        ''' try to establish and auth to proxy at (host, port)
-        call on_success, or on_failure according to the result'''
+        """
+        Try to establish and auth to proxy at (host, port)
+
+        Calls on_success, or on_failure according to the result.
+        """
         self.host = host
         self.port = port
         self.jid = jid
@@ -226,7 +246,9 @@ class HostTester(Socks5, IdleObject):
         self.sid = sid
 
     def connect(self):
-        ''' create the socket and plug it to the idlequeue '''
+        """
+        Create the socket and plug it to the idlequeue
+        """
         if self.host is None:
             self.on_failure()
             return None
@@ -320,10 +342,16 @@ class HostTester(Socks5, IdleObject):
         return
 
 class ReceiverTester(Socks5, IdleObject):
-    ''' fake proxy tester. '''
+    """
+    Fake proxy tester
+    """
+
     def __init__(self, host, port, jid, sid, sender_jid, on_success, on_failure):
-        ''' try to establish and auth to proxy at (host, port)
-        call on_success, or on_failure according to the result'''
+        """
+        Try to establish and auth to proxy at (host, port)
+
+        Call on_success, or on_failure according to the result.
+        """
         self.host = host
         self.port = port
         self.jid = jid
@@ -337,7 +365,9 @@ class ReceiverTester(Socks5, IdleObject):
         self.sid = sid
 
     def connect(self):
-        ''' create the socket and plug it to the idlequeue '''
+        """
+        Create the socket and plug it to the idlequeue
+        """
         if self.host is None:
             self.on_failure()
             return None

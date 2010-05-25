@@ -5,7 +5,7 @@
 ##                    Stéphan Kochen <stephan AT kochen.nl>
 ## Copyright (C) 2005-2006 Dimitur Kirov <dkirov AT gmail.com>
 ## Copyright (C) 2005-2007 Nikos Kouremenos <kourem AT gmail.com>
-## Copyright (C) 2005-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2005-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2006 Travis Shirk <travis AT pobox.com>
 ##                    Stefan Bethge <stefan AT lanpartei.de>
 ## Copyright (C) 2006-2007 Jean-Marie Traissard <jim AT lapin.org>
@@ -33,15 +33,20 @@ import gobject
 import os
 import time
 import locale
+from datetime import datetime
+from datetime import timedelta
 
 import gtkgui_helpers
 
 from common import gajim
 from common import helpers
 from common.pep import MOODS, ACTIVITIES
+from common.i18n import Q_
 
 class BaseTooltip:
-    ''' Base Tooltip class;
+    """
+    Base Tooltip class
+
             Usage:
                     tooltip = BaseTooltip()
                     ....
@@ -57,22 +62,28 @@ class BaseTooltip:
 
             Tooltip is displayed aligned centered to the mouse poiner and 4px below the widget.
             In case tooltip goes below the visible area it is shown above the widget.
-    '''
+    """
+
     def __init__(self):
         self.timeout = 0
         self.preferred_position = [0, 0]
         self.win = None
         self.id = None
+        self.cur_data = None
+        self.check_last_time = None
 
     def populate(self, data):
-        ''' this method must be overriden by all extenders
-        This is the most simple implementation: show data as value of a label
-        '''
+        """
+        This method must be overriden by all extenders. This is the most simple
+        implementation: show data as value of a label
+        """
         self.create_window()
         self.win.add(gtk.Label(data))
 
     def create_window(self):
-        ''' create a popup window each time tooltip is requested '''
+        """
+        Create a popup window each time tooltip is requested
+        """
         self.win = gtk.Window(gtk.WINDOW_POPUP)
         self.win.set_border_width(3)
         self.win.set_resizable(False)
@@ -86,10 +97,12 @@ class BaseTooltip:
         self.screen = self.win.get_screen()
 
     def _get_icon_name_for_tooltip(self, contact):
-        ''' helper function used for tooltip contacts/acounts
+        """
+        Helper function used for tooltip contacts/acounts
+
         Tooltip on account has fake contact with sub == '', in this case we show
         real status of the account
-        '''
+        """
         if contact.ask == 'subscribe':
             return 'requested'
         elif contact.sub in ('both', 'to', ''):
@@ -107,9 +120,8 @@ class BaseTooltip:
                 self.screen.get_width() + half_width:
             self.preferred_position[0] = self.screen.get_width() - \
                     requisition.width
-        else:
+        elif not self.check_last_time:
             self.preferred_position[0] -= half_width
-            self.screen.get_height()
         if self.preferred_position[1] + requisition.height > \
                 self.screen.get_height():
             # flip tooltip up
@@ -133,11 +145,14 @@ class BaseTooltip:
         return True
 
     def show_tooltip(self, data, widget_height, widget_y_position):
-        ''' show tooltip on widget.
-        data contains needed data for tooltip contents
-        widget_height is the height of the widget on which we show the tooltip
-        widget_y_position is vertical position of the widget on the screen
-        '''
+        """
+        Show tooltip on widget
+
+        Data contains needed data for tooltip contents.
+        widget_height is the height of the widget on which we show the tooltip.
+        widget_y_position is vertical position of the widget on the screen.
+        """
+        self.cur_data = data
         # set tooltip contents
         self.populate(data)
 
@@ -161,10 +176,53 @@ class BaseTooltip:
             self.win.destroy()
             self.win = None
         self.id = None
+        self.cur_data = None
+        self.check_last_time = None
+
+    @staticmethod
+    def colorize_status(status):
+        """
+        Colorize the status message inside the tooltip by it's
+        semantics. Color palette is the Tango.
+        """
+        formatted = "<span foreground='%s'>%s</span>"
+        if status.startswith(Q_("?user status:Available")):
+            status = formatted % ('#73D216', status)
+        elif status.startswith(_("Free for Chat")):
+            status = formatted % ('#3465A4', status)
+        elif status.startswith(_("Away")):
+            status = formatted % ('#EDD400', status)
+        elif status.startswith(_("Busy")):
+            status = formatted % ('#F57900', status)
+        elif status.startswith(_("Not Available")):
+            status = formatted % ('#CC0000', status)
+        elif status.startswith(_("Offline")):
+            status = formatted % ('#555753', status)
+        return status
+
+    @staticmethod
+    def colorize_affiliation(affiliation):
+        """
+        Color the affiliation of a MUC participant inside the tooltip by
+        it's semantics. Color palette is the Tango.
+        """
+        formatted = "<span foreground='%s'>%s</span>"
+        if affiliation.startswith(Q_("?Group Chat Contact Affiliation:None")):
+            affiliation = formatted % ('#555753', affiliation)
+        elif affiliation.startswith(_("Member")):
+            affiliation = formatted % ('#73D216', affiliation)
+        elif affiliation.startswith(_("Administrator")):
+            affiliation = formatted % ('#F57900', affiliation)
+        elif affiliation.startswith(_("Owner")):
+            affiliation = formatted % ('#CC0000', affiliation)
+        return affiliation
 
 class StatusTable:
-    ''' Contains methods for creating status table. This
-    is used in Roster and NotificationArea tooltips '''
+    """
+    Contains methods for creating status table. This is used in Roster and
+    NotificationArea tooltips
+    """
+
     def __init__(self):
         self.current_row = 1
         self.table = None
@@ -201,8 +259,10 @@ class StatusTable:
         return str_status
 
     def add_status_row(self, file_path, show, str_status, status_time=None,
-    show_lock=False, indent=True):
-        ''' appends a new row with status icon to the table '''
+                    show_lock=False, indent=True):
+        """
+        Append a new row with status icon to the table
+        """
         self.current_row += 1
         state_file = show.replace(' ', '_')
         files = []
@@ -235,7 +295,10 @@ class StatusTable:
                     self.current_row + 1, 0, 0, 0, 0)
 
 class NotificationAreaTooltip(BaseTooltip, StatusTable):
-    ''' Tooltip that is shown in the notification area '''
+    """
+    Tooltip that is shown in the notification area
+    """
+
     def __init__(self):
         BaseTooltip.__init__(self)
         StatusTable.__init__(self)
@@ -283,7 +346,10 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
         self.hbox.show_all()
 
 class GCTooltip(BaseTooltip):
-    ''' Tooltip that is shown in the GC treeview '''
+    """
+    Tooltip that is shown in the GC treeview
+    """
+
     def __init__(self):
         self.account = None
         self.text_label = gtk.Label()
@@ -317,23 +383,25 @@ class GCTooltip(BaseTooltip):
                 status = '<i>' +\
                         gobject.markup_escape_text(status) + '</i>'
                 properties.append((status, None))
-        else: # no status message, show SHOW instead
-            show = helpers.get_uf_show(contact.show)
-            show = '<i>' + show + '</i>'
-            properties.append((show, None))
 
-        if contact.jid.strip() != '':
-            properties.append((_('Jabber ID: '), contact.jid))
+        show = helpers.get_uf_show(contact.show)
+        show = self.colorize_status(show)
+        properties.append((show, None))
 
-        if hasattr(contact, 'resource') and contact.resource.strip() != '':
+        if contact.jid.strip():
+            properties.append((_('Jabber ID: '), "<b>%s</b>" % contact.jid))
+
+        if hasattr(contact, 'resource') and contact.resource.strip():
             properties.append((_('Resource: '),
-                    gobject.markup_escape_text(contact.resource) ))
+                    gobject.markup_escape_text(contact.resource)))
+
         if contact.affiliation != 'none':
             uf_affiliation = helpers.get_uf_affiliation(contact.affiliation)
-            affiliation_str = \
+            uf_affiliation =\
                     _('%(owner_or_admin_or_member)s of this group chat') %\
                     {'owner_or_admin_or_member': uf_affiliation}
-            properties.append((affiliation_str, None))
+            uf_affiliation = self.colorize_affiliation(uf_affiliation)
+            properties.append((uf_affiliation, None))
 
         # Add avatar
         puny_name = helpers.sanitize_filename(contact.name)
@@ -378,7 +446,10 @@ class GCTooltip(BaseTooltip):
         self.win.add(vcard_table)
 
 class RosterTooltip(NotificationAreaTooltip):
-    ''' Tooltip that is shown in the roster treeview '''
+    """
+    Tooltip that is shown in the roster treeview
+    """
+
     def __init__(self):
         self.account = None
         self.image = gtk.Image()
@@ -474,6 +545,20 @@ class RosterTooltip(NotificationAreaTooltip):
         else: # only one resource
             if contact.show:
                 show = helpers.get_uf_show(contact.show)
+                if not self.check_last_time and self.account:
+                    if contact.show == 'offline':
+                        if not contact.last_status_time:
+                            gajim.connections[self.account].request_last_status_time(
+                                    contact.jid, '')
+                        else:
+                            self.check_last_time = contact.last_status_time
+                    elif contact.resource:
+                        gajim.connections[self.account].request_last_status_time(
+                                contact.jid, contact.resource)
+                        if contact.last_activity_time:
+                            self.check_last_time = contact.last_activity_time
+                else:
+                    self.check_last_time = None
                 if contact.last_status_time:
                     vcard_current_row += 1
                     if contact.show == 'offline':
@@ -500,8 +585,7 @@ class RosterTooltip(NotificationAreaTooltip):
                         show = _('Connected')
                     else:
                         show = _('Disconnected')
-                show = '<i>' + show + '</i>'
-                # we append show below
+                show = self.colorize_status(show)
 
                 if contact.status:
                     status = contact.status.strip()
@@ -517,7 +601,7 @@ class RosterTooltip(NotificationAreaTooltip):
 
         self._append_pep_info(contact, properties)
 
-        properties.append((_('Jabber ID: '), prim_contact.jid ))
+        properties.append((_('Jabber ID: '), "<b>%s</b>" % prim_contact.jid))
 
         # contact has only one ressource
         if num_resources == 1 and contact.resource:
@@ -541,6 +625,27 @@ class RosterTooltip(NotificationAreaTooltip):
                 properties.append((_('OpenPGP: '),
                         gobject.markup_escape_text(keyID)))
 
+        if contact.last_activity_time:
+            last_active = datetime(*contact.last_activity_time[:6])
+            current = datetime.now()
+
+            diff = current - last_active
+            diff = timedelta(diff.days, diff.seconds)
+
+            if last_active.date() == current.date():
+                formatted = last_active.strftime("%X")
+            else:
+                formatted = last_active.strftime("%c")
+
+            # Do not show the "Idle since" and "Idle for" items if there
+            # is no meaningful difference between last activity time and
+            # current time.
+            if diff.days > 0 or diff.seconds > 0:
+                cs = "<span foreground='#888A85'>%s</span>"
+                properties.append((str(), None))
+                properties.append(((cs % _("Idle since %s")) % formatted, None))
+                properties.append(((cs % _("Idle for %s")) % str(diff), None))
+
         while properties:
             property_ = properties.pop(0)
             vcard_current_row += 1
@@ -561,7 +666,7 @@ class RosterTooltip(NotificationAreaTooltip):
                         vcard_current_row + 1, gtk.EXPAND | gtk.FILL,
                                 vertical_fill, 0, 0)
             else:
-                if isinstance(property_[0], (unicode, str)): #FIXME: rm unicode?
+                if isinstance(property_[0], (unicode, str)): # FIXME: rm unicode?
                     label.set_markup(property_[0])
                     label.set_line_wrap(True)
                 else:
@@ -574,29 +679,42 @@ class RosterTooltip(NotificationAreaTooltip):
                     vcard_current_row + 1, gtk.FILL, gtk.FILL | gtk.EXPAND, 3, 3)
         self.win.add(vcard_table)
 
+    def update_last_time(self, last_time):
+        if not self.check_last_time or time.strftime('%x %I:%M %p', last_time) !=\
+        time.strftime('%x %I:%M %p', self.check_last_time):
+            self.win.destroy()
+            self.win = None
+            self.populate(self.cur_data)
+            self.win.ensure_style()
+            self.win.show_all()
+
     def _append_pep_info(self, contact, properties):
-        '''
-        Append Tune, Mood, Activity information of the specified contact
+        """
+        Append Tune, Mood, Activity, Location information of the specified contact
         to the given property list.
-        '''
+        """
         if 'mood' in contact.pep:
             mood = contact.pep['mood'].asMarkupText()
-            mood_string = _('Mood:') + ' %s' % mood
-            properties.append((mood_string, None))
+            properties.append((_("Mood: %s") % mood, None))
 
         if 'activity' in contact.pep:
             activity = contact.pep['activity'].asMarkupText()
-            activity_string = _('Activity:') + ' %s' % activity
-            properties.append((activity_string, None))
+            properties.append((_("Activity: %s") % activity, None))
 
         if 'tune' in contact.pep:
             tune = contact.pep['tune'].asMarkupText()
-            tune_string = _('Tune:') + ' %s' % tune
-            properties.append((tune_string, None))
+            properties.append((_("Tune: %s") % tune, None))
+
+        if 'location' in contact.pep:
+            location = contact.pep['location'].asMarkupText()
+            properties.append((_("Location: %s") % location, None))
 
 
 class FileTransfersTooltip(BaseTooltip):
-    ''' Tooltip that is shown in the notification area '''
+    """
+    Tooltip that is shown in the notification area
+    """
+
     def __init__(self):
         BaseTooltip.__init__(self)
 
@@ -680,7 +798,9 @@ class FileTransfersTooltip(BaseTooltip):
 
 
 class ServiceDiscoveryTooltip(BaseTooltip):
-    ''' Tooltip that is shown when hovering over a service discovery row '''
+    """
+    Tooltip that is shown when hovering over a service discovery row
+    """
     def populate(self, status):
         self.create_window()
         label = gtk.Label()

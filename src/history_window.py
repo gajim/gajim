@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ## src/history_window.py
 ##
-## Copyright (C) 2003-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2003-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2005 Vincent Hanquez <tab AT snarc.org>
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem AT gmail.com>
 ## Copyright (C) 2006 Dimitur Kirov <dkirov AT gmail.com>
@@ -43,43 +43,46 @@ constants = Constants()
 
 # Completion dict
 (
-C_INFO_JID,
-C_INFO_ACCOUNT,
-C_INFO_NAME,
-C_INFO_COMPLETION
+        C_INFO_JID,
+        C_INFO_ACCOUNT,
+        C_INFO_NAME,
+        C_INFO_COMPLETION
 ) = range(4)
 
 # contact_name, date, message, time
 (
-C_LOG_JID,
-C_CONTACT_NAME,
-C_UNIXTIME,
-C_MESSAGE,
-C_TIME
+        C_LOG_JID,
+        C_CONTACT_NAME,
+        C_UNIXTIME,
+        C_MESSAGE,
+        C_TIME
 ) = range(5)
 
 class HistoryWindow:
-    '''Class for browsing logs of conversations with contacts'''
+    """
+    Class for browsing logs of conversations with contacts
+    """
 
     def __init__(self, jid = None, account = None):
-        xml = gtkgui_helpers.get_glade('history_window.glade')
-        self.window = xml.get_widget('history_window')
-        self.jid_entry = xml.get_widget('jid_entry')
-        self.calendar = xml.get_widget('calendar')
-        scrolledwindow = xml.get_widget('scrolledwindow')
+        xml = gtkgui_helpers.get_gtk_builder('history_window.ui')
+        self.window = xml.get_object('history_window')
+        self.calendar = xml.get_object('calendar')
+        scrolledwindow = xml.get_object('scrolledwindow')
         self.history_textview = conversation_textview.ConversationTextview(
                 account, used_in_history_window = True)
         scrolledwindow.add(self.history_textview.tv)
         self.history_buffer = self.history_textview.tv.get_buffer()
         self.history_buffer.create_tag('highlight', background = 'yellow')
-        self.checkbutton = xml.get_widget('log_history_checkbutton')
+        self.checkbutton = xml.get_object('log_history_checkbutton')
         self.checkbutton.connect('toggled',
                 self.on_log_history_checkbutton_toggled)
-        self.query_entry = xml.get_widget('query_entry')
-        self.query_combobox = xml.get_widget('query_combobox')
+        self.query_entry = xml.get_object('query_entry')
+        self.query_combobox = xml.get_object('query_combobox')
+        self.jid_entry = self.query_combobox.child
+        self.jid_entry.connect('activate', self.on_jid_entry_activate)
         self.query_combobox.set_active(0)
-        self.results_treeview = xml.get_widget('results_treeview')
-        self.results_window = xml.get_widget('results_scrolledwindow')
+        self.results_treeview = xml.get_object('results_treeview')
+        self.results_window = xml.get_object('results_scrolledwindow')
 
         # contact_name, date, message, time
         model = gtk.ListStore(str, str, str, str, str)
@@ -128,38 +131,38 @@ class HistoryWindow:
                 gajim.config.get('history_window_x-position'),
                 gajim.config.get('history_window_y-position'))
 
-        xml.signal_autoconnect(self)
+        xml.connect_signals(self)
         self.window.show_all()
 
     def _fill_completion_dict(self):
-        '''Fill completion_dict for key auto completion. Then load history for
-        current jid (by calling another function).
+        """
+        Fill completion_dict for key auto completion. Then load history for
+        current jid (by calling another function)
 
-        Key will be either jid or full_completion_name
-        (contact name or long description like "pm-contact from groupchat....")
+        Key will be either jid or full_completion_name (contact name or long
+        description like "pm-contact from groupchat....").
 
         {key : (jid, account, nick_name, full_completion_name}
-        this is a generator and does pseudo-threading via idle_add()
-        '''
+        This is a generator and does pseudo-threading via idle_add().
+        """
         liststore = gtkgui_helpers.get_completion_liststore(self.jid_entry)
 
         # Add all jids in logs.db:
         db_jids = gajim.logger.get_jids_in_db()
-        self.completion_dict = dict.fromkeys(db_jids)
+        completion_dict = dict.fromkeys(db_jids)
 
         self.accounts_seen_online = gajim.contacts.get_accounts()[:]
 
         # Enhance contacts of online accounts with contact. Needed for mapping below
         for account in self.accounts_seen_online:
-            self.completion_dict.update(
-                    helpers.get_contact_dict_for_account(account))
+            completion_dict.update(helpers.get_contact_dict_for_account(account))
 
         muc_active_img = gtkgui_helpers.load_icon('muc_active')
         contact_img = gajim.interface.jabber_state_images['16']['online']
         muc_active_pix = muc_active_img.get_pixbuf()
         contact_pix = contact_img.get_pixbuf()
 
-        keys = self.completion_dict.keys()
+        keys = completion_dict.keys()
         # Move the actual jid at first so we load history faster
         actual_jid = self.jid_entry.get_text().decode('utf-8')
         if actual_jid in keys:
@@ -171,7 +174,7 @@ class HistoryWindow:
         # Warning : This for is time critical with big DB
         for key in keys:
             completed = key
-            contact = self.completion_dict[completed]
+            contact = completion_dict[completed]
             if contact:
                 info_name = contact.get_shown_name()
                 info_completion = info_name
@@ -208,8 +211,10 @@ class HistoryWindow:
         yield False
 
     def _get_account_for_jid(self, jid):
-        '''Return the corresponding account of the jid.
-        May be None if an account could not be found'''
+        """
+        Return the corresponding account of the jid. May be None if an account
+        could not be found
+        """
         accounts = gajim.contacts.get_accounts()
         account = None
         for acc in accounts:
@@ -246,8 +251,10 @@ class HistoryWindow:
     def on_jid_entry_focus(self, widget, event):
         widget.select_region(0, -1) # select text
 
-    def _load_history(self, jid_or_name, account = None):
-        '''Load history for the given jid/name and show it'''
+    def _load_history(self, jid_or_name, account=None):
+        """
+        Load history for the given jid/name and show it
+        """
         if jid_or_name and jid_or_name in self.completion_dict:
         # a full qualified jid or a contact name was entered
             info_jid, info_account, info_name, info_completion = self.completion_dict[jid_or_name]
@@ -324,12 +331,17 @@ class HistoryWindow:
         self._add_lines_for_date(year, month, day)
 
     def on_calendar_month_changed(self, widget):
-        '''asks for days in this month if they have logs it bolds them (marks
-        them)
-        '''
+        """
+        Ask for days in this month, if they have logs it bolds them (marks them)
+        """
         if not self.jid:
             return
         year, month, day = widget.get_date() # integers
+        if year < 1900:
+            widget.select_month(0, 1900)
+            widget.select_day(1)
+            return
+
         # in gtk January is 1, in python January is 0,
         # I want the second
         # first day of month is 1 not 0
@@ -338,7 +350,7 @@ class HistoryWindow:
         days_in_this_month = calendar.monthrange(year, month)[1]
         try:
             log_days = gajim.logger.get_days_with_logs(self.jid, year, month,
-                    days_in_this_month, self.account)
+                days_in_this_month, self.account)
         except exceptions.PysqliteOperationalError, e:
             dialogs.ErrorDialog(_('Disk Error'), str(e))
             return
@@ -362,7 +374,9 @@ class HistoryWindow:
         return show
 
     def _add_lines_for_date(self, year, month, day):
-        '''adds all the lines for given date in textbuffer'''
+        """
+        Add all the lines for given date in textbuffer
+        """
         self.history_buffer.set_text('') # clear the buffer first
         self.last_time_printout = 0
 
@@ -376,7 +390,9 @@ class HistoryWindow:
                     line[5])
 
     def _add_new_line(self, contact_name, tim, kind, show, message, subject):
-        '''add a new line in textbuffer'''
+        """
+        Add a new line in textbuffer
+        """
         if not message and kind not in (constants.KIND_STATUS,
                 constants.KIND_GCSTATUS):
             return
@@ -538,8 +554,10 @@ class HistoryWindow:
             self.jids_to_search = gajim.logger.get_jids_in_db()
 
     def on_results_treeview_row_activated(self, widget, path, column):
-        '''a row was double clicked, get date from row, and select it in calendar
-        which results to showing conversation logs for that date'''
+        """
+        A row was double clicked, get date from row, and select it in calendar
+        which results to showing conversation logs for that date
+        """
         # get currently selected date
         cur_year, cur_month = self.calendar.get_date()[0:2]
         cur_month = gtkgui_helpers.make_gtk_month_python_month(cur_month)
@@ -568,7 +586,9 @@ class HistoryWindow:
         # and highlight all that
 
     def _scroll_to_result(self, unix_time):
-        '''scrolls to the result using unix_time and highlight line'''
+        """
+        Scroll to the result using unix_time and highlight line
+        """
         start_iter = self.history_buffer.get_start_iter()
         local_time = time.localtime(float(unix_time))
         tim = time.strftime('%X', local_time)
@@ -602,7 +622,9 @@ class HistoryWindow:
                     ' '.join(no_log_for))
 
     def open_history(self, jid, account):
-        '''Load chat history of the specified jid'''
+        """
+        Load chat history of the specified jid
+        """
         self.jid_entry.set_text(jid)
         if account and account not in self.accounts_seen_online:
             # Update dict to not only show bare jid

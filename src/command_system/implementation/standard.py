@@ -1,4 +1,4 @@
-# Copyright (C) 2009  Alexander Cherniuk <ts33kr@gmail.com>
+# Copyright (C) 2009-2010  Alexander Cherniuk <ts33kr@gmail.com>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@ from common.exceptions import GajimGeneralException
 from common.logger import Constants
 
 from ..errors import CommandError
-from ..framework import CommandContainer, command, documentation
+from ..framework import CommandContainer, command, doc
 from ..mapping import generate_usage
 
 from hosts import ChatCommands, PrivateChatCommands, GroupChatCommands
@@ -38,25 +38,25 @@ lc = Constants()
 
 class StandardCommonCommands(CommandContainer):
     """
-    This command container contains standard commands which are common to all -
-    chat, private chat, group chat.
+    This command container contains standard commands which are common
+    to all - chat, private chat, group chat.
     """
 
     HOSTS = (ChatCommands, PrivateChatCommands, GroupChatCommands)
 
     @command
-    @documentation(_("Clear the text window"))
+    @doc(_("Clear the text window"))
     def clear(self):
         self.conv_textview.clear()
 
     @command
-    @documentation(_("Hide the chat buttons"))
+    @doc(_("Hide the chat buttons"))
     def compact(self):
         new_status = not self.hide_chat_buttons
         self.chat_buttons_set_visible(new_status)
 
     @command(overlap=True)
-    @documentation(_("Show help on a given command or a list of available commands if -(-a)ll is given"))
+    @doc(_("Show help on a given command or a list of available commands if -(-a)ll is given"))
     def help(self, command=None, all=False):
         if command:
             command = self.get_command(command)
@@ -83,17 +83,17 @@ class StandardCommonCommands(CommandContainer):
             self.echo(help(self, 'help'))
 
     @command(raw=True)
-    @documentation(_("Send a message to the contact"))
+    @doc(_("Send a message to the contact"))
     def say(self, message):
         self.send(message)
 
     @command(raw=True)
-    @documentation(_("Send action (in the third person) to the current chat"))
+    @doc(_("Send action (in the third person) to the current chat"))
     def me(self, action):
         self.send("/me %s" % action)
 
     @command('lastlog', overlap=True)
-    @documentation(_("Show logged messages which mention given text"))
+    @doc(_("Show logged messages which mention given text"))
     def grep(self, text, limit=None):
         results = gajim.logger.get_search_results_for_query(self.contact.jid,
                 text, self.account)
@@ -128,28 +128,62 @@ class StandardCommonCommands(CommandContainer):
 
             self.echo(formatted)
 
-class StandardChatCommands(CommandContainer):
+    @command(raw=True, empty=True)
+    @doc(_("""
+    Set current the status
+
+    Status can be given as one of the following values: online, away,
+    chat, xa, dnd.
+    """))
+    def status(self, status, message):
+        if status not in ('online', 'away', 'chat', 'xa', 'dnd'):
+            raise CommandError("Invalid status given")
+        for connection in gajim.connections.itervalues():
+            connection.change_status(status, message)
+
+    @command(raw=True, empty=True)
+    @doc(_("Set the current status to away"))
+    def away(self, message):
+        if not message:
+            message = _("Away")
+        for connection in gajim.connections.itervalues():
+            connection.change_status('away', message)
+
+    @command('back', raw=True, empty=True)
+    @doc(_("Set the current status to online"))
+    def online(self, message):
+        if not message:
+            message = _("Available")
+        for connection in gajim.connections.itervalues():
+            connection.change_status('online', message)
+
+class StandardCommonChatCommands(CommandContainer):
     """
-    This command container contains standard command which are unique to a chat.
+    This command container contans standard commands, which are common
+    to a chat and a private chat only.
     """
 
-    HOSTS = (ChatCommands,)
+    HOSTS = (ChatCommands, PrivateChatCommands)
 
     @command
-    @documentation(_("Send a ping to the contact"))
+    @doc(_("Toggle the GPG encryption"))
+    def gpg(self):
+        self._toggle_gpg()
+
+    @command
+    @doc(_("Send a ping to the contact"))
     def ping(self):
         if self.account == gajim.ZEROCONF_ACC_NAME:
             raise CommandError(_('Command is not supported for zeroconf accounts'))
         gajim.connections[self.account].sendPing(self.contact)
 
-    @command('dtmf')
-    @documentation(_("Sends DTMF events through an open audio session"))
+    @command
+    @doc(_("Send DTMF events through an open audio session"))
     def dtmf(self, events):
         if not self.audio_sid:
             raise CommandError(_("There is no open audio session with this contact"))
-        # Valid values for DTMF tones are *, # or a number
-        events = [event for event in events
-            if event in ('*', '#') or event.isdigit()]
+        # Valid values for DTMF tones are *, # or a number.
+        events = [e for e in events if e in ('*', '#') or e.isdigit()]
         if events:
             session = gajim.connections[self.account].get_jingle_session(
                 self.contact.get_full_jid(), self.audio_sid)
@@ -158,21 +192,21 @@ class StandardChatCommands(CommandContainer):
         else:
             raise CommandError(_("No valid DTMF event specified"))
 
-    @command('audio')
-    @documentation(_("Toggle audio session"))
+    @command
+    @doc(_("Toggle audio session"))
     def audio(self):
-        if self.audio_state == self.JINGLE_STATE_NOT_AVAILABLE:
-            raise CommandError(_("Video sessions are not available"))
+        if not self.audio_available:
+            raise CommandError(_("Audio sessions are not available"))
         else:
             # A state of an audio session is toggled by inverting a state of the
             # appropriate button.
             state = self._audio_button.get_active()
             self._audio_button.set_active(not state)
 
-    @command('video')
-    @documentation(_("Toggle video session"))
+    @command
+    @doc(_("Toggle video session"))
     def video(self):
-        if self.video_state == self.JINGLE_STATE_NOT_AVAILABLE:
+        if not self.video_available:
             raise CommandError(_("Video sessions are not available"))
         else:
             # A state of a video session is toggled by inverting a state of the
@@ -180,24 +214,32 @@ class StandardChatCommands(CommandContainer):
             state = self._video_button.get_active()
             self._video_button.set_active(not state)
 
+class StandardChatCommands(CommandContainer):
+    """
+    This command container contains standard commands which are unique
+    to a chat.
+    """
+
+    HOSTS = (ChatCommands,)
+
 class StandardPrivateChatCommands(CommandContainer):
     """
-    This command container contains standard command which are unique to a
-    private chat.
+    This command container contains standard commands which are unique
+    to a private chat.
     """
 
     HOSTS = (PrivateChatCommands,)
 
-class StandardGroupchatCommands(CommandContainer):
+class StandardGroupChatCommands(CommandContainer):
     """
-    This command container contains standard command which are unique to a group
-    chat.
+    This command container contains standard commands which are unique
+    to a group chat.
     """
 
     HOSTS = (GroupChatCommands,)
 
     @command(raw=True)
-    @documentation(_("Change your nickname in a group chat"))
+    @doc(_("Change your nickname in a group chat"))
     def nick(self, new_nick):
         try:
             new_nick = helpers.parse_resource(new_nick)
@@ -207,7 +249,7 @@ class StandardGroupchatCommands(CommandContainer):
         self.new_nick = new_nick
 
     @command('query', raw=True)
-    @documentation(_("Open a private chat window with a specified occupant"))
+    @doc(_("Open a private chat window with a specified occupant"))
     def chat(self, nick):
         nicks = gajim.contacts.get_nick_list(self.account, self.room_jid)
         if nick in nicks:
@@ -216,7 +258,7 @@ class StandardGroupchatCommands(CommandContainer):
             raise CommandError(_("Nickname not found"))
 
     @command('msg', raw=True)
-    @documentation(_("Open a private chat window with a specified occupant and send him a message"))
+    @doc(_("Open a private chat window with a specified occupant and send him a message"))
     def message(self, nick, a_message):
         nicks = gajim.contacts.get_nick_list(self.account, self.room_jid)
         if nick in nicks:
@@ -225,7 +267,7 @@ class StandardGroupchatCommands(CommandContainer):
             raise CommandError(_("Nickname not found"))
 
     @command(raw=True, empty=True)
-    @documentation(_("Display or change a group chat topic"))
+    @doc(_("Display or change a group chat topic"))
     def topic(self, new_topic):
         if new_topic:
             self.connection.send_gc_subject(self.room_jid, new_topic)
@@ -233,13 +275,13 @@ class StandardGroupchatCommands(CommandContainer):
             return self.subject
 
     @command(raw=True, empty=True)
-    @documentation(_("Invite a user to a room for a reason"))
+    @doc(_("Invite a user to a room for a reason"))
     def invite(self, jid, reason):
         self.connection.send_invite(self.room_jid, jid, reason)
         return _("Invited %s to %s") % (jid, self.room_jid)
 
     @command(raw=True, empty=True)
-    @documentation(_("Join a group chat given by a jid, optionally using given nickname"))
+    @doc(_("Join a group chat given by a jid, optionally using given nickname"))
     def join(self, jid, nick):
         if not nick:
             nick = self.nick
@@ -256,12 +298,12 @@ class StandardGroupchatCommands(CommandContainer):
                 pass
 
     @command('part', 'close', raw=True, empty=True)
-    @documentation(_("Leave the groupchat, optionally giving a reason, and close tab or window"))
+    @doc(_("Leave the groupchat, optionally giving a reason, and close tab or window"))
     def leave(self, reason):
         self.parent_win.remove_tab(self, self.parent_win.CLOSE_COMMAND, reason)
 
     @command(raw=True, empty=True)
-    @documentation(_("""
+    @doc(_("""
     Ban user by a nick or a jid from a groupchat
 
     If given nickname is not found it will be treated as a jid.
@@ -273,14 +315,14 @@ class StandardGroupchatCommands(CommandContainer):
         self.connection.gc_set_affiliation(self.room_jid, who, 'outcast', reason or str())
 
     @command(raw=True, empty=True)
-    @documentation(_("Kick user by a nick from a groupchat"))
+    @doc(_("Kick user by a nick from a groupchat"))
     def kick(self, who, reason):
         if not who in gajim.contacts.get_nick_list(self.account, self.room_jid):
             raise CommandError(_("Nickname not found"))
         self.connection.gc_set_role(self.room_jid, who, 'none', reason or str())
 
     @command
-    @documentation(_("Display names of all group chat occupants"))
+    @doc(_("Display names of all group chat occupants"))
     def names(self, verbose=False):
         get_contact = lambda nick: gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
         nicks = gajim.contacts.get_nick_list(self.account, self.room_jid)
@@ -301,11 +343,11 @@ class StandardGroupchatCommands(CommandContainer):
             return ', '.join(nicks)
 
     @command('ignore', raw=True)
-    @documentation(_("Forbid an occupant to send you public or private messages"))
+    @doc(_("Forbid an occupant to send you public or private messages"))
     def block(self, who):
         self.on_block(None, who)
 
     @command('unignore', raw=True)
-    @documentation(_("Allow an occupant to send you public or private messages"))
+    @doc(_("Allow an occupant to send you public or private messages"))
     def unblock(self, who):
         self.on_unblock(None, who)

@@ -1,8 +1,8 @@
 # -*- coding:utf-8 -*-
 ## src/common/commands.py
 ##
-## Copyright (C) 2006-2007 Yann Leboulanger <asterix AT lagaule.org>
-##                         Tomasz Melcer <liori AT exroot.org>
+## Copyright (C) 2006-2010 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2006-2007 Tomasz Melcer <liori AT exroot.org>
 ## Copyright (C) 2007 Jean-Marie Traissard <jim AT lapin.org>
 ## Copyright (C) 2008 Brendan Taylor <whateley AT gmail.com>
 ##                    Stephan Erb <steve-e AT h3c.de>
@@ -34,10 +34,13 @@ class AdHocCommand:
 
     @staticmethod
     def isVisibleFor(samejid):
-        ''' This returns True if that command should be visible and invokable
-        for others.
+        """
+        This returns True if that command should be visible and invokable for
+        others
+
         samejid - True when command is invoked by an entity with the same bare
-        jid.'''
+        jid.
+        """
         return True
 
     def __init__(self, conn, jid, sessionid):
@@ -80,7 +83,9 @@ class ChangeStatusCommand(AdHocCommand):
 
     @staticmethod
     def isVisibleFor(samejid):
-        ''' Change status is visible only if the entity has the same bare jid. '''
+        """
+        Change status is visible only if the entity has the same bare jid
+        """
         return samejid
 
     def execute(self, request):
@@ -177,7 +182,9 @@ class LeaveGroupchatsCommand(AdHocCommand):
 
     @staticmethod
     def isVisibleFor(samejid):
-        ''' Change status is visible only if the entity has the same bare jid. '''
+        """
+        Change status is visible only if the entity has the same bare jid
+        """
         return samejid
 
     def execute(self, request):
@@ -259,7 +266,9 @@ class ForwardMessagesCommand(AdHocCommand):
 
     @staticmethod
     def isVisibleFor(samejid):
-        ''' Change status is visible only if the entity has the same bare jid. '''
+        """
+        Change status is visible only if the entity has the same bare jid
+        """
         return samejid
 
     def execute(self, request):
@@ -281,13 +290,51 @@ class ForwardMessagesCommand(AdHocCommand):
 
         return False    # finish the session
 
+class FwdMsgThenDisconnectCommand(AdHocCommand):
+    commandnode = 'fwd-msd-disconnect'
+    commandname = _('Forward unread message then disconnect')
+
+    @staticmethod
+    def isVisibleFor(samejid):
+        """
+        Change status is visible only if the entity has the same bare jid
+        """
+        return samejid
+
+    def execute(self, request):
+        account = self.connection.name
+        # Forward messages
+        events = gajim.events.get_events(account, types=['chat', 'normal'])
+        j, resource = gajim.get_room_and_nick_from_fjid(self.jid)
+        for jid in events:
+            for event in events[jid]:
+                self.connection.send_message(j, event.parameters[0], '',
+                    type_=event.type_, subject=event.parameters[1],
+                    resource=resource, forward_from=jid, delayed=event.time_,
+                    now=True)
+
+        response, cmd = self.buildResponse(request, status = 'completed')
+        cmd.addChild('note', {}, _('The status has been changed.'))
+
+        # if going offline, we need to push response so it won't go into
+        # queue and disappear
+        self.connection.connection.send(response, now = True)
+
+        # send new status
+        gajim.interface.roster.send_status(self.connection.name, 'offline', '')
+        # finish the session
+        return False
+
 class ConnectionCommands:
-    ''' This class depends on that it is a part of Connection() class. '''
+    """
+    This class depends on that it is a part of Connection() class
+    """
+
     def __init__(self):
         # a list of all commands exposed: node -> command class
         self.__commands = {}
         for cmdobj in (ChangeStatusCommand, ForwardMessagesCommand,
-        LeaveGroupchatsCommand):
+        LeaveGroupchatsCommand, FwdMsgThenDisconnectCommand):
             self.__commands[cmdobj.commandnode] = cmdobj
 
         # a list of sessions; keys are tuples (jid, sessionid, node)
@@ -297,7 +344,9 @@ class ConnectionCommands:
         return gajim.get_jid_from_account(self.name)
 
     def isSameJID(self, jid):
-        ''' Tests if the bare jid given is the same as our bare jid. '''
+        """
+        Test if the bare jid given is the same as our bare jid
+        """
         return xmpp.JID(jid).getStripped() == self.getOurBareJID()
 
     def commandListQuery(self, con, iq_obj):
@@ -318,8 +367,10 @@ class ConnectionCommands:
         self.connection.send(iq)
 
     def commandInfoQuery(self, con, iq_obj):
-        ''' Send disco#info result for query for command (JEP-0050, example 6.).
-        Return True if the result was sent, False if not. '''
+        """
+        Send disco#info result for query for command (JEP-0050, example 6.).
+        Return True if the result was sent, False if not
+        """
         jid = helpers.get_full_jid_from_iq(iq_obj)
         node = iq_obj.getTagAttr('query', 'node')
 
@@ -342,8 +393,10 @@ class ConnectionCommands:
         return False
 
     def commandItemsQuery(self, con, iq_obj):
-        ''' Send disco#items result for query for command.
-        Return True if the result was sent, False if not. '''
+        """
+        Send disco#items result for query for command. Return True if the result
+        was sent, False if not.
+        """
         jid = helpers.get_full_jid_from_iq(iq_obj)
         node = iq_obj.getTagAttr('query', 'node')
 

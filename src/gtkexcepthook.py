@@ -2,7 +2,7 @@
 ## src/gtkexcepthook.py
 ##
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem AT gmail.com>
-## Copyright (C) 2005-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2005-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2008 Stephan Erb <steve-e AT h3c.de>
 ##
 ## This file is part of Gajim.
@@ -52,7 +52,6 @@ def _info(type_, value, tb):
     RESPONSE_REPORT_BUG = 42
     dialog.add_buttons(gtk.STOCK_CLOSE, gtk.BUTTONS_CLOSE,
             _('_Report Bug'), RESPONSE_REPORT_BUG)
-    dialog.set_default_response(RESPONSE_REPORT_BUG)
     report_button = dialog.action_area.get_children()[0] # right to left
     report_button.grab_focus()
 

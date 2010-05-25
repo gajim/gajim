@@ -10,7 +10,12 @@
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
 ##
-''' Handles Jingle contents (XEP 0166). '''
+
+"""
+Handles Jingle contents (XEP 0166)
+"""
+
+import xmpp
 
 contents = {}
 
@@ -18,12 +23,19 @@ def get_jingle_content(node):
     namespace = node.getNamespace()
     if namespace in contents:
         return contents[namespace](node)
-    else:
-        return None
+
+
+class JingleContentSetupException(Exception):
+    """
+    Exception that should be raised when a content fails to setup.
+    """
 
 
 class JingleContent(object):
-    ''' An abstraction of content in Jingle sessions. '''
+    """
+    An abstraction of content in Jingle sessions
+    """
+
     def __init__(self, session, transport):
         self.session = session
         self.transport = transport
@@ -34,6 +46,7 @@ class JingleContent(object):
         #self.name = None
         self.accepted = False
         self.sent = False
+        self.negotiated = False
 
         self.media = None
 
@@ -42,65 +55,88 @@ class JingleContent(object):
 
         self.callbacks = {
                 # these are called when *we* get stanzas
-                'content-accept': [self.__transportInfoCB],
-                'content-add': [self.__transportInfoCB],
+                'content-accept': [self.__on_transport_info],
+                'content-add': [self.__on_transport_info],
                 'content-modify': [],
                 'content-reject': [],
                 'content-remove': [],
                 'description-info': [],
                 'security-info': [],
-                'session-accept': [self.__transportInfoCB],
+                'session-accept': [self.__on_transport_info],
                 'session-info': [],
-                'session-initiate': [self.__transportInfoCB],
+                'session-initiate': [self.__on_transport_info],
                 'session-terminate': [],
-                'transport-info': [self.__transportInfoCB],
+                'transport-info': [self.__on_transport_info],
                 'transport-replace': [],
                 'transport-accept': [],
                 'transport-reject': [],
                 'iq-result': [],
                 'iq-error': [],
                 # these are called when *we* sent these stanzas
-                'content-accept-sent': [self.__fillJingleStanza],
-                'content-add-sent': [self.__fillJingleStanza],
-                'session-initiate-sent': [self.__fillJingleStanza],
-                'session-accept-sent': [self.__fillJingleStanza],
+                'content-accept-sent': [self.__fill_jingle_stanza],
+                'content-add-sent': [self.__fill_jingle_stanza],
+                'session-initiate-sent': [self.__fill_jingle_stanza],
+                'session-accept-sent': [self.__fill_jingle_stanza],
                 'session-terminate-sent': [],
         }
 
     def is_ready(self):
-        return (self.accepted and not self.sent)
+        return self.accepted and not self.sent
+
+    def on_negotiated(self):
+        if self.accepted:
+            self.negotiated = True
+            self.session.content_negotiated(self.media)
 
     def add_remote_candidates(self, candidates):
-        ''' Add a list of candidates to the list of remote candidates. '''
+        """
+        Add a list of candidates to the list of remote candidates
+        """
         pass
 
-    def stanzaCB(self, stanza, content, error, action):
-        ''' Called when something related to our content was sent by peer. '''
+    def on_stanza(self, stanza, content, error, action):
+        """
+        Called when something related to our content was sent by peer
+        """
         if action in self.callbacks:
             for callback in self.callbacks[action]:
                 callback(stanza, content, error, action)
 
-    def __transportInfoCB(self, stanza, content, error, action):
-        ''' Got a new transport candidate. '''
+    def __on_transport_info(self, stanza, content, error, action):
+        """
+        Got a new transport candidate
+        """
         candidates = self.transport.parse_transport_stanza(
                 content.getTag('transport'))
         if candidates:
             self.add_remote_candidates(candidates)
 
     def __content(self, payload=[]):
-        ''' Build a XML content-wrapper for our data. '''
+        """
+        Build a XML content-wrapper for our data
+        """
         return xmpp.Node('content',
                 attrs={'name': self.name, 'creator': self.creator},
                 payload=payload)
 
     def send_candidate(self, candidate):
+        """
+        Send a transport candidate for a previously defined transport.
+        """
         content = self.__content()
-        content.addChild(self.transport.make_transport([candidate]))
+        content.addChild(node=self.transport.make_transport([candidate]))
         self.session.send_transport_info(content)
 
-    def __fillJingleStanza(self, stanza, content, error, action):
-        ''' Add our things to session-initiate stanza. '''
-        self._fillContent(content)
+    def send_description_info(self):
+        content = self.__content()
+        self._fill_content(content)
+        self.session.send_description_info(content)
+
+    def __fill_jingle_stanza(self, stanza, content, error, action):
+        """
+        Add our things to session-initiate stanza
+        """
+        self._fill_content(content)
         self.sent = True
         content.addChild(node=self.transport.make_transport())
 

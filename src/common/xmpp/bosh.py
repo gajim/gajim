@@ -125,11 +125,12 @@ class NonBlockingBOSH(NonBlockingTransport):
             log.warn('set_timeout: TIMEOUT NOT SET: state is %s, fd is %s' % (self.get_state(), self.fd))
 
     def on_http_request_possible(self):
-        '''
+        """
         Called when HTTP request it's possible to send a HTTP request. It can be when
-        socket is connected or when HTTP response arrived.
+        socket is connected or when HTTP response arrived
+
         There should be always one pending request to BOSH CM.
-        '''
+        """
         log.debug('on_http_req possible, state:\n%s' % self.get_current_state())
         if self.get_state()==DISCONNECTED: return
 
@@ -149,14 +150,18 @@ class NonBlockingBOSH(NonBlockingTransport):
 
 
     def get_socket_in(self, state):
-        ''' gets sockets in desired state '''
+        """
+        Get sockets in desired state
+        """
         for s in self.http_socks:
             if s.get_state()==state: return s
         return None
 
 
     def get_free_socket(self):
-        ''' Selects and returns socket eligible for sending a data to.'''
+        """
+        Select and returns socket eligible for sending a data to
+        """
         if self.http_pipelining:
             return self.get_socket_in(CONNECTED)
         else:
@@ -176,10 +181,10 @@ class NonBlockingBOSH(NonBlockingTransport):
 
 
     def send_BOSH(self, payload):
-        '''
+        """
         Tries to send a stanza in payload by appeding it to a buffer and plugging a
         free socket for writing.
-        '''
+        """
         total_pending_reqs = sum([s.pending_requests for s in self.http_socks])
 
         # when called after HTTP response (Payload=None) and when there are already
@@ -236,15 +241,16 @@ class NonBlockingBOSH(NonBlockingTransport):
             log.error('=====!!!!!!!!====> Couldn\'t get free socket in plug_socket())')
 
     def build_stanza(self, socket):
-        '''
-        Builds a BOSH body tag from data in buffers and adds key, rid and ack
-        attributes to it.
+        """
+        Build a BOSH body tag from data in buffers and adds key, rid and ack
+        attributes to it
+
         This method is called from _do_send() of underlying transport. This is to
-        ensure rid and keys will be processed in correct order. If I generate them
-        before  plugging a socket for write (and did it for two sockets/HTTP
-        connections) in parallel, they might be sent in wrong order, which results
-        in violating the BOSH session and server-side disconnect.
-        '''
+        ensure rid and keys will be processed in correct order. If I generate
+        them before     plugging a socket for write (and did it for two sockets/HTTP
+        connections) in parallel, they might be sent in wrong order, which
+        results in violating the BOSH session and server-side disconnect.
+        """
         if self.prio_bosh_stanzas:
             stanza, add_payload = self.prio_bosh_stanzas.pop(0)
             if add_payload:
@@ -285,10 +291,11 @@ class NonBlockingBOSH(NonBlockingTransport):
                         self.wait_cb_time)
 
     def on_persistent_fallback(self, socket):
-        '''
-        Called from underlying transport when server closes TCP connection.
+        """
+        Called from underlying transport when server closes TCP connection
+
         :param socket: disconnected transport object
-        '''
+        """
         if socket.http_persistent:
             log.warn('Fallback to nonpersistent HTTP (no pipelining as well)')
             socket.http_persistent = False
@@ -302,9 +309,10 @@ class NonBlockingBOSH(NonBlockingTransport):
 
 
     def handle_body_attrs(self, stanza_attrs):
-        '''
-        Called for each incoming body stanza from dispatcher. Checks body attributes.
-        '''
+        """
+        Called for each incoming body stanza from dispatcher. Checks body
+        attributes.
+        """
         self.remove_bosh_wait_timeout()
 
         if self.after_init:
@@ -345,7 +353,9 @@ class NonBlockingBOSH(NonBlockingTransport):
 
 
     def append_stanza(self, stanza):
-        ''' appends stanza to a buffer to send '''
+        """
+        Append stanza to a buffer to send
+        """
         if stanza:
             if isinstance(stanza, tuple):
                 # stanza is tuple of BOSH stanza and bool value for whether to add payload
@@ -378,7 +388,9 @@ class NonBlockingBOSH(NonBlockingTransport):
 
 
     def boshify_stanzas(self, stanzas=[], body_attrs=None):
-        ''' wraps zero to many stanzas by body tag with xmlns and sid '''
+        """
+        Wraps zero to many stanzas by body tag with xmlns and sid
+        """
         log.debug('boshify_staza - type is: %s, stanza is %s' % (type(stanzas), stanzas))
         tag = BOSHBody(attrs={'sid': self.bosh_sid})
         tag.setPayload(stanzas)
@@ -470,10 +482,10 @@ def get_rand_number():
 
 
 class AckChecker():
-    '''
+    """
     Class for generating rids and generating and checking acknowledgements in
-    BOSH messages.
-    '''
+    BOSH messages
+    """
     def __init__(self):
         self.rid = get_rand_number()
         self.ack = 1
@@ -516,9 +528,9 @@ class AckChecker():
 
 
 class KeyStack():
-    '''
+    """
     Class implementing key sequences for BOSH messages
-    '''
+    """
     def __init__(self, count):
         self.count = count
         self.keys = []

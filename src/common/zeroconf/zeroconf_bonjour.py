@@ -10,11 +10,11 @@
 ##
 ## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ## GNU General Public License for more details.
 ##
 ## You should have received a copy of the GNU General Public License
-## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
 from common import gajim
@@ -28,14 +28,14 @@ except ImportError, e:
     pass
 
 
-resolve_timeout  = 1
+resolve_timeout = 1
 
 class Zeroconf:
     def __init__(self, new_serviceCB, remove_serviceCB, name_conflictCB,
             disconnected_CB, error_CB, name, host, port):
-        self.domain = None   # specific domain to browse
+        self.domain = None # specific domain to browse
         self.stype = '_presence._tcp'
-        self.port = port  # listening port that gets announced
+        self.port = port # listening port that gets announced
         self.username = name
         self.host = host
         self.txt = pybonjour.TXTRecord()                # service data
@@ -48,7 +48,7 @@ class Zeroconf:
         self.disconnected_CB = disconnected_CB
         self.error_CB = error_CB
 
-        self.contacts = {}    # all current local contacts with data
+        self.contacts = {} # all current local contacts with data
         self.connected = False
         self.announced = False
         self.invalid_self_contact = {}
@@ -103,7 +103,7 @@ class Zeroconf:
     def service_resolved_callback(self, sdRef, flags, interfaceIndex, errorCode, fullname,
                     hosttarget, port, txtRecord):
 
-    # TODO: do proper decoding...
+        # TODO: do proper decoding...
         escaping= {
         r'\.': '.',
         r'\032': ' ',
@@ -211,7 +211,7 @@ class Zeroconf:
         txt['version'] = 1
         txt['txtvers'] = 1
 
-      # replace gajim's show messages with compatible ones
+        # replace gajim's show messages with compatible ones
         if 'status' in self.txt:
             txt['status'] = self.replace_show(self.txt['status'])
         else:
@@ -274,9 +274,9 @@ class Zeroconf:
     def disconnect(self):
         if self.connected:
             self.connected = False
-            self.browse_sdRef.close()
-            self.remove_announce()
-
+            if hasattr(self, 'browse_sdRef'):
+                self.browse_sdRef.close()
+                self.remove_announce()
 
     def browse_domain(self, domain=None):
         gajim.log.debug('starting to browse')

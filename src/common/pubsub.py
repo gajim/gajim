@@ -2,7 +2,7 @@
 ## src/common/pubsub.py
 ##
 ## Copyright (C) 2006 Tomasz Melcer <liori AT exroot.org>
-## Copyright (C) 2006-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2006-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2007 Jean-Marie Traissard <jim AT lapin.org>
 ## Copyright (C) 2008 Stephan Erb <steve-e AT h3c.de>
 ##
@@ -67,7 +67,9 @@ class ConnectionPubSub:
         self.__callbacks[id_]=(cb, args, kwargs)
 
     def send_pb_publish(self, jid, node, item, id_, options=None):
-        '''Publish item to a node.'''
+        """
+        Publish item to a node
+        """
         if not self.connection or self.connected < 2:
             return
         query = xmpp.Iq('set', to=jid)
@@ -81,7 +83,9 @@ class ConnectionPubSub:
         self.connection.send(query)
 
     def send_pb_retrieve(self, jid, node, cb=None, *args, **kwargs):
-        '''Get items from a node'''
+        """
+        Get items from a node
+        """
         if not self.connection or self.connected < 2:
             return
         query = xmpp.Iq('get', to=jid)
@@ -93,7 +97,9 @@ class ConnectionPubSub:
             self.__callbacks[id_]=(cb, args, kwargs)
 
     def send_pb_retract(self, jid, node, id_):
-        '''Delete item from a node'''
+        """
+        Delete item from a node
+        """
         if not self.connection or self.connected < 2:
             return
         query = xmpp.Iq('set', to=jid)
@@ -104,7 +110,9 @@ class ConnectionPubSub:
         self.connection.send(query)
 
     def send_pb_delete(self, jid, node):
-        '''Deletes node.'''
+        """
+        Delete node
+        """
         if not self.connection or self.connected < 2:
             return
         query = xmpp.Iq('set', to=jid)
@@ -122,7 +130,9 @@ class ConnectionPubSub:
                 'node': node})
 
     def send_pb_create(self, jid, node, configure = False, configure_form = None):
-        '''Creates new node.'''
+        """
+        Create a new node
+        """
         if not self.connection or self.connected < 2:
             return
         query = xmpp.Iq('set', to=jid)

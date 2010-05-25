@@ -3,7 +3,7 @@
 ##
 ## Copyright (C) 2006 Nikos Kouremenos <kourem AT gmail.com>
 ## Copyright (C) 2006-2007 Jean-Marie Traissard <jim AT lapin.org>
-## Copyright (C) 2006-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2006-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2007 Lukas Petrovicky <lukas AT petrovicky.net>
 ##                    Julien Pivotto <roidelapluie AT gmail.com>
 ## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
@@ -39,37 +39,48 @@ from common import helpers
 from common import pep
 
 class StatusIcon:
-    '''Class for the notification area icon'''
+    """
+    Class for the notification area icon
+    """
+
     def __init__(self):
         self.single_message_handler_id = None
         self.new_chat_handler_id = None
         # click somewhere else does not popdown menu. workaround this.
         self.added_hide_menuitem = False
         self.status = 'offline'
-        self.xml = gtkgui_helpers.get_glade('systray_context_menu.glade')
-        self.systray_context_menu = self.xml.get_widget('systray_context_menu')
-        self.xml.signal_autoconnect(self)
+        self.xml = gtkgui_helpers.get_gtk_builder('systray_context_menu.ui')
+        self.systray_context_menu = self.xml.get_object('systray_context_menu')
+        self.xml.connect_signals(self)
         self.popup_menus = []
         self.status_icon = None
         self.tooltip = tooltips.NotificationAreaTooltip()
 
     def subscribe_events(self):
-        '''Register listeners to the events class'''
+        """
+        Register listeners to the events class
+        """
         gajim.events.event_added_subscribe(self.on_event_added)
         gajim.events.event_removed_subscribe(self.on_event_removed)
 
     def unsubscribe_events(self):
-        '''Unregister listeners to the events class'''
+        """
+        Unregister listeners to the events class
+        """
         gajim.events.event_added_unsubscribe(self.on_event_added)
         gajim.events.event_removed_unsubscribe(self.on_event_removed)
 
     def on_event_added(self, event):
-        '''Called when an event is added to the event list'''
+        """
+        Called when an event is added to the event list
+        """
         if event.show_in_systray:
             self.set_img()
 
     def on_event_removed(self, event_list):
-        '''Called when one or more events are removed from the event list'''
+        """
+        Called when one or more events are removed from the event list
+        """
         self.set_img()
 
     def show_icon(self):
@@ -102,7 +113,9 @@ class StatusIcon:
         self.on_left_click()
 
     def set_img(self):
-        '''apart from image, we also update tooltip text here'''
+        """
+        Apart from image, we also update tooltip text here
+        """
         if not gajim.interface.systray_enabled:
             return
         if gajim.events.get_nb_systray_events():
@@ -122,7 +135,9 @@ class StatusIcon:
         #       self.img_tray.set_from_animation(image.get_animation())
 
     def change_status(self, global_status):
-        ''' set tray image to 'global_status' '''
+        """
+        Set tray image to 'global_status'
+        """
         # change image and status, only if it is different
         if global_status is not None and self.status != global_status:
             self.status = global_status
@@ -145,16 +160,19 @@ class StatusIcon:
         dialogs.NewChatDialog(account)
 
     def make_menu(self, event_button, event_time):
-        '''create chat with and new message (sub) menus/menuitems'''
+        """
+        Create chat with and new message (sub) menus/menuitems
+        """
         for m in self.popup_menus:
             m.destroy()
 
-        chat_with_menuitem = self.xml.get_widget('chat_with_menuitem')
-        single_message_menuitem = self.xml.get_widget(
+        chat_with_menuitem = self.xml.get_object('chat_with_menuitem')
+        single_message_menuitem = self.xml.get_object(
                 'single_message_menuitem')
-        status_menuitem = self.xml.get_widget('status_menu')
-        join_gc_menuitem = self.xml.get_widget('join_gc_menuitem')
-        sounds_mute_menuitem = self.xml.get_widget('sounds_mute_menuitem')
+        status_menuitem = self.xml.get_object('status_menu')
+        join_gc_menuitem = self.xml.get_object('join_gc_menuitem')
+        sounds_mute_menuitem = self.xml.get_object('sounds_mute_menuitem')
+        show_roster_menuitem = self.xml.get_object('show_roster_menuitem')
 
         if self.single_message_handler_id:
             single_message_menuitem.handler_disconnect(
@@ -190,10 +208,7 @@ class StatusIcon:
         sub_menu.append(item)
 
         item = gtk.ImageMenuItem(_('_Change Status Message...'))
-        path = os.path.join(gajim.DATA_DIR, 'pixmaps', 'kbd_input.png')
-        img = gtk.Image()
-        img.set_from_file(path)
-        item.set_image(img)
+        gtkgui_helpers.add_image_to_menuitem(item, 'gajim-kbd_input')
         sub_menu.append(item)
         item.connect('activate', self.on_change_status_message_activate)
 
@@ -302,6 +317,16 @@ class StatusIcon:
 
         sounds_mute_menuitem.set_active(not gajim.config.get('sounds_on'))
 
+        win = gajim.interface.roster.window
+        if win.get_property('has-toplevel-focus'):
+            show_roster_menuitem.get_children()[0].set_label(_('Hide _Roster'))
+            show_roster_menuitem.connect('activate',
+                self.on_hide_roster_menuitem_activate)
+        else:
+            show_roster_menuitem.get_children()[0].set_label(_('Show _Roster'))
+            show_roster_menuitem.connect('activate',
+                self.on_show_roster_menuitem_activate)
+
         if os.name == 'nt':
             if self.added_hide_menuitem is False:
                 self.systray_context_menu.prepend(gtk.SeparatorMenuItem())
@@ -328,6 +353,10 @@ class StatusIcon:
         win = gajim.interface.roster.window
         win.present()
 
+    def on_hide_roster_menuitem_activate(self, widget):
+        win = gajim.interface.roster.window
+        win.hide()
+
     def on_preferences_menuitem_activate(self, widget):
         if 'preferences' in gajim.interface.instances:
             gajim.interface.instances['preferences'].window.present()
@@ -341,18 +370,23 @@ class StatusIcon:
         win = gajim.interface.roster.window
         if len(gajim.events.get_systray_events()) == 0:
             # No pending events, so toggle visible/hidden for roster window
-            if not win.iconify_initially and (win.get_property(
+            if win.get_property('visible') and (win.get_property(
             'has-toplevel-focus') or os.name == 'nt'):
                 # visible in ANY virtual desktop?
 
                 # we could be in another VD right now. eg vd2
                 # and we want to show it in vd2
                 if not gtkgui_helpers.possibly_move_window_in_current_desktop(win):
-                    win.set_property('skip-taskbar-hint', False)
-                    win.iconify() # else we hide it from VD that was visible in
-                    win.set_property('skip-taskbar-hint', True)
+                    x, y = win.get_position()
+                    gajim.config.set('roster_x-position', x)
+                    gajim.config.set('roster_y-position', y)
+                    win.hide() # else we hide it from VD that was visible in
             else:
-                win.deiconify()
+                if not win.get_property('visible'):
+                    win.show_all()
+                    gtkgui_helpers.move_window(win,
+                        gajim.config.get('roster_x-position'),
+                        gajim.config.get('roster_y-position'))
                 if not gajim.config.get('roster_window_skip_taskbar'):
                     win.set_property('skip-taskbar-hint', False)
                 win.present_with_time(gtk.get_current_event_time())
@@ -366,8 +400,10 @@ class StatusIcon:
         gajim.interface.handle_event(account, jid, event.type_)
 
     def on_middle_click(self):
-        '''middle click raises window to have complete focus (fe. get kbd events)
-        but if already raised, it hides it'''
+        """
+        Middle click raises window to have complete focus (fe. get kbd events)
+        but if already raised, it hides it
+        """
         win = gajim.interface.roster.window
         if win.is_active(): # is it fully raised? (eg does it receive kbd events?)
             win.hide()

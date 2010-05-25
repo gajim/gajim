@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ## src/gajim_themes_window.py
 ##
-## Copyright (C) 2003-2007 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2003-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2005-2006 Dimitur Kirov <dkirov AT gmail.com>
 ##                         Nikos Kouremenos <kourem AT gmail.com>
 ## Copyright (C) 2006 Jean-Marie Traissard <jim AT lapin.org>
@@ -32,27 +32,27 @@ from common import gajim
 class GajimThemesWindow:
 
     def __init__(self):
-        self.xml = gtkgui_helpers.get_glade('gajim_themes_window.glade')
-        self.window = self.xml.get_widget('gajim_themes_window')
+        self.xml = gtkgui_helpers.get_gtk_builder('gajim_themes_window.ui')
+        self.window = self.xml.get_object('gajim_themes_window')
         self.window.set_transient_for(gajim.interface.roster.window)
 
         self.options = ['account', 'group', 'contact', 'banner']
-        self.options_combobox = self.xml.get_widget('options_combobox')
-        self.textcolor_checkbutton = self.xml.get_widget('textcolor_checkbutton')
-        self.background_checkbutton = self.xml.get_widget('background_checkbutton')
-        self.textfont_checkbutton = self.xml.get_widget('textfont_checkbutton')
-        self.text_colorbutton = self.xml.get_widget('text_colorbutton')
-        self.background_colorbutton = self.xml.get_widget('background_colorbutton')
-        self.text_fontbutton = self.xml.get_widget('text_fontbutton')
-        self.bold_togglebutton = self.xml.get_widget('bold_togglebutton')
-        self.italic_togglebutton = self.xml.get_widget('italic_togglebutton')
-        self.themes_tree = self.xml.get_widget('themes_treeview')
-        self.theme_options_vbox = self.xml.get_widget('theme_options_vbox')
-        self.theme_options_table = self.xml.get_widget('theme_options_table')
+        self.options_combobox = self.xml.get_object('options_combobox')
+        self.textcolor_checkbutton = self.xml.get_object('textcolor_checkbutton')
+        self.background_checkbutton = self.xml.get_object('background_checkbutton')
+        self.textfont_checkbutton = self.xml.get_object('textfont_checkbutton')
+        self.text_colorbutton = self.xml.get_object('text_colorbutton')
+        self.background_colorbutton = self.xml.get_object('background_colorbutton')
+        self.text_fontbutton = self.xml.get_object('text_fontbutton')
+        self.bold_togglebutton = self.xml.get_object('bold_togglebutton')
+        self.italic_togglebutton = self.xml.get_object('italic_togglebutton')
+        self.themes_tree = self.xml.get_object('themes_treeview')
+        self.theme_options_vbox = self.xml.get_object('theme_options_vbox')
+        self.theme_options_table = self.xml.get_object('theme_options_table')
         self.colorbuttons = {}
         for chatstate in ('inactive', 'composing', 'paused', 'gone',
         'muc_msg', 'muc_directed_msg'):
-            self.colorbuttons[chatstate] = self.xml.get_widget(chatstate + \
+            self.colorbuttons[chatstate] = self.xml.get_object(chatstate + \
                     '_colorbutton')
         model = gtk.ListStore(str)
         self.themes_tree.set_model(model)
@@ -70,7 +70,7 @@ class GajimThemesWindow:
         self.current_option = self.options[0]
         self.set_theme_options(self.current_theme, self.current_option)
 
-        self.xml.signal_autoconnect(self)
+        self.xml.connect_signals(self)
         self.window.connect('delete-event', self.on_themese_window_delete_event)
         self.themes_tree.get_selection().connect('changed',
                         self.selection_changed)
@@ -132,11 +132,11 @@ class GajimThemesWindow:
             if theme == active_theme:
                 self.themes_tree.get_selection().select_iter(iter_)
                 if active_theme == 'default':
-                    self.xml.get_widget('remove_button').set_sensitive(False)
+                    self.xml.get_object('remove_button').set_sensitive(False)
                     self.theme_options_vbox.set_sensitive(False)
                     self.theme_options_table.set_sensitive(False)
                 else:
-                    self.xml.get_widget('remove_button').set_sensitive(True)
+                    self.xml.get_object('remove_button').set_sensitive(True)
                     self.theme_options_vbox.set_sensitive(True)
                     self.theme_options_table.set_sensitive(True)
                 break
@@ -153,11 +153,11 @@ class GajimThemesWindow:
         self.current_theme = self.current_theme.replace(' ', '_')
         self.set_theme_options(self.current_theme)
         if self.current_theme == 'default':
-            self.xml.get_widget('remove_button').set_sensitive(False)
+            self.xml.get_object('remove_button').set_sensitive(False)
             self.theme_options_vbox.set_sensitive(False)
             self.theme_options_table.set_sensitive(False)
         else:
-            self.xml.get_widget('remove_button').set_sensitive(True)
+            self.xml.get_object('remove_button').set_sensitive(True)
             self.theme_options_vbox.set_sensitive(True)
             self.theme_options_table.set_sensitive(True)
 
@@ -188,7 +188,7 @@ class GajimThemesWindow:
             return
         self.theme_options_vbox.set_sensitive(False)
         self.theme_options_table.set_sensitive(False)
-        self.xml.get_widget('remove_button').set_sensitive(False)
+        self.xml.get_object('remove_button').set_sensitive(False)
         gajim.config.del_per('themes', self.current_theme)
         model.remove(iter_)
 

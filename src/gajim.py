@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ## src/gajim.py
 ##
-## Copyright (C) 2003-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2003-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2004-2005 Vincent Hanquez <tab AT snarc.org>
 ## Copyright (C) 2005 Alex Podaras <bigpod AT gmail.com>
 ##                    Norman Rasmussen <norman AT rasmussen.co.za>
@@ -70,32 +70,34 @@ import getopt
 from common import i18n
 
 def parseOpts():
-    profile = ''
-    config_path = None
+    profile_ = ''
+    config_path_ = None
 
     try:
         shortargs = 'hqvl:p:c:'
         longargs = 'help quiet verbose loglevel= profile= config_path='
         opts = getopt.getopt(sys.argv[1:], shortargs, longargs.split())[0]
-    except getopt.error, msg:
-        print msg
+    except getopt.error, msg1:
+        print msg1
         print 'for help use --help'
         sys.exit(2)
     for o, a in opts:
         if o in ('-h', '--help'):
-            print 'gajim [--help] [--quiet] [--verbose] [--loglevel subsystem=level[,subsystem=level[...]]] [--profile name] [--config-path]'
+            print 'gajim [--help] [--quiet] [--verbose] ' + \
+                '[--loglevel subsystem=level[,subsystem=level[...]]] ' + \
+                '[--profile name] [--config-path]'
             sys.exit()
         elif o in ('-q', '--quiet'):
             logging_helpers.set_quiet()
         elif o in ('-v', '--verbose'):
             logging_helpers.set_verbose()
         elif o in ('-p', '--profile'): # gajim --profile name
-            profile = a
+            profile_ = a
         elif o in ('-l', '--loglevel'):
             logging_helpers.set_loglevels(a)
         elif o in ('-c', '--config-path'):
-            config_path = a
-    return profile, config_path
+            config_path_ = a
+    return profile_, config_path_
 
 profile, config_path = parseOpts()
 del parseOpts
@@ -114,8 +116,8 @@ if os.name == 'nt':
         _file = None
         _error = None
         def write(self, text):
-            fname=os.path.join(common.configpaths.gajimpaths.root,
-                    os.path.split(sys.executable)[1]+'.log')
+            fname = os.path.join(common.configpaths.gajimpaths.cache_root,
+                os.path.split(sys.executable)[1]+'.log')
             if self._file is None and self._error is None:
                 try:
                     self._file = open(fname, 'a')
@@ -133,14 +135,17 @@ if os.name == 'nt':
 # PyGTK2.10+ only throws a warning
 warnings.filterwarnings('error', module='gtk')
 try:
+    import gobject
     import gtk
-except Warning, msg:
-    if str(msg) == 'could not open display':
+except Warning, msg2:
+    if str(msg2) == 'could not open display':
         print >> sys.stderr, _('Gajim needs X server to run. Quiting...')
     else:
-        print >> sys.stderr, _('importing PyGTK failed: %s') % str(msg)
+        print >> sys.stderr, _('importing PyGTK failed: %s') % str(msg2)
     sys.exit()
 warnings.resetwarnings()
+
+gobject.set_prgname('gajim')
 
 if os.name == 'nt':
     warnings.filterwarnings(action='ignore')
@@ -152,12 +157,13 @@ try:
     from common import gajim
 except exceptions.DatabaseMalformed:
     pritext = _('Database Error')
-    sectext = _('The database file (%s) cannot be read. Try to repair it (see http://trac.gajim.org/wiki/DatabaseBackup) or remove it (all history will be lost).') % common.logger.LOG_DB_PATH
+    sectext = _('The database file (%s) cannot be read. Try to repair it (see '
+        'http://trac.gajim.org/wiki/DatabaseBackup) or remove it (all history '
+        'will be lost).') % common.logger.LOG_DB_PATH
 else:
     from common import dbus_support
     if dbus_support.supported:
         from music_track_listener import MusicTrackListener
-        import dbus
 
     from ctypes import CDLL
     from ctypes.util import find_library
@@ -167,8 +173,8 @@ else:
     if sysname in ('Linux', 'FreeBSD', 'OpenBSD', 'NetBSD'):
         libc = CDLL(find_library('c'))
 
-        # The constant defined in <linux/prctl.h> which is used to set the name of
-        # the process.
+        # The constant defined in <linux/prctl.h> which is used to set the name
+        # of the process.
         PR_SET_NAME = 15
 
         if sysname == 'Linux':
@@ -176,27 +182,14 @@ else:
         elif sysname in ('FreeBSD', 'OpenBSD', 'NetBSD'):
             libc.setproctitle('gajim')
 
-    if gtk.pygtk_version < (2, 12, 0):
-        pritext = _('Gajim needs PyGTK 2.12 or above')
-        sectext = _('Gajim needs PyGTK 2.12 or above to run. Quiting...')
-    elif gtk.gtk_version < (2, 12, 0):
-        pritext = _('Gajim needs GTK 2.12 or above')
-        sectext = _('Gajim needs GTK 2.12 or above to run. Quiting...')
+    if gtk.pygtk_version < (2, 16, 0):
+        pritext = _('Gajim needs PyGTK 2.16 or above')
+        sectext = _('Gajim needs PyGTK 2.16 or above to run. Quiting...')
+    elif gtk.gtk_version < (2, 16, 0):
+        pritext = _('Gajim needs GTK 2.16 or above')
+        sectext = _('Gajim needs GTK 2.16 or above to run. Quiting...')
 
-    try:
-        import gtk.glade # check if user has libglade (in pygtk and in gtk)
-    except ImportError:
-        pritext = _('GTK+ runtime is missing libglade support')
-        if os.name == 'nt':
-            sectext = _('Please remove your current GTK+ runtime and install the latest stable version from %s') % 'http://gladewin32.sourceforge.net'
-        else:
-            sectext = _('Please make sure that GTK+ and PyGTK have libglade support in your system.')
-
-    try:
-        from common import check_paths
-    except exceptions.PysqliteNotAvailable, e:
-        pritext = _('Gajim needs PySQLite2 to run')
-        sectext = str(e)
+    from common import check_paths
 
     if os.name == 'nt':
         try:
@@ -204,7 +197,9 @@ else:
             import win32api # do NOT remove. we req this module
         except Exception:
             pritext = _('Gajim needs pywin32 to run')
-            sectext = _('Please make sure that Pywin32 is installed on your system. You can get it at %s') % 'http://sourceforge.net/project/showfiles.php?group_id=78018'
+            sectext = _('Please make sure that Pywin32 is installed on your '
+                'system. You can get it at %s') % \
+                'http://sourceforge.net/project/showfiles.php?group_id=78018'
 
 if pritext:
     dlg = gtk.MessageDialog(None,
@@ -219,13 +214,6 @@ if pritext:
 del pritext
 
 import gtkexcepthook
-
-import gobject
-if not hasattr(gobject, 'timeout_add_seconds'):
-    def timeout_add_seconds_fake(time_sec, *args):
-        return gobject.timeout_add(time_sec * 1000, *args)
-    gobject.timeout_add_seconds = timeout_add_seconds_fake
-
 
 import signal
 import gtkgui_helpers
@@ -257,7 +245,8 @@ def pid_alive():
 
     if os.name == 'nt':
         try:
-            from ctypes import (windll, c_ulong, c_int, Structure, c_char, POINTER, pointer, )
+            from ctypes import (windll, c_ulong, c_int, Structure, c_char)
+            from ctypes import (POINTER, pointer, sizeof)
         except Exception:
             return True
 
@@ -274,26 +263,26 @@ def pid_alive():
                     ('dwFlags', c_ulong, ),
                     ('szExeFile', c_char*512, ),
                     ]
-            def __init__(self):
-                Structure.__init__(self, 512+9*4)
 
-        k = windll.kernel32
-        k.CreateToolhelp32Snapshot.argtypes = c_ulong, c_ulong,
-        k.CreateToolhelp32Snapshot.restype = c_int
-        k.Process32First.argtypes = c_int, POINTER(PROCESSENTRY32),
-        k.Process32First.restype = c_int
-        k.Process32Next.argtypes = c_int, POINTER(PROCESSENTRY32),
-        k.Process32Next.restype = c_int
+        kernel = windll.kernel32
+        kernel.CreateToolhelp32Snapshot.argtypes = c_ulong, c_ulong,
+        kernel.CreateToolhelp32Snapshot.restype = c_int
+        kernel.Process32First.argtypes = c_int, POINTER(PROCESSENTRY32),
+        kernel.Process32First.restype = c_int
+        kernel.Process32Next.argtypes = c_int, POINTER(PROCESSENTRY32),
+        kernel.Process32Next.restype = c_int
 
-        def get_p(p):
-            h = k.CreateToolhelp32Snapshot(2, 0) # TH32CS_SNAPPROCESS
-            assert h > 0, 'CreateToolhelp32Snapshot failed'
-            b = pointer(PROCESSENTRY32())
-            f = k.Process32First(h, b)
-            while f:
-                if b.contents.th32ProcessID == p:
-                    return b.contents.szExeFile
-                f = k.Process32Next(h, b)
+        def get_p(pid_):
+            TH32CS_SNAPPROCESS = 2
+            CreateToolhelp32Snapshot = kernel.CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0)
+            assert CreateToolhelp32Snapshot > 0, 'CreateToolhelp32Snapshot failed'
+            pe32 = PROCESSENTRY32()
+            pe32.dwSize = sizeof( PROCESSENTRY32 )
+            f3 = kernel.Process32First(CreateToolhelp32Snapshot, pointer(pe32))
+            while f3:
+                if pe32.th32ProcessID == pid_:
+                    return pe32.szExeFile
+                f3 = kernel.Process32Next(CreateToolhelp32Snapshot, pointer(pe32))
 
         if get_p(pid) in ('python.exe', 'gajim.exe'):
             return True
@@ -303,14 +292,14 @@ def pid_alive():
             return True # no /proc, assume Gajim is running
 
         try:
-            f = open('/proc/%d/cmdline'% pid)
-        except IOError, e:
-            if e.errno == errno.ENOENT:
+            f1 = open('/proc/%d/cmdline'% pid)
+        except IOError, e1:
+            if e1.errno == errno.ENOENT:
                 return False # file/pid does not exist
             raise
 
-        n = f.read().lower()
-        f.close()
+        n = f1.read().lower()
+        f1.close()
         if n.find('gajim') < 0:
             return False
         return True # Running Gajim found at pid
@@ -322,8 +311,7 @@ def pid_alive():
     return True
 
 if pid_alive():
-    path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps/gajim.png')
-    pix = gtk.gdk.pixbuf_new_from_file(path_to_file)
+    pix = gtkgui_helpers.get_icon_pixmap('gajim', 48)
     gtk.window_set_default_icon(pix) # set the icon to all newly opened wind
     pritext = _('Gajim is already running')
     sectext = _('Another instance of Gajim seems to be running\nRun anyway?')
@@ -335,7 +323,6 @@ if pid_alive():
     # run anyway, delete pid and useless global vars
     if os.path.exists(pid_filename):
         os.remove(pid_filename)
-    del path_to_file
     del pix
     del pritext
     del sectext
@@ -347,23 +334,23 @@ if not os.path.exists(pid_dir):
     check_paths.create_path(pid_dir)
 # Create pid file
 try:
-    f = open(pid_filename, 'w')
-    f.write(str(os.getpid()))
-    f.close()
-except IOError, e:
-    dlg = dialogs.ErrorDialog(_('Disk Write Error'), str(e))
+    f2 = open(pid_filename, 'w')
+    f2.write(str(os.getpid()))
+    f2.close()
+except IOError, e2:
+    dlg = dialogs.ErrorDialog(_('Disk Write Error'), str(e2))
     dlg.run()
     dlg.destroy()
     sys.exit()
 del pid_dir
-del f
 
 def on_exit():
     # delete pid file on normal exit
     if os.path.exists(pid_filename):
         os.remove(pid_filename)
     # Shutdown GUI and save config
-    gajim.interface.roster.prepare_quit()
+    if hasattr(gajim.interface, 'roster'):
+        gajim.interface.roster.prepare_quit()
 
 import atexit
 atexit.register(on_exit)
@@ -383,10 +370,11 @@ if __name__ == '__main__':
         # Session Management support
         try:
             import gnome.ui
+            raise ImportError
         except ImportError:
             pass
         else:
-            def die_cb(cli):
+            def die_cb(dummy):
                 gajim.interface.roster.quit_gtkgui_interface()
             gnome.program_init('gajim', gajim.version)
             cli = gnome.ui.master_client()
@@ -397,13 +385,7 @@ if __name__ == '__main__':
 
             if path_to_gajim_script:
                 argv = [path_to_gajim_script]
-                # FIXME: remove this typeerror catch when gnome python is old and
-                # not bad patched by distro men [2.12.0 + should not need all that
-                # NORMALLY]
-                try:
-                    cli.set_restart_command(argv)
-                except AttributeError:
-                    cli.set_restart_command(len(argv), argv)
+                cli.set_restart_command(len(argv), argv)
 
     check_paths.check_and_possibly_create_paths()
 

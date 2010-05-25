@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<interface>
+  <requires lib="gtk+" version="2.16"/>
+  <!-- interface-naming-policy toplevel-contextual -->
+  <object class="GtkMenu" id="advanced_menuitem_menu">
+    <child>
+      <object class="GtkMenuItem" id="xml_console_menuitem">
+        <property name="label" translatable="yes">Show _XML Console</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="archiving_preferences_menuitem">
+        <property name="visible">True</property>
+        <property name="label" translatable="yes">Edit Archi_ving Preferences</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="privacy_lists_menuitem">
+        <property name="label" translatable="yes">Edit _Privacy Lists...</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="separator8"/>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="administrator_menuitem">
+        <property name="label" translatable="yes">_Administrator</property>
+        <property name="use_underline">True</property>
+        <child type="submenu">
+          <object class="GtkMenu" id="administrator_menuitem_menu">
+            <child>
+              <object class="GtkImageMenuItem" id="send_server_message_menuitem">
+                <property name="label" translatable="yes">_Send Server Message...</property>
+                <property name="tooltip_text" translatable="yes">Sends a message to users currently connected to this server</property>
+                <property name="use_underline">True</property>
+                <property name="image">image1</property>
+                <property name="use_stock">False</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkSeparatorMenuItem" id="separator9">
+                <property name="visible">True</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuItem" id="set_motd_menuitem">
+                <property name="tooltip_text" translatable="yes">Sets Message of the Day</property>
+                <property name="label" translatable="yes">Set MOTD...</property>
+                <property name="use_underline">True</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuItem" id="update_motd_menuitem">
+                <property name="tooltip_text" translatable="yes">Updates Message of the Day</property>
+                <property name="label" translatable="yes">Update MOTD...</property>
+                <property name="use_underline">True</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkImageMenuItem" id="delete_motd_menuitem">
+                <property name="label" translatable="yes">Delete MOTD</property>
+                <property name="tooltip_text" translatable="yes">Deletes Message of the Day</property>
+                <property name="image">image2</property>
+                <property name="use_stock">False</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkImage" id="image1">
+    <property name="visible">True</property>
+    <property name="stock">gtk-new</property>
+    <property name="icon-size">1</property>
+  </object>
+  <object class="GtkImage" id="image2">
+    <property name="visible">True</property>
+    <property name="stock">gtk-clear</property>
+    <property name="icon-size">1</property>
+  </object>
+</interface>

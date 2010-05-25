@@ -5,7 +5,7 @@
 ## Copyright (C) 2005-2006 Alex Mauer <hawke AT hawkesnest.net>
 ##                         Travis Shirk <travis AT pobox.com>
 ## Copyright (C) 2005-2007 Nikos Kouremenos <kourem AT gmail.com>
-## Copyright (C) 2005-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2005-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2006 Dimitur Kirov <dkirov AT gmail.com>
 ## Copyright (C) 2006-2008 Jean-Marie Traissard <jim AT lapin.org>
 ## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
@@ -169,10 +169,9 @@ class ConversationTextview(gobject.GObject):
             )
     )
 
-    FOCUS_OUT_LINE_PIXBUF = gtk.gdk.pixbuf_new_from_file(os.path.join(
-            gajim.DATA_DIR, 'pixmaps', 'muc_separator.png'))
-    XEP0184_WARNING_PIXBUF = gtk.gdk.pixbuf_new_from_file(os.path.join(
-            gajim.DATA_DIR, 'pixmaps', 'receipt_missing.png'))
+    FOCUS_OUT_LINE_PIXBUF = gtkgui_helpers.get_icon_pixmap('gajim-muc_separator')
+    XEP0184_WARNING_PIXBUF = gtkgui_helpers.get_icon_pixmap(
+            'gajim-receipt_missing')
 
     # smooth scroll constants
     MAX_SCROLL_TIME = 0.4 # seconds
@@ -475,13 +474,14 @@ class ConversationTextview(gobject.GObject):
             self.xep0184_shown[id_] == ALREADY_RECEIVED:
                 return False
 
-            end_iter = buffer_.get_iter_at_mark(
-                    self.xep0184_marks[id_])
+            end_iter = buffer_.get_iter_at_mark(self.xep0184_marks[id_])
             buffer_.insert(end_iter, ' ')
-            buffer_.insert_pixbuf(end_iter,
-                    ConversationTextview.XEP0184_WARNING_PIXBUF)
-            before_img_iter = buffer_.get_iter_at_mark(
-                    self.xep0184_marks[id_])
+            anchor = buffer_.create_child_anchor(end_iter)
+            img = TextViewImage(anchor, '')
+            img.set_from_pixbuf(ConversationTextview.XEP0184_WARNING_PIXBUF)
+            img.show()
+            self.tv.add_child_at_anchor(img, anchor)
+            before_img_iter = buffer_.get_iter_at_mark(self.xep0184_marks[id_])
             before_img_iter.forward_char()
             post_img_iter = before_img_iter.copy()
             post_img_iter.forward_char()
@@ -703,6 +703,7 @@ class ConversationTextview(gobject.GObject):
         size = 2 * size - 1
         self.marks_queue = Queue.Queue(size)
         self.focus_out_end_mark = None
+        self.just_cleared = True
 
     def visit_url_from_menuitem(self, widget, link):
         """
@@ -861,7 +862,7 @@ class ConversationTextview(gobject.GObject):
     def on_join_group_chat_menuitem_activate(self, widget, room_jid):
         if 'join_gc' in gajim.interface.instances[self.account]:
             instance = gajim.interface.instances[self.account]['join_gc']
-            instance.xml.get_widget('room_jid_entry').set_text(room_jid)
+            instance.xml.get_object('room_jid_entry').set_text(room_jid)
             gajim.interface.instances[self.account]['join_gc'].window.present()
         else:
             try:
@@ -873,8 +874,8 @@ class ConversationTextview(gobject.GObject):
         dialogs.AddNewContactWindow(self.account, jid)
 
     def make_link_menu(self, event, kind, text):
-        xml = gtkgui_helpers.get_glade('chat_context_menu.glade')
-        menu = xml.get_widget('chat_context_menu')
+        xml = gtkgui_helpers.get_gtk_builder('chat_context_menu.ui')
+        menu = xml.get_object('chat_context_menu')
         childs = menu.get_children()
         if kind == 'url':
             id_ = childs[0].connect('activate', self.on_copy_link_activate, text)
@@ -890,7 +891,7 @@ class ConversationTextview(gobject.GObject):
             childs[7].hide() # add to roster
         else: # It's a mail or a JID
             # load muc icon
-            join_group_chat_menuitem = xml.get_widget('join_group_chat_menuitem')
+            join_group_chat_menuitem = xml.get_object('join_group_chat_menuitem')
             muc_icon = gtkgui_helpers.load_icon('muc_active')
             if muc_icon:
                 join_group_chat_menuitem.set_image(muc_icon)
@@ -909,16 +910,7 @@ class ConversationTextview(gobject.GObject):
                     self.on_join_group_chat_menuitem_activate, text)
             self.handlers[id_] = childs[6]
 
-            allow_add = False
             if self.account:
-                c = gajim.contacts.get_first_contact_from_jid(self.account, text)
-                if c and not gajim.contacts.is_pm_from_contact(self.account, c):
-                    if _('Not in Roster') in c.groups:
-                        allow_add = True
-                else: # he or she's not at all in the account contacts
-                    allow_add = True
-
-            if allow_add:
                 id_ = childs[7].connect('activate', self.on_add_to_roster_activate,
                         text)
                 self.handlers[id_] = childs[7]
@@ -1139,7 +1131,7 @@ class ConversationTextview(gobject.GObject):
             end_iter = buffer_.get_end_iter()
             if imagepath is not None:
                 anchor = buffer_.create_child_anchor(end_iter)
-                img = gtk.Image()
+                img = TextViewImage(anchor, special_text)
                 img.set_from_file(imagepath)
                 img.show()
                 # add
@@ -1167,12 +1159,16 @@ class ConversationTextview(gobject.GObject):
             all_tags = tags[:]
             if use_other_tags:
                 all_tags += other_tags
-            buffer_.insert_with_tags_by_name(end_iter, special_text, *all_tags)
+            # convert all names to TextTag
+            ttt = buffer_.get_tag_table()
+            all_tags = [(ttt.lookup(t) if isinstance(t, str) else t) for t in all_tags]
+            buffer_.insert_with_tags(end_iter, special_text, *all_tags)
 
     def print_empty_line(self):
         buffer_ = self.tv.get_buffer()
         end_iter = buffer_.get_end_iter()
         buffer_.insert_with_tags_by_name(end_iter, '\n', 'eol')
+        self.just_cleared = False
 
     def print_conversation_line(self, text, jid, kind, name, tim,
                     other_tags_for_name=[], other_tags_for_time=[],
@@ -1252,7 +1248,7 @@ class ConversationTextview(gobject.GObject):
             text_tags.append(other_text_tag)
         else: # not status nor /me
             if gajim.config.get('chat_merge_consecutive_nickname'):
-                if kind != old_kind:
+                if kind != old_kind or self.just_cleared:
                     self.print_name(name, kind, other_tags_for_name)
                 else:
                     self.print_real_text(gajim.config.get(
@@ -1275,6 +1271,7 @@ class ConversationTextview(gobject.GObject):
             else:
                 gobject.idle_add(self.scroll_to_end)
 
+        self.just_cleared = False
         buffer_.end_user_action()
 
     def get_time_to_show(self, tim):

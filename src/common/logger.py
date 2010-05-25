@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ## src/common/logger.py
 ##
-## Copyright (C) 2003-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2003-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2004-2005 Vincent Hanquez <tab AT snarc.org>
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem AT gmail.com>
 ## Copyright (C) 2006 Dimitur Kirov <dkirov AT gmail.com>
@@ -24,7 +24,9 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-''' This module allows to access the on-disk database of logs. '''
+"""
+This module allows to access the on-disk database of logs
+"""
 
 import os
 import sys
@@ -36,17 +38,12 @@ from cStringIO import StringIO
 import exceptions
 import gajim
 
-try:
-    import sqlite3 as sqlite # python 2.5
-except ImportError:
-    try:
-        from pysqlite2 import dbapi2 as sqlite
-    except ImportError:
-        raise exceptions.PysqliteNotAvailable
+import sqlite3 as sqlite
 
 import configpaths
 LOG_DB_PATH = configpaths.gajimpaths['LOG_DB']
 LOG_DB_FOLDER, LOG_DB_FILE = os.path.split(LOG_DB_PATH)
+CACHE_DB_PATH = configpaths.gajimpaths['CACHE_DB']
 
 import logging
 log = logging.getLogger('gajim.c.logger')
@@ -114,6 +111,11 @@ class Logger:
             # db is not created here but in src/common/checks_paths.py
             return
         self.init_vars()
+        if not os.path.exists(CACHE_DB_PATH):
+            # this can happen cache database is not present when gajim is launched
+            # db will be created in src/common/checks_paths.py
+            return
+        self.attach_cache_database()
 
     def close_db(self):
         if self.con:
@@ -139,6 +141,12 @@ class Logger:
         self.cur = self.con.cursor()
         self.set_synchronous(False)
 
+    def attach_cache_database(self):
+        try:
+            self.cur.execute("ATTACH DATABASE '%s' AS cache" % CACHE_DB_PATH)
+        except sqlite.Error, e:
+            log.debug("Failed to attach cache database: %s" % str(e))
+
     def set_synchronous(self, sync):
         try:
             if sync:
@@ -153,7 +161,9 @@ class Logger:
         self.get_jids_already_in_db()
 
     def simple_commit(self, sql_to_commit):
-        '''helper to commit'''
+        """
+        Helper to commit
+        """
         self.cur.execute(sql_to_commit)
         try:
             self.con.commit()
@@ -180,14 +190,14 @@ class Logger:
         return self.jids_already_in
 
     def jid_is_from_pm(self, jid):
-        '''if jid is gajim@conf/nkour it's likely a pm one, how we know
-        gajim@conf is not a normal guy and nkour is not his resource?
-        we ask if gajim@conf is already in jids (with type room jid)
-        this fails if user disables logging for room and only enables for
-        pm (so higly unlikely) and if we fail we do not go chaos
-        (user will see the first pm as if it was message in room's public chat)
-        and after that all okay'''
-
+        """
+        If jid is gajim@conf/nkour it's likely a pm one, how we know gajim@conf
+        is not a normal guy and nkour is not his resource?  we ask if gajim@conf
+        is already in jids (with type room jid) this fails if user disables
+        logging for room and only enables for pm (so higly unlikely) and if we
+        fail we do not go chaos (user will see the first pm as if it was message
+        in room's public chat) and after that all okay
+        """
         if jid.find('/') > -1:
             possible_room_jid = jid.split('/', 1)[0]
             return self.jid_is_room_jid(possible_room_jid)
@@ -205,13 +215,14 @@ class Logger:
             return True
 
     def get_jid_id(self, jid, typestr=None):
-        '''jids table has jid and jid_id
-        logs table has log_id, jid_id, contact_name, time, kind, show, message
-        so to ask logs we need jid_id that matches our jid in jids table
-        this method wants jid and returns the jid_id for later sql-ing on logs
-        typestr can be 'ROOM' or anything else depending on the type of JID
-        and is only needed to be specified when the JID is new in DB
-        '''
+        """
+        jids table has jid and jid_id logs table has log_id, jid_id,
+        contact_name, time, kind, show, message so to ask logs we need jid_id
+        that matches our jid in jids table this method wants jid and returns the
+        jid_id for later sql-ing on logs typestr can be 'ROOM' or anything else
+        depending on the type of JID and is only needed to be specified when the
+        JID is new in DB
+        """
         if jid.find('/') != -1: # if it has a /
             jid_is_from_pm = self.jid_is_from_pm(jid)
             if not jid_is_from_pm: # it's normal jid with resource
@@ -241,7 +252,9 @@ class Logger:
         return jid_id
 
     def convert_human_values_to_db_api_values(self, kind, show):
-        '''coverts from string style to constant ints for db'''
+        """
+        Convert from string style to constant ints for db
+        """
         if kind == 'status':
             kind_col = constants.KIND_STATUS
         elif kind == 'gcstatus':
@@ -280,7 +293,9 @@ class Logger:
         return kind_col, show_col
 
     def convert_human_transport_type_to_db_api_values(self, type_):
-        '''converts from string style to constant ints for db'''
+        """
+        Convert from string style to constant ints for db
+        """
         if type_ == 'aim':
             return constants.TYPE_AIM
         if type_ == 'gadu-gadu':
@@ -312,7 +327,9 @@ class Logger:
         return None
 
     def convert_api_values_to_human_transport_type(self, type_id):
-        '''converts from constant ints for db to string style'''
+        """
+        Convert from constant ints for db to string style
+        """
         if type_id == constants.TYPE_AIM:
             return 'aim'
         if type_id == constants.TYPE_GG:
@@ -343,7 +360,9 @@ class Logger:
             return 'mrim'
 
     def convert_human_subscription_values_to_db_api_values(self, sub):
-        '''converts from string style to constant ints for db'''
+        """
+        Convert from string style to constant ints for db
+        """
         if sub == 'none':
             return constants.SUBSCRIPTION_NONE
         if sub == 'to':
@@ -354,7 +373,9 @@ class Logger:
             return constants.SUBSCRIPTION_BOTH
 
     def convert_db_api_values_to_human_subscription_values(self, sub):
-        '''converts from constant ints for db to string style'''
+        """
+        Convert from constant ints for db to string style
+        """
         if sub == constants.SUBSCRIPTION_NONE:
             return 'none'
         if sub == constants.SUBSCRIPTION_TO:
@@ -385,30 +406,40 @@ class Logger:
         return message_id
 
     def insert_unread_events(self, message_id, jid_id):
-        ''' add unread message with id: message_id'''
+        """
+        Add unread message with id: message_id
+        """
         sql = 'INSERT INTO unread_messages VALUES (%d, %d, 0)' % (message_id,
                 jid_id)
         self.simple_commit(sql)
 
     def set_read_messages(self, message_ids):
-        ''' mark all messages with ids in message_ids as read'''
+        """
+        Mark all messages with ids in message_ids as read
+        """
         ids = ','.join([str(i) for i in message_ids])
         sql = 'DELETE FROM unread_messages WHERE message_id IN (%s)' % ids
         self.simple_commit(sql)
 
     def set_shown_unread_msgs(self, msg_id):
-        ''' mark unread message as shown un GUI '''
+        """
+        Mark unread message as shown un GUI
+        """
         sql = 'UPDATE unread_messages SET shown = 1 where message_id = %s' % \
                 msg_id
         self.simple_commit(sql)
 
     def reset_shown_unread_messages(self):
-        ''' Set shown field to False in unread_messages table '''
+        """
+        Set shown field to False in unread_messages table
+        """
         sql = 'UPDATE unread_messages SET shown = 0'
         self.simple_commit(sql)
 
     def get_unread_msgs(self):
-        ''' get all unread messages '''
+        """
+        Get all unread messages
+        """
         all_messages = []
         try:
             self.cur.execute(
@@ -438,15 +469,18 @@ class Logger:
         return all_messages
 
     def write(self, kind, jid, message=None, show=None, tim=None, subject=None):
-        '''write a row (status, gcstatus, message etc) to logs database
-        kind can be status, gcstatus, gc_msg, (we only recv for those 3),
-        single_msg_recv, chat_msg_recv, chat_msg_sent, single_msg_sent
-        we cannot know if it is pm or normal chat message, we try to guess
-        see jid_is_from_pm()
+        """
+        Write a row (status, gcstatus, message etc) to logs database
 
-        we analyze jid and store it as follows:
-        jids.jid text column will hold JID if TC-related, room_jid if GC-related,
-        ROOM_JID/nick if pm-related.'''
+        kind can be status, gcstatus, gc_msg, (we only recv for those 3),
+        single_msg_recv, chat_msg_recv, chat_msg_sent, single_msg_sent we cannot
+        know if it is pm or normal chat message, we try to guess see
+        jid_is_from_pm()
+
+        We analyze jid and store it as follows:
+                jids.jid text column will hold JID if TC-related, room_jid if GC-related,
+                ROOM_JID/nick if pm-related.
+        """
 
         if self.jids_already_in == []: # only happens if we just created the db
             self.open_db()
@@ -519,12 +553,14 @@ class Logger:
         return self.commit_to_db(values, write_unread)
 
     def get_last_conversation_lines(self, jid, restore_how_many_rows,
-    pending_how_many, timeout, account):
-        '''accepts how many rows to restore and when to time them out (in minutes)
-        (mark them as too old) and number of messages that are in queue
-        and are already logged but pending to be viewed,
-        returns a list of tupples containg time, kind, message,
-        list with empty tupple if nothing found to meet our demands'''
+                    pending_how_many, timeout, account):
+        """
+        Accept how many rows to restore and when to time them out (in minutes)
+        (mark them as too old) and number of messages that are in queue and are
+        already logged but pending to be viewed, returns a list of tupples
+        containg time, kind, message, list with empty tupple if nothing found to
+        meet our demands
+        """
         try:
             self.get_jid_id(jid)
         except exceptions.PysqliteOperationalError, e:
@@ -564,9 +600,12 @@ class Logger:
         return start_of_day
 
     def get_conversation_for_date(self, jid, year, month, day, account):
-        '''returns contact_name, time, kind, show, message, subject
-        for each row in a list of tupples,
-        returns list with empty tupple if we found nothing to meet our demands'''
+        """
+        Return contact_name, time, kind, show, message, subject
+
+        For each row in a list of tupples, returns list with empty tupple if we
+        found nothing to meet our demands
+        """
         try:
             self.get_jid_id(jid)
         except exceptions.PysqliteOperationalError, e:
@@ -589,9 +628,12 @@ class Logger:
         return results
 
     def get_search_results_for_query(self, jid, query, account):
-        '''returns contact_name, time, kind, show, message
-        for each row in a list of tupples,
-        returns list with empty tupple if we found nothing to meet our demands'''
+        """
+        Returns contact_name, time, kind, show, message
+
+        For each row in a list of tupples, returns list with empty tupple if we
+        found nothing to meet our demands
+        """
         try:
             self.get_jid_id(jid)
         except exceptions.PysqliteOperationalError, e:
@@ -618,7 +660,9 @@ class Logger:
         return results
 
     def get_days_with_logs(self, jid, year, month, max_day, account):
-        '''returns the list of days that have logs (not status messages)'''
+        """
+        Return the list of days that have logs (not status messages)
+        """
         try:
             self.get_jid_id(jid)
         except exceptions.PysqliteOperationalError, e:
@@ -653,8 +697,10 @@ class Logger:
         return days_with_logs
 
     def get_last_date_that_has_logs(self, jid, account=None, is_room=False):
-        '''returns last time (in seconds since EPOCH) for which
-        we had logs (excluding statuses)'''
+        """
+        Return last time (in seconds since EPOCH) for which we had logs
+        (excluding statuses)
+        """
         where_sql = ''
         if not is_room:
             where_sql = self._build_contact_where(account, jid)
@@ -679,8 +725,10 @@ class Logger:
         return result
 
     def get_room_last_message_time(self, jid):
-        '''returns FASTLY last time (in seconds since EPOCH) for which
-        we had logs for that room from rooms_last_message_time table'''
+        """
+        Return FASTLY last time (in seconds since EPOCH) for which we had logs
+        for that room from rooms_last_message_time table
+        """
         try:
             jid_id = self.get_jid_id(jid, 'ROOM')
         except exceptions.PysqliteOperationalError, e:
@@ -700,8 +748,10 @@ class Logger:
         return result
 
     def set_room_last_message_time(self, jid, time):
-        '''set last time (in seconds since EPOCH) for which
-        we had logs for that room in rooms_last_message_time table'''
+        """
+        Set last time (in seconds since EPOCH) for which we had logs for that
+        room in rooms_last_message_time table
+        """
         jid_id = self.get_jid_id(jid, 'ROOM')
         # jid_id is unique in this table, create or update :
         sql = 'REPLACE INTO rooms_last_message_time VALUES (%d, %d)' % \
@@ -709,8 +759,9 @@ class Logger:
         self.simple_commit(sql)
 
     def _build_contact_where(self, account, jid):
-        '''build the where clause for a jid, including metacontacts
-        jid(s) if any'''
+        """
+        Build the where clause for a jid, including metacontacts jid(s) if any
+        """
         where_sql = ''
         # will return empty list if jid is not associated with
         # any metacontacts
@@ -730,7 +781,9 @@ class Logger:
         return where_sql
 
     def save_transport_type(self, jid, type_):
-        '''save the type of the transport in DB'''
+        """
+        Save the type of the transport in DB
+        """
         type_id = self.convert_human_transport_type_to_db_api_values(type_)
         if not type_id:
             # unknown type
@@ -750,7 +803,9 @@ class Logger:
         self.simple_commit(sql)
 
     def get_transports_type(self):
-        '''return all the type of the transports in DB'''
+        """
+        Return all the type of the transports in DB
+        """
         self.cur.execute(
                 'SELECT * from transports_cache')
         results = self.cur.fetchall()
@@ -770,11 +825,13 @@ class Logger:
     # (2)
     # GzipFile needs a file-like object, StringIO emulates file for plain strings
     def iter_caps_data(self):
-        ''' Iterate over caps cache data stored in the database.
+        """
+        Iterate over caps cache data stored in the database
+
         The iterator values are pairs of (node, ver, ext, identities, features):
         identities == {'category':'foo', 'type':'bar', 'name':'boo'},
-        features being a list of feature namespaces. '''
-
+        features being a list of feature namespaces.
+        """
         # get data from table
         # the data field contains binary object (gzipped data), this is a hack
         # to get that data without trying to convert it to unicode
@@ -857,16 +914,21 @@ class Logger:
         self.simple_commit(sql)
 
     def clean_caps_table(self):
-        '''Remove caps which was not seen for 3 months'''
+        """
+        Remove caps which was not seen for 3 months
+        """
         sql = '''DELETE FROM caps_cache WHERE last_seen < %d''' % \
                 int(time.time() - 3*30*24*3600)
         self.simple_commit(sql)
 
     def replace_roster(self, account_name, roster_version, roster):
-        ''' Replace current roster in DB by a new one.
-        accout_name is the name of the account to change
-        roster_version is the version of the new roster
-        roster is the new version '''
+        """
+        Replace current roster in DB by a new one
+
+        accout_name is the name of the account to change.
+        roster_version is the version of the new roster.
+        roster is the new version.
+        """
         # First we must reset roster_version value to ensure that the server
         # sends back all the roster at the next connexion if the replacement
         # didn't work properly.
@@ -890,7 +952,9 @@ class Logger:
                 roster_version)
 
     def del_contact(self, account_jid, jid):
-        ''' Remove jid from account_jid roster. '''
+        """
+        Remove jid from account_jid roster
+        """
         try:
             account_jid_id = self.get_jid_id(account_jid)
             jid_id = self.get_jid_id(jid)
@@ -905,7 +969,9 @@ class Logger:
         self.con.commit()
 
     def add_or_update_contact(self, account_jid, jid, name, sub, ask, groups):
-        ''' Add or update a contact from account_jid roster. '''
+        """
+        Add or update a contact from account_jid roster
+        """
         if sub == 'remove':
             self.del_contact(account_jid, jid)
             return
@@ -936,7 +1002,9 @@ class Logger:
         self.con.commit()
 
     def get_roster(self, account_jid):
-        ''' Return the accound_jid roster in NonBlockingRoster format. '''
+        """
+        Return the accound_jid roster in NonBlockingRoster format
+        """
         data = {}
         account_jid_id = self.get_jid_id(account_jid)
 
@@ -975,7 +1043,9 @@ class Logger:
         return data
 
     def remove_roster(self, account_jid):
-        ''' Remove all entry from account_jid roster. '''
+        """
+        Remove all entry from account_jid roster
+        """
         account_jid_id = self.get_jid_id(account_jid)
 
         self.cur.execute('DELETE FROM roster_entry WHERE account_jid_id=?',
@@ -990,7 +1060,7 @@ class Logger:
         else:
             time_col = int(float(time.time()))
         if msg:
-            if self.jid_is_room_jid(with_) or nick:
+            if self.jid_is_from_pm(with_) or nick:
                 # It's a groupchat message
                 if nick:
                     # It's a message from a groupchat occupent
@@ -1005,22 +1075,23 @@ class Logger:
                 elif direction == 'to':
                     type_ = 'chat_msg_sent'
         jid_id = self.get_jid_id(with_)
-        where_sql = 'jid_id = %s AND message=?' % (jid_id)
+        where_sql = 'jid_id = %s AND message=?' % jid_id
         if type_ == 'gc_msg':
-            # We cannot differentiate gc message and pm messages, so look in both
-            # logs
+            # We cannot differentiate gc message and pm messages, so look in
+            # both logs
             with_2 = gajim.get_jid_without_resource(with_)
             if with_ != with_2:
                 jid_id2 = self.get_jid_id(with_2)
-                where_sql = 'jid_id in (%s, %s) AND message=?' % (jid_id, jid_id2)
+                where_sql = 'jid_id in (%s, %s) AND message=?' % (jid_id,
+                    jid_id2)
         start_time = time_col - 300 # 5 minutes arrount given time
         end_time = time_col + 300 # 5 minutes arrount given time
         self.cur.execute('''
-                SELECT log_line_id FROM logs
-                WHERE (%s)
-                AND time BETWEEN %d AND %d
-                ORDER BY time
-                ''' % (where_sql, start_time, end_time), (msg,))
+            SELECT log_line_id FROM logs
+            WHERE (%s)
+            AND time BETWEEN %d AND %d
+            ORDER BY time
+            ''' % (where_sql, start_time, end_time), (msg,))
         results = self.cur.fetchall()
         if results:
             log.debug('Log already in DB, ignoring it')

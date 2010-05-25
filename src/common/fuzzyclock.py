@@ -2,7 +2,7 @@
 ## src/common/fuzzyclock.py
 ##
 ## Copyright (C) 2006 Christoph Neuroth <delmonico AT gmx.net>
-## Copyright (C) 2006-2007 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2006-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2007 Jean-Marie Traissard <jim AT lapin.org>
 ## Copyright (C) 2009 Benjamin Richter <br AT waldteufel-online.net>
 ##
@@ -21,7 +21,7 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-'''
+"""
 Python class to show a "fuzzy clock".
 Homepage of the original: http://home.gna.org/fuzzyclock/
 Project Page of the original: http://gna.org/projects/fuzzyclock
@@ -30,7 +30,7 @@ The class is based on a port from PHP code by
 Henrique Recidive <henrique at recidive.com> which was
 in turn based on the Fuzzy Clock Applet of Frerich Raabe (KDE).
 So most of the credit goes to this guys, thanks :-)
-'''
+"""
 
 import time
 

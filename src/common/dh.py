@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ## src/common/dh.py
 ##
-## Copyright (C) 2007 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2007-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2008 Brendan Taylor <whateley AT gmail.com>
 ##
 ## This file is part of Gajim.
@@ -19,12 +19,13 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-'''
+"""
 This module defines a number of constants; specifically, large primes suitable
-for use with the Diffie-Hellman key exchange.
+for use with the Diffie-Hellman key exchange
 
 These constants have been obtained from RFC2409 and RFC3526.
-'''
+"""
+
 import string
 
 generators = [None, # one to get the right offset

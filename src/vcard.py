@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ## src/vcard.py
 ##
-## Copyright (C) 2003-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2003-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2005 Vincent Hanquez <tab AT snarc.org>
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem AT gmail.com>
 ## Copyright (C) 2006 Junglecow J <junglecow AT gmail.com>
@@ -45,8 +45,11 @@ from common import gajim
 from common.i18n import Q_
 
 def get_avatar_pixbuf_encoded_mime(photo):
-    '''return the pixbuf of the image
-    photo is a dictionary containing PHOTO information'''
+    """
+    Return the pixbuf of the image
+
+    Photo is a dictionary containing PHOTO information.
+    """
     if not isinstance(photo, dict):
         return None, None, None
     img_decoded = None
@@ -71,13 +74,15 @@ def get_avatar_pixbuf_encoded_mime(photo):
     return pixbuf, avatar_encoded, avatar_mime_type
 
 class VcardWindow:
-    '''Class for contact's information window'''
+    """
+    Class for contact's information window
+    """
 
     def __init__(self, contact, account, gc_contact = None):
         # the contact variable is the jid if vcard is true
-        self.xml = gtkgui_helpers.get_glade('vcard_information_window.glade')
-        self.window = self.xml.get_widget('vcard_information_window')
-        self.progressbar = self.xml.get_widget('progressbar')
+        self.xml = gtkgui_helpers.get_gtk_builder('vcard_information_window.ui')
+        self.window = self.xml.get_object('vcard_information_window')
+        self.progressbar = self.xml.get_object('progressbar')
 
         self.contact = contact
         self.account = account
@@ -107,10 +112,10 @@ class VcardWindow:
         for extension in ('.png', '.jpeg'):
             local_avatar_path = local_avatar_basepath + extension
             if os.path.isfile(local_avatar_path):
-                image = self.xml.get_widget('custom_avatar_image')
+                image = self.xml.get_object('custom_avatar_image')
                 image.set_from_file(local_avatar_path)
                 image.show()
-                self.xml.get_widget('custom_avatar_label').show()
+                self.xml.get_object('custom_avatar_label').show()
                 break
         self.avatar_mime_type = None
         self.avatar_encoded = None
@@ -123,12 +128,12 @@ class VcardWindow:
         self.fill_jabber_page()
         annotations = gajim.connections[self.account].annotations
         if self.contact.jid in annotations:
-            buffer_ = self.xml.get_widget('textview_annotation').get_buffer()
+            buffer_ = self.xml.get_object('textview_annotation').get_buffer()
             buffer_.set_text(annotations[self.contact.jid])
 
-        self.xml.signal_autoconnect(self)
+        self.xml.connect_signals(self)
         self.window.show_all()
-        self.xml.get_widget('close_button').grab_focus()
+        self.xml.get_object('close_button').grab_focus()
 
     def update_progressbar(self):
         self.progressbar.pulse()
@@ -138,7 +143,7 @@ class VcardWindow:
         if self.update_progressbar_timeout_id is not None:
             gobject.source_remove(self.update_progressbar_timeout_id)
         del gajim.interface.instances[self.account]['infos'][self.contact.jid]
-        buffer_ = self.xml.get_widget('textview_annotation').get_buffer()
+        buffer_ = self.xml.get_object('textview_annotation').get_buffer()
         annotation = buffer_.get_text(buffer_.get_start_iter(),
                 buffer_.get_end_iter())
         connection = gajim.connections[self.account]
@@ -151,14 +156,15 @@ class VcardWindow:
             self.window.destroy()
 
     def on_PHOTO_eventbox_button_press_event(self, widget, event):
-        '''If right-clicked, show popup'''
+        """
+        If right-clicked, show popup
+        """
         if event.button == 3: # right click
             menu = gtk.Menu()
             menuitem = gtk.ImageMenuItem(gtk.STOCK_SAVE_AS)
             menuitem.connect('activate',
                     gtkgui_helpers.on_avatar_save_as_menuitem_activate,
-                    self.contact.jid, self.account, self.contact.get_shown_name() +
-                    '.jpeg')
+                    self.contact.jid, self.contact.get_shown_name())
             menu.append(menuitem)
             menu.connect('selection-done', lambda w:w.destroy())
             # show the menu
@@ -171,22 +177,22 @@ class VcardWindow:
                 widget = gtk.LinkButton(value, value)
                 widget.set_alignment(0, 0)
                 widget.show()
-                table = self.xml.get_widget('personal_info_table')
+                table = self.xml.get_object('personal_info_table')
                 table.attach(widget, 1, 4, 3, 4, yoptions = 0)
             else:
-                self.xml.get_widget(entry_name).set_text(value)
+                self.xml.get_object(entry_name).set_text(value)
         except AttributeError:
             pass
 
     def set_values(self, vcard):
         for i in vcard.keys():
-            if i == 'PHOTO' and self.xml.get_widget('information_notebook').\
+            if i == 'PHOTO' and self.xml.get_object('information_notebook').\
             get_n_pages() > 4:
                 pixbuf, self.avatar_encoded, self.avatar_mime_type = \
                         get_avatar_pixbuf_encoded_mime(vcard[i])
-                image = self.xml.get_widget('PHOTO_image')
+                image = self.xml.get_object('PHOTO_image')
                 image.show()
-                self.xml.get_widget('user_avatar_label').show()
+                self.xml.get_object('user_avatar_label').show()
                 if not pixbuf:
                     image.set_from_icon_name('stock_person',
                             gtk.ICON_SIZE_DIALOG)
@@ -206,7 +212,7 @@ class VcardWindow:
                     self.set_value(i + '_' + j + '_label', vcard[i][j])
             else:
                 if i == 'DESC':
-                    self.xml.get_widget('DESC_textview').get_buffer().set_text(
+                    self.xml.get_object('DESC_textview').get_buffer().set_text(
                             vcard[i], 0)
                 elif i != 'jid': # Do not override jid_label
                     self.set_value(i + '_label', vcard[i])
@@ -224,7 +230,7 @@ class VcardWindow:
         self.fill_status_label()
 
     def set_os_info(self, resource, client_info, os_info):
-        if self.xml.get_widget('information_notebook').get_n_pages() < 5:
+        if self.xml.get_object('information_notebook').get_n_pages() < 5:
             return
         i = 0
         client = ''
@@ -245,13 +251,13 @@ class VcardWindow:
             client = Q_('?Client:Unknown')
         if os == '':
             os = Q_('?OS:Unknown')
-        self.xml.get_widget('client_name_version_label').set_text(client)
-        self.xml.get_widget('os_label').set_text(os)
+        self.xml.get_object('client_name_version_label').set_text(client)
+        self.xml.get_object('os_label').set_text(os)
         self.os_info_arrived = True
         self.test_remove_progressbar()
 
     def set_entity_time(self, resource, time_info):
-        if self.xml.get_widget('information_notebook').get_n_pages() < 5:
+        if self.xml.get_object('information_notebook').get_n_pages() < 5:
             return
         i = 0
         time_s = ''
@@ -266,12 +272,12 @@ class VcardWindow:
 
         if time_s == '':
             time_s = Q_('?Time:Unknown')
-        self.xml.get_widget('time_label').set_text(time_s)
+        self.xml.get_object('time_label').set_text(time_s)
         self.entity_time_arrived = True
         self.test_remove_progressbar()
 
     def fill_status_label(self):
-        if self.xml.get_widget('information_notebook').get_n_pages() < 5:
+        if self.xml.get_object('information_notebook').get_n_pages() < 5:
             return
         contact_list = gajim.contacts.get_contacts(self.account, self.contact.jid)
         connected_contact_list = []
@@ -305,34 +311,34 @@ class VcardWindow:
             stats = helpers.get_uf_show(self.contact.show)
             if self.contact.status:
                 stats += ': ' + self.contact.status
-        status_label = self.xml.get_widget('status_label')
+        status_label = self.xml.get_object('status_label')
         status_label.set_max_width_chars(15)
         status_label.set_text(stats)
 
-        status_label_eventbox = self.xml.get_widget('status_label_eventbox')
+        status_label_eventbox = self.xml.get_object('status_label_eventbox')
         status_label_eventbox.set_tooltip_text(stats)
 
     def fill_jabber_page(self):
-        self.xml.get_widget('nickname_label').set_markup(
+        self.xml.get_object('nickname_label').set_markup(
                 '<b><span size="x-large">' +
                 self.contact.get_shown_name() +
                 '</span></b>')
-        self.xml.get_widget('jid_label').set_text(self.contact.jid)
+        self.xml.get_object('jid_label').set_text(self.contact.jid)
 
-        subscription_label = self.xml.get_widget('subscription_label')
-        ask_label = self.xml.get_widget('ask_label')
+        subscription_label = self.xml.get_object('subscription_label')
+        ask_label = self.xml.get_object('ask_label')
         if self.gc_contact:
-            self.xml.get_widget('subscription_title_label').set_markup(_("<b>Role:</b>"))
+            self.xml.get_object('subscription_title_label').set_markup(Q_("?Role in Group Chat:<b>Role:</b>"))
             uf_role = helpers.get_uf_role(self.gc_contact.role)
             subscription_label.set_text(uf_role)
 
-            self.xml.get_widget('ask_title_label').set_markup(_("<b>Affiliation:</b>"))
+            self.xml.get_object('ask_title_label').set_markup(_("<b>Affiliation:</b>"))
             uf_affiliation = helpers.get_uf_affiliation(self.gc_contact.affiliation)
             ask_label.set_text(uf_affiliation)
         else:
             uf_sub = helpers.get_uf_sub(self.contact.sub)
             subscription_label.set_text(uf_sub)
-            eb = self.xml.get_widget('subscription_label_eventbox')
+            eb = self.xml.get_object('subscription_label_eventbox')
             if self.contact.sub == 'from':
                 tt_text = _("This contact is interested in your presence information, but you are not interested in his/her presence")
             elif self.contact.sub == 'to':
@@ -345,7 +351,7 @@ class VcardWindow:
 
             uf_ask = helpers.get_uf_ask(self.contact.ask)
             ask_label.set_text(uf_ask)
-            eb = self.xml.get_widget('ask_label_eventbox')
+            eb = self.xml.get_object('ask_label_eventbox')
             if self.contact.ask == 'subscribe':
                 tt_text = _("You are waiting contact's answer about your subscription request")
             else:
@@ -420,8 +426,8 @@ class VcardWindow:
                     self.time_info[i] = {'resource': c.resource, 'time': ''}
                     i += 1
 
-        self.xml.get_widget('resource_prio_label').set_text(resources)
-        resource_prio_label_eventbox = self.xml.get_widget(
+        self.xml.get_object('resource_prio_label').set_text(resources)
+        resource_prio_label_eventbox = self.xml.get_object(
                 'resource_prio_label_eventbox')
         resource_prio_label_eventbox.set_tooltip_text(uf_resources)
 
@@ -441,8 +447,8 @@ class VcardWindow:
 class ZeroconfVcardWindow:
     def __init__(self, contact, account, is_fake = False):
         # the contact variable is the jid if vcard is true
-        self.xml = gtkgui_helpers.get_glade('zeroconf_information_window.glade')
-        self.window = self.xml.get_widget('zeroconf_information_window')
+        self.xml = gtkgui_helpers.get_gtk_builder('zeroconf_information_window.ui')
+        self.window = self.xml.get_object('zeroconf_information_window')
 
         self.contact = contact
         self.account = account
@@ -454,7 +460,7 @@ class ZeroconfVcardWindow:
         self.fill_contact_page()
         self.fill_personal_page()
 
-        self.xml.signal_autoconnect(self)
+        self.xml.connect_signals(self)
         self.window.show_all()
 
     def on_zeroconf_information_window_destroy(self, widget):
@@ -465,14 +471,15 @@ class ZeroconfVcardWindow:
             self.window.destroy()
 
     def on_PHOTO_eventbox_button_press_event(self, widget, event):
-        '''If right-clicked, show popup'''
+        """
+        If right-clicked, show popup
+        """
         if event.button == 3: # right click
             menu = gtk.Menu()
             menuitem = gtk.ImageMenuItem(gtk.STOCK_SAVE_AS)
             menuitem.connect('activate',
                     gtkgui_helpers.on_avatar_save_as_menuitem_activate,
-                    self.contact.jid, self.account, self.contact.get_shown_name() +
-                    '.jpeg')
+                    self.contact.jid, self.contact.get_shown_name())
             menu.append(menuitem)
             menu.connect('selection-done', lambda w:w.destroy())
             # show the menu
@@ -484,15 +491,15 @@ class ZeroconfVcardWindow:
             if value and entry_name == 'URL_label':
                 widget = gtk.LinkButton(value, value)
                 widget.set_alignment(0, 0)
-                table = self.xml.get_widget('personal_info_table')
+                table = self.xml.get_object('personal_info_table')
                 table.attach(widget, 1, 4, 3, 4, yoptions = 0)
             else:
-                self.xml.get_widget(entry_name).set_text(value)
+                self.xml.get_object(entry_name).set_text(value)
         except AttributeError:
             pass
 
     def fill_status_label(self):
-        if self.xml.get_widget('information_notebook').get_n_pages() < 2:
+        if self.xml.get_object('information_notebook').get_n_pages() < 2:
             return
         contact_list = gajim.contacts.get_contacts(self.account, self.contact.jid)
         # stats holds show and status message
@@ -513,19 +520,19 @@ class ZeroconfVcardWindow:
             stats = helpers.get_uf_show(self.contact.show)
             if self.contact.status:
                 stats += ': ' + self.contact.status
-        status_label = self.xml.get_widget('status_label')
+        status_label = self.xml.get_object('status_label')
         status_label.set_max_width_chars(15)
         status_label.set_text(stats)
 
-        status_label_eventbox = self.xml.get_widget('status_label_eventbox')
+        status_label_eventbox = self.xml.get_object('status_label_eventbox')
         status_label_eventbox.set_tooltip_text(stats)
 
     def fill_contact_page(self):
-        self.xml.get_widget('nickname_label').set_markup(
+        self.xml.get_object('nickname_label').set_markup(
                 '<b><span size="x-large">' +
                 self.contact.get_shown_name() +
                 '</span></b>')
-        self.xml.get_widget('local_jid_label').set_text(self.contact.jid)
+        self.xml.get_object('local_jid_label').set_text(self.contact.jid)
 
         resources = '%s (%s)' % (self.contact.resource, unicode(
                 self.contact.priority))
@@ -534,28 +541,22 @@ class ZeroconfVcardWindow:
         if not self.contact.status:
             self.contact.status = ''
 
-        # Request list time status
-    #       gajim.connections[self.account].request_last_status_time(self.contact.jid,
-    #               self.contact.resource)
-
-        self.xml.get_widget('resource_prio_label').set_text(resources)
-        resource_prio_label_eventbox = self.xml.get_widget(
+        self.xml.get_object('resource_prio_label').set_text(resources)
+        resource_prio_label_eventbox = self.xml.get_object(
                 'resource_prio_label_eventbox')
         resource_prio_label_eventbox.set_tooltip_text(uf_resources)
 
         self.fill_status_label()
-
-    #       gajim.connections[self.account].request_vcard(self.contact.jid, self.is_fake)
 
     def fill_personal_page(self):
         contact = gajim.connections[gajim.ZEROCONF_ACC_NAME].roster.getItem(self.contact.jid)
         for key in ('1st', 'last', 'jid', 'email'):
             if key not in contact['txt_dict']:
                 contact['txt_dict'][key] = ''
-        self.xml.get_widget('first_name_label').set_text(contact['txt_dict']['1st'])
-        self.xml.get_widget('last_name_label').set_text(contact['txt_dict']['last'])
-        self.xml.get_widget('jabber_id_label').set_text(contact['txt_dict']['jid'])
-        self.xml.get_widget('email_label').set_text(contact['txt_dict']['email'])
+        self.xml.get_object('first_name_label').set_text(contact['txt_dict']['1st'])
+        self.xml.get_object('last_name_label').set_text(contact['txt_dict']['last'])
+        self.xml.get_object('jabber_id_label').set_text(contact['txt_dict']['jid'])
+        self.xml.get_object('email_label').set_text(contact['txt_dict']['email'])
 
     def on_close_button_clicked(self, widget):
         self.window.destroy()

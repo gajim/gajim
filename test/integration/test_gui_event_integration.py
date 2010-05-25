@@ -28,7 +28,7 @@ class TestStatusChange(unittest.TestCase):
     def setUp(self):
 
         gajim.connections = {}
-        gajim.contacts = contacts_module.Contacts()
+        gajim.contacts = contacts_module.LegacyContactsAPI()
         gajim.interface.roster = roster_window.RosterWindow()
 
         for acc in contacts:

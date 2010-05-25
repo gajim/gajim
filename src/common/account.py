@@ -25,8 +25,11 @@ class Account(object):
         self.contacts = contacts
         self.gc_contacts = gc_contacts
 
+    def change_contact_jid(self, old_jid, new_jid):
+        self.contacts.change_contact_jid(old_jid, new_jid)
+
     def __repr__(self):
         return self.name
 
     def __hash__(self):
-        return self.name.__hash__()
+        return hash(self.name)

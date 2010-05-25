@@ -47,4 +47,4 @@ def setup_env():
 
     if use_x:
         import gtkgui_helpers
-        gtkgui_helpers.GLADE_DIR = gajim_root + '/data/glade'
+        gtkgui_helpers.GUI_DIR = gajim_root + '/data/gui'

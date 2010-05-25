@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ## src/profile_window.py
 ##
-## Copyright (C) 2003-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2003-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem AT gmail.com>
 ## Copyright (C) 2006-2008 Jean-Marie Traissard <jim AT lapin.org>
 ##
@@ -36,13 +36,15 @@ from common import gajim
 
 
 class ProfileWindow:
-    '''Class for our information window'''
+    """
+    Class for our information window
+    """
 
     def __init__(self, account):
-        self.xml = gtkgui_helpers.get_glade('profile_window.glade')
-        self.window = self.xml.get_widget('profile_window')
-        self.progressbar = self.xml.get_widget('progressbar')
-        self.statusbar = self.xml.get_widget('statusbar')
+        self.xml = gtkgui_helpers.get_gtk_builder('profile_window.ui')
+        self.window = self.xml.get_object('profile_window')
+        self.progressbar = self.xml.get_object('progressbar')
+        self.statusbar = self.xml.get_object('statusbar')
         self.context_id = self.statusbar.get_context_id('profile')
 
         self.account = account
@@ -59,8 +61,8 @@ class ProfileWindow:
 
         # Create Image for avatar button
         image = gtk.Image()
-        self.xml.get_widget('PHOTO_button').set_image(image)
-        self.xml.signal_autoconnect(self)
+        self.xml.get_object('PHOTO_button').set_image(image)
+        self.xml.connect_signals(self)
         self.window.show_all()
 
     def update_progressbar(self):
@@ -86,11 +88,11 @@ class ProfileWindow:
 
     def on_clear_button_clicked(self, widget):
         # empty the image
-        button = self.xml.get_widget('PHOTO_button')
+        button = self.xml.get_object('PHOTO_button')
         image = button.get_image()
         image.set_from_pixbuf(None)
         button.hide()
-        text_button = self.xml.get_widget('NOPHOTO_button')
+        text_button = self.xml.get_object('NOPHOTO_button')
         text_button.show()
         self.avatar_encoded = None
         self.avatar_mime_type = None
@@ -142,11 +144,11 @@ class ProfileWindow:
                 return
             self.dialog.destroy()
             self.dialog = None
-            button = self.xml.get_widget('PHOTO_button')
+            button = self.xml.get_object('PHOTO_button')
             image = button.get_image()
             image.set_from_pixbuf(pixbuf)
             button.show()
-            text_button = self.xml.get_widget('NOPHOTO_button')
+            text_button = self.xml.get_object('NOPHOTO_button')
             text_button.hide()
             self.avatar_encoded = base64.encodestring(data)
             # returns None if unknown type
@@ -173,20 +175,22 @@ class ProfileWindow:
                     on_response_cancel = on_cancel, on_response_clear = on_clear)
 
     def on_PHOTO_button_press_event(self, widget, event):
-        '''If right-clicked, show popup'''
+        """
+        If right-clicked, show popup
+        """
         if event.button == 3 and self.avatar_encoded: # right click
             menu = gtk.Menu()
 
             # Try to get pixbuf
             pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(self.jid,
-                    use_local = False)
+                    use_local=False)
 
-            if pixbuf:
+            if pixbuf not in (None, 'ask'):
                 nick = gajim.config.get_per('accounts', self.account, 'name')
                 menuitem = gtk.ImageMenuItem(gtk.STOCK_SAVE_AS)
                 menuitem.connect('activate',
-                        gtkgui_helpers.on_avatar_save_as_menuitem_activate,
-                        self.jid, None, nick + '.jpeg')
+                    gtkgui_helpers.on_avatar_save_as_menuitem_activate,
+                    self.jid, nick)
                 menu.append(menuitem)
             # show clear
             menuitem = gtk.ImageMenuItem(gtk.STOCK_CLEAR)
@@ -199,16 +203,30 @@ class ProfileWindow:
         elif event.button == 1: # left click
             self.on_set_avatar_button_clicked(widget)
 
+    def on_BDAY_entry_focus_out_event(self, widget, event):
+        txt = widget.get_text()
+        if not txt:
+            return
+        try:
+            time.strptime(txt, '%Y-%m-%d')
+        except ValueError:
+            if not widget.is_focus():
+                pritext = _('Wrong date format')
+                dialogs.ErrorDialog(pritext, _('Format of the date must be '
+                    'YYYY-MM-DD'))
+                gobject.idle_add(lambda: widget.grab_focus())
+            return True
+
     def set_value(self, entry_name, value):
         try:
-            self.xml.get_widget(entry_name).set_text(value)
+            self.xml.get_object(entry_name).set_text(value)
         except AttributeError:
             pass
 
     def set_values(self, vcard_):
-        button = self.xml.get_widget('PHOTO_button')
+        button = self.xml.get_object('PHOTO_button')
         image = button.get_image()
-        text_button = self.xml.get_widget('NOPHOTO_button')
+        text_button = self.xml.get_object('NOPHOTO_button')
         if not 'PHOTO' in vcard_:
             # set default image
             image.set_from_pixbuf(None)
@@ -240,7 +258,7 @@ class ProfileWindow:
                     self.set_value(i + '_' + j + '_entry', vcard_[i][j])
             else:
                 if i == 'DESC':
-                    self.xml.get_widget('DESC_textview').get_buffer().set_text(
+                    self.xml.get_object('DESC_textview').get_buffer().set_text(
                             vcard_[i], 0)
                 else:
                     self.set_value(i + '_entry', vcard_[i])
@@ -257,7 +275,9 @@ class ProfileWindow:
             self.update_progressbar_timeout_id = None
 
     def add_to_vcard(self, vcard_, entry, txt):
-        '''Add an information to the vCard dictionary'''
+        """
+        Add an information to the vCard dictionary
+        """
         entries = entry.split('_')
         loc = vcard_
         if len(entries) == 3: # We need to use lists
@@ -280,7 +300,9 @@ class ProfileWindow:
         return vcard_
 
     def make_vcard(self):
-        '''make the vCard dictionary'''
+        """
+        Make the vCard dictionary
+        """
         entries = ['FN', 'NICKNAME', 'BDAY', 'EMAIL_HOME_USERID', 'URL',
                 'TEL_HOME_NUMBER', 'N_FAMILY', 'N_GIVEN', 'N_MIDDLE', 'N_PREFIX',
                 'N_SUFFIX', 'ADR_HOME_STREET', 'ADR_HOME_EXTADR', 'ADR_HOME_LOCALITY',
@@ -290,12 +312,12 @@ class ProfileWindow:
                 'ADR_WORK_REGION', 'ADR_WORK_PCODE', 'ADR_WORK_CTRY']
         vcard_ = {}
         for e in entries:
-            txt = self.xml.get_widget(e + '_entry').get_text().decode('utf-8')
+            txt = self.xml.get_object(e + '_entry').get_text().decode('utf-8')
             if txt != '':
                 vcard_ = self.add_to_vcard(vcard_, e, txt)
 
         # DESC textview
-        buff = self.xml.get_widget('DESC_textview').get_buffer()
+        buff = self.xml.get_object('DESC_textview').get_buffer()
         start_iter = buff.get_start_iter()
         end_iter = buff.get_end_iter()
         txt = buff.get_text(start_iter, end_iter, 0)

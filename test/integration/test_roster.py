@@ -27,7 +27,7 @@ class TestRosterWindow(unittest.TestCase):
 
         # Add after creating RosterWindow
         # We want to test the filling explicitly
-        gajim.contacts = contacts_module.Contacts()
+        gajim.contacts = contacts_module.LegacyContactsAPI()
         gajim.connections = {}
         self.roster = roster_window.RosterWindow()
 

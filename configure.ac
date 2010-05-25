@@ -1,5 +1,5 @@
 AC_INIT([Gajim - A Jabber Instant Messager],
-		[0.13.0.1-dev],[http://trac.gajim.org/],[gajim])
+		[0.13.10.2-dev],[http://trac.gajim.org/],[gajim])
 AC_PREREQ([2.59])
 
 AC_CONFIG_HEADER(config.h)
@@ -56,8 +56,21 @@ AC_SUBST(ACLOCAL_AMFLAGS)
 AM_CHECK_PYTHON_HEADERS(,[AC_MSG_ERROR(could not find Python headers)])
 AC_SUBST([PYTHON_INCLUDES])
 
-AS_AC_EXPAND(DATADIR, "${datadir}")
-AS_AC_EXPAND(LIBDIR, "${libdir}")
+dnl ****
+dnl enable installation in python-2.x/site-packages/gajim
+dnl ****
+AC_ARG_ENABLE(site-packages,
+  [AS_HELP_STRING([--enable-site-packages],
+	[install gajim sources in PYTHONDIR/site-packages/gajim
+instead of DATADIR/gajim/src.])]
+,
+AC_SUBST([gajim_srcdir], [\${pkgpythondir}])
+,
+AC_SUBST([gajim_srcdir], [\${datadir}/\${PACKAGE}/src])
+)
+
+AS_AC_EXPAND(GAJIM_SRCDIR, "${gajim_srcdir}")
+AS_AC_EXPAND(PKGDATADIR, "${datadir}/${PACKAGE}")
 AS_AC_EXPAND(DOCDIR, "${docdir}")
 AS_AC_EXPAND(LOCALEDIR, "${localedir}")
 
@@ -67,12 +80,13 @@ AC_SUBST(PACKAGE)
 AC_CONFIG_FILES([ 
 	Makefile
 	data/Makefile
-	data/glade/Makefile
+	data/gui/Makefile
 	data/emoticons/Makefile
 	data/pixmaps/Makefile
 	data/iconsets/Makefile
 	data/moods/Makefile
 	data/activities/Makefile
+	icons/Makefile
 	data/gajim.desktop.in
 	data/defs.py
 	src/Makefile
@@ -82,3 +96,12 @@ AC_CONFIG_FILES([
 	po/Makefile.in
 ])
 AC_OUTPUT
+echo "
+*****************************
+  Installation:
+    Prefix ........... ${prefix}
+    Python modules ... ${GAJIM_SRCDIR}
+    Documentation .... ${DOCDIR}
+    Others ........... ${PKGDATADIR}
+*****************************"
+

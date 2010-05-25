@@ -4,7 +4,7 @@
 ## Copyright (C) 2006 Dimitur Kirov <dkirov AT gmail.com>
 ## Copyright (C) 2006-2007 Jean-Marie Traissard <jim AT lapin.org>
 ##                         Nikos Kouremenos <kourem AT gmail.com>
-## Copyright (C) 2006-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2006-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2007 Stephan Erb <steve-e AT h3c.de>
 ## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
 ##
@@ -102,19 +102,12 @@ C_NICKNAME
 ) = range(2, 6)
 
 
-try:
-    import sqlite3 as sqlite # python 2.5
-except ImportError:
-    try:
-        from pysqlite2 import dbapi2 as sqlite
-    except ImportError:
-        raise exceptions.PysqliteNotAvailable
+import sqlite3 as sqlite
 
 
 class HistoryManager:
     def __init__(self):
-        path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps/gajim.png')
-        pix = gtk.gdk.pixbuf_new_from_file(path_to_file)
+        pix = gtkgui_helpers.get_icon_pixmap('gajim')
         gtk.window_set_default_icon(pix) # set the icon to all newly opened windows
 
         if not os.path.exists(LOG_DB_PATH):
@@ -122,16 +115,16 @@ class HistoryManager:
                     '%s does not exist.' % LOG_DB_PATH)
             sys.exit()
 
-        xml = gtkgui_helpers.get_glade('history_manager.glade')
-        self.window = xml.get_widget('history_manager_window')
-        self.jids_listview = xml.get_widget('jids_listview')
-        self.logs_listview = xml.get_widget('logs_listview')
-        self.search_results_listview = xml.get_widget('search_results_listview')
-        self.search_entry = xml.get_widget('search_entry')
-        self.logs_scrolledwindow = xml.get_widget('logs_scrolledwindow')
-        self.search_results_scrolledwindow = xml.get_widget(
+        xml = gtkgui_helpers.get_gtk_builder('history_manager.ui')
+        self.window = xml.get_object('history_manager_window')
+        self.jids_listview = xml.get_object('jids_listview')
+        self.logs_listview = xml.get_object('logs_listview')
+        self.search_results_listview = xml.get_object('search_results_listview')
+        self.search_entry = xml.get_object('search_entry')
+        self.logs_scrolledwindow = xml.get_object('logs_scrolledwindow')
+        self.search_results_scrolledwindow = xml.get_object(
                 'search_results_scrolledwindow')
-        self.welcome_vbox = xml.get_widget('welcome_vbox')
+        self.welcome_vbox = xml.get_object('welcome_vbox')
 
         self.jids_already_in = [] # holds jids that we already have in DB
         self.AT_LEAST_ONE_DELETION_DONE = False
@@ -150,7 +143,7 @@ class HistoryManager:
 
         self.window.show_all()
 
-        xml.signal_autoconnect(self)
+        xml.connect_signals(self)
 
     def _init_jids_listview(self):
         self.jids_liststore = gtk.ListStore(str, str) # jid, jid_id
@@ -448,22 +441,22 @@ class HistoryManager:
 
     def on_listview_button_press_event(self, widget, event):
         if event.button == 3: # right click
-            xml = gtkgui_helpers.get_glade('history_manager.glade', 'context_menu')
+            xml = gtkgui_helpers.get_gtk_builder('history_manager.ui', 'context_menu')
             if widget.name != 'jids_listview':
-                xml.get_widget('export_menuitem').hide()
-            xml.get_widget('delete_menuitem').connect('activate',
+                xml.get_object('export_menuitem').hide()
+            xml.get_object('delete_menuitem').connect('activate',
                     self.on_delete_menuitem_activate, widget)
 
-            xml.signal_autoconnect(self)
-            xml.get_widget('context_menu').popup(None, None, None,
+            xml.connect_signals(self)
+            xml.get_object('context_menu').popup(None, None, None,
                     event.button, event.time)
             return True
 
     def on_export_menuitem_activate(self, widget):
-        xml = gtkgui_helpers.get_glade('history_manager.glade', 'filechooserdialog')
-        xml.signal_autoconnect(self)
+        xml = gtkgui_helpers.get_gtk_builder('history_manager.ui', 'filechooserdialog')
+        xml.connect_signals(self)
 
-        dlg = xml.get_widget('filechooserdialog')
+        dlg = xml.get_object('filechooserdialog')
         dlg.set_title(_('Exporting History Logs...'))
         dlg.set_current_folder(gajim.HOME_DIR)
         dlg.props.do_overwrite_confirmation = True

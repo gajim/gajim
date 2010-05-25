@@ -3,7 +3,7 @@
 ##
 ## Copyright (C) 2005-2006 Stéphan Kochen <stephan AT kochen.nl>
 ## Copyright (C) 2005-2007 Nikos Kouremenos <kourem AT gmail.com>
-## Copyright (C) 2005-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2005-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2006 Dimitur Kirov <dkirov AT gmail.com>
 ## Copyright (C) 2006-2008 Jean-Marie Traissard <jim AT lapin.org>
 ## Copyright (C) 2007 Stephan Erb <steve-e AT h3c.de>
@@ -62,6 +62,7 @@ from common import gajim
 from common import xmpp
 from common.exceptions import GajimGeneralException
 from common import helpers
+from common import ged
 
 # Dictionary mapping category, type pairs to browser class, image pairs.
 # This is a function, so we can call it after the classes are declared.
@@ -73,44 +74,44 @@ def _gen_agent_type_info():
             (0, 0):                                                 (None, None),
 
             # Jabber server
-            ('server', 'im'):                               (ToplevelAgentBrowser, 'jabber.png'),
-            ('services', 'jabber'):         (ToplevelAgentBrowser, 'jabber.png'),
-            ('hierarchy', 'branch'):        (AgentBrowser, 'jabber.png'),
+            ('server', 'im'):                               (ToplevelAgentBrowser, 'jabber'),
+            ('services', 'jabber'):         (ToplevelAgentBrowser, 'jabber'),
+            ('hierarchy', 'branch'):        (AgentBrowser, 'jabber'),
 
             # Services
-            ('conference', 'text'):         (MucBrowser, 'conference.png'),
-            ('headline', 'rss'):                    (AgentBrowser, 'rss.png'),
-            ('headline', 'weather'):        (False, 'weather.png'),
-            ('gateway', 'weather'):         (False, 'weather.png'),
-            ('_jid', 'weather'):                    (False, 'weather.png'),
-            ('gateway', 'sip'):                     (False, 'sip.png'),
-            ('directory', 'user'):          (None, 'jud.png'),
-            ('pubsub', 'generic'):          (PubSubBrowser, 'pubsub.png'),
-            ('pubsub', 'service'):          (PubSubBrowser, 'pubsub.png'),
-            ('proxy', 'bytestreams'):       (None, 'bytestreams.png'), # Socks5 FT proxy
-            ('headline', 'newmail'):        (ToplevelAgentBrowser, 'mail.png'),
+            ('conference', 'text'):         (MucBrowser, 'conference'),
+            ('headline', 'rss'):                    (AgentBrowser, 'rss'),
+            ('headline', 'weather'):        (False, 'weather'),
+            ('gateway', 'weather'):         (False, 'weather'),
+            ('_jid', 'weather'):                    (False, 'weather'),
+            ('gateway', 'sip'):                     (False, 'sip'),
+            ('directory', 'user'):          (None, 'jud'),
+            ('pubsub', 'generic'):          (PubSubBrowser, 'pubsub'),
+            ('pubsub', 'service'):          (PubSubBrowser, 'pubsub'),
+            ('proxy', 'bytestreams'):       (None, 'bytestreams'), # Socks5 FT proxy
+            ('headline', 'newmail'):        (ToplevelAgentBrowser, 'mail'),
 
             # Transports
-            ('conference', 'irc'):          (ToplevelAgentBrowser, 'irc.png'),
-            ('_jid', 'irc'):                                (False, 'irc.png'),
-            ('gateway', 'aim'):                     (False, 'aim.png'),
-            ('_jid', 'aim'):                                (False, 'aim.png'),
-            ('gateway', 'gadu-gadu'):       (False, 'gadu-gadu.png'),
-            ('_jid', 'gadugadu'):           (False, 'gadu-gadu.png'),
-            ('gateway', 'http-ws'):         (False, 'http-ws.png'),
-            ('gateway', 'icq'):                     (False, 'icq.png'),
-            ('_jid', 'icq'):                                (False, 'icq.png'),
-            ('gateway', 'msn'):                     (False, 'msn.png'),
-            ('_jid', 'msn'):                                (False, 'msn.png'),
-            ('gateway', 'sms'):                     (False, 'sms.png'),
-            ('_jid', 'sms'):                                (False, 'sms.png'),
-            ('gateway', 'smtp'):                    (False, 'mail.png'),
-            ('gateway', 'yahoo'):           (False, 'yahoo.png'),
-            ('_jid', 'yahoo'):                      (False, 'yahoo.png'),
-            ('gateway', 'mrim'):                    (False, 'mrim.png'),
-            ('_jid', 'mrim'):                               (False, 'mrim.png'),
-            ('gateway', 'facebook'):        (False, 'facebook.png'),
-            ('_jid', 'facebook'):           (False, 'facebook.png'),
+            ('conference', 'irc'):          (ToplevelAgentBrowser, 'irc'),
+            ('_jid', 'irc'):                                (False, 'irc'),
+            ('gateway', 'aim'):                     (False, 'aim'),
+            ('_jid', 'aim'):                                (False, 'aim'),
+            ('gateway', 'gadu-gadu'):       (False, 'gadu-gadu'),
+            ('_jid', 'gadugadu'):           (False, 'gadu-gadu'),
+            ('gateway', 'http-ws'):         (False, 'http-ws'),
+            ('gateway', 'icq'):                     (False, 'icq'),
+            ('_jid', 'icq'):                                (False, 'icq'),
+            ('gateway', 'msn'):                     (False, 'msn'),
+            ('_jid', 'msn'):                                (False, 'msn'),
+            ('gateway', 'sms'):                     (False, 'sms'),
+            ('_jid', 'sms'):                                (False, 'sms'),
+            ('gateway', 'smtp'):                    (False, 'mail'),
+            ('gateway', 'yahoo'):           (False, 'yahoo'),
+            ('_jid', 'yahoo'):                      (False, 'yahoo'),
+            ('gateway', 'mrim'):                    (False, 'mrim'),
+            ('_jid', 'mrim'):                               (False, 'mrim'),
+            ('gateway', 'facebook'):        (False, 'facebook'),
+            ('_jid', 'facebook'):           (False, 'facebook'),
     }
 
 # Category type to "human-readable" description string, and sort priority
@@ -254,6 +255,24 @@ class ServicesCache:
         self._info = CacheDictionary(0, getrefresh = False)
         self._subscriptions = CacheDictionary(5, getrefresh=False)
         self._cbs = {}
+        gajim.ged.register_event_handler('AGENT_ERROR_INFO', ged.CORE,
+                self.agent_info_error)
+        gajim.ged.register_event_handler('AGENT_ERROR_ITEMS', ged.CORE,
+                self.agent_items_error)
+        gajim.ged.register_event_handler('AGENT_INFO_ITEMS', ged.CORE,
+                self.agent_items)
+        gajim.ged.register_event_handler('AGENT_INFO_INFO', ged.CORE,
+                self.agent_info)
+
+    def __del__(self):
+        gajim.ged.remove_event_handler('AGENT_ERROR_INFO', ged.CORE,
+                self.agent_info_error)
+        gajim.ged.remove_event_handler('AGENT_ERROR_ITEMS', ged.CORE,
+                self.agent_items_error)
+        gajim.ged.remove_event_handler('AGENT_INFO_ITEMS', ged.CORE,
+                self.agent_items)
+        gajim.ged.remove_event_handler('AGENT_INFO_INFO', ged.CORE,
+                self.agent_info)
 
     def cleanup(self):
         self._items.cleanup()
@@ -291,13 +310,12 @@ class ServicesCache:
             info = _agent_type_info[(0, 0)]
             filename = info[1]
         if not filename: # we don't have an image to show for this type
-            filename = 'jabber.png'
+            filename = 'jabber'
         # Use the cache if possible
         if filename in _icon_cache:
             return _icon_cache[filename]
         # Or load it
-        filepath = os.path.join(gajim.DATA_DIR, 'pixmaps', 'agents', filename)
-        pix = gtk.gdk.pixbuf_new_from_file(filepath)
+        pix = gtkgui_helpers.get_icon_pixmap('gajim-agent-' + filename, size=32)
         # Store in cache
         _icon_cache[filename] = pix
         return pix
@@ -384,10 +402,15 @@ class ServicesCache:
             self._cbs[cbkey] = [cb]
             gajim.connections[self.account].discoverItems(jid, node)
 
-    def agent_info(self, jid, node, identities, features, data):
+    def agent_info(self, account, array):
         """
         Callback for when we receive an agent's info
+        array is (agent, node, identities, features, data)
         """
+        # We receive events from all accounts from GED
+        if account != self.account:
+            return
+        jid, node, identities, features, data = array
         addr = get_agent_address(jid, node)
 
         # Store in cache
@@ -402,10 +425,15 @@ class ServicesCache:
             if cbkey in self._cbs:
                 del self._cbs[cbkey]
 
-    def agent_items(self, jid, node, items):
+    def agent_items(self, account, array):
         """
         Callback for when we receive an agent's items
+        array is (agent, node, items)
         """
+        # We receive events from all accounts from GED
+        if account != self.account:
+            return
+        jid, node, items = array
         addr = get_agent_address(jid, node)
 
         # Store in cache
@@ -420,11 +448,14 @@ class ServicesCache:
             if cbkey in self._cbs:
                 del self._cbs[cbkey]
 
-    def agent_info_error(self, jid):
+    def agent_info_error(self, account, jid):
         """
         Callback for when a query fails. Even after the browse and agents
         namespaces
         """
+        # We receive events from all accounts from GED
+        if account != self.account:
+            return
         addr = get_agent_address(jid)
 
         # Call callbacks
@@ -436,11 +467,14 @@ class ServicesCache:
             if cbkey in self._cbs:
                 del self._cbs[cbkey]
 
-    def agent_items_error(self, jid):
+    def agent_items_error(self, account, jid):
         """
         Callback for when a query fails. Even after the browse and agents
         namespaces
         """
+        # We receive events from all accounts from GED
+        if account != self.account:
+            return
         addr = get_agent_address(jid)
 
         # Call callbacks
@@ -458,8 +492,8 @@ class ServiceDiscoveryWindow(object):
     Class that represents the Services Discovery window
     """
 
-    def __init__(self, account, jid = '', node = '',
-                    address_entry = False, parent = None):
+    def __init__(self, account, jid='', node='', address_entry=False,
+    parent=None, initial_identities=None):
         self.account = account
         self.parent = parent
         if not jid:
@@ -485,37 +519,38 @@ _('Without a connection, you can not browse available services'))
             self.cache = ServicesCache(account)
             gajim.connections[account].services_cache = self.cache
 
-        self.xml = gtkgui_helpers.get_glade('service_discovery_window.glade')
-        self.window = self.xml.get_widget('service_discovery_window')
-        self.services_treeview = self.xml.get_widget('services_treeview')
+        if initial_identities:
+            self.cache.agent_info(account, (jid, node, initial_identities, [],
+                None))
+        self.xml = gtkgui_helpers.get_gtk_builder('service_discovery_window.ui')
+        self.window = self.xml.get_object('service_discovery_window')
+        self.services_treeview = self.xml.get_object('services_treeview')
         self.model = None
         # This is more reliable than the cursor-changed signal.
         selection = self.services_treeview.get_selection()
         selection.connect_after('changed',
                 self.on_services_treeview_selection_changed)
-        self.services_scrollwin = self.xml.get_widget('services_scrollwin')
-        self.progressbar = self.xml.get_widget('services_progressbar')
-        self.banner = self.xml.get_widget('banner_agent_label')
-        self.banner_icon = self.xml.get_widget('banner_agent_icon')
-        self.banner_eventbox = self.xml.get_widget('banner_agent_eventbox')
+        self.services_scrollwin = self.xml.get_object('services_scrollwin')
+        self.progressbar = self.xml.get_object('services_progressbar')
+        self.banner = self.xml.get_object('banner_agent_label')
+        self.banner_icon = self.xml.get_object('banner_agent_icon')
+        self.banner_eventbox = self.xml.get_object('banner_agent_eventbox')
         self.style_event_id = 0
         self.banner.realize()
         self.paint_banner()
-        self.action_buttonbox = self.xml.get_widget('action_buttonbox')
+        self.action_buttonbox = self.xml.get_object('action_buttonbox')
 
         # Address combobox
         self.address_comboboxentry = None
-        address_table = self.xml.get_widget('address_table')
+        address_table = self.xml.get_object('address_table')
         if address_entry:
-            self.address_comboboxentry = self.xml.get_widget(
+            self.address_comboboxentry = self.xml.get_object(
                     'address_comboboxentry')
             self.address_comboboxentry_entry = self.address_comboboxentry.child
             self.address_comboboxentry_entry.set_activates_default(True)
 
-            liststore = gtk.ListStore(str)
-            self.address_comboboxentry.set_model(liststore)
             self.latest_addresses = gajim.config.get(
-                    'latest_disco_addresses').split()
+                'latest_disco_addresses').split()
             if jid in self.latest_addresses:
                 self.latest_addresses.remove(jid)
             self.latest_addresses.insert(0, jid)
@@ -530,7 +565,7 @@ _('Without a connection, you can not browse available services'))
             address_table.hide()
 
         self._initial_state()
-        self.xml.signal_autoconnect(self)
+        self.xml.connect_signals(self)
         self.travel(jid, node)
         self.window.show_all()
 
@@ -907,7 +942,7 @@ class AgentBrowser:
 
         # This is a hack. The buttonbox apparently doesn't care about pack_start
         # or pack_end, so we repack the close button here to make sure it's last
-        close_button = self.window.xml.get_widget('close_button')
+        close_button = self.window.xml.get_object('close_button')
         self.window.action_buttonbox.remove(close_button)
         self.window.action_buttonbox.pack_end(close_button)
         close_button.show_all()
@@ -1004,7 +1039,7 @@ class AgentBrowser:
         self.window.progressbar.show()
         self._pulse_timeout = gobject.timeout_add(250, self._pulse_timeout_cb)
         self.cache.get_items(self.jid, self.node, self._agent_items,
-                force = force, args = (force,))
+                force=force, args=(force,))
 
     def _pulse_timeout_cb(self, *args):
         """
@@ -1636,6 +1671,7 @@ class ToplevelAgentBrowser(AgentBrowser):
 
         # Search for an icon and category we can display
         pix = self.cache.get_icon(identities)
+        cat, type_ = None, None
         for identity in identities:
             try:
                 cat, type_ = identity['category'], identity['type']
@@ -1973,7 +2009,7 @@ class DiscussionGroupsBrowser(AgentBrowser):
         self.subscribe_button = None
         self.unsubscribe_button = None
 
-        gajim.connections[account].send_pb_subscription_query(jid, self._subscriptionsCB)
+        gajim.connections[account].send_pb_subscription_query(jid, self._on_pep_subscriptions)
 
     def _create_treemodel(self):
         """
@@ -2141,7 +2177,7 @@ class DiscussionGroupsBrowser(AgentBrowser):
 
         groupnode = model.get_value(iter_, 1)   # 1 = groupnode
 
-        gajim.connections[self.account].send_pb_subscribe(self.jid, groupnode, self._subscribeCB, groupnode)
+        gajim.connections[self.account].send_pb_subscribe(self.jid, groupnode, self._on_pep_subscribe, groupnode)
 
     def on_unsubscribe_button_clicked(self, widget):
         """
@@ -2152,9 +2188,9 @@ class DiscussionGroupsBrowser(AgentBrowser):
 
         groupnode = model.get_value(iter_, 1) # 1 = groupnode
 
-        gajim.connections[self.account].send_pb_unsubscribe(self.jid, groupnode, self._unsubscribeCB, groupnode)
+        gajim.connections[self.account].send_pb_unsubscribe(self.jid, groupnode, self._on_pep_unsubscribe, groupnode)
 
-    def _subscriptionsCB(self, conn, request):
+    def _on_pep_subscriptions(self, conn, request):
         """
         We got the subscribed groups list stanza. Now, if we already have items
         on the list, we should actualize them
@@ -2177,15 +2213,15 @@ class DiscussionGroupsBrowser(AgentBrowser):
             # 3 = insensitive checkbox for subscribed
             # 4 = subscribed?
             groupnode = row[1]
-            row[3]=False
-            row[4]=groupnode in groups
+            row[3] = False
+            row[4] = groupnode in groups
 
         # we now know subscriptions, update button states
         self.update_actions()
 
         raise xmpp.NodeProcessed
 
-    def _subscribeCB(self, conn, request, groupnode):
+    def _on_pep_subscribe(self, conn, request, groupnode):
         """
         We have just subscribed to a node. Update UI
         """
@@ -2194,14 +2230,14 @@ class DiscussionGroupsBrowser(AgentBrowser):
         model = self.window.services_treeview.get_model()
         for row in model:
             if row[1] == groupnode: # 1 = groupnode
-                row[4]=True
+                row[4] = True
                 break
 
         self.update_actions()
 
         raise xmpp.NodeProcessed
 
-    def _unsubscribeCB(self, conn, request, groupnode):
+    def _on_pep_unsubscribe(self, conn, request, groupnode):
         """
         We have just unsubscribed from a node. Update UI
         """

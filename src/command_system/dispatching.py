@@ -1,4 +1,4 @@
-# Copyright (C) 2009  Alexander Cherniuk <ts33kr@gmail.com>
+# Copyright (C) 2009-2010  Alexander Cherniuk <ts33kr@gmail.com>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,9 +14,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 """
-The backbone of the command system. Provides automatic dispatching which does
-not require explicit registering commands or containers and remains active even
-after everything is done, so new commands can be added during the runtime.
+The backbone of the command system. Provides automatic dispatching which
+does not require explicit registering commands or containers and remains
+active even after everything is done, so new commands can be added
+during the runtime.
 """
 
 from types import NoneType

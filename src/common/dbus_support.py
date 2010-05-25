@@ -4,7 +4,7 @@
 ## Copyright (C) 2005 Andrew Sayman <lorien420 AT myrealbox.com>
 ##                    Dimitur Kirov <dkirov AT gmail.com>
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem AT gmail.com>
-## Copyright (C) 2005-2007 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2005-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2006 Jean-Marie Traissard <jim AT lapin.org>
 ##                    Stefan Bethge <stefan AT lanpartei.de>
 ## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
@@ -42,6 +42,7 @@ except ImportError:
 else:
     try:
         # test if dbus-x11 is installed
+        bus = dbus.SystemBus()
         bus = dbus.SessionBus()
         supported = True # does user have D-Bus bindings?
     except dbus.DBusException:
@@ -49,9 +50,18 @@ else:
         if not os.name == 'nt': # only say that to non Windows users
             print _('D-Bus does not run correctly on this machine')
             print _('D-Bus capabilities of Gajim cannot be used')
+    except exceptions.SystemBusNotPresent:
+        print _('D-Bus does not run correctly on this machine: system bus not '
+            'present')
+    except exceptions.SessionBusNotPresent:
+        print _('D-Bus does not run correctly on this machine: session bus not '
+            'present')
 
 class SystemBus:
-    '''A Singleton for the DBus SystemBus'''
+    """
+    A Singleton for the DBus SystemBus
+    """
+
     def __init__(self):
         self.system_bus = None
 
@@ -84,7 +94,10 @@ class SystemBus:
 system_bus = SystemBus()
 
 class SessionBus:
-    '''A Singleton for the D-Bus SessionBus'''
+    """
+    A Singleton for the D-Bus SessionBus
+    """
+
     def __init__(self):
         self.session_bus = None
 
@@ -115,8 +128,10 @@ class SessionBus:
 session_bus = SessionBus()
 
 def get_interface(interface, path, start_service=True):
-    '''Returns an interface on the current SessionBus. If the interface isn\'t
-    running, it tries to start it first.'''
+    """
+    Get an interface on the current SessionBus. If the interface isn't running,
+    try to start it first
+    """
     if not supported:
         return None
     if session_bus.present():
@@ -144,9 +159,11 @@ def get_interface(interface, path, start_service=True):
 
 
 def get_notifications_interface(notif=None):
-    '''Returns the notifications interface.
+    """
+    Get the notifications interface
 
-    :param notif: DesktopNotification instance'''
+    :param notif: DesktopNotification instance
+    """
     # try to see if KDE notifications are available
     iface = get_interface('org.kde.VisualNotifications', '/VisualNotifications',
             start_service=False)

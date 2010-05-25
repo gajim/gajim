@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<interface>
+  <requires lib="gtk+" version="2.16"/>
+  <!-- interface-naming-policy toplevel-contextual -->
+  <object class="GtkMenu" id="subscription_request_popup_menu">
+    <child>
+      <object class="GtkImageMenuItem" id="start_chat_menuitem">
+        <property name="label" translatable="yes">_Start Chat</property>
+        <property name="visible">True</property>
+        <property name="use_underline">True</property>
+        <property name="image">image1</property>
+        <property name="use_stock">False</property>
+        <property name="accel_group">accelgroup1</property>
+        <signal name="activate" handler="on_start_chat_activate"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkImageMenuItem" id="information_menuitem">
+        <property name="label">gtk-info</property>
+        <property name="visible">True</property>
+        <property name="use_underline">True</property>
+        <property name="use_stock">True</property>
+        <property name="accel_group">accelgroup1</property>
+        <signal name="activate" handler="on_contact_info_activate"/>
+      </object>
+    </child>
+  </object>
+  <object class="GtkAccelGroup" id="accelgroup1"/>
+  <object class="GtkImage" id="image1">
+    <property name="visible">True</property>
+    <property name="stock">gtk-jump-to</property>
+    <property name="icon-size">1</property>
+  </object>
+</interface>

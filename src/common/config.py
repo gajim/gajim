@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ## src/common/config.py
 ##
-## Copyright (C) 2003-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2003-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2004-2005 Vincent Hanquez <tab AT snarc.org>
 ## Copyright (C) 2005 Stéphan Kochen <stephan AT kochen.nl>
 ## Copyright (C) 2005-2006 Dimitur Kirov <dkirov AT gmail.com>
@@ -225,6 +225,7 @@ class Config:
             'show_mood_in_roster': [opt_bool, True, '', True],
             'show_activity_in_roster': [opt_bool, True, '', True],
             'show_tunes_in_roster': [opt_bool, True, '', True],
+            'show_location_in_roster': [opt_bool, True, '', True],
             'avatar_position_in_roster': [opt_str, 'right', _('Define the position of the avatar in roster. Can be left or right'), True],
             'ask_avatars_on_startup': [opt_bool, True, _('If True, Gajim will ask for avatar each contact that did not have an avatar last time or has one cached that is too old.')],
             'print_status_in_chats': [opt_bool, True, _('If False, Gajim will no longer print status line in chats when a contact changes his or her status and/or his or her status message.')],
@@ -272,6 +273,15 @@ class Config:
             'ask_offline_status_on_connection': [ opt_bool, False, _('Ask offline status message to all offline contacts when connection to an accoutn is established. WARNING: This causes a lot of requests to be sent!') ],
             'shell_like_completion': [ opt_bool, False, _('If True, completion in groupchats will be like a shell auto-completion')],
             'show_self_contact': [opt_str, 'when_other_resource', _('When is self contact row displayed. Can be "always", "when_other_resource" or "never"'), True],
+            'audio_input_device': [opt_str, 'autoaudiosrc ! volume name=gajim_vol'],
+            'audio_output_device': [opt_str, 'autoaudiosink'],
+            'video_input_device': [opt_str, 'autovideosrc ! videoscale ! ffmpegcolorspace'],
+            'video_output_device': [opt_str, 'autovideosink'],
+            'audio_input_volume': [opt_int, 50],
+            'audio_output_volume': [opt_int, 50],
+            'use_stun_server': [opt_bool, True, _('If True, Gajim will try to use a STUN server when using jingle. The one in "stun_server" option, or the one given by the jabber server.')],
+            'stun_server': [opt_str, '', _('STUN server to use when using jingle')],
+            'show_affiliation_in_groupchat': [opt_bool, True, _('If True, Gajim will show affiliation of groupchat occupants by adding a colored square to the status icon')],
     }
 
     __options_per_key = {
@@ -279,6 +289,7 @@ class Config:
                     'name': [ opt_str, '', '', True ],
                     'hostname': [ opt_str, '', '', True ],
                     'anonymous_auth': [ opt_bool, False ],
+                    'client_cert': [ opt_str, '', '', True ],
                     'savepass': [ opt_bool, False ],
                     'password': [ opt_str, '' ],
                     'resource': [ opt_str, 'gajim', '', True ],
@@ -305,6 +316,7 @@ class Config:
                     'connection_types': [ opt_str, 'tls ssl plain', _('Ordered list (space separated) of connection type to try. Can contain tls, ssl or plain')],
                     'warn_when_plaintext_connection': [ opt_bool, True, _('Show a warning dialog before sending password on an plaintext connection.') ],
                     'warn_when_insecure_ssl_connection': [ opt_bool, True, _('Show a warning dialog before using standard SSL library.') ],
+                    'warn_when_insecure_password': [ opt_bool, True, _('Show a warning dialog before sending PLAIN password over a plain conenction.') ],
                     'ssl_fingerprint_sha1': [ opt_str, '', '', True ],
                     'ignore_ssl_errors': [ opt_str, '', _('Space separated list of ssl errors to ignore.') ],
                     'use_srv': [ opt_bool, True, '', True ],
@@ -344,14 +356,18 @@ class Config:
                     'answer_receipts': [opt_bool, True, _('Answer to receipt requests')],
                     'request_receipt': [opt_bool, True, _('Sent receipt requests')],
                     'publish_tune': [opt_bool, False],
+                    'publish_location': [opt_bool, False],
                     'subscribe_mood': [opt_bool, True],
                     'subscribe_activity': [opt_bool, True],
                     'subscribe_tune': [opt_bool, True],
                     'subscribe_nick': [opt_bool, True],
+                    'subscribe_location': [opt_bool, True],
                     'ignore_unknown_contacts': [ opt_bool, False ],
                     'send_os_info': [ opt_bool, True ],
                     'log_encrypted_sessions': [opt_bool, True, _('When negotiating an encrypted session, should Gajim assume you want your messages to be logged?')],
+                    'send_idle_time': [ opt_bool, True ],
                     'roster_version': [opt_str, ''],
+                    'subscription_request_msg': [opt_str, '', _('Message that is sent to contacts you want to add')],
                     'last_archiving_time': [opt_str, '1970-01-01T00:00:00Z', _('Last time we syncronized with logs from server.')],
             }, {}),
             'statusmsg': ({
@@ -513,7 +529,9 @@ class Config:
                     cb(data, opt3, [opt, opt2], dict_[opt2][opt3])
 
     def get_children(self, node=None):
-        ''' Tree-like interface '''
+        """
+        Tree-like interface
+        """
         if node is None:
             for child, option in self.__options.iteritems():
                 yield (child, ), option
@@ -699,8 +717,9 @@ class Config:
         return False
 
     def should_log(self, account, jid):
-        '''should conversations between a local account and a remote jid be
-        logged?'''
+        """
+        Should conversations between a local account and a remote jid be logged?
+        """
         no_log_for = self.get_per('accounts', account, 'no_log_for')
 
         if not no_log_for:

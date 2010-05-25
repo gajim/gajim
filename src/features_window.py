@@ -5,7 +5,7 @@
 ##                    Julien Pivotto <roidelapluie AT gmail.com>
 ##                    Stefan Bethge <stefan AT lanpartei.de>
 ##                    Stephan Erb <steve-e AT h3c.de>
-## Copyright (C) 2007-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2007-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
 ##
 ## This file is part of Gajim.
@@ -31,6 +31,7 @@ import gtkgui_helpers
 from common import gajim
 from common import helpers
 from common import kwalletbinding
+from common.i18n import Q_
 
 class FeaturesWindow:
     """
@@ -38,10 +39,10 @@ class FeaturesWindow:
     """
 
     def __init__(self):
-        self.xml = gtkgui_helpers.get_glade('features_window.glade')
-        self.window = self.xml.get_widget('features_window')
-        treeview = self.xml.get_widget('features_treeview')
-        self.desc_label = self.xml.get_widget('feature_desc_label')
+        self.xml = gtkgui_helpers.get_gtk_builder('features_window.ui')
+        self.window = self.xml.get_object('features_window')
+        treeview = self.xml.get_object('features_treeview')
+        self.desc_label = self.xml.get_object('feature_desc_label')
 
         # {name: (available_function, unix_text, windows_text)}
         self.features = {
@@ -101,10 +102,6 @@ class FeaturesWindow:
                         _('Generate XHTML output from RST code (see http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html).'),
                         _('Requires python-docutils.'),
                         _('Requires python-docutils.')),
-                _('Banners and clickable links'): (self.pysexy_available,
-                        _('Ability to have clickable URLs in chat and groupchat window banners.'),
-                        _('Requires python-sexy.'),
-                        _('Requires python-sexy.')),
                 _('Audio / Video'): (self.farsight_available,
                         _('Ability to start audio and video chat.'),
                         _('Requires python-farsight.'),
@@ -115,7 +112,7 @@ class FeaturesWindow:
         self.model = gtk.ListStore(str, bool)
         treeview.set_model(self.model)
 
-        col = gtk.TreeViewColumn(_('Available'))
+        col = gtk.TreeViewColumn(Q_('?features:Available'))
         treeview.append_column(col)
         cell = gtk.CellRendererToggle()
         cell.set_property('radio', True)
@@ -136,9 +133,9 @@ class FeaturesWindow:
 
         self.model.set_sort_column_id(0, gtk.SORT_ASCENDING)
 
-        self.xml.signal_autoconnect(self)
+        self.xml.connect_signals(self)
         self.window.show_all()
-        self.xml.get_widget('close_button').grab_focus()
+        self.xml.get_object('close_button').grab_focus()
 
     def on_close_button_clicked(self, widget):
         self.window.destroy()
@@ -243,7 +240,8 @@ class FeaturesWindow:
         return sleepy.SUPPORTED
 
     def latex_available(self):
-        return gajim.HAVE_LATEX
+        from common import latex
+        return latex.check_for_latex_support()
 
     def pycrypto_available(self):
         return gajim.HAVE_PYCRYPTO
@@ -254,9 +252,6 @@ class FeaturesWindow:
         except Exception:
             return False
         return True
-
-    def pysexy_available(self):
-        return gajim.HAVE_PYSEXY
 
     def farsight_available(self):
         return gajim.HAVE_FARSIGHT

@@ -1,9 +1,8 @@
 ## src/common/GnuPG.py
 ##
-## Copyright (C) 2003-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2003-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2005 Alex Mauer <hawke AT hawkesnest.net>
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem AT gmail.com>
-## Copyright (C) 2005-2008 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2007 Stephan Erb <steve-e AT h3c.de>
 ## Copyright (C) 2008 Jean-Marie Traissard <jim AT lapin.org>
 ##                    Jonathan Schleifer <js-gajim AT webkeks.org>
@@ -213,7 +212,9 @@ if gajim.HAVE_GPG:
             return self.get_keys(True)
 
         def _stripHeaderFooter(self, data):
-            """Remove header and footer from data"""
+            """
+            Remove header and footer from data
+            """
             if not data: return ''
             lines = data.split('\n')
             while lines[0] != '':
@@ -229,7 +230,9 @@ if gajim.HAVE_GPG:
             return line
 
         def _addHeaderFooter(self, data, type_):
-            """Add header and footer from data"""
+            """
+            Add header and footer from data
+            """
             out = "-----BEGIN PGP %s-----\n" % type_
             out = out + "Version: PGP\n"
             out = out + "\n"
