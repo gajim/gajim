@@ -396,7 +396,7 @@ class FileTransfersWindow:
                 on_response_ok=(on_response_ok, account, contact, file_props),
                 on_response_cancel=(on_response_cancel, account, file_props))
         dialog.connect('delete-event', lambda widget, event:
-                on_response_cancel(widget, account, file_props))
+            on_response_cancel(account, file_props))
         dialog.popup()
 
     def get_icon(self, ident):
