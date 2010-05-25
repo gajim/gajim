@@ -94,13 +94,16 @@ class AtomWindow:
             u'<small>%s</small>' % \
             gobject.markup_escape_text(newentry.feed_tagline))
 
-        if newentry.uri is not None:
-            self.entry_title_label.set_markup(
-                u'<span foreground="blue" underline="single">%s</span>' % \
-                gobject.markup_escape_text(newentry.title))
+        if newentry.title:
+            if newentry.uri is not None:
+                self.entry_title_label.set_markup(
+                    u'<span foreground="blue" underline="single">%s</span>' % \
+                    gobject.markup_escape_text(newentry.title))
+            else:
+                self.entry_title_label.set_markup(
+                    gobject.markup_escape_text(newentry.title))
         else:
-            self.entry_title_label.set_markup(
-                gobject.markup_escape_text(newentry.title))
+            self.entry_title_label.set_markup('')
 
         self.last_modified_label.set_text(newentry.updated)
 
