@@ -63,7 +63,7 @@
 
 <p>To specify where to install do:</p>
 <pre>
-    su -c make PREFIX=custom_path install
+    ./configure --prefix=custom_path
 </pre>
 
 <h2>Running Gajim</h2>
@@ -98,7 +98,8 @@ or if you didn't 'make install' you can also run from gajim folder with<em>./lau
 If you want to remove it from custom directory provide it as:
 </p>
 <pre>
-    make PREFIX=custom_path uninstall
+    ./configure --prefix=custom_path
+    make uninstall
 </pre>
 
 <h2>Miscellaneous</h2>
