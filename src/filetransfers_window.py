@@ -304,9 +304,9 @@ class FileTransfersWindow:
             return False
         self.add_transfer(account, contact, file_props)
         if contact.supports(NS_JINGLE_FILE_TRANSFER):
-            log.info("contacts supports jingle file transfer")
+            log.info("contact supports jingle file transfer")
         else:
-            log.info("contacts does not support jingle file transfer")
+            log.info("contact does not support jingle file transfer")
         gajim.connections[account].send_file_request(file_props)
         return True
 
