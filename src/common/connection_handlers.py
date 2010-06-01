@@ -182,7 +182,7 @@ class ConnectionDisco:
         query = iq.setTag('query')
         query.setAttr('node', 'http://gajim.org#' + gajim.version.split('-', 1)[0])
         for f in (common.xmpp.NS_BYTESTREAM, common.xmpp.NS_SI,
-        common.xmpp.NS_FILE, common.xmpp.NS_COMMANDS):
+        common.xmpp.NS_FILE, common.xmpp.NS_COMMANDS, common.xmpp.NS_JINGLE_FILE_TRANSFER):
             feature = common.xmpp.Node('feature')
             feature.setAttr('var', f)
             query.addChild(node=feature)
