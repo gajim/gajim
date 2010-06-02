@@ -115,13 +115,16 @@ class OptionsParser:
             gajim.config.foreach(self.write_line, f)
         except IOError, e:
             return str(e)
+        f.flush()
+        os.fsync(f.fileno())
         f.close()
         if os.path.exists(self.__filename):
-            # win32 needs this
-            try:
-                os.remove(self.__filename)
-            except Exception:
-                pass
+            if os.name == 'nt':
+                # win32 needs this
+                try:
+                    os.remove(self.__filename)
+                except Exception:
+                    pass
         try:
             os.rename(self.__tempfile, self.__filename)
         except IOError, e:
