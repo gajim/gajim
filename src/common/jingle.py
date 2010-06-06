@@ -35,7 +35,10 @@ import helpers
 
 from jingle_session import JingleSession, JingleStates
 from jingle_rtp import JingleAudio, JingleVideo
+from jingle_ft import JingleFileTransfer
 
+import logging
+logger = logging.getLogger('gajim.c.jingle')
 
 class ConnectionJingle(object):
     """
@@ -124,6 +127,18 @@ class ConnectionJingle(object):
             jingle.start_session()
         return jingle.sid
 
+    def start_file_transfer(self, jid, file_props):
+        logger.info("start file transfer with file: %s", str(file_props))
+        jingle = self.get_jingle_session(jid, media='file')
+        if jingle:
+            jingle.add_content('file', JingleFileTransfer(jingle, file_props))
+        else:
+            jingle = JingleSession(self, weinitiate=True, jid=jid)
+            self.__sessions[jingle.sid] = jingle
+            jingle.add_content('file', JingleFileTransfer(jingle, file_props))
+            jingle.start_session()
+        return jingle.sid
+        
 
     def iter_jingle_sessions(self, jid, sid=None, media=None):
         if sid:
