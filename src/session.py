@@ -95,6 +95,8 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
             self.resource = resource
             if self.control and self.control.resource:
                 self.control.change_resource(self.resource)
+        seclabel = None
+        displaymarking = None
 
         if not msg_type or msg_type not in ('chat', 'groupchat', 'error'):
             msg_type = 'normal'
@@ -113,7 +115,9 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
                 break
 
         composing_xep, chatstate = self.get_chatstate(msg, msgtxt)
-
+        seclabel = msg.getTag('securitylabel')
+        if seclabel and seclabel.getNamespace() == common.xmpp.NS_SECLABEL:
+            displaymarking = seclabel.getTag('displaymarking')
         xhtml = msg.getXHTML()
 
         if msg_type == 'chat':
@@ -236,15 +240,15 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
             if self.control:
                 # print if a control is open
                 self.control.print_conversation(msgtxt, tim=tim, xhtml=xhtml,
-                        encrypted=encrypted)
+                        encrypted=encrypted, displaymarking=displaymarking)
             else:
                 # otherwise pass it off to the control to be queued
                 groupchat_control.on_private_message(nickname, msgtxt, tim,
-                        xhtml, self, msg_id=msg_id, encrypted=encrypted)
+                        xhtml, self, msg_id=msg_id, encrypted=encrypted, displaymarking=displaymarking)
         else:
             self.roster_message(jid, msgtxt, tim, encrypted, msg_type,
                     subject, resource, msg_id, user_nick, advanced_notif_num,
-                    xhtml=xhtml, form_node=form_node)
+                    xhtml=xhtml, form_node=form_node, displaymarking=displaymarking)
 
             nickname = gajim.get_name_from_jid(self.conn.name, jid)
 
@@ -270,7 +274,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 
     def roster_message(self, jid, msg, tim, encrypted=False, msg_type='',
                     subject=None, resource='', msg_id=None, user_nick='',
-                    advanced_notif_num=None, xhtml=None, form_node=None):
+                    advanced_notif_num=None, xhtml=None, form_node=None, displaymarking=None):
         """
         Display the message or show notification in the roster
         """
@@ -334,7 +338,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
         if msg_type == 'normal' and popup: # it's single message to be autopopuped
             dialogs.SingleMessageWindow(self.conn.name, contact.jid,
                     action='receive', from_whom=jid, subject=subject, message=msg,
-                    resource=resource, session=self, form_node=form_node)
+                    resource=resource, session=self, form_node=form_node, displaymarking=displaymarking)
             return
 
         # We print if window is opened and it's not a single message
@@ -345,7 +349,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
                 typ = 'error'
 
             self.control.print_conversation(msg, typ, tim=tim, encrypted=encrypted,
-                    subject=subject, xhtml=xhtml)
+                    subject=subject, xhtml=xhtml, displaymarking=displaymarking)
 
             if msg_id:
                 gajim.logger.set_read_messages([msg_id])
@@ -366,7 +370,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
                 contact)
 
         event = gajim.events.create_event(type_, (msg, subject, msg_type, tim,
-                encrypted, resource, msg_id, xhtml, self, form_node),
+                encrypted, resource, msg_id, xhtml, self, form_node, displaymarking),
                 show_in_roster=show_in_roster, show_in_systray=show_in_systray)
 
         gajim.events.add_event(self.conn.name, fjid, event)

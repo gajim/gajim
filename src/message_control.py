@@ -208,7 +208,7 @@ class MessageControl:
 
     def send_message(self, message, keyID='', type_='chat', chatstate=None,
                     msg_id=None, composing_xep=None, resource=None, user_nick=None,
-                    xhtml=None, callback=None, callback_args=[]):
+                    xhtml=None, label=None, callback=None, callback_args=[]):
         # Send the given message to the active tab.
         # Doesn't return None if error
         jid = self.contact.jid
@@ -241,5 +241,5 @@ class MessageControl:
         conn.send_message(jid, message, keyID, type_=type_, chatstate=chatstate,
                 msg_id=msg_id, composing_xep=composing_xep, resource=self.resource,
                 user_nick=user_nick, session=self.session,
-                original_message=original_message, xhtml=xhtml, callback=callback,
+                original_message=original_message, xhtml=xhtml, label=label, callback=callback,
                 callback_args=callback_args)

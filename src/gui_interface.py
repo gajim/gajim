@@ -956,7 +956,7 @@ class Interface:
 
     def handle_event_gc_msg(self, account, array):
         # ('GC_MSG', account, (jid, msg, time, has_timestamp, htmlmsg,
-        # [status_codes]))
+        # [status_codes], displaymarking))
         jids = array[0].split('/', 1)
         room_jid = jids[0]
 
@@ -980,7 +980,7 @@ class Interface:
             # message from someone
             nick = jids[1]
 
-        gc_control.on_message(nick, msg, array[2], array[3], xhtml, array[5])
+        gc_control.on_message(nick, msg, array[2], array[3], xhtml, array[5], displaymarking=array[6])
 
         if self.remote_ctrl:
             highlight = gc_control.needs_visual_notification(msg)

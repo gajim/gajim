@@ -341,6 +341,8 @@ class ConnectionDisco:
                 if features.__contains__(common.xmpp.NS_GMAILNOTIFY):
                     gajim.gmail_domains.append(jid)
                     self.request_gmail_notifications()
+                if features.__contains__(common.xmpp.NS_SECLABEL):
+                    self.seclabel_supported = True
                 for identity in identities:
                     if identity['category'] == 'pubsub' and identity.get('type') == \
                     'pep':
@@ -1071,6 +1073,33 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
                     annotation = note.getData()
                     self.annotations[jid] = annotation
 
+    def _SecLabelCB(self, con, iq_obj):
+        """
+        Security Label callback, used for catalogues.
+        """
+        log.debug('SecLabelCB')
+        query = iq_obj.getTag('catalog')
+        to = query.getAttr('to')
+        items = query.getTags('securitylabel')
+        labels = {}
+        ll = []
+        for item in items:
+            label = item.getTag('displaymarking').getData()
+            labels[label] = item
+            ll.append(label)
+        if to not in self.seclabel_catalogues:
+            self.seclabel_catalogues[to] = [[], None, None]
+        self.seclabel_catalogues[to][1] = labels
+        self.seclabel_catalogues[to][2] = ll
+        for callback in self.seclabel_catalogues[to][0]:
+            callback()
+        self.seclabel_catalogues[to][0] = []
+
+    def seclabel_catalogue_request(self, to, callback):
+        if to not in self.seclabel_catalogues:
+            self.seclabel_catalogues[to] = [[], None, None]
+        self.seclabel_catalogues[to][0].append(callback)
+
     def _parse_bookmarks(self, storage, storage_type):
         """
         storage_type can be 'pubsub' or 'xml' to tell from where we got bookmarks
@@ -1618,12 +1647,15 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
                     self.dispatch('GC_CONFIG_CHANGE', (jid, statusCode))
             return
 
-        # Ignore message from room in which we are not
+        displaymarking = None
+        seclabel = msg.getTag('securitylabel')
+        if seclabel and seclabel.getNamespace() == common.xmpp.NS_SECLABEL:
+            displaymarking = seclabel.getTag('displaymarking')        # Ignore message from room in which we are not
         if jid not in self.last_history_time:
             return
 
         self.dispatch('GC_MSG', (frm, msgtxt, tim, has_timestamp, msg.getXHTML(),
-                statusCode))
+                statusCode, displaymarking))
 
         tim_int = int(float(mktime(tim)))
         if gajim.config.should_log(self.name, jid) and not \
@@ -2302,6 +2334,8 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
                 common.xmpp.NS_MUC_ADMIN)
         con.RegisterHandler('iq', self._PrivateCB, 'result',
                 common.xmpp.NS_PRIVATE)
+        con.RegisterHandler('iq', self._SecLabelCB, 'result',
+                common.xmpp.NS_SECLABEL_CATALOG)
         con.RegisterHandler('iq', self._HttpAuthCB, 'get',
                 common.xmpp.NS_HTTP_AUTH)
         con.RegisterHandler('iq', self._CommandExecuteCB, 'set',

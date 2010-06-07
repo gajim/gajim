@@ -385,6 +385,8 @@ class GroupchatControl(ChatControlBase):
         column.set_visible(False)
         self.list_treeview.set_expander_column(column)
 
+        self.setup_seclabel(self.xml.get_object('label_selector'))
+
         gajim.gc_connected[self.account][self.room_jid] = False
         # disable win, we are not connected yet
         ChatControlBase.got_disconnected(self)
@@ -785,30 +787,30 @@ class GroupchatControl(ChatControlBase):
         menu.destroy()
 
     def on_message(self, nick, msg, tim, has_timestamp=False, xhtml=None,
-    status_code=[]):
+    status_code=[], displaymarking=None):
         if '100' in status_code:
             # Room is not anonymous
             self.is_anonymous = False
         if not nick:
             # message from server
-            self.print_conversation(msg, tim=tim, xhtml=xhtml)
+            self.print_conversation(msg, tim=tim, xhtml=xhtml, displaymarking=displaymarking)
         else:
             # message from someone
             if has_timestamp:
                 # don't print xhtml if it's an old message.
                 # Like that xhtml messages are grayed too.
-                self.print_old_conversation(msg, nick, tim, None)
+                self.print_old_conversation(msg, nick, tim, None, displaymarking=displaymarking)
             else:
-                self.print_conversation(msg, nick, tim, xhtml)
+                self.print_conversation(msg, nick, tim, xhtml, displaymarking=displaymarking)
 
     def on_private_message(self, nick, msg, tim, xhtml, session, msg_id=None,
-    encrypted=False):
+    encrypted=False, displaymarking=None):
         # Do we have a queue?
         fjid = self.room_jid + '/' + nick
         no_queue = len(gajim.events.get_events(self.account, fjid)) == 0
 
         event = gajim.events.create_event('pm', (msg, '', 'incoming', tim,
-            encrypted, '', msg_id, xhtml, session))
+            encrypted, '', msg_id, xhtml, session, displaymarking))
         gajim.events.add_event(self.account, fjid, event)
 
         autopopup = gajim.config.get('autopopup')
@@ -851,7 +853,8 @@ class GroupchatControl(ChatControlBase):
             role_iter = model.iter_next(role_iter)
         return None
 
-    def print_old_conversation(self, text, contact='', tim=None, xhtml = None):
+    def print_old_conversation(self, text, contact='', tim=None, xhtml = None,
+        displaymarking=None):
         if isinstance(text, str):
             text = unicode(text, 'utf-8')
         if contact:
@@ -867,10 +870,11 @@ class GroupchatControl(ChatControlBase):
             small_attr = []
         ChatControlBase.print_conversation_line(self, text, kind, contact, tim,
             small_attr, small_attr + ['restored_message'],
-            small_attr + ['restored_message'], count_as_new=False, xhtml=xhtml)
+            small_attr + ['restored_message'], count_as_new=False, xhtml=xhtml,
+            displaymarking=displaymarking)
 
     def print_conversation(self, text, contact='', tim=None, xhtml=None,
-    graphics=True):
+    graphics=True, displaymarking=None):
         """
         Print a line in the conversation
 
@@ -937,7 +941,7 @@ class GroupchatControl(ChatControlBase):
 
         ChatControlBase.print_conversation_line(self, text, kind, contact, tim,
             other_tags_for_name, [], other_tags_for_text, xhtml=xhtml,
-            graphics=graphics)
+            graphics=graphics, displaymarking=displaymarking)
 
     def get_nb_unread(self):
         type_events = ['printed_marked_gc_msg']
@@ -1588,12 +1592,13 @@ class GroupchatControl(ChatControlBase):
         if not message:
             return
 
+        label = self.get_seclabel()
         if message != '' or message != '\n':
             self.save_sent_message(message)
 
             # Send the message
             gajim.connections[self.account].send_gc_message(self.room_jid,
-                    message, xhtml=xhtml)
+                    message, xhtml=xhtml, label=label)
             self.msg_textview.get_buffer().set_text('')
             self.msg_textview.grab_focus()
 

@@ -232,6 +232,29 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
     def status_url_clicked(self, widget, url):
         helpers.launch_browser_mailer('url', url)
 
+    def setup_seclabel(self, combo):
+        self.seclabel_combo = combo
+        self.seclabel_combo.hide()
+        self.seclabel_combo.set_no_show_all(True)
+        lb = gtk.ListStore(str)
+        self.seclabel_combo.set_model(lb)
+        cell = gtk.CellRendererText()
+        cell.set_property('xpad', 5) # padding for status text
+        self.seclabel_combo.pack_start(cell, True)
+        # text to show is in in first column of liststore
+        self.seclabel_combo.add_attribute(cell, 'text', 0)
+        if gajim.connections[self.account].seclabel_supported:
+            gajim.connections[self.account].seclabel_catalogue(self.contact.jid, self.on_seclabels_ready)
+
+    def on_seclabels_ready(self):
+        lb = self.seclabel_combo.get_model()
+        lb.clear()
+        for label in gajim.connections[self.account].seclabel_catalogues[self.contact.jid][2]:
+            lb.append([label])
+        self.seclabel_combo.set_active(0)
+        self.seclabel_combo.set_no_show_all(False)
+        self.seclabel_combo.show_all()
+
     def __init__(self, type_id, parent_win, widget_name, contact, acct,
     resource=None):
         # Undo needs this variable to know if space has been pressed.
@@ -721,6 +744,16 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             self.drag_entered_conv = True
             self.conv_textview.tv.set_editable(True)
 
+    def get_seclabel(self):
+        label = None
+        if self.seclabel_combo is not None:
+            idx = self.seclabel_combo.get_active()
+            if idx != -1:
+                cat = gajim.connections[self.account].seclabel_catalogues[self.contact.jid]
+                lname = cat[2][idx]
+                label = cat[1][lname]
+        return label
+
     def send_message(self, message, keyID='', type_='chat', chatstate=None,
                     msg_id=None, composing_xep=None, resource=None, xhtml=None,
                     callback=None, callback_args=[], process_commands=True):
@@ -733,9 +766,11 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         if process_commands and self.process_as_command(message):
             return
 
+        label = self.get_seclabel()
         MessageControl.send_message(self, message, keyID, type_=type_,
                 chatstate=chatstate, msg_id=msg_id, composing_xep=composing_xep,
                 resource=resource, user_nick=self.user_nick, xhtml=xhtml,
+                label=label,
                 callback=callback, callback_args=callback_args)
 
         # Record message history
@@ -769,7 +804,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
                     other_tags_for_name=[], other_tags_for_time=[],
                     other_tags_for_text=[], count_as_new=True, subject=None,
                     old_kind=None, xhtml=None, simple=False, xep0184_id=None,
-                    graphics=True):
+                    graphics=True, displaymarking=None):
         """
         Print 'chat' type messages
         """
@@ -781,7 +816,8 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             end = True
         textview.print_conversation_line(text, jid, kind, name, tim,
                 other_tags_for_name, other_tags_for_time, other_tags_for_text,
-                subject, old_kind, xhtml, simple=simple, graphics=graphics)
+                subject, old_kind, xhtml, simple=simple, graphics=graphics,
+                displaymarking=displaymarking)
 
         if xep0184_id is not None:
             textview.show_xep0184_warning(xep0184_id)
@@ -1429,6 +1465,7 @@ class ChatControl(ChatControlBase):
             session = gajim.connections[self.account].find_controlless_session(
                     self.contact.jid, resource)
 
+        self.setup_seclabel(self.xml.get_object('label_selector'))
         if session:
             session.control = self
             self.session = session
@@ -2048,20 +2085,23 @@ class ChatControl(ChatControlBase):
                 gobject.source_remove(self.possible_inactive_timeout_id)
                 self._schedule_activity_timers()
 
-        def _on_sent(id_, contact, message, encrypted, xhtml):
+        def _on_sent(id_, contact, message, encrypted, xhtml, label):
             if contact.supports(NS_RECEIPTS) and gajim.config.get_per('accounts',
             self.account, 'request_receipt'):
                 xep0184_id = id_
             else:
                 xep0184_id = None
-
+            if label:
+                displaymarking = label.getTag('displaymarking')
+            else:
+                displaymarking = None
             self.print_conversation(message, self.contact.jid, encrypted=encrypted,
-                    xep0184_id=xep0184_id, xhtml=xhtml)
+                    xep0184_id=xep0184_id, xhtml=xhtml, displaymarking=displaymarking)
 
         ChatControlBase.send_message(self, message, keyID, type_='chat',
                 chatstate=chatstate_to_send, composing_xep=composing_xep,
                 xhtml=xhtml, callback=_on_sent,
-                callback_args=[contact, message, encrypted, xhtml],
+                callback_args=[contact, message, encrypted, xhtml, self.get_seclabel()],
                 process_commands=process_commands)
 
     def check_for_possible_paused_chatstate(self, arg):
@@ -2150,7 +2190,8 @@ class ChatControl(ChatControlBase):
                         self.session.is_loggable(), self.session and self.session.verified_identity)
 
     def print_conversation(self, text, frm='', tim=None, encrypted=False,
-                    subject=None, xhtml=None, simple=False, xep0184_id=None):
+                    subject=None, xhtml=None, simple=False, xep0184_id=None,
+                    displaymarking=None):
         """
         Print a line in the conversation
 
@@ -2213,7 +2254,7 @@ class ChatControl(ChatControlBase):
                         xhtml = '<body xmlns="%s">%s</body>' % (NS_XHTML, xhtml)
         ChatControlBase.print_conversation_line(self, text, kind, name, tim,
                 subject=subject, old_kind=self.old_msg_kind, xhtml=xhtml,
-                simple=simple, xep0184_id=xep0184_id)
+                simple=simple, xep0184_id=xep0184_id, displaymarking=displaymarking)
         if text.startswith('/me ') or text.startswith('/me\n'):
             self.old_msg_kind = None
         else:
@@ -2660,8 +2701,12 @@ class ChatControl(ChatControlBase):
                 kind = 'info'
             else:
                 kind = 'print_queue'
+            dm = None
+            if len(data) > 10:
+                dm = data[10]
             self.print_conversation(data[0], kind, tim = data[3],
-                    encrypted = data[4], subject = data[1], xhtml = data[7])
+                    encrypted = data[4], subject = data[1], xhtml = data[7],
+                    displaymarking=dm)
             if len(data) > 6 and isinstance(data[6], int):
                 message_ids.append(data[6])
 

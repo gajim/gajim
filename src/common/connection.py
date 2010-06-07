@@ -135,6 +135,9 @@ class CommonConnection:
         self.blocked_groups = []
         self.blocked_all = False
 
+        self.seclabel_supported = False
+        self.seclabel_catalogues = {}
+
         self.pep_supported = False
         self.pep = {}
         # Do we continue connection when we get roster (send presence,get vcard..)
@@ -239,7 +242,7 @@ class CommonConnection:
     def _prepare_message(self, jid, msg, keyID, type_='chat', subject='',
     chatstate=None, msg_id=None, composing_xep=None, resource=None,
     user_nick=None, xhtml=None, session=None, forward_from=None, form_node=None,
-    original_message=None, delayed=None, callback=None):
+    label=None, original_message=None, delayed=None, callback=None):
         if not self.connection or self.connected < 2:
             return 1
         try:
@@ -287,14 +290,14 @@ class CommonConnection:
                             else:
                                 self._message_encrypted_cb(output, type_, msg, msgtxt,
                                         original_message, fjid, resource, jid, xhtml,
-                                        subject, chatstate, composing_xep, forward_from,
+                                        subject, chatstate, composing_xep, label, forward_from,
                                         delayed, session, form_node, user_nick, keyID,
                                         callback)
                         self.dispatch('GPG_ALWAYS_TRUST', _on_always_trust)
                     else:
                         self._message_encrypted_cb(output, type_, msg, msgtxt,
                                 original_message, fjid, resource, jid, xhtml, subject,
-                                chatstate, composing_xep, forward_from, delayed, session,
+                                chatstate, composing_xep, label, forward_from, delayed, session,
                                 form_node, user_nick, keyID, callback)
                 gajim.thread_interface(encrypt_thread, [msg, keyID, False],
                         _on_encrypted, [])
@@ -302,15 +305,15 @@ class CommonConnection:
 
             self._message_encrypted_cb(('', error), type_, msg, msgtxt,
                     original_message, fjid, resource, jid, xhtml, subject, chatstate,
-                    composing_xep, forward_from, delayed, session, form_node, user_nick,
+                    composing_xep, label, forward_from, delayed, session, form_node, user_nick,
                     keyID, callback)
 
         self._on_continue_message(type_, msg, msgtxt, original_message, fjid,
                 resource, jid, xhtml, subject, msgenc, keyID, chatstate, composing_xep,
-                forward_from, delayed, session, form_node, user_nick, callback)
+                label, forward_from, delayed, session, form_node, user_nick, callback)
 
     def _message_encrypted_cb(self, output, type_, msg, msgtxt, original_message,
-    fjid, resource, jid, xhtml, subject, chatstate, composing_xep, forward_from,
+    fjid, resource, jid, xhtml, subject, chatstate, composing_xep, label, forward_from,
     delayed, session, form_node, user_nick, keyID, callback):
         msgenc, error = output
 
@@ -323,7 +326,7 @@ class CommonConnection:
                         ' (' + msgtxt + ')'
             self._on_continue_message(type_, msg, msgtxt, original_message, fjid,
                     resource, jid, xhtml, subject, msgenc, keyID, chatstate,
-                    composing_xep, forward_from, delayed, session, form_node, user_nick,
+                    composing_xep, label, forward_from, delayed, session, form_node, user_nick,
                     callback)
             return
         # Encryption failed, do not send message
@@ -332,6 +335,7 @@ class CommonConnection:
 
     def _on_continue_message(self, type_, msg, msgtxt, original_message, fjid,
     resource, jid, xhtml, subject, msgenc, keyID, chatstate, composing_xep,
+    label,
     forward_from, delayed, session, form_node, user_nick, callback):
         if type_ == 'chat':
             msg_iq = common.xmpp.Message(to=fjid, body=msgtxt, typ=type_,
@@ -348,6 +352,8 @@ class CommonConnection:
 
         if form_node:
             msg_iq.addChild(node=form_node)
+        if label:
+            msg_iq.addChild(node=label)
 
         # XEP-0172: user_nickname
         if user_nick:
@@ -1605,7 +1611,7 @@ class Connection(CommonConnection, ConnectionHandlers):
 
     def send_message(self, jid, msg, keyID, type_='chat', subject='',
     chatstate=None, msg_id=None, composing_xep=None, resource=None,
-    user_nick=None, xhtml=None, session=None, forward_from=None, form_node=None,
+    user_nick=None, xhtml=None, label=None, session=None, forward_from=None, form_node=None,
     original_message=None, delayed=None, callback=None, callback_args=[],
     now=False):
 
@@ -1622,7 +1628,8 @@ class Connection(CommonConnection, ConnectionHandlers):
 
         self._prepare_message(jid, msg, keyID, type_=type_, subject=subject,
                 chatstate=chatstate, msg_id=msg_id, composing_xep=composing_xep,
-                resource=resource, user_nick=user_nick, xhtml=xhtml, session=session,
+                resource=resource, user_nick=user_nick, xhtml=xhtml, label=label,
+                session=session,
                 forward_from=forward_from, form_node=form_node,
                 original_message=original_message, delayed=delayed, callback=cb)
 
@@ -1828,6 +1835,15 @@ class Connection(CommonConnection, ConnectionHandlers):
         iq = common.xmpp.Iq(typ='get')
         iq2 = iq.addChild(name='query', namespace=common.xmpp.NS_PRIVATE)
         iq2.addChild(name='gajim', namespace='gajim:prefs')
+        self.connection.send(iq)
+
+    def seclabel_catalogue(self, to, callback):
+        if not gajim.account_is_connected(self.name):
+            return
+        self.seclabel_catalogue_request(to, callback)
+        iq = common.xmpp.Iq(typ='get')
+        iq2 = iq.addChild(name='catalog', namespace=common.xmpp.NS_SECLABEL_CATALOG)
+        iq2.setAttr('to', to)
         self.connection.send(iq)
 
     def _request_bookmarks_xml(self):
@@ -2041,13 +2057,15 @@ class Connection(CommonConnection, ConnectionHandlers):
                 t.setTagData('password', password)
         self.connection.send(p)
 
-    def send_gc_message(self, jid, msg, xhtml = None):
+    def send_gc_message(self, jid, msg, xhtml = None, label = None):
         if not gajim.account_is_connected(self.name):
             return
         if not xhtml and gajim.config.get('rst_formatting_outgoing_messages'):
             from common.rst_xhtml_generator import create_xhtml
             xhtml = create_xhtml(msg)
         msg_iq = common.xmpp.Message(jid, msg, typ = 'groupchat', xhtml = xhtml)
+        if label is not None:
+            msg_iq.addChild(node = label)
         self.connection.send(msg_iq)
         self.dispatch('MSGSENT', (jid, msg))
 

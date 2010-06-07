@@ -326,6 +326,7 @@ class ConversationTextview(gobject.GObject):
         tag.set_property('underline', pango.UNDERLINE_SINGLE)
 
         buffer_.create_tag('focus-out-line', justification = gtk.JUSTIFY_CENTER)
+        self.displaymarking_tags = {}
 
         tag = buffer_.create_tag('xep0184-warning')
 
@@ -1173,7 +1174,7 @@ class ConversationTextview(gobject.GObject):
     def print_conversation_line(self, text, jid, kind, name, tim,
                     other_tags_for_name=[], other_tags_for_time=[],
                     other_tags_for_text=[], subject=None, old_kind=None, xhtml=None,
-                    simple=False, graphics=True):
+                    simple=False, graphics=True, displaymarking=None):
         """
         Print 'chat' type messages
         """
@@ -1238,6 +1239,9 @@ class ConversationTextview(gobject.GObject):
                     tim_format = self.get_time_to_show(tim)
                 buffer_.insert_with_tags_by_name(end_iter, tim_format + '\n',
                         'time_sometimes')
+        # If there's a displaymarking, print it here.
+        if displaymarking:
+            self.print_displaymarking(displaymarking)
         # kind = info, we print things as if it was a status: same color, ...
         if kind in ('error', 'info'):
             kind = 'status'
@@ -1308,6 +1312,19 @@ class ConversationTextview(gobject.GObject):
             return kind
         elif text.startswith('/me ') or text.startswith('/me\n'):
             return kind
+
+    def print_displaymarking(self, displaymarking):
+        bgcolor = displaymarking.getAttr('bgcolor') or '#FFF'
+        fgcolor = displaymarking.getAttr('fgcolor') or '#000'
+        text = displaymarking.getData()
+        if text:
+            buffer_ = self.tv.get_buffer()
+            end_iter = buffer_.get_end_iter()
+            tag = self.displaymarking_tags.setdefault(bgcolor + '/' + fgcolor,
+                buffer_.create_tag(None, background=bgcolor, foreground=fgcolor))
+            buffer_.insert_with_tags(end_iter, '[' + text + ']', tag)
+            end_iter = buffer_.get_end_iter()
+            buffer_.insert_with_tags(end_iter, ' ')
 
     def print_name(self, name, kind, other_tags_for_name):
         if name:

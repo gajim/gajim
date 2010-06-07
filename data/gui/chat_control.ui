@@ -5,7 +5,6 @@
   <object class="GtkVBox" id="chat_control_vbox">
     <property name="can_focus">True</property>
     <property name="border_width">3</property>
-    <property name="orientation">vertical</property>
     <property name="spacing">1</property>
     <child>
       <object class="GtkHBox" id="hbox3">
@@ -13,7 +12,6 @@
         <child>
           <object class="GtkVBox" id="vbox2">
             <property name="visible">True</property>
-            <property name="orientation">vertical</property>
             <child>
               <object class="GtkAlignment" id="alignment">
                 <property name="visible">True</property>
@@ -43,7 +41,6 @@
                             <property name="visible">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="border_width">5</property>
-                            <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkLabel" id="banner_name_label">
                                 <property name="visible">True</property>
@@ -195,7 +192,6 @@
             <child>
               <object class="GtkVBox" id="vbox106">
                 <property name="visible">True</property>
-                <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkScrolledWindow" id="conversation_scrolledwindow">
                     <property name="height_request">60</property>
@@ -314,7 +310,6 @@
                   <object class="GtkVSeparator" id="vseparator1">
                     <property name="visible">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="orientation">vertical</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -470,7 +465,6 @@
                   <object class="GtkVSeparator" id="vseparator3">
                     <property name="visible">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="orientation">vertical</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -500,6 +494,14 @@
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkComboBox" id="label_selector">
+                    <property name="visible">True</property>
+                  </object>
+                  <packing>
+                    <property name="position">12</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkAlignment" id="alignment1">
                     <property name="visible">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -508,7 +510,7 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="position">12</property>
+                    <property name="position">13</property>
                   </packing>
                 </child>
                 <child>
@@ -555,7 +557,7 @@
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="position">13</property>
+                    <property name="position">14</property>
                   </packing>
                 </child>
               </object>
@@ -572,7 +574,6 @@
         <child>
           <object class="GtkVBox" id="audio_vbox">
             <property name="no_show_all">True</property>
-            <property name="orientation">vertical</property>
             <property name="spacing">6</property>
             <child>
               <object class="GtkLabel" id="label3">
