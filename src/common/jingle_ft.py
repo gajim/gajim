@@ -75,4 +75,22 @@ class JingleFileTransfer(JingleContent):
         pass
 
     def _fill_content(self, content):
-        content.addChild("description", namespace = xmpp.NS_JINGLE_FILE_TRANSFER)
+        description_node = xmpp.simplexml.Node(tag=xmpp.NS_JINGLE_FILE_TRANSFER + ' description')
+
+        sioffer = xmpp.simplexml.Node(tag='offer')
+        file_tag = sioffer.setTag('file', namespace=xmpp.NS_FILE)
+        file_tag.setAttr('name', self.file_props['name'])
+        file_tag.setAttr('size', self.file_props['size'])
+        desc = file_tag.setTag('desc')
+        if 'desc' in self.file_props:
+            desc.setData(self.file_props['desc'])
+
+        description_node.addChild(node=sioffer)
+
+        content.addChild(node=description_node)
+
+def get_content(desc):
+    return JingleFileTransfer
+
+
+contents[xmpp.NS_JINGLE_FILE_TRANSFER] = get_content
