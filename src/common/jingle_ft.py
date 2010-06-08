@@ -29,7 +29,7 @@ log = logging.getLogger('gajim.c.jingle_ft')
 
 
 class JingleFileTransfer(JingleContent):
-    def __init__(self, session, file_props, transport=None):
+    def __init__(self, session, transport=None, file_props=None):
         JingleContent.__init__(self, session, transport)
         
         #events we might be interested in
@@ -42,13 +42,47 @@ class JingleFileTransfer(JingleContent):
         self.callbacks['transport-info'] += [self.__on_transport_info]
 
         self.file_props = file_props
+        if file_props == None:
+            self.weinitiate = False
+        else:
+            self.weinitiate = True
 
         if transport == None:
             self.transport = JingleTransportICEUDP()
+
+        self.session = session
         
     def __on_session_initiate(self, stanza, content, error, action):
-        log.info("__on_session_initiate")
-        pass
+        jid = unicode(stanza.getFrom())
+        log.info("jid:%s"%jid)
+        
+        file_props = {'type': 'r'}
+        file_props['sender'] = jid
+        file_props['request-id'] = unicode(stanza.getAttr('id'))
+
+        file_tag = content.getTag('description').getTag('offer').getTag('file')
+        for attribute in file_tag.getAttrs():
+            if attribute in ('name', 'size', 'hash', 'date'):
+                val = file_tag.getAttr(attribute)
+                if val is None:
+                    continue
+                file_props[attribute] = val
+        file_desc_tag = file_tag.getTag('desc')
+        if file_desc_tag is not None:
+            file_props['desc'] = file_desc_tag.getData()
+        
+        file_props['receiver'] = self.session.ourjid
+        log.info("ourjid: %s"%self.session.ourjid)
+        file_props['sid'] = unicode(stanza.getTag('jingle').getAttr('sid'))
+        file_props['transfered_size'] = []
+        
+        log.info("FT request: %s"%file_props)
+
+        #TODO
+        #add file transfer to queue
+        self.session.connection.dispatch('FILE_REQUEST', (jid, file_props))
+
+        
 
     def __on_session_accept(self, stanza, content, error, action):
         log.info("__on_session_accept")
