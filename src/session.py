@@ -338,7 +338,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
         if msg_type == 'normal' and popup: # it's single message to be autopopuped
             dialogs.SingleMessageWindow(self.conn.name, contact.jid,
                     action='receive', from_whom=jid, subject=subject, message=msg,
-                    resource=resource, session=self, form_node=form_node, displaymarking=displaymarking)
+                    resource=resource, session=self, form_node=form_node)
             return
 
         # We print if window is opened and it's not a single message
