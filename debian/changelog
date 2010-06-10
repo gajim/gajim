@@ -1,3 +1,10 @@
+gajim (0.13.4-1) unstable; urgency=low
+
+  * New upstream release.
+  * Fix flood when trying to join a full MUC. Closes: #575688
+
+ -- Yann Leboulanger <asterix@lagaule.org>  Fri, 02 Apr 2010 10:19:59 +0200
+
 gajim (0.13.3-1) unstable; urgency=low
 
   * New upstream release.
