@@ -687,6 +687,10 @@ _('Do you really want to close them all?'),
         except KeyError:
             return
 
+        if new_jid in self._controls[acct]:
+            self.remove_tab(self._controls[acct][new_jid],
+                self.CLOSE_CLOSE_BUTTON, force=True)
+
         self._controls[acct][new_jid] = ctrl
         del self._controls[acct][old_jid]
 
