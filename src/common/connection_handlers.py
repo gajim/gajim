@@ -1484,7 +1484,7 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
 
         thread_id = msg.getThread()
 
-        if not mtype:
+        if not mtype or mtype not in ('chat', 'groupchat', 'error'):
             mtype = 'normal'
 
         msgtxt = msg.getBody()
@@ -1493,6 +1493,14 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
         xep_200_encrypted = msg.getTag('c', namespace=common.xmpp.NS_STANZA_CRYPTO)
 
         session = None
+        gc_control = gajim.interface.msg_win_mgr.get_gc_control(jid, self.name)
+        if not gc_control and \
+        jid in gajim.interface.minimized_controls[self.name]:
+            gc_control = gajim.interface.minimized_controls[self.name][jid]
+
+        if gc_control and jid == frm: # message from a gc without a resource
+            mtype = 'groupchat'
+
         if mtype != 'groupchat':
             session = self.get_or_create_session(frm, thread_id)
 
