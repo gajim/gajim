@@ -156,7 +156,7 @@ class ConnectionBytestream:
         field = _feature.setField('stream-method')
         field.delAttr('type')
         field.setValue(xmpp.NS_BYTESTREAM)
-        log.info("send_file_approval: %s"%(str(iq)))
+        log.info("send_file_approval: %s" % iq)
         self.connection.send(iq)
 
     def send_file_rejection(self, file_props, code='403', typ=None):

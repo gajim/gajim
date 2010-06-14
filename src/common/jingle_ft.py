@@ -42,21 +42,21 @@ class JingleFileTransfer(JingleContent):
         self.callbacks['transport-info'] += [self.__on_transport_info]
 
         self.file_props = file_props
-        if file_props == None:
+        if file_props is None:
             self.weinitiate = False
         else:
             self.weinitiate = True
 
-        if self.file_props != None:
+        if self.file_props is not None:
             self.file_props['sender'] = session.ourjid
             self.file_props['session-type'] = 'jingle'
             self.file_props['sid'] = session.sid
             self.file_props['transfered_size'] = []
         
-        log.info("FT request: %s"%file_props)
+        log.info("FT request: %s" % file_props)
 
 
-        if transport == None:
+        if transport is None:
             self.transport = JingleTransportICEUDP()
 
         self.session = session
@@ -64,7 +64,7 @@ class JingleFileTransfer(JingleContent):
         
     def __on_session_initiate(self, stanza, content, error, action):
         jid = unicode(stanza.getFrom())
-        log.info("jid:%s"%jid)
+        log.info("jid:%s" % jid)
         
         file_props = {'type': 'r'}
         file_props['sender'] = jid
@@ -84,13 +84,13 @@ class JingleFileTransfer(JingleContent):
             file_props['desc'] = file_desc_tag.getData()
         
         file_props['receiver'] = self.session.ourjid
-        log.info("ourjid: %s"%self.session.ourjid)
+        log.info("ourjid: %s" % self.session.ourjid)
         file_props['sid'] = unicode(stanza.getTag('jingle').getAttr('sid'))
         file_props['transfered_size'] = []
 
         self.file_props = file_props
         
-        log.info("FT request: %s"%file_props)
+        log.info("FT request: %s" % file_props)
 
         #TODO
         #add file transfer to queue
