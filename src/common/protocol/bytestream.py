@@ -37,6 +37,9 @@ from common import dataforms
 
 from common.socks5 import Socks5Receiver
 
+import logging
+log = logging.getLogger('gajim.c.protocol.bytestream')
+
 
 def is_transfer_paused(file_props):
     if 'stopped' in file_props and file_props['stopped']:
@@ -125,6 +128,21 @@ class ConnectionBytestream:
         # user response to ConfirmationDialog may come after we've disconneted
         if not self.connection or self.connected < 2:
             return
+
+        #file transfer initiated by a jingle session
+        log.info("send_file_approval: jingle session accept")
+        if file_props.get('session-type') == 'jingle':
+            session = self.get_jingle_session(file_props['sender'], file_props['sid'])
+            if not session:
+                return
+            jid = gajim.get_jid_without_resource(file_props['sender'])
+            resource = gajim.get_resource_from_jid(file_props['sender'])
+            
+            if not session.accepted:
+                session.approve_session()
+                session.approve_content('file')
+            return
+
         iq = xmpp.Iq(to=unicode(file_props['sender']), typ='result')
         iq.setAttr('id', file_props['request-id'])
         si = iq.setTag('si', namespace=xmpp.NS_SI)
@@ -138,6 +156,7 @@ class ConnectionBytestream:
         field = _feature.setField('stream-method')
         field.delAttr('type')
         field.setValue(xmpp.NS_BYTESTREAM)
+        log.info("send_file_approval: %s"%(str(iq)))
         self.connection.send(iq)
 
     def send_file_rejection(self, file_props, code='403', typ=None):

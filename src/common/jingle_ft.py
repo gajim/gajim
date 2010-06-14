@@ -47,10 +47,20 @@ class JingleFileTransfer(JingleContent):
         else:
             self.weinitiate = True
 
+        if self.file_props != None:
+            self.file_props['sender'] = session.ourjid
+            self.file_props['session-type'] = 'jingle'
+            self.file_props['sid'] = session.sid
+            self.file_props['transfered_size'] = []
+        
+        log.info("FT request: %s"%file_props)
+
+
         if transport == None:
             self.transport = JingleTransportICEUDP()
 
         self.session = session
+        self.media = 'file'
         
     def __on_session_initiate(self, stanza, content, error, action):
         jid = unicode(stanza.getFrom())
@@ -59,6 +69,8 @@ class JingleFileTransfer(JingleContent):
         file_props = {'type': 'r'}
         file_props['sender'] = jid
         file_props['request-id'] = unicode(stanza.getAttr('id'))
+
+        file_props['session-type'] = 'jingle'
 
         file_tag = content.getTag('description').getTag('offer').getTag('file')
         for attribute in file_tag.getAttrs():
@@ -75,6 +87,8 @@ class JingleFileTransfer(JingleContent):
         log.info("ourjid: %s"%self.session.ourjid)
         file_props['sid'] = unicode(stanza.getTag('jingle').getAttr('sid'))
         file_props['transfered_size'] = []
+
+        self.file_props = file_props
         
         log.info("FT request: %s"%file_props)
 
