@@ -625,7 +625,8 @@ class JingleSession(object):
         assert self.state != JingleStates.ended
         stanza, jingle = self.__make_jingle('session-terminate', reason=reason)
         self.__broadcast_all(stanza, jingle, None, 'session-terminate-sent')
-        self.connection.connection.send(stanza)
+        if self.connection.connection and self.connection.connected >= 2:
+            self.connection.connection.send(stanza)
         # TODO: Move to GUI?
         reason, text = self.__reason_from_stanza(jingle)
         if reason not in ('success', 'cancel', 'decline'):
