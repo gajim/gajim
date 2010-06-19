@@ -456,8 +456,6 @@ class PreferencesWindow:
             create_av_combobox('video_output', VideoOutputManager().get_devices(
                 ))
 
-            def cmp_framerate(f1, f2):
-                print 'tt'
             create_av_combobox('video_framerate', {_('Default'): '',
                 '15fps': '15/1', '10fps': '10/1', '5fps': '5/1',
                 '2.5fps': '5/2'}, 'video_framerate', key=lambda x: -1 if \
