@@ -141,7 +141,7 @@ class ConnectionBytestream:
             if not session.accepted:
                 session.approve_session()
                 session.approve_content('file')
-            return
+        return
 
         iq = xmpp.Iq(to=unicode(file_props['sender']), typ='result')
         iq.setAttr('id', file_props['request-id'])

@@ -22,7 +22,7 @@ Handles  Jingle File Transfer (XEP 0234)
 import gajim
 import xmpp
 from jingle_content import contents, JingleContent
-from jingle_transport import JingleTransportICEUDP
+from jingle_transport import JingleTransportICEUDP, JingleTransportSocks5
 import logging
 
 log = logging.getLogger('gajim.c.jingle_ft')
@@ -31,6 +31,8 @@ log = logging.getLogger('gajim.c.jingle_ft')
 class JingleFileTransfer(JingleContent):
     def __init__(self, session, transport=None, file_props=None):
         JingleContent.__init__(self, session, transport)
+        
+        log.info("transport value: %s" % transport)
         
         #events we might be interested in
         self.callbacks['session-initiate'] += [self.__on_session_initiate]
@@ -57,7 +59,10 @@ class JingleFileTransfer(JingleContent):
 
 
         if transport is None:
-            self.transport = JingleTransportICEUDP()
+            self.transport = JingleTransportSocks5()
+            self.transport.set_file_props(self.file_props)
+            self.transport.set_our_jid(session.ourjid)
+        log.info('ourjid: %s' % session.ourjid)
 
         self.session = session
         self.media = 'file'
@@ -89,7 +94,10 @@ class JingleFileTransfer(JingleContent):
         file_props['transfered_size'] = []
 
         self.file_props = file_props
-        
+        if self.transport is None:
+            self.transport = JingleTransportSocks5()
+            self.transport.set_our_jid(self.session.ourjid)
+        self.transport.set_file_props(self.file_props)
         log.info("FT request: %s" % file_props)
 
         #TODO

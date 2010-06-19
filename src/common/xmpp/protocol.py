@@ -72,6 +72,7 @@ NS_JINGLE_RTP_VIDEO='urn:xmpp:jingle:apps:rtp:video'                    # XEP-01
 NS_JINGLE_FILE_TRANSFER='urn:xmpp:jingle:apps:file-transfer:1'          # XEP-0234
 NS_JINGLE_RAW_UDP='urn:xmpp:jingle:transports:raw-udp:1'                # XEP-0177
 NS_JINGLE_ICE_UDP='urn:xmpp:jingle:transports:ice-udp:1'                # XEP-0176
+NS_JINGLE_BYTESTREAM ='urn:xmpp:jingle:transports:s5b:1'                # XEP-0260
 NS_LAST          ='jabber:iq:last'
 NS_LOCATION  ='http://jabber.org/protocol/geoloc'                                                               # XEP-0080
 NS_MESSAGE        ='message'                                                                                      # Jabberd2

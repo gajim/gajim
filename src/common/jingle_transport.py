@@ -16,6 +16,13 @@ Handles Jingle Transports (currently only ICE-UDP)
 """
 
 import xmpp
+import socket
+from common import gajim
+from common.protocol.bytestream import ConnectionSocks5Bytestream
+import logging
+
+log = logging.getLogger('gajim.c.jingle_transport')
+
 
 transports = {}
 
@@ -71,6 +78,117 @@ class JingleTransport(object):
         """
         return []
 
+class JingleTransportSocks5(JingleTransport):
+    """
+    Socks5 transport in jingle scenario
+    Note: Don't forget to call set_file_props after initialization
+    """
+    def __init__(self):
+        JingleTransport.__init__(self, TransportType.streaming)
+
+    def set_file_props(self, file_props):
+        self.file_props = file_props
+
+    def set_our_jid(self, jid):
+        self.ourjid = jid
+        
+    def make_candidate(self, candidate):
+        import logging
+        log = logging.getLogger()
+        log.info('candidate dict, %s' % candidate)
+        attrs = {
+            'cid': candidate['candidate_id'],
+            'host': candidate['host'],
+            'jid': candidate['jid'],
+            'port': candidate['port'],
+            'priority': candidate['priority'],
+            'type': candidate['type']
+        }
+
+        return xmpp.Node('candidate', attrs=attrs)
+
+    def make_transport(self, candidates=None):
+        self._add_local_ips_as_candidates()
+        self._add_additional_candidates()
+        self._add_proxy_candidates()
+        transport = JingleTransport.make_transport(self, candidates)
+        transport.setNamespace(xmpp.NS_JINGLE_BYTESTREAM)
+        return transport
+
+    def parse_transport_stanza(self, transport):
+        pass
+
+    def _add_local_ips_as_candidates(self):
+        local_ip_cand = []
+        port = gajim.config.get('file_transfers_port')
+        type_preference = 126 #type preference of connection type. XEP-0260 section 2.2
+        jid_wo_resource = gajim.get_jid_without_resource(self.ourjid)
+        conn = gajim.connections[jid_wo_resource]
+        c = {'host': conn.peerhost[0]}
+        c['candidate_id'] = conn.connection.getAnID()
+        c['port'] = port
+        c['type'] = 'direct'
+        c['jid'] = self.ourjid
+        c['priority'] = (2**16) * type_preference
+        
+        local_ip_cand.append(c)
+        
+        for addr in socket.getaddrinfo(socket.gethostname(), None):
+            if not addr[4][0] in local_ip_cand and not addr[4][0].startswith('127'):
+                c = {'host': addr[4][0]}
+                c['candidate_id'] = conn.connection.getAnID()
+                c['port'] = port
+                c['type'] = 'direct'
+                c['jid'] = self.ourjid
+                c['priority'] = (2**16) * type_preference
+                local_ip_cand.append(c)
+
+        self.candidates += local_ip_cand
+
+    def _add_additional_candidates(self):
+        type_preference = 126
+        additional_ip_cand = []
+        port = gajim.config.get('file_transfers_port')
+        ft_add_hosts = gajim.config.get('ft_add_hosts_to_send')   
+        jid_wo_resource = gajim.get_jid_without_resource(self.ourjid)
+        conn = gajim.connections[jid_wo_resource]
+        
+        if ft_add_hosts:
+            hosts = [e.strip() for e in ft_add_hosts.split(',')]
+            for h in hosts:
+                c = {'host': h}
+                c['candidate_id'] = conn.connection.getAnID()
+                c['port'] = port
+                c['type'] = 'direct'
+                c['jid'] = self.ourjid
+                c['priority'] = (2**16) * type_preference
+                additional_ip_cand.append(c)
+        self.candidates += additional_ip_cand
+        
+    def _add_proxy_candidates(self):
+        type_preference = 10
+        proxy_cand = []
+        socks5conn = ConnectionSocks5Bytestream()
+        socks5conn.name = self.ourjid
+        proxyhosts = socks5conn._get_file_transfer_proxies_from_config(self.file_props)
+        jid_wo_resource = gajim.get_jid_without_resource(self.ourjid)
+        conn = gajim.connections[jid_wo_resource]
+
+        if proxyhosts:
+            file_props['proxy_receiver'] = unicode(file_props['receiver'])
+            file_props['proxy_sender'] = unicode(file_props['sender'])
+            file_props['proxyhosts'] = proxyhosts
+            
+            for proxyhost in proxyhosts:
+                c = {'host': proxyhost['host']}
+                c['candidate_id'] = conn.connection.getAnID()
+                c['port'] = proxyhost['port']
+                c['type'] = 'proxy'
+                c['jid'] = self.ourjid
+                c['priority'] = (2**16) * type_preference
+                proxy_cand.append(c)
+        self.candidates += proxy_cand
+        
 
 import farsight
 
@@ -146,3 +264,4 @@ class JingleTransportICEUDP(JingleTransport):
         return candidates
 
 transports[xmpp.NS_JINGLE_ICE_UDP] = JingleTransportICEUDP
+transports[xmpp.NS_JINGLE_BYTESTREAM] = JingleTransportSocks5

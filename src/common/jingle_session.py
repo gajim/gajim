@@ -502,6 +502,8 @@ class JingleSession(object):
 
         for element in jingle.iterTags('content'):
             transport = get_jingle_transport(element.getTag('transport'))
+            if transport:
+                transport.ourjid = self.ourjid
             content_type = get_jingle_content(element.getTag('description'))
             if content_type:
                 try:
