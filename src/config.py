@@ -459,11 +459,11 @@ class PreferencesWindow:
             create_av_combobox('video_framerate', {_('Default'): '',
                 '15fps': '15/1', '10fps': '10/1', '5fps': '5/1',
                 '2.5fps': '5/2'}, 'video_framerate', key=lambda x: -1 if \
-                x[0] == 'Default' else float(x[0][:-3]))
+                x[1] == '' else float(x[0][:-3]))
             create_av_combobox('video_size', {_('Default'): '',
                 '800x600': '800x600', '640x480': '640x480',
                 '320x240': '320x240'}, 'video_size', key=lambda x: -1 if \
-                x[0] == 'Default' else int(x[0][:3]))
+                x[1] == '' else int(x[0][:3]))
 
         else:
             for opt_name in ('audio_input', 'audio_output', 'video_input',
