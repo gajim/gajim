@@ -2136,7 +2136,7 @@ $T will be replaced by auto-not-available timeout</property>
                         <child>
                           <object class="GtkTable" id="table8">
                             <property name="visible">True</property>
-                            <property name="n_rows">2</property>
+                            <property name="n_rows">4</property>
                             <property name="n_columns">2</property>
                             <property name="column_spacing">6</property>
                             <property name="row_spacing">6</property>
@@ -2182,6 +2182,52 @@ $T will be replaced by auto-not-available timeout</property>
                                 <property name="right_attach">2</property>
                                 <property name="top_attach">1</property>
                                 <property name="bottom_attach">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label26">
+                                <property name="visible">True</property>
+                                <property name="xalign">0</property>
+                                <property name="label" translatable="yes">Video framerate</property>
+                              </object>
+                              <packing>
+                                <property name="top_attach">2</property>
+                                <property name="bottom_attach">3</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label27">
+                                <property name="visible">True</property>
+                                <property name="xalign">0</property>
+                                <property name="label" translatable="yes">Video size</property>
+                              </object>
+                              <packing>
+                                <property name="top_attach">3</property>
+                                <property name="bottom_attach">4</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBox" id="video_framerate_combobox">
+                                <property name="visible">True</property>
+                                <signal name="changed" handler="on_video_framerate_combobox_changed"/>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="right_attach">2</property>
+                                <property name="top_attach">2</property>
+                                <property name="bottom_attach">3</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBox" id="video_size_combobox">
+                                <property name="visible">True</property>
+                                <signal name="changed" handler="on_video_size_combobox_changed"/>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="right_attach">2</property>
+                                <property name="top_attach">3</property>
+                                <property name="bottom_attach">4</property>
                               </packing>
                             </child>
                           </object>

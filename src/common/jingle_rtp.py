@@ -365,8 +365,22 @@ class JingleVideo(JingleRTPContent):
         JingleRTPContent.setup_stream(self)
 
         # the local parts
+        if gajim.config.get('video_framerate'):
+            framerate = 'videorate ! video/x-raw-yuv,framerate=%s ! ' % \
+                gajim.config.get('video_framerate')
+        else:
+            framerate = ''
+        try:
+            w, h = gajim.config.get('video_size').split('x')
+        except:
+            w = h = None
+        if w and h:
+            video_size = 'video/x-raw-yuv,width=%s,height=%s ! ' % (w, h)
+        else:
+            video_size = ''
         self.src_bin = self.make_bin_from_config('video_input_device',
-                '%s ! videoscale ! ffmpegcolorspace', _("video input"))
+            '%%s ! %svideoscale ! %sffmpegcolorspace' % (framerate, video_size),
+            _("video input"))
         #caps = gst.element_factory_make('capsfilter')
         #caps.set_property('caps', gst.caps_from_string('video/x-raw-yuv, width=320, height=240'))
 
