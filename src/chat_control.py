@@ -1449,6 +1449,15 @@ class ChatControl(ChatControlBase):
             id_ = widget.connect('released', self.on_num_button_released)
             self.handlers[id_] = widget
 
+        self.dtmf_window = self.xml.get_object('dtmf_window')
+        id_ = self.dtmf_window.connect('focus-out-event',
+            self.on_dtmf_window_focus_out_event)
+        self.handlers[id_] = self.dtmf_window
+
+        widget = self.xml.get_object('dtmf_button')
+        id_ = widget.connect('clicked', self.on_dtmf_button_clicked)
+        self.handlers[id_] = widget
+
         widget = self.xml.get_object('mic_hscale')
         id_ = widget.connect('value_changed', self.on_mic_hscale_value_changed)
         self.handlers[id_] = widget
@@ -1595,7 +1604,7 @@ class ChatControl(ChatControlBase):
 
     def update_audio(self):
         self._update_jingle('audio')
-        vbox = self.xml.get_object('audio_vbox')
+        hbox = self.xml.get_object('audio_buttons_hbox')
         if self.audio_state == self.JINGLE_STATE_CONNECTED:
             # Set volume from config
             input_vol = gajim.config.get('audio_input_volume')
@@ -1605,11 +1614,11 @@ class ChatControl(ChatControlBase):
             self.xml.get_object('mic_hscale').set_value(input_vol)
             self.xml.get_object('sound_hscale').set_value(output_vol)
             # Show vbox
-            vbox.set_no_show_all(False)
-            vbox.show_all()
+            hbox.set_no_show_all(False)
+            hbox.show_all()
         elif not self.audio_sid:
-            vbox.set_no_show_all(True)
-            vbox.hide()
+            hbox.set_no_show_all(True)
+            hbox.hide()
 
     def update_video(self):
         self._update_jingle('video')
@@ -1683,19 +1692,21 @@ class ChatControl(ChatControlBase):
     def on_num_button_released(self, released):
         self._get_audio_content()._stop_dtmf()
 
-    def on_mic_hscale_value_changed(self, widget):
-        value = widget.get_value()
+    def on_dtmf_button_clicked(self, widget):
+        self.dtmf_window.show_all()
+
+    def on_dtmf_window_focus_out_event(self, widget, event):
+        self.dtmf_window.hide()
+
+    def on_mic_hscale_value_changed(self, widget, value):
         self._get_audio_content().set_mic_volume(value / 100)
         # Save volume to config
-        # FIXME: Putting it here is maybe not the right thing to do?
         gajim.config.set('audio_input_volume', value)
 
 
-    def on_sound_hscale_value_changed(self, widget):
-        value = widget.get_value()
+    def on_sound_hscale_value_changed(self, widget, value):
         self._get_audio_content().set_out_volume(value / 100)
         # Save volume to config
-        # FIXME: Putting it here is maybe not the right thing to do?
         gajim.config.set('audio_output_volume', value)
 
     def on_avatar_eventbox_enter_notify_event(self, widget, event):
