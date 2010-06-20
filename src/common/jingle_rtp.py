@@ -199,7 +199,7 @@ class JingleRTPContent(JingleContent):
                 log.error('Farsight error #%d!\nMessage: %s\nDebug: %s' % (
                     message.structure['error-no'],
                     message.structure['error-msg'],
-                    message.structure['debug-msg'])
+                    message.structure['debug-msg']))
         elif message.type == gst.MESSAGE_ERROR:
             # TODO: Fix it to fallback to videotestsrc anytime an error occur,
             # or raise an error, Jingle way
