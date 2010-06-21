@@ -2064,19 +2064,6 @@ class Interface:
             checktext2, on_response_ok=on_ok, on_response_cancel=on_cancel,
             is_modal=False)
 
-    def handle_event_pubsub_node_removed(self, account, data):
-        # ('PUBSUB_NODE_REMOVED', account, (jid, node))
-        if 'pep_services' in self.instances[account]:
-            if data[0] == gajim.get_jid_from_account(account):
-                self.instances[account]['pep_services'].node_removed(data[1])
-
-    def handle_event_pubsub_node_not_removed(self, account, data):
-        # ('PUBSUB_NODE_NOT_REMOVED', account, (jid, node, msg))
-        if data[0] == gajim.get_jid_from_account(account):
-            dialogs.WarningDialog(_('PEP node was not removed'),
-                    _('PEP node %(node)s was not removed: %(message)s') % {
-                    'node': data[1], 'message': data[2]})
-
     def handle_event_pep_received(self, account, data):
         # ('PEP_RECEIVED', account, (jid, pep_type))
         jid = data[0]
@@ -2188,9 +2175,6 @@ class Interface:
             'INSECURE_SSL_CONNECTION': \
                 [self.handle_event_insecure_ssl_connection],
             'INSECURE_PASSWORD': [self.handle_event_insecure_password],
-            'PUBSUB_NODE_REMOVED': [self.handle_event_pubsub_node_removed],
-            'PUBSUB_NODE_NOT_REMOVED': \
-                [self.handle_event_pubsub_node_not_removed],
             'JINGLE_INCOMING': [self.handle_event_jingle_incoming],
             'JINGLE_CONNECTED': [self.handle_event_jingle_connected],
             'JINGLE_DISCONNECTED': [self.handle_event_jingle_disconnected],

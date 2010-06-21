@@ -109,25 +109,37 @@ class ConnectionPubSub:
 
         self.connection.send(query)
 
-    def send_pb_delete(self, jid, node):
+    def send_pb_purge(self, jid, node):
+        """
+        Purge node: Remove all items
+        """
+        if not self.connection or self.connected < 2:
+            return
+        query = xmpp.Iq('set', to=jid)
+        d = query.addChild('pubsub', namespace=xmpp.NS_PUBSUB_OWNER)
+        d = d.addChild('purge', {'node': node})
+
+        self.connection.send(query)
+
+    def send_pb_delete(self, jid, node, on_ok=None, on_fail=None):
         """
         Delete node
         """
         if not self.connection or self.connected < 2:
             return
         query = xmpp.Iq('set', to=jid)
-        d = query.addChild('pubsub', namespace=xmpp.NS_PUBSUB)
+        d = query.addChild('pubsub', namespace=xmpp.NS_PUBSUB_OWNER)
         d = d.addChild('delete', {'node': node})
 
         def response(con, resp, jid, node):
-            if resp.getType() == 'result':
-                self.dispatch('PUBSUB_NODE_REMOVED', (jid, node))
-            else:
+            if resp.getType() == 'result' and on_ok:
+                on_ok(jid, node)
+            elif on_fail:
                 msg = resp.getErrorMsg()
-                self.dispatch('PUBSUB_NODE_NOT_REMOVED', (jid, node, msg))
+                on_fail(jid, node, msg)
 
         self.connection.SendAndCallForResponse(query, response, {'jid': jid,
-                'node': node})
+            'node': node})
 
     def send_pb_create(self, jid, node, configure = False, configure_form = None):
         """
