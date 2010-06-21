@@ -1899,21 +1899,19 @@ class Connection(CommonConnection, ConnectionHandlers):
             if bm.get('print_status', None):
                 iq2.setTagData('print_status', bm['print_status'])
 
-        if self.pubsub_supported and storage_type != 'xml':
-            if self.pubsub_publish_options_supported:
-                options = common.xmpp.Node(common.xmpp.NS_DATA + ' x',
-                        attrs={'type': 'submit'})
-                f = options.addChild('field', attrs={'var': 'FORM_TYPE',
-                        'type': 'hidden'})
-                f.setTagData('value', common.xmpp.NS_PUBSUB_PUBLISH_OPTIONS)
-                f = options.addChild('field', attrs={'var': 'pubsub#persist_items'})
-                f.setTagData('value', 'true')
-                f = options.addChild('field', attrs={'var': 'pubsub#access_model'})
-                f.setTagData('value', 'whitelist')
-            else:
-                options = None
+        if self.pubsub_supported and self.pubsub_publish_options_supported and \
+        storage_type != 'xml':
+            options = common.xmpp.Node(common.xmpp.NS_DATA + ' x',
+                attrs={'type': 'submit'})
+            f = options.addChild('field', attrs={'var': 'FORM_TYPE',
+                'type': 'hidden'})
+            f.setTagData('value', common.xmpp.NS_PUBSUB_PUBLISH_OPTIONS)
+            f = options.addChild('field', attrs={'var': 'pubsub#persist_items'})
+            f.setTagData('value', 'true')
+            f = options.addChild('field', attrs={'var': 'pubsub#access_model'})
+            f.setTagData('value', 'whitelist')
             self.send_pb_publish('', 'storage:bookmarks', iq, 'current',
-                    options=options)
+                options=options)
         if storage_type != 'pubsub':
             iqA = common.xmpp.Iq(typ='set')
             iqB = iqA.addChild(name='query', namespace=common.xmpp.NS_PRIVATE)
