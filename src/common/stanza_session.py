@@ -287,6 +287,9 @@ class ArchivingStanzaSession(StanzaSession):
         if self.control:
             self.control.print_archiving_session_details()
 
+    def stop_archiving_for_session(self):
+        self.conn.stop_archiving_session(self.thread_id)
+
 
 class EncryptedStanzaSession(ArchivingStanzaSession):
     """
@@ -1035,6 +1038,8 @@ class EncryptedStanzaSession(ArchivingStanzaSession):
         if self.control:
             self.control.print_esession_details()
 
+        self.stop_archiving_for_session()
+
     def final_steps_alice(self, form):
         srs = ''
         srses = secrets.secrets().retained_secrets(self.conn.name,
@@ -1074,6 +1079,8 @@ class EncryptedStanzaSession(ArchivingStanzaSession):
 
         if self.control:
             self.control.print_esession_details()
+
+        self.stop_archiving_for_session()
 
     def do_retained_secret(self, k, old_srs):
         """

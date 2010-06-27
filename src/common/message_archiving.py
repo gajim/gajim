@@ -76,6 +76,13 @@ class ConnectionArchive:
         item.setAttr('jid', jid)
         self.connection.send(iq_)
 
+    def stop_archiving_session(self, thread_id):
+        iq_ = common.xmpp.Iq('set')
+        pref = iq_.setTag('pref', namespace=common.xmpp.NS_ARCHIVE)
+        session = pref.setTag('session', attrs={'thread': thread_id,
+            'save': 'false', 'otr': 'concede'})
+        self.connection.send(iq_)
+
     def get_item_pref(self, jid):
         jid = common.xmpp.JID(jid)
         if unicode(jid) in self.items:
