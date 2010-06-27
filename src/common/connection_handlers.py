@@ -1667,8 +1667,21 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
         if jid not in self.last_history_time:
             return
 
-        self.dispatch('GC_MSG', (frm, msgtxt, tim, has_timestamp, msg.getXHTML(),
-                statusCode, displaymarking))
+        captcha = msg.getTag('captcha', namespace=common.xmpp.NS_CAPTCHA)
+        if captcha:
+            captcha = captcha.getTag('x', namespace=common.xmpp.NS_DATA)
+            for field in captcha.getTags('field'):
+                for media in field.getTags('media'):
+                    for uri in media.getTags('uri'):
+                        uri_data = uri.getData()
+                        if uri_data.startswith('cid:'):
+                            uri_data = uri_data[4:]
+                            for data in msg.getTags('data',
+                            namespace=common.xmpp.NS_BOB):
+                                if data.getAttr('cid') == uri_data:
+                                    uri.setData(data.getData())
+        self.dispatch('GC_MSG', (frm, msgtxt, tim, has_timestamp,
+            msg.getXHTML(), statusCode, displaymarking, captcha))
 
         tim_int = int(float(mktime(tim)))
         if gajim.config.should_log(self.name, jid) and not \

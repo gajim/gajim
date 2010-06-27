@@ -27,6 +27,7 @@ multiple - these which may contain more data (with <reported/> element).'''
 
 import gtk
 import gobject
+import base64
 
 import gtkgui_helpers
 import dialogs
@@ -527,6 +528,25 @@ class SingleForm(gtk.Table, object):
                     label.set_alignment(0.0, 0.0)
                 label = decorate_with_tooltip(label, field)
                 self.attach(label, 0, 1, linecounter, linecounter+1,
+                        xoptions=gtk.FILL, yoptions=gtk.FILL)
+
+            if field.media is not None:
+                for uri in field.media.uris:
+                    if uri.type_.startswith('image/'):
+                        try:
+                            img_data = base64.decodestring(uri.uri_data)
+                            pixbuf_l = gtk.gdk.PixbufLoader()
+                            pixbuf_l.write(img_data)
+                            pixbuf_l.close()
+                            media = gtk.image_new_from_pixbuf(pixbuf_l.\
+                                get_pixbuf())
+                        except Exception:
+                            media = gtk.Label(_('Unable to load image'))
+                    else:
+                        media = gtk.Label(_('Media type not supported: %s') % \
+                            uri.type_)
+                    linecounter += 1
+                    self.attach(media, 0, 1, linecounter, linecounter+1,
                         xoptions=gtk.FILL, yoptions=gtk.FILL)
 
             if commonwidget:

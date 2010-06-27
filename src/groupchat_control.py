@@ -40,9 +40,11 @@ import dialogs
 import config
 import vcard
 import cell_renderer_image
+import dataforms_widget
 
 from common import gajim
 from common import helpers
+from common import dataforms
 
 from chat_control import ChatControl
 from chat_control import ChatControlBase
@@ -787,7 +789,39 @@ class GroupchatControl(ChatControlBase):
         menu.destroy()
 
     def on_message(self, nick, msg, tim, has_timestamp=False, xhtml=None,
-    status_code=[], displaymarking=None):
+    status_code=[], displaymarking=None, captcha=None):
+        if captcha:
+            dataform = dataforms.ExtendForm(node=captcha)
+            self.form_widget = dataforms_widget.DataFormWidget(dataform)
+            self.form_widget.show_all()
+            vbox = self.xml.get_object('gc_textviews_vbox')
+            vbox.pack_start(self.form_widget, expand=False, fill=False)
+
+            def on_send_dataform_clicked(widget):
+                if not self.form_widget:
+                    return
+                form_node = self.form_widget.data_form.get_purged()
+                form_node.type = 'submit'
+                gajim.connections[self.account].send_captcha(self.room_jid,
+                    form_node)
+                self.form_widget.hide()
+                self.form_widget.destroy()
+                self.btn_box.destroy()
+                del self.form_widget
+                del self.btn_box
+
+            valid_button = gtk.Button(stock=gtk.STOCK_OK)
+            valid_button.connect('clicked', on_send_dataform_clicked)
+            self.btn_box = gtk.HButtonBox()
+            self.btn_box.set_layout(gtk.BUTTONBOX_END)
+            self.btn_box.pack_start(valid_button)
+            self.btn_box.show_all()
+            vbox.pack_start(self.btn_box, expand=False, fill=False)
+            if self.parent_win:
+                self.parent_win.redraw_tab(self, 'attention')
+            else:
+                self.attention_flag = True
+            helpers.play_sound('muc_message_received')
         if '100' in status_code:
             # Room is not anonymous
             self.is_anonymous = False

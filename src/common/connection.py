@@ -288,33 +288,37 @@ class CommonConnection:
                                 gajim.thread_interface(encrypt_thread, [msg, keyID,
                                         True], _on_encrypted, [])
                             else:
-                                self._message_encrypted_cb(output, type_, msg, msgtxt,
-                                        original_message, fjid, resource, jid, xhtml,
-                                        subject, chatstate, composing_xep, label, forward_from,
-                                        delayed, session, form_node, user_nick, keyID,
-                                        callback)
+                                self._message_encrypted_cb(output, type_, msg,
+                                    msgtxt, original_message, fjid, resource,
+                                    jid, xhtml, subject, chatstate, msg_id,
+                                    composing_xep, label, forward_from, delayed,
+                                    session, form_node, user_nick, keyID,
+                                    callback)
                         self.dispatch('GPG_ALWAYS_TRUST', _on_always_trust)
                     else:
                         self._message_encrypted_cb(output, type_, msg, msgtxt,
-                                original_message, fjid, resource, jid, xhtml, subject,
-                                chatstate, composing_xep, label, forward_from, delayed, session,
-                                form_node, user_nick, keyID, callback)
+                            original_message, fjid, resource, jid, xhtml,
+                            subject, chatstate, msg_id, composing_xep, label,
+                            forward_from, delayed, session, form_node,
+                            user_nick, keyID, callback)
                 gajim.thread_interface(encrypt_thread, [msg, keyID, False],
                         _on_encrypted, [])
                 return
 
             self._message_encrypted_cb(('', error), type_, msg, msgtxt,
-                    original_message, fjid, resource, jid, xhtml, subject, chatstate,
-                    composing_xep, label, forward_from, delayed, session, form_node, user_nick,
-                    keyID, callback)
+                original_message, fjid, resource, jid, xhtml, subject,
+                chatstate, msg_id, composing_xep, label, forward_from, delayed,
+                session, form_node, user_nick, keyID, callback)
 
         self._on_continue_message(type_, msg, msgtxt, original_message, fjid,
-                resource, jid, xhtml, subject, msgenc, keyID, chatstate, composing_xep,
-                label, forward_from, delayed, session, form_node, user_nick, callback)
+            resource, jid, xhtml, subject, msgenc, keyID, chatstate, msg_id,
+            composing_xep, label, forward_from, delayed, session, form_node,
+            user_nick, callback)
 
-    def _message_encrypted_cb(self, output, type_, msg, msgtxt, original_message,
-    fjid, resource, jid, xhtml, subject, chatstate, composing_xep, label, forward_from,
-    delayed, session, form_node, user_nick, keyID, callback):
+    def _message_encrypted_cb(self, output, type_, msg, msgtxt,
+    original_message, fjid, resource, jid, xhtml, subject, chatstate, msg_id,
+    composing_xep, label, forward_from, delayed, session, form_node, user_nick,
+    keyID, callback):
         msgenc, error = output
 
         if msgenc and not error:
@@ -324,19 +328,19 @@ class CommonConnection:
                 # one in locale and one en
                 msgtxt = _('[This message is *encrypted* (See :XEP:`27`]') + \
                         ' (' + msgtxt + ')'
-            self._on_continue_message(type_, msg, msgtxt, original_message, fjid,
-                    resource, jid, xhtml, subject, msgenc, keyID, chatstate,
-                    composing_xep, label, forward_from, delayed, session, form_node, user_nick,
-                    callback)
+            self._on_continue_message(type_, msg, msgtxt, original_message,
+                fjid, resource, jid, xhtml, subject, msgenc, keyID,
+                chatstate, msg_id, composing_xep, label, forward_from, delayed,
+                session, form_node, user_nick, callback)
             return
         # Encryption failed, do not send message
         tim = localtime()
         self.dispatch('MSGNOTSENT', (jid, error, msgtxt, tim, session))
 
     def _on_continue_message(self, type_, msg, msgtxt, original_message, fjid,
-    resource, jid, xhtml, subject, msgenc, keyID, chatstate, composing_xep,
-    label,
-    forward_from, delayed, session, form_node, user_nick, callback):
+    resource, jid, xhtml, subject, msgenc, keyID, chatstate, msg_id,
+    composing_xep, label, forward_from, delayed, session, form_node, user_nick,
+    callback):
         if type_ == 'chat':
             msg_iq = common.xmpp.Message(to=fjid, body=msgtxt, typ=type_,
                     xhtml=xhtml)
@@ -347,6 +351,10 @@ class CommonConnection:
             else:
                 msg_iq = common.xmpp.Message(to=fjid, body=msgtxt, typ='normal',
                         xhtml=xhtml)
+
+        if msg_id:
+            msg_iq.setID(msg_id)
+
         if msgenc:
             msg_iq.setTag(common.xmpp.NS_ENCRYPTED + ' x').setData(msgenc)
 
@@ -1607,11 +1615,11 @@ class Connection(CommonConnection, ConnectionHandlers):
 
         self.connection.send(msg_iq)
 
-    def send_message(self, jid, msg, keyID, type_='chat', subject='',
+    def send_message(self, jid, msg, keyID=None, type_='chat', subject='',
     chatstate=None, msg_id=None, composing_xep=None, resource=None,
-    user_nick=None, xhtml=None, label=None, session=None, forward_from=None, form_node=None,
-    original_message=None, delayed=None, callback=None, callback_args=[],
-    now=False):
+    user_nick=None, xhtml=None, label=None, session=None, forward_from=None,
+    form_node=None, original_message=None, delayed=None, callback=None,
+    callback_args=[], now=False):
 
         def cb(jid, msg, keyID, forward_from, session, original_message,
         subject, type_, msg_iq):
@@ -1625,11 +1633,10 @@ class Connection(CommonConnection, ConnectionHandlers):
                     subject, type_)
 
         self._prepare_message(jid, msg, keyID, type_=type_, subject=subject,
-                chatstate=chatstate, msg_id=msg_id, composing_xep=composing_xep,
-                resource=resource, user_nick=user_nick, xhtml=xhtml, label=label,
-                session=session,
-                forward_from=forward_from, form_node=form_node,
-                original_message=original_message, delayed=delayed, callback=cb)
+            chatstate=chatstate, msg_id=msg_id, composing_xep=composing_xep,
+            resource=resource, user_nick=user_nick, xhtml=xhtml, label=label,
+            session=session, forward_from=forward_from, form_node=form_node,
+            original_message=original_message, delayed=delayed, callback=cb)
 
     def send_contacts(self, contacts, jid):
         """
@@ -1986,6 +1993,14 @@ class Connection(CommonConnection, ConnectionHandlers):
         p = common.xmpp.Presence(to = agent, typ = ptype, show = show)
         p = self.add_sha(p, ptype != 'unavailable')
         self.connection.send(p)
+
+    def send_captcha(self, jid, form_node):
+        if not gajim.account_is_connected(self.name):
+            return
+        iq = common.xmpp.Iq(typ='set', to=jid)
+        captcha = iq.addChild(name='captcha', namespace=common.xmpp.NS_CAPTCHA)
+        captcha.addChild(node=form_node)
+        self.connection.send(iq)
 
     def check_unique_room_id_support(self, server, instance):
         if not gajim.account_is_connected(self.name):

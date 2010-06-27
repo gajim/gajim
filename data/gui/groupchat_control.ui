@@ -5,6 +5,7 @@
   <object class="GtkVBox" id="groupchat_control_vbox">
     <property name="can_focus">True</property>
     <property name="border_width">3</property>
+    <property name="orientation">vertical</property>
     <child>
       <object class="GtkAlignment" id="alignment">
         <property name="visible">True</property>
@@ -34,6 +35,7 @@
                     <property name="visible">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="border_width">5</property>
+                    <property name="orientation">vertical</property>
                     <child>
                       <object class="GtkLabel" id="banner_name_label">
                         <property name="visible">True</property>
@@ -71,6 +73,85 @@
         <property name="expand">False</property>
         <property name="fill">False</property>
         <property name="position">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkHPaned" id="hpaned">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="border_width">3</property>
+        <property name="position">495</property>
+        <property name="position_set">True</property>
+        <child>
+          <object class="GtkVBox" id="gc_textviews_vbox">
+            <property name="width_request">0</property>
+            <property name="visible">True</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkScrolledWindow" id="conversation_scrolledwindow">
+                <property name="width_request">200</property>
+                <property name="height_request">60</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="hscrollbar_policy">automatic</property>
+                <property name="vscrollbar_policy">automatic</property>
+                <property name="shadow_type">in</property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow" id="message_scrolledwindow">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="hscrollbar_policy">never</property>
+                <property name="vscrollbar_policy">never</property>
+                <property name="shadow_type">in</property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="resize">False</property>
+            <property name="shrink">False</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow" id="list_scrolledwindow">
+            <property name="width_request">100</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="hscrollbar_policy">never</property>
+            <property name="vscrollbar_policy">automatic</property>
+            <property name="shadow_type">in</property>
+            <child>
+              <object class="GtkTreeView" id="list_treeview">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="border_width">1</property>
+                <property name="headers_visible">False</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="resize">False</property>
+            <property name="shrink">False</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="position">1</property>
       </packing>
     </child>
     <child>
@@ -337,93 +418,6 @@
       <packing>
         <property name="expand">False</property>
         <property name="position">2</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkHPaned" id="hpaned">
-        <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="border_width">3</property>
-        <property name="position">495</property>
-        <property name="position_set">True</property>
-        <child>
-          <object class="GtkVBox" id="vbox108">
-            <property name="width_request">0</property>
-            <property name="visible">True</property>
-            <property name="spacing">6</property>
-            <child>
-              <object class="GtkVBox" id="vbox109">
-                <property name="visible">True</property>
-                <property name="spacing">6</property>
-                <child>
-                  <object class="GtkScrolledWindow" id="conversation_scrolledwindow">
-                    <property name="width_request">200</property>
-                    <property name="height_request">60</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="hscrollbar_policy">automatic</property>
-                    <property name="vscrollbar_policy">automatic</property>
-                    <property name="shadow_type">in</property>
-                    <child>
-                      <placeholder/>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkScrolledWindow" id="message_scrolledwindow">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="hscrollbar_policy">never</property>
-                    <property name="vscrollbar_policy">never</property>
-                    <property name="shadow_type">in</property>
-                    <child>
-                      <placeholder/>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="position">0</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="resize">False</property>
-            <property name="shrink">False</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkScrolledWindow" id="list_scrolledwindow">
-            <property name="width_request">100</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="hscrollbar_policy">never</property>
-            <property name="vscrollbar_policy">automatic</property>
-            <property name="shadow_type">in</property>
-            <child>
-              <object class="GtkTreeView" id="list_treeview">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="border_width">1</property>
-                <property name="headers_visible">False</property>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="resize">False</property>
-            <property name="shrink">False</property>
-          </packing>
-        </child>
-      </object>
-      <packing>
-        <property name="position">1</property>
       </packing>
     </child>
   </object>

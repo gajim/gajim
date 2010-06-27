@@ -227,6 +227,93 @@ class DataField(ExtendedNode):
 
         return locals()
 
+    @nested_property
+    def media():
+        """
+        Media data
+        """
+        def fget(self):
+            media = self.getTag('media', namespace=xmpp.NS_DATA_MEDIA)
+            if media:
+                return Media(media)
+            return None
+
+        def fset(self, value):
+            assert isinstance(value, Media)
+            fdel(self)
+            self.addChild(node=value)
+
+        def fdel(self):
+            t = self.getTag('media')
+            if t is not None:
+                self.delChild(t)
+
+        return locals()
+
+class Uri(xmpp.Node):
+    def __init__(self, uri_tag):
+        xmpp.Node.__init__(self, node=uri_tag)
+
+    @nested_property
+    def type_():
+        """
+        uri type
+        """
+        def fget(self):
+            return self.getAttr('type')
+
+        def fset(self, value):
+            assert isinstance(value, basestring)
+            self.setAttr('type', value)
+
+        def fdel(self):
+            self.delAttr('type')
+
+        return locals()
+
+    @nested_property
+    def uri_data():
+        """
+        uri data
+        """
+        def fget(self):
+            return self.getData()
+
+        def fset(self, value):
+            assert isinstance(value, basestring)
+            self.setData(value)
+
+        def fdel(self):
+            self.setData(None)
+
+        return locals()
+
+class Media(xmpp.Node):
+    def __init__(self, media_tag):
+        xmpp.Node.__init__(self, node=media_tag)
+
+    @nested_property
+    def uris():
+        """
+        URIs of the media element.
+        """
+        def fget(self):
+            uris = []
+            for element in self.getTags('uri'):
+                uris.append(Uri(element))
+            return uris
+
+        def fset(self, value):
+            fdel(self)
+            for uri in values:
+                self.addChild(node=uri)
+
+        def fdel(self, value):
+            for element in self.getTags('uri'):
+                self.delChild(element)
+
+        return locals()
+
 class BooleanField(DataField):
     @nested_property
     def value():
@@ -543,12 +630,13 @@ class SimpleDataForm(DataForm, DataRecord):
             if f.required:
                 # Keep all required fields
                 continue
-            if (hasattr(f, 'value') and not f.value) or (hasattr(f, 'values') and \
-            len(f.values) == 0):
+            if (hasattr(f, 'value') and not f.value) or (hasattr(f, 'values') \
+            and len(f.values) == 0):
                 to_be_removed.append(f)
             else:
                 del f.label
                 del f.description
+                del f.media
         for f in to_be_removed:
             c.delChild(f)
         return c
