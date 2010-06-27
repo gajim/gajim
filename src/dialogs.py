@@ -3394,7 +3394,6 @@ class ItemArchivingPreferencesWindow:
             self.item_config = gajim.connections[self.account].items[self.item]
         else:
             self.item_config = gajim.connections[self.account].default
-        print self.item, self.item_config
         self.waiting = None
 
         # Connect to gtk builder
@@ -3620,7 +3619,6 @@ class ArchivingPreferencesWindow:
 
     def on_edit_item_button_clicked(self, widget):
         if not self.current_item:
-            print 'there is no current item'
             return
 
         key_name = 'edit_item_archiving_preferences_%s' % self.current_item
@@ -3726,8 +3724,7 @@ class ArchivingPreferencesWindow:
         print error
 
     def on_close_button_clicked(self, widget):
-        if not self.waiting:
-            self.window.destroy()
+        self.window.destroy()
 
     def on_archiving_preferences_window_destroy(self, widget):
         if 'archiving_preferences' in gajim.interface.instances[self.account]:

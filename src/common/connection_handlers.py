@@ -701,6 +701,7 @@ class ConnectionVcard:
 
         elif self.awaiting_answers[id_][0] == ARCHIVING_COLLECTIONS_ARRIVED:
             # TODO
+            print 'ARCHIVING_COLLECTIONS_ARRIVED'
             pass
 
         elif self.awaiting_answers[id_][0] == ARCHIVING_COLLECTION_ARRIVED:

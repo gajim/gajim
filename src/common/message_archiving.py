@@ -184,6 +184,8 @@ class ConnectionArchive:
                 self.dispatch('ARCHIVING_CHANGED', ('itemremove',
                         item.getAttr('jid')))
 
+        raise common.xmpp.NodeProcessed
+
     def request_collections_list_page(self, with_='', start=None, end=None,
     after=None, max=30, exact_match=False):
         iq_ = common.xmpp.Iq('get')

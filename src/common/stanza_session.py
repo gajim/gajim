@@ -315,7 +315,8 @@ class EncryptedStanzaSession(ArchivingStanzaSession):
     """
 
     def __init__(self, conn, jid, thread_id, type_='chat'):
-        StanzaSession.__init__(self, conn, jid, thread_id, type_='chat')
+        ArchivingStanzaSession.__init__(self, conn, jid, thread_id,
+            type_='chat')
 
         self.xes = {}
         self.es = {}

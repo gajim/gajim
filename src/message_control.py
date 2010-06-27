@@ -207,9 +207,9 @@ class MessageControl:
                 EncryptedStanzaSession) and oldsession.enable_encryption)
 
         archiving_changed = bool(session and isinstance(session,
-                ArchivingStanzaSession) and session.archiving) != \
-                bool(oldsession and isinstance(oldsession,
-                ArchivingStanzaSession) and oldsession.archiving)
+            ArchivingStanzaSession) and session.archiving) != \
+            bool(oldsession and isinstance(oldsession,
+            ArchivingStanzaSession) and oldsession.archiving)
 
         if crypto_changed or archiving_changed:
             self.print_session_details()
