@@ -236,10 +236,8 @@ class DataField(ExtendedNode):
             media = self.getTag('media', namespace=xmpp.NS_DATA_MEDIA)
             if media:
                 return Media(media)
-            return None
 
         def fset(self, value):
-            assert isinstance(value, Media)
             fdel(self)
             self.addChild(node=value)
 
@@ -263,7 +261,6 @@ class Uri(xmpp.Node):
             return self.getAttr('type')
 
         def fset(self, value):
-            assert isinstance(value, basestring)
             self.setAttr('type', value)
 
         def fdel(self):
@@ -280,7 +277,6 @@ class Uri(xmpp.Node):
             return self.getData()
 
         def fset(self, value):
-            assert isinstance(value, basestring)
             self.setData(value)
 
         def fdel(self):
@@ -298,10 +294,7 @@ class Media(xmpp.Node):
         URIs of the media element.
         """
         def fget(self):
-            uris = []
-            for element in self.getTags('uri'):
-                uris.append(Uri(element))
-            return uris
+            return map(Uri, self.getTags('uri'))
 
         def fset(self, value):
             fdel(self)
