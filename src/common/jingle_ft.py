@@ -100,8 +100,6 @@ class JingleFileTransfer(JingleContent):
         self.transport.set_file_props(self.file_props)
         log.info("FT request: %s" % file_props)
 
-        #TODO
-        #add file transfer to queue
         self.session.connection.dispatch('FILE_REQUEST', (jid, file_props))
 
         
