@@ -157,6 +157,8 @@ class CommonConnection:
         self.muc_jid = {} # jid of muc server for each transport type
         self._stun_servers = [] # STUN servers of our jabber server
 
+        self.awaiting_cids = {} # Used for XEP-0231
+
         self.get_config_values_or_default()
 
     def _compute_resource(self):

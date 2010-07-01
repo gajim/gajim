@@ -1640,6 +1640,55 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
         self.dispatch('MSGERROR', (frm, msg.getErrorCode(), error_msg, msgtxt,
                 tim, session))
 
+    def _on_bob_received(self, conn, result, cid):
+        """
+        Called when we receive BoB data
+        """
+        if cid not in self.awaiting_cids:
+            return
+
+        if result.getType() == 'result':
+            data = msg.getTags('data', namespace=common.xmpp.NS_BOB)
+            if data.getAttr('cid') == cid:
+                for func in self.awaiting_cids[cid]:
+                    cb = func[0]
+                    args = func[1]
+                    pos = func[2]
+                    bob_data = data.getData()
+                    def recurs(node, cid, data):
+                        if node.getData() == 'cid:' + cid:
+                            node.setData(data)
+                        else:
+                            for child in node.getChildren():
+                                recurs(child, cid, data)
+                    recurs(args[pos], cid, bob_data)
+                    cb(*args)
+                del self.awaiting_cids[cid]
+                return
+
+        # An error occured, call callback without modifying data.
+        for func in self.awaiting_cids[cid]:
+            cb = func[0]
+            args = func[1]
+            cb(*args)
+        del self.awaiting_cids[cid]
+
+    def get_bob_data(self, cid, to, callback, args, position):
+        """
+        Request for BoB (XEP-0231) and when data will arrive, call callback
+        with given args, after having replaced cid by it's data in
+        args[position]
+        """
+        if cid in self.awaiting_cids:
+            self.awaiting_cids[cid].appends((callback, args, position))
+        else:
+            self.awaiting_cids[cid] = [(callback, args, position)]
+        iq = common.xmpp.Iq(to=to, typ='get')
+        data = iq.addChild(name='data', attrs={'cid': cid},
+            namespace=common.xmpp.NS_BOB)
+        self.connection.SendAndCallForResponse(iq, self._on_bob_received,
+            {'cid': cid})
+
     # process and dispatch a groupchat message
     def dispatch_gc_message(self, msg, frm, msgtxt, jid, tim):
         has_timestamp = bool(msg.timestamp)
@@ -1676,10 +1725,17 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
                         uri_data = uri.getData()
                         if uri_data.startswith('cid:'):
                             uri_data = uri_data[4:]
+                            found = False
                             for data in msg.getTags('data',
                             namespace=common.xmpp.NS_BOB):
                                 if data.getAttr('cid') == uri_data:
                                     uri.setData(data.getData())
+                                    found = True
+                            if not found:
+                                self.get_bob_data(uri_data, frm,
+                                    self.dispatch_gc_message, [msg, frm, msgtxt,
+                                    jid, tim], 0)
+                                return
         self.dispatch('GC_MSG', (frm, msgtxt, tim, has_timestamp,
             msg.getXHTML(), statusCode, displaymarking, captcha))
 
