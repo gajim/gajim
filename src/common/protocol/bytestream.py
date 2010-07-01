@@ -137,12 +137,17 @@ class ConnectionBytestream:
                 return
             jid = gajim.get_jid_without_resource(file_props['sender'])
             resource = gajim.get_resource_from_jid(file_props['sender'])
-            
+            sid = file_props['sid']
             gajim.socks5queue.add_file_props(session.ourjid, file_props)
             
             if not session.accepted:
                 session.approve_session()
                 session.approve_content('file')
+                
+        if not gajim.socks5queue.get_file_props(session.ourjid, sid):
+            gajim.socks5queue.add_file_props(session.ourjid, file_props)
+        gajim.socks5queue.connect_to_hosts(session.ourjid, sid,
+            None, None)
         return
 
         iq = xmpp.Iq(to=unicode(file_props['sender']), typ='result')

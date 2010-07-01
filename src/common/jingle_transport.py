@@ -85,6 +85,7 @@ class JingleTransportSocks5(JingleTransport):
     """
     def __init__(self):
         JingleTransport.__init__(self, TransportType.streaming)
+        self.remote_candidates = []
 
     def set_file_props(self, file_props):
         self.file_props = file_props
@@ -116,7 +117,20 @@ class JingleTransportSocks5(JingleTransport):
         return transport
 
     def parse_transport_stanza(self, transport):
-        pass
+        candidates = []
+        for candidate in transport.iterTags('candidate'):
+            cand = {
+                'state': 0,
+                'target': self.ourjid,
+                'host': candidate['host'],
+                'port': candidate['port']
+            }
+            candidates.append(cand)
+            
+            # we need this when we construct file_props on session-initiation
+        self.remote_candidates = candidates
+        return candidates
+            
 
     def _add_local_ips_as_candidates(self):
         local_ip_cand = []

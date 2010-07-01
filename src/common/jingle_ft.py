@@ -98,6 +98,13 @@ class JingleFileTransfer(JingleContent):
             self.transport = JingleTransportSocks5()
             self.transport.set_our_jid(self.session.ourjid)
         self.transport.set_file_props(self.file_props)
+        if self.file_props.has_key("streamhosts"):
+            self.file_props['streamhosts'].extend(self.transport.remote_candidates)
+        else:
+            self.file_props['streamhosts'] = self.transport.remote_candidates
+        for host in self.file_props['streamhosts']:
+            host['initiator'] = self.session.initiator
+            host['target'] = self.session.responder
         log.info("FT request: %s" % file_props)
 
         self.session.connection.dispatch('FILE_REQUEST', (jid, file_props))
@@ -106,27 +113,22 @@ class JingleFileTransfer(JingleContent):
 
     def __on_session_accept(self, stanza, content, error, action):
         log.info("__on_session_accept")
-        pass
+        gajim.socks5queue.send_file(self.file_props, self.session.ourjid)
 
     def __on_session_terminate(self, stanza, content, error, action):
         log.info("__on_session_terminate")
-        pass
 
     def __on_transport_accept(self, stanza, content, error, action):
         log.info("__on_transport_accept")
-        pass
 
     def __on_transport_replace(self, stanza, content, error, action):
         log.info("__on_transport_replace")
-        pass
     
     def __on_transport_reject(self, stanza, content, error, action):
         log.info("__on_transport_reject")
-        pass
 
     def __on_transport_info(self, stanza, content, error, action):
         log.info("__on_transport_info")
-        pass
 
     def _fill_content(self, content):
         description_node = xmpp.simplexml.Node(tag=xmpp.NS_JINGLE_FILE_TRANSFER + ' description')
