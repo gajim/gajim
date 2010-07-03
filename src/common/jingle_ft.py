@@ -23,6 +23,8 @@ import gajim
 import xmpp
 from jingle_content import contents, JingleContent
 from jingle_transport import JingleTransportICEUDP, JingleTransportSocks5
+from common import helpers
+
 import logging
 
 log = logging.getLogger('gajim.c.jingle_ft')
@@ -42,6 +44,7 @@ class JingleFileTransfer(JingleContent):
         self.callbacks['transport-replace'] += [self.__on_transport_replace]    #fallback transport method
         self.callbacks['transport-reject'] += [self.__on_transport_reject]
         self.callbacks['transport-info'] += [self.__on_transport_info]
+        self.callbacks['iq-result'] += [self.__on_iq_result]
 
         self.file_props = file_props
         if file_props is None:
@@ -51,6 +54,7 @@ class JingleFileTransfer(JingleContent):
 
         if self.file_props is not None:
             self.file_props['sender'] = session.ourjid
+            self.file_props['receiver'] = session.peerjid
             self.file_props['session-type'] = 'jingle'
             self.file_props['sid'] = session.sid
             self.file_props['transfered_size'] = []
@@ -129,6 +133,25 @@ class JingleFileTransfer(JingleContent):
 
     def __on_transport_info(self, stanza, content, error, action):
         log.info("__on_transport_info")
+        
+    def __on_iq_result(self, stanza, content, error, action):
+        log.info("__on_iq_result")
+        
+        if self.weinitiate:
+            receiver = self.file_props['receiver']
+            sender = self.file_props['sender']
+        
+            sha_str = helpers.get_auth_sha(self.file_props['sid'], sender, receiver)
+            self.file_props['sha_str'] = sha_str
+        
+            port = gajim.config.get('file_transfers_port')
+        
+            listener = gajim.socks5queue.start_listener(port, sha_str,
+            self._store_socks5_sid, self.file_props['sid'])
+            
+            if not listener:
+                return
+                # send error message, notify the user
 
     def _fill_content(self, content):
         description_node = xmpp.simplexml.Node(tag=xmpp.NS_JINGLE_FILE_TRANSFER + ' description')
@@ -144,6 +167,11 @@ class JingleFileTransfer(JingleContent):
         description_node.addChild(node=sioffer)
 
         content.addChild(node=description_node)
+        
+    def _store_socks5_sid(self, sid, hash_id):
+        # callback from socsk5queue.start_listener
+        self.file_props['hash'] = hash_id
+        return
 
 def get_content(desc):
     return JingleFileTransfer

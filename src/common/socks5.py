@@ -35,6 +35,10 @@ from errno import EISCONN
 from errno import EINPROGRESS
 from errno import EAFNOSUPPORT
 from xmpp.idlequeue import IdleObject
+
+import logging
+log = logging.getLogger('gajim.c.socks5')
+
 MAX_BUFF_LEN = 65536
 
 # after foo seconds without activity label transfer as 'stalled'
@@ -257,6 +261,7 @@ class SocksQueue:
 
     def send_file(self, file_props, account):
         if 'hash' in file_props and file_props['hash'] in self.senders:
+            log.info("socks5: sending file")
             sender = self.senders[file_props['hash']]
             file_props['streamhost-used'] = True
             sender.account = account
@@ -269,6 +274,8 @@ class SocksQueue:
                 file_props['last-time'] = self.idlequeue.current_time()
                 file_props['received-len'] = 0
                 sender.file_props = file_props
+        else:
+            log.info("socks5: NOT sending file")
 
     def add_file_props(self, account, file_props):
         """

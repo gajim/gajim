@@ -30,6 +30,8 @@ import gajim #Get rid of that?
 import xmpp
 from jingle_transport import get_jingle_transport
 from jingle_content import get_jingle_content, JingleContentSetupException
+import logging
+log = logging.getLogger("gajim.c.jingle_session")
 
 # FIXME: Move it to JingleSession.States?
 class JingleStates(object):
@@ -58,7 +60,7 @@ class JingleSession(object):
     negotiated between an initiator and a responder.
     """
 
-    def __init__(self, con, weinitiate, jid, sid=None):
+    def __init__(self, con, weinitiate, jid, iq_id = None, sid=None):
         """
         con -- connection object,
         weinitiate -- boolean, are we the initiator?
@@ -83,6 +85,14 @@ class JingleSession(object):
         if not sid:
             sid = con.connection.getAnID()
         self.sid = sid # sessionid
+        
+        # iq stanza id, used to determine which sessions to summon callback
+        # later on when iq-result stanza arrives
+        if iq_id is not None:
+            self.iq_ids = [iq_id]
+        else:
+            self.iq_ids = []
+            
 
         self.accepted = True # is this session accepted by user
 
@@ -110,10 +120,14 @@ class JingleSession(object):
                 'transport-replace':    [self.__broadcast, self.__on_transport_replace], #TODO
                 'transport-accept':     [self.__ack], #TODO
                 'transport-reject':     [self.__ack], #TODO
-                'iq-result':            [],
+                'iq-result':            [self.__broadcast],
                 'iq-error':             [self.__on_error],
         }
 
+    def collect_iq_id(self, iq_id):
+        if iq_id is not None:
+            self.iq_ids.append(iq_id)
+        
     def approve_session(self):
         """
         Called when user accepts session in UI (when we aren't the initiator)
@@ -463,6 +477,17 @@ class JingleSession(object):
         """
         Broadcast the stanza contents to proper content handlers
         """
+        #if jingle is None: # it is a iq-result stanza
+        #    for cn in self.contents.values():
+        #        cn.on_stanza(stanza, None, error, action)
+        #    return
+        
+        # special case: iq-result stanza does not come with a jingle element
+        if action == 'iq-result':
+            for cn in self.contents.values():
+                cn.on_stanza(stanza, None, error, action)
+            return
+        
         for content in jingle.iterTags('content'):
             name = content['name']
             creator = content['creator']
@@ -606,6 +631,7 @@ class JingleSession(object):
         self.__append_contents(jingle)
         self.__broadcast(stanza, jingle, None, 'session-initiate-sent')
         self.connection.connection.send(stanza)
+        self.collect_iq_id(stanza.getID())
         self.state = JingleStates.pending
 
     def __session_accept(self):
@@ -614,6 +640,7 @@ class JingleSession(object):
         self.__append_contents(jingle)
         self.__broadcast(stanza, jingle, None, 'session-accept-sent')
         self.connection.connection.send(stanza)
+        self.collect_iq_id(stanza.getID())
         self.state = JingleStates.active
 
     def __session_info(self, payload=None):

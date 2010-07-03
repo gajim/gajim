@@ -84,16 +84,26 @@ class ConnectionJingle(object):
             raise xmpp.NodeProcessed
 
         jingle = stanza.getTag('jingle')
-        if not jingle: return
-        sid = jingle.getAttr('sid')
+        # a jingle element is not necessary in iq-result stanza
+        # don't check for that
+        if jingle:
+            sid = jingle.getAttr('sid')
+        else:
+            sid = None
+            for sesn in self.__sessions.values():
+                if id in sesn.iq_ids:
+                    sesn.on_stanza(stanza)
+            return
 
         # do we need to create a new jingle object
         if sid not in self.__sessions:
             #TODO: tie-breaking and other things...
-            newjingle = JingleSession(con=self, weinitiate=False, jid=jid, sid=sid)
+            newjingle = JingleSession(con=self, weinitiate=False, jid=jid,
+                                      iq_id = id, sid=sid)
             self.__sessions[sid] = newjingle
 
         # we already have such session in dispatcher...
+        self.__sessions[sid].collect_iq_id(id)
         self.__sessions[sid].on_stanza(stanza)
         # Delete invalid/unneeded sessions
         if sid in self.__sessions and self.__sessions[sid].state == JingleStates.ended:
