@@ -37,7 +37,7 @@ from hashlib import sha256
 from hmac import HMAC
 from common import crypto
 
-if gajim.HAVE_PYCRYPTO and False:
+if gajim.HAVE_PYCRYPTO:
     from Crypto.Cipher import AES
     from Crypto.PublicKey import RSA
 
