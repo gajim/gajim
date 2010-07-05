@@ -132,7 +132,8 @@ class JingleFileTransfer(JingleContent):
 
     def __on_transport_info(self, stanza, content, error, action):
         log.info("__on_transport_info")
-        gajim.socks5queue.send_file(self.file_props, self.session.ourjid)
+        jid = gajim.get_jid_without_resource(self.session.ourjid)
+        gajim.socks5queue.send_file(self.file_props, jid)
         
     def __on_iq_result(self, stanza, content, error, action):
         log.info("__on_iq_result")
@@ -155,7 +156,8 @@ class JingleFileTransfer(JingleContent):
         else: # session-accept iq-result
                 if not gajim.socks5queue.get_file_props(self.session.ourjid, self.file_props['sid']):
                     gajim.socks5queue.add_file_props(self.session.ourjid, self.file_props)
-                gajim.socks5queue.connect_to_hosts(self.session.ourjid, self.file_props['sid'],
+                jid = gajim.get_jid_without_resource(self.session.ourjid)
+                gajim.socks5queue.connect_to_hosts(jid, self.file_props['sid'],
                                                    self.send_candidate_used, self._on_connect_error)
                     
     def send_candidate_used(self, streamhost):
