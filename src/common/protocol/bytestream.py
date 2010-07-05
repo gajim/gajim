@@ -143,13 +143,7 @@ class ConnectionBytestream:
             if not session.accepted:
                 session.approve_session()
                 session.approve_content('file')
-                
-        if not gajim.socks5queue.get_file_props(session.ourjid, sid):
-            gajim.socks5queue.add_file_props(session.ourjid, file_props)
-        gajim.socks5queue.connect_to_hosts(session.ourjid, sid,
-            lambda streamhost: log.info("connected to" + str(streamhost)),
-            lambda a, b, c, d: log.info("connect error!" + a + b + c + d))
-        return
+            return
 
         iq = xmpp.Iq(to=unicode(file_props['sender']), typ='result')
         iq.setAttr('id', file_props['request-id'])

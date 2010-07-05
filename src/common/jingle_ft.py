@@ -117,7 +117,6 @@ class JingleFileTransfer(JingleContent):
 
     def __on_session_accept(self, stanza, content, error, action):
         log.info("__on_session_accept")
-        gajim.socks5queue.send_file(self.file_props, self.session.ourjid)
 
     def __on_session_terminate(self, stanza, content, error, action):
         log.info("__on_session_terminate")
@@ -133,6 +132,7 @@ class JingleFileTransfer(JingleContent):
 
     def __on_transport_info(self, stanza, content, error, action):
         log.info("__on_transport_info")
+        gajim.socks5queue.send_file(self.file_props, self.session.ourjid)
         
     def __on_iq_result(self, stanza, content, error, action):
         log.info("__on_iq_result")
@@ -152,7 +152,39 @@ class JingleFileTransfer(JingleContent):
             if not listener:
                 return
                 # send error message, notify the user
+        else: # session-accept iq-result
+                if not gajim.socks5queue.get_file_props(self.session.ourjid, self.file_props['sid']):
+                    gajim.socks5queue.add_file_props(self.session.ourjid, self.file_props)
+                gajim.socks5queue.connect_to_hosts(self.session.ourjid, self.file_props['sid'],
+                                                   self.send_candidate_used, self._on_connect_error)
+                    
+    def send_candidate_used(self, streamhost):
+        """
+        send candidate-used stanza
+        """
+        log.info("send_candidate_used")
+        if streamhost is None:
+            return
+        
+        content = xmpp.Node('content')
+        content.setAttr('creator', 'initiator')
+        content.setAttr('name', 'file')
+        
+        transport = xmpp.Node('transport')
+        transport.setAttr('xmlns', xmpp.NS_JINGLE_BYTESTREAM)
+        
+        candidateused = xmpp.Node('candidate-used')
+        candidateused.setAttr('cid', streamhost['cid'])
+        
+        transport.addChild(node=candidateused)
+        content.addChild(node=transport)
 
+        self.session.send_transport_info(content)
+        
+    def _on_connect_error(self, to, _id, sid, code=404):
+        log.info("connect error, sid=" + sid)
+        return
+        
     def _fill_content(self, content):
         description_node = xmpp.simplexml.Node(tag=xmpp.NS_JINGLE_FILE_TRANSFER + ' description')
 
