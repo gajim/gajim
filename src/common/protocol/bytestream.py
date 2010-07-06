@@ -596,7 +596,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             raise xmpp.NodeProcessed
 
         if real_id.startswith('au_'):
-            if 'stopped' in file and file_props['stopped']:
+            if 'stopped' in file_props and file_props['stopped']:
                 self.remove_transfer(file_props)
             else:
                 gajim.socks5queue.send_file(file_props, self.name)
@@ -608,6 +608,9 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
                 if proxyhost['jid'] == jid:
                     proxy = proxyhost
 
+        if 'stopped' in file_props and file_props['stopped']:
+            self.remove_transfer(file_props)
+            raise xmpp.NodeProcessed
         if proxy is not None:
             file_props['streamhost-used'] = True
             if 'streamhosts' not in file_props:
@@ -622,10 +625,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             raise xmpp.NodeProcessed
 
         else:
-            if 'stopped' in file_props and file_props['stopped']:
-                self.remove_transfer(file_props)
-            else:
-                gajim.socks5queue.send_file(file_props, self.name)
+            gajim.socks5queue.send_file(file_props, self.name)
             if 'fast' in file_props:
                 fasts = file_props['fast']
                 if len(fasts) > 0:
