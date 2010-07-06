@@ -85,6 +85,7 @@ class JingleTransportSocks5(JingleTransport):
     """
     def __init__(self):
         JingleTransport.__init__(self, TransportType.streaming)
+        self.connection = None
         self.remote_candidates = []
 
     def set_file_props(self, file_props):
@@ -92,6 +93,9 @@ class JingleTransportSocks5(JingleTransport):
 
     def set_our_jid(self, jid):
         self.ourjid = jid
+
+    def set_connection(self, conn):
+        self.connection = conn
         
     def make_candidate(self, candidate):
         import logging
@@ -134,13 +138,13 @@ class JingleTransportSocks5(JingleTransport):
             
 
     def _add_local_ips_as_candidates(self):
+        if not self.connection:
+            return
         local_ip_cand = []
         port = gajim.config.get('file_transfers_port')
         type_preference = 126 #type preference of connection type. XEP-0260 section 2.2
-        jid_wo_resource = gajim.get_jid_without_resource(self.ourjid)
-        conn = gajim.connections[jid_wo_resource]
-        c = {'host': conn.peerhost[0]}
-        c['candidate_id'] = conn.connection.getAnID()
+        c = {'host': self.connection.peerhost[0]}
+        c['candidate_id'] = self.connection.connection.getAnID()
         c['port'] = port
         c['type'] = 'direct'
         c['jid'] = self.ourjid
@@ -161,18 +165,18 @@ class JingleTransportSocks5(JingleTransport):
         self.candidates += local_ip_cand
 
     def _add_additional_candidates(self):
+        if not self.connection:
+            return
         type_preference = 126
         additional_ip_cand = []
         port = gajim.config.get('file_transfers_port')
         ft_add_hosts = gajim.config.get('ft_add_hosts_to_send')   
-        jid_wo_resource = gajim.get_jid_without_resource(self.ourjid)
-        conn = gajim.connections[jid_wo_resource]
         
         if ft_add_hosts:
             hosts = [e.strip() for e in ft_add_hosts.split(',')]
             for h in hosts:
                 c = {'host': h}
-                c['candidate_id'] = conn.connection.getAnID()
+                c['candidate_id'] = self.connection.connection.getAnID()
                 c['port'] = port
                 c['type'] = 'direct'
                 c['jid'] = self.ourjid
@@ -181,22 +185,23 @@ class JingleTransportSocks5(JingleTransport):
         self.candidates += additional_ip_cand
         
     def _add_proxy_candidates(self):
+        if not self.connection:
+            return
         type_preference = 10
         proxy_cand = []
         socks5conn = ConnectionSocks5Bytestream()
         socks5conn.name = self.ourjid
         proxyhosts = socks5conn._get_file_transfer_proxies_from_config(self.file_props)
-        jid_wo_resource = gajim.get_jid_without_resource(self.ourjid)
-        conn = gajim.connections[jid_wo_resource]
 
         if proxyhosts:
-            file_props['proxy_receiver'] = unicode(file_props['receiver'])
-            file_props['proxy_sender'] = unicode(file_props['sender'])
-            file_props['proxyhosts'] = proxyhosts
+            self.file_props['proxy_receiver'] = unicode(
+                self.file_props['receiver'])
+            self.file_props['proxy_sender'] = unicode(self.file_props['sender'])
+            self.file_props['proxyhosts'] = proxyhosts
             
             for proxyhost in proxyhosts:
                 c = {'host': proxyhost['host']}
-                c['candidate_id'] = conn.connection.getAnID()
+                c['candidate_id'] = self.connection.connection.getAnID()
                 c['port'] = proxyhost['port']
                 c['type'] = 'proxy'
                 c['jid'] = self.ourjid

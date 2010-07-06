@@ -66,6 +66,7 @@ class JingleFileTransfer(JingleContent):
             self.transport = JingleTransportSocks5()
             self.transport.set_file_props(self.file_props)
             self.transport.set_our_jid(session.ourjid)
+            self.transport.set_connection(session.connection)
         log.info('ourjid: %s' % session.ourjid)
 
         self.session = session
@@ -101,6 +102,7 @@ class JingleFileTransfer(JingleContent):
         if self.transport is None:
             self.transport = JingleTransportSocks5()
             self.transport.set_our_jid(self.session.ourjid)
+            self.transport.set_connection(self.session.connection)
         self.transport.set_file_props(self.file_props)
         if self.file_props.has_key("streamhosts"):
             self.file_props['streamhosts'].extend(self.transport.remote_candidates)
