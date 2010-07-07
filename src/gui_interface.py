@@ -79,6 +79,7 @@ from common import helpers
 from common import dataforms
 from common import passwords
 from common import logging_helpers
+from common import jingle
 
 import roster_window
 import profile_window
@@ -1505,6 +1506,12 @@ class Interface:
                     txt = _('File transfer of %(filename)s to %(name)s '
                         'stopped.') % {'filename': filename, 'name': name}
                     img_name = 'gajim-ft_stopped'
+                # if we are the sender of the file and the file transfer was initiated with jingle
+                # send session-terminate stanza
+                if file_props.has_key('session-type') and file_props['session-type'] == 'jingle':
+                    sender = gajim.get_jid_without_resource(file_props['sender'])
+                    jingle_session = gajim.connections[sender].get_jingle_session(sender, file_props['sid'])
+                    jingle_session.end_session()
             path = gtkgui_helpers.get_icon_path(img_name, 48)
         else:
             txt = ''
