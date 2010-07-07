@@ -95,8 +95,14 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
     """
 
     keymap = gtk.gdk.keymap_get_default()
-    keycode_c = keymap.get_entries_for_keyval(gtk.keysyms.c)[0][0]
-    keycode_ins = keymap.get_entries_for_keyval(gtk.keysyms.Insert)[0][0]
+    try:
+        keycode_c = keymap.get_entries_for_keyval(gtk.keysyms.c)[0][0]
+    except TypeError:
+        keycode_c = 54
+    try:
+        keycode_ins = keymap.get_entries_for_keyval(gtk.keysyms.Insert)[0][0]
+    except TypeError:
+        keycode_ins = 118
     def make_href(self, match):
         url_color = gajim.config.get('urlmsgcolor')
         url = match.group()
