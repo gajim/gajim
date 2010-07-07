@@ -1508,7 +1508,7 @@ class Interface:
                     img_name = 'gajim-ft_stopped'
                 # if we are the sender of the file and the file transfer was initiated with jingle
                 # send session-terminate stanza
-                if file_props.has_key('session-type') and file_props['session-type'] == 'jingle':
+                if 'session-type' in file_props and file_props['session-type'] == 'jingle':
                     sender = gajim.get_jid_without_resource(file_props['sender'])
                     jingle_session = gajim.connections[sender].get_jingle_session(sender, file_props['sid'])
                     jingle_session.end_session()
