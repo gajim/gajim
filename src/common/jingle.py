@@ -138,13 +138,15 @@ class ConnectionJingle(object):
         return jingle.sid
 
     def start_file_transfer(self, jid, file_props):
-        logger.info("start file transfer with file: %s", str(file_props))
+        logger.info("start file transfer with file: %s" % file_props)
         jingle = self.get_jingle_session(jid, media='file')
         if jingle:
+            file_props['sid'] = jingle.sid
             jingle.add_content('file', JingleFileTransfer(jingle, file_props))
         else:
             jingle = JingleSession(self, weinitiate=True, jid=jid)
             self.__sessions[jingle.sid] = jingle
+            file_props['sid'] = jingle.sid
             jingle.add_content('file', JingleFileTransfer(jingle, file_props=file_props))
             jingle.start_session()
         return jingle.sid

@@ -302,13 +302,17 @@ class FileTransfersWindow:
                         file_path, file_name, file_desc)
         if file_props is None:
             return False
-        self.add_transfer(account, contact, file_props)
         if contact.supports(NS_JINGLE_FILE_TRANSFER):
             log.info("contact %s supports jingle file transfer"%(contact.get_full_jid()))
-            gajim.connections[account].start_file_transfer(contact.get_full_jid(), file_props)
+            # this call has the side effect of setting file_props['sid'] to the jingle sid, but for the sake of clarity
+            # make it explicit here
+            sid = gajim.connections[account].start_file_transfer(contact.get_full_jid(), file_props)
+            file_props['sid'] = sid
+            self.add_transfer(account, contact, file_props)
         else:
             log.info("contact does not support jingle file transfer")
             gajim.connections[account].send_file_request(file_props)
+            self.add_transfer(account, contact, file_props)
         return True
 
     def _start_receive(self, file_path, account, contact, file_props):
