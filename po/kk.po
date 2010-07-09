@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gajim.trunk\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-06-30 10:15+0600\n"
-"PO-Revision-Date: 2010-07-08 21:56+0600\n"
+"PO-Revision-Date: 2010-07-09 11:07+0600\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <kk_KZ@googlegroups.com>\n"
 "Language: kk\n"
@@ -828,12 +828,12 @@ msgstr "Соңғы рет өзгертілген:"
 
 #: ../data/gui/atom_entry_window.ui.h:4
 msgid "New entry received"
-msgstr ""
+msgstr "Жаңа жазба алынды"
 
 #: ../data/gui/atom_entry_window.ui.h:5
 #: ../src/atom_window.py:128
 msgid "You have received new entry:"
-msgstr ""
+msgstr "Сіз жаңа жазбаны алдыңыз:"
 
 #: ../data/gui/blocked_contacts_window.ui.h:1
 msgid "Blocked Contacts"
@@ -1005,11 +1005,11 @@ msgstr "Достарды шақыру!"
 
 #: ../data/gui/chat_to_muc_window.ui.h:3
 msgid "MUC server"
-msgstr "КПЧ сервері"
+msgstr "MUC сервері"
 
 #: ../data/gui/chat_to_muc_window.ui.h:4
 msgid "Please select a MUC server."
-msgstr "КПЧ серверін таңдаңыз"
+msgstr "MUC серверін таңдаңыз"
 
 #: ../data/gui/chat_to_muc_window.ui.h:5
 msgid ""
@@ -1229,7 +1229,7 @@ msgstr "файлдармен алмасу тізімі"
 
 #: ../data/gui/gajim_themes_window.ui.h:1
 msgid "<b>Chatstate Tab Colors</b>"
-msgstr ""
+msgstr "<b>Чаттары бар беттер түсі</b>"
 
 #: ../data/gui/gajim_themes_window.ui.h:2
 msgid "Account row"
@@ -1242,7 +1242,7 @@ msgstr "Қалың"
 
 #: ../data/gui/gajim_themes_window.ui.h:4
 msgid "Chat Banner"
-msgstr ""
+msgstr "Баннер"
 
 #: ../data/gui/gajim_themes_window.ui.h:5
 msgid "Composing"
@@ -1262,7 +1262,7 @@ msgstr "Gajim темаларын басқару"
 
 #: ../data/gui/gajim_themes_window.ui.h:9
 msgid "Gone"
-msgstr ""
+msgstr "Кетіп қалды"
 
 #: ../data/gui/gajim_themes_window.ui.h:10
 msgid "Group row"
@@ -1283,7 +1283,7 @@ msgid ""
 "MUC\n"
 "Messages"
 msgstr ""
-"КПЧ\n"
+"MUC\n"
 "Хабарламалар"
 
 #: ../data/gui/gajim_themes_window.ui.h:15
@@ -1291,6 +1291,8 @@ msgid ""
 "MUC Directed\n"
 "Messages"
 msgstr ""
+"MUC адрестелген\n"
+"хабарламалары"
 
 #: ../data/gui/gajim_themes_window.ui.h:17
 msgid "Paused"
@@ -1383,7 +1385,7 @@ msgstr "_Даусы бар"
 
 #: ../data/gui/groups_post_window.ui.h:1
 msgid "Create new post"
-msgstr ""
+msgstr "Жаңа хабарламаны жасау"
 
 #: ../data/gui/groups_post_window.ui.h:2
 #: ../src/common/helpers.py:258
@@ -3228,7 +3230,7 @@ msgstr "Қалып-күйді өзгерту"
 
 #: ../src/common/commands.py:98
 msgid "Set the presence type and description"
-msgstr ""
+msgstr "Бар болудың түрін мен анықтамасын орнату"
 
 #: ../src/common/commands.py:104
 msgid "Free for chat"
@@ -3447,27 +3449,27 @@ msgstr ""
 
 #: ../src/common/config.py:165
 msgid "Add * and [n] in roster title?"
-msgstr ""
+msgstr "Ростер атауыны * мен [n] қосу керек пе?"
 
 #: ../src/common/config.py:166
 msgid "How many lines to remember from previous conversation when a chat tab/window is reopened."
-msgstr ""
+msgstr "Чат беті/терезесі қайта ашылған кезде алдыңғы сөйлесуден қанша тарих жолын есте сақтау керек."
 
 #: ../src/common/config.py:167
 msgid "How many minutes should last lines from previous conversation last."
-msgstr ""
+msgstr "Алдыңғы сөйлесуден қалған соңғы жолдар қанша минут бойы қалуы керек."
 
 #: ../src/common/config.py:168
 msgid "How many lines to request to server when entering a groupchat."
-msgstr ""
+msgstr "Топ чатына кірген кезде серверден қанша тарих жолын сұрау керек."
 
 #: ../src/common/config.py:169
 msgid "How many minutes back to request logs when a entering a groupchat."
-msgstr ""
+msgstr "Топ чатына кірген кезде қанша минут бұрынғы сөйлесулердің тарих жолдарын сұрау керек."
 
 #: ../src/common/config.py:170
 msgid "How many seconds to wait before trying to autorejoin to a conference you are being disconnected from. Set to 0 to disable autorejoining."
-msgstr ""
+msgstr "Конференциядан шыққан кезде қанша минуттан кейін оған авто түрде кіру талабын жасау. Өздігінен кіруді сөндіру үшін 0-ге орнатыңыз."
 
 #: ../src/common/config.py:172
 msgid "Send message on Ctrl+Enter and with Enter make new line (Mirabilis ICQ Client default behaviour)."
@@ -3488,31 +3490,31 @@ msgstr "Белгіленсе, Gajim-ді қашықтан gajim-remote қолд�
 
 #: ../src/common/config.py:181
 msgid "If True, listen to D-Bus signals from NetworkManager and change the status of accounts (provided they do not have listen_to_network_manager set to False and they sync with global status) based upon the status of the network connection."
-msgstr ""
+msgstr "Белсенді болса, NetworkManager жіберген D-Bus сигналдарын тыңдау мен тіркелгілердің қалып-күйлерін желілік байланыс күйіне сәйкес орнату (тек оларда listen_to_network_manager сөндірілмеген және олар глобалды қалып-күймен сихрондалса)."
 
 #: ../src/common/config.py:182
 msgid "Sent chat state notifications. Can be one of all, composing_only, disabled."
-msgstr ""
+msgstr "Сөйлесудің күйі туралы хабарлау. Мүмкін нұсқалары: all (барлығы), composing_only (тек жазу туралы), disabled (сөндірілген)."
 
 #: ../src/common/config.py:183
 msgid "Displayed chat state notifications in chat windows. Can be one of all, composing_only, disabled."
-msgstr ""
+msgstr "Чат терезесінде сөйлесудің күйін көрсету. Мүмкін нұсқалары: all (барлығы), composing_only (тек жазу туралы), disabled (сөндірілген)."
 
 #: ../src/common/config.py:185
 msgid "When not printing time for every message (print_time==sometimes), print it every x minutes."
-msgstr ""
+msgstr "Әр хабарлама үшін уақытты көрсетпеу кезде (print_time==sometimes), оны әр x минут сайын көрсету."
 
 #: ../src/common/config.py:186
 msgid "Ask before closing a group chat tab/window."
-msgstr ""
+msgstr "Топ чат беті/терезесін жабу алдында сұрау."
 
 #: ../src/common/config.py:187
 msgid "Always ask before closing group chat tab/window in this space separated list of group chat jids."
-msgstr ""
+msgstr "Бұл тізімдегі бөлмелерді жабу алдында әрқашан сұрау. Бөлмелер бос аралықпен ажыратылсын."
 
 #: ../src/common/config.py:188
 msgid "Never ask before closing group chat tab/window in this space separated list of group chat jids."
-msgstr ""
+msgstr "Бұл тізімдегі бөлмелерді жабу алдында ешқашан сұрамау. Бөлмелер бос аралықпен ажыратылсын."
 
 #: ../src/common/config.py:189
 msgid "Ask before closing tabbed chat window if there are control that can loose data (chat, private chat, groupchat that will not be minimized)"
@@ -3536,7 +3538,7 @@ msgstr "Тек бір сөйлесу бар болса чат терезесін
 
 #: ../src/common/config.py:203
 msgid "Show tabbed notebook border in chat windows?"
-msgstr ""
+msgstr "Чат терезесінде бет шекарасын көрсету керек пе?"
 
 #: ../src/common/config.py:204
 msgid "Show close button in tab?"
@@ -3815,7 +3817,7 @@ msgstr ""
 
 #: ../src/common/config.py:323
 msgid "Space separated list of ssl errors to ignore."
-msgstr ""
+msgstr "Елемеу үшін ssl қателер тізімі, бос аралықпен ажыратылсын."
 
 #: ../src/common/config.py:332
 msgid "Whitespace sent after inactivity"
@@ -3970,7 +3972,7 @@ msgstr "Топ чат хабарламасында muc_highlight_words ішін�
 
 #: ../src/common/config.py:494
 msgid "Sound to play when any MUC message arrives."
-msgstr "КПЧ хабарламасы келген кезде ойналатын дыбыс."
+msgstr "MUC хабарламасы келген кезде ойналатын дыбыс."
 
 #: ../src/common/config.py:503
 #: ../src/common/optparser.py:304
@@ -4443,7 +4445,7 @@ msgstr "%(server)s серверінен тіркелгіні өшіру сәтс
 #: ../src/common/helpers.py:57
 #: ../src/gui_interface.py:673
 msgid "Observers"
-msgstr ""
+msgstr "Байқаушылар"
 
 #: ../src/common/contacts.py:139
 #: ../src/common/contacts.py:366
@@ -5239,7 +5241,7 @@ msgstr "Аш"
 
 #: ../src/common/pep.py:69
 msgid "Hurt"
-msgstr ""
+msgstr "Жаралы"
 
 #: ../src/common/pep.py:70
 msgid "Impressed"
@@ -5247,7 +5249,7 @@ msgstr "Әсер етілген"
 
 #: ../src/common/pep.py:71
 msgid "In Awe"
-msgstr ""
+msgstr "Қастерлеуде"
 
 #: ../src/common/pep.py:72
 msgid "In Love"
@@ -5307,7 +5309,7 @@ msgstr "Ренжіген"
 
 #: ../src/common/pep.py:86
 msgid "Outraged"
-msgstr ""
+msgstr "Қорланған"
 
 #: ../src/common/pep.py:87
 msgid "Playful"
@@ -5463,7 +5465,7 @@ msgstr "Шай ішуде"
 
 #: ../src/common/pep.py:128
 msgid "Having a Snack"
-msgstr ""
+msgstr "Жеңіл тамақтану"
 
 #: ../src/common/pep.py:129
 msgid "Having Breakfast"
@@ -5516,11 +5518,11 @@ msgstr "Шомылуда"
 
 #: ../src/common/pep.py:141
 msgid "Working out"
-msgstr ""
+msgstr "Бапталу"
 
 #: ../src/common/pep.py:142
 msgid "Grooming"
-msgstr ""
+msgstr "Өз-өзін күту"
 
 #: ../src/common/pep.py:143
 msgid "At the Spa"
@@ -5548,7 +5550,7 @@ msgstr "Душта"
 
 #: ../src/common/pep.py:149
 msgid "Having an Appointment"
-msgstr ""
+msgstr "Кездесу"
 
 #: ../src/common/pep.py:151
 msgid "Day Off"
@@ -5556,7 +5558,7 @@ msgstr "Бос күн"
 
 #: ../src/common/pep.py:152
 msgid "Hanging out"
-msgstr ""
+msgstr "Қыдыруда"
 
 #: ../src/common/pep.py:153
 msgid "Hiding"
@@ -5564,11 +5566,11 @@ msgstr "Жасырылуда"
 
 #: ../src/common/pep.py:154
 msgid "On Vacation"
-msgstr ""
+msgstr "Демалыста"
 
 #: ../src/common/pep.py:155
 msgid "Praying"
-msgstr ""
+msgstr "Сиыну"
 
 #: ../src/common/pep.py:156
 msgid "Scheduled Holiday"
@@ -6283,11 +6285,11 @@ msgstr "Бірінші хабарлама алынды"
 
 #: ../src/config.py:4053
 msgid "Next Message Received Focused"
-msgstr ""
+msgstr "Келесі  хабарлама фокусы бар терезеде алынды"
 
 #: ../src/config.py:4055
 msgid "Next Message Received Unfocused"
-msgstr ""
+msgstr "Келесі  хабарлама фокусы жоқ терезеде алынды"
 
 #: ../src/config.py:4056
 msgid "Contact Connected"
@@ -6303,11 +6305,11 @@ msgstr "Хабарлама жіберілді"
 
 #: ../src/config.py:4059
 msgid "Group Chat Message Highlight"
-msgstr ""
+msgstr "Сізді біреу бөлмеде еске алған"
 
 #: ../src/config.py:4060
 msgid "Group Chat Message Received"
-msgstr ""
+msgstr "Бөлмеде хабарлама алынды"
 
 #: ../src/config.py:4061
 msgid "GMail Email Received"
@@ -6459,7 +6461,7 @@ msgstr "Бұл атау қолдануда. Бұл қалып-күй хабар�
 
 #: ../src/dialogs.py:802
 msgid "Save as Preset Status Message"
-msgstr ""
+msgstr "Орнатылған хабарлама ретінде сақтау"
 
 #: ../src/dialogs.py:803
 msgid "Please type a name for this status message"
@@ -7076,11 +7078,11 @@ msgstr ""
 
 #: ../src/dialogs.py:4874
 msgid "GPG key is assigned to this contact, but <b>you do not trust his key</b>, so message <b>cannot</b> be encrypted. Use your GPG client to trust this key."
-msgstr ""
+msgstr "Бұл контактқа GPG кілті көрсетілген, бірақ <b>сіз ол кілтке сенбейсіз</b>, сол үшін хабарламаларды шифрлеу <b>мүмкін емес</b>. Бұл кілтті растау үшін өзіңіздің GPG клиентін қолданыңыз."
 
 #: ../src/dialogs.py:4880
 msgid "GPG Key is assigned to this contact, and you trust his key, so messages will be encrypted."
-msgstr ""
+msgstr "Бұл контактқа GPG кілті көрсетілген, және сіз ол кілтке сенесіз, сол үшін хабарламалар шифрленеді."
 
 #: ../src/dialogs.py:4945
 msgid "an audio and video"
@@ -7216,7 +7218,7 @@ msgstr "Node"
 
 #: ../src/disco.py:2109
 msgid "New post"
-msgstr ""
+msgstr "Жаңа хабарлама"
 
 #: ../src/disco.py:2115
 msgid "_Subscribe"
@@ -7975,7 +7977,7 @@ msgstr ""
 
 #: ../src/gajim-remote.py:277
 msgid "Handle a xmpp:/ uri"
-msgstr ""
+msgstr "\"xmpp:/\" түріндегі сілтемені өндеу"
 
 #: ../src/gajim-remote.py:279
 msgid "uri"
@@ -7983,11 +7985,11 @@ msgstr "uri"
 
 #: ../src/gajim-remote.py:279
 msgid "URI to handle"
-msgstr ""
+msgstr "Өнделетін сілтеме"
 
 #: ../src/gajim-remote.py:280
 msgid "Account in which you want to handle it"
-msgstr ""
+msgstr "Өндеу үшін тіркелгі"
 
 #: ../src/gajim-remote.py:282
 msgid "Message content"
@@ -8483,7 +8485,7 @@ msgstr "Жазылмаған"
 #: ../src/gui_interface.py:753
 #, python-format
 msgid "Contact with \"%s\" cannot be established"
-msgstr ""
+msgstr "\"%s\" үшін байланысты орнату мүмкін емес"
 
 #: ../src/gui_interface.py:1014
 #, python-format
@@ -8608,7 +8610,7 @@ msgstr "%(name)s жіберген %(filename)s сәтті қабылдадыңы
 #: ../src/gui_interface.py:1489
 #, python-format
 msgid "File transfer of %(filename)s from %(name)s stopped."
-msgstr ""
+msgstr "%(name)s жіберген %(filename)s файлын алу тоқтатылды."
 
 #: ../src/gui_interface.py:1502
 #, python-format
@@ -8619,7 +8621,7 @@ msgstr "Сіз %(filename)s файлын %(name)s үшін сәтті жібер
 #: ../src/gui_interface.py:1506
 #, python-format
 msgid "File transfer of %(filename)s to %(name)s stopped."
-msgstr ""
+msgstr "%(filename)s файлын %(name)s үшін жіберу тоқтатылды."
 
 #: ../src/gui_interface.py:1618
 #, python-format
@@ -8627,6 +8629,8 @@ msgid ""
 "Unable to decrypt message from %s\n"
 "It may have been tampered with."
 msgstr ""
+"%s жіберген хабарламаны декодалау мүмкін емес\n"
+"Ол зақымдалған шығар."
 
 #: ../src/gui_interface.py:1625
 msgid "Unable to decrypt message"
@@ -8642,12 +8646,12 @@ msgstr "Жергілікті тіркелгіңіз үшін жаңа пайда
 
 #: ../src/gui_interface.py:1711
 msgid "Ping?"
-msgstr ""
+msgstr "Ping?"
 
 #: ../src/gui_interface.py:1724
 #, python-format
 msgid "Pong! (%s s.)"
-msgstr ""
+msgstr "Pong! (%s сек.)"
 
 #: ../src/gui_interface.py:1735
 msgid "Error."
