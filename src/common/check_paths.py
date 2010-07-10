@@ -334,5 +334,10 @@ def check_and_possibly_create_paths():
         sys.exit()
 
 def create_path(directory):
+    head, tail = os.path.split(directory)
+    if not os.path.exists(head):
+        create_path(head)
+    if os.path.exists(directory):
+        return
     print _('creating %s directory') % directory
     os.mkdir(directory, 0700)
