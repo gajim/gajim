@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gajim.trunk\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-06-30 10:15+0600\n"
-"PO-Revision-Date: 2010-07-09 11:07+0600\n"
+"PO-Revision-Date: 2010-07-12 10:11+0600\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <kk_KZ@googlegroups.com>\n"
 "Language: kk\n"
@@ -1848,7 +1848,7 @@ msgstr ""
 
 #: ../data/gui/preferences_window.ui.h:60
 msgid "Gajim will notify you via a popup window in the bottom right of the screen about contacts that just signed out"
-msgstr ""
+msgstr "Gajim сізді жаңа кірген контакттар туралы экранның төменгі оң жақта шығатын қалқымалы терезеде ескертеді"
 
 #: ../data/gui/preferences_window.ui.h:62
 msgid "Hide all buttons in chat windows"
@@ -1856,7 +1856,7 @@ msgstr "Чат терезесіндегі барлық батырмаларды 
 
 #: ../data/gui/preferences_window.ui.h:63
 msgid "If checked, Gajim will allow others to detect the operation system you are using"
-msgstr ""
+msgstr "Белгіленген болса, Gajim басқаларға сіздің операциялық жүйеңізді анықтауға рұқсат етеді"
 
 #: ../data/gui/preferences_window.ui.h:64
 msgid "If checked, Gajim will also include information about the sender of the new emails"
@@ -1864,11 +1864,11 @@ msgstr "Белгіленген болса, Gajim жаңа эл. пошталар
 
 #: ../data/gui/preferences_window.ui.h:65
 msgid "If checked, Gajim will change status to Away when the computer is unused."
-msgstr ""
+msgstr "Белгіленген болса, Gajim компьютеріңіз қолданылмаса, қалып-күйіңізді Кетіп қалғанға ауыстырады."
 
 #: ../data/gui/preferences_window.ui.h:66
 msgid "If checked, Gajim will change status to Not Available when the computer has not been used even longer"
-msgstr ""
+msgstr "Белгіленген болса, Gajim компьютеріңіз одан да көп қолданылмаса, қалып-күйіңізді Қолжетерсізге ауыстырады."
 
 #: ../data/gui/preferences_window.ui.h:67
 msgid "If checked, Gajim will display avatars of contacts in roster window and in group chats"
@@ -2041,6 +2041,9 @@ msgid ""
 "$S will be replaced by previous status message\n"
 "$T will be replaced by auto-away timeout"
 msgstr ""
+"Авто Кетіп қалған қалып-күй хабарламасы. Бос болса, Gajim ағымдағы күй хабарламасын өзгертпейді\n"
+"$S алдыңғы күй хабарласымен, ал\n"
+"$T авто кетіп қалған уақыт шамасымен алмастырылады"
 
 #: ../data/gui/preferences_window.ui.h:111
 msgid ""
@@ -2048,6 +2051,9 @@ msgid ""
 "$S will be replaced by previous status message\n"
 "$T will be replaced by auto-not-available timeout"
 msgstr ""
+"Авто Қолжетерсіз қалып-күй хабарламасы. Бос болса, Gajim ағымдағы күй хабарламасын өзгертпейді\n"
+"$S алдыңғы күй хабарласымен, ал\n"
+"$T авто қолжетерсіз уақыт шамасымен алмастырылады"
 
 #: ../data/gui/preferences_window.ui.h:114
 msgid "Use _transports icons"
@@ -2782,7 +2788,7 @@ msgstr "GTK+ Jabber бағдарламасы"
 
 #: ../data/gajim.desktop.in.in.h:2
 msgid "Gajim Instant Messenger"
-msgstr "Gajim хабарламалармен алмасу"
+msgstr "Gajim жедел хабарласу"
 
 #: ../data/gajim.desktop.in.in.h:3
 msgid "Jabber IM Client"
@@ -3116,7 +3122,7 @@ msgstr ""
 
 #: ../src/chat_control.py:2176
 msgid "Session negotiation cancelled"
-msgstr ""
+msgstr "Сессияны бастаудан бас тартылды"
 
 #: ../src/chat_control.py:2185
 msgid "This session is encrypted"
@@ -3132,7 +3138,7 @@ msgstr " және оның тарихы САҚТАЛМАЙАДЫ"
 
 #: ../src/chat_control.py:2195
 msgid "Remote contact's identity not verified. Click the shield button for more details."
-msgstr ""
+msgstr "Қашықтағы контакттың шындылығы расталмаған. Көбірек білу үшін таңбашаға шертіңіз."
 
 #: ../src/chat_control.py:2197
 msgid "E2E encryption disabled"
@@ -3242,7 +3248,7 @@ msgstr "Осында"
 
 #: ../src/common/commands.py:107
 msgid "Extended away"
-msgstr ""
+msgstr "Кеңейтілген кетіп қалған"
 
 #: ../src/common/commands.py:108
 msgid "Do not disturb"
@@ -3250,7 +3256,7 @@ msgstr "Мазамды алмаңыз"
 
 #: ../src/common/commands.py:109
 msgid "Offline - disconnect"
-msgstr ""
+msgstr "Желіде емес - байланыспаған"
 
 #: ../src/common/commands.py:114
 msgid "Presence description:"
@@ -3269,7 +3275,7 @@ msgstr "Топ чаттардан шығу"
 #: ../src/common/commands.py:197
 #, python-format
 msgid "%(nickname)s on %(room_jid)s"
-msgstr ""
+msgstr "%(nickname)s, қайда: %(room_jid)s"
 
 #: ../src/common/commands.py:201
 msgid "You have not joined a groupchat."
@@ -3296,15 +3302,15 @@ msgstr "Келесі топ чаттарынан шығасыз:"
 
 #: ../src/common/commands.py:265
 msgid "Forward unread messages"
-msgstr ""
+msgstr "Оқылмаған хабарламаларды бағдарлау"
 
 #: ../src/common/commands.py:287
 msgid "All unread messages have been forwarded."
-msgstr ""
+msgstr "Барлық оқылмаған хабарламалар бағдарланды."
 
 #: ../src/common/commands.py:295
 msgid "Forward unread message then disconnect"
-msgstr ""
+msgstr "Оқылмаған хабарламаны бағдарлау мен шығу"
 
 #: ../src/common/config.py:75
 msgid "Play sound when user is busy"
@@ -3316,11 +3322,11 @@ msgstr "Хабарламаларды көрсету үшін D-Bus пен Notifi
 
 #: ../src/common/config.py:78
 msgid "Show only online and free for chat contacts in roster."
-msgstr ""
+msgstr "Ростерде тек желідегі мен чатқа дайын контакттарды көрсету"
 
 #: ../src/common/config.py:81
 msgid "Time in minutes, after which your status changes to away."
-msgstr ""
+msgstr "Қалып-күйіңіз Кетіп қалғанға ауысу үшін керек уақыт шамасы."
 
 #: ../src/common/config.py:82
 msgid "$S (Away as a result of being idle more than $T min)"
@@ -3328,11 +3334,11 @@ msgstr "$S (Кетіп қалған, $T минуттан көп белсенді
 
 #: ../src/common/config.py:82
 msgid "$S will be replaced by current status message, $T by autoaway time."
-msgstr ""
+msgstr "$S ағымдағы күй хабарласымен, ал $T авто қолжетерсіз уақыт шамасымен алмастырылады."
 
 #: ../src/common/config.py:84
 msgid "Time in minutes, after which your status changes to not available."
-msgstr ""
+msgstr "Қалып-күйіңіз Қолжетерсізге ауысу үшін керек уақыт шамасы."
 
 #: ../src/common/config.py:85
 msgid "$S (Not available as a result of being idle more than $T min)"
@@ -3340,11 +3346,11 @@ msgstr "$S (Қол жетерсіз, $T минуттан көп белсенді
 
 #: ../src/common/config.py:85
 msgid "$S will be replaced by current status message, $T by autoxa time."
-msgstr ""
+msgstr "$S ағымдағы күй хабарласымен, ал $T авто кеңейтілген қолжетерсізге уақыт шамасымен алмастырылады."
 
 #: ../src/common/config.py:88
 msgid "When to show systray icon. Can be 'never', 'on_event', 'always'."
-msgstr ""
+msgstr "Трей таңбашасын қашан көрсету керек. Мүмкін мәндері: 'never', 'on_event', 'always'."
 
 #: ../src/common/config.py:93
 msgid "Incoming nickname color."
@@ -3410,6 +3416,9 @@ msgid ""
 "'sometimes' - print time every print_ichat_every_foo_minutes minute.\n"
 "'never' - never print time."
 msgstr ""
+"'always' - уақытты әр хабарлама үшін көрсету.\n"
+"'sometimes' - уақытты әр print_ichat_every_foo_minutes минут сайын көрсету.\n"
+"'never' - уақытты ешқашан көрсетпеу."
 
 #: ../src/common/config.py:114
 msgid "Print time in chats using Fuzzy Clock. Value of fuzziness from 1 to 4, or 0 to disable fuzzyclock. 1 is the most precise clock, 4 the least precise one. This is used only if print_time is 'sometimes'."
@@ -3417,7 +3426,7 @@ msgstr ""
 
 #: ../src/common/config.py:117
 msgid "Treat * / _ pairs as possible formatting characters."
-msgstr ""
+msgstr "* / _ жұптарын мүмкін пішімдеу таңбалары ретінде қарастыру."
 
 #: ../src/common/config.py:118
 msgid "If True, do not remove */_ . So *abc* will be bold but with * * not removed."
@@ -3566,11 +3575,11 @@ msgstr ""
 
 #: ../src/common/config.py:222
 msgid "If True, Gajim will display an icon on each tab containing unread messages. Depending on the theme, this icon may be animated."
-msgstr ""
+msgstr "Белгіленген болса, Gajim оқылмаған хабарламалар бар әр бетте таңбашаны көрсетеді. Темаға байланысты, таңбашаның анимациясы болуы мүмкін."
 
 #: ../src/common/config.py:223
 msgid "If True, Gajim will display the status message, if not empty, for every contact under the contact name in roster window."
-msgstr ""
+msgstr "Белгіленген болса, Gajim ростерде әр контакт астында оның қалып-күй хабарламасын көрсетеді, егер ол бар болса."
 
 #: ../src/common/config.py:229
 msgid "Define the position of the avatar in roster. Can be left or right"
@@ -3578,7 +3587,7 @@ msgstr "Ростердегі аватар орналасуын орнатады.
 
 #: ../src/common/config.py:230
 msgid "If True, Gajim will ask for avatar each contact that did not have an avatar last time or has one cached that is too old."
-msgstr ""
+msgstr "Белгіленген болса, Gajim әр контакттан аватарды сұрайды, егер оның соңғы рет аватары болмаса, не кэштегі аватар тым ескі болса."
 
 #: ../src/common/config.py:231
 msgid "If False, Gajim will no longer print status line in chats when a contact changes his or her status and/or his or her status message."
@@ -3689,11 +3698,11 @@ msgstr ""
 
 #: ../src/common/config.py:261
 msgid "If True, Gajim will use Gnome Keyring (if available) to store account passwords."
-msgstr ""
+msgstr "Белсенді болса, Gajim тіркелгі парольдерін сақтау үшін Gnome Keyring (егер қолжетерлік болса) қолданады."
 
 #: ../src/common/config.py:262
 msgid "If True, Gajim will use KDE Wallet (if kwalletcli is available) to store account passwords."
-msgstr ""
+msgstr "Белсенді болса, Gajim тіркелгі парольдерін сақтау үшін KDE Wallet (егер kwalletcli қолжетерлік болса) қолданады."
 
 #: ../src/common/config.py:263
 msgid "If True, Gajim will show number of online and total contacts in account and group rows."
@@ -3717,7 +3726,7 @@ msgstr ""
 
 #: ../src/common/config.py:268
 msgid "Maximum number of lines that are printed in conversations. Oldest lines are cleared."
-msgstr ""
+msgstr "Сөйлесулерде көрсетілетін жолдардың максимал саны. Ескі жолдар өшіріледі."
 
 #: ../src/common/config.py:269
 msgid "If True, notification windows from notification-daemon will be attached to systray icon."
@@ -3725,7 +3734,7 @@ msgstr ""
 
 #: ../src/common/config.py:270
 msgid "Choose interval between 2 checks of idleness."
-msgstr ""
+msgstr "Белсенді еместігіне екі тексеру арасындағы уақыт."
 
 #: ../src/common/config.py:271
 msgid "Change the value to change the size of latex formulas displayed. The higher is larger."
@@ -3761,7 +3770,7 @@ msgstr ""
 
 #: ../src/common/config.py:285
 msgid "STUN server to use when using jingle"
-msgstr ""
+msgstr "STUN сервері, jingle қолдану үшін"
 
 #: ../src/common/config.py:286
 msgid "If True, Gajim will show affiliation of groupchat occupants by adding a colored square to the status icon"
@@ -3834,7 +3843,7 @@ msgstr ""
 #. yes, no, ask
 #: ../src/common/config.py:341
 msgid "Jabberd2 workaround"
-msgstr ""
+msgstr "Jabberd2 жұмысы"
 
 #: ../src/common/config.py:344
 msgid "If checked, Gajim will use your IP and proxies defined in file_transfer_proxies option for file transfer."
@@ -7074,7 +7083,7 @@ msgstr ""
 
 #: ../src/dialogs.py:4867
 msgid "No GPG key is assigned to this contact. So you cannot encrypt messages."
-msgstr ""
+msgstr "Бұл контактқа ешбір GPG кілті көрсетілмеген. Сол үшін хабарламаларды шифрлей алмайсыз."
 
 #: ../src/dialogs.py:4874
 msgid "GPG key is assigned to this contact, but <b>you do not trust his key</b>, so message <b>cannot</b> be encrypted. Use your GPG client to trust this key."
