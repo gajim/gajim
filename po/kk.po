@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gajim.trunk\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-06-30 10:15+0600\n"
-"PO-Revision-Date: 2010-07-12 10:11+0600\n"
+"PO-Revision-Date: 2010-07-12 10:35+0600\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <kk_KZ@googlegroups.com>\n"
 "Language: kk\n"
@@ -689,7 +689,7 @@ msgstr "Контакт байланыспаған"
 
 #: ../data/gui/advanced_notifications_window.ui.h:12
 msgid "Don't have "
-msgstr ""
+msgstr "Жоқ "
 
 #: ../data/gui/advanced_notifications_window.ui.h:13
 msgid "File Transfer Finished"
@@ -713,7 +713,7 @@ msgstr "Топ чат хабарламасы алынған"
 
 #: ../data/gui/advanced_notifications_window.ui.h:18
 msgid "Have "
-msgstr ""
+msgstr "Бар "
 
 #: ../data/gui/advanced_notifications_window.ui.h:19
 #: ../src/common/helpers.py:243
@@ -800,11 +800,11 @@ msgstr "контакт(тар)"
 
 #: ../data/gui/advanced_notifications_window.ui.h:39
 msgid "everybody"
-msgstr ""
+msgstr "әркім"
 
 #: ../data/gui/advanced_notifications_window.ui.h:40
 msgid "for "
-msgstr ""
+msgstr "үшін: "
 
 #: ../data/gui/advanced_notifications_window.ui.h:41
 msgid "group(s)"
@@ -812,7 +812,7 @@ msgstr "топ(тар)"
 
 #: ../data/gui/advanced_notifications_window.ui.h:42
 msgid "when I'm in"
-msgstr ""
+msgstr "Мен келесіде болғанда: "
 
 #: ../data/gui/atom_entry_window.ui.h:1
 msgid "Entry:"
@@ -2784,7 +2784,7 @@ msgstr "Күйі:"
 
 #: ../data/gajim.desktop.in.in.h:1
 msgid "A GTK+ Jabber client"
-msgstr "GTK+ Jabber бағдарламасы"
+msgstr "GTK+ Jabber қолданбасы"
 
 #: ../data/gajim.desktop.in.in.h:2
 msgid "Gajim Instant Messenger"
@@ -3260,7 +3260,7 @@ msgstr "Желіде емес - байланыспаған"
 
 #: ../src/common/commands.py:114
 msgid "Presence description:"
-msgstr ""
+msgstr "Бар болудың анықтамасы:"
 
 #: ../src/common/commands.py:149
 #: ../src/common/commands.py:317
@@ -3430,7 +3430,7 @@ msgstr "* / _ жұптарын мүмкін пішімдеу таңбалары 
 
 #: ../src/common/config.py:118
 msgid "If True, do not remove */_ . So *abc* will be bold but with * * not removed."
-msgstr ""
+msgstr "Белсенді болса, */_ өшірілмейді. Мысалы, *abc* жуан қаріппен көрсетіледі, бірақ * * өшірілмейді."
 
 #: ../src/common/config.py:121
 msgid "Uses ReStructured text markup to send HTML, plus ascii formatting if selected. For syntax, see http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html (If you want to use this, install docutils)"
@@ -3567,11 +3567,11 @@ msgstr ""
 
 #: ../src/common/config.py:220
 msgid "If True, quits Gajim when X button of Window Manager is clicked. This setting is taken into account only if trayicon is used."
-msgstr ""
+msgstr "Белсенді болса, Терезелер басқарушысы ұсынған X батырмасын шерткенеде Gajim жұмысын аяқтайды. Тек трей таңбашасы қосулы болу керек."
 
 #: ../src/common/config.py:221
 msgid "If True, Gajim will check if it's the default jabber client on each startup."
-msgstr ""
+msgstr "Белсенді болса, Gajim әр қосылған кезде жүйеде негізгі jabber клиенті ма, соны тексереді."
 
 #: ../src/common/config.py:222
 msgid "If True, Gajim will display an icon on each tab containing unread messages. Depending on the theme, this icon may be animated."
@@ -3607,7 +3607,7 @@ msgstr "Жаңа шыққан контакт аты үшін фон түсі."
 
 #: ../src/common/config.py:237
 msgid "If True, restored messages will use a smaller font than the default one."
-msgstr ""
+msgstr "Белсенді болса, тарихтан алынған хабарламалар қаріпі қалыптыдан кішірек болады."
 
 #: ../src/common/config.py:238
 msgid "Don't show avatar for the transport itself."
@@ -3619,7 +3619,7 @@ msgstr "Ростерді жүйелік есептер панелінде көр
 
 #: ../src/common/config.py:240
 msgid "If True and installed GTK+ and PyGTK versions are at least 2.8, make the window flash (the default behaviour in most Window Managers) when holding pending events."
-msgstr ""
+msgstr "Белсенді болса және GTK+ мен PyGTK нұсқалары кем дегенде 2.8 болса, кезекте оқиға бар болса, терезе шегі жыпылықтайды."
 
 #: ../src/common/config.py:242
 msgid "Jabberd1.4 does not like sha info when one join a password protected group chat. Turn this option to False to stop sending sha info in group chat presences."
@@ -3678,7 +3678,7 @@ msgstr "\":\" арқылы бөлінген түстер тізімі, топ ч
 
 #: ../src/common/config.py:256
 msgid "Ctrl-Tab go to next composing tab when none is unread."
-msgstr ""
+msgstr "Оқылмағандар болмаса, Ctrl-Tab басу арқылы келесі жазылудағы бетке өтеді."
 
 #: ../src/common/config.py:257
 msgid "Should we show the confirm metacontacts creation dialog or not? Empty string means we never show the dialog."
@@ -7079,7 +7079,7 @@ msgstr ""
 #: ../src/dialogs.py:4861
 #, python-format
 msgid "The contact's key (%s) <b>does not match</b> the key assigned in Gajim."
-msgstr ""
+msgstr "Контакт кілті (%s) Gajim ішінде көрсетілгенге <b>сәйкес келмейді</b>."
 
 #: ../src/dialogs.py:4867
 msgid "No GPG key is assigned to this contact. So you cannot encrypt messages."
@@ -9669,20 +9669,20 @@ msgstr "<b>Қатысуы:</b>"
 
 #: ../src/vcard.py:343
 msgid "This contact is interested in your presence information, but you are not interested in his/her presence"
-msgstr ""
+msgstr "Бұл контакт сіздің бар болуы ақпаратыңызға қызығада, сіз болсаңыз, оған қызықпайсыз"
 
 #: ../src/vcard.py:345
 msgid "You are interested in the contact's presence information, but he/she is not interested in yours"
-msgstr ""
+msgstr "Сіз контакттың бар болуына қызығасыз, ол болса, сіздікіне қызықпайды"
 
 #: ../src/vcard.py:347
 msgid "You and the contact are interested in each other's presence information"
-msgstr ""
+msgstr "Сіз бен контакт өзара бар болуы ақпаратына қызығасыз"
 
 #. None
 #: ../src/vcard.py:349
 msgid "You are not interested in the contact's presence, and neither he/she is interested in yours"
-msgstr ""
+msgstr "Сіз контакттың бар болуына қызықпайсыз, және ол да өз ретінде сіздікіне қызықпайды."
 
 #: ../src/vcard.py:356
 msgid "You are waiting contact's answer about your subscription request"
