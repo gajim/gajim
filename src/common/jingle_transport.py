@@ -160,6 +160,8 @@ class JingleTransportSocks5(JingleTransport):
                 c['type'] = 'direct'
                 c['jid'] = self.ourjid
                 c['priority'] = (2**16) * type_preference
+                c['initiator'] = self.file_props['sender']
+                c['target'] = self.file_props['receiver']
                 local_ip_cand.append(c)
 
         self.candidates += local_ip_cand
@@ -181,6 +183,8 @@ class JingleTransportSocks5(JingleTransport):
                 c['type'] = 'direct'
                 c['jid'] = self.ourjid
                 c['priority'] = (2**16) * type_preference
+                c['initiator'] = self.file_props['sender']
+                c['target'] = self.file_props['receiver']
                 additional_ip_cand.append(c)
         self.candidates += additional_ip_cand
         
@@ -205,9 +209,26 @@ class JingleTransportSocks5(JingleTransport):
                 c['type'] = 'proxy'
                 c['jid'] = proxyhost['jid']
                 c['priority'] = (2**16) * type_preference
+                c['initiator'] = self.file_props['sender']
+                c['target'] = self.file_props['receiver']
                 proxy_cand.append(c)
         self.candidates += proxy_cand
         
+    def _on_proxy_auth_ok(self, proxy):
+        log.info('proxy auth ok for ' + str(proxy))
+        # send activate request to proxy, send activated confirmation to peer
+        if not self.connection:
+            return
+        file_props = self.file_props
+        iq = xmpp.Iq(to=proxy['initiator'], typ='set')
+        auth_id = "au_" + proxy['sid']
+        iq.setID(auth_id)
+        query = iq.setTag('query', namespace=xmpp.NS_BYTESTREAM)
+        query.setAttr('sid', proxy['sid'])
+        activate = query.setTag('activate')
+        activate.setData(file_props['proxy_receiver'])
+        iq.setID(auth_id)
+        self.connection.connection.send(iq)
 
 import farsight
 

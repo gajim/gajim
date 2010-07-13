@@ -24,6 +24,7 @@ import xmpp
 from jingle_content import contents, JingleContent
 from jingle_transport import JingleTransportICEUDP, JingleTransportSocks5
 from common import helpers
+from common.socks5 import Socks5Receiver
 
 import logging
 
@@ -99,6 +100,7 @@ class JingleFileTransfer(JingleContent):
         file_props['transfered_size'] = []
 
         self.file_props = file_props
+        self.session.connection.files_props[file_props['sid']] = file_props
         if self.transport is None:
             self.transport = JingleTransportSocks5()
             self.transport.set_our_jid(self.session.ourjid)
@@ -134,13 +136,44 @@ class JingleFileTransfer(JingleContent):
 
     def __on_transport_info(self, stanza, content, error, action):
         log.info("__on_transport_info")
-        jid = gajim.get_jid_without_resource(self.session.ourjid)
-        gajim.socks5queue.send_file(self.file_props, jid)
         
+        streamhost_cid = content.getTag('transport').getTag('candidate-used').getAttr('cid')
+        streamhost_used = None
+        for cand in self.transport.candidates:
+            if cand['candidate_id'] == streamhost_cid:
+                streamhost_used = cand
+                break
+        if streamhost_used == None:
+            log.info("unknow streamhost")
+            return
+        if streamhost_used['type'] == 'proxy':
+            self.file_props['streamhost-used'] = True
+            for proxy in self.file_props['proxyhosts']:
+                if proxy['host'] == streamhost_used['host'] and \
+                   proxy['port'] == streamhost_used['port'] and \
+                   proxy['jid'] == streamhost_used['jid']:
+                    streamhost_used = proxy
+                    break
+            if 'streamhosts' not in self.file_props:
+                self.file_props['streamhosts'] = []
+                self.file_props['streamhosts'].append(streamhost_used)
+                self.file_props['is_a_proxy'] = True
+                receiver = Socks5Receiver(gajim.idlequeue, streamhost_used,
+                                          self.file_props['sid'], self.file_props)
+                #gajim.socks5queue.add_file_props(self.session.ourjid, self.file_props)
+                gajim.socks5queue.add_receiver(self.session.ourjid, receiver)
+                streamhost_used['idx'] = receiver.queue_idx
+                gajim.socks5queue.on_success = self.transport._on_proxy_auth_ok
+            pass
+        else:
+            jid = gajim.get_jid_without_resource(self.session.ourjid)
+            gajim.socks5queue.send_file(self.file_props, jid)
+            
     def __on_iq_result(self, stanza, content, error, action):
         log.info("__on_iq_result")
         
         if self.weinitiate:
+            self.session.connection.files_props[self.file_props['sid']] = self.file_props
             receiver = self.file_props['receiver']
             sender = self.file_props['sender']
         
