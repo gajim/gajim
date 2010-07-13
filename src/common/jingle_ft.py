@@ -164,7 +164,6 @@ class JingleFileTransfer(JingleContent):
                 gajim.socks5queue.add_receiver(self.session.ourjid, receiver)
                 streamhost_used['idx'] = receiver.queue_idx
                 gajim.socks5queue.on_success = self.transport._on_proxy_auth_ok
-            pass
         else:
             jid = gajim.get_jid_without_resource(self.session.ourjid)
             gajim.socks5queue.send_file(self.file_props, jid)
