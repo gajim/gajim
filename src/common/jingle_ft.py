@@ -30,6 +30,11 @@ import logging
 
 log = logging.getLogger('gajim.c.jingle_ft')
 
+STATE_NOT_STARTED = 0
+STATE_INITIALIZED = 1
+STATE_ACCEPTED = 2
+STATE_TRANSPORT_INFO = 3
+STATE_PROXY_ACTIVATED = 4
 
 class JingleFileTransfer(JingleContent):
     def __init__(self, session, transport=None, file_props=None):
@@ -47,6 +52,8 @@ class JingleFileTransfer(JingleContent):
         self.callbacks['transport-info'] += [self.__on_transport_info]
         self.callbacks['iq-result'] += [self.__on_iq_result]
 
+        self.state = STATE_NOT_STARTED
+        
         self.file_props = file_props
         if file_props is None:
             self.weinitiate = False
@@ -137,6 +144,8 @@ class JingleFileTransfer(JingleContent):
     def __on_transport_info(self, stanza, content, error, action):
         log.info("__on_transport_info")
         
+        if not self.weinitiate: # proxy activated from initiator
+            return
         streamhost_cid = content.getTag('transport').getTag('candidate-used').getAttr('cid')
         streamhost_used = None
         for cand in self.transport.candidates:
@@ -171,7 +180,8 @@ class JingleFileTransfer(JingleContent):
     def __on_iq_result(self, stanza, content, error, action):
         log.info("__on_iq_result")
         
-        if self.weinitiate:
+        if self.weinitiate and self.state == STATE_NOT_STARTED:
+            self.state = STATE_INITIALIZED
             self.session.connection.files_props[self.file_props['sid']] = self.file_props
             receiver = self.file_props['receiver']
             sender = self.file_props['sender']
@@ -187,13 +197,18 @@ class JingleFileTransfer(JingleContent):
             if not listener:
                 return
                 # send error message, notify the user
-        else: # session-accept iq-result
-                if not gajim.socks5queue.get_file_props(self.session.ourjid, self.file_props['sid']):
-                    gajim.socks5queue.add_file_props(self.session.ourjid, self.file_props)
-                jid = gajim.get_jid_without_resource(self.session.ourjid)
-                gajim.socks5queue.connect_to_hosts(jid, self.file_props['sid'],
-                                                   self.send_candidate_used, self._on_connect_error)
-                    
+        elif not self.weinitiate and self.state == STATE_NOT_STARTED: # session-accept iq-result
+            self.state = STATE_ACCEPTED
+            if not gajim.socks5queue.get_file_props(self.session.ourjid, self.file_props['sid']):
+                gajim.socks5queue.add_file_props(self.session.ourjid, self.file_props)
+            jid = gajim.get_jid_without_resource(self.session.ourjid)
+            gajim.socks5queue.connect_to_hosts(jid, self.file_props['sid'],
+                                               self.send_candidate_used, self._on_connect_error)
+        elif not self.weinitiate and self.state == STATE_ACCEPTED: # transport-info iq-result
+            self.state = STATE_TRANSPORT_INFO
+        elif self.weinitiate and self.state == STATE_INITIALIZED: # proxy activated
+            self.state = STATE_PROXY_ACTIVATED
+                
     def send_candidate_used(self, streamhost):
         """
         send candidate-used stanza

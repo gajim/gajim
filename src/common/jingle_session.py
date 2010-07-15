@@ -277,6 +277,7 @@ class JingleSession(object):
         stanza, jingle = self.__make_jingle('transport-info')
         jingle.addChild(node=content)
         self.connection.connection.send(stanza)
+        self.collect_iq_id(stanza.getID())
 
     def send_description_info(self, content):
         assert self.state != JingleStates.ended

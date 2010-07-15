@@ -229,6 +229,30 @@ class JingleTransportSocks5(JingleTransport):
         activate.setData(file_props['proxy_receiver'])
         iq.setID(auth_id)
         self.connection.connection.send(iq)
+        
+        content = xmpp.Node('content')
+        content.setAttr('creator', 'initiator')
+        content.setAttr('name', 'file')
+        transport = xmpp.Node('transport')
+        transport.setAttr('xmlns', xmpp.NS_JINGLE_BYTESTREAM)
+        activated = xmpp.Node('activated')
+        cid = None
+        for host in self.candidates:
+            if host['host'] == proxy['host'] and \
+               host['jid'] == proxy['jid'] and \
+               host['port'] == proxy['port']:
+                cid = host['candidate_id']
+                break
+        if cid is None:
+            return
+        activated.setAttr('cid', cid)
+        transport.addChild(node=activated)
+        content.addChild(node=transport)
+        sesn = self.connection.get_jingle_session(self.ourjid, self.file_props['sid'])
+        
+        if sesn is None:
+            return
+        sesn.send_transport_info(content)
 
 import farsight
 
