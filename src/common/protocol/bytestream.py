@@ -138,8 +138,7 @@ class ConnectionBytestream:
             jid = gajim.get_jid_without_resource(file_props['sender'])
             resource = gajim.get_resource_from_jid(file_props['sender'])
             sid = file_props['sid']
-            wr_ourjid = gajim.get_jid_without_resource(session.ourjid)
-            gajim.socks5queue.add_file_props(wr_ourjid, file_props)
+            gajim.socks5queue.add_file_props(self.name, file_props)
             
             if not session.accepted:
                 session.approve_session()

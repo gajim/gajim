@@ -169,13 +169,12 @@ class JingleFileTransfer(JingleContent):
                 self.file_props['is_a_proxy'] = True
                 receiver = Socks5Receiver(gajim.idlequeue, streamhost_used,
                                           self.file_props['sid'], self.file_props)
-                #gajim.socks5queue.add_file_props(self.session.ourjid, self.file_props)
-                gajim.socks5queue.add_receiver(self.session.ourjid, receiver)
+                gajim.socks5queue.add_receiver(self.session.connection.name, receiver)
                 streamhost_used['idx'] = receiver.queue_idx
                 gajim.socks5queue.on_success = self.transport._on_proxy_auth_ok
         else:
             jid = gajim.get_jid_without_resource(self.session.ourjid)
-            gajim.socks5queue.send_file(self.file_props, jid)
+            gajim.socks5queue.send_file(self.file_props, self.session.connection.name)
             
     def __on_iq_result(self, stanza, content, error, action):
         log.info("__on_iq_result")
@@ -199,10 +198,9 @@ class JingleFileTransfer(JingleContent):
                 # send error message, notify the user
         elif not self.weinitiate and self.state == STATE_NOT_STARTED: # session-accept iq-result
             self.state = STATE_ACCEPTED
-            if not gajim.socks5queue.get_file_props(self.session.ourjid, self.file_props['sid']):
-                gajim.socks5queue.add_file_props(self.session.ourjid, self.file_props)
-            jid = gajim.get_jid_without_resource(self.session.ourjid)
-            gajim.socks5queue.connect_to_hosts(jid, self.file_props['sid'],
+            if not gajim.socks5queue.get_file_props(self.session.connection.name, self.file_props['sid']):
+                gajim.socks5queue.add_file_props(self.session.connection.name, self.file_props)
+            gajim.socks5queue.connect_to_hosts(self.session.connection.name, self.file_props['sid'],
                                                self.send_candidate_used, self._on_connect_error)
         elif not self.weinitiate and self.state == STATE_ACCEPTED: # transport-info iq-result
             self.state = STATE_TRANSPORT_INFO

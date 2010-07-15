@@ -1510,7 +1510,7 @@ class Interface:
                 # send session-terminate stanza
                 if 'session-type' in file_props and file_props['session-type'] == 'jingle':
                     sender = gajim.get_jid_without_resource(file_props['sender'])
-                    jingle_session = gajim.connections[sender].get_jingle_session(sender, file_props['sid'])
+                    jingle_session = gajim.connections[account].get_jingle_session(sender, file_props['sid'])
                     jingle_session.end_session()
             path = gtkgui_helpers.get_icon_path(img_name, 48)
         else:
