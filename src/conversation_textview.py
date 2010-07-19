@@ -5,7 +5,7 @@
 ## Copyright (C) 2005-2006 Alex Mauer <hawke AT hawkesnest.net>
 ##                         Travis Shirk <travis AT pobox.com>
 ## Copyright (C) 2005-2007 Nikos Kouremenos <kourem AT gmail.com>
-## Copyright (C) 2005-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2005-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2006 Dimitur Kirov <dkirov AT gmail.com>
 ## Copyright (C) 2006-2008 Jean-Marie Traissard <jim AT lapin.org>
 ## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
@@ -326,6 +326,7 @@ class ConversationTextview(gobject.GObject):
         tag.set_property('underline', pango.UNDERLINE_SINGLE)
 
         buffer_.create_tag('focus-out-line', justification = gtk.JUSTIFY_CENTER)
+        self.displaymarking_tags = {}
 
         tag = buffer_.create_tag('xep0184-warning')
 
@@ -703,6 +704,7 @@ class ConversationTextview(gobject.GObject):
         size = 2 * size - 1
         self.marks_queue = Queue.Queue(size)
         self.focus_out_end_mark = None
+        self.just_cleared = True
 
     def visit_url_from_menuitem(self, widget, link):
         """
@@ -1167,11 +1169,12 @@ class ConversationTextview(gobject.GObject):
         buffer_ = self.tv.get_buffer()
         end_iter = buffer_.get_end_iter()
         buffer_.insert_with_tags_by_name(end_iter, '\n', 'eol')
+        self.just_cleared = False
 
     def print_conversation_line(self, text, jid, kind, name, tim,
                     other_tags_for_name=[], other_tags_for_time=[],
                     other_tags_for_text=[], subject=None, old_kind=None, xhtml=None,
-                    simple=False, graphics=True):
+                    simple=False, graphics=True, displaymarking=None):
         """
         Print 'chat' type messages
         """
@@ -1236,6 +1239,9 @@ class ConversationTextview(gobject.GObject):
                     tim_format = self.get_time_to_show(tim)
                 buffer_.insert_with_tags_by_name(end_iter, tim_format + '\n',
                         'time_sometimes')
+        # If there's a displaymarking, print it here.
+        if displaymarking:
+            self.print_displaymarking(displaymarking)
         # kind = info, we print things as if it was a status: same color, ...
         if kind in ('error', 'info'):
             kind = 'status'
@@ -1246,7 +1252,7 @@ class ConversationTextview(gobject.GObject):
             text_tags.append(other_text_tag)
         else: # not status nor /me
             if gajim.config.get('chat_merge_consecutive_nickname'):
-                if kind != old_kind:
+                if kind != old_kind or self.just_cleared:
                     self.print_name(name, kind, other_tags_for_name)
                 else:
                     self.print_real_text(gajim.config.get(
@@ -1269,6 +1275,7 @@ class ConversationTextview(gobject.GObject):
             else:
                 gobject.idle_add(self.scroll_to_end)
 
+        self.just_cleared = False
         buffer_.end_user_action()
 
     def get_time_to_show(self, tim):
@@ -1305,6 +1312,19 @@ class ConversationTextview(gobject.GObject):
             return kind
         elif text.startswith('/me ') or text.startswith('/me\n'):
             return kind
+
+    def print_displaymarking(self, displaymarking):
+        bgcolor = displaymarking.getAttr('bgcolor') or '#FFF'
+        fgcolor = displaymarking.getAttr('fgcolor') or '#000'
+        text = displaymarking.getData()
+        if text:
+            buffer_ = self.tv.get_buffer()
+            end_iter = buffer_.get_end_iter()
+            tag = self.displaymarking_tags.setdefault(bgcolor + '/' + fgcolor,
+                buffer_.create_tag(None, background=bgcolor, foreground=fgcolor))
+            buffer_.insert_with_tags(end_iter, '[' + text + ']', tag)
+            end_iter = buffer_.get_end_iter()
+            buffer_.insert_with_tags(end_iter, ' ')
 
     def print_name(self, name, kind, other_tags_for_name):
         if name:

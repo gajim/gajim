@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ## src/vcard.py
 ##
-## Copyright (C) 2003-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2003-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2005 Vincent Hanquez <tab AT snarc.org>
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem AT gmail.com>
 ## Copyright (C) 2006 Junglecow J <junglecow AT gmail.com>
@@ -164,7 +164,7 @@ class VcardWindow:
             menuitem = gtk.ImageMenuItem(gtk.STOCK_SAVE_AS)
             menuitem.connect('activate',
                     gtkgui_helpers.on_avatar_save_as_menuitem_activate,
-                    self.contact.jid, self.account, self.contact.get_shown_name())
+                    self.contact.jid, self.contact.get_shown_name())
             menu.append(menuitem)
             menu.connect('selection-done', lambda w:w.destroy())
             # show the menu
@@ -328,7 +328,7 @@ class VcardWindow:
         subscription_label = self.xml.get_object('subscription_label')
         ask_label = self.xml.get_object('ask_label')
         if self.gc_contact:
-            self.xml.get_object('subscription_title_label').set_markup(_("<b>Role:</b>"))
+            self.xml.get_object('subscription_title_label').set_markup(Q_("?Role in Group Chat:<b>Role:</b>"))
             uf_role = helpers.get_uf_role(self.gc_contact.role)
             subscription_label.set_text(uf_role)
 
@@ -479,7 +479,7 @@ class ZeroconfVcardWindow:
             menuitem = gtk.ImageMenuItem(gtk.STOCK_SAVE_AS)
             menuitem.connect('activate',
                     gtkgui_helpers.on_avatar_save_as_menuitem_activate,
-                    self.contact.jid, self.account, self.contact.get_shown_name())
+                    self.contact.jid, self.contact.get_shown_name())
             menu.append(menuitem)
             menu.connect('selection-done', lambda w:w.destroy())
             # show the menu

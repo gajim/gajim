@@ -223,7 +223,7 @@ class NonBlockingTransport(PlugIn):
             if hasattr(self, '_owner') and hasattr(self._owner, 'Dispatcher'):
                 self.on_receive = self._owner.Dispatcher.ProcessNonBlocking
             else:
-                log.warning('No Dispatcher plugged. Received data will not be processed')
+                log.warn('No Dispatcher plugged. Received data will not be processed')
                 self.on_receive = None
             return
         self.on_receive = recv_handler
@@ -342,6 +342,7 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
         # variable for errno symbol that will be found from exception raised
         # from connect()
         errnum = 0
+        errstr = str()
 
         # set timeout for TCP connecting - if nonblocking connect() fails, pollend
         # is called. If if succeeds pollout is called.
@@ -350,8 +351,8 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
         try:
             self._sock.setblocking(False)
             self._sock.connect((self.server, self.port))
-        except Exception, (errnum, errstr):
-            pass
+        except Exception, exc:
+            errnum, errstr = exc.args
 
         if errnum in (errno.EINPROGRESS, errno.EALREADY, errno.EWOULDBLOCK):
             # connecting in progress
@@ -453,7 +454,7 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
             self._sock.shutdown(socket.SHUT_RDWR)
             self._sock.close()
         except socket.error, (errnum, errstr):
-            log.error('Error while disconnecting socket: %s' % errstr)
+            log.info('Error while disconnecting socket: %s' % errstr)
         self.fd = -1
         NonBlockingTransport.disconnect(self, do_callback)
 
@@ -542,7 +543,7 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
                         readable=True)
                 self.raise_event(DATA_SENT, sent_data)
 
-        except socket.error, e:
+        except Exception:
             log.error('_do_send:', exc_info=True)
             traceback.print_exc()
             self.disconnect()

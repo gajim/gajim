@@ -30,6 +30,8 @@ from common.xmpp.protocol import *
 import socket
 import errno
 import sys
+import string
+from random import Random
 
 import logging
 log = logging.getLogger('gajim.c.z.client_zeroconf')
@@ -317,6 +319,9 @@ class P2PClient(IdleObject):
                 common.xmpp.NS_BYTESTREAM)
         self.RegisterHandler('iq', self._caller._DiscoverItemsGetCB, 'get',
                 common.xmpp.NS_DISCO_ITEMS)
+        self.RegisterHandler('iq', self._caller._JingleCB, 'result')
+        self.RegisterHandler('iq', self._caller._JingleCB, 'error')
+        self.RegisterHandler('iq', self._caller._JingleCB, 'set', common.xmpp.NS_JINGLE)
 
 class P2PConnection(IdleObject, PlugIn):
     def __init__(self, sock_hash, _sock, host=None, port=None, caller=None,
@@ -412,7 +417,6 @@ class P2PConnection(IdleObject, PlugIn):
 
         If supplied data is unicode string, encode it to UTF-8.
         """
-        print 'ici'
         if self.state <= 0:
             return
 
@@ -726,7 +730,8 @@ class ClientZeroconf:
     def send(self, stanza, is_message=False, now=False, on_ok=None,
     on_not_ok=None):
         stanza.setFrom(self.roster.zeroconf.name)
-        to = stanza.getTo()
+        to = unicode(stanza.getTo())
+        to = gajim.get_jid_without_resource(to)
 
         try:
             item = self.roster[to]
@@ -758,6 +763,12 @@ class ClientZeroconf:
             stanza.setID('zero')
         P2PClient(None, item['address'], item['port'], self,
                 [(stanza, is_message)], to, on_ok=on_ok, on_not_ok=on_not_ok)
+
+    def getAnID(self):
+        """
+        Generate a random id
+        """
+        return ''.join(Random().sample(string.letters + string.digits, 6))
 
     def RegisterDisconnectHandler(self, handler):
         """

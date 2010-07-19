@@ -1,4 +1,4 @@
-# Copyright (C) 2009  Alexander Cherniuk <ts33kr@gmail.com>
+# Copyright (C) 2009-2010  Alexander Cherniuk <ts33kr@gmail.com>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,8 +15,9 @@
 
 class BaseError(Exception):
     """
-    Common base for errors which relate to a specific command. Encapsulates
-    everything needed to identify a command, by either its object or name.
+    Common base for errors which relate to a specific command.
+    Encapsulates everything needed to identify a command, by either its
+    object or name.
     """
 
     def __init__(self, message, command=None, name=None):
@@ -42,5 +43,11 @@ class DefinitionError(BaseError):
 class CommandError(BaseError):
     """
     Used to indicate errors occured during command execution.
+    """
+    pass
+
+class NoCommandError(BaseError):
+    """
+    Used to indicate an inability to find the specified command.
     """
     pass

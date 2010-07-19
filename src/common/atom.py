@@ -3,7 +3,7 @@
 ##
 ## Copyright (C) 2006 Jean-Marie Traissard <jim AT lapin.org>
 ##                    Tomasz Melcer <liori AT exroot.org>
-## Copyright (C) 2006-2007 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2006-2010 Yann Leboulanger <asterix AT lagaule.org>
 ##
 ## This file is part of Gajim.
 ##

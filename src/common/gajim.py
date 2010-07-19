@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ## src/common/gajim.py
 ##
-## Copyright (C) 2003-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2003-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2005-2006 Dimitur Kirov <dkirov AT gmail.com>
 ##                         Travis Shirk <travis AT pobox.com>
 ##                         Nikos Kouremenos <kourem AT gmail.com>
@@ -91,7 +91,7 @@ DATA_DIR = gajimpaths['DATA']
 ICONS_DIR = gajimpaths['ICONS']
 HOME_DIR = gajimpaths['HOME']
 PLUGINS_DIRS = [gajimpaths['PLUGINS_BASE'],
-                                gajimpaths['PLUGINS_USER']]
+                gajimpaths['PLUGINS_USER']]
 PLUGINS_CONFIG_DIR = gajimpaths['PLUGINS_CONFIG_DIR']
 
 try:
@@ -186,12 +186,6 @@ else:
 # read.
 HAVE_LATEX = False
 
-HAVE_INDICATOR = True
-try:
-    import indicate
-except ImportError:
-    HAVE_INDICATOR = False
-
 HAVE_FARSIGHT = True
 try:
     import farsight, gst
@@ -204,7 +198,7 @@ gajim_common_features = [xmpp.NS_BYTESTREAM, xmpp.NS_SI, xmpp.NS_FILE,
         'jabber:iq:gateway', xmpp.NS_LAST, xmpp.NS_PRIVACY, xmpp.NS_PRIVATE,
         xmpp.NS_REGISTER, xmpp.NS_VERSION, xmpp.NS_DATA, xmpp.NS_ENCRYPTED, 'msglog',
         'sslc2s', 'stringprep', xmpp.NS_PING, xmpp.NS_TIME_REVISED, xmpp.NS_SSN,
-        xmpp.NS_MOOD, xmpp.NS_ACTIVITY, xmpp.NS_NICK, xmpp.NS_ROSTERX]
+        xmpp.NS_MOOD, xmpp.NS_ACTIVITY, xmpp.NS_NICK, xmpp.NS_ROSTERX, xmpp.NS_SECLABEL]
 
 # Optional features gajim supports per account
 gajim_optional_features = {}

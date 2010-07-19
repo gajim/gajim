@@ -127,6 +127,11 @@ class JingleContent(object):
         content.addChild(node=self.transport.make_transport([candidate]))
         self.session.send_transport_info(content)
 
+    def send_description_info(self):
+        content = self.__content()
+        self._fill_content(content)
+        self.session.send_description_info(content)
+
     def __fill_jingle_stanza(self, stanza, content, error, action):
         """
         Add our things to session-initiate stanza

@@ -3,7 +3,7 @@
 ##
 ## Copyright (C) 2006 Nikos Kouremenos <kourem AT gmail.com>
 ## Copyright (C) 2006-2007 Jean-Marie Traissard <jim AT lapin.org>
-## Copyright (C) 2006-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2006-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2007 Lukas Petrovicky <lukas AT petrovicky.net>
 ##                    Julien Pivotto <roidelapluie AT gmail.com>
 ## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
@@ -172,6 +172,7 @@ class StatusIcon:
         status_menuitem = self.xml.get_object('status_menu')
         join_gc_menuitem = self.xml.get_object('join_gc_menuitem')
         sounds_mute_menuitem = self.xml.get_object('sounds_mute_menuitem')
+        show_roster_menuitem = self.xml.get_object('show_roster_menuitem')
 
         if self.single_message_handler_id:
             single_message_menuitem.handler_disconnect(
@@ -316,6 +317,16 @@ class StatusIcon:
 
         sounds_mute_menuitem.set_active(not gajim.config.get('sounds_on'))
 
+        win = gajim.interface.roster.window
+        if win.get_property('has-toplevel-focus'):
+            show_roster_menuitem.get_children()[0].set_label(_('Hide _Roster'))
+            show_roster_menuitem.connect('activate',
+                self.on_hide_roster_menuitem_activate)
+        else:
+            show_roster_menuitem.get_children()[0].set_label(_('Show _Roster'))
+            show_roster_menuitem.connect('activate',
+                self.on_show_roster_menuitem_activate)
+
         if os.name == 'nt':
             if self.added_hide_menuitem is False:
                 self.systray_context_menu.prepend(gtk.SeparatorMenuItem())
@@ -342,6 +353,10 @@ class StatusIcon:
         win = gajim.interface.roster.window
         win.present()
 
+    def on_hide_roster_menuitem_activate(self, widget):
+        win = gajim.interface.roster.window
+        win.hide()
+
     def on_preferences_menuitem_activate(self, widget):
         if 'preferences' in gajim.interface.instances:
             gajim.interface.instances['preferences'].window.present()
@@ -362,9 +377,16 @@ class StatusIcon:
                 # we could be in another VD right now. eg vd2
                 # and we want to show it in vd2
                 if not gtkgui_helpers.possibly_move_window_in_current_desktop(win):
+                    x, y = win.get_position()
+                    gajim.config.set('roster_x-position', x)
+                    gajim.config.set('roster_y-position', y)
                     win.hide() # else we hide it from VD that was visible in
             else:
-                win.show_all()
+                if not win.get_property('visible'):
+                    win.show_all()
+                    gtkgui_helpers.move_window(win,
+                        gajim.config.get('roster_x-position'),
+                        gajim.config.get('roster_y-position'))
                 if not gajim.config.get('roster_window_skip_taskbar'):
                     win.set_property('skip-taskbar-hint', False)
                 win.present_with_time(gtk.get_current_event_time())

@@ -4,7 +4,7 @@
 ## Copyright (C) 2005 Andrew Sayman <lorien420 AT myrealbox.com>
 ##                    Dimitur Kirov <dkirov AT gmail.com>
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem AT gmail.com>
-## Copyright (C) 2005-2007 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2005-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2006 Jean-Marie Traissard <jim AT lapin.org>
 ##                    Stefan Bethge <stefan AT lanpartei.de>
 ## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
@@ -42,6 +42,7 @@ except ImportError:
 else:
     try:
         # test if dbus-x11 is installed
+        bus = dbus.SystemBus()
         bus = dbus.SessionBus()
         supported = True # does user have D-Bus bindings?
     except dbus.DBusException:
@@ -49,6 +50,12 @@ else:
         if not os.name == 'nt': # only say that to non Windows users
             print _('D-Bus does not run correctly on this machine')
             print _('D-Bus capabilities of Gajim cannot be used')
+    except exceptions.SystemBusNotPresent:
+        print _('D-Bus does not run correctly on this machine: system bus not '
+            'present')
+    except exceptions.SessionBusNotPresent:
+        print _('D-Bus does not run correctly on this machine: session bus not '
+            'present')
 
 class SystemBus:
     """

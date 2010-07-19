@@ -6,7 +6,7 @@
 ## Copyright (C) 2006-2007 Tomasz Melcer <liori AT exroot.org>
 ##                         Travis Shirk <travis AT pobox.com>
 ##                         Nikos Kouremenos <kourem AT gmail.com>
-## Copyright (C) 2006-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2006-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2007 Julien Pivotto <roidelapluie AT gmail.com>
 ## Copyright (C) 2007-2008 Brendan Taylor <whateley AT gmail.com>
 ##                         Jean-Marie Traissard <jim AT lapin.org>
@@ -74,6 +74,190 @@ class ConnectionBytestream:
 
     def __init__(self):
         self.files_props = {}
+
+    def _ft_get_our_jid(self):
+        our_jid = gajim.get_jid_from_account(self.name)
+        resource = self.server_resource
+        return our_jid + '/' + resource
+
+    def _ft_get_receiver_jid(self, file_props):
+        return file_props['receiver'].jid + '/' + file_props['receiver'].resource
+
+    def _ft_get_from(self, iq_obj):
+        return helpers.get_full_jid_from_iq(iq_obj)
+
+    def _ft_get_streamhost_jid_attr(self, streamhost):
+        return helpers.parse_jid(streamhost.getAttr('jid'))
+
+    def send_file_request(self, file_props):
+        """
+        Send iq for new FT request
+        """
+        if not self.connection or self.connected < 2:
+            return
+        file_props['sender'] = self._ft_get_our_jid()
+        fjid = self._ft_get_receiver_jid(file_props)
+        iq = xmpp.Iq(to=fjid, typ='set')
+        iq.setID(file_props['sid'])
+        self.files_props[file_props['sid']] = file_props
+        si = iq.setTag('si', namespace=xmpp.NS_SI)
+        si.setAttr('profile', xmpp.NS_FILE)
+        si.setAttr('id', file_props['sid'])
+        file_tag = si.setTag('file', namespace=xmpp.NS_FILE)
+        file_tag.setAttr('name', file_props['name'])
+        file_tag.setAttr('size', file_props['size'])
+        desc = file_tag.setTag('desc')
+        if 'desc' in file_props:
+            desc.setData(file_props['desc'])
+        file_tag.setTag('range')
+        feature = si.setTag('feature', namespace=xmpp.NS_FEATURE)
+        _feature = xmpp.DataForm(typ='form')
+        feature.addChild(node=_feature)
+        field = _feature.setField('stream-method')
+        field.setAttr('type', 'list-single')
+        field.addOption(xmpp.NS_BYTESTREAM)
+        self.connection.send(iq)
+
+    def send_file_approval(self, file_props):
+        """
+        Send iq, confirming that we want to download the file
+        """
+        # user response to ConfirmationDialog may come after we've disconneted
+        if not self.connection or self.connected < 2:
+            return
+        iq = xmpp.Iq(to=unicode(file_props['sender']), typ='result')
+        iq.setAttr('id', file_props['request-id'])
+        si = iq.setTag('si', namespace=xmpp.NS_SI)
+        if 'offset' in file_props and file_props['offset']:
+            file_tag = si.setTag('file', namespace=xmpp.NS_FILE)
+            range_tag = file_tag.setTag('range')
+            range_tag.setAttr('offset', file_props['offset'])
+        feature = si.setTag('feature', namespace=xmpp.NS_FEATURE)
+        _feature = xmpp.DataForm(typ='submit')
+        feature.addChild(node=_feature)
+        field = _feature.setField('stream-method')
+        field.delAttr('type')
+        field.setValue(xmpp.NS_BYTESTREAM)
+        self.connection.send(iq)
+
+    def send_file_rejection(self, file_props, code='403', typ=None):
+        """
+        Inform sender that we refuse to download the file
+
+        typ is used when code = '400', in this case typ can be 'strean' for
+        invalid stream or 'profile' for invalid profile
+        """
+        # user response to ConfirmationDialog may come after we've disconneted
+        if not self.connection or self.connected < 2:
+            return
+        iq = xmpp.Iq(to=unicode(file_props['sender']), typ='error')
+        iq.setAttr('id', file_props['request-id'])
+        if code == '400' and typ in ('stream', 'profile'):
+            name = 'bad-request'
+            text = ''
+        else:
+            name = 'forbidden'
+            text = 'Offer Declined'
+        err = xmpp.ErrorNode(code=code, typ='cancel', name=name, text=text)
+        if code == '400' and typ in ('stream', 'profile'):
+            if typ == 'stream':
+                err.setTag('no-valid-streams', namespace=xmpp.NS_SI)
+            else:
+                err.setTag('bad-profile', namespace=xmpp.NS_SI)
+        iq.addChild(node=err)
+        self.connection.send(iq)
+
+    def _siResultCB(self, con, iq_obj):
+        file_props = self.files_props.get(iq_obj.getAttr('id'))
+        if not file_props:
+            return
+        if 'request-id' in file_props:
+            # we have already sent streamhosts info
+            return
+        file_props['receiver'] = self._ft_get_from(iq_obj)
+        si = iq_obj.getTag('si')
+        file_tag = si.getTag('file')
+        range_tag = None
+        if file_tag:
+            range_tag = file_tag.getTag('range')
+        if range_tag:
+            offset = range_tag.getAttr('offset')
+            if offset:
+                file_props['offset'] = int(offset)
+            length = range_tag.getAttr('length')
+            if length:
+                file_props['length'] = int(length)
+        feature = si.setTag('feature')
+        if feature.getNamespace() != xmpp.NS_FEATURE:
+            return
+        form_tag = feature.getTag('x')
+        form = xmpp.DataForm(node=form_tag)
+        field = form.getField('stream-method')
+        if field.getValue() != xmpp.NS_BYTESTREAM:
+            return
+        self._send_socks5_info(file_props)
+        raise xmpp.NodeProcessed
+
+    def _siSetCB(self, con, iq_obj):
+        jid = self._ft_get_from(iq_obj)
+        file_props = {'type': 'r'}
+        file_props['sender'] = jid
+        file_props['request-id'] = unicode(iq_obj.getAttr('id'))
+        si = iq_obj.getTag('si')
+        profile = si.getAttr('profile')
+        mime_type = si.getAttr('mime-type')
+        if profile != xmpp.NS_FILE:
+            self.send_file_rejection(file_props, code='400', typ='profile')
+            raise xmpp.NodeProcessed
+        feature_tag = si.getTag('feature', namespace=xmpp.NS_FEATURE)
+        if not feature_tag:
+            return
+        form_tag = feature_tag.getTag('x', namespace=xmpp.NS_DATA)
+        if not form_tag:
+            return
+        form = dataforms.ExtendForm(node=form_tag)
+        for f in form.iter_fields():
+            if f.var == 'stream-method' and f.type == 'list-single':
+                values = [o[1] for o in f.options]
+                if xmpp.NS_BYTESTREAM in values:
+                    break
+        else:
+            self.send_file_rejection(file_props, code='400', typ='stream')
+            raise xmpp.NodeProcessed
+        file_tag = si.getTag('file')
+        for attribute in file_tag.getAttrs():
+            if attribute in ('name', 'size', 'hash', 'date'):
+                val = file_tag.getAttr(attribute)
+                if val is None:
+                    continue
+                file_props[attribute] = val
+        file_desc_tag = file_tag.getTag('desc')
+        if file_desc_tag is not None:
+            file_props['desc'] = file_desc_tag.getData()
+
+        if mime_type is not None:
+            file_props['mime-type'] = mime_type
+        file_props['receiver'] = self._ft_get_our_jid()
+        file_props['sid'] = unicode(si.getAttr('id'))
+        file_props['transfered_size'] = []
+        gajim.socks5queue.add_file_props(self.name, file_props)
+        self.dispatch('FILE_REQUEST', (jid, file_props))
+        raise xmpp.NodeProcessed
+
+    def _siErrorCB(self, con, iq_obj):
+        si = iq_obj.getTag('si')
+        profile = si.getAttr('profile')
+        if profile != xmpp.NS_FILE:
+            return
+        file_props = self.files_props.get(iq_obj.getAttr('id'))
+        if not file_props:
+            return
+        jid = self._ft_get_from(iq_obj)
+        file_props['error'] = -3
+        self.dispatch('FILE_REQUEST_ERROR', (jid, file_props, ''))
+        raise xmpp.NodeProcessed
+
+class ConnectionSocks5Bytestream(ConnectionBytestream):
 
     def send_success_connect_reply(self, streamhost):
         """
@@ -252,92 +436,6 @@ class ConnectionBytestream:
         else:
             return []
 
-    def send_file_rejection(self, file_props, code='403', typ=None):
-        """
-        Inform sender that we refuse to download the file
-
-        typ is used when code = '400', in this case typ can be 'strean' for
-        invalid stream or 'profile' for invalid profile
-        """
-        # user response to ConfirmationDialog may come after we've disconneted
-        if not self.connection or self.connected < 2:
-            return
-        iq = xmpp.Iq(to=unicode(file_props['sender']), typ='error')
-        iq.setAttr('id', file_props['request-id'])
-        if code == '400' and typ in ('stream', 'profile'):
-            name = 'bad-request'
-            text = ''
-        else:
-            name = 'forbidden'
-            text = 'Offer Declined'
-        err = xmpp.ErrorNode(code=code, typ='cancel', name=name, text=text)
-        if code == '400' and typ in ('stream', 'profile'):
-            if typ == 'stream':
-                err.setTag('no-valid-streams', namespace=xmpp.NS_SI)
-            else:
-                err.setTag('bad-profile', namespace=xmpp.NS_SI)
-        iq.addChild(node=err)
-        self.connection.send(iq)
-
-    def send_file_approval(self, file_props):
-        """
-        Send iq, confirming that we want to download the file
-        """
-        # user response to ConfirmationDialog may come after we've disconneted
-        if not self.connection or self.connected < 2:
-            return
-        iq = xmpp.Iq(to=unicode(file_props['sender']), typ='result')
-        iq.setAttr('id', file_props['request-id'])
-        si = iq.setTag('si', namespace=xmpp.NS_SI)
-        if 'offset' in file_props and file_props['offset']:
-            file_tag = si.setTag('file', namespace=xmpp.NS_FILE)
-            range_tag = file_tag.setTag('range')
-            range_tag.setAttr('offset', file_props['offset'])
-        feature = si.setTag('feature', namespace=xmpp.NS_FEATURE)
-        _feature = xmpp.DataForm(typ='submit')
-        feature.addChild(node=_feature)
-        field = _feature.setField('stream-method')
-        field.delAttr('type')
-        field.setValue(xmpp.NS_BYTESTREAM)
-        self.connection.send(iq)
-
-    def _ft_get_our_jid(self):
-        our_jid = gajim.get_jid_from_account(self.name)
-        resource = self.server_resource
-        return our_jid + '/' + resource
-
-    def _ft_get_receiver_jid(self, file_props):
-        return file_props['receiver'].jid + '/' + file_props['receiver'].resource
-
-    def send_file_request(self, file_props):
-        """
-        Send iq for new FT request
-        """
-        if not self.connection or self.connected < 2:
-            return
-        file_props['sender'] = self._ft_get_our_jid()
-        fjid = self._ft_get_receiver_jid(file_props)
-        iq = xmpp.Iq(to=fjid, typ='set')
-        iq.setID(file_props['sid'])
-        self.files_props[file_props['sid']] = file_props
-        si = iq.setTag('si', namespace=xmpp.NS_SI)
-        si.setAttr('profile', xmpp.NS_FILE)
-        si.setAttr('id', file_props['sid'])
-        file_tag = si.setTag('file', namespace=xmpp.NS_FILE)
-        file_tag.setAttr('name', file_props['name'])
-        file_tag.setAttr('size', file_props['size'])
-        desc = file_tag.setTag('desc')
-        if 'desc' in file_props:
-            desc.setData(file_props['desc'])
-        file_tag.setTag('range')
-        feature = si.setTag('feature', namespace=xmpp.NS_FEATURE)
-        _feature = xmpp.DataForm(typ='form')
-        feature.addChild(node=_feature)
-        field = _feature.setField('stream-method')
-        field.setAttr('type', 'list-single')
-        field.addOption(xmpp.NS_BYTESTREAM)
-        self.connection.send(iq)
-
     def _result_socks5_sid(self, sid, hash_id):
         """
         Store the result of SHA message from auth
@@ -406,9 +504,6 @@ class ConnectionBytestream:
         self.dispatch('FILE_REQUEST_ERROR', (jid, file_props, ''))
         raise xmpp.NodeProcessed
 
-    def _ft_get_from(self, iq_obj):
-        return helpers.get_full_jid_from_iq(iq_obj)
-
     def _bytestreamSetCB(self, con, iq_obj):
         target = unicode(iq_obj.getAttr('to'))
         id_ = unicode(iq_obj.getAttr('id'))
@@ -466,9 +561,6 @@ class ConnectionBytestream:
                         gajim.socks5queue.activate_proxy(host['idx'])
                         raise xmpp.NodeProcessed
 
-    def _ft_get_streamhost_jid_attr(self, streamhost):
-        return helpers.parse_jid(streamhost.getAttr('jid'))
-
     def _bytestreamResultCB(self, con, iq_obj):
         frm = self._ft_get_from(iq_obj)
         real_id = unicode(iq_obj.getAttr('id'))
@@ -504,7 +596,7 @@ class ConnectionBytestream:
             raise xmpp.NodeProcessed
 
         if real_id.startswith('au_'):
-            if 'stopped' in file and file_props['stopped']:
+            if 'stopped' in file_props and file_props['stopped']:
                 self.remove_transfer(file_props)
             else:
                 gajim.socks5queue.send_file(file_props, self.name)
@@ -516,6 +608,9 @@ class ConnectionBytestream:
                 if proxyhost['jid'] == jid:
                     proxy = proxyhost
 
+        if 'stopped' in file_props and file_props['stopped']:
+            self.remove_transfer(file_props)
+            raise xmpp.NodeProcessed
         if proxy is not None:
             file_props['streamhost-used'] = True
             if 'streamhosts' not in file_props:
@@ -530,10 +625,7 @@ class ConnectionBytestream:
             raise xmpp.NodeProcessed
 
         else:
-            if 'stopped' in file_props and file_props['stopped']:
-                self.remove_transfer(file_props)
-            else:
-                gajim.socks5queue.send_file(file_props, self.name)
+            gajim.socks5queue.send_file(file_props, self.name)
             if 'fast' in file_props:
                 fasts = file_props['fast']
                 if len(fasts) > 0:
@@ -542,98 +634,7 @@ class ConnectionBytestream:
 
         raise xmpp.NodeProcessed
 
-    def _siResultCB(self, con, iq_obj):
-        file_props = self.files_props.get(iq_obj.getAttr('id'))
-        if not file_props:
-            return
-        if 'request-id' in file_props:
-            # we have already sent streamhosts info
-            return
-        file_props['receiver'] = self._ft_get_from(iq_obj)
-        si = iq_obj.getTag('si')
-        file_tag = si.getTag('file')
-        range_tag = None
-        if file_tag:
-            range_tag = file_tag.getTag('range')
-        if range_tag:
-            offset = range_tag.getAttr('offset')
-            if offset:
-                file_props['offset'] = int(offset)
-            length = range_tag.getAttr('length')
-            if length:
-                file_props['length'] = int(length)
-        feature = si.setTag('feature')
-        if feature.getNamespace() != xmpp.NS_FEATURE:
-            return
-        form_tag = feature.getTag('x')
-        form = xmpp.DataForm(node=form_tag)
-        field = form.getField('stream-method')
-        if field.getValue() != xmpp.NS_BYTESTREAM:
-            return
-        self._send_socks5_info(file_props)
-        raise xmpp.NodeProcessed
-
-    def _siSetCB(self, con, iq_obj):
-        jid = self._ft_get_from(iq_obj)
-        file_props = {'type': 'r'}
-        file_props['sender'] = jid
-        file_props['request-id'] = unicode(iq_obj.getAttr('id'))
-        si = iq_obj.getTag('si')
-        profile = si.getAttr('profile')
-        mime_type = si.getAttr('mime-type')
-        if profile != xmpp.NS_FILE:
-            self.send_file_rejection(file_props, code='400', typ='profile')
-            raise xmpp.NodeProcessed
-        feature_tag = si.getTag('feature', namespace=xmpp.NS_FEATURE)
-        if not feature_tag:
-            return
-        form_tag = feature_tag.getTag('x', namespace=xmpp.NS_DATA)
-        if not form_tag:
-            return
-        form = dataforms.ExtendForm(node=form_tag)
-        for f in form.iter_fields():
-            if f.var == 'stream-method' and f.type == 'list-single':
-                values = [o[1] for o in f.options]
-                if xmpp.NS_BYTESTREAM in values:
-                    break
-        else:
-            self.send_file_rejection(file_props, code='400', typ='stream')
-            raise xmpp.NodeProcessed
-        file_tag = si.getTag('file')
-        for attribute in file_tag.getAttrs():
-            if attribute in ('name', 'size', 'hash', 'date'):
-                val = file_tag.getAttr(attribute)
-                if val is None:
-                    continue
-                file_props[attribute] = val
-        file_desc_tag = file_tag.getTag('desc')
-        if file_desc_tag is not None:
-            file_props['desc'] = file_desc_tag.getData()
-
-        if mime_type is not None:
-            file_props['mime-type'] = mime_type
-        file_props['receiver'] = self._ft_get_our_jid()
-        file_props['sid'] = unicode(si.getAttr('id'))
-        file_props['transfered_size'] = []
-        gajim.socks5queue.add_file_props(self.name, file_props)
-        self.dispatch('FILE_REQUEST', (jid, file_props))
-        raise xmpp.NodeProcessed
-
-    def _siErrorCB(self, con, iq_obj):
-        si = iq_obj.getTag('si')
-        profile = si.getAttr('profile')
-        if profile != xmpp.NS_FILE:
-            return
-        file_props = self.files_props.get(iq_obj.getAttr('id'))
-        if not file_props:
-            return
-        jid = self._ft_get_from(iq_obj)
-        file_props['error'] = -3
-        self.dispatch('FILE_REQUEST_ERROR', (jid, file_props, ''))
-        raise xmpp.NodeProcessed
-
-
-class ConnectionBytestreamZeroconf(ConnectionBytestream):
+class ConnectionSocks5BytestreamZeroconf(ConnectionSocks5Bytestream):
 
     def _ft_get_from(self, iq_obj):
         return unicode(iq_obj.getFrom())

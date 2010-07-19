@@ -3,7 +3,7 @@
 ##
 ## Copyright (C) 2005-2006 Stéphan Kochen <stephan AT kochen.nl>
 ## Copyright (C) 2005-2007 Nikos Kouremenos <kourem AT gmail.com>
-## Copyright (C) 2005-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2005-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2006 Dimitur Kirov <dkirov AT gmail.com>
 ## Copyright (C) 2006-2008 Jean-Marie Traissard <jim AT lapin.org>
 ## Copyright (C) 2007 Stephan Erb <steve-e AT h3c.de>
@@ -492,8 +492,8 @@ class ServiceDiscoveryWindow(object):
     Class that represents the Services Discovery window
     """
 
-    def __init__(self, account, jid = '', node = '',
-                    address_entry = False, parent = None):
+    def __init__(self, account, jid='', node='', address_entry=False,
+    parent=None, initial_identities=None):
         self.account = account
         self.parent = parent
         if not jid:
@@ -519,6 +519,9 @@ _('Without a connection, you can not browse available services'))
             self.cache = ServicesCache(account)
             gajim.connections[account].services_cache = self.cache
 
+        if initial_identities:
+            self.cache.agent_info(account, (jid, node, initial_identities, [],
+                None))
         self.xml = gtkgui_helpers.get_gtk_builder('service_discovery_window.ui')
         self.window = self.xml.get_object('service_discovery_window')
         self.services_treeview = self.xml.get_object('services_treeview')
@@ -546,10 +549,8 @@ _('Without a connection, you can not browse available services'))
             self.address_comboboxentry_entry = self.address_comboboxentry.child
             self.address_comboboxentry_entry.set_activates_default(True)
 
-            liststore = gtk.ListStore(str)
-            self.address_comboboxentry.set_model(liststore)
             self.latest_addresses = gajim.config.get(
-                    'latest_disco_addresses').split()
+                'latest_disco_addresses').split()
             if jid in self.latest_addresses:
                 self.latest_addresses.remove(jid)
             self.latest_addresses.insert(0, jid)
@@ -1670,6 +1671,7 @@ class ToplevelAgentBrowser(AgentBrowser):
 
         # Search for an icon and category we can display
         pix = self.cache.get_icon(identities)
+        cat, type_ = None, None
         for identity in identities:
             try:
                 cat, type_ = identity['category'], identity['type']

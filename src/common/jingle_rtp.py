@@ -15,6 +15,8 @@
 Handles Jingle RTP sessions (XEP 0167)
 """
 
+from collections import deque
+
 import gobject
 import socket
 
@@ -28,6 +30,10 @@ from jingle_transport import JingleTransportICEUDP
 from jingle_content import contents, JingleContent, JingleContentSetupException
 
 
+import logging
+log = logging.getLogger('gajim.c.jingle_rtp')
+
+
 class JingleRTPContent(JingleContent):
     def __init__(self, session, media, transport=None):
         if transport is None:
@@ -37,6 +43,10 @@ class JingleRTPContent(JingleContent):
         self._dtmf_running = False
         self.farsight_media = {'audio': farsight.MEDIA_TYPE_AUDIO,
                                                         'video': farsight.MEDIA_TYPE_VIDEO}[media]
+
+        self.pipeline = None
+        self.src_bin = None
+        self.stream_failed_once = False
 
         self.candidates_ready = False # True when local candidates are prepared
 
@@ -89,8 +99,7 @@ class JingleRTPContent(JingleContent):
                 farsight.DIRECTION_RECV, 'nice', params)
 
     def is_ready(self):
-        return (JingleContent.is_ready(self) and self.candidates_ready
-                and self.p2psession.get_property('codecs-ready'))
+        return (JingleContent.is_ready(self) and self.candidates_ready)
 
     def make_bin_from_config(self, config_key, pipeline, text):
         pipeline = pipeline % gajim.config.get(config_key)
@@ -117,15 +126,16 @@ class JingleRTPContent(JingleContent):
         Send several DTMF tones
         """
         if self._dtmf_running:
-            raise Exception # TODO: Proper exception
+            raise Exception("There is a DTMF batch already running")
+        events = deque(events)
         self._dtmf_running = True
-        self._start_dtmf(events.pop(0))
+        self._start_dtmf(events.popleft())
         gobject.timeout_add(500, self._next_dtmf, events)
 
     def _next_dtmf(self, events):
         self._stop_dtmf()
         if events:
-            self._start_dtmf(events.pop(0))
+            self._start_dtmf(events.popleft())
             gobject.timeout_add(500, self._next_dtmf, events)
         else:
             self._dtmf_running = False
@@ -161,14 +171,14 @@ class JingleRTPContent(JingleContent):
     def _on_gst_message(self, bus, message):
         if message.type == gst.MESSAGE_ELEMENT:
             name = message.structure.get_name()
+            log.debug('gst element message: %s: %s' % (name, message))
             if name == 'farsight-new-active-candidate-pair':
                 pass
             elif name == 'farsight-recv-codecs-changed':
                 pass
             elif name == 'farsight-codecs-changed':
-                if self.is_ready():
-                    self.session.on_session_state_changed(self)
-                # TODO: description-info
+                if self.sent and self.p2psession.get_property('codecs-ready'):
+                    self.send_description_info()
             elif name == 'farsight-local-candidates-prepared':
                 self.candidates_ready = True
                 if self.is_ready():
@@ -176,22 +186,53 @@ class JingleRTPContent(JingleContent):
             elif name == 'farsight-new-local-candidate':
                 candidate = message.structure['candidate']
                 self.transport.candidates.append(candidate)
-                if self.candidates_ready:
+                if self.sent:
                     # FIXME: Is this case even possible?
                     self.send_candidate(candidate)
             elif name == 'farsight-component-state-changed':
                 state = message.structure['state']
-                print message.structure['component'], state
                 if state == farsight.STREAM_STATE_FAILED:
                     reason = xmpp.Node('reason')
                     reason.setTag('failed-transport')
-                    self.session._session_terminate(reason)
+                    self.session.remove_content(self.creator, self.name, reason)
             elif name == 'farsight-error':
-                print 'Farsight error #%d!' % message.structure['error-no']
-                print 'Message: %s' % message.structure['error-msg']
-                print 'Debug: %s' % message.structure['debug-msg']
+                log.error('Farsight error #%d!\nMessage: %s\nDebug: %s' % (
+                    message.structure['error-no'],
+                    message.structure['error-msg'],
+                    message.structure['debug-msg']))
+        elif message.type == gst.MESSAGE_ERROR:
+            # TODO: Fix it to fallback to videotestsrc anytime an error occur,
+            # or raise an error, Jingle way
+            # or maybe one-sided stream?
+            if not self.stream_failed_once:
+                self.session.connection.dispatch('ERROR',
+                        (_("GStreamer error"),
+                         _("Error: %s\nDebug: %s" % (message.structure['gerror'],
+                                message.structure['debug']))))
+
+            sink_pad = self.p2psession.get_property('sink-pad')
+
+            # Remove old source
+            self.src_bin.get_pad('src').unlink(sink_pad)
+            self.src_bin.set_state(gst.STATE_NULL)
+            self.pipeline.remove(self.src_bin)
+
+            if not self.stream_failed_once:
+                # Add fallback source
+                self.src_bin = self.get_fallback_src()
+                self.pipeline.add(self.src_bin)
+                self.src_bin.get_pad('src').link(sink_pad)
+                self.stream_failed_once = True
             else:
-                print name
+                reason = xmpp.Node('reason')
+                reason.setTag('failed-application')
+                self.session.remove_content(self.creator, self.name, reason)
+
+            # Start playing again
+            self.pipeline.set_state(gst.STATE_PLAYING)
+
+    def get_fallback_src(self):
+        return gst.element_factory_make('fakesrc')
 
     def __on_content_accept(self, stanza, content, error, action):
         if self.accepted:
@@ -291,19 +332,19 @@ class JingleAudio(JingleRTPContent):
 
         # the local parts
         # TODO: Add queues?
-        src_bin = self.make_bin_from_config('audio_input_device',
+        self.src_bin = self.make_bin_from_config('audio_input_device',
                 '%s ! audioconvert', _("audio input"))
 
         self.sink = self.make_bin_from_config('audio_output_device',
                 'audioconvert ! volume name=gajim_out_vol ! %s', _("audio output"))
 
-        self.mic_volume = src_bin.get_by_name('gajim_vol')
+        self.mic_volume = self.src_bin.get_by_name('gajim_vol')
         self.out_volume = self.sink.get_by_name('gajim_out_vol')
 
         # link gst elements
-        self.pipeline.add(self.sink, src_bin)
+        self.pipeline.add(self.sink, self.src_bin)
 
-        src_bin.get_pad('src').link(self.p2psession.get_property(
+        self.src_bin.get_pad('src').link(self.p2psession.get_property(
                 'sink-pad'))
         self.p2pstream.connect('src-pad-added', self._on_src_pad_added)
 
@@ -323,24 +364,42 @@ class JingleVideo(JingleRTPContent):
         JingleRTPContent.setup_stream(self)
 
         # the local parts
-        src_bin = self.make_bin_from_config('video_input_device',
-                '%s ! videoscale ! ffmpegcolorspace', _("video input"))
+        if gajim.config.get('video_framerate'):
+            framerate = 'videorate ! video/x-raw-yuv,framerate=%s ! ' % \
+                gajim.config.get('video_framerate')
+        else:
+            framerate = ''
+        try:
+            w, h = gajim.config.get('video_size').split('x')
+        except:
+            w = h = None
+        if w and h:
+            video_size = 'video/x-raw-yuv,width=%s,height=%s ! ' % (w, h)
+        else:
+            video_size = ''
+        self.src_bin = self.make_bin_from_config('video_input_device',
+            '%%s ! %svideoscale ! %sffmpegcolorspace' % (framerate, video_size),
+            _("video input"))
         #caps = gst.element_factory_make('capsfilter')
         #caps.set_property('caps', gst.caps_from_string('video/x-raw-yuv, width=320, height=240'))
 
-        self.pipeline.add(src_bin)#, caps)
+        self.pipeline.add(self.src_bin)#, caps)
         #src_bin.link(caps)
 
         self.sink = self.make_bin_from_config('video_output_device',
                 'videoscale ! ffmpegcolorspace ! %s', _("video output"))
         self.pipeline.add(self.sink)
 
-        src_bin.get_pad('src').link(self.p2psession.get_property('sink-pad'))
+        self.src_bin.get_pad('src').link(self.p2psession.get_property('sink-pad'))
         self.p2pstream.connect('src-pad-added', self._on_src_pad_added)
 
         # The following is needed for farsight to process ICE requests:
         self.pipeline.set_state(gst.STATE_PLAYING)
 
+    def get_fallback_src(self):
+        # TODO: Use avatar?
+        pipeline = 'videotestsrc is-live=true ! video/x-raw-yuv,framerate=10/1 ! ffmpegcolorspace'
+        return gst.parse_bin_from_description(pipeline, True)
 
 def get_content(desc):
     if desc['media'] == 'audio':

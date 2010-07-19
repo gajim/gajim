@@ -362,6 +362,9 @@ class NonBlockingClient:
         supported and desired.
         """
         self.stream_started = True
+        if not hasattr(self, 'onreceive'):
+            # we may already have been disconnected
+            return
         self.onreceive(None)
 
         if self.connected == 'plain':
@@ -372,7 +375,7 @@ class NonBlockingClient:
                 # try to negotiate TLS
                 if self.incoming_stream_version() != '1.0':
                     # if stream version is less than 1.0, we can't do more
-                    log.warn('While connecting with type = "tls": stream version ' +
+                    log.info('While connecting with type = "tls": stream version ' +
                             'is less than 1.0')
                     self._on_connect()
                     return
@@ -382,7 +385,7 @@ class NonBlockingClient:
                     log.info('TLS supported by remote server. Requesting TLS start.')
                     self._tls_negotiation_handler()
                 else:
-                    log.warn('While connecting with type = "tls": TLS unsupported ' +
+                    log.info('While connecting with type = "tls": TLS unsupported ' +
                             'by remote server')
                     self._on_connect()
 

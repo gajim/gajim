@@ -29,6 +29,8 @@ import random
 import itertools
 import dispatcher_nb
 import hashlib
+import hmac
+import hashlib
 
 import logging
 log = logging.getLogger('gajim.c.x.auth_nb')
@@ -113,6 +115,8 @@ def challenge_splitter(data):
             quotes_open = False
     return dict_
 
+def scram_parse(chatter):
+    return dict(s.split('=', 1) for s in chatter.split(','))
 
 class SASL(PlugIn):
     """
@@ -187,7 +191,7 @@ class SASL(PlugIn):
         """
         if not feats.getTag('mechanisms', namespace=NS_SASL):
             self.startsasl='not-supported'
-            log.error('SASL not supported by server')
+            log.info('SASL not supported by server')
             return
         self.mecs = []
         for mec in feats.getTag('mechanisms', namespace=NS_SASL).getTags(
@@ -209,9 +213,12 @@ class SASL(PlugIn):
             raise NodeProcessed
         if "EXTERNAL" in self.mecs:
             self.mecs.remove('EXTERNAL')
-            node = Node('auth', attrs={'xmlns': NS_SASL, 'mechanism': 'EXTERNAL'},
-                    payload=[base64.encodestring('%s@%s' % (self.username,
-                    self._owner.Server)).replace('\n', '')])
+            sasl_data = u'%s@%s' % (self.username, self._owner.Server)
+            sasl_data = sasl_data.encode('utf-8').encode('base64').replace(
+                '\n', '')
+            node = Node('auth', attrs={'xmlns': NS_SASL,
+                'mechanism': 'EXTERNAL'}, payload=[sasl_data])
+            self.mechanism = 'EXTERNAL'
             self.startsasl = SASL_IN_PROCESS
             self._owner.send(str(node))
             raise NodeProcessed
@@ -231,6 +238,13 @@ class SASL(PlugIn):
                 raise NodeProcessed
             except kerberos.GSSError, e:
                 log.info('GSSAPI authentication failed: %s' % str(e))
+        if 'SCRAM-SHA-1' in self.mecs:
+            self.mecs.remove('SCRAM-SHA-1')
+            self.mechanism = 'SCRAM-SHA-1'
+            self._owner._caller.get_password(self.set_password, self.mechanism)
+            self.scram_step = 0
+            self.startsasl = SASL_IN_PROCESS
+            raise NodeProcessed
         if 'DIGEST-MD5' in self.mecs:
             self.mecs.remove('DIGEST-MD5')
             node = Node('auth', attrs={'xmlns': NS_SASL, 'mechanism': 'DIGEST-MD5'})
@@ -241,12 +255,12 @@ class SASL(PlugIn):
         if 'PLAIN' in self.mecs:
             self.mecs.remove('PLAIN')
             self.mechanism = 'PLAIN'
-            self._owner._caller.get_password(self.set_password)
+            self._owner._caller.get_password(self.set_password, self.mechanism)
             self.startsasl = SASL_IN_PROCESS
             raise NodeProcessed
         self.startsasl = SASL_FAILURE
-        log.error('I can only use EXTERNAL, DIGEST-MD5, GSSAPI and PLAIN '
-                'mecanisms.')
+        log.info('I can only use EXTERNAL, SCRAM-SHA-1, DIGEST-MD5, GSSAPI and '
+            'PLAIN mecanisms.')
         if self.on_sasl:
             self.on_sasl()
         return
@@ -264,7 +278,7 @@ class SASL(PlugIn):
                 reason = challenge.getChildren()[0]
             except Exception:
                 reason = challenge
-            log.error('Failed SASL authentification: %s' % reason)
+            log.info('Failed SASL authentification: %s' % reason)
             if len(self.mecs) > 0:
                 # There are other mechanisms to test
                 self.MechanismHandler()
@@ -273,6 +287,8 @@ class SASL(PlugIn):
                 self.on_sasl()
             raise NodeProcessed
         elif challenge.getName() == 'success':
+            # TODO: Need to validate any data-with-success.
+            # TODO: Important for DIGEST-MD5 and SCRAM.
             self.startsasl = SASL_SUCCESS
             log.info('Successfully authenticated with remote server.')
             handlers = self._owner.Dispatcher.dumpHandlers()
@@ -310,9 +326,73 @@ class SASL(PlugIn):
             response = kerberos.authGSSClientResponse(self.gss_vc)
             if not response:
                 response = ''
-            self._owner.send(Node('response', attrs={'xmlns':NS_SASL},
+            self._owner.send(Node('response', attrs={'xmlns': NS_SASL},
                     payload=response).__str__())
             raise NodeProcessed
+        if self.mechanism == 'SCRAM-SHA-1':
+            hashfn = hashlib.sha1
+
+            def HMAC(k, s):
+                return hmac.HMAC(key=k, msg=s, digestmod=hashfn).digest()
+
+            def XOR(x, y):
+                r = (chr(ord(px) ^ ord(py)) for px, py in zip(x, y))
+                return ''.join(r)
+
+            def Hi(s, salt, iters):
+                ii = 1
+                try:
+                    s = s.encode('utf-8')
+                except:
+                    pass
+                ui_1 = HMAC(s, salt + '\0\0\0\01')
+                ui = ui_1
+                for i in range(iters - 1):
+                    ii += 1
+                    ui_1 = HMAC(s, ui_1)
+                    ui = XOR(ui, ui_1)
+                return ui
+
+            def H(s):
+                return hashfn(s).digest()
+
+            def scram_base64(s):
+                return ''.join(s.encode('base64').split('\n'))
+
+            if self.scram_step == 0:
+                self.scram_step = 1
+                self.scram_soup += ',' + data + ','
+                data = scram_parse(data)
+                # TODO: Should check cnonce here.
+                # TODO: Channel binding data goes in here too.
+                r = 'c=' + scram_base64(self.scram_gs2)
+                r += ',r=' + data['r']
+                self.scram_soup += r
+                salt = data['s'].decode('base64')
+                iter = int(data['i'])
+                SaltedPassword = Hi(self.password, salt, iter)
+                # TODO: Could cache this, along with salt+iter.
+                ClientKey = HMAC(SaltedPassword, 'Client Key')
+                StoredKey = H(ClientKey)
+                ClientSignature = HMAC(StoredKey, self.scram_soup)
+                ClientProof = XOR(ClientKey, ClientSignature)
+                r += ',p=' + scram_base64(ClientProof)
+                ServerKey = HMAC(SaltedPassword, 'Server Key')
+                self.scram_ServerSignature = HMAC(ServerKey, self.scram_soup)
+                sasl_data = scram_base64(r)
+                node = Node('response', attrs={'xmlns': NS_SASL},
+                    payload=[sasl_data])
+                self._owner.send(str(node))
+                raise NodeProcessed
+
+            if self.scram_step == 1:
+                data = scram_parse(data)
+                if data['v'].decode('base64') != self.scram_ServerSignature:
+                    # TODO: Not clear what to do here - need to abort.
+                    raise Exception
+                node = Node('response', attrs={'xmlns': NS_SASL});
+                self._owner.send(str(node))
+                raise NodeProcessed
 
         # magic foo...
         chal = challenge_splitter(data)
@@ -335,31 +415,39 @@ class SASL(PlugIn):
             self.resp['digest-uri'] = 'xmpp/' + self._owner.Server
             self.resp['charset'] = 'utf-8'
             # Password is now required
-            self._owner._caller.get_password(self.set_password)
+            self._owner._caller.get_password(self.set_password, self.mechanism)
         elif 'rspauth' in chal:
             self._owner.send(str(Node('response', attrs={'xmlns':NS_SASL})))
         else:
             self.startsasl = SASL_FAILURE
-            log.error('Failed SASL authentification: unknown challenge')
+            log.info('Failed SASL authentification: unknown challenge')
         if self.on_sasl:
             self.on_sasl()
         raise NodeProcessed
 
+    @staticmethod
+    def _convert_to_iso88591(string):
+        try:
+            string = string.decode('utf-8').encode('iso-8859-1')
+        except UnicodeEncodeError:
+            pass
+        return string
+
     def set_password(self, password):
-        if password is None:
-            self.password = ''
-        else:
-            self.password = password
-        if self.mechanism == 'DIGEST-MD5':
-            def convert_to_iso88591(string):
-                try:
-                    string = string.decode('utf-8').encode('iso-8859-1')
-                except UnicodeEncodeError:
-                    pass
-                return string
-            hash_username = convert_to_iso88591(self.resp['username'])
-            hash_realm = convert_to_iso88591(self.resp['realm'])
-            hash_password = convert_to_iso88591(self.password)
+        self.password = '' if password is None else password
+        if self.mechanism == 'SCRAM-SHA-1':
+            nonce = ''.join('%x' % randint(0, 2 ** 28) for randint in \
+                itertools.repeat(random.randint, 7))
+            self.scram_soup = 'n=' + self.username + ',r=' + nonce
+            self.scram_gs2 = 'n,,' # No CB yet.
+            sasl_data = (self.scram_gs2 + self.scram_soup).encode('base64').\
+                replace('\n', '')
+            node = Node('auth', attrs={'xmlns': NS_SASL,
+                'mechanism': self.mechanism}, payload=[sasl_data])
+        elif self.mechanism == 'DIGEST-MD5':
+            hash_username = self._convert_to_iso88591(self.resp['username'])
+            hash_realm = self._convert_to_iso88591(self.resp['realm'])
+            hash_password = self._convert_to_iso88591(self.password)
             A1 = C([H(C([hash_username, hash_realm, hash_password])),
                     self.resp['nonce'], self.resp['cnonce']])
             A2 = C(['AUTHENTICATE', self.resp['digest-uri']])
@@ -377,8 +465,7 @@ class SASL(PlugIn):
                     '\r', '').replace('\n', '')
             node = Node('response', attrs={'xmlns':NS_SASL}, payload=[sasl_data])
         elif self.mechanism == 'PLAIN':
-            sasl_data = u'%s\x00%s\x00%s' % (self.username + '@' + \
-                    self._owner.Server, self.username, self.password)
+            sasl_data = u'\x00%s\x00%s' % (self.username, self.password)
             sasl_data = sasl_data.encode('utf-8').encode('base64').replace(
                     '\n', '')
             node = Node('auth', attrs={'xmlns': NS_SASL, 'mechanism': 'PLAIN'},
@@ -419,7 +506,7 @@ class NonBlockingNonSASL(PlugIn):
 
     def _on_username(self, resp):
         if not isResultNode(resp):
-            log.error('No result node arrived! Aborting...')
+            log.info('No result node arrived! Aborting...')
             return self.on_auth(None)
 
         iq=Iq(typ='set', node=resp)
@@ -450,7 +537,7 @@ class NonBlockingNonSASL(PlugIn):
             query.setTagData('hash', hash_)
             self._method='0k'
         else:
-            log.warn("Sequre methods unsupported, performing plain text \
+            log.warn("Secure methods unsupported, performing plain text \
                     authentication")
             query.setTagData('password', self.password)
             self._method = 'plain'
@@ -464,7 +551,7 @@ class NonBlockingNonSASL(PlugIn):
             self.owner._registered_name = self.owner.User+'@'+self.owner.Server+\
                     '/'+self.owner.Resource
             return self.on_auth(self._method)
-        log.error('Authentication failed!')
+        log.info('Authentication failed!')
         return self.on_auth(None)
 
 
@@ -496,7 +583,7 @@ class NonBlockingBind(PlugIn):
         attributes accordingly
         """
         if not feats.getTag('bind', namespace=NS_BIND):
-            log.error('Server does not requested binding.')
+            log.info('Server does not requested binding.')
             # we try to bind resource anyway
             #self.bound='failure'
             self.bound = []
@@ -548,10 +635,10 @@ class NonBlockingBind(PlugIn):
                             func=self._on_session)
                 return
         if resp:
-            log.error('Binding failed: %s.' % resp.getTag('error'))
+            log.info('Binding failed: %s.' % resp.getTag('error'))
             self.on_bound(None)
         else:
-            log.error('Binding failed: timeout expired.')
+            log.info('Binding failed: timeout expired.')
             self.on_bound(None)
 
     def _on_session(self, resp):

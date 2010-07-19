@@ -3,7 +3,7 @@
 ##
 ## Copyright (C) 2005-2006 Travis Shirk <travis AT pobox.com>
 ##                         Nikos Kouremenos <kourem AT gmail.com>
-## Copyright (C) 2005-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2005-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2006 Dimitur Kirov <dkirov AT gmail.com>
 ## Copyright (C) 2007 Tomasz Melcer <liori AT exroot.org>
 ## Copyright (C) 2008 Jean-Marie Traissard <jim AT lapin.org>
@@ -129,7 +129,9 @@ def split_db():
     print 'spliting database'
     if os.name == 'nt':
         try:
-            OLD_LOG_DB_FOLDER = os.path.join(fse(os.environ[u'appdata']), u'Gajim')
+            import configpaths
+            OLD_LOG_DB_FOLDER = os.path.join(configpaths.fse(
+                os.environ[u'appdata']), u'Gajim')
         except KeyError:
             OLD_LOG_DB_FOLDER = u'.'
     else:
@@ -184,7 +186,8 @@ def check_and_possibly_move_config():
 
     if os.name == 'nt':
         try:
-            OLD_LOG_DB_FOLDER = os.path.join(fse(os.environ[u'appdata']), u'Gajim')
+            OLD_LOG_DB_FOLDER = os.path.join(configpaths.fse(
+                os.environ[u'appdata']), u'Gajim')
         except KeyError:
             OLD_LOG_DB_FOLDER = u'.'
     else:
@@ -340,5 +343,10 @@ def check_and_possibly_create_paths():
         sys.exit()
 
 def create_path(directory):
+    head, tail = os.path.split(directory)
+    if not os.path.exists(head):
+        create_path(head)
+    if os.path.exists(directory):
+        return
     print _('creating %s directory') % directory
     os.mkdir(directory, 0700)

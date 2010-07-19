@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ## src/common/config.py
 ##
-## Copyright (C) 2003-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2003-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2004-2005 Vincent Hanquez <tab AT snarc.org>
 ## Copyright (C) 2005 Stéphan Kochen <stephan AT kochen.nl>
 ## Copyright (C) 2005-2006 Dimitur Kirov <dkirov AT gmail.com>
@@ -277,6 +277,8 @@ class Config:
             'audio_output_device': [opt_str, 'autoaudiosink'],
             'video_input_device': [opt_str, 'autovideosrc ! videoscale ! ffmpegcolorspace'],
             'video_output_device': [opt_str, 'autovideosink'],
+            'video_framerate': [opt_str, '', _('Optionally fix jingle output video framerate. Example: 10/1 or 25/2')],
+            'video_size': [opt_str, '', _('Optionally resize jingle output video. Example: 320x240')],
             'audio_input_volume': [opt_int, 50],
             'audio_output_volume': [opt_int, 50],
             'use_stun_server': [opt_bool, True, _('If True, Gajim will try to use a STUN server when using jingle. The one in "stun_server" option, or the one given by the jabber server.')],
@@ -289,6 +291,7 @@ class Config:
                     'name': [ opt_str, '', '', True ],
                     'hostname': [ opt_str, '', '', True ],
                     'anonymous_auth': [ opt_bool, False ],
+                    'client_cert': [ opt_str, '', '', True ],
                     'savepass': [ opt_bool, False ],
                     'password': [ opt_str, '' ],
                     'resource': [ opt_str, 'gajim', '', True ],
@@ -315,6 +318,7 @@ class Config:
                     'connection_types': [ opt_str, 'tls ssl plain', _('Ordered list (space separated) of connection type to try. Can contain tls, ssl or plain')],
                     'warn_when_plaintext_connection': [ opt_bool, True, _('Show a warning dialog before sending password on an plaintext connection.') ],
                     'warn_when_insecure_ssl_connection': [ opt_bool, True, _('Show a warning dialog before using standard SSL library.') ],
+                    'warn_when_insecure_password': [ opt_bool, True, _('Show a warning dialog before sending PLAIN password over a plain conenction.') ],
                     'ssl_fingerprint_sha1': [ opt_str, '', '', True ],
                     'ignore_ssl_errors': [ opt_str, '', _('Space separated list of ssl errors to ignore.') ],
                     'use_srv': [ opt_bool, True, '', True ],
@@ -451,8 +455,8 @@ class Config:
                     'urgency_hint': [opt_bool, False],
             }, {}),
             'plugins': ({
-                    'active': [opt_bool, False, _('State whether plugins should be activated on exit (this is saved on Gajim exit). This option SHOULD NOT be used to (de)activate plug-ins. Use GUI instead.')],
-            }, {}),
+                'active': [opt_bool, False, _('State whether plugins should be activated on exit (this is saved on Gajim exit). This option SHOULD NOT be used to (de)activate plug-ins. Use GUI instead.')],
+            },{}),
     }
 
     statusmsg_default = {

@@ -2,8 +2,8 @@
 ## src/chat_control.py
 ##
 ## Copyright (C) 2006 Dimitur Kirov <dkirov AT gmail.com>
-## Copyright (C) 2006-2008 Yann Leboulanger <asterix AT lagaule.org>
-##                         Jean-Marie Traissard <jim AT lapin.org>
+## Copyright (C) 2006-2010 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2006-2008 Jean-Marie Traissard <jim AT lapin.org>
 ##                         Nikos Kouremenos <kourem AT gmail.com>
 ##                         Travis Shirk <travis AT pobox.com>
 ## Copyright (C) 2007 Lukas Petrovicky <lukas AT petrovicky.net>
@@ -94,6 +94,15 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
     A base class containing a banner, ConversationTextview, MessageTextView
     """
 
+    keymap = gtk.gdk.keymap_get_default()
+    try:
+        keycode_c = keymap.get_entries_for_keyval(gtk.keysyms.c)[0][0]
+    except TypeError:
+        keycode_c = 54
+    try:
+        keycode_ins = keymap.get_entries_for_keyval(gtk.keysyms.Insert)[0][0]
+    except TypeError:
+        keycode_ins = 118
     def make_href(self, match):
         url_color = gajim.config.get('urlmsgcolor')
         url = match.group()
@@ -147,7 +156,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         self.draw_banner_text()
         self._update_banner_state_image()
         gajim.plugin_manager.gui_extension_point('chat_control_base_draw_banner',
-                                                                                         self)
+            self)
 
     def draw_banner_text(self):
         """
@@ -230,6 +239,29 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
     def status_url_clicked(self, widget, url):
         helpers.launch_browser_mailer('url', url)
+
+    def setup_seclabel(self, combo):
+        self.seclabel_combo = combo
+        self.seclabel_combo.hide()
+        self.seclabel_combo.set_no_show_all(True)
+        lb = gtk.ListStore(str)
+        self.seclabel_combo.set_model(lb)
+        cell = gtk.CellRendererText()
+        cell.set_property('xpad', 5) # padding for status text
+        self.seclabel_combo.pack_start(cell, True)
+        # text to show is in in first column of liststore
+        self.seclabel_combo.add_attribute(cell, 'text', 0)
+        if gajim.connections[self.account].seclabel_supported:
+            gajim.connections[self.account].seclabel_catalogue(self.contact.jid, self.on_seclabels_ready)
+
+    def on_seclabels_ready(self):
+        lb = self.seclabel_combo.get_model()
+        lb.clear()
+        for label in gajim.connections[self.account].seclabel_catalogues[self.contact.jid][2]:
+            lb.append([label])
+        self.seclabel_combo.set_active(0)
+        self.seclabel_combo.set_no_show_all(False)
+        self.seclabel_combo.show_all()
 
     def __init__(self, type_id, parent_win, widget_name, contact, acct,
     resource=None):
@@ -383,7 +415,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         # instance object (also subclasses, eg. ChatControl or GroupchatControl)
         gajim.plugin_manager.gui_extension_point('chat_control_base', self)
 
-
     def set_speller(self):
         # now set the one the user selected
         per_type = 'contacts'
@@ -418,7 +449,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             menu.reorder_child(item, i)
             i += 1
         menu.show_all()
-
 
     def shutdown(self):
         # PluginSystem: removing GUI extension points connected with ChatControlBase
@@ -568,8 +598,11 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         self.connect_style_event(widget, opts[0], opts[1])
 
     def _conv_textview_key_press_event(self, widget, event):
-        if (event.state & gtk.gdk.CONTROL_MASK and event.keyval in (gtk.keysyms.c,
-        gtk.keysyms.Insert)) or (event.state & gtk.gdk.SHIFT_MASK and \
+        # translate any layout to latin_layout
+        keymap = gtk.gdk.keymap_get_default()
+        keycode = keymap.get_entries_for_keyval(event.keyval)[0][0]
+        if (event.state & gtk.gdk.CONTROL_MASK and keycode in (self.keycode_c,
+        self.keycode_ins)) or (event.state & gtk.gdk.SHIFT_MASK and \
         event.keyval in (gtk.keysyms.Page_Down, gtk.keysyms.Page_Up)):
             return False
         self.parent_win.notebook.emit('key_press_event', event)
@@ -729,6 +762,16 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             self.drag_entered_conv = True
             self.conv_textview.tv.set_editable(True)
 
+    def get_seclabel(self):
+        label = None
+        if self.seclabel_combo is not None:
+            idx = self.seclabel_combo.get_active()
+            if idx != -1:
+                cat = gajim.connections[self.account].seclabel_catalogues[self.contact.jid]
+                lname = cat[2][idx]
+                label = cat[1][lname]
+        return label
+
     def send_message(self, message, keyID='', type_='chat', chatstate=None,
                     msg_id=None, composing_xep=None, resource=None, xhtml=None,
                     callback=None, callback_args=[], process_commands=True):
@@ -741,9 +784,11 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         if process_commands and self.process_as_command(message):
             return
 
+        label = self.get_seclabel()
         MessageControl.send_message(self, message, keyID, type_=type_,
                 chatstate=chatstate, msg_id=msg_id, composing_xep=composing_xep,
                 resource=resource, user_nick=self.user_nick, xhtml=xhtml,
+                label=label,
                 callback=callback, callback_args=callback_args)
 
         # Record message history
@@ -777,7 +822,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
                     other_tags_for_name=[], other_tags_for_time=[],
                     other_tags_for_text=[], count_as_new=True, subject=None,
                     old_kind=None, xhtml=None, simple=False, xep0184_id=None,
-                    graphics=True):
+                    graphics=True, displaymarking=None):
         """
         Print 'chat' type messages
         """
@@ -789,7 +834,8 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             end = True
         textview.print_conversation_line(text, jid, kind, name, tim,
                 other_tags_for_name, other_tags_for_time, other_tags_for_text,
-                subject, old_kind, xhtml, simple=simple, graphics=graphics)
+                subject, old_kind, xhtml, simple=simple, graphics=graphics,
+                displaymarking=displaymarking)
 
         if xep0184_id is not None:
             textview.show_xep0184_warning(xep0184_id)
@@ -1267,13 +1313,12 @@ class ChatControl(ChatControlBase):
     A control for standard 1-1 chat
     """
     (
-            JINGLE_STATE_NOT_AVAILABLE,
-            JINGLE_STATE_AVAILABLE,
+            JINGLE_STATE_NULL,
             JINGLE_STATE_CONNECTING,
             JINGLE_STATE_CONNECTION_RECEIVED,
             JINGLE_STATE_CONNECTED,
             JINGLE_STATE_ERROR
-    ) = range(6)
+    ) = range(5)
 
     TYPE_ID = message_control.TYPE_CHAT
     old_msg_kind = None # last kind of the printed message
@@ -1360,9 +1405,11 @@ class ChatControl(ChatControlBase):
         self._audio_banner_image = self.xml.get_object('audio_banner_image')
         self._video_banner_image = self.xml.get_object('video_banner_image')
         self.audio_sid = None
-        self.audio_state = self.JINGLE_STATE_NOT_AVAILABLE
+        self.audio_state = self.JINGLE_STATE_NULL
+        self.audio_available = False
         self.video_sid = None
-        self.video_state = self.JINGLE_STATE_NOT_AVAILABLE
+        self.video_state = self.JINGLE_STATE_NULL
+        self.video_available = False
 
         self.update_toolbar()
 
@@ -1420,6 +1467,15 @@ class ChatControl(ChatControlBase):
             id_ = widget.connect('released', self.on_num_button_released)
             self.handlers[id_] = widget
 
+        self.dtmf_window = self.xml.get_object('dtmf_window')
+        id_ = self.dtmf_window.connect('focus-out-event',
+            self.on_dtmf_window_focus_out_event)
+        self.handlers[id_] = self.dtmf_window
+
+        widget = self.xml.get_object('dtmf_button')
+        id_ = widget.connect('clicked', self.on_dtmf_button_clicked)
+        self.handlers[id_] = widget
+
         widget = self.xml.get_object('mic_hscale')
         id_ = widget.connect('value_changed', self.on_mic_hscale_value_changed)
         self.handlers[id_] = widget
@@ -1436,6 +1492,7 @@ class ChatControl(ChatControlBase):
             session = gajim.connections[self.account].find_controlless_session(
                     self.contact.jid, resource)
 
+        self.setup_seclabel(self.xml.get_object('label_selector'))
         if session:
             session.control = self
             self.session = session
@@ -1488,38 +1545,24 @@ class ChatControl(ChatControlBase):
         # Jingle detection
         if self.contact.supports(NS_JINGLE_ICE_UDP) and \
         gajim.HAVE_FARSIGHT and self.contact.resource:
-            if self.contact.supports(NS_JINGLE_RTP_AUDIO):
-                if self.audio_state == self.JINGLE_STATE_NOT_AVAILABLE:
-                    self.set_audio_state('available')
-            else:
-                self.set_audio_state('not_available')
-
-            if self.contact.supports(NS_JINGLE_RTP_VIDEO):
-                if self.video_state == self.JINGLE_STATE_NOT_AVAILABLE:
-                    self.set_video_state('available')
-            else:
-                self.set_video_state('not_available')
+            self.audio_available = self.contact.supports(NS_JINGLE_RTP_AUDIO)
+            self.video_available = self.contact.supports(NS_JINGLE_RTP_VIDEO)
         else:
-            if self.audio_state != self.JINGLE_STATE_NOT_AVAILABLE:
-                self.set_audio_state('not_available')
-            if self.video_state != self.JINGLE_STATE_NOT_AVAILABLE:
-                self.set_video_state('not_available')
+            if self.video_available or self.audio_available:
+                self.stop_jingle()
+            self.video_available = False
+            self.audio_available = False
 
         # Audio buttons
-        if self.audio_state == self.JINGLE_STATE_NOT_AVAILABLE:
-            self._audio_button.set_sensitive(False)
-        else:
-            self._audio_button.set_sensitive(True)
+        self._audio_button.set_sensitive(self.audio_available)
 
         # Video buttons
-        if self.video_state == self.JINGLE_STATE_NOT_AVAILABLE:
-            self._video_button.set_sensitive(False)
-        else:
-            self._video_button.set_sensitive(True)
+        self._video_button.set_sensitive(self.video_available)
 
         # Send file
         if self.contact.supports(NS_FILE) and self.contact.resource:
             self._send_file_button.set_sensitive(True)
+            self._send_file_button.set_tooltip_text('')
         else:
             self._send_file_button.set_sensitive(False)
             if not self.contact.supports(NS_FILE):
@@ -1554,18 +1597,16 @@ class ChatControl(ChatControlBase):
         else:
             img.hide()
 
-        # PluginSystem: adding GUI extension point for this ChatControl
+        # PluginSystem: adding GUI extension point for this ChatControl 
         # instance object
         gajim.plugin_manager.gui_extension_point('chat_control', self)
-
 
     def _update_jingle(self, jingle_type):
         if jingle_type not in ('audio', 'video'):
             return
         banner_image = getattr(self, '_' + jingle_type + '_banner_image')
         state = getattr(self, jingle_type + '_state')
-        if state in (self.JINGLE_STATE_NOT_AVAILABLE,
-        self.JINGLE_STATE_AVAILABLE):
+        if state == self.JINGLE_STATE_NULL:
             banner_image.hide()
         else:
             banner_image.show()
@@ -1585,7 +1626,7 @@ class ChatControl(ChatControlBase):
 
     def update_audio(self):
         self._update_jingle('audio')
-        vbox = self.xml.get_object('audio_vbox')
+        hbox = self.xml.get_object('audio_buttons_hbox')
         if self.audio_state == self.JINGLE_STATE_CONNECTED:
             # Set volume from config
             input_vol = gajim.config.get('audio_input_volume')
@@ -1595,11 +1636,11 @@ class ChatControl(ChatControlBase):
             self.xml.get_object('mic_hscale').set_value(input_vol)
             self.xml.get_object('sound_hscale').set_value(output_vol)
             # Show vbox
-            vbox.set_no_show_all(False)
-            vbox.show_all()
+            hbox.set_no_show_all(False)
+            hbox.show_all()
         elif not self.audio_sid:
-            vbox.set_no_show_all(True)
-            vbox.hide()
+            hbox.set_no_show_all(True)
+            hbox.hide()
 
     def update_video(self):
         self._update_jingle('video')
@@ -1617,43 +1658,42 @@ class ChatControl(ChatControlBase):
         # update MessageWindow._controls
         self.parent_win.change_jid(self.account, old_full_jid, new_full_jid)
 
+    def stop_jingle(self, sid=None, reason=None):
+        if self.audio_sid and sid in (self.audio_sid, None):
+            self.close_jingle_content('audio')
+        if self.video_sid and sid in (self.video_sid, None):
+            self.close_jingle_content('video')
+
+
     def _set_jingle_state(self, jingle_type, state, sid=None, reason=None):
         if jingle_type not in ('audio', 'video'):
             return
-        if state in ('connecting', 'connected', 'stop') and reason:
+        if state in ('connecting', 'connected', 'stop', 'error') and reason:
             str = _('%(type)s state : %(state)s, reason: %(reason)s') % {
                     'type': jingle_type.capitalize(), 'state': state, 'reason': reason}
             self.print_conversation(str, 'info')
 
-        states = {'not_available': self.JINGLE_STATE_NOT_AVAILABLE,
-                'available': self.JINGLE_STATE_AVAILABLE,
-                'connecting': self.JINGLE_STATE_CONNECTING,
+        states = {'connecting': self.JINGLE_STATE_CONNECTING,
                 'connection_received': self.JINGLE_STATE_CONNECTION_RECEIVED,
                 'connected': self.JINGLE_STATE_CONNECTED,
-                'stop': self.JINGLE_STATE_AVAILABLE,
+                'stop': self.JINGLE_STATE_NULL,
                 'error': self.JINGLE_STATE_ERROR}
 
-        if state in states:
-            jingle_state = states[state]
-            if getattr(self, jingle_type + '_state') == jingle_state:
-                return
-            setattr(self, jingle_type + '_state', jingle_state)
+        jingle_state = states[state]
+        if getattr(self, jingle_type + '_state') == jingle_state or state == 'error':
+            return
 
-        # Destroy existing session with the user when he signs off
-        # We need to do that before modifying the sid
-        if state == 'not_available':
-            gajim.connections[self.account].delete_jingle_session(
-                    self.contact.get_full_jid(), getattr(self, jingle_type + '_sid'))
+        if state == 'stop' and getattr(self, jingle_type + '_sid') not in (None, sid):
+            return
 
-        if state in ('not_available', 'available', 'stop'):
+        setattr(self, jingle_type + '_state', jingle_state)
+
+        if jingle_state == self.JINGLE_STATE_NULL:
             setattr(self, jingle_type + '_sid', None)
         if state in ('connection_received', 'connecting'):
             setattr(self, jingle_type + '_sid', sid)
 
-        if state in ('connecting', 'connected', 'connection_received'):
-            getattr(self, '_' + jingle_type + '_button').set_active(True)
-        elif state in ('not_available', 'stop'):
-            getattr(self, '_' + jingle_type + '_button').set_active(False)
+        getattr(self, '_' + jingle_type + '_button').set_active(jingle_state != self.JINGLE_STATE_NULL)
 
         getattr(self, 'update_' + jingle_type)()
 
@@ -1674,19 +1714,21 @@ class ChatControl(ChatControlBase):
     def on_num_button_released(self, released):
         self._get_audio_content()._stop_dtmf()
 
-    def on_mic_hscale_value_changed(self, widget):
-        value = widget.get_value()
+    def on_dtmf_button_clicked(self, widget):
+        self.dtmf_window.show_all()
+
+    def on_dtmf_window_focus_out_event(self, widget, event):
+        self.dtmf_window.hide()
+
+    def on_mic_hscale_value_changed(self, widget, value):
         self._get_audio_content().set_mic_volume(value / 100)
         # Save volume to config
-        # FIXME: Putting it here is maybe not the right thing to do?
         gajim.config.set('audio_input_volume', value)
 
 
-    def on_sound_hscale_value_changed(self, widget):
-        value = widget.get_value()
+    def on_sound_hscale_value_changed(self, widget, value):
         self._get_audio_content().set_out_volume(value / 100)
         # Save volume to config
-        # FIXME: Putting it here is maybe not the right thing to do?
         gajim.config.set('audio_output_volume', value)
 
     def on_avatar_eventbox_enter_notify_event(self, widget, event):
@@ -1708,6 +1750,8 @@ class ChatControl(ChatControlBase):
         # do we have something bigger to show?
         if avatar_w > scaled_buf_w or avatar_h > scaled_buf_h:
             # wait for 0.5 sec in case we leave earlier
+            if self.show_bigger_avatar_timeout_id is not None:
+                gobject.source_remove(self.show_bigger_avatar_timeout_id)
             self.show_bigger_avatar_timeout_id = gobject.timeout_add(500,
                     self.show_bigger_avatar, widget)
 
@@ -1718,6 +1762,7 @@ class ChatControl(ChatControlBase):
         # did we add a timeout? if yes remove it
         if self.show_bigger_avatar_timeout_id is not None:
             gobject.source_remove(self.show_bigger_avatar_timeout_id)
+            self.show_bigger_avatar_timeout_id = None
 
     def on_avatar_eventbox_button_press_event(self, widget, event):
         """
@@ -1727,8 +1772,8 @@ class ChatControl(ChatControlBase):
             menu = gtk.Menu()
             menuitem = gtk.ImageMenuItem(gtk.STOCK_SAVE_AS)
             id_ = menuitem.connect('activate',
-                    gtkgui_helpers.on_avatar_save_as_menuitem_activate,
-                    self.contact.jid, self.account, self.contact.get_shown_name())
+                gtkgui_helpers.on_avatar_save_as_menuitem_activate,
+                self.contact.jid, self.contact.get_shown_name())
             self.handlers[id_] = menuitem
             menu.append(menuitem)
             menu.show_all()
@@ -1899,12 +1944,16 @@ class ChatControl(ChatControlBase):
         sid = getattr(self, jingle_type + '_sid')
         if not sid:
             return
+        setattr(self, jingle_type + '_sid', None)
+        setattr(self, jingle_type + '_state', self.JINGLE_STATE_NULL)
         session = gajim.connections[self.account].get_jingle_session(
                 self.contact.get_full_jid(), sid)
         if session:
             content = session.get_content(jingle_type)
             if content:
                 session.remove_content(content.creator, content.name)
+        getattr(self, '_' + jingle_type + '_button').set_active(False)
+        getattr(self, 'update_' + jingle_type)()
 
     def on_jingle_button_toggled(self, widget, jingle_type):
         img_name = 'gajim-%s_%s' % ({'audio': 'mic', 'video': 'cam'}[jingle_type],
@@ -1913,7 +1962,7 @@ class ChatControl(ChatControlBase):
 
         if widget.get_active():
             if getattr(self, jingle_type + '_state') == \
-            self.JINGLE_STATE_AVAILABLE:
+            self.JINGLE_STATE_NULL:
                 sid = getattr(gajim.connections[self.account],
                         'start_' + jingle_type)(self.contact.get_full_jid())
                 getattr(self, 'set_' + jingle_type + '_state')('connecting', sid)
@@ -2069,20 +2118,23 @@ class ChatControl(ChatControlBase):
                 gobject.source_remove(self.possible_inactive_timeout_id)
                 self._schedule_activity_timers()
 
-        def _on_sent(id_, contact, message, encrypted, xhtml):
+        def _on_sent(id_, contact, message, encrypted, xhtml, label):
             if contact.supports(NS_RECEIPTS) and gajim.config.get_per('accounts',
             self.account, 'request_receipt'):
                 xep0184_id = id_
             else:
                 xep0184_id = None
-
+            if label:
+                displaymarking = label.getTag('displaymarking')
+            else:
+                displaymarking = None
             self.print_conversation(message, self.contact.jid, encrypted=encrypted,
-                    xep0184_id=xep0184_id, xhtml=xhtml)
+                    xep0184_id=xep0184_id, xhtml=xhtml, displaymarking=displaymarking)
 
         ChatControlBase.send_message(self, message, keyID, type_='chat',
                 chatstate=chatstate_to_send, composing_xep=composing_xep,
                 xhtml=xhtml, callback=_on_sent,
-                callback_args=[contact, message, encrypted, xhtml],
+                callback_args=[contact, message, encrypted, xhtml, self.get_seclabel()],
                 process_commands=process_commands)
 
     def check_for_possible_paused_chatstate(self, arg):
@@ -2171,7 +2223,8 @@ class ChatControl(ChatControlBase):
                         self.session.is_loggable(), self.session and self.session.verified_identity)
 
     def print_conversation(self, text, frm='', tim=None, encrypted=False,
-                    subject=None, xhtml=None, simple=False, xep0184_id=None):
+                    subject=None, xhtml=None, simple=False, xep0184_id=None,
+                    displaymarking=None):
         """
         Print a line in the conversation
 
@@ -2234,7 +2287,7 @@ class ChatControl(ChatControlBase):
                         xhtml = '<body xmlns="%s">%s</body>' % (NS_XHTML, xhtml)
         ChatControlBase.print_conversation_line(self, text, kind, name, tim,
                 subject=subject, old_kind=self.old_msg_kind, xhtml=xhtml,
-                simple=simple, xep0184_id=xep0184_id)
+                simple=simple, xep0184_id=xep0184_id, displaymarking=displaymarking)
         if text.startswith('/me ') or text.startswith('/me\n'):
             self.old_msg_kind = None
         else:
@@ -2423,9 +2476,8 @@ class ChatControl(ChatControlBase):
         super(ChatControl, self).shutdown()
         # PluginSystem: removing GUI extension points connected with ChatControl
         # instance object
-        gajim.plugin_manager.remove_gui_extension_point('chat_control', self)
+        gajim.plugin_manager.remove_gui_extension_point('chat_control', self)        # Send 'gone' chatstate
 
-        # Send 'gone' chatstate
         self.send_chatstate('gone', self.contact)
         self.contact.chatstate = None
         self.contact.our_chatstate = None
@@ -2688,8 +2740,12 @@ class ChatControl(ChatControlBase):
                 kind = 'info'
             else:
                 kind = 'print_queue'
+            dm = None
+            if len(data) > 10:
+                dm = data[10]
             self.print_conversation(data[0], kind, tim = data[3],
-                    encrypted = data[4], subject = data[1], xhtml = data[7])
+                    encrypted = data[4], subject = data[1], xhtml = data[7],
+                    displaymarking=dm)
             if len(data) > 6 and isinstance(data[6], int):
                 message_ids.append(data[6])
 

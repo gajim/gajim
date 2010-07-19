@@ -1,9 +1,8 @@
 # -*- coding:utf-8 -*-
 ## src/common/i18n.py
 ##
-## Copyright (C) 2003-2007 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2003-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2004 Vincent Hanquez <tab AT snarc.org>
-## Copyright (C) 2004-2007 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem AT gmail.com>
 ## Copyright (C) 2009 Benjamin Richter <br AT waldteufel-online.net>
 ##
@@ -68,20 +67,25 @@ if gettext._translations:
 else:
     _translation = gettext.NullTranslations()
 
-def Q_(s):
-    # Qualified translatable strings
-    # Some strings are too ambiguous to be easily translated.
-    # so we must use as:
-    # s = Q_('?vcard:Unknown')
-    # widget.set_text(s)
-    # Q_() removes the ?vcard:
-    # but gettext while parsing the file detects ?vcard:Unknown as a whole string.
-    # translator can either put the ?vcard: part or no (easier for him or her to no)
-    # nothing fails
-    s = _(s)
-    if s[0] == '?':
-        s = s[s.find(':')+1:] # remove ?abc: part
-    return s
+def Q_(text):
+    """
+    Translate the given text, optionally qualified with a special
+    construction, which will help translators to disambiguate between
+    same terms, but in different contexts.
+
+    When translated text is returned - this rudimentary construction
+    will be stripped off, if it's present.
+
+    Here is the construction to use:
+        Q_("?vcard:Unknown")
+
+    Everything between ? and : - is the qualifier to convey the context
+    to the translators. Everything after : - is the text itself.
+    """
+    text = _(text)
+    if text.startswith('?'):
+        qualifier, text = text.split(':', 1)
+    return text
 
 def ngettext(s_sing, s_plural, n, replace_sing = None, replace_plural = None):
     """

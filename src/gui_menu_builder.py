@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ## src/gui_menu_builder.py
 ##
-## Copyright (C) 2009 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2009-2010 Yann Leboulanger <asterix AT lagaule.org>
 ##
 ## This file is part of Gajim.
 ##
@@ -95,7 +95,7 @@ def build_invite_submenu(invite_menuitem, list_):
     invite_to_new_room_menuitem.set_image(icon)
     if len(contact_list) > 1: # several resources
         invite_to_new_room_menuitem.set_submenu(build_resources_submenu(
-                contact_list, account, roster.on_invite_to_new_room, cap=NS_MUC))
+            contact_list, account, roster.on_invite_to_new_room, cap=NS_MUC))
     elif len(list_) == 1 and contact.supports(NS_MUC):
         invite_menuitem.set_sensitive(True)
         # use resource if it's self contact
@@ -104,9 +104,9 @@ def build_invite_submenu(invite_menuitem, list_):
         else:
             resource = None
         invite_to_new_room_menuitem.connect('activate',
-                roster.on_invite_to_new_room, list_, resource)
+            roster.on_invite_to_new_room, list_, resource)
     else:
-        invite_menuitem.set_sensitive(False)
+        invite_menuitem.set_sensitive(True)
     # transform None in 'jabber'
     c_t = contacts_transport or 'jabber'
     muc_jid = {}
@@ -120,7 +120,8 @@ def build_invite_submenu(invite_menuitem, list_):
     rooms = [] # a list of (room_jid, account) tuple
     minimized_controls = []
     for account in connected_accounts:
-        minimized_controls += gajim.interface.minimized_controls[account].values()
+        minimized_controls += \
+            gajim.interface.minimized_controls[account].values()
     for gc_control in gajim.interface.msg_win_mgr.get_controls(
     message_control.TYPE_GC) + minimized_controls:
         acct = gc_control.account
@@ -149,8 +150,8 @@ def build_invite_submenu(invite_menuitem, list_):
             invite_to_submenu.append(menuitem)
 
 def get_contact_menu(contact, account, use_multiple_contacts=True,
-                show_start_chat=True, show_encryption=False, show_buttonbar_items=True,
-                control=None):
+show_start_chat=True, show_encryption=False, show_buttonbar_items=True,
+control=None):
     """
     Build contact popup menu for roster and chat window. If control is not set,
     we hide invite_contacts_menuitem

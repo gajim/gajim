@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ## src/profile_window.py
 ##
-## Copyright (C) 2003-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2003-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem AT gmail.com>
 ## Copyright (C) 2006-2008 Jean-Marie Traissard <jim AT lapin.org>
 ##
@@ -189,8 +189,8 @@ class ProfileWindow:
                 nick = gajim.config.get_per('accounts', self.account, 'name')
                 menuitem = gtk.ImageMenuItem(gtk.STOCK_SAVE_AS)
                 menuitem.connect('activate',
-                        gtkgui_helpers.on_avatar_save_as_menuitem_activate,
-                        self.jid, self.account, nick)
+                    gtkgui_helpers.on_avatar_save_as_menuitem_activate,
+                    self.jid, nick)
                 menu.append(menuitem)
             # show clear
             menuitem = gtk.ImageMenuItem(gtk.STOCK_CLEAR)
@@ -202,6 +202,20 @@ class ProfileWindow:
             menu.popup(None, None, None, event.button, event.time)
         elif event.button == 1: # left click
             self.on_set_avatar_button_clicked(widget)
+
+    def on_BDAY_entry_focus_out_event(self, widget, event):
+        txt = widget.get_text()
+        if not txt:
+            return
+        try:
+            time.strptime(txt, '%Y-%m-%d')
+        except ValueError:
+            if not widget.is_focus():
+                pritext = _('Wrong date format')
+                dialogs.ErrorDialog(pritext, _('Format of the date must be '
+                    'YYYY-MM-DD'))
+                gobject.idle_add(lambda: widget.grab_focus())
+            return True
 
     def set_value(self, entry_name, value):
         try:

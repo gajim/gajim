@@ -2,7 +2,7 @@
 ## src/dialogs.py
 ##
 ## Copyright (C) 2003-2005 Vincent Hanquez <tab AT snarc.org>
-## Copyright (C) 2003-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2003-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2005 Alex Mauer <hawke AT hawkesnest.net>
 ## Copyright (C) 2005-2006 Dimitur Kirov <dkirov AT gmail.com>
 ##                         Travis Shirk <travis AT pobox.com>
@@ -38,6 +38,7 @@ import vcard
 import conversation_textview
 import message_control
 import dataforms_widget
+import disco
 
 from random import randrange
 from common import pep
@@ -992,7 +993,7 @@ _('Please fill in the data of the contact you want to add in account %s') % acco
         if self.account:
             message_buffer = self.message_textview.get_buffer()
             message_buffer.set_text(helpers.get_subscription_request_msg(
-                    self.account))
+                self.account))
 
     def on_add_new_contact_window_destroy(self, widget):
         if self.account:
@@ -1163,7 +1164,7 @@ class AboutDialog:
         dlg.set_transient_for(gajim.interface.roster.window)
         dlg.set_name('Gajim')
         dlg.set_version(gajim.version)
-        s = u'Copyright © 2003-2009 Gajim Team'
+        s = u'Copyright © 2003-2010 Gajim Team'
         dlg.set_copyright(s)
         copying_file_path = self.get_path('COPYING')
         if copying_file_path:
@@ -1241,8 +1242,9 @@ class AboutDialog:
 
 class Dialog(gtk.Dialog):
     def __init__(self, parent, title, buttons, default=None,
-                             on_response_ok=None, on_response_cancel=None):
-        gtk.Dialog.__init__(self, title, parent, gtk.DIALOG_DESTROY_WITH_PARENT | gtk.DIALOG_NO_SEPARATOR)
+    on_response_ok=None, on_response_cancel=None):
+        gtk.Dialog.__init__(self, title, parent,
+            gtk.DIALOG_DESTROY_WITH_PARENT | gtk.DIALOG_NO_SEPARATOR)
 
         self.user_response_ok = on_response_ok
         self.user_response_cancel = on_response_cancel
@@ -1479,8 +1481,8 @@ class InformationDialog(HigDialog):
     """
 
     def __init__(self, pritext, sectext=''):
-        HigDialog.__init__(self, None,
-                                           gtk.MESSAGE_INFO, gtk.BUTTONS_OK, pritext, sectext)
+        HigDialog.__init__(self, None, gtk.MESSAGE_INFO, gtk.BUTTONS_OK,
+            pritext, sectext)
         self.set_modal(False)
         self.set_transient_for(gajim.interface.roster.window)
         self.popup()
@@ -1490,9 +1492,11 @@ class ErrorDialog(HigDialog):
     HIG compliant error dialog
     """
 
-    def __init__(self, pritext, sectext=''):
-        HigDialog.__init__( self, None,
-                                                gtk.MESSAGE_ERROR, gtk.BUTTONS_OK, pritext, sectext)
+    def __init__(self, pritext, sectext='', on_response_ok=None,
+    on_response_cancel=None):
+        HigDialog.__init__( self, None, gtk.MESSAGE_ERROR, gtk.BUTTONS_OK,
+            pritext, sectext, on_response_ok=on_response_ok,
+            on_response_cancel=on_response_cancel)
         self.popup()
 
 class YesNoDialog(HigDialog):
@@ -1594,7 +1598,7 @@ class ConfirmationDialogCheck(ConfirmationDialog):
         """
         return self.checkbutton.get_active()
 
-class ConfirmationDialogDubbleCheck(ConfirmationDialog):
+class ConfirmationDialogDoubleCheck(ConfirmationDialog):
     """
     HIG compliant confirmation dialog with 2 checkbuttons
     """
@@ -1869,10 +1873,15 @@ class ChangeNickDialog(InputDialogCheck):
     Class for changing room nickname in case of conflict
     """
 
-    def __init__(self, account, room_jid, title, prompt, check_text=None):
+    def __init__(self, account, room_jid, title, prompt, check_text=None,
+    change_nick=False):
+        """
+        change_nick must be set to True when we are already occupant of the room
+        and we are changing our nick
+        """
         InputDialogCheck.__init__(self, title, '', checktext=check_text,
                 input_str='', is_modal=True, ok_handler=None, cancel_handler=None)
-        self.room_queue = [(account, room_jid, prompt)]
+        self.room_queue = [(account, room_jid, prompt, change_nick)]
         self.check_next()
 
     def on_input_dialog_delete_event(self, widget, event):
@@ -1901,7 +1910,8 @@ class ChangeNickDialog(InputDialogCheck):
             if 'change_nick_dialog' in gajim.interface.instances:
                 del gajim.interface.instances['change_nick_dialog']
             return
-        self.account, self.room_jid, self.prompt = self.room_queue.pop(0)
+        self.account, self.room_jid, self.prompt, self.change_nick = \
+            self.room_queue.pop(0)
         self.setup_dialog()
 
         if gajim.new_room_nick is not None and not gajim.gc_connected[
@@ -1930,7 +1940,7 @@ class ChangeNickDialog(InputDialogCheck):
         if is_checked:
             gajim.new_room_nick = nick
         gajim.connections[self.account].join_gc(nick, self.room_jid, None,
-                change_nick=True)
+            change_nick=self.change_nick)
         if gajim.gc_connected[self.account][self.room_jid]:
             # We are changing nick, we will change self.nick when we receive
             # presence that inform that it works
@@ -1945,9 +1955,9 @@ class ChangeNickDialog(InputDialogCheck):
         self.gc_control.new_nick = ''
         self.check_next()
 
-    def add_room(self, account, room_jid, prompt):
-        if (account, room_jid, prompt) not in self.room_queue:
-            self.room_queue.append((account, room_jid, prompt))
+    def add_room(self, account, room_jid, prompt, change_nick=False):
+        if (account, room_jid, prompt, change_nick) not in self.room_queue:
+            self.room_queue.append((account, room_jid, prompt, change_nick))
 
 class InputTextDialog(CommonInputDialog):
     """
@@ -1969,9 +1979,9 @@ class InputTextDialog(CommonInputDialog):
         start_iter, end_iter = self.input_buffer.get_bounds()
         return self.input_buffer.get_text(start_iter, end_iter).decode('utf-8')
 
-class DubbleInputDialog:
+class DoubleInputDialog:
     """
-    Class for Dubble Input dialog
+    Class for Double Input dialog
     """
 
     def __init__(self, title, label_str1, label_str2, input_str1=None,
@@ -2156,7 +2166,6 @@ class JoinGroupchatWindow:
         self._nickname_entry = self.xml.get_object('nickname_entry')
         self._password_entry = self.xml.get_object('password_entry')
 
-        self._room_jid_entry.set_text(room_jid)
         self._nickname_entry.set_text(nick)
         if password:
             self._password_entry.set_text(password)
@@ -2171,6 +2180,13 @@ class JoinGroupchatWindow:
             title = _('Join Group Chat')
         self.window.set_title(title)
 
+        self.server_comboboxentry = self.xml.get_object('server_comboboxentry')
+        self.server_model = self.server_comboboxentry.get_model()
+        server_list = []
+        # get the muc server of our server
+        if 'jabber' in gajim.connections[account].muc_jid:
+            server_list.append(gajim.connections[account].muc_jid['jabber'])
+
         self.recently_combobox = self.xml.get_object('recently_combobox')
         liststore = gtk.ListStore(str)
         self.recently_combobox.set_model(liststore)
@@ -2180,6 +2196,16 @@ class JoinGroupchatWindow:
         self.recently_groupchat = gajim.config.get('recently_groupchat').split()
         for g in self.recently_groupchat:
             self.recently_combobox.append_text(g)
+            server = gajim.get_server_from_jid(g)
+            if server not in server_list and not server.startswith('irc'):
+                server_list.append(server)
+
+        for s in server_list:
+            self.server_model.append([s])
+        self.server_comboboxentry.set_active(0)
+
+        self._set_room_jid(room_jid)
+
         if len(self.recently_groupchat) == 0:
             self.recently_combobox.set_sensitive(False)
         elif room_jid == '':
@@ -2220,8 +2246,16 @@ class JoinGroupchatWindow:
         else:
             if widget in self._empty_required_widgets:
                 self._empty_required_widgets.remove(widget)
-            if len(self._empty_required_widgets) == 0 and self.account:
+            if not self._empty_required_widgets and self.account:
                 self.xml.get_object('join_button').set_sensitive(True)
+            text = self._room_jid_entry.get_text()
+            if widget == self._room_jid_entry and '@' in text:
+                # Don't allow @ char in room entry
+                room_jid, server = text.split('@', 1)
+                self._room_jid_entry.set_text(room_jid)
+                if server:
+                    self.server_comboboxentry.child.set_text(server)
+                self.server_comboboxentry.grab_focus()
 
     def on_account_combobox_changed(self, widget):
         model = widget.get_model()
@@ -2229,11 +2263,30 @@ class JoinGroupchatWindow:
         self.account = model[iter_][0].decode('utf-8')
         self.on_required_entry_changed(self._nickname_entry)
 
+    def _set_room_jid(self, room_jid):
+        room, server = gajim.get_name_and_server_from_jid(room_jid)
+        self._room_jid_entry.set_text(room)
+        self.server_comboboxentry.child.set_text(server)
+
     def on_recently_combobox_changed(self, widget):
         model = widget.get_model()
         iter_ = widget.get_active_iter()
         room_jid = model[iter_][0].decode('utf-8')
-        self._room_jid_entry.set_text(room_jid)
+        self._set_room_jid(room_jid)
+
+    def on_browse_rooms_button_clicked(self, widget):
+        server = self.server_comboboxentry.child.get_text().decode('utf-8')
+        if server in gajim.interface.instances[self.account]['disco']:
+            gajim.interface.instances[self.account]['disco'][server].window.\
+                present()
+        else:
+            try:
+                # Object will add itself to the window dict
+                disco.ServiceDiscoveryWindow(self.account, server,
+                    initial_identities=[{'category': 'conference',
+                    'type': 'text'}])
+            except GajimGeneralException:
+                pass
 
     def on_cancel_button_clicked(self, widget):
         """
@@ -2258,7 +2311,9 @@ class JoinGroupchatWindow:
                     'groupchat.'))
             return
         nickname = self._nickname_entry.get_text().decode('utf-8')
-        room_jid = self._room_jid_entry.get_text().decode('utf-8')
+        server = self.server_comboboxentry.child.get_text().decode('utf-8')
+        room = self._room_jid_entry.get_text().decode('utf-8')
+        room_jid = room + '@' + server
         password = self._password_entry.get_text().decode('utf-8')
         try:
             nickname = helpers.parse_resource(nickname)
@@ -2963,10 +3018,11 @@ class XMLConsoleWindow:
         self.tagOutIq.set_property('foreground', color)
         buffer_.create_tag('') # Default tag
 
-        self.enabled = False
+        self.enabled = True
+        self.xml.get_object('enable_checkbutton').set_active(True)
 
         self.input_textview.modify_text(
-                gtk.STATE_NORMAL, gtk.gdk.color_parse(color))
+            gtk.STATE_NORMAL, gtk.gdk.color_parse(color))
 
         if len(gajim.connections) > 1:
             title = _('XML Console for %s') % self.account
@@ -2978,9 +3034,8 @@ class XMLConsoleWindow:
 
         self.xml.connect_signals(self)
 
-    def on_xml_console_window_delete_event(self, widget, event):
-        self.window.hide()
-        return True # do NOT destroy the window
+    def on_xml_console_window_destroy(self, widget):
+        del gajim.interface.instances[self.account]['xml_console']
 
     def on_clear_button_clicked(self, widget):
         buffer_ = self.stanzas_log_textview.get_buffer()
@@ -3059,42 +3114,41 @@ class XMLConsoleWindow:
             type_ = kind # 'incoming' or 'outgoing'
 
         if kind == 'incoming':
-            buffer.insert_with_tags_by_name(end_iter, '<!-- In -->\n',
-                    type_)
+            buffer.insert_with_tags_by_name(end_iter, '<!-- In -->\n', type_)
         elif kind == 'outgoing':
-            buffer.insert_with_tags_by_name(end_iter, '<!-- Out -->\n',
-                    type_)
+            buffer.insert_with_tags_by_name(end_iter, '<!-- Out -->\n', type_)
         end_iter = buffer.get_end_iter()
-        buffer.insert_with_tags_by_name(end_iter, stanza.replace('><', '>\n<') +\
-                '\n\n', type_)
+        buffer.insert_with_tags_by_name(end_iter, stanza.replace('><', '>\n<') \
+            + '\n\n', type_)
         if at_the_end:
             gobject.idle_add(self.scroll_to_end)
 
     def on_send_button_clicked(self, widget):
         if gajim.connections[self.account].connected <= 1:
-            #if offline or connecting
+            # if offline or connecting
             ErrorDialog(_('Connection not available'),
-                    _('Please make sure you are connected with "%s".') % self.account)
+                _('Please make sure you are connected with "%s".') % \
+                self.account)
             return
         begin_iter, end_iter = self.input_tv_buffer.get_bounds()
         stanza = self.input_tv_buffer.get_text(begin_iter, end_iter).decode(
-                'utf-8')
+            'utf-8')
         if stanza:
             gajim.connections[self.account].send_stanza(stanza)
             self.input_tv_buffer.set_text('') # we sent ok, clear the textview
 
     def on_presence_button_clicked(self, widget):
         self.input_tv_buffer.set_text(
-                '<presence><show></show><status></status><priority></priority>'
-                '</presence>')
+            '<presence><show></show><status></status><priority></priority>'
+            '</presence>')
 
     def on_iq_button_clicked(self, widget):
         self.input_tv_buffer.set_text(
-                '<iq to="" type=""><query xmlns=""></query></iq>')
+            '<iq to="" type=""><query xmlns=""></query></iq>')
 
     def on_message_button_clicked(self, widget):
         self.input_tv_buffer.set_text(
-                '<message to="" type=""><body></body></message>')
+            '<message to="" type=""><body></body></message>')
 
     def on_expander_activate(self, widget):
         if not widget.get_expanded(): # it's the opposite!
@@ -3103,7 +3157,7 @@ class XMLConsoleWindow:
 
 #Action that can be done with an incoming list of contacts
 TRANSLATED_ACTION = {'add': _('add'), 'modify': _('modify'),
-        'remove': _('remove')}
+    'remove': _('remove')}
 class RosterItemExchangeWindow:
     """
     Windows used when someone send you a exchange contact suggestion
@@ -3855,6 +3909,50 @@ class ProgressDialog:
 
     def on_progress_dialog_delete_event(self, widget, event):
         return True # WM's X button or Escape key should not destroy the window
+
+
+class ClientCertChooserDialog(FileChooserDialog):
+    def __init__(self, path_to_clientcert_file='', on_response_ok=None,
+    on_response_cancel=None):
+        '''
+        optionally accepts path_to_clientcert_file so it has that as selected
+        '''
+        def on_ok(widget, callback):
+            '''
+            check if file exists and call callback
+            '''
+            path_to_clientcert_file = self.get_filename()
+            path_to_clientcert_file = \
+                gtkgui_helpers.decode_filechooser_file_paths(
+                (path_to_clientcert_file,))[0]
+            if os.path.exists(path_to_clientcert_file):
+                callback(widget, path_to_clientcert_file)
+
+        FileChooserDialog.__init__(self,
+            title_text=_('Choose Client Cert #PCKS12'),
+            action=gtk.FILE_CHOOSER_ACTION_OPEN,
+            buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+            gtk.STOCK_OPEN, gtk.RESPONSE_OK),
+            current_folder='',
+            default_response=gtk.RESPONSE_OK,
+            on_response_ok=(on_ok, on_response_ok),
+            on_response_cancel=on_response_cancel)
+
+        filter_ = gtk.FileFilter()
+        filter_.set_name(_('All files'))
+        filter_.add_pattern('*')
+        self.add_filter(filter_)
+
+        filter_ = gtk.FileFilter()
+        filter_.set_name(_('PKCS12 Files'))
+        filter_.add_pattern('*.p12')
+        self.add_filter(filter_)
+        self.set_filter(filter_)
+
+        if path_to_clientcert_file:
+            # set_filename accept only absolute path
+            path_to_clientcert_file = os.path.abspath(path_to_clientcert_file)
+            self.set_filename(path_to_clientcert_file)
 
 
 class SoundChooserDialog(FileChooserDialog):
@@ -4861,6 +4959,15 @@ class VoIPCallReceivedDialog(object):
                 self.content_types.add(type_)
         self.set_secondary_text()
 
+    def remove_contents(self, content_types):
+        for type_ in content_types:
+            if type_ in self.content_types:
+                self.content_types.remove(type_)
+        if not self.content_types:
+            self.dialog.destroy()
+        else:
+            self.set_secondary_text()
+
     def on_voip_call_received_messagedialog_destroy(self, dialog):
         if (self.fjid, self.sid) in self.instances:
             del self.instances[(self.fjid, self.sid)]
@@ -4879,17 +4986,10 @@ class VoIPCallReceivedDialog(object):
             #TODO: Ensure that ctrl.contact.resource == resource
             jid = gajim.get_jid_without_resource(self.fjid)
             resource = gajim.get_resource_from_jid(self.fjid)
-            ctrl = gajim.interface.msg_win_mgr.get_control(self.fjid, self.account)
-            if not ctrl:
-                ctrl = gajim.interface.msg_win_mgr.get_control(jid, self.account)
-            if not ctrl:
-                # open chat control
-                contact = gajim.contacts.get_contact(self.account, jid, resource)
-                if not contact:
-                    contact = gajim.contacts.get_contact(self.account, jid)
-                if not contact:
-                    return
-                ctrl = gajim.interface.new_chat(contact, self.account, resource)
+            ctrl = (gajim.interface.msg_win_mgr.get_control(self.fjid, self.account)
+                    or gajim.interface.msg_win_mgr.get_control(jid, self.account)
+                    or gajim.interface.new_chat_from_jid(self.account, jid))
+
             # Chat control opened, update content's status
             audio = session.get_content('audio')
             video = session.get_content('video')

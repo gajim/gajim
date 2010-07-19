@@ -2,7 +2,7 @@
 ## src/common/pep.py
 ##
 ## Copyright (C) 2007 Piotr Gaczkowski <doomhammerng AT gmail.com>
-## Copyright (C) 2007-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2007-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2008 Brendan Taylor <whateley AT gmail.com>
 ##                    Jean-Marie Traissard <jim AT lapin.org>
 ##                    Jonathan Schleifer <js-common.gajim AT webkeks.org>
@@ -544,7 +544,7 @@ class ConnectionPEP(object):
         items = event_tag.getTag('items')
         if items:
             for item in items.getTags('item'):
-                entry = item.getTag('entry')
+                entry = item.getTag('entry', namespace=xmpp.NS_ATOM)
                 if entry:
                     # for each entry in feed (there shouldn't be more than one,
                     # but to be sure...

@@ -3,7 +3,7 @@
 ##
 ## Copyright (C) 2006 Jean-Marie Traissard <jim AT lapin.org>
 ##                    Junglecow J <junglecow AT gmail.com>
-## Copyright (C) 2006-2007 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2006-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2007 Brendan Taylor <whateley AT gmail.com>
 ## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
 ##
@@ -157,7 +157,7 @@ class ConfigPaths:
         self.add('ICONS', None, os.path.join(basedir, windowsify(u'icons')))
         self.add('HOME', None, fse(os.path.expanduser('~')))
         self.add('PLUGINS_BASE', None, os.path.join(basedir,
-                windowsify(u'plugins')))
+            windowsify(u'plugins')))
         try:
             self.add('TMP', None, fse(tempfile.gettempdir()))
         except IOError, e:

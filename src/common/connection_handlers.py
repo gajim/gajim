@@ -6,7 +6,7 @@
 ## Copyright (C) 2006-2007 Tomasz Melcer <liori AT exroot.org>
 ##                         Travis Shirk <travis AT pobox.com>
 ##                         Nikos Kouremenos <kourem AT gmail.com>
-## Copyright (C) 2006-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2006-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2007 Julien Pivotto <roidelapluie AT gmail.com>
 ## Copyright (C) 2007-2008 Brendan Taylor <whateley AT gmail.com>
 ##                         Jean-Marie Traissard <jim AT lapin.org>
@@ -49,7 +49,7 @@ from common.commands import ConnectionCommands
 from common.pubsub import ConnectionPubSub
 from common.pep import ConnectionPEP
 from common.protocol.caps import ConnectionCaps
-from common.protocol.bytestream import ConnectionBytestream
+from common.protocol.bytestream import ConnectionSocks5Bytestream
 import common.caps_cache as capscache
 from common.nec import NetworkEvent
 if gajim.HAVE_FARSIGHT:
@@ -342,6 +342,8 @@ class ConnectionDisco:
                 if features.__contains__(common.xmpp.NS_GMAILNOTIFY):
                     gajim.gmail_domains.append(jid)
                     self.request_gmail_notifications()
+                if features.__contains__(common.xmpp.NS_SECLABEL):
+                    self.seclabel_supported = True
                 for identity in identities:
                     if identity['category'] == 'pubsub' and identity.get('type') == \
                     'pep':
@@ -353,6 +355,11 @@ class ConnectionDisco:
                 self.pubsub_supported = True
                 if features.__contains__(common.xmpp.NS_PUBSUB_PUBLISH_OPTIONS):
                     self.pubsub_publish_options_supported = True
+                else:
+                    # Remove stored bookmarks accessible to everyone.
+                    our_jid = gajim.get_jid_from_account(self.name)
+                    self.send_pb_purge(our_jid, 'storage:bookmarks')
+                    self.send_pb_delete(our_jid, 'storage:bookmarks')
             if features.__contains__(common.xmpp.NS_BYTESTREAM):
                 our_jid = helpers.parse_jid(gajim.get_jid_from_account(self.name) +\
                         '/' + self.server_resource)
@@ -547,8 +554,7 @@ class ConnectionVcard:
         id_ = iq_obj.getID()
 
         gajim.nec.push_incoming_event(NetworkEvent('raw-iq-received',
-                                                                                           conn = con,
-                                                                                           xmpp_iq = iq_obj))
+            conn=con, xmpp_iq=iq_obj))
 
         # Check if we were waiting a timeout for this id
         found_tim = None
@@ -641,9 +647,19 @@ class ConnectionVcard:
             else:
                 if iq_obj.getErrorCode() not in ('403', '406', '404'):
                     self.private_storage_supported = False
+
             # We can now continue connection by requesting the roster
-            version = gajim.config.get_per('accounts', self.name,
+            version = None
+            if con.Stream.features and con.Stream.features.getTag('ver',
+            namespace=common.xmpp.NS_ROSTER_VER):
+                version = gajim.config.get_per('accounts', self.name,
                     'roster_version')
+                if version and not gajim.contacts.get_contacts_jid_list(
+                self.name):
+                    gajim.config.set_per('accounts', self.name,
+                        'roster_version', '')
+                    version = None
+
             iq_id = self.connection.initRoster(version=version)
             self.awaiting_answers[iq_id] = (ROSTER_ARRIVED, )
         elif self.awaiting_answers[id_][0] == ROSTER_ARRIVED:
@@ -669,7 +685,13 @@ class ConnectionVcard:
             # Ask metacontacts before roster
             self.get_metacontacts()
         elif self.awaiting_answers[id_][0] == PEP_CONFIG:
+            if iq_obj.getType() == 'error':
+                return
+            if not iq_obj.getTag('pubsub'):
+                return
             conf = iq_obj.getTag('pubsub').getTag('configure')
+            if not conf:
+                return
             node = conf.getAttr('node')
             form_tag = conf.getTag('x', namespace=common.xmpp.NS_DATA)
             if form_tag:
@@ -782,9 +804,41 @@ class ConnectionHandlersBase:
         # keep the jids we auto added (transports contacts) to not send the
         # SUBSCRIBED event to gui
         self.automatically_added = []
+        # IDs of jabber:iq:last requests
+        self.last_ids = []
 
         # keep track of sessions this connection has with other JIDs
         self.sessions = {}
+
+    def _ErrorCB(self, con, iq_obj):
+        log.debug('ErrorCB')
+        jid_from = helpers.get_full_jid_from_iq(iq_obj)
+        jid_stripped, resource = gajim.get_room_and_nick_from_fjid(jid_from)
+        id_ = unicode(iq_obj.getID())
+        if id_ in self.last_ids:
+            self.dispatch('LAST_STATUS_TIME', (jid_stripped, resource, -1, ''))
+            self.last_ids.remove(id_)
+            return
+
+    def _LastResultCB(self, con, iq_obj):
+        log.debug('LastResultCB')
+        qp = iq_obj.getTag('query')
+        seconds = qp.getAttr('seconds')
+        status = qp.getData()
+        try:
+            seconds = int(seconds)
+        except Exception:
+            return
+        id_ = iq_obj.getID()
+        if id_ in self.groupchat_jids:
+            who = self.groupchat_jids[id_]
+            del self.groupchat_jids[id_]
+        else:
+            who = helpers.get_full_jid_from_iq(iq_obj)
+        if id_ in self.last_ids:
+            self.last_ids.remove(id_)
+        jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
+        self.dispatch('LAST_STATUS_TIME', (jid_stripped, resource, seconds, status))
 
     def get_sessions(self, jid):
         """
@@ -915,13 +969,13 @@ class ConnectionHandlersBase:
 
         return sess
 
-class ConnectionHandlers(ConnectionVcard, ConnectionBytestream,
-                ConnectionDisco, ConnectionCommands, ConnectionPubSub, ConnectionPEP,
-                ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
+class ConnectionHandlers(ConnectionVcard, ConnectionSocks5Bytestream,
+ConnectionDisco, ConnectionCommands, ConnectionPubSub, ConnectionPEP,
+ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
     def __init__(self):
         global HAS_IDLE
         ConnectionVcard.__init__(self)
-        ConnectionBytestream.__init__(self)
+        ConnectionSocks5Bytestream.__init__(self)
         ConnectionCommands.__init__(self)
         ConnectionPubSub.__init__(self)
         ConnectionPEP.__init__(self, account=self.name, dispatcher=self,
@@ -936,8 +990,6 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream,
         # keep the latest subscribed event for each jid to prevent loop when we
         # acknowledge presences
         self.subscribed_events = {}
-        # IDs of jabber:iq:last requests
-        self.last_ids = []
         # IDs of jabber:iq:version requests
         self.version_ids = []
         # IDs of urn:xmpp:time requests
@@ -960,10 +1012,14 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream,
         if not self.connection or self.connected < 2:
             return
         if answer == 'yes':
-            self.connection.send(iq_obj.buildReply('result'))
+            confirm = iq_obj.getTag('confirm')
+            reply = iq_obj.buildReply('result')
+            if iq_obj.getName() == 'message':
+                reply.addChild(node=confirm)
+            self.connection.send(reply)
         elif answer == 'no':
             err = common.xmpp.Error(iq_obj,
-                    common.xmpp.protocol.ERR_NOT_AUTHORIZED)
+                common.xmpp.protocol.ERR_NOT_AUTHORIZED)
             self.connection.send(err)
 
     def _HttpAuthCB(self, con, iq_obj):
@@ -981,16 +1037,13 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream,
 
     def _ErrorCB(self, con, iq_obj):
         log.debug('ErrorCB')
+        ConnectionHandlersBase._ErrorCB(self, con, iq_obj)
         jid_from = helpers.get_full_jid_from_iq(iq_obj)
         jid_stripped, resource = gajim.get_room_and_nick_from_fjid(jid_from)
         id_ = unicode(iq_obj.getID())
         if id_ in self.version_ids:
             self.dispatch('OS_INFO', (jid_stripped, resource, '', ''))
             self.version_ids.remove(id_)
-            return
-        if id_ in self.last_ids:
-            self.dispatch('LAST_STATUS_TIME', (jid_stripped, resource, -1, ''))
-            self.last_ids.remove(id_)
             return
         if id_ in self.entity_time_ids:
             self.dispatch('ENTITY_TIME', (jid_stripped, resource, ''))
@@ -1028,6 +1081,33 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream,
                         continue
                     annotation = note.getData()
                     self.annotations[jid] = annotation
+
+    def _SecLabelCB(self, con, iq_obj):
+        """
+        Security Label callback, used for catalogues.
+        """
+        log.debug('SecLabelCB')
+        query = iq_obj.getTag('catalog')
+        to = query.getAttr('to')
+        items = query.getTags('securitylabel')
+        labels = {}
+        ll = []
+        for item in items:
+            label = item.getTag('displaymarking').getData()
+            labels[label] = item
+            ll.append(label)
+        if to not in self.seclabel_catalogues:
+            self.seclabel_catalogues[to] = [[], None, None]
+        self.seclabel_catalogues[to][1] = labels
+        self.seclabel_catalogues[to][2] = ll
+        for callback in self.seclabel_catalogues[to][0]:
+            callback()
+        self.seclabel_catalogues[to][0] = []
+
+    def seclabel_catalogue_request(self, to, callback):
+        if to not in self.seclabel_catalogues:
+            self.seclabel_catalogues[to] = [[], None, None]
+        self.seclabel_catalogues[to][0].append(callback)
 
     def _parse_bookmarks(self, storage, storage_type):
         """
@@ -1131,26 +1211,6 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream,
 
         self.connection.send(iq_obj)
         raise common.xmpp.NodeProcessed
-
-    def _LastResultCB(self, con, iq_obj):
-        log.debug('LastResultCB')
-        qp = iq_obj.getTag('query')
-        seconds = qp.getAttr('seconds')
-        status = qp.getData()
-        try:
-            seconds = int(seconds)
-        except Exception:
-            return
-        id_ = iq_obj.getID()
-        if id_ in self.groupchat_jids:
-            who = self.groupchat_jids[id_]
-            del self.groupchat_jids[id_]
-        else:
-            who = helpers.get_full_jid_from_iq(iq_obj)
-        if id_ in self.last_ids:
-            self.last_ids.remove(id_)
-        jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
-        self.dispatch('LAST_STATUS_TIME', (jid_stripped, resource, seconds, status))
 
     def _VersionResultCB(self, con, iq_obj):
         log.debug('VersionResultCB')
@@ -1373,12 +1433,9 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream,
         log.debug('MessageCB')
 
         gajim.nec.push_incoming_event(NetworkEvent('raw-message-received',
-                                                                                           conn = con,
-                                                                                           xmpp_msg = msg,
-                                                                                           account = self.name))
+            conn=con, xmpp_msg=msg, account=self.name))
 
         mtype = msg.getType()
-
 
         # check if the message is a roster item exchange (XEP-0144)
         if msg.getTag('x', namespace=common.xmpp.NS_ROSTERX):
@@ -1440,7 +1497,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream,
 
         thread_id = msg.getThread()
 
-        if not mtype:
+        if not mtype or mtype not in ('chat', 'groupchat', 'error'):
             mtype = 'normal'
 
         msgtxt = msg.getBody()
@@ -1449,6 +1506,14 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream,
         xep_200_encrypted = msg.getTag('c', namespace=common.xmpp.NS_STANZA_CRYPTO)
 
         session = None
+        gc_control = gajim.interface.msg_win_mgr.get_gc_control(jid, self.name)
+        if not gc_control and \
+        jid in gajim.interface.minimized_controls[self.name]:
+            gc_control = gajim.interface.minimized_controls[self.name][jid]
+
+        if gc_control and jid == frm: # message from a gc without a resource
+            mtype = 'groupchat'
+
         if mtype != 'groupchat':
             session = self.get_or_create_session(frm, thread_id)
 
@@ -1573,15 +1638,64 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream,
                 gajim.logger.write('error', frm, error_msg, tim=tim,
                         subject=subject)
             except exceptions.PysqliteOperationalError, e:
-                self.dispatch('ERROR', (_('Disk Write Error'), str(e)))
+                self.dispatch('DB_ERROR', (_('Disk Write Error'), str(e)))
             except exceptions.DatabaseMalformed:
                 pritext = _('Database Error')
                 sectext = _('The database file (%s) cannot be read. Try to repair '
                         'it (see http://trac.gajim.org/wiki/DatabaseBackup) or remove '
                         'it (all history will be lost).') % common.logger.LOG_DB_PATH
-                self.dispatch('ERROR', (pritext, sectext))
+                self.dispatch('DB_ERROR', (pritext, sectext))
         self.dispatch('MSGERROR', (frm, msg.getErrorCode(), error_msg, msgtxt,
                 tim, session))
+
+    def _on_bob_received(self, conn, result, cid):
+        """
+        Called when we receive BoB data
+        """
+        if cid not in self.awaiting_cids:
+            return
+
+        if result.getType() == 'result':
+            data = msg.getTags('data', namespace=common.xmpp.NS_BOB)
+            if data.getAttr('cid') == cid:
+                for func in self.awaiting_cids[cid]:
+                    cb = func[0]
+                    args = func[1]
+                    pos = func[2]
+                    bob_data = data.getData()
+                    def recurs(node, cid, data):
+                        if node.getData() == 'cid:' + cid:
+                            node.setData(data)
+                        else:
+                            for child in node.getChildren():
+                                recurs(child, cid, data)
+                    recurs(args[pos], cid, bob_data)
+                    cb(*args)
+                del self.awaiting_cids[cid]
+                return
+
+        # An error occured, call callback without modifying data.
+        for func in self.awaiting_cids[cid]:
+            cb = func[0]
+            args = func[1]
+            cb(*args)
+        del self.awaiting_cids[cid]
+
+    def get_bob_data(self, cid, to, callback, args, position):
+        """
+        Request for BoB (XEP-0231) and when data will arrive, call callback
+        with given args, after having replaced cid by it's data in
+        args[position]
+        """
+        if cid in self.awaiting_cids:
+            self.awaiting_cids[cid].appends((callback, args, position))
+        else:
+            self.awaiting_cids[cid] = [(callback, args, position)]
+        iq = common.xmpp.Iq(to=to, typ='get')
+        data = iq.addChild(name='data', attrs={'cid': cid},
+            namespace=common.xmpp.NS_BOB)
+        self.connection.SendAndCallForResponse(iq, self._on_bob_received,
+            {'cid': cid})
 
     # process and dispatch a groupchat message
     def dispatch_gc_message(self, msg, frm, msgtxt, jid, tim):
@@ -1603,12 +1717,35 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream,
                     self.dispatch('GC_CONFIG_CHANGE', (jid, statusCode))
             return
 
-        # Ignore message from room in which we are not
+        displaymarking = None
+        seclabel = msg.getTag('securitylabel')
+        if seclabel and seclabel.getNamespace() == common.xmpp.NS_SECLABEL:
+            displaymarking = seclabel.getTag('displaymarking')        # Ignore message from room in which we are not
         if jid not in self.last_history_time:
             return
 
-        self.dispatch('GC_MSG', (frm, msgtxt, tim, has_timestamp, msg.getXHTML(),
-                statusCode))
+        captcha = msg.getTag('captcha', namespace=common.xmpp.NS_CAPTCHA)
+        if captcha:
+            captcha = captcha.getTag('x', namespace=common.xmpp.NS_DATA)
+            for field in captcha.getTags('field'):
+                for media in field.getTags('media'):
+                    for uri in media.getTags('uri'):
+                        uri_data = uri.getData()
+                        if uri_data.startswith('cid:'):
+                            uri_data = uri_data[4:]
+                            found = False
+                            for data in msg.getTags('data',
+                            namespace=common.xmpp.NS_BOB):
+                                if data.getAttr('cid') == uri_data:
+                                    uri.setData(data.getData())
+                                    found = True
+                            if not found:
+                                self.get_bob_data(uri_data, frm,
+                                    self.dispatch_gc_message, [msg, frm, msgtxt,
+                                    jid, tim], 0)
+                                return
+        self.dispatch('GC_MSG', (frm, msgtxt, tim, has_timestamp,
+            msg.getXHTML(), statusCode, displaymarking, captcha))
 
         tim_int = int(float(mktime(tim)))
         if gajim.config.should_log(self.name, jid) and not \
@@ -1624,13 +1761,13 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream,
                 self.last_history_time[jid] = mktime(tim)
 
             except exceptions.PysqliteOperationalError, e:
-                self.dispatch('ERROR', (_('Disk Write Error'), str(e)))
+                self.dispatch('DB_ERROR', (_('Disk Write Error'), str(e)))
             except exceptions.DatabaseMalformed:
                 pritext = _('Database Error')
                 sectext = _('The database file (%s) cannot be read. Try to repair '
                         'it (see http://trac.gajim.org/wiki/DatabaseBackup) or remove '
                         'it (all history will be lost).') % common.logger.LOG_DB_PATH
-                self.dispatch('ERROR', (pritext, sectext))
+                self.dispatch('DB_ERROR', (pritext, sectext))
 
     def dispatch_invite_message(self, invite, frm):
         item = invite.getTag('invite')
@@ -1654,7 +1791,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream,
         Called when we receive a presence
         """
         gajim.nec.push_incoming_event(NetworkEvent('raw-pres-received',
-                conn=con, xmpp_pres=prs))
+            conn=con, xmpp_pres=prs))
         ptype = prs.getType()
         if ptype == 'available':
             ptype = None
@@ -1769,34 +1906,41 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream,
                     self.dispatch('NOTIFY', (jid_stripped, 'error', errmsg, resource,
                             prio, keyID, timestamp, None))
                 elif (errcode == '503'):
-                    # maximum user number reached
-                    self.dispatch('ERROR', (_('Unable to join group chat'),
-                            _('Maximum number of users for %s has been reached') % \
-                            room_jid))
+                    if gc_control is None or gc_control.autorejoin is None:
+                        # maximum user number reached
+                        self.dispatch('GC_ERROR', (gc_control,
+                            _('Unable to join group chat'),
+                            _('Maximum number of users for %s has been '
+                            'reached') % room_jid))
                 elif (errcode == '401') or (errcon == 'not-authorized'):
                     # password required to join
                     self.dispatch('GC_PASSWORD_REQUIRED', (room_jid, nick))
                 elif (errcode == '403') or (errcon == 'forbidden'):
                     # we are banned
-                    self.dispatch('ERROR', (_('Unable to join group chat'),
-                            _('You are banned from group chat %s.') % room_jid))
+                    self.dispatch('GC_ERROR', (gc_control,
+                        _('Unable to join group chat'),
+                        _('You are banned from group chat %s.') % room_jid))
                 elif (errcode == '404') or (errcon in ('item-not-found',
                 'remote-server-not-found')):
                     if gc_control is None or gc_control.autorejoin is None:
                         # group chat does not exist
-                        self.dispatch('ERROR', (_('Unable to join group chat'),
-                                _('Group chat %s does not exist.') % room_jid))
+                        self.dispatch('GC_ERROR', (gc_control,
+                            _('Unable to join group chat'),
+                            _('Group chat %s does not exist.') % room_jid))
                 elif (errcode == '405') or (errcon == 'not-allowed'):
-                    self.dispatch('ERROR', (_('Unable to join group chat'),
-                            _('Group chat creation is restricted.')))
+                    self.dispatch('GC_ERROR', (gc_control,
+                        _('Unable to join group chat'),
+                        _('Group chat creation is restricted.')))
                 elif (errcode == '406') or (errcon == 'not-acceptable'):
-                    self.dispatch('ERROR', (_('Unable to join group chat'),
-                            _('Your registered nickname must be used in group chat %s.') \
-                            % room_jid))
+                    self.dispatch('GC_ERROR', (gc_control,
+                        _('Unable to join group chat'),
+                        _('Your registered nickname must be used in group chat '
+                        '%s.') % room_jid))
                 elif (errcode == '407') or (errcon == 'registration-required'):
-                    self.dispatch('ERROR', (_('Unable to join group chat'),
-                            _('You are not in the members list in groupchat %s.') % \
-                            room_jid))
+                    self.dispatch('GC_ERROR', (gc_control,
+                        _('Unable to join group chat'),
+                        _('You are not in the members list in groupchat %s.') %\
+                        room_jid))
                 elif (errcode == '409') or (errcon == 'conflict'):
                     # nick conflict
                     room_jid = gajim.get_room_from_fjid(who)
@@ -1820,14 +1964,15 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream,
                     try:
                         gajim.logger.write('gcstatus', who, st, show)
                     except exceptions.PysqliteOperationalError, e:
-                        self.dispatch('ERROR', (_('Disk Write Error'), str(e)))
+                        self.dispatch('DB_ERROR', (_('Disk Write Error'),
+                            str(e)))
                     except exceptions.DatabaseMalformed:
                         pritext = _('Database Error')
                         sectext = _('The database file (%s) cannot be read. Try to '
                                 'repair it (see http://trac.gajim.org/wiki/DatabaseBackup)'
                                 ' or remove it (all history will be lost).') % \
                                 common.logger.LOG_DB_PATH
-                        self.dispatch('ERROR', (pritext, sectext))
+                        self.dispatch('DB_ERROR', (pritext, sectext))
                 if avatar_sha or avatar_sha == '':
                     if avatar_sha == '':
                         # contact has no avatar
@@ -1970,14 +2115,14 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream,
                 try:
                     gajim.logger.write('status', jid_stripped, status, show)
                 except exceptions.PysqliteOperationalError, e:
-                    self.dispatch('ERROR', (_('Disk Write Error'), str(e)))
+                    self.dispatch('DB_ERROR', (_('Disk Write Error'), str(e)))
                 except exceptions.DatabaseMalformed:
                     pritext = _('Database Error')
                     sectext = _('The database file (%s) cannot be read. Try to '
                             'repair it (see http://trac.gajim.org/wiki/DatabaseBackup) '
                             'or remove it (all history will be lost).') % \
                             common.logger.LOG_DB_PATH
-                    self.dispatch('ERROR', (pritext, sectext))
+                    self.dispatch('DB_ERROR', (pritext, sectext))
             our_jid = gajim.get_jid_from_account(self.name)
             if jid_stripped == our_jid and resource == self.server_resource:
                 # We got our own presence
@@ -2281,6 +2426,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream,
                 common.xmpp.NS_MUC_ADMIN)
         con.RegisterHandler('iq', self._PrivateCB, 'result',
                 common.xmpp.NS_PRIVATE)
+        con.RegisterHandler('iq', self._SecLabelCB, 'result',
+                common.xmpp.NS_SECLABEL_CATALOG)
         con.RegisterHandler('iq', self._HttpAuthCB, 'get',
                 common.xmpp.NS_HTTP_AUTH)
         con.RegisterHandler('iq', self._CommandExecuteCB, 'set',

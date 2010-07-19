@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ## src/message_window.py
 ##
-## Copyright (C) 2003-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2003-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2005-2008 Travis Shirk <travis AT pobox.com>
 ##                         Nikos Kouremenos <kourem AT gmail.com>
 ## Copyright (C) 2006 Geobert Quach <geobert AT gmail.com>
@@ -144,6 +144,8 @@ class MessageWindow(object):
         self.notebook.set_show_border(gajim.config.get('tabs_border'))
         self.show_icon()
 
+        gobject.idle_add(self.notebook.grab_focus)
+
     def change_account_name(self, old_name, new_name):
         if old_name in self._controls:
             self._controls[new_name] = self._controls[old_name]
@@ -219,7 +221,7 @@ class MessageWindow(object):
             dialogs.YesNoDialog(
                     _('You are going to close several tabs'),
 _('Do you really want to close them all?'),
-                    checktext=_('Do _not ask me again'), on_response_yes=on_yes1)
+                    checktext=_('_Do not ask me again'), on_response_yes=on_yes1)
             return True
 
         def on_yes(ctrl):
@@ -684,6 +686,10 @@ _('Do you really want to close them all?'),
             ctrl = self._controls[acct][old_jid]
         except KeyError:
             return
+
+        if new_jid in self._controls[acct]:
+            self.remove_tab(self._controls[acct][new_jid],
+                self.CLOSE_CLOSE_BUTTON, force=True)
 
         self._controls[acct][new_jid] = ctrl
         del self._controls[acct][old_jid]

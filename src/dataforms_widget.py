@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ## src/dataforms_widget.py
 ##
-## Copyright (C) 2003-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2003-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2006 Tomasz Melcer <liori AT exroot.org>
 ## Copyright (C) 2006-2007 Jean-Marie Traissard <jim AT lapin.org>
 ##
@@ -27,6 +27,7 @@ multiple - these which may contain more data (with <reported/> element).'''
 
 import gtk
 import gobject
+import base64
 
 import gtkgui_helpers
 import dialogs
@@ -400,7 +401,7 @@ class SingleForm(gtk.Table, object):
                         check.set_active(value in field.values)
                         check.connect('toggled',
                                 self.on_list_multi_checkbutton_toggled, field, value)
-                    widget.pack_start(check, expand=False)
+                        widget.pack_start(check, expand=False)
                 else:
                     # more than 5 options: show combobox
                     def on_list_multi_treeview_changed(selection, f):
@@ -428,9 +429,9 @@ class SingleForm(gtk.Table, object):
                 commonwidget = False
 
                 xml = gtkgui_helpers.get_gtk_builder('data_form_window.ui',
-                        'item_list_table')
-                widget = xml.get_object('item_list_table')
-                treeview = xml.get_object('item_treeview')
+                    'multiple_form_hbox')
+                widget = xml.get_object('multiple_form_hbox')
+                treeview = xml.get_object('records_treeview')
 
                 listmodel = gtk.ListStore(str)
                 for value in field.iter_values():
@@ -527,6 +528,25 @@ class SingleForm(gtk.Table, object):
                     label.set_alignment(0.0, 0.0)
                 label = decorate_with_tooltip(label, field)
                 self.attach(label, 0, 1, linecounter, linecounter+1,
+                        xoptions=gtk.FILL, yoptions=gtk.FILL)
+
+            if field.media is not None:
+                for uri in field.media.uris:
+                    if uri.type_.startswith('image/'):
+                        try:
+                            img_data = base64.decodestring(uri.uri_data)
+                            pixbuf_l = gtk.gdk.PixbufLoader()
+                            pixbuf_l.write(img_data)
+                            pixbuf_l.close()
+                            media = gtk.image_new_from_pixbuf(pixbuf_l.\
+                                get_pixbuf())
+                        except Exception:
+                            media = gtk.Label(_('Unable to load image'))
+                    else:
+                        media = gtk.Label(_('Media type not supported: %s') % \
+                            uri.type_)
+                    linecounter += 1
+                    self.attach(media, 0, 1, linecounter, linecounter+1,
                         xoptions=gtk.FILL, yoptions=gtk.FILL)
 
             if commonwidget:

@@ -5,7 +5,7 @@
 ##                    Julien Pivotto <roidelapluie AT gmail.com>
 ##                    Stefan Bethge <stefan AT lanpartei.de>
 ##                    Stephan Erb <steve-e AT h3c.de>
-## Copyright (C) 2007-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2007-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
 ##
 ## This file is part of Gajim.
@@ -31,6 +31,7 @@ import gtkgui_helpers
 from common import gajim
 from common import helpers
 from common import kwalletbinding
+from common.i18n import Q_
 
 class FeaturesWindow:
     """
@@ -111,7 +112,7 @@ class FeaturesWindow:
         self.model = gtk.ListStore(str, bool)
         treeview.set_model(self.model)
 
-        col = gtk.TreeViewColumn(_('Available'))
+        col = gtk.TreeViewColumn(Q_('?features:Available'))
         treeview.append_column(col)
         cell = gtk.CellRendererToggle()
         cell.set_property('radio', True)

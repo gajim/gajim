@@ -1,4 +1,4 @@
-# Copyright (C) 2009  Alexander Cherniuk <ts33kr@gmail.com>
+# Copyright (C) 2009-2010  Alexander Cherniuk <ts33kr@gmail.com>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,10 +14,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 """
-Provides a glue to tie command system framework and the actual code where it
-would be dropped in. Defines a little bit of scaffolding to support interaction
-between the two and a few utility methods so you don't need to dig up the code
-itself code to write basic commands.
+Provides a glue to tie command system framework and the actual code
+where it would be dropped in. Defines a little bit of scaffolding to
+support interaction between the two and a few utility methods so you
+don't need to dig up the code itself code to write basic commands.
 """
 
 from types import StringTypes
@@ -26,17 +26,18 @@ from traceback import print_exc
 from common import gajim
 
 from ..framework import CommandProcessor
-from ..errors import CommandError
+from ..errors import CommandError, NoCommandError
 
 class ChatCommandProcessor(CommandProcessor):
     """
-    A basic scaffolding to provide convenient interaction between the command
-    system and chat controls.
+    A basic scaffolding to provide convenient interaction between the
+    command system and chat controls.
     """
 
     def process_as_command(self, text):
+        self.command_succeeded = False
         flag = super(ChatCommandProcessor, self).process_as_command(text)
-        if flag:
+        if flag and self.command_succeeded:
             self.add_history(text)
             self.clear_input()
         return flag
@@ -44,40 +45,49 @@ class ChatCommandProcessor(CommandProcessor):
     def execute_command(self, name, arguments):
         try:
             super(ChatCommandProcessor, self).execute_command(name, arguments)
+        except NoCommandError, error:
+            details = dict(name=error.name, message=error.message)
+            message = "%(name)s: %(message)s\n" % details
+            message += "Try using the //%(name)s or /say /%(name)s " % details
+            message += "construct if you intended to send it as a text."
+            self.echo(message, 'error')
         except CommandError, error:
-            self.echo("%s: %s" %(error.name, error.message), 'error')
+            self.echo("%s: %s" % (error.name, error.message), 'error')
         except Exception:
             self.echo("An error occured while trying to execute the command", 'error')
             print_exc()
+        else:
+            self.command_succeeded = True
 
     def looks_like_command(self, text, body, name, arguments):
-        # Command escape stuff ggoes here. If text was prepended by the command
-        # prefix twice, like //not_a_command (if prefix is set to /) then it
-        # will be escaped, that is sent just as a regular message with one (only
-        # one) prefix removed, so message will be /not_a_command.
+        # Command escape stuff ggoes here. If text was prepended by the
+        # command prefix twice, like //not_a_command (if prefix is set
+        # to /) then it will be escaped, that is sent just as a regular
+        # message with one (only one) prefix removed, so message will be
+        # /not_a_command.
         if body.startswith(self.COMMAND_PREFIX):
             self.send(body)
             return True
 
     def command_preprocessor(self, command, name, arguments, args, kwargs):
-        # If command argument contain h or help option - forward it to the /help
-        # command. Dont forget to pass self, as all commands are unbound. And
-        # also don't forget to print output.
+        # If command argument contain h or help option - forward it to
+        # the /help command. Dont forget to pass self, as all commands
+        # are unbound. And also don't forget to print output.
         if 'h' in kwargs or 'help' in kwargs:
             help = self.get_command('help')
             self.echo(help(self, name))
             return True
 
     def command_postprocessor(self, command, name, arguments, args, kwargs, value):
-        # If command returns a string - print it to a user. A convenient and
-        # sufficient in most simple cases shortcut to a using echo.
+        # If command returns a string - print it to a user. A convenient
+        # and sufficient in most simple cases shortcut to a using echo.
         if value and isinstance(value, StringTypes):
             self.echo(value)
 
 class CommandTools:
     """
-    Contains a set of basic tools and shortcuts you can use in your commands to
-    performe some simple operations.
+    Contains a set of basic tools and shortcuts you can use in your
+    commands to performe some simple operations.
     """
 
     def echo(self, text, kind='info'):
@@ -107,8 +117,8 @@ class CommandTools:
 
     def add_history(self, text):
         """
-        Add given text to the input history, so user can scroll through it using
-        ctrl + up/down arrow keys.
+        Add given text to the input history, so user can scroll through
+        it using ctrl + up/down arrow keys.
         """
         self.save_sent_message(text)
 

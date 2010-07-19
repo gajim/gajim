@@ -5,7 +5,7 @@
   <object class="GtkMenu" id="systray_context_menu">
     <child>
       <object class="GtkImageMenuItem" id="status_menu">
-        <property name="label">Sta_tus</property>
+        <property name="label" translatable="yes">Sta_tus</property>
         <property name="visible">True</property>
         <property name="use_underline">True</property>
         <property name="image">image1</property>
@@ -15,7 +15,7 @@
     </child>
     <child>
       <object class="GtkImageMenuItem" id="chat_with_menuitem">
-        <property name="label">_Start Chat</property>
+        <property name="label" translatable="yes">_Start Chat</property>
         <property name="visible">True</property>
         <property name="use_underline">True</property>
         <property name="image">image2</property>
@@ -25,7 +25,7 @@
     </child>
     <child>
       <object class="GtkImageMenuItem" id="join_gc_menuitem">
-        <property name="label">_Group Chat</property>
+        <property name="label" translatable="yes">_Group Chat</property>
         <property name="visible">True</property>
         <property name="use_underline">True</property>
         <property name="image">image3</property>
@@ -35,7 +35,7 @@
     </child>
     <child>
       <object class="GtkImageMenuItem" id="single_message_menuitem">
-        <property name="label">Send Single _Message</property>
+        <property name="label" translatable="yes">Send Single _Message</property>
         <property name="visible">True</property>
         <property name="use_underline">True</property>
         <property name="image">image4</property>
@@ -66,13 +66,11 @@
     </child>
     <child>
       <object class="GtkImageMenuItem" id="show_roster_menuitem">
-        <property name="label">Show _Roster</property>
         <property name="visible">True</property>
         <property name="use_underline">True</property>
         <property name="image">image5</property>
         <property name="use_stock">False</property>
         <property name="accel_group">accelgroup1</property>
-        <signal name="activate" handler="on_show_roster_menuitem_activate"/>
       </object>
     </child>
     <child>

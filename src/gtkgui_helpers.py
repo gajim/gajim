@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ## src/gtkgui_helpers.py
 ##
-## Copyright (C) 2003-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2003-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2005-2006 Dimitur Kirov <dkirov AT gmail.com>
 ## Copyright (C) 2005-2007 Nikos Kouremenos <kourem AT gmail.com>
 ## Copyright (C) 2006 Travis Shirk <travis AT pobox.com>
@@ -189,7 +189,8 @@ def get_default_font():
     xdg_config_home = os.environ.get('XDG_CONFIG_HOME', '')
     if xdg_config_home == '':
         xdg_config_home = os.path.expanduser('~/.config') # default
-    xfce_config_file = os.path.join(xdg_config_home, 'xfce4/mcs_settings/gtk.xml')
+    xfce_config_file = os.path.join(xdg_config_home,
+        'xfce4/mcs_settings/gtk.xml')
 
     kde_config_file = os.path.expanduser('~/.kde/share/config/kdeglobals')
 
@@ -201,7 +202,8 @@ def get_default_font():
                     return line[start:line.find('"', start)].decode('utf-8')
         except Exception:
             #we talk about file
-            print >> sys.stderr, _('Error: cannot open %s for reading') % xfce_config_file
+            print >> sys.stderr, _('Error: cannot open %s for reading') % \
+                xfce_config_file
 
     elif os.path.exists(kde_config_file):
         try:
@@ -216,7 +218,8 @@ def get_default_font():
                     return font_string.decode('utf-8')
         except Exception:
             #we talk about file
-            print >> sys.stderr, _('Error: cannot open %s for reading') % kde_config_file
+            print >> sys.stderr, _('Error: cannot open %s for reading') % \
+                kde_config_file
 
     return None
 
@@ -261,7 +264,7 @@ def get_running_processes():
         files = os.listdir('/proc')
 
         # files that doesn't have only digits in names...
-        files = filter(str.isdigit, files)
+        files = [f for f in files if f.isdigit()]
 
         # files that aren't directories...
         files = [f for f in files if os.path.isdir('/proc/' + f)]
@@ -275,7 +278,8 @@ def get_running_processes():
         files = [f for f in files if os.path.islink('/proc/' + f + '/exe')]
 
         # list of processes
-        processes = [os.path.basename(os.readlink('/proc/' + f +'/exe')) for f in files]
+        processes = [os.path.basename(os.readlink('/proc/' + f +'/exe')) for f \
+            in files]
 
         return processes
     return []
@@ -314,7 +318,8 @@ class HashDigest:
 
     def cleanID(self, id_):
         id_ = id_.strip().lower()
-        for strip in (' :.-_'): id_ = id_.replace(strip, '')
+        for strip in (' :.-_'):
+            id_ = id_.replace(strip, '')
         return id_
 
     def __eq__(self, other):
@@ -436,7 +441,8 @@ def get_abspath_for_script(scriptname, want_type = False):
                 os.chmod(path_to_script, 0700)
             except OSError: # do not traceback (could be a permission problem)
                 #we talk about a file here
-                s = _('Could not write to %s. Session Management support will not work') % path_to_script
+                s = _('Could not write to %s. Session Management support will '
+                    'not work') % path_to_script
                 print >> sys.stderr, s
 
     else: # normal user (not svn user)
@@ -541,13 +547,13 @@ def file_is_locked(path_to_file):
     try:
         # try make a handle for READING the file
         hfile = win32file.CreateFile(
-                path_to_file,                                   # path to file
-                win32con.GENERIC_READ,                  # open for reading
-                0,                                                              # do not share with other proc
+                path_to_file,                   # path to file
+                win32con.GENERIC_READ,          # open for reading
+                0,                              # do not share with other proc
                 secur_att,
-                win32con.OPEN_EXISTING,                 # existing file only
+                win32con.OPEN_EXISTING,         # existing file only
                 win32con.FILE_ATTRIBUTE_NORMAL, # normal file
-                0                                                               # no attr. template
+                0                               # no attr. template
         )
     except pywintypes.error:
         return True
@@ -555,7 +561,7 @@ def file_is_locked(path_to_file):
         hfile.Close()
         return False
 
-def _get_fade_color(treeview, selected, focused):
+def get_fade_color(treeview, selected, focused):
     """
     Get a gdk color that is between foreground and background in 0.3
     0.7 respectively colors of the cell for the given treeview
@@ -621,7 +627,8 @@ def get_avatar_pixbuf_from_cache(fjid, use_local=True):
         # don't show avatar for the transport itself
         return None
 
-    if any(jid in gajim.contacts.get_gc_list(acc) for acc in gajim.connections):
+    if any(jid in gajim.contacts.get_gc_list(acc) for acc in \
+    gajim.contacts.get_accounts()):
         is_groupchat_contact = True
     else:
         is_groupchat_contact = False
@@ -756,8 +763,10 @@ def possibly_set_gajim_as_xmpp_handler():
 
             # setting for GNOME/Gconf
             client.set_bool('/desktop/gnome/url-handlers/xmpp/enabled', True)
-            client.set_string('/desktop/gnome/url-handlers/xmpp/command', command)
-            client.set_bool('/desktop/gnome/url-handlers/xmpp/needs_terminal', False)
+            client.set_string('/desktop/gnome/url-handlers/xmpp/command',
+                command)
+            client.set_bool('/desktop/gnome/url-handlers/xmpp/needs_terminal',
+                False)
 
             # setting for KDE
             if path_to_kde_file is not None: # user has run kde at least once
@@ -780,7 +789,8 @@ Description=xmpp
 ''' % command)
                     f.close()
                 except IOError:
-                    log.debug("I/O Error writing settings to %s", repr(path_to_kde_file), exc_info=True)
+                    log.debug("I/O Error writing settings to %s",
+                        repr(path_to_kde_file), exc_info=True)
         else: # no gajim remote, stop ask user everytime
             gajim.config.set('check_if_gajim_is_default', False)
 
@@ -807,12 +817,12 @@ Description=xmpp
         # xmpp: is currently handled by another program, so ask the user
         pritext = _('Gajim is not the default Jabber client')
         sectext = _('Would you like to make Gajim the default Jabber client?')
-        checktext = _('Always check to see if Gajim is the default Jabber client '
-                'on startup')
+        checktext = _('Always check to see if Gajim is the default Jabber '
+            'client on startup')
         def on_cancel(checked):
             gajim.config.set('check_if_gajim_is_default', checked)
         dlg = dialogs.ConfirmationDialogCheck(pritext, sectext, checktext,
-                set_gajim_as_xmpp_handler, on_cancel)
+            set_gajim_as_xmpp_handler, on_cancel)
         if gajim.config.get('check_if_gajim_is_default'):
             dlg.checkbutton.set_active(True)
 
@@ -849,12 +859,12 @@ def get_possible_button_event(event):
 def destroy_widget(widget):
     widget.destroy()
 
-def on_avatar_save_as_menuitem_activate(widget, jid, account, default_name=''):
+def on_avatar_save_as_menuitem_activate(widget, jid, default_name=''):
     def on_continue(response, file_path):
         if response < 0:
             return
         pixbuf = get_avatar_pixbuf_from_cache(jid)
-        path, extension = os.path.splitext(file_path)
+        extension = os.path.splitext(file_path)[1]
         if not extension:
             # Silently save as Jpeg image
             image_format = 'jpeg'
@@ -875,9 +885,10 @@ def on_avatar_save_as_menuitem_activate(widget, jid, account, default_name=''):
             def on_ok(file_path, pixbuf):
                 pixbuf.save(file_path, 'jpeg')
             dialogs.ConfirmationDialog(_('Extension not supported'),
-                    _('Image cannot be saved in %(type)s format. Save as %(new_filename)s?'
-                    ) % {'type': image_format, 'new_filename': new_file_path},
-                    on_response_ok = (on_ok, new_file_path, pixbuf))
+                _('Image cannot be saved in %(type)s format. Save as '
+                '%(new_filename)s?') % {'type': image_format,
+                'new_filename': new_file_path},
+                on_response_ok = (on_ok, new_file_path, pixbuf))
         else:
             dialog.destroy()
 
@@ -888,22 +899,21 @@ def on_avatar_save_as_menuitem_activate(widget, jid, account, default_name=''):
             # check if we have write permissions
             if not os.access(file_path, os.W_OK):
                 file_name = os.path.basename(file_path)
-                dialogs.ErrorDialog(_('Cannot overwrite existing file "%s"' %
-                        file_name),
-                _('A file with this name already exists and you do not have '
-                'permission to overwrite it.'))
+                dialogs.ErrorDialog(_('Cannot overwrite existing file "%s"') % \
+                    file_name, _('A file with this name already exists and you '
+                    'do not have permission to overwrite it.'))
                 return
             dialog2 = dialogs.FTOverwriteConfirmationDialog(
-                    _('This file already exists'), _('What do you want to do?'),
-                    propose_resume=False, on_response=(on_continue, file_path))
+                _('This file already exists'), _('What do you want to do?'),
+                propose_resume=False, on_response=(on_continue, file_path))
             dialog2.set_transient_for(dialog)
             dialog2.set_destroy_with_parent(True)
         else:
             dirname = os.path.dirname(file_path)
             if not os.access(dirname, os.W_OK):
                 dialogs.ErrorDialog(_('Directory "%s" is not writable') % \
-                dirname, _('You do not have permission to create files in this'
-                ' directory.'))
+                    dirname, _('You do not have permission to create files in '
+                    'this directory.'))
                 return
 
         on_continue(0, file_path)
@@ -912,15 +922,15 @@ def on_avatar_save_as_menuitem_activate(widget, jid, account, default_name=''):
         dialog.destroy()
 
     dialog = dialogs.FileChooserDialog(title_text=_('Save Image as...'),
-            action=gtk.FILE_CHOOSER_ACTION_SAVE, buttons=(gtk.STOCK_CANCEL,
-            gtk.RESPONSE_CANCEL, gtk.STOCK_SAVE, gtk.RESPONSE_OK),
-            default_response=gtk.RESPONSE_OK,
-            current_folder=gajim.config.get('last_save_dir'), on_response_ok=on_ok,
-            on_response_cancel=on_cancel)
+        action=gtk.FILE_CHOOSER_ACTION_SAVE, buttons=(gtk.STOCK_CANCEL,
+        gtk.RESPONSE_CANCEL, gtk.STOCK_SAVE, gtk.RESPONSE_OK),
+        default_response=gtk.RESPONSE_OK,
+        current_folder=gajim.config.get('last_save_dir'), on_response_ok=on_ok,
+        on_response_cancel=on_cancel)
 
     dialog.set_current_name(default_name + '.jpeg')
     dialog.connect('delete-event', lambda widget, event:
-            on_cancel(widget))
+        on_cancel(widget))
 
 def on_bm_header_changed_state(widget, event):
     widget.set_state(gtk.STATE_NORMAL) #do not allow selected_state
@@ -1124,7 +1134,7 @@ def __label_size_allocate(widget, allocation):
 
     # set wrap width to the pango.Layout of the labels ###
     layout.set_width (allocation.width * pango.SCALE)
-    lw, lh = layout.get_size ()
+    lh = layout.get_size()[1]
 
     if lh_old != lh:
         widget.set_size_request (-1, lh / pango.SCALE)
