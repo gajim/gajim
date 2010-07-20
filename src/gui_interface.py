@@ -40,6 +40,7 @@ import sys
 import re
 import time
 import math
+from subprocess import Popen
 
 import gtk
 import gobject
@@ -1347,6 +1348,10 @@ class Interface:
                         'subject': gmessage['Subject'],
                         'snippet': gmessage['Snippet']}
                     cnt += 1
+
+            command = gajim.config.get('notify_on_new_gmail_email_command')
+            if command:
+                Popen(command, shell=True)
 
             if gajim.config.get_per('soundevents', 'gmail_received', 'enabled'):
                 helpers.play_sound('gmail_received')

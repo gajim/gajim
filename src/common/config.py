@@ -161,6 +161,7 @@ class Config:
             'after_nickname': [ opt_str, ':', _('Characters that are printed after the nickname in conversations') ],
             'notify_on_new_gmail_email': [ opt_bool, True ],
             'notify_on_new_gmail_email_extra': [ opt_bool, False ],
+            'notify_on_new_gmail_email_command': [ opt_str, '', _('Specify the command to run when new mail arrives, e.g.: /usr/bin/getmail -q') ],
             'use_gpg_agent': [ opt_bool, False ],
             'change_roster_title': [ opt_bool, True, _('Add * and [n] in roster title?')],
             'restore_lines': [opt_int, 4, _('How many lines to remember from previous conversation when a chat tab/window is reopened.')],
