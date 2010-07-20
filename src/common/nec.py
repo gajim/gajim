@@ -41,7 +41,9 @@ class NetworkEventsController(object):
 
     def register_incoming_event(self, event_class):
         for base_event_name in event_class.base_network_events:
-            self.incoming_events_generators.setdefault(base_event_name, []).append(event_class)
+            event_list = self.incoming_events_generators.setdefault(base_event_name, [])
+            if not event_class in event_list:
+                event_list.append(event_class)
 
     def unregister_incoming_event(self, event_class):
         for base_event_name in event_class.base_network_events:
@@ -55,8 +57,9 @@ class NetworkEventsController(object):
         pass
 
     def push_incoming_event(self, event_object):
-        if self._generate_events_based_on_incoming_event(event_object):
-            gajim.ged.raise_event(event_object.name, event_object)
+        if event_object.generate():
+            if self._generate_events_based_on_incoming_event(event_object):
+                gajim.ged.raise_event(event_object.name, event_object)
 
     def push_outgoing_event(self, event_object):
         pass
@@ -93,25 +96,7 @@ class NetworkEvent(object):
     def init(self):
         pass
 
-    def _set_kwargs_as_attributes(self, **kwargs):
-        for k, v in kwargs.iteritems():
-            setattr(self, k, v)
-
-    def __str__(self):
-        return '<NetworkEvent object> Attributes: %s'%(pformat(self.__dict__))
-
-    def __repr__(self):
-        return '<NetworkEvent object> Attributes: %s'%(pformat(self.__dict__))
-
-class NetworkIncomingEvent(NetworkEvent):
-    base_network_events = []
-    '''
-    Names of base network events that new event is going to be generated on.
-    '''
-
-    def init(self):
-        pass
-
+    
     def generate(self):
         '''
         Generates new event (sets it's attributes) based on event object.
@@ -125,10 +110,25 @@ class NetworkIncomingEvent(NetworkEvent):
 
         :return: True if generated event should be dispatched, False otherwise.
         '''
-        pass
+        return True
+
+    def _set_kwargs_as_attributes(self, **kwargs):
+        for k, v in kwargs.iteritems():
+            setattr(self, k, v)
+
+    def __str__(self):
+        return '<NetworkEvent object> Attributes: %s'%(pformat(self.__dict__))
+
+    def __repr__(self):
+        return '<NetworkEvent object> Attributes: %s'%(pformat(self.__dict__))
+
+    
+class NetworkIncomingEvent(NetworkEvent):
+    base_network_events = []
+    '''
+    Names of base network events that new event is going to be generated on.
+    '''
 
 
 class NetworkOutgoingEvent(NetworkEvent):
-
-    def init(self):
         pass

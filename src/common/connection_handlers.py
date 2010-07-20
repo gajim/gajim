@@ -41,6 +41,7 @@ from calendar import timegm
 import datetime
 
 import common.xmpp
+import common.caps_cache as capscache
 
 from common import helpers
 from common import gajim
@@ -50,8 +51,10 @@ from common.pubsub import ConnectionPubSub
 from common.pep import ConnectionPEP
 from common.protocol.caps import ConnectionCaps
 from common.protocol.bytestream import ConnectionSocks5Bytestream
-import common.caps_cache as capscache
+from common import ged
+from common import nec
 from common.nec import NetworkEvent
+from plugins import GajimPlugin
 if gajim.HAVE_FARSIGHT:
     from common.jingle import ConnectionJingle
 else:
@@ -1008,6 +1011,9 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
         self.gmail_last_tid = None
         self.gmail_last_time = None
 
+        gajim.ged.register_event_handler('http-auth-received', ged.CORE,
+            self._nec_http_auth_received)
+
     def build_http_auth_answer(self, iq_obj, answer):
         if not self.connection or self.connected < 2:
             return
@@ -1022,17 +1028,17 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
                 common.xmpp.protocol.ERR_NOT_AUTHORIZED)
             self.connection.send(err)
 
+    def _nec_http_auth_received(self, obj):
+        if obj.conn.name != self.name:
+            return
+        if obj.opt in ('yes', 'no'):
+            obj.conn.build_http_auth_answer(obj.iq_obj, obj.opt)
+            return True
+
     def _HttpAuthCB(self, con, iq_obj):
         log.debug('HttpAuthCB')
-        opt = gajim.config.get_per('accounts', self.name, 'http_auth')
-        if opt in ('yes', 'no'):
-            self.build_http_auth_answer(iq_obj, opt)
-        else:
-            id_ = iq_obj.getTagAttr('confirm', 'id')
-            method = iq_obj.getTagAttr('confirm', 'method')
-            url = iq_obj.getTagAttr('confirm', 'url')
-            msg = iq_obj.getTagData('body') # In case it's a message with a body
-            self.dispatch('HTTP_AUTH', (method, url, id_, iq_obj, msg))
+        gajim.nec.push_incoming_event(HttpAuthReceivedEvent(None, conn=self,
+            iq_obj=iq_obj))
         raise common.xmpp.NodeProcessed
 
     def _ErrorCB(self, con, iq_obj):
@@ -2459,3 +2465,21 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
         con.RegisterHandler('presence', self._StanzaArrivedCB)
         con.RegisterHandler('message', self._StanzaArrivedCB)
         con.RegisterHandler('unknown', self._StreamCB, 'urn:ietf:params:xml:ns:xmpp-streams', xmlns='http://etherx.jabber.org/streams')
+
+class HttpAuthReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'http-auth-received'
+    base_network_events = []
+
+    def generate(self):
+        if not self.conn:
+            self.conn = self.base_event.conn
+        if not self.iq_obj:
+            self.iq_obj = self.base_event.xmpp_iq
+
+        self.opt = gajim.config.get_per('accounts', self.conn.name, 'http_auth')
+        self.iq_id = self.iq_obj.getTagAttr('confirm', 'id')
+        self.method = self.iq_obj.getTagAttr('confirm', 'method')
+        self.url = self.iq_obj.getTagAttr('confirm', 'url')
+        # In case it's a message with a body
+        self.msg = self.iq_obj.getTagData('body')
+        return True

@@ -147,23 +147,24 @@ class Interface:
             self.instances['change_nick_dialog'] = dialogs.ChangeNickDialog(
                 account, room_jid, title, prompt)
 
-    def handle_event_http_auth(self, account, data):
+    def handle_event_http_auth(self, obj):
         #('HTTP_AUTH', account, (method, url, transaction_id, iq_obj, msg))
-        def response(account, iq_obj, answer):
-            gajim.connections[account].build_http_auth_answer(iq_obj, answer)
+        def response(account, answer):
+            obj.conn.build_http_auth_answer(obj.iq_obj, answer)
 
-        def on_yes(is_checked, account, iq_obj):
-            response(account, iq_obj, 'yes')
+        def on_yes(is_checked, obj):
+            response(obj, 'yes')
 
+        account = obj.conn.name
         sec_msg = _('Do you accept this request?')
         if gajim.get_number_of_connected_accounts() > 1:
             sec_msg = _('Do you accept this request on account %s?') % account
-        if data[4]:
-            sec_msg = data[4] + '\n' + sec_msg
+        if obj.msg:
+            sec_msg = obj.msg + '\n' + sec_msg
         dialog = dialogs.YesNoDialog(_('HTTP (%(method)s) Authorization for '
-            '%(url)s (id: %(id)s)') % {'method': data[0], 'url': data[1],
-            'id': data[2]}, sec_msg, on_response_yes=(on_yes, account, data[3]),
-            on_response_no=(response, account, data[3], 'no'))
+            '%(url)s (id: %(id)s)') % {'method': obj.method, 'url': obj.url,
+            'id': obj.iq_id}, sec_msg, on_response_yes=(on_yes, obj),
+            on_response_no=(response, obj, 'no'))
 
     def handle_event_error_answer(self, account, array):
         #('ERROR_ANSWER', account, (id, jid_from, errmsg, errcode))
@@ -2140,7 +2141,6 @@ class Interface:
             'FILE_SEND_ERROR': [self.handle_event_file_send_error],
             'STANZA_ARRIVED': [self.handle_event_stanza_arrived],
             'STANZA_SENT': [self.handle_event_stanza_sent],
-            'HTTP_AUTH': [self.handle_event_http_auth],
             'VCARD_PUBLISHED': [self.handle_event_vcard_published],
             'VCARD_NOT_PUBLISHED': [self.handle_event_vcard_not_published],
             'ASK_NEW_NICK': [self.handle_event_ask_new_nick],
@@ -2181,7 +2181,8 @@ class Interface:
             'JINGLE_DISCONNECTED': [self.handle_event_jingle_disconnected],
             'JINGLE_ERROR': [self.handle_event_jingle_error],
             'PEP_RECEIVED': [self.handle_event_pep_received],
-            'CAPS_RECEIVED': [self.handle_event_caps_received]
+            'CAPS_RECEIVED': [self.handle_event_caps_received],
+            'http-auth-received': [self.handle_event_http_auth],
         }
 
     def register_core_handlers(self):
@@ -2192,7 +2193,7 @@ class Interface:
         """
         for event_name, event_handlers in self.handlers.iteritems():
             for event_handler in event_handlers:
-                gajim.ged.register_event_handler(event_name, ged.CORE,
+                gajim.ged.register_event_handler(event_name, ged.GUI1,
                     event_handler)
 
 ################################################################################
