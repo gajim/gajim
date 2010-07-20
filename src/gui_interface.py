@@ -825,57 +825,24 @@ class Interface:
         if self.remote_ctrl:
             self.remote_ctrl.raise_signal('VcardInfo', (account, vcard))
 
-    def handle_event_last_status_time(self, account, array):
+    def handle_event_last_status_time(self, obj):
         # ('LAST_STATUS_TIME', account, (jid, resource, seconds, status))
-        tim = array[2]
-        if tim < 0:
+        if obj.seconds < 0:
             # Ann error occured
             return
-        win = None
-        if array[0] in self.instances[account]['infos']:
-            win = self.instances[account]['infos'][array[0]]
-        elif array[0] + '/' + array[1] in self.instances[account]['infos']:
-            win = self.instances[account]['infos'][array[0] + '/' + array[1]]
-        c = gajim.contacts.get_contact(account, array[0], array[1])
+        account = obj.conn.name
+        c = gajim.contacts.get_contact(account, obj.jid, obj.resource)
         if c: # c can be none if it's a gc contact
-            if array[3]:
-                c.status = array[3]
+            if obj.status:
+                c.status = obj.status
                 self.roster.draw_contact(c.jid, account) # draw offline status
-            last_time = time.localtime(time.time() - tim)
+            last_time = time.localtime(time.time() - obj.seconds)
             if c.show == 'offline':
                 c.last_status_time = last_time
             else:
                 c.last_activity_time = last_time
-        if win:
-            win.set_last_status_time()
-        if self.roster.tooltip.id and self.roster.tooltip.win:
-            self.roster.tooltip.update_last_time(last_time)
-        if self.remote_ctrl:
-            self.remote_ctrl.raise_signal('LastStatusTime', (account, array))
-
-    def handle_event_os_info(self, account, array):
-        #'OS_INFO' (account, (jid, resource, client_info, os_info))
-        win = None
-        if array[0] in self.instances[account]['infos']:
-            win = self.instances[account]['infos'][array[0]]
-        elif array[0] + '/' + array[1] in self.instances[account]['infos']:
-            win = self.instances[account]['infos'][array[0] + '/' + array[1]]
-        if win:
-            win.set_os_info(array[1], array[2], array[3])
-        if self.remote_ctrl:
-            self.remote_ctrl.raise_signal('OsInfo', (account, array))
-
-    def handle_event_entity_time(self, account, array):
-        #'ENTITY_TIME' (account, (jid, resource, time_info))
-        win = None
-        if array[0] in self.instances[account]['infos']:
-            win = self.instances[account]['infos'][array[0]]
-        elif array[0] + '/' + array[1] in self.instances[account]['infos']:
-            win = self.instances[account]['infos'][array[0] + '/' + array[1]]
-        if win:
-            win.set_entity_time(array[1], array[2])
-        if self.remote_ctrl:
-            self.remote_ctrl.raise_signal('EntityTime', (account, array))
+            if self.roster.tooltip.id and self.roster.tooltip.win:
+                self.roster.tooltip.update_last_time(last_time)
 
     def handle_event_gc_notify(self, account, array):
         #'GC_NOTIFY' (account, (room_jid, show, status, nick,
@@ -2118,9 +2085,6 @@ class Interface:
             'ACC_OK': [self.handle_event_acc_ok],
             'MYVCARD': [self.handle_event_myvcard],
             'VCARD': [self.handle_event_vcard],
-            'LAST_STATUS_TIME': [self.handle_event_last_status_time],
-            'OS_INFO': [self.handle_event_os_info],
-            'ENTITY_TIME': [self.handle_event_entity_time],
             'GC_NOTIFY': [self.handle_event_gc_notify],
             'GC_MSG': [self.handle_event_gc_msg],
             'GC_SUBJECT': [self.handle_event_gc_subject],
@@ -2183,6 +2147,7 @@ class Interface:
             'PEP_RECEIVED': [self.handle_event_pep_received],
             'CAPS_RECEIVED': [self.handle_event_caps_received],
             'http-auth-received': [self.handle_event_http_auth],
+            'last-result-received': [self.handle_event_last_status_time],
         }
 
     def register_core_handlers(self):

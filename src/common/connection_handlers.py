@@ -815,33 +815,16 @@ class ConnectionHandlersBase:
 
     def _ErrorCB(self, con, iq_obj):
         log.debug('ErrorCB')
-        jid_from = helpers.get_full_jid_from_iq(iq_obj)
-        jid_stripped, resource = gajim.get_room_and_nick_from_fjid(jid_from)
         id_ = unicode(iq_obj.getID())
         if id_ in self.last_ids:
-            self.dispatch('LAST_STATUS_TIME', (jid_stripped, resource, -1, ''))
-            self.last_ids.remove(id_)
-            return
+            gajim.nec.push_incoming_event(LastResultReceivedEvent(None,
+                conn=self, iq_obj=iq_obj))
+            return True
 
     def _LastResultCB(self, con, iq_obj):
         log.debug('LastResultCB')
-        qp = iq_obj.getTag('query')
-        seconds = qp.getAttr('seconds')
-        status = qp.getData()
-        try:
-            seconds = int(seconds)
-        except Exception:
-            return
-        id_ = iq_obj.getID()
-        if id_ in self.groupchat_jids:
-            who = self.groupchat_jids[id_]
-            del self.groupchat_jids[id_]
-        else:
-            who = helpers.get_full_jid_from_iq(iq_obj)
-        if id_ in self.last_ids:
-            self.last_ids.remove(id_)
-        jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
-        self.dispatch('LAST_STATUS_TIME', (jid_stripped, resource, seconds, status))
+        gajim.nec.push_incoming_event(LastResultReceivedEvent(None, conn=self,
+            iq_obj=iq_obj))
 
     def get_sessions(self, jid):
         """
@@ -1043,18 +1026,18 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
 
     def _ErrorCB(self, con, iq_obj):
         log.debug('ErrorCB')
-        ConnectionHandlersBase._ErrorCB(self, con, iq_obj)
-        jid_from = helpers.get_full_jid_from_iq(iq_obj)
-        jid_stripped, resource = gajim.get_room_and_nick_from_fjid(jid_from)
+        if ConnectionHandlersBase._ErrorCB(self, con, iq_obj):
+            return
         id_ = unicode(iq_obj.getID())
         if id_ in self.version_ids:
-            self.dispatch('OS_INFO', (jid_stripped, resource, '', ''))
-            self.version_ids.remove(id_)
+            gajim.nec.push_incoming_event(VersionResultReceivedEvent(None,
+                conn=self, iq_obj=iq_obj))
             return
         if id_ in self.entity_time_ids:
-            self.dispatch('ENTITY_TIME', (jid_stripped, resource, ''))
-            self.entity_time_ids.remove(id_)
+            gajim.nec.push_incoming_event(LastResultReceivedEvent(None,
+                conn=self, iq_obj=iq_obj))
             return
+        jid_from = helpers.get_full_jid_from_iq(iq_obj)
         errmsg = iq_obj.getErrorMsg()
         errcode = iq_obj.getErrorCode()
         self.dispatch('ERROR_ANSWER', (id_, jid_from, errmsg, errcode))
@@ -1220,25 +1203,8 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
 
     def _VersionResultCB(self, con, iq_obj):
         log.debug('VersionResultCB')
-        client_info = ''
-        os_info = ''
-        qp = iq_obj.getTag('query')
-        if qp.getTag('name'):
-            client_info += qp.getTag('name').getData()
-        if qp.getTag('version'):
-            client_info += ' ' + qp.getTag('version').getData()
-        if qp.getTag('os'):
-            os_info += qp.getTag('os').getData()
-        id_ = iq_obj.getID()
-        if id_ in self.groupchat_jids:
-            who = self.groupchat_jids[id_]
-            del self.groupchat_jids[id_]
-        else:
-            who = helpers.get_full_jid_from_iq(iq_obj)
-        jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
-        if id_ in self.version_ids:
-            self.version_ids.remove(id_)
-        self.dispatch('OS_INFO', (jid_stripped, resource, client_info, os_info))
+        gajim.nec.push_incoming_event(VersionResultReceivedEvent(None,
+            conn=self, iq_obj=iq_obj))
 
     def _TimeCB(self, con, iq_obj):
         log.debug('TimeCB')
@@ -1270,50 +1236,8 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
 
     def _TimeRevisedResultCB(self, con, iq_obj):
         log.debug('TimeRevisedResultCB')
-        time_info = ''
-        qp = iq_obj.getTag('time')
-        if not qp:
-            # wrong answer
-            return
-        tzo = qp.getTag('tzo').getData()
-        if tzo.lower() == 'z':
-            tzo = '0:0'
-        tzoh, tzom = tzo.split(':')
-        utc_time = qp.getTag('utc').getData()
-        ZERO = datetime.timedelta(0)
-        class UTC(datetime.tzinfo):
-            def utcoffset(self, dt):
-                return ZERO
-            def tzname(self, dt):
-                return "UTC"
-            def dst(self, dt):
-                return ZERO
-
-        class contact_tz(datetime.tzinfo):
-            def utcoffset(self, dt):
-                return datetime.timedelta(hours=int(tzoh), minutes=int(tzom))
-            def tzname(self, dt):
-                return "remote timezone"
-            def dst(self, dt):
-                return ZERO
-
-        try:
-            t = datetime.datetime.strptime(utc_time, '%Y-%m-%dT%H:%M:%SZ')
-            t = t.replace(tzinfo=UTC())
-            time_info = t.astimezone(contact_tz()).strftime('%c')
-        except ValueError, e:
-            log.info('Wrong time format: %s' % str(e))
-
-        id_ = iq_obj.getID()
-        if id_ in self.groupchat_jids:
-            who = self.groupchat_jids[id_]
-            del self.groupchat_jids[id_]
-        else:
-            who = helpers.get_full_jid_from_iq(iq_obj)
-        jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
-        if id_ in self.entity_time_ids:
-            self.entity_time_ids.remove(id_)
-        self.dispatch('ENTITY_TIME', (jid_stripped, resource, time_info))
+        gajim.nec.push_incoming_event(TimeResultReceivedEvent(None,
+            conn=self, iq_obj=iq_obj))
 
     def _gMailNewMailCB(self, con, gm):
         """
@@ -2466,6 +2390,18 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
         con.RegisterHandler('message', self._StanzaArrivedCB)
         con.RegisterHandler('unknown', self._StreamCB, 'urn:ietf:params:xml:ns:xmpp-streams', xmlns='http://etherx.jabber.org/streams')
 
+class HelperEvent:
+    def get_jid_resource(self):
+        if self.id_ in self.conn.groupchat_jids:
+            who = self.conn.groupchat_jids[self.id_]
+            del self.conn.groupchat_jids[self.id_]
+        else:
+            who = helpers.get_full_jid_from_iq(self.iq_obj)
+        self.jid, self.resource = gajim.get_room_and_nick_from_fjid(who)
+
+    def get_id(self):
+        self.id_ = self.iq_obj.getID()
+
 class HttpAuthReceivedEvent(nec.NetworkIncomingEvent):
     name = 'http-auth-received'
     base_network_events = []
@@ -2482,4 +2418,122 @@ class HttpAuthReceivedEvent(nec.NetworkIncomingEvent):
         self.url = self.iq_obj.getTagAttr('confirm', 'url')
         # In case it's a message with a body
         self.msg = self.iq_obj.getTagData('body')
+        return True
+
+class LastResultReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
+    name = 'last-result-received'
+    base_network_events = []
+    
+    def generate(self):
+        if not self.conn:
+            self.conn = self.base_event.conn
+        if not self.iq_obj:
+            self.iq_obj = self.base_event.xmpp_iq
+
+        self.get_id()
+        self.get_jid_resource()
+        if self.id_ in self.conn.last_ids:
+            self.conn.last_ids.remove(self.id_)
+
+        self.status = ''
+        self.seconds = -1
+
+        if self.iq_obj.getType() == 'error':
+            return True
+
+        qp = self.iq_obj.getTag('query')
+        sec = qp.getAttr('seconds')
+        self.status = qp.getData()
+        try:
+            self.seconds = int(sec)
+        except Exception:
+            return
+
+        return True
+
+class VersionResultReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
+    name = 'version-result-received'
+    base_network_events = []
+    
+    def generate(self):
+        if not self.conn:
+            self.conn = self.base_event.conn
+        if not self.iq_obj:
+            self.iq_obj = self.base_event.xmpp_iq
+
+        self.get_id()
+        self.get_jid_resource()
+        if self.id_ in self.conn.version_ids:
+            self.conn.version_ids.remove(self.id_)
+
+        self.client_info = ''
+        self.os_info = ''
+
+        if self.iq_obj.getType() == 'error':
+            return True
+
+        qp = self.iq_obj.getTag('query')
+        if qp.getTag('name'):
+            self.client_info += qp.getTag('name').getData()
+        if qp.getTag('version'):
+            self.client_info += ' ' + qp.getTag('version').getData()
+        if qp.getTag('os'):
+            self.os_info += qp.getTag('os').getData()
+
+        return True
+
+class TimeResultReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
+    name = 'version-result-received'
+    base_network_events = []
+
+    def generate(self):
+        if not self.conn:
+            self.conn = self.base_event.conn
+        if not self.iq_obj:
+            self.iq_obj = self.base_event.xmpp_iq
+
+        self.get_id()
+        self.get_jid_resource()
+        if self.id_ in self.conn.entity_time_ids:
+            self.conn.entity_time_ids.remove(self.id_)
+
+        self.time_info = ''
+
+        if self.iq_obj.getType() == 'error':
+            return True
+
+        qp = self.iq_obj.getTag('time')
+        if not qp:
+            # wrong answer
+            return
+        tzo = qp.getTag('tzo').getData()
+        if tzo.lower() == 'z':
+            tzo = '0:0'
+        tzoh, tzom = tzo.split(':')
+        utc_time = qp.getTag('utc').getData()
+        ZERO = datetime.timedelta(0)
+        class UTC(datetime.tzinfo):
+            def utcoffset(self, dt):
+                return ZERO
+            def tzname(self, dt):
+                return "UTC"
+            def dst(self, dt):
+                return ZERO
+
+        class contact_tz(datetime.tzinfo):
+            def utcoffset(self, dt):
+                return datetime.timedelta(hours=int(tzoh), minutes=int(tzom))
+            def tzname(self, dt):
+                return "remote timezone"
+            def dst(self, dt):
+                return ZERO
+
+        try:
+            t = datetime.datetime.strptime(utc_time, '%Y-%m-%dT%H:%M:%SZ')
+            t = t.replace(tzinfo=UTC())
+            self.time_info = t.astimezone(contact_tz()).strftime('%c')
+        except ValueError, e:
+            log.info('Wrong time format: %s' % str(e))
+            return
+
         return True
