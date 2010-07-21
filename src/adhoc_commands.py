@@ -64,12 +64,12 @@ class CommandWindow:
         self.window.connect('delete-event',
             self.on_adhoc_commands_window_delete_event)
         for name in ('restart_button', 'back_button', 'forward_button',
-                'execute_button', 'close_button', 'stages_notebook',
-                'retrieving_commands_stage_vbox',
-                'command_list_stage_vbox', 'command_list_vbox',
-                'sending_form_stage_vbox', 'sending_form_progressbar',
-                'notes_label', 'no_commands_stage_vbox', 'error_stage_vbox',
-                'error_description_label'):
+            'execute_button', 'finish_button', 'close_button',
+            'stages_notebook', 'retrieving_commands_stage_vbox',
+            'command_list_stage_vbox', 'command_list_vbox',
+            'sending_form_stage_vbox', 'sending_form_progressbar',
+            'notes_label', 'no_commands_stage_vbox', 'error_stage_vbox',
+            'error_description_label'):
             self.__dict__[name] = self.xml.get_object(name)
 
         self.initiate()
@@ -137,6 +137,9 @@ class CommandWindow:
     def on_execute_button_clicked(self, *anything):
         return self.stage_execute_button_clicked(*anything)
 
+    def on_finish_button_clicked(self, *anything):
+        return self.stage_finish_button_clicked(*anything)
+
     def on_close_button_clicked(self, *anything):
         return self.stage_close_button_clicked(*anything)
 
@@ -169,6 +172,7 @@ class CommandWindow:
         self.back_button.set_sensitive(False)
         self.forward_button.set_sensitive(False)
         self.execute_button.set_sensitive(False)
+        self.finish_button.set_sensitive(False)
 
         # request command list
         self.request_command_list()
@@ -214,6 +218,7 @@ class CommandWindow:
         self.back_button.set_sensitive(False)
         self.forward_button.set_sensitive(True)
         self.execute_button.set_sensitive(False)
+        self.finish_button.set_sensitive(False)
 
         # build the commands list radiobuttons
         first_radio = None
@@ -270,6 +275,7 @@ class CommandWindow:
         self.back_button.set_sensitive(False)
         self.forward_button.set_sensitive(False)
         self.execute_button.set_sensitive(False)
+        self.finish_button.set_sensitive(False)
 
         self.stage3_submit_form()
 
@@ -277,6 +283,7 @@ class CommandWindow:
         self.stage_back_button_clicked = self.stage3_back_button_clicked
         self.stage_forward_button_clicked = self.stage3_forward_button_clicked
         self.stage_execute_button_clicked = self.stage3_execute_button_clicked
+        self.stage_finish_button_clicked = self.stage3_finish_button_clicked
         self.stage_close_button_clicked = self.stage3_close_button_clicked
         self.stage_adhoc_commands_window_delete_event = \
             self.stage3_close_button_clicked
@@ -320,6 +327,9 @@ class CommandWindow:
     def stage3_execute_button_clicked(self, widget):
         self.stage3_submit_form('execute')
 
+    def stage3_finish_button_clicked(self, widget):
+        self.stage3_submit_form('complete')
+
     def stage3_submit_form(self, action='execute'):
         self.data_form_widget.set_sensitive(False)
         if self.data_form_widget.get_data_form():
@@ -331,6 +341,7 @@ class CommandWindow:
         self.back_button.set_sensitive(False)
         self.forward_button.set_sensitive(False)
         self.execute_button.set_sensitive(False)
+        self.finish_button.set_sensitive(False)
 
         self.sending_form_progressbar.show()
         self.setup_pulsing(self.sending_form_progressbar)
@@ -379,11 +390,14 @@ class CommandWindow:
             self.forward_button.set_sensitive(
                 actions.getTag('next') is not None)
             self.execute_button.set_sensitive(True)
+            self.finish_button.set_sensitive(actions.getTag('complete') is not \
+                None)
         else:
             self.close_button.set_sensitive(True)
             self.back_button.set_sensitive(False)
             self.forward_button.set_sensitive(False)
             self.execute_button.set_sensitive(True)
+            self.finish_button.set_sensitive(False)
 
         if self.form_status == 'completed':
             self.close_button.set_sensitive(True)
@@ -391,6 +405,7 @@ class CommandWindow:
             self.back_button.hide()
             self.forward_button.hide()
             self.execute_button.hide()
+            self.finish_button.hide()
             self.close_button.show()
             self.stage_adhoc_commands_window_delete_event = \
                 self.stage3_close_button_clicked
@@ -423,6 +438,7 @@ class CommandWindow:
         self.back_button.set_sensitive(False)
         self.forward_button.set_sensitive(False)
         self.execute_button.set_sensitive(False)
+        self.finish_button.set_sensitive(False)
 
         self.stage_finish = self.do_nothing
         self.stage_close_button_clicked = self.stage4_close_button_clicked
@@ -468,6 +484,7 @@ class CommandWindow:
         self.back_button.hide()
         self.forward_button.hide()
         self.execute_button.hide()
+        self.finish_button.hide()
 
         self.error_description_label.set_text(error)
 
