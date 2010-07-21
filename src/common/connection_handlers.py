@@ -1263,54 +1263,15 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
             self.connection.send(iq)
             raise common.xmpp.NodeProcessed
 
-    def _gMailQueryCB(self, con, gm):
+    def _gMailQueryCB(self, con, iq_obj):
         """
         Called when we receive results from Querying the server for mail messages
         in gmail account
         """
-        if not gm.getTag('mailbox'):
-            return
-        self.gmail_url = gm.getTag('mailbox').getAttr('url')
-        if gm.getTag('mailbox').getNamespace() == common.xmpp.NS_GMAILNOTIFY:
-            newmsgs = gm.getTag('mailbox').getAttr('total-matched')
-            if newmsgs != '0':
-                # there are new messages
-                gmail_messages_list = []
-                if gm.getTag('mailbox').getTag('mail-thread-info'):
-                    gmail_messages = gm.getTag('mailbox').getTags('mail-thread-info')
-                    for gmessage in gmail_messages:
-                        unread_senders = []
-                        for sender in gmessage.getTag('senders').getTags('sender'):
-                            if sender.getAttr('unread') != '1':
-                                continue
-                            if sender.getAttr('name'):
-                                unread_senders.append(sender.getAttr('name') + '< ' + \
-                                        sender.getAttr('address') + '>')
-                            else:
-                                unread_senders.append(sender.getAttr('address'))
-
-                        if not unread_senders:
-                            continue
-                        gmail_subject = gmessage.getTag('subject').getData()
-                        gmail_snippet = gmessage.getTag('snippet').getData()
-                        tid = int(gmessage.getAttr('tid'))
-                        if not self.gmail_last_tid or tid > self.gmail_last_tid:
-                            self.gmail_last_tid = tid
-                        gmail_messages_list.append({ \
-                                'From': unread_senders, \
-                                'Subject': gmail_subject, \
-                                'Snippet': gmail_snippet, \
-                                'url': gmessage.getAttr('url'), \
-                                'participation': gmessage.getAttr('participation'), \
-                                'messages': gmessage.getAttr('messages'), \
-                                'date': gmessage.getAttr('date')})
-                    self.gmail_last_time = int(gm.getTag('mailbox').getAttr(
-                            'result-time'))
-
-                jid = gajim.get_jid_from_account(self.name)
-                log.debug(('You have %s new gmail e-mails on %s.') % (newmsgs, jid))
-                self.dispatch('GMAIL_NOTIFY', (jid, newmsgs, gmail_messages_list))
-            raise common.xmpp.NodeProcessed
+        log.debug('gMailQueryCB')
+        gajim.nec.push_incoming_event(GMailQueryReceivedEvent(None,
+            conn=self, iq_obj=iq_obj))
+        raise common.xmpp.NodeProcessed
 
     def _rosterItemExchangeCB(self, con, msg):
         """
@@ -2536,4 +2497,66 @@ class TimeResultReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             log.info('Wrong time format: %s' % str(e))
             return
 
+        return True
+
+class GMailQueryReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'gmail-notify'
+    base_network_events = []
+
+    def generate(self):
+        if not self.conn:
+            self.conn = self.base_event.conn
+        if not self.iq_obj:
+            self.iq_obj = self.base_event.xmpp_iq
+
+        if not self.iq_obj.getTag('mailbox'):
+            return
+        mb = self.iq_obj.getTag('mailbox')
+        if not mb.getAttr('url'):
+            return
+        self.conn.gmail_url = mb.getAttr('url')
+        if mb.getNamespace() != common.xmpp.NS_GMAILNOTIFY:
+            return
+        self.newmsgs = mb.getAttr('total-matched')
+        if not self.newmsgs:
+            return
+        if self.newmsgs == '0':
+            return
+        # there are new messages
+        self.gmail_messages_list = []
+        if mb.getTag('mail-thread-info'):
+            gmail_messages = mb.getTags('mail-thread-info')
+            for gmessage in gmail_messages:
+                unread_senders = []
+                for sender in gmessage.getTag('senders').getTags(
+                'sender'):
+                    if sender.getAttr('unread') != '1':
+                        continue
+                    if sender.getAttr('name'):
+                        unread_senders.append(sender.getAttr('name') + \
+                            '< ' + sender.getAttr('address') + '>')
+                    else:
+                        unread_senders.append(sender.getAttr('address'))
+
+                if not unread_senders:
+                    continue
+                gmail_subject = gmessage.getTag('subject').getData()
+                gmail_snippet = gmessage.getTag('snippet').getData()
+                tid = int(gmessage.getAttr('tid'))
+                if not self.conn.gmail_last_tid or \
+                tid > self.conn.gmail_last_tid:
+                    self.conn.gmail_last_tid = tid
+                self.gmail_messages_list.append({
+                    'From': unread_senders,
+                    'Subject': gmail_subject,
+                    'Snippet': gmail_snippet,
+                    'url': gmessage.getAttr('url'),
+                    'participation': gmessage.getAttr('participation'),
+                    'messages': gmessage.getAttr('messages'),
+                    'date': gmessage.getAttr('date')})
+            self.conn.gmail_last_time = int(mb.getAttr('result-time'))
+
+        self.jid = gajim.get_jid_from_account(self.name)
+        log.debug(('You have %s new gmail e-mails on %s.') % (self.newmsgs,
+            self.jid))
         return True

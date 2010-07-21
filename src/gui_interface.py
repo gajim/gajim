@@ -1288,41 +1288,38 @@ class Interface:
             notify.popup(event_type, jid, account, 'file-send-error', path,
                 event_type, file_props['name'])
 
-    def handle_event_gmail_notify(self, account, array):
-        jid = array[0]
-        gmail_new_messages = int(array[1])
-        gmail_messages_list = array[2]
-        if gajim.config.get('notify_on_new_gmail_email'):
-            path = gtkgui_helpers.get_icon_path('gajim-new_email_recv', 48)
-            title = _('New mail on %(gmail_mail_address)s') % \
-                    {'gmail_mail_address': jid}
-            text = i18n.ngettext('You have %d new mail conversation',
-                    'You have %d new mail conversations', gmail_new_messages,
-                    gmail_new_messages, gmail_new_messages)
+    def handle_event_gmail_notify(self, obj):
+        jid = obj.jid
+        gmail_new_messages = int(obj.newmsgs)
+        gmail_messages_list = obj.gmail_messages_list
+        if not gajim.config.get('notify_on_new_gmail_email'):
+            return
+        path = gtkgui_helpers.get_icon_path('gajim-new_email_recv', 48)
+        title = _('New mail on %(gmail_mail_address)s') % \
+            {'gmail_mail_address': jid}
+        text = i18n.ngettext('You have %d new mail conversation',
+            'You have %d new mail conversations', gmail_new_messages,
+            gmail_new_messages, gmail_new_messages)
 
-            if gajim.config.get('notify_on_new_gmail_email_extra'):
-                cnt = 0
-                for gmessage in gmail_messages_list:
-                    # FIXME: emulate Gtalk client popups. find out what they
-                    # parse and how they decide what to show each message has a
-                    # 'From', 'Subject' and 'Snippet' field
-                    if cnt >= 5:
-                        break
-                    senders = ',\n     '.join(reversed(gmessage['From']))
-                    text += _('\n\nFrom: %(from_address)s\nSubject: '
-                        '%(subject)s\n%(snippet)s') % \
-                        {'from_address': senders,
-                        'subject': gmessage['Subject'],
-                        'snippet': gmessage['Snippet']}
-                    cnt += 1
+        if gajim.config.get('notify_on_new_gmail_email_extra'):
+            cnt = 0
+            for gmessage in gmail_messages_list:
+                # FIXME: emulate Gtalk client popups. find out what they
+                # parse and how they decide what to show each message has a
+                # 'From', 'Subject' and 'Snippet' field
+                if cnt >= 5:
+                    break
+                senders = ',\n     '.join(reversed(gmessage['From']))
+                text += _('\n\nFrom: %(from_address)s\nSubject: '
+                    '%(subject)s\n%(snippet)s') % {'from_address': senders,
+                    'subject': gmessage['Subject'],
+                    'snippet': gmessage['Snippet']}
+                cnt += 1
 
-            if gajim.config.get_per('soundevents', 'gmail_received', 'enabled'):
-                helpers.play_sound('gmail_received')
-            notify.popup(_('New E-mail'), jid, account, 'gmail',
-                path_to_image=path, title=title, text=text)
-
-        if self.remote_ctrl:
-            self.remote_ctrl.raise_signal('NewGmail', (account, array))
+        if gajim.config.get_per('soundevents', 'gmail_received', 'enabled'):
+            helpers.play_sound('gmail_received')
+        notify.popup(_('New E-mail'), jid, obj.conn.name, 'gmail',
+            path_to_image=path, title=title, text=text)
 
     def handle_event_file_request_error(self, account, array):
         # ('FILE_REQUEST_ERROR', account, (jid, file_props, error_msg))
@@ -2100,7 +2097,6 @@ class Interface:
             'CON_TYPE': [self.handle_event_con_type],
             'CONNECTION_LOST': [self.handle_event_connection_lost],
             'FILE_REQUEST': [self.handle_event_file_request],
-            'GMAIL_NOTIFY': [self.handle_event_gmail_notify],
             'FILE_REQUEST_ERROR': [self.handle_event_file_request_error],
             'FILE_SEND_ERROR': [self.handle_event_file_send_error],
             'STANZA_ARRIVED': [self.handle_event_stanza_arrived],
@@ -2146,6 +2142,7 @@ class Interface:
             'JINGLE_ERROR': [self.handle_event_jingle_error],
             'PEP_RECEIVED': [self.handle_event_pep_received],
             'CAPS_RECEIVED': [self.handle_event_caps_received],
+            'gmail-notify': [self.handle_event_gmail_notify],
             'http-auth-received': [self.handle_event_http_auth],
             'last-result-received': [self.handle_event_last_status_time],
         }
