@@ -1843,6 +1843,8 @@ class MucBrowser(AgentBrowser):
             except GajimGeneralException:
                 pass
         else:
+            gajim.interface.instances[self.account]['join_gc']._set_room_jid(
+                service)
             gajim.interface.instances[self.account]['join_gc'].window.present()
         self.window.destroy(chain = True)
 
