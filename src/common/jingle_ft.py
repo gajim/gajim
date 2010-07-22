@@ -37,7 +37,7 @@ STATE_TRANSPORT_INFO = 3
 STATE_PROXY_ACTIVATED = 4
 
 class JingleFileTransfer(JingleContent):
-    def __init__(self, session, transport=None, file_props=None):
+    def __init__(self, session, transport=None, file_props=None, use_security=False):
         JingleContent.__init__(self, session, transport)
         
         log.info("transport value: %s" % transport)
@@ -53,6 +53,8 @@ class JingleFileTransfer(JingleContent):
         self.callbacks['iq-result'] += [self.__on_iq_result]
 
         self.state = STATE_NOT_STARTED
+        
+        self.use_security = use_security
         
         self.file_props = file_props
         if file_props is None:
@@ -246,6 +248,15 @@ class JingleFileTransfer(JingleContent):
             desc.setData(self.file_props['desc'])
 
         description_node.addChild(node=sioffer)
+        
+        if self.use_security:
+            security = xmpp.simplexml.Node(tag=xmpp.NS_JINGLE_XTLS + ' security')
+            # TODO: add fingerprint element
+            for m in ('x509', ): # supported authentication methods
+                method = xmpp.simplexml.Node(tag='method')
+                method.setAttr('name', m)
+                security.addChild(node=method)
+            content.addChild(node=security)
 
         content.addChild(node=description_node)
         

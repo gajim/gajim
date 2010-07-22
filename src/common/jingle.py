@@ -36,6 +36,7 @@ import helpers
 from jingle_session import JingleSession, JingleStates
 from jingle_rtp import JingleAudio, JingleVideo
 from jingle_ft import JingleFileTransfer
+import gajim
 
 import logging
 logger = logging.getLogger('gajim.c.jingle')
@@ -140,14 +141,26 @@ class ConnectionJingle(object):
     def start_file_transfer(self, jid, file_props):
         logger.info("start file transfer with file: %s" % file_props)
         jingle = self.get_jingle_session(jid, media='file')
+        contact = gajim.contacts.get_contact_with_highest_priority(self.name, 
+                                                                   gajim.get_jid_without_resource(jid))
+        if contact is None:
+            return
+        if contact.supports(xmpp.NS_JINGLE_XTLS):
+            use_security = True
+        else:
+            use_security = False
         if jingle:
             file_props['sid'] = jingle.sid
-            jingle.add_content('file', JingleFileTransfer(jingle, file_props))
+            jingle.add_content('file',
+                               JingleFileTransfer(jingle, file_props = file_props, use_security=use_security)
+                               )
         else:
             jingle = JingleSession(self, weinitiate=True, jid=jid)
             self.__sessions[jingle.sid] = jingle
             file_props['sid'] = jingle.sid
-            jingle.add_content('file', JingleFileTransfer(jingle, file_props=file_props))
+            jingle.add_content('file', 
+                               JingleFileTransfer(jingle, file_props=file_props, use_security=use_security)
+                               )
             jingle.start_session()
         return jingle.sid
         
