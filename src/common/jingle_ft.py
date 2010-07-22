@@ -92,6 +92,12 @@ class JingleFileTransfer(JingleContent):
 
         file_props['session-type'] = 'jingle'
 
+        security = content.getTag('security')
+        if not security:
+            self.use_security = False
+        else:
+            self.use_security = True
+        
         file_tag = content.getTag('description').getTag('offer').getTag('file')
         for attribute in file_tag.getAttrs():
             if attribute in ('name', 'size', 'hash', 'date'):
@@ -130,6 +136,11 @@ class JingleFileTransfer(JingleContent):
 
     def __on_session_accept(self, stanza, content, error, action):
         log.info("__on_session_accept")
+        
+        security = content.getTag('security')
+        if not security: # responder can not verify our fingerprint
+            self.use_security = False
+            
 
     def __on_session_terminate(self, stanza, content, error, action):
         log.info("__on_session_terminate")
