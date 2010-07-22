@@ -941,12 +941,13 @@ class Logger:
         for jid in roster:
             self.add_or_update_contact(account_jid, jid, roster[jid]['name'],
                     roster[jid]['subscription'], roster[jid]['ask'],
-                    roster[jid]['groups'])
+                    roster[jid]['groups'], commit=False)
+        self.con.commit()
 
         # At this point, we are sure the replacement works properly so we can
         # set the new roster_version value.
         gajim.config.set_per('accounts', account_name, 'roster_version',
-                roster_version)
+            roster_version)
 
     def del_contact(self, account_jid, jid):
         """
@@ -965,7 +966,8 @@ class Logger:
                 (account_jid_id, jid_id))
         self.con.commit()
 
-    def add_or_update_contact(self, account_jid, jid, name, sub, ask, groups):
+    def add_or_update_contact(self, account_jid, jid, name, sub, ask, groups,
+    commit=True):
         """
         Add or update a contact from account_jid roster
         """
@@ -996,7 +998,8 @@ class Logger:
                 (account_jid_id, jid_id, name,
                 self.convert_human_subscription_values_to_db_api_values(sub),
                 bool(ask)))
-        self.con.commit()
+        if commit:
+            self.con.commit()
 
     def get_roster(self, account_jid):
         """
