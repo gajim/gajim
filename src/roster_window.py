@@ -284,7 +284,6 @@ class RosterWindow:
         self.starting = True
         jids = gajim.contacts.get_jid_list(account)
 
-        self.tree.freeze_child_notify()
         for jid in jids:
             self.add_contact(jid, account)
 
@@ -298,7 +297,6 @@ class RosterWindow:
             self.draw_group(group, account)
         self.draw_account(account)
 
-        self.tree.thaw_child_notify()
         self.starting = False
 
 
@@ -1363,6 +1361,17 @@ class RosterWindow:
 
         task = _draw_all_contacts(jids, account)
         gobject.idle_add(task.next)
+
+    def _before_fill(self):
+        self.tree.freeze_child_notify()
+        self.tree.set_model(None)
+        # disable sorting
+        self.model.set_sort_column_id(-2, gtk.SORT_ASCENDING)
+ 
+    def _after_fill(self):
+        self.model.set_sort_column_id(1, gtk.SORT_ASCENDING)
+        self.tree.set_model(self.modelfilter)
+        self.tree.thaw_child_notify()
 
     def setup_and_draw_roster(self):
         """

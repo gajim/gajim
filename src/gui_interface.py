@@ -3246,8 +3246,10 @@ class Interface:
             self.show_systray()
 
         self.roster = roster_window.RosterWindow()
+        self.roster._before_fill()
         for account in gajim.connections:
             gajim.connections[account].load_roster_from_db()
+        self.roster._after_fill()
 
         # get instances for windows/dialogs that will show_all()/hide()
         self.instances['file_transfers'] = dialogs.FileTransfersWindow()
