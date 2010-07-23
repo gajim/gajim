@@ -1428,6 +1428,8 @@ class RosterWindow:
         """
         Expand/collapse account row based on self.collapsed_rows
         """
+        if not self.tree.get_model():
+            return
         iterA = self._get_account_iter(account)
         if not iterA:
             # thank you modelfilter
@@ -1444,6 +1446,8 @@ class RosterWindow:
         """
         Expand/collapse group row based on self.collapsed_rows
         """
+        if not self.tree.get_model():
+            return
         iterG = self._get_group_iter(group, account)
         if not iterG:
             # Group not visible
