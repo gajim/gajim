@@ -98,43 +98,50 @@ class RosterWindow:
         name -- the account name
         model -- the data model (default TreeFilterModel)
         """
-        if not model:
-            model = self.modelfilter
         if model is None:
-            return
-        account_iter = model.get_iter_root()
+            model = self.modelfilter
+            if model is None:
+                return
+
         if self.regroup:
-            return account_iter
-        while account_iter:
-            account_name = model[account_iter][C_ACCOUNT]
-            if account_name and name == account_name.decode('utf-8'):
-                break
-            account_iter = model.iter_next(account_iter)
-        return account_iter
+            if 'account' not in self._iters:
+                return None
+            it = self._iters['account']
+        else:
+            it = self._iters[name]['account']
+
+        if model == self.model or it is None:
+            return it
+        try:
+            return self.modelfilter.convert_child_iter_to_iter(it)
+        except RuntimeError:
+            return None
 
 
-    def _get_group_iter(self, name, account, account_iter=None, model=None):
+    def _get_group_iter(self, name, account, model=None):
         """
         Return the gtk.TreeIter of the given group or None if not found
 
         Keyword arguments:
         name -- the group name
         account -- the account name
-        account_iter -- the iter of the account the model (default None)
         model -- the data model (default TreeFilterModel)
         """
-        if not model:
+        if model is None:
             model = self.modelfilter
-        if not account_iter:
-            account_iter = self._get_account_iter(account, model)
-        group_iter = model.iter_children(account_iter)
-        # C_NAME column contacts the pango escaped group name
-        while group_iter:
-            group_name = model[group_iter][C_JID].decode('utf-8')
-            if name == group_name:
-                break
-            group_iter = model.iter_next(group_iter)
-        return group_iter
+            if model is None:
+                return
+
+        if name not in self._iters[account]['groups']:
+            return None
+
+        it = self._iters[account]['groups'][name]
+        if model == self.model or it is None:
+            return it
+        try:
+            return self.modelfilter.convert_child_iter_to_iter(it)
+        except RuntimeError:
+            return None
 
 
     def _get_self_contact_iter(self, account, model=None):
@@ -145,19 +152,10 @@ class RosterWindow:
         account -- the account of SelfContact
         model -- the data model (default TreeFilterModel)
         """
-        if not model:
-            model = self.modelfilter
-        iterAcct = self._get_account_iter(account, model)
-        iterC = model.iter_children(iterAcct)
-
-        # There might be several SelfContacts in merged account view
-        while iterC:
-            if model[iterC][C_TYPE] != 'self_contact':
-                break
-            iter_account = model[iterC][C_ACCOUNT]
-            if account == iter_account.decode('utf-8'):
-                return iterC
-            iterC = model.iter_next(iterC)
+        jid = gajim.get_jid_from_account(account)
+        its = self._get_contact_iter(jid, account, model=model)
+        if its:
+            return its[0]
         return None
 
 
@@ -171,17 +169,10 @@ class RosterWindow:
         contact -- the contact (default None)
         model -- the data model (default TreeFilterModel)
         """
-        if not model:
+        if model is None:
             model = self.modelfilter
             # when closing Gajim model can be none (async pbs?)
             if model is None:
-                return []
-
-        if jid == gajim.get_jid_from_account(account):
-            contact_iter = self._get_self_contact_iter(account, model)
-            if contact_iter:
-                return [contact_iter]
-            else:
                 return []
 
         if not contact:
@@ -190,42 +181,24 @@ class RosterWindow:
                 # We don't know this contact
                 return []
 
-        acct = self._get_account_iter(account, model)
-        found = [] # the contact iters. One per group
-        for group in contact.get_shown_groups():
-            group_iter = self._get_group_iter(group, account, acct,  model)
-            contact_iter = model.iter_children(group_iter)
+        if jid not in self._iters[account]['contacts']:
+            return []
 
-            while contact_iter:
-                # Loop over all contacts in this group
-                iter_jid = model[contact_iter][C_JID]
-                if iter_jid and jid == iter_jid.decode('utf-8') and \
-                account == model[contact_iter][C_ACCOUNT].decode('utf-8'):
-                    # only one iter per group
-                    found.append(contact_iter)
-                    contact_iter = None
-                elif model.iter_has_child(contact_iter):
-                    # it's a big brother and has children
-                    contact_iter = model.iter_children(contact_iter)
-                else:
-                    # try to find next contact:
-                    # other contact in this group or
-                    # brother contact
-                    next_contact_iter = model.iter_next(contact_iter)
-                    if next_contact_iter:
-                        contact_iter = next_contact_iter
-                    else:
-                        # It's the last one.
-                        # Go up if we are big brother
-                        parent_iter = model.iter_parent(contact_iter)
-                        if parent_iter and model[parent_iter][C_TYPE] == \
-                        'contact':
-                            contact_iter = model.iter_next(parent_iter)
-                        else:
-                            # we tested all
-                            # contacts in this group
-                            contact_iter = None
-        return found
+        its = self._iters[account]['contacts'][jid]
+
+        if not its:
+            return []
+
+        if model == self.model:
+            return its
+
+        its2 = []
+        for it in its:
+            try:
+                its2.append(self.modelfilter.convert_child_iter_to_iter(it))
+            except RuntimeError:
+                pass
+        return its2
 
 
     def _iter_is_separator(self, model, titer):
@@ -278,10 +251,11 @@ class RosterWindow:
         if self.regroup:
             # Merged accounts view
             show = helpers.get_global_show()
-            self.model.append(None, [
-                    gajim.interface.jabber_state_images['16'][show],
-                    _('Merged accounts'), 'account', '', 'all',
-                    None, None, None, None, None, None])
+            it = self.model.append(None, [
+                gajim.interface.jabber_state_images['16'][show],
+                _('Merged accounts'), 'account', '', 'all', None, None, None,
+                None, None, None])
+            self._iters['account'] = it
         else:
             show = gajim.SHOW_LIST[gajim.connections[account].connected]
             our_jid = gajim.get_jid_from_account(account)
@@ -293,11 +267,11 @@ class RosterWindow:
                         gtk.STOCK_DIALOG_AUTHENTICATION,
                         gtk.ICON_SIZE_MENU)
 
-            self.model.append(None, [
-                    gajim.interface.jabber_state_images['16'][show],
-                    gobject.markup_escape_text(account), 'account',
-                    our_jid, account, None, None, None, None, None,
-                    tls_pixbuf])
+            it = self.model.append(None, [
+                gajim.interface.jabber_state_images['16'][show],
+                gobject.markup_escape_text(account), 'account', our_jid,
+                account, None, None, None, None, None, tls_pixbuf])
+            self._iters[account]['account'] = it
 
         self.draw_account(account)
 
@@ -362,13 +336,17 @@ class RosterWindow:
                     contact.get_shown_name(), 'contact', contact.jid, account,
                     None, None, None, None, None, None))
                 added_iters.append(it)
+                if contact.jid in self._iters[account]['contacts']:
+                    self._iters[account]['contacts'][contact.jid].append(it)
+                else:
+                    self._iters[account]['contacts'][contact.jid] = [it]
         else:
             # We are a normal contact. Add us to our groups.
             if not groups:
                 groups = contact.get_shown_groups()
             for group in groups:
                 child_iterG = self._get_group_iter(group, account,
-                                model = self.model)
+                    model=self.model)
                 if not child_iterG:
                     # Group is not yet in roster, add it!
                     child_iterA = self._get_account_iter(account, self.model)
@@ -378,6 +356,7 @@ class RosterWindow:
                         'group', group, account, None, None, None, None, None,
                         None])
                     self.draw_group(group, account)
+                    self._iters[account]['groups'][group] = child_iterG
 
                 if contact.is_transport():
                     typestr = 'agent'
@@ -393,6 +372,10 @@ class RosterWindow:
                         contact.jid, account, None, None, None,
                         None, None, None))
                 added_iters.append(i_)
+                if contact.jid in self._iters[account]['contacts']:
+                    self._iters[account]['contacts'][contact.jid].append(i_)
+                else:
+                    self._iters[account]['contacts'][contact.jid] = [i_]
 
                 # Restore the group expand state
                 if account + group in self.collapsed_rows:
@@ -455,8 +438,10 @@ class RosterWindow:
                     if group in gajim.groups[account]:
                         del gajim.groups[account][group]
                     self.model.remove(parent_i)
+                    del self._iters[account]['groups'][group]
                 else:
                     self.model.remove(i)
+            del self._iters[account]['contacts'][contact.jid]
             return True
 
     def _add_metacontact_family(self, family, account):
@@ -633,8 +618,9 @@ class RosterWindow:
         self.model)) == 0, 'Self contact %s already in roster' % jid
 
         child_iterA = self._get_account_iter(account, self.model)
-        self.model.append(child_iterA, (None, gajim.nicks[account],
-            'self_contact', jid, account, None, None, None, None, None, None))
+        self._iters[account]['contacts'][jid] = [self.model.append(child_iterA,
+            (None, gajim.nicks[account], 'self_contact', jid, account, None,
+            None, None, None, None, None))]
 
         self.draw_completely(jid, account)
         self.draw_account(account)
@@ -1398,7 +1384,9 @@ class RosterWindow:
                 self.on_modelfilter_row_has_child_toggled)
         self.tree.set_model(self.modelfilter)
 
+        self._iters = {}
         for acct in gajim.contacts.get_accounts():
+            self._iters[acct] = {'account': None, 'groups': {}, 'contacts': {}}
             self.add_account(acct)
             self.add_account_contacts(acct)
         # Recalculate column width for ellipsizing
@@ -1729,6 +1717,8 @@ class RosterWindow:
         # Most of the logic SHOULD NOT be done at GUI level
         if account not in gajim.contacts.get_accounts():
             gajim.contacts.add_account(account)
+            self._iters[account] = {'account': None, 'groups': {},
+                'contacts': {}}
         if account not in gajim.groups:
             gajim.groups[account] = {}
         if gajim.config.get('show_self_contact') == 'always':
@@ -5854,6 +5844,7 @@ class RosterWindow:
         # sel.connect('changed',
         #       self.on_treeview_selection_changed)
 
+        self._iters = {}
         # holds a list of (jid, account) tupples
         self._last_selected_contact = []
         self.transports_state_images = {'16': {}, '32': {}, 'opened': {},
