@@ -1,3 +1,9 @@
+gajim (0.13.90-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Yann Leboulanger <asterix@lagaule.org>  Sat, 24 Jul 2010 10:25:26 +0200
+
 gajim (0.13.4-1) unstable; urgency=low
 
   * New upstream release.

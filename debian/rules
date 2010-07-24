@@ -14,4 +14,4 @@ DEB_MAKE_INSTALL_TARGET = install DESTDIR=$(DEB_DESTDIR)
 binary-install/gajim::
 	rm $(DEB_DESTDIR)/usr/share/gajim/src/common/GnuPGInterface.py*
 	dh_pysupport -pgajim
-	convert $(DEB_DESTDIR)/usr/share/pixmaps/gajim.png -resize 32x32 $(DEB_DESTDIR)/usr/share/pixmaps/gajim.xpm
+	convert $(DEB_DESTDIR)/usr/share/icons/hicolor/64x64/apps/gajim.png -resize 32x32 $(DEB_DESTDIR)/usr/share/pixmaps/gajim.xpm
