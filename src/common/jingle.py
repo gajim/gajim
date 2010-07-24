@@ -145,10 +145,7 @@ class ConnectionJingle(object):
                                                                    gajim.get_jid_without_resource(jid))
         if contact is None:
             return
-        if contact.supports(xmpp.NS_JINGLE_XTLS):
-            use_security = True
-        else:
-            use_security = False
+        use_security = contact.supports(xmpp.NS_JINGLE_XTLS)
         if jingle:
             file_props['sid'] = jingle.sid
             jingle.add_content('file',

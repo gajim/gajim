@@ -92,11 +92,7 @@ class JingleFileTransfer(JingleContent):
 
         file_props['session-type'] = 'jingle'
 
-        security = content.getTag('security')
-        if not security:
-            self.use_security = False
-        else:
-            self.use_security = True
+        self.use_security = bool(content.getTag('security'))
         
         file_tag = content.getTag('description').getTag('offer').getTag('file')
         for attribute in file_tag.getAttrs():
@@ -131,8 +127,6 @@ class JingleFileTransfer(JingleContent):
         log.info("FT request: %s" % file_props)
 
         self.session.connection.dispatch('FILE_REQUEST', (jid, file_props))
-
-        
 
     def __on_session_accept(self, stanza, content, error, action):
         log.info("__on_session_accept")
