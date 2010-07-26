@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gajim.trunk\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-06-30 10:15+0600\n"
-"PO-Revision-Date: 2010-07-12 10:35+0600\n"
+"PO-Revision-Date: 2010-07-25 00:16+0600\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <kk_KZ@googlegroups.com>\n"
 "Language: kk\n"
@@ -1840,11 +1840,11 @@ msgstr "Ростердегі _контакттардың қалып-күй ха�
 
 #: ../data/gui/preferences_window.ui.h:58
 msgid "Gajim can send and receive meta-information related to a conversation you may have with a contact. Here you can specify which chatstates you want to display in chat windows."
-msgstr ""
+msgstr "Контактпен сөйлесу кезінде Gajim ол сөйлесуге қатысты мета-ақпаратты жібере мен қабылдай алады. Чат терезелерінде қай чат күйлерін көрсетуді осында таңдай аласыз."
 
 #: ../data/gui/preferences_window.ui.h:59
 msgid "Gajim can send and receive meta-information related to a conversation you may have with a contact. Here you can specify which chatstates you want to send to the other party."
-msgstr ""
+msgstr "Контактпен сөйлесу кезінде Gajim ол сөйлесуге қатысты мета-ақпаратты жібере мен қабылдай алады. Екінші жаққа қай чат күйлерін жіберуді осында таңдай аласыз."
 
 #: ../data/gui/preferences_window.ui.h:60
 msgid "Gajim will notify you via a popup window in the bottom right of the screen about contacts that just signed out"
@@ -3394,7 +3394,7 @@ msgstr "Күй хабарламасы мәтін қарібі."
 
 #: ../src/common/config.py:105
 msgid "List (space separated) of rows (accounts and groups) that are collapsed."
-msgstr ""
+msgstr "Жиналған жолдар (тіркелгілер мен топтар) тізімі (бос аралықпен ажыратылсын)."
 
 #. sorted alphanum
 #: ../src/common/config.py:106
@@ -3422,7 +3422,7 @@ msgstr ""
 
 #: ../src/common/config.py:114
 msgid "Print time in chats using Fuzzy Clock. Value of fuzziness from 1 to 4, or 0 to disable fuzzyclock. 1 is the most precise clock, 4 the least precise one. This is used only if print_time is 'sometimes'."
-msgstr ""
+msgstr "Чаттарда уақытты Қызық Сағат көмегімен шығару. Қызықтылық мәні 1 мен 4 арасында, 0 ол сағатты сөндіреді. 1 тура сағат үшін, 4 ең тура емес үшін. Бұл тек print_time опциясы 'sometimes' мәнінде болса ғана қолданылады."
 
 #: ../src/common/config.py:117
 msgid "Treat * / _ pairs as possible formatting characters."
@@ -3434,31 +3434,31 @@ msgstr "Белсенді болса, */_ өшірілмейді. Мысалы, *
 
 #: ../src/common/config.py:121
 msgid "Uses ReStructured text markup to send HTML, plus ascii formatting if selected. For syntax, see http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html (If you want to use this, install docutils)"
-msgstr ""
+msgstr "HTML жіберу үшін ReStructured text markup қолдану, және таңдалған болса, ascii пішімдеу. Синтаксисі үшін, http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html  қараңыз (Осыны қолданам десеңіз, docutils орнатыңыз)"
 
 #: ../src/common/config.py:130
 msgid "Character to add after nickname when using nick completion (tab) in group chat."
-msgstr ""
+msgstr "Топтық чатта ник аттарын автотолықтыру (tab пернесі) қолдану кезінде ник атының артына қосылатын таңба."
 
 #: ../src/common/config.py:131
 msgid "Character to propose to add after desired nickname when desired nickname is used by someone else in group chat."
-msgstr ""
+msgstr "Таңдалған ник атын чатта біреу қолданып тұрса, ол ник аты артына қосуға ұсынылатын таңба."
 
 #: ../src/common/config.py:159
 msgid "This option let you customize timestamp that is printed in conversation. For exemple \"[%H:%M] \" will show \"[hour:minute] \". See python doc on strftime for full documentation: http://docs.python.org/lib/module-time.html"
-msgstr ""
+msgstr "Бұл опция сізге сөйлесулердегі уақыт көрсетілуін баптауға мүмкіндік береді. Мысалы, \"[%H:%M] \" болса, \"[сағат:минут] \" ретінде көрсетіледі. Көбірек білу үшін python құжаттамасынан strftime үшін ақпаратты қараңыз: http://docs.python.org/lib/module-time.html"
 
 #: ../src/common/config.py:160
 msgid "Characters that are printed before the nickname in conversations"
-msgstr ""
+msgstr "Сөйлесулерде ник атына дейін қойылатын таңбалар"
 
 #: ../src/common/config.py:161
 msgid "Characters that are printed after the nickname in conversations"
-msgstr ""
+msgstr "Сөйлесулерде ник атынан кейін қойылатын таңбалар"
 
 #: ../src/common/config.py:165
 msgid "Add * and [n] in roster title?"
-msgstr "Ростер атауыны * мен [n] қосу керек пе?"
+msgstr "Ростер атауына * мен [n] қосу керек пе?"
 
 #: ../src/common/config.py:166
 msgid "How many lines to remember from previous conversation when a chat tab/window is reopened."
@@ -3491,7 +3491,7 @@ msgstr "Ctrl+KeyUP үшін қанша тарих жолын сақтау кер
 #: ../src/common/config.py:177
 #, python-format
 msgid "Either custom url with %s in it where %s is the word/phrase or 'WIKTIONARY' which means use wiktionary."
-msgstr ""
+msgstr "%s бар таңдауыңызша сілтеме, бұл жерде %s - сөз не мәтін, немесе 'WIKTIONARY', яғни, wiktionary қолдану."
 
 #: ../src/common/config.py:180
 msgid "If checked, Gajim can be controlled remotely using gajim-remote."
@@ -3527,11 +3527,11 @@ msgstr "Бұл тізімдегі бөлмелерді жабу алдында �
 
 #: ../src/common/config.py:189
 msgid "Ask before closing tabbed chat window if there are control that can loose data (chat, private chat, groupchat that will not be minimized)"
-msgstr ""
+msgstr "Беттері бар терезені жабу алдында сұрау, егер ақпаратты жоғалту мүмкіндігі болса (чат, жеке чат, қайырылмайтын топтық чат)"
 
 #: ../src/common/config.py:192
 msgid "Comma separated list of hosts that we send, in addition of local interfaces, for File Transfer in case of address translation/port forwarding."
-msgstr ""
+msgstr "Жергілікті интерфейстерге қоса, үтірмен ажыратылған хост аттары, адрес/порттар бағдарлауы кезінде Файлдармен алмасу үшін оларды жібереміз."
 
 #: ../src/common/config.py:194
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
@@ -3555,7 +3555,7 @@ msgstr "Бет үшін жабу батырмасын көрсету керек 
 
 #: ../src/common/config.py:205
 msgid "A list of modp groups to use in a Diffie-Hellman, highest preference first, separated by commas. Valid groups are 1, 2, 5, 14, 15, 16, 17 and 18. Higher numbers are more secure, but take longer to calculate when you start a session."
-msgstr ""
+msgstr "Diffie-Hellman қолдану үшін modp топтар тізімі, үлкенірек баптау бірінші болсын, үтірмен ажыратылсын. Дұрыс топтар 1, 2, 5, 14, 15, 16, 17 және 18. Үлкенірек нөмірлер қауіпсіздігі жоғарырақ, бірақ сессияны бастау кезінде оны есептеу үшін көбірек уақыт кетеді."
 
 #: ../src/common/config.py:214
 msgid "Preview new messages in notification popup?"
@@ -3563,7 +3563,7 @@ msgstr "Жаңа хабарламаларды қалқымалы терезед�
 
 #: ../src/common/config.py:219
 msgid "A semicolon-separated list of words that will be highlighted in group chats."
-msgstr ""
+msgstr "Топтық чаттарда түспен ерекшелеу үшін сөздер тізімі, нүктелі үтірмен ажыратылсын."
 
 #: ../src/common/config.py:220
 msgid "If True, quits Gajim when X button of Window Manager is clicked. This setting is taken into account only if trayicon is used."
@@ -3591,11 +3591,11 @@ msgstr "Белгіленген болса, Gajim әр контакттан ав�
 
 #: ../src/common/config.py:231
 msgid "If False, Gajim will no longer print status line in chats when a contact changes his or her status and/or his or her status message."
-msgstr ""
+msgstr "Сөндірілген болса, Gajim чаттарда контакт өз күйін не күй хабарламасын өзгертсе, күй жолын енді жазбайды."
 
 #: ../src/common/config.py:232
 msgid "can be \"none\", \"all\" or \"in_and_out\". If \"none\", Gajim will no longer print status line in groupchats when a member changes his or her status and/or his or her status message. If \"all\" Gajim will print all status messages. If \"in_and_out\", Gajim will only print FOO enters/leaves group chat."
-msgstr ""
+msgstr "\"none\", \"all\" не \"in_and_out\" бола алады. Егер \"none\" болса, Gajim топтық чаттарда мүше өз күйін не күй хабарламасын өзгертсе, күй хабарламасы жолын шығармайды. Егер \"all\" болса, Gajim барлық күй хабарламаларын көрсетеді. Егер \"in_and_out\" болса, Gajim тек БІРЕУ топтық чатқа кірді/шықты хабарламаларын көрсетеді."
 
 #: ../src/common/config.py:234
 msgid "Background color of contacts when they just signed in."
@@ -3623,7 +3623,7 @@ msgstr "Белсенді болса және GTK+ мен PyGTK нұсқалар�
 
 #: ../src/common/config.py:242
 msgid "Jabberd1.4 does not like sha info when one join a password protected group chat. Turn this option to False to stop sending sha info in group chat presences."
-msgstr ""
+msgstr "Jabberd1.4 парольмен қорғалған топтық чатқа біреу кірген кезде sha ақпаратын ұнатпайды. Топтық чаттың бар болу хабарламаларында sha ақпаратын көрсетпеу үшін бұл опцияны сөндіріңіз."
 
 #. always, never, peracct, pertype should not be translated
 #: ../src/common/config.py:245
@@ -3635,6 +3635,12 @@ msgid ""
 "'peracct' - Messages for each account are sent to a specific window.\n"
 "'pertype' - Each message type (e.g., chats vs. groupchats) are sent to a specific window."
 msgstr ""
+"Жаңа хабарламалар көрсетілетін терезені басқару.\n"
+"'always' - Барлық хабарламалар бір терезеге жіберіледі.\n"
+"'always_with_roster' - 'always' сияқты, бірақ хабарламалар бар бір терезе ростермен бір терезені құрайды.\n"
+"'never' - Барлық хабарламалар жеке терезелерінде.\n"
+"'peracct' - Әр тіркелгі үшін хабарламалар жеке терезеде.\n"
+"'pertype' - Хабарламалар түрі бойынша (мыс. чат не топтық чаттар) терезеге жіберіледі."
 
 #: ../src/common/config.py:246
 msgid "If False, you will no longer see the avatar in the chat window."
@@ -3662,11 +3668,11 @@ msgstr "Топтық чат терезесінде мүшелер тізімін
 
 #: ../src/common/config.py:252
 msgid "In a chat, show the nickname at the beginning of a line only when it's not the same person talking than in previous message."
-msgstr ""
+msgstr "Чатта, алдыңғы хабарламадағы адам емес болмаса ғана, жол басынан контакт атын көрсету."
 
 #: ../src/common/config.py:253
 msgid "Indentation when using merge consecutive nickname."
-msgstr ""
+msgstr "Біріккен тізбекті ник атын қолдану кезіндегі шегіну."
 
 #: ../src/common/config.py:254
 msgid "Smooth scroll message in conversation window"
@@ -3682,19 +3688,19 @@ msgstr "Оқылмағандар болмаса, Ctrl-Tab басу арқылы 
 
 #: ../src/common/config.py:257
 msgid "Should we show the confirm metacontacts creation dialog or not? Empty string means we never show the dialog."
-msgstr ""
+msgstr "Метаконтакттарды жасауды растау сұхбатын көрсету керек пе? Бос жол терезені ешқашан көрсетпеуді белгілейді."
 
 #: ../src/common/config.py:258
 msgid "Should we show the confirm block contact dialog or not? Empty string means we never show the dialog."
-msgstr ""
+msgstr "Контактты блоктауды растау сұхбатын көрсету керек пе? Бос жол терезені ешқашан көрсетпеуді белгілейді."
 
 #: ../src/common/config.py:259
 msgid "Should we show the confirm custom status dialog or not? Empty string means we never show the dialog."
-msgstr ""
+msgstr "Таңдауыңызша күйді растау сұхбатын көрсету керек пе? Бос жол терезені ешқашан көрсетпеуді белгілейді."
 
 #: ../src/common/config.py:260
 msgid "If True, you will be able to set a negative priority to your account in account modification window. BE CAREFUL, when you are logged in with a negative priority, you will NOT receive any message from your server."
-msgstr ""
+msgstr "Қосулы тұрса, тіркелгіні баптау терезесінде сіз приоритеттің теріс мәнің орната аласыз. АБАЙЛАҢЫЗ, теріс приоритетпен отырған кезде, серверден бірде-бір хабарламаны АЛМАЙСЫЗ."
 
 #: ../src/common/config.py:261
 msgid "If True, Gajim will use Gnome Keyring (if available) to store account passwords."
@@ -3706,23 +3712,23 @@ msgstr "Белсенді болса, Gajim тіркелгі парольдері
 
 #: ../src/common/config.py:263
 msgid "If True, Gajim will show number of online and total contacts in account and group rows."
-msgstr ""
+msgstr "Қосулы тұрса, Gajim желідегі мен барлық контакттар санын тіркелгі мен топтар жолында көрсетеді."
 
 #: ../src/common/config.py:264
 msgid "Can be empty, 'chat' or 'normal'. If not empty, treat all incoming messages as if they were of this type"
-msgstr ""
+msgstr "Бос, 'chat' не 'normal' түрде бола алады. Бос емес болса, кірген хабарламалардың барлығын осы түрде деп есептеу"
 
 #: ../src/common/config.py:265
 msgid "If True, Gajim will scroll and select the contact who sent you the last message, if chat window is not already opened."
-msgstr ""
+msgstr "Қосулы болса, Gajim сізге соңғы болып хабарламаны жіберген контактты белгілейді, егер чат терезесі ашылған болмаса."
 
 #: ../src/common/config.py:266
 msgid "If True, Gajim will convert string between $$ and $$ to an image using dvips and convert before insterting it in chat window."
-msgstr ""
+msgstr "Қосулы болса, Gajim $$ және $$ таңбалары арасындағы жолды чат терезесіне орналастырмас бұрын, dvips пен convert көмегімен суретке айналдырады."
 
 #: ../src/common/config.py:267
 msgid "Time of inactivity needed before the change status window closes down."
-msgstr ""
+msgstr "Күйді өзгерту терезесі жабылу үшін керек белсенді еместік уақыт шамасы."
 
 #: ../src/common/config.py:268
 msgid "Maximum number of lines that are printed in conversations. Oldest lines are cleared."
@@ -3730,7 +3736,7 @@ msgstr "Сөйлесулерде көрсетілетін жолдардың м�
 
 #: ../src/common/config.py:269
 msgid "If True, notification windows from notification-daemon will be attached to systray icon."
-msgstr ""
+msgstr "Қосулы болса, notification-daemon жіберген хабарламалар терезелері жүйелік трейден көрсетіледі."
 
 #: ../src/common/config.py:270
 msgid "Choose interval between 2 checks of idleness."
@@ -3738,35 +3744,35 @@ msgstr "Белсенді еместігіне екі тексеру арасын
 
 #: ../src/common/config.py:271
 msgid "Change the value to change the size of latex formulas displayed. The higher is larger."
-msgstr ""
+msgstr "Көрсетілетін latex формулалар өлшемдерін өзгерту. Жоғары мән үлкенін білдіреді."
 
 #: ../src/common/config.py:272
 msgid "Valid uri schemes. Only schemes in this list will be accepted as \"real\" uri. (mailto and xmpp are handled separately)"
-msgstr ""
+msgstr "Дұрыс uri схемелары. Тек осы тізімдегі схемалар ғана \"шын\" uri ретінде қабылданады. (mailto және xmpp бөлек өнделеді)"
 
 #: ../src/common/config.py:273
 msgid "Ask offline status message to all offline contacts when connection to an accoutn is established. WARNING: This causes a lot of requests to be sent!"
-msgstr ""
+msgstr "Тіркелгіге байланыс орнатылған кезде барлық желіде емес контакттардан желіде емес күй хабарламасын сұрау. ЕСКЕРТУ: Бұл көп сұранымдардың жіберілуіне әкеп соғады!"
 
 #: ../src/common/config.py:274
 msgid "If True, completion in groupchats will be like a shell auto-completion"
-msgstr ""
+msgstr "Қосулы тұрса, топ чаттардағы мәтінді автотолықтыру қоршамдағыдай іске асады"
 
 #: ../src/common/config.py:275
 msgid "When is self contact row displayed. Can be \"always\", \"when_other_resource\" or \"never\""
-msgstr ""
+msgstr "Өз контакт жолы қашан көрсетіледі. Келесіден біреу болсын: \"always\", \"when_other_resource\" немесе \"never\""
 
 #: ../src/common/config.py:280
 msgid "Optionally fix jingle output video framerate. Example: 10/1 or 25/2"
-msgstr ""
+msgstr "Осыған қоса, jingle шығыс видеосының кадр/сек қасиетін автоөзгерту. Мысалы: 10/1 не 25/2"
 
 #: ../src/common/config.py:281
 msgid "Optionally resize jingle output video. Example: 320x240"
-msgstr ""
+msgstr "Осыған қоса, jingle шығыс видеосының өлшемін автоөзгерту. Мысалы: 320x240"
 
 #: ../src/common/config.py:284
 msgid "If True, Gajim will try to use a STUN server when using jingle. The one in \"stun_server\" option, or the one given by the jabber server."
-msgstr ""
+msgstr "Қосулы түрса, jingle қолдану кезде Gajim STUN серверін қолдануға тырысады. Ол сервер \"stun_server\" опциясында көрсетіледі не оны jabber сервердің өзі береді."
 
 #: ../src/common/config.py:285
 msgid "STUN server to use when using jingle"
@@ -3774,15 +3780,15 @@ msgstr "STUN сервері, jingle қолдану үшін"
 
 #: ../src/common/config.py:286
 msgid "If True, Gajim will show affiliation of groupchat occupants by adding a colored square to the status icon"
-msgstr ""
+msgstr "Қосулы тұрса, топ чаттарындағы қатысушылардың қатысу деңгейін көрсету үшін, Gajim күй таңбашаларына кішкене ғана түсті шаршы қосады"
 
 #: ../src/common/config.py:299
 msgid "Priority will change automatically according to your status. Priorities are defined in autopriority_* options."
-msgstr ""
+msgstr "Приоритет күйіңізге сәйкес автоөзгертіледі. Приоритеттер autopriority_* опцияларында бапталған."
 
 #: ../src/common/config.py:307
 msgid "Status used to autoconnect as. Can be online, chat, away, xa, dnd, invisible. NOTE: this option is used only if restore_last_status is disabled"
-msgstr ""
+msgstr "Қайта автоқосылу үшін қолданылатын күйі. Келесіден біреу: желіде, чатқа дайын, кетіп қалған, кеңейтілген кетіп қалған, мазамды алмаңыз, жасырын. ЕСКЕРТУ: бұл опция тек restore_last_status опциясы сөндірілген болса ғана қолданылады"
 
 #: ../src/common/config.py:308
 msgid "If enabled, restore the last status that was used."
@@ -3798,7 +3804,7 @@ msgstr "Сөндірілген болса, бұл тіркелгі сөндір�
 
 #: ../src/common/config.py:314
 msgid "If disabled, don't sign presences with GPG key, even if GPG is configured."
-msgstr ""
+msgstr "Сөндірілген болса, бар болу хабарламаларды GPG кілтімен жазбау, GPG бапталған болса да."
 
 #: ../src/common/config.py:316
 msgid "Enable ESessions encryption for this account."
@@ -3810,19 +3816,19 @@ msgstr "Қолжетерлік болса, Gajim шифрленген сесси
 
 #: ../src/common/config.py:318
 msgid "Ordered list (space separated) of connection type to try. Can contain tls, ssl or plain"
-msgstr ""
+msgstr "Көру үшін байланыс түрлерінің реттелген тізімі (арасы бос аралық). Құрамында tls, ssl не plain бола алады"
 
 #: ../src/common/config.py:319
 msgid "Show a warning dialog before sending password on an plaintext connection."
-msgstr ""
+msgstr "Парольдерді шифрленбеген байланыс арқылы беру алдында ескерту сұхбатын көрсету."
 
 #: ../src/common/config.py:320
 msgid "Show a warning dialog before using standard SSL library."
-msgstr ""
+msgstr "Қалыпты SSL жинығын қолдану алдында ескерту сұхбатын көрсету."
 
 #: ../src/common/config.py:321
 msgid "Show a warning dialog before sending PLAIN password over a plain conenction."
-msgstr ""
+msgstr "ШИФРЛЕНБЕГЕН парольдерді шифрленбеген байланыс арқылы беру алдында ескерту сұхбатын көрсету."
 
 #: ../src/common/config.py:323
 msgid "Space separated list of ssl errors to ignore."
@@ -3830,15 +3836,15 @@ msgstr "Елемеу үшін ssl қателер тізімі, бос аралы
 
 #: ../src/common/config.py:332
 msgid "Whitespace sent after inactivity"
-msgstr ""
+msgstr "Белсенді еместіктен кейін бос аралық жіберліген"
 
 #: ../src/common/config.py:333
 msgid "XMPP ping sent after inactivity"
-msgstr ""
+msgstr "Белсенді еместіктен кейін XMPP ping жіберліген"
 
 #: ../src/common/config.py:337
 msgid "How many seconds to wait for the answer of ping alive packet before we try to reconnect."
-msgstr ""
+msgstr "Байланысты қайта орнатпас бұрын, ping alive дестесіне жауапты қанша секунд күту керек."
 
 #. yes, no, ask
 #: ../src/common/config.py:341
@@ -3851,11 +3857,11 @@ msgstr "Белгіленген болса, Gajim файлдармен алмас
 
 #: ../src/common/config.py:358
 msgid "Answer to receipt requests"
-msgstr ""
+msgstr "Алу сұранымдарына жауап"
 
 #: ../src/common/config.py:359
 msgid "Sent receipt requests"
-msgstr ""
+msgstr "Алу сұранымы жіберілді"
 
 #: ../src/common/config.py:369
 msgid "When negotiating an encrypted session, should Gajim assume you want your messages to be logged?"
@@ -4266,19 +4272,19 @@ msgstr "Сертификат тайдырылған"
 
 #: ../src/common/connection.py:95
 msgid "Subject issuer mismatch"
-msgstr ""
+msgstr "Сертификатты ұсынушының сәйкес еместігі"
 
 #: ../src/common/connection.py:96
 msgid "Authority and subject key identifier mismatch"
-msgstr ""
+msgstr "Сертификаттау орталығы мен иесі кілттерінің идентификаторлары өзара сәйкес емес"
 
 #: ../src/common/connection.py:97
 msgid "Authority and issuer serial number mismatch"
-msgstr ""
+msgstr "Сертификаттау орталығы мен ұсынушы кілттерінің идентификаторлары өзара сәйкес емес"
 
 #: ../src/common/connection.py:98
 msgid "Key usage does not include certificate signing"
-msgstr ""
+msgstr "Кілтті қолдану сертификаттарға қолтаңбаны қою қамтымайды"
 
 #: ../src/common/connection.py:99
 msgid "Application verification failure"
@@ -4292,7 +4298,7 @@ msgstr "%s үшін хабарламаны жіберу мүмкін емес, �
 
 #: ../src/common/connection.py:274
 msgid "Neither the remote presence is signed, nor a key was assigned."
-msgstr ""
+msgstr "Қашықтағы бар болу хабарламасында қолтаңба жоқ және кілт көрсетілмеген."
 
 #: ../src/common/connection.py:277
 #, python-format
@@ -6102,6 +6108,12 @@ msgid ""
 "4. domain (the domain itself matches, as does any user@domain,\n"
 "domain/resource, or address containing a subdomain)."
 msgstr ""
+"Келесілерден біреу болуы мүмкін:\n"
+"1. user@domain/resource (тек ол ресурс сәйкес келеді).\n"
+"2. user@domain (кез-келген ресурс сәйкес).\n"
+"3. domain/resource (тек ол ресурс сәйкес келеді).\n"
+"4. domain (доменнің өзі сәйкес, және әр user@domain,\n"
+"domain/resource, және субдомені бар адрес сәйкес келеді)."
 
 #: ../src/config.py:2926
 #, python-format
@@ -6362,13 +6374,13 @@ msgstr "_Сөздіктен іздеу"
 #: ../src/conversation_textview.py:780
 #, python-format
 msgid "Dictionary URL is missing an \"%s\" and it is not WIKTIONARY"
-msgstr ""
+msgstr "\"%s\" сөздіктен іздеу сілтемесі емес және ол WIKTIONARY емес"
 
 #. we must have %s in the url
 #: ../src/conversation_textview.py:793
 #, python-format
 msgid "Web Search URL is missing an \"%s\""
-msgstr ""
+msgstr "Келесі нәрсе вебтен іздеу сілтемесі емес: \"%s\""
 
 #: ../src/conversation_textview.py:796
 msgid "Web _Search for it"
@@ -7023,7 +7035,7 @@ msgstr "Күйі"
 
 #: ../src/dialogs.py:4310
 msgid "when I am "
-msgstr ""
+msgstr "Мен болғанда:"
 
 #: ../src/dialogs.py:4786
 #, python-format
@@ -7032,6 +7044,9 @@ msgid ""
 "\n"
 "This session's Short Authentication String is <b>%(sas)s</b>."
 msgstr ""
+"Сіздің <b>%(jid)s</b> контактымен чат сессиясы шифрленген.\n"
+"\n"
+"Бұл сессияның Short Authentication String келесі: <b>%(sas)s</b>."
 
 #: ../src/dialogs.py:4789
 msgid "You have already verified this contact's identity."
@@ -7048,7 +7063,7 @@ msgstr "Қайтадан растау..."
 
 #: ../src/dialogs.py:4806
 msgid "To be certain that <b>only</b> the expected person can read your messages or send you messages, you need to verify their identity by clicking the button below."
-msgstr ""
+msgstr "Хабарламаларыңызды <b>тек</b> тиісті адам оқи алатынына толығымен сенімді болу үшін, оның идентификациясын төмендегі батырмаға шерту арқылы растаңыз."
 
 #: ../src/dialogs.py:4809
 #: ../src/dialogs.py:4860
@@ -7071,10 +7086,13 @@ msgid ""
 "\n"
 "This session's Short Authentication String is <b>%(sas)s</b>."
 msgstr ""
+"Белгісіз адаммен сөйлесуге жол бермеу үшін, сізге <b>%(jid)s</b> контактымен тура сөйлесіп (кездесіп не телефон арқылы), екеуіңіз де бірдей Short Authentication String (SAS) көретініңізге көз жеткізу керек.\n"
+"\n"
+"Бұл сессияның Short Authentication String келесі: <b>%(sas)s</b>."
 
 #: ../src/dialogs.py:4827
 msgid "Did you talk to the remote contact and verify the SAS?"
-msgstr ""
+msgstr "Қашықтағы адаммен тура сөйлесіп, SAS-ты растағансыз ба?"
 
 #: ../src/dialogs.py:4861
 #, python-format
@@ -7754,7 +7772,7 @@ msgstr "күйі"
 
 #: ../src/gajim-remote.py:109
 msgid "one of: offline, online, chat, away, xa, dnd, invisible. If not set, use accoun't previous status"
-msgstr ""
+msgstr "келесіден біреу: желіде емес, осында, кетіп қалған, кеңейтілген кетіп қалған, мазамды алмаңыз, жасырын. Орнатылмаса, тіркелгінің алдыңғы күйі қолданылады"
 
 #: ../src/gajim-remote.py:110
 #: ../src/gajim-remote.py:133
@@ -7970,7 +7988,7 @@ msgstr "Жіберілетін XML"
 
 #: ../src/gajim-remote.py:262
 msgid "Account in which the xml will be sent; if not specified, xml will be sent to all accounts"
-msgstr ""
+msgstr "Xml жібетілетін тіркелгі; көрсетілмесе, xml барлық тіркелгілерге жіберіледі"
 
 #: ../src/gajim-remote.py:268
 msgid "Change the avatar"
@@ -7982,7 +8000,7 @@ msgstr "Қолдану үшін сурет"
 
 #: ../src/gajim-remote.py:271
 msgid "Account in which the avatar will be set; if not specified, the avatar will be set for all accounts"
-msgstr ""
+msgstr "Аватар орнатылатын тіркелгі; көрсетілмесе, аватар барлық тіркелгілерге орнатылады"
 
 #: ../src/gajim-remote.py:277
 msgid "Handle a xmpp:/ uri"
@@ -8511,7 +8529,7 @@ msgstr "Бөлме енді қолжетерсіз қатысушыларды к
 
 #: ../src/gui_interface.py:1086
 msgid "A non-privacy-related room configuration change has occurred"
-msgstr ""
+msgstr "Жекелікке байланысты емес бөлме баптауының өзгерісі орын алды"
 
 #. Can be a presence (see chg_contact_status in groupchat_control.py)
 #: ../src/gui_interface.py:1090
@@ -8843,6 +8861,8 @@ msgid ""
 "\n"
 "In case you click YES, please wait..."
 msgstr ""
+"Қалыпты бөлінген дерекқор өлшемі азаймайды, оны қайта қолдануға болады. Дерекқор өлшемін шынымен азайтсам десеңіз, ИӘ шертіңіз, олай болмаса, ЖОҚ шертіңіз.\n"
+"ИӘ шертсеңіз, күте тұрыңыз..."
 
 #: ../src/history_manager.py:460
 msgid "Exporting History Logs..."
