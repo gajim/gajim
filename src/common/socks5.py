@@ -79,14 +79,14 @@ class SocksQueue:
         self.on_success = None
         self.on_failure = None
 
-    def start_listener(self, port, sha_str, sha_handler, sid):
+    def start_listener(self, port, sha_str, sha_handler, sid, fingerprint=None):
         """
         Start waiting for incomming connections on (host, port) and do a socks5
         authentication using sid for generated SHA
         """
         self.sha_handlers[sha_str] = (sha_handler, sid)
         if self.listener is None:
-            self.listener = Socks5Listener(self.idlequeue, port)
+            self.listener = Socks5Listener(self.idlequeue, port, fingerprint=fingerprint)
             self.listener.queue = self
             self.listener.bind()
             if self.listener.started is False:
@@ -117,7 +117,7 @@ class SocksQueue:
             return 1
         return 0
 
-    def connect_to_hosts(self, account, sid, on_success=None, on_failure=None):
+    def connect_to_hosts(self, account, sid, on_success=None, on_failure=None, fingerprint=None):
         self.on_success = on_success
         self.on_failure = on_failure
         file_props = self.files_props[account][sid]
@@ -125,7 +125,7 @@ class SocksQueue:
 
         # add streamhosts to the queue
         for streamhost in file_props['streamhosts']:
-            receiver = Socks5Receiver(self.idlequeue, streamhost, sid, file_props)
+            receiver = Socks5Receiver(self.idlequeue, streamhost, sid, file_props, fingerprint=fingerprint)
             self.add_receiver(account, receiver)
             streamhost['idx'] = receiver.queue_idx
 
@@ -848,12 +848,14 @@ class Socks5Sender(Socks5, IdleObject):
             self.queue.remove_sender(self.queue_idx, False)
 
 class Socks5Listener(IdleObject):
-    def __init__(self, idlequeue, port):
+    def __init__(self, idlequeue, port, fingerprint=None):
         """
         Handle all incomming connections on (0.0.0.0, port)
 
         This class implements IdleObject, but we will expect
         only pollin events though
+
+        fingerprint: fingerprint of certificates we shall use, set to None if TLS connection not desired
         """
         self.port = port
         self.ais = socket.getaddrinfo(None, port, socket.AF_UNSPEC,
@@ -939,7 +941,10 @@ class Socks5Listener(IdleObject):
         return _sock
 
 class Socks5Receiver(Socks5, IdleObject):
-    def __init__(self, idlequeue, streamhost, sid, file_props = None):
+    def __init__(self, idlequeue, streamhost, sid, file_props = None, fingerprint=None):
+        """
+        fingerprint: fingerprint of certificates we shall use, set to None if TLS connection not desired
+        """
         self.queue_idx = -1
         self.streamhost = streamhost
         self.queue = None
