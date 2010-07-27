@@ -5,13 +5,14 @@
 #
 # Sergiy Yegorov <prapor@unixzone.org.ua>, 2009, 2010.
 # Yuri Chornoivan <yurchor@ukr.net>, 2008.
+# Sergiy Yegorov <syegorov@act.dp.ua>, 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: uk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-07-27 11:28+0200\n"
-"PO-Revision-Date: 2010-04-26 00:26+0300\n"
-"Last-Translator: Sergiy Yegorov <prapor@unixzone.org.ua>\n"
+"POT-Creation-Date: 2010-07-27 16:16+0200\n"
+"PO-Revision-Date: 2010-07-27 13:53+0300\n"
+"Last-Translator: Sergiy Yegorov <syegorov@act.dp.ua>\n"
 "Language-Team: Ukrainian <kde-i18n-doc@kde.org>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
@@ -231,9 +232,8 @@ msgid "Auto-reconnect when connection is lost"
 msgstr "Автоматично відновлювати втрачене з'єднання"
 
 #: ../data/gui/accounts_window.ui.h:11
-#, fuzzy
 msgid "Browse..."
-msgstr "_Перегляд"
+msgstr "Перегляд..."
 
 #: ../data/gui/accounts_window.ui.h:12
 msgid "C_onnect on Gajim startup"
@@ -252,9 +252,8 @@ msgstr ""
 "незахищеним з’єднанням."
 
 #: ../data/gui/accounts_window.ui.h:15
-#, fuzzy
 msgid "Choose Client Cert"
-msgstr "Вибрати файл для надсилання..."
+msgstr "Оберіть клієнтський сертифікат"
 
 #: ../data/gui/accounts_window.ui.h:16
 msgid "Choose _Key..."
@@ -271,9 +270,8 @@ msgstr ""
 "запису"
 
 #: ../data/gui/accounts_window.ui.h:19
-#, fuzzy
 msgid "Client certificate"
-msgstr "Сертифікат є самопідписаним"
+msgstr "Клієнтський сертифікат"
 
 #: ../data/gui/accounts_window.ui.h:20
 msgid "Co_nnect on Gajim startup"
@@ -453,7 +451,7 @@ msgstr "Синхронізувати контакти"
 
 #: ../data/gui/accounts_window.ui.h:53
 msgid "The path to the client certificate and key in PKCS#12 format"
-msgstr ""
+msgstr "Шлях до клієнтського сертифікату та ключа у форматі PKCS#12"
 
 #: ../data/gui/accounts_window.ui.h:54
 msgid "Use G_PG Agent"
@@ -473,7 +471,7 @@ msgstr "Використовувати проксі передавання фа�
 
 #: ../data/gui/accounts_window.ui.h:58
 msgid "_Client Cert File:"
-msgstr ""
+msgstr "Файл клієнтського _сертифікату:"
 
 #: ../data/gui/accounts_window.ui.h:59
 msgid "_Edit Personal Information..."
@@ -558,7 +556,7 @@ msgstr "_Зареєструвати"
 
 #: ../data/gui/add_new_contact_window.ui.h:15
 msgid "_Save subscription message"
-msgstr "_Зберігти повідомлення підписки"
+msgstr "_Зберегти повідомлення підписки"
 
 #: ../data/gui/add_new_contact_window.ui.h:16
 msgid "_User ID:"
@@ -585,7 +583,6 @@ msgid "Error description..."
 msgstr "Опис помилки..."
 
 #: ../data/gui/adhoc_commands_window.ui.h:6
-#, fuzzy
 msgid "F_inish"
 msgstr "_Завершити"
 
@@ -1630,14 +1627,12 @@ msgid "Passphrase"
 msgstr "Пароль"
 
 #: ../data/gui/popup_notification_window.ui.h:1
-#, fuzzy
 msgid "Event Type"
-msgstr "Подія"
+msgstr "Тип події"
 
 #: ../data/gui/popup_notification_window.ui.h:2
-#, fuzzy
 msgid "Event desc"
-msgstr "Подія"
+msgstr "Опис події"
 
 #: ../data/gui/preferences_window.ui.h:1
 msgid "<b>Advanced Configuration Editor</b>"
@@ -2179,9 +2174,8 @@ msgid "Use system _default"
 msgstr "Використовувати _типове для системи"
 
 #: ../data/gui/preferences_window.ui.h:116
-#, fuzzy
 msgid "Video framerate"
-msgstr "Тест відео"
+msgstr "Частота кадрів відео"
 
 #: ../data/gui/preferences_window.ui.h:117
 msgid "Video input device"
@@ -2192,9 +2186,8 @@ msgid "Video output device"
 msgstr "Пристрій відтворення відео"
 
 #: ../data/gui/preferences_window.ui.h:119
-#, fuzzy
 msgid "Video size"
-msgstr "Тест відео"
+msgstr "Розмір відео"
 
 #: ../data/gui/preferences_window.ui.h:120
 msgid "When new event is received:"
@@ -3419,9 +3412,8 @@ msgid "All unread messages have been forwarded."
 msgstr "Всі непрочитані повідомлення було переспрямовано."
 
 #: ../src/common/commands.py:295
-#, fuzzy
 msgid "Forward unread message then disconnect"
-msgstr "Переспрямувати непрочитані повідомлення"
+msgstr "Переспрямувати непрочитані повідомлення на від’єднатись"
 
 #: ../src/common/config.py:75
 msgid "Play sound when user is busy"
@@ -3611,6 +3603,8 @@ msgstr "Символи, які буде показано після псевдо
 msgid ""
 "Specify the command to run when new mail arrives, e.g.: /usr/bin/getmail -q"
 msgstr ""
+"Вкажить команду для виконання при отриманні нової пошти, наприклад: /usr/bin/"
+"getmail -q"
 
 #: ../src/common/config.py:166
 msgid "Add * and [n] in roster title?"
@@ -4147,10 +4141,12 @@ msgstr ""
 #: ../src/common/config.py:281
 msgid "Optionally fix jingle output video framerate. Example: 10/1 or 25/2"
 msgstr ""
+"Опціонально виправляти частоту кадрів вихідного відео Jingle. Приклад: 10/1 "
+"або 25/2"
 
 #: ../src/common/config.py:282
 msgid "Optionally resize jingle output video. Example: 320x240"
-msgstr ""
+msgstr "Опціонально змінювати розмір вихідного відео Jingle. Приклад: 320х240"
 
 #: ../src/common/config.py:285
 msgid ""
@@ -5173,14 +5169,12 @@ msgid "Free for Chat"
 msgstr "Вільний для балачки"
 
 #: ../src/common/helpers.py:224
-#, fuzzy
 msgid "?user status:_Available"
-msgstr "Призупинено"
+msgstr "?стан користувача:_Доступний"
 
 #: ../src/common/helpers.py:226 ../src/tooltips.py:189
-#, fuzzy
 msgid "?user status:Available"
-msgstr "Призупинено"
+msgstr "?стан користувача:Доступний"
 
 #: ../src/common/helpers.py:228
 msgid "Connecting"
@@ -5204,15 +5198,15 @@ msgstr "_Невидимий"
 
 #: ../src/common/helpers.py:247
 msgid "?contact has status:Unknown"
-msgstr "Невідомий"
+msgstr "?стан контакту:Невідомий"
 
 #: ../src/common/helpers.py:249
 msgid "?contact has status:Has errors"
-msgstr "З помилками"
+msgstr "?стан контакту:З помилками"
 
 #: ../src/common/helpers.py:254
 msgid "?Subscription we already have:None"
-msgstr "Немає"
+msgstr "?Підписка яку ми вже маємо:Жодної"
 
 #: ../src/common/helpers.py:256
 msgid "To"
@@ -5224,7 +5218,7 @@ msgstr "Обидва"
 
 #: ../src/common/helpers.py:268
 msgid "?Ask (for Subscription):None"
-msgstr "Немає"
+msgstr "?Запит (на підписку):Немає"
 
 #: ../src/common/helpers.py:270
 msgid "Subscribe"
@@ -5232,7 +5226,7 @@ msgstr "Підписатися"
 
 #: ../src/common/helpers.py:279
 msgid "?Group Chat Contact Role:None"
-msgstr "Немає"
+msgstr "?Роль у груповій балачці:Немає"
 
 #: ../src/common/helpers.py:282
 msgid "Moderators"
@@ -5260,7 +5254,7 @@ msgstr "Відвідувач"
 
 #: ../src/common/helpers.py:300 ../src/tooltips.py:210
 msgid "?Group Chat Contact Affiliation:None"
-msgstr "Немає"
+msgstr "?Членство контакту у груповій балачці:Жодного"
 
 #: ../src/common/helpers.py:302 ../src/tooltips.py:216
 msgid "Owner"
@@ -5403,14 +5397,16 @@ msgstr ""
 
 #: ../src/common/jingle_rtp.py:209
 msgid "GStreamer error"
-msgstr ""
+msgstr "Помилка GStreamer"
 
 #: ../src/common/jingle_rtp.py:210
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Error: %s\n"
 "Debug: %s"
-msgstr "Повідомлення про помилку: %s"
+msgstr ""
+"Повідомлення про помилку: %s\n"
+"Відлагодження: %s"
 
 #: ../src/common/jingle_rtp.py:336
 msgid "audio input"
@@ -6841,14 +6837,13 @@ msgid "Subject: %s\n"
 msgstr "Тема: %s\n"
 
 #: ../src/dataforms_widget.py:544
-#, fuzzy
 msgid "Unable to load image"
-msgstr "Не вдалося завантажити модуль перевірки відсутності активності"
+msgstr "Не вдалося завантажити зображення"
 
 #: ../src/dataforms_widget.py:546
-#, fuzzy, python-format
+#, python-format
 msgid "Media type not supported: %s"
-msgstr "Невидимість не підтримується"
+msgstr "Тим медіа не підтримується: %s"
 
 #: ../src/dataforms_widget.py:601
 msgid "Jabber ID already in list"
@@ -7412,7 +7407,7 @@ msgstr "Чи бажаєте ви прийняти це запрошення?"
 
 #: ../src/dialogs.py:3932
 msgid "Choose Client Cert #PCKS12"
-msgstr ""
+msgstr "Оберіть клієнтський сертифікат PCKS#12"
 
 #: ../src/dialogs.py:3942 ../src/dialogs.py:3985 ../src/dialogs.py:4041
 msgid "All files"
@@ -7420,7 +7415,7 @@ msgstr "Всі файли"
 
 #: ../src/dialogs.py:3947
 msgid "PKCS12 Files"
-msgstr ""
+msgstr "Файли PKCS12"
 
 #: ../src/dialogs.py:3975
 msgid "Choose Sound"
@@ -7923,9 +7918,8 @@ msgid "Requires python-farsight."
 msgstr "Потрібен python-farsight."
 
 #: ../src/features_window.py:115
-#, fuzzy
 msgid "?features:Available"
-msgstr "Доступний"
+msgstr "?features:Доступний"
 
 #: ../src/features_window.py:122
 msgid "Feature"
@@ -8797,7 +8791,6 @@ msgstr "Якщо ви закриєте це вікно, вас буде від�
 #: ../src/gui_interface.py:2064 ../src/message_window.py:224
 #: ../src/roster_window.py:2739 ../src/roster_window.py:3399
 #: ../src/roster_window.py:4123
-#, fuzzy
 msgid "_Do not ask me again"
 msgstr "Більше _не питати мене"
 
@@ -9560,14 +9553,12 @@ msgid "Could not load image"
 msgstr "Не вдалося завантажити зображення"
 
 #: ../src/profile_window.py:214
-#, fuzzy
 msgid "Wrong date format"
-msgstr "Контактна інформація"
+msgstr "Невірний формат дати"
 
 #: ../src/profile_window.py:215
-#, fuzzy
 msgid "Format of the date must be YYYY-MM-DD"
-msgstr "Формат: РРРР-ММ-ДД"
+msgstr "Формат має бути РРРР-ММ-ДД"
 
 #: ../src/profile_window.py:269
 msgid "Information received"
@@ -10147,34 +10138,34 @@ msgid "OpenPGP: "
 msgstr "OpenPGP: "
 
 #: ../src/tooltips.py:646
-#, fuzzy, python-format
+#, python-format
 msgid "Idle since %s"
-msgstr " з %s"
+msgstr "Відсутній з %s"
 
 #: ../src/tooltips.py:647
-#, fuzzy, python-format
+#, python-format
 msgid "Idle for %s"
-msgstr "Консоль XML для %s"
+msgstr "Відсутній %s"
 
 #: ../src/tooltips.py:698
-#, fuzzy, python-format
+#, python-format
 msgid "Mood: %s"
-msgstr "Настрій:"
+msgstr "Настрій: %s"
 
 #: ../src/tooltips.py:702
-#, fuzzy, python-format
+#, python-format
 msgid "Activity: %s"
-msgstr "Заняття:"
+msgstr "Заняття: %s"
 
 #: ../src/tooltips.py:706
-#, fuzzy, python-format
+#, python-format
 msgid "Tune: %s"
-msgstr "Музика:"
+msgstr "Музика: %s"
 
 #: ../src/tooltips.py:710
-#, fuzzy, python-format
+#, python-format
 msgid "Location: %s"
-msgstr "Положення:"
+msgstr "Положення: %s"
 
 #: ../src/tooltips.py:735
 msgid "Download"
@@ -10231,11 +10222,11 @@ msgstr ""
 
 #: ../src/vcard.py:251
 msgid "?Client:Unknown"
-msgstr "Невідомий"
+msgstr "?Клієнт:Невідомий"
 
 #: ../src/vcard.py:253
 msgid "?OS:Unknown"
-msgstr "Невідома"
+msgstr "?ОС:Невідома"
 
 #: ../src/vcard.py:274
 msgid "?Time:Unknown"
@@ -10248,7 +10239,7 @@ msgstr "з %s"
 
 #: ../src/vcard.py:331
 msgid "?Role in Group Chat:<b>Role:</b>"
-msgstr ""
+msgstr "?Роль в груповій балачці:<b>Роль:</b>"
 
 #: ../src/vcard.py:335
 msgid "<b>Affiliation:</b>"

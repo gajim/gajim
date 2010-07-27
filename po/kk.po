@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim.trunk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-07-27 11:28+0200\n"
-"PO-Revision-Date: 2010-07-25 00:16+0600\n"
+"POT-Creation-Date: 2010-07-27 16:16+0200\n"
+"PO-Revision-Date: 2010-07-27 17:15+0600\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <kk_KZ@googlegroups.com>\n"
 "Language: kk\n"
@@ -573,9 +573,8 @@ msgid "Error description..."
 msgstr "Анықтамасы қате..."
 
 #: ../data/gui/adhoc_commands_window.ui.h:6
-#, fuzzy
 msgid "F_inish"
-msgstr "_Аяқтау"
+msgstr "А_яқтау"
 
 #: ../data/gui/adhoc_commands_window.ui.h:7
 msgid "Please wait while retrieving command list..."
@@ -3576,6 +3575,8 @@ msgstr "Сөйлесулерде ник атынан кейін қойылаты
 msgid ""
 "Specify the command to run when new mail arrives, e.g.: /usr/bin/getmail -q"
 msgstr ""
+"Жаңа эл. пошта келген кезде жөнелтілетін команданы көрсетіңіз, мыс.: /usr/"
+"bin/getmail -q"
 
 #: ../src/common/config.py:166
 msgid "Add * and [n] in roster title?"
