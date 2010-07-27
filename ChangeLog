@@ -1,4 +1,47 @@
-Gajim 0.13 (XX November 2009)
+Gajim 0.14 (XX)
+
+  * Jingle audio / video chat
+  * Improve Startup time
+  * Copy emoticons, LaTeX expressions when they are selected
+  * Fix status icon transparency by using gtk.statusicon
+  * Groupchat auto-rejoin
+  * geolocation (with geoclue)
+  * use XDG standards
+  * SCRAM-SHA-1 and SASL EXTERNAL authentication
+  * MUC captcha
+  * Lots of refactoring
+
+Gajim 0.13.4 (02 April 2010)
+
+  * Add japanese translation
+  * Fix some TLS connection
+  * Don't raise a lot of "DB Error" dialog
+  * Fix contact synchronisation
+  * Minor fixes
+
+Gajim 0.13.3 (23 February 2010)
+
+  * Fix facebook xmpp server connection
+  * Fix copy / paste with Ctrl+C on non-latin keyboard
+  * Fix sending PEP information when connecting
+  * Fix parsing HTML messages that have ascii markup
+
+Gajim 0.13.2 (14 January 2010)
+
+  * Fix some translations
+  * Fix string comparison according to locales
+  * Fix resizing of groupchat occupant treeview
+  * Fix some gnomekeyring glitches
+  * better SRV usage with libasyncns
+  * copy emoticons when we copy / paste in conversations
+
+Gajim 0.13.1 (28 November 2009)
+
+  * Fix a bug when no account exists and bonjour is not available
+  * Fix a bug when opening advanced option in MUC
+  * Fix a bug when using non-BOSH proxies
+
+Gajim 0.13 (24 November 2009)
 
   * Improve gtkspell (fix memleak)
   * BOSH connection
@@ -44,7 +87,7 @@ Gajim 0.12.2 (07 June 2009)
   * Improve error messages handling
   * Totem support for played music
   * Fix SSL with some servers
-  * Handle Xfce notification-daemon
+  * Handle XFCE notification-daemon
   * Restore old behaviour of click on systray: left click to open events
   * Network manager 0.7 support
   * Move logs file under windows to $APPDATA/gajim
