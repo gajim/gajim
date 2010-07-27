@@ -36,6 +36,11 @@ from errno import EINPROGRESS
 from errno import EAFNOSUPPORT
 from xmpp.idlequeue import IdleObject
 
+import jingle_xtls
+
+if jingle_xtls.PYOPENSSL_PRESENT:
+    import OpenSSL
+
 import logging
 log = logging.getLogger('gajim.c.socks5')
 
@@ -867,12 +872,16 @@ class Socks5Listener(IdleObject):
         self.started = False
         self._sock = None
         self.fd = -1
+        self.fingerprint = fingerprint
 
     def bind(self):
         for ai in self.ais:
             # try the different possibilities (ipv6, ipv4, etc.)
             try:
                 self._serv = socket.socket(*ai[:3])
+                if not self.fingerprint is None:
+                    self._serv = OpenSSL.SSL.Connection(
+                        jingle_xtls.get_context('server'), self._serv)
             except socket.error, e:
                 if e.args[0] == EAFNOSUPPORT:
                     self.ai = None
@@ -949,6 +958,7 @@ class Socks5Receiver(Socks5, IdleObject):
         self.streamhost = streamhost
         self.queue = None
         self.file_props = file_props
+        self.fingerprint = fingerprint
         self.connect_timeout = 0
         self.connected = False
         self.pauses = 0
@@ -992,6 +1002,9 @@ class Socks5Receiver(Socks5, IdleObject):
         for ai in self.ais:
             try:
                 self._sock = socket.socket(*ai[:3])
+                if not self.fingerprint is None:
+                    self._sock = OpenSSL.SSL.Connection(
+                        jingle_xtls.get_context('client'), self._sock)
                 # this will not block the GUI
                 self._sock.setblocking(False)
                 self._server = ai[4]
