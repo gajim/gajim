@@ -103,7 +103,7 @@ class ConnectionCaps(object):
                 node = caps_hash = hash_method = None
                 contact.client_caps = self._create_suitable_client_caps(node,
                         caps_hash, hash_method)
-                log.warn("Computed and retrieved caps hash differ." +
+                log.info("Computed and retrieved caps hash differ." +
                         "Ignoring caps of contact %s" % contact.get_full_jid())
 
             self._dispatch_event('CAPS_RECEIVED', (jid,))
