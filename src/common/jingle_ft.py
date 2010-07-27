@@ -93,6 +93,7 @@ class JingleFileTransfer(JingleContent):
         file_props['session-type'] = 'jingle'
 
         self.use_security = bool(content.getTag('security'))
+        # TODO: extract fingerprint element, encryption method element for later use
         
         file_tag = content.getTag('description').getTag('offer').getTag('file')
         for attribute in file_tag.getAttrs():
