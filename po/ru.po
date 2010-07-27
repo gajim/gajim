@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-07-27 11:28+0200\n"
-"PO-Revision-Date: 2010-07-03 14:02+0300\n"
+"POT-Creation-Date: 2010-07-27 16:16+0200\n"
+"PO-Revision-Date: 2010-07-27 19:57+0300\n"
 "Last-Translator: Fomin Denis <fominde@mail.ru>\n"
 "Language-Team: Linux Support LLC\n"
 "Language: ru\n"
@@ -582,7 +582,6 @@ msgid "Error description..."
 msgstr "Описание ошибки..."
 
 #: ../data/gui/adhoc_commands_window.ui.h:6
-#, fuzzy
 msgid "F_inish"
 msgstr "_Закончить"
 
@@ -2817,7 +2816,6 @@ msgid "User avatar:"
 msgstr "Аватар:"
 
 #: ../data/gui/xml_console_window.ui.h:1
-#, fuzzy
 msgid "<b>Filter</b>"
 msgstr "<b>Фильтр</b>"
 
@@ -2831,23 +2829,23 @@ msgstr "<b>XML Ввод</b>"
 
 #: ../data/gui/xml_console_window.ui.h:4
 msgid "Hide IN stanzas"
-msgstr ""
+msgstr "Спрятать IN станзы"
 
 #: ../data/gui/xml_console_window.ui.h:5
 msgid "Hide IQ stanzas"
-msgstr ""
+msgstr "Спрятать IQ станзы"
 
 #: ../data/gui/xml_console_window.ui.h:6
 msgid "Hide Message stanzas"
-msgstr ""
+msgstr "Спрятать станзы сообщений"
 
 #: ../data/gui/xml_console_window.ui.h:7
 msgid "Hide OUT stanzas"
-msgstr ""
+msgstr "Спрятать OUT станзы"
 
 #: ../data/gui/xml_console_window.ui.h:8
 msgid "Hide Presence stanzas"
-msgstr ""
+msgstr "Спрятать Presence станзы"
 
 #: ../data/gui/xml_console_window.ui.h:9
 msgid "Info/Query"
@@ -3588,6 +3586,8 @@ msgstr "Символы, которые будут отображаться по�
 msgid ""
 "Specify the command to run when new mail arrives, e.g.: /usr/bin/getmail -q"
 msgstr ""
+"Определение команды для запуска при получении нового письма, например: /usr/"
+"bin/getmail -q"
 
 #: ../src/common/config.py:166
 msgid "Add * and [n] in roster title?"
@@ -4097,10 +4097,11 @@ msgstr ""
 #: ../src/common/config.py:281
 msgid "Optionally fix jingle output video framerate. Example: 10/1 or 25/2"
 msgstr ""
+"Опциональное изменение частоты кадров видео в jingle. Например: 10/1 или 25/2"
 
 #: ../src/common/config.py:282
 msgid "Optionally resize jingle output video. Example: 320x240"
-msgstr ""
+msgstr "Опциональное изменение размера кадра видео в jingle. Например: 320x240"
 
 #: ../src/common/config.py:285
 msgid ""
@@ -5336,14 +5337,16 @@ msgstr ""
 
 #: ../src/common/jingle_rtp.py:209
 msgid "GStreamer error"
-msgstr ""
+msgstr "Ошибка GStreamer"
 
 #: ../src/common/jingle_rtp.py:210
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Error: %s\n"
 "Debug: %s"
-msgstr "Сообщение об ошибке: %s"
+msgstr ""
+"Ошибка: %s\n"
+"Отладка: %s"
 
 #: ../src/common/jingle_rtp.py:336
 msgid "audio input"
