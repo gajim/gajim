@@ -2444,7 +2444,7 @@ class VersionResultReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         return True
 
 class TimeResultReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
-    name = 'version-result-received'
+    name = 'time-result-received'
     base_network_events = []
 
     def generate(self):
