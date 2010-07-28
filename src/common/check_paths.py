@@ -268,6 +268,8 @@ def check_and_possibly_create_paths():
     MY_CONFIG = configpaths.gajimpaths['MY_CONFIG']
     MY_CACHE = configpaths.gajimpaths['MY_CACHE']
 
+    PLUGINS_CONFIG_PATH = gajim.PLUGINS_CONFIG_DIR
+
     if not os.path.exists(MY_DATA):
         create_path(MY_DATA)
     elif os.path.isfile(MY_DATA):
@@ -330,6 +332,13 @@ def check_and_possibly_create_paths():
         gajim.logger.attach_cache_database()
     elif os.path.isdir(CACHE_DB_PATH):
         print _('%s is a directory but should be a file') % CACHE_DB_PATH
+        print _('Gajim will now exit')
+        sys.exit()
+
+    if not os.path.exists(PLUGINS_CONFIG_PATH):
+        create_path(PLUGINS_CONFIG_PATH)
+    elif os.path.isfile(PLUGINS_CONFIG_PATH):
+        print _('%s is a file but it should be a directory') % PLUGINS_CONFIG_PATH
         print _('Gajim will now exit')
         sys.exit()
 

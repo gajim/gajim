@@ -42,6 +42,7 @@ import gtkgui_helpers
 
 from common import helpers
 from common import gajim
+from common import ged
 from common.i18n import Q_
 
 def get_avatar_pixbuf_encoded_mime(photo):
@@ -125,6 +126,13 @@ class VcardWindow:
         self.update_progressbar_timeout_id = gobject.timeout_add(100,
                 self.update_progressbar)
 
+        gajim.ged.register_event_handler('version-result-received', ged.GUI1,
+            self.set_os_info)
+        gajim.ged.register_event_handler('last-result-received', ged.GUI2,
+            self.set_last_status_time)
+        gajim.ged.register_event_handler('time-result-received', ged.GUI1,
+            self.set_entity_time)
+
         self.fill_jabber_page()
         annotations = gajim.connections[self.account].annotations
         if self.contact.jid in annotations:
@@ -150,6 +158,12 @@ class VcardWindow:
         if annotation != connection.annotations.get(self.contact.jid, ''):
             connection.annotations[self.contact.jid] = annotation
             connection.store_annotations()
+        gajim.ged.remove_event_handler('version-result-received', ged.GUI1,
+            self.set_os_info)
+        gajim.ged.remove_event_handler('last-result-received', ged.GUI2,
+            self.set_last_status_time)
+        gajim.ged.remove_event_handler('time-result-received', ged.GUI1,
+            self.set_entity_time)
 
     def on_vcard_information_window_key_press_event(self, widget, event):
         if event.keyval == gtk.keysyms.Escape:
@@ -226,10 +240,10 @@ class VcardWindow:
             self.progressbar.hide()
             self.update_progressbar_timeout_id = None
 
-    def set_last_status_time(self):
+    def set_last_status_time(self, obj):
         self.fill_status_label()
 
-    def set_os_info(self, resource, client_info, os_info):
+    def set_os_info(self, obj):
         if self.xml.get_object('information_notebook').get_n_pages() < 5:
             return
         i = 0
@@ -237,9 +251,9 @@ class VcardWindow:
         os = ''
         while i in self.os_info:
             if not self.os_info[i]['resource'] or \
-                            self.os_info[i]['resource'] == resource:
-                self.os_info[i]['client'] = client_info
-                self.os_info[i]['os'] = os_info
+            self.os_info[i]['resource'] == obj.resource:
+                self.os_info[i]['client'] = obj.client_info
+                self.os_info[i]['os'] = obj.os_info
             if i > 0:
                 client += '\n'
                 os += '\n'
@@ -256,15 +270,15 @@ class VcardWindow:
         self.os_info_arrived = True
         self.test_remove_progressbar()
 
-    def set_entity_time(self, resource, time_info):
+    def set_entity_time(self, obj):
         if self.xml.get_object('information_notebook').get_n_pages() < 5:
             return
         i = 0
         time_s = ''
         while i in self.time_info:
             if not self.time_info[i]['resource'] or \
-            self.time_info[i]['resource'] == resource:
-                self.time_info[i]['time'] = time_info
+            self.time_info[i]['resource'] == obj.resource:
+                self.time_info[i]['time'] = obj.time_info
             if i > 0:
                 time_s += '\n'
             time_s += self.time_info[i]['time']

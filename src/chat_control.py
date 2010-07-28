@@ -155,6 +155,8 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         """
         self.draw_banner_text()
         self._update_banner_state_image()
+        gajim.plugin_manager.gui_extension_point('chat_control_base_draw_banner',
+            self)
 
     def draw_banner_text(self):
         """
@@ -409,6 +411,10 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         self.command_hits = []
         self.last_key_tabs = False
 
+        # PluginSystem: adding GUI extension point for ChatControlBase
+        # instance object (also subclasses, eg. ChatControl or GroupchatControl)
+        gajim.plugin_manager.gui_extension_point('chat_control_base', self)
+
     def set_speller(self):
         # now set the one the user selected
         per_type = 'contacts'
@@ -443,6 +449,12 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             menu.reorder_child(item, i)
             i += 1
         menu.show_all()
+
+    def shutdown(self):
+        # PluginSystem: removing GUI extension points connected with ChatControlBase
+        # instance object
+        gajim.plugin_manager.remove_gui_extension_point('chat_control_base', self)
+        gajim.plugin_manager.remove_gui_extension_point('chat_control_base_draw_banner', self)
 
     def on_msg_textview_populate_popup(self, textview, menu):
         """
@@ -1585,6 +1597,10 @@ class ChatControl(ChatControlBase):
         else:
             img.hide()
 
+        # PluginSystem: adding GUI extension point for this ChatControl 
+        # instance object
+        gajim.plugin_manager.gui_extension_point('chat_control', self)
+
     def _update_jingle(self, jingle_type):
         if jingle_type not in ('audio', 'video'):
             return
@@ -2455,7 +2471,13 @@ class ChatControl(ChatControlBase):
             self.reset_kbd_mouse_timeout_vars()
 
     def shutdown(self):
-        # Send 'gone' chatstate
+        # PluginSystem: calling shutdown of super class (ChatControlBase) to let it remove
+        # it's GUI extension points
+        super(ChatControl, self).shutdown()
+        # PluginSystem: removing GUI extension points connected with ChatControl
+        # instance object
+        gajim.plugin_manager.remove_gui_extension_point('chat_control', self)        # Send 'gone' chatstate
+
         self.send_chatstate('gone', self.contact)
         self.contact.chatstate = None
         self.contact.our_chatstate = None
