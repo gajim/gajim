@@ -19,7 +19,7 @@
               <object class="GtkHBox" id="hbox3024">
                 <property name="visible">True</property>
                 <child>
-                  <object class="GtkImage" id="banner_status_image">
+                  <object class="GtkImage" id="gc_banner_status_image">
                     <property name="visible">True</property>
                     <property name="stock">gtk-missing-image</property>
                   </object>
