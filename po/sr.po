@@ -4,13 +4,13 @@
 # This file is distributed under the same license as the gajim package.
 #
 # B. Kokanovic <branko.kokanovic@gmail.com>, 2007.
-# Branko Kokanovic <branko.kokanovic@gmail.com>, 2008, 2009.
+# Branko Kokanovic <branko.kokanovic@gmail.com>, 2008, 2009, 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: sr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-07-27 11:28+0200\n"
-"PO-Revision-Date: 2009-10-29 23:50+0100\n"
+"POT-Creation-Date: 2010-07-27 16:16+0200\n"
+"PO-Revision-Date: 2010-07-29 20:25+0200\n"
 "Last-Translator: Branko Kokanovic <branko.kokanovic@gmail.com>\n"
 "Language-Team:  <sr@li.org>\n"
 "Language: \n"
@@ -229,9 +229,8 @@ msgid "Auto-reconnect when connection is lost"
 msgstr "Аутоматско повезивање када се веза изгуби"
 
 #: ../data/gui/accounts_window.ui.h:11
-#, fuzzy
 msgid "Browse..."
-msgstr "_Преглед"
+msgstr "_Разгледај"
 
 #: ../data/gui/accounts_window.ui.h:12
 msgid "C_onnect on Gajim startup"
@@ -250,9 +249,8 @@ msgstr ""
 "везе."
 
 #: ../data/gui/accounts_window.ui.h:15
-#, fuzzy
 msgid "Choose Client Cert"
-msgstr "Одаберите датотеку за слање..."
+msgstr "Одаберите сертификат клијента"
 
 #: ../data/gui/accounts_window.ui.h:16
 msgid "Choose _Key..."
@@ -267,9 +265,8 @@ msgid "Click to request authorization to all contacts of another account"
 msgstr "Кликните да затражите ауторизацију свим контактима другог налога"
 
 #: ../data/gui/accounts_window.ui.h:19
-#, fuzzy
 msgid "Client certificate"
-msgstr "Самопотписани сертификат"
+msgstr "Сертификат клијента"
 
 #: ../data/gui/accounts_window.ui.h:20
 msgid "Co_nnect on Gajim startup"
@@ -445,7 +442,7 @@ msgstr "Синхронизуј контакте"
 
 #: ../data/gui/accounts_window.ui.h:53
 msgid "The path to the client certificate and key in PKCS#12 format"
-msgstr ""
+msgstr "Путања до сертификата клијента и кључ у PKCS#12 формату"
 
 #: ../data/gui/accounts_window.ui.h:54
 msgid "Use G_PG Agent"
@@ -465,7 +462,7 @@ msgstr "Користи прокси за пренос датотека"
 
 #: ../data/gui/accounts_window.ui.h:58
 msgid "_Client Cert File:"
-msgstr ""
+msgstr "Датотека сертификата _клијента:"
 
 #: ../data/gui/accounts_window.ui.h:59
 msgid "_Edit Personal Information..."
@@ -549,9 +546,8 @@ msgid "_Register"
 msgstr "_Регистрација"
 
 #: ../data/gui/add_new_contact_window.ui.h:15
-#, fuzzy
 msgid "_Save subscription message"
-msgstr "_Претплата"
+msgstr "_Сачувај поруку претплате"
 
 #: ../data/gui/add_new_contact_window.ui.h:16
 msgid "_User ID:"
@@ -578,9 +574,8 @@ msgid "Error description..."
 msgstr "Опис грешке"
 
 #: ../data/gui/adhoc_commands_window.ui.h:6
-#, fuzzy
 msgid "F_inish"
-msgstr "_Заврши"
+msgstr "Заврш_и"
 
 #: ../data/gui/adhoc_commands_window.ui.h:7
 msgid "Please wait while retrieving command list..."
@@ -701,43 +696,36 @@ msgid "Busy "
 msgstr "Запослен"
 
 #: ../data/gui/advanced_notifications_window.ui.h:10
-#, fuzzy
 msgid "Contact Change Status "
-msgstr "Контакт променио статус"
+msgstr "Контакт променио статус   "
 
 #: ../data/gui/advanced_notifications_window.ui.h:11
-#, fuzzy
 msgid "Contact Disconnected "
-msgstr "Контакт Отишао Са Везе"
+msgstr "Контакт Отишао Са Везе "
 
 #: ../data/gui/advanced_notifications_window.ui.h:12
 msgid "Don't have "
 msgstr "Немам "
 
 #: ../data/gui/advanced_notifications_window.ui.h:13
-#, fuzzy
 msgid "File Transfer Finished"
-msgstr "Преноси датотека"
+msgstr "Пренос датотеке завршен"
 
 #: ../data/gui/advanced_notifications_window.ui.h:14
-#, fuzzy
 msgid "File Transfer Request "
-msgstr "Захтев за преносом датотеке"
+msgstr "Захтев за преносом датотеке "
 
 #: ../data/gui/advanced_notifications_window.ui.h:15
-#, fuzzy
 msgid "File Transfer Started "
-msgstr "Пренос датотеке заустављен"
+msgstr "Пренос датотеке започет "
 
 #: ../data/gui/advanced_notifications_window.ui.h:16
-#, fuzzy
 msgid "Group Chat Message Highlight "
-msgstr "Бојење Порука Са Групног Разговора"
+msgstr "Обојена Порука Са Групног Разговора "
 
 #: ../data/gui/advanced_notifications_window.ui.h:17
-#, fuzzy
 msgid "Group Chat Message Received "
-msgstr "Примљена Порука Са Групног Разговора"
+msgstr "Примљена Порука Са Групног Разговора "
 
 #: ../data/gui/advanced_notifications_window.ui.h:18
 msgid "Have "
@@ -770,9 +758,8 @@ msgid "Play a sound"
 msgstr "Пуштање звукове"
 
 #: ../data/gui/advanced_notifications_window.ui.h:25
-#, fuzzy
 msgid "Receive a Message"
-msgstr "Нова Приватна Порука"
+msgstr "Примљена Порука"
 
 #: ../data/gui/advanced_notifications_window.ui.h:26
 msgid "When "
@@ -824,22 +811,20 @@ msgid "and I "
 msgstr "и ја "
 
 #: ../data/gui/advanced_notifications_window.ui.h:38
-#, fuzzy
 msgid "contact(s)"
-msgstr "Контакти"
+msgstr "контакт(и)"
 
 #: ../data/gui/advanced_notifications_window.ui.h:39
 msgid "everybody"
-msgstr ""
+msgstr "сви"
 
 #: ../data/gui/advanced_notifications_window.ui.h:40
 msgid "for "
 msgstr "за"
 
 #: ../data/gui/advanced_notifications_window.ui.h:41
-#, fuzzy
 msgid "group(s)"
-msgstr "Групе"
+msgstr "група(е)"
 
 #: ../data/gui/advanced_notifications_window.ui.h:42
 msgid "when I'm in"
@@ -966,47 +951,47 @@ msgstr "#"
 
 #: ../data/gui/chat_control.ui.h:2
 msgid "*"
-msgstr ""
+msgstr "*"
 
 #: ../data/gui/chat_control.ui.h:3 ../data/gui/single_message_window.ui.h:1
 msgid "0"
-msgstr "О"
+msgstr "0"
 
 #: ../data/gui/chat_control.ui.h:4
 msgid "1"
-msgstr ""
+msgstr "1"
 
 #: ../data/gui/chat_control.ui.h:5
 msgid "2"
-msgstr ""
+msgstr "2"
 
 #: ../data/gui/chat_control.ui.h:6
 msgid "3"
-msgstr ""
+msgstr "3"
 
 #: ../data/gui/chat_control.ui.h:7
 msgid "4"
-msgstr ""
+msgstr "4"
 
 #: ../data/gui/chat_control.ui.h:8
 msgid "5"
-msgstr ""
+msgstr "5"
 
 #: ../data/gui/chat_control.ui.h:9
 msgid "6"
-msgstr ""
+msgstr "6"
 
 #: ../data/gui/chat_control.ui.h:10
 msgid "7"
-msgstr ""
+msgstr "7"
 
 #: ../data/gui/chat_control.ui.h:11
 msgid "8"
-msgstr ""
+msgstr "8"
 
 #: ../data/gui/chat_control.ui.h:12
 msgid "9"
-msgstr ""
+msgstr "9"
 
 #. Make sure the character after "_" is not M/m (conflicts with Alt+M that is supposed to show the Emoticon Selector)
 #: ../data/gui/chat_control.ui.h:14 ../data/gui/groupchat_control.ui.h:2
@@ -1016,7 +1001,7 @@ msgstr "_Пошаљи"
 
 #: ../data/gui/chat_control.ui.h:15 ../data/gui/groupchat_control.ui.h:3
 msgid "label"
-msgstr ""
+msgstr "ознака"
 
 #: ../data/gui/chat_to_muc_window.ui.h:1
 msgid "In_vite"
@@ -1252,9 +1237,8 @@ msgid "<b>Chatstate Tab Colors</b>"
 msgstr "<b>Боје језичака статуса разговора</b>"
 
 #: ../data/gui/gajim_themes_window.ui.h:2
-#, fuzzy
 msgid "Account row"
-msgstr "Налог"
+msgstr "Ред са налогом"
 
 #: ../data/gui/gajim_themes_window.ui.h:3 ../src/chat_control.py:925
 msgid "Bold"
@@ -1262,16 +1246,15 @@ msgstr "Подебљано"
 
 #: ../data/gui/gajim_themes_window.ui.h:4
 msgid "Chat Banner"
-msgstr ""
+msgstr "Барјак разговора"
 
 #: ../data/gui/gajim_themes_window.ui.h:5
 msgid "Composing"
 msgstr "Састављање"
 
 #: ../data/gui/gajim_themes_window.ui.h:6
-#, fuzzy
 msgid "Contact row"
-msgstr "Контакт"
+msgstr "Ред са контактима"
 
 #: ../data/gui/gajim_themes_window.ui.h:7
 msgid "Font style:"
@@ -1286,9 +1269,8 @@ msgid "Gone"
 msgstr "Отишао"
 
 #: ../data/gui/gajim_themes_window.ui.h:10
-#, fuzzy
 msgid "Group row"
-msgstr "Група"
+msgstr "Ред са групама"
 
 #: ../data/gui/gajim_themes_window.ui.h:11 ../src/common/pep.py:150
 msgid "Inactive"
@@ -1344,7 +1326,7 @@ msgstr "Подеси _собу..."
 
 #: ../data/gui/gc_control_popup_menu.ui.h:4 ../src/disco.py:1782
 msgid "_Bookmark"
-msgstr "_Маркирај ову со_бу"
+msgstr "Обележи ову со_бу"
 
 #: ../data/gui/gc_control_popup_menu.ui.h:5
 msgid "_Destroy Room"
@@ -1463,23 +1445,20 @@ msgid "_Search Database"
 msgstr "_Претражи базу података"
 
 #: ../data/gui/history_window.ui.h:1
-#, fuzzy
 msgid "All Chat Histories"
-msgstr "Сви статуси"
+msgstr "Историјат свих разговора"
 
 #: ../data/gui/history_window.ui.h:2 ../src/history_window.py:323
 msgid "Conversation History"
 msgstr "Историјат разговора"
 
 #: ../data/gui/history_window.ui.h:3
-#, fuzzy
 msgid "Enter JID or Contact name"
-msgstr "Име контакта"
+msgstr "Унесите џабер ИД или Име контакта"
 
 #: ../data/gui/history_window.ui.h:4
-#, fuzzy
 msgid "Groupchat Histories"
-msgstr "Групни разговори"
+msgstr "Историјат групних разговора"
 
 #: ../data/gui/history_window.ui.h:5
 msgid "Search:"
@@ -1491,18 +1470,16 @@ msgid "_Log conversation history"
 msgstr "_Памти у дневнику историјат разговора"
 
 #: ../data/gui/join_groupchat_window.ui.h:2
-#, fuzzy
 msgid "Bro_wse Rooms"
-msgstr "_Преглед"
+msgstr "_Разгледај собе"
 
 #: ../data/gui/join_groupchat_window.ui.h:3 ../src/dialogs.py:2180
 msgid "Join Group Chat"
 msgstr "Придружи се групном разговору"
 
 #: ../data/gui/join_groupchat_window.ui.h:4
-#, fuzzy
 msgid "Join this room _automatically when I connect"
-msgstr "Уђи у ову собу аутоматски када се повежем"
+msgstr "Уђи у ову собу _аутоматски када се повежем"
 
 #: ../data/gui/join_groupchat_window.ui.h:5
 #: ../data/gui/manage_bookmarks_window.ui.h:5
@@ -1529,9 +1506,8 @@ msgid "Server:"
 msgstr "Сервер:"
 
 #: ../data/gui/join_groupchat_window.ui.h:10
-#, fuzzy
 msgid "_Bookmark this room"
-msgstr "Маркирај ову собу"
+msgstr "Обележи ову со_бу"
 
 #: ../data/gui/join_groupchat_window.ui.h:11 ../src/disco.py:1341
 #: ../src/disco.py:1786
@@ -1549,7 +1525,7 @@ msgstr ""
 
 #: ../data/gui/manage_bookmarks_window.ui.h:3
 msgid "Manage Bookmarks"
-msgstr "Подешавање маркера"
+msgstr "Управљање Обележавачима"
 
 #: ../data/gui/manage_bookmarks_window.ui.h:4
 msgid "Minimize on Auto Join"
@@ -1581,15 +1557,11 @@ msgstr "<b>Подешавања</b>"
 
 #: ../data/gui/manage_proxies_window.ui.h:3
 msgid "BOSH"
-msgstr ""
+msgstr "BOSH"
 
 #: ../data/gui/manage_proxies_window.ui.h:4
-#, fuzzy
 msgid "HTTP Connect"
-msgstr ""
-"HTTP спој\n"
-"SOCKS5\n"
-"BOSH"
+msgstr "HTTP спој"
 
 #: ../data/gui/manage_proxies_window.ui.h:5
 msgid "Manage Proxy Profiles"
@@ -1609,7 +1581,7 @@ msgstr "Прокси _порт:"
 
 #: ../data/gui/manage_proxies_window.ui.h:9
 msgid "SOCKS5"
-msgstr ""
+msgstr "SOCKS5"
 
 #: ../data/gui/manage_proxies_window.ui.h:10
 msgid "Use HTTP prox_y"
@@ -1640,14 +1612,12 @@ msgid "Passphrase"
 msgstr "Лозинка"
 
 #: ../data/gui/popup_notification_window.ui.h:1
-#, fuzzy
 msgid "Event Type"
-msgstr "догађај"
+msgstr "Тип Догађаја"
 
 #: ../data/gui/popup_notification_window.ui.h:2
-#, fuzzy
 msgid "Event desc"
-msgstr "догађај"
+msgstr "Опис Догађаја"
 
 #: ../data/gui/preferences_window.ui.h:1
 msgid "<b>Advanced Configuration Editor</b>"
@@ -1658,9 +1628,8 @@ msgid "<b>Applications</b>"
 msgstr "<b>Апликације</b>"
 
 #: ../data/gui/preferences_window.ui.h:3
-#, fuzzy
 msgid "<b>Audio</b>"
-msgstr "<b>Акције</b>"
+msgstr "<b>Аудио</b>"
 
 #: ../data/gui/preferences_window.ui.h:4
 msgid "<b>Auto Status</b>"
@@ -1679,9 +1648,8 @@ msgid "<b>Chat state notifications</b>"
 msgstr "<b>Обавештења стања разговора</b>"
 
 #: ../data/gui/preferences_window.ui.h:8
-#, fuzzy
 msgid "<b>Connection</b>"
-msgstr "<b>Услови</b>"
+msgstr "<b>Веза</b>"
 
 #. a header for custom browser/client/file manager. so translate sth like: Custom Settings
 #: ../data/gui/preferences_window.ui.h:10
@@ -1717,9 +1685,8 @@ msgid "<b>Themes</b>"
 msgstr "<b>Теме</b>"
 
 #: ../data/gui/preferences_window.ui.h:20
-#, fuzzy
 msgid "<b>Video</b>"
-msgstr "<b>Средње име:</b>"
+msgstr "<b>Видео</b>"
 
 #: ../data/gui/preferences_window.ui.h:21
 msgid "<b>Visual Notifications</b>"
@@ -1727,7 +1694,7 @@ msgstr "<b>Визуална обавештења</b>"
 
 #: ../data/gui/preferences_window.ui.h:22
 msgid "<i>(example: stunserver.org)</i>"
-msgstr ""
+msgstr "<i>(пример: stunserver.org)</i>"
 
 #: ../data/gui/preferences_window.ui.h:23
 msgid "Advanced"
@@ -1738,18 +1705,16 @@ msgid "Advanced..."
 msgstr "Напредно..."
 
 #: ../data/gui/preferences_window.ui.h:25
-#, fuzzy
 msgid "All chat states"
-msgstr "Сви статуси"
+msgstr "Сви стања разговора"
 
 #: ../data/gui/preferences_window.ui.h:26
 msgid "Allow _OS information to be sent"
 msgstr "Дозволи слање података о ОС-у"
 
 #: ../data/gui/preferences_window.ui.h:27
-#, fuzzy
 msgid "Allow my _idle time to be sent"
-msgstr "Дозволи слање података о ОС-у"
+msgstr "Дозволи слање мог времена неактивности"
 
 #: ../data/gui/preferences_window.ui.h:28
 msgid "Allow popup/notifications when I'm _away/na/busy/invisible"
@@ -1762,24 +1727,20 @@ msgid "Allow sound when I'm _busy"
 msgstr "Доз_воли звукове када сам заузет"
 
 #: ../data/gui/preferences_window.ui.h:30
-#, fuzzy
 msgid "Always"
-msgstr "Одсутан"
+msgstr "Увек"
 
 #: ../data/gui/preferences_window.ui.h:31
-#, fuzzy
 msgid "Always use GNOME default applications"
-msgstr "Увек користи апликацију коју оперативни систем нуди"
+msgstr "Увек користи Гномове подразумеване апликације"
 
 #: ../data/gui/preferences_window.ui.h:32
-#, fuzzy
 msgid "Always use KDE default applications"
-msgstr "Увек користи апликацију коју оперативни систем нуди"
+msgstr "Увек користи КДЕ подразумеване апликације"
 
 #: ../data/gui/preferences_window.ui.h:33
-#, fuzzy
 msgid "Always use Xfce default applications"
-msgstr "Увек користи апликацију коју оперативни систем нуди"
+msgstr "Увек користи Xfce подразумеване апликације"
 
 #: ../data/gui/preferences_window.ui.h:34
 msgid "Ask status message when I:"
@@ -1787,20 +1748,19 @@ msgstr "Питај за статусну поруку при:"
 
 #: ../data/gui/preferences_window.ui.h:35 ../src/features_window.py:105
 msgid "Audio / Video"
-msgstr ""
+msgstr "Аудио/ Видео"
 
 #: ../data/gui/preferences_window.ui.h:36
 msgid "Audio input device"
-msgstr ""
+msgstr "Аудио улазни уређај"
 
 #: ../data/gui/preferences_window.ui.h:37
 msgid "Audio output device"
-msgstr ""
+msgstr "Аудио излазни уређај"
 
 #: ../data/gui/preferences_window.ui.h:38
-#, fuzzy
 msgid "Autodetect on every Gajim startup"
-msgstr "По_вежи се приликом покретања Гајима"
+msgstr "Самопрепознај по сваком покретању Гајима"
 
 #: ../data/gui/preferences_window.ui.h:39
 msgid "Chat message:"
@@ -1811,23 +1771,20 @@ msgid "Check on startup if Gajim is the _default Jabber client"
 msgstr "Провери по стартовању да ли је Гајим подразумевани џабер клијент"
 
 #: ../data/gui/preferences_window.ui.h:41
-#, fuzzy
 msgid "Composing only"
-msgstr "Састављање"
+msgstr "Само састављање"
 
 #: ../data/gui/preferences_window.ui.h:42
 msgid "Configure color and font of the interface"
 msgstr "Конфигурисање боје и фонта интерфејса"
 
 #: ../data/gui/preferences_window.ui.h:43
-#, fuzzy
 msgid "Contact's message:"
-msgstr "Порука разговора:"
+msgstr "Порука контакта:"
 
 #: ../data/gui/preferences_window.ui.h:44
-#, fuzzy
 msgid "Contact's nickname:"
-msgstr "Име контакта"
+msgstr "Надимак контакта:"
 
 #: ../data/gui/preferences_window.ui.h:45
 msgid "Custom"
@@ -1835,19 +1792,19 @@ msgstr "Кориснички"
 
 #: ../data/gui/preferences_window.ui.h:46
 msgid "Detached roster with chat grouped by account"
-msgstr ""
+msgstr "Одвојена листа контаката са разговорима груписаним по налогу"
 
 #: ../data/gui/preferences_window.ui.h:47
 msgid "Detached roster with chat grouped by type"
-msgstr ""
+msgstr "Одвојена листа контаката са разговорима груписаним по типу"
 
 #: ../data/gui/preferences_window.ui.h:48
 msgid "Detached roster with detached chats"
-msgstr ""
+msgstr "Одвојена листа контаката са одвојеним разговорима"
 
 #: ../data/gui/preferences_window.ui.h:49
 msgid "Detached roster with single chat"
-msgstr ""
+msgstr "Одвојена листа контаката са једним разговором"
 
 #: ../data/gui/preferences_window.ui.h:50 ../src/config.py:170
 #: ../src/config.py:671
@@ -1863,9 +1820,8 @@ msgid "Display _extra email details"
 msgstr "Прикажи додатне е-мејл детаље"
 
 #: ../data/gui/preferences_window.ui.h:53
-#, fuzzy
 msgid "Display _location of contacts in roster"
-msgstr "Прикажи _расположења контаката на листи"
+msgstr "Прикажи _локације контаката на листи"
 
 #: ../data/gui/preferences_window.ui.h:54
 msgid "Display _tunes of contacts in roster"
@@ -1969,11 +1925,10 @@ msgstr ""
 "Ако је означена, Гајим ће приказивати активности контаката у листи контаката"
 
 #: ../data/gui/preferences_window.ui.h:70
-#, fuzzy
 msgid ""
 "If checked, Gajim will display the location of contacts in the roster window"
 msgstr ""
-"Ако је означена, Гајим ће приказивати расположење контаката у листи контаката"
+"Ако је означена, Гајим ће приказивати локацију контаката у листи контаката"
 
 #: ../data/gui/preferences_window.ui.h:71
 msgid ""
@@ -2063,9 +2018,8 @@ msgid "Ma_nage..."
 msgstr "Поде_си..."
 
 #: ../data/gui/preferences_window.ui.h:83
-#, fuzzy
 msgid "Never"
-msgstr "Сервер"
+msgstr "Никад"
 
 #: ../data/gui/preferences_window.ui.h:84
 msgid "Notifications"
@@ -2080,21 +2034,16 @@ msgid "Notify me about contacts that sign _out"
 msgstr "Обавести ме о контактима који се _одјаве"
 
 #: ../data/gui/preferences_window.ui.h:87
-#, fuzzy
 msgid "Notify me about it"
-msgstr "Обавести ме о контактима који се _одјаве"
+msgstr "Обавести ме"
 
 #: ../data/gui/preferences_window.ui.h:88
 msgid "Notify on new _GMail email"
 msgstr "Обавести ме о новопристиглој Гмаил е-мејл пошти"
 
 #: ../data/gui/preferences_window.ui.h:89
-#, fuzzy
 msgid "Only when pending events"
-msgstr ""
-"Никад\n"
-"Само за догађаје на чекању\n"
-"Увек"
+msgstr "Само за догађаје на чекању"
 
 #: ../data/gui/preferences_window.ui.h:90
 msgid "Personal Events"
@@ -2106,7 +2055,7 @@ msgstr "Пуштај звукове"
 
 #: ../data/gui/preferences_window.ui.h:92
 msgid "Pop it up"
-msgstr ""
+msgstr "Искочи"
 
 #: ../data/gui/preferences_window.ui.h:93
 msgid "Preferences"
@@ -2117,16 +2066,16 @@ msgid ""
 "STUN server hostname. If none given, Gajim will try\n"
 "to discover one from server."
 msgstr ""
+"Име хоста СТУН сервера. Уколико није дато, Гајим ће\n"
+"покушати да га открије од сервера."
 
 #: ../data/gui/preferences_window.ui.h:96
-#, fuzzy
 msgid "STUN server:"
-msgstr "Сервер:"
+msgstr "СТУН Сервер:"
 
 #: ../data/gui/preferences_window.ui.h:97
-#, fuzzy
 msgid "Show only in roster"
-msgstr "Прикажи догађај у листи контаката"
+msgstr "Прикажи само у листи контаката"
 
 #: ../data/gui/preferences_window.ui.h:98
 msgid "Show systray:"
@@ -2142,7 +2091,7 @@ msgstr "Одјављивању"
 
 #: ../data/gui/preferences_window.ui.h:101
 msgid "Single window for everything"
-msgstr ""
+msgstr "Један прозор за све"
 
 #: ../data/gui/preferences_window.ui.h:102
 msgid ""
@@ -2206,33 +2155,31 @@ msgstr "Користи системски подразумевано"
 
 #: ../data/gui/preferences_window.ui.h:116
 msgid "Video framerate"
-msgstr ""
+msgstr "Број кадрова за видео"
 
 #: ../data/gui/preferences_window.ui.h:117
 msgid "Video input device"
-msgstr ""
+msgstr "Улазни видео уређај"
 
 #: ../data/gui/preferences_window.ui.h:118
 msgid "Video output device"
-msgstr ""
+msgstr "Излазни видео уређај"
 
 #: ../data/gui/preferences_window.ui.h:119
 msgid "Video size"
-msgstr ""
+msgstr "Величина видеа"
 
 #: ../data/gui/preferences_window.ui.h:120
 msgid "When new event is received:"
 msgstr "Када се прими нови догађај:"
 
 #: ../data/gui/preferences_window.ui.h:121
-#, fuzzy
 msgid "Your message:"
-msgstr "Порука грешке: %s"
+msgstr "Ваша порука:"
 
 #: ../data/gui/preferences_window.ui.h:122
-#, fuzzy
 msgid "Your nickname:"
-msgstr "Надимак:"
+msgstr "Ваш надимак:"
 
 #: ../data/gui/preferences_window.ui.h:123
 msgid "_Away after:"
@@ -2375,24 +2322,20 @@ msgid "all in the group"
 msgstr "све у групи"
 
 #: ../data/gui/privacy_list_window.ui.h:15
-#, fuzzy
 msgid "both"
-msgstr "Обоје"
+msgstr "обоје"
 
 #: ../data/gui/privacy_list_window.ui.h:16
-#, fuzzy
 msgid "from"
-msgstr "Од"
+msgstr "од"
 
 #: ../data/gui/privacy_list_window.ui.h:17
-#, fuzzy
 msgid "none"
-msgstr "један"
+msgstr "нико"
 
 #: ../data/gui/privacy_list_window.ui.h:18
-#, fuzzy
 msgid "to"
-msgstr "два"
+msgstr "за"
 
 #: ../data/gui/privacy_list_window.ui.h:19
 msgid "to send me messages"
@@ -2860,9 +2803,8 @@ msgid "User avatar:"
 msgstr "Кориснички аватар:"
 
 #: ../data/gui/xml_console_window.ui.h:1
-#, fuzzy
 msgid "<b>Filter</b>"
-msgstr "<b>Фонт</b>"
+msgstr "<b>Филтер</b>"
 
 #: ../data/gui/xml_console_window.ui.h:2
 msgid "<b>Jabber Traffic</b>"
@@ -2874,23 +2816,23 @@ msgstr "<b>XML Унос</b>"
 
 #: ../data/gui/xml_console_window.ui.h:4
 msgid "Hide IN stanzas"
-msgstr ""
+msgstr "Сакриј IN станце"
 
 #: ../data/gui/xml_console_window.ui.h:5
 msgid "Hide IQ stanzas"
-msgstr ""
+msgstr "Сакриј IQ станце"
 
 #: ../data/gui/xml_console_window.ui.h:6
 msgid "Hide Message stanzas"
-msgstr ""
+msgstr "Сакриј станце порука"
 
 #: ../data/gui/xml_console_window.ui.h:7
 msgid "Hide OUT stanzas"
-msgstr ""
+msgstr "Сакриј OUT станце"
 
 #: ../data/gui/xml_console_window.ui.h:8
 msgid "Hide Presence stanzas"
-msgstr ""
+msgstr "Сакриј станце присутности"
 
 #: ../data/gui/xml_console_window.ui.h:9
 msgid "Info/Query"
@@ -3010,12 +2952,12 @@ msgid "Hidden"
 msgstr "Скривен"
 
 #: ../src/atom_window.py:123
-#, fuzzy, python-format
+#, python-format
 msgid "You have received new entries (and %d not displayed):"
 msgid_plural "You have received new entries (and %d not displayed):"
-msgstr[0] "Примили сте нове уносе (%(count)d није приказано):"
-msgstr[1] "Примили сте нове уносе (%(count)d није приказано):"
-msgstr[2] "Примили сте нове уносе (%(count)d није приказано):"
+msgstr[0] "Примили сте нове уносе (%d није приказан):"
+msgstr[1] "Примили сте нове уносе (%d нису приказана):"
+msgstr[2] "Примили сте нове уносе (%d нису приказана):"
 
 #. the next script, executed in the "po" directory,
 #. generates the following list.
@@ -3187,7 +3129,7 @@ msgstr "Морате знати прави џабер ИД контакта да
 #: ../src/chat_control.py:1656
 #, python-format
 msgid "%(type)s state : %(state)s, reason: %(reason)s"
-msgstr ""
+msgstr "%(type)s стање : %(state)s, разлог: %(reason)s"
 
 #: ../src/chat_control.py:1848
 #, python-format
@@ -3335,9 +3277,8 @@ msgid "creating logs database"
 msgstr "креирам базу дневника"
 
 #: ../src/common/check_paths.py:85
-#, fuzzy
 msgid "creating cache database"
-msgstr "креирам базу дневника"
+msgstr "креирам кеш базу података"
 
 #: ../src/common/check_paths.py:274 ../src/common/check_paths.py:281
 #: ../src/common/check_paths.py:288 ../src/common/check_paths.py:295
@@ -3443,9 +3384,8 @@ msgid "All unread messages have been forwarded."
 msgstr "Све непрочитане поруке су прослеђене."
 
 #: ../src/common/commands.py:295
-#, fuzzy
 msgid "Forward unread message then disconnect"
-msgstr "Проследи непрочитане поруке"
+msgstr "Проследи непрочитане поруке, па се раскачи"
 
 #: ../src/common/config.py:75
 msgid "Play sound when user is busy"
@@ -3632,6 +3572,8 @@ msgstr "Карактери који ће бити приказани после 
 msgid ""
 "Specify the command to run when new mail arrives, e.g.: /usr/bin/getmail -q"
 msgstr ""
+"Наведите наредбу за покретање када стигне нова пошта, нпр. /usr/bin/getmail -"
+"q"
 
 #: ../src/common/config.py:166
 msgid "Add * and [n] in roster title?"
@@ -4129,27 +4071,31 @@ msgstr ""
 
 #: ../src/common/config.py:281
 msgid "Optionally fix jingle output video framerate. Example: 10/1 or 25/2"
-msgstr ""
+msgstr "Опционо поправи излазни број кадрова . Пример: 10/1 or 25/2"
 
 #: ../src/common/config.py:282
 msgid "Optionally resize jingle output video. Example: 320x240"
-msgstr ""
+msgstr "Опционо промени величину излазног видеа. Пример: 320x240"
 
 #: ../src/common/config.py:285
 msgid ""
 "If True, Gajim will try to use a STUN server when using jingle. The one in "
 "\"stun_server\" option, or the one given by the jabber server."
 msgstr ""
+"Ако је True, Гајим ће покушати да користи СТУН сервер када користи jingle. "
+"Онај дефинисан у \"stun_server\" опцији, или онај који пошаље џабер сервер."
 
 #: ../src/common/config.py:286
 msgid "STUN server to use when using jingle"
-msgstr ""
+msgstr "СТУН сервер који ће се користити када се користи jingle"
 
 #: ../src/common/config.py:287
 msgid ""
 "If True, Gajim will show affiliation of groupchat occupants by adding a "
 "colored square to the status icon"
 msgstr ""
+"Ако је True, Гајим ће приказивати припадност чланова групног разговора "
+"додајући обојени квадрат поред иконе стања"
 
 #: ../src/common/config.py:300
 msgid ""
@@ -4219,11 +4165,10 @@ msgid "Show a warning dialog before using standard SSL library."
 msgstr "Прикажи прозор упозорења пре коришћења стандардне SSL библиотеке."
 
 #: ../src/common/config.py:322
-#, fuzzy
 msgid ""
 "Show a warning dialog before sending PLAIN password over a plain conenction."
 msgstr ""
-"Прикажи прозор упозорења пре слања нешифроване лозинке преко обичне везе."
+"Прикажи прозорче упозорења пре слања нешифроване лозинке преко обичне везе."
 
 #: ../src/common/config.py:324
 msgid "Space separated list of ssl errors to ignore."
@@ -4275,9 +4220,8 @@ msgstr ""
 "желите да чувате поруке у дневнику?"
 
 #: ../src/common/config.py:373
-#, fuzzy
 msgid "Message that is sent to contacts you want to add"
-msgstr "Молимо Вас испуните податке за контакт кога желите додати"
+msgstr "Порука која се шаље контакту кога желите да додате"
 
 #: ../src/common/config.py:435
 msgid "Is OpenPGP enabled for this contact?"
@@ -4894,14 +4838,13 @@ msgid "D-Bus does not run correctly on this machine"
 msgstr "D-Bus не ради исправно на овом рачунару"
 
 #: ../src/common/dbus_support.py:54
-#, fuzzy
 msgid "D-Bus does not run correctly on this machine: system bus not present"
-msgstr "D-Bus не ради исправно на овом рачунару"
+msgstr ""
+"D-Bus не ради исправно на овом рачунару: системска линија није присутна"
 
 #: ../src/common/dbus_support.py:57
-#, fuzzy
 msgid "D-Bus does not run correctly on this machine: session bus not present"
-msgstr "D-Bus не ради исправно на овом рачунару"
+msgstr "D-Bus не ради исправно на овом рачунару: линија сесије није присутна"
 
 #: ../src/common/exceptions.py:45
 msgid "Database cannot be read."
@@ -4918,22 +4861,22 @@ msgid "D-Bus is not present on this machine or python module is missing"
 msgstr "D-Bus не постоји на овом рачунару или нема python модула."
 
 #: ../src/common/exceptions.py:78
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Session bus is not available.\n"
 "Try reading %(url)s"
 msgstr ""
 "Линија сесије није доступна.\n"
-"Прочитајте http:/trac.gajim.org/wiki/GajimDBus"
+"Прочитајте %(url)s"
 
 #: ../src/common/exceptions.py:90
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "System bus is not available.\n"
 "Try reading %(url)s"
 msgstr ""
 "Линија сесије није доступна.\n"
-"Прочитајте http:/trac.gajim.org/wiki/GajimDBus"
+"Прочитајте %(url)s"
 
 #: ../src/common/fuzzyclock.py:38
 msgid "twelve"
@@ -5135,14 +5078,12 @@ msgid "Free for Chat"
 msgstr "Слободан за разговор"
 
 #: ../src/common/helpers.py:224
-#, fuzzy
 msgid "?user status:_Available"
-msgstr "?статус преноса:Паузиран"
+msgstr "?статус корисника:Доступ_ан"
 
 #: ../src/common/helpers.py:226 ../src/tooltips.py:189
-#, fuzzy
 msgid "?user status:Available"
-msgstr "?статус преноса:Паузиран"
+msgstr "?статус корисника:Доступан"
 
 #: ../src/common/helpers.py:228
 msgid "Connecting"
@@ -5337,12 +5278,12 @@ msgstr "Гајим - %s"
 
 #: ../src/common/helpers.py:1341
 msgid "Hello, I am $name."
-msgstr ""
+msgstr "Здраво, ја сам $name."
 
 #: ../src/common/jingle_rtp.py:111
-#, fuzzy, python-format
+#, python-format
 msgid "%s configuration error"
-msgstr "Конфигурација собе"
+msgstr "%s грешка при подешавању"
 
 #: ../src/common/jingle_rtp.py:112
 #, python-format
@@ -5355,33 +5296,42 @@ msgid ""
 "Error was:\n"
 "%s"
 msgstr ""
+"Не могу да подесим %s. Проверите ваша подешавања.\n"
+"\n"
+"Редослед је био:\n"
+"%s\n"
+"\n"
+"Грешка је била:\n"
+"%s"
 
 #: ../src/common/jingle_rtp.py:209
 msgid "GStreamer error"
-msgstr ""
+msgstr "GStreamer грешка"
 
 #: ../src/common/jingle_rtp.py:210
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Error: %s\n"
 "Debug: %s"
-msgstr "Порука грешке: %s"
+msgstr ""
+"Грешка: %s\n"
+"За отклањање грешака: %s"
 
 #: ../src/common/jingle_rtp.py:336
 msgid "audio input"
-msgstr ""
+msgstr "аудио улаз"
 
 #: ../src/common/jingle_rtp.py:339
 msgid "audio output"
-msgstr ""
+msgstr "аудио излаз"
 
 #: ../src/common/jingle_rtp.py:382
 msgid "video input"
-msgstr ""
+msgstr "видео улаз"
 
 #: ../src/common/jingle_rtp.py:390
 msgid "video output"
-msgstr ""
+msgstr "видео излаз"
 
 #: ../src/common/latex.py:109
 #, python-format
@@ -5394,14 +5344,13 @@ msgid "%s is not a valid loglevel"
 msgstr "%s није исправан ниво логовања"
 
 #: ../src/common/multimedia_helpers.py:37
-#, fuzzy
 msgid " Default device"
-msgstr "Подразумевана порука"
+msgstr "Подразумевани уређај"
 
 #. Test src
 #: ../src/common/multimedia_helpers.py:55
 msgid "Audio test"
-msgstr ""
+msgstr "Аудио тест"
 
 #. Auto src
 #. Auto sink
@@ -5411,44 +5360,44 @@ msgstr ""
 #: ../src/common/multimedia_helpers.py:84
 #: ../src/common/multimedia_helpers.py:101
 msgid "Autodetect"
-msgstr ""
+msgstr "Самопрепознај"
 
 #. Alsa src
 #. Alsa sink
 #: ../src/common/multimedia_helpers.py:61
 #: ../src/common/multimedia_helpers.py:73
-#, fuzzy, python-format
+#, python-format
 msgid "ALSA: %s"
-msgstr "Величина: %s"
+msgstr "ALSA: %s"
 
 #. Fake sink
 #. Fake video output
 #: ../src/common/multimedia_helpers.py:69
 #: ../src/common/multimedia_helpers.py:96
 msgid "Fake audio output"
-msgstr ""
+msgstr "Лажни аудио излаз"
 
 #. Test src
 #: ../src/common/multimedia_helpers.py:81
 msgid "Video test"
-msgstr ""
+msgstr "Видео тест"
 
 #. V4L2 src
 #: ../src/common/multimedia_helpers.py:86
 #, python-format
 msgid "V4L2: %s"
-msgstr ""
+msgstr "V4L2: %s"
 
 #. Auto sink
 #: ../src/common/multimedia_helpers.py:98
 #, python-format
 msgid "X Window System (X11/XShm/Xv): %s"
-msgstr ""
+msgstr "X систем прозора (X11/XShm/Xv): %s"
 
 #. ximagesink
 #: ../src/common/multimedia_helpers.py:100
 msgid "X Window System (without Xv)"
-msgstr ""
+msgstr "X систем прозора (без Xv-а)"
 
 #. we talk about a file
 #: ../src/common/optparser.py:53
@@ -6500,13 +6449,12 @@ msgid "Removing %s account"
 msgstr "Уклањање рачуна %s"
 
 #: ../src/config.py:2941
-#, fuzzy
 msgid "Account is disabled"
-msgstr "Смајлији искључени"
+msgstr "Налог је онемогућен"
 
 #: ../src/config.py:2942
 msgid "To unregister from a server, account must be enabled."
-msgstr ""
+msgstr "Да бисте се искључили са сервера, налог мора бити омогућен."
 
 #: ../src/config.py:2955 ../src/gui_interface.py:1132
 #: ../src/gui_interface.py:1243
@@ -6532,23 +6480,21 @@ msgid "If you remove it, the connection will be lost."
 msgstr "Уколико га уклоните, веза ће бити изгубљена."
 
 #: ../src/config.py:2982
-#, fuzzy, python-format
+#, python-format
 msgid "Connection to server %s failed"
-msgstr "Веза са проксијем прекинута"
+msgstr "Веза са сервером %s није успела"
 
 #: ../src/config.py:2983
-#, fuzzy
 msgid "What would you like to do?"
 msgstr "Шта желите да урадите?"
 
 #: ../src/config.py:2984
-#, fuzzy
 msgid "Remove only from Gajim"
 msgstr "Уклони налог само из Гајима"
 
 #: ../src/config.py:2985
 msgid "Don't remove anything. I'll try again later"
-msgstr ""
+msgstr "Не уклањај ништа. Пробаћу касније"
 
 #: ../src/config.py:3078
 msgid "?print_status:All"
@@ -6568,12 +6514,13 @@ msgstr "Нови групни разговор"
 
 #: ../src/config.py:3183
 msgid "This bookmark has invalid data"
-msgstr "Овај маркер има неисправне податке"
+msgstr "Овај обележавач има неисправне податке"
 
 #: ../src/config.py:3184
 msgid ""
 "Please be sure to fill out server and room fields or remove this bookmark."
-msgstr "Молимо обавезно испуните поља сервера и собе или уклоните овај маркер."
+msgstr ""
+"Молимо обавезно испуните поља сервера и собе или уклоните овај обележавач."
 
 #. invalid char
 #: ../src/config.py:3302 ../src/dialogs.py:1934
@@ -6768,12 +6715,12 @@ msgstr "Отвори као _Везу"
 
 #. %i is day in year (1-365)
 #: ../src/conversation_textview.py:1296
-#, fuzzy, python-format
+#, python-format
 msgid "Yesterday"
 msgid_plural "%i days ago"
-msgstr[0] "Јуче"
-msgstr[1] "Јуче"
-msgstr[2] "Јуче"
+msgstr[0] "Пре %i дана"
+msgstr[1] "Пре %i дана"
+msgstr[2] "Пре %i дана"
 
 #. if we have subject, show it too!
 #: ../src/conversation_textview.py:1344 ../src/history_window.py:480
@@ -6782,14 +6729,13 @@ msgid "Subject: %s\n"
 msgstr "Тема: %s\n"
 
 #: ../src/dataforms_widget.py:544
-#, fuzzy
 msgid "Unable to load image"
-msgstr "Није могуће учитавање модула idle"
+msgstr "Није могуће учитавање слике"
 
 #: ../src/dataforms_widget.py:546
-#, fuzzy, python-format
+#, python-format
 msgid "Media type not supported: %s"
-msgstr "Невидљивост није подржана"
+msgstr "Тип медије није подржан: %s"
 
 #: ../src/dataforms_widget.py:601
 msgid "Jabber ID already in list"
@@ -7015,9 +6961,8 @@ msgid "Invalid group chat Jabber ID"
 msgstr "Неисправан Џабер ИД групног разговора"
 
 #: ../src/dialogs.py:2327
-#, fuzzy
 msgid "Please enter the group chat Jabber ID as room@server."
-msgstr "Џабер ИД групног разговора има недозвољене знаке."
+msgstr "Унесите џабер ИД собе за групни разговор као соба@сервер"
 
 #: ../src/dialogs.py:2333 ../src/groupchat_control.py:1833
 msgid "The group chat Jabber ID has not allowed characters."
@@ -7217,26 +7162,25 @@ msgstr "XML Конзола"
 
 #. Action that can be done with an incoming list of contacts
 #: ../src/dialogs.py:3159
-#, fuzzy
 msgid "add"
-msgstr "Тужан"
+msgstr "дода"
 
 #: ../src/dialogs.py:3159
-#, fuzzy
 msgid "modify"
-msgstr "Измените"
+msgstr "измени"
 
 #: ../src/dialogs.py:3160
-#, fuzzy
 msgid "remove"
-msgstr "_Уклони"
+msgstr "уклони"
 
 #: ../src/dialogs.py:3188
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "<b>%(jid)s</b> would like you to <b>%(action)s</b> some contacts in your "
 "roster."
-msgstr "<b>%s</b> жели да <b>%s</b> неке контакте у листу ваших контаката."
+msgstr ""
+"<b>%(jid)s</b> жели да <b>%(action)s</b> неке контакте у листу ваших "
+"контаката."
 
 #. Change label for accept_button to action name instead of 'OK'.
 #: ../src/dialogs.py:3204 ../src/dialogs.py:3250
@@ -7264,14 +7208,14 @@ msgid "%s suggested me to add you in my roster."
 msgstr "%s је предложио да вас додам у листу мојих контаката."
 
 #: ../src/dialogs.py:3340
-#, fuzzy, python-format
+#, python-format
 msgid "Added  %s contacts"
-msgstr "Додај _контакт"
+msgstr "Додат %s контакта"
 
 #: ../src/dialogs.py:3377
-#, fuzzy, python-format
+#, python-format
 msgid "Removed  %s contacts"
-msgstr "Уклања контакт са листе"
+msgstr "Уклањено %s контакта са листе"
 
 #: ../src/dialogs.py:3430
 #, python-format
@@ -7343,7 +7287,7 @@ msgstr "Да ли желите да прихватите ову позивниц
 
 #: ../src/dialogs.py:3932
 msgid "Choose Client Cert #PCKS12"
-msgstr ""
+msgstr "Одаберите #PCKS12 сертификат клијента"
 
 #: ../src/dialogs.py:3942 ../src/dialogs.py:3985 ../src/dialogs.py:4041
 msgid "All files"
@@ -7351,7 +7295,7 @@ msgstr "Све датотеке"
 
 #: ../src/dialogs.py:3947
 msgid "PKCS12 Files"
-msgstr ""
+msgstr "PKCS12 датотеке"
 
 #: ../src/dialogs.py:3975
 msgid "Choose Sound"
@@ -7480,15 +7424,15 @@ msgstr ""
 
 #: ../src/dialogs.py:4945
 msgid "an audio and video"
-msgstr ""
+msgstr "аудио и видео"
 
 #: ../src/dialogs.py:4947
 msgid "an audio"
-msgstr ""
+msgstr "аудио"
 
 #: ../src/dialogs.py:4949
 msgid "a video"
-msgstr ""
+msgstr "видео"
 
 #: ../src/dialogs.py:4953
 #, python-format
@@ -7496,6 +7440,8 @@ msgid ""
 "%(contact)s wants to start %(type)s session with you. Do you want to answer "
 "the call?"
 msgstr ""
+"%(contact)s жели да започне %(type)s сесију са вама. Желите ли да одговорите "
+"на позив?"
 
 #: ../src/disco.py:119
 msgid "Others"
@@ -7586,21 +7532,21 @@ msgstr "Идентификација"
 
 #: ../src/disco.py:1817 ../src/gui_interface.py:3182
 msgid "Bookmark already set"
-msgstr "Маркер је већ постављен"
+msgstr "Обележавач је већ постављен"
 
 #: ../src/disco.py:1818 ../src/gui_interface.py:3183
 #, python-format
 msgid "Group Chat \"%s\" is already in your bookmarks."
-msgstr "Групни разговор \"%s\" је већ маркиран."
+msgstr "Групни разговор \"%s\" је већ обележен."
 
 #: ../src/disco.py:1827 ../src/gui_interface.py:3197
 msgid "Bookmark has been added successfully"
-msgstr "Маркер успешно додат"
+msgstr "Обележавач успешно додат"
 
 #: ../src/disco.py:1828 ../src/gui_interface.py:3198
 msgid "You can manage your bookmarks via Actions menu in your roster."
 msgstr ""
-"Можете управљати Вашим маркерима помоћу менија Акције из Ваше листе "
+"Можете управљати Вашим обележавачима помоћу менија Акције из ваше листе "
 "контаката."
 
 #: ../src/disco.py:2039
@@ -7837,17 +7783,15 @@ msgstr "Захтева python-docutils."
 
 #: ../src/features_window.py:106
 msgid "Ability to start audio and video chat."
-msgstr ""
+msgstr "Могућност започињања аудио и видео разговора."
 
 #: ../src/features_window.py:107
-#, fuzzy
 msgid "Requires python-farsight."
-msgstr "Захтева python-avahi."
+msgstr "Захтева python-farsight."
 
 #: ../src/features_window.py:115
-#, fuzzy
 msgid "?features:Available"
-msgstr "Доступан"
+msgstr "?могућност:Доступна"
 
 #: ../src/features_window.py:122
 msgid "Feature"
@@ -8043,24 +7987,20 @@ msgid "importing PyGTK failed: %s"
 msgstr "неуспело увожење PyGTK модула: %s"
 
 #: ../src/gajim.py:186
-#, fuzzy
 msgid "Gajim needs PyGTK 2.16 or above"
-msgstr "Гајиму треба pyGTK 2.12 или већа верзија"
+msgstr "Гајиму треба pyGTK 2.16 или већа верзија"
 
 #: ../src/gajim.py:187
-#, fuzzy
 msgid "Gajim needs PyGTK 2.16 or above to run. Quiting..."
-msgstr "Гајиму треба pyGTK 2.12 или већа верзија. Завршавам..."
+msgstr "Гајиму треба pyGTK 2.16 или већа верзија. Завршавам..."
 
 #: ../src/gajim.py:189
-#, fuzzy
 msgid "Gajim needs GTK 2.16 or above"
-msgstr "Гајиму треба GTK 2.12 или већа верзија"
+msgstr "Гајиму треба GTK 2.16 или већа верзија"
 
 #: ../src/gajim.py:190
-#, fuzzy
 msgid "Gajim needs GTK 2.16 or above to run. Quiting..."
-msgstr "Гајиму треба GTK 2.12 или већа верзија. Завршавам..."
+msgstr "Гајиму треба GTK 2.16 или већа верзија. Завршавам..."
 
 #: ../src/gajim.py:199
 msgid "Gajim needs pywin32 to run"
@@ -8146,13 +8086,12 @@ msgid "status"
 msgstr "статус"
 
 #: ../src/gajim-remote.py:109
-#, fuzzy
 msgid ""
 "one of: offline, online, chat, away, xa, dnd, invisible. If not set, use "
 "accoun't previous status"
 msgstr ""
 "једно од: није на вези, на вези, прича, одсутан, продужено одсутан, не "
-"узнемиравај, невидљив"
+"узнемиравај, невидљив. Ако није подешено, користи се претходно стање налога."
 
 #: ../src/gajim-remote.py:110 ../src/gajim-remote.py:133
 #: ../src/gajim-remote.py:144 ../src/gajim-remote.py:158
@@ -8388,23 +8327,20 @@ msgstr ""
 "све налоге"
 
 #: ../src/gajim-remote.py:268
-#, fuzzy
 msgid "Change the avatar"
-msgstr "Измени статус"
+msgstr "Измени аватар"
 
 #: ../src/gajim-remote.py:270
-#, fuzzy
 msgid "Picture to use"
-msgstr "Надимак за коришћење"
+msgstr "Слика за коришћење"
 
 #: ../src/gajim-remote.py:271
-#, fuzzy
 msgid ""
 "Account in which the avatar will be set; if not specified, the avatar will "
 "be set for all accounts"
 msgstr ""
-"Налог за који ће бити послан xml ; ако није одређен, xml ће бити послат за "
-"све налоге"
+"Налог за који ће бити постављен авата ; ако није одређен, аватар ће бити "
+"постављен за све налоге"
 
 #: ../src/gajim-remote.py:277
 msgid "Handle a xmpp:/ uri"
@@ -8534,11 +8470,11 @@ msgstr ""
 
 #: ../src/gajim-remote.py:538
 msgid "No uri given"
-msgstr ""
+msgstr "Ниједна адреса није задата"
 
 #: ../src/gajim-remote.py:540
 msgid "Wrong uri"
-msgstr "Лош uri"
+msgstr "Лоша адреса"
 
 #: ../src/gajim_themes_window.py:59
 msgid "Theme"
@@ -8711,7 +8647,6 @@ msgstr "Ако затворите овај прозор, бићете искљу
 #: ../src/gui_interface.py:2064 ../src/message_window.py:224
 #: ../src/roster_window.py:2739 ../src/roster_window.py:3399
 #: ../src/roster_window.py:4123
-#, fuzzy
 msgid "_Do not ask me again"
 msgstr "_Не питај ме више"
 
@@ -8989,13 +8924,12 @@ msgstr ""
 "да шифрујете ову поруку?"
 
 #: ../src/gui_interface.py:1226
-#, fuzzy
 msgid ""
 "Gnome Keyring is installed but not                 correctly started "
 "(environment variable probably not                 correctly set)"
 msgstr ""
-"Gnome Keyring је инсталиран, али није \t\t\t\tправилно покренут (променљиве "
-"окружења вероватно нису \t\t\tправилно подешене)"
+"Gnome Keyring је инсталиран, али није                 правилно покренут "
+"(променљиве окружења вероватно нису                 правилно подешене)"
 
 #: ../src/gui_interface.py:1330
 #, python-format
@@ -9108,14 +9042,13 @@ msgstr ""
 
 #. TODO: we should use another pixmap ;-)
 #: ../src/gui_interface.py:1816
-#, fuzzy, python-format
+#, python-format
 msgid "%s wants to start a voice chat."
-msgstr "%s Вам жели послати датотеку."
+msgstr "%s жели да започне видео разговор."
 
 #: ../src/gui_interface.py:1819
-#, fuzzy
 msgid "Voice Chat Request"
-msgstr "Захтев за преносом датотеке"
+msgstr "Захтев за аудио разговором"
 
 #: ../src/gui_interface.py:1927
 msgid "Error verifying SSL certificate"
@@ -9163,14 +9096,13 @@ msgid "Insecure connection"
 msgstr "Несигурна веза"
 
 #: ../src/gui_interface.py:1988
-#, fuzzy
 msgid ""
 "You are about to connect to the server with an insecure connection. This "
 "means all your conversations will be exchanged unencrypted. Are you sure you "
 "want to do that?"
 msgstr ""
-"Управо ћете послати лозинку преко несигурне везе. Требало би да инсталирате "
-"PyOpenSSL да спречите ово. Да ли желите да наставите?"
+"Управо ћете послати лозинку преко несигурне везе. Ово значи да ће ваша "
+"конверзација бити нешифрована. Да ли желите да наставите?"
 
 #: ../src/gui_interface.py:1991 ../src/gui_interface.py:2028
 #: ../src/gui_interface.py:2063
@@ -9186,13 +9118,12 @@ msgstr ""
 "PyOpenSSL да спречите ово. Да ли желите да наставите?"
 
 #: ../src/gui_interface.py:2061
-#, fuzzy
 msgid ""
 "You are about to send your password unencrypted on an insecure connection. "
 "Are you sure you want to do that?"
 msgstr ""
-"Управо ћете послати лозинку преко нешифроване везе. Јесте ли сигурни да "
-"желите то да урадите?"
+"Управо ћете послати лозинку преко нешифроване везе. Да ли желите да "
+"наставите?"
 
 #. theme doesn't exist, disable emoticons
 #: ../src/gui_interface.py:2624 ../src/gui_interface.py:2647
@@ -9239,7 +9170,7 @@ msgid "GPG key expired"
 msgstr "GPG кључ истекао"
 
 #: ../src/gui_interface.py:3608
-#, fuzzy, python-format
+#, python-format
 msgid "Your GPG key has expired, you will be connected to %s without OpenPGP."
 msgstr "Ваш GPG кључ је истекао, бићете повезани са %s без OpenPGP-а."
 
@@ -9473,14 +9404,12 @@ msgid "Could not load image"
 msgstr "Не могу учитати слику"
 
 #: ../src/profile_window.py:214
-#, fuzzy
 msgid "Wrong date format"
-msgstr "Информације контакта"
+msgstr "Погрешан формат датума"
 
 #: ../src/profile_window.py:215
-#, fuzzy
 msgid "Format of the date must be YYYY-MM-DD"
-msgstr "Формат: ГГГГ-ММ-ДД"
+msgstr "Формат датума мора бити ГГГГ-ММ-ДД"
 
 #: ../src/profile_window.py:269
 msgid "Information received"
@@ -9579,15 +9508,16 @@ msgid "Always close Gajim"
 msgstr "Увек затвори Гајим"
 
 #: ../src/roster_window.py:2373
-#, fuzzy
 msgid "You have running file transfers"
-msgstr "Прекини пренос датотеке"
+msgstr "Имате пренос датотеке који је у току"
 
 #: ../src/roster_window.py:2374
 msgid ""
 "If you quit now, the file(s) being transfered will be stopped. Do you still "
 "want to quit?"
 msgstr ""
+"Ако изађете сада, датотека(е) које се преносе ће бити заустављене. Да ли "
+"ипак желите да изађете?"
 
 #: ../src/roster_window.py:2405 ../src/roster_window.py:2653
 msgid "You have unread messages"
@@ -9735,7 +9665,6 @@ msgstr ""
 "нисте на вези."
 
 #: ../src/roster_window.py:3393
-#, fuzzy
 msgid ""
 "You are about to send a custom status. Are you sure you want  to continue?"
 msgstr ""
@@ -9743,13 +9672,13 @@ msgstr ""
 "наставите?"
 
 #: ../src/roster_window.py:3395
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "This contact will temporarily see you as %(status)s, but only until you "
 "change your status. Then he or she will see your global status."
 msgstr ""
 "Контакт ће вас привремено видети као %(status)s, али само док не промените "
-"статус. Онда ће видети глобални статус."
+"статус. Онда ће он или она видети ваш глобални статус."
 
 #: ../src/roster_window.py:3414
 msgid "No account available"
@@ -9837,7 +9766,7 @@ msgstr "користећи %s рачун"
 
 #: ../src/roster_window.py:4948 ../src/statusicon.py:309
 msgid "_Manage Bookmarks..."
-msgstr "Управљање _маркерима..."
+msgstr "Управљање _обележавачима..."
 
 #. profile, avatar
 #: ../src/roster_window.py:4968
@@ -9859,9 +9788,8 @@ msgid "Publish Tune"
 msgstr "Објави песму"
 
 #: ../src/roster_window.py:5104
-#, fuzzy
 msgid "Publish Location"
-msgstr "Објави песму"
+msgstr "Објави локацију"
 
 #: ../src/roster_window.py:5107
 msgid "Configure Services..."
@@ -9970,7 +9898,7 @@ msgid "Confirm these session options"
 msgstr "Потврди ове опције сесије"
 
 #: ../src/session.py:435
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "The remote client wants to negotiate an session with these features:\n"
 "\n"
@@ -9980,7 +9908,7 @@ msgid ""
 msgstr ""
 "Удаљени клијент жели да започне сесију са овим могућностима:\n"
 "\n"
-"\t%s\n"
+"%s\n"
 "\n"
 "\tДа ли су ове ставке прихватљиве?"
 
@@ -10004,9 +9932,8 @@ msgid "_Change Status Message..."
 msgstr "_Промени статусну поруку..."
 
 #: ../src/statusicon.py:322
-#, fuzzy
 msgid "Hide _Roster"
-msgstr "у _листи контаката"
+msgstr "Сакриј _листу контаката"
 
 #: ../src/statusicon.py:333
 msgid "Hide this menu"
@@ -10065,34 +9992,34 @@ msgid "OpenPGP: "
 msgstr "OpenPGP: "
 
 #: ../src/tooltips.py:646
-#, fuzzy, python-format
+#, python-format
 msgid "Idle since %s"
-msgstr " од %s"
+msgstr "Неактиван од %s"
 
 #: ../src/tooltips.py:647
-#, fuzzy, python-format
+#, python-format
 msgid "Idle for %s"
-msgstr "XML Конзола за %s"
+msgstr "Неактиван већ %s"
 
 #: ../src/tooltips.py:698
-#, fuzzy, python-format
+#, python-format
 msgid "Mood: %s"
-msgstr "Расположење:"
+msgstr "Расположење: %s"
 
 #: ../src/tooltips.py:702
-#, fuzzy, python-format
+#, python-format
 msgid "Activity: %s"
-msgstr "Активност:"
+msgstr "Активност: %s"
 
 #: ../src/tooltips.py:706
-#, fuzzy, python-format
+#, python-format
 msgid "Tune: %s"
-msgstr "Песма:"
+msgstr "Песма: %s"
 
 #: ../src/tooltips.py:710
-#, fuzzy, python-format
+#, python-format
 msgid "Location: %s"
-msgstr "Обавештење"
+msgstr "Локација: %s"
 
 #: ../src/tooltips.py:735
 msgid "Download"
@@ -10166,7 +10093,7 @@ msgstr "од %s"
 
 #: ../src/vcard.py:331
 msgid "?Role in Group Chat:<b>Role:</b>"
-msgstr ""
+msgstr "?Улога у групном разговору:<b>Улога:</b>"
 
 #: ../src/vcard.py:335
 msgid "<b>Affiliation:</b>"
