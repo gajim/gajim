@@ -317,7 +317,7 @@ class SocksQueue:
         sock_hash = sock.__hash__()
         if sock_hash not in self.senders:
             self.senders[sock_hash] = Socks5Sender(self.idlequeue, sock_hash, self,
-                    sock[0], sock[1][0], sock[1][1])
+                    sock[0], sock[1][0], sock[1][1], fingerprint='server')
             self.connected += 1
 
     def process_result(self, result, actor):
@@ -453,6 +453,10 @@ class Socks5:
         received = ''
         try:
             add = self._recv(64)
+        except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError, 
+                OpenSSL.SSL.WantX509LookupError), e:
+            log.info('SSL rehandshake request : ' + repr(e))
+            raise e
         except Exception:
             add = ''
         received += add
@@ -466,7 +470,11 @@ class Socks5:
         """
         try:
             self._send(raw_data)
-        except Exception:
+        except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError,
+                OpenSSL.SSL.WantX509LookupError), e:
+            log.info('SSL rehandshake request :' + repr(e))
+            raise e
+        except Exception, e:
             self.disconnect()
         return len(raw_data)
 
@@ -487,6 +495,10 @@ class Socks5:
             lenn = 0
             try:
                 lenn = self._send(buff)
+            except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError,
+                    OpenSSL.SSL.WantX509LookupError), e:
+                log.info('SSL rehandshake request :' + repr(e))
+                raise e
             except Exception, e:
                 if e.args[0] not in (EINTR, ENOBUFS, EWOULDBLOCK):
                     # peer stopped reading
@@ -557,6 +569,10 @@ class Socks5:
                 return 0
             try:
                 buff = self._recv(MAX_BUFF_LEN)
+            except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError,
+                    OpenSSL.SSL.WantX509LookupError), e:
+                log.info('SSL rehandshake request :' + repr(e))
+                raise e
             except Exception:
                 buff = ''
             current_time = self.idlequeue.current_time()
@@ -682,7 +698,12 @@ class Socks5:
         """
         Connect response: version, auth method
         """
-        buff = self._recv()
+        try:
+            buff = self._recv()
+        except (SSL.WantReadError, SSL.WantWriteError,
+                SSL.WantX509LookupError), e:
+            log.info("SSL rehandshake request : " + repr(e))
+            raise e
         try:
             version, method = struct.unpack('!BB', buff)
         except Exception:
@@ -716,11 +737,15 @@ class Socks5Sender(Socks5, IdleObject):
     """
 
     def __init__(self, idlequeue, sock_hash, parent, _sock, host=None,
-                    port=None):
+                    port=None, fingerprint = None):
+        self.fingerprint = fingerprint
         self.queue_idx = sock_hash
         self.queue = parent
         Socks5.__init__(self, idlequeue, host, port, None, None, None)
         self._sock = _sock
+        if not self.fingerprint is None:
+            self._sock = OpenSSL.SSL.Connection(
+                jingle_xtls.get_context('server'), self._sock)
         self._sock.setblocking(False)
         self.fd = _sock.fileno()
         self._recv = _sock.recv
@@ -782,17 +807,21 @@ class Socks5Sender(Socks5, IdleObject):
 
     def pollin(self):
         if self.connected:
-            if self.state < 5:
-                result = self.main()
-                if self.state == 4:
-                    self.queue.result_sha(self.sha_msg, self.queue_idx)
-                if result == -1:
-                    self.disconnect()
-
-            elif self.state == 5:
-                if self.file_props is not None and self.file_props['type'] == 'r':
-                    result = self.get_file_contents(0)
-                    self.queue.process_result(result, self)
+            try:
+                if self.state < 5:
+                    result = self.main()
+                    if self.state == 4:
+                        self.queue.result_sha(self.sha_msg, self.queue_idx)
+                    if result == -1:
+                        self.disconnect()
+    
+                elif self.state == 5:
+                    if self.file_props is not None and self.file_props['type'] == 'r':
+                        result = self.get_file_contents(0)
+                        self.queue.process_result(result, self)
+            except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError,
+                    OpenSSL.SSL.WantX509LookupError), e:
+                log.info('caught SSL exception, ignored')
         else:
             self.disconnect()
 
@@ -1028,19 +1057,24 @@ class Socks5Receiver(Socks5, IdleObject):
 
     def pollout(self):
         self.idlequeue.remove_timeout(self.fd)
-        if self.state == 0:
-            self.do_connect()
-            return
-        elif self.state == 1: # send initially: version and auth types
-            self.send_raw(self._get_auth_buff())
-        elif self.state == 3: # send 'connect' request
-            self.send_raw(self._get_request_buff(self._get_sha1_auth()))
-        elif self.file_props['type'] != 'r':
-            if self.file_props['paused']:
-                self.idlequeue.plug_idle(self, False, False)
+        try:
+            if self.state == 0:
+                self.do_connect()
                 return
-            result = self.write_next()
-            self.queue.process_result(result, self)
+            elif self.state == 1: # send initially: version and auth types
+                self.send_raw(self._get_auth_buff())
+            elif self.state == 3: # send 'connect' request
+                self.send_raw(self._get_request_buff(self._get_sha1_auth()))
+            elif self.file_props['type'] != 'r':
+                if self.file_props['paused']:
+                    self.idlequeue.plug_idle(self, False, False)
+                    return
+                result = self.write_next()
+                self.queue.process_result(result, self)
+                return
+        except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError,
+                OpenSSL.SSL.WantX509LookupError), e:
+            log.info('caught SSL exception, ignored')
             return
         self.state += 1
         # unplug and plug for reading
@@ -1059,19 +1093,24 @@ class Socks5Receiver(Socks5, IdleObject):
     def pollin(self):
         self.idlequeue.remove_timeout(self.fd)
         if self.connected:
-            if self.file_props['paused']:
-                self.idlequeue.plug_idle(self, False, False)
+            try:
+                if self.file_props['paused']:
+                    self.idlequeue.plug_idle(self, False, False)
+                    return
+                if self.state < 5:
+                    self.idlequeue.set_read_timeout(self.fd, CONNECT_TIMEOUT)
+                    result = self.main(0)
+                    self.queue.process_result(result, self)
+                elif self.state == 5: # wait for proxy reply
+                    pass
+                elif self.file_props['type'] == 'r':
+                    self.idlequeue.set_read_timeout(self.fd, STALLED_TIMEOUT)
+                    result = self.get_file_contents(0)
+                    self.queue.process_result(result, self)
+            except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError,
+                    OpenSSL.SSL.WantX509LookupError), e:
+                log.info('caught SSL exception, ignored')
                 return
-            if self.state < 5:
-                self.idlequeue.set_read_timeout(self.fd, CONNECT_TIMEOUT)
-                result = self.main(0)
-                self.queue.process_result(result, self)
-            elif self.state == 5: # wait for proxy reply
-                pass
-            elif self.file_props['type'] == 'r':
-                self.idlequeue.set_read_timeout(self.fd, STALLED_TIMEOUT)
-                result = self.get_file_contents(0)
-                self.queue.process_result(result, self)
         else:
             self.disconnect()
 

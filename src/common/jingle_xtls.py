@@ -39,13 +39,16 @@ def get_context(fingerprint, verify_cb=None):
     constructs and returns the context objects
     """
     ctx = SSL.Context(SSL.TLSv1_METHOD)
-    ctx.set_verify(SSL.VERIFY_PEER|SSL.VERIFY_FAIL_IF_NO_PEER_CERT, verify_cb or default_callback)
-    # TODO: set private key, set certificate, set verification path
+
     if fingerprint == 'server': # for testing purposes only
+        ctx.set_verify(SSL.VERIFY_PEER|SSL.VERIFY_FAIL_IF_NO_PEER_CERT, verify_cb or default_callback)
+        
         ctx.use_privatekey_file (os.path.expanduser('~/certs/server.pkey'))
         ctx.use_certificate_file(os.path.expanduser('~/certs/server.cert'))
         ctx.load_verify_locations(os.path.expanduser('~/certs/CA.cert'))
-    elif fingerprint == 'client': 
+    elif fingerprint == 'client':
+        ctx.set_verify(SSL.VERIFY_PEER, verify_cb or default_callback)
+        
         ctx.use_privatekey_file (os.path.expanduser('~/certs/client.pkey'))
         ctx.use_certificate_file(os.path.expanduser('~/certs/client.cert'))
         ctx.load_verify_locations(os.path.expanduser('~/certs/CA.cert'))
