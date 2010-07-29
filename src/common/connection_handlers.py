@@ -1277,44 +1277,9 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
         """
         XEP-0144 Roster Item Echange
         """
-        exchange_items_list = {}
-        jid_from = helpers.get_full_jid_from_iq(msg)
-        items_list = msg.getTag('x').getChildren()
-        if not items_list:
-            return
-        action = items_list[0].getAttr('action')
-        if action == None:
-            action = 'add'
-        for item in msg.getTag('x',
-        namespace=common.xmpp.NS_ROSTERX).getChildren():
-            try:
-                jid = helpers.parse_jid(item.getAttr('jid'))
-            except common.helpers.InvalidFormat:
-                log.warn('Invalid JID: %s, ignoring it' % item.getAttr('jid'))
-                continue
-            name = item.getAttr('name')
-            contact = gajim.contacts.get_contact(self.name, jid)
-            groups = []
-            same_groups = True
-            for group in item.getTags('group'):
-                groups.append(group.getData())
-                # check that all suggested groups are in the groups we have for this
-                # contact
-                if not contact or group not in contact.groups:
-                    same_groups = False
-            if contact:
-                # check that all groups we have for this contact are in the
-                # suggested groups
-                for group in contact.groups:
-                    if group not in groups:
-                        same_groups = False
-                if contact.sub in ('both', 'to') and same_groups:
-                    continue
-            exchange_items_list[jid] = []
-            exchange_items_list[jid].append(name)
-            exchange_items_list[jid].append(groups)
-        if exchange_items_list:
-            self.dispatch('ROSTERX', (action, exchange_items_list, jid_from))
+        log.debug('rosterItemExchangeCB')
+        gajim.nec.push_incoming_event(RosterItemExchangeEvent(None,
+            conn=self, iq_obj=msg))
         raise common.xmpp.NodeProcessed
 
     def _messageCB(self, con, msg):
@@ -2357,8 +2322,8 @@ class HelperEvent:
             who = self.conn.groupchat_jids[self.id_]
             del self.conn.groupchat_jids[self.id_]
         else:
-            who = helpers.get_full_jid_from_iq(self.iq_obj)
-        self.jid, self.resource = gajim.get_room_and_nick_from_fjid(who)
+            self.fjid = helpers.get_full_jid_from_iq(self.iq_obj)
+        self.jid, self.resource = gajim.get_room_and_nick_from_fjid(self.fjid)
 
     def get_id(self):
         self.id_ = self.iq_obj.getID()
@@ -2560,3 +2525,52 @@ class GMailQueryReceivedEvent(nec.NetworkIncomingEvent):
         log.debug(('You have %s new gmail e-mails on %s.') % (self.newmsgs,
             self.jid))
         return True
+
+class RosterItemExchangeEvent(nec.NetworkIncomingEvent, HelperEvent):
+    name = 'roster-item-exchange-received'
+    base_network_events = []
+    
+    def generate(self):
+        if not self.conn:
+            self.conn = self.base_event.conn
+        if not self.iq_obj:
+            self.iq_obj = self.base_event.xmpp_iq
+
+        self.get_jid_resource()
+        self.exchange_items_list = {}
+        items_list = msg.getTag('x').getChildren()
+        if not items_list:
+            return
+        self.action = items_list[0].getAttr('action')
+        if self.action is None:
+            self.action = 'add'
+        for item in msg.getTag('x', namespace=common.xmpp.NS_ROSTERX).\
+        getChildren():
+            try:
+                jid = helpers.parse_jid(item.getAttr('jid'))
+            except common.helpers.InvalidFormat:
+                log.warn('Invalid JID: %s, ignoring it' % item.getAttr('jid'))
+                continue
+            name = item.getAttr('name')
+            contact = gajim.contacts.get_contact(self.conn.name, jid)
+            groups = []
+            same_groups = True
+            for group in item.getTags('group'):
+                groups.append(group.getData())
+                # check that all suggested groups are in the groups we have for this
+                # contact
+                if not contact or group not in contact.groups:
+                    same_groups = False
+            if contact:
+                # check that all groups we have for this contact are in the
+                # suggested groups
+                for group in contact.groups:
+                    if group not in groups:
+                        same_groups = False
+                if contact.sub in ('both', 'to') and same_groups:
+                    continue
+            self.exchange_items_list[jid] = []
+            self.exchange_items_list[jid].append(name)
+            self.exchange_items_list[jid].append(groups)
+        if exchange_items_list:
+            return True
