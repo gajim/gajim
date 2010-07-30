@@ -1135,7 +1135,8 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
                 log.warn('Invalid JID: %s, ignoring it' % conf.getAttr('jid'))
                 continue
 
-            if bm not in self.bookmarks:
+            bm_jids = [b['jid'] for b in self.bookmarks]
+            if bm['jid'] not in bm_jids:
                 self.bookmarks.append(bm)
                 if storage_type == 'xml':
                     # We got a bookmark that was not in pubsub
