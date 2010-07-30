@@ -2320,7 +2320,7 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
 class HelperEvent:
     def get_jid_resource(self):
         if self.id_ in self.conn.groupchat_jids:
-            who = self.conn.groupchat_jids[self.id_]
+            self.fjid = self.conn.groupchat_jids[self.id_]
             del self.conn.groupchat_jids[self.id_]
         else:
             self.fjid = helpers.get_full_jid_from_iq(self.iq_obj)
