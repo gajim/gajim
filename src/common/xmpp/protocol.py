@@ -717,7 +717,7 @@ class Message(Protocol):
             if xmllang:
                 dom = NodeBuilder('<body xmlns="%s" xml:lang="%s">%s</body>' % (NS_XHTML, xmllang, val)).getDom()
             else:
-                dom = NodeBuilder('<body xmlns="%s">%s</body>, 0' % (NS_XHTM, val)).getDom()
+                dom = NodeBuilder('<body xmlns="%s">%s</body>, 0' % (NS_XHTML, val)).getDom()
             if self.getTag('html'):
                 self.getTag('html').addChild(node=dom)
             else:
