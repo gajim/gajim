@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gajim.trunk\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-07-27 11:28+0200\n"
-"PO-Revision-Date: 2010-07-27 17:15+0600\n"
+"PO-Revision-Date: 2010-08-03 14:02+0600\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <kk_KZ@googlegroups.com>\n"
 "Language: kk\n"
@@ -2504,7 +2504,7 @@ msgstr "_Тіркелгілер"
 #: ../data/gui/roster_window.ui.h:14
 #: ../data/gui/subscription_request_window.ui.h:6
 msgid "_Actions"
-msgstr "Әрек_еттер"
+msgstr "Әрек_ет"
 
 #: ../data/gui/roster_window.ui.h:16
 msgid "_Contents"
@@ -9658,7 +9658,7 @@ msgstr "Алмасуда"
 
 #: ../src/tooltips.py:812
 msgid "This service has not yet responded with detailed information"
-msgstr "Бұл қызмет әлі толық ақпаратпен жауап бермеген."
+msgstr "Бұл қызмет әлі толық ақпаратпен жауап бермеген"
 
 #: ../src/tooltips.py:815
 msgid ""
@@ -9710,7 +9710,7 @@ msgstr "Сіз бен контакт өзара бар болуы ақпарат
 #. None
 #: ../src/vcard.py:349
 msgid "You are not interested in the contact's presence, and neither he/she is interested in yours"
-msgstr "Сіз контакттың бар болуына қызықпайсыз, және ол да өз ретінде сіздікіне қызықпайды."
+msgstr "Сіз контакттың бар болуына қызықпайсыз, және ол да өз ретінде сіздікіне қызықпайды"
 
 #: ../src/vcard.py:356
 msgid "You are waiting contact's answer about your subscription request"
