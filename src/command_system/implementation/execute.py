@@ -45,7 +45,7 @@ class Execute(CommandContainer):
 
     DIRECTORY = "~"
 
-    POLL_TIME = 100
+    POLL_INTERVAL = 100
     POLL_COUNT = 5
 
     @command("exec", raw=True)
@@ -63,7 +63,7 @@ class Execute(CommandContainer):
     @classmethod
     def monitor(cls, processor, popen):
         poller = cls.poller(processor, popen)
-        timeout_add(cls.POLL_TIME, poller.next)
+        timeout_add(cls.POLL_INTERVAL, poller.next)
 
     @classmethod
     def poller(cls, processor, popen):
