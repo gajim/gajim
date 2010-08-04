@@ -21,7 +21,7 @@ declarative way.
 
 import re
 from types import FunctionType
-from inspect import getargspec
+from inspect import getargspec, getdoc
 
 from dispatching import Dispatcher, HostDispatcher, ContainerDispatcher
 from mapping import parse_arguments, adapt_arguments
@@ -138,12 +138,6 @@ class CommandProcessor(object):
 
 class Command(object):
 
-    # These two regular expression patterns control how command
-    # documentation will be formatted to be transformed to a normal,
-    # readable state.
-    DOC_STRIP_PATTERN = re.compile(r'(?:^[ \t]+|\A\n)', re.MULTILINE)
-    DOC_FORMAT_PATTERN = re.compile(r'(?<!\n)\n(?!\n)', re.MULTILINE)
-
     def __init__(self, handler, *names, **properties):
         self.handler = handler
         self.names = names
@@ -192,19 +186,8 @@ class Command(object):
         """
         Extract handler's documentation which is a doc-string and
         transform it to a usable format.
-
-        Transformation is done based on the DOC_STRIP_PATTERN and
-        DOC_FORMAT_PATTERN regular expression patterns.
         """
-        documentation = self.handler.__doc__ or None
-
-        if not documentation:
-            return
-
-        documentation = re.sub(self.DOC_STRIP_PATTERN, str(), documentation)
-        documentation = re.sub(self.DOC_FORMAT_PATTERN, ' ', documentation)
-
-        return documentation
+        return getdoc(self.handler)
 
     def extract_description(self):
         """
