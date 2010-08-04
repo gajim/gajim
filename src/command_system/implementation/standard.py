@@ -30,7 +30,8 @@ from ..errors import CommandError
 from ..framework import CommandContainer, command, doc
 from ..mapping import generate_usage
 
-from hosts import ChatCommands, PrivateChatCommands, GroupChatCommands
+from hosts import *
+import execute
 
 # This holds constants fron the logger, which we'll be using in some of our
 # commands.
@@ -42,7 +43,7 @@ class StandardCommonCommands(CommandContainer):
     to all - chat, private chat, group chat.
     """
 
-    HOSTS = (ChatCommands, PrivateChatCommands, GroupChatCommands)
+    HOSTS = ChatCommands, PrivateChatCommands, GroupChatCommands
 
     @command
     @doc(_("Clear the text window"))
@@ -163,7 +164,7 @@ class StandardCommonChatCommands(CommandContainer):
     to a chat and a private chat only.
     """
 
-    HOSTS = (ChatCommands, PrivateChatCommands)
+    HOSTS = ChatCommands, PrivateChatCommands
 
     @command
     @doc(_("Toggle the GPG encryption"))
