@@ -43,6 +43,7 @@ class StandardCommonCommands(CommandContainer):
     to all - chat, private chat, group chat.
     """
 
+    AUTOMATIC = True
     HOSTS = ChatCommands, PrivateChatCommands, GroupChatCommands
 
     @command
@@ -164,6 +165,7 @@ class StandardCommonChatCommands(CommandContainer):
     to a chat and a private chat only.
     """
 
+    AUTOMATIC = True
     HOSTS = ChatCommands, PrivateChatCommands
 
     @command
@@ -221,6 +223,7 @@ class StandardChatCommands(CommandContainer):
     to a chat.
     """
 
+    AUTOMATIC = True
     HOSTS = (ChatCommands,)
 
 class StandardPrivateChatCommands(CommandContainer):
@@ -229,6 +232,7 @@ class StandardPrivateChatCommands(CommandContainer):
     to a private chat.
     """
 
+    AUTOMATIC = True
     HOSTS = (PrivateChatCommands,)
 
 class StandardGroupChatCommands(CommandContainer):
@@ -237,6 +241,7 @@ class StandardGroupChatCommands(CommandContainer):
     to a group chat.
     """
 
+    AUTOMATIC = True
     HOSTS = (GroupChatCommands,)
 
     @command(raw=True)

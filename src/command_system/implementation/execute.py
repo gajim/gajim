@@ -41,6 +41,7 @@ from ..framework import CommandContainer, command, doc
 from hosts import *
 
 class Execute(CommandContainer):
+    AUTOMATIC = True
     HOSTS = ChatCommands, PrivateChatCommands, GroupChatCommands
 
     DIRECTORY = "~"

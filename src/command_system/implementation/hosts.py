@@ -25,18 +25,18 @@ class ChatCommands(CommandHost):
     This command host is bound to the command processor which processes
     commands from a chat.
     """
-    pass
+    AUTOMATIC = True
 
 class PrivateChatCommands(CommandHost):
     """
     This command host is bound to the command processor which processes
     commands from a private chat.
     """
-    pass
+    AUTOMATIC = True
 
 class GroupChatCommands(CommandHost):
     """
     This command host is bound to the command processor which processes
     commands from a group chat.
     """
-    pass
+    AUTOMATIC = True

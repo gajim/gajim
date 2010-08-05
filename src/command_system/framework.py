@@ -23,7 +23,8 @@ import re
 from types import FunctionType
 from inspect import getargspec, getdoc
 
-from dispatching import Dispatcher, HostDispatcher, ContainerDispatcher
+from dispatcher import Host, Container
+from dispatcher import get_command, list_commands
 from mapping import parse_arguments, adapt_arguments
 from errors import DefinitionError, CommandError, NoCommandError
 
@@ -32,8 +33,12 @@ class CommandHost(object):
     Command host is a hub between numerous command processors and
     command containers. Aimed to participate in a dispatching process in
     order to provide clean and transparent architecture.
+
+    The AUTOMATIC class variable, which must be defined by a command
+    host, specifies whether the command host should be automatically
+    dispatched and enabled by the dispatcher or not.
     """
-    __metaclass__ = HostDispatcher
+    __metaclass__ = Host
 
 class CommandContainer(object):
     """
@@ -41,11 +46,15 @@ class CommandContainer(object):
     allowing them to be dispatched and proccessed correctly. Each
     command container may be bound to a one or more command hosts.
 
-    Bounding is controlled by the HOSTS variable, which must be defined
-    in the body of the command container. This variable should contain a
-    list of hosts to bound to, as a tuple or list.
+    The AUTOMATIC class variable, which must be defined by a command
+    processor, specifies whether the command processor should be
+    automatically dispatched and enabled by the dispatcher or not.
+
+    Bounding is controlled by the HOSTS class variable, which must be
+    defined by the command container. This variable should contain a
+    sequence of hosts to bound to, as a tuple or list.
     """
-    __metaclass__ = ContainerDispatcher
+    __metaclass__ = Container
 
 class CommandProcessor(object):
     """
@@ -126,13 +135,13 @@ class CommandProcessor(object):
         pass
 
     def get_command(self, name):
-        command = Dispatcher.get_command(self.COMMAND_HOST, name)
+        command = get_command(self.COMMAND_HOST, name)
         if not command:
             raise NoCommandError("Command does not exist", name=name)
         return command
 
     def list_commands(self):
-        commands = Dispatcher.list_commands(self.COMMAND_HOST)
+        commands = list_commands(self.COMMAND_HOST)
         commands = dict(commands)
         return sorted(set(commands.itervalues()))
 
