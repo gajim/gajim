@@ -402,6 +402,7 @@ class SingleForm(gtk.Table, object):
                         check.connect('toggled',
                                 self.on_list_multi_checkbutton_toggled, field, value)
                         widget.pack_start(check, expand=False)
+                        widget.set_sensitive(readwrite)
                 else:
                     # more than 5 options: show combobox
                     def on_list_multi_treeview_changed(selection, f):
@@ -418,7 +419,7 @@ class SingleForm(gtk.Table, object):
                     widget.set_size_request(-1, 120)
                     tv.get_selection().connect('changed',
                             on_list_multi_treeview_changed, field)
-                widget.set_sensitive(readwrite)
+                    tv.set_sensitive(readwrite)
 
             elif field.type == 'jid-single':
                 widget = gtk.Entry()
@@ -490,11 +491,11 @@ class SingleForm(gtk.Table, object):
                 textwidget.get_buffer().connect('changed',
                         self.on_text_multi_textbuffer_changed, field)
                 textwidget.get_buffer().set_text(field.value)
+                textwidget.set_sensitive(readwrite)
 
                 widget = gtk.ScrolledWindow()
                 widget.add(textwidget)
 
-                widget.set_sensitive(readwrite)
                 widget=decorate_with_tooltip(widget, field)
                 self.attach(widget, 1, 2, linecounter, linecounter+1)
 
