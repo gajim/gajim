@@ -28,63 +28,63 @@ class Dispatcher(type):
     commands = {}
 
     @classmethod
-    def register_host(klass, host):
-        klass.containers[host] = []
+    def register_host(cls, host):
+        cls.containers[host] = []
 
     @classmethod
-    def register_container(klass, container):
+    def register_container(cls, container):
         for host in container.HOSTS:
-            klass.containers[host].append(container)
+            cls.containers[host].append(container)
 
     @classmethod
-    def register_commands(klass, container):
-        klass.commands[container] = {}
-        for command in klass.traverse_commands(container):
+    def register_commands(cls, container):
+        cls.commands[container] = {}
+        for command in cls.traverse_commands(container):
             for name in command.names:
-                klass.commands[container][name] = command
+                cls.commands[container][name] = command
 
     @classmethod
-    def get_command(klass, host, name):
-        for container in klass.containers[host]:
-            command = klass.commands[container].get(name)
+    def get_command(cls, host, name):
+        for container in cls.containers[host]:
+            command = cls.commands[container].get(name)
             if command:
                 return command
 
     @classmethod
-    def list_commands(klass, host):
-        for container in klass.containers[host]:
-            commands = klass.commands[container]
+    def list_commands(cls, host):
+        for container in cls.containers[host]:
+            commands = cls.commands[container]
             for name, command in commands.iteritems():
                 yield name, command
 
     @classmethod
-    def traverse_commands(klass, container):
+    def traverse_commands(cls, container):
         for name in dir(container):
             attribute = getattr(container, name)
-            if klass.is_command(attribute):
+            if cls.is_command(attribute):
                 yield attribute
 
     @staticmethod
     def is_root(ns):
-        meta = ns.get('__metaclass__', NoneType)
-        return issubclass(meta, Dispatcher)
+        metaclass = ns.get('__metaclass__', NoneType)
+        return issubclass(metaclass, Dispatcher)
 
     @staticmethod
     def is_command(attribute):
-        name = attribute.__class__.__name__
-        return name == 'Command'
+        from framework import Command
+        return isinstance(attribute, Command)
 
 class HostDispatcher(Dispatcher):
 
-    def __init__(klass, name, bases, ns):
+    def __init__(self, name, bases, ns):
         if not Dispatcher.is_root(ns):
-            HostDispatcher.register_host(klass)
-        super(HostDispatcher, klass).__init__(name, bases, ns)
+            HostDispatcher.register_host(self)
+        super(HostDispatcher, self).__init__(name, bases, ns)
 
 class ContainerDispatcher(Dispatcher):
 
-    def __init__(klass, name, bases, ns):
+    def __init__(self, name, bases, ns):
         if not Dispatcher.is_root(ns):
-            ContainerDispatcher.register_container(klass)
-            ContainerDispatcher.register_commands(klass)
-        super(ContainerDispatcher, klass).__init__(name, bases, ns)
+            ContainerDispatcher.register_container(self)
+            ContainerDispatcher.register_commands(self)
+        super(ContainerDispatcher, self).__init__(name, bases, ns)
