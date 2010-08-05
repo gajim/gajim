@@ -57,7 +57,7 @@ class StandardCommonCommands(CommandContainer):
         self.chat_buttons_set_visible(new_status)
 
     @command(overlap=True)
-    @doc(_("Show help on a given command or a list of available commands if -(-a)ll is given"))
+    @doc(_("Show help on a given command or a list of available commands if -a is given"))
     def help(self, command=None, all=False):
         if command:
             command = self.get_command(command)
