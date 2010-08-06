@@ -83,10 +83,11 @@ class Execute(CommandContainer):
     @classmethod
     def terminated(cls, processor, popen):
         stdout, stderr = cls.fetch(popen)
-        if stdout:
+        success = popen.returncode == 0
+        if success and stdout:
             processor.echo(stdout)
-        elif stderr:
-            processor.echo(stderr)
+        elif not success and stderr:
+            processor.echo_error(stderr)
 
     @classmethod
     def overdue(cls, processor, popen):
@@ -112,7 +113,8 @@ class Show(Execute):
     @classmethod
     def terminated(cls, processor, popen):
         stdout, stderr = cls.fetch(popen)
-        if stdout:
+        success = popen.returncode == 0
+        if success and stdout:
             processor.send(stdout)
-        elif stderr:
-            processor.send(stderr)
+        elif not success and stderr:
+            processor.echo_error(stderr)
