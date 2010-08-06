@@ -25,6 +25,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 from types import *
+from glib import GError
 
 def remove(sequence, target):
     if isinstance(sequence, ListType):
@@ -37,7 +38,7 @@ def remove(sequence, target):
 def gconf(path):
     try:
         from gconf import client_get_default
-    except ImportError:
-        return
-    client = client_get_default()
-    return client.get_string(path)
+        client = client_get_default()
+        return client.get_string(path)
+    except ImportError, GError:
+        pass
