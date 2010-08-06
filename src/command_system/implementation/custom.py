@@ -76,7 +76,7 @@ class CustomChatCommands(CommandContainer):
     """
 
     AUTOMATIC = True
-    HOSTS = (ChatCommands,)
+    HOSTS = ChatCommands,
 
     @command("squal", "bawl")
     def sing(self):
@@ -99,7 +99,7 @@ class CustomPrivateChatCommands(CommandContainer):
     """
 
     AUTOMATIC = True
-    HOSTS = (PrivateChatCommands,)
+    HOSTS = PrivateChatCommands,
 
     @command
     @doc(_("The same as using a doc-string, except it supports translation"))
@@ -114,7 +114,7 @@ class CustomGroupChatCommands(CommandContainer):
     """
 
     AUTOMATIC = True
-    HOSTS = (GroupChatCommands,)
+    HOSTS = GroupChatCommands,
 
     @command
     def fetch(self):
