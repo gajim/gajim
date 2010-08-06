@@ -33,3 +33,11 @@ def remove(sequence, target):
     elif isinstance(sequence, DictType):
         if target in sequence:
             del sequence[target]
+
+def gconf(path):
+    try:
+        from gconf import client_get_default
+    except ImportError:
+        return
+    client = client_get_default()
+    return client.get_string(path)

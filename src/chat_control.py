@@ -409,6 +409,10 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         self.command_hits = []
         self.last_key_tabs = False
 
+        # This is bascially a very nasty hack to surpass the inability
+        # to properly use the super, because of the old code.
+        CommandTools.__init__(self)
+
     def set_speller(self):
         # now set the one the user selected
         per_type = 'contacts'
