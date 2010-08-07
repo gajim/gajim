@@ -183,3 +183,10 @@ class CommandTools:
         Get the current connection object.
         """
         return gajim.connections[self.account]
+
+    @property
+    def full_jid(self):
+        """
+        Get a full JID of the contact.
+        """
+        return self.contact.get_full_jid()

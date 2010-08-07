@@ -181,19 +181,17 @@ class StandardCommonChatCommands(CommandContainer):
         gajim.connections[self.account].sendPing(self.contact)
 
     @command
-    @doc(_("Send DTMF events through an open audio session"))
-    def dtmf(self, events):
+    @doc(_("Send DTMF sequence through an open audio session"))
+    def dtmf(self, sequence):
         if not self.audio_sid:
-            raise CommandError(_("There is no open audio session with this contact"))
-        # Valid values for DTMF tones are *, # or a number.
-        events = [e for e in events if e in ('*', '#') or e.isdigit()]
-        if events:
-            session = gajim.connections[self.account].get_jingle_session(
-                self.contact.get_full_jid(), self.audio_sid)
-            content = session.get_content('audio')
-            content.batch_dtmf(events)
-        else:
-            raise CommandError(_("No valid DTMF event specified"))
+            raise CommandError(_("No open audio sessions with the contact"))
+        for tone in sequence:
+            if not (tone in ("*", "#") or tone.isdigit()):
+                raise CommandError(_("%s is not a valid tone") % tone)
+        gjs = self.connection.get_jingle_session
+        session = gjs(self.full_jid, self.audio_sid)
+        content = session.get_content("audio")
+        content.batch_dtmf(sequence)
 
     @command
     @doc(_("Toggle audio session"))
