@@ -224,7 +224,7 @@ class StandardChatCommands(CommandContainer):
     """
 
     AUTOMATIC = True
-    HOSTS = (ChatCommands,)
+    HOSTS = ChatCommands,
 
 class StandardPrivateChatCommands(CommandContainer):
     """
@@ -233,7 +233,7 @@ class StandardPrivateChatCommands(CommandContainer):
     """
 
     AUTOMATIC = True
-    HOSTS = (PrivateChatCommands,)
+    HOSTS = PrivateChatCommands,
 
 class StandardGroupChatCommands(CommandContainer):
     """
@@ -242,7 +242,7 @@ class StandardGroupChatCommands(CommandContainer):
     """
 
     AUTOMATIC = True
-    HOSTS = (GroupChatCommands,)
+    HOSTS = GroupChatCommands,
 
     @command(raw=True)
     @doc(_("Change your nickname in a group chat"))
@@ -330,23 +330,24 @@ class StandardGroupChatCommands(CommandContainer):
     @command
     @doc(_("Display names of all group chat occupants"))
     def names(self, verbose=False):
-        get_contact = lambda nick: gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
-        nicks = gajim.contacts.get_nick_list(self.account, self.room_jid)
+        ggc = gajim.contacts.get_gc_contact
+        gnl = gajim.contacts.get_nick_list
 
-        # First we do alpha-numeric sort and then role-based one.
-        nicks.sort()
-        nicks.sort(key=lambda nick: get_contact(nick).role)
+        get_contact = lambda nick: ggc(self.account, self.room_jid, nick)
+        get_role = lambda nick: get_contact(nick).role
+        nicks = gnl(self.account, self.room_jid)
 
-        if verbose:
-            for nick in nicks:
-                contact = get_contact(nick)
+        nicks = sorted(nicks)
+        nicks = sorted(nicks, key=get_role)
 
-                role = helpers.get_uf_role(contact.role)
-                affiliation = helpers.get_uf_affiliation(contact.affiliation)
+        if not verbose:
+            return ", ".join(nicks)
 
-                self.echo("%s - %s - %s" % (nick, role, affiliation))
-        else:
-            return ', '.join(nicks)
+        for nick in nicks:
+            contact = get_contact(nick)
+            role = helpers.get_uf_role(contact.role)
+            affiliation = helpers.get_uf_affiliation(contact.affiliation)
+            self.echo("%s - %s - %s" % (nick, role, affiliation))
 
     @command('ignore', raw=True)
     @doc(_("Forbid an occupant to send you public or private messages"))
