@@ -432,7 +432,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 
                     self.dialog = dialogs.YesNoDialog(_('Confirm these session '
                             'options'),
-                            _('''The remote client wants to negotiate an session with these features:
+                            _('''The remote client wants to negotiate a session with these features:
 
 %s
 

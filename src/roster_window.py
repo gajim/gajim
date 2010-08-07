@@ -2371,7 +2371,7 @@ class RosterWindow:
 
             if transfer_active:
                 dialogs.ConfirmationDialog(_('You have running file transfers'),
-                        _('If you quit now, the file(s) being transfered will '
+                        _('If you quit now, the file(s) being transferred will '
                         'be stopped. Do you still want to quit?'),
                         on_response_ok=(on_continue3, message, pep_dict))
                 return
