@@ -86,7 +86,6 @@ def get_context(fingerprint, verify_cb=None):
         
     ctx.use_privatekey_file (os.path.expanduser('~/certs/' + SELF_SIGNED_CERTIFICATE + '.pkey'))
     ctx.use_certificate_file(os.path.expanduser('~/certs/' + SELF_SIGNED_CERTIFICATE + '.cert'))
-    #    ctx.load_verify_locations(os.path.expanduser('~/certs/CA.cert'))
     store = ctx.get_cert_store()
     for f in os.listdir(os.path.expanduser('~/certs/')):
         load_cert_file(os.path.join(os.path.expanduser('~/certs'), f), store)

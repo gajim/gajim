@@ -29,6 +29,7 @@ import stat
 
 from common import gajim
 import logger
+from common import jingle_xtls
 
 # DO NOT MOVE ABOVE OF import gajim
 import sqlite3 as sqlite
@@ -267,6 +268,7 @@ def check_and_possibly_create_paths():
     MY_DATA = configpaths.gajimpaths['MY_DATA']
     MY_CONFIG = configpaths.gajimpaths['MY_CONFIG']
     MY_CACHE = configpaths.gajimpaths['MY_CACHE']
+    XTLS_CERTS = os.path.expanduser('~/certs/')
 
     if not os.path.exists(MY_DATA):
         create_path(MY_DATA)
@@ -332,6 +334,13 @@ def check_and_possibly_create_paths():
         print _('%s is a directory but should be a file') % CACHE_DB_PATH
         print _('Gajim will now exit')
         sys.exit()
+        
+    if not os.path.exists(XTLS_CERTS):
+        create_path(XTLS_CERTS)
+    if not (os.path.exists(os.path.join(XTLS_CERTS, jingle_xtls.SELF_SIGNED_CERTIFICATE + '.cert')) and
+                           os.path.exist(os.path.join(XTLS_CERTS, jingle_xtls.SELF_SIGNED_CERTIFICATE + '.pkey'))):
+        jingle_xtls.make_certs(XTLS_CERTS + jingle_xtls.SELF_SIGNED_CERTIFICATE, 'gajim')
+                               
 
 def create_path(directory):
     print _('creating %s directory') % directory
