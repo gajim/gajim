@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-07-27 11:28+0200\n"
-"PO-Revision-Date: 2010-07-27 19:57+0300\n"
+"POT-Creation-Date: 2010-08-08 11:21+0400\n"
+"PO-Revision-Date: 2010-08-08 11:23+0300\n"
 "Last-Translator: Fomin Denis <fominde@mail.ru>\n"
 "Language-Team: Linux Support LLC\n"
 "Language: ru\n"
@@ -1246,7 +1246,7 @@ msgid "Account row"
 msgstr "Учетная запись"
 
 #: ../data/gui/gajim_themes_window.ui.h:3
-#: ../src/chat_control.py:925
+#: ../src/chat_control.py:929
 msgid "Bold"
 msgstr "Полужирный"
 
@@ -1284,7 +1284,7 @@ msgid "Inactive"
 msgstr "Неактивен"
 
 #: ../data/gui/gajim_themes_window.ui.h:12
-#: ../src/chat_control.py:926
+#: ../src/chat_control.py:930
 msgid "Italic"
 msgstr "Курсив"
 
@@ -2846,7 +2846,7 @@ msgid "Text"
 msgstr "Текст"
 
 #: ../src/advanced_configuration_window.py:96
-#: ../src/chat_control.py:945
+#: ../src/chat_control.py:949
 msgid "Color"
 msgstr "Цвет"
 
@@ -2984,53 +2984,53 @@ msgstr "Шведский"
 msgid "Chinese (Ch)"
 msgstr "Китайский"
 
-#: ../src/chat_control.py:479
+#: ../src/chat_control.py:483
 msgid "Spelling language"
 msgstr "Язык проверки орфографии"
 
 #. we are not connected
-#: ../src/chat_control.py:511
-#: ../src/chat_control.py:720
+#: ../src/chat_control.py:515
+#: ../src/chat_control.py:724
 msgid "A connection is not available"
 msgstr "Подключение недоступно"
 
-#: ../src/chat_control.py:512
-#: ../src/chat_control.py:721
+#: ../src/chat_control.py:516
+#: ../src/chat_control.py:725
 msgid "Your message can not be sent until you are connected."
 msgstr "Ваше сообщение не может быть отправлено, пока вы не подключитесь."
 
-#: ../src/chat_control.py:927
+#: ../src/chat_control.py:931
 msgid "Underline"
 msgstr "Подчеркнутый"
 
-#: ../src/chat_control.py:928
+#: ../src/chat_control.py:932
 msgid "Strike"
 msgstr "Зачеркнутый"
 
-#: ../src/chat_control.py:951
+#: ../src/chat_control.py:955
 msgid "Font"
 msgstr "Шрифт"
 
-#: ../src/chat_control.py:960
+#: ../src/chat_control.py:964
 msgid "Clear formating"
 msgstr "Удалить форматирование"
 
-#: ../src/chat_control.py:1038
+#: ../src/chat_control.py:1042
 msgid "Really send file?"
 msgstr "Отправить файл?"
 
-#: ../src/chat_control.py:1039
+#: ../src/chat_control.py:1043
 #, python-format
 msgid "If you send a file to %s, he/she will know your real Jabber ID."
 msgstr "Если вы пошлете файл %s, он/она узнает ваш настоящий Jabber ID."
 
-#: ../src/chat_control.py:1503
-#: ../src/chat_control.py:1987
+#: ../src/chat_control.py:1507
+#: ../src/chat_control.py:1991
 msgid "GPG encryption enabled"
 msgstr "GPG шифрование включено"
 
 #. Add to roster
-#: ../src/chat_control.py:1528
+#: ../src/chat_control.py:1532
 #: ../src/common/contacts.py:158
 #: ../src/common/contacts.py:277
 #: ../src/common/helpers.py:57
@@ -3049,78 +3049,78 @@ msgstr "GPG шифрование включено"
 msgid "Not in Roster"
 msgstr "Не в ростере"
 
-#: ../src/chat_control.py:1558
+#: ../src/chat_control.py:1562
 msgid "This contact does not support file transfer."
 msgstr "Этот контакт не поддерживает передачу файлов."
 
-#: ../src/chat_control.py:1561
+#: ../src/chat_control.py:1565
 msgid "You need to know the real JID of the contact to send him or her a file."
 msgstr "Необходимо знать настоящий JID контакта для того, чтобы отправить ему или ей файл."
 
-#: ../src/chat_control.py:1656
+#: ../src/chat_control.py:1660
 #, python-format
 msgid "%(type)s state : %(state)s, reason: %(reason)s"
 msgstr "%(type)s состояние : %(state)s, причина: %(reason)s"
 
-#: ../src/chat_control.py:1848
+#: ../src/chat_control.py:1852
 #, python-format
 msgid "%(nickname)s from group chat %(room_name)s"
 msgstr "%(nickname)s из комнаты %(room_name)s"
 
 #. No key assigned nor a key is used by remote contact
-#: ../src/chat_control.py:1967
+#: ../src/chat_control.py:1971
 #: ../src/dialogs.py:4866
 msgid "No GPG key assigned"
 msgstr "Ключ GPG не присвоен"
 
-#: ../src/chat_control.py:1968
+#: ../src/chat_control.py:1972
 msgid "No GPG key is assigned to this contact. So you cannot encrypt messages with GPG."
 msgstr "Этому контакту не присвоен ключ GPG, поэтому вы не можете зашифровать сообщения с помощью GPG."
 
-#: ../src/chat_control.py:1977
+#: ../src/chat_control.py:1981
 msgid "GPG encryption disabled"
 msgstr "GPG шифрование выключено"
 
-#: ../src/chat_control.py:2003
+#: ../src/chat_control.py:2007
 msgid "Session WILL be logged"
 msgstr "Для сеанса БУДЕТ сохранена история сообщений"
 
-#: ../src/chat_control.py:2005
+#: ../src/chat_control.py:2009
 msgid "Session WILL NOT be logged"
 msgstr "Для сеанса НЕ БУДЕТ сохранена история сообщений"
 
 #. encryption %s active
-#: ../src/chat_control.py:2022
+#: ../src/chat_control.py:2026
 msgid "is"
 msgstr "было"
 
-#: ../src/chat_control.py:2022
+#: ../src/chat_control.py:2026
 msgid "is NOT"
 msgstr "НЕ"
 
 #. chat session %s be logged
-#: ../src/chat_control.py:2024
+#: ../src/chat_control.py:2028
 msgid "will"
 msgstr "будет"
 
-#: ../src/chat_control.py:2024
+#: ../src/chat_control.py:2028
 msgid "will NOT"
 msgstr "НЕ будет"
 
 #. About encrypted chat session
-#: ../src/chat_control.py:2028
+#: ../src/chat_control.py:2032
 msgid "and authenticated"
 msgstr "и заверено"
 
 #. About encrypted chat session
-#: ../src/chat_control.py:2032
+#: ../src/chat_control.py:2036
 msgid "and NOT authenticated"
 msgstr "и НЕ заверено"
 
 #. status will become 'is' or 'is not', authentificaed will become
 #. 'and authentificated' or 'and not authentificated', logged will become
 #. 'will' or 'will not'
-#: ../src/chat_control.py:2039
+#: ../src/chat_control.py:2043
 #, python-format
 msgid ""
 "%(type)s encryption %(status)s active %(authenticated)s.\n"
@@ -3129,50 +3129,50 @@ msgstr ""
 "%(type)s шифрование %(status)s включено %(authenticated)s.\n"
 "Для сеанса %(logged)s сохранена история сообщений."
 
-#: ../src/chat_control.py:2182
+#: ../src/chat_control.py:2186
 msgid "Session negotiation cancelled"
 msgstr "Установление сеанса отменено"
 
-#: ../src/chat_control.py:2191
+#: ../src/chat_control.py:2195
 msgid "This session is encrypted"
 msgstr "Сеанс зашифрован"
 
-#: ../src/chat_control.py:2194
+#: ../src/chat_control.py:2198
 msgid " and WILL be logged"
 msgstr " и БУДЕТ сохранена история сообщений"
 
-#: ../src/chat_control.py:2196
+#: ../src/chat_control.py:2200
 msgid " and WILL NOT be logged"
 msgstr " и НЕ БУДЕТ сохранена история сообщений"
 
-#: ../src/chat_control.py:2201
+#: ../src/chat_control.py:2205
 msgid "Remote contact's identity not verified. Click the shield button for more details."
 msgstr "Личность удаленного контакта не подтверждена. Нажмите на кнопке со щитом для подробностей."
 
-#: ../src/chat_control.py:2203
+#: ../src/chat_control.py:2207
 msgid "E2E encryption disabled"
 msgstr "E2E шифрование выключено"
 
-#: ../src/chat_control.py:2241
-#: ../src/chat_control.py:2254
+#: ../src/chat_control.py:2245
+#: ../src/chat_control.py:2258
 msgid "The following message was NOT encrypted"
 msgstr "Последнее сообщение НЕ БЫЛО зашифровано"
 
-#: ../src/chat_control.py:2247
+#: ../src/chat_control.py:2251
 msgid "The following message was encrypted"
 msgstr "Последнее сообщение зашифровано"
 
 #. %s is being replaced in the code with JID
-#: ../src/chat_control.py:2519
+#: ../src/chat_control.py:2523
 #, python-format
 msgid "You just received a new message from \"%s\""
 msgstr "Получено новое сообщение от «%s»"
 
-#: ../src/chat_control.py:2520
+#: ../src/chat_control.py:2524
 msgid "If you close this tab and you have history disabled, this message will be lost."
 msgstr "Если вы закроете эту вкладку и у вас отключена функция ведения истории сообщений, то это сообщение будет утеряно."
 
-#: ../src/chat_control.py:2663
+#: ../src/chat_control.py:2667
 #: ../src/common/connection_handlers.py:1635
 #: ../src/common/connection_handlers.py:1758
 #: ../src/common/connection_handlers.py:1960
@@ -3183,12 +3183,12 @@ msgstr "Если вы закроете эту вкладку и у вас отк
 msgid "Database Error"
 msgstr "Ошибка базы данных"
 
-#: ../src/chat_control.py:2664
+#: ../src/chat_control.py:2668
 #, python-format
 msgid "The database file (%s) cannot be read. Try to repair it or remove it (all history will be lost)."
 msgstr "Файл базы данных (%s) не может быть прочитан. Попробуйте восстановить его или удалить (вся история будет утеряна)."
 
-#: ../src/chat_control.py:2906
+#: ../src/chat_control.py:2910
 #, python-format
 msgid "%(name)s is now %(status)s"
 msgstr "%(name)s теперь %(status)s"
@@ -4076,7 +4076,7 @@ msgstr "Учетная запись %s не поддерживает невид�
 #: ../src/config.py:2100
 #: ../src/config.py:2168
 #: ../src/config.py:3560
-#: ../src/dataforms_widget.py:597
+#: ../src/dataforms_widget.py:598
 #: ../src/dialogs.py:2931
 msgid "Invalid Jabber ID"
 msgstr "Неверный Jabber ID"
@@ -6424,30 +6424,30 @@ msgstr[2] "%i дней назад"
 msgid "Subject: %s\n"
 msgstr "Тема: %s\n"
 
-#: ../src/dataforms_widget.py:544
+#: ../src/dataforms_widget.py:545
 msgid "Unable to load image"
 msgstr "Невозможно загрузить изображение"
 
-#: ../src/dataforms_widget.py:546
+#: ../src/dataforms_widget.py:547
 #, python-format
 msgid "Media type not supported: %s"
 msgstr "Тип не поддерживается: %s"
 
-#: ../src/dataforms_widget.py:601
+#: ../src/dataforms_widget.py:602
 msgid "Jabber ID already in list"
 msgstr "Jabber ID уже в списке"
 
-#: ../src/dataforms_widget.py:602
+#: ../src/dataforms_widget.py:603
 msgid "The Jabber ID you entered is already in the list. Choose another one."
 msgstr "Jabber ID, который вы ввели, уже существует. Выберите другой."
 
 #. Default jid
-#: ../src/dataforms_widget.py:613
+#: ../src/dataforms_widget.py:614
 msgid "new@jabber.id"
 msgstr "new@jabber.id"
 
-#: ../src/dataforms_widget.py:616
-#: ../src/dataforms_widget.py:618
+#: ../src/dataforms_widget.py:617
+#: ../src/dataforms_widget.py:619
 #, python-format
 msgid "new%d@jabber.id"
 msgstr "new%d@jabber.id"
@@ -7604,36 +7604,36 @@ msgid "%s wants to send you a file:"
 msgstr "%s хочет отправить вам файл:"
 
 #: ../src/filetransfers_window.py:342
-#: ../src/gtkgui_helpers.py:902
+#: ../src/gtkgui_helpers.py:900
 #, python-format
 msgid "Cannot overwrite existing file \"%s\""
 msgstr "Не могу заместить существующий файл «%s»"
 
 #: ../src/filetransfers_window.py:343
-#: ../src/gtkgui_helpers.py:903
+#: ../src/gtkgui_helpers.py:901
 msgid "A file with this name already exists and you do not have permission to overwrite it."
 msgstr "Этот файл уже существует, и у вас нет права его перезаписать."
 
 #: ../src/filetransfers_window.py:359
-#: ../src/gtkgui_helpers.py:907
+#: ../src/gtkgui_helpers.py:905
 msgid "This file already exists"
 msgstr "Файл уже существует"
 
 #: ../src/filetransfers_window.py:359
-#: ../src/gtkgui_helpers.py:907
+#: ../src/gtkgui_helpers.py:905
 msgid "What do you want to do?"
 msgstr "Что вы хотите сделать?"
 
 #. read-only bit is used to mark special folder under windows,
 #. not to mark that a folder is read-only. See ticket #3587
 #: ../src/filetransfers_window.py:369
-#: ../src/gtkgui_helpers.py:914
+#: ../src/gtkgui_helpers.py:912
 #, python-format
 msgid "Directory \"%s\" is not writable"
 msgstr "Папка «%s» не доступна для записи"
 
 #: ../src/filetransfers_window.py:369
-#: ../src/gtkgui_helpers.py:915
+#: ../src/gtkgui_helpers.py:913
 msgid "You do not have permission to create files in this directory."
 msgstr "У вас нет права создавать файлы в этой директории."
 
@@ -7792,7 +7792,7 @@ msgid "status"
 msgstr "статус"
 
 #: ../src/gajim-remote.py:109
-msgid "one of: offline, online, chat, away, xa, dnd, invisible. If not set, use accoun't previous status"
+msgid "one of: offline, online, chat, away, xa, dnd, invisible. If not set, use account's previous status"
 msgstr "один из: отключен, в сети, готов поболтать, отошел, недоступен, не беспокоить, невидимка. Если не указано, использовать предыдущий статус."
 
 #: ../src/gajim-remote.py:110
@@ -8407,50 +8407,50 @@ msgid "Details"
 msgstr "Детали"
 
 #. we talk about file
-#: ../src/gtkgui_helpers.py:205
-#: ../src/gtkgui_helpers.py:221
+#: ../src/gtkgui_helpers.py:203
+#: ../src/gtkgui_helpers.py:219
 #, python-format
 msgid "Error: cannot open %s for reading"
 msgstr "Ошибка: не могу открыть %s для чтения"
 
-#: ../src/gtkgui_helpers.py:400
+#: ../src/gtkgui_helpers.py:398
 msgid "Error reading file:"
 msgstr "Ошибка чтения файла:"
 
-#: ../src/gtkgui_helpers.py:403
+#: ../src/gtkgui_helpers.py:401
 msgid "Error parsing file:"
 msgstr "Ошибка обработки файла:"
 
 #. do not traceback (could be a permission problem)
 #. we talk about a file here
-#: ../src/gtkgui_helpers.py:444
+#: ../src/gtkgui_helpers.py:442
 #, python-format
 msgid "Could not write to %s. Session Management support will not work"
 msgstr "Не могу писать в %s. Управление сеансами будет недоступно"
 
 #. xmpp: is currently handled by another program, so ask the user
-#: ../src/gtkgui_helpers.py:818
+#: ../src/gtkgui_helpers.py:816
 msgid "Gajim is not the default Jabber client"
 msgstr "Gajim не является основным jabber-клиентом"
 
-#: ../src/gtkgui_helpers.py:819
+#: ../src/gtkgui_helpers.py:817
 msgid "Would you like to make Gajim the default Jabber client?"
 msgstr "Вы хотите сделать Gajim основным jabber-клиентом?"
 
-#: ../src/gtkgui_helpers.py:820
+#: ../src/gtkgui_helpers.py:818
 msgid "Always check to see if Gajim is the default Jabber client on startup"
 msgstr "Всегда проверять при запуске является ли Gajim основным jabber-клиентом"
 
-#: ../src/gtkgui_helpers.py:887
+#: ../src/gtkgui_helpers.py:885
 msgid "Extension not supported"
 msgstr "Расширение не поддерживается"
 
-#: ../src/gtkgui_helpers.py:888
+#: ../src/gtkgui_helpers.py:886
 #, python-format
 msgid "Image cannot be saved in %(type)s format. Save as %(new_filename)s?"
 msgstr "Изображение нельзя сохранить в формате %(type)s. Сохранить как %(new_filename)s?"
 
-#: ../src/gtkgui_helpers.py:924
+#: ../src/gtkgui_helpers.py:922
 msgid "Save Image as..."
 msgstr "Сохранить изображение как..."
 
@@ -9160,7 +9160,7 @@ msgid "You have running file transfers"
 msgstr "Идет передача файлов"
 
 #: ../src/roster_window.py:2374
-msgid "If you quit now, the file(s) being transfered will be stopped. Do you still want to quit?"
+msgid "If you quit now, the file(s) being transferred will be stopped. Do you still want to quit?"
 msgstr "Если выйти сейчас, передача файла остановится. Выйти?"
 
 #: ../src/roster_window.py:2405
@@ -9507,7 +9507,7 @@ msgstr "Подтвердить данные настройки сеанса"
 #: ../src/session.py:435
 #, python-format
 msgid ""
-"The remote client wants to negotiate an session with these features:\n"
+"The remote client wants to negotiate a session with these features:\n"
 "\n"
 "%s\n"
 "\n"
