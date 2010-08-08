@@ -2537,6 +2537,7 @@ class RosterItemExchangeEvent(nec.NetworkIncomingEvent, HelperEvent):
         if not self.iq_obj:
             self.iq_obj = self.base_event.xmpp_iq
 
+        self.get_id()
         self.get_jid_resource()
         self.exchange_items_list = {}
         items_list = msg.getTag('x').getChildren()
