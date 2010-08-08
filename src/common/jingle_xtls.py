@@ -34,6 +34,7 @@ if PYOPENSSL_PRESENT:
     from OpenSSL.SSL import Context
     from OpenSSL import crypto
 
+CERTIFICATE_DIR = '~/certs/'
 SELF_SIGNED_CERTIFICATE = 'localcert'
     
 def default_callback(connection, certificate, error_num, depth, return_code):
@@ -84,11 +85,11 @@ def get_context(fingerprint, verify_cb=None):
     elif fingerprint == 'client':
         ctx.set_verify(SSL.VERIFY_PEER, verify_cb or default_callback)
         
-    ctx.use_privatekey_file (os.path.expanduser('~/certs/' + SELF_SIGNED_CERTIFICATE + '.pkey'))
-    ctx.use_certificate_file(os.path.expanduser('~/certs/' + SELF_SIGNED_CERTIFICATE + '.cert'))
+    ctx.use_privatekey_file (os.path.expanduser(CERTIFICATE_DIR + SELF_SIGNED_CERTIFICATE + '.pkey'))
+    ctx.use_certificate_file(os.path.expanduser(CERTIFICATE_DIR + SELF_SIGNED_CERTIFICATE + '.cert'))
     store = ctx.get_cert_store()
-    for f in os.listdir(os.path.expanduser('~/certs/')):
-        load_cert_file(os.path.join(os.path.expanduser('~/certs'), f), store)
+    for f in os.listdir(os.path.expanduser(CERTIFICATE_DIR)):
+        load_cert_file(os.path.join(os.path.expanduser(CERTIFICATE_DIR), f), store)
     return ctx
 
 # the following code is partly due to pyopenssl examples

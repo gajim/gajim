@@ -268,7 +268,7 @@ def check_and_possibly_create_paths():
     MY_DATA = configpaths.gajimpaths['MY_DATA']
     MY_CONFIG = configpaths.gajimpaths['MY_CONFIG']
     MY_CACHE = configpaths.gajimpaths['MY_CACHE']
-    XTLS_CERTS = os.path.expanduser('~/certs/')
+    XTLS_CERTS = os.path.expanduser(jingle_xtls.CERTIFICATE_DIR)
 
     if not os.path.exists(MY_DATA):
         create_path(MY_DATA)
@@ -338,7 +338,7 @@ def check_and_possibly_create_paths():
     if not os.path.exists(XTLS_CERTS):
         create_path(XTLS_CERTS)
     if not (os.path.exists(os.path.join(XTLS_CERTS, jingle_xtls.SELF_SIGNED_CERTIFICATE + '.cert')) and
-                           os.path.exist(os.path.join(XTLS_CERTS, jingle_xtls.SELF_SIGNED_CERTIFICATE + '.pkey'))):
+                           os.path.exists(os.path.join(XTLS_CERTS, jingle_xtls.SELF_SIGNED_CERTIFICATE + '.pkey'))):
         jingle_xtls.make_certs(XTLS_CERTS + jingle_xtls.SELF_SIGNED_CERTIFICATE, 'gajim')
                                
 
