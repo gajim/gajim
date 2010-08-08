@@ -38,7 +38,7 @@ TYPE_PM = 'pm'
 
 ####################
 
-class MessageControl:
+class MessageControl(object):
     """
     An abstract base widget that can embed in the gtk.Notebook of a
     MessageWindow

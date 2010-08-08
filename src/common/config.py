@@ -455,6 +455,9 @@ class Config:
                     'roster': [opt_str, '', _("'yes', 'no' or ''")],
                     'urgency_hint': [opt_bool, False],
             }, {}),
+            'plugins': ({
+                'active': [opt_bool, False, _('State whether plugins should be activated on exit (this is saved on Gajim exit). This option SHOULD NOT be used to (de)activate plug-ins. Use GUI instead.')],
+            },{}),
     }
 
     statusmsg_default = {

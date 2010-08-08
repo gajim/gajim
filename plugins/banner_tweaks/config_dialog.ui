@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<interface>
+  <requires lib="gtk+" version="2.16"/>
+  <!-- interface-naming-policy toplevel-contextual -->
+  <object class="GtkWindow" id="window1">
+    <child>
+      <object class="GtkVBox" id="banner_tweaks_config_vbox">
+        <property name="visible">True</property>
+        <property name="border_width">9</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">4</property>
+        <child>
+          <object class="GtkCheckButton" id="show_banner_image_checkbutton">
+            <property name="label" translatable="yes">Display status icon</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="tooltip_text" translatable="yes">If checked, status icon will be displayed in chat window banner.</property>
+            <property name="draw_indicator">True</property>
+            <signal name="toggled" handler="on_show_banner_image_checkbutton_toggled"/>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkCheckButton" id="show_banner_online_msg_checkbutton">
+            <property name="label" translatable="yes">Display status message of contact</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="tooltip_text" translatable="yes">If checked, status message of contact will be displayed in chat window banner.</property>
+            <property name="draw_indicator">True</property>
+            <signal name="toggled" handler="on_show_banner_online_msg_checkbutton_toggled"/>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkCheckButton" id="show_banner_resource_checkbutton">
+            <property name="label" translatable="yes">Display resource name of contact</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="tooltip_text" translatable="yes">If checked, resource name of contact will be displayed in chat window banner.</property>
+            <property name="draw_indicator">True</property>
+            <signal name="toggled" handler="on_show_banner_resource_checkbutton_toggled"/>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkCheckButton" id="banner_small_fonts_checkbutton">
+            <property name="label" translatable="yes">Use small fonts for contact name and resource name</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="tooltip_text" translatable="yes">If checked, smaller font will be used to display resource name and contact name in chat window banner.</property>
+            <property name="draw_indicator">True</property>
+            <signal name="toggled" handler="on_banner_small_fonts_checkbutton_toggled"/>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="position">3</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

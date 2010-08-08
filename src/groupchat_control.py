@@ -1669,6 +1669,10 @@ class GroupchatControl(ChatControlBase):
         del win._controls[self.account][self.contact.jid]
 
     def shutdown(self, status='offline'):
+        # PluginSystem: calling shutdown of super class (ChatControlBase) 
+        # to let it remove it's GUI extension points
+        super(GroupchatControl, self).shutdown()
+
         # Preventing autorejoin from being activated
         self.autorejoin = False
 

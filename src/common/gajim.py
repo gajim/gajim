@@ -68,6 +68,8 @@ connections = {} # 'account name': 'account (connection.Connection) instance'
 ipython_window = None
 
 ged = None # Global Events Dispatcher
+nec = None # Network Events Controller
+plugin_manager = None # Plugins Manager
 
 log = logging.getLogger('gajim')
 
@@ -88,6 +90,9 @@ TMP = gajimpaths['TMP']
 DATA_DIR = gajimpaths['DATA']
 ICONS_DIR = gajimpaths['ICONS']
 HOME_DIR = gajimpaths['HOME']
+PLUGINS_DIRS = [gajimpaths['PLUGINS_BASE'],
+                gajimpaths['PLUGINS_USER']]
+PLUGINS_CONFIG_DIR = gajimpaths['PLUGINS_CONFIG_DIR']
 
 try:
     LANG = locale.getdefaultlocale()[0] # en_US, fr_FR, el_GR etc..

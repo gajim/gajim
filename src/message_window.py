@@ -298,9 +298,10 @@ _('Do you really want to close them all?'),
             self.notebook.show_all()
         else:
             self.window.show_all()
-        # NOTE: we do not call set_control_active(True) since we don't know whether
-        # the tab is the active one.
+        # NOTE: we do not call set_control_active(True) since we don't know
+        # whether the tab is the active one.
         self.show_title()
+        gobject.idle_add(control.msg_textview.grab_focus)
 
     def on_tab_eventbox_button_press_event(self, widget, event, child):
         if event.button == 3: # right click
@@ -511,6 +512,7 @@ _('Do you really want to close them all?'),
         ctrl_page = self.notebook.page_num(ctrl.widget)
         self.notebook.set_current_page(ctrl_page)
         self.window.present()
+        gobject.idle_add(ctrl.msg_textview.grab_focus)
 
     def remove_tab(self, ctrl, method, reason = None, force = False):
         """

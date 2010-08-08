@@ -140,7 +140,8 @@ class ConfigPaths:
 
         d = {'MY_DATA': '', 'LOG_DB': u'logs.db', 'MY_CACERTS': u'cacerts.pem',
                 'MY_EMOTS': u'emoticons', 'MY_ICONSETS': u'iconsets',
-                'MY_MOOD_ICONSETS': u'moods', 'MY_ACTIVITY_ICONSETS': u'activities'}
+                'MY_MOOD_ICONSETS': u'moods', 'MY_ACTIVITY_ICONSETS': u'activities',
+                'PLUGINS_USER': u'plugins'}
         for name in d:
             self.add(name, TYPE_DATA, windowsify(d[name]))
 
@@ -155,6 +156,8 @@ class ConfigPaths:
         self.add('DATA', None, os.path.join(basedir, windowsify(u'data')))
         self.add('ICONS', None, os.path.join(basedir, windowsify(u'icons')))
         self.add('HOME', None, fse(os.path.expanduser('~')))
+        self.add('PLUGINS_BASE', None, os.path.join(basedir,
+            windowsify(u'plugins')))
         try:
             self.add('TMP', None, fse(tempfile.gettempdir()))
         except IOError, e:
@@ -172,14 +175,17 @@ class ConfigPaths:
         conffile = windowsify(u'config')
         pidfile = windowsify(u'gajim')
         secretsfile = windowsify(u'secrets')
+        pluginsconfdir = windowsify(u'pluginsconfig')
 
         if len(profile) > 0:
             conffile += u'.' + profile
             pidfile += u'.' + profile
             secretsfile += u'.' + profile
+            pluginsconfdir += u'.' + profile
         pidfile += u'.pid'
         self.add('CONFIG_FILE', TYPE_CONFIG, conffile)
         self.add('PID_FILE', TYPE_CACHE, pidfile)
         self.add('SECRETS_FILE', TYPE_DATA, secretsfile)
+        self.add('PLUGINS_CONFIG_DIR', TYPE_CONFIG, pluginsconfdir)
 
 gajimpaths = ConfigPaths()

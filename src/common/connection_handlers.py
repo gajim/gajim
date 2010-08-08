@@ -41,6 +41,7 @@ from calendar import timegm
 import datetime
 
 import common.xmpp
+import common.caps_cache as capscache
 
 from common import helpers
 from common import gajim
@@ -50,7 +51,10 @@ from common.pubsub import ConnectionPubSub
 from common.pep import ConnectionPEP
 from common.protocol.caps import ConnectionCaps
 from common.protocol.bytestream import ConnectionSocks5Bytestream
-import common.caps_cache as capscache
+from common import ged
+from common import nec
+from common.nec import NetworkEvent
+from plugins import GajimPlugin
 if gajim.HAVE_FARSIGHT:
     from common.jingle import ConnectionJingle
 else:
@@ -552,6 +556,9 @@ class ConnectionVcard:
     def _IqCB(self, con, iq_obj):
         id_ = iq_obj.getID()
 
+        gajim.nec.push_incoming_event(NetworkEvent('raw-iq-received',
+            conn=con, xmpp_iq=iq_obj))
+
         # Check if we were waiting a timeout for this id
         found_tim = None
         for tim in self.awaiting_timeouts:
@@ -808,33 +815,16 @@ class ConnectionHandlersBase:
 
     def _ErrorCB(self, con, iq_obj):
         log.debug('ErrorCB')
-        jid_from = helpers.get_full_jid_from_iq(iq_obj)
-        jid_stripped, resource = gajim.get_room_and_nick_from_fjid(jid_from)
         id_ = unicode(iq_obj.getID())
         if id_ in self.last_ids:
-            self.dispatch('LAST_STATUS_TIME', (jid_stripped, resource, -1, ''))
-            self.last_ids.remove(id_)
-            return
+            gajim.nec.push_incoming_event(LastResultReceivedEvent(None,
+                conn=self, iq_obj=iq_obj))
+            return True
 
     def _LastResultCB(self, con, iq_obj):
         log.debug('LastResultCB')
-        qp = iq_obj.getTag('query')
-        seconds = qp.getAttr('seconds')
-        status = qp.getData()
-        try:
-            seconds = int(seconds)
-        except Exception:
-            return
-        id_ = iq_obj.getID()
-        if id_ in self.groupchat_jids:
-            who = self.groupchat_jids[id_]
-            del self.groupchat_jids[id_]
-        else:
-            who = helpers.get_full_jid_from_iq(iq_obj)
-        if id_ in self.last_ids:
-            self.last_ids.remove(id_)
-        jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
-        self.dispatch('LAST_STATUS_TIME', (jid_stripped, resource, seconds, status))
+        gajim.nec.push_incoming_event(LastResultReceivedEvent(None, conn=self,
+            iq_obj=iq_obj))
 
     def get_sessions(self, jid):
         """
@@ -1004,6 +994,9 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
         self.gmail_last_tid = None
         self.gmail_last_time = None
 
+        gajim.ged.register_event_handler('http-auth-received', ged.CORE,
+            self._nec_http_auth_received)
+
     def build_http_auth_answer(self, iq_obj, answer):
         if not self.connection or self.connected < 2:
             return
@@ -1018,33 +1011,33 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
                 common.xmpp.protocol.ERR_NOT_AUTHORIZED)
             self.connection.send(err)
 
+    def _nec_http_auth_received(self, obj):
+        if obj.conn.name != self.name:
+            return
+        if obj.opt in ('yes', 'no'):
+            obj.conn.build_http_auth_answer(obj.iq_obj, obj.opt)
+            return True
+
     def _HttpAuthCB(self, con, iq_obj):
         log.debug('HttpAuthCB')
-        opt = gajim.config.get_per('accounts', self.name, 'http_auth')
-        if opt in ('yes', 'no'):
-            self.build_http_auth_answer(iq_obj, opt)
-        else:
-            id_ = iq_obj.getTagAttr('confirm', 'id')
-            method = iq_obj.getTagAttr('confirm', 'method')
-            url = iq_obj.getTagAttr('confirm', 'url')
-            msg = iq_obj.getTagData('body') # In case it's a message with a body
-            self.dispatch('HTTP_AUTH', (method, url, id_, iq_obj, msg))
+        gajim.nec.push_incoming_event(HttpAuthReceivedEvent(None, conn=self,
+            iq_obj=iq_obj))
         raise common.xmpp.NodeProcessed
 
     def _ErrorCB(self, con, iq_obj):
         log.debug('ErrorCB')
-        ConnectionHandlersBase._ErrorCB(self, con, iq_obj)
-        jid_from = helpers.get_full_jid_from_iq(iq_obj)
-        jid_stripped, resource = gajim.get_room_and_nick_from_fjid(jid_from)
+        if ConnectionHandlersBase._ErrorCB(self, con, iq_obj):
+            return
         id_ = unicode(iq_obj.getID())
         if id_ in self.version_ids:
-            self.dispatch('OS_INFO', (jid_stripped, resource, '', ''))
-            self.version_ids.remove(id_)
+            gajim.nec.push_incoming_event(VersionResultReceivedEvent(None,
+                conn=self, iq_obj=iq_obj))
             return
         if id_ in self.entity_time_ids:
-            self.dispatch('ENTITY_TIME', (jid_stripped, resource, ''))
-            self.entity_time_ids.remove(id_)
+            gajim.nec.push_incoming_event(LastResultReceivedEvent(None,
+                conn=self, iq_obj=iq_obj))
             return
+        jid_from = helpers.get_full_jid_from_iq(iq_obj)
         errmsg = iq_obj.getErrorMsg()
         errcode = iq_obj.getErrorCode()
         self.dispatch('ERROR_ANSWER', (id_, jid_from, errmsg, errcode))
@@ -1135,7 +1128,8 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
                 log.warn('Invalid JID: %s, ignoring it' % conf.getAttr('jid'))
                 continue
 
-            if bm not in self.bookmarks:
+            bm_jids = [b['jid'] for b in self.bookmarks]
+            if bm['jid'] not in bm_jids:
                 self.bookmarks.append(bm)
                 if storage_type == 'xml':
                     # We got a bookmark that was not in pubsub
@@ -1210,25 +1204,8 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
 
     def _VersionResultCB(self, con, iq_obj):
         log.debug('VersionResultCB')
-        client_info = ''
-        os_info = ''
-        qp = iq_obj.getTag('query')
-        if qp.getTag('name'):
-            client_info += qp.getTag('name').getData()
-        if qp.getTag('version'):
-            client_info += ' ' + qp.getTag('version').getData()
-        if qp.getTag('os'):
-            os_info += qp.getTag('os').getData()
-        id_ = iq_obj.getID()
-        if id_ in self.groupchat_jids:
-            who = self.groupchat_jids[id_]
-            del self.groupchat_jids[id_]
-        else:
-            who = helpers.get_full_jid_from_iq(iq_obj)
-        jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
-        if id_ in self.version_ids:
-            self.version_ids.remove(id_)
-        self.dispatch('OS_INFO', (jid_stripped, resource, client_info, os_info))
+        gajim.nec.push_incoming_event(VersionResultReceivedEvent(None,
+            conn=self, iq_obj=iq_obj))
 
     def _TimeCB(self, con, iq_obj):
         log.debug('TimeCB')
@@ -1260,50 +1237,8 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
 
     def _TimeRevisedResultCB(self, con, iq_obj):
         log.debug('TimeRevisedResultCB')
-        time_info = ''
-        qp = iq_obj.getTag('time')
-        if not qp:
-            # wrong answer
-            return
-        tzo = qp.getTag('tzo').getData()
-        if tzo.lower() == 'z':
-            tzo = '0:0'
-        tzoh, tzom = tzo.split(':')
-        utc_time = qp.getTag('utc').getData()
-        ZERO = datetime.timedelta(0)
-        class UTC(datetime.tzinfo):
-            def utcoffset(self, dt):
-                return ZERO
-            def tzname(self, dt):
-                return "UTC"
-            def dst(self, dt):
-                return ZERO
-
-        class contact_tz(datetime.tzinfo):
-            def utcoffset(self, dt):
-                return datetime.timedelta(hours=int(tzoh), minutes=int(tzom))
-            def tzname(self, dt):
-                return "remote timezone"
-            def dst(self, dt):
-                return ZERO
-
-        try:
-            t = datetime.datetime.strptime(utc_time, '%Y-%m-%dT%H:%M:%SZ')
-            t = t.replace(tzinfo=UTC())
-            time_info = t.astimezone(contact_tz()).strftime('%c')
-        except ValueError, e:
-            log.info('Wrong time format: %s' % str(e))
-
-        id_ = iq_obj.getID()
-        if id_ in self.groupchat_jids:
-            who = self.groupchat_jids[id_]
-            del self.groupchat_jids[id_]
-        else:
-            who = helpers.get_full_jid_from_iq(iq_obj)
-        jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
-        if id_ in self.entity_time_ids:
-            self.entity_time_ids.remove(id_)
-        self.dispatch('ENTITY_TIME', (jid_stripped, resource, time_info))
+        gajim.nec.push_incoming_event(TimeResultReceivedEvent(None,
+            conn=self, iq_obj=iq_obj))
 
     def _gMailNewMailCB(self, con, gm):
         """
@@ -1329,97 +1264,23 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
             self.connection.send(iq)
             raise common.xmpp.NodeProcessed
 
-    def _gMailQueryCB(self, con, gm):
+    def _gMailQueryCB(self, con, iq_obj):
         """
         Called when we receive results from Querying the server for mail messages
         in gmail account
         """
-        if not gm.getTag('mailbox'):
-            return
-        self.gmail_url = gm.getTag('mailbox').getAttr('url')
-        if gm.getTag('mailbox').getNamespace() == common.xmpp.NS_GMAILNOTIFY:
-            newmsgs = gm.getTag('mailbox').getAttr('total-matched')
-            if newmsgs != '0':
-                # there are new messages
-                gmail_messages_list = []
-                if gm.getTag('mailbox').getTag('mail-thread-info'):
-                    gmail_messages = gm.getTag('mailbox').getTags('mail-thread-info')
-                    for gmessage in gmail_messages:
-                        unread_senders = []
-                        for sender in gmessage.getTag('senders').getTags('sender'):
-                            if sender.getAttr('unread') != '1':
-                                continue
-                            if sender.getAttr('name'):
-                                unread_senders.append(sender.getAttr('name') + '< ' + \
-                                        sender.getAttr('address') + '>')
-                            else:
-                                unread_senders.append(sender.getAttr('address'))
-
-                        if not unread_senders:
-                            continue
-                        gmail_subject = gmessage.getTag('subject').getData()
-                        gmail_snippet = gmessage.getTag('snippet').getData()
-                        tid = int(gmessage.getAttr('tid'))
-                        if not self.gmail_last_tid or tid > self.gmail_last_tid:
-                            self.gmail_last_tid = tid
-                        gmail_messages_list.append({ \
-                                'From': unread_senders, \
-                                'Subject': gmail_subject, \
-                                'Snippet': gmail_snippet, \
-                                'url': gmessage.getAttr('url'), \
-                                'participation': gmessage.getAttr('participation'), \
-                                'messages': gmessage.getAttr('messages'), \
-                                'date': gmessage.getAttr('date')})
-                    self.gmail_last_time = int(gm.getTag('mailbox').getAttr(
-                            'result-time'))
-
-                jid = gajim.get_jid_from_account(self.name)
-                log.debug(('You have %s new gmail e-mails on %s.') % (newmsgs, jid))
-                self.dispatch('GMAIL_NOTIFY', (jid, newmsgs, gmail_messages_list))
-            raise common.xmpp.NodeProcessed
+        log.debug('gMailQueryCB')
+        gajim.nec.push_incoming_event(GMailQueryReceivedEvent(None,
+            conn=self, iq_obj=iq_obj))
+        raise common.xmpp.NodeProcessed
 
     def _rosterItemExchangeCB(self, con, msg):
         """
         XEP-0144 Roster Item Echange
         """
-        exchange_items_list = {}
-        jid_from = helpers.get_full_jid_from_iq(msg)
-        items_list = msg.getTag('x').getChildren()
-        if not items_list:
-            return
-        action = items_list[0].getAttr('action')
-        if action == None:
-            action = 'add'
-        for item in msg.getTag('x',
-        namespace=common.xmpp.NS_ROSTERX).getChildren():
-            try:
-                jid = helpers.parse_jid(item.getAttr('jid'))
-            except common.helpers.InvalidFormat:
-                log.warn('Invalid JID: %s, ignoring it' % item.getAttr('jid'))
-                continue
-            name = item.getAttr('name')
-            contact = gajim.contacts.get_contact(self.name, jid)
-            groups = []
-            same_groups = True
-            for group in item.getTags('group'):
-                groups.append(group.getData())
-                # check that all suggested groups are in the groups we have for this
-                # contact
-                if not contact or group not in contact.groups:
-                    same_groups = False
-            if contact:
-                # check that all groups we have for this contact are in the
-                # suggested groups
-                for group in contact.groups:
-                    if group not in groups:
-                        same_groups = False
-                if contact.sub in ('both', 'to') and same_groups:
-                    continue
-            exchange_items_list[jid] = []
-            exchange_items_list[jid].append(name)
-            exchange_items_list[jid].append(groups)
-        if exchange_items_list:
-            self.dispatch('ROSTERX', (action, exchange_items_list, jid_from))
+        log.debug('rosterItemExchangeCB')
+        gajim.nec.push_incoming_event(RosterItemExchangeEvent(None,
+            conn=self, iq_obj=msg))
         raise common.xmpp.NodeProcessed
 
     def _messageCB(self, con, msg):
@@ -1427,6 +1288,10 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
         Called when we receive a message
         """
         log.debug('MessageCB')
+
+        gajim.nec.push_incoming_event(NetworkEvent('raw-message-received',
+            conn=con, xmpp_msg=msg, account=self.name))
+
         mtype = msg.getType()
 
         # check if the message is a roster item exchange (XEP-0144)
@@ -1782,6 +1647,8 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
         """
         Called when we receive a presence
         """
+        gajim.nec.push_incoming_event(NetworkEvent('raw-pres-received',
+            conn=con, xmpp_pres=prs))
         ptype = prs.getType()
         if ptype == 'available':
             ptype = None
@@ -2449,3 +2316,262 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
         con.RegisterHandler('presence', self._StanzaArrivedCB)
         con.RegisterHandler('message', self._StanzaArrivedCB)
         con.RegisterHandler('unknown', self._StreamCB, 'urn:ietf:params:xml:ns:xmpp-streams', xmlns='http://etherx.jabber.org/streams')
+
+class HelperEvent:
+    def get_jid_resource(self):
+        if self.id_ in self.conn.groupchat_jids:
+            self.fjid = self.conn.groupchat_jids[self.id_]
+            del self.conn.groupchat_jids[self.id_]
+        else:
+            self.fjid = helpers.get_full_jid_from_iq(self.iq_obj)
+        self.jid, self.resource = gajim.get_room_and_nick_from_fjid(self.fjid)
+
+    def get_id(self):
+        self.id_ = self.iq_obj.getID()
+
+class HttpAuthReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'http-auth-received'
+    base_network_events = []
+
+    def generate(self):
+        if not self.conn:
+            self.conn = self.base_event.conn
+        if not self.iq_obj:
+            self.iq_obj = self.base_event.xmpp_iq
+
+        self.opt = gajim.config.get_per('accounts', self.conn.name, 'http_auth')
+        self.iq_id = self.iq_obj.getTagAttr('confirm', 'id')
+        self.method = self.iq_obj.getTagAttr('confirm', 'method')
+        self.url = self.iq_obj.getTagAttr('confirm', 'url')
+        # In case it's a message with a body
+        self.msg = self.iq_obj.getTagData('body')
+        return True
+
+class LastResultReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
+    name = 'last-result-received'
+    base_network_events = []
+    
+    def generate(self):
+        if not self.conn:
+            self.conn = self.base_event.conn
+        if not self.iq_obj:
+            self.iq_obj = self.base_event.xmpp_iq
+
+        self.get_id()
+        self.get_jid_resource()
+        if self.id_ in self.conn.last_ids:
+            self.conn.last_ids.remove(self.id_)
+
+        self.status = ''
+        self.seconds = -1
+
+        if self.iq_obj.getType() == 'error':
+            return True
+
+        qp = self.iq_obj.getTag('query')
+        sec = qp.getAttr('seconds')
+        self.status = qp.getData()
+        try:
+            self.seconds = int(sec)
+        except Exception:
+            return
+
+        return True
+
+class VersionResultReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
+    name = 'version-result-received'
+    base_network_events = []
+    
+    def generate(self):
+        if not self.conn:
+            self.conn = self.base_event.conn
+        if not self.iq_obj:
+            self.iq_obj = self.base_event.xmpp_iq
+
+        self.get_id()
+        self.get_jid_resource()
+        if self.id_ in self.conn.version_ids:
+            self.conn.version_ids.remove(self.id_)
+
+        self.client_info = ''
+        self.os_info = ''
+
+        if self.iq_obj.getType() == 'error':
+            return True
+
+        qp = self.iq_obj.getTag('query')
+        if qp.getTag('name'):
+            self.client_info += qp.getTag('name').getData()
+        if qp.getTag('version'):
+            self.client_info += ' ' + qp.getTag('version').getData()
+        if qp.getTag('os'):
+            self.os_info += qp.getTag('os').getData()
+
+        return True
+
+class TimeResultReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
+    name = 'time-result-received'
+    base_network_events = []
+
+    def generate(self):
+        if not self.conn:
+            self.conn = self.base_event.conn
+        if not self.iq_obj:
+            self.iq_obj = self.base_event.xmpp_iq
+
+        self.get_id()
+        self.get_jid_resource()
+        if self.id_ in self.conn.entity_time_ids:
+            self.conn.entity_time_ids.remove(self.id_)
+
+        self.time_info = ''
+
+        if self.iq_obj.getType() == 'error':
+            return True
+
+        qp = self.iq_obj.getTag('time')
+        if not qp:
+            # wrong answer
+            return
+        tzo = qp.getTag('tzo').getData()
+        if tzo.lower() == 'z':
+            tzo = '0:0'
+        tzoh, tzom = tzo.split(':')
+        utc_time = qp.getTag('utc').getData()
+        ZERO = datetime.timedelta(0)
+        class UTC(datetime.tzinfo):
+            def utcoffset(self, dt):
+                return ZERO
+            def tzname(self, dt):
+                return "UTC"
+            def dst(self, dt):
+                return ZERO
+
+        class contact_tz(datetime.tzinfo):
+            def utcoffset(self, dt):
+                return datetime.timedelta(hours=int(tzoh), minutes=int(tzom))
+            def tzname(self, dt):
+                return "remote timezone"
+            def dst(self, dt):
+                return ZERO
+
+        try:
+            t = datetime.datetime.strptime(utc_time, '%Y-%m-%dT%H:%M:%SZ')
+            t = t.replace(tzinfo=UTC())
+            self.time_info = t.astimezone(contact_tz()).strftime('%c')
+        except ValueError, e:
+            log.info('Wrong time format: %s' % str(e))
+            return
+
+        return True
+
+class GMailQueryReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'gmail-notify'
+    base_network_events = []
+
+    def generate(self):
+        if not self.conn:
+            self.conn = self.base_event.conn
+        if not self.iq_obj:
+            self.iq_obj = self.base_event.xmpp_iq
+
+        if not self.iq_obj.getTag('mailbox'):
+            return
+        mb = self.iq_obj.getTag('mailbox')
+        if not mb.getAttr('url'):
+            return
+        self.conn.gmail_url = mb.getAttr('url')
+        if mb.getNamespace() != common.xmpp.NS_GMAILNOTIFY:
+            return
+        self.newmsgs = mb.getAttr('total-matched')
+        if not self.newmsgs:
+            return
+        if self.newmsgs == '0':
+            return
+        # there are new messages
+        self.gmail_messages_list = []
+        if mb.getTag('mail-thread-info'):
+            gmail_messages = mb.getTags('mail-thread-info')
+            for gmessage in gmail_messages:
+                unread_senders = []
+                for sender in gmessage.getTag('senders').getTags(
+                'sender'):
+                    if sender.getAttr('unread') != '1':
+                        continue
+                    if sender.getAttr('name'):
+                        unread_senders.append(sender.getAttr('name') + \
+                            '< ' + sender.getAttr('address') + '>')
+                    else:
+                        unread_senders.append(sender.getAttr('address'))
+
+                if not unread_senders:
+                    continue
+                gmail_subject = gmessage.getTag('subject').getData()
+                gmail_snippet = gmessage.getTag('snippet').getData()
+                tid = int(gmessage.getAttr('tid'))
+                if not self.conn.gmail_last_tid or \
+                tid > self.conn.gmail_last_tid:
+                    self.conn.gmail_last_tid = tid
+                self.gmail_messages_list.append({
+                    'From': unread_senders,
+                    'Subject': gmail_subject,
+                    'Snippet': gmail_snippet,
+                    'url': gmessage.getAttr('url'),
+                    'participation': gmessage.getAttr('participation'),
+                    'messages': gmessage.getAttr('messages'),
+                    'date': gmessage.getAttr('date')})
+            self.conn.gmail_last_time = int(mb.getAttr('result-time'))
+
+        self.jid = gajim.get_jid_from_account(self.name)
+        log.debug(('You have %s new gmail e-mails on %s.') % (self.newmsgs,
+            self.jid))
+        return True
+
+class RosterItemExchangeEvent(nec.NetworkIncomingEvent, HelperEvent):
+    name = 'roster-item-exchange-received'
+    base_network_events = []
+    
+    def generate(self):
+        if not self.conn:
+            self.conn = self.base_event.conn
+        if not self.iq_obj:
+            self.iq_obj = self.base_event.xmpp_iq
+
+        self.get_jid_resource()
+        self.exchange_items_list = {}
+        items_list = msg.getTag('x').getChildren()
+        if not items_list:
+            return
+        self.action = items_list[0].getAttr('action')
+        if self.action is None:
+            self.action = 'add'
+        for item in msg.getTag('x', namespace=common.xmpp.NS_ROSTERX).\
+        getChildren():
+            try:
+                jid = helpers.parse_jid(item.getAttr('jid'))
+            except common.helpers.InvalidFormat:
+                log.warn('Invalid JID: %s, ignoring it' % item.getAttr('jid'))
+                continue
+            name = item.getAttr('name')
+            contact = gajim.contacts.get_contact(self.conn.name, jid)
+            groups = []
+            same_groups = True
+            for group in item.getTags('group'):
+                groups.append(group.getData())
+                # check that all suggested groups are in the groups we have for this
+                # contact
+                if not contact or group not in contact.groups:
+                    same_groups = False
+            if contact:
+                # check that all groups we have for this contact are in the
+                # suggested groups
+                for group in contact.groups:
+                    if group not in groups:
+                        same_groups = False
+                if contact.sub in ('both', 'to') and same_groups:
+                    continue
+            self.exchange_items_list[jid] = []
+            self.exchange_items_list[jid].append(name)
+            self.exchange_items_list[jid].append(groups)
+        if exchange_items_list:
+            return True

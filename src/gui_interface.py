@@ -148,23 +148,24 @@ class Interface:
             self.instances['change_nick_dialog'] = dialogs.ChangeNickDialog(
                 account, room_jid, title, prompt)
 
-    def handle_event_http_auth(self, account, data):
+    def handle_event_http_auth(self, obj):
         #('HTTP_AUTH', account, (method, url, transaction_id, iq_obj, msg))
-        def response(account, iq_obj, answer):
-            gajim.connections[account].build_http_auth_answer(iq_obj, answer)
+        def response(account, answer):
+            obj.conn.build_http_auth_answer(obj.iq_obj, answer)
 
-        def on_yes(is_checked, account, iq_obj):
-            response(account, iq_obj, 'yes')
+        def on_yes(is_checked, obj):
+            response(obj, 'yes')
 
+        account = obj.conn.name
         sec_msg = _('Do you accept this request?')
         if gajim.get_number_of_connected_accounts() > 1:
             sec_msg = _('Do you accept this request on account %s?') % account
-        if data[4]:
-            sec_msg = data[4] + '\n' + sec_msg
+        if obj.msg:
+            sec_msg = obj.msg + '\n' + sec_msg
         dialog = dialogs.YesNoDialog(_('HTTP (%(method)s) Authorization for '
-            '%(url)s (id: %(id)s)') % {'method': data[0], 'url': data[1],
-            'id': data[2]}, sec_msg, on_response_yes=(on_yes, account, data[3]),
-            on_response_no=(response, account, data[3], 'no'))
+            '%(url)s (id: %(id)s)') % {'method': obj.method, 'url': obj.url,
+            'id': obj.iq_id}, sec_msg, on_response_yes=(on_yes, obj),
+            on_response_no=(response, obj, 'no'))
 
     def handle_event_error_answer(self, account, array):
         #('ERROR_ANSWER', account, (id, jid_from, errmsg, errcode))
@@ -825,57 +826,24 @@ class Interface:
         if self.remote_ctrl:
             self.remote_ctrl.raise_signal('VcardInfo', (account, vcard))
 
-    def handle_event_last_status_time(self, account, array):
+    def handle_event_last_status_time(self, obj):
         # ('LAST_STATUS_TIME', account, (jid, resource, seconds, status))
-        tim = array[2]
-        if tim < 0:
+        if obj.seconds < 0:
             # Ann error occured
             return
-        win = None
-        if array[0] in self.instances[account]['infos']:
-            win = self.instances[account]['infos'][array[0]]
-        elif array[0] + '/' + array[1] in self.instances[account]['infos']:
-            win = self.instances[account]['infos'][array[0] + '/' + array[1]]
-        c = gajim.contacts.get_contact(account, array[0], array[1])
+        account = obj.conn.name
+        c = gajim.contacts.get_contact(account, obj.jid, obj.resource)
         if c: # c can be none if it's a gc contact
-            if array[3]:
-                c.status = array[3]
+            if obj.status:
+                c.status = obj.status
                 self.roster.draw_contact(c.jid, account) # draw offline status
-            last_time = time.localtime(time.time() - tim)
+            last_time = time.localtime(time.time() - obj.seconds)
             if c.show == 'offline':
                 c.last_status_time = last_time
             else:
                 c.last_activity_time = last_time
-        if win:
-            win.set_last_status_time()
-        if self.roster.tooltip.id and self.roster.tooltip.win:
-            self.roster.tooltip.update_last_time(last_time)
-        if self.remote_ctrl:
-            self.remote_ctrl.raise_signal('LastStatusTime', (account, array))
-
-    def handle_event_os_info(self, account, array):
-        #'OS_INFO' (account, (jid, resource, client_info, os_info))
-        win = None
-        if array[0] in self.instances[account]['infos']:
-            win = self.instances[account]['infos'][array[0]]
-        elif array[0] + '/' + array[1] in self.instances[account]['infos']:
-            win = self.instances[account]['infos'][array[0] + '/' + array[1]]
-        if win:
-            win.set_os_info(array[1], array[2], array[3])
-        if self.remote_ctrl:
-            self.remote_ctrl.raise_signal('OsInfo', (account, array))
-
-    def handle_event_entity_time(self, account, array):
-        #'ENTITY_TIME' (account, (jid, resource, time_info))
-        win = None
-        if array[0] in self.instances[account]['infos']:
-            win = self.instances[account]['infos'][array[0]]
-        elif array[0] + '/' + array[1] in self.instances[account]['infos']:
-            win = self.instances[account]['infos'][array[0] + '/' + array[1]]
-        if win:
-            win.set_entity_time(array[1], array[2])
-        if self.remote_ctrl:
-            self.remote_ctrl.raise_signal('EntityTime', (account, array))
+            if self.roster.tooltip.id and self.roster.tooltip.win:
+                self.roster.tooltip.update_last_time(last_time)
 
     def handle_event_gc_notify(self, account, array):
         #'GC_NOTIFY' (account, (room_jid, show, status, nick,
@@ -1321,45 +1289,42 @@ class Interface:
             notify.popup(event_type, jid, account, 'file-send-error', path,
                 event_type, file_props['name'])
 
-    def handle_event_gmail_notify(self, account, array):
-        jid = array[0]
-        gmail_new_messages = int(array[1])
-        gmail_messages_list = array[2]
-        if gajim.config.get('notify_on_new_gmail_email'):
-            path = gtkgui_helpers.get_icon_path('gajim-new_email_recv', 48)
-            title = _('New mail on %(gmail_mail_address)s') % \
-                    {'gmail_mail_address': jid}
-            text = i18n.ngettext('You have %d new mail conversation',
-                    'You have %d new mail conversations', gmail_new_messages,
-                    gmail_new_messages, gmail_new_messages)
+    def handle_event_gmail_notify(self, obj):
+        jid = obj.jid
+        gmail_new_messages = int(obj.newmsgs)
+        gmail_messages_list = obj.gmail_messages_list
+        if not gajim.config.get('notify_on_new_gmail_email'):
+            return
+        path = gtkgui_helpers.get_icon_path('gajim-new_email_recv', 48)
+        title = _('New mail on %(gmail_mail_address)s') % \
+            {'gmail_mail_address': jid}
+        text = i18n.ngettext('You have %d new mail conversation',
+            'You have %d new mail conversations', gmail_new_messages,
+            gmail_new_messages, gmail_new_messages)
 
-            if gajim.config.get('notify_on_new_gmail_email_extra'):
-                cnt = 0
-                for gmessage in gmail_messages_list:
-                    # FIXME: emulate Gtalk client popups. find out what they
-                    # parse and how they decide what to show each message has a
-                    # 'From', 'Subject' and 'Snippet' field
-                    if cnt >= 5:
-                        break
-                    senders = ',\n     '.join(reversed(gmessage['From']))
-                    text += _('\n\nFrom: %(from_address)s\nSubject: '
-                        '%(subject)s\n%(snippet)s') % \
-                        {'from_address': senders,
-                        'subject': gmessage['Subject'],
-                        'snippet': gmessage['Snippet']}
-                    cnt += 1
+        if gajim.config.get('notify_on_new_gmail_email_extra'):
+            cnt = 0
+            for gmessage in gmail_messages_list:
+                # FIXME: emulate Gtalk client popups. find out what they
+                # parse and how they decide what to show each message has a
+                # 'From', 'Subject' and 'Snippet' field
+                if cnt >= 5:
+                    break
+                senders = ',\n     '.join(reversed(gmessage['From']))
+                text += _('\n\nFrom: %(from_address)s\nSubject: '
+                    '%(subject)s\n%(snippet)s') % {'from_address': senders,
+                    'subject': gmessage['Subject'],
+                    'snippet': gmessage['Snippet']}
+                cnt += 1
 
-            command = gajim.config.get('notify_on_new_gmail_email_command')
-            if command:
-                Popen(command, shell=True)
+        command = gajim.config.get('notify_on_new_gmail_email_command')
+        if command:
+            Popen(command, shell=True)
 
-            if gajim.config.get_per('soundevents', 'gmail_received', 'enabled'):
-                helpers.play_sound('gmail_received')
-            notify.popup(_('New E-mail'), jid, account, 'gmail',
-                path_to_image=path, title=title, text=text)
-
-        if self.remote_ctrl:
-            self.remote_ctrl.raise_signal('NewGmail', (account, array))
+        if gajim.config.get_per('soundevents', 'gmail_received', 'enabled'):
+            helpers.play_sound('gmail_received')
+        notify.popup(_('New E-mail'), jid, obj.conn.name, 'gmail',
+            path_to_image=path, title=title, text=text)
 
     def handle_event_file_request_error(self, account, array):
         # ('FILE_REQUEST_ERROR', account, (jid, file_props, error_msg))
@@ -1870,9 +1835,10 @@ class Interface:
         if 'pep_services' in self.instances[account]:
             self.instances[account]['pep_services'].config(data[0], data[1])
 
-    def handle_event_roster_item_exchange(self, account, data):
+    def handle_event_roster_item_exchange(self, obj):
         # data = (action in [add, delete, modify], exchange_list, jid_from)
-        dialogs.RosterItemExchangeWindow(account, data[0], data[1], data[2])
+        dialogs.RosterItemExchangeWindow(obj.conn.name, obj.action,
+            obj.exchange_items_list, obj.fjid)
 
     def handle_event_unique_room_id_supported(self, account, data):
         """
@@ -2122,9 +2088,6 @@ class Interface:
             'ACC_OK': [self.handle_event_acc_ok],
             'MYVCARD': [self.handle_event_myvcard],
             'VCARD': [self.handle_event_vcard],
-            'LAST_STATUS_TIME': [self.handle_event_last_status_time],
-            'OS_INFO': [self.handle_event_os_info],
-            'ENTITY_TIME': [self.handle_event_entity_time],
             'GC_NOTIFY': [self.handle_event_gc_notify],
             'GC_MSG': [self.handle_event_gc_msg],
             'GC_SUBJECT': [self.handle_event_gc_subject],
@@ -2140,12 +2103,10 @@ class Interface:
             'CON_TYPE': [self.handle_event_con_type],
             'CONNECTION_LOST': [self.handle_event_connection_lost],
             'FILE_REQUEST': [self.handle_event_file_request],
-            'GMAIL_NOTIFY': [self.handle_event_gmail_notify],
             'FILE_REQUEST_ERROR': [self.handle_event_file_request_error],
             'FILE_SEND_ERROR': [self.handle_event_file_send_error],
             'STANZA_ARRIVED': [self.handle_event_stanza_arrived],
             'STANZA_SENT': [self.handle_event_stanza_sent],
-            'HTTP_AUTH': [self.handle_event_http_auth],
             'VCARD_PUBLISHED': [self.handle_event_vcard_published],
             'VCARD_NOT_PUBLISHED': [self.handle_event_vcard_not_published],
             'ASK_NEW_NICK': [self.handle_event_ask_new_nick],
@@ -2166,7 +2127,6 @@ class Interface:
             'SEARCH_FORM': [self.handle_event_search_form],
             'SEARCH_RESULT': [self.handle_event_search_result],
             'RESOURCE_CONFLICT': [self.handle_event_resource_conflict],
-            'ROSTERX': [self.handle_event_roster_item_exchange],
             'PEP_CONFIG': [self.handle_event_pep_config],
             'UNIQUE_ROOM_ID_UNSUPPORTED': \
                 [self.handle_event_unique_room_id_unsupported],
@@ -2186,7 +2146,12 @@ class Interface:
             'JINGLE_DISCONNECTED': [self.handle_event_jingle_disconnected],
             'JINGLE_ERROR': [self.handle_event_jingle_error],
             'PEP_RECEIVED': [self.handle_event_pep_received],
-            'CAPS_RECEIVED': [self.handle_event_caps_received]
+            'CAPS_RECEIVED': [self.handle_event_caps_received],
+            'gmail-notify': [self.handle_event_gmail_notify],
+            'http-auth-received': [self.handle_event_http_auth],
+            'last-result-received': [self.handle_event_last_status_time],
+            'roster-item-exchange-received': \
+                [self.handle_event_roster_item_exchange],
         }
 
     def register_core_handlers(self):
@@ -2197,7 +2162,7 @@ class Interface:
         """
         for event_name, event_handlers in self.handlers.iteritems():
             for event_handler in event_handlers:
-                gajim.ged.register_event_handler(event_name, ged.CORE,
+                gajim.ged.register_event_handler(event_name, ged.GUI1,
                     event_handler)
 
 ################################################################################
@@ -3246,6 +3211,10 @@ class Interface:
             self.show_systray()
 
         self.roster = roster_window.RosterWindow()
+        # Creating plugin manager
+        import plugins
+        gajim.plugin_manager = plugins.PluginManager()
+
         self.roster._before_fill()
         for account in gajim.connections:
             gajim.connections[account].load_roster_from_db()
@@ -3275,7 +3244,6 @@ class Interface:
                 except Exception:
                     pass
         gobject.timeout_add_seconds(5, remote_init)
-
 
     def __init__(self):
         gajim.interface = self
@@ -3398,6 +3366,9 @@ class Interface:
 
         # Creating Global Events Dispatcher
         gajim.ged = ged.GlobalEventsDispatcher()
+        # Creating Network Events Controller
+        from common import nec
+        gajim.nec = nec.NetworkEventsController()
         self.create_core_handlers_list()
         self.register_core_handlers()
 

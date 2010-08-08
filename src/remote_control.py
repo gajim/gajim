@@ -36,6 +36,7 @@ from common import gajim
 from common import helpers
 from time import time
 from dialogs import AddNewContactWindow, NewChatDialog, JoinGroupchatWindow
+from common import ged
 
 from common import dbus_support
 if dbus_support.supported:
@@ -103,6 +104,31 @@ class Remote:
 
         bus_name = dbus.service.BusName(SERVICE, bus=session_bus)
         self.signal_object = SignalObject(bus_name)
+        
+        gajim.ged.register_event_handler('last-result-received', ged.POSTGUI,
+            self.on_last_status_time)
+        gajim.ged.register_event_handler('version-result-received', ged.POSTGUI,
+            self.on_os_info)
+        gajim.ged.register_event_handler('time-result-received', ged.POSTGUI,
+            self.on_time)
+        gajim.ged.register_event_handler('gmail-nofify', ged.POSTGUI,
+            self.on_gmail_notify)
+
+    def on_last_status_time(self, obj):
+        self.raise_signal('LastStatusTime', (obj.conn.name, [
+            obj.jid, obj.resource, obj.seconds, obj.status]))
+
+    def on_os_info(self, obj):
+        self.raise_signal('OsInfo', (obj.conn.name, [obj.jid, obj.resource,
+            obj.client_info, obj.os_info]))
+
+    def on_time(self, obj):
+        self.raise_signal('EntityTime', (obj.conn.name, [obj.jid, obj.resource,
+            obj.time_info]))
+
+    def on_gmail_notify(self, obj):
+        self.raise_signal('NewGmail', (obj.conn.name, [obj.jid, obj.newmsgs,
+            obj.gmail_messages_list]))
 
     def raise_signal(self, signal, arg):
         if self.signal_object:
