@@ -34,9 +34,44 @@ if PYOPENSSL_PRESENT:
     from OpenSSL.SSL import Context
     from OpenSSL import crypto
 
+SELF_SIGNED_CERTIFICATE = 'localcert'
+    
 def default_callback(connection, certificate, error_num, depth, return_code):
     log.info("certificate: %s" % certificate)
     return return_code
+
+def load_cert_file(cert_path, cert_store):
+    """
+    This is almost identical to the one in common.xmpp.tls_nb
+    """
+    if not os.path.isfile(cert_path):
+        return
+    try:
+        f = open(cert_path)
+    except IOError, e:
+        log.warning('Unable to open certificate file %s: %s' % \
+                (cert_path, str(e)))
+        return
+    lines = f.readlines()
+    i = 0
+    begin = -1
+    for line in lines:
+        if 'BEGIN CERTIFICATE' in line:
+            begin = i
+        elif 'END CERTIFICATE' in line and begin > -1:
+            cert = ''.join(lines[begin:i+2])
+            try:
+                x509cert = OpenSSL.crypto.load_certificate(
+                        OpenSSL.crypto.FILETYPE_PEM, cert)
+                cert_store.add_cert(x509cert)
+            except OpenSSL.crypto.Error, exception_obj:
+                log.warning('Unable to load a certificate from file %s: %s' %\
+                            (cert_path, exception_obj.args[0][0][2]))
+            except:
+                log.warning('Unknown error while loading certificate from file '
+                            '%s' % cert_path)
+            begin = -1
+        i += 1
 
 def get_context(fingerprint, verify_cb=None):
     """
@@ -46,16 +81,15 @@ def get_context(fingerprint, verify_cb=None):
 
     if fingerprint == 'server': # for testing purposes only
         ctx.set_verify(SSL.VERIFY_PEER|SSL.VERIFY_FAIL_IF_NO_PEER_CERT, verify_cb or default_callback)
-        
-        ctx.use_privatekey_file (os.path.expanduser('~/certs/server.pkey'))
-        ctx.use_certificate_file(os.path.expanduser('~/certs/server.cert'))
-        ctx.load_verify_locations(os.path.expanduser('~/certs/CA.cert'))
     elif fingerprint == 'client':
         ctx.set_verify(SSL.VERIFY_PEER, verify_cb or default_callback)
         
-        ctx.use_privatekey_file (os.path.expanduser('~/certs/client.pkey'))
-        ctx.use_certificate_file(os.path.expanduser('~/certs/client.cert'))
-        ctx.load_verify_locations(os.path.expanduser('~/certs/CA.cert'))
+    ctx.use_privatekey_file (os.path.expanduser('~/certs/' + SELF_SIGNED_CERTIFICATE + '.pkey'))
+    ctx.use_certificate_file(os.path.expanduser('~/certs/' + SELF_SIGNED_CERTIFICATE + '.cert'))
+    #    ctx.load_verify_locations(os.path.expanduser('~/certs/CA.cert'))
+    store = ctx.get_cert_store()
+    for f in os.listdir(os.path.expanduser('~/certs/')):
+        load_cert_file(os.path.join(os.path.expanduser('~/certs'), f), store)
     return ctx
 
 # the following code is partly due to pyopenssl examples
@@ -142,4 +176,3 @@ def make_certs(filepath, CN):
 
 if __name__ == '__main__':
     make_certs('./selfcert', 'gajim')
-

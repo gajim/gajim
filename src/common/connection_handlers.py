@@ -51,6 +51,8 @@ from common.pep import ConnectionPEP
 from common.protocol.caps import ConnectionCaps
 from common.protocol.bytestream import ConnectionSocks5Bytestream
 import common.caps_cache as capscache
+import common.jingle_xtls
+
 if gajim.HAVE_FARSIGHT:
     from common.jingle import ConnectionJingle
 else:
