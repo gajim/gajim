@@ -183,7 +183,9 @@ class ConnectionDisco:
         query.setAttr('node', 'http://gajim.org#' + gajim.version.split('-', 1)[0])
         for f in (common.xmpp.NS_BYTESTREAM, common.xmpp.NS_SI,
         common.xmpp.NS_FILE, common.xmpp.NS_COMMANDS, 
-        common.xmpp.NS_JINGLE_FILE_TRANSFER, common.xmpp.NS_JINGLE_XTLS):
+        common.xmpp.NS_JINGLE_FILE_TRANSFER, common.xmpp.NS_JINGLE_XTLS,
+        common.xmpp.NS_PUBKEY_PUBKEY, common.xmpp.NS_PUBKEY_REVOKE,
+        common.xmpp.NS_PUBKEY_ATTEST):
             feature = common.xmpp.Node('feature')
             feature.setAttr('var', f)
             query.addChild(node=feature)
@@ -2238,6 +2240,12 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
         for i in iq_obj.getQueryPayload():
             df[i.getName()] = i.getData()
         self.dispatch('SEARCH_FORM', (jid, df, False))
+        
+    def _PubkeyGetCB(self, con, obj):
+        log.info('PubkeyGetCB')
+        
+    def _PubkeyResultCB(self, con, obj):
+        log.info('PubkeyResultCB')
 
     def _StreamCB(self, con, obj):
         if obj.getTag('conflict'):
@@ -2334,3 +2342,6 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
         con.RegisterHandler('presence', self._StanzaArrivedCB)
         con.RegisterHandler('message', self._StanzaArrivedCB)
         con.RegisterHandler('unknown', self._StreamCB, 'urn:ietf:params:xml:ns:xmpp-streams', xmlns='http://etherx.jabber.org/streams')
+        con.RegisterHandler('iq', self._PubkeyGetCB, 'get', common.xmpp.NS_PUBKEY_PUBKEY)
+        con.RegisterHandler('iq', self._PubkeyResultCB, 'result', common.xmpp.NS_PUBKEY_PUBKEY)
+

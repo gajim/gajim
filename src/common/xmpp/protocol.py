@@ -131,6 +131,10 @@ NS_DATA_LAYOUT  ='http://jabber.org/protocol/xdata-layout'                      
 NS_DATA_VALIDATE='http://jabber.org/protocol/xdata-validate'                    # XEP-0122
 NS_XMPP_STREAMS ='urn:ietf:params:xml:ns:xmpp-streams'
 NS_RECEIPTS     ='urn:xmpp:receipts'
+NS_PUBKEY_PUBKEY='urn:xmpp:pubkey:2'                                              # XEP-0189
+NS_PUBKEY_REVOKE='urn:xmpp:revoke:2'
+NS_PUBKEY_ATTEST='urn:xmpp:attest:2'
+
 
 xmpp_stream_error_conditions = '''
 bad-format --  --  -- The entity has sent XML that cannot be processed.
