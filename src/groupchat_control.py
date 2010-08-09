@@ -388,6 +388,8 @@ class GroupchatControl(ChatControlBase):
         self.list_treeview.set_expander_column(column)
 
         self.setup_seclabel(self.xml.get_object('label_selector'))
+        
+        self.form_widget = None
 
         gajim.gc_connected[self.account][self.room_jid] = False
         # disable win, we are not connected yet
@@ -791,6 +793,10 @@ class GroupchatControl(ChatControlBase):
     def on_message(self, nick, msg, tim, has_timestamp=False, xhtml=None,
     status_code=[], displaymarking=None, captcha=None):
         if captcha:
+            if self.form_widget:
+                self.form_widget.hide()
+                self.form_widget.destroy()
+                self.btn_box.destroy()
             dataform = dataforms.ExtendForm(node=captcha)
             self.form_widget = dataforms_widget.DataFormWidget(dataform)
             self.form_widget.show_all()
@@ -807,7 +813,7 @@ class GroupchatControl(ChatControlBase):
                 self.form_widget.hide()
                 self.form_widget.destroy()
                 self.btn_box.destroy()
-                del self.form_widget
+                self.form_widget = None
                 del self.btn_box
 
             valid_button = gtk.Button(stock=gtk.STOCK_OK)
