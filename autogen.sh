@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
+  gajimversion="0.13.90"
+  if [ -d ".hg" ]; then
+    hgversion="-$(hexdump -n6 -e'6/1 "%02x"' .hg/dirstate)"
+  else
+    hgversion=""
+  fi
+  echo "define([AC_PACKAGE_VERSION], [${gajimversion}${hgversion}])" > m4/hgversion.m4
+
   AM_ARGS="--add-missing --gnu --copy"
   CONF_ARGS=""
   if test x`uname -s 2>/dev/null` = 'xDarwin' -a -f /Library/Frameworks/GTK+.framework/Versions/Current/env; then

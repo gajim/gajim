@@ -47,3 +47,8 @@ AC_DEFUN([AS_AC_EXPAND],
   prefix=$prefix_save
   exec_prefix=$exec_prefix_save
 ])
+
+# Fix autoconf: They don't allow shell variables in AC_INIT
+# So we have to define them via m4 to be accepted....
+
+m4_include(m4/hgversion.m4)
