@@ -217,7 +217,7 @@ to the Jabber network.</property>
                       <object class="GtkLabel" id="label1">
                         <property name="visible">True</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">@</property>
+                        <property name="label">@</property>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
