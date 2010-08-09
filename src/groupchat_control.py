@@ -1871,6 +1871,9 @@ class GroupchatControl(ChatControlBase):
         # NOTE: handles mykeypress which is custom signal connected to this
         # CB in new_room(). for this singal see message_textview.py
 
+        if not widget.get_sensitive():
+            # Textview is not sensitive, don't handle keypress
+            return
         # construct event instance from binding
         event = gtk.gdk.Event(gtk.gdk.KEY_PRESS) # it's always a key-press here
         event.keyval = event_keyval
