@@ -310,7 +310,7 @@ class MessageTextView(gtk.TextView):
     def get_sensitive(self):
         # get sensitive is not in GTK < 2.18
         try:
-            super(MessageTextView, self).get_sensitive()
+            return super(MessageTextView, self).get_sensitive()
         except AttributeError:
             return self.get_property('sensitive')
 
