@@ -28,6 +28,13 @@ basedir   = '../'
 localedir = '../po'
 
 version = '0.13.90'
+import subprocess
+try:
+    hgversion = subprocess.Popen('hexdump -n6 -e\'6/1 "%02x"\' ../.hg/dirstate',
+        shell=True, stdout=subprocess.PIPE).communicate()[0]
+    version += '-' + hgversion
+except Exception:
+    pass
 
 import sys, os.path
 for base in ('.', 'common'):
