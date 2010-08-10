@@ -616,7 +616,7 @@ class CommandWindow:
             cmdnode.setAttr('sessionid', self.sessionid)
 
         if self.data_form_widget.data_form:
-            cmdnode.addChild(node=self.data_form_widget.data_form)
+            cmdnode.addChild(node=self.data_form_widget.data_form.get_purged())
 
         def callback(response):
             # FIXME: move to connection_handlers.py

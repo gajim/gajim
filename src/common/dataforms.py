@@ -352,7 +352,7 @@ class StringField(DataField):
 
         def fset(self, value):
             assert isinstance(value, basestring)
-            if value == '':
+            if value == '' and not self.required:
                 return fdel(self)
             self.setTagData('value', value)
 
@@ -662,6 +662,11 @@ class SimpleDataForm(DataForm, DataRecord):
         to_be_removed = []
         for f in c.iter_fields():
             if f.required:
+                # add <value> if there is not
+                if hasattr(f, 'value') and  not f.value:
+                    f.value = ''
+                if hasattr(f, 'values') and  not f.values:
+                    f.values = ['']
                 # Keep all required fields
                 continue
             if (hasattr(f, 'value') and not f.value) or (hasattr(f, 'values') \
