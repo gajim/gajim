@@ -34,6 +34,7 @@ from common import xmpp
 from common import gajim
 from common import helpers
 from common import dataforms
+from common import jingle_xtls
 
 from common.socks5 import Socks5Receiver
 
@@ -139,6 +140,8 @@ class ConnectionBytestream:
             gajim.socks5queue.add_file_props(self.name, file_props)
             
             if not session.accepted:
+                if session.get_content('file').use_security:
+                    jingle_xtls.send_cert_request(self, file_props['receiver'])
                 session.approve_session()
                 session.approve_content('file')
             return

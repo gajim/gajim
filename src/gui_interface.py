@@ -2111,6 +2111,14 @@ class Interface:
         pm_ctrl = gajim.interface.msg_win_mgr.get_control(full_jid, account)
         if pm_ctrl and hasattr(pm_ctrl, "update_contact"):
             pm_ctrl.update_contact()
+            
+    def handle_event_pubkey_request(self, account, data):
+        con, obj, jid_from, sid = data
+        common.jingle_xtls.send_cert(con, jid_from, sid)
+        
+    def handle_event_pubkey_result(self, account, data):
+        con, obj, jid_from = data
+        common.jingle_xtls.handle_new_cert(con, obj, jid_from)
 
     def create_core_handlers_list(self):
         self.handlers = {
@@ -2203,7 +2211,9 @@ class Interface:
             'JINGLE_DISCONNECTED': [self.handle_event_jingle_disconnected],
             'JINGLE_ERROR': [self.handle_event_jingle_error],
             'PEP_RECEIVED': [self.handle_event_pep_received],
-            'CAPS_RECEIVED': [self.handle_event_caps_received]
+            'CAPS_RECEIVED': [self.handle_event_caps_received],
+            'PUBKEY_REQUEST': [self.handle_event_pubkey_request],
+            'PUBKEY_RESULT': [self.handle_event_pubkey_result],
         }
 
     def register_core_handlers(self):

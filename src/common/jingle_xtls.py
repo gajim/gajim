@@ -19,6 +19,8 @@
 import os
 
 import logging
+import common
+import gajim
 log = logging.getLogger('gajim.c.jingle_xtls')
 
 PYOPENSSL_PRESENT = False
@@ -91,6 +93,48 @@ def get_context(fingerprint, verify_cb=None):
     for f in os.listdir(os.path.expanduser(CERTIFICATE_DIR)):
         load_cert_file(os.path.join(os.path.expanduser(CERTIFICATE_DIR), f), store)
     return ctx
+
+def send_cert(con, jid_from, sid):
+    certpath = os.path.expanduser(CERTIFICATE_DIR + SELF_SIGNED_CERTIFICATE + '.cert')
+    certfile = open(certpath, 'r')
+    certificate = ''
+    for line in certfile.readlines():
+        if not line.startswith('-'):
+            certificate += line
+    iq = common.xmpp.Iq('result', to=jid_from);
+    iq.setAttr('id', sid)
+    
+    pubkey = iq.setTag('pubkeys')
+    pubkey.setNamespace(common.xmpp.NS_PUBKEY_PUBKEY)
+    
+    keyinfo = pubkey.setTag('keyinfo')
+    name = keyinfo.setTag('name')
+    name.setData('CertificateHash')
+    cert = keyinfo.setTag('x509cert')
+    cert.setData(certificate)
+    
+    con.send(iq)
+
+def handle_new_cert(con, obj, jid_from):
+    jid = gajim.get_jid_without_resource(jid_from)
+    certpath = os.path.join(os.path.expanduser(CERTIFICATE_DIR), jid)
+    certpath += '.cert'
+
+    x509cert = obj.getTag('pubkeys').getTag('keyinfo').getTag('x509cert')
+    
+    cert = x509cert.getData()
+    
+    f = open(certpath, 'w')    
+    f.write('-----BEGIN CERTIFICATE-----\n')
+    f.write(cert)
+    f.write('-----END CERTIFICATE-----\n')
+    
+def send_cert_request(con, to_jid):
+    iq = common.xmpp.Iq('get', to=to_jid)
+    iq.setAttr('id', con.connection.getAnID())
+    pubkey = iq.setTag('pubkeys')
+    pubkey.setNamespace(common.xmpp.NS_PUBKEY_PUBKEY)
+    con.connection.send(iq)
 
 # the following code is partly due to pyopenssl examples
 

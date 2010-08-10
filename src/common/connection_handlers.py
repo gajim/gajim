@@ -2245,9 +2245,14 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
         
     def _PubkeyGetCB(self, con, obj):
         log.info('PubkeyGetCB')
+        jid_from = unicode(obj.getAttr('from'))
+        sid = obj.getAttr('id')
+        self.dispatch('PUBKEY_REQUEST', (con, obj, jid_from, sid))
         
     def _PubkeyResultCB(self, con, obj):
         log.info('PubkeyResultCB')
+        jid_from = unicode(obj.getAttr('from'))
+        self.dispatch('PUBKEY_RESULT', (con, obj, jid_from));
 
     def _StreamCB(self, con, obj):
         if obj.getTag('conflict'):
