@@ -23,6 +23,9 @@ import common
 import gajim
 log = logging.getLogger('gajim.c.jingle_xtls')
 
+from common import configpaths
+gajimpath = configpaths.gajimpaths
+
 PYOPENSSL_PRESENT = False
 
 try:
@@ -36,7 +39,8 @@ if PYOPENSSL_PRESENT:
     from OpenSSL.SSL import Context
     from OpenSSL import crypto
 
-CERTIFICATE_DIR = '~/certs/'
+CERTIFICATE_DIR = gajimpath['MY_PEER_CERTS']
+print 'CERTIFICATE_DIR: ', CERTIFICATE_DIR
 SELF_SIGNED_CERTIFICATE = 'localcert'
     
 def default_callback(connection, certificate, error_num, depth, return_code):
@@ -87,15 +91,15 @@ def get_context(fingerprint, verify_cb=None):
     elif fingerprint == 'client':
         ctx.set_verify(SSL.VERIFY_PEER, verify_cb or default_callback)
         
-    ctx.use_privatekey_file (os.path.expanduser(CERTIFICATE_DIR + SELF_SIGNED_CERTIFICATE + '.pkey'))
-    ctx.use_certificate_file(os.path.expanduser(CERTIFICATE_DIR + SELF_SIGNED_CERTIFICATE + '.cert'))
+    ctx.use_privatekey_file (os.path.expanduser(os.path.join(CERTIFICATE_DIR, SELF_SIGNED_CERTIFICATE) + '.pkey'))
+    ctx.use_certificate_file(os.path.expanduser(os.path.join(CERTIFICATE_DIR, SELF_SIGNED_CERTIFICATE) + '.cert'))
     store = ctx.get_cert_store()
     for f in os.listdir(os.path.expanduser(CERTIFICATE_DIR)):
         load_cert_file(os.path.join(os.path.expanduser(CERTIFICATE_DIR), f), store)
     return ctx
 
 def send_cert(con, jid_from, sid):
-    certpath = os.path.expanduser(CERTIFICATE_DIR + SELF_SIGNED_CERTIFICATE + '.cert')
+    certpath = os.path.expanduser(os.path.join(CERTIFICATE_DIR, SELF_SIGNED_CERTIFICATE) + '.cert')
     certfile = open(certpath, 'r')
     certificate = ''
     for line in certfile.readlines():

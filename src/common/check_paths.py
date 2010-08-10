@@ -339,7 +339,7 @@ def check_and_possibly_create_paths():
         create_path(XTLS_CERTS)
     if not (os.path.exists(os.path.join(XTLS_CERTS, jingle_xtls.SELF_SIGNED_CERTIFICATE + '.cert')) and
                            os.path.exists(os.path.join(XTLS_CERTS, jingle_xtls.SELF_SIGNED_CERTIFICATE + '.pkey'))):
-        jingle_xtls.make_certs(XTLS_CERTS + jingle_xtls.SELF_SIGNED_CERTIFICATE, 'gajim')
+        jingle_xtls.make_certs(os.path.join(XTLS_CERTS, jingle_xtls.SELF_SIGNED_CERTIFICATE), 'gajim')
                                
 
 def create_path(directory):

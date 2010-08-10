@@ -140,7 +140,8 @@ class ConfigPaths:
 
         d = {'MY_DATA': '', 'LOG_DB': u'logs.db', 'MY_CACERTS': u'cacerts.pem',
                 'MY_EMOTS': u'emoticons', 'MY_ICONSETS': u'iconsets',
-                'MY_MOOD_ICONSETS': u'moods', 'MY_ACTIVITY_ICONSETS': u'activities'}
+                'MY_MOOD_ICONSETS': u'moods', 'MY_ACTIVITY_ICONSETS': u'activities',
+                'MY_PEER_CERTS': u'certs'}
         for name in d:
             self.add(name, TYPE_DATA, windowsify(d[name]))
 
@@ -150,6 +151,7 @@ class ConfigPaths:
             self.add(name, TYPE_CACHE, windowsify(d[name]))
 
         self.add('MY_CONFIG', TYPE_CONFIG, '')
+        self.add('MY_CERT', TYPE_CONFIG, 'localcert')
 
         basedir = fse(os.environ.get(u'GAJIM_BASEDIR', defs.basedir))
         self.add('DATA', None, os.path.join(basedir, windowsify(u'data')))
