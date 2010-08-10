@@ -38,6 +38,7 @@ import tooltips
 import dialogs
 import locale
 import Queue
+import urllib
 
 import gtkgui_helpers
 from common import gajim
@@ -747,14 +748,15 @@ class ConversationTextview(gobject.GObject):
             menu.prepend(item)
             submenu = gtk.Menu()
             item.set_submenu(submenu)
+            phrase_for_url = urllib.quote(self.selected_phrase)
 
             always_use_en = gajim.config.get('always_english_wikipedia')
             if always_use_en:
                 link = 'http://en.wikipedia.org/wiki/Special:Search?search=%s'\
-                        % self.selected_phrase
+                        % phrase_for_url
             else:
                 link = 'http://%s.wikipedia.org/wiki/Special:Search?search=%s'\
-                        % (gajim.LANG, self.selected_phrase)
+                        % (gajim.LANG, phrase_for_url)
             item = gtk.MenuItem(_('Read _Wikipedia Article'))
             id_ = item.connect('activate', self.visit_url_from_menuitem, link)
             self.handlers[id_] = item
@@ -767,10 +769,10 @@ class ConversationTextview(gobject.GObject):
                 always_use_en = gajim.config.get('always_english_wiktionary')
                 if always_use_en:
                     link = 'http://en.wiktionary.org/wiki/Special:Search?search=%s'\
-                            % self.selected_phrase
+                            % phrase_for_url
                 else:
                     link = 'http://%s.wiktionary.org/wiki/Special:Search?search=%s'\
-                            % (gajim.LANG, self.selected_phrase)
+                            % (gajim.LANG, phrase_for_url)
                 id_ = item.connect('activate', self.visit_url_from_menuitem, link)
                 self.handlers[id_] = item
             else:
@@ -780,7 +782,7 @@ class ConversationTextview(gobject.GObject):
                             'Dictionary URL is missing an "%s" and it is not WIKTIONARY'))
                     item.set_property('sensitive', False)
                 else:
-                    link = dict_link % self.selected_phrase
+                    link = dict_link % phrase_for_url
                     id_ = item.connect('activate', self.visit_url_from_menuitem,
                             link)
                     self.handlers[id_] = item
@@ -794,7 +796,7 @@ class ConversationTextview(gobject.GObject):
                 item.set_property('sensitive', False)
             else:
                 item = gtk.MenuItem(_('Web _Search for it'))
-                link =  search_link % self.selected_phrase
+                link =  search_link % phrase_for_url
                 id_ = item.connect('activate', self.visit_url_from_menuitem, link)
                 self.handlers[id_] = item
             submenu.append(item)
