@@ -151,7 +151,7 @@ class ConfigPaths:
             self.add(name, TYPE_CACHE, windowsify(d[name]))
 
         self.add('MY_CONFIG', TYPE_CONFIG, '')
-        self.add('MY_CERT', TYPE_CONFIG, 'localcert')
+        self.add('MY_CERT', TYPE_CONFIG, '')
 
         basedir = fse(os.environ.get(u'GAJIM_BASEDIR', defs.basedir))
         self.add('DATA', None, os.path.join(basedir, windowsify(u'data')))

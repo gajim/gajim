@@ -28,6 +28,16 @@ gajimpath = configpaths.gajimpaths
 
 PYOPENSSL_PRESENT = False
 
+pending_sessions = {} # key-exchange id -> session, accept that session once key-exchange completes
+
+def key_exchange_pend(id, session):
+    pending_sessions[id] = session
+    
+def approve_pending_session(id):
+    session = pending_sessions[id]
+    session.approve_session()
+    session.approve_content('file')
+
 try:
     import OpenSSL
     PYOPENSSL_PRESENT = True
@@ -40,7 +50,9 @@ if PYOPENSSL_PRESENT:
     from OpenSSL import crypto
 
 CERTIFICATE_DIR = gajimpath['MY_PEER_CERTS']
+LOCAL_CERT_DIR = gajimpath['MY_CERT']
 print 'CERTIFICATE_DIR: ', CERTIFICATE_DIR
+print 'MY_CERT_DIR: ', LOCAL_CERT_DIR
 SELF_SIGNED_CERTIFICATE = 'localcert'
     
 def default_callback(connection, certificate, error_num, depth, return_code):
@@ -87,19 +99,20 @@ def get_context(fingerprint, verify_cb=None):
     ctx = SSL.Context(SSL.TLSv1_METHOD)
 
     if fingerprint == 'server': # for testing purposes only
-        ctx.set_verify(SSL.VERIFY_PEER|SSL.VERIFY_FAIL_IF_NO_PEER_CERT, verify_cb or default_callback)
+        ctx.set_verify(SSL.VERIFY_NONE|SSL.VERIFY_FAIL_IF_NO_PEER_CERT, verify_cb or default_callback)
     elif fingerprint == 'client':
         ctx.set_verify(SSL.VERIFY_PEER, verify_cb or default_callback)
         
-    ctx.use_privatekey_file (os.path.expanduser(os.path.join(CERTIFICATE_DIR, SELF_SIGNED_CERTIFICATE) + '.pkey'))
-    ctx.use_certificate_file(os.path.expanduser(os.path.join(CERTIFICATE_DIR, SELF_SIGNED_CERTIFICATE) + '.cert'))
+    ctx.use_privatekey_file (os.path.expanduser(os.path.join(LOCAL_CERT_DIR, SELF_SIGNED_CERTIFICATE) + '.pkey'))
+    ctx.use_certificate_file(os.path.expanduser(os.path.join(LOCAL_CERT_DIR, SELF_SIGNED_CERTIFICATE) + '.cert'))
     store = ctx.get_cert_store()
     for f in os.listdir(os.path.expanduser(CERTIFICATE_DIR)):
         load_cert_file(os.path.join(os.path.expanduser(CERTIFICATE_DIR), f), store)
+        print 'certificate file' + f + ' loaded', 'fingerprint', fingerprint
     return ctx
 
 def send_cert(con, jid_from, sid):
-    certpath = os.path.expanduser(os.path.join(CERTIFICATE_DIR, SELF_SIGNED_CERTIFICATE) + '.cert')
+    certpath = os.path.expanduser(os.path.join(LOCAL_CERT_DIR, SELF_SIGNED_CERTIFICATE) + '.cert')
     certfile = open(certpath, 'r')
     certificate = ''
     for line in certfile.readlines():
@@ -124,6 +137,8 @@ def handle_new_cert(con, obj, jid_from):
     certpath = os.path.join(os.path.expanduser(CERTIFICATE_DIR), jid)
     certpath += '.cert'
 
+    id = obj.getAttr('id')
+    
     x509cert = obj.getTag('pubkeys').getTag('keyinfo').getTag('x509cert')
     
     cert = x509cert.getData()
@@ -133,12 +148,16 @@ def handle_new_cert(con, obj, jid_from):
     f.write(cert)
     f.write('-----END CERTIFICATE-----\n')
     
+    approve_pending_session(id)
+    
 def send_cert_request(con, to_jid):
     iq = common.xmpp.Iq('get', to=to_jid)
-    iq.setAttr('id', con.connection.getAnID())
+    id = con.connection.getAnID()
+    iq.setAttr('id', id)
     pubkey = iq.setTag('pubkeys')
     pubkey.setNamespace(common.xmpp.NS_PUBKEY_PUBKEY)
     con.connection.send(iq)
+    return unicode(id)
 
 # the following code is partly due to pyopenssl examples
 

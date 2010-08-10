@@ -141,7 +141,9 @@ class ConnectionBytestream:
             
             if not session.accepted:
                 if session.get_content('file').use_security:
-                    jingle_xtls.send_cert_request(self, file_props['receiver'])
+                    id = jingle_xtls.send_cert_request(self, file_props['sender'])
+                    jingle_xtls.key_exchange_pend(id, session)
+                    return
                 session.approve_session()
                 session.approve_content('file')
             return
