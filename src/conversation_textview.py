@@ -748,7 +748,7 @@ class ConversationTextview(gobject.GObject):
             menu.prepend(item)
             submenu = gtk.Menu()
             item.set_submenu(submenu)
-            phrase_for_url = urllib.quote(self.selected_phrase)
+            phrase_for_url = urllib.quote(self.selected_phrase.encode('utf-8'))
 
             always_use_en = gajim.config.get('always_english_wikipedia')
             if always_use_en:
