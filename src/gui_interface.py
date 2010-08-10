@@ -2432,7 +2432,8 @@ class Interface:
         # FIXME: recognize xmpp: and treat it specially
         links = r"((?<=\()[A-Za-z][A-Za-z0-9\+\.\-]*:"\
             r"([\w\.\-_~:/\?#\[\]@!\$&'\(\)\*\+,;=]|%[A-Fa-f0-9]{2})+"\
-            r"(?=\)))|(\w[\w\+\.\-]*:(\S|%[A-Fa-f0-9]{2})+)"
+            r"(?=\)))|([A-Za-z][A-Za-z0-9\+\.\-]*:([\w\.\-_~:/\?#\[\]@!\$"\
+            r"&'\(\)\*\+,;=]|%[A-Fa-f0-9]{2})+)"
 
         # 2nd one: at_least_one_char@at_least_one_char.at_least_one_char
         mail = r'\bmailto:\S*[^\s\W]|' r'\b\S+@\S+\.\S*[^\s\W]'
