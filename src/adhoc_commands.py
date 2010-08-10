@@ -331,7 +331,14 @@ class CommandWindow:
 
     def stage3_submit_form(self, action='execute'):
         self.data_form_widget.set_sensitive(False)
+
         if self.data_form_widget.get_data_form():
+            df = self.data_form_widget.get_data_form()
+            if not df.is_valid():
+                dialogs.ErrorDialog(_('Invalid Form'),
+                    _('The form is not filled correctly.'))
+                self.data_form_widget.set_sensitive(True)
+                return
             self.data_form_widget.data_form.type = 'submit'
         else:
             self.data_form_widget.hide()

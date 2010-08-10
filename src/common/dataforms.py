@@ -27,6 +27,7 @@ information how to use them, read documentation
 """
 
 import xmpp
+import helpers
 
 # exceptions used in this module
 # base class
@@ -65,8 +66,8 @@ def Field(typ, **attrs):
             'hidden': StringField,
             'text-private': StringField,
             'text-single': StringField,
-            'jid-multi': ListMultiField,
-            'jid-single': ListSingleField,
+            'jid-multi': JidMultiField,
+            'jid-single': JidSingleField,
             'list-multi': ListMultiField,
             'list-single': ListSingleField,
             'text-multi': TextMultiField,
@@ -87,8 +88,8 @@ def ExtendField(node):
             'hidden': StringField,
             'text-private': StringField,
             'text-single': StringField,
-            'jid-multi': ListMultiField,
-            'jid-single': ListSingleField,
+            'jid-multi': JidMultiField,
+            'jid-single': JidSingleField,
             'list-multi': ListMultiField,
             'list-single': ListSingleField,
             'text-multi': TextMultiField,
@@ -247,6 +248,9 @@ class DataField(ExtendedNode):
                 self.delChild(t)
 
         return locals()
+    
+    def is_valid(self):
+        return True
 
 class Uri(xmpp.Node):
     def __init__(self, uri_tag):
@@ -405,13 +409,28 @@ class ListField(DataField):
 
 class ListSingleField(ListField, StringField):
     """
-    Covers list-single and jid-single fields
+    Covers list-single field
     """
     pass
 
+class JidSingleField(ListSingleField):
+    """
+    Covers jid-single fields
+    """
+    def is_valid(self):
+        if self.value:
+            try:
+                helpers.parse_jid(self.value)
+                return True
+            except:
+                return False
+        if self.required:
+            return False
+        return True
+
 class ListMultiField(ListField):
     """
-    Covers list-multi and jid-multi fields
+    Covers list-multi fields
     """
 
     @nested_property
@@ -439,6 +458,22 @@ class ListMultiField(ListField):
     def iter_values(self):
         for element in self.getTags('value'):
             yield element.getData()
+
+class JidMultiField(ListMultiField):
+    """
+    Covers jid-multi fields
+    """
+    def is_valid(self):
+        if len(self.values):
+            for value in self.values:
+                try:
+                    helpers.parse_jid(self.value)
+                except:
+                    return False
+            return True
+        if self.required:
+            return False
+        return True
 
 class TextMultiField(DataField):
     @nested_property
@@ -530,6 +565,12 @@ class DataRecord(ExtendedNode):
 
     def __getitem__(self, item):
         return self.vars[item]
+    
+    def is_valid(self):
+        for f in self.iter_fields():
+            if not f.is_valid():
+                return False
+        return True
 
 class DataForm(ExtendedNode):
     def __init__(self, type_=None, title=None, instructions=None, extend=None):
