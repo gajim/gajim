@@ -2540,13 +2540,13 @@ class RosterItemExchangeEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.get_id()
         self.get_jid_resource()
         self.exchange_items_list = {}
-        items_list = msg.getTag('x').getChildren()
+        items_list = self.iq_obj.getTag('x').getChildren()
         if not items_list:
             return
         self.action = items_list[0].getAttr('action')
         if self.action is None:
             self.action = 'add'
-        for item in msg.getTag('x', namespace=common.xmpp.NS_ROSTERX).\
+        for item in self.iq_obj.getTag('x', namespace=common.xmpp.NS_ROSTERX).\
         getChildren():
             try:
                 jid = helpers.parse_jid(item.getAttr('jid'))
