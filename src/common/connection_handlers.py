@@ -45,13 +45,13 @@ import common.xmpp
 from common import helpers
 from common import gajim
 from common import exceptions
+from common import jingle_xtls
 from common.commands import ConnectionCommands
 from common.pubsub import ConnectionPubSub
 from common.pep import ConnectionPEP
 from common.protocol.caps import ConnectionCaps
 from common.protocol.bytestream import ConnectionSocks5Bytestream
 import common.caps_cache as capscache
-import common.jingle_xtls
 
 if gajim.HAVE_FARSIGHT:
     from common.jingle import ConnectionJingle
@@ -2242,17 +2242,18 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
         for i in iq_obj.getQueryPayload():
             df[i.getName()] = i.getData()
         self.dispatch('SEARCH_FORM', (jid, df, False))
-        
-    def _PubkeyGetCB(self, con, obj):
+
+    def _PubkeyGetCB(self, con, iq_obj):
         log.info('PubkeyGetCB')
-        jid_from = unicode(obj.getAttr('from'))
-        sid = obj.getAttr('id')
-        self.dispatch('PUBKEY_REQUEST', (con, obj, jid_from, sid))
-        
-    def _PubkeyResultCB(self, con, obj):
+        jid_from = helpers.get_full_jid_from_iq(iq_obj)
+        sid = iq_obj.getAttr('id')
+        jingle_xtls.send_cert(con, jid_from, sid)
+        raise common.xmpp.NodeProcessed
+
+    def _PubkeyResultCB(self, con, iq_obj):
         log.info('PubkeyResultCB')
-        jid_from = unicode(obj.getAttr('from'))
-        self.dispatch('PUBKEY_RESULT', (con, obj, jid_from));
+        jid_from = helpers.get_full_jid_from_iq(iq_obj)
+        jingle_xtls.handle_new_cert(con, iq_obj, jid_from)
 
     def _StreamCB(self, con, obj):
         if obj.getTag('conflict'):
