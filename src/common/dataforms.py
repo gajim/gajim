@@ -411,7 +411,11 @@ class ListSingleField(ListField, StringField):
     """
     Covers list-single field
     """
-    pass
+    def is_valid(self):
+        if not self.required:
+            return True
+        if not self.value:
+            return False
 
 class JidSingleField(ListSingleField):
     """
@@ -458,6 +462,12 @@ class ListMultiField(ListField):
     def iter_values(self):
         for element in self.getTags('value'):
             yield element.getData()
+            
+    def is_valid(self):
+        if not self.required:
+            return True
+        if not self.values:
+            return False
 
 class JidMultiField(ListMultiField):
     """
@@ -665,8 +675,6 @@ class SimpleDataForm(DataForm, DataRecord):
                 # add <value> if there is not
                 if hasattr(f, 'value') and  not f.value:
                     f.value = ''
-                if hasattr(f, 'values') and  not f.values:
-                    f.values = ['']
                 # Keep all required fields
                 continue
             if (hasattr(f, 'value') and not f.value) or (hasattr(f, 'values') \
