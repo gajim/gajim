@@ -1573,11 +1573,12 @@ class Interface:
         if gajim.connections[account].pep_supported and dbus_support.supported \
         and gajim.config.get_per('accounts', account, 'publish_location'):
             location_listener.enable()
-        # Start merging logs from server
-        gajim.connections[account].request_modifications_page(
-            gajim.config.get_per('accounts', account, 'last_archiving_time'))
-        gajim.config.set_per('accounts', account, 'last_archiving_time',
-            time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()))
+        if gajim.connections[account].archiving_supported:
+            # Start merging logs from server
+            gajim.connections[account].request_modifications_page(
+                gajim.config.get_per('accounts', account, 'last_archiving_time'))
+            gajim.config.set_per('accounts', account, 'last_archiving_time',
+                time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()))
 
     def handle_event_metacontacts(self, account, tags_list):
         gajim.contacts.define_metacontacts(account, tags_list)

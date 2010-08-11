@@ -368,6 +368,8 @@ class ConnectionDisco:
                     our_jid = gajim.get_jid_from_account(self.name)
                     self.send_pb_purge(our_jid, 'storage:bookmarks')
                     self.send_pb_delete(our_jid, 'storage:bookmarks')
+            if features.__contains__(common.xmpp.NS_ARCHIVE):
+                self.archiving_supported = True
             if features.__contains__(common.xmpp.NS_ARCHIVE_AUTO):
                 self.archive_auto_supported = True
             if features.__contains__(common.xmpp.NS_ARCHIVE_MANAGE):

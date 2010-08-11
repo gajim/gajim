@@ -153,6 +153,7 @@ class CommonConnection:
         self.privacy_rules_supported = False
         self.vcard_supported = False
         self.private_storage_supported = False
+        self.archiving_supported = False
         self.archive_pref_supported = False
 
         self.muc_jid = {} # jid of muc server for each transport type
