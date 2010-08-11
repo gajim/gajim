@@ -20,11 +20,8 @@ import os
 
 import logging
 import common
-import gajim
+from common import gajim
 log = logging.getLogger('gajim.c.jingle_xtls')
-
-from common import configpaths
-gajimpath = configpaths.gajimpaths
 
 PYOPENSSL_PRESENT = False
 
@@ -49,10 +46,6 @@ if PYOPENSSL_PRESENT:
     from OpenSSL.SSL import Context
     from OpenSSL import crypto
 
-CERTIFICATE_DIR = gajimpath['MY_PEER_CERTS']
-LOCAL_CERT_DIR = gajimpath['MY_CERT']
-print 'CERTIFICATE_DIR: ', CERTIFICATE_DIR
-print 'MY_CERT_DIR: ', LOCAL_CERT_DIR
 SELF_SIGNED_CERTIFICATE = 'localcert'
     
 def default_callback(connection, certificate, error_num, depth, return_code):
@@ -103,16 +96,17 @@ def get_context(fingerprint, verify_cb=None):
     elif fingerprint == 'client':
         ctx.set_verify(SSL.VERIFY_PEER, verify_cb or default_callback)
         
-    ctx.use_privatekey_file (os.path.expanduser(os.path.join(LOCAL_CERT_DIR, SELF_SIGNED_CERTIFICATE) + '.pkey'))
-    ctx.use_certificate_file(os.path.expanduser(os.path.join(LOCAL_CERT_DIR, SELF_SIGNED_CERTIFICATE) + '.cert'))
+    cert_name = os.path.join(gajim.MY_CERT_DIR, SELF_SIGNED_CERTIFICATE)
+    ctx.use_privatekey_file (cert_name + '.pkey')
+    ctx.use_certificate_file(cert_name + '.cert')
     store = ctx.get_cert_store()
-    for f in os.listdir(os.path.expanduser(CERTIFICATE_DIR)):
-        load_cert_file(os.path.join(os.path.expanduser(CERTIFICATE_DIR), f), store)
+    for f in os.listdir(os.path.expanduser(gajim.MY_PEER_CERTS_PATH)):
+        load_cert_file(os.path.join(os.path.expanduser(gajim.MY_PEER_CERTS_PATH), f), store)
         print 'certificate file' + f + ' loaded', 'fingerprint', fingerprint
     return ctx
 
 def send_cert(con, jid_from, sid):
-    certpath = os.path.expanduser(os.path.join(LOCAL_CERT_DIR, SELF_SIGNED_CERTIFICATE) + '.cert')
+    certpath = os.path.join(gajim.MY_CERT_DIR, SELF_SIGNED_CERTIFICATE) + '.cert'
     certfile = open(certpath, 'r')
     certificate = ''
     for line in certfile.readlines():
@@ -134,7 +128,7 @@ def send_cert(con, jid_from, sid):
 
 def handle_new_cert(con, obj, jid_from):
     jid = gajim.get_jid_without_resource(jid_from)
-    certpath = os.path.join(os.path.expanduser(CERTIFICATE_DIR), jid)
+    certpath = os.path.join(os.path.expanduser(gajim.MY_PEER_CERTS_PATH), jid)
     certpath += '.cert'
 
     id = obj.getAttr('id')

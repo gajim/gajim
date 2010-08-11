@@ -84,10 +84,12 @@ MY_ICONSETS_PATH = gajimpaths['MY_ICONSETS']
 MY_MOOD_ICONSETS_PATH = gajimpaths['MY_MOOD_ICONSETS']
 MY_ACTIVITY_ICONSETS_PATH = gajimpaths['MY_ACTIVITY_ICONSETS']
 MY_CACERTS = gajimpaths['MY_CACERTS']
+MY_PEER_CERTS_PATH = gajimpaths['MY_PEER_CERTS']
 TMP = gajimpaths['TMP']
 DATA_DIR = gajimpaths['DATA']
 ICONS_DIR = gajimpaths['ICONS']
 HOME_DIR = gajimpaths['HOME']
+MY_CERT_DIR = gajimpaths['MY_CERT']
 
 try:
     LANG = locale.getdefaultlocale()[0] # en_US, fr_FR, el_GR etc..
