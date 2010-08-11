@@ -555,8 +555,13 @@ class SingleForm(gtk.Table, object):
                 widget.set_sensitive(readwrite)
                 widget = decorate_with_tooltip(widget, field)
                 self.attach(widget, 1, 2, linecounter, linecounter+1,
-                        yoptions=gtk.FILL)
-            widget.show_all()
+                        yoptions=gtk.FILL)	
+            
+            if field.required:
+                label = gtk.Label('*')
+                label.set_tooltip_text(_('This field is required'))
+                self.attach(label, 2, 3, linecounter, linecounter+1, xoptions=0,
+                    yoptions=0)
 
             linecounter+=1
         if self.get_property('visible'):
