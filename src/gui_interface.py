@@ -1573,6 +1573,11 @@ class Interface:
         if gajim.connections[account].pep_supported and dbus_support.supported \
         and gajim.config.get_per('accounts', account, 'publish_location'):
             location_listener.enable()
+        # Start merging logs from server
+        gajim.connections[account].request_modifications_page(
+            gajim.config.get_per('accounts', account, 'last_archiving_time'))
+        gajim.config.set_per('accounts', account, 'last_archiving_time',
+            time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()))
 
     def handle_event_metacontacts(self, account, tags_list):
         gajim.contacts.define_metacontacts(account, tags_list)
@@ -2064,6 +2069,18 @@ class Interface:
         if pm_ctrl and hasattr(pm_ctrl, "update_contact"):
             pm_ctrl.update_contact()
 
+    def handle_event_archiving_changed(self, account, data):
+        # ('ARCHIVING_CHANGED', account, (type, value)
+        if 'archiving_preferences' in self.instances[account]:
+            self.instances[account]['archiving_preferences'].archiving_changed(
+                data)
+
+    def handle_event_archiving_error(self, account, data):
+        # ('ARCHIVING_CHANGED', account, (error_msg,))
+        if 'archiving_preferences' in self.instances[account]:
+            self.instances[account]['archiving_preferences'].archiving_error(
+                data)
+
     def create_core_handlers_list(self):
         self.handlers = {
             'ROSTER': [self.handle_event_roster],
@@ -2147,6 +2164,8 @@ class Interface:
             'JINGLE_ERROR': [self.handle_event_jingle_error],
             'PEP_RECEIVED': [self.handle_event_pep_received],
             'CAPS_RECEIVED': [self.handle_event_caps_received],
+            'ARCHIVING_CHANGED': [self.handle_event_archiving_changed],
+            'ARCHIVING_ERROR': [self.handle_event_archiving_error],
             'gmail-notify': [self.handle_event_gmail_notify],
             'http-auth-received': [self.handle_event_http_auth],
             'last-result-received': [self.handle_event_last_status_time],

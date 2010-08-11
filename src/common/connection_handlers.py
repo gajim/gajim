@@ -51,6 +51,11 @@ from common.pubsub import ConnectionPubSub
 from common.pep import ConnectionPEP
 from common.protocol.caps import ConnectionCaps
 from common.protocol.bytestream import ConnectionSocks5Bytestream
+from common.message_archiving import ConnectionArchive
+from common.message_archiving import ARCHIVING_COLLECTIONS_ARRIVED
+from common.message_archiving import ARCHIVING_COLLECTION_ARRIVED
+from common.message_archiving import ARCHIVING_MODIFICATIONS_ARRIVED
+
 from common import ged
 from common import nec
 from common.nec import NetworkEvent
@@ -363,6 +368,14 @@ class ConnectionDisco:
                     our_jid = gajim.get_jid_from_account(self.name)
                     self.send_pb_purge(our_jid, 'storage:bookmarks')
                     self.send_pb_delete(our_jid, 'storage:bookmarks')
+            if features.__contains__(common.xmpp.NS_ARCHIVE_AUTO):
+                self.archive_auto_supported = True
+            if features.__contains__(common.xmpp.NS_ARCHIVE_MANAGE):
+                self.archive_manage_supported = True
+            if features.__contains__(common.xmpp.NS_ARCHIVE_MANUAL):
+                self.archive_manual_supported = True
+            if features.__contains__(common.xmpp.NS_ARCHIVE_PREF):
+                self.archive_pref_supported = True
             if features.__contains__(common.xmpp.NS_BYTESTREAM):
                 our_jid = helpers.parse_jid(gajim.get_jid_from_account(self.name) +\
                         '/' + self.server_resource)
@@ -701,6 +714,71 @@ class ConnectionVcard:
                 form = common.dataforms.ExtendForm(node=form_tag)
                 self.dispatch('PEP_CONFIG', (node, form))
 
+        elif self.awaiting_answers[id_][0] == ARCHIVING_COLLECTIONS_ARRIVED:
+            # TODO
+            print 'ARCHIVING_COLLECTIONS_ARRIVED'
+            pass
+
+        elif self.awaiting_answers[id_][0] == ARCHIVING_COLLECTION_ARRIVED:
+            def save_if_not_exists(with_, nick, direction, tim, payload):
+                assert len(payload) == 1, 'got several archiving messages in' +\
+                    ' the same time %s' % ''.join(payload)
+                if payload[0].getName() == 'body':
+                    gajim.logger.save_if_not_exists(with_, direction, tim,
+                        msg=payload[0].getData(), nick=nick)
+                elif payload[0].getName() == 'message':
+                    print 'Not implemented'
+            chat = iq_obj.getTag('chat')
+            if chat:
+                with_ = chat.getAttr('with')
+                start_ = chat.getAttr('start')
+                tim = helpers.datetime_tuple(start_)
+                tim = timegm(tim)
+                nb = 0
+                for element in chat.getChildren():
+                    try:
+                        secs = int(element.getAttr('secs'))
+                    except TypeError:
+                        secs = 0
+                    if secs:
+                        tim += secs
+                    nick = element.getAttr('name')
+                    if element.getName() == 'from':
+                        save_if_not_exists(with_, nick, 'from', localtime(tim),
+                            element.getPayload())
+                        nb += 1
+                    if element.getName() == 'to':
+                        save_if_not_exists(with_, nick, 'to', localtime(tim),
+                            element.getPayload())
+                        nb += 1
+                set_ = chat.getTag('set')
+                first = set_.getTag('first')
+                if first:
+                    try:
+                        index = int(first.getAttr('index'))
+                    except TypeError:
+                        index = 0
+                try:
+                    count = int(set_.getTagData('count'))
+                except TypeError:
+                    count = 0
+                if count > index + nb:
+                    # Request the next page
+                    after = element.getTagData('last')
+                    self.request_collection_page(with_, start_, after=after)
+
+        elif self.awaiting_answers[id_][0] == ARCHIVING_MODIFICATIONS_ARRIVED:
+            modified = iq_obj.getTag('modified')
+            if modified:
+                for element in modified.getChildren():
+                    if element.getName() == 'changed':
+                        with_ = element.getAttr('with')
+                        start_ = element.getAttr('start')
+                        self.request_collection_page(with_, start_)
+                    elif element.getName() == 'removed':
+                        # do nothing
+                        pass
+
         del self.awaiting_answers[id_]
 
     def _vCardCB(self, con, vc):
@@ -955,11 +1033,13 @@ class ConnectionHandlersBase:
 
         return sess
 
-class ConnectionHandlers(ConnectionVcard, ConnectionSocks5Bytestream,
-ConnectionDisco, ConnectionCommands, ConnectionPubSub, ConnectionPEP,
-ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
+class ConnectionHandlers(ConnectionArchive, ConnectionVcard,
+ConnectionSocks5Bytestream, ConnectionDisco, ConnectionCommands,
+ConnectionPubSub, ConnectionPEP, ConnectionCaps, ConnectionHandlersBase,
+ConnectionJingle):
     def __init__(self):
         global HAS_IDLE
+        ConnectionArchive.__init__(self)
         ConnectionVcard.__init__(self)
         ConnectionSocks5Bytestream.__init__(self)
         ConnectionCommands.__init__(self)
@@ -2303,6 +2383,7 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
                 common.xmpp.NS_SEARCH)
         con.RegisterHandler('iq', self._PrivacySetCB, 'set',
                 common.xmpp.NS_PRIVACY)
+        con.RegisterHandler('iq', self._ArchiveCB, ns=common.xmpp.NS_ARCHIVE)
         con.RegisterHandler('iq', self._PubSubCB, 'result')
         con.RegisterHandler('iq', self._PubSubErrorCB, 'error')
         con.RegisterHandler('iq', self._JingleCB, 'result')

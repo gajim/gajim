@@ -45,6 +45,9 @@ LOG_DB_PATH = configpaths.gajimpaths['LOG_DB']
 LOG_DB_FOLDER, LOG_DB_FILE = os.path.split(LOG_DB_PATH)
 CACHE_DB_PATH = configpaths.gajimpaths['CACHE_DB']
 
+import logging
+log = logging.getLogger('gajim.c.logger')
+
 class Constants:
     def __init__(self):
         (
@@ -142,7 +145,7 @@ class Logger:
         try:
             self.cur.execute("ATTACH DATABASE '%s' AS cache" % CACHE_DB_PATH)
         except sqlite.Error, e:
-            gajim.log.debug("Failed to attach cache database: %s" % str(e))
+            log.debug("Failed to attach cache database: %s" % str(e))
 
     def set_synchronous(self, sync):
         try:
@@ -151,7 +154,7 @@ class Logger:
             else:
                 self.cur.execute("PRAGMA synchronous = OFF")
         except sqlite.Error, e:
-            gajim.log.debug("Failed to set_synchronous(%s): %s" % (sync, str(e)))
+            log.debug("Failed to set_synchronous(%s): %s" % (sync, str(e)))
 
     def init_vars(self):
         self.open_db()
@@ -1053,3 +1056,48 @@ class Logger:
         self.cur.execute('DELETE FROM roster_group WHERE account_jid_id=?',
                 (account_jid_id,))
         self.con.commit()
+
+    def save_if_not_exists(self, with_, direction, tim, msg='', nick=None):
+        if tim:
+            time_col = int(float(time.mktime(tim)))
+        else:
+            time_col = int(float(time.time()))
+        if msg:
+            if self.jid_is_from_pm(with_) or nick:
+                # It's a groupchat message
+                if nick:
+                    # It's a message from a groupchat occupent
+                    type_ = 'gc_msg'
+                    with_ = with_ + '/' + nick
+                else:
+                    # It's a server message message, we don't log them
+                    return
+            else:
+                if direction == 'from':
+                    type_ = 'chat_msg_recv'
+                elif direction == 'to':
+                    type_ = 'chat_msg_sent'
+        jid_id = self.get_jid_id(with_)
+        where_sql = 'jid_id = %s AND message=?' % jid_id
+        if type_ == 'gc_msg':
+            # We cannot differentiate gc message and pm messages, so look in
+            # both logs
+            with_2 = gajim.get_jid_without_resource(with_)
+            if with_ != with_2:
+                jid_id2 = self.get_jid_id(with_2)
+                where_sql = 'jid_id in (%s, %s) AND message=?' % (jid_id,
+                    jid_id2)
+        start_time = time_col - 300 # 5 minutes arrount given time
+        end_time = time_col + 300 # 5 minutes arrount given time
+        self.cur.execute('''
+            SELECT log_line_id FROM logs
+            WHERE (%s)
+            AND time BETWEEN %d AND %d
+            ORDER BY time
+            ''' % (where_sql, start_time, end_time), (msg,))
+        results = self.cur.fetchall()
+        if results:
+            log.debug('Log already in DB, ignoring it')
+            return
+        log.debug('New log received from server archives, storing it')
+        self.write(type_, with_, message=msg, tim=tim)

@@ -153,6 +153,7 @@ class CommonConnection:
         self.privacy_rules_supported = False
         self.vcard_supported = False
         self.private_storage_supported = False
+        self.archive_pref_supported = False
 
         self.muc_jid = {} # jid of muc server for each transport type
         self._stun_servers = [] # STUN servers of our jabber server
@@ -1541,6 +1542,9 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.connection.set_send_timeout(self.keepalives, self.send_keepalive)
         self.connection.set_send_timeout2(self.pingalives, self.sendPing)
         self.connection.onreceive(None)
+
+        self.request_message_archiving_preferences()
+
         self.discoverInfo(gajim.config.get_per('accounts', self.name, 'hostname'),
                 id_prefix='Gajim_')
         self.privacy_rules_requested = False

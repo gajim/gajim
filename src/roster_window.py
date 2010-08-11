@@ -2447,6 +2447,14 @@ class RosterWindow:
             gajim.interface.instances[account]['xml_console'] = \
                     dialogs.XMLConsoleWindow(account)
 
+    def on_archiving_preferences_menuitem_activate(self, widget, account):
+        if 'archiving_preferences' in gajim.interface.instances[account]:
+            gajim.interface.instances[account]['archiving_preferences'].window.\
+                present()
+        else:
+            gajim.interface.instances[account]['archiving_preferences'] = \
+                dialogs.ArchivingPreferencesWindow(account)
+
     def on_privacy_lists_menuitem_activate(self, widget, account):
         if 'privacy_lists' in gajim.interface.instances[account]:
             gajim.interface.instances[account]['privacy_lists'].window.present()
@@ -5710,6 +5718,8 @@ class RosterWindow:
         advanced_menuitem_menu = xml.get_object('advanced_menuitem_menu')
 
         xml_console_menuitem = xml.get_object('xml_console_menuitem')
+        archiving_preferences_menuitem = xml.get_object(
+            'archiving_preferences_menuitem')
         privacy_lists_menuitem = xml.get_object('privacy_lists_menuitem')
         administrator_menuitem = xml.get_object('administrator_menuitem')
         send_server_message_menuitem = xml.get_object(
@@ -5721,12 +5731,17 @@ class RosterWindow:
         xml_console_menuitem.connect('activate',
             self.on_xml_console_menuitem_activate, account)
 
-        if gajim.connections[account] and gajim.connections[account].\
-        privacy_rules_supported:
-            privacy_lists_menuitem.connect('activate',
-                self.on_privacy_lists_menuitem_activate, account)
-        else:
-            privacy_lists_menuitem.set_sensitive(False)
+        if gajim.connections[account]:
+            if gajim.connections[account].privacy_rules_supported:
+                privacy_lists_menuitem.connect('activate',
+                    self.on_privacy_lists_menuitem_activate, account)
+            else:
+                privacy_lists_menuitem.set_sensitive(False)
+            if gajim.connections[account].archive_pref_supported:
+                archiving_preferences_menuitem.connect('activate',
+                    self.on_archiving_preferences_menuitem_activate, account)
+            else:
+                archiving_preferences_menuitem.set_sensitive(False)
 
         if gajim.connections[account].is_zeroconf:
             administrator_menuitem.set_sensitive(False)

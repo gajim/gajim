@@ -371,6 +371,7 @@ class Config:
                     'send_idle_time': [ opt_bool, True ],
                     'roster_version': [opt_str, ''],
                     'subscription_request_msg': [opt_str, '', _('Message that is sent to contacts you want to add')],
+                    'last_archiving_time': [opt_str, '1970-01-01T00:00:00Z', _('Last time we syncronized with logs from server.')],
             }, {}),
             'statusmsg': ({
                     'message': [ opt_str, '' ],
