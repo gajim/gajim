@@ -1890,11 +1890,13 @@ class RosterWindow:
 ################################################################################
 
     def show_roster_vbox(self, active):
+        vb = self.xml.get_object('roster_vbox2')
         if active:
-            self.xml.get_object('roster_vbox2').show()
+            vb.set_no_show_all(False)
+            vb.show()
         else:
             self.xml.get_object('roster_vbox2').hide()
-
+            vb.set_no_show_all(True)
 
     def show_tooltip(self, contact):
         pointer = self.tree.get_pointer()
