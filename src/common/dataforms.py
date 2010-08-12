@@ -469,6 +469,7 @@ class ListMultiField(ListField):
             return True
         if not self.values:
             return False
+        return True
 
 class JidMultiField(ListMultiField):
     """
