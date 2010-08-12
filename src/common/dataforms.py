@@ -416,6 +416,7 @@ class ListSingleField(ListField, StringField):
             return True
         if not self.value:
             return False
+        return True
 
 class JidSingleField(ListSingleField):
     """
