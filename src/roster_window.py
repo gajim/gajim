@@ -106,11 +106,8 @@ class RosterWindow:
                 return
 
         if self.regroup:
-            if 'account' not in self._iters:
-                return None
-            it = self._iters['account']
-        else:
-            it = self._iters[name]['account']
+            name = 'MERGED'
+        it = self._iters[name]['account']
 
         if model == self.model or it is None:
             return it
@@ -133,6 +130,9 @@ class RosterWindow:
             model = self.modelfilter
             if model is None:
                 return
+
+        if self.regroup:
+            account = 'MERGED'
 
         if name not in self._iters[account]['groups']:
             return None
@@ -182,6 +182,9 @@ class RosterWindow:
             if not contact:
                 # We don't know this contact
                 return []
+
+        if account not in self._iters:
+            return []
 
         if jid not in self._iters[account]['contacts']:
             return []
@@ -257,7 +260,7 @@ class RosterWindow:
                 gajim.interface.jabber_state_images['16'][show],
                 _('Merged accounts'), 'account', '', 'all', None, None, None,
                 None, None, None])
-            self._iters['account'] = it
+            self._iters['MERGED']['account'] = it
         else:
             show = gajim.SHOW_LIST[gajim.connections[account].connected]
             our_jid = gajim.get_jid_from_account(account)
@@ -344,6 +347,10 @@ class RosterWindow:
             # We are a normal contact. Add us to our groups.
             if not groups:
                 groups = contact.get_shown_groups()
+            if self.regroup:
+                account_group = 'MERGED'
+            else:
+                account_group = account
             for group in groups:
                 child_iterG = self._get_group_iter(group, account,
                     model=self.model)
@@ -356,7 +363,7 @@ class RosterWindow:
                         'group', group, account, None, None, None, None, None,
                         None])
                     self.draw_group(group, account)
-                    self._iters[account]['groups'][group] = child_iterG
+                    self._iters[account_group]['groups'][group] = child_iterG
 
                 if contact.is_transport():
                     typestr = 'agent'
@@ -434,11 +441,15 @@ class RosterWindow:
 
                 if parent_type == 'group' and \
                 self.model.iter_n_children(parent_i) == 1:
+                    if self.regroup:
+                        account_group = 'MERGED'
+                    else:
+                        account_group = account
                     group = self.model[parent_i][C_JID].decode('utf-8')
                     if group in gajim.groups[account]:
                         del gajim.groups[account][group]
                     self.model.remove(parent_i)
-                    del self._iters[account]['groups'][group]
+                    del self._iters[account_group]['groups'][group]
                 else:
                     self.model.remove(i)
             del self._iters[account]['contacts'][contact.jid]
@@ -1396,10 +1407,14 @@ class RosterWindow:
         self.tree.set_model(self.modelfilter)
 
         self._iters = {}
+        # for merged mode
+        self._iters['MERGED'] = {'account': None, 'groups': {}}
+        
         for acct in gajim.contacts.get_accounts():
             self._iters[acct] = {'account': None, 'groups': {}, 'contacts': {}}
             self.add_account(acct)
             self.add_account_contacts(acct)
+
         # Recalculate column width for ellipsizing
         self.tree.columns_autosize()
 
@@ -5883,6 +5898,8 @@ class RosterWindow:
         #       self.on_treeview_selection_changed)
 
         self._iters = {}
+        # for merged mode
+        self._iters['MERGED'] = {'account': None, 'groups': {}}
         # holds a list of (jid, account) tupples
         self._last_selected_contact = []
         self.transports_state_images = {'16': {}, '32': {}, 'opened': {},
