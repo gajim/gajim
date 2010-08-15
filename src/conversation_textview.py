@@ -1042,7 +1042,7 @@ class ConversationTextview(gobject.GObject):
         # Check if we accept this as an uri
         schemes = gajim.config.get('uri_schemes').split()
         for scheme in schemes:
-            if special_text.startswith(scheme + ':'):
+            if special_text.startswith(scheme):
                 text_is_valid_uri = True
 
         possible_emot_ascii_caps = special_text.upper() # emoticons keys are CAPS
