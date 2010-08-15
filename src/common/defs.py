@@ -27,7 +27,7 @@ docdir = '../'
 basedir   = '../'
 localedir = '../po'
 
-version = '0.13.90'
+version = '0.13.90.1'
 import subprocess
 try:
     hgversion = subprocess.Popen('hexdump -n6 -e\'6/1 "%02x"\' ../.hg/dirstate',

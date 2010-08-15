@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-  gajimversion="0.13.90"
+  gajimversion="0.13.90.1"
   if [ -d ".hg" ]; then
     hgversion="-$(hexdump -n6 -e'6/1 "%02x"' .hg/dirstate)"
   else
