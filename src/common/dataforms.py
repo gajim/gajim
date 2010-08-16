@@ -479,7 +479,7 @@ class JidMultiField(ListMultiField):
         if len(self.values):
             for value in self.values:
                 try:
-                    helpers.parse_jid(self.value)
+                    helpers.parse_jid(value)
                 except:
                     return False
             return True
