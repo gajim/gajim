@@ -51,6 +51,7 @@ from common.pubsub import ConnectionPubSub
 from common.pep import ConnectionPEP
 from common.protocol.caps import ConnectionCaps
 from common.protocol.bytestream import ConnectionSocks5Bytestream
+from common.protocol.bytestream import ConnectionIBBytestream
 from common.message_archiving import ConnectionArchive
 from common.message_archiving import ARCHIVING_COLLECTIONS_ARRIVED
 from common.message_archiving import ARCHIVING_COLLECTION_ARRIVED
@@ -1038,12 +1039,13 @@ class ConnectionHandlersBase:
 class ConnectionHandlers(ConnectionArchive, ConnectionVcard,
 ConnectionSocks5Bytestream, ConnectionDisco, ConnectionCommands,
 ConnectionPubSub, ConnectionPEP, ConnectionCaps, ConnectionHandlersBase,
-ConnectionJingle):
+ConnectionJingle, ConnectionIBBytestream):
     def __init__(self):
         global HAS_IDLE
         ConnectionArchive.__init__(self)
         ConnectionVcard.__init__(self)
         ConnectionSocks5Bytestream.__init__(self)
+        ConnectionIBBytestream.__init__(self)
         ConnectionCommands.__init__(self)
         ConnectionPubSub.__init__(self)
         ConnectionPEP.__init__(self, account=self.name, dispatcher=self,
@@ -2337,6 +2339,10 @@ ConnectionJingle):
                 common.xmpp.NS_BYTESTREAM)
         con.RegisterHandler('iq', self._bytestreamErrorCB, 'error',
                 common.xmpp.NS_BYTESTREAM)
+        con.RegisterHandlerOnce('iq', self.StreamOpenReplyHandler)
+        con.RegisterHandler('iq', self.IBBIqHandler, ns=common.xmpp.NS_IBB)
+        con.RegisterHandler('message', self.IBBMessageHandler,
+            ns=common.xmpp.NS_IBB)
         con.RegisterHandler('iq', self._DiscoverItemsCB, 'result',
                 common.xmpp.NS_DISCO_ITEMS)
         con.RegisterHandler('iq', self._DiscoverItemsErrorCB, 'error',
