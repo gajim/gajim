@@ -120,7 +120,7 @@ class ConnectionBytestream:
         feature.addChild(node=_feature)
         field = _feature.setField('stream-method')
         field.setAttr('type', 'list-single')
-        #field.addOption(xmpp.NS_BYTESTREAM)
+        field.addOption(xmpp.NS_BYTESTREAM)
         field.addOption(xmpp.NS_IBB)
         self.connection.send(iq)
 
