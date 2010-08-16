@@ -429,27 +429,45 @@ class PreferencesWindow:
         buf.connect('changed', self.on_msg_textview_changed)
 
         ### Audio / Video tab ###
-        def create_av_combobox(opt_name, device_dict):
+        def create_av_combobox(opt_name, device_dict, config_name=None,
+        key=None):
             combobox = self.xml.get_object(opt_name + '_combobox')
             cell = gtk.CellRendererText()
             combobox.pack_start(cell, True)
             combobox.add_attribute(cell, 'text', 0)
             model = gtk.ListStore(str, str)
             combobox.set_model(model)
+            if config_name:
+                config = gajim.config.get(config_name)
+            else:
+                config = gajim.config.get(opt_name + '_device')
 
-            for index, (name, value) in enumerate(sorted(device_dict.iteritems())):
+            for index, (name, value) in enumerate(sorted(device_dict.\
+            iteritems(), key=key)):
                 model.append((name, value))
-                if gajim.config.get(opt_name + '_device') == value:
+                if config == value:
                     combobox.set_active(index)
 
         if HAS_GST:
             create_av_combobox('audio_input', AudioInputManager().get_devices())
-            create_av_combobox('audio_output', AudioOutputManager().get_devices())
+            create_av_combobox('audio_output', AudioOutputManager().get_devices(
+                ))
             create_av_combobox('video_input', VideoInputManager().get_devices())
-            create_av_combobox('video_output', VideoOutputManager().get_devices())
+            create_av_combobox('video_output', VideoOutputManager().get_devices(
+                ))
+
+            create_av_combobox('video_framerate', {_('Default'): '',
+                '15fps': '15/1', '10fps': '10/1', '5fps': '5/1',
+                '2.5fps': '5/2'}, 'video_framerate', key=lambda x: -1 if \
+                not x[1] else float(x[0][:-3]))
+            create_av_combobox('video_size', {_('Default'): '',
+                '800x600': '800x600', '640x480': '640x480',
+                '320x240': '320x240'}, 'video_size', key=lambda x: -1 if \
+                not x[1] else int(x[0][:3]))
+
         else:
             for opt_name in ('audio_input', 'audio_output', 'video_input',
-            'video_output'):
+            'video_output', 'video_framerate', 'video_size'):
                 combobox = self.xml.get_object(opt_name + '_combobox')
                 combobox.set_sensitive(False)
 
@@ -1076,23 +1094,29 @@ class PreferencesWindow:
     def on_msg_treemodel_row_deleted(self, model, path):
         self.save_status_messages(model)
 
-    def on_av_combobox_changed(self, combobox, opt_name):
+    def on_av_combobox_changed(self, combobox, config_name):
         model = combobox.get_model()
         active = combobox.get_active()
         device = model[active][1].decode('utf-8')
-        gajim.config.set(opt_name + '_device', device)
+        gajim.config.set(config_name, device)
 
     def on_audio_input_combobox_changed(self, widget):
-        self.on_av_combobox_changed(widget, 'audio_input')
+        self.on_av_combobox_changed(widget, 'audio_input_device')
 
     def on_audio_output_combobox_changed(self, widget):
-        self.on_av_combobox_changed(widget, 'audio_output')
+        self.on_av_combobox_changed(widget, 'audio_output_device')
 
     def on_video_input_combobox_changed(self, widget):
-        self.on_av_combobox_changed(widget, 'video_input')
+        self.on_av_combobox_changed(widget, 'video_input_device')
 
     def on_video_output_combobox_changed(self, widget):
-        self.on_av_combobox_changed(widget, 'video_output')
+        self.on_av_combobox_changed(widget, 'video_output_device')
+
+    def on_video_framerate_combobox_changed(self, widget):
+        self.on_av_combobox_changed(widget, 'video_framerate')
+
+    def on_video_size_combobox_changed(self, widget):
+        self.on_av_combobox_changed(widget, 'video_size')
 
     def on_stun_checkbutton_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'use_stun_server',

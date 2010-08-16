@@ -544,7 +544,7 @@ class ConnectionPEP(object):
         items = event_tag.getTag('items')
         if items:
             for item in items.getTags('item'):
-                entry = item.getTag('entry')
+                entry = item.getTag('entry', namespace=xmpp.NS_ATOM)
                 if entry:
                     # for each entry in feed (there shouldn't be more than one,
                     # but to be sure...

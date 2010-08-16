@@ -171,6 +171,7 @@ class JingleRTPContent(JingleContent):
     def _on_gst_message(self, bus, message):
         if message.type == gst.MESSAGE_ELEMENT:
             name = message.structure.get_name()
+            log.debug('gst element message: %s: %s' % (name, message))
             if name == 'farsight-new-active-candidate-pair':
                 pass
             elif name == 'farsight-recv-codecs-changed':
@@ -190,17 +191,15 @@ class JingleRTPContent(JingleContent):
                     self.send_candidate(candidate)
             elif name == 'farsight-component-state-changed':
                 state = message.structure['state']
-                print message.structure['component'], state
                 if state == farsight.STREAM_STATE_FAILED:
                     reason = xmpp.Node('reason')
                     reason.setTag('failed-transport')
                     self.session.remove_content(self.creator, self.name, reason)
             elif name == 'farsight-error':
-                print 'Farsight error #%d!' % message.structure['error-no']
-                print 'Message: %s' % message.structure['error-msg']
-                print 'Debug: %s' % message.structure['debug-msg']
-            else:
-                print name
+                log.error('Farsight error #%d!\nMessage: %s\nDebug: %s' % (
+                    message.structure['error-no'],
+                    message.structure['error-msg'],
+                    message.structure['debug-msg']))
         elif message.type == gst.MESSAGE_ERROR:
             # TODO: Fix it to fallback to videotestsrc anytime an error occur,
             # or raise an error, Jingle way
@@ -365,8 +364,22 @@ class JingleVideo(JingleRTPContent):
         JingleRTPContent.setup_stream(self)
 
         # the local parts
+        if gajim.config.get('video_framerate'):
+            framerate = 'videorate ! video/x-raw-yuv,framerate=%s ! ' % \
+                gajim.config.get('video_framerate')
+        else:
+            framerate = ''
+        try:
+            w, h = gajim.config.get('video_size').split('x')
+        except:
+            w = h = None
+        if w and h:
+            video_size = 'video/x-raw-yuv,width=%s,height=%s ! ' % (w, h)
+        else:
+            video_size = ''
         self.src_bin = self.make_bin_from_config('video_input_device',
-                '%s ! videoscale ! ffmpegcolorspace', _("video input"))
+            '%%s ! %svideoscale ! %sffmpegcolorspace' % (framerate, video_size),
+            _("video input"))
         #caps = gst.element_factory_make('capsfilter')
         #caps.set_property('caps', gst.caps_from_string('video/x-raw-yuv, width=320, height=240'))
 

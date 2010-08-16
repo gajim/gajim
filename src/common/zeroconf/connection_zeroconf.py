@@ -309,9 +309,9 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
 
     def send_message(self, jid, msg, keyID, type_='chat', subject='',
     chatstate=None, msg_id=None, composing_xep=None, resource=None,
-    user_nick=None, xhtml=None, session=None, forward_from=None, form_node=None,
-    original_message=None, delayed=None, callback=None, callback_args=[],
-    now=True):
+    user_nick=None, xhtml=None, label=None, session=None, forward_from=None,
+    form_node=None, original_message=None, delayed=None, callback=None,
+    callback_args=[], now=True):
 
         def on_send_ok(msg_id):
             self.dispatch('MSGSENT', (jid, msg, keyID))

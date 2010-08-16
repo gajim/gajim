@@ -115,13 +115,16 @@ class OptionsParser:
             gajim.config.foreach(self.write_line, f)
         except IOError, e:
             return str(e)
+        f.flush()
+        os.fsync(f.fileno())
         f.close()
         if os.path.exists(self.__filename):
-            # win32 needs this
-            try:
-                os.remove(self.__filename)
-            except Exception:
-                pass
+            if os.name == 'nt':
+                # win32 needs this
+                try:
+                    os.remove(self.__filename)
+                except Exception:
+                    pass
         try:
             os.rename(self.__tempfile, self.__filename)
         except IOError, e:
@@ -217,6 +220,8 @@ class OptionsParser:
             self.update_config_to_013100()
         if old < [0, 13, 10, 1] and new >= [0, 13, 10, 1]:
             self.update_config_to_013101()
+        if old < [0, 13, 90, 1] and new >= [0, 13, 90, 1]:
+            self.update_config_to_013901()
 
         gajim.logger.init_vars()
         gajim.logger.attach_cache_database()
@@ -883,3 +888,8 @@ class OptionsParser:
             pass
         con.close()
         gajim.config.set('version', '0.13.10.1')
+
+    def update_config_to_013901(self):
+        schemes = 'aaa:// aaas:// acap:// cap:// cid: crid:// data: dav: dict:// dns: fax: file:/ ftp:// geo: go: gopher:// h323: http:// https:// iax: icap:// im: imap:// info: ipp:// iris: iris.beep: iris.xpc: iris.xpcs: iris.lwz: ldap:// mid: modem: msrp:// msrps:// mtqp:// mupdate:// news: nfs:// nntp:// opaquelocktoken: pop:// pres: prospero:// rtsp:// service: shttp:// sip: sips: sms: snmp:// soap.beep:// soap.beeps:// tag: tel: telnet:// tftp:// thismessage:/ tip:// tv: urn:// vemmi:// xmlrpc.beep:// xmlrpc.beeps:// z39.50r:// z39.50s:// about: apt: cvs:// daap:// ed2k:// feed: fish:// git:// iax2: irc:// ircs:// ldaps:// magnet: mms:// rsync:// ssh:// svn:// sftp:// smb:// webcal://'
+        gajim.config.set('uri_schemes', schemes)
+        gajim.config.set('version', '0.13.90.1')

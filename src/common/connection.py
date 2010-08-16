@@ -135,6 +135,9 @@ class CommonConnection:
         self.blocked_groups = []
         self.blocked_all = False
 
+        self.seclabel_supported = False
+        self.seclabel_catalogues = {}
+
         self.pep_supported = False
         self.pep = {}
         # Do we continue connection when we get roster (send presence,get vcard..)
@@ -150,9 +153,13 @@ class CommonConnection:
         self.privacy_rules_supported = False
         self.vcard_supported = False
         self.private_storage_supported = False
+        self.archiving_supported = False
+        self.archive_pref_supported = False
 
         self.muc_jid = {} # jid of muc server for each transport type
         self._stun_servers = [] # STUN servers of our jabber server
+
+        self.awaiting_cids = {} # Used for XEP-0231
 
         self.get_config_values_or_default()
 
@@ -239,7 +246,7 @@ class CommonConnection:
     def _prepare_message(self, jid, msg, keyID, type_='chat', subject='',
     chatstate=None, msg_id=None, composing_xep=None, resource=None,
     user_nick=None, xhtml=None, session=None, forward_from=None, form_node=None,
-    original_message=None, delayed=None, callback=None):
+    label=None, original_message=None, delayed=None, callback=None):
         if not self.connection or self.connected < 2:
             return 1
         try:
@@ -285,33 +292,37 @@ class CommonConnection:
                                 gajim.thread_interface(encrypt_thread, [msg, keyID,
                                         True], _on_encrypted, [])
                             else:
-                                self._message_encrypted_cb(output, type_, msg, msgtxt,
-                                        original_message, fjid, resource, jid, xhtml,
-                                        subject, chatstate, composing_xep, forward_from,
-                                        delayed, session, form_node, user_nick, keyID,
-                                        callback)
+                                self._message_encrypted_cb(output, type_, msg,
+                                    msgtxt, original_message, fjid, resource,
+                                    jid, xhtml, subject, chatstate, msg_id,
+                                    composing_xep, label, forward_from, delayed,
+                                    session, form_node, user_nick, keyID,
+                                    callback)
                         self.dispatch('GPG_ALWAYS_TRUST', _on_always_trust)
                     else:
                         self._message_encrypted_cb(output, type_, msg, msgtxt,
-                                original_message, fjid, resource, jid, xhtml, subject,
-                                chatstate, composing_xep, forward_from, delayed, session,
-                                form_node, user_nick, keyID, callback)
+                            original_message, fjid, resource, jid, xhtml,
+                            subject, chatstate, msg_id, composing_xep, label,
+                            forward_from, delayed, session, form_node,
+                            user_nick, keyID, callback)
                 gajim.thread_interface(encrypt_thread, [msg, keyID, False],
                         _on_encrypted, [])
                 return
 
             self._message_encrypted_cb(('', error), type_, msg, msgtxt,
-                    original_message, fjid, resource, jid, xhtml, subject, chatstate,
-                    composing_xep, forward_from, delayed, session, form_node, user_nick,
-                    keyID, callback)
+                original_message, fjid, resource, jid, xhtml, subject,
+                chatstate, msg_id, composing_xep, label, forward_from, delayed,
+                session, form_node, user_nick, keyID, callback)
 
         self._on_continue_message(type_, msg, msgtxt, original_message, fjid,
-                resource, jid, xhtml, subject, msgenc, keyID, chatstate, composing_xep,
-                forward_from, delayed, session, form_node, user_nick, callback)
+            resource, jid, xhtml, subject, msgenc, keyID, chatstate, msg_id,
+            composing_xep, label, forward_from, delayed, session, form_node,
+            user_nick, callback)
 
-    def _message_encrypted_cb(self, output, type_, msg, msgtxt, original_message,
-    fjid, resource, jid, xhtml, subject, chatstate, composing_xep, forward_from,
-    delayed, session, form_node, user_nick, keyID, callback):
+    def _message_encrypted_cb(self, output, type_, msg, msgtxt,
+    original_message, fjid, resource, jid, xhtml, subject, chatstate, msg_id,
+    composing_xep, label, forward_from, delayed, session, form_node, user_nick,
+    keyID, callback):
         msgenc, error = output
 
         if msgenc and not error:
@@ -321,18 +332,19 @@ class CommonConnection:
                 # one in locale and one en
                 msgtxt = _('[This message is *encrypted* (See :XEP:`27`]') + \
                         ' (' + msgtxt + ')'
-            self._on_continue_message(type_, msg, msgtxt, original_message, fjid,
-                    resource, jid, xhtml, subject, msgenc, keyID, chatstate,
-                    composing_xep, forward_from, delayed, session, form_node, user_nick,
-                    callback)
+            self._on_continue_message(type_, msg, msgtxt, original_message,
+                fjid, resource, jid, xhtml, subject, msgenc, keyID,
+                chatstate, msg_id, composing_xep, label, forward_from, delayed,
+                session, form_node, user_nick, callback)
             return
         # Encryption failed, do not send message
         tim = localtime()
         self.dispatch('MSGNOTSENT', (jid, error, msgtxt, tim, session))
 
     def _on_continue_message(self, type_, msg, msgtxt, original_message, fjid,
-    resource, jid, xhtml, subject, msgenc, keyID, chatstate, composing_xep,
-    forward_from, delayed, session, form_node, user_nick, callback):
+    resource, jid, xhtml, subject, msgenc, keyID, chatstate, msg_id,
+    composing_xep, label, forward_from, delayed, session, form_node, user_nick,
+    callback):
         if type_ == 'chat':
             msg_iq = common.xmpp.Message(to=fjid, body=msgtxt, typ=type_,
                     xhtml=xhtml)
@@ -343,11 +355,17 @@ class CommonConnection:
             else:
                 msg_iq = common.xmpp.Message(to=fjid, body=msgtxt, typ='normal',
                         xhtml=xhtml)
+
+        if msg_id:
+            msg_iq.setID(msg_id)
+
         if msgenc:
             msg_iq.setTag(common.xmpp.NS_ENCRYPTED + ' x').setData(msgenc)
 
         if form_node:
             msg_iq.addChild(node=form_node)
+        if label:
+            msg_iq.addChild(node=label)
 
         # XEP-0172: user_nickname
         if user_nick:
@@ -1302,8 +1320,6 @@ class Connection(CommonConnection, ConnectionHandlers):
                 self.on_connect_auth(con)
                 self.on_connect_auth = None
         else:
-            # Forget password, it's wrong
-            self.password = None
             gajim.log.debug("Couldn't authenticate to %s" % self._hostname)
             self.disconnect(on_purpose = True)
             self.dispatch('STATUS', 'offline')
@@ -1527,6 +1543,9 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.connection.set_send_timeout(self.keepalives, self.send_keepalive)
         self.connection.set_send_timeout2(self.pingalives, self.sendPing)
         self.connection.onreceive(None)
+
+        self.request_message_archiving_preferences()
+
         self.discoverInfo(gajim.config.get_per('accounts', self.name, 'hostname'),
                 id_prefix='Gajim_')
         self.privacy_rules_requested = False
@@ -1603,11 +1622,11 @@ class Connection(CommonConnection, ConnectionHandlers):
 
         self.connection.send(msg_iq)
 
-    def send_message(self, jid, msg, keyID, type_='chat', subject='',
+    def send_message(self, jid, msg, keyID=None, type_='chat', subject='',
     chatstate=None, msg_id=None, composing_xep=None, resource=None,
-    user_nick=None, xhtml=None, session=None, forward_from=None, form_node=None,
-    original_message=None, delayed=None, callback=None, callback_args=[],
-    now=False):
+    user_nick=None, xhtml=None, label=None, session=None, forward_from=None,
+    form_node=None, original_message=None, delayed=None, callback=None,
+    callback_args=[], now=False):
 
         def cb(jid, msg, keyID, forward_from, session, original_message,
         subject, type_, msg_iq):
@@ -1621,10 +1640,10 @@ class Connection(CommonConnection, ConnectionHandlers):
                     subject, type_)
 
         self._prepare_message(jid, msg, keyID, type_=type_, subject=subject,
-                chatstate=chatstate, msg_id=msg_id, composing_xep=composing_xep,
-                resource=resource, user_nick=user_nick, xhtml=xhtml, session=session,
-                forward_from=forward_from, form_node=form_node,
-                original_message=original_message, delayed=delayed, callback=cb)
+            chatstate=chatstate, msg_id=msg_id, composing_xep=composing_xep,
+            resource=resource, user_nick=user_nick, xhtml=xhtml, label=label,
+            session=session, forward_from=forward_from, form_node=form_node,
+            original_message=original_message, delayed=delayed, callback=cb)
 
     def send_contacts(self, contacts, jid):
         """
@@ -1830,6 +1849,15 @@ class Connection(CommonConnection, ConnectionHandlers):
         iq2.addChild(name='gajim', namespace='gajim:prefs')
         self.connection.send(iq)
 
+    def seclabel_catalogue(self, to, callback):
+        if not gajim.account_is_connected(self.name):
+            return
+        self.seclabel_catalogue_request(to, callback)
+        iq = common.xmpp.Iq(typ='get')
+        iq2 = iq.addChild(name='catalog', namespace=common.xmpp.NS_SECLABEL_CATALOG)
+        iq2.setAttr('to', to)
+        self.connection.send(iq)
+
     def _request_bookmarks_xml(self):
         if not gajim.account_is_connected(self.name):
             return
@@ -1885,21 +1913,19 @@ class Connection(CommonConnection, ConnectionHandlers):
             if bm.get('print_status', None):
                 iq2.setTagData('print_status', bm['print_status'])
 
-        if self.pubsub_supported and storage_type != 'xml':
-            if self.pubsub_publish_options_supported:
-                options = common.xmpp.Node(common.xmpp.NS_DATA + ' x',
-                        attrs={'type': 'submit'})
-                f = options.addChild('field', attrs={'var': 'FORM_TYPE',
-                        'type': 'hidden'})
-                f.setTagData('value', common.xmpp.NS_PUBSUB_PUBLISH_OPTIONS)
-                f = options.addChild('field', attrs={'var': 'pubsub#persist_items'})
-                f.setTagData('value', 'true')
-                f = options.addChild('field', attrs={'var': 'pubsub#access_model'})
-                f.setTagData('value', 'whitelist')
-            else:
-                options = None
+        if self.pubsub_supported and self.pubsub_publish_options_supported and \
+        storage_type != 'xml':
+            options = common.xmpp.Node(common.xmpp.NS_DATA + ' x',
+                attrs={'type': 'submit'})
+            f = options.addChild('field', attrs={'var': 'FORM_TYPE',
+                'type': 'hidden'})
+            f.setTagData('value', common.xmpp.NS_PUBSUB_PUBLISH_OPTIONS)
+            f = options.addChild('field', attrs={'var': 'pubsub#persist_items'})
+            f.setTagData('value', 'true')
+            f = options.addChild('field', attrs={'var': 'pubsub#access_model'})
+            f.setTagData('value', 'whitelist')
             self.send_pb_publish('', 'storage:bookmarks', iq, 'current',
-                    options=options)
+                options=options)
         if storage_type != 'pubsub':
             iqA = common.xmpp.Iq(typ='set')
             iqB = iqA.addChild(name='query', namespace=common.xmpp.NS_PRIVATE)
@@ -1975,6 +2001,14 @@ class Connection(CommonConnection, ConnectionHandlers):
         p = self.add_sha(p, ptype != 'unavailable')
         self.connection.send(p)
 
+    def send_captcha(self, jid, form_node):
+        if not gajim.account_is_connected(self.name):
+            return
+        iq = common.xmpp.Iq(typ='set', to=jid)
+        captcha = iq.addChild(name='captcha', namespace=common.xmpp.NS_CAPTCHA)
+        captcha.addChild(node=form_node)
+        self.connection.send(iq)
+
     def check_unique_room_id_support(self, server, instance):
         if not gajim.account_is_connected(self.name):
             return
@@ -2041,13 +2075,15 @@ class Connection(CommonConnection, ConnectionHandlers):
                 t.setTagData('password', password)
         self.connection.send(p)
 
-    def send_gc_message(self, jid, msg, xhtml = None):
+    def send_gc_message(self, jid, msg, xhtml = None, label = None):
         if not gajim.account_is_connected(self.name):
             return
         if not xhtml and gajim.config.get('rst_formatting_outgoing_messages'):
             from common.rst_xhtml_generator import create_xhtml
             xhtml = create_xhtml(msg)
         msg_iq = common.xmpp.Message(jid, msg, typ = 'groupchat', xhtml = xhtml)
+        if label is not None:
+            msg_iq.addChild(node = label)
         self.connection.send(msg_iq)
         self.dispatch('MSGSENT', (jid, msg))
 

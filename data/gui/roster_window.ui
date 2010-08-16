@@ -54,8 +54,8 @@
                     <child>
                       <object class="GtkImageMenuItem" id="join_gc_menuitem">
                         <property name="label" translatable="yes">Join _Group Chat...</property>
-                        <property name="use_underline">True</property>
                         <property name="visible">True</property>
+                        <property name="use_underline">True</property>
                         <property name="image">image3</property>
                         <property name="use_stock">False</property>
                         <property name="accel_group">accelgroup1</property>
@@ -69,8 +69,8 @@
                     <child>
                       <object class="GtkImageMenuItem" id="add_new_contact_menuitem">
                         <property name="label" translatable="yes">Add _Contact...</property>
-                        <property name="use_underline">True</property>
                         <property name="visible">True</property>
+                        <property name="use_underline">True</property>
                         <property name="image">image4</property>
                         <property name="use_stock">False</property>
                         <property name="accel_group">accelgroup1</property>
@@ -157,6 +157,16 @@
                         <property name="accel_group">accelgroup1</property>
                         <accelerator key="P" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                         <signal name="activate" handler="on_preferences_menuitem_activate"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImageMenuItem" id="plugins_menuitem">
+                        <property name="label" translatable="yes">P_lugins</property>
+                        <property name="visible">True</property>
+                        <property name="use_underline">True</property>
+                        <property name="image">image13</property>
+                        <property name="use_stock">False</property>
+                        <signal name="activate" handler="on_plugins_menuitem_activate"/>
                       </object>
                     </child>
                   </object>
@@ -435,6 +445,11 @@
   <object class="GtkImage" id="image12">
     <property name="visible">True</property>
     <property name="stock">gtk-properties</property>
+    <property name="icon-size">1</property>
+  </object>
+  <object class="GtkImage" id="image13">
+    <property name="visible">True</property>
+    <property name="stock">gtk-disconnect</property>
     <property name="icon-size">1</property>
   </object>
 </interface>

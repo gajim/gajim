@@ -10,7 +10,8 @@ nobase_dist_gajimsrc_PYTHON = \
 	$(srcdir)/common/xmpp/*.py \
 	$(srcdir)/common/zeroconf/*.py \
 	$(srcdir)/command_system/*.py \
-	$(srcdir)/command_system/implementation/*.py
+	$(srcdir)/command_system/implementation/*.py \
+	$(srcdir)/plugins/*.py
 
 dist-hook:
 			rm -f $(distdir)/ipython_view.py

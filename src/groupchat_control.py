@@ -40,9 +40,11 @@ import dialogs
 import config
 import vcard
 import cell_renderer_image
+import dataforms_widget
 
 from common import gajim
 from common import helpers
+from common import dataforms
 
 from chat_control import ChatControl
 from chat_control import ChatControlBase
@@ -384,6 +386,10 @@ class GroupchatControl(ChatControlBase):
         self.list_treeview.append_column(column)
         column.set_visible(False)
         self.list_treeview.set_expander_column(column)
+
+        self.setup_seclabel(self.xml.get_object('label_selector'))
+        
+        self.form_widget = None
 
         gajim.gc_connected[self.account][self.room_jid] = False
         # disable win, we are not connected yet
@@ -785,30 +791,66 @@ class GroupchatControl(ChatControlBase):
         menu.destroy()
 
     def on_message(self, nick, msg, tim, has_timestamp=False, xhtml=None,
-    status_code=[]):
+    status_code=[], displaymarking=None, captcha=None):
+        if captcha:
+            if self.form_widget:
+                self.form_widget.hide()
+                self.form_widget.destroy()
+                self.btn_box.destroy()
+            dataform = dataforms.ExtendForm(node=captcha)
+            self.form_widget = dataforms_widget.DataFormWidget(dataform)
+            self.form_widget.show_all()
+            vbox = self.xml.get_object('gc_textviews_vbox')
+            vbox.pack_start(self.form_widget, expand=False, fill=False)
+
+            def on_send_dataform_clicked(widget):
+                if not self.form_widget:
+                    return
+                form_node = self.form_widget.data_form.get_purged()
+                form_node.type = 'submit'
+                gajim.connections[self.account].send_captcha(self.room_jid,
+                    form_node)
+                self.form_widget.hide()
+                self.form_widget.destroy()
+                self.btn_box.destroy()
+                self.form_widget = None
+                del self.btn_box
+
+            valid_button = gtk.Button(stock=gtk.STOCK_OK)
+            valid_button.connect('clicked', on_send_dataform_clicked)
+            self.btn_box = gtk.HButtonBox()
+            self.btn_box.set_layout(gtk.BUTTONBOX_END)
+            self.btn_box.pack_start(valid_button)
+            self.btn_box.show_all()
+            vbox.pack_start(self.btn_box, expand=False, fill=False)
+            if self.parent_win:
+                self.parent_win.redraw_tab(self, 'attention')
+            else:
+                self.attention_flag = True
+            helpers.play_sound('muc_message_received')
         if '100' in status_code:
             # Room is not anonymous
             self.is_anonymous = False
         if not nick:
             # message from server
-            self.print_conversation(msg, tim=tim, xhtml=xhtml)
+            self.print_conversation(msg, tim=tim, xhtml=xhtml, displaymarking=displaymarking)
         else:
             # message from someone
             if has_timestamp:
                 # don't print xhtml if it's an old message.
                 # Like that xhtml messages are grayed too.
-                self.print_old_conversation(msg, nick, tim, None)
+                self.print_old_conversation(msg, nick, tim, None, displaymarking=displaymarking)
             else:
-                self.print_conversation(msg, nick, tim, xhtml)
+                self.print_conversation(msg, nick, tim, xhtml, displaymarking=displaymarking)
 
     def on_private_message(self, nick, msg, tim, xhtml, session, msg_id=None,
-    encrypted=False):
+    encrypted=False, displaymarking=None):
         # Do we have a queue?
         fjid = self.room_jid + '/' + nick
         no_queue = len(gajim.events.get_events(self.account, fjid)) == 0
 
         event = gajim.events.create_event('pm', (msg, '', 'incoming', tim,
-            encrypted, '', msg_id, xhtml, session))
+            encrypted, '', msg_id, xhtml, session, displaymarking))
         gajim.events.add_event(self.account, fjid, event)
 
         autopopup = gajim.config.get('autopopup')
@@ -851,7 +893,8 @@ class GroupchatControl(ChatControlBase):
             role_iter = model.iter_next(role_iter)
         return None
 
-    def print_old_conversation(self, text, contact='', tim=None, xhtml = None):
+    def print_old_conversation(self, text, contact='', tim=None, xhtml = None,
+        displaymarking=None):
         if isinstance(text, str):
             text = unicode(text, 'utf-8')
         if contact:
@@ -867,10 +910,11 @@ class GroupchatControl(ChatControlBase):
             small_attr = []
         ChatControlBase.print_conversation_line(self, text, kind, contact, tim,
             small_attr, small_attr + ['restored_message'],
-            small_attr + ['restored_message'], count_as_new=False, xhtml=xhtml)
+            small_attr + ['restored_message'], count_as_new=False, xhtml=xhtml,
+            displaymarking=displaymarking)
 
     def print_conversation(self, text, contact='', tim=None, xhtml=None,
-    graphics=True):
+    graphics=True, displaymarking=None):
         """
         Print a line in the conversation
 
@@ -937,7 +981,7 @@ class GroupchatControl(ChatControlBase):
 
         ChatControlBase.print_conversation_line(self, text, kind, contact, tim,
             other_tags_for_name, [], other_tags_for_text, xhtml=xhtml,
-            graphics=graphics)
+            graphics=graphics, displaymarking=displaymarking)
 
     def get_nb_unread(self):
         type_events = ['printed_marked_gc_msg']
@@ -1588,12 +1632,13 @@ class GroupchatControl(ChatControlBase):
         if not message:
             return
 
+        label = self.get_seclabel()
         if message != '' or message != '\n':
             self.save_sent_message(message)
 
             # Send the message
             gajim.connections[self.account].send_gc_message(self.room_jid,
-                    message, xhtml=xhtml)
+                    message, xhtml=xhtml, label=label)
             self.msg_textview.get_buffer().set_text('')
             self.msg_textview.grab_focus()
 
@@ -1630,6 +1675,10 @@ class GroupchatControl(ChatControlBase):
         del win._controls[self.account][self.contact.jid]
 
     def shutdown(self, status='offline'):
+        # PluginSystem: calling shutdown of super class (ChatControlBase) 
+        # to let it remove it's GUI extension points
+        super(GroupchatControl, self).shutdown()
+
         # Preventing autorejoin from being activated
         self.autorejoin = False
 
@@ -1832,6 +1881,9 @@ class GroupchatControl(ChatControlBase):
         # NOTE: handles mykeypress which is custom signal connected to this
         # CB in new_room(). for this singal see message_textview.py
 
+        if not widget.get_sensitive():
+            # Textview is not sensitive, don't handle keypress
+            return
         # construct event instance from binding
         event = gtk.gdk.Event(gtk.gdk.KEY_PRESS) # it's always a key-press here
         event.keyval = event_keyval

@@ -271,6 +271,8 @@ def check_and_possibly_create_paths():
     XTLS_CERTS = configpaths.gajimpaths['MY_PEER_CERTS']
     LOCAL_XTLS_CERTS = configpaths.gajimpaths['MY_CERT']
 
+    PLUGINS_CONFIG_PATH = gajim.PLUGINS_CONFIG_DIR
+
     if not os.path.exists(MY_DATA):
         create_path(MY_DATA)
     elif os.path.isfile(MY_DATA):
@@ -347,6 +349,18 @@ def check_and_possibly_create_paths():
         jingle_xtls.make_certs(cert_name, 'gajim')
 
 
+    if not os.path.exists(PLUGINS_CONFIG_PATH):
+        create_path(PLUGINS_CONFIG_PATH)
+    elif os.path.isfile(PLUGINS_CONFIG_PATH):
+        print _('%s is a file but it should be a directory') % PLUGINS_CONFIG_PATH
+        print _('Gajim will now exit')
+        sys.exit()
+
 def create_path(directory):
+    head, tail = os.path.split(directory)
+    if not os.path.exists(head):
+        create_path(head)
+    if os.path.exists(directory):
+        return
     print _('creating %s directory') % directory
     os.mkdir(directory, 0700)

@@ -30,6 +30,9 @@ log = logging.getLogger('gajim.common.ged')
 PRECORE = 30
 CORE = 40
 POSTCORE = 50
+GUI1 = 60
+GUI2 = 70
+POSTGUI = 80
 
 class GlobalEventsDispatcher(object):
 
@@ -61,4 +64,5 @@ class GlobalEventsDispatcher(object):
         log.debug('%s\nArgs: %s'%(event_name, str(args)))
         if event_name in self.handlers:
             for priority, handler in self.handlers[event_name]:
-                handler(*args, **kwargs)
+                if handler(*args, **kwargs):
+                    return

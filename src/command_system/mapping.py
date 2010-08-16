@@ -205,7 +205,7 @@ def adapt_arguments(command, arguments, args, opts):
     # The second stage of transforming options to an associatable state.
     # Expanding short, one-letter options to a verbose ones, if
     # corresponding optin has been given.
-    if command.expand_short:
+    if command.expand:
         expanded = []
         for spec_key, spec_value in norm_kwargs.iteritems():
             letter = spec_key[0] if len(spec_key) > 1 else None

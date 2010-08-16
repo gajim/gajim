@@ -46,6 +46,7 @@ from common import exceptions
 from message_control import MessageControl
 from conversation_textview import ConversationTextview
 from message_textview import MessageTextView
+from common.stanza_session import EncryptedStanzaSession, ArchivingStanzaSession
 from common.contacts import GC_Contact
 from common.logger import constants
 from common.pep import MOODS, ACTIVITIES
@@ -95,8 +96,14 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
     """
 
     keymap = gtk.gdk.keymap_get_default()
-    keycode_c = keymap.get_entries_for_keyval(gtk.keysyms.c)[0][0]
-    keycode_ins = keymap.get_entries_for_keyval(gtk.keysyms.Insert)[0][0]
+    try:
+        keycode_c = keymap.get_entries_for_keyval(gtk.keysyms.c)[0][0]
+    except TypeError:
+        keycode_c = 54
+    try:
+        keycode_ins = keymap.get_entries_for_keyval(gtk.keysyms.Insert)[0][0]
+    except TypeError:
+        keycode_ins = 118
     def make_href(self, match):
         url_color = gajim.config.get('urlmsgcolor')
         url = match.group()
@@ -149,6 +156,8 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         """
         self.draw_banner_text()
         self._update_banner_state_image()
+        gajim.plugin_manager.gui_extension_point('chat_control_base_draw_banner',
+            self)
 
     def draw_banner_text(self):
         """
@@ -231,6 +240,29 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
     def status_url_clicked(self, widget, url):
         helpers.launch_browser_mailer('url', url)
+
+    def setup_seclabel(self, combo):
+        self.seclabel_combo = combo
+        self.seclabel_combo.hide()
+        self.seclabel_combo.set_no_show_all(True)
+        lb = gtk.ListStore(str)
+        self.seclabel_combo.set_model(lb)
+        cell = gtk.CellRendererText()
+        cell.set_property('xpad', 5) # padding for status text
+        self.seclabel_combo.pack_start(cell, True)
+        # text to show is in in first column of liststore
+        self.seclabel_combo.add_attribute(cell, 'text', 0)
+        if gajim.connections[self.account].seclabel_supported:
+            gajim.connections[self.account].seclabel_catalogue(self.contact.jid, self.on_seclabels_ready)
+
+    def on_seclabels_ready(self):
+        lb = self.seclabel_combo.get_model()
+        lb.clear()
+        for label in gajim.connections[self.account].seclabel_catalogues[self.contact.jid][2]:
+            lb.append([label])
+        self.seclabel_combo.set_active(0)
+        self.seclabel_combo.set_no_show_all(False)
+        self.seclabel_combo.show_all()
 
     def __init__(self, type_id, parent_win, widget_name, contact, acct,
     resource=None):
@@ -380,6 +412,14 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         self.command_hits = []
         self.last_key_tabs = False
 
+        # PluginSystem: adding GUI extension point for ChatControlBase
+        # instance object (also subclasses, eg. ChatControl or GroupchatControl)
+        gajim.plugin_manager.gui_extension_point('chat_control_base', self)
+
+        # This is bascially a very nasty hack to surpass the inability
+        # to properly use the super, because of the old code.
+        CommandTools.__init__(self)
+
     def set_speller(self):
         # now set the one the user selected
         per_type = 'contacts'
@@ -414,6 +454,12 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             menu.reorder_child(item, i)
             i += 1
         menu.show_all()
+
+    def shutdown(self):
+        # PluginSystem: removing GUI extension points connected with ChatControlBase
+        # instance object
+        gajim.plugin_manager.remove_gui_extension_point('chat_control_base', self)
+        gajim.plugin_manager.remove_gui_extension_point('chat_control_base_draw_banner', self)
 
     def on_msg_textview_populate_popup(self, textview, menu):
         """
@@ -721,6 +767,16 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             self.drag_entered_conv = True
             self.conv_textview.tv.set_editable(True)
 
+    def get_seclabel(self):
+        label = None
+        if self.seclabel_combo is not None:
+            idx = self.seclabel_combo.get_active()
+            if idx != -1:
+                cat = gajim.connections[self.account].seclabel_catalogues[self.contact.jid]
+                lname = cat[2][idx]
+                label = cat[1][lname]
+        return label
+
     def send_message(self, message, keyID='', type_='chat', chatstate=None,
                     msg_id=None, composing_xep=None, resource=None, xhtml=None,
                     callback=None, callback_args=[], process_commands=True):
@@ -733,9 +789,11 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         if process_commands and self.process_as_command(message):
             return
 
+        label = self.get_seclabel()
         MessageControl.send_message(self, message, keyID, type_=type_,
                 chatstate=chatstate, msg_id=msg_id, composing_xep=composing_xep,
                 resource=resource, user_nick=self.user_nick, xhtml=xhtml,
+                label=label,
                 callback=callback, callback_args=callback_args)
 
         # Record message history
@@ -769,7 +827,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
                     other_tags_for_name=[], other_tags_for_time=[],
                     other_tags_for_text=[], count_as_new=True, subject=None,
                     old_kind=None, xhtml=None, simple=False, xep0184_id=None,
-                    graphics=True):
+                    graphics=True, displaymarking=None):
         """
         Print 'chat' type messages
         """
@@ -781,7 +839,8 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             end = True
         textview.print_conversation_line(text, jid, kind, name, tim,
                 other_tags_for_name, other_tags_for_time, other_tags_for_text,
-                subject, old_kind, xhtml, simple=simple, graphics=graphics)
+                subject, old_kind, xhtml, simple=simple, graphics=graphics,
+                displaymarking=displaymarking)
 
         if xep0184_id is not None:
             textview.show_xep0184_warning(xep0184_id)
@@ -1413,6 +1472,15 @@ class ChatControl(ChatControlBase):
             id_ = widget.connect('released', self.on_num_button_released)
             self.handlers[id_] = widget
 
+        self.dtmf_window = self.xml.get_object('dtmf_window')
+        id_ = self.dtmf_window.connect('focus-out-event',
+            self.on_dtmf_window_focus_out_event)
+        self.handlers[id_] = self.dtmf_window
+
+        widget = self.xml.get_object('dtmf_button')
+        id_ = widget.connect('clicked', self.on_dtmf_button_clicked)
+        self.handlers[id_] = widget
+
         widget = self.xml.get_object('mic_hscale')
         id_ = widget.connect('value_changed', self.on_mic_hscale_value_changed)
         self.handlers[id_] = widget
@@ -1429,6 +1497,7 @@ class ChatControl(ChatControlBase):
             session = gajim.connections[self.account].find_controlless_session(
                     self.contact.jid, resource)
 
+        self.setup_seclabel(self.xml.get_object('label_selector'))
         if session:
             session.control = self
             self.session = session
@@ -1533,6 +1602,10 @@ class ChatControl(ChatControlBase):
         else:
             img.hide()
 
+        # PluginSystem: adding GUI extension point for this ChatControl 
+        # instance object
+        gajim.plugin_manager.gui_extension_point('chat_control', self)
+
     def _update_jingle(self, jingle_type):
         if jingle_type not in ('audio', 'video'):
             return
@@ -1558,7 +1631,7 @@ class ChatControl(ChatControlBase):
 
     def update_audio(self):
         self._update_jingle('audio')
-        vbox = self.xml.get_object('audio_vbox')
+        hbox = self.xml.get_object('audio_buttons_hbox')
         if self.audio_state == self.JINGLE_STATE_CONNECTED:
             # Set volume from config
             input_vol = gajim.config.get('audio_input_volume')
@@ -1568,11 +1641,11 @@ class ChatControl(ChatControlBase):
             self.xml.get_object('mic_hscale').set_value(input_vol)
             self.xml.get_object('sound_hscale').set_value(output_vol)
             # Show vbox
-            vbox.set_no_show_all(False)
-            vbox.show_all()
+            hbox.set_no_show_all(False)
+            hbox.show_all()
         elif not self.audio_sid:
-            vbox.set_no_show_all(True)
-            vbox.hide()
+            hbox.set_no_show_all(True)
+            hbox.hide()
 
     def update_video(self):
         self._update_jingle('video')
@@ -1646,19 +1719,21 @@ class ChatControl(ChatControlBase):
     def on_num_button_released(self, released):
         self._get_audio_content()._stop_dtmf()
 
-    def on_mic_hscale_value_changed(self, widget):
-        value = widget.get_value()
+    def on_dtmf_button_clicked(self, widget):
+        self.dtmf_window.show_all()
+
+    def on_dtmf_window_focus_out_event(self, widget, event):
+        self.dtmf_window.hide()
+
+    def on_mic_hscale_value_changed(self, widget, value):
         self._get_audio_content().set_mic_volume(value / 100)
         # Save volume to config
-        # FIXME: Putting it here is maybe not the right thing to do?
         gajim.config.set('audio_input_volume', value)
 
 
-    def on_sound_hscale_value_changed(self, widget):
-        value = widget.get_value()
+    def on_sound_hscale_value_changed(self, widget, value):
         self._get_audio_content().set_out_volume(value / 100)
         # Save volume to config
-        # FIXME: Putting it here is maybe not the right thing to do?
         gajim.config.set('audio_output_volume', value)
 
     def on_avatar_eventbox_enter_notify_event(self, widget, event):
@@ -2048,20 +2123,23 @@ class ChatControl(ChatControlBase):
                 gobject.source_remove(self.possible_inactive_timeout_id)
                 self._schedule_activity_timers()
 
-        def _on_sent(id_, contact, message, encrypted, xhtml):
+        def _on_sent(id_, contact, message, encrypted, xhtml, label):
             if contact.supports(NS_RECEIPTS) and gajim.config.get_per('accounts',
             self.account, 'request_receipt'):
                 xep0184_id = id_
             else:
                 xep0184_id = None
-
+            if label:
+                displaymarking = label.getTag('displaymarking')
+            else:
+                displaymarking = None
             self.print_conversation(message, self.contact.jid, encrypted=encrypted,
-                    xep0184_id=xep0184_id, xhtml=xhtml)
+                    xep0184_id=xep0184_id, xhtml=xhtml, displaymarking=displaymarking)
 
         ChatControlBase.send_message(self, message, keyID, type_='chat',
                 chatstate=chatstate_to_send, composing_xep=composing_xep,
                 xhtml=xhtml, callback=_on_sent,
-                callback_args=[contact, message, encrypted, xhtml],
+                callback_args=[contact, message, encrypted, xhtml, self.get_seclabel()],
                 process_commands=process_commands)
 
     def check_for_possible_paused_chatstate(self, arg):
@@ -2125,6 +2203,18 @@ class ChatControl(ChatControlBase):
         msg = _('Session negotiation cancelled')
         ChatControlBase.print_conversation_line(self, msg, 'status', '', None)
 
+    def print_archiving_session_details(self):
+        """
+        Print esession settings to textview
+        """
+        archiving = bool(self.session) and isinstance(self.session,
+                ArchivingStanzaSession) and self.session.archiving
+        if archiving:
+            msg = _('This session WILL be archived on server')
+        else:
+            msg = _('This session WILL NOT be archived on server')
+        ChatControlBase.print_conversation_line(self, msg, 'status', '', None)
+
     def print_esession_details(self):
         """
         Print esession settings to textview
@@ -2149,8 +2239,15 @@ class ChatControl(ChatControlBase):
         self._show_lock_image(e2e_is_active, 'E2E', e2e_is_active, self.session and \
                         self.session.is_loggable(), self.session and self.session.verified_identity)
 
+    def print_session_details(self):
+        if isinstance(self.session, EncryptedStanzaSession):
+            self.print_esession_details()
+        elif isinstance(self.session, ArchivingStanzaSession):
+            self.print_archiving_session_details()
+
     def print_conversation(self, text, frm='', tim=None, encrypted=False,
-                    subject=None, xhtml=None, simple=False, xep0184_id=None):
+                    subject=None, xhtml=None, simple=False, xep0184_id=None,
+                    displaymarking=None):
         """
         Print a line in the conversation
 
@@ -2213,7 +2310,7 @@ class ChatControl(ChatControlBase):
                         xhtml = '<body xmlns="%s">%s</body>' % (NS_XHTML, xhtml)
         ChatControlBase.print_conversation_line(self, text, kind, name, tim,
                 subject=subject, old_kind=self.old_msg_kind, xhtml=xhtml,
-                simple=simple, xep0184_id=xep0184_id)
+                simple=simple, xep0184_id=xep0184_id, displaymarking=displaymarking)
         if text.startswith('/me ') or text.startswith('/me\n'):
             self.old_msg_kind = None
         else:
@@ -2397,7 +2494,13 @@ class ChatControl(ChatControlBase):
             self.reset_kbd_mouse_timeout_vars()
 
     def shutdown(self):
-        # Send 'gone' chatstate
+        # PluginSystem: calling shutdown of super class (ChatControlBase) to let it remove
+        # it's GUI extension points
+        super(ChatControl, self).shutdown()
+        # PluginSystem: removing GUI extension points connected with ChatControl
+        # instance object
+        gajim.plugin_manager.remove_gui_extension_point('chat_control', self)        # Send 'gone' chatstate
+
         self.send_chatstate('gone', self.contact)
         self.contact.chatstate = None
         self.contact.our_chatstate = None
@@ -2574,6 +2677,9 @@ class ChatControl(ChatControlBase):
             if want_e2e and not self.no_autonegotiation \
             and gajim.HAVE_PYCRYPTO and self.contact.supports(NS_ESESSION):
                 self.begin_e2e_negotiation()
+            elif (not self.session or not self.session.status) and \
+            gajim.connections[self.account].archiving_supported:
+                self.begin_archiving_negotiation()
         else:
             self.send_chatstate('active', self.contact)
 
@@ -2660,8 +2766,12 @@ class ChatControl(ChatControlBase):
                 kind = 'info'
             else:
                 kind = 'print_queue'
+            dm = None
+            if len(data) > 10:
+                dm = data[10]
             self.print_conversation(data[0], kind, tim = data[3],
-                    encrypted = data[4], subject = data[1], xhtml = data[7])
+                    encrypted = data[4], subject = data[1], xhtml = data[7],
+                    displaymarking=dm)
             if len(data) > 6 and isinstance(data[6], int):
                 message_ids.append(data[6])
 
@@ -2813,7 +2923,7 @@ class ChatControl(ChatControlBase):
         else:
             self.begin_e2e_negotiation()
 
-    def begin_e2e_negotiation(self):
+    def begin_negotiation(self):
         self.no_autonegotiation = True
 
         if not self.session:
@@ -2821,7 +2931,13 @@ class ChatControl(ChatControlBase):
             new_sess = gajim.connections[self.account].make_new_session(fjid, type_=self.type_id)
             self.set_session(new_sess)
 
+    def begin_e2e_negotiation(self):
+        self.begin_negotiation()
         self.session.negotiate_e2e(False)
+
+    def begin_archiving_negotiation(self):
+        self.begin_negotiation()
+        self.session.negotiate_archiving()
 
     def got_connected(self):
         ChatControlBase.got_connected(self)

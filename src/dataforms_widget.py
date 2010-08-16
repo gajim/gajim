@@ -27,6 +27,7 @@ multiple - these which may contain more data (with <reported/> element).'''
 
 import gtk
 import gobject
+import base64
 
 import gtkgui_helpers
 import dialogs
@@ -401,6 +402,7 @@ class SingleForm(gtk.Table, object):
                         check.connect('toggled',
                                 self.on_list_multi_checkbutton_toggled, field, value)
                         widget.pack_start(check, expand=False)
+                        widget.set_sensitive(readwrite)
                 else:
                     # more than 5 options: show combobox
                     def on_list_multi_treeview_changed(selection, f):
@@ -417,7 +419,7 @@ class SingleForm(gtk.Table, object):
                     widget.set_size_request(-1, 120)
                     tv.get_selection().connect('changed',
                             on_list_multi_treeview_changed, field)
-                widget.set_sensitive(readwrite)
+                    tv.set_sensitive(readwrite)
 
             elif field.type == 'jid-single':
                 widget = gtk.Entry()
@@ -489,11 +491,11 @@ class SingleForm(gtk.Table, object):
                 textwidget.get_buffer().connect('changed',
                         self.on_text_multi_textbuffer_changed, field)
                 textwidget.get_buffer().set_text(field.value)
+                textwidget.set_sensitive(readwrite)
 
                 widget = gtk.ScrolledWindow()
                 widget.add(textwidget)
 
-                widget.set_sensitive(readwrite)
                 widget=decorate_with_tooltip(widget, field)
                 self.attach(widget, 1, 2, linecounter, linecounter+1)
 
@@ -529,13 +531,37 @@ class SingleForm(gtk.Table, object):
                 self.attach(label, 0, 1, linecounter, linecounter+1,
                         xoptions=gtk.FILL, yoptions=gtk.FILL)
 
+            if field.media is not None:
+                for uri in field.media.uris:
+                    if uri.type_.startswith('image/'):
+                        try:
+                            img_data = base64.decodestring(uri.uri_data)
+                            pixbuf_l = gtk.gdk.PixbufLoader()
+                            pixbuf_l.write(img_data)
+                            pixbuf_l.close()
+                            media = gtk.image_new_from_pixbuf(pixbuf_l.\
+                                get_pixbuf())
+                        except Exception:
+                            media = gtk.Label(_('Unable to load image'))
+                    else:
+                        media = gtk.Label(_('Media type not supported: %s') % \
+                            uri.type_)
+                    linecounter += 1
+                    self.attach(media, 0, 1, linecounter, linecounter+1,
+                        xoptions=gtk.FILL, yoptions=gtk.FILL)
+
             if commonwidget:
                 assert widget is not None
                 widget.set_sensitive(readwrite)
                 widget = decorate_with_tooltip(widget, field)
                 self.attach(widget, 1, 2, linecounter, linecounter+1,
-                        yoptions=gtk.FILL)
-            widget.show_all()
+                        yoptions=gtk.FILL)	
+            
+            if field.required:
+                label = gtk.Label('*')
+                label.set_tooltip_text(_('This field is required'))
+                self.attach(label, 2, 3, linecounter, linecounter+1, xoptions=0,
+                    yoptions=0)
 
             linecounter+=1
         if self.get_property('visible'):

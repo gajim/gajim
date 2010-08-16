@@ -7,12 +7,11 @@ include /usr/share/cdbs/1/rules/debhelper.mk
 include /usr/share/cdbs/1/rules/simple-patchsys.mk
 include /usr/share/cdbs/1/class/autotools.mk
 
-PYTHONVER = 2.5
 DEB_CONFIGURE_EXTRA_FLAGS := --prefix=/usr
-DEB_MAKE_BUILD_TARGET    := all PYTHON=python$(PYTHONVER)
-DEB_MAKE_INSTALL_TARGET = install PYTHON=python$(PYTHONVER) DESTDIR=$(DEB_DESTDIR)
+DEB_MAKE_BUILD_TARGET    := all
+DEB_MAKE_INSTALL_TARGET = install DESTDIR=$(DEB_DESTDIR)
 
 binary-install/gajim::
 	rm $(DEB_DESTDIR)/usr/share/gajim/src/common/GnuPGInterface.py*
 	dh_pysupport -pgajim
-	convert $(DEB_DESTDIR)/usr/share/pixmaps/gajim.png -resize 32x32 $(DEB_DESTDIR)/usr/share/pixmaps/gajim.xpm
+	convert $(DEB_DESTDIR)/usr/share/icons/hicolor/64x64/apps/gajim.png -resize 32x32 $(DEB_DESTDIR)/usr/share/pixmaps/gajim.xpm

@@ -75,22 +75,22 @@ def decompose_jid(jidstring):
         else:
             # host/resource
             server = jidstring[0:res_sep]
-            resource = jidstring[res_sep + 1:] or None
+            resource = jidstring[res_sep + 1:]
     else:
         if res_sep == -1:
             # user@host
-            user = jidstring[0:user_sep] or None
+            user = jidstring[0:user_sep]
             server = jidstring[user_sep + 1:]
         else:
             if user_sep < res_sep:
                 # user@host/resource
-                user = jidstring[0:user_sep] or None
+                user = jidstring[0:user_sep]
                 server = jidstring[user_sep + 1:user_sep + (res_sep - user_sep)]
-                resource = jidstring[res_sep + 1:] or None
+                resource = jidstring[res_sep + 1:]
             else:
                 # server/resource (with an @ in resource)
                 server = jidstring[0:res_sep]
-                resource = jidstring[res_sep + 1:] or None
+                resource = jidstring[res_sep + 1:]
     return user, server, resource
 
 def parse_jid(jidstring):
@@ -143,7 +143,9 @@ def prep(user, server, resource):
     """
     # This function comes from
     #http://svn.twistedmatrix.com/cvs/trunk/twisted/words/protocols/jabber/jid.py
-    if user:
+    if user is not None:
+        if len(user) < 1 or len(user) > 1023:
+            raise InvalidFormat, _('Username must be between 1 and 1023 chars')
         try:
             from xmpp.stringprepare import nodeprep
             user = nodeprep.prepare(unicode(user))
@@ -152,16 +154,20 @@ def prep(user, server, resource):
     else:
         user = None
 
-    if not server:
-        raise InvalidFormat, _('Server address required.')
-    else:
+    if server is not None:
+        if len(server) < 1 or len(server) > 1023:
+            raise InvalidFormat, _('Server must be between 1 and 1023 chars')
         try:
             from xmpp.stringprepare import nameprep
             server = nameprep.prepare(unicode(server))
         except UnicodeError:
             raise InvalidFormat, _('Invalid character in hostname.')
+    else:
+        raise InvalidFormat, _('Server address required.')
 
-    if resource:
+    if resource is not None:
+        if len(resource) < 1 or len(resource) > 1023:
+            raise InvalidFormat, _('Resource must be between 1 and 1023 chars')
         try:
             from xmpp.stringprepare import resourceprep
             resource = resourceprep.prepare(unicode(resource))

@@ -30,7 +30,8 @@ from ..errors import CommandError
 from ..framework import CommandContainer, command, doc
 from ..mapping import generate_usage
 
-from hosts import ChatCommands, PrivateChatCommands, GroupChatCommands
+from hosts import *
+import execute
 
 # This holds constants fron the logger, which we'll be using in some of our
 # commands.
@@ -42,7 +43,8 @@ class StandardCommonCommands(CommandContainer):
     to all - chat, private chat, group chat.
     """
 
-    HOSTS = (ChatCommands, PrivateChatCommands, GroupChatCommands)
+    AUTOMATIC = True
+    HOSTS = ChatCommands, PrivateChatCommands, GroupChatCommands
 
     @command
     @doc(_("Clear the text window"))
@@ -56,7 +58,7 @@ class StandardCommonCommands(CommandContainer):
         self.chat_buttons_set_visible(new_status)
 
     @command(overlap=True)
-    @doc(_("Show help on a given command or a list of available commands if -(-a)ll is given"))
+    @doc(_("Show help on a given command or a list of available commands if -a is given"))
     def help(self, command=None, all=False):
         if command:
             command = self.get_command(command)
@@ -163,7 +165,8 @@ class StandardCommonChatCommands(CommandContainer):
     to a chat and a private chat only.
     """
 
-    HOSTS = (ChatCommands, PrivateChatCommands)
+    AUTOMATIC = True
+    HOSTS = ChatCommands, PrivateChatCommands
 
     @command
     @doc(_("Toggle the GPG encryption"))
@@ -178,41 +181,37 @@ class StandardCommonChatCommands(CommandContainer):
         gajim.connections[self.account].sendPing(self.contact)
 
     @command
-    @doc(_("Send DTMF events through an open audio session"))
-    def dtmf(self, events):
+    @doc(_("Send DTMF sequence through an open audio session"))
+    def dtmf(self, sequence):
         if not self.audio_sid:
-            raise CommandError(_("There is no open audio session with this contact"))
-        # Valid values for DTMF tones are *, # or a number.
-        events = [e for e in events if e in ('*', '#') or e.isdigit()]
-        if events:
-            session = gajim.connections[self.account].get_jingle_session(
-                self.contact.get_full_jid(), self.audio_sid)
-            content = session.get_content('audio')
-            content.batch_dtmf(events)
-        else:
-            raise CommandError(_("No valid DTMF event specified"))
+            raise CommandError(_("No open audio sessions with the contact"))
+        for tone in sequence:
+            if not (tone in ("*", "#") or tone.isdigit()):
+                raise CommandError(_("%s is not a valid tone") % tone)
+        gjs = self.connection.get_jingle_session
+        session = gjs(self.full_jid, self.audio_sid)
+        content = session.get_content("audio")
+        content.batch_dtmf(sequence)
 
     @command
     @doc(_("Toggle audio session"))
     def audio(self):
         if not self.audio_available:
             raise CommandError(_("Audio sessions are not available"))
-        else:
-            # A state of an audio session is toggled by inverting a state of the
-            # appropriate button.
-            state = self._audio_button.get_active()
-            self._audio_button.set_active(not state)
+        # An audio session is toggled by inverting the state of the
+        # appropriate button.
+        state = self._audio_button.get_active()
+        self._audio_button.set_active(not state)
 
     @command
     @doc(_("Toggle video session"))
     def video(self):
         if not self.video_available:
             raise CommandError(_("Video sessions are not available"))
-        else:
-            # A state of a video session is toggled by inverting a state of the
-            # appropriate button.
-            state = self._video_button.get_active()
-            self._video_button.set_active(not state)
+        # A video session is toggled by inverting the state of the
+        # appropriate button.
+        state = self._video_button.get_active()
+        self._video_button.set_active(not state)
 
 class StandardChatCommands(CommandContainer):
     """
@@ -220,7 +219,8 @@ class StandardChatCommands(CommandContainer):
     to a chat.
     """
 
-    HOSTS = (ChatCommands,)
+    AUTOMATIC = True
+    HOSTS = ChatCommands,
 
 class StandardPrivateChatCommands(CommandContainer):
     """
@@ -228,7 +228,8 @@ class StandardPrivateChatCommands(CommandContainer):
     to a private chat.
     """
 
-    HOSTS = (PrivateChatCommands,)
+    AUTOMATIC = True
+    HOSTS = PrivateChatCommands,
 
 class StandardGroupChatCommands(CommandContainer):
     """
@@ -236,7 +237,8 @@ class StandardGroupChatCommands(CommandContainer):
     to a group chat.
     """
 
-    HOSTS = (GroupChatCommands,)
+    AUTOMATIC = True
+    HOSTS = GroupChatCommands,
 
     @command(raw=True)
     @doc(_("Change your nickname in a group chat"))
@@ -324,23 +326,24 @@ class StandardGroupChatCommands(CommandContainer):
     @command
     @doc(_("Display names of all group chat occupants"))
     def names(self, verbose=False):
-        get_contact = lambda nick: gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
-        nicks = gajim.contacts.get_nick_list(self.account, self.room_jid)
+        ggc = gajim.contacts.get_gc_contact
+        gnl = gajim.contacts.get_nick_list
 
-        # First we do alpha-numeric sort and then role-based one.
-        nicks.sort()
-        nicks.sort(key=lambda nick: get_contact(nick).role)
+        get_contact = lambda nick: ggc(self.account, self.room_jid, nick)
+        get_role = lambda nick: get_contact(nick).role
+        nicks = gnl(self.account, self.room_jid)
 
-        if verbose:
-            for nick in nicks:
-                contact = get_contact(nick)
+        nicks = sorted(nicks)
+        nicks = sorted(nicks, key=get_role)
 
-                role = helpers.get_uf_role(contact.role)
-                affiliation = helpers.get_uf_affiliation(contact.affiliation)
+        if not verbose:
+            return ", ".join(nicks)
 
-                self.echo("%s - %s - %s" % (nick, role, affiliation))
-        else:
-            return ', '.join(nicks)
+        for nick in nicks:
+            contact = get_contact(nick)
+            role = helpers.get_uf_role(contact.role)
+            affiliation = helpers.get_uf_affiliation(contact.affiliation)
+            self.echo("%s - %s - %s" % (nick, role, affiliation))
 
     @command('ignore', raw=True)
     @doc(_("Forbid an occupant to send you public or private messages"))

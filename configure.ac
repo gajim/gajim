@@ -1,5 +1,5 @@
 AC_INIT([Gajim - A Jabber Instant Messager],
-		[0.13.10.2-dev],[http://trac.gajim.org/],[gajim])
+		["version-set-in-hgversion"],[http://trac.gajim.org/],[gajim])
 AC_PREREQ([2.59])
 
 AC_CONFIG_HEADER(config.h)
@@ -65,14 +65,17 @@ AC_ARG_ENABLE(site-packages,
 instead of DATADIR/gajim/src.])]
 ,
 AC_SUBST([gajim_srcdir], [\${pkgpythondir}])
+AC_SUBST([gajim_pluginsdir], [\${pkgpythondir}])
 ,
 AC_SUBST([gajim_srcdir], [\${datadir}/\${PACKAGE}/src])
+AC_SUBST([gajim_pluginsdir], [\${datadir}/\${PACKAGE}/plugins])
 )
 
 AS_AC_EXPAND(GAJIM_SRCDIR, "${gajim_srcdir}")
 AS_AC_EXPAND(PKGDATADIR, "${datadir}/${PACKAGE}")
 AS_AC_EXPAND(DOCDIR, "${docdir}")
 AS_AC_EXPAND(LOCALEDIR, "${localedir}")
+AS_AC_EXPAND(GAJIM_PLUGINSDIR, "${gajim_pluginsdir}")
 
 AC_SUBST(VERSION)
 AC_SUBST(PACKAGE)
@@ -94,6 +97,7 @@ AC_CONFIG_FILES([
 	scripts/gajim-remote:scripts/gajim.in
 	scripts/gajim-history-manager:scripts/gajim.in
 	po/Makefile.in
+	plugins/Makefile
 ])
 AC_OUTPUT
 echo "
@@ -101,6 +105,7 @@ echo "
   Installation:
     Prefix ........... ${prefix}
     Python modules ... ${GAJIM_SRCDIR}
+    Plugins .. ....... ${GAJIM_PLUGINSDIR}
     Documentation .... ${DOCDIR}
     Others ........... ${PKGDATADIR}
 *****************************"

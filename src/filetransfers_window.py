@@ -409,7 +409,7 @@ class FileTransfersWindow:
                 on_response_ok=(on_response_ok, account, contact, file_props),
                 on_response_cancel=(on_response_cancel, account, file_props))
         dialog.connect('delete-event', lambda widget, event:
-                on_response_cancel(widget, account, file_props))
+            on_response_cancel(account, file_props))
         dialog.popup()
 
     def get_icon(self, ident):
@@ -814,13 +814,14 @@ class FileTransfersWindow:
         s_iter = selected[1]
         sid = self.model[s_iter][C_SID].decode('utf-8')
         file_props = self.files_props[sid[0]][sid[1:]]
-        if self.is_transfer_paused(file_props):
+        if is_transfer_paused(file_props):
             file_props['last-time'] = time.time()
             file_props['paused'] = False
             types = {'r' : 'download', 's' : 'upload'}
             self.set_status(file_props['type'], file_props['sid'], types[sid[0]])
             self.toggle_pause_continue(True)
-            file_props['continue_cb']()
+            if file_props['continue_cb']:
+                file_props['continue_cb']()
         elif is_transfer_active(file_props):
             file_props['paused'] = True
             self.set_status(file_props['type'], file_props['sid'], 'pause')

@@ -28,13 +28,21 @@ NS_ADDRESS        ='http://jabber.org/protocol/address'                         
 NS_AGENTS          ='jabber:iq:agents'
 NS_AMP            ='http://jabber.org/protocol/amp'
 NS_AMP_ERRORS   =NS_AMP+'#errors'
+NS_ARCHIVE       ='urn:xmpp:archive'                                                                    #XEP-0136
+NS_ARCHIVE_AUTO  =NS_ARCHIVE+':auto'                                                            #XEP-0136
+NS_ARCHIVE_MANAGE        =NS_ARCHIVE+':manage'                                                  #XEP-0136
+NS_ARCHIVE_MANUAL        =NS_ARCHIVE+':manual'                                                  #XEP-0136
+NS_ARCHIVE_PREF  =NS_ARCHIVE+':pref'
+NS_ATOM          ='http://www.w3.org/2005/Atom'
 NS_AUTH          ='jabber:iq:auth'
 NS_AVATAR          ='http://www.xmpp.org/extensions/xep-0084.html#ns-metadata'
 NS_BIND          ='urn:ietf:params:xml:ns:xmpp-bind'
+NS_BOB          ='urn:xmpp:bob'                                                 #XEP-0231
 NS_BROWSE          ='jabber:iq:browse'
 NS_BROWSING      ='http://jabber.org/protocol/browsing'                           # XEP-0195
 NS_BYTESTREAM   ='http://jabber.org/protocol/bytestreams'                          # JEP-0065
 NS_CAPS          ='http://jabber.org/protocol/caps'                                       # JEP-0115
+NS_CAPTCHA      ='urn:xmpp:captcha'                             # XEP-0158
 NS_CHATSTATES   ='http://jabber.org/protocol/chatstates'                                # JEP-0085
 NS_CHATTING      ='http://jabber.org/protocol/chatting'                           # XEP-0194
 NS_CLIENT          ='jabber:client'
@@ -44,6 +52,7 @@ NS_COMPONENT_1  ='http://jabberd.jabberstudio.org/ns/component/1.0'
 NS_COMPRESS      ='http://jabber.org/protocol/compress'                           # XEP-0138
 NS_CONFERENCE   ='jabber:x:conference'
 NS_DATA          ='jabber:x:data'                                                                               # XEP-0004
+NS_DATA_MEDIA   ='urn:xmpp:media-element'                                                                       # XEP-0221
 NS_DELAY                ='jabber:x:delay'
 NS_DELAY2          ='urn:xmpp:delay'
 NS_DIALBACK      ='jabber:server:dialback'
@@ -101,7 +110,10 @@ NS_ROSTER          ='jabber:iq:roster'
 NS_ROSTERX        ='http://jabber.org/protocol/rosterx'                            # XEP-0144
 NS_ROSTER_VER    ='urn:xmpp:features:rosterver'               # XEP-0273
 NS_RPC            ='jabber:iq:rpc'                                                                              # XEP-0009
+NS_RSM           ='http://jabber.org/protocol/rsm'
 NS_SASL          ='urn:ietf:params:xml:ns:xmpp-sasl'
+NS_SECLABEL         ='urn:xmpp:sec-label:0'
+NS_SECLABEL_CATALOG ='urn:xmpp:sec-label:catalog:0'
 NS_SEARCH          ='jabber:iq:search'
 NS_SERVER          ='jabber:server'
 NS_SESSION        ='urn:ietf:params:xml:ns:xmpp-session'
@@ -718,7 +730,7 @@ class Message(Protocol):
             if xmllang:
                 dom = NodeBuilder('<body xmlns="%s" xml:lang="%s">%s</body>' % (NS_XHTML, xmllang, val)).getDom()
             else:
-                dom = NodeBuilder('<body xmlns="%s">%s</body>, 0' % (NS_XHTM, val)).getDom()
+                dom = NodeBuilder('<body xmlns="%s">%s</body>, 0' % (NS_XHTML, val)).getDom()
             if self.getTag('html'):
                 self.getTag('html').addChild(node=dom)
             else:

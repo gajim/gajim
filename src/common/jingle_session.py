@@ -333,14 +333,14 @@ class JingleSession(object):
     def __on_error(self, stanza, jingle, error, action):
         # FIXME
         text = error.getTagData('text')
-        jingle_error = None
-        xmpp_error = None
+        error_name = None
         for child in error.getChildren():
             if child.getNamespace() == xmpp.NS_JINGLE_ERRORS:
-                jingle_error = child.getName()
+                error_name = child.getName()
+                break
             elif child.getNamespace() == xmpp.NS_STANZAS:
-                xmpp_error = child.getName()
-        self.__dispatch_error(xmpp_error, jingle_error, text)
+                error_name = child.getName()
+        self.__dispatch_error(error_name, text, error.getAttribute('type'))
         # FIXME: Not sure when we would want to do that...
 
     def __on_transport_replace(self, stanza, jingle, error, action):
@@ -504,7 +504,7 @@ class JingleSession(object):
         self.connection.delete_jingle_session(self.sid)
         reason, text = self.__reason_from_stanza(jingle)
         if reason not in ('success', 'cancel', 'decline'):
-            self.__dispatch_error(reason, reason, text)
+            self.__dispatch_error(reason, text)
         if text:
             text = '%s (%s)' % (reason, text)
         else:
@@ -558,14 +558,12 @@ class JingleSession(object):
 
         return (contents, contents_rejected, failure_reason)
 
-    def __dispatch_error(self, error, jingle_error=None, text=None):
-        if jingle_error:
-            error = jingle_error
+    def __dispatch_error(self, error=None, text=None, type_=None):
         if text:
             text = '%s (%s)' % (error, text)
-        else:
-            text = error
-        self.connection.dispatch('JINGLE_ERROR', (self.peerjid, self.sid, text))
+        if type_ != 'modify':
+            self.connection.dispatch('JINGLE_ERROR',
+                (self.peerjid, self.sid, text or error))
 
     def __reason_from_stanza(self, stanza):
         # TODO: Move to GUI?
@@ -607,7 +605,7 @@ class JingleSession(object):
         if text:
             err.setTagData('text', text)
         self.connection.connection.send(err_stanza)
-        self.__dispatch_error(error, jingle_error, text)
+        self.__dispatch_error(jingle_error or error, text, type_)
 
     def __append_content(self, jingle, content):
         """
@@ -655,11 +653,12 @@ class JingleSession(object):
         assert self.state != JingleStates.ended
         stanza, jingle = self.__make_jingle('session-terminate', reason=reason)
         self.__broadcast_all(stanza, jingle, None, 'session-terminate-sent')
-        self.connection.connection.send(stanza)
+        if self.connection.connection and self.connection.connected >= 2:
+            self.connection.connection.send(stanza)
         # TODO: Move to GUI?
         reason, text = self.__reason_from_stanza(jingle)
         if reason not in ('success', 'cancel', 'decline'):
-            self.__dispatch_error(reason, reason, text)
+            self.__dispatch_error(reason, text)
         if text:
             text = '%s (%s)' % (reason, text)
         else:
