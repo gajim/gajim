@@ -1082,6 +1082,8 @@ ConnectionJingle, ConnectionIBBytestream):
             self._nec_http_auth_received)
         gajim.ged.register_event_handler('version-request-received', ged.CORE,
             self._nec_version_request_received)
+        gajim.ged.register_event_handler('last-request-received', ged.CORE,
+            self._nec_last_request_received
 
     def build_http_auth_answer(self, iq_obj, answer):
         if not self.connection or self.connected < 2:
@@ -1277,22 +1279,28 @@ ConnectionJingle, ConnectionIBBytestream):
         self.connection.send(iq_obj)
 
     def _LastCB(self, con, iq_obj):
-        global HAS_IDLE
         log.debug('LastCB')
         if not self.connection or self.connected < 2:
             return
+        gajim.nec.push_incoming_event(LastRequestEvent(None,
+            conn=self, iq_obj=iq_obj))
+        raise common.xmpp.NodeProcessed
+
+    def _nec_last_request_received(self, obj):
+        global HAS_IDLE
+        if obj.conn.name != self.name:
+            return
         if HAS_IDLE and gajim.config.get_per('accounts', self.name,
         'send_idle_time'):
-            iq_obj = iq_obj.buildReply('result')
+            iq_obj = obj.iq_obj.buildReply('result')
             qp = iq_obj.getTag('query')
             qp.attrs['seconds'] = int(self.sleeper.getIdleSec())
         else:
-            iq_obj = iq_obj.buildReply('error')
-            err = common.xmpp.ErrorNode(name=common.xmpp.NS_STANZAS+' service-unavailable')
+            iq_obj = obj.iq_obj.buildReply('error')
+            err = common.xmpp.ErrorNode(name=common.xmpp.NS_STANZASi + \
+                ' service-unavailable')
             iq_obj.addChild(node=err)
-
         self.connection.send(iq_obj)
-        raise common.xmpp.NodeProcessed
 
     def _VersionResultCB(self, con, iq_obj):
         log.debug('VersionResultCB')
@@ -2676,6 +2684,18 @@ class RosterItemExchangeEvent(nec.NetworkIncomingEvent, HelperEvent):
 
 class VersionRequestEvent(nec.NetworkIncomingEvent):
     name = 'version-request-received'
+    base_network_events = []
+
+    def generate(self):
+        if not self.conn:
+            self.conn = self.base_event.conn
+        if not self.iq_obj:
+            self.iq_obj = self.base_event.xmpp_iq
+
+        return True
+    
+class LastRequestEvent(nec.NetworkIncomingEvent):
+    name = 'last-request-received'
     base_network_events = []
 
     def generate(self):
