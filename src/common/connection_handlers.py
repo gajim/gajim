@@ -1083,7 +1083,11 @@ ConnectionJingle, ConnectionIBBytestream):
         gajim.ged.register_event_handler('version-request-received', ged.CORE,
             self._nec_version_request_received)
         gajim.ged.register_event_handler('last-request-received', ged.CORE,
-            self._nec_last_request_received
+            self._nec_last_request_received)
+        gajim.ged.register_event_handler('time-request-received', ged.CORE,
+            self._nec_time_request_received)
+        gajim.ged.register_event_handler('time-revised-request-received',
+            ged.CORE, self._nec_time_revised_request_received)
 
     def build_http_auth_answer(self, iq_obj, answer):
         if not self.connection or self.connected < 2:
@@ -1311,29 +1315,40 @@ ConnectionJingle, ConnectionIBBytestream):
         log.debug('TimeCB')
         if not self.connection or self.connected < 2:
             return
-        iq_obj = iq_obj.buildReply('result')
+        gajim.nec.push_incoming_event(TimeRequestEvent(None,
+            conn=self, iq_obj=iq_obj))
+        raise common.xmpp.NodeProcessed
+
+    def _nec_time_request_received(self, obj):
+        if obj.conn.name != self.name:
+            return
+        iq_obj = obj.iq_obj.buildReply('result')
         qp = iq_obj.getTag('query')
         qp.setTagData('utc', strftime('%Y%m%dT%H:%M:%S', gmtime()))
         qp.setTagData('tz', helpers.decode_string(tzname[daylight]))
         qp.setTagData('display', helpers.decode_string(strftime('%c',
-                localtime())))
+            localtime())))
         self.connection.send(iq_obj)
-        raise common.xmpp.NodeProcessed
 
     def _TimeRevisedCB(self, con, iq_obj):
         log.debug('TimeRevisedCB')
         if not self.connection or self.connected < 2:
             return
-        iq_obj = iq_obj.buildReply('result')
-        qp = iq_obj.setTag('time',
-                namespace=common.xmpp.NS_TIME_REVISED)
+        gajim.nec.push_incoming_event(TimeRevisedRequestEvent(None,
+            conn=self, iq_obj=iq_obj))
+        raise common.xmpp.NodeProcessed
+
+    def _nec_time_revised_request_received(self, obj):
+        if obj.conn.name != self.name:
+            return
+        iq_obj = obj.iq_obj.buildReply('result')
+        qp = iq_obj.setTag('time', namespace=common.xmpp.NS_TIME_REVISED)
         qp.setTagData('utc', strftime('%Y-%m-%dT%H:%M:%SZ', gmtime()))
         isdst = localtime().tm_isdst
         zone = -(timezone, altzone)[isdst] / 60
         tzo = (zone / 60, abs(zone % 60))
         qp.setTagData('tzo', '%+03d:%02d' % (tzo))
         self.connection.send(iq_obj)
-        raise common.xmpp.NodeProcessed
 
     def _TimeRevisedResultCB(self, con, iq_obj):
         log.debug('TimeRevisedResultCB')
@@ -2696,6 +2711,30 @@ class VersionRequestEvent(nec.NetworkIncomingEvent):
     
 class LastRequestEvent(nec.NetworkIncomingEvent):
     name = 'last-request-received'
+    base_network_events = []
+
+    def generate(self):
+        if not self.conn:
+            self.conn = self.base_event.conn
+        if not self.iq_obj:
+            self.iq_obj = self.base_event.xmpp_iq
+
+        return True
+    
+class TimeRequestEvent(nec.NetworkIncomingEvent):
+    name = 'time-request-received'
+    base_network_events = []
+
+    def generate(self):
+        if not self.conn:
+            self.conn = self.base_event.conn
+        if not self.iq_obj:
+            self.iq_obj = self.base_event.xmpp_iq
+
+        return True
+
+class TimeRevisedRequestEvent(nec.NetworkIncomingEvent):
+    name = 'time-revised-request-received'
     base_network_events = []
 
     def generate(self):
