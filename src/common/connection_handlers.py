@@ -1080,6 +1080,8 @@ ConnectionJingle, ConnectionIBBytestream):
 
         gajim.ged.register_event_handler('http-auth-received', ged.CORE,
             self._nec_http_auth_received)
+        gajim.ged.register_event_handler('version-request-received', ged.CORE,
+            self._nec_version_request_received)
 
     def build_http_auth_answer(self, iq_obj, answer):
         if not self.connection or self.connected < 2:
@@ -1258,7 +1260,14 @@ ConnectionJingle, ConnectionIBBytestream):
         log.debug('VersionCB')
         if not self.connection or self.connected < 2:
             return
-        iq_obj = iq_obj.buildReply('result')
+        gajim.nec.push_incoming_event(VersionRequestEvent(None,
+            conn=self, iq_obj=iq_obj))
+        raise common.xmpp.NodeProcessed
+    
+    def _nec_version_request_received(self, obj):
+        if obj.conn.name != self.name:
+            return
+        iq_obj = obj.iq_obj.buildReply('result')
         qp = iq_obj.getTag('query')
         qp.setTagData('name', 'Gajim')
         qp.setTagData('version', gajim.version)
@@ -1266,7 +1275,6 @@ ConnectionJingle, ConnectionIBBytestream):
         if send_os:
             qp.setTagData('os', helpers.get_os_info())
         self.connection.send(iq_obj)
-        raise common.xmpp.NodeProcessed
 
     def _LastCB(self, con, iq_obj):
         global HAS_IDLE
@@ -2665,3 +2673,15 @@ class RosterItemExchangeEvent(nec.NetworkIncomingEvent, HelperEvent):
             self.exchange_items_list[jid].append(groups)
         if exchange_items_list:
             return True
+
+class VersionRequestEvent(nec.NetworkIncomingEvent):
+    name = 'version-request-received'
+    base_network_events = []
+
+    def generate(self):
+        if not self.conn:
+            self.conn = self.base_event.conn
+        if not self.iq_obj:
+            self.iq_obj = self.base_event.xmpp_iq
+
+        return True
