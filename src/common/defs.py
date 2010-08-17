@@ -30,8 +30,11 @@ localedir = '../po'
 version = '0.13.90.1'
 import subprocess
 try:
-    hgversion = subprocess.Popen('hexdump -n6 -e\'6/1 "%02x"\' ../.hg/dirstate',
-        shell=True, stdout=subprocess.PIPE).communicate()[0]
+    from mercurial import ui, hg
+    from mercurial.context import hex as hex_
+    repo = hg.repository(ui.ui(), '..')
+    node = repo['tip'].node()
+    hgversion = hex_(node)[:12]
     version += '-' + hgversion
 except Exception:
     pass
