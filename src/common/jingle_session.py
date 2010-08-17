@@ -325,7 +325,7 @@ class JingleSession(object):
                 break
             elif child.getNamespace() == xmpp.NS_STANZAS:
                 error_name = child.getName()
-        self.__dispatch_error(error_name, text, error.getAttribute('type'))
+        self.__dispatch_error(error_name, text, error.getAttr('type'))
         # FIXME: Not sure when we would want to do that...
 
     def __on_transport_replace(self, stanza, jingle, error, action):
