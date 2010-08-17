@@ -120,7 +120,7 @@ class ConnectionBytestream:
         feature.addChild(node=_feature)
         field = _feature.setField('stream-method')
         field.setAttr('type', 'list-single')
-        field.addOption(xmpp.NS_BYTESTREAM)
+        #field.addOption(xmpp.NS_BYTESTREAM)
         field.addOption(xmpp.NS_IBB)
         self.connection.send(iq)
 
@@ -665,7 +665,7 @@ class ConnectionIBBytestream(ConnectionBytestream):
             'action': 'error'}), xmpp.Node('rule',
             {'condition': 'match-resource', 'value': 'exact',
             'action':'error'})])
-        self.timout_id = None
+        self.last_sent_ibb_id = None
 
     def IBBIqHandler(self, conn, stanza):
         """
@@ -723,7 +723,7 @@ class ConnectionIBBytestream(ConnectionBytestream):
             file_props['fp'] = open(file_props['file-name'], 'w')
         conn.send(rep)
 
-    def OpenStream(self, sid, to, fp, blocksize=3000):
+    def OpenStream(self, sid, to, fp, blocksize=4096):
         """
         Start new stream. You should provide stream id 'sid', the endpoind jid
         'to', the file object containing info for send 'fp'. Also the desired
@@ -747,11 +747,8 @@ class ConnectionIBBytestream(ConnectionBytestream):
         self.files_props[sid]['completed'] = False
         self.files_props[sid]['disconnect_cb'] = None
         self.files_props[sid]['continue_cb'] = None
-        if not self.timout_id:
-            self.timout_id = gobject.timeout_add_seconds(3, self.SendHandler)
-        self.SendHandler() # start sending now
         syn = xmpp.Protocol('iq', to, 'set', payload=[xmpp.Node(xmpp.NS_IBB + \
-            ' open', {'sid': sid, 'block-size': blocksize})])
+            ' open', {'sid': sid, 'block-size': blocksize, 'stanza': 'iq'})])
         self.connection.send(syn)
         self.files_props[sid]['syn_id'] = syn.getID()
         return self.files_props[sid]
@@ -762,8 +759,7 @@ class ConnectionIBBytestream(ConnectionBytestream):
         """
         log.debug('SendHandler called')
         if not self.files_props:
-            self.timout_id = None
-            return False
+            return
         for file_props in self.files_props.values():
             if 'direction' not in file_props:
                 # it's socks5 bytestream
@@ -783,7 +779,7 @@ class ConnectionIBBytestream(ConnectionBytestream):
                     file_props['started'] = True
                     if file_props['seq'] == 65536:
                         file_props['seq'] = 0
-                    self.connection.send(xmpp.Protocol('message',
+                    self.last_sent_ibb_id = self.connection.send(xmpp.Protocol('iq',
                         file_props['direction'][1:], payload=[datanode,
                         self._ampnode]))
                     current_time = time.time()
@@ -803,11 +799,7 @@ class ConnectionIBBytestream(ConnectionBytestream):
                         {'sid':sid})]))
                     file_props['completed'] = True
                     del self.files_props[sid]
-                    if not self.files_props:
-                        self.timout_id = None
-                        return False
-        return True
-
+        
     def IBBMessageHandler(self, conn, stanza):
         """
         Receive next portion of incoming datastream and store it write
@@ -851,6 +843,8 @@ class ConnectionIBBytestream(ConnectionBytestream):
             conn.send(xmpp.Error(xmpp.Iq(to=stanza.getFrom(),
                 frm=stanza.getTo(),
                 payload=[xmpp.Node(xmpp.NS_IBB + ' close')]), err, reply=0))
+        else:
+            return True
 
     def StreamCloseHandler(self, conn, stanza):
         """
@@ -874,7 +868,7 @@ class ConnectionIBBytestream(ConnectionBytestream):
         else:
             conn.send(xmpp.Error(stanza, xmpp.ERR_ITEM_NOT_FOUND))
 
-    def StreamOpenReplyHandler(self, conn, stanza):
+    def IBBAllIqHandler(self, conn, stanza):
         """
         Handle remote side reply about if it agree or not to receive our
         datastream.
@@ -882,7 +876,7 @@ class ConnectionIBBytestream(ConnectionBytestream):
         is agreed upon.
         """
         syn_id = stanza.getID()
-        log.debug('StreamOpenReplyHandler called syn_id->%s' % syn_id)
+        log.debug('IBBAllIqHandler called syn_id->%s' % syn_id)
         for sid in self.files_props.keys():
             file_props = self.files_props[sid]
             if not 'direction' in file_props:
@@ -898,10 +892,19 @@ class ConnectionIBBytestream(ConnectionBytestream):
                 elif stanza.getType() == 'result':
                     if file_props['direction'][0] == '|':
                         file_props['direction'] = file_props['direction'][1:]
-                        conn.Event('IBB', 'STREAM COMMITTED', file_props)
+                        self.SendHandler()
                     else:
                         conn.send(xmpp.Error(stanza,
                             xmpp.ERR_UNEXPECTED_REQUEST))
+                break
+        else:
+            if stanza.getTag('data'):
+                if self.IBBMessageHandler(conn, stanza):
+                    reply = stanza.buildReply('result')
+                    conn.send(reply)
+                    raise xmpp.NodeProcessed
+            elif syn_id == self.last_sent_ibb_id:
+                self.SendHandler()
 
 class ConnectionSocks5BytestreamZeroconf(ConnectionSocks5Bytestream):
 

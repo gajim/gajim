@@ -2370,7 +2370,7 @@ ConnectionJingle, ConnectionIBBytestream):
                 common.xmpp.NS_BYTESTREAM)
         con.RegisterHandler('iq', self._bytestreamErrorCB, 'error',
                 common.xmpp.NS_BYTESTREAM)
-        con.RegisterHandlerOnce('iq', self.StreamOpenReplyHandler)
+        con.RegisterHandlerOnce('iq', self.IBBAllIqHandler)
         con.RegisterHandler('iq', self.IBBIqHandler, ns=common.xmpp.NS_IBB)
         con.RegisterHandler('message', self.IBBMessageHandler,
             ns=common.xmpp.NS_IBB)
