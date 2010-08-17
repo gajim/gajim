@@ -2,7 +2,7 @@
 # Copyright (C) 2009 gajim team
 # This file is distributed under the same license as the PACKAGE package.
 # Baurzhan Muftakhidinov <baurthefirst@gmail.com>, 2010.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: gajim.trunk\n"
@@ -11,16 +11,15 @@ msgstr ""
 "PO-Revision-Date: 2010-08-03 14:02+0600\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <kk_KZ@googlegroups.com>\n"
-"Language: kk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: kk\n"
 "Plural-Forms: nplurals=2; plural= (n != 1);\n"
 "X-Poedit-Language: Kazakh\n"
 "X-Poedit-Country: KAZAKHSTAN\n"
 
-#: ../data/gui/account_context_menu.ui.h:1
-#: ../data/gui/roster_window.ui.h:7
+#: ../data/gui/account_context_menu.ui.h:1 ../data/gui/roster_window.ui.h:7
 msgid "Join _Group Chat..."
 msgstr "Чат _бөлмесіне кіру..."
 
@@ -28,8 +27,7 @@ msgstr "Чат _бөлмесіне кіру..."
 msgid "_Add Contact..."
 msgstr "_Контакт қосу..."
 
-#: ../data/gui/account_context_menu.ui.h:3
-#: ../data/gui/roster_window.ui.h:17
+#: ../data/gui/account_context_menu.ui.h:3 ../data/gui/roster_window.ui.h:17
 msgid "_Discover Services"
 msgstr "Қы_зметтерді қарап шығу"
 
@@ -49,8 +47,7 @@ msgstr "Gmail е-жәшігін а_шу"
 msgid "_Personal Events"
 msgstr "_Жеке әрекеттер"
 
-#: ../data/gui/account_context_menu.ui.h:8
-#: ../data/gui/roster_window.ui.h:23
+#: ../data/gui/account_context_menu.ui.h:8 ../data/gui/roster_window.ui.h:23
 msgid "_Start Chat..."
 msgstr "_Чатты бастау..."
 
@@ -123,24 +120,13 @@ msgid "Manage..."
 msgstr "Басқару..."
 
 #: ../data/gui/account_creation_wizard_window.ui.h:18
-#: ../data/gui/accounts_window.ui.h:39
-#: ../data/gui/change_mood_dialog.ui.h:3
-#: ../src/config.py:1280
-#: ../src/config.py:1383
-#: ../src/config.py:1694
-#: ../src/config.py:1699
-#: ../src/config.py:2263
-#: ../src/config.py:2342
-#: ../src/config.py:2355
-#: ../src/config.py:3596
-#: ../src/config.py:3671
-#: ../src/dialogs.py:308
-#: ../src/dialogs.py:310
-#: ../src/dialogs.py:513
-#: ../src/dialogs.py:526
-#: ../src/roster_window.py:2890
-#: ../src/roster_window.py:2896
-#: ../src/roster_window.py:2901
+#: ../data/gui/accounts_window.ui.h:39 ../data/gui/change_mood_dialog.ui.h:3
+#: ../src/config.py:1280 ../src/config.py:1383 ../src/config.py:1694
+#: ../src/config.py:1699 ../src/config.py:2263 ../src/config.py:2342
+#: ../src/config.py:2355 ../src/config.py:3596 ../src/config.py:3671
+#: ../src/dialogs.py:308 ../src/dialogs.py:310 ../src/dialogs.py:513
+#: ../src/dialogs.py:526 ../src/roster_window.py:2890
+#: ../src/roster_window.py:2896 ../src/roster_window.py:2901
 msgid "None"
 msgstr "Ешнәрсе"
 
@@ -200,8 +186,7 @@ msgstr "_Порт:"
 msgid "_Server:"
 msgstr "_Сервер:"
 
-#: ../data/gui/accounts_window.ui.h:1
-#: ../data/gui/preferences_window.ui.h:13
+#: ../data/gui/accounts_window.ui.h:1 ../data/gui/preferences_window.ui.h:13
 msgid "<b>Miscellaneous</b>"
 msgstr "<b>Таңдамалы</b>"
 
@@ -221,8 +206,7 @@ msgstr "<b>Прокси</b>"
 msgid "A_djust to status"
 msgstr "Күйге сә_йкес"
 
-#: ../data/gui/accounts_window.ui.h:6
-#: ../data/gui/join_groupchat_window.ui.h:1
+#: ../data/gui/accounts_window.ui.h:6 ../data/gui/join_groupchat_window.ui.h:1
 msgid "Account"
 msgstr "Тіркелгі"
 
@@ -297,27 +281,20 @@ msgid "First Name:"
 msgstr "Аты:"
 
 #. No configured account
-#: ../data/gui/accounts_window.ui.h:24
-#: ../data/gui/roster_window.ui.h:5
-#: ../src/common/helpers.py:1159
-#: ../src/common/helpers.py:1171
-#: ../src/notify.py:528
-#: ../src/notify.py:551
-#: ../src/notify.py:592
+#: ../data/gui/accounts_window.ui.h:24 ../data/gui/roster_window.ui.h:5
+#: ../src/common/helpers.py:1159 ../src/common/helpers.py:1171
+#: ../src/notify.py:528 ../src/notify.py:551 ../src/notify.py:592
 #: ../src/notify.py:608
 msgid "Gajim"
 msgstr "Gajim"
 
 #. FIXME: Ugly workaround.
-#. FIXME: Ugly workaround. Maybe we haven't been in any group (defaults to General)
+#. FIXME: Ugly workaround. Maybe we haven't been in any group (defaults to
+#. General)
 #. General group cannot be changed
-#: ../data/gui/accounts_window.ui.h:25
-#: ../data/gui/preferences_window.ui.h:61
-#: ../src/common/contacts.py:141
-#: ../src/dialogs.py:111
-#: ../src/dialogs.py:121
-#: ../src/roster_window.py:2832
-#: ../src/roster_window.py:5379
+#: ../data/gui/accounts_window.ui.h:25 ../data/gui/preferences_window.ui.h:61
+#: ../src/common/contacts.py:141 ../src/dialogs.py:111 ../src/dialogs.py:121
+#: ../src/roster_window.py:2832 ../src/roster_window.py:5379
 msgid "General"
 msgstr "Жалпы"
 
@@ -354,8 +331,7 @@ msgid "Information about you, as stored in the server"
 msgstr "Сіз туралы ақпарат, серверде сақталған түрде"
 
 #: ../data/gui/accounts_window.ui.h:35
-#: ../data/gui/zeroconf_information_window.ui.h:4
-#: ../src/config.py:1817
+#: ../data/gui/zeroconf_information_window.ui.h:4 ../src/config.py:1817
 #: ../src/dialogs.py:830
 msgid "Jabber ID:"
 msgstr "Jabber ID:"
@@ -369,14 +345,12 @@ msgstr "Фамилиясы:"
 msgid "Mer_ge accounts"
 msgstr "Тіркел_гілерді біріктіру"
 
-#: ../data/gui/accounts_window.ui.h:38
-#: ../src/config.py:1790
+#: ../data/gui/accounts_window.ui.h:38 ../src/config.py:1790
 #: ../src/config.py:2356
 msgid "No key selected"
 msgstr "Кілт таңдалмады"
 
-#: ../data/gui/accounts_window.ui.h:40
-#: ../data/gui/profile_window.ui.h:35
+#: ../data/gui/accounts_window.ui.h:40 ../data/gui/profile_window.ui.h:35
 msgid "Personal Information"
 msgstr "Жеке ақпарат"
 
@@ -393,8 +367,7 @@ msgid "Priority will change automatically according to your status."
 msgstr "Приоритет сіздің қалып-күйіңізге байланысты автоөзгертіледі."
 
 #. Rename
-#: ../data/gui/accounts_window.ui.h:44
-#: ../src/roster_window.py:5329
+#: ../data/gui/accounts_window.ui.h:44 ../src/roster_window.py:5329
 msgid "Re_name"
 msgstr "Аты_н ауыстыру"
 
@@ -456,8 +429,7 @@ msgid "_Edit Personal Information..."
 msgstr "Ж_еке ақпаратты түзету..."
 
 #. XML Console enable checkbutton
-#: ../data/gui/accounts_window.ui.h:60
-#: ../data/gui/xml_console_window.ui.h:11
+#: ../data/gui/accounts_window.ui.h:60 ../data/gui/xml_console_window.ui.h:11
 msgid "_Enable"
 msgstr "Іске қ_осу"
 
@@ -493,8 +465,7 @@ msgstr "Бұ_л контактқа менің күйімді көруге рұқ
 msgid "Add New Contact"
 msgstr "Жаңа контакт қосу"
 
-#: ../data/gui/add_new_contact_window.ui.h:4
-#: ../src/common/helpers.py:1339
+#: ../data/gui/add_new_contact_window.ui.h:4 ../src/common/helpers.py:1339
 msgid "I would like to add you to my contact list."
 msgstr "Мен сізді өзімнің контакттар тізіміне қосқым келеді."
 
@@ -673,8 +644,7 @@ msgid "All statuses"
 msgstr "Барлық күйлер"
 
 #: ../data/gui/advanced_notifications_window.ui.h:8
-#: ../src/common/commands.py:106
-#: ../src/common/helpers.py:233
+#: ../src/common/commands.py:106 ../src/common/helpers.py:233
 #: ../src/tooltips.py:193
 msgid "Away"
 msgstr "Кетіп қалған"
@@ -729,8 +699,7 @@ msgid "Launch a command"
 msgstr "Команданы орындау"
 
 #: ../data/gui/advanced_notifications_window.ui.h:21
-#: ../src/common/helpers.py:216
-#: ../src/tooltips.py:197
+#: ../src/common/helpers.py:216 ../src/tooltips.py:197
 msgid "Not Available"
 msgstr "Қол жетерсіз"
 
@@ -834,8 +803,7 @@ msgstr "Соңғы рет өзгертілген:"
 msgid "New entry received"
 msgstr "Жаңа жазба алынды"
 
-#: ../data/gui/atom_entry_window.ui.h:5
-#: ../src/atom_window.py:128
+#: ../data/gui/atom_entry_window.ui.h:5 ../src/atom_window.py:128
 msgid "You have received new entry:"
 msgstr "Сіз жаңа жазбаны алдыңыз:"
 
@@ -845,10 +813,8 @@ msgstr "Блокталған контакттар"
 
 #: ../data/gui/blocked_contacts_window.ui.h:2
 #: ../data/gui/contact_context_menu.ui.h:25
-#: ../data/gui/gc_occupants_menu.ui.h:13
-#: ../src/roster_window.py:5348
-#: ../src/roster_window.py:5476
-#: ../src/roster_window.py:5609
+#: ../data/gui/gc_occupants_menu.ui.h:13 ../src/roster_window.py:5348
+#: ../src/roster_window.py:5476 ../src/roster_window.py:5609
 msgid "_Unblock"
 msgstr "Б_локтамау"
 
@@ -936,8 +902,7 @@ msgid "_Start Chat"
 msgstr "Чатты ба_стау"
 
 #. # means number
-#: ../data/gui/chat_control.ui.h:1
-#: ../src/dialogs.py:4184
+#: ../data/gui/chat_control.ui.h:1 ../src/dialogs.py:4184
 msgid "#"
 msgstr "#"
 
@@ -945,8 +910,7 @@ msgstr "#"
 msgid "*"
 msgstr "*"
 
-#: ../data/gui/chat_control.ui.h:3
-#: ../data/gui/single_message_window.ui.h:1
+#: ../data/gui/chat_control.ui.h:3 ../data/gui/single_message_window.ui.h:1
 msgid "0"
 msgstr "0"
 
@@ -986,16 +950,14 @@ msgstr "8"
 msgid "9"
 msgstr "9"
 
-#. Make sure the character after "_" is not M/m (conflicts with Alt+M that is supposed to show the Emoticon Selector)
-#: ../data/gui/chat_control.ui.h:14
-#: ../data/gui/groupchat_control.ui.h:2
-#: ../data/gui/xml_console_window.ui.h:16
-#: ../src/filetransfers_window.py:266
+#. Make sure the character after "_" is not M/m (conflicts with Alt+M that is
+#. supposed to show the Emoticon Selector)
+#: ../data/gui/chat_control.ui.h:14 ../data/gui/groupchat_control.ui.h:2
+#: ../data/gui/xml_console_window.ui.h:16 ../src/filetransfers_window.py:266
 msgid "_Send"
 msgstr "_Жіберу"
 
-#: ../data/gui/chat_control.ui.h:15
-#: ../data/gui/groupchat_control.ui.h:3
+#: ../data/gui/chat_control.ui.h:15 ../data/gui/groupchat_control.ui.h:3
 msgid "label"
 msgstr "белгі"
 
@@ -1045,8 +1007,7 @@ msgstr "_Топтарды түзету..."
 
 #. Invite to
 #. Invite to Groupchat
-#: ../data/gui/contact_context_menu.ui.h:6
-#: ../src/roster_window.py:5284
+#: ../data/gui/contact_context_menu.ui.h:6 ../src/roster_window.py:5284
 #: ../src/roster_window.py:5444
 msgid "In_vite to"
 msgstr "_Шақыру"
@@ -1059,8 +1020,7 @@ msgstr "Контакттарды _шақыру"
 msgid "Remo_ve"
 msgstr "Ө_шіру"
 
-#: ../data/gui/contact_context_menu.ui.h:9
-#: ../src/roster_window.py:5294
+#: ../data/gui/contact_context_menu.ui.h:9 ../src/roster_window.py:5294
 #: ../src/roster_window.py:5533
 msgid "Send Cus_tom Status"
 msgstr "_Ол үшін қалып-күйді орнату"
@@ -1094,10 +1054,8 @@ msgid "_Allow him/her to see my status"
 msgstr "Оға_н менің қалып-күйімді көруді рұқсат ету"
 
 #: ../data/gui/contact_context_menu.ui.h:18
-#: ../data/gui/gc_occupants_menu.ui.h:7
-#: ../src/roster_window.py:5356
-#: ../src/roster_window.py:5482
-#: ../src/roster_window.py:5612
+#: ../data/gui/gc_occupants_menu.ui.h:7 ../src/roster_window.py:5356
+#: ../src/roster_window.py:5482 ../src/roster_window.py:5612
 msgid "_Block"
 msgstr "_Блоктау"
 
@@ -1107,8 +1065,7 @@ msgstr "Оған _менің қалып-күйімді көруді рұқсат
 
 #: ../data/gui/contact_context_menu.ui.h:20
 #: ../data/gui/gc_control_popup_menu.ui.h:6
-#: ../data/gui/gc_occupants_menu.ui.h:8
-#: ../data/gui/roster_window.ui.h:21
+#: ../data/gui/gc_occupants_menu.ui.h:8 ../data/gui/roster_window.ui.h:21
 #: ../src/roster_window.py:5683
 msgid "_History"
 msgstr "Тар_ихы"
@@ -1209,8 +1166,7 @@ msgstr "Бұл әрекет тізімнен бір файлдармен алм�
 msgid "When a file transfer is complete show a popup notification"
 msgstr "Файлдармен алмасу аяқталған кезде қалқымалы хабарламаны көрсету"
 
-#: ../data/gui/filetransfers.ui.h:13
-#: ../src/filetransfers_window.py:788
+#: ../data/gui/filetransfers.ui.h:13 ../src/filetransfers_window.py:788
 msgid "_Continue"
 msgstr "Жалға_стыру"
 
@@ -1218,8 +1174,7 @@ msgstr "Жалға_стыру"
 msgid "_Notify me when a file transfer is complete"
 msgstr "Файлдармен алмасу аяқталға_нда, мені ескерту"
 
-#: ../data/gui/filetransfers.ui.h:15
-#: ../src/filetransfers_window.py:205
+#: ../data/gui/filetransfers.ui.h:15 ../src/filetransfers_window.py:205
 msgid "_Open Containing Folder"
 msgstr "_Орналасқан буманы ашу"
 
@@ -1239,8 +1194,7 @@ msgstr "<b>Чаттары бар беттер түсі</b>"
 msgid "Account row"
 msgstr "Тіркелгі бағаны"
 
-#: ../data/gui/gajim_themes_window.ui.h:3
-#: ../src/chat_control.py:925
+#: ../data/gui/gajim_themes_window.ui.h:3 ../src/chat_control.py:925
 msgid "Bold"
 msgstr "Қалың"
 
@@ -1272,13 +1226,11 @@ msgstr "Кетіп қалды"
 msgid "Group row"
 msgstr "Топ бағаны"
 
-#: ../data/gui/gajim_themes_window.ui.h:11
-#: ../src/common/pep.py:150
+#: ../data/gui/gajim_themes_window.ui.h:11 ../src/common/pep.py:150
 msgid "Inactive"
 msgstr "Белсенді емес"
 
-#: ../data/gui/gajim_themes_window.ui.h:12
-#: ../src/chat_control.py:926
+#: ../data/gui/gajim_themes_window.ui.h:12 ../src/chat_control.py:926
 msgid "Italic"
 msgstr "Көлбеу"
 
@@ -1326,8 +1278,7 @@ msgstr "_Тақырыпты өзгерту..."
 msgid "Configure _Room..."
 msgstr "_Бөлмені баптау..."
 
-#: ../data/gui/gc_control_popup_menu.ui.h:4
-#: ../src/disco.py:1782
+#: ../data/gui/gc_control_popup_menu.ui.h:4 ../src/disco.py:1782
 msgid "_Bookmark"
 msgstr "_Бетбелгі"
 
@@ -1391,14 +1342,12 @@ msgstr "_Даусы бар"
 msgid "Create new post"
 msgstr "Жаңа хабарламаны жасау"
 
-#: ../data/gui/groups_post_window.ui.h:2
-#: ../src/common/helpers.py:258
+#: ../data/gui/groups_post_window.ui.h:2 ../src/common/helpers.py:258
 msgid "From"
 msgstr "Одан"
 
 #. holds subject
-#: ../data/gui/groups_post_window.ui.h:3
-#: ../src/history_manager.py:188
+#: ../data/gui/groups_post_window.ui.h:3 ../src/history_manager.py:188
 #: ../src/history_manager.py:219
 msgid "Subject"
 msgstr "Тақырып"
@@ -1416,8 +1365,7 @@ msgid "<big><b>Welcome to Gajim History Logs Manager</b></big>"
 msgstr "<big><b>Gajim тарихы логтар менеджеріне қош келдіңіз</b></big>"
 
 #. Change label for accept_button to action name instead of 'OK'.
-#: ../data/gui/history_manager.ui.h:4
-#: ../src/dialogs.py:3208
+#: ../data/gui/history_manager.ui.h:4 ../src/dialogs.py:3208
 #: ../src/dialogs.py:3305
 msgid "Delete"
 msgstr "Өшіру"
@@ -1448,8 +1396,7 @@ msgstr "Д_ереққордан іздеу"
 msgid "All Chat Histories"
 msgstr "Барлық чаттар тарихы"
 
-#: ../data/gui/history_window.ui.h:2
-#: ../src/history_window.py:323
+#: ../data/gui/history_window.ui.h:2 ../src/history_window.py:323
 msgid "Conversation History"
 msgstr "Чат тарихы"
 
@@ -1474,8 +1421,7 @@ msgstr "Чат тарихын _логқа сақтау"
 msgid "Bro_wse Rooms"
 msgstr "Бөлмелерді қара_п шығу"
 
-#: ../data/gui/join_groupchat_window.ui.h:3
-#: ../src/dialogs.py:2180
+#: ../data/gui/join_groupchat_window.ui.h:3 ../src/dialogs.py:2180
 msgid "Join Group Chat"
 msgstr "Бөлмеге кіру"
 
@@ -1503,8 +1449,7 @@ msgid "Room:"
 msgstr "Бөлме:"
 
 #: ../data/gui/join_groupchat_window.ui.h:9
-#: ../data/gui/manage_bookmarks_window.ui.h:9
-#: ../src/config.py:1807
+#: ../data/gui/manage_bookmarks_window.ui.h:9 ../src/config.py:1807
 msgid "Server:"
 msgstr "Сервер:"
 
@@ -1512,8 +1457,7 @@ msgstr "Сервер:"
 msgid "_Bookmark this room"
 msgstr "_Бөлмені бетбелгілерге қосу"
 
-#: ../data/gui/join_groupchat_window.ui.h:11
-#: ../src/disco.py:1341
+#: ../data/gui/join_groupchat_window.ui.h:11 ../src/disco.py:1341
 #: ../src/disco.py:1786
 msgid "_Join"
 msgstr "_Кіру"
@@ -1654,7 +1598,8 @@ msgstr "<b>Чат қалып-күй хабарламалары</b>"
 msgid "<b>Connection</b>"
 msgstr "<b>Байланыс</b>"
 
-#. a header for custom browser/client/file manager. so translate sth like: Custom Settings
+#. a header for custom browser/client/file manager. so translate sth like:
+#. Custom Settings
 #: ../data/gui/preferences_window.ui.h:10
 msgid "<b>Custom</b>"
 msgstr "<b>Таңдауыңызша</b>"
@@ -1747,8 +1692,7 @@ msgstr "Xfce негізгі қолданбаларын қолдану"
 msgid "Ask status message when I:"
 msgstr "Күй хабарламасын сұрау:"
 
-#: ../data/gui/preferences_window.ui.h:35
-#: ../src/features_window.py:105
+#: ../data/gui/preferences_window.ui.h:35 ../src/features_window.py:105
 msgid "Audio / Video"
 msgstr "Аудио / Видео"
 
@@ -1808,8 +1752,7 @@ msgstr "Бөлек ростер мен бөлек чаттар"
 msgid "Detached roster with single chat"
 msgstr "Бөлек ростер мен бір чат"
 
-#: ../data/gui/preferences_window.ui.h:50
-#: ../src/config.py:170
+#: ../data/gui/preferences_window.ui.h:50 ../src/config.py:170
 #: ../src/config.py:671
 msgid "Disabled"
 msgstr "Сөндірулі"
@@ -2022,8 +1965,7 @@ msgstr "Кейбір хабарламаларда кеңейтілген құр�
 msgid "Sort contacts by status"
 msgstr "Контакттарды қалып-күй бойынша сұрыптау"
 
-#: ../data/gui/preferences_window.ui.h:104
-#: ../src/config.py:391
+#: ../data/gui/preferences_window.ui.h:104 ../src/config.py:391
 msgid "Status"
 msgstr "Күй"
 
@@ -2223,8 +2165,7 @@ msgstr "JabberID"
 msgid "Order:"
 msgstr "Реті:"
 
-#: ../data/gui/privacy_list_window.ui.h:12
-#: ../src/dialogs.py:3436
+#: ../data/gui/privacy_list_window.ui.h:12 ../src/dialogs.py:3436
 msgid "Privacy List"
 msgstr "Жекелік тізімі"
 
@@ -2431,10 +2372,8 @@ msgstr "Тіркелгіні Gajim _мен серверден өшіру"
 
 #. Remove group
 #. Remove
-#: ../data/gui/remove_account_window.ui.h:4
-#: ../src/roster_window.py:5366
-#: ../src/roster_window.py:5492
-#: ../src/roster_window.py:5622
+#: ../data/gui/remove_account_window.ui.h:4 ../src/roster_window.py:5366
+#: ../src/roster_window.py:5492 ../src/roster_window.py:5622
 msgid "_Remove"
 msgstr "Өші_ру"
 
@@ -2491,8 +2430,7 @@ msgstr "Транс_порттарды көрсету"
 msgid "Show _Offline Contacts"
 msgstr "Желіде _еместерді көрсету"
 
-#: ../data/gui/roster_window.ui.h:12
-#: ../src/statusicon.py:326
+#: ../data/gui/roster_window.ui.h:12 ../src/statusicon.py:326
 msgid "Show _Roster"
 msgstr "_Ростерді көрсету"
 
@@ -2500,7 +2438,8 @@ msgstr "_Ростерді көрсету"
 msgid "_Accounts"
 msgstr "_Тіркелгілер"
 
-#. Make sure the character after "_" is not M/m (conflicts with Alt+M that is supposed to show the Emoticon Selector)
+#. Make sure the character after "_" is not M/m (conflicts with Alt+M that is
+#. supposed to show the Emoticon Selector)
 #: ../data/gui/roster_window.ui.h:14
 #: ../data/gui/subscription_request_window.ui.h:6
 msgid "_Actions"
@@ -2510,8 +2449,7 @@ msgstr "Әрек_ет"
 msgid "_Contents"
 msgstr "Құра_масы"
 
-#: ../data/gui/roster_window.ui.h:18
-#: ../src/disco.py:1502
+#: ../data/gui/roster_window.ui.h:18 ../src/disco.py:1502
 msgid "_Edit"
 msgstr "Тү_зету"
 
@@ -2544,13 +2482,11 @@ msgid "_Add contact"
 msgstr "_Контакт қосу"
 
 #. Information
-#: ../data/gui/search_window.ui.h:4
-#: ../src/roster_window.py:5634
+#: ../data/gui/search_window.ui.h:4 ../src/roster_window.py:5634
 msgid "_Information"
 msgstr "_Ақпараты"
 
-#: ../data/gui/search_window.ui.h:5
-#: ../src/disco.py:1353
+#: ../data/gui/search_window.ui.h:5 ../src/disco.py:1353
 msgid "_Search"
 msgstr "І_здеу"
 
@@ -2753,7 +2689,9 @@ msgstr "Бар болу stanzas жасыру"
 msgid "Info/Query"
 msgstr "Ақпарат/Сұрау"
 
-#. Info/Query: all(?) jabber xml start with <iq Leaving it _IQ is not a bad idea unless you are sure your lang has this somehow else translated (NOTE: xml still will still say <iq in your language (of course))
+#. Info/Query: all(?) jabber xml start with <iq Leaving it _IQ is not a bad
+#. idea unless you are sure your lang has this somehow else translated (NOTE:
+#. xml still will still say <iq in your language (of course))
 #: ../data/gui/xml_console_window.ui.h:13
 msgid "_IQ"
 msgstr "_IQ"
@@ -2806,8 +2744,7 @@ msgstr "Растауды тайдыру"
 msgid "You are in process of executing command. Do you really want to cancel it?"
 msgstr "Сіз қазір команданы орындаудасыз. Одан баст тартуды шынымен қалайсыз ба?"
 
-#: ../src/adhoc_commands.py:351
-#: ../src/adhoc_commands.py:374
+#: ../src/adhoc_commands.py:351 ../src/adhoc_commands.py:374
 msgid "Service sent malformed data"
 msgstr "Қызмет қате ақпаратты жіберген"
 
@@ -2841,8 +2778,7 @@ msgstr "Бүтін сан"
 msgid "Text"
 msgstr "Мәтін"
 
-#: ../src/advanced_configuration_window.py:96
-#: ../src/chat_control.py:945
+#: ../src/advanced_configuration_window.py:96 ../src/chat_control.py:945
 msgid "Color"
 msgstr "Түс"
 
@@ -2877,7 +2813,8 @@ msgstr[1] "Сізде жаңа мәліметтер бар (және %d көрс
 #. the next script, executed in the "po" directory,
 #. generates the following list.
 #. #!/bin/sh
-#. LANG=$(for i in *.po; do j=${i/.po/}; echo -n "_('"$j"')":" '"$j"', " ; done)
+#. LANG=$(for i in *.po; do j=${i/.po/}; echo -n "_('"$j"')":" '"$j"', " ;
+#. done)
 #. echo "{_('en'):'en'",$LANG"}"
 #: ../src/chat_control.py:75
 msgid "English"
@@ -2984,13 +2921,11 @@ msgid "Spelling language"
 msgstr "Емле тілі"
 
 #. we are not connected
-#: ../src/chat_control.py:511
-#: ../src/chat_control.py:720
+#: ../src/chat_control.py:511 ../src/chat_control.py:720
 msgid "A connection is not available"
 msgstr "Байланыс қолжетерсіз"
 
-#: ../src/chat_control.py:512
-#: ../src/chat_control.py:721
+#: ../src/chat_control.py:512 ../src/chat_control.py:721
 msgid "Your message can not be sent until you are connected."
 msgstr "Хабарламаңыз байланыс орнатпағанша жіберілмейді."
 
@@ -3019,27 +2954,18 @@ msgstr "Файлды шынымен жіберу керек пе?"
 msgid "If you send a file to %s, he/she will know your real Jabber ID."
 msgstr "Егер сіз файлды %s-қа жіберсеңіз, ол сіздің шын Jabber ID-ді білетін болады."
 
-#: ../src/chat_control.py:1503
-#: ../src/chat_control.py:1987
+#: ../src/chat_control.py:1503 ../src/chat_control.py:1987
 msgid "GPG encryption enabled"
 msgstr "GPG шифрлеу қосулы"
 
 #. Add to roster
-#: ../src/chat_control.py:1528
-#: ../src/common/contacts.py:158
-#: ../src/common/contacts.py:277
-#: ../src/common/helpers.py:57
-#: ../src/common/helpers.py:245
-#: ../src/dialogs.py:1064
-#: ../src/dialogs.py:2078
-#: ../src/dialogs.py:2107
-#: ../src/gui_interface.py:674
-#: ../src/gui_menu_builder.py:252
-#: ../src/gui_menu_builder.py:395
-#: ../src/roster_window.py:1610
-#: ../src/roster_window.py:1612
-#: ../src/roster_window.py:1942
-#: ../src/roster_window.py:3289
+#: ../src/chat_control.py:1528 ../src/common/contacts.py:158
+#: ../src/common/contacts.py:277 ../src/common/helpers.py:57
+#: ../src/common/helpers.py:245 ../src/dialogs.py:1064 ../src/dialogs.py:2078
+#: ../src/dialogs.py:2107 ../src/gui_interface.py:674
+#: ../src/gui_menu_builder.py:252 ../src/gui_menu_builder.py:395
+#: ../src/roster_window.py:1610 ../src/roster_window.py:1612
+#: ../src/roster_window.py:1942 ../src/roster_window.py:3289
 #: ../src/roster_window.py:3316
 msgid "Not in Roster"
 msgstr "Ростерде емес"
@@ -3063,8 +2989,7 @@ msgid "%(nickname)s from group chat %(room_name)s"
 msgstr "%(nickname)s, %(room_name)s топ чатынан"
 
 #. No key assigned nor a key is used by remote contact
-#: ../src/chat_control.py:1967
-#: ../src/dialogs.py:4866
+#: ../src/chat_control.py:1967 ../src/dialogs.py:4866
 msgid "No GPG key assigned"
 msgstr "GPG кілті көрсетілмеген"
 
@@ -3148,8 +3073,7 @@ msgstr "Қашықтағы контакттың шындылығы растал�
 msgid "E2E encryption disabled"
 msgstr "E2E шифрлену сөндірулі"
 
-#: ../src/chat_control.py:2241
-#: ../src/chat_control.py:2254
+#: ../src/chat_control.py:2241 ../src/chat_control.py:2254
 msgid "The following message was NOT encrypted"
 msgstr "Келесі хабарлама шифрленген ЕМЕС болған"
 
@@ -3167,14 +3091,11 @@ msgstr "Сіз жаңа ғана \"%s\" жіберген жаңа хабарла
 msgid "If you close this tab and you have history disabled, this message will be lost."
 msgstr "Егер сіз бұл бетті жауып, тарихты сақтау сөндірілген болса, бұл хабарлама жоғалтылады."
 
-#: ../src/chat_control.py:2663
-#: ../src/common/connection_handlers.py:1635
+#: ../src/chat_control.py:2663 ../src/common/connection_handlers.py:1635
 #: ../src/common/connection_handlers.py:1758
 #: ../src/common/connection_handlers.py:1960
-#: ../src/common/connection_handlers.py:2110
-#: ../src/common/connection.py:452
-#: ../src/gajim.py:159
-#: ../src/session.py:138
+#: ../src/common/connection_handlers.py:2110 ../src/common/connection.py:452
+#: ../src/gajim.py:159 ../src/session.py:138
 msgid "Database Error"
 msgstr "Дерекқор қатесі"
 
@@ -3196,31 +3117,23 @@ msgstr "логтар дерекқорын жасау"
 msgid "creating cache database"
 msgstr "кэш дерекқорын жасау"
 
-#: ../src/common/check_paths.py:274
-#: ../src/common/check_paths.py:281
-#: ../src/common/check_paths.py:288
-#: ../src/common/check_paths.py:295
-#: ../src/common/check_paths.py:302
-#: ../src/common/check_paths.py:309
+#: ../src/common/check_paths.py:274 ../src/common/check_paths.py:281
+#: ../src/common/check_paths.py:288 ../src/common/check_paths.py:295
+#: ../src/common/check_paths.py:302 ../src/common/check_paths.py:309
 #: ../src/common/check_paths.py:324
 #, python-format
 msgid "%s is a file but it should be a directory"
 msgstr "%s файл екен, алайда бума болуы тиіс еді"
 
-#: ../src/common/check_paths.py:275
-#: ../src/common/check_paths.py:282
-#: ../src/common/check_paths.py:289
-#: ../src/common/check_paths.py:296
-#: ../src/common/check_paths.py:303
-#: ../src/common/check_paths.py:310
-#: ../src/common/check_paths.py:318
-#: ../src/common/check_paths.py:325
+#: ../src/common/check_paths.py:275 ../src/common/check_paths.py:282
+#: ../src/common/check_paths.py:289 ../src/common/check_paths.py:296
+#: ../src/common/check_paths.py:303 ../src/common/check_paths.py:310
+#: ../src/common/check_paths.py:318 ../src/common/check_paths.py:325
 #: ../src/common/check_paths.py:333
 msgid "Gajim will now exit"
 msgstr "Gajim қазір өз жұмысын аяқтайды"
 
-#: ../src/common/check_paths.py:317
-#: ../src/common/check_paths.py:332
+#: ../src/common/check_paths.py:317 ../src/common/check_paths.py:332
 #, python-format
 msgid "%s is a directory but should be a file"
 msgstr "%s бума екен, алайда файл болуы керек еді"
@@ -3266,13 +3179,11 @@ msgstr "Желіде емес - байланыспаған"
 msgid "Presence description:"
 msgstr "Бар болудың анықтамасы:"
 
-#: ../src/common/commands.py:149
-#: ../src/common/commands.py:317
+#: ../src/common/commands.py:149 ../src/common/commands.py:317
 msgid "The status has been changed."
 msgstr "Қалып-күй өзгертілді."
 
-#: ../src/common/commands.py:181
-#: ../src/common/commands.py:207
+#: ../src/common/commands.py:181 ../src/common/commands.py:207
 msgid "Leave Groupchats"
 msgstr "Топ чаттардан шығу"
 
@@ -3290,12 +3201,9 @@ msgid "Choose the groupchats you want to leave"
 msgstr "Шығу үшін топ чаттарын таңдаңыз"
 
 #. Make special context menu if group is Groupchats
-#: ../src/common/commands.py:212
-#: ../src/common/contacts.py:137
-#: ../src/common/helpers.py:57
-#: ../src/roster_window.py:801
-#: ../src/roster_window.py:1614
-#: ../src/roster_window.py:1616
+#: ../src/common/commands.py:212 ../src/common/contacts.py:137
+#: ../src/common/helpers.py:57 ../src/roster_window.py:801
+#: ../src/roster_window.py:1614 ../src/roster_window.py:1616
 #: ../src/roster_window.py:5251
 msgid "Groupchats"
 msgstr "Топтық чаттар"
@@ -3401,12 +3309,9 @@ msgid "List (space separated) of rows (accounts and groups) that are collapsed."
 msgstr "Жиналған жолдар (тіркелгілер мен топтар) тізімі (бос аралықпен ажыратылсын)."
 
 #. sorted alphanum
-#: ../src/common/config.py:106
-#: ../src/common/config.py:501
-#: ../src/common/optparser.py:290
-#: ../src/common/optparser.py:486
-#: ../src/common/optparser.py:520
-#: ../src/gui_interface.py:3370
+#: ../src/common/config.py:106 ../src/common/config.py:501
+#: ../src/common/optparser.py:290 ../src/common/optparser.py:486
+#: ../src/common/optparser.py:520 ../src/gui_interface.py:3370
 msgid "default"
 msgstr "бастапқысы"
 
@@ -3887,8 +3792,7 @@ msgstr "Бұл контакт үшін OpenPGP қосулы тұр ма?"
 msgid "Should Gajim automatically start an encrypted session with this contact when possible?"
 msgstr "Қолжетерлік болса, Gajim шифрленген сессияны жасау керек пе?"
 
-#: ../src/common/config.py:437
-#: ../src/common/config.py:440
+#: ../src/common/config.py:437 ../src/common/config.py:440
 msgid "Language for which we want to check misspelled words"
 msgstr "Қай тілде емлені тексеру керек"
 
@@ -3900,16 +3804,13 @@ msgstr "барлық не бос аралықпен ажыратылған кү�
 msgid "'yes', 'no', or 'both'"
 msgstr "'yes', 'no', немесе 'both'"
 
-#: ../src/common/config.py:448
-#: ../src/common/config.py:450
-#: ../src/common/config.py:451
-#: ../src/common/config.py:454
+#: ../src/common/config.py:448 ../src/common/config.py:450
+#: ../src/common/config.py:451 ../src/common/config.py:454
 #: ../src/common/config.py:455
 msgid "'yes', 'no' or ''"
 msgstr "'yes', 'no' немесе ''"
 
-#: ../src/common/config.py:461
-#: ../src/common/pep.py:157
+#: ../src/common/config.py:461 ../src/common/pep.py:157
 msgid "Sleeping"
 msgstr "Ұйқыда"
 
@@ -3921,8 +3822,7 @@ msgstr "Жақында ораламын"
 msgid "Back in some minutes."
 msgstr "Бірнеше минутта ораламын."
 
-#: ../src/common/config.py:463
-#: ../src/common/pep.py:127
+#: ../src/common/config.py:463 ../src/common/pep.py:127
 msgid "Eating"
 msgstr "Тамақ ішуде"
 
@@ -3938,8 +3838,7 @@ msgstr "Кино"
 msgid "I'm watching a movie."
 msgstr "Кино көрудемін."
 
-#: ../src/common/config.py:465
-#: ../src/common/pep.py:186
+#: ../src/common/config.py:465 ../src/common/pep.py:186
 msgid "Working"
 msgstr "Жұмыс істеудемін"
 
@@ -3971,8 +3870,7 @@ msgstr "Мен бармын."
 msgid "I'm free for chat."
 msgstr "Мен чат үшін дайынмын."
 
-#: ../src/common/config.py:480
-#: ../src/config.py:1600
+#: ../src/common/config.py:480 ../src/config.py:1600
 msgid "Be right back."
 msgstr "Жақында боламын."
 
@@ -3984,8 +3882,7 @@ msgstr "Мен жоқпын."
 msgid "Do not disturb."
 msgstr "Мазамды алмаңыз."
 
-#: ../src/common/config.py:483
-#: ../src/common/config.py:484
+#: ../src/common/config.py:483 ../src/common/config.py:484
 msgid "Bye!"
 msgstr "Қош!"
 
@@ -3997,13 +3894,11 @@ msgstr "Топ чат хабарламасында muc_highlight_words ішін�
 msgid "Sound to play when any MUC message arrives."
 msgstr "MUC хабарламасы келген кезде ойналатын дыбыс."
 
-#: ../src/common/config.py:504
-#: ../src/common/optparser.py:304
+#: ../src/common/config.py:504 ../src/common/optparser.py:304
 msgid "green"
 msgstr "green"
 
-#: ../src/common/config.py:508
-#: ../src/common/optparser.py:290
+#: ../src/common/config.py:508 ../src/common/optparser.py:290
 msgid "grocery"
 msgstr "grocery"
 
@@ -4047,31 +3942,23 @@ msgstr "%(agent)s агенті көмегімен тіркелу %(error)s қа�
 #: ../src/common/connection_handlers.py:1633
 #: ../src/common/connection_handlers.py:1756
 #: ../src/common/connection_handlers.py:1957
-#: ../src/common/connection_handlers.py:2108
-#: ../src/common/connection.py:449
+#: ../src/common/connection_handlers.py:2108 ../src/common/connection.py:449
 #: ../src/gajim.py:341
 msgid "Disk Write Error"
 msgstr "Дискке жазу қатесі"
 
-#: ../src/common/connection_handlers.py:678
-#: ../src/common/connection.py:1472
+#: ../src/common/connection_handlers.py:678 ../src/common/connection.py:1472
 msgid "Invisibility not supported"
 msgstr "Жасырын болуға қолдау жоқ"
 
-#: ../src/common/connection_handlers.py:679
-#: ../src/common/connection.py:1473
+#: ../src/common/connection_handlers.py:679 ../src/common/connection.py:1473
 #, python-format
 msgid "Account %s doesn't support invisibility."
 msgstr "%s тіркелгісі жасырын болуды қолдамайды."
 
-#: ../src/common/connection_handlers.py:1446
-#: ../src/common/connection.py:253
-#: ../src/config.py:2091
-#: ../src/config.py:2100
-#: ../src/config.py:2168
-#: ../src/config.py:3560
-#: ../src/dataforms_widget.py:597
-#: ../src/dialogs.py:2931
+#: ../src/common/connection_handlers.py:1446 ../src/common/connection.py:253
+#: ../src/config.py:2091 ../src/config.py:2100 ../src/config.py:2168
+#: ../src/config.py:3560 ../src/dataforms_widget.py:597 ../src/dialogs.py:2931
 msgid "Invalid Jabber ID"
 msgstr "Қате Jabber ID"
 
@@ -4082,10 +3969,8 @@ msgstr "Қате JID жіберген хабарлама алынды, оны е
 #: ../src/common/connection_handlers.py:1636
 #: ../src/common/connection_handlers.py:1759
 #: ../src/common/connection_handlers.py:1961
-#: ../src/common/connection_handlers.py:2111
-#: ../src/common/connection.py:453
-#: ../src/gajim.py:160
-#: ../src/session.py:139
+#: ../src/common/connection_handlers.py:2111 ../src/common/connection.py:453
+#: ../src/gajim.py:160 ../src/session.py:139
 #, python-format
 msgid "The database file (%s) cannot be read. Try to repair it (see http://trac.gajim.org/wiki/DatabaseBackup) or remove it (all history will be lost)."
 msgstr "Дерекқор файлын (%s) оқі мүмкін емес. Оны қалпына келтіріп көріңіз (see http://trac.gajim.org/wiki/DatabaseBackup) не өшіріңіз (бар тарих жоғалады)."
@@ -4100,8 +3985,7 @@ msgstr "Ник атына рұқсат жоқ: %s"
 #: ../src/common/connection_handlers.py:1918
 #: ../src/common/connection_handlers.py:1922
 #: ../src/common/connection_handlers.py:1926
-#: ../src/common/connection_handlers.py:1931
-#: ../src/gui_interface.py:139
+#: ../src/common/connection_handlers.py:1931 ../src/gui_interface.py:139
 msgid "Unable to join group chat"
 msgstr "Чат бөлмесіне кіру мүмкін емес"
 
@@ -4298,8 +4182,7 @@ msgstr "Кілтті қолдану сертификаттарға қолтаң�
 msgid "Application verification failure"
 msgstr "Қолданбаны растау қатесі"
 
-#: ../src/common/connection.py:254
-#: ../src/dialogs.py:2932
+#: ../src/common/connection.py:254 ../src/dialogs.py:2932
 #, python-format
 msgid "It is not possible to send a message to %s, this JID is not valid."
 msgstr "%s үшін хабарламаны жіберу мүмкін емес, бұл JID дұрыс емес."
@@ -4362,16 +4245,14 @@ msgstr "Қате жауап"
 msgid "Transport %(name)s answered wrongly to register request: %(error)s"
 msgstr " %(name)s қызметі тіркелуге сұранымына қате жауап берген: %(error)s"
 
-#: ../src/common/connection.py:1165
-#: ../src/common/connection.py:1294
+#: ../src/common/connection.py:1165 ../src/common/connection.py:1294
 #: ../src/common/connection.py:1784
 #: ../src/common/zeroconf/connection_zeroconf.py:189
 #, python-format
 msgid "Could not connect to \"%s\""
 msgstr "\"%s\" үшін байланыс орнату мүмкін емес"
 
-#: ../src/common/connection.py:1166
-#: ../src/gui_interface.py:755
+#: ../src/common/connection.py:1166 ../src/gui_interface.py:755
 msgid "Check your connection or try again later."
 msgstr "Байланысты тексеріңіз не кейін қайталап көріңіз."
 
@@ -4384,14 +4265,12 @@ msgstr "Сервер жауабы: %s"
 msgid "Connection to proxy failed"
 msgstr "Проксиге байланыс орнату сәтсіз аяқталды"
 
-#: ../src/common/connection.py:1215
-#: ../src/common/connection.py:1274
+#: ../src/common/connection.py:1215 ../src/common/connection.py:1274
 #, python-format
 msgid "Could not connect to account %s"
 msgstr "%s тіркелгісіне байланыс орнату сәтсіз аяқталды"
 
-#: ../src/common/connection.py:1216
-#: ../src/common/connection.py:1275
+#: ../src/common/connection.py:1216 ../src/common/connection.py:1275
 #, python-format
 msgid "Connection with account %s has been lost. Retry connecting."
 msgstr "%s тіркелгісімен байланыс үзілген. Қайтадан орнатып көреміз."
@@ -4450,8 +4329,7 @@ msgstr "Жіберген контакт: \"%s\" (%s)"
 msgid "Sent contacts:"
 msgstr "Жіберілген контакттар:"
 
-#: ../src/common/connection.py:1799
-#: ../src/common/connection.py:1822
+#: ../src/common/connection.py:1799 ../src/common/connection.py:1822
 msgid "Not fetched because of invisible status"
 msgstr "Жасырын қалып-күй нәтижесінде алынбаған"
 
@@ -4464,23 +4342,16 @@ msgstr "Тіркелгіні өшіру сәтсіз"
 msgid "Unregistration with server %(server)s failed: %(error)s"
 msgstr "%(server)s серверінен тіркелгіні өшіру сәтсіз: %(error)s"
 
-#: ../src/common/contacts.py:135
-#: ../src/common/helpers.py:57
+#: ../src/common/contacts.py:135 ../src/common/helpers.py:57
 #: ../src/gui_interface.py:674
 msgid "Observers"
 msgstr "Байқаушылар"
 
-#: ../src/common/contacts.py:139
-#: ../src/common/contacts.py:366
-#: ../src/common/helpers.py:57
-#: ../src/disco.py:120
-#: ../src/disco.py:121
-#: ../src/disco.py:1499
-#: ../src/gui_interface.py:424
-#: ../src/roster_window.py:840
-#: ../src/roster_window.py:1525
-#: ../src/roster_window.py:1606
-#: ../src/roster_window.py:1608
+#: ../src/common/contacts.py:139 ../src/common/contacts.py:366
+#: ../src/common/helpers.py:57 ../src/disco.py:120 ../src/disco.py:121
+#: ../src/disco.py:1499 ../src/gui_interface.py:424
+#: ../src/roster_window.py:840 ../src/roster_window.py:1525
+#: ../src/roster_window.py:1606 ../src/roster_window.py:1608
 #: ../src/roster_window.py:1769
 msgid "Transports"
 msgstr "Қызметтер"
@@ -4494,8 +4365,7 @@ msgstr "Ростерде емес"
 msgid "D-Bus python bindings are missing in this computer"
 msgstr "D-Bus python байланыстары бұл компьютерде жоқ"
 
-#: ../src/common/dbus_support.py:41
-#: ../src/common/dbus_support.py:52
+#: ../src/common/dbus_support.py:41 ../src/common/dbus_support.py:52
 msgid "D-Bus capabilities of Gajim cannot be used"
 msgstr "Gajim-нің D-Bus мүмкіндіктерін қолдану мүмкін емес"
 
@@ -4590,7 +4460,8 @@ msgstr "он"
 msgid "eleven"
 msgstr "он бір"
 
-#. Strings to use for the output. %(0)s will be replaced with the preceding hour
+#. Strings to use for the output. %(0)s will be replaced with the preceding
+#. hour
 #. (e.g. "x PAST %(0)s"), %(1)s with the coming hour (e.g. "x TO %(0)s"). '''
 #: ../src/common/fuzzyclock.py:44
 #, python-format
@@ -4657,8 +4528,7 @@ msgstr "бес минутсыз %(1)s"
 msgid "%(1)s o'clock"
 msgstr "сағат %(1)s"
 
-#: ../src/common/fuzzyclock.py:49
-#: ../src/common/fuzzyclock.py:51
+#: ../src/common/fuzzyclock.py:49 ../src/common/fuzzyclock.py:51
 msgid "Night"
 msgstr "Түн"
 
@@ -4694,8 +4564,7 @@ msgstr "Өте кеш"
 msgid "Start of week"
 msgstr "Апта басы"
 
-#: ../src/common/fuzzyclock.py:53
-#: ../src/common/fuzzyclock.py:54
+#: ../src/common/fuzzyclock.py:53 ../src/common/fuzzyclock.py:54
 msgid "Middle of week"
 msgstr "Апта ортасы"
 
@@ -4727,8 +4596,7 @@ msgstr "Ресурс атындағы қате таңба."
 msgid "_Busy"
 msgstr "_Бос емес"
 
-#: ../src/common/helpers.py:211
-#: ../src/tooltips.py:195
+#: ../src/common/helpers.py:211 ../src/tooltips.py:195
 msgid "Busy"
 msgstr "Бос емес"
 
@@ -4740,8 +4608,7 @@ msgstr "Қо_л жетерсіз"
 msgid "_Free for Chat"
 msgstr "_Чатқа дайын"
 
-#: ../src/common/helpers.py:221
-#: ../src/tooltips.py:191
+#: ../src/common/helpers.py:221 ../src/tooltips.py:191
 msgid "Free for Chat"
 msgstr "Чатқа дайын"
 
@@ -4749,8 +4616,7 @@ msgstr "Чатқа дайын"
 msgid "?user status:_Available"
 msgstr "?user status:_Осында"
 
-#: ../src/common/helpers.py:226
-#: ../src/tooltips.py:189
+#: ../src/common/helpers.py:226 ../src/tooltips.py:189
 msgid "?user status:Available"
 msgstr "?user status:Осында"
 
@@ -4766,8 +4632,7 @@ msgstr "К_етіп қалған"
 msgid "_Offline"
 msgstr "Желі_де емес"
 
-#: ../src/common/helpers.py:238
-#: ../src/tooltips.py:199
+#: ../src/common/helpers.py:238 ../src/tooltips.py:199
 msgid "Offline"
 msgstr "Желіде емес"
 
@@ -4831,23 +4696,19 @@ msgstr "Қонақтар"
 msgid "Visitor"
 msgstr "Қонақ"
 
-#: ../src/common/helpers.py:300
-#: ../src/tooltips.py:210
+#: ../src/common/helpers.py:300 ../src/tooltips.py:210
 msgid "?Group Chat Contact Affiliation:None"
 msgstr "?Group Chat Contact Affiliation:Жоқ"
 
-#: ../src/common/helpers.py:302
-#: ../src/tooltips.py:216
+#: ../src/common/helpers.py:302 ../src/tooltips.py:216
 msgid "Owner"
 msgstr "Иесі"
 
-#: ../src/common/helpers.py:304
-#: ../src/tooltips.py:214
+#: ../src/common/helpers.py:304 ../src/tooltips.py:214
 msgid "Administrator"
 msgstr "Әкімші"
 
-#: ../src/common/helpers.py:306
-#: ../src/tooltips.py:212
+#: ../src/common/helpers.py:306 ../src/tooltips.py:212
 msgid "Member"
 msgstr "Мүше"
 
@@ -4914,8 +4775,7 @@ msgstr "%s КБ"
 msgid "%s B"
 msgstr "%s Б"
 
-#: ../src/common/helpers.py:1108
-#: ../src/common/helpers.py:1115
+#: ../src/common/helpers.py:1108 ../src/common/helpers.py:1115
 #, python-format
 msgid "%d message pending"
 msgid_plural "%d messages pending"
@@ -4927,8 +4787,7 @@ msgstr[1] "%d хабарлама бар"
 msgid " from room %s"
 msgstr " %s бөлмесінен"
 
-#: ../src/common/helpers.py:1124
-#: ../src/common/helpers.py:1143
+#: ../src/common/helpers.py:1124 ../src/common/helpers.py:1143
 #, python-format
 msgid " from user %s"
 msgstr " %s пайдаланушысынан"
@@ -4938,8 +4797,7 @@ msgstr " %s пайдаланушысынан"
 msgid " from %s"
 msgstr ", қайдан: %s"
 
-#: ../src/common/helpers.py:1133
-#: ../src/common/helpers.py:1140
+#: ../src/common/helpers.py:1133 ../src/common/helpers.py:1140
 #, python-format
 msgid "%d event pending"
 msgid_plural "%d events pending"
@@ -5080,8 +4938,7 @@ msgstr "X Window System (Xv жоқ)"
 msgid "error: cannot open %s for reading"
 msgstr "қате: оқу үшін %s ашу мүмкін емес"
 
-#: ../src/common/optparser.py:299
-#: ../src/common/optparser.py:300
+#: ../src/common/optparser.py:299 ../src/common/optparser.py:300
 msgid "cyan"
 msgstr "көгілдір"
 
@@ -5506,8 +5363,7 @@ msgstr "Ланч"
 msgid "Exercising"
 msgstr "Шынығу"
 
-#: ../src/common/pep.py:133
-#: ../src/common/pep.py:178
+#: ../src/common/pep.py:133 ../src/common/pep.py:178
 msgid "Cycling"
 msgstr "Велосипед"
 
@@ -5827,14 +5683,11 @@ msgstr "Хабарлама"
 msgid "Enabled"
 msgstr "Қосулы"
 
-#: ../src/config.py:459
-#: ../src/config.py:463
-#: ../src/config.py:3078
+#: ../src/config.py:459 ../src/config.py:463 ../src/config.py:3078
 msgid "Default"
 msgstr "Бастапқысы"
 
-#: ../src/config.py:739
-#: ../src/dialogs.py:1395
+#: ../src/config.py:739 ../src/dialogs.py:1395
 #, python-format
 msgid "Dictionary for lang %s not available"
 msgstr "%s тілі үшін сөздік қолжетерсіз"
@@ -5853,14 +5706,9 @@ msgid "status message text"
 msgstr "қалып-күй хабарлама мәтіні"
 
 #. Name column
-#: ../src/config.py:1514
-#: ../src/dialogs.py:2383
-#: ../src/dialogs.py:2449
-#: ../src/dialogs.py:3215
-#: ../src/disco.py:866
-#: ../src/disco.py:1726
-#: ../src/disco.py:2030
-#: ../src/history_window.py:90
+#: ../src/config.py:1514 ../src/dialogs.py:2383 ../src/dialogs.py:2449
+#: ../src/dialogs.py:3215 ../src/disco.py:866 ../src/disco.py:1726
+#: ../src/disco.py:2030 ../src/history_window.py:90
 msgid "Name"
 msgstr "Аты"
 
@@ -5872,13 +5720,11 @@ msgstr "Қазір қайта кіру керек пе?"
 msgid "If you want all the changes to apply instantly, you must relogin."
 msgstr "Түзетулерді қазір іске асыруды қаласаңыз, қайта кіруіңіз керек."
 
-#: ../src/config.py:1764
-#: ../src/config.py:1893
+#: ../src/config.py:1764 ../src/config.py:1893
 msgid "OpenPGP is not usable on this computer"
 msgstr "OpenPGP бұл компьютерде қолдануға болмайды"
 
-#: ../src/config.py:1933
-#: ../src/config.py:1980
+#: ../src/config.py:1933 ../src/config.py:1980
 msgid "Unread events"
 msgstr "Оқылмаған оқиғалар"
 
@@ -5895,9 +5741,7 @@ msgstr "Сізде %s тіркелгісінен чаттар ашулы тұр"
 msgid "All chat and groupchat windows will be closed. Do you want to continue?"
 msgstr "Барлық чаттар мен топ чаттары жабылады. Жалғастыруды қалайсыз ба?"
 
-#: ../src/config.py:1976
-#: ../src/config.py:2509
-#: ../src/config.py:2545
+#: ../src/config.py:1976 ../src/config.py:2509 ../src/config.py:2545
 msgid "You are currently connected to the server"
 msgstr "Қазір серверге қосулы тұрсыз"
 
@@ -5917,8 +5761,7 @@ msgstr "Тіркелгі осы аты қолданылуда"
 msgid "This name is already used by another of your accounts. Please choose another name."
 msgstr "Бұл тіркелгі аты қазір қолданылуда. Басқасын таңдаңыз."
 
-#: ../src/config.py:1992
-#: ../src/config.py:1996
+#: ../src/config.py:1992 ../src/config.py:1996
 msgid "Invalid account name"
 msgstr "Тіркелгі аты қате"
 
@@ -5943,13 +5786,11 @@ msgstr "%s тіркелгісі үшін жаңа атын енгізіңіз"
 msgid "A Jabber ID must be in the form \"user@servername\"."
 msgstr "Jabber ID келесідей \"user@servername\" түрінде болуы керек."
 
-#: ../src/config.py:2318
-#: ../src/config.py:3606
+#: ../src/config.py:2318 ../src/config.py:3606
 msgid "Invalid entry"
 msgstr "Қате мән"
 
-#: ../src/config.py:2319
-#: ../src/config.py:3607
+#: ../src/config.py:2319 ../src/config.py:3607
 msgid "Custom port must be a port number."
 msgstr "Таңдауыңызша порт нөмірі түрінде берілуі тиіс."
 
@@ -5977,12 +5818,8 @@ msgstr "Ондай тіркелгі жоқ"
 msgid "You must create your account before editing your personal information."
 msgstr "Жеке ақпаратыңызды түзету алдында сізге тіркелгі жасау керек."
 
-#: ../src/config.py:2391
-#: ../src/dialogs.py:2136
-#: ../src/dialogs.py:2371
-#: ../src/dialogs.py:2557
-#: ../src/disco.py:511
-#: ../src/profile_window.py:339
+#: ../src/config.py:2391 ../src/dialogs.py:2136 ../src/dialogs.py:2371
+#: ../src/dialogs.py:2557 ../src/disco.py:511 ../src/profile_window.py:339
 msgid "You are not connected to the server"
 msgstr "Сервермен байланысты орнатқан жоқсыз"
 
@@ -5998,8 +5835,7 @@ msgstr "Серверіңіз Vcard-ты қолдамайды"
 msgid "Your server can't save your personal information."
 msgstr "Серверіңіз сіздің жеке ақпаратыңызды сақтай алмайды."
 
-#: ../src/config.py:2510
-#: ../src/config.py:2546
+#: ../src/config.py:2510 ../src/config.py:2546
 msgid "To disable the account, you must be disconnected."
 msgstr "Тіркелгіні сөндіру үшін, оның желімен байланысын аяқтаңыз."
 
@@ -6040,9 +5876,7 @@ msgstr "Әкімшілер тізімі"
 
 #. Address column
 #. holds JID (who said this)
-#: ../src/config.py:2763
-#: ../src/disco.py:873
-#: ../src/history_manager.py:201
+#: ../src/config.py:2763 ../src/disco.py:873 ../src/history_manager.py:201
 msgid "JID"
 msgstr "JID"
 
@@ -6136,20 +5970,17 @@ msgstr "Тіркелгі сөндірулі"
 msgid "To unregister from a server, account must be enabled."
 msgstr "Серверден тіркелуді өшіру үшін тіркелгі қосулы тқұру керек."
 
-#: ../src/config.py:2955
-#: ../src/gui_interface.py:1132
+#: ../src/config.py:2955 ../src/gui_interface.py:1132
 #: ../src/gui_interface.py:1243
 msgid "Password Required"
 msgstr "Пароль керек"
 
-#: ../src/config.py:2956
-#: ../src/gui_interface.py:1223
+#: ../src/config.py:2956 ../src/gui_interface.py:1223
 #, python-format
 msgid "Enter your password for account %s"
 msgstr "%s тіркелгіңіз үшін парольді енгізіңіз"
 
-#: ../src/config.py:2957
-#: ../src/gui_interface.py:1243
+#: ../src/config.py:2957 ../src/gui_interface.py:1243
 msgid "Save password"
 msgstr "Парольді сақтау"
 
@@ -6204,19 +6035,15 @@ msgid "Please be sure to fill out server and room fields or remove this bookmark
 msgstr "Сервер мен бөлме өрістерін толтырыңыз немесе бетбелгіні өшіріңіз."
 
 #. invalid char
-#: ../src/config.py:3302
-#: ../src/dialogs.py:1934
+#: ../src/config.py:3302 ../src/dialogs.py:1934
 msgid "Invalid nickname"
 msgstr "Ник қате"
 
-#: ../src/config.py:3303
-#: ../src/config.py:3317
-#: ../src/config.py:3331
+#: ../src/config.py:3303 ../src/config.py:3317 ../src/config.py:3331
 msgid "Character not allowed"
 msgstr "Таңба рұқсат етілмеген"
 
-#: ../src/config.py:3316
-#: ../src/config.py:3582
+#: ../src/config.py:3316 ../src/config.py:3582
 msgid "Invalid server"
 msgstr "Сервер қате"
 
@@ -6228,8 +6055,7 @@ msgstr "Қате бөлме"
 msgid "Account has been added successfully"
 msgstr "Тіркелгі сәтті қосылды"
 
-#: ../src/config.py:3499
-#: ../src/config.py:3505
+#: ../src/config.py:3499 ../src/config.py:3505
 msgid "You can set advanced account options by pressing the Advanced button, or later by choosing the Accounts menu item under the Edit menu from the main window."
 msgstr "Тіркелгінің кеңейтілген баптауларын орнату үшін Кеңейтілген батырмасын қолданыңыз, немесе бас терезесіндегі Түзету мәзіріндегі Тіркелгілер нұсқасын таңдап, кейін де жасай аласыз."
 
@@ -6249,13 +6075,11 @@ msgstr "Бұл тіркелгіні баптау үшін пайдаланушы
 msgid "Please provide a server on which you want to register."
 msgstr "Тіркелгіңіз келетін серверді көрсетіңіз."
 
-#: ../src/config.py:3639
-#: ../src/gui_interface.py:1904
+#: ../src/config.py:3639 ../src/gui_interface.py:1904
 msgid "Certificate Already in File"
 msgstr "Сертификат файлда бар болып тұр"
 
-#: ../src/config.py:3640
-#: ../src/gui_interface.py:1905
+#: ../src/config.py:3640 ../src/gui_interface.py:1905
 #, python-format
 msgid "This certificate is already in file %s, so it's not added again."
 msgstr "Сертификат %s файлында бар болып тұр, сол үшін қайта қосылмайды."
@@ -6275,8 +6099,7 @@ msgstr ""
 "SSL қатесі: %(error)s\n"
 "Сонда да серверге байланысты орнатуды қалайсыз ба?"
 
-#: ../src/config.py:3723
-#: ../src/gui_interface.py:1932
+#: ../src/config.py:3723 ../src/gui_interface.py:1932
 #, python-format
 msgid ""
 "Add this certificate to the list of trusted certificates.\n"
@@ -6287,8 +6110,7 @@ msgstr ""
 "Сертификаттың SHA1 баспасы:\n"
 "%s"
 
-#: ../src/config.py:3755
-#: ../src/config.py:3789
+#: ../src/config.py:3755 ../src/config.py:3789
 msgid "An error occurred during account creation"
 msgstr "Жасау кезінде қате кетті"
 
@@ -6407,8 +6229,7 @@ msgstr[0] "Кеше"
 msgstr[1] "%i күн бұрын"
 
 #. if we have subject, show it too!
-#: ../src/conversation_textview.py:1344
-#: ../src/history_window.py:480
+#: ../src/conversation_textview.py:1344 ../src/history_window.py:480
 #, python-format
 msgid "Subject: %s\n"
 msgstr "Тақырыбы: %s\n"
@@ -6435,8 +6256,7 @@ msgstr "Сіз енгізген Jabber ID тізімде бар болып тұ�
 msgid "new@jabber.id"
 msgstr "жаңа@jabber.id"
 
-#: ../src/dataforms_widget.py:616
-#: ../src/dataforms_widget.py:618
+#: ../src/dataforms_widget.py:616 ../src/dataforms_widget.py:618
 #, python-format
 msgid "new%d@jabber.id"
 msgstr "жаңа%d@jabber.id"
@@ -6525,9 +6345,7 @@ msgstr "%s тіркелгісіне қосқыңыз келетін контак
 msgid "Please fill in the data of the contact you want to add"
 msgstr "Қосықыңыз келетін контакт ақпаратын енгізіңіз"
 
-#: ../src/dialogs.py:1039
-#: ../src/dialogs.py:1045
-#: ../src/dialogs.py:1050
+#: ../src/dialogs.py:1039 ../src/dialogs.py:1045 ../src/dialogs.py:1050
 msgid "Invalid User ID"
 msgstr "Пайдаланушы ID-і қате"
 
@@ -6597,8 +6415,7 @@ msgstr ""
 "\n"
 "Қате жазылған сөздерді түспен ерекшелеу мүмкіндігі енді қолданылмайды"
 
-#: ../src/dialogs.py:1935
-#: ../src/dialogs.py:2322
+#: ../src/dialogs.py:1935 ../src/dialogs.py:2322
 msgid "The nickname has not allowed characters."
 msgstr "Ник аты ішінде рұқсат етілмеген таңбалар бар."
 
@@ -6612,8 +6429,7 @@ msgstr "%(account)s тіркелгісінен жазылуға сұраным �
 msgid "Subscription request from %s"
 msgstr "%s жіберген жазылуға сұраным"
 
-#: ../src/dialogs.py:2131
-#: ../src/gui_interface.py:2672
+#: ../src/dialogs.py:2131 ../src/gui_interface.py:2672
 #, python-format
 msgid "You are already in group chat %s"
 msgstr "Сіз %s топтық чатына қатысудасыз"
@@ -6639,8 +6455,7 @@ msgstr "Топ чатына кіруге қолданылатын тіркелг
 msgid "Invalid Nickname"
 msgstr "Ник аты қате"
 
-#: ../src/dialogs.py:2326
-#: ../src/dialogs.py:2332
+#: ../src/dialogs.py:2326 ../src/dialogs.py:2332
 #: ../src/groupchat_control.py:1832
 msgid "Invalid group chat Jabber ID"
 msgstr "Топтық чаттың Jabber ID-і зате"
@@ -6649,8 +6464,7 @@ msgstr "Топтық чаттың Jabber ID-і зате"
 msgid "Please enter the group chat Jabber ID as room@server."
 msgstr "Jabber ID-ін as бөлме@сервер түрінде көрсетіңіз."
 
-#: ../src/dialogs.py:2333
-#: ../src/groupchat_control.py:1833
+#: ../src/dialogs.py:2333 ../src/groupchat_control.py:1833
 msgid "The group chat Jabber ID has not allowed characters."
 msgstr "Топ чат Jabber ID ішінде рұқсат етілмеген таңбалар бар."
 
@@ -6701,21 +6515,16 @@ msgstr ""
 "төмендегі өріске жазыңыз:"
 
 #. if offline or connecting
-#: ../src/dialogs.py:2536
-#: ../src/dialogs.py:2917
-#: ../src/dialogs.py:3129
+#: ../src/dialogs.py:2536 ../src/dialogs.py:2917 ../src/dialogs.py:3129
 msgid "Connection not available"
 msgstr "Байланыс қолжетерсіз"
 
-#: ../src/dialogs.py:2537
-#: ../src/dialogs.py:2918
-#: ../src/dialogs.py:3130
+#: ../src/dialogs.py:2537 ../src/dialogs.py:2918 ../src/dialogs.py:3130
 #, python-format
 msgid "Please make sure you are connected with \"%s\"."
 msgstr "\"%s\" үшін байланыс орнатылғанына көз жеткізіңіз."
 
-#: ../src/dialogs.py:2546
-#: ../src/dialogs.py:2549
+#: ../src/dialogs.py:2546 ../src/dialogs.py:2549
 msgid "Invalid JID"
 msgstr "Қате JID"
 
@@ -6745,81 +6554,57 @@ msgid "The passwords typed in both fields must be identical."
 msgstr "Екі өрістегі де парольдер өзара сәйкес болуы тиіс."
 
 #. default value
-#: ../src/dialogs.py:2619
-#: ../src/notify.py:247
-#: ../src/notify.py:473
+#: ../src/dialogs.py:2619 ../src/notify.py:247 ../src/notify.py:473
 msgid "Contact Signed In"
 msgstr "Контакт кірді"
 
-#: ../src/dialogs.py:2621
-#: ../src/notify.py:255
-#: ../src/notify.py:475
+#: ../src/dialogs.py:2621 ../src/notify.py:255 ../src/notify.py:475
 msgid "Contact Signed Out"
 msgstr "Контакт шықты"
 
 #. chat message
-#: ../src/dialogs.py:2623
-#: ../src/notify.py:277
-#: ../src/notify.py:477
+#: ../src/dialogs.py:2623 ../src/notify.py:277 ../src/notify.py:477
 msgid "New Message"
 msgstr "Жаңа хабарлама"
 
 #. single message
-#: ../src/dialogs.py:2623
-#: ../src/notify.py:259
-#: ../src/notify.py:477
+#: ../src/dialogs.py:2623 ../src/notify.py:259 ../src/notify.py:477
 msgid "New Single Message"
 msgstr "Жаңа бір хабарлама"
 
 #. private message
-#: ../src/dialogs.py:2624
-#: ../src/notify.py:265
-#: ../src/notify.py:478
+#: ../src/dialogs.py:2624 ../src/notify.py:265 ../src/notify.py:478
 msgid "New Private Message"
 msgstr "Жаңа жеке хабарлама"
 
-#: ../src/dialogs.py:2624
-#: ../src/gui_interface.py:1358
-#: ../src/notify.py:487
+#: ../src/dialogs.py:2624 ../src/gui_interface.py:1358 ../src/notify.py:487
 msgid "New E-mail"
 msgstr "Жаңа E-mail"
 
-#: ../src/dialogs.py:2626
-#: ../src/gui_interface.py:1420
-#: ../src/notify.py:480
+#: ../src/dialogs.py:2626 ../src/gui_interface.py:1420 ../src/notify.py:480
 msgid "File Transfer Request"
 msgstr "Файл алмасуға сұраным"
 
-#: ../src/dialogs.py:2628
-#: ../src/gui_interface.py:1320
-#: ../src/gui_interface.py:1389
-#: ../src/notify.py:482
+#: ../src/dialogs.py:2628 ../src/gui_interface.py:1320
+#: ../src/gui_interface.py:1389 ../src/notify.py:482
 msgid "File Transfer Error"
 msgstr "Файл алмасу қатесі"
 
-#: ../src/dialogs.py:2630
-#: ../src/gui_interface.py:1466
-#: ../src/gui_interface.py:1489
-#: ../src/gui_interface.py:1506
+#: ../src/dialogs.py:2630 ../src/gui_interface.py:1466
+#: ../src/gui_interface.py:1489 ../src/gui_interface.py:1506
 #: ../src/notify.py:484
 msgid "File Transfer Completed"
 msgstr "Файлдармен алмасу аяқталды"
 
-#: ../src/dialogs.py:2631
-#: ../src/gui_interface.py:1469
-#: ../src/notify.py:485
+#: ../src/dialogs.py:2631 ../src/gui_interface.py:1469 ../src/notify.py:485
 msgid "File Transfer Stopped"
 msgstr "Файл алмасу тоқтатылған"
 
-#: ../src/dialogs.py:2633
-#: ../src/gui_interface.py:1152
-#: ../src/notify.py:489
+#: ../src/dialogs.py:2633 ../src/gui_interface.py:1152 ../src/notify.py:489
 msgid "Groupchat Invitation"
 msgstr "Топ чатына шақыру"
 
-#: ../src/dialogs.py:2635
-#: ../src/notify.py:239
-#: ../src/notify.py:491
+#: ../src/dialogs.py:2635 ../src/notify.py:239 ../src/notify.py:491
 msgid "Contact Changed Status"
 msgstr "Контакт қалып-күйін өзгертті"
 
@@ -6894,14 +6679,12 @@ msgid "<b>%(jid)s</b> would like you to <b>%(action)s</b> some contacts in your 
 msgstr "<b>%(jid)s</b> ростеріңіздегі кейбір контакттарды <b>%(action)s</b> келеді."
 
 #. Change label for accept_button to action name instead of 'OK'.
-#: ../src/dialogs.py:3204
-#: ../src/dialogs.py:3250
+#: ../src/dialogs.py:3204 ../src/dialogs.py:3250
 msgid "Add"
 msgstr "Қосу"
 
 #. Change label for accept_button to action name instead of 'OK'.
-#: ../src/dialogs.py:3206
-#: ../src/dialogs.py:3281
+#: ../src/dialogs.py:3206 ../src/dialogs.py:3281
 msgid "Modify"
 msgstr "Түзету"
 
@@ -7001,9 +6784,7 @@ msgstr "Шақыруды қабылдайсыз ба?"
 msgid "Choose Client Cert #PCKS12"
 msgstr "Клиент сертификатын таңдау #PCKS12"
 
-#: ../src/dialogs.py:3942
-#: ../src/dialogs.py:3985
-#: ../src/dialogs.py:4041
+#: ../src/dialogs.py:3942 ../src/dialogs.py:3985 ../src/dialogs.py:4041
 msgid "All files"
 msgstr "Барлық файлдар"
 
@@ -7060,8 +6841,7 @@ msgstr ""
 msgid "You have already verified this contact's identity."
 msgstr "Бұл контакт шынайылығын растағансыз."
 
-#: ../src/dialogs.py:4795
-#: ../src/dialogs.py:4879
+#: ../src/dialogs.py:4795 ../src/dialogs.py:4879
 msgid "Contact's identity verified"
 msgstr "Контакт шынайылығы расталған"
 
@@ -7073,9 +6853,7 @@ msgstr "Қайтадан растау..."
 msgid "To be certain that <b>only</b> the expected person can read your messages or send you messages, you need to verify their identity by clicking the button below."
 msgstr "Хабарламаларыңызды <b>тек</b> тиісті адам оқи алатынына толығымен сенімді болу үшін, оның идентификациясын төмендегі батырмаға шерту арқылы растаңыз."
 
-#: ../src/dialogs.py:4809
-#: ../src/dialogs.py:4860
-#: ../src/dialogs.py:4873
+#: ../src/dialogs.py:4809 ../src/dialogs.py:4860 ../src/dialogs.py:4873
 msgid "Contact's identity NOT verified"
 msgstr "Контакт шынайылығы РАСТАЛМАҒАН"
 
@@ -7166,8 +6944,7 @@ msgstr "Қызмет табылмады"
 msgid "There is no service at the address you entered, or it is not responding. Check the address and try again."
 msgstr "Сіз енгізген адресі бойынша қызметтер жоқ, не олар жауап бермейді. Адресті тексеріп, қайталап көріңіз."
 
-#: ../src/disco.py:746
-#: ../src/disco.py:1082
+#: ../src/disco.py:746 ../src/disco.py:1082
 msgid "The service is not browsable"
 msgstr "Қызмет қарау үшін қол жетерсіз"
 
@@ -7175,8 +6952,7 @@ msgstr "Қызмет қарау үшін қол жетерсіз"
 msgid "This type of service does not contain any items to browse."
 msgstr "Қызметтің осы түрінде қарауға болатын ешнәрсе жоқ."
 
-#: ../src/disco.py:786
-#: ../src/disco.py:796
+#: ../src/disco.py:786 ../src/disco.py:796
 msgid "Invalid Server Name"
 msgstr "Сервердің аты қате"
 
@@ -7197,8 +6973,7 @@ msgstr "Бұл қызметте қарап шығуға болатын ешнә�
 msgid "_Execute Command"
 msgstr "К_оманда орындау"
 
-#: ../src/disco.py:1333
-#: ../src/disco.py:1504
+#: ../src/disco.py:1333 ../src/disco.py:1504
 msgid "Re_gister"
 msgstr "_Тіркелу"
 
@@ -7222,24 +6997,20 @@ msgstr "Сипаттамасы"
 msgid "Id"
 msgstr "Id"
 
-#: ../src/disco.py:1817
-#: ../src/gui_interface.py:3182
+#: ../src/disco.py:1817 ../src/gui_interface.py:3182
 msgid "Bookmark already set"
 msgstr "Бетбелгі орнатылған болып тұр"
 
-#: ../src/disco.py:1818
-#: ../src/gui_interface.py:3183
+#: ../src/disco.py:1818 ../src/gui_interface.py:3183
 #, python-format
 msgid "Group Chat \"%s\" is already in your bookmarks."
 msgstr "\"%s\" чат бөлмесі бетбелгілеріңізде бар болып тұр."
 
-#: ../src/disco.py:1827
-#: ../src/gui_interface.py:3197
+#: ../src/disco.py:1827 ../src/gui_interface.py:3197
 msgid "Bookmark has been added successfully"
 msgstr "Бетбелгі сәтті қосылды"
 
-#: ../src/disco.py:1828
-#: ../src/gui_interface.py:3198
+#: ../src/disco.py:1828 ../src/gui_interface.py:3198
 msgid "You can manage your bookmarks via Actions menu in your roster."
 msgstr "Өзіңіздің бетбелгілеріңізді ростердегі Әрекеттер мәзірінен басқара аласыз."
 
@@ -7271,8 +7042,7 @@ msgstr "SSL сертификатын растау"
 msgid "A library used to validate server certificates to ensure a secure connection."
 msgstr "Қауіпсіз байланыстарды орнату үшін сервер сертификатын растауда қолданылатын жинақ."
 
-#: ../src/features_window.py:51
-#: ../src/features_window.py:52
+#: ../src/features_window.py:51 ../src/features_window.py:52
 msgid "Requires python-pyopenssl."
 msgstr "Python-pyopenssl талап етеді."
 
@@ -7304,14 +7074,10 @@ msgstr "Gajim-ді командалық жолдан басқаратын скр
 msgid "Requires python-dbus."
 msgstr "python-dbus талап етеді."
 
-#: ../src/features_window.py:60
-#: ../src/features_window.py:64
-#: ../src/features_window.py:68
-#: ../src/features_window.py:72
-#: ../src/features_window.py:76
-#: ../src/features_window.py:84
-#: ../src/features_window.py:88
-#: ../src/features_window.py:108
+#: ../src/features_window.py:60 ../src/features_window.py:64
+#: ../src/features_window.py:68 ../src/features_window.py:72
+#: ../src/features_window.py:76 ../src/features_window.py:84
+#: ../src/features_window.py:88 ../src/features_window.py:108
 msgid "Feature not available under Windows."
 msgstr "Бұл мүмкіндік Windows-та қолжетерсіз."
 
@@ -7443,8 +7209,7 @@ msgstr "End to End хабарламаларды шифрлеу"
 msgid "Encrypting chat messages."
 msgstr "Хабарламаларды шифрлеу."
 
-#: ../src/features_window.py:99
-#: ../src/features_window.py:100
+#: ../src/features_window.py:99 ../src/features_window.py:100
 msgid "Requires python-crypto."
 msgstr "Талап етеді: python-crypto."
 
@@ -7456,8 +7221,7 @@ msgstr "RST генераторы"
 msgid "Generate XHTML output from RST code (see http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html)."
 msgstr "RST кодынан XHTML шығысын жасайды (http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html қараңыз)."
 
-#: ../src/features_window.py:103
-#: ../src/features_window.py:104
+#: ../src/features_window.py:103 ../src/features_window.py:104
 msgid "Requires python-docutils."
 msgstr "Талап етеді: python-docutils."
 
@@ -7489,22 +7253,19 @@ msgstr "Уақыт"
 msgid "Progress"
 msgstr "Барысы"
 
-#: ../src/filetransfers_window.py:178
-#: ../src/filetransfers_window.py:234
+#: ../src/filetransfers_window.py:178 ../src/filetransfers_window.py:234
 #, python-format
 msgid "Filename: %s"
 msgstr "Файл аты: %s"
 
-#: ../src/filetransfers_window.py:179
-#: ../src/filetransfers_window.py:323
+#: ../src/filetransfers_window.py:179 ../src/filetransfers_window.py:323
 #, python-format
 msgid "Size: %s"
 msgstr "Өлшемі: %s"
 
 #. You is a reply of who sent a file
 #. You is a reply of who received a file
-#: ../src/filetransfers_window.py:188
-#: ../src/filetransfers_window.py:198
+#: ../src/filetransfers_window.py:188 ../src/filetransfers_window.py:198
 #: ../src/history_manager.py:522
 msgid "You"
 msgstr "Сіз"
@@ -7514,8 +7275,7 @@ msgstr "Сіз"
 msgid "Sender: %s"
 msgstr "Жіберуші: %s"
 
-#: ../src/filetransfers_window.py:190
-#: ../src/filetransfers_window.py:617
+#: ../src/filetransfers_window.py:190 ../src/filetransfers_window.py:617
 #: ../src/tooltips.py:742
 msgid "Recipient: "
 msgstr "Алушы: "
@@ -7529,13 +7289,11 @@ msgstr "Сақталған: %s"
 msgid "File transfer completed"
 msgstr "Файлдармен алмасу аяқталды"
 
-#: ../src/filetransfers_window.py:218
-#: ../src/filetransfers_window.py:225
+#: ../src/filetransfers_window.py:218 ../src/filetransfers_window.py:225
 msgid "File transfer cancelled"
 msgstr "Файлдармен алмасу тоқтатылды"
 
-#: ../src/filetransfers_window.py:218
-#: ../src/filetransfers_window.py:226
+#: ../src/filetransfers_window.py:218 ../src/filetransfers_window.py:226
 msgid "Connection with peer cannot be established."
 msgstr "Тораппен байланысты орнату мүмкін емес."
 
@@ -7557,8 +7315,7 @@ msgstr "Файлдармен алмасу тоқтатылды"
 msgid "Choose File to Send..."
 msgstr "Жіберу үшін файлды таңдаңыз..."
 
-#: ../src/filetransfers_window.py:273
-#: ../src/tooltips.py:780
+#: ../src/filetransfers_window.py:273 ../src/tooltips.py:780
 msgid "Description: "
 msgstr "Анықтамасы: "
 
@@ -7590,37 +7347,31 @@ msgstr "Анықтамасы: %s"
 msgid "%s wants to send you a file:"
 msgstr "%s сізге файлды жібергісі келеді:"
 
-#: ../src/filetransfers_window.py:342
-#: ../src/gtkgui_helpers.py:902
+#: ../src/filetransfers_window.py:342 ../src/gtkgui_helpers.py:902
 #, python-format
 msgid "Cannot overwrite existing file \"%s\""
 msgstr "Бар файлды \"%s\" үстінен жазу мүмкін емес"
 
-#: ../src/filetransfers_window.py:343
-#: ../src/gtkgui_helpers.py:903
+#: ../src/filetransfers_window.py:343 ../src/gtkgui_helpers.py:903
 msgid "A file with this name already exists and you do not have permission to overwrite it."
 msgstr "Аттас файл бар болып тұр және сізде оны үстінен жазу құқығыңыз жоқ."
 
-#: ../src/filetransfers_window.py:359
-#: ../src/gtkgui_helpers.py:907
+#: ../src/filetransfers_window.py:359 ../src/gtkgui_helpers.py:907
 msgid "This file already exists"
 msgstr "Бұл файл бар болып тұр"
 
-#: ../src/filetransfers_window.py:359
-#: ../src/gtkgui_helpers.py:907
+#: ../src/filetransfers_window.py:359 ../src/gtkgui_helpers.py:907
 msgid "What do you want to do?"
 msgstr "Сіздің не істегіңіз келеді?"
 
 #. read-only bit is used to mark special folder under windows,
 #. not to mark that a folder is read-only. See ticket #3587
-#: ../src/filetransfers_window.py:369
-#: ../src/gtkgui_helpers.py:914
+#: ../src/filetransfers_window.py:369 ../src/gtkgui_helpers.py:914
 #, python-format
 msgid "Directory \"%s\" is not writable"
 msgstr "\"%s\" бумасына жазу мүмкін емес"
 
-#: ../src/filetransfers_window.py:369
-#: ../src/gtkgui_helpers.py:915
+#: ../src/filetransfers_window.py:369 ../src/gtkgui_helpers.py:915
 msgid "You do not have permission to create files in this directory."
 msgstr "Сізде ол бумада файлдарды жасауға құқығыңыз жоқ."
 
@@ -7644,8 +7395,7 @@ msgstr "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 msgid "(%(filesize_unit)s/s)"
 msgstr "(%(filesize_unit)s/s)"
 
-#: ../src/filetransfers_window.py:585
-#: ../src/filetransfers_window.py:588
+#: ../src/filetransfers_window.py:585 ../src/filetransfers_window.py:588
 msgid "Invalid File"
 msgstr "Қате файл"
 
@@ -7657,13 +7407,11 @@ msgstr "Файл: "
 msgid "It is not possible to send empty files"
 msgstr "Бос файлдарды жіберу мүмкін емес"
 
-#: ../src/filetransfers_window.py:613
-#: ../src/tooltips.py:732
+#: ../src/filetransfers_window.py:613 ../src/tooltips.py:732
 msgid "Name: "
 msgstr "Аты:"
 
-#: ../src/filetransfers_window.py:615
-#: ../src/tooltips.py:736
+#: ../src/filetransfers_window.py:615 ../src/tooltips.py:736
 msgid "Sender: "
 msgstr "Жіберуші: "
 
@@ -7743,20 +7491,13 @@ msgstr "Келесі кезектегі оқиға бар қалқымалы т�
 msgid "Prints a list of all contacts in the roster. Each contact appears on a separate line"
 msgstr "Ростердегі бар контакттар тізімін шығарады. Әр контакт бөлек жолда болады"
 
-#: ../src/gajim-remote.py:96
-#: ../src/gajim-remote.py:111
-#: ../src/gajim-remote.py:121
-#: ../src/gajim-remote.py:131
-#: ../src/gajim-remote.py:147
-#: ../src/gajim-remote.py:161
-#: ../src/gajim-remote.py:170
-#: ../src/gajim-remote.py:191
-#: ../src/gajim-remote.py:221
-#: ../src/gajim-remote.py:230
-#: ../src/gajim-remote.py:237
-#: ../src/gajim-remote.py:244
-#: ../src/gajim-remote.py:255
-#: ../src/gajim-remote.py:280
+#: ../src/gajim-remote.py:96 ../src/gajim-remote.py:111
+#: ../src/gajim-remote.py:121 ../src/gajim-remote.py:131
+#: ../src/gajim-remote.py:147 ../src/gajim-remote.py:161
+#: ../src/gajim-remote.py:170 ../src/gajim-remote.py:191
+#: ../src/gajim-remote.py:221 ../src/gajim-remote.py:230
+#: ../src/gajim-remote.py:237 ../src/gajim-remote.py:244
+#: ../src/gajim-remote.py:255 ../src/gajim-remote.py:280
 #: ../src/gajim-remote.py:291
 msgid "account"
 msgstr "тіркелгі"
@@ -7782,12 +7523,9 @@ msgstr "күйі"
 msgid "one of: offline, online, chat, away, xa, dnd, invisible. If not set, use accoun't previous status"
 msgstr "келесіден біреу: желіде емес, осында, кетіп қалған, кеңейтілген кетіп қалған, мазамды алмаңыз, жасырын. Орнатылмаса, тіркелгінің алдыңғы күйі қолданылады"
 
-#: ../src/gajim-remote.py:110
-#: ../src/gajim-remote.py:133
-#: ../src/gajim-remote.py:144
-#: ../src/gajim-remote.py:158
-#: ../src/gajim-remote.py:169
-#: ../src/gajim-remote.py:282
+#: ../src/gajim-remote.py:110 ../src/gajim-remote.py:133
+#: ../src/gajim-remote.py:144 ../src/gajim-remote.py:158
+#: ../src/gajim-remote.py:169 ../src/gajim-remote.py:282
 msgid "message"
 msgstr "хабарлама"
 
@@ -7823,8 +7561,7 @@ msgstr "Контактқа хабарлама жібере алатыныңыз�
 msgid "JID of the contact that you want to chat with"
 msgstr "Сөйлесуді бастағыңыз келетін контакттың JID-і"
 
-#: ../src/gajim-remote.py:131
-#: ../src/gajim-remote.py:221
+#: ../src/gajim-remote.py:131 ../src/gajim-remote.py:221
 msgid "if specified, contact is taken from the contact list of this account"
 msgstr "көрсетілсе, контакттар бұл тіркелгінің тізімінен алынады"
 
@@ -7836,29 +7573,24 @@ msgstr "хабарлама құрамасы. Тіркелгі көрсетілу
 msgid "Sends new chat message to a contact in the roster. Both OpenPGP key and account are optional. If you want to set only 'account', without 'OpenPGP key', just set 'OpenPGP key' to ''."
 msgstr "Ростердегі контактқа жаңа чат хабарламасын жіберу. OpenPGP кілті мен тіркелгіні көрсету міндетті емес. Егер сіз 'OpenPGP key'-сіз тек 'account'-ты орнатқыңыз келсе, 'OpenPGP key' мәнін '' етіп орнатыңыз."
 
-#: ../src/gajim-remote.py:143
-#: ../src/gajim-remote.py:156
+#: ../src/gajim-remote.py:143 ../src/gajim-remote.py:156
 msgid "JID of the contact that will receive the message"
 msgstr "Хабарламаны алатын контакттың JID-і"
 
-#: ../src/gajim-remote.py:144
-#: ../src/gajim-remote.py:158
+#: ../src/gajim-remote.py:144 ../src/gajim-remote.py:158
 #: ../src/gajim-remote.py:169
 msgid "message contents"
 msgstr "хабарлама құрамасы"
 
-#: ../src/gajim-remote.py:145
-#: ../src/gajim-remote.py:159
+#: ../src/gajim-remote.py:145 ../src/gajim-remote.py:159
 msgid "pgp key"
 msgstr "pgp кілті"
 
-#: ../src/gajim-remote.py:145
-#: ../src/gajim-remote.py:159
+#: ../src/gajim-remote.py:145 ../src/gajim-remote.py:159
 msgid "if specified, the message will be encrypted using this public key"
 msgstr "көрсетілсе, хабарлама бұл ортақ кілтпен шифрленеді"
 
-#: ../src/gajim-remote.py:147
-#: ../src/gajim-remote.py:161
+#: ../src/gajim-remote.py:147 ../src/gajim-remote.py:161
 #: ../src/gajim-remote.py:170
 msgid "if specified, the message will be sent using this account"
 msgstr "көрсетілсе, хабарлама бұл тіркелгіні қолданып жіберіледі"
@@ -7887,10 +7619,8 @@ msgstr "хабарламаны алатын бөлменің JID-і"
 msgid "Gets detailed info on a contact"
 msgstr "Контакттың толық ақпаратын алу"
 
-#: ../src/gajim-remote.py:177
-#: ../src/gajim-remote.py:190
-#: ../src/gajim-remote.py:220
-#: ../src/gajim-remote.py:229
+#: ../src/gajim-remote.py:177 ../src/gajim-remote.py:190
+#: ../src/gajim-remote.py:220 ../src/gajim-remote.py:229
 msgid "JID of the contact"
 msgstr "Контакт JID-і"
 
@@ -8012,7 +7742,7 @@ msgstr "Аватар орнатылатын тіркелгі; көрсетілм
 
 #: ../src/gajim-remote.py:277
 msgid "Handle a xmpp:/ uri"
-msgstr "\"xmpp:/\" түріндегі сілтемені өндеу"
+msgstr "\"xmpp:/\" түріндегі сілтемені өңдеу"
 
 #: ../src/gajim-remote.py:279
 msgid "uri"
@@ -8194,8 +7924,7 @@ msgstr "Жалғастырылған сөйлесу"
 #. Can be a message (see handle_event_gc_config_change in
 #. gajim.py)
 #. Can be a presence (see chg_contact_status in groupchat_control.py)
-#: ../src/groupchat_control.py:1272
-#: ../src/gui_interface.py:1080
+#: ../src/groupchat_control.py:1272 ../src/gui_interface.py:1080
 msgid "Any occupant is allowed to see your full JID"
 msgstr "Әр қатысушы сіздің толық JID-ды көре алады"
 
@@ -8235,20 +7964,17 @@ msgstr "%(nick)s бандалған болса керек: %(reason)s"
 msgid "%(nick)s has been banned by %(who)s: %(reason)s"
 msgstr "%(who)s қазір %(nick)s қатысушысын бандаған: %(reason)s"
 
-#: ../src/groupchat_control.py:1314
-#: ../src/groupchat_control.py:1418
+#: ../src/groupchat_control.py:1314 ../src/groupchat_control.py:1418
 #, python-format
 msgid "You are now known as %s"
 msgstr "Бұдан былай %s ретінде белгілі боласыз"
 
-#: ../src/groupchat_control.py:1330
-#: ../src/gui_interface.py:919
+#: ../src/groupchat_control.py:1330 ../src/gui_interface.py:919
 #, python-format
 msgid "%(nick)s is now known as %(new_nick)s"
 msgstr "%(nick)s енді %(new_nick)s ретінде белгілі болады"
 
-#: ../src/groupchat_control.py:1372
-#: ../src/groupchat_control.py:1377
+#: ../src/groupchat_control.py:1372 ../src/groupchat_control.py:1377
 #: ../src/groupchat_control.py:1383
 #, python-format
 msgid "%(nick)s has been removed from the room (%(reason)s)"
@@ -8296,10 +8022,8 @@ msgstr "%s шықты"
 msgid "%s has joined the group chat"
 msgstr "%s чат бөлмесіне кірді"
 
-#: ../src/groupchat_control.py:1529
-#: ../src/gui_interface.py:946
-#: ../src/history_window.py:447
-#: ../src/notify.py:234
+#: ../src/groupchat_control.py:1529 ../src/gui_interface.py:946
+#: ../src/history_window.py:447 ../src/notify.py:234
 #, python-format
 msgid "%(nick)s is now %(status)s"
 msgstr "%(nick)s қазір %(status)s"
@@ -8313,14 +8037,10 @@ msgstr "\"%s\" топ чатынан шығуды шынымен қалайсы�
 msgid "If you close this window, you will be disconnected from this group chat."
 msgstr "Бұл терезені жапсаңыз, топ чатынан шығасыз."
 
-#: ../src/groupchat_control.py:1765
-#: ../src/gui_interface.py:1216
-#: ../src/gui_interface.py:1992
-#: ../src/gui_interface.py:2029
-#: ../src/gui_interface.py:2064
-#: ../src/message_window.py:224
-#: ../src/roster_window.py:2739
-#: ../src/roster_window.py:3399
+#: ../src/groupchat_control.py:1765 ../src/gui_interface.py:1216
+#: ../src/gui_interface.py:1992 ../src/gui_interface.py:2029
+#: ../src/gui_interface.py:2064 ../src/message_window.py:224
+#: ../src/roster_window.py:2739 ../src/roster_window.py:3399
 #: ../src/roster_window.py:4123
 msgid "_Do not ask me again"
 msgstr "М_ені қайта сұрамау"
@@ -8365,8 +8085,7 @@ msgstr "Басқа кездесу орнын көрсете аласыз:"
 msgid "Kicking %s"
 msgstr "%s тебілуде"
 
-#: ../src/groupchat_control.py:2029
-#: ../src/groupchat_control.py:2356
+#: ../src/groupchat_control.py:2029 ../src/groupchat_control.py:2356
 msgid "You may specify a reason below:"
 msgstr "Төменде оның себебін көрсете аласыз:"
 
@@ -8393,8 +8112,7 @@ msgid "Details"
 msgstr "Көбірек"
 
 #. we talk about file
-#: ../src/gtkgui_helpers.py:205
-#: ../src/gtkgui_helpers.py:221
+#: ../src/gtkgui_helpers.py:205 ../src/gtkgui_helpers.py:221
 #, python-format
 msgid "Error: cannot open %s for reading"
 msgstr "Қате: оқу үшін %s ашу мүмкін емес"
@@ -8405,7 +8123,7 @@ msgstr "Файлды оқу қатесі:"
 
 #: ../src/gtkgui_helpers.py:403
 msgid "Error parsing file:"
-msgstr "Файлды өндеу қатесі:"
+msgstr "Файлды өңдеу қатесі:"
 
 #. do not traceback (could be a permission problem)
 #. we talk about a file here
@@ -8467,26 +8185,22 @@ msgstr "%s тіркелгісіндегі бұл сұранымды қабылд
 msgid "HTTP (%(method)s) Authorization for %(url)s (id: %(id)s)"
 msgstr "HTTP (%(method)s) %(url)s үшін авторизация (id: %(id)s)"
 
-#: ../src/gui_interface.py:213
-#: ../src/notify.py:493
+#: ../src/gui_interface.py:213 ../src/notify.py:493
 msgid "Connection Failed"
 msgstr "Байланысу сәтсіз"
 
-#: ../src/gui_interface.py:606
-#: ../src/gui_interface.py:610
+#: ../src/gui_interface.py:606 ../src/gui_interface.py:610
 #, python-format
 msgid "Error %(code)s: %(msg)s"
 msgstr "Қате %(code)s: %(msg)s"
 
 #. ('MSGNOTSENT', account, (jid, ierror_msg, msg, time, session))
-#: ../src/gui_interface.py:621
-#: ../src/gui_interface.py:636
+#: ../src/gui_interface.py:621 ../src/gui_interface.py:636
 #, python-format
 msgid "error while sending %(message)s ( %(error)s )"
 msgstr "%(message)s жіберу кезіндегі қате ( %(error)s )"
 
-#: ../src/gui_interface.py:663
-#: ../src/notify.py:495
+#: ../src/gui_interface.py:663 ../src/notify.py:495
 msgid "Subscription request"
 msgstr "Жазылуға сұраным"
 
@@ -8512,8 +8226,7 @@ msgstr ""
 "Сіз енді оны әрқашан да желіде емес ретінде көресіз.\n"
 "Оны өз контакттар тізіміңізден өшіруді қалайсыз ба?"
 
-#: ../src/gui_interface.py:727
-#: ../src/notify.py:497
+#: ../src/gui_interface.py:727 ../src/notify.py:497
 msgid "Unsubscribed"
 msgstr "Жазылмаған"
 
@@ -8569,8 +8282,7 @@ msgstr "%s бөлмесіне кіру үшін пароль керек. Оны 
 msgid "You configured Gajim to use GPG agent, but there is no GPG agent running or it returned a wrong passphrase.\n"
 msgstr "Сіз Gajim-ды GPG агентін қолдануға баптағансыз, бірақ, қосулы тұрған GPG агенті жоқ немесе ол қате кілтсөзді қайтарған.\n"
 
-#: ../src/gui_interface.py:1182
-#: ../src/gui_interface.py:1189
+#: ../src/gui_interface.py:1182 ../src/gui_interface.py:1189
 msgid "You are currently connected without your OpenPGP key."
 msgstr "Сіз қазір өзіңіздің OpenPGP кілтсіз-ақ қосулы тұрсыз."
 
@@ -8626,13 +8338,11 @@ msgstr ""
 msgid "%s wants to send you a file."
 msgstr "%s сізге файлды жібергісі келеді:"
 
-#: ../src/gui_interface.py:1455
-#: ../src/roster_window.py:1856
+#: ../src/gui_interface.py:1455 ../src/roster_window.py:1856
 msgid "Remote contact stopped transfer"
 msgstr "Қашықтағы контакт файлдармен алмасуды тоқтатқан"
 
-#: ../src/gui_interface.py:1458
-#: ../src/roster_window.py:1858
+#: ../src/gui_interface.py:1458 ../src/roster_window.py:1858
 msgid "Error opening file"
 msgstr "Файлды ашу қатесі"
 
@@ -8746,8 +8456,7 @@ msgstr ""
 "\n"
 "Сонда да байланыс орнату мен сертификат баспасын жаңартуды қалайсыз ба?"
 
-#: ../src/gui_interface.py:1987
-#: ../src/gui_interface.py:2024
+#: ../src/gui_interface.py:1987 ../src/gui_interface.py:2024
 #: ../src/gui_interface.py:2060
 msgid "Insecure connection"
 msgstr "Қауіпсіз емес байланыс"
@@ -8756,8 +8465,7 @@ msgstr "Қауіпсіз емес байланыс"
 msgid "You are about to connect to the server with an insecure connection. This means all your conversations will be exchanged unencrypted. Are you sure you want to do that?"
 msgstr "Сіз серверге қауіпсіз емес байланысты орнатасыз. Бұл дегеніміз, сіздің барлық сөйлесулеріңіз шифрленбеген түрде жүреді. Осыны жасауды шынымен қалайсыз ба?"
 
-#: ../src/gui_interface.py:1991
-#: ../src/gui_interface.py:2028
+#: ../src/gui_interface.py:1991 ../src/gui_interface.py:2028
 #: ../src/gui_interface.py:2063
 msgid "Yes, I really want to connect insecurely"
 msgstr "Иә, қауіпсіз емес байланысты орнатқым келеді"
@@ -8771,8 +8479,7 @@ msgid "You are about to send your password unencrypted on an insecure connection
 msgstr "Қауіпсіз емес байланыс арқылы шифрленбеген пароліңізді жібересіз. Осыны жасауды шынымен қалайсыз ба?"
 
 #. theme doesn't exist, disable emoticons
-#: ../src/gui_interface.py:2624
-#: ../src/gui_interface.py:2647
+#: ../src/gui_interface.py:2624 ../src/gui_interface.py:2647
 msgid "Emoticons disabled"
 msgstr "Смайликтер сөндірулі"
 
@@ -8784,8 +8491,7 @@ msgstr "Сіз баптаған смайликтер темасы табылма
 msgid "Your configured emoticons theme cannot been loaded. You maybe need to update the format of emoticons.py file. See http://trac.gajim.org/wiki/Emoticons for more details."
 msgstr "Сіз баптаған смайликтер темасын жүктеу мүмкін емес. Мүмкін, сізге emoticons.py файл пішімін жаңарту керек. Көбірек білу үшін http://trac.gajim.org/wiki/Emoticons қараңыз."
 
-#: ../src/gui_interface.py:2679
-#: ../src/roster_window.py:3560
+#: ../src/gui_interface.py:2679 ../src/roster_window.py:3560
 msgid "You cannot join a group chat while you are invisible"
 msgstr "Жасырын болған кезде топ чатқа кіре алмайсыз"
 
@@ -8840,21 +8546,18 @@ msgid "Contacts"
 msgstr "Контакттар"
 
 #. holds time
-#: ../src/history_manager.py:167
-#: ../src/history_manager.py:207
+#: ../src/history_manager.py:167 ../src/history_manager.py:207
 #: ../src/history_window.py:98
 msgid "Date"
 msgstr "Уақыты"
 
 #. holds nickname
-#: ../src/history_manager.py:173
-#: ../src/history_manager.py:225
+#: ../src/history_manager.py:173 ../src/history_manager.py:225
 msgid "Nickname"
 msgstr "Ник аты"
 
 #. holds message
-#: ../src/history_manager.py:181
-#: ../src/history_manager.py:213
+#: ../src/history_manager.py:181 ../src/history_manager.py:213
 #: ../src/history_window.py:106
 msgid "Message"
 msgstr "Хабарлама"
@@ -8887,8 +8590,7 @@ msgid_plural "Do you really want to delete logs of the selected contacts?"
 msgstr[0] "Ерекшеленген контактпен барлық сөйлесулер тарихын өшіруді қалайсыз ба?"
 msgstr[1] "Ерекшеленген контакттармен барлық сөйлесулер тарихын өшіруді қалайсыз ба?"
 
-#: ../src/history_manager.py:576
-#: ../src/history_manager.py:611
+#: ../src/history_manager.py:576 ../src/history_manager.py:611
 msgid "This is an irreversible operation."
 msgstr "Бұл қайтарылмайтын әрекет."
 
@@ -8931,8 +8633,7 @@ msgstr "Қазір қалып-күйі: %(status)s: %(status_msg)s"
 msgid "Status is now: %(status)s"
 msgstr "Қазір қалып-күйі: %(status)s"
 
-#: ../src/htmltextview.py:515
-#: ../src/htmltextview.py:525
+#: ../src/htmltextview.py:515 ../src/htmltextview.py:525
 msgid "Timeout loading image"
 msgstr "Суретті жүктеу уақыты бітті"
 
@@ -9020,22 +8721,18 @@ msgstr "Елемеу"
 msgid "Retrieving profile..."
 msgstr "Профайлды алу..."
 
-#: ../src/profile_window.py:110
-#: ../src/roster_window.py:2935
+#: ../src/profile_window.py:110 ../src/roster_window.py:2935
 msgid "File is empty"
 msgstr "Файл бос"
 
-#: ../src/profile_window.py:113
-#: ../src/roster_window.py:2938
+#: ../src/profile_window.py:113 ../src/roster_window.py:2938
 msgid "File does not exist"
 msgstr "Файл жоқ"
 
 #. keep identation
 #. unknown format
-#: ../src/profile_window.py:127
-#: ../src/profile_window.py:143
-#: ../src/roster_window.py:2940
-#: ../src/roster_window.py:2951
+#: ../src/profile_window.py:127 ../src/profile_window.py:143
+#: ../src/roster_window.py:2940 ../src/roster_window.py:2951
 msgid "Could not load image"
 msgstr "Суретті жүктеу мүмкін емес"
 
@@ -9071,8 +8768,7 @@ msgstr "vCard жариялануы қатемен аяқталды"
 msgid "There was an error while publishing your personal information, try again later."
 msgstr "Сіз өзіңіздің жеке ақпаратыңызды жариялау кезінде қате кетті, кейін қайталап көріңіз."
 
-#: ../src/roster_window.py:256
-#: ../src/roster_window.py:1012
+#: ../src/roster_window.py:256 ../src/roster_window.py:1012
 msgid "Merged accounts"
 msgstr "Біріктірілген тіркелгілер"
 
@@ -9112,13 +8808,11 @@ msgstr "GPG қолдануға мүмкін емес"
 msgid "You will be connected to %s without OpenPGP."
 msgstr "Сіз %s үшін OpenPGP-сіз байланыс орнатасыз."
 
-#: ../src/roster_window.py:2199
-#: ../src/roster_window.py:3496
+#: ../src/roster_window.py:2199 ../src/roster_window.py:3496
 msgid "You are participating in one or more group chats"
 msgstr "Сіз бір не бірнеше чат бөлмесіне қатысушы болып тұрсыз"
 
-#: ../src/roster_window.py:2200
-#: ../src/roster_window.py:3497
+#: ../src/roster_window.py:2200 ../src/roster_window.py:3497
 msgid "Changing your status to invisible will result in disconnection from those group chats. Are you sure you want to go invisible?"
 msgstr "Қалып-күйіңізді жасырын етіп орнатсаңыз, келесі топ чаттарынан байланысты үзесіз. Жасырын етуді қалайсыз ба?"
 
@@ -9146,8 +8840,7 @@ msgstr "Қазір белсенді файлдармен алмасулар ба
 msgid "If you quit now, the file(s) being transfered will be stopped. Do you still want to quit?"
 msgstr "Қазйр шықсаңыз, файлдармен алмасу(лар) тоқталады. Шығуды қалайсыз ба?"
 
-#: ../src/roster_window.py:2405
-#: ../src/roster_window.py:2653
+#: ../src/roster_window.py:2405 ../src/roster_window.py:2653
 msgid "You have unread messages"
 msgstr "Сізде оқылмаған хабарламалар бар"
 
@@ -9325,12 +9018,9 @@ msgstr "%s және %s метаконтакт жасау"
 #. for chat_with
 #. for single message
 #. join gc
-#: ../src/roster_window.py:4816
-#: ../src/roster_window.py:4889
-#: ../src/roster_window.py:4898
-#: ../src/statusicon.py:246
-#: ../src/statusicon.py:293
-#: ../src/statusicon.py:299
+#: ../src/roster_window.py:4816 ../src/roster_window.py:4889
+#: ../src/roster_window.py:4898 ../src/statusicon.py:246
+#: ../src/statusicon.py:293 ../src/statusicon.py:299
 #, python-format
 msgid "using account %s"
 msgstr "%s тіркелгісін қолданып"
@@ -9347,8 +9037,7 @@ msgstr "%s тіркелгісіне"
 msgid "using %s account"
 msgstr "%s тіркелгісін қолданып"
 
-#: ../src/roster_window.py:4948
-#: ../src/statusicon.py:309
+#: ../src/roster_window.py:4948 ../src/statusicon.py:309
 msgid "_Manage Bookmarks..."
 msgstr "_Бетбелгілерді басқару..."
 
@@ -9363,8 +9052,7 @@ msgstr "%s тіркелгісі үшін"
 msgid "for account %s"
 msgstr "%s тіркелгісі үшін"
 
-#: ../src/roster_window.py:5069
-#: ../src/roster_window.py:5174
+#: ../src/roster_window.py:5069 ../src/roster_window.py:5174
 msgid "_Change Status Message"
 msgstr "Қалып-кү_й хабарламасын өзгерту"
 
@@ -9384,8 +9072,7 @@ msgstr "Қызметтерді баптау..."
 msgid "_Maximize All"
 msgstr "Бар_лығын жазу"
 
-#: ../src/roster_window.py:5262
-#: ../src/roster_window.py:5436
+#: ../src/roster_window.py:5262 ../src/roster_window.py:5436
 msgid "Send Group M_essage"
 msgstr "Топ ү_шін хабарлама жіберу"
 
@@ -9461,14 +9148,12 @@ msgstr "Қалып-күй хабарламасын өзгерту..."
 msgid "Waiting for results"
 msgstr "Нәтижелерді күту"
 
-#: ../src/search_window.py:132
-#: ../src/search_window.py:210
+#: ../src/search_window.py:132 ../src/search_window.py:210
 msgid "Error in received dataform"
 msgstr "Алынған ақпарат формасындағы қате"
 
 #. No result
-#: ../src/search_window.py:166
-#: ../src/search_window.py:202
+#: ../src/search_window.py:166 ../src/search_window.py:202
 msgid "No result"
 msgstr "Нәтижесі жоқ"
 
@@ -9481,8 +9166,7 @@ msgstr "Дискке жазу қатесі"
 msgid "Subject: %s"
 msgstr "Тақырыбы: %s"
 
-#: ../src/session.py:433
-#: ../src/session.py:468
+#: ../src/session.py:433 ../src/session.py:468
 msgid "Confirm these session options"
 msgstr "Бұл сессия опцияларын растау"
 
@@ -9528,13 +9212,11 @@ msgstr "Р_остерді жасыру"
 msgid "Hide this menu"
 msgstr "Бұл мәзірді жасыру"
 
-#: ../src/tooltips.py:392
-#: ../src/tooltips.py:604
+#: ../src/tooltips.py:392 ../src/tooltips.py:604
 msgid "Jabber ID: "
 msgstr "Jabber ID: "
 
-#: ../src/tooltips.py:395
-#: ../src/tooltips.py:608
+#: ../src/tooltips.py:395 ../src/tooltips.py:608
 msgid "Resource: "
 msgstr "Ресурс: "
 
@@ -9551,8 +9233,7 @@ msgstr " [блокталған]"
 msgid " [minimized]"
 msgstr " [қайырылған]"
 
-#: ../src/tooltips.py:521
-#: ../src/tooltips.py:777
+#: ../src/tooltips.py:521 ../src/tooltips.py:777
 msgid "Status: "
 msgstr "Қалып-күй:"
 
@@ -9629,8 +9310,7 @@ msgstr "Түрі: "
 msgid "Transferred: "
 msgstr "Берілген: "
 
-#: ../src/tooltips.py:755
-#: ../src/tooltips.py:776
+#: ../src/tooltips.py:755 ../src/tooltips.py:776
 msgid "Not started"
 msgstr "Басталмаған"
 
@@ -9638,8 +9318,7 @@ msgstr "Басталмаған"
 msgid "Stopped"
 msgstr "Тоқтатылған"
 
-#: ../src/tooltips.py:761
-#: ../src/tooltips.py:764
+#: ../src/tooltips.py:761 ../src/tooltips.py:764
 msgid "Completed"
 msgstr "Аяқталған"
 
@@ -9680,9 +9359,7 @@ msgstr "?ОЖ:Белгісіз"
 msgid "?Time:Unknown"
 msgstr "?Уақыты:Белгісіз"
 
-#: ../src/vcard.py:298
-#: ../src/vcard.py:308
-#: ../src/vcard.py:516
+#: ../src/vcard.py:298 ../src/vcard.py:308 ../src/vcard.py:516
 #, python-format
 msgid "since %s"
 msgstr "%s бастап"
@@ -9720,9 +9397,7 @@ msgstr "Сіз осы контакттың өзіңіз жіберген жаз�
 msgid "There is no pending subscription request."
 msgstr "Кезекте жазылуға сұранымдар жоқ."
 
-#: ../src/vcard.py:363
-#: ../src/vcard.py:417
-#: ../src/vcard.py:539
+#: ../src/vcard.py:363 ../src/vcard.py:417 ../src/vcard.py:539
 msgid " resource with priority "
 msgstr " ресурс приоритеті"
 
@@ -9857,7 +9532,6 @@ msgstr " ресурс приоритеті"
 #~ msgid "Assign Open_PGP Key"
 #~ msgstr "OpenPGP _кілтін орнату..."
 
-#, fuzzy
 #~ msgid "Commands: %s"
 #~ msgstr "Пәрмендер"
 

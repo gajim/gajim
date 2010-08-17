@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
   gajimversion="0.13.90.1"
   if [ -d ".hg" ]; then
-    hgversion="-$(hexdump -n6 -e'6/1 "%02x"' .hg/dirstate)"
+    node=$(hg  tip --template "{node}")
+    hgversion="-${node:0:12}"
   else
     hgversion=""
   fi
