@@ -192,11 +192,8 @@ class JingleSession(object):
         """
         if (creator, name) in self.contents:
             content = self.contents[(creator, name)]
-            if len(self.contents) > 1:
-                self.__content_remove(content, reason)
+            self.__content_remove(content, reason)
             self.contents[(creator, name)].destroy()
-        if not self.contents:
-            self.end_session()
 
     def modify_content(self, creator, name, *someother):
         """
