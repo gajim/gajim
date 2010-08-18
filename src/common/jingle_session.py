@@ -543,6 +543,7 @@ class JingleSession(object):
                 'security-error', 'timeout', 'unsupported-applications',
                 'unsupported-transports']
         tag = stanza.getTag('reason')
+        text = ''
         if tag:
             text = tag.getTagData('text')
             for r in reasons:
