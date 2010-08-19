@@ -2454,11 +2454,6 @@ class HttpAuthReceivedEvent(nec.NetworkIncomingEvent):
     base_network_events = []
 
     def generate(self):
-        if not self.conn:
-            self.conn = self.base_event.conn
-        if not self.iq_obj:
-            self.iq_obj = self.base_event.xmpp_iq
-
         self.opt = gajim.config.get_per('accounts', self.conn.name, 'http_auth')
         self.iq_id = self.iq_obj.getTagAttr('confirm', 'id')
         self.method = self.iq_obj.getTagAttr('confirm', 'method')
@@ -2472,11 +2467,6 @@ class LastResultReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
     base_network_events = []
     
     def generate(self):
-        if not self.conn:
-            self.conn = self.base_event.conn
-        if not self.iq_obj:
-            self.iq_obj = self.base_event.xmpp_iq
-
         self.get_id()
         self.get_jid_resource()
         if self.id_ in self.conn.last_ids:
@@ -2503,11 +2493,6 @@ class VersionResultReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
     base_network_events = []
     
     def generate(self):
-        if not self.conn:
-            self.conn = self.base_event.conn
-        if not self.iq_obj:
-            self.iq_obj = self.base_event.xmpp_iq
-
         self.get_id()
         self.get_jid_resource()
         if self.id_ in self.conn.version_ids:
@@ -2534,11 +2519,6 @@ class TimeResultReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
     base_network_events = []
 
     def generate(self):
-        if not self.conn:
-            self.conn = self.base_event.conn
-        if not self.iq_obj:
-            self.iq_obj = self.base_event.xmpp_iq
-
         self.get_id()
         self.get_jid_resource()
         if self.id_ in self.conn.entity_time_ids:
@@ -2590,11 +2570,6 @@ class GMailQueryReceivedEvent(nec.NetworkIncomingEvent):
     base_network_events = []
 
     def generate(self):
-        if not self.conn:
-            self.conn = self.base_event.conn
-        if not self.iq_obj:
-            self.iq_obj = self.base_event.xmpp_iq
-
         if not self.iq_obj.getTag('mailbox'):
             return
         mb = self.iq_obj.getTag('mailbox')
@@ -2652,11 +2627,6 @@ class RosterItemExchangeEvent(nec.NetworkIncomingEvent, HelperEvent):
     base_network_events = []
     
     def generate(self):
-        if not self.conn:
-            self.conn = self.base_event.conn
-        if not self.iq_obj:
-            self.iq_obj = self.base_event.xmpp_iq
-
         self.get_id()
         self.get_jid_resource()
         self.exchange_items_list = {}
@@ -2700,47 +2670,15 @@ class RosterItemExchangeEvent(nec.NetworkIncomingEvent, HelperEvent):
 class VersionRequestEvent(nec.NetworkIncomingEvent):
     name = 'version-request-received'
     base_network_events = []
-
-    def generate(self):
-        if not self.conn:
-            self.conn = self.base_event.conn
-        if not self.iq_obj:
-            self.iq_obj = self.base_event.xmpp_iq
-
-        return True
     
 class LastRequestEvent(nec.NetworkIncomingEvent):
     name = 'last-request-received'
     base_network_events = []
-
-    def generate(self):
-        if not self.conn:
-            self.conn = self.base_event.conn
-        if not self.iq_obj:
-            self.iq_obj = self.base_event.xmpp_iq
-
-        return True
     
 class TimeRequestEvent(nec.NetworkIncomingEvent):
     name = 'time-request-received'
     base_network_events = []
 
-    def generate(self):
-        if not self.conn:
-            self.conn = self.base_event.conn
-        if not self.iq_obj:
-            self.iq_obj = self.base_event.xmpp_iq
-
-        return True
-
 class TimeRevisedRequestEvent(nec.NetworkIncomingEvent):
     name = 'time-revised-request-received'
     base_network_events = []
-
-    def generate(self):
-        if not self.conn:
-            self.conn = self.base_event.conn
-        if not self.iq_obj:
-            self.iq_obj = self.base_event.xmpp_iq
-
-        return True
