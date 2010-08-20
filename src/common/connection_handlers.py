@@ -1301,7 +1301,7 @@ ConnectionJingle, ConnectionIBBytestream):
             qp.attrs['seconds'] = int(self.sleeper.getIdleSec())
         else:
             iq_obj = obj.iq_obj.buildReply('error')
-            err = common.xmpp.ErrorNode(name=common.xmpp.NS_STANZASi + \
+            err = common.xmpp.ErrorNode(name=common.xmpp.NS_STANZAS + \
                 ' service-unavailable')
             iq_obj.addChild(node=err)
         self.connection.send(iq_obj)
