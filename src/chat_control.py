@@ -1871,6 +1871,8 @@ class ChatControl(ChatControlBase):
             banner_name_label.set_ellipsize(pango.ELLIPSIZE_END)
             self.banner_status_label.set_ellipsize(pango.ELLIPSIZE_END)
             status_reduced = helpers.reduce_chars_newlines(status, max_lines = 1)
+        else:
+            status_reduced = ''
         status_escaped = gobject.markup_escape_text(status_reduced)
 
         font_attrs, font_attrs_small = self.get_font_attrs()
