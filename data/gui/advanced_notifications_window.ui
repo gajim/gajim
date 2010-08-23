@@ -4,7 +4,7 @@
   <!-- interface-naming-policy toplevel-contextual -->
   <object class="GtkListStore" id="liststore1">
     <columns>
-      <!-- column-name item text -->
+      <!-- column-name item -->
       <column type="gchararray"/>
     </columns>
     <data>
@@ -21,7 +21,7 @@
   </object>
   <object class="GtkListStore" id="liststore2">
     <columns>
-      <!-- column-name item text -->
+      <!-- column-name item -->
       <column type="gchararray"/>
     </columns>
     <data>
@@ -814,7 +814,7 @@
                         <property name="spacing">6</property>
                         <child>
                           <object class="GtkCheckButton" id="use_systray_cb">
-                            <property name="label" translatable="yes">_Show event in systray</property>
+                            <property name="label" translatable="yes">_Show event in notification area</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -830,7 +830,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="disable_systray_cb">
-                            <property name="label" translatable="yes">_Disable showing event in systray</property>
+                            <property name="label" translatable="yes">_Disable showing event in notification area</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
