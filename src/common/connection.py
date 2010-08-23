@@ -2287,6 +2287,9 @@ class Connection(CommonConnection, ConnectionHandlers):
             self._disconnectedReconnCB()
 
     def _reconnect_alarm(self):
+        if not gajim.config.get_per('accounts', self.name, 'active'):
+            # Account may have been disabled
+            return
         if self.time_to_reconnect:
             if self.connected < 2:
                 self._reconnect()
