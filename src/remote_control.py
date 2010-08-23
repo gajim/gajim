@@ -133,7 +133,7 @@ class Remote:
             obj.gmail_messages_list]))
 
     def on_roster_info(self, obj):
-        self.raise_signal('RosterInfo', (obj.conn.name, [obj.jid, obj.name,
+        self.raise_signal('RosterInfo', (obj.conn.name, [obj.jid, obj.nickname,
             obj.sub, obj.ask, obj.groups]))
 
     def raise_signal(self, signal, arg):
