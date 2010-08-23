@@ -1320,6 +1320,9 @@ class Connection(CommonConnection, ConnectionHandlers):
                 self.on_connect_auth(con)
                 self.on_connect_auth = None
         else:
+            if not gajim.config.get_per('accounts', self.name, 'savepass'):
+                # Forget password, it's wrong
+                self.password = None
             gajim.log.debug("Couldn't authenticate to %s" % self._hostname)
             self.disconnect(on_purpose = True)
             self.dispatch('STATUS', 'offline')
