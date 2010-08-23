@@ -1088,6 +1088,8 @@ ConnectionJingle, ConnectionIBBytestream):
             self._nec_time_request_received)
         gajim.ged.register_event_handler('time-revised-request-received',
             ged.CORE, self._nec_time_revised_request_received)
+        gajim.ged.register_event_handler('roster-set-received',
+            ged.CORE, self._nec_roster_set_received)
 
     def build_http_auth_answer(self, iq_obj, answer):
         if not self.connection or self.connected < 2:
@@ -1235,32 +1237,22 @@ ConnectionJingle, ConnectionIBBytestream):
 
     def _rosterSetCB(self, con, iq_obj):
         log.debug('rosterSetCB')
-        version = iq_obj.getTagAttr('query', 'ver')
-        for item in iq_obj.getTag('query').getChildren():
-            try:
-                jid = helpers.parse_jid(item.getAttr('jid'))
-            except common.helpers.InvalidFormat:
-                log.warn('Invalid JID: %s, ignoring it' % item.getAttr('jid'))
-                continue
-            name = item.getAttr('name')
-            sub = item.getAttr('subscription')
-            ask = item.getAttr('ask')
-            groups = []
-            for group in item.getTags('group'):
-                groups.append(group.getData())
-            self.dispatch('ROSTER_INFO', (jid, name, sub, ask, groups))
-            account_jid = gajim.get_jid_from_account(self.name)
-            gajim.logger.add_or_update_contact(account_jid, jid, name, sub, ask,
-                    groups)
-            if version:
-                gajim.config.set_per('accounts', self.name, 'roster_version',
-                        version)
-        if not self.connection or self.connected < 2:
-            raise common.xmpp.NodeProcessed
-        reply = common.xmpp.Iq(typ='result', attrs={'id': iq_obj.getID()},
-                to=iq_obj.getFrom(), frm=iq_obj.getTo(), xmlns=None)
-        self.connection.send(reply)
+        gajim.nec.push_incoming_event(RosterSetReceivedEvent(None, conn=self,
+            iq_obj=iq_obj))
         raise common.xmpp.NodeProcessed
+
+    def _nec_roster_set_received(self, obj):
+        for jid in obj.items:
+            item = obj.items[jid]
+            gajim.nec.push_incoming_event(RosterInfoEvent(None, conn=self,
+                jid=jid, nickname=item['name'], sub=item['sub'], ask=item['ask'],
+                groups=item['groups']))
+            account_jid = gajim.get_jid_from_account(self.name)
+            gajim.logger.add_or_update_contact(account_jid, jid, item['name'],
+                item['sub'], item['ask'], item['groups'])
+        if obj.version:
+            gajim.config.set_per('accounts', self.name, 'roster_version',
+                obj.version)
 
     def _VersionCB(self, con, iq_obj):
         log.debug('VersionCB')
@@ -2681,4 +2673,36 @@ class TimeRequestEvent(nec.NetworkIncomingEvent):
 
 class TimeRevisedRequestEvent(nec.NetworkIncomingEvent):
     name = 'time-revised-request-received'
+    base_network_events = []
+
+class RosterSetReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'roster-set-received'
+    base_network_events = []
+
+    def generate(self):
+        self.version = self.iq_obj.getTagAttr('query', 'ver')
+        self.items = {}
+        for item in self.iq_obj.getTag('query').getChildren():
+            try:
+                jid = helpers.parse_jid(item.getAttr('jid'))
+            except common.helpers.InvalidFormat:
+                log.warn('Invalid JID: %s, ignoring it' % item.getAttr('jid'))
+                continue
+            name = item.getAttr('name')
+            sub = item.getAttr('subscription')
+            ask = item.getAttr('ask')
+            groups = []
+            for group in item.getTags('group'):
+                groups.append(group.getData())
+            self.items[jid] = {'name': name, 'sub': sub, 'ask': ask,
+                'groups': groups}
+        if self.conn.connection and self.conn.connected > 1:
+            reply = common.xmpp.Iq(typ='result',
+                attrs={'id': self.iq_obj.getID()}, to=self.iq_obj.getFrom(),
+                frm=self.iq_obj.getTo(), xmlns=None)
+            self.conn.connection.send(reply)
+        return True
+
+class RosterInfoEvent(nec.NetworkIncomingEvent):
+    name = 'roster-info'
     base_network_events = []

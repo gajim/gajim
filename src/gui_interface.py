@@ -1211,52 +1211,47 @@ class Interface:
             _('Password Required'), text, _('Save password'), ok_handler=on_ok,
             cancel_handler=on_cancel)
 
-    def handle_event_roster_info(self, account, array):
+    def handle_event_roster_info(self, obj):
         #('ROSTER_INFO', account, (jid, name, sub, ask, groups))
-        jid = array[0]
-        name = array[1]
-        sub = array[2]
-        ask = array[3]
-        groups = array[4]
-        contacts = gajim.contacts.get_contacts(account, jid)
-        if (not sub or sub == 'none') and (not ask or ask == 'none') and \
-        not name and not groups:
+        account = obj.conn.name
+        contacts = gajim.contacts.get_contacts(account, obj.jid)
+        if (not obj.sub or obj.sub == 'none') and \
+        (not obj.ask or obj.ask == 'none') and not obj.nickname and \
+        not obj.groups:
             # contact removed us.
             if contacts:
-                self.roster.remove_contact(jid, account, backend=True)
+                self.roster.remove_contact(obj.jid, account, backend=True)
                 return
         elif not contacts:
-            if sub == 'remove':
+            if obj.sub == 'remove':
                 return
             # Add new contact to roster
-            contact = gajim.contacts.create_contact(jid=jid, account=account,
-                    name=name, groups=groups, show='offline', sub=sub, ask=ask)
+            contact = gajim.contacts.create_contact(jid=obj.jid,
+                account=account, name=obj.nickname, groups=obj.groups,
+                show='offline', sub=obj.sub, ask=obj.ask)
             gajim.contacts.add_contact(account, contact)
-            self.roster.add_contact(jid, account)
+            self.roster.add_contact(obj.jid, account)
         else:
             # If contact has changed (sub, ask or group) update roster
             # Mind about observer status changes:
             #   According to xep 0162, a contact is not an observer anymore when
             #   we asked for auth, so also remove him if ask changed
             old_groups = contacts[0].groups
-            if contacts[0].sub != sub or contacts[0].ask != ask\
-            or old_groups != groups:
+            if contacts[0].sub != obj.sub or contacts[0].ask != obj.ask\
+            or old_groups != obj.groups:
                 # c.get_shown_groups() has changed. Reflect that in
                 # roster_winodow
-                self.roster.remove_contact(jid, account, force=True)
+                self.roster.remove_contact(obj.jid, account, force=True)
             for contact in contacts:
-                contact.name = name or ''
-                contact.sub = sub
-                contact.ask = ask
-                contact.groups = groups or []
-            self.roster.add_contact(jid, account)
+                contact.name = obj.nickname or ''
+                contact.sub = obj.sub
+                contact.ask = obj.ask
+                contact.groups = obj.groups or []
+            self.roster.add_contact(obj.jid, account)
             # Refilter and update old groups
             for group in old_groups:
                 self.roster.draw_group(group, account)
-            self.roster.draw_contact(jid, account)
-
-        if self.remote_ctrl:
-            self.remote_ctrl.raise_signal('RosterInfo', (account, array))
+            self.roster.draw_contact(obj.jid, account)
 
     def handle_event_bookmarks(self, account, bms):
         # ('BOOKMARKS', account, [{name,jid,autojoin,password,nick}, {}])
@@ -2116,7 +2111,6 @@ class Interface:
             'GC_PASSWORD_REQUIRED': [self.handle_event_gc_password_required],
             'GC_ERROR': [self.handle_event_gc_error],
             'BAD_PASSPHRASE': [self.handle_event_bad_passphrase],
-            'ROSTER_INFO': [self.handle_event_roster_info],
             'BOOKMARKS': [self.handle_event_bookmarks],
             'CON_TYPE': [self.handle_event_con_type],
             'CONNECTION_LOST': [self.handle_event_connection_lost],
@@ -2172,6 +2166,7 @@ class Interface:
             'last-result-received': [self.handle_event_last_status_time],
             'roster-item-exchange-received': \
                 [self.handle_event_roster_item_exchange],
+            'roster-info': [self.handle_event_roster_info],
         }
 
     def register_core_handlers(self):

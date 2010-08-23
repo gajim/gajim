@@ -113,6 +113,8 @@ class Remote:
             self.on_time)
         gajim.ged.register_event_handler('gmail-nofify', ged.POSTGUI,
             self.on_gmail_notify)
+        gajim.ged.register_event_handler('roster-info', ged.POSTGUI,
+            self.on_roster_info)
 
     def on_last_status_time(self, obj):
         self.raise_signal('LastStatusTime', (obj.conn.name, [
@@ -129,6 +131,10 @@ class Remote:
     def on_gmail_notify(self, obj):
         self.raise_signal('NewGmail', (obj.conn.name, [obj.jid, obj.newmsgs,
             obj.gmail_messages_list]))
+
+    def on_roster_info(self, obj):
+        self.raise_signal('RosterInfo', (obj.conn.name, [obj.jid, obj.name,
+            obj.sub, obj.ask, obj.groups]))
 
     def raise_signal(self, signal, arg):
         if self.signal_object:
