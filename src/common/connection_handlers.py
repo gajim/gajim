@@ -2656,7 +2656,7 @@ class RosterItemExchangeEvent(nec.NetworkIncomingEvent, HelperEvent):
             self.exchange_items_list[jid] = []
             self.exchange_items_list[jid].append(name)
             self.exchange_items_list[jid].append(groups)
-        if exchange_items_list:
+        if self.exchange_items_list:
             return True
 
 class VersionRequestEvent(nec.NetworkIncomingEvent):
