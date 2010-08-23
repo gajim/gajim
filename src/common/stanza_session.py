@@ -37,6 +37,9 @@ from hashlib import sha256
 from hmac import HMAC
 from common import crypto
 
+import logging
+log = logging.getLogger('gajim.c.stanza_session')
+
 if gajim.HAVE_PYCRYPTO:
     from Crypto.Cipher import AES
     from Crypto.PublicKey import RSA
