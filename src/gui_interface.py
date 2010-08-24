@@ -2909,6 +2909,8 @@ class Interface:
         for acct in accounts:
             if not gajim.account_is_connected(acct):
                 continue
+            if not gajim.connections[acct].pep_supported:
+                continue
             if not gajim.config.get_per('accounts', acct, 'publish_tune'):
                 continue
             if gajim.connections[acct].music_track_info == music_track_info:
