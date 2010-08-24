@@ -1073,12 +1073,12 @@ class Interface:
         for change in changes:
             gc_control.print_conversation(change)
 
-    def handle_event_gc_affiliation(self, account, array):
+    def handle_event_gc_affiliation(self, obj):
         #('GC_AFFILIATION', account, (room_jid, users_dict))
-        room_jid = array[0]
-        if room_jid in self.instances[account]['gc_config']:
-            self.instances[account]['gc_config'][room_jid].\
-                    affiliation_list_received(array[1])
+        account = obj.conn.name
+        if obj.jid in self.instances[account]['gc_config']:
+            self.instances[account]['gc_config'][obj.jid].\
+                affiliation_list_received(obj.users_dict)
 
     def handle_event_gc_password_required(self, account, array):
         #('GC_PASSWORD_REQUIRED', account, (room_jid, nick))
@@ -2107,7 +2107,6 @@ class Interface:
             'GC_SUBJECT': [self.handle_event_gc_subject],
             'GC_CONFIG_CHANGE': [self.handle_event_gc_config_change],
             'GC_INVITATION': [self.handle_event_gc_invitation],
-            'GC_AFFILIATION': [self.handle_event_gc_affiliation],
             'GC_PASSWORD_REQUIRED': [self.handle_event_gc_password_required],
             'GC_ERROR': [self.handle_event_gc_error],
             'BAD_PASSPHRASE': [self.handle_event_bad_passphrase],
@@ -2164,6 +2163,7 @@ class Interface:
             'gmail-notify': [self.handle_event_gmail_notify],
             'http-auth-received': [self.handle_event_http_auth],
             'last-result-received': [self.handle_event_last_status_time],
+            'muc-admin-received': [self.handle_event_gc_affiliation],
             'muc-owner-received': [self.handle_event_gc_config],
             'roster-info': [self.handle_event_roster_info],
             'roster-item-exchange-received': \

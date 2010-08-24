@@ -2109,28 +2109,8 @@ ConnectionJingle, ConnectionIBBytestream):
 
     def _MucAdminCB(self, con, iq_obj):
         log.debug('MucAdminCB')
-        items = iq_obj.getTag('query', namespace=common.xmpp.NS_MUC_ADMIN).\
-                getTags('item')
-        users_dict = {}
-        for item in items:
-            if item.has_attr('jid') and item.has_attr('affiliation'):
-                try:
-                    jid = helpers.parse_jid(item.getAttr('jid'))
-                except common.helpers.InvalidFormat:
-                    log.warn('Invalid JID: %s, ignoring it' % item.getAttr('jid'))
-                    continue
-                affiliation = item.getAttr('affiliation')
-                users_dict[jid] = {'affiliation': affiliation}
-                if item.has_attr('nick'):
-                    users_dict[jid]['nick'] = item.getAttr('nick')
-                if item.has_attr('role'):
-                    users_dict[jid]['role'] = item.getAttr('role')
-                reason = item.getTagData('reason')
-                if reason:
-                    users_dict[jid]['reason'] = reason
-
-        self.dispatch('GC_AFFILIATION', (helpers.get_full_jid_from_iq(iq_obj),
-                users_dict))
+        gajim.nec.push_incoming_event(MucAdminReceivedEvent(None,
+            conn=self, iq_obj=iq_obj))
 
     def _MucErrorCB(self, con, iq_obj):
         log.debug('MucErrorCB')
@@ -2717,3 +2697,31 @@ class MucOwnerReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                 self.form_node = q
                 self.dataform = dataforms.ExtendForm(node=self.form_node)
                 return True
+
+class MucAdminReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
+    name = 'muc-admin-received'
+    base_network_events = []
+
+    def generate(self):
+        self.get_jid_resource()
+        items = self.iq_obj.getTag('query',
+            namespace=common.xmpp.NS_MUC_ADMIN).getTags('item')
+        self.users_dict = {}
+        for item in items:
+            if item.has_attr('jid') and item.has_attr('affiliation'):
+                try:
+                    jid = helpers.parse_jid(item.getAttr('jid'))
+                except common.helpers.InvalidFormat:
+                    log.warn('Invalid JID: %s, ignoring it' % \
+                        item.getAttr('jid'))
+                    continue
+                affiliation = item.getAttr('affiliation')
+                self.users_dict[jid] = {'affiliation': affiliation}
+                if item.has_attr('nick'):
+                    self.users_dict[jid]['nick'] = item.getAttr('nick')
+                if item.has_attr('role'):
+                    self.users_dict[jid]['role'] = item.getAttr('role')
+                reason = item.getTagData('reason')
+                if reason:
+                    self.users_dict[jid]['reason'] = reason
+        return True
