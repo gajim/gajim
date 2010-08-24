@@ -1242,6 +1242,8 @@ ConnectionJingle, ConnectionIBBytestream):
         raise common.xmpp.NodeProcessed
 
     def _nec_roster_set_received(self, obj):
+        if obj.conn.name != self.name:
+            return
         for jid in obj.items:
             item = obj.items[jid]
             gajim.nec.push_incoming_event(RosterInfoEvent(None, conn=self,
