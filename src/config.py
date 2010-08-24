@@ -2709,11 +2709,11 @@ class GroupchatConfigWindow:
         self.affiliation_treeview = {}
         self.start_users_dict = {} # list at the beginning
         self.affiliation_labels = {'outcast': _('Ban List'),
-                'member': _('Member List'),
-                'owner': _('Owner List'),
-                'admin':_('Administrator List')}
+            'member': _('Member List'), 'owner': _('Owner List'),
+            'admin':_('Administrator List')}
 
-        self.xml = gtkgui_helpers.get_gtk_builder('data_form_window.ui', 'data_form_window')
+        self.xml = gtkgui_helpers.get_gtk_builder('data_form_window.ui',
+            'data_form_window')
         self.window = self.xml.get_object('data_form_window')
         self.window.set_transient_for(gajim.interface.roster.window)
 
@@ -2722,7 +2722,8 @@ class GroupchatConfigWindow:
             self.data_form_widget = dataforms_widget.DataFormWidget(self.form)
             # hide scrollbar of this data_form_widget, we already have in this
             # widget
-            sw = self.data_form_widget.xml.get_object('single_form_scrolledwindow')
+            sw = self.data_form_widget.xml.get_object(
+                'single_form_scrolledwindow')
             sw.set_policy(gtk.POLICY_NEVER, gtk.POLICY_NEVER)
 
             self.data_form_widget.show()
@@ -2733,7 +2734,7 @@ class GroupchatConfigWindow:
 
         for affiliation in self.affiliation_labels.keys():
             self.start_users_dict[affiliation] = {}
-            hbox = gtk.HBox(spacing = 5)
+            hbox = gtk.HBox(spacing=5)
             add_on_vbox.pack_start(hbox, False)
 
             label = gtk.Label(self.affiliation_labels[affiliation])
@@ -2743,21 +2744,23 @@ class GroupchatConfigWindow:
             bb.set_layout(gtk.BUTTONBOX_END)
             bb.set_spacing(5)
             hbox.pack_start(bb)
-            add_button = gtk.Button(stock = gtk.STOCK_ADD)
-            add_button.connect('clicked', self.on_add_button_clicked, affiliation)
+            add_button = gtk.Button(stock=gtk.STOCK_ADD)
+            add_button.connect('clicked', self.on_add_button_clicked,
+                affiliation)
             bb.pack_start(add_button)
-            self.remove_button[affiliation] = gtk.Button(stock = gtk.STOCK_REMOVE)
+            self.remove_button[affiliation] = gtk.Button(stock=gtk.STOCK_REMOVE)
             self.remove_button[affiliation].set_sensitive(False)
             self.remove_button[affiliation].connect('clicked',
                     self.on_remove_button_clicked, affiliation)
             bb.pack_start(self.remove_button[affiliation])
 
-            liststore = gtk.ListStore(str, str, str, str) # Jid, reason, nick, role
+            # jid, reason, nick, role
+            liststore = gtk.ListStore(str, str, str, str)
             self.affiliation_treeview[affiliation] = gtk.TreeView(liststore)
             self.affiliation_treeview[affiliation].get_selection().set_mode(
-                    gtk.SELECTION_MULTIPLE)
+                gtk.SELECTION_MULTIPLE)
             self.affiliation_treeview[affiliation].connect('cursor-changed',
-                    self.on_affiliation_treeview_cursor_changed, affiliation)
+                self.on_affiliation_treeview_cursor_changed, affiliation)
             renderer = gtk.CellRendererText()
             col = gtk.TreeViewColumn(_('JID'), renderer)
             col.add_attribute(renderer, 'text', 0)
@@ -2793,7 +2796,7 @@ class GroupchatConfigWindow:
             sw.add(self.affiliation_treeview[affiliation])
             add_on_vbox.pack_start(sw)
             gajim.connections[self.account].get_affiliation_list(self.room_jid,
-                    affiliation)
+                affiliation)
 
         self.xml.connect_signals(self)
         self.window.show_all()
@@ -2822,11 +2825,11 @@ class GroupchatConfigWindow:
             title = _('Adding Administrator...')
             prompt = _('<b>Whom do you want to make an administrator?</b>\n\n')
         prompt += _('Can be one of the following:\n'
-                        '1. user@domain/resource (only that resource matches).\n'
-                        '2. user@domain (any resource matches).\n'
-                        '3. domain/resource (only that resource matches).\n'
-                        '4. domain (the domain itself matches, as does any user@domain,\n'
-                        'domain/resource, or address containing a subdomain).')
+            '1. user@domain/resource (only that resource matches).\n'
+            '2. user@domain (any resource matches).\n'
+            '3. domain/resource (only that resource matches).\n'
+            '4. domain (the domain itself matches, as does any user@domain,\n'
+            'domain/resource, or address containing a subdomain).')
 
         def on_ok(jid):
             if not jid:
@@ -2885,12 +2888,13 @@ class GroupchatConfigWindow:
                 jid = model[iter_][0].decode('utf-8')
                 actual_jid_list.append(jid)
                 if jid not in self.start_users_dict[affiliation] or \
-                (affiliation == 'outcast' and 'reason' in self.start_users_dict[affiliation]\
-                [jid] and self.start_users_dict[affiliation][jid]\
+                (affiliation == 'outcast' and 'reason' in self.start_users_dict[
+                affiliation][jid] and self.start_users_dict[affiliation][jid]\
                 ['reason'] != model[iter_][1].decode('utf-8')):
                     users_dict[jid] = {'affiliation': affiliation}
                     if affiliation == 'outcast':
-                        users_dict[jid]['reason'] = model[iter_][1].decode('utf-8')
+                        users_dict[jid]['reason'] = model[iter_][1].decode(
+                            'utf-8')
                 iter_ = model.iter_next(iter_)
             # remove removed one
             for jid in self.start_users_dict[affiliation]:
@@ -2898,7 +2902,7 @@ class GroupchatConfigWindow:
                     users_dict[jid] = {'affiliation': 'none'}
             if users_dict:
                 gajim.connections[self.account].send_gc_affiliation_list(
-                        self.room_jid, users_dict)
+                    self.room_jid, users_dict)
         self.window.destroy()
 
 #---------- RemoveAccountWindow class -------------#
