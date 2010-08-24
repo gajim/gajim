@@ -46,6 +46,7 @@ import common.caps_cache as capscache
 from common import helpers
 from common import gajim
 from common import exceptions
+from common import dataforms
 from common.commands import ConnectionCommands
 from common.pubsub import ConnectionPubSub
 from common.pep import ConnectionPEP
@@ -2103,14 +2104,8 @@ ConnectionJingle, ConnectionIBBytestream):
 
     def _MucOwnerCB(self, con, iq_obj):
         log.debug('MucOwnerCB')
-        qp = iq_obj.getQueryPayload()
-        node = None
-        for q in qp:
-            if q.getNamespace() == common.xmpp.NS_DATA:
-                node = q
-        if not node:
-            return
-        self.dispatch('GC_CONFIG', (helpers.get_full_jid_from_iq(iq_obj), node))
+        gajim.nec.push_incoming_event(MucOwnerReceivedEvent(None,
+            conn=self, iq_obj=iq_obj))
 
     def _MucAdminCB(self, con, iq_obj):
         log.debug('MucAdminCB')
@@ -2433,7 +2428,7 @@ ConnectionJingle, ConnectionIBBytestream):
 
 class HelperEvent:
     def get_jid_resource(self):
-        if self.id_ in self.conn.groupchat_jids:
+        if hasattr(self, 'id_') and self.id_ in self.conn.groupchat_jids:
             self.fjid = self.conn.groupchat_jids[self.id_]
             del self.conn.groupchat_jids[self.id_]
         else:
@@ -2708,3 +2703,17 @@ class RosterSetReceivedEvent(nec.NetworkIncomingEvent):
 class RosterInfoEvent(nec.NetworkIncomingEvent):
     name = 'roster-info'
     base_network_events = []
+
+class MucOwnerReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
+    name = 'muc-owner-received'
+    base_network_events = []
+
+    def generate(self):
+        self.get_jid_resource()
+        qp = self.iq_obj.getQueryPayload()
+        self.form_node = None
+        for q in qp:
+            if q.getNamespace() == common.xmpp.NS_DATA:
+                self.form_node = q
+                self.dataform = dataforms.ExtendForm(node=self.form_node)
+                return True

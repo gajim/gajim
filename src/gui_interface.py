@@ -993,14 +993,13 @@ class Interface:
             else:
                 gc_control.print_conversation(text)
 
-    def handle_event_gc_config(self, account, array):
-        #('GC_CONFIG', account, (jid, form))  config is a dict
-        room_jid = array[0].split('/')[0]
-        if room_jid in gajim.automatic_rooms[account]:
-            if 'continue_tag' in gajim.automatic_rooms[account][room_jid]:
+    def handle_event_gc_config(self, obj):
+        #('GC_CONFIG', account, (jid, form_node))  config is a dict
+        account = obj.conn.name
+        if obj.jid in gajim.automatic_rooms[account]:
+            if 'continue_tag' in gajim.automatic_rooms[account][obj.jid]:
                 # We're converting chat to muc. allow participants to invite
-                form = dataforms.ExtendForm(node = array[1])
-                for f in form.iter_fields():
+                for f in obj.dataform.iter_fields():
                     if f.var == 'muc#roomconfig_allowinvites':
                         f.value = True
                     elif f.var == 'muc#roomconfig_publicroom':
@@ -1009,23 +1008,25 @@ class Interface:
                         f.value = True
                     elif f.var == 'public_list':
                         f.value = False
-                gajim.connections[account].send_gc_config(room_jid, form)
+                gajim.connections[account].send_gc_config(obj.jid,
+                    obj.dataform.get_purged())
             else:
                 # use default configuration
-                gajim.connections[account].send_gc_config(room_jid, array[1])
+                gajim.connections[account].send_gc_config(obj.jid,
+                    obj.form_node)
             # invite contacts
             # check if it is necessary to add <continue />
             continue_tag = False
-            if 'continue_tag' in gajim.automatic_rooms[account][room_jid]:
+            if 'continue_tag' in gajim.automatic_rooms[account][obj.jid]:
                 continue_tag = True
-            if 'invities' in gajim.automatic_rooms[account][room_jid]:
-                for jid in gajim.automatic_rooms[account][room_jid]['invities']:
-                    gajim.connections[account].send_invite(room_jid, jid,
-                            continue_tag=continue_tag)
-            del gajim.automatic_rooms[account][room_jid]
-        elif room_jid not in self.instances[account]['gc_config']:
-            self.instances[account]['gc_config'][room_jid] = \
-            config.GroupchatConfigWindow(account, room_jid, array[1])
+            if 'invities' in gajim.automatic_rooms[account][obj.jid]:
+                for jid in gajim.automatic_rooms[account][obj.jid]['invities']:
+                    gajim.connections[account].send_invite(obj.jid, jid,
+                        continue_tag=continue_tag)
+            del gajim.automatic_rooms[account][obj.jid]
+        elif obj.jid not in self.instances[account]['gc_config']:
+            self.instances[account]['gc_config'][obj.jid] = \
+                config.GroupchatConfigWindow(account, obj.jid, obj.dataform)
 
     def handle_event_gc_config_change(self, account, array):
         #('GC_CONFIG_CHANGE', account, (jid, statusCode))  statuscode is a list
@@ -2104,7 +2105,6 @@ class Interface:
             'GC_NOTIFY': [self.handle_event_gc_notify],
             'GC_MSG': [self.handle_event_gc_msg],
             'GC_SUBJECT': [self.handle_event_gc_subject],
-            'GC_CONFIG': [self.handle_event_gc_config],
             'GC_CONFIG_CHANGE': [self.handle_event_gc_config_change],
             'GC_INVITATION': [self.handle_event_gc_invitation],
             'GC_AFFILIATION': [self.handle_event_gc_affiliation],
@@ -2164,9 +2164,10 @@ class Interface:
             'gmail-notify': [self.handle_event_gmail_notify],
             'http-auth-received': [self.handle_event_http_auth],
             'last-result-received': [self.handle_event_last_status_time],
+            'muc-owner-received': [self.handle_event_gc_config],
+            'roster-info': [self.handle_event_roster_info],
             'roster-item-exchange-received': \
                 [self.handle_event_roster_item_exchange],
-            'roster-info': [self.handle_event_roster_info],
         }
 
     def register_core_handlers(self):

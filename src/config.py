@@ -2701,7 +2701,7 @@ class ServiceRegistrationWindow:
 
 class GroupchatConfigWindow:
 
-    def __init__(self, account, room_jid, form = None):
+    def __init__(self, account, room_jid, form=None):
         self.account = account
         self.room_jid = room_jid
         self.form = form
@@ -2719,8 +2719,7 @@ class GroupchatConfigWindow:
 
         if self.form:
             config_vbox = self.xml.get_object('config_vbox')
-            dataform = dataforms.ExtendForm(node = self.form)
-            self.data_form_widget = dataforms_widget.DataFormWidget(dataform)
+            self.data_form_widget = dataforms_widget.DataFormWidget(self.form)
             # hide scrollbar of this data_form_widget, we already have in this
             # widget
             sw = self.data_form_widget.xml.get_object('single_form_scrolledwindow')
