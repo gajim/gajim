@@ -1407,10 +1407,17 @@ class Interface:
         if 'stalled' in file_props and file_props['stalled'] or \
                 'paused' in file_props and file_props['paused']:
             return
+
         if file_props['type'] == 'r': # we receive a file
             jid = unicode(file_props['sender'])
         else: # we send a file
             jid = unicode(file_props['receiver'])
+
+        # End jingle session
+        if file_props['session-type'] == 'jingle' and file_props['type'] == 'r':
+            session = gajim.connections[account].get_jingle_session(jid,
+                sid=file_props['session-sid'])
+            session.end_session()
 
         if helpers.allow_popup_window(account):
             if file_props['error'] == 0:
