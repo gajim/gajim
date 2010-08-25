@@ -149,7 +149,6 @@ class JingleTransportSocks5(JingleTransport):
 
 
     def _add_local_ips_as_candidates(self):
-        return
         if not self.connection:
             return
         local_ip_cand = []
@@ -179,7 +178,6 @@ class JingleTransportSocks5(JingleTransport):
         self.candidates += local_ip_cand
 
     def _add_additional_candidates(self):
-        return
         if not self.connection:
             return
         type_preference = 126
