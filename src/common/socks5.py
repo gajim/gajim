@@ -134,7 +134,7 @@ class SocksQueue:
             if 'type' in streamhost and streamhost['type'] == 'proxy':
                 fp = None
             else:
-                fd = fingerprint
+                fp = fingerprint
             receiver = Socks5Receiver(self.idlequeue, streamhost, sid,
                 file_props, fingerprint=fp)
             self.add_receiver(account, receiver)
