@@ -17,7 +17,6 @@ Handles Jingle Transports (currently only ICE-UDP)
 
 import xmpp
 import socket
-from common import helpers
 from common import gajim
 from common.protocol.bytestream import ConnectionSocks5Bytestream
 import logging
