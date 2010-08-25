@@ -67,17 +67,20 @@ class JingleFileTransfer(JingleContent):
             self.file_props['sender'] = session.ourjid
             self.file_props['receiver'] = session.peerjid
             self.file_props['session-type'] = 'jingle'
-            self.file_props['sid'] = session.sid
+            self.file_props['session-sid'] = session.sid
             self.file_props['transfered_size'] = []
 
         log.info("FT request: %s" % file_props)
 
         if transport is None:
             self.transport = JingleTransportSocks5()
+            self.transport.set_connection(session.connection)
             self.transport.set_file_props(self.file_props)
             self.transport.set_our_jid(session.ourjid)
-            self.transport.set_connection(session.connection)
         log.info('ourjid: %s' % session.ourjid)
+
+        if self.file_props is not None:
+            self.file_props['sid'] = self.transport.sid
 
         self.session = session
         self.media = 'file'
@@ -109,17 +112,19 @@ class JingleFileTransfer(JingleContent):
 
         file_props['receiver'] = self.session.ourjid
         log.info("ourjid: %s" % self.session.ourjid)
-        file_props['sid'] = unicode(stanza.getTag('jingle').getAttr('sid'))
+        file_props['session-sid'] = unicode(stanza.getTag('jingle').getAttr('sid'))
         file_props['transfered_size'] = []
 
         self.file_props = file_props
-        self.session.connection.files_props[file_props['sid']] = file_props
+
         if self.transport is None:
             self.transport = JingleTransportSocks5()
             self.transport.set_our_jid(self.session.ourjid)
             self.transport.set_connection(self.session.connection)
+        self.file_props['sid'] = self.transport.sid
+        self.session.connection.files_props[file_props['sid']] = file_props
         self.transport.set_file_props(self.file_props)
-        if self.file_props.has_key("streamhosts"):
+        if self.file_props.has_key('streamhosts'):
             self.file_props['streamhosts'].extend(
                 self.transport.remote_candidates)
         else:
@@ -247,7 +252,8 @@ class JingleFileTransfer(JingleContent):
         content.setAttr('name', 'file')
 
         transport = xmpp.Node('transport')
-        transport.setAttr('xmlns', xmpp.NS_JINGLE_BYTESTREAM)
+        transport.setNamespace(xmpp.NS_JINGLE_BYTESTREAM)
+        transport.setAttr('sid', self.transport.sid)
 
         candidateused = xmpp.Node('candidate-used')
         candidateused.setAttr('cid', streamhost['cid'])

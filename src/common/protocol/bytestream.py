@@ -136,16 +136,16 @@ class ConnectionBytestream:
         # file transfer initiated by a jingle session
         log.info("send_file_approval: jingle session accept")
         if file_props.get('session-type') == 'jingle':
-            session = self.get_jingle_session(file_props['sender'], file_props['sid'])
+            session = self.get_jingle_session(file_props['sender'],
+                file_props['session-sid'])
             if not session:
                 return
-            sid = file_props['sid']
             gajim.socks5queue.add_file_props(self.name, file_props)
-            
+
             if not session.accepted:
                 if session.get_content('file').use_security:
-                    id = jingle_xtls.send_cert_request(self, file_props['sender'])
-                    jingle_xtls.key_exchange_pend(id, session)
+                    id_ = jingle_xtls.send_cert_request(self, file_props['sender'])
+                    jingle_xtls.key_exchange_pend(id_, session)
                     return
                 session.approve_session()
                 session.approve_content('file')
@@ -356,7 +356,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
                 if 'idx' in host and host['idx'] > 0:
                     gajim.socks5queue.remove_receiver(host['idx'])
                     gajim.socks5queue.remove_sender(host['idx'])
-                    
+
         if 'direction' in file_props:
             # it's a IBB
             sid = file_props['sid']
@@ -822,7 +822,7 @@ class ConnectionIBBytestream(ConnectionBytestream):
                         {'sid':sid})]))
                     file_props['completed'] = True
                     del self.files_props[sid]
-        
+
     def IBBMessageHandler(self, conn, stanza):
         """
         Receive next portion of incoming datastream and store it write

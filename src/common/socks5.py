@@ -122,7 +122,8 @@ class SocksQueue:
             return 1
         return 0
 
-    def connect_to_hosts(self, account, sid, on_success=None, on_failure=None, fingerprint=None):
+    def connect_to_hosts(self, account, sid, on_success=None, on_failure=None,
+    fingerprint=None):
         self.on_success = on_success
         self.on_failure = on_failure
         file_props = self.files_props[account][sid]
@@ -130,7 +131,12 @@ class SocksQueue:
 
         # add streamhosts to the queue
         for streamhost in file_props['streamhosts']:
-            receiver = Socks5Receiver(self.idlequeue, streamhost, sid, file_props, fingerprint=fingerprint)
+            if 'type' in streamhost and streamhost['type'] == 'proxy':
+                fp = None
+            else:
+                fd = fingerprint
+            receiver = Socks5Receiver(self.idlequeue, streamhost, sid,
+                file_props, fingerprint=fp)
             self.add_receiver(account, receiver)
             streamhost['idx'] = receiver.queue_idx
 
@@ -453,7 +459,7 @@ class Socks5:
         received = ''
         try:
             add = self._recv(64)
-        except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError, 
+        except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError,
                 OpenSSL.SSL.WantX509LookupError), e:
             log.info('SSL rehandshake request : ' + repr(e))
             raise e
@@ -814,7 +820,7 @@ class Socks5Sender(Socks5, IdleObject):
                         self.queue.result_sha(self.sha_msg, self.queue_idx)
                     if result == -1:
                         self.disconnect()
-    
+
                 elif self.state == 5:
                     if self.file_props is not None and self.file_props['type'] == 'r':
                         result = self.get_file_contents(0)

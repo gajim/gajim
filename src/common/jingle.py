@@ -141,26 +141,26 @@ class ConnectionJingle(object):
     def start_file_transfer(self, jid, file_props):
         logger.info("start file transfer with file: %s" % file_props)
         jingle = self.get_jingle_session(jid, media='file')
-        contact = gajim.contacts.get_contact_with_highest_priority(self.name, 
+        contact = gajim.contacts.get_contact_with_highest_priority(self.name,
                                                                    gajim.get_jid_without_resource(jid))
         if contact is None:
             return
         use_security = contact.supports(xmpp.NS_JINGLE_XTLS)
         if jingle:
             file_props['sid'] = jingle.sid
-            jingle.add_content('file',
-                               JingleFileTransfer(jingle, file_props = file_props, use_security=use_security)
-                               )
+            c = JingleFileTransfer(jingle, file_props=file_props,
+                use_security=use_security)
+            jingle.add_content('file', c)
         else:
             jingle = JingleSession(self, weinitiate=True, jid=jid)
             self.__sessions[jingle.sid] = jingle
             file_props['sid'] = jingle.sid
-            jingle.add_content('file', 
-                               JingleFileTransfer(jingle, file_props=file_props, use_security=use_security)
-                               )
+            c = JingleFileTransfer(jingle, file_props=file_props,
+                use_security=use_security)
+            jingle.add_content('file', c)
             jingle.start_session()
-        return jingle.sid
-        
+        return c.transport.sid
+
 
     def iter_jingle_sessions(self, jid, sid=None, media=None):
         if sid:
