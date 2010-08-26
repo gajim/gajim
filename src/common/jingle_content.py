@@ -55,14 +55,16 @@ class JingleContent(object):
 
         self.callbacks = {
                 # these are called when *we* get stanzas
-                'content-accept': [self.__on_transport_info],
+                'content-accept': [self.__on_transport_info,
+                        self.__on_content_accept],
                 'content-add': [self.__on_transport_info],
                 'content-modify': [],
                 'content-reject': [],
                 'content-remove': [],
                 'description-info': [],
                 'security-info': [],
-                'session-accept': [self.__on_transport_info],
+                'session-accept': [self.__on_transport_info,
+                        self.__on_content_accept],
                 'session-info': [],
                 'session-initiate': [self.__on_transport_info],
                 'session-terminate': [],
@@ -73,15 +75,20 @@ class JingleContent(object):
                 'iq-result': [],
                 'iq-error': [],
                 # these are called when *we* sent these stanzas
-                'content-accept-sent': [self.__fill_jingle_stanza],
+                'content-accept-sent': [self.__fill_jingle_stanza,
+                        self.__on_content_accept],
                 'content-add-sent': [self.__fill_jingle_stanza],
                 'session-initiate-sent': [self.__fill_jingle_stanza],
-                'session-accept-sent': [self.__fill_jingle_stanza],
+                'session-accept-sent': [self.__fill_jingle_stanza,
+                        self.__on_content_accept],
                 'session-terminate-sent': [],
         }
 
     def is_ready(self):
         return self.accepted and not self.sent
+
+    def __on_content_accept(self, stanza, content, error, action):
+        self.on_negotiated()
 
     def on_negotiated(self):
         if self.accepted:
