@@ -53,12 +53,8 @@ class JingleRTPContent(JingleContent):
         self.callbacks['session-initiate'] += [self.__on_remote_codecs]
         self.callbacks['content-add'] += [self.__on_remote_codecs]
         self.callbacks['description-info'] += [self.__on_remote_codecs]
-        self.callbacks['content-accept'] += [self.__on_remote_codecs,
-                self.__on_content_accept]
-        self.callbacks['session-accept'] += [self.__on_remote_codecs,
-                self.__on_content_accept]
-        self.callbacks['session-accept-sent'] += [self.__on_content_accept]
-        self.callbacks['content-accept-sent'] += [self.__on_content_accept]
+        self.callbacks['content-accept'] += [self.__on_remote_codecs]
+        self.callbacks['session-accept'] += [self.__on_remote_codecs]
         self.callbacks['session-terminate'] += [self.__stop]
         self.callbacks['session-terminate-sent'] += [self.__stop]
 
@@ -234,14 +230,14 @@ class JingleRTPContent(JingleContent):
     def get_fallback_src(self):
         return gst.element_factory_make('fakesrc')
 
-    def __on_content_accept(self, stanza, content, error, action):
+    def on_negotiated(self):
         if self.accepted:
             if self.transport.remote_candidates:
                 self.p2pstream.set_remote_candidates(self.transport.remote_candidates)
                 self.transport.remote_candidates = []
             # TODO: farsight.DIRECTION_BOTH only if senders='both'
             self.p2pstream.set_property('direction', farsight.DIRECTION_BOTH)
-        self.on_negotiated()
+        JingleContent.on_negotiated(self)
 
     def __on_remote_codecs(self, stanza, content, error, action):
         """

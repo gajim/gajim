@@ -223,7 +223,7 @@ class JingleFileTransfer(JingleContent):
                 # send error message, notify the user
         elif not self.weinitiate and self.state == STATE_NOT_STARTED:
             # session-accept iq-result
-            if not self.sent:
+            if not self.negotiated:
                 return
             self.state = STATE_ACCEPTED
             if not gajim.socks5queue.get_file_props(
