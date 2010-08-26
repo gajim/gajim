@@ -1417,7 +1417,15 @@ class Interface:
         if file_props['session-type'] == 'jingle' and file_props['type'] == 'r':
             session = gajim.connections[account].get_jingle_session(jid,
                 sid=file_props['session-sid'])
-            session.end_session()
+            # get content:
+            content = None
+            for c in session.contents.values():
+                if c.file_props['sid'] == file_props['sid']:
+                    content = c
+                    break
+            if not content:
+                return
+            session.remove_content('initiator', c.name)
 
         if helpers.allow_popup_window(account):
             if file_props['error'] == 0:
@@ -1484,12 +1492,6 @@ class Interface:
                     txt = _('File transfer of %(filename)s to %(name)s '
                         'stopped.') % {'filename': filename, 'name': name}
                     img_name = 'gajim-ft_stopped'
-                # if we are the sender of the file and the file transfer was initiated with jingle
-                # send session-terminate stanza
-                if 'session-type' in file_props and file_props['session-type'] == 'jingle':
-                    sender = gajim.get_jid_without_resource(file_props['sender'])
-                    jingle_session = gajim.connections[account].get_jingle_session(sender, file_props['sid'])
-                    jingle_session.end_session()
             path = gtkgui_helpers.get_icon_path(img_name, 48)
         else:
             txt = ''
