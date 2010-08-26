@@ -37,7 +37,7 @@ log = logging.getLogger('gajim.c.jingle_rtp')
 class JingleRTPContent(JingleContent):
     def __init__(self, session, media, transport=None):
         if transport is None:
-            transport = JingleTransportICEUDP()
+            transport = JingleTransportICEUDP(None)
         JingleContent.__init__(self, session, transport)
         self.media = media
         self._dtmf_running = False
