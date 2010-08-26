@@ -247,6 +247,9 @@ class JingleSession(object):
         """
         Return True when all codecs and candidates are ready (for all contents)
         """
+        for c in self.contents.itervalues():
+            if c.is_ready():
+                return True
         return (all((content.is_ready() for content in self.contents.itervalues()))
                 and self.accepted)
 
@@ -623,7 +626,8 @@ class JingleSession(object):
         # TODO: integrate with __appendContent?
         # TODO: parameters 'name', 'content'?
         for content in self.contents.values():
-            self.__append_content(jingle, content)
+            if content.is_ready():
+                self.__append_content(jingle, content)
 
     def __session_initiate(self):
         assert self.state == JingleStates.ended
