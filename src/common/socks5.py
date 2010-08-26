@@ -304,8 +304,10 @@ class SocksQueue:
         if account in self.files_props:
             fl_props = self.files_props[account]
             if sid in fl_props:
-                del self.on_success[sid]
-                del self.on_failure[sid]
+                if sid in self.on_success:
+                    del self.on_success[sid]
+                if sid in self.on_failure:
+                    del self.on_failure[sid]
                 del(fl_props[sid])
 
         if len(self.files_props) == 0:
