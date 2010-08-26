@@ -81,8 +81,8 @@ class SocksQueue:
         self.complete_transfer_cb = complete_transfer_cb
         self.progress_transfer_cb = progress_transfer_cb
         self.error_cb = error_cb
-        self.on_success = None
-        self.on_failure = None
+        self.on_success = {} # {id: cb}
+        self.on_failure = {} # {id: cb}
 
     def start_listener(self, port, sha_str, sha_handler, sid, fingerprint=None):
         """
@@ -110,7 +110,7 @@ class SocksQueue:
             if 'proxyhosts' in file_props:
                 for proxy in file_props['proxyhosts']:
                     if proxy == streamhost:
-                        self.on_success(streamhost)
+                        self.on_success[file_props['sid']](streamhost)
                         return 2
             return 0
         if 'streamhosts' in file_props:
@@ -118,14 +118,14 @@ class SocksQueue:
                 if streamhost['state'] == 1:
                     return 0
             streamhost['state'] = 1
-            self.on_success(streamhost)
+            self.on_success[file_props['sid']](streamhost)
             return 1
         return 0
 
     def connect_to_hosts(self, account, sid, on_success=None, on_failure=None,
     fingerprint=None):
-        self.on_success = on_success
-        self.on_failure = on_failure
+        self.on_success[sid] = on_success
+        self.on_failure[sid] = on_failure
         file_props = self.files_props[account][sid]
         file_props['failure_cb'] = on_failure
 
@@ -304,6 +304,8 @@ class SocksQueue:
         if account in self.files_props:
             fl_props = self.files_props[account]
             if sid in fl_props:
+                del self.on_success[sid]
+                del self.on_failure[sid]
                 del(fl_props[sid])
 
         if len(self.files_props) == 0:
