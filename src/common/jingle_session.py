@@ -142,14 +142,14 @@ class JingleSession(object):
         reason.addChild('decline')
         self._session_terminate(reason)
 
-    def approve_content(self, media):
-        content = self.get_content(media)
+    def approve_content(self, media, name=None):
+        content = self.get_content(media, name)
         if content:
             content.accepted = True
             self.on_session_state_changed(content)
 
-    def reject_content(self, media):
-        content = self.get_content(media)
+    def reject_content(self, media, name=None):
+        content = self.get_content(media, name)
         if content:
             if self.state == JingleStates.active:
                 self.__content_reject(content)
@@ -167,13 +167,14 @@ class JingleSession(object):
             reason.addChild('cancel')
         self._session_terminate(reason)
 
-    def get_content(self, media=None):
+    def get_content(self, media=None, name=None):
         if media is None:
             return
 
         for content in self.contents.values():
             if content.media == media:
-                return content
+                if name is None or content.name == name:
+                    return content
 
     def add_content(self, name, content, creator='we'):
         """

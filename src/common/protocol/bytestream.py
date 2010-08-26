@@ -140,16 +140,24 @@ class ConnectionBytestream:
                 file_props['session-sid'])
             if not session:
                 return
+            content = None
+            for c in session.contents.values():
+                if c.transport.sid == file_props['sid']:
+                    content = c
+                    break
+            if not content:
+                return
             gajim.socks5queue.add_file_props(self.name, file_props)
 
             if not session.accepted:
-                if session.get_content('file').use_security:
-                    id_ = jingle_xtls.send_cert_request(self, file_props['sender'])
-                    jingle_xtls.key_exchange_pend(id_, session)
+                if session.get_content('file', content.name).use_security:
+                    id_ = jingle_xtls.send_cert_request(self,
+                        file_props['sender'])
+                    jingle_xtls.key_exchange_pend(id_, content)
                     return
                 session.approve_session()
 
-            session.approve_content('file')
+            session.approve_content('file', content.name)
             return
 
         iq = xmpp.Iq(to=unicode(file_props['sender']), typ='result')

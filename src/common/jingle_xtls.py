@@ -25,15 +25,15 @@ log = logging.getLogger('gajim.c.jingle_xtls')
 
 PYOPENSSL_PRESENT = False
 
-pending_sessions = {} # key-exchange id -> session, accept that session once key-exchange completes
+pending_contents = {} # key-exchange id -> session, accept that session once key-exchange completes
 
-def key_exchange_pend(id, session):
-    pending_sessions[id] = session
+def key_exchange_pend(id_, content):
+    pending_contents[id_] = content
 
-def approve_pending_session(id):
-    session = pending_sessions[id]
-    session.approve_session()
-    session.approve_content('file')
+def approve_pending_content(id_):
+    content = pending_contents[id_]
+    content.session.approve_session()
+    content.session.approve_content('file', name=content.name)
 
 try:
     import OpenSSL
@@ -133,7 +133,7 @@ def handle_new_cert(con, obj, jid_from):
     certpath = os.path.join(os.path.expanduser(gajim.MY_PEER_CERTS_PATH), jid)
     certpath += '.cert'
 
-    id = obj.getAttr('id')
+    id_ = obj.getAttr('id')
 
     x509cert = obj.getTag('pubkeys').getTag('keyinfo').getTag('x509cert')
 
@@ -144,16 +144,16 @@ def handle_new_cert(con, obj, jid_from):
     f.write(cert)
     f.write('-----END CERTIFICATE-----\n')
 
-    approve_pending_session(id)
+    approve_pending_content(id_)
 
 def send_cert_request(con, to_jid):
     iq = common.xmpp.Iq('get', to=to_jid)
-    id = con.connection.getAnID()
-    iq.setAttr('id', id)
+    id_ = con.connection.getAnID()
+    iq.setAttr('id', id_)
     pubkey = iq.setTag('pubkeys')
     pubkey.setNamespace(common.xmpp.NS_PUBKEY_PUBKEY)
     con.connection.send(iq)
-    return unicode(id)
+    return unicode(id_)
 
 # the following code is partly due to pyopenssl examples
 
