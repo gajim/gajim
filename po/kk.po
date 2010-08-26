@@ -824,11 +824,11 @@ msgstr "<b>Хабарлама:</b> "
 
 #: ../data/gui/change_activity_dialog.ui.h:2
 msgid "Set Activity"
-msgstr "Айналасуыңызды орнату"
+msgstr "Айналысқан ісіңізді орнату"
 
 #: ../data/gui/change_activity_dialog.ui.h:3
 msgid "Set an activity"
-msgstr "Айналасқан ісіңізді көрсету"
+msgstr "Айналысқан ісіңізді көрсету"
 
 #: ../data/gui/change_mood_dialog.ui.h:1
 msgid "<b>Message:</b>"
