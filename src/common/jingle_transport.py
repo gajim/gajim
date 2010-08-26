@@ -224,6 +224,13 @@ class JingleTransportSocks5(JingleTransport):
                 proxy_cand.append(c)
         self.candidates += proxy_cand
 
+    def get_content(self):
+        sesn = self.connection.get_jingle_session(self.ourjid,
+            self.file_props['session-sid'])
+        for content in sesn.contents.values():
+            if content.transport == self:
+                return content
+
     def _on_proxy_auth_ok(self, proxy):
         log.info('proxy auth ok for ' + str(proxy))
         # send activate request to proxy, send activated confirmation to peer
@@ -242,15 +249,15 @@ class JingleTransportSocks5(JingleTransport):
 
         content = xmpp.Node('content')
         content.setAttr('creator', 'initiator')
-        content.setAttr('name', 'file')
+        c = self.get_content()
+        content.setAttr('name', c.name)
         transport = xmpp.Node('transport')
         transport.setNamespace(xmpp.NS_JINGLE_BYTESTREAM)
         activated = xmpp.Node('activated')
         cid = None
         for host in self.candidates:
-            if host['host'] == proxy['host'] and \
-               host['jid'] == proxy['jid'] and \
-               host['port'] == proxy['port']:
+            if host['host'] == proxy['host'] and host['jid'] == proxy['jid'] \
+            and host['port'] == proxy['port']:
                 cid = host['candidate_id']
                 break
         if cid is None:

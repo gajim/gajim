@@ -29,7 +29,7 @@ pending_sessions = {} # key-exchange id -> session, accept that session once key
 
 def key_exchange_pend(id, session):
     pending_sessions[id] = session
-    
+
 def approve_pending_session(id):
     session = pending_sessions[id]
     session.approve_session()
@@ -45,9 +45,11 @@ if PYOPENSSL_PRESENT:
     from OpenSSL import SSL
     from OpenSSL.SSL import Context
     from OpenSSL import crypto
+    TYPE_RSA = crypto.TYPE_RSA
+    TYPE_DSA = crypto.TYPE_DSA
 
 SELF_SIGNED_CERTIFICATE = 'localcert'
-    
+
 def default_callback(connection, certificate, error_num, depth, return_code):
     log.info("certificate: %s" % certificate)
     return return_code
@@ -95,7 +97,7 @@ def get_context(fingerprint, verify_cb=None):
         ctx.set_verify(SSL.VERIFY_NONE|SSL.VERIFY_FAIL_IF_NO_PEER_CERT, verify_cb or default_callback)
     elif fingerprint == 'client':
         ctx.set_verify(SSL.VERIFY_PEER, verify_cb or default_callback)
-        
+
     cert_name = os.path.join(gajim.MY_CERT_DIR, SELF_SIGNED_CERTIFICATE)
     ctx.use_privatekey_file (cert_name + '.pkey')
     ctx.use_certificate_file(cert_name + '.cert')
@@ -114,16 +116,16 @@ def send_cert(con, jid_from, sid):
             certificate += line
     iq = common.xmpp.Iq('result', to=jid_from);
     iq.setAttr('id', sid)
-    
+
     pubkey = iq.setTag('pubkeys')
     pubkey.setNamespace(common.xmpp.NS_PUBKEY_PUBKEY)
-    
+
     keyinfo = pubkey.setTag('keyinfo')
     name = keyinfo.setTag('name')
     name.setData('CertificateHash')
     cert = keyinfo.setTag('x509cert')
     cert.setData(certificate)
-    
+
     con.send(iq)
 
 def handle_new_cert(con, obj, jid_from):
@@ -132,18 +134,18 @@ def handle_new_cert(con, obj, jid_from):
     certpath += '.cert'
 
     id = obj.getAttr('id')
-    
+
     x509cert = obj.getTag('pubkeys').getTag('keyinfo').getTag('x509cert')
-    
+
     cert = x509cert.getData()
-    
-    f = open(certpath, 'w')    
+
+    f = open(certpath, 'w')
     f.write('-----BEGIN CERTIFICATE-----\n')
     f.write(cert)
     f.write('-----END CERTIFICATE-----\n')
-    
+
     approve_pending_session(id)
-    
+
 def send_cert_request(con, to_jid):
     iq = common.xmpp.Iq('get', to=to_jid)
     id = con.connection.getAnID()
@@ -154,9 +156,6 @@ def send_cert_request(con, to_jid):
     return unicode(id)
 
 # the following code is partly due to pyopenssl examples
-
-TYPE_RSA = crypto.TYPE_RSA
-TYPE_DSA = crypto.TYPE_DSA
 
 def createKeyPair(type, bits):
     """

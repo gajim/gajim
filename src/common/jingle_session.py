@@ -85,14 +85,14 @@ class JingleSession(object):
         if not sid:
             sid = con.connection.getAnID()
         self.sid = sid # sessionid
-        
+
         # iq stanza id, used to determine which sessions to summon callback
         # later on when iq-result stanza arrives
         if iq_id is not None:
             self.iq_ids = [iq_id]
         else:
             self.iq_ids = []
-            
+
 
         self.accepted = True # is this session accepted by user
 
@@ -127,7 +127,7 @@ class JingleSession(object):
     def collect_iq_id(self, iq_id):
         if iq_id is not None:
             self.iq_ids.append(iq_id)
-        
+
     def approve_session(self):
         """
         Called when user accepts session in UI (when we aren't the initiator)
@@ -340,7 +340,7 @@ class JingleSession(object):
                 break
             elif child.getNamespace() == xmpp.NS_STANZAS:
                 error_name = child.getName()
-        self.__dispatch_error(error_name, text, error.getAttribute('type'))
+        self.__dispatch_error(error_name, text, error.getAttr('type'))
         # FIXME: Not sure when we would want to do that...
 
     def __on_transport_replace(self, stanza, jingle, error, action):
@@ -482,13 +482,13 @@ class JingleSession(object):
         #    for cn in self.contents.values():
         #        cn.on_stanza(stanza, None, error, action)
         #    return
-        
+
         # special case: iq-result stanza does not come with a jingle element
         if action == 'iq-result':
             for cn in self.contents.values():
                 cn.on_stanza(stanza, None, error, action)
             return
-        
+
         for content in jingle.iterTags('content'):
             name = content['name']
             creator = content['creator']
@@ -673,7 +673,8 @@ class JingleSession(object):
         stanza, jingle = self.__make_jingle('content-add')
         self.__append_content(jingle, content)
         self.__broadcast(stanza, jingle, None, 'content-add-sent')
-        self.connection.connection.send(stanza)
+        id_ = self.connection.connection.send(stanza)
+        self.collect_iq_id(id_)
 
     def __content_accept(self, content):
         # TODO: test
@@ -681,7 +682,8 @@ class JingleSession(object):
         stanza, jingle = self.__make_jingle('content-accept')
         self.__append_content(jingle, content)
         self.__broadcast(stanza, jingle, None, 'content-accept-sent')
-        self.connection.connection.send(stanza)
+        id_ = self.connection.connection.send(stanza)
+        self.collect_iq_id(id_)
 
     def __content_reject(self, content):
         assert self.state != JingleStates.ended

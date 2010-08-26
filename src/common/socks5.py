@@ -914,7 +914,7 @@ class Socks5Listener(IdleObject):
             # try the different possibilities (ipv6, ipv4, etc.)
             try:
                 self._serv = socket.socket(*ai[:3])
-                if not self.fingerprint is None:
+                if self.fingerprint is not None:
                     self._serv = OpenSSL.SSL.Connection(
                         jingle_xtls.get_context('server'), self._serv)
             except socket.error, e:

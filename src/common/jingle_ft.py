@@ -44,6 +44,7 @@ class JingleFileTransfer(JingleContent):
 
         # events we might be interested in
         self.callbacks['session-initiate'] += [self.__on_session_initiate]
+        self.callbacks['content-add'] += [self.__on_session_initiate]
         self.callbacks['session-accept'] += [self.__on_session_accept]
         self.callbacks['session-terminate'] += [self.__on_session_terminate]
         self.callbacks['transport-accept'] += [self.__on_transport_accept]
@@ -249,7 +250,7 @@ class JingleFileTransfer(JingleContent):
 
         content = xmpp.Node('content')
         content.setAttr('creator', 'initiator')
-        content.setAttr('name', 'file')
+        content.setAttr('name', self.name)
 
         transport = xmpp.Node('transport')
         transport.setNamespace(xmpp.NS_JINGLE_BYTESTREAM)

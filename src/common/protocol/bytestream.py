@@ -148,7 +148,8 @@ class ConnectionBytestream:
                     jingle_xtls.key_exchange_pend(id_, session)
                     return
                 session.approve_session()
-                session.approve_content('file')
+
+            session.approve_content('file')
             return
 
         iq = xmpp.Iq(to=unicode(file_props['sender']), typ='result')
