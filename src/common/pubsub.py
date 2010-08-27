@@ -24,7 +24,6 @@
 import xmpp
 import gajim
 import connection_handlers
-import nec
 import ged
 from connection_handlers_events import PubsubReceivedEvent
 from connection_handlers_events import PubsubBookmarksReceivedEvent
@@ -33,7 +32,7 @@ log = logging.getLogger('gajim.c.pubsub')
 
 class ConnectionPubSub:
     def __init__(self):
-        self.__callbacks={}
+        self.__callbacks = {}
         gajim.nec.register_incoming_event(PubsubBookmarksReceivedEvent)
         gajim.ged.register_event_handler('pubsub-bookmarks-received',
             ged.CORE, self._nec_pubsub_bookmarks_received)
@@ -47,7 +46,7 @@ class ConnectionPubSub:
 
         id_ = self.connection.send(query)
 
-        self.__callbacks[id_]=(cb, args, kwargs)
+        self.__callbacks[id_] = (cb, args, kwargs)
 
     def send_pb_subscribe(self, jid, node, cb, *args, **kwargs):
         if not self.connection or self.connected < 2:
@@ -59,7 +58,7 @@ class ConnectionPubSub:
 
         id_ = self.connection.send(query)
 
-        self.__callbacks[id_]=(cb, args, kwargs)
+        self.__callbacks[id_] = (cb, args, kwargs)
 
     def send_pb_unsubscribe(self, jid, node, cb, *args, **kwargs):
         if not self.connection or self.connected < 2:
@@ -71,7 +70,7 @@ class ConnectionPubSub:
 
         id_ = self.connection.send(query)
 
-        self.__callbacks[id_]=(cb, args, kwargs)
+        self.__callbacks[id_] = (cb, args, kwargs)
 
     def send_pb_publish(self, jid, node, item, id_, options=None):
         """
@@ -101,7 +100,7 @@ class ConnectionPubSub:
         id_ = self.connection.send(query)
 
         if cb:
-            self.__callbacks[id_]=(cb, args, kwargs)
+            self.__callbacks[id_] = (cb, args, kwargs)
 
     def send_pb_retract(self, jid, node, id_):
         """
@@ -148,7 +147,7 @@ class ConnectionPubSub:
         self.connection.SendAndCallForResponse(query, response, {'jid': jid,
             'node': node})
 
-    def send_pb_create(self, jid, node, configure = False, configure_form = None):
+    def send_pb_create(self, jid, node, configure=False, configure_form=None):
         """
         Create a new node
         """
