@@ -58,8 +58,8 @@ class NetworkEventsController(object):
 
     def push_incoming_event(self, event_object):
         if event_object.generate():
-            if self._generate_events_based_on_incoming_event(event_object):
-                gajim.ged.raise_event(event_object.name, event_object)
+            gajim.ged.raise_event(event_object.name, event_object)
+            self._generate_events_based_on_incoming_event(event_object)
 
     def push_outgoing_event(self, event_object):
         pass
@@ -78,9 +78,8 @@ class NetworkEventsController(object):
             for new_event_class in self.incoming_events_generators[base_event_name]:
                 new_event_object = new_event_class(None, base_event=event_object)
                 if new_event_object.generate():
-                    if self._generate_events_based_on_incoming_event(new_event_object):
-                        gajim.ged.raise_event(new_event_object.name, new_event_object)
-        return True
+                    gajim.ged.raise_event(new_event_object.name, new_event_object)
+                    self._generate_events_based_on_incoming_event(new_event_object)
 
 class NetworkEvent(object):
     name = ''
@@ -96,7 +95,7 @@ class NetworkEvent(object):
     def init(self):
         pass
 
-    
+
     def generate(self):
         '''
         Generates new event (sets it's attributes) based on event object.
@@ -122,7 +121,7 @@ class NetworkEvent(object):
     def __repr__(self):
         return '<NetworkEvent object> Attributes: %s'%(pformat(self.__dict__))
 
-    
+
 class NetworkIncomingEvent(NetworkEvent):
     base_network_events = []
     '''
