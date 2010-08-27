@@ -36,23 +36,23 @@ for o, a in opts:
 
 # new test modules need to be added manually
 modules = ( 'unit.test_xmpp_dispatcher_nb',
-                                'unit.test_xmpp_transports_nb',
-                                'unit.test_protocol_caps',
-                                'unit.test_caps_cache',
-                                'unit.test_contacts',
-                                'unit.test_sessions',
-                                'unit.test_account',
-                                'unit.test_gui_interface',
-                         )
+            'unit.test_xmpp_transports_nb',
+            'unit.test_protocol_caps',
+            'unit.test_caps_cache',
+            'unit.test_contacts',
+            'unit.test_sessions',
+            'unit.test_account',
+            'unit.test_gui_interface',
+          )
 #modules = ()
 
 if use_x:
     modules += ('integration.test_gui_event_integration',
-                                    'integration.test_roster',
-                                    'integration.test_resolver',
-                                    'integration.test_xmpp_client_nb',
-                                    'integration.test_xmpp_transports_nb'
-    )
+                'integration.test_roster',
+                'integration.test_resolver',
+                'integration.test_xmpp_client_nb',
+                'integration.test_xmpp_transports_nb'
+               )
 
 nb_errors = 0
 nb_failures = 0

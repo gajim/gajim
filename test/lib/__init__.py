@@ -19,6 +19,8 @@ sys.path.insert(1, gajim_root + '/test/lib')
 
 # a temporary version of ~/.gajim for testing
 configdir = gajim_root + '/test/tmp'
+# plugins config dir
+pluginsconfigdir = configdir + '/pluginsconfig'
 
 # define _ for i18n
 import __builtin__
@@ -31,6 +33,7 @@ def setup_env():
         shutil.rmtree(configdir)
 
     os.mkdir(configdir)
+    os.mkdir(pluginsconfigdir)
 
     import common.configpaths
     common.configpaths.gajimpaths.init(configdir)

@@ -4,6 +4,7 @@ Module with dummy classes for Gajim specific unit testing
 
 from mock import Mock
 from common import gajim
+from common import ged
 
 from common.connection_handlers import ConnectionHandlersBase
 
@@ -96,6 +97,7 @@ class MockInterface(Mock):
         gajim.interface = self
         self.msg_win_mgr = Mock()
         self.roster = Mock()
+        gajim.ged = ged.GlobalEventsDispatcher()
 
         self.remote_ctrl = None
         self.instances = {}

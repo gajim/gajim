@@ -73,8 +73,9 @@ class TestRosterWindow(unittest.TestCase):
                         msg='Contact iter invalid')
 
                 c_model = self.roster.model[titerC]
-                self.assertEquals(contact.get_shown_name(), c_model[self.C_NAME],
-                        msg='Contact name missmatch')
+                # name can be stricked if contact or group is blocked
+#                self.assertEquals(contact.get_shown_name(), c_model[self.C_NAME],
+#                        msg='Contact name missmatch')
                 self.assertEquals(contact.jid, c_model[self.C_JID],
                         msg='Jid missmatch')
 
