@@ -1747,6 +1747,7 @@ class RosterWindow:
         # Most of the logic SHOULD NOT be done at GUI level
         if account not in gajim.contacts.get_accounts():
             gajim.contacts.add_account(account)
+        if not account in self._iters:
             self._iters[account] = {'account': None, 'groups': {},
                 'contacts': {}}
         if account not in gajim.groups:
