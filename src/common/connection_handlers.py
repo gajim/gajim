@@ -1091,6 +1091,15 @@ ConnectionJingle, ConnectionIBBytestream):
             ged.CORE, self._nec_time_revised_request_received)
         gajim.ged.register_event_handler('roster-set-received',
             ged.CORE, self._nec_roster_set_received)
+        gajim.nec.register_incoming_event(PrivateStorageBookmarksReceivedEvent)
+        gajim.ged.register_event_handler('private-storage-bookmarks-received',
+            ged.CORE, self._nec_private_storate_bookmarks_received)
+        gajim.nec.register_incoming_event(BookmarksReceivedEvent)
+        gajim.nec.register_incoming_event(
+            PrivateStorageRosternotesReceivedEvent)
+        gajim.ged.register_event_handler('private-storage-rosternotes-received',
+            ged.CORE, self._nec_private_storate_rosternotes_received)
+        gajim.nec.register_incoming_event(RosternotesReceivedEvent)
 
     def build_http_auth_answer(self, iq_obj, answer):
         if not self.connection or self.connected < 2:
@@ -1137,34 +1146,28 @@ ConnectionJingle, ConnectionIBBytestream):
         errcode = iq_obj.getErrorCode()
         self.dispatch('ERROR_ANSWER', (id_, jid_from, errmsg, errcode))
 
+    def _nec_private_storate_bookmarks_received(self, obj):
+        resend_to_pubsub = False
+        bm_jids = [b['jid'] for b in self.bookmarks]
+        for bm in obj.bookmarks:
+            if bm['jid'] not in bm_jids:
+                self.bookmarks.append(bm)
+                # We got a bookmark that was not in pubsub
+                resend_to_pubsub = True
+        if self.pubsub_supported and resend_to_pubsub:
+            self.store_bookmarks('pubsub')
+
+    def _nec_private_storate_rosternotes_received(self, obj):
+        for jid in obj.annotations:
+            self.annotations[jid] = obj.annotations[jid]
+
     def _PrivateCB(self, con, iq_obj):
         """
         Private Data (XEP 048 and 049)
         """
         log.debug('PrivateCB')
-        query = iq_obj.getTag('query')
-        storage = query.getTag('storage')
-        if storage:
-            ns = storage.getNamespace()
-            if ns == 'storage:bookmarks':
-                self._parse_bookmarks(storage, 'xml')
-            elif ns == 'gajim:prefs':
-                # Preferences data
-                # http://www.xmpp.org/extensions/xep-0049.html
-                #TODO: implement this
-                pass
-            elif ns == 'storage:rosternotes':
-                # Annotations
-                # http://www.xmpp.org/extensions/xep-0145.html
-                notes = storage.getTags('note')
-                for note in notes:
-                    try:
-                        jid = helpers.parse_jid(note.getAttr('jid'))
-                    except common.helpers.InvalidFormat:
-                        log.warn('Invalid JID: %s, ignoring it' % note.getAttr('jid'))
-                        continue
-                    annotation = note.getData()
-                    self.annotations[jid] = annotation
+        gajim.nec.push_incoming_event(PrivateStorageReceivedEvent(None,
+            conn=self, iq_obj=iq_obj))
 
     def _SecLabelCB(self, con, iq_obj):
         """
@@ -1264,7 +1267,7 @@ ConnectionJingle, ConnectionIBBytestream):
         gajim.nec.push_incoming_event(VersionRequestEvent(None,
             conn=self, iq_obj=iq_obj))
         raise common.xmpp.NodeProcessed
-    
+
     def _nec_version_request_received(self, obj):
         if obj.conn.name != self.name:
             return
@@ -2434,7 +2437,7 @@ class HttpAuthReceivedEvent(nec.NetworkIncomingEvent):
 class LastResultReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
     name = 'last-result-received'
     base_network_events = []
-    
+
     def generate(self):
         self.get_id()
         self.get_jid_resource()
@@ -2460,7 +2463,7 @@ class LastResultReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
 class VersionResultReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
     name = 'version-result-received'
     base_network_events = []
-    
+
     def generate(self):
         self.get_id()
         self.get_jid_resource()
@@ -2594,7 +2597,7 @@ class GMailQueryReceivedEvent(nec.NetworkIncomingEvent):
 class RosterItemExchangeEvent(nec.NetworkIncomingEvent, HelperEvent):
     name = 'roster-item-exchange-received'
     base_network_events = []
-    
+
     def generate(self):
         self.get_id()
         self.get_jid_resource()
@@ -2639,11 +2642,11 @@ class RosterItemExchangeEvent(nec.NetworkIncomingEvent, HelperEvent):
 class VersionRequestEvent(nec.NetworkIncomingEvent):
     name = 'version-request-received'
     base_network_events = []
-    
+
 class LastRequestEvent(nec.NetworkIncomingEvent):
     name = 'last-request-received'
     base_network_events = []
-    
+
 class TimeRequestEvent(nec.NetworkIncomingEvent):
     name = 'time-request-received'
     base_network_events = []
@@ -2724,4 +2727,98 @@ class MucAdminReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                 reason = item.getTagData('reason')
                 if reason:
                     self.users_dict[jid]['reason'] = reason
+        return True
+
+class PrivateStorageReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'private-storage-received'
+    base_network_events = []
+
+    def generate(self):
+        query = self.iq_obj.getTag('query')
+        self.storage_node = query.getTag('storage')
+        if self.storage_node:
+            self.namespace = self.storage_node.getNamespace()
+            return True
+
+class BookmarksHelper:
+    def parse_bookmarks(self):
+        self.bookmarks = []
+        confs = self.base_event.storage_node.getTags('conference')
+        for conf in confs:
+            autojoin_val = conf.getAttr('autojoin')
+            if autojoin_val is None: # not there (it's optional)
+                autojoin_val = False
+            minimize_val = conf.getAttr('minimize')
+            if minimize_val is None: # not there (it's optional)
+                minimize_val = False
+            print_status = conf.getTagData('print_status')
+            if not print_status:
+                print_status = conf.getTagData('show_status')
+            try:
+                jid = helpers.parse_jid(conf.getAttr('jid'))
+            except common.helpers.InvalidFormat:
+                log.warn('Invalid JID: %s, ignoring it' % conf.getAttr('jid'))
+                continue
+            bm = {'name': conf.getAttr('name'),
+                'jid': jid,
+                'autojoin': autojoin_val,
+                'minimize': minimize_val,
+                'password': conf.getTagData('password'),
+                'nick': conf.getTagData('nick'),
+                'print_status': print_status}
+
+
+            bm_jids = [b['jid'] for b in self.bookmarks]
+            if bm['jid'] not in bm_jids:
+                self.bookmarks.append(bm)
+
+class PrivateStorageBookmarksReceivedEvent(nec.NetworkIncomingEvent,
+BookmarksHelper):
+    name = 'private-storage-bookmarks-received'
+    base_network_events = ['private-storage-received']
+
+    def generate(self):
+        self.conn = self.base_event.conn
+        if self.base_event.namespace != 'storage:bookmarks':
+            return
+        self.parse_bookmarks()
+        return True
+
+class BookmarksReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'bookmarks-received'
+    base_network_events = ['private-storage-bookmarks-received']
+
+    def generate(self):
+        self.conn = self.base_event.conn
+        self.bookmarks = self.base_event.bookmarks
+        return True
+
+class PrivateStorageRosternotesReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'private-storage-rosternotes-received'
+    base_network_events = ['private-storage-received']
+
+    def generate(self):
+        self.conn = self.base_event.conn
+        if self.base_event.namespace != 'storage:rosternotes':
+            return
+        notes = self.base_event.storage_node.getTags('note')
+        self.annotations = {}
+        for note in notes:
+            try:
+                jid = helpers.parse_jid(note.getAttr('jid'))
+            except common.helpers.InvalidFormat:
+                log.warn('Invalid JID: %s, ignoring it' % note.getAttr('jid'))
+                continue
+            annotation = note.getData()
+            self.annotations[jid] = annotation
+        if self.annotations:
+            return True
+
+class RosternotesReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'rosternotes-received'
+    base_network_events = ['private-storage-rosternotes-received']
+
+    def generate(self):
+        self.conn = self.base_event.conn
+        self.annotations = self.base_event.annotations
         return True

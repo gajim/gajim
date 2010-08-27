@@ -1008,12 +1008,10 @@ class Interface:
                         f.value = True
                     elif f.var == 'public_list':
                         f.value = False
-                gajim.connections[account].send_gc_config(obj.jid,
-                    obj.dataform.get_purged())
+                obj.conn.send_gc_config(obj.jid, obj.dataform.get_purged())
             else:
                 # use default configuration
-                gajim.connections[account].send_gc_config(obj.jid,
-                    obj.form_node)
+                obj.conn.send_gc_config(obj.jid, obj.form_node)
             # invite contacts
             # check if it is necessary to add <continue />
             continue_tag = False
@@ -1021,7 +1019,7 @@ class Interface:
                 continue_tag = True
             if 'invities' in gajim.automatic_rooms[account][obj.jid]:
                 for jid in gajim.automatic_rooms[account][obj.jid]['invities']:
-                    gajim.connections[account].send_invite(obj.jid, jid,
+                    obj.conn.send_invite(obj.jid, jid,
                         continue_tag=continue_tag)
             del gajim.automatic_rooms[account][obj.jid]
         elif obj.jid not in self.instances[account]['gc_config']:
@@ -1254,7 +1252,7 @@ class Interface:
                 self.roster.draw_group(group, account)
             self.roster.draw_contact(obj.jid, account)
 
-    def handle_event_bookmarks(self, account, bms):
+    def handle_event_bookmarks(self, obj):
         # ('BOOKMARKS', account, [{name,jid,autojoin,password,nick}, {}])
         # We received a bookmark item from the server (JEP48)
         # Auto join GC windows if neccessary
@@ -1262,10 +1260,10 @@ class Interface:
         self.roster.set_actions_menu_needs_rebuild()
         invisible_show = gajim.SHOW_LIST.index('invisible')
         # do not autojoin if we are invisible
-        if gajim.connections[account].connected == invisible_show:
+        if obj.conn.connected == invisible_show:
             return
 
-        self.auto_join_bookmarks(account)
+        self.auto_join_bookmarks(obj.conn.name)
 
     def handle_event_file_send_error(self, account, array):
         jid = array[0]
@@ -2110,7 +2108,6 @@ class Interface:
             'GC_PASSWORD_REQUIRED': [self.handle_event_gc_password_required],
             'GC_ERROR': [self.handle_event_gc_error],
             'BAD_PASSPHRASE': [self.handle_event_bad_passphrase],
-            'BOOKMARKS': [self.handle_event_bookmarks],
             'CON_TYPE': [self.handle_event_con_type],
             'CONNECTION_LOST': [self.handle_event_connection_lost],
             'FILE_REQUEST': [self.handle_event_file_request],
@@ -2160,6 +2157,7 @@ class Interface:
             'CAPS_RECEIVED': [self.handle_event_caps_received],
             'ARCHIVING_CHANGED': [self.handle_event_archiving_changed],
             'ARCHIVING_ERROR': [self.handle_event_archiving_error],
+            'bookmarks-received': [self.handle_event_bookmarks],
             'gmail-notify': [self.handle_event_gmail_notify],
             'http-auth-received': [self.handle_event_http_auth],
             'last-result-received': [self.handle_event_last_status_time],
