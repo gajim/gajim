@@ -26,6 +26,8 @@ import gajim
 import connection_handlers
 import nec
 import ged
+from connection_handlers_events import PubsubReceivedEvent
+from connection_handlers_events import PubsubBookmarksReceivedEvent
 import logging
 log = logging.getLogger('gajim.c.pubsub')
 
@@ -212,35 +214,3 @@ class ConnectionPubSub:
         query.setID(id_)
         self.awaiting_answers[id_] = (connection_handlers.PEP_CONFIG,)
         self.connection.send(query)
-
-class PubsubReceivedEvent(nec.NetworkIncomingEvent):
-    name = 'pubsub-received'
-    base_network_events = []
-
-    def generate(self):
-        self.pubsub_node = self.iq_obj.getTag('pubsub')
-        if not self.pubsub_node:
-            return
-        self.items_node = self.pubsub_node.getTag('items')
-        if not self.items_node:
-            return
-        self.item_node = self.items_node.getTag('item')
-        if not self.item_node:
-            return
-        return True
-
-class PubsubBookmarksReceivedEvent(nec.NetworkIncomingEvent,
-connection_handlers.BookmarksHelper):
-    name = 'pubsub-bookmarks-received'
-    base_network_events = ['pubsub-received']
-
-    def generate(self):
-        self.conn = self.base_event.conn
-        storage = self.base_event.item_node.getTag('storage')
-        if not storage:
-            return
-        ns = storage.getNamespace()
-        if ns != 'storage:bookmarks':
-            return
-        self.parse_bookmarks()
-        return True
