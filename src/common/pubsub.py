@@ -24,12 +24,17 @@
 import xmpp
 import gajim
 import connection_handlers
+import nec
+import ged
 import logging
 log = logging.getLogger('gajim.c.pubsub')
 
 class ConnectionPubSub:
     def __init__(self):
         self.__callbacks={}
+        gajim.nec.register_incoming_event(PubsubBookmarksReceivedEvent)
+        gajim.ged.register_event_handler('pubsub-bookmarks-received',
+            ged.CORE, self._nec_pubsub_bookmarks_received)
 
     def send_pb_subscription_query(self, jid, cb, *args, **kwargs):
         if not self.connection or self.connected < 2:
@@ -174,21 +179,16 @@ class ConnectionPubSub:
             cb(conn, stanza, *args, **kwargs)
         except Exception:
             pass
+        gajim.nec.push_incoming_event(PubsubReceivedEvent(None,
+            conn=self, iq_obj=stanza))
 
-        pubsub = stanza.getTag('pubsub')
-        if not pubsub:
-            return
-        items = pubsub.getTag('items')
-        if not items:
-            return
-        item = items.getTag('item')
-        if not item:
-            return
-        storage = item.getTag('storage')
-        if storage:
-            ns = storage.getNamespace()
-            if ns == 'storage:bookmarks':
-                self._parse_bookmarks(storage, 'pubsub')
+    def _nec_pubsub_bookmarks_received(self, obj):
+        bm_jids = [b['jid'] for b in self.bookmarks]
+        for bm in obj.bookmarks:
+            if bm['jid'] not in bm_jids:
+                self.bookmarks.append(bm)
+        # We got bookmarks from pubsub, now get those from xml to merge them
+        self.get_bookmarks(storage_type='xml')
 
     def _PubSubErrorCB(self, conn, stanza):
         log.debug('_PubsubErrorCB')
@@ -212,3 +212,35 @@ class ConnectionPubSub:
         query.setID(id_)
         self.awaiting_answers[id_] = (connection_handlers.PEP_CONFIG,)
         self.connection.send(query)
+
+class PubsubReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'pubsub-received'
+    base_network_events = []
+
+    def generate(self):
+        self.pubsub_node = self.iq_obj.getTag('pubsub')
+        if not self.pubsub_node:
+            return
+        self.items_node = self.pubsub_node.getTag('items')
+        if not self.items_node:
+            return
+        self.item_node = self.items_node.getTag('item')
+        if not self.item_node:
+            return
+        return True
+
+class PubsubBookmarksReceivedEvent(nec.NetworkIncomingEvent,
+connection_handlers.BookmarksHelper):
+    name = 'pubsub-bookmarks-received'
+    base_network_events = ['pubsub-received']
+
+    def generate(self):
+        self.conn = self.base_event.conn
+        storage = self.base_event.item_node.getTag('storage')
+        if not storage:
+            return
+        ns = storage.getNamespace()
+        if ns != 'storage:bookmarks':
+            return
+        self.parse_bookmarks()
+        return True

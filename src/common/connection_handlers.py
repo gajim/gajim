@@ -43,6 +43,40 @@ import datetime
 import common.xmpp
 import common.caps_cache as capscache
 
+# This cass is needed in pubsub.py, so we need to create it before importing
+# pubsub
+class BookmarksHelper:
+    def parse_bookmarks(self):
+        self.bookmarks = []
+        confs = self.base_event.storage_node.getTags('conference')
+        for conf in confs:
+            autojoin_val = conf.getAttr('autojoin')
+            if autojoin_val is None: # not there (it's optional)
+                autojoin_val = False
+            minimize_val = conf.getAttr('minimize')
+            if minimize_val is None: # not there (it's optional)
+                minimize_val = False
+            print_status = conf.getTagData('print_status')
+            if not print_status:
+                print_status = conf.getTagData('show_status')
+            try:
+                jid = helpers.parse_jid(conf.getAttr('jid'))
+            except common.helpers.InvalidFormat:
+                log.warn('Invalid JID: %s, ignoring it' % conf.getAttr('jid'))
+                continue
+            bm = {'name': conf.getAttr('name'),
+                'jid': jid,
+                'autojoin': autojoin_val,
+                'minimize': minimize_val,
+                'password': conf.getTagData('password'),
+                'nick': conf.getTagData('nick'),
+                'print_status': print_status}
+
+
+            bm_jids = [b['jid'] for b in self.bookmarks]
+            if bm['jid'] not in bm_jids:
+                self.bookmarks.append(bm)
+
 from common import helpers
 from common import gajim
 from common import exceptions
@@ -1195,49 +1229,6 @@ ConnectionJingle, ConnectionIBBytestream):
         if to not in self.seclabel_catalogues:
             self.seclabel_catalogues[to] = [[], None, None]
         self.seclabel_catalogues[to][0].append(callback)
-
-    def _parse_bookmarks(self, storage, storage_type):
-        """
-        storage_type can be 'pubsub' or 'xml' to tell from where we got bookmarks
-        """
-        # Bookmarked URLs and Conferences
-        # http://www.xmpp.org/extensions/xep-0048.html
-        resend_to_pubsub = False
-        confs = storage.getTags('conference')
-        for conf in confs:
-            autojoin_val = conf.getAttr('autojoin')
-            if autojoin_val is None: # not there (it's optional)
-                autojoin_val = False
-            minimize_val = conf.getAttr('minimize')
-            if minimize_val is None: # not there (it's optional)
-                minimize_val = False
-            print_status = conf.getTagData('print_status')
-            if not print_status:
-                print_status = conf.getTagData('show_status')
-            try:
-                bm = {'name': conf.getAttr('name'),
-                        'jid': helpers.parse_jid(conf.getAttr('jid')),
-                        'autojoin': autojoin_val,
-                        'minimize': minimize_val,
-                        'password': conf.getTagData('password'),
-                        'nick': conf.getTagData('nick'),
-                        'print_status': print_status}
-            except common.helpers.InvalidFormat:
-                log.warn('Invalid JID: %s, ignoring it' % conf.getAttr('jid'))
-                continue
-
-            bm_jids = [b['jid'] for b in self.bookmarks]
-            if bm['jid'] not in bm_jids:
-                self.bookmarks.append(bm)
-                if storage_type == 'xml':
-                    # We got a bookmark that was not in pubsub
-                    resend_to_pubsub = True
-        self.dispatch('BOOKMARKS', self.bookmarks)
-        if storage_type == 'pubsub':
-            # We gor bookmarks from pubsub, now get those from xml to merge them
-            self.get_bookmarks(storage_type='xml')
-        if self.pubsub_supported and resend_to_pubsub:
-            self.store_bookmarks('pubsub')
 
     def _rosterSetCB(self, con, iq_obj):
         log.debug('rosterSetCB')
@@ -2740,38 +2731,6 @@ class PrivateStorageReceivedEvent(nec.NetworkIncomingEvent):
             self.namespace = self.storage_node.getNamespace()
             return True
 
-class BookmarksHelper:
-    def parse_bookmarks(self):
-        self.bookmarks = []
-        confs = self.base_event.storage_node.getTags('conference')
-        for conf in confs:
-            autojoin_val = conf.getAttr('autojoin')
-            if autojoin_val is None: # not there (it's optional)
-                autojoin_val = False
-            minimize_val = conf.getAttr('minimize')
-            if minimize_val is None: # not there (it's optional)
-                minimize_val = False
-            print_status = conf.getTagData('print_status')
-            if not print_status:
-                print_status = conf.getTagData('show_status')
-            try:
-                jid = helpers.parse_jid(conf.getAttr('jid'))
-            except common.helpers.InvalidFormat:
-                log.warn('Invalid JID: %s, ignoring it' % conf.getAttr('jid'))
-                continue
-            bm = {'name': conf.getAttr('name'),
-                'jid': jid,
-                'autojoin': autojoin_val,
-                'minimize': minimize_val,
-                'password': conf.getTagData('password'),
-                'nick': conf.getTagData('nick'),
-                'print_status': print_status}
-
-
-            bm_jids = [b['jid'] for b in self.bookmarks]
-            if bm['jid'] not in bm_jids:
-                self.bookmarks.append(bm)
-
 class PrivateStorageBookmarksReceivedEvent(nec.NetworkIncomingEvent,
 BookmarksHelper):
     name = 'private-storage-bookmarks-received'
@@ -2786,7 +2745,8 @@ BookmarksHelper):
 
 class BookmarksReceivedEvent(nec.NetworkIncomingEvent):
     name = 'bookmarks-received'
-    base_network_events = ['private-storage-bookmarks-received']
+    base_network_events = ['private-storage-bookmarks-received',
+        'pubsub-bookmarks-received']
 
     def generate(self):
         self.conn = self.base_event.conn
