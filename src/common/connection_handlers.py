@@ -1147,6 +1147,8 @@ ConnectionJingle, ConnectionIBBytestream):
         self.dispatch('ERROR_ANSWER', (id_, jid_from, errmsg, errcode))
 
     def _nec_private_storate_bookmarks_received(self, obj):
+        if obj.conn.name != self.name:
+            return
         resend_to_pubsub = False
         bm_jids = [b['jid'] for b in self.bookmarks]
         for bm in obj.bookmarks:
@@ -1158,6 +1160,8 @@ ConnectionJingle, ConnectionIBBytestream):
             self.store_bookmarks('pubsub')
 
     def _nec_private_storate_rosternotes_received(self, obj):
+        if obj.conn.name != self.name:
+            return
         for jid in obj.annotations:
             self.annotations[jid] = obj.annotations[jid]
 
