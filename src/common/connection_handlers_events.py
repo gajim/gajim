@@ -275,6 +275,34 @@ class TimeRevisedRequestEvent(nec.NetworkIncomingEvent):
     name = 'time-revised-request-received'
     base_network_events = []
 
+class RosterReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'roster-received'
+    base_network_events = []
+
+    def generate(self):
+        self.version = self.xmpp_roster.version
+        self.received_from_server = self.xmpp_roster.received_from_server
+        self.roster = {}
+        raw_roster = self.xmpp_roster.getRaw()
+        our_jid = gajim.get_jid_from_account(self.name)
+
+        for jid in raw_roster:
+            try:
+                j = helpers.parse_jid(jid)
+            except Exception:
+                print >> sys.stderr, _('JID %s is not RFC compliant. It will not be added to your roster. Use roster management tools such as http://jru.jabberstudio.org/ to remove it') % jid
+            else:
+                infos = raw_roster[jid]
+                if jid != our_jid and (not infos['subscription'] or \
+                infos['subscription'] == 'none') and (not infos['ask'] or \
+                infos['ask'] == 'none') and not infos['name'] and \
+                not infos['groups']:
+                    # remove this useless item, it won't be shown in roster anyway
+                    self.conn.connection.getRoster().delItem(jid)
+                elif jid != our_jid: # don't add our jid
+                    self.roster[j] = raw_roster[jid]
+        return True
+
 class RosterSetReceivedEvent(nec.NetworkIncomingEvent):
     name = 'roster-set-received'
     base_network_events = []

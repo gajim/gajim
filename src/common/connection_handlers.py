@@ -1100,6 +1100,8 @@ ConnectionJingle, ConnectionIBBytestream):
         gajim.ged.register_event_handler('private-storage-rosternotes-received',
             ged.CORE, self._nec_private_storate_rosternotes_received)
         gajim.nec.register_incoming_event(RosternotesReceivedEvent)
+        gajim.ged.register_event_handler('roster-received', ged.CORE,
+            self._nec_roster_received)
 
     def build_http_auth_answer(self, iq_obj, answer):
         if not self.connection or self.connected < 2:
@@ -2120,19 +2122,21 @@ ConnectionJingle, ConnectionIBBytestream):
     def discover_ft_proxies(self):
         cfg_proxies = gajim.config.get_per('accounts', self.name,
                 'file_transfer_proxies')
-        our_jid = helpers.parse_jid(gajim.get_jid_from_account(self.name) + '/' +\
-                self.server_resource)
+        our_jid = helpers.parse_jid(gajim.get_jid_from_account(self.name) + \
+            '/' + self.server_resource)
         if cfg_proxies:
             proxies = [e.strip() for e in cfg_proxies.split(',')]
             for proxy in proxies:
                 gajim.proxy65_manager.resolve(proxy, self.connection, our_jid)
 
     def _on_roster_set(self, roster):
-        roster_version = roster.version
-        received_from_server = roster.received_from_server
-        raw_roster = roster.getRaw()
-        roster = {}
-        our_jid = helpers.parse_jid(gajim.get_jid_from_account(self.name))
+        gajim.nec.push_incoming_event(RosterReceivedEvent(None, conn=self,
+            xmpp_roster=roster))
+
+    def _nec_roster_received(self, obj):
+        if obj.conn.name != self.name:
+            return
+        our_jid = gajim.get_jid_from_account(self.name)
         if self.connected > 1 and self.continue_connect_info:
             msg = self.continue_connect_info[1]
             sign_msg = self.continue_connect_info[2]
@@ -2148,37 +2152,25 @@ ConnectionJingle, ConnectionIBBytestream):
             if send_first_presence:
                 self._send_first_presence(signed)
 
-        for jid in raw_roster:
-            try:
-                j = helpers.parse_jid(jid)
-            except Exception:
-                print >> sys.stderr, _('JID %s is not RFC compliant. It will not be added to your roster. Use roster management tools such as http://jru.jabberstudio.org/ to remove it') % jid
-            else:
-                infos = raw_roster[jid]
-                if jid != our_jid and (not infos['subscription'] or \
-                infos['subscription'] == 'none') and (not infos['ask'] or \
-                infos['ask'] == 'none') and not infos['name'] and \
-                not infos['groups']:
-                    # remove this useless item, it won't be shown in roster anyway
-                    self.connection.getRoster().delItem(jid)
-                elif jid != our_jid: # don't add our jid
-                    roster[j] = raw_roster[jid]
-                    if gajim.jid_is_transport(jid) and \
-                    not gajim.get_transport_name_from_jid(jid):
-                        # we can't determine which iconset to use
-                        self.discoverInfo(jid)
+        for jid in obj.roster:
+            if jid != our_jid and gajim.jid_is_transport(jid) and \
+            not gajim.get_transport_name_from_jid(jid):
+                # we can't determine which iconset to use
+                self.discoverInfo(jid)
 
-        gajim.logger.replace_roster(self.name, roster_version, roster)
-        if received_from_server:
+        gajim.logger.replace_roster(self.name, obj.version, obj.roster)
+        if obj.received_from_server:
             for contact in gajim.contacts.iter_contacts(self.name):
-                if not contact.is_groupchat() and contact.jid not in roster and \
-                contact.jid != gajim.get_jid_from_account(self.name):
-                    self.dispatch('ROSTER_INFO', (contact.jid, None, None, None,
-                            ()))
-            for jid in roster:
-                self.dispatch('ROSTER_INFO', (jid, roster[jid]['name'],
-                        roster[jid]['subscription'], roster[jid]['ask'],
-                        roster[jid]['groups']))
+                if not contact.is_groupchat() and contact.jid not in obj.roster\
+                and contact.jid != our_jid:
+                    gajim.nec.push_incoming_event(RosterInfoEvent(None,
+                        conn=self, jid=contact.jid, nickname=None, sub=None,
+                        ask=None, groups=()))
+            for jid, info in obj.roster.items():
+                gajim.nec.push_incoming_event(RosterInfoEvent(None,
+                    conn=self, jid=jid, nickname=info['name'],
+                    sub=info['subscription'], ask=info['ask'],
+                    groups=info['groups']))
 
     def _send_first_presence(self, signed = ''):
         show = self.continue_connect_info[0]
