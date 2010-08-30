@@ -1704,20 +1704,6 @@ class Interface:
             if ctrl:
                 ctrl.print_conversation(_('Error.'), 'status')
 
-    def handle_event_search_form(self, account, data):
-        # ('SEARCH_FORM', account, (jid, dataform, is_dataform))
-        if data[0] not in self.instances[account]['search']:
-            return
-        self.instances[account]['search'][data[0]].on_form_arrived(data[1],
-                data[2])
-
-    def handle_event_search_result(self, account, data):
-        # ('SEARCH_RESULT', account, (jid, dataform, is_dataform))
-        if data[0] not in self.instances[account]['search']:
-            return
-        self.instances[account]['search'][data[0]].on_result_arrived(data[1],
-                data[2])
-
     def handle_event_resource_conflict(self, account, data):
         # ('RESOURCE_CONFLICT', account, ())
         # First we go offline, but we don't overwrite status message
@@ -2132,8 +2118,6 @@ class Interface:
             'PING_SENT': [self.handle_event_ping_sent],
             'PING_REPLY': [self.handle_event_ping_reply],
             'PING_ERROR': [self.handle_event_ping_error],
-            'SEARCH_FORM': [self.handle_event_search_form],
-            'SEARCH_RESULT': [self.handle_event_search_result],
             'RESOURCE_CONFLICT': [self.handle_event_resource_conflict],
             'PEP_CONFIG': [self.handle_event_pep_config],
             'UNIQUE_ROOM_ID_UNSUPPORTED': \

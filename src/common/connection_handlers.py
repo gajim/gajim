@@ -2244,20 +2244,10 @@ ConnectionJingle, ConnectionIBBytestream):
         self.connection.send(iq)
 
 
-    def _search_fields_received(self, con, iq_obj):
-        jid = jid = helpers.get_jid_from_iq(iq_obj)
-        tag = iq_obj.getTag('query', namespace = common.xmpp.NS_SEARCH)
-        if not tag:
-            self.dispatch('SEARCH_FORM', (jid, None, False))
-            return
-        df = tag.getTag('x', namespace = common.xmpp.NS_DATA)
-        if df:
-            self.dispatch('SEARCH_FORM', (jid, df, True))
-            return
-        df = {}
-        for i in iq_obj.getQueryPayload():
-            df[i.getName()] = i.getData()
-        self.dispatch('SEARCH_FORM', (jid, df, False))
+    def _SearchCB(self, con, iq_obj):
+        log.debug('SearchCB')
+        gajim.nec.push_incoming_event(SearchFormReceivedEvent(None,
+            conn=self, iq_obj=iq_obj))
 
     def _StreamCB(self, con, obj):
         if obj.getTag('conflict'):
@@ -2343,7 +2333,7 @@ ConnectionJingle, ConnectionIBBytestream):
                 common.xmpp.NS_DISCO_ITEMS)
         con.RegisterHandler('iq', self._IqPingCB, 'get',
                 common.xmpp.NS_PING)
-        con.RegisterHandler('iq', self._search_fields_received, 'result',
+        con.RegisterHandler('iq', self._SearchCB, 'result',
                 common.xmpp.NS_SEARCH)
         con.RegisterHandler('iq', self._PrivacySetCB, 'set',
                 common.xmpp.NS_PRIVACY)

@@ -2308,31 +2308,16 @@ class Connection(CommonConnection, ConnectionHandlers):
 
     def send_search_form(self, jid, form, is_form):
         iq = common.xmpp.Iq(typ = 'set', to = jid, queryNS = \
-                common.xmpp.NS_SEARCH)
+            common.xmpp.NS_SEARCH)
         item = iq.getTag('query')
         if is_form:
-            item.addChild(node = form)
+            item.addChild(node=form)
         else:
             for i in form.keys():
                 item.setTagData(i, form[i])
         def _on_response(resp):
-            jid = jid = helpers.get_jid_from_iq(resp)
-            tag = resp.getTag('query', namespace = common.xmpp.NS_SEARCH)
-            if not tag:
-                self.dispatch('SEARCH_RESULT', (jid, None, False))
-                return
-            df = tag.getTag('x', namespace = common.xmpp.NS_DATA)
-            if df:
-                self.dispatch('SEARCH_RESULT', (jid, df, True))
-                return
-            df = []
-            for item in tag.getTags('item'):
-                # We also show attributes. jid is there
-                f = item.attrs
-                for i in item.getPayload():
-                    f[i.getName()] = i.getData()
-                df.append(f)
-            self.dispatch('SEARCH_RESULT', (jid, df, False))
+            gajim.nec.push_incoming_event(SearchResultReceivedEvent(None,
+                conn=self, iq_obj=resp))
 
         self.connection.SendAndCallForResponse(iq, _on_response)
 
