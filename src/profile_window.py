@@ -27,6 +27,7 @@ import gobject
 import base64
 import mimetypes
 import os
+import time
 
 import gtkgui_helpers
 import dialogs
