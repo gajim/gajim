@@ -415,7 +415,7 @@ class PreferencesWindow:
 
         # Status messages
         self.msg_tree = self.xml.get_object('msg_treeview')
-        model = gtk.ListStore(str, str)
+        model = gtk.ListStore(str, str, str, str, str, str, str)
         self.msg_tree.set_model(model)
         col = gtk.TreeViewColumn('name')
         self.msg_tree.append_column(col)
@@ -1085,6 +1085,13 @@ class PreferencesWindow:
                 gajim.config.add_per('statusmsg', val)
                 msg = helpers.to_one_line(model[iter_][1].decode('utf-8'))
                 gajim.config.set_per('statusmsg', val, 'message', msg)
+                i = 2
+                # store mood / activity
+                for subname in ('activity', 'subactivity', 'activity_text',
+                'mood', 'mood_text'):
+                    gajim.config.set_per('statusmsg', val, subname,
+                        model[iter_][i].decode('utf-8'))
+                    i += 1
             iter_ = model.iter_next(iter_)
         gajim.interface.save_config()
 
@@ -1191,8 +1198,16 @@ class PreferencesWindow:
         for msg_name in preset_status:
             msg_text = gajim.config.get_per('statusmsg', msg_name, 'message')
             msg_text = helpers.from_one_line(msg_text)
+            activity = gajim.config.get_per('statusmsg', msg_name, 'activity')
+            subactivity = gajim.config.get_per('statusmsg', msg_name,
+                'subactivity')
+            activity_text = gajim.config.get_per('statusmsg', msg_name,
+                'activity_text')
+            mood = gajim.config.get_per('statusmsg', msg_name, 'mood')
+            mood_text = gajim.config.get_per('statusmsg', msg_name, 'mood_text')
             iter_ = model.append()
-            model.set(iter_, 0, msg_name, 1, msg_text)
+            model.set(iter_, 0, msg_name, 1, msg_text, 2, activity, 3,
+                subactivity, 4, activity_text, 5, mood, 6, mood_text)
 
     def on_msg_cell_edited(self, cell, row, new_text):
         model = self.msg_tree.get_model()
