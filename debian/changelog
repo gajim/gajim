@@ -1,8 +1,14 @@
-gajim (0.13.90-1) unstable; urgency=low
+gajim (0.14-1) unstable; urgency=low
 
   * New upstream release.
+  * Correctly sanitize menuentries in chat window action context menu.
+    Closes: #574839
+  * Fix traceback when closing file request dialog. Closes: #587186
+  * Recommand python-openssl >= 0.9. Closes: #594772
+  * Improve a string. Closes: #553527
+  * Fix canceling file transfer. Closes: #587679
 
- -- Yann Leboulanger <asterix@lagaule.org>  Sat, 24 Jul 2010 10:25:26 +0200
+ -- Yann Leboulanger <asterix@lagaule.org>  Thu, 02 Sep 2010 19:25:26 +0200
 
 gajim (0.13.4-1) unstable; urgency=low
 
