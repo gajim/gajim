@@ -3975,14 +3975,23 @@ class ManagePEPServicesWindow:
             if 'jid' in item and item['jid'] == our_jid and 'node' in item:
                 self.treestore.append([item['node']])
 
-    def node_removed(self, node):
+    def node_removed(self, jid, node):
+        if jid != gajim.get_jid_from_account(self.account):
+            return
         model = self.treeview.get_model()
         iter_ = model.get_iter_root()
         while iter_:
             if model[iter_][0] == node:
                 model.remove(iter_)
                 break
-            iter_ = model.get_iter_next(iter_)
+            iter_ = model.iter_next(iter_)
+
+    def node_not_removed(self, jid, node, msg):
+        if jid != gajim.get_jid_from_account(self.account):
+            return
+        dialogs.WarningDialog(_('PEP node was not removed'),
+            _('PEP node %(node)s was not removed: %(message)s') % {'node': node,
+            'message': msg})
 
     def on_delete_button_clicked(self, widget):
         selection = self.treeview.get_selection()
@@ -3991,7 +4000,8 @@ class ManagePEPServicesWindow:
         model, iter_ = selection.get_selected()
         node = model[iter_][0]
         our_jid = gajim.get_jid_from_account(self.account)
-        gajim.connections[self.account].send_pb_delete(our_jid, node)
+        gajim.connections[self.account].send_pb_delete(our_jid, node,
+            on_ok=self.node_removed, on_fail=self.node_not_removed)
 
     def on_configure_button_clicked(self, widget):
         selection = self.treeview.get_selection()

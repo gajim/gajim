@@ -2463,7 +2463,7 @@ class RosterWindow:
             gajim.interface.instances[account]['xml_console'].window.present()
         else:
             gajim.interface.instances[account]['xml_console'] = \
-                    dialogs.XMLConsoleWindow(account)
+                dialogs.XMLConsoleWindow(account)
 
     def on_archiving_preferences_menuitem_activate(self, widget, account):
         if 'archiving_preferences' in gajim.interface.instances[account]:
