@@ -348,22 +348,23 @@ class ConnectionDisco:
                     'pep':
                         self.pep_supported = True
                         break
-            if features.__contains__(common.xmpp.NS_VCARD):
-                self.vcard_supported = True
-            if features.__contains__(common.xmpp.NS_PUBSUB):
-                self.pubsub_supported = True
-                if features.__contains__(common.xmpp.NS_PUBSUB_PUBLISH_OPTIONS):
-                    self.pubsub_publish_options_supported = True
-                else:
-                    # Remove stored bookmarks accessible to everyone.
-                    our_jid = gajim.get_jid_from_account(self.name)
-                    self.send_pb_purge(our_jid, 'storage:bookmarks')
-                    self.send_pb_delete(our_jid, 'storage:bookmarks')
+                if features.__contains__(common.xmpp.NS_VCARD):
+                    self.vcard_supported = True
+                if features.__contains__(common.xmpp.NS_PUBSUB):
+                    self.pubsub_supported = True
+                    if features.__contains__(
+                    common.xmpp.NS_PUBSUB_PUBLISH_OPTIONS):
+                        self.pubsub_publish_options_supported = True
+                    else:
+                        # Remove stored bookmarks accessible to everyone.
+                        our_jid = gajim.get_jid_from_account(self.name)
+                        self.send_pb_purge(our_jid, 'storage:bookmarks')
+                        self.send_pb_delete(our_jid, 'storage:bookmarks')
             if features.__contains__(common.xmpp.NS_BYTESTREAM):
-                our_jid = helpers.parse_jid(gajim.get_jid_from_account(self.name) +\
-                        '/' + self.server_resource)
+                our_jid = helpers.parse_jid(gajim.get_jid_from_account(
+                    self.name) + '/' + self.server_resource)
                 gajim.proxy65_manager.resolve(jid, self.connection, our_jid,
-                        self.name)
+                    self.name)
             if features.__contains__(common.xmpp.NS_MUC) and is_muc:
                 type_ = transport_type or 'jabber'
                 self.muc_jid[type_] = jid
