@@ -672,7 +672,7 @@
                                 <child>
                                   <object class="GtkLabel" id="label11">
                                     <property name="visible">True</property>
-                                    <property name="label" translatable="yes">Show notification area:</property>
+                                    <property name="label" translatable="yes">Show notification area icon:</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
