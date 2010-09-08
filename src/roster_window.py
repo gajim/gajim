@@ -1112,7 +1112,9 @@ class RosterWindow:
 
         contact_instances = gajim.contacts.get_contacts(account, jid)
         contact = gajim.contacts.get_highest_prio_contact_from_contacts(
-                contact_instances)
+            contact_instances)
+        if not contact:
+            return False
 
         child_iters = self._get_contact_iter(jid, account, contact, self.model)
         if not child_iters:
