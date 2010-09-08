@@ -2744,7 +2744,7 @@ class GroupchatConfigWindow:
                 self.xml.get_object('title_label').set_text(self.form.title)
             else:
                 self.xml.get_object('title_hseparator').set_no_show_all(True)
-#                self.xml.get_object('title_hseparator').hide()
+                self.xml.get_object('title_hseparator').hide()
 
             self.data_form_widget.show()
             config_vbox.pack_start(self.data_form_widget)
