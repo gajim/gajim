@@ -167,41 +167,38 @@ class Interface:
             'id': obj.iq_id}, sec_msg, on_response_yes=(on_yes, obj),
             on_response_no=(response, obj, 'no'))
 
-    def handle_event_error_answer(self, account, array):
-        #('ERROR_ANSWER', account, (id, jid_from, errmsg, errcode))
-        id_, jid_from, errmsg, errcode = array
-        if unicode(errcode) in ('400', '403', '406') and id_:
+    def handle_event_error_answer(self, obj):
+        #('ERROR_ANSWER', account, (id_, fjid, errmsg, errcode))
+        if unicode(obj.errcode) in ('400', '403', '406') and obj.id_:
             # show the error dialog
             ft = self.instances['file_transfers']
-            sid = id_
-            if len(id_) > 3 and id_[2] == '_':
-                sid = id_[3:]
+            sid = obj.id_
+            if len(obj.id_) > 3 and obj.id_[2] == '_':
+                sid = obj.id_[3:]
             if sid in ft.files_props['s']:
                 file_props = ft.files_props['s'][sid]
-                if unicode(errcode) == '400':
+                if unicode(obj.errcode) == '400':
                     file_props['error'] = -3
                 else:
                     file_props['error'] = -4
-                self.handle_event_file_request_error(account,
-                        (jid_from, file_props, errmsg))
-                conn = gajim.connections[account]
-                conn.disconnect_transfer(file_props)
+                self.handle_event_file_request_error(obj.conn.name, (obj.fjid,
+                    file_props, obj.errmsg))
+                obj.conn.disconnect_transfer(file_props)
                 return
-        elif unicode(errcode) == '404':
-            conn = gajim.connections[account]
-            sid = id_
-            if len(id_) > 3 and id_[2] == '_':
-                sid = id_[3:]
-            if sid in conn.files_props:
-                file_props = conn.files_props[sid]
-                self.handle_event_file_send_error(account,
-                        (jid_from, file_props))
-                conn.disconnect_transfer(file_props)
+        elif unicode(obj.errcode) == '404':
+            sid = obj.id_
+            if len(obj.id_) > 3 and obj.id_[2] == '_':
+                sid = obj.id_[3:]
+            if sid in obj.conn.files_props:
+                file_props = obj.conn.files_props[sid]
+                self.handle_event_file_send_error(obj.conn.name, (obj.fjid,
+                    file_props))
+                obj.conn.disconnect_transfer(file_props)
                 return
 
-        ctrl = self.msg_win_mgr.get_control(jid_from, account)
+        ctrl = self.msg_win_mgr.get_control(obj.fjid, obj.conn.name)
         if ctrl and ctrl.type_id == message_control.TYPE_GC:
-            ctrl.print_conversation('Error %s: %s' % (array[2], array[1]))
+            ctrl.print_conversation('Error %s: %s' % (obj.errcode, obj.errmsg))
 
     def handle_event_con_type(self, account, con_type):
         # ('CON_TYPE', account, con_type) which can be 'ssl', 'tls', 'plain'
@@ -2069,7 +2066,6 @@ class Interface:
             'ERROR': [self.handle_event_error],
             'DB_ERROR': [self.handle_event_db_error],
             'INFORMATION': [self.handle_event_information],
-            'ERROR_ANSWER': [self.handle_event_error_answer],
             'STATUS': [self.handle_event_status],
             'NEW_JID': [self.handle_event_new_jid],
             'NOTIFY': [self.handle_event_notify],
@@ -2142,6 +2138,7 @@ class Interface:
             'ARCHIVING_CHANGED': [self.handle_event_archiving_changed],
             'ARCHIVING_ERROR': [self.handle_event_archiving_error],
             'bookmarks-received': [self.handle_event_bookmarks],
+            'error-received': [self.handle_event_error_answer],
             'gmail-notify': [self.handle_event_gmail_notify],
             'http-auth-received': [self.handle_event_http_auth],
             'last-result-received': [self.handle_event_last_status_time],

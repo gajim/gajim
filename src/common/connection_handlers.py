@@ -896,12 +896,15 @@ class ConnectionHandlersBase:
         # keep track of sessions this connection has with other JIDs
         self.sessions = {}
 
-    def _ErrorCB(self, con, iq_obj):
-        log.debug('ErrorCB')
-        id_ = unicode(iq_obj.getID())
-        if id_ in self.last_ids:
+        gajim.ged.register_event_handler('error-received', ged.CORE,
+            self._nec_error_received)
+
+    def _nec_error_received(self, obj):
+        if obj.conn.name != self.name:
+            return
+        if obj.id_ in self.last_ids:
             gajim.nec.push_incoming_event(LastResultReceivedEvent(None,
-                conn=self, iq_obj=iq_obj))
+                conn=self, iq_obj=obj.iq_obj))
             return True
 
     def _LastResultCB(self, con, iq_obj):
@@ -1103,6 +1106,8 @@ ConnectionJingle, ConnectionIBBytestream):
         gajim.nec.register_incoming_event(RosternotesReceivedEvent)
         gajim.ged.register_event_handler('roster-received', ged.CORE,
             self._nec_roster_received)
+        gajim.ged.register_event_handler('error-received', ged.CORE,
+            self._nec_error_received)
 
     def build_http_auth_answer(self, iq_obj, answer):
         if not self.connection or self.connected < 2:
@@ -1133,21 +1138,20 @@ ConnectionJingle, ConnectionIBBytestream):
 
     def _ErrorCB(self, con, iq_obj):
         log.debug('ErrorCB')
-        if ConnectionHandlersBase._ErrorCB(self, con, iq_obj):
+        gajim.nec.push_incoming_event(ErrorReceivedEvent(None, conn=self,
+            iq_obj=iq_obj))
+
+    def _nec_error_received(self, obj):
+        if obj.conn.name != self.name:
             return
-        id_ = unicode(iq_obj.getID())
-        if id_ in self.version_ids:
+        if obj.id_ in self.version_ids:
             gajim.nec.push_incoming_event(VersionResultReceivedEvent(None,
-                conn=self, iq_obj=iq_obj))
-            return
-        if id_ in self.entity_time_ids:
-            gajim.nec.push_incoming_event(LastResultReceivedEvent(None,
-                conn=self, iq_obj=iq_obj))
-            return
-        jid_from = helpers.get_full_jid_from_iq(iq_obj)
-        errmsg = iq_obj.getErrorMsg()
-        errcode = iq_obj.getErrorCode()
-        self.dispatch('ERROR_ANSWER', (id_, jid_from, errmsg, errcode))
+                conn=self, iq_obj=obj.iq_obj))
+            return True
+        if obj.id_ in self.entity_time_ids:
+            gajim.nec.push_incoming_event(TimeResultReceivedEvent(None,
+                conn=self, iq_obj=obj.iq_obj))
+            return True
 
     def _nec_private_storate_bookmarks_received(self, obj):
         if obj.conn.name != self.name:

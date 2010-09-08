@@ -547,3 +547,14 @@ class SearchResultReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                 f[i.getName()] = i.getData()
             self.data.append(f)
         return True
+
+class ErrorReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
+    name = 'error-received'
+    base_network_events = []
+
+    def generate(self):
+        self.get_id()
+        self.get_jid_resource()
+        self.errmsg = self.iq_obj.getErrorMsg()
+        self.errcode = self.iq_obj.getErrorCode()
+        return True
