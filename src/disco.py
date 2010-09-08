@@ -354,13 +354,13 @@ class ServicesCache:
             return ToplevelAgentBrowser
         return None
 
-    def get_info(self, jid, node, cb, force = False, nofetch = False, args = ()):
+    def get_info(self, jid, node, cb, force=False, nofetch=False, args=()):
         """
         Get info for an agent
         """
         addr = get_agent_address(jid, node)
         # Check the cache
-        if addr in self._info:
+        if addr in self._info and not force:
             args = self._info[addr] + args
             cb(jid, node, *args)
             return
@@ -369,8 +369,8 @@ class ServicesCache:
 
         # Create a closure object
         cbkey = ('info', addr)
-        cb = Closure(cb, userargs = args, remove = self._clean_closure,
-                        removeargs = cbkey)
+        cb = Closure(cb, userargs=args, remove=self._clean_closure,
+            removeargs=cbkey)
         # Are we already fetching this?
         if cbkey in self._cbs:
             self._cbs[cbkey].append(cb)
@@ -378,13 +378,13 @@ class ServicesCache:
             self._cbs[cbkey] = [cb]
             gajim.connections[self.account].discoverInfo(jid, node)
 
-    def get_items(self, jid, node, cb, force = False, nofetch = False, args = ()):
+    def get_items(self, jid, node, cb, force=False, nofetch=False, args=()):
         """
         Get a list of items in an agent
         """
         addr = get_agent_address(jid, node)
         # Check the cache
-        if addr in self._items:
+        if addr in self._items and not force:
             args = (self._items[addr],) + args
             cb(jid, node, *args)
             return
@@ -393,8 +393,8 @@ class ServicesCache:
 
         # Create a closure object
         cbkey = ('items', addr)
-        cb = Closure(cb, userargs = args, remove = self._clean_closure,
-                        removeargs = cbkey)
+        cb = Closure(cb, userargs=args, remove=self._clean_closure,
+            removeargs=cbkey)
         # Are we already fetching this?
         if cbkey in self._cbs:
             self._cbs[cbkey].append(cb)
@@ -505,6 +505,7 @@ class ServiceDiscoveryWindow(object):
         self.children = []
         self.dying = False
         self.node = None
+        self.reloading = False
 
         # Check connection
         if gajim.connections[account].connected < 2:
@@ -564,6 +565,12 @@ _('Without a connection, you can not browse available services'))
             address_table.set_no_show_all(True)
             address_table.hide()
 
+        accel_group = gtk.AccelGroup()
+        keyval, mod = gtk.accelerator_parse('<Control>r')
+        accel_group.connect_group(keyval, mod, gtk.ACCEL_VISIBLE,
+            self.accel_group_func)
+        self.window.add_accel_group(accel_group)
+
         self._initial_state()
         self.xml.connect_signals(self)
         self.travel(jid, node)
@@ -579,6 +586,10 @@ _('Without a connection, you can not browse available services'))
         self.cache.account = value
         if self.browser:
             self.browser.account = value
+
+    def accel_group_func(self, accel_group, acceleratable, keyval, modifier):
+        if (modifier & gtk.gdk.CONTROL_MASK) and (keyval == gtk.keysyms.r):
+            self.reload()
 
     def _initial_state(self):
         """
@@ -709,6 +720,12 @@ _('Without a connection, you can not browse available services'))
         else:
             self.cache.cleanup()
 
+    def reload(self):
+        if not self.jid:
+            return
+        self.reloading = True
+        self.travel(self.jid, self.node)
+
     def travel(self, jid, node):
         """
         Travel to an agent within the current services window
@@ -726,7 +743,7 @@ _('Without a connection, you can not browse available services'))
         # We need to store these, self.browser is not always available.
         self.jid = jid
         self.node = node
-        self.cache.get_info(jid, node, self._travel)
+        self.cache.get_info(jid, node, self._travel, force=self.reloading)
 
     def _travel(self, jid, node, identities, features, data):
         """
@@ -750,7 +767,8 @@ _('This type of service does not contain any items to browse.'))
             klass = AgentBrowser
         self.browser = klass(self.account, jid, node)
         self.browser.prepare_window(self)
-        self.browser.browse()
+        self.browser.browse(force=self.reloading)
+        self.reloading = False
 
     def open(self, jid, node):
         """
@@ -1030,7 +1048,7 @@ class AgentBrowser:
             return True
         return False
 
-    def browse(self, force = False):
+    def browse(self, force=False):
         """
         Fill the treeview with agents, fetching the info if necessary
         """
@@ -1515,7 +1533,7 @@ class ToplevelAgentBrowser(AgentBrowser):
             return True
         return False
 
-    def browse(self, force = False):
+    def browse(self, force=False):
         self._progress = 0
         AgentBrowser.browse(self, force = force)
 
