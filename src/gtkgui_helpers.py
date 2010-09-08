@@ -223,7 +223,9 @@ def get_default_font():
 
 def autodetect_browser_mailer():
     # recognize the environment and set appropriate browser/mailer
-    if user_runs_gnome():
+    if user_supports_xdg_open():
+        gajim.config.set('openwith', 'xdg-open')
+    elif user_runs_gnome():
         gajim.config.set('openwith', 'gnome-open')
     elif user_runs_kde():
         gajim.config.set('openwith', 'kfmclient exec')
@@ -231,6 +233,10 @@ def autodetect_browser_mailer():
         gajim.config.set('openwith', 'exo-open')
     else:
         gajim.config.set('openwith', 'custom')
+
+def user_supports_xdg_open():
+    import os.path
+    return os.path.isfile('/usr/bin/xdg-open')
 
 def user_runs_gnome():
     return 'gnome-session' in get_running_processes()

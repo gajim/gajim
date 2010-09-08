@@ -497,14 +497,8 @@ class PreferencesWindow:
                 self.applications_combobox.set_active(0)
             # else autodetect_browser_mailer is False.
             # so user has 'Always Use GNOME/KDE/Xfce' or Custom
-            elif gajim.config.get('openwith') == 'gnome-open':
-                self.applications_combobox.set_active(1)
-            elif gajim.config.get('openwith') == 'kfmclient exec':
-                self.applications_combobox.set_active(2)
-            elif gajim.config.get('openwith') == 'exo-open':
-                self.applications_combobox.set_active(3)
             elif gajim.config.get('openwith') == 'custom':
-                self.applications_combobox.set_active(4)
+                self.applications_combobox.set_active(1)
                 self.xml.get_object('custom_apps_frame').show()
 
             self.xml.get_object('custom_browser_entry').set_text(
@@ -1133,20 +1127,13 @@ class PreferencesWindow:
         gajim.config.set('stun_server', widget.get_text().decode('utf-8'))
 
     def on_applications_combobox_changed(self, widget):
-        gajim.config.set('autodetect_browser_mailer', False)
-        if widget.get_active() == 4:
+        if widget.get_active() == 0:
+            gajim.config.set('autodetect_browser_mailer', True)
+            self.xml.get_object('custom_apps_frame').hide()
+        elif widget.get_active() == 1:
+            gajim.config.set('autodetect_browser_mailer', False)
             self.xml.get_object('custom_apps_frame').show()
             gajim.config.set('openwith', 'custom')
-        else:
-            if widget.get_active() == 0:
-                gajim.config.set('autodetect_browser_mailer', True)
-            elif widget.get_active() == 1:
-                gajim.config.set('openwith', 'gnome-open')
-            elif widget.get_active() == 2:
-                gajim.config.set('openwith', 'kfmclient exec')
-            elif widget.get_active() == 3:
-                gajim.config.set('openwith', 'exo-open')
-            self.xml.get_object('custom_apps_frame').hide()
         gajim.interface.save_config()
 
     def on_custom_browser_entry_changed(self, widget):

@@ -9,16 +9,7 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">Autodetect on every Gajim startup</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Always use GNOME default applications</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Always use KDE default applications</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Always use Xfce default applications</col>
+        <col id="0" translatable="yes">Use default applications</col>
       </row>
       <row>
         <col id="0" translatable="yes">Custom</col>

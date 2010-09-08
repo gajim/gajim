@@ -59,7 +59,7 @@ class Config:
     DEFAULT_ICONSET = 'dcraven'
     DEFAULT_MOOD_ICONSET = 'default'
     DEFAULT_ACTIVITY_ICONSET = 'default'
-    DEFAULT_OPENWITH = 'gnome-open'
+    DEFAULT_OPENWITH = 'xdg-open'
     DEFAULT_BROWSER = 'firefox'
     DEFAULT_MAILAPP = 'mozilla-thunderbird -compose'
     DEFAULT_FILE_MANAGER = 'xffm'
