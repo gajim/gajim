@@ -38,6 +38,9 @@ class ConnectionCaps(object):
         self._capscache = capscache
         self._create_suitable_client_caps = client_caps_factory
 
+    def caps_change_account_name(self, new_name):
+        self._account = new_name
+
     def _capsPresenceCB(self, con, presence):
         """
         XMMPPY callback method to handle retrieved caps info

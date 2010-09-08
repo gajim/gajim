@@ -2055,6 +2055,8 @@ class AccountsWindow:
                 del gajim.gajim_optional_features[old_name]
                 del gajim.caps_hash[old_name]
                 gajim.connections[old_name].name = new_name
+                gajim.connections[old_name].pep_change_account_name(new_name)
+                gajim.connections[old_name].caps_change_account_name(new_name)
                 gajim.connections[new_name] = gajim.connections[old_name]
                 del gajim.connections[old_name]
             gajim.config.add_per('accounts', new_name)
