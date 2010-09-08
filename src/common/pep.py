@@ -502,6 +502,9 @@ class ConnectionPEP(object):
         self._pubsub_connection = pubsub_connection
         self.reset_awaiting_pep()
 
+    def pep_change_account_name(self, new_name):
+        self._account = new_name
+
     def reset_awaiting_pep(self):
         self.to_be_sent_activity = None
         self.to_be_sent_mood = None
