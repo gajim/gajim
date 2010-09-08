@@ -2740,9 +2740,21 @@ class GroupchatConfigWindow:
             sw = self.data_form_widget.xml.get_object(
                 'single_form_scrolledwindow')
             sw.set_policy(gtk.POLICY_NEVER, gtk.POLICY_NEVER)
+            if self.form.title:
+                self.xml.get_object('title_label').set_text(self.form.title)
+            else:
+                self.xml.get_object('title_hseparator').set_no_show_all(True)
+#                self.xml.get_object('title_hseparator').hide()
 
             self.data_form_widget.show()
             config_vbox.pack_start(self.data_form_widget)
+        else:
+            self.xml.get_object('title_label').set_no_show_all(True)
+            self.xml.get_object('title_label').hide()
+            self.xml.get_object('title_hseparator').set_no_show_all(True)
+            self.xml.get_object('title_hseparator').hide()
+            self.xml.get_object('config_hseparator').set_no_show_all(True)
+            self.xml.get_object('config_hseparator').hide()
 
         # Draw the edit affiliation list things
         add_on_vbox = self.xml.get_object('add_on_vbox')
