@@ -569,3 +569,7 @@ class GmailNewMailReceivedEvent(nec.NetworkIncomingEvent):
         if self.iq_obj.getTag('new-mail').getNamespace() != xmpp.NS_GMAILNOTIFY:
             return
         return True
+
+class PingReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'ping-received'
+    base_network_events = []

@@ -1110,6 +1110,8 @@ ConnectionJingle, ConnectionIBBytestream):
             self._nec_error_received)
         gajim.ged.register_event_handler('gmail-new-mail-received', ged.CORE,
             self._nec_gmail_new_mail_received)
+        gajim.ged.register_event_handler('ping-received', ged.CORE,
+            self._nec_ping_received)
 
     def build_http_auth_answer(self, iq_obj, answer):
         if not self.connection or self.connected < 2:
@@ -2089,20 +2091,19 @@ ConnectionJingle, ConnectionIBBytestream):
         gajim.nec.push_incoming_event(MucAdminReceivedEvent(None,
             conn=self, iq_obj=iq_obj))
 
-    def _MucErrorCB(self, con, iq_obj):
-        log.debug('MucErrorCB')
-        jid = helpers.get_full_jid_from_iq(iq_obj)
-        errmsg = iq_obj.getError()
-        errcode = iq_obj.getErrorCode()
-        self.dispatch('MSGERROR', (jid, errcode, errmsg))
-
     def _IqPingCB(self, con, iq_obj):
         log.debug('IqPingCB')
+        gajim.nec.push_incoming_event(PingReceivedEvent(None, conn=self,
+            iq_obj=iq_obj))
+        raise common.xmpp.NodeProcessed
+
+    def _nec_ping_received(self, obj):
+        if obj.conn.name != self.name:
+            return
         if not self.connection or self.connected < 2:
             return
-        iq_obj = iq_obj.buildReply('result')
+        iq_obj = obj.iq_obj.buildReply('result')
         self.connection.send(iq_obj)
-        raise common.xmpp.NodeProcessed
 
     def _PrivacySetCB(self, con, iq_obj):
         """
