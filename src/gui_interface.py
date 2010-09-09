@@ -1701,17 +1701,16 @@ class Interface:
             if ctrl:
                 ctrl.print_conversation(_('Error.'), 'status')
 
-    def handle_event_resource_conflict(self, account, data):
+    def handle_event_resource_conflict(self, obj):
         # ('RESOURCE_CONFLICT', account, ())
         # First we go offline, but we don't overwrite status message
-        self.roster.send_status(account, 'offline',
-                gajim.connections[account].status)
+        account = obj.conn.name
+        conn = obj.conn
+        self.roster.send_status(account, 'offline', conn.status)
         def on_ok(new_resource):
             gajim.config.set_per('accounts', account, 'resource', new_resource)
-            self.roster.send_status(account,
-                gajim.connections[account].old_show,
-                gajim.connections[account].status)
-        proposed_resource = gajim.connections[account].server_resource
+            self.roster.send_status(account, conn.old_show, conn.status)
+        proposed_resource = conn.server_resource
         proposed_resource += gajim.config.get('gc_proposed_nick_char')
         dlg = dialogs.ResourceConflictDialog(_('Resource Conflict'),
             _('You are already connected to this account with the same '
@@ -2114,7 +2113,6 @@ class Interface:
             'PING_SENT': [self.handle_event_ping_sent],
             'PING_REPLY': [self.handle_event_ping_reply],
             'PING_ERROR': [self.handle_event_ping_error],
-            'RESOURCE_CONFLICT': [self.handle_event_resource_conflict],
             'PEP_CONFIG': [self.handle_event_pep_config],
             'UNIQUE_ROOM_ID_UNSUPPORTED': \
                 [self.handle_event_unique_room_id_unsupported],
@@ -2147,6 +2145,7 @@ class Interface:
             'roster-info': [self.handle_event_roster_info],
             'roster-item-exchange-received': \
                 [self.handle_event_roster_item_exchange],
+            'stream-conflict-received': [self.handle_event_resource_conflict],
         }
 
     def register_core_handlers(self):

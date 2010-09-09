@@ -1083,6 +1083,13 @@ ConnectionJingle, ConnectionIBBytestream):
         self.gmail_last_tid = None
         self.gmail_last_time = None
 
+        gajim.nec.register_incoming_event(PrivateStorageBookmarksReceivedEvent)
+        gajim.nec.register_incoming_event(BookmarksReceivedEvent)
+        gajim.nec.register_incoming_event(
+            PrivateStorageRosternotesReceivedEvent)
+        gajim.nec.register_incoming_event(RosternotesReceivedEvent)
+        gajim.nec.register_incoming_event(StreamConflictReceivedEvent)
+
         gajim.ged.register_event_handler('http-auth-received', ged.CORE,
             self._nec_http_auth_received)
         gajim.ged.register_event_handler('version-request-received', ged.CORE,
@@ -1095,15 +1102,10 @@ ConnectionJingle, ConnectionIBBytestream):
             ged.CORE, self._nec_time_revised_request_received)
         gajim.ged.register_event_handler('roster-set-received',
             ged.CORE, self._nec_roster_set_received)
-        gajim.nec.register_incoming_event(PrivateStorageBookmarksReceivedEvent)
         gajim.ged.register_event_handler('private-storage-bookmarks-received',
             ged.CORE, self._nec_private_storate_bookmarks_received)
-        gajim.nec.register_incoming_event(BookmarksReceivedEvent)
-        gajim.nec.register_incoming_event(
-            PrivateStorageRosternotesReceivedEvent)
         gajim.ged.register_event_handler('private-storage-rosternotes-received',
             ged.CORE, self._nec_private_storate_rosternotes_received)
-        gajim.nec.register_incoming_event(RosternotesReceivedEvent)
         gajim.ged.register_event_handler('roster-received', ged.CORE,
             self._nec_roster_received)
         gajim.ged.register_event_handler('error-received', ged.CORE,
@@ -2261,10 +2263,10 @@ ConnectionJingle, ConnectionIBBytestream):
         gajim.nec.push_incoming_event(SearchFormReceivedEvent(None,
             conn=self, iq_obj=iq_obj))
 
-    def _StreamCB(self, con, obj):
-        if obj.getTag('conflict'):
-            # disconnected because of a resource conflict
-            self.dispatch('RESOURCE_CONFLICT', ())
+    def _StreamCB(self, con, iq_obj):
+        log.debug('StreamCB')
+        gajim.nec.push_incoming_event(StreamReceivedEvent(None,
+            conn=self, iq_obj=iq_obj))
 
     def _register_handlers(self, con, con_type):
         # try to find another way to register handlers in each class

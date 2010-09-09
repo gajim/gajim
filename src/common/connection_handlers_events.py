@@ -573,3 +573,16 @@ class GmailNewMailReceivedEvent(nec.NetworkIncomingEvent):
 class PingReceivedEvent(nec.NetworkIncomingEvent):
     name = 'ping-received'
     base_network_events = []
+
+class StreamReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'stream-received'
+    base_network_events = []
+
+class StreamConflictReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'stream-conflict-received'
+    base_network_events = ['stream-received']
+
+    def generate(self):
+        if self.base_event.iq_obj.getTag('conflict'):
+            self.conn = self.base_event.conn
+            return True
