@@ -558,3 +558,14 @@ class ErrorReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.errmsg = self.iq_obj.getErrorMsg()
         self.errcode = self.iq_obj.getErrorCode()
         return True
+
+class GmailNewMailReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'gmail-new-mail-received'
+    base_network_events = []
+
+    def generate(self):
+        if not self.iq_obj.getTag('new-mail'):
+            return
+        if self.iq_obj.getTag('new-mail').getNamespace() != xmpp.NS_GMAILNOTIFY:
+            return
+        return True

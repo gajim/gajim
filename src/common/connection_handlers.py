@@ -1108,6 +1108,8 @@ ConnectionJingle, ConnectionIBBytestream):
             self._nec_roster_received)
         gajim.ged.register_event_handler('error-received', ged.CORE,
             self._nec_error_received)
+        gajim.ged.register_event_handler('gmail-new-mail-received', ged.CORE,
+            self._nec_gmail_new_mail_received)
 
     def build_http_auth_answer(self, iq_obj, answer):
         if not self.connection or self.connected < 2:
@@ -1321,29 +1323,33 @@ ConnectionJingle, ConnectionIBBytestream):
         gajim.nec.push_incoming_event(TimeResultReceivedEvent(None,
             conn=self, iq_obj=iq_obj))
 
-    def _gMailNewMailCB(self, con, gm):
+    def _gMailNewMailCB(self, con, iq_obj):
         """
         Called when we get notified of new mail messages in gmail account
         """
+        log.debug('gMailNewMailCB')
+        gajim.nec.push_incoming_event(GmailNewMailReceivedEvent(None,
+            conn=self, iq_obj=iq_obj))
+        raise common.xmpp.NodeProcessed
+
+    def _nec_gmail_new_mail_received(self, obj):
+        if obj.conn.name != self.name:
+            return
         if not self.connection or self.connected < 2:
             return
-        if not gm.getTag('new-mail'):
-            return
-        if gm.getTag('new-mail').getNamespace() == common.xmpp.NS_GMAILNOTIFY:
-            # we'll now ask the server for the exact number of new messages
-            jid = gajim.get_jid_from_account(self.name)
-            log.debug('Got notification of new gmail e-mail on %s. Asking the server for more info.' % jid)
-            iq = common.xmpp.Iq(typ = 'get')
-            iq.setID(self.connection.getAnID())
-            query = iq.setTag('query')
-            query.setNamespace(common.xmpp.NS_GMAILNOTIFY)
-            # we want only be notified about newer mails
-            if self.gmail_last_tid:
-                query.setAttr('newer-than-tid', self.gmail_last_tid)
-            if self.gmail_last_time:
-                query.setAttr('newer-than-time', self.gmail_last_time)
-            self.connection.send(iq)
-            raise common.xmpp.NodeProcessed
+        # we'll now ask the server for the exact number of new messages
+        jid = gajim.get_jid_from_account(self.name)
+        log.debug('Got notification of new gmail e-mail on %s. Asking the '
+            'server for more info.' % jid)
+        iq = common.xmpp.Iq(typ='get')
+        query = iq.setTag('query')
+        query.setNamespace(common.xmpp.NS_GMAILNOTIFY)
+        # we want only be notified about newer mails
+        if self.gmail_last_tid:
+            query.setAttr('newer-than-tid', self.gmail_last_tid)
+        if self.gmail_last_time:
+            query.setAttr('newer-than-time', self.gmail_last_time)
+        self.connection.send(iq)
 
     def _gMailQueryCB(self, con, iq_obj):
         """
