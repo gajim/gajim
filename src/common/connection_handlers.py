@@ -820,6 +820,8 @@ class ConnectionHandlersBase:
     def _LastResultCB(self, con, iq_obj):
         log.debug('LastResultCB')
         qp = iq_obj.getTag('query')
+        if not qp:
+            return
         seconds = qp.getAttr('seconds')
         status = qp.getData()
         try:
