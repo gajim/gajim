@@ -48,6 +48,8 @@ from common.zeroconf import client_zeroconf
 from common.zeroconf import zeroconf
 from connection_handlers_zeroconf import *
 
+import locale
+
 class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
     def __init__(self, name):
         ConnectionHandlersZeroconf.__init__(self)
@@ -105,7 +107,8 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
                 'zeroconf_email')
 
         if not self.username:
-            self.username = unicode(getpass.getuser())
+            self.username = unicode(getpass.getuser(),
+                locale.getpreferredencoding())
             gajim.config.set_per('accounts', gajim.ZEROCONF_ACC_NAME, 'name',
                     self.username)
         else:
