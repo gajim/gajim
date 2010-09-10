@@ -25,6 +25,7 @@ Base class for implementing plugin.
 '''
 
 import os
+import locale
 
 from common import gajim
 
@@ -197,7 +198,9 @@ class GajimPluginConfig(UserDict.DictMixin):
     @log_calls('GajimPluginConfig')
     def __init__(self, plugin):
         self.plugin = plugin
-        self.FILE_PATH = os.path.join(gajim.PLUGINS_CONFIG_DIR, self.plugin.short_name)
+        self.FILE_PATH = os.path.join(gajim.PLUGINS_CONFIG_DIR,
+            self.plugin.short_name).decode('utf-8').encode(
+            locale.getpreferredencoding())
         #log.debug('FILE_PATH = %s'%(self.FILE_PATH))
         self.data = None
         self.load()
