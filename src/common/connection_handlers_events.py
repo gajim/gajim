@@ -72,6 +72,8 @@ class LastResultReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             return True
 
         qp = self.iq_obj.getTag('query')
+        if not qp:
+            return
         sec = qp.getAttr('seconds')
         self.status = qp.getData()
         try:
