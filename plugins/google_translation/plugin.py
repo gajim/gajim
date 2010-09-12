@@ -30,6 +30,7 @@ import re
 import urllib2
 import new
 from pprint import pformat
+from sys import getfilesystemencoding
 
 from common import helpers
 from common import gajim
@@ -51,45 +52,49 @@ class GoogleTranslationPlugin(GajimPlugin):
     def init(self):
         self.config_dialog = None
         #self.gui_extension_points = {}
-        self.config_default_values = {'from_lang' : (u'en', _(u'Language of text to be translated')),
-                                                                  'to_lang' : (u'fr', _(u'Language to which translation will be made')),
-                                                                  'user_agent' : (u'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.12) Gecko/20080213 Firefox/2.0.0.11',
-                                                                                                  _(u'User Agent data to be used with urllib2 when connecting to Google Translate service'))}
+        self.config_default_values = {
+            'from_lang' :
+                (u'en', _(u'Language of text to be translated')),
+            'to_lang' :
+                (u'fr', _(u'Language to which translation will be made')),
+            'user_agent' :
+                (u'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.12) '
+                'Gecko/20080213 Firefox/2.0.0.11',
+                _(u'User Agent data to be used with urllib2 '
+                'when connecting to Google Translate service'))}
 
         #self.events_handlers = {}
 
         self.events = [GoogleTranslateMessageReceivedEvent]
 
-        self.translated_text_re = \
-                re.compile(r'google.language.callbacks.id100\(\'22\',{"translatedText":"(?P<text>[^"]*)"}, 200, null, 200\)')
+        self.translated_text_re = re.compile(
+            r'google.language.callbacks.id100\(\'22\','
+            '{"translatedText":"(?P<text>[^"]*)"}, 200, null, 200\)')
 
     @log_calls('GoogleTranslationPlugin')
     def translate_text(self, text, from_lang, to_lang):
-        text = self.prepare_text_for_url(text)
+        # Converts text so it can be used within URL as query to Google
+        # Translate.
+        quoted_text = urllib2.quote(text.encode(getfilesystemencoding()))
+        # prepare url
         headers = { 'User-Agent' : self.config['user_agent'] }
-        translation_url = u'http://www.google.com/uds/Gtranslate?callback=google.language.callbacks.id100&context=22&q=%(text)s&langpair=%(from_lang)s%%7C%(to_lang)s&key=notsupplied&v=1.0'%locals()
-
+        translation_url = u'http://www.google.com/uds/Gtranslate?callback='\
+            'google.language.callbacks.id100&context=22&q=%(quoted_text)s&'\
+            'langpair=%(from_lang)s%%7C%(to_lang)s&key=notsupplied&v=1.0' % \
+            locals()
         request = urllib2.Request(translation_url, headers=headers)
-        response = urllib2.urlopen(request)
-        results = response.read()
 
+        try:
+            response = urllib2.urlopen(request)
+        except urllib2.URLError, e:
+            # print e
+            return text
+
+        results = response.read()
         translated_text = self.translated_text_re.search(results).group('text')
 
-        return translated_text
-
-    @log_calls('GoogleTranslationPlugin')
-    def prepare_text_for_url(self, text):
-        '''
-        Converts text so it can be used within URL as query to Google Translate.
-        '''
-
-        # There should be more replacements for plugin to work in any case:
-        char_replacements = { ' ' : '%20',
-                                                  '+' : '%2B'}
-
-        for char, replacement in char_replacements.iteritems():
-            text = text.replace(char, replacement)
-
+        if translated_text:
+            return translated_text
         return text
 
     @log_calls('GoogleTranslationPlugin')
@@ -112,7 +117,8 @@ class GoogleTranslateMessageReceivedEvent(nec.NetworkIncomingEvent):
                 from_lang = self.plugin.config['from_lang']
                 to_lang = self.plugin.config['to_lang']
                 self.base_event.xmpp_msg.kids[0].setData(
-                        self.plugin.translate_text(msg_text, from_lang, to_lang))
+                    self.plugin.translate_text(msg_text, from_lang, to_lang))
 
-        return False    # We only want to modify old event, not emit another,
-                                        # so we return False here.
+        # We only want to modify old event, not emit another, so we return False
+        # here.
+        return False
