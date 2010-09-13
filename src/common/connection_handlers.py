@@ -1293,10 +1293,16 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
 
         try:
             t = datetime.datetime.strptime(utc_time, '%Y-%m-%dT%H:%M:%SZ')
-            t = t.replace(tzinfo=UTC())
-            time_info = t.astimezone(contact_tz()).strftime('%c')
         except ValueError, e:
-            log.info('Wrong time format: %s' % str(e))
+            try:
+                t = datetime.datetime.strptime(utc_time,
+                    '%Y-%m-%dT%H:%M:%S.%fZ')
+            except ValueError, e:
+                log.info('Wrong time format: %s' % str(e))
+                return
+            
+        t = t.replace(tzinfo=UTC())
+        time_info = t.astimezone(contact_tz()).strftime('%c')
 
         id_ = iq_obj.getID()
         if id_ in self.groupchat_jids:
