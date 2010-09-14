@@ -61,7 +61,7 @@ from common.connection_handlers_events import *
 from common import ged
 from common import nec
 from common.nec import NetworkEvent
-from plugins import GajimPlugin
+
 if gajim.HAVE_FARSIGHT:
     from common.jingle import ConnectionJingle
 else:

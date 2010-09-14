@@ -29,9 +29,12 @@ __all__ = ['PluginManager']
 import os
 import sys
 import fnmatch
+import zipfile
+from shutil import rmtree
 
 from common import gajim
 from common import nec
+from common.exceptions import PluginsystemError
 
 from plugins.helpers import log, log_calls, Singleton
 from plugins.plugin import GajimPlugin
@@ -370,7 +373,7 @@ class PluginManager(object):
 
     @staticmethod
     @log_calls('PluginManager')
-    def scan_dir_for_plugins(path):
+    def scan_dir_for_plugins(path, scan_dirs=True):
         '''
         Scans given directory for plugin classes.
 
@@ -414,7 +417,7 @@ class PluginManager(object):
                         pass
                         #log.debug('Module not imported successfully. ImportError: %s'%(import_error))
 
-                elif os.path.isdir(file_path):
+                elif os.path.isdir(file_path) and scan_dirs:
                     module_name = elem_name
                     file_path += os.path.sep
                     #log.debug('Possible package detected.')
@@ -454,3 +457,70 @@ class PluginManager(object):
                     #log.debug(module)
 
         return plugins_found
+
+    def install_from_zip(self, zip_filename, owerwrite=None):
+        '''
+        Install plagin from zip and return plugin
+        '''
+        try:
+            zip_file = zipfile.ZipFile(zip_filename)
+        except zipfile.BadZipfile, e:
+            # it is not zip file
+            raise PluginsystemError(_('Archive corrupted'))
+        except IOError,e:
+            raise PluginsystemError(_('Archive empty'))
+
+        if zip_file.testzip():
+            # CRC error
+            raise PluginsystemError(_('Archive corrupted'))
+
+        dirs = []
+        for filename in zip_file.namelist():
+            if filename.startswith('.') or filename.startswith('/') or \
+            ('/' not in filename):
+                # members not safe
+                raise PluginsystemError(_('Archive is malformed'))
+            if filename.endswith('/') and filename.find('/', 0, -1) < 0:
+                dirs.append(filename)
+
+        if len(dirs) > 1:
+            # several directories in the root of the archive
+            raise PluginsystemError(_('Archive is malformed'))
+
+        base_dir, user_dir = gajim.PLUGINS_DIRS
+        plugin_dir = os.path.join(user_dir, dirs[0])
+
+        if os.path.isdir(plugin_dir):
+        # Plugin already exists
+            if not owerwrite:
+                raise PluginsystemError(_('Plugin already exists'))
+            self.remove_plugin(self.get_plugin_by_path(plugin_dir))
+
+        zip_file.extractall(user_dir)
+        zip_file.close()
+        path = os.path.join(user_dir, dirs[0])
+        self.add_plugin(self.scan_dir_for_plugins(plugin_dir, False)[0])
+        plugin = self.plugins[-1]
+        return plugin
+
+    def remove_plugin(self, plugin):
+        '''
+        Deactivate and remove plugin from `plugins` list
+        '''
+        def on_error(func, path, error):
+            if func == os.path.islink:
+            # if symlink
+                os.unlink(path)
+                return
+            # access is denied or other
+            raise PluginsystemError(error[1])
+
+        if plugin.active:
+            self.deactivate_plugin(plugin)
+        rmtree(plugin.__path__, False, on_error)
+        self.plugins.remove(plugin)
+
+    def get_plugin_by_path(self, plugin_dir):
+        for plugin in self.plugins:
+            if plugin.__path__ in plugin_dir:
+                return plugin

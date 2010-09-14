@@ -1349,11 +1349,11 @@ class FileChooserDialog(gtk.FileChooserDialog):
     Non-blocking FileChooser Dialog around gtk.FileChooserDialog
     """
     def __init__(self, title_text, action, buttons, default_response,
-                             select_multiple = False, current_folder = None, on_response_ok = None,
-                             on_response_cancel = None):
+    select_multiple=False, current_folder=None, on_response_ok=None,
+    on_response_cancel=None):
 
         gtk.FileChooserDialog.__init__(self, title=title_text, action=action,
-                                                                   buttons=buttons)
+            buttons=buttons)
 
         self.set_default_response(default_response)
         self.set_select_multiple(select_multiple)
@@ -1468,8 +1468,8 @@ class WarningDialog(HigDialog):
     """
 
     def __init__(self, pritext, sectext=''):
-        HigDialog.__init__( self, None,
-                                                gtk.MESSAGE_WARNING, gtk.BUTTONS_OK, pritext, sectext)
+        HigDialog.__init__(self, None, gtk.MESSAGE_WARNING, gtk.BUTTONS_OK,
+            pritext, sectext)
         self.set_modal(False)
         if hasattr(gajim.interface, 'roster') and gajim.interface.roster:
             self.set_transient_for(gajim.interface.roster.window)
@@ -1505,13 +1505,12 @@ class YesNoDialog(HigDialog):
     """
 
     def __init__(self, pritext, sectext='', checktext='', on_response_yes=None,
-                    on_response_no=None):
+    on_response_no=None):
         self.user_response_yes = on_response_yes
         self.user_response_no = on_response_no
-        HigDialog.__init__( self, None,
-                                                gtk.MESSAGE_QUESTION, gtk.BUTTONS_YES_NO, pritext, sectext,
-                                                on_response_yes=self.on_response_yes,
-                                                on_response_no=self.on_response_no)
+        HigDialog.__init__(self, None, gtk.MESSAGE_QUESTION, gtk.BUTTONS_YES_NO,
+            pritext, sectext, on_response_yes=self.on_response_yes,
+            on_response_no=self.on_response_no)
 
         if checktext:
             self.checkbutton = gtk.CheckButton(checktext)
@@ -4441,6 +4440,52 @@ class AvatarChooserDialog(ImageChooserDialog):
             self.response_clear[0](widget, *self.response_clear[1:])
         else:
             self.response_clear(widget)
+
+
+class ArchiveChooserDialog(FileChooserDialog):
+    def __init__(self, on_response_ok=None, on_response_cancel=None):
+
+        def on_ok(widget, callback):
+            '''check if file exists and call callback'''
+            path_to_file = self.get_filename()
+            if not path_to_file:
+                return
+            path_to_file = gtkgui_helpers.decode_filechooser_file_paths(
+                (path_to_file,))[0]
+            if os.path.exists(path_to_file):
+                if isinstance(callback, tuple):
+                    callback[0](path_to_file, *callback[1:])
+                else:
+                    callback(path_to_file)
+            self.destroy()
+
+        path = helpers.get_documents_path()
+
+        FileChooserDialog.__init__(self,
+            title_text=_('Choose Archive'),
+            action=gtk.FILE_CHOOSER_ACTION_OPEN,
+            buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+                gtk.STOCK_OPEN, gtk.RESPONSE_OK),
+            default_response=gtk.RESPONSE_OK,
+            current_folder=path,
+            on_response_ok=(on_ok, on_response_ok),
+            on_response_cancel=on_response_cancel)
+
+        if on_response_cancel:
+            self.connect('destroy', on_response_cancel)
+
+        filter_ = gtk.FileFilter()
+        filter_.set_name(_('All files'))
+        filter_.add_pattern('*')
+        self.add_filter(filter_)
+
+        filter_ = gtk.FileFilter()
+        filter_.set_name(_('Zip files'))
+        filter_.add_pattern('*.zip')
+
+        self.add_filter(filter_)
+        self.set_filter(filter_)
+
 
 class AddSpecialNotificationDialog:
     def __init__(self, jid):
