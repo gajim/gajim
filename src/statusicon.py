@@ -86,12 +86,15 @@ class StatusIcon:
     def show_icon(self):
         if not self.status_icon:
             self.status_icon = gtk.StatusIcon()
+            self.statusicon_size = '16'
             self.status_icon.set_property('has-tooltip', True)
             self.status_icon.connect('activate', self.on_status_icon_left_clicked)
             self.status_icon.connect('popup-menu',
                     self.on_status_icon_right_clicked)
             self.status_icon.connect('query-tooltip',
                     self.on_status_icon_query_tooltip)
+            self.status_icon.connect('size-changed',
+                    self.on_status_icon_size_changed)
 
         self.set_img()
         self.status_icon.set_visible(True)
@@ -112,6 +115,16 @@ class StatusIcon:
     def on_status_icon_left_clicked(self, widget):
         self.on_left_click()
 
+    def on_status_icon_size_changed(self, statusicon, size):
+        if size > 31:
+            self.statusicon_size = '32'
+        else:
+            self.statusicon_size = '16'
+        if os.environ.get('KDE_FULL_SESSION') == 'true':
+        # detect KDE session. see #5476
+            self.statusicon_size = '32'
+        self.set_img()
+
     def set_img(self):
         """
         Apart from image, we also update tooltip text here
@@ -123,8 +136,8 @@ class StatusIcon:
         else:
             self.status_icon.set_blinking(False)
 
-        # FIXME: do not always use 16x16 (ask actually used size and use that)
-        image = gajim.interface.jabber_state_images['16'][self.status]
+        image = gajim.interface.jabber_state_images[self.statusicon_size][
+                                                                self.status]
         if image.get_storage_type() == gtk.IMAGE_PIXBUF:
             self.status_icon.set_from_pixbuf(image.get_pixbuf())
         # FIXME: oops they forgot to support GIF animation?
