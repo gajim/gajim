@@ -197,7 +197,8 @@ def get_storage():
         if USER_USES_GNOMEKEYRING:
             try:
                 storage = GnomePasswordStorage()
-            except (gnomekeyring.NoKeyringDaemonError, gnomekeyring.DeniedError):
+            except (gnomekeyring.NoKeyringDaemonError, gnomekeyring.DeniedError,
+            gnomekeyring.CancelledError):
                 storage = None
         if storage is None:
             if gajim.config.get('use_kwalletcli'):
