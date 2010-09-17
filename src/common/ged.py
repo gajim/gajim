@@ -43,6 +43,9 @@ class GlobalEventsDispatcher(object):
             for i, h in enumerate(handlers_list):
                 if priority < h[0]:
                     break
+            else:
+                # no event with smaller prio found, put it at the end
+                i += 1
 
             handlers_list.insert(i, (priority, handler))
         else:
