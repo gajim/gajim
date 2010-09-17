@@ -20,12 +20,16 @@
 
 import datetime
 import sys
+from time import (localtime, time as time_time)
+from calendar import timegm
 
 from common import nec
 from common import helpers
 from common import gajim
 from common import xmpp
 from common import dataforms
+from common import exceptions
+from common.logger import LOG_DB_PATH
 
 import logging
 log = logging.getLogger('gajim.c.connection_handlers_events')
@@ -592,3 +596,367 @@ class StreamConflictReceivedEvent(nec.NetworkIncomingEvent):
         if self.base_event.iq_obj.getTag('conflict'):
             self.conn = self.base_event.conn
             return True
+
+class PresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
+    name = 'presence-received'
+    base_network_events = ['raw-pres-received']
+
+    def generate(self):
+        self.conn = self.base_event.conn
+        self.iq_obj = self.base_event.iq_obj
+        self.ptype = self.iq_obj.getType()
+        if self.ptype == 'available':
+            self.ptype = None
+        rfc_types = ('unavailable', 'error', 'subscribe', 'subscribed',
+            'unsubscribe', 'unsubscribed')
+        if self.ptype and not self.ptype in rfc_types:
+            self.ptype = None
+        log.debug('PresenceCB: %s' % self.ptype)
+        if not self.conn or self.conn.connected < 2:
+            log.debug('account is no more connected')
+            return
+        try:
+            self.get_jid_resource()
+        except Exception:
+            if self.iq_obj.getTag('error') and self.iq_obj.getTag('error').\
+            getTag('jid-malformed'):
+                # wrong jid, we probably tried to change our nick in a room to a non
+                # valid one
+                who = str(self.iq_obj.getFrom())
+                jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
+                self.conn.dispatch('GC_MSG', (jid_stripped,
+                    _('Nickname not allowed: %s') % resource, None, False, None,
+                    []))
+            return
+        self.timestamp = None
+        self.get_id()
+        self.is_gc = False # is it a GC presence ?
+        sigTag = None
+        ns_muc_user_x = None
+        avatar_sha = None
+        # XEP-0172 User Nickname
+        self.user_nick = self.iq_obj.getTagData('nick') or ''
+        self.contact_nickname = None
+        transport_auto_auth = False
+        # XEP-0203
+        delay_tag = self.iq_obj.getTag('delay', namespace=xmpp.NS_DELAY2)
+        if delay_tag:
+            tim = self.iq_obj.getTimestamp2()
+            tim = helpers.datetime_tuple(tim)
+            self.timestamp = localtime(timegm(tim))
+        xtags = self.iq_obj.getTags('x')
+        for x in xtags:
+            namespace = x.getNamespace()
+            if namespace.startswith(xmpp.NS_MUC):
+                self.is_gc = True
+                if namespace == xmpp.NS_MUC_USER and x.getTag('destroy'):
+                    ns_muc_user_x = x
+            elif namespace == xmpp.NS_SIGNED:
+                sigTag = x
+            elif namespace == xmpp.NS_VCARD_UPDATE:
+                avatar_sha = x.getTagData('photo')
+                self.contact_nickname = x.getTagData('nickname')
+            elif namespace == xmpp.NS_DELAY and not self.timestamp:
+                # XEP-0091
+                tim = self.iq_obj.getTimestamp()
+                tim = helpers.datetime_tuple(tim)
+                self.timestamp = localtime(timegm(tim))
+            elif namespace == 'http://delx.cjb.net/protocol/roster-subsync':
+                # see http://trac.gajim.org/ticket/326
+                agent = gajim.get_server_from_jid(self.jid)
+                if self.conn.connection.getRoster().getItem(agent):
+                    # to be sure it's a transport contact
+                    transport_auto_auth = True
+
+        if not self.is_gc and self.id_ and self.id_.startswith('gajim_muc_') \
+        and self.ptype == 'error':
+            # Error presences may not include sent stanza, so we don't detect it's
+            # a muc preence. So detect it by ID
+            h = hmac.new(self.conn.secret_hmac, self.jid).hexdigest()[:6]
+            if self.id_.split('_')[-1] == h:
+                self.is_gc = True
+        self.status = self.iq_obj.getStatus() or ''
+        self.show = self.iq_obj.getShow()
+        if self.show not in ('chat', 'away', 'xa', 'dnd'):
+            self.show = '' # We ignore unknown show
+        if not self.ptype and not self.show:
+            self.show = 'online'
+        elif self.ptype == 'unavailable':
+            self.show = 'offline'
+
+        self.prio = self.iq_obj.getPriority()
+        try:
+            self.prio = int(self.prio)
+        except Exception:
+            self.prio = 0
+        self.keyID = ''
+        if sigTag and self.conn.USE_GPG and self.ptype != 'error':
+            # error presences contain our own signature
+            # verify
+            sigmsg = sigTag.getData()
+            self.keyID = self.conn.gpg.verify(self.status, sigmsg)
+            self.keyID = helpers.prepare_and_validate_gpg_keyID(self.conn.name,
+                self.jid, self.keyID)
+
+        if self.is_gc:
+            if self.ptype == 'error':
+                errcon = self.iq_obj.getError()
+                errmsg = self.iq_obj.getErrorMsg()
+                errcode = self.iq_obj.getErrorCode()
+
+                gc_control = gajim.interface.msg_win_mgr.get_gc_control(
+                    self.jid, self.conn.name)
+
+                # If gc_control is missing - it may be minimized. Try to get it
+                # from there. If it's not there - then it's missing anyway and
+                # will remain set to None.
+                if gc_control is None:
+                    minimized = gajim.interface.minimized_controls[
+                        self.conn.name]
+                    gc_control = minimized.get(self.jid)
+
+                if errcode == '502':
+                    # Internal Timeout:
+                    self.show = 'error'
+                    self.status = errmsg
+                    return True
+                elif errcode == '503':
+                    if gc_control is None or gc_control.autorejoin is None:
+                        # maximum user number reached
+                        self.conn.dispatch('GC_ERROR', (gc_control,
+                            _('Unable to join group chat'),
+                            _('Maximum number of users for %s has been '
+                            'reached') % self.jid))
+                elif (errcode == '401') or (errcon == 'not-authorized'):
+                    # password required to join
+                    self.conn.dispatch('GC_PASSWORD_REQUIRED', (self.jid,
+                        self.resource))
+                elif (errcode == '403') or (errcon == 'forbidden'):
+                    # we are banned
+                    self.conn.dispatch('GC_ERROR', (gc_control,
+                        _('Unable to join group chat'),
+                        _('You are banned from group chat %s.') % self.jid))
+                elif (errcode == '404') or (errcon in ('item-not-found',
+                'remote-server-not-found')):
+                    if gc_control is None or gc_control.autorejoin is None:
+                        # group chat does not exist
+                        self.conn.dispatch('GC_ERROR', (gc_control,
+                            _('Unable to join group chat'),
+                            _('Group chat %s does not exist.') % self.jid))
+                elif (errcode == '405') or (errcon == 'not-allowed'):
+                    self.conn.dispatch('GC_ERROR', (gc_control,
+                        _('Unable to join group chat'),
+                        _('Group chat creation is restricted.')))
+                elif (errcode == '406') or (errcon == 'not-acceptable'):
+                    self.conn.dispatch('GC_ERROR', (gc_control,
+                        _('Unable to join group chat'),
+                        _('Your registered nickname must be used in group chat '
+                        '%s.') % self.jid))
+                elif (errcode == '407') or (errcon == 'registration-required'):
+                    self.conn.dispatch('GC_ERROR', (gc_control,
+                        _('Unable to join group chat'),
+                        _('You are not in the members list in groupchat %s.') %\
+                        self.jid))
+                elif (errcode == '409') or (errcon == 'conflict'):
+                    # nick conflict
+                    self.conn.dispatch('ASK_NEW_NICK', (self.jid,))
+                else:   # print in the window the error
+                    self.conn.dispatch('ERROR_ANSWER', ('', self.jid,
+                            errmsg, errcode))
+            elif not self.ptype or self.ptype == 'unavailable':
+                if gajim.config.get('log_contact_status_changes') and \
+                gajim.config.should_log(self.conn.name, self.jid):
+                    gc_c = gajim.contacts.get_gc_contact(self.conn.name,
+                        self.jid, self.resource)
+                    st = status or ''
+                    if gc_c:
+                        jid = gc_c.jid
+                    else:
+                        jid = self.iq_obj.getJid()
+                    if jid:
+                        # we know real jid, save it in db
+                        st += ' (%s)' % jid
+                    try:
+                        gajim.logger.write('gcstatus', self.fjid, st, self.show)
+                    except exceptions.PysqliteOperationalError, e:
+                        self.conn.dispatch('DB_ERROR', (_('Disk Write Error'),
+                            str(e)))
+                    except exceptions.DatabaseMalformed:
+                        pritext = _('Database Error')
+                        sectext = _('The database file (%s) cannot be read. '
+                            'Try to repair it (see '
+                            'http://trac.gajim.org/wiki/DatabaseBackup) or '
+                            'remove it (all history will be lost).') % \
+                            LOG_DB_PATH
+                        self.conn.dispatch('DB_ERROR', (pritext, sectext))
+                if avatar_sha == '':
+                    # contact has no avatar
+                    puny_nick = helpers.sanitize_filename(self.resource)
+                    gajim.interface.remove_avatar_files(self.jid, puny_nick)
+                # NOTE: if it's a gc presence, don't ask vcard here.
+                # We may ask it to real jid in gui part.
+                if ns_muc_user_x:
+                    # Room has been destroyed. see
+                    # http://www.xmpp.org/extensions/xep-0045.html#destroyroom
+                    reason = _('Room has been destroyed')
+                    destroy = ns_muc_user_x.getTag('destroy')
+                    r = destroy.getTagData('reason')
+                    if r:
+                        reason += ' (%s)' % r
+                    if destroy.getAttr('jid'):
+                        try:
+                            jid = helpers.parse_jid(destroy.getAttr('jid'))
+                            reason += '\n' + \
+                                _('You can join this room instead: %s') % jid
+                        except common.helpers.InvalidFormat:
+                            pass
+                    statusCode = ['destroyed']
+                else:
+                    reason = self.iq_obj.getReason()
+                    statusCode = self.iq_obj.getStatusCode()
+                role = self.iq_obj.getRole()
+                affiliation = self.iq_obj.getAffiliation()
+                prs_jid = self.iq_obj.getJid()
+                actor = self.iq_obj.getActor()
+                new_nick = self.iq_obj.getNewNick()
+                self.conn.dispatch('GC_NOTIFY', (self.jid, self.show,
+                    self.status, self.resource, role, affiliation, prs_jid,
+                    reason, actor, statusCode, new_nick, avatar_sha))
+            return
+
+        if self.ptype == 'subscribe':
+            log.debug('subscribe request from %s' % self.jfid)
+            if self.fjid.find('@') <= 0 and self.fjid in \
+            self.agent_registrations:
+                self.agent_registrations[self.fjid]['sub_received'] = True
+                if not self.agent_registrations[self.fjid]['roster_push']:
+                    # We'll reply after roster push result
+                    return
+            if gajim.config.get_per('accounts', self.conn.name, 'autoauth') or \
+            self.fjid.find('@') <= 0 or self.jid in self.jids_for_auto_auth or \
+            transport_auto_auth:
+                if self.conn.connection:
+                    p = xmpp.Presence(self.fjid, 'subscribed')
+                    p = self.conn.add_sha(p)
+                    self.conn.connection.send(p)
+                if self.fjid.find('@') <= 0 or transport_auto_auth:
+                    self.show = 'offline'
+                    self.status = 'offline'
+                    return True
+
+                if transport_auto_auth:
+                    self.conn.automatically_added.append(self.jid)
+                    self.conn.request_subscription(self.jid,
+                        name=self.user_nick)
+            else:
+                if not self.status:
+                    self.status = _('I would like to add you to my roster.')
+                self.conn.dispatch('SUBSCRIBE', (self.jid, self.status,
+                    self.user_nick))
+        elif self.ptype == 'subscribed':
+            if self.jid in self.conn.automatically_added:
+                self.conn.automatically_added.remove(self.jid)
+            else:
+                # detect a subscription loop
+                if self.jid not in self.conn.subscribed_events:
+                    self.conn.subscribed_events[self.jid] = []
+                self.conn.subscribed_events[self.jid].append(time_time())
+                block = False
+                if len(self.conn.subscribed_events[self.jid]) > 5:
+                    if time_time() - self.subscribed_events[self.jid][0] < 5:
+                        block = True
+                    self.conn.subscribed_events[self.jid] = \
+                        self.conn.subscribed_events[self.jid][1:]
+                if block:
+                    gajim.config.set_per('account', self.conn.name,
+                        'dont_ack_subscription', True)
+                else:
+                    self.conn.dispatch('SUBSCRIBED', (self.jid, self.resource))
+            # BE CAREFUL: no con.updateRosterItem() in a callback
+            log.debug(_('we are now subscribed to %s') % self.jid)
+        elif self.ptype == 'unsubscribe':
+            log.debug(_('unsubscribe request from %s') % self.jid)
+        elif self.ptype == 'unsubscribed':
+            log.debug(_('we are now unsubscribed from %s') % self.jid)
+            # detect a unsubscription loop
+            if self.jid not in self.conn.subscribed_events:
+                self.conn.subscribed_events[self.jid] = []
+            self.conn.subscribed_events[self.jid].append(time_time())
+            block = False
+            if len(self.conn.subscribed_events[self.jid]) > 5:
+                if time_time() - self.conn.subscribed_events[self.jid][0] < 5:
+                    block = True
+                self.conn.subscribed_events[self.jid] = \
+                    self.conn.subscribed_events[self.jid][1:]
+            if block:
+                gajim.config.set_per('account', self.conn.name,
+                    'dont_ack_subscription', True)
+            else:
+                self.dispatch('UNSUBSCRIBED', self.jid)
+        elif self.ptype == 'error':
+            errmsg = self.iq_obj.getError()
+            errcode = self.iq_obj.getErrorCode()
+            if errcode != '502': # Internal Timeout:
+                # print in the window the error
+                self.conn.dispatch('ERROR_ANSWER', ('', self.jid, errmsg, errcode))
+            if errcode != '409': # conflict # See #5120
+                self.show = 'error'
+                self.status = errmsg
+                return True
+
+        elif self.ptype == 'unavailable':
+            for jid in [self.jid, self.fjid]:
+                if jid not in self.conn.sessions:
+                    continue
+                # automatically terminate sessions that they haven't sent a thread
+                # ID in, only if other part support thread ID
+                for sess in self.conn.sessions[jid].values():
+                    if not sess.received_thread_id:
+                        contact = gajim.contacts.get_contact(self.conn.name,
+                            jid)
+                        # FIXME: I don't know if this is the correct behavior here.
+                        # Anyway, it is the old behavior when we assumed that
+                        # not-existing contacts don't support anything
+                        contact_exists = bool(contact)
+                        session_supported = contact_exists and (
+                            contact.supports(xmpp.NS_SSN) or
+                            contact.supports(xmpp.NS_ESESSION))
+                        if session_supported:
+                            sess.terminate()
+                            del self.conn.sessions[jid][sess.thread_id]
+
+        if avatar_sha is not None and self.ptype != 'error':
+            if self.jid not in self.conn.vcard_shas:
+                cached_vcard = self.conn.get_cached_vcard(self.jid)
+                if cached_vcard and 'PHOTO' in cached_vcard and \
+                'SHA' in cached_vcard['PHOTO']:
+                    self.conn.vcard_shas[self.jid] = \
+                        cached_vcard['PHOTO']['SHA']
+                else:
+                    self.conn.vcard_shas[self.jid] = ''
+            if avatar_sha != self.conn.vcard_shas[self.jid]:
+                # avatar has been updated
+                self.conn.request_vcard(self.jid)
+
+        if not self.ptype or self.ptype == 'unavailable':
+            if gajim.config.get('log_contact_status_changes') and \
+            gajim.config.should_log(self.conn.name, self.jid):
+                try:
+                    gajim.logger.write('status', self.jid, self.status,
+                        self.show)
+                except exceptions.PysqliteOperationalError, e:
+                    self.conn.dispatch('DB_ERROR', (_('Disk Write Error'), str(e)))
+                except exceptions.DatabaseMalformed:
+                    pritext = _('Database Error')
+                    sectext = _('The database file (%s) cannot be read. Try to '
+                        'repair it (see '
+                        'http://trac.gajim.org/wiki/DatabaseBackup) or remove '
+                        'it (all history will be lost).') % LOG_DB_PATH
+                    self.conn.dispatch('DB_ERROR', (pritext, sectext))
+            our_jid = gajim.get_jid_from_account(self.conn.name)
+            if self.jid == our_jid and self.resource == \
+            self.conn.server_resource:
+                # We got our own presence
+                self.conn.dispatch('STATUS', self.show)
+            else:
+                return True

@@ -284,7 +284,7 @@ class Interface:
                     profile_window.ProfileWindow(account)
             gajim.connections[account].request_vcard(jid)
 
-    def handle_event_notify(self, account, array):
+    def handle_event_presence(self, obj):
         # 'NOTIFY' (account, (jid, status, status message, resource,
         # priority, # keyID, timestamp, contact_nickname))
         #
@@ -294,39 +294,29 @@ class Interface:
 
         statuss = ['offline', 'error', 'online', 'chat', 'away', 'xa', 'dnd',
             'invisible']
-        # Ignore invalid show
-        if array[1] not in statuss:
-            return
-        old_show = 0
-        new_show = statuss.index(array[1])
-        status_message = array[2]
-        jid = array[0].split('/')[0]
-        keyID = array[5]
-        contact_nickname = array[7]
+
+        account = obj.conn.name
+        jid = obj.jid
+        show = obj.show
+        status = obj.status
+        resource = obj.resource or ''
+        priority = obj.prio
+        keyID = obj.keyID
+        timestamp = obj.timestamp
+        contact_nickname = obj.contact_nickname
+
+        obj.old_show = 0
+        obj.new_show = statuss.index(show)
+
         lcontact = []
-
-        # Get the proper keyID
-        keyID = helpers.prepare_and_validate_gpg_keyID(account, jid, keyID)
-
-        resource = array[3]
-        if not resource:
-            resource = ''
-        priority = array[4]
-        if gajim.jid_is_transport(jid):
-            # It must be an agent
-            ji = jid.replace('@', '')
-        else:
-            ji = jid
 
         highest = gajim.contacts.get_contact_with_highest_priority(account, jid)
         was_highest = (highest and highest.resource == resource)
 
-        conn = gajim.connections[account]
-
         # Update contact
         jid_list = gajim.contacts.get_jid_list(account)
-        if ji in jid_list or jid == gajim.get_jid_from_account(account):
-            lcontact = gajim.contacts.get_contacts(account, ji)
+        if jid in jid_list or jid == gajim.get_jid_from_account(account):
+            lcontact = gajim.contacts.get_contacts(account, jid)
             contact1 = None
             resources = []
             for c in lcontact:
@@ -337,56 +327,58 @@ class Interface:
 
             if contact1:
                 if contact1.show in statuss:
-                    old_show = statuss.index(contact1.show)
+                    obj.old_show = statuss.index(contact1.show)
                 # nick changed
                 if contact_nickname is not None and \
                 contact1.contact_name != contact_nickname:
                     contact1.contact_name = contact_nickname
                     self.roster.draw_contact(jid, account)
 
-                if old_show == new_show and contact1.status == status_message \
+                if obj.old_show == obj.new_show and contact1.status == status \
                 and contact1.priority == priority: # no change
                     return
             else:
                 contact1 = gajim.contacts.get_first_contact_from_jid(account,
-                    ji)
+                    jid)
                 if not contact1:
                     # Presence of another resource of our
                     # jid
                     # Create self contact and add to roster
-                    if resource == conn.server_resource:
+                    if resource == obj.conn.server_resource:
                         return
                     # Ignore offline presence of unknown self resource
-                    if new_show < 2:
+                    if obj.new_show < 2:
                         return
-                    contact1 = gajim.contacts.create_self_contact(jid=ji,
-                        account=account, show=array[1], status=status_message,
+                    contact1 = gajim.contacts.create_self_contact(jid=jid,
+                        account=account, show=show, status=status,
                         priority=priority, keyID=keyID, resource=resource)
-                    old_show = 0
+                    obj.old_show = 0
                     gajim.contacts.add_contact(account, contact1)
                     lcontact.append(contact1)
                 elif contact1.show in statuss:
-                    old_show = statuss.index(contact1.show)
+                    obj.old_show = statuss.index(contact1.show)
                 if (resources != [''] and (len(lcontact) != 1 or \
-                lcontact[0].show != 'offline')) and jid.find('@') > 0:
+                lcontact[0].show != 'offline')) and \
+                not gajim.jid_is_transport(jid):
                     # Another resource of an existing contact connected
-                    old_show = 0
+                    obj.old_show = 0
                     contact1 = gajim.contacts.copy_contact(contact1)
                     lcontact.append(contact1)
                 contact1.resource = resource
 
                 self.roster.add_contact(contact1.jid, account)
 
-            if contact1.jid.find('@') > 0 and len(lcontact) == 1:
+            if not gajim.jid_is_transport(contact1.jid) and len(lcontact) == 1:
                 # It's not an agent
-                if old_show == 0 and new_show > 1:
+                if obj.old_show == 0 and obj.new_show > 1:
                     if not contact1.jid in gajim.newly_added[account]:
                         gajim.newly_added[account].append(contact1.jid)
                     if contact1.jid in gajim.to_be_removed[account]:
                         gajim.to_be_removed[account].remove(contact1.jid)
                     gobject.timeout_add_seconds(5,
                         self.roster.remove_newly_added, contact1.jid, account)
-                elif old_show > 1 and new_show == 0 and conn.connected > 1:
+                elif obj.old_show > 1 and obj.new_show == 0 and \
+                obj.conn.connected > 1:
                     if not contact1.jid in gajim.to_be_removed[account]:
                         gajim.to_be_removed[account].append(contact1.jid)
                     if contact1.jid in gajim.newly_added[account]:
@@ -396,17 +388,16 @@ class Interface:
                         self.roster.remove_to_be_removed, contact1.jid, account)
 
             # unset custom status
-            if (old_show == 0 and new_show > 1) or \
-            (old_show > 1 and new_show == 0 and conn.connected > 1):
+            if (obj.old_show == 0 and obj.new_show > 1) or \
+            (obj.old_show > 1 and obj.new_show == 0 and obj.conn.connected > 1):
                 if account in self.status_sent_to_users and \
                 jid in self.status_sent_to_users[account]:
                     del self.status_sent_to_users[account][jid]
 
-            contact1.show = array[1]
-            contact1.status = status_message
+            contact1.show = show
+            contact1.status = status
             contact1.priority = priority
             contact1.keyID = keyID
-            timestamp = array[6]
             if timestamp:
                 contact1.last_status_time = timestamp
             elif not gajim.block_signed_in_notifications[account]:
@@ -416,41 +407,41 @@ class Interface:
 
         if gajim.jid_is_transport(jid):
             # It must be an agent
-            if ji in jid_list:
+            if jid in jid_list:
                 # Update existing iter and group counting
-                self.roster.draw_contact(ji, account)
+                self.roster.draw_contact(jid, account)
                 self.roster.draw_group(_('Transports'), account)
-                if new_show > 1 and ji in gajim.transport_avatar[account]:
+                if obj.new_show > 1 and jid in gajim.transport_avatar[account]:
                     # transport just signed in.
                     # request avatars
-                    for jid_ in gajim.transport_avatar[account][ji]:
-                        conn.request_vcard(jid_)
+                    for jid_ in gajim.transport_avatar[account][jid]:
+                        obj.conn.request_vcard(jid_)
                 # transport just signed in/out, don't show
                 # popup notifications for 30s
-                account_ji = account + '/' + ji
-                gajim.block_signed_in_notifications[account_ji] = True
+                account_jid = account + '/' + jid
+                gajim.block_signed_in_notifications[account_jid] = True
                 gobject.timeout_add_seconds(30,
-                    self.unblock_signed_in_notifications, account_ji)
+                    self.unblock_signed_in_notifications, account_jid)
             locations = (self.instances, self.instances[account])
             for location in locations:
                 if 'add_contact' in location:
-                    if old_show == 0 and new_show > 1:
+                    if obj.old_show == 0 and obj.new_show > 1:
                         location['add_contact'].transport_signed_in(jid)
                         break
-                    elif old_show > 1 and new_show == 0:
+                    elif obj.old_show > 1 and obj.new_show == 0:
                         location['add_contact'].transport_signed_out(jid)
                         break
-        elif ji in jid_list:
+        elif jid in jid_list:
             # It isn't an agent
             # reset chatstate if needed:
             # (when contact signs out or has errors)
-            if array[1] in ('offline', 'error'):
+            if show in ('offline', 'error'):
                 contact1.our_chatstate = contact1.chatstate = \
                     contact1.composing_xep = None
 
                 # TODO: This causes problems when another
-                #       resource signs off!
-                conn.stop_all_active_file_transfers(contact1)
+                # resource signs off!
+                obj.conn.stop_all_active_file_transfers(contact1)
 
                 # disable encryption, since if any messages are
                 # lost they'll be not decryptable (note that
@@ -459,19 +450,18 @@ class Interface:
 
                 # there won't be any sessions here if the contact terminated
                 # their sessions before going offline (which we do)
-                for sess in conn.get_sessions(ji):
-                    if (ji + '/' + resource) != str(sess.jid):
+                for sess in obj.conn.get_sessions(jid):
+                    if obj.fjid != str(sess.jid):
                         continue
                     if sess.control:
                         sess.control.no_autonegotiation = False
                     if sess.enable_encryption:
                         sess.terminate_e2e()
-                        conn.delete_session(jid, sess.thread_id)
+                        obj.conn.delete_session(jid, sess.thread_id)
 
-            self.roster.chg_contact_status(contact1, array[1], status_message,
-                account)
+            self.roster.chg_contact_status(contact1, show, status, account)
             # Notifications
-            if old_show < 2 and new_show > 1:
+            if obj.old_show < 2 and obj.new_show > 1:
                 show_notif = True
                 for c in lcontact:
                     if c.resource == resource:
@@ -482,7 +472,8 @@ class Interface:
                         break
                 if show_notif:
                     # no other resource is connected, let's look in metacontacts
-                    family = gajim.contacts.get_metacontacts_family(account, ji)
+                    family = gajim.contacts.get_metacontacts_family(account,
+                        jid)
                     for info in family:
                         acct_ = info['account']
                         jid_ = info['jid']
@@ -495,12 +486,9 @@ class Interface:
                             break
                 if show_notif:
                     notify.notify('contact_connected', jid, account,
-                        status_message)
-                if self.remote_ctrl:
-                    self.remote_ctrl.raise_signal('ContactPresence', (account,
-                        array))
+                        status)
 
-            elif old_show > 1 and new_show < 2:
+            elif obj.old_show > 1 and obj.new_show < 2:
                 show_notif = True
                 for c in lcontact:
                     if c.resource == resource:
@@ -511,7 +499,8 @@ class Interface:
                         break
                 if show_notif:
                     # no other resource is connected, let's look in metacontacts
-                    family = gajim.contacts.get_metacontacts_family(account, ji)
+                    family = gajim.contacts.get_metacontacts_family(account,
+                        jid)
                     for info in family:
                         acct_ = info['account']
                         jid_ = info['jid']
@@ -523,26 +512,18 @@ class Interface:
                             show_notif = False
                             break
                 if show_notif:
-                    notify.notify('contact_disconnected', jid, account,
-                        status_message)
-                if self.remote_ctrl:
-                    self.remote_ctrl.raise_signal('ContactAbsence', (account,
-                        array))
-                # FIXME: stop non active file transfers
+                    notify.notify('contact_disconnected', jid, account, status)
             # Status change (not connected/disconnected or
             # error (<1))
-            elif new_show > 1:
-                notify.notify('status_change', jid, account, [new_show,
-                    status_message])
-                if self.remote_ctrl:
-                    self.remote_ctrl.raise_signal('ContactStatus', (account,
-                        array))
+            elif obj.new_show > 1:
+                notify.notify('status_change', jid, account, [obj.new_show,
+                    status])
         else:
             # FIXME: MSN transport (CMSN1.2.1 and PyMSN) don't
             #        follow the XEP, still the case in 2008.
             #        It's maybe a GC_NOTIFY (specialy for MSN gc)
-            self.handle_event_gc_notify(account, (jid, array[1], status_message,
-                array[3], None, None, None, None, None, [], None, None))
+            self.handle_event_gc_notify(account, (jid, show, status,
+                resource, None, None, None, None, None, [], None, None))
 
         highest = gajim.contacts.get_contact_with_highest_priority(account, jid)
         is_highest = (highest and highest.resource == resource)
@@ -2067,7 +2048,6 @@ class Interface:
             'INFORMATION': [self.handle_event_information],
             'STATUS': [self.handle_event_status],
             'NEW_JID': [self.handle_event_new_jid],
-            'NOTIFY': [self.handle_event_notify],
             'MSGERROR': [self.handle_event_msgerror],
             'MSGSENT': [self.handle_event_msgsent],
             'MSGNOTSENT': [self.handle_event_msgnotsent],
@@ -2142,6 +2122,7 @@ class Interface:
             'last-result-received': [self.handle_event_last_status_time],
             'muc-admin-received': [self.handle_event_gc_affiliation],
             'muc-owner-received': [self.handle_event_gc_config],
+            'presence-received': [self.handle_event_presence],
             'roster-info': [self.handle_event_roster_info],
             'roster-item-exchange-received': \
                 [self.handle_event_roster_item_exchange],

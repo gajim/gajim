@@ -104,7 +104,7 @@ class Remote:
 
         bus_name = dbus.service.BusName(SERVICE, bus=session_bus)
         self.signal_object = SignalObject(bus_name)
-        
+
         gajim.ged.register_event_handler('last-result-received', ged.POSTGUI,
             self.on_last_status_time)
         gajim.ged.register_event_handler('version-result-received', ged.POSTGUI,
@@ -115,6 +115,8 @@ class Remote:
             self.on_gmail_notify)
         gajim.ged.register_event_handler('roster-info', ged.POSTGUI,
             self.on_roster_info)
+        gajim.ged.register_event_handler('presence-received', ged.POSTGUI,
+            self.on_presence_received)
 
     def on_last_status_time(self, obj):
         self.raise_signal('LastStatusTime', (obj.conn.name, [
@@ -135,6 +137,19 @@ class Remote:
     def on_roster_info(self, obj):
         self.raise_signal('RosterInfo', (obj.conn.name, [obj.jid, obj.nickname,
             obj.sub, obj.ask, obj.groups]))
+
+    def on_presence_received(self, obj):
+        event = None
+        if obj.old_show < 2 and obj.new_show > 1:
+            event = 'ContactPresence'
+        elif obj.old_show > 1 and obj.new_show < 2:
+            event = 'ContactAbsence'
+        elif obj.new_show > 1:
+            event = 'ContactStatus'
+        if event:
+            self.raise_signal(event, (obj.conn.name, [obj.jid, obj.show,
+                obj.status, obj.resource, obj.prio, obj.keyID, obj.timestamp,
+                obj.contact_nickname]))
 
     def raise_signal(self, signal, arg):
         if self.signal_object:
