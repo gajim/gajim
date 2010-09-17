@@ -117,6 +117,9 @@ class PluginManager(object):
     def _create_plugin_entry_in_global_config(self, plugin):
         gajim.config.add_per('plugins', plugin.short_name)
 
+    def _remove_plugin_entry_in_global_config(self, plugin):
+        gajim.config.del_per('plugins', plugin.short_name)
+
     @log_calls('PluginManager')
     def add_plugin(self, plugin_class):
         '''
@@ -519,6 +522,8 @@ class PluginManager(object):
             self.deactivate_plugin(plugin)
         rmtree(plugin.__path__, False, on_error)
         self.plugins.remove(plugin)
+        if self._plugin_has_entry_in_global_config(plugin):
+            self._remove_plugin_entry_in_global_config(plugin)
 
     def get_plugin_by_path(self, plugin_dir):
         for plugin in self.plugins:
