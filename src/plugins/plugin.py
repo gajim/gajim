@@ -203,7 +203,6 @@ class GajimPluginConfig(UserDict.DictMixin):
             locale.getpreferredencoding())
         #log.debug('FILE_PATH = %s'%(self.FILE_PATH))
         self.data = None
-        self.load()
 
     @log_calls('GajimPluginConfig')
     def __getitem__(self, key):
