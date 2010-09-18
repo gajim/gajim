@@ -38,13 +38,6 @@ from plugins.helpers import log_calls, log
 from common import ged
 
 class SnarlNotificationsPlugin(GajimPlugin):
-    name = u'Snarl Notifications'
-    short_name = u'snarl_notifications'
-    version = u'0.1'
-    description = u'''Shows events notification using Snarl (http://www.fullphat.net/) under Windows. Snarl needs to be installed in system.
-PySnarl bindings are used (http://code.google.com/p/pysnarl/).'''
-    authors = [u'Mateusz Biliński <mateusz@bilinski.it>']
-    homepage = u'http://blog.bilinski.it'
 
     @log_calls('SnarlNotificationsPlugin')
     def init(self):

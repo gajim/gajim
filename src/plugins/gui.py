@@ -104,7 +104,7 @@ class PluginsWindow(object):
     def _display_installed_plugin_info(self, plugin):
         self.plugin_name_label.set_text(plugin.name)
         self.plugin_version_label.set_text(plugin.version)
-        self.plugin_authors_label.set_text(", ".join(plugin.authors))
+        self.plugin_authors_label.set_text(plugin.authors)
         self.plugin_homepage_linkbutton.set_uri(plugin.homepage)
         self.plugin_homepage_linkbutton.set_label(plugin.homepage)
         self.plugin_homepage_linkbutton.set_property('sensitive', True)
