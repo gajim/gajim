@@ -134,8 +134,8 @@ class PluginManager(object):
             self.plugins.append(plugin)
             plugin.active = False
         else:
-            log.info('Not loading plugin %s v%s from module %s (identified by
-                short name: %s). Plugin already loaded.' % (plugin.name,
+            log.info('Not loading plugin %s v%s from module %s (identified by'
+                ' short name: %s). Plugin already loaded.' % (plugin.name,
                 plugin.version, plugin.__module__, plugin.short_name))
 
     @log_calls('PluginManager')
