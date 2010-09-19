@@ -101,9 +101,7 @@ class PluginManager(object):
         '''
         for path in gajim.PLUGINS_DIRS:
             pc = PluginManager.scan_dir_for_plugins(path)
-            if pc:
-                self.add_plugins(pc)
-
+            self.add_plugins(pc)
         self._activate_all_plugins_from_global_config()
 
     @log_calls('PluginManager')
@@ -400,7 +398,7 @@ class PluginManager(object):
         fields = ('name', 'short_name', 'version', 'description', 'authors',
             'homepage')
         if not os.path.isdir(path):
-            return
+            return plugins_found
 
         dir_list = os.listdir(path)
 
