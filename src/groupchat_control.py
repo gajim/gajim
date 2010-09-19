@@ -1444,8 +1444,6 @@ class GroupchatControl(ChatControlBase):
                 con = gajim.connections[self.account]
                 if gc_c and gc_c.jid:
                     real_jid = gc_c.jid
-                    if gc_c.resource:
-                        real_jid += '/' + gc_c.resource
                 else:
                     real_jid = fake_jid
                 if fake_jid in con.vcard_shas:
