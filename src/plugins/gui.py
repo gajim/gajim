@@ -30,7 +30,7 @@ import pango
 import gtk, gobject
 
 import gtkgui_helpers
-import dialogs
+from dialogs import WarningDialog, YesNoDialog, ArchiveChooserDialog
 from common import gajim
 from plugins.helpers import log_calls, log
 from common.exceptions import PluginsystemError
@@ -194,17 +194,26 @@ class PluginsWindow(object):
             try:
                 gajim.plugin_manager.remove_plugin(plugin)
             except PluginsystemError, e:
-                dialogs.WarningDialog(_('Unable to properly remove the plugin'),
+                WarningDialog(_('Unable to properly remove the plugin'),
                     str(e))
                 return
             model.remove(iter)
 
     @log_calls('PluginsWindow')
     def on_install_plugin_button_clicked(self, widget):
+        def show_warn_dialog():
+            text = _('Archive is malformed')
+            dialog = WarningDialog(text, '', transient_for=self.window)
+            dialog.set_modal(False)
+            dialog.popup()
+
         def _on_plugin_exists(zip_filename):
             def on_yes(is_checked):
                 plugin = gajim.plugin_manager.install_from_zip(zip_filename,
                     True)
+                if not plugin:
+                    show_warn_dialog()
+                    return
                 model = self.installed_plugins_model
 
                 for row in xrange(len(model)):
@@ -216,8 +225,8 @@ class PluginsWindow(object):
                 sel = self.installed_plugins_treeview.get_selection()
                 sel.select_iter(iter_)
 
-            dialogs.YesNoDialog(_('Plugin already exists'),
-                sectext=_('Overwrite?'), on_response_yes=on_yes)
+            YesNoDialog(_('Plugin already exists'), sectext=_('Overwrite?'),
+                on_response_yes=on_yes)
 
         def _try_install(zip_filename):
             try:
@@ -228,15 +237,17 @@ class PluginsWindow(object):
                     _on_plugin_exists(zip_filename)
                     return
 
-                dialogs.WarningDialog(error_text, '"%s"' % zip_filename)
+                WarningDialog(error_text, '"%s"' % zip_filename)
                 return
-
+            if not plugin:
+                show_warn_dialog()
+                return
             model = self.installed_plugins_model
             iter_ = model.append([plugin, plugin.name, False])
             sel = self.installed_plugins_treeview.get_selection()
             sel.select_iter(iter_)
 
-        self.dialog = dialogs.ArchiveChooserDialog(on_response_ok=_try_install)
+        self.dialog = ArchiveChooserDialog(on_response_ok=_try_install)
 
 
 class GajimPluginConfigDialog(gtk.Dialog):

@@ -1467,12 +1467,15 @@ class WarningDialog(HigDialog):
     HIG compliant warning dialog
     """
 
-    def __init__(self, pritext, sectext=''):
+    def __init__(self, pritext, sectext='', transient_for=None):
         HigDialog.__init__(self, None, gtk.MESSAGE_WARNING, gtk.BUTTONS_OK,
             pritext, sectext)
         self.set_modal(False)
-        if hasattr(gajim.interface, 'roster') and gajim.interface.roster:
-            self.set_transient_for(gajim.interface.roster.window)
+        if transient_for is None and hasattr(gajim.interface, 'roster') and \
+        gajim.interface.roster:
+            transient_for = gajim.interface.roster.window
+        if transient_for:
+            self.set_transient_for(transient_for)
         self.popup()
 
 class InformationDialog(HigDialog):

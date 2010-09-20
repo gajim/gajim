@@ -431,6 +431,12 @@ class PluginManager(object):
 
             if module is None:
                 continue
+
+            manifest_path = os.path.join(os.path.dirname(file_path),
+                'manifest.ini')
+            if scan_dirs and (not os.path.isfile(manifest_path)):
+                continue
+
             log.debug('Attributes processing started')
             for module_attr_name in [attr_name for attr_name in dir(module)
             if not (attr_name.startswith('__') or attr_name.endswith('__'))]:
@@ -445,11 +451,7 @@ class PluginManager(object):
                     module_attr.__path__ = os.path.abspath(
                         os.path.dirname(file_path))
 
-                    manifest_path = os.path.join(module_attr.__path__,
-                        'manifest.ini')
                     # read metadata from manifest.ini
-                    if not os.path.isfile(manifest_path):
-                        continue
                     conf.readfp(open(manifest_path, 'r'))
                     for option in fields:
                         if conf.get('info', option) is '':
@@ -484,6 +486,7 @@ class PluginManager(object):
             raise PluginsystemError(_('Archive corrupted'))
 
         dirs = []
+        manifest = None
         for filename in zip_file.namelist():
             if filename.startswith('.') or filename.startswith('/') or \
             ('/' not in filename):
@@ -491,16 +494,18 @@ class PluginManager(object):
                 raise PluginsystemError(_('Archive is malformed'))
             if filename.endswith('/') and filename.find('/', 0, -1) < 0:
                 dirs.append(filename)
-
+            if 'manifest.ini' in filename.split('/')[1]:
+                manifest = True
+        if not manifest:
+            return
         if len(dirs) > 1:
-            # several directories in the root of the archive
             raise PluginsystemError(_('Archive is malformed'))
 
         base_dir, user_dir = gajim.PLUGINS_DIRS
         plugin_dir = os.path.join(user_dir, dirs[0])
 
         if os.path.isdir(plugin_dir):
-        # Plugin already exists
+        # Plugin dir already exists
             if not owerwrite:
                 raise PluginsystemError(_('Plugin already exists'))
             self.remove_plugin(self.get_plugin_by_path(plugin_dir))
@@ -508,7 +513,10 @@ class PluginManager(object):
         zip_file.extractall(user_dir)
         zip_file.close()
         path = os.path.join(user_dir, dirs[0])
-        self.add_plugin(self.scan_dir_for_plugins(plugin_dir, False)[0])
+        plugins = self.scan_dir_for_plugins(plugin_dir, False)
+        if not plugins:
+            return
+        self.add_plugin(plugins[0])
         plugin = self.plugins[-1]
         return plugin
 
@@ -524,12 +532,13 @@ class PluginManager(object):
             # access is denied or other
             raise PluginsystemError(error[1])
 
-        if plugin.active:
-            self.deactivate_plugin(plugin)
-        rmtree(plugin.__path__, False, on_error)
-        self.plugins.remove(plugin)
-        if self._plugin_has_entry_in_global_config(plugin):
-            self._remove_plugin_entry_in_global_config(plugin)
+        if plugin:
+            if plugin.active:
+                self.deactivate_plugin(plugin)
+            rmtree(plugin.__path__, False, on_error)
+            self.plugins.remove(plugin)
+            if self._plugin_has_entry_in_global_config(plugin):
+                self._remove_plugin_entry_in_global_config(plugin)
 
     def get_plugin_by_path(self, plugin_dir):
         for plugin in self.plugins:
