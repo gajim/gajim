@@ -530,7 +530,7 @@ class PluginManager(object):
                 os.unlink(path)
                 return
             # access is denied or other
-            raise PluginsystemError(error[1])
+            raise PluginsystemError(error[1][1])
 
         if plugin:
             if plugin.active:

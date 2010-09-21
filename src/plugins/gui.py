@@ -195,7 +195,7 @@ class PluginsWindow(object):
                 gajim.plugin_manager.remove_plugin(plugin)
             except PluginsystemError, e:
                 WarningDialog(_('Unable to properly remove the plugin'),
-                    str(e))
+                    str(e), self.window)
                 return
             model.remove(iter)
 
@@ -237,7 +237,7 @@ class PluginsWindow(object):
                     _on_plugin_exists(zip_filename)
                     return
 
-                WarningDialog(error_text, '"%s"' % zip_filename)
+                WarningDialog(error_text, '"%s"' % zip_filename, self.window)
                 return
             if not plugin:
                 show_warn_dialog()
