@@ -611,7 +611,6 @@ class PresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             'unsubscribe', 'unsubscribed')
         if self.ptype and not self.ptype in rfc_types:
             self.ptype = None
-        log.debug('PresenceCB: %s' % self.ptype)
         if not self.conn or self.conn.connected < 2:
             log.debug('account is no more connected')
             return
@@ -768,7 +767,7 @@ class PresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                 gajim.config.should_log(self.conn.name, self.jid):
                     gc_c = gajim.contacts.get_gc_contact(self.conn.name,
                         self.jid, self.resource)
-                    st = status or ''
+                    st = self.status or ''
                     if gc_c:
                         jid = gc_c.jid
                     else:
