@@ -340,7 +340,7 @@ class Interface:
                     if c_.show not in ('offline', 'error'):
                         obj.show_notif = False
                         break
-            if show_notif:
+            if obj.show_notif:
                 if obj.old_show < 2 and obj.new_show > 1:
                     notify.notify('contact_connected', jid, account, status)
 
