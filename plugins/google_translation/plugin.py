@@ -41,12 +41,6 @@ from common import ged
 from common import nec
 
 class GoogleTranslationPlugin(GajimPlugin):
-    name = u'Google Translation'
-    short_name = u'google_translation'
-    version = u'0.1'
-    description = u'''Translates (currently only incoming) messages using Google Translate.'''
-    authors = [u'Mateusz Biliński <mateusz@bilinski.it>']
-    homepage = u'http://blog.bilinski.it'
 
     @log_calls('GoogleTranslationPlugin')
     def init(self):

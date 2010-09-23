@@ -1777,7 +1777,6 @@ ConnectionJingle, ConnectionIBBytestream):
             obj.contact.contact_name != obj.contact_nickname:
                 obj.contact.contact_name = obj.contact_nickname
                 obj.need_redraw = True
-#                gajim.interface.roster.draw_contact(jid, account)
 
             if obj.old_show == obj.new_show and obj.contact.status == \
             obj.status and obj.contact.priority == obj.prio: # no change
@@ -1811,7 +1810,6 @@ ConnectionJingle, ConnectionIBBytestream):
             obj.contact.resource = resource
 
             obj.need_add_in_roster = True
-#            gajim.interface.roster.add_contact(jid, account)
 
         if not gajim.jid_is_transport(jid) and len(obj.contact_list) == 1:
             # It's not an agent
@@ -1827,7 +1825,6 @@ ConnectionJingle, ConnectionIBBytestream):
                 if jid in gajim.newly_added[account]:
                     gajim.newly_added[account].remove(jid)
                 obj.need_redraw = True
-#                self.roster.draw_contact(jid, account)
 
         obj.contact.show = obj.show
         obj.contact.status = obj.status

@@ -43,15 +43,6 @@ from plugins.helpers import log, log_calls
 from plugins.gui import GajimPluginConfigDialog
 
 class BannerTweaksPlugin(GajimPlugin):
-    name = u'Banner Tweaks'
-    short_name = u'banner_tweaks'
-    version = u'0.1'
-    description = u'''Allows user to tweak chat window banner appearance (eg. make it compact).
-
-Based on patch by pb in ticket #4133:
-http://trac.gajim.org/attachment/ticket/4133'''
-    authors = [u'Mateusz Biliński <mateusz@bilinski.it>']
-    homepage = u'http://blog.bilinski.it'
 
     @log_calls('BannerTweaksPlugin')
     def init(self):

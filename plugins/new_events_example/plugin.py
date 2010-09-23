@@ -38,12 +38,6 @@ from common import ged
 from common import nec
 
 class NewEventsExamplePlugin(GajimPlugin):
-    name = u'New Events Example'
-    short_name = u'new_events_example'
-    version = u'0.1'
-    description = u'''Shows how to generate new network events based on existing one using Network Events Controller.'''
-    authors = [u'Mateusz Biliński <mateusz@bilinski.it>']
-    homepage = u'http://blog.bilinski.it'
 
     @log_calls('NewEventsExamplePlugin')
     def init(self):

@@ -166,6 +166,8 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="has_tooltip">True</property>
+                <property name="tooltip_text" translatable="yes">Show a list of emoticons (Alt+M)</property>
                 <property name="relief">none</property>
                 <child>
                   <object class="GtkImage" id="emoticons_button_image">
@@ -193,6 +195,8 @@
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+            <property name="has_tooltip">True</property>
+            <property name="tooltip_text" translatable="yes">Show a list of formattings</property>
             <property name="relief">none</property>
             <property name="focus_on_click">False</property>
             <child>
@@ -224,6 +228,8 @@
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+            <property name="has_tooltip">True</property>
+            <property name="tooltip_text" translatable="yes">Change your nickname (Ctrl+N)</property>
             <property name="relief">none</property>
             <child>
               <object class="GtkImage" id="image4">
@@ -246,6 +252,8 @@
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+            <property name="has_tooltip">True</property>
+            <property name="tooltip_text" translatable="yes">Change the room's subject (Alt+T)</property>
             <property name="relief">none</property>
             <child>
               <object class="GtkImage" id="image6">
@@ -269,6 +277,8 @@
             <property name="receives_default">True</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
             <property name="no_show_all">True</property>
+            <property name="has_tooltip">True</property>
+            <property name="tooltip_text" translatable="yes">Bookmark this room (Ctrl+B)</property>
             <property name="relief">none</property>
             <child>
               <object class="GtkImage" id="image7">
@@ -291,6 +301,8 @@
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+            <property name="has_tooltip">True</property>
+            <property name="tooltip_text" translatable="yes">Browse the chat history (Ctrl+H)</property>
             <property name="relief">none</property>
             <child>
               <object class="GtkImage" id="image8">
@@ -323,6 +335,8 @@
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+            <property name="has_tooltip">True</property>
+            <property name="tooltip_text" translatable="yes">Show a menu of advanced functions (Alt+D)</property>
             <property name="relief">none</property>
             <property name="focus_on_click">False</property>
             <child>

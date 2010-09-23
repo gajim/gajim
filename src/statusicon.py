@@ -97,7 +97,6 @@ class StatusIcon:
                     self.on_status_icon_size_changed)
 
         self.set_img()
-        self.status_icon.set_visible(True)
         self.subscribe_events()
 
     def on_status_icon_right_clicked(self, widget, event_button, event_time):
@@ -131,9 +130,14 @@ class StatusIcon:
         """
         if not gajim.interface.systray_enabled:
             return
+        if gajim.config.get('trayicon') == 'always':
+            self.status_icon.set_visible(True)
         if gajim.events.get_nb_systray_events():
+            self.status_icon.set_visible(True)
             self.status_icon.set_blinking(True)
         else:
+            if gajim.config.get('trayicon') == 'on_event':
+                self.status_icon.set_visible(False)
             self.status_icon.set_blinking(False)
 
         image = gajim.interface.jabber_state_images[self.statusicon_size][

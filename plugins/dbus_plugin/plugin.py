@@ -680,13 +680,6 @@ from plugins.helpers import log_calls, log
 from common import ged
 
 class DBusPlugin(GajimPlugin):
-    name = u'D-Bus Support'
-    short_name = u'dbus'
-    version = u'0.1'
-    description = u'''D-Bus support. Based on remote_control module from
-Gajim core but uses new events handling system.'''
-    authors = [u'Mateusz Biliński <mateusz@bilinski.it>']
-    homepage = u'http://blog.bilinski.it'
 
     @log_calls('DBusPlugin')
     def init(self):

@@ -33,12 +33,6 @@ from plugins.helpers import log_calls, log
 from common import ged
 
 class EventsDumpPlugin(GajimPlugin):
-    name = u'Events Dump'
-    short_name = u'events_dump'
-    version = u'0.1'
-    description = u'''Dumps info about selected events to console.'''
-    authors = [u'Mateusz Biliński <mateusz@bilinski.it>']
-    homepage = u'http://blog.bilinski.it'
 
     @log_calls('EventsDumpPlugin')
     def init(self):

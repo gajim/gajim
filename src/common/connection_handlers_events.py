@@ -632,9 +632,6 @@ class PresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                     []))
             return
         jid_list = gajim.contacts.get_jid_list(self.conn.name)
-#        if self.jid not in jid_list and self.jid != gajim.get_jid_from_account(
-#        self.conn.name):
-#            return
         self.timestamp = None
         self.get_id()
         self.is_gc = False # is it a GC presence ?
