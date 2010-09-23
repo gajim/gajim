@@ -1115,6 +1115,8 @@ ConnectionJingle, ConnectionIBBytestream):
             self._nec_gmail_new_mail_received)
         gajim.ged.register_event_handler('ping-received', ged.CORE,
             self._nec_ping_received)
+        gajim.ged.register_event_handler('presence-received', ged.CORE,
+            self._nec_presence_received)
 
     def build_http_auth_answer(self, iq_obj, answer):
         if not self.connection or self.connected < 2:
@@ -1742,6 +1744,131 @@ ConnectionJingle, ConnectionIBBytestream):
         log.debug('PresenceCB')
         gajim.nec.push_incoming_event(NetworkEvent('raw-pres-received',
             conn=self, iq_obj=prs))
+
+    def _nec_presence_received(self, obj):
+        account = obj.conn.name
+        jid = obj.jid
+        resource = obj.resource or ''
+
+        statuss = ['offline', 'error', 'online', 'chat', 'away', 'xa', 'dnd',
+            'invisible']
+        obj.old_show = 0
+        obj.new_show = statuss.index(obj.show)
+
+        obj.contact_list = []
+
+        highest = gajim.contacts.get_contact_with_highest_priority(account, jid)
+        obj.was_highest = (highest and highest.resource == resource)
+
+        # Update contact
+        obj.contact_list = gajim.contacts.get_contacts(account, jid)
+        obj.contact = None
+        resources = []
+        for c in obj.contact_list:
+            resources.append(c.resource)
+            if c.resource == resource:
+                obj.contact = c
+                break
+
+        if obj.contact:
+            obj.old_show = statuss.index(obj.contact.show)
+            # nick changed
+            if obj.contact_nickname is not None and \
+            obj.contact.contact_name != obj.contact_nickname:
+                obj.contact.contact_name = obj.contact_nickname
+                obj.need_redraw = True
+#                gajim.interface.roster.draw_contact(jid, account)
+
+            if obj.old_show == obj.new_show and obj.contact.status == \
+            obj.status and obj.contact.priority == obj.prio: # no change
+                return
+        else:
+            obj.contact = gajim.contacts.get_first_contact_from_jid(account,
+                jid)
+            if not obj.contact:
+                # Presence of another resource of our jid
+                # Create self contact and add to roster
+                if resource == obj.conn.server_resource:
+                    return
+                # Ignore offline presence of unknown self resource
+                if obj.new_show < 2:
+                    return
+                obj.contact = gajim.contacts.create_self_contact(jid=jid,
+                    account=account, show=obj.show, status=obj.status,
+                    priority=obj.prio, keyID=obj.keyID,
+                    resource=obj.resource)
+                gajim.contacts.add_contact(account, obj.contact)
+                obj.contact_list.append(obj.contact)
+            else:
+                obj.old_show = statuss.index(obj.contact.show)
+            if (resources != [''] and (len(obj.contact_list) != 1 or \
+            obj.contact_list[0].show != 'offline')) and \
+            not gajim.jid_is_transport(jid):
+                # Another resource of an existing contact connected
+                obj.old_show = 0
+                obj.contact = gajim.contacts.copy_contact(obj.contact)
+                obj.contact_list.append(obj.contact)
+            obj.contact.resource = resource
+
+            obj.need_add_in_roster = True
+#            gajim.interface.roster.add_contact(jid, account)
+
+        if not gajim.jid_is_transport(jid) and len(obj.contact_list) == 1:
+            # It's not an agent
+            if obj.old_show == 0 and obj.new_show > 1:
+                if not jid in gajim.newly_added[account]:
+                    gajim.newly_added[account].append(jid)
+                if jid in gajim.to_be_removed[account]:
+                    gajim.to_be_removed[account].remove(jid)
+            elif obj.old_show > 1 and obj.new_show == 0 and \
+            obj.conn.connected > 1:
+                if not jid in gajim.to_be_removed[account]:
+                    gajim.to_be_removed[account].append(jid)
+                if jid in gajim.newly_added[account]:
+                    gajim.newly_added[account].remove(jid)
+                obj.need_redraw = True
+#                self.roster.draw_contact(jid, account)
+
+        obj.contact.show = obj.show
+        obj.contact.status = obj.status
+        obj.contact.priority = obj.prio
+        obj.contact.keyID = obj.keyID
+        if obj.timestamp:
+            obj.contact.last_status_time = obj.timestamp
+        elif not gajim.block_signed_in_notifications[account]:
+            # We're connected since more that 30 seconds
+            obj.contact.last_status_time = localtime()
+        obj.contact.contact_nickname = obj.contact_nickname
+
+        if gajim.jid_is_transport(jid):
+            return
+
+        # It isn't an agent
+        # reset chatstate if needed:
+        # (when contact signs out or has errors)
+        if obj.show in ('offline', 'error'):
+            obj.contact.our_chatstate = obj.contact.chatstate = \
+                obj.contact.composing_xep = None
+
+            # TODO: This causes problems when another
+            # resource signs off!
+            self.stop_all_active_file_transfers(obj.contact)
+
+            # disable encryption, since if any messages are
+            # lost they'll be not decryptable (note that
+            # this contradicts XEP-0201 - trying to get that
+            # in the XEP, though)
+
+            # there won't be any sessions here if the contact terminated
+            # their sessions before going offline (which we do)
+            for sess in self.get_sessions(jid):
+                if obj.fjid != str(sess.jid):
+                    continue
+                if sess.control:
+                    sess.control.no_autonegotiation = False
+                if sess.enable_encryption:
+                    sess.terminate_e2e()
+                    self.delete_session(jid, sess.thread_id)
 
     def _StanzaArrivedCB(self, con, obj):
         self.last_io = gajim.idlequeue.current_time()

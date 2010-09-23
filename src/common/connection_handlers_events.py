@@ -604,6 +604,10 @@ class PresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
     def generate(self):
         self.conn = self.base_event.conn
         self.iq_obj = self.base_event.iq_obj
+
+        self.need_add_in_roster = False
+        self.need_redraw = False
+
         self.ptype = self.iq_obj.getType()
         if self.ptype == 'available':
             self.ptype = None
@@ -627,6 +631,10 @@ class PresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                     _('Nickname not allowed: %s') % resource, None, False, None,
                     []))
             return
+        jid_list = gajim.contacts.get_jid_list(self.conn.name)
+#        if self.jid not in jid_list and self.jid != gajim.get_jid_from_account(
+#        self.conn.name):
+#            return
         self.timestamp = None
         self.get_id()
         self.is_gc = False # is it a GC presence ?
@@ -957,5 +965,5 @@ class PresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             self.conn.server_resource:
                 # We got our own presence
                 self.conn.dispatch('STATUS', self.show)
-            else:
+            elif self.jid in jid_list:
                 return True

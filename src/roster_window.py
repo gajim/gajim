@@ -62,6 +62,7 @@ from common.exceptions import GajimGeneralException
 from common import i18n
 from common import pep
 from common import location_listener
+from common import ged
 
 from message_window import MessageWindowMgr
 
@@ -1382,7 +1383,7 @@ class RosterWindow:
         self.tree.set_model(None)
         # disable sorting
         self.model.set_sort_column_id(-2, gtk.SORT_ASCENDING)
- 
+
     def _after_fill(self):
         self.model.set_sort_column_id(1, gtk.SORT_ASCENDING)
         self.tree.set_model(self.modelfilter)
@@ -1411,7 +1412,7 @@ class RosterWindow:
         self._iters = {}
         # for merged mode
         self._iters['MERGED'] = {'account': None, 'groups': {}}
-        
+
         for acct in gajim.contacts.get_accounts():
             self._iters[acct] = {'account': None, 'groups': {}, 'contacts': {}}
             self.add_account(acct)
@@ -2436,6 +2437,41 @@ class RosterWindow:
             self.get_status_message('offline', on_continue, show_pep=False)
         else:
             on_continue('', None)
+
+    def _nec_presence_received(self, obj):
+        account = obj.conn.name
+        jid = obj.jid
+
+        if obj.need_add_in_roster:
+            self.add_contact(jid, account)
+
+        jid_list = gajim.contacts.get_jid_list(account)
+        if jid in jid_list or jid == gajim.get_jid_from_account(account):
+            if not gajim.jid_is_transport(jid) and len(obj.contact_list) == 1:
+                if obj.old_show == 0 and obj.new_show > 1:
+                    gobject.timeout_add_seconds(5, self.remove_newly_added, jid,
+                        account)
+                elif obj.old_show > 1 and obj.new_show == 0 and \
+                obj.conn.connected > 1:
+                    gobject.timeout_add_seconds(5, self.remove_to_be_removed,
+                        jid, account)
+
+        if obj.need_redraw:
+            self.draw_contact(jid, account)
+
+        if gajim.jid_is_transport(jid) and jid in jid_list:
+            # It must be an agent
+            # Update existing iter and group counting
+            self.draw_contact(jid, account)
+            self.draw_group(_('Transports'), account)
+            if obj.new_show > 1 and jid in gajim.transport_avatar[account]:
+                # transport just signed in.
+                # request avatars
+                for jid_ in gajim.transport_avatar[account][jid]:
+                    obj.conn.request_vcard(jid_)
+
+        self.chg_contact_status(obj.contact, obj.show, obj.status, account)
+
 
 ################################################################################
 ### Menu and GUI callbacks
@@ -6148,3 +6184,6 @@ class RosterWindow:
         accel_group = gtk.accel_groups_from_object(self.window)[0]
         accel_group.connect_group(gtk.keysyms.j, gtk.gdk.CONTROL_MASK,
                 gtk.ACCEL_MASK, self.on_ctrl_j)
+
+        gajim.ged.register_event_handler('presence-received', ged.GUI1,
+            self._nec_presence_received)

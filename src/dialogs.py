@@ -995,12 +995,17 @@ _('Please fill in the data of the contact you want to add in account %s') % acco
             message_buffer.set_text(helpers.get_subscription_request_msg(
                 self.account))
 
+        gajim.ged.register_event_handler('presence-received', ged.GUI1,
+            self._nec_presence_received)
+
     def on_add_new_contact_window_destroy(self, widget):
         if self.account:
             location = gajim.interface.instances[self.account]
         else:
             location = gajim.interface.instances
         del location['add_contact']
+        gajim.ged.remove_event_handler('presence-received', ged.GUI1,
+            self._nec_presence_received)
 
     def on_register_button_clicked(self, widget):
         jid = self.protocol_jid_combobox.get_active_text().decode('utf-8')
@@ -1153,6 +1158,14 @@ _('Please fill in the data of the contact you want to add in account %s') % acco
             self.auto_authorize_checkbutton.hide()
             self.connected_label.show()
             self.add_button.set_sensitive(False)
+
+    def _nec_presence_received(self, obj):
+        if gajim.jid_is_transport(obj.jid):
+            if obj.old_show == 0 and obj.new_show > 1:
+                self.transport_signed_in(obj.jid)
+            elif obj.old_show > 1 and obj.new_show == 0:
+                self.transport_signed_out(obj.jid)
+
 
 class AboutDialog:
     """
