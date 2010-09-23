@@ -250,6 +250,9 @@ class JingleRTPContent(JingleContent):
 
         codecs = []
         for codec in content.getTag('description').iterTags('payload-type'):
+            if not codec['id'] or not codec['name'] or not codec['clockrate']:
+                # ignore invalid payload-types
+                continue
             c = farsight.Codec(int(codec['id']), codec['name'],
                     self.farsight_media, int(codec['clockrate']))
             if 'channels' in codec:
