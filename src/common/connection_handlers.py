@@ -1747,6 +1747,8 @@ ConnectionJingle, ConnectionIBBytestream):
 
     def _nec_presence_received(self, obj):
         account = obj.conn.name
+        if account != self.name:
+            return
         jid = obj.jid
         resource = obj.resource or ''
 
