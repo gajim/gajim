@@ -831,14 +831,14 @@ class PresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         if self.ptype == 'subscribe':
             log.debug('subscribe request from %s' % self.jfid)
             if self.fjid.find('@') <= 0 and self.fjid in \
-            self.agent_registrations:
-                self.agent_registrations[self.fjid]['sub_received'] = True
-                if not self.agent_registrations[self.fjid]['roster_push']:
+            self.conn.agent_registrations:
+                self.conn.agent_registrations[self.fjid]['sub_received'] = True
+                if not self.conn.agent_registrations[self.fjid]['roster_push']:
                     # We'll reply after roster push result
                     return
             if gajim.config.get_per('accounts', self.conn.name, 'autoauth') or \
-            self.fjid.find('@') <= 0 or self.jid in self.jids_for_auto_auth or \
-            transport_auto_auth:
+            self.fjid.find('@') <= 0 or self.jid in \
+            self.conn.jids_for_auto_auth or transport_auto_auth:
                 if self.conn.connection:
                     p = xmpp.Presence(self.fjid, 'subscribed')
                     p = self.conn.add_sha(p)
