@@ -115,11 +115,16 @@ def latex_to_image(str_):
     result = None
     exitcode = 0
 
-    try:
-        bg_str, fg_str = gajim.interface.get_bg_fg_colors()
-    except:
-        # interface may not be available when we test latext at startup
-        bg_str, fg_str = 'rgb 1.0 1.0 1.0', 'rgb 0.0 0.0 0.0'
+    def fg_str(fmt):
+        try:
+            return [{'hex' : '+level-colors', 'tex' : '-fg'}[fmt],
+                gajim.interface.get_fg_color(fmt)]
+        except KeyError:
+            # interface may not be available when we test latex at startup
+            return []
+        except AttributeError:
+            # interface may not be available when we test latext at startup
+            return ['-fg', 'rgb 0.0 0.0 0.0']
 
     # filter latex code with bad commands
     if check_blacklist(str_):
@@ -138,9 +143,13 @@ def latex_to_image(str_):
     if exitcode == 0:
         # convert dvi to png
         latex_png_dpi = gajim.config.get('latex_png_dpi')
-        exitcode = try_run(['dvipng', '-bg', bg_str, '-fg', fg_str, '-T',
-                        'tight', '-D', latex_png_dpi, tmpfile + '.dvi', '-o',
-                        tmpfile + '.png'])
+        exitcode = try_run(['dvipng'] + fg_str('tex') + ['-T', 'tight', '-D',
+            latex_png_dpi, tmpfile + '.dvi', '-o', tmpfile + '.png'])
+
+        if exitcode:
+            # dvipng failed, try convert
+            exitcode = try_run(['convert'] + fg_str('hex') + ['-trim',
+                '-density', latex_png_dpi, tmpfile + '.dvi', tmpfile + '.png'])
 
     # remove temp files created by us and TeX
     extensions = ['.tex', '.log', '.aux', '.dvi']

@@ -2704,6 +2704,19 @@ class Interface:
         fg_str = format_gdkcolor(style.text[gtk.STATE_NORMAL])
         return (bg_str, fg_str)
 
+    def get_fg_color(self, fmt='hex'):
+        def format_gdkcolor (c):
+            if fmt == 'tex':
+                return ' '.join([str(s) for s in 
+                    ('rgb', c.red_float, c.green_float, c.blue_float)])
+            elif fmt == 'hex':
+                return str(c)
+
+        # get foreground style color and create string
+        dummy = gtk.Invisible()
+        dummy.ensure_style()
+        return format_gdkcolor(dummy.get_style().text[gtk.STATE_NORMAL])
+
     def read_sleepy(self):
         """
         Check idle status and change that status if needed
