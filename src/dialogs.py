@@ -42,6 +42,7 @@ import disco
 
 from random import randrange
 from common import pep
+from common import ged
 
 try:
     import gtkspell
