@@ -133,9 +133,7 @@ class Interface:
         #('INFORMATION', account, (title_text, section_text))
         dialogs.InformationDialog(data[0], data[1])
 
-    def handle_event_ask_new_nick(self, account, data):
-        #('ASK_NEW_NICK', account, (room_jid,))
-        room_jid = data[0]
+    def handle_ask_new_nick(self, account, room_jid):
         title = _('Unable to join group chat')
         prompt = _('Your desired nickname in group chat %s is in use or '
             'registered by another occupant.\nPlease specify another nickname '
@@ -283,6 +281,79 @@ class Interface:
             self.instances[account]['profile'] = \
                     profile_window.ProfileWindow(account)
             gajim.connections[account].request_vcard(jid)
+
+    def handle_gc_error(self, gc_control, pritext, sectext):
+        if gc_control and obj.gc_control.autorejoin is not None:
+            if gc_control.error_dialog:
+                gc_control.error_dialog.destroy()
+            def on_close(dummy):
+                gc_control.error_dialog.destroy()
+                gc_control.error_dialog = None
+            gc_control.error_dialog = dialogs.ErrorDialog(pritext, sectext,
+                on_response_ok=on_close, on_response_cancel=on_close)
+        else:
+            dialogs.ErrorDialog(pritext, sectext)
+
+    def handle_gc_password_required(self, account, room_jid, nick):
+        def on_ok(text):
+            gajim.connections[account].join_gc(nick, room_jid, text)
+            gajim.gc_passwords[room_jid] = text
+
+        def on_cancel():
+            # get and destroy window
+            if room_jid in gajim.interface.minimized_controls[account]:
+                self.roster.on_disconnect(None, room_jid, account)
+            else:
+                win = self.msg_win_mgr.get_window(room_jid, account)
+                ctrl = self.msg_win_mgr.get_gc_control(room_jid, account)
+                win.remove_tab(ctrl, 3)
+
+        dlg = dialogs.InputDialog(_('Password Required'),
+            _('A Password is required to join the room %s. Please type it.') % \
+            room_jid, is_modal=False, ok_handler=on_ok,
+            cancel_handler=on_cancel)
+        dlg.input_entry.set_visibility(False)
+
+    def handle_event_gc_presence(self, obj):
+        gc_control = obj.gc_control
+        if obj.ptype == 'error':
+            if obj.errcode == '503':
+                # maximum user number reached
+                self.handle_gc_error(gc_control,
+                    _('Unable to join group chat'),
+                    _('Maximum number of users for %s has been reached') % \
+                    obj.room_jid)
+            elif (obj.errcode == '401') or (obj.errcon == 'not-authorized'):
+                # password required to join
+                self.handle_gc_password_required(obj.conn.name, obj.room_jid,
+                    obj.nick)
+            elif (obj.errcode == '403') or (obj.errcon == 'forbidden'):
+                # we are banned
+                self.handle_gc_error(gc_control, _('Unable to join group chat'),
+                    _('You are banned from group chat %s.') % obj.room_jid)
+            elif (obj.errcode == '404') or (obj.errcon in ('item-not-found',
+            'remote-server-not-found')):
+                # group chat does not exist
+                self.handle_gc_error(gc_control, _('Unable to join group chat'),
+                    _('Group chat %s does not exist.') % obj.room_jid)
+            elif (obj.errcode == '405') or (obj.errcon == 'not-allowed'):
+                self.handle_gc_error(gc_control, _('Unable to join group chat'),
+                    _('Group chat creation is restricted.'))
+            elif (obj.errcode == '406') or (obj.errcon == 'not-acceptable'):
+                self.handle_gc_error(gc_control, _('Unable to join group chat'),
+                    _('Your registered nickname must be used in group chat '
+                    '%s.') % obj.room_jid)
+            elif (obj.errcode == '407') or (obj.errcon == \
+            'registration-required'):
+                self.handle_gc_error(gc_control, _('Unable to join group chat'),
+                    _('You are not in the members list in groupchat %s.') % \
+                    obj.room_jid)
+            elif (obj.errcode == '409') or (obj.errcon == 'conflict'):
+                self.handle_ask_new_nick(obj.conn.name, obj.room_jid)
+            elif gc_control:
+                gc_control.print_conversation('Error %s: %s' % (obj.errcode,
+                    obj.errmsg))
+            return
 
     def handle_event_presence(self, obj):
         # 'NOTIFY' (account, (jid, status, status message, resource,
@@ -883,30 +954,6 @@ class Interface:
             self.instances[account]['gc_config'][obj.jid].\
                 affiliation_list_received(obj.users_dict)
 
-    def handle_event_gc_password_required(self, account, array):
-        #('GC_PASSWORD_REQUIRED', account, (room_jid, nick))
-        room_jid = array[0]
-        nick = array[1]
-
-        def on_ok(text):
-            gajim.connections[account].join_gc(nick, room_jid, text)
-            gajim.gc_passwords[room_jid] = text
-
-        def on_cancel():
-            # get and destroy window
-            if room_jid in gajim.interface.minimized_controls[account]:
-                self.roster.on_disconnect(None, room_jid, account)
-            else:
-                win = self.msg_win_mgr.get_window(room_jid, account)
-                ctrl = self.msg_win_mgr.get_gc_control(room_jid, account)
-                win.remove_tab(ctrl, 3)
-
-        dlg = dialogs.InputDialog(_('Password Required'),
-            _('A Password is required to join the room %s. Please type it.') % \
-            room_jid, is_modal=False, ok_handler=on_ok,
-            cancel_handler=on_cancel)
-        dlg.input_entry.set_visibility(False)
-
     def handle_event_gc_invitation(self, account, array):
         #('GC_INVITATION', (room_jid, jid_from, reason, password, is_continued))
         jid = gajim.get_jid_without_resource(array[1])
@@ -924,20 +971,6 @@ class Interface:
             event_type = _('Groupchat Invitation')
             notify.popup(event_type, jid, account, 'gc-invitation', path,
                     event_type, room_jid)
-
-    def handle_event_gc_error(self, account, data):
-        #('ERROR', account, (gc_control, title_text, section_text))
-        gc_control, pritext, sectext = data
-        if gc_control:
-            if gc_control.error_dialog:
-                gc_control.error_dialog.destroy()
-            def on_close(dummy):
-                gc_control.error_dialog.destroy()
-                gc_control.error_dialog = None
-            gc_control.error_dialog = dialogs.ErrorDialog(pritext, sectext,
-                on_response_ok=on_close, on_response_cancel=on_close)
-        else:
-            dialogs.ErrorDialog(pritext, sectext)
 
     def forget_gpg_passphrase(self, keyid):
         if keyid in self.gpg_passphrase:
@@ -1893,8 +1926,6 @@ class Interface:
             'GC_SUBJECT': [self.handle_event_gc_subject],
             'GC_CONFIG_CHANGE': [self.handle_event_gc_config_change],
             'GC_INVITATION': [self.handle_event_gc_invitation],
-            'GC_PASSWORD_REQUIRED': [self.handle_event_gc_password_required],
-            'GC_ERROR': [self.handle_event_gc_error],
             'BAD_PASSPHRASE': [self.handle_event_bad_passphrase],
             'CON_TYPE': [self.handle_event_con_type],
             'CONNECTION_LOST': [self.handle_event_connection_lost],
@@ -1905,7 +1936,6 @@ class Interface:
             'STANZA_SENT': [self.handle_event_stanza_sent],
             'VCARD_PUBLISHED': [self.handle_event_vcard_published],
             'VCARD_NOT_PUBLISHED': [self.handle_event_vcard_not_published],
-            'ASK_NEW_NICK': [self.handle_event_ask_new_nick],
             'SIGNED_IN': [self.handle_event_signed_in],
             'METACONTACTS': [self.handle_event_metacontacts],
             'ATOM_ENTRY': [self.handle_atom_entry],
@@ -1944,6 +1974,7 @@ class Interface:
             'ARCHIVING_ERROR': [self.handle_event_archiving_error],
             'bookmarks-received': [self.handle_event_bookmarks],
             'error-received': [self.handle_event_error_answer],
+            'gc-presence-received': [self.handle_event_gc_presence],
             'gmail-notify': [self.handle_event_gmail_notify],
             'http-auth-received': [self.handle_event_http_auth],
             'last-result-received': [self.handle_event_last_status_time],
@@ -2707,7 +2738,7 @@ class Interface:
     def get_fg_color(self, fmt='hex'):
         def format_gdkcolor (c):
             if fmt == 'tex':
-                return ' '.join([str(s) for s in 
+                return ' '.join([str(s) for s in
                     ('rgb', c.red_float, c.green_float, c.blue_float)])
             elif fmt == 'hex':
                 return str(c)
