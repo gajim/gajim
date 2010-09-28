@@ -1684,6 +1684,9 @@ class GroupchatControl(ChatControlBase):
         # Preventing autorejoin from being activated
         self.autorejoin = False
 
+        gajim.ged.remove_event_handler('gc-presence-received', ged.GUI1,
+            self._nec_gc_presence_received)
+
         if self.room_jid in gajim.gc_connected[self.account] and \
         gajim.gc_connected[self.account][self.room_jid]:
             # Tell connection to note the date we disconnect to avoid duplicate
