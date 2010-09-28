@@ -1773,7 +1773,8 @@ ConnectionJingle, ConnectionIBBytestream):
                 break
 
         if obj.contact:
-            obj.old_show = statuss.index(obj.contact.show)
+            if obj.contact.show in statuss:
+                obj.old_show = statuss.index(obj.contact.show)
             # nick changed
             if obj.contact_nickname is not None and \
             obj.contact.contact_name != obj.contact_nickname:
@@ -1800,7 +1801,7 @@ ConnectionJingle, ConnectionIBBytestream):
                     resource=obj.resource)
                 gajim.contacts.add_contact(account, obj.contact)
                 obj.contact_list.append(obj.contact)
-            else:
+            elif obj.contact.show in statuss:
                 obj.old_show = statuss.index(obj.contact.show)
             if (resources != [''] and (len(obj.contact_list) != 1 or \
             obj.contact_list[0].show != 'offline')) and \

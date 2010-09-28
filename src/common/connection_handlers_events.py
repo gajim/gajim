@@ -772,7 +772,7 @@ class PresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                 gajim.config.set_per('account', self.conn.name,
                     'dont_ack_subscription', True)
             else:
-                self.dispatch('UNSUBSCRIBED', self.jid)
+                self.conn.dispatch('UNSUBSCRIBED', self.jid)
         elif self.ptype == 'error':
             errmsg = self.iq_obj.getError()
             errcode = self.iq_obj.getErrorCode()
