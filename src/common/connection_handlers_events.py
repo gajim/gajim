@@ -22,6 +22,7 @@ import datetime
 import sys
 from time import (localtime, time as time_time)
 from calendar import timegm
+import hmac
 
 from common import nec
 from common import helpers

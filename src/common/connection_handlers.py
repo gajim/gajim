@@ -33,7 +33,6 @@ import base64
 import sys
 import operator
 import hashlib
-import hmac
 
 from time import (altzone, daylight, gmtime, localtime, mktime, strftime,
         time as time_time, timezone, tzname)
