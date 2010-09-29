@@ -883,11 +883,12 @@ class GcPresenceReceivedEvent(nec.NetworkIncomingEvent):
                 jid = self.gc_contact.jid
             else:
                 jid = self.iq_obj.getJid()
+            st = self.status
             if jid:
                 # we know real jid, save it in db
-                self.status += ' (%s)' % jid
+                st += ' (%s)' % jid
             try:
-                gajim.logger.write('gcstatus', self.fjid, self.status,
+                gajim.logger.write('gcstatus', self.fjid, st,
                     self.show)
             except exceptions.PysqliteOperationalError, e:
                 self.conn.dispatch('DB_ERROR', (_('Disk Write Error'),
@@ -908,23 +909,22 @@ class GcPresenceReceivedEvent(nec.NetworkIncomingEvent):
         # We may ask it to real jid in gui part.
         self.status_code = []
         ns_muc_user_x = self.iq_obj.getTag('x', namespace=xmpp.NS_MUC_USER)
-        if ns_muc_user_x:
+        destroy = ns_muc_user_x.getTag('destroy')
+        if ns_muc_user_x and destroy:
             # Room has been destroyed. see
             # http://www.xmpp.org/extensions/xep-0045.html#destroyroom
             self.reason = _('Room has been destroyed')
-            destroy = ns_muc_user_x.getTag('destroy')
-            if destroy:
-                r = destroy.getTagData('reason')
-                if r:
-                    self.reason += ' (%s)' % r
-                if destroy.getAttr('jid'):
-                    try:
-                        jid = helpers.parse_jid(destroy.getAttr('jid'))
-                        self.reason += '\n' + \
-                            _('You can join this room instead: %s') % jid
-                    except common.helpers.InvalidFormat:
-                        pass
-                self.status_code = ['destroyed']
+            r = destroy.getTagData('reason')
+            if r:
+                self.reason += ' (%s)' % r
+            if destroy.getAttr('jid'):
+                try:
+                    jid = helpers.parse_jid(destroy.getAttr('jid'))
+                    self.reason += '\n' + \
+                        _('You can join this room instead: %s') % jid
+                except common.helpers.InvalidFormat:
+                    pass
+            self.status_code = ['destroyed']
         else:
             self.reason = self.iq_obj.getReason()
             self.status_code = self.iq_obj.getStatusCode()
