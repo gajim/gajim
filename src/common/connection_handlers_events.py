@@ -296,7 +296,7 @@ class RosterReceivedEvent(nec.NetworkIncomingEvent):
         self.received_from_server = self.xmpp_roster.received_from_server
         self.roster = {}
         raw_roster = self.xmpp_roster.getRaw()
-        our_jid = gajim.get_jid_from_account(self.name)
+        our_jid = gajim.get_jid_from_account(self.conn.name)
 
         for jid in raw_roster:
             try:
