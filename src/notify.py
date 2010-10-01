@@ -587,7 +587,7 @@ class DesktopNotification:
                     self.path_to_image = os.path.abspath(self.path_to_image)
                     text = '<table style=\'padding: 3px\'><tr><td>' \
                         '<img src=\"%s\"></td><td width=20> </td>' \
-                        '<td>%st4i</td></tr></table>' % (self.path_to_image,
+                        '<td>%s</td></tr></table>' % (self.path_to_image,
                         text)
                     self.path_to_image = os.path.abspath(
                         gtkgui_helpers.get_icon_path('gajim', 48))
