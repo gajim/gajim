@@ -283,7 +283,7 @@ class Interface:
             gajim.connections[account].request_vcard(jid)
 
     def handle_gc_error(self, gc_control, pritext, sectext):
-        if gc_control and obj.gc_control.autorejoin is not None:
+        if gc_control and gc_control.autorejoin is not None:
             if gc_control.error_dialog:
                 gc_control.error_dialog.destroy()
             def on_close(dummy):
