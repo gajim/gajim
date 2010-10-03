@@ -344,8 +344,7 @@ class ChangeActivityDialog:
         self.activity = activity
         self.subactivity = subactivity
         self.text = text
-        self.xml = gtkgui_helpers.get_gtk_builder(
-                'change_activity_dialog.ui')
+        self.xml = gtkgui_helpers.get_gtk_builder('change_activity_dialog.ui')
         self.window = self.xml.get_object('change_activity_dialog')
         self.window.set_transient_for(gajim.interface.roster.window)
 
@@ -411,6 +410,8 @@ class ChangeActivityDialog:
                 vbox.pack_start(rbtns[act], False, False, 0)
 
 
+        self.default_radio = rbtns['doing_chores_other']
+
         if self.activity in pep.ACTIVITIES:
             if not self.subactivity in pep.ACTIVITIES[self.activity]:
                 self.subactivity = 'other'
@@ -436,6 +437,8 @@ class ChangeActivityDialog:
     def on_enable_checkbutton_toggled(self, widget):
         self.notebook.set_sensitive(widget.get_active())
         self.entry.set_sensitive(widget.get_active())
+        if not self.activity:
+            self.default_radio.set_active(True)
 
     def on_rbtn_toggled(self, widget, data):
         if widget.get_active():
