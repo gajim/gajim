@@ -225,7 +225,7 @@ class Interface:
                     del self.instances[account]['online_dialog'][name]
             for request in self.gpg_passphrase.values():
                 if request:
-                    request.interrupt()
+                    request.interrupt(account=account)
             if account in self.pass_dialog:
                 self.pass_dialog[account].window.destroy()
         if show == 'offline':
@@ -3373,9 +3373,15 @@ class PassphraseRequest:
         self.passphrase = None
         self.completed = False
 
-    def interrupt(self):
-        self.dialog.window.destroy()
-        self.callbacks = []
+    def interrupt(self, account=None):
+        if account:
+            for (acct, cb) in self.callbacks:
+                if acct == account:
+                    self.callbacks.remove((acct, cb))
+        else:
+            self.callbacks = []
+        if not len(self.callbacks):
+            self.dialog.window.destroy()
 
     def run_callback(self, account, callback):
         gajim.connections[account].gpg_passphrase(self.passphrase)
