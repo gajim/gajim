@@ -559,8 +559,8 @@ class SearchResultReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             self.data.append(f)
         return True
 
-class ErrorReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
-    name = 'error-received'
+class IqErrorReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
+    name = 'iq-error-received'
     base_network_events = []
 
     def generate(self):
@@ -700,6 +700,9 @@ class PresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             self.keyID = helpers.prepare_and_validate_gpg_keyID(self.conn.name,
                 self.jid, self.keyID)
 
+        self.errcode = self.iq_obj.getErrorCode()
+        self.errmsg = self.iq_obj.getErrorMsg()
+
         if self.is_gc:
             gajim.nec.push_incoming_event(GcPresenceReceivedEvent(None,
                 conn=self.conn, iq_obj=self.iq_obj, presence_obj=self))
@@ -718,65 +721,12 @@ class PresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             gajim.nec.push_incoming_event(UnsubscribedPresenceReceivedEvent(
                 None, conn=self.conn, iq_obj=self.iq_obj, presence_obj=self))
         elif self.ptype == 'error':
-            errmsg = self.iq_obj.getError()
-            errcode = self.iq_obj.getErrorCode()
-            if errcode != '502': # Internal Timeout:
-                # print in the window the error
-                self.conn.dispatch('ERROR_ANSWER', ('', self.jid, errmsg, errcode))
-            if errcode != '409': # conflict # See #5120
+            if self.errcode != '409': # conflict # See #5120
                 self.show = 'error'
-                self.status = errmsg
+                self.status = self.errmsg
                 return True
 
-        elif self.ptype == 'unavailable':
-            for jid in [self.jid, self.fjid]:
-                if jid not in self.conn.sessions:
-                    continue
-                # automatically terminate sessions that they haven't sent a thread
-                # ID in, only if other part support thread ID
-                for sess in self.conn.sessions[jid].values():
-                    if not sess.received_thread_id:
-                        contact = gajim.contacts.get_contact(self.conn.name,
-                            jid)
-                        # FIXME: I don't know if this is the correct behavior here.
-                        # Anyway, it is the old behavior when we assumed that
-                        # not-existing contacts don't support anything
-                        contact_exists = bool(contact)
-                        session_supported = contact_exists and (
-                            contact.supports(xmpp.NS_SSN) or
-                            contact.supports(xmpp.NS_ESESSION))
-                        if session_supported:
-                            sess.terminate()
-                            del self.conn.sessions[jid][sess.thread_id]
-
-        if self.avatar_sha is not None and self.ptype != 'error':
-            if self.jid not in self.conn.vcard_shas:
-                cached_vcard = self.conn.get_cached_vcard(self.jid)
-                if cached_vcard and 'PHOTO' in cached_vcard and \
-                'SHA' in cached_vcard['PHOTO']:
-                    self.conn.vcard_shas[self.jid] = \
-                        cached_vcard['PHOTO']['SHA']
-                else:
-                    self.conn.vcard_shas[self.jid] = ''
-            if self.avatar_sha != self.conn.vcard_shas[self.jid]:
-                # avatar has been updated
-                self.conn.request_vcard(self.jid)
-
         if not self.ptype or self.ptype == 'unavailable':
-            if gajim.config.get('log_contact_status_changes') and \
-            gajim.config.should_log(self.conn.name, self.jid):
-                try:
-                    gajim.logger.write('status', self.jid, self.status,
-                        self.show)
-                except exceptions.PysqliteOperationalError, e:
-                    self.conn.dispatch('DB_ERROR', (_('Disk Write Error'), str(e)))
-                except exceptions.DatabaseMalformed:
-                    pritext = _('Database Error')
-                    sectext = _('The database file (%s) cannot be read. Try to '
-                        'repair it (see '
-                        'http://trac.gajim.org/wiki/DatabaseBackup) or remove '
-                        'it (all history will be lost).') % LOG_DB_PATH
-                    self.conn.dispatch('DB_ERROR', (pritext, sectext))
             our_jid = gajim.get_jid_from_account(self.conn.name)
             if self.jid == our_jid and self.resource == \
             self.conn.server_resource:
@@ -808,9 +758,9 @@ class GcPresenceReceivedEvent(nec.NetworkIncomingEvent):
         self.show = self.presence_obj.show
         self.status = self.presence_obj.status
         self.avatar_sha = self.presence_obj.avatar_sha
+        self.errcode = self.presence_obj.errcode
+        self.errmsg = self.presence_obj.errmsg
         self.errcon = self.iq_obj.getError()
-        self.errmsg = self.iq_obj.getErrorMsg()
-        self.errcode = self.iq_obj.getErrorCode()
         self.get_gc_control()
         self.gc_contact = gajim.contacts.get_gc_contact(self.conn.name,
             self.room_jid, self.nick)

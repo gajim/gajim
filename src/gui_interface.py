@@ -165,7 +165,7 @@ class Interface:
             'id': obj.iq_id}, sec_msg, on_response_yes=(on_yes, obj),
             on_response_no=(response, obj, 'no'))
 
-    def handle_event_error_answer(self, obj):
+    def handle_event_iq_error(self, obj):
         #('ERROR_ANSWER', account, (id_, fjid, errmsg, errcode))
         if unicode(obj.errcode) in ('400', '403', '406') and obj.id_:
             # show the error dialog
@@ -1959,7 +1959,7 @@ class Interface:
             'ARCHIVING_CHANGED': [self.handle_event_archiving_changed],
             'ARCHIVING_ERROR': [self.handle_event_archiving_error],
             'bookmarks-received': [self.handle_event_bookmarks],
-            'error-received': [self.handle_event_error_answer],
+            'iq-error-received': [self.handle_event_iq_error],
             'gc-presence-received': [self.handle_event_gc_presence],
             'gmail-notify': [self.handle_event_gmail_notify],
             'http-auth-received': [self.handle_event_http_auth],

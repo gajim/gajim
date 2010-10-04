@@ -895,10 +895,10 @@ class ConnectionHandlersBase:
         # keep track of sessions this connection has with other JIDs
         self.sessions = {}
 
-        gajim.ged.register_event_handler('error-received', ged.CORE,
-            self._nec_error_received)
+        gajim.ged.register_event_handler('iq-error-received', ged.CORE,
+            self._nec_iq_error_received)
 
-    def _nec_error_received(self, obj):
+    def _nec_iq_error_received(self, obj):
         if obj.conn.name != self.name:
             return
         if obj.id_ in self.last_ids:
@@ -1108,8 +1108,8 @@ ConnectionJingle, ConnectionIBBytestream):
             ged.CORE, self._nec_private_storate_rosternotes_received)
         gajim.ged.register_event_handler('roster-received', ged.CORE,
             self._nec_roster_received)
-        gajim.ged.register_event_handler('error-received', ged.CORE,
-            self._nec_error_received)
+        gajim.ged.register_event_handler('iq-error-received', ged.CORE,
+            self._nec_iq_error_received)
         gajim.ged.register_event_handler('gmail-new-mail-received', ged.CORE,
             self._nec_gmail_new_mail_received)
         gajim.ged.register_event_handler('ping-received', ged.CORE,
@@ -1156,10 +1156,10 @@ ConnectionJingle, ConnectionIBBytestream):
 
     def _ErrorCB(self, con, iq_obj):
         log.debug('ErrorCB')
-        gajim.nec.push_incoming_event(ErrorReceivedEvent(None, conn=self,
+        gajim.nec.push_incoming_event(IqErrorReceivedEvent(None, conn=self,
             iq_obj=iq_obj))
 
-    def _nec_error_received(self, obj):
+    def _nec_iq_error_received(self, obj):
         if obj.conn.name != self.name:
             return
         if obj.id_ in self.version_ids:
@@ -1878,6 +1878,47 @@ ConnectionJingle, ConnectionIBBytestream):
                 if sess.enable_encryption:
                     sess.terminate_e2e()
                     self.delete_session(jid, sess.thread_id)
+
+        if obj.ptype == 'unavailable':
+            for jid in (obj.jid, obj.fjid):
+                if jid not in self.sessions:
+                    continue
+                # automatically terminate sessions that they haven't sent a
+                # thread ID in, only if other part support thread ID
+                for sess in self.sessions[jid].values():
+                    if not sess.received_thread_id:
+                        contact = gajim.contacts.get_contact(self.name, jid)
+                        if contact and (contact.supports(xmpp.NS_SSN) or \
+                        contact.supports(xmpp.NS_ESESSION)):
+                            sess.terminate()
+                            del self.sessions[jid][sess.thread_id]
+
+        if obj.avatar_sha is not None and obj.ptype != 'error':
+            if obj.jid not in self.vcard_shas:
+                cached_vcard = self.get_cached_vcard(obj.jid)
+                if cached_vcard and 'PHOTO' in cached_vcard and \
+                'SHA' in cached_vcard['PHOTO']:
+                    self.vcard_shas[obj.jid] = cached_vcard['PHOTO']['SHA']
+                else:
+                    self.vcard_shas[obj.jid] = ''
+            if obj.avatar_sha != self.vcard_shas[obj.jid]:
+                # avatar has been updated
+                self.request_vcard(obj.jid)
+
+        if gajim.config.get('log_contact_status_changes') and \
+        gajim.config.should_log(self.name, obj.jid):
+            try:
+                gajim.logger.write('status', obj.jid, obj.status, obj.show)
+            except exceptions.PysqliteOperationalError, e:
+                self.dispatch('DB_ERROR', (_('Disk Write Error'), str(e)))
+            except exceptions.DatabaseMalformed:
+                pritext = _('Database Error')
+                sectext = _('The database file (%s) cannot be read. Try to '
+                    'repair it (see '
+                    'http://trac.gajim.org/wiki/DatabaseBackup) or remove '
+                    'it (all history will be lost).') % LOG_DB_PATH
+                self.dispatch('DB_ERROR', (pritext, sectext))
+            our_jid = gajim.get_jid_from_account(self.name)
 
     def _nec_subscribe_presence_received(self, obj):
         account = obj.conn.name
