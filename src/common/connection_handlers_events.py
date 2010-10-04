@@ -624,8 +624,8 @@ class PresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         except Exception:
             if self.iq_obj.getTag('error') and self.iq_obj.getTag('error').\
             getTag('jid-malformed'):
-                # wrong jid, we probably tried to change our nick in a room to a non
-                # valid one
+                # wrong jid, we probably tried to change our nick in a room to a
+                # non valid one
                 who = str(self.iq_obj.getFrom())
                 jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
                 self.conn.dispatch('GC_MSG', (jid_stripped,
@@ -641,7 +641,7 @@ class PresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         # XEP-0172 User Nickname
         self.user_nick = self.iq_obj.getTagData('nick') or ''
         self.contact_nickname = None
-        transport_auto_auth = False
+        self.transport_auto_auth = False
         # XEP-0203
         delay_tag = self.iq_obj.getTag('delay', namespace=xmpp.NS_DELAY2)
         if delay_tag:
@@ -668,12 +668,12 @@ class PresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                 agent = gajim.get_server_from_jid(self.jid)
                 if self.conn.connection.getRoster().getItem(agent):
                     # to be sure it's a transport contact
-                    transport_auto_auth = True
+                    self.transport_auto_auth = True
 
         if not self.is_gc and self.id_ and self.id_.startswith('gajim_muc_') \
         and self.ptype == 'error':
-            # Error presences may not include sent stanza, so we don't detect it's
-            # a muc preence. So detect it by ID
+            # Error presences may not include sent stanza, so we don't detect
+            # it's a muc presence. So detect it by ID
             h = hmac.new(self.conn.secret_hmac, self.jid).hexdigest()[:6]
             if self.id_.split('_')[-1] == h:
                 self.is_gc = True
@@ -706,74 +706,17 @@ class PresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             return
 
         if self.ptype == 'subscribe':
-            log.debug('subscribe request from %s' % self.fjid)
-            if self.fjid.find('@') <= 0 and self.fjid in \
-            self.conn.agent_registrations:
-                self.conn.agent_registrations[self.fjid]['sub_received'] = True
-                if not self.conn.agent_registrations[self.fjid]['roster_push']:
-                    # We'll reply after roster push result
-                    return
-            if gajim.config.get_per('accounts', self.conn.name, 'autoauth') or \
-            self.fjid.find('@') <= 0 or self.jid in \
-            self.conn.jids_for_auto_auth or transport_auto_auth:
-                if self.conn.connection:
-                    p = xmpp.Presence(self.fjid, 'subscribed')
-                    p = self.conn.add_sha(p)
-                    self.conn.connection.send(p)
-                if self.fjid.find('@') <= 0 or transport_auto_auth:
-                    self.show = 'offline'
-                    self.status = 'offline'
-                    return True
-
-                if transport_auto_auth:
-                    self.conn.automatically_added.append(self.jid)
-                    self.conn.request_subscription(self.jid,
-                        name=self.user_nick)
-            else:
-                if not self.status:
-                    self.status = _('I would like to add you to my roster.')
-                self.conn.dispatch('SUBSCRIBE', (self.jid, self.status,
-                    self.user_nick))
+            gajim.nec.push_incoming_event(SubscribePresenceReceivedEvent(None,
+                conn=self.conn, iq_obj=self.iq_obj, presence_obj=self))
         elif self.ptype == 'subscribed':
-            if self.jid in self.conn.automatically_added:
-                self.conn.automatically_added.remove(self.jid)
-            else:
-                # detect a subscription loop
-                if self.jid not in self.conn.subscribed_events:
-                    self.conn.subscribed_events[self.jid] = []
-                self.conn.subscribed_events[self.jid].append(time_time())
-                block = False
-                if len(self.conn.subscribed_events[self.jid]) > 5:
-                    if time_time() - self.subscribed_events[self.jid][0] < 5:
-                        block = True
-                    self.conn.subscribed_events[self.jid] = \
-                        self.conn.subscribed_events[self.jid][1:]
-                if block:
-                    gajim.config.set_per('account', self.conn.name,
-                        'dont_ack_subscription', True)
-                else:
-                    self.conn.dispatch('SUBSCRIBED', (self.jid, self.resource))
             # BE CAREFUL: no con.updateRosterItem() in a callback
-            log.debug(_('we are now subscribed to %s') % self.jid)
+            gajim.nec.push_incoming_event(SubscribedPresenceReceivedEvent(None,
+                conn=self.conn, iq_obj=self.iq_obj, presence_obj=self))
         elif self.ptype == 'unsubscribe':
             log.debug(_('unsubscribe request from %s') % self.jid)
         elif self.ptype == 'unsubscribed':
-            log.debug(_('we are now unsubscribed from %s') % self.jid)
-            # detect a unsubscription loop
-            if self.jid not in self.conn.subscribed_events:
-                self.conn.subscribed_events[self.jid] = []
-            self.conn.subscribed_events[self.jid].append(time_time())
-            block = False
-            if len(self.conn.subscribed_events[self.jid]) > 5:
-                if time_time() - self.conn.subscribed_events[self.jid][0] < 5:
-                    block = True
-                self.conn.subscribed_events[self.jid] = \
-                    self.conn.subscribed_events[self.jid][1:]
-            if block:
-                gajim.config.set_per('account', self.conn.name,
-                    'dont_ack_subscription', True)
-            else:
-                self.conn.dispatch('UNSUBSCRIBED', self.jid)
+            gajim.nec.push_incoming_event(UnsubscribedPresenceReceivedEvent(
+                None, conn=self.conn, iq_obj=self.iq_obj, presence_obj=self))
         elif self.ptype == 'error':
             errmsg = self.iq_obj.getError()
             errcode = self.iq_obj.getErrorCode()
@@ -933,4 +876,33 @@ class GcPresenceReceivedEvent(nec.NetworkIncomingEvent):
         self.real_jid = self.iq_obj.getJid()
         self.actor = self.iq_obj.getActor()
         self.new_nick = self.iq_obj.getNewNick()
+        return True
+
+class SubscribePresenceReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'subscribe-presence-received'
+    base_network_events = []
+
+    def generate(self):
+        self.jid = self.presence_obj.jid
+        self.fjid = self.presence_obj.fjid
+        self.status = self.presence_obj.status
+        self.transport_auto_auth = self.presence_obj.transport_auto_auth
+        self.user_nick = self.presence_obj.user_nick
+        return True
+
+class SubscribedPresenceReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'subscribed-presence-received'
+    base_network_events = []
+
+    def generate(self):
+        self.jid = self.presence_obj.jid
+        self.resource = self.presence_obj.resource
+        return True
+
+class UnsubscribedPresenceReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'unsubscribed-presence-received'
+    base_network_events = []
+
+    def generate(self):
+        self.jid = self.presence_obj.jid
         return True

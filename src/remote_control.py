@@ -117,6 +117,12 @@ class Remote:
             self.on_roster_info)
         gajim.ged.register_event_handler('presence-received', ged.POSTGUI,
             self.on_presence_received)
+        gajim.ged.register_event_handler('subscribe-presence-received',
+            ged.POSTGUI, self.on_subscribe_presence_received)
+        gajim.ged.register_event_handler('subscribed-presence-received',
+            ged.POSTGUI, self.on_subscribed_presence_received)
+        gajim.ged.register_event_handler('unsubscribed-presence-received',
+            ged.POSTGUI, self.on_unsubscribed_presence_received)
 
     def on_last_status_time(self, obj):
         self.raise_signal('LastStatusTime', (obj.conn.name, [
@@ -150,6 +156,17 @@ class Remote:
             self.raise_signal(event, (obj.conn.name, [obj.jid, obj.show,
                 obj.status, obj.resource, obj.prio, obj.keyID, obj.timestamp,
                 obj.contact_nickname]))
+
+    def on_subscribe_presence_received(self, obj):
+        self.raise_signal('Subscribe', (obj.conn.name, [obj.jid, obj.status,
+            obj.user_nick]))
+
+    def on_subscribed_presence_received(self, obj):
+        self.raise_signal('Subscribed', (obj.conn.name, [obj.jid,
+            obj.resource]))
+
+    def on_unsubscribed_presence_received(self, obj):
+        self.raise_signal('Unsubscribed', (obj.conn.name, obj.jid))
 
     def raise_signal(self, signal, arg):
         if self.signal_object:

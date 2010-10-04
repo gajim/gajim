@@ -1116,6 +1116,16 @@ ConnectionJingle, ConnectionIBBytestream):
             self._nec_ping_received)
         gajim.ged.register_event_handler('presence-received', ged.CORE,
             self._nec_presence_received)
+        gajim.ged.register_event_handler('subscribe-presence-received',
+            ged.CORE, self._nec_subscribe_presence_received)
+        gajim.ged.register_event_handler('subscribed-presence-received',
+            ged.CORE, self._nec_subscribed_presence_received)
+        gajim.ged.register_event_handler('subscribed-presence-received',
+            ged.POSTGUI, self._nec_subscribed_presence_received_end)
+        gajim.ged.register_event_handler('unsubscribed-presence-received',
+            ged.CORE, self._nec_unsubscribed_presence_received)
+        gajim.ged.register_event_handler('unsubscribed-presence-received',
+            ged.POSTGUI, self._nec_unsubscribed_presence_received_end)
 
     def build_http_auth_answer(self, iq_obj, answer):
         if not self.connection or self.connected < 2:
@@ -1868,6 +1878,94 @@ ConnectionJingle, ConnectionIBBytestream):
                 if sess.enable_encryption:
                     sess.terminate_e2e()
                     self.delete_session(jid, sess.thread_id)
+
+    def _nec_subscribe_presence_received(self, obj):
+        account = obj.conn.name
+        if account != self.name:
+            return
+        if gajim.jid_is_transport(obj.fjid) and obj.fjid in \
+        self.agent_registrations:
+            self.agent_registrations[obj.fjid]['sub_received'] = True
+            if not self.agent_registrations[obj.fjid]['roster_push']:
+                # We'll reply after roster push result
+                return True
+        if gajim.config.get_per('accounts', self.name, 'autoauth') or \
+        gajim.jid_is_transport(obj.fjid) or obj.jid in self.jids_for_auto_auth \
+        or obj.transport_auto_auth:
+            if self.connection:
+                p = xmpp.Presence(obj.fjid, 'subscribed')
+                p = self.add_sha(p)
+                self.connection.send(p)
+            if gajim.jid_is_transport(obj.fjid) or obj.transport_auto_auth:
+                #TODO!?!?
+                #self.show = 'offline'
+                #self.status = 'offline'
+                #emit NOTIFY
+                pass
+            if obj.transport_auto_auth:
+                self.automatically_added.append(obj.jid)
+                self.request_subscription(obj.jid, name=obj.user_nick)
+            return True
+        if not obj.status:
+            obj.status = _('I would like to add you to my roster.')
+
+    def _nec_subscribed_presence_received(self, obj):
+        account = obj.conn.name
+        if account != self.name:
+            return
+        # BE CAREFUL: no con.updateRosterItem() in a callback
+        if obj.jid in self.automatically_added:
+            self.automatically_added.remove(obj.jid)
+            return True
+        # detect a subscription loop
+        if obj.jid not in self.subscribed_events:
+            self.subscribed_events[obj.jid] = []
+        self.subscribed_events[obj.jid].append(time_time())
+        block = False
+        if len(self.subscribed_events[obj.jid]) > 5:
+            if time_time() - self.subscribed_events[obj.jid][0] < 5:
+                block = True
+            self.subscribed_events[obj.jid] = \
+                self.subscribed_events[obj.jid][1:]
+        if block:
+            gajim.config.set_per('account', self.name, 'dont_ack_subscription',
+                True)
+            return True
+
+    def _nec_subscribed_presence_received_end(self, obj):
+        account = obj.conn.name
+        if account != self.name:
+            return
+        if not gajim.config.get_per('accounts', account,
+        'dont_ack_subscription'):
+            self.ack_subscribed(obj.jid)
+
+    def _nec_unsubscribed_presence_received(self, obj):
+        account = obj.conn.name
+        if account != self.name:
+            return
+        # detect a unsubscription loop
+        if obj.jid not in self.subscribed_events:
+            self.subscribed_events[obj.jid] = []
+        self.subscribed_events[obj.jid].append(time_time())
+        block = False
+        if len(self.subscribed_events[obj.jid]) > 5:
+            if time_time() - self.subscribed_events[obj.jid][0] < 5:
+                block = True
+            self.subscribed_events[obj.jid] = \
+                self.subscribed_events[obj.jid][1:]
+        if block:
+            gajim.config.set_per('account', self.name, 'dont_ack_subscription',
+                True)
+            return True
+
+    def _nec_unsubscribed_presence_received_end(self, obj):
+        account = obj.conn.name
+        if account != self.name:
+            return
+        if not gajim.config.get_per('accounts', account,
+        'dont_ack_subscription'):
+            self.ack_unsubscribed(obj.jid)
 
     def _StanzaArrivedCB(self, con, obj):
         self.last_io = gajim.idlequeue.current_time()

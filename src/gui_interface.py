@@ -520,56 +520,48 @@ class Interface:
         array[4].roster_message(array[0], msg, array[3], account,
                 msg_type='error')
 
-    def handle_event_subscribe(self, account, array):
+    def handle_event_subscribe_presence(self, obj):
         #('SUBSCRIBE', account, (jid, text, user_nick)) user_nick is JEP-0172
-        if self.remote_ctrl:
-            self.remote_ctrl.raise_signal('Subscribe', (account, array))
-
-        jid = array[0]
-        text = array[1]
-        nick = array[2]
+        account = obj.conn.name
         if helpers.allow_popup_window(account) or not self.systray_enabled:
-            dialogs.SubscriptionRequestWindow(jid, text, account, nick)
+            dialogs.SubscriptionRequestWindow(obj.jid, obj.status, account,
+                obj.user_nick)
             return
 
-        self.add_event(account, jid, 'subscription_request', (text, nick))
+        self.add_event(account, obj.jid, 'subscription_request', (obj.status,
+            obj.user_nick))
 
         if helpers.allow_showing_notification(account):
             path = gtkgui_helpers.get_icon_path('gajim-subscription_request',
                 48)
             event_type = _('Subscription request')
-            notify.popup(event_type, jid, account, 'subscription_request', path,
-                event_type, jid)
+            notify.popup(event_type, obj.jid, account, 'subscription_request',
+                path, event_type, obj.jid)
 
-    def handle_event_subscribed(self, account, array):
+    def handle_event_subscribed_presence(self, obj):
         #('SUBSCRIBED', account, (jid, resource))
-        jid = array[0]
-        if jid in gajim.contacts.get_jid_list(account):
-            c = gajim.contacts.get_first_contact_from_jid(account, jid)
-            c.resource = array[1]
+        account = obj.conn.name
+        if obj.jid in gajim.contacts.get_jid_list(account):
+            c = gajim.contacts.get_first_contact_from_jid(account, obj.jid)
+            c.resource = obj.resource
             self.roster.remove_contact_from_groups(c.jid, account,
                 [_('Not in Roster'), _('Observers')], update=False)
         else:
             keyID = ''
             attached_keys = gajim.config.get_per('accounts', account,
                 'attached_gpg_keys').split()
-            if jid in attached_keys:
-                keyID = attached_keys[attached_keys.index(jid) + 1]
-            name = jid.split('@', 1)[0]
+            if obj.jid in attached_keys:
+                keyID = attached_keys[attached_keys.index(obj.jid) + 1]
+            name = obj.jid.split('@', 1)[0]
             name = name.split('%', 1)[0]
-            contact1 = gajim.contacts.create_contact(jid=jid, account=account,
-                name=name, groups=[], show='online', status='online', ask='to',
-                resource=array[1], keyID=keyID)
+            contact1 = gajim.contacts.create_contact(jid=obj.jid,
+                account=account, name=name, groups=[], show='online',
+                status='online', ask='to', resource=obj.resource, keyID=keyID)
             gajim.contacts.add_contact(account, contact1)
-            self.roster.add_contact(jid, account)
+            self.roster.add_contact(obj.jid, account)
         dialogs.InformationDialog(_('Authorization accepted'),
             _('The contact "%s" has authorized you to see his or her status.')
-            % jid)
-        if not gajim.config.get_per('accounts', account,
-        'dont_ack_subscription'):
-            gajim.connections[account].ack_subscribed(jid)
-        if self.remote_ctrl:
-            self.remote_ctrl.raise_signal('Subscribed', (account, array))
+            % obj.jid)
 
     def show_unsubscribed_dialog(self, account, contact):
         def on_yes(is_checked, list_):
@@ -583,13 +575,10 @@ class Interface:
             # FIXME: Per RFC 3921, we can "deny" ack as well, but the GUI does
             # not show deny
 
-    def handle_event_unsubscribed(self, account, jid):
+    def handle_event_unsubscribed_presence(self, obj):
         #('UNSUBSCRIBED', account, jid)
-        gajim.connections[account].ack_unsubscribed(jid)
-        if self.remote_ctrl:
-            self.remote_ctrl.raise_signal('Unsubscribed', (account, jid))
-
-        contact = gajim.contacts.get_first_contact_from_jid(account, jid)
+        account = obj.conn.name
+        contact = gajim.contacts.get_first_contact_from_jid(account, obj.jid)
         if not contact:
             return
 
@@ -597,13 +586,13 @@ class Interface:
             self.show_unsubscribed_dialog(account, contact)
             return
 
-        self.add_event(account, jid, 'unsubscribed', contact)
+        self.add_event(account, obj.jid, 'unsubscribed', contact)
 
         if helpers.allow_showing_notification(account):
             path = gtkgui_helpers.get_icon_path('gajim-unsubscribed', 48)
             event_type = _('Unsubscribed')
-            notify.popup(event_type, jid, account, 'unsubscribed', path,
-                    event_type, jid)
+            notify.popup(event_type, obj.jid, account, 'unsubscribed', path,
+                event_type, obj.jid)
 
     def handle_event_agent_removed(self, account, agent):
         # remove transport's contacts from treeview
@@ -1911,9 +1900,6 @@ class Interface:
             'MSGERROR': [self.handle_event_msgerror],
             'MSGSENT': [self.handle_event_msgsent],
             'MSGNOTSENT': [self.handle_event_msgnotsent],
-            'SUBSCRIBED': [self.handle_event_subscribed],
-            'UNSUBSCRIBED': [self.handle_event_unsubscribed],
-            'SUBSCRIBE': [self.handle_event_subscribe],
             'AGENT_REMOVED': [self.handle_event_agent_removed],
             'REGISTER_AGENT_INFO': [self.handle_event_register_agent_info],
             'AGENT_INFO_ITEMS': [self.handle_event_agent_info_items],
@@ -1985,6 +1971,12 @@ class Interface:
             'roster-item-exchange-received': \
                 [self.handle_event_roster_item_exchange],
             'stream-conflict-received': [self.handle_event_resource_conflict],
+            'subscribe-presence-received': [
+                self.handle_event_subscribe_presence],
+            'subscribed-presence-received': [
+                self.handle_event_subscribed_presence],
+            'unsubscribed-presence-received': [
+                self.handle_event_unsubscribed_presence],
         }
 
     def register_core_handlers(self):
