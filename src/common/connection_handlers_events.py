@@ -732,7 +732,7 @@ class PresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             self.conn.server_resource:
                 # We got our own presence
                 self.conn.dispatch('STATUS', self.show)
-            elif self.jid in jid_list:
+            elif self.jid in jid_list or self.jid == our_jid:
                 return True
 
 class GcPresenceReceivedEvent(nec.NetworkIncomingEvent):
