@@ -3408,10 +3408,9 @@ class AccountCreationWizardWindow:
         # parse servers.xml
         servers_xml = os.path.join(gajim.DATA_DIR, 'other', 'servers.xml')
         servers = gtkgui_helpers.parse_server_xml(servers_xml)
-        servers_model = gtk.ListStore(str, int)
+        servers_model = gtk.ListStore(str)
         for server in servers:
-            if not server[2]['hidden']:
-                servers_model.append((str(server[0]), int(server[1])))
+            servers_model.append((server,))
 
         completion.set_model(servers_model)
         completion.set_text_column(0)
