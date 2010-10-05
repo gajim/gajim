@@ -602,13 +602,37 @@ class PresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
     name = 'presence-received'
     base_network_events = ['raw-pres-received']
 
-    def generate(self):
-        self.conn = self.base_event.conn
-        self.iq_obj = self.base_event.iq_obj
+    def _generate_keyID(self, sig_tag):
+        self.keyID = ''
+        if sig_tag and self.conn.USE_GPG and self.ptype != 'error':
+            # error presences contain our own signature
+            # verify
+            sig_msg = sig_tag.getData()
+            self.keyID = self.conn.gpg.verify(self.status, sig_msg)
+            self.keyID = helpers.prepare_and_validate_gpg_keyID(self.conn.name,
+                self.jid, self.keyID)
 
-        self.need_add_in_roster = False
-        self.need_redraw = False
+    def _generate_timestamp(self, tag):
+        tim = helpers.datetime_tuple(tag)
+        self.timestamp = localtime(timegm(tim))
 
+    def _generate_show(self):
+        self.show = self.iq_obj.getShow()
+        if self.show not in ('chat', 'away', 'xa', 'dnd'):
+            self.show = '' # We ignore unknown show
+        if not self.ptype and not self.show:
+            self.show = 'online'
+        elif self.ptype == 'unavailable':
+            self.show = 'offline'
+
+    def _generate_prio(self):
+        self.prio = self.iq_obj.getPriority()
+        try:
+            self.prio = int(self.prio)
+        except Exception:
+            self.prio = 0
+
+    def _generate_ptype(self):
         self.ptype = self.iq_obj.getType()
         if self.ptype == 'available':
             self.ptype = None
@@ -616,9 +640,19 @@ class PresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             'unsubscribe', 'unsubscribed')
         if self.ptype and not self.ptype in rfc_types:
             self.ptype = None
+
+    def generate(self):
+        self.conn = self.base_event.conn
+        self.iq_obj = self.base_event.iq_obj
+
+        self.need_add_in_roster = False
+        self.need_redraw = False
+
         if not self.conn or self.conn.connected < 2:
             log.debug('account is no more connected')
             return
+
+        self._generate_ptype()
         try:
             self.get_jid_resource()
         except Exception:
@@ -636,7 +670,7 @@ class PresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.timestamp = None
         self.get_id()
         self.is_gc = False # is it a GC presence ?
-        sigTag = None
+        sig_tag = None
         self.avatar_sha = None
         # XEP-0172 User Nickname
         self.user_nick = self.iq_obj.getTagData('nick') or ''
@@ -645,24 +679,20 @@ class PresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         # XEP-0203
         delay_tag = self.iq_obj.getTag('delay', namespace=xmpp.NS_DELAY2)
         if delay_tag:
-            tim = self.iq_obj.getTimestamp2()
-            tim = helpers.datetime_tuple(tim)
-            self.timestamp = localtime(timegm(tim))
+            self._generate_timestamp(self.iq_obj.getTimestamp2())
         xtags = self.iq_obj.getTags('x')
         for x in xtags:
             namespace = x.getNamespace()
             if namespace.startswith(xmpp.NS_MUC):
                 self.is_gc = True
             elif namespace == xmpp.NS_SIGNED:
-                sigTag = x
+                sig_tag = x
             elif namespace == xmpp.NS_VCARD_UPDATE:
                 self.avatar_sha = x.getTagData('photo')
                 self.contact_nickname = x.getTagData('nickname')
             elif namespace == xmpp.NS_DELAY and not self.timestamp:
                 # XEP-0091
-                tim = self.iq_obj.getTimestamp()
-                tim = helpers.datetime_tuple(tim)
-                self.timestamp = localtime(timegm(tim))
+                self._generate_timestamp(self.iq_obj.getTimestamp())
             elif namespace == 'http://delx.cjb.net/protocol/roster-subsync':
                 # see http://trac.gajim.org/ticket/326
                 agent = gajim.get_server_from_jid(self.jid)
@@ -678,27 +708,9 @@ class PresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             if self.id_.split('_')[-1] == h:
                 self.is_gc = True
         self.status = self.iq_obj.getStatus() or ''
-        self.show = self.iq_obj.getShow()
-        if self.show not in ('chat', 'away', 'xa', 'dnd'):
-            self.show = '' # We ignore unknown show
-        if not self.ptype and not self.show:
-            self.show = 'online'
-        elif self.ptype == 'unavailable':
-            self.show = 'offline'
-
-        self.prio = self.iq_obj.getPriority()
-        try:
-            self.prio = int(self.prio)
-        except Exception:
-            self.prio = 0
-        self.keyID = ''
-        if sigTag and self.conn.USE_GPG and self.ptype != 'error':
-            # error presences contain our own signature
-            # verify
-            sigmsg = sigTag.getData()
-            self.keyID = self.conn.gpg.verify(self.status, sigmsg)
-            self.keyID = helpers.prepare_and_validate_gpg_keyID(self.conn.name,
-                self.jid, self.keyID)
+        self._generate_show()
+        self._generate_prio()
+        self._generate_keyID(sig_tag)
 
         self.errcode = self.iq_obj.getErrorCode()
         self.errmsg = self.iq_obj.getErrorMsg()
