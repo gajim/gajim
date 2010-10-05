@@ -357,35 +357,8 @@ class ServersXMLHandler(xml.sax.ContentHandler):
 
     def startElement(self, name, attributes):
         if name == 'item':
-            # we will get the port next time so we just set it 0 here
-            sitem = [None, 0, {}]
-            sitem[2]['digest'] = {}
-            sitem[2]['hidden'] = False
-            for attribute in attributes.getNames():
-                if attribute == 'jid':
-                    jid = attributes.getValue(attribute)
-                    sitem[0] = jid
-                elif attribute == 'hidden':
-                    hidden = attributes.getValue(attribute)
-                    if hidden.lower() in ('1', 'y', 'yes', 't', 'true', 'on'):
-                        sitem[2]['hidden'] = True
-            self.servers.append(sitem)
-        elif name == 'active':
-            for attribute in attributes.getNames():
-                if attribute == 'port':
-                    port = attributes.getValue(attribute)
-                    # we received the jid last time, so we now assign the port
-                    # number to the last jid in the list
-                    self.servers[-1][1] = port
-        elif name == 'digest':
-            algo, digest = None, None
-            for attribute in attributes.getNames():
-                if attribute == 'algo':
-                    algo = attributes.getValue(attribute)
-                elif attribute == 'value':
-                    digest = attributes.getValue(attribute)
-            hd = HashDigest(algo, digest)
-            self.servers[-1][2]['digest'][hd.algo] = hd
+            if 'jid' in attributes.getNames():
+                self.servers.append(attributes.getValue('jid'))
 
     def endElement(self, name):
         pass
