@@ -1,3 +1,6 @@
 #!/bin/sh
+if [ ! $PYTHON ]; then
+       PYTHON="python";
+fi
 cd "$(dirname $0)/src"
-exec python -OOt gajim.py "$@"
+exec $PYTHON -OOt gajim.py "$@"
