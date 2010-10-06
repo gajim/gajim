@@ -2173,7 +2173,7 @@ class RosterWindow:
                     for contact in [c for c in lcontact if (
                     (c.show != 'offline' or c.is_transport()) and not ctrl)]:
                         self.chg_contact_status(contact, 'offline', '', account)
-            self.actions_menu_needs_rebuild = True
+            self.set_actions_menu_needs_rebuild()
         self.update_status_combobox()
 
     def get_status_message(self, show, on_response, show_pep=True,
@@ -4783,11 +4783,6 @@ class RosterWindow:
                 self.service_disco_handler_id)
             self.service_disco_handler_id = None
 
-        if self.new_chat_menuitem_handler_id:
-            new_chat_menuitem.handler_disconnect(
-                self.new_chat_menuitem_handler_id)
-            self.new_chat_menuitem_handler_id = None
-
         if self.single_message_menuitem_handler_id:
             single_message_menuitem.handler_disconnect(
                 self.single_message_menuitem_handler_id)
@@ -4803,16 +4798,8 @@ class RosterWindow:
         service_disco_menuitem.remove_submenu()
         join_gc_menuitem.remove_submenu()
         single_message_menuitem.remove_submenu()
-        new_chat_menuitem.remove_submenu()
         advanced_menuitem.remove_submenu()
         profile_avatar_menuitem.remove_submenu()
-
-        # remove the existing accelerator
-        if self.have_new_chat_accel:
-            ag = gtk.accel_groups_from_object(self.window)[0]
-            new_chat_menuitem.remove_accelerator(ag, gtk.keysyms.n,
-                gtk.gdk.CONTROL_MASK)
-            self.have_new_chat_accel = False
 
         gc_sub_menu = gtk.Menu() # gc is always a submenu
         join_gc_menuitem.set_submenu(gc_sub_menu)
@@ -4844,17 +4831,6 @@ class RosterWindow:
             new_chat_menuitem.set_submenu(new_chat_sub_menu)
             new_chat_sub_menu.show_all()
 
-        elif connected_accounts == 1: # user has only one account
-            for account in gajim.connections:
-                if gajim.account_is_connected(account): # THE connected account
-                    # new chat
-                    if not self.new_chat_menuitem_handler_id:
-                        self.new_chat_menuitem_handler_id = new_chat_menuitem.\
-                            connect('activate',
-                                self.on_new_chat_menuitem_activate, account)
-
-                    break
-
         # menu items that don't apply to zeroconf connections
         if connected_accounts == 1 or (connected_accounts == 2 and \
         gajim.zeroconf_is_connected()):
@@ -4885,14 +4861,6 @@ class RosterWindow:
                         self.single_message_menuitem_handler_id = \
                         single_message_menuitem.connect('activate', \
                         self.on_send_single_message_menuitem_activate, account)
-
-                    # new chat accel
-                    if not self.have_new_chat_accel:
-                        ag = gtk.accel_groups_from_object(self.window)[0]
-                        new_chat_menuitem.add_accelerator('activate', ag,
-                            gtk.keysyms.n, gtk.gdk.CONTROL_MASK,
-                            gtk.ACCEL_VISIBLE)
-                        self.have_new_chat_accel = True
 
                     break # No other account connected
         else:
@@ -5806,6 +5774,41 @@ class RosterWindow:
 
     def set_actions_menu_needs_rebuild(self):
         self.actions_menu_needs_rebuild = True
+        # Just handle new_chat_menuitem to have ctrl+N working even if we don't
+        # open the menu
+        new_chat_menuitem = self.xml.get_object('new_chat_menuitem')
+        ag = gtk.accel_groups_from_object(self.window)[0]
+        # remove the existing accelerator
+        if self.have_new_chat_accel:
+            new_chat_menuitem.remove_accelerator(ag, gtk.keysyms.n,
+                gtk.gdk.CONTROL_MASK)
+            self.have_new_chat_accel = False
+
+        if self.new_chat_menuitem_handler_id:
+            new_chat_menuitem.handler_disconnect(
+                self.new_chat_menuitem_handler_id)
+            self.new_chat_menuitem_handler_id = None
+
+        new_chat_menuitem.remove_submenu()
+
+        connected_accounts = gajim.get_number_of_connected_accounts()
+        if connected_accounts == 1 or (connected_accounts == 2 and \
+        gajim.zeroconf_is_connected()):
+            # only one 'real' (non-zeroconf) account is connected, don't need
+            # submenus
+            accounts_list = sorted(gajim.contacts.get_accounts())
+            for account in accounts_list:
+                if gajim.account_is_connected(account) and \
+                not gajim.config.get_per('accounts', account, 'is_zeroconf'):
+                    if not self.new_chat_menuitem_handler_id:
+                        self.new_chat_menuitem_handler_id = new_chat_menuitem.\
+                            connect('activate',
+                                self.on_new_chat_menuitem_activate, account)
+                    if not self.have_new_chat_accel:
+                        new_chat_menuitem.add_accelerator('activate', ag,
+                            gtk.keysyms.n, gtk.gdk.CONTROL_MASK,
+                            gtk.ACCEL_VISIBLE)
+                        self.have_new_chat_accel = True
 
     def show_appropriate_context_menu(self, event, iters):
         # iters must be all of the same type
@@ -5895,15 +5898,15 @@ class RosterWindow:
         self.new_chat_menuitem_handler_id = False
         self.single_message_menuitem_handler_id = False
         self.profile_avatar_menuitem_handler_id = False
-        self.actions_menu_needs_rebuild = True
+        #FIXME: When list_accel_closures will be wrapped in pygtk
+        # no need of this variable
+        self.have_new_chat_accel = False # Is the "Ctrl+N" shown ?
+        self.set_actions_menu_needs_rebuild()
         self.regroup = gajim.config.get('mergeaccounts')
         self.clicked_path = None # Used remember on wich row we clicked
         if len(gajim.connections) < 2:
             # Do not merge accounts if only one exists
             self.regroup = False
-        #FIXME: When list_accel_closures will be wrapped in pygtk
-        # no need of this variable
-        self.have_new_chat_accel = False # Is the "Ctrl+N" shown ?
         gtkgui_helpers.resize_window(self.window,
             gajim.config.get('roster_width'),
             gajim.config.get('roster_height'))
