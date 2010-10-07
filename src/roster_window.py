@@ -260,7 +260,7 @@ class RosterWindow:
             it = self.model.append(None, [
                 gajim.interface.jabber_state_images['16'][show],
                 _('Merged accounts'), 'account', '', 'all', None, None, None,
-                None, None, None])
+                None, None, None] + [None] * self.nb_ext_renderers)
             self._iters['MERGED']['account'] = it
         else:
             show = gajim.SHOW_LIST[gajim.connections[account].connected]
@@ -276,7 +276,8 @@ class RosterWindow:
             it = self.model.append(None, [
                 gajim.interface.jabber_state_images['16'][show],
                 gobject.markup_escape_text(account), 'account', our_jid,
-                account, None, None, None, None, None, tls_pixbuf])
+                account, None, None, None, None, None, tls_pixbuf] +
+                [None] * self.nb_ext_renderers)
             self._iters[account]['account'] = it
 
         self.draw_account(account)
@@ -336,9 +337,10 @@ class RosterWindow:
             contact.groups = big_brother_contact.get_shown_groups()[:]
 
             for child_iter in parent_iters:
-                it = self.model.append(child_iter, (None,
+                it = self.model.append(child_iter, [None,
                     contact.get_shown_name(), 'contact', contact.jid, account,
-                    None, None, None, None, None, None))
+                    None, None, None, None, None, None] + \
+                    [None] * self.nb_ext_renderers)
                 added_iters.append(it)
                 if contact.jid in self._iters[account]['contacts']:
                     self._iters[account]['contacts'][contact.jid].append(it)
@@ -362,7 +364,7 @@ class RosterWindow:
                         [gajim.interface.jabber_state_images['16']['closed'],
                         gobject.markup_escape_text(group),
                         'group', group, account, None, None, None, None, None,
-                        None])
+                        None] + [None] * self.nb_ext_renderers)
                     self.draw_group(group, account)
                     self._iters[account_group]['groups'][group] = child_iterG
 
@@ -375,10 +377,10 @@ class RosterWindow:
 
                 # we add some values here. see draw_contact
                 # for more
-                i_ = self.model.append(child_iterG, (None,
-                        contact.get_shown_name(), typestr,
-                        contact.jid, account, None, None, None,
-                        None, None, None))
+                i_ = self.model.append(child_iterG, [None,
+                    contact.get_shown_name(), typestr, contact.jid, account,
+                    None, None, None, None, None, None] + \
+                    [None] * self.nb_ext_renderers)
                 added_iters.append(i_)
                 if contact.jid in self._iters[account]['contacts']:
                     self._iters[account]['contacts'][contact.jid].append(i_)
@@ -631,8 +633,8 @@ class RosterWindow:
 
         child_iterA = self._get_account_iter(account, self.model)
         self._iters[account]['contacts'][jid] = [self.model.append(child_iterA,
-            (None, gajim.nicks[account], 'self_contact', jid, account, None,
-            None, None, None, None, None))]
+            [None, gajim.nicks[account], 'self_contact', jid, account, None,
+            None, None, None, None, None] + [None] * self.nb_ext_renderers)]
 
         self.draw_completely(jid, account)
         self.draw_account(account)
@@ -5924,6 +5926,8 @@ class RosterWindow:
 
     def __init__(self):
         self.filtering = False
+        # Number of renderers plugins added
+        self.nb_ext_renderers = 0
         self.xml = gtkgui_helpers.get_gtk_builder('roster_window.ui')
         self.window = self.xml.get_object('roster_window')
         self.hpaned = self.xml.get_object('roster_hpaned')
