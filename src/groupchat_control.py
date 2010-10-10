@@ -1396,7 +1396,7 @@ class GroupchatControl(ChatControlBase):
                 # Room has been destroyed.
                 elif 'destroyed' in obj.status_code:
                     self.autorejoin = False
-                    self.print_conversation(reason, 'info', graphics=False)
+                    self.print_conversation(obj.reason, 'info', graphics=False)
 
             if len(gajim.events.get_events(self.account, jid=obj.fjid,
             types=['pm'])) == 0:
