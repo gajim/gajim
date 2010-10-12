@@ -402,6 +402,10 @@ class GroupchatControl(ChatControlBase):
         self.conv_textview.tv.grab_focus()
         self.widget.show_all()
 
+        # PluginSystem: adding GUI extension point for this GroupchatControl
+        # instance object
+        gajim.plugin_manager.gui_extension_point('groupchat_control', self)
+
     def tree_compare_iters(self, model, iter1, iter2):
         """
         Compare two iters to sort them
@@ -1680,6 +1684,11 @@ class GroupchatControl(ChatControlBase):
         # PluginSystem: calling shutdown of super class (ChatControlBase)
         # to let it remove it's GUI extension points
         super(GroupchatControl, self).shutdown()
+
+        # PluginSystem: removing GUI extension points connected with
+        # GrouphatControl instance object
+        gajim.plugin_manager.remove_gui_extension_point('groupchat_control',
+            self)
 
         # Preventing autorejoin from being activated
         self.autorejoin = False
