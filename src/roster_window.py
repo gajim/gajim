@@ -1396,12 +1396,7 @@ class RosterWindow:
         Create new empty model and draw roster
         """
         self.modelfilter = None
-        # (icon, name, type, jid, account, editable, mood_pixbuf,
-        # activity_pixbuf, tune_pixbuf, location_pixbuf, avatar_pixbuf,
-        # padlock_pixbuf)
-        self.model = gtk.TreeStore(gtk.Image, str, str, str, str,
-                gtk.gdk.Pixbuf, gtk.gdk.Pixbuf, gtk.gdk.Pixbuf,
-                gtk.gdk.Pixbuf, gtk.gdk.Pixbuf, gtk.gdk.Pixbuf)
+        self.model = gtk.TreeStore(*self.columns)
 
         self.model.set_sort_func(1, self._compareIters)
         self.model.set_sort_column_id(1, gtk.SORT_ASCENDING)
@@ -5920,6 +5915,16 @@ class RosterWindow:
         self.on_join_gc_activate(None, account)
         return True
 
+    def fill_column(self, col):
+        for rend in self.renderers_list:
+            col.pack_start(rend[1], expand=rend[2])
+            col.add_attribute(rend[1], rend[3], rend[4])
+            col.set_cell_data_func(rend[1], rend[5], rend[6])
+        # set renderers propertys
+        for renderer in self.renderers_propertys.keys():
+            renderer.set_property(self.renderers_propertys[renderer][0],
+                self.renderers_propertys[renderer][1])
+
 ################################################################################
 ###
 ################################################################################
@@ -5928,6 +5933,12 @@ class RosterWindow:
         self.filtering = False
         # Number of renderers plugins added
         self.nb_ext_renderers = 0
+        # [icon, name, type, jid, account, editable, mood_pixbuf,
+        # activity_pixbuf, tune_pixbuf, location_pixbuf, avatar_pixbuf,
+        # padlock_pixbuf]
+        self.columns = [gtk.Image, str, str, str, str,
+                gtk.gdk.Pixbuf, gtk.gdk.Pixbuf, gtk.gdk.Pixbuf,
+                gtk.gdk.Pixbuf, gtk.gdk.Pixbuf, gtk.gdk.Pixbuf]
         self.xml = gtkgui_helpers.get_gtk_builder('roster_window.ui')
         self.window = self.xml.get_object('roster_window')
         self.hpaned = self.xml.get_object('roster_hpaned')
@@ -6065,70 +6076,60 @@ class RosterWindow:
         self.xml.get_object('show_roster_menuitem').set_active(True)
 
         # columns
-
-        # this col has 3 cells:
-        # first one img, second one text, third is sec pixbuf
         col = gtk.TreeViewColumn()
-
-        def add_avatar_renderer():
-            render_pixbuf = gtk.CellRendererPixbuf() # avatar img
-            col.pack_start(render_pixbuf, expand=False)
-            col.add_attribute(render_pixbuf, 'pixbuf', C_AVATAR_PIXBUF)
-            col.set_cell_data_func(render_pixbuf,
-                self._fill_avatar_pixbuf_renderer, None)
-
-        if gajim.config.get('avatar_position_in_roster') == 'left':
-            add_avatar_renderer()
-
-        render_image = cell_renderer_image.CellRendererImage(0, 0)
-        # show img or +-
-        col.pack_start(render_image, expand=False)
-        col.add_attribute(render_image, 'image', C_IMG)
-        col.set_cell_data_func(render_image, self._iconCellDataFunc, None)
-
-        render_text = gtk.CellRendererText() # contact or group or account name
-        render_text.set_property('ellipsize', pango.ELLIPSIZE_END)
-        col.pack_start(render_text, expand=True)
-        col.add_attribute(render_text, 'markup', C_NAME)
-        # where we hold the name
-        col.set_cell_data_func(render_text, self._nameCellDataFunc, None)
-
-        render_pixbuf = gtk.CellRendererPixbuf()
-        col.pack_start(render_pixbuf, expand=False)
-        col.add_attribute(render_pixbuf, 'pixbuf', C_MOOD_PIXBUF)
-        col.set_cell_data_func(render_pixbuf,
-            self._fill_pep_pixbuf_renderer, C_MOOD_PIXBUF)
-
-        render_pixbuf = gtk.CellRendererPixbuf()
-        col.pack_start(render_pixbuf, expand=False)
-        col.add_attribute(render_pixbuf, 'pixbuf', C_ACTIVITY_PIXBUF)
-        col.set_cell_data_func(render_pixbuf,
-            self._fill_pep_pixbuf_renderer, C_ACTIVITY_PIXBUF)
-
-        render_pixbuf = gtk.CellRendererPixbuf()
-        col.pack_start(render_pixbuf, expand=False)
-        col.add_attribute(render_pixbuf, 'pixbuf', C_TUNE_PIXBUF)
-        col.set_cell_data_func(render_pixbuf,
-            self._fill_pep_pixbuf_renderer, C_TUNE_PIXBUF)
-
-        render_pixbuf = gtk.CellRendererPixbuf()
-        col.pack_start(render_pixbuf, expand=False)
-        col.add_attribute(render_pixbuf, 'pixbuf', C_LOCATION_PIXBUF)
-        col.set_cell_data_func(render_pixbuf,
-            self._fill_pep_pixbuf_renderer, C_LOCATION_PIXBUF)
-
+        # list of renderers with attributes / properties in the form:
+        # (name, renderer_object, expand?, attribute_name, attribute_calue,
+        # cell_data_func, func_arg)
+        self.renderers_list = []
+        self.renderers_propertys ={}
         self._pep_type_to_model_column = {'mood': C_MOOD_PIXBUF,
             'activity': C_ACTIVITY_PIXBUF, 'tune': C_TUNE_PIXBUF,
             'location': C_LOCATION_PIXBUF}
 
+        renderer_text = gtk.CellRendererText()
+        self.renderers_propertys[renderer_text] = ('ellipsize',
+            pango.ELLIPSIZE_END)
+
+        def add_avatar_renderer():
+            self.renderers_list.append(('avatar', gtk.CellRendererPixbuf(),
+                False, 'pixbuf', C_AVATAR_PIXBUF,
+                self._fill_avatar_pixbuf_renderer, None))
+
+        if gajim.config.get('avatar_position_in_roster') == 'left':
+            add_avatar_renderer()
+
+        self.renderers_list += (
+                ('icon', cell_renderer_image.CellRendererImage(0, 0), False,
+                'image', C_IMG, self._iconCellDataFunc, None),
+
+                ('name', renderer_text, True,
+                'markup', C_NAME, self._nameCellDataFunc, None),
+
+                ('mood', gtk.CellRendererPixbuf(), False,
+                'pixbuf', C_MOOD_PIXBUF,
+                self._fill_pep_pixbuf_renderer, C_MOOD_PIXBUF),
+
+                ('activity', gtk.CellRendererPixbuf(), False,
+                'pixbuf', C_ACTIVITY_PIXBUF,
+                self._fill_pep_pixbuf_renderer, C_ACTIVITY_PIXBUF),
+
+                ('tune', gtk.CellRendererPixbuf(), False,
+                'pixbuf', C_TUNE_PIXBUF,
+                self._fill_pep_pixbuf_renderer, C_TUNE_PIXBUF),
+
+                ('location', gtk.CellRendererPixbuf(), False,
+                'pixbuf', C_LOCATION_PIXBUF,
+                self._fill_pep_pixbuf_renderer, C_LOCATION_PIXBUF))
+
         if gajim.config.get('avatar_position_in_roster') == 'right':
             add_avatar_renderer()
 
-        render_pixbuf = gtk.CellRendererPixbuf() # tls/ssl img
-        col.pack_start(render_pixbuf, expand=False)
-        col.add_attribute(render_pixbuf, 'pixbuf', C_PADLOCK_PIXBUF)
-        col.set_cell_data_func(render_pixbuf,
-            self._fill_padlock_pixbuf_renderer, None)
+        self.renderers_list.append(('padlock', gtk.CellRendererPixbuf(), False,
+                'pixbuf', C_PADLOCK_PIXBUF,
+                self._fill_padlock_pixbuf_renderer, None))
+
+        # fill and append column
+        self.fill_column(col)
         self.tree.append_column(col)
 
         # do not show gtk arrows workaround
