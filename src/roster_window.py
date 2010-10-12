@@ -6078,7 +6078,7 @@ class RosterWindow:
         # columns
         col = gtk.TreeViewColumn()
         # list of renderers with attributes / properties in the form:
-        # (name, renderer_object, expand?, attribute_name, attribute_calue,
+        # (name, renderer_object, expand?, attribute_name, attribute_value,
         # cell_data_func, func_arg)
         self.renderers_list = []
         self.renderers_propertys ={}

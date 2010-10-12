@@ -339,45 +339,46 @@ class GroupchatControl(ChatControlBase):
             self.on_treeview_size_allocate)
         self.handlers[id_] = self.list_treeview
         #status_image, shown_nick, type, nickname, avatar
-        store = gtk.TreeStore(gtk.Image, str, str, str, gtk.gdk.Pixbuf)
+        self.columns = [gtk.Image, str, str, str, gtk.gdk.Pixbuf]
+        store = gtk.TreeStore(*self.columns)
         store.set_sort_func(C_NICK, self.tree_compare_iters)
         store.set_sort_column_id(C_NICK, gtk.SORT_ASCENDING)
         self.list_treeview.set_model(store)
 
         # columns
-
-        # this col has 3 cells:
-        # first one img, second one text, third is sec pixbuf
         column = gtk.TreeViewColumn()
-
-        def add_avatar_renderer():
-            renderer_pixbuf = gtk.CellRendererPixbuf() # avatar image
-            column.pack_start(renderer_pixbuf, expand=False)
-            column.add_attribute(renderer_pixbuf, 'pixbuf', C_AVATAR)
-            column.set_cell_data_func(renderer_pixbuf, tree_cell_data_func,
-                self.list_treeview)
-
-        if gajim.config.get('avatar_position_in_roster') == 'left':
-            add_avatar_renderer()
-
-        # status img
+        # list of renderers with attributes / properties in the form:
+        # (name, renderer_object, expand?, attribute_name, attribute_value,
+        # cell_data_func, func_arg)
+        self.renderers_list = []
+        # Number of renderers plugins added
+        self.nb_ext_renderers = 0
+        self.renderers_propertys = {}
         renderer_image = cell_renderer_image.CellRendererImage(0, 0)
-        renderer_image.set_property('width', 26)
-        column.pack_start(renderer_image, expand=False)
-        column.add_attribute(renderer_image, 'image', C_IMG)
-        column.set_cell_data_func(renderer_image, tree_cell_data_func,
-            self.list_treeview)
+        self.renderers_propertys[renderer_image] = ('width', 26)
+        renderer_text = gtk.CellRendererText()
+        self.renderers_propertys[renderer_text] = ('ellipsize',
+            pango.ELLIPSIZE_END)
 
-        renderer_text = gtk.CellRendererText() # nickname
-        column.pack_start(renderer_text, expand=True)
-        column.add_attribute(renderer_text, 'markup', C_TEXT)
-        renderer_text.set_property("ellipsize", pango.ELLIPSIZE_END)
-        column.set_cell_data_func(renderer_text, tree_cell_data_func,
-            self.list_treeview)
+        self.renderers_list += (
+            # status img
+            ('icon', renderer_image, False,
+            'image', C_IMG, tree_cell_data_func, self.list_treeview),
+            # contact name
+            ('name', renderer_text, True,
+            'markup', C_TEXT, tree_cell_data_func, self.list_treeview))
+
+        # avatar img
+        avater_renderer = ('avatar', gtk.CellRendererPixbuf(),
+            False, 'pixbuf', C_AVATAR,
+            tree_cell_data_func, self.list_treeview)
 
         if gajim.config.get('avatar_position_in_roster') == 'right':
-            add_avatar_renderer()
+            self.renderers_list.append(avater_renderer)
+        else:
+            self.renderers_list.insert(0, avater_renderer)
 
+        self.fill_column(column)
         self.list_treeview.append_column(column)
 
         # workaround to avoid gtk arrows to be shown
@@ -405,6 +406,16 @@ class GroupchatControl(ChatControlBase):
         # PluginSystem: adding GUI extension point for this GroupchatControl
         # instance object
         gajim.plugin_manager.gui_extension_point('groupchat_control', self)
+
+    def fill_column(self, col):
+        for rend in self.renderers_list:
+            col.pack_start(rend[1], expand=rend[2])
+            col.add_attribute(rend[1], rend[3], rend[4])
+            col.set_cell_data_func(rend[1], rend[5], rend[6])
+        # set renderers propertys
+        for renderer in self.renderers_propertys.keys():
+            renderer.set_property(self.renderers_propertys[renderer][0],
+                self.renderers_propertys[renderer][1])
 
     def tree_compare_iters(self, model, iter1, iter2):
         """
@@ -1564,10 +1575,11 @@ class GroupchatControl(ChatControlBase):
         role_iter = self.get_role_iter(role)
         if not role_iter:
             role_iter = model.append(None,
-                (gajim.interface.jabber_state_images['16']['closed'], role,
-                'role', role_name,  None))
+                [gajim.interface.jabber_state_images['16']['closed'], role,
+                'role', role_name,  None] + [None] * self.nb_ext_renderers)
             self.draw_all_roles()
-        iter_ = model.append(role_iter, (None, nick, 'contact', name, None))
+        iter_ = model.append(role_iter, [None, nick, 'contact', name, None] + \
+                [None] * self.nb_ext_renderers)
         if not nick in gajim.contacts.get_nick_list(self.account,
         self.room_jid):
             gc_contact = gajim.contacts.create_gc_contact(
@@ -1684,7 +1696,6 @@ class GroupchatControl(ChatControlBase):
         # PluginSystem: calling shutdown of super class (ChatControlBase)
         # to let it remove it's GUI extension points
         super(GroupchatControl, self).shutdown()
-
         # PluginSystem: removing GUI extension points connected with
         # GrouphatControl instance object
         gajim.plugin_manager.remove_gui_extension_point('groupchat_control',
