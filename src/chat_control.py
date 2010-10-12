@@ -1533,6 +1533,10 @@ class ChatControl(ChatControlBase):
         self.restore_conversation()
         self.msg_textview.grab_focus()
 
+        # PluginSystem: adding GUI extension point for this ChatControl 
+        # instance object
+        gajim.plugin_manager.gui_extension_point('chat_control', self)
+
     def update_toolbar(self):
         # Formatting
         if self.contact.supports(NS_XHTML_IM) and not self.gpg_is_active:
@@ -1601,10 +1605,6 @@ class ChatControl(ChatControlBase):
             img.show()
         else:
             img.hide()
-
-        # PluginSystem: adding GUI extension point for this ChatControl 
-        # instance object
-        gajim.plugin_manager.gui_extension_point('chat_control', self)
 
     def _update_jingle(self, jingle_type):
         if jingle_type not in ('audio', 'video'):
