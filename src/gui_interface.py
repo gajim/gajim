@@ -3403,7 +3403,7 @@ class PassphraseRequest:
                 gajim.interface.forget_gpg_passphrase, self.keyid)
         for (account, cb) in self.callbacks:
             self.run_callback(account, cb)
-        del self.callbacks
+        self.callbacks = []
 
     def create_dialog(self, account):
         title = _('Passphrase Required')
