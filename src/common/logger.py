@@ -37,6 +37,7 @@ from cStringIO import StringIO
 
 import exceptions
 import gajim
+import ged
 
 import sqlite3 as sqlite
 
@@ -116,6 +117,8 @@ class Logger:
             # db will be created in src/common/checks_paths.py
             return
         self.attach_cache_database()
+        gajim.ged.register_event_handler('gc-message-received',
+            ged.POSTCORE, self._nec_gc_message_received)
 
     def close_db(self):
         if self.con:
@@ -1101,3 +1104,28 @@ class Logger:
             return
         log.debug('New log received from server archives, storing it')
         self.write(type_, with_, message=msg, tim=tim)
+
+    def _nec_gc_message_received(self, obj):
+        tim_int = int(float(time.mktime(obj.timestamp)))
+        if gajim.config.should_log(obj.conn.name, obj.jid) and not \
+        tim_int <= obj.conn.last_history_time[obj.jid] and obj.msgtxt and \
+        obj.nick:
+            # if not obj.nick, it means message comes from room itself
+            # usually it hold description and can be send at each connection
+            # so don't store it in logs
+            try:
+                self.write('gc_msg', obj.fjid, obj.msgtxt, tim=obj.timestamp)
+                # store in memory time of last message logged.
+                # this will also be saved in rooms_last_message_time table
+                # when we quit this muc
+                obj.conn.last_history_time[obj.jid] = time.mktime(obj.timestamp)
+
+            except exceptions.PysqliteOperationalError, e:
+                self.conn.dispatch('DB_ERROR', (_('Disk Write Error'), str(e)))
+            except exceptions.DatabaseMalformed:
+                pritext = _('Database Error')
+                sectext = _('The database file (%s) cannot be read. Try to '
+                    'repair it (see http://trac.gajim.org/wiki/DatabaseBackup) '
+                    'or remove it (all history will be lost).') % \
+                    LOG_DB_PATH
+                self.conn.dispatch('DB_ERROR', (pritext, sectext))

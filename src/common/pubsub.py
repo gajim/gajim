@@ -181,7 +181,7 @@ class ConnectionPubSub:
         except Exception:
             pass
         gajim.nec.push_incoming_event(PubsubReceivedEvent(None,
-            conn=self, iq_obj=stanza))
+            conn=self, stanza=stanza))
 
     def _nec_pubsub_bookmarks_received(self, obj):
         bm_jids = [b['jid'] for b in self.bookmarks]

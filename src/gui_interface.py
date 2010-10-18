@@ -149,7 +149,7 @@ class Interface:
     def handle_event_http_auth(self, obj):
         #('HTTP_AUTH', account, (method, url, transaction_id, iq_obj, msg))
         def response(account, answer):
-            obj.conn.build_http_auth_answer(obj.iq_obj, answer)
+            obj.conn.build_http_auth_answer(obj.stanza, answer)
 
         def on_yes(is_checked, obj):
             response(obj, 'yes')
@@ -788,40 +788,6 @@ class Interface:
             if self.remote_ctrl:
                 self.remote_ctrl.raise_signal('GCPresence', (account, array))
 
-    def handle_event_gc_msg(self, account, array):
-        # ('GC_MSG', account, (jid, msg, time, has_timestamp, htmlmsg,
-        # [status_codes], displaymarking, captcha))
-        jids = array[0].split('/', 1)
-        room_jid = jids[0]
-
-        msg = array[1]
-
-        gc_control = self.msg_win_mgr.get_gc_control(room_jid, account)
-        if not gc_control and \
-        room_jid in self.minimized_controls[account]:
-            gc_control = self.minimized_controls[account][room_jid]
-
-        if not gc_control:
-            return
-        xhtml = array[4]
-
-        if gajim.config.get('ignore_incoming_xhtml'):
-            xhtml = None
-        if len(jids) == 1:
-            # message from server
-            nick = ''
-        else:
-            # message from someone
-            nick = jids[1]
-
-        gc_control.on_message(nick, msg, array[2], array[3], xhtml, array[5],
-            displaymarking=array[6], captcha=array[7])
-
-        if self.remote_ctrl:
-            highlight = gc_control.needs_visual_notification(msg)
-            array += (highlight,)
-            self.remote_ctrl.raise_signal('GCMessage', (account, array))
-
     def handle_event_gc_subject(self, account, array):
         #('GC_SUBJECT', account, (jid, subject, body, has_timestamp))
         jids = array[0].split('/', 1)
@@ -943,23 +909,23 @@ class Interface:
             self.instances[account]['gc_config'][obj.jid].\
                 affiliation_list_received(obj.users_dict)
 
-    def handle_event_gc_invitation(self, account, array):
+    def handle_event_gc_invitation(self, obj):
         #('GC_INVITATION', (room_jid, jid_from, reason, password, is_continued))
-        jid = gajim.get_jid_without_resource(array[1])
-        room_jid = array[0]
+        jid = gajim.get_jid_without_resource(obj.jid_from)
+        account = obj.conn.name
         if helpers.allow_popup_window(account) or not self.systray_enabled:
-            dialogs.InvitationReceivedDialog(account, room_jid, jid, array[3],
-                    array[2], is_continued=array[4])
+            dialogs.InvitationReceivedDialog(account, obj.room_jid, jid,
+                obj.password, obj.reason, is_continued=obj.is_continued)
             return
 
-        self.add_event(account, jid, 'gc-invitation', (room_jid, array[2],
-                array[3], array[4]))
+        self.add_event(account, jid, 'gc-invitation', (obj.room_jid,
+            obj.reason, obj.password, obj.is_continued))
 
         if helpers.allow_showing_notification(account):
             path = gtkgui_helpers.get_icon_path('gajim-gc_invitation', 48)
             event_type = _('Groupchat Invitation')
             notify.popup(event_type, jid, account, 'gc-invitation', path,
-                    event_type, room_jid)
+                event_type, obj.room_jid)
 
     def forget_gpg_passphrase(self, keyid):
         if keyid in self.gpg_passphrase:
@@ -1908,10 +1874,8 @@ class Interface:
             'MYVCARD': [self.handle_event_myvcard],
             'VCARD': [self.handle_event_vcard],
             'GC_NOTIFY': [self.handle_event_gc_notify],
-            'GC_MSG': [self.handle_event_gc_msg],
             'GC_SUBJECT': [self.handle_event_gc_subject],
             'GC_CONFIG_CHANGE': [self.handle_event_gc_config_change],
-            'GC_INVITATION': [self.handle_event_gc_invitation],
             'BAD_PASSPHRASE': [self.handle_event_bad_passphrase],
             'CON_TYPE': [self.handle_event_con_type],
             'CONNECTION_LOST': [self.handle_event_connection_lost],
@@ -1959,10 +1923,11 @@ class Interface:
             'ARCHIVING_CHANGED': [self.handle_event_archiving_changed],
             'ARCHIVING_ERROR': [self.handle_event_archiving_error],
             'bookmarks-received': [self.handle_event_bookmarks],
-            'iq-error-received': [self.handle_event_iq_error],
+            'gc-invitation-received': [self.handle_event_gc_invitation],
             'gc-presence-received': [self.handle_event_gc_presence],
             'gmail-notify': [self.handle_event_gmail_notify],
             'http-auth-received': [self.handle_event_http_auth],
+            'iq-error-received': [self.handle_event_iq_error],
             'last-result-received': [self.handle_event_last_status_time],
             'muc-admin-received': [self.handle_event_gc_affiliation],
             'muc-owner-received': [self.handle_event_gc_config],
@@ -3204,11 +3169,10 @@ class Interface:
         gajim.proxy65_manager = proxy65_manager.Proxy65Manager(gajim.idlequeue)
         gajim.default_session_type = ChatControlSession
 
-        # Creating Global Events Dispatcher
-        gajim.ged = ged.GlobalEventsDispatcher()
         # Creating Network Events Controller
         from common import nec
         gajim.nec = nec.NetworkEventsController()
+
         self.create_core_handlers_list()
         self.register_core_handlers()
 

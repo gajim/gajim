@@ -33,32 +33,8 @@ import locale
 
 import config
 import xmpp
-
-try:
-    import defs
-except ImportError:
-    print >> sys.stderr, '''defs.py is missing!
-
-If you start gajim from svn:
-* Make sure you have GNU autotools installed.
-This includes the following packages:
-automake >= 1.8
-autoconf >= 2.59
-intltool-0.35
-libtool
-* Run
-$ sh autogen.sh
-* Optionally, install gajim
-$ make
-$ sudo make install
-
-**** Note for translators ****
-You can get the latest string updates, by running:
-$ cd po/
-$ make update-po
-
-'''
-    sys.exit(1)
+import defs
+import common.ged
 
 interface = None # The actual interface (the gtk one for the moment)
 thread_interface = None # Interface to run a thread and then a callback
@@ -67,7 +43,7 @@ version = config.get('version')
 connections = {} # 'account name': 'account (connection.Connection) instance'
 ipython_window = None
 
-ged = None # Global Events Dispatcher
+ged = common.ged.GlobalEventsDispatcher() # Global Events Dispatcher
 nec = None # Network Events Controller
 plugin_manager = None # Plugins Manager
 

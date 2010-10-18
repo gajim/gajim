@@ -395,6 +395,8 @@ class GroupchatControl(ChatControlBase):
 
         gajim.ged.register_event_handler('gc-presence-received', ged.GUI1,
             self._nec_gc_presence_received)
+        gajim.ged.register_event_handler('gc-message-received', ged.GUI1,
+            self._nec_gc_message_received)
         gajim.gc_connected[self.account][self.room_jid] = False
         # disable win, we are not connected yet
         ChatControlBase.got_disconnected(self)
@@ -808,14 +810,15 @@ class GroupchatControl(ChatControlBase):
         # destroy menu
         menu.destroy()
 
-    def on_message(self, nick, msg, tim, has_timestamp=False, xhtml=None,
-    status_code=[], displaymarking=None, captcha=None):
-        if captcha:
+    def _nec_gc_message_received(self, obj):
+        if obj.jid != self.room_jid:
+            return
+        if obj.captcha_form:
             if self.form_widget:
                 self.form_widget.hide()
                 self.form_widget.destroy()
                 self.btn_box.destroy()
-            dataform = dataforms.ExtendForm(node=captcha)
+            dataform = dataforms.ExtendForm(node=obj.captcha_form)
             self.form_widget = dataforms_widget.DataFormWidget(dataform)
             self.form_widget.show_all()
             vbox = self.xml.get_object('gc_textviews_vbox')
@@ -826,8 +829,7 @@ class GroupchatControl(ChatControlBase):
                     return
                 form_node = self.form_widget.data_form.get_purged()
                 form_node.type = 'submit'
-                gajim.connections[self.account].send_captcha(self.room_jid,
-                    form_node)
+                obj.conn.send_captcha(self.room_jid, form_node)
                 self.form_widget.hide()
                 self.form_widget.destroy()
                 self.btn_box.destroy()
@@ -846,20 +848,26 @@ class GroupchatControl(ChatControlBase):
             else:
                 self.attention_flag = True
             helpers.play_sound('muc_message_received')
-        if '100' in status_code:
+        if '100' in obj.status_code:
             # Room is not anonymous
             self.is_anonymous = False
-        if not nick:
+        if not obj.nick:
             # message from server
-            self.print_conversation(msg, tim=tim, xhtml=xhtml, displaymarking=displaymarking)
+            self.print_conversation(obj.msgtxt, tim=obj.timestamp,
+                xhtml=obj.xhtml_msgtxt, displaymarking=obj.displaymarking)
         else:
             # message from someone
-            if has_timestamp:
+            if obj.has_timestamp:
                 # don't print xhtml if it's an old message.
                 # Like that xhtml messages are grayed too.
-                self.print_old_conversation(msg, nick, tim, None, displaymarking=displaymarking)
+                self.print_old_conversation(obj.msgtxt, contact=obj.nick,
+                    tim=obj.timestamp, xhtml=None,
+                    displaymarking=obj.displaymarking)
             else:
-                self.print_conversation(msg, nick, tim, xhtml, displaymarking=displaymarking)
+                self.print_conversation(obj.msgtxt, contact=obj.nick,
+                    tim=obj.timestamp, xhtml=obj.xhtml_msgtxt,
+                    displaymarking=obj.displaymarking)
+        obj.needs_highlight = self.needs_visual_notification(obj.msgtxt)
 
     def on_private_message(self, nick, msg, tim, xhtml, session, msg_id=None,
     encrypted=False, displaymarking=None):
@@ -1706,6 +1714,8 @@ class GroupchatControl(ChatControlBase):
 
         gajim.ged.remove_event_handler('gc-presence-received', ged.GUI1,
             self._nec_gc_presence_received)
+        gajim.ged.remove_event_handler('gc-message-received', ged.GUI1,
+            self._nec_gc_message_received)
 
         if self.room_jid in gajim.gc_connected[self.account] and \
         gajim.gc_connected[self.account][self.room_jid]:

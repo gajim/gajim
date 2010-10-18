@@ -65,9 +65,8 @@ class SnarlNotificationsPlugin(GajimPlugin):
         msg = data[1][1]
         msg_type = data[1][4]
         if msg_type == 'chat':
-            nickname = gajim.get_contact_name_from_jid(account,
-                                                                                       jid_without_resource)
-        elif msg_type == 'pm':
+            nickname = gajim.get_contact_name_from_jid(account, jid_without_resource)
+        elif msg_type in ('pm', 'groupchat'):
             nickname = gajim.get_resource_from_jid(jid)
 
         print "Event '%s' occured. Arguments: %s\n\n===\n"%(event_name, pformat(args))

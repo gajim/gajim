@@ -576,7 +576,7 @@ class ConnectionVcard:
         id_ = iq_obj.getID()
 
         gajim.nec.push_incoming_event(NetworkEvent('raw-iq-received',
-            conn=con, xmpp_iq=iq_obj))
+            conn=self, stanza=iq_obj))
 
         # Check if we were waiting a timeout for this id
         found_tim = None
@@ -910,13 +910,13 @@ class ConnectionHandlersBase:
             return
         if obj.id_ in self.last_ids:
             gajim.nec.push_incoming_event(LastResultReceivedEvent(None,
-                conn=self, iq_obj=obj.iq_obj))
+                conn=self, stanza=obj.stanza))
             return True
 
     def _LastResultCB(self, con, iq_obj):
         log.debug('LastResultCB')
         gajim.nec.push_incoming_event(LastResultReceivedEvent(None, conn=self,
-            iq_obj=iq_obj))
+            stanza=iq_obj))
 
     def get_sessions(self, jid):
         """
@@ -1096,6 +1096,7 @@ ConnectionJingle, ConnectionIBBytestream):
         gajim.nec.register_incoming_event(RosternotesReceivedEvent)
         gajim.nec.register_incoming_event(StreamConflictReceivedEvent)
         gajim.nec.register_incoming_event(PresenceReceivedEvent)
+        gajim.nec.register_incoming_event(MessageReceivedEvent)
 
         gajim.ged.register_event_handler('http-auth-received', ged.CORE,
             self._nec_http_auth_received)
@@ -1133,6 +1134,10 @@ ConnectionJingle, ConnectionIBBytestream):
             ged.CORE, self._nec_unsubscribed_presence_received)
         gajim.ged.register_event_handler('unsubscribed-presence-received',
             ged.POSTGUI, self._nec_unsubscribed_presence_received_end)
+        gajim.ged.register_event_handler('message-received', ged.CORE,
+            self._nec_message_received)
+        gajim.ged.register_event_handler('decrypted-message-received', ged.CORE,
+            self._nec_decrypted_message_received)
 
     def build_http_auth_answer(self, iq_obj, answer):
         if not self.connection or self.connected < 2:
@@ -1152,30 +1157,30 @@ ConnectionJingle, ConnectionIBBytestream):
         if obj.conn.name != self.name:
             return
         if obj.opt in ('yes', 'no'):
-            obj.conn.build_http_auth_answer(obj.iq_obj, obj.opt)
+            obj.conn.build_http_auth_answer(obj.stanza, obj.opt)
             return True
 
     def _HttpAuthCB(self, con, iq_obj):
         log.debug('HttpAuthCB')
         gajim.nec.push_incoming_event(HttpAuthReceivedEvent(None, conn=self,
-            iq_obj=iq_obj))
+            stanza=iq_obj))
         raise common.xmpp.NodeProcessed
 
     def _ErrorCB(self, con, iq_obj):
         log.debug('ErrorCB')
         gajim.nec.push_incoming_event(IqErrorReceivedEvent(None, conn=self,
-            iq_obj=iq_obj))
+            stanza=iq_obj))
 
     def _nec_iq_error_received(self, obj):
         if obj.conn.name != self.name:
             return
         if obj.id_ in self.version_ids:
             gajim.nec.push_incoming_event(VersionResultReceivedEvent(None,
-                conn=self, iq_obj=obj.iq_obj))
+                conn=self, stanza=obj.iq_obj))
             return True
         if obj.id_ in self.entity_time_ids:
             gajim.nec.push_incoming_event(TimeResultReceivedEvent(None,
-                conn=self, iq_obj=obj.iq_obj))
+                conn=self, stanza=obj.stanza))
             return True
 
     def _nec_private_storate_bookmarks_received(self, obj):
@@ -1203,7 +1208,7 @@ ConnectionJingle, ConnectionIBBytestream):
         """
         log.debug('PrivateCB')
         gajim.nec.push_incoming_event(PrivateStorageReceivedEvent(None,
-            conn=self, iq_obj=iq_obj))
+            conn=self, stanza=iq_obj))
 
     def _SecLabelCB(self, con, iq_obj):
         """
@@ -1235,7 +1240,7 @@ ConnectionJingle, ConnectionIBBytestream):
     def _rosterSetCB(self, con, iq_obj):
         log.debug('rosterSetCB')
         gajim.nec.push_incoming_event(RosterSetReceivedEvent(None, conn=self,
-            iq_obj=iq_obj))
+            stanza=iq_obj))
         raise common.xmpp.NodeProcessed
 
     def _nec_roster_set_received(self, obj):
@@ -1258,13 +1263,13 @@ ConnectionJingle, ConnectionIBBytestream):
         if not self.connection or self.connected < 2:
             return
         gajim.nec.push_incoming_event(VersionRequestEvent(None, conn=self,
-            iq_obj=iq_obj))
+            stanza=iq_obj))
         raise common.xmpp.NodeProcessed
 
     def _nec_version_request_received(self, obj):
         if obj.conn.name != self.name:
             return
-        iq_obj = obj.iq_obj.buildReply('result')
+        iq_obj = obj.stanza.buildReply('result')
         qp = iq_obj.getTag('query')
         qp.setTagData('name', 'Gajim')
         qp.setTagData('version', gajim.version)
@@ -1278,7 +1283,7 @@ ConnectionJingle, ConnectionIBBytestream):
         if not self.connection or self.connected < 2:
             return
         gajim.nec.push_incoming_event(LastRequestEvent(None, conn=self,
-            iq_obj=iq_obj))
+            stanza=iq_obj))
         raise common.xmpp.NodeProcessed
 
     def _nec_last_request_received(self, obj):
@@ -1287,11 +1292,11 @@ ConnectionJingle, ConnectionIBBytestream):
             return
         if HAS_IDLE and gajim.config.get_per('accounts', self.name,
         'send_idle_time'):
-            iq_obj = obj.iq_obj.buildReply('result')
+            iq_obj = obj.stanza.buildReply('result')
             qp = iq_obj.getTag('query')
             qp.attrs['seconds'] = int(self.sleeper.getIdleSec())
         else:
-            iq_obj = obj.iq_obj.buildReply('error')
+            iq_obj = obj.stanza.buildReply('error')
             err = common.xmpp.ErrorNode(name=common.xmpp.NS_STANZAS + \
                 ' service-unavailable')
             iq_obj.addChild(node=err)
@@ -1300,20 +1305,20 @@ ConnectionJingle, ConnectionIBBytestream):
     def _VersionResultCB(self, con, iq_obj):
         log.debug('VersionResultCB')
         gajim.nec.push_incoming_event(VersionResultReceivedEvent(None,
-            conn=self, iq_obj=iq_obj))
+            conn=self, stanza=iq_obj))
 
     def _TimeCB(self, con, iq_obj):
         log.debug('TimeCB')
         if not self.connection or self.connected < 2:
             return
         gajim.nec.push_incoming_event(TimeRequestEvent(None, conn=self,
-            iq_obj=iq_obj))
+            stanza=iq_obj))
         raise common.xmpp.NodeProcessed
 
     def _nec_time_request_received(self, obj):
         if obj.conn.name != self.name:
             return
-        iq_obj = obj.iq_obj.buildReply('result')
+        iq_obj = obj.stanza.buildReply('result')
         qp = iq_obj.getTag('query')
         qp.setTagData('utc', strftime('%Y%m%dT%H:%M:%S', gmtime()))
         qp.setTagData('tz', helpers.decode_string(tzname[daylight]))
@@ -1326,13 +1331,13 @@ ConnectionJingle, ConnectionIBBytestream):
         if not self.connection or self.connected < 2:
             return
         gajim.nec.push_incoming_event(TimeRevisedRequestEvent(None, conn=self,
-            iq_obj=iq_obj))
+            stanza=iq_obj))
         raise common.xmpp.NodeProcessed
 
     def _nec_time_revised_request_received(self, obj):
         if obj.conn.name != self.name:
             return
-        iq_obj = obj.iq_obj.buildReply('result')
+        iq_obj = obj.stanza.buildReply('result')
         qp = iq_obj.setTag('time', namespace=common.xmpp.NS_TIME_REVISED)
         qp.setTagData('utc', strftime('%Y-%m-%dT%H:%M:%SZ', gmtime()))
         isdst = localtime().tm_isdst
@@ -1344,7 +1349,7 @@ ConnectionJingle, ConnectionIBBytestream):
     def _TimeRevisedResultCB(self, con, iq_obj):
         log.debug('TimeRevisedResultCB')
         gajim.nec.push_incoming_event(TimeResultReceivedEvent(None, conn=self,
-            iq_obj=iq_obj))
+            stanza=iq_obj))
 
     def _gMailNewMailCB(self, con, iq_obj):
         """
@@ -1352,7 +1357,7 @@ ConnectionJingle, ConnectionIBBytestream):
         """
         log.debug('gMailNewMailCB')
         gajim.nec.push_incoming_event(GmailNewMailReceivedEvent(None, conn=self,
-            iq_obj=iq_obj))
+            stanza=iq_obj))
         raise common.xmpp.NodeProcessed
 
     def _nec_gmail_new_mail_received(self, obj):
@@ -1381,7 +1386,7 @@ ConnectionJingle, ConnectionIBBytestream):
         """
         log.debug('gMailQueryCB')
         gajim.nec.push_incoming_event(GMailQueryReceivedEvent(None, conn=self,
-            iq_obj=iq_obj))
+            stanza=iq_obj))
         raise common.xmpp.NodeProcessed
 
     def _rosterItemExchangeCB(self, con, msg):
@@ -1390,7 +1395,7 @@ ConnectionJingle, ConnectionIBBytestream):
         """
         log.debug('rosterItemExchangeCB')
         gajim.nec.push_incoming_event(RosterItemExchangeEvent(None, conn=self,
-            iq_obj=msg))
+            stanza=msg))
         raise common.xmpp.NodeProcessed
 
     def _messageCB(self, con, msg):
@@ -1400,202 +1405,77 @@ ConnectionJingle, ConnectionIBBytestream):
         log.debug('MessageCB')
 
         gajim.nec.push_incoming_event(NetworkEvent('raw-message-received',
-            conn=con, xmpp_msg=msg, account=self.name))
+            conn=self, stanza=msg, account=self.name))
 
-        mtype = msg.getType()
-
-        # check if the message is a roster item exchange (XEP-0144)
-        if msg.getTag('x', namespace=common.xmpp.NS_ROSTERX):
-            self._rosterItemExchangeCB(con, msg)
+    def _nec_message_received(self, obj):
+        if obj.conn.name != self.name:
             return
-
-        # check if the message is a XEP-0070 confirmation request
-        if msg.getTag('confirm', namespace=common.xmpp.NS_HTTP_AUTH):
-            self._HttpAuthCB(con, msg)
-            return
-
-        try:
-            frm = helpers.get_full_jid_from_iq(msg)
-            jid = helpers.get_jid_from_iq(msg)
-        except helpers.InvalidFormat:
-            self.dispatch('ERROR', (_('Invalid Jabber ID'),
-                _('A message from a non-valid JID arrived, it has been '
-                'ignored.')))
-            return
-
-        addressTag = msg.getTag('addresses', namespace=common.xmpp.NS_ADDRESS)
-
-        # Be sure it comes from one of our resource, else ignore address element
-        if addressTag and jid == gajim.get_jid_from_account(self.name):
-            address = addressTag.getTag('address', attrs={'type': 'ofrom'})
-            if address:
-                try:
-                    frm = helpers.parse_jid(address.getAttr('jid'))
-                except common.helpers.InvalidFormat:
-                    log.warn('Invalid JID: %s, ignoring it' % address.getAttr(
-                        'jid'))
-                    return
-                jid = gajim.get_jid_without_resource(frm)
-
-        # invitations
-        invite = None
-        encTag = msg.getTag('x', namespace=common.xmpp.NS_ENCRYPTED)
-
-        if not encTag:
-            invite = msg.getTag('x', namespace=common.xmpp.NS_MUC_USER)
-            if invite and not invite.getTag('invite'):
-                invite = None
-
-        # FIXME: Msn transport (CMSN1.2.1 and PyMSN0.10) do NOT RECOMMENDED
-        # invitation
-        # stanza (MUC XEP) remove in 2007, as we do not do NOT RECOMMENDED
-        xtags = msg.getTags('x')
-        for xtag in xtags:
-            if xtag.getNamespace() == common.xmpp.NS_CONFERENCE and not invite:
-                try:
-                    room_jid = helpers.parse_jid(xtag.getAttr('jid'))
-                except common.helpers.InvalidFormat:
-                    log.warn('Invalid JID: %s, ignoring it' % xtag.getAttr(
-                        'jid'))
-                    continue
-                is_continued = False
-                if xtag.getTag('continue'):
-                    is_continued = True
-                self.dispatch('GC_INVITATION', (room_jid, frm, '', None,
-                    is_continued))
-                return
-
-        thread_id = msg.getThread()
-
-        if not mtype or mtype not in ('chat', 'groupchat', 'error'):
-            mtype = 'normal'
-
-        msgtxt = msg.getBody()
-
-        encrypted = False
-        xep_200_encrypted = msg.getTag('c',
-            namespace=common.xmpp.NS_STANZA_CRYPTO)
-
-        session = None
-        gc_control = gajim.interface.msg_win_mgr.get_gc_control(jid, self.name)
-        if not gc_control and \
-        jid in gajim.interface.minimized_controls[self.name]:
-            gc_control = gajim.interface.minimized_controls[self.name][jid]
-
-        if gc_control and jid == frm: # message from a gc without a resource
-            mtype = 'groupchat'
-
-        if mtype != 'groupchat':
-            session = self.get_or_create_session(frm, thread_id)
-
-            if thread_id and not session.received_thread_id:
-                session.received_thread_id = True
-
-            session.last_receive = time_time()
-
-        # check if the message is a XEP-0020 feature negotiation request
-        if msg.getTag('feature', namespace=common.xmpp.NS_FEATURE):
-            if gajim.HAVE_PYCRYPTO:
-                feature = msg.getTag(name='feature',
-                    namespace=common.xmpp.NS_FEATURE)
-                form = common.xmpp.DataForm(node=feature.getTag('x'))
-
-                if form['FORM_TYPE'] == 'urn:xmpp:ssn':
-                    session.handle_negotiation(form)
-                else:
-                    reply = msg.buildReply()
-                    reply.setType('error')
-
-                    reply.addChild(feature)
-                    err = common.xmpp.ErrorNode('service-unavailable',
-                        typ='cancel')
-                    reply.addChild(node=err)
-
-                    con.send(reply)
-
-                raise common.xmpp.NodeProcessed
-
-            return
-
-        if msg.getTag('init', namespace=common.xmpp.NS_ESESSION_INIT):
-            init = msg.getTag(name='init',
-                namespace=common.xmpp.NS_ESESSION_INIT)
-            form = common.xmpp.DataForm(node=init.getTag('x'))
-
-            session.handle_negotiation(form)
-
-            raise common.xmpp.NodeProcessed
-
-        tim = msg.getTimestamp()
-        tim = helpers.datetime_tuple(tim)
-        tim = localtime(timegm(tim))
-
-        if xep_200_encrypted:
-            encrypted = 'xep200'
-
+        if obj.encrypted == 'xep200':
             try:
-                msg = session.decrypt_stanza(msg)
-                msgtxt = msg.getBody()
+                obj.stanza = self.session.decrypt_stanza(obj.stanza)
+                obj.msgtxt = obj.stanza.getBody()
             except Exception:
-                self.dispatch('FAILED_DECRYPT', (frm, tim, session))
+                self.dispatch('FAILED_DECRYPT', (obj.fjid, obj.timestamp,
+                    obj.session))
 
         # Receipt requested
         # TODO: We shouldn't answer if we're invisible!
-        contact = gajim.contacts.get_contact(self.name, jid)
-        nick = gajim.get_room_and_nick_from_fjid(frm)[1]
-        gc_contact = gajim.contacts.get_gc_contact(self.name, jid, nick)
-        if msg.getTag('request', namespace=common.xmpp.NS_RECEIPTS) \
-        and gajim.config.get_per('accounts', self.name,
-        'answer_receipts') and ((contact and contact.sub \
-        not in (u'to', u'none')) or gc_contact) and mtype != 'error':
-            receipt = common.xmpp.Message(to=frm, typ='chat')
-            receipt.setID(msg.getID())
+        contact = gajim.contacts.get_contact(self.name, obj.jid)
+        nick = obj.resource
+        gc_contact = gajim.contacts.get_gc_contact(self.name, obj.jid, nick)
+        if obj.receipt_request_tag and gajim.config.get_per('accounts',
+        self.name, 'answer_receipts') and ((contact and contact.sub \
+        not in (u'to', u'none')) or gc_contact) and obj.mtype != 'error':
+            receipt = common.xmpp.Message(to=obj.jfid, typ='chat')
+            receipt.setID(obj.id_)
             receipt.setTag('received', namespace='urn:xmpp:receipts',
-                attrs={'id': msg.getID()})
+                attrs={'id': obj.id_})
 
-            if thread_id:
-                receipt.setThread(thread_id)
-            con.send(receipt)
+            if obj.thread_id:
+                receipt.setThread(obj.thread_id)
+            self.connection.send(receipt)
 
         # We got our message's receipt
-        if msg.getTag('received', namespace=common.xmpp.NS_RECEIPTS) and \
-        session.control and gajim.config.get_per('accounts', self.name,
-        'request_receipt'):
-            session.control.conv_textview.hide_xep0184_warning(msg.getID())
+        if obj.receipt_received_tag and self.session.control and \
+        gajim.config.get_per('accounts', self.name, 'request_receipt'):
+            self.session.control.conv_textview.hide_xep0184_warning(obj.id_)
 
-        if encTag and self.USE_GPG:
-            encmsg = encTag.getData()
+        if obj.enc_tag and self.USE_GPG:
+            encmsg = obj.enc_tag.getData()
 
             keyID = gajim.config.get_per('accounts', self.name, 'keyid')
             if keyID:
-                def decrypt_thread(encmsg, keyID):
+                def decrypt_thread(encmsg, keyID, obj):
                     decmsg = self.gpg.decrypt(encmsg, keyID)
                     # \x00 chars are not allowed in C (so in GTK)
-                    msgtxt = helpers.decode_string(decmsg.replace('\x00', ''))
-                    encrypted = 'xep27'
-                    return (msgtxt, encrypted)
-                gajim.thread_interface(decrypt_thread, [encmsg, keyID],
-                    self._on_message_decrypted, [mtype, msg, session, frm, jid,
-                    invite, tim])
+                    obj.msgtxt = helpers.decode_string(decmsg.replace('\x00',
+                        ''))
+                    obj.encrypted = 'xep27'
+                gajim.thread_interface(decrypt_thread, [encmsg, keyID, obj],
+                    self._on_message_decrypted, [obj])
                 return
-        self._on_message_decrypted((msgtxt, encrypted), mtype, msg, session,
-            frm, jid, invite, tim)
+        self._on_message_decrypted(None, obj)
 
-    def _on_message_decrypted(self, output, mtype, msg, session, frm, jid,
-    invite, tim):
-        msgtxt, encrypted = output
-        if mtype == 'error':
+    def _on_message_decrypted(self, output, obj):
+        gajim.nec.push_incoming_event(DecryptedMessageReceivedEvent(None,
+            conn=self, msg_obj=obj))
+
+    def _nec_decrypted_message_received(self, obj):
+        if obj.conn.name != self.name:
+            return
+        if obj.mtype == 'error':
             self.dispatch_error_message(msg, msgtxt, session, frm, tim)
-        elif mtype == 'groupchat':
-            self.dispatch_gc_message(msg, frm, msgtxt, jid, tim)
-        elif invite is not None:
-            self.dispatch_invite_message(invite, frm)
+        elif obj.mtype == 'groupchat':
+            gajim.nec.push_incoming_event(GcMessageReceivedEvent(None,
+                conn=self, msg_obj=obj))
+        elif obj.invite_tag is not None:
+            gajim.nec.push_incoming_event(GcInvitationReceivedEvent(None,
+                conn=self, msg_obj=obj))
         else:
             if isinstance(session, gajim.default_session_type):
                 session.received(frm, msgtxt, tim, encrypted, msg)
             else:
                 session.received(msg)
-    # END messageCB
 
     # process and dispatch an error message
     def dispatch_error_message(self, msg, msgtxt, session, frm, tim):
@@ -1622,6 +1502,11 @@ ConnectionJingle, ConnectionIBBytestream):
                 self.dispatch('DB_ERROR', (pritext, sectext))
         self.dispatch('MSGERROR', (frm, msg.getErrorCode(), error_msg, msgtxt,
             tim, session))
+
+    def _dispatch_gc_msg_with_captcha(self, stanza, msg_obj):
+        msg_obj.stanza = stanza
+        gajim.nec.push_incoming_event(GcMessageReceivedEvent(None,
+            conn=self, msg_obj=msg_obj))
 
     def _on_bob_received(self, conn, result, cid):
         """
@@ -1747,30 +1632,13 @@ ConnectionJingle, ConnectionIBBytestream):
                     common.logger.LOG_DB_PATH
                 self.dispatch('DB_ERROR', (pritext, sectext))
 
-    def dispatch_invite_message(self, invite, frm):
-        item = invite.getTag('invite')
-        try:
-            jid_from = helpers.parse_jid(item.getAttr('from'))
-        except common.helpers.InvalidFormat:
-            log.warn('Invalid JID: %s, ignoring it' % item.getAttr('from'))
-            return
-        reason = item.getTagData('reason')
-        item = invite.getTag('password')
-        password = invite.getTagData('password')
-
-        is_continued = False
-        if invite.getTag('invite').getTag('continue'):
-            is_continued = True
-        self.dispatch('GC_INVITATION', (frm, jid_from, reason, password,
-            is_continued))
-
     def _presenceCB(self, con, prs):
         """
         Called when we receive a presence
         """
         log.debug('PresenceCB')
         gajim.nec.push_incoming_event(NetworkEvent('raw-pres-received',
-            conn=self, iq_obj=prs))
+            conn=self, stanza=prs))
 
     def _nec_presence_received(self, obj):
         account = obj.conn.name
@@ -2031,17 +1899,17 @@ ConnectionJingle, ConnectionIBBytestream):
     def _MucOwnerCB(self, con, iq_obj):
         log.debug('MucOwnerCB')
         gajim.nec.push_incoming_event(MucOwnerReceivedEvent(None, conn=self,
-            iq_obj=iq_obj))
+            stanza=iq_obj))
 
     def _MucAdminCB(self, con, iq_obj):
         log.debug('MucAdminCB')
         gajim.nec.push_incoming_event(MucAdminReceivedEvent(None, conn=self,
-            iq_obj=iq_obj))
+            stanza=iq_obj))
 
     def _IqPingCB(self, con, iq_obj):
         log.debug('IqPingCB')
         gajim.nec.push_incoming_event(PingReceivedEvent(None, conn=self,
-            iq_obj=iq_obj))
+            stanza=iq_obj))
         raise common.xmpp.NodeProcessed
 
     def _nec_ping_received(self, obj):
@@ -2049,7 +1917,7 @@ ConnectionJingle, ConnectionIBBytestream):
             return
         if not self.connection or self.connected < 2:
             return
-        iq_obj = obj.iq_obj.buildReply('result')
+        iq_obj = obj.stanza.buildReply('result')
         self.connection.send(iq_obj)
 
     def _PrivacySetCB(self, con, iq_obj):
@@ -2207,12 +2075,12 @@ ConnectionJingle, ConnectionIBBytestream):
     def _SearchCB(self, con, iq_obj):
         log.debug('SearchCB')
         gajim.nec.push_incoming_event(SearchFormReceivedEvent(None,
-            conn=self, iq_obj=iq_obj))
+            conn=self, stanza=iq_obj))
 
     def _StreamCB(self, con, iq_obj):
         log.debug('StreamCB')
         gajim.nec.push_incoming_event(StreamReceivedEvent(None,
-            conn=self, iq_obj=iq_obj))
+            conn=self, stanza=iq_obj))
 
     def _register_handlers(self, con, con_type):
         # try to find another way to register handlers in each class
