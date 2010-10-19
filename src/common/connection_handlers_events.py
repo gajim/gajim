@@ -1042,6 +1042,7 @@ class GcMessageReceivedEvent(nec.NetworkIncomingEvent):
         self.fjid = self.msg_obj.fjid
         self.msgtxt = self.msg_obj.msgtxt
         self.jid = self.msg_obj.jid
+        self.room_jid = self.msg_obj.jid
         self.timestamp = self.msg_obj.timestamp
         self.xhtml_msgtxt = self.stanza.getXHTML()
 

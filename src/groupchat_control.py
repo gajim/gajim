@@ -811,7 +811,7 @@ class GroupchatControl(ChatControlBase):
         menu.destroy()
 
     def _nec_gc_message_received(self, obj):
-        if obj.jid != self.room_jid:
+        if obj.room_jid != self.room_jid or obj.conn.name != self.account:
             return
         if obj.captcha_form:
             if self.form_widget:
@@ -1270,7 +1270,7 @@ class GroupchatControl(ChatControlBase):
             self.draw_role(role)
 
     def _nec_gc_presence_received(self, obj):
-        if obj.room_jid != self.room_jid:
+        if obj.room_jid != self.room_jid or obj.conn.name != self.account:
             return
         if obj.ptype == 'error':
             return
