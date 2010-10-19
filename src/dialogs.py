@@ -664,15 +664,14 @@ class ChangeStatusMessageDialog(TimeoutDialog):
         label = self.xml.get_object('activity_button_label')
         if 'activity' in self.pep_dict and self.pep_dict['activity'] in \
            pep.ACTIVITIES:
-            if 'subactivity' in self.pep_dict and self.pep_dict['subactivity'] in \
-               pep.ACTIVITIES[self.pep_dict['activity']]:
+            if 'subactivity' in self.pep_dict and self.pep_dict['subactivity'] \
+            in pep.ACTIVITIES[self.pep_dict['activity']]:
                 img.set_from_pixbuf(gtkgui_helpers.load_activity_icon(
-                        self.pep_dict['activity'], self.pep_dict['subactivity']).\
-                                                        get_pixbuf())
+                    self.pep_dict['activity'], self.pep_dict['subactivity']).\
+                        get_pixbuf())
             else:
                 img.set_from_pixbuf(gtkgui_helpers.load_activity_icon(
-                        self.pep_dict['activity']).get_pixbuf())
-#                       item.set_tooltip_text(pep.ACTIVITIES[category]['category'])
+                    self.pep_dict['activity']).get_pixbuf())
             if self.pep_dict['activity_text']:
                 label.set_text(self.pep_dict['activity_text'])
             else:
@@ -687,9 +686,9 @@ class ChangeStatusMessageDialog(TimeoutDialog):
         """
         img = self.xml.get_object('mood_image')
         label = self.xml.get_object('mood_button_label')
-        if self.pep_dict['mood'] in pep.MOODS:
+        if 'mood' in self.pep_dict and self.pep_dict['mood'] in pep.MOODS:
             img.set_from_pixbuf(gtkgui_helpers.load_mood_icon(
-                    self.pep_dict['mood']).get_pixbuf())
+                self.pep_dict['mood']).get_pixbuf())
             if self.pep_dict['mood_text']:
                 label.set_text(self.pep_dict['mood_text'])
             else:
