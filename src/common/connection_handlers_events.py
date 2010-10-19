@@ -972,10 +972,6 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         if xep_200_encrypted:
             self.encrypted = 'xep200'
 
-        self.receipt_request_tag = self.stanza.getTag('request',
-            namespace=xmpp.NS_RECEIPTS)
-        self.receipt_received_tag = self.stanza.getTag('received',
-            namespace=xmpp.NS_RECEIPTS)
         return True
 
 class GcInvitationReceivedEvent(nec.NetworkIncomingEvent):
@@ -1006,6 +1002,7 @@ class DecryptedMessageReceivedEvent(nec.NetworkIncomingEvent):
 
     def generate(self):
         self.stanza = self.msg_obj.stanza
+        self.id_ = self.msg_obj.id_
         self.jid = self.msg_obj.jid
         self.fjid = self.msg_obj.fjid
         self.resource = self.msg_obj.resource
@@ -1017,6 +1014,11 @@ class DecryptedMessageReceivedEvent(nec.NetworkIncomingEvent):
         self.session = self.msg_obj.session
         self.timestamp = self.msg_obj.timestamp
         self.encrypted = self.msg_obj.encrypted
+
+        self.receipt_request_tag = self.stanza.getTag('request',
+            namespace=xmpp.NS_RECEIPTS)
+        self.receipt_received_tag = self.stanza.getTag('received',
+            namespace=xmpp.NS_RECEIPTS)
         return True
 
 class GcMessageReceivedEvent(nec.NetworkIncomingEvent):

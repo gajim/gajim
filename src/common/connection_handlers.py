@@ -1418,28 +1418,6 @@ ConnectionJingle, ConnectionIBBytestream):
                 self.dispatch('FAILED_DECRYPT', (obj.fjid, obj.timestamp,
                     obj.session))
 
-        # Receipt requested
-        # TODO: We shouldn't answer if we're invisible!
-        contact = gajim.contacts.get_contact(self.name, obj.jid)
-        nick = obj.resource
-        gc_contact = gajim.contacts.get_gc_contact(self.name, obj.jid, nick)
-        if obj.receipt_request_tag and gajim.config.get_per('accounts',
-        self.name, 'answer_receipts') and ((contact and contact.sub \
-        not in (u'to', u'none')) or gc_contact) and obj.mtype != 'error':
-            receipt = common.xmpp.Message(to=obj.fjid, typ='chat')
-            receipt.setID(obj.id_)
-            receipt.setTag('received', namespace='urn:xmpp:receipts',
-                attrs={'id': obj.id_})
-
-            if obj.thread_id:
-                receipt.setThread(obj.thread_id)
-            self.connection.send(receipt)
-
-        # We got our message's receipt
-        if obj.receipt_received_tag and obj.session.control and \
-        gajim.config.get_per('accounts', self.name, 'request_receipt'):
-            obj.session.control.conv_textview.hide_xep0184_warning(obj.id_)
-
         if obj.enc_tag and self.USE_GPG:
             encmsg = obj.enc_tag.getData()
 
@@ -1463,6 +1441,29 @@ ConnectionJingle, ConnectionIBBytestream):
     def _nec_decrypted_message_received(self, obj):
         if obj.conn.name != self.name:
             return
+
+        # Receipt requested
+        # TODO: We shouldn't answer if we're invisible!
+        contact = gajim.contacts.get_contact(self.name, obj.jid)
+        nick = obj.resource
+        gc_contact = gajim.contacts.get_gc_contact(self.name, obj.jid, nick)
+        if obj.receipt_request_tag and gajim.config.get_per('accounts',
+        self.name, 'answer_receipts') and ((contact and contact.sub \
+        not in (u'to', u'none')) or gc_contact) and obj.mtype != 'error':
+            receipt = common.xmpp.Message(to=obj.fjid, typ='chat')
+            receipt.setID(obj.id_)
+            receipt.setTag('received', namespace='urn:xmpp:receipts',
+                attrs={'id': obj.id_})
+
+            if obj.thread_id:
+                receipt.setThread(obj.thread_id)
+            self.connection.send(receipt)
+
+        # We got our message's receipt
+        if obj.receipt_received_tag and obj.session.control and \
+        gajim.config.get_per('accounts', self.name, 'request_receipt'):
+            obj.session.control.conv_textview.hide_xep0184_warning(obj.id_)
+
         if obj.mtype == 'error':
             self.dispatch_error_message(msg, msgtxt, session, frm, tim)
         elif obj.mtype == 'groupchat':
