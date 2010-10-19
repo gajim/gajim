@@ -1426,7 +1426,7 @@ ConnectionJingle, ConnectionIBBytestream):
         if obj.receipt_request_tag and gajim.config.get_per('accounts',
         self.name, 'answer_receipts') and ((contact and contact.sub \
         not in (u'to', u'none')) or gc_contact) and obj.mtype != 'error':
-            receipt = common.xmpp.Message(to=obj.jfid, typ='chat')
+            receipt = common.xmpp.Message(to=obj.fjid, typ='chat')
             receipt.setID(obj.id_)
             receipt.setTag('received', namespace='urn:xmpp:receipts',
                 attrs={'id': obj.id_})
@@ -1436,9 +1436,9 @@ ConnectionJingle, ConnectionIBBytestream):
             self.connection.send(receipt)
 
         # We got our message's receipt
-        if obj.receipt_received_tag and self.session.control and \
+        if obj.receipt_received_tag and obj.session.control and \
         gajim.config.get_per('accounts', self.name, 'request_receipt'):
-            self.session.control.conv_textview.hide_xep0184_warning(obj.id_)
+            obj.session.control.conv_textview.hide_xep0184_warning(obj.id_)
 
         if obj.enc_tag and self.USE_GPG:
             encmsg = obj.enc_tag.getData()
@@ -1472,10 +1472,11 @@ ConnectionJingle, ConnectionIBBytestream):
             gajim.nec.push_incoming_event(GcInvitationReceivedEvent(None,
                 conn=self, msg_obj=obj))
         else:
-            if isinstance(session, gajim.default_session_type):
-                session.received(frm, msgtxt, tim, encrypted, msg)
+            if isinstance(obj.session, gajim.default_session_type):
+                obj.session.received(obj.fjid, obj.msgtxt, obj.timestamp,
+                    obj.encrypted, obj.stanza)
             else:
-                session.received(msg)
+                obj.session.received(obj.stanza)
 
     # process and dispatch an error message
     def dispatch_error_message(self, msg, msgtxt, session, frm, tim):

@@ -1016,6 +1016,7 @@ class DecryptedMessageReceivedEvent(nec.NetworkIncomingEvent):
         self.gc_control = self.msg_obj.gc_control
         self.session = self.msg_obj.session
         self.timestamp = self.msg_obj.timestamp
+        self.encrypted = self.msg_obj.encrypted
         return True
 
 class GcMessageReceivedEvent(nec.NetworkIncomingEvent):
