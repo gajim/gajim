@@ -102,16 +102,6 @@ class Interface:
 ### Methods handling events from connection
 ################################################################################
 
-    def handle_event_roster(self, account, data):
-        #('ROSTER', account, array)
-        # FIXME: Those methods depend to highly on each other
-        # and the order in which they are called
-        self.roster.fill_contacts_and_groups_dicts(data, account)
-        self.roster.add_account_contacts(account)
-        self.roster.fire_up_unread_messages_events(account)
-        if self.remote_ctrl:
-            self.remote_ctrl.raise_signal('Roster', (account, data))
-
     def handle_event_warning(self, unused, data):
         #('WARNING', account, (title_text, section_text))
         dialogs.WarningDialog(data[0], data[1])
@@ -1856,7 +1846,6 @@ class Interface:
 
     def create_core_handlers_list(self):
         self.handlers = {
-            'ROSTER': [self.handle_event_roster],
             'WARNING': [self.handle_event_warning],
             'ERROR': [self.handle_event_error],
             'DB_ERROR': [self.handle_event_db_error],

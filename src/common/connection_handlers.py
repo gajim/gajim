@@ -1984,25 +1984,26 @@ ConnectionJingle, ConnectionIBBytestream):
             if send_first_presence:
                 self._send_first_presence(signed)
 
-        for jid in obj.roster:
-            if jid != our_jid and gajim.jid_is_transport(jid) and \
-            not gajim.get_transport_name_from_jid(jid):
-                # we can't determine which iconset to use
-                self.discoverInfo(jid)
-
-        gajim.logger.replace_roster(self.name, obj.version, obj.roster)
         if obj.received_from_server:
-            for contact in gajim.contacts.iter_contacts(self.name):
-                if not contact.is_groupchat() and contact.jid not in obj.roster\
-                and contact.jid != our_jid:
-                    gajim.nec.push_incoming_event(RosterInfoEvent(None,
-                        conn=self, jid=contact.jid, nickname=None, sub=None,
-                        ask=None, groups=()))
-            for jid, info in obj.roster.items():
+            for jid in obj.roster:
+                if jid != our_jid and gajim.jid_is_transport(jid) and \
+                not gajim.get_transport_name_from_jid(jid):
+                    # we can't determine which iconset to use
+                    self.discoverInfo(jid)
+
+            gajim.logger.replace_roster(self.name, obj.version, obj.roster)
+
+        for contact in gajim.contacts.iter_contacts(self.name):
+            if not contact.is_groupchat() and contact.jid not in obj.roster\
+            and contact.jid != our_jid:
                 gajim.nec.push_incoming_event(RosterInfoEvent(None,
-                    conn=self, jid=jid, nickname=info['name'],
-                    sub=info['subscription'], ask=info['ask'],
-                    groups=info['groups']))
+                    conn=self, jid=contact.jid, nickname=None, sub=None,
+                    ask=None, groups=()))
+        for jid, info in obj.roster.items():
+            gajim.nec.push_incoming_event(RosterInfoEvent(None,
+                conn=self, jid=jid, nickname=info['name'],
+                sub=info['subscription'], ask=info['ask'],
+                groups=info['groups']))
 
     def _send_first_presence(self, signed=''):
         show = self.continue_connect_info[0]
