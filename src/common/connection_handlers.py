@@ -1176,7 +1176,7 @@ ConnectionJingle, ConnectionIBBytestream):
             return
         if obj.id_ in self.version_ids:
             gajim.nec.push_incoming_event(VersionResultReceivedEvent(None,
-                conn=self, stanza=obj.iq_obj))
+                conn=self, stanza=obj.stanza))
             return True
         if obj.id_ in self.entity_time_ids:
             gajim.nec.push_incoming_event(TimeResultReceivedEvent(None,
