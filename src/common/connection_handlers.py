@@ -1412,7 +1412,7 @@ ConnectionJingle, ConnectionIBBytestream):
             return
         if obj.encrypted == 'xep200':
             try:
-                obj.stanza = self.session.decrypt_stanza(obj.stanza)
+                obj.stanza = obj.session.decrypt_stanza(obj.stanza)
                 obj.msgtxt = obj.stanza.getBody()
             except Exception:
                 self.dispatch('FAILED_DECRYPT', (obj.fjid, obj.timestamp,
