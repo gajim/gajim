@@ -173,7 +173,7 @@ class Remote:
     def on_gc_message_received(self, obj):
         self.raise_signal('GCMessage', (obj.conn.name, [obj.fjid, obj.msgtxt,
             obj.timestamp, obj.has_timestamp, obj.xhtml_msgtxt, obj.status_code,
-            obj.displaymarking, obj.captcha_form, obj.needs_highlight)
+            obj.displaymarking, obj.captcha_form, obj.needs_highlight])
 
     def raise_signal(self, signal, arg):
         if self.signal_object:
