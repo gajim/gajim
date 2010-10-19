@@ -2317,7 +2317,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                 item.setTagData(i, form[i])
         def _on_response(resp):
             gajim.nec.push_incoming_event(SearchResultReceivedEvent(None,
-                conn=self, iq_obj=resp))
+                conn=self, stanza=resp))
 
         self.connection.SendAndCallForResponse(iq, _on_response)
 
