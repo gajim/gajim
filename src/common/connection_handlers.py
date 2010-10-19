@@ -1417,6 +1417,7 @@ ConnectionJingle, ConnectionIBBytestream):
             except Exception:
                 self.dispatch('FAILED_DECRYPT', (obj.fjid, obj.timestamp,
                     obj.session))
+                return
 
         if obj.enc_tag and self.USE_GPG:
             encmsg = obj.enc_tag.getData()
