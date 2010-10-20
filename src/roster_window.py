@@ -1278,6 +1278,9 @@ class RosterWindow:
                 # it's not self contact
                 self.model[iterG][C_JID] = self.model[iterG][C_JID]
 
+        gajim.plugin_manager.gui_extension_point('roster_draw_contact', self,
+            jid, account, contact)
+
         return False
 
     def _is_pep_shown_in_roster(self, pep_type):
