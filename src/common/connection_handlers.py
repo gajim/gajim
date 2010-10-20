@@ -1466,7 +1466,8 @@ ConnectionJingle, ConnectionIBBytestream):
             obj.session.control.conv_textview.hide_xep0184_warning(obj.id_)
 
         if obj.mtype == 'error':
-            self.dispatch_error_message(msg, msgtxt, session, frm, tim)
+            self.dispatch_error_message(obj.stanza, obj.msgtxt,
+                obj.session, obj.fjid, obj.timestamp)
         elif obj.mtype == 'groupchat':
             gajim.nec.push_incoming_event(GcMessageReceivedEvent(None,
                 conn=self, msg_obj=obj))
