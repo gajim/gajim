@@ -1096,7 +1096,7 @@ class GcMessageReceivedEvent(nec.NetworkIncomingEvent):
                         if uri_data.startswith('cid:'):
                             uri_data = uri_data[4:]
                             found = False
-                            for data in msg.getTags('data',
+                            for data in self.stanza.getTags('data',
                             namespace=xmpp.NS_BOB):
                                 if data.getAttr('cid') == uri_data:
                                     uri.setData(data.getData())
