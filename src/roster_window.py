@@ -4863,12 +4863,15 @@ class RosterWindow:
 
         # items that get shown whether an account is zeroconf or not
         accounts_list = sorted(gajim.contacts.get_accounts())
-        if connected_accounts > 1: # 2 or more accounts? make submenus
+        if connected_accounts > 2 or \
+        (connected_accounts > 1 and not gajim.zeroconf_is_connected()):
+            # 2 or more "real" (no zeroconf) accounts? make submenus
             new_chat_sub_menu = gtk.Menu()
 
             for account in accounts_list:
-                if gajim.connections[account].connected <= 1:
-                    # if offline or connecting
+                if gajim.connections[account].connected <= 1 or \
+                gajim.config.get_per('accounts', account, 'is_zeroconf'):
+                    # if offline or connecting or zeroconf
                     continue
 
                 # new chat
@@ -4977,8 +4980,9 @@ class RosterWindow:
                 for account in gajim.connections:
                     if gajim.account_is_connected(account) and \
                     gajim.connections[account].is_zeroconf:
-                        for item in (join_gc_menuitem, add_new_contact_menuitem,
-                        service_disco_menuitem, single_message_menuitem):
+                        for item in (new_chat_menuitem, join_gc_menuitem,
+                        add_new_contact_menuitem, service_disco_menuitem,
+                        single_message_menuitem):
                             item.set_sensitive(False)
 
         # Manage GC bookmarks
