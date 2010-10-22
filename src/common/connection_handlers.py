@@ -360,7 +360,8 @@ class ConnectionDisco:
                         our_jid = gajim.get_jid_from_account(self.name)
                         self.send_pb_purge(our_jid, 'storage:bookmarks')
                         self.send_pb_delete(our_jid, 'storage:bookmarks')
-            if features.__contains__(common.xmpp.NS_BYTESTREAM):
+            if features.__contains__(common.xmpp.NS_BYTESTREAM) and \
+            gajim.config.get_per('accounts', self.name, 'use_ft_proxies'):
                 our_jid = helpers.parse_jid(gajim.get_jid_from_account(
                     self.name) + '/' + self.server_resource)
                 gajim.proxy65_manager.resolve(jid, self.connection, our_jid,
