@@ -381,7 +381,8 @@ class ConnectionDisco:
                     self.archive_manual_supported = True
                 if features.__contains__(common.xmpp.NS_ARCHIVE_PREF):
                     self.archive_pref_supported = True
-            if features.__contains__(common.xmpp.NS_BYTESTREAM):
+            if features.__contains__(common.xmpp.NS_BYTESTREAM) and \
+            gajim.config.get_per('accounts', self.name, 'use_ft_proxies'):
                 our_jid = helpers.parse_jid(gajim.get_jid_from_account(
                     self.name) + '/' + self.server_resource)
                 gajim.proxy65_manager.resolve(jid, self.connection, our_jid,
