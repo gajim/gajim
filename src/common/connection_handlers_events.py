@@ -36,8 +36,9 @@ import logging
 log = logging.getLogger('gajim.c.connection_handlers_events')
 
 class HelperEvent:
-    def get_jid_resource(self):
-        if hasattr(self, 'id_') and self.id_ in self.conn.groupchat_jids:
+    def get_jid_resource(self, check_fake_jid=False):
+        if check_fake_jid and hasattr(self, 'id_') and \
+        self.id_ in self.conn.groupchat_jids:
             self.fjid = self.conn.groupchat_jids[self.id_]
             del self.conn.groupchat_jids[self.id_]
         else:
@@ -81,7 +82,7 @@ class LastResultReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
 
     def generate(self):
         self.get_id()
-        self.get_jid_resource()
+        self.get_jid_resource(check_fake_jid=True)
         if self.id_ in self.conn.last_ids:
             self.conn.last_ids.remove(self.id_)
 
@@ -109,7 +110,7 @@ class VersionResultReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
 
     def generate(self):
         self.get_id()
-        self.get_jid_resource()
+        self.get_jid_resource(check_fake_jid=True)
         if self.id_ in self.conn.version_ids:
             self.conn.version_ids.remove(self.id_)
 
@@ -135,7 +136,7 @@ class TimeResultReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
 
     def generate(self):
         self.get_id()
-        self.get_jid_resource()
+        self.get_jid_resource(check_fake_jid=True)
         if self.id_ in self.conn.entity_time_ids:
             self.conn.entity_time_ids.remove(self.id_)
 
@@ -592,7 +593,7 @@ class IqErrorReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
 
     def generate(self):
         self.get_id()
-        self.get_jid_resource()
+        self.get_jid_resource(check_fake_jid=True)
         self.errmsg = self.stanza.getErrorMsg()
         self.errcode = self.stanza.getErrorCode()
         return True
