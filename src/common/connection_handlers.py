@@ -602,7 +602,11 @@ class ConnectionVcard:
                 # We do as if it comes from the fake_jid
                 frm = groupchat_jid
             our_jid = gajim.get_jid_from_account(self.name)
-            if not iq_obj.getTag('vCard') or iq_obj.getType() == 'error':
+            if (not iq_obj.getTag('vCard') and iq_obj.getType() == 'result') or\
+            iq_obj.getType() == 'error':
+                if id_ in self.groupchat_jids:
+                    frm = self.groupchat_jids[id_]
+                    del self.groupchat_jids[id_]
                 if frm and frm != our_jid:
                     # Write an empty file
                     self._save_vcard_to_hd(frm, '')
