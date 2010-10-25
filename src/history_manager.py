@@ -279,7 +279,7 @@ class HistoryManager:
             path = rowref.get_path()
             if path is None:
                 continue
-            jid = liststore[path][0] # jid
+            jid = liststore[path][0].decode('utf-8') # jid
             self._fill_logs_listview(jid)
 
     def _get_jid_id(self, jid):
@@ -625,7 +625,7 @@ class HistoryManager:
     def on_search_results_listview_row_activated(self, widget, path, column):
         # get log_line_id, jid_id from row we double clicked
         log_line_id = self.search_results_liststore[path][0]
-        jid = self.search_results_liststore[path][1]
+        jid = self.search_results_liststore[path][1].decode('utf-8')
         # make it string as in gtk liststores I have them all as strings
         # as this is what db returns so I don't have to fight with types
         jid_id = self._get_jid_id(jid)
