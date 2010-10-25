@@ -1598,23 +1598,11 @@ ConnectionJingle, ConnectionIBBytestream):
         captcha = msg.getTag('captcha', namespace=common.xmpp.NS_CAPTCHA)
         if captcha:
             captcha = captcha.getTag('x', namespace=common.xmpp.NS_DATA)
-            for field in captcha.getTags('field'):
-                for media in field.getTags('media'):
-                    for uri in media.getTags('uri'):
-                        uri_data = uri.getData()
-                        if uri_data.startswith('cid:'):
-                            uri_data = uri_data[4:]
-                            found = False
-                            for data in msg.getTags('data',
-                            namespace=common.xmpp.NS_BOB):
-                                if data.getAttr('cid') == uri_data:
-                                    uri.setData(data.getData())
-                                    found = True
-                            if not found:
-                                self.get_bob_data(uri_data, frm,
-                                    self.dispatch_gc_message, [msg, frm, msgtxt,
-                                    jid, tim], 0)
-                                return
+            found = helpers.replace_dataform_media(captcha, msg)
+            if not found:
+                self.get_bob_data(uri_data, frm, self.dispatch_gc_message,
+                    [msg, frm, msgtxt, jid, tim], 0)
+                return
         self.dispatch('GC_MSG', (frm, msgtxt, tim, has_timestamp,
             msg.getXHTML(), statusCode, displaymarking, captcha))
 

@@ -58,23 +58,24 @@ def _ReceivedRegInfo(con, resp, agent):
     Iq('get', NS_REGISTER, to=agent)
     if not isResultNode(resp):
         error_msg = resp.getErrorMsg()
-        con.Event(NS_REGISTER, REGISTER_DATA_RECEIVED, (agent, None, False, error_msg))
+        con.Event(NS_REGISTER, REGISTER_DATA_RECEIVED, (agent, None, False, error_msg, ''))
         return
     tag=resp.getTag('query', namespace=NS_REGISTER)
     if not tag:
         error_msg = resp.getErrorMsg()
-        con.Event(NS_REGISTER, REGISTER_DATA_RECEIVED, (agent, None, False, error_msg))
+        con.Event(NS_REGISTER, REGISTER_DATA_RECEIVED, (agent, None, False, error_msg, ''))
         return
     df=tag.getTag('x', namespace=NS_DATA)
     if df:
-        con.Event(NS_REGISTER, REGISTER_DATA_RECEIVED, (agent, df, True, ''))
+        con.Event(NS_REGISTER, REGISTER_DATA_RECEIVED, (agent, df, True, '',
+            tag))
         return
     df={}
     for i in resp.getQueryPayload():
         if not isinstance(i, Node):
             continue
         df[i.getName()] = i.getData()
-    con.Event(NS_REGISTER, REGISTER_DATA_RECEIVED, (agent, df, False, ''))
+    con.Event(NS_REGISTER, REGISTER_DATA_RECEIVED, (agent, df, False, '', ''))
 
 def register(disp, host, info, cb, args=None):
     """

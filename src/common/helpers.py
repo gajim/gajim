@@ -1355,3 +1355,18 @@ def get_subscription_request_msg(account=None):
             name = nick
         s = Template(s).safe_substitute({'name': name})
         return s
+
+def replace_dataform_media(form, stanza):
+    import xmpp
+    for field in form.getTags('field'):
+        for media in field.getTags('media'):
+            for uri in media.getTags('uri'):
+                uri_data = uri.getData()
+                if uri_data.startswith('cid:'):
+                    uri_data = uri_data[4:]
+                    found = False
+                    for data in stanza.getTags('data', namespace=xmpp.NS_BOB):
+                        if data.getAttr('cid') == uri_data:
+                            uri.setData(data.getData())
+                            found = True
+    return found
