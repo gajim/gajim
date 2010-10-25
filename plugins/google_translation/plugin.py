@@ -104,13 +104,13 @@ class GoogleTranslateMessageReceivedEvent(nec.NetworkIncomingEvent):
     base_network_events = ['raw-message-received']
 
     def generate(self):
-        msg_type = self.base_event.xmpp_msg.attrs.get('type', None)
+        msg_type = self.base_event.stanza.attrs.get('type', None)
         if msg_type == u'chat':
-            msg_text = "".join(self.base_event.xmpp_msg.kids[0].data)
+            msg_text = "".join(self.base_event.stanza.kids[0].data)
             if msg_text:
                 from_lang = self.plugin.config['from_lang']
                 to_lang = self.plugin.config['to_lang']
-                self.base_event.xmpp_msg.kids[0].setData(
+                self.base_event.stanza.kids[0].setData(
                     self.plugin.translate_text(msg_text, from_lang, to_lang))
 
         # We only want to modify old event, not emit another, so we return False

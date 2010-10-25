@@ -46,34 +46,31 @@ class NewEventsExamplePlugin(GajimPlugin):
         #self.config_default_values = {}
 
         self.events_handlers = {'raw-message-received' :
-                                                                (ged.POSTCORE,
-                                                                 self.raw_message_received),
-                                                        'customized-message-received' :
-                                                                (ged.POSTCORE,
-                                                                 self.customized_message_received),
-                                                        'enriched-chat-message-received' :
-                                                                (ged.POSTCORE,
-                                                                 self.enriched_chat_message_received)}
+                (ged.POSTCORE, self.raw_message_received),
+            'customized-message-received' :
+                (ged.POSTCORE, self.customized_message_received),
+            'enriched-chat-message-received' :
+                (ged.POSTCORE, self.enriched_chat_message_received)}
 
         self.events = [CustomizedMessageReceivedEvent,
-                MoreCustomizedMessageReceivedEvent,
-                ModifyOnlyMessageReceivedEvent,
-                EnrichedChatMessageReceivedEvent]
+            MoreCustomizedMessageReceivedEvent,
+            ModifyOnlyMessageReceivedEvent,
+            EnrichedChatMessageReceivedEvent]
 
     def enriched_chat_message_received(self, event_object):
         pass
-        #print "Event '%s' occured. Event object: %s\n\n===\n"%(event_object.name,
-                                                                                                        #event_object)
+        # print "Event '%s' occured. Event object: %s\n\n===\n" % \
+        # (event_object.name, event_object)
 
     def raw_message_received(self, event_object):
         pass
-        #print "Event '%s' occured. Event object: %s\n\n===\n"%(event_object.name,
-                                                                                                        #event_object)
+        # print "Event '%s' occured. Event object: %s\n\n===\n" % \
+        # (event_object.name,event_object)
 
     def customized_message_received(self, event_object):
         pass
-        #print "Event '%s' occured. Event object: %s\n\n===\n"%(event_object.name,
-                                                                                                        #event_object
+        # print "Event '%s' occured. Event object: %s\n\n===\n" % \
+        # (event_object.name, event_object
 
     @log_calls('NewEventsExamplePlugin')
     def activate(self):
@@ -107,11 +104,11 @@ class ModifyOnlyMessageReceivedEvent(nec.NetworkIncomingEvent):
     base_network_events = ['raw-message-received']
 
     def generate(self):
-        msg_type = self.base_event.xmpp_msg.attrs.get('type', None)
+        msg_type = self.base_event.stanza.attrs.get('type', None)
         if msg_type == u'chat':
-            msg_text = "".join(self.base_event.xmpp_msg.kids[0].data)
-            self.base_event.xmpp_msg.kids[0].setData(
-                    u'%s [MODIFIED BY CUSTOM NETWORK EVENT]'%(msg_text))
+            msg_text = ''.join(self.base_event.stanza.kids[0].data)
+            self.base_event.stanza.kids[0].setData(
+                u'%s [MODIFIED BY CUSTOM NETWORK EVENT]' % (msg_text))
 
         return False
 
@@ -124,17 +121,17 @@ class EnrichedChatMessageReceivedEvent(nec.NetworkIncomingEvent):
     base_network_events = ['raw-message-received']
 
     def generate(self):
-        msg_type = self.base_event.xmpp_msg.attrs.get('type', None)
+        msg_type = self.base_event.stanza.attrs.get('type', None)
         if msg_type == u'chat':
-            self.xmpp_msg = self.base_event.xmpp_msg
+            self.stanza = self.base_event.stanza
             self.conn = self.base_event.conn
-            self.from_jid = helpers.get_full_jid_from_iq(self.xmpp_msg)
-            self.from_jid_without_resource = gajim.get_jid_without_resource(self.from_jid)
-            self.account = self.base_event.account
-            self.from_nickname = gajim.get_contact_name_from_jid(
-                    self.account,
-                    self.from_jid_without_resource)
-            self.msg_text = "".join(self.xmpp_msg.kids[0].data)
+            self.from_jid = helpers.get_full_jid_from_iq(self.stanza)
+            self.from_jid_without_resource = gajim.get_jid_without_resource(
+                self.from_jid)
+            self.account = self.conn.name
+            self.from_nickname = gajim.get_contact_name_from_jid( self.account,
+                self.from_jid_without_resource)
+            self.msg_text = ''.join(self.stanza.kids[0].data)
 
             return True
 
