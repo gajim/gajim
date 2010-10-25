@@ -171,6 +171,9 @@ class Remote:
         self.raise_signal('Unsubscribed', (obj.conn.name, obj.jid))
 
     def on_gc_message_received(self, obj):
+        if not hasattr(obj, 'needs_highlight'):
+            # event has not been handled at GUI level
+            return
         self.raise_signal('GCMessage', (obj.conn.name, [obj.fjid, obj.msgtxt,
             obj.timestamp, obj.has_timestamp, obj.xhtml_msgtxt, obj.status_code,
             obj.displaymarking, obj.captcha_form, obj.needs_highlight]))
