@@ -1109,3 +1109,7 @@ class GcMessageReceivedEvent(nec.NetworkIncomingEvent):
                                 return
 
         return True
+
+class AnonymousAuthEvent(nec.NetworkIncomingEvent):
+    name = 'anonymous-auth'
+    base_network_events = []

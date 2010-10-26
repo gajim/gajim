@@ -1312,7 +1312,8 @@ class Connection(CommonConnection, ConnectionHandlers):
             old_jid = gajim.get_jid_from_account(self.name)
             gajim.config.set_per('accounts', self.name, 'name', con.User)
             new_jid = gajim.get_jid_from_account(self.name)
-            self.dispatch('NEW_JID', (old_jid, new_jid))
+            gajim.nec.push_incoming_event(AnonymousAuthEvent(None,
+                conn=self, old_jid=old_jid, new_jid=new_jid))
         if auth:
             self.last_io = gajim.idlequeue.current_time()
             self.connected = 2

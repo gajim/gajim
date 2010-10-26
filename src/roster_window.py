@@ -2477,6 +2477,13 @@ class RosterWindow:
         self.add_account_contacts(obj.conn.name)
         self.fire_up_unread_messages_events(obj.conn.name)
 
+    def _nec_anonymous_auth(self, obj):
+        """
+        This event is raised when our JID changed (most probably because we use
+        anonymous account. We update contact and roster entry in this case
+        """
+        self.rename_self_contact(obj.old_jid, obj.new_jid, obj.conn.name)
+
 ################################################################################
 ### Menu and GUI callbacks
 ### FIXME: order callbacks in itself...
@@ -6208,3 +6215,5 @@ class RosterWindow:
             self._nec_presence_received)
         gajim.ged.register_event_handler('roster-received', ged.GUI1,
             self._nec_roster_received)
+        gajim.ged.register_event_handler('anonymous-auth', ged.GUI1,
+            self._nec_anonymous_auth)

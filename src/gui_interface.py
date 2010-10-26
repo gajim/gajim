@@ -257,14 +257,6 @@ class Interface:
         if self.remote_ctrl:
             self.remote_ctrl.raise_signal('AccountPresence', (show, account))
 
-    def handle_event_new_jid(self, account, data):
-        #('NEW_JID', account, (old_jid, new_jid))
-        """
-        This event is raised when our JID changed (most probably because we use
-        anonymous account. We update contact and roster entry in this case
-        """
-        self.roster.rename_self_contact(data[0], data[1], account)
-
     def edit_own_details(self, account):
         jid = gajim.get_jid_from_account(account)
         if 'profile' not in self.instances[account]:
@@ -1851,7 +1843,6 @@ class Interface:
             'DB_ERROR': [self.handle_event_db_error],
             'INFORMATION': [self.handle_event_information],
             'STATUS': [self.handle_event_status],
-            'NEW_JID': [self.handle_event_new_jid],
             'MSGERROR': [self.handle_event_msgerror],
             'MSGSENT': [self.handle_event_msgsent],
             'MSGNOTSENT': [self.handle_event_msgnotsent],
