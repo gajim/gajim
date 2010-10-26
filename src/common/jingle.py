@@ -44,7 +44,7 @@ class ConnectionJingle(object):
 
     def __init__(self):
         # dictionary: sessionid => JingleSession object
-        self.__sessions = {}
+        self._sessions = {}
 
         # dictionary: (jid, iq stanza id) => JingleSession object,
         # one time callbacks
@@ -54,12 +54,12 @@ class ConnectionJingle(object):
         """
         Remove a jingle session from a jingle stanza dispatcher
         """
-        if sid in self.__sessions:
+        if sid in self._sessions:
             #FIXME: Move this elsewhere?
-            for content in self.__sessions[sid].contents.values():
+            for content in self._sessions[sid].contents.values():
                 content.destroy()
-            self.__sessions[sid].callbacks = []
-            del self.__sessions[sid]
+            self._sessions[sid].callbacks = []
+            del self._sessions[sid]
 
     def _JingleCB(self, con, stanza):
         """
@@ -85,15 +85,15 @@ class ConnectionJingle(object):
         sid = jingle.getAttr('sid')
 
         # do we need to create a new jingle object
-        if sid not in self.__sessions:
+        if sid not in self._sessions:
             #TODO: tie-breaking and other things...
             newjingle = JingleSession(con=self, weinitiate=False, jid=jid, sid=sid)
-            self.__sessions[sid] = newjingle
+            self._sessions[sid] = newjingle
 
         # we already have such session in dispatcher...
-        self.__sessions[sid].on_stanza(stanza)
+        self._sessions[sid].on_stanza(stanza)
         # Delete invalid/unneeded sessions
-        if sid in self.__sessions and self.__sessions[sid].state == JingleStates.ended:
+        if sid in self._sessions and self._sessions[sid].state == JingleStates.ended:
             self.delete_jingle_session(sid)
 
         raise xmpp.NodeProcessed
@@ -106,7 +106,7 @@ class ConnectionJingle(object):
             jingle.add_content('voice', JingleAudio(jingle))
         else:
             jingle = JingleSession(self, weinitiate=True, jid=jid)
-            self.__sessions[jingle.sid] = jingle
+            self._sessions[jingle.sid] = jingle
             jingle.add_content('voice', JingleAudio(jingle))
             jingle.start_session()
         return jingle.sid
@@ -119,7 +119,7 @@ class ConnectionJingle(object):
             jingle.add_content('video', JingleVideo(jingle))
         else:
             jingle = JingleSession(self, weinitiate=True, jid=jid)
-            self.__sessions[jingle.sid] = jingle
+            self._sessions[jingle.sid] = jingle
             jingle.add_content('video', JingleVideo(jingle))
             jingle.start_session()
         return jingle.sid
@@ -127,8 +127,8 @@ class ConnectionJingle(object):
 
     def iter_jingle_sessions(self, jid, sid=None, media=None):
         if sid:
-            return (session for session in self.__sessions.values() if session.sid == sid)
-        sessions = (session for session in self.__sessions.values() if session.peerjid == jid)
+            return (session for session in self._sessions.values() if session.sid == sid)
+        sessions = (session for session in self._sessions.values() if session.peerjid == jid)
         if media:
             if media not in ('audio', 'video'):
                 return tuple()
@@ -140,14 +140,14 @@ class ConnectionJingle(object):
 
     def get_jingle_session(self, jid, sid=None, media=None):
         if sid:
-            if sid in self.__sessions:
-                return self.__sessions[sid]
+            if sid in self._sessions:
+                return self._sessions[sid]
             else:
                 return None
         elif media:
             if media not in ('audio', 'video'):
                 return None
-            for session in self.__sessions.values():
+            for session in self._sessions.values():
                 if session.peerjid == jid and session.get_content(media):
                     return session
 
