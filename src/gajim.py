@@ -57,7 +57,10 @@ if os.name == 'nt':
 import warnings
 
 if os.name == 'nt':
-    log_file = os.path.join(os.environ['APPDATA'], 'Gajim', 'gajim.log')
+    log_path = os.path.join(os.environ['APPDATA'], 'Gajim')
+    if not os.path.exists(log_path):
+        os.mkdir(log_path, 0700)
+    log_file = os.path.join(log_path, 'gajim.log')
     fout = open(log_file, 'a')
     sys.stdout = fout
     sys.stderr = fout
