@@ -210,7 +210,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
         else:
             self.connection.announce()
         self.roster = self.connection.getRoster()
-        self.dispatch('ROSTER', self.roster)
+        self.dispatch('ROSTER', self.roster.getRaw().copy())
 
         # display contacts already detected and resolved
         for jid in self.roster.keys():
