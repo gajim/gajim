@@ -37,9 +37,31 @@
 
 import os
 import sys
+
+if os.name == 'nt':
+    import locale
+    import gettext
+    APP = 'gajim'
+    DIR = '../po'
+    lang, enc = locale.getdefaultlocale()
+    os.environ['LANG'] = lang
+    gettext.bindtextdomain(APP, DIR)
+    gettext.textdomain(APP)
+    gettext.install(APP, DIR, unicode=True)
+
+    locale.setlocale(locale.LC_ALL, '')
+    import ctypes
+    libintl = ctypes.cdll.LoadLibrary('gtk\\bin\\intl.dll')
+    libintl.bindtextdomain(APP, DIR)
+
 import warnings
 
 if os.name == 'nt':
+    log_file = os.path.join(os.environ['APPDATA'], 'Gajim', 'gajim.log')
+    fout = open(log_file, 'a')
+    sys.stdout = fout
+    sys.stderr = fout
+
     warnings.filterwarnings(action='ignore')
 
     if os.path.isdir('gtk'):
@@ -349,7 +371,7 @@ def on_exit():
     if os.path.exists(pid_filename):
         os.remove(pid_filename)
     # Shutdown GUI and save config
-    if hasattr(gajim.interface, 'roster'):
+    if hasattr(gajim.interface, 'roster') and gajim.interface.roster:
         gajim.interface.roster.prepare_quit()
 
 import atexit

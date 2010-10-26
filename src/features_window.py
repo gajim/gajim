@@ -212,6 +212,8 @@ class FeaturesWindow:
         return True
 
     def srv_available(self):
+        if os.name == 'nt':
+            return True
         return helpers.is_in_path('nslookup')
 
     def speller_available(self):

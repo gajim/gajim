@@ -28,6 +28,7 @@ if __name__ == '__main__':
     from common import i18n
     import common.configpaths
     common.configpaths.gajimpaths.init(None)
+    common.configpaths.gajimpaths.init_profile()
 
 from common import helpers
 from common.xmpp.idlequeue import IdleCommand
