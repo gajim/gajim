@@ -2472,6 +2472,10 @@ class RosterWindow:
 
         self.chg_contact_status(obj.contact, obj.show, obj.status, account)
 
+    def _nec_roster_received(self, obj):
+        self.fill_contacts_and_groups_dicts(obj.roster, obj.conn.name)
+        self.add_account_contacts(obj.conn.name)
+        self.fire_up_unread_messages_events(obj.conn.name)
 
 ################################################################################
 ### Menu and GUI callbacks
@@ -6202,3 +6206,5 @@ class RosterWindow:
 
         gajim.ged.register_event_handler('presence-received', ged.GUI1,
             self._nec_presence_received)
+        gajim.ged.register_event_handler('roster-received', ged.GUI1,
+            self._nec_roster_received)

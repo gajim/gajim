@@ -47,6 +47,7 @@ from common import GnuPG
 from common.zeroconf import client_zeroconf
 from common.zeroconf import zeroconf
 from connection_handlers_zeroconf import *
+from common.connection_handlers_events import *
 
 import locale
 
@@ -210,7 +211,8 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
         else:
             self.connection.announce()
         self.roster = self.connection.getRoster()
-        self.dispatch('ROSTER', self.roster)
+        gajim.nec.push_incoming_event(RosterReceivedEvent(None, conn=self,
+            xmpp_roster=self.roster))
 
         # display contacts already detected and resolved
         for jid in self.roster.keys():

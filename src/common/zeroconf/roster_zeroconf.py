@@ -24,6 +24,8 @@ class Roster:
     def __init__(self, zeroconf):
         self._data = None
         self.zeroconf = zeroconf                 # our zeroconf instance
+        self.version = ''
+        self.received_from_server = True
 
     def update_roster(self):
         for val in self.zeroconf.contacts.values():
