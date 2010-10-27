@@ -1543,19 +1543,17 @@ class Interface:
             notify.popup(event_type, obj.fjid, account, 'jingle-incoming',
                     path_to_image=path, title=event_type, text=txt)
 
-    def handle_event_jingle_connected(self, account, data):
+    def handle_event_jingle_connected(self, obj):
         # ('JINGLE_CONNECTED', account, (peerjid, sid, media))
-        peerjid, sid, media = data
-        if media in ('audio', 'video'):
-            jid = gajim.get_jid_without_resource(peerjid)
-            resource = gajim.get_resource_from_jid(peerjid)
-            ctrl = (self.msg_win_mgr.get_control(peerjid, account)
-                or self.msg_win_mgr.get_control(jid, account))
+        if obj.media in ('audio', 'video'):
+            account = obj.conn.name
+            ctrl = (self.msg_win_mgr.get_control(obj.fjid, account)
+                or self.msg_win_mgr.get_control(obj.jid, account))
             if ctrl:
-                if media == 'audio':
-                    ctrl.set_audio_state('connected', sid)
+                if obj.media == 'audio':
+                    ctrl.set_audio_state('connected', obj.sid)
                 else:
-                    ctrl.set_video_state('connected', sid)
+                    ctrl.set_video_state('connected', obj.sid)
 
     def handle_event_jingle_disconnected(self, account, data):
         # ('JINGLE_DISCONNECTED', account, (peerjid, sid, reason))
@@ -1892,7 +1890,6 @@ class Interface:
             'INSECURE_SSL_CONNECTION': \
                 [self.handle_event_insecure_ssl_connection],
             'INSECURE_PASSWORD': [self.handle_event_insecure_password],
-            'JINGLE_CONNECTED': [self.handle_event_jingle_connected],
             'JINGLE_DISCONNECTED': [self.handle_event_jingle_disconnected],
             'JINGLE_ERROR': [self.handle_event_jingle_error],
             'PEP_RECEIVED': [self.handle_event_pep_received],
@@ -1905,7 +1902,8 @@ class Interface:
             'gmail-notify': [self.handle_event_gmail_notify],
             'http-auth-received': [self.handle_event_http_auth],
             'iq-error-received': [self.handle_event_iq_error],
-            'jingle-received': [self.handle_event_jingle_incoming],
+            'jingle-connected-received': [self.handle_event_jingle_connected],
+            'jingle-request-received': [self.handle_event_jingle_incoming],
             'last-result-received': [self.handle_event_last_status_time],
             'muc-admin-received': [self.handle_event_gc_affiliation],
             'muc-owner-received': [self.handle_event_gc_config],

@@ -145,8 +145,6 @@ class ConnectionJingle(object):
             else:
                 return None
         elif media:
-            if media not in ('audio', 'video'):
-                return None
             for session in self._sessions.values():
                 if session.peerjid == jid and session.get_content(media):
                     return session
