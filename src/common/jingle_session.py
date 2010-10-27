@@ -30,6 +30,7 @@ import gajim #Get rid of that?
 import xmpp
 from jingle_transport import get_jingle_transport
 from jingle_content import get_jingle_content, JingleContentSetupException
+from common.connection_handlers_events import JingleReceivedEvent
 
 # FIXME: Move it to JingleSession.States?
 class JingleStates(object):
@@ -407,8 +408,8 @@ class JingleSession(object):
             self.__content_reject(content)
             self.contents[(content.creator, content.name)].destroy()
 
-        self.connection.dispatch('JINGLE_INCOMING', (self.peerjid, self.sid,
-                contents))
+        gajim.nec.push_incoming_event(JingleReceivedEvent(None,
+            conn=self.connection, jingle_session=self, contents=contents))
 
     def __on_session_initiate(self, stanza, jingle, error, action):
         """
@@ -453,8 +454,8 @@ class JingleSession(object):
         self.state = JingleStates.pending
 
         # Send event about starting a session
-        self.connection.dispatch('JINGLE_INCOMING', (self.peerjid, self.sid,
-                contents))
+        gajim.nec.push_incoming_event(JingleReceivedEvent(None,
+            conn=self.connection, jingle_session=self, contents=contents))
 
     def __broadcast(self, stanza, jingle, error, action):
         """

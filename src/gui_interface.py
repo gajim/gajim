@@ -1495,14 +1495,13 @@ class Interface:
             'resource. Please type a new one'), resource=proposed_resource,
             ok_handler=on_ok)
 
-    def handle_event_jingle_incoming(self, account, data):
+    def handle_event_jingle_incoming(self, obj):
         # ('JINGLE_INCOMING', account, peer jid, sid, tuple-of-contents==(type,
         # data...))
         # TODO: conditional blocking if peer is not in roster
 
-        # unpack data
-        peerjid, sid, contents = data
-        content_types = set(c[0] for c in contents)
+        account = obj.conn.name
+        content_types = set(c[0] for c in obj.contents)
 
         # check type of jingle session
         if 'audio' in content_types or 'video' in content_types:
@@ -1514,36 +1513,37 @@ class Interface:
             # unknown session type... it should be declined in common/jingle.py
             return
 
-        jid = gajim.get_jid_without_resource(peerjid)
-        resource = gajim.get_resource_from_jid(peerjid)
-        ctrl = (self.msg_win_mgr.get_control(peerjid, account)
-                or self.msg_win_mgr.get_control(jid, account))
+        jid = gajim.get_jid_without_resource(obj.jid)
+        resource = gajim.get_resource_from_jid(obj.jid)
+        ctrl = (self.msg_win_mgr.get_control(obj.jid, account)
+            or self.msg_win_mgr.get_control(jid, account))
         if ctrl:
             if 'audio' in content_types:
-                ctrl.set_audio_state('connection_received', sid)
+                ctrl.set_audio_state('connection_received', obj.sid)
             if 'video' in content_types:
-                ctrl.set_video_state('connection_received', sid)
+                ctrl.set_video_state('connection_received', obj.sid)
 
-        dlg = dialogs.VoIPCallReceivedDialog.get_dialog(peerjid, sid)
+        dlg = dialogs.VoIPCallReceivedDialog.get_dialog(obj.jid, obj.sid)
         if dlg:
             dlg.add_contents(content_types)
             return
 
         if helpers.allow_popup_window(account):
-            dialogs.VoIPCallReceivedDialog(account, peerjid, sid, content_types)
+            dialogs.VoIPCallReceivedDialog(account, obj.jid, obj.sid,
+                content_types)
             return
 
-        self.add_event(account, peerjid, 'jingle-incoming', (peerjid, sid,
+        self.add_event(account, obj.jid, 'jingle-incoming', (obj.jid, obj.sid,
                 content_types))
 
         if helpers.allow_showing_notification(account):
             # TODO: we should use another pixmap ;-)
             txt = _('%s wants to start a voice chat.') % \
-                gajim.get_name_from_jid(account, peerjid)
+                gajim.get_name_from_jid(account, obj.jid)
             path = gtkgui_helpers.get_icon_path('gajim-mic_active', 48)
             event_type = _('Voice Chat Request')
-            notify.popup(event_type, peerjid, account, 'jingle-incoming',
-                    path_to_image = path, title = event_type, text = txt)
+            notify.popup(event_type, obj.jid, account, 'jingle-incoming',
+                    path_to_image=path, title=event_type, text=txt)
 
     def handle_event_jingle_connected(self, account, data):
         # ('JINGLE_CONNECTED', account, (peerjid, sid, media))
@@ -1894,7 +1894,6 @@ class Interface:
             'INSECURE_SSL_CONNECTION': \
                 [self.handle_event_insecure_ssl_connection],
             'INSECURE_PASSWORD': [self.handle_event_insecure_password],
-            'JINGLE_INCOMING': [self.handle_event_jingle_incoming],
             'JINGLE_CONNECTED': [self.handle_event_jingle_connected],
             'JINGLE_DISCONNECTED': [self.handle_event_jingle_disconnected],
             'JINGLE_ERROR': [self.handle_event_jingle_error],
@@ -1908,6 +1907,7 @@ class Interface:
             'gmail-notify': [self.handle_event_gmail_notify],
             'http-auth-received': [self.handle_event_http_auth],
             'iq-error-received': [self.handle_event_iq_error],
+            'jingle-received': [self.handle_event_jingle_incoming],
             'last-result-received': [self.handle_event_last_status_time],
             'muc-admin-received': [self.handle_event_gc_affiliation],
             'muc-owner-received': [self.handle_event_gc_config],

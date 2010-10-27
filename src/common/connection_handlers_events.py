@@ -1113,3 +1113,12 @@ class GcMessageReceivedEvent(nec.NetworkIncomingEvent):
 class AnonymousAuthEvent(nec.NetworkIncomingEvent):
     name = 'anonymous-auth'
     base_network_events = []
+
+class JingleReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'jingle-received'
+    base_network_events = []
+
+    def generate(self):
+        self.jid = self.jingle_session.peerjid
+        self.sid = self.jingle_session.sid
+        return True
