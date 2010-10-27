@@ -51,7 +51,15 @@ if os.name == 'nt':
 
     locale.setlocale(locale.LC_ALL, '')
     import ctypes
-    libintl = ctypes.cdll.LoadLibrary('gtk\\bin\\intl.dll')
+    import ctypes.util
+    libintl_path = ctypes.util.find_library('intl')
+    if libintl_path == None:
+        local_intl = ok.path.join('gtk', 'bin', 'intl.dll')
+        if os.path.exists(local_intl):
+            libintl_path = local_intl
+    if libintl_path == None:
+        raise ImportError('intl.dll library not found')
+    libintl = ctypes.cdll.LoadLibrary(libintl_path)
     libintl.bindtextdomain(APP, DIR)
 
 import warnings
