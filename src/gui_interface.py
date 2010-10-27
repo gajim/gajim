@@ -1513,36 +1513,34 @@ class Interface:
             # unknown session type... it should be declined in common/jingle.py
             return
 
-        jid = gajim.get_jid_without_resource(obj.jid)
-        resource = gajim.get_resource_from_jid(obj.jid)
-        ctrl = (self.msg_win_mgr.get_control(obj.jid, account)
-            or self.msg_win_mgr.get_control(jid, account))
+        ctrl = (self.msg_win_mgr.get_control(obj.fjid, account)
+            or self.msg_win_mgr.get_control(obj.jid, account))
         if ctrl:
             if 'audio' in content_types:
                 ctrl.set_audio_state('connection_received', obj.sid)
             if 'video' in content_types:
                 ctrl.set_video_state('connection_received', obj.sid)
 
-        dlg = dialogs.VoIPCallReceivedDialog.get_dialog(obj.jid, obj.sid)
+        dlg = dialogs.VoIPCallReceivedDialog.get_dialog(obj.fjid, obj.sid)
         if dlg:
             dlg.add_contents(content_types)
             return
 
         if helpers.allow_popup_window(account):
-            dialogs.VoIPCallReceivedDialog(account, obj.jid, obj.sid,
+            dialogs.VoIPCallReceivedDialog(account, obj.fjid, obj.sid,
                 content_types)
             return
 
-        self.add_event(account, obj.jid, 'jingle-incoming', (obj.jid, obj.sid,
+        self.add_event(account, obj.jid, 'jingle-incoming', (obj.fjid, obj.sid,
                 content_types))
 
         if helpers.allow_showing_notification(account):
             # TODO: we should use another pixmap ;-)
             txt = _('%s wants to start a voice chat.') % \
-                gajim.get_name_from_jid(account, obj.jid)
+                gajim.get_name_from_jid(account, obj.fjid)
             path = gtkgui_helpers.get_icon_path('gajim-mic_active', 48)
             event_type = _('Voice Chat Request')
-            notify.popup(event_type, obj.jid, account, 'jingle-incoming',
+            notify.popup(event_type, obj.fjid, account, 'jingle-incoming',
                     path_to_image=path, title=event_type, text=txt)
 
     def handle_event_jingle_connected(self, account, data):

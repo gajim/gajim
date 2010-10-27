@@ -1119,6 +1119,7 @@ class JingleReceivedEvent(nec.NetworkIncomingEvent):
     base_network_events = []
 
     def generate(self):
-        self.jid = self.jingle_session.peerjid
+        self.fjid = self.jingle_session.peerjid
+        self.jid, self.resource = gajim.get_room_and_nick_from_fjid(self.fjid)
         self.sid = self.jingle_session.sid
         return True
