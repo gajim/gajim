@@ -54,7 +54,7 @@ if os.name == 'nt':
     import ctypes.util
     libintl_path = ctypes.util.find_library('intl')
     if libintl_path == None:
-        local_intl = ok.path.join('gtk', 'bin', 'intl.dll')
+        local_intl = os.path.join('gtk', 'bin', 'intl.dll')
         if os.path.exists(local_intl):
             libintl_path = local_intl
     if libintl_path == None:
