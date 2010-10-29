@@ -1555,26 +1555,24 @@ class Interface:
                 else:
                     ctrl.set_video_state('connected', obj.sid)
 
-    def handle_event_jingle_disconnected(self, account, data):
+    def handle_event_jingle_disconnected(self, obj):
         # ('JINGLE_DISCONNECTED', account, (peerjid, sid, reason))
-        peerjid, sid, media, reason = data
-        jid = gajim.get_jid_without_resource(peerjid)
-        resource = gajim.get_resource_from_jid(peerjid)
-        ctrl = (self.msg_win_mgr.get_control(peerjid, account)
-            or self.msg_win_mgr.get_control(jid, account))
+        account = obj.conn.name
+        ctrl = (self.msg_win_mgr.get_control(obj.fjid, account)
+            or self.msg_win_mgr.get_control(obj.jid, account))
         if ctrl:
-            if media is None:
-                ctrl.stop_jingle(sid=sid, reason=reason)
-            elif media == 'audio':
-                ctrl.set_audio_state('stop', sid=sid, reason=reason)
-            elif media == 'video':
-                ctrl.set_video_state('stop', sid=sid, reason=reason)
-        dialog = dialogs.VoIPCallReceivedDialog.get_dialog(peerjid, sid)
+            if obj.media is None:
+                ctrl.stop_jingle(sid=obj.sid, reason=obj.reason)
+            elif obj.media == 'audio':
+                ctrl.set_audio_state('stop', sid=obj.sid, reason=obj.reason)
+            elif obj.media == 'video':
+                ctrl.set_video_state('stop', sid=obj.sid, reason=obj.reason)
+        dialog = dialogs.VoIPCallReceivedDialog.get_dialog(obj.fjid, obj.sid)
         if dialog:
-            if media is None:
+            if obj.media is None:
                 dialog.dialog.destroy()
             else:
-                dialog.remove_contents((media, ))
+                dialog.remove_contents((obj.media, ))
 
     def handle_event_jingle_error(self, account, data):
         # ('JINGLE_ERROR', account, (peerjid, sid, reason))
@@ -1890,7 +1888,6 @@ class Interface:
             'INSECURE_SSL_CONNECTION': \
                 [self.handle_event_insecure_ssl_connection],
             'INSECURE_PASSWORD': [self.handle_event_insecure_password],
-            'JINGLE_DISCONNECTED': [self.handle_event_jingle_disconnected],
             'JINGLE_ERROR': [self.handle_event_jingle_error],
             'PEP_RECEIVED': [self.handle_event_pep_received],
             'CAPS_RECEIVED': [self.handle_event_caps_received],
@@ -1903,6 +1900,8 @@ class Interface:
             'http-auth-received': [self.handle_event_http_auth],
             'iq-error-received': [self.handle_event_iq_error],
             'jingle-connected-received': [self.handle_event_jingle_connected],
+            'jingle-disconnected-received': [
+                self.handle_event_jingle_disconnected],
             'jingle-request-received': [self.handle_event_jingle_incoming],
             'last-result-received': [self.handle_event_last_status_time],
             'muc-admin-received': [self.handle_event_gc_affiliation],

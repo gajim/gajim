@@ -368,8 +368,9 @@ class JingleSession(object):
             if (creator, name) in self.contents:
                 content = self.contents[(creator, name)]
                 # TODO: this will fail if content is not an RTP content
-                self.connection.dispatch('JINGLE_DISCONNECTED',
-                        (self.peerjid, self.sid, content.media, 'removed'))
+                gajim.nec.push_incoming_event(JingleDisconnectedReceivedEvent(
+                    None, conn=self.connection, jingle_session=self,
+                    media=content.media, reason='removed'))
                 content.destroy()
         if not self.contents:
             reason = xmpp.Node('reason')
@@ -482,8 +483,9 @@ class JingleSession(object):
         else:
             # TODO
             text = reason
-        self.connection.dispatch('JINGLE_DISCONNECTED',
-                (self.peerjid, self.sid, None, text))
+        gajim.nec.push_incoming_event(JingleDisconnectedReceivedEvent(None,
+            conn=self.connection, jingle_session=self, media=None,
+            reason=text))
 
     def __broadcast_all(self, stanza, jingle, error, action):
         """
@@ -634,8 +636,9 @@ class JingleSession(object):
         else:
             text = reason
         self.connection.delete_jingle_session(self.sid)
-        self.connection.dispatch('JINGLE_DISCONNECTED',
-                (self.peerjid, self.sid, None, text))
+        gajim.nec.push_incoming_event(JingleDisconnectedReceivedEvent(None,
+            conn=self.connection, jingle_session=self, media=None,
+            reason=text))
 
     def __content_add(self, content):
         # TODO: test
@@ -659,8 +662,9 @@ class JingleSession(object):
         self.__append_content(jingle, content)
         self.connection.connection.send(stanza)
         # TODO: this will fail if content is not an RTP content
-        self.connection.dispatch('JINGLE_DISCONNECTED',
-                (self.peerjid, self.sid, content.media, 'rejected'))
+        gajim.nec.push_incoming_event(JingleDisconnectedReceivedEvent(None,
+            conn=self.connection, jingle_session=self, media=content.media,
+            reason='rejected'))
 
     def __content_modify(self):
         assert self.state != JingleStates.ended
@@ -671,8 +675,9 @@ class JingleSession(object):
         self.__append_content(jingle, content)
         self.connection.connection.send(stanza)
         # TODO: this will fail if content is not an RTP content
-        self.connection.dispatch('JINGLE_DISCONNECTED',
-                (self.peerjid, self.sid, content.media, 'removed'))
+        gajim.nec.push_incoming_event(JingleDisconnectedReceivedEvent(None,
+            conn=self.connection, jingle_session=self, media=content.media,
+            reason='removed'))
 
     def content_negotiated(self, media):
         gajim.nec.push_incoming_event(JingleConnectedReceivedEvent(None,

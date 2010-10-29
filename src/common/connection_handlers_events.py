@@ -1133,3 +1133,13 @@ class JingleConnectedReceivedEvent(nec.NetworkIncomingEvent):
         self.jid, self.resource = gajim.get_room_and_nick_from_fjid(self.fjid)
         self.sid = self.jingle_session.sid
         return True
+
+class JingleDisconnectedReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'jingle-disconnected-received'
+    base_network_events = []
+
+    def generate(self):
+        self.fjid = self.jingle_session.peerjid
+        self.jid, self.resource = gajim.get_room_and_nick_from_fjid(self.fjid)
+        self.sid = self.jingle_session.sid
+        return True
