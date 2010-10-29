@@ -413,11 +413,16 @@ if __name__ == '__main__':
             cli.connect('die', die_cb)
 
             path_to_gajim_script = gtkgui_helpers.get_abspath_for_script(
-                    'gajim')
+                'gajim')
 
             if path_to_gajim_script:
                 argv = [path_to_gajim_script]
-                cli.set_restart_command(len(argv), argv)
+                try:
+                    cli.set_restart_command(argv)
+                except TypeError:
+                    # Fedora systems have a broken gnome-python wrapper for this
+                    # function.
+                    cli.set_restart_command(len(argv), argv)
 
     check_paths.check_and_possibly_create_paths()
 
