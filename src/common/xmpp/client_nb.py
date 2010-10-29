@@ -76,6 +76,9 @@ class NonBlockingClient:
         the client.
         """
         # to avoid recursive calls
+        if self.ip_addresses:
+            self._try_next_ip()
+            return
         if self.disconnecting: return
 
         log.info('Disconnecting NBClient: %s' % message)

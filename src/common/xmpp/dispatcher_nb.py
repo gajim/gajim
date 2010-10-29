@@ -154,6 +154,7 @@ class XMPPDispatcher(PlugIn):
         """
         Send an initial stream header
         """
+        self._owner.Connection.sendqueue = []
         self.Stream = simplexml.NodeBuilder()
         self.Stream.dispatch = self.dispatch
         self.Stream._dispatch_depth = 2
