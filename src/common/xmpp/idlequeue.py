@@ -388,6 +388,16 @@ class IdleQueue:
             self.unplug_idle(fd)
             return False
 
+        read_write = False
+        if flags & PENDING_READ:
+            #print 'waiting read on %d, flags are %d' % (fd, flags)
+            obj.pollin()
+            read_write = True
+
+        elif flags & PENDING_WRITE and not flags & IS_CLOSED:
+            obj.pollout()
+            read_write = True
+
         if flags & IS_CLOSED:
             # io error, don't expect more events
             self.remove_timeout(obj.fd)
@@ -395,15 +405,8 @@ class IdleQueue:
             obj.pollend()
             return False
 
-        if flags & PENDING_READ:
-            #print 'waiting read on %d, flags are %d' % (fd, flags)
-            obj.pollin()
+        if read_write:
             return True
-
-        if flags & PENDING_WRITE:
-            obj.pollout()
-            return True
-
         return False
 
     def process(self):
