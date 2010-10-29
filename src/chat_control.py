@@ -159,6 +159,14 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         gajim.plugin_manager.gui_extension_point('chat_control_base_draw_banner',
             self)
 
+    def update_toolbar(self):
+        """
+        update state of buttons in toolbar
+        """
+        self._update_toolbar()
+        gajim.plugin_manager.gui_extension_point(
+            'chat_control_base_update_toolbar', self)
+
     def draw_banner_text(self):
         """
         Derived types SHOULD implement this
@@ -184,8 +192,14 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         """
         pass
 
+    def _update_toolbar(self):
+        """
+        Derived types MAY implement this
+        """
+        pass
+
     def handle_message_textview_mykey_press(self, widget, event_keyval,
-                    event_keymod):
+    event_keymod):
         """
         Derives types SHOULD implement this, rather than connection to the even
         itself
@@ -1533,11 +1547,11 @@ class ChatControl(ChatControlBase):
         self.restore_conversation()
         self.msg_textview.grab_focus()
 
-        # PluginSystem: adding GUI extension point for this ChatControl 
+        # PluginSystem: adding GUI extension point for this ChatControl
         # instance object
         gajim.plugin_manager.gui_extension_point('chat_control', self)
 
-    def update_toolbar(self):
+    def _update_toolbar(self):
         # Formatting
         if self.contact.supports(NS_XHTML_IM) and not self.gpg_is_active:
             self._formattings_button.set_sensitive(True)
