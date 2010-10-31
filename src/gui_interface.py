@@ -1396,20 +1396,31 @@ class Interface:
             self.instances[account]['privacy_list_%s' % name].\
                     privacy_list_received(rules)
         if name == 'block':
-            gajim.connections[account].blocked_contacts = []
-            gajim.connections[account].blocked_groups = []
-            gajim.connections[account].blocked_list = []
+            con = gajim.connections[account]
+            con.blocked_contacts = []
+            con.blocked_groups = []
+            con.blocked_list = []
             gajim.connections[account].blocked_all = False
             for rule in rules:
-                if not 'type' in rule:
-                    gajim.connections[account].blocked_all = True
-                elif rule['type'] == 'jid' and rule['action'] == 'deny':
-                    gajim.connections[account].blocked_contacts.append(
-                        rule['value'])
-                elif rule['type'] == 'group' and rule['action'] == 'deny':
-                    gajim.connections[account].blocked_groups.append(
-                        rule['value'])
-                gajim.connections[account].blocked_list.append(rule)
+                if rule['action'] == 'allow':
+                    if not 'type' in rule:
+                        con.blocked_all = False
+                    elif rule['type'] == 'jid' and rule['value'] in \
+                    con.blocked_contacts:
+                        con.blocked_contacts.remove(rule['value'])
+                    elif rule['type'] == 'group' and rule['value'] in \
+                    con.blocked_groups:
+                        con.blocked_groups.remove(rule['value'])
+                elif rule['action'] == 'deny':
+                    if not 'type' in rule:
+                        con.blocked_all = True
+                    elif rule['type'] == 'jid' and rule['value'] not in \
+                    con.blocked_contacts:
+                        con.blocked_contacts.append(rule['value'])
+                    elif rule['type'] == 'group' and rule['value'] not in \
+                    con.blocked_groups:
+                        con.blocked_groups.append(rule['value'])
+                con.blocked_list.append(rule)
             if 'blocked_contacts' in self.instances[account]:
                 self.instances[account]['blocked_contacts'].\
                     privacy_list_received(rules)
