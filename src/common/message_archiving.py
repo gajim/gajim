@@ -97,7 +97,10 @@ class ConnectionArchive:
         return self.default
 
     def logging_preference(self, jid, initiator_options=None):
-        otr = self.get_item_pref(jid)['otr']
+        otr = self.get_item_pref(jid)
+        if not otr:
+            return
+        otr = otr['otr']
         if initiator_options:
             if ((initiator_options == ['mustnot'] and otr == 'forbid') or
             (initiator_options == ['may'] and otr == 'require')):
