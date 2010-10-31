@@ -5433,7 +5433,6 @@ class RosterWindow:
             # General group cannot be changed
             if group == _('General'):
                 rename_item.set_sensitive(False)
-                block_menuitem.set_sensitive(False)
                 remove_item.set_sensitive(False)
 
         event_button = gtkgui_helpers.get_possible_button_event(event)
