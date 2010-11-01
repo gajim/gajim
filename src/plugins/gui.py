@@ -33,6 +33,7 @@ import gtkgui_helpers
 from dialogs import WarningDialog, YesNoDialog, ArchiveChooserDialog
 from common import gajim
 from plugins.helpers import log_calls, log
+from plugins.helpers import GajimPluginActivateException
 from common.exceptions import PluginsystemError
 
 class PluginsWindow(object):
@@ -153,7 +154,11 @@ class PluginsWindow(object):
         if is_active:
             gajim.plugin_manager.deactivate_plugin(plugin)
         else:
-            gajim.plugin_manager.activate_plugin(plugin)
+            try:
+                gajim.plugin_manager.activate_plugin(plugin)
+            except GajimPluginActivateException, e:
+                WarningDialog(_('Plugin failed'), str(e))
+                return
 
         self.installed_plugins_model[path][2] = not is_active
 

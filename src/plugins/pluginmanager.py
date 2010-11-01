@@ -38,7 +38,8 @@ from common import nec
 from common.exceptions import PluginsystemError
 
 from plugins.helpers import log, log_calls, Singleton
-from plugins.plugin import GajimPlugin
+from plugins.helpers import GajimPluginActivateException
+from plugins.plugin import GajimPlugin, GajimPluginException
 
 class PluginManager(object):
     '''
@@ -279,13 +280,7 @@ class PluginManager(object):
         '''
         :param plugin: plugin to be activated
         :type plugin: class object of `GajimPlugin` subclass
-
-        :todo: success checks should be implemented using exceptions. Such
-                control should also be implemented in deactivation. Exceptions
-                should be shown to user inside popup dialog, so the reason
-                for not activating plugin is known.
         '''
-        success = False
         if not plugin.active:
 
             self._add_gui_extension_points_handlers_from_plugin(plugin)
@@ -293,15 +288,14 @@ class PluginManager(object):
             self._register_events_handlers_in_ged(plugin)
             self._register_network_events_in_nec(plugin)
 
-            success = True
-
-            if success:
-                self.active_plugins.append(plugin)
+            self.active_plugins.append(plugin)
+            try:
                 plugin.activate()
-                self._set_plugin_active_in_global_config(plugin)
-                plugin.active = True
-
-        return success
+            except GajimPluginException, e:
+                self.deactivate_plugin(plugin)
+                raise GajimPluginActivateException(str(e))
+            self._set_plugin_active_in_global_config(plugin)
+            plugin.active = True
 
     def deactivate_plugin(self, plugin):
         # remove GUI extension points handlers (provided by plug-in) from
@@ -362,12 +356,18 @@ class PluginManager(object):
         Activated plugins are appended to `active_plugins` list.
         '''
         for plugin in self.plugins:
-            self.activate_plugin(plugin)
+            try:
+                self.activate_plugin(plugin)
+            except GajimPluginActivateException:
+                pass
 
     def _activate_all_plugins_from_global_config(self):
         for plugin in self.plugins:
             if self._plugin_is_active_in_global_config(plugin):
-                self.activate_plugin(plugin)
+                try:
+                    self.activate_plugin(plugin)
+                except GajimPluginActivateException:
+                    pass
 
     def _plugin_is_active_in_global_config(self, plugin):
         return gajim.config.get_per('plugins', plugin.short_name, 'active')

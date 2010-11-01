@@ -45,6 +45,12 @@ log.propagate = False
 
 import functools
 
+class GajimPluginActivateException(Exception):
+    '''
+    Raised when activation failed
+    '''
+    pass
+
 class log_calls(object):
     '''
     Decorator class for functions to easily log when they are entered and left.
