@@ -471,10 +471,11 @@ class HistoryManager:
         dlg.destroy()
 
     def on_delete_menuitem_activate(self, widget, listview):
+        widget_name = gtk.Buildable.get_name(listview)
         liststore, list_of_paths = listview.get_selection().get_selected_rows()
-        if listview.name == 'jids_listview':
+        if widget_name == 'jids_listview':
             self._delete_jid_logs(liststore, list_of_paths)
-        elif listview.name in ('logs_listview', 'search_results_listview'):
+        elif widget_name in ('logs_listview', 'search_results_listview'):
             self._delete_logs(liststore, list_of_paths)
         else: # Huh ? We don't know this widget
             return
