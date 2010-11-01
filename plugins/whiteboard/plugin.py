@@ -31,6 +31,7 @@ Whiteboard plugin.
 from common import helpers
 from common import gajim
 from plugins import GajimPlugin
+from plugins.plugin import GajimPluginException
 from plugins.helpers import log_calls, log
 import common.xmpp
 import gtk
@@ -40,7 +41,7 @@ from common.jingle_session import JingleSession
 from common.jingle_content import JingleContent
 from common.jingle_transport import JingleTransport, TransportType
 import dialogs
-from whiteboard_widget import Whiteboard
+from whiteboard_widget import Whiteboard, HAS_GOOCANVAS
 from common import xmpp
 from common import caps_cache
 
@@ -81,6 +82,8 @@ class WhiteboardPlugin(GajimPlugin):
 
     @log_calls('WhiteboardPlugin')
     def activate(self):
+        if not HAS_GOOCANVAS:
+            raise GajimPluginException('python-pygoocanvas is missing!')
         if NS_JINGLE_SXE not in gajim.gajim_common_features:
             gajim.gajim_common_features.append(NS_JINGLE_SXE)
         if NS_SXE not in gajim.gajim_common_features:
@@ -155,6 +158,8 @@ class WhiteboardPlugin(GajimPlugin):
 
     @log_calls('WhiteboardPlugin')
     def _nec_jingle_received(self, obj):
+        if not HAS_GOOCANVAS:
+            return
         content_types = set(c[0] for c in obj.contents)
         if 'xhtml' not in content_types:
             return
@@ -163,6 +168,8 @@ class WhiteboardPlugin(GajimPlugin):
 
     @log_calls('WhiteboardPlugin')
     def _nec_jingle_connected(self, obj):
+        if not HAS_GOOCANVAS:
+            return
         account = obj.conn.name
         ctrl = (gajim.interface.msg_win_mgr.get_control(obj.fjid, account)
             or gajim.interface.msg_win_mgr.get_control(obj.jid, account))
@@ -185,6 +192,8 @@ class WhiteboardPlugin(GajimPlugin):
 
     @log_calls('WhiteboardPlugin')
     def _nec_raw_message(self, obj):
+        if not HAS_GOOCANVAS:
+            return
         if obj.stanza.getTag('sxe', namespace=NS_SXE):
             account = obj.conn.name
 

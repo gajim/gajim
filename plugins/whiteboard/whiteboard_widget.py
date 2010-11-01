@@ -20,7 +20,11 @@
 
 import gtk
 import gtkgui_helpers
-import goocanvas
+try:
+    import goocanvas
+    HAS_GOOCANVAS = True
+except:
+    HAS_GOOCANVAS = False
 from common.xmpp import Node
 from common import gajim
 from common import i18n
