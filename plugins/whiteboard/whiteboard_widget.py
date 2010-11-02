@@ -108,7 +108,7 @@ class Whiteboard(object):
         self.image.clear_canvas()
 
     def on_export_button_clicked(self, widget):
-        self.image.export_svg(filename)
+        SvgChooserDialog(self.image.export_svg)
 
     def on_fg_color_button_color_set(self, widget):
         self.color = str(self.fg_color_select_button.get_color())
@@ -258,8 +258,8 @@ class SvgChooserDialog(FileChooserDialog):
             path_to_clientcert_file = \
                 gtkgui_helpers.decode_filechooser_file_paths(
                 (path_to_clientcert_file,))[0]
-            if os.path.exists(path_to_clientcert_file):
-                callback(widget, path_to_clientcert_file)
+            widget.destroy()
+            callback(path_to_clientcert_file)
 
         FileChooserDialog.__init__(self,
             title_text=_('Save Image as...'),
