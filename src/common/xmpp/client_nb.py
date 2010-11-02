@@ -321,6 +321,7 @@ class NonBlockingClient:
         elif mode == 'RECEIVE_DOCUMENT_ATTRIBUTES':
             if data:
                 self.Dispatcher.ProcessNonBlocking(data)
+                self.ip_addresses = []
             if not hasattr(self, 'Dispatcher') or \
                     self.Dispatcher.Stream._document_attrs is None:
                 self._xmpp_connect_machine(
