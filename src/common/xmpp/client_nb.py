@@ -60,6 +60,7 @@ class NonBlockingClient:
         self._owner = self
         self._registered_name = None # our full jid, set after successful auth
         self.connected = ''
+        self.ip_addresses = []
         self.socket = None
         self.on_connect = None
         self.on_proxy_failure = None
