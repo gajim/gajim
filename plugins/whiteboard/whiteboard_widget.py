@@ -254,12 +254,11 @@ class SvgChooserDialog(FileChooserDialog):
             '''
             check if file exists and call callback
             '''
-            path_to_clientcert_file = self.get_filename()
-            path_to_clientcert_file = \
-                gtkgui_helpers.decode_filechooser_file_paths(
-                (path_to_clientcert_file,))[0]
+            path_to_file = self.get_filename()
+            path_to_file = gtkgui_helpers.decode_filechooser_file_paths(
+                (path_to_file,))[0]
             widget.destroy()
-            callback(path_to_clientcert_file)
+            callback(path_to_file)
 
         FileChooserDialog.__init__(self,
             title_text=_('Save Image as...'),
@@ -412,9 +411,9 @@ class SVGObject():
         del self.items[rid]
 
     def export_svg(self, filename):
-        file = open(filename, 'w')
-        file.writelines(str(self.svg))
-        file.close()
+        f = open(filename, 'w')
+        f.writelines(str(self.svg))
+        f.close()
 
     def item_button_press_events(self, item, target_item, event):
         self.del_item(item)
