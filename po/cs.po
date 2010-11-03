@@ -840,8 +840,9 @@ msgid "Concede"
 msgstr ""
 
 #: ../data/gui/archiving_preferences_window.ui.h:6
+#, fuzzy
 msgid "Forbid"
-msgstr ""
+msgstr "Zakázat"
 
 #: ../data/gui/archiving_preferences_window.ui.h:7
 #, fuzzy
@@ -1065,8 +1066,9 @@ msgid "_Send"
 msgstr "Ode_slat"
 
 #: ../data/gui/chat_control.ui.h:24 ../data/gui/groupchat_control.ui.h:10
+#, fuzzy
 msgid "label"
-msgstr ""
+msgstr "označit"
 
 #: ../data/gui/chat_to_muc_window.ui.h:1
 msgid "In_vite"
@@ -1545,12 +1547,14 @@ msgid "_Log conversation history"
 msgstr "_Zaznamenat historii konverzace"
 
 #: ../data/gui/item_archiving_preferences_window.ui.h:1
+#, fuzzy
 msgid "approve"
-msgstr ""
+msgstr "schválit"
 
 #: ../data/gui/item_archiving_preferences_window.ui.h:2
+#, fuzzy
 msgid "body"
-msgstr ""
+msgstr "tělo"
 
 #: ../data/gui/item_archiving_preferences_window.ui.h:3
 msgid "concede"
