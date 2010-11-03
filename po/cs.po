@@ -1915,8 +1915,9 @@ msgid "<b>Visual Notifications</b>"
 msgstr "<b>Vizuální upozornění</b>"
 
 #: ../data/gui/preferences_window.ui.h:22
+#, fuzzy
 msgid "<i>(example: stunserver.org)</i>"
-msgstr ""
+msgstr "<i>(například: stunserver.org)</i>"
 
 #: ../data/gui/preferences_window.ui.h:23
 msgid "Advanced"
@@ -1962,12 +1963,14 @@ msgid "Audio / Video"
 msgstr "Audio / Video"
 
 #: ../data/gui/preferences_window.ui.h:33
+#, fuzzy
 msgid "Audio input device"
-msgstr ""
+msgstr "Audio vstupní zařízení"
 
 #: ../data/gui/preferences_window.ui.h:34
+#, fuzzy
 msgid "Audio output device"
-msgstr ""
+msgstr "Audio výstupní zařízení"
 
 #: ../data/gui/preferences_window.ui.h:35
 msgid "Chat message:"
