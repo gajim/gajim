@@ -28,10 +28,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Country: CZECH REPUBLIC\n"
 "Language: \n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Poedit-Language: Czech\n"
+"X-Poedit-Country: CZECH REPUBLIC\n"
 
 #: ../data/gui/account_context_menu.ui.h:1 ../data/gui/roster_window.ui.h:7
 msgid "Join _Group Chat..."
@@ -801,8 +801,9 @@ msgid "contact(s)"
 msgstr "Kontakty"
 
 #: ../data/gui/advanced_notifications_window.ui.h:39
+#, fuzzy
 msgid "everybody"
-msgstr ""
+msgstr "každý"
 
 #: ../data/gui/advanced_notifications_window.ui.h:40
 msgid "for "
