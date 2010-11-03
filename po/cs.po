@@ -28,10 +28,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Country: CZECH REPUBLIC\n"
 "Language: \n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Poedit-Language: Czech\n"
-"X-Poedit-Country: CZECH REPUBLIC\n"
 
 #: ../data/gui/account_context_menu.ui.h:1 ../data/gui/roster_window.ui.h:7
 msgid "Join _Group Chat..."
@@ -2286,16 +2286,19 @@ msgid "Video framerate"
 msgstr ""
 
 #: ../data/gui/preferences_window.ui.h:114
+#, fuzzy
 msgid "Video input device"
-msgstr ""
+msgstr "Video vstupní zařízení"
 
 #: ../data/gui/preferences_window.ui.h:115
+#, fuzzy
 msgid "Video output device"
-msgstr ""
+msgstr "Video výstupní zařízení"
 
 #: ../data/gui/preferences_window.ui.h:116
+#, fuzzy
 msgid "Video size"
-msgstr ""
+msgstr "Velikost videa"
 
 #: ../data/gui/preferences_window.ui.h:117
 msgid "When new event is received:"
@@ -2691,8 +2694,9 @@ msgid "Help online"
 msgstr "Nápověda online"
 
 #: ../data/gui/roster_window.ui.h:8
+#, fuzzy
 msgid "P_lugins"
-msgstr ""
+msgstr "P_luginy"
 
 #: ../data/gui/roster_window.ui.h:9
 msgid "Profile, A_vatar"
@@ -5059,8 +5063,9 @@ msgid "Gajim - %s"
 msgstr "Gajim - %s"
 
 #: ../src/common/helpers.py:1341
+#, fuzzy
 msgid "Hello, I am $name."
-msgstr ""
+msgstr "Ahoj, já jsem $name"
 
 #: ../src/common/jingle_rtp.py:107
 #, fuzzy, python-format
@@ -5091,20 +5096,24 @@ msgid ""
 msgstr "Chybová zpráva: %s"
 
 #: ../src/common/jingle_rtp.py:335
+#, fuzzy
 msgid "audio input"
-msgstr ""
+msgstr "audio vstup"
 
 #: ../src/common/jingle_rtp.py:338
+#, fuzzy
 msgid "audio output"
-msgstr ""
+msgstr "audio výstup"
 
 #: ../src/common/jingle_rtp.py:381
+#, fuzzy
 msgid "video input"
-msgstr ""
+msgstr "video vstup"
 
 #: ../src/common/jingle_rtp.py:389
+#, fuzzy
 msgid "video output"
-msgstr ""
+msgstr "video výstup"
 
 #: ../src/common/latex.py:109
 #, python-format
@@ -6511,7 +6520,7 @@ msgstr "Neviditelnost není podporována"
 
 #: ../src/dataforms_widget.py:562
 msgid "This field is required"
-msgstr ""
+msgstr "Toto pole je povinné"
 
 #: ../src/dataforms_widget.py:607
 msgid "Jabber ID already in list"
