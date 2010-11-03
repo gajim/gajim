@@ -236,9 +236,8 @@ msgid "Auto-reconnect when connection is lost"
 msgstr "Automaticky se znovu připojit při ztrátě spojení"
 
 #: ../data/gui/accounts_window.ui.h:11
-#, fuzzy
 msgid "Browse..."
-msgstr "_Prohlížet"
+msgstr "Procházet..."
 
 #: ../data/gui/accounts_window.ui.h:12
 msgid "C_onnect on Gajim startup"
@@ -686,19 +685,16 @@ msgid "Don't have "
 msgstr "Nemá"
 
 #: ../data/gui/advanced_notifications_window.ui.h:13
-#, fuzzy
 msgid "File Transfer Finished"
-msgstr "Přenosy souborů"
+msgstr "Přenos souboru dokončen"
 
 #: ../data/gui/advanced_notifications_window.ui.h:14
-#, fuzzy
 msgid "File Transfer Request "
-msgstr "Žádost o přenos souboru"
+msgstr "Požadavek přenosu souboru"
 
 #: ../data/gui/advanced_notifications_window.ui.h:15
-#, fuzzy
 msgid "File Transfer Started "
-msgstr "Přenos souboru zastaven"
+msgstr "Přenos souboru zahájen"
 
 #: ../data/gui/advanced_notifications_window.ui.h:16
 #, fuzzy
@@ -796,12 +792,10 @@ msgid "and I "
 msgstr "a já"
 
 #: ../data/gui/advanced_notifications_window.ui.h:38
-#, fuzzy
 msgid "contact(s)"
-msgstr "Kontakty"
+msgstr "kontakt(y)"
 
 #: ../data/gui/advanced_notifications_window.ui.h:39
-#, fuzzy
 msgid "everybody"
 msgstr "každý"
 
