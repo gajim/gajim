@@ -341,12 +341,10 @@ class Base(object):
         if not self.whiteboard:
             return
         hbox = self.chat_control.xml.get_object('chat_control_hbox')
-        for child in hbox.get_children():
-            if child == self.whiteboard.hbox:
-                self.button.set_active(False)
-                hbox.remove(child)
-                self.whiteboard = None
-                break
+        if self.whiteboard.hbox in hbox.get_children():
+            self.button.set_active(False)
+            hbox.remove(self.whiteboard.hbox)
+            self.whiteboard = None
 
     def disconnect_from_chat_control(self):
         actions_hbox = self.chat_control.xml.get_object('actions_hbox')
