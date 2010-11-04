@@ -40,7 +40,7 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="tooltip_text" translatable="yes">Oval Tool: Create circles and ellipses</property>
+            <property name="tooltip_text" translatable="yes">Oval Tool: Draw circles and ellipses</property>
             <signal name="toggled" handler="on_oval_button_toggled"/>
             <child>
               <object class="GtkImage" id="image6">
@@ -80,7 +80,7 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="tooltip_text" translatable="yes">Delete Tool: Removal of the individual figures</property>
+            <property name="tooltip_text" translatable="yes">Delete Tool: Remove individual figures</property>
             <signal name="toggled" handler="on_delete_button_toggled"/>
             <child>
               <object class="GtkImage" id="image2">
@@ -100,7 +100,7 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="tooltip_text" translatable="yes">Clear Canvas: Cleanup Canvas</property>
+            <property name="tooltip_text" translatable="yes">Clear Canvas: Cleanup canvas</property>
             <signal name="clicked" handler="on_clear_button_clicked"/>
             <child>
               <object class="GtkImage" id="image3">
@@ -120,7 +120,7 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="tooltip_text" translatable="yes">Export Images: Save image to file</property>
+            <property name="tooltip_text" translatable="yes">Export Image: Save image to svg file</property>
             <signal name="clicked" handler="on_export_button_clicked"/>
             <child>
               <object class="GtkImage" id="image4">
@@ -140,7 +140,7 @@
             <property name="height_request">68</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="tooltip_text" translatable="yes">Linewidth</property>
+            <property name="tooltip_text" translatable="yes">Line width</property>
             <property name="orientation">vertical</property>
             <property name="adjustment">adjustment1</property>
             <property name="inverted">True</property>
@@ -159,7 +159,7 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="tooltip_text" translatable="yes">Foreground Color</property>
+            <property name="tooltip_text" translatable="yes">Foreground color</property>
             <property name="color">#000000000000</property>
             <signal name="color_set" handler="on_fg_color_button_color_set"/>
           </object>
