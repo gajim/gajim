@@ -343,8 +343,9 @@ class Base(object):
         hbox = self.chat_control.xml.get_object('chat_control_hbox')
         if self.whiteboard.hbox in hbox.get_children():
             self.button.set_active(False)
-            hbox.remove(self.whiteboard.hbox)
-            self.whiteboard = None
+            if hasattr(self.whiteboard, 'hbox'):
+                hbox.remove(self.whiteboard.hbox)
+                self.whiteboard = None
 
     def disconnect_from_chat_control(self):
         actions_hbox = self.chat_control.xml.get_object('actions_hbox')
