@@ -34,6 +34,7 @@ from plugins import GajimPlugin
 from plugins.helpers import log_calls, log
 from dialogs import WarningDialog, HigDialog
 from plugins.gui import GajimPluginConfigDialog
+from common import i18n
 
 class FtpManager(GajimPlugin):
 
@@ -72,7 +73,7 @@ class FtpManager(GajimPlugin):
         self.GTK_BUILDER_FILE_PATH = self.local_file_path(
             'config_dialog.ui')
         self.xml = gtk.Builder()
-        #self.xml.set_translation_domain('FtpManagerPlugin')
+        self.xml.set_translation_domain(i18n.APP)
         self.xml.add_objects_from_file(self.GTK_BUILDER_FILE_PATH,
                 ['hpaned2'])
         hpaned = self.xml.get_object('hpaned2')
