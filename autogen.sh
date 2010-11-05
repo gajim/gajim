@@ -8,7 +8,7 @@
   fi
   echo "define([AC_PACKAGE_VERSION], [${gajimversion}${hgversion}])" > m4/hgversion.m4
 
-  AM_ARGS="--add-missing --gnu --copy"
+  AM_ARGS="--add-missing --gnu --copy -Wno-portability"
   CONF_ARGS=""
   if test x`uname -s 2>/dev/null` = 'xDarwin' -a -f /Library/Frameworks/GTK+.framework/Versions/Current/env; then
     . /Library/Frameworks/GTK+.framework/Versions/Current/env
@@ -36,6 +36,6 @@
   && aclocal -I ./m4 \
   && $LIBTOOLIZE --copy --force --automake \
   && autoheader \
-  && autoconf  \
+  && autoconf \
   && automake ${AM_ARGS} \
   && ./configure ${CONF_ARGS} $@
