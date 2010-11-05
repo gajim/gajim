@@ -1102,6 +1102,9 @@ ConnectionJingle, ConnectionIBBytestream):
         gajim.nec.register_incoming_event(StreamConflictReceivedEvent)
         gajim.nec.register_incoming_event(PresenceReceivedEvent)
         gajim.nec.register_incoming_event(MessageReceivedEvent)
+        gajim.nec.register_incoming_event(ArchivingErrorReceivedEvent)
+        gajim.nec.register_incoming_event(
+            ArchivingPreferencesChangedReceivedEvent)
 
         gajim.ged.register_event_handler('http-auth-received', ged.CORE,
             self._nec_http_auth_received)

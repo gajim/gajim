@@ -3610,6 +3610,12 @@ class ArchivingPreferencesWindow:
 
         self.window.set_title(_('Archiving Preferences for %s') % self.account)
 
+        gajim.ged.register_event_handler(
+            'archiving-preferences-changed-received', ged.GUI1,
+            self._nec_archiving_changed_received)
+        gajim.ged.register_event_handler('archiving-error-received', ged.GUI1,
+            self._nec_archiving_error)
+
         self.window.show_all()
 
         self.xml.connect_signals(self)
@@ -3687,31 +3693,32 @@ class ArchivingPreferencesWindow:
         if new_key_name in gajim.interface.instances[self.account]:
             return gajim.interface.instances[self.account][new_key_name]
 
-    def archiving_changed(self, data):
-        if data[0] in ('auto', 'method_auto', 'method_local', 'method_manual'):
-            if data[0] in self.waiting:
-                self.waiting.remove(data[0])
-        elif data[0] == 'default':
+    def _nec_archiving_changed_received(self, obj):
+        if obj.conn.name != self.account:
+            return
+        for key in ('auto', 'method_auto', 'method_local', 'method_manual'):
+            if key in obj.conf and key in self.waiting:
+                self.waiting.remove(key)
+        if 'default' in obj.conf:
             key_name = 'edit_item_archiving_preferences_%s' % \
                 self.current_item
             if key_name in gajim.interface.instances[self.account]:
                 gajim.interface.instances[self.account][key_name].\
-                    response_arrived(data[1:])
+                    response_arrived(obj.conf['default'])
             self.fill_items(True)
-        elif data[0] == 'item':
+        for jid, pref in obj.new_items.items():
             child = self.get_child_window()
             if child:
                 is_new = not child.item
-                child.response_arrived(data[1:])
+                child.response_arrived(pref)
                 if is_new:
                     model = self.item_treeview.get_model()
-                    model.append((data[1], data[2]['expire'], data[2]['otr'],
-                        data[2]['save']))
-                    return
+                    model.append((jid, pref['expire'], pref['otr'],
+                        pref['save']))
+                    continue
             self.fill_items(True)
-        elif data[0] == 'itemremove' == self.waiting:
-            if data[0] in self.waiting:
-                self.waiting.remove(data[0])
+        if 'itemremove' in self.waiting and obj.removed_items:
+            self.waiting.remove('itemremove')
             self.fill_items(True)
 
     def fill_items(self, clear=False):
@@ -3728,22 +3735,28 @@ class ArchivingPreferencesWindow:
             model.append((item, expire_value, item_config['otr'],
                 item_config['save']))
 
-    def archiving_error(self, error):
+    def _nec_archiving_error(self, obj):
+        if obj.conn.name != self.account:
+            return
         if self.waiting:
             pritext = _('There is an error')
-            sectext = error
+            sectext = obj.error_msg
             ErrorDialog(pritext, sectext)
             self.waiting.pop()
         else:
             child = self.get_child_window()
             if child:
-                child.error_arrived(error)
-        print error
+                child.error_arrived(obj.error_msg)
 
     def on_close_button_clicked(self, widget):
         self.window.destroy()
 
     def on_archiving_preferences_window_destroy(self, widget):
+        gajim.ged.remove_event_handler(
+            'archiving-preferences-changed-received', ged.GUI1,
+            self._nec_archiving_changed_received)
+        gajim.ged.remove_event_handler('archiving-error-received', ged.GUI1,
+            self._nec_archiving_error)
         if 'archiving_preferences' in gajim.interface.instances[self.account]:
             del gajim.interface.instances[self.account]['archiving_preferences']
 

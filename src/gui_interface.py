@@ -1827,18 +1827,6 @@ class Interface:
         if pm_ctrl and hasattr(pm_ctrl, "update_contact"):
             pm_ctrl.update_contact()
 
-    def handle_event_archiving_changed(self, account, data):
-        # ('ARCHIVING_CHANGED', account, (type, value)
-        if 'archiving_preferences' in self.instances[account]:
-            self.instances[account]['archiving_preferences'].archiving_changed(
-                data)
-
-    def handle_event_archiving_error(self, account, data):
-        # ('ARCHIVING_CHANGED', account, (error_msg,))
-        if 'archiving_preferences' in self.instances[account]:
-            self.instances[account]['archiving_preferences'].archiving_error(
-                data)
-
     def create_core_handlers_list(self):
         self.handlers = {
             'WARNING': [self.handle_event_warning],
@@ -1899,8 +1887,6 @@ class Interface:
             'INSECURE_PASSWORD': [self.handle_event_insecure_password],
             'PEP_RECEIVED': [self.handle_event_pep_received],
             'CAPS_RECEIVED': [self.handle_event_caps_received],
-            'ARCHIVING_CHANGED': [self.handle_event_archiving_changed],
-            'ARCHIVING_ERROR': [self.handle_event_archiving_error],
             'bookmarks-received': [self.handle_event_bookmarks],
             'gc-invitation-received': [self.handle_event_gc_invitation],
             'gc-presence-received': [self.handle_event_gc_presence],
