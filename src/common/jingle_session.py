@@ -534,8 +534,9 @@ class JingleSession(object):
         if text:
             text = '%s (%s)' % (error, text)
         if type_ != 'modify':
-            self.connection.dispatch('JINGLE_ERROR',
-                (self.peerjid, self.sid, text or error))
+            gajim.nec.push_incoming_event(JingleErrorReceivedEvent(None,
+                conn=self.connection, jingle_session=self,
+                reason=text or error))
 
     def __reason_from_stanza(self, stanza):
         # TODO: Move to GUI?

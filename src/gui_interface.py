@@ -1585,15 +1585,13 @@ class Interface:
             else:
                 dialog.remove_contents((obj.media, ))
 
-    def handle_event_jingle_error(self, account, data):
+    def handle_event_jingle_error(self, obj):
         # ('JINGLE_ERROR', account, (peerjid, sid, reason))
-        peerjid, sid, reason = data
-        jid = gajim.get_jid_without_resource(peerjid)
-        resource = gajim.get_resource_from_jid(peerjid)
-        ctrl = (self.msg_win_mgr.get_control(peerjid, account)
-            or self.msg_win_mgr.get_control(jid, account))
+        account = obj.conn.name
+        ctrl = (self.msg_win_mgr.get_control(obj.fjid, account)
+            or self.msg_win_mgr.get_control(obj.jid, account))
         if ctrl:
-            ctrl.set_audio_state('error', reason=reason)
+            ctrl.set_audio_state('error', reason=obj.reason)
 
     def handle_event_pep_config(self, account, data):
         # ('PEP_CONFIG', account, (node, form))
@@ -1899,7 +1897,6 @@ class Interface:
             'INSECURE_SSL_CONNECTION': \
                 [self.handle_event_insecure_ssl_connection],
             'INSECURE_PASSWORD': [self.handle_event_insecure_password],
-            'JINGLE_ERROR': [self.handle_event_jingle_error],
             'PEP_RECEIVED': [self.handle_event_pep_received],
             'CAPS_RECEIVED': [self.handle_event_caps_received],
             'ARCHIVING_CHANGED': [self.handle_event_archiving_changed],
@@ -1913,6 +1910,7 @@ class Interface:
             'jingle-connected-received': [self.handle_event_jingle_connected],
             'jingle-disconnected-received': [
                 self.handle_event_jingle_disconnected],
+            'jingle-error-received': [self.handle_event_jingle_error],
             'jingle-request-received': [self.handle_event_jingle_incoming],
             'last-result-received': [self.handle_event_last_status_time],
             'muc-admin-received': [self.handle_event_gc_affiliation],
