@@ -188,7 +188,7 @@ class WhiteboardPlugin(GajimPlugin):
     def _nec_jingle_disconnected(self, obj):
         for base in self.controls:
             if base.sid == obj.sid:
-                base.stop_whiteboard()
+                base.stop_whiteboard(reason = obj.reason)
 
     @log_calls('WhiteboardPlugin')
     def _nec_raw_message(self, obj):
@@ -332,17 +332,20 @@ class Base(object):
         jingle.add_content('xhtml', content)
         jingle.start_session()
 
-    def stop_whiteboard(self):
+    def stop_whiteboard(self, reason=None):
         conn = gajim.connections[self.chat_control.account]
         self.sid = None
         session = conn.get_jingle_session(self.jid, media='xhtml')
         if session:
             session.end_session()
+        self.button.set_active(False)
+        if reason:
+            txt = _('Whiteboard stopped: %(reason)s') % {'reason': reason}
+            self.chat_control.print_conversation(txt, 'info')
         if not self.whiteboard:
             return
         hbox = self.chat_control.xml.get_object('chat_control_hbox')
         if self.whiteboard.hbox in hbox.get_children():
-            self.button.set_active(False)
             if hasattr(self.whiteboard, 'hbox'):
                 hbox.remove(self.whiteboard.hbox)
                 self.whiteboard = None
