@@ -1171,7 +1171,7 @@ class ArchivingErrorReceivedEvent(nec.NetworkIncomingEvent):
     def generate(self):
         self.conn = self.base_event.conn
         self.stanza = self.base_event.stanza
-        self.type_ = self.base_event.conn
+        self.type_ = self.base_event.type_
 
         if self.type_ == 'error':
             self.error_msg = self.stanza.getErrorMsg()
