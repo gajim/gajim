@@ -2484,6 +2484,17 @@ class RosterWindow:
         """
         self.rename_self_contact(obj.old_jid, obj.new_jid, obj.conn.name)
 
+    def _nec_our_show(self, obj):
+        model = self.status_combobox.get_model()
+        if obj.show == 'offline':
+            # sensitivity for this menuitem
+            if gajim.get_number_of_connected_accounts() == 0:
+                model[self.status_message_menuitem_iter][3] = False
+        else:
+            # sensitivity for this menuitem
+            model[self.status_message_menuitem_iter][3] = True
+        self.on_status_changed(obj.conn.name, obj.show)
+
 ################################################################################
 ### Menu and GUI callbacks
 ### FIXME: order callbacks in itself...
@@ -6216,3 +6227,5 @@ class RosterWindow:
             self._nec_roster_received)
         gajim.ged.register_event_handler('anonymous-auth', ged.GUI1,
             self._nec_anonymous_auth)
+        gajim.ged.register_event_handler('our-show', ged.GUI1,
+            self._nec_our_show)

@@ -125,6 +125,8 @@ class Remote:
             ged.POSTGUI, self.on_unsubscribed_presence_received)
         gajim.ged.register_event_handler('gc-message-received',
             ged.POSTGUI, self.on_gc_message_received)
+        gajim.ged.register_event_handler('our-show',
+            ged.POSTGUI, self.on_our_status)
 
     def on_last_status_time(self, obj):
         self.raise_signal('LastStatusTime', (obj.conn.name, [
@@ -177,6 +179,9 @@ class Remote:
         self.raise_signal('GCMessage', (obj.conn.name, [obj.fjid, obj.msgtxt,
             obj.timestamp, obj.has_timestamp, obj.xhtml_msgtxt, obj.status_code,
             obj.displaymarking, obj.captcha_form, obj.needs_highlight]))
+
+    def on_our_status(self, obj):
+        self.raise_signal('AccountPresence', (obj.show, obj.conn.name))
 
     def raise_signal(self, signal, arg):
         if self.signal_object:

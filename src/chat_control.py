@@ -43,6 +43,7 @@ import re
 from common import gajim
 from common import helpers
 from common import exceptions
+from common import ged
 from message_control import MessageControl
 from conversation_textview import ConversationTextview
 from message_textview import MessageTextView
@@ -197,6 +198,19 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         Derived types MAY implement this
         """
         pass
+
+    def _nec_our_status(self, obj):
+        if self.account != obj.conn.name:
+            return
+        if obj.show == 'offline' or (obj.show == 'invisible' and \
+        obj.conn.is_zeroconf):
+            self.got_disconnected()
+        else:
+            # Other code rejoins all GCs, so we don't do it here
+            if not self.type_id == message_control.TYPE_GC:
+                self.got_connected()
+        if self.parent_win:
+            self.parent_win.redraw_tab(self)
 
     def handle_message_textview_mykey_press(self, widget, event_keyval,
     event_keymod):
@@ -430,6 +444,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         # instance object (also subclasses, eg. ChatControl or GroupchatControl)
         gajim.plugin_manager.gui_extension_point('chat_control_base', self)
 
+        gajim.ged.register_event_handler('our-show', ged.GUI1,
+            self._nec_our_status)
+
         # This is bascially a very nasty hack to surpass the inability
         # to properly use the super, because of the old code.
         CommandTools.__init__(self)
@@ -474,6 +491,8 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         # instance object
         gajim.plugin_manager.remove_gui_extension_point('chat_control_base', self)
         gajim.plugin_manager.remove_gui_extension_point('chat_control_base_draw_banner', self)
+        gajim.ged.remove_event_handler('our-show', ged.GUI1,
+            self._nec_our_status)
 
     def on_msg_textview_populate_popup(self, textview, menu):
         """

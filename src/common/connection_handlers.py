@@ -708,7 +708,8 @@ class ConnectionVcard:
                     # Trying to login as invisible but privacy list not
                     # supported
                     self.disconnect(on_purpose=True)
-                    self.dispatch('STATUS', 'offline')
+                    gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
+                        show='offline'))
                     self.dispatch('ERROR', (_('Invisibility not supported'),
                         _('Account %s doesn\'t support invisibility.') % \
                         self.name))
@@ -2035,7 +2036,8 @@ ConnectionJingle, ConnectionIBBytestream):
         if self.connection:
             self.connection.send(p)
             self.priority = priority
-        self.dispatch('STATUS', show)
+        gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
+            show=show))
         if self.vcard_supported:
             # ask our VCard
             self.request_vcard(None)

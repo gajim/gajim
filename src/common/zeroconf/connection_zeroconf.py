@@ -168,14 +168,16 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
             # after we auth to server
             self.old_show = STATUS_LIST[self.connected]
         self.connected = 0
-        self.dispatch('STATUS', 'offline')
+        gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
+            show='offline'))
         # random number to show we wait network manager to send us a reconenct
         self.time_to_reconnect = 5
         self.on_purpose = False
 
     def _on_name_conflictCB(self, alt_name):
         self.disconnect()
-        self.dispatch('STATUS', 'offline')
+        gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
+            show='offline'))
         self.dispatch('ZC_NAME_CONFLICT', alt_name)
 
     def _on_error(self, message):
@@ -187,7 +189,8 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
         if not self.connection:
             self.connection = client_zeroconf.ClientZeroconf(self)
             if not zeroconf.test_zeroconf():
-                self.dispatch('STATUS', 'offline')
+                gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
+                    show='offline'))
                 self.status = 'offline'
                 self.dispatch('CONNECTION_LOST',
                         (_('Could not connect to "%s"') % self.name,
@@ -196,7 +199,8 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
                 return
             result = self.connection.connect(show, msg)
             if not result:
-                self.dispatch('STATUS', 'offline')
+                gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
+                    show='offline'))
                 self.status = 'offline'
                 if result is False:
                     self.dispatch('CONNECTION_LOST',
@@ -278,10 +282,12 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
 
         # stay offline when zeroconf does something wrong
         if check:
-            self.dispatch('STATUS', show)
+            gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
+                show=show))
         else:
             # show notification that avahi or system bus is down
-            self.dispatch('STATUS', 'offline')
+            gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
+                show='offline'))
             self.status = 'offline'
             self.dispatch('CONNECTION_LOST',
                     (_('Could not change status of account "%s"') % self.name,
@@ -289,10 +295,12 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
 
     def _change_to_invisible(self, msg):
         if self.connection.remove_announce():
-            self.dispatch('STATUS', 'invisible')
+            gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
+                show='invisible'))
         else:
             # show notification that avahi or system bus is down
-            self.dispatch('STATUS', 'offline')
+            gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
+                show='offline'))
             self.status = 'offline'
             self.dispatch('CONNECTION_LOST',
                     (_('Could not change status of account "%s"') % self.name,
@@ -303,10 +311,12 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
 
     def _update_status(self, show, msg):
         if self.connection.set_show_msg(show, msg):
-            self.dispatch('STATUS', show)
+            gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
+                show=show))
         else:
             # show notification that avahi or system bus is down
-            self.dispatch('STATUS', 'offline')
+            gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
+                show='offline'))
             self.status = 'offline'
             self.dispatch('CONNECTION_LOST',
                     (_('Could not change status of account "%s"') % self.name,

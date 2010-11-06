@@ -231,7 +231,8 @@ class CommonConnection:
         Called when a disconnect request has completed successfully
         """
         self.disconnect(on_purpose=True)
-        self.dispatch('STATUS', 'offline')
+        gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
+            show='offline'))
 
     def get_status(self):
         return gajim.SHOW_LIST[self.connected]
@@ -731,7 +732,8 @@ class Connection(CommonConnection, ConnectionHandlers):
         if self.connected < 2: # connection failed
             log.debug('reconnect')
             self.connected = 1
-            self.dispatch('STATUS', 'connecting')
+            gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
+                show='connecting'))
             self.retrycount += 1
             self.on_connect_auth = self._discover_server_at_connection
             self.connect_and_init(self.old_show, self.status, self.USE_GPG)
@@ -768,11 +770,13 @@ class Connection(CommonConnection, ConnectionHandlers):
             self.old_show = gajim.SHOW_LIST[self.connected]
         self.connected = 0
         if not self.on_purpose:
-            self.dispatch('STATUS', 'offline')
+            gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
+                show='offline'))
             self.disconnect()
             if gajim.config.get_per('accounts', self.name, 'autoreconnect'):
                 self.connected = -1
-                self.dispatch('STATUS', 'error')
+                gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
+                    show='error'))
                 if gajim.status_before_autoaway[self.name]:
                     # We were auto away. So go back online
                     self.status = gajim.status_before_autoaway[self.name]
@@ -804,7 +808,8 @@ class Connection(CommonConnection, ConnectionHandlers):
     def _connection_lost(self):
         log.debug('_connection_lost')
         self.disconnect(on_purpose = False)
-        self.dispatch('STATUS', 'offline')
+        gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
+            show='offline'))
         self.dispatch('CONNECTION_LOST',
                 (_('Connection with account "%s" has been lost') % self.name,
                 _('Reconnect manually.')))
@@ -1164,7 +1169,8 @@ class Connection(CommonConnection, ConnectionHandlers):
             # we are not retrying, and not conecting
             if not self.retrycount and self.connected != 0:
                 self.disconnect(on_purpose = True)
-                self.dispatch('STATUS', 'offline')
+                gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
+                    show='offline'))
                 pritxt = _('Could not connect to "%s"') % self._hostname
                 sectxt = _('Check your connection or try again later.')
                 if self.streamError:
@@ -1182,7 +1188,8 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.time_to_reconnect = None
         self.on_connect_failure = None
         self.disconnect(on_purpose = True)
-        self.dispatch('STATUS', 'offline')
+        gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
+            show='offline'))
         self.dispatch('CONNECTION_LOST',
                 (_('Connection to proxy failed'), reason))
 
@@ -1213,7 +1220,8 @@ class Connection(CommonConnection, ConnectionHandlers):
     def connection_accepted(self, con, con_type):
         if not con or not con.Connection:
             self.disconnect(on_purpose=True)
-            self.dispatch('STATUS', 'offline')
+            gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
+                show='offline'))
             self.dispatch('CONNECTION_LOST',
                     (_('Could not connect to account %s') % self.name,
                     _('Connection with account %s has been lost. Retry connecting.') % \
@@ -1272,7 +1280,8 @@ class Connection(CommonConnection, ConnectionHandlers):
     def ssl_certificate_accepted(self):
         if not self.connection:
             self.disconnect(on_purpose=True)
-            self.dispatch('STATUS', 'offline')
+            gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
+                show='offline'))
             self.dispatch('CONNECTION_LOST',
                     (_('Could not connect to account %s') % self.name,
                     _('Connection with account %s has been lost. Retry connecting.') % \
@@ -1292,7 +1301,8 @@ class Connection(CommonConnection, ConnectionHandlers):
     def __on_auth(self, con, auth):
         if not con:
             self.disconnect(on_purpose=True)
-            self.dispatch('STATUS', 'offline')
+            gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
+                show='offline'))
             self.dispatch('CONNECTION_LOST',
                     (_('Could not connect to "%s"') % self._hostname,
                     _('Check your connection or try again later')))
@@ -1327,7 +1337,8 @@ class Connection(CommonConnection, ConnectionHandlers):
                 self.password = None
             gajim.log.debug("Couldn't authenticate to %s" % self._hostname)
             self.disconnect(on_purpose = True)
-            self.dispatch('STATUS', 'offline')
+            gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
+                show='offline'))
             self.dispatch('ERROR', (_('Authentication failed with "%s"') % \
                     self._hostname,
                     _('Please check your login and password for correctness.')))
@@ -1475,7 +1486,8 @@ class Connection(CommonConnection, ConnectionHandlers):
         if not gajim.account_is_connected(self.name):
             return
         if not self.privacy_rules_supported:
-            self.dispatch('STATUS', gajim.SHOW_LIST[self.connected])
+            gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
+                show=gajim.SHOW_LIST[self.connected]))
             self.dispatch('ERROR', (_('Invisibility not supported'),
                     _('Account %s doesn\'t support invisibility.') % self.name))
             return
@@ -1512,7 +1524,8 @@ class Connection(CommonConnection, ConnectionHandlers):
             p.setTag(common.xmpp.NS_SIGNED + ' x').setData(signed)
         self.connection.send(p)
         self.priority = priority
-        self.dispatch('STATUS', 'invisible')
+        gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
+            show='invisible'))
         if initial:
             # ask our VCard
             self.request_vcard(None)
@@ -1617,7 +1630,8 @@ class Connection(CommonConnection, ConnectionHandlers):
         if self.connection:
             self.connection.send(p)
             self.priority = priority
-        self.dispatch('STATUS', show)
+            gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
+                show=show))
 
     def send_motd(self, jid, subject = '', msg = '', xhtml = None):
         if not gajim.account_is_connected(self.name):

@@ -758,7 +758,8 @@ class PresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             if self.jid == our_jid and self.resource == \
             self.conn.server_resource:
                 # We got our own presence
-                self.conn.dispatch('STATUS', self.show)
+                gajim.nec.push_incoming_event(OurShowEvent(None, conn=self.conn,
+                    show=self.show))
             elif self.jid in jid_list or self.jid == our_jid:
                 return True
 
@@ -873,6 +874,10 @@ class UnsubscribedPresenceReceivedEvent(nec.NetworkIncomingEvent):
     def generate(self):
         self.jid = self.presence_obj.jid
         return True
+
+class OurShowEvent(nec.NetworkIncomingEvent):
+    name = 'our-show'
+    base_network_events = []
 
 class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
     name = 'message-received'

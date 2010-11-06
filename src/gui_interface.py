@@ -202,10 +202,10 @@ class Interface:
     def unblock_signed_in_notifications(self, account):
         gajim.block_signed_in_notifications[account] = False
 
-    def handle_event_status(self, account, show): # OUR status
+    def handle_event_status(self, obj): # OUR status
         #('STATUS', account, show)
-        model = self.roster.status_combobox.get_model()
-        if show in ('offline', 'error'):
+        account = obj.conn.name
+        if obj.show in ('offline', 'error'):
             for name in self.instances[account]['online_dialog'].keys():
                 # .keys() is needed to not have a dictionary length changed
                 # during iteration error
@@ -218,10 +218,7 @@ class Interface:
                     request.interrupt(account=account)
             if account in self.pass_dialog:
                 self.pass_dialog[account].window.destroy()
-        if show == 'offline':
-            # sensitivity for this menuitem
-            if gajim.get_number_of_connected_accounts() == 0:
-                model[self.roster.status_message_menuitem_iter][3] = False
+        if obj.show == 'offline':
             gajim.block_signed_in_notifications[account] = True
         else:
             # 30 seconds after we change our status to sth else than offline
@@ -230,32 +227,10 @@ class Interface:
             # contacts. 30 seconds should be enough time
             gobject.timeout_add_seconds(30,
                 self.unblock_signed_in_notifications, account)
-            # sensitivity for this menuitem
-            model[self.roster.status_message_menuitem_iter][3] = True
 
-        # Inform all controls for this account of the connection state change
-        ctrls = self.msg_win_mgr.get_controls()
-        if account in self.minimized_controls:
-            # Can not be the case when we remove account
-            ctrls += self.minimized_controls[account].values()
-        for ctrl in ctrls:
-            if ctrl.account == account:
-                if show == 'offline' or (show == 'invisible' and \
-                gajim.connections[account].is_zeroconf):
-                    ctrl.got_disconnected()
-                else:
-                    # Other code rejoins all GCs, so we don't do it here
-                    if not ctrl.type_id == message_control.TYPE_GC:
-                        ctrl.got_connected()
-                if ctrl.parent_win:
-                    ctrl.parent_win.redraw_tab(ctrl)
-
-        self.roster.on_status_changed(account, show)
-        if account in self.show_vcard_when_connect and show not in ('offline',
-        'error'):
+        if account in self.show_vcard_when_connect and obj.show not in (
+        'offline', 'error'):
             self.edit_own_details(account)
-        if self.remote_ctrl:
-            self.remote_ctrl.raise_signal('AccountPresence', (show, account))
 
     def edit_own_details(self, account):
         jid = gajim.get_jid_from_account(account)
@@ -1833,7 +1808,6 @@ class Interface:
             'ERROR': [self.handle_event_error],
             'DB_ERROR': [self.handle_event_db_error],
             'INFORMATION': [self.handle_event_information],
-            'STATUS': [self.handle_event_status],
             'MSGERROR': [self.handle_event_msgerror],
             'MSGSENT': [self.handle_event_msgsent],
             'MSGNOTSENT': [self.handle_event_msgnotsent],
@@ -1901,6 +1875,7 @@ class Interface:
             'last-result-received': [self.handle_event_last_status_time],
             'muc-admin-received': [self.handle_event_gc_affiliation],
             'muc-owner-received': [self.handle_event_gc_config],
+            'our-show': [self.handle_event_status],
             'presence-received': [self.handle_event_presence],
             'roster-info': [self.handle_event_roster_info],
             'roster-item-exchange-received': \
