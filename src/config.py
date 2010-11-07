@@ -3443,10 +3443,10 @@ class AccountCreationWizardWindow:
         self.notebook.set_current_page(0)
         self.xml.connect_signals(self)
         self.window.show_all()
-        gajim.ged.register_event_handler('NEW_ACC_CONNECTED', ged.CORE,
-            self.new_acc_connected)
-        gajim.ged.register_event_handler('NEW_ACC_NOT_CONNECTED', ged.CORE,
-            self.new_acc_not_connected)
+        gajim.ged.register_event_handler('new-account-connected', ged.GUI1,
+            self._nec_new_acc_connected)
+        gajim.ged.register_event_handler('new-account-not-connected', ged.GUI1,
+            self._nec_new_acc_not_connected)
         gajim.ged.register_event_handler('account-created', ged.GUI1,
             self._nec_acc_is_ok)
         gajim.ged.register_event_handler('account-not-created', ged.GUI1,
@@ -3460,10 +3460,10 @@ class AccountCreationWizardWindow:
             del gajim.connections[self.account]
             if self.account in gajim.config.get_per('accounts'):
                 gajim.config.del_per('accounts', self.account)
-        gajim.ged.remove_event_handler('NEW_ACC_CONNECTED', ged.CORE,
-            self.new_acc_connected)
-        gajim.ged.remove_event_handler('NEW_ACC_NOT_CONNECTED', ged.CORE,
-            self.new_acc_not_connected)
+        gajim.ged.remove_event_handler('new-account-connected', ged.GUI1,
+            self._nec_new_acc_connected)
+        gajim.ged.remove_event_handler('new-account-not-connected', ged.GUI1,
+            self._nec_new_acc_not_connected)
         gajim.ged.remove_event_handler('account-created', ged.GUI1,
             self._nec_acc_is_ok)
         gajim.ged.remove_event_handler('account-not-created', ged.GUI1,
@@ -3706,41 +3706,42 @@ class AccountCreationWizardWindow:
         self.progressbar.pulse()
         return True # loop forever
 
-    def new_acc_connected(self, account, array):
+    def _nec_new_acc_connected(self, obj):
         """
         Connection to server succeded, present the form to the user
         """
         # We receive events from all accounts from GED
-        if account != self.account:
+        if obj.conn.name != self.account:
             return
         form, is_form, ssl_msg, ssl_err, ssl_cert, ssl_fingerprint = array
         if self.update_progressbar_timeout_id is not None:
             gobject.source_remove(self.update_progressbar_timeout_id)
         self.back_button.show()
         self.forward_button.show()
-        self.is_form = is_form
-        if is_form:
-            dataform = dataforms.ExtendForm(node = form)
+        self.is_form = obj.is_form
+        if obj.is_form:
+            dataform = dataforms.ExtendForm(node=obj.config)
             self.data_form_widget = dataforms_widget.DataFormWidget(dataform)
         else:
-            self.data_form_widget = FakeDataForm(form)
+            self.data_form_widget = FakeDataForm(obj.config)
         self.data_form_widget.show_all()
         self.xml.get_object('form_vbox').pack_start(self.data_form_widget)
-        self.ssl_fingerprint = ssl_fingerprint
-        self.ssl_cert = ssl_cert
-        if ssl_msg:
+        self.ssl_fingerprint = obj.ssl_fingerprint
+        self.ssl_cert = obj.ssl_cert
+        if obj.ssl_msg:
             # An SSL warning occured, show it
-            hostname = gajim.connections[self.account].new_account_info['hostname']
+            hostname = gajim.connections[self.account].new_account_info[
+                'hostname']
             self.xml.get_object('ssl_label').set_markup(_(
                 '<b>Security Warning</b>'
                 '\n\nThe authenticity of the %(hostname)s SSL certificate could'
                 ' be invalid.\nSSL Error: %(error)s\n'
                 'Do you still want to connect to this server?') % {
-                'hostname': hostname, 'error': ssl_msg})
-            if ssl_err in (18, 27):
+                'hostname': hostname, 'error': obj.ssl_msg})
+            if obj.ssl_err in (18, 27):
                 text = _('Add this certificate to the list of trusted '
                     'certificates.\nSHA1 fingerprint of the certificate:\n%s') \
-                    % ssl_fingerprint
+                    % obj.ssl_fingerprint
                 self.xml.get_object('ssl_checkbutton').set_label(text)
             else:
                 self.xml.get_object('ssl_checkbutton').set_no_show_all(True)
@@ -3749,12 +3750,12 @@ class AccountCreationWizardWindow:
         else:
             self.notebook.set_current_page(4) # show form page
 
-    def new_acc_not_connected(self, account, reason):
+    def _nec_new_acc_not_connected(self, obj):
         """
         Account creation failed: connection to server failed
         """
         # We receive events from all accounts from GED
-        if account != self.account:
+        if obj.conn.name != self.account:
             return
         if self.account not in gajim.connections:
             return
@@ -3770,7 +3771,7 @@ class AccountCreationWizardWindow:
         img = self.xml.get_object('finish_image')
         img.set_from_stock(gtk.STOCK_DIALOG_ERROR, gtk.ICON_SIZE_DIALOG)
         finish_text = '<big><b>%s</b></big>\n\n%s' % (
-            _('An error occurred during account creation'), reason)
+            _('An error occurred during account creation'), obj.reason)
         self.finish_label.set_markup(finish_text)
         self.notebook.set_current_page(6) # show finish page
 

@@ -872,30 +872,17 @@ class Connection(CommonConnection, ConnectionHandlers):
                                     self._hostname, self.new_account_form,
                                     _on_register_result)
                         return
-                    try:
-                        errnum = self.connection.Connection.ssl_errnum
-                    except AttributeError:
-                        errnum = -1 # we don't have an errnum
-                    ssl_msg = ''
-                    if errnum > 0:
-                        ssl_msg = ssl_error.get(errnum, _('Unknown SSL error: %d') % errnum)
-                    ssl_cert = ''
-                    if hasattr(self.connection.Connection, 'ssl_cert_pem'):
-                        ssl_cert = self.connection.Connection.ssl_cert_pem
-                    ssl_fingerprint = ''
-                    if hasattr(self.connection.Connection, 'ssl_fingerprint_sha1'):
-                        ssl_fingerprint = \
-                                self.connection.Connection.ssl_fingerprint_sha1
-                    self.dispatch('NEW_ACC_CONNECTED', (conf, is_form, ssl_msg,
-                            errnum, ssl_cert, ssl_fingerprint))
+                    gajim.nec.push_incoming_event(NewAccountConnectedEvent(None,
+                        conn=self, config=conf, is_form=is_form))
                     self.connection.UnregisterDisconnectHandler(
-                            self._on_new_account)
+                        self._on_new_account)
                     self.disconnect(on_purpose=True)
                     return
                 if not data[1]: # wrong answer
                     self.dispatch('ERROR', (_('Invalid answer'),
-                            _('Transport %(name)s answered wrongly to register request: '
-                            '%(error)s') % {'name': data[0], 'error': data[3]}))
+                        _('Transport %(name)s answered wrongly to register '
+                        'request: %(error)s') % {'name': data[0],
+                        'error': data[3]}))
                     return
                 is_form = data[2]
                 conf = data[1]
@@ -1810,8 +1797,9 @@ class Connection(CommonConnection, ConnectionHandlers):
             if len(self._connection_types) or len(self._hosts):
                 # There are still other way to try to connect
                 return
-            self.dispatch('NEW_ACC_NOT_CONNECTED',
-                    (_('Could not connect to "%s"') % self._hostname))
+            reason = _('Could not connect to "%s"') % self._hostname
+            gajim.nec.push_incoming_event(NewAccountNotConnectedEvent(None,
+                conn=self, reason=reason))
             return
         self.on_connect_failure = None
         self.connection = con
