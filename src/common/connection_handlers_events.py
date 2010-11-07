@@ -1233,3 +1233,11 @@ class ArchivingPreferencesChangedReceivedEvent(nec.NetworkIncomingEvent):
             for item in pref.getTags('item'):
                 self.removed_items.append(item.getAttr('jid'))
         return True
+
+class AccountCreatedEvent(nec.NetworkIncomingEvent):
+    name = 'account-created'
+    base_network_events = []
+
+class AccountNotCreatedEvent(nec.NetworkIncomingEvent):
+    name = 'account-not-created'
+    base_network_events = []

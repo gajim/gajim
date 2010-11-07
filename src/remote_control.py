@@ -127,6 +127,8 @@ class Remote:
             ged.POSTGUI, self.on_gc_message_received)
         gajim.ged.register_event_handler('our-show',
             ged.POSTGUI, self.on_our_status)
+        gajim.ged.register_event_handler('account-created',
+            ged.POSTGUI, self.on_account_created)
 
     def on_last_status_time(self, obj):
         self.raise_signal('LastStatusTime', (obj.conn.name, [
@@ -182,6 +184,9 @@ class Remote:
 
     def on_our_status(self, obj):
         self.raise_signal('AccountPresence', (obj.show, obj.conn.name))
+
+    def on_account_created(self, obj):
+        self.raise_signal('NewAccount', (obj.conn.name, obj.account_info))
 
     def raise_signal(self, signal, arg):
         if self.signal_object:

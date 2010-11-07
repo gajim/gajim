@@ -823,9 +823,11 @@ class Connection(CommonConnection, ConnectionHandlers):
                 self.new_account_info['hostname'] == data[0]:
                     # it's a new account
                     if not data[1]: # wrong answer
-                        self.dispatch('ACC_NOT_OK', (
-                                _('Server %(name)s answered wrongly to register request: '
-                                '%(error)s') % {'name': data[0], 'error': data[3]}))
+                        reason = _('Server %(name)s answered wrongly to '
+                            'register request: %(error)s') % {'name': data[0],
+                            'error': data[3]}
+                        gajim.nec.push_incoming_event(AccountNotCreated(None,
+                            conn=self, reason=reason))
                         return
                     is_form = data[2]
                     conf = data[1]
@@ -833,13 +835,16 @@ class Connection(CommonConnection, ConnectionHandlers):
                     if self.new_account_form:
                         def _on_register_result(result):
                             if not common.xmpp.isResultNode(result):
-                                self.dispatch('ACC_NOT_OK', (result.getError()))
+                                gajim.nec.push_incoming_event(AccountNotCreated(
+                                    None, conn=self, reason=result.getError()))
                                 return
                             if gajim.HAVE_GPG:
                                 self.USE_GPG = True
                                 self.gpg = GnuPG.GnuPG(gajim.config.get(
                                         'use_gpg_agent'))
-                            self.dispatch('ACC_OK', (self.new_account_info))
+                            gajim.nec.push_incoming_event(
+                                AccountCreatedEvent(None, conn=self,
+                                account_info = self.new_account_info))
                             self.new_account_info = None
                             self.new_account_form = None
                             if self.connection:
@@ -858,9 +863,10 @@ class Connection(CommonConnection, ConnectionHandlers):
                             if self.new_account_form.keys().sort() != \
                             conf.keys().sort():
                                 # requested config has changed since first connection
-                                self.dispatch('ACC_NOT_OK', (_(
-                                        'Server %s provided a different registration form')\
-                                        % data[0]))
+                                reason = _('Server %s provided a different '
+                                    'registration form') % data[0]
+                                gajim.nec.push_incoming_event(AccountNotCreated(
+                                    None, conn=self, reason=reason))
                                 return
                             common.xmpp.features_nb.register(self.connection,
                                     self._hostname, self.new_account_form,

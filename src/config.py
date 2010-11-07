@@ -3447,9 +3447,10 @@ class AccountCreationWizardWindow:
             self.new_acc_connected)
         gajim.ged.register_event_handler('NEW_ACC_NOT_CONNECTED', ged.CORE,
             self.new_acc_not_connected)
-        gajim.ged.register_event_handler('ACC_OK', ged.CORE, self.acc_is_ok)
-        gajim.ged.register_event_handler('ACC_NOT_OK', ged.CORE,
-            self.acc_is_not_ok)
+        gajim.ged.register_event_handler('account-created', ged.GUI1,
+            self._nec_acc_is_ok)
+        gajim.ged.register_event_handler('account-not-created', ged.GUI1,
+            self._nec_acc_is_not_ok)
 
     def on_wizard_window_destroy(self, widget):
         page = self.notebook.get_current_page()
@@ -3463,9 +3464,10 @@ class AccountCreationWizardWindow:
             self.new_acc_connected)
         gajim.ged.remove_event_handler('NEW_ACC_NOT_CONNECTED', ged.CORE,
             self.new_acc_not_connected)
-        gajim.ged.remove_event_handler('ACC_OK', ged.CORE, self.acc_is_ok)
-        gajim.ged.remove_event_handler('ACC_NOT_OK', ged.CORE,
-            self.acc_is_not_ok)
+        gajim.ged.remove_event_handler('account-created', ged.GUI1,
+            self._nec_acc_is_ok)
+        gajim.ged.remove_event_handler('account-not-created', ged.GUI1,
+            self._nec_acc_is_not_ok)
         del gajim.interface.instances['account_creation_wizard']
 
     def on_register_server_features_button_clicked(self, widget):
@@ -3772,25 +3774,25 @@ class AccountCreationWizardWindow:
         self.finish_label.set_markup(finish_text)
         self.notebook.set_current_page(6) # show finish page
 
-    def acc_is_ok(self, account, config):
+    def _nec_acc_is_ok(self, obj):
         """
         Account creation succeeded
         """
         # We receive events from all accounts from GED
-        if account != self.account:
+        if obj.conn.name != self.account:
             return
-        self.create_vars(config)
+        self.create_vars(obj.account_info)
         self.show_finish_page()
 
         if self.update_progressbar_timeout_id is not None:
             gobject.source_remove(self.update_progressbar_timeout_id)
 
-    def acc_is_not_ok(self, account, reason):
+    def _nec_acc_is_not_ok(self, obj):
         """
         Account creation failed
         """
         # We receive events from all accounts from GED
-        if account != self.account:
+        if obj.conn.name != self.account:
             return
         self.back_button.show()
         self.cancel_button.show()
@@ -3802,7 +3804,7 @@ class AccountCreationWizardWindow:
         img = self.xml.get_object('finish_image')
         img.set_from_stock(gtk.STOCK_DIALOG_ERROR, gtk.ICON_SIZE_DIALOG)
         finish_text = '<big><b>%s</b></big>\n\n%s' % (_(
-            'An error occurred during account creation'), reason)
+            'An error occurred during account creation'), obj.reason)
         self.finish_label.set_markup(finish_text)
         self.notebook.set_current_page(6) # show finish page
 

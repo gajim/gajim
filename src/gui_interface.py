@@ -585,11 +585,6 @@ class Interface:
             gajim.interface.instances[account]['pep_services'].items_received(
                     array[2])
 
-    def handle_event_acc_ok(self, account, array):
-        #('ACC_OK', account, (config))
-        if self.remote_ctrl:
-            self.remote_ctrl.raise_signal('NewAccount', (account, array))
-
     def handle_event_myvcard(self, account, array):
         nick = ''
         if 'NICKNAME' in array and array['NICKNAME']:
@@ -1811,7 +1806,6 @@ class Interface:
             'AGENT_REMOVED': [self.handle_event_agent_removed],
             'REGISTER_AGENT_INFO': [self.handle_event_register_agent_info],
             'AGENT_INFO_ITEMS': [self.handle_event_agent_info_items],
-            'ACC_OK': [self.handle_event_acc_ok],
             'MYVCARD': [self.handle_event_myvcard],
             'VCARD': [self.handle_event_vcard],
             'GC_NOTIFY': [self.handle_event_gc_notify],
