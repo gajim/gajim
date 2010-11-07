@@ -590,9 +590,6 @@ class Interface:
         if self.remote_ctrl:
             self.remote_ctrl.raise_signal('NewAccount', (account, array))
 
-    def handle_event_quit(self, p1, p2):
-        self.roster.quit_gtkgui_interface()
-
     def handle_event_myvcard(self, account, array):
         nick = ''
         if 'NICKNAME' in array and array['NICKNAME']:
@@ -1814,7 +1811,6 @@ class Interface:
             'AGENT_REMOVED': [self.handle_event_agent_removed],
             'REGISTER_AGENT_INFO': [self.handle_event_register_agent_info],
             'AGENT_INFO_ITEMS': [self.handle_event_agent_info_items],
-            'QUIT': [self.handle_event_quit],
             'ACC_OK': [self.handle_event_acc_ok],
             'MYVCARD': [self.handle_event_myvcard],
             'VCARD': [self.handle_event_vcard],
