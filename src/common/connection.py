@@ -1287,8 +1287,10 @@ class Connection(CommonConnection, ConnectionHandlers):
 
     def _register_handlers(self, con, con_type):
         self.peerhost = con.get_peerhost()
+        gajim.con_types[self.name] = con_type
         # notify the gui about con_type
-        self.dispatch('CON_TYPE', con_type)
+        gajim.nec.push_incoming_event(ConnectionTypeEvent(None,
+            conn=self, connection_type=con_type))
         ConnectionHandlers._register_handlers(self, con, con_type)
 
     def __on_auth(self, con, auth):

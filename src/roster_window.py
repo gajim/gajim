@@ -2495,6 +2495,9 @@ class RosterWindow:
             model[self.status_message_menuitem_iter][3] = True
         self.on_status_changed(obj.conn.name, obj.show)
 
+    def _nec_connection_type(self, obj):
+        self.draw_account(obj.conn.name)
+
 ################################################################################
 ### Menu and GUI callbacks
 ### FIXME: order callbacks in itself...
@@ -6229,3 +6232,5 @@ class RosterWindow:
             self._nec_anonymous_auth)
         gajim.ged.register_event_handler('our-show', ged.GUI1,
             self._nec_our_show)
+        gajim.ged.register_event_handler('connection-type', ged.GUI1,
+            self._nec_connection_type)

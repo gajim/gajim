@@ -188,11 +188,6 @@ class Interface:
         if ctrl and ctrl.type_id == message_control.TYPE_GC:
             ctrl.print_conversation('Error %s: %s' % (obj.errcode, obj.errmsg))
 
-    def handle_event_con_type(self, account, con_type):
-        # ('CON_TYPE', account, con_type) which can be 'ssl', 'tls', 'plain'
-        gajim.con_types[account] = con_type
-        self.roster.draw_account(account)
-
     def handle_event_connection_lost(self, account, array):
         # ('CONNECTION_LOST', account, [title, text])
         path = gtkgui_helpers.get_icon_path('gajim-connection_lost', 48)
@@ -1812,7 +1807,6 @@ class Interface:
             'GC_SUBJECT': [self.handle_event_gc_subject],
             'GC_CONFIG_CHANGE': [self.handle_event_gc_config_change],
             'BAD_PASSPHRASE': [self.handle_event_bad_passphrase],
-            'CON_TYPE': [self.handle_event_con_type],
             'CONNECTION_LOST': [self.handle_event_connection_lost],
             'FILE_REQUEST': [self.handle_event_file_request],
             'FILE_REQUEST_ERROR': [self.handle_event_file_request_error],

@@ -1268,3 +1268,7 @@ class NewAccountConnectedEvent(nec.NetworkIncomingEvent):
 class NewAccountNotConnectedEvent(nec.NetworkIncomingEvent):
     name = 'new-account-not-connected'
     base_network_events = []
+
+class ConnectionTypeEvent(nec.NetworkIncomingEvent):
+    name = 'connection-type'
+    base_network_events = []
