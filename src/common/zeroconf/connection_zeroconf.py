@@ -329,7 +329,8 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
     callback_args=[], now=True):
 
         def on_send_ok(msg_id):
-            self.dispatch('MSGSENT', (jid, msg, keyID))
+            gajim.nec.push_incoming_event(MessageSentEvent(None, conn=self,
+                jid=jid, message=msg, keyID=keyID))
             if callback:
                 callback(msg_id, *callback_args)
 

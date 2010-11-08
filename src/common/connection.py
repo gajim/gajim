@@ -340,7 +340,8 @@ class CommonConnection:
             return
         # Encryption failed, do not send message
         tim = localtime()
-        self.dispatch('MSGNOTSENT', (jid, error, msgtxt, tim, session))
+        gajim.nec.push_incoming_event(MessageNotSentEvent(None, conn=self,
+            jid=jid, message=msgtxt, error=error, time_=tim, session=session))
 
     def _on_continue_message(self, type_, msg, msgtxt, original_message, fjid,
     resource, jid, xhtml, subject, msgenc, keyID, chatstate, msg_id,
@@ -1646,7 +1647,8 @@ class Connection(CommonConnection, ConnectionHandlers):
         subject, type_, msg_iq):
             msg_id = self.connection.send(msg_iq, now=now)
             jid = helpers.parse_jid(jid)
-            self.dispatch('MSGSENT', (jid, msg, keyID))
+            gajim.nec.push_incoming_event(MessageSentEvent(None, conn=self,
+                jid=jid, message=msg, keyID=keyID))
             if callback:
                 callback(msg_id, *callback_args)
 
@@ -2100,7 +2102,8 @@ class Connection(CommonConnection, ConnectionHandlers):
         if label is not None:
             msg_iq.addChild(node = label)
         self.connection.send(msg_iq)
-        self.dispatch('MSGSENT', (jid, msg))
+        gajim.nec.push_incoming_event(MessageSentEvent(None, conn=self,
+            jid=jid, message=msg, keyID=None))
 
     def send_gc_subject(self, jid, subject):
         if not gajim.account_is_connected(self.name):

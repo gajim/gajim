@@ -452,25 +452,24 @@ class Interface:
         if session:
             session.roster_message(jid, msg, array[4], msg_type='error')
 
-    def handle_event_msgsent(self, account, array):
+    def handle_event_msgsent(self, obj):
         #('MSGSENT', account, (jid, msg, keyID))
-        msg = array[1]
         # do not play sound when standalone chatstate message (eg no msg)
-        if msg and gajim.config.get_per('soundevents', 'message_sent',
+        if obj.message and gajim.config.get_per('soundevents', 'message_sent',
         'enabled'):
             helpers.play_sound('message_sent')
 
-    def handle_event_msgnotsent(self, account, array):
+    def handle_event_msgnotsent(self, obj):
         #('MSGNOTSENT', account, (jid, ierror_msg, msg, time, session))
         msg = _('error while sending %(message)s ( %(error)s )') % {
-                'message': array[2], 'error': array[1]}
-        if not array[4]:
+                'message': obj.message, 'error': obj.error}
+        if not obj.session:
             # No session. This can happen when sending a message from
             # gajim-remote
             log.warn(msg)
             return
-        array[4].roster_message(array[0], msg, array[3], account,
-                msg_type='error')
+        obj.session.roster_message(obj.jid, msg, obj.time_, obj.conn.name,
+            msg_type='error')
 
     def handle_event_subscribe_presence(self, obj):
         #('SUBSCRIBE', account, (jid, text, user_nick)) user_nick is JEP-0172
@@ -1796,8 +1795,6 @@ class Interface:
             'DB_ERROR': [self.handle_event_db_error],
             'INFORMATION': [self.handle_event_information],
             'MSGERROR': [self.handle_event_msgerror],
-            'MSGSENT': [self.handle_event_msgsent],
-            'MSGNOTSENT': [self.handle_event_msgnotsent],
             'AGENT_REMOVED': [self.handle_event_agent_removed],
             'REGISTER_AGENT_INFO': [self.handle_event_register_agent_info],
             'AGENT_INFO_ITEMS': [self.handle_event_agent_info_items],
@@ -1857,6 +1854,8 @@ class Interface:
             'jingle-error-received': [self.handle_event_jingle_error],
             'jingle-request-received': [self.handle_event_jingle_incoming],
             'last-result-received': [self.handle_event_last_status_time],
+            'message-not-sent': [self.handle_event_msgnotsent],
+            'message-sent': [self.handle_event_msgsent],
             'muc-admin-received': [self.handle_event_gc_affiliation],
             'muc-owner-received': [self.handle_event_gc_config],
             'our-show': [self.handle_event_status],
