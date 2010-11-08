@@ -1233,23 +1233,6 @@ class Interface:
             self.instances[account]['xml_console'].print_stanza(stanza,
                 'outgoing')
 
-    def handle_event_vcard_published(self, account, array):
-        if 'profile' in self.instances[account]:
-            win = self.instances[account]['profile']
-            win.vcard_published()
-        for gc_control in self.msg_win_mgr.get_controls(
-        message_control.TYPE_GC) + self.minimized_controls[account].values():
-            if gc_control.account == account:
-                show = gajim.SHOW_LIST[gajim.connections[account].connected]
-                status = gajim.connections[account].status
-                gajim.connections[account].send_gc_status(gc_control.nick,
-                    gc_control.room_jid, show, status)
-
-    def handle_event_vcard_not_published(self, account, array):
-        if 'profile' in self.instances[account]:
-            win = self.instances[account]['profile']
-            win.vcard_not_published()
-
     def ask_offline_status(self, account):
         for contact in gajim.contacts.iter_contacts(account):
             gajim.connections[account].request_last_status_time(contact.jid,
@@ -1810,8 +1793,6 @@ class Interface:
             'FILE_SEND_ERROR': [self.handle_event_file_send_error],
             'STANZA_ARRIVED': [self.handle_event_stanza_arrived],
             'STANZA_SENT': [self.handle_event_stanza_sent],
-            'VCARD_PUBLISHED': [self.handle_event_vcard_published],
-            'VCARD_NOT_PUBLISHED': [self.handle_event_vcard_not_published],
             'SIGNED_IN': [self.handle_event_signed_in],
             'METACONTACTS': [self.handle_event_metacontacts],
             'ATOM_ENTRY': [self.handle_atom_entry],

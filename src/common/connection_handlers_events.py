@@ -1276,3 +1276,11 @@ class NewAccountNotConnectedEvent(nec.NetworkIncomingEvent):
 class ConnectionTypeEvent(nec.NetworkIncomingEvent):
     name = 'connection-type'
     base_network_events = []
+
+class VcardPublishedEvent(nec.NetworkIncomingEvent):
+    name = 'vcard-published'
+    base_network_events = []
+
+class VcardNotPublishedEvent(nec.NetworkIncomingEvent):
+    name = 'vcard-not-published'
+    base_network_events = []

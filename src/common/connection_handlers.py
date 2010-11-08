@@ -616,9 +616,11 @@ class ConnectionVcard:
                         show=sshow, status=self.status)
                     p = self.add_sha(p)
                     self.connection.send(p)
-                self.dispatch('VCARD_PUBLISHED', ())
+                gajim.nec.push_incoming_event(VcardPublishedEvent(None,
+                    conn=self))
             elif iq_obj.getType() == 'error':
-                self.dispatch('VCARD_NOT_PUBLISHED', ())
+                gajim.nec.push_incoming_event(VcardNotPublishedEvent(None,
+                    conn=self))
         elif self.awaiting_answers[id_][0] == VCARD_ARRIVED:
             # If vcard is empty, we send to the interface an empty vcard so that
             # it knows it arrived
