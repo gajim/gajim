@@ -611,9 +611,11 @@ class CommonConnection:
     def _event_dispatcher(self, realm, event, data):
         if realm == '':
             if event == common.xmpp.transports_nb.DATA_RECEIVED:
-                self.dispatch('STANZA_ARRIVED', unicode(data, errors='ignore'))
+                gajim.nec.push_incoming_event(StanzaReceivedEvent(None,
+                    conn=self, stanza_str=unicode(data, errors='ignore')))
             elif event == common.xmpp.transports_nb.DATA_SENT:
-                self.dispatch('STANZA_SENT', unicode(data))
+                gajim.nec.push_incoming_event(StanzaSentEvent(None, conn=self,
+                    stanza_str=unicode(data)))
 
     def change_status(self, show, msg, auto=False):
         if not msg:

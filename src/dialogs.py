@@ -3051,11 +3051,19 @@ class XMLConsoleWindow:
 
         self.window.set_title(title)
         self.window.show_all()
+        gajim.ged.register_event_handler('stanza-received', ged.GUI1,
+            self._nec_stanza_received)
+        gajim.ged.register_event_handler('stanza-sent', ged.GUI1,
+            self._nec_stanza_sent)
 
         self.xml.connect_signals(self)
 
     def on_xml_console_window_destroy(self, widget):
         del gajim.interface.instances[self.account]['xml_console']
+        gajim.ged.remove_event_handler('stanza-received', ged.GUI1,
+            self._nec_stanza_received)
+        gajim.ged.remove_event_handler('stanza-sent', ged.GUI1,
+            self._nec_stanza_sent)
 
     def on_clear_button_clicked(self, widget):
         buffer_ = self.stanzas_log_textview.get_buffer()
@@ -3142,6 +3150,16 @@ class XMLConsoleWindow:
             + '\n\n', type_)
         if at_the_end:
             gobject.idle_add(self.scroll_to_end)
+
+    def _nec_stanza_received(self, obj):
+        if obj.conn.name != self.account:
+            return
+        self.print_stanza(obj.stanza_str, 'incoming')
+
+    def _nec_stanza_sent(self, obj):
+        if obj.conn.name != self.account:
+            return
+        self.print_stanza(obj.stanza_str, 'outgoing')
 
     def on_send_button_clicked(self, widget):
         if gajim.connections[self.account].connected <= 1:

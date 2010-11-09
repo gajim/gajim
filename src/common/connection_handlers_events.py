@@ -1284,3 +1284,11 @@ class VcardPublishedEvent(nec.NetworkIncomingEvent):
 class VcardNotPublishedEvent(nec.NetworkIncomingEvent):
     name = 'vcard-not-published'
     base_network_events = []
+
+class StanzaReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'stanza-received'
+    base_network_events = []
+
+class StanzaSentEvent(nec.NetworkIncomingEvent):
+    name = 'stanza-sent'
+    base_network_events = []

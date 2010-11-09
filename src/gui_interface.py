@@ -1219,20 +1219,6 @@ class Interface:
             notify.popup(event_type, jid, account, msg_type, path_to_image=path,
                     title=event_type, text=txt)
 
-    def handle_event_stanza_arrived(self, account, stanza):
-        if account not in self.instances:
-            return
-        if 'xml_console' in self.instances[account]:
-            self.instances[account]['xml_console'].print_stanza(stanza,
-                'incoming')
-
-    def handle_event_stanza_sent(self, account, stanza):
-        if account not in self.instances:
-            return
-        if 'xml_console' in self.instances[account]:
-            self.instances[account]['xml_console'].print_stanza(stanza,
-                'outgoing')
-
     def ask_offline_status(self, account):
         for contact in gajim.contacts.iter_contacts(account):
             gajim.connections[account].request_last_status_time(contact.jid,
@@ -1791,8 +1777,6 @@ class Interface:
             'FILE_REQUEST': [self.handle_event_file_request],
             'FILE_REQUEST_ERROR': [self.handle_event_file_request_error],
             'FILE_SEND_ERROR': [self.handle_event_file_send_error],
-            'STANZA_ARRIVED': [self.handle_event_stanza_arrived],
-            'STANZA_SENT': [self.handle_event_stanza_sent],
             'SIGNED_IN': [self.handle_event_signed_in],
             'METACONTACTS': [self.handle_event_metacontacts],
             'ATOM_ENTRY': [self.handle_atom_entry],
