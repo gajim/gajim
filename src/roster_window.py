@@ -2498,6 +2498,10 @@ class RosterWindow:
     def _nec_connection_type(self, obj):
         self.draw_account(obj.conn.name)
 
+    def _nec_agent_removed(self, obj):
+        for jid in obj.jid_list:
+            self.remove_contact(jid, obj.conn.name, backend=True)
+
 ################################################################################
 ### Menu and GUI callbacks
 ### FIXME: order callbacks in itself...
@@ -6234,3 +6238,5 @@ class RosterWindow:
             self._nec_our_show)
         gajim.ged.register_event_handler('connection-type', ged.GUI1,
             self._nec_connection_type)
+        gajim.ged.register_event_handler('agent-removed', ged.GUI1,
+            self._nec_agent_removed)

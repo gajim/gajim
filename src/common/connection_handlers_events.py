@@ -1292,3 +1292,14 @@ class StanzaReceivedEvent(nec.NetworkIncomingEvent):
 class StanzaSentEvent(nec.NetworkIncomingEvent):
     name = 'stanza-sent'
     base_network_events = []
+
+class AgentRemovedEvent(nec.NetworkIncomingEvent):
+    name = 'agent-removed'
+    base_network_events = []
+
+    def generate(self):
+        self.jid_list = []
+        for jid in gajim.contacts.get_jid_list(self.conn.name):
+            if jid.endswith('@' + self.agent):
+                self.jid_list.append(jid)
+        return True

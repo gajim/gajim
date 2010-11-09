@@ -645,7 +645,8 @@ class ConnectionVcard:
                     self.dispatch('MYVCARD', {'jid': frm})
         elif self.awaiting_answers[id_][0] == AGENT_REMOVED:
             jid = self.awaiting_answers[id_][1]
-            self.dispatch('AGENT_REMOVED', jid)
+            gajim.nec.push_incoming_event(AgentRemovedEvent(None, conn=self,
+                agent=jid))
         elif self.awaiting_answers[id_][0] == METACONTACTS_ARRIVED:
             if not self.connection:
                 return
@@ -1149,6 +1150,8 @@ ConnectionJingle, ConnectionIBBytestream):
             self._nec_message_received)
         gajim.ged.register_event_handler('decrypted-message-received', ged.CORE,
             self._nec_decrypted_message_received)
+        gajim.ged.register_event_handler('agent-removed', ged.CORE,
+            self._nec_agent_removed)
 
     def build_http_auth_answer(self, iq_obj, answer):
         if not self.connection or self.connected < 2:
@@ -1895,6 +1898,18 @@ ConnectionJingle, ConnectionIBBytestream):
         if not gajim.config.get_per('accounts', account,
         'dont_ack_subscription'):
             self.ack_unsubscribed(obj.jid)
+
+    def _nec_agent_removed(self, obj):
+        if obj.conn.name != self.name:
+            return
+        for jid in obj.jid_list:
+            log.debug('Removing contact %s due to unregistered transport %s' % \
+                (jid, agent))
+            self.unsubscribe(jid)
+            # Transport contacts can't have 2 resources
+            if jid in gajim.to_be_removed[self.name]:
+                # This way we'll really remove it
+                gajim.to_be_removed[self.name].remove(jid)
 
     def _StanzaArrivedCB(self, con, obj):
         self.last_io = gajim.idlequeue.current_time()

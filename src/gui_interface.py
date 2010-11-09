@@ -545,22 +545,6 @@ class Interface:
             notify.popup(event_type, obj.jid, account, 'unsubscribed', path,
                 event_type, obj.jid)
 
-    def handle_event_agent_removed(self, account, agent):
-        # remove transport's contacts from treeview
-        jid_list = gajim.contacts.get_jid_list(account)
-        for jid in jid_list:
-            if jid.endswith('@' + agent):
-                c = gajim.contacts.get_first_contact_from_jid(account, jid)
-                gajim.log.debug(
-                        'Removing contact %s due to unregistered transport %s'\
-                        % (jid, agent))
-                gajim.connections[account].unsubscribe(c.jid)
-                # Transport contacts can't have 2 resources
-                if c.jid in gajim.to_be_removed[account]:
-                    # This way we'll really remove it
-                    gajim.to_be_removed[account].remove(c.jid)
-                self.roster.remove_contact(c.jid, account, backend=True)
-
     def handle_event_register_agent_info(self, account, array):
         # ('REGISTER_AGENT_INFO', account, (agent, infos, is_form))
         # info in a dataform if is_form is True
@@ -1764,7 +1748,6 @@ class Interface:
             'DB_ERROR': [self.handle_event_db_error],
             'INFORMATION': [self.handle_event_information],
             'MSGERROR': [self.handle_event_msgerror],
-            'AGENT_REMOVED': [self.handle_event_agent_removed],
             'REGISTER_AGENT_INFO': [self.handle_event_register_agent_info],
             'AGENT_INFO_ITEMS': [self.handle_event_agent_info_items],
             'MYVCARD': [self.handle_event_myvcard],
