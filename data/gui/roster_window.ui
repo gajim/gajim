@@ -349,7 +349,6 @@
                         <signal name="button_release_event" handler="on_roster_treeview_button_release_event"/>
                         <signal name="row_expanded" handler="on_roster_treeview_row_expanded"/>
                         <signal name="key_press_event" handler="on_roster_treeview_key_press_event"/>
-                        <signal name="style_set" handler="on_roster_treeview_style_set"/>
                         <signal name="scroll_event" handler="on_roster_treeview_scroll_event"/>
                         <signal name="leave_notify_event" handler="on_roster_treeview_leave_notify_event"/>
                       </object>

@@ -220,28 +220,6 @@ class RosterWindow:
         return False
 
 
-    def _iter_contact_rows(self, model=None):
-        """
-        Iterate over all contact rows in given model
-
-        Keyword argument
-        model -- the data model (default TreeFilterModel)
-        """
-        if not model:
-            model = self.modelfilter
-        account_iter = model.get_iter_root()
-        while account_iter:
-            group_iter = model.iter_children(account_iter)
-            while group_iter:
-                contact_iter = model.iter_children(group_iter)
-                while contact_iter:
-                    yield model[contact_iter]
-                    contact_iter = model.iter_next(
-                            contact_iter)
-                group_iter = model.iter_next(group_iter)
-            account_iter = model.iter_next(account_iter)
-
-
 #############################################################################
 ### Methods for adding and removing roster window items
 #############################################################################
@@ -4621,14 +4599,6 @@ class RosterWindow:
         ctrl = gajim.interface.msg_win_mgr.get_control(jid, account)
         if ctrl:
             ctrl.show_avatar()
-
-    def on_roster_treeview_style_set(self, treeview, style):
-        """
-        When style (theme) changes, redraw all contacts
-        """
-        for contact in self._iter_contact_rows():
-            self.draw_contact(contact[C_JID].decode('utf-8'),
-                contact[C_ACCOUNT].decode('utf-8'))
 
     def set_renderer_color(self, renderer, style, set_background=True):
         """
