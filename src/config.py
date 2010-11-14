@@ -3713,7 +3713,6 @@ class AccountCreationWizardWindow:
         # We receive events from all accounts from GED
         if obj.conn.name != self.account:
             return
-        form, is_form, ssl_msg, ssl_err, ssl_cert, ssl_fingerprint = array
         if self.update_progressbar_timeout_id is not None:
             gobject.source_remove(self.update_progressbar_timeout_id)
         self.back_button.show()

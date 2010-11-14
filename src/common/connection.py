@@ -829,16 +829,17 @@ class Connection(CommonConnection, ConnectionHandlers):
                         reason = _('Server %(name)s answered wrongly to '
                             'register request: %(error)s') % {'name': data[0],
                             'error': data[3]}
-                        gajim.nec.push_incoming_event(AccountNotCreated(None,
-                            conn=self, reason=reason))
+                        gajim.nec.push_incoming_event(AccountNotCreatedEvent(
+                            None, conn=self, reason=reason))
                         return
                     is_form = data[2]
                     conf = data[1]
-                    helpers.replace_dataform_media(conf, data[4])
+                    if data[4] is not '':
+                        helpers.replace_dataform_media(conf, data[4])
                     if self.new_account_form:
                         def _on_register_result(result):
                             if not common.xmpp.isResultNode(result):
-                                gajim.nec.push_incoming_event(AccountNotCreated(
+                                gajim.nec.push_incoming_event(AccountNotCreatedEvent(
                                     None, conn=self, reason=result.getError()))
                                 return
                             if gajim.HAVE_GPG:
@@ -858,7 +859,8 @@ class Connection(CommonConnection, ConnectionHandlers):
                         # typed, so send them
                         if is_form:
                             #TODO: Check if form has changed
-                            iq = common.xmpp.Iq('set', common.xmpp.NS_REGISTER, to=self._hostname)
+                            iq = common.xmpp.Iq('set', common.xmpp.NS_REGISTER,
+                                to=self._hostname)
                             iq.setTag('query').addChild(node=self.new_account_form)
                             self.connection.SendAndCallForResponse(iq,
                                     _on_register_result)
@@ -868,7 +870,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                                 # requested config has changed since first connection
                                 reason = _('Server %s provided a different '
                                     'registration form') % data[0]
-                                gajim.nec.push_incoming_event(AccountNotCreated(
+                                gajim.nec.push_incoming_event(AccountNotCreatedEvent(
                                     None, conn=self, reason=reason))
                                 return
                             common.xmpp.features_nb.register(self.connection,
