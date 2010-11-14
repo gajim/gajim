@@ -799,9 +799,6 @@ class GroupchatControl(ChatControlBase):
                 self.btn_box.destroy()
             dataform = dataforms.ExtendForm(node=captcha)
             self.form_widget = dataforms_widget.DataFormWidget(dataform)
-            self.form_widget.show_all()
-            vbox = self.xml.get_object('gc_textviews_vbox')
-            vbox.pack_start(self.form_widget, expand=False, fill=False)
 
             def on_send_dataform_clicked(widget):
                 if not self.form_widget:
@@ -815,6 +812,11 @@ class GroupchatControl(ChatControlBase):
                 self.btn_box.destroy()
                 self.form_widget = None
                 del self.btn_box
+
+            self.form_widget.connect('validated', on_send_dataform_clicked)
+            self.form_widget.show_all()
+            vbox = self.xml.get_object('gc_textviews_vbox')
+            vbox.pack_start(self.form_widget, expand=False, fill=False)
 
             valid_button = gtk.Button(stock=gtk.STOCK_OK)
             valid_button.connect('clicked', on_send_dataform_clicked)

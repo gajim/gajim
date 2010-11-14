@@ -43,6 +43,10 @@ class DataFormWidget(gtk.Alignment, object):
     Data Form widget. Use like any other widget
     """
 
+    __gsignals__ = dict(
+        validated = (gobject.SIGNAL_RUN_LAST | gobject.SIGNAL_ACTION, None, ())
+    )
+
     def __init__(self, dataformnode=None):
         ''' Create a widget. '''
         gtk.Alignment.__init__(self, xscale=1.0, yscale=1.0)
@@ -67,6 +71,9 @@ class DataFormWidget(gtk.Alignment, object):
         selection = self.records_treeview.get_selection()
         selection.connect('changed', self.on_records_selection_changed)
         selection.set_mode(gtk.SELECTION_MULTIPLE)
+
+    def on_data_form_vbox_key_press_event(self, widget, event):
+        print 'key pressed'
 
     def set_data_form(self, dataform):
         """
@@ -141,6 +148,9 @@ class DataFormWidget(gtk.Alignment, object):
         self.clean_data_form()
 
         self.singleform = SingleForm(self._data_form)
+        def _on_validated(widget):
+            self.emit('validated')
+        self.singleform.connect('validated', _on_validated)
         self.singleform.show()
         self.single_form_viewport.add(self.singleform)
         self.data_form_types_notebook.set_current_page(
@@ -298,6 +308,10 @@ class SingleForm(gtk.Table, object):
     only to display single forms, but to form input windows of multiple-type
     forms, it is in another class
     """
+
+    __gsignals__ = dict(
+        validated = (gobject.SIGNAL_RUN_LAST | gobject.SIGNAL_ACTION, None, ())
+    )
 
     def __init__(self, dataform):
         assert isinstance(dataform, dataforms.SimpleDataForm)
@@ -506,6 +520,11 @@ class SingleForm(gtk.Table, object):
                 commonlabelcenter = True
                 if readwrite:
                     widget = gtk.Entry()
+                    def kpe(widget, event):
+                        if event.keyval == gtk.keysyms.Return or \
+                        event.keyval == gtk.keysyms.KP_Enter:
+                            self.emit('validated')
+                    widget.connect('key-press-event', kpe)
                     widget.connect('changed', self.on_text_single_entry_changed,
                             field)
                     widget.set_sensitive(readwrite)
