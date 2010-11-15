@@ -2027,7 +2027,8 @@ ConnectionJingle, ConnectionIBBytestream):
         if sign_msg and not signed:
             signed = self.get_signed_presence(msg)
             if signed is None:
-                self.dispatch('BAD_PASSPHRASE', ())
+                gajim.nec.push_incoming_event(BadGPGPassphraseEvent(None,
+                    conn=self))
                 self.USE_GPG = False
                 signed = ''
         self.connected = gajim.SHOW_LIST.index(show)

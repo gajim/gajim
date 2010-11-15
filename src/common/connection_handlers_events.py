@@ -1303,3 +1303,13 @@ class AgentRemovedEvent(nec.NetworkIncomingEvent):
             if jid.endswith('@' + self.agent):
                 self.jid_list.append(jid)
         return True
+
+class BadGPGPassphraseEvent(nec.NetworkIncomingEvent):
+    name = 'bad-gpg-passphrase'
+    base_network_events = []
+
+    def generate(self):
+        self.account = self.conn.name
+        self.use_gpg_agent = gajim.config.get('use_gpg_agent')
+        self.keyID = gajim.config.get_per('accounts', account, 'keyid')
+        return True

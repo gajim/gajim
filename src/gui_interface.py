@@ -859,23 +859,21 @@ class Interface:
             del self.gpg_passphrase[keyid]
         return False
 
-    def handle_event_bad_passphrase(self, account, array):
+    def handle_event_bad_gpg_passphrase(self, obj):
         #('BAD_PASSPHRASE', account, ())
-        use_gpg_agent = gajim.config.get('use_gpg_agent')
-        sectext = ''
-        if use_gpg_agent:
+        if obj.use_gpg_agent:
             sectext = _('You configured Gajim to use GPG agent, but there is no'
-            ' GPG agent running or it returned a wrong passphrase.\n')
+                ' GPG agent running or it returned a wrong passphrase.\n')
             sectext += _('You are currently connected without your OpenPGP '
                 'key.')
             dialogs.WarningDialog(_('Your passphrase is incorrect'), sectext)
         else:
             path = gtkgui_helpers.get_icon_path('gajim-warning', 48)
+            account = obj.conn.name
             notify.popup('warning', account, account, 'warning', path,
-                    _('OpenGPG Passphrase Incorrect'),
-                    _('You are currently connected without your OpenPGP key.'))
-        keyID = gajim.config.get_per('accounts', account, 'keyid')
-        self.forget_gpg_passphrase(keyID)
+                _('OpenGPG Passphrase Incorrect'),
+                _('You are currently connected without your OpenPGP key.'))
+        self.forget_gpg_passphrase(obj.keyID)
 
     def handle_event_gpg_password_required(self, account, array):
         #('GPG_PASSWORD_REQUIRED', account, (callback,))
@@ -1755,7 +1753,6 @@ class Interface:
             'GC_NOTIFY': [self.handle_event_gc_notify],
             'GC_SUBJECT': [self.handle_event_gc_subject],
             'GC_CONFIG_CHANGE': [self.handle_event_gc_config_change],
-            'BAD_PASSPHRASE': [self.handle_event_bad_passphrase],
             'CONNECTION_LOST': [self.handle_event_connection_lost],
             'FILE_REQUEST': [self.handle_event_file_request],
             'FILE_REQUEST_ERROR': [self.handle_event_file_request_error],
@@ -1790,6 +1787,7 @@ class Interface:
             'INSECURE_PASSWORD': [self.handle_event_insecure_password],
             'PEP_RECEIVED': [self.handle_event_pep_received],
             'CAPS_RECEIVED': [self.handle_event_caps_received],
+            'bad-gpg-passphrase': [self.handle_event_bad_gpg_passphrase],
             'bookmarks-received': [self.handle_event_bookmarks],
             'gc-invitation-received': [self.handle_event_gc_invitation],
             'gc-presence-received': [self.handle_event_gc_presence],
