@@ -1366,7 +1366,8 @@ class Connection(CommonConnection, ConnectionHandlers):
         id_ = self.connection.getAnID()
         if pingTo:
             to = pingTo.get_full_jid()
-            self.dispatch('PING_SENT', (pingTo))
+            gajim.nec.push_incoming_event(PingSentEvent(None, conn=self,
+                contact=pingTo))
         else:
             to = gajim.config.get_per('accounts', self.name, 'hostname')
             self.awaiting_xmpp_ping_id = id_
@@ -1376,10 +1377,12 @@ class Connection(CommonConnection, ConnectionHandlers):
         def _on_response(resp):
             timePong = time_time()
             if not common.xmpp.isResultNode(resp):
-                self.dispatch('PING_ERROR', (pingTo))
+                gajim.nec.push_incoming_event(PingErrorEvent(None, conn=self,
+                    contact=pingTo))
                 return
             timeDiff = round(timePong - timePing, 2)
-            self.dispatch('PING_REPLY', (pingTo, timeDiff))
+            gajim.nec.push_incoming_event(PingReplyEvent(None, conn=self,
+                contact=pingTo, seconds=timeDiff))
         if pingTo:
             timePing = time_time()
             self.connection.SendAndCallForResponse(iq, _on_response)

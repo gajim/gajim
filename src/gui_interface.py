@@ -1368,41 +1368,6 @@ class Interface:
             input_str=data, is_modal=True, ok_handler=on_ok,
             cancel_handler=on_cancel)
 
-    def handle_event_ping_sent(self, account, contact):
-        if contact.jid == contact.get_full_jid():
-            # If contact is a groupchat user
-            jids = [contact.jid]
-        else:
-            jids = [contact.jid, contact.get_full_jid()]
-        for jid in jids:
-            ctrl = self.msg_win_mgr.get_control(jid, account)
-            if ctrl:
-                ctrl.print_conversation(_('Ping?'), 'status')
-
-    def handle_event_ping_reply(self, account, data):
-        contact = data[0]
-        seconds = data[1]
-        if contact.jid == contact.get_full_jid():
-            # If contact is a groupchat user
-            jids = [contact.jid]
-        else:
-            jids = [contact.jid, contact.get_full_jid()]
-        for jid in jids:
-            ctrl = self.msg_win_mgr.get_control(jid, account)
-            if ctrl:
-                ctrl.print_conversation(_('Pong! (%s s.)') % seconds, 'status')
-
-    def handle_event_ping_error(self, account, contact):
-        if contact.jid == contact.get_full_jid():
-            # If contact is a groupchat user
-            jids = [contact.jid]
-        else:
-            jids = [contact.jid, contact.get_full_jid()]
-        for jid in jids:
-            ctrl = self.msg_win_mgr.get_control(jid, account)
-            if ctrl:
-                ctrl.print_conversation(_('Error.'), 'status')
-
     def handle_event_resource_conflict(self, obj):
         # ('RESOURCE_CONFLICT', account, ())
         # First we go offline, but we don't overwrite status message
@@ -1768,9 +1733,6 @@ class Interface:
                 [self.handle_event_privacy_lists_active_default],
             'PRIVACY_LIST_REMOVED': [self.handle_event_privacy_list_removed],
             'ZC_NAME_CONFLICT': [self.handle_event_zc_name_conflict],
-            'PING_SENT': [self.handle_event_ping_sent],
-            'PING_REPLY': [self.handle_event_ping_reply],
-            'PING_ERROR': [self.handle_event_ping_error],
             'PEP_CONFIG': [self.handle_event_pep_config],
             'UNIQUE_ROOM_ID_UNSUPPORTED': \
                 [self.handle_event_unique_room_id_unsupported],

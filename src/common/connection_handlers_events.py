@@ -1322,3 +1322,15 @@ class ConnectionLostEvent(nec.NetworkIncomingEvent):
         gajim.nec.push_incoming_event(OurShowEvent(None, conn=self.conn,
             show='offline'))
         return True
+
+class PingSentEvent(nec.NetworkIncomingEvent):
+    name = 'ping-sent'
+    base_network_events = []
+
+class PingReplyEvent(nec.NetworkIncomingEvent):
+    name = 'ping-reply'
+    base_network_events = []
+
+class PingErrorEvent(nec.NetworkIncomingEvent):
+    name = 'ping-error'
+    base_network_events = []
