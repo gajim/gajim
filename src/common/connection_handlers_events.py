@@ -1313,3 +1313,12 @@ class BadGPGPassphraseEvent(nec.NetworkIncomingEvent):
         self.use_gpg_agent = gajim.config.get('use_gpg_agent')
         self.keyID = gajim.config.get_per('accounts', account, 'keyid')
         return True
+
+class ConnectionLostEvent(nec.NetworkIncomingEvent):
+    name = 'connection-lost'
+    base_network_events = []
+
+    def generate(self):
+        gajim.nec.push_incoming_event(OurShowEvent(None, conn=self.conn,
+            show='offline'))
+        return True

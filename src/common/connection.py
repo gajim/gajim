@@ -812,11 +812,9 @@ class Connection(CommonConnection, ConnectionHandlers):
     def _connection_lost(self):
         log.debug('_connection_lost')
         self.disconnect(on_purpose = False)
-        gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
-            show='offline'))
-        self.dispatch('CONNECTION_LOST',
-                (_('Connection with account "%s" has been lost') % self.name,
-                _('Reconnect manually.')))
+        gajim.nec.push_incoming_event(ConnectionLostEvent(None, conn=self,
+            title=_('Connection with account "%s" has been lost') % self.name,
+            msg=_('Reconnect manually.')))
 
     def _event_dispatcher(self, realm, event, data):
         CommonConnection._event_dispatcher(self, realm, event, data)
@@ -1168,8 +1166,6 @@ class Connection(CommonConnection, ConnectionHandlers):
             # we are not retrying, and not conecting
             if not self.retrycount and self.connected != 0:
                 self.disconnect(on_purpose = True)
-                gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
-                    show='offline'))
                 pritxt = _('Could not connect to "%s"') % self._hostname
                 sectxt = _('Check your connection or try again later.')
                 if self.streamError:
@@ -1180,17 +1176,16 @@ class Connection(CommonConnection, ConnectionHandlers):
                         self.dispatch('ERROR', (pritxt, '%s\n%s' % (sectxt2, sectxt)))
                         return
                 # show popup
-                self.dispatch('CONNECTION_LOST', (pritxt, sectxt))
+                gajim.nec.push_incoming_event(ConnectionLostEvent(None,
+                    conn=self, title=pritxt, msg=sectxt))
 
     def on_proxy_failure(self, reason):
         log.error('Connection to proxy failed: %s' % reason)
         self.time_to_reconnect = None
         self.on_connect_failure = None
         self.disconnect(on_purpose = True)
-        gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
-            show='offline'))
-        self.dispatch('CONNECTION_LOST',
-                (_('Connection to proxy failed'), reason))
+        gajim.nec.push_incoming_event(ConnectionLostEvent(None, conn=self,
+            title=_('Connection to proxy failed'), msg=reason))
 
     def _connect_success(self, con, con_type):
         if not self.connected: # We went offline during connecting process
@@ -1219,12 +1214,10 @@ class Connection(CommonConnection, ConnectionHandlers):
     def connection_accepted(self, con, con_type):
         if not con or not con.Connection:
             self.disconnect(on_purpose=True)
-            gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
-                show='offline'))
-            self.dispatch('CONNECTION_LOST',
-                    (_('Could not connect to account %s') % self.name,
-                    _('Connection with account %s has been lost. Retry connecting.') % \
-                    self.name))
+            gajim.nec.push_incoming_event(ConnectionLostEvent(None, conn=self,
+                title=_('Could not connect to account %s') % self.name,
+                msg=_('Connection with account %s has been lost. Retry '
+                'connecting.') % self.name))
             return
         self.hosts = []
         self.connection_auto_accepted = False
@@ -1279,12 +1272,10 @@ class Connection(CommonConnection, ConnectionHandlers):
     def ssl_certificate_accepted(self):
         if not self.connection:
             self.disconnect(on_purpose=True)
-            gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
-                show='offline'))
-            self.dispatch('CONNECTION_LOST',
-                    (_('Could not connect to account %s') % self.name,
-                    _('Connection with account %s has been lost. Retry connecting.') % \
-                    self.name))
+            gajim.nec.push_incoming_event(ConnectionLostEvent(None, conn=self,
+                title=_('Could not connect to account %s') % self.name,
+                msg=_('Connection with account %s has been lost. Retry '
+                'connecting.') % self.name))
             return
         name = gajim.config.get_per('accounts', self.name, 'name')
         self._register_handlers(self.connection, 'ssl')
@@ -1302,11 +1293,9 @@ class Connection(CommonConnection, ConnectionHandlers):
     def __on_auth(self, con, auth):
         if not con:
             self.disconnect(on_purpose=True)
-            gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
-                show='offline'))
-            self.dispatch('CONNECTION_LOST',
-                    (_('Could not connect to "%s"') % self._hostname,
-                    _('Check your connection or try again later')))
+            gajim.nec.push_incoming_event(ConnectionLostEvent(None, conn=self,
+                title=_('Could not connect to "%s"') % self._hostname,
+                msg=_('Check your connection or try again later')))
             if self.on_connect_auth:
                 self.on_connect_auth(None)
                 self.on_connect_auth = None

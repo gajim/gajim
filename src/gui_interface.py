@@ -188,11 +188,12 @@ class Interface:
         if ctrl and ctrl.type_id == message_control.TYPE_GC:
             ctrl.print_conversation('Error %s: %s' % (obj.errcode, obj.errmsg))
 
-    def handle_event_connection_lost(self, account, array):
+    def handle_event_connection_lost(self, obj):
         # ('CONNECTION_LOST', account, [title, text])
         path = gtkgui_helpers.get_icon_path('gajim-connection_lost', 48)
+        account = obj.conn.name
         notify.popup(_('Connection Failed'), account, account,
-                'connection_failed', path, array[0], array[1])
+            'connection_failed', path, obj.title, obj.msg)
 
     def unblock_signed_in_notifications(self, account):
         gajim.block_signed_in_notifications[account] = False
@@ -1753,7 +1754,6 @@ class Interface:
             'GC_NOTIFY': [self.handle_event_gc_notify],
             'GC_SUBJECT': [self.handle_event_gc_subject],
             'GC_CONFIG_CHANGE': [self.handle_event_gc_config_change],
-            'CONNECTION_LOST': [self.handle_event_connection_lost],
             'FILE_REQUEST': [self.handle_event_file_request],
             'FILE_REQUEST_ERROR': [self.handle_event_file_request_error],
             'FILE_SEND_ERROR': [self.handle_event_file_send_error],
@@ -1789,6 +1789,7 @@ class Interface:
             'CAPS_RECEIVED': [self.handle_event_caps_received],
             'bad-gpg-passphrase': [self.handle_event_bad_gpg_passphrase],
             'bookmarks-received': [self.handle_event_bookmarks],
+            'connection-lost': [self.handle_event_connection_lost],
             'gc-invitation-received': [self.handle_event_gc_invitation],
             'gc-presence-received': [self.handle_event_gc_presence],
             'gmail-notify': [self.handle_event_gmail_notify],
