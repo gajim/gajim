@@ -223,7 +223,7 @@ class CommonConnection:
                 if signed == 'BAD_PASSPHRASE':
                     self.USE_GPG = False
                     signed = ''
-                    gajim.nec.push_incoming_event(BadGPGPassphrase(None,
+                    gajim.nec.push_incoming_event(BadGPGPassphraseEvent(None,
                         conn=self))
         return signed
 
