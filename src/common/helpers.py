@@ -903,6 +903,7 @@ distro_info = {
         'Sun JDS': '/etc/sun-release',
         'PLD Linux': '/etc/pld-release',
         'Yellow Dog Linux': '/etc/yellowdog-release',
+        'AgiliaLinux': '/etc/agilialinux-version',
         # many distros use the /etc/redhat-release for compatibility
         # so Redhat is the last
         'Redhat Linux': '/etc/redhat-release'
