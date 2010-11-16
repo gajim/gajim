@@ -4069,6 +4069,15 @@ class RosterWindow:
         if self.hpaned.get_child2() is not None:
             self.show_roster_vbox(widget.get_active())
 
+    def on_roster_hpaned_notify(self, pane, gparamspec):
+        """
+        Keep changing the width of the roster
+        (when a gtk.Paned widget handle is dragged)
+        """
+        if gparamspec.name == 'position':
+            roster_width = pane.get_child1().allocation.width
+            gajim.config.set('roster_width', roster_width)
+
 ################################################################################
 ### Drag and Drop handling
 ################################################################################
