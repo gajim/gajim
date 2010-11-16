@@ -1459,7 +1459,6 @@ class ToplevelAgentBrowser(AgentBrowser):
                 pass
         else:
             gajim.interface.instances[self.account]['join_gc'].window.present()
-        self.window.destroy(chain = True)
 
     def update_actions(self):
         if self.execute_button:
@@ -1864,7 +1863,6 @@ class MucBrowser(AgentBrowser):
             gajim.interface.instances[self.account]['join_gc']._set_room_jid(
                 service)
             gajim.interface.instances[self.account]['join_gc'].window.present()
-        self.window.destroy(chain = True)
 
     def update_actions(self):
         sens = self.window.services_treeview.get_selection().count_selected_rows()
