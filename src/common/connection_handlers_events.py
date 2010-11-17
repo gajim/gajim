@@ -1334,3 +1334,42 @@ class PingReplyEvent(nec.NetworkIncomingEvent):
 class PingErrorEvent(nec.NetworkIncomingEvent):
     name = 'ping-error'
     base_network_events = []
+
+class CapsPresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
+    name = 'caps-presence-received'
+    base_network_events = ['raw-pres-received']
+
+    def _extract_caps_from_presence(self):
+        caps_tag = self.stanza.getTag('c', namespace=xmpp.NS_CAPS)
+        if caps_tag:
+            self.hash_method = caps_tag['hash']
+            self.node = caps_tag['node']
+            self.caps_hash = caps_tag['ver']
+        else:
+            self.hash_method = self.node = self.caps_hash = None
+
+    def generate(self):
+        self.conn = self.base_event.conn
+        self.stanza = self.base_event.stanza
+        try:
+            self.get_jid_resource()
+        except Exception:
+            return
+        self._extract_caps_from_presence()
+        return True
+
+class CapsDiscoReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
+    name = 'caps-disco-received'
+    base_network_events = []
+
+class CapsReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
+    name = 'caps-received'
+    base_network_events = ['caps-presence-received', 'caps-disco-received']
+
+    def generate(self):
+        self.conn = self.base_event.conn
+        self.fjid = self.base_event.fjid
+        self.jid = self.base_event.jid
+        self.resource = self.base_event.resource
+        self.client_caps = self.base_event.client_caps
+        return True

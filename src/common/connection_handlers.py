@@ -2108,7 +2108,6 @@ ConnectionJingle, ConnectionIBBytestream):
         # that defines handlers
         con.RegisterHandler('message', self._messageCB)
         con.RegisterHandler('presence', self._presenceCB)
-        con.RegisterHandler('presence', self._capsPresenceCB)
         # We use makefirst so that this handler is called before _messageCB, and
         # can prevent calling it when it's not needed.
         # We also don't check for namespace, else it cannot stop _messageCB to

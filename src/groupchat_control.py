@@ -149,6 +149,16 @@ class PrivateChatControl(ChatControl):
         ChatControl.__init__(self, parent_win, contact, account, session)
         self.TYPE_ID = 'pm'
 
+    def shutdown(self):
+        gajim.ged.remove_event_handler('caps-received', ged.GUI1,
+            self._nec_caps_received)
+
+    def _nec_caps_received(self, obj):
+        if obj.conn.name != self.account or \
+        obj.fjid != self.gc_contact.get_full_jid():
+            return
+        self.update_contact()
+
     def send_message(self, message, xhtml=None, process_commands=True):
         """
         Call this method to send the message

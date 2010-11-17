@@ -1698,13 +1698,6 @@ class Interface:
             if ctrl:
                 ctrl.update_pep(pep_type)
 
-    def handle_event_caps_received(self, account, data):
-        # ('CAPS_RECEIVED', account, (full_jid))
-        full_jid = data[0]
-        pm_ctrl = gajim.interface.msg_win_mgr.get_control(full_jid, account)
-        if pm_ctrl and hasattr(pm_ctrl, "update_contact"):
-            pm_ctrl.update_contact()
-
     def create_core_handlers_list(self):
         self.handlers = {
             'WARNING': [self.handle_event_warning],
@@ -1748,7 +1741,6 @@ class Interface:
                 [self.handle_event_insecure_ssl_connection],
             'INSECURE_PASSWORD': [self.handle_event_insecure_password],
             'PEP_RECEIVED': [self.handle_event_pep_received],
-            'CAPS_RECEIVED': [self.handle_event_caps_received],
             'bad-gpg-passphrase': [self.handle_event_bad_gpg_passphrase],
             'bookmarks-received': [self.handle_event_bookmarks],
             'connection-lost': [self.handle_event_connection_lost],
