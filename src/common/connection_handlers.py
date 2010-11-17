@@ -1991,8 +1991,8 @@ ConnectionJingle, ConnectionIBBytestream):
                 signed = self.get_signed_presence(msg,
                     self._send_first_presence)
                 if signed is None:
-                    self.dispatch('GPG_PASSWORD_REQUIRED',
-                            (self._send_first_presence,))
+                    gajim.nec.push_incoming_event(GPGPasswordRequired(None,
+                        conn=self, callback=self._send_first_presence))
                     # _send_first_presence will be called when user enter
                     # passphrase
                     send_first_presence = False

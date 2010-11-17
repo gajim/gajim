@@ -876,26 +876,24 @@ class Interface:
                 _('You are currently connected without your OpenPGP key.'))
         self.forget_gpg_passphrase(obj.keyID)
 
-    def handle_event_gpg_password_required(self, account, array):
+    def handle_event_gpg_password_required(self, obj):
         #('GPG_PASSWORD_REQUIRED', account, (callback,))
-        callback = array[0]
-        keyid = gajim.config.get_per('accounts', account, 'keyid')
-        if keyid in self.gpg_passphrase:
-            request = self.gpg_passphrase[keyid]
+        if obj.keyid in self.gpg_passphrase:
+            request = self.gpg_passphrase[obj.keyid]
         else:
-            request = PassphraseRequest(keyid)
-            self.gpg_passphrase[keyid] = request
-        request.add_callback(account, callback)
+            request = PassphraseRequest(obj.keyid)
+            self.gpg_passphrase[obj.keyid] = request
+        request.add_callback(obj.conn.name, obj.callback)
 
-    def handle_event_gpg_always_trust(self, account, callback):
+    def handle_event_gpg_trust_key(self, obj):
         #('GPG_ALWAYS_TRUST', account, callback)
         def on_yes(checked):
             if checked:
-                gajim.connections[account].gpg.always_trust = True
-            callback(True)
+                obj.conn.gpg.always_trust = True
+            obj.callback(True)
 
         def on_no():
-            callback(False)
+            obj.callback(False)
 
         dialogs.YesNoDialog(_('GPG key not trusted'), _('The GPG key used to '
             'encrypt this chat is not trusted. Do you really want to encrypt '
@@ -1731,8 +1729,6 @@ class Interface:
                 [self.handle_event_unique_room_id_unsupported],
             'UNIQUE_ROOM_ID_SUPPORTED': \
                 [self.handle_event_unique_room_id_supported],
-            'GPG_PASSWORD_REQUIRED': [self.handle_event_gpg_password_required],
-            'GPG_ALWAYS_TRUST': [self.handle_event_gpg_always_trust],
             'PASSWORD_REQUIRED': [self.handle_event_password_required],
             'SSL_ERROR': [self.handle_event_ssl_error],
             'FINGERPRINT_ERROR': [self.handle_event_fingerprint_error],
@@ -1747,6 +1743,8 @@ class Interface:
             'gc-invitation-received': [self.handle_event_gc_invitation],
             'gc-presence-received': [self.handle_event_gc_presence],
             'gmail-notify': [self.handle_event_gmail_notify],
+            'gpg_password-required': [self.handle_event_gpg_password_required],
+            'gpg-trust-key': [self.handle_event_gpg_trust_key],
             'http-auth-received': [self.handle_event_http_auth],
             'iq-error-received': [self.handle_event_iq_error],
             'jingle-connected-received': [self.handle_event_jingle_connected],
