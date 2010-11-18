@@ -1743,7 +1743,7 @@ class Interface:
             'gc-invitation-received': [self.handle_event_gc_invitation],
             'gc-presence-received': [self.handle_event_gc_presence],
             'gmail-notify': [self.handle_event_gmail_notify],
-            'gpg_password-required': [self.handle_event_gpg_password_required],
+            'gpg-password-required': [self.handle_event_gpg_password_required],
             'gpg-trust-key': [self.handle_event_gpg_trust_key],
             'http-auth-received': [self.handle_event_http_auth],
             'iq-error-received': [self.handle_event_iq_error],
