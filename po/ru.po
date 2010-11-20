@@ -6631,7 +6631,7 @@ msgstr "Открыть как _ссылку"
 #, python-format
 msgid "Yesterday"
 msgid_plural "%i days ago"
-msgstr[0] "%i день назад"
+msgstr[0] "Вчера"
 msgstr[1] "%i дня назад"
 msgstr[2] "%i дней назад"
 
