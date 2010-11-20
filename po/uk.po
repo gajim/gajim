@@ -6890,9 +6890,8 @@ msgid "There is an error with the form"
 msgstr ""
 
 #: ../src/dialogs.py:3732
-#, fuzzy
 msgid "There is an error"
-msgstr "Служба повернула повідомлення про помилку."
+msgstr "Це помилка"
 
 #: ../src/dialogs.py:3796
 #, python-format
@@ -6991,14 +6990,12 @@ msgid "Images"
 msgstr "Зображення"
 
 #: ../src/dialogs.py:4482
-#, fuzzy
 msgid "Choose Archive"
-msgstr "Вибрати зображення"
+msgstr "Вибрати архів"
 
 #: ../src/dialogs.py:4500
-#, fuzzy
 msgid "Zip files"
-msgstr "Всі файли"
+msgstr "Файли ZIP"
 
 #: ../src/dialogs.py:4525
 #, python-format
@@ -7386,14 +7383,12 @@ msgid "Transform LaTeX expressions between $$ $$."
 msgstr "Перетворення виразів LaTeX, обмежених позначками $$."
 
 #: ../src/features_window.py:95
-#, fuzzy
 msgid "Requires texlive-latex-base and (dvipng or ImageMagick). You have to set 'use_latex' to True in the Advanced Configuration Editor."
-msgstr "Потрібні пакунки texlive-latex-base і dvipng. Крім того, вам слід вказати для параметра «use_latex» значення «True» у Редакторі додаткових налаштувань."
+msgstr "Потрібні пакунки texlive-latex-base і dvipng або ImageMagick. Крім того, вам слід вказати для параметра «use_latex» значення «True» у Редакторі додаткових налаштувань."
 
 #: ../src/features_window.py:96
-#, fuzzy
 msgid "Requires texlive-latex-base and (dvipng or ImageMagick) (All is in MikTeX). You have to set 'use_latex' to True in the Advanced Configuration Editor."
-msgstr "Потрібні пакунки texlive-latex-base і dvipng (ці пакунки є у MikTeX). Вам також слід встановити для параметра «use_latex» значення «True» у Редакторі додаткових налаштувань."
+msgstr "Потрібні пакунки texlive-latex-base і dvipng або ImageMagick (ці пакунки є у MikTeX). Вам також слід встановити для параметра «use_latex» значення «True» у Редакторі додаткових налаштувань."
 
 #: ../src/features_window.py:97
 msgid "End to End message encryption"
@@ -7721,7 +7716,6 @@ msgid "status"
 msgstr "стан"
 
 #: ../src/gajim-remote-plugin.py:106
-#, fuzzy
 msgid "one of: offline, online, chat, away, xa, dnd, invisible "
 msgstr "одне зі значень: поза мережею, доступний, балачка, пішов, далеко, не турбувати, невидимий. Якщо не вказано, буде використано попередній стан облікового запису."
 
@@ -7881,7 +7875,6 @@ msgid "Returns current status (the global one unless account is specified)"
 msgstr "Повертає поточний стан (загальний стан, якщо не було вказано облікового запису)"
 
 #: ../src/gajim-remote-plugin.py:226
-#, fuzzy
 msgid "Returns current status message(the global one unless account is specified)"
 msgstr "Повертає поточне повідомлення стану (загальне повідомлення, якщо не було вказано облікового запису)"
 
@@ -7969,6 +7962,8 @@ msgid ""
 "Usage: %s %s %s \n"
 "\t %s"
 msgstr ""
+"Використання: %s %s %s \n"
+"\t %s"
 
 #: ../src/gajim-remote-plugin.py:415 ../src/gajim-remote.py:435
 msgid "Arguments:"
@@ -7989,29 +7984,28 @@ msgstr ""
 "Можливі команди:\n"
 
 #: ../src/gajim-remote-plugin.py:496
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Too many arguments. \n"
 "Type \"%s help %s\" for more info"
 msgstr ""
 "Забагато аргументів. \n"
-"Виконайте команду \"%(basename)s help %(command)s\", щоб дізнатися більше"
+"Виконайте команду \"%s help %s\", щоб дізнатися більше"
 
 #: ../src/gajim-remote-plugin.py:500
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Argument \"%s\" is not specified. \n"
 "Type \"%s help %s\" for more info"
 msgstr ""
-"Не було вказано аргумент \"%(arg)s\". \n"
-"Виконайте команду \"%(basename)s help %(command)s\", щоб дізнатися більше"
+"Не було вказано аргумент \"%s\". \n"
+"Виконайте команду \"%s help %s\", щоб дізнатися більше"
 
 #: ../src/gajim-remote-plugin.py:518 ../src/gajim-remote.py:540
 msgid "Wrong uri"
 msgstr "Помилкова адреса uri"
 
 #: ../src/gajim-remote.py:109
-#, fuzzy
 msgid "one of: offline, online, chat, away, xa, dnd, invisible. If not set, use account's previous status"
 msgstr "одне зі значень: поза мережею, доступний, балачка, пішов, далеко, не турбувати, невидимий. Якщо не вказано, буде використано попередній стан облікового запису."
 
@@ -9118,7 +9112,6 @@ msgid "You have running file transfers"
 msgstr "Ви маєте активні перенесення файлів"
 
 #: ../src/roster_window.py:2397
-#, fuzzy
 msgid "If you quit now, the file(s) being transferred will be stopped. Do you still want to quit?"
 msgstr "Якщо ви вийдете зараз, усі передачі файлів буде зупинено. Ви все ще бажаєте вийти?"
 
