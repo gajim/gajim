@@ -1356,6 +1356,7 @@ class RosterWindow:
                 else:
                     self.draw_completely(jid, account)
                 yield True
+            self.refilter_shown_roster_items()
             yield False
 
         task = _draw_all_contacts(jids, account)
