@@ -150,6 +150,7 @@ class PrivateChatControl(ChatControl):
         self.TYPE_ID = 'pm'
 
     def shutdown(self):
+        super(PrivateChatControl, self).shutdown()
         gajim.ged.remove_event_handler('caps-received', ged.GUI1,
             self._nec_caps_received)
 
