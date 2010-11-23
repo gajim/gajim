@@ -4453,8 +4453,17 @@ class RosterWindow:
             c_source, account_dest, c_dest, is_big_brother, context, etime)
             menu.append(item)
 
-            item = gtk.MenuItem(_('Make %s and %s metacontacts') % (
+            dest_family = gajim.contacts.get_metacontacts_family(account_dest,
+                c_dest.jid)
+            source_family = gajim.contacts.get_metacontacts_family(
+                account_source, c_source.jid)
+            if dest_family == source_family:
+                item = gtk.MenuItem(_('Make %s first contact') % (
+                    c_source.get_shown_name()))
+            else:
+                item = gtk.MenuItem(_('Make %s and %s metacontacts') % (
                     c_source.get_shown_name(), c_dest.get_shown_name()))
+
             item.connect('activate', self.on_drop_in_contact, account_source,
             c_source, account_dest, c_dest, is_big_brother, context, etime)
 
