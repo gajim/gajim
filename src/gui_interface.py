@@ -638,84 +638,6 @@ class Interface:
             if self.roster.tooltip.id and self.roster.tooltip.win:
                 self.roster.tooltip.update_last_time(last_time)
 
-    def handle_event_gc_notify(self, account, array):
-        #'GC_NOTIFY' (account, (room_jid, show, status, nick,
-        # role, affiliation, jid, reason, actor, statusCode, newNick,
-        # avatar_sha))
-        nick = array[3]
-        if not nick:
-            return
-        room_jid = array[0]
-        fjid = room_jid + '/' + nick
-        show = array[1]
-        status = array[2]
-        conn = gajim.connections[account]
-
-        # Get the window and control for the updated status, this may be a
-        # PrivateChatControl
-        control = self.msg_win_mgr.get_gc_control(room_jid, account)
-
-        if not control and \
-        room_jid in self.minimized_controls[account]:
-            control = self.minimized_controls[account][room_jid]
-
-        if not control or (control and \
-        control.type_id != message_control.TYPE_GC):
-            return
-
-        control.chg_contact_status(nick, show, status, array[4], array[5],
-            array[6], array[7], array[8], array[9], array[10], array[11])
-
-        contact = gajim.contacts.get_contact_with_highest_priority(account,
-            room_jid)
-        if contact:
-            self.roster.draw_contact(room_jid, account)
-
-        # print status in chat window and update status/GPG image
-        ctrl = self.msg_win_mgr.get_control(fjid, account)
-        if ctrl:
-            statusCode = array[9]
-            if '303' in statusCode:
-                new_nick = array[10]
-                ctrl.print_conversation(_('%(nick)s is now known as '
-                    '%(new_nick)s') % {'nick': nick, 'new_nick': new_nick},
-                    'status')
-                gc_c = gajim.contacts.get_gc_contact(account, room_jid,
-                    new_nick)
-                c = gc_c.as_contact()
-                ctrl.gc_contact = gc_c
-                ctrl.contact = c
-                if ctrl.session:
-                    # stop e2e
-                    if ctrl.session.enable_encryption:
-                        thread_id = ctrl.session.thread_id
-                        ctrl.session.terminate_e2e()
-                        conn.delete_session(fjid, thread_id)
-                        ctrl.no_autonegotiation = False
-                ctrl.draw_banner()
-                old_jid = room_jid + '/' + nick
-                new_jid = room_jid + '/' + new_nick
-                self.msg_win_mgr.change_key(old_jid, new_jid, account)
-            else:
-                contact = ctrl.contact
-                contact.show = show
-                contact.status = status
-                gc_contact = ctrl.gc_contact
-                gc_contact.show = show
-                gc_contact.status = status
-                uf_show = helpers.get_uf_show(show)
-                ctrl.print_conversation(_('%(nick)s is now %(status)s') % {
-                        'nick': nick, 'status': uf_show}, 'status')
-                if status:
-                    ctrl.print_conversation(' (', 'status', simple=True)
-                    ctrl.print_conversation('%s' % (status), 'status',
-                        simple=True)
-                    ctrl.print_conversation(')', 'status', simple=True)
-                ctrl.parent_win.redraw_tab(ctrl)
-                ctrl.update_ui()
-            if self.remote_ctrl:
-                self.remote_ctrl.raise_signal('GCPresence', (account, array))
-
     def handle_event_gc_subject(self, account, array):
         #('GC_SUBJECT', account, (jid, subject, body, has_timestamp))
         jids = array[0].split('/', 1)
@@ -1707,7 +1629,6 @@ class Interface:
             'AGENT_INFO_ITEMS': [self.handle_event_agent_info_items],
             'MYVCARD': [self.handle_event_myvcard],
             'VCARD': [self.handle_event_vcard],
-            'GC_NOTIFY': [self.handle_event_gc_notify],
             'GC_SUBJECT': [self.handle_event_gc_subject],
             'GC_CONFIG_CHANGE': [self.handle_event_gc_config_change],
             'FILE_REQUEST': [self.handle_event_file_request],

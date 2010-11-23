@@ -148,17 +148,65 @@ class PrivateChatControl(ChatControl):
         self.gc_contact = gc_contact
         ChatControl.__init__(self, parent_win, contact, account, session)
         self.TYPE_ID = 'pm'
+        gajim.ged.register_event_handler('caps-received', ged.GUI1,
+            self._nec_caps_received)
+        gajim.ged.register_event_handler('gc-presence-received', ged.GUI1,
+            self._nec_gc_presence_received)
 
     def shutdown(self):
         super(PrivateChatControl, self).shutdown()
         gajim.ged.remove_event_handler('caps-received', ged.GUI1,
             self._nec_caps_received)
+        gajim.ged.remove_event_handler('gc-presence-received', ged.GUI1,
+            self._nec_gc_presence_received)
 
     def _nec_caps_received(self, obj):
         if obj.conn.name != self.account or \
         obj.fjid != self.gc_contact.get_full_jid():
             return
         self.update_contact()
+
+    def _nec_gc_presence_received(self, obj):
+        if obj.conn.name != self.account:
+            return
+        if obj.fjid != self.full_jid:
+            return
+        if '303' in obj.status_code:
+            self.print_conversation(_('%(nick)s is now known as '
+                '%(new_nick)s') % {'nick': obj.nick, 'new_nick': obj.new_nick},
+                'status')
+            gc_c = gajim.contacts.get_gc_contact(obj.conn.name, obj.room_jid,
+                obj.new_nick)
+            c = gc_c.as_contact()
+            self.gc_contact = gc_c
+            self.contact = c
+            if self.session:
+                # stop e2e
+                if self.session.enable_encryption:
+                    thread_id = self.session.thread_id
+                    self.session.terminate_e2e()
+                    obj.conn.delete_session(obj.fjid, thread_id)
+                    self.no_autonegotiation = False
+            self.draw_banner()
+            old_jid = obj.room_jid + '/' + obj.nick
+            new_jid = obj.room_jid + '/' + obj.new_nick
+            gajim.interface.msg_win_mgr.change_key(old_jid, new_jid,
+                obj.conn.name)
+        else:
+            self.contact.show = obj.show
+            self.contact.status = obj.status
+            self.gc_contact.show = obj.show
+            self.gc_contact.status = obj.status
+            uf_show = helpers.get_uf_show(obj.show)
+            self.print_conversation(_('%(nick)s is now %(status)s') % {
+                    'nick': obj.nick, 'status': uf_show}, 'status')
+            if obj.status:
+                self.print_conversation(' (', 'status', simple=True)
+                self.print_conversation('%s' % (obj.status), 'status',
+                    simple=True)
+                self.print_conversation(')', 'status', simple=True)
+            self.parent_win.redraw_tab(self)
+            self.update_ui()
 
     def send_message(self, message, xhtml=None, process_commands=True):
         """

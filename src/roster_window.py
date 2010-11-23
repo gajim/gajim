@@ -2451,6 +2451,18 @@ class RosterWindow:
 
         self.chg_contact_status(obj.contact, obj.show, obj.status, account)
 
+    def _nec_gc_presence_received(self, obj):
+        account = obj.conn.name
+        if obj.room_jid in gajim.interface.minimized_controls[account]:
+            gc_ctrl = gajim.interface.minimized_controls[account][obj.room_jid]
+        else:
+            return
+
+        contact = gajim.contacts.get_contact_with_highest_priority(account,
+            obj.room_jid)
+        if contact:
+            self.draw_contact(obj.room_jid, account)
+
     def _nec_roster_received(self, obj):
         self.fill_contacts_and_groups_dicts(obj.roster, obj.conn.name)
         self.add_account_contacts(obj.conn.name)
@@ -6219,6 +6231,8 @@ class RosterWindow:
 
         gajim.ged.register_event_handler('presence-received', ged.GUI1,
             self._nec_presence_received)
+        gajim.ged.register_event_handler('gc-presence-received', ged.GUI1,
+            self._nec_gc_presence_received)
         gajim.ged.register_event_handler('roster-received', ged.GUI1,
             self._nec_roster_received)
         gajim.ged.register_event_handler('anonymous-auth', ged.GUI1,
