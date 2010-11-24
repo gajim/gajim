@@ -1287,7 +1287,6 @@ class RosterWindow:
         iters = self._get_contact_iter(jid, account, model=self.model)
         if not iters:
             return
-        jid = self.model[iters[0]][C_JID].decode('utf-8')
         contact = gajim.contacts.get_contact(account, jid)
         if pep_type in contact.pep:
             pixbuf = contact.pep[pep_type].asPixbufIcon()
@@ -2492,6 +2491,15 @@ class RosterWindow:
     def _nec_agent_removed(self, obj):
         for jid in obj.jid_list:
             self.remove_contact(jid, obj.conn.name, backend=True)
+
+    def _nec_pep_received(self, obj):
+        if obj.jid == common.gajim.get_jid_from_account(obj.conn.name):
+            self.draw_account(obj.conn.name)
+
+        if obj.pep_type == 'nickname':
+            self.draw_contact(obj.jid, obj.conn.name)
+        else:
+            self.draw_pep(obj.jid, obj.conn.name, obj.pep_type)
 
 ################################################################################
 ### Menu and GUI callbacks
@@ -6245,3 +6253,5 @@ class RosterWindow:
             self._nec_connection_type)
         gajim.ged.register_event_handler('agent-removed', ged.GUI1,
             self._nec_agent_removed)
+        gajim.ged.register_event_handler('pep-received', ged.GUI1,
+            self._nec_pep_received)

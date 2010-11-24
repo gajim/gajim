@@ -203,7 +203,6 @@ import logging
 log = logging.getLogger('gajim.c.pep')
 
 from common import helpers
-from common import atom
 from common import xmpp
 from common import gajim
 
@@ -492,7 +491,9 @@ class UserLocationPEP(AbstractPEP):
 
 
 SUPPORTED_PERSONAL_USER_EVENTS = [UserMoodPEP, UserTunePEP, UserActivityPEP,
-                                                                                         UserNicknamePEP, UserLocationPEP]
+    UserNicknamePEP, UserLocationPEP]
+
+from common.connection_handlers_events import PEPReceivedEvent
 
 class ConnectionPEP(object):
 
@@ -530,30 +531,8 @@ class ConnectionPEP(object):
 
     def _pubsubEventCB(self, xmpp_dispatcher, msg):
         ''' Called when we receive <message /> with pubsub event. '''
-        if not msg.getTag('event'):
-            return
-        if msg.getTag('error'):
-            log.debug('PubsubEventCB received error stanza. Ignoring')
-            raise xmpp.NodeProcessed
-
-        jid = helpers.get_full_jid_from_iq(msg)
-        event_tag = msg.getTag('event')
-
-        for pep_class in SUPPORTED_PERSONAL_USER_EVENTS:
-            pep = pep_class.get_tag_as_PEP(jid, self._account, event_tag)
-            if pep:
-                self._dispatcher.dispatch('PEP_RECEIVED', (jid, pep.type))
-
-        items = event_tag.getTag('items')
-        if items:
-            for item in items.getTags('item'):
-                entry = item.getTag('entry', namespace=xmpp.NS_ATOM)
-                if entry:
-                    # for each entry in feed (there shouldn't be more than one,
-                    # but to be sure...
-                    self._dispatcher.dispatch('ATOM_ENTRY',
-                            (atom.OldEntry(node=entry),))
-
+        gajim.nec.push_incoming_event(PEPReceivedEvent(None, conn=self,
+            stanza=msg))
         raise xmpp.NodeProcessed
 
     def send_activity(self, activity, subactivity=None, message=None):

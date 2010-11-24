@@ -24,6 +24,7 @@ from time import (localtime, time as time_time)
 from calendar import timegm
 import hmac
 
+from common import atom
 from common import nec
 from common import helpers
 from common import gajim
@@ -31,6 +32,7 @@ from common import xmpp
 from common import dataforms
 from common import exceptions
 from common.logger import LOG_DB_PATH
+from common.pep import SUPPORTED_PERSONAL_USER_EVENTS
 
 import logging
 log = logging.getLogger('gajim.c.connection_handlers_events')
@@ -1358,11 +1360,11 @@ class CapsPresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self._extract_caps_from_presence()
         return True
 
-class CapsDiscoReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
+class CapsDiscoReceivedEvent(nec.NetworkIncomingEvent):
     name = 'caps-disco-received'
     base_network_events = []
 
-class CapsReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
+class CapsReceivedEvent(nec.NetworkIncomingEvent):
     name = 'caps-received'
     base_network_events = ['caps-presence-received', 'caps-disco-received']
 
@@ -1384,4 +1386,47 @@ class GPGPasswordRequiredEvent(nec.NetworkIncomingEvent):
 
     def generate(self):
         self.keyid = gajim.config.get_per('accounts', self.conn.name, 'keyid')
+        return True
+
+class PEPReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
+    name = 'pep-received'
+    base_network_events = []
+
+    def generate(self):
+        if not self.stanza.getTag('event'):
+            return
+        if self.stanza.getTag('error'):
+            log.debug('PEPReceivedEvent received error stanza. Ignoring')
+            return
+
+        try:
+            self.get_jid_resource()
+        except Exception:
+            return
+
+        self.event_tag = self.stanza.getTag('event')
+
+        for pep_class in SUPPORTED_PERSONAL_USER_EVENTS:
+            pep = pep_class.get_tag_as_PEP(self.fjid, self.conn.name,
+                self.event_tag)
+            if pep:
+                self.pep_type = pep.type
+                return True
+
+        items = self.event_tag.getTag('items')
+        if items:
+            # for each entry in feed (there shouldn't be more than one, but to
+            # be sure...
+            for item in items.getTags('item'):
+                entry = item.getTag('entry', namespace=xmpp.NS_ATOM)
+                if entry:
+                    gajim.nec.push_incoming_event(AtomEntryReceived(None,
+                        conn=self.conn, node=entry))
+
+class AtomEntryReceived(nec.NetworkIncomingEvent):
+    name = 'atom-entry-received'
+    base_network_events = []
+
+    def generate(self):
+        self.atom_entry = atom.OldEntry(node=entry)
         return True

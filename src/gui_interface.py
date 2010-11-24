@@ -1186,9 +1186,8 @@ class Interface:
         gajim.contacts.define_metacontacts(account, tags_list)
         self.roster.redraw_metacontacts(account)
 
-    def handle_atom_entry(self, account, data):
-        atom_entry, = data
-        AtomWindow.newAtomEntry(atom_entry)
+    def handle_atom_entry(self, obj):
+        AtomWindow.newAtomEntry(obj.atom_entry)
 
     def handle_event_failed_decrypt(self, account, data):
         jid, tim, session = data
@@ -1597,27 +1596,6 @@ class Interface:
             checktext2, on_response_ok=on_ok, on_response_cancel=on_cancel,
             is_modal=False)
 
-    def handle_event_pep_received(self, account, data):
-        # ('PEP_RECEIVED', account, (jid, pep_type))
-        jid = data[0]
-        pep_type = data[1]
-        ctrl = common.gajim.interface.msg_win_mgr.get_control(jid, account)
-
-        if jid == common.gajim.get_jid_from_account(account):
-            self.roster.draw_account(account)
-
-        if pep_type == 'nickname':
-            self.roster.draw_contact(jid, account)
-            if ctrl:
-                ctrl.update_ui()
-                win = ctrl.parent_win
-                win.redraw_tab(ctrl)
-                win.show_title()
-        else:
-            self.roster.draw_pep(jid, account, pep_type)
-            if ctrl:
-                ctrl.update_pep(pep_type)
-
     def create_core_handlers_list(self):
         self.handlers = {
             'WARNING': [self.handle_event_warning],
@@ -1636,7 +1614,6 @@ class Interface:
             'FILE_SEND_ERROR': [self.handle_event_file_send_error],
             'SIGNED_IN': [self.handle_event_signed_in],
             'METACONTACTS': [self.handle_event_metacontacts],
-            'ATOM_ENTRY': [self.handle_atom_entry],
             'FAILED_DECRYPT': [self.handle_event_failed_decrypt],
             'PRIVACY_LISTS_RECEIVED': \
                 [self.handle_event_privacy_lists_received],
@@ -1657,7 +1634,7 @@ class Interface:
             'INSECURE_SSL_CONNECTION': \
                 [self.handle_event_insecure_ssl_connection],
             'INSECURE_PASSWORD': [self.handle_event_insecure_password],
-            'PEP_RECEIVED': [self.handle_event_pep_received],
+            'atom-entry-received': [self.handle_atom_entry],
             'bad-gpg-passphrase': [self.handle_event_bad_gpg_passphrase],
             'bookmarks-received': [self.handle_event_bookmarks],
             'connection-lost': [self.handle_event_connection_lost],

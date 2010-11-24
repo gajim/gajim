@@ -1597,6 +1597,9 @@ class ChatControl(ChatControlBase):
             self._video_button.set_tooltip_text(
                 '%s\n%s' % (tooltip_text, _('Requires python-farsight.')))
 
+        gajim.ged.register_event_handler('pep-received', ged.GUI1,
+            self._nec_pep_received)
+
         # PluginSystem: adding GUI extension point for this ChatControl
         # instance object
         gajim.plugin_manager.gui_extension_point('chat_control', self)
@@ -1669,6 +1672,19 @@ class ChatControl(ChatControlBase):
             img.show()
         else:
             img.hide()
+
+    def _nec_pep_received(self, obj):
+        if obj.conn.name != self.account:
+            return
+        if obj.jid != self.contact.jid:
+            return
+
+        if obj.pep_type == 'nickname':
+            self.update_ui()
+            self.parent_win.redraw_tab(self)
+            self.parent_win.show_title()
+        else:
+            self.update_pep(obj.pep_type)
 
     def _update_jingle(self, jingle_type):
         if jingle_type not in ('audio', 'video'):
@@ -2566,6 +2582,9 @@ class ChatControl(ChatControlBase):
         # PluginSystem: removing GUI extension points connected with ChatControl
         # instance object
         gajim.plugin_manager.remove_gui_extension_point('chat_control', self)        # Send 'gone' chatstate
+
+        gajim.ged.remove_event_handler('pep-received', ged.GUI1,
+            self._nec_pep_received)
 
         self.send_chatstate('gone', self.contact)
         self.contact.chatstate = None
