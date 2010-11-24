@@ -1400,19 +1400,6 @@ class Interface:
         dialogs.RosterItemExchangeWindow(obj.conn.name, obj.action,
             obj.exchange_items_list, obj.fjid)
 
-    def handle_event_unique_room_id_supported(self, account, data):
-        """
-        Receive confirmation that unique_room_id are supported
-        """
-        # ('UNIQUE_ROOM_ID_SUPPORTED', server, instance, room_id)
-        instance = data[1]
-        instance.unique_room_id_supported(data[0], data[2])
-
-    def handle_event_unique_room_id_unsupported(self, account, data):
-        # ('UNIQUE_ROOM_ID_UNSUPPORTED', server, instance)
-        instance = data[1]
-        instance.unique_room_id_error(data[0])
-
     def handle_event_ssl_error(self, obj):
         # ('SSL_ERROR', account, (text, errnum, cert, sha1_fingerprint))
         account = obj.conn.name
@@ -1640,10 +1627,6 @@ class Interface:
             'PRIVACY_LIST_REMOVED': [self.handle_event_privacy_list_removed],
             'ZC_NAME_CONFLICT': [self.handle_event_zc_name_conflict],
             'PEP_CONFIG': [self.handle_event_pep_config],
-            'UNIQUE_ROOM_ID_UNSUPPORTED': \
-                [self.handle_event_unique_room_id_unsupported],
-            'UNIQUE_ROOM_ID_SUPPORTED': \
-                [self.handle_event_unique_room_id_supported],
             'PASSWORD_REQUIRED': [self.handle_event_password_required],
             'atom-entry-received': [self.handle_atom_entry],
             'bad-gpg-passphrase': [self.handle_event_bad_gpg_passphrase],

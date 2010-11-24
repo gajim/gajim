@@ -1451,3 +1451,11 @@ class SSLErrorEvent(nec.NetworkIncomingEvent):
 class FingerprintErrorEvent(nec.NetworkIncomingEvent):
     name = 'fingerprint-error'
     base_network_events = []
+
+class UniqueRoomIdSupportedEvent(nec.NetworkIncomingEvent):
+    name = 'unique-room-id-supported'
+    base_network_events = []
+
+class UniqueRoomIdNotSupportedEvent(nec.NetworkIncomingEvent):
+    name = 'unique-room-id-not-supported'
+    base_network_events = []

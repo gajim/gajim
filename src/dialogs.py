@@ -5151,12 +5151,21 @@ class TransformChatToMUC:
                         path = self.store.get_path(iter_)
                         self.guests_treeview.get_selection().select_path(path)
 
+        gajim.ged.register_event_handler('unique-room-id-supported', ged.GUI1,
+            self._nec_unique_room_id_supported)
+        gajim.ged.register_event_handler('unique-room-id-not-supported',
+            ged.GUI1, self._nec_unique_room_id_not_supported)
+
         # show all
         self.window.show_all()
 
         self.xml.connect_signals(self)
 
     def on_chat_to_muc_window_destroy(self, widget):
+        gajim.ged.remove_event_handler('unique-room-id-supported', ged.GUI1,
+            self._nec_unique_room_id_supported)
+        gajim.ged.remove_event_handler('unique-room-id-not-supported', ged.GUI1,
+            self._nec_unique_room_id_not_supported)
         self.instances.remove(self)
 
     def on_chat_to_muc_window_key_press_event(self, widget, event):
@@ -5169,7 +5178,9 @@ class TransformChatToMUC:
             return
         gajim.connections[self.account].check_unique_room_id_support(server, self)
 
-    def unique_room_id_supported(self, server, room_id):
+    def _nec_unique_room_id_supported(self, obj):
+        if obj.instance != self:
+            return
         guest_list = []
         guests = self.guests_treeview.get_selection().get_selected_rows()
         for guest in guests[1]:
@@ -5177,7 +5188,7 @@ class TransformChatToMUC:
             guest_list.append(self.store[iter_][2].decode('utf-8'))
         for guest in self.auto_jids:
             guest_list.append(guest)
-        room_jid = room_id + '@' + server
+        room_jid = obj.room_id + '@' + obj.server
         gajim.automatic_rooms[self.account][room_jid] = {}
         gajim.automatic_rooms[self.account][room_jid]['invities'] = guest_list
         gajim.automatic_rooms[self.account][room_jid]['continue_tag'] = True
@@ -5188,10 +5199,12 @@ class TransformChatToMUC:
     def on_cancel_button_clicked(self, widget):
         self.window.destroy()
 
-    def unique_room_id_error(self, server):
-        self.unique_room_id_supported(server,
-            gajim.nicks[self.account].lower().replace(' ', '') + str(randrange(
-            9999999)))
+    def _nec_unique_room_id_not_supported(self, obj):
+        if obj.instance != self:
+            return
+        obj.room_id = gajim.nicks[self.account].lower().replace(' ', '') + \
+            str(randrange(9999999))
+        self._nec_unique_room_id_supported(obj)
 
 class DataFormWindow(Dialog):
     def __init__(self, form, on_response_ok):

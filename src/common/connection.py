@@ -2037,10 +2037,12 @@ class Connection(CommonConnection, ConnectionHandlers):
         iq.addChild('unique', namespace=common.xmpp.NS_MUC_UNIQUE)
         def _on_response(resp):
             if not common.xmpp.isResultNode(resp):
-                self.dispatch('UNIQUE_ROOM_ID_UNSUPPORTED', (server, instance))
+                gajim.nec.push_incoming_event(UniqueRoomIdNotSupportedEvent(
+                    None, conn=self, instance=instance, server=server))
                 return
-            self.dispatch('UNIQUE_ROOM_ID_SUPPORTED', (server, instance,
-                    resp.getTag('unique').getData()))
+            gajim.nec.push_incoming_event(UniqueRoomIdSupportedEvent(None,
+                conn=self, instance=instance, server=server,
+                room_id=resp.getTag('unique').getData()))
         self.connection.SendAndCallForResponse(iq, _on_response)
 
     def join_gc(self, nick, room_jid, password, change_nick=False):

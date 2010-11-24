@@ -403,6 +403,7 @@ if __name__ == '__main__':
         # Session Management support
         try:
             import gnome.ui
+            raise ImportError
         except ImportError:
             pass
         else:
