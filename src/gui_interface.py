@@ -1413,8 +1413,9 @@ class Interface:
         instance = data[1]
         instance.unique_room_id_error(data[0])
 
-    def handle_event_ssl_error(self, account, data):
+    def handle_event_ssl_error(self, obj):
         # ('SSL_ERROR', account, (text, errnum, cert, sha1_fingerprint))
+        account = obj.conn.name
         server = gajim.config.get_per('accounts', account, 'hostname')
 
         def on_ok(is_checked):
@@ -1426,37 +1427,38 @@ class Interface:
                     f = open(gajim.MY_CACERTS)
                     certs = f.read()
                     f.close()
-                if data[2] in certs:
+                if obj.cert in certs:
                     dialogs.ErrorDialog(_('Certificate Already in File'),
                         _('This certificate is already in file %s, so it\'s '
                         'not added again.') % gajim.MY_CACERTS)
                 else:
                     f = open(gajim.MY_CACERTS, 'a')
                     f.write(server + '\n')
-                    f.write(data[2] + '\n\n')
+                    f.write(obj.cert + '\n\n')
                     f.close()
                 gajim.config.set_per('accounts', account,
-                    'ssl_fingerprint_sha1', data[3])
+                    'ssl_fingerprint_sha1', obj.fingerprint)
             if is_checked[1]:
                 ignore_ssl_errors = gajim.config.get_per('accounts', account,
-                        'ignore_ssl_errors').split()
-                ignore_ssl_errors.append(str(data[1]))
+                    'ignore_ssl_errors').split()
+                ignore_ssl_errors.append(str(obj.error_num))
                 gajim.config.set_per('accounts', account, 'ignore_ssl_errors',
-                        ' '.join(ignore_ssl_errors))
-            gajim.connections[account].ssl_certificate_accepted()
+                    ' '.join(ignore_ssl_errors))
+            obj.conn.ssl_certificate_accepted()
 
         def on_cancel():
             del self.instances[account]['online_dialog']['ssl_error']
-            gajim.connections[account].disconnect(on_purpose=True)
+            iobj.conn.disconnect(on_purpose=True)
             self.handle_event_status(account, 'offline')
 
         pritext = _('Error verifying SSL certificate')
         sectext = _('There was an error verifying the SSL certificate of your '
             'jabber server: %(error)s\nDo you still want to connect to this '
-            'server?') % {'error': data[0]}
-        if data[1] in (18, 27):
+            'server?') % {'error': obj.error_text}
+        if obj.error_num in (18, 27):
             checktext1 = _('Add this certificate to the list of trusted '
-            'certificates.\nSHA1 fingerprint of the certificate:\n%s') % data[3]
+            'certificates.\nSHA1 fingerprint of the certificate:\n%s') % \
+            obj.fingerprint
         else:
             checktext1 = ''
         checktext2 = _('Ignore this error for this certificate.')
@@ -1640,7 +1642,6 @@ class Interface:
             'UNIQUE_ROOM_ID_SUPPORTED': \
                 [self.handle_event_unique_room_id_supported],
             'PASSWORD_REQUIRED': [self.handle_event_password_required],
-            'SSL_ERROR': [self.handle_event_ssl_error],
             'FINGERPRINT_ERROR': [self.handle_event_fingerprint_error],
             'atom-entry-received': [self.handle_atom_entry],
             'bad-gpg-passphrase': [self.handle_event_bad_gpg_passphrase],
@@ -1672,6 +1673,7 @@ class Interface:
             'roster-info': [self.handle_event_roster_info],
             'roster-item-exchange-received': \
                 [self.handle_event_roster_item_exchange],
+            'ssl-error': [self.handle_event_ssl_error],
             'stream-conflict-received': [self.handle_event_resource_conflict],
             'subscribe-presence-received': [
                 self.handle_event_subscribe_presence],

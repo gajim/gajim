@@ -1250,8 +1250,10 @@ class Connection(CommonConnection, ConnectionHandlers):
                 text += _('\nSSL Error: <b>%s</b>') % ssl_error[errnum]
             else:
                 text += _('\nUnknown SSL error: %d') % errnum
-            self.dispatch('SSL_ERROR', (text, errnum, con.Connection.ssl_cert_pem,
-                    con.Connection.ssl_fingerprint_sha1))
+            gajim.nec.push_incoming_event(SSLErrorEvent(None, conn=self,
+                error_text=text, error_num=errnum,
+                cert=con.Connection.ssl_cert_pem,
+                fingerprint=con.Connection.ssl_fingerprint_sha1))
             return True
         if hasattr(con.Connection, 'ssl_fingerprint_sha1'):
             saved_fingerprint = gajim.config.get_per('accounts', self.name, 'ssl_fingerprint_sha1')

@@ -1443,3 +1443,7 @@ class InsecurePasswordEvent(nec.NetworkIncomingEvent):
 class InsecureSSLConnectionEvent(nec.NetworkIncomingEvent):
     name = 'insecure-ssl-connection'
     base_network_events = []
+
+class SSLErrorEvent(nec.NetworkIncomingEvent):
+    name = 'ssl-error'
+    base_network_events = []
