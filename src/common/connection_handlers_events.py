@@ -1422,6 +1422,7 @@ class PEPReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                 if entry:
                     gajim.nec.push_incoming_event(AtomEntryReceived(None,
                         conn=self.conn, node=entry))
+        raise xmpp.NodeProcessed
 
 class AtomEntryReceived(nec.NetworkIncomingEvent):
     name = 'atom-entry-received'

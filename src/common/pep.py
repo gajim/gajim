@@ -533,7 +533,6 @@ class ConnectionPEP(object):
         ''' Called when we receive <message /> with pubsub event. '''
         gajim.nec.push_incoming_event(PEPReceivedEvent(None, conn=self,
             stanza=msg))
-        raise xmpp.NodeProcessed
 
     def send_activity(self, activity, subactivity=None, message=None):
         if self.connected == 1:
