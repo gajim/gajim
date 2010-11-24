@@ -1564,38 +1564,43 @@ class Interface:
             checktext2, on_response_ok=on_ok, on_response_cancel=on_cancel,
             is_modal=False)
 
-    def handle_event_insecure_password(self, account, data):
+    def handle_event_insecure_password(self, obj):
         # ('INSECURE_PASSWORD', account, ())
         def on_ok(is_checked):
             if not is_checked[0]:
                 on_cancel()
                 return
-            del self.instances[account]['online_dialog']['insecure_password']
+            del self.instances[obj.conn.name]['online_dialog']\
+                ['insecure_password']
             if is_checked[1]:
-                gajim.config.set_per('accounts', account,
+                gajim.config.set_per('accounts', obj.conn.name,
                     'warn_when_insecure_password', False)
-            if gajim.connections[account].connected == 0:
+            if obj.conn.connected == 0:
                 # We have been disconnecting (too long time since window is
                 # opened)
                 # re-connect with auto-accept
-                gajim.connections[account].connection_auto_accepted = True
-                show, msg = gajim.connections[account].continue_connect_info[:2]
-                self.roster.send_status(account, show, msg)
+                obj.conn.connection_auto_accepted = True
+                show, msg = obj.conn.continue_connect_info[:2]
+                self.roster.send_status(obj.conn.name, show, msg)
                 return
-            gajim.connections[account].accept_insecure_password()
+            obj.conn.accept_insecure_password()
+
         def on_cancel():
-            del self.instances[account]['online_dialog']['insecure_password']
-            gajim.connections[account].disconnect(on_purpose=True)
-            self.handle_event_status(account, 'offline')
+            del self.instances[obj.conn.name]['online_dialog']\
+                ['insecure_password']
+            obj.conn.disconnect(on_purpose=True)
+            self.handle_event_status(obj.conn.name, 'offline')
+
         pritext = _('Insecure connection')
         sectext = _('You are about to send your password unencrypted on an '
             'insecure connection. Are you sure you want to do that?')
         checktext1 = _('Yes, I really want to connect insecurely')
         checktext2 = _('_Do not ask me again')
-        if 'insecure_password' in self.instances[account]['online_dialog']:
-            self.instances[account]['online_dialog']['insecure_password'].\
-                destroy()
-        self.instances[account]['online_dialog']['insecure_password'] = \
+        if 'insecure_password' in self.instances[obj.conn.name]\
+        ['online_dialog']:
+            self.instances[obj.conn.name]['online_dialog']\
+                ['insecure_password'].destroy()
+        self.instances[obj.conn.name]['online_dialog']['insecure_password'] = \
             dialogs.ConfirmationDialogDoubleCheck(pritext, sectext, checktext1,
             checktext2, on_response_ok=on_ok, on_response_cancel=on_cancel,
             is_modal=False)
@@ -1636,7 +1641,6 @@ class Interface:
             'FINGERPRINT_ERROR': [self.handle_event_fingerprint_error],
             'INSECURE_SSL_CONNECTION': \
                 [self.handle_event_insecure_ssl_connection],
-            'INSECURE_PASSWORD': [self.handle_event_insecure_password],
             'atom-entry-received': [self.handle_atom_entry],
             'bad-gpg-passphrase': [self.handle_event_bad_gpg_passphrase],
             'bookmarks-received': [self.handle_event_bookmarks],
@@ -1647,6 +1651,7 @@ class Interface:
             'gpg-password-required': [self.handle_event_gpg_password_required],
             'gpg-trust-key': [self.handle_event_gpg_trust_key],
             'http-auth-received': [self.handle_event_http_auth],
+            'insecure-password': [self.handle_event_insecure_password],
             'iq-error-received': [self.handle_event_iq_error],
             'jingle-connected-received': [self.handle_event_jingle_connected],
             'jingle-disconnected-received': [

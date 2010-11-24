@@ -1435,3 +1435,7 @@ class AtomEntryReceived(nec.NetworkIncomingEvent):
 class PlainConnectionEvent(nec.NetworkIncomingEvent):
     name = 'plain-connection'
     base_network_events = []
+
+class InsecurePasswordEvent(nec.NetworkIncomingEvent):
+    name = 'insecure-password'
+    base_network_events = []

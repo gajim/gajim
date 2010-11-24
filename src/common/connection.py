@@ -2249,7 +2249,8 @@ class Connection(CommonConnection, ConnectionHandlers):
             if self._current_type == 'plain' and type_ == 'PLAIN' and \
             gajim.config.get_per('accounts', self.name,
             'warn_when_insecure_password'):
-                self.dispatch('INSECURE_PASSWORD', None)
+                gajim.nec.push_incoming_event(InsecurePasswordEvent(None,
+                    conn=self))
                 return
             callback(password)
             self.pasword_callback = None
