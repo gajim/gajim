@@ -1447,3 +1447,7 @@ class InsecureSSLConnectionEvent(nec.NetworkIncomingEvent):
 class SSLErrorEvent(nec.NetworkIncomingEvent):
     name = 'ssl-error'
     base_network_events = []
+
+class FingerprintErrorEvent(nec.NetworkIncomingEvent):
+    name = 'fingerprint-error'
+    base_network_events = []

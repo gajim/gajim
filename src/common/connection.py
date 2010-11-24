@@ -1260,8 +1260,9 @@ class Connection(CommonConnection, ConnectionHandlers):
             if saved_fingerprint:
                 # Check sha1 fingerprint
                 if con.Connection.ssl_fingerprint_sha1 != saved_fingerprint:
-                    self.dispatch('FINGERPRINT_ERROR',
-                            (con.Connection.ssl_fingerprint_sha1,))
+                    gajim.nec.push_incoming_event(FingerprintErrorEvent(None,
+                        conn=self,
+                        new_fingerprint=con.Connection.ssl_fingerprint_sha1))
                     return True
             else:
                 gajim.config.set_per('accounts', self.name, 'ssl_fingerprint_sha1',

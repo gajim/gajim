@@ -1468,26 +1468,29 @@ class Interface:
             dialogs.ConfirmationDialogDoubleCheck(pritext, sectext, checktext1,
             checktext2, on_response_ok=on_ok, on_response_cancel=on_cancel)
 
-    def handle_event_fingerprint_error(self, account, data):
+    def handle_event_fingerprint_error(self, obj):
         # ('FINGERPRINT_ERROR', account, (new_fingerprint,))
+        account = obj.conn.name
         def on_yes(is_checked):
             del self.instances[account]['online_dialog']['fingerprint_error']
             gajim.config.set_per('accounts', account, 'ssl_fingerprint_sha1',
-                data[0])
+                obj.new_fingerprint)
             # Reset the ignored ssl errors
             gajim.config.set_per('accounts', account, 'ignore_ssl_errors', '')
-            gajim.connections[account].ssl_certificate_accepted()
+            obj.conn.ssl_certificate_accepted()
+
         def on_no():
             del self.instances[account]['online_dialog']['fingerprint_error']
-            gajim.connections[account].disconnect(on_purpose=True)
+            obj.conn.disconnect(on_purpose=True)
             self.handle_event_status(account, 'offline')
+
         pritext = _('SSL certificate error')
         sectext = _('It seems the SSL certificate of account %(account)s has '
             'changed or your connection is being hacked.\nOld fingerprint: '
             '%(old)s\nNew fingerprint: %(new)s\n\nDo you still want to connect '
             'and update the fingerprint of the certificate?') % \
             {'account': account, 'old': gajim.config.get_per('accounts',
-            account, 'ssl_fingerprint_sha1'), 'new': data[0]}
+            account, 'ssl_fingerprint_sha1'), 'new': obj.new_fingerprint}
         if 'fingerprint_error' in self.instances[account]['online_dialog']:
             self.instances[account]['online_dialog']['fingerprint_error'].\
                 destroy()
@@ -1642,11 +1645,11 @@ class Interface:
             'UNIQUE_ROOM_ID_SUPPORTED': \
                 [self.handle_event_unique_room_id_supported],
             'PASSWORD_REQUIRED': [self.handle_event_password_required],
-            'FINGERPRINT_ERROR': [self.handle_event_fingerprint_error],
             'atom-entry-received': [self.handle_atom_entry],
             'bad-gpg-passphrase': [self.handle_event_bad_gpg_passphrase],
             'bookmarks-received': [self.handle_event_bookmarks],
             'connection-lost': [self.handle_event_connection_lost],
+            'fingerprint-error': [self.handle_event_fingerprint_error],
             'gc-invitation-received': [self.handle_event_gc_invitation],
             'gc-presence-received': [self.handle_event_gc_presence],
             'gmail-notify': [self.handle_event_gmail_notify],
