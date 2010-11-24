@@ -1431,3 +1431,7 @@ class AtomEntryReceived(nec.NetworkIncomingEvent):
     def generate(self):
         self.atom_entry = atom.OldEntry(node=entry)
         return True
+
+class PlainConnectionEvent(nec.NetworkIncomingEvent):
+    name = 'plain-connection'
+    base_network_events = []

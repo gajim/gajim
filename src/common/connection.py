@@ -1201,7 +1201,8 @@ class Connection(CommonConnection, ConnectionHandlers):
         con.RegisterDisconnectHandler(self._on_disconnected)
         if _con_type == 'plain' and gajim.config.get_per('accounts', self.name,
         'warn_when_plaintext_connection'):
-            self.dispatch('PLAIN_CONNECTION', (con,))
+            gajim.nec.push_incoming_event(PlainConnectionEvent(None, conn=self,
+                xmpp_client=con))
             return True
         if _con_type in ('tls', 'ssl') and con.Connection.ssl_lib != 'PYOPENSSL' \
         and gajim.config.get_per('accounts', self.name,

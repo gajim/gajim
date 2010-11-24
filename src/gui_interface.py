@@ -1493,7 +1493,7 @@ class Interface:
             dialogs.YesNoDialog(pritext, sectext, on_response_yes=on_yes,
             on_response_no=on_no)
 
-    def handle_event_plain_connection(self, account, data):
+    def handle_event_plain_connection(self, obj):
         # ('PLAIN_CONNECTION', account, (connection))
         def on_ok(is_checked):
             if not is_checked[0]:
@@ -1501,25 +1501,29 @@ class Interface:
                 return
             # On cancel call del self.instances, so don't call it another time
             # before
-            del self.instances[account]['online_dialog']['plain_connection']
+            del self.instances[obj.conn.name]['online_dialog']\
+                ['plain_connection']
             if is_checked[1]:
-                gajim.config.set_per('accounts', account,
-                        'warn_when_plaintext_connection', False)
-            gajim.connections[account].connection_accepted(data[0], 'plain')
+                gajim.config.set_per('accounts', obj.conn.name,
+                    'warn_when_plaintext_connection', False)
+            obj.conn.connection_accepted(obj.xmpp_client, 'plain')
+
         def on_cancel():
-            del self.instances[account]['online_dialog']['plain_connection']
-            gajim.connections[account].disconnect(on_purpose=True)
-            self.handle_event_status(account, 'offline')
+            del self.instances[obj.conn.name]['online_dialog']\
+                ['plain_connection']
+            obj.conn.disconnect(on_purpose=True)
+            self.handle_event_status(obj.conn.name, 'offline')
+
         pritext = _('Insecure connection')
         sectext = _('You are about to connect to the server with an insecure '
                 'connection. This means all your conversations will be '
                 'exchanged unencrypted. Are you sure you want to do that?')
         checktext1 = _('Yes, I really want to connect insecurely')
         checktext2 = _('_Do not ask me again')
-        if 'plain_connection' in self.instances[account]['online_dialog']:
-            self.instances[account]['online_dialog']['plain_connection'].\
+        if 'plain_connection' in self.instances[obj.conn.name]['online_dialog']:
+            self.instances[obj.conn.name]['online_dialog']['plain_connection'].\
                 destroy()
-        self.instances[account]['online_dialog']['plain_connection'] = \
+        self.instances[obj.conn.name]['online_dialog']['plain_connection'] = \
             dialogs.ConfirmationDialogDoubleCheck(pritext, sectext, checktext1,
             checktext2, on_response_ok=on_ok, on_response_cancel=on_cancel,
             is_modal=False)
@@ -1630,7 +1634,6 @@ class Interface:
             'PASSWORD_REQUIRED': [self.handle_event_password_required],
             'SSL_ERROR': [self.handle_event_ssl_error],
             'FINGERPRINT_ERROR': [self.handle_event_fingerprint_error],
-            'PLAIN_CONNECTION': [self.handle_event_plain_connection],
             'INSECURE_SSL_CONNECTION': \
                 [self.handle_event_insecure_ssl_connection],
             'INSECURE_PASSWORD': [self.handle_event_insecure_password],
@@ -1656,6 +1659,7 @@ class Interface:
             'muc-admin-received': [self.handle_event_gc_affiliation],
             'muc-owner-received': [self.handle_event_gc_config],
             'our-show': [self.handle_event_status],
+            'plain-connection': [self.handle_event_plain_connection],
             'presence-received': [self.handle_event_presence],
             'roster-info': [self.handle_event_roster_info],
             'roster-item-exchange-received': \
