@@ -1209,7 +1209,8 @@ class Connection(CommonConnection, ConnectionHandlers):
         'warn_when_insecure_ssl_connection') and \
         not self.connection_auto_accepted:
             # Pyopenssl is not used
-            self.dispatch('INSECURE_SSL_CONNECTION', (con, _con_type))
+            gajim.nec.push_incoming_event(InsecureSSLConnectionEvent(None,
+                conn=self, xmpp_client=con, conn_type=_con_type))
             return True
         return self.connection_accepted(con, con_type)
 

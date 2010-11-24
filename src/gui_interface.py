@@ -1528,38 +1528,41 @@ class Interface:
             checktext2, on_response_ok=on_ok, on_response_cancel=on_cancel,
             is_modal=False)
 
-    def handle_event_insecure_ssl_connection(self, account, data):
+    def handle_event_insecure_ssl_connection(self, obj):
         # ('INSECURE_SSL_CONNECTION', account, (connection, connection_type))
         def on_ok(is_checked):
             if not is_checked[0]:
                 on_cancel()
                 return
-            del self.instances[account]['online_dialog']['insecure_ssl']
+            del self.instances[obj.conn.name]['online_dialog']['insecure_ssl']
             if is_checked[1]:
-                gajim.config.set_per('accounts', account,
+                gajim.config.set_per('accounts', obj.conn.name,
                     'warn_when_insecure_ssl_connection', False)
-            if gajim.connections[account].connected == 0:
+            if obj.conn.connected == 0:
                 # We have been disconnecting (too long time since window is
                 # opened)
                 # re-connect with auto-accept
-                gajim.connections[account].connection_auto_accepted = True
-                show, msg = gajim.connections[account].continue_connect_info[:2]
-                self.roster.send_status(account, show, msg)
+                obj.conn.connection_auto_accepted = True
+                show, msg = obj.conn.continue_connect_info[:2]
+                self.roster.send_status(obj.conn.name, show, msg)
                 return
-            gajim.connections[account].connection_accepted(data[0], data[1])
+            obj.conn.connection_accepted(obj.xmpp_client, obj.conn_type)
+
         def on_cancel():
-            del self.instances[account]['online_dialog']['insecure_ssl']
-            gajim.connections[account].disconnect(on_purpose=True)
-            self.handle_event_status(account, 'offline')
+            del self.instances[obj.conn.name]['online_dialog']['insecure_ssl']
+            obj.conn.disconnect(on_purpose=True)
+            self.handle_event_status(obj.conn.name, 'offline')
+
         pritext = _('Insecure connection')
         sectext = _('You are about to send your password on an insecure '
             'connection. You should install PyOpenSSL to prevent that. Are you '
             'sure you want to do that?')
         checktext1 = _('Yes, I really want to connect insecurely')
         checktext2 = _('_Do not ask me again')
-        if 'insecure_ssl' in self.instances[account]['online_dialog']:
-            self.instances[account]['online_dialog']['insecure_ssl'].destroy()
-        self.instances[account]['online_dialog']['insecure_ssl'] = \
+        if 'insecure_ssl' in self.instances[obj.conn.name]['online_dialog']:
+            self.instances[obj.conn.name]['online_dialog']['insecure_ssl'].\
+                destroy()
+        self.instances[obj.conn.name]['online_dialog']['insecure_ssl'] = \
             dialogs.ConfirmationDialogDoubleCheck(pritext, sectext, checktext1,
             checktext2, on_response_ok=on_ok, on_response_cancel=on_cancel,
             is_modal=False)
@@ -1639,8 +1642,6 @@ class Interface:
             'PASSWORD_REQUIRED': [self.handle_event_password_required],
             'SSL_ERROR': [self.handle_event_ssl_error],
             'FINGERPRINT_ERROR': [self.handle_event_fingerprint_error],
-            'INSECURE_SSL_CONNECTION': \
-                [self.handle_event_insecure_ssl_connection],
             'atom-entry-received': [self.handle_atom_entry],
             'bad-gpg-passphrase': [self.handle_event_bad_gpg_passphrase],
             'bookmarks-received': [self.handle_event_bookmarks],
@@ -1652,6 +1653,8 @@ class Interface:
             'gpg-trust-key': [self.handle_event_gpg_trust_key],
             'http-auth-received': [self.handle_event_http_auth],
             'insecure-password': [self.handle_event_insecure_password],
+            'insecure-ssl-connection': \
+                [self.handle_event_insecure_ssl_connection],
             'iq-error-received': [self.handle_event_iq_error],
             'jingle-connected-received': [self.handle_event_jingle_connected],
             'jingle-disconnected-received': [
