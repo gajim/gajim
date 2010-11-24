@@ -1071,6 +1071,10 @@ ConnectionJingle, ConnectionIBBytestream):
         ConnectionPubSub.__init__(self)
         ConnectionPEP.__init__(self, account=self.name, dispatcher=self,
             pubsub_connection=self)
+
+        # Handle presences BEFORE caps
+        gajim.nec.register_incoming_event(PresenceReceivedEvent)
+
         ConnectionCaps.__init__(self, account=self.name,
             dispatch_event=self.dispatch, capscache=capscache.capscache,
             client_caps_factory=capscache.create_suitable_client_caps)
@@ -1104,7 +1108,6 @@ ConnectionJingle, ConnectionIBBytestream):
             PrivateStorageRosternotesReceivedEvent)
         gajim.nec.register_incoming_event(RosternotesReceivedEvent)
         gajim.nec.register_incoming_event(StreamConflictReceivedEvent)
-        gajim.nec.register_incoming_event(PresenceReceivedEvent)
         gajim.nec.register_incoming_event(MessageReceivedEvent)
         gajim.nec.register_incoming_event(ArchivingErrorReceivedEvent)
         gajim.nec.register_incoming_event(

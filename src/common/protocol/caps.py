@@ -41,13 +41,15 @@ class ConnectionCaps(object):
         self._create_suitable_client_caps = client_caps_factory
         gajim.nec.register_incoming_event(CapsPresenceReceivedEvent)
         gajim.nec.register_incoming_event(CapsReceivedEvent)
-        gajim.ged.register_event_handler('caps-presence-received', ged.GUI1, 
+        gajim.ged.register_event_handler('caps-presence-received', ged.GUI1,
             self._nec_caps_presence_received)
 
     def caps_change_account_name(self, new_name):
         self._account = new_name
 
     def _nec_caps_presence_received(self, obj):
+        if obj.conn.name != self._account:
+            return
         obj.client_caps = self._create_suitable_client_caps(obj.node,
             obj.caps_hash, obj.hash_method)
         self._capscache.query_client_of_jid_if_unknown(self, obj.fjid,
