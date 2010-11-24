@@ -2887,9 +2887,8 @@ class RosterWindow:
                 gajim.connections[account].set_default_list('')
                 gajim.connections[account].set_active_list('')
                 gajim.connections[account].del_privacy_list('block')
-                if 'blocked_contacts' in gajim.interface.instances[account]:
-                    gajim.interface.instances[account]['blocked_contacts'].\
-                        privacy_list_received([])
+                if 'privacy_list_block' in gajim.interface.instances[account]:
+                    del gajim.interface.instances[account]['privacy_list_block']
         for (contact, account) in list_:
             if not self.regroup:
                 show = gajim.SHOW_LIST[gajim.connections[account].connected]

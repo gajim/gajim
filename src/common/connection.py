@@ -712,7 +712,13 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.private_storage_supported = True
         self.streamError = ''
         self.secret_hmac = str(random.random())[2:]
+        gajim.ged.register_event_handler('privacy-list-received', ged.CORE,
+            self._nec_privacy_list_received)
     # END __init__
+
+    def __del__(self):
+        gajim.ged.remove_event_handler('privacy-list-received', ged.CORE,
+            self._nec_privacy_list_received)
 
     def get_config_values_or_default(self):
         if gajim.config.get_per('accounts', self.name, 'keep_alives_enabled'):
@@ -895,7 +901,8 @@ class Connection(CommonConnection, ConnectionHandlers):
         elif realm == common.xmpp.NS_PRIVACY:
             if event == common.xmpp.features_nb.PRIVACY_LISTS_RECEIVED:
                 # data is (list)
-                self.dispatch('PRIVACY_LISTS_RECEIVED', (data))
+                gajim.nec.push_incoming_event(PrivacyListsReceivedEvent(None,
+                    conn=self, lists_list=data))
             elif event == common.xmpp.features_nb.PRIVACY_LIST_RECEIVED:
                 # data is (resp)
                 if not data:
@@ -916,10 +923,13 @@ class Connection(CommonConnection, ConnectionHandlers):
                             childs.append(scnd_child.getName())
                         rules.append({'action':dict_item['action'],
                                 'order':dict_item['order'], 'child':childs})
-                self.dispatch('PRIVACY_LIST_RECEIVED', (name, rules))
+                gajim.nec.push_incoming_event(PrivacyListReceivedEvent(None,
+                    conn=self, list_name=name, rules=rules))
             elif event == common.xmpp.features_nb.PRIVACY_LISTS_ACTIVE_DEFAULT:
                 # data is (dict)
-                self.dispatch('PRIVACY_LISTS_ACTIVE_DEFAULT', (data))
+                gajim.nec.push_incoming_event(PrivacyListActiveDefaultEvent(
+                    None, conn=self, active_list=data['active'],
+                    default_list=data['default']))
 
     def _select_next_host(self, hosts):
         """
@@ -1407,7 +1417,8 @@ class Connection(CommonConnection, ConnectionHandlers):
             return
         def _on_del_privacy_list_result(result):
             if result:
-                self.dispatch('PRIVACY_LIST_REMOVED', privacy_list)
+                gajim.nec.push_incoming_event(PrivacyListRemovedEvent(None,
+                    conn=self, list_name=privacy_list))
             else:
                 self.dispatch('ERROR', (_('Error while removing privacy list'),
                         _('Privacy list %s has not been removed. It is maybe active in '
@@ -1877,6 +1888,36 @@ class Connection(CommonConnection, ConnectionHandlers):
         iq2 = iq.addChild(name='catalog', namespace=common.xmpp.NS_SECLABEL_CATALOG)
         iq2.setAttr('to', to)
         self.connection.send(iq)
+
+    def _nec_privacy_list_received(self, obj):
+        if obj.conn.name != self.name:
+            return
+        if obj.list_name != 'block':
+            return
+        self.blocked_contacts = []
+        self.blocked_groups = []
+        self.blocked_list = []
+        self.blocked_all = False
+        for rule in obj.rules:
+            if rule['action'] == 'allow':
+                if not 'type' in rule:
+                    self.blocked_all = False
+                elif rule['type'] == 'jid' and rule['value'] in \
+                self.blocked_contacts:
+                    self.blocked_contacts.remove(rule['value'])
+                elif rule['type'] == 'group' and rule['value'] in \
+                self.blocked_groups:
+                    self.blocked_groups.remove(rule['value'])
+            elif rule['action'] == 'deny':
+                if not 'type' in rule:
+                    self.blocked_all = True
+                elif rule['type'] == 'jid' and rule['value'] not in \
+                self.blocked_contacts:
+                    self.blocked_contacts.append(rule['value'])
+                elif rule['type'] == 'group' and rule['value'] not in \
+                self.blocked_groups:
+                    self.blocked_groups.append(rule['value'])
+            self.blocked_list.append(rule)
 
     def _request_bookmarks_xml(self):
         if not gajim.account_is_connected(self.name):

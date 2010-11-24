@@ -3864,6 +3864,11 @@ class PrivacyListWindow:
 
         self.window.set_title(title)
 
+        gajim.ged.register_event_handler('privacy-list-received', ged.GUI1,
+            self._nec_privacy_list_received)
+        gajim.ged.register_event_handler('privacy-list-active-default',
+            ged.GUI1, self._nec_privacy_list_active_default)
+
         self.window.show_all()
         self.add_edit_vbox.hide()
 
@@ -3873,13 +3878,19 @@ class PrivacyListWindow:
         key_name = 'privacy_list_%s' % self.privacy_list_name
         if key_name in gajim.interface.instances[self.account]:
             del gajim.interface.instances[self.account][key_name]
+        gajim.ged.remove_event_handler('privacy-list-received', ged.GUI1,
+            self._nec_privacy_list_received)
+        gajim.ged.remove_event_handler('privacy-list-active-default',
+            ged.GUI1, self._nec_privacy_list_active_default)
 
-    def check_active_default(self, a_d_dict):
-        if a_d_dict['active'] == self.privacy_list_name:
+    def _nec_privacy_list_active_default(self, obj):
+        if obj.conn.name != self.account:
+            return
+        if obj.active_list == self.privacy_list_name:
             self.privacy_list_active_checkbutton.set_active(True)
         else:
             self.privacy_list_active_checkbutton.set_active(False)
-        if a_d_dict['default'] == self.privacy_list_name:
+        if obj.default_list == self.privacy_list_name:
             self.privacy_list_default_checkbutton.set_active(True)
         else:
             self.privacy_list_default_checkbutton.set_active(False)
@@ -3917,6 +3928,13 @@ class PrivacyListWindow:
             self.privacy_list_default_checkbutton.set_sensitive(True)
         self.reset_fields()
         gajim.connections[self.account].get_active_default_lists()
+
+    def _nec_privacy_list_received(self, obj):
+        if obj.conn.name != self.account:
+            return
+        if obj.list_name != self.privacy_list_name:
+            return
+        self.privacy_list_received(obj.rules)
 
     def refresh_rules(self):
         gajim.connections[self.account].get_privacy_list(self.privacy_list_name)
@@ -4154,6 +4172,11 @@ class PrivacyListsWindow:
 
         self.window.set_title(title)
 
+        gajim.ged.register_event_handler('privacy-lists-received', ged.GUI1,
+            self._nec_privacy_lists_received)
+        gajim.ged.register_event_handler('privacy-lists-removed', ged.GUI1,
+            self._nec_privacy_lists_removed)
+
         self.window.show_all()
 
         self.xml.connect_signals(self)
@@ -4161,6 +4184,10 @@ class PrivacyListsWindow:
     def on_privacy_lists_first_window_destroy(self, widget):
         if 'privacy_lists' in gajim.interface.instances[self.account]:
             del gajim.interface.instances[self.account]['privacy_lists']
+        gajim.ged.remove_event_handler('privacy-lists-received', ged.GUI1,
+            self._nec_privacy_lists_received)
+        gajim.ged.remove_event_handler('privacy-lists-removed', ged.GUI1,
+            self._nec_privacy_lists_removed)
 
     def remove_privacy_list_from_combobox(self, privacy_list):
         if privacy_list not in self.privacy_lists_save:
@@ -4206,6 +4233,11 @@ class PrivacyListsWindow:
         self.privacy_lists_save.remove(active_list)
         self.privacy_lists_received({'lists': self.privacy_lists_save})
 
+    def _nec_privacy_lists_removed(self, obj):
+        if obj.conn.name != self.account:
+            return
+        self.privacy_list_removed(obj.lists_list)
+
     def privacy_lists_received(self, lists):
         if not lists:
             return
@@ -4213,6 +4245,11 @@ class PrivacyListsWindow:
         for privacy_list in lists['lists']:
             privacy_lists.append(privacy_list)
         self.draw_privacy_lists_in_combobox(privacy_lists)
+
+    def _nec_privacy_lists_received(self, obj):
+        if obj.conn.name != self.account:
+            return
+        self.privacy_lists_received(obj.lists_list)
 
     def privacy_lists_refresh(self):
         gajim.connections[self.account].get_privacy_lists()

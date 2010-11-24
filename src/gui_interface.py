@@ -1210,68 +1210,6 @@ class Interface:
         if ctrl:
             ctrl.begin_e2e_negotiation()
 
-    def handle_event_privacy_lists_received(self, account, data):
-        # ('PRIVACY_LISTS_RECEIVED', account, list)
-        if account not in self.instances:
-            return
-        if 'privacy_lists' in self.instances[account]:
-            self.instances[account]['privacy_lists'].privacy_lists_received(
-                data)
-
-    def handle_event_privacy_list_received(self, account, data):
-        # ('PRIVACY_LIST_RECEIVED', account, (name, rules))
-        if account not in self.instances:
-            return
-        name = data[0]
-        rules = data[1]
-        if 'privacy_list_%s' % name in self.instances[account]:
-            self.instances[account]['privacy_list_%s' % name].\
-                    privacy_list_received(rules)
-        if name == 'block':
-            con = gajim.connections[account]
-            con.blocked_contacts = []
-            con.blocked_groups = []
-            con.blocked_list = []
-            gajim.connections[account].blocked_all = False
-            for rule in rules:
-                if rule['action'] == 'allow':
-                    if not 'type' in rule:
-                        con.blocked_all = False
-                    elif rule['type'] == 'jid' and rule['value'] in \
-                    con.blocked_contacts:
-                        con.blocked_contacts.remove(rule['value'])
-                    elif rule['type'] == 'group' and rule['value'] in \
-                    con.blocked_groups:
-                        con.blocked_groups.remove(rule['value'])
-                elif rule['action'] == 'deny':
-                    if not 'type' in rule:
-                        con.blocked_all = True
-                    elif rule['type'] == 'jid' and rule['value'] not in \
-                    con.blocked_contacts:
-                        con.blocked_contacts.append(rule['value'])
-                    elif rule['type'] == 'group' and rule['value'] not in \
-                    con.blocked_groups:
-                        con.blocked_groups.append(rule['value'])
-                con.blocked_list.append(rule)
-            if 'blocked_contacts' in self.instances[account]:
-                self.instances[account]['blocked_contacts'].\
-                    privacy_list_received(rules)
-
-    def handle_event_privacy_lists_active_default(self, account, data):
-        if not data:
-            return
-        # Send to all privacy_list_* windows as we can't know which one asked
-        for win in self.instances[account]:
-            if win.startswith('privacy_list_'):
-                self.instances[account][win].check_active_default(data)
-
-    def handle_event_privacy_list_removed(self, account, name):
-        # ('PRIVACY_LISTS_REMOVED', account, name)
-        if account not in self.instances:
-            return
-        if 'privacy_lists' in self.instances[account]:
-            self.instances[account]['privacy_lists'].privacy_list_removed(name)
-
     def handle_event_zc_name_conflict(self, account, data):
         def on_ok(new_name):
             gajim.config.set_per('accounts', account, 'name', new_name)
@@ -1619,12 +1557,6 @@ class Interface:
             'SIGNED_IN': [self.handle_event_signed_in],
             'METACONTACTS': [self.handle_event_metacontacts],
             'FAILED_DECRYPT': [self.handle_event_failed_decrypt],
-            'PRIVACY_LISTS_RECEIVED': \
-                [self.handle_event_privacy_lists_received],
-            'PRIVACY_LIST_RECEIVED': [self.handle_event_privacy_list_received],
-            'PRIVACY_LISTS_ACTIVE_DEFAULT': \
-                [self.handle_event_privacy_lists_active_default],
-            'PRIVACY_LIST_REMOVED': [self.handle_event_privacy_list_removed],
             'ZC_NAME_CONFLICT': [self.handle_event_zc_name_conflict],
             'PEP_CONFIG': [self.handle_event_pep_config],
             'PASSWORD_REQUIRED': [self.handle_event_password_required],

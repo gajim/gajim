@@ -2576,9 +2576,9 @@ class GroupchatControl(ChatControlBase):
             connection.set_default_list('')
             connection.set_active_list('')
             connection.del_privacy_list('block')
-            if 'blocked_contacts' in gajim.interface.instances[self.account]:
-                gajim.interface.instances[self.account]['blocked_contacts'].\
-                    privacy_list_received([])
+            if 'privay_list_block' in gajim.interface.instances[self.account]:
+                del gajim.interface.instances[self.account]\
+                    ['privay_list_block']
 
     def on_voice_checkmenuitem_activate(self, widget, nick):
         if widget.get_active():

@@ -1459,3 +1459,19 @@ class UniqueRoomIdSupportedEvent(nec.NetworkIncomingEvent):
 class UniqueRoomIdNotSupportedEvent(nec.NetworkIncomingEvent):
     name = 'unique-room-id-not-supported'
     base_network_events = []
+
+class PrivacyListsReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'privacy-lists-received'
+    base_network_events = []
+
+class PrivacyListReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'privacy-list-received'
+    base_network_events = []
+
+class PrivacyListRemovedEvent(nec.NetworkIncomingEvent):
+    name = 'privacy-list-removed'
+    base_network_events = []
+
+class PrivacyListActiveDefaultEvent(nec.NetworkIncomingEvent):
+    name = 'privacy-list-active-default'
+    base_network_events = []
