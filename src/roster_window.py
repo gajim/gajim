@@ -6231,7 +6231,9 @@ class RosterWindow:
 
         gajim.ged.register_event_handler('presence-received', ged.GUI1,
             self._nec_presence_received)
-        gajim.ged.register_event_handler('gc-presence-received', ged.GUI1,
+        # presence has to be fully handled so that contact is added to occupant
+        # list before roster can be correctly updated
+        gajim.ged.register_event_handler('gc-presence-received', ged.GUI2,
             self._nec_gc_presence_received)
         gajim.ged.register_event_handler('roster-received', ged.GUI1,
             self._nec_roster_received)
