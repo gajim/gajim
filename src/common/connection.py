@@ -300,7 +300,7 @@ class CommonConnection:
                                     composing_xep, label, forward_from, delayed,
                                     session, form_node, user_nick, keyID,
                                     callback)
-                        gajim.nec.push_incoming_event(GPGTrustKey(None,
+                        gajim.nec.push_incoming_event(GPGTrustKeyEvent(None,
                             conn=self, callback=_on_always_trust))
                     else:
                         self._message_encrypted_cb(output, type_, msg, msgtxt,

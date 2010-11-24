@@ -1374,11 +1374,11 @@ class CapsReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.client_caps = self.base_event.client_caps
         return True
 
-class GPGTrustKey(nec.NetworkIncomingEvent):
+class GPGTrustKeyEvent(nec.NetworkIncomingEvent):
     name = 'gpg-trust-key'
     base_network_events = []
 
-class GPGPasswordRequired(nec.NetworkIncomingEvent):
+class GPGPasswordRequiredEvent(nec.NetworkIncomingEvent):
     name = 'gpg-password-required'
     base_network_events = []
 
