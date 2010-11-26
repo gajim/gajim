@@ -2,7 +2,7 @@
 # Ukrainian translations for Gajim - A Jabber Instant Messager package.
 # Copyright (C) 2008 THE Gajim - A Jabber Instant Messager'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the Gajim - A Jabber Instant Messager package.
-# 
+#
 # Sergiy Yegorov <prapor@unixzone.org.ua>, 2009, 2010.
 # Yuri Chornoivan <yurchor@ukr.net>, 2008.
 # Sergiy Yegorov <syegorov@act.dp.ua>, 2010.
@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: uk\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-10-01 20:39+0200\n"
-"PO-Revision-Date: 2010-07-27 13:53+0300\n"
-"Last-Translator: Sergiy Yegorov <syegorov@act.dp.ua>\n"
+"PO-Revision-Date: 2010-11-27 00:34+0200\n"
+"Last-Translator: Sergiy Yegorov <prapor@unixzone.org.ua>\n"
 "Language-Team: Ukrainian <kde-i18n-doc@kde.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -4017,7 +4017,7 @@ msgstr "'так', 'ні' або ''"
 
 #: ../src/common/config.py:460
 msgid "State whether plugins should be activated on exit (this is saved on Gajim exit). This option SHOULD NOT be used to (de)activate plug-ins. Use GUI instead."
-msgstr ""
+msgstr "Стан коли додатки мають бути активовані при виході (це зберігається при виході з Gajim). Ця опція НЕ ПОВИННА бути використана для (де)активації додатків. Використовуйте для цього графічний інтерфейс користувача."
 
 #: ../src/common/config.py:465 ../src/common/pep.py:157
 msgid "Sleeping"
@@ -4704,7 +4704,7 @@ msgstr "Вихідні!"
 
 #: ../src/common/helpers.py:148
 msgid "Username must be between 1 and 1023 chars"
-msgstr ""
+msgstr "Ім’я користувача повинно бути від 1 до 1023 символів"
 
 #: ../src/common/helpers.py:153
 msgid "Invalid character in username."
@@ -4712,7 +4712,7 @@ msgstr "Некоректний символ у імені користувача
 
 #: ../src/common/helpers.py:159
 msgid "Server must be between 1 and 1023 chars"
-msgstr ""
+msgstr "Сервер має бути від 1 до 1023 символів"
 
 #: ../src/common/helpers.py:164
 msgid "Invalid character in hostname."
@@ -4724,7 +4724,7 @@ msgstr "Слід вказати адресу сервера."
 
 #: ../src/common/helpers.py:170
 msgid "Resource must be between 1 and 1023 chars"
-msgstr ""
+msgstr "Ресурс має бути від 1 до 1023 символів"
 
 #: ../src/common/helpers.py:175
 msgid "Invalid character in resource."
@@ -6379,7 +6379,7 @@ msgstr "Відкрити як _посилання"
 msgid "Yesterday"
 msgid_plural "%i days ago"
 msgstr[0] "Вчора (%i день тому)"
-msgstr[1] "%i днів тому"
+msgstr[1] "%i дні тому"
 msgstr[2] "%i днів тому"
 
 #. if we have subject, show it too!
@@ -6399,7 +6399,7 @@ msgstr "Тим медіа не підтримується: %s"
 
 #: ../src/dataforms_widget.py:562
 msgid "This field is required"
-msgstr ""
+msgstr "Це обов’язкове поле"
 
 #: ../src/dataforms_widget.py:607
 msgid "Jabber ID already in list"
@@ -6875,7 +6875,7 @@ msgstr "Вилучено %s контактів"
 #: ../src/dialogs.py:3433 ../src/dialogs.py:3610
 #, python-format
 msgid "Archiving Preferences for %s"
-msgstr ""
+msgstr "Архівація налаштувань для %s"
 
 #: ../src/dialogs.py:3473
 msgid "Invalid expire value"
@@ -6883,11 +6883,11 @@ msgstr "Некоректне значення застарівання"
 
 #: ../src/dialogs.py:3474
 msgid "Expire must be a valid positive integer."
-msgstr ""
+msgstr "Час застарівання має бути дійсним додатним цілим числом."
 
 #: ../src/dialogs.py:3521
 msgid "There is an error with the form"
-msgstr ""
+msgstr "Це помилка з формою"
 
 #: ../src/dialogs.py:3732
 msgid "There is an error"
@@ -9447,7 +9447,7 @@ msgid "Confirm these session options"
 msgstr "Підтвердити параметри цих сеансів"
 
 #: ../src/session.py:448
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "The remote client wants '\n"
 "                            'to negotiate an session with these features:\n"
@@ -9456,7 +9456,8 @@ msgid ""
 "\n"
 "Are these options acceptable?"
 msgstr ""
-"Віддалений клієнт бажає розпочати сеанс з такими можливостями:\n"
+"Віддалений клієнт бажає '\n"
+"\t'розпочати сеанс з такими можливостями:\n"
 "\n"
 "%s\n"
 "\n"
