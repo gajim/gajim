@@ -1371,7 +1371,6 @@ class ConversationTextview(gobject.GObject):
                 self.tv.display_html(xhtml.encode('utf-8'), self)
                 return
             except Exception, e:
-                print e
                 gajim.log.debug('Error processing xhtml' + str(e))
                 gajim.log.debug('with |' + xhtml + '|')
 
