@@ -40,7 +40,6 @@ import pango
 import gtk
 import xml.sax, xml.sax.handler
 import re
-import warnings
 from cStringIO import StringIO
 import socket
 import time
@@ -56,7 +55,8 @@ if __name__ == '__main__':
 from common import gajim
 
 import tooltips
-
+import logging
+log = logging.getLogger('gajim.htmlview')
 
 __all__ = ['HtmlTextView']
 
@@ -302,7 +302,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                 val = sign*max(minl, min(abs(val), maxl))
                 callback(val, *args)
             except Exception:
-                warnings.warn('Unable to parse length value "%s"' % value)
+                log.warning('Unable to parse length value "%s"' % value)
 
     def __parse_font_size_cb(length, tag):
         tag.set_property('size-points', length/display_resolution)
@@ -348,7 +348,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                     'oblique': pango.STYLE_OBLIQUE,
                     } [value]
         except KeyError:
-            warnings.warn('unknown font-style %s' % value)
+            log.warning('unknown font-style %s' % value)
         else:
             tag.set_property('style', style)
 
@@ -386,7 +386,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                     'bold': pango.WEIGHT_BOLD,
                     } [value]
         except KeyError:
-            warnings.warn('unknown font-style %s' % value)
+            log.warning('unknown font-style %s' % value)
         else:
             tag.set_property('weight', weight)
 
@@ -402,7 +402,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                     'justify': gtk.JUSTIFY_FILL,
                     } [value]
         except KeyError:
-            warnings.warn('Invalid text-align:%s requested' % value)
+            log.warning('Invalid text-align:%s requested' % value)
         else:
             tag.set_property('justification', align)
 
@@ -420,9 +420,9 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
         else:
             tag.set_property('strikethrough', False)
         if 'blink' in values:
-            warnings.warn('text-decoration:blink not implemented')
+            log.warning('text-decoration:blink not implemented')
         if 'overline' in values:
-            warnings.warn('text-decoration:overline not implemented')
+            log.warning('text-decoration:overline not implemented')
 
     def _parse_style_white_space(self, tag, value):
         if value == 'pre':
@@ -436,7 +436,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
         try:
             tag.set_property(propname, value)
         except Exception:
-            gajim.log.warn( "Error with prop: " + propname + " for tag: " + str(tag))
+            log.warning( "Error with prop: " + propname + " for tag: " + str(tag))
 
 
     def _parse_style_width(self, tag, value):
@@ -460,7 +460,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
         try:
             method = locals()['_parse_style_%s' % style.replace('-', '_')]
         except KeyError:
-            warnings.warn('Style attribute "%s" not yet implemented' % style)
+            log.warning('Style attribute "%s" not yet implemented' % style)
         else:
             __style_methods[style] = method
     del style
@@ -496,7 +496,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                 req.add_header('User-Agent', 'Gajim ' + gajim.version)
                 f = urllib2.urlopen(req)
             except Exception, ex:
-                gajim.log.debug('Error loading image %s ' % attrs['src']  + str(ex))
+                log.debug('Error loading image %s ' % attrs['src']  + str(ex))
                 pixbuf = None
                 alt = attrs.get('alt', 'Broken image')
             else:
@@ -509,7 +509,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                 deadline = time.time() + 3
                 while True:
                     if time.time() > deadline:
-                        gajim.log.debug(str('Timeout loading image %s ' % \
+                        log.debug(str('Timeout loading image %s ' % \
                             attrs['src'] + ex))
                         mem = ''
                         alt = attrs.get('alt', '')
@@ -520,7 +520,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                     try:
                         temp = f.read(100)
                     except socket.timeout, ex:
-                        gajim.log.debug('Timeout loading image %s ' % \
+                        log.debug('Timeout loading image %s ' % \
                             attrs['src'] + str(ex))
                         alt = attrs.get('alt', '')
                         if alt:
@@ -596,7 +596,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
             else:
                 self._insert_text('[IMG: %s]' % alt)
         except Exception, ex:
-            gajim.log.error('Error loading image ' + str(ex))
+            log.error('Error loading image ' + str(ex))
             pixbuf = None
             alt = attrs.get('alt', 'Broken image')
             try:
@@ -620,7 +620,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
             try:
                 method = self.__style_methods[attr]
             except KeyError:
-                warnings.warn('Style attribute "%s" requested '
+                log.warning('Style attribute "%s" requested '
                     'but not yet implemented' % attr)
             else:
                 method(self, tag, val)
@@ -755,7 +755,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
         elif name in INLINE:
             pass
         else:
-            warnings.warn('Unhandled element "%s"' % name)
+            log.warning('Unhandled element "%s"' % name)
 
     def endElement(self, name):
         endPreserving = False
@@ -771,7 +771,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                 #self._insert_text(u'\u2550'*40)
                 self._jump_line()
             except Exception, e:
-                gajim.log.debug(str('Error in hr'+e))
+                log.debug(str('Error in hr'+e))
         elif name in LIST_ELEMS:
             self.list_counters.pop()
         elif name == 'li':
@@ -790,7 +790,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
             if name == 'pre':
                 endPreserving = True
         else:
-            warnings.warn("Unhandled element '%s'" % name)
+            log.warning("Unhandled element '%s'" % name)
         self._flush_text()
         if endPreserving:
             self.preserve = False
@@ -935,17 +935,7 @@ if __name__ == '__main__':
     from conversation_textview import ConversationTextview
     import gajim as gaj
 
-    class log(object):
-
-        def debug(self, text):
-            print "debug:", text
-        def warn(self, text):
-            print "warn;", text
-        def error(self, text):
-            print "error;", text
-
-    gajim.log=log()
-
+    log = logging.getLogger()
     gaj.Interface()
 
     htmlview = ConversationTextview(None)
