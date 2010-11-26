@@ -191,7 +191,7 @@ class ConversationTextview(gobject.GObject):
 
         # no need to inherit TextView, use it as atrribute is safer
         self.tv = HtmlTextView()
-        self.tv.html_hyperlink_handler = self.html_hyperlink_handler
+        self.tv.hyperlink_handler = self.hyperlink_handler
 
         # set properties
         self.tv.set_border_width(1)
@@ -946,10 +946,24 @@ class ConversationTextview(gobject.GObject):
             # we get the end of the tag
             while not end_iter.ends_tag(texttag):
                 end_iter.forward_char()
-            word = self.tv.get_buffer().get_text(begin_iter, end_iter).decode(
+
+            # Detect XHTML-IM link
+            word = getattr(texttag, 'href', None)
+            if word:
+                if word.startswith('xmpp'):
+                    kind = 'xmpp'
+                elif word.startswith('mailto:'):
+                    kind = 'mail'
+                elif gajim.interface.sth_at_sth_dot_sth_re.match(word):
+                    # it's a JID or mail
+                    kind = 'sth_at_sth'
+            else:
+                word = self.tv.get_buffer().get_text(begin_iter, end_iter).decode(
                     'utf-8')
+
             if event.button == 3: # right click
                 self.make_link_menu(event, kind, word)
+                return True
             else:
                 # we launch the correct application
                 if kind == 'xmpp':
@@ -964,16 +978,6 @@ class ConversationTextview(gobject.GObject):
                         self.on_start_chat_activate(None, word)
                 else:
                     helpers.launch_browser_mailer(kind, word)
-
-    def html_hyperlink_handler(self, texttag, widget, event, iter_, kind, href):
-        if event.type == gtk.gdk.BUTTON_PRESS:
-            if event.button == 3: # right click
-                self.make_link_menu(event, kind, href)
-                return True
-            else:
-                # we launch the correct application
-                helpers.launch_browser_mailer(kind, href)
-
 
     def detect_and_print_special_text(self, otext, other_tags, graphics=True):
         """
@@ -1039,6 +1043,14 @@ class ConversationTextview(gobject.GObject):
                 gajim.config.get('show_ascii_formatting_chars')
         buffer_ = self.tv.get_buffer()
 
+        # Detect XHTML-IM link
+        ttt = buffer_.get_tag_table()
+        tags_ = [(ttt.lookup(t) if isinstance(t, str) else t) for t in other_tags]
+        for t in tags_:
+            is_xhtml_link = getattr(t, 'href', None)
+            if is_xhtml_link:
+                break
+
         # Check if we accept this as an uri
         schemes = gajim.config.get('uri_schemes').split()
         for scheme in schemes:
@@ -1062,21 +1074,18 @@ class ConversationTextview(gobject.GObject):
             self.images.append(img)
             # add with possible animation
             self.tv.add_child_at_anchor(img, anchor)
-        elif special_text.startswith('www.') or \
-        special_text.startswith('ftp.') or \
-        text_is_valid_uri:
-            tags.append('url')
-            use_other_tags = False
-        elif special_text.startswith('mailto:'):
-            tags.append('mail')
-            use_other_tags = False
-        elif special_text.startswith('xmpp:'):
-            tags.append('xmpp')
-            use_other_tags = False
-        elif gajim.interface.sth_at_sth_dot_sth_re.match(special_text):
-            # it's a JID or mail
-            tags.append('sth_at_sth')
-            use_other_tags = False
+        elif not is_xhtml_link:
+            if special_text.startswith('www.') or \
+            special_text.startswith('ftp.') or \
+            text_is_valid_uri:
+                tags.append('url')
+            elif special_text.startswith('mailto:'):
+                tags.append('mail')
+            elif special_text.startswith('xmpp:'):
+                tags.append('xmpp')
+            elif gajim.interface.sth_at_sth_dot_sth_re.match(special_text):
+                # it's a JID or mail
+                tags.append('sth_at_sth')
         elif special_text.startswith('*'): # it's a bold text
             tags.append('bold')
             if special_text[1] == '/' and special_text[-2] == '/' and\
@@ -1163,7 +1172,6 @@ class ConversationTextview(gobject.GObject):
             if use_other_tags:
                 all_tags += other_tags
             # convert all names to TextTag
-            ttt = buffer_.get_tag_table()
             all_tags = [(ttt.lookup(t) if isinstance(t, str) else t) for t in all_tags]
             buffer_.insert_with_tags(end_iter, special_text, *all_tags)
 
@@ -1361,6 +1369,7 @@ class ConversationTextview(gobject.GObject):
                 self.tv.display_html(xhtml.encode('utf-8'), self)
                 return
             except Exception, e:
+                print e
                 gajim.log.debug('Error processing xhtml' + str(e))
                 gajim.log.debug('with |' + xhtml + '|')
 

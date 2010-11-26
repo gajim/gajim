@@ -50,7 +50,9 @@ import operator
 if __name__ == '__main__':
     from common import i18n
     import common.configpaths
+    common.configpaths.gajimpaths.init_profile()
     common.configpaths.gajimpaths.init(None)
+    import gtkgui_helpers
 from common import gajim
 
 import tooltips
@@ -182,8 +184,7 @@ for name in BLOCK_HEAD:
     size = (num-1) // 2
     weigth = (num - 1) % 2
     element_styles[name] = '; font-size: %s; %s' % ( ('large', 'medium', 'small')[size],
-                                                                                                    ('font-weight: bold', 'font-style: oblique')[weigth],
-                                                                                      )
+        ('font-weight: bold', 'font-style: oblique')[weigth],)
 
 def _parse_css_color(color):
     if color.startswith('rgb(') and color.endswith(')'):
@@ -215,7 +216,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
         self.preserve = False
         self.styles = [] # a gtk.TextTag or None, for each span level
         self.list_counters = [] # stack (top at head) of list
-                                                        # counters, or None for unordered list
+                                # counters, or None for unordered list
 
     def _parse_style_color(self, tag, value):
         color = _parse_css_color(value)
@@ -234,11 +235,12 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
         self.iter.forward_char()
         return attrs
 
-    def __parse_length_frac_size_allocate(self, textview, allocation,
-                                                                              frac, callback, args):
+    def __parse_length_frac_size_allocate(self, textview, allocation, frac,
+        callback, args):
         callback(allocation.width*frac, *args)
 
-    def _parse_length(self, value, font_relative, block_relative, minl, maxl, callback, *args):
+    def _parse_length(self, value, font_relative, block_relative, minl, maxl,
+        callback, *args):
         """
         Parse/calc length, converting to pixels, calls callback(length, *args)
         when the length is first computed or changes
@@ -260,10 +262,10 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                 # textview width instead; a reasonable approximation..
                 alloc = self.textview.get_allocation()
                 self.__parse_length_frac_size_allocate(self.textview, alloc,
-                                                                                           frac, callback, args)
+                    frac, callback, args)
                 self.textview.connect('size-allocate',
-                                                          self.__parse_length_frac_size_allocate,
-                                                          frac, callback, args)
+                    self.__parse_length_frac_size_allocate,
+                    frac, callback, args)
             else:
                 callback(frac, *args)
             return
@@ -335,7 +337,8 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
             tag.set_property('scale', pango.SCALE_LARGE)
             return
         # font relative (5 ~ 4pt, 110 ~ 72pt)
-        self._parse_length(value, True, False, 5, 110, self.__parse_font_size_cb, tag)
+        self._parse_length(value, True, False, 5, 110,self.__parse_font_size_cb,
+            tag)
 
     def _parse_style_font_style(self, tag, value):
         try:
@@ -358,13 +361,13 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 
     def _parse_style_margin_left(self, tag, value):
         # block relative
-        self._parse_length(value, False, True, 1, 1000, self.__frac_length_tag_cb,
-                                           tag, 'left-margin')
+        self._parse_length(value, False, True, 1, 1000,
+            self.__frac_length_tag_cb, tag, 'left-margin')
 
     def _parse_style_margin_right(self, tag, value):
         # block relative
-        self._parse_length(value, False, True, 1, 1000, self.__frac_length_tag_cb,
-                                           tag, 'right-margin')
+        self._parse_length(value, False, True, 1, 1000,
+            self.__frac_length_tag_cb, tag, 'right-margin')
 
     def _parse_style_font_weight(self, tag, value):
         # TODO: missing 'bolder' and 'lighter'
@@ -440,20 +443,20 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
         if value == 'auto':
             return
         self._parse_length(value, False, False, 1, 1000, self.__length_tag_cb,
-                                           tag, "width")
+            tag, "width")
     def _parse_style_height(self, tag, value):
         if value == 'auto':
             return
         self._parse_length(value, False, False, 1, 1000, self.__length_tag_cb,
-                                           tag, "height")
+            tag, "height")
 
 
     # build a dictionary mapping styles to methods, for greater speed
     __style_methods = dict()
     for style in ('background-color', 'color', 'font-family', 'font-size',
-                              'font-style', 'font-weight', 'margin-left', 'margin-right',
-                              'text-align', 'text-decoration', 'white-space', 'display',
-                              'width', 'height' ):
+                  'font-style', 'font-weight', 'margin-left', 'margin-right',
+                  'text-align', 'text-decoration', 'white-space', 'display',
+                  'width', 'height' ):
         try:
             method = locals()['_parse_style_%s' % style.replace('-', '_')]
         except KeyError:
@@ -473,7 +476,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
         if href and href[0] != '#':
             tag.href = href
             tag.type_ = type_ # to be used by the URL handler
-            tag.connect('event', self.textview.html_hyperlink_handler, 'url', href)
+            tag.connect('event', self.textview.hyperlink_handler, 'url')
             tag.set_property('foreground', gajim.config.get('urlmsgcolor'))
             tag.set_property('underline', pango.UNDERLINE_SINGLE)
             tag.is_anchor = True
@@ -507,7 +510,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                 while True:
                     if time.time() > deadline:
                         gajim.log.debug(str('Timeout loading image %s ' % \
-                                attrs['src'] + ex))
+                            attrs['src'] + ex))
                         mem = ''
                         alt = attrs.get('alt', '')
                         if alt:
@@ -517,8 +520,8 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                     try:
                         temp = f.read(100)
                     except socket.timeout, ex:
-                        gajim.log.debug('Timeout loading image %s ' % attrs['src'] + \
-                                str(ex))
+                        gajim.log.debug('Timeout loading image %s ' % \
+                            attrs['src'] + str(ex))
                         alt = attrs.get('alt', '')
                         if alt:
                             alt += '\n'
@@ -618,7 +621,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                 method = self.__style_methods[attr]
             except KeyError:
                 warnings.warn('Style attribute "%s" requested '
-                                          'but not yet implemented' % attr)
+                    'but not yet implemented' % attr)
             else:
                 method(self, tag, val)
         self.styles.append(tag)
@@ -658,14 +661,14 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
         return False
 
     def handle_specials(self, text):
-        self.iter = self.conv_textview.detect_and_print_special_text(text,                                                      self._get_style_tags())
+        self.iter = self.conv_textview.detect_and_print_special_text(text,
+            self._get_style_tags())
 
     def characters(self, content):
         if self.preserve:
             self.text += content
             return
         if allwhitespace_rx.match(content) is not None and self._starts_line():
-            self.text += ' '
             return
         self.text += content
         self.starting = False
@@ -763,7 +766,8 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
             #FIXME: plenty of unused attributes (width, height,...) :)
             self._jump_line()
             try:
-                self.textbuf.insert_pixbuf(self.iter, self.textview.focus_out_line_pixbuf)
+                self.textbuf.insert_pixbuf(self.iter,
+                    self.textview.focus_out_line_pixbuf)
                 #self._insert_text(u'\u2550'*40)
                 self._jump_line()
             except Exception, e:
@@ -859,7 +863,8 @@ class HtmlTextView(gtk.TextView):
             window = widget.get_window(gtk.TEXT_WINDOW_TEXT)
             window.set_cursor(gtk.gdk.Cursor(gtk.gdk.HAND2))
             self._changed_cursor = True
-            self.tooltip.timeout = gobject.timeout_add(500, self.show_tooltip, anchor_tags[0])
+            self.tooltip.timeout = gobject.timeout_add(500, self.show_tooltip,
+                anchor_tags[0])
         elif self._changed_cursor and not anchor_tags:
             window = widget.get_window(gtk.TEXT_WINDOW_TEXT)
             window.set_cursor(gtk.gdk.Cursor(gtk.gdk.XTERM))
@@ -886,10 +891,12 @@ class HtmlTextView(gtk.TextView):
         self.emit_stop_by_name('copy-clipboard')
 
     def on_html_text_view_realized(self, unused_data):
-        self.get_buffer().remove_selection_clipboard(self.get_clipboard(gtk.gdk.SELECTION_PRIMARY))
+        self.get_buffer().remove_selection_clipboard(self.get_clipboard(
+            gtk.gdk.SELECTION_PRIMARY))
 
     def on_html_text_view_unrealized(self, unused_data):
-        self.get_buffer().add_selection_clipboard(self.get_clipboard(gtk.gdk.SELECTION_PRIMARY))
+        self.get_buffer().add_selection_clipboard(self.get_clipboard(
+            gtk.gdk.SELECTION_PRIMARY))
 
     def on_text_buffer_mark_set(self, location, mark, unused_data):
         bounds = self.get_buffer().get_selection_bounds()
@@ -955,19 +962,19 @@ if __name__ == '__main__':
         """
         global change_cursor
         pointer_x, pointer_y = htmlview.tv.window.get_pointer()[0:2]
-        x, y = htmlview.tv.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT, pointer_x,
-                                                           pointer_y)
+        x, y = htmlview.tv.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT,
+            pointer_x, pointer_y)
         tags = htmlview.tv.get_iter_at_location(x, y).get_tags()
         if change_cursor:
             htmlview.tv.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(
-                             gtk.gdk.Cursor(gtk.gdk.XTERM))
+                gtk.gdk.Cursor(gtk.gdk.XTERM))
             change_cursor = None
         tag_table = htmlview.tv.get_buffer().get_tag_table()
         for tag in tags:
             try:
                 if tag.is_anchor:
                     htmlview.tv.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(
-                                                            gtk.gdk.Cursor(gtk.gdk.HAND2))
+                        gtk.gdk.Cursor(gtk.gdk.HAND2))
                     change_cursor = tag
                 elif tag == tag_table.lookup('focus-out-line'):
                     over_line = True
@@ -987,22 +994,30 @@ if __name__ == '__main__':
 
     htmlview.tv.connect('motion_notify_event', on_textview_motion_notify_event)
 
-    def handler(texttag, widget, event, iter_, kind, href):
+    def handler(texttag, widget, event, iter_, kind):
         if event.type == gtk.gdk.BUTTON_PRESS:
-            print href
+            pass
 
-    htmlview.tv.html_hyperlink_handler = handler
+    htmlview.tv.hyperlink_handler = htmlview.hyperlink_handler
 
-    htmlview.print_real_text(None, xhtml='<div><span style="color: red; text-decoration:underline">Hello</span><br/>\n'
-                                              '  <img src="http://images.slashdot.org/topics/topicsoftware.gif"/><br/>\n'
-                                              '  <span style="font-size: 500%; font-family: serif">World</span>\n'
-                                              '</div>\n')
+    htmlview.print_real_text(None, xhtml='<div>'
+    '<span style="color: red; text-decoration:underline">Hello</span><br/>\n'
+      '  <img src="http://images.slashdot.org/topics/topicsoftware.gif"/><br/>\n'
+    '<span style="font-size: 500%; font-family: serif">World</span>\n'
+      '</div>\n')
     htmlview.print_real_text(None, xhtml='<hr />')
-    htmlview.print_real_text(None, xhtml='''<body xmlns='http://www.w3.org/1999/xhtml'><p xmlns='http://www.w3.org/1999/xhtml'>a:b<a href='http://google.com/' xmlns='http://www.w3.org/1999/xhtml'>Google</a></p><br/></body>''')
+    htmlview.print_real_text(None, xhtml='''
+    <body xmlns='http://www.w3.org/1999/xhtml'>
+     <p xmlns='http://www.w3.org/1999/xhtml'>a:b
+       <a href='http://google.com/' xmlns='http://www.w3.org/1999/xhtml'>Google
+       </a>
+     </p><br/>
+    </body>''')
     htmlview.print_real_text(None, xhtml='''
      <body xmlns='http://www.w3.org/1999/xhtml'>
       <p style='font-size:large'>
-            <span style='font-style: italic'>O<span style='font-size:larger'>M</span>G</span>,
+            <span style='font-style: italic'>O
+            <span style='font-size:larger'>M</span>G</span>,
             I&apos;m <span style='color:green'>green</span>
             with <span style='font-weight: bold'>envy</span>!
       </p>
@@ -1017,7 +1032,8 @@ if __name__ == '__main__':
     htmlview.print_real_text(None, xhtml='<hr />')
     htmlview.print_real_text(None, xhtml='''
     <body xmlns='http://www.w3.org/1999/xhtml'>
-      <p>As Emerson said in his essay <span style='font-style: italic; background-color:cyan'>Self-Reliance</span>:</p>
+      <p>As Emerson said in his essay <span style='
+        font-style: italic; background-color:cyan'>Self-Reliance</span>:</p>
       <p style='margin-left: 5px; margin-right: 2%'>
             &quot;A foolish consistency is the hobgoblin of little minds.&quot;
       </p>
@@ -1026,11 +1042,13 @@ if __name__ == '__main__':
     htmlview.print_real_text(None, xhtml='<hr />')
     htmlview.print_real_text(None, xhtml='''
     <body xmlns='http://www.w3.org/1999/xhtml'>
-      <p style='text-align:center'>Hey, are you licensed to <a href='http://www.jabber.org/'>Jabber</a>?</p>
-      <p style='text-align:right'><img src='http://www.jabber.org/images/psa-license.jpg'
-                      alt='A License to Jabber'
-                      width='50%' height='50%'
-                      /></p>
+      <p style='text-align:center'>
+        Hey, are you licensed to <a href='http://www.jabber.org/'>Jabber</a>?
+      </p>
+      <p style='text-align:right'>
+        <img src='http://www.xmpp.org/images/psa-license.jpg'
+        alt='A License to Jabber' width='50%' height='50%'/>
+      </p>
     </body>
             ''')
     htmlview.print_real_text(None, xhtml='<hr />')
@@ -1062,6 +1080,28 @@ return faciter(n,1)</pre>
        <li> Three </li></ol>
     </body>
             ''')
+    htmlview.print_real_text(None, xhtml='<hr />')
+    htmlview.print_real_text(None, xhtml='''
+    <body xmlns='http://www.w3.org/1999/xhtml'>
+    <p>
+      <strong>
+        <a href='xmpp:example@example.org'>xmpp link</a>
+      </strong>: </p>
+    <div xmlns='http://www.w3.org/1999/xhtml'>
+      <cite style='margin: 7px;' title='xmpp:examples@example.org'>
+        <p>
+          <strong>examples@example.org wrote:</strong>
+        </p>
+        <p>this cite - bla bla bla, smile- :-)  ...</p>
+      </cite>
+      <div>
+        <p>some text</p>
+      </div>
+    </div>
+    <p/>
+    <p>#232/1</p>
+    </body>
+    ''')
     htmlview.tv.show()
     sw = gtk.ScrolledWindow()
     sw.set_property('hscrollbar-policy', gtk.POLICY_AUTOMATIC)
