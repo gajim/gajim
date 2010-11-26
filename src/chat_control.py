@@ -1599,6 +1599,8 @@ class ChatControl(ChatControlBase):
 
         gajim.ged.register_event_handler('pep-received', ged.GUI1,
             self._nec_pep_received)
+        gajim.ged.register_event_handler('vcard-received', ged.GUI1,
+            self._nec_vcard_received)
 
         # PluginSystem: adding GUI extension point for this ChatControl
         # instance object
@@ -2585,6 +2587,8 @@ class ChatControl(ChatControlBase):
 
         gajim.ged.remove_event_handler('pep-received', ged.GUI1,
             self._nec_pep_received)
+        gajim.ged.remove_event_handler('vcard-received', ged.GUI1,
+            self._nec_vcard_received)
 
         self.send_chatstate('gone', self.contact)
         self.contact.chatstate = None
@@ -2705,6 +2709,14 @@ class ChatControl(ChatControlBase):
         image = self.xml.get_object('avatar_image')
         image.set_from_pixbuf(scaled_pixbuf)
         image.show_all()
+
+    def _nec_vcard_received(self, obj):
+        if obj.conn.name != self.account:
+            return
+        j = gajim.get_jid_without_resource(self.contact.jid)
+        if obj.jid != j:
+            return
+        self.show_avatar()
 
     def _on_drag_data_received(self, widget, context, x, y, selection,
             target_type, timestamp):

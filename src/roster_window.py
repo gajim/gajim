@@ -2501,6 +2501,12 @@ class RosterWindow:
         else:
             self.draw_pep(obj.jid, obj.conn.name, obj.pep_type)
 
+    def _nec_vcard_received(self, obj):
+        if obj.resource:
+            # it's a muc occupant vcard
+            return
+        self.draw_avatar(obj.jid, obj.conn.name)
+
 ################################################################################
 ### Menu and GUI callbacks
 ### FIXME: order callbacks in itself...
@@ -6254,3 +6260,5 @@ class RosterWindow:
             self._nec_agent_removed)
         gajim.ged.register_event_handler('pep-received', ged.GUI1,
             self._nec_pep_received)
+        gajim.ged.register_event_handler('vcard-received', ged.GUI1,
+            self._nec_vcard_received)

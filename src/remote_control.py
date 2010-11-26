@@ -125,10 +125,12 @@ class Remote:
             ged.POSTGUI, self.on_unsubscribed_presence_received)
         gajim.ged.register_event_handler('gc-message-received',
             ged.POSTGUI, self.on_gc_message_received)
-        gajim.ged.register_event_handler('our-show',
-            ged.POSTGUI, self.on_our_status)
-        gajim.ged.register_event_handler('account-created',
-            ged.POSTGUI, self.on_account_created)
+        gajim.ged.register_event_handler('our-show', ged.POSTGUI,
+            self.on_our_status)
+        gajim.ged.register_event_handler('account-created', ged.POSTGUI,
+            self.on_account_created)
+        gajim.ged.register_event_handler('vcard-received', ged.POSTGUI,
+            self.on_vcard_received)
 
     def on_last_status_time(self, obj):
         self.raise_signal('LastStatusTime', (obj.conn.name, [
@@ -187,6 +189,9 @@ class Remote:
 
     def on_account_created(self, obj):
         self.raise_signal('NewAccount', (obj.conn.name, obj.account_info))
+
+    def on_vcard_received(self, obj):
+        self.raise_signal('VcardInfo', (obj.conn.name, obj.vcard_dict))
 
     def raise_signal(self, signal, arg):
         if self.signal_object:

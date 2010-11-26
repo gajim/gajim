@@ -639,10 +639,10 @@ class ConnectionVcard:
                 if frm and frm != our_jid:
                     # Write an empty file
                     self._save_vcard_to_hd(frm, '')
-                    jid, resource = gajim.get_room_and_nick_from_fjid(frm)
-                    self.dispatch('VCARD', {'jid': jid, 'resource': resource})
-                elif frm == our_jid:
-                    self.dispatch('MYVCARD', {'jid': frm})
+                jid, resource = gajim.get_room_and_nick_from_fjid(frm)
+                vcard = {'jid': jid, 'resource': resource}
+                gajim.nec.push_incoming_event(VcardReceivedEvent(None,
+                    conn=self, vcard_dict=vcard))
         elif self.awaiting_answers[id_][0] == AGENT_REMOVED:
             jid = self.awaiting_answers[id_][1]
             gajim.nec.push_incoming_event(AgentRemovedEvent(None, conn=self,
@@ -874,8 +874,9 @@ class ConnectionVcard:
 
         vcard['jid'] = frm
         vcard['resource'] = resource
+        gajim.nec.push_incoming_event(VcardReceivedEvent(None, conn=self,
+            vcard_dict=vcard))
         if frm_jid == our_jid:
-            self.dispatch('MYVCARD', vcard)
             # we re-send our presence with sha if has changed and if we are
             # not invisible
             if self.vcard_sha == avatar_sha:
@@ -890,9 +891,6 @@ class ConnectionVcard:
                 show=sshow, status=self.status)
             p = self.add_sha(p)
             self.connection.send(p)
-        else:
-            #('VCARD', {entry1: data, entry2: {entry21: data, ...}, ...})
-            self.dispatch('VCARD', vcard)
 
 # basic connection handlers used here and in zeroconf
 class ConnectionHandlersBase:
@@ -1676,6 +1674,18 @@ ConnectionJingle, ConnectionIBBytestream):
                 obj.contact = c
                 break
 
+        if obj.avatar_sha is not None and obj.ptype != 'error':
+            if obj.jid not in self.vcard_shas:
+                cached_vcard = self.get_cached_vcard(obj.jid)
+                if cached_vcard and 'PHOTO' in cached_vcard and \
+                'SHA' in cached_vcard['PHOTO']:
+                    self.vcard_shas[obj.jid] = cached_vcard['PHOTO']['SHA']
+                else:
+                    self.vcard_shas[obj.jid] = ''
+            if obj.avatar_sha != self.vcard_shas[obj.jid]:
+                # avatar has been updated
+                self.request_vcard(obj.jid)
+
         if obj.contact:
             if obj.contact.show in statuss:
                 obj.old_show = statuss.index(obj.contact.show)
@@ -1787,18 +1797,6 @@ ConnectionJingle, ConnectionIBBytestream):
                         contact.supports(xmpp.NS_ESESSION)):
                             sess.terminate()
                             del self.sessions[jid][sess.thread_id]
-
-        if obj.avatar_sha is not None and obj.ptype != 'error':
-            if obj.jid not in self.vcard_shas:
-                cached_vcard = self.get_cached_vcard(obj.jid)
-                if cached_vcard and 'PHOTO' in cached_vcard and \
-                'SHA' in cached_vcard['PHOTO']:
-                    self.vcard_shas[obj.jid] = cached_vcard['PHOTO']['SHA']
-                else:
-                    self.vcard_shas[obj.jid] = ''
-            if obj.avatar_sha != self.vcard_shas[obj.jid]:
-                # avatar has been updated
-                self.request_vcard(obj.jid)
 
         if gajim.config.get('log_contact_status_changes') and \
         gajim.config.should_log(self.name, obj.jid):

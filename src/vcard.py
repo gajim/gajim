@@ -132,6 +132,8 @@ class VcardWindow:
             self.set_last_status_time)
         gajim.ged.register_event_handler('time-result-received', ged.GUI1,
             self.set_entity_time)
+        gajim.ged.register_event_handler('vcard-received', ged.GUI1,
+            self._nec_vcard_received)
 
         self.fill_jabber_page()
         annotations = gajim.connections[self.account].annotations
@@ -164,6 +166,8 @@ class VcardWindow:
             self.set_last_status_time)
         gajim.ged.remove_event_handler('time-result-received', ged.GUI1,
             self.set_entity_time)
+        gajim.ged.remove_event_handler('vcard-received', ged.GUI1,
+            self._nec_vcard_received)
 
     def on_vcard_information_window_key_press_event(self, widget, event):
         if event.keyval == gtk.keysyms.Escape:
@@ -232,6 +236,20 @@ class VcardWindow:
                     self.set_value(i + '_label', vcard[i])
         self.vcard_arrived = True
         self.test_remove_progressbar()
+
+    def _nec_vcard_received(self, obj):
+        if obj.conn.name != self.account:
+            return
+        if obj.resource:
+            # It's a muc occupant vcard
+            if obj.jid != self.gc_contact.room_jid:
+                return
+            if obj.resource != self.gc_contact.name:
+                return
+        else:
+            if obj.jid != self.contact.jid:
+                return
+        self.set_values(obj.vcard_dict)
 
     def test_remove_progressbar(self):
         if self.update_progressbar_timeout_id is not None and \

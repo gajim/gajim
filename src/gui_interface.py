@@ -564,60 +564,15 @@ class Interface:
             gajim.interface.instances[account]['pep_services'].items_received(
                     array[2])
 
-    def handle_event_myvcard(self, account, array):
-        nick = ''
-        if 'NICKNAME' in array and array['NICKNAME']:
-            gajim.nicks[account] = array['NICKNAME']
-        elif 'FN' in array and array['FN']:
-            gajim.nicks[account] = array['FN']
-        if 'profile' in self.instances[account]:
-            win = self.instances[account]['profile']
-            win.set_values(array)
-            if account in self.show_vcard_when_connect:
-                self.show_vcard_when_connect.remove(account)
-        jid = array['jid']
-        if jid in self.instances[account]['infos']:
-            self.instances[account]['infos'][jid].set_values(array)
-
-    def handle_event_vcard(self, account, vcard):
+    def handle_event_vcard(self, obj):
         # ('VCARD', account, data)
         '''vcard holds the vcard data'''
-        jid = vcard['jid']
-        resource = vcard.get('resource', '')
-        fjid = jid + '/' + str(resource)
-
-        # vcard window
-        win = None
-        if jid in self.instances[account]['infos']:
-            win = self.instances[account]['infos'][jid]
-        elif resource and fjid in self.instances[account]['infos']:
-            win = self.instances[account]['infos'][fjid]
-        if win:
-            win.set_values(vcard)
-
-        # show avatar in chat
-        ctrl = None
-        if resource and self.msg_win_mgr.has_window(fjid, account):
-            win = self.msg_win_mgr.get_window(fjid, account)
-            ctrl = win.get_control(fjid, account)
-        elif self.msg_win_mgr.has_window(jid, account):
-            win = self.msg_win_mgr.get_window(jid, account)
-            ctrl = win.get_control(jid, account)
-
-        if ctrl and ctrl.type_id != message_control.TYPE_GC:
-            ctrl.show_avatar()
-
-        # Show avatar in roster or gc_roster
-        gc_ctrl = self.msg_win_mgr.get_gc_control(jid, account)
-        if not gc_ctrl and \
-        jid in self.minimized_controls[account]:
-            gc_ctrl = self.minimized_controls[account][jid]
-        if gc_ctrl and gc_ctrl.type_id == message_control.TYPE_GC:
-            gc_ctrl.draw_avatar(resource)
-        else:
-            self.roster.draw_avatar(jid, account)
-        if self.remote_ctrl:
-            self.remote_ctrl.raise_signal('VcardInfo', (account, vcard))
+        our_jid = gajim.get_jid_from_account(obj.conn.name)
+        if obj.jid == our_jid:
+            if obj.nickname:
+                gajim.nicks[obj.conn.name] = obj.nickname
+            if obj.conn.name in self.show_vcard_when_connect:
+                self.show_vcard_when_connect.remove(obj.conn.name)
 
     def handle_event_last_status_time(self, obj):
         # ('LAST_STATUS_TIME', account, (jid, resource, seconds, status))
@@ -1547,8 +1502,6 @@ class Interface:
             'MSGERROR': [self.handle_event_msgerror],
             'REGISTER_AGENT_INFO': [self.handle_event_register_agent_info],
             'AGENT_INFO_ITEMS': [self.handle_event_agent_info_items],
-            'MYVCARD': [self.handle_event_myvcard],
-            'VCARD': [self.handle_event_vcard],
             'GC_SUBJECT': [self.handle_event_gc_subject],
             'GC_CONFIG_CHANGE': [self.handle_event_gc_config_change],
             'FILE_REQUEST': [self.handle_event_file_request],
@@ -1599,6 +1552,7 @@ class Interface:
                 self.handle_event_subscribed_presence],
             'unsubscribed-presence-received': [
                 self.handle_event_unsubscribed_presence],
+            'vcard-received': [self.handle_event_vcard],
         }
 
     def register_core_handlers(self):

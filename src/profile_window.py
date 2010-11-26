@@ -69,6 +69,8 @@ class ProfileWindow:
             self._nec_vcard_published)
         gajim.ged.register_event_handler('vcard-not-published', ged.GUI1,
             self._nec_vcard_not_published)
+        gajim.ged.register_event_handler('vcard-received', ged.GUI1,
+            self._nec_vcard_received)
         self.window.show_all()
 
     def update_progressbar(self):
@@ -88,6 +90,8 @@ class ProfileWindow:
             self._nec_vcard_published)
         gajim.ged.remove_event_handler('vcard-not-published', ged.GUI1,
             self._nec_vcard_not_published)
+        gajim.ged.remove_event_handler('vcard-received', ged.GUI1,
+            self._nec_vcard_received)
         del gajim.interface.instances[self.account]['profile']
         if self.dialog: # Image chooser dialog
             self.dialog.destroy()
@@ -283,6 +287,13 @@ class ProfileWindow:
             self.progressbar.hide()
             self.progressbar.set_fraction(0)
             self.update_progressbar_timeout_id = None
+
+    def _nec_vcard_received(self, obj):
+        if obj.conn.name != self.account:
+            return
+        if obj.jid != self.jid:
+            return
+        self.set_values(obj.vcard_dict)
 
     def add_to_vcard(self, vcard_, entry, txt):
         """

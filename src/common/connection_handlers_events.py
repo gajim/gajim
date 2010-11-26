@@ -1475,3 +1475,20 @@ class PrivacyListRemovedEvent(nec.NetworkIncomingEvent):
 class PrivacyListActiveDefaultEvent(nec.NetworkIncomingEvent):
     name = 'privacy-list-active-default'
     base_network_events = []
+
+class VcardReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'vcard-received'
+    base_network_events = []
+    
+    def generate(self):
+        self.nickname = None
+        if 'NICKNAME' in self.vcard_dict:
+            self.nickname = self.vcard_dict['NICKNAME']
+        elif 'FN' in self.vcard_dict:
+            self.nickname = self.vcard_dict['FN']
+        self.jid = self.vcard_dict['jid']
+        self.resource = self.vcard_dict['resource']
+        self.fjid = self.jid
+        if self.resource:
+            self.fjid += '/' + self.resource
+        return True

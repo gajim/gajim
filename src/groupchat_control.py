@@ -458,6 +458,8 @@ class GroupchatControl(ChatControlBase):
             self._nec_gc_message_received)
         gajim.ged.register_event_handler('vcard-published', ged.GUI1,
             self._nec_vcard_published)
+        gajim.ged.register_event_handler('vcard-received', ged.GUI1,
+            self._nec_vcard_received)
         gajim.gc_connected[self.account][self.room_jid] = False
         # disable win, we are not connected yet
         ChatControlBase.got_disconnected(self)
@@ -877,6 +879,13 @@ class GroupchatControl(ChatControlBase):
         show = gajim.SHOW_LIST[obj.conn.connected]
         status = obj.conn.status
         obj.conn.send_gc_status(self.nick, self.room_jid, show, status)
+
+    def _nec_vcard_received(self, obj):
+        if obj.conn.name != self.account:
+            return
+        if obj.jid != self.room_jid:
+            return
+        self.draw_avatar(obj.resource)
 
     def _nec_gc_message_received(self, obj):
         if obj.room_jid != self.room_jid or obj.conn.name != self.account:
