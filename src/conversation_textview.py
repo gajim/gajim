@@ -1076,19 +1076,19 @@ class ConversationTextview(gobject.GObject):
             self.images.append(img)
             # add with possible animation
             self.tv.add_child_at_anchor(img, anchor)
-        if not is_xhtml_link:
-            if special_text.startswith('www.') or \
+        elif special_text.startswith('www.') or \
             special_text.startswith('ftp.') or \
-            text_is_valid_uri:
+            text_is_valid_uri and not is_xhtml_link:
                 tags.append('url')
-            elif special_text.startswith('mailto:'):
+        elif special_text.startswith('mailto:') and not is_xhtml_link:
                 tags.append('mail')
-            elif special_text.startswith('xmpp:'):
+        elif special_text.startswith('xmpp:') and not is_xhtml_link:
                 tags.append('xmpp')
-            elif gajim.interface.sth_at_sth_dot_sth_re.match(special_text):
+        elif gajim.interface.sth_at_sth_dot_sth_re.match(special_text) and\
+        not is_xhtml_link:
                 # it's a JID or mail
                 tags.append('sth_at_sth')
-        if special_text.startswith('*'): # it's a bold text
+        elif special_text.startswith('*'): # it's a bold text
             tags.append('bold')
             if special_text[1] == '/' and special_text[-2] == '/' and\
             len(special_text) > 4: # it's also italic
