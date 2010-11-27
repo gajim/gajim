@@ -1445,7 +1445,7 @@ class AtomEntryReceived(nec.NetworkIncomingEvent):
     base_network_events = []
 
     def generate(self):
-        self.atom_entry = atom.OldEntry(node=entry)
+        self.atom_entry = atom.OldEntry(node=self.node)
         return True
 
 class PlainConnectionEvent(nec.NetworkIncomingEvent):
