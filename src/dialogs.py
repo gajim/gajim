@@ -1835,6 +1835,12 @@ class InputDialog(CommonInputDialog):
         if input_str:
             self.set_entry(input_str)
 
+    def on_input_dialog_delete_event(self, widget, event):
+        '''
+        may be implemented by subclasses
+        '''
+        pass
+
     def set_entry(self, value):
         self.input_entry.set_text(value)
         self.input_entry.select_region(0, -1) # select all
