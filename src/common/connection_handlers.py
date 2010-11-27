@@ -1580,12 +1580,6 @@ ConnectionJingle, ConnectionIBBytestream):
     def dispatch_gc_message(self, msg, frm, msgtxt, jid, tim):
         has_timestamp = bool(msg.timestamp)
 
-        subject = msg.getSubject()
-
-        if subject is not None:
-            self.dispatch('GC_SUBJECT', (frm, subject, msgtxt, has_timestamp))
-            return
-
         statusCode = msg.getStatusCode()
 
         if not msg.getTag('body'): # no <body>

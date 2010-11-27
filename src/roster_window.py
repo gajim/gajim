@@ -2507,6 +2507,13 @@ class RosterWindow:
             return
         self.draw_avatar(obj.jid, obj.conn.name)
 
+    def _nec_gc_subject_received(self, obj):
+        contact = gajim.contacts.get_contact_with_highest_priority(
+            obj.conn.name, obj.room_jid)
+        if contact:
+            contact.status = obj.subject
+            self.draw_contact(obj.room_jid, obj.conn.name)
+
 ################################################################################
 ### Menu and GUI callbacks
 ### FIXME: order callbacks in itself...
@@ -6262,3 +6269,5 @@ class RosterWindow:
             self._nec_pep_received)
         gajim.ged.register_event_handler('vcard-received', ged.GUI1,
             self._nec_vcard_received)
+        gajim.ged.register_event_handler('gc-subject-received', ged.GUI1,
+            self._nec_gc_subject_received)

@@ -1051,6 +1051,7 @@ class GcMessageReceivedEvent(nec.NetworkIncomingEvent):
         self.msgtxt = self.msg_obj.msgtxt
         self.jid = self.msg_obj.jid
         self.room_jid = self.msg_obj.jid
+        self.nickname = self.msg_obj.resource
         self.timestamp = self.msg_obj.timestamp
         self.xhtml_msgtxt = self.stanza.getXHTML()
 
@@ -1069,8 +1070,8 @@ class GcMessageReceivedEvent(nec.NetworkIncomingEvent):
         self.subject = self.stanza.getSubject()
 
         if self.subject is not None:
-            self.conn.dispatch('GC_SUBJECT', (self.fjid, self.subject,
-                self.msgtxt, self.has_timestamp))
+            gajim.nec.push_incoming_event(GcSubjectReceivedEvent(None,
+                conn=self.conn, msg_event=self))
             return
 
         self.status_code = self.stanza.getStatusCode()
@@ -1115,6 +1116,21 @@ class GcMessageReceivedEvent(nec.NetworkIncomingEvent):
                                     [self.stanza, self.msg_obj], 0)
                                 return
 
+        return True
+
+class GcSubjectReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'gc-subject-received'
+    base_network_events = []
+
+    def generate(self):
+        self.conn = self.msg_event.conn
+        self.stanza = self.msg_event.stanza
+        self.room_jid = self.msg_event.room_jid
+        self.nickname = self.msg_event.nickname
+        self.fjid = self.msg_event.fjid
+        self.subject = self.msg_event.subject
+        self.msgtxt = self.msg_event.msgtxt
+        self.has_timestamp = self.msg_event.has_timestamp
         return True
 
 class MessageSentEvent(nec.NetworkIncomingEvent):
@@ -1479,7 +1495,7 @@ class PrivacyListActiveDefaultEvent(nec.NetworkIncomingEvent):
 class VcardReceivedEvent(nec.NetworkIncomingEvent):
     name = 'vcard-received'
     base_network_events = []
-    
+
     def generate(self):
         self.nickname = None
         if 'NICKNAME' in self.vcard_dict:

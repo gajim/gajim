@@ -593,42 +593,6 @@ class Interface:
             if self.roster.tooltip.id and self.roster.tooltip.win:
                 self.roster.tooltip.update_last_time(last_time)
 
-    def handle_event_gc_subject(self, account, array):
-        #('GC_SUBJECT', account, (jid, subject, body, has_timestamp))
-        jids = array[0].split('/', 1)
-        jid = jids[0]
-
-        gc_control = self.msg_win_mgr.get_gc_control(jid, account)
-
-        if not gc_control and \
-        jid in self.minimized_controls[account]:
-            gc_control = self.minimized_controls[account][jid]
-
-        contact = gajim.contacts.\
-                get_contact_with_highest_priority(account, jid)
-        if contact:
-            contact.status = array[1]
-            self.roster.draw_contact(jid, account)
-
-        if not gc_control:
-            return
-        gc_control.set_subject(array[1])
-        # Standard way, the message comes from the occupant who set the subject
-        text = None
-        if len(jids) > 1:
-            text = _('%(jid)s has set the subject to %(subject)s') % {
-                    'jid': jids[1], 'subject': array[1]}
-        # Workaround for psi bug http://flyspray.psi-im.org/task/595 , to be
-        # deleted one day. We can receive a subject with a body that contains
-        # "X has set the subject to Y" ...
-        elif array[2]:
-            text = array[2]
-        if text is not None:
-            if array[3]:
-                gc_control.print_old_conversation(text)
-            else:
-                gc_control.print_conversation(text)
-
     def handle_event_gc_config(self, obj):
         #('GC_CONFIG', account, (jid, form_node))  config is a dict
         account = obj.conn.name
@@ -1502,7 +1466,6 @@ class Interface:
             'MSGERROR': [self.handle_event_msgerror],
             'REGISTER_AGENT_INFO': [self.handle_event_register_agent_info],
             'AGENT_INFO_ITEMS': [self.handle_event_agent_info_items],
-            'GC_SUBJECT': [self.handle_event_gc_subject],
             'GC_CONFIG_CHANGE': [self.handle_event_gc_config_change],
             'FILE_REQUEST': [self.handle_event_file_request],
             'FILE_REQUEST_ERROR': [self.handle_event_file_request_error],

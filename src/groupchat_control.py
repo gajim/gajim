@@ -460,6 +460,8 @@ class GroupchatControl(ChatControlBase):
             self._nec_vcard_published)
         gajim.ged.register_event_handler('vcard-received', ged.GUI1,
             self._nec_vcard_received)
+        gajim.ged.register_event_handler('gc-subject-received', ged.GUI1,
+            self._nec_gc_subject_received)
         gajim.gc_connected[self.account][self.room_jid] = False
         # disable win, we are not connected yet
         ChatControlBase.got_disconnected(self)
@@ -1176,6 +1178,19 @@ class GroupchatControl(ChatControlBase):
         self.subject = subject
         self.draw_banner_text()
 
+    def _nec_gc_subject_received(self, obj):
+        if obj.conn.name != self.account:
+            return
+        if obj.room_jid != self.room_jid:
+            return
+        self.set_subject(obj.subject)
+        text = _('%(nick)s has set the subject to %(subject)s') % {
+            'nick': obj.nickname, 'subject': obj.subject}
+        if obj.has_timestamp:
+            self.print_old_conversation(text)
+        else:
+            self.print_conversation(text)
+
     def got_connected(self):
         # Make autorejoin stop.
         if self.autorejoin:
@@ -1797,6 +1812,10 @@ class GroupchatControl(ChatControlBase):
             self._nec_gc_message_received)
         gajim.ged.remove_event_handler('vcard-published', ged.GUI1,
             self._nec_vcard_published)
+        gajim.ged.remove_event_handler('vcard-received', ged.GUI1,
+            self._nec_vcard_received)
+        gajim.ged.remove_event_handler('gc-subject-received', ged.GUI1,
+            self._nec_gc_subject_received)
 
         if self.room_jid in gajim.gc_connected[self.account] and \
         gajim.gc_connected[self.account][self.room_jid]:
