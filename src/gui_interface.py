@@ -626,51 +626,6 @@ class Interface:
             self.instances[account]['gc_config'][obj.jid] = \
                 config.GroupchatConfigWindow(account, obj.jid, obj.dataform)
 
-    def handle_event_gc_config_change(self, account, array):
-        #('GC_CONFIG_CHANGE', account, (jid, statusCode))  statuscode is a list
-        # http://www.xmpp.org/extensions/xep-0045.html#roomconfig-notify
-        # http://www.xmpp.org/extensions/xep-0045.html#registrar-statuscodes...
-        # -init
-        jid = array[0]
-        statusCode = array[1]
-
-        gc_control = self.msg_win_mgr.get_gc_control(jid, account)
-        if not gc_control and \
-        jid in self.minimized_controls[account]:
-            gc_control = self.minimized_controls[account][jid]
-        if not gc_control:
-            return
-
-        changes = []
-        if '100' in statusCode:
-            # Can be a presence (see chg_contact_status in groupchat_control.py)
-            changes.append(_('Any occupant is allowed to see your full JID'))
-            gc_control.is_anonymous = False
-        if '102' in statusCode:
-            changes.append(_('Room now shows unavailable member'))
-        if '103' in statusCode:
-            changes.append(_('room now does not show unavailable members'))
-        if '104' in statusCode:
-            changes.append(_('A non-privacy-related room configuration change '
-                'has occurred'))
-        if '170' in statusCode:
-            # Can be a presence (see chg_contact_status in groupchat_control.py)
-            changes.append(_('Room logging is now enabled'))
-        if '171' in statusCode:
-            changes.append(_('Room logging is now disabled'))
-        if '172' in statusCode:
-            changes.append(_('Room is now non-anonymous'))
-            gc_control.is_anonymous = False
-        if '173' in statusCode:
-            changes.append(_('Room is now semi-anonymous'))
-            gc_control.is_anonymous = True
-        if '174' in statusCode:
-            changes.append(_('Room is now fully-anonymous'))
-            gc_control.is_anonymous = True
-
-        for change in changes:
-            gc_control.print_conversation(change)
-
     def handle_event_gc_affiliation(self, obj):
         #('GC_AFFILIATION', account, (room_jid, users_dict))
         account = obj.conn.name
@@ -1466,7 +1421,6 @@ class Interface:
             'MSGERROR': [self.handle_event_msgerror],
             'REGISTER_AGENT_INFO': [self.handle_event_register_agent_info],
             'AGENT_INFO_ITEMS': [self.handle_event_agent_info_items],
-            'GC_CONFIG_CHANGE': [self.handle_event_gc_config_change],
             'FILE_REQUEST': [self.handle_event_file_request],
             'FILE_REQUEST_ERROR': [self.handle_event_file_request_error],
             'FILE_SEND_ERROR': [self.handle_event_file_send_error],

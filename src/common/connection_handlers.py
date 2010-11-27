@@ -1582,14 +1582,6 @@ ConnectionJingle, ConnectionIBBytestream):
 
         statusCode = msg.getStatusCode()
 
-        if not msg.getTag('body'): # no <body>
-            # It could be a config change. See
-            # http://www.xmpp.org/extensions/xep-0045.html#roomconfig-notify
-            if msg.getTag('x'):
-                if statusCode != []:
-                    self.dispatch('GC_CONFIG_CHANGE', (jid, statusCode))
-            return
-
         displaymarking = None
         seclabel = msg.getTag('securitylabel')
         if seclabel and seclabel.getNamespace() == common.xmpp.NS_SECLABEL:

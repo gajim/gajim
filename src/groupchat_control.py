@@ -462,6 +462,8 @@ class GroupchatControl(ChatControlBase):
             self._nec_vcard_received)
         gajim.ged.register_event_handler('gc-subject-received', ged.GUI1,
             self._nec_gc_subject_received)
+        gajim.ged.register_event_handler('gc-config-changed-received', ged.GUI1,
+            self._nec_gc_config_changed_received)
         gajim.gc_connected[self.account][self.room_jid] = False
         # disable win, we are not connected yet
         ChatControlBase.got_disconnected(self)
@@ -1191,6 +1193,41 @@ class GroupchatControl(ChatControlBase):
         else:
             self.print_conversation(text)
 
+    def _nec_gc_config_changed_received(self, obj):
+        # statuscode is a list
+        # http://www.xmpp.org/extensions/xep-0045.html#roomconfig-notify
+        # http://www.xmpp.org/extensions/xep-0045.html#registrar-statuscodes...
+        # -init
+        changes = []
+        if '100' in obj.statusCode:
+            # Can be a presence (see chg_contact_status in groupchat_control.py)
+            changes.append(_('Any occupant is allowed to see your full JID'))
+            gc_control.is_anonymous = False
+        if '102' in statusCode:
+            changes.append(_('Room now shows unavailable member'))
+        if '103' in statusCode:
+            changes.append(_('room now does not show unavailable members'))
+        if '104' in statusCode:
+            changes.append(_('A non-privacy-related room configuration change '
+                'has occurred'))
+        if '170' in statusCode:
+            # Can be a presence (see chg_contact_status in groupchat_control.py)
+            changes.append(_('Room logging is now enabled'))
+        if '171' in statusCode:
+            changes.append(_('Room logging is now disabled'))
+        if '172' in statusCode:
+            changes.append(_('Room is now non-anonymous'))
+            gc_control.is_anonymous = False
+        if '173' in statusCode:
+            changes.append(_('Room is now semi-anonymous'))
+            gc_control.is_anonymous = True
+        if '174' in statusCode:
+            changes.append(_('Room is now fully-anonymous'))
+            gc_control.is_anonymous = True
+
+        for change in changes:
+            self.print_conversation(change)
+
     def got_connected(self):
         # Make autorejoin stop.
         if self.autorejoin:
@@ -1816,6 +1853,8 @@ class GroupchatControl(ChatControlBase):
             self._nec_vcard_received)
         gajim.ged.remove_event_handler('gc-subject-received', ged.GUI1,
             self._nec_gc_subject_received)
+        gajim.ged.remove_event_handler('gc-config-changed-received', ged.GUI1,
+            self._nec_gc_config_changed_received)
 
         if self.room_jid in gajim.gc_connected[self.account] and \
         gajim.gc_connected[self.account][self.room_jid]:

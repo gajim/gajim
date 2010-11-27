@@ -1081,8 +1081,8 @@ class GcMessageReceivedEvent(nec.NetworkIncomingEvent):
             # http://www.xmpp.org/extensions/xep-0045.html#roomconfig-notify
             if self.stanza.getTag('x'):
                 if self.status_code != []:
-                    self.conn.dispatch('GC_CONFIG_CHANGE', (self.jid,
-                        self.status_code))
+                    gajim.nec.push_incoming_event(GcConfigChangedReceivedEvent(
+                        None, conn=self.conn, msg_event=self))
             return
 
         self.displaymarking = None
@@ -1131,6 +1131,17 @@ class GcSubjectReceivedEvent(nec.NetworkIncomingEvent):
         self.subject = self.msg_event.subject
         self.msgtxt = self.msg_event.msgtxt
         self.has_timestamp = self.msg_event.has_timestamp
+        return True
+
+class GcConfigChangedReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'gc-config-changed-received'
+    base_network_events = []
+
+    def generate(self):
+        self.conn = self.msg_event.conn
+        self.stanza = self.msg_event.stanza
+        self.room_jid = self.msg_event.room_jid
+        self.status_code = self.msg_event.status_code
         return True
 
 class MessageSentEvent(nec.NetworkIncomingEvent):
