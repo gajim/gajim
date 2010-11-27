@@ -7,7 +7,6 @@
     <property name="type_hint">dialog</property>
     <property name="has_separator">False</property>
     <signal name="destroy" handler="on_input_dialog_destroy"/>
-    <signal name="delete_event" handler="on_input_dialog_delete_event"/>
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox10">
         <property name="visible">True</property>

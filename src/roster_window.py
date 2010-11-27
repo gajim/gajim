@@ -5882,6 +5882,7 @@ class RosterWindow:
         ag = gtk.accel_groups_from_object(self.window)[0]
         # remove the existing accelerator
         if self.have_new_chat_accel:
+            print self.have_new_chat_accel, new_chat_menuitem.get_submenu()
             new_chat_menuitem.remove_accelerator(ag, gtk.keysyms.n,
                 gtk.gdk.CONTROL_MASK)
             self.have_new_chat_accel = False
