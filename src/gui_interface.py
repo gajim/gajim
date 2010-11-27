@@ -1428,7 +1428,6 @@ class Interface:
             'METACONTACTS': [self.handle_event_metacontacts],
             'FAILED_DECRYPT': [self.handle_event_failed_decrypt],
             'ZC_NAME_CONFLICT': [self.handle_event_zc_name_conflict],
-            'PEP_CONFIG': [self.handle_event_pep_config],
             'PASSWORD_REQUIRED': [self.handle_event_password_required],
             'atom-entry-received': [self.handle_atom_entry],
             'bad-gpg-passphrase': [self.handle_event_bad_gpg_passphrase],

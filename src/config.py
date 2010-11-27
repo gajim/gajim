@@ -3940,11 +3940,17 @@ class ManagePEPServicesWindow:
         self.init_services()
         self.xml.get_object('services_treeview').get_selection().connect(
                 'changed', self.on_services_selection_changed)
+
+        gajim.ged.register_event_handler('pep-config-received', ged.GUI1,
+            self._nec_pep_config_received)
+
         self.window.show_all()
 
     def on_manage_pep_services_window_destroy(self, widget):
         '''close window'''
         del gajim.interface.instances[self.account]['pep_services']
+        gajim.ged.remove_event_handler('pep-config-received', ged.GUI1,
+            self._nec_pep_config_received)
 
     def on_close_button_clicked(self, widget):
         self.window.destroy()
@@ -4012,13 +4018,13 @@ class ManagePEPServicesWindow:
         our_jid = gajim.get_jid_from_account(self.account)
         gajim.connections[self.account].request_pb_configuration(our_jid, node)
 
-    def config(self, node, form):
+    def _nec_pep_config_received(self, obj):
         def on_ok(form, node):
             form.type = 'submit'
             our_jid = gajim.get_jid_from_account(self.account)
             gajim.connections[self.account].send_pb_configure(our_jid, node, form)
-        window = dialogs.DataFormWindow(form, (on_ok, node))
-        title = "Configure %s" % node
+        window = dialogs.DataFormWindow(obj.form, (on_ok, obj.node))
+        title = _('Configure %s') % obj.node
         window.set_title(title)
         window.show_all()
 

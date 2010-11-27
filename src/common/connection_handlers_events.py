@@ -1519,3 +1519,7 @@ class VcardReceivedEvent(nec.NetworkIncomingEvent):
         if self.resource:
             self.fjid += '/' + self.resource
         return True
+
+class PEPConfigReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'pep-config-received'
+    base_network_events = []

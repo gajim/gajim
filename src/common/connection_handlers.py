@@ -731,12 +731,12 @@ class ConnectionVcard:
             form_tag = conf.getTag('x', namespace=common.xmpp.NS_DATA)
             if form_tag:
                 form = common.dataforms.ExtendForm(node=form_tag)
-                self.dispatch('PEP_CONFIG', (node, form))
+                gajim.nec.push_incoming_event(PEPConfigReceivedEvent(None,
+                    conn=self.conn, node=node, form=form))
 
         elif self.awaiting_answers[id_][0] == ARCHIVING_COLLECTIONS_ARRIVED:
             # TODO
             print 'ARCHIVING_COLLECTIONS_ARRIVED'
-            pass
 
         elif self.awaiting_answers[id_][0] == ARCHIVING_COLLECTION_ARRIVED:
             def save_if_not_exists(with_, nick, direction, tim, payload):
