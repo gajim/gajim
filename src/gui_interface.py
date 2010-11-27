@@ -1202,11 +1202,6 @@ class Interface:
         if ctrl:
             ctrl.set_audio_state('error', reason=obj.reason)
 
-    def handle_event_pep_config(self, account, data):
-        # ('PEP_CONFIG', account, (node, form))
-        if 'pep_services' in self.instances[account]:
-            self.instances[account]['pep_services'].config(data[0], data[1])
-
     def handle_event_roster_item_exchange(self, obj):
         # data = (action in [add, delete, modify], exchange_list, jid_from)
         dialogs.RosterItemExchangeWindow(obj.conn.name, obj.action,
