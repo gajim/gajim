@@ -5887,11 +5887,6 @@ class RosterWindow:
         # open the menu
         new_chat_menuitem = self.xml.get_object('new_chat_menuitem')
         ag = gtk.accel_groups_from_object(self.window)[0]
-        # remove the existing accelerator
-        if self.have_new_chat_accel:
-            new_chat_menuitem.remove_accelerator(ag, gtk.keysyms.n,
-                gtk.gdk.CONTROL_MASK)
-            self.have_new_chat_accel = False
 
         if self.new_chat_menuitem_handler_id:
             new_chat_menuitem.handler_disconnect(
@@ -5913,11 +5908,6 @@ class RosterWindow:
                         self.new_chat_menuitem_handler_id = new_chat_menuitem.\
                             connect('activate',
                                 self.on_new_chat_menuitem_activate, account)
-                    if not self.have_new_chat_accel:
-                        new_chat_menuitem.add_accelerator('activate', ag,
-                            gtk.keysyms.n, gtk.gdk.CONTROL_MASK,
-                            gtk.ACCEL_VISIBLE)
-                        self.have_new_chat_accel = True
 
     def show_appropriate_context_menu(self, event, iters):
         # iters must be all of the same type
@@ -6248,6 +6238,11 @@ class RosterWindow:
         accel_group = gtk.accel_groups_from_object(self.window)[0]
         accel_group.connect_group(gtk.keysyms.j, gtk.gdk.CONTROL_MASK,
                 gtk.ACCEL_MASK, self.on_ctrl_j)
+
+        # Setting CTRL+N to be the shortcut for show Start chat dialog
+        new_chat_menuitem = self.xml.get_object('new_chat_menuitem')
+        new_chat_menuitem.add_accelerator('activate', accel_group,
+            gtk.keysyms.n, gtk.gdk.CONTROL_MASK, gtk.ACCEL_VISIBLE)
 
         gajim.ged.register_event_handler('presence-received', ged.GUI1,
             self._nec_presence_received)
