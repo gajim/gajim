@@ -1039,6 +1039,7 @@ class ConversationTextview(gobject.GObject):
         tags = []
         use_other_tags = True
         text_is_valid_uri = False
+        is_xhtml_link = None
         show_ascii_formatting_chars = \
                 gajim.config.get('show_ascii_formatting_chars')
         buffer_ = self.tv.get_buffer()
