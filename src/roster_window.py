@@ -1196,8 +1196,8 @@ class RosterWindow:
                 self._get_nearby_family_and_big_brother(family, account)[1:]
             is_big_brother = (jid, account) == (bb_jid, bb_account)
             iters = self._get_contact_iter(jid, account)
-            have_visible_children = iters and \
-                self.modelfilter.iter_has_child(iters[0])
+            if iters != [] and is_big_brother and (len(family) > 1):
+                have_visible_children = self.modelfilter.iter_has_child(iters[0])
 
         if have_visible_children:
             # We are the big brother and have a visible family
