@@ -732,7 +732,7 @@ class ConnectionVcard:
             if form_tag:
                 form = common.dataforms.ExtendForm(node=form_tag)
                 gajim.nec.push_incoming_event(PEPConfigReceivedEvent(None,
-                    conn=self.conn, node=node, form=form))
+                    conn=self, node=node, form=form))
 
         elif self.awaiting_answers[id_][0] == ARCHIVING_COLLECTIONS_ARRIVED:
             # TODO
