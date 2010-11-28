@@ -1533,8 +1533,8 @@ class MetacontactsReceivedEvent(nec.NetworkIncomingEvent):
         # http://www.xmpp.org/extensions/xep-0209.html
         self.meta_list = {}
         query = self.stanza.getTag('query')
-        storage = self.stanza.getTag('storage')
-        metas = self.stanza.getTags('meta')
+        storage = query.getTag('storage')
+        metas = storage.getTags('meta')
         for meta in metas:
             try:
                 jid = helpers.parse_jid(meta.getAttr('jid'))
