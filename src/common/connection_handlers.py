@@ -651,31 +651,8 @@ class ConnectionVcard:
             if not self.connection:
                 return
             if iq_obj.getType() == 'result':
-                # Metacontact tags
-                # http://www.xmpp.org/extensions/xep-0209.html
-                meta_list = {}
-                query = iq_obj.getTag('query')
-                storage = query.getTag('storage')
-                metas = storage.getTags('meta')
-                for meta in metas:
-                    try:
-                        jid = helpers.parse_jid(meta.getAttr('jid'))
-                    except common.helpers.InvalidFormat:
-                        continue
-                    tag = meta.getAttr('tag')
-                    data = {'jid': jid}
-                    order = meta.getAttr('order')
-                    try:
-                        order = int(order)
-                    except Exception:
-                        order = 0
-                    if order is not None:
-                        data['order'] = order
-                    if tag in meta_list:
-                        meta_list[tag].append(data)
-                    else:
-                        meta_list[tag] = [data]
-                self.dispatch('METACONTACTS', meta_list)
+                gajim.nec.push_incoming_event(MetacontactsReceivedEvent(None,
+                    conn=self, stanza=iq_obj))
             else:
                 if iq_obj.getErrorCode() not in ('403', '406', '404'):
                     self.private_storage_supported = False

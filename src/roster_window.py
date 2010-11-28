@@ -2514,6 +2514,9 @@ class RosterWindow:
             contact.status = obj.subject
             self.draw_contact(obj.room_jid, obj.conn.name)
 
+    def _nec_metacontacts_received(self, obj):
+        self.redraw_metacontacts(obj.conn.name)
+
 ################################################################################
 ### Menu and GUI callbacks
 ### FIXME: order callbacks in itself...
@@ -6266,3 +6269,5 @@ class RosterWindow:
             self._nec_vcard_received)
         gajim.ged.register_event_handler('gc-subject-received', ged.GUI1,
             self._nec_gc_subject_received)
+        gajim.ged.register_event_handler('metacontacts-received', ged.GUI2,
+            self._nec_metacontacts_received)

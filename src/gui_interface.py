@@ -1056,9 +1056,8 @@ class Interface:
             gajim.config.set_per('accounts', account, 'last_archiving_time',
                 time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()))
 
-    def handle_event_metacontacts(self, account, tags_list):
-        gajim.contacts.define_metacontacts(account, tags_list)
-        self.roster.redraw_metacontacts(account)
+    def handle_event_metacontacts(self, obj):
+        gajim.contacts.define_metacontacts(obj.conn.name, obj.meta_list)
 
     def handle_atom_entry(self, obj):
         AtomWindow.newAtomEntry(obj.atom_entry)
@@ -1420,7 +1419,6 @@ class Interface:
             'FILE_REQUEST_ERROR': [self.handle_event_file_request_error],
             'FILE_SEND_ERROR': [self.handle_event_file_send_error],
             'SIGNED_IN': [self.handle_event_signed_in],
-            'METACONTACTS': [self.handle_event_metacontacts],
             'FAILED_DECRYPT': [self.handle_event_failed_decrypt],
             'ZC_NAME_CONFLICT': [self.handle_event_zc_name_conflict],
             'PASSWORD_REQUIRED': [self.handle_event_password_required],
@@ -1447,6 +1445,7 @@ class Interface:
             'last-result-received': [self.handle_event_last_status_time],
             'message-not-sent': [self.handle_event_msgnotsent],
             'message-sent': [self.handle_event_msgsent],
+            'metacontacts-received': [self.handle_event_metacontacts],
             'muc-admin-received': [self.handle_event_gc_affiliation],
             'muc-owner-received': [self.handle_event_gc_config],
             'our-show': [self.handle_event_status],

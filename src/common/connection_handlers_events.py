@@ -1523,3 +1523,34 @@ class VcardReceivedEvent(nec.NetworkIncomingEvent):
 class PEPConfigReceivedEvent(nec.NetworkIncomingEvent):
     name = 'pep-config-received'
     base_network_events = []
+
+class MetacontactsReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'metacontacts-received'
+    base_network_events = []
+
+    def generate(self):
+        # Metacontact tags
+        # http://www.xmpp.org/extensions/xep-0209.html
+        self.meta_list = {}
+        query = self.stanza.getTag('query')
+        storage = self.stanza.getTag('storage')
+        metas = self.stanza.getTags('meta')
+        for meta in metas:
+            try:
+                jid = helpers.parse_jid(meta.getAttr('jid'))
+            except common.helpers.InvalidFormat:
+                continue
+            tag = meta.getAttr('tag')
+            data = {'jid': jid}
+            order = meta.getAttr('order')
+            try:
+                order = int(order)
+            except Exception:
+                order = 0
+            if order is not None:
+                data['order'] = order
+            if tag in self.meta_list:
+                self.meta_list[tag].append(data)
+            else:
+                self.meta_list[tag] = [data]
+        return True
