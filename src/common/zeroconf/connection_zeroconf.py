@@ -178,7 +178,8 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
         self.disconnect()
         gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
             show='offline'))
-        self.dispatch('ZC_NAME_CONFLICT', alt_name)
+        gajim.nec.push_incoming_event(ZeroconfNameConflictEvent(None, conn=self,
+            alt_name=alt_name))
 
     def _on_error(self, message):
         self.dispatch('ERROR', (_('Avahi error'),

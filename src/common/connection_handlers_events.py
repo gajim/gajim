@@ -1554,3 +1554,7 @@ class MetacontactsReceivedEvent(nec.NetworkIncomingEvent):
             else:
                 self.meta_list[tag] = [data]
         return True
+
+class ZeroconfNameConflictEvent(nec.NetworkIncomingEvent):
+    name = 'zeroconf-name-conflict'
+    base_network_events = []

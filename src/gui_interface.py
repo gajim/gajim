@@ -1083,19 +1083,19 @@ class Interface:
         if ctrl:
             ctrl.begin_e2e_negotiation()
 
-    def handle_event_zc_name_conflict(self, account, data):
+    def handle_event_zc_name_conflict(self, obj):
         def on_ok(new_name):
             gajim.config.set_per('accounts', account, 'name', new_name)
-            show = gajim.connections[account].old_show
-            status = gajim.connections[account].status
-            gajim.connections[account].username = new_name
-            gajim.connections[account].change_status(show, status)
+            show = obj.conn.old_show
+            status = obj.conn.status
+            obj.conn.username = new_name
+            obj.conn.change_status(show, status)
         def on_cancel():
-            gajim.connections[account].change_status('offline', '')
+            obj.conn.change_status('offline', '')
 
         dlg = dialogs.InputDialog(_('Username Conflict'),
             _('Please type a new username for your local account'),
-            input_str=data, is_modal=True, ok_handler=on_ok,
+            input_str=obj.alt_name, is_modal=True, ok_handler=on_ok,
             cancel_handler=on_cancel)
 
     def handle_event_resource_conflict(self, obj):
@@ -1420,7 +1420,6 @@ class Interface:
             'FILE_SEND_ERROR': [self.handle_event_file_send_error],
             'SIGNED_IN': [self.handle_event_signed_in],
             'FAILED_DECRYPT': [self.handle_event_failed_decrypt],
-            'ZC_NAME_CONFLICT': [self.handle_event_zc_name_conflict],
             'PASSWORD_REQUIRED': [self.handle_event_password_required],
             'atom-entry-received': [self.handle_atom_entry],
             'bad-gpg-passphrase': [self.handle_event_bad_gpg_passphrase],
@@ -1463,6 +1462,7 @@ class Interface:
             'unsubscribed-presence-received': [
                 self.handle_event_unsubscribed_presence],
             'vcard-received': [self.handle_event_vcard],
+            'zeroconf-name-conflict': [self.handle_event_zc_name_conflict],
         }
 
     def register_core_handlers(self):
