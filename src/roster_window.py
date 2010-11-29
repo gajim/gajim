@@ -1085,9 +1085,6 @@ class RosterWindow:
         return False
 
     def draw_contact(self, jid, account, selected=False, focus=False):
-        gobject.idle_add(self._draw_contact, jid, account, selected, focus)
-
-    def _draw_contact(self, jid, account, selected=False, focus=False):
         """
         Draw the correct state image, name BUT not avatar
         """
