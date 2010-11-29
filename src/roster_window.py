@@ -2466,9 +2466,12 @@ class RosterWindow:
             self.draw_contact(obj.room_jid, account)
 
     def _nec_roster_received(self, obj):
-        self.fill_contacts_and_groups_dicts(obj.roster, obj.conn.name)
-        self.add_account_contacts(obj.conn.name)
-        self.fire_up_unread_messages_events(obj.conn.name)
+        if obj.received_from_server:
+            self.fill_contacts_and_groups_dicts(obj.roster, obj.conn.name)
+            self.add_account_contacts(obj.conn.name)
+            self.fire_up_unread_messages_events(obj.conn.name)
+        else:
+            gobject.idle_add(self.refilter_shown_roster_items)
 
     def _nec_anonymous_auth(self, obj):
         """
