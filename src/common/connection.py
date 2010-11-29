@@ -2287,7 +2287,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         if self.password:
             self.set_password(self.password)
             return
-        self.dispatch('PASSWORD_REQUIRED', None)
+        gajim.nec.push_incoming_event(PasswordRequiredEvent(None, conn=self))
 
     def set_password(self, password):
         self.password = password

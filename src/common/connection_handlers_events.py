@@ -1558,3 +1558,7 @@ class MetacontactsReceivedEvent(nec.NetworkIncomingEvent):
 class ZeroconfNameConflictEvent(nec.NetworkIncomingEvent):
     name = 'zeroconf-name-conflict'
     base_network_events = []
+
+class PasswordRequiredEvent(nec.NetworkIncomingEvent):
+    name = 'password-required'
+    base_network_events = []

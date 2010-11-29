@@ -696,8 +696,9 @@ class Interface:
             'this message?'), checktext=_('_Do not ask me again'),
             on_response_yes=on_yes, on_response_no=on_no)
 
-    def handle_event_password_required(self, account, array):
+    def handle_event_password_required(self, obj):
         #('PASSWORD_REQUIRED', account, None)
+        account = obj.conn.name
         if account in self.pass_dialog:
             return
         text = _('Enter your password for account %s') % account
@@ -711,7 +712,7 @@ class Interface:
             if save:
                 gajim.config.set_per('accounts', account, 'savepass', True)
                 passwords.save_password(account, passphrase)
-            gajim.connections[account].set_password(passphrase)
+            obj.conn.set_password(passphrase)
             del self.pass_dialog[account]
 
         def on_cancel():
@@ -1420,7 +1421,6 @@ class Interface:
             'FILE_SEND_ERROR': [self.handle_event_file_send_error],
             'SIGNED_IN': [self.handle_event_signed_in],
             'FAILED_DECRYPT': [self.handle_event_failed_decrypt],
-            'PASSWORD_REQUIRED': [self.handle_event_password_required],
             'atom-entry-received': [self.handle_atom_entry],
             'bad-gpg-passphrase': [self.handle_event_bad_gpg_passphrase],
             'bookmarks-received': [self.handle_event_bookmarks],
@@ -1448,6 +1448,7 @@ class Interface:
             'muc-admin-received': [self.handle_event_gc_affiliation],
             'muc-owner-received': [self.handle_event_gc_config],
             'our-show': [self.handle_event_status],
+            'password-required': [self.handle_event_password_required],
             'plain-connection': [self.handle_event_plain_connection],
             'presence-received': [self.handle_event_presence],
             'roster-info': [self.handle_event_roster_info],
