@@ -1201,29 +1201,29 @@ class GroupchatControl(ChatControlBase):
         # http://www.xmpp.org/extensions/xep-0045.html#registrar-statuscodes...
         # -init
         changes = []
-        if '100' in obj.statusCode:
+        if '100' in obj.status_code:
             # Can be a presence (see chg_contact_status in groupchat_control.py)
             changes.append(_('Any occupant is allowed to see your full JID'))
             gc_control.is_anonymous = False
-        if '102' in statusCode:
+        if '102' in obj.status_code:
             changes.append(_('Room now shows unavailable member'))
-        if '103' in statusCode:
+        if '103' in obj.status_code:
             changes.append(_('room now does not show unavailable members'))
-        if '104' in statusCode:
+        if '104' in obj.status_code:
             changes.append(_('A non-privacy-related room configuration change '
                 'has occurred'))
-        if '170' in statusCode:
+        if '170' in obj.status_code:
             # Can be a presence (see chg_contact_status in groupchat_control.py)
             changes.append(_('Room logging is now enabled'))
-        if '171' in statusCode:
+        if '171' in obj.status_code:
             changes.append(_('Room logging is now disabled'))
-        if '172' in statusCode:
+        if '172' in obj.status_code:
             changes.append(_('Room is now non-anonymous'))
             gc_control.is_anonymous = False
-        if '173' in statusCode:
+        if '173' in obj.status_code:
             changes.append(_('Room is now semi-anonymous'))
             gc_control.is_anonymous = True
-        if '174' in statusCode:
+        if '174' in obj.status_code:
             changes.append(_('Room is now fully-anonymous'))
             gc_control.is_anonymous = True
 
