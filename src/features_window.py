@@ -60,8 +60,8 @@ class FeaturesWindow:
                         _('Feature not available under Windows.')),
                 _('OpenGPG message encryption'): (self.gpg_available,
                         _('Encrypting chat messages with gpg keys.'),
-                        _('Requires gpg and python-GnuPGInterface.'),
-                        _('Feature not available under Windows.')),
+                        _('Requires gpg and python-gnupg (http://code.google.com/p/python-gnupg/).'),
+                        _('Requires gpg.exe in PATH.')),
                 _('Network-manager'): (self.network_manager_available,
                         _('Autodetection of network status.'),
                         _('Requires gnome-network-manager and python-dbus.'),
@@ -181,8 +181,6 @@ class FeaturesWindow:
         return dbus_support.supported
 
     def gpg_available(self):
-        if os.name == 'nt':
-            return False
         return gajim.HAVE_GPG
 
     def network_manager_available(self):

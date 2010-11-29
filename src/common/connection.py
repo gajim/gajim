@@ -218,13 +218,12 @@ class CommonConnection:
             if self.gpg.passphrase is None and not use_gpg_agent:
                 # We didn't set a passphrase
                 return None
-            if self.gpg.passphrase is not None or use_gpg_agent:
-                signed = self.gpg.sign(msg, keyID)
-                if signed == 'BAD_PASSPHRASE':
-                    self.USE_GPG = False
-                    signed = ''
-                    gajim.nec.push_incoming_event(BadGPGPassphraseEvent(None,
-                        conn=self))
+            signed = self.gpg.sign(msg, keyID)
+            if signed == 'BAD_PASSPHRASE':
+                self.USE_GPG = False
+                signed = ''
+                gajim.nec.push_incoming_event(BadGPGPassphraseEvent(None,
+                    conn=self))
         return signed
 
     def _on_disconnected(self):
@@ -596,14 +595,12 @@ class CommonConnection:
 
     def ask_gpg_keys(self):
         if self.gpg:
-            keys = self.gpg.get_keys()
-            return keys
+            return self.gpg.get_keys()
         return None
 
     def ask_gpg_secrete_keys(self):
         if self.gpg:
-            keys = self.gpg.get_secret_keys()
-            return keys
+            return self.gpg.get_secret_keys()
         return None
 
     def load_roster_from_db(self):
