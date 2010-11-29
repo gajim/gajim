@@ -2517,6 +2517,10 @@ class RosterWindow:
     def _nec_metacontacts_received(self, obj):
         self.redraw_metacontacts(obj.conn.name)
 
+    def _nec_signed_in(self, obj):
+        self.set_actions_menu_needs_rebuild()
+        self.draw_account(obj.conn.name)
+
 ################################################################################
 ### Menu and GUI callbacks
 ### FIXME: order callbacks in itself...
@@ -6271,3 +6275,5 @@ class RosterWindow:
             self._nec_gc_subject_received)
         gajim.ged.register_event_handler('metacontacts-received', ged.GUI2,
             self._nec_metacontacts_received)
+        gajim.ged.register_event_handler('signed-in', ged.GUI1,
+            self._nec_signed_in)

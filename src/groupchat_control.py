@@ -464,6 +464,8 @@ class GroupchatControl(ChatControlBase):
             self._nec_gc_subject_received)
         gajim.ged.register_event_handler('gc-config-changed-received', ged.GUI1,
             self._nec_gc_config_changed_received)
+        gajim.ged.register_event_handler('signed-in', ged.GUI1,
+            self._nec_signed_in)
         gajim.gc_connected[self.account][self.room_jid] = False
         # disable win, we are not connected yet
         ChatControlBase.got_disconnected(self)
@@ -1228,6 +1230,15 @@ class GroupchatControl(ChatControlBase):
         for change in changes:
             self.print_conversation(change)
 
+    def _nec_signed_in(self, obj):
+        if obj.conn.name != self.account:
+            return
+        if self.room_jid in gajim.gc_connected[obj.conn.name] and \
+        gajim.gc_connected[obj.conn.name][self.room_jid]:
+            return
+        password = gajim.gc_passwords.get(self.room_jid, '')
+        obj.conn.join_gc(self.nick, self.room_jid, password)
+
     def got_connected(self):
         # Make autorejoin stop.
         if self.autorejoin:
@@ -1855,6 +1866,8 @@ class GroupchatControl(ChatControlBase):
             self._nec_gc_subject_received)
         gajim.ged.remove_event_handler('gc-config-changed-received', ged.GUI1,
             self._nec_gc_config_changed_received)
+        gajim.ged.remove_event_handler('signed-in', ged.GUI1,
+            self._nec_signed_in)
 
         if self.room_jid in gajim.gc_connected[self.account] and \
         gajim.gc_connected[self.account][self.room_jid]:

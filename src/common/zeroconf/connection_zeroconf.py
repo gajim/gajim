@@ -279,7 +279,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
             check = self.connection.announce()
         else:
             self.connected = STATUS_LIST.index(show)
-        self.dispatch('SIGNED_IN', ())
+        gajim.nec.push_incoming_event(SignedInEvent(None, conn=self))
 
         # stay offline when zeroconf does something wrong
         if check:

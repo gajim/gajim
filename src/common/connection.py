@@ -1547,7 +1547,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             self.get_annotations()
 
             # Inform GUI we just signed in
-            self.dispatch('SIGNED_IN', ())
+            gajim.nec.push_incoming_event(SignedInEvent(None, conn=self))
 
     def get_signed_presence(self, msg, callback = None):
         if gajim.config.get_per('accounts', self.name, 'gpg_sign_presence'):

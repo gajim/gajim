@@ -2031,7 +2031,7 @@ ConnectionJingle, ConnectionIBBytestream):
         self.get_annotations()
 
         # Inform GUI we just signed in
-        self.dispatch('SIGNED_IN', ())
+        gajim.nec.push_incoming_event(SignedInEvent(None, conn=self))
         self.send_awaiting_pep()
         self.continue_connect_info = None
 

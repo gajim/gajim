@@ -1002,17 +1002,16 @@ class Interface:
             gajim.connections[account].request_last_status_time(contact.jid,
                 contact.resource)
 
-    def handle_event_signed_in(self, account, empty):
+    def handle_event_signed_in(self, obj):
         """
         SIGNED_IN event is emitted when we sign in, so handle it
         """
         # ('SIGNED_IN', account, ())
         # block signed in notifications for 30 seconds
+        account = obj.conn.name
         gajim.block_signed_in_notifications[account] = True
-        self.roster.set_actions_menu_needs_rebuild()
-        self.roster.draw_account(account)
         state = self.sleeper.getState()
-        connected = gajim.connections[account].connected
+        connected = obj.conn.connected
         if gajim.config.get('ask_offline_status_on_connection'):
             # Ask offline status in 1 minute so w'are sure we got all online
             # presences
@@ -1021,41 +1020,32 @@ class Interface:
             # we go online or free for chat, so we activate auto status
             gajim.sleeper_state[account] = 'online'
         elif not ((state == common.sleepy.STATE_AWAY and connected == 4) or \
-                (state == common.sleepy.STATE_XA and connected == 5)):
+        (state == common.sleepy.STATE_XA and connected == 5)):
             # If we are autoaway/xa and come back after a disconnection, do
             # nothing
             # Else disable autoaway
             gajim.sleeper_state[account] = 'off'
-        invisible_show = gajim.SHOW_LIST.index('invisible')
-        # We cannot join rooms if we are invisible
-        if gajim.connections[account].connected == invisible_show:
-            return
-        # join already open groupchats
-        for gc_control in self.msg_win_mgr.get_controls(
-        message_control.TYPE_GC) + self.minimized_controls[account].values():
-            if account != gc_control.account:
-                continue
-            room_jid = gc_control.room_jid
-            if room_jid in gajim.gc_connected[account] and \
-            gajim.gc_connected[account][room_jid]:
-                continue
-            nick = gc_control.nick
-            password = gajim.gc_passwords.get(room_jid, '')
-            gajim.connections[account].join_gc(nick, room_jid, password)
-        # send currently played music
-        if gajim.connections[account].pep_supported and dbus_support.supported \
-        and gajim.config.get_per('accounts', account, 'publish_tune'):
-            self.enable_music_listener()
-        # enable location listener
-        if gajim.connections[account].pep_supported and dbus_support.supported \
-        and gajim.config.get_per('accounts', account, 'publish_location'):
-            location_listener.enable()
-        if gajim.connections[account].archiving_supported:
+
+        if obj.conn.archiving_supported:
             # Start merging logs from server
-            gajim.connections[account].request_modifications_page(
-                gajim.config.get_per('accounts', account, 'last_archiving_time'))
+            obj.conn.request_modifications_page(gajim.config.get_per('accounts',
+                account, 'last_archiving_time'))
             gajim.config.set_per('accounts', account, 'last_archiving_time',
                 time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()))
+
+        invisible_show = gajim.SHOW_LIST.index('invisible')
+        # We cannot join rooms if we are invisible
+        if connected == invisible_show:
+            return
+        # send currently played music
+        if obj.conn.pep_supported and dbus_support.supported and \
+        gajim.config.get_per('accounts', account, 'publish_tune'):
+            self.enable_music_listener()
+        # enable location listener
+        if obj.conn.pep_supported and dbus_support.supported and \
+        gajim.config.get_per('accounts', account, 'publish_location'):
+            location_listener.enable()
+
 
     def handle_event_metacontacts(self, obj):
         gajim.contacts.define_metacontacts(obj.conn.name, obj.meta_list)
@@ -1403,7 +1393,6 @@ class Interface:
             'FILE_REQUEST': [self.handle_event_file_request],
             'FILE_REQUEST_ERROR': [self.handle_event_file_request_error],
             'FILE_SEND_ERROR': [self.handle_event_file_send_error],
-            'SIGNED_IN': [self.handle_event_signed_in],
             'atom-entry-received': [self.handle_atom_entry],
             'bad-gpg-passphrase': [self.handle_event_bad_gpg_passphrase],
             'bookmarks-received': [self.handle_event_bookmarks],
@@ -1438,6 +1427,7 @@ class Interface:
             'roster-info': [self.handle_event_roster_info],
             'roster-item-exchange-received': \
                 [self.handle_event_roster_item_exchange],
+            'signed-in': [self.handle_event_signed_in],
             'ssl-error': [self.handle_event_ssl_error],
             'stream-conflict-received': [self.handle_event_resource_conflict],
             'subscribe-presence-received': [

@@ -1574,3 +1574,7 @@ class FailedDecryptEvent(nec.NetworkIncomingEvent):
         self.session = self.msg_obj.session
         self.printed_in_chat = False
         return True
+
+class SignedInEvent(nec.NetworkIncomingEvent):
+    name = 'signed-in'
+    base_network_events = []
