@@ -255,24 +255,24 @@ class ServicesCache:
         self._info = CacheDictionary(0, getrefresh = False)
         self._subscriptions = CacheDictionary(5, getrefresh=False)
         self._cbs = {}
-        gajim.ged.register_event_handler('AGENT_ERROR_INFO', ged.CORE,
-                self.agent_info_error)
-        gajim.ged.register_event_handler('AGENT_ERROR_ITEMS', ged.CORE,
-                self.agent_items_error)
-        gajim.ged.register_event_handler('AGENT_INFO_ITEMS', ged.CORE,
-                self.agent_items)
-        gajim.ged.register_event_handler('AGENT_INFO_INFO', ged.CORE,
-                self.agent_info)
+        gajim.ged.register_event_handler('agent-items-received', ged.GUI1,
+            self._nec_agent_items_received)
+        gajim.ged.register_event_handler('agent-items-error-received', ged.GUI1,
+            self._nec_agent_items_error_received)
+        gajim.ged.register_event_handler('agent-info-received', ged.GUI1,
+                self._nec_agent_info_received)
+        gajim.ged.register_event_handler('agent-info-error-received', ged.GUI1,
+                self._nec_agent_info_error_received)
 
     def __del__(self):
-        gajim.ged.remove_event_handler('AGENT_ERROR_INFO', ged.CORE,
-                self.agent_info_error)
-        gajim.ged.remove_event_handler('AGENT_ERROR_ITEMS', ged.CORE,
-                self.agent_items_error)
-        gajim.ged.remove_event_handler('AGENT_INFO_ITEMS', ged.CORE,
-                self.agent_items)
-        gajim.ged.remove_event_handler('AGENT_INFO_INFO', ged.CORE,
-                self.agent_info)
+        gajim.ged.remove_event_handler('agent-items-received', ged.GUI1,
+            self._nec_agent_items_received)
+        gajim.ged.remove_event_handler('agent-items-error-received', ged.GUI1,
+            self._nec_agent_items_error_received)
+        gajim.ged.remove_event_handler('agent-info-received', ged.GUI1,
+                self._nec_agent_info_received)
+        gajim.ged.remove_event_handler('agent-info-error-received', ged.GUI1,
+                self._nec_agent_info_error_received)
 
     def cleanup(self):
         self._items.cleanup()
@@ -402,86 +402,86 @@ class ServicesCache:
             self._cbs[cbkey] = [cb]
             gajim.connections[self.account].discoverItems(jid, node)
 
-    def agent_info(self, account, array):
+    def _nec_agent_info_received(self, obj):
         """
         Callback for when we receive an agent's info
         array is (agent, node, identities, features, data)
         """
         # We receive events from all accounts from GED
-        if account != self.account:
+        if obj.conn.name != self.account:
             return
-        jid, node, identities, features, data = array
-        addr = get_agent_address(jid, node)
+
+        addr = get_agent_address(obj.fjid, obj.node)
 
         # Store in cache
-        self._info[addr] = (identities, features, data)
+        self._info[addr] = (obj.identities, obj.features, obj.data)
 
         # Call callbacks
         cbkey = ('info', addr)
         if cbkey in self._cbs:
             for cb in self._cbs[cbkey]:
-                cb(jid, node, identities, features, data)
+                cb(obj.fjid, obj.node, obj.identities, obj.features, obj.data)
             # clean_closure may have beaten us to it
             if cbkey in self._cbs:
                 del self._cbs[cbkey]
 
-    def agent_items(self, account, array):
+    def _nec_agent_items_received(self, obj):
         """
         Callback for when we receive an agent's items
         array is (agent, node, items)
         """
         # We receive events from all accounts from GED
-        if account != self.account:
+        if obj.conn.name != self.account:
             return
-        jid, node, items = array
-        addr = get_agent_address(jid, node)
+
+        addr = get_agent_address(obj.fjid, obj.node)
 
         # Store in cache
-        self._items[addr] = items
+        self._items[addr] = obj.items
 
         # Call callbacks
         cbkey = ('items', addr)
         if cbkey in self._cbs:
             for cb in self._cbs[cbkey]:
-                cb(jid, node, items)
+                cb(obj.fjid, obj.node, obj.items)
             # clean_closure may have beaten us to it
             if cbkey in self._cbs:
                 del self._cbs[cbkey]
 
-    def agent_info_error(self, account, jid):
+    def _nec_agent_info_error_received(self, obj):
         """
         Callback for when a query fails. Even after the browse and agents
         namespaces
         """
         # We receive events from all accounts from GED
-        if account != self.account:
+        if obj.conn.name != self.account:
             return
-        addr = get_agent_address(jid)
+        addr = get_agent_address(obj.fjid)
 
         # Call callbacks
         cbkey = ('info', addr)
         if cbkey in self._cbs:
             for cb in self._cbs[cbkey]:
-                cb(jid, '', 0, 0, 0)
+                cb(obj.fjid, '', 0, 0, 0)
             # clean_closure may have beaten us to it
             if cbkey in self._cbs:
                 del self._cbs[cbkey]
 
-    def agent_items_error(self, account, jid):
+    def _nec_agent_items_error_received(self, obj):
         """
         Callback for when a query fails. Even after the browse and agents
         namespaces
         """
         # We receive events from all accounts from GED
-        if account != self.account:
+        if obj.conn.name != self.account:
             return
-        addr = get_agent_address(jid)
+        addr = get_agent_address(obj.fjid)
 
         # Call callbacks
         cbkey = ('items', addr)
         if cbkey in self._cbs:
             for cb in self._cbs[cbkey]:
-                cb(jid, '', 0)
+                cb(obj.fjid, '', 0)
             # clean_closure may have beaten us to it
             if cbkey in self._cbs:
                 del self._cbs[cbkey]

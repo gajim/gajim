@@ -203,42 +203,13 @@ class ConnectionDisco:
 
     def _DiscoverItemsErrorCB(self, con, iq_obj):
         log.debug('DiscoverItemsErrorCB')
-        jid = helpers.get_full_jid_from_iq(iq_obj)
-        self.dispatch('AGENT_ERROR_ITEMS', (jid))
+        gajim.nec.push_incoming_event(AgentItemsErrorReceivedEvent(None,
+            conn=self, stanza=iq_obj))
 
     def _DiscoverItemsCB(self, con, iq_obj):
         log.debug('DiscoverItemsCB')
-        q = iq_obj.getTag('query')
-        node = q.getAttr('node')
-        if not node:
-            node = ''
-        qp = iq_obj.getQueryPayload()
-        items = []
-        if not qp:
-            qp = []
-        for i in qp:
-            # CDATA payload is not processed, only nodes
-            if not isinstance(i, common.xmpp.simplexml.Node):
-                continue
-            attr = {}
-            for key in i.getAttrs():
-                attr[key] = i.getAttrs()[key]
-            if 'jid' not in attr:
-                continue
-            try:
-                attr['jid'] = helpers.parse_jid(attr['jid'])
-            except common.helpers.InvalidFormat:
-                # jid is not conform
-                continue
-            items.append(attr)
-        jid = helpers.get_full_jid_from_iq(iq_obj)
-        hostname = gajim.config.get_per('accounts', self.name, 'hostname')
-        id_ = iq_obj.getID()
-        if jid == hostname and id_[:6] == 'Gajim_':
-            for item in items:
-                self.discoverInfo(item['jid'], id_prefix='Gajim_')
-        else:
-            self.dispatch('AGENT_INFO_ITEMS', (jid, node, items))
+        gajim.nec.push_incoming_event(AgentItemsReceivedEvent(None, conn=self,
+            stanza=iq_obj))
 
     def _DiscoverItemsGetCB(self, con, iq_obj):
         log.debug('DiscoverItemsGetCB')
@@ -291,117 +262,15 @@ class ConnectionDisco:
 
     def _DiscoverInfoErrorCB(self, con, iq_obj):
         log.debug('DiscoverInfoErrorCB')
-        jid = helpers.get_full_jid_from_iq(iq_obj)
-        id_ = iq_obj.getID()
-        if id_[:6] == 'Gajim_':
-            if not self.privacy_rules_requested:
-                self.privacy_rules_requested = True
-                self._request_privacy()
-        self.dispatch('AGENT_ERROR_INFO', (jid))
+        gajim.nec.push_incoming_event(AgentInfoErrorReceivedEvent(None,
+            conn=self, stanza=iq_obj))
 
     def _DiscoverInfoCB(self, con, iq_obj):
         log.debug('DiscoverInfoCB')
         if not self.connection or self.connected < 2:
             return
-        # According to XEP-0030:
-        # For identity: category, type is mandatory, name is optional.
-        # For feature: var is mandatory
-        identities, features, data = [], [], []
-        q = iq_obj.getTag('query')
-        node = q.getAttr('node')
-        if not node:
-            node = ''
-        qc = iq_obj.getQueryChildren()
-        if not qc:
-            qc = []
-        is_muc = False
-        transport_type = ''
-        for i in qc:
-            if i.getName() == 'identity':
-                attr = {}
-                for key in i.getAttrs().keys():
-                    attr[key] = i.getAttr(key)
-                if 'category' in attr and attr['category'] in ('gateway',
-                'headline') and 'type' in attr:
-                    transport_type = attr['type']
-                if 'category' in attr and attr['category'] == 'conference' and \
-                'type' in attr and attr['type'] == 'text':
-                    is_muc = True
-                identities.append(attr)
-            elif i.getName() == 'feature':
-                var = i.getAttr('var')
-                if var:
-                    features.append(var)
-            elif i.getName() == 'x' and i.getNamespace() == common.xmpp.NS_DATA:
-                data.append(common.xmpp.DataForm(node=i))
-        jid = helpers.get_full_jid_from_iq(iq_obj)
-        if transport_type and jid not in gajim.transport_type:
-            gajim.transport_type[jid] = transport_type
-            gajim.logger.save_transport_type(jid, transport_type)
-        id_ = iq_obj.getID()
-        if id_ is None:
-            log.warn('Invalid IQ received without an ID. Ignoring it: %s' % \
-                iq_obj)
-            return
-        if not identities:
-            # ejabberd doesn't send identities when we browse online users
-            #FIXME: see http://www.jabber.ru/bugzilla/show_bug.cgi?id=225
-            identities = [{'category': 'server', 'type': 'im', 'name': node}]
-        if id_[:6] == 'Gajim_':
-            if jid == gajim.config.get_per('accounts', self.name, 'hostname'):
-                if features.__contains__(common.xmpp.NS_GMAILNOTIFY):
-                    gajim.gmail_domains.append(jid)
-                    self.request_gmail_notifications()
-                if features.__contains__(common.xmpp.NS_SECLABEL):
-                    self.seclabel_supported = True
-                for identity in identities:
-                    if identity['category'] == 'pubsub' and identity.get(
-                    'type') == 'pep':
-                        self.pep_supported = True
-                        break
-                if features.__contains__(common.xmpp.NS_VCARD):
-                    self.vcard_supported = True
-                if features.__contains__(common.xmpp.NS_PUBSUB):
-                    self.pubsub_supported = True
-                    if features.__contains__(
-                    common.xmpp.NS_PUBSUB_PUBLISH_OPTIONS):
-                        self.pubsub_publish_options_supported = True
-                    else:
-                        # Remove stored bookmarks accessible to everyone.
-                        our_jid = gajim.get_jid_from_account(self.name)
-                        self.send_pb_purge(our_jid, 'storage:bookmarks')
-                        self.send_pb_delete(our_jid, 'storage:bookmarks')
-                if features.__contains__(common.xmpp.NS_ARCHIVE):
-                    self.archiving_supported = True
-                if features.__contains__(common.xmpp.NS_ARCHIVE_AUTO):
-                    self.archive_auto_supported = True
-                if features.__contains__(common.xmpp.NS_ARCHIVE_MANAGE):
-                    self.archive_manage_supported = True
-                if features.__contains__(common.xmpp.NS_ARCHIVE_MANUAL):
-                    self.archive_manual_supported = True
-                if features.__contains__(common.xmpp.NS_ARCHIVE_PREF):
-                    self.archive_pref_supported = True
-            if features.__contains__(common.xmpp.NS_BYTESTREAM) and \
-            gajim.config.get_per('accounts', self.name, 'use_ft_proxies'):
-                our_jid = helpers.parse_jid(gajim.get_jid_from_account(
-                    self.name) + '/' + self.server_resource)
-                gajim.proxy65_manager.resolve(jid, self.connection, our_jid,
-                    self.name)
-            if features.__contains__(common.xmpp.NS_MUC) and is_muc:
-                type_ = transport_type or 'jabber'
-                self.muc_jid[type_] = jid
-            if transport_type:
-                if transport_type in self.available_transports:
-                    self.available_transports[transport_type].append(jid)
-                else:
-                    self.available_transports[transport_type] = [jid]
-            if not self.privacy_rules_requested:
-                self.privacy_rules_requested = True
-                self._request_privacy()
-
-        self.dispatch('AGENT_INFO_INFO', (jid, node, identities, features,
-            data))
-        self._capsDiscoCB(jid, node, identities, features, data)
+        gajim.nec.push_incoming_event(AgentInfoReceivedEvent(None, conn=self,
+            stanza=iq_obj))
 
 class ConnectionVcard:
     def __init__(self):

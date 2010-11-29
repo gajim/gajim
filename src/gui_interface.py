@@ -556,14 +556,6 @@ class Interface:
             dialogs.ErrorDialog(_('Contact with "%s" cannot be established') % \
                 obj.agent, _('Check your connection or try again later.'))
 
-    def handle_event_agent_info_items(self, account, array):
-        #('AGENT_INFO_ITEMS', account, (agent, node, items))
-        our_jid = gajim.get_jid_from_account(account)
-        if 'pep_services' in gajim.interface.instances[account] and \
-        array[0] == our_jid:
-            gajim.interface.instances[account]['pep_services'].items_received(
-                    array[2])
-
     def handle_event_vcard(self, obj):
         # ('VCARD', account, data)
         '''vcard holds the vcard data'''
@@ -1388,7 +1380,6 @@ class Interface:
             'DB_ERROR': [self.handle_event_db_error],
             'INFORMATION': [self.handle_event_information],
             'MSGERROR': [self.handle_event_msgerror],
-            'AGENT_INFO_ITEMS': [self.handle_event_agent_info_items],
             'FILE_REQUEST': [self.handle_event_file_request],
             'FILE_REQUEST_ERROR': [self.handle_event_file_request_error],
             'FILE_SEND_ERROR': [self.handle_event_file_send_error],

@@ -3943,6 +3943,8 @@ class ManagePEPServicesWindow:
 
         gajim.ged.register_event_handler('pep-config-received', ged.GUI1,
             self._nec_pep_config_received)
+        gajim.ged.register_event_handler('agent-items-received', ged.GUI1,
+            self._nec_agent_items_received)
 
         self.window.show_all()
 
@@ -3951,6 +3953,8 @@ class ManagePEPServicesWindow:
         del gajim.interface.instances[self.account]['pep_services']
         gajim.ged.remove_event_handler('pep-config-received', ged.GUI1,
             self._nec_pep_config_received)
+        gajim.ged.remove_event_handler('agent-items-received', ged.GUI1,
+            self._nec_agent_items_received)
 
     def on_close_button_clicked(self, widget):
         self.window.destroy()
@@ -3975,9 +3979,9 @@ class ManagePEPServicesWindow:
         our_jid = gajim.get_jid_from_account(self.account)
         gajim.connections[self.account].discoverItems(our_jid)
 
-    def items_received(self, items):
+    def _nec_agent_items_received(self, obj):
         our_jid = gajim.get_jid_from_account(self.account)
-        for item in items:
+        for item in obj.items:
             if 'jid' in item and item['jid'] == our_jid and 'node' in item:
                 self.treestore.append([item['node']])
 
@@ -4027,6 +4031,9 @@ class ManagePEPServicesWindow:
         title = _('Configure %s') % obj.node
         window.set_title(title)
         window.show_all()
+
+    def _nec_agent_items_received(self, obj):
+        pass
 
 class ManageSoundsWindow:
     def __init__(self):

@@ -3044,8 +3044,6 @@ class ChatControl(ChatControlBase):
         if obj.session != self.session:
             return
 
-        obj.printed_in_chat = True
-
         details = _('Unable to decrypt message from %s\nIt may have been '
             'tampered with.') % obj.fjid
         self.print_conversation_line(details, 'status', '', obj.timestamp)

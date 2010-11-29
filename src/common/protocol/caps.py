@@ -43,6 +43,8 @@ class ConnectionCaps(object):
         gajim.nec.register_incoming_event(CapsReceivedEvent)
         gajim.ged.register_event_handler('caps-presence-received', ged.GUI1,
             self._nec_caps_presence_received)
+        gajim.ged.register_event_handler('agent-info-received', ged.GUI1,
+            self._nec_agent_info_received)
 
     def caps_change_account_name(self, new_name):
         self._account = new_name
@@ -70,14 +72,14 @@ class ConnectionCaps(object):
             contact = gajim.contacts.get_gc_contact(self._account, room_jid, nick)
         return contact
 
-    def _capsDiscoCB(self, jid, node, identities, features, dataforms):
+    def _nec_agent_info_received(self, obj):
         """
-        XMMPPY callback to update our caps cache with queried information after
+        callback to update our caps cache with queried information after
         we have retrieved an unknown caps hash and issued a disco
         """
-        contact = self._get_contact_or_gc_contact_for_jid(jid)
+        contact = self._get_contact_or_gc_contact_for_jid(obj.fjid)
         if not contact:
-            log.info("Received Disco from unknown contact %s" % jid)
+            log.info('Received Disco from unknown contact %s' % obj.fjid)
             return
 
         lookup = contact.client_caps.get_cache_lookup_strategy()
@@ -89,18 +91,17 @@ class ConnectionCaps(object):
             return
         else:
             validate = contact.client_caps.get_hash_validation_strategy()
-            hash_is_valid = validate(identities, features, dataforms)
+            hash_is_valid = validate(obj.identities, obj.features, obj.data)
 
             if hash_is_valid:
-                cache_item.set_and_store(identities, features)
+                cache_item.set_and_store(obj.identities, obj.features)
             else:
                 node = caps_hash = hash_method = None
-                contact.client_caps = self._create_suitable_client_caps(node,
-                        caps_hash, hash_method)
-                log.info("Computed and retrieved caps hash differ." +
-                        "Ignoring caps of contact %s" % contact.get_full_jid())
+                contact.client_caps = self._create_suitable_client_caps(
+                    obj.node, caps_hash, hash_method)
+                log.info('Computed and retrieved caps hash differ.' +
+                    'Ignoring caps of contact %s' % contact.get_full_jid())
 
-            j, r = gajim.get_room_and_nick_from_fjid(jid)
             gajim.nec.push_incoming_event(CapsDiscoReceivedEvent(None,
-                conn=self, fjid=jid, jid=j, resource=r,
+                conn=self, fjid=obj.fjid, jid=obj.jid, resource=obj.resource,
                 client_caps=contact.client_caps))

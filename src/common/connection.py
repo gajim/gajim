@@ -714,11 +714,17 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.secret_hmac = str(random.random())[2:]
         gajim.ged.register_event_handler('privacy-list-received', ged.CORE,
             self._nec_privacy_list_received)
+        gajim.ged.register_event_handler('agent-info-error-received', ged.CORE,
+            self._nec_agent_info_error_received)
+        gajim.ged.register_event_handler('agent-info-received', ged.CORE,
+            self._nec_agent_info_received)
     # END __init__
 
     def __del__(self):
         gajim.ged.remove_event_handler('privacy-list-received', ged.CORE,
             self._nec_privacy_list_received)
+        gajim.ged.remove_event_handler('agent-info-error-received', ged.CORE,
+            self._nec_agent_info_error_received)
 
     def get_config_values_or_default(self):
         if gajim.config.get_per('accounts', self.name, 'keep_alives_enabled'):
@@ -1593,6 +1599,83 @@ class Connection(CommonConnection, ConnectionHandlers):
         iq.setID(id_)
         self.awaiting_answers[id_] = (PRIVACY_ARRIVED, )
         self.connection.send(iq)
+
+    def _nec_agent_info_error_received(self, obj):
+        if obj.conn.name != self.name:
+            return
+        if obj.id_[:6] == 'Gajim_':
+            if not self.privacy_rules_requested:
+                self.privacy_rules_requested = True
+                self._request_privacy()
+
+    def _nec_agent_info_received(self, obj):
+        if obj.conn.name != self.name:
+            return
+        is_muc = False
+        transport_type = ''
+        for identity in obj.identities:
+            if 'category' in identity and identity['category'] in ('gateway',
+            'headline') and 'type' in identity:
+                transport_type = identity['type']
+            if 'category' in identity and identity['category'] == 'conference' \
+            and 'type' in identity and identity['type'] == 'text':
+                is_muc = True
+
+        if transport_type and obj.fjid not in gajim.transport_type:
+            gajim.transport_type[obj.fjid] = transport_type
+            gajim.logger.save_transport_type(obj.fjid, transport_type)
+
+        if obj.id_[:6] == 'Gajim_':
+            hostname = gajim.config.get_per('accounts', self.name, 'hostname')
+            our_jid = gajim.get_jid_from_account(self.name)
+            if obj.fjid == hostname:
+                if common.xmpp.NS_GMAILNOTIFY in obj.features:
+                    gajim.gmail_domains.append(obj.fjid)
+                    self.request_gmail_notifications()
+                if common.xmpp.NS_SECLABEL in obj.features:
+                    self.seclabel_supported = True
+                for identity in obj.identities:
+                    if identity['category'] == 'pubsub' and identity.get(
+                    'type') == 'pep':
+                        self.pep_supported = True
+                        break
+                if common.xmpp.NS_VCARD in obj.features:
+                    self.vcard_supported = True
+                if common.xmpp.NS_PUBSUB in obj.features:
+                    self.pubsub_supported = True
+                    if common.xmpp.NS_PUBSUB_PUBLISH_OPTIONS in obj.features:
+                        self.pubsub_publish_options_supported = True
+                    else:
+                        # Remove stored bookmarks accessible to everyone.
+                        self.send_pb_purge(our_jid, 'storage:bookmarks')
+                        self.send_pb_delete(our_jid, 'storage:bookmarks')
+                if common.xmpp.NS_ARCHIVE in obj.features:
+                    self.archiving_supported = True
+                if common.xmpp.NS_ARCHIVE_AUTO in obj.features:
+                    self.archive_auto_supported = True
+                if common.xmpp.NS_ARCHIVE_MANAGE in obj.features:
+                    self.archive_manage_supported = True
+                if common.xmpp.NS_ARCHIVE_MANUAL in obj.features:
+                    self.archive_manual_supported = True
+                if common.xmpp.NS_ARCHIVE_PREF in obj.features:
+                    self.archive_pref_supported = True
+            if common.xmpp.NS_BYTESTREAM in obj.features and \
+            gajim.config.get_per('accounts', self.name, 'use_ft_proxies'):
+                our_fjid = helpers.parse_jid(our_jid + '/' + \
+                    self.server_resource)
+                gajim.proxy65_manager.resolve(obj.fjid, self.connection,
+                    our_fjid, self.name)
+            if common.xmpp.NS_MUC in obj.features and is_muc:
+                type_ = transport_type or 'jabber'
+                self.muc_jid[type_] = obj.fjid
+            if transport_type:
+                if transport_type in self.available_transports:
+                    self.available_transports[transport_type].append(obj.fjid)
+                else:
+                    self.available_transports[transport_type] = [obj.fjid]
+            if not self.privacy_rules_requested:
+                self.privacy_rules_requested = True
+                self._request_privacy()
 
     def send_custom_status(self, show, msg, jid):
         if not show in gajim.SHOW_LIST:

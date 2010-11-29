@@ -1572,7 +1572,6 @@ class FailedDecryptEvent(nec.NetworkIncomingEvent):
         self.fjid = self.msg_obj.fjid
         self.timestamp = self.msg_obj.timestamp
         self.session = self.msg_obj.session
-        self.printed_in_chat = False
         return True
 
 class SignedInEvent(nec.NetworkIncomingEvent):
@@ -1582,3 +1581,100 @@ class SignedInEvent(nec.NetworkIncomingEvent):
 class RegisterAgentInfoReceivedEvent(nec.NetworkIncomingEvent):
     name = 'register-agent-info-received'
     base_network_events = []
+
+class AgentItemsReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
+    name = 'agent-items-received'
+    base_network_events = []
+
+    def generate(self):
+        q = self.stanza.getTag('query')
+        self.node = q.getAttr('node')
+        if not self.node:
+            self.node = ''
+        qp = self.stanza.getQueryPayload()
+        self.items = []
+        if not qp:
+            qp = []
+        for i in qp:
+            # CDATA payload is not processed, only nodes
+            if not isinstance(i, xmpp.simplexml.Node):
+                continue
+            attr = {}
+            for key in i.getAttrs():
+                attr[key] = i.getAttrs()[key]
+            if 'jid' not in attr:
+                continue
+            try:
+                attr['jid'] = helpers.parse_jid(attr['jid'])
+            except helpers.InvalidFormat:
+                # jid is not conform
+                continue
+            self.items.append(attr)
+        self.get_jid_resource()
+        hostname = gajim.config.get_per('accounts', self.conn.name, 'hostname')
+        self.get_id()
+        if self.fjid == hostname and self.id_[:6] == 'Gajim_':
+            for item in self.items:
+                self.conn.discoverInfo(item['jid'], id_prefix='Gajim_')
+        else:
+            return True
+
+class AgentItemsErrorReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
+    name = 'agent-items-error-received'
+    base_network_events = []
+
+    def generate(self):
+        self.get_jid_resource()
+        return True
+
+class AgentInfoReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
+    name = 'agent-info-received'
+    base_network_events = []
+
+    def generate(self):
+        self.get_id()
+        if self.id_ is None:
+            log.warn('Invalid IQ received without an ID. Ignoring it: %s' % \
+                self.stanza)
+            return
+        # According to XEP-0030:
+        # For identity: category, type is mandatory, name is optional.
+        # For feature: var is mandatory
+        self.identities, self.features, self.data = [], [], []
+        q = self.stanza.getTag('query')
+        self.node = q.getAttr('node')
+        if not self.node:
+            self.node = ''
+        qc = self.stanza.getQueryChildren()
+        if not qc:
+            qc = []
+
+        for i in qc:
+            if i.getName() == 'identity':
+                attr = {}
+                for key in i.getAttrs().keys():
+                    attr[key] = i.getAttr(key)
+                self.identities.append(attr)
+            elif i.getName() == 'feature':
+                var = i.getAttr('var')
+                if var:
+                    self.features.append(var)
+            elif i.getName() == 'x' and i.getNamespace() == xmpp.NS_DATA:
+                self.data.append(xmpp.DataForm(node=i))
+
+        if not self.identities:
+            # ejabberd doesn't send identities when we browse online users
+            # see http://www.jabber.ru/bugzilla/show_bug.cgi?id=225
+            self.identities = [{'category': 'server', 'type': 'im',
+                'name': node}]
+        self.get_jid_resource()
+        return True
+
+class AgentInfoErrorReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
+    name = 'agent-info-error-received'
+    base_network_events = []
+
+    def generate(self):
+        self.get_jid_resource()
+        self.get_id()
+        return True
