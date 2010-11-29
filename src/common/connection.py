@@ -897,7 +897,9 @@ class Connection(CommonConnection, ConnectionHandlers):
                     return
                 is_form = data[2]
                 conf = data[1]
-                self.dispatch('REGISTER_AGENT_INFO', (data[0], conf, is_form))
+                gajim.nec.push_incoming_event(RegisterAgentInfoReceivedEvent(
+                    None, conn=self, agent=data[0], config=conf,
+                    is_form=is_form))
         elif realm == common.xmpp.NS_PRIVACY:
             if event == common.xmpp.features_nb.PRIVACY_LISTS_RECEIVED:
                 # data is (list)

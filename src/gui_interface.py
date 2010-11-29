@@ -546,15 +546,15 @@ class Interface:
             notify.popup(event_type, obj.jid, account, 'unsubscribed', path,
                 event_type, obj.jid)
 
-    def handle_event_register_agent_info(self, account, array):
+    def handle_event_register_agent_info(self, obj):
         # ('REGISTER_AGENT_INFO', account, (agent, infos, is_form))
         # info in a dataform if is_form is True
-        if array[2] or 'instructions' in array[1]:
-            config.ServiceRegistrationWindow(array[0], array[1], account,
-                    array[2])
+        if obj.is_form or 'instructions' in obj.config:
+            config.ServiceRegistrationWindow(obj.agent, obj.config,
+                obj.conn.name, obj.is_form)
         else:
-            dialogs.ErrorDialog(_('Contact with "%s" cannot be established') \
-                    % array[0], _('Check your connection or try again later.'))
+            dialogs.ErrorDialog(_('Contact with "%s" cannot be established') % \
+                obj.agent, _('Check your connection or try again later.'))
 
     def handle_event_agent_info_items(self, account, array):
         #('AGENT_INFO_ITEMS', account, (agent, node, items))
@@ -1388,7 +1388,6 @@ class Interface:
             'DB_ERROR': [self.handle_event_db_error],
             'INFORMATION': [self.handle_event_information],
             'MSGERROR': [self.handle_event_msgerror],
-            'REGISTER_AGENT_INFO': [self.handle_event_register_agent_info],
             'AGENT_INFO_ITEMS': [self.handle_event_agent_info_items],
             'FILE_REQUEST': [self.handle_event_file_request],
             'FILE_REQUEST_ERROR': [self.handle_event_file_request_error],
@@ -1424,6 +1423,7 @@ class Interface:
             'password-required': [self.handle_event_password_required],
             'plain-connection': [self.handle_event_plain_connection],
             'presence-received': [self.handle_event_presence],
+            'register-agent-info-received': [self.handle_event_register_agent_info],
             'roster-info': [self.handle_event_roster_info],
             'roster-item-exchange-received': \
                 [self.handle_event_roster_item_exchange],

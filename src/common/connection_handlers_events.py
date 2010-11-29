@@ -1578,3 +1578,7 @@ class FailedDecryptEvent(nec.NetworkIncomingEvent):
 class SignedInEvent(nec.NetworkIncomingEvent):
     name = 'signed-in'
     base_network_events = []
+
+class RegisterAgentInfoReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'register-agent-info-received'
+    base_network_events = []
