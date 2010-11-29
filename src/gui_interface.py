@@ -1063,26 +1063,10 @@ class Interface:
     def handle_atom_entry(self, obj):
         AtomWindow.newAtomEntry(obj.atom_entry)
 
-    def handle_event_failed_decrypt(self, account, data):
-        jid, tim, session = data
-
-        details = _('Unable to decrypt message from '
-                '%s\nIt may have been tampered with.') % jid
-
-        ctrl = session.control
-        if ctrl:
-            ctrl.print_conversation_line(details, 'status', '', tim)
-        else:
-            dialogs.WarningDialog(_('Unable to decrypt message'),
-                    details)
-
-        # terminate the session
-        session.terminate_e2e()
-        session.conn.delete_session(jid, session.thread_id)
-
-        # restart the session
-        if ctrl:
-            ctrl.begin_e2e_negotiation()
+    def handle_event_failed_decrypt(self, obj):
+        details = _('Unable to decrypt message from %s\nIt may have been '
+            'tampered with.') % obj.fjid
+        dialogs.WarningDialog(_('Unable to decrypt message'), details)
 
     def handle_event_zc_name_conflict(self, obj):
         def on_ok(new_name):
@@ -1420,11 +1404,11 @@ class Interface:
             'FILE_REQUEST_ERROR': [self.handle_event_file_request_error],
             'FILE_SEND_ERROR': [self.handle_event_file_send_error],
             'SIGNED_IN': [self.handle_event_signed_in],
-            'FAILED_DECRYPT': [self.handle_event_failed_decrypt],
             'atom-entry-received': [self.handle_atom_entry],
             'bad-gpg-passphrase': [self.handle_event_bad_gpg_passphrase],
             'bookmarks-received': [self.handle_event_bookmarks],
             'connection-lost': [self.handle_event_connection_lost],
+            'failed-decrypt': [(self.handle_event_failed_decrypt, ged.GUI2)],
             'fingerprint-error': [self.handle_event_fingerprint_error],
             'gc-invitation-received': [self.handle_event_gc_invitation],
             'gc-presence-received': [self.handle_event_gc_presence],
@@ -1474,7 +1458,11 @@ class Interface:
         """
         for event_name, event_handlers in self.handlers.iteritems():
             for event_handler in event_handlers:
-                gajim.ged.register_event_handler(event_name, ged.GUI1,
+                prio = ged.GUI1
+                if type(event_handler) == tuple:
+                    prio = event_handler[1]
+                    event_handler = event_handler[0]
+                gajim.ged.register_event_handler(event_name, prio,
                     event_handler)
 
 ################################################################################

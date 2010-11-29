@@ -132,7 +132,7 @@ connection_handlers.ConnectionHandlersBase, connection_handlers.ConnectionJingle
             try:
                 msg = session.decrypt_stanza(msg)
             except Exception:
-                self.dispatch('FAILED_DECRYPT', (frm, tim))
+                self.dispatch('FAILED_DECRYPT', (frm, tim, session))
 
         msgtxt = msg.getBody()
         subject = msg.getSubject() # if not there, it's None

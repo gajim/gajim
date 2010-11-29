@@ -1562,3 +1562,15 @@ class ZeroconfNameConflictEvent(nec.NetworkIncomingEvent):
 class PasswordRequiredEvent(nec.NetworkIncomingEvent):
     name = 'password-required'
     base_network_events = []
+
+class FailedDecryptEvent(nec.NetworkIncomingEvent):
+    name = 'failed-decrypt'
+    base_network_events = []
+
+    def generate(self):
+        self.conn = self.msg_obj.conn
+        self.fjid = self.msg_obj.fjid
+        self.timestamp = self.msg_obj.timestamp
+        self.session = self.msg_obj.session
+        self.printed_in_chat = False
+        return True

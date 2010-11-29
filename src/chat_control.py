@@ -1601,6 +1601,8 @@ class ChatControl(ChatControlBase):
             self._nec_pep_received)
         gajim.ged.register_event_handler('vcard-received', ged.GUI1,
             self._nec_vcard_received)
+        gajim.ged.register_event_handler('failed-decrypt', ged.GUI1,
+            self._nec_failed_decrypt)
 
         # PluginSystem: adding GUI extension point for this ChatControl
         # instance object
@@ -2589,6 +2591,8 @@ class ChatControl(ChatControlBase):
             self._nec_pep_received)
         gajim.ged.remove_event_handler('vcard-received', ged.GUI1,
             self._nec_vcard_received)
+        gajim.ged.remove_event_handler('failed-decrypt', ged.GUI1,
+            self._nec_failed_decrypt)
 
         self.send_chatstate('gone', self.contact)
         self.contact.chatstate = None
@@ -3035,6 +3039,27 @@ class ChatControl(ChatControlBase):
     def begin_archiving_negotiation(self):
         self.begin_negotiation()
         self.session.negotiate_archiving()
+
+    def _nec_failed_decrypt(self, obj):
+        if obj.session != self.session:
+            return
+
+        obj.printed_in_chat = True
+
+        details = _('Unable to decrypt message from %s\nIt may have been '
+            'tampered with.') % obj.fjid
+        self.print_conversation_line(details, 'status', '', obj.timestamp)
+
+        # terminate the session
+        thread_id = self.session.thread_id
+        self.session.terminate_e2e()
+        obj.conn.delete_session(obj.fjid, thread_id)
+
+        # restart the session
+        self.begin_e2e_negotiation()
+
+        # Stop emission so it doesn't go to gui_interface
+        return True
 
     def got_connected(self):
         ChatControlBase.got_connected(self)

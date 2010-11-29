@@ -1407,8 +1407,8 @@ ConnectionJingle, ConnectionIBBytestream):
                 obj.stanza = obj.session.decrypt_stanza(obj.stanza)
                 obj.msgtxt = obj.stanza.getBody()
             except Exception:
-                self.dispatch('FAILED_DECRYPT', (obj.fjid, obj.timestamp,
-                    obj.session))
+                gajim.nec.push_incoming_event(FailedDecryptEvent(None,
+                    conn=self, msg_obj=obj))
                 return
 
         if obj.enc_tag and self.USE_GPG:
