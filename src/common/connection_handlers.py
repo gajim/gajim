@@ -1495,6 +1495,10 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
                 except common.helpers.InvalidFormat:
                     log.warn('Invalid JID: %s, ignoring it' % xtag.getAttr('jid'))
                     continue
+                if gajim.config.get_per('accounts', self.name,
+                'ignore_unknown_contacts') and not gajim.contacts.get_contacts( 
+                self.name, jid):
+                    return
                 is_continued = False
                 if xtag.getTag('continue'):
                     is_continued = True
