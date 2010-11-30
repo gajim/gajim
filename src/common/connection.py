@@ -54,7 +54,7 @@ if os.name != 'nt':
 import common.xmpp
 from common import helpers
 from common import gajim
-from common import GnuPG
+from common import gpg
 from common import passwords
 from common import exceptions
 
@@ -123,7 +123,7 @@ class CommonConnection:
         self.USE_GPG = False
         if gajim.HAVE_GPG:
             self.USE_GPG = True
-            self.gpg = GnuPG.GnuPG(gajim.config.get('use_gpg_agent'))
+            self.gpg = gpg.GnuPG(gajim.config.get('use_gpg_agent'))
         self.status = ''
         self.old_show = ''
         self.priority = gajim.get_priority(name, 'offline')
@@ -633,7 +633,7 @@ class CommonConnection:
             self.server_resource = self._compute_resource()
             if gajim.HAVE_GPG:
                 self.USE_GPG = True
-                self.gpg = GnuPG.GnuPG(gajim.config.get('use_gpg_agent'))
+                self.gpg = gpg.GnuPG(gajim.config.get('use_gpg_agent'))
             self.connect_and_init(show, msg, sign_msg)
             return
 
@@ -853,7 +853,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                                 return
                             if gajim.HAVE_GPG:
                                 self.USE_GPG = True
-                                self.gpg = GnuPG.GnuPG(gajim.config.get(
+                                self.gpg = gpg.GnuPG(gajim.config.get(
                                         'use_gpg_agent'))
                             gajim.nec.push_incoming_event(
                                 AccountCreatedEvent(None, conn=self,

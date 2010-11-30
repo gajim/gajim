@@ -1,4 +1,4 @@
-## src/common/GnuPG.py
+## src/common/gpg.py
 ##
 ## Copyright (C) 2003-2010 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2005 Alex Mauer <hawke AT hawkesnest.net>
@@ -22,11 +22,10 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-import gajim
+from gajim import HAVE_GPG
 import os
-from os import tmpfile
 
-if gajim.HAVE_GPG:
+if HAVE_GPG:
     import gnupg
 
     class GnuPG(gnupg.GPG):

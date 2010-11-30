@@ -57,7 +57,7 @@ from common import connection
 from common import passwords
 from common.zeroconf import connection_zeroconf
 from common import dataforms
-from common import GnuPG
+from common import gpg
 from common import ged
 
 try:
@@ -2335,7 +2335,7 @@ class AccountsWindow:
         # self.current_account is None and/or gajim.connections is {}
         else:
             if gajim.HAVE_GPG:
-                secret_keys = GnuPG.GnuPG().get_secret_keys()
+                secret_keys = gpg.GnuPG().get_secret_keys()
             else:
                 secret_keys = []
         if not secret_keys:
