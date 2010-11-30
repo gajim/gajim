@@ -677,6 +677,15 @@ class Verify(object):
         elif key == "SIG_ID":
             (self.signature_id,
              self.creation_date, self.timestamp) = value.split()
+        elif key == "ERRSIG":
+            self.valid = False
+            (self.key_id,
+             algo, hash_algo,
+             cls,
+             self.timestamp) = value.split()[:5]
+        elif key == "NO_PUBKEY":
+            self.valid = False
+            self.key_id = value
         else:
             raise ValueError("Unknown status message: %r" % key)
 
