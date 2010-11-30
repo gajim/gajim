@@ -43,7 +43,6 @@ import gobject
 
 from common.connection import CommonConnection
 from common import gajim
-from common import GnuPG
 from common.zeroconf import client_zeroconf
 from common.zeroconf import zeroconf
 from connection_handlers_zeroconf import *
