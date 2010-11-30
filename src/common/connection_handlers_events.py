@@ -1007,6 +1007,11 @@ class GcInvitationReceivedEvent(nec.NetworkIncomingEvent):
         except helpers.InvalidFormat:
             log.warn('Invalid JID: %s, ignoring it' % item.getAttr('from'))
             return
+        jid = gajim.get_jid_without_resource(self.jid_from)
+        if gajim.config.get_per('accounts', self.conn.name,
+        'ignore_unknown_contacts') and not gajim.contacts.get_contacts(
+        self.conn.name, jid):
+            return
         self.reason = item.getTagData('reason')
         self.password = self.msg_obj.invite_tag.getTagData('password')
 
