@@ -1208,8 +1208,9 @@ class Interface:
 
         def on_cancel():
             del self.instances[account]['online_dialog']['ssl_error']
-            iobj.conn.disconnect(on_purpose=True)
-            self.handle_event_status(account, 'offline')
+            obj.conn.disconnect(on_purpose=True)
+            gajim.nec.push_incoming_event(OurShowEvent(None, conn=obj.conn,
+                show='offline')
 
         pritext = _('Error verifying SSL certificate')
         sectext = _('There was an error verifying the SSL certificate of your '
@@ -1242,7 +1243,8 @@ class Interface:
         def on_no():
             del self.instances[account]['online_dialog']['fingerprint_error']
             obj.conn.disconnect(on_purpose=True)
-            self.handle_event_status(account, 'offline')
+            gajim.nec.push_incoming_event(OurShowEvent(None, conn=obj.conn,
+                show='offline')
 
         pritext = _('SSL certificate error')
         sectext = _('It seems the SSL certificate of account %(account)s has '
@@ -1277,7 +1279,8 @@ class Interface:
             del self.instances[obj.conn.name]['online_dialog']\
                 ['plain_connection']
             obj.conn.disconnect(on_purpose=True)
-            self.handle_event_status(obj.conn.name, 'offline')
+            gajim.nec.push_incoming_event(OurShowEvent(None, conn=obj.conn,
+                show='offline')
 
         pritext = _('Insecure connection')
         sectext = _('You are about to connect to the server with an insecure '
@@ -1316,7 +1319,8 @@ class Interface:
         def on_cancel():
             del self.instances[obj.conn.name]['online_dialog']['insecure_ssl']
             obj.conn.disconnect(on_purpose=True)
-            self.handle_event_status(obj.conn.name, 'offline')
+            gajim.nec.push_incoming_event(OurShowEvent(None, conn=obj.conn,
+                show='offline')
 
         pritext = _('Insecure connection')
         sectext = _('You are about to send your password on an insecure '
@@ -1357,7 +1361,8 @@ class Interface:
             del self.instances[obj.conn.name]['online_dialog']\
                 ['insecure_password']
             obj.conn.disconnect(on_purpose=True)
-            self.handle_event_status(obj.conn.name, 'offline')
+            gajim.nec.push_incoming_event(OurShowEvent(None, conn=obj.conn,
+                show='offline')
 
         pritext = _('Insecure connection')
         sectext = _('You are about to send your password unencrypted on an '
