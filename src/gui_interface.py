@@ -102,10 +102,6 @@ class Interface:
 ### Methods handling events from connection
 ################################################################################
 
-    def handle_event_warning(self, unused, data):
-        #('WARNING', account, (title_text, section_text))
-        dialogs.WarningDialog(data[0], data[1])
-
     def handle_event_error(self, unused, data):
         #('ERROR', account, (title_text, section_text))
         dialogs.ErrorDialog(data[0], data[1])
@@ -1380,7 +1376,6 @@ class Interface:
 
     def create_core_handlers_list(self):
         self.handlers = {
-            'WARNING': [self.handle_event_warning],
             'ERROR': [self.handle_event_error],
             'DB_ERROR': [self.handle_event_db_error],
             'INFORMATION': [self.handle_event_information],
