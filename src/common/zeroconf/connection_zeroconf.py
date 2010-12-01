@@ -192,9 +192,9 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
                 gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
                     show='offline'))
                 self.status = 'offline'
-                self.dispatch('CONNECTION_LOST',
-                        (_('Could not connect to "%s"') % self.name,
-                        _('Please check if Avahi or Bonjour is installed.')))
+                gajim.nec.push_incoming_event(ConnectionLostEvent(None,
+                    conn=self, title=_('Could not connect to "%s"') % self.name,
+                    msg=_('Please check if Avahi or Bonjour is installed.')))
                 self.disconnect()
                 return
             result = self.connection.connect(show, msg)
@@ -203,13 +203,13 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
                     show='offline'))
                 self.status = 'offline'
                 if result is False:
-                    self.dispatch('CONNECTION_LOST',
-                            (_('Could not start local service'),
-                            _('Unable to bind to port %d.' % self.port)))
+                    gajim.nec.push_incoming_event(ConnectionLostEvent(None,
+                        conn=self, title=_('Could not start local service'),
+                        msg=_('Unable to bind to port %d.' % self.port)))
                 else: # result is None
-                    self.dispatch('CONNECTION_LOST',
-                    (_('Could not start local service'),
-                    _('Please check if avahi-daemon is running.')))
+                    gajim.nec.push_incoming_event(ConnectionLostEvent(None,
+                        conn=self, title=_('Could not start local service'),
+                        msg=_('Please check if avahi-daemon is running.')))
                 self.disconnect()
                 return
         else:
@@ -289,9 +289,9 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
             gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
                 show='offline'))
             self.status = 'offline'
-            self.dispatch('CONNECTION_LOST',
-                    (_('Could not change status of account "%s"') % self.name,
-                    _('Please check if avahi-daemon is running.')))
+            gajim.nec.push_incoming_event(ConnectionLostEvent(None, conn=self,
+                title=_('Could not change status of account "%s"') % self.name,
+                msg=_('Please check if avahi-daemon is running.')))
 
     def _change_to_invisible(self, msg):
         if self.connection.remove_announce():
@@ -302,9 +302,9 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
             gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
                 show='offline'))
             self.status = 'offline'
-            self.dispatch('CONNECTION_LOST',
-                    (_('Could not change status of account "%s"') % self.name,
-                    _('Please check if avahi-daemon is running.')))
+            gajim.nec.push_incoming_event(ConnectionLostEvent(None, conn=self,
+                title=_('Could not change status of account "%s"') % self.name,
+                msg=_('Please check if avahi-daemon is running.')))
 
     def _change_from_invisible(self):
         self.connection.announce()
@@ -318,9 +318,9 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
             gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
                 show='offline'))
             self.status = 'offline'
-            self.dispatch('CONNECTION_LOST',
-                    (_('Could not change status of account "%s"') % self.name,
-                    _('Please check if avahi-daemon is running.')))
+            gajim.nec.push_incoming_event(ConnectionLostEvent(None, conn=self,
+                title=_('Could not change status of account "%s"') % self.name,
+                msg=_('Please check if avahi-daemon is running.')))
 
     def send_message(self, jid, msg, keyID, type_='chat', subject='',
     chatstate=None, msg_id=None, composing_xep=None, resource=None,
