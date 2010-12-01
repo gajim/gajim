@@ -1052,7 +1052,7 @@ class Interface:
 
     def handle_event_zc_name_conflict(self, obj):
         def on_ok(new_name):
-            gajim.config.set_per('accounts', account, 'name', new_name)
+            gajim.config.set_per('accounts', obj.conn.name, 'name', new_name)
             show = obj.conn.old_show
             status = obj.conn.status
             obj.conn.username = new_name
