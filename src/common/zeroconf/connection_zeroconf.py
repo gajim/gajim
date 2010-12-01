@@ -339,7 +339,9 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
 
         def on_send_not_ok(reason):
             reason += ' ' + _('Your message could not be sent.')
-            self.dispatch('MSGERROR', [jid, -1, reason, None, None, session])
+            gajim.nec.push_incoming_event(MessageErrorEvent(None, conn=self,
+                fjid=jid, error_code=-1, error_msg=reason, msg=None, time_=None,
+                session=session))
 
         def cb(jid, msg, keyID, forward_from, session, original_message, subject,
         type_, msg_iq):
@@ -348,8 +350,10 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
 
             if ret == -1:
                 # Contact Offline
-                self.dispatch('MSGERROR', [jid, -1, _('Contact is offline. Your '
-                        'message could not be sent.'), None, None, session])
+                gajim.nec.push_incoming_event(MessageErrorEvent(None, conn=self,
+                    fjid=jid, error_code=-1, error_msg=_(
+                    'Contact is offline. Your message could not be sent.'),
+                    msg=None, time_=None, session=session))
 
         self._prepare_message(jid, msg, keyID, type_=type_, subject=subject,
                 chatstate=chatstate, msg_id=msg_id, composing_xep=composing_xep,
@@ -372,8 +376,9 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
                 thread_id = data[1]
                 frm = unicode(data[0])
                 session = self.get_or_create_session(frm, thread_id)
-                self.dispatch('MSGERROR', [frm, -1,
-    _('Connection to host could not be established: Timeout while '
-                        'sending data.'), None, None, session])
+                gajim.nec.push_incoming_event(MessageErrorEvent(
+                    None, conn=self, fjid=frm, error_code=-1, error_msg=_(
+                    'Connection to host could not be established: Timeout while '
+                    'sending data.'), msg=None, time_=None, session=session))
 
 # END ConnectionZeroconf

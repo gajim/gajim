@@ -1365,8 +1365,9 @@ ConnectionJingle, ConnectionIBBytestream):
                     'or remove it (all history will be lost).') % \
                     common.logger.LOG_DB_PATH
                 self.dispatch('DB_ERROR', (pritext, sectext))
-        self.dispatch('MSGERROR', (frm, msg.getErrorCode(), error_msg, msgtxt,
-            tim, session))
+        gajim.nec.push_incoming_event(MessageErrorEvent(None, conn=self,
+            fjid=frm, error_code=msg.getErrorCode(), error_msg=error_msg,
+            msg=msgtxt, time_=tim, session=session))
 
     def _dispatch_gc_msg_with_captcha(self, stanza, msg_obj):
         msg_obj.stanza = stanza

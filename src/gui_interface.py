@@ -385,21 +385,18 @@ class Interface:
                 ctrl.set_session(None)
                 ctrl.contact = highest
 
-    def handle_event_msgerror(self, account, array):
-        #'MSGERROR' (account, (jid, error_code, error_msg, msg, time[,
-        # session]))
-        full_jid_with_resource = array[0]
-        jids = full_jid_with_resource.split('/', 1)
+    def handle_event_msgerror(self, obj):
+        #'MSGERROR' (account, (jid, error_code, error_msg, msg, time[session]))
+        account = obj.conn.name
+        jids = obj.fjid.split('/', 1)
         jid = jids[0]
 
-        if array[1] == '503':
+        if obj.error_code == '503':
             # If we get server-not-found error, stop sending chatstates
             for contact in gajim.contacts.get_contacts(account, jid):
                 contact.composing_xep = False
 
-        session = None
-        if len(array) > 5:
-            session = array[5]
+        session = obj.session
 
         gc_control = self.msg_win_mgr.get_gc_control(jid, account)
         if not gc_control and \
@@ -414,8 +411,7 @@ class Interface:
                 if session:
                     ctrl = session.control
                 else:
-                    ctrl = self.msg_win_mgr.get_control(full_jid_with_resource,
-                        account)
+                    ctrl = self.msg_win_mgr.get_control(obj.fjid, account)
 
                 if not ctrl:
                     tv = gc_control.list_treeview
@@ -430,11 +426,11 @@ class Interface:
                     ctrl = self.new_private_chat(gc_c, account, session)
 
                 ctrl.print_conversation(_('Error %(code)s: %(msg)s') % {
-                    'code': array[1], 'msg': array[2]}, 'status')
+                    'code': obj.error_code, 'msg': obj.error_msg}, 'status')
                 return
 
             gc_control.print_conversation(_('Error %(code)s: %(msg)s') % {
-                'code': array[1], 'msg': array[2]}, 'status')
+                'code': obj.error_code, 'msg': obj.error_msg}, 'status')
             if gc_control.parent_win and \
             gc_control.parent_win.get_active_jid() == jid:
                 gc_control.set_subject(gc_control.subject)
@@ -442,12 +438,12 @@ class Interface:
 
         if gajim.jid_is_transport(jid):
             jid = jid.replace('@', '')
-        msg = array[2]
-        if array[3]:
+        msg = obj.error_msg
+        if obj.msg:
             msg = _('error while sending %(message)s ( %(error)s )') % {
-                    'message': array[3], 'error': msg}
+                    'message': obj.msg, 'error': msg}
         if session:
-            session.roster_message(jid, msg, array[4], msg_type='error')
+            session.roster_message(jid, msg, obj.time_, msg_type='error')
 
     def handle_event_msgsent(self, obj):
         #('MSGSENT', account, (jid, msg, keyID))
@@ -1379,7 +1375,6 @@ class Interface:
             'ERROR': [self.handle_event_error],
             'DB_ERROR': [self.handle_event_db_error],
             'INFORMATION': [self.handle_event_information],
-            'MSGERROR': [self.handle_event_msgerror],
             'FILE_REQUEST': [self.handle_event_file_request],
             'FILE_REQUEST_ERROR': [self.handle_event_file_request_error],
             'FILE_SEND_ERROR': [self.handle_event_file_send_error],
@@ -1405,6 +1400,7 @@ class Interface:
             'jingle-error-received': [self.handle_event_jingle_error],
             'jingle-request-received': [self.handle_event_jingle_incoming],
             'last-result-received': [self.handle_event_last_status_time],
+            'message-error': [self.handle_event_msgerror],
             'message-not-sent': [self.handle_event_msgnotsent],
             'message-sent': [self.handle_event_msgsent],
             'metacontacts-received': [self.handle_event_metacontacts],

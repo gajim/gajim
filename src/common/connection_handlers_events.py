@@ -1153,6 +1153,10 @@ class MessageSentEvent(nec.NetworkIncomingEvent):
     name = 'message-sent'
     base_network_events = []
 
+class MessageErrorEvent(nec.NetworkIncomingEvent):
+    name = 'message-error'
+    base_network_events = []
+
 class AnonymousAuthEvent(nec.NetworkIncomingEvent):
     name = 'anonymous-auth'
     base_network_events = []
