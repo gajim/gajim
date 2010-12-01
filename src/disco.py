@@ -410,17 +410,20 @@ class ServicesCache:
         # We receive events from all accounts from GED
         if obj.conn.name != self.account:
             return
+        self._on_agent_info(obj.fjid, obj.node, obj.identities, obj.features,
+            obj.data)
 
-        addr = get_agent_address(obj.fjid, obj.node)
+    def _on_agent_info(self, fjid, node, identities, features, data):
+        addr = get_agent_address(fjid, node)
 
         # Store in cache
-        self._info[addr] = (obj.identities, obj.features, obj.data)
+        self._info[addr] = (identities, features, data)
 
         # Call callbacks
         cbkey = ('info', addr)
         if cbkey in self._cbs:
             for cb in self._cbs[cbkey]:
-                cb(obj.fjid, obj.node, obj.identities, obj.features, obj.data)
+                cb(fjid, node, identities, features, data)
             # clean_closure may have beaten us to it
             if cbkey in self._cbs:
                 del self._cbs[cbkey]
@@ -521,8 +524,7 @@ _('Without a connection, you can not browse available services'))
             gajim.connections[account].services_cache = self.cache
 
         if initial_identities:
-            self.cache.agent_info(account, (jid, node, initial_identities, [],
-                None))
+            self.cache._on_agent_info(jid, node, initial_identities, [], None)
         self.xml = gtkgui_helpers.get_gtk_builder('service_discovery_window.ui')
         self.window = self.xml.get_object('service_discovery_window')
         self.services_treeview = self.xml.get_object('services_treeview')
