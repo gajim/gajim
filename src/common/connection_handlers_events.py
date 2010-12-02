@@ -1296,8 +1296,8 @@ class NewAccountConnectedEvent(nec.NetworkIncomingEvent):
         self.ssl_msg = ''
         if self.errnum > 0:
             from common.connection import ssl_error
-            self.ssl_msg = ssl_error.get(errnum, _('Unknown SSL error: %d') % \
-                errnum)
+            self.ssl_msg = ssl_error.get(self.errnum, _(
+                'Unknown SSL error: %d') % self.errnum)
         self.ssl_cert = ''
         if hasattr(self.conn.connection.Connection, 'ssl_cert_pem'):
             self.ssl_cert = self.conn.connection.Connection.ssl_cert_pem
