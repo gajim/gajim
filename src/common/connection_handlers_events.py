@@ -1675,7 +1675,7 @@ class AgentInfoReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             # ejabberd doesn't send identities when we browse online users
             # see http://www.jabber.ru/bugzilla/show_bug.cgi?id=225
             self.identities = [{'category': 'server', 'type': 'im',
-                'name': node}]
+                'name': self.node}]
         self.get_jid_resource()
         return True
 
