@@ -4032,9 +4032,6 @@ class ManagePEPServicesWindow:
         window.set_title(title)
         window.show_all()
 
-    def _nec_agent_items_received(self, obj):
-        pass
-
 class ManageSoundsWindow:
     def __init__(self):
         self.xml = gtkgui_helpers.get_gtk_builder('manage_sounds_window.ui')
