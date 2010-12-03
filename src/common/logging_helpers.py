@@ -27,7 +27,7 @@ def parseLogLevel(arg):
     """
     if arg.isdigit():
         return int(arg)
-    elif arg.isupper():
+    elif arg.isupper() and hasattr(logging, arg):
         return getattr(logging, arg)
     else:
         print _('%s is not a valid loglevel') % repr(arg)
