@@ -30,7 +30,8 @@ def parseLogLevel(arg):
     elif arg.isupper():
         return getattr(logging, arg)
     else:
-        raise ValueError(_('%s is not a valid loglevel'), repr(arg))
+        print _('%s is not a valid loglevel') % repr(arg)
+        return 0
 
 def parseLogTarget(arg):
     """
