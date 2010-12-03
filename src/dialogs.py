@@ -94,8 +94,8 @@ class EditGroupsDialog:
         self.dialog.show_all()
         if self.changes_made:
             for (contact, account) in self.list_:
-                gajim.connections[account].update_contact(contact.jid, contact.name,
-                        contact.groups)
+                gajim.connections[account].update_contact(contact.jid,
+                    contact.name, contact.groups)
 
     def on_edit_groups_dialog_response(self, widget, response_id):
         if response_id == gtk.RESPONSE_CLOSE:
@@ -106,7 +106,8 @@ class EditGroupsDialog:
         Remove group group from all contacts and all their brothers
         """
         for (contact, account) in self.list_:
-            gajim.interface.roster.remove_contact_from_groups(contact.jid, account, [group])
+            gajim.interface.roster.remove_contact_from_groups(contact.jid,
+                account, [group])
 
         # FIXME: Ugly workaround.
         gajim.interface.roster.draw_group(_('General'), account)
@@ -116,9 +117,11 @@ class EditGroupsDialog:
         Add group group to all contacts and all their brothers
         """
         for (contact, account) in self.list_:
-            gajim.interface.roster.add_contact_to_groups(contact.jid, account, [group])
+            gajim.interface.roster.add_contact_to_groups(contact.jid, account,
+                [group])
 
-        # FIXME: Ugly workaround. Maybe we haven't been in any group (defaults to General)
+        # FIXME: Ugly workaround.
+        # Maybe we haven't been in any group (defaults to General)
         gajim.interface.roster.draw_group(_('General'), account)
 
     def on_add_button_clicked(self, widget):
@@ -3398,7 +3401,7 @@ class RosterItemExchangeWindow:
                         u.name = model[iter_][2]
                     gajim.connections[self.account].update_contact(jid,
                             model[iter_][2], groups)
-                    self.draw_contact(jid, account)
+                    self.draw_contact(jid, self.account)
                     # Update opened chat
                     ctrl = gajim.interface.msg_win_mgr.get_control(jid, self.account)
                     if ctrl:
