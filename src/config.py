@@ -2861,7 +2861,6 @@ class GroupchatConfigWindow:
         for row_ref in row_refs:
             path = row_ref.get_path()
             iter_ = model.get_iter(path)
-            jid = model[iter_][0]
             model.remove(iter_)
         self.remove_button[affiliation].set_sensitive(False)
 
@@ -2995,7 +2994,7 @@ class RemoveAccountWindow:
         # action of unregistration has failed, we don't remove the account
         # Error message is send by connect_and_auth()
         if not res:
-            confirmation_check = dialogs.ConfirmationDialogDoubleRadio(
+            dialogs.ConfirmationDialogDoubleRadio(
                     _('Connection to server %s failed') % self.account,
                     _('What would you like to do?'),
                     _('Remove only from Gajim'),
@@ -3129,6 +3128,8 @@ class ManageBookmarksWindow:
 
         self.xml.connect_signals(self)
         self.window.show_all()
+        # select root iter
+        self.selection.select_iter(self.treestore.get_iter_root())
 
     def on_bookmarks_treeview_button_press_event(self, widget, event):
         (model, iter_) = self.selection.get_selected()
@@ -3164,8 +3165,8 @@ class ManageBookmarksWindow:
 
         account = model[add_to][1].decode('utf-8')
         nick = gajim.nicks[account]
-        iter_ = self.treestore.append(add_to, [account, _('New Group Chat'), '',
-                False, False, '', nick, 'in_and_out'])
+        iter_ = self.treestore.append(add_to, [account, _('New Group Chat'),
+            '@', False, False, '', nick, 'in_and_out'])
 
         self.view.expand_row(model.get_path(add_to), True)
         self.view.set_cursor(model.get_path(iter_))
@@ -3268,12 +3269,7 @@ class ManageBookmarksWindow:
         # Fill in the data for childs
         self.title_entry.set_text(model[iter_][1])
         room_jid = model[iter_][2].decode('utf-8')
-        try:
-            (room, server) = room_jid.split('@')
-        except ValueError:
-            # We just added this one
-            room = ''
-            server = ''
+        (room, server) = room_jid.split('@')
         self.room_entry.set_text(room)
         self.server_entry.set_text(server)
 
@@ -3324,31 +3320,42 @@ class ManageBookmarksWindow:
 
     def on_server_entry_changed(self, widget):
         (model, iter_) = self.selection.get_selected()
-        if iter_:
-            room_jid = self.room_entry.get_text().decode('utf-8').strip() + '@' + \
-                    self.server_entry.get_text().decode('utf-8').strip()
-            try:
-                room_jid = helpers.parse_resource(room_jid)
-            except helpers.InvalidFormat, e:
-                dialogs.ErrorDialog(_('Invalid server'),
-                        _('Character not allowed'))
-                self.server_entry.set_text(model[iter_][2].split('@')[1])
-                return True
-            model[iter_][2] = room_jid
+        if not iter_:
+            return
+        server = widget.get_text().decode('utf-8')
+        if '@' in server:
+            dialogs.ErrorDialog(_('Invalid server'), _('Character not allowed'))
+            widget.set_text(server.replace('@', ''))
+
+        room_jid = self.room_entry.get_text().decode('utf-8').strip() + '@' + \
+                server.strip()
+        try:
+            room_jid = helpers.parse_resource(room_jid)
+        except helpers.InvalidFormat, e:
+            dialogs.ErrorDialog(_('Invalid server'),
+                    _('Character not allowed'))
+            self.server_entry.set_text(model[iter_][2].split('@')[1])
+            return True
+        model[iter_][2] = room_jid
 
     def on_room_entry_changed(self, widget):
         (model, iter_) = self.selection.get_selected()
-        if iter_:
-            room_jid = self.room_entry.get_text().decode('utf-8').strip() + '@' + \
-                    self.server_entry.get_text().decode('utf-8').strip()
-            try:
-                room_jid = helpers.parse_resource(room_jid)
-            except helpers.InvalidFormat, e:
-                dialogs.ErrorDialog(_('Invalid room'),
-                        _('Character not allowed'))
-                self.room_entry.set_text(model[iter_][2].split('@')[0])
-                return True
-            model[iter_][2] = room_jid
+        if not iter_:
+            return
+        room = widget.get_text().decode('utf-8')
+        if '@' in room:
+            dialogs.ErrorDialog(_('Invalid server'), _('Character not allowed'))
+            widget.set_text(room.replace('@', ''))
+        room_jid = self.room_entry.get_text().decode('utf-8').strip() + '@' + \
+                room.strip()
+        try:
+            room_jid = helpers.parse_resource(room_jid)
+        except helpers.InvalidFormat, e:
+            dialogs.ErrorDialog(_('Invalid room'),
+                    _('Character not allowed'))
+            self.room_entry.set_text(model[iter_][2].split('@')[0])
+            return True
+        model[iter_][2] = room_jid
 
     def on_pass_entry_changed(self, widget):
         (model, iter_) = self.selection.get_selected()

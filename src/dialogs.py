@@ -1959,7 +1959,7 @@ class ChangeNickDialog(InputDialogCheck):
             nick = helpers.parse_resource(nick)
         except Exception:
             # invalid char
-            dialogs.ErrorDialog(_('Invalid nickname'),
+            ErrorDialog(_('Invalid nickname'),
                     _('The nickname has not allowed characters.'))
             return
         self.on_ok(nick, self.is_checked())

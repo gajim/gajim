@@ -1855,7 +1855,6 @@ class MucBrowser(AgentBrowser):
         if not iter_:
             return
         service = model[iter_][0].decode('utf-8')
-        room = model[iter_][1].decode('utf-8')
         if 'join_gc' not in gajim.interface.instances[self.account]:
             try:
                 dialogs.JoinGroupchatWindow(self.account, service)
