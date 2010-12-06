@@ -61,6 +61,7 @@ if os.name == 'nt':
         raise ImportError('intl.dll library not found')
     libintl = ctypes.cdll.LoadLibrary(libintl_path)
     libintl.bindtextdomain(APP, DIR)
+    libintl.bind_textdomain_codeset(APP, 'UTF-8')
 
 import warnings
 
