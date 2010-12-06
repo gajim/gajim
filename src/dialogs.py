@@ -1761,7 +1761,7 @@ class FTOverwriteConfirmationDialog(ConfirmationDialog):
             align = b.get_children()[0]
             hbox = align.get_children()[0]
             label = hbox.get_children()[1]
-            label.set_text('_Resume')
+            label.set_text(_('_Resume'))
             label.set_use_underline(True)
             self.add_action_widget(b, 100)
 
@@ -1769,7 +1769,7 @@ class FTOverwriteConfirmationDialog(ConfirmationDialog):
         align = b.get_children()[0]
         hbox = align.get_children()[0]
         label = hbox.get_children()[1]
-        label.set_text('Re_place')
+        label.set_text(_('Re_place'))
         label.set_use_underline(True)
         self.add_action_widget(b, 200)
 
