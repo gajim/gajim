@@ -53,6 +53,7 @@ if os.name == 'nt':
     import ctypes
     libintl = ctypes.cdll.LoadLibrary('gtk\\bin\\intl.dll')
     libintl.bindtextdomain(APP, DIR)
+    libintl.bind_textdomain_codeset(APP, 'UTF-8')
 
 import warnings
 
