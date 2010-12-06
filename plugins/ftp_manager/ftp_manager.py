@@ -36,19 +36,20 @@ from dialogs import WarningDialog, HigDialog
 from plugins.gui import GajimPluginConfigDialog
 from common import i18n
 
+
 class FtpManager(GajimPlugin):
 
     @log_calls('FtpManagerPlugin')
     def init(self):
         self.config_dialog = FtpManagerPluginConfigDialog(self)
-        self.config_default_values = {'ftp_server': ('ftp.gajim.org','')}
+        self.config_default_values = {'ftp_server': ('ftp.gajim.org', '')}
 
     @log_calls('FtpManagerPlugin')
     def activate(self):
         self.pl_menuitem = gajim.interface.roster.xml.get_object(
             'plugins_menuitem')
         self.id_ = self.pl_menuitem.connect_after('activate', self.on_activate)
-        if gajim.interface.instances.has_key('plugins'):
+        if 'plugins' in gajim.interface.instances:
             self.on_activate(None)
 
     @log_calls('FtpManagerPlugin')
@@ -61,7 +62,7 @@ class FtpManager(GajimPlugin):
             del self.ftp
 
     def on_activate(self, widget):
-        if not gajim.interface.instances.has_key('plugins'):
+        if 'plugins' not in gajim.interface.instances:
             return
         self.installed_plugins_model = gajim.interface.instances[
             'plugins'].installed_plugins_model
@@ -186,7 +187,8 @@ class FtpManager(GajimPlugin):
             if plugin:
                 if plugin.active and plugin.name != self.name:
                     is_active = True
-                    gobject.idle_add(gajim.plugin_manager.deactivate_plugin ,plugin)
+                    gobject.idle_add(gajim.plugin_manager.deactivate_plugin,
+                        plugin)
                 gajim.plugin_manager.plugins.remove(plugin)
 
                 model = self.installed_plugins_model
@@ -206,7 +208,7 @@ class FtpManager(GajimPlugin):
                     self.available_plugins_model[row][4] = False
                     continue
             if is_active and plugin.name != self.name:
-                gobject.idle_add(gajim.plugin_manager.activate_plugin ,plugin)
+                gobject.idle_add(gajim.plugin_manager.activate_plugin, plugin)
             if plugin.name != 'Ftp Manager':
                 self.installed_plugins_model.append([plugin, plugin.name,
                     is_active])
@@ -268,7 +270,7 @@ class FtpManager(GajimPlugin):
                 if module_name == '__init__':
                     continue
                 try:
-                    module = __import__('%s.%s' %(mod, module_name))
+                    module = __import__('%s.%s' % (mod, module_name))
                 except ValueError, value_error:
                     pass
                 except ImportError, import_error:
@@ -348,7 +350,7 @@ class Ftp(threading.Thread):
                     gobject.idle_add(self.progressbar.set_text,
                         'Read "%s"' % dir_)
                     try:
-                        self.ftp.retrbinary('RETR %s/manifest.ini' %dir_,
+                        self.ftp.retrbinary('RETR %s/manifest.ini' % dir_,
                             self.handleDownload)
                     except Exception, error:
                         if str(error).startswith('550'):
@@ -356,12 +358,12 @@ class Ftp(threading.Thread):
                     self.config.readfp(io.BytesIO(self.buffer_.getvalue()))
                     local_version = self.get_plugin_version(
                         self.config.get('info', 'name'))
-                    gobject.idle_add(self.model_append,[dir_,
+                    gobject.idle_add(self.model_append, [dir_,
                         self.config.get('info', 'name'), local_version,
                         self.config.get('info', 'version'), False,
                         self.config.get('info', 'description'),
                         self.config.get('info', 'authors'),
-                        self.config.get('info', 'homepage'),])
+                        self.config.get('info', 'homepage'), ])
                 self.plugins_dirs = None
                 self.ftp.quit()
             gobject.idle_add(self.progressbar.set_fraction, 0)
@@ -370,7 +372,6 @@ class Ftp(threading.Thread):
             gobject.idle_add(self.progressbar.hide)
         except Exception, e:
             self.window.emit('error_signal', str(e))
-
 
     def handleDownload(self, block):
         self.buffer_.write(block)
@@ -393,7 +394,7 @@ class Ftp(threading.Thread):
                             if i == self.ftp.nlst(i)[0]:
                                 files.append(i[1:])
                                 del dirs[i[1:]]
-                        except Exception,e:
+                        except Exception, e:
                             # empty dir or file
                             continue
                         dirs.append(i[1:])
@@ -401,7 +402,7 @@ class Ftp(threading.Thread):
                         nlstr(dir_, subdirs)
                     else:
                         files.append(i[1:])
-            dirs,files = [], []
+            dirs, files = [], []
             nlstr('/plugins/' + remote_dir)
 
             if not os.path.isdir(gajim.PLUGINS_DIRS[1]):
