@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-11-27 13:33+0300\n"
-"PO-Revision-Date: 2010-11-27 13:36+0300\n"
+"PO-Revision-Date: 2010-12-07 19:39+0300\n"
 "Last-Translator: Fomin Denis <fominde@mail.ru>\n"
 "Language-Team: Linux Support LLC\n"
 "Language: ru\n"
@@ -2002,11 +2002,11 @@ msgstr "Окно контактов и окна с беседами сгрупп
 
 #: ../data/gui/preferences_window.ui.h:44
 msgid "Detached roster with detached chats"
-msgstr "Окно контактов и окно с беседами"
+msgstr "Окно контактов и окно для каждой беседы"
 
 #: ../data/gui/preferences_window.ui.h:45
 msgid "Detached roster with single chat"
-msgstr "Окно контактов и окно для каждой беседы"
+msgstr "Окно контактов и окно с беседами"
 
 #: ../data/gui/preferences_window.ui.h:46
 #: ../src/config.py:170
