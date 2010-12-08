@@ -1691,3 +1691,64 @@ class AgentInfoErrorReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.get_jid_resource()
         self.get_id()
         return True
+
+class FileRequestReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
+    name = 'file-request-received'
+    base_network_events = []
+
+    def generate(self):
+        self.get_id()
+        self.fjid = self.conn._ft_get_from(self.stanza)
+        self.jid = gajim.get_jid_without_resource(self.fjid)
+        self.file_props = {'type': 'r'}
+        self.file_props['sender'] = self.fjid
+        self.file_props['request-id'] = self.id_
+        si = self.stanza.getTag('si')
+        profile = si.getAttr('profile')
+        if profile != xmpp.NS_FILE:
+            self.conn.send_file_rejection(self.file_props, code='400', typ='profile')
+            raise xmpp.NodeProcessed
+        feature_tag = si.getTag('feature', namespace=xmpp.NS_FEATURE)
+        if not feature_tag:
+            return
+        form_tag = feature_tag.getTag('x', namespace=xmpp.NS_DATA)
+        if not form_tag:
+            return
+        self.dataform = dataforms.ExtendForm(node=form_tag)
+        for f in self.dataform.iter_fields():
+            if f.var == 'stream-method' and f.type == 'list-single':
+                values = [o[1] for o in f.options]
+                self.file_props['stream-methods'] = ' '.join(values)
+                if xmpp.NS_BYTESTREAM in values or xmpp.NS_IBB in values:
+                    break
+        else:
+            self.conn.send_file_rejection(self.file_props, code='400', typ='stream')
+            raise xmpp.NodeProcessed
+        file_tag = si.getTag('file')
+        for attribute in file_tag.getAttrs():
+            if attribute in ('name', 'size', 'hash', 'date'):
+                val = file_tag.getAttr(attribute)
+                if val is None:
+                    continue
+                self.file_props[attribute] = val
+        file_desc_tag = file_tag.getTag('desc')
+        if file_desc_tag is not None:
+            self.file_props['desc'] = file_desc_tag.getData()
+
+        mime_type = si.getAttr('mime-type')
+        if mime_type is not None:
+            self.file_props['mime-type'] = mime_type
+
+        self.file_props['receiver'] = self.conn._ft_get_our_jid()
+        self.file_props['sid'] = unicode(si.getAttr('id'))
+        self.file_props['transfered_size'] = []
+        return True
+
+class FileRequestErrorEvent(nec.NetworkIncomingEvent):
+    name = 'file-request-error'
+    base_network_events = []
+
+    def generate(self):
+        self.jid = gajim.get_jid_without_resource(self.jid)
+        return True
+

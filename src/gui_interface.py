@@ -166,8 +166,9 @@ class Interface:
                     file_props['error'] = -3
                 else:
                     file_props['error'] = -4
-                self.handle_event_file_request_error(obj.conn.name, (obj.fjid,
-                    file_props, obj.errmsg))
+                gajim.nec.push_incoming_event(FileRequestErrorEvent(None,
+                    conn=self, jid=obj.jid, file_props=file_props,
+                    error_msg=obj.errmsg))
                 obj.conn.disconnect_transfer(file_props)
                 return
         elif unicode(obj.errcode) == '404':
@@ -819,19 +820,17 @@ class Interface:
         notify.popup(_('New E-mail'), jid, obj.conn.name, 'gmail',
             path_to_image=path, title=title, text=text)
 
-    def handle_event_file_request_error(self, account, array):
+    def handle_event_file_request_error(self, obj):
         # ('FILE_REQUEST_ERROR', account, (jid, file_props, error_msg))
-        jid, file_props, errmsg = array
-        jid = gajim.get_jid_without_resource(jid)
         ft = self.instances['file_transfers']
-        ft.set_status(file_props['type'], file_props['sid'], 'stop')
-        errno = file_props['error']
+        ft.set_status(obj.file_props['type'], obj.file_props['sid'], 'stop')
+        errno = obj.file_props['error']
 
-        if helpers.allow_popup_window(account):
+        if helpers.allow_popup_window(obj.conn.name):
             if errno in (-4, -5):
-                ft.show_stopped(jid, file_props, errmsg)
+                ft.show_stopped(obj.jid, obj.file_props, obj.error_msg)
             else:
-                ft.show_request_error(file_props)
+                ft.show_request_error(obj.file_props)
             return
 
         if errno in (-4, -5):
@@ -839,45 +838,43 @@ class Interface:
         else:
             msg_type = 'file-request-error'
 
-        self.add_event(account, jid, msg_type, file_props)
+        self.add_event(obj.conn.name, obj.jid, msg_type, obj.file_props)
 
-        if helpers.allow_showing_notification(account):
+        if helpers.allow_showing_notification(obj.conn.name):
             # check if we should be notified
             path = gtkgui_helpers.get_icon_path('gajim-ft_error', 48)
             event_type = _('File Transfer Error')
-            notify.popup(event_type, jid, account, msg_type, path,
-                    title = event_type, text = file_props['name'])
+            notify.popup(event_type, obj.jid, obj.conn.name, msg_type, path,
+                title=event_type, text=obj.file_props['name'])
 
-    def handle_event_file_request(self, account, array):
-        jid = array[0]
-        jid = gajim.get_jid_without_resource(jid)
-        if jid not in gajim.contacts.get_jid_list(account):
+    def handle_event_file_request(self, obj):
+        account = obj.conn.name
+        if obj.jid not in gajim.contacts.get_jid_list(account):
             keyID = ''
             attached_keys = gajim.config.get_per('accounts', account,
-                    'attached_gpg_keys').split()
-            if jid in attached_keys:
-                keyID = attached_keys[attached_keys.index(jid) + 1]
-            contact = gajim.contacts.create_not_in_roster_contact(jid=jid,
-                    account=account, keyID=keyID)
+                'attached_gpg_keys').split()
+            if obj.jid in attached_keys:
+                keyID = attached_keys[attached_keys.index(obj.jid) + 1]
+            contact = gajim.contacts.create_not_in_roster_contact(jid=obj.jid,
+                account=account, keyID=keyID)
             gajim.contacts.add_contact(account, contact)
-            self.roster.add_contact(contact.jid, account)
-        file_props = array[1]
-        contact = gajim.contacts.get_first_contact_from_jid(account, jid)
+            self.roster.add_contact(obj.jid, account)
+        contact = gajim.contacts.get_first_contact_from_jid(account, obj.jid)
 
         if helpers.allow_popup_window(account):
             self.instances['file_transfers'].show_file_request(account, contact,
-                    file_props)
+                obj.file_props)
             return
 
-        self.add_event(account, jid, 'file-request', file_props)
+        self.add_event(account, obj.jid, 'file-request', obj.file_props)
 
         if helpers.allow_showing_notification(account):
             path = gtkgui_helpers.get_icon_path('gajim-ft_request', 48)
             txt = _('%s wants to send you a file.') % gajim.get_name_from_jid(
-                    account, jid)
+                account, obj.jid)
             event_type = _('File Transfer Request')
-            notify.popup(event_type, jid, account, 'file-request',
-                    path_to_image = path, title = event_type, text = txt)
+            notify.popup(event_type, obj.jid, account, 'file-request',
+                path_to_image=path, title=event_type, text=txt)
 
     def handle_event_file_error(self, title, message):
         dialogs.ErrorDialog(title, message)
@@ -1376,14 +1373,14 @@ class Interface:
             'ERROR': [self.handle_event_error],
             'DB_ERROR': [self.handle_event_db_error],
             'INFORMATION': [self.handle_event_information],
-            'FILE_REQUEST': [self.handle_event_file_request],
-            'FILE_REQUEST_ERROR': [self.handle_event_file_request_error],
             'FILE_SEND_ERROR': [self.handle_event_file_send_error],
             'atom-entry-received': [self.handle_atom_entry],
             'bad-gpg-passphrase': [self.handle_event_bad_gpg_passphrase],
             'bookmarks-received': [self.handle_event_bookmarks],
             'connection-lost': [self.handle_event_connection_lost],
             'failed-decrypt': [(self.handle_event_failed_decrypt, ged.GUI2)],
+            'file-request-error': [self.handle_event_file_request_error],
+            'file-request-received': [self.handle_event_file_request],
             'fingerprint-error': [self.handle_event_fingerprint_error],
             'gc-invitation-received': [self.handle_event_gc_invitation],
             'gc-presence-received': [self.handle_event_gc_presence],
