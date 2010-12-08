@@ -238,17 +238,6 @@ class VcardWindow:
         self.test_remove_progressbar()
 
     def _nec_vcard_received(self, obj):
-        if obj.conn.name != self.account:
-            return
-        if obj.resource:
-            # It's a muc occupant vcard
-            if obj.jid != self.gc_contact.room_jid:
-                return
-            if obj.resource != self.gc_contact.name:
-                return
-        else:
-            if obj.jid != self.contact.jid:
-                return
         self.set_values(obj.vcard_dict)
 
     def test_remove_progressbar(self):
