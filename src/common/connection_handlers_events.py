@@ -65,6 +65,34 @@ class HelperEvent:
         tim = helpers.datetime_tuple(tag)
         self.timestamp = localtime(timegm(tim))
 
+    def get_chatstate(self):
+        """
+        Extract chatstate from a <message/> stanza
+        Requires self.stanza and self.msgtxt
+        """
+        self.composing_xep = None
+        self.chatstate = None
+
+        # chatstates - look for chatstate tags in a message if not delayed
+        delayed = self.stanza.getTag('x', namespace=xmpp.NS_DELAY) is not None
+        if not delayed:
+            self.composing_xep = False
+            children = self.stanza.getChildren()
+            for child in children:
+                if child.getNamespace() == 'http://jabber.org/protocol/chatstates':
+                    self.chatstate = child.getName()
+                    self.composing_xep = 'XEP-0085'
+                    break
+            # No XEP-0085 support, fallback to XEP-0022
+            if not self.chatstate:
+                chatstate_child = self.stanza.getTag('x',
+                    namespace=xmpp.NS_EVENT)
+                if chatstate_child:
+                    self.chatstate = 'active'
+                    self.composing_xep = 'XEP-0022'
+                    if not self.msgtxt and chatstate_child.getTag('composing'):
+                        self.chatstate = 'composing'
+
 class HttpAuthReceivedEvent(nec.NetworkIncomingEvent):
     name = 'http-auth-received'
     base_network_events = []
@@ -1021,7 +1049,7 @@ class GcInvitationReceivedEvent(nec.NetworkIncomingEvent):
 
         return True
 
-class DecryptedMessageReceivedEvent(nec.NetworkIncomingEvent):
+class DecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
     name = 'decrypted-message-received'
     base_network_events = []
 
@@ -1044,6 +1072,43 @@ class DecryptedMessageReceivedEvent(nec.NetworkIncomingEvent):
             namespace=xmpp.NS_RECEIPTS)
         self.receipt_received_tag = self.stanza.getTag('received',
             namespace=xmpp.NS_RECEIPTS)
+
+        self.subject = self.stanza.getSubject()
+
+        self.displaymarking = None
+        self.seclabel = self.stanza.getTag('securitylabel',
+            namespace=xmpp.NS_SECLABEL)
+        if self.seclabel:
+            self.displaymarking = self.seclabel.getTag('displaymarking')
+
+        self.form_node = self.stanza.getTag('x', namespace=xmpp.NS_DATA)
+
+        if gajim.config.get('ignore_incoming_xhtml'):
+            self.xhtml = None
+        else:
+            self.xhtml = self.stanza.getXHTML()
+
+        # XEP-0172 User Nickname
+        self.user_nick = self.stanza.getTagData('nick') or ''
+
+        treat_as = gajim.config.get('treat_incoming_messages')
+        if treat_as:
+            self.mtype = treat_as
+
+        self.get_chatstate()
+        return True
+
+class ChatstateReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'chatstate-received'
+    base_network_events = []
+
+    def generate(self):
+        self.stanza = self.msg_obj.stanza
+        self.jid = self.msg_obj.jid
+        self.fjid = self.msg_obj.fjid
+        self.resource = self.msg_obj.resource
+        self.composing_xep = self.msg_obj.composing_xep
+        self.chatstate = self.msg_obj.chatstate
         return True
 
 class GcMessageReceivedEvent(nec.NetworkIncomingEvent):

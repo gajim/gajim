@@ -1603,6 +1603,8 @@ class ChatControl(ChatControlBase):
             self._nec_vcard_received)
         gajim.ged.register_event_handler('failed-decrypt', ged.GUI1,
             self._nec_failed_decrypt)
+        gajim.ged.register_event_handler('chatstate-received', ged.GUI1,
+            self._nec_chatstate_received)
 
         # PluginSystem: adding GUI extension point for this ChatControl
         # instance object
@@ -2593,6 +2595,8 @@ class ChatControl(ChatControlBase):
             self._nec_vcard_received)
         gajim.ged.remove_event_handler('failed-decrypt', ged.GUI1,
             self._nec_failed_decrypt)
+        gajim.ged.remove_event_handler('chatstate-received', ged.GUI1,
+            self._nec_chatstate_received)
 
         self.send_chatstate('gone', self.contact)
         self.contact.chatstate = None
@@ -2661,7 +2665,7 @@ class ChatControl(ChatControlBase):
             return
         on_yes(self)
 
-    def handle_incoming_chatstate(self):
+    def _nec_chatstate_received(self, obj):
         """
         Handle incoming chatstate that jid SENT TO us
         """

@@ -1329,18 +1329,15 @@ ConnectionJingle, ConnectionIBBytestream):
         if obj.mtype == 'error':
             self.dispatch_error_message(obj.stanza, obj.msgtxt,
                 obj.session, obj.fjid, obj.timestamp)
+            return True
         elif obj.mtype == 'groupchat':
             gajim.nec.push_incoming_event(GcMessageReceivedEvent(None,
                 conn=self, msg_obj=obj))
+            return True
         elif obj.invite_tag is not None:
             gajim.nec.push_incoming_event(GcInvitationReceivedEvent(None,
                 conn=self, msg_obj=obj))
-        else:
-            if isinstance(obj.session, gajim.default_session_type):
-                obj.session.received(obj.fjid, obj.msgtxt, obj.timestamp,
-                    obj.encrypted, obj.stanza)
-            else:
-                obj.session.received(obj.stanza)
+            return True
 
     # process and dispatch an error message
     def dispatch_error_message(self, msg, msgtxt, session, frm, tim):
