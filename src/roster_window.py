@@ -2448,7 +2448,8 @@ class RosterWindow:
                 for jid_ in gajim.transport_avatar[account][jid]:
                     obj.conn.request_vcard(jid_)
 
-        self.chg_contact_status(obj.contact, obj.show, obj.status, account)
+        if obj.contact:
+            self.chg_contact_status(obj.contact, obj.show, obj.status, account)
 
     def _nec_gc_presence_received(self, obj):
         account = obj.conn.name
