@@ -283,6 +283,12 @@ _('Do you really want to close them all?'),
         xml = gtkgui_helpers.get_gtk_builder('message_window.ui', 'chat_tab_ebox')
         tab_label_box = xml.get_object('chat_tab_ebox')
         widget = xml.get_object('tab_close_button')
+        #this reduces the size of the button
+        style = gtk.RcStyle()
+        style.xthickness = 0
+        style.ythickness = 0
+        widget.modify_style(style)
+
         id_ = widget.connect('clicked', self._on_close_button_clicked, control)
         control.handlers[id_] = widget
 
