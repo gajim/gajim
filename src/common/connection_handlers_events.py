@@ -863,7 +863,7 @@ class GcPresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                     jid = helpers.parse_jid(destroy.getAttr('jid'))
                     self.reason += '\n' + \
                         _('You can join this room instead: %s') % jid
-                except common.helpers.InvalidFormat:
+                except helpers.InvalidFormat:
                     pass
             self.status_code = ['destroyed']
         else:
@@ -1616,7 +1616,7 @@ class MetacontactsReceivedEvent(nec.NetworkIncomingEvent):
         for meta in metas:
             try:
                 jid = helpers.parse_jid(meta.getAttr('jid'))
-            except common.helpers.InvalidFormat:
+            except helpers.InvalidFormat:
                 continue
             tag = meta.getAttr('tag')
             data = {'jid': jid}
@@ -1816,4 +1816,3 @@ class FileRequestErrorEvent(nec.NetworkIncomingEvent):
     def generate(self):
         self.jid = gajim.get_jid_without_resource(self.jid)
         return True
-
