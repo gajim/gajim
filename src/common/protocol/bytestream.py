@@ -37,7 +37,8 @@ from common import xmpp
 from common import gajim
 from common import helpers
 from common import dataforms
-from common.connection_handlers_events import FileRequestReceivedEvent
+from common.connection_handlers_events import FileRequestReceivedEvent, \
+    FileRequestErrorEvent
 from common import ged
 
 from common.socks5 import Socks5Receiver
