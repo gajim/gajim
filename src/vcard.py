@@ -257,10 +257,15 @@ class VcardWindow:
             self.update_progressbar_timeout_id = None
 
     def set_last_status_time(self, obj):
+        if obj.fjid != self.real_jid:
+            return
         self.fill_status_label()
 
     def set_os_info(self, obj):
         if self.xml.get_object('information_notebook').get_n_pages() < 5:
+            return
+        if obj.fjid != self.real_jid:
+            print obj
             return
         i = 0
         client = ''
@@ -288,6 +293,8 @@ class VcardWindow:
 
     def set_entity_time(self, obj):
         if self.xml.get_object('information_notebook').get_n_pages() < 5:
+            return
+        if obj.fjid != self.real_jid:
             return
         i = 0
         time_s = ''
