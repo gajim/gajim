@@ -52,8 +52,6 @@
         </child>
         <child>
           <object class="GtkButton" id="tab_close_button">
-            <property name="width_request">20</property>
-            <property name="height_request">20</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
