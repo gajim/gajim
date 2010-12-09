@@ -3346,8 +3346,8 @@ class ManageBookmarksWindow:
         if '@' in room:
             dialogs.ErrorDialog(_('Invalid server'), _('Character not allowed'))
             widget.set_text(room.replace('@', ''))
-        room_jid = self.room_entry.get_text().decode('utf-8').strip() + '@' + \
-                room.strip()
+        room_jid = room.strip() + '@' + \
+            self.server_entry.get_text().decode('utf-8').strip()
         try:
             room_jid = helpers.parse_resource(room_jid)
         except helpers.InvalidFormat, e:
