@@ -80,7 +80,8 @@ from common import helpers
 from common import dataforms
 from common import passwords
 from common import logging_helpers
-from common.connection_handlers_events import OurShowEvent
+from common.connection_handlers_events import OurShowEvent, \
+    FileRequestErrorEvent
 
 import roster_window
 import profile_window
