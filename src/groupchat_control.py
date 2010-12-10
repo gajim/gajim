@@ -578,7 +578,7 @@ class GroupchatControl(ChatControlBase):
                 if not ctrl and room_jid in \
                 gajim.interface.minimized_controls[account]:
                     ctrl = gajim.interface.minimized_controls[account][room_jid]
-                if ctrl:
+                if ctrl and gajim.config.get('one_message_window') != 'never':
                     ctrl.resize_occupant_treeview(hpaned_position)
 
     def iter_contact_rows(self):
