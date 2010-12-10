@@ -484,6 +484,7 @@
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">True</property>
                                         <property name="tooltip_text" translatable="yes">Choose Client Cert</property>
+                                        <signal name="clicked" handler="on_browse_for_client_cert_button_clicked"/>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
