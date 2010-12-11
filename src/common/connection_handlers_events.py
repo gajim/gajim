@@ -1091,10 +1091,6 @@ class DecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         # XEP-0172 User Nickname
         self.user_nick = self.stanza.getTagData('nick') or ''
 
-        treat_as = gajim.config.get('treat_incoming_messages')
-        if treat_as:
-            self.mtype = treat_as
-
         self.get_chatstate()
         return True
 

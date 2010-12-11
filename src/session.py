@@ -97,6 +97,9 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
                     common.logger.LOG_DB_PATH
                 self.conn.dispatch('ERROR', (pritext, sectext))
 
+        treat_as = gajim.config.get('treat_incoming_messages')
+        if treat_as:
+            obj.mtype = treat_as
         pm = False
         if obj.gc_control and obj.resource:
             # It's a Private message
