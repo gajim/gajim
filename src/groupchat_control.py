@@ -471,7 +471,6 @@ class GroupchatControl(ChatControlBase):
         ChatControlBase.got_disconnected(self)
 
         self.update_ui()
-        gobject.idle_add(self.conv_textview.tv.grab_focus)
         self.widget.show_all()
 
         # PluginSystem: adding GUI extension point for this GroupchatControl
@@ -1254,6 +1253,7 @@ class GroupchatControl(ChatControlBase):
         self._update_banner_state_image()
         if self.parent_win:
             self.parent_win.redraw_tab(self)
+        gobject.idle_add(self.msg_textview.grab_focus)
 
     def got_disconnected(self):
         self.list_treeview.get_model().clear()
