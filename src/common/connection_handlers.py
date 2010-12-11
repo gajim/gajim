@@ -84,6 +84,7 @@ VCARD_ARRIVED = 'vcard_arrived'
 AGENT_REMOVED = 'agent_removed'
 METACONTACTS_ARRIVED = 'metacontacts_arrived'
 ROSTER_ARRIVED = 'roster_arrived'
+DELIMITER_ARRIVED = 'delimiter_arrived'
 PRIVACY_ARRIVED = 'privacy_arrived'
 PEP_CONFIG = 'pep_config'
 HAS_IDLE = True
@@ -525,21 +526,22 @@ class ConnectionVcard:
             else:
                 if iq_obj.getErrorCode() not in ('403', '406', '404'):
                     self.private_storage_supported = False
+            self.get_roster_delimiter()
+        elif self.awaiting_answers[id_][0] == DELIMITER_ARRIVED:
+            if not self.connection:
+                return
+            if iq_obj.getType() == 'result':
+                query = iq_obj.getTag('query')
+                delimiter = query.getTagData('roster')
+                if delimiter:
+                    self.nested_group_delimiter = delimiter
+                else:
+                    self.set_roster_delimiter('::')
+            else:
+                self.private_storage_supported = False
 
             # We can now continue connection by requesting the roster
-            version = None
-            if con.Stream.features and con.Stream.features.getTag('ver',
-            namespace=common.xmpp.NS_ROSTER_VER):
-                version = gajim.config.get_per('accounts', self.name,
-                    'roster_version')
-                if version and not gajim.contacts.get_contacts_jid_list(
-                self.name):
-                    gajim.config.set_per('accounts', self.name,
-                        'roster_version', '')
-                    version = None
-
-            iq_id = self.connection.initRoster(version=version)
-            self.awaiting_answers[iq_id] = (ROSTER_ARRIVED, )
+            self.request_roster()
         elif self.awaiting_answers[id_][0] == ROSTER_ARRIVED:
             if iq_obj.getType() == 'result':
                 if not iq_obj.getTag('query'):

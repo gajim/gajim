@@ -161,6 +161,8 @@ class CommonConnection:
 
         self.awaiting_cids = {} # Used for XEP-0231
 
+        self.nested_group_delimiter = '::'
+
         self.get_config_values_or_default()
 
     def _compute_resource(self):
@@ -2103,6 +2105,32 @@ class Connection(CommonConnection, ConnectionHandlers):
                 iq4.setData(self.annotations[jid])
         self.connection.send(iq)
 
+    def get_roster_delimiter(self):
+        """
+        Get roster group delimiter from storage as described in XEP 0083
+        """
+        if not gajim.account_is_connected(self.name):
+            return
+        iq = common.xmpp.Iq(typ='get')
+        iq2 = iq.addChild(name='query', namespace=common.xmpp.NS_PRIVATE)
+        iq2.addChild(name='roster', namespace='roster:delimiter')
+        id_ = self.connection.getAnID()
+        iq.setID(id_)
+        self.awaiting_answers[id_] = (DELIMITER_ARRIVED, )
+        self.connection.send(iq)
+
+    def set_roster_delimiter(self, delimiter='::'):
+        """
+        Set roster group delimiter to the storage namespace
+        """
+        if not gajim.account_is_connected(self.name):
+            return
+        iq = common.xmpp.Iq(typ='set')
+        iq2 = iq.addChild(name='query', namespace=common.xmpp.NS_PRIVATE)
+        iq3 = iq2.addChild(name='roster', namespace='roster:delimiter')
+        iq3.setData(delimiter)
+
+        self.connection.send(iq)
 
     def get_metacontacts(self):
         """
@@ -2135,6 +2163,22 @@ class Connection(CommonConnection, ConnectionHandlers):
                     dict_['order'] = data['order']
                 iq3.addChild(name = 'meta', attrs = dict_)
         self.connection.send(iq)
+
+    def request_roster(self):
+        version = None
+        features =  self.connection.Dispatcher.Stream.features
+        if features and features.getTag('ver',
+        namespace=common.xmpp.NS_ROSTER_VER):
+            version = gajim.config.get_per('accounts', self.name,
+                'roster_version')
+            if version and not gajim.contacts.get_contacts_jid_list(
+            self.name):
+                gajim.config.set_per('accounts', self.name, 'roster_version',
+                    '')
+                version = None
+
+        iq_id = self.connection.initRoster(version=version)
+        self.awaiting_answers[iq_id] = (ROSTER_ARRIVED, )
 
     def send_agent_status(self, agent, ptype):
         if not gajim.account_is_connected(self.name):
