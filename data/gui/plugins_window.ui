@@ -172,7 +172,7 @@
                             <child>
                               <object class="GtkLabel" id="label7">
                                 <property name="visible">True</property>
-                                <property name="label" translatable="yes">Descrition:</property>
+                                <property name="label" translatable="yes">Description:</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
