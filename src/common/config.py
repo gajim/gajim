@@ -169,7 +169,7 @@ class Config:
             'muc_restore_lines': [opt_int, 20, _('How many lines to request to server when entering a groupchat.')],
             'muc_restore_timeout': [opt_int, 60, _('How many minutes back to request logs when a entering a groupchat.')],
             'muc_autorejoin_timeout': [opt_int, 1, _('How many seconds to wait before trying to autorejoin to a conference you are being disconnected from. Set to 0 to disable autorejoining.')],
-            'muc_autorejoin_on_kick': [opt_bool, False, 'Should autorejoin be activated when we are being kicked from a conference?'],
+            'muc_autorejoin_on_kick': [opt_bool, False, _('Should autorejoin be activated when we are being kicked from a conference?')],
             'send_on_ctrl_enter': [opt_bool, False, _('Send message on Ctrl+Enter and with Enter make new line (Mirabilis ICQ Client default behaviour).')],
             'show_roster_on_startup': [opt_bool, True],
             'key_up_lines': [opt_int, 25, _('How many lines to store for Ctrl+KeyUP.')],
