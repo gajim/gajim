@@ -20,7 +20,7 @@
   && for p in `ls data/gui/*.ui`; do echo "[type: gettext/glade]$p" >> \
   po/POTFILES.in; done \
   && ls -1 data/gajim.desktop.in.in \
-  src/*py src/common/*py src/common/zeroconf/*.py | grep -v ipython_view.py >> \
+  src/*py src/common/*py src/common/zeroconf/*.py src/plugins/*.py| grep -v ipython_view.py >> \
   po/POTFILES.in || exit 1
   if test -z `which pkg-config 2>/dev/null`;then
     echo "***Error: pkg-config not found***"
