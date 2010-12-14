@@ -489,54 +489,60 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
         '''
         mem = ''
         try:
-            # Wait maximum 1s for connection
-            socket.setdefaulttimeout(1)
-            try:
-                req = urllib2.Request(attrs['src'])
-                req.add_header('User-Agent', 'Gajim ' + gajim.version)
-                f = urllib2.urlopen(req)
-            except Exception, ex:
-                log.debug('Error loading image %s ' % attrs['src']  + str(ex))
-                pixbuf = None
-                alt = attrs.get('alt', 'Broken image')
+            if attrs['src'].startswith('data:image/'):
+                # The "data" URL scheme http://tools.ietf.org/html/rfc2397
+                import base64
+                img = attrs['src'].split(',')[1]
+                mem = base64.standard_b64decode(urllib2.unquote(img))
             else:
-                # Wait 0.1s between each byte
+                # Wait maximum 1s for connection
+                socket.setdefaulttimeout(1)
                 try:
-                    f.fp._sock.fp._sock.settimeout(0.5)
-                except Exception:
-                    pass
-                # Max image size = 2 MB (to try to prevent DoS)
-                deadline = time.time() + 3
-                while True:
-                    if time.time() > deadline:
-                        log.debug(str('Timeout loading image %s ' % \
-                            attrs['src'] + ex))
-                        mem = ''
-                        alt = attrs.get('alt', '')
-                        if alt:
-                            alt += '\n'
-                        alt += _('Timeout loading image')
-                        break
+                    req = urllib2.Request(attrs['src'])
+                    req.add_header('User-Agent', 'Gajim ' + gajim.version)
+                    f = urllib2.urlopen(req)
+                except Exception, ex:
+                    log.debug('Error loading image %s ' % attrs['src']  + str(ex))
+                    pixbuf = None
+                    alt = attrs.get('alt', 'Broken image')
+                else:
+                    # Wait 0.1s between each byte
                     try:
-                        temp = f.read(100)
-                    except socket.timeout, ex:
-                        log.debug('Timeout loading image %s ' % \
-                            attrs['src'] + str(ex))
-                        alt = attrs.get('alt', '')
-                        if alt:
-                            alt += '\n'
-                        alt += _('Timeout loading image')
-                        break
-                    if temp:
-                        mem += temp
-                    else:
-                        break
-                    if len(mem) > 2*1024*1024:
-                        alt = attrs.get('alt', '')
-                        if alt:
-                            alt += '\n'
-                        alt += _('Image is too big')
-                        break
+                        f.fp._sock.fp._sock.settimeout(0.5)
+                    except Exception:
+                        pass
+                    # Max image size = 2 MB (to try to prevent DoS)
+                    deadline = time.time() + 3
+                    while True:
+                        if time.time() > deadline:
+                            log.debug(str('Timeout loading image %s ' % \
+                                attrs['src'] + ex))
+                            mem = ''
+                            alt = attrs.get('alt', '')
+                            if alt:
+                                alt += '\n'
+                            alt += _('Timeout loading image')
+                            break
+                        try:
+                            temp = f.read(100)
+                        except socket.timeout, ex:
+                            log.debug('Timeout loading image %s ' % \
+                                attrs['src'] + str(ex))
+                            alt = attrs.get('alt', '')
+                            if alt:
+                                alt += '\n'
+                            alt += _('Timeout loading image')
+                            break
+                        if temp:
+                            mem += temp
+                        else:
+                            break
+                        if len(mem) > 2*1024*1024:
+                            alt = attrs.get('alt', '')
+                            if alt:
+                                alt += '\n'
+                            alt += _('Image is too big')
+                            break
             pixbuf = None
             if mem:
                 # Caveat: GdkPixbuf is known not to be safe to load
@@ -1090,6 +1096,19 @@ return faciter(n,1)</pre>
     </div>
     <p/>
     <p>#232/1</p>
+    </body>
+    ''')
+    htmlview.print_real_text(None, xhtml='<hr />')
+    htmlview.print_real_text(None, xhtml='''
+    <body xmlns='http://www.w3.org/1999/xhtml'>
+    <br/>
+<img src='data:image/png;base64,R0lGODdhMAAwAPAAAAAAAP///ywAAAAAMAAw\
+AAAC8IyPqcvt3wCcDkiLc7C0qwyGHhSWpjQu5yqmCYsapyuvUUlvONmOZtfzgFz\
+ByTB10QgxOR0TqBQejhRNzOfkVJ+5YiUqrXF5Y5lKh/DeuNcP5yLWGsEbtLiOSp\
+a/TPg7JpJHxyendzWTBfX0cxOnKPjgBzi4diinWGdkF8kjdfnycQZXZeYGejmJl\
+ZeGl9i2icVqaNVailT6F5iJ90m6mvuTS4OK05M0vDk0Q4XUtwvKOzrcd3iq9uis\
+F81M1OIcR7lEewwcLp7tuNNkM3uNna3F2JQFo97Vriy/Xl4/f1cf5VWzXyym7PH\
+hhx4dbgYKAAA7' alt='Larry'/>
     </body>
     ''')
     htmlview.tv.show()
