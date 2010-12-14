@@ -98,7 +98,8 @@ if dbus_support.supported:
 
         class SignalObject(dbus.service.Object):
             ''' Local object definition for /org/gajim/dbus/RemoteObject.
-            (This docstring is not be visible, because the clients can access only the remote object.)'''
+            (This docstring is not be visible,
+            because the clients can access only the remote object.)'''
 
             def __init__(self, bus_name):
                 self.first_show = True
@@ -173,6 +174,10 @@ if dbus_support.supported:
 
             @dbus.service.signal(INTERFACE, signature='av')
             def NewGmail(self, account_and_array):
+                pass
+
+            @dbus.service.signal(INTERFACE, signature='av')
+            def EntityTime(self, account_and_array):
                 pass
 
             def raise_signal(self, signal, arg):
@@ -625,7 +630,7 @@ if dbus_support.supported:
                 contact_dict['resources'] = dbus.Array([], signature='(sis)')
                 for contact in contacts:
                     resource_props = dbus.Struct((DBUS_STRING(contact.resource),
-                            dbus.Int32(contact.priority), DBUS_STRING(contact.status)))
+                        dbus.Int32(contact.priority), DBUS_STRING(contact.status)))
                     contact_dict['resources'].append(resource_props)
                 contact_dict['groups'] = dbus.Array([], signature='(s)')
                 for group in prim_contact.groups:
@@ -688,11 +693,11 @@ class DBusPlugin(GajimPlugin):
         #self.config_default_values = {}
 
         self.events_names = ['Roster', 'AccountPresence', 'ContactPresence',
-                                                 'ContactAbsence', 'ContactStatus', 'NewMessage',
-                                                 'Subscribe', 'Subscribed', 'Unsubscribed',
-                                                 'NewAccount', 'VcardInfo', 'LastStatusTime',
-                                                 'OsInfo', 'GCPresence', 'GCMessage', 'RosterInfo',
-                                                 'NewGmail']
+                             'ContactAbsence', 'ContactStatus', 'NewMessage',
+                             'Subscribe', 'Subscribed', 'Unsubscribed',
+                             'NewAccount', 'VcardInfo', 'LastStatusTime',
+                             'OsInfo', 'GCPresence', 'GCMessage', 'RosterInfo',
+                             'NewGmail', 'EntityTime']
 
         self.signal_object = None
 
@@ -720,7 +725,7 @@ class DBusPlugin(GajimPlugin):
                                     self,
                                     DBusPlugin))
             self.events_handlers[event_name] = (ged.POSTCORE,
-                                                                               getattr(self, event_name))
+                getattr(self, event_name))
 
     def _generate_handling_method(self, event_name):
         def handler(self, arg):
