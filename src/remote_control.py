@@ -386,6 +386,8 @@ class SignalObject(dbus.service.Object):
                     break
                 # jid is in roster
                 elif contact:
+                    minimized_control = \
+                        jid in gajim.interface.minimized_controls[acct]
                     connected_account = acct
                     break
                 # we send the message to jid not in roster, because account is
@@ -398,6 +400,10 @@ class SignalObject(dbus.service.Object):
         # if jid is not a conntact, open-chat with first connected account
         if connected_account is None and first_connected_acct:
             connected_account = first_connected_acct
+
+        if minimized_control:
+            gajim.interface.roster.on_groupchat_maximized(None, jid,
+                connected_account)
 
         if connected_account:
             gajim.interface.new_chat_from_jid(connected_account, jid, message)
