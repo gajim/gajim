@@ -66,6 +66,7 @@ NS_EVENT                ='jabber:x:event'                                       
 NS_FEATURE        ='http://jabber.org/protocol/feature-neg'
 NS_FILE          ='http://jabber.org/protocol/si/profile/file-transfer'  # JEP-0096
 NS_GAMING          ='http://jabber.org/protocol/gaming'                                 # XEP-0196
+NS_GATEWAY       ='jabber:iq:gateway'                                   # XEP-0100
 NS_GEOLOC          ='http://jabber.org/protocol/geoloc'                                 # JEP-0080
 NS_GROUPCHAT    ='gc-1.0'
 NS_HTTP_AUTH    ='http://jabber.org/protocol/http-auth'                          # XEP-0070

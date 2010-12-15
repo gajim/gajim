@@ -1953,6 +1953,13 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.entity_time_ids.append(id_)
         self.connection.send(iq)
 
+    def request_gateway_prompt(self, jid):
+        def _on_prompt_result(resp):
+            gajim.nec.push_incoming_event(GatewayPromptReceivedEvent(None,
+                conn=self, stanza=resp))
+        iq = common.xmpp.Iq(typ='get', queryNS=common.xmpp.NS_GATEWAY, to=jid)
+        self.connection.SendAndCallForResponse(iq, _on_prompt_result)
+
     def get_settings(self):
         """
         Get Gajim settings as described in XEP 0049

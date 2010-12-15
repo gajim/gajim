@@ -836,11 +836,11 @@ class AddNewContactWindow:
     """
 
     uid_labels = {'jabber': _('Jabber ID:'),
-            'aim': _('AIM Address:'),
-            'gadu-gadu': _('GG Number:'),
-            'icq': _('ICQ Number:'),
-            'msn': _('MSN Address:'),
-            'yahoo': _('Yahoo! Address:')}
+        'aim': _('AIM Address:'),
+        'gadu-gadu': _('GG Number:'),
+        'icq': _('ICQ Number:'),
+        'msn': _('MSN Address:'),
+        'yahoo': _('Yahoo! Address:')}
 
     def __init__(self, account=None, jid=None, user_nick=None, group=None):
         self.account = account
@@ -876,13 +876,14 @@ class AddNewContactWindow:
         'group_comboboxentry', 'auto_authorize_checkbutton'):
             self.__dict__[w] = self.xml.get_object(w)
         if account and len(gajim.connections) >= 2:
-            prompt_text = \
-_('Please fill in the data of the contact you want to add in account %s') % account
+            self.default_desc = _('Please fill in the data of the contact you '
+                'want to add in account %s') % account
         else:
-            prompt_text = \
-                    _('Please fill in the data of the contact you want to add')
-        self.xml.get_object('prompt_label').set_text(prompt_text)
+            self.default_desc = _('Please fill in the data of the contact you '
+                'want to add')
+        self.xml.get_object('prompt_label').set_text(self.default_desc)
         self.agents = {'jabber': []}
+        self.gateway_prompt = {}
         # types to which we are not subscribed but account has an agent for it
         self.available_types = []
         for acct in accounts:
@@ -895,6 +896,7 @@ _('Please fill in the data of the contact you want to add in account %s') % acco
                         self.agents[type_].append(j)
                     else:
                         self.agents[type_] = [j]
+                    self.gateway_prompt[j] = {'desc': None, 'prompt': None}
         # Now add the one to which we can register
         for acct in accounts:
             for type_ in gajim.connections[acct].available_transports:
@@ -904,6 +906,8 @@ _('Please fill in the data of the contact you want to add in account %s') % acco
                 for jid_ in gajim.connections[acct].available_transports[type_]:
                     if not jid_ in self.agents[type_]:
                         self.agents[type_].append(jid_)
+                        self.gateway_prompt[jid_] = {'desc': None,
+                            'prompt': None}
                 self.available_types.append(type_)
         # Combobox with transport/jabber icons
         liststore = gtk.ListStore(str, gtk.gdk.Pixbuf, str)
@@ -916,7 +920,7 @@ _('Please fill in the data of the contact you want to add in account %s') % acco
         self.protocol_combobox.add_attribute(cell, 'text', 0)
         self.protocol_combobox.set_model(liststore)
         uf_type = {'jabber': 'Jabber', 'aim': 'AIM', 'gadu-gadu': 'Gadu Gadu',
-                'icq': 'ICQ', 'msn': 'MSN', 'yahoo': 'Yahoo'}
+            'icq': 'ICQ', 'msn': 'MSN', 'yahoo': 'Yahoo'}
         # Jabber as first
         img = gajim.interface.jabber_state_images['16']['online']
         liststore.append(['Jabber', img.get_pixbuf(), 'jabber'])
@@ -933,6 +937,9 @@ _('Please fill in the data of the contact you want to add in account %s') % acco
                     liststore.append([type_, img.get_pixbuf(), type_])
             else:
                 liststore.append([type_, img, type_])
+            if account:
+                for service in self.agents[type_]:
+                    gajim.connections[account].request_gateway_prompt(service)
         self.protocol_combobox.set_active(0)
         self.auto_authorize_checkbutton.show()
         liststore = gtk.ListStore(str)
@@ -1003,6 +1010,8 @@ _('Please fill in the data of the contact you want to add in account %s') % acco
             message_buffer.set_text(helpers.get_subscription_request_msg(
                 self.account))
 
+        gajim.ged.register_event_handler('gateway-prompt-received', ged.GUI1,
+            self._nec_gateway_prompt_received)
         gajim.ged.register_event_handler('presence-received', ged.GUI1,
             self._nec_presence_received)
 
@@ -1014,6 +1023,8 @@ _('Please fill in the data of the contact you want to add in account %s') % acco
         del location['add_contact']
         gajim.ged.remove_event_handler('presence-received', ged.GUI1,
             self._nec_presence_received)
+        gajim.ged.remove_event_handler('gateway-prompt-received', ged.GUI1,
+            self._nec_gateway_prompt_received)
 
     def on_register_button_clicked(self, widget):
         jid = self.protocol_jid_combobox.get_active_text().decode('utf-8')
@@ -1042,7 +1053,7 @@ _('Please fill in the data of the contact you want to add in account %s') % acco
         type_ = model[iter_][2]
         if type_ != 'jabber':
             transport = self.protocol_jid_combobox.get_active_text().decode(
-                    'utf-8')
+                'utf-8')
             jid = jid.replace('@', '%') + '@' + transport
 
         # check if jid is conform to RFC and stringprep it
@@ -1076,7 +1087,7 @@ _('Please fill in the data of the contact you want to add in account %s') % acco
             c = gajim.contacts.get_first_contact_from_jid(self.account, jid)
             if _('Not in Roster') not in c.groups and c.sub in ('both', 'to'):
                 ErrorDialog(_('Contact already in roster'),
-                        _('This contact is already listed in your roster.'))
+                    _('This contact is already listed in your roster.'))
                 return
 
         if type_ == 'jabber':
@@ -1086,7 +1097,7 @@ _('Please fill in the data of the contact you want to add in account %s') % acco
             message = message_buffer.get_text(start_iter, end_iter).decode('utf-8')
             if self.save_message_checkbutton.get_active():
                 gajim.config.set_per('accounts', self.account,
-                        'subscription_request_msg', message)
+                    'subscription_request_msg', message)
         else:
             message= ''
         group = self.group_comboboxentry.child.get_text().decode('utf-8')
@@ -1095,7 +1106,7 @@ _('Please fill in the data of the contact you want to add in account %s') % acco
             groups = [group]
         auto_auth = self.auto_authorize_checkbutton.get_active()
         gajim.interface.roster.req_sub(self, jid, message, self.account,
-                groups=groups, nickname=nickname, auto_auth=auto_auth)
+            groups=groups, nickname=nickname, auto_auth=auto_auth)
         self.window.destroy()
 
     def on_account_combobox_changed(self, widget):
@@ -1104,6 +1115,30 @@ _('Please fill in the data of the contact you want to add in account %s') % acco
         account = model[iter_][0]
         message_buffer = self.message_textview.get_buffer()
         message_buffer.set_text(helpers.get_subscription_request_msg(account))
+
+    def on_protocol_jid_combobox_changed(self, widget):
+        model = widget.get_model()
+        iter_ = widget.get_active_iter()
+        jid_ = model[iter_][0]
+        model = self.protocol_combobox.get_model()
+        iter_ = self.protocol_combobox.get_active_iter()
+        type_ = model[iter_][2]
+        desc = None
+        if self.agents[type_] and jid_ in self.gateway_prompt:
+            desc = self.gateway_prompt[jid_]['desc']
+        if not desc:
+            desc = self.default_desc
+        self.xml.get_object('prompt_label').set_text(desc)
+
+        prompt = None
+        if self.agents[type_] and jid_ in self.gateway_prompt:
+            prompt = self.gateway_prompt[jid_]['prompt']
+        if not prompt:
+            if type_ in self.uid_labels:
+                prompt = self.uid_labels[type_]
+            else:
+                prompt = _('User ID:')
+        self.uid_label.set_text(prompt)
 
     def on_protocol_combobox_changed(self, widget):
         model = widget.get_model()
@@ -1115,14 +1150,30 @@ _('Please fill in the data of the contact you want to add in account %s') % acco
             for jid_ in self.agents[type_]:
                 model.append([jid_])
             self.protocol_jid_combobox.set_active(0)
+        desc = None
+        if self.agents[type_]:
+            jid_ = self.agents[type_][0]
+            if jid_ in self.gateway_prompt:
+                desc = self.gateway_prompt[jid_]['desc']
+        if not desc:
+            desc = self.default_desc
+        self.xml.get_object('prompt_label').set_text(desc)
         if len(self.agents[type_]) > 1:
             self.protocol_jid_combobox.show()
         else:
             self.protocol_jid_combobox.hide()
-        if type_ in self.uid_labels:
-            self.uid_label.set_text(self.uid_labels[type_])
-        else:
-            self.uid_label.set_text(_('User ID:'))
+        prompt = None
+        if self.agents[type_]:
+            jid_ = self.agents[type_][0]
+            if jid_ in self.gateway_prompt:
+                prompt = self.gateway_prompt[jid_]['prompt']
+        if not prompt:
+            if type_ in self.uid_labels:
+                prompt = self.uid_labels[type_]
+            else:
+                prompt = _('User ID:')
+        self.uid_label.set_text(prompt)
+
         if type_ == 'jabber':
             self.message_scrolledwindow.show()
             self.save_message_checkbutton.show()
@@ -1139,8 +1190,8 @@ _('Please fill in the data of the contact you want to add in account %s') % acco
             self.register_hbox.hide()
             if type_ != 'jabber':
                 jid = self.protocol_jid_combobox.get_active_text()
-                contact = gajim.contacts.get_first_contact_from_jid(self.account,
-                        jid)
+                contact = gajim.contacts.get_first_contact_from_jid(
+                    self.account, jid)
                 if contact.show in ('offline', 'error'):
                     self.subscription_table.hide()
                     self.connected_label.show()
@@ -1174,6 +1225,12 @@ _('Please fill in the data of the contact you want to add in account %s') % acco
             elif obj.old_show > 1 and obj.new_show == 0:
                 self.transport_signed_out(obj.jid)
 
+    def _nec_gateway_prompt_received(self, obj):
+        if obj.jid in self.gateway_prompt:
+            if obj.desc:
+                self.gateway_prompt[obj.jid]['desc'] = obj.desc
+            if obj.prompt:
+                self.gateway_prompt[obj.jid]['prompt'] = obj.prompt
 
 class AboutDialog:
     """

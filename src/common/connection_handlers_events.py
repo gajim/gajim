@@ -1812,3 +1812,14 @@ class FileRequestErrorEvent(nec.NetworkIncomingEvent):
     def generate(self):
         self.jid = gajim.get_jid_without_resource(self.jid)
         return True
+
+class GatewayPromptReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
+    name = 'gateway-prompt-received'
+    base_network_events = []
+
+    def generate(self):
+        self.get_jid_resource()
+        query = self.stanza.getTag('query')
+        self.desc = query.getTagData('desc')
+        self.prompt = query.getTagData('prompt')
+        return True
