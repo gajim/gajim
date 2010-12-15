@@ -1953,11 +1953,18 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.entity_time_ids.append(id_)
         self.connection.send(iq)
 
-    def request_gateway_prompt(self, jid):
+    def request_gateway_prompt(self, jid, prompt=None):
         def _on_prompt_result(resp):
             gajim.nec.push_incoming_event(GatewayPromptReceivedEvent(None,
                 conn=self, stanza=resp))
-        iq = common.xmpp.Iq(typ='get', queryNS=common.xmpp.NS_GATEWAY, to=jid)
+        if prompt:
+            typ_ = 'set'
+        else:
+            typ_ = 'get'
+        iq = common.xmpp.Iq(typ=typ_, to=jid)
+        query = iq.addChild(name='query', namespace=common.xmpp.NS_GATEWAY)
+        if prompt:
+            query.setTagData('prompt', prompt)
         self.connection.SendAndCallForResponse(iq, _on_prompt_result)
 
     def get_settings(self):

@@ -1820,6 +1820,12 @@ class GatewayPromptReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
     def generate(self):
         self.get_jid_resource()
         query = self.stanza.getTag('query')
-        self.desc = query.getTagData('desc')
-        self.prompt = query.getTagData('prompt')
+        if query:
+            self.desc = query.getTagData('desc')
+            self.prompt = query.getTagData('prompt')
+            self.prompt_jid = query.getTagData('jid')
+        else:
+            self.desc = None
+            self.prompt = None
+            self.prompt_jid = None
         return True

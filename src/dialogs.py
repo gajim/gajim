@@ -844,6 +844,7 @@ class AddNewContactWindow:
 
     def __init__(self, account=None, jid=None, user_nick=None, group=None):
         self.account = account
+        self.adding_jid = False
         if account is None:
             # fill accounts with active accounts
             accounts = []
@@ -1054,8 +1055,17 @@ class AddNewContactWindow:
         if type_ != 'jabber':
             transport = self.protocol_jid_combobox.get_active_text().decode(
                 'utf-8')
-            jid = jid.replace('@', '%') + '@' + transport
+            if self.account:
+                self.adding_jid = (jid, transport)
+                gajim.connections[self.account].request_gateway_prompt(
+                    transport, jid)
+            else:
+                jid = jid.replace('@', '%') + '@' + transport
+                self._add_jid(jid)
+        else:
+            self._add_jid(jid)
 
+    def _add_jid(self, jid):
         # check if jid is conform to RFC and stringprep it
         try:
             jid = helpers.parse_jid(jid)
@@ -1119,6 +1129,8 @@ class AddNewContactWindow:
     def on_protocol_jid_combobox_changed(self, widget):
         model = widget.get_model()
         iter_ = widget.get_active_iter()
+        if not iter_:
+            return
         jid_ = model[iter_][0]
         model = self.protocol_combobox.get_model()
         iter_ = self.protocol_combobox.get_active_iter()
@@ -1226,7 +1238,14 @@ class AddNewContactWindow:
                 self.transport_signed_out(obj.jid)
 
     def _nec_gateway_prompt_received(self, obj):
-        if obj.jid in self.gateway_prompt:
+        if self.adding_jid:
+            if obj.prompt_jid:
+                self._add_jid(obj.prompt_jid)
+            else:
+                jid, transport = self.adding_jid
+                jid = jid.replace('@', '%') + '@' + transport
+                self._add_jid(jid)
+        elif obj.jid in self.gateway_prompt:
             if obj.desc:
                 self.gateway_prompt[obj.jid]['desc'] = obj.desc
             if obj.prompt:
