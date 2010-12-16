@@ -305,7 +305,8 @@ class Interface:
             elif gc_control:
                 gc_control.print_conversation('Error %s: %s' % (obj.errcode,
                     obj.errmsg))
-            return
+            if gc_control and gc_control.autorejoin:
+                gc_control.autorejoin = False
 
     def handle_event_presence(self, obj):
         # 'NOTIFY' (account, (jid, status, status message, resource,

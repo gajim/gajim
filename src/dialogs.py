@@ -1056,16 +1056,16 @@ class AddNewContactWindow:
             transport = self.protocol_jid_combobox.get_active_text().decode(
                 'utf-8')
             if self.account:
-                self.adding_jid = (jid, transport)
+                self.adding_jid = (jid, transport, type_)
                 gajim.connections[self.account].request_gateway_prompt(
                     transport, jid)
             else:
                 jid = jid.replace('@', '%') + '@' + transport
-                self._add_jid(jid)
+                self._add_jid(jid, type_)
         else:
-            self._add_jid(jid)
+            self._add_jid(jid, type_)
 
-    def _add_jid(self, jid):
+    def _add_jid(self, jid, type_):
         # check if jid is conform to RFC and stringprep it
         try:
             jid = helpers.parse_jid(jid)
@@ -1239,12 +1239,12 @@ class AddNewContactWindow:
 
     def _nec_gateway_prompt_received(self, obj):
         if self.adding_jid:
+            jid, transport, type_ = self.adding_jid
             if obj.prompt_jid:
-                self._add_jid(obj.prompt_jid)
+                self._add_jid(obj.prompt_jid, type_)
             else:
-                jid, transport = self.adding_jid
                 jid = jid.replace('@', '%') + '@' + transport
-                self._add_jid(jid)
+                self._add_jid(jid, type_)
         elif obj.jid in self.gateway_prompt:
             if obj.desc:
                 self.gateway_prompt[obj.jid]['desc'] = obj.desc

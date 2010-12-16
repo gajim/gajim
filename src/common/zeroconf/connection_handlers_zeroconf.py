@@ -133,6 +133,9 @@ connection_handlers.ConnectionHandlersBase, connection_handlers.ConnectionJingle
                 msg = session.decrypt_stanza(msg)
             except Exception:
                 self.dispatch('FAILED_DECRYPT', (frm, tim, session))
+                gajim.nec.push_incoming_event(FailedDecryptEvent(None,
+                    conn=self, msg_obj=obj))
+
 
         msgtxt = msg.getBody()
         subject = msg.getSubject() # if not there, it's None

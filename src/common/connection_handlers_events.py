@@ -1829,3 +1829,100 @@ class GatewayPromptReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             self.prompt = None
             self.prompt_jid = None
         return True
+
+class NotificationEvent(nec.NetworkIncomingEvent):
+    name = 'notification'
+    base_network_events = ['decrypted-message-received']
+
+    def detect_type(self):
+        if self.base_event.name == 'decrypted-message-received':
+            self.notif_type='msg'
+
+    def get_focused(self):
+        self.control_focused = False
+        if self.control:
+            parent_win = self.control.parent_win
+            if parent_win and self.control == parent_win.get_active_control() \
+            and parent_win.window.has_focus:
+                self.control_focused = True
+
+    def handle_incoming_msg_event(self, msg_obj):
+        self.control = msg_obj.session.control
+        self.get_focused()
+        if not self.control and not gajim.events.get_events(self.conn.name, \
+        self.control.jid, [msg_obj.mtype]):
+            self.first_unread = True
+
+        if msg_obj.mtype == 'pm':
+            nick = msg_obj.resource
+        else:
+            nick = gajim.get_name_from_jid(self.conn.name, msg_obj.jid)
+
+        if self.first_unread:
+            self.sound_event = 'first_message_received'
+        elif self.control_focused:
+            self.sound_event = 'next_message_received_focused'
+        else:
+            self.sound_event = 'next_message_received_unfocused'
+
+        if gajim.config.get('notification_preview_message'):
+            self.popup_text = msg_obj.msgtxt
+            if self.popup_text.startswith('/me ') or self.popup_text.startswith(
+            '/me\n'):
+                self.popup_text = '* ' + nick + self.popup_text[3:]
+            else:
+                # We don't want message preview, do_preview = False
+                self.popup_text = ''
+        if msg_obj.mtype == 'normal': # single message
+            self.popup_event_type = _('New Single Message')
+            self.popup_image = 'gajim-single_msg_recv'
+            self.popup_title = _('New Single Message from %(nickname)s') % \
+                {'nickname': nick}
+        elif msg_obj.mtype == 'pm':
+            self.popup_event_type = _('New Private Message')
+            self.popup_image = 'gajim-priv_msg_recv'
+            self.popup_title = _('New Private Message from group chat %s') % \
+                msg_obj.jid
+            if self.popup_text:
+                self.popup_text = _('%(nickname)s: %(message)s') % \
+                    {'nickname': nick, 'message': self.popup_text}
+            else:
+                self.popup_text = _('Messaged by %(nickname)s') % \
+                    {'nickname': nick}
+        else: # chat message
+            self.popup_event_type = _('New Message')
+            self.popup_image = 'gajim-chat_msg_recv'
+            self.popup_title = _('New Message from %(nickname)s') % \
+                {'nickname': nick}
+
+        self.popup_image = gtkgui_helpers.get_icon_path(self.popup_image, 48)
+
+    def handle_incoming_msg_event(self, msg_obj):
+        pass
+
+    def generate(self):
+        # what's needed to compute output
+        self.control = None
+        self.control_focused = False
+        self.first_unread = False
+
+        # For output
+        self.sound_event = ''
+        self.show_popup = False
+        self.popup_title = ''
+        self.popup_text = ''
+        self.popup_event_type = ''
+        self.popup_image = ''
+        self.open_chat = False
+        self.activate_urgency_hint = False
+        self.command_to_run = ''
+        self.show_in_notification_area = False
+        self.show_in_roster = False
+
+        self.detect_type()
+
+        if self.notif_type == 'msg':
+            self.handle_incoming_msg_event(self.base_event)
+        elif self.notif_type == 'pres':
+            self.handle_incoming_pres_event(self.base_event)
+        return True
