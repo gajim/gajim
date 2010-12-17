@@ -35,6 +35,12 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
+from common import demandimport
+demandimport.enable()
+demandimport.ignore += ['gobject._gobject', 'libasyncns', 'i18n',
+    'logging.NullHandler', 'dbus.glib', 'dbus.service',
+    'command_system.implementation.standard']
+
 import os
 import sys
 

@@ -82,6 +82,7 @@ from common import passwords
 from common import logging_helpers
 from common.connection_handlers_events import OurShowEvent, \
     FileRequestErrorEvent
+from common.connection import Connection
 
 import roster_window
 import profile_window
@@ -2670,8 +2671,7 @@ class Interface:
         for account in gajim.config.get_per('accounts'):
             if not gajim.config.get_per('accounts', account, 'is_zeroconf') and\
             gajim.config.get_per('accounts', account, 'active'):
-                gajim.connections[account] = common.connection.Connection(
-                    account)
+                gajim.connections[account] = Connection(account)
 
         # gtk hooks
         gtk.about_dialog_set_email_hook(self.on_launch_browser_mailer, 'mail')
