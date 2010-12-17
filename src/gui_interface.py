@@ -169,7 +169,7 @@ class Interface:
                 else:
                     file_props['error'] = -4
                 gajim.nec.push_incoming_event(FileRequestErrorEvent(None,
-                    conn=self, jid=obj.jid, file_props=file_props,
+                    conn=obj.conn, jid=obj.jid, file_props=file_props,
                     error_msg=obj.errmsg))
                 obj.conn.disconnect_transfer(file_props)
                 return
