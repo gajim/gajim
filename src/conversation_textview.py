@@ -522,7 +522,7 @@ class ConversationTextview(gobject.GObject):
         del self.xep0184_marks[id_]
         del self.xep0184_shown[id_]
 
-    def show_focus_out_line(self):
+    def show_focus_out_line(self, scroll=True):
         if not self.allow_focus_out_line:
             # if room did not receive focus-in from the last time we added
             # --- line then do not readd
@@ -581,8 +581,10 @@ class ConversationTextview(gobject.GObject):
 
             buffer_.end_user_action()
 
-            # scroll to the end (via idle in case the scrollbar has appeared)
-            gobject.idle_add(self.scroll_to_end)
+            if scroll:
+                # scroll to the end (via idle in case the scrollbar has
+                # appeared)
+                gobject.idle_add(self.scroll_to_end)
 
     def show_xep0184_warning_tooltip(self):
         pointer = self.tv.get_pointer()
