@@ -136,8 +136,9 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
             diffs = self.roster.getDiffs()
             for key in diffs:
                 self.roster.setItem(key)
-                self.dispatch('ROSTER_INFO', (key, self.roster.getName(key),
-                                        'both', 'no', self.roster.getGroups(key)))
+                gajim.nec.push_incoming_event(RosterInfoEvent(None, conn=self,
+                    jid=key, nickname=self.roster.getName(key), sub='both',
+                    ask='no', groups=self.roster.getGroups(key)))
                 self.dispatch('NOTIFY', (key, self.roster.getStatus(key),
                                         self.roster.getMessage(key), 'local', 0, None, 0, None))
                 #XXX open chat windows don't get refreshed (full name), add that
@@ -146,8 +147,9 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
     # callbacks called from zeroconf
     def _on_new_service(self, jid):
         self.roster.setItem(jid)
-        self.dispatch('ROSTER_INFO', (jid, self.roster.getName(jid), 'both', 'no',
-                self.roster.getGroups(jid)))
+        gajim.nec.push_incoming_event(RosterInfoEvent(None, conn=self,
+            jid=jid, nickname=self.roster.getName(jid), sub='both',
+            ask='no', groups=self.roster.getGroups(jid)))
         self.dispatch('NOTIFY', (jid, self.roster.getStatus(jid),
                 self.roster.getMessage(jid), 'local', 0, None, 0, None))
 
@@ -220,8 +222,9 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
 
         # display contacts already detected and resolved
         for jid in self.roster.keys():
-            self.dispatch('ROSTER_INFO', (jid, self.roster.getName(jid), 'both',
-                    'no', self.roster.getGroups(jid)))
+            gajim.nec.push_incoming_event(RosterInfoEvent(None, conn=self,
+                jid=jid, nickname=self.roster.getName(jid), sub='both',
+                ask='no', groups=self.roster.getGroups(jid)))
             self.dispatch('NOTIFY', (jid, self.roster.getStatus(jid),
                     self.roster.getMessage(jid), 'local', 0, None, 0, None))
 
