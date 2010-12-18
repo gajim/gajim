@@ -165,14 +165,7 @@ class FeaturesWindow:
         return True
 
     def zeroconf_available(self):
-        try:
-            import avahi
-        except Exception:
-            try:
-                import pybonjour
-            except Exception:
-                return False
-        return True
+        return gajim.HAVE_ZEROCONF
 
     def dbus_available(self):
         if os.name == 'nt':
@@ -193,7 +186,7 @@ class FeaturesWindow:
         if os.name == 'nt':
             return False
         try:
-            import gnome.ui
+            __import__('gnome.ui')
         except Exception:
             return False
         return True
@@ -204,7 +197,7 @@ class FeaturesWindow:
         if kwalletbinding.kwallet_available():
             return True
         try:
-            import gnomekeyring
+            __import__('gnomekeyring')
         except Exception:
             return False
         return True
@@ -218,7 +211,7 @@ class FeaturesWindow:
         if os.name == 'nt':
             return False
         try:
-            import gtkspell
+            __import__('gtkspell')
         except ImportError:
             return False
         return True
@@ -230,7 +223,7 @@ class FeaturesWindow:
         if self.dbus_available() and dbus_support.get_notifications_interface():
             return True
         try:
-            import pynotify
+            __import__('pynotify')
         except Exception:
             return False
         return True
@@ -248,7 +241,7 @@ class FeaturesWindow:
 
     def docutils_available(self):
         try:
-            import docutils
+            __import__('docutils')
         except Exception:
             return False
         return True

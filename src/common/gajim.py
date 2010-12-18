@@ -135,22 +135,22 @@ ZEROCONF_ACC_NAME = 'Local'
 
 HAVE_ZEROCONF = True
 try:
-    import avahi
+    __import__('avahi')
 except ImportError:
     try:
-        import pybonjour
+        __import__('pybonjour')
     except Exception: # Linux raises ImportError, Windows raises WindowsError
         HAVE_ZEROCONF = False
 
 HAVE_PYCRYPTO = True
 try:
-    import Crypto
+    __import__('Crypto')
 except ImportError:
     HAVE_PYCRYPTO = False
 
 HAVE_GPG = True
 try:
-    import gnupg
+    __import__('gnupg', globals(), locals(), [], -1)
 except ImportError:
     HAVE_GPG = False
 else:
@@ -164,7 +164,8 @@ HAVE_LATEX = False
 
 HAVE_FARSIGHT = True
 try:
-    import farsight, gst
+    __import__('farsight')
+    __import__('gst')
 except ImportError:
     HAVE_FARSIGHT = False
 gajim_identity = {'type': 'pc', 'category': 'client', 'name': 'Gajim'}
