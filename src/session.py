@@ -106,6 +106,14 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
             pm = True
             obj.mtype = 'pm'
 
+        highest_contact = gajim.contacts.get_contact_with_highest_priority(
+            self.conn.name, obj.jid)
+
+        # does this resource have the highest priority of any available?
+        is_highest = not highest_contact or not highest_contact.resource or \
+            obj.resource == highest_contact.resource or highest_contact.show ==\
+            'offline'
+
         # Handle chat states
         contact = gajim.contacts.get_contact(self.conn.name, obj.jid,
             obj.resource)
@@ -134,14 +142,13 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
         # THIS MUST BE AFTER chatstates handling
         # AND BEFORE playsound (else we ear sounding on chatstates!)
         if not obj.msgtxt: # empty message text
-            return True
+            return
 
         if gajim.config.get_per('accounts', self.conn.name,
         'ignore_unknown_contacts') and not gajim.contacts.get_contacts(
         self.conn.name, obj.jid) and not pm:
-            return True
+            return
 
-        #FIXME Remove after advanced_notif will be removed
         if not contact:
             # contact is not in the roster, create a fake one to display
             # notification
@@ -150,14 +157,6 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 
         advanced_notif_num = notify.get_advanced_notification(
             'message_received', self.conn.name, contact)
-
-        highest_contact = gajim.contacts.get_contact_with_highest_priority(
-            self.conn.name, obj.jid)
-
-        # does this resource have the highest priority of any available?
-        is_highest = not highest_contact or not highest_contact.resource or \
-            obj.resource == highest_contact.resource or highest_contact.show ==\
-            'offline'
 
         if not pm and is_highest:
             jid_of_control = obj.jid
@@ -171,7 +170,6 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
                 self.control = ctrl
                 self.control.set_session(self)
 
-        #TODO handled
         # Is it a first or next message received ?
         first = False
         if not self.control and not gajim.events.get_events(self.conn.name, \
@@ -203,9 +201,8 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
         msg = obj.msgtxt
         if obj.subject:
             msg = _('Subject: %s') % obj.subject + '\n' + msg
-
-        #TODO handled
         focused = False
+
         if self.control:
             parent_win = self.control.parent_win
             if parent_win and self.control == parent_win.get_active_control() \
