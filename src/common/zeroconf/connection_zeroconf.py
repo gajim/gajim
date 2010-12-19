@@ -110,10 +110,10 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
             self.username = unicode(getpass.getuser(),
                 locale.getpreferredencoding())
             gajim.config.set_per('accounts', gajim.ZEROCONF_ACC_NAME, 'name',
-                    self.username)
+                self.username)
         else:
             self.username = gajim.config.get_per('accounts',
-                    gajim.ZEROCONF_ACC_NAME, 'name')
+                gajim.ZEROCONF_ACC_NAME, 'name')
     # END __init__
 
     def check_jid(self, jid):
@@ -139,8 +139,9 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
                 gajim.nec.push_incoming_event(RosterInfoEvent(None, conn=self,
                     jid=key, nickname=self.roster.getName(key), sub='both',
                     ask='no', groups=self.roster.getGroups(key)))
-                self.dispatch('NOTIFY', (key, self.roster.getStatus(key),
-                                        self.roster.getMessage(key), 'local', 0, None, 0, None))
+                gajim.nec.push_incoming_event(ZeroconfPresenceReceivedEvent(
+                    None, conn=self, jid=key, show=self.roster.getStatus(key),
+                    status=self.roster.getMessage(key)))
                 #XXX open chat windows don't get refreshed (full name), add that
         return self.call_resolve_timeout
 
@@ -150,14 +151,16 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
         gajim.nec.push_incoming_event(RosterInfoEvent(None, conn=self,
             jid=jid, nickname=self.roster.getName(jid), sub='both',
             ask='no', groups=self.roster.getGroups(jid)))
-        self.dispatch('NOTIFY', (jid, self.roster.getStatus(jid),
-                self.roster.getMessage(jid), 'local', 0, None, 0, None))
+        gajim.nec.push_incoming_event(ZeroconfPresenceReceivedEvent(
+            None, conn=self, jid=jid, show=self.roster.getStatus(jid),
+            status=self.roster.getMessage(jid)))
 
     def _on_remove_service(self, jid):
         self.roster.delItem(jid)
         # 'NOTIFY' (account, (jid, status, status message, resource, priority,
         # keyID, timestamp, contact_nickname))
-        self.dispatch('NOTIFY', (jid, 'offline', '', 'local', 0, None, 0, None))
+        gajim.nec.push_incoming_event(ZeroconfPresenceReceivedEvent(
+            None, conn=self, jid=jid, show='offline', status=''))
 
     def _disconnectedReconnCB(self):
         """
@@ -225,8 +228,9 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
             gajim.nec.push_incoming_event(RosterInfoEvent(None, conn=self,
                 jid=jid, nickname=self.roster.getName(jid), sub='both',
                 ask='no', groups=self.roster.getGroups(jid)))
-            self.dispatch('NOTIFY', (jid, self.roster.getStatus(jid),
-                    self.roster.getMessage(jid), 'local', 0, None, 0, None))
+            gajim.nec.push_incoming_event(ZeroconfPresenceReceivedEvent(
+                None, conn=self, jid=jid, show=self.roster.getStatus(jid),
+                status=self.roster.getMessage(jid)))
 
         self.connected = STATUS_LIST.index(show)
 

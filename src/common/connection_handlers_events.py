@@ -793,6 +793,30 @@ class PresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             elif self.jid in jid_list or self.jid == our_jid:
                 return True
 
+class ZeroconfPresenceReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'presence-received'
+    base_network_events = []
+
+    def generate(self):
+        self.resource = 'local'
+        self.prio = 0
+        self.keyID = None
+        self.timestamp = 0
+        self.contact_nickname = None
+        self.avatar_sha = None
+        self.need_add_in_roster = False
+        self.need_redraw = False
+        if self.show == 'offline':
+            self.ptype = 'unavailable'
+        else:
+            self.ptype = None
+        self.is_gc = False
+        self.user_nick = ''
+        self.transport_auto_auth = False
+        self.errcode = None
+        self.errmsg = ''
+        return True
+
 class GcPresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
     name = 'gc-presence-received'
     base_network_events = []

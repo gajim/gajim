@@ -759,6 +759,8 @@ class ConnectionHandlersBase:
 
         gajim.ged.register_event_handler('iq-error-received', ged.CORE,
             self._nec_iq_error_received)
+        gajim.ged.register_event_handler('presence-received', ged.CORE,
+            self._nec_presence_received)
 
     def _nec_iq_error_received(self, obj):
         if obj.conn.name != self.name:
@@ -767,6 +769,171 @@ class ConnectionHandlersBase:
             gajim.nec.push_incoming_event(LastResultReceivedEvent(None,
                 conn=self, stanza=obj.stanza))
             return True
+
+    def _nec_presence_received(self, obj):
+        account = obj.conn.name
+        if account != self.name:
+            return
+        jid = obj.jid
+        resource = obj.resource or ''
+
+        statuss = ['offline', 'error', 'online', 'chat', 'away', 'xa', 'dnd',
+            'invisible']
+        obj.old_show = 0
+        obj.new_show = statuss.index(obj.show)
+
+        obj.contact_list = []
+
+        highest = gajim.contacts.get_contact_with_highest_priority(account, jid)
+        obj.was_highest = (highest and highest.resource == resource)
+
+        # Update contact
+        obj.contact_list = gajim.contacts.get_contacts(account, jid)
+        obj.contact = None
+        resources = []
+        for c in obj.contact_list:
+            resources.append(c.resource)
+            if c.resource == resource:
+                obj.contact = c
+                break
+
+        if obj.avatar_sha is not None and obj.ptype != 'error':
+            if obj.jid not in self.vcard_shas:
+                cached_vcard = self.get_cached_vcard(obj.jid)
+                if cached_vcard and 'PHOTO' in cached_vcard and \
+                'SHA' in cached_vcard['PHOTO']:
+                    self.vcard_shas[obj.jid] = cached_vcard['PHOTO']['SHA']
+                else:
+                    self.vcard_shas[obj.jid] = ''
+            if obj.avatar_sha != self.vcard_shas[obj.jid]:
+                # avatar has been updated
+                self.request_vcard(obj.jid)
+
+        if obj.contact:
+            if obj.contact.show in statuss:
+                obj.old_show = statuss.index(obj.contact.show)
+            # nick changed
+            if obj.contact_nickname is not None and \
+            obj.contact.contact_name != obj.contact_nickname:
+                obj.contact.contact_name = obj.contact_nickname
+                obj.need_redraw = True
+
+            if obj.old_show == obj.new_show and obj.contact.status == \
+            obj.status and obj.contact.priority == obj.prio: # no change
+                return
+        else:
+            obj.contact = gajim.contacts.get_first_contact_from_jid(account,
+                jid)
+            if not obj.contact:
+                # Presence of another resource of our jid
+                # Create self contact and add to roster
+                if resource == obj.conn.server_resource:
+                    return
+                # Ignore offline presence of unknown self resource
+                if obj.new_show < 2:
+                    return
+                obj.contact = gajim.contacts.create_self_contact(jid=jid,
+                    account=account, show=obj.show, status=obj.status,
+                    priority=obj.prio, keyID=obj.keyID,
+                    resource=obj.resource)
+                gajim.contacts.add_contact(account, obj.contact)
+                obj.contact_list.append(obj.contact)
+            elif obj.contact.show in statuss:
+                obj.old_show = statuss.index(obj.contact.show)
+            if (resources != [''] and (len(obj.contact_list) != 1 or \
+            obj.contact_list[0].show != 'offline')) and \
+            not gajim.jid_is_transport(jid):
+                # Another resource of an existing contact connected
+                obj.old_show = 0
+                obj.contact = gajim.contacts.copy_contact(obj.contact)
+                obj.contact_list.append(obj.contact)
+            obj.contact.resource = resource
+
+            obj.need_add_in_roster = True
+
+        if not gajim.jid_is_transport(jid) and len(obj.contact_list) == 1:
+            # It's not an agent
+            if obj.old_show == 0 and obj.new_show > 1:
+                if not jid in gajim.newly_added[account]:
+                    gajim.newly_added[account].append(jid)
+                if jid in gajim.to_be_removed[account]:
+                    gajim.to_be_removed[account].remove(jid)
+            elif obj.old_show > 1 and obj.new_show == 0 and \
+            obj.conn.connected > 1:
+                if not jid in gajim.to_be_removed[account]:
+                    gajim.to_be_removed[account].append(jid)
+                if jid in gajim.newly_added[account]:
+                    gajim.newly_added[account].remove(jid)
+                obj.need_redraw = True
+
+        obj.contact.show = obj.show
+        obj.contact.status = obj.status
+        obj.contact.priority = obj.prio
+        obj.contact.keyID = obj.keyID
+        if obj.timestamp:
+            obj.contact.last_status_time = obj.timestamp
+        elif not gajim.block_signed_in_notifications[account]:
+            # We're connected since more that 30 seconds
+            obj.contact.last_status_time = localtime()
+        obj.contact.contact_nickname = obj.contact_nickname
+
+        if gajim.jid_is_transport(jid):
+            return
+
+        # It isn't an agent
+        # reset chatstate if needed:
+        # (when contact signs out or has errors)
+        if obj.show in ('offline', 'error'):
+            obj.contact.our_chatstate = obj.contact.chatstate = \
+                obj.contact.composing_xep = None
+
+            # TODO: This causes problems when another
+            # resource signs off!
+            self.stop_all_active_file_transfers(obj.contact)
+
+            # disable encryption, since if any messages are
+            # lost they'll be not decryptable (note that
+            # this contradicts XEP-0201 - trying to get that
+            # in the XEP, though)
+
+            # there won't be any sessions here if the contact terminated
+            # their sessions before going offline (which we do)
+            for sess in self.get_sessions(jid):
+                if obj.fjid != str(sess.jid):
+                    continue
+                if sess.control:
+                    sess.control.no_autonegotiation = False
+                if sess.enable_encryption:
+                    sess.terminate_e2e()
+                    self.delete_session(jid, sess.thread_id)
+
+        if obj.ptype == 'unavailable':
+            for jid in (obj.jid, obj.fjid):
+                if jid not in self.sessions:
+                    continue
+                # automatically terminate sessions that they haven't sent a
+                # thread ID in, only if other part support thread ID
+                for sess in self.sessions[jid].values():
+                    if not sess.received_thread_id:
+                        contact = gajim.contacts.get_contact(self.name, jid)
+                        if contact and (contact.supports(xmpp.NS_SSN) or \
+                        contact.supports(xmpp.NS_ESESSION)):
+                            sess.terminate()
+                            del self.sessions[jid][sess.thread_id]
+
+        if gajim.config.get('log_contact_status_changes') and \
+        gajim.config.should_log(self.name, obj.jid):
+            try:
+                gajim.logger.write('status', obj.jid, obj.status, obj.show)
+            except exceptions.PysqliteOperationalError, e:
+                self.dispatch('DB_ERROR', (_('Disk Write Error'), str(e)))
+            except exceptions.DatabaseMalformed:
+                pritext = _('Database Error')
+                sectext = _('The database file (%s) cannot be read. Try to '
+                    'repair it (see http://trac.gajim.org/wiki/DatabaseBackup) '
+                    'or remove it (all history will be lost).') % LOG_DB_PATH
+                self.dispatch('DB_ERROR', (pritext, sectext))
+            our_jid = gajim.get_jid_from_account(self.name)
 
     def _LastResultCB(self, con, iq_obj):
         log.debug('LastResultCB')
@@ -983,8 +1150,6 @@ ConnectionJingle, ConnectionIBBytestream):
             self._nec_gmail_new_mail_received)
         gajim.ged.register_event_handler('ping-received', ged.CORE,
             self._nec_ping_received)
-        gajim.ged.register_event_handler('presence-received', ged.CORE,
-            self._nec_presence_received)
         gajim.ged.register_event_handler('subscribe-presence-received',
             ged.CORE, self._nec_subscribe_presence_received)
         gajim.ged.register_event_handler('subscribed-presence-received',
@@ -1478,171 +1643,6 @@ ConnectionJingle, ConnectionIBBytestream):
         log.debug('PresenceCB')
         gajim.nec.push_incoming_event(NetworkEvent('raw-pres-received',
             conn=self, stanza=prs))
-
-    def _nec_presence_received(self, obj):
-        account = obj.conn.name
-        if account != self.name:
-            return
-        jid = obj.jid
-        resource = obj.resource or ''
-
-        statuss = ['offline', 'error', 'online', 'chat', 'away', 'xa', 'dnd',
-            'invisible']
-        obj.old_show = 0
-        obj.new_show = statuss.index(obj.show)
-
-        obj.contact_list = []
-
-        highest = gajim.contacts.get_contact_with_highest_priority(account, jid)
-        obj.was_highest = (highest and highest.resource == resource)
-
-        # Update contact
-        obj.contact_list = gajim.contacts.get_contacts(account, jid)
-        obj.contact = None
-        resources = []
-        for c in obj.contact_list:
-            resources.append(c.resource)
-            if c.resource == resource:
-                obj.contact = c
-                break
-
-        if obj.avatar_sha is not None and obj.ptype != 'error':
-            if obj.jid not in self.vcard_shas:
-                cached_vcard = self.get_cached_vcard(obj.jid)
-                if cached_vcard and 'PHOTO' in cached_vcard and \
-                'SHA' in cached_vcard['PHOTO']:
-                    self.vcard_shas[obj.jid] = cached_vcard['PHOTO']['SHA']
-                else:
-                    self.vcard_shas[obj.jid] = ''
-            if obj.avatar_sha != self.vcard_shas[obj.jid]:
-                # avatar has been updated
-                self.request_vcard(obj.jid)
-
-        if obj.contact:
-            if obj.contact.show in statuss:
-                obj.old_show = statuss.index(obj.contact.show)
-            # nick changed
-            if obj.contact_nickname is not None and \
-            obj.contact.contact_name != obj.contact_nickname:
-                obj.contact.contact_name = obj.contact_nickname
-                obj.need_redraw = True
-
-            if obj.old_show == obj.new_show and obj.contact.status == \
-            obj.status and obj.contact.priority == obj.prio: # no change
-                return
-        else:
-            obj.contact = gajim.contacts.get_first_contact_from_jid(account,
-                jid)
-            if not obj.contact:
-                # Presence of another resource of our jid
-                # Create self contact and add to roster
-                if resource == obj.conn.server_resource:
-                    return
-                # Ignore offline presence of unknown self resource
-                if obj.new_show < 2:
-                    return
-                obj.contact = gajim.contacts.create_self_contact(jid=jid,
-                    account=account, show=obj.show, status=obj.status,
-                    priority=obj.prio, keyID=obj.keyID,
-                    resource=obj.resource)
-                gajim.contacts.add_contact(account, obj.contact)
-                obj.contact_list.append(obj.contact)
-            elif obj.contact.show in statuss:
-                obj.old_show = statuss.index(obj.contact.show)
-            if (resources != [''] and (len(obj.contact_list) != 1 or \
-            obj.contact_list[0].show != 'offline')) and \
-            not gajim.jid_is_transport(jid):
-                # Another resource of an existing contact connected
-                obj.old_show = 0
-                obj.contact = gajim.contacts.copy_contact(obj.contact)
-                obj.contact_list.append(obj.contact)
-            obj.contact.resource = resource
-
-            obj.need_add_in_roster = True
-
-        if not gajim.jid_is_transport(jid) and len(obj.contact_list) == 1:
-            # It's not an agent
-            if obj.old_show == 0 and obj.new_show > 1:
-                if not jid in gajim.newly_added[account]:
-                    gajim.newly_added[account].append(jid)
-                if jid in gajim.to_be_removed[account]:
-                    gajim.to_be_removed[account].remove(jid)
-            elif obj.old_show > 1 and obj.new_show == 0 and \
-            obj.conn.connected > 1:
-                if not jid in gajim.to_be_removed[account]:
-                    gajim.to_be_removed[account].append(jid)
-                if jid in gajim.newly_added[account]:
-                    gajim.newly_added[account].remove(jid)
-                obj.need_redraw = True
-
-        obj.contact.show = obj.show
-        obj.contact.status = obj.status
-        obj.contact.priority = obj.prio
-        obj.contact.keyID = obj.keyID
-        if obj.timestamp:
-            obj.contact.last_status_time = obj.timestamp
-        elif not gajim.block_signed_in_notifications[account]:
-            # We're connected since more that 30 seconds
-            obj.contact.last_status_time = localtime()
-        obj.contact.contact_nickname = obj.contact_nickname
-
-        if gajim.jid_is_transport(jid):
-            return
-
-        # It isn't an agent
-        # reset chatstate if needed:
-        # (when contact signs out or has errors)
-        if obj.show in ('offline', 'error'):
-            obj.contact.our_chatstate = obj.contact.chatstate = \
-                obj.contact.composing_xep = None
-
-            # TODO: This causes problems when another
-            # resource signs off!
-            self.stop_all_active_file_transfers(obj.contact)
-
-            # disable encryption, since if any messages are
-            # lost they'll be not decryptable (note that
-            # this contradicts XEP-0201 - trying to get that
-            # in the XEP, though)
-
-            # there won't be any sessions here if the contact terminated
-            # their sessions before going offline (which we do)
-            for sess in self.get_sessions(jid):
-                if obj.fjid != str(sess.jid):
-                    continue
-                if sess.control:
-                    sess.control.no_autonegotiation = False
-                if sess.enable_encryption:
-                    sess.terminate_e2e()
-                    self.delete_session(jid, sess.thread_id)
-
-        if obj.ptype == 'unavailable':
-            for jid in (obj.jid, obj.fjid):
-                if jid not in self.sessions:
-                    continue
-                # automatically terminate sessions that they haven't sent a
-                # thread ID in, only if other part support thread ID
-                for sess in self.sessions[jid].values():
-                    if not sess.received_thread_id:
-                        contact = gajim.contacts.get_contact(self.name, jid)
-                        if contact and (contact.supports(xmpp.NS_SSN) or \
-                        contact.supports(xmpp.NS_ESESSION)):
-                            sess.terminate()
-                            del self.sessions[jid][sess.thread_id]
-
-        if gajim.config.get('log_contact_status_changes') and \
-        gajim.config.should_log(self.name, obj.jid):
-            try:
-                gajim.logger.write('status', obj.jid, obj.status, obj.show)
-            except exceptions.PysqliteOperationalError, e:
-                self.dispatch('DB_ERROR', (_('Disk Write Error'), str(e)))
-            except exceptions.DatabaseMalformed:
-                pritext = _('Database Error')
-                sectext = _('The database file (%s) cannot be read. Try to '
-                    'repair it (see http://trac.gajim.org/wiki/DatabaseBackup) '
-                    'or remove it (all history will be lost).') % LOG_DB_PATH
-                self.dispatch('DB_ERROR', (pritext, sectext))
-            our_jid = gajim.get_jid_from_account(self.name)
 
     def _nec_subscribe_presence_received(self, obj):
         account = obj.conn.name
