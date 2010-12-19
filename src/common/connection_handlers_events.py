@@ -799,6 +799,7 @@ class ZeroconfPresenceReceivedEvent(nec.NetworkIncomingEvent):
     base_network_events = []
 
     def generate(self):
+        self.jid, self.resource = gajim.get_room_and_nick_from_fjid(self.fjid)
         self.resource = 'local'
         self.prio = 0
         self.keyID = None
@@ -1063,6 +1064,11 @@ class ZeroconfMessageReceivedEvent(MessageReceivedEvent):
 
         self.fjid = unicode(self.fjid)
         self.jid, self.resource = gajim.get_room_and_nick_from_fjid(self.fjid)
+
+    def generate(self):
+        self.base_event = nec.NetworkIncomingEvent(None, conn=self.conn,
+            stanza=self.stanza)
+        return super(ZeroconfMessageReceivedEvent, self).generate()
 
 class GcInvitationReceivedEvent(nec.NetworkIncomingEvent):
     name = 'gc-invitation-received'

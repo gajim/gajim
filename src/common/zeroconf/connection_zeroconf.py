@@ -140,7 +140,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
                     jid=key, nickname=self.roster.getName(key), sub='both',
                     ask='no', groups=self.roster.getGroups(key)))
                 gajim.nec.push_incoming_event(ZeroconfPresenceReceivedEvent(
-                    None, conn=self, jid=key, show=self.roster.getStatus(key),
+                    None, conn=self, fjid=key, show=self.roster.getStatus(key),
                     status=self.roster.getMessage(key)))
                 #XXX open chat windows don't get refreshed (full name), add that
         return self.call_resolve_timeout
@@ -152,7 +152,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
             jid=jid, nickname=self.roster.getName(jid), sub='both',
             ask='no', groups=self.roster.getGroups(jid)))
         gajim.nec.push_incoming_event(ZeroconfPresenceReceivedEvent(
-            None, conn=self, jid=jid, show=self.roster.getStatus(jid),
+            None, conn=self, fjid=jid, show=self.roster.getStatus(jid),
             status=self.roster.getMessage(jid)))
 
     def _on_remove_service(self, jid):
@@ -160,7 +160,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
         # 'NOTIFY' (account, (jid, status, status message, resource, priority,
         # keyID, timestamp, contact_nickname))
         gajim.nec.push_incoming_event(ZeroconfPresenceReceivedEvent(
-            None, conn=self, jid=jid, show='offline', status=''))
+            None, conn=self, fjid=jid, show='offline', status=''))
 
     def _disconnectedReconnCB(self):
         """
@@ -229,7 +229,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
                 jid=jid, nickname=self.roster.getName(jid), sub='both',
                 ask='no', groups=self.roster.getGroups(jid)))
             gajim.nec.push_incoming_event(ZeroconfPresenceReceivedEvent(
-                None, conn=self, jid=jid, show=self.roster.getStatus(jid),
+                None, conn=self, fjid=jid, show=self.roster.getStatus(jid),
                 status=self.roster.getMessage(jid)))
 
         self.connected = STATUS_LIST.index(show)

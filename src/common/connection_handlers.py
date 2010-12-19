@@ -761,6 +761,10 @@ class ConnectionHandlersBase:
             self._nec_iq_error_received)
         gajim.ged.register_event_handler('presence-received', ged.CORE,
             self._nec_presence_received)
+        gajim.ged.register_event_handler('message-received', ged.CORE,
+            self._nec_message_received)
+        gajim.ged.register_event_handler('decrypted-message-received', ged.CORE,
+            self._nec_decrypted_message_received)
 
     def _nec_iq_error_received(self, obj):
         if obj.conn.name != self.name:
@@ -934,6 +938,104 @@ class ConnectionHandlersBase:
                     'or remove it (all history will be lost).') % LOG_DB_PATH
                 self.dispatch('DB_ERROR', (pritext, sectext))
             our_jid = gajim.get_jid_from_account(self.name)
+
+    def _nec_message_received(self, obj):
+        if obj.conn.name != self.name:
+            return
+        if obj.encrypted == 'xep200':
+            try:
+                obj.stanza = obj.session.decrypt_stanza(obj.stanza)
+                obj.msgtxt = obj.stanza.getBody()
+            except Exception:
+                gajim.nec.push_incoming_event(FailedDecryptEvent(None,
+                    conn=self, msg_obj=obj))
+                return
+
+        if obj.enc_tag and self.USE_GPG:
+            encmsg = obj.enc_tag.getData()
+
+            keyID = gajim.config.get_per('accounts', self.name, 'keyid')
+            if keyID:
+                def decrypt_thread(encmsg, keyID, obj):
+                    decmsg = self.gpg.decrypt(encmsg, keyID)
+                    # \x00 chars are not allowed in C (so in GTK)
+                    obj.msgtxt = helpers.decode_string(decmsg.replace('\x00',
+                        ''))
+                    obj.encrypted = 'xep27'
+                gajim.thread_interface(decrypt_thread, [encmsg, keyID, obj],
+                    self._on_message_decrypted, [obj])
+                return
+        self._on_message_decrypted(None, obj)
+
+    def _on_message_decrypted(self, output, obj):
+        gajim.nec.push_incoming_event(DecryptedMessageReceivedEvent(None,
+            conn=self, msg_obj=obj))
+
+    def _nec_decrypted_message_received(self, obj):
+        if obj.conn.name != self.name:
+            return
+
+        # Receipt requested
+        # TODO: We shouldn't answer if we're invisible!
+        contact = gajim.contacts.get_contact(self.name, obj.jid)
+        nick = obj.resource
+        gc_contact = gajim.contacts.get_gc_contact(self.name, obj.jid, nick)
+        if obj.receipt_request_tag and gajim.config.get_per('accounts',
+        self.name, 'answer_receipts') and ((contact and contact.sub \
+        not in (u'to', u'none')) or gc_contact) and obj.mtype != 'error':
+            receipt = common.xmpp.Message(to=obj.fjid, typ='chat')
+            receipt.setID(obj.id_)
+            receipt.setTag('received', namespace='urn:xmpp:receipts',
+                attrs={'id': obj.id_})
+
+            if obj.thread_id:
+                receipt.setThread(obj.thread_id)
+            self.connection.send(receipt)
+
+        # We got our message's receipt
+        if obj.receipt_received_tag and obj.session.control and \
+        gajim.config.get_per('accounts', self.name, 'request_receipt'):
+            obj.session.control.conv_textview.hide_xep0184_warning(obj.id_)
+
+        if obj.mtype == 'error':
+            self.dispatch_error_message(obj.stanza, obj.msgtxt,
+                obj.session, obj.fjid, obj.timestamp)
+            return True
+        elif obj.mtype == 'groupchat':
+            gajim.nec.push_incoming_event(GcMessageReceivedEvent(None,
+                conn=self, msg_obj=obj))
+            return True
+        elif obj.invite_tag is not None:
+            gajim.nec.push_incoming_event(GcInvitationReceivedEvent(None,
+                conn=self, msg_obj=obj))
+            return True
+
+    # process and dispatch an error message
+    def dispatch_error_message(self, msg, msgtxt, session, frm, tim):
+        error_msg = msg.getErrorMsg()
+
+        if not error_msg:
+            error_msg = msgtxt
+            msgtxt = None
+
+        subject = msg.getSubject()
+
+        if session.is_loggable():
+            try:
+                gajim.logger.write('error', frm, error_msg, tim=tim,
+                    subject=subject)
+            except exceptions.PysqliteOperationalError, e:
+                self.dispatch('DB_ERROR', (_('Disk Write Error'), str(e)))
+            except exceptions.DatabaseMalformed:
+                pritext = _('Database Error')
+                sectext = _('The database file (%s) cannot be read. Try to '
+                    'repair it (see http://trac.gajim.org/wiki/DatabaseBackup) '
+                    'or remove it (all history will be lost).') % \
+                    common.logger.LOG_DB_PATH
+                self.dispatch('DB_ERROR', (pritext, sectext))
+        gajim.nec.push_incoming_event(MessageErrorEvent(None, conn=self,
+            fjid=frm, error_code=msg.getErrorCode(), error_msg=error_msg,
+            msg=msgtxt, time_=tim, session=session))
 
     def _LastResultCB(self, con, iq_obj):
         log.debug('LastResultCB')
@@ -1160,10 +1262,6 @@ ConnectionJingle, ConnectionIBBytestream):
             ged.CORE, self._nec_unsubscribed_presence_received)
         gajim.ged.register_event_handler('unsubscribed-presence-received',
             ged.POSTGUI, self._nec_unsubscribed_presence_received_end)
-        gajim.ged.register_event_handler('message-received', ged.CORE,
-            self._nec_message_received)
-        gajim.ged.register_event_handler('decrypted-message-received', ged.CORE,
-            self._nec_decrypted_message_received)
         gajim.ged.register_event_handler('agent-removed', ged.CORE,
             self._nec_agent_removed)
 
@@ -1434,104 +1532,6 @@ ConnectionJingle, ConnectionIBBytestream):
 
         gajim.nec.push_incoming_event(NetworkEvent('raw-message-received',
             conn=self, stanza=msg, account=self.name))
-
-    def _nec_message_received(self, obj):
-        if obj.conn.name != self.name:
-            return
-        if obj.encrypted == 'xep200':
-            try:
-                obj.stanza = obj.session.decrypt_stanza(obj.stanza)
-                obj.msgtxt = obj.stanza.getBody()
-            except Exception:
-                gajim.nec.push_incoming_event(FailedDecryptEvent(None,
-                    conn=self, msg_obj=obj))
-                return
-
-        if obj.enc_tag and self.USE_GPG:
-            encmsg = obj.enc_tag.getData()
-
-            keyID = gajim.config.get_per('accounts', self.name, 'keyid')
-            if keyID:
-                def decrypt_thread(encmsg, keyID, obj):
-                    decmsg = self.gpg.decrypt(encmsg, keyID)
-                    # \x00 chars are not allowed in C (so in GTK)
-                    obj.msgtxt = helpers.decode_string(decmsg.replace('\x00',
-                        ''))
-                    obj.encrypted = 'xep27'
-                gajim.thread_interface(decrypt_thread, [encmsg, keyID, obj],
-                    self._on_message_decrypted, [obj])
-                return
-        self._on_message_decrypted(None, obj)
-
-    def _on_message_decrypted(self, output, obj):
-        gajim.nec.push_incoming_event(DecryptedMessageReceivedEvent(None,
-            conn=self, msg_obj=obj))
-
-    def _nec_decrypted_message_received(self, obj):
-        if obj.conn.name != self.name:
-            return
-
-        # Receipt requested
-        # TODO: We shouldn't answer if we're invisible!
-        contact = gajim.contacts.get_contact(self.name, obj.jid)
-        nick = obj.resource
-        gc_contact = gajim.contacts.get_gc_contact(self.name, obj.jid, nick)
-        if obj.receipt_request_tag and gajim.config.get_per('accounts',
-        self.name, 'answer_receipts') and ((contact and contact.sub \
-        not in (u'to', u'none')) or gc_contact) and obj.mtype != 'error':
-            receipt = common.xmpp.Message(to=obj.fjid, typ='chat')
-            receipt.setID(obj.id_)
-            receipt.setTag('received', namespace='urn:xmpp:receipts',
-                attrs={'id': obj.id_})
-
-            if obj.thread_id:
-                receipt.setThread(obj.thread_id)
-            self.connection.send(receipt)
-
-        # We got our message's receipt
-        if obj.receipt_received_tag and obj.session.control and \
-        gajim.config.get_per('accounts', self.name, 'request_receipt'):
-            obj.session.control.conv_textview.hide_xep0184_warning(obj.id_)
-
-        if obj.mtype == 'error':
-            self.dispatch_error_message(obj.stanza, obj.msgtxt,
-                obj.session, obj.fjid, obj.timestamp)
-            return True
-        elif obj.mtype == 'groupchat':
-            gajim.nec.push_incoming_event(GcMessageReceivedEvent(None,
-                conn=self, msg_obj=obj))
-            return True
-        elif obj.invite_tag is not None:
-            gajim.nec.push_incoming_event(GcInvitationReceivedEvent(None,
-                conn=self, msg_obj=obj))
-            return True
-
-    # process and dispatch an error message
-    def dispatch_error_message(self, msg, msgtxt, session, frm, tim):
-        error_msg = msg.getErrorMsg()
-
-        if not error_msg:
-            error_msg = msgtxt
-            msgtxt = None
-
-        subject = msg.getSubject()
-
-        if session.is_loggable():
-            try:
-                gajim.logger.write('error', frm, error_msg, tim=tim,
-                    subject=subject)
-            except exceptions.PysqliteOperationalError, e:
-                self.dispatch('DB_ERROR', (_('Disk Write Error'), str(e)))
-            except exceptions.DatabaseMalformed:
-                pritext = _('Database Error')
-                sectext = _('The database file (%s) cannot be read. Try to '
-                    'repair it (see http://trac.gajim.org/wiki/DatabaseBackup) '
-                    'or remove it (all history will be lost).') % \
-                    common.logger.LOG_DB_PATH
-                self.dispatch('DB_ERROR', (pritext, sectext))
-        gajim.nec.push_incoming_event(MessageErrorEvent(None, conn=self,
-            fjid=frm, error_code=msg.getErrorCode(), error_msg=error_msg,
-            msg=msgtxt, time_=tim, session=session))
 
     def _dispatch_gc_msg_with_captcha(self, stanza, msg_obj):
         msg_obj.stanza = stanza

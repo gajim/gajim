@@ -36,6 +36,7 @@ from common.zeroconf import zeroconf
 from common.commands import ConnectionCommands
 from common.pep import ConnectionPEP
 from common.protocol.bytestream import ConnectionSocks5BytestreamZeroconf
+from common.connection_handlers_events import ZeroconfMessageReceivedEvent
 
 import logging
 log = logging.getLogger('gajim.c.z.connection_handlers_zeroconf')
@@ -91,82 +92,9 @@ connection_handlers.ConnectionHandlersBase, connection_handlers.ConnectionJingle
         Called when we receive a message
         """
         log.debug('Zeroconf MessageCB')
-
-        frm = msg.getFrom()
-        mtype = msg.getType()
-        thread_id = msg.getThread()
-
-        if not mtype:
-            mtype = 'normal'
-
-        if frm is None:
-            for key in self.connection.zeroconf.contacts:
-                if ip == self.connection.zeroconf.contacts[key][zeroconf.C_ADDRESS]:
-                    frm = key
-
-        frm = unicode(frm)
-
-        session = self.get_or_create_session(frm, thread_id)
-
-        if thread_id and not session.received_thread_id:
-            session.received_thread_id = True
-
-        if msg.getTag('feature') and msg.getTag('feature').namespace == \
-        common.xmpp.NS_FEATURE:
-            if gajim.HAVE_PYCRYPTO:
-                self._FeatureNegCB(con, msg, session)
-            return
-
-        if msg.getTag('init') and msg.getTag('init').namespace == \
-        common.xmpp.NS_ESESSION_INIT:
-            self._InitE2ECB(con, msg, session)
-
-        encrypted = False
-        tim = msg.getTimestamp()
-        tim = helpers.datetime_tuple(tim)
-        tim = time.localtime(timegm(tim))
-
-        if msg.getTag('c', namespace = common.xmpp.NS_STANZA_CRYPTO):
-            encrypted = True
-
-            try:
-                msg = session.decrypt_stanza(msg)
-            except Exception:
-                self.dispatch('FAILED_DECRYPT', (frm, tim, session))
-
-
-        msgtxt = msg.getBody()
-        subject = msg.getSubject() # if not there, it's None
-
-        # invitations
-        invite = None
-        encTag = msg.getTag('x', namespace = common.xmpp.NS_ENCRYPTED)
-
-        if not encTag:
-            invite = msg.getTag('x', namespace = common.xmpp.NS_MUC_USER)
-            if invite and not invite.getTag('invite'):
-                invite = None
-
-        if encTag and self.USE_GPG:
-            #decrypt
-            encmsg = encTag.getData()
-
-            keyID = gajim.config.get_per('accounts', self.name, 'keyid')
-            if keyID:
-                decmsg = self.gpg.decrypt(encmsg, keyID)
-                # \x00 chars are not allowed in C (so in GTK)
-                msgtxt = decmsg.replace('\x00', '')
-                encrypted = True
-
-        if mtype == 'error':
-            self.dispatch_error_msg(msg, msgtxt, session, frm, tim, subject)
-        else:
-            # XXX this shouldn't be hardcoded
-            if isinstance(session, ChatControlSession):
-                session.received(frm, msgtxt, tim, encrypted, msg)
-            else:
-                session.received(msg)
-    # END messageCB
+        gajim.nec.push_incoming_event(ZeroconfMessageReceivedEvent(None,
+            conn=self, stanza=msg, ip=ip))
+        return
 
     def store_metacontacts(self, tags):
         """
