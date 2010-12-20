@@ -459,6 +459,7 @@ class SignalObject(dbus.service.Object):
             # Jid is not conform, ignore it
             return DBUS_BOOLEAN(False)
 
+        minimized_control = None
         if account:
             accounts = [account]
         else:
