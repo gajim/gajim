@@ -162,14 +162,16 @@ def notify(event, jid, account, parameters, advanced_notif_num=None):
             do_popup = True
         if gajim.config.get_per('soundevents', 'contact_connected',
         'enabled') and not gajim.block_signed_in_notifications[account] and \
-        not block_transport:
+        not block_transport and helpers.allow_sound_notification(account,
+        event, advanced_notif_num):
             do_sound = True
     elif event == 'contact_disconnected':
         status_message = parameters
         if helpers.allow_showing_notification(account, 'notify_on_signout'):
             do_popup = True
         if gajim.config.get_per('soundevents', 'contact_disconnected',
-        'enabled'):
+        'enabled') and helpers.allow_sound_notification(account,
+        event, advanced_notif_num):
             do_sound = True
     elif event == 'new_message':
         message_type = parameters[0]
