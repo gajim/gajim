@@ -2501,6 +2501,7 @@ class RosterWindow:
         if contact:
             contact.show = obj.show
             self.draw_contact(obj.room_jid, account)
+            self.draw_group(_('Groupchats'), account)
 
     def _nec_roster_received(self, obj):
         if obj.received_from_server:
