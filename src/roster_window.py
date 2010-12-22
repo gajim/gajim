@@ -430,34 +430,33 @@ class RosterWindow:
         if iter_children:
             # We have children. We cannot be removed!
             return False
-        else:
-            # Remove us and empty groups from the model
-            for i in iters:
-                assert self.model[i][C_JID] == contact.jid and \
-                        self.model[i][C_ACCOUNT] == account, \
-                        "Invalidated iters of %s" % contact.jid
+        # Remove us and empty groups from the model
+        for i in iters:
+            assert self.model[i][C_JID] == contact.jid and \
+                    self.model[i][C_ACCOUNT] == account, \
+                    "Invalidated iters of %s" % contact.jid
 
-                parent_i = self.model.iter_parent(i)
+            parent_i = self.model.iter_parent(i)
+            parent_type = self.model[parent_i][C_TYPE]
+
+            to_be_removed = i
+            while parent_type == 'group' and \
+            self.model.iter_n_children(parent_i) == 1:
+                if self.regroup:
+                    account_group = 'MERGED'
+                else:
+                    account_group = account
+                group = self.model[parent_i][C_JID].decode('utf-8')
+                if group in gajim.groups[account]:
+                    del gajim.groups[account][group]
+                to_be_removed = parent_i
+                del self._iters[account_group]['groups'][group]
+                parent_i = self.model.iter_parent(parent_i)
                 parent_type = self.model[parent_i][C_TYPE]
+            self.model.remove(to_be_removed)
 
-                to_be_removed = i
-                while parent_type == 'group' and \
-                self.model.iter_n_children(parent_i) == 1:
-                    if self.regroup:
-                        account_group = 'MERGED'
-                    else:
-                        account_group = account
-                    group = self.model[parent_i][C_JID].decode('utf-8')
-                    if group in gajim.groups[account]:
-                        del gajim.groups[account][group]
-                    to_be_removed = parent_i
-                    del self._iters[account_group]['groups'][group]
-                    parent_i = self.model.iter_parent(parent_i)
-                    parent_type = self.model[parent_i][C_TYPE]
-                self.model.remove(to_be_removed)
-
-            del self._iters[account]['contacts'][contact.jid]
-            return True
+        del self._iters[account]['contacts'][contact.jid]
+        return True
 
     def _add_metacontact_family(self, family, account):
         """
