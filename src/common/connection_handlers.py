@@ -1737,7 +1737,7 @@ ConnectionJingle, ConnectionIBBytestream):
             return
         for jid in obj.jid_list:
             log.debug('Removing contact %s due to unregistered transport %s' % \
-                (jid, agent))
+                (jid, obj.agent))
             self.unsubscribe(jid)
             # Transport contacts can't have 2 resources
             if jid in gajim.to_be_removed[self.name]:
