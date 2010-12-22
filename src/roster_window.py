@@ -2500,6 +2500,7 @@ class RosterWindow:
         contact = gajim.contacts.get_contact_with_highest_priority(account,
             obj.room_jid)
         if contact:
+            contact.show = obj.show
             self.draw_contact(obj.room_jid, account)
 
     def _nec_roster_received(self, obj):
