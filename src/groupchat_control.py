@@ -149,18 +149,18 @@ class PrivateChatControl(ChatControl):
         ChatControl.__init__(self, parent_win, contact, account, session)
         self.TYPE_ID = 'pm'
         gajim.ged.register_event_handler('caps-received', ged.GUI1,
-            self._nec_caps_received)
+            self._nec_caps_received_pm)
         gajim.ged.register_event_handler('gc-presence-received', ged.GUI1,
             self._nec_gc_presence_received)
 
     def shutdown(self):
         super(PrivateChatControl, self).shutdown()
         gajim.ged.remove_event_handler('caps-received', ged.GUI1,
-            self._nec_caps_received)
+            self._nec_caps_received_pm)
         gajim.ged.remove_event_handler('gc-presence-received', ged.GUI1,
             self._nec_gc_presence_received)
 
-    def _nec_caps_received(self, obj):
+    def _nec_caps_received_pm(self, obj):
         if obj.conn.name != self.account or \
         obj.fjid != self.gc_contact.get_full_jid():
             return

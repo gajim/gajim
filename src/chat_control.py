@@ -1605,6 +1605,8 @@ class ChatControl(ChatControlBase):
             self._nec_failed_decrypt)
         gajim.ged.register_event_handler('chatstate-received', ged.GUI1,
             self._nec_chatstate_received)
+        gajim.ged.register_event_handler('caps-received', ged.GUI1,
+            self._nec_caps_received)
 
         # PluginSystem: adding GUI extension point for this ChatControl
         # instance object
@@ -2597,6 +2599,8 @@ class ChatControl(ChatControlBase):
             self._nec_failed_decrypt)
         gajim.ged.remove_event_handler('chatstate-received', ged.GUI1,
             self._nec_chatstate_received)
+        gajim.ged.remove_event_handler('caps-received', ged.GUI1,
+            self._nec_caps_received)
 
         self.send_chatstate('gone', self.contact)
         self.contact.chatstate = None
@@ -2672,6 +2676,11 @@ class ChatControl(ChatControlBase):
         self.draw_banner_text()
         # update chatstate in tab for this chat
         self.parent_win.redraw_tab(self, self.contact.chatstate)
+
+    def _nec_caps_received(self, obj):
+        if obj.conn.name != self.account or obj.jid != self.contact.jid:
+            return
+        self.update_ui()
 
     def set_control_active(self, state):
         ChatControlBase.set_control_active(self, state)
