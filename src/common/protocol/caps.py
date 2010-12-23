@@ -44,7 +44,7 @@ class ConnectionCaps(object):
         gajim.ged.register_event_handler('caps-presence-received', ged.GUI1,
             self._nec_caps_presence_received)
         gajim.ged.register_event_handler('agent-info-received', ged.GUI1,
-            self._nec_agent_info_received)
+            self._nec_agent_info_received_caps)
 
     def caps_change_account_name(self, new_name):
         self._account = new_name
@@ -72,7 +72,7 @@ class ConnectionCaps(object):
             contact = gajim.contacts.get_gc_contact(self._account, room_jid, nick)
         return contact
 
-    def _nec_agent_info_received(self, obj):
+    def _nec_agent_info_received_caps(self, obj):
         """
         callback to update our caps cache with queried information after
         we have retrieved an unknown caps hash and issued a disco
