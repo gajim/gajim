@@ -51,6 +51,12 @@ from StringIO import StringIO
 
 try:
     import IPython
+    import IPython.iplib
+    import IPython.prefilter
+    import IPython.Shell
+    import IPython.genutils
+    import IPython.shadowns
+    import IPython.history
 except ImportError:
     IPython = None
 
