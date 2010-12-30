@@ -3744,7 +3744,7 @@ class AccountCreationWizardWindow:
                 ' be invalid.\nSSL Error: %(error)s\n'
                 'Do you still want to connect to this server?') % {
                 'hostname': hostname, 'error': obj.ssl_msg})
-            if obj.ssl_err in (18, 27):
+            if obj.errnum in (18, 27):
                 text = _('Add this certificate to the list of trusted '
                     'certificates.\nSHA1 fingerprint of the certificate:\n%s') \
                     % obj.ssl_fingerprint
