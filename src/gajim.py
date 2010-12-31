@@ -40,7 +40,7 @@ demandimport.enable()
 demandimport.ignore += ['gobject._gobject', 'libasyncns', 'i18n',
     'logging.NullHandler', 'dbus.glib', 'dbus.service',
     'command_system.implementation.standard', 'OpenSSL.SSL', 'OpenSSL.crypto',
-    'common.sleepy']
+    'common.sleepy', 'DLFCN', 'dl']
 
 import os
 import sys
