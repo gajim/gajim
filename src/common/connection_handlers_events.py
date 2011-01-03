@@ -461,13 +461,7 @@ class PrivateStorageReceivedEvent(nec.NetworkIncomingEvent):
 class BookmarksHelper:
     def parse_bookmarks(self):
         self.bookmarks = []
-        try:
-            storage = self.base_event.item_node.getTag('storage',
-                namespace=xmpp.NS_BOOKMARKS)
-        except AttributeError:
-            storage = self.base_event.storage_node
-        confs = storage.getTags('conference')
-
+        confs = self.storage_node.getTags('conference')
         for conf in confs:
             autojoin_val = conf.getAttr('autojoin')
             if autojoin_val is None: # not there (it's optional)
@@ -503,7 +497,8 @@ BookmarksHelper):
 
     def generate(self):
         self.conn = self.base_event.conn
-        if self.base_event.namespace != 'storage:bookmarks':
+        self.storage_node = self.base_event.storage_node
+        if self.base_event.namespace != xmpp.NS_BOOKMARKS:
             return
         self.parse_bookmarks()
         return True
@@ -524,7 +519,7 @@ class PrivateStorageRosternotesReceivedEvent(nec.NetworkIncomingEvent):
 
     def generate(self):
         self.conn = self.base_event.conn
-        if self.base_event.namespace != 'storage:rosternotes':
+        if self.base_event.namespace != xmpp.NS_ROSTERNOTES:
             return
         notes = self.base_event.storage_node.getTags('note')
         self.annotations = {}
@@ -570,11 +565,11 @@ class PubsubBookmarksReceivedEvent(nec.NetworkIncomingEvent, BookmarksHelper):
 
     def generate(self):
         self.conn = self.base_event.conn
-        storage = self.base_event.item_node.getTag('storage')
-        if not storage:
+        self.storage_node = self.base_event.item_node.getTag('storage')
+        if not self.storage_node:
             return
-        ns = storage.getNamespace()
-        if ns != 'storage:bookmarks':
+        ns = self.storage_node.getNamespace()
+        if ns != xmpp.NS_BOOKMARKS:
             return
         self.parse_bookmarks()
         return True
