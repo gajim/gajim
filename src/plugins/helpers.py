@@ -27,23 +27,14 @@ Helper code related to plug-ins management system.
 __all__ = ['log', 'log_calls', 'Singleton']
 
 import logging
+import functools
+
 log = logging.getLogger('gajim.plugin_system')
 '''
 Logger for code related to plug-in system.
 
 :type: logging.Logger
 '''
-
-consoleloghandler = logging.StreamHandler()
-#consoleloghandler.setLevel(1)
-consoleloghandler.setFormatter(
-        logging.Formatter('%(levelname)s: %(message)s'))
-        #logging.Formatter('%(asctime)s %(name)s: %(levelname)s: %(message)s'))
-#log.setLevel(logging.DEBUG)
-log.addHandler(consoleloghandler)
-log.propagate = False
-
-import functools
 
 class GajimPluginActivateException(Exception):
     '''
