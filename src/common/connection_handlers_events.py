@@ -557,6 +557,10 @@ class PubsubReceivedEvent(nec.NetworkIncomingEvent):
         self.item_node = self.items_node.getTag('item')
         if not self.item_node:
             return
+        children = self.item_node.getChildren()
+        if not children:
+            return
+        self.node = children[0]
         return True
 
 class PubsubBookmarksReceivedEvent(nec.NetworkIncomingEvent, BookmarksHelper):
@@ -565,9 +569,7 @@ class PubsubBookmarksReceivedEvent(nec.NetworkIncomingEvent, BookmarksHelper):
 
     def generate(self):
         self.conn = self.base_event.conn
-        self.storage_node = self.base_event.item_node.getTag('storage')
-        if not self.storage_node:
-            return
+        self.storage_node = self.base_event.node
         ns = self.storage_node.getNamespace()
         if ns != xmpp.NS_BOOKMARKS:
             return
