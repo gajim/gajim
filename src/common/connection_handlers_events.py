@@ -461,7 +461,13 @@ class PrivateStorageReceivedEvent(nec.NetworkIncomingEvent):
 class BookmarksHelper:
     def parse_bookmarks(self):
         self.bookmarks = []
-        confs = self.base_event.storage_node.getTags('conference')
+        try:
+            storage = self.base_event.item_node.getTag('storage',
+                namespace=xmpp.NS_BOOKMARKS)
+        except AttributeError:
+            storage = self.base_event.storage_node
+        confs = storage.getTags('conference')
+
         for conf in confs:
             autojoin_val = conf.getAttr('autojoin')
             if autojoin_val is None: # not there (it's optional)

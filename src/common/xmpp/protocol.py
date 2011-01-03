@@ -38,6 +38,7 @@ NS_AUTH          ='jabber:iq:auth'
 NS_AVATAR          ='http://www.xmpp.org/extensions/xep-0084.html#ns-metadata'
 NS_BIND          ='urn:ietf:params:xml:ns:xmpp-bind'
 NS_BOB          ='urn:xmpp:bob'                                                 #XEP-0231
+NS_BOOKMARKS     ='storage:bookmarks'                                 #XEP-0048
 NS_BROWSE          ='jabber:iq:browse'
 NS_BROWSING      ='http://jabber.org/protocol/browsing'                           # XEP-0195
 NS_BYTESTREAM   ='http://jabber.org/protocol/bytestreams'                          # JEP-0065
