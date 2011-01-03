@@ -981,7 +981,8 @@ def get_os_info():
                     path_to_file.endswith('arch-release'):
                         # file doesn't have version
                         text = distro_name
-                    elif path_to_file.endswith('lfs-release'): # file just has version
+                    elif path_to_file.endswith('lfs-release'):
+                        # file just has version
                         text = distro_name + ' ' + text
                 os_info = text.replace('\n', '')
                 gajim.os_info = os_info
@@ -1131,16 +1132,14 @@ def get_notification_icon_tooltip_dict():
         if total_non_messages > 0:
             if total_non_messages > max_ungrouped_events:
                 text = ngettext(
-                        '%d event pending',
-                        '%d events pending',
-                        total_non_messages, total_non_messages, total_non_messages)
+                    '%d event pending',
+                    '%d events pending',
+                    total_non_messages, total_non_messages,total_non_messages)
                 account['event_lines'].append(text)
             else:
                 for jid in non_messages.keys():
-                    text = ngettext(
-                            '%d event pending',
-                            '%d events pending',
-                            non_messages[jid], non_messages[jid], non_messages[jid])
+                    text = ngettext('%d event pending', '%d events pending',
+                        non_messages[jid], non_messages[jid], non_messages[jid])
                     text += _(' from user %s') % (jid)
                     account[account]['event_lines'].append(text)
 
@@ -1273,9 +1272,11 @@ def prepare_and_validate_gpg_keyID(account, jid, keyID):
             if keyID in public_keys:
                 for u in gajim.contacts.get_contacts(account, jid):
                     u.keyID = keyID
-                keys_str = gajim.config.get_per('accounts', account, 'attached_gpg_keys')
+                keys_str = gajim.config.get_per('accounts', account,
+                    'attached_gpg_keys')
                 keys_str += jid + ' ' + keyID + ' '
-                gajim.config.set_per('accounts', account, 'attached_gpg_keys', keys_str)
+                gajim.config.set_per('accounts', account, 'attached_gpg_keys',
+                    keys_str)
         elif keyID is None:
             keyID = 'UNKNOWN'
     return keyID

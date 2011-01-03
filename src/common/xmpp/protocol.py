@@ -23,126 +23,126 @@ sub- stanzas) handling routines
 from simplexml import Node, NodeBuilder
 import time
 
-NS_ACTIVITY      ='http://jabber.org/protocol/activity'                           # XEP-0108
-NS_ADDRESS        ='http://jabber.org/protocol/address'                            # XEP-0033
-NS_AGENTS          ='jabber:iq:agents'
-NS_AMP            ='http://jabber.org/protocol/amp'
-NS_AMP_ERRORS   =NS_AMP+'#errors'
-NS_ARCHIVE       ='urn:xmpp:archive'                                                                    #XEP-0136
-NS_ARCHIVE_AUTO  =NS_ARCHIVE+':auto'                                                            #XEP-0136
-NS_ARCHIVE_MANAGE        =NS_ARCHIVE+':manage'                                                  #XEP-0136
-NS_ARCHIVE_MANUAL        =NS_ARCHIVE+':manual'                                                  #XEP-0136
-NS_ARCHIVE_PREF  =NS_ARCHIVE+':pref'
-NS_ATOM          ='http://www.w3.org/2005/Atom'
-NS_AUTH          ='jabber:iq:auth'
-NS_AVATAR          ='http://www.xmpp.org/extensions/xep-0084.html#ns-metadata'
-NS_BIND          ='urn:ietf:params:xml:ns:xmpp-bind'
-NS_BOB          ='urn:xmpp:bob'                                                 #XEP-0231
-NS_BOOKMARKS    ='storage:bookmarks'                            #XEP-0048
-NS_BROWSE          ='jabber:iq:browse'
-NS_BROWSING      ='http://jabber.org/protocol/browsing'                           # XEP-0195
-NS_BYTESTREAM   ='http://jabber.org/protocol/bytestreams'                          # JEP-0065
-NS_CAPS          ='http://jabber.org/protocol/caps'                                       # JEP-0115
-NS_CAPTCHA      ='urn:xmpp:captcha'                             # XEP-0158
-NS_CHATSTATES   ='http://jabber.org/protocol/chatstates'                                # JEP-0085
-NS_CHATTING      ='http://jabber.org/protocol/chatting'                           # XEP-0194
-NS_CLIENT          ='jabber:client'
-NS_COMMANDS      ='http://jabber.org/protocol/commands'
-NS_COMPONENT_ACCEPT='jabber:component:accept'
-NS_COMPONENT_1  ='http://jabberd.jabberstudio.org/ns/component/1.0'
-NS_COMPRESS      ='http://jabber.org/protocol/compress'                           # XEP-0138
-NS_CONFERENCE   ='jabber:x:conference'
-NS_DATA          ='jabber:x:data'                                                                               # XEP-0004
-NS_DATA_MEDIA   ='urn:xmpp:media-element'                                                                       # XEP-0221
-NS_DELAY                ='jabber:x:delay'
-NS_DELAY2          ='urn:xmpp:delay'
-NS_DIALBACK      ='jabber:server:dialback'
-NS_DISCO                ='http://jabber.org/protocol/disco'
-NS_DISCO_INFO   =NS_DISCO+'#info'
-NS_DISCO_ITEMS  =NS_DISCO+'#items'
-NS_ENCRYPTED    ='jabber:x:encrypted'                                                              # XEP-0027
-NS_ESESSION      ='http://www.xmpp.org/extensions/xep-0116.html#ns'
-NS_ESESSION_INIT='http://www.xmpp.org/extensions/xep-0116.html#ns-init' # XEP-0116
-NS_EVENT                ='jabber:x:event'                                                                          # XEP-0022
-NS_FEATURE        ='http://jabber.org/protocol/feature-neg'
-NS_FILE          ='http://jabber.org/protocol/si/profile/file-transfer'  # JEP-0096
-NS_GAMING          ='http://jabber.org/protocol/gaming'                                 # XEP-0196
-NS_GATEWAY       ='jabber:iq:gateway'                                   # XEP-0100
-NS_GEOLOC          ='http://jabber.org/protocol/geoloc'                                 # JEP-0080
-NS_GROUPCHAT    ='gc-1.0'
-NS_HTTP_AUTH    ='http://jabber.org/protocol/http-auth'                          # XEP-0070
-NS_HTTP_BIND    ='http://jabber.org/protocol/httpbind'                            # XEP-0124
-NS_IBB            ='http://jabber.org/protocol/ibb'
-NS_INVISIBLE    ='presence-invisible'                                                              # Jabberd2
-NS_IQ              ='iq'                                                                                                   # Jabberd2
-NS_JINGLE       ='urn:xmpp:jingle:1'                                    # XEP-0166
-NS_JINGLE_ERRORS='urn:xmpp:jingle:errors:1'                             # XEP-0166
-NS_JINGLE_RTP   ='urn:xmpp:jingle:apps:rtp:1'                           # XEP-0167
-NS_JINGLE_RTP_AUDIO='urn:xmpp:jingle:apps:rtp:audio'                    # XEP-0167
-NS_JINGLE_RTP_VIDEO='urn:xmpp:jingle:apps:rtp:video'                    # XEP-0167
-NS_JINGLE_RAW_UDP='urn:xmpp:jingle:transports:raw-udp:1'                # XEP-0177
-NS_JINGLE_ICE_UDP='urn:xmpp:jingle:transports:ice-udp:1'                # XEP-0176
-NS_LAST          ='jabber:iq:last'
-NS_LOCATION  ='http://jabber.org/protocol/geoloc'                                                               # XEP-0080
-NS_MESSAGE        ='message'                                                                                      # Jabberd2
-NS_MOOD          ='http://jabber.org/protocol/mood'                                       # XEP-0107
-NS_MUC            ='http://jabber.org/protocol/muc'
-NS_MUC_USER      =NS_MUC+'#user'
-NS_MUC_ADMIN    =NS_MUC+'#admin'
-NS_MUC_OWNER    =NS_MUC+'#owner'
-NS_MUC_UNIQUE   =NS_MUC+'#unique'
-NS_MUC_CONFIG   =NS_MUC+'#roomconfig'
-NS_NICK          ='http://jabber.org/protocol/nick'                                       # XEP-0172
-NS_OFFLINE        ='http://www.jabber.org/jeps/jep-0030.html'                    # XEP-0013
-NS_PHYSLOC        ='http://jabber.org/protocol/physloc'                            # XEP-0112
-NS_PING          ='urn:xmpp:ping'                                                                               # SEP-0199
-NS_PRESENCE      ='presence'                                                                                     # Jabberd2
-NS_PRIVACY        ='jabber:iq:privacy'
-NS_PRIVATE        ='jabber:iq:private'
-NS_PROFILE        ='http://jabber.org/protocol/profile'                            # XEP-0154
-NS_PUBSUB          ='http://jabber.org/protocol/pubsub'                                 # XEP-0060
-NS_PUBSUB_EVENT = 'http://jabber.org/protocol/pubsub#event'
-NS_PUBSUB_PUBLISH_OPTIONS = NS_PUBSUB + '#publish-options'                      # XEP-0060
-NS_PUBSUB_OWNER ='http://jabber.org/protocol/pubsub#owner'                        # JEP-0060
-NS_REGISTER      ='jabber:iq:register'
-NS_ROSTER          ='jabber:iq:roster'
-NS_ROSTERNOTES   ='storage:rosternotes'
-NS_ROSTERX        ='http://jabber.org/protocol/rosterx'                            # XEP-0144
-NS_ROSTER_VER    ='urn:xmpp:features:rosterver'               # XEP-0273
-NS_RPC            ='jabber:iq:rpc'                                                                              # XEP-0009
-NS_RSM           ='http://jabber.org/protocol/rsm'
-NS_SASL          ='urn:ietf:params:xml:ns:xmpp-sasl'
-NS_SECLABEL         ='urn:xmpp:sec-label:0'
-NS_SECLABEL_CATALOG ='urn:xmpp:sec-label:catalog:0'
-NS_SEARCH          ='jabber:iq:search'
-NS_SERVER          ='jabber:server'
-NS_SESSION        ='urn:ietf:params:xml:ns:xmpp-session'
-NS_SI              ='http://jabber.org/protocol/si'                                             # XEP-0096
-NS_SI_PUB          ='http://jabber.org/protocol/sipub'                                   # XEP-0137
-NS_SIGNED          ='jabber:x:signed'                                                                     # XEP-0027
-NS_SSN            ='urn:xmpp:ssn'                                                                                # XEP-0155
-NS_STANZA_CRYPTO='http://www.xmpp.org/extensions/xep-0200.html#ns'        # XEP-0200
-NS_STANZAS        ='urn:ietf:params:xml:ns:xmpp-stanzas'
-NS_STREAM          ='http://affinix.com/jabber/stream'
-NS_STREAMS        ='http://etherx.jabber.org/streams'
-NS_TIME          ='jabber:iq:time'                                                                         # XEP-0900
-NS_TIME_REVISED ='urn:xmpp:time'                                                                                # XEP-0202
-NS_TLS            ='urn:ietf:params:xml:ns:xmpp-tls'
-NS_TUNE          ='http://jabber.org/protocol/tune'                                       # XEP-0118
-NS_VACATION      ='http://jabber.org/protocol/vacation'
-NS_VCARD                ='vcard-temp'
-NS_GMAILNOTIFY  ='google:mail:notify'
-NS_GTALKSETTING ='google:setting'
-NS_VCARD_UPDATE =NS_VCARD+':x:update'
-NS_VERSION        ='jabber:iq:version'
-NS_VIEWING        ='http://jabber.org/protocol/viewing'                            # XEP--197
-NS_WAITINGLIST  ='http://jabber.org/protocol/waitinglist'                          # XEP-0130
-NS_XHTML_IM      ='http://jabber.org/protocol/xhtml-im'                           # XEP-0071
-NS_XHTML                = 'http://www.w3.org/1999/xhtml'                                                #  "
-NS_DATA_LAYOUT  ='http://jabber.org/protocol/xdata-layout'                        # XEP-0141
-NS_DATA_VALIDATE='http://jabber.org/protocol/xdata-validate'                    # XEP-0122
-NS_XMPP_STREAMS ='urn:ietf:params:xml:ns:xmpp-streams'
-NS_RECEIPTS     ='urn:xmpp:receipts'
+NS_ACTIVITY       = 'http://jabber.org/protocol/activity'             # XEP-0108
+NS_ADDRESS        = 'http://jabber.org/protocol/address'              # XEP-0033
+NS_AGENTS         = 'jabber:iq:agents'
+NS_AMP            = 'http://jabber.org/protocol/amp'
+NS_AMP_ERRORS     = NS_AMP + '#errors'
+NS_ARCHIVE        = 'urn:xmpp:archive'                                # XEP-0136
+NS_ARCHIVE_AUTO   = NS_ARCHIVE + ':auto'                              # XEP-0136
+NS_ARCHIVE_MANAGE = NS_ARCHIVE + ':manage'                            # XEP-0136
+NS_ARCHIVE_MANUAL = NS_ARCHIVE + ':manual'                            # XEP-0136
+NS_ARCHIVE_PREF   = NS_ARCHIVE + ':pref'
+NS_ATOM           = 'http://www.w3.org/2005/Atom'
+NS_AUTH           = 'jabber:iq:auth'
+NS_AVATAR         = 'http://www.xmpp.org/extensions/xep-0084.html#ns-metadata'
+NS_BIND           = 'urn:ietf:params:xml:ns:xmpp-bind'
+NS_BOB            = 'urn:xmpp:bob'                                    # XEP-0231
+NS_BOOKMARKS      = 'storage:bookmarks'                               # XEP-0048
+NS_BROWSE         = 'jabber:iq:browse'
+NS_BROWSING       = 'http://jabber.org/protocol/browsing'             # XEP-0195
+NS_BYTESTREAM     = 'http://jabber.org/protocol/bytestreams'          # JEP-0065
+NS_CAPS           = 'http://jabber.org/protocol/caps'                 # JEP-0115
+NS_CAPTCHA        = 'urn:xmpp:captcha'                                # XEP-0158
+NS_CHATSTATES     = 'http://jabber.org/protocol/chatstates'           # JEP-0085
+NS_CHATTING       = 'http://jabber.org/protocol/chatting'             # XEP-0194
+NS_CLIENT         = 'jabber:client'
+NS_COMMANDS       = 'http://jabber.org/protocol/commands'
+NS_COMPONENT_ACCEPT = 'jabber:component:accept'
+NS_COMPONENT_1    = 'http://jabberd.jabberstudio.org/ns/component/1.0'
+NS_COMPRESS       = 'http://jabber.org/protocol/compress'             # XEP-0138
+NS_CONFERENCE     = 'jabber:x:conference'
+NS_DATA           = 'jabber:x:data'                                   # XEP-0004
+NS_DATA_MEDIA     = 'urn:xmpp:media-element'                          # XEP-0221
+NS_DELAY          = 'jabber:x:delay'
+NS_DELAY2         = 'urn:xmpp:delay'
+NS_DIALBACK       = 'jabber:server:dialback'
+NS_DISCO          = 'http://jabber.org/protocol/disco'
+NS_DISCO_INFO     = NS_DISCO + '#info'
+NS_DISCO_ITEMS    = NS_DISCO + '#items'
+NS_ENCRYPTED      = 'jabber:x:encrypted'                              # XEP-0027
+NS_ESESSION       = 'http://www.xmpp.org/extensions/xep-0116.html#ns'
+NS_ESESSION_INIT  = 'http://www.xmpp.org/extensions/xep-0116.html#ns-init' # XEP-0116
+NS_EVENT                = 'jabber:x:event'                            # XEP-0022
+NS_FEATURE        = 'http://jabber.org/protocol/feature-neg'
+NS_FILE      = 'http://jabber.org/protocol/si/profile/file-transfer'  # JEP-0096
+NS_GAMING         = 'http://jabber.org/protocol/gaming'               # XEP-0196
+NS_GATEWAY        = 'jabber:iq:gateway'                               # XEP-0100
+NS_GEOLOC         = 'http://jabber.org/protocol/geoloc'               # XEP-0080
+NS_GROUPCHAT      = 'gc-1.0'
+NS_HTTP_AUTH      = 'http://jabber.org/protocol/http-auth'            # XEP-0070
+NS_HTTP_BIND      = 'http://jabber.org/protocol/httpbind'             # XEP-0124
+NS_IBB            = 'http://jabber.org/protocol/ibb'
+NS_INVISIBLE      = 'presence-invisible'                              # Jabberd2
+NS_IQ             = 'iq'                                              # Jabberd2
+NS_JINGLE         ='urn:xmpp:jingle:1'                                # XEP-0166
+NS_JINGLE_ERRORS  = 'urn:xmpp:jingle:errors:1'                        # XEP-0166
+NS_JINGLE_RTP     = 'urn:xmpp:jingle:apps:rtp:1'                      # XEP-0167
+NS_JINGLE_RTP_AUDIO = 'urn:xmpp:jingle:apps:rtp:audio'                # XEP-0167
+NS_JINGLE_RTP_VIDEO = 'urn:xmpp:jingle:apps:rtp:video'                # XEP-0167
+NS_JINGLE_RAW_UDP = 'urn:xmpp:jingle:transports:raw-udp:1'            # XEP-0177
+NS_JINGLE_ICE_UDP = 'urn:xmpp:jingle:transports:ice-udp:1'            # XEP-0176
+NS_LAST           = 'jabber:iq:last'
+NS_LOCATION       = 'http://jabber.org/protocol/geoloc'               # XEP-0080
+NS_MESSAGE        = 'message'                                         # Jabberd2
+NS_MOOD           = 'http://jabber.org/protocol/mood'                 # XEP-0107
+NS_MUC            = 'http://jabber.org/protocol/muc'
+NS_MUC_USER       = NS_MUC + '#user'
+NS_MUC_ADMIN      = NS_MUC + '#admin'
+NS_MUC_OWNER      = NS_MUC + '#owner'
+NS_MUC_UNIQUE     = NS_MUC + '#unique'
+NS_MUC_CONFIG     = NS_MUC + '#roomconfig'
+NS_NICK           = 'http://jabber.org/protocol/nick'                 # XEP-0172
+NS_OFFLINE        = 'http://www.jabber.org/jeps/jep-0030.html'        # XEP-0013
+NS_PHYSLOC        = 'http://jabber.org/protocol/physloc'              # XEP-0112
+NS_PING           = 'urn:xmpp:ping'                                   # SEP-0199
+NS_PRESENCE       = 'presence'                                        # Jabberd2
+NS_PRIVACY        = 'jabber:iq:privacy'
+NS_PRIVATE        = 'jabber:iq:private'
+NS_PROFILE        = 'http://jabber.org/protocol/profile'              # XEP-0154
+NS_PUBSUB         = 'http://jabber.org/protocol/pubsub'               # XEP-0060
+NS_PUBSUB_EVENT   = 'http://jabber.org/protocol/pubsub#event'
+NS_PUBSUB_PUBLISH_OPTIONS = NS_PUBSUB + '#publish-options'            # XEP-0060
+NS_PUBSUB_OWNER   = 'http://jabber.org/protocol/pubsub#owner'         # JEP-0060
+NS_REGISTER       = 'jabber:iq:register'
+NS_ROSTER         = 'jabber:iq:roster'
+NS_ROSTERNOTES    = 'storage:rosternotes'
+NS_ROSTERX        = 'http://jabber.org/protocol/rosterx'              # XEP-0144
+NS_ROSTER_VER     = 'urn:xmpp:features:rosterver'                     # XEP-0273
+NS_RPC            = 'jabber:iq:rpc'                                   # XEP-0009
+NS_RSM            = 'http://jabber.org/protocol/rsm'
+NS_SASL           = 'urn:ietf:params:xml:ns:xmpp-sasl'
+NS_SECLABEL       = 'urn:xmpp:sec-label:0'
+NS_SECLABEL_CATALOG = 'urn:xmpp:sec-label:catalog:0'
+NS_SEARCH         = 'jabber:iq:search'
+NS_SERVER         = 'jabber:server'
+NS_SESSION        = 'urn:ietf:params:xml:ns:xmpp-session'
+NS_SI             = 'http://jabber.org/protocol/si'                   # XEP-0096
+NS_SI_PUB         = 'http://jabber.org/protocol/sipub'                # XEP-0137
+NS_SIGNED         = 'jabber:x:signed'                                 # XEP-0027
+NS_SSN            = 'urn:xmpp:ssn'                                    # XEP-0155
+NS_STANZA_CRYPTO  = 'http://www.xmpp.org/extensions/xep-0200.html#ns' # XEP-0200
+NS_STANZAS        = 'urn:ietf:params:xml:ns:xmpp-stanzas'
+NS_STREAM         = 'http://affinix.com/jabber/stream'
+NS_STREAMS        = 'http://etherx.jabber.org/streams'
+NS_TIME           = 'jabber:iq:time'                                  # XEP-0900
+NS_TIME_REVISED   = 'urn:xmpp:time'                                   # XEP-0202
+NS_TLS            = 'urn:ietf:params:xml:ns:xmpp-tls'
+NS_TUNE           = 'http://jabber.org/protocol/tune'                 # XEP-0118
+NS_VACATION       = 'http://jabber.org/protocol/vacation'
+NS_VCARD          = 'vcard-temp'
+NS_GMAILNOTIFY    = 'google:mail:notify'
+NS_GTALKSETTING   = 'google:setting'
+NS_VCARD_UPDATE   = NS_VCARD + ':x:update'
+NS_VERSION        = 'jabber:iq:version'
+NS_VIEWING        = 'http://jabber.org/protocol/viewing'              # XEP--197
+NS_WAITINGLIST    = 'http://jabber.org/protocol/waitinglist'          # XEP-0130
+NS_XHTML_IM       = 'http://jabber.org/protocol/xhtml-im'             # XEP-0071
+NS_XHTML          = 'http://www.w3.org/1999/xhtml'                    # "
+NS_DATA_LAYOUT    = 'http://jabber.org/protocol/xdata-layout'         # XEP-0141
+NS_DATA_VALIDATE  = 'http://jabber.org/protocol/xdata-validate'       # XEP-0122
+NS_XMPP_STREAMS   = 'urn:ietf:params:xml:ns:xmpp-streams'
+NS_RECEIPTS       = 'urn:xmpp:receipts'
 
 xmpp_stream_error_conditions = '''
 bad-format --  --  -- The entity has sent XML that cannot be processed.
@@ -204,9 +204,9 @@ not-authorized --  --  -- The authentication failed because the initiating entit
 temporary-auth-failure --  --  -- The authentication failed because of a temporary error condition within the receiving entity; sent in reply to an <auth/> element or <response/> element.'''
 
 ERRORS, _errorcodes = {}, {}
-for ns, errname, errpool in ((NS_XMPP_STREAMS, 'STREAM', xmpp_stream_error_conditions),
-                                                   (NS_STANZAS, 'ERR', xmpp_stanza_error_conditions),
-                                                   (NS_SASL, 'SASL', sasl_error_conditions)):
+for ns, errname, errpool in ((NS_XMPP_STREAMS, 'STREAM',
+xmpp_stream_error_conditions), (NS_STANZAS, 'ERR', xmpp_stanza_error_conditions),
+(NS_SASL, 'SASL', sasl_error_conditions)):
     for err in errpool.split('\n')[1:]:
         cond, code, typ, text = err.split(' -- ')
         name = errname + '_' + cond.upper().replace('-', '_')
@@ -314,29 +314,29 @@ class XMLNotWellFormed(StreamError):
     pass
 
 stream_exceptions = {'bad-format': BadFormat,
-                                         'bad-namespace-prefix': BadNamespacePrefix,
-                                         'conflict': Conflict,
-                                         'connection-timeout': ConnectionTimeout,
-                                         'host-gone': HostGone,
-                                         'host-unknown': HostUnknown,
-                                         'improper-addressing': ImproperAddressing,
-                                         'internal-server-error': InternalServerError,
-                                         'invalid-from': InvalidFrom,
-                                         'invalid-id': InvalidID,
-                                         'invalid-namespace': InvalidNamespace,
-                                         'invalid-xml': InvalidXML,
-                                         'not-authorized': NotAuthorized,
-                                         'policy-violation': PolicyViolation,
-                                         'remote-connection-failed': RemoteConnectionFailed,
-                                         'resource-constraint': ResourceConstraint,
-                                         'restricted-xml': RestrictedXML,
-                                         'see-other-host': SeeOtherHost,
-                                         'system-shutdown': SystemShutdown,
-                                         'undefined-condition': UndefinedCondition,
-                                         'unsupported-encoding': UnsupportedEncoding,
-                                         'unsupported-stanza-type': UnsupportedStanzaType,
-                                         'unsupported-version': UnsupportedVersion,
-                                         'xml-not-well-formed': XMLNotWellFormed}
+                    'bad-namespace-prefix': BadNamespacePrefix,
+                    'conflict': Conflict,
+                    'connection-timeout': ConnectionTimeout,
+                    'host-gone': HostGone,
+                    'host-unknown': HostUnknown,
+                    'improper-addressing': ImproperAddressing,
+                    'internal-server-error': InternalServerError,
+                    'invalid-from': InvalidFrom,
+                    'invalid-id': InvalidID,
+                    'invalid-namespace': InvalidNamespace,
+                    'invalid-xml': InvalidXML,
+                    'not-authorized': NotAuthorized,
+                    'policy-violation': PolicyViolation,
+                    'remote-connection-failed': RemoteConnectionFailed,
+                    'resource-constraint': ResourceConstraint,
+                    'restricted-xml': RestrictedXML,
+                    'see-other-host': SeeOtherHost,
+                    'system-shutdown': SystemShutdown,
+                    'undefined-condition': UndefinedCondition,
+                    'unsupported-encoding': UnsupportedEncoding,
+                    'unsupported-stanza-type': UnsupportedStanzaType,
+                    'unsupported-version': UnsupportedVersion,
+                    'xml-not-well-formed': XMLNotWellFormed}
 
 class JID:
     """
@@ -354,7 +354,8 @@ class JID:
         if not jid and not domain:
             raise ValueError('JID must contain at least domain name')
         elif type(jid) == type(self):
-            self.node, self.domain, self.resource = jid.node, jid.domain, jid.resource
+            self.node, self.domain = jid.node, jid.domain
+            self.resource = jid.resource
         elif domain:
             self.node, self.domain, self.resource = node, domain, resource
         else:
@@ -375,7 +376,8 @@ class JID:
 
     def setNode(self, node):
         """
-        Set the node part of the JID to new value. Specify None to remove the node part
+        Set the node part of the JID to new value. Specify None to remove
+        the node part
         """
         self.node = node.lower()
 
@@ -418,7 +420,8 @@ class JID:
             other = JID(other)
         except ValueError:
             return 0
-        return self.resource == other.resource and self.__str__(0) == other.__str__(0)
+        return self.resource == other.resource and \
+            self.__str__(0) == other.__str__(0)
 
     def __ne__(self, other):
         """
@@ -446,7 +449,8 @@ class JID:
 
     def __hash__(self):
         """
-        Produce hash of the JID, Allows to use JID objects as keys of the dictionary
+        Produce hash of the JID, Allows to use JID objects as keys of the
+        dictionary
         """
         return hash(str(self))
 
@@ -469,7 +473,8 @@ class Protocol(Node):
     def __init__(self, name=None, to=None, typ=None, frm=None, attrs={},
                     payload=[], timestamp=None, xmlns=None, node=None):
         """
-        Constructor, name is the name of the stanza i.e. 'message' or 'presence' or 'iq'
+        Constructor, name is the name of the stanza
+        i.e. 'message' or 'presence'or 'iq'
 
         to is the value of 'to' attribure, 'typ' - 'type' attribute
         frn - from attribure, attrs - other attributes mapping,
@@ -493,7 +498,8 @@ class Protocol(Node):
             self.setTo(self['to'])
         if self['from']:
             self.setFrom(self['from'])
-        if node and type(self) == type(node) and self.__class__ == node.__class__ and self.attrs.has_key('id'):
+        if node and type(self) == type(node) and \
+        self.__class__ == node.__class__ and self.attrs.has_key('id'):
             del self.attrs['id']
         self.timestamp = None
         for d in self.getTags('delay', namespace=NS_DELAY2):
@@ -584,19 +590,20 @@ class Protocol(Node):
 
     def getError(self):
         """
-        Return the error-condition (if present) or the textual description of the
-        error (otherwise)
+        Return the error-condition (if present) or the textual description
+        of the error (otherwise)
         """
         errtag = self.getTag('error')
         if errtag:
             for tag in errtag.getChildren():
-                if tag.getName() <> 'text':
+                if tag.getName() != 'text':
                     return tag.getName()
             return errtag.getData()
 
     def getErrorMsg(self):
         """
-        Return the textual description of the error (if present) or the error condition
+        Return the textual description of the error (if present)
+        or the error condition
         """
         errtag = self.getTag('error')
         if errtag:
@@ -611,7 +618,7 @@ class Protocol(Node):
         """
         return self.getTagAttr('error', 'code')
 
-    def setError(self,error,code=None):
+    def setError(self, error, code=None):
         """
         Set the error code. Obsolete. Use error-conditions instead
         """
@@ -619,7 +626,8 @@ class Protocol(Node):
             if str(code) in _errorcodes.keys():
                 error = ErrorNode(_errorcodes[str(code)], text=error)
             else:
-                error = ErrorNode(ERR_UNDEFINED_CONDITION, code=code, typ='cancel', text=error)
+                error = ErrorNode(ERR_UNDEFINED_CONDITION, code=code,
+                    typ='cancel', text=error)
         elif type(error) in [type(''), type(u'')]:
             error=ErrorNode(error)
         self.setType('error')
@@ -660,8 +668,8 @@ class Message(Protocol):
     """
 
     def __init__(self, to=None, body=None, xhtml=None, typ=None, subject=None,
-                    attrs={}, frm=None, payload=[], timestamp=None, xmlns=NS_CLIENT,
-                    node=None):
+        attrs={}, frm=None, payload=[], timestamp=None, xmlns=NS_CLIENT,
+        node=None):
         """
         You can specify recipient, text of message, type of message any
         additional attributes, sender of the message, any additional payload
@@ -671,7 +679,7 @@ class Message(Protocol):
         parameted to replicate it as message
         """
         Protocol.__init__(self, 'message', to=to, typ=typ, attrs=attrs, frm=frm,
-                        payload=payload, timestamp=timestamp, xmlns=xmlns, node=node)
+                payload=payload, timestamp=timestamp, xmlns=xmlns, node=node)
         if body:
             self.setBody(body)
         if xhtml:
@@ -724,7 +732,8 @@ class Message(Protocol):
         """
         try:
             if xmllang:
-                dom = NodeBuilder('<body xmlns="%s" xml:lang="%s">%s</body>' % (NS_XHTML, xmllang, val)).getDom()
+                dom = NodeBuilder('<body xmlns="%s" xml:lang="%s">%s</body>' \
+                    % (NS_XHTML, xmllang, val)).getDom()
             else:
                 dom = NodeBuilder('<body xmlns="%s">%s</body>' % (NS_XHTML,
                     val), 0).getDom()
@@ -773,8 +782,8 @@ class Message(Protocol):
 class Presence(Protocol):
 
     def __init__(self, to=None, typ=None, priority=None, show=None, status=None,
-                    attrs={}, frm=None, timestamp=None, payload=[], xmlns=NS_CLIENT,
-                    node=None):
+        attrs={}, frm=None, timestamp=None, payload=[], xmlns=NS_CLIENT,
+        node=None):
         """
         You can specify recipient, type of message, priority, show and status
         values any additional attributes, sender of the presence, timestamp, any
@@ -783,7 +792,7 @@ class Presence(Protocol):
         parameted to replicate it as presence
         """
         Protocol.__init__(self, 'presence', to=to, typ=typ, attrs=attrs, frm=frm,
-                        payload=payload, timestamp=timestamp, xmlns=xmlns, node=node)
+                payload=payload, timestamp=timestamp, xmlns=xmlns, node=node)
         if priority:
             self.setPriority(priority)
         if show:
@@ -848,6 +857,7 @@ class Presence(Protocol):
         Return the presence role (for groupchat)
         """
         return self._muc_getItemAttr('item', 'role')
+
     def getAffiliation(self):
         """
         Return the presence affiliation (for groupchat)
@@ -903,7 +913,8 @@ class Iq(Protocol):
         Alternatively you can pass in the other XML object as the 'node'
         parameted to replicate it as an iq
         """
-        Protocol.__init__(self, 'iq', to=to, typ=typ, attrs=attrs, frm=frm, xmlns=xmlns, node=node)
+        Protocol.__init__(self, 'iq', to=to, typ=typ, attrs=attrs, frm=frm,
+            xmlns=xmlns, node=node)
         if payload:
             self.setQueryPayload(payload)
         if queryNS:
@@ -978,7 +989,8 @@ class ErrorNode(Node):
     def __init__(self, name, code=None, typ=None, text=None):
         """
         Mandatory parameter: name - name of error condition.
-        Optional parameters: code, typ, text. Used for backwards compartibility with older jabber protocol.
+        Optional parameters: code, typ, text.
+        Used for backwards compartibility with older jabber protocol.
         """
         if name in ERRORS:
             cod, type_, txt = ERRORS[name]
@@ -1043,8 +1055,8 @@ class DataField(Node):
         Create new data field of specified name,value and type
 
         Also 'required','desc' and 'options' fields can be set. Alternatively
-        other XML object can be passed in as the 'node' parameted to replicate it
-        as a new datafiled.
+        other XML object can be passed in as the 'node' parameted
+        to replicate it as a new datafiled.
         """
         Node.__init__(self, 'field', node=node)
         if name:
@@ -1153,7 +1165,8 @@ class DataField(Node):
         if isinstance(opt, basestring):
             self.addChild('option').setTagData('value', opt)
         else:
-            self.addChild('option', {'label': opt[0]}).setTagData('value', opt[1])
+            self.addChild('option', {'label': opt[0]}).setTagData('value',
+                opt[1])
 
     def getType(self):
         """
