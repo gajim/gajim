@@ -465,6 +465,8 @@ class PluginManager(object):
                     pass
                 except ConfigParser.NoOptionError, type_error:
                     # all fields are required
+                    log.debug('%s : %s' % (module_attr_name,
+                        'wrong manifest file. all fields are required!'))
                     pass
 
         return plugins_found
