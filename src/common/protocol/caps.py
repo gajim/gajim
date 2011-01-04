@@ -53,9 +53,14 @@ class ConnectionCaps(object):
         if obj.conn.name != self._account:
             return
         obj.client_caps = self._create_suitable_client_caps(obj.node,
-            obj.caps_hash, obj.hash_method)
-        self._capscache.query_client_of_jid_if_unknown(self, obj.fjid,
-            obj.client_caps)
+            obj.caps_hash, obj.hash_method, obj.fjid)
+        if obj.show == 'offline' and obj.client_caps._hash_method == 'no':
+            self._capscache.forget_caps(obj.client_caps)
+            obj.client_caps = self._create_suitable_client_caps(obj.node,
+                obj.caps_hash, obj.hash_method)
+        else:
+            self._capscache.query_client_of_jid_if_unknown(self, obj.fjid,
+                obj.client_caps)
         self._update_client_caps_of_contact(obj)
 
     def _update_client_caps_of_contact(self, obj):

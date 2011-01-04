@@ -660,7 +660,27 @@ class StreamConflictReceivedEvent(nec.NetworkIncomingEvent):
             self.conn = self.base_event.conn
             return True
 
-class PresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
+class PresenceHelperEvent:
+    def _generate_show(self):
+        self.show = self.stanza.getShow()
+        if self.show not in ('chat', 'away', 'xa', 'dnd'):
+            self.show = '' # We ignore unknown show
+        if not self.ptype and not self.show:
+            self.show = 'online'
+        elif self.ptype == 'unavailable':
+            self.show = 'offline'
+
+    def _generate_ptype(self):
+        self.ptype = self.stanza.getType()
+        if self.ptype == 'available':
+            self.ptype = None
+        rfc_types = ('unavailable', 'error', 'subscribe', 'subscribed',
+            'unsubscribe', 'unsubscribed')
+        if self.ptype and not self.ptype in rfc_types:
+            self.ptype = None
+
+class PresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent,
+PresenceHelperEvent):
     name = 'presence-received'
     base_network_events = ['raw-pres-received']
 
@@ -674,30 +694,12 @@ class PresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             self.keyID = helpers.prepare_and_validate_gpg_keyID(self.conn.name,
                 self.jid, self.keyID)
 
-    def _generate_show(self):
-        self.show = self.stanza.getShow()
-        if self.show not in ('chat', 'away', 'xa', 'dnd'):
-            self.show = '' # We ignore unknown show
-        if not self.ptype and not self.show:
-            self.show = 'online'
-        elif self.ptype == 'unavailable':
-            self.show = 'offline'
-
     def _generate_prio(self):
         self.prio = self.stanza.getPriority()
         try:
             self.prio = int(self.prio)
         except Exception:
             self.prio = 0
-
-    def _generate_ptype(self):
-        self.ptype = self.stanza.getType()
-        if self.ptype == 'available':
-            self.ptype = None
-        rfc_types = ('unavailable', 'error', 'subscribe', 'subscribed',
-            'unsubscribe', 'unsubscribed')
-        if self.ptype and not self.ptype in rfc_types:
-            self.ptype = None
 
     def generate(self):
         self.conn = self.base_event.conn
@@ -1489,7 +1491,8 @@ class PingErrorEvent(nec.NetworkIncomingEvent):
     name = 'ping-error'
     base_network_events = []
 
-class CapsPresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
+class CapsPresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent,
+PresenceHelperEvent):
     name = 'caps-presence-received'
     base_network_events = ['raw-pres-received']
 
@@ -1509,6 +1512,8 @@ class CapsPresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             self.get_jid_resource()
         except Exception:
             return
+        self._generate_ptype()
+        self._generate_show()
         self._extract_caps_from_presence()
         return True
 
