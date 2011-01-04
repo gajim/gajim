@@ -19,8 +19,6 @@
 <li>pysqlite2 (if you have python 2.5, you already have this)</li>
 </ul>
 
-<p><strong>Note to packagers</strong> Gajim is a GTK+ app that loves GNOME. You can do 'make' so you don't require gnomepythonextras (aka gnome-python-desktop) which is gnome dep, but you will miss gnomekeyring integration.</p>
-
 <h2>Optional Runtime Requirements</h2>
 <ul>
 <li><a href="http://pyopenssl.sourceforge.net/">PyOpenSSL</a> (python-pyopenssl package in Debian) (>=0.9) for <em>secure</em> SSL/TLS. Python's default SSL is insecure, so this package is highly recommended!</li>
@@ -40,8 +38,6 @@
 
 <h2>Compile-time Requirements</h2>
 <ul>
-<li>python-dev</li>
-<li>python-gtk2-dev</li>
 <li>intltool (>= 0.40.1)</li>
 </ul>
 
@@ -52,14 +48,9 @@
 <li>tar jxvf gajim-version.tar.bz2</li>
 <li>cd gajim</li>
 <li>./configure</li>
-<li>make (builds all modules)</li>
+<li>make (builds translations)</li>
 <li>su -c make install</li>
 </ol>
-
-<p>To specify what modules to build do:</p>
-<pre>
-    make help
-</pre>
 
 <p>To specify where to install do:</p>
 <pre>
@@ -120,7 +111,7 @@ Wiki can be found at <a href="http://trac.gajim.org/wiki">http://trac.gajim.org/
 <br/>
 <br/>
 <br/>
-(C) 2003-2010<br/>
+(C) 2003-2011<br/>
 The Gajim Team<br/>
 http://gajim.org<br/>
 <br/>

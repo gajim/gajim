@@ -9,9 +9,6 @@ AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([1.8])
 AM_MAINTAINER_MODE
 
-dnl Make Objective-C work with automake
-AM_CONDITIONAL([am__fastdepOBJC], false)
-
 IT_PROG_INTLTOOL([0.35.0])
 PKG_PROG_PKG_CONFIG([0.19])
 
@@ -36,25 +33,10 @@ AM_GLIB_GNU_GETTEXT
 AM_NLS
 
 
-dnl ****
-dnl pygtk and gtk+
-dnl ****
-PKG_CHECK_MODULES([PYGTK], [gtk+-2.0 >= 2.16.0 pygtk-2.0 >= 2.16.0])
-AC_SUBST(PYGTK_CFLAGS)
-AC_SUBST(PYGTK_LIBS)
-PYGTK_DEFS=`$PKG_CONFIG --variable=defsdir pygtk-2.0`
-AC_SUBST(PYGTK_DEFS)
-
-AM_PATH_PYTHON([2.5])
-if test "x$PYTHON" = "x:"; then
-	AC_MSG_ERROR([Python not found])
-fi
-
 ACLOCAL_AMFLAGS="\${ACLOCAL_FLAGS}"
 AC_SUBST(ACLOCAL_AMFLAGS)
 
-AM_CHECK_PYTHON_HEADERS(,[AC_MSG_ERROR(could not find Python headers)])
-AC_SUBST([PYTHON_INCLUDES])
+AM_PATH_PYTHON([2.5])
 
 dnl ****
 dnl enable installation in python-2.x/site-packages/gajim
