@@ -1581,9 +1581,10 @@ class Connection(CommonConnection, ConnectionHandlers):
 
         self.request_message_archiving_preferences()
 
+        self.privacy_rules_requested = False
         self.discoverInfo(gajim.config.get_per('accounts', self.name, 'hostname'),
                 id_prefix='Gajim_')
-        self.privacy_rules_requested = False
+
         # Discover Stun server(s)
         gajim.resolver.resolve('_stun._udp.' + helpers.idn_to_ascii(
                 self.connected_hostname), self._on_stun_resolved)
@@ -2456,16 +2457,20 @@ class Connection(CommonConnection, ConnectionHandlers):
             if gajim.account_is_connected(self.name):
                 hostname = gajim.config.get_per('accounts', self.name, 'hostname')
                 iq = common.xmpp.Iq(typ = 'set', to = hostname)
+                id_ = self.connection.getAnID()
+                iq.setID(id_)
                 iq.setTag(common.xmpp.NS_REGISTER + ' query').setTag('remove')
-                def _on_answer(result):
-                    if result.getType() == 'result':
+                def _on_answer(con, result):
+                    if result.getID() == id_:
                         on_remove_success(True)
                         return
                     self.dispatch('ERROR', (_('Unregister failed'),
-                            _('Unregistration with server %(server)s failed: %(error)s') \
-                            % {'server': hostname, 'error': result.getErrorMsg()}))
+                        _('Unregistration with server %(server)s failed: '
+                        '%(error)s') % {'server': hostname,
+                        'error': result.getErrorMsg()}))
                     on_remove_success(False)
-                con.SendAndCallForResponse(iq, _on_answer)
+                con.RegisterHandler('iq', _on_answer, 'result', system=True)
+                con.SendAndWaitForResponse(iq)
                 return
             on_remove_success(False)
         if self.connected == 0:
