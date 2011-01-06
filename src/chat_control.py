@@ -2139,8 +2139,8 @@ class ChatControl(ChatControlBase):
         if self.kbd_activity_in_last_5_secs and message_buffer.get_char_count():
             # Only composing if the keyboard activity was in text entry
             self.send_chatstate('composing')
-        elif self.mouse_over_in_last_5_secs and\
-                jid == self.parent_win.get_active_jid():
+        elif self.mouse_over_in_last_5_secs and current_state == 'inactive' and\
+        jid == self.parent_win.get_active_jid():
             self.send_chatstate('active')
         else:
             if current_state == 'composing':
@@ -2436,15 +2436,8 @@ class ChatControl(ChatControlBase):
             self.reset_kbd_mouse_timeout_vars()
             return
 
-        # prevent going paused if we we were not composing (JEP violation)
-        if state == 'paused' and not contact.our_chatstate == 'composing':
-            # go active before
-            MessageControl.send_message(self, None, chatstate = 'active')
-            contact.our_chatstate = 'active'
-            self.reset_kbd_mouse_timeout_vars()
-
         # if we're inactive prevent composing (JEP violation)
-        elif contact.our_chatstate == 'inactive' and state == 'composing':
+        if contact.our_chatstate == 'inactive' and state == 'composing':
             # go active before
             MessageControl.send_message(self, None, chatstate = 'active')
             contact.our_chatstate = 'active'
@@ -2538,7 +2531,15 @@ class ChatControl(ChatControlBase):
         # send chatstate inactive to the one we're leaving
         # and active to the one we visit
         if state:
-            self.send_chatstate('active', self.contact)
+            message_buffer = self.msg_textview.get_buffer()
+            if message_buffer.get_char_count():
+                self.send_chatstate('paused', self.contact)
+            else:
+                self.send_chatstate('active', self.contact)
+            self.reset_kbd_mouse_timeout_vars()
+            gobject.source_remove(self.possible_paused_timeout_id)
+            gobject.source_remove(self.possible_inactive_timeout_id)
+            self._schedule_activity_timers()
         else:
             self.send_chatstate('inactive', self.contact)
         # Hide bigger avatar window
