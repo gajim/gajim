@@ -766,6 +766,16 @@ class ConnectionHandlersBase:
         gajim.ged.register_event_handler('decrypted-message-received', ged.CORE,
             self._nec_decrypted_message_received)
 
+    def cleanup(self):
+        gajim.ged.remove_event_handler('iq-error-received', ged.CORE,
+            self._nec_iq_error_received)
+        gajim.ged.remove_event_handler('presence-received', ged.CORE,
+            self._nec_presence_received)
+        gajim.ged.remove_event_handler('message-received', ged.CORE,
+            self._nec_message_received)
+        gajim.ged.remove_event_handler('decrypted-message-received', ged.CORE,
+            self._nec_decrypted_message_received)
+
     def _nec_iq_error_received(self, obj):
         if obj.conn.name != self.name:
             return
@@ -1263,6 +1273,48 @@ ConnectionJingle, ConnectionIBBytestream):
         gajim.ged.register_event_handler('unsubscribed-presence-received',
             ged.POSTGUI, self._nec_unsubscribed_presence_received_end)
         gajim.ged.register_event_handler('agent-removed', ged.CORE,
+            self._nec_agent_removed)
+
+    def cleanup(self):
+        ConnectionHandlersBase.cleanup(self)
+        ConnectionCaps.cleanup(self)
+        ConnectionArchive.cleanup(self)
+        ConnectionPubSub.cleanup(self)
+        gajim.ged.remove_event_handler('http-auth-received', ged.CORE,
+            self._nec_http_auth_received)
+        gajim.ged.remove_event_handler('version-request-received', ged.CORE,
+            self._nec_version_request_received)
+        gajim.ged.remove_event_handler('last-request-received', ged.CORE,
+            self._nec_last_request_received)
+        gajim.ged.remove_event_handler('time-request-received', ged.CORE,
+            self._nec_time_request_received)
+        gajim.ged.remove_event_handler('time-revised-request-received',
+            ged.CORE, self._nec_time_revised_request_received)
+        gajim.ged.remove_event_handler('roster-set-received',
+            ged.CORE, self._nec_roster_set_received)
+        gajim.ged.remove_event_handler('private-storage-bookmarks-received',
+            ged.CORE, self._nec_private_storate_bookmarks_received)
+        gajim.ged.remove_event_handler('private-storage-rosternotes-received',
+            ged.CORE, self._nec_private_storate_rosternotes_received)
+        gajim.ged.remove_event_handler('roster-received', ged.CORE,
+            self._nec_roster_received)
+        gajim.ged.remove_event_handler('iq-error-received', ged.CORE,
+            self._nec_iq_error_received)
+        gajim.ged.remove_event_handler('gmail-new-mail-received', ged.CORE,
+            self._nec_gmail_new_mail_received)
+        gajim.ged.remove_event_handler('ping-received', ged.CORE,
+            self._nec_ping_received)
+        gajim.ged.remove_event_handler('subscribe-presence-received',
+            ged.CORE, self._nec_subscribe_presence_received)
+        gajim.ged.remove_event_handler('subscribed-presence-received',
+            ged.CORE, self._nec_subscribed_presence_received)
+        gajim.ged.remove_event_handler('subscribed-presence-received',
+            ged.POSTGUI, self._nec_subscribed_presence_received_end)
+        gajim.ged.remove_event_handler('unsubscribed-presence-received',
+            ged.CORE, self._nec_unsubscribed_presence_received)
+        gajim.ged.remove_event_handler('unsubscribed-presence-received',
+            ged.POSTGUI, self._nec_unsubscribed_presence_received_end)
+        gajim.ged.remove_event_handler('agent-removed', ged.CORE,
             self._nec_agent_removed)
 
     def build_http_auth_answer(self, iq_obj, answer):

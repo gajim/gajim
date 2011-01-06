@@ -37,6 +37,10 @@ class ConnectionPubSub:
         gajim.ged.register_event_handler('pubsub-bookmarks-received',
             ged.CORE, self._nec_pubsub_bookmarks_received)
 
+    def cleanup(self):
+        gajim.ged.remove_event_handler('pubsub-bookmarks-received',
+            ged.CORE, self._nec_pubsub_bookmarks_received)
+
     def send_pb_subscription_query(self, jid, cb, *args, **kwargs):
         if not self.connection or self.connected < 2:
             return

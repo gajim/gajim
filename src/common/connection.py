@@ -719,11 +719,14 @@ class Connection(CommonConnection, ConnectionHandlers):
             self._nec_agent_info_received)
     # END __init__
 
-    def __del__(self):
+    def cleanup(self):
+        ConnectionHandlers.cleanup(self)
         gajim.ged.remove_event_handler('privacy-list-received', ged.CORE,
             self._nec_privacy_list_received)
         gajim.ged.remove_event_handler('agent-info-error-received', ged.CORE,
             self._nec_agent_info_error_received)
+        gajim.ged.remove_event_handler('agent-info-received', ged.CORE,
+            self._nec_agent_info_received)
 
     def get_config_values_or_default(self):
         if gajim.config.get_per('accounts', self.name, 'keep_alives_enabled'):

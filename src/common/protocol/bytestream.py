@@ -85,6 +85,10 @@ class ConnectionBytestream:
         gajim.ged.register_event_handler('file-request-received', ged.GUI1,
             self._nec_file_request_received)
 
+    def cleanup(self):
+        gajim.ged.remove_event_handler('file-request-received', ged.GUI1,
+            self._nec_file_request_received)
+
     def _ft_get_our_jid(self):
         our_jid = gajim.get_jid_from_account(self.name)
         resource = self.server_resource

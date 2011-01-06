@@ -46,6 +46,12 @@ class ConnectionCaps(object):
         gajim.ged.register_event_handler('agent-info-received', ged.GUI1,
             self._nec_agent_info_received_caps)
 
+    def cleanup(self):
+        gajim.ged.remove_event_handler('caps-presence-received', ged.GUI1,
+            self._nec_caps_presence_received)
+        gajim.ged.remove_event_handler('agent-info-received', ged.GUI1,
+            self._nec_agent_info_received_caps)
+
     def caps_change_account_name(self, new_name):
         self._account = new_name
 

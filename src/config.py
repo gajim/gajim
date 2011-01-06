@@ -3005,6 +3005,7 @@ class RemoveAccountWindow:
         gajim.interface.roster.close_all(self.account, force=True)
         if self.account in gajim.connections:
             gajim.connections[self.account].disconnect(on_purpose=True)
+            gajim.connections[self.account].cleanup()
             del gajim.connections[self.account]
         gajim.logger.remove_roster(gajim.get_jid_from_account(self.account))
         gajim.config.del_per('accounts', self.account)

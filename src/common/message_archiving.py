@@ -46,6 +46,11 @@ class ConnectionArchive:
             'archiving-preferences-changed-received', ged.CORE,
             self._nec_archiving_changed_received)
 
+    def cleanup(self):
+        gajim.ged.remove_event_handler(
+            'archiving-preferences-changed-received', ged.CORE,
+            self._nec_archiving_changed_received)
+
     def request_message_archiving_preferences(self):
         iq_ = common.xmpp.Iq('get')
         iq_.setTag('pref', namespace=common.xmpp.NS_ARCHIVE)
