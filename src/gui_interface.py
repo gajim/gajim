@@ -2541,7 +2541,7 @@ class Interface:
         self.sth_at_sth_dot_sth = r'\S+@\S+\.\S*[^\s)?]'
 
         # Invalid XML chars
-        self.invalid_XML_chars = u'[\x00-\x08]|[\x0b-\x0c]|[\x0e-\x19]|'\
+        self.invalid_XML_chars = u'[\x00-\x08]|[\x0b-\x0c]|[\x0e-\x1f]|'\
             u'[\ud800-\udfff]|[\ufffe-\uffff]'
 
     def popup_emoticons_under_button(self, button, parent_win):
