@@ -881,7 +881,10 @@ class GcPresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         # We may ask it to real jid in gui part.
         self.status_code = []
         ns_muc_user_x = self.stanza.getTag('x', namespace=xmpp.NS_MUC_USER)
-        destroy = ns_muc_user_x.getTag('destroy')
+        if ns_muc_user_x:
+            destroy = ns_muc_user_x.getTag('destroy')
+        else:
+            destroy = None
         if ns_muc_user_x and destroy:
             # Room has been destroyed. see
             # http://www.xmpp.org/extensions/xep-0045.html#destroyroom
