@@ -99,7 +99,7 @@ def load_secrets(filename):
 
     try:
         secrets = pickle.load(f)
-    except KeyError:
+    except (KeyError, EOFError):
         f.close()
         secrets = Secrets(filename)
 
