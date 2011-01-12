@@ -1519,7 +1519,7 @@ ConnectionJingle, ConnectionIBBytestream):
         qp = iq_obj.setTag('time', namespace=common.xmpp.NS_TIME_REVISED)
         qp.setTagData('utc', strftime('%Y-%m-%dT%H:%M:%SZ', gmtime()))
         isdst = localtime().tm_isdst
-        zone = -(timezone, altzone)[isdst] / 60
+        zone = -(timezone, altzone)[isdst] / 60.0
         tzo = (zone / 60, abs(zone % 60))
         qp.setTagData('tzo', '%+03d:%02d' % (tzo))
         self.connection.send(iq_obj)
