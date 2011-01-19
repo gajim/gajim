@@ -1496,12 +1496,18 @@ ConnectionJingle, ConnectionIBBytestream):
     def _nec_time_request_received(self, obj):
         if obj.conn.name != self.name:
             return
-        iq_obj = obj.stanza.buildReply('result')
-        qp = iq_obj.getTag('query')
-        qp.setTagData('utc', strftime('%Y%m%dT%H:%M:%S', gmtime()))
-        qp.setTagData('tz', helpers.decode_string(tzname[daylight]))
-        qp.setTagData('display', helpers.decode_string(strftime('%c',
-            localtime())))
+        if gajim.config.get_per('accounts', self.name, 'send_time_info'):
+            iq_obj = obj.stanza.buildReply('result')
+            qp = iq_obj.getTag('query')
+            qp.setTagData('utc', strftime('%Y%m%dT%H:%M:%S', gmtime()))
+            qp.setTagData('tz', helpers.decode_string(tzname[daylight]))
+            qp.setTagData('display', helpers.decode_string(strftime('%c',
+                localtime())))
+        else:
+            iq_obj = obj.stanza.buildReply('error')
+            err = common.xmpp.ErrorNode(name=common.xmpp.NS_STANZAS + \
+                ' service-unavailable')
+            iq_obj.addChild(node=err)
         self.connection.send(iq_obj)
 
     def _TimeRevisedCB(self, con, iq_obj):
@@ -1515,13 +1521,19 @@ ConnectionJingle, ConnectionIBBytestream):
     def _nec_time_revised_request_received(self, obj):
         if obj.conn.name != self.name:
             return
-        iq_obj = obj.stanza.buildReply('result')
-        qp = iq_obj.setTag('time', namespace=common.xmpp.NS_TIME_REVISED)
-        qp.setTagData('utc', strftime('%Y-%m-%dT%H:%M:%SZ', gmtime()))
-        isdst = localtime().tm_isdst
-        zone = -(timezone, altzone)[isdst] / 60.0
-        tzo = (zone / 60, abs(zone % 60))
-        qp.setTagData('tzo', '%+03d:%02d' % (tzo))
+        if gajim.config.get_per('accounts', self.name, 'send_time_info'):
+            iq_obj = obj.stanza.buildReply('result')
+            qp = iq_obj.setTag('time', namespace=common.xmpp.NS_TIME_REVISED)
+            qp.setTagData('utc', strftime('%Y-%m-%dT%H:%M:%SZ', gmtime()))
+            isdst = localtime().tm_isdst
+            zone = -(timezone, altzone)[isdst] / 60.0
+            tzo = (zone / 60, abs(zone % 60))
+            qp.setTagData('tzo', '%+03d:%02d' % (tzo))
+        else:
+            iq_obj = obj.stanza.buildReply('error')
+            err = common.xmpp.ErrorNode(name=common.xmpp.NS_STANZAS + \
+                ' service-unavailable')
+            iq_obj.addChild(node=err)
         self.connection.send(iq_obj)
 
     def _TimeRevisedResultCB(self, con, iq_obj):
