@@ -384,8 +384,13 @@ class NonBlockingTLS(PlugIn):
         else:
             # See http://docs.python.org/dev/library/ssl.html
             tcpsock._sslContext = OpenSSL.SSL.Context(OpenSSL.SSL.SSLv23_METHOD)
-            tcpsock._sslContext.set_options(OpenSSL.SSL.OP_NO_SSLv2 | \
-                OpenSSL.SSL.OP_NO_TICKET)
+            flags = OpenSSL.SSL.OP_NO_SSLv2
+            try:
+                flags |= OpenSSL.SSL.OP_NO_TICKET
+            except AttributeError, e:
+                # py-OpenSSL < 0.9 or old OpenSSL
+                flags |= 16384
+            tcpsock._sslContext.set_options(flags)
 
         tcpsock.ssl_errnum = 0
         tcpsock._sslContext.set_verify(OpenSSL.SSL.VERIFY_PEER,
