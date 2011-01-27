@@ -414,6 +414,11 @@ class StatusIcon:
         account, jid, event = gajim.events.get_first_systray_event()
         if not event:
             return
+        win = gajim.interface.roster.window
+        if not win.get_property('visible'):
+            gtkgui_helpers.move_window(win,
+                gajim.config.get('roster_x-position'),
+                gajim.config.get('roster_y-position'))
         gajim.interface.handle_event(account, jid, event.type_)
 
     def on_middle_click(self):
