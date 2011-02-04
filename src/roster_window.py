@@ -2349,7 +2349,7 @@ class RosterWindow:
                 # then we want to save (i.e. the window will grow every startup)
                 # so adjust.
                 msgwin_width_adjust = -1 * width
-        gajim.config.set('show_roster_on_startup',
+        gajim.config.set('last_roster_visible',
                 self.window.get_property('visible'))
         gajim.interface.msg_win_mgr.shutdown(msgwin_width_adjust)
 
@@ -6310,13 +6310,17 @@ class RosterWindow:
         self._toggeling_row = False
         self.setup_and_draw_roster()
 
-        if gajim.config.get('show_roster_on_startup'):
+        if gajim.config.get('show_roster_on_startup') == 'always':
             self.window.show_all()
-        else:
+        elif gajim.config.get('show_roster_on_startup') == 'never':
             if gajim.config.get('trayicon') != 'always':
                 # Without trayicon, user should see the roster!
                 self.window.show_all()
-                gajim.config.set('show_roster_on_startup', True)
+                gajim.config.set('last_roster_visible', True)
+        else:
+            if gajim.config.get('last_roster_visible') or \
+            gajim.config.get('trayicon') != 'always':
+                self.window.show_all()
 
         if len(gajim.connections) == 0: # if we have no account
             def _open_wizard():

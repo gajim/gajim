@@ -183,6 +183,15 @@ class PreferencesWindow:
         else:
             self.one_window_type_combobox.set_active(0)
 
+        # Show roster on startup
+        show_roster_combobox = self.xml.get_object('show_roster_on_startup')
+        choices = common.config.opt_show_roster_on_startup
+        type_ = gajim.config.get('show_roster_on_startup')
+        if type_ in choices:
+            show_roster_combobox.set_active(choices.index(type_))
+        else:
+            show_roster_combobox.set_active(0)
+
         # Compact View
         st = gajim.config.get('compact_view')
         self.xml.get_object('compact_view_checkbutton').set_active(st)
@@ -684,6 +693,12 @@ class PreferencesWindow:
         gajim.config.set('one_message_window', config_type)
         gajim.interface.save_config()
         gajim.interface.msg_win_mgr.reconfig()
+
+    def on_show_roster_on_startup_changed(self, widget):
+        active = widget.get_active()
+        config_type = common.config.opt_show_roster_on_startup[active]
+        gajim.config.set('show_roster_on_startup', config_type)
+        gajim.interface.save_config()
 
     def on_compact_view_checkbutton_toggled(self, widget):
         active = widget.get_active()

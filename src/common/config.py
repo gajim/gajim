@@ -52,6 +52,7 @@ opt_str = [ 'string', 0 ]
 opt_bool = [ 'boolean', 0 ]
 opt_color = [ 'color', '^(#[0-9a-fA-F]{6})|()$' ]
 opt_one_window_types = ['never', 'always', 'always_with_roster', 'peracct', 'pertype']
+opt_show_roster_on_startup = ['always', 'never', 'last_state']
 opt_treat_incoming_messages = ['', 'chat', 'normal']
 
 class Config:
@@ -171,7 +172,7 @@ class Config:
             'muc_autorejoin_timeout': [opt_int, 1, _('How many seconds to wait before trying to autorejoin to a conference you are being disconnected from. Set to 0 to disable autorejoining.')],
             'muc_autorejoin_on_kick': [opt_bool, False, _('Should autorejoin be activated when we are being kicked from a conference?')],
             'send_on_ctrl_enter': [opt_bool, False, _('Send message on Ctrl+Enter and with Enter make new line (Mirabilis ICQ Client default behaviour).')],
-            'show_roster_on_startup': [opt_bool, True],
+            'last_roster_visible': [opt_bool, True],
             'key_up_lines': [opt_int, 25, _('How many lines to store for Ctrl+KeyUP.')],
             'version': [ opt_str, defs.version ], # which version created the config
             'search_engine': [opt_str, 'http://www.google.com/search?&q=%s&sourceid=gajim'],
@@ -244,6 +245,7 @@ class Config:
             'one_message_window': [opt_str, 'always',
 #always, never, peracct, pertype should not be translated
                     _('Controls the window where new messages are placed.\n\'always\' - All messages are sent to a single window.\n\'always_with_roster\' - Like \'always\' but the messages are in a single window along with the roster.\n\'never\' - All messages get their own window.\n\'peracct\' - Messages for each account are sent to a specific window.\n\'pertype\' - Each message type (e.g., chats vs. groupchats) are sent to a specific window.')],
+            'show_roster_on_startup':[opt_str, 'always', _('Show roster on startup.\n\'always\' - Always show roster.\n\'never\' - Never show roster.\n\'last_state\' - Restore the last state roster.')],
             'show_avatar_in_chat': [opt_bool, True, _('If False, you will no longer see the avatar in the chat window.')],
             'escape_key_closes': [opt_bool, True, _('If True, pressing the escape key closes a tab/window.')],
             'compact_view': [opt_bool, False, _('Hides the buttons in chat windows.')],
