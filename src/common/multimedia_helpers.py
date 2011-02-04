@@ -44,6 +44,8 @@ class DeviceManager(object):
                 element.set_state(gst.STATE_NULL)
             else:
                 self.devices[text] = pipe % name
+        except ImportError:
+            pass
         except gst.ElementNotFoundError:
             print 'element \'%s\' not found' % name
 
