@@ -87,8 +87,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
                     'is_zeroconf', True)
             gajim.config.set_per('accounts', gajim.ZEROCONF_ACC_NAME,
                     'use_ft_proxies', False)
-        #XXX make sure host is US-ASCII
-        self.host = unicode(socket.gethostname())
+        self.host = unicode(socket.gethostname(), locale.getpreferredencoding())
         gajim.config.set_per('accounts', gajim.ZEROCONF_ACC_NAME, 'hostname',
                 self.host)
         self.port = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME,
