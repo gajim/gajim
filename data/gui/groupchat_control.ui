@@ -85,6 +85,7 @@
             <property name="border_width">3</property>
             <property name="position">495</property>
             <property name="position_set">True</property>
+            <signal name="notify" handler="on_hpaned_notify"/>
             <child>
               <object class="GtkVBox" id="gc_textviews_vbox">
                 <property name="width_request">0</property>

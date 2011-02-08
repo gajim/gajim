@@ -377,11 +377,6 @@ class GroupchatControl(ChatControlBase):
         self.name_label = self.xml.get_object('banner_name_label')
         self.event_box = self.xml.get_object('banner_eventbox')
 
-        # set the position of the current hpaned
-        hpaned_position = gajim.config.get('gc-hpaned-position')
-        self.hpaned = self.xml.get_object('hpaned')
-        self.hpaned.set_position(hpaned_position)
-
         self.list_treeview = self.xml.get_object('list_treeview')
         selection = self.list_treeview.get_selection()
         id_ = selection.connect('changed',
@@ -390,13 +385,17 @@ class GroupchatControl(ChatControlBase):
         id_ = self.list_treeview.connect('style-set',
             self.on_list_treeview_style_set)
         self.handlers[id_] = self.list_treeview
-        self.resize_from_another_muc = False
+        self.resize_from_another_muc = True
         # we want to know when the the widget resizes, because that is
         # an indication that the hpaned has moved...
-        # FIXME: Find a better indicator that the hpaned has moved.
-        id_ = self.list_treeview.connect('size-allocate',
-            self.on_treeview_size_allocate)
-        self.handlers[id_] = self.list_treeview
+        self.hpaned = self.xml.get_object('hpaned')
+        id_ = self.hpaned.connect('notify', self.on_hpaned_notify)
+        self.handlers[id_] = self.hpaned
+
+        # set the position of the current hpaned
+        hpaned_position = gajim.config.get('gc-hpaned-position')
+        self.hpaned.set_position(hpaned_position)
+
         #status_image, shown_nick, type, nickname, avatar
         self.columns = [gtk.Image, str, str, str, gtk.gdk.Pixbuf]
         store = gtk.TreeStore(*self.columns)
@@ -552,23 +551,21 @@ class GroupchatControl(ChatControlBase):
 
         menu.show_all()
 
-    def resize_occupant_treeview(self, position):
-        self.resize_from_another_muc = True
-        self.hpaned.set_position(position)
-        def reset_flag():
-            self.resize_from_another_muc = False
-        # Reset the flag when everything will be redrawn, and in particular when
-        # on_treeview_size_allocate will have been called.
-        gobject.idle_add(reset_flag)
-
-    def on_treeview_size_allocate(self, widget, allocation):
+    def on_hpaned_notify(self, pane, gparamspec):
         """
         The MUC treeview has resized. Move the hpaned in all tabs to match
         """
-        if self.resize_from_another_muc:
+        def reset_flag():
+            self.resize_from_another_muc = True
+
+        if gparamspec.name != 'position':
+            return
+        if not self.resize_from_another_muc:
             # Don't send the event to other MUC
             return
+
         hpaned_position = self.hpaned.get_position()
+        gajim.config.set('gc-hpaned-position', hpaned_position)
         for account in gajim.gc_connected:
             for room_jid in [i for i in gajim.gc_connected[account] if \
             gajim.gc_connected[account][i] and i != self.room_jid]:
@@ -578,7 +575,9 @@ class GroupchatControl(ChatControlBase):
                 gajim.interface.minimized_controls[account]:
                     ctrl = gajim.interface.minimized_controls[account][room_jid]
                 if ctrl and gajim.config.get('one_message_window') != 'never':
-                    ctrl.resize_occupant_treeview(hpaned_position)
+                    ctrl.resize_from_another_muc = False
+                    ctrl.hpaned.set_position(hpaned_position)
+                    gobject.idle_add(reset_flag)
 
     def iter_contact_rows(self):
         """
