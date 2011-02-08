@@ -555,9 +555,6 @@ class GroupchatControl(ChatControlBase):
         """
         The MUC treeview has resized. Move the hpaned in all tabs to match
         """
-        def reset_flag():
-            self.resize_from_another_muc = True
-
         if gparamspec.name != 'position':
             return
         if not self.resize_from_another_muc:
@@ -577,7 +574,7 @@ class GroupchatControl(ChatControlBase):
                 if ctrl and gajim.config.get('one_message_window') != 'never':
                     ctrl.resize_from_another_muc = False
                     ctrl.hpaned.set_position(hpaned_position)
-                    gobject.idle_add(reset_flag)
+                    ctrl.resize_from_another_muc = True
 
     def iter_contact_rows(self):
         """
