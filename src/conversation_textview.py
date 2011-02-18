@@ -1296,7 +1296,7 @@ class ConversationTextview(gobject.GObject):
         Get the time, with the day before if needed and return it. It DOESN'T
         format a fuzzy time
         """
-        format = ''
+        format_ = ''
         # get difference in days since epoch (86400 = 24*3600)
         # number of days since epoch for current time (in GMT) -
         # number of days since epoch for message (in GMT)
@@ -1309,11 +1309,11 @@ class ConversationTextview(gobject.GObject):
             day_str = i18n.ngettext('Yesterday', '%i days ago', diff_day,
                     replace_plural=diff_day)
         if day_str:
-            format += day_str + ' '
+            format_ += day_str + ' '
         timestamp_str = gajim.config.get('time_stamp')
         timestamp_str = helpers.from_one_line(timestamp_str)
-        format += timestamp_str
-        tim_format = time.strftime(format, tim)
+        format_ += timestamp_str
+        tim_format = time.strftime(format_, tim)
         if locale.getpreferredencoding() != 'KOI8-R':
             # if tim_format comes as unicode because of day_str.
             # we convert it to the encoding that we want (and that is utf-8)
