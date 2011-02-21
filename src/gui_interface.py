@@ -2779,8 +2779,9 @@ class Interface:
         self.systray = statusicon.StatusIcon()
 
         pix = gtkgui_helpers.get_icon_pixmap('gajim', 32)
-        # set the icon to all windows
-        gtk.window_set_default_icon(pix)
+        if pix is not None:
+            # set the icon to all windows
+            gtk.window_set_default_icon(pix)
 
         self.init_emoticons()
         self.make_regexps()
