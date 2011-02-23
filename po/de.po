@@ -9114,7 +9114,7 @@ msgstr ""
 #: ../src/groupchat_control.py:1481
 #, python-format
 msgid "** Affiliation of %(nick)s has been set to %(affiliation)s"
-msgstr "** Mitgliedschaft von %(nick)s wurde an %(affiliation)s gesendet"
+msgstr "** Mitgliedschaft von %(nick)s wurde auf %(affiliation)s gesetzt"
 
 #: ../src/groupchat_control.py:1496
 #, python-format
