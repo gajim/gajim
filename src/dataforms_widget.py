@@ -193,8 +193,9 @@ class DataFormWidget(gtk.Alignment, object):
         for item in self._data_form.iter_records():
             iter_ = self.multiplemodel.append()
             for field in item.iter_fields():
-                self.multiplemodel.set_value(iter_, fieldvars.index(field.var),
-                        field.value)
+                if field.var in fieldvars:
+                    self.multiplemodel.set_value(iter_,
+                        fieldvars.index(field.var), field.value)
 
         # constructing columns...
         for field, counter in zip(self._data_form.reported.iter_fields(),
@@ -574,8 +575,8 @@ class SingleForm(gtk.Table, object):
                 widget.set_sensitive(readwrite)
                 widget = decorate_with_tooltip(widget, field)
                 self.attach(widget, 1, 2, linecounter, linecounter+1,
-                        yoptions=gtk.FILL)	
-            
+                        yoptions=gtk.FILL)
+
             if field.required:
                 label = gtk.Label('*')
                 label.set_tooltip_text(_('This field is required'))
