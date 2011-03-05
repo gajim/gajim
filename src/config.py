@@ -3230,14 +3230,26 @@ class ManageBookmarksWindow:
             gajim.connections[account_unicode].bookmarks = []
 
             for bm in account.iterchildren():
-                #Convert True/False/None to '1' or '0'
+                # Convert True/False/None to '1' or '0'
                 autojoin = unicode(int(bm[3]))
                 minimize = unicode(int(bm[4]))
+                name = bm[1]
+                if name:
+                    name = name.decode('utf-8')
+                jid = bm[2]
+                if jid:
+                    jid = jid.decode('utf-8')
+                pw = bm[5]
+                if pw:
+                    pw = pw.decode('utf-8')
+                nick = bm[6]
+                if nick:
+                    nick = nick.decode('utf-8')
 
-                #create the bookmark-dict
-                bmdict = { 'name': bm[1], 'jid': bm[2], 'autojoin': autojoin,
-                        'minimize': minimize, 'password': bm[5], 'nick': bm[6],
-                        'print_status': bm[7]}
+                # create the bookmark-dict
+                bmdict = { 'name': name, 'jid': jid, 'autojoin': autojoin,
+                    'minimize': minimize, 'password': pw, 'nick': nick,
+                    'print_status': bm[7]}
 
                 gajim.connections[account_unicode].bookmarks.append(bmdict)
 
