@@ -1304,10 +1304,11 @@ class ConversationTextview(gobject.GObject):
                 int(timegm(tim)) / 86400
         if diff_day == 0:
             day_str = ''
+        elif diff_day == 1:
+            day_str = _('Yesterday')
         else:
             #%i is day in year (1-365)
-            day_str = i18n.ngettext('Yesterday', '%i days ago', diff_day,
-                    replace_plural=diff_day)
+            day_str = _('%i days ago') % diff_day
         if day_str:
             format_ += day_str + ' '
         timestamp_str = gajim.config.get('time_stamp')
