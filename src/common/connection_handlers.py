@@ -1008,6 +1008,8 @@ class ConnectionHandlersBase:
             obj.session.control.conv_textview.hide_xep0184_warning(obj.id_)
 
         if obj.mtype == 'error':
+            if not obj.msgtxt:
+                return True
             self.dispatch_error_message(obj.stanza, obj.msgtxt,
                 obj.session, obj.fjid, obj.timestamp)
             return True
