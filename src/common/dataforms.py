@@ -628,8 +628,8 @@ class SimpleDataForm(DataForm, DataRecord):
                     f.values = ['']
                 # Keep all required fields
                 continue
-            if (hasattr(f, 'value') and not f.value) or (hasattr(f, 'values') \
-            and len(f.values) == 0):
+            if (hasattr(f, 'value') and not f.value and f.value != 0) or (
+            hasattr(f, 'values') and len(f.values) == 0):
                 to_be_removed.append(f)
             else:
                 del f.label
