@@ -6755,10 +6755,10 @@ msgstr "Открыть как _ссылку"
 #: ../src/conversation_textview.py:1296
 #, python-format
 msgid "Yesterday"
-msgid_plural "%i days ago"
-msgstr[0] "Вчера"
-msgstr[1] "%i дня назад"
-msgstr[2] "%i дней назад"
+msgid_plural "%(nb_days)i days ago"
+msgstr[0] "%(nb_days)i день назад"
+msgstr[1] "%(nb_days)i дня назад"
+msgstr[2] "%(nb_days)i дней назад"
 
 #. if we have subject, show it too!
 #: ../src/conversation_textview.py:1344 ../src/history_window.py:480
