@@ -1304,11 +1304,9 @@ class ConversationTextview(gobject.GObject):
                 int(timegm(tim)) / 86400
         if diff_day == 0:
             day_str = ''
-        elif diff_day == 1:
-            day_str = _('Yesterday')
         else:
             #%i is day in year (1-365)
-            day_str = i18n.ngettext('%(nb_days)i day ago',
+            day_str = i18n.ngettext('Yesterday',
                 '%(nb_days)i days ago', diff_day, {'nb_days': diff_day},
                 {'nb_days': diff_day})
         if day_str:

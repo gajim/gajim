@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-03-06 17:04+0300\n"
-"PO-Revision-Date: 2011-03-06 17:49+0300\n"
+"PO-Revision-Date: 2011-03-06 23:31+0300\n"
 "Last-Translator: Fomin Denis <fominde@mail.ru>\n"
 "Language-Team: Linux Support LLC\n"
 "Language: ru\n"
@@ -6678,14 +6678,10 @@ msgstr "_Поиск по Web"
 msgid "Open as _Link"
 msgstr "Открыть как _ссылку"
 
-#: ../src/conversation_textview.py:1308
-msgid "Yesterday"
-msgstr "Вчера"
-
 #. %i is day in year (1-365)
 #: ../src/conversation_textview.py:1311
 #, python-format
-msgid "%(nb_days)i day ago"
+msgid "Yesterday"
 msgid_plural "%(nb_days)i days ago"
 msgstr[0] "%(nb_days)i день назад"
 msgstr[1] "%(nb_days)i  дня назад"
