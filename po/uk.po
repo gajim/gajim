@@ -7136,12 +7136,12 @@ msgstr "Вчора"
 
 #. %i is day in year (1-365)
 #: ../src/conversation_textview.py:1311
-#, fuzzy, python-format
+#, python-format
 msgid "%(nb_days)i day ago"
 msgid_plural "%(nb_days)i days ago"
-msgstr[0] "%i днів тому"
-msgstr[1] "%i днів тому"
-msgstr[2] "%i днів тому"
+msgstr[0] "%(nb_days)i день тому"
+msgstr[1] "%(nb_days)i днi тому"
+msgstr[2] "%(nb_days)i днiв тому"
 
 #. if we have subject, show it too!
 #: ../src/conversation_textview.py:1360 ../src/history_window.py:480
