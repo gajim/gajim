@@ -1305,9 +1305,8 @@ class ConversationTextview(gobject.GObject):
             day_str = ''
         else:
             #%i is day in year (1-365)
-            day_str = i18n.ngettext('Yesterday',
-                '%(nb_days)i days ago', diff_day, {'nb_days': diff_day},
-                {'nb_days': diff_day})
+            day_str = i18n.ngettext('Yesterday', '%(nb_days)i days ago',
+                diff_day, {'nb_days': diff_day}, {'nb_days': diff_day})
         if day_str:
             format += day_str + ' '
         timestamp_str = gajim.config.get('time_stamp')
