@@ -7130,14 +7130,10 @@ msgstr "Пошук у _Тенетах"
 msgid "Open as _Link"
 msgstr "Відкрити як _посилання"
 
-#: ../src/conversation_textview.py:1308
-msgid "Yesterday"
-msgstr "Вчора"
-
 #. %i is day in year (1-365)
 #: ../src/conversation_textview.py:1311
 #, python-format
-msgid "%(nb_days)i day ago"
+msgid "Yesterday"
 msgid_plural "%(nb_days)i days ago"
 msgstr[0] "%(nb_days)i день тому"
 msgstr[1] "%(nb_days)i днi тому"
