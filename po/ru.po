@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-03-06 17:04+0300\n"
-"PO-Revision-Date: 2011-03-06 23:31+0300\n"
+"PO-Revision-Date: 2011-03-07 17:43+0300\n"
 "Last-Translator: Fomin Denis <fominde@mail.ru>\n"
 "Language-Team: Linux Support LLC\n"
 "Language: ru\n"
@@ -2807,7 +2807,7 @@ msgstr "Отправить сообщение и закрыть окно"
 
 #: ../data/gui/single_message_window.ui.h:8
 msgid "To:"
-msgstr "К:"
+msgstr "Кому:"
 
 #: ../data/gui/single_message_window.ui.h:9
 msgid "_Reply"
