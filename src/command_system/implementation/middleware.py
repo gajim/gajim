@@ -175,7 +175,7 @@ class CommandTools:
         Add given text to the input history, so user can scroll through
         it using ctrl + up/down arrow keys.
         """
-        self.save_sent_message(text)
+        self.save_message(text, 'sent')
 
     @property
     def connection(self):

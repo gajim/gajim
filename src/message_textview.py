@@ -345,6 +345,18 @@ gtk.binding_entry_add_signal(MessageTextView, gtk.keysyms.Down,
         gtk.gdk.CONTROL_MASK, 'mykeypress', int, gtk.keysyms.Down,
         gtk.gdk.ModifierType, gtk.gdk.CONTROL_MASK)
 
+# CTRL + SHIFT + UP
+gtk.binding_entry_add_signal(MessageTextView, gtk.keysyms.Up,
+        gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK, 'mykeypress', int,
+        gtk.keysyms.Up, gtk.gdk.ModifierType, gtk.gdk.CONTROL_MASK |
+        gtk.gdk.SHIFT_MASK)
+
+# CTRL + SHIFT + DOWN
+gtk.binding_entry_add_signal(MessageTextView, gtk.keysyms.Down,
+        gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK, 'mykeypress', int,
+        gtk.keysyms.Down, gtk.gdk.ModifierType, gtk.gdk.CONTROL_MASK |
+        gtk.gdk.SHIFT_MASK)
+
 # ENTER
 gtk.binding_entry_add_signal(MessageTextView, gtk.keysyms.Return,
         0, 'mykeypress', int, gtk.keysyms.Return,
