@@ -1650,6 +1650,7 @@ class GroupchatControl(ChatControlBase):
 
         label = self.get_seclabel()
         if message != '' or message != '\n':
+            self.save_message(message, 'sent')
             # Send the message
             gajim.connections[self.account].send_gc_message(self.room_jid,
                     message, xhtml=xhtml, label=label)
