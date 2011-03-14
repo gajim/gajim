@@ -3146,12 +3146,12 @@ class RosterWindow:
 
     def on_reconnect(self, widget, jid, account):
         """
-        When disconnect menuitem is activated: disconect from room
+        When reconnect menuitem is activated: join the room
         """
         if jid in gajim.interface.minimized_controls[account]:
             ctrl = gajim.interface.minimized_controls[account][jid]
-        gajim.interface.join_gc_room(account, jid, ctrl.nick,
-            gajim.gc_passwords.get(jid, ''))
+            gajim.interface.join_gc_room(account, jid, ctrl.nick,
+                gajim.gc_passwords.get(jid, ''))
 
     def on_send_single_message_menuitem_activate(self, widget, account,
     contact=None):
