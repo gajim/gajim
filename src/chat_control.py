@@ -804,19 +804,27 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         # save the message, so user can scroll though the list with key up/down
         if msg_type == 'sent':
             history = self.sent_history
+            pos = self.sent_history_pos
         else:
             history = self.received_history
-        size = len(self.sent_history)
+            pos = self.received_history_pos
+        size = len(history)
+        scroll = False if pos == size else True # are we scrolling?
         # we don't want size of the buffer to grow indefinately
         max_size = gajim.config.get('key_up_lines')
         for i in xrange(size - max_size + 1):
+            if pos == 0:
+                break
             history.pop(0)
+            pos -= 1
         history.append(message)
+        if not scroll or msg_type == 'sent':
+            pos = len(history)
         if msg_type == 'sent':
-            self.sent_history_pos = len(history)
+            self.sent_history_pos = pos
+            self.orig_msg = None
         else:
-            self.received_history_pos = len(history)
-        self.orig_msg = None
+            self.received_history_pos = pos
 
     def print_conversation_line(self, text, kind, name, tim,
                     other_tags_for_name=[], other_tags_for_time=[],
