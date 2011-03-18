@@ -1005,7 +1005,8 @@ class ConnectionHandlersBase:
         # We got our message's receipt
         if obj.receipt_received_tag and obj.session.control and \
         gajim.config.get_per('accounts', self.name, 'request_receipt'):
-            obj.session.control.conv_textview.hide_xep0184_warning(obj.id_)
+            obj.session.control.conv_textview.hide_xep0184_warning(
+                obj.receipt_received_tag.getAttr('id'))
 
         if obj.mtype == 'error':
             if not obj.msgtxt:
