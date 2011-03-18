@@ -34,6 +34,7 @@ import gtk
 import pango
 import gobject
 import gtkgui_helpers
+import gui_menu_builder
 import message_control
 import tooltips
 import dialogs
@@ -195,6 +196,20 @@ class PrivateChatControl(ChatControl):
             self.set_session(new_sess)
 
         self.session.negotiate_e2e(False)
+
+    def prepare_context_menu(self, hide_buttonbar_items=False):
+        """
+        Set compact view menuitem active state sets active and sensitivity state
+        for toggle_gpg_menuitem sets sensitivity for history_menuitem (False for
+        tranasports) and file_transfer_menuitem and hide()/show() for
+        add_to_roster_menuitem
+        """
+        menu = gui_menu_builder.get_contact_menu(self.contact, self.account,
+            use_multiple_contacts=False, show_start_chat=False,
+            show_encryption=True, control=self,
+            show_buttonbar_items=not hide_buttonbar_items,
+            gc_contact=self.gc_contact)
+        return menu
 
 class GroupchatControl(ChatControlBase):
     TYPE_ID = message_control.TYPE_GC
