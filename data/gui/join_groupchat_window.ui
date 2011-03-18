@@ -5,6 +5,7 @@
   <object class="GtkWindow" id="join_groupchat_window">
     <property name="border_width">6</property>
     <property name="title" translatable="yes">Join Group Chat</property>
+    <property name="type_hint">dialog</property>
     <signal name="destroy" handler="on_join_groupchat_window_destroy"/>
     <signal name="key_press_event" handler="on_join_groupchat_window_key_press_event"/>
     <child>

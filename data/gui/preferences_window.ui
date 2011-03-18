@@ -128,6 +128,7 @@
     <property name="border_width">6</property>
     <property name="title" translatable="yes">Preferences</property>
     <property name="role">preferences</property>
+    <property name="type_hint">dialog</property>
     <signal name="destroy" handler="on_preferences_window_destroy"/>
     <signal name="key_press_event" handler="on_preferences_window_key_press_event"/>
     <child>
@@ -1399,8 +1400,8 @@ $T will be replaced by auto-not-available timeout</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="headers_visible">False</property>
-                                    <signal name="key_press_event" handler="on_msg_treeview_key_press_event"/>
                                     <signal name="cursor_changed" handler="on_msg_treeview_cursor_changed"/>
+                                    <signal name="key_press_event" handler="on_msg_treeview_key_press_event"/>
                                   </object>
                                 </child>
                               </object>

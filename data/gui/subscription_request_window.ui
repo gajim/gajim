@@ -5,6 +5,7 @@
   <object class="GtkWindow" id="subscription_request_window">
     <property name="border_width">12</property>
     <property name="title" translatable="yes">Subscription Request</property>
+    <property name="type_hint">dialog</property>
     <child>
       <object class="GtkVBox" id="vbox10">
         <property name="visible">True</property>

@@ -9,6 +9,7 @@
     <property name="title" translatable="yes">Plugins</property>
     <property name="default_width">650</property>
     <property name="default_height">500</property>
+    <property name="type_hint">dialog</property>
     <signal name="destroy" handler="on_plugins_window_destroy"/>
     <child>
       <object class="GtkVBox" id="vbox1">

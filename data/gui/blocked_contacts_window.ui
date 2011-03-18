@@ -5,6 +5,7 @@
   <object class="GtkWindow" id="blocked_contacts_window">
     <property name="visible">True</property>
     <property name="title" translatable="yes">Blocked Contacts</property>
+    <property name="type_hint">dialog</property>
     <signal name="destroy" handler="on_blocked_contacts_window_destroy"/>
     <child>
       <object class="GtkVBox" id="vbox1">

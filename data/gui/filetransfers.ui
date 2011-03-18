@@ -5,6 +5,7 @@
   <object class="GtkWindow" id="file_transfers_window">
     <property name="border_width">12</property>
     <property name="title" translatable="yes">File Transfers</property>
+    <property name="type_hint">dialog</property>
     <child internal-child="accessible">
       <object class="AtkObject" id="file_transfers_window-atkobject">
         <property name="AtkObject::accessible-name" translatable="yes">File Transfers</property>
@@ -40,11 +41,11 @@
                   </object>
                 </child>
                 <signal name="button_press_event" handler="on_transfers_list_button_press_event"/>
-                <signal name="motion_notify_event" handler="on_transfers_list_motion_notify_event"/>
+                <signal name="button_release_event" handler="on_transfers_list_button_release_event"/>
                 <signal name="key_press_event" handler="on_transfers_list_key_press_event"/>
                 <signal name="leave_notify_event" handler="on_transfers_list_leave_notify_event"/>
+                <signal name="motion_notify_event" handler="on_transfers_list_motion_notify_event"/>
                 <signal name="row_activated" handler="on_transfers_list_row_activated"/>
-                <signal name="button_release_event" handler="on_transfers_list_button_release_event"/>
               </object>
             </child>
           </object>

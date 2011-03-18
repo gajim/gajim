@@ -4,6 +4,7 @@
   <!-- interface-naming-policy project-wide -->
   <object class="GtkWindow" id="item_archiving_preferences_window">
     <property name="border_width">12</property>
+    <property name="type_hint">dialog</property>
     <signal name="destroy" handler="on_item_archiving_preferences_window_destroy"/>
     <child>
       <object class="GtkVBox" id="vbox1">
@@ -180,7 +181,7 @@
   </object>
   <object class="GtkListStore" id="liststore1">
     <columns>
-      <!-- column-name item text -->
+      <!-- column-name item -->
       <column type="gchararray"/>
     </columns>
     <data>
@@ -200,7 +201,7 @@
   </object>
   <object class="GtkListStore" id="liststore2">
     <columns>
-      <!-- column-name item text -->
+      <!-- column-name item -->
       <column type="gchararray"/>
     </columns>
     <data>

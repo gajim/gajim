@@ -6,6 +6,7 @@
     <property name="visible">True</property>
     <property name="border_width">12</property>
     <property name="title" translatable="yes">window1</property>
+    <property name="type_hint">dialog</property>
     <signal name="destroy" handler="on_privacy_lists_first_window_destroy"/>
     <child>
       <object class="GtkVBox" id="vbox1">
@@ -167,7 +168,7 @@
   </object>
   <object class="GtkListStore" id="liststore1">
     <columns>
-      <!-- column-name item text -->
+      <!-- column-name item -->
       <column type="gchararray"/>
     </columns>
   </object>
