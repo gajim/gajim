@@ -5,6 +5,7 @@
   <object class="GtkWindow" id="service_registration_window">
     <property name="border_width">6</property>
     <property name="title" translatable="yes">Register to</property>
+    <property name="type_hint">dialog</property>
     <child>
       <object class="GtkVBox" id="vbox12">
         <property name="visible">True</property>

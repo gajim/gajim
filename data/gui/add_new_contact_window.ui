@@ -6,6 +6,7 @@
     <property name="border_width">6</property>
     <property name="title" translatable="yes">Add New Contact</property>
     <property name="resizable">False</property>
+    <property name="type_hint">dialog</property>
     <signal name="destroy" handler="on_add_new_contact_window_destroy"/>
     <signal name="key_press_event" handler="on_add_new_contact_window_key_press_event"/>
     <child>

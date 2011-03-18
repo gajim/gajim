@@ -4,7 +4,7 @@
   <!-- interface-naming-policy toplevel-contextual -->
   <object class="GtkListStore" id="liststore1">
     <columns>
-      <!-- column-name item text -->
+      <!-- column-name item -->
       <column type="gchararray"/>
     </columns>
     <data>
@@ -22,6 +22,7 @@
   <object class="GtkWindow" id="manage_proxies_window">
     <property name="border_width">12</property>
     <property name="title" translatable="yes">Manage Proxy Profiles</property>
+    <property name="type_hint">dialog</property>
     <signal name="destroy" handler="on_manage_proxies_window_destroy"/>
     <child>
       <object class="GtkVBox" id="vbox87">
@@ -49,8 +50,8 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="headers_visible">False</property>
-                        <signal name="key_press_event" handler="on_proxies_treeview_key_press_event"/>
                         <signal name="cursor_changed" handler="on_proxies_treeview_cursor_changed"/>
+                        <signal name="key_press_event" handler="on_proxies_treeview_key_press_event"/>
                       </object>
                     </child>
                   </object>

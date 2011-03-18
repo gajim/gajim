@@ -5,6 +5,7 @@
   <object class="GtkWindow" id="groups_post_window">
     <property name="visible">True</property>
     <property name="title" translatable="yes">Create new post</property>
+    <property name="type_hint">dialog</property>
     <child>
       <object class="GtkVBox" id="vbox1">
         <property name="visible">True</property>

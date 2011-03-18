@@ -18,6 +18,7 @@
     <property name="border_width">12</property>
     <property name="title" translatable="yes">Accounts</property>
     <property name="default_width">800</property>
+    <property name="type_hint">dialog</property>
     <signal name="destroy" handler="on_accounts_window_destroy"/>
     <signal name="key_press_event" handler="on_accounts_window_key_press_event"/>
     <child>

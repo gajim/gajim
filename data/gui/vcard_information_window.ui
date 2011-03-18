@@ -5,6 +5,7 @@
   <object class="GtkWindow" id="vcard_information_window">
     <property name="border_width">12</property>
     <property name="title" translatable="yes">Contact Information</property>
+    <property name="type_hint">dialog</property>
     <signal name="destroy" handler="on_vcard_information_window_destroy"/>
     <signal name="key_press_event" handler="on_vcard_information_window_key_press_event"/>
     <child>
