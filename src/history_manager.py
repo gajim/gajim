@@ -578,6 +578,7 @@ class HistoryManager:
             liststore, list_of_paths))
         ok_button = dialog.get_children()[0].get_children()[1].get_children()[0]
         ok_button.grab_focus()
+        dialog.set_transient_for(self.window)
 
     def _delete_logs(self, liststore, list_of_paths):
         paths_len = len(list_of_paths)
@@ -615,6 +616,7 @@ class HistoryManager:
             liststore, list_of_paths))
         ok_button = dialog.get_children()[0].get_children()[1].get_children()[0]
         ok_button.grab_focus()
+        dialog.set_transient_for(self.window)
 
     def on_search_db_button_clicked(self, widget):
         text = self.search_entry.get_text().decode('utf-8')
