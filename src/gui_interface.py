@@ -1276,9 +1276,11 @@ class Interface:
                 show='offline'))
 
         pritext = _('Insecure connection')
-        sectext = _('You are about to connect to the server with an insecure '
-                'connection. This means all your conversations will be '
-                'exchanged unencrypted. Are you sure you want to do that?')
+        sectext = _('You are about to connect to the account %(account)s '
+            '(%(server)s) with an insecure connection. This means all your '
+            'conversations will be exchanged unencrypted. Are you sure you '
+            'want to do that?') % {'account': obj.conn.name,
+            'server': gajim.get_hostname_from_account(obj.conn.name)}
         checktext1 = _('Yes, I really want to connect insecurely')
         checktext2 = _('_Do not ask me again')
         if 'plain_connection' in self.instances[obj.conn.name]['online_dialog']:
