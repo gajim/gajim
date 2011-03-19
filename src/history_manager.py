@@ -570,12 +570,14 @@ class HistoryManager:
             self.AT_LEAST_ONE_DELETION_DONE = True
 
         pri_text = i18n.ngettext(
-                'Do you really want to delete logs of the selected contact?',
-                'Do you really want to delete logs of the selected contacts?',
-                paths_len)
-        dialogs.ConfirmationDialog(pri_text,
-                _('This is an irreversible operation.'), on_response_ok = (on_ok,
-                liststore, list_of_paths))
+            'Do you really want to delete logs of the selected contact?',
+            'Do you really want to delete logs of the selected contacts?',
+            paths_len)
+        dialog = dialogs.ConfirmationDialog(pri_text,
+            _('This is an irreversible operation.'), on_response_ok = (on_ok,
+            liststore, list_of_paths))
+        ok_button = dialog.get_children()[0].get_children()[1].get_children()[0]
+        ok_button.grab_focus()
 
     def _delete_logs(self, liststore, list_of_paths):
         paths_len = len(list_of_paths)
@@ -606,11 +608,13 @@ class HistoryManager:
 
 
         pri_text = i18n.ngettext(
-                'Do you really want to delete the selected message?',
-                'Do you really want to delete the selected messages?', paths_len)
-        dialogs.ConfirmationDialog(pri_text,
-                _('This is an irreversible operation.'), on_response_ok = (on_ok,
-                liststore, list_of_paths))
+            'Do you really want to delete the selected message?',
+            'Do you really want to delete the selected messages?', paths_len)
+        dialog = dialogs.ConfirmationDialog(pri_text,
+            _('This is an irreversible operation.'), on_response_ok = (on_ok,
+            liststore, list_of_paths))
+        ok_button = dialog.get_children()[0].get_children()[1].get_children()[0]
+        ok_button.grab_focus()
 
     def on_search_db_button_clicked(self, widget):
         text = self.search_entry.get_text().decode('utf-8')
