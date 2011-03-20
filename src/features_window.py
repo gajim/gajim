@@ -41,6 +41,7 @@ class FeaturesWindow:
     def __init__(self):
         self.xml = gtkgui_helpers.get_gtk_builder('features_window.ui')
         self.window = self.xml.get_object('features_window')
+        self.window.set_transient_for(gajim.interface.roster.window)
         treeview = self.xml.get_object('features_treeview')
         self.desc_label = self.xml.get_object('feature_desc_label')
 
