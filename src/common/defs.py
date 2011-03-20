@@ -30,10 +30,9 @@ localedir = '../po'
 version = '0.14.1.1'
 import subprocess
 try:
-    node = subprocess.Popen('hg tip --template {node}', shell=True,
+    node = subprocess.Popen('hg tip --template "{node|short}"', shell=True,
         stdout=subprocess.PIPE).communicate()[0]
-    hgversion = node[:12]
-    version += '-' + hgversion
+    version += '-' + node
 except Exception:
     pass
 
