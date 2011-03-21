@@ -45,6 +45,7 @@ class ProfileWindow:
     def __init__(self, account):
         self.xml = gtkgui_helpers.get_gtk_builder('profile_window.ui')
         self.window = self.xml.get_object('profile_window')
+        self.window.set_transient_for(gajim.interface.roster.window)
         self.progressbar = self.xml.get_object('progressbar')
         self.statusbar = self.xml.get_object('statusbar')
         self.context_id = self.statusbar.get_context_id('profile')
