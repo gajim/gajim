@@ -400,7 +400,7 @@ class StatusIcon:
                     x, y = win.get_position()
                     gajim.config.set('roster_x-position', x)
                     gajim.config.set('roster_y-position', y)
-                    win.hide() # else we hide it from VD that was visible in
+                win.hide() # else we hide it from VD that was visible in
             else:
                 if not win.get_property('visible'):
                     win.show_all()
