@@ -994,6 +994,7 @@ class AddNewContactWindow:
                 self.group_comboboxentry.set_active(i)
             i += 1
 
+        self.window.set_transient_for(gajim.interface.roster.window)
         self.window.show_all()
 
         if self.account:
@@ -2267,6 +2268,7 @@ class JoinGroupchatWindow:
         self._empty_required_widgets = []
 
         self.window = self.xml.get_object('join_groupchat_window')
+        self.window.set_transient_for(gajim.interface.roster.window)
         self._room_jid_entry = self.xml.get_object('room_jid_entry')
         self._nickname_entry = self.xml.get_object('nickname_entry')
         self._password_entry = self.xml.get_object('password_entry')
@@ -2630,6 +2632,7 @@ class NewChatDialog(InputDialog):
         okbutton.connect('clicked', self.on_okbutton_clicked)
         cancelbutton = self.xml.get_object('cancelbutton')
         cancelbutton.connect('clicked', self.on_cancelbutton_clicked)
+        self.dialog.set_transient_for(gajim.interface.roster.window)
         self.dialog.show_all()
 
     def new_chat_response(self, jid):
