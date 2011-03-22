@@ -2539,7 +2539,7 @@ class ChatControl(ChatControlBase):
 
         # This functions also checks for violation in state transitions
         # and raises RuntimeException with appropriate message
-        # more on that http://www.jabber.org/jeps/jep-0085.html#statechart
+        # more on that http://xmpp.org/extensions/xep-0085.html#statechart
 
         # do not send nothing if we have chat state notifications disabled
         # that means we won't reply to the <active/> from other peer

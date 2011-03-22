@@ -27,7 +27,7 @@
 
 """
 A gtk.TextView-based renderer for XHTML-IM, as described in:
-  http://www.jabber.org/jeps/jep-0071.html
+  http://xmpp.org/extensions/xep-0071.html
 
 Starting with the version posted by Gustavo Carneiro,
 I (Santiago Gala) am trying to make it more compatible
