@@ -53,6 +53,7 @@ if __name__ == '__main__':
     common.configpaths.gajimpaths.init(None)
     import gtkgui_helpers
 from common import gajim
+from gtkgui_helpers import get_icon_pixmap
 
 import tooltips
 import logging
@@ -485,7 +486,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
         return tag
 
     def _get_img(self, attrs):
-        mem = ''
+        mem, alt = '', ''
         # Wait maximum 1s for connection
         socket.setdefaulttimeout(1)
         try:
@@ -534,21 +535,34 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                         alt += '\n'
                     alt += _('Image is too big')
                     break
-        return mem 
+        return (mem, alt)
 
-    def _process_img(self, attrs):
+    def _update_img(self, (mem, alt), attrs, img_mark):
+        self._process_img(attrs, (mem, alt, img_mark))
+
+    def _process_img(self, attrs, loaded=None):
         '''Process a img tag.
         '''
         mem = ''
+        update = False
+        pixbuf = None
+        replace_mark = None
+
         try:
             if attrs['src'].startswith('data:image/'):
                 # The "data" URL scheme http://tools.ietf.org/html/rfc2397
                 import base64
                 img = attrs['src'].split(',')[1]
                 mem = base64.standard_b64decode(urllib2.unquote(img))
+            elif loaded is not None:
+                (mem, alt, replace_mark) = loaded
+                update = True
             else:
-                mem = self._get_img(attrs)
-            pixbuf = None
+                img_mark = self.textbuf.create_mark(None, self.iter, True)
+                gajim.thread_interface(self._get_img, [attrs], \
+                    self._update_img, [attrs, img_mark])
+                alt = 'Loading...'
+                pixbuf = get_icon_pixmap('gajim-receipt_missing')
             if mem:
                 # Caveat: GdkPixbuf is known not to be safe to load
                 # images from network... this program is now potentially
@@ -593,19 +607,26 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                 loader.close()
                 pixbuf = loader.get_pixbuf()
                 alt = attrs.get('alt', '')
+            working_iter = self.iter
+            if replace_mark is not None:
+                working_iter = self.textbuf.get_iter_at_mark(replace_mark)
+                next_iter = working_iter.copy()
+                next_iter.forward_char()
+                self.textbuf.delete(working_iter, next_iter)
+                self.textbuf.delete_mark(replace_mark)
             if pixbuf is not None:
                 tags = self._get_style_tags()
                 if tags:
-                    tmpmark = self.textbuf.create_mark(None, self.iter, True)
-                self.textbuf.insert_pixbuf(self.iter, pixbuf)
+                    tmpmark = self.textbuf.create_mark(None, working_iter, True)
+                self.textbuf.insert_pixbuf(working_iter, pixbuf)
                 self.starting = False
                 if tags:
                     start = self.textbuf.get_iter_at_mark(tmpmark)
                     for tag in tags:
-                        self.textbuf.apply_tag(tag, start, self.iter)
+                        self.textbuf.apply_tag(tag, start, working_iter)
                     self.textbuf.delete_mark(tmpmark)
             else:
-                self._insert_text('[IMG: %s]' % alt)
+                self._insert_text('[IMG: %s]' % alt, working_iter)
         except Exception, ex:
             log.error('Error loading image ' + str(ex))
             pixbuf = None
@@ -644,14 +665,16 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
         self.textbuf.insert_with_tags_by_name(self.iter, '\n', 'eol')
         self.starting = True
 
-    def _insert_text(self, text):
+    def _insert_text(self, text, working_iter=None):
+        if working_iter == None:
+            working_iter = self.iter
         if self.starting and text != '\n':
             self.starting = (text[-1] == '\n')
         tags = self._get_style_tags()
         if tags:
-            self.textbuf.insert_with_tags(self.iter, text, *tags)
+            self.textbuf.insert_with_tags(working_iter, text, *tags)
         else:
-            self.textbuf.insert(self.iter, text)
+            self.textbuf.insert(working_iter, text)
 
     def _starts_line(self):
         return self.starting or self.iter.starts_line()
