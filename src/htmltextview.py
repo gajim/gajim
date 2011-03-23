@@ -561,7 +561,10 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                 img_mark = self.textbuf.create_mark(None, self.iter, True)
                 gajim.thread_interface(self._get_img, [attrs], \
                     self._update_img, [attrs, img_mark])
-                alt = 'Loading...'
+                alt = attrs.get('alt', '')
+                if alt:
+                    alt += '\n'
+                alt += _('Loading')
                 pixbuf = get_icon_pixmap('gajim-receipt_missing')
             if mem:
                 # Caveat: GdkPixbuf is known not to be safe to load
