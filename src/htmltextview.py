@@ -487,7 +487,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 
     def _get_img(self, attrs):
         mem, alt = '', ''
-        # Wait maximum 1s for connection
+        # Wait maximum 5s for connection
         socket.setdefaulttimeout(5)
         try:
             req = urllib2.Request(attrs['src'])
