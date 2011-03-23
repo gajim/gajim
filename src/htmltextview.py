@@ -488,7 +488,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
     def _get_img(self, attrs):
         mem, alt = '', ''
         # Wait maximum 1s for connection
-        socket.setdefaulttimeout(1)
+        socket.setdefaulttimeout(5)
         try:
             req = urllib2.Request(attrs['src'])
             req.add_header('User-Agent', 'Gajim ' + gajim.version)
@@ -498,7 +498,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
             pixbuf = None
             alt = attrs.get('alt', 'Broken image')
         else:
-            # Wait 0.1s between each byte
+            # Wait 0.5s between each byte
             try:
                 f.fp._sock.fp._sock.settimeout(0.5)
             except Exception:
