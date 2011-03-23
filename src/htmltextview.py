@@ -484,6 +484,58 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
             tag.title = title
         return tag
 
+    def _get_img(self, attrs):
+        mem = ''
+        # Wait maximum 1s for connection
+        socket.setdefaulttimeout(1)
+        try:
+            req = urllib2.Request(attrs['src'])
+            req.add_header('User-Agent', 'Gajim ' + gajim.version)
+            f = urllib2.urlopen(req)
+        except Exception, ex:
+            log.debug('Error loading image %s ' % attrs['src']  + str(ex))
+            pixbuf = None
+            alt = attrs.get('alt', 'Broken image')
+        else:
+            # Wait 0.1s between each byte
+            try:
+                f.fp._sock.fp._sock.settimeout(0.5)
+            except Exception:
+                pass
+            # Max image size = 2 MB (to try to prevent DoS)
+            deadline = time.time() + 3
+            while True:
+                if time.time() > deadline:
+                    log.debug(str('Timeout loading image %s ' % \
+                        attrs['src'] + ex))
+                    mem = ''
+                    alt = attrs.get('alt', '')
+                    if alt:
+                        alt += '\n'
+                    alt += _('Timeout loading image')
+                    break
+                try:
+                    temp = f.read(100)
+                except socket.timeout, ex:
+                    log.debug('Timeout loading image %s ' % \
+                        attrs['src'] + str(ex))
+                    alt = attrs.get('alt', '')
+                    if alt:
+                        alt += '\n'
+                    alt += _('Timeout loading image')
+                    break
+                if temp:
+                    mem += temp
+                else:
+                    break
+                if len(mem) > 2*1024*1024:
+                    alt = attrs.get('alt', '')
+                    if alt:
+                        alt += '\n'
+                    alt += _('Image is too big')
+                    break
+        return mem 
+
     def _process_img(self, attrs):
         '''Process a img tag.
         '''
@@ -495,54 +547,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                 img = attrs['src'].split(',')[1]
                 mem = base64.standard_b64decode(urllib2.unquote(img))
             else:
-                # Wait maximum 1s for connection
-                socket.setdefaulttimeout(1)
-                try:
-                    req = urllib2.Request(attrs['src'])
-                    req.add_header('User-Agent', 'Gajim ' + gajim.version)
-                    f = urllib2.urlopen(req)
-                except Exception, ex:
-                    log.debug('Error loading image %s ' % attrs['src']  + str(ex))
-                    pixbuf = None
-                    alt = attrs.get('alt', 'Broken image')
-                else:
-                    # Wait 0.1s between each byte
-                    try:
-                        f.fp._sock.fp._sock.settimeout(0.5)
-                    except Exception:
-                        pass
-                    # Max image size = 2 MB (to try to prevent DoS)
-                    deadline = time.time() + 3
-                    while True:
-                        if time.time() > deadline:
-                            log.debug(str('Timeout loading image %s ' % \
-                                attrs['src'] + ex))
-                            mem = ''
-                            alt = attrs.get('alt', '')
-                            if alt:
-                                alt += '\n'
-                            alt += _('Timeout loading image')
-                            break
-                        try:
-                            temp = f.read(100)
-                        except socket.timeout, ex:
-                            log.debug('Timeout loading image %s ' % \
-                                attrs['src'] + str(ex))
-                            alt = attrs.get('alt', '')
-                            if alt:
-                                alt += '\n'
-                            alt += _('Timeout loading image')
-                            break
-                        if temp:
-                            mem += temp
-                        else:
-                            break
-                        if len(mem) > 2*1024*1024:
-                            alt = attrs.get('alt', '')
-                            if alt:
-                                alt += '\n'
-                            alt += _('Image is too big')
-                            break
+                mem = self._get_img(attrs)
             pixbuf = None
             if mem:
                 # Caveat: GdkPixbuf is known not to be safe to load
