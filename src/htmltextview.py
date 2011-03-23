@@ -95,7 +95,7 @@ element_styles['i']   = element_styles['em']
 element_styles['b']   = element_styles['strong']
 
 # ==========
-#   JEP-0071
+#   XEP-0071
 # ==========
 #
 # This Integration Set includes a subset of the modules defined for
