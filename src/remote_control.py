@@ -131,6 +131,23 @@ class Remote:
             self.on_account_created)
         gajim.ged.register_event_handler('vcard-received', ged.POSTGUI,
             self.on_vcard_received)
+        gajim.ged.register_event_handler('chatstate-received', ged.POSTGUI,
+            self.on_chatstate_received)
+        gajim.ged.register_event_handler('message-sent', ged.POSTGUI,
+            self.on_message_sent)
+
+    def on_chatstate_received(self, obj):
+        self.raise_signal('ChatState', (obj.conn.name, [
+            obj.jid, obj.fjid, obj.stanza, obj.resource, obj.composing_xep,
+            obj.chatstate]))
+
+    def on_message_sent(self, obj):
+        try:
+            chatstate = obj.chatstate
+        except AttributeError:
+            chatstate = ""
+        self.raise_signal('MessageSent', (obj.conn.name, [
+            obj.jid, obj.message, obj.keyID, chatstate]))
 
     def on_last_status_time(self, obj):
         self.raise_signal('LastStatusTime', (obj.conn.name, [
@@ -286,6 +303,14 @@ class SignalObject(dbus.service.Object):
 
     @dbus.service.signal(INTERFACE, signature='av')
     def NewGmail(self, account_and_array):
+        pass
+
+    @dbus.service.signal(INTERFACE, signature='av')
+    def ChatState(self, account_and_array):
+        pass
+
+    @dbus.service.signal(INTERFACE, signature='av')
+    def MessageSent(self, account_and_array):
         pass
 
     def raise_signal(self, signal, arg):

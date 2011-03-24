@@ -1750,7 +1750,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             msg_id = self.connection.send(msg_iq, now=now)
             jid = helpers.parse_jid(jid)
             gajim.nec.push_incoming_event(MessageSentEvent(None, conn=self,
-                jid=jid, message=msg, keyID=keyID))
+                jid=jid, message=msg, keyID=keyID, chatstate=chatstate))
             if callback:
                 callback(msg_id, *callback_args)
 
