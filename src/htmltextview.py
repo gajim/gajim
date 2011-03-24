@@ -486,6 +486,8 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
         return tag
 
     def _get_img(self, attrs):
+        '''Download an image. This function is launched in a separate thread.
+        '''
         mem, alt = '', ''
         # Wait maximum 5s for connection
         socket.setdefaulttimeout(5)
@@ -538,6 +540,8 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
         return (mem, alt)
 
     def _update_img(self, (mem, alt), attrs, img_mark):
+        '''Callback function called after the function _get_img above.
+        '''
         self._process_img(attrs, (mem, alt, img_mark))
 
     def _process_img(self, attrs, loaded=None):
