@@ -131,3 +131,4 @@ class NetworkIncomingEvent(NetworkEvent):
 
 class NetworkOutgoingEvent(NetworkEvent):
         pass
+
