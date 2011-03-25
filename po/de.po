@@ -9102,7 +9102,7 @@ msgstr ""
 
 #: ../src/groupchat_control.py:1394
 msgid "system shutdown"
-msgstr "Computer wird heruntergefahren"
+msgstr "Server wird heruntergefahren"
 
 #: ../src/groupchat_control.py:1477
 #, python-format
