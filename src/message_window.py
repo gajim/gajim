@@ -75,8 +75,6 @@ class MessageWindow(object):
         self.widget_name = 'message_window'
         self.xml = gtkgui_helpers.get_gtk_builder('%s.ui' % self.widget_name)
         self.window = self.xml.get_object(self.widget_name)
-        # Set window role to differ chats from MUCs
-        self.window.set_role(self.type_)
         self.notebook = self.xml.get_object('notebook')
         self.parent_paned = None
 
