@@ -70,7 +70,7 @@ except ImportError:
     HAS_GTK_SPELL = False
 
 from common import dbus_support
-if dbus_support:
+if dbus_support.supported:
     import dbus
     import remote_control
 
@@ -1427,7 +1427,7 @@ class ChatControl(ChatControlBase):
                 'chat_control', contact, acct, resource)
 
         self._dbus_message_sent_match = None
-        if dbus_support:
+        if dbus_support.supported:
             bus = dbus_support.session_bus.bus()
             try:
                 obj = bus.get_object(remote_control.SERVICE, remote_control.OBJ_PATH)
