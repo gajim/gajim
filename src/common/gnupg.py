@@ -488,7 +488,7 @@ class GPG(object):
         result = ListKeys()
         self._collect_output(p, result, stdin=p.stdin)
         lines = result.data.decode(self.encoding).splitlines()
-        valid_keywords = 'pub uid sec fpr'.split()
+        valid_keywords = 'pub uid sec fpr sub'.split()
         for line in lines:
             if self.verbose:
                 print(line)
@@ -830,6 +830,7 @@ class ListKeys(list):
         if self.curkey['uid']:
             self.curkey['uids'].append(self.curkey['uid'])
         del self.curkey['uid']
+        self.curkey['subkeys'] = []
         self.append(self.curkey)
 
     pub = sec = key
@@ -841,6 +842,10 @@ class ListKeys(list):
     def uid(self, args):
         self.curkey['uids'].append(args[9])
         self.uids.append(args[9])
+
+    def sub(self, args):
+        subkey = [args[4],args[11]]
+        self.curkey['subkeys'].append(subkey)
 
     def handle_status(self, key, value):
         pass

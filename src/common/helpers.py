@@ -1261,8 +1261,17 @@ def prepare_and_validate_gpg_keyID(account, jid, keyID):
         if jid in attached_keys and keyID:
             attachedkeyID = attached_keys[attached_keys.index(jid) + 1]
             if attachedkeyID != keyID:
-                # Mismatch! Another gpg key was expected
-                keyID += 'MISMATCH'
+                # Get signing subkeys for the attached key
+                subkeys = []
+                for key in gajim.connections[account].gpg.list_keys():
+                    if key['keyid'][8:] == attachedkeyID:
+                        subkeys = [subkey[0][8:] for subkey in key['subkeys'] \
+                            if subkey[1] == 's']
+                        break
+
+                if keyID not in subkeys:
+                    # Mismatch! Another gpg key was expected
+                    keyID += 'MISMATCH'
         elif jid in attached_keys:
             # An unsigned presence, just use the assigned key
             keyID = attached_keys[attached_keys.index(jid) + 1]
