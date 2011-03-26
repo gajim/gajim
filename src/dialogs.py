@@ -38,7 +38,6 @@ import vcard
 import conversation_textview
 import message_control
 import dataforms_widget
-import disco
 
 from random import randrange
 from common import pep
@@ -2388,6 +2387,7 @@ class JoinGroupchatWindow:
         else:
             try:
                 # Object will add itself to the window dict
+                import disco
                 disco.ServiceDiscoveryWindow(self.account, server,
                     initial_identities=[{'category': 'conference',
                     'type': 'text'}])
