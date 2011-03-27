@@ -272,7 +272,8 @@
                             <property name="no_show_all">True</property>
                             <property name="xalign">0</property>
                             <property name="ypad">5</property>
-                            <property name="label" translatable="yes">User avatar:</property>
+                            <property name="label" translatable="yes">&lt;b&gt;User avatar:&lt;/b&gt;</property>
+                            <property name="use_markup">True</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -303,7 +304,8 @@
                           <object class="GtkLabel" id="custom_avatar_label">
                             <property name="no_show_all">True</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">Configured avatar:</property>
+                            <property name="label" translatable="yes">&lt;b&gt;Configured avatar:&lt;/b&gt;</property>
+                            <property name="use_markup">True</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
