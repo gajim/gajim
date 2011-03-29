@@ -2258,6 +2258,8 @@ class JoinGroupchatWindow:
         # Add accounts, set current as active if it matches 'account'
         for acct in [a for a in gajim.connections if \
         gajim.account_is_connected(a)]:
+            if gajim.connections[acct].is_zeroconf:
+                continue
             account_combobox.append_text(acct)
             if account and account == acct:
                 account_combobox.set_active(liststore.iter_n_children(None)-1)
@@ -2466,10 +2468,7 @@ class JoinGroupchatWindow:
 
         if self.automatic:
             gajim.automatic_rooms[self.account][room_jid] = self.automatic
-        if gajim.connections[self.account].is_zeroconf:
-            ErrorDialog(_('Impossible join groupchat'),
-                    _('local account does not support groupchats.'))
-            return
+
         gajim.interface.join_gc_room(self.account, room_jid, nickname,  password)
 
         self.window.destroy()
