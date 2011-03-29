@@ -52,7 +52,7 @@ try:
     # test if dbus-x11 is installed
     bus = dbus.SessionBus()
 except Exception:
-    print str(exceptions.DbusNotSupported())
+    print _('D-Bus is not present on this machine or python module is missing')
     sys.exit(1)
 
 OBJ_PATH = '/org/gajim/dbus/RemoteObject'
