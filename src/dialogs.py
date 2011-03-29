@@ -2358,6 +2358,10 @@ class JoinGroupchatWindow:
 
         if self.automatic:
             gajim.automatic_rooms[self.account][room_jid] = self.automatic
+        if gajim.connections[self.account].is_zeroconf:
+            ErrorDialog(_('Impossible join groupchat'),
+                    _('local account does not support groupchats.'))
+            return
         gajim.interface.join_gc_room(self.account, room_jid, nickname,  password)
 
         self.window.destroy()

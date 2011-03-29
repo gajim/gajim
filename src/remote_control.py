@@ -786,10 +786,16 @@ class SignalObject(dbus.service.Object):
             accounts = gajim.connections.keys()
             for acct in accounts:
                 if gajim.account_is_connected(acct):
-                    account = acct
-                    break
+                    if not gajim.connections[acct].is_zeroconf:
+                        account = acct
+                        break
             if not account:
                 return
+
+        if gajim.connections[account].is_zeroconf:
+            # zeroconf not support groupchats
+            return
+
         if not nick:
             nick = ''
             gajim.interface.instances[account]['join_gc'] = \
