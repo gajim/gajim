@@ -1897,8 +1897,8 @@ class GroupchatControl(ChatControlBase):
             # logs. We do it only when connected because if connection was lost
             # there may be new messages since disconnection.
             gajim.connections[self.account].gc_got_disconnected(self.room_jid)
-        gajim.connections[self.account].send_gc_status(self.nick, self.room_jid,
-                                                show='offline', status=status)
+            gajim.connections[self.account].send_gc_status(self.nick,
+                self.room_jid, show='offline', status=status)
         nick_list = gajim.contacts.get_nick_list(self.account, self.room_jid)
         for nick in nick_list:
             # Update pm chat window
