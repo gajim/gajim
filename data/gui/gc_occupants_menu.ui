@@ -95,6 +95,15 @@
       </object>
     </child>
     <child>
+      <object class="GtkImageMenuItem" id="invite_menuitem">
+        <property name="label" translatable="yes">In_vite to</property>
+        <property name="visible">True</property>
+        <property name="use_underline">True</property>
+        <property name="image">image7</property>
+        <property name="use_stock">False</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkSeparatorMenuItem" id="separator6">
         <property name="visible">True</property>
       </object>
@@ -184,5 +193,9 @@
     <property name="visible">True</property>
     <property name="stock">gtk-justify-fill</property>
     <property name="icon-size">1</property>
+  </object>
+  <object class="GtkImage" id="image7">
+    <property name="visible">True</property>
+    <property name="stock">gtk-missing-image</property>
   </object>
 </interface>

@@ -2336,6 +2336,16 @@ class GroupchatControl(ChatControlBase):
             jid)
         self.handlers[id_] = item
 
+        item = xml.get_object('invite_menuitem')
+        muc_icon = gtkgui_helpers.load_icon('muc_active')
+        if muc_icon:
+            item.set_image(muc_icon)
+        if c.jid and c.name != self.nick:
+            gui_menu_builder.build_invite_submenu(item, ((c, self.account),),
+                ignore_rooms=[self.room_jid])
+        else:
+            item.set_sensitive(False)
+
         item = xml.get_object('information_menuitem')
         id_ = item.connect('activate', self.on_info, nick)
         self.handlers[id_] = item

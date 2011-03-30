@@ -62,7 +62,7 @@ def build_resources_submenu(contacts, account, action, room_jid=None,
 
     return sub_menu
 
-def build_invite_submenu(invite_menuitem, list_):
+def build_invite_submenu(invite_menuitem, list_, ignore_rooms=[]):
     """
     list_ in a list of (contact, account)
     """
@@ -126,6 +126,8 @@ def build_invite_submenu(invite_menuitem, list_):
     message_control.TYPE_GC) + minimized_controls:
         acct = gc_control.account
         room_jid = gc_control.room_jid
+        if room_jid in ignore_rooms:
+            continue
         if room_jid in gajim.gc_connected[acct] and \
         gajim.gc_connected[acct][room_jid] and \
         contacts_transport == gajim.get_transport_name_from_jid(room_jid):
