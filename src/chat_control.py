@@ -1231,20 +1231,16 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
                 if message_height + conversation_height - min_height > min_height:
                     policy = self.msg_scrolledwindow.get_property(
                             'vscrollbar-policy')
-                    # scroll only when scrollbar appear
                     if policy != gtk.POLICY_AUTOMATIC:
                         self.msg_scrolledwindow.set_property('vscrollbar-policy',
                                 gtk.POLICY_AUTOMATIC)
                         self.msg_scrolledwindow.set_property('height-request',
                                 message_height + conversation_height - min_height)
-                        self.bring_scroll_to_end(msg_textview)
             else:
                 self.msg_scrolledwindow.set_property('vscrollbar-policy',
                         gtk.POLICY_NEVER)
                 self.msg_scrolledwindow.set_property('height-request', -1)
-            self.conv_textview.bring_scroll_to_end(diff_y - 18, False)
-        else:
-            self.conv_textview.bring_scroll_to_end(diff_y - 18, self.smooth)
+
         self.smooth = True # reinit the flag
         # enable scrollbar automatic policy for horizontal scrollbar
         # if message we have in message_textview is too big
