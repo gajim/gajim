@@ -1815,7 +1815,8 @@ class Interface:
                 img.set_from_pixbuf(image[1])
             item.add(img)
             item.connect('activate', emoticon_clicked, image[0])
-            #FIXME: add tooltip with ascii
+            # add tooltip with ascii
+            item.set_tooltip_text(image[0])
             menu.attach(item, counter % size, counter % size + 1,
                 counter / size, counter / size + 1)
             counter += 1
