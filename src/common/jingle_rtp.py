@@ -390,10 +390,12 @@ class JingleVideo(JingleRTPContent):
         #src_bin.link(caps)
 
         self.sink = self.make_bin_from_config('video_output_device',
-                'videoscale ! ffmpegcolorspace ! %s', _("video output"))
+            'videoscale ! ffmpegcolorspace ! %s force-aspect-ratio=True',
+            _("video output"))
         self.pipeline.add(self.sink)
 
-        self.src_bin.get_pad('src').link(self.p2psession.get_property('sink-pad'))
+        self.src_bin.get_pad('src').link(self.p2psession.get_property(
+            'sink-pad'))
         self.p2pstream.connect('src-pad-added', self._on_src_pad_added)
 
         # The following is needed for farsight to process ICE requests:
