@@ -1912,7 +1912,7 @@ class ChatControl(ChatControlBase):
 
         if status_escaped:
             status_text = self.urlfinder.sub(self.make_href, status_escaped)
-            status_text = '<span %s>%s</span>' % (font_attrs_small, status_escaped)
+            status_text = '<span %s>%s</span>' % (font_attrs_small, status_text)
             self.banner_status_label.set_tooltip_text(status)
             self.banner_status_label.set_no_show_all(False)
             self.banner_status_label.show()
