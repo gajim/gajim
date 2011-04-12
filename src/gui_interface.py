@@ -2899,13 +2899,14 @@ class PassphraseRequest:
 
 
 class ThreadInterface:
-    def __init__(self, func, func_args, callback, callback_args):
+    def __init__(self, func, func_args=(), callback=None, callback_args=()):
         """
         Call a function in a thread
         """
         def thread_function(func, func_args, callback, callback_args):
             output = func(*func_args)
-            gobject.idle_add(callback, output, *callback_args)
+            if callback:
+                gobject.idle_add(callback, output, *callback_args)
 
         Thread(target=thread_function, args=(func, func_args, callback,
                 callback_args)).start()
