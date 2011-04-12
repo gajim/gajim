@@ -51,6 +51,8 @@ try:
     import winsound # windows-only built-in module for playing wav
     import win32api
     import win32con
+    import wave     # posix-only fallback wav playback
+    import ossaudiodev as oss
 except Exception:
     pass
 
@@ -785,6 +787,15 @@ def play_sound_file(path_to_soundfile):
             pass
     elif os.name == 'posix':
         if gajim.config.get('soundplayer') == '':
+            def _oss_play():
+                sndfile = wave.open(path_to_soundfile, 'rb')
+                (nc, sw, fr, nf, comptype, compname) = sndfile.getparams()
+                dev = oss.open('/dev/dsp', 'w')
+                dev.setparameters(sw * 8, nc, fr)
+                dev.write(sndfile.readframes(nf))
+                sndfile.close()
+                dev.close()
+            gajim.thread_interface(_oss_play)
             return
         player = gajim.config.get('soundplayer')
         command = build_command(player, path_to_soundfile)
