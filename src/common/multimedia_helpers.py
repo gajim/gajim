@@ -80,7 +80,7 @@ class AudioOutputManager(DeviceManager):
         # Alsa sink
         self.detect_element('alsasink', _('ALSA: %s'), '%s sync=false')
         # Pulseaudio sink
-        self.detect_element('pulsesink', _('Pulse: %s'), '%s sync=false')
+        self.detect_element('pulsesink', _('Pulse: %s'), '%s sync=true')
 
 
 class VideoInputManager(DeviceManager):
