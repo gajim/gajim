@@ -4165,7 +4165,7 @@ class RosterWindow:
         if self.hpaned.get_child2() is not None:
             self.show_roster_vbox(widget.get_active())
 
-    def on_roster_filter_entry_insert_at_cursor(self, widget):
+    def on_roster_filter_entry_insert_changed(self, widget):
         """ When we update the content of the filter """
         pass
 

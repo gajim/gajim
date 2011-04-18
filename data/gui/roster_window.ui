@@ -347,7 +347,7 @@
 		    <property name="visible">False</property>
 		    <property name="editable">False</property>
 		    <property name="can_focus">True</property>
-		    <signal name="insert_at_cursor" handler="on_roster_filter_entry_insert_at_cursor" />
+		    <signal name="changed" handler="on_roster_filter_entry_changed" />
 		  </object>
                   <packing>
                     <property name="expand">False</property>
