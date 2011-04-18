@@ -4176,12 +4176,19 @@ class RosterWindow:
             self.search_enabled = True
         self.refilter_shown_roster_items()
 
+    def on_roster_filter_entry_icon_press(self, widget):
+        pass
+
+    def on_roster_filter_entry_key_press_event(self, widget):
+        pass
+
     def on_show_roster_filter_menuitem_toggled(self, widget):
         """ Show the roster filter entry """
         self.search_enabled = widget.get_active()
         self.xml.get_object('roster_filter_entry').set_visible(self.search_enabled)
         self.xml.get_object('roster_filter_entry').set_editable(self.search_enabled)
         if self.search_enabled:
+            self.xml.get_object('roster_filter_entry').set_text('')
             self.xml.get_object('roster_filter_entry').grab_focus()
 
     def on_roster_hpaned_notify(self, pane, gparamspec):
