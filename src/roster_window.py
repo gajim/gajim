@@ -4185,11 +4185,11 @@ class RosterWindow:
     def on_show_roster_filter_menuitem_toggled(self, widget):
         """ Show the roster filter entry """
         self.search_enabled = widget.get_active()
-        self.xml.get_object('roster_filter_entry').set_visible(self.search_enabled)
-        self.xml.get_object('roster_filter_entry').set_editable(self.search_enabled)
+        self.roster_filter_entry.set_visible(self.search_enabled)
+        self.roster_filter_entry.set_editable(self.search_enabled)
         if self.search_enabled:
-            self.xml.get_object('roster_filter_entry').set_text('')
-            self.xml.get_object('roster_filter_entry').grab_focus()
+            self.roster_filter_entry.set_text('')
+            self.roster_filter_entry.grab_focus()
 
     def on_roster_hpaned_notify(self, pane, gparamspec):
         """
@@ -6372,6 +6372,7 @@ class RosterWindow:
             gtk.keysyms.n, gtk.gdk.CONTROL_MASK, gtk.ACCEL_VISIBLE)
 
         # Setting the search stuff
+        self.roster_filter_entry = self.xml.get_object('roster_filter_entry')
         self.search_string = ''
         self.search_enabled = False
 
