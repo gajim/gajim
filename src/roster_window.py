@@ -4171,7 +4171,8 @@ class RosterWindow:
 
     def on_show_roster_filter_menuitem_toggled(self, widget):
         """ Show the roster filter entry """
-        pass
+        self.xml.get_object('roster_filter_entry').set_visible(widget.get_active())
+        self.xml.get_object('roster_filter_entry').set_editable(widget.get_active())
 
     def on_roster_hpaned_notify(self, pane, gparamspec):
         """

@@ -344,7 +344,8 @@
                 <property name="orientation">vertical</property>
                 <child>
 		  <object class="GtkEntry" id="roster_filter_entry">
-		    <property name="visible">True</property>
+		    <property name="visible">False</property>
+		    <property name="editable">False</property>
 		    <property name="can_focus">True</property>
 		    <signal name="insert_at_cursor" handler="on_roster_filter_entry_insert_at_cursor" />
 		  </object>
