@@ -348,7 +348,7 @@
 		    <property name="no_show_all">True</property>
 		    <property name="editable">False</property>
 		    <property name="can_focus">True</property>
-		    <property name="primary_icon_stock">gtk-close</property>
+		    <property name="primary_icon_stock">gtk-clear</property>
 		    <property name="primary_icon_activatable">True</property>
 		    <signal name="changed" handler="on_rfilter_entry_changed"/>
 		    <signal name="icon_press" handler="on_rfilter_entry_icon_press"/>
