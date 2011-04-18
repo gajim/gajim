@@ -1281,7 +1281,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                 # Check sha1 fingerprint
                 if con.Connection.ssl_fingerprint_sha1 != saved_fingerprint:
                     gajim.nec.push_incoming_event(FingerprintErrorEvent(None,
-                        conn=self,
+                        conn=self, certificate=con.Connection.ssl_certificate,
                         new_fingerprint=con.Connection.ssl_fingerprint_sha1))
                     return True
             else:

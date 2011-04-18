@@ -1250,8 +1250,9 @@ class Interface:
             self.instances[account]['online_dialog']['fingerprint_error'].\
                 destroy()
         self.instances[account]['online_dialog']['fingerprint_error'] = \
-            dialogs.YesNoDialog(pritext, sectext, on_response_yes=on_yes,
-            on_response_no=on_no)
+            dialogs.CheckFingerprintDialog(pritext, sectext, on_response_yes=on_yes,
+            on_response_no=on_no, account=obj.conn.name,
+            certificate=obj.certificate)
 
     def handle_event_plain_connection(self, obj):
         # ('PLAIN_CONNECTION', account, (connection))

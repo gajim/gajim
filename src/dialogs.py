@@ -5606,3 +5606,51 @@ class VoIPCallReceivedDialog(object):
                     session.reject_content(content)
 
         dialog.destroy()
+
+class CertificatDialog(InformationDialog):
+    def __init__(self, parent, account, cert):
+        issuer = cert.get_issuer()
+        subject = cert.get_subject()
+        InformationDialog.__init__(self,
+            _('Certificate for account %s') % account, _('''<b>Issued to:</b>
+Common Name (CN): %(scn)s
+Organization (O): %(sorg)s
+Organizationl Unit (OU): %(sou)s
+Serial Number: %(sn)s
+
+<b>Issued by:</b>
+Common Name (CN): %(icn)s
+Organization (O): %(iorg)s
+Organizationl Unit (OU): %(iou)s
+
+<b>Validity:</b>
+Issued on: %(io)s
+Expires on: %(eo)s
+
+<b>Fingerprint</b>
+SHA1 Fingerprint: %(sha1)s''') % {
+            'scn': subject.commonName, 'sorg': subject.organizationName,
+            'sou': subject.organizationalUnitName,
+            'sn': cert.get_serial_number(), 'icn': issuer.commonName,
+            'iorg': issuer.organizationName,
+            'iou': issuer.organizationalUnitName,
+            'io': cert.get_notBefore(), 'eo': cert.get_notAfter(),
+            'sha1': cert.digest('sha1')})
+        self.set_transient_for(parent)
+
+
+class CheckFingerprintDialog(YesNoDialog):
+    def __init__(self, pritext='', sectext='', checktext='',
+    on_response_yes=None, on_response_no=None, account=None, certificate=None):
+        self.account = account
+        self.cert = certificate
+        YesNoDialog.__init__(self, pritext, sectext, checktext, on_response_yes,
+            on_response_no)
+        b = gtk.Button('View cert...')
+        b.connect('clicked', self.on_cert_clicked)
+        b.show_all()
+        area = self.get_action_area()
+        area.pack_start(b)
+
+    def on_cert_clicked(self, button):
+        d = CertificatDialog(self, self.account, self.cert)

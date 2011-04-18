@@ -449,6 +449,7 @@ class NonBlockingTLS(PlugIn):
         # Exceptions can't propagate up through this callback, so print them here.
         try:
             self._owner.ssl_fingerprint_sha1 = cert.digest('sha1')
+            self._owner.ssl_certificate = cert
             if errnum == 0:
                 return True
             self._owner.ssl_errnum = errnum
