@@ -4176,11 +4176,11 @@ class RosterWindow:
             self.search_enabled = True
         self.refilter_shown_roster_items()
 
-    def on_roster_filter_entry_icon_press(self, widget):
-        pass
-
-    def on_roster_filter_entry_key_press_event(self, widget):
-        pass
+    def on_roster_filter_entry_icon_press(self, widget, icon, event):
+        """ Disable the roster filtering by clicking the icon in the textEntry """
+        self.xml.get_object('show_roster_filter_menuitem').set_active(False)
+        self.search_enabled = False
+        self.refilter_shown_roster_items()
 
     def on_show_roster_filter_menuitem_toggled(self, widget):
         """ Show the roster filter entry """

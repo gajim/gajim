@@ -352,7 +352,6 @@
 		    <property name="primary_icon_activatable">True</property>
 		    <signal name="changed" handler="on_roster_filter_entry_changed"/>
 		    <signal name="icon_press" handler="on_roster_filter_entry_icon_press"/>
-		    <signal name="key_press_event" handler="on_roster_filter_entry_key_press_event"/>
 		  </object>
                   <packing>
                     <property name="expand">False</property>
