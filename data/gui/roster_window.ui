@@ -345,6 +345,7 @@
                 <child>
 		  <object class="GtkEntry" id="roster_filter_entry">
 		    <property name="visible">False</property>
+		    <property name="no_show_all">True</property>
 		    <property name="editable">False</property>
 		    <property name="can_focus">True</property>
 		    <signal name="changed" handler="on_roster_filter_entry_changed" />

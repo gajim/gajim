@@ -6365,7 +6365,6 @@ class RosterWindow:
             gtk.keysyms.n, gtk.gdk.CONTROL_MASK, gtk.ACCEL_VISIBLE)
 
         # Setting the search stuff
-        self.xml.get_object('roster_filter_entry').set_visible(False)
         self.search_string = ''
         self.search_enabled = False
 
