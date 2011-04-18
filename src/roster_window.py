@@ -4165,6 +4165,9 @@ class RosterWindow:
         if self.hpaned.get_child2() is not None:
             self.show_roster_vbox(widget.get_active())
 
+#    def on_show_roster_filter_menuitem_toggled(self, widget):
+#        """ Show the roster filter textentry """
+
     def on_roster_hpaned_notify(self, pane, gparamspec):
         """
         Keep changing the width of the roster
