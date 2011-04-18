@@ -1589,6 +1589,8 @@ class RosterWindow:
                             grp = delimiter.join(grp.split(delimiter)[:-1])
             return False
         if type_ == 'contact':
+            if self.search_enabled:
+                return self.search_string in model[titer][C_NAME].lower()
             if gajim.config.get('showoffline'):
                 return True
             bb_jid = None
@@ -4165,14 +4167,22 @@ class RosterWindow:
         if self.hpaned.get_child2() is not None:
             self.show_roster_vbox(widget.get_active())
 
-    def on_roster_filter_entry_insert_changed(self, widget):
+    def on_roster_filter_entry_changed(self, widget):
         """ When we update the content of the filter """
-        pass
+        self.search_string = widget.get_text().lower()
+        if self.search_string == '':
+            self.search_enabled = False
+        else:
+            self.search_enabled = True
+        self.refilter_shown_roster_items()
 
     def on_show_roster_filter_menuitem_toggled(self, widget):
         """ Show the roster filter entry """
-        self.xml.get_object('roster_filter_entry').set_visible(widget.get_active())
-        self.xml.get_object('roster_filter_entry').set_editable(widget.get_active())
+        self.search_enabled = widget.get_active()
+        self.xml.get_object('roster_filter_entry').set_visible(self.search_enabled)
+        self.xml.get_object('roster_filter_entry').set_editable(self.search_enabled)
+        if self.search_enabled:
+            self.xml.get_object('roster_filter_entry').grab_focus()
 
     def on_roster_hpaned_notify(self, pane, gparamspec):
         """
@@ -6353,6 +6363,11 @@ class RosterWindow:
         new_chat_menuitem = self.xml.get_object('new_chat_menuitem')
         new_chat_menuitem.add_accelerator('activate', accel_group,
             gtk.keysyms.n, gtk.gdk.CONTROL_MASK, gtk.ACCEL_VISIBLE)
+
+        # Setting the search stuff
+        self.xml.get_object('roster_filter_entry').set_visible(False)
+        self.search_string = ''
+        self.search_enabled = False
 
         gajim.ged.register_event_handler('presence-received', ged.GUI1,
             self._nec_presence_received)
