@@ -1273,7 +1273,8 @@ class Connection(CommonConnection, ConnectionHandlers):
             gajim.nec.push_incoming_event(SSLErrorEvent(None, conn=self,
                 error_text=text, error_num=errnum,
                 cert=con.Connection.ssl_cert_pem,
-                fingerprint=con.Connection.ssl_fingerprint_sha1))
+                fingerprint=con.Connection.ssl_fingerprint_sha1,
+                certificate=con.Connection.ssl_certificate))
             return True
         if hasattr(con.Connection, 'ssl_fingerprint_sha1'):
             saved_fingerprint = gajim.config.get_per('accounts', self.name, 'ssl_fingerprint_sha1')

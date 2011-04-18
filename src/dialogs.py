@@ -5646,7 +5646,24 @@ class CheckFingerprintDialog(YesNoDialog):
         self.cert = certificate
         YesNoDialog.__init__(self, pritext, sectext, checktext, on_response_yes,
             on_response_no)
-        b = gtk.Button('View cert...')
+        b = gtk.Button(_('View cert...'))
+        b.connect('clicked', self.on_cert_clicked)
+        b.show_all()
+        area = self.get_action_area()
+        area.pack_start(b)
+
+    def on_cert_clicked(self, button):
+        d = CertificatDialog(self, self.account, self.cert)
+
+class SSLErrorDialog(ConfirmationDialogDoubleCheck):
+    def __init__(self, account, certificate, pritext, sectext, checktext1,
+    checktext2, on_response_ok=None, on_response_cancel=None):
+        self.account = account
+        self.cert = certificate
+        ConfirmationDialogDoubleCheck.__init__(self, pritext, sectext,
+            checktext1, checktext2, on_response_ok, on_response_cancel,
+            is_modal=False)
+        b = gtk.Button(_('View cert...'))
         b.connect('clicked', self.on_cert_clicked)
         b.show_all()
         area = self.get_action_area()
