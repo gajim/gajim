@@ -1589,8 +1589,8 @@ class RosterWindow:
                             grp = delimiter.join(grp.split(delimiter)[:-1])
             return False
         if type_ == 'contact':
-            if self.roster_filter_enabled:
-                return self.roster_filter_string in model[titer][C_NAME].lower()
+            if self.rfilter_enabled:
+                return self.rfilter_string in model[titer][C_NAME].lower()
             if gajim.config.get('showoffline'):
                 return True
             bb_jid = None
@@ -4167,29 +4167,29 @@ class RosterWindow:
         if self.hpaned.get_child2() is not None:
             self.show_roster_vbox(widget.get_active())
 
-    def on_roster_filter_entry_changed(self, widget):
+    def on_rfilter_entry_changed(self, widget):
         """ When we update the content of the filter """
-        self.roster_filter_string = widget.get_text().lower()
-        if self.roster_filter_string == '':
-            self.roster_filter_enabled = False
+        self.rfilter_string = widget.get_text().lower()
+        if self.rfilter_string == '':
+            self.rfilter_enabled = False
         else:
-            self.roster_filter_enabled = True
+            self.rfilter_enabled = True
         self.refilter_shown_roster_items()
 
-    def on_roster_filter_entry_icon_press(self, widget, icon, event):
+    def on_rfilter_entry_icon_press(self, widget, icon, event):
         """ Disable the roster filtering by clicking the icon in the textEntry """
-        self.xml.get_object('show_roster_filter_menuitem').set_active(False)
-        self.roster_filter_enabled = False
+        self.xml.get_object('show_rfilter_menuitem').set_active(False)
+        self.rfilter_enabled = False
         self.refilter_shown_roster_items()
 
-    def on_show_roster_filter_menuitem_toggled(self, widget):
+    def on_show_rfilter_menuitem_toggled(self, widget):
         """ Show the roster filter entry """
-        self.roster_filter_enabled = widget.get_active()
-        self.roster_filter_entry.set_visible(self.roster_filter_enabled)
-        self.roster_filter_entry.set_editable(self.roster_filter_enabled)
-        if self.roster_filter_enabled:
-            self.roster_filter_entry.set_text('')
-            self.roster_filter_entry.grab_focus()
+        self.rfilter_enabled = widget.get_active()
+        self.rfilter_entry.set_visible(self.rfilter_enabled)
+        self.rfilter_entry.set_editable(self.rfilter_enabled)
+        if self.rfilter_enabled:
+            self.rfilter_entry.set_text('')
+            self.rfilter_entry.grab_focus()
 
     def on_roster_hpaned_notify(self, pane, gparamspec):
         """
@@ -6372,9 +6372,9 @@ class RosterWindow:
             gtk.keysyms.n, gtk.gdk.CONTROL_MASK, gtk.ACCEL_VISIBLE)
 
         # Setting the search stuff
-        self.roster_filter_entry = self.xml.get_object('roster_filter_entry')
-        self.roster_filter_string = ''
-        self.roster_filter_enabled = False
+        self.rfilter_entry = self.xml.get_object('rfilter_entry')
+        self.rfilter_string = ''
+        self.rfilter_enabled = False
 
         gajim.ged.register_event_handler('presence-received', ged.GUI1,
             self._nec_presence_received)
