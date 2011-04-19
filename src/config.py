@@ -504,9 +504,7 @@ class PreferencesWindow:
 
             if gajim.config.get('autodetect_browser_mailer'):
                 self.applications_combobox.set_active(0)
-            # else autodetect_browser_mailer is False.
-            # so user has 'Always Use GNOME/KDE/Xfce' or Custom
-            elif gajim.config.get('openwith') == 'custom':
+            else:
                 self.applications_combobox.set_active(1)
                 self.xml.get_object('custom_apps_frame').show()
 
@@ -1146,7 +1144,6 @@ class PreferencesWindow:
         elif widget.get_active() == 1:
             gajim.config.set('autodetect_browser_mailer', False)
             self.xml.get_object('custom_apps_frame').show()
-            gajim.config.set('openwith', 'custom')
         gajim.interface.save_config()
 
     def on_custom_browser_entry_changed(self, widget):

@@ -2649,9 +2649,6 @@ class Interface:
                     gajim.config.set_per('themes', theme_name, o,
                         theme[d.index(o)])
 
-        if gajim.config.get('autodetect_browser_mailer') or not cfg_was_read:
-            gtkgui_helpers.autodetect_browser_mailer()
-
         gajim.idlequeue = idlequeue.get_idlequeue()
         # resolve and keep current record of resolved hosts
         gajim.resolver = resolver.get_resolver(gajim.idlequeue)

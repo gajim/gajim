@@ -35,6 +35,7 @@ import locale
 import os
 import subprocess
 import urllib
+import webbrowser
 import errno
 import select
 import base64
@@ -671,30 +672,20 @@ def get_contact_dict_for_account(account):
     return contacts_dict
 
 def launch_browser_mailer(kind, uri):
-    #kind = 'url' or 'mail'
-    if os.name == 'nt':
-        try:
-            os.startfile(uri) # if pywin32 is installed we open
-        except Exception:
-            pass
+    # kind = 'url' or 'mail'
+    if kind in ('mail', 'sth_at_sth') and not uri.startswith('mailto:'):
+        uri = 'mailto:' + uri
 
-    else:
-        if kind in ('mail', 'sth_at_sth') and not uri.startswith('mailto:'):
-            uri = 'mailto:' + uri
+    if kind == 'url' and uri.startswith('www.'):
+        uri = 'http://' + uri
 
-        if kind == 'url' and uri.startswith('www.'):
-            uri = 'http://' + uri
-
-        if gajim.config.get('openwith') in ('xdg-open', 'gnome-open',
-        'kfmclient exec', 'exo-open'):
-            command = gajim.config.get('openwith')
-        elif gajim.config.get('openwith') == 'custom':
-            if kind == 'url':
-                command = gajim.config.get('custombrowser')
-            elif kind in ('mail', 'sth_at_sth'):
-                command = gajim.config.get('custommailapp')
-            if command == '': # if no app is configured
-                return
+    if not gajim.config.get('autodetect_browser_mailer'):
+        if kind == 'url':
+            command = gajim.config.get('custombrowser')
+        elif kind in ('mail', 'sth_at_sth'):
+            command = gajim.config.get('custommailapp')
+        if command == '': # if no app is configured
+            return
 
         command = build_command(command, uri)
         try:
@@ -702,18 +693,14 @@ def launch_browser_mailer(kind, uri):
         except Exception:
             pass
 
-def launch_file_manager(path_to_open):
-    if os.name == 'nt':
-        try:
-            os.startfile(path_to_open) # if pywin32 is installed we open
-        except Exception:
-            pass
     else:
-        if gajim.config.get('openwith') in ('xdg-open', 'gnome-open',
-        'kfmclient exec', 'exo-open'):
-            command = gajim.config.get('openwith')
-        elif gajim.config.get('openwith') == 'custom':
-            command = gajim.config.get('custom_file_manager')
+        webbrowser.open(uri)
+
+
+def launch_file_manager(path_to_open):
+    uri = 'file://' + path_to_open
+    if not gajim.config.get('autodetect_browser_mailer'):
+        command = gajim.config.get('custom_file_manager')
         if command == '': # if no app is configured
             return
         command = build_command(command, path_to_open)
@@ -721,6 +708,8 @@ def launch_file_manager(path_to_open):
             exec_command(command)
         except Exception:
             pass
+    else:
+        webbrowser.open(uri)
 
 def play_sound(event):
     if not gajim.config.get('sounds_on'):
