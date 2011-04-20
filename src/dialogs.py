@@ -1008,8 +1008,9 @@ class AddNewContactWindow:
 
         if self.account:
             message_buffer = self.message_textview.get_buffer()
-            message_buffer.set_text(helpers.get_subscription_request_msg(
+            msg = helpers.from_one_line(helpers.get_subscription_request_msg(
                 self.account))
+            message_buffer.set_text(msg)
 
         gajim.ged.register_event_handler('gateway-prompt-received', ged.GUI1,
             self._nec_gateway_prompt_received)
@@ -1105,6 +1106,7 @@ class AddNewContactWindow:
             start_iter = message_buffer.get_start_iter()
             end_iter = message_buffer.get_end_iter()
             message = message_buffer.get_text(start_iter, end_iter).decode('utf-8')
+            message = helpers.to_one_line(message)
             if self.save_message_checkbutton.get_active():
                 gajim.config.set_per('accounts', self.account,
                     'subscription_request_msg', message)
