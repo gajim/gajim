@@ -1106,10 +1106,10 @@ class AddNewContactWindow:
             start_iter = message_buffer.get_start_iter()
             end_iter = message_buffer.get_end_iter()
             message = message_buffer.get_text(start_iter, end_iter).decode('utf-8')
-            message = helpers.to_one_line(message)
             if self.save_message_checkbutton.get_active():
+                msg = helpers.to_one_line(message)
                 gajim.config.set_per('accounts', self.account,
-                    'subscription_request_msg', message)
+                    'subscription_request_msg', msg)
         else:
             message= ''
         group = self.group_comboboxentry.child.get_text().decode('utf-8')
