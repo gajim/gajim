@@ -2666,6 +2666,12 @@ class Interface:
         """
         Join the room immediately
         """
+
+        if gajim.contacts.get_contact(account, room_jid):
+            dialogs.ErrorDialog(_('This is not a group chat'),
+                _('%s is not the name of a group chat.') % room_jid)
+            return
+
         if not nick:
             nick = gajim.nicks[account]
 
@@ -3158,7 +3164,7 @@ class Interface:
                 if not jid in gajim.gc_connected[account]:
                     # we are not already connected
                     minimize = bm['minimize'] in ('1', 'true')
-                    gajim.interface.join_gc_room(account, jid, bm['nick'],
+                    self.join_gc_room(account, jid, bm['nick'],
                     bm['password'], minimize = minimize)
                 elif jid in self.minimized_controls[account]:
                     # more or less a hack:
