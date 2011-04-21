@@ -147,6 +147,7 @@ class Config:
             'single-msg-y-position': [opt_int, 0],
             'single-msg-width': [opt_int, 400],
             'single-msg-height': [opt_int, 280],
+            'save-roster-position': [opt_bool, True, _('If true, Gajim will save roster position when hiding roster, and restore it when showing roster.')],
             'roster_x-position': [ opt_int, 0 ],
             'roster_y-position': [ opt_int, 0 ],
             'roster_width': [ opt_int, 200 ],

@@ -2337,9 +2337,10 @@ class RosterWindow:
         # in case show_roster_on_start is False and roster is never shown
         # window.window is None
         if self.window.window is not None:
-            x, y = self.window.window.get_root_origin()
-            gajim.config.set('roster_x-position', x)
-            gajim.config.set('roster_y-position', y)
+            if gajim.config.get('save-roster-position'):
+                x, y = self.window.window.get_root_origin()
+                gajim.config.set('roster_x-position', x)
+                gajim.config.set('roster_y-position', y)
             width, height = self.window.get_size()
             # For the width use the size of the vbox containing the tree and
             # status combo, this will cancel out any hpaned width
@@ -6150,9 +6151,10 @@ class RosterWindow:
         gtkgui_helpers.resize_window(self.window,
             gajim.config.get('roster_width'),
             gajim.config.get('roster_height'))
-        gtkgui_helpers.move_window(self.window,
-            gajim.config.get('roster_x-position'),
-            gajim.config.get('roster_y-position'))
+        if gajim.config.get('save-roster-position'):
+            gtkgui_helpers.move_window(self.window,
+                gajim.config.get('roster_x-position'),
+                gajim.config.get('roster_y-position'))
 
         self.popups_notification_height = 0
         self.popup_notification_windows = []

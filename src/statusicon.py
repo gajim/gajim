@@ -396,7 +396,8 @@ class StatusIcon:
 
                 # we could be in another VD right now. eg vd2
                 # and we want to show it in vd2
-                if not gtkgui_helpers.possibly_move_window_in_current_desktop(win):
+                if not gtkgui_helpers.possibly_move_window_in_current_desktop(
+                win) and gajim.config.get('save-roster-position'):
                     x, y = win.get_position()
                     gajim.config.set('roster_x-position', x)
                     gajim.config.set('roster_y-position', y)
@@ -404,9 +405,10 @@ class StatusIcon:
             else:
                 if not win.get_property('visible'):
                     win.show_all()
-                    gtkgui_helpers.move_window(win,
-                        gajim.config.get('roster_x-position'),
-                        gajim.config.get('roster_y-position'))
+                    if gajim.config.get('save-roster-position'):
+                        gtkgui_helpers.move_window(win,
+                            gajim.config.get('roster_x-position'),
+                            gajim.config.get('roster_y-position'))
                 if not gajim.config.get('roster_window_skip_taskbar'):
                     win.set_property('skip-taskbar-hint', False)
                 win.present_with_time(gtk.get_current_event_time())
@@ -418,7 +420,8 @@ class StatusIcon:
         if not event:
             return
         win = gajim.interface.roster.window
-        if not win.get_property('visible'):
+        if not win.get_property('visible') and gajim.config.get(
+        'save-roster-position'):
             gtkgui_helpers.move_window(win,
                 gajim.config.get('roster_x-position'),
                 gajim.config.get('roster_y-position'))
