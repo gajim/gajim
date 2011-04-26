@@ -2496,6 +2496,22 @@ class Connection(CommonConnection, ConnectionHandlers):
             c.setTagData('reason', reason)
         self.connection.send(message)
 
+    def request_voice(self, room, nick):
+        """ 
+        Request voice in a moderated room
+        """
+        message = common.xmpp.Message(to=room)
+
+        x = xmpp.DataForm(typ='submit')
+        x.addChild(node=xmpp.DataField(name='FORM_TYPE',
+            value=common.xmpp.NS_MUC + '#request'))
+        x.addChild(node=xmpp.DataField(name='muc#role', value='participant',
+            typ='text-single'))
+
+        message.addChild(node=x)
+
+        self.connection.send(message)
+
     def check_pingalive(self):
         if self.awaiting_xmpp_ping_id:
             # We haven't got the pong in time, disco and reconnect

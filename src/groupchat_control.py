@@ -789,8 +789,10 @@ class GroupchatControl(ChatControlBase):
         change_subject_menuitem = xml.get_object('change_subject_menuitem')
         history_menuitem = xml.get_object('history_menuitem')
         minimize_menuitem = xml.get_object('minimize_menuitem')
+        request_voice_menuitem = xml.get_object('request_voice_menuitem')
         bookmark_separator = xml.get_object('bookmark_separator')
         separatormenuitem2 = xml.get_object('separatormenuitem2')
+        request_voice_separator = xml.get_object('request_voice_separator')
 
         if hide_buttonbar_items:
             change_nick_menuitem.hide()
@@ -840,12 +842,17 @@ class GroupchatControl(ChatControlBase):
                 destroy_room_menuitem.set_sensitive(True)
             change_subject_menuitem.set_sensitive(True)
             change_nick_menuitem.set_sensitive(True)
+            if c.role == 'visitor':
+                request_voice_menuitem.set_sensitive(True)
+            else:
+                request_voice_menuitem.set_sensitive(False)
         else:
             # We are not connected to this groupchat, disable unusable menuitems
             configure_room_menuitem.set_sensitive(False)
             destroy_room_menuitem.set_sensitive(False)
             change_subject_menuitem.set_sensitive(False)
             change_nick_menuitem.set_sensitive(False)
+            request_voice_menuitem.set_sensitive(False)
 
         # connect the menuitems to their respective functions
         id_ = bookmark_room_menuitem.connect('activate',
@@ -871,6 +878,10 @@ class GroupchatControl(ChatControlBase):
         id_ = history_menuitem.connect('activate',
             self._on_history_menuitem_activate)
         self.handlers[id_] = history_menuitem
+
+        id_ = request_voice_menuitem.connect('activate',
+            self._on_request_voice_menuitem_activate)
+        self.handlers[id_] = request_voice_menuitem
 
         id_ = minimize_menuitem.connect('toggled',
             self.on_minimize_menuitem_toggled)
@@ -2067,6 +2078,12 @@ class GroupchatControl(ChatControlBase):
         password = gajim.gc_passwords.get(self.room_jid, '')
         gajim.interface.add_gc_bookmark(self.account, self.name, self.room_jid,\
             '0', '0', password, self.nick)
+
+    def _on_request_voice_menuitem_activate(self, widget):
+        """
+        Request voice in the current room
+        """
+        gajim.connections[self.account].request_voice(self.room_jid)
 
     def _on_drag_data_received(self, widget, context, x, y, selection,
     target_type, timestamp):
