@@ -348,7 +348,6 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             file_props['request-id'] = 'id_' + file_props['sid']
             iq.setID(file_props['request-id'])
             query = iq.setTag('query', namespace=xmpp.NS_BYTESTREAM)
-            query.setAttr('mode', 'plain')
             query.setAttr('sid', file_props['sid'])
 
             self._add_addiditional_streamhosts_to_query(query, file_props)
