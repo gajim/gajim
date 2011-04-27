@@ -3544,9 +3544,14 @@ class Interface:
         import statusicon
         self.systray = statusicon.StatusIcon()
 
-        pix = gtkgui_helpers.get_icon_pixmap('gajim', 32)
-        # set the icon to all windows
-        gtk.window_set_default_icon(pix)
+        pixs = []
+        for size in (16, 32, 48, 64, 128):
+            pix = gtkgui_helpers.get_icon_pixmap('gajim', size)
+            if pix:
+                pixs.append(pix)
+        if pixs:
+            # set the icon to all windows
+            gtk.window_set_default_icon_list(*pixs)
 
         self.init_emoticons()
         self.make_regexps()
