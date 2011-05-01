@@ -35,6 +35,8 @@ from common.zeroconf import zeroconf
 from common.logger import LOG_DB_PATH
 from common.pep import SUPPORTED_PERSONAL_USER_EVENTS
 
+import gtkgui_helpers
+
 import logging
 log = logging.getLogger('gajim.c.connection_handlers_events')
 
@@ -1887,4 +1889,156 @@ class GatewayPromptReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             self.desc = None
             self.prompt = None
             self.prompt_jid = None
+        return True
+
+class NotificationEvent(nec.NetworkIncomingEvent):
+    name = 'notification'
+    base_network_events = ['decrypted-message-received', 'gc-message-received']
+
+    def detect_type(self):
+        if self.base_event.name == 'decrypted-message-received':
+            self.notif_type = 'msg'
+        if self.base_event.name == 'gc-message-received':
+            self.notif_type = 'gc-msg'
+
+    def get_focused(self):
+        self.control_focused = False
+        if self.control:
+            parent_win = self.control.parent_win
+            if parent_win and self.control == parent_win.get_active_control() \
+            and parent_win.window.has_focus:
+                self.control_focused = True
+
+    def handle_incoming_msg_event(self, msg_obj):
+        if not msg_obj.msgtxt:
+            return
+        self.jid = msg_obj.jid
+        if msg_obj.session:
+            self.control = msg_obj.session.control
+        else:
+            self.control = None
+        self.get_focused()
+        # This event has already been added to event list
+        if not self.control and len(gajim.events.get_events(self.conn.name, \
+        self.jid, [msg_obj.mtype])) <= 1:
+            self.first_unread = True
+
+        if msg_obj.mtype == 'pm':
+            nick = msg_obj.resource
+        else:
+            nick = gajim.get_name_from_jid(self.conn.name, self.jid)
+
+        if self.first_unread:
+            self.sound_event = 'first_message_received'
+        elif self.control_focused:
+            self.sound_event = 'next_message_received_focused'
+        else:
+            self.sound_event = 'next_message_received_unfocused'
+
+        if gajim.config.get('notification_preview_message'):
+            self.popup_text = msg_obj.msgtxt
+            if self.popup_text and (self.popup_text.startswith('/me ') or \
+            self.popup_text.startswith('/me\n')):
+                self.popup_text = '* ' + nick + self.popup_text[3:]
+        else:
+            # We don't want message preview, do_preview = False
+            self.popup_text = ''
+        if msg_obj.mtype == 'normal': # single message
+            self.popup_event_type = _('New Single Message')
+            self.popup_image = 'gajim-single_msg_recv'
+            self.popup_title = _('New Single Message from %(nickname)s') % \
+                {'nickname': nick}
+        elif msg_obj.mtype == 'pm':
+            self.popup_event_type = _('New Private Message')
+            self.popup_image = 'gajim-priv_msg_recv'
+            self.popup_title = _('New Private Message from group chat %s') % \
+                msg_obj.jid
+            if self.popup_text:
+                self.popup_text = _('%(nickname)s: %(message)s') % \
+                    {'nickname': nick, 'message': self.popup_text}
+            else:
+                self.popup_text = _('Messaged by %(nickname)s') % \
+                    {'nickname': nick}
+        else: # chat message
+            self.popup_event_type = _('New Message')
+            self.popup_image = 'gajim-chat_msg_recv'
+            self.popup_title = _('New Message from %(nickname)s') % \
+                {'nickname': nick}
+
+        self.popup_image = gtkgui_helpers.get_icon_path(self.popup_image, 48)
+
+        if not gajim.config.get('notify_on_new_message') or \
+        not self.first_unread:
+            self.do_popup = False
+        elif gajim.config.get('autopopupaway'):
+            # always show notification
+            self.do_popup = True
+        elif gajim.connections[self.conn.name].connected in (2, 3):
+            # we're online or chat
+            self.do_popup = True
+
+        if self.first_unread and helpers.allow_sound_notification(
+        self.conn.name, 'first_message_received'):
+            self.do_sound = True
+        elif not self.first_unread and self.control_focused and \
+        helpers.allow_sound_notification(self.conn.name,
+        'next_message_received_focused'):
+            self.do_sound = True
+        elif not self.first_unread and not self.control_focused and \
+        helpers.allow_sound_notification(self.conn.name,
+        'next_message_received_unfocused'):
+            self.do_sound = True
+
+    def handle_incoming_gc_msg_event(self, msg_obj):
+        sound = msg_obj.msg_obj.gc_control.highlighting_for_message(
+            msg_obj.msgtxt, msg_obj.timestamp)[1]
+        self.do_sound = True
+        if sound == 'received':
+            self.sound_event = 'muc_message_received'
+        elif sound == 'highlight':
+            self.sound_event = 'muc_message_highlight'
+        else:
+            self.do_sound = False
+
+        self.do_popup = False
+
+    def handle_incoming_pres_event(self, msg_obj):
+        pass
+
+    def generate(self):
+        # what's needed to compute output
+        self.conn = self.base_event.conn
+        self.control = None
+        self.control_focused = False
+        self.first_unread = False
+
+        # For output
+        self.do_sound = False
+        self.sound_file = ''
+        self.sound_event = '' # gajim sound played if not sound_file is set
+        self.show_popup = False
+
+        self.do_popup = False
+        self.popup_title = ''
+        self.popup_text = ''
+        self.popup_event_type = ''
+        self.popup_msg_type = ''
+        self.popup_image = ''
+
+        self.do_command = False
+        self.command = ''
+
+        self.open_chat = False
+        self.activate_urgency_hint = False
+        self.show_in_notification_area = False
+        self.show_in_roster = False
+
+        self.detect_type()
+
+        if self.notif_type == 'msg':
+            self.handle_incoming_msg_event(self.base_event)
+        elif self.notif_type == 'gc-msg':
+            self.handle_incoming_gc_msg_event(self.base_event)
+        elif self.notif_type == 'pres':
+            self.handle_incoming_pres_event(self.base_event)
         return True

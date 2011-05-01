@@ -27,12 +27,17 @@ Global Events Dispatcher module.
 import logging
 log = logging.getLogger('gajim.common.ged')
 
-PRECORE = 30
-CORE = 40
-POSTCORE = 50
+PRECORE = 10
+CORE = 20
+POSTCORE = 30
+PREGUI = 40
+PREGUI1 = 50
 GUI1 = 60
-GUI2 = 70
-POSTGUI = 80
+POSTGUI1 = 70
+PREGUI2 = 80
+GUI2 = 90
+POSTGUI2 = 100
+POSTGUI = 110
 
 class GlobalEventsDispatcher(object):
 
@@ -68,4 +73,4 @@ class GlobalEventsDispatcher(object):
         if event_name in self.handlers:
             for priority, handler in self.handlers[event_name]:
                 if handler(*args, **kwargs):
-                    return
+                    return True

@@ -2568,6 +2568,44 @@ class RosterWindow:
         self.set_actions_menu_needs_rebuild()
         self.draw_account(obj.conn.name)
 
+    def _nec_decrypted_message_received(self, obj):
+        if not obj.msgtxt: # empty message text
+            return True
+        if obj.mtype not in ('norml', 'chat'):
+            return
+        if obj.session.control:
+            typ = ''
+            if obj.mtype == 'error':
+                typ = 'error'
+
+            obj.session.control.print_conversation(obj.msgtxt, typ,
+            tim=obj.timestamp, encrypted=obj.encrypted, subject=obj.subject,
+            xhtml=obj.xhtml, displaymarking=obj.displaymarking)
+        elif obj.popup:
+            if not obj.session.control:
+                contact = gajim.contacts.get_contact(obj.conn.name, obj.jid,
+                    obj.resource_for_chat)
+                obj.session.control = gajim.interface.new_chat(contact,
+                    obj.conn.name, resource=obj.resource_for_chat,
+                    session=obj.session)
+                if len(gajim.events.get_events(obj.conn.name, obj.fjid)):
+                    obj.session.control.read_queue()
+
+        if obj.show_in_roster:
+            self.draw_contact(obj.jid, obj.conn.name)
+            self.show_title() # we show the * or [n]
+            # Select the big brother contact in roster, it's visible because it
+            # has events.
+            family = gajim.contacts.get_metacontacts_family(obj.conn.name,
+                obj.jid)
+            if family:
+                nearby_family, bb_jid, bb_account = \
+                    gajim.contacts.get_nearby_family_and_big_brother(family,
+                    obj.conn.name)
+            else:
+                bb_jid, bb_account = obj.jid, obj.conn.name
+            self.select_contact(bb_jid, bb_account)
+
 ################################################################################
 ### Menu and GUI callbacks
 ### FIXME: order callbacks in itself...
@@ -6404,3 +6442,5 @@ class RosterWindow:
             self._nec_metacontacts_received)
         gajim.ged.register_event_handler('signed-in', ged.GUI1,
             self._nec_signed_in)
+        gajim.ged.register_event_handler('decrypted-message-received', ged.GUI2,
+            self._nec_decrypted_message_received)

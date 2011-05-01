@@ -1474,7 +1474,6 @@ class ToplevelAgentBrowser(AgentBrowser):
         if self.search_button:
             self.search_button.set_sensitive(False)
         model, iter_ = self.window.services_treeview.get_selection().get_selected()
-        model, iter_ = self.window.services_treeview.get_selection().get_selected()
         if not iter_:
             return
         if not model[iter_][0]:

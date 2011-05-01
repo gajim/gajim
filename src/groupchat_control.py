@@ -480,6 +480,8 @@ class GroupchatControl(ChatControlBase):
             self._nec_gc_config_changed_received)
         gajim.ged.register_event_handler('signed-in', ged.GUI1,
             self._nec_signed_in)
+        gajim.ged.register_event_handler('decrypted-message-received', ged.GUI2,
+            self._nec_decrypted_message_received)
         gajim.gc_connected[self.account][self.room_jid] = False
         # disable win, we are not connected yet
         ChatControlBase.got_disconnected(self)
@@ -1108,10 +1110,6 @@ class GroupchatControl(ChatControlBase):
                     self.attention_list.pop(0) # remove older
                 self.attention_list.append(contact)
 
-            if sound == 'received':
-                helpers.play_sound('muc_message_received')
-            elif sound == 'highlight':
-                helpers.play_sound('muc_message_highlight')
             if text.startswith('/me ') or text.startswith('/me\n'):
                 other_tags_for_text.append('gc_nickname_color_' + \
                     str(self.gc_custom_colors[contact]))
@@ -1270,6 +1268,23 @@ class GroupchatControl(ChatControlBase):
             return
         password = gajim.gc_passwords.get(self.room_jid, '')
         obj.conn.join_gc(self.nick, self.room_jid, password)
+
+    def _nec_decrypted_message_received(self, obj):
+        if obj.conn.name != self.account:
+            return
+        if obj.gc_control == self and obj.resource:
+            # We got a pm from this room
+            nick = obj.resource
+            if obj.session.control:
+                # print if a control is open
+                obj.session.control.print_conversation(obj.msgtxt,
+                    tim=obj.timestamp, xhtml=obj.xhtml, encrypted=obj.encrypted,
+                    displaymarking=obj.displaymarking)
+            else:
+                # otherwise pass it off to the control to be queued
+                self.on_private_message(nick, obj.msgtxt, obj.timestamp,
+                    obj.xhtml, self, msg_id=obj.msg_id, encrypted=obj.encrypted,
+                    displaymarking=obj.displaymarking)
 
     def got_connected(self):
         # Make autorejoin stop.

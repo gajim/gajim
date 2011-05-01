@@ -36,6 +36,7 @@ import gtk
 
 from common import gajim
 from common import helpers
+from common import ged
 
 from common import dbus_support
 if dbus_support.supported:
@@ -389,6 +390,32 @@ def on_pynotify_notification_clicked(notification, action):
 
     notification.close()
     gajim.interface.handle_event(account, jid, msg_type)
+
+class Notification:
+    """
+    Handle notifications
+    """
+    def __init__(self):
+        gajim.ged.register_event_handler('notification', ged.GUI2,
+            self._nec_notification)
+
+    def _nec_notification(self, obj):
+        if obj.do_popup:
+            popup(obj.popup_event_type, obj.jid, obj.conn.name,
+                obj.popup_msg_type, path_to_image=obj.popup_image,
+                title=obj.popup_title, text=obj.popup_text)
+
+        if obj.do_sound:
+            if obj.sound_file:
+                helpers.play_sound_file(obj.sound_file)
+            elif obj.sound_event:
+                helpers.play_sound(obj.sound_event)
+
+        if obj.do_command:
+            try:
+                helpers.exec_command(obj.command)
+            except Exception:
+                pass
 
 class NotificationResponseManager:
     """

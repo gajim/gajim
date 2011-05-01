@@ -2954,7 +2954,7 @@ class ChatControl(ChatControlBase):
             if len(data) > 6 and isinstance(data[6], int):
                 message_ids.append(data[6])
 
-            if len(data) > 8:
+            if len(data) > 8 and not self.session:
                 self.set_session(data[8])
         if message_ids:
             gajim.logger.set_read_messages(message_ids)

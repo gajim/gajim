@@ -45,7 +45,7 @@ class SnarlNotificationsPlugin(GajimPlugin):
         #self.gui_extension_points = {}
         #self.config_default_values = {}
 
-        self.events_handlers = {'NewMessage' : (ged.POSTCORE, self.newMessage)}
+        self.events_handlers = {'notification' : (ged.POSTCORE, self.notif)}
 
     @log_calls('SnarlNotificationsPlugin')
     def activate(self):
@@ -56,29 +56,12 @@ class SnarlNotificationsPlugin(GajimPlugin):
         pass
 
     @log_calls('SnarlNotificationsPlugin')
-    def newMessage(self, args):
-        event_name = "NewMessage"
-        data = args
-        account = data[0]
-        jid = data[1][0]
-        jid_without_resource = gajim.get_jid_without_resource(jid)
-        msg = data[1][1]
-        msg_type = data[1][4]
-        if msg_type == 'chat':
-            nickname = gajim.get_contact_name_from_jid(account, jid_without_resource)
-        elif msg_type in ('pm', 'groupchat'):
-            nickname = gajim.get_resource_from_jid(jid)
-        else:
-            nickname = jid
-
-        print "Event '%s' occured. Arguments: %s\n\n===\n"%(event_name, pformat(args))
-        print "Event '%s' occured. Arguments: \naccount = %s\njid = %s\nmsg = %s\nnickname = %s"%(
-                event_name, account, jid, msg, nickname)
-
+    def notif(self, obj):
+        print "Event '%s' occured.\n\n===\n" % obj.popup_event_type
 
         #if PySnarl.snGetVersion() != False:
             #(major, minor) = PySnarl.snGetVersion()
             #print "Found Snarl version",str(major)+"."+str(minor),"running."
-            #PySnarl.snShowMessage(nickname, msg[:20]+'...')
+            #PySnarl.snShowMessage(obj.popup_title, obj.popup_text)
         #else:
             #print "Sorry Snarl does not appear to be running"

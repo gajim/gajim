@@ -35,6 +35,7 @@ import config
 import xmpp
 import defs
 import common.ged
+import notify
 
 interface = None # The actual interface (the gtk one for the moment)
 thread_interface = None # Interface to run a thread and then a callback
@@ -104,6 +105,8 @@ newly_added = {} # list of contacts that has just signed in
 to_be_removed = {} # list of contacts that has just signed out
 
 events = Events()
+
+notification = notify.Notification()
 
 nicks = {} # list of our nick names in each account
 # should we block 'contact signed in' notifications for this account?
