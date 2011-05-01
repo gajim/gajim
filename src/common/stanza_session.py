@@ -78,7 +78,8 @@ class StanzaSession(object):
         self.negotiated = {}
 
     def is_loggable(self):
-        return self.loggable and gajim.config.should_log(self.conn.name, self.jid)
+        return self.loggable and gajim.config.should_log(self.conn.name,
+            self.jid.getStripped())
 
     def get_to(self):
         to = str(self.jid)
