@@ -1283,8 +1283,8 @@ class GroupchatControl(ChatControlBase):
             else:
                 # otherwise pass it off to the control to be queued
                 self.on_private_message(nick, obj.msgtxt, obj.timestamp,
-                    obj.xhtml, self, msg_id=obj.msg_id, encrypted=obj.encrypted,
-                    displaymarking=obj.displaymarking)
+                    obj.xhtml, self.session, msg_id=obj.msg_id,
+                    encrypted=obj.encrypted, displaymarking=obj.displaymarking)
 
     def got_connected(self):
         # Make autorejoin stop.
