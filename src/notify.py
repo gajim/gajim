@@ -29,7 +29,7 @@
 
 import os
 import time
-import dialogs
+from dialogs import PopupNotificationWindow
 import gobject
 import gtkgui_helpers
 import gtk
@@ -379,8 +379,8 @@ text=None):
             gajim.log.debug(str(e))
 
     # Either nothing succeeded or the user wants old-style notifications
-    instance = dialogs.PopupNotificationWindow(event_type, jid, account,
-        msg_type, path_to_image, title, text)
+    instance = PopupNotificationWindow(event_type, jid, account, msg_type,
+        path_to_image, title, text)
     gajim.interface.roster.popup_notification_windows.append(instance)
 
 def on_pynotify_notification_clicked(notification, action):
@@ -663,7 +663,7 @@ class DesktopNotification:
     def notify_another_way(self, e):
         gajim.log.debug('Error when trying to use notification daemon: %s' % \
             str(e))
-        instance = dialogs.PopupNotificationWindow(self.event_type, self.jid,
+        instance = PopupNotificationWindow(self.event_type, self.jid,
             self.account, self.msg_type, self.path_to_image, self.title,
             self.text)
         gajim.interface.roster.popup_notification_windows.append(instance)
