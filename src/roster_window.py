@@ -2499,12 +2499,13 @@ class RosterWindow:
         else:
             return
 
-        contact = gajim.contacts.get_contact_with_highest_priority(account,
-            obj.room_jid)
-        if contact:
-            contact.show = obj.show
-            self.draw_contact(obj.room_jid, account)
-            self.draw_group(_('Groupchats'), account)
+        if obj.nick == gc_ctrl.nick:
+            contact = gajim.contacts.get_contact_with_highest_priority(account,
+                obj.room_jid)
+            if contact:
+                contact.show = obj.show
+                self.draw_contact(obj.room_jid, account)
+                self.draw_group(_('Groupchats'), account)
 
     def _nec_roster_received(self, obj):
         if obj.received_from_server:
