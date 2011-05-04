@@ -2668,6 +2668,7 @@ class Interface:
         # Creating Network Events Controller
         from common import nec
         gajim.nec = nec.NetworkEventsController()
+        gajim.notification = notify.Notification()
 
         self.create_core_handlers_list()
         self.register_core_handlers()
