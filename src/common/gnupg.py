@@ -688,6 +688,9 @@ class Verify(object):
             pass
         elif key in ("PLAINTEXT", "PLAINTEXT_LENGTH"):
             pass
+        elif key == "IMPORT_RES":
+            # If auto-key-retrieve option is enabled, this can happen
+            pass
         elif key == "BADSIG":
             self.valid = False
             self.key_id, self.username = value.split(None, 1)
