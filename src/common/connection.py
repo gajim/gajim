@@ -2269,16 +2269,22 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.add_lang(p)
         if not change_nick:
             t = p.setTag(common.xmpp.NS_MUC + ' x')
-            last_date = self.last_history_time[room_jid]
-            if last_date == 0:
-                last_date = time.time() - gajim.config.get(
-                        'muc_restore_timeout') * 60
-            else:
-                last_date = min(last_date, time.time() - gajim.config.get(
-                        'muc_restore_timeout') * 60)
-            last_date = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(last_date))
-            t.setTag('history', {'maxstanzas': gajim.config.get(
-                    'muc_restore_lines'), 'since': last_date})
+            tags = {}
+            timeout = gajim.config.get('muc_restore_timeout') * 60
+            if timeout >= 0:
+                last_date = self.last_history_time[room_jid]
+                if last_date == 0:
+                    last_date = time.time() - timeout
+                else:
+                    last_date = min(last_date, time.time() - timeout)
+                last_date = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(
+                    last_date))
+                tags['since'] = last_date
+            nb = gajim.config.get('muc_restore_lines')
+            if nb >= 0:
+                tags['maxstanzas'] = nb
+            if tags:
+                t.setTag('history', tags)
             if password:
                 t.setTagData('password', password)
         self.connection.send(p)
@@ -2497,7 +2503,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.connection.send(message)
 
     def request_voice(self, room, nick):
-        """ 
+        """
         Request voice in a moderated room
         """
         message = common.xmpp.Message(to=room)
