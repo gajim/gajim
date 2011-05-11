@@ -455,7 +455,7 @@ class GPG(object):
         result = DeleteResult() # any result will do
         self._collect_output(p, result, stdin=p.stdin)
         logger.debug('export_keys result: %r', result.data)
-        return result.data.decode(self.encoding)
+        return result.data.decode(self.encoding, 'replace')
 
     def list_keys(self, secret=False):
         """ list the keys currently in the keyring
@@ -487,7 +487,7 @@ class GPG(object):
         # Get the response information
         result = ListKeys()
         self._collect_output(p, result, stdin=p.stdin)
-        lines = result.data.decode(self.encoding).splitlines()
+        lines = result.data.decode(self.encoding, 'replace').splitlines()
         valid_keywords = 'pub uid sec fpr sub'.split()
         for line in lines:
             if self.verbose:
@@ -869,7 +869,7 @@ class Crypt(Verify):
     __bool__ = __nonzero__
 
     def __str__(self):
-        return self.data.decode(self.encoding)
+        return self.data.decode(self.encoding, 'replace')
 
     def handle_status(self, key, value):
         if key in ("ENC_TO", "USERID_HINT", "GOODMDC", "END_DECRYPTION",
@@ -958,7 +958,7 @@ class Sign(object):
     __bool__ = __nonzero__
 
     def __str__(self):
-        return self.data.decode(self.encoding)
+        return self.data.decode(self.encoding, 'replace')
 
     def handle_status(self, key, value):
         if key in ("USERID_HINT", "NEED_PASSPHRASE", "BAD_PASSPHRASE",
