@@ -2582,6 +2582,8 @@ class RosterWindow:
             obj.session.control.print_conversation(obj.msgtxt, typ,
             tim=obj.timestamp, encrypted=obj.encrypted, subject=obj.subject,
             xhtml=obj.xhtml, displaymarking=obj.displaymarking)
+            if obj.msg_id:
+                gajim.logger.set_read_messages([obj.msg_id])
         elif obj.popup:
             if not obj.session.control:
                 contact = gajim.contacts.get_contact(obj.conn.name, obj.jid,
