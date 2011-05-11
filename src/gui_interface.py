@@ -739,6 +739,10 @@ class Interface:
             #   According to xep 0162, a contact is not an observer anymore when
             #   we asked for auth, so also remove him if ask changed
             old_groups = contacts[0].groups
+            if obj.sub == 'remove':
+                # another of our instance removed a contact. Remove it here too
+                self.roster.remove_contact(obj.jid, account, backend=True)
+                return
             if contacts[0].sub != obj.sub or contacts[0].ask != obj.ask\
             or old_groups != obj.groups:
                 # c.get_shown_groups() has changed. Reflect that in
