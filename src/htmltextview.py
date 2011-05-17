@@ -753,7 +753,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
         elif name in ('a', 'img', 'body', 'html'):
             pass
         elif name in INLINE:
-            pass
+            self._jump_line()
         else:
             warnings.warn('Unhandled element "%s"' % name)
 
