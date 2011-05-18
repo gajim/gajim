@@ -21,6 +21,7 @@ Network Events Controller.
 :author: Mateusz Biliński <mateusz@bilinski.it>
 :since: 10th August 2008
 :copyright: Copyright (2008) Mateusz Biliński <mateusz@bilinski.it>
+:copyright: Copyright (2011) Yann Leboulanger <asterix@lagaule.org>
 :license: GPL
 '''
 
@@ -38,23 +39,38 @@ class NetworkEventsController(object):
         Values: list of class objects that are subclasses
         of `NetworkIncomingEvent`
         '''
+        self.outgoing_events_generators = {}
+        '''
+        Keys: names of events
+        Values: list of class objects that are subclasses
+        of `NetworkOutgoingEvent`
+        '''
 
     def register_incoming_event(self, event_class):
         for base_event_name in event_class.base_network_events:
-            event_list = self.incoming_events_generators.setdefault(base_event_name, [])
+            event_list = self.incoming_events_generators.setdefault(
+                base_event_name, [])
             if not event_class in event_list:
                 event_list.append(event_class)
 
     def unregister_incoming_event(self, event_class):
         for base_event_name in event_class.base_network_events:
             if base_event_name in self.incoming_events_generators:
-                self.incoming_events_generators[base_event_name].remove(event_class)
+                self.incoming_events_generators[base_event_name].remove(
+                    event_class)
 
     def register_outgoing_event(self, event_class):
-        pass
+        for base_event_name in event_class.base_network_events:
+            event_list = self.outgoing_events_generators.setdefault(
+                base_event_name, [])
+            if not event_class in event_list:
+                event_list.append(event_class)
 
     def unregister_outgoing_event(self, event_class):
-        pass
+        for base_event_name in event_class.base_network_events:
+            if base_event_name in self.outgoing_events_generators:
+                self.outgoing_events_generators[base_event_name].remove(
+                    event_class)
 
     def push_incoming_event(self, event_object):
         if event_object.generate():
@@ -62,7 +78,9 @@ class NetworkEventsController(object):
                 self._generate_events_based_on_incoming_event(event_object)
 
     def push_outgoing_event(self, event_object):
-        pass
+        if event_object.generate():
+            if not gajim.ged.raise_event(event_object.name, event_object):
+                self._generate_events_based_on_outgoing_event(event_object)
 
     def _generate_events_based_on_incoming_event(self, event_object):
         '''
@@ -75,11 +93,36 @@ class NetworkEventsController(object):
         '''
         base_event_name = event_object.name
         if base_event_name in self.incoming_events_generators:
-            for new_event_class in self.incoming_events_generators[base_event_name]:
-                new_event_object = new_event_class(None, base_event=event_object)
+            for new_event_class in self.incoming_events_generators[
+            base_event_name]:
+                new_event_object = new_event_class(None,
+                    base_event=event_object)
                 if new_event_object.generate():
-                    if not gajim.ged.raise_event(new_event_object.name, new_event_object):
-                        self._generate_events_based_on_incoming_event(new_event_object)
+                    if not gajim.ged.raise_event(new_event_object.name,
+                    new_event_object):
+                        self._generate_events_based_on_incoming_event(
+                            new_event_object)
+
+    def _generate_events_based_on_outgoing_event(self, event_object):
+        '''
+        :return: True if even_object should be dispatched through Global
+        Events Dispatcher, False otherwise. This can be used to replace
+        base events with those that more data computed (easier to use
+        by handlers).
+        :note: replacing mechanism is not implemented currently, but will be
+        based on attribute in new network events object.
+        '''
+        base_event_name = event_object.name
+        if base_event_name in self.outgoing_events_generators:
+            for new_event_class in self.outgoing_events_generators[
+            base_event_name]:
+                new_event_object = new_event_class(None,
+                    base_event=event_object)
+                if new_event_object.generate():
+                    if not gajim.ged.raise_event(new_event_object.name,
+                    new_event_object):
+                        self._generate_events_based_on_outgoing_event(
+                            new_event_object)
 
 class NetworkEvent(object):
     name = ''
@@ -88,9 +131,9 @@ class NetworkEvent(object):
         if new_name:
             self.name = new_name
 
-        self._set_kwargs_as_attributes(**kwargs)
-
         self.init()
+
+        self._set_kwargs_as_attributes(**kwargs)
 
     def init(self):
         pass
@@ -130,5 +173,7 @@ class NetworkIncomingEvent(NetworkEvent):
 
 
 class NetworkOutgoingEvent(NetworkEvent):
-        pass
-
+    base_network_events = []
+    '''
+    Names of base network events that new event is going to be generated on.
+    '''

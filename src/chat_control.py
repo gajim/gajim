@@ -54,6 +54,7 @@ from common.pep import MOODS, ACTIVITIES
 from common.xmpp.protocol import NS_XHTML, NS_XHTML_IM, NS_FILE, NS_MUC
 from common.xmpp.protocol import NS_RECEIPTS, NS_ESESSION
 from common.xmpp.protocol import NS_JINGLE_RTP_AUDIO, NS_JINGLE_RTP_VIDEO, NS_JINGLE_ICE_UDP
+from common.connection_handlers_events import MessageOutgoingEvent
 
 from command_system.implementation.middleware import ChatCommandProcessor
 from command_system.implementation.middleware import CommandTools
@@ -517,6 +518,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         menu.show_all()
 
     def shutdown(self):
+        super(ChatControlBase, self).shutdown()
         # PluginSystem: removing GUI extension points connected with ChatControlBase
         # instance object
         gajim.plugin_manager.remove_gui_extension_point('chat_control_base', self)
@@ -848,8 +850,8 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         return label
 
     def send_message(self, message, keyID='', type_='chat', chatstate=None,
-                    msg_id=None, composing_xep=None, resource=None, xhtml=None,
-                    callback=None, callback_args=[], process_commands=True):
+    msg_id=None, composing_xep=None, resource=None, xhtml=None, callback=None,
+    callback_args=[], process_commands=True):
         """
         Send the given message to the active tab. Doesn't return None if error
         """
@@ -860,11 +862,12 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             return
 
         label = self.get_seclabel()
-        MessageControl.send_message(self, message, keyID, type_=type_,
-                chatstate=chatstate, msg_id=msg_id, composing_xep=composing_xep,
-                resource=resource, user_nick=self.user_nick, xhtml=xhtml,
-                label=label,
-                callback=callback, callback_args=callback_args)
+
+        gajim.nec.push_outgoing_event(MessageOutgoingEvent(None,
+            account=self.account, message=message, keyID=keyID, type_=type_,
+            chatstate=chatstate, msg_id=msg_id, composing_xep=composing_xep,
+            resource=resource, user_nick=self.user_nick, xhtml=xhtml,
+            label=label, callback=callback, callback_args= callback_args))
 
         # Record the history of sent messages
         self.save_message(message, 'sent')
@@ -2209,6 +2212,7 @@ class ChatControl(ChatControlBase):
         """
         Send a message to contact
         """
+        message = helpers.remove_invalid_xml_chars(message)
         if message in ('', None, '\n'):
             return None
 
@@ -2624,12 +2628,14 @@ class ChatControl(ChatControlBase):
         # if we're inactive prevent composing (JEP violation)
         if contact.our_chatstate == 'inactive' and state == 'composing':
             # go active before
-            MessageControl.send_message(self, None, chatstate='active')
+            gajim.nec.push_outgoing_event(MessageOutgoingEvent(None,
+                account=self.account, chatstate='active'))
             contact.our_chatstate = 'active'
             self.reset_kbd_mouse_timeout_vars()
 
-        MessageControl.send_message(self, "", chatstate = state,
-                msg_id = contact.msg_id, composing_xep = contact.composing_xep)
+        gajim.nec.push_outgoing_event(MessageOutgoingEvent(None,
+            account=self.account, chatstate=state, msg_id=contact.msg_id,
+            composing_xep=contact.composing_xep))
 
         contact.our_chatstate = state
         if contact.our_chatstate == 'active':

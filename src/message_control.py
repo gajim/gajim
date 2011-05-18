@@ -30,6 +30,7 @@ import gtkgui_helpers
 
 from common import gajim
 from common import helpers
+from common import ged
 from common.stanza_session import EncryptedStanzaSession, ArchivingStanzaSession
 
 # Derived types MUST register their type IDs here if custom behavor is required
@@ -63,6 +64,9 @@ class MessageControl(object):
 
         self.xml = gtkgui_helpers.get_gtk_builder('%s.ui' % widget_name)
         self.widget = self.xml.get_object('%s_hbox' % widget_name)
+
+        gajim.ged.register_event_handler('message-outgoing', ged.OUT_GUI1,
+            self._nec_message_outgoing)
 
     def get_full_jid(self):
         fjid = self.contact.jid
@@ -110,7 +114,8 @@ class MessageControl(object):
         """
         Derived classes MUST implement this
         """
-        pass
+        gajim.ged.remove_event_handler('message-outgoing', ged.OUT_GUI1,
+            self._nec_message_outgoing)
 
     def repaint_themed_widgets(self):
         """
@@ -214,40 +219,35 @@ class MessageControl(object):
         if crypto_changed or archiving_changed:
             self.print_session_details()
 
-    def send_message(self, message, keyID='', type_='chat', chatstate=None,
-                    msg_id=None, composing_xep=None, resource=None, user_nick=None,
-                    xhtml=None, label=None, callback=None, callback_args=[]):
+    def _nec_message_outgoing(self, obj):
         # Send the given message to the active tab.
         # Doesn't return None if error
-        jid = self.contact.jid
+        if obj.account != self.account:
+            return
 
-        message = helpers.remove_invalid_xml_chars(message)
+        obj.jid = self.contact.jid
+        obj.message = helpers.remove_invalid_xml_chars(obj.message)
+        obj.original_message = obj.message
 
-        original_message = message
         conn = gajim.connections[self.account]
 
         if not self.session:
-            if not resource:
+            if not obj.resource:
                 if self.resource:
-                    resource = self.resource
+                    obj.resource = self.resource
                 else:
-                    resource = self.contact.resource
-            sess = conn.find_controlless_session(jid, resource=resource)
+                    obj.resource = self.contact.resource
+            sess = conn.find_controlless_session(obj.jid, resource=obj.resource)
 
             if self.resource:
-                jid += '/' + self.resource
+                obj.jid += '/' + self.resource
 
             if not sess:
                 if self.type_id == TYPE_PM:
-                    sess = conn.make_new_session(jid, type_='pm')
+                    sess = conn.make_new_session(obj.jid, type_='pm')
                 else:
-                    sess = conn.make_new_session(jid)
+                    sess = conn.make_new_session(obj.jid)
 
             self.set_session(sess)
 
-        # Send and update history
-        conn.send_message(jid, message, keyID, type_=type_, chatstate=chatstate,
-                msg_id=msg_id, composing_xep=composing_xep, resource=self.resource,
-                user_nick=user_nick, session=self.session,
-                original_message=original_message, xhtml=xhtml, label=label, callback=callback,
-                callback_args=callback_args)
+        obj.session = self.session

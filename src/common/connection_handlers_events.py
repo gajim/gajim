@@ -2042,3 +2042,31 @@ class NotificationEvent(nec.NetworkIncomingEvent):
         elif self.notif_type == 'pres':
             self.handle_incoming_pres_event(self.base_event)
         return True
+
+class MessageOutgoingEvent(nec.NetworkIncomingEvent):
+    name = 'message-outgoing'
+    base_network_events = []
+
+    def init(self):
+        self.message = ''
+        self.keyID = None
+        self.type_ = 'chat'
+        self.subject = ''
+        self.chatstate = None
+        self.msg_id = None
+        self.composing_xep = None
+        self.resource = None
+        self.user_nick = None
+        self.xhtml = None
+        self.label = None
+        self.session = None
+        self.forward_from = None
+        self.form_node = None
+        self.original_message = ''
+        self.delayed = None
+        self.callback = None
+        self.callback_args = []
+        self.now = False
+
+    def generate(self):
+        return True

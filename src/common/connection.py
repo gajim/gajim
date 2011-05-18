@@ -717,6 +717,8 @@ class Connection(CommonConnection, ConnectionHandlers):
             self._nec_agent_info_error_received)
         gajim.ged.register_event_handler('agent-info-received', ged.CORE,
             self._nec_agent_info_received)
+        gajim.ged.register_event_handler('message-outgoing', ged.OUT_CORE,
+            self._nec_message_outgoing)
     # END __init__
 
     def cleanup(self):
@@ -727,6 +729,8 @@ class Connection(CommonConnection, ConnectionHandlers):
             self._nec_agent_info_error_received)
         gajim.ged.remove_event_handler('agent-info-received', ged.CORE,
             self._nec_agent_info_received)
+        gajim.ged.remove_event_handler('message-outgoing', ged.OUT_CORE,
+            self._nec_message_outgoing)
 
     def get_config_values_or_default(self):
         if gajim.config.get_per('accounts', self.name, 'keep_alives_enabled'):
@@ -1763,6 +1767,30 @@ class Connection(CommonConnection, ConnectionHandlers):
             resource=resource, user_nick=user_nick, xhtml=xhtml, label=label,
             session=session, forward_from=forward_from, form_node=form_node,
             original_message=original_message, delayed=delayed, callback=cb)
+
+    def _nec_message_outgoing(self, obj):
+        if obj.account != self.name:
+            return
+
+        def cb(jid, msg, keyID, forward_from, session, original_message,
+        subject, type_, msg_iq):
+            msg_id = self.connection.send(msg_iq, now=obj.now)
+            jid = helpers.parse_jid(obj.jid)
+            gajim.nec.push_incoming_event(MessageSentEvent(None, conn=self,
+                jid=jid, message=msg, keyID=keyID, chatstate=obj.chatstate))
+            if obj.callback:
+                obj.callback(msg_id, *obj.callback_args)
+
+            self.log_message(jid, msg, forward_from, session, original_message,
+                    subject, type_)
+
+        self._prepare_message(obj.jid, obj.message, obj.keyID, type_=obj.type_,
+            subject=obj.subject, chatstate=obj.chatstate, msg_id=obj.msg_id,
+            composing_xep=obj.composing_xep, resource=obj.resource,
+            user_nick=obj.user_nick, xhtml=obj.xhtml, label=obj.label,
+            session=obj.session, forward_from=obj.forward_from,
+            form_node=obj.form_node, original_message=obj.original_message,
+            delayed=obj.delayed, callback=cb)
 
     def send_contacts(self, contacts, jid):
         """

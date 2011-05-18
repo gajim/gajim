@@ -21,6 +21,7 @@ Global Events Dispatcher module.
 :author: Mateusz Biliński <mateusz@bilinski.it>
 :since: 8th August 2008
 :copyright: Copyright (2008) Mateusz Biliński <mateusz@bilinski.it>
+:copyright: Copyright (2011) Yann Leboulanger <asterix@lagaule.org>
 :license: GPL
 '''
 
@@ -38,6 +39,18 @@ PREGUI2 = 80
 GUI2 = 90
 POSTGUI2 = 100
 POSTGUI = 110
+
+OUT_PREGUI = 10
+OUT_PREGUI1 = 20
+OUT_GUI1 = 30
+OUT_POSTGUI1 = 40
+OUT_PREGUI2 = 50
+OUT_GUI2 = 60
+OUT_POSTGUI2 = 70
+OUT_POSTGUI = 80
+OUT_PRECORE = 90
+OUT_CORE = 100
+OUT_POSTCORE = 110
 
 class GlobalEventsDispatcher(object):
 
