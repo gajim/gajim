@@ -2642,12 +2642,9 @@ class ChatControl(ChatControlBase):
             self.reset_kbd_mouse_timeout_vars()
 
     def shutdown(self):
-        # PluginSystem: calling shutdown of super class (ChatControlBase) to let it remove
-        # it's GUI extension points
-        super(ChatControl, self).shutdown()
         # PluginSystem: removing GUI extension points connected with ChatControl
         # instance object
-        gajim.plugin_manager.remove_gui_extension_point('chat_control', self)        # Send 'gone' chatstate
+        gajim.plugin_manager.remove_gui_extension_point('chat_control', self)
 
         # disconnect from the dbus MessageSent signal.
         if self._dbus_message_sent_match:
@@ -2664,6 +2661,7 @@ class ChatControl(ChatControlBase):
         gajim.ged.remove_event_handler('caps-received', ged.GUI1,
             self._nec_caps_received)
 
+        # Send 'gone' chatstate
         self.send_chatstate('gone', self.contact)
         self.contact.chatstate = None
         self.contact.our_chatstate = None
@@ -2688,11 +2686,12 @@ class ChatControl(ChatControlBase):
         key = (self.contact.jid, self.account)
         roster = gajim.interface.roster
         if key in roster.contacts_to_be_removed.keys() and \
-        not roster.contact_has_pending_roster_events(self.contact, self.account):
+        not roster.contact_has_pending_roster_events(self.contact,
+        self.account):
             backend = roster.contacts_to_be_removed[key]['backend']
             del roster.contacts_to_be_removed[key]
             roster.remove_contact(self.contact.jid, self.account, force=True,
-                    backend=backend)
+                backend=backend)
         # remove all register handlers on widgets, created by self.xml
         # to prevent circular references among objects
         for i in self.handlers.keys():
@@ -2705,6 +2704,9 @@ class ChatControl(ChatControlBase):
             if spell_obj:
                 spell_obj.detach()
         self.msg_textview.destroy()
+        # PluginSystem: calling shutdown of super class (ChatControlBase) to let
+        # it remove it's GUI extension points
+        super(ChatControl, self).shutdown()
 
     def minimizable(self):
         return False
