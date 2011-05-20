@@ -1,0 +1,23 @@
+Description: don't install useless COPYING file
+Forwarded: not-neded
+
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -8,7 +8,6 @@
+ docfiles_DATA = README \
+ 				README.html \
+ 				ChangeLog \
+-				COPYING \
+ 				THANKS \
+ 				THANKS.artists \
+ 				AUTHORS 
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -299,7 +299,6 @@
+ docfiles_DATA = README \
+ 				README.html \
+ 				ChangeLog \
+-				COPYING \
+ 				THANKS \
+ 				THANKS.artists \
+ 				AUTHORS 
