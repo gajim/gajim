@@ -1,17 +1,19 @@
 #!/usr/bin/make -f
-DEB_PYTHON_SYSTEM=pysupport
 
-# Debhelper must be included before python-distutils to use
-# # # dh_python / dh_pycentral / dh_pysupport
-include /usr/share/cdbs/1/rules/debhelper.mk
-include /usr/share/cdbs/1/rules/simple-patchsys.mk
-include /usr/share/cdbs/1/class/autotools.mk
+%:
+	dh $@ --with python2,autoreconf
 
-DEB_CONFIGURE_EXTRA_FLAGS := --prefix=/usr
-DEB_MAKE_BUILD_TARGET    := all
-DEB_MAKE_INSTALL_TARGET = install DESTDIR=$(DEB_DESTDIR)
+# test target is broken
+override_dh_auto_test:
 
-binary-install/gajim::
-	rm $(DEB_DESTDIR)/usr/share/gajim/src/common/GnuPGInterface.py*
-	dh_pysupport -pgajim
-	convert $(DEB_DESTDIR)/usr/share/icons/hicolor/64x64/apps/gajim.png -resize 32x32 $(DEB_DESTDIR)/usr/share/pixmaps/gajim.xpm
+override_dh_auto_configure:
+	convert icons/hicolor/64x64/apps/gajim.png -resize 32x32 debian/gajim.xpm
+	dh_auto_configure
+
+override_dh_auto_install:
+	dh_auto_install
+	rm debian/gajim/usr/share/gajim/src/common/GnuPGInterface.py*
+
+override_dh_auto_clean:
+	-rm -f debian/gajim.xpm
+	dh_auto_clean
