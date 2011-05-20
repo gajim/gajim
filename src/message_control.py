@@ -224,8 +224,9 @@ class MessageControl(object):
         # Doesn't return None if error
         if obj.account != self.account:
             return
+        if self.contact.jid != obj.jid:
+            return
 
-        obj.jid = self.contact.jid
         obj.message = helpers.remove_invalid_xml_chars(obj.message)
         obj.original_message = obj.message
 
