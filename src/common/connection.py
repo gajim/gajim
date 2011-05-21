@@ -1781,6 +1781,8 @@ class Connection(CommonConnection, ConnectionHandlers):
             if obj.callback:
                 obj.callback(msg_id, *obj.callback_args)
 
+            if not obj.is_loggable:
+                return
             self.log_message(jid, msg, forward_from, session, original_message,
                     subject, type_)
 
