@@ -79,7 +79,12 @@ class BannerTweaksPlugin(GajimPlugin):
             chat_control.banner_status_label.set_markup(status_text)
 
         if not self.config['show_banner_image']:
-            banner_status_img = chat_control.xml.get_object('banner_status_image')
+            if chat_control.type_id == 'chat':
+                banner_status_img = chat_control.xml.get_object(
+                    'banner_status_image')
+            else:
+                banner_status_img = chat_control.xml.get_object(
+                    'gc_banner_status_image')
             banner_status_img.clear()
 
         # TODO: part below repeats a lot of code from ChatControl.draw_banner_text()
