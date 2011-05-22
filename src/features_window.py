@@ -47,7 +47,7 @@ class FeaturesWindow:
 
         # {name: (available_function, unix_text, windows_text)}
         self.features = {
-                _('SSL certificat validation'): (self.pyopenssl_available,
+                _('SSL certificate validation'): (self.pyopenssl_available,
                         _('A library used to validate server certificates to ensure a secure connection.'),
                         _('Requires python-pyopenssl.'),
                         _('Requires python-pyopenssl.')),
