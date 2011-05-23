@@ -478,7 +478,10 @@ class Interface:
         #('SUBSCRIBE', account, (jid, text, user_nick)) user_nick is JEP-0172
         account = obj.conn.name
         if helpers.allow_popup_window(account) or not self.systray_enabled:
-            dialogs.SubscriptionRequestWindow(obj.jid, obj.status, account,
+            if obj.jid in self.instances[account]['sub_request']:
+                self.instances[account]['sub_request'][obj.jid].window.destroy()
+            self.instances[account]['sub_request'][obj.jid] = \
+                dialogs.SubscriptionRequestWindow(obj.jid, obj.status, account,
                 obj.user_nick)
             return
 
@@ -2700,7 +2703,7 @@ class Interface:
 
         for a in gajim.connections:
             self.instances[a] = {'infos': {}, 'disco': {}, 'gc_config': {},
-                'search': {}, 'online_dialog': {}}
+                'search': {}, 'online_dialog': {}, 'sub_request': {}}
             # online_dialog contains all dialogs that have a meaning only when
             # we are not disconnected
             self.minimized_controls[a] = {}

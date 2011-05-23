@@ -2040,7 +2040,7 @@ class AccountsWindow:
                 gajim.interface.msg_win_mgr.change_account_name(old_name, new_name)
                 # upgrade account variable in opened windows
                 for kind in ('infos', 'disco', 'gc_config', 'search',
-                'online_dialog'):
+                'online_dialog', 'sub_request'):
                     for j in gajim.interface.instances[new_name][kind]:
                         gajim.interface.instances[new_name][kind][j].account = \
                                 new_name
@@ -2477,7 +2477,8 @@ class AccountsWindow:
         self.init_account_gpg()
         # update variables
         gajim.interface.instances[account] = {'infos': {},
-                'disco': {}, 'gc_config': {}, 'search': {}, 'online_dialog': {}}
+            'disco': {}, 'gc_config': {}, 'search': {}, 'online_dialog': {},
+            'sub_request': {}}
         gajim.interface.minimized_controls[account] = {}
         gajim.connections[account].connected = 0
         gajim.groups[account] = {}
@@ -3926,7 +3927,8 @@ class AccountCreationWizardWindow:
 
         # update variables
         gajim.interface.instances[self.account] = {'infos': {}, 'disco': {},
-            'gc_config': {}, 'search': {}, 'online_dialog': {}}
+            'gc_config': {}, 'search': {}, 'online_dialog': {},
+            'sub_request': {}}
         gajim.interface.minimized_controls[self.account] = {}
         gajim.connections[self.account].connected = 0
         gajim.connections[self.account].keepalives = gajim.config.get_per(
