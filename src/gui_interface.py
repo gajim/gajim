@@ -652,7 +652,10 @@ class Interface:
         text = array[1]
         nick = array[2]
         if helpers.allow_popup_window(account) or not self.systray_enabled:
-            dialogs.SubscriptionRequestWindow(jid, text, account, nick)
+            if jid in self.instances[account]['sub_request']:
+                self.instances[account]['sub_request'][jid].window.destroy()
+            self.instances[account]['sub_request'][jid] = \
+                dialogs.SubscriptionRequestWindow(jid, text, account, nick)
             return
 
         self.add_event(account, jid, 'subscription_request', (text, nick))
@@ -3448,7 +3451,7 @@ class Interface:
 
         for a in gajim.connections:
             self.instances[a] = {'infos': {}, 'disco': {}, 'gc_config': {},
-                'search': {}, 'online_dialog': {}}
+                'search': {}, 'online_dialog': {}, 'sub_request': {}}
             # online_dialog contains all dialogs that have a meaning only when
             # we are not disconnected
             self.minimized_controls[a] = {}

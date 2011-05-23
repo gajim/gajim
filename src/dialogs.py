@@ -2061,6 +2061,14 @@ class SubscriptionRequestWindow:
         xml.connect_signals(self)
         self.window.show_all()
 
+    def on_subscription_request_window_destroy(self, widget):
+        """
+        Close window
+        """
+        if self.jid in gajim.interface.instances[self.account]['sub_request']:
+            # remove us from open windows
+            del gajim.interface.instances[self.account]['sub_request'][self.jid]
+
     def prepare_popup_menu(self):
         xml = gtkgui_helpers.get_gtk_builder('subscription_request_popup_menu.ui')
         menu = xml.get_object('subscription_request_popup_menu')

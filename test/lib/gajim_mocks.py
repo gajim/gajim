@@ -20,7 +20,7 @@ class MockConnection(Mock, ConnectionHandlersBase):
         self.sessions = {}
 
         gajim.interface.instances[account] = {'infos': {}, 'disco': {},
-                'gc_config': {}, 'search': {}}
+                'gc_config': {}, 'search': {}, 'sub_request': {}}
         gajim.interface.minimized_controls[account] = {}
         gajim.contacts.add_account(account)
         gajim.groups[account] = {}
