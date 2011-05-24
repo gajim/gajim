@@ -754,7 +754,7 @@ class Interface:
             if contacts[0].sub != obj.sub or contacts[0].ask != obj.ask\
             or old_groups != obj.groups:
                 # c.get_shown_groups() has changed. Reflect that in
-                # roster_winodow
+                # roster_window
                 self.roster.remove_contact(obj.jid, account, force=True)
             for contact in contacts:
                 contact.name = obj.nickname or ''
@@ -766,6 +766,9 @@ class Interface:
             for group in old_groups:
                 self.roster.draw_group(group, account)
             self.roster.draw_contact(obj.jid, account)
+        if obj.jid in self.instances[account]['sub_request'] and obj.sub in (
+        'from', 'both'):
+            self.instances[account]['sub_request'][obj.jid].window.destroy()
 
     def handle_event_bookmarks(self, obj):
         # ('BOOKMARKS', account, [{name,jid,autojoin,password,nick}, {}])
