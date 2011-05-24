@@ -673,6 +673,9 @@ def get_contact_dict_for_account(account):
 
 def launch_browser_mailer(kind, uri):
     # kind = 'url' or 'mail'
+    if kind == 'url' and uri.startswith('file://'):
+        launch_file_manager(uri)
+        return
     if kind in ('mail', 'sth_at_sth') and not uri.startswith('mailto:'):
         uri = 'mailto:' + uri
 
@@ -698,18 +701,25 @@ def launch_browser_mailer(kind, uri):
 
 
 def launch_file_manager(path_to_open):
-    uri = 'file://' + path_to_open
-    if not gajim.config.get('autodetect_browser_mailer'):
-        command = gajim.config.get('custom_file_manager')
-        if command == '': # if no app is configured
-            return
+    if not path_to_open.startswith('file://'):
+        uri = 'file://' + path_to_open
+    if os.name == 'nt':
+        try:
+            os.startfile(path_to_open) # if pywin32 is installed we open
+        except Exception:
+            pass
+    else:
+        if not gajim.config.get('autodetect_browser_mailer'):
+            command = gajim.config.get('custom_file_manager')
+            if command == '': # if no app is configured
+                return
+        else:
+            command = 'xdg-open'
         command = build_command(command, path_to_open)
         try:
             exec_command(command)
         except Exception:
             pass
-    else:
-        webbrowser.open(uri)
 
 def play_sound(event):
     if not gajim.config.get('sounds_on'):
