@@ -2318,7 +2318,11 @@ class RosterWindow:
         'quit_on_roster_x_button') and gajim.config.get('trayicon') != \
         'on_event':
             self.tooltip.hide_tooltip()
-            self.window.hide()
+            if gajim.config.get('save-roster-position'):
+                x, y = self.window.get_position()
+                gajim.config.set('roster_x-position', x)
+                gajim.config.set('roster_y-position', y)
+                self.window.hide()
         elif gajim.config.get('quit_on_roster_x_button'):
             self.on_quit_request()
         else:
