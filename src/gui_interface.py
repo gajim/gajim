@@ -1286,7 +1286,7 @@ class Interface:
             if contacts[0].sub != sub or contacts[0].ask != ask\
             or old_groups != groups:
                 # c.get_shown_groups() has changed. Reflect that in
-                # roster_winodow
+                # roster_window
                 self.roster.remove_contact(jid, account, force=True)
             for contact in contacts:
                 contact.name = name or ''
@@ -1298,6 +1298,10 @@ class Interface:
             for group in old_groups:
                 self.roster.draw_group(group, account)
             self.roster.draw_contact(jid, account)
+
+        if jid in self.instances[account]['sub_request'] and sub in ('from',
+        'both'):
+            self.instances[account]['sub_request'][jid].window.destroy()
 
         if self.remote_ctrl:
             self.remote_ctrl.raise_signal('RosterInfo', (account, array))
