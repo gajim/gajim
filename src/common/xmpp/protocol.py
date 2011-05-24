@@ -22,6 +22,12 @@ sub- stanzas) handling routines
 
 from simplexml import Node, NodeBuilder
 import time
+import string
+
+def ascii_upper(s):
+    trans_table = string.maketrans(string.ascii_lowercase,
+        string.ascii_uppercase)
+    return s.translate(trans_table)
 
 NS_ACTIVITY       = 'http://jabber.org/protocol/activity'             # XEP-0108
 NS_ADDRESS        = 'http://jabber.org/protocol/address'              # XEP-0033
@@ -209,7 +215,7 @@ xmpp_stream_error_conditions), (NS_STANZAS, 'ERR', xmpp_stanza_error_conditions)
 (NS_SASL, 'SASL', sasl_error_conditions)):
     for err in errpool.split('\n')[1:]:
         cond, code, typ, text = err.split(' -- ')
-        name = errname + '_' + cond.upper().replace('-', '_')
+        name = errname + '_' + ascii_upper(cond).replace('-', '_')
         locals()[name] = ns + ' ' + cond
         ERRORS[ns + ' ' + cond] = [code, typ, text]
         if code:
