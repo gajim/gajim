@@ -323,7 +323,6 @@ class GroupchatControl(ChatControlBase):
             if gtkgui_helpers.gtk_icon_theme.has_icon('bookmark-new'):
                 img = self.xml.get_object('image7')
                 img.set_from_icon_name('bookmark-new', gtk.ICON_SIZE_MENU)
-                img.show()
 
             widget.show()
 
