@@ -319,6 +319,13 @@ class GroupchatControl(ChatControlBase):
             id_ = widget.connect('clicked',
                 self._on_bookmark_room_menuitem_activate)
             self.handlers[id_] = widget
+
+            icon_theme = gtk.icon_theme_get_default()
+            if icon_theme.has_icon('bookmark-new'):
+                img = self.xml.get_object('image7')
+                img.set_from_icon_name('bookmark-new', gtk.ICON_SIZE_MENU)
+                img.show()
+
             widget.show()
 
         widget = self.xml.get_object('list_treeview')
