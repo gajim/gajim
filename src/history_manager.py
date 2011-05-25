@@ -256,6 +256,7 @@ class HistoryManager:
                 'database filesize, click YES, else click NO.'
                 '\n\nIn case you click YES, please wait...'),
             on_response_yes=on_yes, on_response_no=on_no)
+        dialog.set_title(_('Database Cleanup'))
         button_box = dialog.get_children()[0].get_children()[1]
         button_box.get_children()[0].grab_focus()
 
@@ -586,13 +587,18 @@ class HistoryManager:
 
             self.AT_LEAST_ONE_DELETION_DONE = True
 
-        pri_text = i18n.ngettext(
-            'Do you really want to delete logs of the selected contact?',
-            'Do you really want to delete logs of the selected contacts?',
-            paths_len)
-        dialog = dialogs.ConfirmationDialog(pri_text,
+        if paths_len == 1:
+            jid_id = '<i>%s</i>' % liststore[list_of_paths[0]][0]
+            pri_text = _('Do you really want to delete the logs of %(jid)s?') \
+                % {'jid': jid_id}
+        else:
+            pri_text = _(
+                'Do you really want to delete logs of the selected contacts?')
+        dialog = dialogs.ConfirmationDialog('',
             _('This is an irreversible operation.'), on_response_ok=(on_ok,
             liststore, list_of_paths))
+        dialog.set_title(_('Deletion Confirmation'))
+        dialog.set_markup(pri_text)
         ok_button = dialog.get_children()[0].get_children()[1].get_children()[0]
         ok_button.grab_focus()
         dialog.set_transient_for(self.window)
@@ -630,6 +636,7 @@ class HistoryManager:
         dialog = dialogs.ConfirmationDialog(pri_text,
             _('This is an irreversible operation.'), on_response_ok=(on_ok,
             liststore, list_of_paths))
+        dialog.set_title(_('Deletion Confirmation'))
         ok_button = dialog.get_children()[0].get_children()[1].get_children()[0]
         ok_button.grab_focus()
         dialog.set_transient_for(self.window)
