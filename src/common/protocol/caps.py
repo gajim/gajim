@@ -88,6 +88,8 @@ class ConnectionCaps(object):
         callback to update our caps cache with queried information after
         we have retrieved an unknown caps hash and issued a disco
         """
+        if obj.conn.name != self._account:
+            return
         contact = self._get_contact_or_gc_contact_for_jid(obj.fjid)
         if not contact:
             log.info('Received Disco from unknown contact %s' % obj.fjid)
