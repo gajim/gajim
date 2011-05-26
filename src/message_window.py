@@ -355,7 +355,11 @@ class MessageWindow(object):
                 control._on_history_menuitem_activate()
             elif control.type_id == message_control.TYPE_CHAT and \
             keyval == gtk.keysyms.f: # CTRL + f
-                control._on_send_file_menuitem_activate(None)
+                # CTRL + f moves cursor one char forward when user uses Emacs
+                # theme
+                if not gtk.settings_get_default().get_property(
+                'gtk-key-theme-name') == 'Emacs':
+                    control._on_send_file_menuitem_activate(None)
             elif control.type_id == message_control.TYPE_CHAT and \
             keyval == gtk.keysyms.g: # CTRL + g
                 control._on_convert_to_gc_menuitem_activate(None)
