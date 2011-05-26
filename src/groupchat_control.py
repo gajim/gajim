@@ -801,6 +801,11 @@ class GroupchatControl(ChatControlBase):
         separatormenuitem2 = xml.get_object('separatormenuitem2')
         request_voice_separator = xml.get_object('request_voice_separator')
 
+        if gtkgui_helpers.gtk_icon_theme.has_icon('bookmark-new'):
+            img = gtk.Image()
+            img.set_from_icon_name('bookmark-new', gtk.ICON_SIZE_MENU)
+            bookmark_room_menuitem.set_image(img)
+
         if hide_buttonbar_items:
             change_nick_menuitem.hide()
             change_subject_menuitem.hide()
