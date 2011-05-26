@@ -143,6 +143,7 @@ NS_DATA_LAYOUT    = 'http://jabber.org/protocol/xdata-layout'         # XEP-0141
 NS_DATA_VALIDATE  = 'http://jabber.org/protocol/xdata-validate'       # XEP-0122
 NS_XMPP_STREAMS   = 'urn:ietf:params:xml:ns:xmpp-streams'
 NS_RECEIPTS       = 'urn:xmpp:receipts'
+NS_STREAM_MGMT    = 'urn:xmpp:sm:3'                                   # XEP-198
 
 xmpp_stream_error_conditions = '''
 bad-format --  --  -- The entity has sent XML that cannot be processed.
@@ -977,6 +978,35 @@ class Iq(Protocol):
         if self.getTag('query'):
             iq.setQueryNS(self.getQueryNS())
         return iq
+
+class Acks(Node):
+    """
+    Acknowledgement elements for Stream Management 
+    """
+    def __init__(self, nsp=NS_STREAM_MGMT):
+        
+        
+        Node.__init__(self, None, {}, [], None, None,False, None)
+        
+        self.setNamespace(nsp)
+    
+    def buildAnswer(self, handled): # handled is the number of stanzas handled
+        self.setName('a')
+        self.setAttr('h', handled)
+    
+    def buildRequest(self):
+        self.setName('r')
+    
+    def buildEnable(self, resume=False):
+        self.setName('enable')
+        if resume:
+            self.setAttr('resume', 'true')
+            
+    
+    def buildResume(self, handled, previd):
+        self.setName('resume')
+        self.setAttr('h', handled)
+        self.setAttr('previd', previd)
 
 class ErrorNode(Node):
     """
