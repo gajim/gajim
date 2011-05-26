@@ -421,7 +421,6 @@ class MessageWindow(object):
         elif keyval == gtk.keysyms.Escape and \
                         gajim.config.get('escape_key_closes'): # Escape
             self.remove_tab(control, self.CLOSE_ESC)
-        return True
 
     def _on_close_button_clicked(self, button, control):
         """
