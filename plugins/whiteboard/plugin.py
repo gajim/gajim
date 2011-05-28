@@ -73,12 +73,13 @@ class WhiteboardPlugin(GajimPlugin):
     def _compute_caps_hash(self):
         for a in gajim.connections:
             gajim.caps_hash[a] = caps_cache.compute_caps_hash([
-                gajim.gajim_identity], gajim.gajim_common_features + gajim.gajim_optional_features[a])
-        # re-send presence with new hash
-        connected = gajim.connections[a].connected
-        if connected > 1 and gajim.SHOW_LIST[connected] != 'invisible':
-            gajim.connections[a].change_status(gajim.SHOW_LIST[connected],
-                gajim.connections[a].status)
+                gajim.gajim_identity], gajim.gajim_common_features + \
+                gajim.gajim_optional_features[a])
+            # re-send presence with new hash
+            connected = gajim.connections[a].connected
+            if connected > 1 and gajim.SHOW_LIST[connected] != 'invisible':
+                gajim.connections[a].change_status(gajim.SHOW_LIST[connected],
+                    gajim.connections[a].status)
 
     @log_calls('WhiteboardPlugin')
     def activate(self):
