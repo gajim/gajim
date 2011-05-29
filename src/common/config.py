@@ -322,7 +322,7 @@ class Config:
                     'connection_types': [ opt_str, 'tls ssl plain', _('Ordered list (space separated) of connection type to try. Can contain tls, ssl or plain')],
                     'warn_when_plaintext_connection': [ opt_bool, True, _('Show a warning dialog before sending password on an plaintext connection.') ],
                     'warn_when_insecure_ssl_connection': [ opt_bool, True, _('Show a warning dialog before using standard SSL library.') ],
-                    'warn_when_insecure_password': [ opt_bool, True, _('Show a warning dialog before sending PLAIN password over a plain conenction.') ],
+                    'warn_when_insecure_password': [ opt_bool, True, _('Show a warning dialog before sending PLAIN password over a plain connection.') ],
                     'ssl_fingerprint_sha1': [ opt_str, '', '', True ],
                     'ignore_ssl_errors': [ opt_str, '', _('Space separated list of ssl errors to ignore.') ],
                     'use_srv': [ opt_bool, True, '', True ],
