@@ -6395,7 +6395,10 @@ class RosterWindow:
             gajim.config.get('trayicon') != 'always':
                 self.window.show_all()
 
-        if len(gajim.connections) == 0: # if we have no account
+        if not gajim.config.get_per('accounts') or \
+        gajim.config.get_per('accounts') == ['Local'] and not \
+        gajim.config.get_per('accounts', 'Local', 'active'):
+        # if we have no account configured or only Local account but not enabled
             def _open_wizard():
                 gajim.interface.instances['account_creation_wizard'] = \
                     config.AccountCreationWizardWindow()
