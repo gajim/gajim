@@ -85,8 +85,12 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 
         if self.is_loggable() and obj.msgtxt:
             try:
+                if obj.xhtml and gajim.config.get('log_xhtml_messages'):
+                    msg_to_log = obj.xhtml
+                else:
+                    msg_to_log = obj.msgtxt
                 msg_id = gajim.logger.write(log_type, obj.fjid,
-                    obj.msgtxt, tim=obj.timestamp, subject=obj.subject)
+                    msg_to_log, tim=obj.timestamp, subject=obj.subject)
             except exceptions.PysqliteOperationalError, e:
                 self.conn.dispatch('ERROR', (_('Disk WriteError'), str(e)))
             except exceptions.DatabaseMalformed:

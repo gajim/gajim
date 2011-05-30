@@ -432,10 +432,10 @@ class CommonConnection:
 
         if callback:
             callback(jid, msg, keyID, forward_from, session, original_message,
-                    subject, type_, msg_iq)
+                    subject, type_, msg_iq, xhtml)
 
     def log_message(self, jid, msg, forward_from, session, original_message,
-    subject, type_):
+    subject, type_, xhtml=None):
         if not forward_from and session and session.is_loggable():
             ji = gajim.get_jid_without_resource(jid)
             if gajim.config.should_log(self.name, ji):
@@ -451,6 +451,9 @@ class CommonConnection:
                     else:
                         kind = 'single_msg_sent'
                     try:
+                        if xhtml and gajim.config.get('log_xhtml_messages'):
+                            log_msg = '<body xmlns="%s">%s</body>' % (
+                                common.xmpp.NS_XHTML, xhtml)
                         gajim.logger.write(kind, jid, log_msg)
                     except exceptions.PysqliteOperationalError, e:
                         self.dispatch('DB_ERROR', (_('Disk Write Error'),
@@ -1751,7 +1754,7 @@ class Connection(CommonConnection, ConnectionHandlers):
     callback_args=[], now=False):
 
         def cb(jid, msg, keyID, forward_from, session, original_message,
-        subject, type_, msg_iq):
+        subject, type_, msg_iq, xhtml):
             msg_id = self.connection.send(msg_iq, now=now)
             jid = helpers.parse_jid(jid)
             gajim.nec.push_incoming_event(MessageSentEvent(None, conn=self,
@@ -1760,7 +1763,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                 callback(msg_id, *callback_args)
 
             self.log_message(jid, msg, forward_from, session, original_message,
-                    subject, type_)
+                    subject, type_, xhtml)
 
         self._prepare_message(jid, msg, keyID, type_=type_, subject=subject,
             chatstate=chatstate, msg_id=msg_id, composing_xep=composing_xep,
@@ -1773,7 +1776,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             return
 
         def cb(jid, msg, keyID, forward_from, session, original_message,
-        subject, type_, msg_iq):
+        subject, type_, msg_iq, xhtml):
             msg_id = self.connection.send(msg_iq, now=obj.now)
             jid = helpers.parse_jid(obj.jid)
             gajim.nec.push_incoming_event(MessageSentEvent(None, conn=self,
@@ -1784,7 +1787,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             if not obj.is_loggable:
                 return
             self.log_message(jid, msg, forward_from, session, original_message,
-                    subject, type_)
+                    subject, type_, xhtml)
 
         self._prepare_message(obj.jid, obj.message, obj.keyID, type_=obj.type_,
             subject=obj.subject, chatstate=obj.chatstate, msg_id=obj.msg_id,
