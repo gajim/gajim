@@ -1,3 +1,11 @@
+Gajim 0.14.2 (XX June 2011)
+
+  * Fix CPU usage when testing file transfer proxies
+  * Fix invalid XML char regex
+  * Fix subscription request window handling
+  * Fix URL display in chat message banner
+  * Other minor bugfixes
+
 Gajim 0.14.1 (26 October 2010)
 
   * Fix changing account name
