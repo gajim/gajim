@@ -460,10 +460,11 @@ class CommonConnection:
                             str(e)))
                     except exceptions.DatabaseMalformed:
                         pritext = _('Database Error')
-                        sectext = _('The database file (%s) cannot be read. Try to '
-                                'repair it (see http://trac.gajim.org/wiki/DatabaseBackup)'
-                                ' or remove it (all history will be lost).') % \
-                                common.logger.LOG_DB_PATH
+                        sectext = _('The database file (%s) cannot be read. Try'
+                            ' to repair it (see '
+                            'http://trac.gajim.org/wiki/DatabaseBackup)'
+                            ' or remove it (all history will be lost).') % \
+                            common.logger.LOG_DB_PATH
                         self.dispatch('DB_ERROR', (pritext, sectext))
 
     def ack_subscribed(self, jid):
