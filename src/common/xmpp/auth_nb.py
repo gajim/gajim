@@ -21,9 +21,11 @@ Can be used both for client and transport authentication
 See client_nb.py
 """
 
-from protocol import NS_SASL, NS_SESSION, NS_STREAMS, NS_BIND, NS_AUTH, NS_STREAM_MGMT
+from protocol import NS_SASL, NS_SESSION, NS_STREAMS, NS_BIND, NS_AUTH
+from protocol import NS_STREAM_MGMT
 from protocol import Node, NodeProcessed, isResultNode, Iq, Protocol, JID
 from plugin import PlugIn
+from smacks import Smacks
 import base64
 import random
 import itertools
@@ -31,7 +33,7 @@ import dispatcher_nb
 import hashlib
 import hmac
 import hashlib
-from smacks import Smacks
+
 import logging
 log = logging.getLogger('gajim.c.x.auth_nb')
 
@@ -142,7 +144,7 @@ class SASL(PlugIn):
         elif self._owner.Dispatcher.Stream.features:
             try:
                 self.FeaturesHandler(self._owner.Dispatcher,
-                        self._owner.Dispatcher.Stream.features)
+                    self._owner.Dispatcher.Stream.features)
             except NodeProcessed:
                 pass
         else:
@@ -154,16 +156,16 @@ class SASL(PlugIn):
         """
         if 'features' in  self._owner.__dict__:
             self._owner.UnregisterHandler('features', self.FeaturesHandler,
-                    xmlns=NS_STREAMS)
+                xmlns=NS_STREAMS)
         if 'challenge' in  self._owner.__dict__:
             self._owner.UnregisterHandler('challenge', self.SASLHandler,
-                    xmlns=NS_SASL)
+                xmlns=NS_SASL)
         if 'failure' in  self._owner.__dict__:
             self._owner.UnregisterHandler('failure', self.SASLHandler,
-                    xmlns=NS_SASL)
+                xmlns=NS_SASL)
         if 'success' in  self._owner.__dict__:
             self._owner.UnregisterHandler('success', self.SASLHandler,
-                    xmlns=NS_SASL)
+                xmlns=NS_SASL)
 
     def auth(self):
         """
@@ -178,12 +180,12 @@ class SASL(PlugIn):
         elif self._owner.Dispatcher.Stream.features:
             try:
                 self.FeaturesHandler(self._owner.Dispatcher,
-                        self._owner.Dispatcher.Stream.features)
+                    self._owner.Dispatcher.Stream.features)
             except NodeProcessed:
                 pass
         else:
             self._owner.RegisterHandler('features',
-                    self.FeaturesHandler, xmlns=NS_STREAMS)
+                self.FeaturesHandler, xmlns=NS_STREAMS)
 
     def FeaturesHandler(self, conn, feats):
         """
@@ -198,7 +200,8 @@ class SASL(PlugIn):
         'mechanism'):
             self.mecs.append(mec.getData())
 
-        self._owner.RegisterHandler('challenge', self.SASLHandler, xmlns=NS_SASL)
+        self._owner.RegisterHandler('challenge', self.SASLHandler,
+            xmlns=NS_SASL)
         self._owner.RegisterHandler('failure', self.SASLHandler, xmlns=NS_SASL)
         self._owner.RegisterHandler('success', self.SASLHandler, xmlns=NS_SASL)
         self.MechanismHandler()
@@ -206,7 +209,8 @@ class SASL(PlugIn):
     def MechanismHandler(self):
         if 'ANONYMOUS' in self.mecs and self.username is None:
             self.mecs.remove('ANONYMOUS')
-            node = Node('auth', attrs={'xmlns': NS_SASL, 'mechanism': 'ANONYMOUS'})
+            node = Node('auth', attrs={'xmlns': NS_SASL,
+                'mechanism': 'ANONYMOUS'})
             self.mechanism = 'ANONYMOUS'
             self.startsasl = SASL_IN_PROCESS
             self._owner.send(str(node))
@@ -226,11 +230,11 @@ class SASL(PlugIn):
             self.mecs.remove('GSSAPI')
             try:
                 self.gss_vc = kerberos.authGSSClientInit('xmpp@' + \
-                        self._owner.xmpp_hostname)[1]
+                    self._owner.xmpp_hostname)[1]
                 kerberos.authGSSClientStep(self.gss_vc, '')
                 response = kerberos.authGSSClientResponse(self.gss_vc)
-                node=Node('auth', attrs={'xmlns': NS_SASL, 'mechanism': 'GSSAPI'},
-                        payload=(response or ''))
+                node=Node('auth', attrs={'xmlns': NS_SASL,
+                    'mechanism': 'GSSAPI'}, payload=(response or ''))
                 self.mechanism = 'GSSAPI'
                 self.gss_step = GSS_STATE_STEP
                 self.startsasl = SASL_IN_PROCESS
@@ -247,7 +251,8 @@ class SASL(PlugIn):
             raise NodeProcessed
         if 'DIGEST-MD5' in self.mecs:
             self.mecs.remove('DIGEST-MD5')
-            node = Node('auth', attrs={'xmlns': NS_SASL, 'mechanism': 'DIGEST-MD5'})
+            node = Node('auth', attrs={'xmlns': NS_SASL,
+                'mechanism': 'DIGEST-MD5'})
             self.mechanism = 'DIGEST-MD5'
             self.startsasl = SASL_IN_PROCESS
             self._owner.send(str(node))
@@ -294,13 +299,13 @@ class SASL(PlugIn):
             handlers = self._owner.Dispatcher.dumpHandlers()
 
             # Bosh specific dispatcher replugging
-            # save old features. They will be used in case we won't get response on
-            # stream restart after SASL auth (happens with XMPP over BOSH with
-            # Openfire)
+            # save old features. They will be used in case we won't get response
+            # on stream restart after SASL auth (happens with XMPP over BOSH
+            # with Openfire)
             old_features = self._owner.Dispatcher.Stream.features
             self._owner.Dispatcher.PlugOut()
             dispatcher_nb.Dispatcher.get_instance().PlugIn(self._owner,
-                    after_SASL=True, old_features=old_features)
+                after_SASL=True, old_features=old_features)
             self._owner.Dispatcher.restoreHandlers(handlers)
             self._owner.User = self.username
 
@@ -322,12 +327,12 @@ class SASL(PlugIn):
                 rc = kerberos.authGSSClientUnwrap(self.gss_vc, incoming_data)
                 response = kerberos.authGSSClientResponse(self.gss_vc)
                 rc = kerberos.authGSSClientWrap(self.gss_vc, response,
-                        kerberos.authGSSClientUserName(self.gss_vc))
+                    kerberos.authGSSClientUserName(self.gss_vc))
             response = kerberos.authGSSClientResponse(self.gss_vc)
             if not response:
                 response = ''
             self._owner.send(Node('response', attrs={'xmlns': NS_SASL},
-                    payload=response).__str__())
+                payload=response).__str__())
             raise NodeProcessed
         if self.mechanism == 'SCRAM-SHA-1':
             hashfn = hashlib.sha1
@@ -408,8 +413,8 @@ class SASL(PlugIn):
             else:
                 self.resp['realm'] = self._owner.Server
             self.resp['nonce'] = chal['nonce']
-            self.resp['cnonce'] = ''.join("%x" % randint(0, 2**28) for randint in
-                    itertools.repeat(random.randint, 7))
+            self.resp['cnonce'] = ''.join("%x" % randint(0, 2**28) for randint \
+                in itertools.repeat(random.randint, 7))
             self.resp['nc'] = ('00000001')
             self.resp['qop'] = 'auth'
             self.resp['digest-uri'] = 'xmpp/' + self._owner.Server
@@ -449,10 +454,10 @@ class SASL(PlugIn):
             hash_realm = self._convert_to_iso88591(self.resp['realm'])
             hash_password = self._convert_to_iso88591(self.password)
             A1 = C([H(C([hash_username, hash_realm, hash_password])),
-                    self.resp['nonce'], self.resp['cnonce']])
+                self.resp['nonce'], self.resp['cnonce']])
             A2 = C(['AUTHENTICATE', self.resp['digest-uri']])
             response= HH(C([HH(A1), self.resp['nonce'], self.resp['nc'],
-                    self.resp['cnonce'], self.resp['qop'], HH(A2)]))
+                self.resp['cnonce'], self.resp['qop'], HH(A2)]))
             self.resp['response'] = response
             sasl_data = u''
             for key in ('charset', 'username', 'realm', 'nonce', 'nc', 'cnonce',
@@ -462,14 +467,15 @@ class SASL(PlugIn):
                 else:
                     sasl_data += u'%s="%s",' % (key, self.resp[key])
             sasl_data = sasl_data[:-1].encode('utf-8').encode('base64').replace(
-                    '\r', '').replace('\n', '')
-            node = Node('response', attrs={'xmlns':NS_SASL}, payload=[sasl_data])
+                '\r', '').replace('\n', '')
+            node = Node('response', attrs={'xmlns': NS_SASL},
+                payload=[sasl_data])
         elif self.mechanism == 'PLAIN':
             sasl_data = u'\x00%s\x00%s' % (self.username, self.password)
             sasl_data = sasl_data.encode('utf-8').encode('base64').replace(
-                    '\n', '')
+                '\n', '')
             node = Node('auth', attrs={'xmlns': NS_SASL, 'mechanism': 'PLAIN'},
-                    payload=[sasl_data])
+                payload=[sasl_data])
         self._owner.send(str(node))
 
 
@@ -491,8 +497,8 @@ class NonBlockingNonSASL(PlugIn):
             self.password = password
         self.resource = resource
         self.on_auth = on_auth
-        
-        
+
+
     def plugin(self, owner):
         """
         Determine the best auth method (digest/0k/plain) and use it for auth.
@@ -502,8 +508,8 @@ class NonBlockingNonSASL(PlugIn):
         self.owner = owner
 
         owner.Dispatcher.SendAndWaitForResponse(
-                Iq('get', NS_AUTH, payload=[Node('username', payload=[self.user])]),
-                func=self._on_username)
+            Iq('get', NS_AUTH, payload=[Node('username', payload=[self.user])]),
+            func=self._on_username)
 
     def _on_username(self, resp):
         if not isResultNode(resp):
@@ -518,8 +524,8 @@ class NonBlockingNonSASL(PlugIn):
         if query.getTag('digest'):
             log.info("Performing digest authentication")
             query.setTagData('digest',
-                    hashlib.sha1(self.owner.Dispatcher.Stream._document_attrs['id']
-                    + self.password).hexdigest())
+                hashlib.sha1(self.owner.Dispatcher.Stream._document_attrs['id']
+                + self.password).hexdigest())
             if query.getTag('password'):
                 query.delChild('password')
             self._method = 'digest'
@@ -534,23 +540,25 @@ class NonBlockingNonSASL(PlugIn):
             def hash_n_times(s, count):
                 return count and hasher(hash_n_times(s, count-1)) or s
 
-            hash_ = hash_n_times(hasher(hasher(self.password) + token), int(seq))
+            hash_ = hash_n_times(hasher(hasher(self.password) + token),
+                int(seq))
             query.setTagData('hash', hash_)
             self._method='0k'
         else:
             log.warn("Secure methods unsupported, performing plain text \
-                    authentication")
+                authentication")
             query.setTagData('password', self.password)
             self._method = 'plain'
-        resp = self.owner.Dispatcher.SendAndWaitForResponse(iq, func=self._on_auth)
+        resp = self.owner.Dispatcher.SendAndWaitForResponse(iq,
+            func=self._on_auth)
 
     def _on_auth(self, resp):
         if isResultNode(resp):
             log.info('Sucessfully authenticated with remote host.')
             self.owner.User = self.user
             self.owner.Resource = self.resource
-            self.owner._registered_name = self.owner.User+'@'+self.owner.Server+\
-                    '/'+self.owner.Resource
+            self.owner._registered_name = self.owner.User + '@' + \
+                self.owner.Server+ '/' + self.owner.Resource
             return self.on_auth(self._method)
         log.info('Authentication failed!')
         return self.on_auth(None)
@@ -572,24 +580,24 @@ class NonBlockingBind(PlugIn):
         if self._owner.Dispatcher.Stream.features:
             try:
                 self.FeaturesHandler(self._owner.Dispatcher,
-                        self._owner.Dispatcher.Stream.features)
+                    self._owner.Dispatcher.Stream.features)
             except NodeProcessed:
                 pass
         else:
             self._owner.RegisterHandler('features', self.FeaturesHandler,
-                    xmlns=NS_STREAMS)
+                xmlns=NS_STREAMS)
 
     def FeaturesHandler(self, conn, feats):
         """
         Determine if server supports resource binding and set some internal
         attributes accordingly.
-        
+
         It also checks if server supports stream management
         """
-        
+
         if feats.getTag('sm', namespace=NS_STREAM_MGMT):
             self.supports_sm = True # server supports stream management
-        
+
         if not feats.getTag('bind', namespace=NS_BIND):
             log.info('Server does not requested binding.')
             # we try to bind resource anyway
@@ -607,7 +615,7 @@ class NonBlockingBind(PlugIn):
         Remove Bind handler from owner's dispatcher. Used internally
         """
         self._owner.UnregisterHandler('features', self.FeaturesHandler,
-                xmlns=NS_STREAMS)
+            xmlns=NS_STREAMS)
 
     def NonBlockingBind(self, resource=None, on_bound=None):
         """
@@ -622,8 +630,9 @@ class NonBlockingBind(PlugIn):
 
         self._owner.onreceive(None)
         self._owner.Dispatcher.SendAndWaitForResponse(
-                Protocol('iq', typ='set', payload=[Node('bind', attrs={'xmlns':NS_BIND},
-                payload=self._resource)]), func=self._on_bound)
+            Protocol('iq', typ='set', payload=[Node('bind',
+            attrs={'xmlns': NS_BIND}, payload=self._resource)]),
+            func=self._on_bound)
 
     def _on_bound(self, resp):
         if isResultNode(resp):
@@ -634,7 +643,7 @@ class NonBlockingBind(PlugIn):
                 self._owner.User = jid.getNode()
                 self._owner.Resource = jid.getResource()
                 # Only negociate stream management after bounded
-                if self.supports_sm: 
+                if self.supports_sm:
                     # starts negociation
                     sm = Smacks(self._owner)
                     self._owner.Dispatcher.supports_sm = True
@@ -647,8 +656,8 @@ class NonBlockingBind(PlugIn):
                     self.on_bound('ok')
                 else:
                     self._owner.SendAndWaitForResponse(Protocol('iq', typ='set',
-                            payload=[Node('session', attrs={'xmlns':NS_SESSION})]),
-                            func=self._on_session)
+                        payload=[Node('session', attrs={'xmlns':NS_SESSION})]),
+                        func=self._on_session)
                 return
         if resp:
             log.info('Binding failed: %s.' % resp.getTag('error'))
