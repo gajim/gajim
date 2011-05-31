@@ -75,7 +75,7 @@ class XMPPDispatcher(PlugIn):
     stream headers (used by SASL f.e.).
     """
 
-    def __init__(self):
+    def __init__(self):        
         PlugIn.__init__(self)
         self.handlers = {}
         self._expected = {}
@@ -89,6 +89,9 @@ class XMPPDispatcher(PlugIn):
                 self.UnregisterHandler, self.RegisterProtocol,
                 self.SendAndWaitForResponse, self.SendAndCallForResponse,
                 self.getAnID, self.Event, self.send]
+        
+        # Let the dispatcher know if there is support for stream management
+        self.supports_sm = False 
 
     def getAnID(self):
         global outgoingID
@@ -110,6 +113,7 @@ class XMPPDispatcher(PlugIn):
         """
         self.handlers = handlers
 
+            
     def _init(self):
         """
         Register default namespaces/protocols/handlers. Used internally
@@ -125,7 +129,7 @@ class XMPPDispatcher(PlugIn):
         self.RegisterDefaultHandler(self.returnStanzaHandler)
         self.RegisterEventHandler(self._owner._caller._event_dispatcher)
         self.on_responses = {}
-
+        
     def plugin(self, owner):
         """
         Plug the Dispatcher instance into Client class instance and send initial
@@ -416,7 +420,11 @@ class XMPPDispatcher(PlugIn):
             typ = ''
         stanza.props = stanza.getProperties()
         ID = stanza.getID()
-
+        if self.supports_sm and (stanza.getName() != 'r' and 
+                                 stanza.getName() != 'a' and
+                                 stanza.getName() != 'enabled') :
+            # increments the number of stanzas that has been handled
+            self.sm.in_h = self.sm.in_h + 1
         list_ = ['default'] # we will use all handlers:
         if typ in self.handlers[xmlns][name]:
             list_.append(typ) # from very common...

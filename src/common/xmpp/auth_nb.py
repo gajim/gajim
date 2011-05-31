@@ -21,7 +21,7 @@ Can be used both for client and transport authentication
 See client_nb.py
 """
 
-from protocol import NS_SASL, NS_SESSION, NS_STREAMS, NS_BIND, NS_AUTH
+from protocol import NS_SASL, NS_SESSION, NS_STREAMS, NS_BIND, NS_AUTH, NS_STREAM_MGMT
 from protocol import Node, NodeProcessed, isResultNode, Iq, Protocol, JID
 from plugin import PlugIn
 import base64
@@ -31,7 +31,7 @@ import dispatcher_nb
 import hashlib
 import hmac
 import hashlib
-
+from smacks import Smacks
 import logging
 log = logging.getLogger('gajim.c.x.auth_nb')
 
@@ -491,7 +491,8 @@ class NonBlockingNonSASL(PlugIn):
             self.password = password
         self.resource = resource
         self.on_auth = on_auth
-
+        
+        
     def plugin(self, owner):
         """
         Determine the best auth method (digest/0k/plain) and use it for auth.
@@ -564,6 +565,7 @@ class NonBlockingBind(PlugIn):
     def __init__(self):
         PlugIn.__init__(self)
         self.bound = None
+        self.supports_sm = False
 
     def plugin(self, owner):
         ''' Start resource binding, if allowed at this time. Used internally. '''
@@ -580,8 +582,14 @@ class NonBlockingBind(PlugIn):
     def FeaturesHandler(self, conn, feats):
         """
         Determine if server supports resource binding and set some internal
-        attributes accordingly
+        attributes accordingly.
+        
+        It also checks if server supports stream management
         """
+        
+        if feats.getTag('sm', namespace=NS_STREAM_MGMT):
+            self.supports_sm = True # server supports stream management
+        
         if not feats.getTag('bind', namespace=NS_BIND):
             log.info('Server does not requested binding.')
             # we try to bind resource anyway
@@ -625,6 +633,14 @@ class NonBlockingBind(PlugIn):
                 jid = JID(resp.getTag('bind').getTagData('jid'))
                 self._owner.User = jid.getNode()
                 self._owner.Resource = jid.getResource()
+                # Only negociate stream management after bounded
+                if self.supports_sm: 
+                    # starts negociation
+                    sm = Smacks(self._owner)
+                    self._owner.Dispatcher.supports_sm = True
+                    self._owner.Dispatcher.sm = sm
+                    sm.negociate()
+
                 if hasattr(self, 'session') and self.session == -1:
                     # Server don't want us to initialize a session
                     log.info('No session required.')
