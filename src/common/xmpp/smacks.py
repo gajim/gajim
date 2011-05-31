@@ -18,6 +18,8 @@ class Smacks():
         self.out_h = 0 # Outgoing stanzas handled
         self.in_h = 0  # Incoming stanzas handled
         self.uqueue = [] # Unhandled stanzas queue
+        self.sesion_id = None
+        self.supports_resume = False # If server supports resume
         # Max number of stanzas in queue before making a request
         self.max_queue = 5  
         # Register handlers 
@@ -32,11 +34,15 @@ class Smacks():
         
     def negociate(self):
         stanza = Acks()
-        stanza.buildEnable()
-        self._owner.Connection.send(stanza, True)
+        stanza.buildEnable(resume=True)
+        self._owner.Connection.send(stanza, now=True)
         
     def _neg_response(self, disp, stanza):
-        pass
+        r = stanza.getAttr('resume')
+        if r == 'true':
+            self.supports_resume = True
+            self.sesion_id = stanza.getAttr(id)
+            
     
     def send_ack(self, disp, stanza):
         ack = Acks()
@@ -49,6 +55,10 @@ class Smacks():
         self._owner.Connection.send(r, False)
         
     def check_ack(self, disp, stanza):
+        ''' Checks if the number of stanzas sent are the same as the
+            number of stanzas received by the server. Pops stanzas that were
+            handled by the server from the queue.
+        '''
         h = int(stanza.getAttr('h'))
         diff = self.out_h - h
         
