@@ -1,5 +1,7 @@
 from protocol import Acks
 from protocol import NS_STREAM_MGMT
+import logging
+log = logging.getLogger('gajim.c.x.smacks')
 
 class Smacks():
     '''
@@ -16,12 +18,15 @@ class Smacks():
         self.out_h = 0 # Outgoing stanzas handled
         self.in_h = 0  # Incoming stanzas handled
         self.uqueue = [] # Unhandled stanzas queue
-        
-        #Register handlers 
+        # Max number of stanzas in queue before making a request
+        self.max_queue = 5  
+        # Register handlers 
         owner.Dispatcher.RegisterNamespace(NS_STREAM_MGMT)
         owner.Dispatcher.RegisterHandler('enabled', self._neg_response
                                          ,xmlns=NS_STREAM_MGMT)
         owner.Dispatcher.RegisterHandler('r', self.send_ack
+                                         ,xmlns=NS_STREAM_MGMT)
+        owner.Dispatcher.RegisterHandler('a', self.check_ack
                                          ,xmlns=NS_STREAM_MGMT)
 
         
@@ -42,3 +47,18 @@ class Smacks():
         r = Acks()
         r.buildRequest()
         self._owner.Connection.send(r, False)
+        
+    def check_ack(self, disp, stanza):
+        h = int(stanza.getAttr('h'))
+        diff = self.out_h - h
+        
+
+        if len(self.uqueue) < diff or diff < 0:
+            log.error('Server and client number of stanzas handled mismatch ')
+            return
+        
+        while (len(self.uqueue) > diff):
+            self.uqueue.pop(0)
+        
+
+        

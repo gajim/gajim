@@ -533,6 +533,13 @@ class XMPPDispatcher(PlugIn):
                     ID = stanza.getID()
                 if self._owner._registered_name and not stanza.getAttr('from'):
                     stanza.setAttr('from', self._owner._registered_name)
+                    
+        if self.supports_sm:
+            self.sm.uqueue.append(stanza)
+            self.sm.out_h = self.sm.out_h + 1
+            if len(self.sm.uqueue) > self.sm.max_queue:
+                self.sm.request_ack()
+                
         self._owner.Connection.send(stanza, now)
         return ID
 
