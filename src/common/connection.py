@@ -57,9 +57,9 @@ from common import gajim
 from common import gpg
 from common import passwords
 from common import exceptions
-
 from connection_handlers import *
 
+from xmpp import Smacks
 from string import Template
 import logging
 log = logging.getLogger('gajim.c.connection')
@@ -711,6 +711,9 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.private_storage_supported = True
         self.streamError = ''
         self.secret_hmac = str(random.random())[2:]
+        
+        self.sm = Smacks(self)
+        
         gajim.ged.register_event_handler('privacy-list-received', ged.CORE,
             self._nec_privacy_list_received)
         gajim.ged.register_event_handler('agent-info-error-received', ged.CORE,
@@ -1587,12 +1590,18 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.connection.set_send_timeout2(self.pingalives, self.sendPing)
         self.connection.onreceive(None)
 
-        self.request_message_archiving_preferences()
+        
 
         self.privacy_rules_requested = False
-        self.discoverInfo(gajim.config.get_per('accounts', self.name, 'hostname'),
-                id_prefix='Gajim_')
-
+        # If we are not resuming, we ask for discovery info
+        # and archiving preferences
+        if not self.sm.resuming:
+            
+            self.request_message_archiving_preferences()
+            self.discoverInfo(gajim.config.get_per('accounts', self.name, 'hostname'),
+                              id_prefix='Gajim_')
+        
+        self.sm.resuming = False # back to previous state
         # Discover Stun server(s)
         gajim.resolver.resolve('_stun._udp.' + helpers.idn_to_ascii(
                 self.connected_hostname), self._on_stun_resolved)

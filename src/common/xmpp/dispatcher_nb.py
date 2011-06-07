@@ -420,7 +420,8 @@ class XMPPDispatcher(PlugIn):
             typ = ''
         stanza.props = stanza.getProperties()
         ID = stanza.getID()
-        if self.supports_sm and (stanza.getName() != 'r' and 
+        # If server supports stream management
+        if self.sm != None and (stanza.getName() != 'r' and 
                                  stanza.getName() != 'a' and
                                  stanza.getName() != 'enabled') :
             # increments the number of stanzas that has been handled

@@ -13,15 +13,21 @@ class Smacks():
     '''
 
 
-    def __init__(self, owner):
-        self._owner = owner
+    def __init__(self, con):
+        self.con = con # Connection object
         self.out_h = 0 # Outgoing stanzas handled
         self.in_h = 0  # Incoming stanzas handled
         self.uqueue = [] # Unhandled stanzas queue
-        self.sesion_id = None
-        self.supports_resume = False # If server supports resume
+        self.session_id = None
+        self.resumption = False # If server supports resume
         # Max number of stanzas in queue before making a request
         self.max_queue = 5  
+        self._owner = None
+        self.resuming = False
+    
+    def set_owner(self, owner):
+        self._owner = owner
+        
         # Register handlers 
         owner.Dispatcher.RegisterNamespace(NS_STREAM_MGMT)
         owner.Dispatcher.RegisterHandler('enabled', self._neg_response
@@ -30,19 +36,41 @@ class Smacks():
                                          ,xmlns=NS_STREAM_MGMT)
         owner.Dispatcher.RegisterHandler('a', self.check_ack
                                          ,xmlns=NS_STREAM_MGMT)
-
+        owner.Dispatcher.RegisterHandler('resumed', self.check_ack
+                                         ,xmlns=NS_STREAM_MGMT)
+        owner.Dispatcher.RegisterHandler('failed', self.error_handling
+                                         ,xmlns=NS_STREAM_MGMT)
         
-    def negociate(self):
-        stanza = Acks()
-        stanza.buildEnable(resume=True)
-        self._owner.Connection.send(stanza, now=True)
-        
+    
     def _neg_response(self, disp, stanza):
         r = stanza.getAttr('resume')
-        if r == 'true':
-            self.supports_resume = True
-            self.sesion_id = stanza.getAttr(id)
-            
+        if r == 'true' or r == 'True' or r == '1':
+            self.resumption = True
+            self.session_id = stanza.getAttr('id')
+        
+        if r == 'false' or r == 'False' or r == '0':
+            self.negociate(False)
+
+    def negociate(self, resume=True):
+        # Every time we attempt to negociate, we must erase all previous info
+        # about any previous session
+        self.uqueue = []
+        self.in_h = 0
+        self.out_h = 0
+        self.session_id = None
+        
+        stanza = Acks()
+        stanza.buildEnable(resume)
+        self._owner.Connection.send(stanza, now=True)            
+
+    def resume_request(self):
+        if not self.session_id:
+            self.resuming = False
+            log.error('Attempted to resume without a valid session id ')
+            return
+        resume = Acks()
+        resume.buildResume(self.in_h, self.session_id)
+        self._owner.Connection.send(resume, True)            
     
     def send_ack(self, disp, stanza):
         ack = Acks()
@@ -70,5 +98,24 @@ class Smacks():
         while (len(self.uqueue) > diff):
             self.uqueue.pop(0)
         
-
         
+        if stanza.getName() == 'resumed':
+            self.resuming = True
+            if self.uqueue != []:
+                for i in self.uqueue:
+                    self._owner.Connection.send(i, False)
+            
+    def error_handling(self, disp, stanza): # NEEDS TESTING
+        
+        tag = stanza.getTag('item-not-found')
+        # If the server doesn't recognize previd, forget about resuming
+        # Ask for service discovery, etc..
+        if tag: 
+            self.negociate()
+            self.resuming = False
+            self.con._discover_server_at_connection(self.con.connection)
+        
+        tag = stanza.getTag('feature-not-implemented')
+        # Doesn't support resumption
+        if tag:
+            self.negociate(False)

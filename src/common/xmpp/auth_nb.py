@@ -643,13 +643,18 @@ class NonBlockingBind(PlugIn):
                 self._owner.User = jid.getNode()
                 self._owner.Resource = jid.getResource()
                 # Only negociate stream management after bounded
+                sm = self._owner._caller.sm
                 if self.supports_sm:
                     # starts negociation
-                    sm = Smacks(self._owner)
-                    self._owner.Dispatcher.supports_sm = True
+                    if sm._owner and sm.resumption:
+                        sm.set_owner(self._owner)
+                        sm.resume_request()
+                    else:
+                        sm.set_owner(self._owner)
+                        sm.negociate()
+                        
                     self._owner.Dispatcher.sm = sm
-                    sm.negociate()
-
+                    
                 if hasattr(self, 'session') and self.session == -1:
                     # Server don't want us to initialize a session
                     log.info('No session required.')
