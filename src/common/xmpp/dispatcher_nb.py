@@ -91,7 +91,7 @@ class XMPPDispatcher(PlugIn):
                 self.getAnID, self.Event, self.send]
         
         # Let the dispatcher know if there is support for stream management
-        self.supports_sm = False 
+        self.sm = None 
 
     def getAnID(self):
         global outgoingID
@@ -535,7 +535,7 @@ class XMPPDispatcher(PlugIn):
                 if self._owner._registered_name and not stanza.getAttr('from'):
                     stanza.setAttr('from', self._owner._registered_name)
                     
-        if self.supports_sm:
+        if self.sm:
             self.sm.uqueue.append(stanza)
             self.sm.out_h = self.sm.out_h + 1
             if len(self.sm.uqueue) > self.sm.max_queue:
