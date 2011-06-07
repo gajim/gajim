@@ -24,7 +24,8 @@ class Smacks():
         self.max_queue = 5  
         self._owner = None
         self.resuming = False
-    
+        self.enabled = False # If SM is enabled 
+        
     def set_owner(self, owner):
         self._owner = owner
         
@@ -50,6 +51,8 @@ class Smacks():
         
         if r == 'false' or r == 'False' or r == '0':
             self.negociate(False)
+            
+        self.enabled = True
 
     def negociate(self, resume=True):
         # Every time we attempt to negociate, we must erase all previous info
@@ -69,7 +72,7 @@ class Smacks():
             log.error('Attempted to resume without a valid session id ')
             return
         resume = Acks()
-        resume.buildResume(self.in_h, self.session_id)
+        resume.buildResume(self.in_h, None)#self.session_id)
         self._owner.Connection.send(resume, True)            
     
     def send_ack(self, disp, stanza):
@@ -105,17 +108,28 @@ class Smacks():
                 for i in self.uqueue:
                     self._owner.Connection.send(i, False)
             
-    def error_handling(self, disp, stanza): # NEEDS TESTING
+    def error_handling(self, disp, stanza):
         
-        tag = stanza.getTag('item-not-found')
         # If the server doesn't recognize previd, forget about resuming
         # Ask for service discovery, etc..
-        if tag: 
-            self.negociate()
+        if stanza.getTag('item-not-found'): 
+            self.enabled = False
             self.resuming = False
+            self.negociate()
             self.con._discover_server_at_connection(self.con.connection)
+            return
         
-        tag = stanza.getTag('feature-not-implemented')
         # Doesn't support resumption
-        if tag:
+        if stanza.getTag('feature-not-implemented'):
+            self.enabled = False
             self.negociate(False)
+            return
+        
+        if stanza.getTag('unexpected-request'):
+            self.enabled = False
+            log.error('Gajim failed to negociate Stream Management')
+            return
+        
+
+
+        

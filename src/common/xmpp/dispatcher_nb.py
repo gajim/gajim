@@ -535,7 +535,7 @@ class XMPPDispatcher(PlugIn):
                 if self._owner._registered_name and not stanza.getAttr('from'):
                     stanza.setAttr('from', self._owner._registered_name)
                     
-        if self.sm:
+        if self.sm and self.sm.enabled:
             self.sm.uqueue.append(stanza)
             self.sm.out_h = self.sm.out_h + 1
             if len(self.sm.uqueue) > self.sm.max_queue:
