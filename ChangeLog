@@ -1,4 +1,4 @@
-Gajim 0.14.2 (XX June 2011)
+Gajim 0.14.2 (07 June 2011)
 
   * Fix CPU usage when testing file transfer proxies
   * Fix invalid XML char regex
