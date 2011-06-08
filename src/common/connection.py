@@ -784,7 +784,16 @@ class Connection(CommonConnection, ConnectionHandlers):
             self.connection.disconnect()
             self.last_connection = None
             self.connection = None
-
+    def set_oldst(self): # Set old state
+        if self.old_show:
+            self.connected = gajim.SHOW_LIST.index(self.old_show)
+            gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
+                                           show=self.connected))
+        else: # we default to online
+            self.connected = 2
+            gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
+                                    show=gajim.SHOW_LIST[self.connected]))
+        
     def _disconnectedReconnCB(self):
         """
         Called when we are disconnected

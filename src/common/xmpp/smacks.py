@@ -72,7 +72,7 @@ class Smacks():
             log.error('Attempted to resume without a valid session id ')
             return
         resume = Acks()
-        resume.buildResume(self.in_h, None)#self.session_id)
+        resume.buildResume(self.in_h, self.session_id)
         self._owner.Connection.send(resume, True)            
     
     def send_ack(self, disp, stanza):
@@ -104,6 +104,7 @@ class Smacks():
         
         if stanza.getName() == 'resumed':
             self.resuming = True
+            self.con.set_oldst()
             if self.uqueue != []:
                 for i in self.uqueue:
                     self._owner.Connection.send(i, False)
