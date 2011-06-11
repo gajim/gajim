@@ -96,10 +96,10 @@ class Smacks():
 
         if len(self.uqueue) < diff or diff < 0:
             log.error('Server and client number of stanzas handled mismatch ')
-            return
+        else:
         
-        while (len(self.uqueue) > diff):
-            self.uqueue.pop(0)
+            while (len(self.uqueue) > diff):
+                self.uqueue.pop(0)
         
         
         if stanza.getName() == 'resumed':

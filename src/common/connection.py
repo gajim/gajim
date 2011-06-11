@@ -776,6 +776,8 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.connected = 0
         self.time_to_reconnect = None
         self.privacy_rules_supported = False
+        if on_purpose:
+            self.sm = Smacks(self)
         if self.connection:
             # make sure previous connection is completely closed
             gajim.proxy65_manager.disconnect(self.connection)
