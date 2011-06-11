@@ -73,7 +73,7 @@ class Smacks():
             return
         resume = Acks()
         resume.buildResume(self.in_h, self.session_id)
-        self._owner.Connection.send(resume, True)            
+        self._owner.Connection.send(resume, False)            
     
     def send_ack(self, disp, stanza):
         ack = Acks()

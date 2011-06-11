@@ -574,6 +574,7 @@ class NonBlockingBind(PlugIn):
         PlugIn.__init__(self)
         self.bound = None
         self.supports_sm = False
+        self.resuming = False
 
     def plugin(self, owner):
         ''' Start resource binding, if allowed at this time. Used internally. '''
@@ -597,6 +598,8 @@ class NonBlockingBind(PlugIn):
 
         if feats.getTag('sm', namespace=NS_STREAM_MGMT):
             self.supports_sm = True # server supports stream management
+            if self.resuming:
+                self._owner._caller.sm.resume_request()
 
         if not feats.getTag('bind', namespace=NS_BIND):
             log.info('Server does not requested binding.')
@@ -621,6 +624,8 @@ class NonBlockingBind(PlugIn):
         """
         Perform binding. Use provided resource name or random (if not provided).
         """
+        if self.resuming: # We don't bind if we resume the stream
+            return
         self.on_bound = on_bound
         self._resource = resource
         if self._resource:
@@ -646,13 +651,8 @@ class NonBlockingBind(PlugIn):
                 sm = self._owner._caller.sm
                 if self.supports_sm:
                     # starts negociation
-                    if sm._owner and sm.resumption:
-                        sm.set_owner(self._owner)
-                        sm.resume_request()
-                    else:
-                        sm.set_owner(self._owner)
-                        sm.negociate()
-                        
+                    sm.set_owner(self._owner)
+                    sm.negociate()    
                     self._owner.Dispatcher.sm = sm
                     
                 if hasattr(self, 'session') and self.session == -1:
@@ -670,7 +670,7 @@ class NonBlockingBind(PlugIn):
         else:
             log.info('Binding failed: timeout expired.')
             self.on_bound(None)
-
+            
     def _on_session(self, resp):
         self._owner.onreceive(None)
         if isResultNode(resp):

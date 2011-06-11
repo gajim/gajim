@@ -712,7 +712,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.streamError = ''
         self.secret_hmac = str(random.random())[2:]
         
-        self.sm = Smacks(self)
+        self.sm = Smacks(self) # Stream Management 
         
         gajim.ged.register_event_handler('privacy-list-received', ged.CORE,
             self._nec_privacy_list_received)
@@ -805,8 +805,9 @@ class Connection(CommonConnection, ConnectionHandlers):
             self.old_show = gajim.SHOW_LIST[self.connected]
         self.connected = 0
         if not self.on_purpose:
-            gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
-                show='offline'))
+            if not (self.sm and self.sm.resumption):
+                gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
+                                                           show='offline'))
             self.disconnect()
             if gajim.config.get_per('accounts', self.name, 'autoreconnect'):
                 self.connected = -1
