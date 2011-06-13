@@ -1,3 +1,10 @@
+gajim (0.14.2-1) unstable; urgency=low
+
+  * New upstream release.
+  * Fix CPU usage when testing file transfer proxies. Closes: #626576
+
+ -- Yann Leboulanger <asterix@lagaule.org>  Tue, 07 Jun 2011 19:30:43 +0200
+
 gajim (0.14.1-1) unstable; urgency=low
 
   [ Yann Leboulanger ]
