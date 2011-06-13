@@ -1009,8 +1009,8 @@ def get_os_info():
     return os_info
 
 
-def allow_showing_notification(account, type_ = 'notify_on_new_message',
-                advanced_notif_num = None, is_first_message = True):
+def allow_showing_notification(account, type_='notify_on_new_message',
+is_first_message=True):
     """
     Is it allowed to show nofication?
 
@@ -1018,13 +1018,6 @@ def allow_showing_notification(account, type_ = 'notify_on_new_message',
     option that need to be True e.g.: notify_on_signing is_first_message: set it
     to false when it's not the first message
     """
-    if advanced_notif_num is not None:
-        popup = gajim.config.get_per('notifications', str(advanced_notif_num),
-                'popup')
-        if popup == 'yes':
-            return True
-        if popup == 'no':
-            return False
     if type_ and (not gajim.config.get(type_) or not is_first_message):
         return False
     if gajim.config.get('autopopupaway'): # always show notification
@@ -1033,17 +1026,10 @@ def allow_showing_notification(account, type_ = 'notify_on_new_message',
         return True
     return False
 
-def allow_popup_window(account, advanced_notif_num = None):
+def allow_popup_window(account):
     """
     Is it allowed to popup windows?
     """
-    if advanced_notif_num is not None:
-        popup = gajim.config.get_per('notifications', str(advanced_notif_num),
-                'auto_open')
-        if popup == 'yes':
-            return True
-        if popup == 'no':
-            return False
     autopopup = gajim.config.get('autopopup')
     autopopupaway = gajim.config.get('autopopupaway')
     if autopopup and (autopopupaway or \
@@ -1051,14 +1037,7 @@ def allow_popup_window(account, advanced_notif_num = None):
         return True
     return False
 
-def allow_sound_notification(account, sound_event, advanced_notif_num=None):
-    if advanced_notif_num is not None:
-        sound = gajim.config.get_per('notifications', str(advanced_notif_num),
-                'sound')
-        if sound == 'yes':
-            return True
-        if sound == 'no':
-            return False
+def allow_sound_notification(account, sound_event):
     if gajim.config.get('sounddnd') or gajim.connections[account].connected != \
     gajim.SHOW_LIST.index('dnd') and gajim.config.get_per('soundevents',
     sound_event, 'enabled'):

@@ -445,22 +445,6 @@ class Config:
             'rooms': ({
                     'speller_language': [ opt_str, '', _('Language for which we want to check misspelled words')],
             }, {}),
-            'notifications': ({
-                    'event': [opt_str, ''],
-                    'recipient_type': [opt_str, 'all'],
-                    'recipients': [opt_str, ''],
-                    'status': [opt_str, 'all', _('all or space separated status')],
-                    'tab_opened': [opt_str, 'both', _("'yes', 'no', or 'both'")],
-                    'sound': [opt_str, '', _("'yes', 'no' or ''")],
-                    'sound_file': [opt_str, ''],
-                    'popup': [opt_str, '', _("'yes', 'no' or ''")],
-                    'auto_open': [opt_str, '', _("'yes', 'no' or ''")],
-                    'run_command': [opt_bool, False],
-                    'command': [opt_str, ''],
-                    'systray': [opt_str, '', _("'yes', 'no' or ''")],
-                    'roster': [opt_str, '', _("'yes', 'no' or ''")],
-                    'urgency_hint': [opt_bool, False],
-            }, {}),
             'plugins': ({
                 'active': [opt_bool, False, _('State whether plugins should be activated on exit (this is saved on Gajim exit). This option SHOULD NOT be used to (de)activate plug-ins. Use GUI instead.')],
             },{}),

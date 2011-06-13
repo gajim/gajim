@@ -865,9 +865,6 @@ class PreferencesWindow:
             gajim.interface.systray_enabled = True
             gajim.interface.systray.show_icon()
 
-    def on_advanced_notifications_button_clicked(self, widget):
-        dialogs.AdvancedNotificationsWindow()
-
     def on_play_sounds_checkbutton_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'sounds_on',
                 [self.xml.get_object('manage_sounds_button')])

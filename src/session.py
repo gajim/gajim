@@ -262,8 +262,8 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
             gajim.events.add_event(self.conn.name, fjid, event)
 
     def roster_message(self, jid, msg, tim, encrypted=False, msg_type='',
-    subject=None, resource='', msg_id=None, user_nick='',
-    advanced_notif_num=None, xhtml=None, form_node=None, displaymarking=None):
+    subject=None, resource='', msg_id=None, user_nick='', xhtml=None,
+    form_node=None, displaymarking=None):
         """
         Display the message or show notification in the roster
         """
@@ -322,7 +322,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
         # Do we have a queue?
         no_queue = len(gajim.events.get_events(self.conn.name, fjid)) == 0
 
-        popup = helpers.allow_popup_window(self.conn.name, advanced_notif_num)
+        popup = helpers.allow_popup_window(self.conn.name)
 
         if msg_type == 'normal' and popup: # it's single message to be autopopuped
             dialogs.SingleMessageWindow(self.conn.name, contact.jid,

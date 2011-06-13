@@ -217,6 +217,11 @@ class GajimPluginConfig(UserDict.DictMixin):
         self.data[key] = value
         self.save()
 
+    @log_calls('GajimPluginConfig')
+    def __delitem__(self, key):
+        del self.data[key]
+        self.save()
+
     def keys(self):
         return self.data.keys()
 

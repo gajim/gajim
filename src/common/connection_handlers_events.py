@@ -2028,8 +2028,6 @@ class NotificationEvent(nec.NetworkIncomingEvent):
         self.do_command = False
         self.command = ''
 
-        self.open_chat = False
-        self.activate_urgency_hint = False
         self.show_in_notification_area = False
         self.show_in_roster = False
 
