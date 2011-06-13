@@ -740,15 +740,15 @@ class NonBlockingHTTP(NonBlockingTCP):
                 httpbody - string with http body)
                 http_rest - what is left in the message after a full HTTP header + body
         """
-        message = message.replace('\r', '')
-        message = message.lstrip('\n')
-        splitted = message.split('\n\n')
+        splitted = message.split('\r\n\r\n')
         if len(splitted) < 2:
             # no complete http message. Keep filling the buffer until we find one
             buffer_rest = message
             return ('', '', '', buffer_rest)
         else:
             (header, httpbody)  = splitted[:2]
+            header = header.replace('\r', '')
+            header = header.lstrip('\n')
             header = header.split('\n')
             statusline = header[0].split(' ', 2)
             header = header[1:]
