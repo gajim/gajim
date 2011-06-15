@@ -1418,9 +1418,10 @@ class RosterWindow:
         self._iters = {}
         # for merged mode
         self._iters['MERGED'] = {'account': None, 'groups': {}}
-
         for acct in gajim.contacts.get_accounts():
             self._iters[acct] = {'account': None, 'groups': {}, 'contacts': {}}
+
+        for acct in gajim.contacts.get_accounts():
             self.add_account(acct)
             self.add_account_contacts(acct)
 
