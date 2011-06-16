@@ -56,7 +56,7 @@ class Smacks():
         l = stanza.getAttr('location')
         if l:
             self.location = l
-        self.enabled = True
+        
 
     def negociate(self, resume=True):
         # Every time we attempt to negociate, we must erase all previous info
@@ -65,6 +65,7 @@ class Smacks():
         self.in_h = 0
         self.out_h = 0
         self.session_id = None
+        self.enabled = True
         
         stanza = Acks()
         stanza.buildEnable(resume)
@@ -118,7 +119,6 @@ class Smacks():
         # If the server doesn't recognize previd, forget about resuming
         # Ask for service discovery, etc..
         if stanza.getTag('item-not-found'): 
-            self.enabled = False
             self.resuming = False
             self.negociate()
             self.con._discover_server_at_connection(self.con.connection)
@@ -126,7 +126,6 @@ class Smacks():
         
         # Doesn't support resumption
         if stanza.getTag('feature-not-implemented'):
-            self.enabled = False
             self.negociate(False)
             return
         
