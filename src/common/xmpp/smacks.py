@@ -25,6 +25,7 @@ class Smacks():
         self._owner = None
         self.resuming = False
         self.enabled = False # If SM is enabled 
+        self.location = None
         
     def set_owner(self, owner):
         self._owner = owner
@@ -51,7 +52,10 @@ class Smacks():
         
         if r == 'false' or r == 'False' or r == '0':
             self.negociate(False)
-            
+        
+        l = stanza.getAttr('location')
+        if l:
+            self.location = l
         self.enabled = True
 
     def negociate(self, resume=True):

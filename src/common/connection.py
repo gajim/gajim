@@ -996,8 +996,16 @@ class Connection(CommonConnection, ConnectionHandlers):
         """
         if self.connection:
             return self.connection, ''
-
-        if data:
+        
+        
+        if self.sm.resuming and self.sm.location:
+            # If resuming and server gave a location, connect from there 
+            hostname = self.sm.location
+            self.try_connecting_for_foo_secs = gajim.config.get_per('accounts',
+                    self.name, 'try_connecting_for_foo_secs')
+            use_custom = False
+            
+        elif data:
             hostname = data['hostname']
             self.try_connecting_for_foo_secs = 45
             p = data['proxy']
