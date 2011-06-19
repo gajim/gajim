@@ -49,7 +49,7 @@ options = {
 
 setup(
     name='Gajim',
-    version='0.14.2',
+    version='0.14.3',
     description='A full featured Jabber client',
     author='Gajim Development Team',
     url='http://www.gajim.org/',
