@@ -182,6 +182,7 @@ Section "Gajim" SecGajim
 	File "bin\win32file.pyd"
 	File "bin\win32pipe.pyd"
 	File "bin\winsound.pyd"
+    File "msvcr90.dll"
 
 	WriteRegStr HKCU "Software\Gajim" "" $INSTDIR
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Gajim" "DisplayName" "Gajim"
