@@ -1,8 +1,26 @@
-gajim (0.13.90-1) unstable; urgency=low
+gajim (0.14.1-1) unstable; urgency=low
 
-  * New upstream release.
+  [ Yann Leboulanger ]
+  * New upstream release. Closes: #604966
+  * Correctly sanitize menuentries in chat window action context menu.
+    Closes: #574839
+  * Fix traceback when closing file request dialog. Closes: #587186
+  * Recommend python-openssl >= 0.9. Closes: #594772
+  * Improve a string. Closes: #553527
+  * Fix cancelling file transfer. Closes: #587679
 
- -- Yann Leboulanger <asterix@lagaule.org>  Sat, 24 Jul 2010 10:25:26 +0200
+  [ Julien Valroff ]
+  * Switch to dh from CDBS and drop unused (build-)dependencies.
+  * Switch to dh_python2 from pysupport. Closes: #616819
+  * Drop useless debian/dirs.
+  * Switch to 3.0 (quilt) source format.
+  * Update Standards-Version to 3.9.2.
+  * Remove useless and unused shlibs:Depends substvar.
+  * Add a note about python-farsight in README.Debian.
+  * Add patch and use dh_autoreconf to remove build-dependencies on
+    python-dev, python-gtk2-dev and libgtk2.0-dev.
+
+ -- Yann Leboulanger <asterix@lagaule.org>  Sat, 07 May 2011 16:01:37 +0200
 
 gajim (0.13.4-1) unstable; urgency=low
 

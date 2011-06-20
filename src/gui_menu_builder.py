@@ -62,7 +62,7 @@ def build_resources_submenu(contacts, account, action, room_jid=None,
 
     return sub_menu
 
-def build_invite_submenu(invite_menuitem, list_):
+def build_invite_submenu(invite_menuitem, list_, ignore_rooms=[]):
     """
     list_ in a list of (contact, account)
     """
@@ -126,6 +126,8 @@ def build_invite_submenu(invite_menuitem, list_):
     message_control.TYPE_GC) + minimized_controls:
         acct = gc_control.account
         room_jid = gc_control.room_jid
+        if room_jid in ignore_rooms:
+            continue
         if room_jid in gajim.gc_connected[acct] and \
         gajim.gc_connected[acct][room_jid] and \
         contacts_transport == gajim.get_transport_name_from_jid(room_jid):
@@ -151,7 +153,7 @@ def build_invite_submenu(invite_menuitem, list_):
 
 def get_contact_menu(contact, account, use_multiple_contacts=True,
 show_start_chat=True, show_encryption=False, show_buttonbar_items=True,
-control=None):
+control=None, gc_contact=None):
     """
     Build contact popup menu for roster and chat window. If control is not set,
     we hide invite_contacts_menuitem
@@ -368,7 +370,14 @@ control=None):
     if muc_icon:
         invite_menuitem.set_image(muc_icon)
 
-    build_invite_submenu(invite_menuitem, [(contact, account)])
+    if gc_contact:
+        if not gc_contact.jid:
+            # it's a pm and we don't know real JID
+            invite_menuitem.set_sensitive(False)
+        else:
+            build_invite_submenu(invite_menuitem, [(gc_contact, account)])
+    else:
+        build_invite_submenu(invite_menuitem, [(contact, account)])
 
     # One or several resource, we do the same for send_custom_status
     status_menuitems = gtk.Menu()

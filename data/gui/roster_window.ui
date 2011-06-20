@@ -12,11 +12,11 @@
     <accel-groups>
       <group name="accelgroup1"/>
     </accel-groups>
+    <signal name="focus_in_event" handler="on_roster_window_focus_in_event"/>
     <signal name="key_press_event" handler="on_roster_window_key_press_event"/>
+    <signal name="delete_event" handler="on_roster_window_delete_event"/>
     <signal name="focus_out_event" handler="on_roster_window_focus_out_event"/>
     <signal name="popup_menu" handler="on_roster_window_popup_menu"/>
-    <signal name="delete_event" handler="on_roster_window_delete_event"/>
-    <signal name="focus_in_event" handler="on_roster_window_focus_in_event"/>
     <child>
       <object class="GtkVBox" id="roster_vbox">
         <property name="visible">True</property>
@@ -44,7 +44,7 @@
                     </child>
                     <child>
                       <object class="GtkImageMenuItem" id="send_single_message_menuitem">
-                        <property name="label" translatable="yes">_Send Single Message...</property>
+                        <property name="label" translatable="yes">Send Single _Message...</property>
                         <property name="use_underline">True</property>
                         <property name="image">image2</property>
                         <property name="use_stock">False</property>
@@ -219,6 +219,16 @@
                       </object>
                     </child>
                     <child>
+                      <object class="GtkCheckMenuItem" id="show_rfilter_menuitem">
+                        <property name="visible">True</property>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="label" translatable="yes">Show Roster Fi_lter</property>
+                        <property name="use_underline">True</property>
+                        <accelerator key="L" signal="activate" modifiers="GDK_CONTROL_MASK"/>
+                        <signal name="toggled" handler="on_show_rfilter_menuitem_toggled"/>
+                      </object>
+                    </child>
+                    <child>
                       <object class="GtkSeparatorMenuItem" id="separator3">
                         <property name="visible">True</property>
                       </object>
@@ -325,11 +335,27 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+            <signal name="notify" handler="on_roster_hpaned_notify"/>
             <child>
               <object class="GtkVBox" id="roster_vbox2">
                 <property name="visible">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkEntry" id="rfilter_entry">
+                    <property name="can_focus">True</property>
+                    <property name="no_show_all">True</property>
+                    <property name="editable">False</property>
+                    <property name="primary_icon_stock">gtk-clear</property>
+                    <property name="primary_icon_activatable">True</property>
+                    <signal name="changed" handler="on_rfilter_entry_changed"/>
+                    <signal name="icon_press" handler="on_rfilter_entry_icon_press"/>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
                 <child>
                   <object class="GtkScrolledWindow" id="scrolledwindow">
                     <property name="visible">True</property>
@@ -342,21 +368,20 @@
                         <property name="can_focus">True</property>
                         <property name="headers_visible">False</property>
                         <property name="reorderable">True</property>
-                        <signal name="row_collapsed" handler="on_roster_treeview_row_collapsed"/>
-                        <signal name="button_press_event" handler="on_roster_treeview_button_press_event"/>
-                        <signal name="motion_notify_event" handler="on_roster_treeview_motion_notify_event"/>
-                        <signal name="row_activated" handler="on_roster_treeview_row_activated"/>
-                        <signal name="button_release_event" handler="on_roster_treeview_button_release_event"/>
                         <signal name="row_expanded" handler="on_roster_treeview_row_expanded"/>
                         <signal name="key_press_event" handler="on_roster_treeview_key_press_event"/>
-                        <signal name="style_set" handler="on_roster_treeview_style_set"/>
                         <signal name="scroll_event" handler="on_roster_treeview_scroll_event"/>
                         <signal name="leave_notify_event" handler="on_roster_treeview_leave_notify_event"/>
+                        <signal name="button_press_event" handler="on_roster_treeview_button_press_event"/>
+                        <signal name="row_activated" handler="on_roster_treeview_row_activated"/>
+                        <signal name="row_collapsed" handler="on_roster_treeview_row_collapsed"/>
+                        <signal name="motion_notify_event" handler="on_roster_treeview_motion_notify_event"/>
+                        <signal name="button_release_event" handler="on_roster_treeview_button_release_event"/>
                       </object>
                     </child>
                   </object>
                   <packing>
-                    <property name="position">0</property>
+                    <property name="position">1</property>
                   </packing>
                 </child>
                 <child>
@@ -366,7 +391,7 @@
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="position">1</property>
+                    <property name="position">2</property>
                   </packing>
                 </child>
               </object>

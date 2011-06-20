@@ -34,12 +34,6 @@ from plugins import GajimPlugin
 from plugins.helpers import log, log_calls
 
 class RosterButtonsPlugin(GajimPlugin):
-    name = u'Roster Buttons'
-    short_name = u'roster_buttons'
-    version = u'0.1'
-    description = u'''Adds quick action buttons to roster window.'''
-    authors = [u'Mateusz Biliński <mateusz@bilinski.it>']
-    homepage = u'http://blog.bilinski.it'
 
     @log_calls('RosterButtonsPlugin')
     def init(self):

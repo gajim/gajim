@@ -478,12 +478,17 @@ class HistoryWindow:
 
         if subject:
             message = _('Subject: %s\n') % subject + message
-        message += '\n'
+        xhtml = None
+        if message.startswith('<body '):
+            xhtml = message
+
         if tag_msg:
             self.history_textview.print_real_text(message, [tag_msg],
-                    name=contact_name)
+                    name=contact_name, xhtml=xhtml)
         else:
-            self.history_textview.print_real_text(message, name=contact_name)
+            self.history_textview.print_real_text(message, name=contact_name,
+                xhtml=xhtml)
+        self.history_textview.print_real_text('\n')
 
     def on_query_entry_activate(self, widget):
         text = self.query_entry.get_text()

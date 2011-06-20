@@ -28,7 +28,7 @@ import tempfile
 import defs
 HAVE_XDG = True
 try:
-    import xdg.BaseDirectory
+    __import__(xdg)
 except:
     HAVE_XDG = False
 

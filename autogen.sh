@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-  gajimversion="0.13.90.1"
+  gajimversion="0.14.0.1"
   if [ -d ".hg" ]; then
     node=$(hg  tip --template "{node}")
     hgversion="-${node:0:12}"
@@ -8,7 +8,7 @@
   fi
   echo "define([AC_PACKAGE_VERSION], [${gajimversion}${hgversion}])" > m4/hgversion.m4
 
-  AM_ARGS="--add-missing --gnu --copy"
+  AM_ARGS="--add-missing --gnu --copy -Wno-portability"
   CONF_ARGS=""
   if test x`uname -s 2>/dev/null` = 'xDarwin' -a -f /Library/Frameworks/GTK+.framework/Versions/Current/env; then
     . /Library/Frameworks/GTK+.framework/Versions/Current/env
@@ -20,7 +20,7 @@
   && for p in `ls data/gui/*.ui`; do echo "[type: gettext/glade]$p" >> \
   po/POTFILES.in; done \
   && ls -1 data/gajim.desktop.in.in \
-  src/*py src/common/*py src/common/zeroconf/*.py | grep -v ipython_view.py >> \
+  src/*py src/common/*py src/common/zeroconf/*.py src/plugins/*.py| grep -v ipython_view.py >> \
   po/POTFILES.in || exit 1
   if test -z `which pkg-config 2>/dev/null`;then
     echo "***Error: pkg-config not found***"
@@ -36,6 +36,6 @@
   && aclocal -I ./m4 \
   && $LIBTOOLIZE --copy --force --automake \
   && autoheader \
-  && autoconf  \
+  && autoconf \
   && automake ${AM_ARGS} \
   && ./configure ${CONF_ARGS} $@

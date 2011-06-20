@@ -45,6 +45,7 @@ class StatusIcon:
 
     def __init__(self):
         self.single_message_handler_id = None
+        self.show_roster_handler_id = None
         self.new_chat_handler_id = None
         # click somewhere else does not popdown menu. workaround this.
         self.added_hide_menuitem = False
@@ -86,15 +87,17 @@ class StatusIcon:
     def show_icon(self):
         if not self.status_icon:
             self.status_icon = gtk.StatusIcon()
+            self.statusicon_size = '16'
             self.status_icon.set_property('has-tooltip', True)
             self.status_icon.connect('activate', self.on_status_icon_left_clicked)
             self.status_icon.connect('popup-menu',
                     self.on_status_icon_right_clicked)
             self.status_icon.connect('query-tooltip',
                     self.on_status_icon_query_tooltip)
+            self.status_icon.connect('size-changed',
+                    self.on_status_icon_size_changed)
 
         self.set_img()
-        self.status_icon.set_visible(True)
         self.subscribe_events()
 
     def on_status_icon_right_clicked(self, widget, event_button, event_time):
@@ -112,19 +115,34 @@ class StatusIcon:
     def on_status_icon_left_clicked(self, widget):
         self.on_left_click()
 
+    def on_status_icon_size_changed(self, statusicon, size):
+        if size > 31:
+            self.statusicon_size = '32'
+        else:
+            self.statusicon_size = '16'
+        if os.environ.get('KDE_FULL_SESSION') == 'true':
+        # detect KDE session. see #5476
+            self.statusicon_size = '32'
+        self.set_img()
+
     def set_img(self):
         """
         Apart from image, we also update tooltip text here
         """
         if not gajim.interface.systray_enabled:
             return
+        if gajim.config.get('trayicon') == 'always':
+            self.status_icon.set_visible(True)
         if gajim.events.get_nb_systray_events():
+            self.status_icon.set_visible(True)
             self.status_icon.set_blinking(True)
         else:
+            if gajim.config.get('trayicon') == 'on_event':
+                self.status_icon.set_visible(False)
             self.status_icon.set_blinking(False)
 
-        # FIXME: do not always use 16x16 (ask actually used size and use that)
-        image = gajim.interface.jabber_state_images['16'][self.status]
+        image = gajim.interface.jabber_state_images[self.statusicon_size][
+                                                                self.status]
         if image.get_storage_type() == gtk.IMAGE_PIXBUF:
             self.status_icon.set_from_pixbuf(image.get_pixbuf())
         # FIXME: oops they forgot to support GIF animation?
@@ -318,14 +336,16 @@ class StatusIcon:
         sounds_mute_menuitem.set_active(not gajim.config.get('sounds_on'))
 
         win = gajim.interface.roster.window
+        if self.show_roster_handler_id:
+            show_roster_menuitem.handler_disconnect(self.show_roster_handler_id)
         if win.get_property('has-toplevel-focus'):
             show_roster_menuitem.get_children()[0].set_label(_('Hide _Roster'))
-            show_roster_menuitem.connect('activate',
-                self.on_hide_roster_menuitem_activate)
+            self.show_roster_handler_id = show_roster_menuitem.connect(
+                'activate', self.on_hide_roster_menuitem_activate)
         else:
             show_roster_menuitem.get_children()[0].set_label(_('Show _Roster'))
-            show_roster_menuitem.connect('activate',
-                self.on_show_roster_menuitem_activate)
+            self.show_roster_handler_id = show_roster_menuitem.connect(
+                'activate', self.on_show_roster_menuitem_activate)
 
         if os.name == 'nt':
             if self.added_hide_menuitem is False:
@@ -376,17 +396,19 @@ class StatusIcon:
 
                 # we could be in another VD right now. eg vd2
                 # and we want to show it in vd2
-                if not gtkgui_helpers.possibly_move_window_in_current_desktop(win):
+                if not gtkgui_helpers.possibly_move_window_in_current_desktop(
+                win) and gajim.config.get('save-roster-position'):
                     x, y = win.get_position()
                     gajim.config.set('roster_x-position', x)
                     gajim.config.set('roster_y-position', y)
-                    win.hide() # else we hide it from VD that was visible in
+                win.hide() # else we hide it from VD that was visible in
             else:
                 if not win.get_property('visible'):
                     win.show_all()
-                    gtkgui_helpers.move_window(win,
-                        gajim.config.get('roster_x-position'),
-                        gajim.config.get('roster_y-position'))
+                    if gajim.config.get('save-roster-position'):
+                        gtkgui_helpers.move_window(win,
+                            gajim.config.get('roster_x-position'),
+                            gajim.config.get('roster_y-position'))
                 if not gajim.config.get('roster_window_skip_taskbar'):
                     win.set_property('skip-taskbar-hint', False)
                 win.present_with_time(gtk.get_current_event_time())
@@ -397,6 +419,12 @@ class StatusIcon:
         account, jid, event = gajim.events.get_first_systray_event()
         if not event:
             return
+        win = gajim.interface.roster.window
+        if not win.get_property('visible') and gajim.config.get(
+        'save-roster-position'):
+            gtkgui_helpers.move_window(win,
+                gajim.config.get('roster_x-position'),
+                gajim.config.get('roster_y-position'))
         gajim.interface.handle_event(account, jid, event.type_)
 
     def on_middle_click(self):

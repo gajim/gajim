@@ -19,6 +19,9 @@
 ##
 
 import common.xmpp
+from common import gajim
+from common import ged
+from common.connection_handlers_events import ArchivingReceivedEvent
 
 import logging
 log = logging.getLogger('gajim.c.message_archiving')
@@ -39,6 +42,14 @@ class ConnectionArchive:
         self.method_manual = None
         self.default = None
         self.items = {}
+        gajim.ged.register_event_handler(
+            'archiving-preferences-changed-received', ged.CORE,
+            self._nec_archiving_changed_received)
+
+    def cleanup(self):
+        gajim.ged.remove_event_handler(
+            'archiving-preferences-changed-received', ged.CORE,
+            self._nec_archiving_changed_received)
 
     def request_message_archiving_preferences(self):
         iq_ = common.xmpp.Iq('get')
@@ -97,7 +108,10 @@ class ConnectionArchive:
         return self.default
 
     def logging_preference(self, jid, initiator_options=None):
-        otr = self.get_item_pref(jid)['otr']
+        otr = self.get_item_pref(jid)
+        if not otr:
+            return
+        otr = otr['otr']
         if initiator_options:
             if ((initiator_options == ['mustnot'] and otr == 'forbid') or
             (initiator_options == ['may'] and otr == 'require')):
@@ -126,72 +140,23 @@ class ConnectionArchive:
 
     def _ArchiveCB(self, con, iq_obj):
         log.debug('_ArchiveCB %s' % iq_obj.getType())
-        if iq_obj.getType() == 'error':
-            self.dispatch('ARCHIVING_ERROR', iq_obj.getErrorMsg())
-            return
-        elif iq_obj.getType() not in ('result', 'set'):
-            return
-
-        if iq_obj.getTag('pref'):
-            pref = iq_obj.getTag('pref')
-
-            if pref.getTag('auto'):
-                self.auto = pref.getTagAttr('auto', 'save')
-                log.debug('archiving preference: auto: %s' % self.auto)
-                self.dispatch('ARCHIVING_CHANGED', ('auto',
-                        self.auto))
-
-            method_auto = pref.getTag('method', attrs={'type': 'auto'})
-            if method_auto:
-                self.method_auto = method_auto.getAttr('use')
-                self.dispatch('ARCHIVING_CHANGED', ('method_auto',
-                        self.method_auto))
-
-            method_local = pref.getTag('method', attrs={'type': 'local'})
-            if method_local:
-                self.method_local = method_local.getAttr('use')
-                self.dispatch('ARCHIVING_CHANGED', ('method_local',
-                        self.method_local))
-
-            method_manual = pref.getTag('method', attrs={'type': 'manual'})
-            if method_manual:
-                self.method_manual = method_manual.getAttr('use')
-                self.dispatch('ARCHIVING_CHANGED', ('method_manual',
-                        self.method_manual))
-
-            log.debug('archiving preferences: method auto: %s, local: %s, '
-                    'manual: %s' % (self.method_auto, self.method_local,
-                    self.method_manual))
-
-            if pref.getTag('default'):
-                default = pref.getTag('default')
-                log.debug('archiving preferences: default otr: %s, save: %s, '
-                        'expire: %s, unset: %s' % (default.getAttr('otr'),
-                        default.getAttr('save'), default.getAttr('expire'),
-                        default.getAttr('unset')))
-                self.default = {
-                        'expire': default.getAttr('expire'),
-                        'otr': default.getAttr('otr'),
-                        'save': default.getAttr('save'),
-                        'unset': default.getAttr('unset')}
-                self.dispatch('ARCHIVING_CHANGED', ('default',
-                        self.default))
-            for item in pref.getTags('item'):
-                log.debug('archiving preferences for jid %s: otr: %s, save: %s, '
-                        'expire: %s' % (item.getAttr('jid'), item.getAttr('otr'),
-                        item.getAttr('save'), item.getAttr('expire')))
-                self.items[item.getAttr('jid')] = {
-                        'expire': item.getAttr('expire'),
-                        'otr': item.getAttr('otr'), 'save': item.getAttr('save')}
-                self.dispatch('ARCHIVING_CHANGED', ('item',
-                        item.getAttr('jid'), self.items[item.getAttr('jid')]))
-        elif iq_obj.getTag('itemremove'):
-            for item in pref.getTags('item'):
-                del self.items[item.getAttr('jid')]
-                self.dispatch('ARCHIVING_CHANGED', ('itemremove',
-                        item.getAttr('jid')))
-
+        gajim.nec.push_incoming_event(ArchivingReceivedEvent(None, conn=self,
+            stanza=iq_obj))
         raise common.xmpp.NodeProcessed
+
+    def _nec_archiving_changed_received(self, obj):
+        if obj.conn.name != self.name:
+            return
+        for key in ('auto', 'method_auto', 'method_local', 'method_manual',
+        'default'):
+            if key in obj.conf:
+                self.__dict__[key] = obj.conf[key]
+
+        for jid, pref in obj.new_items.items():
+            self.items[jid] = pref
+
+        for jid in obj.removed_items:
+            del self.items[jid]
 
     def request_collections_list_page(self, with_='', start=None, end=None,
     after=None, max=30, exact_match=False):

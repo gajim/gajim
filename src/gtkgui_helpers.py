@@ -221,29 +221,6 @@ def get_default_font():
 
     return None
 
-def autodetect_browser_mailer():
-    # recognize the environment and set appropriate browser/mailer
-    if user_runs_gnome():
-        gajim.config.set('openwith', 'gnome-open')
-    elif user_runs_kde():
-        gajim.config.set('openwith', 'kfmclient exec')
-    elif user_runs_xfce():
-        gajim.config.set('openwith', 'exo-open')
-    else:
-        gajim.config.set('openwith', 'custom')
-
-def user_runs_gnome():
-    return 'gnome-session' in get_running_processes()
-
-def user_runs_kde():
-    return 'startkde' in get_running_processes()
-
-def user_runs_xfce():
-    procs = get_running_processes()
-    if 'startxfce4' in procs or 'xfce4-session' in procs:
-        return True
-    return False
-
 def get_running_processes():
     """
     Return running processes or None (if /proc does not exist)
@@ -355,35 +332,8 @@ class ServersXMLHandler(xml.sax.ContentHandler):
 
     def startElement(self, name, attributes):
         if name == 'item':
-            # we will get the port next time so we just set it 0 here
-            sitem = [None, 0, {}]
-            sitem[2]['digest'] = {}
-            sitem[2]['hidden'] = False
-            for attribute in attributes.getNames():
-                if attribute == 'jid':
-                    jid = attributes.getValue(attribute)
-                    sitem[0] = jid
-                elif attribute == 'hidden':
-                    hidden = attributes.getValue(attribute)
-                    if hidden.lower() in ('1', 'y', 'yes', 't', 'true', 'on'):
-                        sitem[2]['hidden'] = True
-            self.servers.append(sitem)
-        elif name == 'active':
-            for attribute in attributes.getNames():
-                if attribute == 'port':
-                    port = attributes.getValue(attribute)
-                    # we received the jid last time, so we now assign the port
-                    # number to the last jid in the list
-                    self.servers[-1][1] = port
-        elif name == 'digest':
-            algo, digest = None, None
-            for attribute in attributes.getNames():
-                if attribute == 'algo':
-                    algo = attributes.getValue(attribute)
-                elif attribute == 'value':
-                    digest = attributes.getValue(attribute)
-            hd = HashDigest(algo, digest)
-            self.servers[-1][2]['digest'][hd.algo] = hd
+            if 'jid' in attributes.getNames():
+                self.servers.append(attributes.getValue('jid'))
 
     def endElement(self, name):
         pass

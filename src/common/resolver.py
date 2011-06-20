@@ -28,6 +28,7 @@ if __name__ == '__main__':
     from common import i18n
     import common.configpaths
     common.configpaths.gajimpaths.init(None)
+    common.configpaths.gajimpaths.init_profile()
 
 from common import helpers
 from common.xmpp.idlequeue import IdleCommand
@@ -70,7 +71,8 @@ class CommonResolver():
             return
         if self.resolved_hosts.has_key(host+type):
             # host is already resolved, return cached values
-            log.debug('%s already resolved: %s')
+            log.debug('%s already resolved: %s' % (host,
+                self.resolved_hosts[host+type]))
             on_ready(host, self.resolved_hosts[host+type])
             return
         if self.handlers.has_key(host+type):

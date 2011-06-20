@@ -101,7 +101,6 @@ class MessageTextView(gtk.TextView):
                 text_before_special_text = text[index:start]
             else:
                 text_before_special_text = ''
-            end_iter = _buffer.get_end_iter()
             # we insert normal text
             new_text += text_before_special_text + \
             '<a href="'+ url +'">' + url + '</a>'
@@ -306,7 +305,7 @@ class MessageTextView(gtk.TextView):
         if self.undo_list:
             _buffer.set_text(self.undo_list.pop())
         self.undo_pressed = True
-        
+
     def get_sensitive(self):
         # get sensitive is not in GTK < 2.18
         try:
@@ -345,6 +344,18 @@ gtk.binding_entry_add_signal(MessageTextView, gtk.keysyms.Up,
 gtk.binding_entry_add_signal(MessageTextView, gtk.keysyms.Down,
         gtk.gdk.CONTROL_MASK, 'mykeypress', int, gtk.keysyms.Down,
         gtk.gdk.ModifierType, gtk.gdk.CONTROL_MASK)
+
+# CTRL + SHIFT + UP
+gtk.binding_entry_add_signal(MessageTextView, gtk.keysyms.Up,
+        gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK, 'mykeypress', int,
+        gtk.keysyms.Up, gtk.gdk.ModifierType, gtk.gdk.CONTROL_MASK |
+        gtk.gdk.SHIFT_MASK)
+
+# CTRL + SHIFT + DOWN
+gtk.binding_entry_add_signal(MessageTextView, gtk.keysyms.Down,
+        gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK, 'mykeypress', int,
+        gtk.keysyms.Down, gtk.gdk.ModifierType, gtk.gdk.CONTROL_MASK |
+        gtk.gdk.SHIFT_MASK)
 
 # ENTER
 gtk.binding_entry_add_signal(MessageTextView, gtk.keysyms.Return,

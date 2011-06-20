@@ -50,7 +50,7 @@ class TestNonBlockingClient(unittest.TestCase):
         '''
 
         class TempConnection():
-            def get_password(self, cb):
+            def get_password(self, cb, mechanism):
                 if wrong_pass:
                     cb('wrong pass')
                 else:

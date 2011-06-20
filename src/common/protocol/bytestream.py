@@ -37,6 +37,9 @@ from common import xmpp
 from common import gajim
 from common import helpers
 from common import dataforms
+from common.connection_handlers_events import FileRequestReceivedEvent, \
+    FileRequestErrorEvent
+from common import ged
 from common import jingle_xtls
 
 from common.socks5 import Socks5Receiver
@@ -80,6 +83,12 @@ class ConnectionBytestream:
 
     def __init__(self):
         self.files_props = {}
+        gajim.ged.register_event_handler('file-request-received', ged.GUI1,
+            self._nec_file_request_received)
+
+    def cleanup(self):
+        gajim.ged.remove_event_handler('file-request-received', ged.GUI1,
+            self._nec_file_request_received)
 
     def _ft_get_our_jid(self):
         our_jid = gajim.get_jid_from_account(self.name)
@@ -241,51 +250,14 @@ class ConnectionBytestream:
             raise xmpp.NodeProcessed
 
     def _siSetCB(self, con, iq_obj):
-        jid = self._ft_get_from(iq_obj)
-        file_props = {'type': 'r'}
-        file_props['sender'] = jid
-        file_props['request-id'] = unicode(iq_obj.getAttr('id'))
-        si = iq_obj.getTag('si')
-        profile = si.getAttr('profile')
-        mime_type = si.getAttr('mime-type')
-        if profile != xmpp.NS_FILE:
-            self.send_file_rejection(file_props, code='400', typ='profile')
-            raise xmpp.NodeProcessed
-        feature_tag = si.getTag('feature', namespace=xmpp.NS_FEATURE)
-        if not feature_tag:
-            return
-        form_tag = feature_tag.getTag('x', namespace=xmpp.NS_DATA)
-        if not form_tag:
-            return
-        form = dataforms.ExtendForm(node=form_tag)
-        for f in form.iter_fields():
-            if f.var == 'stream-method' and f.type == 'list-single':
-                values = [o[1] for o in f.options]
-                file_props['stream-methods'] = ' '.join(values)
-                if xmpp.NS_BYTESTREAM in values or xmpp.NS_IBB in values:
-                    break
-        else:
-            self.send_file_rejection(file_props, code='400', typ='stream')
-            raise xmpp.NodeProcessed
-        file_tag = si.getTag('file')
-        for attribute in file_tag.getAttrs():
-            if attribute in ('name', 'size', 'hash', 'date'):
-                val = file_tag.getAttr(attribute)
-                if val is None:
-                    continue
-                file_props[attribute] = val
-        file_desc_tag = file_tag.getTag('desc')
-        if file_desc_tag is not None:
-            file_props['desc'] = file_desc_tag.getData()
-
-        if mime_type is not None:
-            file_props['mime-type'] = mime_type
-        file_props['receiver'] = self._ft_get_our_jid()
-        file_props['sid'] = unicode(si.getAttr('id'))
-        file_props['transfered_size'] = []
-        gajim.socks5queue.add_file_props(self.name, file_props)
-        self.dispatch('FILE_REQUEST', (jid, file_props))
+        gajim.nec.push_incoming_event(FileRequestReceivedEvent(None, conn=self,
+            stanza=iq_obj))
         raise xmpp.NodeProcessed
+
+    def _nec_file_request_received(self, obj):
+        if obj.conn.name != self.name:
+            return
+        gajim.socks5queue.add_file_props(self.name, obj.file_props)
 
     def _siErrorCB(self, con, iq_obj):
         si = iq_obj.getTag('si')
@@ -297,7 +269,8 @@ class ConnectionBytestream:
             return
         jid = self._ft_get_from(iq_obj)
         file_props['error'] = -3
-        self.dispatch('FILE_REQUEST_ERROR', (jid, file_props, ''))
+        gajim.nec.push_incoming_event(FileRequestErrorEvent(None, conn=self,
+            jid=jid, file_props=file_props, error_msg=''))
         raise xmpp.NodeProcessed
 
 class ConnectionSocks5Bytestream(ConnectionBytestream):
@@ -329,7 +302,9 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             if contact.get_full_jid() == receiver_jid:
                 file_props['error'] = -5
                 self.remove_transfer(file_props)
-                self.dispatch('FILE_REQUEST_ERROR', (contact.jid, file_props, ''))
+                gajim.nec.push_incoming_event(FileRequestErrorEvent(None,
+                    conn=self, jid=contact.jid, file_props=file_props,
+                    error_msg=''))
             sender_jid = unicode(file_props['sender'])
             if contact.get_full_jid() == sender_jid:
                 file_props['error'] = -3
@@ -389,7 +364,8 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
                 self._result_socks5_sid, file_props['sid'])
         if not listener:
             file_props['error'] = -5
-            self.dispatch('FILE_REQUEST_ERROR', (unicode(receiver), file_props, ''))
+            gajim.nec.push_incoming_event(FileRequestErrorEvent(None, conn=self,
+                jid=unicode(receiver), file_props=file_props, error_msg=''))
             self._connect_error(unicode(receiver), file_props['sid'],
                     file_props['sid'], code=406)
         else:
@@ -397,7 +373,6 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             file_props['request-id'] = 'id_' + file_props['sid']
             iq.setID(file_props['request-id'])
             query = iq.setTag('query', namespace=xmpp.NS_BYTESTREAM)
-            query.setAttr('mode', 'plain')
             query.setAttr('sid', file_props['sid'])
 
             self._add_addiditional_streamhosts_to_query(query, file_props)
@@ -519,7 +494,8 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             if file_props is not None:
                 self.disconnect_transfer(file_props)
                 file_props['error'] = -3
-                self.dispatch('FILE_REQUEST_ERROR', (to, file_props, msg))
+                gajim.nec.push_incoming_event(FileRequestErrorEvent(None,
+                    conn=self, jid=to, file_props=file_props, error_msg=msg))
 
     def _proxy_auth_ok(self, proxy):
         """
@@ -550,7 +526,8 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             return
         file_props = self.files_props[id_]
         file_props['error'] = -4
-        self.dispatch('FILE_REQUEST_ERROR', (jid, file_props, ''))
+        gajim.nec.push_incoming_event(FileRequestErrorEvent(None, conn=self,
+            jid=jid, file_props=file_props, error_msg=''))
         raise xmpp.NodeProcessed
 
     def _bytestreamSetCB(self, con, iq_obj):

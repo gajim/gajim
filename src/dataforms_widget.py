@@ -43,6 +43,10 @@ class DataFormWidget(gtk.Alignment, object):
     Data Form widget. Use like any other widget
     """
 
+    __gsignals__ = dict(
+        validated = (gobject.SIGNAL_RUN_LAST | gobject.SIGNAL_ACTION, None, ())
+    )
+
     def __init__(self, dataformnode=None):
         ''' Create a widget. '''
         gtk.Alignment.__init__(self, xscale=1.0, yscale=1.0)
@@ -67,6 +71,9 @@ class DataFormWidget(gtk.Alignment, object):
         selection = self.records_treeview.get_selection()
         selection.connect('changed', self.on_records_selection_changed)
         selection.set_mode(gtk.SELECTION_MULTIPLE)
+
+    def on_data_form_vbox_key_press_event(self, widget, event):
+        print 'key pressed'
 
     def set_data_form(self, dataform):
         """
@@ -141,6 +148,9 @@ class DataFormWidget(gtk.Alignment, object):
         self.clean_data_form()
 
         self.singleform = SingleForm(self._data_form)
+        def _on_validated(widget):
+            self.emit('validated')
+        self.singleform.connect('validated', _on_validated)
         self.singleform.show()
         self.single_form_viewport.add(self.singleform)
         self.data_form_types_notebook.set_current_page(
@@ -183,8 +193,9 @@ class DataFormWidget(gtk.Alignment, object):
         for item in self._data_form.iter_records():
             iter_ = self.multiplemodel.append()
             for field in item.iter_fields():
-                self.multiplemodel.set_value(iter_, fieldvars.index(field.var),
-                        field.value)
+                if field.var in fieldvars:
+                    self.multiplemodel.set_value(iter_,
+                        fieldvars.index(field.var), field.value)
 
         # constructing columns...
         for field, counter in zip(self._data_form.reported.iter_fields(),
@@ -298,6 +309,10 @@ class SingleForm(gtk.Table, object):
     only to display single forms, but to form input windows of multiple-type
     forms, it is in another class
     """
+
+    __gsignals__ = dict(
+        validated = (gobject.SIGNAL_RUN_LAST | gobject.SIGNAL_ACTION, None, ())
+    )
 
     def __init__(self, dataform):
         assert isinstance(dataform, dataforms.SimpleDataForm)
@@ -506,6 +521,11 @@ class SingleForm(gtk.Table, object):
                 commonlabelcenter = True
                 if readwrite:
                     widget = gtk.Entry()
+                    def kpe(widget, event):
+                        if event.keyval == gtk.keysyms.Return or \
+                        event.keyval == gtk.keysyms.KP_Enter:
+                            self.emit('validated')
+                    widget.connect('key-press-event', kpe)
                     widget.connect('changed', self.on_text_single_entry_changed,
                             field)
                     widget.set_sensitive(readwrite)
@@ -555,8 +575,8 @@ class SingleForm(gtk.Table, object):
                 widget.set_sensitive(readwrite)
                 widget = decorate_with_tooltip(widget, field)
                 self.attach(widget, 1, 2, linecounter, linecounter+1,
-                        yoptions=gtk.FILL)	
-            
+                        yoptions=gtk.FILL)
+
             if field.required:
                 label = gtk.Label('*')
                 label.set_tooltip_text(_('This field is required'))

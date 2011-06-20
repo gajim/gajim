@@ -191,7 +191,7 @@ class ConversationTextview(gobject.GObject):
 
         # no need to inherit TextView, use it as atrribute is safer
         self.tv = HtmlTextView()
-        self.tv.html_hyperlink_handler = self.html_hyperlink_handler
+        self.tv.hyperlink_handler = self.hyperlink_handler
 
         # set properties
         self.tv.set_border_width(1)
@@ -522,7 +522,7 @@ class ConversationTextview(gobject.GObject):
         del self.xep0184_marks[id_]
         del self.xep0184_shown[id_]
 
-    def show_focus_out_line(self):
+    def show_focus_out_line(self, scroll=True):
         if not self.allow_focus_out_line:
             # if room did not receive focus-in from the last time we added
             # --- line then do not readd
@@ -581,8 +581,10 @@ class ConversationTextview(gobject.GObject):
 
             buffer_.end_user_action()
 
-            # scroll to the end (via idle in case the scrollbar has appeared)
-            gobject.idle_add(self.scroll_to_end)
+            if scroll:
+                # scroll to the end (via idle in case the scrollbar has
+                # appeared)
+                gobject.idle_add(self.scroll_to_end)
 
     def show_xep0184_warning_tooltip(self):
         pointer = self.tv.get_pointer()
@@ -946,10 +948,24 @@ class ConversationTextview(gobject.GObject):
             # we get the end of the tag
             while not end_iter.ends_tag(texttag):
                 end_iter.forward_char()
-            word = self.tv.get_buffer().get_text(begin_iter, end_iter).decode(
+
+            # Detect XHTML-IM link
+            word = getattr(texttag, 'href', None)
+            if word:
+                if word.startswith('xmpp'):
+                    kind = 'xmpp'
+                elif word.startswith('mailto:'):
+                    kind = 'mail'
+                elif gajim.interface.sth_at_sth_dot_sth_re.match(word):
+                    # it's a JID or mail
+                    kind = 'sth_at_sth'
+            else:
+                word = self.tv.get_buffer().get_text(begin_iter, end_iter).decode(
                     'utf-8')
+
             if event.button == 3: # right click
                 self.make_link_menu(event, kind, word)
+                return True
             else:
                 # we launch the correct application
                 if kind == 'xmpp':
@@ -964,16 +980,6 @@ class ConversationTextview(gobject.GObject):
                         self.on_start_chat_activate(None, word)
                 else:
                     helpers.launch_browser_mailer(kind, word)
-
-    def html_hyperlink_handler(self, texttag, widget, event, iter_, kind, href):
-        if event.type == gtk.gdk.BUTTON_PRESS:
-            if event.button == 3: # right click
-                self.make_link_menu(event, kind, href)
-                return True
-            else:
-                # we launch the correct application
-                helpers.launch_browser_mailer(kind, href)
-
 
     def detect_and_print_special_text(self, otext, other_tags, graphics=True):
         """
@@ -1035,9 +1041,18 @@ class ConversationTextview(gobject.GObject):
         tags = []
         use_other_tags = True
         text_is_valid_uri = False
+        is_xhtml_link = None
         show_ascii_formatting_chars = \
                 gajim.config.get('show_ascii_formatting_chars')
         buffer_ = self.tv.get_buffer()
+
+        # Detect XHTML-IM link
+        ttt = buffer_.get_tag_table()
+        tags_ = [(ttt.lookup(t) if isinstance(t, str) else t) for t in other_tags]
+        for t in tags_:
+            is_xhtml_link = getattr(t, 'href', None)
+            if is_xhtml_link:
+                break
 
         # Check if we accept this as an uri
         schemes = gajim.config.get('uri_schemes').split()
@@ -1063,20 +1078,17 @@ class ConversationTextview(gobject.GObject):
             # add with possible animation
             self.tv.add_child_at_anchor(img, anchor)
         elif special_text.startswith('www.') or \
-        special_text.startswith('ftp.') or \
-        text_is_valid_uri:
-            tags.append('url')
-            use_other_tags = False
-        elif special_text.startswith('mailto:'):
-            tags.append('mail')
-            use_other_tags = False
-        elif special_text.startswith('xmpp:'):
-            tags.append('xmpp')
-            use_other_tags = False
-        elif gajim.interface.sth_at_sth_dot_sth_re.match(special_text):
-            # it's a JID or mail
-            tags.append('sth_at_sth')
-            use_other_tags = False
+            special_text.startswith('ftp.') or \
+            text_is_valid_uri and not is_xhtml_link:
+                tags.append('url')
+        elif special_text.startswith('mailto:') and not is_xhtml_link:
+                tags.append('mail')
+        elif special_text.startswith('xmpp:') and not is_xhtml_link:
+                tags.append('xmpp')
+        elif gajim.interface.sth_at_sth_dot_sth_re.match(special_text) and\
+        not is_xhtml_link:
+                # it's a JID or mail
+                tags.append('sth_at_sth')
         elif special_text.startswith('*'): # it's a bold text
             tags.append('bold')
             if special_text[1] == '/' and special_text[-2] == '/' and\
@@ -1163,7 +1175,6 @@ class ConversationTextview(gobject.GObject):
             if use_other_tags:
                 all_tags += other_tags
             # convert all names to TextTag
-            ttt = buffer_.get_tag_table()
             all_tags = [(ttt.lookup(t) if isinstance(t, str) else t) for t in all_tags]
             buffer_.insert_with_tags(end_iter, special_text, *all_tags)
 
@@ -1285,7 +1296,7 @@ class ConversationTextview(gobject.GObject):
         Get the time, with the day before if needed and return it. It DOESN'T
         format a fuzzy time
         """
-        format = ''
+        format_ = ''
         # get difference in days since epoch (86400 = 24*3600)
         # number of days since epoch for current time (in GMT) -
         # number of days since epoch for message (in GMT)
@@ -1295,14 +1306,15 @@ class ConversationTextview(gobject.GObject):
             day_str = ''
         else:
             #%i is day in year (1-365)
-            day_str = i18n.ngettext('Yesterday', '%i days ago', diff_day,
-                    replace_plural=diff_day)
+            day_str = i18n.ngettext('Yesterday',
+                '%(nb_days)i days ago', diff_day, {'nb_days': diff_day},
+                {'nb_days': diff_day})
         if day_str:
-            format += day_str + ' '
+            format_ += day_str + ' '
         timestamp_str = gajim.config.get('time_stamp')
         timestamp_str = helpers.from_one_line(timestamp_str)
-        format += timestamp_str
-        tim_format = time.strftime(format, tim)
+        format_ += timestamp_str
+        tim_format = time.strftime(format_, tim)
         if locale.getpreferredencoding() != 'KOI8-R':
             # if tim_format comes as unicode because of day_str.
             # we convert it to the encoding that we want (and that is utf-8)

@@ -57,7 +57,7 @@ from common import connection
 from common import passwords
 from common.zeroconf import connection_zeroconf
 from common import dataforms
-from common import GnuPG
+from common import gpg
 from common import ged
 
 try:
@@ -182,6 +182,15 @@ class PreferencesWindow:
             self.one_window_type_combobox.set_active(choices.index(type_))
         else:
             self.one_window_type_combobox.set_active(0)
+
+        # Show roster on startup
+        show_roster_combobox = self.xml.get_object('show_roster_on_startup')
+        choices = common.config.opt_show_roster_on_startup
+        type_ = gajim.config.get('show_roster_on_startup')
+        if type_ in choices:
+            show_roster_combobox.set_active(choices.index(type_))
+        else:
+            show_roster_combobox.set_active(0)
 
         # Compact View
         st = gajim.config.get('compact_view')
@@ -384,7 +393,7 @@ class PreferencesWindow:
         # Default Status messages
         self.default_msg_tree = self.xml.get_object('default_msg_treeview')
         col2 = self.default_msg_tree.rc_get_style().bg[gtk.STATE_ACTIVE].\
-                to_string()
+            to_string()
         # (status, translated_status, message, enabled)
         model = gtk.ListStore(str, str, str, bool)
         self.default_msg_tree.set_model(model)
@@ -415,7 +424,7 @@ class PreferencesWindow:
 
         # Status messages
         self.msg_tree = self.xml.get_object('msg_treeview')
-        model = gtk.ListStore(str, str)
+        model = gtk.ListStore(str, str, str, str, str, str, str)
         self.msg_tree.set_model(model)
         col = gtk.TreeViewColumn('name')
         self.msg_tree.append_column(col)
@@ -495,16 +504,8 @@ class PreferencesWindow:
 
             if gajim.config.get('autodetect_browser_mailer'):
                 self.applications_combobox.set_active(0)
-            # else autodetect_browser_mailer is False.
-            # so user has 'Always Use GNOME/KDE/Xfce' or Custom
-            elif gajim.config.get('openwith') == 'gnome-open':
+            else:
                 self.applications_combobox.set_active(1)
-            elif gajim.config.get('openwith') == 'kfmclient exec':
-                self.applications_combobox.set_active(2)
-            elif gajim.config.get('openwith') == 'exo-open':
-                self.applications_combobox.set_active(3)
-            elif gajim.config.get('openwith') == 'custom':
-                self.applications_combobox.set_active(4)
                 self.xml.get_object('custom_apps_frame').show()
 
             self.xml.get_object('custom_browser_entry').set_text(
@@ -691,6 +692,12 @@ class PreferencesWindow:
         gajim.interface.save_config()
         gajim.interface.msg_win_mgr.reconfig()
 
+    def on_show_roster_on_startup_changed(self, widget):
+        active = widget.get_active()
+        config_type = common.config.opt_show_roster_on_startup[active]
+        gajim.config.set('show_roster_on_startup', config_type)
+        gajim.interface.save_config()
+
     def on_compact_view_checkbutton_toggled(self, widget):
         active = widget.get_active()
         for ctrl in self._get_all_controls():
@@ -853,15 +860,10 @@ class PreferencesWindow:
             gajim.config.set('trayicon', 'on_event')
             gajim.interface.systray_enabled = True
             gajim.interface.systray.show_icon()
-            gajim.interface.systray.set_img()
         else:
             gajim.config.set('trayicon', 'always')
             gajim.interface.systray_enabled = True
             gajim.interface.systray.show_icon()
-            gajim.interface.systray.set_img()
-
-    def on_advanced_notifications_button_clicked(self, widget):
-        dialogs.AdvancedNotificationsWindow()
 
     def on_play_sounds_checkbutton_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'sounds_on',
@@ -1085,6 +1087,13 @@ class PreferencesWindow:
                 gajim.config.add_per('statusmsg', val)
                 msg = helpers.to_one_line(model[iter_][1].decode('utf-8'))
                 gajim.config.set_per('statusmsg', val, 'message', msg)
+                i = 2
+                # store mood / activity
+                for subname in ('activity', 'subactivity', 'activity_text',
+                'mood', 'mood_text'):
+                    gajim.config.set_per('statusmsg', val, subname,
+                        model[iter_][i].decode('utf-8'))
+                    i += 1
             iter_ = model.iter_next(iter_)
         gajim.interface.save_config()
 
@@ -1126,20 +1135,12 @@ class PreferencesWindow:
         gajim.config.set('stun_server', widget.get_text().decode('utf-8'))
 
     def on_applications_combobox_changed(self, widget):
-        gajim.config.set('autodetect_browser_mailer', False)
-        if widget.get_active() == 4:
-            self.xml.get_object('custom_apps_frame').show()
-            gajim.config.set('openwith', 'custom')
-        else:
-            if widget.get_active() == 0:
-                gajim.config.set('autodetect_browser_mailer', True)
-            elif widget.get_active() == 1:
-                gajim.config.set('openwith', 'gnome-open')
-            elif widget.get_active() == 2:
-                gajim.config.set('openwith', 'kfmclient exec')
-            elif widget.get_active() == 3:
-                gajim.config.set('openwith', 'exo-open')
+        if widget.get_active() == 0:
+            gajim.config.set('autodetect_browser_mailer', True)
             self.xml.get_object('custom_apps_frame').hide()
+        elif widget.get_active() == 1:
+            gajim.config.set('autodetect_browser_mailer', False)
+            self.xml.get_object('custom_apps_frame').show()
         gajim.interface.save_config()
 
     def on_custom_browser_entry_changed(self, widget):
@@ -1191,8 +1192,16 @@ class PreferencesWindow:
         for msg_name in preset_status:
             msg_text = gajim.config.get_per('statusmsg', msg_name, 'message')
             msg_text = helpers.from_one_line(msg_text)
+            activity = gajim.config.get_per('statusmsg', msg_name, 'activity')
+            subactivity = gajim.config.get_per('statusmsg', msg_name,
+                'subactivity')
+            activity_text = gajim.config.get_per('statusmsg', msg_name,
+                'activity_text')
+            mood = gajim.config.get_per('statusmsg', msg_name, 'mood')
+            mood_text = gajim.config.get_per('statusmsg', msg_name, 'mood_text')
             iter_ = model.append()
-            model.set(iter_, 0, msg_name, 1, msg_text)
+            model.set(iter_, 0, msg_name, 1, msg_text, 2, activity, 3,
+                subactivity, 4, activity_text, 5, mood, 6, mood_text)
 
     def on_msg_cell_edited(self, cell, row, new_text):
         model = self.msg_tree.get_model()
@@ -2028,7 +2037,7 @@ class AccountsWindow:
                 gajim.interface.msg_win_mgr.change_account_name(old_name, new_name)
                 # upgrade account variable in opened windows
                 for kind in ('infos', 'disco', 'gc_config', 'search',
-                'online_dialog'):
+                'online_dialog', 'sub_request'):
                     for j in gajim.interface.instances[new_name][kind]:
                         gajim.interface.instances[new_name][kind][j].account = \
                                 new_name
@@ -2053,6 +2062,8 @@ class AccountsWindow:
                 del gajim.gajim_optional_features[old_name]
                 del gajim.caps_hash[old_name]
                 gajim.connections[old_name].name = new_name
+                gajim.connections[old_name].pep_change_account_name(new_name)
+                gajim.connections[old_name].caps_change_account_name(new_name)
                 gajim.connections[new_name] = gajim.connections[old_name]
                 del gajim.connections[old_name]
             gajim.config.add_per('accounts', new_name)
@@ -2333,7 +2344,7 @@ class AccountsWindow:
         # self.current_account is None and/or gajim.connections is {}
         else:
             if gajim.HAVE_GPG:
-                secret_keys = GnuPG.GnuPG().get_secret_keys()
+                secret_keys = gpg.GnuPG().get_secret_keys()
             else:
                 secret_keys = []
         if not secret_keys:
@@ -2463,7 +2474,8 @@ class AccountsWindow:
         self.init_account_gpg()
         # update variables
         gajim.interface.instances[account] = {'infos': {},
-                'disco': {}, 'gc_config': {}, 'search': {}, 'online_dialog': {}}
+            'disco': {}, 'gc_config': {}, 'search': {}, 'online_dialog': {},
+            'sub_request': {}}
         gajim.interface.minimized_controls[account] = {}
         gajim.connections[account].connected = 0
         gajim.groups[account] = {}
@@ -2701,7 +2713,7 @@ class ServiceRegistrationWindow:
 
 class GroupchatConfigWindow:
 
-    def __init__(self, account, room_jid, form = None):
+    def __init__(self, account, room_jid, form=None):
         self.account = account
         self.room_jid = room_jid
         self.form = form
@@ -2709,32 +2721,44 @@ class GroupchatConfigWindow:
         self.affiliation_treeview = {}
         self.start_users_dict = {} # list at the beginning
         self.affiliation_labels = {'outcast': _('Ban List'),
-                'member': _('Member List'),
-                'owner': _('Owner List'),
-                'admin':_('Administrator List')}
+            'member': _('Member List'), 'owner': _('Owner List'),
+            'admin':_('Administrator List')}
 
-        self.xml = gtkgui_helpers.get_gtk_builder('data_form_window.ui', 'data_form_window')
+        self.xml = gtkgui_helpers.get_gtk_builder('data_form_window.ui',
+            'data_form_window')
         self.window = self.xml.get_object('data_form_window')
         self.window.set_transient_for(gajim.interface.roster.window)
 
         if self.form:
             config_vbox = self.xml.get_object('config_vbox')
-            dataform = dataforms.ExtendForm(node = self.form)
-            self.data_form_widget = dataforms_widget.DataFormWidget(dataform)
+            self.data_form_widget = dataforms_widget.DataFormWidget(self.form)
             # hide scrollbar of this data_form_widget, we already have in this
             # widget
-            sw = self.data_form_widget.xml.get_object('single_form_scrolledwindow')
+            sw = self.data_form_widget.xml.get_object(
+                'single_form_scrolledwindow')
             sw.set_policy(gtk.POLICY_NEVER, gtk.POLICY_NEVER)
+            if self.form.title:
+                self.xml.get_object('title_label').set_text(self.form.title)
+            else:
+                self.xml.get_object('title_hseparator').set_no_show_all(True)
+                self.xml.get_object('title_hseparator').hide()
 
             self.data_form_widget.show()
             config_vbox.pack_start(self.data_form_widget)
+        else:
+            self.xml.get_object('title_label').set_no_show_all(True)
+            self.xml.get_object('title_label').hide()
+            self.xml.get_object('title_hseparator').set_no_show_all(True)
+            self.xml.get_object('title_hseparator').hide()
+            self.xml.get_object('config_hseparator').set_no_show_all(True)
+            self.xml.get_object('config_hseparator').hide()
 
         # Draw the edit affiliation list things
         add_on_vbox = self.xml.get_object('add_on_vbox')
 
         for affiliation in self.affiliation_labels.keys():
             self.start_users_dict[affiliation] = {}
-            hbox = gtk.HBox(spacing = 5)
+            hbox = gtk.HBox(spacing=5)
             add_on_vbox.pack_start(hbox, False)
 
             label = gtk.Label(self.affiliation_labels[affiliation])
@@ -2744,21 +2768,23 @@ class GroupchatConfigWindow:
             bb.set_layout(gtk.BUTTONBOX_END)
             bb.set_spacing(5)
             hbox.pack_start(bb)
-            add_button = gtk.Button(stock = gtk.STOCK_ADD)
-            add_button.connect('clicked', self.on_add_button_clicked, affiliation)
+            add_button = gtk.Button(stock=gtk.STOCK_ADD)
+            add_button.connect('clicked', self.on_add_button_clicked,
+                affiliation)
             bb.pack_start(add_button)
-            self.remove_button[affiliation] = gtk.Button(stock = gtk.STOCK_REMOVE)
+            self.remove_button[affiliation] = gtk.Button(stock=gtk.STOCK_REMOVE)
             self.remove_button[affiliation].set_sensitive(False)
             self.remove_button[affiliation].connect('clicked',
                     self.on_remove_button_clicked, affiliation)
             bb.pack_start(self.remove_button[affiliation])
 
-            liststore = gtk.ListStore(str, str, str, str) # Jid, reason, nick, role
+            # jid, reason, nick, role
+            liststore = gtk.ListStore(str, str, str, str)
             self.affiliation_treeview[affiliation] = gtk.TreeView(liststore)
             self.affiliation_treeview[affiliation].get_selection().set_mode(
-                    gtk.SELECTION_MULTIPLE)
+                gtk.SELECTION_MULTIPLE)
             self.affiliation_treeview[affiliation].connect('cursor-changed',
-                    self.on_affiliation_treeview_cursor_changed, affiliation)
+                self.on_affiliation_treeview_cursor_changed, affiliation)
             renderer = gtk.CellRendererText()
             col = gtk.TreeViewColumn(_('JID'), renderer)
             col.add_attribute(renderer, 'text', 0)
@@ -2794,7 +2820,7 @@ class GroupchatConfigWindow:
             sw.add(self.affiliation_treeview[affiliation])
             add_on_vbox.pack_start(sw)
             gajim.connections[self.account].get_affiliation_list(self.room_jid,
-                    affiliation)
+                affiliation)
 
         self.xml.connect_signals(self)
         self.window.show_all()
@@ -2823,11 +2849,11 @@ class GroupchatConfigWindow:
             title = _('Adding Administrator...')
             prompt = _('<b>Whom do you want to make an administrator?</b>\n\n')
         prompt += _('Can be one of the following:\n'
-                        '1. user@domain/resource (only that resource matches).\n'
-                        '2. user@domain (any resource matches).\n'
-                        '3. domain/resource (only that resource matches).\n'
-                        '4. domain (the domain itself matches, as does any user@domain,\n'
-                        'domain/resource, or address containing a subdomain).')
+            '1. user@domain/resource (only that resource matches).\n'
+            '2. user@domain (any resource matches).\n'
+            '3. domain/resource (only that resource matches).\n'
+            '4. domain (the domain itself matches, as does any user@domain,\n'
+            'domain/resource, or address containing a subdomain).')
 
         def on_ok(jid):
             if not jid:
@@ -2845,7 +2871,6 @@ class GroupchatConfigWindow:
         for row_ref in row_refs:
             path = row_ref.get_path()
             iter_ = model.get_iter(path)
-            jid = model[iter_][0]
             model.remove(iter_)
         self.remove_button[affiliation].set_sensitive(False)
 
@@ -2886,12 +2911,13 @@ class GroupchatConfigWindow:
                 jid = model[iter_][0].decode('utf-8')
                 actual_jid_list.append(jid)
                 if jid not in self.start_users_dict[affiliation] or \
-                (affiliation == 'outcast' and 'reason' in self.start_users_dict[affiliation]\
-                [jid] and self.start_users_dict[affiliation][jid]\
+                (affiliation == 'outcast' and 'reason' in self.start_users_dict[
+                affiliation][jid] and self.start_users_dict[affiliation][jid]\
                 ['reason'] != model[iter_][1].decode('utf-8')):
                     users_dict[jid] = {'affiliation': affiliation}
                     if affiliation == 'outcast':
-                        users_dict[jid]['reason'] = model[iter_][1].decode('utf-8')
+                        users_dict[jid]['reason'] = model[iter_][1].decode(
+                            'utf-8')
                 iter_ = model.iter_next(iter_)
             # remove removed one
             for jid in self.start_users_dict[affiliation]:
@@ -2899,7 +2925,7 @@ class GroupchatConfigWindow:
                     users_dict[jid] = {'affiliation': 'none'}
             if users_dict:
                 gajim.connections[self.account].send_gc_affiliation_list(
-                        self.room_jid, users_dict)
+                    self.room_jid, users_dict)
         self.window.destroy()
 
 #---------- RemoveAccountWindow class -------------#
@@ -2978,7 +3004,7 @@ class RemoveAccountWindow:
         # action of unregistration has failed, we don't remove the account
         # Error message is send by connect_and_auth()
         if not res:
-            confirmation_check = dialogs.ConfirmationDialogDoubleRadio(
+            dialogs.ConfirmationDialogDoubleRadio(
                     _('Connection to server %s failed') % self.account,
                     _('What would you like to do?'),
                     _('Remove only from Gajim'),
@@ -2989,6 +3015,7 @@ class RemoveAccountWindow:
         gajim.interface.roster.close_all(self.account, force=True)
         if self.account in gajim.connections:
             gajim.connections[self.account].disconnect(on_purpose=True)
+            gajim.connections[self.account].cleanup()
             del gajim.connections[self.account]
         gajim.logger.remove_roster(gajim.get_jid_from_account(self.account))
         gajim.config.del_per('accounts', self.account)
@@ -3112,6 +3139,8 @@ class ManageBookmarksWindow:
 
         self.xml.connect_signals(self)
         self.window.show_all()
+        # select root iter
+        self.selection.select_iter(self.treestore.get_iter_root())
 
     def on_bookmarks_treeview_button_press_event(self, widget, event):
         (model, iter_) = self.selection.get_selected()
@@ -3147,8 +3176,8 @@ class ManageBookmarksWindow:
 
         account = model[add_to][1].decode('utf-8')
         nick = gajim.nicks[account]
-        iter_ = self.treestore.append(add_to, [account, _('New Group Chat'), '',
-                False, False, '', nick, 'in_and_out'])
+        iter_ = self.treestore.append(add_to, [account, _('New Group Chat'),
+            '@', False, False, '', nick, 'in_and_out'])
 
         self.view.expand_row(model.get_path(add_to), True)
         self.view.set_cursor(model.get_path(iter_))
@@ -3203,14 +3232,26 @@ class ManageBookmarksWindow:
             gajim.connections[account_unicode].bookmarks = []
 
             for bm in account.iterchildren():
-                #Convert True/False/None to '1' or '0'
+                # Convert True/False/None to '1' or '0'
                 autojoin = unicode(int(bm[3]))
                 minimize = unicode(int(bm[4]))
+                name = bm[1]
+                if name:
+                    name = name.decode('utf-8')
+                jid = bm[2]
+                if jid:
+                    jid = jid.decode('utf-8')
+                pw = bm[5]
+                if pw:
+                    pw = pw.decode('utf-8')
+                nick = bm[6]
+                if nick:
+                    nick = nick.decode('utf-8')
 
-                #create the bookmark-dict
-                bmdict = { 'name': bm[1], 'jid': bm[2], 'autojoin': autojoin,
-                        'minimize': minimize, 'password': bm[5], 'nick': bm[6],
-                        'print_status': bm[7]}
+                # create the bookmark-dict
+                bmdict = { 'name': name, 'jid': jid, 'autojoin': autojoin,
+                    'minimize': minimize, 'password': pw, 'nick': nick,
+                    'print_status': bm[7]}
 
                 gajim.connections[account_unicode].bookmarks.append(bmdict)
 
@@ -3251,12 +3292,7 @@ class ManageBookmarksWindow:
         # Fill in the data for childs
         self.title_entry.set_text(model[iter_][1])
         room_jid = model[iter_][2].decode('utf-8')
-        try:
-            (room, server) = room_jid.split('@')
-        except ValueError:
-            # We just added this one
-            room = ''
-            server = ''
+        (room, server) = room_jid.split('@')
         self.room_entry.set_text(room)
         self.server_entry.set_text(server)
 
@@ -3307,31 +3343,42 @@ class ManageBookmarksWindow:
 
     def on_server_entry_changed(self, widget):
         (model, iter_) = self.selection.get_selected()
-        if iter_:
-            room_jid = self.room_entry.get_text().decode('utf-8').strip() + '@' + \
-                    self.server_entry.get_text().decode('utf-8').strip()
-            try:
-                room_jid = helpers.parse_resource(room_jid)
-            except helpers.InvalidFormat, e:
-                dialogs.ErrorDialog(_('Invalid server'),
-                        _('Character not allowed'))
-                self.server_entry.set_text(model[iter_][2].split('@')[1])
-                return True
-            model[iter_][2] = room_jid
+        if not iter_:
+            return
+        server = widget.get_text().decode('utf-8')
+        if '@' in server:
+            dialogs.ErrorDialog(_('Invalid server'), _('Character not allowed'))
+            widget.set_text(server.replace('@', ''))
+
+        room_jid = self.room_entry.get_text().decode('utf-8').strip() + '@' + \
+                server.strip()
+        try:
+            room_jid = helpers.parse_resource(room_jid)
+        except helpers.InvalidFormat, e:
+            dialogs.ErrorDialog(_('Invalid server'),
+                    _('Character not allowed'))
+            self.server_entry.set_text(model[iter_][2].split('@')[1])
+            return True
+        model[iter_][2] = room_jid
 
     def on_room_entry_changed(self, widget):
         (model, iter_) = self.selection.get_selected()
-        if iter_:
-            room_jid = self.room_entry.get_text().decode('utf-8').strip() + '@' + \
-                    self.server_entry.get_text().decode('utf-8').strip()
-            try:
-                room_jid = helpers.parse_resource(room_jid)
-            except helpers.InvalidFormat, e:
-                dialogs.ErrorDialog(_('Invalid room'),
-                        _('Character not allowed'))
-                self.room_entry.set_text(model[iter_][2].split('@')[0])
-                return True
-            model[iter_][2] = room_jid
+        if not iter_:
+            return
+        room = widget.get_text().decode('utf-8')
+        if '@' in room:
+            dialogs.ErrorDialog(_('Invalid server'), _('Character not allowed'))
+            widget.set_text(room.replace('@', ''))
+        room_jid = room.strip() + '@' + \
+            self.server_entry.get_text().decode('utf-8').strip()
+        try:
+            room_jid = helpers.parse_resource(room_jid)
+        except helpers.InvalidFormat, e:
+            dialogs.ErrorDialog(_('Invalid room'),
+                    _('Character not allowed'))
+            self.room_entry.set_text(model[iter_][2].split('@')[0])
+            return True
+        model[iter_][2] = room_jid
 
     def on_pass_entry_changed(self, widget):
         (model, iter_) = self.selection.get_selected()
@@ -3391,10 +3438,9 @@ class AccountCreationWizardWindow:
         # parse servers.xml
         servers_xml = os.path.join(gajim.DATA_DIR, 'other', 'servers.xml')
         servers = gtkgui_helpers.parse_server_xml(servers_xml)
-        servers_model = gtk.ListStore(str, int)
+        servers_model = gtk.ListStore(str)
         for server in servers:
-            if not server[2]['hidden']:
-                servers_model.append((str(server[0]), int(server[1])))
+            servers_model.append((server,))
 
         completion.set_model(servers_model)
         completion.set_text_column(0)
@@ -3427,13 +3473,14 @@ class AccountCreationWizardWindow:
         self.notebook.set_current_page(0)
         self.xml.connect_signals(self)
         self.window.show_all()
-        gajim.ged.register_event_handler('NEW_ACC_CONNECTED', ged.CORE,
-            self.new_acc_connected)
-        gajim.ged.register_event_handler('NEW_ACC_NOT_CONNECTED', ged.CORE,
-            self.new_acc_not_connected)
-        gajim.ged.register_event_handler('ACC_OK', ged.CORE, self.acc_is_ok)
-        gajim.ged.register_event_handler('ACC_NOT_OK', ged.CORE,
-            self.acc_is_not_ok)
+        gajim.ged.register_event_handler('new-account-connected', ged.GUI1,
+            self._nec_new_acc_connected)
+        gajim.ged.register_event_handler('new-account-not-connected', ged.GUI1,
+            self._nec_new_acc_not_connected)
+        gajim.ged.register_event_handler('account-created', ged.GUI1,
+            self._nec_acc_is_ok)
+        gajim.ged.register_event_handler('account-not-created', ged.GUI1,
+            self._nec_acc_is_not_ok)
 
     def on_wizard_window_destroy(self, widget):
         page = self.notebook.get_current_page()
@@ -3443,13 +3490,14 @@ class AccountCreationWizardWindow:
             del gajim.connections[self.account]
             if self.account in gajim.config.get_per('accounts'):
                 gajim.config.del_per('accounts', self.account)
-        gajim.ged.remove_event_handler('NEW_ACC_CONNECTED', ged.CORE,
-            self.new_acc_connected)
-        gajim.ged.remove_event_handler('NEW_ACC_NOT_CONNECTED', ged.CORE,
-            self.new_acc_not_connected)
-        gajim.ged.remove_event_handler('ACC_OK', ged.CORE, self.acc_is_ok)
-        gajim.ged.remove_event_handler('ACC_NOT_OK', ged.CORE,
-            self.acc_is_not_ok)
+        gajim.ged.remove_event_handler('new-account-connected', ged.GUI1,
+            self._nec_new_acc_connected)
+        gajim.ged.remove_event_handler('new-account-not-connected', ged.GUI1,
+            self._nec_new_acc_not_connected)
+        gajim.ged.remove_event_handler('account-created', ged.GUI1,
+            self._nec_acc_is_ok)
+        gajim.ged.remove_event_handler('account-not-created', ged.GUI1,
+            self._nec_acc_is_not_ok)
         del gajim.interface.instances['account_creation_wizard']
 
     def on_register_server_features_button_clicked(self, widget):
@@ -3688,41 +3736,41 @@ class AccountCreationWizardWindow:
         self.progressbar.pulse()
         return True # loop forever
 
-    def new_acc_connected(self, account, array):
+    def _nec_new_acc_connected(self, obj):
         """
         Connection to server succeded, present the form to the user
         """
         # We receive events from all accounts from GED
-        if account != self.account:
+        if obj.conn.name != self.account:
             return
-        form, is_form, ssl_msg, ssl_err, ssl_cert, ssl_fingerprint = array
         if self.update_progressbar_timeout_id is not None:
             gobject.source_remove(self.update_progressbar_timeout_id)
         self.back_button.show()
         self.forward_button.show()
-        self.is_form = is_form
-        if is_form:
-            dataform = dataforms.ExtendForm(node = form)
+        self.is_form = obj.is_form
+        if obj.is_form:
+            dataform = dataforms.ExtendForm(node=obj.config)
             self.data_form_widget = dataforms_widget.DataFormWidget(dataform)
         else:
-            self.data_form_widget = FakeDataForm(form)
+            self.data_form_widget = FakeDataForm(obj.config)
         self.data_form_widget.show_all()
         self.xml.get_object('form_vbox').pack_start(self.data_form_widget)
-        self.ssl_fingerprint = ssl_fingerprint
-        self.ssl_cert = ssl_cert
-        if ssl_msg:
+        self.ssl_fingerprint = obj.ssl_fingerprint
+        self.ssl_cert = obj.ssl_cert
+        if obj.ssl_msg:
             # An SSL warning occured, show it
-            hostname = gajim.connections[self.account].new_account_info['hostname']
+            hostname = gajim.connections[self.account].new_account_info[
+                'hostname']
             self.xml.get_object('ssl_label').set_markup(_(
                 '<b>Security Warning</b>'
                 '\n\nThe authenticity of the %(hostname)s SSL certificate could'
                 ' be invalid.\nSSL Error: %(error)s\n'
                 'Do you still want to connect to this server?') % {
-                'hostname': hostname, 'error': ssl_msg})
-            if ssl_err in (18, 27):
+                'hostname': hostname, 'error': obj.ssl_msg})
+            if obj.errnum in (18, 27):
                 text = _('Add this certificate to the list of trusted '
                     'certificates.\nSHA1 fingerprint of the certificate:\n%s') \
-                    % ssl_fingerprint
+                    % obj.ssl_fingerprint
                 self.xml.get_object('ssl_checkbutton').set_label(text)
             else:
                 self.xml.get_object('ssl_checkbutton').set_no_show_all(True)
@@ -3731,12 +3779,12 @@ class AccountCreationWizardWindow:
         else:
             self.notebook.set_current_page(4) # show form page
 
-    def new_acc_not_connected(self, account, reason):
+    def _nec_new_acc_not_connected(self, obj):
         """
         Account creation failed: connection to server failed
         """
         # We receive events from all accounts from GED
-        if account != self.account:
+        if obj.conn.name != self.account:
             return
         if self.account not in gajim.connections:
             return
@@ -3752,29 +3800,29 @@ class AccountCreationWizardWindow:
         img = self.xml.get_object('finish_image')
         img.set_from_stock(gtk.STOCK_DIALOG_ERROR, gtk.ICON_SIZE_DIALOG)
         finish_text = '<big><b>%s</b></big>\n\n%s' % (
-            _('An error occurred during account creation'), reason)
+            _('An error occurred during account creation'), obj.reason)
         self.finish_label.set_markup(finish_text)
         self.notebook.set_current_page(6) # show finish page
 
-    def acc_is_ok(self, account, config):
+    def _nec_acc_is_ok(self, obj):
         """
         Account creation succeeded
         """
         # We receive events from all accounts from GED
-        if account != self.account:
+        if obj.conn.name != self.account:
             return
-        self.create_vars(config)
+        self.create_vars(obj.account_info)
         self.show_finish_page()
 
         if self.update_progressbar_timeout_id is not None:
             gobject.source_remove(self.update_progressbar_timeout_id)
 
-    def acc_is_not_ok(self, account, reason):
+    def _nec_acc_is_not_ok(self, obj):
         """
         Account creation failed
         """
         # We receive events from all accounts from GED
-        if account != self.account:
+        if obj.conn.name != self.account:
             return
         self.back_button.show()
         self.cancel_button.show()
@@ -3786,7 +3834,7 @@ class AccountCreationWizardWindow:
         img = self.xml.get_object('finish_image')
         img.set_from_stock(gtk.STOCK_DIALOG_ERROR, gtk.ICON_SIZE_DIALOG)
         finish_text = '<big><b>%s</b></big>\n\n%s' % (_(
-            'An error occurred during account creation'), reason)
+            'An error occurred during account creation'), obj.reason)
         self.finish_label.set_markup(finish_text)
         self.notebook.set_current_page(6) # show finish page
 
@@ -3876,7 +3924,8 @@ class AccountCreationWizardWindow:
 
         # update variables
         gajim.interface.instances[self.account] = {'infos': {}, 'disco': {},
-            'gc_config': {}, 'search': {}, 'online_dialog': {}}
+            'gc_config': {}, 'search': {}, 'online_dialog': {},
+            'sub_request': {}}
         gajim.interface.minimized_controls[self.account] = {}
         gajim.connections[self.account].connected = 0
         gajim.connections[self.account].keepalives = gajim.config.get_per(
@@ -3922,11 +3971,21 @@ class ManagePEPServicesWindow:
         self.init_services()
         self.xml.get_object('services_treeview').get_selection().connect(
                 'changed', self.on_services_selection_changed)
+
+        gajim.ged.register_event_handler('pep-config-received', ged.GUI1,
+            self._nec_pep_config_received)
+        gajim.ged.register_event_handler('agent-items-received', ged.GUI1,
+            self._nec_agent_items_received)
+
         self.window.show_all()
 
     def on_manage_pep_services_window_destroy(self, widget):
         '''close window'''
         del gajim.interface.instances[self.account]['pep_services']
+        gajim.ged.remove_event_handler('pep-config-received', ged.GUI1,
+            self._nec_pep_config_received)
+        gajim.ged.remove_event_handler('agent-items-received', ged.GUI1,
+            self._nec_agent_items_received)
 
     def on_close_button_clicked(self, widget):
         self.window.destroy()
@@ -3951,20 +4010,29 @@ class ManagePEPServicesWindow:
         our_jid = gajim.get_jid_from_account(self.account)
         gajim.connections[self.account].discoverItems(our_jid)
 
-    def items_received(self, items):
+    def _nec_agent_items_received(self, obj):
         our_jid = gajim.get_jid_from_account(self.account)
-        for item in items:
+        for item in obj.items:
             if 'jid' in item and item['jid'] == our_jid and 'node' in item:
                 self.treestore.append([item['node']])
 
-    def node_removed(self, node):
+    def node_removed(self, jid, node):
+        if jid != gajim.get_jid_from_account(self.account):
+            return
         model = self.treeview.get_model()
         iter_ = model.get_iter_root()
         while iter_:
             if model[iter_][0] == node:
                 model.remove(iter_)
                 break
-            iter_ = model.get_iter_next(iter_)
+            iter_ = model.iter_next(iter_)
+
+    def node_not_removed(self, jid, node, msg):
+        if jid != gajim.get_jid_from_account(self.account):
+            return
+        dialogs.WarningDialog(_('PEP node was not removed'),
+            _('PEP node %(node)s was not removed: %(message)s') % {'node': node,
+            'message': msg})
 
     def on_delete_button_clicked(self, widget):
         selection = self.treeview.get_selection()
@@ -3973,7 +4041,8 @@ class ManagePEPServicesWindow:
         model, iter_ = selection.get_selected()
         node = model[iter_][0]
         our_jid = gajim.get_jid_from_account(self.account)
-        gajim.connections[self.account].send_pb_delete(our_jid, node)
+        gajim.connections[self.account].send_pb_delete(our_jid, node,
+            on_ok=self.node_removed, on_fail=self.node_not_removed)
 
     def on_configure_button_clicked(self, widget):
         selection = self.treeview.get_selection()
@@ -3984,13 +4053,13 @@ class ManagePEPServicesWindow:
         our_jid = gajim.get_jid_from_account(self.account)
         gajim.connections[self.account].request_pb_configuration(our_jid, node)
 
-    def config(self, node, form):
+    def _nec_pep_config_received(self, obj):
         def on_ok(form, node):
             form.type = 'submit'
             our_jid = gajim.get_jid_from_account(self.account)
             gajim.connections[self.account].send_pb_configure(our_jid, node, form)
-        window = dialogs.DataFormWindow(form, (on_ok, node))
-        title = "Configure %s" % node
+        window = dialogs.DataFormWindow(obj.form, (on_ok, obj.node))
+        title = _('Configure %s') % obj.node
         window.set_title(title)
         window.show_all()
 

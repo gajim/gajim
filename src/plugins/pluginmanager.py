@@ -29,12 +29,17 @@ __all__ = ['PluginManager']
 import os
 import sys
 import fnmatch
+import zipfile
+from shutil import rmtree
+import ConfigParser
 
 from common import gajim
 from common import nec
+from common.exceptions import PluginsystemError
 
 from plugins.helpers import log, log_calls, Singleton
-from plugins.plugin import GajimPlugin
+from plugins.helpers import GajimPluginActivateException
+from plugins.plugin import GajimPlugin, GajimPluginException
 
 class PluginManager(object):
     '''
@@ -43,8 +48,9 @@ class PluginManager(object):
     Currently:
             - scans for plugins
             - activates them
-            - handles GUI extension points, when called by GUI objects after plugin
-              is activated (by dispatching info about call to handlers in plugins)
+            - handles GUI extension points, when called by GUI objects after
+                plugin is activated (by dispatching info about call to handlers
+                in plugins)
 
     :todo: add more info about how GUI extension points work
     :todo: add list of available GUI extension points
@@ -55,10 +61,11 @@ class PluginManager(object):
                deactivation handler) [DONE?]
     :todo: when plug-in is deactivated all GUI extension points are removed
                from `PluginManager.gui_extension_points_handlers`. But when
-               object that invoked GUI extension point is abandoned by Gajim, eg.
-               closed ChatControl object, the reference to called GUI extension
-               points is still in `PluginManager.gui_extension_points`. These
-               should be removed, so that object can be destroyed by Python.
+               object that invoked GUI extension point is abandoned by Gajim,
+               eg. closed ChatControl object, the reference to called GUI
+               extension points is still in `PluginManager.gui_extension_points`
+               These should be removed, so that object can be destroyed by
+               Python.
                Possible solution: add call to clean up method in classes
                'destructors' (classes that register GUI extension points)
     '''
@@ -93,15 +100,10 @@ class PluginManager(object):
         '''
         Registered handlers of GUI extension points.
         '''
-
         for path in gajim.PLUGINS_DIRS:
-            self.add_plugins(PluginManager.scan_dir_for_plugins(path))
-
-        #log.debug('plugins: %s'%(self.plugins))
-
+            pc = PluginManager.scan_dir_for_plugins(path)
+            self.add_plugins(pc)
         self._activate_all_plugins_from_global_config()
-
-        #log.debug('active: %s'%(self.active_plugins))
 
     @log_calls('PluginManager')
     def _plugin_has_entry_in_global_config(self, plugin):
@@ -113,6 +115,9 @@ class PluginManager(object):
     @log_calls('PluginManager')
     def _create_plugin_entry_in_global_config(self, plugin):
         gajim.config.add_per('plugins', plugin.short_name)
+
+    def _remove_plugin_entry_in_global_config(self, plugin):
+        gajim.config.del_per('plugins', plugin.short_name)
 
     @log_calls('PluginManager')
     def add_plugin(self, plugin_class):
@@ -129,8 +134,9 @@ class PluginManager(object):
             self.plugins.append(plugin)
             plugin.active = False
         else:
-            log.info('Not loading plugin %s v%s from module %s (identified by short name: %s). Plugin already loaded.'%(
-                    plugin.name, plugin.version, plugin.__module__, plugin.short_name))
+            log.info('Not loading plugin %s v%s from module %s (identified by'
+                ' short name: %s). Plugin already loaded.' % (plugin.name,
+                plugin.version, plugin.__module__, plugin.short_name))
 
     @log_calls('PluginManager')
     def add_plugins(self, plugin_classes):
@@ -141,14 +147,14 @@ class PluginManager(object):
     def gui_extension_point(self, gui_extpoint_name, *args):
         '''
         Invokes all handlers (from plugins) for particular GUI extension point
-        and adds it to collection for further processing (eg. by plugins not active
-        yet).
+        and adds it to collection for further processing (eg. by plugins not
+        active yet).
 
         :param gui_extpoint_name: name of GUI extension point.
         :type gui_extpoint_name: unicode
         :param args: parameters to be passed to extension point handlers
-                (typically and object that invokes `gui_extension_point`; however,
-                this can be practically anything)
+                (typically and object that invokes `gui_extension_point`;
+                however, this can be practically anything)
         :type args: tuple
 
         :todo: GUI extension points must be documented well - names with
@@ -159,12 +165,13 @@ class PluginManager(object):
         :bug: what if only some handlers are successfully connected? we should
                 revert all those connections that where successfully made. Maybe
                 call 'self._deactivate_plugin()' or sth similar.
-                Looking closer - we only rewrite tuples here. Real check should be
-                made in method that invokes gui_extpoints handlers.
+                Looking closer - we only rewrite tuples here. Real check should
+                be made in method that invokes gui_extpoints handlers.
         '''
 
         self._add_gui_extension_point_call_to_list(gui_extpoint_name, *args)
-        self._execute_all_handlers_of_gui_extension_point(gui_extpoint_name, *args)
+        self._execute_all_handlers_of_gui_extension_point(gui_extpoint_name,
+            *args)
 
     @log_calls('PluginManager')
     def remove_gui_extension_point(self, gui_extpoint_name, *args):
@@ -188,11 +195,11 @@ class PluginManager(object):
                 extension points. The same arguments and the same name mean
                 the same extension point.
         :todo: instead of using argument to identify which extpoint should be
-                removed, maybe add additional 'id' argument - this would work similar
-                hash in Python objects. 'id' would be calculated based on arguments
-                passed or on anything else (even could be constant). This would give
-                core developers (that add new extpoints) more freedom, but is this
-                necessary?
+                removed, maybe add additional 'id' argument - this would work
+                similar hash in Python objects. 'id' would be calculated based
+                on arguments passed or on anything else (even could be constant)
+                This would give core developers (that add new extpoints) more
+                freedom, but is this necessary?
 
         :param gui_extpoint_name: name of GUI extension point.
         :type gui_extpoint_name: unicode
@@ -203,9 +210,7 @@ class PluginManager(object):
         '''
 
         if gui_extpoint_name in self.gui_extension_points:
-            #log.debug('Removing GUI extpoint\n name: %s\n args: %s'%(gui_extpoint_name, args))
             self.gui_extension_points[gui_extpoint_name].remove(args)
-
 
     @log_calls('PluginManager')
     def _add_gui_extension_point_call_to_list(self, gui_extpoint_name, *args):
@@ -223,36 +228,37 @@ class PluginManager(object):
         :type gui_extpoint_name: str
 
         :param args: parameters to be passed to extension point handlers
-                (typically and object that invokes `gui_extension_point`; however,
-                this can be practically anything)
+                (typically and object that invokes `gui_extension_point`;
+                however, this can be practically anything)
         :type args: tuple
 
         '''
         if ((gui_extpoint_name not in self.gui_extension_points)
-                or (args not in self.gui_extension_points[gui_extpoint_name])):
-            self.gui_extension_points.setdefault(gui_extpoint_name, []).append(args)
+        or (args not in self.gui_extension_points[gui_extpoint_name])):
+            self.gui_extension_points.setdefault(gui_extpoint_name,[]).append(
+                args)
 
     @log_calls('PluginManager')
-    def _execute_all_handlers_of_gui_extension_point(self, gui_extpoint_name, *args):
+    def _execute_all_handlers_of_gui_extension_point(self, gui_extpoint_name,
+    *args):
         if gui_extpoint_name in self.gui_extension_points_handlers:
-            for handlers in self.gui_extension_points_handlers[gui_extpoint_name]:
+            for handlers in self.gui_extension_points_handlers[
+            gui_extpoint_name]:
                 handlers[0](*args)
 
     def _register_events_handlers_in_ged(self, plugin):
         for event_name, handler in plugin.events_handlers.iteritems():
             priority = handler[0]
             handler_function = handler[1]
-            gajim.ged.register_event_handler(event_name,
-                                                                             priority,
-                                                                             handler_function)
+            gajim.ged.register_event_handler(event_name, priority,
+                handler_function)
 
     def _remove_events_handler_from_ged(self, plugin):
         for event_name, handler in plugin.events_handlers.iteritems():
             priority = handler[0]
             handler_function = handler[1]
-            gajim.ged.remove_event_handler(event_name,
-                                                                             priority,
-                                                                             handler_function)
+            gajim.ged.remove_event_handler(event_name, priority,
+                handler_function)
 
     def _register_network_events_in_nec(self, plugin):
         for event_class in plugin.events:
@@ -274,13 +280,7 @@ class PluginManager(object):
         '''
         :param plugin: plugin to be activated
         :type plugin: class object of `GajimPlugin` subclass
-
-        :todo: success checks should be implemented using exceptions. Such
-                control should also be implemented in deactivation. Exceptions
-                should be shown to user inside popup dialog, so the reason
-                for not activating plugin is known.
         '''
-        success = False
         if not plugin.active:
 
             self._add_gui_extension_points_handlers_from_plugin(plugin)
@@ -288,30 +288,31 @@ class PluginManager(object):
             self._register_events_handlers_in_ged(plugin)
             self._register_network_events_in_nec(plugin)
 
-            success = True
-
-            if success:
-                self.active_plugins.append(plugin)
+            self.active_plugins.append(plugin)
+            try:
                 plugin.activate()
-                self._set_plugin_active_in_global_config(plugin)
-                plugin.active = True
-
-        return success
+            except GajimPluginException, e:
+                self.deactivate_plugin(plugin)
+                raise GajimPluginActivateException(str(e))
+            self._set_plugin_active_in_global_config(plugin)
+            plugin.active = True
 
     def deactivate_plugin(self, plugin):
         # remove GUI extension points handlers (provided by plug-in) from
         # handlers list
         for gui_extpoint_name, gui_extpoint_handlers in \
-                        plugin.gui_extension_points.iteritems():
-            self.gui_extension_points_handlers[gui_extpoint_name].remove(gui_extpoint_handlers)
+        plugin.gui_extension_points.iteritems():
+            self.gui_extension_points_handlers[gui_extpoint_name].remove(
+                gui_extpoint_handlers)
 
         # detaching plug-in from handler GUI extension points (calling
         # cleaning up method that must be provided by plug-in developer
         # for each handled GUI extension point)
         for gui_extpoint_name, gui_extpoint_handlers in \
-                        plugin.gui_extension_points.iteritems():
+        plugin.gui_extension_points.iteritems():
             if gui_extpoint_name in self.gui_extension_points:
-                for gui_extension_point_args in self.gui_extension_points[gui_extpoint_name]:
+                for gui_extension_point_args in self.gui_extension_points[
+                gui_extpoint_name]:
                     handler = gui_extpoint_handlers[1]
                     if handler:
                         handler(*gui_extension_point_args)
@@ -332,16 +333,17 @@ class PluginManager(object):
     @log_calls('PluginManager')
     def _add_gui_extension_points_handlers_from_plugin(self, plugin):
         for gui_extpoint_name, gui_extpoint_handlers in \
-                        plugin.gui_extension_points.iteritems():
-            self.gui_extension_points_handlers.setdefault(gui_extpoint_name, []).append(
-                            gui_extpoint_handlers)
+        plugin.gui_extension_points.iteritems():
+            self.gui_extension_points_handlers.setdefault(gui_extpoint_name,
+                []).append(gui_extpoint_handlers)
 
     @log_calls('PluginManager')
     def _handle_all_gui_extension_points_with_plugin(self, plugin):
         for gui_extpoint_name, gui_extpoint_handlers in \
-                        plugin.gui_extension_points.iteritems():
+        plugin.gui_extension_points.iteritems():
             if gui_extpoint_name in self.gui_extension_points:
-                for gui_extension_point_args in self.gui_extension_points[gui_extpoint_name]:
+                for gui_extension_point_args in self.gui_extension_points[
+                gui_extpoint_name]:
                     handler = gui_extpoint_handlers[0]
                     if handler:
                         handler(*gui_extension_point_args)
@@ -353,14 +355,19 @@ class PluginManager(object):
 
         Activated plugins are appended to `active_plugins` list.
         '''
-        #self.active_plugins = []
         for plugin in self.plugins:
-            self.activate_plugin(plugin)
+            try:
+                self.activate_plugin(plugin)
+            except GajimPluginActivateException:
+                pass
 
     def _activate_all_plugins_from_global_config(self):
         for plugin in self.plugins:
             if self._plugin_is_active_in_global_config(plugin):
-                self.activate_plugin(plugin)
+                try:
+                    self.activate_plugin(plugin)
+                except GajimPluginActivateException:
+                    pass
 
     def _plugin_is_active_in_global_config(self, plugin):
         return gajim.config.get_per('plugins', plugin.short_name, 'active')
@@ -370,7 +377,7 @@ class PluginManager(object):
 
     @staticmethod
     @log_calls('PluginManager')
-    def scan_dir_for_plugins(path):
+    def scan_dir_for_plugins(path, scan_dirs=True):
         '''
         Scans given directory for plugin classes.
 
@@ -387,70 +394,157 @@ class PluginManager(object):
         :todo: add scanning zipped modules
         '''
         plugins_found = []
-        if os.path.isdir(path):
-            dir_list = os.listdir(path)
-            #log.debug(dir_list)
+        conf = ConfigParser.ConfigParser()
+        fields = ('name', 'short_name', 'version', 'description', 'authors',
+            'homepage')
+        if not os.path.isdir(path):
+            return plugins_found
 
-            sys.path.insert(0, path)
-            #log.debug(sys.path)
+        dir_list = os.listdir(path)
 
-            for elem_name in dir_list:
-                #log.debug('- "%s"'%(elem_name))
-                file_path = os.path.join(path, elem_name)
-                #log.debug('  "%s"'%(file_path))
+        sys.path.insert(0, path)
 
-                module = None
+        for elem_name in dir_list:
+            file_path = os.path.join(path, elem_name)
 
-                if os.path.isfile(file_path) and fnmatch.fnmatch(file_path, '*.py'):
-                    module_name = os.path.splitext(elem_name)[0]
-                    #log.debug('Possible module detected.')
-                    try:
-                        module = __import__(module_name)
-                        #log.debug('Module imported.')
-                    except ValueError, value_error:
-                        pass
-                        #log.debug('Module not imported successfully. ValueError: %s'%(value_error))
-                    except ImportError, import_error:
-                        pass
-                        #log.debug('Module not imported successfully. ImportError: %s'%(import_error))
+            module = None
 
-                elif os.path.isdir(file_path):
-                    module_name = elem_name
-                    file_path += os.path.sep
-                    #log.debug('Possible package detected.')
-                    try:
-                        module = __import__(module_name)
-                        #log.debug('Package imported.')
-                    except ValueError, value_error:
-                        pass
-                        #log.debug('Package not imported successfully. ValueError: %s'%(value_error))
-                    except ImportError, import_error:
-                        pass
-                        #log.debug('Package not imported successfully. ImportError: %s'%(import_error))
+            if os.path.isfile(file_path) and fnmatch.fnmatch(file_path, '*.py'):
+                module_name = os.path.splitext(elem_name)[0]
+                try:
+                    module = __import__(module_name)
+                except ValueError, value_error:
+                    pass
+                except ImportError, import_error:
+                    pass
+
+            elif os.path.isdir(file_path) and scan_dirs:
+                module_name = elem_name
+                file_path += os.path.sep
+                try:
+                    module = __import__(module_name)
+                except ValueError, value_error:
+                    pass
+                except ImportError, import_error:
+                    pass
 
 
-                if module:
-                    log.debug('Attributes processing started')
-                    for module_attr_name in [attr_name for attr_name in dir(module)
-                                                                     if not (attr_name.startswith('__') or
-                                                                                     attr_name.endswith('__'))]:
-                        module_attr = getattr(module, module_attr_name)
-                        log.debug('%s : %s'%(module_attr_name, module_attr))
+            if module is None:
+                continue
 
-                        try:
-                            if issubclass(module_attr, GajimPlugin) and \
-                               not module_attr is GajimPlugin:
-                                log.debug('is subclass of GajimPlugin')
-                                #log.debug('file_path: %s\nabspath: %s\ndirname: %s'%(file_path, os.path.abspath(file_path), os.path.dirname(os.path.abspath(file_path))))
-                                #log.debug('file_path: %s\ndirname: %s\nabspath: %s'%(file_path, os.path.dirname(file_path), os.path.abspath(os.path.dirname(file_path))))
-                                module_attr.__path__ = os.path.abspath(os.path.dirname(file_path))
-                                plugins_found.append(module_attr)
-                        except TypeError, type_error:
-                            pass
-                            #log.debug('module_attr: %s, error : %s'%(
-                                #module_name+'.'+module_attr_name,
-                                #type_error))
+            manifest_path = os.path.join(os.path.dirname(file_path),
+                'manifest.ini')
+            if scan_dirs and (not os.path.isfile(manifest_path)):
+                continue
 
-                    #log.debug(module)
+            log.debug('Attributes processing started')
+            for module_attr_name in [attr_name for attr_name in dir(module)
+            if not (attr_name.startswith('__') or attr_name.endswith('__'))]:
+                module_attr = getattr(module, module_attr_name)
+                log.debug('%s : %s' % (module_attr_name, module_attr))
+
+                try:
+                    if not issubclass(module_attr, GajimPlugin) or \
+                    module_attr is GajimPlugin:
+                        continue
+                    log.debug('is subclass of GajimPlugin')
+                    module_attr.__path__ = os.path.abspath(
+                        os.path.dirname(file_path))
+
+                    # read metadata from manifest.ini
+                    conf.readfp(open(manifest_path, 'r'))
+                    for option in fields:
+                        if conf.get('info', option) is '':
+                            raise ConfigParser.NoOptionError, 'field empty'
+                        setattr(module_attr, option, conf.get('info', option))
+                    conf.remove_section('info')
+
+                    plugins_found.append(module_attr)
+
+                except TypeError, type_error:
+                    pass
+                except ConfigParser.NoOptionError, type_error:
+                    # all fields are required
+                    log.debug('%s : %s' % (module_attr_name,
+                        'wrong manifest file. all fields are required!'))
 
         return plugins_found
+
+    def install_from_zip(self, zip_filename, owerwrite=None):
+        '''
+        Install plagin from zip and return plugin
+        '''
+        try:
+            zip_file = zipfile.ZipFile(zip_filename)
+        except zipfile.BadZipfile, e:
+            # it is not zip file
+            raise PluginsystemError(_('Archive corrupted'))
+        except IOError,e:
+            raise PluginsystemError(_('Archive empty'))
+
+        if zip_file.testzip():
+            # CRC error
+            raise PluginsystemError(_('Archive corrupted'))
+
+        dirs = []
+        manifest = None
+        for filename in zip_file.namelist():
+            if filename.startswith('.') or filename.startswith('/') or \
+            ('/' not in filename):
+                # members not safe
+                raise PluginsystemError(_('Archive is malformed'))
+            if filename.endswith('/') and filename.find('/', 0, -1) < 0:
+                dirs.append(filename)
+            if 'manifest.ini' in filename.split('/')[1]:
+                manifest = True
+        if not manifest:
+            return
+        if len(dirs) > 1:
+            raise PluginsystemError(_('Archive is malformed'))
+
+        base_dir, user_dir = gajim.PLUGINS_DIRS
+        plugin_dir = os.path.join(user_dir, dirs[0])
+
+        if os.path.isdir(plugin_dir):
+        # Plugin dir already exists
+            if not owerwrite:
+                raise PluginsystemError(_('Plugin already exists'))
+            self.remove_plugin(self.get_plugin_by_path(plugin_dir))
+
+        zip_file.extractall(user_dir)
+        zip_file.close()
+        path = os.path.join(user_dir, dirs[0])
+        plugins = self.scan_dir_for_plugins(plugin_dir, False)
+        if not plugins:
+            return
+        self.add_plugin(plugins[0])
+        plugin = self.plugins[-1]
+        return plugin
+
+    def remove_plugin(self, plugin):
+        '''
+        Deactivate and remove plugin from `plugins` list
+        '''
+        def on_error(func, path, error):
+            if func == os.path.islink:
+            # if symlink
+                os.unlink(path)
+                return
+            # access is denied or other
+            raise PluginsystemError(error[1][1])
+
+        if plugin:
+            if plugin.active:
+                self.deactivate_plugin(plugin)
+            rmtree(plugin.__path__, False, on_error)
+            self.plugins.remove(plugin)
+            if self._plugin_has_entry_in_global_config(plugin):
+                self._remove_plugin_entry_in_global_config(plugin)
+            del sys.modules[plugin.__module__.split('.')[-1]]
+            del plugin.__module__.split('.')[-1]
+            del plugin
+
+    def get_plugin_by_path(self, plugin_dir):
+        for plugin in self.plugins:
+            if plugin.__path__ in plugin_dir:
+                return plugin

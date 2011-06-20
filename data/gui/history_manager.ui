@@ -281,11 +281,10 @@ If you plan to do massive deletions, please make sure Gajim is not running. Gene
     </child>
     <child>
       <object class="GtkImageMenuItem" id="delete_menuitem">
-        <property name="label" translatable="yes">Delete</property>
+        <property name="label">gtk-delete</property>
         <property name="visible">True</property>
         <property name="use_underline">True</property>
         <property name="use_stock">True</property>
-        <property name="accel_group">accelgroup1</property>
       </object>
     </child>
   </object>
@@ -346,5 +345,4 @@ If you plan to do massive deletions, please make sure Gajim is not running. Gene
       <action-widget response="-5">save_button</action-widget>
     </action-widgets>
   </object>
-  <object class="GtkAccelGroup" id="accelgroup1"/>
 </interface>

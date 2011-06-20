@@ -243,16 +243,25 @@ class FileTransfersWindow:
         self.tree.get_selection().unselect_all()
 
     def show_file_send_request(self, account, contact):
-        desc_entry = gtk.Entry()
+        win = gtk.ScrolledWindow()
+        win.set_shadow_type(gtk.SHADOW_IN)
+        win.set_policy(gtk.POLICY_NEVER, gtk.POLICY_NEVER)
+
+        from message_textview import MessageTextView
+        desc_entry = MessageTextView()
+        win.add(desc_entry)
 
         def on_ok(widget):
             file_dir = None
             files_path_list = dialog.get_filenames()
             files_path_list = gtkgui_helpers.decode_filechooser_file_paths(
                     files_path_list)
-            desc = desc_entry.get_text()
+            text_buffer = desc_entry.get_buffer()
+            desc = text_buffer.get_text(text_buffer.get_start_iter(),
+                text_buffer.get_end_iter())
             for file_path in files_path_list:
-                if self.send_file(account, contact, file_path, desc) and file_dir is None:
+                if self.send_file(account, contact, file_path, desc) \
+                and file_dir is None:
                     file_dir = os.path.dirname(file_path)
             if file_dir:
                 gajim.config.set('last_send_dir', file_dir)
@@ -275,7 +284,7 @@ class FileTransfersWindow:
 
         desc_hbox = gtk.HBox(False, 5)
         desc_hbox.pack_start(gtk.Label(_('Description: ')), False, False, 0)
-        desc_hbox.pack_start(desc_entry, True, True, 0)
+        desc_hbox.pack_start(win, True, True, 0)
 
         dialog.vbox.pack_start(desc_hbox, False, False, 0)
 
@@ -296,7 +305,8 @@ class FileTransfersWindow:
             if contact.find('/') == -1:
                 return
             (jid, resource) = contact.split('/', 1)
-            contact = gajim.contacts.create_contact(jid=jid, account=account, resource=resource)
+            contact = gajim.contacts.create_contact(jid=jid, account=account,
+                resource=resource)
         file_name = os.path.split(file_path)[1]
         file_props = self.get_send_file_props(account, contact,
                         file_path, file_name, file_desc)

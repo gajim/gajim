@@ -6,6 +6,7 @@
     <property name="border_width">12</property>
     <property name="title">Contact Information</property>
     <property name="resizable">False</property>
+    <property name="type_hint">dialog</property>
     <signal name="destroy" handler="on_zeroconf_information_window_destroy"/>
     <signal name="key_press_event" handler="on_zeroconf_information_window_key_press_event"/>
     <child>

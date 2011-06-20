@@ -33,12 +33,6 @@ from plugins import GajimPlugin
 from plugins.helpers import log, log_calls
 
 class AcronymsExpanderPlugin(GajimPlugin):
-    name = u'Acronyms Expander'
-    short_name = u'acronyms_expander'
-    version = u'0.1'
-    description = u'''Replaces acronyms (or other strings) with given expansions/substitutes.'''
-    authors = [u'Mateusz Biliński <mateusz@bilinski.it>']
-    homepage = u'http://blog.bilinski.it'
 
     @log_calls('AcronymsExpanderPlugin')
     def init(self):

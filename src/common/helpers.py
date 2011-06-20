@@ -35,6 +35,7 @@ import locale
 import os
 import subprocess
 import urllib
+import webbrowser
 import errno
 import select
 import base64
@@ -51,6 +52,8 @@ try:
     import winsound # windows-only built-in module for playing wav
     import win32api
     import win32con
+    import wave     # posix-only fallback wav playback
+    import ossaudiodev as oss
 except Exception:
     pass
 
@@ -669,33 +672,23 @@ def get_contact_dict_for_account(account):
     return contacts_dict
 
 def launch_browser_mailer(kind, uri):
-    #kind = 'url' or 'mail'
-    if os.name == 'nt':
-        try:
-            os.startfile(uri) # if pywin32 is installed we open
-        except Exception:
-            pass
+    # kind = 'url' or 'mail'
+    if kind == 'url' and uri.startswith('file://'):
+        launch_file_manager(uri)
+        return
+    if kind in ('mail', 'sth_at_sth') and not uri.startswith('mailto:'):
+        uri = 'mailto:' + uri
 
-    else:
-        if kind in ('mail', 'sth_at_sth') and not uri.startswith('mailto:'):
-            uri = 'mailto:' + uri
+    if kind == 'url' and uri.startswith('www.'):
+        uri = 'http://' + uri
 
-        if kind == 'url' and uri.startswith('www.'):
-            uri = 'http://' + uri
-
-        if gajim.config.get('openwith') == 'gnome-open':
-            command = 'gnome-open'
-        elif gajim.config.get('openwith') == 'kfmclient exec':
-            command = 'kfmclient exec'
-        elif gajim.config.get('openwith') == 'exo-open':
-            command = 'exo-open'
-        elif gajim.config.get('openwith') == 'custom':
-            if kind == 'url':
-                command = gajim.config.get('custombrowser')
-            elif kind in ('mail', 'sth_at_sth'):
-                command = gajim.config.get('custommailapp')
-            if command == '': # if no app is configured
-                return
+    if not gajim.config.get('autodetect_browser_mailer'):
+        if kind == 'url':
+            command = gajim.config.get('custombrowser')
+        elif kind in ('mail', 'sth_at_sth'):
+            command = gajim.config.get('custommailapp')
+        if command == '': # if no app is configured
+            return
 
         command = build_command(command, uri)
         try:
@@ -703,23 +696,25 @@ def launch_browser_mailer(kind, uri):
         except Exception:
             pass
 
+    else:
+        webbrowser.open(uri)
+
+
 def launch_file_manager(path_to_open):
+    if not path_to_open.startswith('file://'):
+        uri = 'file://' + path_to_open
     if os.name == 'nt':
         try:
             os.startfile(path_to_open) # if pywin32 is installed we open
         except Exception:
             pass
     else:
-        if gajim.config.get('openwith') == 'gnome-open':
-            command = 'gnome-open'
-        elif gajim.config.get('openwith') == 'kfmclient exec':
-            command = 'kfmclient exec'
-        elif gajim.config.get('openwith') == 'exo-open':
-            command = 'exo-open'
-        elif gajim.config.get('openwith') == 'custom':
+        if not gajim.config.get('autodetect_browser_mailer'):
             command = gajim.config.get('custom_file_manager')
-        if command == '': # if no app is configured
-            return
+            if command == '': # if no app is configured
+                return
+        else:
+            command = 'xdg-open'
         command = build_command(command, path_to_open)
         try:
             exec_command(command)
@@ -791,6 +786,15 @@ def play_sound_file(path_to_soundfile):
             pass
     elif os.name == 'posix':
         if gajim.config.get('soundplayer') == '':
+            def _oss_play():
+                sndfile = wave.open(path_to_soundfile, 'rb')
+                (nc, sw, fr, nf, comptype, compname) = sndfile.getparams()
+                dev = oss.open('/dev/dsp', 'w')
+                dev.setparameters(sw * 8, nc, fr)
+                dev.write(sndfile.readframes(nf))
+                sndfile.close()
+                dev.close()
+            gajim.thread_interface(_oss_play)
             return
         player = gajim.config.get('soundplayer')
         command = build_command(player, path_to_soundfile)
@@ -909,6 +913,7 @@ distro_info = {
         'Sun JDS': '/etc/sun-release',
         'PLD Linux': '/etc/pld-release',
         'Yellow Dog Linux': '/etc/yellowdog-release',
+        'AgiliaLinux': '/etc/agilialinux-version',
         # many distros use the /etc/redhat-release for compatibility
         # so Redhat is the last
         'Redhat Linux': '/etc/redhat-release'
@@ -986,7 +991,8 @@ def get_os_info():
                     path_to_file.endswith('arch-release'):
                         # file doesn't have version
                         text = distro_name
-                    elif path_to_file.endswith('lfs-release'): # file just has version
+                    elif path_to_file.endswith('lfs-release'):
+                        # file just has version
                         text = distro_name + ' ' + text
                 os_info = text.replace('\n', '')
                 gajim.os_info = os_info
@@ -1003,8 +1009,8 @@ def get_os_info():
     return os_info
 
 
-def allow_showing_notification(account, type_ = 'notify_on_new_message',
-                advanced_notif_num = None, is_first_message = True):
+def allow_showing_notification(account, type_='notify_on_new_message',
+is_first_message=True):
     """
     Is it allowed to show nofication?
 
@@ -1012,13 +1018,6 @@ def allow_showing_notification(account, type_ = 'notify_on_new_message',
     option that need to be True e.g.: notify_on_signing is_first_message: set it
     to false when it's not the first message
     """
-    if advanced_notif_num is not None:
-        popup = gajim.config.get_per('notifications', str(advanced_notif_num),
-                'popup')
-        if popup == 'yes':
-            return True
-        if popup == 'no':
-            return False
     if type_ and (not gajim.config.get(type_) or not is_first_message):
         return False
     if gajim.config.get('autopopupaway'): # always show notification
@@ -1027,17 +1026,10 @@ def allow_showing_notification(account, type_ = 'notify_on_new_message',
         return True
     return False
 
-def allow_popup_window(account, advanced_notif_num = None):
+def allow_popup_window(account):
     """
     Is it allowed to popup windows?
     """
-    if advanced_notif_num is not None:
-        popup = gajim.config.get_per('notifications', str(advanced_notif_num),
-                'auto_open')
-        if popup == 'yes':
-            return True
-        if popup == 'no':
-            return False
     autopopup = gajim.config.get('autopopup')
     autopopupaway = gajim.config.get('autopopupaway')
     if autopopup and (autopopupaway or \
@@ -1045,14 +1037,7 @@ def allow_popup_window(account, advanced_notif_num = None):
         return True
     return False
 
-def allow_sound_notification(account, sound_event, advanced_notif_num=None):
-    if advanced_notif_num is not None:
-        sound = gajim.config.get_per('notifications', str(advanced_notif_num),
-                'sound')
-        if sound == 'yes':
-            return True
-        if sound == 'no':
-            return False
+def allow_sound_notification(account, sound_event):
     if gajim.config.get('sounddnd') or gajim.connections[account].connected != \
     gajim.SHOW_LIST.index('dnd') and gajim.config.get_per('soundevents',
     sound_event, 'enabled'):
@@ -1136,16 +1121,14 @@ def get_notification_icon_tooltip_dict():
         if total_non_messages > 0:
             if total_non_messages > max_ungrouped_events:
                 text = ngettext(
-                        '%d event pending',
-                        '%d events pending',
-                        total_non_messages, total_non_messages, total_non_messages)
+                    '%d event pending',
+                    '%d events pending',
+                    total_non_messages, total_non_messages,total_non_messages)
                 account['event_lines'].append(text)
             else:
                 for jid in non_messages.keys():
-                    text = ngettext(
-                            '%d event pending',
-                            '%d events pending',
-                            non_messages[jid], non_messages[jid], non_messages[jid])
+                    text = ngettext('%d event pending', '%d events pending',
+                        non_messages[jid], non_messages[jid], non_messages[jid])
                     text += _(' from user %s') % (jid)
                     account[account]['event_lines'].append(text)
 
@@ -1267,8 +1250,17 @@ def prepare_and_validate_gpg_keyID(account, jid, keyID):
         if jid in attached_keys and keyID:
             attachedkeyID = attached_keys[attached_keys.index(jid) + 1]
             if attachedkeyID != keyID:
-                # Mismatch! Another gpg key was expected
-                keyID += 'MISMATCH'
+                # Get signing subkeys for the attached key
+                subkeys = []
+                for key in gajim.connections[account].gpg.list_keys():
+                    if key['keyid'][8:] == attachedkeyID:
+                        subkeys = [subkey[0][8:] for subkey in key['subkeys'] \
+                            if subkey[1] == 's']
+                        break
+
+                if keyID not in subkeys:
+                    # Mismatch! Another gpg key was expected
+                    keyID += 'MISMATCH'
         elif jid in attached_keys:
             # An unsigned presence, just use the assigned key
             keyID = attached_keys[attached_keys.index(jid) + 1]
@@ -1278,9 +1270,11 @@ def prepare_and_validate_gpg_keyID(account, jid, keyID):
             if keyID in public_keys:
                 for u in gajim.contacts.get_contacts(account, jid):
                     u.keyID = keyID
-                keys_str = gajim.config.get_per('accounts', account, 'attached_gpg_keys')
+                keys_str = gajim.config.get_per('accounts', account,
+                    'attached_gpg_keys')
                 keys_str += jid + ' ' + keyID + ' '
-                gajim.config.set_per('accounts', account, 'attached_gpg_keys', keys_str)
+                gajim.config.set_per('accounts', account, 'attached_gpg_keys',
+                    keys_str)
         elif keyID is None:
             keyID = 'UNKNOWN'
     return keyID
@@ -1363,3 +1357,18 @@ def get_subscription_request_msg(account=None):
             name = nick
         s = Template(s).safe_substitute({'name': name})
         return s
+
+def replace_dataform_media(form, stanza):
+    import xmpp
+    found = False
+    for field in form.getTags('field'):
+        for media in field.getTags('media'):
+            for uri in media.getTags('uri'):
+                uri_data = uri.getData()
+                if uri_data.startswith('cid:'):
+                    uri_data = uri_data[4:]
+                    for data in stanza.getTags('data', namespace=xmpp.NS_BOB):
+                        if data.getAttr('cid') == uri_data:
+                            uri.setData(data.getData())
+                            found = True
+    return found

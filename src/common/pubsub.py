@@ -24,12 +24,22 @@
 import xmpp
 import gajim
 import connection_handlers
+import ged
+from connection_handlers_events import PubsubReceivedEvent
+from connection_handlers_events import PubsubBookmarksReceivedEvent
 import logging
 log = logging.getLogger('gajim.c.pubsub')
 
 class ConnectionPubSub:
     def __init__(self):
-        self.__callbacks={}
+        self.__callbacks = {}
+        gajim.nec.register_incoming_event(PubsubBookmarksReceivedEvent)
+        gajim.ged.register_event_handler('pubsub-bookmarks-received',
+            ged.CORE, self._nec_pubsub_bookmarks_received)
+
+    def cleanup(self):
+        gajim.ged.remove_event_handler('pubsub-bookmarks-received',
+            ged.CORE, self._nec_pubsub_bookmarks_received)
 
     def send_pb_subscription_query(self, jid, cb, *args, **kwargs):
         if not self.connection or self.connected < 2:
@@ -40,7 +50,7 @@ class ConnectionPubSub:
 
         id_ = self.connection.send(query)
 
-        self.__callbacks[id_]=(cb, args, kwargs)
+        self.__callbacks[id_] = (cb, args, kwargs)
 
     def send_pb_subscribe(self, jid, node, cb, *args, **kwargs):
         if not self.connection or self.connected < 2:
@@ -52,7 +62,7 @@ class ConnectionPubSub:
 
         id_ = self.connection.send(query)
 
-        self.__callbacks[id_]=(cb, args, kwargs)
+        self.__callbacks[id_] = (cb, args, kwargs)
 
     def send_pb_unsubscribe(self, jid, node, cb, *args, **kwargs):
         if not self.connection or self.connected < 2:
@@ -64,7 +74,7 @@ class ConnectionPubSub:
 
         id_ = self.connection.send(query)
 
-        self.__callbacks[id_]=(cb, args, kwargs)
+        self.__callbacks[id_] = (cb, args, kwargs)
 
     def send_pb_publish(self, jid, node, item, id_, options=None):
         """
@@ -94,7 +104,7 @@ class ConnectionPubSub:
         id_ = self.connection.send(query)
 
         if cb:
-            self.__callbacks[id_]=(cb, args, kwargs)
+            self.__callbacks[id_] = (cb, args, kwargs)
 
     def send_pb_retract(self, jid, node, id_):
         """
@@ -141,7 +151,7 @@ class ConnectionPubSub:
         self.connection.SendAndCallForResponse(query, response, {'jid': jid,
             'node': node})
 
-    def send_pb_create(self, jid, node, configure = False, configure_form = None):
+    def send_pb_create(self, jid, node, configure=False, configure_form=None):
         """
         Create a new node
         """
@@ -174,21 +184,16 @@ class ConnectionPubSub:
             cb(conn, stanza, *args, **kwargs)
         except Exception:
             pass
+        gajim.nec.push_incoming_event(PubsubReceivedEvent(None,
+            conn=self, stanza=stanza))
 
-        pubsub = stanza.getTag('pubsub')
-        if not pubsub:
-            return
-        items = pubsub.getTag('items')
-        if not items:
-            return
-        item = items.getTag('item')
-        if not item:
-            return
-        storage = item.getTag('storage')
-        if storage:
-            ns = storage.getNamespace()
-            if ns == 'storage:bookmarks':
-                self._parse_bookmarks(storage, 'pubsub')
+    def _nec_pubsub_bookmarks_received(self, obj):
+        bm_jids = [b['jid'] for b in self.bookmarks]
+        for bm in obj.bookmarks:
+            if bm['jid'] not in bm_jids:
+                self.bookmarks.append(bm)
+        # We got bookmarks from pubsub, now get those from xml to merge them
+        self.get_bookmarks(storage_type='xml')
 
     def _PubSubErrorCB(self, conn, stanza):
         log.debug('_PubsubErrorCB')

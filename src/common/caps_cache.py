@@ -75,14 +75,17 @@ def client_supports(client_caps, requested_feature):
     else:
         return False
 
-def create_suitable_client_caps(node, caps_hash, hash_method):
+def create_suitable_client_caps(node, caps_hash, hash_method, fjid=None):
     """
     Create and return a suitable ClientCaps object for the given node,
     caps_hash, hash_method combination.
     """
     if not node or not caps_hash:
-        # improper caps, ignore client capabilities.
-        client_caps = NullClientCaps()
+        if fjid:
+            client_caps = NoClientCaps(fjid)
+        else:
+            # improper caps, ignore client capabilities.
+            client_caps = NullClientCaps()
     elif not hash_method:
         client_caps = OldClientCaps(caps_hash, node)
     else:
@@ -172,6 +175,7 @@ class AbstractClientCaps(object):
     def __init__(self, caps_hash, node):
         self._hash = caps_hash
         self._node = node
+        self._hash_method = None
 
     def get_discover_strategy(self):
         return self._discover
@@ -228,6 +232,7 @@ class OldClientCaps(AbstractClientCaps):
     """
     def __init__(self, caps_hash, node):
         AbstractClientCaps.__init__(self, caps_hash, node)
+        self._hash_method = 'old'
 
     def _lookup_in_cache(self, caps_cache):
         return caps_cache[('old', self._node + '#' + self._hash)]
@@ -238,6 +243,22 @@ class OldClientCaps(AbstractClientCaps):
     def _is_hash_valid(self, identities, features, dataforms):
         return True
 
+class NoClientCaps(AbstractClientCaps):
+    """
+    For clients that don't support XEP-0115
+    """
+    def __init__(self, fjid):
+        AbstractClientCaps.__init__(self, fjid, fjid)
+        self._hash_method = 'no'
+
+    def _lookup_in_cache(self, caps_cache):
+        return caps_cache[('no', self._node)]
+
+    def _discover(self, connection, jid):
+        connection.discoverInfo(jid)
+
+    def _is_hash_valid(self, identities, features, dataforms):
+        return True
 
 class NullClientCaps(AbstractClientCaps):
     """
@@ -258,6 +279,7 @@ class NullClientCaps(AbstractClientCaps):
 
     def __init__(self):
         AbstractClientCaps.__init__(self, None, None)
+        self._hash_method = 'dummy'
 
     def _lookup_in_cache(self, caps_cache):
         # lookup something which does not exist to get a new CacheItem created
@@ -341,14 +363,17 @@ class CapsCache(object):
             def set_and_store(self, identities, features):
                 self.identities = identities
                 self.features = features
-                self._logger.add_caps_entry(self.hash_method, self.hash,
+                if self.hash_method != 'no':
+                    self._logger.add_caps_entry(self.hash_method, self.hash,
                         identities, features)
                 self.status = CACHED
 
             def update_last_seen(self):
                 if not self._recently_seen:
                     self._recently_seen = True
-                    self._logger.update_caps_time(self.hash_method, self.hash)
+                    if self.hash_method != 'no':
+                        self._logger.update_caps_time(self.hash_method,
+                            self.hash)
 
             def is_valid(self):
                 """
@@ -401,3 +426,10 @@ class CapsCache(object):
             discover(connection, jid)
         else:
             q.update_last_seen()
+
+    def forget_caps(self, client_caps):
+        hash_method = client_caps._hash_method
+        hash = client_caps._hash
+        key = (hash_method, hash)
+        if key in self.__cache:
+            del self.__cache[key]

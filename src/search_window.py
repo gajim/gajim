@@ -22,7 +22,9 @@
 import gobject
 import gtk
 
-from common import gajim, dataforms
+from common import gajim
+from common import dataforms
+from common import ged
 
 import gtkgui_helpers
 import dialogs
@@ -57,6 +59,11 @@ class SearchWindow:
         # Is there a jid column in results ? if -1: no, else column number
         self.jid_column = -1
 
+        gajim.ged.register_event_handler('search-form-received', ged.GUI1,
+            self._nec_search_form_received)
+        gajim.ged.register_event_handler('search-result-received', ged.GUI1,
+            self._nec_search_result_received)
+
     def request_form(self):
         gajim.connections[self.account].request_search_fields(self.jid)
 
@@ -72,6 +79,10 @@ class SearchWindow:
         if self.pulse_id:
             gobject.source_remove(self.pulse_id)
         del gajim.interface.instances[self.account]['search'][self.jid]
+        gajim.ged.remove_event_handler('search-form-received', ged.GUI1,
+            self._nec_search_form_received)
+        gajim.ged.remove_event_handler('search-result-received', ged.GUI1,
+            self._nec_search_result_received)
 
     def on_close_button_clicked(self, button):
         self.window.destroy()
@@ -115,16 +126,16 @@ class SearchWindow:
             gajim.interface.instances[self.account]['infos'][jid] = \
                     vcard.VcardWindow(contact, self.account)
 
-    def on_form_arrived(self, form, is_form):
+    def _nec_search_form_received(self, obj):
         if self.pulse_id:
             gobject.source_remove(self.pulse_id)
         self.progressbar.hide()
         self.label.hide()
 
-        if is_form:
+        if obj.is_dataform:
             self.is_form = True
             self.data_form_widget = dataforms_widget.DataFormWidget()
-            self.dataform = dataforms.ExtendForm(node = form)
+            self.dataform = dataforms.ExtendForm(node=obj.data)
             self.data_form_widget.set_sensitive(True)
             try:
                 self.data_form_widget.data_form = self.dataform
@@ -137,7 +148,7 @@ class SearchWindow:
                         self.data_form_widget.title)
         else:
             self.is_form = False
-            self.data_form_widget = config.FakeDataForm(form)
+            self.data_form_widget = config.FakeDataForm(obj.data)
 
         self.data_form_widget.show_all()
         self.search_vbox.pack_start(self.data_form_widget)
@@ -155,14 +166,14 @@ class SearchWindow:
             self.add_contact_button.set_sensitive(False)
             self.information_button.set_sensitive(False)
 
-    def on_result_arrived(self, form, is_form):
+    def _nec_search_result_received(self, obj):
         if self.pulse_id:
             gobject.source_remove(self.pulse_id)
         self.progressbar.hide()
         self.label.hide()
 
-        if not is_form:
-            if not form:
+        if not obj.is_dataform:
+            if not obj.data:
                 self.label.set_text(_('No result'))
                 self.label.show()
                 return
@@ -171,20 +182,19 @@ class SearchWindow:
             sw.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
             self.result_treeview = gtk.TreeView()
             self.result_treeview.connect('cursor-changed',
-                    self.on_result_treeview_cursor_changed)
+                self.on_result_treeview_cursor_changed)
             sw.add(self.result_treeview)
             # Create model
-            fieldtypes = [str]*len(form[0])
+            fieldtypes = [str]*len(obj.data[0])
             model = gtk.ListStore(*fieldtypes)
             # Copy data to model
-            for item in form:
+            for item in obj.data:
                 model.append(item.values())
             # Create columns
             counter = 0
-            for field in form[0].keys():
-                self.result_treeview.append_column(
-                        gtk.TreeViewColumn(field, gtk.CellRendererText(),
-                        text = counter))
+            for field in obj.data[0].keys():
+                self.result_treeview.append_column(gtk.TreeViewColumn(field,
+                    gtk.CellRendererText(), text=counter))
                 if field == 'jid':
                     self.jid_column = counter
                 counter += 1
@@ -196,7 +206,7 @@ class SearchWindow:
                 self.information_button.show()
             return
 
-        self.dataform = dataforms.ExtendForm(node = form)
+        self.dataform = dataforms.ExtendForm(node=obj.data)
         if len(self.dataform.items) == 0:
             # No result
             self.label.set_text(_('No result'))
@@ -215,7 +225,7 @@ class SearchWindow:
         selection = self.result_treeview.get_selection()
         selection.set_mode(gtk.SELECTION_SINGLE)
         self.result_treeview.connect('cursor-changed',
-                self.on_result_treeview_cursor_changed)
+            self.on_result_treeview_cursor_changed)
 
         counter = 0
         for field in self.dataform.items[0].fields:
@@ -230,4 +240,4 @@ class SearchWindow:
             self.information_button.show()
         if self.data_form_widget.title:
             self.window.set_title('%s - Search - Gajim' % \
-                    self.data_form_widget.title)
+                self.data_form_widget.title)

@@ -1,0 +1,2071 @@
+# -*- coding:utf-8 -*-
+## src/common/connection_handlers_events.py
+##
+## Copyright (C) 2010 Yann Leboulanger <asterix AT lagaule.org>
+##
+## This file is part of Gajim.
+##
+## Gajim is free software; you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published
+## by the Free Software Foundation; version 3 only.
+##
+## Gajim is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
+##
+
+import datetime
+import sys
+from time import (localtime, time as time_time)
+from calendar import timegm
+import hmac
+
+from common import atom
+from common import nec
+from common import helpers
+from common import gajim
+from common import xmpp
+from common import dataforms
+from common import exceptions
+from common.zeroconf import zeroconf
+from common.logger import LOG_DB_PATH
+from common.pep import SUPPORTED_PERSONAL_USER_EVENTS
+
+import gtkgui_helpers
+
+import logging
+log = logging.getLogger('gajim.c.connection_handlers_events')
+
+class HelperEvent:
+    def get_jid_resource(self, check_fake_jid=False):
+        if check_fake_jid and hasattr(self, 'id_') and \
+        self.id_ in self.conn.groupchat_jids:
+            self.fjid = self.conn.groupchat_jids[self.id_]
+            del self.conn.groupchat_jids[self.id_]
+        else:
+            self.fjid = helpers.get_full_jid_from_iq(self.stanza)
+        self.jid, self.resource = gajim.get_room_and_nick_from_fjid(self.fjid)
+
+    def get_id(self):
+        self.id_ = self.stanza.getID()
+
+    def get_gc_control(self):
+        self.gc_control = gajim.interface.msg_win_mgr.get_gc_control(self.jid,
+            self.conn.name)
+
+        # If gc_control is missing - it may be minimized. Try to get it
+        # from there. If it's not there - then it's missing anyway and
+        # will remain set to None.
+        if not self.gc_control:
+            minimized = gajim.interface.minimized_controls[self.conn.name]
+            self.gc_control = minimized.get(self.jid)
+
+    def _generate_timestamp(self, tag):
+        tim = helpers.datetime_tuple(tag)
+        self.timestamp = localtime(timegm(tim))
+
+    def get_chatstate(self):
+        """
+        Extract chatstate from a <message/> stanza
+        Requires self.stanza and self.msgtxt
+        """
+        self.composing_xep = None
+        self.chatstate = None
+
+        # chatstates - look for chatstate tags in a message if not delayed
+        delayed = self.stanza.getTag('x', namespace=xmpp.NS_DELAY) is not None
+        if not delayed:
+            self.composing_xep = False
+            children = self.stanza.getChildren()
+            for child in children:
+                if child.getNamespace() == 'http://jabber.org/protocol/chatstates':
+                    self.chatstate = child.getName()
+                    self.composing_xep = 'XEP-0085'
+                    break
+            # No XEP-0085 support, fallback to XEP-0022
+            if not self.chatstate:
+                chatstate_child = self.stanza.getTag('x',
+                    namespace=xmpp.NS_EVENT)
+                if chatstate_child:
+                    self.chatstate = 'active'
+                    self.composing_xep = 'XEP-0022'
+                    if not self.msgtxt and chatstate_child.getTag('composing'):
+                        self.chatstate = 'composing'
+
+class HttpAuthReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'http-auth-received'
+    base_network_events = []
+
+    def generate(self):
+        self.opt = gajim.config.get_per('accounts', self.conn.name, 'http_auth')
+        self.iq_id = self.stanza.getTagAttr('confirm', 'id')
+        self.method = self.stanza.getTagAttr('confirm', 'method')
+        self.url = self.stanza.getTagAttr('confirm', 'url')
+        # In case it's a message with a body
+        self.msg = self.stanza.getTagData('body')
+        return True
+
+class LastResultReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
+    name = 'last-result-received'
+    base_network_events = []
+
+    def generate(self):
+        self.get_id()
+        self.get_jid_resource(check_fake_jid=True)
+        if self.id_ in self.conn.last_ids:
+            self.conn.last_ids.remove(self.id_)
+
+        self.status = ''
+        self.seconds = -1
+
+        if self.stanza.getType() == 'error':
+            return True
+
+        qp = self.stanza.getTag('query')
+        if not qp:
+            return
+        sec = qp.getAttr('seconds')
+        self.status = qp.getData()
+        try:
+            self.seconds = int(sec)
+        except Exception:
+            return
+
+        return True
+
+class VersionResultReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
+    name = 'version-result-received'
+    base_network_events = []
+
+    def generate(self):
+        self.get_id()
+        self.get_jid_resource(check_fake_jid=True)
+        if self.id_ in self.conn.version_ids:
+            self.conn.version_ids.remove(self.id_)
+
+        self.client_info = ''
+        self.os_info = ''
+
+        if self.stanza.getType() == 'error':
+            return True
+
+        qp = self.stanza.getTag('query')
+        if qp.getTag('name'):
+            self.client_info += qp.getTag('name').getData()
+        if qp.getTag('version'):
+            self.client_info += ' ' + qp.getTag('version').getData()
+        if qp.getTag('os'):
+            self.os_info += qp.getTag('os').getData()
+
+        return True
+
+class TimeResultReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
+    name = 'time-result-received'
+    base_network_events = []
+
+    def generate(self):
+        self.get_id()
+        self.get_jid_resource(check_fake_jid=True)
+        if self.id_ in self.conn.entity_time_ids:
+            self.conn.entity_time_ids.remove(self.id_)
+
+        self.time_info = ''
+
+        if self.stanza.getType() == 'error':
+            return True
+
+        qp = self.stanza.getTag('time')
+        if not qp:
+            # wrong answer
+            return
+        tzo = qp.getTag('tzo').getData()
+        if tzo.lower() == 'z':
+            tzo = '0:0'
+        tzoh, tzom = tzo.split(':')
+        utc_time = qp.getTag('utc').getData()
+        ZERO = datetime.timedelta(0)
+        class UTC(datetime.tzinfo):
+            def utcoffset(self, dt):
+                return ZERO
+            def tzname(self, dt):
+                return "UTC"
+            def dst(self, dt):
+                return ZERO
+
+        class contact_tz(datetime.tzinfo):
+            def utcoffset(self, dt):
+                return datetime.timedelta(hours=int(tzoh), minutes=int(tzom))
+            def tzname(self, dt):
+                return "remote timezone"
+            def dst(self, dt):
+                return ZERO
+
+        try:
+            t = datetime.datetime.strptime(utc_time, '%Y-%m-%dT%H:%M:%SZ')
+        except ValueError, e:
+            try:
+                t = datetime.datetime.strptime(utc_time,
+                    '%Y-%m-%dT%H:%M:%S.%fZ')
+            except ValueError, e:
+                log.info('Wrong time format: %s' % str(e))
+                return
+
+        t = t.replace(tzinfo=UTC())
+        self.time_info = t.astimezone(contact_tz()).strftime('%c')
+        return True
+
+class GMailQueryReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'gmail-notify'
+    base_network_events = []
+
+    def generate(self):
+        if not self.stanza.getTag('mailbox'):
+            return
+        mb = self.stanza.getTag('mailbox')
+        if not mb.getAttr('url'):
+            return
+        self.conn.gmail_url = mb.getAttr('url')
+        if mb.getNamespace() != xmpp.NS_GMAILNOTIFY:
+            return
+        self.newmsgs = mb.getAttr('total-matched')
+        if not self.newmsgs:
+            return
+        if self.newmsgs == '0':
+            return
+        # there are new messages
+        self.gmail_messages_list = []
+        if mb.getTag('mail-thread-info'):
+            gmail_messages = mb.getTags('mail-thread-info')
+            for gmessage in gmail_messages:
+                unread_senders = []
+                for sender in gmessage.getTag('senders').getTags(
+                'sender'):
+                    if sender.getAttr('unread') != '1':
+                        continue
+                    if sender.getAttr('name'):
+                        unread_senders.append(sender.getAttr('name') + \
+                            '< ' + sender.getAttr('address') + '>')
+                    else:
+                        unread_senders.append(sender.getAttr('address'))
+
+                if not unread_senders:
+                    continue
+                gmail_subject = gmessage.getTag('subject').getData()
+                gmail_snippet = gmessage.getTag('snippet').getData()
+                tid = int(gmessage.getAttr('tid'))
+                if not self.conn.gmail_last_tid or \
+                tid > self.conn.gmail_last_tid:
+                    self.conn.gmail_last_tid = tid
+                self.gmail_messages_list.append({
+                    'From': unread_senders,
+                    'Subject': gmail_subject,
+                    'Snippet': gmail_snippet,
+                    'url': gmessage.getAttr('url'),
+                    'participation': gmessage.getAttr('participation'),
+                    'messages': gmessage.getAttr('messages'),
+                    'date': gmessage.getAttr('date')})
+            self.conn.gmail_last_time = int(mb.getAttr('result-time'))
+
+        self.jid = gajim.get_jid_from_account(self.name)
+        log.debug(('You have %s new gmail e-mails on %s.') % (self.newmsgs,
+            self.jid))
+        return True
+
+class RosterItemExchangeEvent(nec.NetworkIncomingEvent, HelperEvent):
+    name = 'roster-item-exchange-received'
+    base_network_events = []
+
+    def generate(self):
+        self.get_id()
+        self.get_jid_resource()
+        self.exchange_items_list = {}
+        items_list = self.stanza.getTag('x').getChildren()
+        if not items_list:
+            return
+        self.action = items_list[0].getAttr('action')
+        if self.action is None:
+            self.action = 'add'
+        for item in self.stanza.getTag('x', namespace=xmpp.NS_ROSTERX).\
+        getChildren():
+            try:
+                jid = helpers.parse_jid(item.getAttr('jid'))
+            except helpers.InvalidFormat:
+                log.warn('Invalid JID: %s, ignoring it' % item.getAttr('jid'))
+                continue
+            name = item.getAttr('name')
+            contact = gajim.contacts.get_contact(self.conn.name, jid)
+            groups = []
+            same_groups = True
+            for group in item.getTags('group'):
+                groups.append(group.getData())
+                # check that all suggested groups are in the groups we have for
+                # this contact
+                if not contact or group not in contact.groups:
+                    same_groups = False
+            if contact:
+                # check that all groups we have for this contact are in the
+                # suggested groups
+                for group in contact.groups:
+                    if group not in groups:
+                        same_groups = False
+                if contact.sub in ('both', 'to') and same_groups:
+                    continue
+            self.exchange_items_list[jid] = []
+            self.exchange_items_list[jid].append(name)
+            self.exchange_items_list[jid].append(groups)
+        if self.exchange_items_list:
+            return True
+
+class VersionRequestEvent(nec.NetworkIncomingEvent):
+    name = 'version-request-received'
+    base_network_events = []
+
+class LastRequestEvent(nec.NetworkIncomingEvent):
+    name = 'last-request-received'
+    base_network_events = []
+
+class TimeRequestEvent(nec.NetworkIncomingEvent):
+    name = 'time-request-received'
+    base_network_events = []
+
+class TimeRevisedRequestEvent(nec.NetworkIncomingEvent):
+    name = 'time-revised-request-received'
+    base_network_events = []
+
+class RosterReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'roster-received'
+    base_network_events = []
+
+    def generate(self):
+        if hasattr(self, 'xmpp_roster'):
+            self.version = self.xmpp_roster.version
+            self.received_from_server = self.xmpp_roster.received_from_server
+            self.roster = {}
+            raw_roster = self.xmpp_roster.getRaw()
+            our_jid = gajim.get_jid_from_account(self.conn.name)
+
+            for jid in raw_roster:
+                try:
+                    j = helpers.parse_jid(jid)
+                except Exception:
+                    print >> sys.stderr, _('JID %s is not RFC compliant. It '
+                        'will not be added to your roster. Use roster '
+                        'management tools such as '
+                        'http://jru.jabberstudio.org/ to remove it') % jid
+                else:
+                    infos = raw_roster[jid]
+                    if jid != our_jid and (not infos['subscription'] or \
+                    infos['subscription'] == 'none') and (not infos['ask'] or \
+                    infos['ask'] == 'none') and not infos['name'] and \
+                    not infos['groups']:
+                        # remove this useless item, it won't be shown in roster
+                        # anyway
+                        self.conn.connection.getRoster().delItem(jid)
+                    elif jid != our_jid: # don't add our jid
+                        self.roster[j] = raw_roster[jid]
+        else:
+            # Roster comes from DB
+            self.received_from_server = False
+            self.version = gajim.config.get_per('accounts', self.conn.name,
+                'roster_version')
+            self.roster = gajim.logger.get_roster(gajim.get_jid_from_account(
+                self.conn.name))
+        return True
+
+class RosterSetReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'roster-set-received'
+    base_network_events = []
+
+    def generate(self):
+        self.version = self.stanza.getTagAttr('query', 'ver')
+        self.items = {}
+        for item in self.stanza.getTag('query').getChildren():
+            try:
+                jid = helpers.parse_jid(item.getAttr('jid'))
+            except helpers.InvalidFormat:
+                log.warn('Invalid JID: %s, ignoring it' % item.getAttr('jid'))
+                continue
+            name = item.getAttr('name')
+            sub = item.getAttr('subscription')
+            ask = item.getAttr('ask')
+            groups = []
+            for group in item.getTags('group'):
+                groups.append(group.getData())
+            self.items[jid] = {'name': name, 'sub': sub, 'ask': ask,
+                'groups': groups}
+        if self.conn.connection and self.conn.connected > 1:
+            reply = xmpp.Iq(typ='result', attrs={'id': self.stanza.getID()},
+                to=self.stanza.getFrom(), frm=self.stanza.getTo(), xmlns=None)
+            self.conn.connection.send(reply)
+        return True
+
+class RosterInfoEvent(nec.NetworkIncomingEvent):
+    name = 'roster-info'
+    base_network_events = []
+
+class MucOwnerReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
+    name = 'muc-owner-received'
+    base_network_events = []
+
+    def generate(self):
+        self.get_jid_resource()
+        qp = self.stanza.getQueryPayload()
+        self.form_node = None
+        for q in qp:
+            if q.getNamespace() == xmpp.NS_DATA:
+                self.form_node = q
+                self.dataform = dataforms.ExtendForm(node=self.form_node)
+                return True
+
+class MucAdminReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
+    name = 'muc-admin-received'
+    base_network_events = []
+
+    def generate(self):
+        self.get_jid_resource()
+        items = self.stanza.getTag('query',
+            namespace=xmpp.NS_MUC_ADMIN).getTags('item')
+        self.users_dict = {}
+        for item in items:
+            if item.has_attr('jid') and item.has_attr('affiliation'):
+                try:
+                    jid = helpers.parse_jid(item.getAttr('jid'))
+                except helpers.InvalidFormat:
+                    log.warn('Invalid JID: %s, ignoring it' % \
+                        item.getAttr('jid'))
+                    continue
+                affiliation = item.getAttr('affiliation')
+                self.users_dict[jid] = {'affiliation': affiliation}
+                if item.has_attr('nick'):
+                    self.users_dict[jid]['nick'] = item.getAttr('nick')
+                if item.has_attr('role'):
+                    self.users_dict[jid]['role'] = item.getAttr('role')
+                reason = item.getTagData('reason')
+                if reason:
+                    self.users_dict[jid]['reason'] = reason
+        return True
+
+class PrivateStorageReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'private-storage-received'
+    base_network_events = []
+
+    def generate(self):
+        query = self.stanza.getTag('query')
+        self.storage_node = query.getTag('storage')
+        if self.storage_node:
+            self.namespace = self.storage_node.getNamespace()
+            return True
+
+class BookmarksHelper:
+    def parse_bookmarks(self):
+        self.bookmarks = []
+        confs = self.storage_node.getTags('conference')
+        for conf in confs:
+            autojoin_val = conf.getAttr('autojoin')
+            if autojoin_val is None: # not there (it's optional)
+                autojoin_val = False
+            minimize_val = conf.getAttr('minimize')
+            if minimize_val is None: # not there (it's optional)
+                minimize_val = False
+            print_status = conf.getTagData('print_status')
+            if not print_status:
+                print_status = conf.getTagData('show_status')
+            try:
+                jid = helpers.parse_jid(conf.getAttr('jid'))
+            except helpers.InvalidFormat:
+                log.warn('Invalid JID: %s, ignoring it' % conf.getAttr('jid'))
+                continue
+            bm = {'name': conf.getAttr('name'),
+                'jid': jid,
+                'autojoin': autojoin_val,
+                'minimize': minimize_val,
+                'password': conf.getTagData('password'),
+                'nick': conf.getTagData('nick'),
+                'print_status': print_status}
+
+
+            bm_jids = [b['jid'] for b in self.bookmarks]
+            if bm['jid'] not in bm_jids:
+                self.bookmarks.append(bm)
+
+class PrivateStorageBookmarksReceivedEvent(nec.NetworkIncomingEvent,
+BookmarksHelper):
+    name = 'private-storage-bookmarks-received'
+    base_network_events = ['private-storage-received']
+
+    def generate(self):
+        self.conn = self.base_event.conn
+        self.storage_node = self.base_event.storage_node
+        if self.base_event.namespace != xmpp.NS_BOOKMARKS:
+            return
+        self.parse_bookmarks()
+        return True
+
+class BookmarksReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'bookmarks-received'
+    base_network_events = ['private-storage-bookmarks-received',
+        'pubsub-bookmarks-received']
+
+    def generate(self):
+        self.conn = self.base_event.conn
+        self.bookmarks = self.base_event.bookmarks
+        return True
+
+class PrivateStorageRosternotesReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'private-storage-rosternotes-received'
+    base_network_events = ['private-storage-received']
+
+    def generate(self):
+        self.conn = self.base_event.conn
+        if self.base_event.namespace != xmpp.NS_ROSTERNOTES:
+            return
+        notes = self.base_event.storage_node.getTags('note')
+        self.annotations = {}
+        for note in notes:
+            try:
+                jid = helpers.parse_jid(note.getAttr('jid'))
+            except helpers.InvalidFormat:
+                log.warn('Invalid JID: %s, ignoring it' % note.getAttr('jid'))
+                continue
+            annotation = note.getData()
+            self.annotations[jid] = annotation
+        if self.annotations:
+            return True
+
+class RosternotesReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'rosternotes-received'
+    base_network_events = ['private-storage-rosternotes-received']
+
+    def generate(self):
+        self.conn = self.base_event.conn
+        self.annotations = self.base_event.annotations
+        return True
+
+class PubsubReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'pubsub-received'
+    base_network_events = []
+
+    def generate(self):
+        self.pubsub_node = self.stanza.getTag('pubsub')
+        if not self.pubsub_node:
+            return
+        self.items_node = self.pubsub_node.getTag('items')
+        if not self.items_node:
+            return
+        self.item_node = self.items_node.getTag('item')
+        if not self.item_node:
+            return
+        children = self.item_node.getChildren()
+        if not children:
+            return
+        self.node = children[0]
+        return True
+
+class PubsubBookmarksReceivedEvent(nec.NetworkIncomingEvent, BookmarksHelper):
+    name = 'pubsub-bookmarks-received'
+    base_network_events = ['pubsub-received']
+
+    def generate(self):
+        self.conn = self.base_event.conn
+        self.storage_node = self.base_event.node
+        ns = self.storage_node.getNamespace()
+        if ns != xmpp.NS_BOOKMARKS:
+            return
+        self.parse_bookmarks()
+        return True
+
+class SearchFormReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
+    name = 'search-form-received'
+    base_network_events = []
+
+    def generate(self):
+        self.get_jid_resource()
+        self.data = None
+        self.is_dataform = False
+        tag = self.stanza.getTag('query', namespace=xmpp.NS_SEARCH)
+        if not tag:
+            return True
+        self.data = tag.getTag('x', namespace=xmpp.NS_DATA)
+        if self.data:
+            self.is_dataform = True
+            return True
+        self.data = {}
+        for i in self.stanza.getQueryPayload():
+            self.data[i.getName()] = i.getData()
+        return True
+
+
+class SearchResultReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
+    name = 'search-result-received'
+    base_network_events = []
+
+    def generate(self):
+        self.get_jid_resource()
+        self.data = None
+        self.is_dataform = False
+        tag = self.stanza.getTag('query', namespace=xmpp.NS_SEARCH)
+        if not tag:
+            return True
+        self.data = tag.getTag('x', namespace=xmpp.NS_DATA)
+        if self.data:
+            self.is_dataform = True
+            return True
+        self.data = []
+        for item in tag.getTags('item'):
+            # We also show attributes. jid is there
+            f = item.attrs
+            for i in item.getPayload():
+                f[i.getName()] = i.getData()
+            self.data.append(f)
+        return True
+
+class IqErrorReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
+    name = 'iq-error-received'
+    base_network_events = []
+
+    def generate(self):
+        self.get_id()
+        self.get_jid_resource(check_fake_jid=True)
+        self.errmsg = self.stanza.getErrorMsg()
+        self.errcode = self.stanza.getErrorCode()
+        return True
+
+class GmailNewMailReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'gmail-new-mail-received'
+    base_network_events = []
+
+    def generate(self):
+        if not self.stanza.getTag('new-mail'):
+            return
+        if self.stanza.getTag('new-mail').getNamespace() != xmpp.NS_GMAILNOTIFY:
+            return
+        return True
+
+class PingReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'ping-received'
+    base_network_events = []
+
+class StreamReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'stream-received'
+    base_network_events = []
+
+class StreamConflictReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'stream-conflict-received'
+    base_network_events = ['stream-received']
+
+    def generate(self):
+        if self.base_event.stanza.getTag('conflict'):
+            self.conn = self.base_event.conn
+            return True
+
+class PresenceHelperEvent:
+    def _generate_show(self):
+        self.show = self.stanza.getShow()
+        if self.show not in ('chat', 'away', 'xa', 'dnd'):
+            self.show = '' # We ignore unknown show
+        if not self.ptype and not self.show:
+            self.show = 'online'
+        elif self.ptype == 'unavailable':
+            self.show = 'offline'
+
+    def _generate_ptype(self):
+        self.ptype = self.stanza.getType()
+        if self.ptype == 'available':
+            self.ptype = None
+        rfc_types = ('unavailable', 'error', 'subscribe', 'subscribed',
+            'unsubscribe', 'unsubscribed')
+        if self.ptype and not self.ptype in rfc_types:
+            self.ptype = None
+
+class PresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent,
+PresenceHelperEvent):
+    name = 'presence-received'
+    base_network_events = ['raw-pres-received']
+
+    def _generate_keyID(self, sig_tag):
+        self.keyID = ''
+        if sig_tag and self.conn.USE_GPG and self.ptype != 'error':
+            # error presences contain our own signature
+            # verify
+            sig_msg = sig_tag.getData()
+            self.keyID = self.conn.gpg.verify(self.status, sig_msg)
+            self.keyID = helpers.prepare_and_validate_gpg_keyID(self.conn.name,
+                self.jid, self.keyID)
+
+    def _generate_prio(self):
+        self.prio = self.stanza.getPriority()
+        try:
+            self.prio = int(self.prio)
+        except Exception:
+            self.prio = 0
+
+    def generate(self):
+        self.conn = self.base_event.conn
+        self.stanza = self.base_event.stanza
+
+        self.need_add_in_roster = False
+        self.need_redraw = False
+
+        if not self.conn or self.conn.connected < 2:
+            log.debug('account is no more connected')
+            return
+
+        self._generate_ptype()
+        try:
+            self.get_jid_resource()
+        except Exception:
+            return
+        jid_list = gajim.contacts.get_jid_list(self.conn.name)
+        self.timestamp = None
+        self.get_id()
+        self.is_gc = False # is it a GC presence ?
+        sig_tag = None
+        self.avatar_sha = None
+        # XEP-0172 User Nickname
+        self.user_nick = self.stanza.getTagData('nick') or ''
+        self.contact_nickname = None
+        self.transport_auto_auth = False
+        # XEP-0203
+        delay_tag = self.stanza.getTag('delay', namespace=xmpp.NS_DELAY2)
+        if delay_tag:
+            self._generate_timestamp(self.stanza.getTimestamp2())
+        xtags = self.stanza.getTags('x')
+        for x in xtags:
+            namespace = x.getNamespace()
+            if namespace.startswith(xmpp.NS_MUC):
+                self.is_gc = True
+            elif namespace == xmpp.NS_SIGNED:
+                sig_tag = x
+            elif namespace == xmpp.NS_VCARD_UPDATE:
+                self.avatar_sha = x.getTagData('photo')
+                self.contact_nickname = x.getTagData('nickname')
+            elif namespace == xmpp.NS_DELAY and not self.timestamp:
+                # XEP-0091
+                self._generate_timestamp(self.stanza.getTimestamp())
+            elif namespace == 'http://delx.cjb.net/protocol/roster-subsync':
+                # see http://trac.gajim.org/ticket/326
+                agent = gajim.get_server_from_jid(self.jid)
+                if self.conn.connection.getRoster().getItem(agent):
+                    # to be sure it's a transport contact
+                    self.transport_auto_auth = True
+
+        if not self.is_gc and self.id_ and self.id_.startswith('gajim_muc_') \
+        and self.ptype == 'error':
+            # Error presences may not include sent stanza, so we don't detect
+            # it's a muc presence. So detect it by ID
+            h = hmac.new(self.conn.secret_hmac, self.jid).hexdigest()[:6]
+            if self.id_.split('_')[-1] == h:
+                self.is_gc = True
+        self.status = self.stanza.getStatus() or ''
+        self._generate_show()
+        self._generate_prio()
+        self._generate_keyID(sig_tag)
+
+        self.errcode = self.stanza.getErrorCode()
+        self.errmsg = self.stanza.getErrorMsg()
+
+        if self.is_gc:
+            gajim.nec.push_incoming_event(GcPresenceReceivedEvent(None,
+                conn=self.conn, stanza=self.stanza, presence_obj=self))
+            return
+
+        if self.ptype == 'subscribe':
+            gajim.nec.push_incoming_event(SubscribePresenceReceivedEvent(None,
+                conn=self.conn, stanza=self.stanza, presence_obj=self))
+        elif self.ptype == 'subscribed':
+            # BE CAREFUL: no con.updateRosterItem() in a callback
+            gajim.nec.push_incoming_event(SubscribedPresenceReceivedEvent(None,
+                conn=self.conn, stanza=self.stanza, presence_obj=self))
+        elif self.ptype == 'unsubscribe':
+            log.debug(_('unsubscribe request from %s') % self.jid)
+        elif self.ptype == 'unsubscribed':
+            gajim.nec.push_incoming_event(UnsubscribedPresenceReceivedEvent(
+                None, conn=self.conn, stanza=self.stanza, presence_obj=self))
+        elif self.ptype == 'error':
+            if self.errcode != '409': # conflict # See #5120
+                self.show = 'error'
+                self.status = self.errmsg
+                return True
+
+        if not self.ptype or self.ptype == 'unavailable':
+            our_jid = gajim.get_jid_from_account(self.conn.name)
+            if self.jid == our_jid and self.resource == \
+            self.conn.server_resource:
+                # We got our own presence
+                gajim.nec.push_incoming_event(OurShowEvent(None, conn=self.conn,
+                    show=self.show))
+            elif self.jid in jid_list or self.jid == our_jid:
+                return True
+
+class ZeroconfPresenceReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'presence-received'
+    base_network_events = []
+
+    def generate(self):
+        self.jid, self.resource = gajim.get_room_and_nick_from_fjid(self.fjid)
+        self.resource = 'local'
+        self.prio = 0
+        self.keyID = None
+        self.timestamp = 0
+        self.contact_nickname = None
+        self.avatar_sha = None
+        self.need_add_in_roster = False
+        self.need_redraw = False
+        if self.show == 'offline':
+            self.ptype = 'unavailable'
+        else:
+            self.ptype = None
+        self.is_gc = False
+        self.user_nick = ''
+        self.transport_auto_auth = False
+        self.errcode = None
+        self.errmsg = ''
+        return True
+
+class GcPresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
+    name = 'gc-presence-received'
+    base_network_events = []
+
+    def generate(self):
+        self.ptype = self.presence_obj.ptype
+        self.fjid = self.presence_obj.fjid
+        self.jid = self.presence_obj.jid
+        self.room_jid = self.presence_obj.jid
+        self.nick = self.presence_obj.resource
+        self.show = self.presence_obj.show
+        self.status = self.presence_obj.status
+        self.avatar_sha = self.presence_obj.avatar_sha
+        self.errcode = self.presence_obj.errcode
+        self.errmsg = self.presence_obj.errmsg
+        self.errcon = self.stanza.getError()
+        self.get_gc_control()
+        self.gc_contact = gajim.contacts.get_gc_contact(self.conn.name,
+            self.room_jid, self.nick)
+
+        if self.ptype == 'error':
+            return True
+
+        if self.ptype and self.ptype != 'unavailable':
+            return
+        if gajim.config.get('log_contact_status_changes') and \
+        gajim.config.should_log(self.conn.name, self.room_jid):
+            if self.gc_contact:
+                jid = self.gc_contact.jid
+            else:
+                jid = self.stanza.getJid()
+            st = self.status
+            if jid:
+                # we know real jid, save it in db
+                st += ' (%s)' % jid
+            try:
+                gajim.logger.write('gcstatus', self.fjid, st,
+                    self.show)
+            except exceptions.PysqliteOperationalError, e:
+                self.conn.dispatch('DB_ERROR', (_('Disk Write Error'),
+                    str(e)))
+            except exceptions.DatabaseMalformed:
+                pritext = _('Database Error')
+                sectext = _('The database file (%s) cannot be read. '
+                    'Try to repair it (see '
+                    'http://trac.gajim.org/wiki/DatabaseBackup) or '
+                    'remove it (all history will be lost).') % \
+                    LOG_DB_PATH
+                self.conn.dispatch('DB_ERROR', (pritext, sectext))
+        if self.avatar_sha == '':
+            # contact has no avatar
+            puny_nick = helpers.sanitize_filename(self.nick)
+            gajim.interface.remove_avatar_files(self.room_jid, puny_nick)
+        # NOTE: if it's a gc presence, don't ask vcard here.
+        # We may ask it to real jid in gui part.
+        self.status_code = []
+        ns_muc_user_x = self.stanza.getTag('x', namespace=xmpp.NS_MUC_USER)
+        if ns_muc_user_x:
+            destroy = ns_muc_user_x.getTag('destroy')
+        else:
+            destroy = None
+        if ns_muc_user_x and destroy:
+            # Room has been destroyed. see
+            # http://www.xmpp.org/extensions/xep-0045.html#destroyroom
+            self.reason = _('Room has been destroyed')
+            r = destroy.getTagData('reason')
+            if r:
+                self.reason += ' (%s)' % r
+            if destroy.getAttr('jid'):
+                try:
+                    jid = helpers.parse_jid(destroy.getAttr('jid'))
+                    self.reason += '\n' + \
+                        _('You can join this room instead: %s') % jid
+                except helpers.InvalidFormat:
+                    pass
+            self.status_code = ['destroyed']
+        else:
+            self.reason = self.stanza.getReason()
+            self.status_code = self.stanza.getStatusCode()
+        self.role = self.stanza.getRole()
+        self.affiliation = self.stanza.getAffiliation()
+        self.real_jid = self.stanza.getJid()
+        self.actor = self.stanza.getActor()
+        self.new_nick = self.stanza.getNewNick()
+        return True
+
+class SubscribePresenceReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'subscribe-presence-received'
+    base_network_events = []
+
+    def generate(self):
+        self.jid = self.presence_obj.jid
+        self.fjid = self.presence_obj.fjid
+        self.status = self.presence_obj.status
+        self.transport_auto_auth = self.presence_obj.transport_auto_auth
+        self.user_nick = self.presence_obj.user_nick
+        return True
+
+class SubscribedPresenceReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'subscribed-presence-received'
+    base_network_events = []
+
+    def generate(self):
+        self.jid = self.presence_obj.jid
+        self.resource = self.presence_obj.resource
+        return True
+
+class UnsubscribedPresenceReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'unsubscribed-presence-received'
+    base_network_events = []
+
+    def generate(self):
+        self.jid = self.presence_obj.jid
+        return True
+
+class OurShowEvent(nec.NetworkIncomingEvent):
+    name = 'our-show'
+    base_network_events = []
+
+class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
+    name = 'message-received'
+    base_network_events = ['raw-message-received']
+
+    def generate(self):
+        self.conn = self.base_event.conn
+        self.stanza = self.base_event.stanza
+        self.get_id()
+
+        account = self.conn.name
+
+        # check if the message is a roster item exchange (XEP-0144)
+        if self.stanza.getTag('x', namespace=xmpp.NS_ROSTERX):
+            gajim.nec.push_incoming_event(RosterItemExchangeEvent(None,
+                conn=self.conn, stanza=self.stanza))
+            return
+
+        # check if the message is a XEP-0070 confirmation request
+        if self.stanza.getTag('confirm', namespace=xmpp.NS_HTTP_AUTH):
+            gajim.nec.push_incoming_event(HttpAuthReceivedEvent(None,
+                conn=self.conn, stanza=self.stanza))
+            return
+
+        try:
+            self.get_jid_resource()
+        except helpers.InvalidFormat:
+            self.conn.dispatch('ERROR', (_('Invalid Jabber ID'),
+                _('A message from a non-valid JID arrived, it has been '
+                'ignored.')))
+            return
+
+        address_tag = self.stanza.getTag('addresses', namespace=xmpp.NS_ADDRESS)
+        # Be sure it comes from one of our resource, else ignore address element
+        if address_tag and self.jid == gajim.get_jid_from_account(account):
+            address = address_tag.getTag('address', attrs={'type': 'ofrom'})
+            if address:
+                try:
+                    self.fjid = helpers.parse_jid(address.getAttr('jid'))
+                except helpers.InvalidFormat:
+                    log.warn('Invalid JID: %s, ignoring it' % address.getAttr(
+                        'jid'))
+                    return
+                self.jid = gajim.get_jid_without_resource(self.fjid)
+
+        self.enc_tag = self.stanza.getTag('x', namespace=xmpp.NS_ENCRYPTED)
+
+        self.invite_tag = None
+        if not self.enc_tag:
+            self.invite_tag = self.stanza.getTag('x',
+                namespace=xmpp.NS_MUC_USER)
+            if self.invite_tag and not self.invite_tag.getTag('invite'):
+                self.invite_tag = None
+
+        self.thread_id = self.stanza.getThread()
+        self.mtype = self.stanza.getType()
+        if not self.mtype or self.mtype not in ('chat', 'groupchat', 'error'):
+            self.mtype = 'normal'
+
+        self.msgtxt = self.stanza.getBody()
+
+        self.get_gc_control()
+
+        if self.gc_control and self.jid == self.fjid:
+            # message from a gc without a resource
+            self.mtype = 'groupchat'
+
+        self.session = None
+        if self.mtype != 'groupchat':
+            self.session = self.conn.get_or_create_session(self.fjid,
+                self.thread_id)
+
+            if self.thread_id and not self.session.received_thread_id:
+                self.session.received_thread_id = True
+
+            self.session.last_receive = time_time()
+
+        # check if the message is a XEP-0020 feature negotiation request
+        if self.stanza.getTag('feature', namespace=xmpp.NS_FEATURE):
+            if gajim.HAVE_PYCRYPTO:
+                feature = self.stanza.getTag(name='feature',
+                    namespace=xmpp.NS_FEATURE)
+                form = xmpp.DataForm(node=feature.getTag('x'))
+
+                if form['FORM_TYPE'] == 'urn:xmpp:ssn':
+                    self.session.handle_negotiation(form)
+                else:
+                    reply = self.stanza.buildReply()
+                    reply.setType('error')
+                    reply.addChild(feature)
+                    err = xmpp.ErrorNode('service-unavailable', typ='cancel')
+                    reply.addChild(node=err)
+                    self.conn.connection.send(reply)
+            return
+
+        if self.stanza.getTag('init', namespace=xmpp.NS_ESESSION_INIT):
+            init = self.stanza.getTag(name='init',
+                namespace=xmpp.NS_ESESSION_INIT)
+            form = xmpp.DataForm(node=init.getTag('x'))
+
+            self.session.handle_negotiation(form)
+
+            return
+
+        self._generate_timestamp(self.stanza.getTimestamp())
+
+        self.encrypted = False
+        xep_200_encrypted = self.stanza.getTag('c',
+            namespace=xmpp.NS_STANZA_CRYPTO)
+        if xep_200_encrypted:
+            self.encrypted = 'xep200'
+
+        return True
+
+class ZeroconfMessageReceivedEvent(MessageReceivedEvent):
+    name = 'message-received'
+    base_network_events = []
+
+    def get_jid_resource(self):
+        self.fjid =self.stanza.getFrom()
+
+        if self.fjid is None:
+            for key in self.conn.connection.zeroconf.contacts:
+                if self.ip == self.conn.connection.zeroconf.contacts[key][
+                zeroconf.C_ADDRESS]:
+                    self.fjid = key
+                    break
+
+        self.fjid = unicode(self.fjid)
+        self.jid, self.resource = gajim.get_room_and_nick_from_fjid(self.fjid)
+
+    def generate(self):
+        self.base_event = nec.NetworkIncomingEvent(None, conn=self.conn,
+            stanza=self.stanza)
+        return super(ZeroconfMessageReceivedEvent, self).generate()
+
+class GcInvitationReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'gc-invitation-received'
+    base_network_events = []
+
+    def generate(self):
+        self.room_jid = self.msg_obj.fjid
+
+        item = self.msg_obj.invite_tag.getTag('invite')
+        try:
+            self.jid_from = helpers.parse_jid(item.getAttr('from'))
+        except helpers.InvalidFormat:
+            log.warn('Invalid JID: %s, ignoring it' % item.getAttr('from'))
+            return
+        jid = gajim.get_jid_without_resource(self.jid_from)
+        if gajim.config.get_per('accounts', self.conn.name,
+        'ignore_unknown_contacts') and not gajim.contacts.get_contacts(
+        self.conn.name, jid):
+            return
+        self.reason = item.getTagData('reason')
+        self.password = self.msg_obj.invite_tag.getTagData('password')
+
+        self.is_continued = False
+        if item.getTag('continue'):
+            self.is_continued = True
+
+        return True
+
+class DecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
+    name = 'decrypted-message-received'
+    base_network_events = []
+
+    def generate(self):
+        self.stanza = self.msg_obj.stanza
+        self.id_ = self.msg_obj.id_
+        self.jid = self.msg_obj.jid
+        self.fjid = self.msg_obj.fjid
+        self.resource = self.msg_obj.resource
+        self.mtype = self.msg_obj.mtype
+        self.invite_tag = self.msg_obj.invite_tag
+        self.thread_id = self.msg_obj.thread_id
+        self.msgtxt = self.msg_obj.msgtxt
+        self.gc_control = self.msg_obj.gc_control
+        self.session = self.msg_obj.session
+        self.timestamp = self.msg_obj.timestamp
+        self.encrypted = self.msg_obj.encrypted
+
+        self.receipt_request_tag = self.stanza.getTag('request',
+            namespace=xmpp.NS_RECEIPTS)
+        self.receipt_received_tag = self.stanza.getTag('received',
+            namespace=xmpp.NS_RECEIPTS)
+
+        self.subject = self.stanza.getSubject()
+
+        self.displaymarking = None
+        self.seclabel = self.stanza.getTag('securitylabel',
+            namespace=xmpp.NS_SECLABEL)
+        if self.seclabel:
+            self.displaymarking = self.seclabel.getTag('displaymarking')
+
+        self.form_node = self.stanza.getTag('x', namespace=xmpp.NS_DATA)
+
+        if gajim.config.get('ignore_incoming_xhtml'):
+            self.xhtml = None
+        else:
+            self.xhtml = self.stanza.getXHTML()
+
+        # XEP-0172 User Nickname
+        self.user_nick = self.stanza.getTagData('nick') or ''
+
+        self.get_chatstate()
+        return True
+
+class ChatstateReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'chatstate-received'
+    base_network_events = []
+
+    def generate(self):
+        self.stanza = self.msg_obj.stanza
+        self.jid = self.msg_obj.jid
+        self.fjid = self.msg_obj.fjid
+        self.resource = self.msg_obj.resource
+        self.composing_xep = self.msg_obj.composing_xep
+        self.chatstate = self.msg_obj.chatstate
+        return True
+
+class GcMessageReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'gc-message-received'
+    base_network_events = []
+
+    def generate(self):
+        self.stanza = self.msg_obj.stanza
+        self.fjid = self.msg_obj.fjid
+        self.msgtxt = self.msg_obj.msgtxt
+        self.jid = self.msg_obj.jid
+        self.room_jid = self.msg_obj.jid
+        self.nickname = self.msg_obj.resource
+        self.timestamp = self.msg_obj.timestamp
+        self.xhtml_msgtxt = self.stanza.getXHTML()
+
+        if gajim.config.get('ignore_incoming_xhtml'):
+            self.xhtml_msgtxt = None
+
+        if self.msg_obj.resource:
+            # message from someone
+            self.nick = self.msg_obj.resource
+        else:
+            # message from server
+            self.nick = ''
+
+        self.has_timestamp = bool(self.stanza.timestamp)
+
+        self.subject = self.stanza.getSubject()
+
+        if self.subject is not None:
+            gajim.nec.push_incoming_event(GcSubjectReceivedEvent(None,
+                conn=self.conn, msg_event=self))
+            return
+
+        self.status_code = self.stanza.getStatusCode()
+
+        if not self.stanza.getTag('body'): # no <body>
+            # It could be a config change. See
+            # http://www.xmpp.org/extensions/xep-0045.html#roomconfig-notify
+            if self.stanza.getTag('x'):
+                if self.status_code != []:
+                    gajim.nec.push_incoming_event(GcConfigChangedReceivedEvent(
+                        None, conn=self.conn, msg_event=self))
+            return
+
+        self.displaymarking = None
+        seclabel = self.stanza.getTag('securitylabel')
+        if seclabel and seclabel.getNamespace() == xmpp.NS_SECLABEL:
+            # Ignore message from room in which we are not
+            self.displaymarking = seclabel.getTag('displaymarking')
+
+        if self.jid not in self.conn.last_history_time:
+            return
+
+        self.captcha_form = None
+        captcha_tag = self.stanza.getTag('captcha', namespace=xmpp.NS_CAPTCHA)
+        if captcha_tag:
+            self.captcha_form = captcha_tag.getTag('x', namespace=xmpp.NS_DATA)
+            for field in self.captcha_form.getTags('field'):
+                for media in field.getTags('media'):
+                    for uri in media.getTags('uri'):
+                        uri_data = uri.getData()
+                        if uri_data.startswith('cid:'):
+                            uri_data = uri_data[4:]
+                            found = False
+                            for data in self.stanza.getTags('data',
+                            namespace=xmpp.NS_BOB):
+                                if data.getAttr('cid') == uri_data:
+                                    uri.setData(data.getData())
+                                    found = True
+                            if not found:
+                                self.conn.get_bob_data(uri_data, self.fjid,
+                                    self.conn._dispatch_gc_msg_with_captcha,
+                                    [self.stanza, self.msg_obj], 0)
+                                return
+
+        return True
+
+class GcSubjectReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'gc-subject-received'
+    base_network_events = []
+
+    def generate(self):
+        self.conn = self.msg_event.conn
+        self.stanza = self.msg_event.stanza
+        self.room_jid = self.msg_event.room_jid
+        self.nickname = self.msg_event.nickname
+        self.fjid = self.msg_event.fjid
+        self.subject = self.msg_event.subject
+        self.msgtxt = self.msg_event.msgtxt
+        self.has_timestamp = self.msg_event.has_timestamp
+        return True
+
+class GcConfigChangedReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'gc-config-changed-received'
+    base_network_events = []
+
+    def generate(self):
+        self.conn = self.msg_event.conn
+        self.stanza = self.msg_event.stanza
+        self.room_jid = self.msg_event.room_jid
+        self.status_code = self.msg_event.status_code
+        return True
+
+class MessageSentEvent(nec.NetworkIncomingEvent):
+    name = 'message-sent'
+    base_network_events = []
+
+class MessageNotSentEvent(nec.NetworkIncomingEvent):
+    name = 'message-not-sent'
+    base_network_events = []
+
+class MessageErrorEvent(nec.NetworkIncomingEvent):
+    name = 'message-error'
+    base_network_events = []
+
+class AnonymousAuthEvent(nec.NetworkIncomingEvent):
+    name = 'anonymous-auth'
+    base_network_events = []
+
+class JingleRequestReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'jingle-request-received'
+    base_network_events = []
+
+    def generate(self):
+        self.fjid = self.jingle_session.peerjid
+        self.jid, self.resource = gajim.get_room_and_nick_from_fjid(self.fjid)
+        self.sid = self.jingle_session.sid
+        return True
+
+class JingleConnectedReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'jingle-connected-received'
+    base_network_events = []
+
+    def generate(self):
+        self.fjid = self.jingle_session.peerjid
+        self.jid, self.resource = gajim.get_room_and_nick_from_fjid(self.fjid)
+        self.sid = self.jingle_session.sid
+        return True
+
+class JingleDisconnectedReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'jingle-disconnected-received'
+    base_network_events = []
+
+    def generate(self):
+        self.fjid = self.jingle_session.peerjid
+        self.jid, self.resource = gajim.get_room_and_nick_from_fjid(self.fjid)
+        self.sid = self.jingle_session.sid
+        return True
+
+class JingleErrorReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'jingle-error-received'
+    base_network_events = []
+
+    def generate(self):
+        self.fjid = self.jingle_session.peerjid
+        self.jid, self.resource = gajim.get_room_and_nick_from_fjid(self.fjid)
+        self.sid = self.jingle_session.sid
+        return True
+
+class ArchivingReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'archiving-received'
+    base_network_events = []
+
+    def generate(self):
+        self.type_ = self.stanza.getType()
+        if self.type_ not in ('result', 'set', 'error'):
+            return
+        return True
+
+class ArchivingErrorReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'archiving-error-received'
+    base_network_events = ['archiving-received']
+
+    def generate(self):
+        self.conn = self.base_event.conn
+        self.stanza = self.base_event.stanza
+        self.type_ = self.base_event.type_
+
+        if self.type_ == 'error':
+            self.error_msg = self.stanza.getErrorMsg()
+            return True
+
+class ArchivingPreferencesChangedReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'archiving-preferences-changed-received'
+    base_network_events = ['archiving-received']
+
+    def generate(self):
+        self.conn = self.base_event.conn
+        self.stanza = self.base_event.stanza
+        self.type_ = self.base_event.type_
+
+        if self.type_ not in ('result', 'set'):
+            return
+
+        self.conf = {}
+        self.new_items = {}
+        self.removed_items = []
+        if self.stanza.getTag('pref'):
+            pref = self.stanza.getTag('pref')
+
+            if pref.getTag('auto'):
+                self.conf['auto'] = pref.getTagAttr('auto', 'save')
+
+            method_auto = pref.getTag('method', attrs={'type': 'auto'})
+            if method_auto:
+                self.conf['method_auto'] = method_auto.getAttr('use')
+
+            method_local = pref.getTag('method', attrs={'type': 'local'})
+            if method_local:
+                self.conf['method_local'] = method_local.getAttr('use')
+
+            method_manual = pref.getTag('method', attrs={'type': 'manual'})
+            if method_manual:
+                self.conf['method_manual'] = method_manual.getAttr('use')
+
+            default = pref.getTag('default')
+            if default:
+                self.conf['default'] = {
+                    'expire': default.getAttr('expire'),
+                    'otr': default.getAttr('otr'),
+                    'save': default.getAttr('save'),
+                    'unset': default.getAttr('unset')}
+
+            for item in pref.getTags('item'):
+                self.new_items[item.getAttr('jid')] = {
+                    'expire': item.getAttr('expire'),
+                    'otr': item.getAttr('otr'),
+                    'save': item.getAttr('save')}
+
+        elif self.stanza.getTag('itemremove'):
+            for item in pref.getTags('item'):
+                self.removed_items.append(item.getAttr('jid'))
+        return True
+
+class AccountCreatedEvent(nec.NetworkIncomingEvent):
+    name = 'account-created'
+    base_network_events = []
+
+class AccountNotCreatedEvent(nec.NetworkIncomingEvent):
+    name = 'account-not-created'
+    base_network_events = []
+
+class NewAccountConnectedEvent(nec.NetworkIncomingEvent):
+    name = 'new-account-connected'
+    base_network_events = []
+
+    def generate(self):
+        try:
+            self.errnum = self.conn.connection.Connection.ssl_errnum
+        except AttributeError:
+            self.errnum = -1 # we don't have an errnum
+        self.ssl_msg = ''
+        if self.errnum > 0:
+            from common.connection import ssl_error
+            self.ssl_msg = ssl_error.get(self.errnum, _(
+                'Unknown SSL error: %d') % self.errnum)
+        self.ssl_cert = ''
+        if hasattr(self.conn.connection.Connection, 'ssl_cert_pem'):
+            self.ssl_cert = self.conn.connection.Connection.ssl_cert_pem
+        self.ssl_fingerprint = ''
+        if hasattr(self.conn.connection.Connection, 'ssl_fingerprint_sha1'):
+            self.ssl_fingerprint = \
+                self.conn.connection.Connection.ssl_fingerprint_sha1
+        return True
+
+class NewAccountNotConnectedEvent(nec.NetworkIncomingEvent):
+    name = 'new-account-not-connected'
+    base_network_events = []
+
+class ConnectionTypeEvent(nec.NetworkIncomingEvent):
+    name = 'connection-type'
+    base_network_events = []
+
+class VcardPublishedEvent(nec.NetworkIncomingEvent):
+    name = 'vcard-published'
+    base_network_events = []
+
+class VcardNotPublishedEvent(nec.NetworkIncomingEvent):
+    name = 'vcard-not-published'
+    base_network_events = []
+
+class StanzaReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'stanza-received'
+    base_network_events = []
+
+class StanzaSentEvent(nec.NetworkIncomingEvent):
+    name = 'stanza-sent'
+    base_network_events = []
+
+class AgentRemovedEvent(nec.NetworkIncomingEvent):
+    name = 'agent-removed'
+    base_network_events = []
+
+    def generate(self):
+        self.jid_list = []
+        for jid in gajim.contacts.get_jid_list(self.conn.name):
+            if jid.endswith('@' + self.agent):
+                self.jid_list.append(jid)
+        return True
+
+class BadGPGPassphraseEvent(nec.NetworkIncomingEvent):
+    name = 'bad-gpg-passphrase'
+    base_network_events = []
+
+    def generate(self):
+        self.account = self.conn.name
+        self.use_gpg_agent = gajim.config.get('use_gpg_agent')
+        self.keyID = gajim.config.get_per('accounts', self.conn.name, 'keyid')
+        return True
+
+class ConnectionLostEvent(nec.NetworkIncomingEvent):
+    name = 'connection-lost'
+    base_network_events = []
+
+    def generate(self):
+        gajim.nec.push_incoming_event(OurShowEvent(None, conn=self.conn,
+            show='offline'))
+        return True
+
+class PingSentEvent(nec.NetworkIncomingEvent):
+    name = 'ping-sent'
+    base_network_events = []
+
+class PingReplyEvent(nec.NetworkIncomingEvent):
+    name = 'ping-reply'
+    base_network_events = []
+
+class PingErrorEvent(nec.NetworkIncomingEvent):
+    name = 'ping-error'
+    base_network_events = []
+
+class CapsPresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent,
+PresenceHelperEvent):
+    name = 'caps-presence-received'
+    base_network_events = ['raw-pres-received']
+
+    def _extract_caps_from_presence(self):
+        caps_tag = self.stanza.getTag('c', namespace=xmpp.NS_CAPS)
+        if caps_tag:
+            self.hash_method = caps_tag['hash']
+            self.node = caps_tag['node']
+            self.caps_hash = caps_tag['ver']
+        else:
+            self.hash_method = self.node = self.caps_hash = None
+
+    def generate(self):
+        self.conn = self.base_event.conn
+        self.stanza = self.base_event.stanza
+        try:
+            self.get_jid_resource()
+        except Exception:
+            return
+        self._generate_ptype()
+        self._generate_show()
+        self._extract_caps_from_presence()
+        return True
+
+class CapsDiscoReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'caps-disco-received'
+    base_network_events = []
+
+class CapsReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'caps-received'
+    base_network_events = ['caps-presence-received', 'caps-disco-received']
+
+    def generate(self):
+        self.conn = self.base_event.conn
+        self.fjid = self.base_event.fjid
+        self.jid = self.base_event.jid
+        self.resource = self.base_event.resource
+        self.client_caps = self.base_event.client_caps
+        return True
+
+class GPGTrustKeyEvent(nec.NetworkIncomingEvent):
+    name = 'gpg-trust-key'
+    base_network_events = []
+
+class GPGPasswordRequiredEvent(nec.NetworkIncomingEvent):
+    name = 'gpg-password-required'
+    base_network_events = []
+
+    def generate(self):
+        self.keyid = gajim.config.get_per('accounts', self.conn.name, 'keyid')
+        return True
+
+class PEPReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
+    name = 'pep-received'
+    base_network_events = []
+
+    def generate(self):
+        if not self.stanza.getTag('event'):
+            return
+        if self.stanza.getTag('error'):
+            log.debug('PEPReceivedEvent received error stanza. Ignoring')
+            return
+
+        try:
+            self.get_jid_resource()
+        except Exception:
+            return
+
+        self.event_tag = self.stanza.getTag('event')
+
+        for pep_class in SUPPORTED_PERSONAL_USER_EVENTS:
+            pep = pep_class.get_tag_as_PEP(self.fjid, self.conn.name,
+                self.event_tag)
+            if pep:
+                self.pep_type = pep.type
+                return True
+
+        items = self.event_tag.getTag('items')
+        if items:
+            # for each entry in feed (there shouldn't be more than one, but to
+            # be sure...
+            for item in items.getTags('item'):
+                entry = item.getTag('entry', namespace=xmpp.NS_ATOM)
+                if entry:
+                    gajim.nec.push_incoming_event(AtomEntryReceived(None,
+                        conn=self.conn, node=entry))
+        raise xmpp.NodeProcessed
+
+class AtomEntryReceived(nec.NetworkIncomingEvent):
+    name = 'atom-entry-received'
+    base_network_events = []
+
+    def generate(self):
+        self.atom_entry = atom.OldEntry(node=self.node)
+        return True
+
+class PlainConnectionEvent(nec.NetworkIncomingEvent):
+    name = 'plain-connection'
+    base_network_events = []
+
+class InsecurePasswordEvent(nec.NetworkIncomingEvent):
+    name = 'insecure-password'
+    base_network_events = []
+
+class InsecureSSLConnectionEvent(nec.NetworkIncomingEvent):
+    name = 'insecure-ssl-connection'
+    base_network_events = []
+
+class SSLErrorEvent(nec.NetworkIncomingEvent):
+    name = 'ssl-error'
+    base_network_events = []
+
+class FingerprintErrorEvent(nec.NetworkIncomingEvent):
+    name = 'fingerprint-error'
+    base_network_events = []
+
+class UniqueRoomIdSupportedEvent(nec.NetworkIncomingEvent):
+    name = 'unique-room-id-supported'
+    base_network_events = []
+
+class UniqueRoomIdNotSupportedEvent(nec.NetworkIncomingEvent):
+    name = 'unique-room-id-not-supported'
+    base_network_events = []
+
+class PrivacyListsReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'privacy-lists-received'
+    base_network_events = []
+
+class PrivacyListReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'privacy-list-received'
+    base_network_events = []
+
+class PrivacyListRemovedEvent(nec.NetworkIncomingEvent):
+    name = 'privacy-list-removed'
+    base_network_events = []
+
+class PrivacyListActiveDefaultEvent(nec.NetworkIncomingEvent):
+    name = 'privacy-list-active-default'
+    base_network_events = []
+
+class VcardReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'vcard-received'
+    base_network_events = []
+
+    def generate(self):
+        self.nickname = None
+        if 'NICKNAME' in self.vcard_dict:
+            self.nickname = self.vcard_dict['NICKNAME']
+        elif 'FN' in self.vcard_dict:
+            self.nickname = self.vcard_dict['FN']
+        self.jid = self.vcard_dict['jid']
+        self.resource = self.vcard_dict['resource']
+        self.fjid = self.jid
+        if self.resource:
+            self.fjid += '/' + self.resource
+        return True
+
+class PEPConfigReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'pep-config-received'
+    base_network_events = []
+
+class MetacontactsReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'metacontacts-received'
+    base_network_events = []
+
+    def generate(self):
+        # Metacontact tags
+        # http://www.xmpp.org/extensions/xep-0209.html
+        self.meta_list = {}
+        query = self.stanza.getTag('query')
+        storage = query.getTag('storage')
+        metas = storage.getTags('meta')
+        for meta in metas:
+            try:
+                jid = helpers.parse_jid(meta.getAttr('jid'))
+            except helpers.InvalidFormat:
+                continue
+            tag = meta.getAttr('tag')
+            data = {'jid': jid}
+            order = meta.getAttr('order')
+            try:
+                order = int(order)
+            except Exception:
+                order = 0
+            if order is not None:
+                data['order'] = order
+            if tag in self.meta_list:
+                self.meta_list[tag].append(data)
+            else:
+                self.meta_list[tag] = [data]
+        return True
+
+class ZeroconfNameConflictEvent(nec.NetworkIncomingEvent):
+    name = 'zeroconf-name-conflict'
+    base_network_events = []
+
+class PasswordRequiredEvent(nec.NetworkIncomingEvent):
+    name = 'password-required'
+    base_network_events = []
+
+class FailedDecryptEvent(nec.NetworkIncomingEvent):
+    name = 'failed-decrypt'
+    base_network_events = []
+
+    def generate(self):
+        self.conn = self.msg_obj.conn
+        self.fjid = self.msg_obj.fjid
+        self.timestamp = self.msg_obj.timestamp
+        self.session = self.msg_obj.session
+        return True
+
+class SignedInEvent(nec.NetworkIncomingEvent):
+    name = 'signed-in'
+    base_network_events = []
+
+class RegisterAgentInfoReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'register-agent-info-received'
+    base_network_events = []
+
+class AgentItemsReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
+    name = 'agent-items-received'
+    base_network_events = []
+
+    def generate(self):
+        q = self.stanza.getTag('query')
+        self.node = q.getAttr('node')
+        if not self.node:
+            self.node = ''
+        qp = self.stanza.getQueryPayload()
+        self.items = []
+        if not qp:
+            qp = []
+        for i in qp:
+            # CDATA payload is not processed, only nodes
+            if not isinstance(i, xmpp.simplexml.Node):
+                continue
+            attr = {}
+            for key in i.getAttrs():
+                attr[key] = i.getAttrs()[key]
+            if 'jid' not in attr:
+                continue
+            try:
+                attr['jid'] = helpers.parse_jid(attr['jid'])
+            except helpers.InvalidFormat:
+                # jid is not conform
+                continue
+            self.items.append(attr)
+        self.get_jid_resource()
+        hostname = gajim.config.get_per('accounts', self.conn.name, 'hostname')
+        self.get_id()
+        if self.fjid == hostname and self.id_[:6] == 'Gajim_':
+            for item in self.items:
+                self.conn.discoverInfo(item['jid'], id_prefix='Gajim_')
+        else:
+            return True
+
+class AgentItemsErrorReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
+    name = 'agent-items-error-received'
+    base_network_events = []
+
+    def generate(self):
+        self.get_jid_resource()
+        return True
+
+class AgentInfoReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
+    name = 'agent-info-received'
+    base_network_events = []
+
+    def generate(self):
+        self.get_id()
+        if self.id_ is None:
+            log.warn('Invalid IQ received without an ID. Ignoring it: %s' % \
+                self.stanza)
+            return
+        # According to XEP-0030:
+        # For identity: category, type is mandatory, name is optional.
+        # For feature: var is mandatory
+        self.identities, self.features, self.data = [], [], []
+        q = self.stanza.getTag('query')
+        self.node = q.getAttr('node')
+        if not self.node:
+            self.node = ''
+        qc = self.stanza.getQueryChildren()
+        if not qc:
+            qc = []
+
+        for i in qc:
+            if i.getName() == 'identity':
+                attr = {}
+                for key in i.getAttrs().keys():
+                    attr[key] = i.getAttr(key)
+                self.identities.append(attr)
+            elif i.getName() == 'feature':
+                var = i.getAttr('var')
+                if var:
+                    self.features.append(var)
+            elif i.getName() == 'x' and i.getNamespace() == xmpp.NS_DATA:
+                self.data.append(xmpp.DataForm(node=i))
+
+        if not self.identities:
+            # ejabberd doesn't send identities when we browse online users
+            # see http://www.jabber.ru/bugzilla/show_bug.cgi?id=225
+            self.identities = [{'category': 'server', 'type': 'im',
+                'name': self.node}]
+        self.get_jid_resource()
+        return True
+
+class AgentInfoErrorReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
+    name = 'agent-info-error-received'
+    base_network_events = []
+
+    def generate(self):
+        self.get_jid_resource()
+        self.get_id()
+        return True
+
+class FileRequestReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
+    name = 'file-request-received'
+    base_network_events = []
+
+    def generate(self):
+        self.get_id()
+        self.fjid = self.conn._ft_get_from(self.stanza)
+        self.jid = gajim.get_jid_without_resource(self.fjid)
+        self.file_props = {'type': 'r'}
+        self.file_props['sender'] = self.fjid
+        self.file_props['request-id'] = self.id_
+        si = self.stanza.getTag('si')
+        profile = si.getAttr('profile')
+        if profile != xmpp.NS_FILE:
+            self.conn.send_file_rejection(self.file_props, code='400', typ='profile')
+            raise xmpp.NodeProcessed
+        feature_tag = si.getTag('feature', namespace=xmpp.NS_FEATURE)
+        if not feature_tag:
+            return
+        form_tag = feature_tag.getTag('x', namespace=xmpp.NS_DATA)
+        if not form_tag:
+            return
+        self.dataform = dataforms.ExtendForm(node=form_tag)
+        for f in self.dataform.iter_fields():
+            if f.var == 'stream-method' and f.type == 'list-single':
+                values = [o[1] for o in f.options]
+                self.file_props['stream-methods'] = ' '.join(values)
+                if xmpp.NS_BYTESTREAM in values or xmpp.NS_IBB in values:
+                    break
+        else:
+            self.conn.send_file_rejection(self.file_props, code='400', typ='stream')
+            raise xmpp.NodeProcessed
+        file_tag = si.getTag('file')
+        for attribute in file_tag.getAttrs():
+            if attribute in ('name', 'size', 'hash', 'date'):
+                val = file_tag.getAttr(attribute)
+                if val is None:
+                    continue
+                self.file_props[attribute] = val
+        file_desc_tag = file_tag.getTag('desc')
+        if file_desc_tag is not None:
+            self.file_props['desc'] = file_desc_tag.getData()
+
+        mime_type = si.getAttr('mime-type')
+        if mime_type is not None:
+            self.file_props['mime-type'] = mime_type
+
+        self.file_props['receiver'] = self.conn._ft_get_our_jid()
+        self.file_props['sid'] = unicode(si.getAttr('id'))
+        self.file_props['transfered_size'] = []
+        return True
+
+class FileRequestErrorEvent(nec.NetworkIncomingEvent):
+    name = 'file-request-error'
+    base_network_events = []
+
+    def generate(self):
+        self.jid = gajim.get_jid_without_resource(self.jid)
+        return True
+
+class GatewayPromptReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
+    name = 'gateway-prompt-received'
+    base_network_events = []
+
+    def generate(self):
+        self.get_jid_resource()
+        query = self.stanza.getTag('query')
+        if query:
+            self.desc = query.getTagData('desc')
+            self.prompt = query.getTagData('prompt')
+            self.prompt_jid = query.getTagData('jid')
+        else:
+            self.desc = None
+            self.prompt = None
+            self.prompt_jid = None
+        return True
+
+class NotificationEvent(nec.NetworkIncomingEvent):
+    name = 'notification'
+    base_network_events = ['decrypted-message-received', 'gc-message-received']
+
+    def detect_type(self):
+        if self.base_event.name == 'decrypted-message-received':
+            self.notif_type = 'msg'
+        if self.base_event.name == 'gc-message-received':
+            self.notif_type = 'gc-msg'
+
+    def get_focused(self):
+        self.control_focused = False
+        if self.control:
+            parent_win = self.control.parent_win
+            if parent_win and self.control == parent_win.get_active_control() \
+            and parent_win.window.has_focus:
+                self.control_focused = True
+
+    def handle_incoming_msg_event(self, msg_obj):
+        if not msg_obj.msgtxt:
+            return
+        self.jid = msg_obj.jid
+        if msg_obj.session:
+            self.control = msg_obj.session.control
+        else:
+            self.control = None
+        self.get_focused()
+        # This event has already been added to event list
+        if not self.control and len(gajim.events.get_events(self.conn.name, \
+        self.jid, [msg_obj.mtype])) <= 1:
+            self.first_unread = True
+
+        if msg_obj.mtype == 'pm':
+            nick = msg_obj.resource
+        else:
+            nick = gajim.get_name_from_jid(self.conn.name, self.jid)
+
+        if self.first_unread:
+            self.sound_event = 'first_message_received'
+        elif self.control_focused:
+            self.sound_event = 'next_message_received_focused'
+        else:
+            self.sound_event = 'next_message_received_unfocused'
+
+        if gajim.config.get('notification_preview_message'):
+            self.popup_text = msg_obj.msgtxt
+            if self.popup_text and (self.popup_text.startswith('/me ') or \
+            self.popup_text.startswith('/me\n')):
+                self.popup_text = '* ' + nick + self.popup_text[3:]
+        else:
+            # We don't want message preview, do_preview = False
+            self.popup_text = ''
+        if msg_obj.mtype == 'normal': # single message
+            self.popup_event_type = _('New Single Message')
+            self.popup_image = 'gajim-single_msg_recv'
+            self.popup_title = _('New Single Message from %(nickname)s') % \
+                {'nickname': nick}
+        elif msg_obj.mtype == 'pm':
+            self.popup_event_type = _('New Private Message')
+            self.popup_image = 'gajim-priv_msg_recv'
+            self.popup_title = _('New Private Message from group chat %s') % \
+                msg_obj.jid
+            if self.popup_text:
+                self.popup_text = _('%(nickname)s: %(message)s') % \
+                    {'nickname': nick, 'message': self.popup_text}
+            else:
+                self.popup_text = _('Messaged by %(nickname)s') % \
+                    {'nickname': nick}
+        else: # chat message
+            self.popup_event_type = _('New Message')
+            self.popup_image = 'gajim-chat_msg_recv'
+            self.popup_title = _('New Message from %(nickname)s') % \
+                {'nickname': nick}
+
+        self.popup_image = gtkgui_helpers.get_icon_path(self.popup_image, 48)
+
+        if not gajim.config.get('notify_on_new_message') or \
+        not self.first_unread:
+            self.do_popup = False
+        elif gajim.config.get('autopopupaway'):
+            # always show notification
+            self.do_popup = True
+        elif gajim.connections[self.conn.name].connected in (2, 3):
+            # we're online or chat
+            self.do_popup = True
+
+        if self.first_unread and helpers.allow_sound_notification(
+        self.conn.name, 'first_message_received'):
+            self.do_sound = True
+        elif not self.first_unread and self.control_focused and \
+        helpers.allow_sound_notification(self.conn.name,
+        'next_message_received_focused'):
+            self.do_sound = True
+        elif not self.first_unread and not self.control_focused and \
+        helpers.allow_sound_notification(self.conn.name,
+        'next_message_received_unfocused'):
+            self.do_sound = True
+
+    def handle_incoming_gc_msg_event(self, msg_obj):
+        sound = msg_obj.msg_obj.gc_control.highlighting_for_message(
+            msg_obj.msgtxt, msg_obj.timestamp)[1]
+        self.do_sound = True
+        if sound == 'received':
+            self.sound_event = 'muc_message_received'
+        elif sound == 'highlight':
+            self.sound_event = 'muc_message_highlight'
+        else:
+            self.do_sound = False
+
+        self.do_popup = False
+
+    def handle_incoming_pres_event(self, msg_obj):
+        pass
+
+    def generate(self):
+        # what's needed to compute output
+        self.conn = self.base_event.conn
+        self.control = None
+        self.control_focused = False
+        self.first_unread = False
+
+        # For output
+        self.do_sound = False
+        self.sound_file = ''
+        self.sound_event = '' # gajim sound played if not sound_file is set
+        self.show_popup = False
+
+        self.do_popup = False
+        self.popup_title = ''
+        self.popup_text = ''
+        self.popup_event_type = ''
+        self.popup_msg_type = ''
+        self.popup_image = ''
+
+        self.do_command = False
+        self.command = ''
+
+        self.show_in_notification_area = False
+        self.show_in_roster = False
+
+        self.detect_type()
+
+        if self.notif_type == 'msg':
+            self.handle_incoming_msg_event(self.base_event)
+        elif self.notif_type == 'gc-msg':
+            self.handle_incoming_gc_msg_event(self.base_event)
+        elif self.notif_type == 'pres':
+            self.handle_incoming_pres_event(self.base_event)
+        return True
+
+class MessageOutgoingEvent(nec.NetworkIncomingEvent):
+    name = 'message-outgoing'
+    base_network_events = []
+
+    def init(self):
+        self.message = ''
+        self.keyID = None
+        self.type_ = 'chat'
+        self.subject = ''
+        self.chatstate = None
+        self.msg_id = None
+        self.composing_xep = None
+        self.resource = None
+        self.user_nick = None
+        self.xhtml = None
+        self.label = None
+        self.session = None
+        self.forward_from = None
+        self.form_node = None
+        self.original_message = ''
+        self.delayed = None
+        self.callback = None
+        self.callback_args = []
+        self.now = False
+        self.is_loggable = True
+
+    def generate(self):
+        return True

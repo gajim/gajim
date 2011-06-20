@@ -52,6 +52,7 @@ opt_str = [ 'string', 0 ]
 opt_bool = [ 'boolean', 0 ]
 opt_color = [ 'color', '^(#[0-9a-fA-F]{6})|()$' ]
 opt_one_window_types = ['never', 'always', 'always_with_roster', 'peracct', 'pertype']
+opt_show_roster_on_startup = ['always', 'never', 'last_state']
 opt_treat_incoming_messages = ['', 'chat', 'normal']
 
 class Config:
@@ -59,7 +60,7 @@ class Config:
     DEFAULT_ICONSET = 'dcraven'
     DEFAULT_MOOD_ICONSET = 'default'
     DEFAULT_ACTIVITY_ICONSET = 'default'
-    DEFAULT_OPENWITH = 'gnome-open'
+    DEFAULT_OPENWITH = 'xdg-open'
     DEFAULT_BROWSER = 'firefox'
     DEFAULT_MAILAPP = 'mozilla-thunderbird -compose'
     DEFAULT_FILE_MANAGER = 'xffm'
@@ -85,7 +86,7 @@ class Config:
             'autoxa_message': [ opt_str, _('$S (Not available as a result of being idle more than $T min)'), _('$S will be replaced by current status message, $T by autoxa time.') ],
             'ask_online_status': [ opt_bool, False ],
             'ask_offline_status': [ opt_bool, False ],
-            'trayicon': [opt_str, 'always', _("When to show systray icon. Can be 'never', 'on_event', 'always'."), True],
+            'trayicon': [opt_str, 'always', _("When to show notification area icon. Can be 'never', 'on_event', 'always'."), True],
             'iconset': [ opt_str, DEFAULT_ICONSET, '', True ],
             'mood_iconset': [ opt_str, DEFAULT_MOOD_ICONSET, '', True ],
             'activity_iconset': [ opt_str, DEFAULT_ACTIVITY_ICONSET, '', True ],
@@ -146,6 +147,7 @@ class Config:
             'single-msg-y-position': [opt_int, 0],
             'single-msg-width': [opt_int, 400],
             'single-msg-height': [opt_int, 280],
+            'save-roster-position': [opt_bool, True, _('If true, Gajim will save roster position when hiding roster, and restore it when showing roster.')],
             'roster_x-position': [ opt_int, 0 ],
             'roster_y-position': [ opt_int, 0 ],
             'roster_width': [ opt_int, 200 ],
@@ -166,12 +168,12 @@ class Config:
             'change_roster_title': [ opt_bool, True, _('Add * and [n] in roster title?')],
             'restore_lines': [opt_int, 4, _('How many lines to remember from previous conversation when a chat tab/window is reopened.')],
             'restore_timeout': [opt_int, 60, _('How many minutes should last lines from previous conversation last.')],
-            'muc_restore_lines': [opt_int, 20, _('How many lines to request to server when entering a groupchat.')],
-            'muc_restore_timeout': [opt_int, 60, _('How many minutes back to request logs when a entering a groupchat.')],
+            'muc_restore_lines': [opt_int, 20, _('How many lines to request to server when entering a groupchat. -1 means no limit')],
+            'muc_restore_timeout': [opt_int, 60, _('How many minutes back to request logs when a entering a groupchat. -1 means no limit')],
             'muc_autorejoin_timeout': [opt_int, 1, _('How many seconds to wait before trying to autorejoin to a conference you are being disconnected from. Set to 0 to disable autorejoining.')],
-            'muc_autorejoin_on_kick': [opt_bool, False, 'Should autorejoin be activated when we are being kicked from a conference?'],
+            'muc_autorejoin_on_kick': [opt_bool, False, _('Should autorejoin be activated when we are being kicked from a conference?')],
             'send_on_ctrl_enter': [opt_bool, False, _('Send message on Ctrl+Enter and with Enter make new line (Mirabilis ICQ Client default behaviour).')],
-            'show_roster_on_startup': [opt_bool, True],
+            'last_roster_visible': [opt_bool, True],
             'key_up_lines': [opt_int, 25, _('How many lines to store for Ctrl+KeyUP.')],
             'version': [ opt_str, defs.version ], # which version created the config
             'search_engine': [opt_str, 'http://www.google.com/search?&q=%s&sourceid=gajim'],
@@ -194,7 +196,7 @@ class Config:
             'conversation_font': [opt_str, ''],
             'use_kib_mib': [opt_bool, False, _('IEC standard says KiB = 1024 bytes, KB = 1000 bytes.')],
             'notify_on_all_muc_messages': [opt_bool, False],
-            'trayicon_notification_on_events': [opt_bool, True, _('Notify of events in the system trayicon.')],
+            'trayicon_notification_on_events': [opt_bool, True, _('Notify of events in the notification area.')],
             'last_save_dir': [opt_str, ''],
             'last_send_dir': [opt_str, ''],
             'last_emoticons_dir': [opt_str, ''],
@@ -218,7 +220,7 @@ class Config:
             'notification_avatar_width': [opt_int, 48],
             'notification_avatar_height': [opt_int, 48],
             'muc_highlight_words': [opt_str, '', _('A semicolon-separated list of words that will be highlighted in group chats.')],
-            'quit_on_roster_x_button': [opt_bool, False, _('If True, quits Gajim when X button of Window Manager is clicked. This setting is taken into account only if trayicon is used.')],
+            'quit_on_roster_x_button': [opt_bool, False, _('If True, quits Gajim when X button of Window Manager is clicked. This setting is taken into account only if notification icon is used.')],
             'check_if_gajim_is_default': [opt_bool, True, _('If True, Gajim will check if it\'s the default jabber client on each startup.')],
             'show_unread_tab_icon': [opt_bool, False, _('If True, Gajim will display an icon on each tab containing unread messages. Depending on the theme, this icon may be animated.')],
             'show_status_msgs_in_roster': [opt_bool, True, _('If True, Gajim will display the status message, if not empty, for every contact under the contact name in roster window.'), True],
@@ -232,6 +234,7 @@ class Config:
             'print_status_in_chats': [opt_bool, True, _('If False, Gajim will no longer print status line in chats when a contact changes his or her status and/or his or her status message.')],
             'print_status_in_muc': [opt_str, 'in_and_out', _('can be "none", "all" or "in_and_out". If "none", Gajim will no longer print status line in groupchats when a member changes his or her status and/or his or her status message. If "all" Gajim will print all status messages. If "in_and_out", Gajim will only print FOO enters/leaves group chat.')],
             'log_contact_status_changes': [opt_bool, False],
+            'log_xhtml_messages': [opt_bool, False, _('Log XHTML messages instead of plain text messages.')],
             'just_connected_bg_color': [opt_str, '#adc3c6', _('Background color of contacts when they just signed in.')],
             'just_disconnected_bg_color': [opt_str, '#ab6161', _('Background color of contacts when they just signed out.')],
             'restored_messages_color': [opt_color, '#555753'],
@@ -244,6 +247,7 @@ class Config:
             'one_message_window': [opt_str, 'always',
 #always, never, peracct, pertype should not be translated
                     _('Controls the window where new messages are placed.\n\'always\' - All messages are sent to a single window.\n\'always_with_roster\' - Like \'always\' but the messages are in a single window along with the roster.\n\'never\' - All messages get their own window.\n\'peracct\' - Messages for each account are sent to a specific window.\n\'pertype\' - Each message type (e.g., chats vs. groupchats) are sent to a specific window.')],
+            'show_roster_on_startup':[opt_str, 'always', _('Show roster on startup.\n\'always\' - Always show roster.\n\'never\' - Never show roster.\n\'last_state\' - Restore the last state roster.')],
             'show_avatar_in_chat': [opt_bool, True, _('If False, you will no longer see the avatar in the chat window.')],
             'escape_key_closes': [opt_bool, True, _('If True, pressing the escape key closes a tab/window.')],
             'compact_view': [opt_bool, False, _('Hides the buttons in chat windows.')],
@@ -267,7 +271,7 @@ class Config:
             'use_latex': [opt_bool, False, _('If True, Gajim will convert string between $$ and $$ to an image using dvips and convert before insterting it in chat window.')],
             'change_status_window_timeout': [opt_int, 15, _('Time of inactivity needed before the change status window closes down.')],
             'max_conversation_lines': [opt_int, 500, _('Maximum number of lines that are printed in conversations. Oldest lines are cleared.')],
-            'attach_notifications_to_systray': [opt_bool, False, _('If True, notification windows from notification-daemon will be attached to systray icon.')],
+            'attach_notifications_to_systray': [opt_bool, False, _('If True, notification windows from notification-daemon will be attached to notification icon.')],
             'check_idle_every_foo_seconds': [opt_int, 2, _('Choose interval between 2 checks of idleness.')],
             'latex_png_dpi': [opt_str, '108', _('Change the value to change the size of latex formulas displayed. The higher is larger.') ],
             'uri_schemes': [opt_str, 'aaa:// aaas:// acap:// cap:// cid: crid:// data: dav: dict:// dns: fax: file:/ ftp:// geo: go: gopher:// h323: http:// https:// iax: icap:// im: imap:// info: ipp:// iris: iris.beep: iris.xpc: iris.xpcs: iris.lwz: ldap:// mid: modem: msrp:// msrps:// mtqp:// mupdate:// news: nfs:// nntp:// opaquelocktoken: pop:// pres: prospero:// rtsp:// service: shttp:// sip: sips: sms: snmp:// soap.beep:// soap.beeps:// tag: tel: telnet:// tftp:// thismessage:/ tip:// tv: urn:// vemmi:// xmlrpc.beep:// xmlrpc.beeps:// z39.50r:// z39.50s:// about: apt: cvs:// daap:// ed2k:// feed: fish:// git:// iax2: irc:// ircs:// ldaps:// magnet: mms:// rsync:// ssh:// svn:// sftp:// smb:// webcal://', _('Valid uri schemes. Only schemes in this list will be accepted as "real" uri. (mailto and xmpp are handled separately)'), True],
@@ -319,7 +323,7 @@ class Config:
                     'connection_types': [ opt_str, 'tls ssl plain', _('Ordered list (space separated) of connection type to try. Can contain tls, ssl or plain')],
                     'warn_when_plaintext_connection': [ opt_bool, True, _('Show a warning dialog before sending password on an plaintext connection.') ],
                     'warn_when_insecure_ssl_connection': [ opt_bool, True, _('Show a warning dialog before using standard SSL library.') ],
-                    'warn_when_insecure_password': [ opt_bool, True, _('Show a warning dialog before sending PLAIN password over a plain conenction.') ],
+                    'warn_when_insecure_password': [ opt_bool, True, _('Show a warning dialog before sending PLAIN password over a plain connection.') ],
                     'ssl_fingerprint_sha1': [ opt_str, '', '', True ],
                     'ignore_ssl_errors': [ opt_str, '', _('Space separated list of ssl errors to ignore.') ],
                     'use_srv': [ opt_bool, True, '', True ],
@@ -366,7 +370,8 @@ class Config:
                     'subscribe_nick': [opt_bool, True],
                     'subscribe_location': [opt_bool, True],
                     'ignore_unknown_contacts': [ opt_bool, False ],
-                    'send_os_info': [ opt_bool, True ],
+                    'send_os_info': [ opt_bool, True, _("Allow Gajim to send information about the operating system you are running.") ],
+                    'send_time_info': [ opt_bool, True, _("Allow Gajim to send your local time.") ],
                     'log_encrypted_sessions': [opt_bool, True, _('When negotiating an encrypted session, should Gajim assume you want your messages to be logged?')],
                     'send_idle_time': [ opt_bool, True ],
                     'roster_version': [opt_str, ''],
@@ -439,22 +444,6 @@ class Config:
             }, {}),
             'rooms': ({
                     'speller_language': [ opt_str, '', _('Language for which we want to check misspelled words')],
-            }, {}),
-            'notifications': ({
-                    'event': [opt_str, ''],
-                    'recipient_type': [opt_str, 'all'],
-                    'recipients': [opt_str, ''],
-                    'status': [opt_str, 'all', _('all or space separated status')],
-                    'tab_opened': [opt_str, 'both', _("'yes', 'no', or 'both'")],
-                    'sound': [opt_str, '', _("'yes', 'no' or ''")],
-                    'sound_file': [opt_str, ''],
-                    'popup': [opt_str, '', _("'yes', 'no' or ''")],
-                    'auto_open': [opt_str, '', _("'yes', 'no' or ''")],
-                    'run_command': [opt_bool, False],
-                    'command': [opt_str, ''],
-                    'systray': [opt_str, '', _("'yes', 'no' or ''")],
-                    'roster': [opt_str, '', _("'yes', 'no' or ''")],
-                    'urgency_hint': [opt_bool, False],
             }, {}),
             'plugins': ({
                 'active': [opt_bool, False, _('State whether plugins should be activated on exit (this is saved on Gajim exit). This option SHOULD NOT be used to (de)activate plug-ins. Use GUI instead.')],

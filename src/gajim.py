@@ -35,11 +35,52 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
+from common import demandimport
+demandimport.enable()
+demandimport.ignore += ['gobject._gobject', 'libasyncns', 'i18n',
+    'logging.NullHandler', 'dbus.glib', 'dbus.service',
+    'command_system.implementation.standard', 'OpenSSL.SSL', 'OpenSSL.crypto',
+    'common.sleepy', 'DLFCN', 'dl', 'xml.sax', 'xml.sax.handler', 'ic']
+
 import os
 import sys
+
+if os.name == 'nt':
+    import locale
+    import gettext
+    APP = 'gajim'
+    DIR = '../po'
+    lang, enc = locale.getdefaultlocale()
+    os.environ['LANG'] = lang
+    gettext.bindtextdomain(APP, DIR)
+    gettext.textdomain(APP)
+    gettext.install(APP, DIR, unicode=True)
+
+    locale.setlocale(locale.LC_ALL, '')
+    import ctypes
+    import ctypes.util
+    libintl_path = ctypes.util.find_library('intl')
+    if libintl_path == None:
+        local_intl = os.path.join('gtk', 'bin', 'intl.dll')
+        if os.path.exists(local_intl):
+            libintl_path = local_intl
+    if libintl_path == None:
+        raise ImportError('intl.dll library not found')
+    libintl = ctypes.cdll.LoadLibrary(libintl_path)
+    libintl.bindtextdomain(APP, DIR)
+    libintl.bind_textdomain_codeset(APP, 'UTF-8')
+
 import warnings
 
 if os.name == 'nt':
+    log_path = os.path.join(os.environ['APPDATA'], 'Gajim')
+    if not os.path.exists(log_path):
+        os.mkdir(log_path, 0700)
+    log_file = os.path.join(log_path, 'gajim.log')
+    fout = open(log_file, 'a')
+    sys.stdout = fout
+    sys.stderr = fout
+
     warnings.filterwarnings(action='ignore')
 
     if os.path.isdir('gtk'):
@@ -75,7 +116,10 @@ def parseOpts():
 
     try:
         shortargs = 'hqvl:p:c:'
+        # add gtk/gnome session option as gtk_get_option_group is not wrapped
         longargs = 'help quiet verbose loglevel= profile= config_path='
+        longargs += ' class= name= screen= gtk-module= sync g-fatal-warnings'
+        longargs += ' sm-client-id= sm-client-state-file= sm-disable'
         opts = getopt.getopt(sys.argv[1:], shortargs, longargs.split())[0]
     except getopt.error, msg1:
         print msg1
@@ -349,7 +393,7 @@ def on_exit():
     if os.path.exists(pid_filename):
         os.remove(pid_filename)
     # Shutdown GUI and save config
-    if hasattr(gajim.interface, 'roster'):
+    if hasattr(gajim.interface, 'roster') and gajim.interface.roster:
         gajim.interface.roster.prepare_quit()
 
 import atexit
@@ -381,11 +425,16 @@ if __name__ == '__main__':
             cli.connect('die', die_cb)
 
             path_to_gajim_script = gtkgui_helpers.get_abspath_for_script(
-                    'gajim')
+                'gajim')
 
             if path_to_gajim_script:
                 argv = [path_to_gajim_script]
-                cli.set_restart_command(len(argv), argv)
+                try:
+                    cli.set_restart_command(argv)
+                except TypeError:
+                    # Fedora systems have a broken gnome-python wrapper for this
+                    # function.
+                    cli.set_restart_command(len(argv), argv)
 
     check_paths.check_and_possibly_create_paths()
 

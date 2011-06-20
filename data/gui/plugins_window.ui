@@ -9,6 +9,7 @@
     <property name="title" translatable="yes">Plugins</property>
     <property name="default_width">650</property>
     <property name="default_height">500</property>
+    <property name="type_hint">dialog</property>
     <signal name="destroy" handler="on_plugins_window_destroy"/>
     <child>
       <object class="GtkVBox" id="vbox1">
@@ -51,33 +52,12 @@
                     <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
                     <child>
-                      <object class="GtkHBox" id="hbox4">
+                      <object class="GtkLabel" id="plugin_name_label">
                         <property name="visible">True</property>
-                        <property name="spacing">6</property>
-                        <child>
-                          <object class="GtkLabel" id="plugin_name_label">
-                            <property name="visible">True</property>
-                            <property name="xalign">0</property>
-                            <property name="label" translatable="yes">&amp;lt;empty&amp;gt;</property>
-                            <property name="use_markup">True</property>
-                            <property name="wrap">True</property>
-                            <property name="selectable">True</property>
-                          </object>
-                          <packing>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkAlignment" id="alignment1">
-                            <property name="visible">True</property>
-                            <child>
-                              <placeholder/>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes">&amp;lt;empty&amp;gt;</property>
+                        <property name="use_markup">True</property>
+                        <property name="selectable">True</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -174,7 +154,6 @@
                             <property name="xalign">0</property>
                           </object>
                           <packing>
-                            <property name="expand">False</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
@@ -194,7 +173,7 @@
                             <child>
                               <object class="GtkLabel" id="label7">
                                 <property name="visible">True</property>
-                                <property name="label" translatable="yes">Descrition:</property>
+                                <property name="label" translatable="yes">Description:</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -246,9 +225,46 @@
                         <property name="spacing">5</property>
                         <property name="layout_style">end</property>
                         <child>
+                          <object class="GtkButton" id="install_plugin_button">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="receives_default">True</property>
+                            <signal name="clicked" handler="on_install_plugin_button_clicked"/>
+                            <child>
+                              <object class="GtkHBox" id="hbox13">
+                                <property name="visible">True</property>
+                                <child>
+                                  <object class="GtkImage" id="image3">
+                                    <property name="visible">True</property>
+                                    <property name="stock">gtk-apply</property>
+                                  </object>
+                                  <packing>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="install_plugin_button_label">
+                                    <property name="visible">True</property>
+                                    <property name="xalign">0</property>
+                                    <property name="label" translatable="yes">Install</property>
+                                  </object>
+                                  <packing>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
                           <object class="GtkButton" id="uninstall_plugin_button">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
+                            <property name="can_focus">False</property>
                             <property name="receives_default">True</property>
                             <signal name="clicked" handler="on_uninstall_plugin_button_clicked"/>
                             <child>
@@ -266,6 +282,7 @@
                                 <child>
                                   <object class="GtkLabel" id="uninstall_plugin_button_label">
                                     <property name="visible">True</property>
+                                    <property name="xalign">0</property>
                                     <property name="label" translatable="yes">Uninstall</property>
                                   </object>
                                   <packing>
@@ -278,7 +295,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">False</property>
-                            <property name="position">0</property>
+                            <property name="position">1</property>
                           </packing>
                         </child>
                         <child>
@@ -302,6 +319,7 @@
                                 <child>
                                   <object class="GtkLabel" id="configure_plugin_button_label">
                                     <property name="visible">True</property>
+                                    <property name="xalign">0</property>
                                     <property name="label" translatable="yes">Configure</property>
                                   </object>
                                   <packing>
@@ -314,7 +332,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">False</property>
-                            <property name="position">1</property>
+                            <property name="position">2</property>
                           </packing>
                         </child>
                       </object>

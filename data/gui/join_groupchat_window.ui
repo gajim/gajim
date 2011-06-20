@@ -5,6 +5,7 @@
   <object class="GtkWindow" id="join_groupchat_window">
     <property name="border_width">6</property>
     <property name="title" translatable="yes">Join Group Chat</property>
+    <property name="type_hint">dialog</property>
     <signal name="destroy" handler="on_join_groupchat_window_destroy"/>
     <signal name="key_press_event" handler="on_join_groupchat_window_key_press_event"/>
     <child>
@@ -235,10 +236,12 @@
                 <property name="right_attach">2</property>
                 <property name="top_attach">4</property>
                 <property name="bottom_attach">5</property>
+                <property name="y_options">GTK_EXPAND</property>
               </packing>
             </child>
           </object>
           <packing>
+            <property name="expand">False</property>
             <property name="position">0</property>
           </packing>
         </child>
@@ -317,6 +320,7 @@
           </object>
           <packing>
             <property name="expand">False</property>
+            <property name="pack_type">end</property>
             <property name="position">1</property>
           </packing>
         </child>

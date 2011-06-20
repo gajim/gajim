@@ -43,10 +43,12 @@ import gobject
 
 from common.connection import CommonConnection
 from common import gajim
-from common import GnuPG
 from common.zeroconf import client_zeroconf
 from common.zeroconf import zeroconf
 from connection_handlers_zeroconf import *
+from common.connection_handlers_events import *
+
+import locale
 
 class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
     def __init__(self, name):
@@ -85,8 +87,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
                     'is_zeroconf', True)
             gajim.config.set_per('accounts', gajim.ZEROCONF_ACC_NAME,
                     'use_ft_proxies', False)
-        #XXX make sure host is US-ASCII
-        self.host = unicode(socket.gethostname())
+        self.host = unicode(socket.gethostname(), locale.getpreferredencoding())
         gajim.config.set_per('accounts', gajim.ZEROCONF_ACC_NAME, 'hostname',
                 self.host)
         self.port = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME,
@@ -105,12 +106,13 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
                 'zeroconf_email')
 
         if not self.username:
-            self.username = unicode(getpass.getuser())
+            self.username = unicode(getpass.getuser(),
+                locale.getpreferredencoding())
             gajim.config.set_per('accounts', gajim.ZEROCONF_ACC_NAME, 'name',
-                    self.username)
+                self.username)
         else:
             self.username = gajim.config.get_per('accounts',
-                    gajim.ZEROCONF_ACC_NAME, 'name')
+                gajim.ZEROCONF_ACC_NAME, 'name')
     # END __init__
 
     def check_jid(self, jid):
@@ -133,26 +135,31 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
             diffs = self.roster.getDiffs()
             for key in diffs:
                 self.roster.setItem(key)
-                self.dispatch('ROSTER_INFO', (key, self.roster.getName(key),
-                                        'both', 'no', self.roster.getGroups(key)))
-                self.dispatch('NOTIFY', (key, self.roster.getStatus(key),
-                                        self.roster.getMessage(key), 'local', 0, None, 0, None))
+                gajim.nec.push_incoming_event(RosterInfoEvent(None, conn=self,
+                    jid=key, nickname=self.roster.getName(key), sub='both',
+                    ask='no', groups=self.roster.getGroups(key)))
+                gajim.nec.push_incoming_event(ZeroconfPresenceReceivedEvent(
+                    None, conn=self, fjid=key, show=self.roster.getStatus(key),
+                    status=self.roster.getMessage(key)))
                 #XXX open chat windows don't get refreshed (full name), add that
         return self.call_resolve_timeout
 
     # callbacks called from zeroconf
     def _on_new_service(self, jid):
         self.roster.setItem(jid)
-        self.dispatch('ROSTER_INFO', (jid, self.roster.getName(jid), 'both', 'no',
-                self.roster.getGroups(jid)))
-        self.dispatch('NOTIFY', (jid, self.roster.getStatus(jid),
-                self.roster.getMessage(jid), 'local', 0, None, 0, None))
+        gajim.nec.push_incoming_event(RosterInfoEvent(None, conn=self,
+            jid=jid, nickname=self.roster.getName(jid), sub='both',
+            ask='no', groups=self.roster.getGroups(jid)))
+        gajim.nec.push_incoming_event(ZeroconfPresenceReceivedEvent(
+            None, conn=self, fjid=jid, show=self.roster.getStatus(jid),
+            status=self.roster.getMessage(jid)))
 
     def _on_remove_service(self, jid):
         self.roster.delItem(jid)
         # 'NOTIFY' (account, (jid, status, status message, resource, priority,
         # keyID, timestamp, contact_nickname))
-        self.dispatch('NOTIFY', (jid, 'offline', '', 'local', 0, None, 0, None))
+        gajim.nec.push_incoming_event(ZeroconfPresenceReceivedEvent(
+            None, conn=self, fjid=jid, show='offline', status=''))
 
     def _disconnectedReconnCB(self):
         """
@@ -164,15 +171,18 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
             # after we auth to server
             self.old_show = STATUS_LIST[self.connected]
         self.connected = 0
-        self.dispatch('STATUS', 'offline')
+        gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
+            show='offline'))
         # random number to show we wait network manager to send us a reconenct
         self.time_to_reconnect = 5
         self.on_purpose = False
 
     def _on_name_conflictCB(self, alt_name):
         self.disconnect()
-        self.dispatch('STATUS', 'offline')
-        self.dispatch('ZC_NAME_CONFLICT', alt_name)
+        gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
+            show='offline'))
+        gajim.nec.push_incoming_event(ZeroconfNameConflictEvent(None, conn=self,
+            alt_name=alt_name))
 
     def _on_error(self, message):
         self.dispatch('ERROR', (_('Avahi error'),
@@ -183,38 +193,43 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
         if not self.connection:
             self.connection = client_zeroconf.ClientZeroconf(self)
             if not zeroconf.test_zeroconf():
-                self.dispatch('STATUS', 'offline')
+                gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
+                    show='offline'))
                 self.status = 'offline'
-                self.dispatch('CONNECTION_LOST',
-                        (_('Could not connect to "%s"') % self.name,
-                        _('Please check if Avahi or Bonjour is installed.')))
+                gajim.nec.push_incoming_event(ConnectionLostEvent(None,
+                    conn=self, title=_('Could not connect to "%s"') % self.name,
+                    msg=_('Please check if Avahi or Bonjour is installed.')))
                 self.disconnect()
                 return
             result = self.connection.connect(show, msg)
             if not result:
-                self.dispatch('STATUS', 'offline')
+                gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
+                    show='offline'))
                 self.status = 'offline'
                 if result is False:
-                    self.dispatch('CONNECTION_LOST',
-                            (_('Could not start local service'),
-                            _('Unable to bind to port %d.' % self.port)))
+                    gajim.nec.push_incoming_event(ConnectionLostEvent(None,
+                        conn=self, title=_('Could not start local service'),
+                        msg=_('Unable to bind to port %d.' % self.port)))
                 else: # result is None
-                    self.dispatch('CONNECTION_LOST',
-                    (_('Could not start local service'),
-                    _('Please check if avahi-daemon is running.')))
+                    gajim.nec.push_incoming_event(ConnectionLostEvent(None,
+                        conn=self, title=_('Could not start local service'),
+                        msg=_('Please check if avahi-daemon is running.')))
                 self.disconnect()
                 return
         else:
             self.connection.announce()
         self.roster = self.connection.getRoster()
-        self.dispatch('ROSTER', self.roster)
+        gajim.nec.push_incoming_event(RosterReceivedEvent(None, conn=self,
+            xmpp_roster=self.roster))
 
         # display contacts already detected and resolved
         for jid in self.roster.keys():
-            self.dispatch('ROSTER_INFO', (jid, self.roster.getName(jid), 'both',
-                    'no', self.roster.getGroups(jid)))
-            self.dispatch('NOTIFY', (jid, self.roster.getStatus(jid),
-                    self.roster.getMessage(jid), 'local', 0, None, 0, None))
+            gajim.nec.push_incoming_event(RosterInfoEvent(None, conn=self,
+                jid=jid, nickname=self.roster.getName(jid), sub='both',
+                ask='no', groups=self.roster.getGroups(jid)))
+            gajim.nec.push_incoming_event(ZeroconfPresenceReceivedEvent(
+                None, conn=self, fjid=jid, show=self.roster.getStatus(jid),
+                status=self.roster.getMessage(jid)))
 
         self.connected = STATUS_LIST.index(show)
 
@@ -269,43 +284,49 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
             check = self.connection.announce()
         else:
             self.connected = STATUS_LIST.index(show)
-        self.dispatch('SIGNED_IN', ())
+        gajim.nec.push_incoming_event(SignedInEvent(None, conn=self))
 
         # stay offline when zeroconf does something wrong
         if check:
-            self.dispatch('STATUS', show)
+            gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
+                show=show))
         else:
             # show notification that avahi or system bus is down
-            self.dispatch('STATUS', 'offline')
+            gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
+                show='offline'))
             self.status = 'offline'
-            self.dispatch('CONNECTION_LOST',
-                    (_('Could not change status of account "%s"') % self.name,
-                    _('Please check if avahi-daemon is running.')))
+            gajim.nec.push_incoming_event(ConnectionLostEvent(None, conn=self,
+                title=_('Could not change status of account "%s"') % self.name,
+                msg=_('Please check if avahi-daemon is running.')))
 
     def _change_to_invisible(self, msg):
         if self.connection.remove_announce():
-            self.dispatch('STATUS', 'invisible')
+            gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
+                show='invisible'))
         else:
             # show notification that avahi or system bus is down
-            self.dispatch('STATUS', 'offline')
+            gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
+                show='offline'))
             self.status = 'offline'
-            self.dispatch('CONNECTION_LOST',
-                    (_('Could not change status of account "%s"') % self.name,
-                    _('Please check if avahi-daemon is running.')))
+            gajim.nec.push_incoming_event(ConnectionLostEvent(None, conn=self,
+                title=_('Could not change status of account "%s"') % self.name,
+                msg=_('Please check if avahi-daemon is running.')))
 
     def _change_from_invisible(self):
         self.connection.announce()
 
     def _update_status(self, show, msg):
         if self.connection.set_show_msg(show, msg):
-            self.dispatch('STATUS', show)
+            gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
+                show=show))
         else:
             # show notification that avahi or system bus is down
-            self.dispatch('STATUS', 'offline')
+            gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
+                show='offline'))
             self.status = 'offline'
-            self.dispatch('CONNECTION_LOST',
-                    (_('Could not change status of account "%s"') % self.name,
-                    _('Please check if avahi-daemon is running.')))
+            gajim.nec.push_incoming_event(ConnectionLostEvent(None, conn=self,
+                title=_('Could not change status of account "%s"') % self.name,
+                msg=_('Please check if avahi-daemon is running.')))
 
     def send_message(self, jid, msg, keyID, type_='chat', subject='',
     chatstate=None, msg_id=None, composing_xep=None, resource=None,
@@ -314,7 +335,8 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
     callback_args=[], now=True):
 
         def on_send_ok(msg_id):
-            self.dispatch('MSGSENT', (jid, msg, keyID))
+            gajim.nec.push_incoming_event(MessageSentEvent(None, conn=self,
+                jid=jid, message=msg, keyID=keyID))
             if callback:
                 callback(msg_id, *callback_args)
 
@@ -323,7 +345,9 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
 
         def on_send_not_ok(reason):
             reason += ' ' + _('Your message could not be sent.')
-            self.dispatch('MSGERROR', [jid, -1, reason, None, None, session])
+            gajim.nec.push_incoming_event(MessageErrorEvent(None, conn=self,
+                fjid=jid, error_code=-1, error_msg=reason, msg=None, time_=None,
+                session=session))
 
         def cb(jid, msg, keyID, forward_from, session, original_message, subject,
         type_, msg_iq):
@@ -332,8 +356,10 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
 
             if ret == -1:
                 # Contact Offline
-                self.dispatch('MSGERROR', [jid, -1, _('Contact is offline. Your '
-                        'message could not be sent.'), None, None, session])
+                gajim.nec.push_incoming_event(MessageErrorEvent(None, conn=self,
+                    fjid=jid, error_code=-1, error_msg=_(
+                    'Contact is offline. Your message could not be sent.'),
+                    msg=None, time_=None, session=session))
 
         self._prepare_message(jid, msg, keyID, type_=type_, subject=subject,
                 chatstate=chatstate, msg_id=msg_id, composing_xep=composing_xep,
@@ -356,8 +382,9 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
                 thread_id = data[1]
                 frm = unicode(data[0])
                 session = self.get_or_create_session(frm, thread_id)
-                self.dispatch('MSGERROR', [frm, -1,
-    _('Connection to host could not be established: Timeout while '
-                        'sending data.'), None, None, session])
+                gajim.nec.push_incoming_event(MessageErrorEvent(
+                    None, conn=self, fjid=frm, error_code=-1, error_msg=_(
+                    'Connection to host could not be established: Timeout while '
+                    'sending data.'), msg=None, time_=None, session=session))
 
 # END ConnectionZeroconf

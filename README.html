@@ -16,10 +16,7 @@
 <ul>
 <li>python2.5 or higher</li>
 <li>pygtk2.16 or higher</li>
-<li>pysqlite2 (if you have python 2.5, you already have this)</li>
 </ul>
-
-<p><strong>Note to packagers</strong> Gajim is a GTK+ app that loves GNOME. You can do 'make' so you don't require gnomepythonextras (aka gnome-python-desktop) which is gnome dep, but you will miss gnomekeyring integration.</p>
 
 <h2>Optional Runtime Requirements</h2>
 <ul>
@@ -29,7 +26,8 @@
 <li>For zeroconf (bonjour), the "enable link-local messaging" checkbox, you need dbus-glib, python-avahi</li>
 <li>dnsutils (or whatever package provides the nslookup binary) for SRV support</li>
 <li>gtkspell and aspell-LANG where lang is your locale eg. en, fr etc</li>
-<li>gnome-python-desktop (for GnomeKeyring support)</li>
+<li>gnome-python-desktop (for GnomeKeyring support as password storage)</li>
+<li>kwalletcli (for support of KDE Wallet as password storage)</li>
 <li>notification-daemon or notify-python (and D-Bus) to get cooler popups</li>
 <li>D-Bus running to have gajim-remote working. Some distributions split dbus-x11, which is needed for dbus to work with Gajim. Version >= 0.80 is required.</li>
 <li>python-dbus bindings (>=0.81)</li>
@@ -40,8 +38,6 @@
 
 <h2>Compile-time Requirements</h2>
 <ul>
-<li>python-dev</li>
-<li>python-gtk2-dev</li>
 <li>intltool (>= 0.40.1)</li>
 </ul>
 
@@ -52,14 +48,9 @@
 <li>tar jxvf gajim-version.tar.bz2</li>
 <li>cd gajim</li>
 <li>./configure</li>
-<li>make (builds all modules)</li>
+<li>make (builds translations)</li>
 <li>su -c make install</li>
 </ol>
-
-<p>To specify what modules to build do:</p>
-<pre>
-    make help
-</pre>
 
 <p>To specify where to install do:</p>
 <pre>
@@ -68,7 +59,7 @@
 
 <h2>Running Gajim</h2>
 <p>Just do <em>gajim</em> or you can run Gajim from your GNOME/Xfce/KDE/whatever menus.<br/><br/>
-or if you didn't 'make install' you can also run from gajim folder with<em>./launch.sh</em></p>
+or if you use hg version and you didn't 'make install' you can also run from gajim folder with<em>./launch.sh</em></p>
 <hr />
 <h3>Note for hg users</h3>
 <p>You will need GNU autotools in order to install Gajim from svn. This includes:</p>
@@ -120,7 +111,7 @@ Wiki can be found at <a href="http://trac.gajim.org/wiki">http://trac.gajim.org/
 <br/>
 <br/>
 <br/>
-(C) 2003-2010<br/>
+(C) 2003-2011<br/>
 The Gajim Team<br/>
 http://gajim.org<br/>
 <br/>

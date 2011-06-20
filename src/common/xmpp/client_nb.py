@@ -60,6 +60,7 @@ class NonBlockingClient:
         self._owner = self
         self._registered_name = None # our full jid, set after successful auth
         self.connected = ''
+        self.ip_addresses = []
         self.socket = None
         self.on_connect = None
         self.on_proxy_failure = None
@@ -76,6 +77,9 @@ class NonBlockingClient:
         the client.
         """
         # to avoid recursive calls
+        if self.ip_addresses:
+            self._try_next_ip()
+            return
         if self.disconnecting: return
 
         log.info('Disconnecting NBClient: %s' % message)
@@ -317,6 +321,7 @@ class NonBlockingClient:
         elif mode == 'RECEIVE_DOCUMENT_ATTRIBUTES':
             if data:
                 self.Dispatcher.ProcessNonBlocking(data)
+                self.ip_addresses = []
             if not hasattr(self, 'Dispatcher') or \
                     self.Dispatcher.Stream._document_attrs is None:
                 self._xmpp_connect_machine(

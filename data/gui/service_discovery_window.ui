@@ -13,6 +13,7 @@
     <property name="role">Service Discovery</property>
     <property name="default_width">550</property>
     <property name="default_height">420</property>
+    <property name="type_hint">dialog</property>
     <signal name="destroy" handler="on_service_discovery_window_destroy"/>
     <child>
       <object class="GtkVBox" id="vbox11">

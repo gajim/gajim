@@ -33,32 +33,8 @@ import locale
 
 import config
 import xmpp
-
-try:
-    import defs
-except ImportError:
-    print >> sys.stderr, '''defs.py is missing!
-
-If you start gajim from svn:
-* Make sure you have GNU autotools installed.
-This includes the following packages:
-automake >= 1.8
-autoconf >= 2.59
-intltool-0.35
-libtool
-* Run
-$ sh autogen.sh
-* Optionally, install gajim
-$ make
-$ sudo make install
-
-**** Note for translators ****
-You can get the latest string updates, by running:
-$ cd po/
-$ make update-po
-
-'''
-    sys.exit(1)
+import defs
+import common.ged
 
 interface = None # The actual interface (the gtk one for the moment)
 thread_interface = None # Interface to run a thread and then a callback
@@ -67,7 +43,7 @@ version = config.get('version')
 connections = {} # 'account name': 'account (connection.Connection) instance'
 ipython_window = None
 
-ged = None # Global Events Dispatcher
+ged = common.ged.GlobalEventsDispatcher() # Global Events Dispatcher
 nec = None # Network Events Controller
 plugin_manager = None # Plugins Manager
 
@@ -131,6 +107,8 @@ to_be_removed = {} # list of contacts that has just signed out
 
 events = Events()
 
+notification = None
+
 nicks = {} # list of our nick names in each account
 # should we block 'contact signed in' notifications for this account?
 # this is only for the first 30 seconds after we change our show
@@ -161,22 +139,22 @@ ZEROCONF_ACC_NAME = 'Local'
 
 HAVE_ZEROCONF = True
 try:
-    import avahi
+    __import__('avahi')
 except ImportError:
     try:
-        import pybonjour
+        __import__('pybonjour')
     except Exception: # Linux raises ImportError, Windows raises WindowsError
         HAVE_ZEROCONF = False
 
 HAVE_PYCRYPTO = True
 try:
-    import Crypto
+    __import__('Crypto')
 except ImportError:
     HAVE_PYCRYPTO = False
 
 HAVE_GPG = True
 try:
-    import GnuPGInterface
+    __import__('gnupg', globals(), locals(), [], -1)
 except ImportError:
     HAVE_GPG = False
 else:
@@ -190,7 +168,8 @@ HAVE_LATEX = False
 
 HAVE_FARSIGHT = True
 try:
-    import farsight, gst
+    __import__('farsight')
+    __import__('gst')
 except ImportError:
     HAVE_FARSIGHT = False
 gajim_identity = {'type': 'pc', 'category': 'client', 'name': 'Gajim'}

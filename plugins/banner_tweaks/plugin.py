@@ -43,15 +43,6 @@ from plugins.helpers import log, log_calls
 from plugins.gui import GajimPluginConfigDialog
 
 class BannerTweaksPlugin(GajimPlugin):
-    name = u'Banner Tweaks'
-    short_name = u'banner_tweaks'
-    version = u'0.1'
-    description = u'''Allows user to tweak chat window banner appearance (eg. make it compact).
-
-Based on patch by pb in ticket #4133:
-http://trac.gajim.org/attachment/ticket/4133'''
-    authors = [u'Mateusz Biliński <mateusz@bilinski.it>']
-    homepage = u'http://blog.bilinski.it'
 
     @log_calls('BannerTweaksPlugin')
     def init(self):
@@ -88,7 +79,12 @@ http://trac.gajim.org/attachment/ticket/4133'''
             chat_control.banner_status_label.set_markup(status_text)
 
         if not self.config['show_banner_image']:
-            banner_status_img = chat_control.xml.get_object('banner_status_image')
+            if chat_control.TYPE_ID == message_control.TYPE_GC:
+                banner_status_img = chat_control.xml.get_object(
+                    'gc_banner_status_image')
+            else:
+                banner_status_img = chat_control.xml.get_object(
+                    'banner_status_image')
             banner_status_img.clear()
 
         # TODO: part below repeats a lot of code from ChatControl.draw_banner_text()

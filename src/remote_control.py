@@ -104,7 +104,7 @@ class Remote:
 
         bus_name = dbus.service.BusName(SERVICE, bus=session_bus)
         self.signal_object = SignalObject(bus_name)
-        
+
         gajim.ged.register_event_handler('last-result-received', ged.POSTGUI,
             self.on_last_status_time)
         gajim.ged.register_event_handler('version-result-received', ged.POSTGUI,
@@ -113,6 +113,41 @@ class Remote:
             self.on_time)
         gajim.ged.register_event_handler('gmail-nofify', ged.POSTGUI,
             self.on_gmail_notify)
+        gajim.ged.register_event_handler('roster-info', ged.POSTGUI,
+            self.on_roster_info)
+        gajim.ged.register_event_handler('presence-received', ged.POSTGUI,
+            self.on_presence_received)
+        gajim.ged.register_event_handler('subscribe-presence-received',
+            ged.POSTGUI, self.on_subscribe_presence_received)
+        gajim.ged.register_event_handler('subscribed-presence-received',
+            ged.POSTGUI, self.on_subscribed_presence_received)
+        gajim.ged.register_event_handler('unsubscribed-presence-received',
+            ged.POSTGUI, self.on_unsubscribed_presence_received)
+        gajim.ged.register_event_handler('gc-message-received',
+            ged.POSTGUI, self.on_gc_message_received)
+        gajim.ged.register_event_handler('our-show', ged.POSTGUI,
+            self.on_our_status)
+        gajim.ged.register_event_handler('account-created', ged.POSTGUI,
+            self.on_account_created)
+        gajim.ged.register_event_handler('vcard-received', ged.POSTGUI,
+            self.on_vcard_received)
+        gajim.ged.register_event_handler('chatstate-received', ged.POSTGUI,
+            self.on_chatstate_received)
+        gajim.ged.register_event_handler('message-sent', ged.POSTGUI,
+            self.on_message_sent)
+
+    def on_chatstate_received(self, obj):
+        self.raise_signal('ChatState', (obj.conn.name, [
+            obj.jid, obj.fjid, obj.stanza, obj.resource, obj.composing_xep,
+            obj.chatstate]))
+
+    def on_message_sent(self, obj):
+        try:
+            chatstate = obj.chatstate
+        except AttributeError:
+            chatstate = ""
+        self.raise_signal('MessageSent', (obj.conn.name, [
+            obj.jid, obj.message, obj.keyID, chatstate]))
 
     def on_last_status_time(self, obj):
         self.raise_signal('LastStatusTime', (obj.conn.name, [
@@ -129,6 +164,51 @@ class Remote:
     def on_gmail_notify(self, obj):
         self.raise_signal('NewGmail', (obj.conn.name, [obj.jid, obj.newmsgs,
             obj.gmail_messages_list]))
+
+    def on_roster_info(self, obj):
+        self.raise_signal('RosterInfo', (obj.conn.name, [obj.jid, obj.nickname,
+            obj.sub, obj.ask, obj.groups]))
+
+    def on_presence_received(self, obj):
+        event = None
+        if obj.old_show < 2 and obj.new_show > 1:
+            event = 'ContactPresence'
+        elif obj.old_show > 1 and obj.new_show < 2:
+            event = 'ContactAbsence'
+        elif obj.new_show > 1:
+            event = 'ContactStatus'
+        if event:
+            self.raise_signal(event, (obj.conn.name, [obj.jid, obj.show,
+                obj.status, obj.resource, obj.prio, obj.keyID, obj.timestamp,
+                obj.contact_nickname]))
+
+    def on_subscribe_presence_received(self, obj):
+        self.raise_signal('Subscribe', (obj.conn.name, [obj.jid, obj.status,
+            obj.user_nick]))
+
+    def on_subscribed_presence_received(self, obj):
+        self.raise_signal('Subscribed', (obj.conn.name, [obj.jid,
+            obj.resource]))
+
+    def on_unsubscribed_presence_received(self, obj):
+        self.raise_signal('Unsubscribed', (obj.conn.name, obj.jid))
+
+    def on_gc_message_received(self, obj):
+        if not hasattr(obj, 'needs_highlight'):
+            # event has not been handled at GUI level
+            return
+        self.raise_signal('GCMessage', (obj.conn.name, [obj.fjid, obj.msgtxt,
+            obj.timestamp, obj.has_timestamp, obj.xhtml_msgtxt, obj.status_code,
+            obj.displaymarking, obj.captcha_form, obj.needs_highlight]))
+
+    def on_our_status(self, obj):
+        self.raise_signal('AccountPresence', (obj.show, obj.conn.name))
+
+    def on_account_created(self, obj):
+        self.raise_signal('NewAccount', (obj.conn.name, obj.account_info))
+
+    def on_vcard_received(self, obj):
+        self.raise_signal('VcardInfo', (obj.conn.name, obj.vcard_dict))
 
     def raise_signal(self, signal, arg):
         if self.signal_object:
@@ -223,6 +303,14 @@ class SignalObject(dbus.service.Object):
 
     @dbus.service.signal(INTERFACE, signature='av')
     def NewGmail(self, account_and_array):
+        pass
+
+    @dbus.service.signal(INTERFACE, signature='av')
+    def ChatState(self, account_and_array):
+        pass
+
+    @dbus.service.signal(INTERFACE, signature='av')
+    def MessageSent(self, account_and_array):
         pass
 
     def raise_signal(self, signal, arg):
@@ -396,6 +484,7 @@ class SignalObject(dbus.service.Object):
             # Jid is not conform, ignore it
             return DBUS_BOOLEAN(False)
 
+        minimized_control = None
         if account:
             accounts = [account]
         else:
@@ -412,6 +501,8 @@ class SignalObject(dbus.service.Object):
                     break
                 # jid is in roster
                 elif contact:
+                    minimized_control = \
+                        jid in gajim.interface.minimized_controls[acct]
                     connected_account = acct
                     break
                 # we send the message to jid not in roster, because account is
@@ -424,6 +515,10 @@ class SignalObject(dbus.service.Object):
         # if jid is not a conntact, open-chat with first connected account
         if connected_account is None and first_connected_acct:
             connected_account = first_connected_acct
+
+        if minimized_control:
+            gajim.interface.roster.on_groupchat_maximized(None, jid,
+                connected_account)
 
         if connected_account:
             gajim.interface.new_chat_from_jid(connected_account, jid, message)
@@ -806,10 +901,16 @@ class SignalObject(dbus.service.Object):
             accounts = gajim.connections.keys()
             for acct in accounts:
                 if gajim.account_is_connected(acct):
-                    account = acct
-                    break
+                    if not gajim.connections[acct].is_zeroconf:
+                        account = acct
+                        break
             if not account:
                 return
+
+        if gajim.connections[account].is_zeroconf:
+            # zeroconf not support groupchats
+            return
+
         if not nick:
             nick = ''
             gajim.interface.instances[account]['join_gc'] = \

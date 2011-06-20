@@ -132,6 +132,8 @@ class VcardWindow:
             self.set_last_status_time)
         gajim.ged.register_event_handler('time-result-received', ged.GUI1,
             self.set_entity_time)
+        gajim.ged.register_event_handler('vcard-received', ged.GUI1,
+            self._nec_vcard_received)
 
         self.fill_jabber_page()
         annotations = gajim.connections[self.account].annotations
@@ -164,6 +166,8 @@ class VcardWindow:
             self.set_last_status_time)
         gajim.ged.remove_event_handler('time-result-received', ged.GUI1,
             self.set_entity_time)
+        gajim.ged.remove_event_handler('vcard-received', ged.GUI1,
+            self._nec_vcard_received)
 
     def on_vcard_information_window_key_press_event(self, widget, event):
         if event.keyval == gtk.keysyms.Escape:
@@ -233,6 +237,18 @@ class VcardWindow:
         self.vcard_arrived = True
         self.test_remove_progressbar()
 
+    def _nec_vcard_received(self, obj):
+        if obj.conn.name != self.account:
+            return
+        if obj.resource:
+            # It's a muc occupant vcard
+            if obj.fjid != self.real_jid:
+                return
+        else:
+            if obj.jid != self.contact.jid:
+                return
+        self.set_values(obj.vcard_dict)
+
     def test_remove_progressbar(self):
         if self.update_progressbar_timeout_id is not None and \
         self.vcard_arrived and self.os_info_arrived and self.entity_time_arrived:
@@ -241,10 +257,14 @@ class VcardWindow:
             self.update_progressbar_timeout_id = None
 
     def set_last_status_time(self, obj):
+        if obj.fjid != self.real_jid:
+            return
         self.fill_status_label()
 
     def set_os_info(self, obj):
         if self.xml.get_object('information_notebook').get_n_pages() < 5:
+            return
+        if obj.fjid != self.real_jid:
             return
         i = 0
         client = ''
@@ -272,6 +292,8 @@ class VcardWindow:
 
     def set_entity_time(self, obj):
         if self.xml.get_object('information_notebook').get_n_pages() < 5:
+            return
+        if obj.fjid != self.real_jid:
             return
         i = 0
         time_s = ''

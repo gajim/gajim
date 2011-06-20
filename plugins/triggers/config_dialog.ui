@@ -4,7 +4,7 @@
   <!-- interface-naming-policy toplevel-contextual -->
   <object class="GtkListStore" id="liststore1">
     <columns>
-      <!-- column-name item text -->
+      <!-- column-name item -->
       <column type="gchararray"/>
     </columns>
     <data>
@@ -21,33 +21,12 @@
   </object>
   <object class="GtkListStore" id="liststore2">
     <columns>
-      <!-- column-name item text -->
+      <!-- column-name item -->
       <column type="gchararray"/>
     </columns>
     <data>
       <row>
         <col id="0" translatable="yes">Receive a Message</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Contact Disconnected </col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Contact Change Status </col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Group Chat Message Highlight </col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Group Chat Message Received </col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">File Transfer Request </col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">File Transfer Started </col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">File Transfer Finished</col>
       </row>
     </data>
   </object>
@@ -58,36 +37,11 @@
     <property name="resizable">False</property>
     <property name="destroy_with_parent">True</property>
     <child>
-      <object class="GtkVBox" id="vbox95">
+      <object class="GtkVBox" id="vbox">
         <property name="visible">True</property>
         <property name="border_width">12</property>
         <property name="orientation">vertical</property>
         <property name="spacing">12</property>
-        <child>
-          <object class="GtkHBox" id="hbox3041">
-            <property name="visible">True</property>
-            <child>
-              <object class="GtkLabel" id="label396">
-                <property name="visible">True</property>
-                <property name="label">Hi HG users ! This window does nothing for the moment. Discussions about this take place in ticket #1005.</property>
-                <property name="wrap">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
         <child>
           <object class="GtkVBox" id="vbox100">
             <property name="visible">True</property>
@@ -208,7 +162,7 @@
             </child>
           </object>
           <packing>
-            <property name="position">1</property>
+            <property name="position">0</property>
           </packing>
         </child>
         <child>
@@ -814,7 +768,7 @@
                         <property name="spacing">6</property>
                         <child>
                           <object class="GtkCheckButton" id="use_systray_cb">
-                            <property name="label" translatable="yes">_Show event in systray</property>
+                            <property name="label" translatable="yes">_Show event in notification area</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -830,7 +784,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="disable_systray_cb">
-                            <property name="label" translatable="yes">_Disable showing event in systray</property>
+                            <property name="label" translatable="yes">_Disable showing event in notification area</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -891,19 +845,35 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkCheckButton" id="urgency_hint_cb">
+                      <object class="GtkCheckButton" id="use_urgency_hint_cb">
                         <property name="label" translatable="yes">_Activate window manager's UrgencyHint to make chat window in taskbar flash</property>
-                        <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="no_show_all">True</property>
                         <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
-                        <signal name="toggled" handler="on_urgency_hint_checkbutton_toggled"/>
+                        <signal name="toggled" handler="on_use_urgency_hint_cb_toggled"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
                         <property name="position">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="disable_urgency_hint_cb">
+                        <property name="label" translatable="yes">_Deactivate window manager's UrgencyHint</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="no_show_all">True</property>
+                        <property name="use_underline">True</property>
+                        <property name="draw_indicator">True</property>
+                        <signal name="toggled" handler="on_disable_urgency_hint_cb_toggled"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">4</property>
                       </packing>
                     </child>
                   </object>
@@ -921,28 +891,7 @@
             </child>
           </object>
           <packing>
-            <property name="position">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkAlignment" id="alignment97">
-            <property name="visible">True</property>
-            <property name="left_padding">413</property>
-            <child>
-              <object class="GtkButton" id="close_button">
-                <property name="label">gtk-close</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_stock">True</property>
-                <signal name="clicked" handler="on_close_window"/>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="position">3</property>
+            <property name="position">1</property>
           </packing>
         </child>
       </object>

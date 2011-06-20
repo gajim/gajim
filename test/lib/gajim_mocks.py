@@ -4,6 +4,7 @@ Module with dummy classes for Gajim specific unit testing
 
 from mock import Mock
 from common import gajim
+from common import ged
 
 from common.connection_handlers import ConnectionHandlersBase
 
@@ -20,7 +21,7 @@ class MockConnection(Mock, ConnectionHandlersBase):
         self.sessions = {}
 
         gajim.interface.instances[account] = {'infos': {}, 'disco': {},
-                'gc_config': {}, 'search': {}}
+                'gc_config': {}, 'search': {}, 'sub_request': {}}
         gajim.interface.minimized_controls[account] = {}
         gajim.contacts.add_account(account)
         gajim.groups[account] = {}
@@ -96,6 +97,7 @@ class MockInterface(Mock):
         gajim.interface = self
         self.msg_win_mgr = Mock()
         self.roster = Mock()
+        gajim.ged = ged.GlobalEventsDispatcher()
 
         self.remote_ctrl = None
         self.instances = {}

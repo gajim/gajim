@@ -30,9 +30,11 @@ import pango
 import gtk, gobject
 
 import gtkgui_helpers
+from dialogs import WarningDialog, YesNoDialog, ArchiveChooserDialog
 from common import gajim
-
 from plugins.helpers import log_calls, log
+from plugins.helpers import GajimPluginActivateException
+from common.exceptions import PluginsystemError
 
 class PluginsWindow(object):
     '''Class for Plugins window'''
@@ -44,15 +46,11 @@ class PluginsWindow(object):
         self.window = self.xml.get_object('plugins_window')
         self.window.set_transient_for(gajim.interface.roster.window)
 
-        widgets_to_extract = ('plugins_notebook',
-                                                 'plugin_name_label',
-                                                 'plugin_version_label',
-                                                 'plugin_authors_label',
-                                                 'plugin_homepage_linkbutton',
-                                                 'plugin_description_textview',
-                                                 'uninstall_plugin_button',
-                                                 'configure_plugin_button',
-                                                 'installed_plugins_treeview')
+        widgets_to_extract = ('plugins_notebook', 'plugin_name_label',
+            'plugin_version_label', 'plugin_authors_label',
+            'plugin_homepage_linkbutton', 'plugin_description_textview',
+            'uninstall_plugin_button', 'configure_plugin_button',
+            'installed_plugins_treeview')
 
         for widget_name in widgets_to_extract:
             setattr(self, widget_name, self.xml.get_object(widget_name))
@@ -62,8 +60,7 @@ class PluginsWindow(object):
         self.plugin_name_label.set_attributes(attr_list)
 
         self.installed_plugins_model = gtk.ListStore(gobject.TYPE_PYOBJECT,
-                                                                                                 gobject.TYPE_STRING,
-                                                                                                 gobject.TYPE_BOOLEAN)
+            gobject.TYPE_STRING, gobject.TYPE_BOOLEAN)
         self.installed_plugins_treeview.set_model(self.installed_plugins_model)
 
         renderer = gtk.CellRendererText()
@@ -79,7 +76,7 @@ class PluginsWindow(object):
         # connect signal for selection change
         selection = self.installed_plugins_treeview.get_selection()
         selection.connect('changed',
-                                          self.installed_plugins_treeview_selection_changed)
+            self.installed_plugins_treeview_selection_changed)
         selection.set_mode(gtk.SELECTION_SINGLE)
 
         self._clear_installed_plugin_info()
@@ -108,7 +105,9 @@ class PluginsWindow(object):
     def _display_installed_plugin_info(self, plugin):
         self.plugin_name_label.set_text(plugin.name)
         self.plugin_version_label.set_text(plugin.version)
-        self.plugin_authors_label.set_text(", ".join(plugin.authors))
+        self.plugin_authors_label.set_text(plugin.authors)
+        label = self.plugin_homepage_linkbutton.get_children()[0]
+        label.set_ellipsize(pango.ELLIPSIZE_END)
         self.plugin_homepage_linkbutton.set_uri(plugin.homepage)
         self.plugin_homepage_linkbutton.set_label(plugin.homepage)
         self.plugin_homepage_linkbutton.set_property('sensitive', True)
@@ -116,7 +115,8 @@ class PluginsWindow(object):
         desc_textbuffer = self.plugin_description_textview.get_buffer()
         desc_textbuffer.set_text(plugin.description)
         self.plugin_description_textview.set_property('sensitive', True)
-        self.uninstall_plugin_button.set_property('sensitive', True)
+        self.uninstall_plugin_button.set_property('sensitive',
+                                    gajim.PLUGINS_DIRS[1] in plugin.__path__)
         if plugin.config_dialog is None:
             self.configure_plugin_button.set_property('sensitive', False)
         else:
@@ -143,9 +143,8 @@ class PluginsWindow(object):
         self.installed_plugins_model.set_sort_column_id(1, gtk.SORT_ASCENDING)
 
         for plugin in pm.plugins:
-            self.installed_plugins_model.append([plugin,
-                                                                                     plugin.name,
-                                                                                     plugin.active])
+            self.installed_plugins_model.append([plugin, plugin.name,
+                plugin.active])
 
     @log_calls('PluginsWindow')
     def installed_plugins_toggled_cb(self, cell, path):
@@ -155,7 +154,11 @@ class PluginsWindow(object):
         if is_active:
             gajim.plugin_manager.deactivate_plugin(plugin)
         else:
-            gajim.plugin_manager.activate_plugin(plugin)
+            try:
+                gajim.plugin_manager.activate_plugin(plugin)
+            except GajimPluginActivateException, e:
+                WarningDialog(_('Plugin failed'), str(e))
+                return
 
         self.installed_plugins_model[path][2] = not is_active
 
@@ -189,14 +192,77 @@ class PluginsWindow(object):
 
     @log_calls('PluginsWindow')
     def on_uninstall_plugin_button_clicked(self, widget):
-        pass
+        selection = self.installed_plugins_treeview.get_selection()
+        model, iter = selection.get_selected()
+        if iter:
+            plugin = model.get_value(iter, 0)
+            plugin_name = model.get_value(iter, 1).decode('utf-8')
+            is_active = model.get_value(iter, 2)
+            try:
+                gajim.plugin_manager.remove_plugin(plugin)
+            except PluginsystemError, e:
+                WarningDialog(_('Unable to properly remove the plugin'),
+                    str(e), self.window)
+                return
+            model.remove(iter)
+
+    @log_calls('PluginsWindow')
+    def on_install_plugin_button_clicked(self, widget):
+        def show_warn_dialog():
+            text = _('Archive is malformed')
+            dialog = WarningDialog(text, '', transient_for=self.window)
+            dialog.set_modal(False)
+            dialog.popup()
+
+        def _on_plugin_exists(zip_filename):
+            def on_yes(is_checked):
+                plugin = gajim.plugin_manager.install_from_zip(zip_filename,
+                    True)
+                if not plugin:
+                    show_warn_dialog()
+                    return
+                model = self.installed_plugins_model
+
+                for row in xrange(len(model)):
+                    if plugin == model[row][0]:
+                        model.remove(model.get_iter((row, 0)))
+                        break
+
+                iter_ = model.append([plugin, plugin.name, False])
+                sel = self.installed_plugins_treeview.get_selection()
+                sel.select_iter(iter_)
+
+            YesNoDialog(_('Plugin already exists'), sectext=_('Overwrite?'),
+                on_response_yes=on_yes)
+
+        def _try_install(zip_filename):
+            try:
+                plugin = gajim.plugin_manager.install_from_zip(zip_filename)
+            except PluginsystemError, er_type:
+                error_text = str(er_type)
+                if error_text == _('Plugin already exists'):
+                    _on_plugin_exists(zip_filename)
+                    return
+
+                WarningDialog(error_text, '"%s"' % zip_filename, self.window)
+                return
+            if not plugin:
+                show_warn_dialog()
+                return
+            model = self.installed_plugins_model
+            iter_ = model.append([plugin, plugin.name, False])
+            sel = self.installed_plugins_treeview.get_selection()
+            sel.select_iter(iter_)
+
+        self.dialog = ArchiveChooserDialog(on_response_ok=_try_install)
 
 
 class GajimPluginConfigDialog(gtk.Dialog):
 
     @log_calls('GajimPluginConfigDialog')
     def __init__(self, plugin, **kwargs):
-        gtk.Dialog.__init__(self, '%s %s'%(plugin.name, _('Configuration')), **kwargs)
+        gtk.Dialog.__init__(self, '%s %s'%(plugin.name, _('Configuration')),
+                                                                    **kwargs)
         self.plugin = plugin
         self.add_button('gtk-close', gtk.RESPONSE_CLOSE)
 

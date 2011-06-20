@@ -219,9 +219,9 @@ class MessageWindow(object):
                 # destroy window
                 return False
             dialogs.YesNoDialog(
-                    _('You are going to close several tabs'),
-_('Do you really want to close them all?'),
-                    checktext=_('_Do not ask me again'), on_response_yes=on_yes1)
+                _('You are going to close several tabs'),
+                _('Do you really want to close them all?'),
+                checktext=_('_Do not ask me again'), on_response_yes=on_yes1)
             return True
 
         def on_yes(ctrl):
@@ -283,11 +283,17 @@ _('Do you really want to close them all?'),
         xml = gtkgui_helpers.get_gtk_builder('message_window.ui', 'chat_tab_ebox')
         tab_label_box = xml.get_object('chat_tab_ebox')
         widget = xml.get_object('tab_close_button')
+        #this reduces the size of the button
+        style = gtk.RcStyle()
+        style.xthickness = 0
+        style.ythickness = 0
+        widget.modify_style(style)
+
         id_ = widget.connect('clicked', self._on_close_button_clicked, control)
         control.handlers[id_] = widget
 
-        id_ = tab_label_box.connect('button-press-event', self.on_tab_eventbox_button_press_event,
-                                control.widget)
+        id_ = tab_label_box.connect('button-press-event',
+            self.on_tab_eventbox_button_press_event, control.widget)
         control.handlers[id_] = tab_label_box
         self.notebook.append_page(control.widget, tab_label_box)
 
@@ -311,6 +317,9 @@ _('Do you really want to close them all?'),
         elif event.button == 2: # middle click
             ctrl = self._widget_to_control(child)
             self.remove_tab(ctrl, self.CLOSE_TAB_MIDDLE_CLICK)
+        else:
+            ctrl = self._widget_to_control(child)
+            gobject.idle_add(ctrl.msg_textview.grab_focus)
 
     def _on_message_textview_mykeypress_event(self, widget, event_keyval,
             event_keymod):
@@ -346,7 +355,11 @@ _('Do you really want to close them all?'),
                 control._on_history_menuitem_activate()
             elif control.type_id == message_control.TYPE_CHAT and \
             keyval == gtk.keysyms.f: # CTRL + f
-                control._on_send_file_menuitem_activate(None)
+                # CTRL + f moves cursor one char forward when user uses Emacs
+                # theme
+                if not gtk.settings_get_default().get_property(
+                'gtk-key-theme-name') == 'Emacs':
+                    control._on_send_file_menuitem_activate(None)
             elif control.type_id == message_control.TYPE_CHAT and \
             keyval == gtk.keysyms.g: # CTRL + g
                 control._on_convert_to_gc_menuitem_activate(None)
@@ -412,7 +425,6 @@ _('Do you really want to close them all?'),
         elif keyval == gtk.keysyms.Escape and \
                         gajim.config.get('escape_key_closes'): # Escape
             self.remove_tab(control, self.CLOSE_ESC)
-        return True
 
     def _on_close_button_clicked(self, button, control):
         """
@@ -585,7 +597,7 @@ _('Do you really want to close them all?'),
         elif self.get_num_controls() == 1: # we are going from two tabs to one
             window_mode = gajim.interface.msg_win_mgr.mode
             show_tabs_if_one_tab = gajim.config.get('tabs_always_visible') or \
-                    window_mode == MessageWindowMgr.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER
+                window_mode == MessageWindowMgr.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER
             self.notebook.set_show_tabs(show_tabs_if_one_tab)
 
     def redraw_tab(self, ctrl, chatstate = None):
@@ -713,8 +725,8 @@ _('Do you really want to close them all?'),
         ind = self.notebook.get_current_page()
         current = ind
         found = False
-        first_composing_ind = -1 # id of first composing ctrl to switch to
-                                                                        # if no others controls have awaiting events
+        first_composing_ind = -1  # id of first composing ctrl to switch to
+        # if no others controls have awaiting events
         # loop until finding an unread tab or having done a complete cycle
         while True:
             if forward == True: # look for the first unread tab on the right
@@ -729,7 +741,8 @@ _('Do you really want to close them all?'),
             if ctrl.get_nb_unread() > 0:
                 found = True
                 break # found
-            elif gajim.config.get('ctrl_tab_go_to_next_composing') : # Search for a composing contact
+            elif gajim.config.get('ctrl_tab_go_to_next_composing') :
+                # Search for a composing contact
                 contact = ctrl.contact
                 if first_composing_ind == -1 and contact.chatstate == 'composing':
                 # If no composing contact found yet, check if this one is composing
@@ -774,7 +787,8 @@ _('Do you really want to close them all?'),
             control.msg_textview.grab_focus()
 
     def _on_notebook_key_press(self, widget, event):
-        # when tab itself is selected, make sure <- and -> are allowed for navigating between tabs
+        # when tab itself is selected,
+        # make sure <- and -> are allowed for navigating between tabs
         if event.keyval in (gtk.keysyms.Left, gtk.keysyms.Right):
             return False
 
@@ -882,11 +896,11 @@ class MessageWindowMgr(gobject.GObject):
     def __init__(self, parent_window, parent_paned):
         """
         A dictionary of windows; the key depends on the config:
-                ONE_MSG_WINDOW_NEVER: The key is the contact JID
-                ONE_MSG_WINDOW_ALWAYS: The key is MessageWindowMgr.MAIN_WIN
-                ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER: The key is MessageWindowMgr.MAIN_WIN
-                ONE_MSG_WINDOW_PERACCT: The key is the account name
-                ONE_MSG_WINDOW_PERTYPE: The key is a message type constant
+            ONE_MSG_WINDOW_NEVER: The key is the contact JID
+            ONE_MSG_WINDOW_ALWAYS: The key is MessageWindowMgr.MAIN_WIN
+            ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER: The key is MessageWindowMgr.MAIN_WIN
+            ONE_MSG_WINDOW_PERACCT: The key is the account name
+            ONE_MSG_WINDOW_PERTYPE: The key is a message type constant
         """
         gobject.GObject.__init__(self)
         self._windows = {}
@@ -933,7 +947,7 @@ class MessageWindowMgr(gobject.GObject):
     def one_window_opened(self, contact=None, acct=None, type_=None):
         try:
             return \
-                    self._windows[self._mode_to_key(contact, acct, type_)] is not None
+                self._windows[self._mode_to_key(contact, acct, type_)] is not None
         except KeyError:
             return False
 

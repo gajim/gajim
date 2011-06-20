@@ -41,12 +41,13 @@ class FeaturesWindow:
     def __init__(self):
         self.xml = gtkgui_helpers.get_gtk_builder('features_window.ui')
         self.window = self.xml.get_object('features_window')
+        self.window.set_transient_for(gajim.interface.roster.window)
         treeview = self.xml.get_object('features_treeview')
         self.desc_label = self.xml.get_object('feature_desc_label')
 
         # {name: (available_function, unix_text, windows_text)}
         self.features = {
-                _('SSL certificat validation'): (self.pyopenssl_available,
+                _('SSL certificate validation'): (self.pyopenssl_available,
                         _('A library used to validate server certificates to ensure a secure connection.'),
                         _('Requires python-pyopenssl.'),
                         _('Requires python-pyopenssl.')),
@@ -60,8 +61,8 @@ class FeaturesWindow:
                         _('Feature not available under Windows.')),
                 _('OpenGPG message encryption'): (self.gpg_available,
                         _('Encrypting chat messages with gpg keys.'),
-                        _('Requires gpg and python-GnuPGInterface.'),
-                        _('Feature not available under Windows.')),
+                        _('Requires gpg and python-gnupg (http://code.google.com/p/python-gnupg/).'),
+                        _('Requires gpg.exe in PATH.')),
                 _('Network-manager'): (self.network_manager_available,
                         _('Autodetection of network status.'),
                         _('Requires gnome-network-manager and python-dbus.'),
@@ -92,8 +93,8 @@ class FeaturesWindow:
                         _('Requires python2.5.')),
                 _('LaTeX'): (self.latex_available,
                         _('Transform LaTeX expressions between $$ $$.'),
-                        _('Requires texlive-latex-base and dvipng. You have to set \'use_latex\' to True in the Advanced Configuration Editor.'),
-                        _('Requires texlive-latex-base and dvipng (All is in MikTeX). You have to set \'use_latex\' to True in the Advanced Configuration Editor.')),
+                        _('Requires texlive-latex-base and (dvipng or ImageMagick). You have to set \'use_latex\' to True in the Advanced Configuration Editor.'),
+                        _('Requires texlive-latex-base and (dvipng or ImageMagick) (All is in MikTeX). You have to set \'use_latex\' to True in the Advanced Configuration Editor.')),
                 _('End to End message encryption'): (self.pycrypto_available,
                         _('Encrypting chat messages.'),
                         _('Requires python-crypto.'),
@@ -165,14 +166,7 @@ class FeaturesWindow:
         return True
 
     def zeroconf_available(self):
-        try:
-            import avahi
-        except Exception:
-            try:
-                import pybonjour
-            except Exception:
-                return False
-        return True
+        return gajim.HAVE_ZEROCONF
 
     def dbus_available(self):
         if os.name == 'nt':
@@ -181,8 +175,6 @@ class FeaturesWindow:
         return dbus_support.supported
 
     def gpg_available(self):
-        if os.name == 'nt':
-            return False
         return gajim.HAVE_GPG
 
     def network_manager_available(self):
@@ -195,7 +187,7 @@ class FeaturesWindow:
         if os.name == 'nt':
             return False
         try:
-            import gnome.ui
+            __import__('gnome.ui')
         except Exception:
             return False
         return True
@@ -206,19 +198,21 @@ class FeaturesWindow:
         if kwalletbinding.kwallet_available():
             return True
         try:
-            import gnomekeyring
+            __import__('gnomekeyring')
         except Exception:
             return False
         return True
 
     def srv_available(self):
+        if os.name == 'nt':
+            return True
         return helpers.is_in_path('nslookup')
 
     def speller_available(self):
         if os.name == 'nt':
             return False
         try:
-            import gtkspell
+            __import__('gtkspell')
         except ImportError:
             return False
         return True
@@ -230,7 +224,7 @@ class FeaturesWindow:
         if self.dbus_available() and dbus_support.get_notifications_interface():
             return True
         try:
-            import pynotify
+            __import__('pynotify')
         except Exception:
             return False
         return True
@@ -248,7 +242,7 @@ class FeaturesWindow:
 
     def docutils_available(self):
         try:
-            import docutils
+            __import__('docutils')
         except Exception:
             return False
         return True

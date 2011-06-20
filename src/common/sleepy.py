@@ -50,6 +50,7 @@ try:
         SystemParametersInfo = ctypes.windll.user32.SystemParametersInfoW
     else: # unix
         from common import idle
+        idle.xss_available
 except Exception:
     gajim.log.debug('Unable to load idle module')
     SUPPORTED = False

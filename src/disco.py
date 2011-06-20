@@ -255,24 +255,24 @@ class ServicesCache:
         self._info = CacheDictionary(0, getrefresh = False)
         self._subscriptions = CacheDictionary(5, getrefresh=False)
         self._cbs = {}
-        gajim.ged.register_event_handler('AGENT_ERROR_INFO', ged.CORE,
-                self.agent_info_error)
-        gajim.ged.register_event_handler('AGENT_ERROR_ITEMS', ged.CORE,
-                self.agent_items_error)
-        gajim.ged.register_event_handler('AGENT_INFO_ITEMS', ged.CORE,
-                self.agent_items)
-        gajim.ged.register_event_handler('AGENT_INFO_INFO', ged.CORE,
-                self.agent_info)
+        gajim.ged.register_event_handler('agent-items-received', ged.GUI1,
+            self._nec_agent_items_received)
+        gajim.ged.register_event_handler('agent-items-error-received', ged.GUI1,
+            self._nec_agent_items_error_received)
+        gajim.ged.register_event_handler('agent-info-received', ged.GUI1,
+                self._nec_agent_info_received)
+        gajim.ged.register_event_handler('agent-info-error-received', ged.GUI1,
+                self._nec_agent_info_error_received)
 
     def __del__(self):
-        gajim.ged.remove_event_handler('AGENT_ERROR_INFO', ged.CORE,
-                self.agent_info_error)
-        gajim.ged.remove_event_handler('AGENT_ERROR_ITEMS', ged.CORE,
-                self.agent_items_error)
-        gajim.ged.remove_event_handler('AGENT_INFO_ITEMS', ged.CORE,
-                self.agent_items)
-        gajim.ged.remove_event_handler('AGENT_INFO_INFO', ged.CORE,
-                self.agent_info)
+        gajim.ged.remove_event_handler('agent-items-received', ged.GUI1,
+            self._nec_agent_items_received)
+        gajim.ged.remove_event_handler('agent-items-error-received', ged.GUI1,
+            self._nec_agent_items_error_received)
+        gajim.ged.remove_event_handler('agent-info-received', ged.GUI1,
+                self._nec_agent_info_received)
+        gajim.ged.remove_event_handler('agent-info-error-received', ged.GUI1,
+                self._nec_agent_info_error_received)
 
     def cleanup(self):
         self._items.cleanup()
@@ -354,13 +354,13 @@ class ServicesCache:
             return ToplevelAgentBrowser
         return None
 
-    def get_info(self, jid, node, cb, force = False, nofetch = False, args = ()):
+    def get_info(self, jid, node, cb, force=False, nofetch=False, args=()):
         """
         Get info for an agent
         """
         addr = get_agent_address(jid, node)
         # Check the cache
-        if addr in self._info:
+        if addr in self._info and not force:
             args = self._info[addr] + args
             cb(jid, node, *args)
             return
@@ -369,8 +369,8 @@ class ServicesCache:
 
         # Create a closure object
         cbkey = ('info', addr)
-        cb = Closure(cb, userargs = args, remove = self._clean_closure,
-                        removeargs = cbkey)
+        cb = Closure(cb, userargs=args, remove=self._clean_closure,
+            removeargs=cbkey)
         # Are we already fetching this?
         if cbkey in self._cbs:
             self._cbs[cbkey].append(cb)
@@ -378,13 +378,13 @@ class ServicesCache:
             self._cbs[cbkey] = [cb]
             gajim.connections[self.account].discoverInfo(jid, node)
 
-    def get_items(self, jid, node, cb, force = False, nofetch = False, args = ()):
+    def get_items(self, jid, node, cb, force=False, nofetch=False, args=()):
         """
         Get a list of items in an agent
         """
         addr = get_agent_address(jid, node)
         # Check the cache
-        if addr in self._items:
+        if addr in self._items and not force:
             args = (self._items[addr],) + args
             cb(jid, node, *args)
             return
@@ -393,8 +393,8 @@ class ServicesCache:
 
         # Create a closure object
         cbkey = ('items', addr)
-        cb = Closure(cb, userargs = args, remove = self._clean_closure,
-                        removeargs = cbkey)
+        cb = Closure(cb, userargs=args, remove=self._clean_closure,
+            removeargs=cbkey)
         # Are we already fetching this?
         if cbkey in self._cbs:
             self._cbs[cbkey].append(cb)
@@ -402,16 +402,19 @@ class ServicesCache:
             self._cbs[cbkey] = [cb]
             gajim.connections[self.account].discoverItems(jid, node)
 
-    def agent_info(self, account, array):
+    def _nec_agent_info_received(self, obj):
         """
         Callback for when we receive an agent's info
         array is (agent, node, identities, features, data)
         """
         # We receive events from all accounts from GED
-        if account != self.account:
+        if obj.conn.name != self.account:
             return
-        jid, node, identities, features, data = array
-        addr = get_agent_address(jid, node)
+        self._on_agent_info(obj.fjid, obj.node, obj.identities, obj.features,
+            obj.data)
+
+    def _on_agent_info(self, fjid, node, identities, features, data):
+        addr = get_agent_address(fjid, node)
 
         # Store in cache
         self._info[addr] = (identities, features, data)
@@ -420,68 +423,68 @@ class ServicesCache:
         cbkey = ('info', addr)
         if cbkey in self._cbs:
             for cb in self._cbs[cbkey]:
-                cb(jid, node, identities, features, data)
+                cb(fjid, node, identities, features, data)
             # clean_closure may have beaten us to it
             if cbkey in self._cbs:
                 del self._cbs[cbkey]
 
-    def agent_items(self, account, array):
+    def _nec_agent_items_received(self, obj):
         """
         Callback for when we receive an agent's items
         array is (agent, node, items)
         """
         # We receive events from all accounts from GED
-        if account != self.account:
+        if obj.conn.name != self.account:
             return
-        jid, node, items = array
-        addr = get_agent_address(jid, node)
+
+        addr = get_agent_address(obj.fjid, obj.node)
 
         # Store in cache
-        self._items[addr] = items
+        self._items[addr] = obj.items
 
         # Call callbacks
         cbkey = ('items', addr)
         if cbkey in self._cbs:
             for cb in self._cbs[cbkey]:
-                cb(jid, node, items)
+                cb(obj.fjid, obj.node, obj.items)
             # clean_closure may have beaten us to it
             if cbkey in self._cbs:
                 del self._cbs[cbkey]
 
-    def agent_info_error(self, account, jid):
+    def _nec_agent_info_error_received(self, obj):
         """
         Callback for when a query fails. Even after the browse and agents
         namespaces
         """
         # We receive events from all accounts from GED
-        if account != self.account:
+        if obj.conn.name != self.account:
             return
-        addr = get_agent_address(jid)
+        addr = get_agent_address(obj.fjid)
 
         # Call callbacks
         cbkey = ('info', addr)
         if cbkey in self._cbs:
             for cb in self._cbs[cbkey]:
-                cb(jid, '', 0, 0, 0)
+                cb(obj.fjid, '', 0, 0, 0)
             # clean_closure may have beaten us to it
             if cbkey in self._cbs:
                 del self._cbs[cbkey]
 
-    def agent_items_error(self, account, jid):
+    def _nec_agent_items_error_received(self, obj):
         """
         Callback for when a query fails. Even after the browse and agents
         namespaces
         """
         # We receive events from all accounts from GED
-        if account != self.account:
+        if obj.conn.name != self.account:
             return
-        addr = get_agent_address(jid)
+        addr = get_agent_address(obj.fjid)
 
         # Call callbacks
         cbkey = ('items', addr)
         if cbkey in self._cbs:
             for cb in self._cbs[cbkey]:
-                cb(jid, '', 0)
+                cb(obj.fjid, '', 0)
             # clean_closure may have beaten us to it
             if cbkey in self._cbs:
                 del self._cbs[cbkey]
@@ -505,6 +508,7 @@ class ServiceDiscoveryWindow(object):
         self.children = []
         self.dying = False
         self.node = None
+        self.reloading = False
 
         # Check connection
         if gajim.connections[account].connected < 2:
@@ -520,8 +524,7 @@ _('Without a connection, you can not browse available services'))
             gajim.connections[account].services_cache = self.cache
 
         if initial_identities:
-            self.cache.agent_info(account, (jid, node, initial_identities, [],
-                None))
+            self.cache._on_agent_info(jid, node, initial_identities, [], None)
         self.xml = gtkgui_helpers.get_gtk_builder('service_discovery_window.ui')
         self.window = self.xml.get_object('service_discovery_window')
         self.services_treeview = self.xml.get_object('services_treeview')
@@ -564,6 +567,12 @@ _('Without a connection, you can not browse available services'))
             address_table.set_no_show_all(True)
             address_table.hide()
 
+        accel_group = gtk.AccelGroup()
+        keyval, mod = gtk.accelerator_parse('<Control>r')
+        accel_group.connect_group(keyval, mod, gtk.ACCEL_VISIBLE,
+            self.accel_group_func)
+        self.window.add_accel_group(accel_group)
+
         self._initial_state()
         self.xml.connect_signals(self)
         self.travel(jid, node)
@@ -579,6 +588,10 @@ _('Without a connection, you can not browse available services'))
         self.cache.account = value
         if self.browser:
             self.browser.account = value
+
+    def accel_group_func(self, accel_group, acceleratable, keyval, modifier):
+        if (modifier & gtk.gdk.CONTROL_MASK) and (keyval == gtk.keysyms.r):
+            self.reload()
 
     def _initial_state(self):
         """
@@ -709,6 +722,12 @@ _('Without a connection, you can not browse available services'))
         else:
             self.cache.cleanup()
 
+    def reload(self):
+        if not self.jid:
+            return
+        self.reloading = True
+        self.travel(self.jid, self.node)
+
     def travel(self, jid, node):
         """
         Travel to an agent within the current services window
@@ -726,7 +745,7 @@ _('Without a connection, you can not browse available services'))
         # We need to store these, self.browser is not always available.
         self.jid = jid
         self.node = node
-        self.cache.get_info(jid, node, self._travel)
+        self.cache.get_info(jid, node, self._travel, force=self.reloading)
 
     def _travel(self, jid, node, identities, features, data):
         """
@@ -750,7 +769,8 @@ _('This type of service does not contain any items to browse.'))
             klass = AgentBrowser
         self.browser = klass(self.account, jid, node)
         self.browser.prepare_window(self)
-        self.browser.browse()
+        self.browser.browse(force=self.reloading)
+        self.reloading = False
 
     def open(self, jid, node):
         """
@@ -1030,7 +1050,7 @@ class AgentBrowser:
             return True
         return False
 
-    def browse(self, force = False):
+    def browse(self, force=False):
         """
         Fill the treeview with agents, fetching the info if necessary
         """
@@ -1441,7 +1461,6 @@ class ToplevelAgentBrowser(AgentBrowser):
                 pass
         else:
             gajim.interface.instances[self.account]['join_gc'].window.present()
-        self.window.destroy(chain = True)
 
     def update_actions(self):
         if self.execute_button:
@@ -1454,7 +1473,6 @@ class ToplevelAgentBrowser(AgentBrowser):
             self.join_button.set_sensitive(False)
         if self.search_button:
             self.search_button.set_sensitive(False)
-        model, iter_ = self.window.services_treeview.get_selection().get_selected()
         model, iter_ = self.window.services_treeview.get_selection().get_selected()
         if not iter_:
             return
@@ -1515,7 +1533,7 @@ class ToplevelAgentBrowser(AgentBrowser):
             return True
         return False
 
-    def browse(self, force = False):
+    def browse(self, force=False):
         self._progress = 0
         AgentBrowser.browse(self, force = force)
 
@@ -1836,7 +1854,6 @@ class MucBrowser(AgentBrowser):
         if not iter_:
             return
         service = model[iter_][0].decode('utf-8')
-        room = model[iter_][1].decode('utf-8')
         if 'join_gc' not in gajim.interface.instances[self.account]:
             try:
                 dialogs.JoinGroupchatWindow(self.account, service)
@@ -1846,7 +1863,6 @@ class MucBrowser(AgentBrowser):
             gajim.interface.instances[self.account]['join_gc']._set_room_jid(
                 service)
             gajim.interface.instances[self.account]['join_gc'].window.present()
-        self.window.destroy(chain = True)
 
     def update_actions(self):
         sens = self.window.services_treeview.get_selection().count_selected_rows()

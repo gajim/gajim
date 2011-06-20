@@ -28,22 +28,27 @@ class DeviceManager(object):
 
     def detect_element(self, name, text, pipe='%s'):
         try:
-            element = gst.element_factory_make(name, '%spresencetest' % name)
-            if isinstance(element, gst.interfaces.PropertyProbe):
-                element.set_state(gst.STATE_READY)
-                element.probe_property_name('device')
-                devices = element.probe_get_values_name('device')
-                if devices:
-                    self.devices[text % _(' Default device')] = pipe % name
-                    for device in devices:
-                        element.set_state(gst.STATE_NULL)
-                        element.set_property('device', device)
-                        element.set_state(gst.STATE_READY)
-                        device_name = element.get_property('device-name')
-                        self.devices[text % device_name] = pipe % '%s device=%s' % (name, device)
-                element.set_state(gst.STATE_NULL)
-            else:
-                self.devices[text] = pipe % name
+            if gst.element_factory_find(name):
+                element = gst.element_factory_make(name,
+                    '%spresencetest' % name)
+                if isinstance(element, gst.interfaces.PropertyProbe):
+                    element.set_state(gst.STATE_READY)
+                    element.probe_property_name('device')
+                    devices = element.probe_get_values_name('device')
+                    if devices:
+                        self.devices[text % _(' Default device')] = pipe % name
+                        for device in devices:
+                            element.set_state(gst.STATE_NULL)
+                            element.set_property('device', device)
+                            element.set_state(gst.STATE_READY)
+                            device_name = element.get_property('device-name')
+                            self.devices[text % device_name] = pipe % \
+                                '%s device=%s' % (name, device)
+                    element.set_state(gst.STATE_NULL)
+                else:
+                    self.devices[text] = pipe % name
+        except ImportError:
+            pass
         except gst.ElementNotFoundError:
             print 'element \'%s\' not found' % name
 
@@ -53,13 +58,16 @@ class AudioInputManager(DeviceManager):
         self.devices = {}
         # Test src
         self.detect_element('audiotestsrc', _('Audio test'),
-                '%s is-live=true name=gajim_vol')
+            '%s is-live=true name=gajim_vol')
         # Auto src
         self.detect_element('autoaudiosrc', _('Autodetect'),
-                '%s ! volume name=gajim_vol')
+            '%s ! volume name=gajim_vol')
         # Alsa src
         self.detect_element('alsasrc', _('ALSA: %s'),
-                '%s ! volume name=gajim_vol')
+            '%s ! volume name=gajim_vol')
+        # Pulseaudio src
+        self.detect_element('pulsesrc', _('Pulse: %s'),
+            '%s ! volume name=gajim_vol')
 
 
 class AudioOutputManager(DeviceManager):
@@ -70,8 +78,9 @@ class AudioOutputManager(DeviceManager):
         # Auto sink
         self.detect_element('autoaudiosink', _('Autodetect'))
         # Alsa sink
-        self.detect_element('alsasink', _('ALSA: %s'),
-                '%s sync=false')
+        self.detect_element('alsasink', _('ALSA: %s'), '%s sync=false')
+        # Pulseaudio sink
+        self.detect_element('pulsesink', _('Pulse: %s'), '%s sync=true')
 
 
 class VideoInputManager(DeviceManager):
@@ -79,7 +88,7 @@ class VideoInputManager(DeviceManager):
         self.devices = {}
         # Test src
         self.detect_element('videotestsrc', _('Video test'),
-                '%s is-live=true ! video/x-raw-yuv,framerate=10/1')
+            '%s is-live=true ! video/x-raw-yuv,framerate=10/1')
         # Auto src
         self.detect_element('autovideosrc', _('Autodetect'))
         # V4L2 src
@@ -95,7 +104,9 @@ class VideoOutputManager(DeviceManager):
         # Fake video output
         self.detect_element('fakesink', _('Fake audio output'))
         # Auto sink
-        self.detect_element('xvimagesink', _('X Window System (X11/XShm/Xv): %s'))
+        self.detect_element('xvimagesink',
+            _('X Window System (X11/XShm/Xv): %s'))
         # ximagesink
         self.detect_element('ximagesink', _('X Window System (without Xv)'))
         self.detect_element('autovideosink', _('Autodetect'))
+

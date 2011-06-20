@@ -246,6 +246,9 @@ class JingleRTPContent(JingleContent):
 
         codecs = []
         for codec in content.getTag('description').iterTags('payload-type'):
+            if not codec['id'] or not codec['name'] or not codec['clockrate']:
+                # ignore invalid payload-types
+                continue
             c = farsight.Codec(int(codec['id']), codec['name'],
                     self.farsight_media, int(codec['clockrate']))
             if 'channels' in codec:
@@ -383,10 +386,12 @@ class JingleVideo(JingleRTPContent):
         #src_bin.link(caps)
 
         self.sink = self.make_bin_from_config('video_output_device',
-                'videoscale ! ffmpegcolorspace ! %s', _("video output"))
+            'videoscale ! ffmpegcolorspace ! %s force-aspect-ratio=True',
+            _("video output"))
         self.pipeline.add(self.sink)
 
-        self.src_bin.get_pad('src').link(self.p2psession.get_property('sink-pad'))
+        self.src_bin.get_pad('src').link(self.p2psession.get_property(
+            'sink-pad'))
         self.p2pstream.connect('src-pad-added', self._on_src_pad_added)
 
         # The following is needed for farsight to process ICE requests:

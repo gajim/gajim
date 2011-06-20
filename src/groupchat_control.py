@@ -34,6 +34,7 @@ import gtk
 import pango
 import gobject
 import gtkgui_helpers
+import gui_menu_builder
 import message_control
 import tooltips
 import dialogs
@@ -45,6 +46,7 @@ import dataforms_widget
 from common import gajim
 from common import helpers
 from common import dataforms
+from common import ged
 
 from chat_control import ChatControl
 from chat_control import ChatControlBase
@@ -147,6 +149,65 @@ class PrivateChatControl(ChatControl):
         self.gc_contact = gc_contact
         ChatControl.__init__(self, parent_win, contact, account, session)
         self.TYPE_ID = 'pm'
+        gajim.ged.register_event_handler('caps-received', ged.GUI1,
+            self._nec_caps_received_pm)
+        gajim.ged.register_event_handler('gc-presence-received', ged.GUI1,
+            self._nec_gc_presence_received)
+
+    def shutdown(self):
+        super(PrivateChatControl, self).shutdown()
+        gajim.ged.remove_event_handler('caps-received', ged.GUI1,
+            self._nec_caps_received_pm)
+        gajim.ged.remove_event_handler('gc-presence-received', ged.GUI1,
+            self._nec_gc_presence_received)
+
+    def _nec_caps_received_pm(self, obj):
+        if obj.conn.name != self.account or \
+        obj.fjid != self.gc_contact.get_full_jid():
+            return
+        self.update_contact()
+
+    def _nec_gc_presence_received(self, obj):
+        if obj.conn.name != self.account:
+            return
+        if obj.fjid != self.full_jid:
+            return
+        if '303' in obj.status_code:
+            self.print_conversation(_('%(nick)s is now known as '
+                '%(new_nick)s') % {'nick': obj.nick, 'new_nick': obj.new_nick},
+                'status')
+            gc_c = gajim.contacts.get_gc_contact(obj.conn.name, obj.room_jid,
+                obj.new_nick)
+            c = gc_c.as_contact()
+            self.gc_contact = gc_c
+            self.contact = c
+            if self.session:
+                # stop e2e
+                if self.session.enable_encryption:
+                    thread_id = self.session.thread_id
+                    self.session.terminate_e2e()
+                    obj.conn.delete_session(obj.fjid, thread_id)
+                    self.no_autonegotiation = False
+            self.draw_banner()
+            old_jid = obj.room_jid + '/' + obj.nick
+            new_jid = obj.room_jid + '/' + obj.new_nick
+            gajim.interface.msg_win_mgr.change_key(old_jid, new_jid,
+                obj.conn.name)
+        else:
+            self.contact.show = obj.show
+            self.contact.status = obj.status
+            self.gc_contact.show = obj.show
+            self.gc_contact.status = obj.status
+            uf_show = helpers.get_uf_show(obj.show)
+            self.print_conversation(_('%(nick)s is now %(status)s') % {
+                    'nick': obj.nick, 'status': uf_show}, 'status')
+            if obj.status:
+                self.print_conversation(' (', 'status', simple=True)
+                self.print_conversation('%s' % (obj.status), 'status',
+                    simple=True)
+                self.print_conversation(')', 'status', simple=True)
+            self.parent_win.redraw_tab(self)
+            self.update_ui()
 
     def send_message(self, message, xhtml=None, process_commands=True):
         """
@@ -196,6 +257,20 @@ class PrivateChatControl(ChatControl):
 
         self.session.negotiate_e2e(False)
 
+    def prepare_context_menu(self, hide_buttonbar_items=False):
+        """
+        Set compact view menuitem active state sets active and sensitivity state
+        for toggle_gpg_menuitem sets sensitivity for history_menuitem (False for
+        tranasports) and file_transfer_menuitem and hide()/show() for
+        add_to_roster_menuitem
+        """
+        menu = gui_menu_builder.get_contact_menu(self.contact, self.account,
+            use_multiple_contacts=False, show_start_chat=False,
+            show_encryption=True, control=self,
+            show_buttonbar_items=not hide_buttonbar_items,
+            gc_contact=self.gc_contact)
+        return menu
+
 class GroupchatControl(ChatControlBase):
     TYPE_ID = message_control.TYPE_GC
 
@@ -244,6 +319,11 @@ class GroupchatControl(ChatControlBase):
             id_ = widget.connect('clicked',
                 self._on_bookmark_room_menuitem_activate)
             self.handlers[id_] = widget
+
+            if gtkgui_helpers.gtk_icon_theme.has_icon('bookmark-new'):
+                img = self.xml.get_object('image7')
+                img.set_from_icon_name('bookmark-new', gtk.ICON_SIZE_MENU)
+
             widget.show()
 
         widget = self.xml.get_object('list_treeview')
@@ -317,11 +397,6 @@ class GroupchatControl(ChatControlBase):
         self.name_label = self.xml.get_object('banner_name_label')
         self.event_box = self.xml.get_object('banner_eventbox')
 
-        # set the position of the current hpaned
-        hpaned_position = gajim.config.get('gc-hpaned-position')
-        self.hpaned = self.xml.get_object('hpaned')
-        self.hpaned.set_position(hpaned_position)
-
         self.list_treeview = self.xml.get_object('list_treeview')
         selection = self.list_treeview.get_selection()
         id_ = selection.connect('changed',
@@ -333,50 +408,55 @@ class GroupchatControl(ChatControlBase):
         self.resize_from_another_muc = False
         # we want to know when the the widget resizes, because that is
         # an indication that the hpaned has moved...
-        # FIXME: Find a better indicator that the hpaned has moved.
-        id_ = self.list_treeview.connect('size-allocate',
-            self.on_treeview_size_allocate)
-        self.handlers[id_] = self.list_treeview
+        self.hpaned = self.xml.get_object('hpaned')
+        id_ = self.hpaned.connect('notify', self.on_hpaned_notify)
+        self.handlers[id_] = self.hpaned
+
+        # set the position of the current hpaned
+        hpaned_position = gajim.config.get('gc-hpaned-position')
+        self.hpaned.set_position(hpaned_position)
+
         #status_image, shown_nick, type, nickname, avatar
-        store = gtk.TreeStore(gtk.Image, str, str, str, gtk.gdk.Pixbuf)
+        self.columns = [gtk.Image, str, str, str, gtk.gdk.Pixbuf]
+        store = gtk.TreeStore(*self.columns)
         store.set_sort_func(C_NICK, self.tree_compare_iters)
         store.set_sort_column_id(C_NICK, gtk.SORT_ASCENDING)
         self.list_treeview.set_model(store)
 
         # columns
-
-        # this col has 3 cells:
-        # first one img, second one text, third is sec pixbuf
         column = gtk.TreeViewColumn()
-
-        def add_avatar_renderer():
-            renderer_pixbuf = gtk.CellRendererPixbuf() # avatar image
-            column.pack_start(renderer_pixbuf, expand=False)
-            column.add_attribute(renderer_pixbuf, 'pixbuf', C_AVATAR)
-            column.set_cell_data_func(renderer_pixbuf, tree_cell_data_func,
-                self.list_treeview)
-
-        if gajim.config.get('avatar_position_in_roster') == 'left':
-            add_avatar_renderer()
-
-        # status img
+        # list of renderers with attributes / properties in the form:
+        # (name, renderer_object, expand?, attribute_name, attribute_value,
+        # cell_data_func, func_arg)
+        self.renderers_list = []
+        # Number of renderers plugins added
+        self.nb_ext_renderers = 0
+        self.renderers_propertys = {}
         renderer_image = cell_renderer_image.CellRendererImage(0, 0)
-        renderer_image.set_property('width', 26)
-        column.pack_start(renderer_image, expand=False)
-        column.add_attribute(renderer_image, 'image', C_IMG)
-        column.set_cell_data_func(renderer_image, tree_cell_data_func,
-            self.list_treeview)
+        self.renderers_propertys[renderer_image] = ('width', 26)
+        renderer_text = gtk.CellRendererText()
+        self.renderers_propertys[renderer_text] = ('ellipsize',
+            pango.ELLIPSIZE_END)
 
-        renderer_text = gtk.CellRendererText() # nickname
-        column.pack_start(renderer_text, expand=True)
-        column.add_attribute(renderer_text, 'markup', C_TEXT)
-        renderer_text.set_property("ellipsize", pango.ELLIPSIZE_END)
-        column.set_cell_data_func(renderer_text, tree_cell_data_func,
-            self.list_treeview)
+        self.renderers_list += (
+            # status img
+            ('icon', renderer_image, False,
+            'image', C_IMG, tree_cell_data_func, self.list_treeview),
+            # contact name
+            ('name', renderer_text, True,
+            'markup', C_TEXT, tree_cell_data_func, self.list_treeview))
+
+        # avatar img
+        avater_renderer = ('avatar', gtk.CellRendererPixbuf(),
+            False, 'pixbuf', C_AVATAR,
+            tree_cell_data_func, self.list_treeview)
 
         if gajim.config.get('avatar_position_in_roster') == 'right':
-            add_avatar_renderer()
+            self.renderers_list.append(avater_renderer)
+        else:
+            self.renderers_list.insert(0, avater_renderer)
 
+        self.fill_column(column)
         self.list_treeview.append_column(column)
 
         # workaround to avoid gtk arrows to be shown
@@ -388,16 +468,45 @@ class GroupchatControl(ChatControlBase):
         self.list_treeview.set_expander_column(column)
 
         self.setup_seclabel(self.xml.get_object('label_selector'))
-        
+
         self.form_widget = None
 
+        gajim.ged.register_event_handler('gc-presence-received', ged.GUI1,
+            self._nec_gc_presence_received)
+        gajim.ged.register_event_handler('gc-message-received', ged.GUI1,
+            self._nec_gc_message_received)
+        gajim.ged.register_event_handler('vcard-published', ged.GUI1,
+            self._nec_vcard_published)
+        gajim.ged.register_event_handler('vcard-received', ged.GUI1,
+            self._nec_vcard_received)
+        gajim.ged.register_event_handler('gc-subject-received', ged.GUI1,
+            self._nec_gc_subject_received)
+        gajim.ged.register_event_handler('gc-config-changed-received', ged.GUI1,
+            self._nec_gc_config_changed_received)
+        gajim.ged.register_event_handler('signed-in', ged.GUI1,
+            self._nec_signed_in)
+        gajim.ged.register_event_handler('decrypted-message-received', ged.GUI2,
+            self._nec_decrypted_message_received)
         gajim.gc_connected[self.account][self.room_jid] = False
         # disable win, we are not connected yet
         ChatControlBase.got_disconnected(self)
 
         self.update_ui()
-        self.conv_textview.tv.grab_focus()
         self.widget.show_all()
+
+        # PluginSystem: adding GUI extension point for this GroupchatControl
+        # instance object
+        gajim.plugin_manager.gui_extension_point('groupchat_control', self)
+
+    def fill_column(self, col):
+        for rend in self.renderers_list:
+            col.pack_start(rend[1], expand=rend[2])
+            col.add_attribute(rend[1], rend[3], rend[4])
+            col.set_cell_data_func(rend[1], rend[5], rend[6])
+        # set renderers propertys
+        for renderer in self.renderers_propertys.keys():
+            renderer.set_property(self.renderers_propertys[renderer][0],
+                self.renderers_propertys[renderer][1])
 
     def tree_compare_iters(self, model, iter1, iter2):
         """
@@ -473,14 +582,18 @@ class GroupchatControl(ChatControlBase):
         # on_treeview_size_allocate will have been called.
         gobject.idle_add(reset_flag)
 
-    def on_treeview_size_allocate(self, widget, allocation):
+    def on_hpaned_notify(self, pane, gparamspec):
         """
         The MUC treeview has resized. Move the hpaned in all tabs to match
         """
+        if gparamspec.name != 'position':
+            return
         if self.resize_from_another_muc:
             # Don't send the event to other MUC
             return
+
         hpaned_position = self.hpaned.get_position()
+        gajim.config.set('gc-hpaned-position', hpaned_position)
         for account in gajim.gc_connected:
             for room_jid in [i for i in gajim.gc_connected[account] if \
             gajim.gc_connected[account][i] and i != self.room_jid]:
@@ -489,7 +602,7 @@ class GroupchatControl(ChatControlBase):
                 if not ctrl and room_jid in \
                 gajim.interface.minimized_controls[account]:
                     ctrl = gajim.interface.minimized_controls[account][room_jid]
-                if ctrl:
+                if ctrl and gajim.config.get('one_message_window') != 'never':
                     ctrl.resize_occupant_treeview(hpaned_position)
 
     def iter_contact_rows(self):
@@ -683,8 +796,15 @@ class GroupchatControl(ChatControlBase):
         change_subject_menuitem = xml.get_object('change_subject_menuitem')
         history_menuitem = xml.get_object('history_menuitem')
         minimize_menuitem = xml.get_object('minimize_menuitem')
+        request_voice_menuitem = xml.get_object('request_voice_menuitem')
         bookmark_separator = xml.get_object('bookmark_separator')
         separatormenuitem2 = xml.get_object('separatormenuitem2')
+        request_voice_separator = xml.get_object('request_voice_separator')
+
+        if gtkgui_helpers.gtk_icon_theme.has_icon('bookmark-new'):
+            img = gtk.Image()
+            img.set_from_icon_name('bookmark-new', gtk.ICON_SIZE_MENU)
+            bookmark_room_menuitem.set_image(img)
 
         if hide_buttonbar_items:
             change_nick_menuitem.hide()
@@ -734,12 +854,17 @@ class GroupchatControl(ChatControlBase):
                 destroy_room_menuitem.set_sensitive(True)
             change_subject_menuitem.set_sensitive(True)
             change_nick_menuitem.set_sensitive(True)
+            if c.role == 'visitor':
+                request_voice_menuitem.set_sensitive(True)
+            else:
+                request_voice_menuitem.set_sensitive(False)
         else:
             # We are not connected to this groupchat, disable unusable menuitems
             configure_room_menuitem.set_sensitive(False)
             destroy_room_menuitem.set_sensitive(False)
             change_subject_menuitem.set_sensitive(False)
             change_nick_menuitem.set_sensitive(False)
+            request_voice_menuitem.set_sensitive(False)
 
         # connect the menuitems to their respective functions
         id_ = bookmark_room_menuitem.connect('activate',
@@ -766,6 +891,10 @@ class GroupchatControl(ChatControlBase):
             self._on_history_menuitem_activate)
         self.handlers[id_] = history_menuitem
 
+        id_ = request_voice_menuitem.connect('activate',
+            self._on_request_voice_menuitem_activate)
+        self.handlers[id_] = request_voice_menuitem
+
         id_ = minimize_menuitem.connect('toggled',
             self.on_minimize_menuitem_toggled)
         self.handlers[id_] = minimize_menuitem
@@ -790,31 +919,47 @@ class GroupchatControl(ChatControlBase):
         # destroy menu
         menu.destroy()
 
-    def on_message(self, nick, msg, tim, has_timestamp=False, xhtml=None,
-    status_code=[], displaymarking=None, captcha=None):
-        if captcha:
+    def _nec_vcard_published(self, obj):
+        if obj.conn.name != self.account:
+            return
+        show = gajim.SHOW_LIST[obj.conn.connected]
+        status = obj.conn.status
+        obj.conn.send_gc_status(self.nick, self.room_jid, show, status)
+
+    def _nec_vcard_received(self, obj):
+        if obj.conn.name != self.account:
+            return
+        if obj.jid != self.room_jid:
+            return
+        self.draw_avatar(obj.resource)
+
+    def _nec_gc_message_received(self, obj):
+        if obj.room_jid != self.room_jid or obj.conn.name != self.account:
+            return
+        if obj.captcha_form:
             if self.form_widget:
                 self.form_widget.hide()
                 self.form_widget.destroy()
                 self.btn_box.destroy()
-            dataform = dataforms.ExtendForm(node=captcha)
+            dataform = dataforms.ExtendForm(node=obj.captcha_form)
             self.form_widget = dataforms_widget.DataFormWidget(dataform)
-            self.form_widget.show_all()
-            vbox = self.xml.get_object('gc_textviews_vbox')
-            vbox.pack_start(self.form_widget, expand=False, fill=False)
 
             def on_send_dataform_clicked(widget):
                 if not self.form_widget:
                     return
                 form_node = self.form_widget.data_form.get_purged()
                 form_node.type = 'submit'
-                gajim.connections[self.account].send_captcha(self.room_jid,
-                    form_node)
+                obj.conn.send_captcha(self.room_jid, form_node)
                 self.form_widget.hide()
                 self.form_widget.destroy()
                 self.btn_box.destroy()
                 self.form_widget = None
                 del self.btn_box
+
+            self.form_widget.connect('validated', on_send_dataform_clicked)
+            self.form_widget.show_all()
+            vbox = self.xml.get_object('gc_textviews_vbox')
+            vbox.pack_start(self.form_widget, expand=False, fill=False)
 
             valid_button = gtk.Button(stock=gtk.STOCK_OK)
             valid_button.connect('clicked', on_send_dataform_clicked)
@@ -828,20 +973,26 @@ class GroupchatControl(ChatControlBase):
             else:
                 self.attention_flag = True
             helpers.play_sound('muc_message_received')
-        if '100' in status_code:
+        if '100' in obj.status_code:
             # Room is not anonymous
             self.is_anonymous = False
-        if not nick:
+        if not obj.nick:
             # message from server
-            self.print_conversation(msg, tim=tim, xhtml=xhtml, displaymarking=displaymarking)
+            self.print_conversation(obj.msgtxt, tim=obj.timestamp,
+                xhtml=obj.xhtml_msgtxt, displaymarking=obj.displaymarking)
         else:
             # message from someone
-            if has_timestamp:
+            if obj.has_timestamp:
                 # don't print xhtml if it's an old message.
                 # Like that xhtml messages are grayed too.
-                self.print_old_conversation(msg, nick, tim, None, displaymarking=displaymarking)
+                self.print_old_conversation(obj.msgtxt, contact=obj.nick,
+                    tim=obj.timestamp, xhtml=None,
+                    displaymarking=obj.displaymarking)
             else:
-                self.print_conversation(msg, nick, tim, xhtml, displaymarking=displaymarking)
+                self.print_conversation(obj.msgtxt, contact=obj.nick,
+                    tim=obj.timestamp, xhtml=obj.xhtml_msgtxt,
+                    displaymarking=obj.displaymarking)
+        obj.needs_highlight = self.needs_visual_notification(obj.msgtxt)
 
     def on_private_message(self, nick, msg, tim, xhtml, session, msg_id=None,
     encrypted=False, displaymarking=None):
@@ -969,10 +1120,6 @@ class GroupchatControl(ChatControlBase):
                     self.attention_list.pop(0) # remove older
                 self.attention_list.append(contact)
 
-            if sound == 'received':
-                helpers.play_sound('muc_message_received')
-            elif sound == 'highlight':
-                helpers.play_sound('muc_message_highlight')
             if text.startswith('/me ') or text.startswith('/me\n'):
                 other_tags_for_text.append('gc_nickname_color_' + \
                     str(self.gc_custom_colors[contact]))
@@ -1039,7 +1186,8 @@ class GroupchatControl(ChatControlBase):
             # we have full focus (we are reading it!)
             return
 
-        self.conv_textview.show_focus_out_line()
+        at_the_end = self.conv_textview.at_the_end()
+        self.conv_textview.show_focus_out_line(scroll=at_the_end)
 
     def needs_visual_notification(self, text):
         """
@@ -1071,6 +1219,83 @@ class GroupchatControl(ChatControlBase):
         self.subject = subject
         self.draw_banner_text()
 
+    def _nec_gc_subject_received(self, obj):
+        if obj.conn.name != self.account:
+            return
+        if obj.room_jid != self.room_jid:
+            return
+        self.set_subject(obj.subject)
+        text = _('%(nick)s has set the subject to %(subject)s') % {
+            'nick': obj.nickname, 'subject': obj.subject}
+        if obj.has_timestamp:
+            self.print_old_conversation(text)
+        else:
+            self.print_conversation(text)
+
+    def _nec_gc_config_changed_received(self, obj):
+        # statuscode is a list
+        # http://www.xmpp.org/extensions/xep-0045.html#roomconfig-notify
+        # http://www.xmpp.org/extensions/xep-0045.html#registrar-statuscodes...
+        # -init
+        if obj.room_jid != self.room_jid or obj.conn.name != self.account:
+            return
+
+        changes = []
+        if '100' in obj.status_code:
+            # Can be a presence (see chg_contact_status in groupchat_control.py)
+            changes.append(_('Any occupant is allowed to see your full JID'))
+            self.is_anonymous = False
+        if '102' in obj.status_code:
+            changes.append(_('Room now shows unavailable member'))
+        if '103' in obj.status_code:
+            changes.append(_('room now does not show unavailable members'))
+        if '104' in obj.status_code:
+            changes.append(_('A non-privacy-related room configuration change '
+                'has occurred'))
+        if '170' in obj.status_code:
+            # Can be a presence (see chg_contact_status in groupchat_control.py)
+            changes.append(_('Room logging is now enabled'))
+        if '171' in obj.status_code:
+            changes.append(_('Room logging is now disabled'))
+        if '172' in obj.status_code:
+            changes.append(_('Room is now non-anonymous'))
+            self.is_anonymous = False
+        if '173' in obj.status_code:
+            changes.append(_('Room is now semi-anonymous'))
+            self.is_anonymous = True
+        if '174' in obj.status_code:
+            changes.append(_('Room is now fully-anonymous'))
+            self.is_anonymous = True
+
+        for change in changes:
+            self.print_conversation(change)
+
+    def _nec_signed_in(self, obj):
+        if obj.conn.name != self.account:
+            return
+        if self.room_jid in gajim.gc_connected[obj.conn.name] and \
+        gajim.gc_connected[obj.conn.name][self.room_jid]:
+            return
+        password = gajim.gc_passwords.get(self.room_jid, '')
+        obj.conn.join_gc(self.nick, self.room_jid, password)
+
+    def _nec_decrypted_message_received(self, obj):
+        if obj.conn.name != self.account:
+            return
+        if obj.gc_control == self and obj.resource:
+            # We got a pm from this room
+            nick = obj.resource
+            if obj.session.control:
+                # print if a control is open
+                obj.session.control.print_conversation(obj.msgtxt,
+                    tim=obj.timestamp, xhtml=obj.xhtml, encrypted=obj.encrypted,
+                    displaymarking=obj.displaymarking)
+            else:
+                # otherwise pass it off to the control to be queued
+                self.on_private_message(nick, obj.msgtxt, obj.timestamp,
+                    obj.xhtml, self.session, msg_id=obj.msg_id,
+                    encrypted=obj.encrypted, displaymarking=obj.displaymarking)
+
     def got_connected(self):
         # Make autorejoin stop.
         if self.autorejoin:
@@ -1083,6 +1308,7 @@ class GroupchatControl(ChatControlBase):
         self._update_banner_state_image()
         if self.parent_win:
             self.parent_win.redraw_tab(self)
+        gobject.idle_add(self.msg_textview.grab_focus)
 
     def got_disconnected(self):
         self.list_treeview.get_model().clear()
@@ -1243,81 +1469,81 @@ class GroupchatControl(ChatControlBase):
         for role in ('visitor', 'participant', 'moderator'):
             self.draw_role(role)
 
-    def chg_contact_status(self, nick, show, status, role, affiliation, jid,
-    reason, actor, statusCode, new_nick, avatar_sha, tim=None):
-        """
-        When an occupant changes his or her status
-        """
-        if show == 'invisible':
+    def _nec_gc_presence_received(self, obj):
+        if obj.room_jid != self.room_jid or obj.conn.name != self.account:
+            return
+        if obj.ptype == 'error':
             return
 
+        role = obj.role
         if not role:
             role = 'visitor'
+
+        affiliation = obj.affiliation
         if not affiliation:
             affiliation = 'none'
-        fake_jid = self.room_jid + '/' + nick
+
         newly_created = False
-        nick_jid = nick
+        nick_jid = obj.nick
 
         # Set to true if role or affiliation have changed
         right_changed = False
 
-        if jid:
+        if obj.real_jid:
             # delete ressource
-            simple_jid = gajim.get_jid_without_resource(jid)
+            simple_jid = gajim.get_jid_without_resource(obj.real_jid)
             nick_jid += ' (%s)' % simple_jid
 
-        # statusCode
+        # status_code
         # http://www.xmpp.org/extensions/xep-0045.html#registrar-statuscodes-\
         # init
-        if statusCode:
-            if '100' in statusCode:
+        if obj.status_code:
+            if '100' in obj.status_code:
                 # Can be a message (see handle_event_gc_config_change in
                 # gajim.py)
-                self.print_conversation(\
+                self.print_conversation(
                     _('Any occupant is allowed to see your full JID'))
-            if '170' in statusCode:
+            if '170' in obj.status_code:
                 # Can be a message (see handle_event_gc_config_change in
                 # gajim.py)
                 self.print_conversation(_('Room logging is enabled'))
-            if '201' in statusCode:
+            if '201' in obj.status_code:
                 self.print_conversation(_('A new room has been created'))
-            if '210' in statusCode:
+            if '210' in obj.status_code:
                 self.print_conversation(\
                     _('The server has assigned or modified your roomnick'))
 
-        if show in ('offline', 'error'):
-            if statusCode:
-                if '307' in statusCode:
-                    if actor is None: # do not print 'kicked by None'
+        if obj.show in ('offline', 'error'):
+            if obj.status_code:
+                if '307' in obj.status_code:
+                    if obj.actor is None: # do not print 'kicked by None'
                         s = _('%(nick)s has been kicked: %(reason)s') % {
-                            'nick': nick,
-                            'reason': reason }
+                            'nick': obj.nick, 'reason': obj.reason}
                     else:
                         s = _('%(nick)s has been kicked by %(who)s: '
-                            '%(reason)s') % {'nick': nick, 'who': actor,
-                            'reason': reason }
-                    self.print_conversation(s, 'info', tim=tim, graphics=False)
-                    if nick == self.nick and not gajim.config.get(
+                            '%(reason)s') % {'nick': obj.nick, 'who': obj.actor,
+                            'reason': obj.reason}
+                    self.print_conversation(s, 'info', graphics=False)
+                    if obj.nick == self.nick and not gajim.config.get(
                     'muc_autorejoin_on_kick'):
                         self.autorejoin = False
-                elif '301' in statusCode:
-                    if actor is None: # do not print 'banned by None'
+                elif '301' in obj.status_code:
+                    if obj.actor is None: # do not print 'banned by None'
                         s = _('%(nick)s has been banned: %(reason)s') % {
-                            'nick': nick, 'reason': reason }
+                            'nick': obj.nick, 'reason': obj.reason}
                     else:
                         s = _('%(nick)s has been banned by %(who)s: '
-                            '%(reason)s') % { 'nick': nick, 'who': actor,
-                            'reason': reason }
-                    self.print_conversation(s, 'info', tim=tim, graphics=False)
-                    if nick == self.nick:
+                            '%(reason)s') % {'nick': obj.nick, 'who': obj.actor,
+                            'reason': obj.reason}
+                    self.print_conversation(s, 'info', graphics=False)
+                    if obj.nick == self.nick:
                         self.autorejoin = False
-                elif '303' in statusCode: # Someone changed his or her nick
-                    if new_nick == self.new_nick or nick == self.nick:
+                elif '303' in obj.status_code: # Someone changed his or her nick
+                    if obj.new_nick == self.new_nick or obj.nick == self.nick:
                         # We changed our nick
-                        self.nick = new_nick
+                        self.nick = obj.new_nick
                         self.new_nick = ''
-                        s = _('You are now known as %s') % new_nick
+                        s = _('You are now known as %s') % self.nick
                         # Stop all E2E sessions
                         nick_list = gajim.contacts.get_nick_list(self.account,
                             self.room_jid)
@@ -1334,24 +1560,24 @@ class GroupchatControl(ChatControlBase):
                                 ctrl.no_autonegotiation = False
                     else:
                         s = _('%(nick)s is now known as %(new_nick)s') % {
-                            'nick': nick, 'new_nick': new_nick}
+                            'nick': obj.nick, 'new_nick': obj.new_nick}
                     # We add new nick to muc roster here, so we don't see
                     # that "new_nick has joined the room" when he just changed
                     # nick.
                     # add_contact_to_roster will be called a second time
                     # after that, but that doesn't hurt
-                    self.add_contact_to_roster(new_nick, show, role,
-                        affiliation, status, jid)
-                    if nick in self.attention_list:
-                        self.attention_list.remove(nick)
+                    self.add_contact_to_roster(obj.new_nick, obj.show, role,
+                        affiliation, obj.status, obj.real_jid)
+                    if obj.nick in self.attention_list:
+                        self.attention_list.remove(obj.nick)
                     # keep nickname color
-                    if nick in self.gc_custom_colors:
-                        self.gc_custom_colors[new_nick] = \
-                            self.gc_custom_colors[nick]
+                    if obj.nick in self.gc_custom_colors:
+                        self.gc_custom_colors[obj.new_nick] = \
+                            self.gc_custom_colors[obj.nick]
                     # rename vcard / avatar
                     puny_jid = helpers.sanitize_filename(self.room_jid)
-                    puny_nick = helpers.sanitize_filename(nick)
-                    puny_new_nick = helpers.sanitize_filename(new_nick)
+                    puny_nick = helpers.sanitize_filename(obj.nick)
+                    puny_new_nick = helpers.sanitize_filename(obj.new_nick)
                     old_path = os.path.join(gajim.VCARD_PATH, puny_jid,
                         puny_nick)
                     new_path = os.path.join(gajim.VCARD_PATH, puny_jid,
@@ -1373,39 +1599,39 @@ class GroupchatControl(ChatControlBase):
                                 # will also remove 'TEST'
                                 os.remove(files[old_file])
                             os.rename(old_file, files[old_file])
-                    self.print_conversation(s, 'info', tim=tim, graphics=False)
-                elif '321' in statusCode:
+                    self.print_conversation(s, 'info', graphics=False)
+                elif '321' in obj.status_code:
                     s = _('%(nick)s has been removed from the room '
-                        '(%(reason)s)') % { 'nick': nick,
+                        '(%(reason)s)') % { 'nick': obj.nick,
                         'reason': _('affiliation changed') }
-                    self.print_conversation(s, 'info', tim=tim, graphics=False)
-                elif '322' in statusCode:
+                    self.print_conversation(s, 'info', graphics=False)
+                elif '322' in obj.status_code:
                     s = _('%(nick)s has been removed from the room '
-                        '(%(reason)s)') % { 'nick': nick,
+                        '(%(reason)s)') % { 'nick': obj.nick,
                         'reason': _('room configuration changed to '
                         'members-only') }
-                    self.print_conversation(s, 'info', tim=tim, graphics=False)
-                elif '332' in statusCode:
+                    self.print_conversation(s, 'info', graphics=False)
+                elif '332' in obj.status_code:
                     s = _('%(nick)s has been removed from the room '
-                        '(%(reason)s)') % {'nick': nick,
+                        '(%(reason)s)') % {'nick': obj.nick,
                         'reason': _('system shutdown') }
-                    self.print_conversation(s, 'info', tim=tim, graphics=False)
+                    self.print_conversation(s, 'info', graphics=False)
                 # Room has been destroyed.
-                elif 'destroyed' in statusCode:
+                elif 'destroyed' in obj.status_code:
                     self.autorejoin = False
-                    self.print_conversation(reason, 'info', tim, graphics=False)
+                    self.print_conversation(obj.reason, 'info', graphics=False)
 
-            if len(gajim.events.get_events(self.account, jid=fake_jid,
+            if len(gajim.events.get_events(self.account, jid=obj.fjid,
             types=['pm'])) == 0:
-                self.remove_contact(nick)
+                self.remove_contact(obj.nick)
                 self.draw_all_roles()
             else:
                 c = gajim.contacts.get_gc_contact(self.account, self.room_jid,
-                    nick)
-                c.show = show
-                c.status = status
-            if nick == self.nick and (not statusCode or \
-            '303' not in statusCode): # We became offline
+                    obj.nick)
+                c.show = obj.show
+                c.status = obj.status
+            if obj.nick == self.nick and (not obj.status_code or \
+            '303' not in obj.status_code): # We became offline
                 self.got_disconnected()
                 contact = gajim.contacts.\
                     get_contact_with_highest_priority(self.account,
@@ -1416,27 +1642,27 @@ class GroupchatControl(ChatControlBase):
                 if self.parent_win:
                     self.parent_win.redraw_tab(self)
         else:
-            iter_ = self.get_contact_iter(nick)
+            iter_ = self.get_contact_iter(obj.nick)
             if not iter_:
-                if '210' in statusCode:
+                if '210' in obj.status_code:
                     # Server changed our nick
-                    self.nick = nick
-                    s = _('You are now known as %s') % nick
-                    self.print_conversation(s, 'info', tim=tim, graphics=False)
-                iter_ = self.add_contact_to_roster(nick, show, role,
-                    affiliation, status, jid)
+                    self.nick = obj.nick
+                    s = _('You are now known as %s') % obj.nick
+                    self.print_conversation(s, 'info', graphics=False)
+                iter_ = self.add_contact_to_roster(obj.nick, obj.show, role,
+                    affiliation, obj.status, obj.real_jid)
                 newly_created = True
                 self.draw_all_roles()
-                if statusCode and '201' in statusCode:
+                if obj.status_code and '201' in obj.status_code:
                     # We just created the room
                     gajim.connections[self.account].request_gc_config(
                         self.room_jid)
             else:
                 gc_c = gajim.contacts.get_gc_contact(self.account,
-                    self.room_jid, nick)
+                    self.room_jid, obj.nick)
                 if not gc_c:
                     log.error('%s has an iter, but no gc_contact instance' % \
-                        nick)
+                        obj.nick)
                     return
                 # Re-get vcard if avatar has changed
                 # We do that here because we may request it to the real JID if
@@ -1444,74 +1670,73 @@ class GroupchatControl(ChatControlBase):
                 con = gajim.connections[self.account]
                 if gc_c and gc_c.jid:
                     real_jid = gc_c.jid
-                    if gc_c.resource:
-                        real_jid += '/' + gc_c.resource
                 else:
-                    real_jid = fake_jid
-                if fake_jid in con.vcard_shas:
-                    if avatar_sha != con.vcard_shas[fake_jid]:
+                    real_jid = obj.fjid
+                if obj.fjid in obj.conn.vcard_shas:
+                    if obj.avatar_sha != obj.conn.vcard_shas[obj.fjid]:
                         server = gajim.get_server_from_jid(self.room_jid)
                         if not server.startswith('irc'):
-                            con.request_vcard(real_jid, fake_jid)
+                            obj.conn.request_vcard(real_jid, obj.fjid)
                 else:
-                    cached_vcard = con.get_cached_vcard(fake_jid, True)
+                    cached_vcard = obj.conn.get_cached_vcard(obj.fjid, True)
                     if cached_vcard and 'PHOTO' in cached_vcard and \
                     'SHA' in cached_vcard['PHOTO']:
                         cached_sha = cached_vcard['PHOTO']['SHA']
                     else:
                         cached_sha = ''
-                    if cached_sha != avatar_sha:
+                    if cached_sha != obj.avatar_sha:
                         # avatar has been updated
                         # sha in mem will be updated later
                         server = gajim.get_server_from_jid(self.room_jid)
                         if not server.startswith('irc'):
-                            con.request_vcard(real_jid, fake_jid)
+                            obj.conn.request_vcard(real_jid, obj.fjid)
                     else:
                         # save sha in mem NOW
-                        con.vcard_shas[fake_jid] = avatar_sha
+                        obj.conn.vcard_shas[obj.fjid] = obj.avatar_sha
 
                 actual_affiliation = gc_c.affiliation
                 if affiliation != actual_affiliation:
-                    if actor:
+                    if obj.actor:
                         st = _('** Affiliation of %(nick)s has been set to '
                             '%(affiliation)s by %(actor)s') % {'nick': nick_jid,
-                            'affiliation': affiliation, 'actor': actor}
+                            'affiliation': affiliation, 'actor': obj.actor}
                     else:
                         st = _('** Affiliation of %(nick)s has been set to '
                             '%(affiliation)s') % {'nick': nick_jid,
                             'affiliation': affiliation}
-                    if reason:
-                        st += ' (%s)' % reason
-                    self.print_conversation(st, tim=tim, graphics=False)
+                    if obj.reason:
+                        st += ' (%s)' % obj.reason
+                    self.print_conversation(st, graphics=False)
                     right_changed = True
-                actual_role = self.get_role(nick)
+                actual_role = self.get_role(obj.nick)
                 if role != actual_role:
-                    self.remove_contact(nick)
-                    self.add_contact_to_roster(nick, show, role, affiliation,
-                        status, jid)
+                    self.remove_contact(obj.nick)
+                    self.add_contact_to_roster(obj.nick, obj.show, role,
+                        affiliation, obj.status, obj.real_jid)
                     self.draw_role(actual_role)
                     self.draw_role(role)
-                    if actor:
+                    if obj.actor:
                         st = _('** Role of %(nick)s has been set to %(role)s '
                             'by %(actor)s') % {'nick': nick_jid, 'role': role,
-                            'actor': actor}
+                            'actor': obj.actor}
                     else:
                         st = _('** Role of %(nick)s has been set to '
                             '%(role)s') % {'nick': nick_jid, 'role': role}
-                    if reason:
-                        st += ' (%s)' % reason
-                    self.print_conversation(st, tim=tim, graphics=False)
+                    if obj.reason:
+                        st += ' (%s)' % obj.reason
+                    self.print_conversation(st, graphics=False)
                     right_changed = True
                 else:
-                    if gc_c.show == show and gc_c.status == status and \
+                    if gc_c.show == obj.show and gc_c.status == obj.status and \
                     gc_c.affiliation == affiliation: # no change
                         return
-                    gc_c.show = show
+                    gc_c.show = obj.show
                     gc_c.affiliation = affiliation
-                    gc_c.status = status
-                    self.draw_contact(nick)
-        if (time.time() - self.room_creation) > 30 and nick != self.nick and \
-        (not statusCode or '303' not in statusCode) and not right_changed:
+                    gc_c.status = obj.status
+                    self.draw_contact(obj.nick)
+        if (time.time() - self.room_creation) > 30 and obj.nick != self.nick \
+        and (not obj.status_code or '303' not in obj.status_code) and not \
+        right_changed:
             st = ''
             print_status = None
             for bookmark in gajim.connections[self.account].bookmarks:
@@ -1520,24 +1745,24 @@ class GroupchatControl(ChatControlBase):
                     break
             if not print_status:
                 print_status = gajim.config.get('print_status_in_muc')
-            if show == 'offline':
-                if nick in self.attention_list:
-                    self.attention_list.remove(nick)
-            if show == 'offline' and print_status in ('all', 'in_and_out') and \
-            (not statusCode or '307' not in statusCode):
+            if obj.show == 'offline':
+                if obj.nick in self.attention_list:
+                    self.attention_list.remove(obj.nick)
+            if obj.show == 'offline' and print_status in ('all', 'in_and_out') \
+            and (not obj.status_code or '307' not in obj.status_code):
                 st = _('%s has left') % nick_jid
-                if reason:
-                    st += ' [%s]' % reason
+                if obj.reason:
+                    st += ' [%s]' % obj.reason
             else:
                 if newly_created and print_status in ('all', 'in_and_out'):
                     st = _('%s has joined the group chat') % nick_jid
                 elif print_status == 'all':
                     st = _('%(nick)s is now %(status)s') % {'nick': nick_jid,
-                        'status': helpers.get_uf_show(show)}
+                        'status': helpers.get_uf_show(obj.show)}
             if st:
-                if status:
-                    st += ' (' + status + ')'
-                self.print_conversation(st, tim=tim, graphics=False)
+                if obj.status:
+                    st += ' (' + obj.status + ')'
+                self.print_conversation(st, graphics=False)
 
     def add_contact_to_roster(self, nick, show, role, affiliation, status,
     jid=''):
@@ -1558,10 +1783,11 @@ class GroupchatControl(ChatControlBase):
         role_iter = self.get_role_iter(role)
         if not role_iter:
             role_iter = model.append(None,
-                (gajim.interface.jabber_state_images['16']['closed'], role,
-                'role', role_name,  None))
+                [gajim.interface.jabber_state_images['16']['closed'], role,
+                'role', role_name,  None] + [None] * self.nb_ext_renderers)
             self.draw_all_roles()
-        iter_ = model.append(role_iter, (None, nick, 'contact', name, None))
+        iter_ = model.append(role_iter, [None, nick, 'contact', name, None] + \
+                [None] * self.nb_ext_renderers)
         if not nick in gajim.contacts.get_nick_list(self.account,
         self.room_jid):
             gc_contact = gajim.contacts.create_gc_contact(
@@ -1634,7 +1860,7 @@ class GroupchatControl(ChatControlBase):
 
         label = self.get_seclabel()
         if message != '' or message != '\n':
-            self.save_sent_message(message)
+            self.save_message(message, 'sent')
 
             # Send the message
             gajim.connections[self.account].send_gc_message(self.room_jid,
@@ -1675,12 +1901,31 @@ class GroupchatControl(ChatControlBase):
         del win._controls[self.account][self.contact.jid]
 
     def shutdown(self, status='offline'):
-        # PluginSystem: calling shutdown of super class (ChatControlBase) 
+        # PluginSystem: calling shutdown of super class (ChatControlBase)
         # to let it remove it's GUI extension points
         super(GroupchatControl, self).shutdown()
+        # PluginSystem: removing GUI extension points connected with
+        # GrouphatControl instance object
+        gajim.plugin_manager.remove_gui_extension_point('groupchat_control',
+            self)
 
         # Preventing autorejoin from being activated
         self.autorejoin = False
+
+        gajim.ged.remove_event_handler('gc-presence-received', ged.GUI1,
+            self._nec_gc_presence_received)
+        gajim.ged.remove_event_handler('gc-message-received', ged.GUI1,
+            self._nec_gc_message_received)
+        gajim.ged.remove_event_handler('vcard-published', ged.GUI1,
+            self._nec_vcard_published)
+        gajim.ged.remove_event_handler('vcard-received', ged.GUI1,
+            self._nec_vcard_received)
+        gajim.ged.remove_event_handler('gc-subject-received', ged.GUI1,
+            self._nec_gc_subject_received)
+        gajim.ged.remove_event_handler('gc-config-changed-received', ged.GUI1,
+            self._nec_gc_config_changed_received)
+        gajim.ged.remove_event_handler('signed-in', ged.GUI1,
+            self._nec_signed_in)
 
         if self.room_jid in gajim.gc_connected[self.account] and \
         gajim.gc_connected[self.account][self.room_jid]:
@@ -1688,8 +1933,8 @@ class GroupchatControl(ChatControlBase):
             # logs. We do it only when connected because if connection was lost
             # there may be new messages since disconnection.
             gajim.connections[self.account].gc_got_disconnected(self.room_jid)
-        gajim.connections[self.account].send_gc_status(self.nick, self.room_jid,
-                                                show='offline', status=status)
+            gajim.connections[self.account].send_gc_status(self.nick,
+                self.room_jid, show='offline', status=status)
         nick_list = gajim.contacts.get_nick_list(self.account, self.room_jid)
         for nick in nick_list:
             # Update pm chat window
@@ -1858,6 +2103,12 @@ class GroupchatControl(ChatControlBase):
         password = gajim.gc_passwords.get(self.room_jid, '')
         gajim.interface.add_gc_bookmark(self.account, self.name, self.room_jid,\
             '0', '0', password, self.nick)
+
+    def _on_request_voice_menuitem_activate(self, widget):
+        """
+        Request voice in the current room
+        """
+        gajim.connections[self.account].request_voice(self.room_jid)
 
     def _on_drag_data_received(self, widget, context, x, y, selection,
     target_type, timestamp):
@@ -2126,6 +2377,16 @@ class GroupchatControl(ChatControlBase):
         id_ = item.connect('activate', self.on_owner_checkmenuitem_activate,
             jid)
         self.handlers[id_] = item
+
+        item = xml.get_object('invite_menuitem')
+        muc_icon = gtkgui_helpers.load_icon('muc_active')
+        if muc_icon:
+            item.set_image(muc_icon)
+        if c.jid and c.name != self.nick:
+            gui_menu_builder.build_invite_submenu(item, ((c, self.account),),
+                ignore_rooms=[self.room_jid])
+        else:
+            item.set_sensitive(False)
 
         item = xml.get_object('information_menuitem')
         id_ = item.connect('activate', self.on_info, nick)
@@ -2469,9 +2730,9 @@ class GroupchatControl(ChatControlBase):
             connection.set_default_list('')
             connection.set_active_list('')
             connection.del_privacy_list('block')
-            if 'blocked_contacts' in gajim.interface.instances[self.account]:
-                gajim.interface.instances[self.account]['blocked_contacts'].\
-                    privacy_list_received([])
+            if 'privay_list_block' in gajim.interface.instances[self.account]:
+                del gajim.interface.instances[self.account]\
+                    ['privay_list_block']
 
     def on_voice_checkmenuitem_activate(self, widget, nick):
         if widget.get_active():

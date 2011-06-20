@@ -24,6 +24,7 @@
 ##
 
 import os
+import shutil
 import sys
 import stat
 
@@ -249,13 +250,11 @@ def check_and_possibly_move_config():
         if not os.path.exists(src):
             continue
         print 'moving %s to %s' % (src, dst)
-        os.renames(src, dst)
+        shutil.move(src, dst)
     gajim.logger.init_vars()
     gajim.logger.attach_cache_database()
 
 def check_and_possibly_create_paths():
-    check_and_possibly_move_config()
-
     LOG_DB_PATH = logger.LOG_DB_PATH
     LOG_DB_FOLDER, LOG_DB_FILE = os.path.split(LOG_DB_PATH)
 
@@ -315,11 +314,10 @@ def check_and_possibly_create_paths():
         print _('Gajim will now exit')
         sys.exit()
 
-    if not os.path.exists(LOG_DB_PATH):
-        create_log_db()
-        gajim.logger.init_vars()
-    elif os.path.isdir(LOG_DB_PATH):
-        print _('%s is a directory but should be a file') % LOG_DB_PATH
+    if not os.path.exists(PLUGINS_CONFIG_PATH):
+        create_path(PLUGINS_CONFIG_PATH)
+    elif os.path.isfile(PLUGINS_CONFIG_PATH):
+        print _('%s is a file but it should be a directory') % PLUGINS_CONFIG_PATH
         print _('Gajim will now exit')
         sys.exit()
 
@@ -327,6 +325,16 @@ def check_and_possibly_create_paths():
         create_path(CACHE_DB_FOLDER)
     elif os.path.isfile(CACHE_DB_FOLDER):
         print _('%s is a file but it should be a directory') % CACHE_DB_FOLDER
+        print _('Gajim will now exit')
+        sys.exit()
+
+    check_and_possibly_move_config()
+
+    if not os.path.exists(LOG_DB_PATH):
+        create_log_db()
+        gajim.logger.init_vars()
+    elif os.path.isdir(LOG_DB_PATH):
+        print _('%s is a directory but should be a file') % LOG_DB_PATH
         print _('Gajim will now exit')
         sys.exit()
 
@@ -348,13 +356,6 @@ def check_and_possibly_create_paths():
     cert_name + '.pkey')):
         jingle_xtls.make_certs(cert_name, 'gajim')
 
-
-    if not os.path.exists(PLUGINS_CONFIG_PATH):
-        create_path(PLUGINS_CONFIG_PATH)
-    elif os.path.isfile(PLUGINS_CONFIG_PATH):
-        print _('%s is a file but it should be a directory') % PLUGINS_CONFIG_PATH
-        print _('Gajim will now exit')
-        sys.exit()
 
 def create_path(directory):
     head, tail = os.path.split(directory)

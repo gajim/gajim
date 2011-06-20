@@ -5,6 +5,7 @@
   <object class="GtkWindow" id="vcard_information_window">
     <property name="border_width">12</property>
     <property name="title" translatable="yes">Contact Information</property>
+    <property name="type_hint">dialog</property>
     <signal name="destroy" handler="on_vcard_information_window_destroy"/>
     <signal name="key_press_event" handler="on_vcard_information_window_key_press_event"/>
     <child>
@@ -270,7 +271,9 @@
                           <object class="GtkLabel" id="user_avatar_label">
                             <property name="no_show_all">True</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">User avatar:</property>
+                            <property name="ypad">5</property>
+                            <property name="label" translatable="yes">&lt;b&gt;User avatar:&lt;/b&gt;</property>
+                            <property name="use_markup">True</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -301,7 +304,8 @@
                           <object class="GtkLabel" id="custom_avatar_label">
                             <property name="no_show_all">True</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">Configured avatar:</property>
+                            <property name="label" translatable="yes">&lt;b&gt;Configured avatar:&lt;/b&gt;</property>
+                            <property name="use_markup">True</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>

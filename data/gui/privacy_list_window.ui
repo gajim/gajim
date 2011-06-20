@@ -6,15 +6,16 @@
     <property name="visible">True</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes">Privacy List</property>
+    <property name="type_hint">dialog</property>
     <signal name="destroy" handler="on_privacy_list_edit_window_destroy"/>
     <child>
       <object class="GtkVBox" id="main_vbox">
-        <property name="width_request">600</property>
         <property name="visible">True</property>
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkHBox" id="title_hbox">
             <property name="visible">True</property>
+            <property name="orientation">vertical</property>
             <property name="homogeneous">True</property>
             <child>
               <object class="GtkLabel" id="privacy_lists_title_label">
@@ -591,7 +592,7 @@
   </object>
   <object class="GtkListStore" id="liststore1">
     <columns>
-      <!-- column-name item text -->
+      <!-- column-name item -->
       <column type="gchararray"/>
     </columns>
     <data>
@@ -611,13 +612,13 @@
   </object>
   <object class="GtkListStore" id="liststore2">
     <columns>
-      <!-- column-name item text -->
+      <!-- column-name item -->
       <column type="gchararray"/>
     </columns>
   </object>
   <object class="GtkListStore" id="liststore3">
     <columns>
-      <!-- column-name item text -->
+      <!-- column-name item -->
       <column type="gchararray"/>
     </columns>
   </object>

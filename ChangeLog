@@ -1,4 +1,12 @@
-Gajim 0.14 (XX)
+Gajim 0.14.1 (26 October 2010)
+
+  * Fix changing account name
+  * Fix sending XHTML
+  * Fix GnomeKayring usage
+  * Fix some GPG bugs
+  * Minor bugfixes
+
+Gajim 0.14 (02 September 2010)
 
   * Jingle audio / video chat
   * Improve Startup time

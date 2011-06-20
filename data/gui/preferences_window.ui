@@ -9,16 +9,7 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">Autodetect on every Gajim startup</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Always use GNOME default applications</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Always use KDE default applications</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Always use Xfce default applications</col>
+        <col id="0" translatable="yes">Use default applications</col>
       </row>
       <row>
         <col id="0" translatable="yes">Custom</col>
@@ -116,10 +107,28 @@
       </row>
     </data>
   </object>
+  <object class="GtkListStore" id="liststore7">
+    <columns>
+      <!-- column-name item -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">Always</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Never</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Last state</col>
+      </row>
+    </data>
+  </object>
   <object class="GtkWindow" id="preferences_window">
     <property name="border_width">6</property>
     <property name="title" translatable="yes">Preferences</property>
     <property name="role">preferences</property>
+    <property name="type_hint">dialog</property>
     <signal name="destroy" handler="on_preferences_window_destroy"/>
     <signal name="key_press_event" handler="on_preferences_window_key_press_event"/>
     <child>
@@ -341,7 +350,7 @@
                           <object class="GtkTable" id="table1">
                             <property name="visible">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="n_rows">5</property>
+                            <property name="n_rows">6</property>
                             <property name="n_columns">2</property>
                             <property name="column_spacing">6</property>
                             <property name="row_spacing">6</property>
@@ -400,8 +409,8 @@
                               </object>
                               <packing>
                                 <property name="right_attach">2</property>
-                                <property name="top_attach">2</property>
-                                <property name="bottom_attach">3</property>
+                                <property name="top_attach">3</property>
+                                <property name="bottom_attach">4</property>
                                 <property name="x_options">GTK_FILL</property>
                               </packing>
                             </child>
@@ -418,8 +427,8 @@
                               </object>
                               <packing>
                                 <property name="right_attach">2</property>
-                                <property name="top_attach">3</property>
-                                <property name="bottom_attach">4</property>
+                                <property name="top_attach">4</property>
+                                <property name="bottom_attach">5</property>
                                 <property name="x_options">GTK_FILL</property>
                               </packing>
                             </child>
@@ -435,8 +444,8 @@
                               </object>
                               <packing>
                                 <property name="right_attach">2</property>
-                                <property name="top_attach">4</property>
-                                <property name="bottom_attach">5</property>
+                                <property name="top_attach">5</property>
+                                <property name="bottom_attach">6</property>
                                 <property name="x_options">GTK_FILL</property>
                               </packing>
                             </child>
@@ -458,6 +467,41 @@
                                 <property name="right_attach">2</property>
                                 <property name="top_attach">1</property>
                                 <property name="bottom_attach">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label28">
+                                <property name="visible">True</property>
+                                <property name="xalign">0</property>
+                                <property name="xpad">1</property>
+                                <property name="label" translatable="yes">_Show roster on startup:</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">show_roster_on_startup</property>
+                              </object>
+                              <packing>
+                                <property name="top_attach">2</property>
+                                <property name="bottom_attach">3</property>
+                                <property name="x_options">GTK_FILL</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBox" id="show_roster_on_startup">
+                                <property name="width_request">50</property>
+                                <property name="visible">True</property>
+                                <property name="model">liststore7</property>
+                                <signal name="changed" handler="on_show_roster_on_startup_changed"/>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderertext7"/>
+                                  <attributes>
+                                    <attribute name="text">0</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="right_attach">2</property>
+                                <property name="top_attach">2</property>
+                                <property name="bottom_attach">3</property>
                               </packing>
                             </child>
                           </object>
@@ -672,7 +716,7 @@
                                 <child>
                                   <object class="GtkLabel" id="label11">
                                     <property name="visible">True</property>
-                                    <property name="label" translatable="yes">Show systray:</property>
+                                    <property name="label" translatable="yes">Show notification area icon:</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -700,33 +744,6 @@
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="position">5</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkHBox" id="hbox2">
-                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="no_show_all">True</property>
-                                <child>
-                                  <object class="GtkButton" id="advanced_notifications_button">
-                                    <property name="label" translatable="yes">Advanced...</property>
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">True</property>
-                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <signal name="clicked" handler="on_advanced_notifications_button_clicked"/>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">False</property>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="position">6</property>
                               </packing>
                             </child>
                           </object>
@@ -1356,8 +1373,8 @@ $T will be replaced by auto-not-available timeout</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="headers_visible">False</property>
-                                    <signal name="key_press_event" handler="on_msg_treeview_key_press_event"/>
                                     <signal name="cursor_changed" handler="on_msg_treeview_cursor_changed"/>
+                                    <signal name="key_press_event" handler="on_msg_treeview_key_press_event"/>
                                   </object>
                                 </child>
                               </object>

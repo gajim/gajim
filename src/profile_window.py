@@ -27,12 +27,14 @@ import gobject
 import base64
 import mimetypes
 import os
+import time
 
 import gtkgui_helpers
 import dialogs
 import vcard
 
 from common import gajim
+from common import ged
 
 
 class ProfileWindow:
@@ -43,6 +45,7 @@ class ProfileWindow:
     def __init__(self, account):
         self.xml = gtkgui_helpers.get_gtk_builder('profile_window.ui')
         self.window = self.xml.get_object('profile_window')
+        self.window.set_transient_for(gajim.interface.roster.window)
         self.progressbar = self.xml.get_object('progressbar')
         self.statusbar = self.xml.get_object('statusbar')
         self.context_id = self.statusbar.get_context_id('profile')
@@ -54,15 +57,21 @@ class ProfileWindow:
         self.avatar_mime_type = None
         self.avatar_encoded = None
         self.message_id = self.statusbar.push(self.context_id,
-                _('Retrieving profile...'))
+            _('Retrieving profile...'))
         self.update_progressbar_timeout_id = gobject.timeout_add(100,
-                self.update_progressbar)
+            self.update_progressbar)
         self.remove_statusbar_timeout_id = None
 
         # Create Image for avatar button
         image = gtk.Image()
         self.xml.get_object('PHOTO_button').set_image(image)
         self.xml.connect_signals(self)
+        gajim.ged.register_event_handler('vcard-published', ged.GUI1,
+            self._nec_vcard_published)
+        gajim.ged.register_event_handler('vcard-not-published', ged.GUI1,
+            self._nec_vcard_not_published)
+        gajim.ged.register_event_handler('vcard-received', ged.GUI1,
+            self._nec_vcard_received)
         self.window.show_all()
 
     def update_progressbar(self):
@@ -78,6 +87,12 @@ class ProfileWindow:
             gobject.source_remove(self.update_progressbar_timeout_id)
         if self.remove_statusbar_timeout_id is not None:
             gobject.source_remove(self.remove_statusbar_timeout_id)
+        gajim.ged.remove_event_handler('vcard-published', ged.GUI1,
+            self._nec_vcard_published)
+        gajim.ged.remove_event_handler('vcard-not-published', ged.GUI1,
+            self._nec_vcard_not_published)
+        gajim.ged.remove_event_handler('vcard-received', ged.GUI1,
+            self._nec_vcard_received)
         del gajim.interface.instances[self.account]['profile']
         if self.dialog: # Image chooser dialog
             self.dialog.destroy()
@@ -274,6 +289,13 @@ class ProfileWindow:
             self.progressbar.set_fraction(0)
             self.update_progressbar_timeout_id = None
 
+    def _nec_vcard_received(self, obj):
+        if obj.conn.name != self.account:
+            return
+        if obj.jid != self.jid:
+            return
+        self.set_values(obj.vcard_dict)
+
     def add_to_vcard(self, vcard_, entry, txt):
         """
         Add an information to the vCard dictionary
@@ -355,26 +377,30 @@ class ProfileWindow:
         self.update_progressbar_timeout_id = gobject.timeout_add(100,
                 self.update_progressbar)
 
-    def vcard_published(self):
+    def _nec_vcard_published(self, obj):
+        if obj.conn.name != self.account:
+            return
         if self.update_progressbar_timeout_id is not None:
             gobject.source_remove(self.update_progressbar_timeout_id)
             self.update_progressbar_timeout_id = None
         self.window.destroy()
 
-    def vcard_not_published(self):
+    def _nec_vcard_not_published(self, obj):
+        if obj.conn.name != self.account:
+            return
         if self.message_id:
             self.statusbar.remove_message(self.context_id, self.message_id)
         self.message_id = self.statusbar.push(self.context_id,
-                _('Information NOT published'))
+            _('Information NOT published'))
         self.remove_statusbar_timeout_id = gobject.timeout_add_seconds(3,
-                self.remove_statusbar, self.message_id)
+            self.remove_statusbar, self.message_id)
         if self.update_progressbar_timeout_id is not None:
             gobject.source_remove(self.update_progressbar_timeout_id)
             self.progressbar.set_fraction(0)
             self.update_progressbar_timeout_id = None
         dialogs.InformationDialog(_('vCard publication failed'),
-                _('There was an error while publishing your personal information, '
-                'try again later.'))
+            _('There was an error while publishing your personal information, '
+            'try again later.'))
 
     def on_cancel_button_clicked(self, widget):
         self.window.destroy()

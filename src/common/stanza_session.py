@@ -37,6 +37,9 @@ from hashlib import sha256
 from hmac import HMAC
 from common import crypto
 
+import logging
+log = logging.getLogger('gajim.c.stanza_session')
+
 if gajim.HAVE_PYCRYPTO:
     from Crypto.Cipher import AES
     from Crypto.PublicKey import RSA
@@ -75,7 +78,8 @@ class StanzaSession(object):
         self.negotiated = {}
 
     def is_loggable(self):
-        return self.loggable and gajim.config.should_log(self.conn.name, self.jid)
+        return self.loggable and gajim.config.should_log(self.conn.name,
+            self.jid.getStripped())
 
     def get_to(self):
         to = str(self.jid)

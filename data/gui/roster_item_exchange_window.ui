@@ -4,6 +4,7 @@
   <!-- interface-naming-policy project-wide -->
   <object class="GtkWindow" id="roster_item_exchange_window">
     <property name="title" translatable="yes">Roster Item Exchange</property>
+    <property name="type_hint">dialog</property>
     <child>
       <object class="GtkVBox" id="vbox1">
         <property name="visible">True</property>

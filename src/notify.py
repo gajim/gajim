@@ -29,13 +29,14 @@
 
 import os
 import time
-import dialogs
+from dialogs import PopupNotificationWindow
 import gobject
 import gtkgui_helpers
 import gtk
 
 from common import gajim
 from common import helpers
+from common import ged
 
 from common import dbus_support
 if dbus_support.supported:
@@ -56,12 +57,6 @@ def get_show_in_roster(event, account, contact, session=None):
     """
     if event == 'gc_message_received':
         return True
-    num = get_advanced_notification(event, account, contact)
-    if num is not None:
-        if gajim.config.get_per('notifications', str(num), 'roster') == 'yes':
-            return True
-        if gajim.config.get_per('notifications', str(num), 'roster') == 'no':
-            return False
     if event == 'message_received':
         if session and session.control:
             return False
@@ -71,73 +66,16 @@ def get_show_in_systray(event, account, contact, type_=None):
     """
     Return True if this event must be shown in systray, else False
     """
-    num = get_advanced_notification(event, account, contact)
-    if num is not None:
-        if gajim.config.get_per('notifications', str(num), 'systray') == 'yes':
-            return True
-        if gajim.config.get_per('notifications', str(num), 'systray') == 'no':
-            return False
     if type_ == 'printed_gc_msg' and not gajim.config.get(
     'notify_on_all_muc_messages'):
         # it's not an highlighted message, don't show in systray
         return False
     return gajim.config.get('trayicon_notification_on_events')
 
-def get_advanced_notification(event, account, contact):
-    """
-    Returns the number of the first (top most) advanced notification else None
-    """
-    num = 0
-    notif = gajim.config.get_per('notifications', str(num))
-    while notif:
-        recipient_ok = False
-        status_ok = False
-        tab_opened_ok = False
-        # test event
-        if gajim.config.get_per('notifications', str(num), 'event') == event:
-            # test recipient
-            recipient_type = gajim.config.get_per('notifications', str(num),
-                'recipient_type')
-            recipients = gajim.config.get_per('notifications', str(num),
-                'recipients').split()
-            if recipient_type == 'all':
-                recipient_ok = True
-            elif recipient_type == 'contact' and contact.jid in recipients:
-                recipient_ok = True
-            elif recipient_type == 'group':
-                for group in contact.groups:
-                    if group in contact.groups:
-                        recipient_ok = True
-                        break
-        if recipient_ok:
-            # test status
-            our_status = gajim.SHOW_LIST[gajim.connections[account].connected]
-            status = gajim.config.get_per('notifications', str(num), 'status')
-            if status == 'all' or our_status in status.split():
-                status_ok = True
-        if status_ok:
-            # test window_opened
-            tab_opened = gajim.config.get_per('notifications', str(num),
-                'tab_opened')
-            if tab_opened == 'both':
-                tab_opened_ok = True
-            else:
-                chat_control = helpers.get_chat_control(account, contact)
-                if (chat_control and tab_opened == 'yes') or (not chat_control \
-                and tab_opened == 'no'):
-                    tab_opened_ok = True
-        if tab_opened_ok:
-            return num
-
-        num += 1
-        notif = gajim.config.get_per('notifications', str(num))
-
-def notify(event, jid, account, parameters, advanced_notif_num=None):
+def notify(event, jid, account, parameters):
     """
     Check what type of notifications we want, depending on basic and the
     advanced configuration of notifications and do these notifications;
-    advanced_notif_num holds the number of the first (top most) advanced
-    notification
     """
     # First, find what notifications we want
     do_popup = False
@@ -162,14 +100,15 @@ def notify(event, jid, account, parameters, advanced_notif_num=None):
             do_popup = True
         if gajim.config.get_per('soundevents', 'contact_connected',
         'enabled') and not gajim.block_signed_in_notifications[account] and \
-        not block_transport:
+        not block_transport and helpers.allow_sound_notification(account,
+        event):
             do_sound = True
     elif event == 'contact_disconnected':
         status_message = parameters
         if helpers.allow_showing_notification(account, 'notify_on_signout'):
             do_popup = True
         if gajim.config.get_per('soundevents', 'contact_disconnected',
-        'enabled'):
+        'enabled') and helpers.allow_sound_notification(account, event):
             do_sound = True
     elif event == 'new_message':
         message_type = parameters[0]
@@ -184,25 +123,21 @@ def notify(event, jid, account, parameters, advanced_notif_num=None):
             message = ''
         focused = parameters[4]
         if helpers.allow_showing_notification(account, 'notify_on_new_message',
-        advanced_notif_num, is_first_message):
+        is_first_message):
             do_popup = True
         if is_first_message and helpers.allow_sound_notification(account,
-        'first_message_received', advanced_notif_num):
+        'first_message_received'):
             do_sound = True
         elif not is_first_message and focused and \
         helpers.allow_sound_notification(account,
-        'next_message_received_focused', advanced_notif_num):
+        'next_message_received_focused'):
             do_sound = True
         elif not is_first_message and not focused and \
         helpers.allow_sound_notification(account,
-        'next_message_received_unfocused', advanced_notif_num):
+        'next_message_received_unfocused'):
             do_sound = True
     else:
         print '*Event not implemeted yet*'
-
-    if advanced_notif_num is not None and gajim.config.get_per('notifications',
-    str(advanced_notif_num), 'run_command'):
-        do_cmd = True
 
     # Do the wanted notifications
     if do_popup:
@@ -287,14 +222,7 @@ def notify(event, jid, account, parameters, advanced_notif_num=None):
         snd_file = None
         snd_event = None # If not snd_file, play the event
         if event == 'new_message':
-            if advanced_notif_num is not None and gajim.config.get_per(
-            'notifications', str(advanced_notif_num), 'sound') == 'yes':
-                snd_file = gajim.config.get_per('notifications',
-                    str(advanced_notif_num), 'sound_file')
-            elif advanced_notif_num is not None and gajim.config.get_per(
-            'notifications', str(advanced_notif_num), 'sound') == 'no':
-                pass # do not set snd_event
-            elif is_first_message:
+            if is_first_message:
                 snd_event = 'first_message_received'
             elif focused:
                 snd_event = 'next_message_received_focused'
@@ -306,14 +234,6 @@ def notify(event, jid, account, parameters, advanced_notif_num=None):
             helpers.play_sound_file(snd_file)
         if snd_event:
             helpers.play_sound(snd_event)
-
-    if do_cmd:
-        command = gajim.config.get_per('notifications', str(advanced_notif_num),
-            'command')
-        try:
-            helpers.exec_command(command)
-        except Exception:
-            pass
 
 def popup(event_type, jid, account, msg_type='', path_to_image=None, title=None,
 text=None):
@@ -376,8 +296,8 @@ text=None):
             gajim.log.debug(str(e))
 
     # Either nothing succeeded or the user wants old-style notifications
-    instance = dialogs.PopupNotificationWindow(event_type, jid, account,
-        msg_type, path_to_image, title, text)
+    instance = PopupNotificationWindow(event_type, jid, account, msg_type,
+        path_to_image, title, text)
     gajim.interface.roster.popup_notification_windows.append(instance)
 
 def on_pynotify_notification_clicked(notification, action):
@@ -387,6 +307,32 @@ def on_pynotify_notification_clicked(notification, action):
 
     notification.close()
     gajim.interface.handle_event(account, jid, msg_type)
+
+class Notification:
+    """
+    Handle notifications
+    """
+    def __init__(self):
+        gajim.ged.register_event_handler('notification', ged.GUI2,
+            self._nec_notification)
+
+    def _nec_notification(self, obj):
+        if obj.do_popup:
+            popup(obj.popup_event_type, obj.jid, obj.conn.name,
+                obj.popup_msg_type, path_to_image=obj.popup_image,
+                title=obj.popup_title, text=obj.popup_text)
+
+        if obj.do_sound:
+            if obj.sound_file:
+                helpers.play_sound_file(obj.sound_file)
+            elif obj.sound_event:
+                helpers.play_sound(obj.sound_event)
+
+        if obj.do_command:
+            try:
+                helpers.exec_command(obj.command)
+            except Exception:
+                pass
 
 class NotificationResponseManager:
     """
@@ -583,6 +529,14 @@ class DesktopNotification:
                     text = self.text
                 else:
                     text = ' '
+                if os.environ.get('KDE_FULL_SESSION') == 'true':
+                    self.path_to_image = os.path.abspath(self.path_to_image)
+                    text = '<table style=\'padding: 3px\'><tr><td>' \
+                        '<img src=\"%s\"></td><td width=20> </td>' \
+                        '<td>%s</td></tr></table>' % (self.path_to_image,
+                        text)
+                    self.path_to_image = os.path.abspath(
+                        gtkgui_helpers.get_icon_path('gajim', 48))
                 actions = ()
                 if 'actions' in self.capabilities:
                     actions = (dbus.String('default'), dbus.String(
@@ -626,7 +580,7 @@ class DesktopNotification:
     def notify_another_way(self, e):
         gajim.log.debug('Error when trying to use notification daemon: %s' % \
             str(e))
-        instance = dialogs.PopupNotificationWindow(self.event_type, self.jid,
+        instance = PopupNotificationWindow(self.event_type, self.jid,
             self.account, self.msg_type, self.path_to_image, self.title,
             self.text)
         gajim.interface.roster.popup_notification_windows.append(instance)

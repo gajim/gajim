@@ -6,6 +6,7 @@
     <property name="visible">True</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes">Ad-hoc Commands - Gajim</property>
+    <property name="type_hint">dialog</property>
     <signal name="destroy" handler="on_adhoc_commands_window_destroy"/>
     <child>
       <object class="GtkVBox" id="vbox1">

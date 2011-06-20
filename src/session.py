@@ -27,6 +27,8 @@ from common import exceptions
 from common import gajim
 from common import stanza_session
 from common import contacts
+from common import ged
+from common.connection_handlers_events import ChatstateReceivedEvent
 
 import common.xmpp
 
@@ -41,12 +43,16 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
     def __init__(self, conn, jid, thread_id, type_='chat'):
         stanza_session.EncryptedStanzaSession.__init__(self, conn, jid, thread_id,
                 type_='chat')
+        gajim.ged.register_event_handler('decrypted-message-received', ged.GUI1,
+            self._nec_decrypted_message_received)
 
         self.control = None
 
     def detach_from_control(self):
         if self.control:
             self.control.set_session(None)
+        gajim.ged.remove_event_handler('decrypted-message-received',
+            ged.GUI1, self._nec_decrypted_message_received)
 
     def acknowledge_termination(self):
         self.detach_from_control()
@@ -56,230 +62,208 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
         stanza_session.EncryptedStanzaSession.terminate(self, send_termination)
         self.detach_from_control()
 
-    def get_chatstate(self, msg, msgtxt):
-        """
-        Extract chatstate from a <message/> stanza
-        """
-        composing_xep = None
-        chatstate = None
-
-        # chatstates - look for chatstate tags in a message if not delayed
-        delayed = msg.getTag('x', namespace=common.xmpp.NS_DELAY) is not None
-        if not delayed:
-            composing_xep = False
-            children = msg.getChildren()
-            for child in children:
-                if child.getNamespace() == 'http://jabber.org/protocol/chatstates':
-                    chatstate = child.getName()
-                    composing_xep = 'XEP-0085'
-                    break
-            # No XEP-0085 support, fallback to XEP-0022
-            if not chatstate:
-                chatstate_child = msg.getTag('x', namespace=common.xmpp.NS_EVENT)
-                if chatstate_child:
-                    chatstate = 'active'
-                    composing_xep = 'XEP-0022'
-                    if not msgtxt and chatstate_child.getTag('composing'):
-                        chatstate = 'composing'
-
-        return (composing_xep, chatstate)
-
-    def received(self, full_jid_with_resource, msgtxt, tim, encrypted, msg):
+    def _nec_decrypted_message_received(self, obj):
         """
         Dispatch a received <message> stanza
         """
-        msg_type = msg.getType()
-        subject = msg.getSubject()
-        resource = gajim.get_resource_from_jid(full_jid_with_resource)
-        if self.resource != resource:
-            self.resource = resource
+        if obj.session != self:
+            return
+        if self.resource != obj.resource:
+            self.resource = obj.resource
             if self.control and self.control.resource:
                 self.control.change_resource(self.resource)
-        seclabel = None
-        displaymarking = None
-
-        if not msg_type or msg_type not in ('chat', 'groupchat', 'error'):
-            msg_type = 'normal'
 
         msg_id = None
 
-        # XEP-0172 User Nickname
-        user_nick = msg.getTagData('nick')
-        if not user_nick:
-            user_nick = ''
-
-        form_node = None
-        for xtag in msg.getTags('x'):
-            if xtag.getNamespace() == common.xmpp.NS_DATA:
-                form_node = xtag
-                break
-
-        composing_xep, chatstate = self.get_chatstate(msg, msgtxt)
-        seclabel = msg.getTag('securitylabel')
-        if seclabel and seclabel.getNamespace() == common.xmpp.NS_SECLABEL:
-            displaymarking = seclabel.getTag('displaymarking')
-        xhtml = msg.getXHTML()
-
-        if msg_type == 'chat':
-            if not msg.getTag('body') and chatstate is None:
+        if obj.mtype == 'chat':
+            if not obj.stanza.getTag('body') and obj.chatstate is None:
                 return
 
             log_type = 'chat_msg_recv'
         else:
             log_type = 'single_msg_recv'
 
-        if self.is_loggable() and msgtxt:
+        if self.is_loggable() and obj.msgtxt:
             try:
-                msg_id = gajim.logger.write(log_type, full_jid_with_resource,
-                        msgtxt, tim=tim, subject=subject)
+                if obj.xhtml and gajim.config.get('log_xhtml_messages'):
+                    msg_to_log = obj.xhtml
+                else:
+                    msg_to_log = obj.msgtxt
+                msg_id = gajim.logger.write(log_type, obj.fjid,
+                    msg_to_log, tim=obj.timestamp, subject=obj.subject)
             except exceptions.PysqliteOperationalError, e:
                 self.conn.dispatch('ERROR', (_('Disk WriteError'), str(e)))
             except exceptions.DatabaseMalformed:
                 pritext = _('Database Error')
-                sectext = _('The database file (%s) cannot be read. Try to repair '
-                        'it (see http://trac.gajim.org/wiki/DatabaseBackup) or remove '
-                        'it (all history will be lost).') % common.logger.LOG_DB_PATH
+                sectext = _('The database file (%s) cannot be read. Try to '
+                    'repair it (see http://trac.gajim.org/wiki/DatabaseBackup) '
+                    'or remove it (all history will be lost).') % \
+                    common.logger.LOG_DB_PATH
                 self.conn.dispatch('ERROR', (pritext, sectext))
+
+        obj.msg_id = msg_id
 
         treat_as = gajim.config.get('treat_incoming_messages')
         if treat_as:
-            msg_type = treat_as
-
-        jid = gajim.get_jid_without_resource(full_jid_with_resource)
-        resource = gajim.get_resource_from_jid(full_jid_with_resource)
-
-        if gajim.config.get('ignore_incoming_xhtml'):
-            xhtml = None
-        if gajim.jid_is_transport(jid):
-            jid = jid.replace('@', '')
-
-        groupchat_control = gajim.interface.msg_win_mgr.get_gc_control(jid,
-                self.conn.name)
-
-        if not groupchat_control and \
-        jid in gajim.interface.minimized_controls[self.conn.name]:
-            groupchat_control = gajim.interface.minimized_controls[self.conn.name]\
-                    [jid]
-
+            obj.mtype = treat_as
         pm = False
-        if groupchat_control and groupchat_control.type_id == \
-        message_control.TYPE_GC and resource:
+        if obj.gc_control and obj.resource:
             # It's a Private message
             pm = True
-            msg_type = 'pm'
-
-        highest_contact = gajim.contacts.get_contact_with_highest_priority(
-                self.conn.name, jid)
-
-        # does this resource have the highest priority of any available?
-        is_highest = not highest_contact or not highest_contact.resource or \
-                resource == highest_contact.resource or highest_contact.show == \
-                        'offline'
+            obj.mtype = 'pm'
 
         # Handle chat states
-        contact = gajim.contacts.get_contact(self.conn.name, jid, resource)
+        contact = gajim.contacts.get_contact(self.conn.name, obj.jid,
+            obj.resource)
         if contact:
             if contact.composing_xep != 'XEP-0085': # We cache xep85 support
-                contact.composing_xep = composing_xep
-            if self.control and self.control.type_id == message_control.TYPE_CHAT:
-                if chatstate is not None:
+                contact.composing_xep = obj.composing_xep
+            if self.control and self.control.type_id == \
+            message_control.TYPE_CHAT:
+                if obj.chatstate is not None:
                     # other peer sent us reply, so he supports jep85 or jep22
-                    contact.chatstate = chatstate
+                    contact.chatstate = obj.chatstate
                     if contact.our_chatstate == 'ask': # we were jep85 disco?
                         contact.our_chatstate = 'active' # no more
-                    self.control.handle_incoming_chatstate()
+                    gajim.nec.push_incoming_event(ChatstateReceivedEvent(None,
+                        conn=obj.conn, msg_obj=obj))
                 elif contact.chatstate != 'active':
                     # got no valid jep85 answer, peer does not support it
                     contact.chatstate = False
-            elif chatstate == 'active':
+            elif obj.chatstate == 'active':
                 # Brand new message, incoming.
-                contact.our_chatstate = chatstate
-                contact.chatstate = chatstate
+                contact.our_chatstate = obj.chatstate
+                contact.chatstate = obj.chatstate
                 if msg_id: # Do not overwrite an existing msg_id with None
                     contact.msg_id = msg_id
 
         # THIS MUST BE AFTER chatstates handling
         # AND BEFORE playsound (else we ear sounding on chatstates!)
-        if not msgtxt: # empty message text
-            return
+        if not obj.msgtxt: # empty message text
+            return True
 
         if gajim.config.get_per('accounts', self.conn.name,
         'ignore_unknown_contacts') and not gajim.contacts.get_contacts(
-        self.conn.name, jid) and not pm:
-            return
+        self.conn.name, obj.jid) and not pm:
+            return True
 
-        if not contact:
-            # contact is not in the roster, create a fake one to display
-            # notification
-            contact = gajim.contacts.create_not_in_roster_contact(jid=jid,
-                    account=self.conn.name, resource=resource)
+        highest_contact = gajim.contacts.get_contact_with_highest_priority(
+            self.conn.name, obj.jid)
 
-        advanced_notif_num = notify.get_advanced_notification('message_received',
-                self.conn.name, contact)
+        # does this resource have the highest priority of any available?
+        is_highest = not highest_contact or not highest_contact.resource or \
+            obj.resource == highest_contact.resource or highest_contact.show ==\
+            'offline'
 
         if not pm and is_highest:
-            jid_of_control = jid
+            jid_of_control = obj.jid
         else:
-            jid_of_control = full_jid_with_resource
+            jid_of_control = obj.fjid
 
         if not self.control:
             ctrl = gajim.interface.msg_win_mgr.get_control(jid_of_control,
-                    self.conn.name)
+                self.conn.name)
             if ctrl:
                 self.control = ctrl
                 self.control.set_session(self)
 
-        # Is it a first or next message received ?
-        first = False
-        if not self.control and not gajim.events.get_events(self.conn.name, \
-        jid_of_control, [msg_type]):
-            first = True
-
-        if pm:
-            nickname = resource
-            if self.control:
-                # print if a control is open
-                self.control.print_conversation(msgtxt, tim=tim, xhtml=xhtml,
-                        encrypted=encrypted, displaymarking=displaymarking)
-            else:
-                # otherwise pass it off to the control to be queued
-                groupchat_control.on_private_message(nickname, msgtxt, tim,
-                        xhtml, self, msg_id=msg_id, encrypted=encrypted, displaymarking=displaymarking)
-        else:
-            self.roster_message(jid, msgtxt, tim, encrypted, msg_type,
-                    subject, resource, msg_id, user_nick, advanced_notif_num,
-                    xhtml=xhtml, form_node=form_node, displaymarking=displaymarking)
-
-            nickname = gajim.get_name_from_jid(self.conn.name, jid)
-
-        # Check and do wanted notifications
-        msg = msgtxt
-        if subject:
-            msg = _('Subject: %s') % subject + '\n' + msg
-        focused = False
-
-        if self.control:
-            parent_win = self.control.parent_win
-            if parent_win and self.control == parent_win.get_active_control() and \
-            parent_win.window.has_focus:
-                focused = True
-
-        notify.notify('new_message', jid_of_control, self.conn.name, [msg_type,
-                first, nickname, msg, focused], advanced_notif_num)
+        if not pm:
+            self.roster_message2(obj)
 
         if gajim.interface.remote_ctrl:
-            gajim.interface.remote_ctrl.raise_signal('NewMessage', (self.conn.name,
-                    [full_jid_with_resource, msgtxt, tim, encrypted, msg_type, subject,
-                    chatstate, msg_id, composing_xep, user_nick, xhtml, form_node]))
+            gajim.interface.remote_ctrl.raise_signal('NewMessage', (
+                self.conn.name, [obj.fjid, obj.msgtxt, obj.timestamp,
+                obj.encrypted, obj.mtype, obj.subject, obj.chatstate, msg_id,
+                obj.composing_xep, obj.user_nick, obj.xhtml, obj.form_node]))
 
-        gajim.ged.raise_event('NewMessage', 
-            (self.conn.name, [full_jid_with_resource, msgtxt, tim,
-            encrypted, msg_type, subject, chatstate, msg_id,
-            composing_xep, user_nick, xhtml, form_node]))
+    def roster_message2(self, obj):
+        """
+        Display the message or show notification in the roster
+        """
+        contact = None
+        jid = obj.jid
+        resource = obj.resource
+        # if chat window will be for specific resource
+        resource_for_chat = resource
+
+        fjid = jid
+
+        # Try to catch the contact with correct resource
+        if resource:
+            fjid = jid + '/' + resource
+            contact = gajim.contacts.get_contact(obj.conn.name, jid, resource)
+
+        highest_contact = gajim.contacts.get_contact_with_highest_priority(
+            obj.conn.name, jid)
+        if not contact:
+            # If there is another resource, it may be a message from an
+            # invisible resource
+            lcontact = gajim.contacts.get_contacts(obj.conn.name, jid)
+            if (len(lcontact) > 1 or (lcontact and lcontact[0].resource and \
+            lcontact[0].show != 'offline')) and jid.find('@') > 0:
+                contact = gajim.contacts.copy_contact(highest_contact)
+                contact.resource = resource
+                contact.priority = 0
+                contact.show = 'offline'
+                contact.status = ''
+                gajim.contacts.add_contact(obj.conn.name, contact)
+
+            else:
+                # Default to highest prio
+                fjid = jid
+                resource_for_chat = None
+                contact = highest_contact
+
+        if not contact:
+            # contact is not in roster
+            contact = gajim.interface.roster.add_to_not_in_the_roster(
+                obj.conn.name, jid, obj.user_nick)
+
+        if not self.control:
+            ctrl = gajim.interface.msg_win_mgr.get_control(fjid, self.conn.name)
+            if ctrl:
+                self.control = ctrl
+                self.control.set_session(self)
+            else:
+                # if no control exists and message comes from highest prio,
+                # the new control shouldn't have a resource
+                if highest_contact and contact.resource == \
+                highest_contact.resource and jid != gajim.get_jid_from_account(
+                self.conn.name):
+                    fjid = jid
+                    resource_for_chat = None
+
+        obj.popup = helpers.allow_popup_window(self.conn.name)
+        obj.resource_for_chat = resource_for_chat
+
+        type_ = 'chat'
+        event_type = 'message_received'
+
+        if obj.mtype == 'normal':
+            type_ = 'normal'
+            event_type = 'single_message_received'
+
+        if self.control and obj.mtype != 'normal':
+            obj.show_in_roster = False
+            obj.show_in_systray = False
+        else:
+            obj.show_in_roster = notify.get_show_in_roster(event_type,
+                self.conn.name, contact, self)
+            obj.show_in_systray = notify.get_show_in_systray(event_type,
+                self.conn.name, contact)
+
+        if not self.control:
+            event = gajim.events.create_event(type_, (obj.msgtxt, obj.subject,
+                obj.mtype, obj.timestamp, obj.encrypted, obj.resource,
+                obj.msg_id, obj.xhtml, self, obj.form_node, obj.displaymarking),
+                show_in_roster=obj.show_in_roster,
+                show_in_systray=obj.show_in_systray)
+
+            gajim.events.add_event(self.conn.name, fjid, event)
 
     def roster_message(self, jid, msg, tim, encrypted=False, msg_type='',
-                    subject=None, resource='', msg_id=None, user_nick='',
-                    advanced_notif_num=None, xhtml=None, form_node=None, displaymarking=None):
+    subject=None, resource='', msg_id=None, user_nick='', xhtml=None,
+    form_node=None, displaymarking=None):
         """
         Display the message or show notification in the roster
         """
@@ -338,7 +322,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
         # Do we have a queue?
         no_queue = len(gajim.events.get_events(self.conn.name, fjid)) == 0
 
-        popup = helpers.allow_popup_window(self.conn.name, advanced_notif_num)
+        popup = helpers.allow_popup_window(self.conn.name)
 
         if msg_type == 'normal' and popup: # it's single message to be autopopuped
             dialogs.SingleMessageWindow(self.conn.name, contact.jid,

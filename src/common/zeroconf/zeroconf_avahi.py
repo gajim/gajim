@@ -22,6 +22,7 @@ log = logging.getLogger('gajim.c.z.zeroconf_avahi')
 
 try:
     import dbus.glib
+    import dbus.exceptions
 except ImportError, e:
     pass
 
@@ -400,11 +401,17 @@ class Zeroconf:
         if self.connected:
             self.connected = False
             if self.service_browser:
-                self.service_browser.Free()
+                try:
+                    self.service_browser.Free()
+                except dbus.DBusException, e:
+                    log.debug(str(e))
                 self.service_browser._obj._bus = None
                 self.service_browser._obj = None
             if self.domain_browser:
-                self.domain_browser.Free()
+                try:
+                    self.domain_browser.Free()
+                except dbus.DBusException, e:
+                    log.debug(str(e))
                 self.domain_browser._obj._bus = None
                 self.domain_browser._obj = None
             self.remove_announce()

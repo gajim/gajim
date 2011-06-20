@@ -67,6 +67,19 @@
       </object>
     </child>
     <child>
+      <object class="GtkSeparatorMenuItem" id="request_voice_separator">
+        <property name="no_show_all">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkImageMenuItem" id="request_voice_menuitem">
+        <property name="label" translatable="yes">_Request Voice</property>
+        <property name="visible">True</property>
+        <property name="use_underline">True</property>
+        <property name="use_stock">False</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkSeparatorMenuItem" id="bookmark_separator">
         <property name="no_show_all">True</property>
       </object>

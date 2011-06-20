@@ -4,6 +4,7 @@
   <!-- interface-naming-policy toplevel-contextual -->
   <object class="GtkWindow" id="remove_account_window">
     <property name="border_width">6</property>
+    <property name="type_hint">dialog</property>
     <signal name="destroy" handler="on_remove_account_window_destroy"/>
     <child>
       <object class="GtkVBox" id="vbox69">

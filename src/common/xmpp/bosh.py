@@ -23,7 +23,7 @@ from hashlib import sha1
 from transports_nb import NonBlockingTransport, NonBlockingHTTPBOSH,\
         CONNECTED, CONNECTING, DISCONNECTED, DISCONNECTING,\
         urisplit, DISCONNECT_TIMEOUT_SECONDS
-from protocol import BOSHBody
+from protocol import BOSHBody, Protocol, NS_CLIENT
 from simplexml import Node
 
 import logging
@@ -190,12 +190,17 @@ class NonBlockingBOSH(NonBlockingTransport):
         # when called after HTTP response (Payload=None) and when there are already
         # some pending requests and no data to send, or when the socket is
         # disconnected, we do nothing
-        if      payload is None and \
+        if payload is None and \
                 total_pending_reqs > 0 and \
                 self.stanza_buffer == [] and \
                 self.prio_bosh_stanzas == [] or \
                 self.get_state()==DISCONNECTED:
             return
+
+        # Add xmlns to stanza to help ejabberd server
+        if payload and isinstance(payload, Protocol):
+            if not payload.getNamespace():
+                payload.setNamespace(NS_CLIENT)
 
         # now the payload is put to buffer and will be sent at some point
         self.append_stanza(payload)

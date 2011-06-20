@@ -7,7 +7,7 @@
     <property name="title" translatable="yes">Synchronise : select contacts</property>
     <property name="default_width">400</property>
     <property name="default_height">300</property>
-    <property name="type_hint">normal</property>
+    <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox7">
         <property name="visible">True</property>
