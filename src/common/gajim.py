@@ -166,8 +166,17 @@ HAVE_LATEX = False
 
 HAVE_FARSIGHT = True
 try:
-    __import__('farsight')
-    __import__('gst')
+    import farsight
+    import gst
+    import glib
+    try:
+        conference = gst.element_factory_make('fsrtpconference')
+        session = conference.new_session(farsight.MEDIA_TYPE_AUDIO)
+        del session
+        del conference
+    except glib.GError:
+        HAVE_FARSIGHT = False
+
 except ImportError:
     HAVE_FARSIGHT = False
 gajim_identity = {'type': 'pc', 'category': 'client', 'name': 'Gajim'}
