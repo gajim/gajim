@@ -166,7 +166,7 @@ HAVE_LATEX = False
 
 HAVE_FARSIGHT = True
 try:
-    import farsight
+    farsight = __import__('farsight')
     import gst
     import glib
     try:
