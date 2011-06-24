@@ -753,10 +753,11 @@ class Socks5Sender(Socks5, IdleObject):
         self.queue = parent
         Socks5.__init__(self, idlequeue, host, port, None, None, None)
         self._sock = _sock
-        if not self.fingerprint is None:
+        if self.fingerprint is not None:
             self._sock = OpenSSL.SSL.Connection(
                 jingle_xtls.get_context('server'), self._sock)
-        self._sock.setblocking(False)
+        else:
+            self._sock.setblocking(False)
         self.fd = _sock.fileno()
         self._recv = _sock.recv
         self._send = _sock.send

@@ -25,6 +25,7 @@ from jingle_content import contents, JingleContent
 from jingle_transport import JingleTransportICEUDP, JingleTransportSocks5
 from common import helpers
 from common.socks5 import Socks5Receiver
+from common.connection_handlers_events import FileRequestReceivedEvent
 
 import logging
 log = logging.getLogger('gajim.c.jingle_ft')
@@ -87,55 +88,9 @@ class JingleFileTransfer(JingleContent):
         self.media = 'file'
 
     def __on_session_initiate(self, stanza, content, error, action):
-        jid = unicode(stanza.getFrom())
-        log.info("jid:%s" % jid)
-
-        file_props = {'type': 'r'}
-        file_props['sender'] = jid
-        file_props['request-id'] = unicode(stanza.getAttr('id'))
-
-        file_props['session-type'] = 'jingle'
-
-        self.use_security = bool(content.getTag('security'))
-        # TODO: extract fingerprint element, encryption method element for later
-        # use
-
-        file_tag = content.getTag('description').getTag('offer').getTag('file')
-        for attribute in file_tag.getAttrs():
-            if attribute in ('name', 'size', 'hash', 'date'):
-                val = file_tag.getAttr(attribute)
-                if val is None:
-                    continue
-                file_props[attribute] = val
-        file_desc_tag = file_tag.getTag('desc')
-        if file_desc_tag is not None:
-            file_props['desc'] = file_desc_tag.getData()
-
-        file_props['receiver'] = self.session.ourjid
-        log.info("ourjid: %s" % self.session.ourjid)
-        file_props['session-sid'] = unicode(stanza.getTag('jingle').getAttr('sid'))
-        file_props['transfered_size'] = []
-
-        self.file_props = file_props
-
-        if self.transport is None:
-            self.transport = JingleTransportSocks5()
-            self.transport.set_our_jid(self.session.ourjid)
-            self.transport.set_connection(self.session.connection)
-        self.file_props['sid'] = self.transport.sid
-        self.session.connection.files_props[file_props['sid']] = file_props
-        self.transport.set_file_props(self.file_props)
-        if self.file_props.has_key('streamhosts'):
-            self.file_props['streamhosts'].extend(
-                self.transport.remote_candidates)
-        else:
-            self.file_props['streamhosts'] = self.transport.remote_candidates
-        for host in self.file_props['streamhosts']:
-            host['initiator'] = self.session.initiator
-            host['target'] = self.session.responder
-        log.info("FT request: %s" % file_props)
-
-        self.session.connection.dispatch('FILE_REQUEST', (jid, file_props))
+        gajim.nec.push_incoming_event(FileRequestReceivedEvent(None,
+            conn=self.session.connection, stanza=stanza, jingle_content=content,
+            FT_content=self))
 
     def __on_session_accept(self, stanza, content, error, action):
         log.info("__on_session_accept")

@@ -104,7 +104,8 @@ def get_context(fingerprint, verify_cb=None):
     store = ctx.get_cert_store()
     for f in os.listdir(os.path.expanduser(gajim.MY_PEER_CERTS_PATH)):
         load_cert_file(os.path.join(os.path.expanduser(gajim.MY_PEER_CERTS_PATH), f), store)
-        print 'certificate file' + f + ' loaded', 'fingerprint', fingerprint
+        log.debug('certificate file ' + f + ' loaded fingerprint ' + \
+            fingerprint)
     return ctx
 
 def send_cert(con, jid_from, sid):
