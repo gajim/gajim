@@ -154,7 +154,7 @@ class ConnectionJingle(object):
             jingle.on_session_state_changed(c)
         else:
             jingle = JingleSession(self, weinitiate=True, jid=jid)
-            self.__sessions__[jingle.sid] = jingle
+            self._sessions[jingle.sid] = jingle
             file_props['sid'] = jingle.sid
             c = JingleFileTransfer(jingle, file_props=file_props,
                 use_security=use_security)
