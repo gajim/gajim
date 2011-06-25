@@ -941,9 +941,10 @@ class HtmlTextView(gtk.TextView):
             gtk.gdk.SELECTION_PRIMARY))
 
     def on_left_mouse_button_release(self, widget, event):
-        bounds = self.get_buffer().get_selection_bounds()
         if event.button != 1:
             return
+
+        bounds = self.get_buffer().get_selection_bounds()
         if bounds:
             # textview can be hidden while we add a new line in it.
             if self.has_screen():
