@@ -855,7 +855,8 @@ class HtmlTextView(gtk.TextView):
         self.connect('realize', self.on_html_text_view_realized)
         self.connect('unrealize', self.on_html_text_view_unrealized)
         self.connect('copy-clipboard', self.on_html_text_view_copy_clipboard)
-        self.get_buffer().connect_after('mark-set', self.on_text_buffer_mark_set)
+        self.id_ = self.connect('button-release-event',
+            self.on_left_mouse_button_release)
         self.get_buffer().create_tag('eol', scale = pango.SCALE_XX_SMALL)
         self.tooltip = tooltips.BaseTooltip()
         self.config = gajim.config
@@ -939,8 +940,10 @@ class HtmlTextView(gtk.TextView):
         self.get_buffer().add_selection_clipboard(self.get_clipboard(
             gtk.gdk.SELECTION_PRIMARY))
 
-    def on_text_buffer_mark_set(self, location, mark, unused_data):
+    def on_left_mouse_button_release(self, widget, event):
         bounds = self.get_buffer().get_selection_bounds()
+        if event.button != 1:
+            return
         if bounds:
             # textview can be hidden while we add a new line in it.
             if self.has_screen():
