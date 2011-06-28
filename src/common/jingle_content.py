@@ -16,6 +16,7 @@ Handles Jingle contents (XEP 0166)
 """
 
 import xmpp
+from jingle_transport import JingleTransportIBB
 
 contents = {}
 
@@ -69,7 +70,7 @@ class JingleContent(object):
                 'session-initiate': [self.__on_transport_info],
                 'session-terminate': [],
                 'transport-info': [self.__on_transport_info],
-                'transport-replace': [],
+                'transport-replace': [self.__on_transport_replace],
                 'transport-accept': [],
                 'transport-reject': [],
                 'iq-result': [],
@@ -109,6 +110,10 @@ class JingleContent(object):
             for callback in self.callbacks[action]:
                 callback(stanza, content, error, action)
 
+    def __on_transport_replace(self, stanza, content, error, action):
+    
+        content.addChild(node=self.transport.make_transport())
+        
     def __on_transport_info(self, stanza, content, error, action):
         """
         Got a new transport candidate

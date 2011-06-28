@@ -165,7 +165,7 @@ class JingleTransportSocks5(JingleTransport):
         for addr in socket.getaddrinfo(socket.gethostname(), None):
             if not addr[4][0] in local_ip_cand and not addr[4][0].startswith('127'):
                 c = {'host': addr[4][0]}
-                c['candidate_id'] = conn.connection.getAnID()
+                c['candidate_id'] = self.connection.connection.getAnID()
                 c['port'] = port
                 c['type'] = 'direct'
                 c['jid'] = self.ourjid
@@ -272,6 +272,39 @@ class JingleTransportSocks5(JingleTransport):
             return
         sesn.send_transport_info(content)
 
+
+class JingleTransportIBB(JingleTransport):
+    
+    def __init__(self, node=None, block_sz=None):
+        
+        JingleTransport.__init__(self, TransportType.streaming)
+        
+        if block_sz:
+            self.block_sz = block_sz
+        else:
+            self.block_sz = '4096'
+            
+        self.connection = None
+        self.sid = None
+        if node and node.getAttr('sid'):
+            self.sid = node.getAttr('sid')
+
+
+    def set_sid(self, sid):
+        self.sid = sid
+            
+    def make_transport(self):
+        
+        transport = JingleTransport.make_transport(self)
+        transport.setNamespace(xmpp.NS_JINGLE_IBB)
+        transport.setAttr('block-size', self.block_sz)
+        transport.setAttr('sid', self.sid)
+        return transport       
+    
+    def set_file_props(self, file_props):
+        self.file_props = file_props
+
+    
 import farsight
 
 class JingleTransportICEUDP(JingleTransport):
@@ -347,3 +380,4 @@ class JingleTransportICEUDP(JingleTransport):
 
 transports[xmpp.NS_JINGLE_ICE_UDP] = JingleTransportICEUDP
 transports[xmpp.NS_JINGLE_BYTESTREAM] = JingleTransportSocks5
+transports[xmpp.NS_JINGLE_IBB] = JingleTransportIBB

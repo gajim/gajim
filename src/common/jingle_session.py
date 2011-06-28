@@ -28,8 +28,10 @@ Handles Jingle sessions (XEP 0166)
 
 import gajim #Get rid of that?
 import xmpp
-from jingle_transport import get_jingle_transport
+from jingle_transport import get_jingle_transport, JingleTransportIBB
 from jingle_content import get_jingle_content, JingleContentSetupException
+from jingle_content import JingleContent
+from jingle_ft import STATE_TRANSPORT_REPLACE
 from common.connection_handlers_events import *
 import logging
 log = logging.getLogger("gajim.c.jingle_session")
@@ -213,11 +215,19 @@ class JingleSession(object):
         if not self.contents:
             self.end_session()
 
-    def modify_content(self, creator, name, *someother):
-        """
-        We do not need this now
-        """
-        pass
+    def modify_content(self, creator, name, transport = None):
+        ''' 
+        Currently used for transport replacement
+        '''
+        
+        content = self.contents[(creator,name)]
+        transport.set_sid(content.transport.sid)
+        transport.set_file_props(content.transport.file_props)
+        content.transport = transport
+        # The content will have to be resend now that it is modified
+        content.sent = False
+        content.accepted = True
+        
 
     def on_session_state_changed(self, content=None):
         if self.state == JingleStates.ended:
@@ -343,18 +353,43 @@ class JingleSession(object):
                 error_name = child.getName()
         self.__dispatch_error(error_name, text, error.getAttr('type'))
         # FIXME: Not sure when we would want to do that...
+    def transport_replace(self):
+        transport = JingleTransportIBB()
+        # For debug only, delete this and replace for a function
+        # that will identify contents by its sid
+        for creator, name in self.contents.keys():
+            self.modify_content(creator, name, transport)
+            cont = self.contents[(creator, name)]
+            cont.transport = transport
+            cont.state =  STATE_TRANSPORT_REPLACE
+            
+        stanza, jingle = self.__make_jingle('transport-replace')
+        self.__append_contents(jingle)
+        self.__broadcast(stanza, jingle, None, 'transport-replace')
+        self.connection.connection.send(stanza)
+        #self.collect_iq_id(stanza.getID())
 
+        
     def __on_transport_replace(self, stanza, jingle, error, action):
         for content in jingle.iterTags('content'):
             creator = content['creator']
             name = content['name']
             if (creator, name) in self.contents:
                 transport_ns = content.getTag('transport').getNamespace()
-                if transport_ns == xmpp.JINGLE_ICE_UDP:
+                if transport_ns == xmpp.NS_JINGLE_ICE_UDP:
                     # FIXME: We don't manage anything else than ICE-UDP now...
                     # What was the previous transport?!?
                     # Anyway, content's transport is not modifiable yet
                     pass
+                elif transport_ns == xmpp.NS_JINGLE_IBB:
+                    
+                    transport = JingleTransportIBB()
+                    self.modify_content(creator, name, transport)
+                    #self.state = JingleStates.pending
+                    self.contents[(creator,name)].state = STATE_TRANSPORT_REPLACE
+                    self.__ack(stanza, jingle, error, action)
+                    self.__session_accept()
+                    
                 else:
                     stanza, jingle = self.__make_jingle('transport-reject')
                     content = jingle.setTag('content', attrs={'creator': creator,
@@ -400,6 +435,7 @@ class JingleSession(object):
         if self.state != JingleStates.pending:
             raise OutOfOrder
         self.state = JingleStates.active
+        
 
     def __on_content_accept(self, stanza, jingle, error, action):
         """
@@ -562,12 +598,19 @@ class JingleSession(object):
         return (contents, contents_rejected, failure_reason)
 
     def __dispatch_error(self, error=None, text=None, type_=None):
+        
+        if type_ == 'cancel' and error == 'item-not-found':
+            # We coudln't connect with sock5stream, we fallback to IBB
+            self.transport_replace()
+            return
         if text:
             text = '%s (%s)' % (error, text)
         if type_ != 'modify':
             gajim.nec.push_incoming_event(JingleErrorReceivedEvent(None,
                 conn=self.connection, jingle_session=self,
                 reason=text or error))
+            
+       
 
     def __reason_from_stanza(self, stanza):
         # TODO: Move to GUI?
@@ -595,6 +638,8 @@ class JingleSession(object):
             attrs['initiator'] = self.initiator
         elif action == 'session-accept':
             attrs['responder'] = self.responder
+        elif action == 'transport-replace':
+            attrs['initiator'] = self.initiator
         jingle = stanza.addChild('jingle', attrs=attrs, namespace=xmpp.NS_JINGLE)
         if reason is not None:
             jingle.addChild(node=reason)

@@ -23,6 +23,8 @@ import gajim
 import xmpp
 from jingle_content import contents, JingleContent
 from jingle_transport import JingleTransportICEUDP, JingleTransportSocks5
+from jingle_transport import JingleTransportIBB
+from jingle_session import JingleStates
 from common import helpers
 from common.socks5 import Socks5Receiver
 from common.connection_handlers_events import FileRequestReceivedEvent
@@ -35,6 +37,7 @@ STATE_INITIALIZED = 1
 STATE_ACCEPTED = 2
 STATE_TRANSPORT_INFO = 3
 STATE_PROXY_ACTIVATED = 4
+STATE_TRANSPORT_REPLACE = 5
 
 class JingleFileTransfer(JingleContent):
     def __init__(self, session, transport=None, file_props=None,
@@ -98,6 +101,19 @@ class JingleFileTransfer(JingleContent):
         security = content.getTag('security')
         if not security: # responder can not verify our fingerprint
             self.use_security = False
+            
+        if self.state == STATE_TRANSPORT_REPLACE:
+            # We ack the session accept
+            response = stanza.buildReply('result')
+            con = self.session.connection
+            con.connection.send(response)
+            # We send the file
+            con.files_props[self.file_props['sid']] = self.file_props
+            fp = open(self.file_props['file-name'], 'r')
+            con.OpenStream( self.transport.sid, self.session.peerjid, 
+                            fp,    blocksize=4096)
+            raise xmpp.NodeProcessed
+            
 
     def __on_session_terminate(self, stanza, content, error, action):
         log.info("__on_session_terminate")
@@ -197,7 +213,7 @@ class JingleFileTransfer(JingleContent):
         elif self.weinitiate and self.state == STATE_INITIALIZED:
             # proxy activated
             self.state = STATE_PROXY_ACTIVATED
-
+        
     def send_candidate_used(self, streamhost):
         """
         send candidate-used stanza

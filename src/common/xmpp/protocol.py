@@ -91,6 +91,7 @@ NS_JINGLE_XTLS='urn:xmpp:jingle:security:xtls:0'                      # XTLS: EX
 NS_JINGLE_RAW_UDP = 'urn:xmpp:jingle:transports:raw-udp:1'            # XEP-0177
 NS_JINGLE_ICE_UDP = 'urn:xmpp:jingle:transports:ice-udp:1'            # XEP-0176
 NS_JINGLE_BYTESTREAM ='urn:xmpp:jingle:transports:s5b:1'              # XEP-0260
+NS_JINGLE_IBB     = 'urn:xmpp:jingle:transports:ibb:1'                # XEP-0261
 NS_LAST           = 'jabber:iq:last'
 NS_LOCATION       = 'http://jabber.org/protocol/geoloc'               # XEP-0080
 NS_MESSAGE        = 'message'                                         # Jabberd2
