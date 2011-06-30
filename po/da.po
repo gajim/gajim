@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim 0.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-07-27 16:16+0200\n"
+"POT-Creation-Date: 2011-06-22 13:32+0200\n"
 "PO-Revision-Date: 2010-08-08 17:36+0200\n"
 "Last-Translator: Niels Felsted Thorsen <felsted@fsfe.org>\n"
 "Language-Team:  <>\n"
@@ -120,12 +120,12 @@ msgstr "Håndter..."
 
 #: ../data/gui/account_creation_wizard_window.ui.h:18
 #: ../data/gui/accounts_window.ui.h:39 ../data/gui/change_mood_dialog.ui.h:3
-#: ../src/config.py:1280 ../src/config.py:1383 ../src/config.py:1694
-#: ../src/config.py:1699 ../src/config.py:2263 ../src/config.py:2342
-#: ../src/config.py:2355 ../src/config.py:3596 ../src/config.py:3671
-#: ../src/dialogs.py:308 ../src/dialogs.py:310 ../src/dialogs.py:513
-#: ../src/dialogs.py:526 ../src/roster_window.py:2890
-#: ../src/roster_window.py:2896 ../src/roster_window.py:2901
+#: ../src/config.py:1293 ../src/config.py:1396 ../src/config.py:1707
+#: ../src/config.py:1712 ../src/config.py:2278 ../src/config.py:2357
+#: ../src/config.py:2370 ../src/config.py:3635 ../src/config.py:3710
+#: ../src/dialogs.py:308 ../src/dialogs.py:310 ../src/dialogs.py:516
+#: ../src/dialogs.py:529 ../src/roster_window.py:2913
+#: ../src/roster_window.py:2919 ../src/roster_window.py:2924
 msgid "None"
 msgstr "Ingen"
 
@@ -286,9 +286,9 @@ msgstr "Fornavn:"
 
 #. No configured account
 #: ../data/gui/accounts_window.ui.h:24 ../data/gui/roster_window.ui.h:5
-#: ../src/common/helpers.py:1159 ../src/common/helpers.py:1171
-#: ../src/notify.py:528 ../src/notify.py:551 ../src/notify.py:592
-#: ../src/notify.py:608
+#: ../src/common/helpers.py:1160 ../src/common/helpers.py:1172
+#: ../src/notify.py:530 ../src/notify.py:553 ../src/notify.py:602
+#: ../src/notify.py:618
 msgid "Gajim"
 msgstr "Gajim"
 
@@ -297,7 +297,7 @@ msgstr "Gajim"
 #. General group cannot be changed
 #: ../data/gui/accounts_window.ui.h:25 ../data/gui/preferences_window.ui.h:61
 #: ../src/common/contacts.py:141 ../src/dialogs.py:111 ../src/dialogs.py:121
-#: ../src/roster_window.py:2832 ../src/roster_window.py:5379
+#: ../src/roster_window.py:2855 ../src/roster_window.py:5374
 msgid "General"
 msgstr "General"
 
@@ -355,8 +355,8 @@ msgid "Information about you, as stored in the server"
 msgstr "Information om dig, som er gemt på serveren"
 
 #: ../data/gui/accounts_window.ui.h:35
-#: ../data/gui/zeroconf_information_window.ui.h:4 ../src/config.py:1817
-#: ../src/dialogs.py:830
+#: ../data/gui/zeroconf_information_window.ui.h:4 ../src/config.py:1830
+#: ../src/dialogs.py:832
 msgid "Jabber ID:"
 msgstr "Jabber ID:"
 
@@ -369,8 +369,8 @@ msgstr "Efternavn:"
 msgid "Mer_ge accounts"
 msgstr "Fle_t kontoer"
 
-#: ../data/gui/accounts_window.ui.h:38 ../src/config.py:1790
-#: ../src/config.py:2356
+#: ../data/gui/accounts_window.ui.h:38 ../src/config.py:1803
+#: ../src/config.py:2371
 msgid "No key selected"
 msgstr "Ingen nøgle er valgt"
 
@@ -397,7 +397,7 @@ msgid "Priority will change automatically according to your status."
 msgstr "Prioritet vil automatisk ændres ifølge din status."
 
 #. Rename
-#: ../data/gui/accounts_window.ui.h:44 ../src/roster_window.py:5329
+#: ../data/gui/accounts_window.ui.h:44 ../src/roster_window.py:5324
 msgid "Re_name"
 msgstr "Om_døb"
 
@@ -505,7 +505,7 @@ msgstr "Ti_llad denne kontakt at se min status"
 msgid "Add New Contact"
 msgstr "Tilføj Ny Kontakt"
 
-#: ../data/gui/add_new_contact_window.ui.h:4 ../src/common/helpers.py:1339
+#: ../data/gui/add_new_contact_window.ui.h:4 ../src/common/helpers.py:1340
 msgid "I would like to add you to my contact list."
 msgstr "Jeg vil gerne tilføje dig til min kontakt liste."
 
@@ -858,8 +858,8 @@ msgstr "Blokerede Kontakter"
 
 #: ../data/gui/blocked_contacts_window.ui.h:2
 #: ../data/gui/contact_context_menu.ui.h:25
-#: ../data/gui/gc_occupants_menu.ui.h:13 ../src/roster_window.py:5348
-#: ../src/roster_window.py:5476 ../src/roster_window.py:5609
+#: ../data/gui/gc_occupants_menu.ui.h:13 ../src/roster_window.py:5343
+#: ../src/roster_window.py:5470 ../src/roster_window.py:5603
 msgid "_Unblock"
 msgstr "_Fjern blokering"
 
@@ -947,7 +947,7 @@ msgid "_Start Chat"
 msgstr "_Start Samtale"
 
 #. # means number
-#: ../data/gui/chat_control.ui.h:1 ../src/dialogs.py:4184
+#: ../data/gui/chat_control.ui.h:1 ../src/dialogs.py:4194
 msgid "#"
 msgstr "#"
 
@@ -1051,8 +1051,8 @@ msgstr "Ændre _Grupper..."
 
 #. Invite to
 #. Invite to Groupchat
-#: ../data/gui/contact_context_menu.ui.h:6 ../src/roster_window.py:5284
-#: ../src/roster_window.py:5444
+#: ../data/gui/contact_context_menu.ui.h:6 ../src/roster_window.py:5279
+#: ../src/roster_window.py:5438
 msgid "In_vite to"
 msgstr "In_viter til"
 
@@ -1064,8 +1064,8 @@ msgstr "Inviter _Kontakter"
 msgid "Remo_ve"
 msgstr "_Fjern"
 
-#: ../data/gui/contact_context_menu.ui.h:9 ../src/roster_window.py:5294
-#: ../src/roster_window.py:5533
+#: ../data/gui/contact_context_menu.ui.h:9 ../src/roster_window.py:5289
+#: ../src/roster_window.py:5527
 msgid "Send Cus_tom Status"
 msgstr "Send _Tilpasset Status"
 
@@ -1098,8 +1098,8 @@ msgid "_Allow him/her to see my status"
 msgstr "Till_ad ham/hende at se min status"
 
 #: ../data/gui/contact_context_menu.ui.h:18
-#: ../data/gui/gc_occupants_menu.ui.h:7 ../src/roster_window.py:5356
-#: ../src/roster_window.py:5482 ../src/roster_window.py:5612
+#: ../data/gui/gc_occupants_menu.ui.h:7 ../src/roster_window.py:5351
+#: ../src/roster_window.py:5476 ../src/roster_window.py:5606
 msgid "_Block"
 msgstr "_Bloker"
 
@@ -1110,7 +1110,7 @@ msgstr "_Nægt ham/hende at se min status"
 #: ../data/gui/contact_context_menu.ui.h:20
 #: ../data/gui/gc_control_popup_menu.ui.h:6
 #: ../data/gui/gc_occupants_menu.ui.h:8 ../data/gui/roster_window.ui.h:21
-#: ../src/roster_window.py:5683
+#: ../src/roster_window.py:5677
 msgid "_History"
 msgstr "_Historie"
 
@@ -1242,7 +1242,7 @@ msgstr "<b>Samtalestatus Fane Farver</b>"
 msgid "Account row"
 msgstr "Konto række"
 
-#: ../data/gui/gajim_themes_window.ui.h:3 ../src/chat_control.py:925
+#: ../data/gui/gajim_themes_window.ui.h:3 ../src/chat_control.py:949
 msgid "Bold"
 msgstr "Fed"
 
@@ -1278,7 +1278,7 @@ msgstr "Gruppe række"
 msgid "Inactive"
 msgstr "Ikke aktiv"
 
-#: ../data/gui/gajim_themes_window.ui.h:12 ../src/chat_control.py:926
+#: ../data/gui/gajim_themes_window.ui.h:12 ../src/chat_control.py:950
 msgid "Italic"
 msgstr "Kursiv"
 
@@ -1326,7 +1326,7 @@ msgstr "Ændre _Emne..."
 msgid "Configure _Room..."
 msgstr "Tilpas _Rum..."
 
-#: ../data/gui/gc_control_popup_menu.ui.h:4 ../src/disco.py:1782
+#: ../data/gui/gc_control_popup_menu.ui.h:4 ../src/disco.py:1781
 msgid "_Bookmark"
 msgstr "_Bogmærke"
 
@@ -1416,8 +1416,8 @@ msgid "<big><b>Welcome to Gajim History Logs Manager</b></big>"
 msgstr "<big><b>Velkommen til Gajims Loghistorie Håndterer</b></big>"
 
 #. Change label for accept_button to action name instead of 'OK'.
-#: ../data/gui/history_manager.ui.h:4 ../src/dialogs.py:3208
-#: ../src/dialogs.py:3305
+#: ../data/gui/history_manager.ui.h:4 ../src/dialogs.py:3218
+#: ../src/dialogs.py:3315
 msgid "Delete"
 msgstr "Slet"
 
@@ -1476,7 +1476,7 @@ msgstr "_Log samtale historie"
 msgid "Bro_wse Rooms"
 msgstr "_Gennemse rum"
 
-#: ../data/gui/join_groupchat_window.ui.h:3 ../src/dialogs.py:2180
+#: ../data/gui/join_groupchat_window.ui.h:3 ../src/dialogs.py:2190
 msgid "Join Group Chat"
 msgstr "Bliv med i en Gruppe Samtale"
 
@@ -1504,7 +1504,7 @@ msgid "Room:"
 msgstr "Rum:"
 
 #: ../data/gui/join_groupchat_window.ui.h:9
-#: ../data/gui/manage_bookmarks_window.ui.h:9 ../src/config.py:1807
+#: ../data/gui/manage_bookmarks_window.ui.h:9 ../src/config.py:1820
 msgid "Server:"
 msgstr "Server:"
 
@@ -1513,7 +1513,7 @@ msgid "_Bookmark this room"
 msgstr "_Bogmærk dette rom"
 
 #: ../data/gui/join_groupchat_window.ui.h:11 ../src/disco.py:1341
-#: ../src/disco.py:1786
+#: ../src/disco.py:1785
 msgid "_Join"
 msgstr "_Bliv med:"
 
@@ -2306,7 +2306,7 @@ msgstr "Jabber ID"
 msgid "Order:"
 msgstr "Bestil:"
 
-#: ../data/gui/privacy_list_window.ui.h:12 ../src/dialogs.py:3436
+#: ../data/gui/privacy_list_window.ui.h:12 ../src/dialogs.py:3446
 msgid "Privacy List"
 msgstr "Privatlivs Liste"
 
@@ -2513,8 +2513,8 @@ msgstr "Fjern konto fra Gajim og fra _serveren"
 
 #. Remove group
 #. Remove
-#: ../data/gui/remove_account_window.ui.h:4 ../src/roster_window.py:5366
-#: ../src/roster_window.py:5492 ../src/roster_window.py:5622
+#: ../data/gui/remove_account_window.ui.h:4 ../src/roster_window.py:5361
+#: ../src/roster_window.py:5486 ../src/roster_window.py:5616
 msgid "_Remove"
 msgstr "_Kan fjernes"
 
@@ -2575,7 +2575,7 @@ msgstr "Vis Trans_porter"
 msgid "Show _Offline Contacts"
 msgstr "Vis _Afkoblede Kontakter"
 
-#: ../data/gui/roster_window.ui.h:12 ../src/statusicon.py:326
+#: ../data/gui/roster_window.ui.h:12 ../src/statusicon.py:346
 msgid "Show _Roster"
 msgstr "Vis _Kontaktvindue"
 
@@ -2593,7 +2593,7 @@ msgstr "_Handlinger"
 msgid "_Contents"
 msgstr "_Indhold"
 
-#: ../data/gui/roster_window.ui.h:18 ../src/disco.py:1502
+#: ../data/gui/roster_window.ui.h:18 ../src/disco.py:1501
 msgid "_Edit"
 msgstr "R_ediger"
 
@@ -2626,7 +2626,7 @@ msgid "_Add contact"
 msgstr "Tilføj Kont_akt"
 
 #. Information
-#: ../data/gui/search_window.ui.h:4 ../src/roster_window.py:5634
+#: ../data/gui/search_window.ui.h:4 ../src/roster_window.py:5628
 msgid "_Information"
 msgstr "_Information"
 
@@ -2928,7 +2928,7 @@ msgstr "Heltal"
 msgid "Text"
 msgstr "Tekst"
 
-#: ../src/advanced_configuration_window.py:96 ../src/chat_control.py:945
+#: ../src/advanced_configuration_window.py:96 ../src/chat_control.py:969
 msgid "Color"
 msgstr "Farve"
 
@@ -3065,88 +3065,88 @@ msgstr "Svensk"
 msgid "Chinese (Ch)"
 msgstr "Kinesisk"
 
-#: ../src/chat_control.py:479
+#: ../src/chat_control.py:483
 msgid "Spelling language"
 msgstr "Sprog for stavekontrollen"
 
 #. we are not connected
-#: ../src/chat_control.py:511 ../src/chat_control.py:720
+#: ../src/chat_control.py:515 ../src/chat_control.py:731
 msgid "A connection is not available"
 msgstr "En tilslutning er ikke tilgængelig"
 
-#: ../src/chat_control.py:512 ../src/chat_control.py:721
+#: ../src/chat_control.py:516 ../src/chat_control.py:732
 msgid "Your message can not be sent until you are connected."
 msgstr "Din besked kan ikke blive sendt før du er tilsluttet."
 
-#: ../src/chat_control.py:927
+#: ../src/chat_control.py:951
 msgid "Underline"
 msgstr "Understregning"
 
-#: ../src/chat_control.py:928
+#: ../src/chat_control.py:952
 msgid "Strike"
 msgstr "Streg"
 
-#: ../src/chat_control.py:951
+#: ../src/chat_control.py:975
 msgid "Font"
 msgstr "Font"
 
-#: ../src/chat_control.py:960
+#: ../src/chat_control.py:984
 msgid "Clear formating"
 msgstr "Fjern formatering"
 
-#: ../src/chat_control.py:1038
+#: ../src/chat_control.py:1061
 msgid "Really send file?"
 msgstr "Virkelig send denne fil?"
 
-#: ../src/chat_control.py:1039
+#: ../src/chat_control.py:1062
 #, python-format
 msgid "If you send a file to %s, he/she will know your real Jabber ID."
 msgstr ""
 "Hvis du sender en fil til %s, vil han eller hun få at vide dit rigtige "
 "Jabber ID."
 
-#: ../src/chat_control.py:1503 ../src/chat_control.py:1987
+#: ../src/chat_control.py:1534 ../src/chat_control.py:2018
 msgid "GPG encryption enabled"
 msgstr "GPG kryptering aktiveret"
 
 #. Add to roster
-#: ../src/chat_control.py:1528 ../src/common/contacts.py:158
+#: ../src/chat_control.py:1559 ../src/common/contacts.py:158
 #: ../src/common/contacts.py:277 ../src/common/helpers.py:57
-#: ../src/common/helpers.py:245 ../src/dialogs.py:1064 ../src/dialogs.py:2078
-#: ../src/dialogs.py:2107 ../src/gui_interface.py:674
-#: ../src/gui_menu_builder.py:252 ../src/gui_menu_builder.py:395
-#: ../src/roster_window.py:1610 ../src/roster_window.py:1612
-#: ../src/roster_window.py:1942 ../src/roster_window.py:3289
-#: ../src/roster_window.py:3316
+#: ../src/common/helpers.py:245 ../src/dialogs.py:1066 ../src/dialogs.py:2088
+#: ../src/dialogs.py:2117 ../src/gui_interface.py:677
+#: ../src/gui_menu_builder.py:252 ../src/gui_menu_builder.py:402
+#: ../src/roster_window.py:1628 ../src/roster_window.py:1630
+#: ../src/roster_window.py:1962 ../src/roster_window.py:3312
+#: ../src/roster_window.py:3339
 msgid "Not in Roster"
 msgstr "Ikke i Kontaktvinduet"
 
-#: ../src/chat_control.py:1558
+#: ../src/chat_control.py:1589
 msgid "This contact does not support file transfer."
 msgstr "Denne kontakt understøtter ikke fil overførsler."
 
-#: ../src/chat_control.py:1561
+#: ../src/chat_control.py:1592
 msgid "You need to know the real JID of the contact to send him or her a file."
 msgstr ""
 "Du trænger den rigtige JID fra kontakten for at kunne sende ham eller hende "
 "en fil."
 
-#: ../src/chat_control.py:1656
+#: ../src/chat_control.py:1686
 #, python-format
 msgid "%(type)s state : %(state)s, reason: %(reason)s"
 msgstr "%(type)s tilstand : %(state)s, begrundelse: %(reason)s"
 
-#: ../src/chat_control.py:1848
+#: ../src/chat_control.py:1877
 #, python-format
 msgid "%(nickname)s from group chat %(room_name)s"
 msgstr "%(nickname)s fra gruppesamtale %(room_name)s"
 
 #. No key assigned nor a key is used by remote contact
-#: ../src/chat_control.py:1967 ../src/dialogs.py:4866
+#: ../src/chat_control.py:1998 ../src/dialogs.py:4876
 msgid "No GPG key assigned"
 msgstr "Ingen GPG nøgle valgt"
 
-#: ../src/chat_control.py:1968
+#: ../src/chat_control.py:1999
 msgid ""
 "No GPG key is assigned to this contact. So you cannot encrypt messages with "
 "GPG."
@@ -3154,50 +3154,50 @@ msgstr ""
 "Ingen GPG nøgle er valgt for denne kontakt. Derfor kan du ikke kryptere "
 "beskeder med GPG."
 
-#: ../src/chat_control.py:1977
+#: ../src/chat_control.py:2008
 msgid "GPG encryption disabled"
 msgstr "GPG kryptering ikke aktiveret"
 
-#: ../src/chat_control.py:2003
+#: ../src/chat_control.py:2034
 msgid "Session WILL be logged"
 msgstr "Session VIL blive logget"
 
-#: ../src/chat_control.py:2005
+#: ../src/chat_control.py:2036
 msgid "Session WILL NOT be logged"
 msgstr "Session VIL IKKE blive logget"
 
 #. encryption %s active
-#: ../src/chat_control.py:2022
+#: ../src/chat_control.py:2053
 msgid "is"
 msgstr "er"
 
-#: ../src/chat_control.py:2022
+#: ../src/chat_control.py:2053
 msgid "is NOT"
 msgstr "er IKKE"
 
 #. chat session %s be logged
-#: ../src/chat_control.py:2024
+#: ../src/chat_control.py:2055
 msgid "will"
 msgstr "vil"
 
-#: ../src/chat_control.py:2024
+#: ../src/chat_control.py:2055
 msgid "will NOT"
 msgstr "vil IKKE"
 
 #. About encrypted chat session
-#: ../src/chat_control.py:2028
+#: ../src/chat_control.py:2059
 msgid "and authenticated"
 msgstr "og godkendt"
 
 #. About encrypted chat session
-#: ../src/chat_control.py:2032
+#: ../src/chat_control.py:2063
 msgid "and NOT authenticated"
 msgstr "og IKKE godkendt"
 
 #. status will become 'is' or 'is not', authentificaed will become
 #. 'and authentificated' or 'and not authentificated', logged will become
 #. 'will' or 'will not'
-#: ../src/chat_control.py:2039
+#: ../src/chat_control.py:2070
 #, python-format
 msgid ""
 "%(type)s encryption %(status)s active %(authenticated)s.\n"
@@ -3206,23 +3206,23 @@ msgstr ""
 "%(type)s kryptering %(status)s aktiv %(authenticated)s.\n"
 "Din samtale session %(logged)s blive logget."
 
-#: ../src/chat_control.py:2182
+#: ../src/chat_control.py:2213
 msgid "Session negotiation cancelled"
 msgstr "Session forhandling annulleret"
 
-#: ../src/chat_control.py:2191
+#: ../src/chat_control.py:2222
 msgid "This session is encrypted"
 msgstr "Denne session er krypteret"
 
-#: ../src/chat_control.py:2194
+#: ../src/chat_control.py:2225
 msgid " and WILL be logged"
 msgstr " og VIL blive logget"
 
-#: ../src/chat_control.py:2196
+#: ../src/chat_control.py:2227
 msgid " and WILL NOT be logged"
 msgstr " og VIL IKKE blive logget"
 
-#: ../src/chat_control.py:2201
+#: ../src/chat_control.py:2232
 msgid ""
 "Remote contact's identity not verified. Click the shield button for more "
 "details."
@@ -3230,25 +3230,25 @@ msgstr ""
 "Kontaktens identitet er ikke verificeret Tryk på skjold knappen for flere "
 "detaljer."
 
-#: ../src/chat_control.py:2203
+#: ../src/chat_control.py:2234
 msgid "E2E encryption disabled"
 msgstr "E2E kryptering ikke aktiveret"
 
-#: ../src/chat_control.py:2241 ../src/chat_control.py:2254
+#: ../src/chat_control.py:2272 ../src/chat_control.py:2285
 msgid "The following message was NOT encrypted"
 msgstr "Den følgende besked var IKKE krypteret"
 
-#: ../src/chat_control.py:2247
+#: ../src/chat_control.py:2278
 msgid "The following message was encrypted"
 msgstr "Den følgende besked var krypteret"
 
 #. %s is being replaced in the code with JID
-#: ../src/chat_control.py:2519
+#: ../src/chat_control.py:2543
 #, python-format
 msgid "You just received a new message from \"%s\""
 msgstr "Du har netop modtaget en besked fra \"%s\""
 
-#: ../src/chat_control.py:2520
+#: ../src/chat_control.py:2544
 msgid ""
 "If you close this tab and you have history disabled, this message will be "
 "lost."
@@ -3256,15 +3256,15 @@ msgstr ""
 "Hvis du lukker dette faneblad og ikke har aktiveret historie loggen, vil du\n"
 "miste denne besked."
 
-#: ../src/chat_control.py:2663 ../src/common/connection_handlers.py:1635
-#: ../src/common/connection_handlers.py:1758
-#: ../src/common/connection_handlers.py:1960
-#: ../src/common/connection_handlers.py:2110 ../src/common/connection.py:452
-#: ../src/gajim.py:159 ../src/session.py:138
+#: ../src/chat_control.py:2695 ../src/common/connection_handlers.py:1654
+#: ../src/common/connection_handlers.py:1777
+#: ../src/common/connection_handlers.py:1979
+#: ../src/common/connection_handlers.py:2129 ../src/common/connection.py:452
+#: ../src/gajim.py:196 ../src/session.py:138
 msgid "Database Error"
 msgstr "Database Fejl"
 
-#: ../src/chat_control.py:2664
+#: ../src/chat_control.py:2696
 #, python-format
 msgid ""
 "The database file (%s) cannot be read. Try to repair it or remove it (all "
@@ -3273,41 +3273,41 @@ msgstr ""
 "Database filen (%s) kan ikke læses. Prøv at reparere den eller fjerne den "
 "(hele historikken vil tabes)."
 
-#: ../src/chat_control.py:2906
+#: ../src/chat_control.py:2938
 #, python-format
 msgid "%(name)s is now %(status)s"
 msgstr "%(name)s er nu %(status)s"
 
-#: ../src/common/check_paths.py:37
+#: ../src/common/check_paths.py:38
 msgid "creating logs database"
 msgstr "opretter log database"
 
-#: ../src/common/check_paths.py:85
+#: ../src/common/check_paths.py:86
 msgid "creating cache database"
 msgstr "opretter mellemlager database"
 
-#: ../src/common/check_paths.py:274 ../src/common/check_paths.py:281
-#: ../src/common/check_paths.py:288 ../src/common/check_paths.py:295
-#: ../src/common/check_paths.py:302 ../src/common/check_paths.py:309
-#: ../src/common/check_paths.py:324
+#: ../src/common/check_paths.py:273 ../src/common/check_paths.py:280
+#: ../src/common/check_paths.py:287 ../src/common/check_paths.py:294
+#: ../src/common/check_paths.py:301 ../src/common/check_paths.py:308
+#: ../src/common/check_paths.py:315
 #, python-format
 msgid "%s is a file but it should be a directory"
 msgstr "%s er en fil, men burde være et katalog"
 
-#: ../src/common/check_paths.py:275 ../src/common/check_paths.py:282
-#: ../src/common/check_paths.py:289 ../src/common/check_paths.py:296
-#: ../src/common/check_paths.py:303 ../src/common/check_paths.py:310
-#: ../src/common/check_paths.py:318 ../src/common/check_paths.py:325
-#: ../src/common/check_paths.py:333
+#: ../src/common/check_paths.py:274 ../src/common/check_paths.py:281
+#: ../src/common/check_paths.py:288 ../src/common/check_paths.py:295
+#: ../src/common/check_paths.py:302 ../src/common/check_paths.py:309
+#: ../src/common/check_paths.py:316 ../src/common/check_paths.py:326
+#: ../src/common/check_paths.py:334
 msgid "Gajim will now exit"
 msgstr "Gajim vil nu slutte"
 
-#: ../src/common/check_paths.py:317 ../src/common/check_paths.py:332
+#: ../src/common/check_paths.py:325 ../src/common/check_paths.py:333
 #, python-format
 msgid "%s is a directory but should be a file"
 msgstr "%s er et katalog men burde være en fil"
 
-#: ../src/common/check_paths.py:342
+#: ../src/common/check_paths.py:343
 #, python-format
 msgid "creating %s directory"
 msgstr "opretter %s katalog"
@@ -3371,9 +3371,9 @@ msgstr "Vælg de gruppesamtaler du vil forlade"
 
 #. Make special context menu if group is Groupchats
 #: ../src/common/commands.py:212 ../src/common/contacts.py:137
-#: ../src/common/helpers.py:57 ../src/roster_window.py:801
-#: ../src/roster_window.py:1614 ../src/roster_window.py:1616
-#: ../src/roster_window.py:5251
+#: ../src/common/helpers.py:57 ../src/roster_window.py:812
+#: ../src/roster_window.py:1632 ../src/roster_window.py:1634
+#: ../src/roster_window.py:5246
 msgid "Groupchats"
 msgstr "Gruppesamtaler"
 
@@ -3492,8 +3492,8 @@ msgstr ""
 
 #. sorted alphanum
 #: ../src/common/config.py:106 ../src/common/config.py:501
-#: ../src/common/optparser.py:290 ../src/common/optparser.py:486
-#: ../src/common/optparser.py:520 ../src/gui_interface.py:3370
+#: ../src/common/optparser.py:292 ../src/common/optparser.py:488
+#: ../src/common/optparser.py:522 ../src/gui_interface.py:3405
 msgid "default"
 msgstr "standard"
 
@@ -3602,13 +3602,19 @@ msgid "How many minutes should last lines from previous conversation last."
 msgstr "Hvor mange minutter skal sidste linjer fra forrige samtale vare."
 
 #: ../src/common/config.py:169
-msgid "How many lines to request to server when entering a groupchat."
+#, fuzzy
+msgid ""
+"How many lines to request to server when entering a groupchat. -1 means no "
+"limit"
 msgstr ""
 "Hvor mange linjer skal hentes fra serveren når man deltager i en "
 "gruppesamtale."
 
 #: ../src/common/config.py:170
-msgid "How many minutes back to request logs when a entering a groupchat."
+#, fuzzy
+msgid ""
+"How many minutes back to request logs when a entering a groupchat. -1 means "
+"no limit"
 msgstr ""
 "Hvor mange minutter tilbage skal der hentes log fra når man deltager i en "
 "gruppesamtale."
@@ -4343,7 +4349,7 @@ msgstr "Jeg er tilgængelig."
 msgid "I'm free for chat."
 msgstr "Jeg er tilgængelig for en samtale."
 
-#: ../src/common/config.py:480 ../src/config.py:1600
+#: ../src/common/config.py:480 ../src/config.py:1613
 msgid "Be right back."
 msgstr "Er straks tilbage."
 
@@ -4372,11 +4378,11 @@ msgstr ""
 msgid "Sound to play when any MUC message arrives."
 msgstr "Lyd som spilles når en hvilken som helst MUC besked ankommer."
 
-#: ../src/common/config.py:504 ../src/common/optparser.py:304
+#: ../src/common/config.py:504 ../src/common/optparser.py:306
 msgid "green"
 msgstr "grøn"
 
-#: ../src/common/config.py:508 ../src/common/optparser.py:290
+#: ../src/common/config.py:508 ../src/common/optparser.py:292
 msgid "grocery"
 msgstr "købmandsvarer"
 
@@ -4419,39 +4425,39 @@ msgstr ""
 "Tilslutning med agenten %(agent)s mislykkedes med fejlen %(error)s: "
 "%(error_msg)s"
 
-#: ../src/common/connection_handlers.py:445
-#: ../src/common/connection_handlers.py:1633
-#: ../src/common/connection_handlers.py:1756
-#: ../src/common/connection_handlers.py:1957
-#: ../src/common/connection_handlers.py:2108 ../src/common/connection.py:449
-#: ../src/gajim.py:341
+#: ../src/common/connection_handlers.py:447
+#: ../src/common/connection_handlers.py:1652
+#: ../src/common/connection_handlers.py:1775
+#: ../src/common/connection_handlers.py:1976
+#: ../src/common/connection_handlers.py:2127 ../src/common/connection.py:449
+#: ../src/gajim.py:378
 msgid "Disk Write Error"
 msgstr "Disk skrivefejl"
 
-#: ../src/common/connection_handlers.py:678 ../src/common/connection.py:1472
+#: ../src/common/connection_handlers.py:684 ../src/common/connection.py:1475
 msgid "Invisibility not supported"
 msgstr "Usynlighed er ikke understøttet"
 
-#: ../src/common/connection_handlers.py:679 ../src/common/connection.py:1473
+#: ../src/common/connection_handlers.py:685 ../src/common/connection.py:1476
 #, python-format
 msgid "Account %s doesn't support invisibility."
 msgstr "Konto %s understøtter ikke usynlighed."
 
-#: ../src/common/connection_handlers.py:1446 ../src/common/connection.py:253
-#: ../src/config.py:2091 ../src/config.py:2100 ../src/config.py:2168
-#: ../src/config.py:3560 ../src/dataforms_widget.py:597 ../src/dialogs.py:2931
+#: ../src/common/connection_handlers.py:1461 ../src/common/connection.py:253
+#: ../src/config.py:2106 ../src/config.py:2115 ../src/config.py:2183
+#: ../src/config.py:3599 ../src/dataforms_widget.py:617 ../src/dialogs.py:2941
 msgid "Invalid Jabber ID"
 msgstr "Ugyldigt Jabber ID"
 
-#: ../src/common/connection_handlers.py:1447
+#: ../src/common/connection_handlers.py:1462
 msgid "A message from a non-valid JID arrived, it has been ignored."
 msgstr "En besked fra en ugyldig JID blev modtaget, den er blevet ignoreret."
 
-#: ../src/common/connection_handlers.py:1636
-#: ../src/common/connection_handlers.py:1759
-#: ../src/common/connection_handlers.py:1961
-#: ../src/common/connection_handlers.py:2111 ../src/common/connection.py:453
-#: ../src/gajim.py:160 ../src/session.py:139
+#: ../src/common/connection_handlers.py:1655
+#: ../src/common/connection_handlers.py:1778
+#: ../src/common/connection_handlers.py:1980
+#: ../src/common/connection_handlers.py:2130 ../src/common/connection.py:453
+#: ../src/gajim.py:197 ../src/session.py:139
 #, python-format
 msgid ""
 "The database file (%s) cannot be read. Try to repair it (see http://trac."
@@ -4460,81 +4466,81 @@ msgstr ""
 "Database filen (%s) kan ikke læses. Prøv at reparere den (se http://trac."
 "gajim.org/wiki/DatabaseBackup) eller fjerne den (hele historikken vil tabes)."
 
-#: ../src/common/connection_handlers.py:1805
+#: ../src/common/connection_handlers.py:1824
 #, python-format
 msgid "Nickname not allowed: %s"
 msgstr "Kælenavn er ikke tilladt: %s"
 
-#: ../src/common/connection_handlers.py:1902
-#: ../src/common/connection_handlers.py:1911
-#: ../src/common/connection_handlers.py:1918
-#: ../src/common/connection_handlers.py:1922
-#: ../src/common/connection_handlers.py:1926
-#: ../src/common/connection_handlers.py:1931 ../src/gui_interface.py:139
+#: ../src/common/connection_handlers.py:1921
+#: ../src/common/connection_handlers.py:1930
+#: ../src/common/connection_handlers.py:1937
+#: ../src/common/connection_handlers.py:1941
+#: ../src/common/connection_handlers.py:1945
+#: ../src/common/connection_handlers.py:1950 ../src/gui_interface.py:139
 msgid "Unable to join group chat"
 msgstr "Ikke i stand til at deltage i gruppesamtale."
 
-#: ../src/common/connection_handlers.py:1903
+#: ../src/common/connection_handlers.py:1922
 #, python-format
 msgid "Maximum number of users for %s has been reached"
 msgstr "Maksimalt antal brugere for %s er nået"
 
-#: ../src/common/connection_handlers.py:1912
+#: ../src/common/connection_handlers.py:1931
 #, python-format
 msgid "You are banned from group chat %s."
 msgstr "Du er bandlyst fra gruppesamtalen %s."
 
-#: ../src/common/connection_handlers.py:1919
+#: ../src/common/connection_handlers.py:1938
 #, python-format
 msgid "Group chat %s does not exist."
 msgstr "Gruppesamtalen %s eksisterer ikke."
 
-#: ../src/common/connection_handlers.py:1923
+#: ../src/common/connection_handlers.py:1942
 msgid "Group chat creation is restricted."
 msgstr "Gruppesamtale oprettelse er begrænset."
 
-#: ../src/common/connection_handlers.py:1927
+#: ../src/common/connection_handlers.py:1946
 #, python-format
 msgid "Your registered nickname must be used in group chat %s."
 msgstr "Dit registrerede kælenavn skal bruges i gruppesamtalen %s."
 
-#: ../src/common/connection_handlers.py:1932
+#: ../src/common/connection_handlers.py:1951
 #, python-format
 msgid "You are not in the members list in groupchat %s."
 msgstr "Du er ikke i medlemslisten for gruppesamtalen %s."
 
 #. Room has been destroyed. see
 #. http://www.xmpp.org/extensions/xep-0045.html#destroyroom
-#: ../src/common/connection_handlers.py:1976
+#: ../src/common/connection_handlers.py:1995
 msgid "Room has been destroyed"
 msgstr "Rummet er blevet ødelagt"
 
-#: ../src/common/connection_handlers.py:1984
+#: ../src/common/connection_handlers.py:2003
 #, python-format
 msgid "You can join this room instead: %s"
 msgstr "Du kan deltage i dette rum i stedet: %s"
 
-#: ../src/common/connection_handlers.py:2020
+#: ../src/common/connection_handlers.py:2039
 msgid "I would like to add you to my roster."
 msgstr "Jeg vil gerne tilføje dig til min kontaktliste."
 
 #. BE CAREFUL: no con.updateRosterItem() in a callback
-#: ../src/common/connection_handlers.py:2041
+#: ../src/common/connection_handlers.py:2060
 #, python-format
 msgid "we are now subscribed to %s"
 msgstr "vi abonnerer nu på %s"
 
-#: ../src/common/connection_handlers.py:2043
+#: ../src/common/connection_handlers.py:2062
 #, python-format
 msgid "unsubscribe request from %s"
 msgstr "forespørsel om ophør på abonnement fra %s"
 
-#: ../src/common/connection_handlers.py:2045
+#: ../src/common/connection_handlers.py:2064
 #, python-format
 msgid "we are now unsubscribed from %s"
 msgstr "nu abonnerer vi ikke længere på %s"
 
-#: ../src/common/connection_handlers.py:2240
+#: ../src/common/connection_handlers.py:2259
 #, python-format
 msgid ""
 "JID %s is not RFC compliant. It will not be added to your roster. Use roster "
@@ -4672,7 +4678,7 @@ msgstr "Nøglebrug indeholder ikke certifikat signering"
 msgid "Application verification failure"
 msgstr "Kunne ikke verificere programmet"
 
-#: ../src/common/connection.py:254 ../src/dialogs.py:2932
+#: ../src/common/connection.py:254 ../src/dialogs.py:2942
 #, python-format
 msgid "It is not possible to send a message to %s, this JID is not valid."
 msgstr "Det er ikke mulig at sende en besked til %s, denne JID er ikke gyldig."
@@ -4739,13 +4745,13 @@ msgstr ""
 "Transport %(name)s svarede forkert på indskrivnings forespørgslen: %(error)s"
 
 #: ../src/common/connection.py:1165 ../src/common/connection.py:1294
-#: ../src/common/connection.py:1784
-#: ../src/common/zeroconf/connection_zeroconf.py:189
+#: ../src/common/connection.py:1787
+#: ../src/common/zeroconf/connection_zeroconf.py:192
 #, python-format
 msgid "Could not connect to \"%s\""
 msgstr "Kunne ikke tilslutte til \"%s\""
 
-#: ../src/common/connection.py:1166 ../src/gui_interface.py:755
+#: ../src/common/connection.py:1166 ../src/gui_interface.py:758
 msgid "Check your connection or try again later."
 msgstr "Kontroller din tilslutning eller forsøg igen senere."
 
@@ -4796,20 +4802,20 @@ msgstr ""
 msgid "Check your connection or try again later"
 msgstr "Kontroller din tilslutning eller prøv igen senere"
 
-#: ../src/common/connection.py:1324
+#: ../src/common/connection.py:1327
 #, python-format
 msgid "Authentication failed with \"%s\""
 msgstr "Godkendelse fejlede med \"%s\""
 
-#: ../src/common/connection.py:1326
+#: ../src/common/connection.py:1329
 msgid "Please check your login and password for correctness."
 msgstr "Venligst kontroller om dit logind og adgangskode er korrekt."
 
-#: ../src/common/connection.py:1395
+#: ../src/common/connection.py:1398
 msgid "Error while removing privacy list"
 msgstr "Fejl under fjernelse af privatlivs liste"
 
-#: ../src/common/connection.py:1396
+#: ../src/common/connection.py:1399
 #, python-format
 msgid ""
 "Privacy list %s has not been removed. It is maybe active in one of your "
@@ -4818,39 +4824,39 @@ msgstr ""
 "Privatlivs liste %s er ikke blevet fjernet. Den er måske aktiv i en af dine "
 "tilsluttede ressourcer. Deaktivér den og prøv igen."
 
-#: ../src/common/connection.py:1650
+#: ../src/common/connection.py:1653
 #, python-format
 msgid "Sent contact: \"%s\" (%s)"
 msgstr "Sendt kontakt: \"%s\" (%s)"
 
-#: ../src/common/connection.py:1653
+#: ../src/common/connection.py:1656
 msgid "Sent contacts:"
 msgstr "Sendte kontakter:"
 
-#: ../src/common/connection.py:1799 ../src/common/connection.py:1822
+#: ../src/common/connection.py:1802 ../src/common/connection.py:1825
 msgid "Not fetched because of invisible status"
 msgstr "Ikke hentet på grund af usynlig status"
 
-#: ../src/common/connection.py:2254
+#: ../src/common/connection.py:2263
 msgid "Unregister failed"
 msgstr "Tilslutning fejlede"
 
-#: ../src/common/connection.py:2255
+#: ../src/common/connection.py:2264
 #, python-format
 msgid "Unregistration with server %(server)s failed: %(error)s"
 msgstr "Frakobling fra serveren %(server)s mislykkedes: %(error)s"
 
 #: ../src/common/contacts.py:135 ../src/common/helpers.py:57
-#: ../src/gui_interface.py:674
+#: ../src/gui_interface.py:677
 msgid "Observers"
 msgstr "Iagttagere"
 
 #: ../src/common/contacts.py:139 ../src/common/contacts.py:366
 #: ../src/common/helpers.py:57 ../src/disco.py:120 ../src/disco.py:121
-#: ../src/disco.py:1499 ../src/gui_interface.py:424
-#: ../src/roster_window.py:840 ../src/roster_window.py:1525
-#: ../src/roster_window.py:1606 ../src/roster_window.py:1608
-#: ../src/roster_window.py:1769
+#: ../src/disco.py:1498 ../src/gui_interface.py:424
+#: ../src/roster_window.py:851 ../src/roster_window.py:1543
+#: ../src/roster_window.py:1624 ../src/roster_window.py:1626
+#: ../src/roster_window.py:1787
 msgid "Transports"
 msgstr "Transporter"
 
@@ -4893,7 +4899,7 @@ msgid "Service not available: Gajim is not running, or remote_control is False"
 msgstr ""
 "Tjeneste ikke tilgængelig: Gajim kører ikke, eller remote_control er Falsk"
 
-#: ../src/common/exceptions.py:67
+#: ../src/common/exceptions.py:67 ../src/gajim-remote.py:55
 msgid "D-Bus is not present on this machine or python module is missing"
 msgstr ""
 "D-Bus er ikke tilgængelig på denne maskine eller et python modul mangler"
@@ -5278,41 +5284,41 @@ msgstr "%s KB"
 msgid "%s B"
 msgstr "%s B"
 
-#: ../src/common/helpers.py:1108 ../src/common/helpers.py:1115
+#: ../src/common/helpers.py:1109 ../src/common/helpers.py:1116
 #, python-format
 msgid "%d message pending"
 msgid_plural "%d messages pending"
 msgstr[0] "%d besked venter"
 msgstr[1] "%d beskeder venter"
 
-#: ../src/common/helpers.py:1121
+#: ../src/common/helpers.py:1122
 #, python-format
 msgid " from room %s"
 msgstr "fra rum %s"
 
-#: ../src/common/helpers.py:1124 ../src/common/helpers.py:1143
+#: ../src/common/helpers.py:1125 ../src/common/helpers.py:1144
 #, python-format
 msgid " from user %s"
 msgstr "fra bruger %s"
 
-#: ../src/common/helpers.py:1126
+#: ../src/common/helpers.py:1127
 #, python-format
 msgid " from %s"
 msgstr " fra %s"
 
-#: ../src/common/helpers.py:1133 ../src/common/helpers.py:1140
+#: ../src/common/helpers.py:1134 ../src/common/helpers.py:1141
 #, python-format
 msgid "%d event pending"
 msgid_plural "%d events pending"
 msgstr[0] "%d hændelse venter"
 msgstr[1] "%d hændelser venter"
 
-#: ../src/common/helpers.py:1173
+#: ../src/common/helpers.py:1174
 #, python-format
 msgid "Gajim - %s"
 msgstr "Gajim - %s"
 
-#: ../src/common/helpers.py:1341
+#: ../src/common/helpers.py:1342
 msgid "Hello, I am $name."
 msgstr "Hej, jeg hedder $name."
 
@@ -5353,19 +5359,19 @@ msgstr ""
 "Fejl: %s\n"
 "Debug: %s"
 
-#: ../src/common/jingle_rtp.py:336
+#: ../src/common/jingle_rtp.py:339
 msgid "audio input"
 msgstr "audio input"
 
-#: ../src/common/jingle_rtp.py:339
+#: ../src/common/jingle_rtp.py:342
 msgid "audio output"
 msgstr "audio output"
 
-#: ../src/common/jingle_rtp.py:382
+#: ../src/common/jingle_rtp.py:385
 msgid "video input"
 msgstr "video input"
 
-#: ../src/common/jingle_rtp.py:390
+#: ../src/common/jingle_rtp.py:394
 msgid "video output"
 msgstr "video output"
 
@@ -5441,11 +5447,11 @@ msgstr "X Window System (uden Xv)"
 msgid "error: cannot open %s for reading"
 msgstr "fejl: kan ikke åbne %s for læsning"
 
-#: ../src/common/optparser.py:299 ../src/common/optparser.py:300
+#: ../src/common/optparser.py:301 ../src/common/optparser.py:302
 msgid "cyan"
 msgstr "cyan"
 
-#: ../src/common/optparser.py:379
+#: ../src/common/optparser.py:381
 msgid "migrating logs database to indices"
 msgstr "flytter log databasen til flere indeks"
 
@@ -6118,7 +6124,7 @@ msgstr ""
 "annulleret."
 
 #. we're not english
-#: ../src/common/stanza_session.py:303
+#: ../src/common/stanza_session.py:307
 msgid ""
 "[This is part of an encrypted session. If you see this message, something "
 "went wrong.]"
@@ -6126,11 +6132,11 @@ msgstr ""
 "[Dette er en del af en krypteret session. Hvis du ser denne besked gik noget "
 "galt.]"
 
-#: ../src/common/zeroconf/connection_zeroconf.py:178
+#: ../src/common/zeroconf/connection_zeroconf.py:181
 msgid "Avahi error"
 msgstr "Avahi fejl"
 
-#: ../src/common/zeroconf/connection_zeroconf.py:179
+#: ../src/common/zeroconf/connection_zeroconf.py:182
 #, python-format
 msgid ""
 "%s\n"
@@ -6139,44 +6145,44 @@ msgstr ""
 "%s\n"
 "Link-local beskeder vil sandsynligvis ikke virke ordentligt."
 
-#: ../src/common/zeroconf/connection_zeroconf.py:190
+#: ../src/common/zeroconf/connection_zeroconf.py:193
 msgid "Please check if Avahi or Bonjour is installed."
 msgstr "Kontroller venligst om Avahi eller Bonjour er installeret."
 
-#: ../src/common/zeroconf/connection_zeroconf.py:199
-#: ../src/common/zeroconf/connection_zeroconf.py:203
+#: ../src/common/zeroconf/connection_zeroconf.py:202
+#: ../src/common/zeroconf/connection_zeroconf.py:206
 msgid "Could not start local service"
 msgstr "Kunne ikke starte lokal tjeneste"
 
-#: ../src/common/zeroconf/connection_zeroconf.py:200
+#: ../src/common/zeroconf/connection_zeroconf.py:203
 #, python-format
 msgid "Unable to bind to port %d."
 msgstr "Ikke i stand til at tildele port %d."
 
-#: ../src/common/zeroconf/connection_zeroconf.py:204
-#: ../src/common/zeroconf/connection_zeroconf.py:283
-#: ../src/common/zeroconf/connection_zeroconf.py:294
-#: ../src/common/zeroconf/connection_zeroconf.py:308
+#: ../src/common/zeroconf/connection_zeroconf.py:207
+#: ../src/common/zeroconf/connection_zeroconf.py:286
+#: ../src/common/zeroconf/connection_zeroconf.py:297
+#: ../src/common/zeroconf/connection_zeroconf.py:311
 msgid "Please check if avahi-daemon is running."
 msgstr "Kontroller venligst om avahi-dæmonen kører."
 
-#: ../src/common/zeroconf/connection_zeroconf.py:282
-#: ../src/common/zeroconf/connection_zeroconf.py:293
-#: ../src/common/zeroconf/connection_zeroconf.py:307
+#: ../src/common/zeroconf/connection_zeroconf.py:285
+#: ../src/common/zeroconf/connection_zeroconf.py:296
+#: ../src/common/zeroconf/connection_zeroconf.py:310
 #, python-format
 msgid "Could not change status of account \"%s\""
 msgstr "Kunne ikke ændre status på kontoen \"%s\""
 
-#: ../src/common/zeroconf/connection_zeroconf.py:325
+#: ../src/common/zeroconf/connection_zeroconf.py:328
 msgid "Your message could not be sent."
 msgstr "Din besked kunne ikke sendes."
 
 #. Contact Offline
-#: ../src/common/zeroconf/connection_zeroconf.py:335
+#: ../src/common/zeroconf/connection_zeroconf.py:338
 msgid "Contact is offline. Your message could not be sent."
 msgstr "Kontakt er afkoblet. Din besked kunne ikke sendes."
 
-#: ../src/common/zeroconf/connection_zeroconf.py:360
+#: ../src/common/zeroconf/connection_zeroconf.py:363
 msgid ""
 "Connection to host could not be established: Timeout while sending data."
 msgstr ""
@@ -6197,11 +6203,11 @@ msgstr "Standard Besked"
 msgid "Enabled"
 msgstr "Aktiveret"
 
-#: ../src/config.py:459 ../src/config.py:463 ../src/config.py:3078
+#: ../src/config.py:459 ../src/config.py:463 ../src/config.py:3106
 msgid "Default"
 msgstr "Standard"
 
-#: ../src/config.py:739 ../src/dialogs.py:1395
+#: ../src/config.py:739 ../src/dialogs.py:1397
 #, python-format
 msgid "Dictionary for lang %s not available"
 msgstr "Ordbog for sproget %s er ikke tilgængelig"
@@ -6215,69 +6221,69 @@ msgstr ""
 "For at bruge stavekontrollen må du installer en %s ordbog, eller vælge et "
 "andet sprog ved indstillingen for sprog til stavekontrollen."
 
-#: ../src/config.py:1214
+#: ../src/config.py:1227
 msgid "status message title"
 msgstr "status besked Titel"
 
-#: ../src/config.py:1214
+#: ../src/config.py:1227
 msgid "status message text"
 msgstr "status besked tekst"
 
 #. Name column
-#: ../src/config.py:1514 ../src/dialogs.py:2383 ../src/dialogs.py:2449
-#: ../src/dialogs.py:3215 ../src/disco.py:866 ../src/disco.py:1726
-#: ../src/disco.py:2030 ../src/history_window.py:90
+#: ../src/config.py:1527 ../src/dialogs.py:2393 ../src/dialogs.py:2459
+#: ../src/dialogs.py:3225 ../src/disco.py:866 ../src/disco.py:1725
+#: ../src/disco.py:2028 ../src/history_window.py:90
 msgid "Name"
 msgstr "Navn"
 
-#: ../src/config.py:1609
+#: ../src/config.py:1622
 msgid "Relogin now?"
 msgstr "Log ind igen nu?"
 
-#: ../src/config.py:1610
+#: ../src/config.py:1623
 msgid "If you want all the changes to apply instantly, you must relogin."
 msgstr ""
 "Hvis du vil at alle ændringerne skal træde i kraft nu, må du logge ind igen."
 
-#: ../src/config.py:1764 ../src/config.py:1893
+#: ../src/config.py:1777 ../src/config.py:1906
 msgid "OpenPGP is not usable on this computer"
 msgstr "Det er ikke muligt at bruge OpenPGP på denne computer"
 
-#: ../src/config.py:1933 ../src/config.py:1980
+#: ../src/config.py:1946 ../src/config.py:1993
 msgid "Unread events"
 msgstr "Ulæste hændelser"
 
-#: ../src/config.py:1934
+#: ../src/config.py:1947
 msgid "Read all pending events before removing this account."
 msgstr "Læs alle ventende hændelser før denne konto fjernes."
 
-#: ../src/config.py:1963
+#: ../src/config.py:1976
 #, python-format
 msgid "You have opened chat in account %s"
 msgstr "Du har en åben samtale med kontonavnet %s"
 
-#: ../src/config.py:1964
+#: ../src/config.py:1977
 msgid "All chat and groupchat windows will be closed. Do you want to continue?"
 msgstr ""
 "Alle samtale og gruppesamtale vinduer vil blive lukket. Vil du fortsætte?"
 
-#: ../src/config.py:1976 ../src/config.py:2509 ../src/config.py:2545
+#: ../src/config.py:1989 ../src/config.py:2525 ../src/config.py:2561
 msgid "You are currently connected to the server"
 msgstr "Du er for øjeblikket tilsluttet til serveren"
 
-#: ../src/config.py:1977
+#: ../src/config.py:1990
 msgid "To change the account name, you must be disconnected."
 msgstr "For at ændre kontonavnet må du afbryde din tilslutning"
 
-#: ../src/config.py:1981
+#: ../src/config.py:1994
 msgid "To change the account name, you must read all pending events."
 msgstr "For at ændre kontonavnet må du læse alle ventende hændelser."
 
-#: ../src/config.py:1987
+#: ../src/config.py:2000
 msgid "Account Name Already Used"
 msgstr "Kontonavnet er allerede i brug"
 
-#: ../src/config.py:1988
+#: ../src/config.py:2001
 msgid ""
 "This name is already used by another of your accounts. Please choose another "
 "name."
@@ -6285,143 +6291,143 @@ msgstr ""
 "Dette navn er allerede brugt til en af dine andre kontoer. Vælg venligst et "
 "andet navn."
 
-#: ../src/config.py:1992 ../src/config.py:1996
+#: ../src/config.py:2005 ../src/config.py:2009
 msgid "Invalid account name"
 msgstr "Ugyldigt kontonavn"
 
-#: ../src/config.py:1993
+#: ../src/config.py:2006
 msgid "Account name cannot be empty."
 msgstr "Kontonavnet kan ikke være tomt."
 
-#: ../src/config.py:1997
+#: ../src/config.py:2010
 msgid "Account name cannot contain spaces."
 msgstr "Kontonavnet kan ikke indeholde mellemrom."
 
-#: ../src/config.py:2072
+#: ../src/config.py:2087
 msgid "Rename Account"
 msgstr "Omdøb Konto"
 
-#: ../src/config.py:2073
+#: ../src/config.py:2088
 #, python-format
 msgid "Enter a new name for account %s"
 msgstr "Indtast et nyt navn for kontoen %s"
 
-#: ../src/config.py:2101
+#: ../src/config.py:2116
 msgid "A Jabber ID must be in the form \"user@servername\"."
 msgstr "Et Jabber ID må være på formen \"bruger@servernavn\"."
 
-#: ../src/config.py:2318 ../src/config.py:3606
+#: ../src/config.py:2333 ../src/config.py:3645
 msgid "Invalid entry"
 msgstr "Ugyldig indgang"
 
-#: ../src/config.py:2319 ../src/config.py:3607
+#: ../src/config.py:2334 ../src/config.py:3646
 msgid "Custom port must be a port number."
 msgstr "Personlig port må være et port nummer."
 
-#: ../src/config.py:2340
+#: ../src/config.py:2355
 msgid "Failed to get secret keys"
 msgstr "Forsøg på at hente krypteringsnøgler mislykkedes"
 
-#: ../src/config.py:2341
+#: ../src/config.py:2356
 msgid "There is no OpenPGP secret key available."
 msgstr "Der er ikke nogen hemmelig OpenPGP nøgle tilgængelig."
 
-#: ../src/config.py:2375
+#: ../src/config.py:2390
 msgid "OpenPGP Key Selection"
 msgstr "OpenPGP Nøgle Valg"
 
-#: ../src/config.py:2376
+#: ../src/config.py:2391
 msgid "Choose your OpenPGP key"
 msgstr "Vælg din OpenPGP Nøgle"
 
-#: ../src/config.py:2383
+#: ../src/config.py:2398
 msgid "No such account available"
 msgstr "Ingen konto ved det navn er tilgængelig"
 
-#: ../src/config.py:2384
+#: ../src/config.py:2399
 msgid "You must create your account before editing your personal information."
 msgstr "Du må oprette en konto før du kan redigere din personlige information."
 
-#: ../src/config.py:2391 ../src/dialogs.py:2136 ../src/dialogs.py:2371
-#: ../src/dialogs.py:2557 ../src/disco.py:511 ../src/profile_window.py:339
+#: ../src/config.py:2406 ../src/dialogs.py:2146 ../src/dialogs.py:2381
+#: ../src/dialogs.py:2567 ../src/disco.py:511 ../src/profile_window.py:340
 msgid "You are not connected to the server"
 msgstr "Du er ikke tilsluttet til serveren"
 
-#: ../src/config.py:2392
+#: ../src/config.py:2407
 msgid "Without a connection, you can not edit your personal information."
 msgstr "Uden en tilslutning kan du ikke redigere din personlige information."
 
-#: ../src/config.py:2396
+#: ../src/config.py:2411
 msgid "Your server doesn't support Vcard"
 msgstr "Din server understøtter ikke Vcard"
 
-#: ../src/config.py:2397
+#: ../src/config.py:2412
 msgid "Your server can't save your personal information."
 msgstr "Din server kan ikke gemme din personlige information."
 
-#: ../src/config.py:2510 ../src/config.py:2546
+#: ../src/config.py:2526 ../src/config.py:2562
 msgid "To disable the account, you must be disconnected."
 msgstr "For at deaktivere din konto må du afbryde din tilslutning."
 
-#: ../src/config.py:2515
+#: ../src/config.py:2531
 msgid "Account Local already exists."
 msgstr "Den Lokale Konto eksisterer allerede."
 
-#: ../src/config.py:2516
+#: ../src/config.py:2532
 msgid "Please rename or remove it before enabling link-local messaging."
 msgstr "Omdøb eller fjern den før du aktiverer link-local beskeder."
 
-#: ../src/config.py:2673
+#: ../src/config.py:2689
 #, python-format
 msgid "Edit %s"
 msgstr "Rediger %s"
 
-#: ../src/config.py:2675
+#: ../src/config.py:2691
 #, python-format
 msgid "Register to %s"
 msgstr "Registrer til %s"
 
 #. list at the beginning
-#: ../src/config.py:2711
+#: ../src/config.py:2727
 msgid "Ban List"
 msgstr "Liste over bandlyste"
 
-#: ../src/config.py:2712
+#: ../src/config.py:2728
 msgid "Member List"
 msgstr "Medlems Liste"
 
-#: ../src/config.py:2713
+#: ../src/config.py:2729
 msgid "Owner List"
 msgstr "Ejer Liste"
 
-#: ../src/config.py:2714
+#: ../src/config.py:2730
 msgid "Administrator List"
 msgstr "Administrator Liste"
 
 #. Address column
 #. holds JID (who said this)
-#: ../src/config.py:2763 ../src/disco.py:873 ../src/history_manager.py:201
+#: ../src/config.py:2791 ../src/disco.py:873 ../src/history_manager.py:201
 msgid "JID"
 msgstr "JID"
 
-#: ../src/config.py:2773
+#: ../src/config.py:2801
 msgid "Reason"
 msgstr "Grund"
 
-#: ../src/config.py:2780
+#: ../src/config.py:2808
 msgid "Nick"
 msgstr "Kælenavne"
 
-#: ../src/config.py:2786
+#: ../src/config.py:2814
 msgid "Role"
 msgstr "Rolle"
 
-#: ../src/config.py:2813
+#: ../src/config.py:2841
 msgid "Banning..."
 msgstr "Bandlysning..."
 
 #. You can move '\n' before user@domain if that line is TOO BIG
-#: ../src/config.py:2815
+#: ../src/config.py:2843
 msgid ""
 "<b>Whom do you want to ban?</b>\n"
 "\n"
@@ -6429,11 +6435,11 @@ msgstr ""
 "<b>Hvem vil du bandlyse?</b>\n"
 "\n"
 
-#: ../src/config.py:2817
+#: ../src/config.py:2845
 msgid "Adding Member..."
 msgstr "Tilføj Medlem..."
 
-#: ../src/config.py:2818
+#: ../src/config.py:2846
 msgid ""
 "<b>Whom do you want to make a member?</b>\n"
 "\n"
@@ -6441,11 +6447,11 @@ msgstr ""
 "<b>Hvem vil du gøre til medlem?</b>\n"
 "\n"
 
-#: ../src/config.py:2820
+#: ../src/config.py:2848
 msgid "Adding Owner..."
 msgstr "Tilføj Ejer..."
 
-#: ../src/config.py:2821
+#: ../src/config.py:2849
 msgid ""
 "<b>Whom do you want to make an owner?</b>\n"
 "\n"
@@ -6453,11 +6459,11 @@ msgstr ""
 "<b>Hvem vil du gøre til ejer?</b>\n"
 "\n"
 
-#: ../src/config.py:2823
+#: ../src/config.py:2851
 msgid "Adding Administrator..."
 msgstr "Tilføj Administrator..."
 
-#: ../src/config.py:2824
+#: ../src/config.py:2852
 msgid ""
 "<b>Whom do you want to make an administrator?</b>\n"
 "\n"
@@ -6465,7 +6471,7 @@ msgstr ""
 "<b>Hvem vil du gøre til administrator?</b>\n"
 "\n"
 
-#: ../src/config.py:2825
+#: ../src/config.py:2853
 msgid ""
 "Can be one of the following:\n"
 "1. user@domain/resource (only that resource matches).\n"
@@ -6481,107 +6487,107 @@ msgstr ""
 "4. domæne (domænet træffer, ligeledes et hvilken som helst bruger@domæne,\n"
 "domæne/resource, eller adresse indeholdende et subdomæne."
 
-#: ../src/config.py:2926
+#: ../src/config.py:2954
 #, python-format
 msgid "Removing %s account"
 msgstr "Fjerne kontoen med navnet %s"
 
-#: ../src/config.py:2941
+#: ../src/config.py:2969
 msgid "Account is disabled"
 msgstr "Konto er ikke aktiveret"
 
-#: ../src/config.py:2942
+#: ../src/config.py:2970
 msgid "To unregister from a server, account must be enabled."
 msgstr "For at afregistrere sig fra en server, må kontoen være aktiveret."
 
-#: ../src/config.py:2955 ../src/gui_interface.py:1132
-#: ../src/gui_interface.py:1243
+#: ../src/config.py:2983 ../src/gui_interface.py:1140
+#: ../src/gui_interface.py:1251
 msgid "Password Required"
 msgstr "Adgangskode er Påkrævet"
 
-#: ../src/config.py:2956 ../src/gui_interface.py:1223
+#: ../src/config.py:2984 ../src/gui_interface.py:1231
 #, python-format
 msgid "Enter your password for account %s"
 msgstr "Skriv din adgangskode for kontoen %s"
 
-#: ../src/config.py:2957 ../src/gui_interface.py:1243
+#: ../src/config.py:2985 ../src/gui_interface.py:1251
 msgid "Save password"
 msgstr "Gem adgangskode"
 
-#: ../src/config.py:2967
+#: ../src/config.py:2995
 #, python-format
 msgid "Account \"%s\" is connected to the server"
 msgstr "Kontoen \"%s\" er tilsluttet til serveren"
 
-#: ../src/config.py:2968
+#: ../src/config.py:2996
 msgid "If you remove it, the connection will be lost."
 msgstr "Hvis du fjerne den vil tilslutningen tabes."
 
-#: ../src/config.py:2982
+#: ../src/config.py:3010
 #, python-format
 msgid "Connection to server %s failed"
 msgstr "Tilslutning til server %s fejlede"
 
-#: ../src/config.py:2983
+#: ../src/config.py:3011
 msgid "What would you like to do?"
 msgstr "Hvad har du lyst til at gøre?"
 
-#: ../src/config.py:2984
+#: ../src/config.py:3012
 msgid "Remove only from Gajim"
 msgstr "Fjern kun fra Gajim"
 
-#: ../src/config.py:2985
+#: ../src/config.py:3013
 msgid "Don't remove anything. I'll try again later"
 msgstr "Fjern ikke nogen ting. Jeg prøver igen senere"
 
-#: ../src/config.py:3078
+#: ../src/config.py:3106
 msgid "?print_status:All"
 msgstr "?print_status:Alle"
 
-#: ../src/config.py:3079
+#: ../src/config.py:3107
 msgid "Enter and leave only"
 msgstr "Gå kun ind og ud"
 
-#: ../src/config.py:3080
+#: ../src/config.py:3108
 msgid "?print_status:None"
 msgstr "?print_status:Ingen"
 
-#: ../src/config.py:3150
+#: ../src/config.py:3178
 msgid "New Group Chat"
 msgstr "Ny Gruppe Samtale"
 
-#: ../src/config.py:3183
+#: ../src/config.py:3211
 msgid "This bookmark has invalid data"
 msgstr "Dette bogmærke er ugyldigt"
 
-#: ../src/config.py:3184
+#: ../src/config.py:3212
 msgid ""
 "Please be sure to fill out server and room fields or remove this bookmark."
 msgstr ""
 "Fyld ud server og rum tekstindtastningsfelterne eller fjern dette bogmærke."
 
 #. invalid char
-#: ../src/config.py:3302 ../src/dialogs.py:1934
+#: ../src/config.py:3342 ../src/dialogs.py:1936
 msgid "Invalid nickname"
 msgstr "Ugyldigt kælenavn"
 
-#: ../src/config.py:3303 ../src/config.py:3317 ../src/config.py:3331
+#: ../src/config.py:3343 ../src/config.py:3357 ../src/config.py:3371
 msgid "Character not allowed"
 msgstr "Tegn ikke tilladt: %s"
 
-#: ../src/config.py:3316 ../src/config.py:3582
+#: ../src/config.py:3356 ../src/config.py:3621
 msgid "Invalid server"
 msgstr "Ugyldigt server"
 
-#: ../src/config.py:3330
+#: ../src/config.py:3370
 msgid "Invalid room"
 msgstr "Ugyldig rum"
 
-#: ../src/config.py:3498
+#: ../src/config.py:3537
 msgid "Account has been added successfully"
 msgstr "Kontoen er blevet tilføjet med succes"
 
-#: ../src/config.py:3499 ../src/config.py:3505
+#: ../src/config.py:3538 ../src/config.py:3544
 msgid ""
 "You can set advanced account options by pressing the Advanced button, or "
 "later by choosing the Accounts menu item under the Edit menu from the main "
@@ -6591,33 +6597,33 @@ msgstr ""
 "eller senere ved at vælge kontoens menupunkt under Rediger menuen fra "
 "hovedvinduet."
 
-#: ../src/config.py:3504
+#: ../src/config.py:3543
 msgid "Your new account has been created successfully"
 msgstr "Din nye konto er blevet oprettet med succes"
 
-#: ../src/config.py:3543
+#: ../src/config.py:3582
 msgid "Invalid username"
 msgstr "Ugyldigt brugernavn"
 
-#: ../src/config.py:3545
+#: ../src/config.py:3584
 msgid "You must provide a username to configure this account."
 msgstr "Du må give et brugernavn for at konfigurere denne konto."
 
-#: ../src/config.py:3583
+#: ../src/config.py:3622
 msgid "Please provide a server on which you want to register."
 msgstr "Anfør en server som du vil registrere dig ved."
 
-#: ../src/config.py:3639 ../src/gui_interface.py:1904
+#: ../src/config.py:3678 ../src/gui_interface.py:1931
 msgid "Certificate Already in File"
 msgstr "Certifikatet er allerede i filen"
 
-#: ../src/config.py:3640 ../src/gui_interface.py:1905
+#: ../src/config.py:3679 ../src/gui_interface.py:1932
 #, python-format
 msgid "This certificate is already in file %s, so it's not added again."
 msgstr ""
 "Dette certifikat er allerede i filen %s, så det bliver ikke tilføjet igen."
 
-#: ../src/config.py:3717
+#: ../src/config.py:3756
 #, python-format
 msgid ""
 "<b>Security Warning</b>\n"
@@ -6632,7 +6638,7 @@ msgstr ""
 "SSL Fejl: %(error)s\n"
 "Vil du stadig prøve at forbinde til denne server?"
 
-#: ../src/config.py:3723 ../src/gui_interface.py:1932
+#: ../src/config.py:3762 ../src/gui_interface.py:1959
 #, python-format
 msgid ""
 "Add this certificate to the list of trusted certificates.\n"
@@ -6643,63 +6649,63 @@ msgstr ""
 "Certifikatets SHA1 fingeraftryk:\n"
 "%s"
 
-#: ../src/config.py:3755 ../src/config.py:3789
+#: ../src/config.py:3794 ../src/config.py:3828
 msgid "An error occurred during account creation"
 msgstr "Under oprettelsen af kontoen opstod der en fejl"
 
-#: ../src/config.py:3854
+#: ../src/config.py:3893
 msgid "Account name is in use"
 msgstr "Kontonavnet er i brug"
 
-#: ../src/config.py:3855
+#: ../src/config.py:3894
 msgid "You already have an account using this name."
 msgstr "Du har allered en konto med dette navn."
 
-#: ../src/config.py:4009
+#: ../src/config.py:4049
 msgid "Active"
 msgstr "Aktiv"
 
-#: ../src/config.py:4017
+#: ../src/config.py:4057
 msgid "Event"
 msgstr "Hændelse"
 
-#: ../src/config.py:4052
+#: ../src/config.py:4092
 msgid "First Message Received"
 msgstr "Første Besked er Modtaget"
 
-#: ../src/config.py:4053
+#: ../src/config.py:4093
 msgid "Next Message Received Focused"
 msgstr "Næste Besked Modtages i Fokus"
 
-#: ../src/config.py:4055
+#: ../src/config.py:4095
 msgid "Next Message Received Unfocused"
 msgstr "Næste Besked Modtages uden Fokus"
 
-#: ../src/config.py:4056
+#: ../src/config.py:4096
 msgid "Contact Connected"
 msgstr "Kontakt er Tilsluttet"
 
-#: ../src/config.py:4057
+#: ../src/config.py:4097
 msgid "Contact Disconnected"
 msgstr "Kontakt er ikke Tilsluttet"
 
-#: ../src/config.py:4058
+#: ../src/config.py:4098
 msgid "Message Sent"
 msgstr "Besked er Sendt"
 
-#: ../src/config.py:4059
+#: ../src/config.py:4099
 msgid "Group Chat Message Highlight"
 msgstr "Gruppe Samtale Besked Fremhævning"
 
-#: ../src/config.py:4060
+#: ../src/config.py:4100
 msgid "Group Chat Message Received"
 msgstr "Gruppe Samtale Besked Modtaget"
 
-#: ../src/config.py:4061
+#: ../src/config.py:4101
 msgid "GMail Email Received"
 msgstr "GMail E-post Modtaget"
 
-#: ../src/conversation_textview.py:600
+#: ../src/conversation_textview.py:603
 msgid ""
 "This icon indicates that this message has not yet\n"
 "been received by the remote end. If this icon stays\n"
@@ -6710,7 +6716,7 @@ msgstr ""
 "ikon forbliver på skærmen længe er det sandsynlig\n"
 "at beskeden gik tabt."
 
-#: ../src/conversation_textview.py:619
+#: ../src/conversation_textview.py:622
 msgid ""
 "Text below this line is what has been said since the\n"
 "last time you paid attention to this group chat"
@@ -6718,79 +6724,79 @@ msgstr ""
 "Teksten under denne linje er hvad der er blevet sagt siden\n"
 "sidste gang du var opmærksom på denne gruppe samtale"
 
-#: ../src/conversation_textview.py:739
+#: ../src/conversation_textview.py:742
 msgid "_Quote"
 msgstr "_Citat"
 
-#: ../src/conversation_textview.py:746
+#: ../src/conversation_textview.py:749
 #, python-format
 msgid "_Actions for \"%s\""
 msgstr "_Handlinger for \"%s\""
 
-#: ../src/conversation_textview.py:758
+#: ../src/conversation_textview.py:762
 msgid "Read _Wikipedia Article"
 msgstr "Læs _Wikipedia Artikel"
 
-#: ../src/conversation_textview.py:763
+#: ../src/conversation_textview.py:767
 msgid "Look it up in _Dictionary"
 msgstr "Slå dette op i Or_dbogen"
 
-#: ../src/conversation_textview.py:780
+#: ../src/conversation_textview.py:784
 #, python-format
 msgid "Dictionary URL is missing an \"%s\" and it is not WIKTIONARY"
 msgstr "Ordbogens URL mangler en \"%s\" og det må ikke være WIKTIONARY"
 
 #. we must have %s in the url
-#: ../src/conversation_textview.py:793
+#: ../src/conversation_textview.py:797
 #, python-format
 msgid "Web Search URL is missing an \"%s\""
 msgstr "Web søge URL'en mangler en \"%s\""
 
-#: ../src/conversation_textview.py:796
+#: ../src/conversation_textview.py:800
 msgid "Web _Search for it"
 msgstr "Søg på nettet efter det"
 
-#: ../src/conversation_textview.py:802
+#: ../src/conversation_textview.py:806
 msgid "Open as _Link"
 msgstr "Åbn som et _Link"
 
 #. %i is day in year (1-365)
-#: ../src/conversation_textview.py:1296
+#: ../src/conversation_textview.py:1309
 #, python-format
 msgid "Yesterday"
-msgid_plural "%i days ago"
+msgid_plural "%(nb_days)i days ago"
 msgstr[0] "Igår"
-msgstr[1] "%i dage siden"
+msgstr[1] "%(nb_days)i dage siden"
 
 #. if we have subject, show it too!
-#: ../src/conversation_textview.py:1344 ../src/history_window.py:480
+#: ../src/conversation_textview.py:1357 ../src/history_window.py:480
 #, python-format
 msgid "Subject: %s\n"
 msgstr "Emne: %s\n"
 
-#: ../src/dataforms_widget.py:544
+#: ../src/dataforms_widget.py:564
 msgid "Unable to load image"
 msgstr "Ikke i stand til at læse billedet"
 
-#: ../src/dataforms_widget.py:546
+#: ../src/dataforms_widget.py:566
 #, python-format
 msgid "Media type not supported: %s"
 msgstr "Medie format ikke understøttet: %s"
 
-#: ../src/dataforms_widget.py:601
+#: ../src/dataforms_widget.py:621
 msgid "Jabber ID already in list"
 msgstr "Jabber ID er allerede i listen"
 
-#: ../src/dataforms_widget.py:602
+#: ../src/dataforms_widget.py:622
 msgid "The Jabber ID you entered is already in the list. Choose another one."
 msgstr "Den Jabber ID som de skrev er allerede i listen. Vælg en anden."
 
 #. Default jid
-#: ../src/dataforms_widget.py:613
+#: ../src/dataforms_widget.py:633
 msgid "new@jabber.id"
 msgstr "ny@jabber.id"
 
-#: ../src/dataforms_widget.py:616 ../src/dataforms_widget.py:618
+#: ../src/dataforms_widget.py:636 ../src/dataforms_widget.py:638
 #, python-format
 msgid "new%d@jabber.id"
 msgstr "ny%d@jabber.id"
@@ -6821,125 +6827,125 @@ msgstr "Nøgle ID"
 msgid "Contact name"
 msgstr "Kontakt navn"
 
-#: ../src/dialogs.py:469
+#: ../src/dialogs.py:472
 msgid "Set Mood"
 msgstr "Sæt Humørstemning"
 
-#: ../src/dialogs.py:589
+#: ../src/dialogs.py:592
 #, python-format
 msgid "%s Status Message"
 msgstr "%s Status Besked"
 
-#: ../src/dialogs.py:603
+#: ../src/dialogs.py:606
 msgid "Status Message"
 msgstr "Status Besked"
 
-#: ../src/dialogs.py:793
+#: ../src/dialogs.py:795
 msgid "Overwrite Status Message?"
 msgstr "Overskriv Status Besked?"
 
-#: ../src/dialogs.py:794
+#: ../src/dialogs.py:796
 msgid ""
 "This name is already used. Do you want to overwrite this status message?"
 msgstr "Dette navn er allerede i brug. Vil du overskrive denne status besked?"
 
-#: ../src/dialogs.py:802
+#: ../src/dialogs.py:804
 msgid "Save as Preset Status Message"
 msgstr "Gem som Forvalgt Status Besked"
 
-#: ../src/dialogs.py:803
+#: ../src/dialogs.py:805
 msgid "Please type a name for this status message"
 msgstr "Skriv et navn for denne status besked"
 
-#: ../src/dialogs.py:831
+#: ../src/dialogs.py:833
 msgid "AIM Address:"
 msgstr "AIM Adresse:"
 
-#: ../src/dialogs.py:832
+#: ../src/dialogs.py:834
 msgid "GG Number:"
 msgstr "GG Nummer:"
 
-#: ../src/dialogs.py:833
+#: ../src/dialogs.py:835
 msgid "ICQ Number:"
 msgstr "ICQ Nummer:"
 
-#: ../src/dialogs.py:834
+#: ../src/dialogs.py:836
 msgid "MSN Address:"
 msgstr "MSN Adresse:"
 
-#: ../src/dialogs.py:835
+#: ../src/dialogs.py:837
 msgid "Yahoo! Address:"
 msgstr "Yahoo! Adresse:"
 
-#: ../src/dialogs.py:872
+#: ../src/dialogs.py:874
 #, python-format
 msgid "Please fill in the data of the contact you want to add in account %s"
 msgstr "Fyld ind data for den kontakt som du vil tilføje kontoen med navnet %s"
 
-#: ../src/dialogs.py:875
+#: ../src/dialogs.py:877
 msgid "Please fill in the data of the contact you want to add"
 msgstr "Fyld ind data for den kontakt som du vil tilføje"
 
-#: ../src/dialogs.py:1039 ../src/dialogs.py:1045 ../src/dialogs.py:1050
+#: ../src/dialogs.py:1041 ../src/dialogs.py:1047 ../src/dialogs.py:1052
 msgid "Invalid User ID"
 msgstr "Ugyldig Bruger ID"
 
-#: ../src/dialogs.py:1046
+#: ../src/dialogs.py:1048
 msgid "The user ID must not contain a resource."
 msgstr "Bruger ID'en må ikke indeholde en resource."
 
-#: ../src/dialogs.py:1051
+#: ../src/dialogs.py:1053
 msgid "You cannot add yourself to your roster."
 msgstr "Du kan ikke tilføje dig selv til kontaktvinduet."
 
-#: ../src/dialogs.py:1065
+#: ../src/dialogs.py:1067
 msgid "Contact already in roster"
 msgstr "Kontakten er allerede i kontaktvinduet"
 
-#: ../src/dialogs.py:1066
+#: ../src/dialogs.py:1068
 msgid "This contact is already listed in your roster."
 msgstr "Denne kontakt er allered i dit kontaktvindue"
 
-#: ../src/dialogs.py:1112
+#: ../src/dialogs.py:1114
 msgid "User ID:"
 msgstr "Bruger ID:"
 
-#: ../src/dialogs.py:1175
+#: ../src/dialogs.py:1177
 msgid "A GTK+ jabber client"
 msgstr "En GTK+ jabber klient"
 
-#: ../src/dialogs.py:1176
+#: ../src/dialogs.py:1178
 msgid "GTK+ Version:"
 msgstr "GTK+ Version:"
 
-#: ../src/dialogs.py:1177
+#: ../src/dialogs.py:1179
 msgid "PyGTK Version:"
 msgstr "PyGTK Version:"
 
-#: ../src/dialogs.py:1187
+#: ../src/dialogs.py:1189
 msgid "Current Developers:"
 msgstr "Nuværende Programudviklere:"
 
-#: ../src/dialogs.py:1189
+#: ../src/dialogs.py:1191
 msgid "Past Developers:"
 msgstr "Tidligere Programudviklerer:"
 
-#: ../src/dialogs.py:1195
+#: ../src/dialogs.py:1197
 msgid "THANKS:"
 msgstr "TAK:"
 
 #. remove one english sentence
 #. and add it manually as translatable
-#: ../src/dialogs.py:1201
+#: ../src/dialogs.py:1203
 msgid "Last but not least, we would like to thank all the package maintainers."
 msgstr "Sidst men ikke mindst, vil vi gerne takke alle pakke vedligeholdere."
 
 #. here you write your name in the form Name FamilyName <someone@somewhere>
-#: ../src/dialogs.py:1213
+#: ../src/dialogs.py:1215
 msgid "translator-credits"
 msgstr "Niels Felsted Thorsen <felsted@fsfe.org>"
 
-#: ../src/dialogs.py:1396
+#: ../src/dialogs.py:1398
 #, python-format
 msgid ""
 "You have to install %s dictionary to use spellchecking, or choose another "
@@ -6952,100 +6958,110 @@ msgstr ""
 "\n"
 "Egenskaben med at fremhæve stavefejl vil ikke blive brugt"
 
-#: ../src/dialogs.py:1935 ../src/dialogs.py:2322
+#: ../src/dialogs.py:1937 ../src/dialogs.py:2331
 msgid "The nickname has not allowed characters."
 msgstr "Kælenavnet har ikke tilladte tegn."
 
-#: ../src/dialogs.py:2053
+#: ../src/dialogs.py:2055
 #, python-format
 msgid "Subscription request for account %(account)s from %(jid)s"
 msgstr "Forespørgsel på abonnering for konto %(account)s fra %(jid)s"
 
-#: ../src/dialogs.py:2056
+#: ../src/dialogs.py:2058
 #, python-format
 msgid "Subscription request from %s"
 msgstr "Forespørgsel om abonnering fra %s"
 
-#: ../src/dialogs.py:2131 ../src/gui_interface.py:2672
+#: ../src/dialogs.py:2141 ../src/gui_interface.py:2705
 #, python-format
 msgid "You are already in group chat %s"
 msgstr "Du er allerede i en gruppe samtale %s"
 
-#: ../src/dialogs.py:2137
+#: ../src/dialogs.py:2147
 msgid "You can not join a group chat unless you are connected."
 msgstr "Du kan kun deltage i en gruppe samtale hvis du er tilsluttet."
 
-#: ../src/dialogs.py:2178
+#: ../src/dialogs.py:2188
 #, python-format
 msgid "Join Group Chat with account %s"
 msgstr "Deltag i Gruppe Samtale med kontoen %s"
 
-#: ../src/dialogs.py:2309
+#: ../src/dialogs.py:2318
 msgid "Invalid Account"
 msgstr "Ugyldig Konto"
 
-#: ../src/dialogs.py:2310
+#: ../src/dialogs.py:2319
 msgid ""
 "You have to choose an account from which you want to join the groupchat."
 msgstr ""
 "Du må vælge en konto som du vil bruge til at tilslutte gruppe samtalen med."
 
-#: ../src/dialogs.py:2321
+#: ../src/dialogs.py:2330
 msgid "Invalid Nickname"
 msgstr "Ugyldig Kælenavn"
 
-#: ../src/dialogs.py:2326 ../src/dialogs.py:2332
-#: ../src/groupchat_control.py:1832
+#: ../src/dialogs.py:2335 ../src/dialogs.py:2341
+#: ../src/groupchat_control.py:1853
 msgid "Invalid group chat Jabber ID"
 msgstr "Ugyldig gruppe samtale Jabber ID"
 
-#: ../src/dialogs.py:2327
+#: ../src/dialogs.py:2336
 msgid "Please enter the group chat Jabber ID as room@server."
 msgstr "Venligst skriv gruppesamtale Jabber ID som rum@server."
 
-#: ../src/dialogs.py:2333 ../src/groupchat_control.py:1833
+#: ../src/dialogs.py:2342 ../src/groupchat_control.py:1854
 msgid "The group chat Jabber ID has not allowed characters."
 msgstr "Gruppe samtale Jabber ID'en indeholder ikke tilladte tegn."
 
-#: ../src/dialogs.py:2340
+#: ../src/dialogs.py:2346 ../src/gui_interface.py:2693
 msgid "This is not a group chat"
 msgstr "Dette er ikke en gruppe samtale"
 
-#: ../src/dialogs.py:2341
+#: ../src/dialogs.py:2347 ../src/gui_interface.py:2694
 #, python-format
 msgid "%s is not the name of a group chat."
 msgstr "%s er ikke navnet på en gruppe samtale."
 
-#: ../src/dialogs.py:2372
+#: ../src/dialogs.py:2370
+#, fuzzy
+msgid "Impossible join groupchat"
+msgstr "Ikke i stand til at deltage i gruppesamtale."
+
+#: ../src/dialogs.py:2371
+#, fuzzy
+msgid "local account does not support groupchats."
+msgstr "Denne kontakt understøtter ikke fil overførsler."
+
+#: ../src/dialogs.py:2382
 msgid "Without a connection, you can not synchronise your contacts."
 msgstr "Du kan kun synkronisere dine kontakter når du er tilsluttet."
 
-#: ../src/dialogs.py:2386
+#: ../src/dialogs.py:2396
 msgid "Server"
 msgstr "Server"
 
-#: ../src/dialogs.py:2421
+#: ../src/dialogs.py:2431
 msgid "This account is not connected to the server"
 msgstr "Denne konto er ikke tilsluttet til serveren"
 
-#: ../src/dialogs.py:2422
+#: ../src/dialogs.py:2432
 msgid "You cannot synchronize with an account unless it is connected."
 msgstr "Du kan kun synkronisere med en konto hvis du er tilsluttet."
 
-#: ../src/dialogs.py:2446
+#: ../src/dialogs.py:2456
 msgid "Synchronise"
 msgstr "Synkroniser"
 
-#: ../src/dialogs.py:2507
+#: ../src/dialogs.py:2517
 #, python-format
 msgid "Start Chat with account %s"
 msgstr "Start en samtale med konto %s"
 
-#: ../src/dialogs.py:2509
+#: ../src/dialogs.py:2519
 msgid "Start Chat"
 msgstr "Start Samtale"
 
-#: ../src/dialogs.py:2510
+#: ../src/dialogs.py:2520
 msgid ""
 "Fill in the nickname or the Jabber ID of the contact you would like\n"
 "to send a chat message to:"
@@ -7054,165 +7070,165 @@ msgstr ""
 "en besked til:"
 
 #. if offline or connecting
-#: ../src/dialogs.py:2536 ../src/dialogs.py:2917 ../src/dialogs.py:3129
+#: ../src/dialogs.py:2546 ../src/dialogs.py:2927 ../src/dialogs.py:3139
 msgid "Connection not available"
 msgstr "Tilslutning er ikke tilgængelig"
 
-#: ../src/dialogs.py:2537 ../src/dialogs.py:2918 ../src/dialogs.py:3130
+#: ../src/dialogs.py:2547 ../src/dialogs.py:2928 ../src/dialogs.py:3140
 #, python-format
 msgid "Please make sure you are connected with \"%s\"."
 msgstr "Vær venligst sikker på at du er tilsluttet med \"%s\"."
 
-#: ../src/dialogs.py:2546 ../src/dialogs.py:2549
+#: ../src/dialogs.py:2556 ../src/dialogs.py:2559
 msgid "Invalid JID"
 msgstr "Ugyldig JID"
 
-#: ../src/dialogs.py:2549
+#: ../src/dialogs.py:2559
 #, python-format
 msgid "Unable to parse \"%s\"."
 msgstr "Kan ikke fortolke \"%s\"."
 
-#: ../src/dialogs.py:2558
+#: ../src/dialogs.py:2568
 msgid "Without a connection, you can not change your password."
 msgstr "Du kan kun ændre din adgangskode hvis du er tilsluttet."
 
-#: ../src/dialogs.py:2577
+#: ../src/dialogs.py:2587
 msgid "Invalid password"
 msgstr "Ugyldig adgangskode"
 
-#: ../src/dialogs.py:2577
+#: ../src/dialogs.py:2587
 msgid "You must enter a password."
 msgstr "Du må indtaste en adgangskode."
 
-#: ../src/dialogs.py:2581
+#: ../src/dialogs.py:2591
 msgid "Passwords do not match"
 msgstr "Adgangskoderne er ikke ens"
 
-#: ../src/dialogs.py:2582
+#: ../src/dialogs.py:2592
 msgid "The passwords typed in both fields must be identical."
 msgstr "Adgangskoderene i de to tekstindtastningsfelter må være identiske."
 
 #. default value
-#: ../src/dialogs.py:2619 ../src/notify.py:247 ../src/notify.py:473
+#: ../src/dialogs.py:2629 ../src/notify.py:249 ../src/notify.py:475
 msgid "Contact Signed In"
 msgstr "Kontakt Loggede Ind"
 
-#: ../src/dialogs.py:2621 ../src/notify.py:255 ../src/notify.py:475
+#: ../src/dialogs.py:2631 ../src/notify.py:257 ../src/notify.py:477
 msgid "Contact Signed Out"
 msgstr "Kontakt Loggede Ud"
 
 #. chat message
-#: ../src/dialogs.py:2623 ../src/notify.py:277 ../src/notify.py:477
+#: ../src/dialogs.py:2633 ../src/notify.py:279 ../src/notify.py:479
 msgid "New Message"
 msgstr "Ny Besked"
 
 #. single message
-#: ../src/dialogs.py:2623 ../src/notify.py:259 ../src/notify.py:477
+#: ../src/dialogs.py:2633 ../src/notify.py:261 ../src/notify.py:479
 msgid "New Single Message"
 msgstr "Ny Enkel Besked"
 
 #. private message
-#: ../src/dialogs.py:2624 ../src/notify.py:265 ../src/notify.py:478
+#: ../src/dialogs.py:2634 ../src/notify.py:267 ../src/notify.py:480
 msgid "New Private Message"
 msgstr "Ny Privat Besked"
 
-#: ../src/dialogs.py:2624 ../src/gui_interface.py:1358 ../src/notify.py:487
+#: ../src/dialogs.py:2634 ../src/gui_interface.py:1374 ../src/notify.py:489
 msgid "New E-mail"
 msgstr "Ny E-post"
 
-#: ../src/dialogs.py:2626 ../src/gui_interface.py:1420 ../src/notify.py:480
+#: ../src/dialogs.py:2636 ../src/gui_interface.py:1436 ../src/notify.py:482
 msgid "File Transfer Request"
 msgstr "Filoverførsel Forespørgsel"
 
-#: ../src/dialogs.py:2628 ../src/gui_interface.py:1320
-#: ../src/gui_interface.py:1389 ../src/notify.py:482
+#: ../src/dialogs.py:2638 ../src/gui_interface.py:1336
+#: ../src/gui_interface.py:1405 ../src/notify.py:484
 msgid "File Transfer Error"
 msgstr "Filoverførsel Fejl"
 
-#: ../src/dialogs.py:2630 ../src/gui_interface.py:1466
-#: ../src/gui_interface.py:1489 ../src/gui_interface.py:1506
-#: ../src/notify.py:484
+#: ../src/dialogs.py:2640 ../src/gui_interface.py:1482
+#: ../src/gui_interface.py:1505 ../src/gui_interface.py:1522
+#: ../src/notify.py:486
 msgid "File Transfer Completed"
 msgstr "Filoverførsel er Fuldført"
 
-#: ../src/dialogs.py:2631 ../src/gui_interface.py:1469 ../src/notify.py:485
+#: ../src/dialogs.py:2641 ../src/gui_interface.py:1485 ../src/notify.py:487
 msgid "File Transfer Stopped"
 msgstr "Filoverførsel Stoppede"
 
-#: ../src/dialogs.py:2633 ../src/gui_interface.py:1152 ../src/notify.py:489
+#: ../src/dialogs.py:2643 ../src/gui_interface.py:1160 ../src/notify.py:491
 msgid "Groupchat Invitation"
 msgstr "Gruppesamtale Invitation"
 
-#: ../src/dialogs.py:2635 ../src/notify.py:239 ../src/notify.py:491
+#: ../src/dialogs.py:2645 ../src/notify.py:241 ../src/notify.py:493
 msgid "Contact Changed Status"
 msgstr "Kontakt Ændrede Status"
 
-#: ../src/dialogs.py:2836
+#: ../src/dialogs.py:2846
 #, python-format
 msgid "Single Message using account %s"
 msgstr "Enkel Besked med konto %s"
 
-#: ../src/dialogs.py:2838
+#: ../src/dialogs.py:2848
 #, python-format
 msgid "Single Message in account %s"
 msgstr "Enkel Besked i konto %s"
 
-#: ../src/dialogs.py:2840
+#: ../src/dialogs.py:2850
 msgid "Single Message"
 msgstr "Enkel Besked"
 
 #. prepare UI for Sending
-#: ../src/dialogs.py:2843
+#: ../src/dialogs.py:2853
 #, python-format
 msgid "Send %s"
 msgstr "Send %s"
 
 #. prepare UI for Receiving
-#: ../src/dialogs.py:2866
+#: ../src/dialogs.py:2876
 #, python-format
 msgid "Received %s"
 msgstr "Modtaget %s"
 
 #. prepare UI for Receiving
-#: ../src/dialogs.py:2889
+#: ../src/dialogs.py:2899
 #, python-format
 msgid "Form %s"
 msgstr "Formular %s"
 
 #. we create a new blank window to send and we preset RE: and to jid
-#: ../src/dialogs.py:2968
+#: ../src/dialogs.py:2978
 #, python-format
 msgid "RE: %s"
 msgstr "SV: %s"
 
-#: ../src/dialogs.py:2969
+#: ../src/dialogs.py:2979
 #, python-format
 msgid "%s wrote:\n"
 msgstr "%s skrev:\n"
 
-#: ../src/dialogs.py:3028
+#: ../src/dialogs.py:3038
 #, python-format
 msgid "XML Console for %s"
 msgstr "XML Konsol for %s"
 
-#: ../src/dialogs.py:3030
+#: ../src/dialogs.py:3040
 msgid "XML Console"
 msgstr "XML Konsol"
 
 #. Action that can be done with an incoming list of contacts
-#: ../src/dialogs.py:3159
+#: ../src/dialogs.py:3169
 msgid "add"
 msgstr "tilføj"
 
-#: ../src/dialogs.py:3159
+#: ../src/dialogs.py:3169
 msgid "modify"
 msgstr "ændre"
 
-#: ../src/dialogs.py:3160
+#: ../src/dialogs.py:3170
 msgid "remove"
 msgstr "fjern"
 
-#: ../src/dialogs.py:3188
+#: ../src/dialogs.py:3198
 #, python-format
 msgid ""
 "<b>%(jid)s</b> would like you to <b>%(action)s</b> some contacts in your "
@@ -7222,156 +7238,156 @@ msgstr ""
 "kontaktvindue."
 
 #. Change label for accept_button to action name instead of 'OK'.
-#: ../src/dialogs.py:3204 ../src/dialogs.py:3250
+#: ../src/dialogs.py:3214 ../src/dialogs.py:3260
 msgid "Add"
 msgstr "Tilføj"
 
 #. Change label for accept_button to action name instead of 'OK'.
-#: ../src/dialogs.py:3206 ../src/dialogs.py:3281
+#: ../src/dialogs.py:3216 ../src/dialogs.py:3291
 msgid "Modify"
 msgstr "Ændre"
 
-#: ../src/dialogs.py:3212
+#: ../src/dialogs.py:3222
 msgid "Jabber ID"
 msgstr "Jabber ID"
 
-#: ../src/dialogs.py:3218
+#: ../src/dialogs.py:3228
 msgid "Groups"
 msgstr "Grupper"
 
 #. it is selected
 #. remote_jid = model[iter_][1].decode('utf-8')
-#: ../src/dialogs.py:3326
+#: ../src/dialogs.py:3336
 #, python-format
 msgid "%s suggested me to add you in my roster."
 msgstr "%s foreslog mig at tilføje dig til min kontaktliste."
 
-#: ../src/dialogs.py:3340
+#: ../src/dialogs.py:3350
 #, python-format
 msgid "Added  %s contacts"
 msgstr "Tilføjede %s kontakter"
 
-#: ../src/dialogs.py:3377
+#: ../src/dialogs.py:3387
 #, python-format
 msgid "Removed  %s contacts"
 msgstr "Fjernede %s kontakter"
 
-#: ../src/dialogs.py:3430
+#: ../src/dialogs.py:3440
 #, python-format
 msgid "Privacy List <b><i>%s</i></b>"
 msgstr "Privatlivs Liste <b><i>%s</i></b>"
 
-#: ../src/dialogs.py:3434
+#: ../src/dialogs.py:3444
 #, python-format
 msgid "Privacy List for %s"
 msgstr "Privatlivs Liste for %s"
 
-#: ../src/dialogs.py:3490
+#: ../src/dialogs.py:3500
 #, python-format
 msgid "Order: %(order)s, action: %(action)s, type: %(type)s, value: %(value)s"
 msgstr ""
 "Rækkefølge: %(order)s, handling: %(action)s, type: %(type)s, værdi: %(value)s"
 
-#: ../src/dialogs.py:3495
+#: ../src/dialogs.py:3505
 #, python-format
 msgid "Order: %(order)s, action: %(action)s"
 msgstr "Rækkefølge: %(order)s, handling: %(action)s"
 
-#: ../src/dialogs.py:3539
+#: ../src/dialogs.py:3549
 msgid "<b>Edit a rule</b>"
 msgstr "<b>Rediger en regel</b>"
 
-#: ../src/dialogs.py:3650
+#: ../src/dialogs.py:3660
 msgid "<b>Add a rule</b>"
 msgstr "<b>Tilføj en regel</b>"
 
-#: ../src/dialogs.py:3750
+#: ../src/dialogs.py:3760
 #, python-format
 msgid "Privacy Lists for %s"
 msgstr "Privatlivs Liste for %s"
 
-#: ../src/dialogs.py:3752
+#: ../src/dialogs.py:3762
 msgid "Privacy Lists"
 msgstr "Privatlivs lister"
 
-#: ../src/dialogs.py:3822
+#: ../src/dialogs.py:3832
 msgid "Invalid List Name"
 msgstr "Ugyldig Listenavn"
 
-#: ../src/dialogs.py:3823
+#: ../src/dialogs.py:3833
 msgid "You must enter a name to create a privacy list."
 msgstr "Du må indtaste et navn for at skabe en privatlivs liste."
 
-#: ../src/dialogs.py:3855
+#: ../src/dialogs.py:3865
 msgid "You are invited to a groupchat"
 msgstr "Du er inviteret til en gruppesamtale."
 
-#: ../src/dialogs.py:3858
+#: ../src/dialogs.py:3868
 msgid "$Contact has invited you to join a discussion"
 msgstr "$Contact har inviteret dig til at deltage i en diskussion"
 
-#: ../src/dialogs.py:3860
+#: ../src/dialogs.py:3870
 #, python-format
 msgid "$Contact has invited you to group chat %(room_jid)s"
 msgstr ""
 "$Contact har inviteret dig til at deltage i en gruppe samtale %(room_jid)s"
 
-#: ../src/dialogs.py:3868
+#: ../src/dialogs.py:3878
 #, python-format
 msgid "Comment: %s"
 msgstr "Kommentar: %s"
 
-#: ../src/dialogs.py:3870
+#: ../src/dialogs.py:3880
 msgid "Do you want to accept the invitation?"
 msgstr "Vil du acceptere denne invitation?"
 
-#: ../src/dialogs.py:3932
+#: ../src/dialogs.py:3942
 msgid "Choose Client Cert #PCKS12"
 msgstr "Vælg Klient Cert #PCKS12"
 
-#: ../src/dialogs.py:3942 ../src/dialogs.py:3985 ../src/dialogs.py:4041
+#: ../src/dialogs.py:3952 ../src/dialogs.py:3995 ../src/dialogs.py:4051
 msgid "All files"
 msgstr "Alle filer"
 
-#: ../src/dialogs.py:3947
+#: ../src/dialogs.py:3957
 msgid "PKCS12 Files"
 msgstr "PKCS12 Filer"
 
-#: ../src/dialogs.py:3975
+#: ../src/dialogs.py:3985
 msgid "Choose Sound"
 msgstr "Vælg Lyd"
 
-#: ../src/dialogs.py:3990
+#: ../src/dialogs.py:4000
 msgid "Wav Sounds"
 msgstr "Wav Lyde"
 
-#: ../src/dialogs.py:4028
+#: ../src/dialogs.py:4038
 msgid "Choose Image"
 msgstr "Vælg Billede"
 
-#: ../src/dialogs.py:4046
+#: ../src/dialogs.py:4056
 msgid "Images"
 msgstr "Billeder"
 
-#: ../src/dialogs.py:4113
+#: ../src/dialogs.py:4123
 #, python-format
 msgid "When %s becomes:"
 msgstr "Når %s bliver:"
 
-#: ../src/dialogs.py:4115
+#: ../src/dialogs.py:4125
 #, python-format
 msgid "Adding Special Notification for %s"
 msgstr "Tilføj Speciel Påmindelse for %s"
 
-#: ../src/dialogs.py:4190
+#: ../src/dialogs.py:4200
 msgid "Condition"
 msgstr "Betingelse"
 
-#: ../src/dialogs.py:4310
+#: ../src/dialogs.py:4320
 msgid "when I am "
 msgstr "når jeg er"
 
-#: ../src/dialogs.py:4786
+#: ../src/dialogs.py:4796
 #, python-format
 msgid ""
 "Your chat session with <b>%(jid)s</b> is encrypted.\n"
@@ -7382,19 +7398,19 @@ msgstr ""
 "\n"
 "Denne sessions Korte Ægtheds Streng er: <b>%(sas)s</b>"
 
-#: ../src/dialogs.py:4789
+#: ../src/dialogs.py:4799
 msgid "You have already verified this contact's identity."
 msgstr "Du har allerede verificeret denne kontakts identitet."
 
-#: ../src/dialogs.py:4795 ../src/dialogs.py:4879
+#: ../src/dialogs.py:4805 ../src/dialogs.py:4889
 msgid "Contact's identity verified"
 msgstr "Kontaktens identitet er verificeret"
 
-#: ../src/dialogs.py:4801
+#: ../src/dialogs.py:4811
 msgid "Verify again..."
 msgstr "Verificer igen..."
 
-#: ../src/dialogs.py:4806
+#: ../src/dialogs.py:4816
 msgid ""
 "To be certain that <b>only</b> the expected person can read your messages or "
 "send you messages, you need to verify their identity by clicking the button "
@@ -7404,19 +7420,19 @@ msgstr ""
 "beskeder eller sende dig beskeder, må du verificere deres identitet ved at "
 "trykke på knappen under."
 
-#: ../src/dialogs.py:4809 ../src/dialogs.py:4860 ../src/dialogs.py:4873
+#: ../src/dialogs.py:4819 ../src/dialogs.py:4870 ../src/dialogs.py:4883
 msgid "Contact's identity NOT verified"
 msgstr "Kontaktens identitet er IKKE verificeret"
 
-#: ../src/dialogs.py:4814
+#: ../src/dialogs.py:4824
 msgid "Verify..."
 msgstr "Verificer..."
 
-#: ../src/dialogs.py:4825
+#: ../src/dialogs.py:4835
 msgid "Have you verified the contact's identity?"
 msgstr "Har du bekræftet den kontaktens identitet?"
 
-#: ../src/dialogs.py:4826
+#: ../src/dialogs.py:4836
 #, python-format
 msgid ""
 "To prevent talking to an unknown person, you should speak to <b>%(jid)s</b> "
@@ -7431,23 +7447,23 @@ msgstr ""
 "\n"
 "Denne sessions Korte Ægtheds Streng: <b>%(sas)s</b>"
 
-#: ../src/dialogs.py:4827
+#: ../src/dialogs.py:4837
 msgid "Did you talk to the remote contact and verify the SAS?"
 msgstr "Har du snakket med den fjerne kontakt og verificeret KÆS?"
 
-#: ../src/dialogs.py:4861
+#: ../src/dialogs.py:4871
 #, python-format
 msgid "The contact's key (%s) <b>does not match</b> the key assigned in Gajim."
 msgstr ""
 "Kontaktens nøgle (%s) <b>passer ikke</b> til den angivne nøgle i Gajim."
 
-#: ../src/dialogs.py:4867
+#: ../src/dialogs.py:4877
 msgid "No GPG key is assigned to this contact. So you cannot encrypt messages."
 msgstr ""
 "Ingen GPG nøgle er tildelt denne kontakt. Derfor kan du ikke kryptere "
 "beskeder."
 
-#: ../src/dialogs.py:4874
+#: ../src/dialogs.py:4884
 msgid ""
 "GPG key is assigned to this contact, but <b>you do not trust his key</b>, so "
 "message <b>cannot</b> be encrypted. Use your GPG client to trust this key."
@@ -7456,7 +7472,7 @@ msgstr ""
 "nøgle</b>, så beskeder <b>kan ikke</b> krypteres. Brug din GPG klient til at "
 "ændre dette."
 
-#: ../src/dialogs.py:4880
+#: ../src/dialogs.py:4890
 msgid ""
 "GPG Key is assigned to this contact, and you trust his key, so messages will "
 "be encrypted."
@@ -7464,19 +7480,19 @@ msgstr ""
 "GPG Nøgle er tildet til denne kontakt, og du stoler på denne nøgle, så "
 "beskeder vil blive krypteret."
 
-#: ../src/dialogs.py:4945
+#: ../src/dialogs.py:4955
 msgid "an audio and video"
 msgstr "en lyd og en video"
 
-#: ../src/dialogs.py:4947
+#: ../src/dialogs.py:4957
 msgid "an audio"
 msgstr "en lyd"
 
-#: ../src/dialogs.py:4949
+#: ../src/dialogs.py:4959
 msgid "a video"
 msgstr "en video"
 
-#: ../src/dialogs.py:4953
+#: ../src/dialogs.py:4963
 #, python-format
 msgid ""
 "%(contact)s wants to start %(type)s session with you. Do you want to answer "
@@ -7548,65 +7564,65 @@ msgstr "Denne tjeneste har ingen elementer som kan gennemses."
 msgid "_Execute Command"
 msgstr "_Kør Kommando"
 
-#: ../src/disco.py:1333 ../src/disco.py:1504
+#: ../src/disco.py:1333 ../src/disco.py:1503
 msgid "Re_gister"
 msgstr "Re_gistrer"
 
-#: ../src/disco.py:1545
+#: ../src/disco.py:1544
 #, python-format
 msgid "Scanning %(current)d / %(total)d.."
 msgstr "Skanner %(current)d / %(total)d.."
 
 #. Users column
-#: ../src/disco.py:1736
+#: ../src/disco.py:1735
 msgid "Users"
 msgstr "Brugere"
 
 #. Description column
-#: ../src/disco.py:1744
+#: ../src/disco.py:1743
 msgid "Description"
 msgstr "Beskrivelse"
 
 #. Id column
-#: ../src/disco.py:1752
+#: ../src/disco.py:1751
 msgid "Id"
 msgstr "Id"
 
-#: ../src/disco.py:1817 ../src/gui_interface.py:3182
+#: ../src/disco.py:1816 ../src/gui_interface.py:3217
 msgid "Bookmark already set"
 msgstr "Bogmærke er allerede sat"
 
-#: ../src/disco.py:1818 ../src/gui_interface.py:3183
+#: ../src/disco.py:1817 ../src/gui_interface.py:3218
 #, python-format
 msgid "Group Chat \"%s\" is already in your bookmarks."
 msgstr "Gruppe samtale \"%s\" er allerede i dine bogmærker."
 
-#: ../src/disco.py:1827 ../src/gui_interface.py:3197
+#: ../src/disco.py:1826 ../src/gui_interface.py:3232
 msgid "Bookmark has been added successfully"
 msgstr "Bogmærket er blevet tilføjet succesfuldt"
 
-#: ../src/disco.py:1828 ../src/gui_interface.py:3198
+#: ../src/disco.py:1827 ../src/gui_interface.py:3233
 msgid "You can manage your bookmarks via Actions menu in your roster."
 msgstr ""
 "De kan håndtere dine bogmærker via Handlings menuen i dit kontaktvindue."
 
-#: ../src/disco.py:2039
+#: ../src/disco.py:2037
 msgid "Subscribed"
 msgstr "Abonnerede"
 
-#: ../src/disco.py:2047
+#: ../src/disco.py:2045
 msgid "Node"
 msgstr "Knude"
 
-#: ../src/disco.py:2111
+#: ../src/disco.py:2109
 msgid "New post"
 msgstr "Ny post"
 
-#: ../src/disco.py:2117
+#: ../src/disco.py:2115
 msgid "_Subscribe"
 msgstr "_Abonner"
 
-#: ../src/disco.py:2123
+#: ../src/disco.py:2121
 msgid "_Unsubscribe"
 msgstr "_Frameld abonnement"
 
@@ -7861,7 +7877,7 @@ msgstr "Størrelse: %s"
 #. You is a reply of who sent a file
 #. You is a reply of who received a file
 #: ../src/filetransfers_window.py:188 ../src/filetransfers_window.py:198
-#: ../src/history_manager.py:522
+#: ../src/history_manager.py:523
 msgid "You"
 msgstr "Du"
 
@@ -7942,12 +7958,12 @@ msgstr "Beskrivelse: %s"
 msgid "%s wants to send you a file:"
 msgstr "%s vil gerne sende dig en fil:"
 
-#: ../src/filetransfers_window.py:342 ../src/gtkgui_helpers.py:902
+#: ../src/filetransfers_window.py:342 ../src/gtkgui_helpers.py:875
 #, python-format
 msgid "Cannot overwrite existing file \"%s\""
 msgstr "Kan ikke overskrive den eksisterende fil \"%s\""
 
-#: ../src/filetransfers_window.py:343 ../src/gtkgui_helpers.py:903
+#: ../src/filetransfers_window.py:343 ../src/gtkgui_helpers.py:876
 msgid ""
 "A file with this name already exists and you do not have permission to "
 "overwrite it."
@@ -7955,22 +7971,22 @@ msgstr ""
 "En fil med dette navn eksisterer allerede og du har ikke rettigheder til at "
 "overskrive den."
 
-#: ../src/filetransfers_window.py:359 ../src/gtkgui_helpers.py:907
+#: ../src/filetransfers_window.py:359 ../src/gtkgui_helpers.py:880
 msgid "This file already exists"
 msgstr "Denne fil eksisterer allerede"
 
-#: ../src/filetransfers_window.py:359 ../src/gtkgui_helpers.py:907
+#: ../src/filetransfers_window.py:359 ../src/gtkgui_helpers.py:880
 msgid "What do you want to do?"
 msgstr "Hvad vil du gøre?"
 
 #. read-only bit is used to mark special folder under windows,
 #. not to mark that a folder is read-only. See ticket #3587
-#: ../src/filetransfers_window.py:369 ../src/gtkgui_helpers.py:914
+#: ../src/filetransfers_window.py:369 ../src/gtkgui_helpers.py:887
 #, python-format
 msgid "Directory \"%s\" is not writable"
 msgstr "Kataloget \"%s\" er ikke skrivbart"
 
-#: ../src/filetransfers_window.py:369 ../src/gtkgui_helpers.py:915
+#: ../src/filetransfers_window.py:369 ../src/gtkgui_helpers.py:888
 msgid "You do not have permission to create files in this directory."
 msgstr "Du har ikke rettigheder til at oprette filer i dette katalog."
 
@@ -8018,36 +8034,36 @@ msgstr "Afsender: "
 msgid "Pause"
 msgstr "Pause"
 
-#: ../src/gajim.py:142
+#: ../src/gajim.py:179
 msgid "Gajim needs X server to run. Quiting..."
 msgstr "Gajim behøver en X server for at kunne køre. Slutter..."
 
-#: ../src/gajim.py:144
+#: ../src/gajim.py:181
 #, python-format
 msgid "importing PyGTK failed: %s"
 msgstr "importering af PyGTK fejlede: %s"
 
-#: ../src/gajim.py:186
+#: ../src/gajim.py:223
 msgid "Gajim needs PyGTK 2.16 or above"
 msgstr "Gajim behøver PyGTK 2.16 eller højere"
 
-#: ../src/gajim.py:187
+#: ../src/gajim.py:224
 msgid "Gajim needs PyGTK 2.16 or above to run. Quiting..."
 msgstr "Gajim behøver PyGTK 2.16 eller højere for at køre. Slutter..."
 
-#: ../src/gajim.py:189
+#: ../src/gajim.py:226
 msgid "Gajim needs GTK 2.16 or above"
 msgstr "Gajim behøver GTK 2.16 eller højere"
 
-#: ../src/gajim.py:190
+#: ../src/gajim.py:227
 msgid "Gajim needs GTK 2.16 or above to run. Quiting..."
 msgstr "Gajim behøver GTK 2.16 eller højere for at køre. Slutter..."
 
-#: ../src/gajim.py:199
+#: ../src/gajim.py:236
 msgid "Gajim needs pywin32 to run"
 msgstr "Gajim behøver pywin32 for at køre"
 
-#: ../src/gajim.py:200
+#: ../src/gajim.py:237
 #, python-format
 msgid ""
 "Please make sure that Pywin32 is installed on your system. You can get it at "
@@ -8057,11 +8073,11 @@ msgstr ""
 "det fra %s"
 
 #. set the icon to all newly opened wind
-#: ../src/gajim.py:316
+#: ../src/gajim.py:353
 msgid "Gajim is already running"
 msgstr "Gajim kører allerede"
 
-#: ../src/gajim.py:317
+#: ../src/gajim.py:354
 msgid ""
 "Another instance of Gajim seems to be running\n"
 "Run anyway?"
@@ -8452,7 +8468,7 @@ msgstr "Viser eller gemmer ipython vinduet"
 msgid "Missing argument \"contact_jid\""
 msgstr "Manglende argument \"contact_jid\""
 
-#: ../src/gajim-remote.py:348
+#: ../src/gajim-remote.py:349
 #, python-format
 msgid ""
 "'%s' is not in your roster.\n"
@@ -8461,15 +8477,15 @@ msgstr ""
 "'%s' er ikke i dit kontaktvindue.\n"
 "Specificer venligst en konto for at sende beskeden."
 
-#: ../src/gajim-remote.py:351
+#: ../src/gajim-remote.py:352
 msgid "You have no active account"
 msgstr "Du har ingen aktiv konto"
 
-#: ../src/gajim-remote.py:404
+#: ../src/gajim-remote.py:405
 msgid "It seems Gajim is not running. So you can't use gajim-remote."
 msgstr "Det ser ud til at Gajim ikke kører. Så du kan ikke bruge gajim-remote."
 
-#: ../src/gajim-remote.py:431
+#: ../src/gajim-remote.py:432
 #, python-format
 msgid ""
 "Usage: %(basename)s %(command)s %(arguments)s \n"
@@ -8478,16 +8494,16 @@ msgstr ""
 "Brug: %(basename)s %(command)s %(arguments)s \n"
 "\t %(help)s"
 
-#: ../src/gajim-remote.py:435
+#: ../src/gajim-remote.py:436
 msgid "Arguments:"
 msgstr "Argumenter:"
 
-#: ../src/gajim-remote.py:439
+#: ../src/gajim-remote.py:440
 #, python-format
 msgid "%s not found"
 msgstr "%s ikke fundet"
 
-#: ../src/gajim-remote.py:445
+#: ../src/gajim-remote.py:446
 #, python-format
 msgid ""
 "Usage: %s command [arguments]\n"
@@ -8496,7 +8512,7 @@ msgstr ""
 "Brug: %s kommando [argumenter]\n"
 "Kommando er en af:\n"
 
-#: ../src/gajim-remote.py:514
+#: ../src/gajim-remote.py:515
 #, python-format
 msgid ""
 "Too many arguments. \n"
@@ -8505,7 +8521,7 @@ msgstr ""
 "For mange argumenter. \n"
 "Skriv \"%(basename)s help %(command)s\" for mere information"
 
-#: ../src/gajim-remote.py:519
+#: ../src/gajim-remote.py:520
 #, python-format
 msgid ""
 "Argument \"%(arg)s\" is not specified. \n"
@@ -8514,11 +8530,11 @@ msgstr ""
 "Argument \"%(arg)s\" er ikke specificeret. \n"
 "Skriv \"%(basename)s help %(command)s\" for mere information"
 
-#: ../src/gajim-remote.py:538
+#: ../src/gajim-remote.py:539
 msgid "No uri given"
 msgstr "Ingen uri er givet"
 
-#: ../src/gajim-remote.py:540
+#: ../src/gajim-remote.py:541
 msgid "Wrong uri"
 msgstr "Forkert uri"
 
@@ -8547,181 +8563,181 @@ msgstr "Du kan ikke slette det nuværende tema"
 msgid "Please first choose another for your current theme."
 msgstr "Vælg venligst en anden for dit nuværende tema."
 
-#: ../src/groupchat_control.py:169
+#: ../src/groupchat_control.py:170
 msgid "Sending private message failed"
 msgstr "Sending af privat besked fejlede"
 
 #. in second %s code replaces with nickname
-#: ../src/groupchat_control.py:171
+#: ../src/groupchat_control.py:172
 #, python-format
 msgid "You are no longer in group chat \"%(room)s\" or \"%(nick)s\" has left."
 msgstr ""
 "Du er ikke længere i gruppe samtale \"%(room)s\" eller \"%(nick)s\" har "
 "forladt rummet."
 
-#: ../src/groupchat_control.py:450
+#: ../src/groupchat_control.py:467
 msgid "Insert Nickname"
 msgstr "Indsæt Kælenavn"
 
-#: ../src/groupchat_control.py:631
+#: ../src/groupchat_control.py:648
 msgid "Conversation with "
 msgstr "Samtale med "
 
-#: ../src/groupchat_control.py:633
+#: ../src/groupchat_control.py:650
 msgid "Continued conversation"
 msgstr "Fortsat samtale"
 
 #. Can be a message (see handle_event_gc_config_change in
 #. gajim.py)
 #. Can be a presence (see chg_contact_status in groupchat_control.py)
-#: ../src/groupchat_control.py:1272 ../src/gui_interface.py:1080
+#: ../src/groupchat_control.py:1296 ../src/gui_interface.py:1083
 msgid "Any occupant is allowed to see your full JID"
 msgstr "En hvilken som helst deltager har lov til at se din fulde JID"
 
 #. Can be a message (see handle_event_gc_config_change in
 #. gajim.py)
-#: ../src/groupchat_control.py:1276
+#: ../src/groupchat_control.py:1300
 msgid "Room logging is enabled"
 msgstr "Rum logging er aktiveret"
 
-#: ../src/groupchat_control.py:1278
+#: ../src/groupchat_control.py:1302
 msgid "A new room has been created"
 msgstr "Et nyt rum er blevet oprettet"
 
-#: ../src/groupchat_control.py:1281
+#: ../src/groupchat_control.py:1305
 msgid "The server has assigned or modified your roomnick"
 msgstr "Serveren har fastsat eller ændret dit kælenavn for rummet"
 
 #. do not print 'kicked by None'
-#: ../src/groupchat_control.py:1287
+#: ../src/groupchat_control.py:1311
 #, python-format
 msgid "%(nick)s has been kicked: %(reason)s"
 msgstr "%(nick)s er blevet udvist: %(reason)s"
 
-#: ../src/groupchat_control.py:1291
+#: ../src/groupchat_control.py:1315
 #, python-format
 msgid "%(nick)s has been kicked by %(who)s: %(reason)s"
 msgstr "%(nick)s er blevet udvist af %(who)s: %(reason)s"
 
 #. do not print 'banned by None'
-#: ../src/groupchat_control.py:1300
+#: ../src/groupchat_control.py:1324
 #, python-format
 msgid "%(nick)s has been banned: %(reason)s"
 msgstr "%(nick)s er blevet uønsket: %(reason)s"
 
-#: ../src/groupchat_control.py:1303
+#: ../src/groupchat_control.py:1327
 #, python-format
 msgid "%(nick)s has been banned by %(who)s: %(reason)s"
 msgstr "%(nick)s er blevet uønsket af %(who)s: %(reason)s"
 
-#: ../src/groupchat_control.py:1314 ../src/groupchat_control.py:1418
+#: ../src/groupchat_control.py:1338 ../src/groupchat_control.py:1442
 #, python-format
 msgid "You are now known as %s"
 msgstr "Du er nu kendt som %s"
 
-#: ../src/groupchat_control.py:1330 ../src/gui_interface.py:919
+#: ../src/groupchat_control.py:1354 ../src/gui_interface.py:922
 #, python-format
 msgid "%(nick)s is now known as %(new_nick)s"
 msgstr "%(nick)s er nu kendt som %(new_nick)s"
 
-#: ../src/groupchat_control.py:1372 ../src/groupchat_control.py:1377
-#: ../src/groupchat_control.py:1383
+#: ../src/groupchat_control.py:1396 ../src/groupchat_control.py:1401
+#: ../src/groupchat_control.py:1407
 #, python-format
 msgid "%(nick)s has been removed from the room (%(reason)s)"
 msgstr "%(nick)s er blevet fjernet fra rummet %(reason)s"
 
-#: ../src/groupchat_control.py:1374
+#: ../src/groupchat_control.py:1398
 msgid "affiliation changed"
 msgstr "tilknytning ændret"
 
-#: ../src/groupchat_control.py:1379
+#: ../src/groupchat_control.py:1403
 msgid "room configuration changed to members-only"
 msgstr "Rum konfiguration er blevet ændret til 'kun for medlemmer'"
 
-#: ../src/groupchat_control.py:1385
+#: ../src/groupchat_control.py:1409
 msgid "system shutdown"
 msgstr "computeren slukkes"
 
-#: ../src/groupchat_control.py:1470
+#: ../src/groupchat_control.py:1492
 #, python-format
 msgid "** Affiliation of %(nick)s has been set to %(affiliation)s by %(actor)s"
 msgstr ""
 "** Tilhørsforholdet for %(nick)s er blevet sat til %(affiliation)s af "
 "%(actor)s"
 
-#: ../src/groupchat_control.py:1474
+#: ../src/groupchat_control.py:1496
 #, python-format
 msgid "** Affiliation of %(nick)s has been set to %(affiliation)s"
 msgstr "** Tilhørsforholdet for %(nick)s er blevet sat til %(affiliation)s"
 
-#: ../src/groupchat_control.py:1489
+#: ../src/groupchat_control.py:1511
 #, python-format
 msgid "** Role of %(nick)s has been set to %(role)s by %(actor)s"
 msgstr "** %(nick)s rolle er blevet sat til %(role)s af %(actor)s"
 
-#: ../src/groupchat_control.py:1493
+#: ../src/groupchat_control.py:1515
 #, python-format
 msgid "** Role of %(nick)s has been set to %(role)s"
 msgstr "** %(nick)s rolle er blevet sat til %(role)s"
 
-#: ../src/groupchat_control.py:1522
+#: ../src/groupchat_control.py:1544
 #, python-format
 msgid "%s has left"
 msgstr "%s har forladt samtalen"
 
-#: ../src/groupchat_control.py:1527
+#: ../src/groupchat_control.py:1549
 #, python-format
 msgid "%s has joined the group chat"
 msgstr "%s deltager nu i gruppe samtalen"
 
-#: ../src/groupchat_control.py:1529 ../src/gui_interface.py:946
-#: ../src/history_window.py:447 ../src/notify.py:234
+#: ../src/groupchat_control.py:1551 ../src/gui_interface.py:949
+#: ../src/history_window.py:447 ../src/notify.py:236
 #, python-format
 msgid "%(nick)s is now %(status)s"
 msgstr "%(nick)s er nu %(status)s"
 
-#: ../src/groupchat_control.py:1759
+#: ../src/groupchat_control.py:1780
 #, python-format
 msgid "Are you sure you want to leave group chat \"%s\"?"
 msgstr "Er du sikker på du vil forlade gruppe samtalen \"%s\"?"
 
-#: ../src/groupchat_control.py:1761
+#: ../src/groupchat_control.py:1782
 msgid ""
 "If you close this window, you will be disconnected from this group chat."
 msgstr ""
 "Hvis du lukker dette vindue vil du blive frakoblet fra denne gruppe samtale."
 
-#: ../src/groupchat_control.py:1765 ../src/gui_interface.py:1216
-#: ../src/gui_interface.py:1992 ../src/gui_interface.py:2029
-#: ../src/gui_interface.py:2064 ../src/message_window.py:224
-#: ../src/roster_window.py:2739 ../src/roster_window.py:3399
-#: ../src/roster_window.py:4123
+#: ../src/groupchat_control.py:1786 ../src/gui_interface.py:1224
+#: ../src/gui_interface.py:2019 ../src/gui_interface.py:2056
+#: ../src/gui_interface.py:2091 ../src/message_window.py:224
+#: ../src/roster_window.py:2762 ../src/roster_window.py:3422
+#: ../src/roster_window.py:4146
 msgid "_Do not ask me again"
 msgstr "Ikke spørg mig ige_n"
 
-#: ../src/groupchat_control.py:1799
+#: ../src/groupchat_control.py:1820
 msgid "Changing Subject"
 msgstr "Ændre emne"
 
-#: ../src/groupchat_control.py:1800
+#: ../src/groupchat_control.py:1821
 msgid "Please specify the new subject:"
 msgstr "Anfør et nyt emne:"
 
-#: ../src/groupchat_control.py:1807
+#: ../src/groupchat_control.py:1828
 msgid "Changing Nickname"
 msgstr "Ændre kælenavn"
 
-#: ../src/groupchat_control.py:1808
+#: ../src/groupchat_control.py:1829
 msgid "Please specify the new nickname you want to use:"
 msgstr "Anfør dit nye kælenavn:"
 
 #. Ask for a reason
-#: ../src/groupchat_control.py:1839
+#: ../src/groupchat_control.py:1860
 #, python-format
 msgid "Destroying %s"
 msgstr "Fjern %s"
 
-#: ../src/groupchat_control.py:1840
+#: ../src/groupchat_control.py:1861
 msgid ""
 "You are going to definitively destroy this room.\n"
 "You may specify a reason below:"
@@ -8729,22 +8745,22 @@ msgstr ""
 "Du er ved at definitivt fjerne dette rum.\n"
 "Du kan anføre en grund herunder:"
 
-#: ../src/groupchat_control.py:1842
+#: ../src/groupchat_control.py:1863
 msgid "You may also enter an alternate venue:"
 msgstr "Du kan også indtaste et alternativt mødested:"
 
 #. ask for reason
-#: ../src/groupchat_control.py:2028
+#: ../src/groupchat_control.py:2052
 #, python-format
 msgid "Kicking %s"
 msgstr "Sparker %s"
 
-#: ../src/groupchat_control.py:2029 ../src/groupchat_control.py:2356
+#: ../src/groupchat_control.py:2053 ../src/groupchat_control.py:2380
 msgid "You may specify a reason below:"
 msgstr "Du kan anføre en begrundelse under:"
 
 #. ask for reason
-#: ../src/groupchat_control.py:2355
+#: ../src/groupchat_control.py:2379
 #, python-format
 msgid "Banning %s"
 msgstr "Udeluk %s"
@@ -8774,45 +8790,45 @@ msgstr "Detaljer"
 msgid "Error: cannot open %s for reading"
 msgstr "Fejl: kan ikke åbne %s for læsning"
 
-#: ../src/gtkgui_helpers.py:400
+#: ../src/gtkgui_helpers.py:373
 msgid "Error reading file:"
 msgstr "Fejl ved læsning af fil:"
 
-#: ../src/gtkgui_helpers.py:403
+#: ../src/gtkgui_helpers.py:376
 msgid "Error parsing file:"
 msgstr "Fejl ved fortolkning af fil:"
 
 #. do not traceback (could be a permission problem)
 #. we talk about a file here
-#: ../src/gtkgui_helpers.py:444
+#: ../src/gtkgui_helpers.py:417
 #, python-format
 msgid "Could not write to %s. Session Management support will not work"
 msgstr ""
 "Kunne ikke skrive til %s. Sessions håndterings understøttelse vil ikke virke"
 
 #. xmpp: is currently handled by another program, so ask the user
-#: ../src/gtkgui_helpers.py:818
+#: ../src/gtkgui_helpers.py:791
 msgid "Gajim is not the default Jabber client"
 msgstr "Gajim er ikke standard Jabber client"
 
-#: ../src/gtkgui_helpers.py:819
+#: ../src/gtkgui_helpers.py:792
 msgid "Would you like to make Gajim the default Jabber client?"
 msgstr "Har du lyst til at gøre Gajim til standard Jabber client?"
 
-#: ../src/gtkgui_helpers.py:820
+#: ../src/gtkgui_helpers.py:793
 msgid "Always check to see if Gajim is the default Jabber client on startup"
 msgstr "Altid kontroller om Gajim er standard Jabber client ved opstart"
 
-#: ../src/gtkgui_helpers.py:887
+#: ../src/gtkgui_helpers.py:860
 msgid "Extension not supported"
 msgstr "Udvidelse er ikke understøttet"
 
-#: ../src/gtkgui_helpers.py:888
+#: ../src/gtkgui_helpers.py:861
 #, python-format
 msgid "Image cannot be saved in %(type)s format. Save as %(new_filename)s?"
 msgstr "Billede kan ikke gemmes i formatet %(type)s. Gem som %(new_filename)s?"
 
-#: ../src/gtkgui_helpers.py:924
+#: ../src/gtkgui_helpers.py:897
 msgid "Save Image as..."
 msgstr "Gem Billede som..."
 
@@ -8845,7 +8861,7 @@ msgstr "Accepterer du denne forespørgsel for konto %s?"
 msgid "HTTP (%(method)s) Authorization for %(url)s (id: %(id)s)"
 msgstr "HTTP (%(method)s) Autorisering for %(url)s (id: %(id)s)"
 
-#: ../src/gui_interface.py:213 ../src/notify.py:493
+#: ../src/gui_interface.py:213 ../src/notify.py:495
 msgid "Connection Failed"
 msgstr "Tilslutning Fejlede"
 
@@ -8860,25 +8876,25 @@ msgstr "Fejl %(code)s: %(msg)s"
 msgid "error while sending %(message)s ( %(error)s )"
 msgstr "fejl opstod under sending %(message)s ( %(error)s )"
 
-#: ../src/gui_interface.py:663 ../src/notify.py:495
+#: ../src/gui_interface.py:666 ../src/notify.py:497
 msgid "Subscription request"
 msgstr "Abonnement forespørgsel"
 
-#: ../src/gui_interface.py:688
+#: ../src/gui_interface.py:691
 msgid "Authorization accepted"
 msgstr "Autorisering accepteret"
 
-#: ../src/gui_interface.py:689
+#: ../src/gui_interface.py:692
 #, python-format
 msgid "The contact \"%s\" has authorized you to see his or her status."
 msgstr "Kontakten \"%s\" har godkendt dig til at se hans eller hendes status."
 
-#: ../src/gui_interface.py:702
+#: ../src/gui_interface.py:705
 #, python-format
 msgid "Contact \"%s\" removed subscription from you"
 msgstr "Kontakt \"%s\" har fjernet abonneringen på dig"
 
-#: ../src/gui_interface.py:703
+#: ../src/gui_interface.py:706
 msgid ""
 "You will always see him or her as offline.\n"
 "Do you want to remove him or her from your contact list?"
@@ -8886,60 +8902,60 @@ msgstr ""
 "Du vil altid se ham eller hende som offline.\n"
 "Vil du fjerne ham eller hende fra din kontakt liste?"
 
-#: ../src/gui_interface.py:727 ../src/notify.py:497
+#: ../src/gui_interface.py:730 ../src/notify.py:499
 msgid "Unsubscribed"
 msgstr "Frameldt abonnement"
 
-#: ../src/gui_interface.py:754
+#: ../src/gui_interface.py:757
 #, python-format
 msgid "Contact with \"%s\" cannot be established"
 msgstr "Kontakt med \"%s\" kan ikke blive etableret"
 
-#: ../src/gui_interface.py:1015
+#: ../src/gui_interface.py:1018
 #, python-format
 msgid "%(jid)s has set the subject to %(subject)s"
 msgstr "%(jid)s har sat emnet til %(subject)s"
 
-#: ../src/gui_interface.py:1083
+#: ../src/gui_interface.py:1086
 msgid "Room now shows unavailable member"
 msgstr "Rummet viser nu; ikke tilgængelige medlemmer"
 
-#: ../src/gui_interface.py:1085
+#: ../src/gui_interface.py:1088
 msgid "room now does not show unavailable members"
 msgstr "Rummet viser nu ikke; ikke tilgængelige medlemmer"
 
-#: ../src/gui_interface.py:1087
+#: ../src/gui_interface.py:1090
 msgid "A non-privacy-related room configuration change has occurred"
 msgstr "En ændring i en non-privacy-related rum konfiguration har forekommet"
 
 #. Can be a presence (see chg_contact_status in groupchat_control.py)
-#: ../src/gui_interface.py:1091
+#: ../src/gui_interface.py:1094
 msgid "Room logging is now enabled"
 msgstr "Rum logging er nu aktiveret"
 
-#: ../src/gui_interface.py:1093
+#: ../src/gui_interface.py:1096
 msgid "Room logging is now disabled"
 msgstr "Rum logging er nu deaktiveret"
 
-#: ../src/gui_interface.py:1095
+#: ../src/gui_interface.py:1098
 msgid "Room is now non-anonymous"
 msgstr "Rummet er nu ikke-anonymt"
 
-#: ../src/gui_interface.py:1098
+#: ../src/gui_interface.py:1101
 msgid "Room is now semi-anonymous"
 msgstr "Rummet er nu semi-anonymt"
 
-#: ../src/gui_interface.py:1101
+#: ../src/gui_interface.py:1104
 msgid "Room is now fully-anonymous"
 msgstr "Rummet er nu helt anonymt"
 
-#: ../src/gui_interface.py:1133
+#: ../src/gui_interface.py:1141
 #, python-format
 msgid "A Password is required to join the room %s. Please type it."
 msgstr ""
 "En adgangskode er påkrævet for at deltage i rummet %s. Venligst skriv den."
 
-#: ../src/gui_interface.py:1180
+#: ../src/gui_interface.py:1188
 msgid ""
 "You configured Gajim to use GPG agent, but there is no GPG agent running or "
 "it returned a wrong passphrase.\n"
@@ -8947,23 +8963,23 @@ msgstr ""
 "Du har konfigureret Gajim til at bruge GPG agenten, men der er ingen GPG "
 "agent som kører eller den returnerede en forkert gpg-løsen.\n"
 
-#: ../src/gui_interface.py:1182 ../src/gui_interface.py:1189
+#: ../src/gui_interface.py:1190 ../src/gui_interface.py:1197
 msgid "You are currently connected without your OpenPGP key."
 msgstr "Du er for øjeblikket tilsluttet uden din OpenPGP nøgle."
 
-#: ../src/gui_interface.py:1184
+#: ../src/gui_interface.py:1192
 msgid "Your passphrase is incorrect"
 msgstr "Dit pgp-løsen er ikke korrekt"
 
-#: ../src/gui_interface.py:1188
+#: ../src/gui_interface.py:1196
 msgid "OpenGPG Passphrase Incorrect"
 msgstr "OpenPGP-løsen er ikke korrekt"
 
-#: ../src/gui_interface.py:1214
+#: ../src/gui_interface.py:1222
 msgid "GPG key not trusted"
 msgstr "GPG nøglen kan ikke stoles på"
 
-#: ../src/gui_interface.py:1214
+#: ../src/gui_interface.py:1222
 msgid ""
 "The GPG key used to encrypt this chat is not trusted. Do you really want to "
 "encrypt this message?"
@@ -8971,7 +8987,7 @@ msgstr ""
 "GPG nøglen brugt til at kryptere den samtale er ikke til at stole på. Vil du "
 "virkelig kryptere den besked?"
 
-#: ../src/gui_interface.py:1226
+#: ../src/gui_interface.py:1234
 msgid ""
 "Gnome Keyring is installed but not                 correctly started "
 "(environment variable probably not                 correctly set)"
@@ -8979,19 +8995,19 @@ msgstr ""
 "Gnomes Nøglering er installeret men ikke                  startet korrekt "
 "(miljøvariabel er sandsynligvis ikke                  sat op rigtig)"
 
-#: ../src/gui_interface.py:1330
+#: ../src/gui_interface.py:1346
 #, python-format
 msgid "New mail on %(gmail_mail_address)s"
 msgstr "Ny e-post på %(gmail_mail_address)s"
 
-#: ../src/gui_interface.py:1332
+#: ../src/gui_interface.py:1348
 #, python-format
 msgid "You have %d new mail conversation"
 msgid_plural "You have %d new mail conversations"
 msgstr[0] "Du har %d ny e-post samtale"
 msgstr[1] "Du har %d nye e-post samtaler"
 
-#: ../src/gui_interface.py:1345
+#: ../src/gui_interface.py:1361
 #, python-format
 msgid ""
 "\n"
@@ -9006,42 +9022,42 @@ msgstr ""
 "Emne: %(subject)s\n"
 "%(snippet)s"
 
-#: ../src/gui_interface.py:1418
+#: ../src/gui_interface.py:1434
 #, python-format
 msgid "%s wants to send you a file."
 msgstr "%s vil gerne sende dig en fil."
 
-#: ../src/gui_interface.py:1455 ../src/roster_window.py:1856
+#: ../src/gui_interface.py:1471 ../src/roster_window.py:1874
 msgid "Remote contact stopped transfer"
 msgstr "Den fjerne kontakt stoppede filoverførslen"
 
-#: ../src/gui_interface.py:1458 ../src/roster_window.py:1858
+#: ../src/gui_interface.py:1474 ../src/roster_window.py:1876
 msgid "Error opening file"
 msgstr "Fejl ved åbning af fil"
 
-#: ../src/gui_interface.py:1490
+#: ../src/gui_interface.py:1506
 #, python-format
 msgid "You successfully received %(filename)s from %(name)s."
 msgstr "Du har succesfuldt modtaget %(filename)s fra %(name)s"
 
 #. ft stopped
-#: ../src/gui_interface.py:1494
+#: ../src/gui_interface.py:1510
 #, python-format
 msgid "File transfer of %(filename)s from %(name)s stopped."
 msgstr "Filoverførsel af %(filename)s fra %(name)s er stoppet."
 
-#: ../src/gui_interface.py:1507
+#: ../src/gui_interface.py:1523
 #, python-format
 msgid "You successfully sent %(filename)s to %(name)s."
 msgstr "Du har succesfuldt sendt %(filename)s til %(name)s."
 
 #. ft stopped
-#: ../src/gui_interface.py:1511
+#: ../src/gui_interface.py:1527
 #, python-format
 msgid "File transfer of %(filename)s to %(name)s stopped."
 msgstr "Filoverførsel af %(filename)s til %(name)s er stoppet."
 
-#: ../src/gui_interface.py:1623
+#: ../src/gui_interface.py:1639
 #, python-format
 msgid ""
 "Unable to decrypt message from %s\n"
@@ -9050,36 +9066,36 @@ msgstr ""
 "Ikke i stand til at dekryptere beskeden fra %s\n"
 "Det er mulig den er blevet forfalsket."
 
-#: ../src/gui_interface.py:1630
+#: ../src/gui_interface.py:1646
 msgid "Unable to decrypt message"
 msgstr "Ikke i stand til at dekryptere beskeden"
 
-#: ../src/gui_interface.py:1702
+#: ../src/gui_interface.py:1729
 msgid "Username Conflict"
 msgstr "Brugernavns Konflikt"
 
-#: ../src/gui_interface.py:1703
+#: ../src/gui_interface.py:1730
 msgid "Please type a new username for your local account"
 msgstr "Skriv et nyt brugernavn for din lokale konto"
 
-#: ../src/gui_interface.py:1716
+#: ../src/gui_interface.py:1743
 msgid "Ping?"
 msgstr "Ping?"
 
-#: ../src/gui_interface.py:1729
+#: ../src/gui_interface.py:1756
 #, python-format
 msgid "Pong! (%s s.)"
 msgstr "Pong! (%s .s)"
 
-#: ../src/gui_interface.py:1740
+#: ../src/gui_interface.py:1767
 msgid "Error."
 msgstr "Fejl."
 
-#: ../src/gui_interface.py:1768
+#: ../src/gui_interface.py:1795
 msgid "Resource Conflict"
 msgstr "Ressource Konflikt"
 
-#: ../src/gui_interface.py:1769
+#: ../src/gui_interface.py:1796
 msgid ""
 "You are already connected to this account with the same resource. Please "
 "type a new one"
@@ -9088,20 +9104,20 @@ msgstr ""
 "venligst en ny"
 
 #. TODO: we should use another pixmap ;-)
-#: ../src/gui_interface.py:1816
+#: ../src/gui_interface.py:1843
 #, python-format
 msgid "%s wants to start a voice chat."
 msgstr "%s vil gerne starte en stemmesamtale."
 
-#: ../src/gui_interface.py:1819
+#: ../src/gui_interface.py:1846
 msgid "Voice Chat Request"
 msgstr "Stemmesamtale Forespørgsel"
 
-#: ../src/gui_interface.py:1927
+#: ../src/gui_interface.py:1954
 msgid "Error verifying SSL certificate"
 msgstr "Fejl under verificering af SSL certifikat"
 
-#: ../src/gui_interface.py:1928
+#: ../src/gui_interface.py:1955
 #, python-format
 msgid ""
 "There was an error verifying the SSL certificate of your jabber server: "
@@ -9112,15 +9128,15 @@ msgstr ""
 "server: %(error)s\n"
 "Vil du stadig prøve på at forbinde til denne server?"
 
-#: ../src/gui_interface.py:1936
+#: ../src/gui_interface.py:1963
 msgid "Ignore this error for this certificate."
 msgstr "Ignorer denne fejl for dette certifikat."
 
-#: ../src/gui_interface.py:1956
+#: ../src/gui_interface.py:1983
 msgid "SSL certificate error"
 msgstr "SSL certifikat fejl"
 
-#: ../src/gui_interface.py:1957
+#: ../src/gui_interface.py:1984
 #, python-format
 msgid ""
 "It seems the SSL certificate of account %(account)s has changed or your "
@@ -9137,12 +9153,12 @@ msgstr ""
 "\n"
 "Vil du stadig forbinde og opdatere fingeraftrykket for certifikatet?"
 
-#: ../src/gui_interface.py:1987 ../src/gui_interface.py:2024
-#: ../src/gui_interface.py:2060
+#: ../src/gui_interface.py:2014 ../src/gui_interface.py:2051
+#: ../src/gui_interface.py:2087
 msgid "Insecure connection"
 msgstr "Ikke sikker forbindelse"
 
-#: ../src/gui_interface.py:1988
+#: ../src/gui_interface.py:2015
 msgid ""
 "You are about to connect to the server with an insecure connection. This "
 "means all your conversations will be exchanged unencrypted. Are you sure you "
@@ -9152,12 +9168,12 @@ msgstr ""
 "betyder at alle dine samtaler ikke vil være krypterede. Er du sikker på du "
 "vil gøre dette?"
 
-#: ../src/gui_interface.py:1991 ../src/gui_interface.py:2028
-#: ../src/gui_interface.py:2063
+#: ../src/gui_interface.py:2018 ../src/gui_interface.py:2055
+#: ../src/gui_interface.py:2090
 msgid "Yes, I really want to connect insecurely"
 msgstr "Ja, jeg vil virkelig gerne tilslutte mig uden sikkerhed"
 
-#: ../src/gui_interface.py:2025
+#: ../src/gui_interface.py:2052
 msgid ""
 "You are about to send your password on an insecure connection. You should "
 "install PyOpenSSL to prevent that. Are you sure you want to do that?"
@@ -9166,7 +9182,7 @@ msgstr ""
 "installere PyOpenSSL for at forhindre dette. Er du sikker på du vil gøre "
 "dette?"
 
-#: ../src/gui_interface.py:2061
+#: ../src/gui_interface.py:2088
 msgid ""
 "You are about to send your password unencrypted on an insecure connection. "
 "Are you sure you want to do that?"
@@ -9175,11 +9191,11 @@ msgstr ""
 "Er du sikker på du vil gøre dette?"
 
 #. theme doesn't exist, disable emoticons
-#: ../src/gui_interface.py:2624 ../src/gui_interface.py:2647
+#: ../src/gui_interface.py:2651 ../src/gui_interface.py:2674
 msgid "Emoticons disabled"
 msgstr "Følelsesikoner er ikke aktiveret"
 
-#: ../src/gui_interface.py:2625
+#: ../src/gui_interface.py:2652
 msgid ""
 "Your configured emoticons theme has not been found, so emoticons have been "
 "disabled."
@@ -9187,7 +9203,7 @@ msgstr ""
 "Dit konfigurerede følelsesikon tema blev ikke fundet, så følelsesikoner er "
 "blevet deaktiveret."
 
-#: ../src/gui_interface.py:2648
+#: ../src/gui_interface.py:2675
 msgid ""
 "Your configured emoticons theme cannot been loaded. You maybe need to update "
 "the format of emoticons.py file. See http://trac.gajim.org/wiki/Emoticons "
@@ -9197,40 +9213,40 @@ msgstr ""
 "opdatere formatet for filen emoticons.py. Se http://trac.gajim.org/wiki/"
 "Emoticons for flere detaljer."
 
-#: ../src/gui_interface.py:2679 ../src/roster_window.py:3560
+#: ../src/gui_interface.py:2712 ../src/roster_window.py:3583
 msgid "You cannot join a group chat while you are invisible"
 msgstr "Du kan ikke deltage i en gruppe samtale mens du er usynlig"
 
 #. it is good to notify the user
 #. in case he or she cannot see the output of the console
-#: ../src/gui_interface.py:3058
+#: ../src/gui_interface.py:3093
 msgid "Could not save your settings and preferences"
 msgstr "Kunne ikke gemme din opsætning og indstillinger"
 
-#: ../src/gui_interface.py:3592
+#: ../src/gui_interface.py:3638
 msgid "Passphrase Required"
 msgstr "Adgangskode Påkrævet"
 
-#: ../src/gui_interface.py:3593
+#: ../src/gui_interface.py:3639
 #, python-format
 msgid "Enter GPG key passphrase for key %(keyid)s (account %(account)s)."
 msgstr "Indtast adgangskoden til GPG nøglen %(keyid)s (Konto %(account)s)."
 
-#: ../src/gui_interface.py:3607
+#: ../src/gui_interface.py:3653
 msgid "GPG key expired"
 msgstr "GPG nøgle er udløbet"
 
-#: ../src/gui_interface.py:3608
+#: ../src/gui_interface.py:3654
 #, python-format
 msgid "Your GPG key has expired, you will be connected to %s without OpenPGP."
 msgstr "Din GPG nøgle er udløbet, du vil blive tilsuttet til %s uden OpenPGP."
 
 #. ask again
-#: ../src/gui_interface.py:3617
+#: ../src/gui_interface.py:3663
 msgid "Wrong Passphrase"
 msgstr "Forkert Adgangskode"
 
-#: ../src/gui_interface.py:3618
+#: ../src/gui_interface.py:3664
 msgid "Please retype your GPG passphrase or press Cancel."
 msgstr "Indtast din GPG adgangskode igen eller annuller."
 
@@ -9238,7 +9254,7 @@ msgstr "Indtast din GPG adgangskode igen eller annuller."
 msgid "_New Group Chat"
 msgstr "_Ny Gruppe Samtale"
 
-#: ../src/gui_menu_builder.py:410
+#: ../src/gui_menu_builder.py:417
 msgid "I would like to add you to my roster"
 msgstr "Jeg vil gerne tilføje dig til mit kontaktvindue"
 
@@ -9293,22 +9309,22 @@ msgstr ""
 msgid "Exporting History Logs..."
 msgstr "Eksporter Historik Log..."
 
-#: ../src/history_manager.py:535
+#: ../src/history_manager.py:536
 #, python-format
 msgid "%(who)s on %(time)s said: %(message)s\n"
 msgstr "%(who)s klokken %(time)s sagde: %(message)s\n"
 
-#: ../src/history_manager.py:572
+#: ../src/history_manager.py:573
 msgid "Do you really want to delete logs of the selected contact?"
 msgid_plural "Do you really want to delete logs of the selected contacts?"
 msgstr[0] "Vil du virkelig slette loggen for den valgte kontakt?"
 msgstr[1] "Vil du virkelig slette loggene fra de valgte kontakter?"
 
-#: ../src/history_manager.py:576 ../src/history_manager.py:611
+#: ../src/history_manager.py:577 ../src/history_manager.py:612
 msgid "This is an irreversible operation."
 msgstr "Dette er en irreversibel handling."
 
-#: ../src/history_manager.py:608
+#: ../src/history_manager.py:609
 msgid "Do you really want to delete the selected message?"
 msgid_plural "Do you really want to delete the selected messages?"
 msgstr[0] "Vil du virkelig slette den valgte besked?"
@@ -9347,11 +9363,11 @@ msgstr "Status er nu: %(status)s: %(status_msg)s"
 msgid "Status is now: %(status)s"
 msgstr "Status er nu: %(status)s"
 
-#: ../src/htmltextview.py:515 ../src/htmltextview.py:525
+#: ../src/htmltextview.py:518 ../src/htmltextview.py:528
 msgid "Timeout loading image"
 msgstr "Tidsudløb nået for at laste billede"
 
-#: ../src/htmltextview.py:535
+#: ../src/htmltextview.py:538
 msgid "Image is too big"
 msgstr "Billede er for stort"
 
@@ -9363,19 +9379,19 @@ msgstr "Du er ved at lukke flere faneblade"
 msgid "Do you really want to close them all?"
 msgstr "Vil du virkelig lukke dem alle?"
 
-#: ../src/message_window.py:484
+#: ../src/message_window.py:485
 msgid "Chats"
 msgstr "Samtaler"
 
-#: ../src/message_window.py:486
+#: ../src/message_window.py:487
 msgid "Group Chats"
 msgstr "Gruppe Samtaler"
 
-#: ../src/message_window.py:488
+#: ../src/message_window.py:489
 msgid "Private Chats"
 msgstr "Private Samtaler"
 
-#: ../src/message_window.py:494
+#: ../src/message_window.py:495
 msgid "Messages"
 msgstr "Beskeder"
 
@@ -9387,98 +9403,98 @@ msgstr "- beskeder vil blive logget"
 msgid "- messages will not be logged"
 msgstr "- beskeder vil ikke blive logget"
 
-#: ../src/notify.py:232
+#: ../src/notify.py:234
 #, python-format
 msgid "%(nick)s Changed Status"
 msgstr "%(nick)s Ændrede Status"
 
-#: ../src/notify.py:242
+#: ../src/notify.py:244
 #, python-format
 msgid "%(nickname)s Signed In"
 msgstr "%(nickname)s Loggede Ind"
 
-#: ../src/notify.py:250
+#: ../src/notify.py:252
 #, python-format
 msgid "%(nickname)s Signed Out"
 msgstr "%(nickname)s Loggede Ud"
 
-#: ../src/notify.py:261
+#: ../src/notify.py:263
 #, python-format
 msgid "New Single Message from %(nickname)s"
 msgstr "Ny Besked fra %(nickname)s"
 
-#: ../src/notify.py:268
+#: ../src/notify.py:270
 #, python-format
 msgid "New Private Message from group chat %s"
 msgstr "Ny Privat Besked fra gruppe samtale %s"
 
-#: ../src/notify.py:270
+#: ../src/notify.py:272
 #, python-format
 msgid "%(nickname)s: %(message)s"
 msgstr "%(nickname)s: %(message)s"
 
-#: ../src/notify.py:273
+#: ../src/notify.py:275
 #, python-format
 msgid "Messaged by %(nickname)s"
 msgstr "Besked fra %(nickname)s"
 
-#: ../src/notify.py:279
+#: ../src/notify.py:281
 #, python-format
 msgid "New Message from %(nickname)s"
 msgstr "Ny Besked fra %(nickname)s"
 
-#: ../src/notify.py:536
+#: ../src/notify.py:538
 msgid "Ignore"
 msgstr "Ignorer"
 
-#: ../src/profile_window.py:57
+#: ../src/profile_window.py:58
 msgid "Retrieving profile..."
 msgstr "Henter profil..."
 
-#: ../src/profile_window.py:110 ../src/roster_window.py:2935
+#: ../src/profile_window.py:111 ../src/roster_window.py:2958
 msgid "File is empty"
 msgstr "Filen er tom"
 
-#: ../src/profile_window.py:113 ../src/roster_window.py:2938
+#: ../src/profile_window.py:114 ../src/roster_window.py:2961
 msgid "File does not exist"
 msgstr "Filen eksisterer ikke"
 
 #. keep identation
 #. unknown format
-#: ../src/profile_window.py:127 ../src/profile_window.py:143
-#: ../src/roster_window.py:2940 ../src/roster_window.py:2951
+#: ../src/profile_window.py:128 ../src/profile_window.py:144
+#: ../src/roster_window.py:2963 ../src/roster_window.py:2974
 msgid "Could not load image"
 msgstr "Kunne ikke laste billede"
 
-#: ../src/profile_window.py:214
+#: ../src/profile_window.py:215
 msgid "Wrong date format"
 msgstr "Forkert dato format"
 
-#: ../src/profile_window.py:215
+#: ../src/profile_window.py:216
 msgid "Format of the date must be YYYY-MM-DD"
 msgstr "Formatet for dato må være YYYY-MM-DD"
 
-#: ../src/profile_window.py:269
+#: ../src/profile_window.py:270
 msgid "Information received"
 msgstr "Information modtaget"
 
-#: ../src/profile_window.py:340
+#: ../src/profile_window.py:341
 msgid "Without a connection you can not publish your contact information."
 msgstr "Uden en tilslutning kan du ikke publicere din kontakt information."
 
-#: ../src/profile_window.py:353
+#: ../src/profile_window.py:354
 msgid "Sending profile..."
 msgstr "Sender profil..."
 
-#: ../src/profile_window.py:368
+#: ../src/profile_window.py:369
 msgid "Information NOT published"
 msgstr "Information er IKKE publiceret"
 
-#: ../src/profile_window.py:375
+#: ../src/profile_window.py:376
 msgid "vCard publication failed"
 msgstr "vCard publicering fejlede"
 
-#: ../src/profile_window.py:376
+#: ../src/profile_window.py:377
 msgid ""
 "There was an error while publishing your personal information, try again "
 "later."
@@ -9486,53 +9502,53 @@ msgstr ""
 "Der var en fejl under publicering af din personlige information, prøv igen "
 "senere."
 
-#: ../src/roster_window.py:256 ../src/roster_window.py:1012
+#: ../src/roster_window.py:259 ../src/roster_window.py:1023
 msgid "Merged accounts"
 msgstr "Flettede kontoer"
 
-#: ../src/roster_window.py:1919
+#: ../src/roster_window.py:1939
 msgid "Authorization has been sent"
 msgstr "Godkendelse er blevet sendt"
 
-#: ../src/roster_window.py:1920
+#: ../src/roster_window.py:1940
 #, python-format
 msgid "Now \"%s\" will know your status."
 msgstr "Nu vil %s vide din status."
 
-#: ../src/roster_window.py:1943
+#: ../src/roster_window.py:1963
 msgid "Subscription request has been sent"
 msgstr "Forespørgsel på abonnering er blevet sendt"
 
-#: ../src/roster_window.py:1944
+#: ../src/roster_window.py:1964
 #, python-format
 msgid "If \"%s\" accepts this request you will know his or her status."
 msgstr ""
 "Hvis %s accepterer denne forespørsel vil du kunne se hans eller hendes "
 "status."
 
-#: ../src/roster_window.py:1958
+#: ../src/roster_window.py:1978
 msgid "Authorization has been removed"
 msgstr "Godkendelse er blevet fjernet"
 
-#: ../src/roster_window.py:1959
+#: ../src/roster_window.py:1979
 #, python-format
 msgid "Now \"%s\" will always see you as offline."
 msgstr "Nu vil %s altid se dig som offline."
 
-#: ../src/roster_window.py:1986
+#: ../src/roster_window.py:2006
 msgid "GPG is not usable"
 msgstr "GPG er ikke brugbar"
 
-#: ../src/roster_window.py:1987
+#: ../src/roster_window.py:2007
 #, python-format
 msgid "You will be connected to %s without OpenPGP."
 msgstr "Du vil blive tilsluttet til %s uden OpenPGP."
 
-#: ../src/roster_window.py:2199 ../src/roster_window.py:3496
+#: ../src/roster_window.py:2219 ../src/roster_window.py:3519
 msgid "You are participating in one or more group chats"
 msgstr "Du deltager i en eller flere gruppesamtaler"
 
-#: ../src/roster_window.py:2200 ../src/roster_window.py:3497
+#: ../src/roster_window.py:2220 ../src/roster_window.py:3520
 msgid ""
 "Changing your status to invisible will result in disconnection from those "
 "group chats. Are you sure you want to go invisible?"
@@ -9540,27 +9556,27 @@ msgstr ""
 "Hvis du ændrer din status til usynlig vil det resultere i at du bliver "
 "frakoblet fra disse gruppesamtaler. Er du sikker på du vil gøre dig usynlig?"
 
-#: ../src/roster_window.py:2226
+#: ../src/roster_window.py:2246
 msgid "desync'ed"
 msgstr "ikke synkroniseret"
 
-#: ../src/roster_window.py:2288
+#: ../src/roster_window.py:2311
 msgid "Really quit Gajim?"
 msgstr "Skal Gajim afsluttes?"
 
-#: ../src/roster_window.py:2289
+#: ../src/roster_window.py:2312
 msgid "Are you sure you want to quit Gajim?"
 msgstr "Er du sikker på du vil afslutte Gajim?"
 
-#: ../src/roster_window.py:2290
+#: ../src/roster_window.py:2313
 msgid "Always close Gajim"
 msgstr "Altid afslut Gajim"
 
-#: ../src/roster_window.py:2373
+#: ../src/roster_window.py:2396
 msgid "You have running file transfers"
 msgstr "Du har igangværende filoverførsler"
 
-#: ../src/roster_window.py:2374
+#: ../src/roster_window.py:2397
 msgid ""
 "If you quit now, the file(s) being transfered will be stopped. Do you still "
 "want to quit?"
@@ -9568,11 +9584,11 @@ msgstr ""
 "Hvis du afslutter nu, vil igangværende filoverførsler blive\n"
 "stoppet. Vil du stadig afslutte?"
 
-#: ../src/roster_window.py:2405 ../src/roster_window.py:2653
+#: ../src/roster_window.py:2428 ../src/roster_window.py:2676
 msgid "You have unread messages"
 msgstr "Du har ulæste beskeder"
 
-#: ../src/roster_window.py:2406
+#: ../src/roster_window.py:2429
 msgid ""
 "Messages will only be available for reading them later if you have history "
 "enabled and contact is in your roster."
@@ -9580,16 +9596,16 @@ msgstr ""
 "Beskeder vil kun være tilgængelige for læsning senere hvis du har historik "
 "aktiveret og kontakten er i dit kontaktvindue."
 
-#: ../src/roster_window.py:2654
+#: ../src/roster_window.py:2677
 msgid "You must read them before removing this transport."
 msgstr "Du må læse dem før du fjerner denne transport."
 
-#: ../src/roster_window.py:2657
+#: ../src/roster_window.py:2680
 #, python-format
 msgid "Transport \"%s\" will be removed"
 msgstr "Transport \"%s\" vil blive fjernet"
 
-#: ../src/roster_window.py:2658
+#: ../src/roster_window.py:2681
 msgid ""
 "You will no longer be able to send and receive messages from contacts using "
 "this transport."
@@ -9597,11 +9613,11 @@ msgstr ""
 "Du vil ikke længere være i stand til at sende og modtage beskeder fra "
 "kontakter som bruger denne transport."
 
-#: ../src/roster_window.py:2661
+#: ../src/roster_window.py:2684
 msgid "Transports will be removed"
 msgstr "Transporter vil blive fjernet"
 
-#: ../src/roster_window.py:2666
+#: ../src/roster_window.py:2689
 #, python-format
 msgid ""
 "You will no longer be able to send and receive messages to contacts from "
@@ -9610,11 +9626,11 @@ msgstr ""
 "Du vil ikke længere være i stand til at sende og modtage beskeder fra "
 "kontakter som bruger disse transporter: %s"
 
-#: ../src/roster_window.py:2734
+#: ../src/roster_window.py:2757
 msgid "You are about to block a contact. Are you sure you want to continue?"
 msgstr "Du er ved at blokere en kontakt. Er du sikker på du vil fortsætte?"
 
-#: ../src/roster_window.py:2736
+#: ../src/roster_window.py:2759
 msgid ""
 "This contact will see you offline and you will not receive messages he will "
 "send you."
@@ -9623,56 +9639,56 @@ msgstr ""
 "dig."
 
 #. it's jid
-#: ../src/roster_window.py:2827
+#: ../src/roster_window.py:2850
 msgid "Rename Contact"
 msgstr "Omdøb Kontakt"
 
-#: ../src/roster_window.py:2828
+#: ../src/roster_window.py:2851
 #, python-format
 msgid "Enter a new nickname for contact %s"
 msgstr "Indtast et nyt kælenavn for kontakt %s"
 
-#: ../src/roster_window.py:2835
+#: ../src/roster_window.py:2858
 msgid "Rename Group"
 msgstr "Omdøb Gruppe"
 
-#: ../src/roster_window.py:2836
+#: ../src/roster_window.py:2859
 #, python-format
 msgid "Enter a new name for group %s"
 msgstr "Indtast et nyt navn for gruppen %s"
 
-#: ../src/roster_window.py:2881
+#: ../src/roster_window.py:2904
 msgid "Remove Group"
 msgstr "Fjern Gruppen"
 
-#: ../src/roster_window.py:2882
+#: ../src/roster_window.py:2905
 #, python-format
 msgid "Do you want to remove group %s from the roster?"
 msgstr "Vil du fjerne gruppen %s fra kontaktvinduet?"
 
-#: ../src/roster_window.py:2883
+#: ../src/roster_window.py:2906
 msgid "Also remove all contacts in this group from your roster"
 msgstr "Fjern også alle kontakter i denne gruppe fra kontaktvinduet"
 
-#: ../src/roster_window.py:2922
+#: ../src/roster_window.py:2945
 msgid "Assign OpenPGP Key"
 msgstr "Tildel OpenPGP Nøgle"
 
-#: ../src/roster_window.py:2923
+#: ../src/roster_window.py:2946
 msgid "Select a key to apply to the contact"
 msgstr "Vælg den nøgle du vil anvende til kontakten"
 
-#: ../src/roster_window.py:3306
+#: ../src/roster_window.py:3329
 #, python-format
 msgid "Contact \"%s\" will be removed from your roster"
 msgstr "Kontakt %s vil blive fjernet fra dit kontaktvindue"
 
-#: ../src/roster_window.py:3308
+#: ../src/roster_window.py:3331
 #, python-format
 msgid "You are about to remove \"%(name)s\" (%(jid)s) from your roster.\n"
 msgstr "Du er ved at fjerne \"%(name)s\" (%(jid)s) fra dit kontaktvindue.\n"
 
-#: ../src/roster_window.py:3313
+#: ../src/roster_window.py:3336
 msgid ""
 "By removing this contact you also remove authorization resulting in him or "
 "her always seeing you as offline."
@@ -9681,11 +9697,11 @@ msgstr ""
 "vil altid se dig som offline."
 
 #. Contact is not in roster
-#: ../src/roster_window.py:3319
+#: ../src/roster_window.py:3342
 msgid "Do you want to continue?"
 msgstr "Vil du fortsætte?"
 
-#: ../src/roster_window.py:3323
+#: ../src/roster_window.py:3346
 msgid ""
 "By removing this contact you also by default remove authorization resulting "
 "in him or her always seeing you as offline."
@@ -9693,16 +9709,16 @@ msgstr ""
 "Ved at fjerne denne kontakt fjerner du også samtidig godkendelsen, så han "
 "eller hun altid vil se dig som offline."
 
-#: ../src/roster_window.py:3326
+#: ../src/roster_window.py:3349
 msgid "I want this contact to know my status after removal"
 msgstr "Jeg vil at denne kontakt kan se min status efter den er blevet fjernet"
 
 #. several contact to remove at the same time
-#: ../src/roster_window.py:3330
+#: ../src/roster_window.py:3353
 msgid "Contacts will be removed from your roster"
 msgstr "Kontakter vil blive fjernet fra dit kontaktvindue"
 
-#: ../src/roster_window.py:3335
+#: ../src/roster_window.py:3358
 #, python-format
 msgid ""
 "By removing these contacts:%s\n"
@@ -9712,13 +9728,13 @@ msgstr ""
 "fjerner du også godkendelsen, hvilket medfører at de altid vil se dig som "
 "offline."
 
-#: ../src/roster_window.py:3393
+#: ../src/roster_window.py:3416
 msgid ""
 "You are about to send a custom status. Are you sure you want  to continue?"
 msgstr ""
 "Du er ved at sende en personlig status. Er du sikker på du vil  fortsætte?"
 
-#: ../src/roster_window.py:3395
+#: ../src/roster_window.py:3418
 #, python-format
 msgid ""
 "This contact will temporarily see you as %(status)s, but only until you "
@@ -9727,20 +9743,20 @@ msgstr ""
 "Denne kontakt vil midlertidig se dig som %(status)s, men kun indtil du "
 "ændrer din status. Da vil han eller hun se din globale status."
 
-#: ../src/roster_window.py:3414
+#: ../src/roster_window.py:3437
 msgid "No account available"
 msgstr "Ingen konto tilgængelig"
 
-#: ../src/roster_window.py:3415
+#: ../src/roster_window.py:3438
 msgid "You must create an account before you can chat with other contacts."
 msgstr ""
 "Du må oprette en konto før du kan begynde en samtale med andre kontakter."
 
-#: ../src/roster_window.py:4023
+#: ../src/roster_window.py:4046
 msgid "Metacontacts storage not supported by your server"
 msgstr "Metakontakt lagring er ikke understøttet af din server"
 
-#: ../src/roster_window.py:4025
+#: ../src/roster_window.py:4048
 msgid ""
 "Your server does not support storing metacontacts information. So those "
 "information will not be saved on next reconnection."
@@ -9749,12 +9765,12 @@ msgstr ""
 "information. Så denne information vil ikke blive gemt til næste gang du "
 "tilslutter dig."
 
-#: ../src/roster_window.py:4117
+#: ../src/roster_window.py:4140
 msgid ""
 "You are about to create a metacontact. Are you sure you want to continue?"
 msgstr "Du er ved at oprette en metakontakt. Er du sikker på du vil fortsætte?"
 
-#: ../src/roster_window.py:4119
+#: ../src/roster_window.py:4142
 msgid ""
 "Metacontacts are a way to regroup several contacts in one line. Generally it "
 "is used when the same person has several Jabber accounts or transport "
@@ -9763,23 +9779,23 @@ msgstr ""
 "Metakontakter er en måde at gruppere flere kontakter på en linie. Oftest "
 "bruges det når den samme person har flere Jabber eller transport kontoer."
 
-#: ../src/roster_window.py:4234
+#: ../src/roster_window.py:4257
 msgid "Invalid file URI:"
 msgstr "Ugyldig Fil URI:"
 
-#: ../src/roster_window.py:4246
+#: ../src/roster_window.py:4269
 #, python-format
 msgid "Do you want to send this file to %s:"
 msgid_plural "Do you want to send these files to %s:"
 msgstr[0] "Vil du sende denne fil til %s:"
 msgstr[1] "Vil du sende disse filer til %s:"
 
-#: ../src/roster_window.py:4361
+#: ../src/roster_window.py:4384
 #, python-format
 msgid "Send %s to %s"
 msgstr "Send %s til %s"
 
-#: ../src/roster_window.py:4367
+#: ../src/roster_window.py:4390
 #, python-format
 msgid "Make %s and %s metacontacts"
 msgstr "Lav %s og %s til metakontakter"
@@ -9789,129 +9805,129 @@ msgstr "Lav %s og %s til metakontakter"
 #. for chat_with
 #. for single message
 #. join gc
-#: ../src/roster_window.py:4816 ../src/roster_window.py:4889
-#: ../src/roster_window.py:4898 ../src/statusicon.py:246
-#: ../src/statusicon.py:293 ../src/statusicon.py:299
+#: ../src/roster_window.py:4829 ../src/roster_window.py:4883
+#: ../src/roster_window.py:4892 ../src/statusicon.py:264
+#: ../src/statusicon.py:311 ../src/statusicon.py:317
 #, python-format
 msgid "using account %s"
 msgstr "med konto %s"
 
 #. add
-#: ../src/roster_window.py:4905
+#: ../src/roster_window.py:4899
 #, python-format
 msgid "to %s account"
 msgstr "til %s konto"
 
 #. disco
-#: ../src/roster_window.py:4910
+#: ../src/roster_window.py:4904
 #, python-format
 msgid "using %s account"
 msgstr "bruger %s konto"
 
-#: ../src/roster_window.py:4948 ../src/statusicon.py:309
+#: ../src/roster_window.py:4943 ../src/statusicon.py:327
 msgid "_Manage Bookmarks..."
 msgstr "Håndter Bog_mærker..."
 
 #. profile, avatar
-#: ../src/roster_window.py:4968
+#: ../src/roster_window.py:4963
 #, python-format
 msgid "of account %s"
 msgstr "fra konto %s"
 
-#: ../src/roster_window.py:5009
+#: ../src/roster_window.py:5004
 #, python-format
 msgid "for account %s"
 msgstr "for konto %s"
 
-#: ../src/roster_window.py:5069 ../src/roster_window.py:5174
+#: ../src/roster_window.py:5064 ../src/roster_window.py:5169
 msgid "_Change Status Message"
 msgstr "_Ændre Status Besked"
 
-#: ../src/roster_window.py:5102
+#: ../src/roster_window.py:5097
 msgid "Publish Tune"
 msgstr "Publicer Melodi"
 
-#: ../src/roster_window.py:5104
+#: ../src/roster_window.py:5099
 msgid "Publish Location"
 msgstr "Publicer Placering"
 
-#: ../src/roster_window.py:5107
+#: ../src/roster_window.py:5102
 msgid "Configure Services..."
 msgstr "Tilpas Tjenester..."
 
-#: ../src/roster_window.py:5252
+#: ../src/roster_window.py:5247
 msgid "_Maximize All"
 msgstr "_Maksimer alt"
 
-#: ../src/roster_window.py:5262 ../src/roster_window.py:5436
+#: ../src/roster_window.py:5257 ../src/roster_window.py:5430
 msgid "Send Group M_essage"
 msgstr "Send Gruppeb_esked"
 
-#: ../src/roster_window.py:5270
+#: ../src/roster_window.py:5265
 msgid "To all users"
 msgstr "Til alle brugere"
 
-#: ../src/roster_window.py:5274
+#: ../src/roster_window.py:5269
 msgid "To all online users"
 msgstr "Til alle brugere på net"
 
 #. Manage Transport submenu
-#: ../src/roster_window.py:5456
+#: ../src/roster_window.py:5450
 msgid "_Manage Contacts"
 msgstr "_Håndter Kontakter"
 
 #. Edit Groups
-#: ../src/roster_window.py:5465
+#: ../src/roster_window.py:5459
 msgid "Edit _Groups"
 msgstr "Ændre _Grupper"
 
 #. Send single message
-#: ../src/roster_window.py:5520
+#: ../src/roster_window.py:5514
 msgid "Send Single Message"
 msgstr "Send Enkel Besked"
 
 #. Execute Command
-#: ../src/roster_window.py:5567
+#: ../src/roster_window.py:5561
 msgid "Execute Command..."
 msgstr "Kør Kommando..."
 
 #. Manage Transport submenu
-#: ../src/roster_window.py:5577
+#: ../src/roster_window.py:5571
 msgid "_Manage Transport"
 msgstr "Hå_ndter Transport"
 
 #. Modify Transport
-#: ../src/roster_window.py:5586
+#: ../src/roster_window.py:5580
 msgid "_Modify Transport"
 msgstr "_Modificer Transport"
 
 #. Rename
-#: ../src/roster_window.py:5596
+#: ../src/roster_window.py:5590
 msgid "_Rename"
 msgstr "_Omdøb"
 
-#: ../src/roster_window.py:5656
+#: ../src/roster_window.py:5650
 msgid "_Maximize"
 msgstr "_Maksimer"
 
-#: ../src/roster_window.py:5665
+#: ../src/roster_window.py:5659
 msgid "_Reconnect"
 msgstr "_Tilslut igen"
 
-#: ../src/roster_window.py:5672
+#: ../src/roster_window.py:5666
 msgid "_Disconnect"
 msgstr "Afbry_d tilslutningen"
 
 #. History manager
-#: ../src/roster_window.py:5754
+#: ../src/roster_window.py:5748
 msgid "History Manager"
 msgstr "Historik Håndterer"
 
-#: ../src/roster_window.py:5765
+#: ../src/roster_window.py:5759
 msgid "_Join New Group Chat"
 msgstr "_Deltag i Ny Gruppe Samtale"
 
-#: ../src/roster_window.py:5938
+#: ../src/roster_window.py:5969
 msgid "Change Status Message..."
 msgstr "Ændre Status Besked..."
 
@@ -9971,15 +9987,15 @@ msgstr ""
 "\n"
 "Fortsæt med sessionen?"
 
-#: ../src/statusicon.py:210
+#: ../src/statusicon.py:228
 msgid "_Change Status Message..."
 msgstr "_Ændre Status Besked..."
 
-#: ../src/statusicon.py:322
+#: ../src/statusicon.py:342
 msgid "Hide _Roster"
 msgstr "Gem _Kontaktvinduet"
 
-#: ../src/statusicon.py:333
+#: ../src/statusicon.py:353
 msgid "Hide this menu"
 msgstr "Skjul denne menu"
 
