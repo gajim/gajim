@@ -37,8 +37,6 @@ from common import xmpp
 from common import gajim
 from common import helpers
 from common import dataforms
-from common.connection_handlers_events import FileRequestReceivedEvent, \
-    FileRequestErrorEvent
 from common import ged
 from common import jingle_xtls
 
@@ -250,6 +248,7 @@ class ConnectionBytestream:
             raise xmpp.NodeProcessed
 
     def _siSetCB(self, con, iq_obj):
+        from common.connection_handlers_events import FileRequestReceivedEvent
         gajim.nec.push_incoming_event(FileRequestReceivedEvent(None, conn=self,
             stanza=iq_obj))
         raise xmpp.NodeProcessed
@@ -269,6 +268,7 @@ class ConnectionBytestream:
             return
         jid = self._ft_get_from(iq_obj)
         file_props['error'] = -3
+        from common.connection_handlers_events import FileRequestErrorEvent
         gajim.nec.push_incoming_event(FileRequestErrorEvent(None, conn=self,
             jid=jid, file_props=file_props, error_msg=''))
         raise xmpp.NodeProcessed
@@ -302,6 +302,8 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             if contact.get_full_jid() == receiver_jid:
                 file_props['error'] = -5
                 self.remove_transfer(file_props)
+                from common.connection_handlers_events import \
+                    FileRequestErrorEvent
                 gajim.nec.push_incoming_event(FileRequestErrorEvent(None,
                     conn=self, jid=contact.jid, file_props=file_props,
                     error_msg=''))
@@ -364,6 +366,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
                 self._result_socks5_sid, file_props['sid'])
         if not listener:
             file_props['error'] = -5
+            from common.connection_handlers_events import FileRequestErrorEvent
             gajim.nec.push_incoming_event(FileRequestErrorEvent(None, conn=self,
                 jid=unicode(receiver), file_props=file_props, error_msg=''))
             self._connect_error(unicode(receiver), file_props['sid'],
@@ -494,6 +497,8 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             if file_props is not None:
                 self.disconnect_transfer(file_props)
                 file_props['error'] = -3
+                from common.connection_handlers_events import \
+                    FileRequestErrorEvent
                 gajim.nec.push_incoming_event(FileRequestErrorEvent(None,
                     conn=self, jid=to, file_props=file_props, error_msg=msg))
 
@@ -526,6 +531,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             return
         file_props = self.files_props[id_]
         file_props['error'] = -4
+        from common.connection_handlers_events import FileRequestErrorEvent
         gajim.nec.push_incoming_event(FileRequestErrorEvent(None, conn=self,
             jid=jid, file_props=file_props, error_msg=''))
         raise xmpp.NodeProcessed

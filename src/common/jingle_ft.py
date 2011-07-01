@@ -24,7 +24,6 @@ import xmpp
 from jingle_content import contents, JingleContent
 from jingle_transport import JingleTransportICEUDP, JingleTransportSocks5
 from jingle_transport import JingleTransportIBB
-from jingle_session import JingleStates
 from common import helpers
 from common.socks5 import Socks5Receiver
 from common.connection_handlers_events import FileRequestReceivedEvent
