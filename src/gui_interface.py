@@ -922,7 +922,8 @@ class Interface:
             jid = unicode(file_props['receiver'])
 
         # End jingle session
-        if file_props['session-type'] == 'jingle' and file_props['type'] == 'r':
+        if file_props.get('session-type') == 'jingle' and file_props['type'] ==\
+        'r':
             session = gajim.connections[account].get_jingle_session(jid,
                 sid=file_props['session-sid'])
             # get content:
