@@ -2689,7 +2689,8 @@ class Interface:
         Join the room immediately
         """
 
-        if gajim.contacts.get_contact(account, room_jid):
+        if gajim.contacts.get_contact(account, room_jid) and \
+        not gajim.contacts.get_contact(account, room_jid).is_groupchat():
             dialogs.ErrorDialog(_('This is not a group chat'),
                 _('%s is not the name of a group chat.') % room_jid)
             return
@@ -2697,11 +2698,17 @@ class Interface:
         if not nick:
             nick = gajim.nicks[account]
 
-        if self.msg_win_mgr.has_window(room_jid, account) and \
-        gajim.gc_connected[account][room_jid]:
-            gc_ctrl = self.msg_win_mgr.get_gc_control(room_jid, account)
-            win = gc_ctrl.parent_win
-            win.set_active_tab(gc_ctrl)
+        minimized_control = gajim.interface.minimized_controls[account].get(
+            room_jid, None)
+
+        if (self.msg_win_mgr.has_window(room_jid, account) or \
+        minimized_control) and gajim.gc_connected[account][room_jid]:
+            if self.msg_win_mgr.has_window(room_jid, account):
+                gc_ctrl = self.msg_win_mgr.get_gc_control(room_jid, account)
+                win = gc_ctrl.parent_win
+                win.set_active_tab(gc_ctrl)
+            else:
+                self.roster.on_groupchat_maximized(None, room_jid, account)
             dialogs.ErrorDialog(_('You are already in group chat %s') % \
                 room_jid)
             return
@@ -2711,9 +2718,6 @@ class Interface:
             dialogs.ErrorDialog(
                 _('You cannot join a group chat while you are invisible'))
             return
-
-        minimized_control = gajim.interface.minimized_controls[account].get(
-            room_jid, None)
 
         if minimized_control is None and not self.msg_win_mgr.has_window(
         room_jid, account):
@@ -2734,10 +2738,6 @@ class Interface:
             gc_control = self.msg_win_mgr.get_gc_control(room_jid, account)
             gc_control.nick = nick
             gc_control.parent_win.set_active_tab(gc_control)
-        else:
-            # We are already in this groupchat and it is minimized
-            minimized_control.nick = nick
-            self.roster.add_groupchat(room_jid, account)
 
         # Connect
         gajim.connections[account].join_gc(nick, room_jid, password)
