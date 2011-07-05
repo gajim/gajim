@@ -209,7 +209,7 @@ class SocksQueue:
                     return
         # failure_cb exists - this means that it has never been called
         if 'failure_cb' in file_props and file_props['failure_cb']:
-            file_props['failure_cb'](streamhost['initiator'], streamhost['id'],
+            file_props['failure_cb'](streamhost['initiator'], streamhost['idx'],
                     file_props['sid'], code = 404)
             del(file_props['failure_cb'])
 

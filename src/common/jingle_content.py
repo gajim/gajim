@@ -138,6 +138,17 @@ class JingleContent(object):
         content = self.__content()
         content.addChild(node=self.transport.make_transport([candidate]))
         self.session.send_transport_info(content)
+        
+    def send_error_candidate(self):
+        """
+        Sends a candidate-error when we can't connect to a candidate.
+        """
+        content = self.__content()
+        tp = self.transport.make_transport()
+        tp.addChild(name='candidate-error')
+        content.addChild(node=tp)
+        self.session.send_transport_info(content)
+        
 
     def send_description_info(self):
         content = self.__content()

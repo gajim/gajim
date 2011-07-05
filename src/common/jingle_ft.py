@@ -23,7 +23,6 @@ import gajim
 import xmpp
 from jingle_content import contents, JingleContent
 from jingle_transport import JingleTransportICEUDP, JingleTransportSocks5
-from jingle_transport import JingleTransportIBB
 from common import helpers
 from common.socks5 import Socks5Receiver
 from common.connection_handlers_events import FileRequestReceivedEvent
@@ -88,6 +87,7 @@ class JingleFileTransfer(JingleContent):
 
         self.session = session
         self.media = 'file'
+        
 
     def __on_session_initiate(self, stanza, content, error, action):
         gajim.nec.push_incoming_event(FileRequestReceivedEvent(None,
@@ -131,6 +131,9 @@ class JingleFileTransfer(JingleContent):
 
         if not self.weinitiate: # proxy activated from initiator
             return
+        if content.getTag('transport').getTag('candidate-error'):
+            self.session.transport_replace()
+            return
         streamhost_cid = content.getTag('transport').getTag('candidate-used').\
             getAttr('cid')
         streamhost_used = None
@@ -147,7 +150,7 @@ class JingleFileTransfer(JingleContent):
                 if proxy['host'] == streamhost_used['host'] and \
                 proxy['port'] == streamhost_used['port'] and \
                 proxy['jid'] == streamhost_used['jid']:
-                    streamhost_used = proxy
+                    host_used = proxy
                     break
             if 'streamhosts' not in self.file_props:
                 self.file_props['streamhosts'] = []
@@ -238,6 +241,9 @@ class JingleFileTransfer(JingleContent):
         self.session.send_transport_info(content)
 
     def _on_connect_error(self, to, _id, sid, code=404):
+        if code == 404 and self.file_props['sid'] == sid:
+            self.send_error_candidate()
+            
         log.info('connect error, sid=' + sid)
 
     def _fill_content(self, content):

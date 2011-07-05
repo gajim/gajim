@@ -128,7 +128,7 @@ class ConnectionBytestream:
         feature.addChild(node=_feature)
         field = _feature.setField('stream-method')
         field.setAttr('type', 'list-single')
-        #field.addOption(xmpp.NS_BYTESTREAM)
+        field.addOption(xmpp.NS_BYTESTREAM)
         field.addOption(xmpp.NS_IBB)
         self.connection.send(iq)
 
@@ -795,8 +795,7 @@ class ConnectionIBBytestream(ConnectionBytestream):
                     if file_props['seq'] == 65536:
                         file_props['seq'] = 0
                     self.last_sent_ibb_id = self.connection.send(xmpp.Protocol('iq',
-                        file_props['direction'][1:], payload=[datanode,
-                        self._ampnode]))
+                        file_props['direction'][1:], 'set', payload=[datanode]))
                     current_time = time.time()
                     file_props['elapsed-time'] += current_time - file_props[
                         'last-time']
@@ -871,7 +870,7 @@ class ConnectionIBBytestream(ConnectionBytestream):
         # look in sending files
         if sid in self.files_props.keys():
             conn.send(stanza.buildReply('result'))
-            gajim.socks5queue.complete_transfer_cb(self.name, file_props)
+            gajim.socks5queue.complete_transfer_cb(self.name, self.files_props[sid])
             del self.files_props[sid]
         # look in receiving files
         elif gajim.socks5queue.get_file_props(self.name, sid):

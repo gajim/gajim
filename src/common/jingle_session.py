@@ -314,7 +314,7 @@ class JingleSession(object):
                 self.__send_error(stanza, 'bad-request')
                 return
             # FIXME: If we aren't initiated and it's not a session-initiate...
-            if action != 'session-initiate' and self.state == JingleStates.ended:
+            if action not in ['session-initiate','session-terminate'] and self.state == JingleStates.ended:
                 self.__send_error(stanza, 'item-not-found', 'unknown-session')
                 return
         else:
@@ -367,7 +367,7 @@ class JingleSession(object):
         self.__append_contents(jingle)
         self.__broadcast(stanza, jingle, None, 'transport-replace')
         self.connection.connection.send(stanza)
-        #self.collect_iq_id(stanza.getID())
+        self.state = JingleStates.pending
 
         
     def __on_transport_replace(self, stanza, jingle, error, action):
@@ -599,10 +599,6 @@ class JingleSession(object):
 
     def __dispatch_error(self, error=None, text=None, type_=None):
         
-        if type_ == 'cancel' and error == 'item-not-found':
-            # We coudln't connect with sock5stream, we fallback to IBB
-            self.transport_replace()
-            return
         if text:
             text = '%s (%s)' % (error, text)
         if type_ != 'modify':
