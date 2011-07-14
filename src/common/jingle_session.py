@@ -385,7 +385,7 @@ class JingleSession(object):
                     
                     transport = JingleTransportIBB()
                     self.modify_content(creator, name, transport)
-                    #self.state = JingleStates.pending
+                    self.state = JingleStates.pending
                     self.contents[(creator,name)].state = STATE_TRANSPORT_REPLACE
                     self.__ack(stanza, jingle, error, action)
                     self.__session_accept()
@@ -627,14 +627,12 @@ class JingleSession(object):
         return (reason, text)
 
     def __make_jingle(self, action, reason=None):
-        stanza = xmpp.Iq(typ='set', to=xmpp.JID(self.peerjid))
+        stanza = xmpp.Iq(typ='set', to=xmpp.JID(self.peerjid),
+                        frm=self.responder)
         attrs = {'action': action,
                 'sid': self.sid}
-        if action == 'session-initiate':
-            attrs['initiator'] = self.initiator
-        elif action == 'session-accept':
-            attrs['responder'] = self.responder
-        elif action == 'transport-replace':
+        if action == 'session-initiate' or action == 'session-accept' or \
+           action == 'transport-replace':
             attrs['initiator'] = self.initiator
         jingle = stanza.addChild('jingle', attrs=attrs, namespace=xmpp.NS_JINGLE)
         if reason is not None:
