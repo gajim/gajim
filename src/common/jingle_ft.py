@@ -74,12 +74,12 @@ class JingleFileTransfer(JingleContent):
             self.file_props['transfered_size'] = []
 
         log.info("FT request: %s" % file_props)
-
+       
         if transport is None:
             self.transport = JingleTransportSocks5()
-            self.transport.set_connection(session.connection)
-            self.transport.set_file_props(self.file_props)
-            self.transport.set_our_jid(session.ourjid)
+        self.transport.set_connection(session.connection)
+        self.transport.set_file_props(self.file_props)
+        self.transport.set_our_jid(session.ourjid)
         log.info('ourjid: %s' % session.ourjid)
 
         if self.file_props is not None:
