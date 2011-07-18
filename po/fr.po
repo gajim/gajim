@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 0.12 svn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-20 23:14+0200\n"
+"POT-Creation-Date: 2011-07-19 00:05+0200\n"
 "PO-Revision-Date: 2011-05-30 08:28+0100\n"
 "Last-Translator: Florent Le Coz <louizatakk@fedoraproject.org>\n"
 "Language-Team: <>\n"
@@ -3194,7 +3194,6 @@ msgid "GPG encryption enabled"
 msgstr "Chiffrement GPG activé"
 
 #: ../src/chat_control.py:1643 ../src/chat_control.py:1646
-#: ../src/features_window.py:108
 msgid "Requires python-farsight."
 msgstr "Nécessite python-farsight."
 
@@ -4911,7 +4910,7 @@ msgstr ""
 
 #: ../src/common/connection.py:1198 ../src/common/connection.py:1332
 #: ../src/common/connection.py:1941
-#: ../src/common/zeroconf/connection_zeroconf.py:200
+#: ../src/common/zeroconf/connection_zeroconf.py:203
 #, python-format
 msgid "Could not connect to \"%s\""
 msgstr "Impossible de se connecter à \"%s\""
@@ -5304,14 +5303,12 @@ msgid "Free for Chat"
 msgstr "Disponible pour discuter"
 
 #: ../src/common/helpers.py:233
-#, fuzzy
 msgid "?user status:_Available"
-msgstr "?transfer status:En pause"
+msgstr "?user status:_Disponible"
 
 #: ../src/common/helpers.py:235 ../src/tooltips.py:189
-#, fuzzy
 msgid "?user status:Available"
-msgstr "?transfer status:En pause"
+msgstr "?user status:Disponible"
 
 #: ../src/common/helpers.py:237
 msgid "Connecting"
@@ -6331,11 +6328,11 @@ msgstr ""
 "[Ceci fait partie d'une session chiffrée. Si vous voyez ce message, un "
 "problème a eu lieu.]"
 
-#: ../src/common/zeroconf/connection_zeroconf.py:188
+#: ../src/common/zeroconf/connection_zeroconf.py:191
 msgid "Avahi error"
 msgstr "Erreur d'Avahi"
 
-#: ../src/common/zeroconf/connection_zeroconf.py:189
+#: ../src/common/zeroconf/connection_zeroconf.py:192
 #, python-format
 msgid ""
 "%s\n"
@@ -6344,43 +6341,43 @@ msgstr ""
 "%s\n"
 "La messagerie en « link-local » pourrait ne pas fonctionner correctement."
 
-#: ../src/common/zeroconf/connection_zeroconf.py:201
+#: ../src/common/zeroconf/connection_zeroconf.py:204
 msgid "Please check if Avahi or Bonjour is installed."
 msgstr "Veuillez vérifier si Avahi ou Bonjour sont installés."
 
-#: ../src/common/zeroconf/connection_zeroconf.py:211
-#: ../src/common/zeroconf/connection_zeroconf.py:215
+#: ../src/common/zeroconf/connection_zeroconf.py:214
+#: ../src/common/zeroconf/connection_zeroconf.py:218
 msgid "Could not start local service"
 msgstr "Impossible de lancer le service local"
 
-#: ../src/common/zeroconf/connection_zeroconf.py:212
+#: ../src/common/zeroconf/connection_zeroconf.py:215
 #, python-format
 msgid "Unable to bind to port %d."
 msgstr "Impossible de débloquer le port %d."
 
-#: ../src/common/zeroconf/connection_zeroconf.py:216
-#: ../src/common/zeroconf/connection_zeroconf.py:300
-#: ../src/common/zeroconf/connection_zeroconf.py:313
-#: ../src/common/zeroconf/connection_zeroconf.py:329
+#: ../src/common/zeroconf/connection_zeroconf.py:219
+#: ../src/common/zeroconf/connection_zeroconf.py:303
+#: ../src/common/zeroconf/connection_zeroconf.py:316
+#: ../src/common/zeroconf/connection_zeroconf.py:332
 msgid "Please check if avahi-daemon is running."
 msgstr "Vérifiez si avahi-daemon est actif."
 
-#: ../src/common/zeroconf/connection_zeroconf.py:299
-#: ../src/common/zeroconf/connection_zeroconf.py:312
-#: ../src/common/zeroconf/connection_zeroconf.py:328
+#: ../src/common/zeroconf/connection_zeroconf.py:302
+#: ../src/common/zeroconf/connection_zeroconf.py:315
+#: ../src/common/zeroconf/connection_zeroconf.py:331
 #, python-format
 msgid "Could not change status of account \"%s\""
 msgstr "Impossible de changer l'état du compte « %s »"
 
-#: ../src/common/zeroconf/connection_zeroconf.py:347
+#: ../src/common/zeroconf/connection_zeroconf.py:353
 msgid "Your message could not be sent."
 msgstr "Votre message n'a pas pu être envoyé."
 
-#: ../src/common/zeroconf/connection_zeroconf.py:361
+#: ../src/common/zeroconf/connection_zeroconf.py:367
 msgid "Contact is offline. Your message could not be sent."
 msgstr "Le destinataire est déconnecté. Votre message n'a pas pu être envoyé."
 
-#: ../src/common/zeroconf/connection_zeroconf.py:387
+#: ../src/common/zeroconf/connection_zeroconf.py:395
 msgid ""
 "Connection to host could not be established: Timeout while sending data."
 msgstr ""
@@ -7206,7 +7203,7 @@ msgstr "Requête d'inscription pour le compte %(account)s de la part de %(jid)s"
 msgid "Subscription request from %s"
 msgstr "Requête d'inscription de la part de %s"
 
-#: ../src/dialogs.py:2246 ../src/gui_interface.py:1941
+#: ../src/dialogs.py:2246 ../src/gui_interface.py:1948
 #, python-format
 msgid "You are already in group chat %s"
 msgstr "Vous êtes déjà dans le salon %s"
@@ -7252,11 +7249,11 @@ msgstr ""
 "L'identifiant jabber du salon de discussion contient des caractères "
 "interdits."
 
-#: ../src/dialogs.py:2455 ../src/gui_interface.py:1929
+#: ../src/dialogs.py:2455 ../src/gui_interface.py:1930
 msgid "This is not a group chat"
 msgstr "Ceci n'est pas une conversation multi-utilisateurs"
 
-#: ../src/dialogs.py:2456 ../src/gui_interface.py:1930
+#: ../src/dialogs.py:2456 ../src/gui_interface.py:1931
 #, python-format
 msgid "%s is not the name of a group chat."
 msgstr "%s n'est pas un nom de salon de discussion valide"
@@ -8131,10 +8128,13 @@ msgstr "Nécessite python-docutils."
 msgid "Ability to start audio and video chat."
 msgstr "Possibilité de démarrer une conversation audio et vidéo."
 
+#: ../src/features_window.py:108
+msgid "Requires python-farsight and gstreamer-plugins-bad."
+msgstr "Nécessite python-farsight et gstreamer-plugins-bad."
+
 #: ../src/features_window.py:116
-#, fuzzy
 msgid "?features:Available"
-msgstr "Disponible"
+msgstr "?features:Disponible"
 
 #: ../src/features_window.py:123
 msgid "Feature"
@@ -9511,7 +9511,7 @@ msgstr ""
 "mettre à jour le format du fichier emoticons.py. Voir http://trac.gajim.org/"
 "wiki/Emoticons pour plus de détails."
 
-#: ../src/gui_interface.py:1948 ../src/roster_window.py:3784
+#: ../src/gui_interface.py:1955 ../src/roster_window.py:3784
 msgid "You cannot join a group chat while you are invisible"
 msgstr ""
 "Vous ne pouvez pas joindre un salon de discussion tant que vous êtes "
