@@ -251,6 +251,7 @@ class Interface:
         def on_ok(text):
             gajim.connections[account].join_gc(nick, room_jid, text)
             gajim.gc_passwords[room_jid] = text
+            gc_control.error_dialog = None
 
         def on_cancel():
             # get and destroy window
@@ -260,6 +261,7 @@ class Interface:
                 win = self.msg_win_mgr.get_window(room_jid, account)
                 ctrl = self.msg_win_mgr.get_gc_control(room_jid, account)
                 win.remove_tab(ctrl, 3)
+            gc_control.error_dialog = None
 
         gc_control = self.msg_win_mgr.get_gc_control(room_jid, account)
         if gc_control:
