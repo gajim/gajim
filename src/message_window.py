@@ -589,7 +589,10 @@ _('Do you really want to close them all?'),
             self.notebook.set_show_tabs(show_tabs_if_one_tab)
 
     def redraw_tab(self, ctrl, chatstate = None):
-        hbox = self.notebook.get_tab_label(ctrl.widget).get_children()[0]
+        tab = self.notebook.get_tab_label(ctrl.widget)
+        if not tab:
+            return
+        hbox = tab.get_children()[0]
         status_img = hbox.get_children()[0]
         nick_label = hbox.get_children()[1]
 
