@@ -628,7 +628,7 @@ class JingleSession(object):
 
     def __make_jingle(self, action, reason=None):
         stanza = xmpp.Iq(typ='set', to=xmpp.JID(self.peerjid),
-                        frm=self.responder)
+                        frm=self.ourjid)
         attrs = {'action': action,
                 'sid': self.sid}
         if action == 'session-initiate' or action == 'session-accept' or \
