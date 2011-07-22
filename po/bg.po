@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim 0.12\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-22 13:32+0200\n"
+"POT-Creation-Date: 2011-07-22 12:15+0200\n"
 "PO-Revision-Date: 2009-08-19 23:43+0200\n"
 "Last-Translator: Yavor Doganov <yavor@gnu.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -3573,7 +3573,7 @@ msgstr ""
 #. sorted alphanum
 #: ../src/common/config.py:106 ../src/common/config.py:501
 #: ../src/common/optparser.py:292 ../src/common/optparser.py:488
-#: ../src/common/optparser.py:522 ../src/gui_interface.py:3405
+#: ../src/common/optparser.py:522 ../src/gui_interface.py:3407
 msgid "default"
 msgstr "по подразбиране"
 
@@ -6573,17 +6573,17 @@ msgstr "Емотиконите са изключени"
 msgid "To unregister from a server, account must be enabled."
 msgstr ""
 
-#: ../src/config.py:2983 ../src/gui_interface.py:1140
-#: ../src/gui_interface.py:1251
+#: ../src/config.py:2983 ../src/gui_interface.py:1142
+#: ../src/gui_interface.py:1253
 msgid "Password Required"
 msgstr "Необходима е парола"
 
-#: ../src/config.py:2984 ../src/gui_interface.py:1231
+#: ../src/config.py:2984 ../src/gui_interface.py:1233
 #, python-format
 msgid "Enter your password for account %s"
 msgstr "Въведете парола за акаунт „%s“"
 
-#: ../src/config.py:2985 ../src/gui_interface.py:1251
+#: ../src/config.py:2985 ../src/gui_interface.py:1253
 msgid "Save password"
 msgstr "Запазване на паролата"
 
@@ -6689,11 +6689,11 @@ msgstr "Трябва да въведете име на потребител за
 msgid "Please provide a server on which you want to register."
 msgstr "Задайте сървър, където искате да се регистрирате."
 
-#: ../src/config.py:3678 ../src/gui_interface.py:1931
+#: ../src/config.py:3678 ../src/gui_interface.py:1933
 msgid "Certificate Already in File"
 msgstr "Сертификатът вече е във файла"
 
-#: ../src/config.py:3679 ../src/gui_interface.py:1932
+#: ../src/config.py:3679 ../src/gui_interface.py:1934
 #, python-format
 msgid "This certificate is already in file %s, so it's not added again."
 msgstr ""
@@ -6714,7 +6714,7 @@ msgstr ""
 "Грешка на SSL: %(error)s\n"
 "Все още ли искате да се свържете с този сървър?"
 
-#: ../src/config.py:3762 ../src/gui_interface.py:1959
+#: ../src/config.py:3762 ../src/gui_interface.py:1961
 #, python-format
 msgid ""
 "Add this certificate to the list of trusted certificates.\n"
@@ -7059,7 +7059,7 @@ msgstr "Искане за записване за акаунт „%(account)s“
 msgid "Subscription request from %s"
 msgstr "Искане за записване от %s"
 
-#: ../src/dialogs.py:2141 ../src/gui_interface.py:2705
+#: ../src/dialogs.py:2141 ../src/gui_interface.py:2714
 #, python-format
 msgid "You are already in group chat %s"
 msgstr "Вече сте в стая „%s“"
@@ -7089,7 +7089,7 @@ msgid "Invalid Nickname"
 msgstr "Невалиден псевдоним"
 
 #: ../src/dialogs.py:2335 ../src/dialogs.py:2341
-#: ../src/groupchat_control.py:1853
+#: ../src/groupchat_control.py:1854
 msgid "Invalid group chat Jabber ID"
 msgstr "Невалиден Jabber ID на стая"
 
@@ -7098,15 +7098,15 @@ msgstr "Невалиден Jabber ID на стая"
 msgid "Please enter the group chat Jabber ID as room@server."
 msgstr "Jabber ID на стаята съдържа непозволени знаци."
 
-#: ../src/dialogs.py:2342 ../src/groupchat_control.py:1854
+#: ../src/dialogs.py:2342 ../src/groupchat_control.py:1855
 msgid "The group chat Jabber ID has not allowed characters."
 msgstr "Jabber ID на стаята съдържа непозволени знаци."
 
-#: ../src/dialogs.py:2346 ../src/gui_interface.py:2693
+#: ../src/dialogs.py:2346 ../src/gui_interface.py:2696
 msgid "This is not a group chat"
 msgstr "Това не е стая"
 
-#: ../src/dialogs.py:2347 ../src/gui_interface.py:2694
+#: ../src/dialogs.py:2347 ../src/gui_interface.py:2697
 #, python-format
 msgid "%s is not the name of a group chat."
 msgstr "%s не е име на стая."
@@ -7221,30 +7221,30 @@ msgstr "Ново еднократно съобщение"
 msgid "New Private Message"
 msgstr "Ново лично съобщение"
 
-#: ../src/dialogs.py:2634 ../src/gui_interface.py:1374 ../src/notify.py:489
+#: ../src/dialogs.py:2634 ../src/gui_interface.py:1376 ../src/notify.py:489
 msgid "New E-mail"
 msgstr "Нова е-поща"
 
-#: ../src/dialogs.py:2636 ../src/gui_interface.py:1436 ../src/notify.py:482
+#: ../src/dialogs.py:2636 ../src/gui_interface.py:1438 ../src/notify.py:482
 msgid "File Transfer Request"
 msgstr "Запитване за файлов трансфер"
 
-#: ../src/dialogs.py:2638 ../src/gui_interface.py:1336
-#: ../src/gui_interface.py:1405 ../src/notify.py:484
+#: ../src/dialogs.py:2638 ../src/gui_interface.py:1338
+#: ../src/gui_interface.py:1407 ../src/notify.py:484
 msgid "File Transfer Error"
 msgstr "Грешка при файловия трансфер"
 
-#: ../src/dialogs.py:2640 ../src/gui_interface.py:1482
-#: ../src/gui_interface.py:1505 ../src/gui_interface.py:1522
+#: ../src/dialogs.py:2640 ../src/gui_interface.py:1484
+#: ../src/gui_interface.py:1507 ../src/gui_interface.py:1524
 #: ../src/notify.py:486
 msgid "File Transfer Completed"
 msgstr "Файловият трансфер е приключен"
 
-#: ../src/dialogs.py:2641 ../src/gui_interface.py:1485 ../src/notify.py:487
+#: ../src/dialogs.py:2641 ../src/gui_interface.py:1487 ../src/notify.py:487
 msgid "File Transfer Stopped"
 msgstr "Файловият трансфер е преустановен"
 
-#: ../src/dialogs.py:2643 ../src/gui_interface.py:1160 ../src/notify.py:491
+#: ../src/dialogs.py:2643 ../src/gui_interface.py:1162 ../src/notify.py:491
 msgid "Groupchat Invitation"
 msgstr "Покана за разговор в стая"
 
@@ -7679,20 +7679,20 @@ msgstr "Описание"
 msgid "Id"
 msgstr "Идентификатор"
 
-#: ../src/disco.py:1816 ../src/gui_interface.py:3217
+#: ../src/disco.py:1816 ../src/gui_interface.py:3219
 msgid "Bookmark already set"
 msgstr "Отметката вече е установена"
 
-#: ../src/disco.py:1817 ../src/gui_interface.py:3218
+#: ../src/disco.py:1817 ../src/gui_interface.py:3220
 #, python-format
 msgid "Group Chat \"%s\" is already in your bookmarks."
 msgstr "Стаята „%s“ вече присъства в отметките."
 
-#: ../src/disco.py:1826 ../src/gui_interface.py:3232
+#: ../src/disco.py:1826 ../src/gui_interface.py:3234
 msgid "Bookmark has been added successfully"
 msgstr "Отметката беше добавена успешно"
 
-#: ../src/disco.py:1827 ../src/gui_interface.py:3233
+#: ../src/disco.py:1827 ../src/gui_interface.py:3235
 msgid "You can manage your bookmarks via Actions menu in your roster."
 msgstr "Може да организирате отметките чрез менюто „Действия“."
 
@@ -8712,146 +8712,146 @@ msgstr "На всеки участник е позволено да вижда �
 
 #. Can be a message (see handle_event_gc_config_change in
 #. gajim.py)
-#: ../src/groupchat_control.py:1300
+#: ../src/groupchat_control.py:1301
 msgid "Room logging is enabled"
 msgstr "Воденето на дневник на стаята е включено"
 
-#: ../src/groupchat_control.py:1302
+#: ../src/groupchat_control.py:1303
 msgid "A new room has been created"
 msgstr "Беше създадена нова стая"
 
-#: ../src/groupchat_control.py:1305
+#: ../src/groupchat_control.py:1306
 msgid "The server has assigned or modified your roomnick"
 msgstr "Сървърът назначи или промени псевдонима ви в стаята"
 
 #. do not print 'kicked by None'
-#: ../src/groupchat_control.py:1311
+#: ../src/groupchat_control.py:1312
 #, python-format
 msgid "%(nick)s has been kicked: %(reason)s"
 msgstr "%(nick)s беше изритан: %(reason)s"
 
-#: ../src/groupchat_control.py:1315
+#: ../src/groupchat_control.py:1316
 #, python-format
 msgid "%(nick)s has been kicked by %(who)s: %(reason)s"
 msgstr "%(nick)s беше изритан от %(who)s: %(reason)s"
 
 #. do not print 'banned by None'
-#: ../src/groupchat_control.py:1324
+#: ../src/groupchat_control.py:1325
 #, python-format
 msgid "%(nick)s has been banned: %(reason)s"
 msgstr "%(nick)s беше отлъчен: %(reason)s"
 
-#: ../src/groupchat_control.py:1327
+#: ../src/groupchat_control.py:1328
 #, python-format
 msgid "%(nick)s has been banned by %(who)s: %(reason)s"
 msgstr "%(nick)s беше отлъчен от %(who)s: %(reason)s"
 
-#: ../src/groupchat_control.py:1338 ../src/groupchat_control.py:1442
+#: ../src/groupchat_control.py:1339 ../src/groupchat_control.py:1443
 #, python-format
 msgid "You are now known as %s"
 msgstr "Вече сте познати като %s"
 
-#: ../src/groupchat_control.py:1354 ../src/gui_interface.py:922
+#: ../src/groupchat_control.py:1355 ../src/gui_interface.py:922
 #, python-format
 msgid "%(nick)s is now known as %(new_nick)s"
 msgstr "%(nick)s вече е познат като %(new_nick)s"
 
-#: ../src/groupchat_control.py:1396 ../src/groupchat_control.py:1401
-#: ../src/groupchat_control.py:1407
+#: ../src/groupchat_control.py:1397 ../src/groupchat_control.py:1402
+#: ../src/groupchat_control.py:1408
 #, python-format
 msgid "%(nick)s has been removed from the room (%(reason)s)"
 msgstr "%(nick)s беше изритан от стаята (%(reason)s)"
 
-#: ../src/groupchat_control.py:1398
+#: ../src/groupchat_control.py:1399
 msgid "affiliation changed"
 msgstr "рангът е променен"
 
-#: ../src/groupchat_control.py:1403
+#: ../src/groupchat_control.py:1404
 msgid "room configuration changed to members-only"
 msgstr "Конфигурацията на стаята бе променена на „само за членове“"
 
-#: ../src/groupchat_control.py:1409
+#: ../src/groupchat_control.py:1410
 msgid "system shutdown"
 msgstr "Изключване на системата"
 
-#: ../src/groupchat_control.py:1492
+#: ../src/groupchat_control.py:1493
 #, python-format
 msgid "** Affiliation of %(nick)s has been set to %(affiliation)s by %(actor)s"
 msgstr "** Рангът на %(nick)s бе зададен на %(affiliation)s от %(actor)s"
 
-#: ../src/groupchat_control.py:1496
+#: ../src/groupchat_control.py:1497
 #, python-format
 msgid "** Affiliation of %(nick)s has been set to %(affiliation)s"
 msgstr "** Рангът на %(nick)s бе зададен на %(affiliation)s"
 
-#: ../src/groupchat_control.py:1511
+#: ../src/groupchat_control.py:1512
 #, python-format
 msgid "** Role of %(nick)s has been set to %(role)s by %(actor)s"
 msgstr "** Ролята на %(nick)s бе зададена на %(role)s от %(actor)s"
 
-#: ../src/groupchat_control.py:1515
+#: ../src/groupchat_control.py:1516
 #, python-format
 msgid "** Role of %(nick)s has been set to %(role)s"
 msgstr "** Ролята на %(nick)s бе зададена на %(role)s"
 
-#: ../src/groupchat_control.py:1544
+#: ../src/groupchat_control.py:1545
 #, python-format
 msgid "%s has left"
 msgstr "%s напусна"
 
-#: ../src/groupchat_control.py:1549
+#: ../src/groupchat_control.py:1550
 #, python-format
 msgid "%s has joined the group chat"
 msgstr "%s влезе в стаята"
 
-#: ../src/groupchat_control.py:1551 ../src/gui_interface.py:949
+#: ../src/groupchat_control.py:1552 ../src/gui_interface.py:949
 #: ../src/history_window.py:447 ../src/notify.py:236
 #, python-format
 msgid "%(nick)s is now %(status)s"
 msgstr "%(nick)s вече е %(status)s"
 
-#: ../src/groupchat_control.py:1780
+#: ../src/groupchat_control.py:1781
 #, python-format
 msgid "Are you sure you want to leave group chat \"%s\"?"
 msgstr "Сигурни ли сте, че искате да напуснете стаята „%s“?"
 
-#: ../src/groupchat_control.py:1782
+#: ../src/groupchat_control.py:1783
 msgid ""
 "If you close this window, you will be disconnected from this group chat."
 msgstr "Ако затворите този прозорец, връзката със стаята ще бъде прекъсната."
 
-#: ../src/groupchat_control.py:1786 ../src/gui_interface.py:1224
-#: ../src/gui_interface.py:2019 ../src/gui_interface.py:2056
-#: ../src/gui_interface.py:2091 ../src/message_window.py:224
+#: ../src/groupchat_control.py:1787 ../src/gui_interface.py:1226
+#: ../src/gui_interface.py:2021 ../src/gui_interface.py:2058
+#: ../src/gui_interface.py:2093 ../src/message_window.py:224
 #: ../src/roster_window.py:2762 ../src/roster_window.py:3422
 #: ../src/roster_window.py:4146
 #, fuzzy
 msgid "_Do not ask me again"
 msgstr "Да _не се задава този въпрос отново"
 
-#: ../src/groupchat_control.py:1820
+#: ../src/groupchat_control.py:1821
 msgid "Changing Subject"
 msgstr "Промяна на темата"
 
-#: ../src/groupchat_control.py:1821
+#: ../src/groupchat_control.py:1822
 msgid "Please specify the new subject:"
 msgstr "Въведете новата тема:"
 
-#: ../src/groupchat_control.py:1828
+#: ../src/groupchat_control.py:1829
 msgid "Changing Nickname"
 msgstr "Промяна на псевдонима"
 
-#: ../src/groupchat_control.py:1829
+#: ../src/groupchat_control.py:1830
 msgid "Please specify the new nickname you want to use:"
 msgstr "Въведете новия псевдоним, който искате да използвате:"
 
 #. Ask for a reason
-#: ../src/groupchat_control.py:1860
+#: ../src/groupchat_control.py:1861
 #, python-format
 msgid "Destroying %s"
 msgstr "Унищожаване на %s"
 
-#: ../src/groupchat_control.py:1861
+#: ../src/groupchat_control.py:1862
 msgid ""
 "You are going to definitively destroy this room.\n"
 "You may specify a reason below:"
@@ -8859,22 +8859,22 @@ msgstr ""
 "Определено сте на път да унищожите тази стая.\n"
 "Може да укажете причина по-долу:"
 
-#: ../src/groupchat_control.py:1863
+#: ../src/groupchat_control.py:1864
 msgid "You may also enter an alternate venue:"
 msgstr "Може да въведете и друго място за срещи:"
 
 #. ask for reason
-#: ../src/groupchat_control.py:2052
+#: ../src/groupchat_control.py:2053
 #, python-format
 msgid "Kicking %s"
 msgstr "Изритване на %s"
 
-#: ../src/groupchat_control.py:2053 ../src/groupchat_control.py:2380
+#: ../src/groupchat_control.py:2054 ../src/groupchat_control.py:2381
 msgid "You may specify a reason below:"
 msgstr "Може да уточните причина по-долу:"
 
 #. ask for reason
-#: ../src/groupchat_control.py:2379
+#: ../src/groupchat_control.py:2380
 #, python-format
 msgid "Banning %s"
 msgstr "Отлъчване на %s"
@@ -9071,12 +9071,12 @@ msgstr "Стаята е полу-анонимна"
 msgid "Room is now fully-anonymous"
 msgstr "Стаята е напълно анонимна"
 
-#: ../src/gui_interface.py:1141
+#: ../src/gui_interface.py:1143
 #, python-format
 msgid "A Password is required to join the room %s. Please type it."
 msgstr "Необходима е парола за влизане в стаята „%s“. Въведете я."
 
-#: ../src/gui_interface.py:1188
+#: ../src/gui_interface.py:1190
 msgid ""
 "You configured Gajim to use GPG agent, but there is no GPG agent running or "
 "it returned a wrong passphrase.\n"
@@ -9084,25 +9084,25 @@ msgstr ""
 "Конфигурирали сте Gajim да използва агент на GPG, но такъв не е стартиран "
 "или е предоставил грешна парола.\n"
 
-#: ../src/gui_interface.py:1190 ../src/gui_interface.py:1197
+#: ../src/gui_interface.py:1192 ../src/gui_interface.py:1199
 msgid "You are currently connected without your OpenPGP key."
 msgstr "В момента сте свързани без OpenPGP ключ."
 
-#: ../src/gui_interface.py:1192
+#: ../src/gui_interface.py:1194
 msgid "Your passphrase is incorrect"
 msgstr "Паролата е грешна"
 
-#: ../src/gui_interface.py:1196
+#: ../src/gui_interface.py:1198
 #, fuzzy
 msgid "OpenGPG Passphrase Incorrect"
 msgstr "Паролата е грешна"
 
-#: ../src/gui_interface.py:1222
+#: ../src/gui_interface.py:1224
 #, fuzzy
 msgid "GPG key not trusted"
 msgstr "GPG не е използваем"
 
-#: ../src/gui_interface.py:1222
+#: ../src/gui_interface.py:1224
 #, fuzzy
 msgid ""
 "The GPG key used to encrypt this chat is not trusted. Do you really want to "
@@ -9111,7 +9111,7 @@ msgstr ""
 "Няма зададен ключ на GPG за този контакт, така че не може да шифрирате "
 "съобщения."
 
-#: ../src/gui_interface.py:1234
+#: ../src/gui_interface.py:1236
 #, fuzzy
 msgid ""
 "Gnome Keyring is installed but not                 correctly started "
@@ -9120,19 +9120,19 @@ msgstr ""
 "Наборът с ключове на GNOME е инсталиран, но не е стартиран правилно (навярно "
 "променливата на обкръжението не е настроена)"
 
-#: ../src/gui_interface.py:1346
+#: ../src/gui_interface.py:1348
 #, python-format
 msgid "New mail on %(gmail_mail_address)s"
 msgstr "Ново писмо за %(gmail_mail_address)s"
 
-#: ../src/gui_interface.py:1348
+#: ../src/gui_interface.py:1350
 #, python-format
 msgid "You have %d new mail conversation"
 msgid_plural "You have %d new mail conversations"
 msgstr[0] "Имате %d ново писмо"
 msgstr[1] "Имате %d нови писма"
 
-#: ../src/gui_interface.py:1361
+#: ../src/gui_interface.py:1363
 #, python-format
 msgid ""
 "\n"
@@ -9147,44 +9147,44 @@ msgstr ""
 "Тема: %(subject)s\n"
 "%(snippet)s"
 
-#: ../src/gui_interface.py:1434
+#: ../src/gui_interface.py:1436
 #, python-format
 msgid "%s wants to send you a file."
 msgstr "%s иска да ви изпрати файл."
 
-#: ../src/gui_interface.py:1471 ../src/roster_window.py:1874
+#: ../src/gui_interface.py:1473 ../src/roster_window.py:1874
 #, fuzzy
 msgid "Remote contact stopped transfer"
 msgstr "Премахване на контакт от списъка"
 
-#: ../src/gui_interface.py:1474 ../src/roster_window.py:1876
+#: ../src/gui_interface.py:1476 ../src/roster_window.py:1876
 #, fuzzy
 msgid "Error opening file"
 msgstr "Грешка при четене на файл:"
 
-#: ../src/gui_interface.py:1506
+#: ../src/gui_interface.py:1508
 #, python-format
 msgid "You successfully received %(filename)s from %(name)s."
 msgstr "Успешно получихте %(filename)s от %(name)s."
 
 #. ft stopped
-#: ../src/gui_interface.py:1510
+#: ../src/gui_interface.py:1512
 #, python-format
 msgid "File transfer of %(filename)s from %(name)s stopped."
 msgstr "Файловият трансфер на %(filename)s от %(name)s прекъсна."
 
-#: ../src/gui_interface.py:1523
+#: ../src/gui_interface.py:1525
 #, python-format
 msgid "You successfully sent %(filename)s to %(name)s."
 msgstr "Успешно изпратихте %(filename)s на %(name)s."
 
 #. ft stopped
-#: ../src/gui_interface.py:1527
+#: ../src/gui_interface.py:1529
 #, python-format
 msgid "File transfer of %(filename)s to %(name)s stopped."
 msgstr "Файловият трансфер на %(filename)s до %(name)s прекъсна."
 
-#: ../src/gui_interface.py:1639
+#: ../src/gui_interface.py:1641
 #, python-format
 msgid ""
 "Unable to decrypt message from %s\n"
@@ -9193,57 +9193,57 @@ msgstr ""
 "Неуспех при дешифрирането на съобщение от %s\n"
 "Възможно е да е било фалшифицирано."
 
-#: ../src/gui_interface.py:1646
+#: ../src/gui_interface.py:1648
 msgid "Unable to decrypt message"
 msgstr "Неуспех при дешифриране на съобщението"
 
-#: ../src/gui_interface.py:1729
+#: ../src/gui_interface.py:1731
 msgid "Username Conflict"
 msgstr "Конфликт с имената на потребители"
 
-#: ../src/gui_interface.py:1730
+#: ../src/gui_interface.py:1732
 msgid "Please type a new username for your local account"
 msgstr "Укажете ново потребителско име за локалния ви акаунт"
 
-#: ../src/gui_interface.py:1743
+#: ../src/gui_interface.py:1745
 msgid "Ping?"
 msgstr "Пинг?"
 
-#: ../src/gui_interface.py:1756
+#: ../src/gui_interface.py:1758
 #, python-format
 msgid "Pong! (%s s.)"
 msgstr "Понг! (%s сек)"
 
-#: ../src/gui_interface.py:1767
+#: ../src/gui_interface.py:1769
 msgid "Error."
 msgstr "Грешка."
 
-#: ../src/gui_interface.py:1795
+#: ../src/gui_interface.py:1797
 msgid "Resource Conflict"
 msgstr "Конфликт на ресурсите"
 
-#: ../src/gui_interface.py:1796
+#: ../src/gui_interface.py:1798
 msgid ""
 "You are already connected to this account with the same resource. Please "
 "type a new one"
 msgstr "Вече сте свързани към този акаунт със същия ресурс. Въведете нов."
 
 #. TODO: we should use another pixmap ;-)
-#: ../src/gui_interface.py:1843
+#: ../src/gui_interface.py:1845
 #, fuzzy, python-format
 msgid "%s wants to start a voice chat."
 msgstr "%s иска да ви изпрати файл."
 
-#: ../src/gui_interface.py:1846
+#: ../src/gui_interface.py:1848
 #, fuzzy
 msgid "Voice Chat Request"
 msgstr "Запитване за файлов трансфер"
 
-#: ../src/gui_interface.py:1954
+#: ../src/gui_interface.py:1956
 msgid "Error verifying SSL certificate"
 msgstr "Грешка при проверка на сертификата на SSL"
 
-#: ../src/gui_interface.py:1955
+#: ../src/gui_interface.py:1957
 #, python-format
 msgid ""
 "There was an error verifying the SSL certificate of your jabber server: "
@@ -9254,15 +9254,15 @@ msgstr ""
 "%(error)s\n"
 "Все още ли искате да се свържете със сървъра?"
 
-#: ../src/gui_interface.py:1963
+#: ../src/gui_interface.py:1965
 msgid "Ignore this error for this certificate."
 msgstr "Пренебрегване на грешката за този сертификат."
 
-#: ../src/gui_interface.py:1983
+#: ../src/gui_interface.py:1985
 msgid "SSL certificate error"
 msgstr "Грешка в сертификата на SSL"
 
-#: ../src/gui_interface.py:1984
+#: ../src/gui_interface.py:1986
 #, fuzzy, python-format
 msgid ""
 "It seems the SSL certificate of account %(account)s has changed or your "
@@ -9278,12 +9278,12 @@ msgstr ""
 "\n"
 "Все още ли искате да се свържете и да обновите отпечатъка на сертификата?"
 
-#: ../src/gui_interface.py:2014 ../src/gui_interface.py:2051
-#: ../src/gui_interface.py:2087
+#: ../src/gui_interface.py:2016 ../src/gui_interface.py:2053
+#: ../src/gui_interface.py:2089
 msgid "Insecure connection"
 msgstr "Несигурна връзка"
 
-#: ../src/gui_interface.py:2015
+#: ../src/gui_interface.py:2017
 #, fuzzy
 msgid ""
 "You are about to connect to the server with an insecure connection. This "
@@ -9294,12 +9294,12 @@ msgstr ""
 "инсталирате PyOpenSSL, за да предотвратите това. Сигурни ли сте, че искате "
 "да го направите?"
 
-#: ../src/gui_interface.py:2018 ../src/gui_interface.py:2055
-#: ../src/gui_interface.py:2090
+#: ../src/gui_interface.py:2020 ../src/gui_interface.py:2057
+#: ../src/gui_interface.py:2092
 msgid "Yes, I really want to connect insecurely"
 msgstr "Да, наистина искам да се свържа по несигурен начин"
 
-#: ../src/gui_interface.py:2052
+#: ../src/gui_interface.py:2054
 msgid ""
 "You are about to send your password on an insecure connection. You should "
 "install PyOpenSSL to prevent that. Are you sure you want to do that?"
@@ -9308,7 +9308,7 @@ msgstr ""
 "инсталирате PyOpenSSL, за да предотвратите това. Сигурни ли сте, че искате "
 "да го направите?"
 
-#: ../src/gui_interface.py:2088
+#: ../src/gui_interface.py:2090
 #, fuzzy
 msgid ""
 "You are about to send your password unencrypted on an insecure connection. "
@@ -9318,17 +9318,17 @@ msgstr ""
 "че искате да го направите?"
 
 #. theme doesn't exist, disable emoticons
-#: ../src/gui_interface.py:2651 ../src/gui_interface.py:2674
+#: ../src/gui_interface.py:2653 ../src/gui_interface.py:2676
 msgid "Emoticons disabled"
 msgstr "Емотиконите са изключени"
 
-#: ../src/gui_interface.py:2652
+#: ../src/gui_interface.py:2654
 msgid ""
 "Your configured emoticons theme has not been found, so emoticons have been "
 "disabled."
 msgstr "Темата с емотикони не беше намерена, така че са изключени."
 
-#: ../src/gui_interface.py:2675
+#: ../src/gui_interface.py:2677
 msgid ""
 "Your configured emoticons theme cannot been loaded. You maybe need to update "
 "the format of emoticons.py file. See http://trac.gajim.org/wiki/Emoticons "
@@ -9338,41 +9338,41 @@ msgstr ""
 "формата на файла emoticons.py. Вижте http://trac.gajim.org/wiki/Emoticons за "
 "повече подробности."
 
-#: ../src/gui_interface.py:2712 ../src/roster_window.py:3583
+#: ../src/gui_interface.py:2721 ../src/roster_window.py:3583
 msgid "You cannot join a group chat while you are invisible"
 msgstr "Не може да влезете в стая, докато сте невидими."
 
 #. it is good to notify the user
 #. in case he or she cannot see the output of the console
-#: ../src/gui_interface.py:3093
+#: ../src/gui_interface.py:3095
 msgid "Could not save your settings and preferences"
 msgstr "Неуспех при запазването на настройките"
 
-#: ../src/gui_interface.py:3638
+#: ../src/gui_interface.py:3640
 msgid "Passphrase Required"
 msgstr "Необходима е парола"
 
-#: ../src/gui_interface.py:3639
+#: ../src/gui_interface.py:3641
 #, python-format
 msgid "Enter GPG key passphrase for key %(keyid)s (account %(account)s)."
 msgstr "Въведете парола за ключ на GPG %(keyid)s (акаунт „%(account)s“)."
 
-#: ../src/gui_interface.py:3653
+#: ../src/gui_interface.py:3655
 #, fuzzy
 msgid "GPG key expired"
 msgstr "Няма зададен ключ на GPG"
 
-#: ../src/gui_interface.py:3654
+#: ../src/gui_interface.py:3656
 #, fuzzy, python-format
 msgid "Your GPG key has expired, you will be connected to %s without OpenPGP."
 msgstr "Ще бъдете свързани към „%s“ без OpenPGP."
 
 #. ask again
-#: ../src/gui_interface.py:3663
+#: ../src/gui_interface.py:3665
 msgid "Wrong Passphrase"
 msgstr "Грешна парола"
 
-#: ../src/gui_interface.py:3664
+#: ../src/gui_interface.py:3666
 msgid "Please retype your GPG passphrase or press Cancel."
 msgstr "Въведете паролата за GPG ключа наново или натиснете „Отказване“."
 
@@ -10089,11 +10089,11 @@ msgstr "Грешка при запис на диска"
 msgid "Subject: %s"
 msgstr "Тема: %s"
 
-#: ../src/session.py:433 ../src/session.py:468
+#: ../src/session.py:434 ../src/session.py:469
 msgid "Confirm these session options"
 msgstr "Потвърждение на тези настройки на сесията"
 
-#: ../src/session.py:435
+#: ../src/session.py:436
 #, fuzzy, python-format
 msgid ""
 "The remote client wants to negotiate an session with these features:\n"
@@ -10108,7 +10108,7 @@ msgstr ""
 "\n"
 "\tДопустими ли са тези настройки?"
 
-#: ../src/session.py:469
+#: ../src/session.py:470
 #, python-format
 msgid ""
 "The remote client selected these options:\n"
