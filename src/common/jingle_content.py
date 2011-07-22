@@ -145,7 +145,7 @@ class JingleContent(object):
         Sends a candidate-error when we can't connect to a candidate.
         """
         content = self.__content()
-        tp = self.transport.make_transport()
+        tp = self.transport.make_transport(add_candidates=False)
         tp.addChild(name='candidate-error')
         content.addChild(node=tp)
         self.session.send_transport_info(content)

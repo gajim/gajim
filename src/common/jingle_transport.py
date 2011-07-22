@@ -117,11 +117,14 @@ class JingleTransportSocks5(JingleTransport):
 
         return xmpp.Node('candidate', attrs=attrs)
 
-    def make_transport(self, candidates=None):
-        self._add_local_ips_as_candidates()
-        self._add_additional_candidates()
-        self._add_proxy_candidates()
-        transport = JingleTransport.make_transport(self, candidates)
+    def make_transport(self, candidates=None, add_candidates = True):
+        if  add_candidates:            
+            self._add_local_ips_as_candidates()
+            self._add_additional_candidates()
+            self._add_proxy_candidates()
+            transport = JingleTransport.make_transport(self, candidates)
+        else:
+            transport = xmpp.Node('transport')
         transport.setNamespace(xmpp.NS_JINGLE_BYTESTREAM)
         transport.setAttr('sid', self.sid)
         return transport
