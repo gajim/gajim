@@ -1503,6 +1503,7 @@ class GroupchatControl(ChatControlBase):
                 # gajim.py)
                 self.print_conversation(
                     _('Any occupant is allowed to see your full JID'))
+                self.is_anonymous = False
             if '170' in obj.status_code:
                 # Can be a message (see handle_event_gc_config_change in
                 # gajim.py)
