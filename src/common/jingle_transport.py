@@ -295,7 +295,7 @@ class JingleTransportIBB(JingleTransport):
             
     def make_transport(self):
         
-        transport = JingleTransport.make_transport(self)
+        transport = xmpp.Node('transport')
         transport.setNamespace(xmpp.NS_JINGLE_IBB)
         transport.setAttr('block-size', self.block_sz)
         transport.setAttr('sid', self.sid)
