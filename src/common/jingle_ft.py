@@ -96,15 +96,15 @@ class JingleFileTransfer(JingleContent):
 
     def __on_session_accept(self, stanza, content, error, action):
         log.info("__on_session_accept")
-
+        con = self.session.connection
         security = content.getTag('security')
         if not security: # responder can not verify our fingerprint
             self.use_security = False
-            
+        
+        
         if self.state == STATE_TRANSPORT_REPLACE:
             # We ack the session accept
             response = stanza.buildReply('result')
-            con = self.session.connection
             con.connection.send(response)
             # We send the file
             con.files_props[self.file_props['sid']] = self.file_props
@@ -112,7 +112,27 @@ class JingleFileTransfer(JingleContent):
             con.OpenStream( self.transport.sid, self.session.peerjid, 
                             fp,    blocksize=4096)
             raise xmpp.NodeProcessed
-            
+        
+        self.file_props['streamhosts'] = self.transport.remote_candidates
+        for host in self.file_props['streamhosts']:
+                host['initiator'] = self.session.initiator
+                host['target'] = self.session.responder
+                
+        response = stanza.buildReply('result')
+        con.connection.send(response)
+        
+        if not gajim.socks5queue.get_file_props(
+           self.session.connection.name, self.file_props['sid']):
+            gajim.socks5queue.add_file_props(self.session.connection.name,
+                                            self.file_props)
+        fingerprint = None
+        if self.use_security:
+            fingerprint = 'client'
+        gajim.socks5queue.connect_to_hosts(self.session.connection.name,
+                       self.file_props['sid'], self.send_candidate_used,
+                         self._on_connect_error, fingerprint=fingerprint)
+        
+        raise xmpp.NodeProcessed
 
     def __on_session_terminate(self, stanza, content, error, action):
         log.info("__on_session_terminate")
@@ -245,7 +265,7 @@ class JingleFileTransfer(JingleContent):
             self.send_error_candidate()
             
         log.info('connect error, sid=' + sid)
-
+        
     def _fill_content(self, content):
         description_node = xmpp.simplexml.Node(
             tag=xmpp.NS_JINGLE_FILE_TRANSFER + ' description')

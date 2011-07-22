@@ -113,7 +113,7 @@ class JingleSession(object):
                 'description-info':     [self.__broadcast, self.__ack], #TODO
                 'security-info':        [self.__ack], #TODO
                 'session-accept':       [self.__on_session_accept, self.__on_content_accept,
-                        self.__broadcast, self.__ack],
+                        self.__broadcast],
                 'session-info':         [self.__broadcast, self.__on_session_info, self.__ack],
                 'session-initiate':     [self.__on_session_initiate, self.__broadcast,
                         self.__ack],

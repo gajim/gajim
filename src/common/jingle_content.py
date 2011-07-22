@@ -100,6 +100,7 @@ class JingleContent(object):
         """
         Add a list of candidates to the list of remote candidates
         """
+        self.transport.remote_candidates = candidates
         pass
 
     def on_stanza(self, stanza, content, error, action):
