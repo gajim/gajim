@@ -409,7 +409,8 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 
         try:
             # bob responds
-            if form.getType() == 'form' and 'security' in form.asDict():
+            if form.getType() == 'form' and 'security' in form.asDict() and \
+            [x[1] for x in form.getField('security').getOptions()] != ['none']:
                 # we don't support 3-message negotiation as the responder
                 if 'dhkeys' in form.asDict():
                     self.fail_bad_negotiation('3 message negotiation not supported '
@@ -506,21 +507,3 @@ Are these options acceptable?''') % (negotiation.describe_features(
             self.conn.delete_session(str(self.jid), self.thread_id)
 
             return
-
-        # non-esession negotiation. this isn't very useful, but i'm keeping it
-        # around to test my test suite.
-        if form.getType() == 'form':
-            if not self.control:
-                jid, resource = gajim.get_room_and_nick_from_fjid(self.jid)
-
-                account = self.conn.name
-                contact = gajim.contacts.get_contact(account, self.jid, resource)
-
-                if not contact:
-                    contact = gajim.contacts.create_contact(jid=jid, account=account,
-                            resource=resource, show=self.conn.get_status())
-
-                gajim.interface.new_chat(contact, account, resource=resource,
-                        session=self)
-
-            negotiation.FeatureNegotiationWindow(account, self.jid, self, form)
