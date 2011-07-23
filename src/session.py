@@ -526,10 +526,11 @@ Are these options acceptable?''') % (negotiation.describe_features(
         # around to test my test suite.
         if form.getType() == 'form':
             if not self.control:
-                jid, resource = gajim.get_room_and_nick_from_fjid(self.jid)
+                jid, resource = gajim.get_room_and_nick_from_fjid(str(self.jid))
 
                 account = self.conn.name
-                contact = gajim.contacts.get_contact(account, self.jid, resource)
+                contact = gajim.contacts.get_contact(account, str(self.jid),
+                    resource)
 
                 if not contact:
                     contact = gajim.contacts.create_contact(jid=jid, account=account,
@@ -538,4 +539,5 @@ Are these options acceptable?''') % (negotiation.describe_features(
                 gajim.interface.new_chat(contact, account, resource=resource,
                         session=self)
 
-            negotiation.FeatureNegotiationWindow(account, self.jid, self, form)
+            negotiation.FeatureNegotiationWindow(account, str(self.jid), self,
+                form)
