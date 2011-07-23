@@ -1495,11 +1495,6 @@ class RosterWindow:
 ### Roster and Modelfilter handling
 ##############################################################################
 
-    def _search_roster_func(self, model, column, key, titer):
-        key = key.decode('utf-8').lower()
-        name = model[titer][C_NAME].decode('utf-8').lower()
-        return not (key in name)
-
     def refilter_shown_roster_items(self):
         self.filtering = True
         self.modelfilter.refilter()
@@ -3372,6 +3367,10 @@ class RosterWindow:
             elif type_ == 'agent':
                 self.on_remove_agent(widget, list_)
 
+        elif gtk.gdk.keyval_to_unicode(event.keyval): # if we got unicode symbol
+            num = gtk.gdk.keyval_to_unicode(event.keyval)
+            self.enable_rfilter(unichr(num))
+
     def on_roster_treeview_button_release_event(self, widget, event):
         try:
             path = self.tree.get_path_at_pos(int(event.x), int(event.y))[0]
@@ -4218,25 +4217,29 @@ class RosterWindow:
         """ When we update the content of the filter """
         self.rfilter_string = widget.get_text().lower()
         if self.rfilter_string == '':
-            self.rfilter_enabled = False
-        else:
-            self.rfilter_enabled = True
+            self.disable_rfilter()
         self.refilter_shown_roster_items()
 
     def on_rfilter_entry_icon_press(self, widget, icon, event):
-        """ Disable the roster filtering by clicking the icon in the textEntry """
-        self.xml.get_object('show_rfilter_menuitem').set_active(False)
-        self.rfilter_enabled = False
-        self.refilter_shown_roster_items()
+        """
+        Disable the roster filtering by clicking the icon in the textEntry
+        """
+        self.disable_rfilter()
 
-    def on_show_rfilter_menuitem_toggled(self, widget):
-        """ Show the roster filter entry """
-        self.rfilter_enabled = widget.get_active()
-        self.rfilter_entry.set_visible(self.rfilter_enabled)
-        self.rfilter_entry.set_editable(self.rfilter_enabled)
-        if self.rfilter_enabled:
-            self.rfilter_entry.set_text('')
-            self.rfilter_entry.grab_focus()
+    def enable_rfilter(self, search_string):
+        self.rfilter_enabled = True
+        self.rfilter_entry.set_visible(True)
+        self.rfilter_entry.set_editable(True)
+        self.rfilter_entry.set_text(search_string)
+        self.rfilter_entry.grab_focus()
+        self.rfilter_entry.set_position(-1)
+
+    def disable_rfilter(self):
+        self.rfilter_enabled = False
+        self.rfilter_entry.set_visible(False)
+        self.rfilter_entry.set_editable(False)
+        self.refilter_shown_roster_items()
+        self.tree.grab_focus()
 
     def on_roster_hpaned_notify(self, pane, gparamspec):
         """
@@ -6356,9 +6359,6 @@ class RosterWindow:
         self.tree.append_column(col)
         col.set_visible(False)
         self.tree.set_expander_column(col)
-
-        # set search function
-        self.tree.set_search_equal_func(self._search_roster_func)
 
         # signals
         self.TARGET_TYPE_URI_LIST = 80
