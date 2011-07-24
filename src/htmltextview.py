@@ -794,7 +794,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
         elif name in ('a', 'img', 'body', 'html'):
             pass
         elif name in INLINE:
-            self._jump_line()
+            pass
         else:
             log.warning('Unhandled element "%s"' % name)
 
@@ -830,6 +830,8 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
         elif name in BLOCK:
             if name == 'pre':
                 endPreserving = True
+            elif name in BLOCK_STRUCT:
+                newLine = True
         else:
             log.warning("Unhandled element '%s'" % name)
         self._flush_text()
@@ -838,8 +840,6 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
         if newLine:
             self._jump_line()
         self._end_span()
-        #if not self._starts_line():
-        #    self.text = ' '
 
 class HtmlTextView(gtk.TextView):
 
