@@ -2310,9 +2310,9 @@ class RosterWindow:
         """
         Main window X button was clicked
         """
-        if gajim.interface.systray_enabled and not gajim.config.get(
-        'quit_on_roster_x_button') and gajim.config.get('trayicon') != \
-        'on_event':
+        if not gajim.config.get('quit_on_roster_x_button') and (
+        (gajim.interface.systray_enabled and gajim.config.get('trayicon') != \
+        'on_event') or gajim.config.get('allow_hide_roster')):
             self.tooltip.hide_tooltip()
             if gajim.config.get('save-roster-position'):
                 x, y = self.window.get_position()
@@ -3878,8 +3878,10 @@ class RosterWindow:
                 # let message window close the tab
                 return
             list_of_paths = self.tree.get_selection().get_selected_rows()[1]
-            if not len(list_of_paths) and gajim.interface.systray_enabled and \
-            not gajim.config.get('quit_on_roster_x_button'):
+            if not len(list_of_paths) and not gajim.config.get(
+            'quit_on_roster_x_button') and ((gajim.interface.systray_enabled and\
+            gajim.config.get('trayicon') == 'always') or gajim.config.get(
+            'allow_hide_roster')):
                 self.tooltip.hide_tooltip()
                 self.window.hide()
         elif event.state & gtk.gdk.CONTROL_MASK and event.keyval == \
