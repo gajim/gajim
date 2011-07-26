@@ -749,6 +749,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             self.pingalives = 0
         self.client_cert = gajim.config.get_per('accounts', self.name,
             'client_cert')
+        self.client_cert_passphrase = ''
 
     def check_jid(self, jid):
         return helpers.parse_jid(jid)
@@ -1155,28 +1156,41 @@ class Connection(CommonConnection, ConnectionHandlers):
             secure_tuple = (self._current_type, cacerts, mycerts)
 
             con = common.xmpp.NonBlockingClient(
-                    domain=self._hostname,
-                    caller=self,
-                    idlequeue=gajim.idlequeue)
+                domain=self._hostname,
+                caller=self,
+                idlequeue=gajim.idlequeue)
 
             self.last_connection = con
             # increase default timeout for server responses
-            common.xmpp.dispatcher_nb.DEFAULT_TIMEOUT_SECONDS = self.try_connecting_for_foo_secs
+            common.xmpp.dispatcher_nb.DEFAULT_TIMEOUT_SECONDS = \
+                self.try_connecting_for_foo_secs
             # FIXME: this is a hack; need a better way
             if self.on_connect_success == self._on_new_account:
                 con.RegisterDisconnectHandler(self._on_new_account)
 
-            self.log_hosttype_info(port)
-            con.connect(
-                    hostname=self._current_host['host'],
-                    port=port,
-                    on_connect=self.on_connect_success,
-                    on_proxy_failure=self.on_proxy_failure,
-                    on_connect_failure=self.connect_to_next_type,
-                    proxy=self._proxy,
-                    secure_tuple = secure_tuple)
+            if self.client_cert and gajim.config.get_per('accounts', self.name,
+            'client_cert_encrypted'):
+                gajim.nec.push_incoming_event(ClientCertPassphraseEvent(
+                    None, conn=self, con=con, port=port,
+                    secure_tuple=secure_tuple))
+                return
+            self.on_client_cert_passphrase(None, con, port, secure_tuple)
+
         else:
             self._connect_to_next_host(retry)
+
+    def on_client_cert_passphrase(self, passphrase, con, port, secure_tuple):
+        self.client_cert_passphrase = passphrase
+
+        self.log_hosttype_info(port)
+        con.connect(
+            hostname=self._current_host['host'],
+            port=port,
+            on_connect=self.on_connect_success,
+            on_proxy_failure=self.on_proxy_failure,
+            on_connect_failure=self.connect_to_next_type,
+            proxy=self._proxy,
+            secure_tuple = secure_tuple)
 
     def log_hosttype_info(self, port):
         msg = '>>>>>> Connecting to %s [%s:%d], type = %s' % (self.name,

@@ -671,6 +671,19 @@ class Interface:
                 _('You are currently connected without your OpenPGP key.'))
         self.forget_gpg_passphrase(obj.keyID)
 
+    def handle_event_client_cert_passphrase(self, obj):
+        def on_ok(passphrase, checked):
+            obj.conn.on_client_cert_passphrase(passphrase, obj.con, obj.port,
+                obj.secure_tuple)
+
+        def on_cancel():
+            obj.conn.on_client_cert_passphrase('', obj.con, obj.port,
+                obj.secure_tuple)
+
+        dialogs.PassphraseDialog(_('Certificate Passphrase Required'),
+            _('Enter the passphrase for the certificate for account %s') % \
+            obj.conn.name, ok_handler=on_ok, cancel_handler=on_cancel)
+
     def handle_event_gpg_password_required(self, obj):
         #('GPG_PASSWORD_REQUIRED', account, (callback,))
         if obj.keyid in self.gpg_passphrase:
@@ -1401,6 +1414,8 @@ class Interface:
             'atom-entry-received': [self.handle_atom_entry],
             'bad-gpg-passphrase': [self.handle_event_bad_gpg_passphrase],
             'bookmarks-received': [self.handle_event_bookmarks],
+            'client-cert-passphrase': [
+                self.handle_event_client_cert_passphrase],
             'connection-lost': [self.handle_event_connection_lost],
             'failed-decrypt': [(self.handle_event_failed_decrypt, ged.GUI2)],
             'file-request-error': [self.handle_event_file_request_error],

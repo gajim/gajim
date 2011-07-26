@@ -2069,3 +2069,7 @@ class MessageOutgoingEvent(nec.NetworkIncomingEvent):
 
     def generate(self):
         return True
+
+class ClientCertPassphraseEvent(nec.NetworkIncomingEvent):
+    name = 'client-cert-passphrase'
+    base_network_events = []

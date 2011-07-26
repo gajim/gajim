@@ -1851,6 +1851,10 @@ class AccountsWindow:
 
         client_cert = gajim.config.get_per('accounts', account, 'client_cert')
         self.xml.get_object('cert_entry1').set_text(client_cert)
+        client_cert_encrypted = gajim.config.get_per('accounts', account,
+            'client_cert_encrypted')
+        self.xml.get_object('client_cert_encrypted_checkbutton1').\
+            set_active(client_cert_encrypted)
 
         self.xml.get_object('adjust_priority_with_status_checkbutton1').\
             set_active(gajim.config.get_per('accounts', account,
@@ -2221,6 +2225,12 @@ class AccountsWindow:
         except GajimGeneralException:
             # if we showed ErrorDialog, there will not be dialog instance
             return
+
+    def on_client_cert_encrypted_checkbutton1_toggled(self, widget):
+        if self.ignore_events:
+            return
+        self.on_checkbutton_toggled(widget, 'client_cert_encrypted',
+            account=self.current_account)
 
     def on_autoconnect_checkbutton_toggled(self, widget):
         if self.ignore_events:
