@@ -632,7 +632,7 @@ class JingleSession(object):
         attrs = {'action': action,
                 'sid': self.sid}
         if action == 'session-initiate' or action == 'session-accept' or \
-           action == 'transport-replace':
+           action == 'transport-replace' or action == 'transport-info':
             attrs['initiator'] = self.initiator
         jingle = stanza.addChild('jingle', attrs=attrs, namespace=xmpp.NS_JINGLE)
         if reason is not None:
