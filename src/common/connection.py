@@ -1174,7 +1174,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                     None, conn=self, con=con, port=port,
                     secure_tuple=secure_tuple))
                 return
-            self.on_client_cert_passphrase(None, con, port, secure_tuple)
+            self.on_client_cert_passphrase('', con, port, secure_tuple)
 
         else:
             self._connect_to_next_host(retry)
