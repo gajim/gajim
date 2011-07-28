@@ -716,9 +716,9 @@ class Interface:
         text = _('Enter your password for account %s') % account
         if passwords.USER_HAS_GNOMEKEYRING and \
         not passwords.USER_USES_GNOMEKEYRING:
-            text += '\n' + _('Gnome Keyring is installed but not \
-                correctly started (environment variable probably not \
-                correctly set)')
+            text += '\n' + _('Gnome Keyring is installed but not '
+                'correctly started (environment variable probably not '
+                'correctly set)')
 
         def on_ok(passphrase, save):
             if save:
