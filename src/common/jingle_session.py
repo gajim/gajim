@@ -630,10 +630,9 @@ class JingleSession(object):
         stanza = xmpp.Iq(typ='set', to=xmpp.JID(self.peerjid),
                         frm=self.ourjid)
         attrs = {'action': action,
-                'sid': self.sid}
-        if action == 'session-initiate' or action == 'session-accept' or \
-           action == 'transport-replace' or action == 'transport-info':
-            attrs['initiator'] = self.initiator
+                'sid': self.sid,
+                'initiator' : self.initiator}
+   
         jingle = stanza.addChild('jingle', attrs=attrs, namespace=xmpp.NS_JINGLE)
         if reason is not None:
             jingle.addChild(node=reason)
