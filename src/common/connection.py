@@ -2550,7 +2550,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             c.setTagData('reason', reason)
         self.connection.send(message)
 
-    def request_voice(self, room, nick):
+    def request_voice(self, room):
         """
         Request voice in a moderated room
         """
