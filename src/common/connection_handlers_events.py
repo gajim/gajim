@@ -1008,6 +1008,11 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.get_gc_control()
 
         if self.gc_control and self.jid == self.fjid:
+            if self.mtype == 'error':
+                self.msgtxt = _('error while sending %(message)s ( %(error)s )'\
+                    ) % {'message': self.msgtxt,
+                    'error': self.stanza.getErrorMsg()}
+                self.stanza.delChild('html')
             # message from a gc without a resource
             self.mtype = 'groupchat'
 
