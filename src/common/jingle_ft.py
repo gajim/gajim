@@ -51,6 +51,7 @@ class JingleFileTransfer(JingleContent):
         self.callbacks['session-terminate'] += [self.__on_session_terminate]
         self.callbacks['transport-accept'] += [self.__on_transport_accept]
         self.callbacks['transport-replace'] += [self.__on_transport_replace]
+        self.callbacks['session-accept-sent'] += [self._listen_host]
         # fallback transport method
         self.callbacks['transport-reject'] += [self.__on_transport_reject]
         self.callbacks['transport-info'] += [self.__on_transport_info]
@@ -112,15 +113,17 @@ class JingleFileTransfer(JingleContent):
             con.OpenStream( self.transport.sid, self.session.peerjid, 
                             fp,    blocksize=4096)
             raise xmpp.NodeProcessed
-        
+        '''
         self.file_props['streamhosts'] = self.transport.remote_candidates
         for host in self.file_props['streamhosts']:
                 host['initiator'] = self.session.initiator
                 host['target'] = self.session.responder
-                
+                host['sid'] = self.file_props['sid']
+        '''       
         response = stanza.buildReply('result')
         con.connection.send(response)
         
+        '''
         if not gajim.socks5queue.get_file_props(
            self.session.connection.name, self.file_props['sid']):
             gajim.socks5queue.add_file_props(self.session.connection.name,
@@ -130,8 +133,9 @@ class JingleFileTransfer(JingleContent):
             fingerprint = 'client'
         gajim.socks5queue.connect_to_hosts(self.session.connection.name,
                        self.file_props['sid'], self.send_candidate_used,
-                         self._on_connect_error, fingerprint=fingerprint)
-        
+                         self._on_connect_error, fingerprint=fingerprint,
+                         receiving=False)
+        '''
         raise xmpp.NodeProcessed
 
     def __on_session_terminate(self, stanza, content, error, action):
@@ -195,25 +199,8 @@ class JingleFileTransfer(JingleContent):
             self.state = STATE_INITIALIZED
             self.session.connection.files_props[self.file_props['sid']] = \
                 self.file_props
-            receiver = self.file_props['receiver']
-            sender = self.file_props['sender']
-
-            sha_str = helpers.get_auth_sha(self.file_props['sid'], sender,
-                receiver)
-            self.file_props['sha_str'] = sha_str
-
-            port = gajim.config.get('file_transfers_port')
-
-            fingerprint = None
-            if self.use_security:
-                fingerprint = 'server'
-            listener = gajim.socks5queue.start_listener(port, sha_str,
-                self._store_socks5_sid, self.file_props['sid'],
-                fingerprint=fingerprint)
-
-            if not listener:
-                return
-                # send error message, notify the user
+            # Listen on configured port for file transfer
+            self._listen_host()
         elif not self.weinitiate and self.state == STATE_NOT_STARTED:
             # session-accept iq-result
             if not self.negotiated:
@@ -265,7 +252,7 @@ class JingleFileTransfer(JingleContent):
             self.send_error_candidate()
             
         log.info('connect error, sid=' + sid)
-        
+        print 'connect error ********************'
     def _fill_content(self, content):
         description_node = xmpp.simplexml.Node(
             tag=xmpp.NS_JINGLE_FILE_TRANSFER + ' description')
@@ -295,7 +282,34 @@ class JingleFileTransfer(JingleContent):
     def _store_socks5_sid(self, sid, hash_id):
         # callback from socsk5queue.start_listener
         self.file_props['hash'] = hash_id
+    
+    def _listen_host(self, stanza=None, content=None, error=None
+                     , action=None):
+        receiver = self.file_props['receiver']
+        sender = self.file_props['sender']
 
+        sha_str = helpers.get_auth_sha(self.file_props['sid'], sender,
+                receiver)
+        self.file_props['sha_str'] = sha_str
+
+        port = gajim.config.get('file_transfers_port')
+
+        fingerprint = None
+        if self.use_security:
+            fingerprint = 'server'
+        if self.weinitiate:
+            listener = gajim.socks5queue.start_listener(port, sha_str,
+                    self._store_socks5_sid, self.file_props['sid'],
+                    fingerprint=fingerprint, type='sender')
+        else:
+            listener = gajim.socks5queue.start_listener(port, sha_str,
+                    self._store_socks5_sid, self.file_props['sid'],
+                    fingerprint=fingerprint, type='receiver')
+
+        if not listener:
+        # send error message, notify the user
+            return
+        
 def get_content(desc):
     return JingleFileTransfer
 
