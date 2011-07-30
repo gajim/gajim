@@ -113,17 +113,17 @@ class JingleFileTransfer(JingleContent):
             con.OpenStream( self.transport.sid, self.session.peerjid, 
                             fp,    blocksize=4096)
             raise xmpp.NodeProcessed
-        '''
+        
         self.file_props['streamhosts'] = self.transport.remote_candidates
         for host in self.file_props['streamhosts']:
                 host['initiator'] = self.session.initiator
                 host['target'] = self.session.responder
                 host['sid'] = self.file_props['sid']
-        '''       
+               
         response = stanza.buildReply('result')
         con.connection.send(response)
         
-        '''
+        
         if not gajim.socks5queue.get_file_props(
            self.session.connection.name, self.file_props['sid']):
             gajim.socks5queue.add_file_props(self.session.connection.name,
@@ -135,7 +135,7 @@ class JingleFileTransfer(JingleContent):
                        self.file_props['sid'], self.send_candidate_used,
                          self._on_connect_error, fingerprint=fingerprint,
                          receiving=False)
-        '''
+        
         raise xmpp.NodeProcessed
 
     def __on_session_terminate(self, stanza, content, error, action):
@@ -285,6 +285,7 @@ class JingleFileTransfer(JingleContent):
     
     def _listen_host(self, stanza=None, content=None, error=None
                      , action=None):
+        
         receiver = self.file_props['receiver']
         sender = self.file_props['sender']
 
@@ -297,6 +298,7 @@ class JingleFileTransfer(JingleContent):
         fingerprint = None
         if self.use_security:
             fingerprint = 'server'
+        return
         if self.weinitiate:
             listener = gajim.socks5queue.start_listener(port, sha_str,
                     self._store_socks5_sid, self.file_props['sid'],
