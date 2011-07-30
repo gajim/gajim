@@ -1224,12 +1224,13 @@ class Socks5Receiver(Socks5, IdleObject):
         """
         result = 1
         buff = self.receive()
+        '''
         if buff == '':
 	    print 'GOT NOTHING!!'
             # end connection
             self.pollend()
             return
-        
+        '''
         mechs = self._parse_auth_buff(buff)
         if mechs is not None:
             self.send_raw(self._get_auth_response())
