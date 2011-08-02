@@ -287,7 +287,7 @@ class Config:
             'video_size': [opt_str, '', _('Optionally resize jingle output video. Example: 320x240')],
             'audio_input_volume': [opt_int, 50],
             'audio_output_volume': [opt_int, 50],
-            'use_stun_server': [opt_bool, True, _('If True, Gajim will try to use a STUN server when using jingle. The one in "stun_server" option, or the one given by the jabber server.')],
+            'use_stun_server': [opt_bool, False, _('If True, Gajim will try to use a STUN server when using jingle. The one in "stun_server" option, or the one given by the jabber server.')],
             'stun_server': [opt_str, '', _('STUN server to use when using jingle')],
             'show_affiliation_in_groupchat': [opt_bool, True, _('If True, Gajim will show affiliation of groupchat occupants by adding a colored square to the status icon')],
     }
