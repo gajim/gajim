@@ -328,6 +328,8 @@ class SocksQueue:
         if sock_hash not in self.senders:
             self.senders[sock_hash] = Socks5Sender(self.idlequeue, sock_hash, self,
                     sock[0], sock[1][0], sock[1][1], fingerprint='server')
+            # Start waiting for data
+            self.idlequeue.plug_idle(self.senders[sock_hash], False, True)
             self.connected += 1
 
     def process_result(self, result, actor):
@@ -764,8 +766,7 @@ class Socks5Sender(Socks5, IdleObject):
         self.connected = True
         self.state = 1 # waiting for first bytes
         self.file_props = None
-        # start waiting for data
-        self.idlequeue.plug_idle(self, False, True)
+
 
     def read_timeout(self):
         self.idlequeue.remove_timeout(self.fd)
