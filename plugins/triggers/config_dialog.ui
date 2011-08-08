@@ -264,6 +264,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="no_show_all">True</property>
+                        <property name="tooltip_text" translatable="yes">comma separated list</property>
                         <signal name="changed" handler="on_recipient_list_entry_changed"/>
                       </object>
                       <packing>
