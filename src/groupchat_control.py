@@ -972,7 +972,6 @@ class GroupchatControl(ChatControlBase):
                 self.parent_win.redraw_tab(self, 'attention')
             else:
                 self.attention_flag = True
-            helpers.play_sound('muc_message_received')
         if '100' in obj.status_code:
             # Room is not anonymous
             self.is_anonymous = False
