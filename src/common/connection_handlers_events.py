@@ -20,6 +20,7 @@
 
 import datetime
 import sys
+import os
 from time import (localtime, time as time_time)
 from calendar import timegm
 import hmac
@@ -1898,13 +1899,16 @@ class GatewayPromptReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
 
 class NotificationEvent(nec.NetworkIncomingEvent):
     name = 'notification'
-    base_network_events = ['decrypted-message-received', 'gc-message-received']
+    base_network_events = ['decrypted-message-received', 'gc-message-received',
+        'presence-received']
 
     def detect_type(self):
         if self.base_event.name == 'decrypted-message-received':
             self.notif_type = 'msg'
         if self.base_event.name == 'gc-message-received':
             self.notif_type = 'gc-msg'
+        if self.base_event.name == 'presence-received':
+            self.notif_type = 'pres'
 
     def get_focused(self):
         self.control_focused = False
@@ -1949,11 +1953,13 @@ class NotificationEvent(nec.NetworkIncomingEvent):
             # We don't want message preview, do_preview = False
             self.popup_text = ''
         if msg_obj.mtype == 'normal': # single message
+            self.popup_msg_type = 'normal'
             self.popup_event_type = _('New Single Message')
             self.popup_image = 'gajim-single_msg_recv'
             self.popup_title = _('New Single Message from %(nickname)s') % \
                 {'nickname': nick}
         elif msg_obj.mtype == 'pm':
+            self.popup_msg_type = 'pm'
             self.popup_event_type = _('New Private Message')
             self.popup_image = 'gajim-priv_msg_recv'
             self.popup_title = _('New Private Message from group chat %s') % \
@@ -1965,6 +1971,7 @@ class NotificationEvent(nec.NetworkIncomingEvent):
                 self.popup_text = _('Messaged by %(nickname)s') % \
                     {'nickname': nick}
         else: # chat message
+            self.popup_msg_type = 'chat'
             self.popup_event_type = _('New Message')
             self.popup_image = 'gajim-chat_msg_recv'
             self.popup_title = _('New Message from %(nickname)s') % \
@@ -2007,12 +2014,116 @@ class NotificationEvent(nec.NetworkIncomingEvent):
 
         self.do_popup = False
 
-    def handle_incoming_pres_event(self, msg_obj):
-        pass
+    def handle_incoming_pres_event(self, pres_obj):
+        if gajim.jid_is_transport(pres_obj.jid):
+            return True
+        account = pres_obj.conn.name
+        self.jid = pres_obj.jid
+        resource = pres_obj.resource or ''
+        # It isn't an agent
+        for c in pres_obj.contact_list:
+            if c.resource == resource:
+                # we look for other connected resources
+                continue
+            if c.show not in ('offline', 'error'):
+                return True
+
+
+        # no other resource is connected, let's look in metacontacts
+        family = gajim.contacts.get_metacontacts_family(account, self.jid)
+        for info in family:
+            acct_ = info['account']
+            jid_ = info['jid']
+            c_ = gajim.contacts.get_contact_with_highest_priority(acct_, jid_)
+            if not c_:
+                continue
+            if c_.jid == self.jid:
+                continue
+            if c_.show not in ('offline', 'error'):
+                return True
+
+        if pres_obj.old_show < 2 and pres_obj.new_show > 1:
+            event = 'contact_connected'
+            show_image = 'online.png'
+            suffix = '_notif_size_colored'
+            server = gajim.get_server_from_jid(self.jid)
+            account_server = account + '/' + server
+            block_transport = False
+            if account_server in gajim.block_signed_in_notifications and \
+            gajim.block_signed_in_notifications[account_server]:
+                block_transport = True
+            if helpers.allow_showing_notification(account, 'notify_on_signin') \
+            and not gajim.block_signed_in_notifications[account] and \
+            not block_transport:
+                self.do_popup = True
+            if gajim.config.get_per('soundevents', 'contact_connected',
+            'enabled') and not gajim.block_signed_in_notifications[account] and\
+            not block_transport and helpers.allow_sound_notification(account,
+            'contact_connected'):
+                self.sound_event = event
+                self.do_sound = True
+
+        elif pres_obj.old_show > 1 and pres_obj.new_show < 2:
+            event = 'contact_disconnected'
+            show_image = 'offline.png'
+            suffix = '_notif_size_bw'
+            if helpers.allow_showing_notification(account, 'notify_on_signout'):
+                self.do_popup = True
+            if gajim.config.get_per('soundevents', 'contact_disconnected',
+            'enabled') and helpers.allow_sound_notification(account, event):
+                self.sound_event = event
+                self.do_sound = True
+        # Status change (not connected/disconnected or error (<1))
+        elif pres_obj.new_show > 1:
+            event = 'status_change'
+            # FIXME: we don't always 'online.png', but we first need 48x48 for
+            # all status
+            show_image = 'online.png'
+            suffix = '_notif_size_colored'
+        else:
+            return True
+
+        transport_name = gajim.get_transport_name_from_jid(self.jid)
+        img_path = None
+        if transport_name:
+            img_path = os.path.join(helpers.get_transport_path(
+                transport_name), '48x48', show_image)
+        if not img_path or not os.path.isfile(img_path):
+            iconset = gajim.config.get('iconset')
+            img_path = os.path.join(helpers.get_iconset_path(iconset),
+                '48x48', show_image)
+        self.popup_image = gtkgui_helpers.get_path_to_generic_or_avatar(
+            img_path, jid=self.jid, suffix=suffix)
+
+        if event == 'status_change':
+            self.popup_title = _('%(nick)s Changed Status') % \
+                {'nick': gajim.get_name_from_jid(account, self.jid)}
+            self.popup_text = _('%(nick)s is now %(status)s') % \
+                {'nick': gajim.get_name_from_jid(account, self.jid),\
+                'status': helpers.get_uf_show(
+                gajim.SHOW_LIST[pres_obj.show])}
+            if pres_obj.status:
+                text = text + " : " + pres_obj.status
+            self.popup_event_type = _('Contact Changed Status')
+        elif event == 'contact_connected':
+            self.popup_title = _('%(nickname)s Signed In') % \
+                {'nickname': gajim.get_name_from_jid(account, self.jid)}
+            self.popup_text = ''
+            if pres_obj.status:
+                self.popup_text = pres_obj.status
+            self.popup_event_type = _('Contact Signed In')
+        elif event == 'contact_disconnected':
+            self.popup_title = _('%(nickname)s Signed Out') % \
+                {'nickname': gajim.get_name_from_jid(account, self.jid)}
+            self.popup_text = ''
+            if pres_obj.status:
+                self.popup_text = pres_obj.status
+            self.popup_event_type = _('Contact Signed Out')
 
     def generate(self):
         # what's needed to compute output
         self.conn = self.base_event.conn
+        self.jid = ''
         self.control = None
         self.control_focused = False
         self.first_unread = False

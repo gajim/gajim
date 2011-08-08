@@ -347,43 +347,6 @@ class Interface:
             gobject.timeout_add_seconds(30,
                 self.unblock_signed_in_notifications, account_jid)
 
-        else:
-            # It isn't an agent
-            # Notifications
-            obj.show_notif = True
-            for c in obj.contact_list:
-                if c.resource == resource:
-                    # we look for other connected resources
-                    continue
-                if c.show not in ('offline', 'error'):
-                    obj.show_notif = False
-                    break
-            if obj.show_notif:
-                # no other resource is connected, let's look in metacontacts
-                family = gajim.contacts.get_metacontacts_family(account,
-                    jid)
-                for info in family:
-                    acct_ = info['account']
-                    jid_ = info['jid']
-                    c_ = gajim.contacts.get_contact_with_highest_priority(
-                        acct_, jid_)
-                    if not c_:
-                        continue
-                    if c_.show not in ('offline', 'error'):
-                        obj.show_notif = False
-                        break
-            if obj.show_notif:
-                if obj.old_show < 2 and obj.new_show > 1:
-                    notify.notify('contact_connected', jid, account, status)
-
-                elif obj.old_show > 1 and obj.new_show < 2:
-                    notify.notify('contact_disconnected', jid, account, status)
-                # Status change (not connected/disconnected or
-                # error (<1))
-                elif obj.new_show > 1:
-                    notify.notify('status_change', jid, account, [obj.new_show,
-                        status])
-
         highest = gajim.contacts.get_contact_with_highest_priority(account, jid)
         is_highest = (highest and highest.resource == resource)
 
