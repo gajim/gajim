@@ -2004,11 +2004,15 @@ class NotificationEvent(nec.NetworkIncomingEvent):
     def handle_incoming_gc_msg_event(self, msg_obj):
         sound = msg_obj.msg_obj.gc_control.highlighting_for_message(
             msg_obj.msgtxt, msg_obj.timestamp)[1]
-        self.do_sound = True
-        if sound == 'received':
-            self.sound_event = 'muc_message_received'
-        elif sound == 'highlight':
-            self.sound_event = 'muc_message_highlight'
+
+        if msg_obj.nickname != msg_obj.msg_obj.gc_control.nick:
+            self.do_sound = True
+            if sound == 'received':
+                self.sound_event = 'muc_message_received'
+            elif sound == 'highlight':
+                self.sound_event = 'muc_message_highlight'
+            else:
+                self.do_sound = False
         else:
             self.do_sound = False
 
