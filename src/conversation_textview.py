@@ -915,9 +915,10 @@ class ConversationTextview(gobject.GObject):
                     self.on_join_group_chat_menuitem_activate, text)
             self.handlers[id_] = childs[6]
 
-            if self.account:
-                id_ = childs[7].connect('activate', self.on_add_to_roster_activate,
-                        text)
+            if self.account and gajim.connections[self.account].\
+            roster_supported:
+                id_ = childs[7].connect('activate',
+                    self.on_add_to_roster_activate, text)
                 self.handlers[id_] = childs[7]
                 childs[7].show() # show add to roster menuitem
             else:

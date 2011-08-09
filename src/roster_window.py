@@ -5396,8 +5396,11 @@ class RosterWindow:
 
             edit_account_menuitem.connect('activate', self.on_edit_account,
                 account)
-            add_contact_menuitem.connect('activate', self.on_add_new_contact,
-                account)
+            if gajim.connections[account].roster_supported:
+                add_contact_menuitem.connect('activate',
+                    self.on_add_new_contact, account)
+            else:
+                add_contact_menuitem.set_sensitive(False)
             service_discovery_menuitem.connect('activate',
                 self.on_service_disco_menuitem_activate, account)
             hostname = gajim.config.get_per('accounts', account, 'hostname')

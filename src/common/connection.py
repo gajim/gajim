@@ -155,6 +155,7 @@ class CommonConnection:
         self.private_storage_supported = False
         self.archiving_supported = False
         self.archive_pref_supported = False
+        self.roster_supported = True
 
         self.muc_jid = {} # jid of muc server for each transport type
         self._stun_servers = [] # STUN servers of our jabber server
@@ -511,14 +512,14 @@ class CommonConnection:
         raise NotImplementedError
 
     def update_contact(self, jid, name, groups):
-        if self.connection:
+        if self.connection and self.roster_supported:
             self.connection.getRoster().setItem(jid=jid, name=name, groups=groups)
 
     def update_contacts(self, contacts):
         """
         Update multiple roster items
         """
-        if self.connection:
+        if self.connection and self.roster_supported:
             self.connection.getRoster().setItemMulti(contacts)
 
     def new_account(self, name, config, sync=False):

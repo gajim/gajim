@@ -550,6 +550,15 @@ class ConnectionVcard:
                     roster = self.connection.getRoster(force=True)
                     roster.setRaw(roster_data)
                 self._getRoster()
+            elif iq_obj.getType() == 'error':
+                self.roster_supported = False
+                self.discoverItems(gajim.config.get_per('accounts', self.name,
+                    'hostname'), id_prefix='Gajim_')
+                if gajim.config.get_per('accounts', self.name,
+                'use_ft_proxies'):
+                    self.discover_ft_proxies()
+                gajim.nec.push_incoming_event(RosterReceivedEvent(None,
+                    conn=self))
         elif self.awaiting_answers[id_][0] == PRIVACY_ARRIVED:
             if iq_obj.getType() != 'error':
                 self.privacy_rules_supported = True

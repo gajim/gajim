@@ -1669,7 +1669,8 @@ class ChatControl(ChatControlBase):
 
         # Add to roster
         if not isinstance(self.contact, GC_Contact) \
-        and _('Not in Roster') in self.contact.groups:
+        and _('Not in Roster') in self.contact.groups and \
+        gajim.connections[self.account].roster_supported:
             self._add_to_roster_button.show()
         else:
             self._add_to_roster_button.hide()
