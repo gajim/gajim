@@ -76,14 +76,19 @@ classes = {
 
 # styles for elements
 element_styles = {
-                'u'                     : ';text-decoration: underline',
+                'u'             : ';text-decoration: underline',
                 'em'            : ';font-style: oblique',
-                'cite'          : '; background-color:rgb(170,190,250); font-style: oblique',
+                'cite'          : '; background-color:rgb(170,190,250);'
+                                  'font-style: oblique',
                 'li'            : '; margin-left: 1em; margin-right: 10%',
                 'strong'        : ';font-weight: bold',
-                'pre'           : '; background-color:rgb(190,190,190); font-family: monospace; white-space: pre; margin-left: 1em; margin-right: 10%',
-                'kbd'           : ';background-color:rgb(210,210,210);font-family: monospace',
-                'blockquote': '; background-color:rgb(170,190,250); margin-left: 2em; margin-right: 10%',
+                'pre'           : '; background-color:rgb(190,190,190);'
+                                  'font-family: monospace; white-space: pre;'
+                                  'margin-left: 1em; margin-right: 10%',
+                'kbd'           : ';background-color:rgb(210,210,210);'
+                                  'font-family: monospace',
+                'blockquote'    : '; background-color:rgb(170,190,250);'
+                                  'margin-left: 2em; margin-right: 10%',
                 'dt'            : ';font-weight: bold; font-style: oblique',
                 'dd'            : ';margin-left: 2em; font-style: oblique'
 }
