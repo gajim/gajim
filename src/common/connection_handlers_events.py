@@ -2106,7 +2106,7 @@ class NotificationEvent(nec.NetworkIncomingEvent):
                 {'nick': gajim.get_name_from_jid(account, self.jid),\
                 'status': helpers.get_uf_show(pres_obj.show)}
             if pres_obj.status:
-                text = text + " : " + pres_obj.status
+                self.popup_text = self.popup_text + " : " + pres_obj.status
             self.popup_event_type = _('Contact Changed Status')
         elif event == 'contact_connected':
             self.popup_title = _('%(nickname)s Signed In') % \
