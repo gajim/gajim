@@ -244,8 +244,15 @@ class Interface:
                 gc_control.error_dialog = None
             gc_control.error_dialog = dialogs.ErrorDialog(pritext, sectext,
                 on_response_ok=on_close, on_response_cancel=on_close)
+            gc_control.error_dialog.set_modal(False)
+            if gc_control.parent_win:
+                gc_control.error_dialog.set_transient_for(
+                    gc_control.parent_win.window)
         else:
-            dialogs.ErrorDialog(pritext, sectext)
+            d = dialogs.ErrorDialog(pritext, sectext)
+            if gc_control and gc_control.parent_win:
+                d.set_transient_for(gc_control.parent_win.window)
+            d.set_modal(False)
 
     def handle_gc_password_required(self, account, room_jid, nick):
         def on_ok(text):
@@ -281,8 +288,8 @@ class Interface:
                 # maximum user number reached
                 self.handle_gc_error(gc_control,
                     _('Unable to join group chat'),
-                    _('Maximum number of users for %s has been reached') % \
-                    obj.room_jid)
+                    _('Maximum number of users for <b>%s</b> has been reached')\
+                    % obj.room_jid)
             elif (obj.errcode == '401') or (obj.errcon == 'not-authorized'):
                 # password required to join
                 self.handle_gc_password_required(obj.conn.name, obj.room_jid,
@@ -290,19 +297,20 @@ class Interface:
             elif (obj.errcode == '403') or (obj.errcon == 'forbidden'):
                 # we are banned
                 self.handle_gc_error(gc_control, _('Unable to join group chat'),
-                    _('You are banned from group chat %s.') % obj.room_jid)
+                    _('You are banned from group chat <b>%s</b>.') % \
+                    obj.room_jid)
             elif (obj.errcode == '404') or (obj.errcon in ('item-not-found',
             'remote-server-not-found')):
                 # group chat does not exist
                 self.handle_gc_error(gc_control, _('Unable to join group chat'),
-                    _('Group chat %s does not exist.') % obj.room_jid)
+                    _('Group chat <b>%s</b> does not exist.') % obj.room_jid)
             elif (obj.errcode == '405') or (obj.errcon == 'not-allowed'):
                 self.handle_gc_error(gc_control, _('Unable to join group chat'),
                     _('Group chat creation is restricted.'))
             elif (obj.errcode == '406') or (obj.errcon == 'not-acceptable'):
                 self.handle_gc_error(gc_control, _('Unable to join group chat'),
                     _('Your registered nickname must be used in group chat '
-                    '%s.') % obj.room_jid)
+                    '<b>%s</b>.') % obj.room_jid)
             elif (obj.errcode == '407') or (obj.errcon == \
             'registration-required'):
                 self.handle_gc_error(gc_control, _('Unable to join group chat'),
