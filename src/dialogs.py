@@ -1534,12 +1534,16 @@ class NonModalConfirmationDialog(HigDialog):
     """
 
     def __init__(self, pritext, sectext='', on_response_ok=None,
-                             on_response_cancel=None):
+    on_response_cancel=None):
         self.user_response_ok = on_response_ok
         self.user_response_cancel = on_response_cancel
-        HigDialog.__init__(self, None,
-           gtk.MESSAGE_QUESTION, gtk.BUTTONS_OK_CANCEL, pritext, sectext,
-           self.on_response_ok, self.on_response_cancel)
+        if hasattr(gajim.interface, 'roster') and gajim.interface.roster:
+            parent = gajim.interface.roster.window
+        else:
+            parent = None
+        HigDialog.__init__(self, parent, gtk.MESSAGE_QUESTION,
+            gtk.BUTTONS_OK_CANCEL, pritext, sectext, self.on_response_ok,
+            self.on_response_cancel)
         self.set_modal(False)
 
     def on_response_ok(self, widget):
@@ -1566,14 +1570,12 @@ class WarningDialog(HigDialog):
     """
 
     def __init__(self, pritext, sectext='', transient_for=None):
-        HigDialog.__init__(self, None, gtk.MESSAGE_WARNING, gtk.BUTTONS_OK,
-            pritext, sectext)
-        self.set_modal(False)
-        if transient_for is None and hasattr(gajim.interface, 'roster') and \
+        if not transient_for and hasattr(gajim.interface, 'roster') and \
         gajim.interface.roster:
             transient_for = gajim.interface.roster.window
-        if transient_for:
-            self.set_transient_for(transient_for)
+        HigDialog.__init__(self, transient_for, gtk.MESSAGE_WARNING,
+            gtk.BUTTONS_OK, pritext, sectext)
+        self.set_modal(False)
         self.popup()
 
 class InformationDialog(HigDialog):
@@ -1582,10 +1584,13 @@ class InformationDialog(HigDialog):
     """
 
     def __init__(self, pritext, sectext=''):
-        HigDialog.__init__(self, None, gtk.MESSAGE_INFO, gtk.BUTTONS_OK,
+        if hasattr(gajim.interface, 'roster') and gajim.interface.roster:
+            parent = gajim.interface.roster.window
+        else:
+            parent = None
+        HigDialog.__init__(self, parent, gtk.MESSAGE_INFO, gtk.BUTTONS_OK,
             pritext, sectext)
         self.set_modal(False)
-        self.set_transient_for(gajim.interface.roster.window)
         self.popup()
 
 class ErrorDialog(HigDialog):
@@ -1595,7 +1600,11 @@ class ErrorDialog(HigDialog):
 
     def __init__(self, pritext, sectext='', on_response_ok=None,
     on_response_cancel=None):
-        HigDialog.__init__( self, None, gtk.MESSAGE_ERROR, gtk.BUTTONS_OK,
+        if hasattr(gajim.interface, 'roster') and gajim.interface.roster:
+            parent = gajim.interface.roster.window
+        else:
+            parent = None
+        HigDialog.__init__(self, parent, gtk.MESSAGE_ERROR, gtk.BUTTONS_OK,
             pritext, sectext, on_response_ok=on_response_ok,
             on_response_cancel=on_response_cancel)
         self.popup()
@@ -1609,8 +1618,13 @@ class YesNoDialog(HigDialog):
     on_response_no=None):
         self.user_response_yes = on_response_yes
         self.user_response_no = on_response_no
-        HigDialog.__init__(self, None, gtk.MESSAGE_QUESTION, gtk.BUTTONS_YES_NO,
-            pritext, sectext, on_response_yes=self.on_response_yes,
+        if hasattr(gajim.interface, 'roster') and gajim.interface.roster:
+            parent = gajim.interface.roster.window
+        else:
+            parent = None
+        HigDialog.__init__(self, parent, gtk.MESSAGE_QUESTION,
+            gtk.BUTTONS_YES_NO, pritext, sectext,
+            on_response_yes=self.on_response_yes,
             on_response_no=self.on_response_no)
 
         if checktext:
@@ -1658,7 +1672,11 @@ class ConfirmationDialogCheck(ConfirmationDialog):
         self.user_response_ok = on_response_ok
         self.user_response_cancel = on_response_cancel
 
-        HigDialog.__init__(self, None, gtk.MESSAGE_QUESTION,
+        if hasattr(gajim.interface, 'roster') and gajim.interface.roster:
+            parent = gajim.interface.roster.window
+        else:
+            parent = None
+        HigDialog.__init__(self, parent, gtk.MESSAGE_QUESTION,
            gtk.BUTTONS_OK_CANCEL, pritext, sectext, self.on_response_ok,
            self.on_response_cancel)
 
@@ -1708,7 +1726,11 @@ class ConfirmationDialogDoubleCheck(ConfirmationDialog):
         self.user_response_ok = on_response_ok
         self.user_response_cancel = on_response_cancel
 
-        HigDialog.__init__(self, None, gtk.MESSAGE_QUESTION,
+        if hasattr(gajim.interface, 'roster') and gajim.interface.roster:
+            parent = gajim.interface.roster.window
+        else:
+            parent = None
+        HigDialog.__init__(self, parent, gtk.MESSAGE_QUESTION,
            gtk.BUTTONS_OK_CANCEL, pritext, sectext, self.on_response_ok,
            self.on_response_cancel)
 
@@ -1772,7 +1794,11 @@ class ConfirmationDialogDoubleRadio(ConfirmationDialog):
         self.user_response_ok = on_response_ok
         self.user_response_cancel = on_response_cancel
 
-        HigDialog.__init__(self, None, gtk.MESSAGE_QUESTION,
+        if hasattr(gajim.interface, 'roster') and gajim.interface.roster:
+            parent = gajim.interface.roster.window
+        else:
+            parent = None
+        HigDialog.__init__(self, parent, gtk.MESSAGE_QUESTION,
                 gtk.BUTTONS_OK_CANCEL, pritext, sectext, self.on_response_ok,
                 self.on_response_cancel)
 
@@ -1828,9 +1854,13 @@ class FTOverwriteConfirmationDialog(ConfirmationDialog):
     """
 
     def __init__(self, pritext, sectext='', propose_resume=True,
-                             on_response=None):
-        HigDialog.__init__(self, None, gtk.MESSAGE_QUESTION, gtk.BUTTONS_CANCEL,
-            pritext, sectext)
+    on_response=None):
+        if hasattr(gajim.interface, 'roster') and gajim.interface.roster:
+            parent = gajim.interface.roster.window
+        else:
+            parent = None
+        HigDialog.__init__(self, parent, gtk.MESSAGE_QUESTION,
+            gtk.BUTTONS_CANCEL, pritext, sectext)
 
         self.on_response = on_response
 
