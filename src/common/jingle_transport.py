@@ -141,7 +141,8 @@ class JingleTransportSocks5(JingleTransport):
                 'host': candidate['host'],
                 'port': candidate['port'],
                 'cid': candidate['cid'],
-                'type': typ
+                'type': typ,
+                'priority': candidate['priority'] 
             }
             candidates.append(cand)
 
