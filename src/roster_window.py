@@ -2086,11 +2086,6 @@ class RosterWindow:
                     if gajim.gc_connected[account][gc_control.room_jid]:
                         gajim.connections[account].send_gc_status(
                             gc_control.nick, gc_control.room_jid, status, txt)
-                    else:
-                        # for some reason, we are not connected to the room even
-                        # if tab is opened, send initial join_gc()
-                        gajim.connections[account].join_gc(gc_control.nick,
-                        gc_control.room_jid, None)
             if was_invisible and status != 'offline':
                 # We come back from invisible, join bookmarks
                 gajim.interface.auto_join_bookmarks(account)
