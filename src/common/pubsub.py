@@ -76,7 +76,7 @@ class ConnectionPubSub:
 
         self.__callbacks[id_] = (cb, args, kwargs)
 
-    def send_pb_publish(self, jid, node, item, id_, options=None):
+    def send_pb_publish(self, jid, node, item, id_=None, options=None):
         """
         Publish item to a node
         """
@@ -85,7 +85,10 @@ class ConnectionPubSub:
         query = xmpp.Iq('set', to=jid)
         e = query.addChild('pubsub', namespace=xmpp.NS_PUBSUB)
         p = e.addChild('publish', {'node': node})
-        p.addChild('item', {'id': id_}, [item])
+        attrs = {}
+        if id_:
+            attrs = {'id': id_}
+        p.addChild('item', attrs, [item])
         if options:
             p = e.addChild('publish-options')
             p.addChild(node=options)
