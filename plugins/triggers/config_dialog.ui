@@ -28,6 +28,15 @@
       <row>
         <col id="0" translatable="yes">Receive a Message</col>
       </row>
+      <row>
+        <col id="0" translatable="yes">Contact Connects</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Contact Disconnects</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Contact Changes Status</col>
+      </row>
     </data>
   </object>
   <object class="GtkWindow" id="advanced_notifications_window">

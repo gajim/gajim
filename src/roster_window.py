@@ -2487,6 +2487,15 @@ class RosterWindow:
         if obj.contact:
             self.chg_contact_status(obj.contact, obj.show, obj.status, account)
 
+        if obj.popup:
+            ctrl = gajim.interface.msg_win_mgr.search_control(jid, account)
+            if ctrl:
+                gobject.idle_add(ctrl.parent_win.set_active_tab, ctrl)
+            else:
+                ctrl = gajim.interface.new_chat(obj.contact, account)
+                if len(gajim.events.get_events(account, obj.jid)):
+                    ctrl.read_queue()
+
     def _nec_gc_presence_received(self, obj):
         account = obj.conn.name
         if obj.room_jid in gajim.interface.minimized_controls[account]:
@@ -2580,14 +2589,11 @@ class RosterWindow:
             if obj.msg_id:
                 gajim.logger.set_read_messages([obj.msg_id])
         elif obj.popup:
-            if not obj.session.control:
-                contact = gajim.contacts.get_contact(obj.conn.name, obj.jid,
-                    obj.resource_for_chat)
-                obj.session.control = gajim.interface.new_chat(contact,
-                    obj.conn.name, resource=obj.resource_for_chat,
-                    session=obj.session)
-                if len(gajim.events.get_events(obj.conn.name, obj.fjid)):
-                    obj.session.control.read_queue()
+            contact = gajim.contacts.get_contact(obj.conn.name, obj.jid)
+            obj.session.control = gajim.interface.new_chat(contact,
+                obj.conn.name, session=obj.session)
+            if len(gajim.events.get_events(obj.conn.name, obj.fjid)):
+                obj.session.control.read_queue()
 
         if obj.show_in_roster:
             self.draw_contact(obj.jid, obj.conn.name)

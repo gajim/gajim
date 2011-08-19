@@ -711,6 +711,8 @@ PresenceHelperEvent):
         self.need_add_in_roster = False
         self.need_redraw = False
 
+        self.popup = False # Do we want to open chat window ?
+
         if not self.conn or self.conn.connected < 2:
             log.debug('account is no more connected')
             return

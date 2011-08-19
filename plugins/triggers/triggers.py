@@ -40,7 +40,8 @@ class Triggers(GajimPlugin):
 
         self.events_handlers = {'notification' : (ged.PREGUI, self._nec_notif),
             'decrypted-message-received': (ged.PREGUI2,
-            self._nec_decrypted_message_received)}
+            self._nec_decrypted_message_received),
+            'presence-received': (ged.PREGUI, self._nec_presence_received)}
 
     def _check_rule_recipients(self, obj, rule):
         rule_recipients = [t.strip() for t in rule['recipients'].split(',')]
@@ -80,50 +81,54 @@ class Triggers(GajimPlugin):
 
         return True
 
+    def check_rule_all(self, event, obj, rule):
+        # Check notification type
+        if rule['event'] != event:
+            return False
+
+        # notification type is ok. Now check recipient
+        if not self._check_rule_recipients(obj, rule):
+            return False
+
+        # recipient is ok. Now check our status
+        if not self._check_rule_status(obj, rule):
+            return False
+
+        # our_status is ok. Now check opened chat window
+        if not self._check_rule_tab_opened(obj, rule):
+            return False
+
+        # All is ok
+        return True
+
     def check_rule_apply_notif(self, obj, rule):
         # Check notification type
         notif_type = ''
         if obj.notif_type == 'msg':
             notif_type = 'message_received'
-        if notif_type != rule['event']:
-            return False
+        elif obj.notif_type == 'pres':
+            if obj.base_event.old_show < 2 and obj.base_event.new_show > 1:
+                notif_type = 'contact_connected'
+            elif obj.base_event.old_show > 1 and obj.base_event.new_show < 2:
+                notif_type = 'contact_disconnected'
+            else:
+                notif_type = 'contact_status_change'
 
-        # notification type is ok. Now check recipient
-        if not self._check_rule_recipients(obj, rule):
-            return False
-
-        # recipient is ok. Now check our status
-        if not self._check_rule_status(obj, rule):
-            return False
-
-        # our_status is ok. Now check opened chat window
-        if not self._check_rule_tab_opened(obj, rule):
-            return False
-
-        # All is ok
-        return True
+        return self.check_rule_all(notif_type, obj, rule)
 
     def check_rule_apply_decrypted_msg(self, obj, rule):
-        # Check notification type
-        if rule['event'] != 'message_received':
-            return False
+        return self.check_rule_all('message_received', obj, rule)
 
-        # notification type is ok. Now check recipient
-        if not self._check_rule_recipients(obj, rule):
-            return False
+    def check_rule_apply_connected(self, obj, rule):
+        return self.check_rule_all('contact_connected', obj, rule)
 
-        # recipient is ok. Now check our status
-        if not self._check_rule_status(obj, rule):
-            return False
+    def check_rule_apply_disconnected(self, obj, rule):
+        return self.check_rule_all('contact_disconnected', obj, rule)
 
-        # our_status is ok. Now check opened chat window
-        if not self._check_rule_tab_opened(obj, rule):
-            return False
+    def check_rule_apply_status_changed(self, obj, rule):
+        return self.check_rule_all('contact_status_change', obj, rule)
 
-        # All is ok
-        return True
-
-    def apply_rule(self, obj, rule):
+    def apply_rule_notif(self, obj, rule):
         if rule['sound'] == 'no':
             obj.do_sound = False
         elif rule['sound'] == 'yes':
@@ -156,32 +161,58 @@ class Triggers(GajimPlugin):
 #            ?? not in obj actions
 #        elif rule['urgency_hint'] == 'yes':
 
-    def _nec_notif(self, obj):
+    def apply_rule_decrypted_message(self, obj, rule):
+        if rule['auto_open'] == 'no':
+            obj.popup = False
+        elif rule['auto_open'] == 'yes':
+            obj.popup = True
+
+    def apply_rule_presence(self, obj, rule):
+        if rule['auto_open'] == 'no':
+            obj.popup = False
+        elif rule['auto_open'] == 'yes':
+            obj.popup = True
+
+    def _nec_all(self, obj, check_func, apply_func):
         # check rules in order
         rules_num = [int(i) for i in self.config.keys()]
         rules_num.sort()
         for num in rules_num:
-            if self.check_rule_apply_notif(obj, self.config[str(num)]):
-                self.apply_rule(obj, self.config[str(num)])
+            rule = self.config[str(num)]
+            if check_func(obj, rule):
+                apply_func(obj, rule)
                 # Should we stop after first valid rule ?
                 # break
 
+    def _nec_notif(self, obj):
+        self._nec_all(obj, self.check_rule_apply_notif, self.apply_rule_notif)
+
     def _nec_decrypted_message_received(self, obj):
-        rules_num = [int(i) for i in self.config.keys()]
-        rules_num.sort()
-        for num in rules_num:
-            rule = self.config[str(num)]
-            if self.check_rule_apply_decrypted_msg(obj, rule):
-                if rule['auto_open'] == 'no':
-                    obj.popup = False
-                elif rule['auto_open'] == 'yes':
-                    obj.popup = True
+        self._nec_all(obj, self.check_rule_apply_decrypted_msg,
+            self.apply_rule_decrypted_message)
+
+    def _nec_presence_received(self, obj):
+        if obj.old_show < 2 and obj.new_show > 1:
+            check_func = self.check_rule_apply_connected
+        elif obj.old_show > 1 and obj.new_show < 2:
+            check_func = self.check_rule_apply_disconnected
+        else:
+            check_func = self.check_rule_apply_status_changed
+        self._nec_all(obj, check_func, self.apply_rule_presence)
 
 
 class TriggersPluginConfigDialog(GajimPluginConfigDialog):
-    events_list = ['message_received']#, 'contact_connected',
-        #'contact_disconnected', 'contact_change_status', 'gc_msg_highlight',
-        #'gc_msg']
+    # {event: widgets_to_disable, }
+    events_list = {
+        'message_received': [],
+        'contact_connected': ['use_systray_cb', 'disable_systray_cb',
+            'use_roster_cb', 'disable_roster_cb'],
+        'contact_disconnected': ['use_systray_cb', 'disable_systray_cb',
+            'use_roster_cb', 'disable_roster_cb'],
+        'contact_status_change': ['use_systray_cb', 'disable_systray_cb',
+            'use_roster_cb', 'disable_roster_cb']
+        #, 'gc_msg_highlight': [], 'gc_msg': []}
+    }
     recipient_types_list = ['contact', 'group', 'all']
     config_options = ['event', 'recipient_type', 'recipients', 'status',
         'tab_opened', 'sound', 'sound_file', 'popup', 'auto_open',
@@ -278,7 +309,7 @@ class TriggersPluginConfigDialog(GajimPluginConfigDialog):
         # event
         value = self.config[self.active_num]['event']
         if value:
-            self.event_combobox.set_active(self.events_list.index(value))
+            self.event_combobox.set_active(self.events_list.keys().index(value))
         else:
             self.event_combobox.set_active(-1)
         # recipient_type
@@ -449,8 +480,14 @@ class TriggersPluginConfigDialog(GajimPluginConfigDialog):
         if active == -1:
             event = ''
         else:
-            event = self.events_list[active]
+            event = self.events_list.keys()[active]
         self.config[self.active_num]['event'] = event
+        for w in ('use_systray_cb', 'disable_systray_cb', 'use_roster_cb',
+        'disable_roster_cb'):
+            self.__dict__[w].set_sensitive(True)
+        for w in self.events_list[event]:
+            self.__dict__[w].set_sensitive(False)
+            self.__dict__[w].set_state(False)
         self.set_treeview_string()
 
     def on_recipient_type_combobox_changed(self, widget):
