@@ -271,13 +271,14 @@ class SASL(PlugIn):
         """
         if challenge.getNamespace() != NS_SASL:
             return
+
+        def scram_base64(s):
+            return ''.join(s.encode('base64').split('\n'))
+
+        incoming_data = challenge.getData()
+        data=base64.decodestring(incoming_data)
         ### Handle Auth result
-        if challenge.getName() == 'failure':
-            self.startsasl = SASL_FAILURE
-            try:
-                reason = challenge.getChildren()[0]
-            except Exception:
-                reason = challenge
+        def on_auth_fail(reason):
             log.info('Failed SASL authentification: %s' % reason)
             if len(self.mecs) > 0:
                 # There are other mechanisms to test
@@ -286,9 +287,21 @@ class SASL(PlugIn):
             if self.on_sasl:
                 self.on_sasl()
             raise NodeProcessed
+
+        if challenge.getName() == 'failure':
+            self.startsasl = SASL_FAILURE
+            try:
+                reason = challenge.getChildren()[0]
+            except Exception:
+                reason = challenge
+            on_auth_fail(reason)
         elif challenge.getName() == 'success':
-            # TODO: Need to validate any data-with-success.
-            # TODO: Important for DIGEST-MD5 and SCRAM.
+            if self.mechanism == 'SCRAM-SHA-1':
+                # check data-with-success
+                data = scram_parse(data)
+                if data['v'] != scram_base64(self.scram_ServerSignature):
+                    on_auth_fail('ServerSignature is wrong')
+
             self.startsasl = SASL_SUCCESS
             log.info('Successfully authenticated with remote server.')
             handlers = self._owner.Dispatcher.dumpHandlers()
@@ -309,8 +322,6 @@ class SASL(PlugIn):
             raise NodeProcessed
 
         ### Perform auth step
-        incoming_data = challenge.getData()
-        data=base64.decodestring(incoming_data)
         log.info('Got challenge:' + data)
 
         if self.mechanism == 'GSSAPI':
@@ -353,11 +364,8 @@ class SASL(PlugIn):
                     ui = XOR(ui, ui_1)
                 return ui
 
-            def H(s):
+            def scram_H(s):
                 return hashfn(s).digest()
-
-            def scram_base64(s):
-                return ''.join(s.encode('base64').split('\n'))
 
             if self.scram_step == 0:
                 self.scram_step = 1
@@ -373,7 +381,7 @@ class SASL(PlugIn):
                 SaltedPassword = Hi(self.password, salt, iter)
                 # TODO: Could cache this, along with salt+iter.
                 ClientKey = HMAC(SaltedPassword, 'Client Key')
-                StoredKey = H(ClientKey)
+                StoredKey = scram_H(ClientKey)
                 ClientSignature = HMAC(StoredKey, self.scram_soup)
                 ClientProof = XOR(ClientKey, ClientSignature)
                 r += ',p=' + scram_base64(ClientProof)
@@ -417,6 +425,9 @@ class SASL(PlugIn):
             # Password is now required
             self._owner._caller.get_password(self.set_password, self.mechanism)
         elif 'rspauth' in chal:
+            # Check rspauth value
+            if chal['rspauth'] != self.digest_rspauth:
+                on_auth_fail('rspauth is wrong'):
             self._owner.send(str(Node('response', attrs={'xmlns':NS_SASL})))
         else:
             self.startsasl = SASL_FAILURE
@@ -449,10 +460,14 @@ class SASL(PlugIn):
             hash_realm = self._convert_to_iso88591(self.resp['realm'])
             hash_password = self._convert_to_iso88591(self.password)
             A1 = C([H(C([hash_username, hash_realm, hash_password])),
-                    self.resp['nonce'], self.resp['cnonce']])
+                self.resp['nonce'], self.resp['cnonce']])
             A2 = C(['AUTHENTICATE', self.resp['digest-uri']])
-            response= HH(C([HH(A1), self.resp['nonce'], self.resp['nc'],
-                    self.resp['cnonce'], self.resp['qop'], HH(A2)]))
+            response = HH(C([HH(A1), self.resp['nonce'], self.resp['nc'],
+                self.resp['cnonce'], self.resp['qop'], HH(A2)]))
+            A2 = C(['', self.resp['digest-uri']])
+            self.digest_rspauth = HH(C([HH(A1), self.resp['nonce'],
+                self.resp['nc'], self.resp['cnonce'], self.resp['qop'],
+                HH(A2)]))
             self.resp['response'] = response
             sasl_data = u''
             for key in ('charset', 'username', 'realm', 'nonce', 'nc', 'cnonce',
