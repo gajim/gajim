@@ -458,7 +458,10 @@ class P2PConnection(IdleObject, PlugIn):
             self._sock.setblocking(False)
         except Exception, ee:
             (errnum, errstr) = ee
-        if errnum in (errno.EINPROGRESS, errno.EALREADY, errno.EWOULDBLOCK):
+        errors = (errno.EINPROGRESS, errno.EALREADY, errno.EWOULDBLOCK)
+        if 'WSAEINVAL' in errno.__dict__:
+            errors += (errno.WSAEINVAL,)
+        if errnum in errors:
             return
         # win32 needs this
         elif errnum not in (0, 10056, errno.EISCONN) or self.state != 0:
