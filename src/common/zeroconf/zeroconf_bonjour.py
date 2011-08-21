@@ -286,7 +286,7 @@ class Zeroconf:
             self.error_CB("Error while browsing: %s" % e)
 
     def browse_loop(self):
-        ready = select.select([self.browse_sdRef], [], [], 2)
+        ready = select.select([self.browse_sdRef], [], [], 0)
         if self.browse_sdRef in ready[0]:
             pybonjour.DNSServiceProcessResult(self.browse_sdRef)
 
