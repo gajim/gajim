@@ -342,6 +342,10 @@ class JingleFileTransfer(JingleContent):
         # send error message, notify the user
             return
     def isOurCandUsed(self):
+        '''
+        If this method returns true then the candidate we nominated will be
+        used, if false, the candidate nominated by peer will be used
+        '''
         
         if self.nominated_cand['peer-cand'] == False:
             return True
@@ -352,32 +356,24 @@ class JingleFileTransfer(JingleContent):
         our_pr = int(self.nominated_cand['our-cand']['priority'])
         
         if peer_pr != our_pr:
-            if peer_pr > our_pr:
-                # Choose peer host
-                return False
-            else:
-                # Choose our host
-                return True
+            return peer_pr > our_pr
         else:
-            if self.weinitiate:
-                # Choose our host
-                return True
-            else:
-                # Choose peer host
-                return False
-            
+            return self.weinitiate
             
         
     def start_transfer(self, streamhost_used):
         
         self.state = STATE_TRANSFERING
         
+        # It tells wether we start the transfer as client or server
+        type = None 
+        
         if self.isOurCandUsed():
-            print 'our'
+            type = 'client'
         else:
-            print 'peer' 
+            type = 'server' 
         
-        
+        print type
         # FIXME if streamhost_used is none where do we get the proxy host
         if streamhost_used and streamhost_used['type'] == 'proxy':
             self.file_props['streamhost-used'] = True
@@ -401,7 +397,7 @@ class JingleFileTransfer(JingleContent):
         else:
             jid = gajim.get_jid_without_resource(self.session.ourjid)
             gajim.socks5queue.send_file(self.file_props,
-                self.session.connection.name)
+                self.session.connection.name, type)
     
 def get_content(desc):
     return JingleFileTransfer
