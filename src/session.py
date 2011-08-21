@@ -155,14 +155,9 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
             obj.resource == highest_contact.resource or highest_contact.show ==\
             'offline'
 
-        if not pm and is_highest:
-            jid_of_control = obj.jid
-        else:
-            jid_of_control = obj.fjid
-
         if not self.control:
-            ctrl = gajim.interface.msg_win_mgr.get_control(jid_of_control,
-                self.conn.name)
+            ctrl = gajim.interface.msg_win_mgr.search_control(obj.jid,
+                obj.conn.name, obj.resource)
             if ctrl:
                 self.control = ctrl
                 self.control.set_session(self)
@@ -183,8 +178,6 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
         contact = None
         jid = obj.jid
         resource = obj.resource
-        # if chat window will be for specific resource
-        resource_for_chat = resource
 
         fjid = jid
 
@@ -211,7 +204,6 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
             else:
                 # Default to highest prio
                 fjid = jid
-                resource_for_chat = None
                 contact = highest_contact
 
         if not contact:
@@ -220,21 +212,15 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
                 obj.conn.name, jid, obj.user_nick)
 
         if not self.control:
-            ctrl = gajim.interface.msg_win_mgr.get_control(fjid, self.conn.name)
+            ctrl = gajim.interface.msg_win_mgr.search_control(obj.jid,
+                obj.conn.name, obj.resource)
             if ctrl:
                 self.control = ctrl
                 self.control.set_session(self)
             else:
-                # if no control exists and message comes from highest prio,
-                # the new control shouldn't have a resource
-                if highest_contact and contact.resource == \
-                highest_contact.resource and jid != gajim.get_jid_from_account(
-                self.conn.name):
-                    fjid = jid
-                    resource_for_chat = None
+                fjid = jid
 
         obj.popup = helpers.allow_popup_window(self.conn.name)
-        obj.resource_for_chat = resource_for_chat
 
         type_ = 'chat'
         event_type = 'message_received'
@@ -268,9 +254,6 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
         Display the message or show notification in the roster
         """
         contact = None
-        # if chat window will be for specific resource
-        resource_for_chat = resource
-
         fjid = jid
 
         # Try to catch the contact with correct resource
@@ -298,7 +281,6 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
             else:
                 # Default to highest prio
                 fjid = jid
-                resource_for_chat = None
                 contact = highest_contact
 
         if not contact:
@@ -312,12 +294,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
                 self.control = ctrl
                 self.control.set_session(self)
             else:
-                # if no control exists and message comes from highest prio, the new
-                # control shouldn't have a resource
-                if highest_contact and contact.resource == highest_contact.resource\
-                and not jid == gajim.get_jid_from_account(self.conn.name):
-                    fjid = jid
-                    resource_for_chat = None
+                fjid = jid
 
         # Do we have a queue?
         no_queue = len(gajim.events.get_events(self.conn.name, fjid)) == 0
@@ -367,7 +344,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
         if popup:
             if not self.control:
                 self.control = gajim.interface.new_chat(contact,
-                        self.conn.name, resource=resource_for_chat, session=self)
+                    self.conn.name, session=self)
 
                 if len(gajim.events.get_events(self.conn.name, fjid)):
                     self.control.read_queue()

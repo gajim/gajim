@@ -926,23 +926,6 @@ class ConnectionHandlersBase:
                     continue
                 if sess.control:
                     sess.control.no_autonegotiation = False
-                if sess.enable_encryption:
-                    sess.terminate_e2e()
-                    self.delete_session(jid, sess.thread_id)
-
-        if obj.ptype == 'unavailable':
-            for jid in (obj.jid, obj.fjid):
-                if jid not in self.sessions:
-                    continue
-                # automatically terminate sessions that they haven't sent a
-                # thread ID in, only if other part support thread ID
-                for sess in self.sessions[jid].values():
-                    if not sess.received_thread_id:
-                        contact = gajim.contacts.get_contact(self.name, jid)
-                        if contact and (contact.supports(xmpp.NS_SSN) or \
-                        contact.supports(xmpp.NS_ESESSION)):
-                            sess.terminate()
-                            del self.sessions[jid][sess.thread_id]
 
         if gajim.config.get('log_contact_status_changes') and \
         gajim.config.should_log(self.name, obj.jid):

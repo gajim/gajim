@@ -1087,6 +1087,26 @@ class MessageWindowMgr(gobject.GObject):
             return win.get_control(jid, acct)
         return None
 
+    def search_control(self, jid, account, resource=None):
+        """
+        Search windows with this policy:
+        1. try to find already opened tab for resource
+        2. find the tab for this jid with ctrl.resource not set
+        3. there is none
+        """
+        fjid = jid
+        if resource:
+            jid += '/' + resource
+        ctrl = self.get_control(fjid, account)
+        if ctrl:
+            return ctrl
+        win = self.get_window(jid, account)
+        if win:
+            ctrl = win.get_control(jid, account)
+            if not ctrl.resource:
+                return ctrl
+        return None
+
     def get_gc_control(self, jid, acct):
         """
         Same as get_control. Was briefly required, is not any more. May be useful

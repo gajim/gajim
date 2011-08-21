@@ -2187,6 +2187,7 @@ class MessageOutgoingEvent(nec.NetworkIncomingEvent):
         self.callback_args = []
         self.now = False
         self.is_loggable = True
+        self.control = None
 
     def generate(self):
         return True

@@ -868,7 +868,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             keyID=keyID, type_=type_, chatstate=chatstate, msg_id=msg_id,
             composing_xep=composing_xep, resource=resource,
             user_nick=self.user_nick, xhtml=xhtml, label=label,
-            callback=callback, callback_args= callback_args))
+            callback=callback, callback_args=callback_args, control=self))
 
         # Record the history of sent messages
         self.save_message(message, 'sent')
@@ -2631,13 +2631,15 @@ class ChatControl(ChatControlBase):
         if contact.our_chatstate == 'inactive' and state == 'composing':
             # go active before
             gajim.nec.push_outgoing_event(MessageOutgoingEvent(None,
-                account=self.account, jid=self.contact.jid, chatstate='active'))
+                account=self.account, jid=self.contact.jid, chatstate='active',
+                control=self))
             contact.our_chatstate = 'active'
             self.reset_kbd_mouse_timeout_vars()
 
         gajim.nec.push_outgoing_event(MessageOutgoingEvent(None,
             account=self.account, jid=self.contact.jid, chatstate=state,
-            msg_id=contact.msg_id, composing_xep=contact.composing_xep))
+            msg_id=contact.msg_id, composing_xep=contact.composing_xep,
+            control=self))
 
         contact.our_chatstate = state
         if contact.our_chatstate == 'active':

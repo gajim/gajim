@@ -46,7 +46,8 @@ class MessageControl(object):
     MessageWindow
     """
 
-    def __init__(self, type_id, parent_win, widget_name, contact, account, resource = None):
+    def __init__(self, type_id, parent_win, widget_name, contact, account,
+    resource=None):
         # dict { cb id : widget}
         # keep all registered callbacks of widgets, created by self.xml
         self.handlers = {}
@@ -59,6 +60,7 @@ class MessageControl(object):
         self.resource = resource
 
         self.session = None
+        self.other_sessions = []
 
         gajim.last_message_time[self.account][self.get_full_jid()] = 0
 
@@ -201,15 +203,15 @@ class MessageControl(object):
 
         if oldsession:
             oldsession.control = None
+            self.other_sessions.append(oldsession)
 
-            jid = self.contact.jid
-            if self.resource:
-                jid += '/' + self.resource
+        if self.session in self.other_sessions:
+            self.other_sessions.remove(self.session)
 
         crypto_changed = bool(session and isinstance(session,
-                EncryptedStanzaSession) and session.enable_encryption) != \
-                bool(oldsession and isinstance(oldsession,
-                EncryptedStanzaSession) and oldsession.enable_encryption)
+            EncryptedStanzaSession) and session.enable_encryption) != \
+            bool(oldsession and isinstance(oldsession, EncryptedStanzaSession) \
+            and oldsession.enable_encryption)
 
         archiving_changed = bool(session and isinstance(session,
             ArchivingStanzaSession) and session.archiving) != \
@@ -219,12 +221,21 @@ class MessageControl(object):
         if crypto_changed or archiving_changed:
             self.print_session_details()
 
+    def remove_session(self, session):
+        if session != self.session:
+            return
+        last_session = None
+        if self.other_sessions:
+            last_session = self.other_sessions.pop(0)
+        if session not in self.other_sessions:
+            self.other_sessions.append(session)
+        if last_session:
+            self.session = last_session
+
     def _nec_message_outgoing(self, obj):
         # Send the given message to the active tab.
         # Doesn't return None if error
-        if obj.account != self.account:
-            return
-        if self.contact.jid != obj.jid:
+        if obj.control != self:
             return
 
         obj.message = helpers.remove_invalid_xml_chars(obj.message)

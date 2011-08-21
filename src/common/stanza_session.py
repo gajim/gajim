@@ -58,7 +58,7 @@ class StanzaSession(object):
         self.conn = conn
         self.jid = jid
         self.type = type_
-        self.resource = None
+        self.resource = jid.getResource()
 
         if thread_id:
             self.received_thread_id = True

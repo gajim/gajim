@@ -358,15 +358,9 @@ class Interface:
         highest = gajim.contacts.get_contact_with_highest_priority(account, jid)
         is_highest = (highest and highest.resource == resource)
 
-        # disconnect the session from the ctrl if the highest resource has
-        # changed
-        if (obj.was_highest and not is_highest) or \
-        (not obj.was_highest and is_highest):
-            ctrl = self.msg_win_mgr.get_control(jid, account)
-            if ctrl:
-                ctrl.no_autonegotiation = False
-                ctrl.set_session(None)
-                ctrl.contact = highest
+        ctrl = self.msg_win_mgr.get_control(jid, account)
+        if ctrl and ctrl.session and ctrl.session.resource == resource:
+            ctrl.remove_session(ctrl.session)
 
     def handle_event_msgerror(self, obj):
         #'MSGERROR' (account, (jid, error_code, error_msg, msg, time[session]))
