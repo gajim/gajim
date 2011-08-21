@@ -714,6 +714,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.available_transports = {} # list of available transports on this
         # server {'icq': ['icq.server.com', 'icq2.server.com'], }
         self.private_storage_supported = True
+        self.privacy_rules_requested = False
         self.streamError = ''
         self.secret_hmac = str(random.random())[2:]
         gajim.ged.register_event_handler('privacy-list-received', ged.CORE,
