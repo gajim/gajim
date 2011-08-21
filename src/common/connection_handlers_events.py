@@ -827,6 +827,7 @@ class ZeroconfPresenceReceivedEvent(nec.NetworkIncomingEvent):
         self.transport_auto_auth = False
         self.errcode = None
         self.errmsg = ''
+        self.popup = False # Do we want to open chat window ?
         return True
 
 class GcPresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
