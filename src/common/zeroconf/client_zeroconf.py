@@ -365,12 +365,12 @@ class P2PConnection(IdleObject, PlugIn):
 
     def connect_to_next_ip(self):
         if len(self.ais) == 0:
-            log.error('Connection failure to %s', self.host, exc_info=True)
+            log.error('Connection failure to %s', str(self.host), exc_info=True)
             self.disconnect()
             return
         ai = self.ais.pop(0)
-        log.info('Trying to connect to %s through %s:%s', self.host, ai[4][0],
-            ai[4][1], exc_info=True)
+        log.info('Trying to connect to %s through %s:%s', str(self.host),
+            ai[4][0], ai[4][1], exc_info=True)
         try:
             self._sock = socket.socket(*ai[:3])
             self._sock.setblocking(False)
@@ -462,8 +462,8 @@ class P2PConnection(IdleObject, PlugIn):
             return
         # win32 needs this
         elif errnum not in (0, 10056, errno.EISCONN) or self.state != 0:
-            log.error('Could not connect to %s: %s [%s]', self.host, errnum,
-                errstr)
+            log.error('Could not connect to %s: %s [%s]', str(self.host),
+                errnum, errstr)
             self.connect_to_next_ip()
             return
         else: # socket is already connected
