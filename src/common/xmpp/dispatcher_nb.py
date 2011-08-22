@@ -90,6 +90,9 @@ class XMPPDispatcher(PlugIn):
                 self.SendAndWaitForResponse, self.SendAndCallForResponse,
                 self.getAnID, self.Event, self.send]
 
+        # Let the dispatcher know if there is support for stream management
+        self.sm = None
+
     def getAnID(self):
         global outgoingID
         outgoingID += 1
@@ -417,6 +420,12 @@ class XMPPDispatcher(PlugIn):
         stanza.props = stanza.getProperties()
         ID = stanza.getID()
 
+        # If server supports stream management
+        if self.sm and self.sm.enabled and (stanza.getName() != 'r' and
+        stanza.getName() != 'a' and stanza.getName() != 'enabled' and
+        stanza.getName() != 'resumed'):
+            # increments the number of stanzas that has been handled
+            self.sm.in_h = self.sm.in_h + 1
         list_ = ['default'] # we will use all handlers:
         if typ in self.handlers[xmlns][name]:
             list_.append(typ) # from very common...
@@ -525,6 +534,14 @@ class XMPPDispatcher(PlugIn):
                     ID = stanza.getID()
                 if self._owner._registered_name and not stanza.getAttr('from'):
                     stanza.setAttr('from', self._owner._registered_name)
+
+        # If no ID then it is a whitespace
+        if self.sm and self.sm.enabled and ID:
+            self.sm.uqueue.append(stanza)
+            self.sm.out_h = self.sm.out_h + 1
+            if len(self.sm.uqueue) > self.sm.max_queue:
+                self.sm.request_ack()
+
         self._owner.Connection.send(stanza, now)
         return ID
 

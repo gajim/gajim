@@ -15,3 +15,4 @@ import simplexml, protocol, auth_nb, transports_nb, roster_nb
 import dispatcher_nb, features_nb, idlequeue, bosh, tls_nb, proxy_connectors
 from client_nb import NonBlockingClient
 from plugin import PlugIn
+from smacks import Smacks

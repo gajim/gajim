@@ -57,9 +57,9 @@ from common import gajim
 from common import gpg
 from common import passwords
 from common import exceptions
-
 from connection_handlers import *
 
+from xmpp import Smacks
 from string import Template
 import logging
 log = logging.getLogger('gajim.c.connection')
@@ -717,6 +717,9 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.privacy_rules_requested = False
         self.streamError = ''
         self.secret_hmac = str(random.random())[2:]
+        
+        self.sm = Smacks(self) # Stream Management 
+        
         gajim.ged.register_event_handler('privacy-list-received', ged.CORE,
             self._nec_privacy_list_received)
         gajim.ged.register_event_handler('agent-info-error-received', ged.CORE,
@@ -780,6 +783,8 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.connected = 0
         self.time_to_reconnect = None
         self.privacy_rules_supported = False
+        if on_purpose:
+            self.sm = Smacks(self)
         if self.connection:
             # make sure previous connection is completely closed
             gajim.proxy65_manager.disconnect(self.connection)
@@ -788,6 +793,15 @@ class Connection(CommonConnection, ConnectionHandlers):
             self.connection.disconnect()
             self.last_connection = None
             self.connection = None
+    def set_oldst(self): # Set old state
+        if self.old_show:
+            self.connected = gajim.SHOW_LIST.index(self.old_show)
+            gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
+                                           show=self.connected))
+        else: # we default to online
+            self.connected = 2
+            gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
+                                    show=gajim.SHOW_LIST[self.connected]))
 
     def _disconnectedReconnCB(self):
         """
@@ -800,8 +814,9 @@ class Connection(CommonConnection, ConnectionHandlers):
             self.old_show = gajim.SHOW_LIST[self.connected]
         self.connected = 0
         if not self.on_purpose:
-            gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
-                show='offline'))
+            if not (self.sm and self.sm.resumption):
+                gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
+                    show='offline'))
             self.disconnect()
             if gajim.config.get_per('accounts', self.name, 'autoreconnect'):
                 self.connected = -1
@@ -989,7 +1004,14 @@ class Connection(CommonConnection, ConnectionHandlers):
         if self.connection:
             return self.connection, ''
 
-        if data:
+        if self.sm.resuming and self.sm.location:
+            # If resuming and server gave a location, connect from there
+            hostname = self.sm.location
+            self.try_connecting_for_foo_secs = gajim.config.get_per('accounts',
+                self.name, 'try_connecting_for_foo_secs')
+            use_custom = False
+
+        elif data:
             hostname = data['hostname']
             self.try_connecting_for_foo_secs = 45
             p = data['proxy']
@@ -1607,12 +1629,16 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.connection.set_send_timeout2(self.pingalives, self.sendPing)
         self.connection.onreceive(None)
 
-        self.request_message_archiving_preferences()
-
         self.privacy_rules_requested = False
-        self.discoverInfo(gajim.config.get_per('accounts', self.name, 'hostname'),
-                id_prefix='Gajim_')
 
+        # If we are not resuming, we ask for discovery info
+        # and archiving preferences
+        if not self.sm.resuming:
+            self.request_message_archiving_preferences()
+            self.discoverInfo(gajim.config.get_per('accounts', self.name,
+                'hostname'), id_prefix='Gajim_')
+
+        self.sm.resuming = False # back to previous state
         # Discover Stun server(s)
         gajim.resolver.resolve('_stun._udp.' + helpers.idn_to_ascii(
                 self.connected_hostname), self._on_stun_resolved)
