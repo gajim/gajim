@@ -427,7 +427,7 @@ class SASL(PlugIn):
         elif 'rspauth' in chal:
             # Check rspauth value
             if chal['rspauth'] != self.digest_rspauth:
-                on_auth_fail('rspauth is wrong'):
+                on_auth_fail('rspauth is wrong')
             self._owner.send(str(Node('response', attrs={'xmlns':NS_SASL})))
         else:
             self.startsasl = SASL_FAILURE
