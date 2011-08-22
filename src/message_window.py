@@ -1096,14 +1096,14 @@ class MessageWindowMgr(gobject.GObject):
         """
         fjid = jid
         if resource:
-            jid += '/' + resource
+            fjid += '/' + resource
         ctrl = self.get_control(fjid, account)
         if ctrl:
             return ctrl
         win = self.get_window(jid, account)
         if win:
             ctrl = win.get_control(jid, account)
-            if not ctrl.resource:
+            if not ctrl.resource and ctrl.type_id != message_control.TYPE_GC:
                 return ctrl
         return None
 
