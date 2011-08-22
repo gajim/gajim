@@ -49,6 +49,7 @@ except ImportError:
 
 GSS_STATE_STEP = 0
 GSS_STATE_WRAP = 1
+SASL_FAILURE_IN_PROGRESS = 'failure-in-process'
 SASL_FAILURE = 'failure'
 SASL_SUCCESS = 'success'
 SASL_UNSUPPORTED = 'not-supported'
@@ -285,15 +286,20 @@ class SASL(PlugIn):
         ### Handle Auth result
         def on_auth_fail(reason):
             log.info('Failed SASL authentification: %s' % reason)
+            self._owner.send(str(Node('abort', attrs={'xmlns': NS_SASL})))
             if len(self.mecs) > 0:
-                # There are other mechanisms to test
-                self.MechanismHandler()
+                # There are other mechanisms to test, but wait for <failure>
+                # answer from server
+                self.startsasl = SASL_FAILURE_IN_PROGRESS
                 raise NodeProcessed
             if self.on_sasl:
                 self.on_sasl()
             raise NodeProcessed
 
         if challenge.getName() == 'failure':
+            if self.startsasl == SASL_FAILURE_IN_PROGRESS:
+                self.MechanismHandler()
+                raise NodeProcessed
             self.startsasl = SASL_FAILURE
             try:
                 reason = challenge.getChildren()[0]
@@ -666,9 +672,9 @@ class NonBlockingBind(PlugIn):
                 if self.supports_sm:
                     # starts negociation
                     sm.set_owner(self._owner)
-                    sm.negociate()    
+                    sm.negociate()
                     self._owner.Dispatcher.sm = sm
-                    
+
                 if hasattr(self, 'session') and self.session == -1:
                     # Server don't want us to initialize a session
                     log.info('No session required.')
