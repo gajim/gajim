@@ -356,7 +356,7 @@ class JingleFileTransfer(JingleContent):
         our_pr = int(self.nominated_cand['our-cand']['priority'])
         
         if peer_pr != our_pr:
-            return peer_pr > our_pr
+            return our_pr > peer_pr
         else:
             return self.weinitiate
             
@@ -373,7 +373,6 @@ class JingleFileTransfer(JingleContent):
         else:
             type = 'server' 
         
-        print type
         # FIXME if streamhost_used is none where do we get the proxy host
         if streamhost_used and streamhost_used['type'] == 'proxy':
             self.file_props['streamhost-used'] = True
