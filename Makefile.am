@@ -4,15 +4,6 @@ ACLOCAL_AMFLAGS = -I m4
 
 bin_SCRIPTS = scripts/gajim scripts/gajim-history-manager scripts/gajim-remote
 
-docfilesdir = $(docdir)
-docfiles_DATA = README \
-				README.html \
-				ChangeLog \
-				COPYING \
-				THANKS \
-				THANKS.artists \
-				AUTHORS 
-
 EXTRA_DIST = \
 	$(docfiles_DATA) \
 	autogen.sh			\
