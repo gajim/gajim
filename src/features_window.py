@@ -107,6 +107,10 @@ class FeaturesWindow:
                 _('Ability to start audio and video chat.'),
                 _('Requires python-farsight and gstreamer-plugins-bad.'),
                 _('Feature not available under Windows.')),
+            _('UPnP-IGD'): (self.gupnp_igd_available,
+                _('Ability to request your router to forward port for file transfer.'),
+                _('Requires python-gupnp-igd.'),
+                _('Feature not available under Windows.')),
         }
 
         # name, supported
@@ -249,3 +253,6 @@ class FeaturesWindow:
 
     def farsight_available(self):
         return gajim.HAVE_FARSIGHT
+
+    def gupnp_igd_available(self):
+        return gajim.HAVE_UPNP_IGD

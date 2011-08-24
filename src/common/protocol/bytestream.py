@@ -349,8 +349,8 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             self._add_addiditional_streamhosts_to_query(query, file_props)
             self._add_local_ips_as_streamhosts_to_query(query, file_props)
             self._add_proxy_streamhosts_to_query(query, file_props)
-
-            self.connection.send(iq)
+            self._add_upnp_igd_as_streamhost_to_query(query, file_props, iq)
+            # Upnp-igd is ascynchronous, so it will send the iq itself
 
     def _add_streamhosts_to_query(self, query, sender, port, hosts):
         for host in hosts:
@@ -385,6 +385,84 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
         else:
             additional_hosts = []
         self._add_streamhosts_to_query(query, sender, port, additional_hosts)
+
+    def _add_upnp_igd_as_streamhost_to_query(self, query, file_props, iq):
+        if not gajim.HAVE_UPNP_IGD:
+            self.connection.send(iq)
+            return
+
+        def ip_is_local(ip):
+            if '.' not in ip:
+                # it's an IPv6
+                return True
+            ip_s = ip.split('.')
+            ip_l = long(ip_s[0])<<24 | long(ip_s[1])<<16 | long(ip_s[2])<<8 | \
+                 long(ip_s[3])
+            # 10/8
+            if ip_l & (255<<24) == 10<<24:
+                return True
+            # 172.16/12
+            if ip_l & (255<<24 | 240<<16) == (172<<24 | 16<<16):
+                return True
+            # 192.168
+            if ip_l & (255<<24 | 255<<16) == (192<<24 | 168<<16):
+                return True
+            return False
+
+
+        my_ip = self.peerhost[0]
+
+        if not ip_is_local(my_ip):
+            self.connection.send(iq)
+            return
+
+        self.no_gupnp_reply_id = 0
+
+        def cleanup_gupnp():
+            if self.no_gupnp_reply_id:
+                gobject.source_remove(self.no_gupnp_reply_id)
+                self.no_gupnp_reply_id = 0
+            gajim.gupnp_igd.disconnect(self.ok_id)
+            gajim.gupnp_igd.disconnect(self.fail_id)
+
+        def ok(s, proto, ext_ip, re, ext_port, local_ip, local_port, desc):
+            log.debug('Got GUPnP-IGD answer: external: %s:%s, internal: %s:%s',
+                ext_ip, ext_port, local_ip, local_port)
+            if local_port != gajim.config.get('file_transfers_port'):
+                sender = file_props['sender']
+                receiver = file_props['receiver']
+                sha_str = helpers.get_auth_sha(file_props['sid'], sender,
+                    receiver)
+                listener = gajim.socks5queue.start_listener(local_port, sha_str,
+                    self._result_socks5_sid, file_props['sid'])
+                if listener:
+                    self._add_streamhosts_to_query(query, sender, ext_port,
+                        [ext_ip])
+            self.connection.send(iq)
+            cleanup_gupnp()
+
+        def fail(s, error, proto, ext_ip, local_ip, local_port, desc):
+            log.debug('Got GUPnP-IGD error : %s', str(error))
+            self.connection.send(iq)
+            cleanup_gupnp()
+
+        def no_upnp_reply():
+            log.debug('Got not GUPnP-IGD answer')
+            # stop trying to use it
+            gajim.HAVE_UPNP_IGD = False
+            self.no_gupnp_reply_id = 0
+            self.connection.send(iq)
+            cleanup_gupnp()
+            return False
+
+
+        self.ok_id = gajim.gupnp_igd.connect('mapped-external-port', ok)
+        self.fail_id = gajim.gupnp_igd.connect('error-mapping-port', fail)
+
+        port = gajim.config.get('file_transfers_port')
+        self.no_gupnp_reply_id = gobject.timeout_add_seconds(10, no_upnp_reply)
+        gajim.gupnp_igd.add_port('TCP', 0, my_ip, port, 3600,
+            'Gajim file transfer')
 
     def _add_proxy_streamhosts_to_query(self, query, file_props):
         proxyhosts = self._get_file_transfer_proxies_from_config(file_props)
