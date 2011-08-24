@@ -1,3 +1,20 @@
+gajim (0.14.4-1) unstable; urgency=low
+
+  * New upstream release. Closes: #637071
+  * Fixes weird error. Closes: #632226
+  * Stop suggesting unused python-sexy. Closes: #633301
+  * Modify 00_debian-copying.diff to also not install ChangeLog file.
+    dh_changelogs will do it.
+
+ -- Yann Leboulanger <asterix@lagaule.org>  Fri, 22 Jul 2011 12:56:30 +0200
+
+gajim (0.14.3-1) unstable; urgency=low
+
+  * New upstream release.
+  * Fix closing roster window. Closes: #630315
+
+ -- Yann Leboulanger <asterix@lagaule.org>  Sun, 19 Jun 2011 21:46:09 +0200
+
 gajim (0.14.2-1) unstable; urgency=low
 
   * New upstream release.
