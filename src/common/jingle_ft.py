@@ -167,12 +167,16 @@ class JingleFileTransfer(JingleContent):
         if content.getTag('transport').getTag('candidate-error'):
             self.nominated_cand['peer-cand'] = False
             if self.state == STATE_CAND_SENT_PENDING_REPLY:
-                #self.state = STATE_CAND_SENT_AND_RECEIVED
                 if not self.nominated_cand['our-cand'] and \
                    not self.nominated_cand['peer-cand']:
                     if not self.weinitiate:
                         return
                     self.session.transport_replace()
+                else:
+                    response = stanza.buildReply('result')
+                    self.session.connection.connection.send(response)
+                    self.start_transfer()
+                    raise xmpp.NodeProcessed
             else:
                 self.state = STATE_CAND_RECEIVED_PENDING_REPLY
 
