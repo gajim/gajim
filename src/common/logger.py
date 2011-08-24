@@ -1121,11 +1121,11 @@ class Logger:
                 obj.conn.last_history_time[obj.jid] = time.mktime(obj.timestamp)
 
             except exceptions.PysqliteOperationalError, e:
-                self.conn.dispatch('DB_ERROR', (_('Disk Write Error'), str(e)))
+                obj.conn.dispatch('DB_ERROR', (_('Disk Write Error'), str(e)))
             except exceptions.DatabaseMalformed:
                 pritext = _('Database Error')
                 sectext = _('The database file (%s) cannot be read. Try to '
                     'repair it (see http://trac.gajim.org/wiki/DatabaseBackup) '
                     'or remove it (all history will be lost).') % \
                     LOG_DB_PATH
-                self.conn.dispatch('DB_ERROR', (pritext, sectext))
+                obj.conn.dispatch('DB_ERROR', (pritext, sectext))
