@@ -3,7 +3,7 @@ INCLUDES = \
 
 gajimpluginsdir = $(gajim_pluginsdir)
 
-installedplugins = acronyms_expander banner_tweaks ftp_manager length_notifier whiteboard
+installedplugins = acronyms_expander banner_tweaks ftp_manager length_notifier triggers whiteboard
 
 installedpluginsfiles = $(wildcard ${srcdir}/${p}/*.py ${srcdir}/${p}/manifest.ini ${srcdir}/${p}/*.ui ${srcdir}/${p}/*.png)
 
