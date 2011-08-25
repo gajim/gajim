@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-08-25 22:24+0400\n"
-"PO-Revision-Date: 2011-08-25 22:40+0300\n"
+"PO-Revision-Date: 2011-08-25 22:46+0300\n"
 "Last-Translator: Fomin Denis <fominde@mail.ru>\n"
 "Language-Team: Linux Support LLC\n"
 "Language: ru\n"
@@ -7717,9 +7717,8 @@ msgid "Ability to start audio and video chat."
 msgstr "Возможность голосового и видео общения."
 
 #: ../src/features_window.py:108
-#, fuzzy
 msgid "Requires python-farsight and gstreamer-plugins-bad."
-msgstr "Требует python-farsight."
+msgstr "Требует python-farsight и gstreamer-plugins-bad."
 
 #: ../src/features_window.py:110
 msgid "UPnP-IGD"
@@ -7730,9 +7729,8 @@ msgid "Ability to request your router to forward port for file transfer."
 msgstr ""
 
 #: ../src/features_window.py:112
-#, fuzzy
 msgid "Requires python-gupnp-igd."
-msgstr "Требует python-gnome2."
+msgstr "Требует python-gupnp-igd."
 
 #: ../src/features_window.py:120
 msgid "?features:Available"
