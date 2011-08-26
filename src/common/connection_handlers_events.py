@@ -2005,6 +2005,9 @@ class NotificationEvent(nec.NetworkIncomingEvent):
             self.do_sound = True
 
     def handle_incoming_gc_msg_event(self, msg_obj):
+        if not msg_obj.msg_obj.gc_control:
+            # we got a message from a room we're not in? ignore it
+            return
         sound = msg_obj.msg_obj.gc_control.highlighting_for_message(
             msg_obj.msgtxt, msg_obj.timestamp)[1]
 
