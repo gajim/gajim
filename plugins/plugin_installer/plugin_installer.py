@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 #
-## plugins/ftp_manager/ftp_manager.py
+## plugins/plugin_installer/plugin_installer.py
 ##
-## Copyright (C) 2010 Denis Fomin <fominde AT gmail.com>
+## Copyright (C) 2010-2011 Denis Fomin <fominde AT gmail.com>
+## Copyright (C) 2011 Yann Leboulanger <asterix AT lagaule.org>
 ##
 ## This file is part of Gajim.
 ##
@@ -37,14 +38,14 @@ from plugins.gui import GajimPluginConfigDialog
 from common import i18n
 
 
-class FtpManager(GajimPlugin):
+class PluginInstaller(GajimPlugin):
 
-    @log_calls('FtpManagerPlugin')
+    @log_calls('PluginInstallerPlugin')
     def init(self):
-        self.config_dialog = FtpManagerPluginConfigDialog(self)
+        self.config_dialog = PluginInstallerPluginConfigDialog(self)
         self.config_default_values = {'ftp_server': ('ftp.gajim.org', '')}
 
-    @log_calls('FtpManagerPlugin')
+    @log_calls('PluginInstallerPlugin')
     def activate(self):
         self.pl_menuitem = gajim.interface.roster.xml.get_object(
             'plugins_menuitem')
@@ -52,7 +53,7 @@ class FtpManager(GajimPlugin):
         if 'plugins' in gajim.interface.instances:
             self.on_activate(None)
 
-    @log_calls('FtpManagerPlugin')
+    @log_calls('PluginInstallerPlugin')
     def deactivate(self):
         self.pl_menuitem.disconnect(self.id_)
         if hasattr(self, 'page_num'):
@@ -71,15 +72,13 @@ class FtpManager(GajimPlugin):
             self.on_notebook_switch_page)
         self.window = gajim.interface.instances['plugins'].window
         self.window.connect('destroy', self.on_win_destroy)
-        self.GTK_BUILDER_FILE_PATH = self.local_file_path(
-            'config_dialog.ui')
+        self.GTK_BUILDER_FILE_PATH = self.local_file_path('config_dialog.ui')
         self.xml = gtk.Builder()
         self.xml.set_translation_domain(i18n.APP)
-        self.xml.add_objects_from_file(self.GTK_BUILDER_FILE_PATH,
-                ['hpaned2'])
+        self.xml.add_objects_from_file(self.GTK_BUILDER_FILE_PATH, ['hpaned2'])
         hpaned = self.xml.get_object('hpaned2')
         self.page_num = self.notebook.append_page(hpaned,
-            gtk.Label('Ftp Manager'))
+            gtk.Label('Available'))
 
         widgets_to_extract = ('plugin_name_label1',
         'available_treeview', 'progressbar', 'inslall_upgrade_button',
@@ -87,7 +86,7 @@ class FtpManager(GajimPlugin):
         'plugin_homepage_linkbutton1', 'plugin_description_textview1')
 
         for widget_name in widgets_to_extract:
-                setattr(self, widget_name, self.xml.get_object(widget_name))
+            setattr(self, widget_name, self.xml.get_object(widget_name))
 
         attr_list = pango.AttrList()
         attr_list.insert(pango.AttrWeight(pango.WEIGHT_BOLD, 0, -1))
@@ -209,7 +208,7 @@ class FtpManager(GajimPlugin):
                     continue
             if is_active and plugin.name != self.name:
                 gobject.idle_add(gajim.plugin_manager.activate_plugin, plugin)
-            if plugin.name != 'Ftp Manager':
+            if plugin.name != 'Plugin Installer':
                 self.installed_plugins_model.append([plugin, plugin.name,
                     is_active])
         dialog = HigDialog(None, gtk.MESSAGE_INFO, gtk.BUTTONS_OK,
@@ -379,8 +378,7 @@ class Ftp(threading.Thread):
     def download_plugin(self):
         gobject.idle_add(self.progressbar.show)
         self.pulse = gobject.timeout_add(150, self.progressbar_pulse)
-        gobject.idle_add(self.progressbar.set_text,
-                'Create a list of files')
+        gobject.idle_add(self.progressbar.set_text, 'Create a list of files')
         for remote_dir in self.remote_dirs:
 
             def nlstr(dir_, subdir=None):
@@ -438,13 +436,12 @@ class Ftp(threading.Thread):
         gobject.source_remove(self.pulse)
 
 
-class FtpManagerPluginConfigDialog(GajimPluginConfigDialog):
+class PluginInstallerPluginConfigDialog(GajimPluginConfigDialog):
     def init(self):
         self.GTK_BUILDER_FILE_PATH = self.plugin.local_file_path(
-                'config_dialog.ui')
+            'config_dialog.ui')
         self.xml = gtk.Builder()
-        self.xml.add_objects_from_file(self.GTK_BUILDER_FILE_PATH,
-                ['hbox111'])
+        self.xml.add_objects_from_file(self.GTK_BUILDER_FILE_PATH, ['hbox111'])
         hbox = self.xml.get_object('hbox111')
         self.child.pack_start(hbox)
 
