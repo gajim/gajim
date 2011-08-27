@@ -54,6 +54,7 @@ from common.pep import MOODS, ACTIVITIES
 from common.xmpp.protocol import NS_XHTML, NS_XHTML_IM, NS_FILE, NS_MUC
 from common.xmpp.protocol import NS_RECEIPTS, NS_ESESSION
 from common.xmpp.protocol import NS_JINGLE_RTP_AUDIO, NS_JINGLE_RTP_VIDEO, NS_JINGLE_ICE_UDP
+from common.xmpp.protocol import NS_CHATSTATES
 from common.connection_handlers_events import MessageOutgoingEvent
 
 from command_system.implementation.middleware import ChatCommandProcessor
@@ -850,8 +851,8 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         return label
 
     def send_message(self, message, keyID='', type_='chat', chatstate=None,
-    msg_id=None, composing_xep=None, resource=None, xhtml=None, callback=None,
-    callback_args=[], process_commands=True):
+    msg_id=None, resource=None, xhtml=None, callback=None, callback_args=[],
+    process_commands=True):
         """
         Send the given message to the active tab. Doesn't return None if error
         """
@@ -866,9 +867,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         gajim.nec.push_outgoing_event(MessageOutgoingEvent(None,
             account=self.account, jid=self.contact.jid, message=message,
             keyID=keyID, type_=type_, chatstate=chatstate, msg_id=msg_id,
-            composing_xep=composing_xep, resource=resource,
-            user_nick=self.user_nick, xhtml=xhtml, label=label,
-            callback=callback, callback_args=callback_args, control=self))
+            resource=resource, user_nick=self.user_nick, xhtml=xhtml,
+            label=label, callback=callback, callback_args=callback_args,
+            control=self))
 
         # Record the history of sent messages
         self.save_message(message, 'sent')
@@ -2037,24 +2038,13 @@ class ChatControl(ChatControlBase):
         if cs and st in ('composing_only', 'all'):
             if contact.show == 'offline':
                 chatstate = ''
-            elif contact.composing_xep == 'XEP-0085':
-                if st == 'all' or cs == 'composing':
-                    chatstate = helpers.get_uf_chatstate(cs)
-                else:
-                    chatstate = ''
-            elif contact.composing_xep == 'XEP-0022':
-                if cs in ('composing', 'paused'):
-                    # only print composing, paused
-                    chatstate = helpers.get_uf_chatstate(cs)
-                else:
-                    chatstate = ''
-            else:
-                # When does that happen ? See [7797] and [7804]
+            elif st == 'all' or cs == 'composing':
                 chatstate = helpers.get_uf_chatstate(cs)
+            else:
+                chatstate = ''
 
             label_text = '<span %s>%s</span><span %s>%s %s</span>' \
-                    % (font_attrs, name, font_attrs_small,
-                    acct_info, chatstate)
+                % (font_attrs, name, font_attrs_small, acct_info, chatstate)
             if acct_info:
                 acct_info = ' ' + acct_info
             label_tooltip = '%s%s %s' % (name, acct_info, chatstate)
@@ -2210,7 +2200,7 @@ class ChatControl(ChatControlBase):
             dialogs.ESessionInfoWindow(self.session)
 
     def send_message(self, message, keyID='', chatstate=None, xhtml=None,
-                    process_commands=True):
+    process_commands=True):
         """
         Send a message to contact
         """
@@ -2234,25 +2224,9 @@ class ChatControl(ChatControlBase):
 
         chatstates_on = gajim.config.get('outgoing_chat_state_notifications') != \
                 'disabled'
-        composing_xep = contact.composing_xep
         chatstate_to_send = None
         if chatstates_on and contact is not None:
-            if composing_xep is None:
-                # no info about peer
-                # send active to discover chat state capabilities
-                # this is here (and not in send_chatstate)
-                # because we want it sent with REAL message
-                # (not standlone) eg. one that has body
-
-                if contact.our_chatstate:
-                    # We already asked for xep 85, don't ask it twice
-                    composing_xep = 'asked_once'
-
-                chatstate_to_send = 'active'
-                contact.our_chatstate = 'ask' # pseudo state
-            # if peer supports jep85 and we are not 'ask', send 'active'
-            # NOTE: first active and 'ask' is set in gajim.py
-            elif composing_xep is not False:
+            if contact.supports(NS_CHATSTATES):
                 # send active chatstate on every message (as XEP says)
                 chatstate_to_send = 'active'
                 contact.our_chatstate = 'active'
@@ -2275,10 +2249,9 @@ class ChatControl(ChatControlBase):
                     xep0184_id=xep0184_id, xhtml=xhtml, displaymarking=displaymarking)
 
         ChatControlBase.send_message(self, message, keyID, type_='chat',
-                chatstate=chatstate_to_send, composing_xep=composing_xep,
-                xhtml=xhtml, callback=_on_sent,
-                callback_args=[contact, message, encrypted, xhtml, self.get_seclabel()],
-                process_commands=process_commands)
+            chatstate=chatstate_to_send, xhtml=xhtml, callback=_on_sent,
+            callback_args=[contact, message, encrypted, xhtml,
+            self.get_seclabel()], process_commands=process_commands)
 
 
     def on_message_sent(self, account_and_message):
@@ -2598,7 +2571,7 @@ class ChatControl(ChatControlBase):
         if contact.show == 'offline':
             return
 
-        if contact.composing_xep is False: # jid cannot do xep85 nor xep22
+        if not contact.supports(NS_CHATSTATES):
             return
 
         # if the new state we wanna send (state) equals
@@ -2606,28 +2579,7 @@ class ChatControl(ChatControlBase):
         if contact.our_chatstate == state:
             return
 
-        if contact.composing_xep is None:
-            # we don't know anything about jid, so return
-            # NOTE:
-            # send 'active', set current state to 'ask' and return is done
-            # in self.send_message() because we need REAL message (with <body>)
-            # for that procedure so return to make sure we send only once
-            # 'active' until we know peer supports jep85
-            return
-
-        if contact.our_chatstate == 'ask':
-            return
-
-        # in JEP22, when we already sent stop composing
-        # notification on paused, don't resend it
-        if contact.composing_xep == 'XEP-0022' and \
-        contact.our_chatstate in ('paused', 'active', 'inactive') and \
-        state is not 'composing': # not composing == in (active, inactive, gone)
-            contact.our_chatstate = 'active'
-            self.reset_kbd_mouse_timeout_vars()
-            return
-
-        # if we're inactive prevent composing (JEP violation)
+        # if wel're inactive prevent composing (XEP violation)
         if contact.our_chatstate == 'inactive' and state == 'composing':
             # go active before
             gajim.nec.push_outgoing_event(MessageOutgoingEvent(None,
@@ -2638,11 +2590,10 @@ class ChatControl(ChatControlBase):
 
         gajim.nec.push_outgoing_event(MessageOutgoingEvent(None,
             account=self.account, jid=self.contact.jid, chatstate=state,
-            msg_id=contact.msg_id, composing_xep=contact.composing_xep,
-            control=self))
+            msg_id=contact.msg_id, control=self))
 
         contact.our_chatstate = state
-        if contact.our_chatstate == 'active':
+        if state == 'active':
             self.reset_kbd_mouse_timeout_vars()
 
     def shutdown(self):

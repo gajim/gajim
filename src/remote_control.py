@@ -138,8 +138,7 @@ class Remote:
 
     def on_chatstate_received(self, obj):
         self.raise_signal('ChatState', (obj.conn.name, [
-            obj.jid, obj.fjid, obj.stanza, obj.resource, obj.composing_xep,
-            obj.chatstate]))
+            obj.jid, obj.fjid, obj.stanza, obj.resource, obj.chatstate]))
 
     def on_message_sent(self, obj):
         try:

@@ -907,8 +907,7 @@ class ConnectionHandlersBase:
         # reset chatstate if needed:
         # (when contact signs out or has errors)
         if obj.show in ('offline', 'error'):
-            obj.contact.our_chatstate = obj.contact.chatstate = \
-                obj.contact.composing_xep = None
+            obj.contact.our_chatstate = obj.contact.chatstate = None
 
             # TODO: This causes problems when another
             # resource signs off!

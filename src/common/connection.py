@@ -248,9 +248,9 @@ class CommonConnection:
         raise NotImplementedError
 
     def _prepare_message(self, jid, msg, keyID, type_='chat', subject='',
-    chatstate=None, msg_id=None, composing_xep=None, resource=None,
-    user_nick=None, xhtml=None, session=None, forward_from=None, form_node=None,
-    label=None, original_message=None, delayed=None, callback=None):
+    chatstate=None, msg_id=None, resource=None, user_nick=None, xhtml=None,
+    session=None, forward_from=None, form_node=None, label=None,
+    original_message=None, delayed=None, callback=None):
         if not self.connection or self.connected < 2:
             return 1
         try:
@@ -299,35 +299,34 @@ class CommonConnection:
                                 self._message_encrypted_cb(output, type_, msg,
                                     msgtxt, original_message, fjid, resource,
                                     jid, xhtml, subject, chatstate, msg_id,
-                                    composing_xep, label, forward_from, delayed,
-                                    session, form_node, user_nick, keyID,
-                                    callback)
+                                    label, forward_from, delayed, session,
+                                    form_node, user_nick, keyID, callback)
                         gajim.nec.push_incoming_event(GPGTrustKeyEvent(None,
                             conn=self, callback=_on_always_trust))
                     else:
                         self._message_encrypted_cb(output, type_, msg, msgtxt,
                             original_message, fjid, resource, jid, xhtml,
-                            subject, chatstate, msg_id, composing_xep, label,
-                            forward_from, delayed, session, form_node,
-                            user_nick, keyID, callback)
+                            subject, chatstate, msg_id, label, forward_from,
+                            delayed, session, form_node, user_nick, keyID,
+                            callback)
                 gajim.thread_interface(encrypt_thread, [msg, keyID, False],
-                        _on_encrypted, [])
+                    _on_encrypted, [])
                 return
 
             self._message_encrypted_cb(('', error), type_, msg, msgtxt,
                 original_message, fjid, resource, jid, xhtml, subject,
-                chatstate, msg_id, composing_xep, label, forward_from, delayed,
-                session, form_node, user_nick, keyID, callback)
+                chatstate, msg_id, label, forward_from, delayed, session,
+                form_node, user_nick, keyID, callback)
 
         self._on_continue_message(type_, msg, msgtxt, original_message, fjid,
             resource, jid, xhtml, subject, msgenc, keyID, chatstate, msg_id,
-            composing_xep, label, forward_from, delayed, session, form_node,
-            user_nick, callback)
+            label, forward_from, delayed, session, form_node, user_nick,
+            callback)
 
     def _message_encrypted_cb(self, output, type_, msg, msgtxt,
     original_message, fjid, resource, jid, xhtml, subject, chatstate, msg_id,
-    composing_xep, label, forward_from, delayed, session, form_node, user_nick,
-    keyID, callback):
+    label, forward_from, delayed, session, form_node, user_nick, keyID,
+    callback):
         msgenc, error = output
 
         if msgenc and not error:
@@ -339,8 +338,8 @@ class CommonConnection:
                         ' (' + msgtxt + ')'
             self._on_continue_message(type_, msg, msgtxt, original_message,
                 fjid, resource, jid, xhtml, subject, msgenc, keyID,
-                chatstate, msg_id, composing_xep, label, forward_from, delayed,
-                session, form_node, user_nick, callback)
+                chatstate, msg_id, label, forward_from, delayed, session,
+                form_node, user_nick, callback)
             return
         # Encryption failed, do not send message
         tim = localtime()
@@ -349,8 +348,7 @@ class CommonConnection:
 
     def _on_continue_message(self, type_, msg, msgtxt, original_message, fjid,
     resource, jid, xhtml, subject, msgenc, keyID, chatstate, msg_id,
-    composing_xep, label, forward_from, delayed, session, form_node, user_nick,
-    callback):
+    label, forward_from, delayed, session, form_node, user_nick, callback):
         if type_ == 'chat':
             msg_iq = common.xmpp.Message(to=fjid, body=msgtxt, typ=type_,
                     xhtml=xhtml)
@@ -386,27 +384,17 @@ class CommonConnection:
             contact = gajim.contacts.get_contact_with_highest_priority(self.name,
                     jid)
 
-        # chatstates - if peer supports xep85 or xep22, send chatstates
-        # please note that the only valid tag inside a message containing a <body>
-        # tag is the active event
-        if chatstate is not None and contact:
-            if ((composing_xep == 'XEP-0085' or not composing_xep) \
-            and composing_xep != 'asked_once') or \
-            contact.supports(common.xmpp.NS_CHATSTATES):
-                # XEP-0085
-                msg_iq.setTag(chatstate, namespace=common.xmpp.NS_CHATSTATES)
-            if composing_xep in ('XEP-0022', 'asked_once') or \
-            not composing_xep:
-                # XEP-0022
-                chatstate_node = msg_iq.setTag('x', namespace=common.xmpp.NS_EVENT)
-                if chatstate is 'composing' or msgtxt:
-                    chatstate_node.addChild(name='composing')
+        # chatstates - if peer supports xep85, send chatstates
+        # please note that the only valid tag inside a message containing a
+        # <body> tag is the active event
+        if chatstate and contact and contact.supports(NS_CHATSTATES):
+            msg_iq.setTag(chatstate, namespace=NS_CHATSTATES)
 
         if forward_from:
             addresses = msg_iq.addChild('addresses',
-                    namespace=common.xmpp.NS_ADDRESS)
+                namespace=common.xmpp.NS_ADDRESS)
             addresses.addChild('address', attrs = {'type': 'ofrom',
-                    'jid': forward_from})
+                'jid': forward_from})
 
         # XEP-0203
         if delayed:
@@ -433,7 +421,7 @@ class CommonConnection:
 
         if callback:
             callback(jid, msg, keyID, forward_from, session, original_message,
-                    subject, type_, msg_iq, xhtml)
+                subject, type_, msg_iq, xhtml)
 
     def log_message(self, jid, msg, forward_from, session, original_message,
     subject, type_, xhtml=None):
@@ -717,9 +705,9 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.privacy_rules_requested = False
         self.streamError = ''
         self.secret_hmac = str(random.random())[2:]
-        
-        self.sm = Smacks(self) # Stream Management 
-        
+
+        self.sm = Smacks(self) # Stream Management
+
         gajim.ged.register_event_handler('privacy-list-received', ged.CORE,
             self._nec_privacy_list_received)
         gajim.ged.register_event_handler('agent-info-error-received', ged.CORE,
@@ -1791,10 +1779,10 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.connection.send(msg_iq)
 
     def send_message(self, jid, msg, keyID=None, type_='chat', subject='',
-    chatstate=None, msg_id=None, composing_xep=None, resource=None,
-    user_nick=None, xhtml=None, label=None, session=None, forward_from=None,
-    form_node=None, original_message=None, delayed=None, callback=None,
-    callback_args=[], now=False):
+    chatstate=None, msg_id=None, resource=None, user_nick=None, xhtml=None,
+    label=None, session=None, forward_from=None, form_node=None,
+    original_message=None, delayed=None, callback=None, callback_args=[],
+    now=False):
 
         def cb(jid, msg, keyID, forward_from, session, original_message,
         subject, type_, msg_iq, xhtml):
@@ -1809,9 +1797,9 @@ class Connection(CommonConnection, ConnectionHandlers):
                     subject, type_, xhtml)
 
         self._prepare_message(jid, msg, keyID, type_=type_, subject=subject,
-            chatstate=chatstate, msg_id=msg_id, composing_xep=composing_xep,
-            resource=resource, user_nick=user_nick, xhtml=xhtml, label=label,
-            session=session, forward_from=forward_from, form_node=form_node,
+            chatstate=chatstate, msg_id=msg_id, resource=resource,
+            user_nick=user_nick, xhtml=xhtml, label=label, session=session,
+            forward_from=forward_from, form_node=form_node,
             original_message=original_message, delayed=delayed, callback=cb)
 
     def _nec_message_outgoing(self, obj):
@@ -1834,9 +1822,8 @@ class Connection(CommonConnection, ConnectionHandlers):
 
         self._prepare_message(obj.jid, obj.message, obj.keyID, type_=obj.type_,
             subject=obj.subject, chatstate=obj.chatstate, msg_id=obj.msg_id,
-            composing_xep=obj.composing_xep, resource=obj.resource,
-            user_nick=obj.user_nick, xhtml=obj.xhtml, label=obj.label,
-            session=obj.session, forward_from=obj.forward_from,
+            resource=obj.resource, user_nick=obj.user_nick, xhtml=obj.xhtml,
+            label=obj.label, session=obj.session, forward_from=obj.forward_from,
             form_node=obj.form_node, original_message=obj.original_message,
             delayed=obj.delayed, callback=cb)
 

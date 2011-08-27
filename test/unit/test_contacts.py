@@ -15,8 +15,8 @@ class TestCommonContact(unittest.TestCase):
 
     def setUp(self):
         self.contact = CommonContact(jid='', account="", resource='', show='',
-                status='', name='', our_chatstate=None, composing_xep=None,
-                chatstate=None, client_caps=None)
+            status='', name='', our_chatstate=None, chatstate=None,
+            client_caps=None)
 
     def test_default_client_supports(self):
         '''
@@ -44,7 +44,7 @@ class TestContact(TestCommonContact):
         domain model by smoke testing that no attribute values are lost'''
 
         attributes = ["jid", "resource", "show", "status", "name", "our_chatstate",
-                "composing_xep", "chatstate", "client_caps", "priority", "sub"]
+            "chatstate", "client_caps", "priority", "sub"]
         for attr in attributes:
             self.assertTrue(hasattr(self.contact, attr), msg="expected: " + attr)
 
@@ -60,7 +60,7 @@ class TestGC_Contact(TestCommonContact):
         domain model by asserting no attributes have been lost'''
 
         attributes = ["jid", "resource", "show", "status", "name", "our_chatstate",
-                "composing_xep", "chatstate", "client_caps", "role", "room_jid"]
+            "chatstate", "client_caps", "role", "room_jid"]
         for attr in attributes:
             self.assertTrue(hasattr(self.contact, attr), msg="expected: " + attr)
 

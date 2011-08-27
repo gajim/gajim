@@ -368,11 +368,6 @@ class Interface:
         jids = obj.fjid.split('/', 1)
         jid = jids[0]
 
-        if obj.error_code == '503':
-            # If we get server-not-found error, stop sending chatstates
-            for contact in gajim.contacts.get_contacts(account, jid):
-                contact.composing_xep = False
-
         session = obj.session
 
         gc_control = self.msg_win_mgr.get_gc_control(jid, account)

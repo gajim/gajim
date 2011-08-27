@@ -135,27 +135,17 @@ class BannerTweaksPlugin(GajimPlugin):
             if cs and st in ('composing_only', 'all'):
                 if contact.show == 'offline':
                     chatstate = ''
-                elif contact.composing_xep == 'XEP-0085':
-                    if st == 'all' or cs == 'composing':
-                        chatstate = helpers.get_uf_chatstate(cs)
-                    else:
-                        chatstate = ''
-                elif contact.composing_xep == 'XEP-0022':
-                    if cs in ('composing', 'paused'):
-                        # only print composing, paused
-                        chatstate = helpers.get_uf_chatstate(cs)
-                    else:
-                        chatstate = ''
-                else:
-                    # When does that happen ? See [7797] and [7804]
+                elif st == 'all' or cs == 'composing':
                     chatstate = helpers.get_uf_chatstate(cs)
+                else:
+                    chatstate = ''
 
                 label_text = '<span %s>%s</span><span %s>%s %s</span>' % \
-                        (font_attrs, name, font_attrs_small, acct_info, chatstate)
+                    (font_attrs, name, font_attrs_small, acct_info, chatstate)
             else:
                 # weight="heavy" size="x-large"
                 label_text = '<span %s>%s</span><span %s>%s</span>' % \
-                        (font_attrs, name, font_attrs_small, acct_info)
+                    (font_attrs, name, font_attrs_small, acct_info)
 
             banner_name_label.set_markup(label_text)
 

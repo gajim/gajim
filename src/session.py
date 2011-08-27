@@ -116,8 +116,6 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
         contact = gajim.contacts.get_contact(self.conn.name, obj.jid,
             obj.resource)
         if contact:
-            if contact.composing_xep != 'XEP-0085': # We cache xep85 support
-                contact.composing_xep = obj.composing_xep
             if self.control and self.control.type_id == \
             message_control.TYPE_CHAT:
                 if obj.chatstate is not None:
@@ -169,7 +167,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
             gajim.interface.remote_ctrl.raise_signal('NewMessage', (
                 self.conn.name, [obj.fjid, obj.msgtxt, obj.timestamp,
                 obj.encrypted, obj.mtype, obj.subject, obj.chatstate, msg_id,
-                obj.composing_xep, obj.user_nick, obj.xhtml, obj.form_node]))
+                obj.user_nick, obj.xhtml, obj.form_node]))
 
     def roster_message2(self, obj):
         """

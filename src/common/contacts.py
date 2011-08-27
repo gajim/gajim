@@ -46,7 +46,7 @@ class XMPPEntity(object):
 class CommonContact(XMPPEntity):
 
     def __init__(self, jid, account, resource, show, status, name,
-                    our_chatstate, composing_xep, chatstate, client_caps=None):
+    our_chatstate, chatstate, client_caps=None):
 
         XMPPEntity.__init__(self, jid, account, resource)
 
@@ -57,17 +57,8 @@ class CommonContact(XMPPEntity):
         self.client_caps = client_caps or caps_cache.NullClientCaps()
 
         # please read xep-85 http://www.xmpp.org/extensions/xep-0085.html
-        # we keep track of xep85 support with the peer by three extra states:
-        # None, False and 'ask'
-        # None if no info about peer
-        # False if peer does not support xep85
-        # 'ask' if we sent the first 'active' chatstate and are waiting for reply
         # this holds what WE SEND to contact (our current chatstate)
         self.our_chatstate = our_chatstate
-        # tell which XEP we're using for composing state
-        # None = have to ask, XEP-0022 = use this xep,
-        # XEP-0085 = use this xep, False = no composing support
-        self.composing_xep = composing_xep
         # this is contact's chatstate
         self.chatstate = chatstate
 
@@ -97,12 +88,12 @@ class Contact(CommonContact):
     Information concerning a contact
     """
     def __init__(self, jid, account, name='', groups=[], show='', status='',
-                    sub='', ask='', resource='', priority=0, keyID='', client_caps=None,
-                    our_chatstate=None, chatstate=None, last_status_time=None, msg_id=
-                    None, composing_xep=None, last_activity_time=None):
+    sub='', ask='', resource='', priority=0, keyID='', client_caps=None,
+    our_chatstate=None, chatstate=None, last_status_time=None, msg_id=None,
+    last_activity_time=None):
 
         CommonContact.__init__(self, jid, account, resource, show, status, name,
-                our_chatstate, composing_xep, chatstate, client_caps=client_caps)
+            our_chatstate, chatstate, client_caps=client_caps)
 
         self.contact_name = '' # nick choosen by contact
         self.groups = [i for i in set(groups)] # filter duplicate values
@@ -184,11 +175,11 @@ class GC_Contact(CommonContact):
     """
 
     def __init__(self, room_jid, account, name='', show='', status='', role='',
-                    affiliation='', jid='', resource='', our_chatstate=None,
-                    composing_xep=None, chatstate=None):
+    affiliation='', jid='', resource='', our_chatstate=None,
+    chatstate=None):
 
         CommonContact.__init__(self, jid, account, resource, show, status, name,
-                        our_chatstate, composing_xep, chatstate)
+            our_chatstate, chatstate)
 
         self.room_jid = room_jid
         self.role = role
@@ -205,8 +196,8 @@ class GC_Contact(CommonContact):
         Create a Contact instance from this GC_Contact instance
         """
         return Contact(jid=self.get_full_jid(), account=self.account,
-                name=self.name, groups=[], show=self.show, status=self.status,
-                sub='none', client_caps=self.client_caps)
+            name=self.name, groups=[], show=self.show, status=self.status,
+            sub='none', client_caps=self.client_caps)
 
 
 class LegacyContactsAPI:
@@ -249,15 +240,15 @@ class LegacyContactsAPI:
     def create_contact(self, jid, account, name='', groups=[], show='',
     status='', sub='', ask='', resource='', priority=0, keyID='',
     client_caps=None, our_chatstate=None, chatstate=None, last_status_time=None,
-    composing_xep=None, last_activity_time=None):
+    last_activity_time=None):
         # Use Account object if available
         account = self._accounts.get(account, account)
         return Contact(jid=jid, account=account, name=name, groups=groups,
-                show=show, status=status, sub=sub, ask=ask, resource=resource,
-                priority=priority, keyID=keyID, client_caps=client_caps,
-                our_chatstate=our_chatstate, chatstate=chatstate,
-                last_status_time=last_status_time, composing_xep=composing_xep,
-                last_activity_time=last_activity_time)
+            show=show, status=status, sub=sub, ask=ask, resource=resource,
+            priority=priority, keyID=keyID, client_caps=client_caps,
+            our_chatstate=our_chatstate, chatstate=chatstate,
+            last_status_time=last_status_time,
+            last_activity_time=last_activity_time)
 
     def create_self_contact(self, jid, account, resource, show, status, priority,
     name='', keyID=''):
@@ -266,27 +257,28 @@ class LegacyContactsAPI:
         account = self._accounts.get(account, account) # Use Account object if available
         self_contact = self.create_contact(jid=jid, account=account,
                 name=nick, groups=['self_contact'], show=show, status=status,
-                sub='both', ask='none',         priority=priority, keyID=keyID,
+                sub='both', ask='none', priority=priority, keyID=keyID,
                 resource=resource)
         self_contact.pep = conn.pep
         return self_contact
 
-    def create_not_in_roster_contact(self, jid, account, resource='', name='', keyID=''):
-        account = self._accounts.get(account, account) # Use Account object if available
+    def create_not_in_roster_contact(self, jid, account, resource='', name='',
+    keyID=''):
+        # Use Account object if available
+        account = self._accounts.get(account, account)
         return self.create_contact(jid=jid, account=account, resource=resource,
-                        name=name, groups=[_('Not in Roster')], show='not in roster',
-                        status='', sub='none', keyID=keyID)
+            name=name, groups=[_('Not in Roster')], show='not in roster',
+            status='', sub='none', keyID=keyID)
 
     def copy_contact(self, contact):
         return self.create_contact(contact.jid, contact.account,
-                name=contact.name, groups=contact.groups, show=contact.show,
-                status=contact.status, sub=contact.sub, ask=contact.ask,
-                resource=contact.resource, priority=contact.priority,
-                keyID=contact.keyID, client_caps=contact.client_caps,
-                our_chatstate=contact.our_chatstate, chatstate=contact.chatstate,
-                last_status_time=contact.last_status_time,
-                composing_xep=contact.composing_xep,
-                last_activity_time=contact.last_activity_time)
+            name=contact.name, groups=contact.groups, show=contact.show,
+            status=contact.status, sub=contact.sub, ask=contact.ask,
+            resource=contact.resource, priority=contact.priority,
+            keyID=contact.keyID, client_caps=contact.client_caps,
+            our_chatstate=contact.our_chatstate, chatstate=contact.chatstate,
+            last_status_time=contact.last_status_time,
+            last_activity_time=contact.last_activity_time)
 
     def add_contact(self, account, contact):
         if account not in self._accounts:

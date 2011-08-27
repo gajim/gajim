@@ -35,6 +35,7 @@ from common import exceptions
 from common.zeroconf import zeroconf
 from common.logger import LOG_DB_PATH
 from common.pep import SUPPORTED_PERSONAL_USER_EVENTS
+from common.xmpp.protocol import NS_CHATSTATES
 
 import gtkgui_helpers
 
@@ -74,28 +75,16 @@ class HelperEvent:
         Extract chatstate from a <message/> stanza
         Requires self.stanza and self.msgtxt
         """
-        self.composing_xep = None
         self.chatstate = None
 
         # chatstates - look for chatstate tags in a message if not delayed
         delayed = self.stanza.getTag('x', namespace=xmpp.NS_DELAY) is not None
         if not delayed:
-            self.composing_xep = False
             children = self.stanza.getChildren()
             for child in children:
-                if child.getNamespace() == 'http://jabber.org/protocol/chatstates':
+                if child.getNamespace() == NS_CHATSTATES:
                     self.chatstate = child.getName()
-                    self.composing_xep = 'XEP-0085'
                     break
-            # No XEP-0085 support, fallback to XEP-0022
-            if not self.chatstate:
-                chatstate_child = self.stanza.getTag('x',
-                    namespace=xmpp.NS_EVENT)
-                if chatstate_child:
-                    self.chatstate = 'active'
-                    self.composing_xep = 'XEP-0022'
-                    if not self.msgtxt and chatstate_child.getTag('composing'):
-                        self.chatstate = 'composing'
 
 class HttpAuthReceivedEvent(nec.NetworkIncomingEvent):
     name = 'http-auth-received'
@@ -1170,7 +1159,6 @@ class ChatstateReceivedEvent(nec.NetworkIncomingEvent):
         self.jid = self.msg_obj.jid
         self.fjid = self.msg_obj.fjid
         self.resource = self.msg_obj.resource
-        self.composing_xep = self.msg_obj.composing_xep
         self.chatstate = self.msg_obj.chatstate
         return True
 
@@ -2177,7 +2165,6 @@ class MessageOutgoingEvent(nec.NetworkIncomingEvent):
         self.subject = ''
         self.chatstate = None
         self.msg_id = None
-        self.composing_xep = None
         self.resource = None
         self.user_nick = None
         self.xhtml = None
