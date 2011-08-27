@@ -1,3 +1,13 @@
+Gajim 0.15 (XX XX 2011)
+
+  * Plugin system
+  * Whiteboard (via a plugin)
+  * Message archiving
+  * Stream managment
+  * IBB
+  * Nested roster group
+  * Roster filtrering
+
 Gajim 0.14.4 (22 July 2011)
 
   * Fix translation issue
