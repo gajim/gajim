@@ -114,8 +114,9 @@ class Smacks():
         # Ask for service discovery, etc..
         if stanza.getTag('item-not-found'):
             self.resuming = False
-            self.negociate()
-            self.con._discover_server_at_connection(self.con.connection)
+            # we need to bind a resource
+            self._owner.NonBlockingBind.resuming = False
+            self._owner._on_auth_bind(None)
             return
 
         # Doesn't support resumption
