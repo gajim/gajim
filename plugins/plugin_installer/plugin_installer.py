@@ -432,7 +432,8 @@ class Ftp(threading.Thread):
                     print 'ERROR: cannot read file "%s"' % filename
                     os.unlink(filename)
         self.ftp.quit()
-        self.window.emit('plugin_downloaded', self.remote_dirs)
+        gobject.idle_add(self.window.emit, 'plugin_downloaded',
+            self.remote_dirs)
         gobject.source_remove(self.pulse)
 
 
