@@ -1636,6 +1636,8 @@ class Connection(CommonConnection, ConnectionHandlers):
             self._stun_servers = self._hosts = [i for i in result_array]
 
     def _request_privacy(self):
+        if not gajim.account_is_connected(self.name):
+            return
         iq = common.xmpp.Iq('get', common.xmpp.NS_PRIVACY, xmlns = '')
         id_ = self.connection.getAnID()
         iq.setID(id_)
