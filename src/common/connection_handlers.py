@@ -770,6 +770,8 @@ class ConnectionHandlersBase:
             self._nec_iq_error_received)
         gajim.ged.register_event_handler('presence-received', ged.CORE,
             self._nec_presence_received)
+        gajim.ged.register_event_handler('gc-presence-received', ged.CORE,
+            self._nec_gc_presence_received)
         gajim.ged.register_event_handler('message-received', ged.CORE,
             self._nec_message_received)
         gajim.ged.register_event_handler('decrypted-message-received', ged.CORE,
@@ -780,6 +782,8 @@ class ConnectionHandlersBase:
             self._nec_iq_error_received)
         gajim.ged.remove_event_handler('presence-received', ged.CORE,
             self._nec_presence_received)
+        gajim.ged.remove_event_handler('gc-presence-received', ged.CORE,
+            self._nec_gc_presence_received)
         gajim.ged.remove_event_handler('message-received', ged.CORE,
             self._nec_message_received)
         gajim.ged.remove_event_handler('decrypted-message-received', ged.CORE,
@@ -922,10 +926,15 @@ class ConnectionHandlersBase:
             # there won't be any sessions here if the contact terminated
             # their sessions before going offline (which we do)
             for sess in self.get_sessions(jid):
-                if obj.fjid != str(sess.jid):
+                sess_fjid = str(sess.jid)
+                if sess.resource:
+                    sess_fjid += '/' + sess.resource
+                if obj.fjid != sess_fjid:
                     continue
                 if sess.control:
                     sess.control.no_autonegotiation = False
+                if sess.enable_encryption:
+                    sess.terminate_e2e()
 
         if gajim.config.get('log_contact_status_changes') and \
         gajim.config.should_log(self.name, obj.jid):
@@ -940,6 +949,15 @@ class ConnectionHandlersBase:
                     'or remove it (all history will be lost).') % LOG_DB_PATH
                 self.dispatch('DB_ERROR', (pritext, sectext))
             our_jid = gajim.get_jid_from_account(self.name)
+
+    def _nec_gc_presence_received(self, obj):
+        if obj.conn.name != self.name:
+            return
+        for sess in self.get_sessions(obj.fjid):
+            if obj.fjid != sess.jid:
+                continue
+            if sess.enable_encryption:
+                sess.terminate_e2e()
 
     def _nec_message_received(self, obj):
         if obj.conn.name != self.name:
