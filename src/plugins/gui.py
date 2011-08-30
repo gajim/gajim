@@ -113,7 +113,8 @@ class PluginsWindow(object):
         self.plugin_homepage_linkbutton.set_property('sensitive', True)
 
         desc_textbuffer = self.plugin_description_textview.get_buffer()
-        desc_textbuffer.set_text(plugin.description)
+        from plugins.plugins_i18n import _
+        desc_textbuffer.set_text(_(plugin.description))
         self.plugin_description_textview.set_property('sensitive', True)
         self.uninstall_plugin_button.set_property('sensitive',
                                     gajim.PLUGINS_DIRS[1] in plugin.__path__)

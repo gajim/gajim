@@ -393,6 +393,7 @@ class PluginManager(object):
         :todo: add scanning packages
         :todo: add scanning zipped modules
         '''
+        from plugins.plugins_i18n import _
         plugins_found = []
         conf = ConfigParser.ConfigParser()
         fields = ('name', 'short_name', 'version', 'description', 'authors',
@@ -460,6 +461,9 @@ class PluginManager(object):
                     conf.remove_section('info')
 
                     plugins_found.append(module_attr)
+                    # set plugin localization
+                    plugin_module = dir(module)[-1]
+                    getattr(module, plugin_module)._ = _
 
                 except TypeError, type_error:
                     pass

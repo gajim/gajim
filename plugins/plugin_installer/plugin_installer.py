@@ -35,7 +35,6 @@ from plugins import GajimPlugin
 from plugins.helpers import log_calls, log
 from dialogs import WarningDialog, HigDialog
 from plugins.gui import GajimPluginConfigDialog
-from common import i18n
 
 
 class PluginInstaller(GajimPlugin):
@@ -74,7 +73,7 @@ class PluginInstaller(GajimPlugin):
         self.window.connect('destroy', self.on_win_destroy)
         self.GTK_BUILDER_FILE_PATH = self.local_file_path('config_dialog.ui')
         self.xml = gtk.Builder()
-        self.xml.set_translation_domain(i18n.APP)
+        self.xml.set_translation_domain('gajim_plugins')
         self.xml.add_objects_from_file(self.GTK_BUILDER_FILE_PATH, ['hpaned2'])
         hpaned = self.xml.get_object('hpaned2')
         self.page_num = self.notebook.append_page(hpaned,
@@ -228,7 +227,7 @@ class PluginInstaller(GajimPlugin):
             label.set_ellipsize(pango.ELLIPSIZE_END)
             self.plugin_homepage_linkbutton1.set_property('sensitive', True)
             desc_textbuffer = self.plugin_description_textview1.get_buffer()
-            desc_textbuffer.set_text(model.get_value(iter, 5))
+            desc_textbuffer.set_text(_(model.get_value(iter, 5)))
             self.plugin_description_textview1.set_property('sensitive', True)
         else:
             self._clear_available_plugin_info()
