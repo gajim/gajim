@@ -1005,7 +1005,8 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                 self.msgtxt = _('error while sending %(message)s ( %(error)s )'\
                     ) % {'message': self.msgtxt,
                     'error': self.stanza.getErrorMsg()}
-                self.stanza.delChild('html')
+                if self.stanza.getTag('html'):
+                    self.stanza.delChild('html')
             # message from a gc without a resource
             self.mtype = 'groupchat'
 
