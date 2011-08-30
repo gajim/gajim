@@ -1148,8 +1148,10 @@ class EncryptedStanzaSession(ArchivingStanzaSession):
         return xmpp.DataField(name=name, typ='hidden', value=dhs)
 
     def terminate_e2e(self):
-        self.terminate()
         self.enable_encryption = False
+        if self.control:
+            self.control.print_session_details()
+        self.terminate()
 
     def acknowledge_termination(self):
         StanzaSession.acknowledge_termination(self)
