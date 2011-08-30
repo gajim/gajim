@@ -441,6 +441,7 @@ class PluginInstallerPluginConfigDialog(GajimPluginConfigDialog):
         self.GTK_BUILDER_FILE_PATH = self.plugin.local_file_path(
             'config_dialog.ui')
         self.xml = gtk.Builder()
+        self.xml.set_translation_domain('gajim_plugins')
         self.xml.add_objects_from_file(self.GTK_BUILDER_FILE_PATH, ['hbox111'])
         hbox = self.xml.get_object('hbox111')
         self.child.pack_start(hbox)
