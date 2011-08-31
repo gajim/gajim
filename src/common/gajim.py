@@ -156,8 +156,12 @@ try:
 except ImportError:
     HAVE_GPG = False
 else:
-    from os import system
-    if system('gpg -h >/dev/null 2>&1'):
+    import os
+    if os.name == 'nt':
+        gpg_cmd = 'gpg -h >null 2>&1'
+    else:
+        gpg_cmd = 'gpg -h >/dev/null 2>&1'
+    if os.system(gpg_cmd):
         HAVE_GPG = False
 
 # Depends on use_latex option. Will be correctly set after we config options are
