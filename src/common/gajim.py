@@ -158,7 +158,7 @@ except ImportError:
 else:
     import os
     if os.name == 'nt':
-        gpg_cmd = 'gpg -h >null 2>&1'
+        gpg_cmd = 'gpg -h >nul 2>&1'
     else:
         gpg_cmd = 'gpg -h >/dev/null 2>&1'
     if os.system(gpg_cmd):
