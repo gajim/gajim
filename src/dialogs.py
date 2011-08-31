@@ -1270,7 +1270,7 @@ class AboutDialog:
             text = open(copying_file_path).read()
             dlg.set_license(text)
 
-        dlg.set_comments('%s\n%s %s\n%s %s' % (_('A GTK+ jabber client'),
+        dlg.set_comments('%s\n%s %s\n%s %s' % (_('A GTK+ Jabber/XMPP client'),
             _('GTK+ Version:'), self.tuple2str(gtk.gtk_version), \
             _('PyGTK Version:'), self.tuple2str(gtk.pygtk_version)))
         dlg.set_website('http://www.gajim.org/')
