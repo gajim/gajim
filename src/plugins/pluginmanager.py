@@ -540,7 +540,7 @@ class PluginManager(object):
             self.plugins.remove(plugin)
             if self._plugin_has_entry_in_global_config(plugin):
                 self._remove_plugin_entry_in_global_config(plugin)
-            del sys.modules[plugin.__module__.split('.')[-1]]
+            del sys.modules[plugin.__module__.split('.')[0]]
             del plugin.__module__.split('.')[-1]
             del plugin
 
