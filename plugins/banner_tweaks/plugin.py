@@ -53,11 +53,11 @@ class BannerTweaksPlugin(GajimPlugin):
         }
 
         self.config_default_values = {
-            'show_banner_image': (True, _('If True, Gajim will display a status icon in the banner of chat windows.')),
-            'show_banner_online_msg': (True, _('If True, Gajim will display the status message of the contact in the banner of chat windows.')),
-            'show_banner_resource': (False, _('If True, Gajim will display the resource name of the contact in the banner of chat windows.')),
-            'banner_small_fonts': (False, _('If True, Gajim will use small fonts for contact name and resource name in the banner of chat windows.')),
-            'old_chat_avatar_height': (52, _('chat_avatar_height value before plugin was activated')),
+            'show_banner_image': (True, 'If True, Gajim will display a status icon in the banner of chat windows.'),
+            'show_banner_online_msg': (True, 'If True, Gajim will display the status message of the contact in the banner of chat windows.'),
+            'show_banner_resource': (False, 'If True, Gajim will display the resource name of the contact in the banner of chat windows.'),
+            'banner_small_fonts': (False, 'If True, Gajim will use small fonts for contact name and resource name in the banner of chat windows.'),
+            'old_chat_avatar_height': (52, 'chat_avatar_height value before plugin was activated'),
         }
 
     @log_calls('BannerTweaksPlugin')
