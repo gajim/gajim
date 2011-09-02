@@ -901,7 +901,7 @@ class OptionsParser:
     def update_config_to_01401(self):
         if 'autodetect_browser_mailer' not in self.old_values or 'openwith' \
         not in self.old_values or \
-        (self.old_values['autodetect_browser_mailer'] == 'False' and \
+        (self.old_values['autodetect_browser_mailer'] == False and \
         self.old_values['openwith'] != 'custom'):
             gajim.config.set('autodetect_browser_mailer', True)
             gajim.config.set('openwith', gajim.config.DEFAULT_OPENWITH)
@@ -911,3 +911,5 @@ class OptionsParser:
         if 'use_stun_server' in self.old_values and self.old_values[
         'use_stun_server'] and not self.old_values['stun_server']:
             gajim.config.set('use_stun_server', False)
+        if os.name == 'nt':
+            gajim.config.set('autodetect_browser_mailer', True)
