@@ -1124,6 +1124,7 @@ class DecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.session = self.msg_obj.session
         self.timestamp = self.msg_obj.timestamp
         self.encrypted = self.msg_obj.encrypted
+        self.popup = False
 
         self.receipt_request_tag = self.stanza.getTag('request',
             namespace=xmpp.NS_RECEIPTS)
