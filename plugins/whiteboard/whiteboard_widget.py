@@ -39,7 +39,7 @@ class Whiteboard(object):
         self.plugin = plugin
         file_path = plugin.local_file_path('whiteboard_widget.ui')
         xml = gtk.Builder()
-        self.xml.set_translation_domain('gajim_plugins')
+        xml.set_translation_domain('gajim_plugins')
         xml.add_from_file(file_path)
         self.hbox = xml.get_object('whiteboard_hbox')
         self.canevas = goocanvas.Canvas()
