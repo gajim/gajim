@@ -45,6 +45,10 @@ class BannerTweaksPlugin(GajimPlugin):
 
     @log_calls('BannerTweaksPlugin')
     def init(self):
+        self.description = _('Allows user to tweak chat window banner '
+            'appearance (eg. make it compact).\n'
+            'Based on patch by pb in ticket #4133:\n'
+            'http://trac.gajim.org/attachment/ticket/4133.')
         self.config_dialog = BannerTweaksPluginConfigDialog(self)
 
         self.gui_extension_points = {

@@ -52,6 +52,8 @@ NS_SXE = 'urn:xmpp:sxe:0'
 class WhiteboardPlugin(GajimPlugin):
     @log_calls('WhiteboardPlugin')
     def init(self):
+        self.description = _('Shows a whiteboard in chat.'
+            ' python-pygoocanvas is required.')
         self.config_dialog = None
         self.events_handlers = {
             'jingle-request-received': (ged.GUI1, self._nec_jingle_received),

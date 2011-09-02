@@ -36,6 +36,8 @@ class LengthNotifierPlugin(GajimPlugin):
 
     @log_calls('LengthNotifierPlugin')
     def init(self):
+        self.description = _('Highlights message entry field in chat window '
+            'when given length of message is exceeded.')
         self.config_dialog = LengthNotifierPluginConfigDialog(self)
 
         self.gui_extension_points = {
@@ -43,10 +45,11 @@ class LengthNotifierPlugin(GajimPlugin):
                                                   self.disconnect_from_chat_control)
         }
 
-        self.config_default_values = {'MESSAGE_WARNING_LENGTH' : (140, 'Message length at which notification is invoked.'),
-                                                                  'WARNING_COLOR' : ('#F0DB3E', 'Background color of text entry field in chat window when notification is invoked.'),
-                                                                  'JIDS' : ([], 'JabberIDs that plugin should be used with (eg. restrict only to one microblogging bot). If empty plugin is used with every JID. [not implemented]')
-                                                                 }
+        self.config_default_values = {
+            'MESSAGE_WARNING_LENGTH' : (140, 'Message length at which notification is invoked.'),
+            'WARNING_COLOR' : ('#F0DB3E', 'Background color of text entry field in chat window when notification is invoked.'),
+            'JIDS' : ([], 'JabberIDs that plugin should be used with (eg. restrict only to one microblogging bot). If empty plugin is used with every JID. [not implemented]')
+            }
 
     @log_calls('LengthNotifierPlugin')
     def textview_length_warning(self, tb, chat_control):

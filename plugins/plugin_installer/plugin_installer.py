@@ -41,6 +41,7 @@ class PluginInstaller(GajimPlugin):
 
     @log_calls('PluginInstallerPlugin')
     def init(self):
+        self.description = _('Install and upgrade plugins from ftp')
         self.config_dialog = PluginInstallerPluginConfigDialog(self)
         self.config_default_values = {'ftp_server': ('ftp.gajim.org', '')}
 

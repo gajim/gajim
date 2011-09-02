@@ -36,6 +36,8 @@ class AcronymsExpanderPlugin(GajimPlugin):
 
     @log_calls('AcronymsExpanderPlugin')
     def init(self):
+        self.description = _('Replaces acronyms (or other strings) '
+            'with given expansions/substitutes.')
         self.config_dialog = None
 
         self.gui_extension_points = {
