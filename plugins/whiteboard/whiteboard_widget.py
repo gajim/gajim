@@ -27,7 +27,6 @@ except:
     HAS_GOOCANVAS = False
 from common.xmpp import Node
 from common import gajim
-from common import i18n
 from dialogs import FileChooserDialog
 
 '''
@@ -40,7 +39,7 @@ class Whiteboard(object):
         self.plugin = plugin
         file_path = plugin.local_file_path('whiteboard_widget.ui')
         xml = gtk.Builder()
-        xml.set_translation_domain(i18n.APP)
+        self.xml.set_translation_domain('gajim_plugins')
         xml.add_from_file(file_path)
         self.hbox = xml.get_object('whiteboard_hbox')
         self.canevas = goocanvas.Canvas()
