@@ -36,6 +36,7 @@ class RosterButtonsPlugin(GajimPlugin):
 
     @log_calls('RosterButtonsPlugin')
     def init(self):
+        self.description = _('Adds quick action buttons to roster window.')
         self.GTK_BUILDER_FILE_PATH = self.local_file_path('roster_buttons.ui')
         self.roster_vbox = gajim.interface.roster.xml.get_object('roster_vbox2')
         self.show_offline_contacts_menuitem = gajim.interface.roster.xml.get_object('show_offline_contacts_menuitem')

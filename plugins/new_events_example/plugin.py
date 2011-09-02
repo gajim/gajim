@@ -41,6 +41,8 @@ class NewEventsExamplePlugin(GajimPlugin):
 
     @log_calls('NewEventsExamplePlugin')
     def init(self):
+        self.description = _('Shows how to generate new network events based '
+            'on existing one using Network Events Controller.')
         self.config_dialog = None
         #self.gui_extension_points = {}
         #self.config_default_values = {}

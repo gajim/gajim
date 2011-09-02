@@ -44,6 +44,8 @@ class GoogleTranslationPlugin(GajimPlugin):
 
     @log_calls('GoogleTranslationPlugin')
     def init(self):
+        self.description = _('Translates (currently only incoming)'
+            'messages using Google Translate.')
         self.config_dialog = None
         #self.gui_extension_points = {}
         self.config_default_values = {

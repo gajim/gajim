@@ -36,6 +36,7 @@ class EventsDumpPlugin(GajimPlugin):
 
     @log_calls('EventsDumpPlugin')
     def init(self):
+        self.description = _('Dumps info about selected events to console.')
         self.config_dialog = None
         #self.gui_extension_points = {}
         #self.config_default_values = {}
