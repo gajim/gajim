@@ -156,6 +156,11 @@ common.configpaths.gajimpaths.init_profile(profile)
 del profile
 
 if os.name == 'nt':
+    plugins_locale_dir = str(os.path.join(common.configpaths.gajimpaths[
+        'PLUGINS_USER'], 'locale'))
+    libintl.bindtextdomain('gajim_plugins', plugins_locale_dir)
+    libintl.bind_textdomain_codeset('gajim_plugins', 'UTF-8')
+
     class MyStderr(object):
         _file = None
         _error = None
