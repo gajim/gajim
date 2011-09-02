@@ -26,7 +26,6 @@ from common import gajim
 from plugins import GajimPlugin
 from plugins.helpers import log_calls, log
 from plugins.gui import GajimPluginConfigDialog
-from common import i18n
 from common import ged
 from common import helpers
 
@@ -222,6 +221,7 @@ class TriggersPluginConfigDialog(GajimPluginConfigDialog):
         self.GTK_BUILDER_FILE_PATH = self.plugin.local_file_path(
             'config_dialog.ui')
         self.xml = gtk.Builder()
+        self.xml.set_translation_domain('gajim_plugins')
         self.xml.add_objects_from_file(self.GTK_BUILDER_FILE_PATH,
             ['vbox', 'liststore1', 'liststore2'])
         vbox = self.xml.get_object('vbox')
