@@ -43,9 +43,9 @@ class LengthNotifierPlugin(GajimPlugin):
                                                   self.disconnect_from_chat_control)
         }
 
-        self.config_default_values = {'MESSAGE_WARNING_LENGTH' : (140, _('Message length at which notification is invoked.')),
-                                                                  'WARNING_COLOR' : ('#F0DB3E', _('Background color of text entry field in chat window when notification is invoked.')),
-                                                                  'JIDS' : ([], _('JabberIDs that plugin should be used with (eg. restrict only to one microblogging bot). If empty plugin is used with every JID. [not implemented]'))
+        self.config_default_values = {'MESSAGE_WARNING_LENGTH' : (140, 'Message length at which notification is invoked.'),
+                                                                  'WARNING_COLOR' : ('#F0DB3E', 'Background color of text entry field in chat window when notification is invoked.'),
+                                                                  'JIDS' : ([], 'JabberIDs that plugin should be used with (eg. restrict only to one microblogging bot). If empty plugin is used with every JID. [not implemented]')
                                                                  }
 
     @log_calls('LengthNotifierPlugin')

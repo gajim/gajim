@@ -48,14 +48,14 @@ class GoogleTranslationPlugin(GajimPlugin):
         #self.gui_extension_points = {}
         self.config_default_values = {
             'from_lang' :
-                (u'en', _(u'Language of text to be translated')),
+                (u'en', u'Language of text to be translated'),
             'to_lang' :
-                (u'fr', _(u'Language to which translation will be made')),
+                (u'fr', u'Language to which translation will be made'),
             'user_agent' :
                 (u'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.12) '
                 'Gecko/20080213 Firefox/2.0.0.11',
-                _(u'User Agent data to be used with urllib2 '
-                'when connecting to Google Translate service'))}
+                u'User Agent data to be used with urllib2 '
+                'when connecting to Google Translate service')}
 
         #self.events_handlers = {}
 
