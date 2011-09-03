@@ -175,7 +175,7 @@ class PluginInstaller(GajimPlugin):
         for i in xrange(len(self.available_plugins_model)):
             self.available_plugins_model[i][4] = False
         self.progressbar.hide()
-        WarningDialog('Ftp error', error_text, self.window)
+        WarningDialog(_('Ftp error'), error_text, self.window)
 
     def on_plugin_downloaded(self, widget, plugin_dirs):
         for _dir in plugin_dirs:
@@ -212,7 +212,7 @@ class PluginInstaller(GajimPlugin):
                 self.installed_plugins_model.append([plugin, plugin.name,
                     is_active])
         dialog = HigDialog(None, gtk.MESSAGE_INFO, gtk.BUTTONS_OK,
-            '', 'All selected plugins downloaded')
+            '', _('All selected plugins downloaded'))
         dialog.set_modal(False)
         dialog.set_transient_for(self.window)
         dialog.popup()
@@ -334,7 +334,7 @@ class Ftp(threading.Thread):
     def run(self):
         try:
             gobject.idle_add(self.progressbar.set_text,
-                'Connecting to server')
+                _('Connecting to server'))
             self.ftp = ftplib.FTP(self.server)
             self.ftp.login()
             self.ftp.cwd('plugins')
@@ -342,12 +342,12 @@ class Ftp(threading.Thread):
                 self.plugins_dirs = self.ftp.nlst()
                 progress_step = 1.0 / len(self.plugins_dirs)
                 gobject.idle_add(self.progressbar.set_text,
-                    'Scan files on the server')
+                    _('Scan files on the server'))
                 for dir_ in self.plugins_dirs:
                     fract = self.progressbar.get_fraction() + progress_step
                     gobject.idle_add(self.progressbar.set_fraction, fract)
                     gobject.idle_add(self.progressbar.set_text,
-                        'Read "%s"' % dir_)
+                        _('Read "%s"') % dir_)
                     try:
                         self.ftp.retrbinary('RETR %s/manifest.ini' % dir_,
                             self.handleDownload)
@@ -378,7 +378,7 @@ class Ftp(threading.Thread):
     def download_plugin(self):
         gobject.idle_add(self.progressbar.show)
         self.pulse = gobject.timeout_add(150, self.progressbar_pulse)
-        gobject.idle_add(self.progressbar.set_text, 'Create a list of files')
+        gobject.idle_add(self.progressbar.set_text, _('Create a list of files'))
         for remote_dir in self.remote_dirs:
 
             def nlstr(dir_, subdir=None):
@@ -422,7 +422,7 @@ class Ftp(threading.Thread):
             # downloading files
             for filename in files:
                 gobject.idle_add(self.progressbar.set_text,
-                    'Downloading "%s"' % filename)
+                    _('Downloading "%s"') % filename)
                 full_filename = os.path.join(local_dir, filename)
                 try:
                     self.ftp.retrbinary('RETR /%s' % filename,
