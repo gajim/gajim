@@ -120,8 +120,11 @@ class WhiteboardPlugin(GajimPlugin):
                 if control.contact.supports(NS_JINGLE_SXE) and \
                 control.contact.supports(NS_SXE):
                     base.button.set_sensitive(True)
+                    base.button.set_tooltip_text(_('Show whiteboard'))
                 else:
                     base.button.set_sensitive(False)
+                    base.button.set_tooltip_text(_('Client on the other side '
+                        'does not support the whiteboard'))
 
     @log_calls('WhiteboardPlugin')
     def show_request_dialog(self, account, fjid, jid, sid, content_types):
@@ -267,7 +270,7 @@ class Base(object):
         self.sid = None
 
     def create_buttons(self):
-        # create juick button
+        # create whiteboard button
         actions_hbox = self.chat_control.xml.get_object('actions_hbox')
         self.button = gtk.ToggleButton(label=None, use_underline=True)
         self.button.set_property('relief', gtk.RELIEF_NONE)
