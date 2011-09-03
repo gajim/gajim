@@ -78,7 +78,7 @@ class PluginInstaller(GajimPlugin):
         self.xml.add_objects_from_file(self.GTK_BUILDER_FILE_PATH, ['hpaned2'])
         hpaned = self.xml.get_object('hpaned2')
         self.page_num = self.notebook.append_page(hpaned,
-            gtk.Label('Available'))
+            gtk.Label(_('Available')))
 
         widgets_to_extract = ('plugin_name_label1',
         'available_treeview', 'progressbar', 'inslall_upgrade_button',
