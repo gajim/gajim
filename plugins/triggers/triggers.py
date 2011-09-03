@@ -24,7 +24,7 @@ import sys
 
 from common import gajim
 from plugins import GajimPlugin
-from plugins.helpers import log_calls, log
+from plugins.helpers import log_calls
 from plugins.gui import GajimPluginConfigDialog
 from common import ged
 from common import helpers
@@ -38,7 +38,7 @@ class Triggers(GajimPlugin):
         self.config_dialog = TriggersPluginConfigDialog(self)
         self.config_default_values = {}
 
-        self.events_handlers = {'notification' : (ged.PREGUI, self._nec_notif),
+        self.events_handlers = {'notification': (ged.PREGUI, self._nec_notif),
             'decrypted-message-received': (ged.PREGUI2,
             self._nec_decrypted_message_received),
             'presence-received': (ged.PREGUI, self._nec_presence_received)}
@@ -436,7 +436,7 @@ class TriggersPluginConfigDialog(GajimPluginConfigDialog):
         while iter2:
             num = model[iter2][0]
             model[iter2][0] = num - 1
-            self.config[num-1] = self.config[num].copy()
+            self.config[num - 1] = self.config[num].copy()
             iter2 = model.iter_next(iter2)
         model.remove(iter_)
         del self.config[num]
@@ -454,7 +454,7 @@ class TriggersPluginConfigDialog(GajimPluginConfigDialog):
         self.config[self.active_num] = self.config[self.active_num - 1]
         self.config[self.active_num - 1] = conf
 
-        model[iter_][0] =self.active_num - 1
+        model[iter_][0] = self.active_num - 1
         # get previous iter
         path = model.get_path(iter_)
         iter_ = model.get_iter((path[0] - 1,))
