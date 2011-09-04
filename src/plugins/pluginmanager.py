@@ -461,12 +461,10 @@ class PluginManager(object):
                     conf.remove_section('info')
 
                     plugins_found.append(module_attr)
-                    # set plugin localization
-                    plugin_module = dir(module)[-1]
-                    getattr(module, plugin_module)._ = _
 
                 except TypeError, type_error:
-                    pass
+                    # set plugin localization
+                    module_attr._ = _
                 except ConfigParser.NoOptionError, type_error:
                     # all fields are required
                     log.debug('%s : %s' % (module_attr_name,

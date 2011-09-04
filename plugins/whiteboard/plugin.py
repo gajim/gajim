@@ -120,11 +120,12 @@ class WhiteboardPlugin(GajimPlugin):
                 if control.contact.supports(NS_JINGLE_SXE) and \
                 control.contact.supports(NS_SXE):
                     base.button.set_sensitive(True)
-                    base.button.set_tooltip_text(_('Show whiteboard'))
+                    tooltip_text = _('Show whiteboard')
                 else:
                     base.button.set_sensitive(False)
-                    base.button.set_tooltip_text(_('Client on the other side '
-                        'does not support the whiteboard'))
+                    tooltip_text = _('Client on the other side '
+                        'does not support the whiteboard')
+                base.button.set_tooltip_text(tooltip_text)
 
     @log_calls('WhiteboardPlugin')
     def show_request_dialog(self, account, fjid, jid, sid, content_types):
