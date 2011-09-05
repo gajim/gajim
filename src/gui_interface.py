@@ -2718,6 +2718,9 @@ class Interface:
         dbus_support.supported:
             import network_manager_listener
 
+        if dbus_support.supported:
+            import upower_listener
+
         # Handle gnome screensaver
         if dbus_support.supported:
             def gnome_screensaver_ActiveChanged_cb(active):
