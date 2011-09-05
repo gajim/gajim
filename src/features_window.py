@@ -111,6 +111,10 @@ class FeaturesWindow:
                 _('Ability to request your router to forward port for file transfer.'),
                 _('Requires python-gupnp-igd.'),
                 _('Feature not available under Windows.')),
+            _('UPower'): (self.gupnp_igd_available,
+                _('Ability to disconnect properly just before suspending the machine.'),
+                _('Requires upower and python-dbus.'),
+                _('Feature not available under Windows.')),
         }
 
         # name, supported
