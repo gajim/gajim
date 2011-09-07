@@ -1273,7 +1273,7 @@ class AboutDialog:
         dlg.set_comments('%s\n%s %s\n%s %s' % (_('A GTK+ Jabber/XMPP client'),
             _('GTK+ Version:'), self.tuple2str(gtk.gtk_version), \
             _('PyGTK Version:'), self.tuple2str(gtk.pygtk_version)))
-        dlg.set_website('http://www.gajim.org/')
+        dlg.set_website('http://gajim.org/')
 
         authors_file_path = self.get_path('AUTHORS')
         if authors_file_path:
