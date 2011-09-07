@@ -415,9 +415,9 @@ class PluginManager(object):
                 try:
                     module = __import__(module_name)
                 except ValueError, value_error:
-                    pass
+                    log.debug(value_error)
                 except ImportError, import_error:
-                    pass
+                    log.debug(import_error)
 
             elif os.path.isdir(file_path) and scan_dirs:
                 module_name = elem_name
@@ -425,9 +425,9 @@ class PluginManager(object):
                 try:
                     module = __import__(module_name)
                 except ValueError, value_error:
-                    pass
+                    log.debug(value_error)
                 except ImportError, import_error:
-                    pass
+                    log.debug(import_error)
 
 
             if module is None:
