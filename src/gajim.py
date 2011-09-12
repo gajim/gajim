@@ -35,15 +35,39 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
+import os
+import sys
+import warnings
+
+if os.name == 'nt':
+    log_path = os.path.join(os.environ['APPDATA'], 'Gajim')
+    if not os.path.exists(log_path):
+        os.mkdir(log_path, 0700)
+    log_file = os.path.join(log_path, 'gajim.log')
+    fout = open(log_file, 'a')
+    sys.stdout = fout
+    sys.stderr = fout
+
+    warnings.filterwarnings(action='ignore')
+
+    if os.path.isdir('gtk'):
+        # Used to create windows installer with GTK included
+        paths = os.environ['PATH']
+        list_ = paths.split(';')
+        new_list = []
+        for p in list_:
+            if p.find('gtk') < 0 and p.find('GTK') < 0:
+                new_list.append(p)
+        new_list.insert(0, os.path.join(os.getcwd(), 'gtk', 'lib'))
+        new_list.insert(0, os.path.join(os.getcwd(), 'gtk', 'bin'))
+        os.environ['PATH'] = ';'.join(new_list)
+
 from common import demandimport
 demandimport.enable()
 demandimport.ignore += ['gobject._gobject', 'libasyncns', 'i18n',
     'logging.NullHandler', 'dbus.glib', 'dbus.service',
     'command_system.implementation.standard', 'OpenSSL.SSL', 'OpenSSL.crypto',
     'common.sleepy', 'DLFCN', 'dl', 'xml.sax', 'xml.sax.handler', 'ic']
-
-import os
-import sys
 
 if os.name == 'nt':
     import locale
@@ -69,32 +93,6 @@ if os.name == 'nt':
     libintl = ctypes.cdll.LoadLibrary(libintl_path)
     libintl.bindtextdomain(APP, DIR)
     libintl.bind_textdomain_codeset(APP, 'UTF-8')
-
-import warnings
-
-if os.name == 'nt':
-    log_path = os.path.join(os.environ['APPDATA'], 'Gajim')
-    if not os.path.exists(log_path):
-        os.mkdir(log_path, 0700)
-    log_file = os.path.join(log_path, 'gajim.log')
-    fout = open(log_file, 'a')
-    sys.stdout = fout
-    sys.stderr = fout
-
-    warnings.filterwarnings(action='ignore')
-
-    if os.path.isdir('gtk'):
-        # Used to create windows installer with GTK included
-        paths = os.environ['PATH']
-        list_ = paths.split(';')
-        new_list = []
-        for p in list_:
-            if p.find('gtk') < 0 and p.find('GTK') < 0:
-                new_list.append(p)
-        new_list.insert(0, 'gtk/lib')
-        new_list.insert(0, 'gtk/bin')
-        os.environ['PATH'] = ';'.join(new_list)
-        os.environ['GTK_BASEPATH'] = 'gtk'
 
 if os.name == 'nt':
     # needed for docutils
