@@ -432,7 +432,13 @@ class SignalObject(dbus.service.Object):
         connected_account, contact = self._get_account_and_contact(account, jid)
         if connected_account:
             connection = gajim.connections[connected_account]
-            connection.send_message(jid, message, keyID, type_, subject)
+            sessions = connection.get_sessions(jid)
+            if sessions:
+                session = sessions[0]
+            else:
+                session = connection.make_new_session(jid)
+            connection.send_message(jid, message, keyID, type_, subject,
+                session=session)
             return DBUS_BOOLEAN(True)
         return DBUS_BOOLEAN(False)
 
