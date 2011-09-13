@@ -42,7 +42,7 @@ def H(some): return hashlib.md5(some).digest()
 def C(some): return ':'.join(some)
 
 try:
-    import kerberos
+    kerberos = __import__('kerberos')
     have_kerberos = True
 except ImportError:
     have_kerberos = False
