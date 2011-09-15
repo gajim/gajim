@@ -437,6 +437,11 @@ class SignalObject(dbus.service.Object):
                 session = sessions[0]
             else:
                 session = connection.make_new_session(jid)
+            ctrl = gajim.interface.msg_win_mgr.search_control(jid,
+                connected_account)
+            if ctrl:
+                ctrl.print_conversation(message, frm='outgoing')
+
             connection.send_message(jid, message, keyID, type_, subject,
                 session=session)
             return DBUS_BOOLEAN(True)

@@ -1427,18 +1427,6 @@ class ChatControl(ChatControlBase):
         ChatControlBase.__init__(self, self.TYPE_ID, parent_win,
                 'chat_control', contact, acct, resource)
 
-        self._dbus_message_sent_match = None
-        if dbus_support.supported:
-            bus = dbus_support.session_bus.bus()
-            try:
-                obj = bus.get_object(remote_control.SERVICE, remote_control.OBJ_PATH)
-            except:
-                # likely dbus service not started
-                pass
-            else:
-                iface = dbus.Interface(obj, remote_control.INTERFACE)
-                self._dbus_message_sent_match = iface.connect_to_signal("MessageSent", self.on_message_sent)
-
         self.gpg_is_active = False
         # for muc use:
         # widget = self.xml.get_object('muc_window_actions_button')
@@ -2253,23 +2241,6 @@ class ChatControl(ChatControlBase):
             callback_args=[contact, message, encrypted, xhtml,
             self.get_seclabel()], process_commands=process_commands)
 
-
-    def on_message_sent(self, account_and_message):
-        # this is called when an external application sends a chat
-        # message using DBus. So we likely need to update the UI
-        # accordingly.
-        message = account_and_message[1][1]
-        jid_and_resource = account_and_message[1][0]
-        if not message:
-            return
-
-        # try to filter based on jid/resource to avoid duplicate
-        # messages.
-        if jid_and_resource.find('/') > -1:
-            jid = jid_and_resource.split('/')[0]
-            if jid == self.contact.jid:
-                self.print_conversation(message, frm='outgoing')
-
     def check_for_possible_paused_chatstate(self, arg):
         """
         Did we move mouse of that window or write something in message textview
@@ -2600,10 +2571,6 @@ class ChatControl(ChatControlBase):
         # PluginSystem: removing GUI extension points connected with ChatControl
         # instance object
         gajim.plugin_manager.remove_gui_extension_point('chat_control', self)
-
-        # disconnect from the dbus MessageSent signal.
-        if self._dbus_message_sent_match:
-            self._dbus_message_sent_match.remove()
 
         gajim.ged.remove_event_handler('pep-received', ged.GUI1,
             self._nec_pep_received)
