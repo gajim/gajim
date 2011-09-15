@@ -21,6 +21,7 @@ different handlers to different XMPP stanzas and namespaces
 """
 
 import simplexml, sys, locale
+import re
 from xml.parsers.expat import ExpatError
 from plugin import PlugIn
 from protocol import (NS_STREAMS, NS_XMPP_STREAMS, NS_HTTP_BIND, Iq, Presence,
@@ -92,6 +93,24 @@ class XMPPDispatcher(PlugIn):
 
         # Let the dispatcher know if there is support for stream management
         self.sm = None
+
+        # \ufddo -> \ufdef range
+        c = u'\ufdd0'
+        r = c.encode('utf8')
+        while (c < u'\ufdef'):
+            c = unichr(ord(c) + 1)
+            r += '|' + c.encode('utf8')
+
+        # \ufffe-\uffff, \u1fffe-\u1ffff, ..., \u10fffe-\u10ffff
+        c = u'\ufffe'
+        r += '|' + c.encode('utf8')
+        r += '|' + unichr(ord(c) + 1).encode('utf8')
+        while (c < u'\U0010fffe'):
+            c = unichr(ord(c) + 0x10000)
+            r += '|' + c.encode('utf8')
+            r += '|' + unichr(ord(c) + 1).encode('utf8')
+
+        self.invalid_chars_re = re.compile(r)
 
     def getAnID(self):
         global outgoingID
@@ -193,6 +212,7 @@ class XMPPDispatcher(PlugIn):
         # disconnect method will never be called.
         # Is this intended?
         # also look at transports start_disconnect()
+        data = re.sub(self.invalid_chars_re, u'\ufffd'.encode('utf-8'), data)
         for handler in self._cycleHandlers:
             handler(self)
         if len(self._pendingExceptions) > 0:
