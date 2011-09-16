@@ -492,6 +492,9 @@ class EncryptedStanzaSession(ArchivingStanzaSession):
         for child in parsed.getChildren():
             stanza.addChild(node=child)
 
+        # replace non-character unicode
+        stranza = self.conn.connection.Dispatcher.replace_non_character(stanza)
+
         return stanza
 
     def decrypt(self, ciphertext):
