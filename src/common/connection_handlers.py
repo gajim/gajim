@@ -978,6 +978,8 @@ class ConnectionHandlersBase:
             if keyID:
                 def decrypt_thread(encmsg, keyID, obj):
                     decmsg = self.gpg.decrypt(encmsg, keyID)
+                    decmsg = self.connection.Dispatcher.replace_non_character(
+                        decmsg)
                     # \x00 chars are not allowed in C (so in GTK)
                     obj.msgtxt = helpers.decode_string(decmsg.replace('\x00',
                         ''))

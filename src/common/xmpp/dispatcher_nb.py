@@ -197,6 +197,9 @@ class XMPPDispatcher(PlugIn):
             raise ValueError('Incorrect stream start: (%s,%s). Terminating.'
                     % (tag, ns))
 
+    def replace_non_character(self, data):
+        return re.sub(self.invalid_chars_re, u'\ufffd'.encode('utf-8'), data)
+
     def ProcessNonBlocking(self, data):
         """
         Check incoming stream for data waiting
@@ -212,7 +215,7 @@ class XMPPDispatcher(PlugIn):
         # disconnect method will never be called.
         # Is this intended?
         # also look at transports start_disconnect()
-        data = re.sub(self.invalid_chars_re, u'\ufffd'.encode('utf-8'), data)
+        data = self.replace_non_character(data)
         for handler in self._cycleHandlers:
             handler(self)
         if len(self._pendingExceptions) > 0:
