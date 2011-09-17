@@ -3,7 +3,7 @@
   <requires lib="gtk+" version="2.16"/>
   <!-- interface-naming-policy toplevel-contextual -->
   <object class="GtkWindow" id="roster_window">
-    <property name="width_request">250</property>
+    <property name="width_request">85</property>
     <property name="height_request">200</property>
     <property name="title" translatable="yes">Gajim</property>
     <property name="role">roster</property>
