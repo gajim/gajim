@@ -49,11 +49,11 @@ options = {
 
 setup(
     name='Gajim',
-    version='0.14.1',
+    version='0.15',
     description='A full featured Jabber client',
     author='Gajim Development Team',
-    url='http://www.gajim.org/',
-    download_url='http://www.gajim.org/downloads.php',
+    url='http://gajim.org/',
+    download_url='http://gajim.org/downloads.php',
     license='GPL',
     options=options,
     executables=[Executable('src/gajim.py', icon='data/pixmaps/gajim.ico'),
