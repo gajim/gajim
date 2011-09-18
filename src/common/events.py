@@ -122,8 +122,10 @@ class Events:
     def remove_account(self, account):
         del self._events[account]
 
-    def create_event(self, type_, parameters, time_ = time.time(),
-    show_in_roster = False, show_in_systray = True):
+    def create_event(self, type_, parameters, time_=None,
+    show_in_roster=False, show_in_systray=True):
+        if not time_:
+            time_ = time.time()
         return Event(type_, time_, parameters, show_in_roster,
                 show_in_systray)
 
