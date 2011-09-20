@@ -192,11 +192,14 @@ class NotificationResponseManager:
         self.interface.connect_to_signal('NotificationClosed', self.on_closed)
 
     def on_action_invoked(self, id_, reason):
-        self.received.append((id_, time.time(), reason))
         if id_ in self.pending:
             notification = self.pending[id_]
             notification.on_action_invoked(id_, reason)
             del self.pending[id_]
+            return
+        # got an action on popup that isn't handled yet? Maybe user clicked too
+        # fast. Remember it.
+        self.received.append((id_, time.time(), reason))
         if len(self.received) > 20:
             curt = time.time()
             for rec in self.received:
@@ -410,9 +413,8 @@ class DesktopNotification:
                     self.notify_another_way(e)
 
     def attach_by_id(self, id_):
-        self.id = id_
         notification_response_manager.attach_to_interface()
-        notification_response_manager.add_pending(self.id, self)
+        notification_response_manager.add_pending(id_, self)
 
     def notify_another_way(self, e):
         gajim.log.debug('Error when trying to use notification daemon: %s' % \
