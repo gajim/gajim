@@ -605,7 +605,7 @@ class SignalObject(dbus.service.Object):
         Show the window(s) with next pending event in tabbed/group chats
         """
         if gajim.events.get_nb_events():
-            account, jid, event = gajim.events.get_first_event()
+            account, jid, event = gajim.events.get_first_systray_event()
             if not event:
                 return
             gajim.interface.handle_event(account, jid, event.type_)
