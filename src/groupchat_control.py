@@ -138,12 +138,12 @@ class PrivateChatControl(ChatControl):
 
     def __init__(self, parent_win, gc_contact, contact, account, session):
         room_jid = gc_contact.room_jid
-        room_ctrl = gajim.interface.msg_win_mgr.get_gc_control(room_jid,
+        self.room_ctrl = gajim.interface.msg_win_mgr.get_gc_control(room_jid,
             account)
         if room_jid in gajim.interface.minimized_controls[account]:
-            room_ctrl = gajim.interface.minimized_controls[account][room_jid]
-        if room_ctrl:
-            self.room_name = room_ctrl.name
+            self.room_ctrl = gajim.interface.minimized_controls[account][room_jid]
+        if self.room_ctrl:
+            self.room_name = self.room_ctrl.name
         else:
             self.room_name = room_jid
         self.gc_contact = gc_contact
@@ -153,6 +153,9 @@ class PrivateChatControl(ChatControl):
             self._nec_caps_received_pm)
         gajim.ged.register_event_handler('gc-presence-received', ged.GUI1,
             self._nec_gc_presence_received)
+
+    def get_our_nick(self):
+        return self.room_ctrl.nick
 
     def shutdown(self):
         super(PrivateChatControl, self).shutdown()
