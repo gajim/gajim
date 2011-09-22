@@ -1106,9 +1106,10 @@ class Logger:
         self.write(type_, with_, message=msg, tim=tim)
 
     def _nec_gc_message_received(self, obj):
-        tim_int = int(float(time.mktime(obj.timestamp)))
+        tim_f = float(time.mktime(obj.timestamp))
+        tim_int = int(tim_f)
         if gajim.config.should_log(obj.conn.name, obj.jid) and not \
-        tim_int <= obj.conn.last_history_time[obj.jid] and obj.msgtxt and \
+        tim_int < obj.conn.last_history_time[obj.jid] and obj.msgtxt and \
         obj.nick:
             # if not obj.nick, it means message comes from room itself
             # usually it hold description and can be send at each connection
@@ -1118,7 +1119,7 @@ class Logger:
                 # store in memory time of last message logged.
                 # this will also be saved in rooms_last_message_time table
                 # when we quit this muc
-                obj.conn.last_history_time[obj.jid] = time.mktime(obj.timestamp)
+                obj.conn.last_history_time[obj.jid] = tim_f
 
             except exceptions.PysqliteOperationalError, e:
                 obj.conn.dispatch('DB_ERROR', (_('Disk Write Error'), str(e)))
