@@ -2344,6 +2344,9 @@ class ChatControl(ChatControlBase):
         elif isinstance(self.session, ArchivingStanzaSession):
             self.print_archiving_session_details()
 
+    def get_our_nick(self):
+        return gajim.nicks[self.account]
+
     def print_conversation(self, text, frm='', tim=None, encrypted=False,
                     subject=None, xhtml=None, simple=False, xep0184_id=None,
                     displaymarking=None):
@@ -2400,7 +2403,7 @@ class ChatControl(ChatControlBase):
                 name = contact.get_shown_name()
             else:
                 kind = 'outgoing'
-                name = gajim.nicks[self.account]
+                name = self.get_our_nick()
                 if not xhtml and not (encrypted and self.gpg_is_active) and \
                 gajim.config.get('rst_formatting_outgoing_messages'):
                     from common.rst_xhtml_generator import create_xhtml
@@ -2827,7 +2830,7 @@ class ChatControl(ChatControlBase):
             if row[1] in (constants.KIND_CHAT_MSG_SENT,
                             constants.KIND_SINGLE_MSG_SENT):
                 kind = 'outgoing'
-                name = gajim.nicks[self.account]
+                name = self.get_our_nick()
             elif row[1] in (constants.KIND_SINGLE_MSG_RECV,
                             constants.KIND_CHAT_MSG_RECV):
                 kind = 'incoming'
