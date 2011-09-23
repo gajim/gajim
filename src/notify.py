@@ -236,7 +236,7 @@ class DesktopNotification:
 
     def __init__(self, event_type, jid, account, msg_type='',
     path_to_image=None, title=None, text=None):
-        self.path_to_image = path_to_image
+        self.path_to_image = os.path.abspath(path_to_image)
         self.event_type = event_type
         self.title = title
         self.text = text
@@ -366,11 +366,11 @@ class DesktopNotification:
                 hints['category'] = dbus.String(ntype)
                 # it seems notification-daemon doesn't like empty text
                 if self.text:
-                    text = self.text
+                    if len(self.text) > 200:
+                        text = '%s\n...' % self.text[:200]
                 else:
                     text = ' '
                 if os.environ.get('KDE_FULL_SESSION') == 'true':
-                    self.path_to_image = os.path.abspath(self.path_to_image)
                     text = '<table style=\'padding: 3px\'><tr><td>' \
                         '<img src=\"%s\"></td><td width=20> </td>' \
                         '<td>%s</td></tr></table>' % (self.path_to_image,
