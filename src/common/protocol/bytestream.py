@@ -597,6 +597,12 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
                 }
                 for attr in item.getAttrs():
                     host_dict[attr] = item.getAttr(attr)
+                if 'host' not in host_dict:
+                    continue
+                if 'jid' not in host_dict:
+                    continue
+                if 'port' not in host_dict:
+                    continue
                 streamhosts.append(host_dict)
         if file_props is None:
             if sid in self.files_props:
