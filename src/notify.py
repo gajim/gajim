@@ -366,6 +366,7 @@ class DesktopNotification:
                 hints['category'] = dbus.String(ntype)
                 # it seems notification-daemon doesn't like empty text
                 if self.text:
+                    text = self.text
                     if len(self.text) > 200:
                         text = '%s\n...' % self.text[:200]
                 else:
