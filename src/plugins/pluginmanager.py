@@ -144,6 +144,13 @@ class PluginManager(object):
             self.add_plugin(plugin_class)
 
     @log_calls('PluginManager')
+    def get_active_plugin(self, plugin_name):
+        for plugin in self.active_plugins:
+            if plugin.short_name == plugin_name:
+                return plugin
+        return None
+
+    @log_calls('PluginManager')
     def gui_extension_point(self, gui_extpoint_name, *args):
         '''
         Invokes all handlers (from plugins) for particular GUI extension point
