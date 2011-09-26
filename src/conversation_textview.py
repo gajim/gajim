@@ -1039,6 +1039,15 @@ class ConversationTextview(gobject.GObject):
         Is called by detect_and_print_special_text and prints special text
         (emots, links, formatting)
         """
+
+
+        # PluginSystem: adding GUI extension point for ConversationTextview
+        self.plugin_modified = False
+        gajim.plugin_manager.gui_extension_point('print_special_text', self,
+            special_text, other_tags, graphics)
+        if self.plugin_modified:
+            return
+
         tags = []
         use_other_tags = True
         text_is_valid_uri = False
