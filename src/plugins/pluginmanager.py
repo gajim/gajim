@@ -215,9 +215,13 @@ class PluginManager(object):
                 extension point name) to identify element to be removed.
         :type args: tuple
         '''
-
         if gui_extpoint_name in self.gui_extension_points:
-            self.gui_extension_points[gui_extpoint_name].remove(args)
+            extension_points = list(self.gui_extension_points[gui_extpoint_name])
+            for ext_point in extension_points:
+                if args[0] in ext_point:
+                    self.gui_extension_points[gui_extpoint_name].remove(
+                        ext_point)
+
 
     @log_calls('PluginManager')
     def _add_gui_extension_point_call_to_list(self, gui_extpoint_name, *args):
