@@ -493,7 +493,10 @@ class EncryptedStanzaSession(ArchivingStanzaSession):
             stanza.addChild(node=child)
 
         # replace non-character unicode
-        stranza = self.conn.connection.Dispatcher.replace_non_character(stanza)
+        body = stanza.getBody()
+        if body:
+            stanza.setBody(
+                self.conn.connection.Dispatcher.replace_non_character(body))
 
         return stanza
 
