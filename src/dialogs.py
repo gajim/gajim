@@ -2481,7 +2481,8 @@ class JoinGroupchatWindow:
                     _('The group chat Jabber ID has not allowed characters.'))
             return
 
-        if gajim.contacts.get_contact(self.account, room_jid):
+        if gajim.contacts.get_contact(self.account, room_jid) and \
+        not gajim.contacts.get_contact(account, room_jid).is_groupchat():
             ErrorDialog(_('This is not a group chat'),
                 _('%s is not the name of a group chat.') % room_jid)
             return
