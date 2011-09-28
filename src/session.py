@@ -406,13 +406,11 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
                                 not_acceptable)
 
                         self.dialog = dialogs.YesNoDialog(_('Confirm these '
-                            'session options'), _('''The remote client wants '
-                            'to negotiate an session with these features:
-
-%s
-
-Are these options acceptable?''') % (negotiation.describe_features(
-                            ask_user)),
+                            'session options'),
+                            _('The remote client wants to negotiate a session '
+                            'with these features:\n\n%s\n\nAre these options '
+                            'acceptable?''') % (
+                            negotiation.describe_features(ask_user)),
                             on_response_yes=accept_nondefault_options,
                             on_response_no=reject_nondefault_options)
                     else:
@@ -436,7 +434,18 @@ Are these options acceptable?''') % (negotiation.describe_features(
 
                 if ask_user:
                     def accept_nondefault_options(is_checked):
-                        dialog.destroy()
+                        if dialog:
+                            dialog.destroy()
+
+                        if is_checked:
+                            allow_no_log_for = gajim.config.get_per(
+                                'accounts', self.conn.name,
+                                'allow_no_log_for').split()
+                            jid = str(self.jid)
+                            if jid not in allow_no_log_for:
+                                allow_no_log_for.append(jid)
+                                gajim.config.set_per('accounts', self.conn.name,
+                                'allow_no_log_for', ' '.join(allow_no_log_for))
 
                         negotiated.update(ask_user)
 
@@ -449,10 +458,18 @@ Are these options acceptable?''') % (negotiation.describe_features(
                         self.reject_negotiation()
                         dialog.destroy()
 
-                    dialog = dialogs.YesNoDialog(_('Confirm these session options'),
-                            _('The remote client selected these options:\n\n%s\n\n'
-                            'Continue with the session?') % (
+                    allow_no_log_for = gajim.config.get_per('accounts',
+                        self.conn.name, 'allow_no_log_for').split()
+                    if str(self.jid) in allow_no_log_for:
+                        dialog = None
+                        accept_nondefault_options(False)
+                    else:
+                        dialog = dialogs.YesNoDialog(_('Confirm these session '
+                            'options'),
+                            _('The remote client selected these options:\n\n%s'
+                            '\n\nContinue with the session?') % (
                             negotiation.describe_features(ask_user)),
+                            _('Always accept for this contact'),
                             on_response_yes = accept_nondefault_options,
                             on_response_no = reject_nondefault_options)
                 else:
