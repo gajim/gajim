@@ -988,6 +988,12 @@ if __name__ == '__main__':
     log = logging.getLogger()
     gaj.Interface()
 
+    # create fake gajim.plugin_manager.gui_extension_point method for tests
+    def gui_extension_point(*args):
+        pass
+    gajim.plugin_manager = gaj.Interface()
+    gajim.plugin_manager.gui_extension_point = gui_extension_point
+
     htmlview = ConversationTextview(None)
 
     path = gtkgui_helpers.get_icon_path('gajim-muc_separator')
