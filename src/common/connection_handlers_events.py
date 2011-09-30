@@ -721,6 +721,7 @@ PresenceHelperEvent):
         try:
             self.get_jid_resource()
         except Exception:
+            log.warn('Invalid JID: %s, ignoring it' % self.stanza.getFrom())
             return
         jid_list = gajim.contacts.get_jid_list(self.conn.name)
         self.timestamp = None
