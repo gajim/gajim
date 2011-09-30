@@ -27,6 +27,9 @@ import helpers
 import dataforms
 import gajim
 
+import logging
+log = logging.getLogger('gajim.c.commands')
+
 class AdHocCommand:
     commandnode = 'command'
     commandname = 'The Command'
@@ -371,7 +374,11 @@ class ConnectionCommands:
         Send disco#info result for query for command (JEP-0050, example 6.).
         Return True if the result was sent, False if not
         """
-        jid = helpers.get_full_jid_from_iq(iq_obj)
+        try:
+            jid = helpers.get_full_jid_from_iq(iq_obj)
+        except helpers.InvalidFormat:
+            log.warn('Invalid JID: %s, ignoring it' % iq_obj.getFrom())
+            return
         node = iq_obj.getTagAttr('query', 'node')
 
         if node not in self.__commands: return False
