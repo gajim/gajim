@@ -1903,7 +1903,7 @@ class Interface:
         """
 
         if gajim.contacts.get_contact(account, room_jid) and \
-        gajim.contacts.get_contact(account, room_jid).is_transport():
+        gajim.contacts.get_contact(account, room_jid).is_groupchat():
             dialogs.ErrorDialog(_('This is not a group chat'),
                 _('%s is not the name of a group chat.') % room_jid)
             return
