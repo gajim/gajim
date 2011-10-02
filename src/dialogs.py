@@ -2482,7 +2482,7 @@ class JoinGroupchatWindow:
             return
 
         if gajim.contacts.get_contact(self.account, room_jid) and \
-        gajim.contacts.get_contact(self.account, room_jid).is_groupchat():
+        not gajim.contacts.get_contact(self.account, room_jid).is_groupchat():
             ErrorDialog(_('This is not a group chat'),
                 _('%s is not the name of a group chat.') % room_jid)
             return
