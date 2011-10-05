@@ -3764,18 +3764,18 @@ class AccountCreationWizardWindow:
             self.data_form_widget = dataforms_widget.DataFormWidget(dataform)
         else:
             self.data_form_widget = FakeDataForm(obj.config)
-        empty_config = True
-        for field in obj.config:
-            if field == 'instructions':
-                continue
-            if not obj.config[field]:
-                # ignore empty tag
-                continue
-            empty_config = False
-            break
-        if not obj.is_form and empty_config:
-            self.forward_button.set_sensitive(False)
-            self.notebook.set_current_page(4) # show form page
+            empty_config = True
+            for field in obj.config:
+                if field in ('key', 'instructions', 'x', 'registered'):
+                    continue
+                if not obj.config[field]:
+                    # ignore empty tag
+                    continue
+                empty_config = False
+                break
+            if not obj.is_form and empty_config:
+                self.forward_button.set_sensitive(False)
+                self.notebook.set_current_page(4) # show form page
         self.data_form_widget.show_all()
         self.xml.get_object('form_vbox').pack_start(self.data_form_widget)
         self.ssl_fingerprint = obj.ssl_fingerprint
