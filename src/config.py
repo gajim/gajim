@@ -3768,14 +3768,12 @@ class AccountCreationWizardWindow:
             for field in obj.config:
                 if field in ('key', 'instructions', 'x', 'registered'):
                     continue
-                if not obj.config[field]:
-                    # ignore empty tag
-                    continue
                 empty_config = False
                 break
-            if not obj.is_form and empty_config:
+            if empty_config:
                 self.forward_button.set_sensitive(False)
                 self.notebook.set_current_page(4) # show form page
+                return
         self.data_form_widget.show_all()
         self.xml.get_object('form_vbox').pack_start(self.data_form_widget)
         self.ssl_fingerprint = obj.ssl_fingerprint
