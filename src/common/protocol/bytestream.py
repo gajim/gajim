@@ -721,11 +721,6 @@ class ConnectionIBBytestream(ConnectionBytestream):
     def __init__(self):
         ConnectionBytestream.__init__(self)
         self._streams = {}
-        self._ampnode = xmpp.Node(xmpp.NS_AMP + ' amp', payload=[xmpp.Node(
-            'rule', {'condition': 'deliver-at', 'value': 'stored',
-            'action': 'error'}), xmpp.Node('rule',
-            {'condition': 'match-resource', 'value': 'exact',
-            'action':'error'})])
         self.last_sent_ibb_id = None
 
     def IBBIqHandler(self, conn, stanza):
@@ -840,9 +835,9 @@ class ConnectionIBBytestream(ConnectionBytestream):
                     file_props['started'] = True
                     if file_props['seq'] == 65536:
                         file_props['seq'] = 0
-                    self.last_sent_ibb_id = self.connection.send(xmpp.Protocol('iq',
-                        file_props['direction'][1:], payload=[datanode,
-                        self._ampnode]))
+                    self.last_sent_ibb_id = self.connection.send(xmpp.Protocol(
+                        name='iq', to=file_props['direction'][1:], typ='set',
+                        payload=[datanode]))
                     current_time = time.time()
                     file_props['elapsed-time'] += current_time - file_props[
                         'last-time']
