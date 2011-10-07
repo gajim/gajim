@@ -2065,7 +2065,8 @@ class Connection(CommonConnection, ConnectionHandlers):
         if not gajim.account_is_connected(self.name):
             return
         self.seclabel_catalogue_request(to, callback)
-        iq = common.xmpp.Iq(typ='get')
+        server = gajim.get_jid_from_account(self.name).split("@")[1] # Really, no better way?
+        iq = common.xmpp.Iq(typ='get', to=server)
         iq2 = iq.addChild(name='catalog', namespace=common.xmpp.NS_SECLABEL_CATALOG)
         iq2.setAttr('to', to)
         self.connection.send(iq)
