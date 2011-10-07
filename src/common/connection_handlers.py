@@ -1413,16 +1413,12 @@ ConnectionJingle, ConnectionIBBytestream):
         log.debug('SecLabelCB')
         query = iq_obj.getTag('catalog')
         to = query.getAttr('to')
-        items = query.getTags('securitylabel')
+        items = query.getTags('item')
         labels = {}
         ll = []
         for item in items:
-            display_tag = item.getTag('displaymarking')
-            if display_tag:
-                label = display_tag.getData()
-            else:
-                label = ''
-            labels[label] = item
+            label = item.getAttr('selector')
+            labels[label] = item.getTag('securitylabel')
             ll.append(label)
         if to not in self.seclabel_catalogues:
             self.seclabel_catalogues[to] = [[], None, None]
