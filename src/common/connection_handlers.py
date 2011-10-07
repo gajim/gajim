@@ -1418,7 +1418,11 @@ ConnectionJingle, ConnectionIBBytestream):
         labels = {}
         ll = []
         for item in items:
-            label = item.getTag('displaymarking').getData()
+            display_tag = item.getTag('displaymarking')
+            if display_tag:
+                label = display_tag.getData()
+            else:
+                label = ''
             labels[label] = item
             ll.append(label)
         if to not in self.seclabel_catalogues:
