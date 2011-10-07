@@ -26,7 +26,7 @@ Global Events Dispatcher module.
 '''
 
 import logging
-log = logging.getLogger('gajim.common.ged')
+log = logging.getLogger('gajim.c.ged')
 
 PRECORE = 10
 CORE = 20
