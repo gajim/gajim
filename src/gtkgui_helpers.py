@@ -1081,6 +1081,7 @@ def __label_size_allocate(widget, allocation):
         return
 
     # set wrap width to the pango.Layout of the labels ###
+    widget.set_alignment(0.0, 0.0)
     layout.set_width (allocation.width * pango.SCALE)
     lh = layout.get_size()[1]
 
