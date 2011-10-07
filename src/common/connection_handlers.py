@@ -926,7 +926,7 @@ class ConnectionHandlersBase:
             # there won't be any sessions here if the contact terminated
             # their sessions before going offline (which we do)
             for sess in self.get_sessions(jid):
-                sess_fjid = str(sess.jid)
+                sess_fjid = sess.jid.getStripped()
                 if sess.resource:
                     sess_fjid += '/' + sess.resource
                 if obj.fjid != sess_fjid:
