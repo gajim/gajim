@@ -234,6 +234,9 @@ class GajimPluginConfig():
     def keys(self):
         return self.data.keys()
 
+    def items(self):
+        return self.data.items()
+
     @log_calls('GajimPluginConfig')
     def save(self):
         fd = open(self.FILE_PATH, 'wb')
@@ -242,7 +245,7 @@ class GajimPluginConfig():
 
     @log_calls('GajimPluginConfig')
     def load(self):
-        if os.path.isfile('qwe'):
+        if os.path.isfile(self.FILE_PATH):
             fd = open(self.FILE_PATH, 'rb')
             try:
                 self.data = cPickle.load(fd)
