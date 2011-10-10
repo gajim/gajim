@@ -32,6 +32,9 @@ from common import gajim
 from plugins.helpers import log_calls, log
 from plugins.gui import GajimPluginConfigDialog
 
+import logging
+log = logging.getLogger('gajim.p.plugin')
+
 
 class GajimPlugin(object):
     '''
@@ -191,17 +194,15 @@ class GajimPlugin(object):
     def deactivate(self):
         pass
 
-import shelve
-import UserDict
+import cPickle
 
-class GajimPluginConfig(UserDict.DictMixin):
+class GajimPluginConfig():
     @log_calls('GajimPluginConfig')
     def __init__(self, plugin):
         self.plugin = plugin
         self.FILE_PATH = os.path.join(gajim.PLUGINS_CONFIG_DIR,
             self.plugin.short_name).decode('utf-8').encode(
             locale.getpreferredencoding())
-        #log.debug('FILE_PATH = %s'%(self.FILE_PATH))
         self.data = None
 
     @log_calls('GajimPluginConfig')
@@ -222,17 +223,51 @@ class GajimPluginConfig(UserDict.DictMixin):
         del self.data[key]
         self.save()
 
+    @log_calls('GajimPluginConfig')
+    def __contains__(self, key):
+        return key in self.data
+
+    def __iter__(self):
+        for k in self.data.keys():
+            yield k
+
     def keys(self):
         return self.data.keys()
 
     @log_calls('GajimPluginConfig')
     def save(self):
-        self.data.sync()
-        #log.debug(str(self.data))
+        fd = open(self.FILE_PATH, 'wb')
+        cPickle.dump(self.data, fd)
+        fd.close()
 
     @log_calls('GajimPluginConfig')
     def load(self):
-        self.data = shelve.open(self.FILE_PATH)
+        if os.path.isfile('qwe'):
+            fd = open(self.FILE_PATH, 'rb')
+            try:
+                self.data = cPickle.load(fd)
+                fd.close()
+            except EOFError:
+                fd.close()
+                try:
+                    import shelve
+                    s = shelve.open(self.FILE_PATH)
+                    for (k, v) in s.iteritems():
+                        self.data[k] = v
+                    s.close()
+                    self.save()
+                except:
+                    log.warn('%s plugin config file not readable. Saving it as '
+                        '%s and creating a new one' % (self.plugin.short_name,
+                        self.FILE_PATH + '.bak'))
+                    if os.path.exists(self.FILE_PATH + '.bak'):
+                        os.rename(self.FILE_PATH, self.FILE_PATH + '.bak')
+                        self.data = {}
+                        self.save()
+        else:
+            self.data = {}
+            self.save()
+
 
 class GajimPluginException(Exception):
     pass
