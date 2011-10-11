@@ -203,7 +203,7 @@ class GajimPluginConfig():
         self.FILE_PATH = os.path.join(gajim.PLUGINS_CONFIG_DIR,
             self.plugin.short_name).decode('utf-8').encode(
             locale.getpreferredencoding())
-        self.data = None
+        self.data = {}
 
     @log_calls('GajimPluginConfig')
     def __getitem__(self, key):
