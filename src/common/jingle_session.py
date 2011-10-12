@@ -672,9 +672,10 @@ class JingleSession(object):
 
     def __content_remove(self, content, reason=None):
         assert self.state != JingleStates.ended
-        stanza, jingle = self.__make_jingle('content-remove', reason=reason)
-        self.__append_content(jingle, content)
-        self.connection.connection.send(stanza)
+        if self.connection.connection and self.connection.connected > 1:
+            stanza, jingle = self.__make_jingle('content-remove', reason=reason)
+            self.__append_content(jingle, content)
+            self.connection.connection.send(stanza)
         # TODO: this will fail if content is not an RTP content
         gajim.nec.push_incoming_event(JingleDisconnectedReceivedEvent(None,
             conn=self.connection, jingle_session=self, media=content.media,
