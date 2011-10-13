@@ -310,9 +310,16 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
     def on_seclabels_ready(self):
         lb = self.seclabel_combo.get_model()
         lb.clear()
-        for label in gajim.connections[self.account].seclabel_catalogues[self.contact.jid][2]:
+        i = 0
+        sel = 0
+        catalogue = gajim.connections[self.account].seclabel_catalogues[
+            self.contact.jid]
+        for label in catalogue[2]:
             lb.append([label])
-        self.seclabel_combo.set_active(0)
+            if label == catalogue[3]:
+                sel = i
+            i += 1
+        self.seclabel_combo.set_active(sel)
         self.seclabel_combo.set_no_show_all(False)
         self.seclabel_combo.show_all()
 
