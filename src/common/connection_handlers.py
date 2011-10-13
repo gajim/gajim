@@ -1416,14 +1416,18 @@ ConnectionJingle, ConnectionIBBytestream):
         items = query.getTags('item')
         labels = {}
         ll = []
+        default = None
         for item in items:
             label = item.getAttr('selector')
             labels[label] = item.getTag('securitylabel')
             ll.append(label)
+            if item.getAttr('default') == 'true':
+                default = label
         if to not in self.seclabel_catalogues:
-            self.seclabel_catalogues[to] = [[], None, None]
+            self.seclabel_catalogues[to] = [[], None, None, None]
         self.seclabel_catalogues[to][1] = labels
         self.seclabel_catalogues[to][2] = ll
+        self.seclabel_catalogues[to][3] = default
         for callback in self.seclabel_catalogues[to][0]:
             callback()
         self.seclabel_catalogues[to][0] = []
