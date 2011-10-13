@@ -250,7 +250,7 @@ class GajimPluginConfig():
             try:
                 self.data = cPickle.load(fd)
                 fd.close()
-            except EOFError:
+            except:
                 fd.close()
                 try:
                     import shelve
