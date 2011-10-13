@@ -3067,7 +3067,12 @@ class SingleMessageWindow:
                 _('Please make sure you are connected with "%s".') % self.account)
             return
         if isinstance(self.to, list):
-            sender_list = [i[0].jid + '/' + i[0].resource for i in self.to]
+            sender_list = []
+            for i in self.to:
+                if i[0].resource:
+                    sender_list.append(i[0].jid + '/' + i[0].resource)
+                else:
+                    sender_list.append(i[0].jid)
         else:
             sender_list = [self.to_entry.get_text().decode('utf-8')]
 
