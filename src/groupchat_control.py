@@ -1495,6 +1495,14 @@ class GroupchatControl(ChatControlBase):
         # http://www.xmpp.org/extensions/xep-0045.html#registrar-statuscodes-\
         # init
         if obj.status_code:
+            if '110' in obj.status_code:
+                # We just join the room
+                if self.room_jid in gajim.automatic_rooms[self.account] and \
+                gajim.automatic_rooms[self.account][self.room_jid]['invities']:
+                    if self.room_jid not in gajim.interface.instances[
+                    self.account]['gc_config']:
+                        gajim.connections[self.account].request_gc_config(
+                            self.room_jid)
             if '100' in obj.status_code:
                 # Can be a message (see handle_event_gc_config_change in
                 # gajim.py)
