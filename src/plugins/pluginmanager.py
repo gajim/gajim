@@ -480,6 +480,14 @@ class PluginManager(object):
                     # all fields are required
                     log.debug('%s : %s' % (module_attr_name,
                         'wrong manifest file. all fields are required!'))
+                except ConfigParser.NoSectionError, type_error:
+                    # info section are required
+                    log.debug('%s : %s' % (module_attr_name,
+                        'wrong manifest file. info section are required!'))
+                except ConfigParser.MissingSectionHeaderError, type_error:
+                    # info section are required
+                    log.debug('%s : %s' % (module_attr_name,
+                        'wrong manifest file. section are required!'))
 
         return plugins_found
 
