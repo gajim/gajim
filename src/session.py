@@ -73,7 +73,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
             if self.control and self.control.resource:
                 self.control.change_resource(self.resource)
 
-        msg_id = None
+        obj.msg_id = None
 
         if obj.mtype == 'chat':
             if not obj.stanza.getTag('body') and obj.chatstate is None:
@@ -89,7 +89,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
                     msg_to_log = obj.xhtml
                 else:
                     msg_to_log = obj.msgtxt
-                msg_id = gajim.logger.write(log_type, obj.fjid,
+                obj.msg_id = gajim.logger.write(log_type, obj.fjid,
                     msg_to_log, tim=obj.timestamp, subject=obj.subject)
             except exceptions.PysqliteOperationalError, e:
                 self.conn.dispatch('ERROR', (_('Disk WriteError'), str(e)))
@@ -100,8 +100,6 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
                     'or remove it (all history will be lost).') % \
                     common.logger.LOG_DB_PATH
                 self.conn.dispatch('ERROR', (pritext, sectext))
-
-        obj.msg_id = msg_id
 
         treat_as = gajim.config.get('treat_incoming_messages')
         if treat_as:
@@ -134,8 +132,8 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
                 # Brand new message, incoming.
                 contact.our_chatstate = obj.chatstate
                 contact.chatstate = obj.chatstate
-                if msg_id: # Do not overwrite an existing msg_id with None
-                    contact.msg_id = msg_id
+                if obj.msg_id: # Do not overwrite an existing msg_id with None
+                    contact.msg_id = obj.msg_id
 
         # THIS MUST BE AFTER chatstates handling
         # AND BEFORE playsound (else we ear sounding on chatstates!)
@@ -168,8 +166,9 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
         if gajim.interface.remote_ctrl:
             gajim.interface.remote_ctrl.raise_signal('NewMessage', (
                 self.conn.name, [obj.fjid, obj.msgtxt, obj.timestamp,
-                obj.encrypted, obj.mtype, obj.subject, obj.chatstate, msg_id,
-                obj.composing_xep, obj.user_nick, obj.xhtml, obj.form_node]))
+                obj.encrypted, obj.mtype, obj.subject, obj.chatstate,
+                obj.msg_id, obj.composing_xep, obj.user_nick, obj.xhtml,
+                obj.form_node]))
 
     def roster_message2(self, obj):
         """
