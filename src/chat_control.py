@@ -1592,6 +1592,22 @@ class ChatControl(ChatControlBase):
         id_ = widget.connect('value_changed', self.on_sound_hscale_value_changed)
         self.handlers[id_] = widget
 
+        self.info_bar = gtk.InfoBar()
+        content_area = self.info_bar.get_content_area()
+        self.info_bar_label = gtk.Label()
+        self.info_bar_label.set_use_markup(True)
+        self.info_bar_label.set_alignment(0, 0)
+        content_area.add(self.info_bar_label)
+        self.info_bar.set_no_show_all(True)
+        widget = self.xml.get_object('vbox2')
+        widget.pack_start(self.info_bar, expand=False, padding=5)
+        widget.reorder_child(self.info_bar, 1)
+
+        # List of waiting infobar messages
+        self.info_bar_queue = []
+
+        self.subscribe_events()
+
         if not session:
             # Don't use previous session if we want to a specific resource
             # and it's not the same
@@ -1660,6 +1676,20 @@ class ChatControl(ChatControlBase):
         # PluginSystem: adding GUI extension point for this ChatControl
         # instance object
         gajim.plugin_manager.gui_extension_point('chat_control', self)
+
+    def subscribe_events(self):
+        """
+        Register listeners to the events class
+        """
+        gajim.events.event_added_subscribe(self.on_event_added)
+        gajim.events.event_removed_subscribe(self.on_event_removed)
+
+    def unsubscribe_events(self):
+        """
+        Unregister listeners to the events class
+        """
+        gajim.events.event_added_unsubscribe(self.on_event_added)
+        gajim.events.event_removed_unsubscribe(self.on_event_removed)
 
     def _update_toolbar(self):
         # Formatting
@@ -2598,6 +2628,8 @@ class ChatControl(ChatControlBase):
         gajim.ged.remove_event_handler('caps-received', ged.GUI1,
             self._nec_caps_received)
 
+        self.unsubscribe_events()
+
         # Send 'gone' chatstate
         self.send_chatstate('gone', self.contact)
         self.contact.chatstate = None
@@ -3109,3 +3141,139 @@ class ChatControl(ChatControlBase):
             self.print_conversation(' (', 'status', simple=True)
             self.print_conversation('%s' % (status), 'status', simple=True)
             self.print_conversation(')', 'status', simple=True)
+
+    def _info_bar_show_message(self):
+        if self.info_bar.get_visible():
+            # A message is already shown
+            return
+        if not self.info_bar_queue:
+            return
+        markup, buttons, args, type_ = self.info_bar_queue[0]
+        self.info_bar_label.set_markup(markup)
+        for button in buttons:
+            self.info_bar.add_action_widget(button, 0)
+        self.info_bar.set_message_type(type_)
+        self.info_bar.set_no_show_all(False)
+        self.info_bar.show_all()
+
+    def _add_info_bar_message(self, markup, buttons, args,
+    type_=gtk.MESSAGE_INFO):
+        self.info_bar_queue.append((markup, buttons, args, type_))
+        self._info_bar_show_message()
+
+    def _get_file_props_event(self, file_props, type_):
+        evs = gajim.events.get_events(self.account, self.contact.jid, [type_])
+        for ev in evs:
+            if ev.parameters == file_props:
+                return ev
+        return None
+
+    def _on_accept_file_request(self, widget, file_props):
+        gajim.interface.instances['file_transfers'].on_file_request_accepted(
+            self.account, self.contact, file_props)
+        ev = self._get_file_props_event(file_props, 'file-request')
+        if ev:
+            gajim.events.remove_events(self.account, self.contact.jid, event=ev)
+
+    def _on_cancel_file_request(self, widget, file_props):
+        gajim.connections[self.account].send_file_rejection(file_props)
+        ev = self._get_file_props_event(file_props, 'file-request')
+        if ev:
+            gajim.events.remove_events(self.account, self.contact.jid, event=ev)
+
+    def _got_file_request(self, file_props):
+        """
+        Show an InfoBar on top of control
+        """
+        markup = '<b>' + _('File transfer:') + '</b> ' + file_props['name']
+        if file_props['desc']:
+            markup += ' (' + file_props['desc'] + ')'
+        markup += '\n' + _('Size:') + ' ' + helpers.convert_bytes(
+            file_props['size'])
+        b1 = gtk.Button(_('_Accept'))
+        b1.connect('clicked', self._on_accept_file_request, file_props)
+        b2 = gtk.Button(stock=gtk.STOCK_CANCEL)
+        b2.connect('clicked', self._on_cancel_file_request, file_props)
+        self._add_info_bar_message(markup, [b1, b2], file_props,
+            gtk.MESSAGE_QUESTION)
+
+    def _on_open_ft_folder(self, widget, file_props):
+        if 'file-name' not in file_props:
+            return
+        path = os.path.split(file_props['file-name'])[0]
+        if os.path.exists(path) and os.path.isdir(path):
+            helpers.launch_file_manager(path)
+        ev = self._get_file_props_event(file_props, 'file-completed')
+        if ev:
+            gajim.events.remove_events(self.account, self.contact.jid, event=ev)
+
+    def _on_ok(self, widget, file_props, type_):
+        ev = self._get_file_props_event(file_props, type_)
+        if ev:
+            gajim.events.remove_events(self.account, self.contact.jid, event=ev)
+
+    def _got_file_completed(self, file_props):
+        markup = '<b>' + _('File transfer completed:') + '</b> ' + \
+            file_props['name']
+        if file_props['desc']:
+            markup += ' (' + file_props['desc'] + ')'
+        b1 = gtk.Button(_('_Open Containing Folder'))
+        b1.connect('clicked', self._on_open_ft_folder, file_props)
+        b2 = gtk.Button(stock=gtk.STOCK_OK)
+        b2.connect('clicked', self._on_ok, file_props, 'file-completed')
+        self._add_info_bar_message(markup, [b1, b2], file_props)
+
+    def _got_file_error(self, file_props, type_, pri_txt, sec_txt):
+        markup = '<b>%s:</b> %s' % (pri_txt, sec_txt)
+        b = gtk.Button(stock=gtk.STOCK_OK)
+        b.connect('clicked', self._on_ok, file_props, type_)
+        self._add_info_bar_message(markup, [b], file_props, gtk.MESSAGE_ERROR)
+
+    def on_event_added(self, event):
+        if event.account != self.account:
+            return
+        if event.jid != self.contact.jid:
+            return
+        if event.type_ == 'file-request':
+            self._got_file_request(event.parameters)
+        elif event.type_ == 'file-completed':
+            self._got_file_completed(event.parameters)
+        elif event.type_ in ('file-error', 'file-stopped'):
+            msg_err = ''
+            if event.parameters['error'] == -1:
+                msg_err = _('Remote contact stopped transfer')
+            elif event.parameters['error'] == -6:
+                msg_err = _('Error opening file')
+            self._got_file_error(event.parameters, event.type_,
+                _('File transfer stopped'), msg_err)
+        elif event.type_ in ('file-request-error', 'file-send-error'):
+            self._got_file_error(event.parameters, event.type_,
+                _('File transfer cancelled'),
+                _('Connection with peer cannot be established.'))
+
+    def on_event_removed(self, event_list):
+        """
+        Called when one or more events are removed from the event list
+        """
+        for ev in event_list:
+            if ev.account != self.account:
+                continue
+            if ev.jid != self.contact.jid:
+                continue
+            if ev.type_ not in ('file-request', 'file-completed', 'file-error',
+            'file-stopped', 'file-request-error', 'file-send-error'):
+                continue
+            i = 0
+            for ib_msg in self.info_bar_queue:
+                if ib_msg[2] == ev.parameters:
+                    self.info_bar_queue.remove(ib_msg)
+                    if i == 0:
+                        # We are removing the one currently displayed
+                        area = self.info_bar.get_action_area()
+                        for b in area.get_children():
+                            area.remove(b)
+                        self.info_bar.hide()
+                        # show next one?
+                        gobject.idle_add(self._info_bar_show_message)
+                    break
+                i += 1
