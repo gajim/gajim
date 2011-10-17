@@ -320,6 +320,70 @@ class FileTransfersWindow:
         self.add_transfer(account, contact, file_props)
         gajim.connections[account].send_file_approval(file_props)
 
+    def on_file_request_accepted(self, account, contact, file_props):
+        def on_ok(widget, account, contact, file_props):
+            file_path = dialog2.get_filename()
+            file_path = gtkgui_helpers.decode_filechooser_file_paths(
+                (file_path,))[0]
+            if os.path.exists(file_path):
+                # check if we have write permissions
+                if not os.access(file_path, os.W_OK):
+                    file_name = os.path.basename(file_path)
+                    dialogs.ErrorDialog(
+                        _('Cannot overwrite existing file "%s"' % file_name),
+                        _('A file with this name already exists and you do not '
+                        'have permission to overwrite it.'))
+                    return
+                stat = os.stat(file_path)
+                dl_size = stat.st_size
+                file_size = file_props['size']
+                dl_finished = dl_size >= file_size
+
+                def on_response(response):
+                    if response < 0:
+                        return
+                    elif response == 100:
+                        file_props['offset'] = dl_size
+                    dialog2.destroy()
+                    self._start_receive(file_path, account, contact, file_props)
+
+                dialog = dialogs.FTOverwriteConfirmationDialog(
+                    _('This file already exists'), _('What do you want to do?'),
+                    propose_resume=not dl_finished, on_response=on_response)
+                dialog.set_transient_for(dialog2)
+                dialog.set_destroy_with_parent(True)
+                return
+            else:
+                dirname = os.path.dirname(file_path)
+                if not os.access(dirname, os.W_OK) and os.name != 'nt':
+                    # read-only bit is used to mark special folder under
+                    # windows, not to mark that a folder is read-only.
+                    # See ticket #3587
+                    dialogs.ErrorDialog(_('Directory "%s" is not writable') % \
+                        dirname, _('You do not have permission to create files '
+                        'in this directory.'))
+                    return
+            dialog2.destroy()
+            self._start_receive(file_path, account, contact, file_props)
+
+        def on_cancel(widget, account, contact, file_props):
+            dialog2.destroy()
+            gajim.connections[account].send_file_rejection(file_props)
+
+        dialog2 = dialogs.FileChooserDialog(
+            title_text=_('Save File as...'),
+            action=gtk.FILE_CHOOSER_ACTION_SAVE,
+            buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+            gtk.STOCK_SAVE, gtk.RESPONSE_OK),
+            default_response=gtk.RESPONSE_OK,
+            current_folder=gajim.config.get('last_save_dir'),
+            on_response_ok=(on_ok, account, contact, file_props),
+            on_response_cancel=(on_cancel, account, contact, file_props))
+
+        dialog2.set_current_name(file_props['name'])
+        dialog2.connect('delete-event', lambda widget, event:
+            on_cancel(widget, account, contact, file_props))
+
     def show_file_request(self, account, contact, file_props):
         """
         Show dialog asking for comfirmation and store location of new file
@@ -340,64 +404,7 @@ class FileTransfersWindow:
         dialog = None
 
         def on_response_ok(account, contact, file_props):
-
-            def on_ok(widget, account, contact, file_props):
-                file_path = dialog2.get_filename()
-                file_path = gtkgui_helpers.decode_filechooser_file_paths(
-                        (file_path,))[0]
-                if os.path.exists(file_path):
-                    # check if we have write permissions
-                    if not os.access(file_path, os.W_OK):
-                        file_name = os.path.basename(file_path)
-                        dialogs.ErrorDialog(_('Cannot overwrite existing file "%s"' % file_name),
-                        _('A file with this name already exists and you do not have permission to overwrite it.'))
-                        return
-                    stat = os.stat(file_path)
-                    dl_size = stat.st_size
-                    file_size = file_props['size']
-                    dl_finished = dl_size >= file_size
-
-                    def on_response(response):
-                        if response < 0:
-                            return
-                        elif response == 100:
-                            file_props['offset'] = dl_size
-                        dialog2.destroy()
-                        self._start_receive(file_path, account, contact, file_props)
-
-                    dialog = dialogs.FTOverwriteConfirmationDialog(
-                            _('This file already exists'), _('What do you want to do?'),
-                            propose_resume=not dl_finished, on_response=on_response)
-                    dialog.set_transient_for(dialog2)
-                    dialog.set_destroy_with_parent(True)
-                    return
-                else:
-                    dirname = os.path.dirname(file_path)
-                    if not os.access(dirname, os.W_OK) and os.name != 'nt':
-                        # read-only bit is used to mark special folder under windows,
-                        # not to mark that a folder is read-only. See ticket #3587
-                        dialogs.ErrorDialog(_('Directory "%s" is not writable') % dirname, _('You do not have permission to create files in this directory.'))
-                        return
-                dialog2.destroy()
-                self._start_receive(file_path, account, contact, file_props)
-
-            def on_cancel(widget, account, contact, file_props):
-                dialog2.destroy()
-                gajim.connections[account].send_file_rejection(file_props)
-
-            dialog2 = dialogs.FileChooserDialog(
-                    title_text=_('Save File as...'),
-                    action=gtk.FILE_CHOOSER_ACTION_SAVE,
-                    buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
-                    gtk.STOCK_SAVE, gtk.RESPONSE_OK),
-                    default_response=gtk.RESPONSE_OK,
-                    current_folder=gajim.config.get('last_save_dir'),
-                    on_response_ok=(on_ok, account, contact, file_props),
-                    on_response_cancel=(on_cancel, account, contact, file_props))
-
-            dialog2.set_current_name(file_props['name'])
-            dialog2.connect('delete-event', lambda widget, event:
-                    on_cancel(widget, account, contact, file_props))
+            self.on_file_request_accepted(account, contact, file_props)
 
         def on_response_cancel(account, file_props):
             gajim.connections[account].send_file_rejection(file_props)
