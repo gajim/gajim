@@ -3199,8 +3199,16 @@ class ChatControl(ChatControlBase):
             return
         markup, buttons, args, type_ = self.info_bar_queue[0]
         self.info_bar_label.set_markup(markup)
+
+        # Remove old buttons
+        area = self.info_bar.get_action_area()
+        for b in area.get_children():
+            area.remove(b)
+
+        # Add new buttons
         for button in buttons:
             self.info_bar.add_action_widget(button, 0)
+
         self.info_bar.set_message_type(type_)
         self.info_bar.set_no_show_all(False)
         self.info_bar.show_all()
@@ -3318,9 +3326,6 @@ class ChatControl(ChatControlBase):
                     self.info_bar_queue.remove(ib_msg)
                     if i == 0:
                         # We are removing the one currently displayed
-                        area = self.info_bar.get_action_area()
-                        for b in area.get_children():
-                            area.remove(b)
                         self.info_bar.hide()
                         # show next one?
                         gobject.idle_add(self._info_bar_show_message)
