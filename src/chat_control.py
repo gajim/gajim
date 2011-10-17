@@ -3185,11 +3185,11 @@ class ChatControl(ChatControlBase):
         """
         Show an InfoBar on top of control
         """
-        markup = '<b>' + _('File transfer:') + '</b> ' + file_props['name']
+        markup = '<b>%s:</b> %s' % (_('File transfer'), file_props['name'])
         if file_props['desc']:
-            markup += ' (' + file_props['desc'] + ')'
-        markup += '\n' + _('Size:') + ' ' + helpers.convert_bytes(
-            file_props['size'])
+            markup += ' (%s)' % file_props['desc']
+        markup += '\n%s: %s' % (_('Size'), helpers.convert_bytes(
+            file_props['size']))
         b1 = gtk.Button(_('_Accept'))
         b1.connect('clicked', self._on_accept_file_request, file_props)
         b2 = gtk.Button(stock=gtk.STOCK_CANCEL)
@@ -3213,10 +3213,10 @@ class ChatControl(ChatControlBase):
             gajim.events.remove_events(self.account, self.contact.jid, event=ev)
 
     def _got_file_completed(self, file_props):
-        markup = '<b>' + _('File transfer completed:') + '</b> ' + \
-            file_props['name']
+        markup = '<b>%s:</b> %s' % (_('File transfer completed'),
+            file_props['name'])
         if file_props['desc']:
-            markup += ' (' + file_props['desc'] + ')'
+            markup += ' (%s)' % file_props['desc']
         b1 = gtk.Button(_('_Open Containing Folder'))
         b1.connect('clicked', self._on_open_ft_folder, file_props)
         b2 = gtk.Button(stock=gtk.STOCK_OK)
