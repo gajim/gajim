@@ -2388,6 +2388,7 @@ class RosterWindow:
                     accounts_to_disconnect.append(acct)
 
             if not self.quit_on_next_offline:
+                # all accounts offline, quit
                 self.quit_gtkgui_interface()
                 return
 
