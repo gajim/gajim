@@ -2387,12 +2387,13 @@ class RosterWindow:
                     self.quit_on_next_offline += 1
                     accounts_to_disconnect.append(acct)
 
+            if not self.quit_on_next_offline:
+                self.quit_gtkgui_interface()
+                return
+
             for acct in accounts_to_disconnect:
                 self.send_status(acct, 'offline', message)
                 self.send_pep(acct, pep_dict)
-
-            if not self.quit_on_next_offline:
-                self.quit_gtkgui_interface()
 
         def on_continue2(message, pep_dict):
             # check if there is an active file transfer
