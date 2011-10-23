@@ -290,7 +290,6 @@ class Config:
             'use_stun_server': [opt_bool, False, _('If True, Gajim will try to use a STUN server when using jingle. The one in "stun_server" option, or the one given by the jabber server.')],
             'stun_server': [opt_str, '', _('STUN server to use when using jingle')],
             'show_affiliation_in_groupchat': [opt_bool, True, _('If True, Gajim will show affiliation of groupchat occupants by adding a colored square to the status icon')],
-            'test_ft_proxies_on_startup': [opt_bool, True, _('If True, Gajim will test file transfer proxies on startup to be sure it works. Openfire\'s proxies are known to fail this test even if they work.')],
     }
 
     __options_per_key = {
@@ -351,6 +350,7 @@ class Config:
                     # proxy65 for FT
                     'file_transfer_proxies': [opt_str, 'proxy.eu.jabber.org, proxy.jabber.ru, proxy.jabbim.cz'],
                     'use_ft_proxies': [opt_bool, True, _('If checked, Gajim will use your IP and proxies defined in file_transfer_proxies option for file transfer.'), True],
+                    'test_ft_proxies_on_startup': [opt_bool, True, _('If True, Gajim will test file transfer proxies on startup to be sure it works. Openfire\'s proxies are known to fail this test even if they work.')],
                     'msgwin-x-position': [opt_int, -1], # Default is to let the wm decide
                     'msgwin-y-position': [opt_int, -1], # Default is to let the wm decide
                     'msgwin-width': [opt_int, 480],
