@@ -144,7 +144,8 @@ def parseOpts():
 
 import locale
 profile, config_path = parseOpts()
-config_path = unicode(config_path, locale.getpreferredencoding())
+if config_path:
+    config_path = unicode(config_path, locale.getpreferredencoding())
 del parseOpts
 
 profile = unicode(profile, locale.getpreferredencoding())
