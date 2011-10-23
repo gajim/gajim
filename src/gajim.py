@@ -142,10 +142,11 @@ def parseOpts():
             config_path_ = a
     return profile_, config_path_
 
+import locale
 profile, config_path = parseOpts()
+config_path = unicode(config_path, locale.getpreferredencoding())
 del parseOpts
 
-import locale
 profile = unicode(profile, locale.getpreferredencoding())
 
 import common.configpaths
@@ -155,8 +156,8 @@ common.configpaths.gajimpaths.init_profile(profile)
 del profile
 
 if os.name == 'nt':
-    plugins_locale_dir = str(os.path.join(common.configpaths.gajimpaths[
-        'PLUGINS_USER'], 'locale'))
+    plugins_locale_dir = os.path.join(common.configpaths.gajimpaths[
+        'PLUGINS_USER'], 'locale').encode(locale.getpreferredencoding())
     libintl.bindtextdomain('gajim_plugins', plugins_locale_dir)
     libintl.bind_textdomain_codeset('gajim_plugins', 'UTF-8')
 
