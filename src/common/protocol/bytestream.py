@@ -620,6 +620,10 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
                             self.send_success_connect_reply, None)
                 raise xmpp.NodeProcessed
 
+        if file_props is None:
+            log.warn('Gajim got streamhosts for unknown transfer. Ignoring it.')
+            raise xmpp.NodeProcessed
+
         file_props['streamhosts'] = streamhosts
         if file_props['type'] == 'r':
             gajim.socks5queue.connect_to_hosts(self.name, sid,

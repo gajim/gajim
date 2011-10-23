@@ -3194,7 +3194,7 @@ class ChatControl(ChatControlBase):
         Show an InfoBar on top of control
         """
         markup = '<b>%s:</b> %s' % (_('File transfer'), file_props['name'])
-        if file_props['desc']:
+        if 'desc' in file_props and file_props['desc']:
             markup += ' (%s)' % file_props['desc']
         markup += '\n%s: %s' % (_('Size'), helpers.convert_bytes(
             file_props['size']))
@@ -3223,7 +3223,7 @@ class ChatControl(ChatControlBase):
     def _got_file_completed(self, file_props):
         markup = '<b>%s:</b> %s' % (_('File transfer completed'),
             file_props['name'])
-        if file_props['desc']:
+        if 'desc' in file_props and file_props['desc']:
             markup += ' (%s)' % file_props['desc']
         b1 = gtk.Button(_('_Open Containing Folder'))
         b1.connect('clicked', self._on_open_ft_folder, file_props)
