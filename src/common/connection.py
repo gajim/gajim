@@ -1719,8 +1719,10 @@ class Connection(CommonConnection, ConnectionHandlers):
             gajim.config.get_per('accounts', self.name, 'use_ft_proxies'):
                 our_fjid = helpers.parse_jid(our_jid + '/' + \
                     self.server_resource)
+                testit = gajim.config.get_per('accounts', self.name,
+                    'test_ft_proxies_on_startup')
                 gajim.proxy65_manager.resolve(obj.fjid, self.connection,
-                    our_fjid, self.name)
+                    our_fjid, default=self.name, testit=testit)
             if common.xmpp.NS_MUC in obj.features and is_muc:
                 type_ = transport_type or 'jabber'
                 self.muc_jid[type_] = obj.fjid
