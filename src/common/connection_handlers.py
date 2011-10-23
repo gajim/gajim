@@ -1888,10 +1888,13 @@ ConnectionJingle, ConnectionIBBytestream):
             'file_transfer_proxies')
         our_jid = helpers.parse_jid(gajim.get_jid_from_account(self.name) + \
             '/' + self.server_resource)
+        testit = gajim.config.get_per('accounts', self.name,
+            'test_ft_proxies_on_startup')
         if cfg_proxies:
             proxies = [e.strip() for e in cfg_proxies.split(',')]
             for proxy in proxies:
-                gajim.proxy65_manager.resolve(proxy, self.connection, our_jid)
+                gajim.proxy65_manager.resolve(proxy, self.connection, our_jid,
+                    testit=testit)
 
     def _on_roster_set(self, roster):
         gajim.nec.push_incoming_event(RosterReceivedEvent(None, conn=self,
