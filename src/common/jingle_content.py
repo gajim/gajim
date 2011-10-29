@@ -101,7 +101,6 @@ class JingleContent(object):
         Add a list of candidates to the list of remote candidates
         """
         self.transport.remote_candidates = candidates
-        pass
 
     def on_stanza(self, stanza, content, error, action):
         """
@@ -112,15 +111,14 @@ class JingleContent(object):
                 callback(stanza, content, error, action)
 
     def __on_transport_replace(self, stanza, content, error, action):
-    
         content.addChild(node=self.transport.make_transport())
-        
+
     def __on_transport_info(self, stanza, content, error, action):
         """
         Got a new transport candidate
         """
         candidates = self.transport.parse_transport_stanza(
-                content.getTag('transport'))
+            content.getTag('transport'))
         if candidates:
             self.add_remote_candidates(candidates)
 
@@ -139,7 +137,7 @@ class JingleContent(object):
         content = self.__content()
         content.addChild(node=self.transport.make_transport([candidate]))
         self.session.send_transport_info(content)
-        
+
     def send_error_candidate(self):
         """
         Sends a candidate-error when we can't connect to a candidate.
@@ -149,7 +147,7 @@ class JingleContent(object):
         tp.addChild(name='candidate-error')
         content.addChild(node=tp)
         self.session.send_transport_info(content)
-        
+
 
     def send_description_info(self):
         content = self.__content()

@@ -24,7 +24,7 @@ import xmpp
 from jingle_content import contents, JingleContent
 from jingle_transport import JingleTransportICEUDP, JingleTransportSocks5
 from common import helpers
-from common.socks5 import Socks5Receiver
+from common.socks5 import Socks5Receiver, Socks5Sender
 from common.connection_handlers_events import FileRequestReceivedEvent
 
 import logging
@@ -181,6 +181,14 @@ class JingleFileTransfer(JingleContent):
                 self.state = STATE_CAND_RECEIVED_PENDING_REPLY
 
             return
+
+        if content.getTag('transport').getTag('activated'):
+            self.state = STATE_TRANSFERING
+            jid = gajim.get_jid_without_resource(self.session.ourjid)
+            gajim.socks5queue.send_file(self.file_props,
+                self.session.connection.name, 'client')
+            return
+
         streamhost_cid = content.getTag('transport').getTag('candidate-used').\
             getAttr('cid')
         streamhost_used = None
@@ -274,7 +282,7 @@ class JingleFileTransfer(JingleContent):
         self.session.send_transport_info(content)
 
 
-    def _on_connect_error(self, to, _id, sid, code=404):
+    def _on_connect_error(self, sid):
         self.nominated_cand['our-cand'] = False
         self.send_error_candidate()
 
@@ -321,7 +329,6 @@ class JingleFileTransfer(JingleContent):
 
         receiver = self.file_props['receiver']
         sender = self.file_props['sender']
-
         sha_str = helpers.get_auth_sha(self.file_props['sid'], sender,
                 receiver)
         self.file_props['sha_str'] = sha_str
@@ -368,36 +375,52 @@ class JingleFileTransfer(JingleContent):
 
         self.state = STATE_TRANSFERING
 
-        # It tells wether we start the transfer as client or server
-        type = None
-
         if self.isOurCandUsed():
-            type = 'client'
             streamhost_used = self.nominated_cand['our-cand']
         else:
-            type = 'server'
             streamhost_used = self.nominated_cand['peer-cand']
+            
+        if streamhost_used['type'] == 'proxy':
+            self.file_props['is_a_proxy'] = True
 
-        # FIXME if streamhost_used is none where do we get the proxy host
-        if streamhost_used and streamhost_used['type'] == 'proxy':
+        if not self.weinitiate and streamhost_used['type'] == 'proxy':
+            r = gajim.socks5queue.readers
+            for reader in r:
+                if r[reader].host == streamhost_used['host'] and \
+                r[reader].connected:
+                    return
+        
+        if streamhost_used['type'] == 'proxy': 
             self.file_props['streamhost-used'] = True
-            for proxy in self.file_props['proxyhosts']:
-                if proxy['host'] == streamhost_used['host'] and \
-                proxy['port'] == streamhost_used['port'] and \
-                proxy['jid'] == streamhost_used['jid']:
-                    host_used = proxy
-                    break
-            if 'streamhosts' not in self.file_props:
-                self.file_props['streamhosts'] = []
-                self.file_props['streamhosts'].append(streamhost_used)
-                self.file_props['is_a_proxy'] = True
-                receiver = Socks5Receiver(gajim.idlequeue, streamhost_used,
-                    self.file_props['sid'], self.file_props)
-                gajim.socks5queue.add_receiver(self.session.connection.name,
-                    receiver)
-                streamhost_used['idx'] = receiver.queue_idx
+            streamhost_used['sid'] = self.file_props['sid']
+            self.file_props['streamhosts'] = []
+            self.file_props['streamhosts'].append(streamhost_used)
+            self.file_props['proxyhosts'] = []
+            self.file_props['proxyhosts'].append(streamhost_used)
+            self.file_props['is_a_proxy'] = True
+            
+            gajim.socks5queue.idx += 1
+            idx = gajim.socks5queue.idx
+            sockobj = Socks5Sender(gajim.idlequeue, idx,
+                                       gajim.socks5queue, 
+                                       mode='client', 
+                                       _sock=None,
+                                       host=str(streamhost_used['host']), 
+                                       port=int(streamhost_used['port']),
+                                       fingerprint=None, 
+                                       connected=False, 
+                                       file_props=self.file_props)
+            sockobj.proxy = True
+            sockobj.streamhost = streamhost_used             
+            gajim.socks5queue.add_sockobj(self.session.connection.name, 
+                                           sockobj, 'sender')
+            streamhost_used['idx'] = sockobj.queue_idx
+            # If we offered the nominated candidate used, we activate
+            # the proxy
+            if not self.isOurCandUsed():
                 gajim.socks5queue.on_success[self.file_props['sid']] = \
-                     self.transport._on_proxy_auth_ok
+                self.transport._on_proxy_auth_ok
+            # TODO: add on failure
         else:
             jid = gajim.get_jid_without_resource(self.session.ourjid)
             gajim.socks5queue.send_file(self.file_props,

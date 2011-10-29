@@ -113,8 +113,8 @@ class SocksQueue:
         file_props['streamhost-used'] is True:
             if 'proxyhosts' in file_props:
                 for proxy in file_props['proxyhosts']:
-                    if proxy == streamhost:
-                        self.on_success[file_props['sid']](streamhost)
+                    if proxy['host'] == streamhost['host']:
+                        self.on_success[file_props['sid']](proxy)
                         return 2
             return 0
         if 'streamhosts' in file_props:
@@ -145,8 +145,13 @@ class SocksQueue:
                     'client', file_props, fingerprint=fp)
                 self.add_sockobj(account, socks5obj)
             else:
+                if 'sha_str' in file_props:
+                    idx = file_props['sha_str']
+                else:
+                    idx = self.idx
+                    self.idx = self.idx + 1
                 self.type = 'sender'
-                socks5obj = Socks5Sender(self.idlequeue, file_props['sha_str'],
+                socks5obj = Socks5Sender(self.idlequeue, idx,
                     self, mode='client' , _sock=None,
                     host=str(streamhost['host']), port=int(streamhost['port']),
                     fingerprint=fp, connected=False, file_props=file_props)
@@ -202,7 +207,6 @@ class SocksQueue:
                 if host['state'] == -2:
                     host['state'] = 0
                     # FIXME: make the sender reconnect also
-                    print 'reconnecting using socks receiver'
                     client = Socks5Receiver(self.idlequeue, host, host['sid'],
                         'client',file_props)
                     self.add_sockobj(client.account, client)
@@ -225,15 +229,16 @@ class SocksQueue:
         if file_props is None:
             return
         streamhost['state'] = -1
+        # FIXME: should only the receiver be remove? what if we are sending?
         self.remove_receiver(idx, False)
         if 'streamhosts' in file_props:
             for host in file_props['streamhosts']:
                 if host['state'] != -1:
                     return
+        self.readers = {}
         # failure_cb exists - this means that it has never been called
         if 'failure_cb' in file_props and file_props['failure_cb']:
-            file_props['failure_cb'](streamhost['initiator'], None,
-                file_props['sid'], code = 404)
+            file_props['failure_cb'](file_props['sid'])
             del(file_props['failure_cb'])
 
     def add_sockobj(self, account, sockobj, type='receiver'):
@@ -306,15 +311,10 @@ class SocksQueue:
                 sender = self.senders[key]
                 file_props['streamhost-used'] = True
                 sender.account = account
-                if file_props['type'] == 's':
-                    sender.file_props = file_props
-                    result = sender.send_file()
-                    self.process_result(result, sender)
-                else:
-                    file_props['elapsed-time'] = 0
-                    file_props['last-time'] = self.idlequeue.current_time()
-                    file_props['received-len'] = 0
-                    sender.file_props = file_props
+                
+                sender.file_props = file_props
+                result = sender.send_file()
+                self.process_result(result, sender)
 
     def add_file_props(self, account, file_props):
         """
@@ -611,6 +611,10 @@ class Socks5:
             if self.queue.on_success:
                 result = self.queue.send_success_reply(self.file_props,
                     self.streamhost)
+                if self.type == 'sender' and self.proxy:
+                    self.queue.process_result( self.send_file()
+                            , self)
+                    return
 
                 if result == 0:
                     self.state = 8
@@ -1143,6 +1147,7 @@ class Socks5:
         """
         Get sha of sid + Initiator jid + Target jid
         """
+         
         if 'is_a_proxy' in self.file_props:
             del(self.file_props['is_a_proxy'])
             return hashlib.sha1('%s%s%s' % (self.sid,
@@ -1164,10 +1169,10 @@ class Socks5Sender(Socks5, IdleObject):
         self.queue = parent
         self.mode = mode # client or server
         self.file_props = file_props
+        self.proxy = False
 
 
-
-        Socks5.__init__(self, idlequeue, host, port, None, None, None)
+        Socks5.__init__(self, idlequeue, host, port, None, None,file_props['sid'])
         self._sock = _sock
 
 
@@ -1380,7 +1385,6 @@ class Socks5Receiver(Socks5, IdleObject):
         """
         Start receiving the file over verified connection
         """
-        print "receiving file"
         if self.file_props['started']:
             return
         self.file_props['error'] = 0

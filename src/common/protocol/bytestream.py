@@ -363,7 +363,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
 
         port = gajim.config.get('file_transfers_port')
         listener = gajim.socks5queue.start_listener(port, sha_str,
-                self._result_socks5_sid, file_props['sid'])
+                self._result_socks5_sid, file_props)
         if not listener:
             file_props['error'] = -5
             from common.connection_handlers_events import FileRequestErrorEvent
@@ -660,7 +660,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             if 'stopped' in file_props and file_props['stopped']:
                 self.remove_transfer(file_props)
             else:
-                gajim.socks5queue.send_file(file_props, self.name)
+                gajim.socks5queue.send_file(file_props, self.name, 'client')
             if 'fast' in file_props:
                 fasts = file_props['fast']
                 if len(fasts) > 0:
