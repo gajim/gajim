@@ -133,6 +133,9 @@ class SocksQueue:
         file_props = self.files_props[account][sid]
         file_props['failure_cb'] = on_failure
 
+        if not file_props['streamhosts']:
+            on_failure(file_props['sid'])
+
         # add streamhosts to the queue
         for streamhost in file_props['streamhosts']:
             if 'type' in streamhost and streamhost['type'] == 'proxy':
