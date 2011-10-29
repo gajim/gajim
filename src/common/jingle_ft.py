@@ -374,10 +374,15 @@ class JingleFileTransfer(JingleContent):
     def start_transfer(self):
 
         self.state = STATE_TRANSFERING
+        
+        # It tells wether we start the transfer as client or server
+        type = None
 
         if self.isOurCandUsed():
+            type = 'client'
             streamhost_used = self.nominated_cand['our-cand']
         else:
+            type = 'server'
             streamhost_used = self.nominated_cand['peer-cand']
             
         if streamhost_used['type'] == 'proxy':
