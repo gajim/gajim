@@ -53,6 +53,7 @@ NS_CAPTCHA        = 'urn:xmpp:captcha'                                # XEP-0158
 NS_CHATSTATES     = 'http://jabber.org/protocol/chatstates'           # JEP-0085
 NS_CHATTING       = 'http://jabber.org/protocol/chatting'             # XEP-0194
 NS_CLIENT         = 'jabber:client'
+NS_CONDITIONS     = 'urn:xmpp:muc:conditions:0'                       # XEP-0306
 NS_COMMANDS       = 'http://jabber.org/protocol/commands'
 NS_COMPONENT_ACCEPT = 'jabber:component:accept'
 NS_COMPONENT_1    = 'http://jabberd.jabberstudio.org/ns/component/1.0'
@@ -624,6 +625,17 @@ class Protocol(Node):
         Return the error code. Obsolete.
         """
         return self.getTagAttr('error', 'code')
+
+    def getStatusConditions(self):
+        """
+        Return the status conditions list as defined in XEP-0306.
+        """
+        conds = []
+        condtag = self.getTag('conditions', namespace=NS_CONDITIONS)
+        if condtag:
+            for tag in condtag.getChildren():
+                conds.append(tag.getName())
+        return conds
 
     def setError(self, error, code=None):
         """
