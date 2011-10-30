@@ -1674,55 +1674,6 @@ ConnectionJingle, ConnectionIBBytestream):
         self.connection.SendAndCallForResponse(iq, self._on_bob_received,
             {'cid': cid})
 
-    # process and dispatch a groupchat message
-    def dispatch_gc_message(self, msg, frm, msgtxt, jid, tim):
-        has_timestamp = bool(msg.timestamp)
-
-        statusCode = msg.getStatusCode()
-
-        displaymarking = None
-        seclabel = msg.getTag('securitylabel')
-        if seclabel and seclabel.getNamespace() == common.xmpp.NS_SECLABEL:
-            # Ignore message from room in which we are not
-            displaymarking = seclabel.getTag('displaymarking')
-
-        if jid not in self.last_history_time:
-            return
-
-        captcha = msg.getTag('captcha', namespace=common.xmpp.NS_CAPTCHA)
-        if captcha:
-            captcha = captcha.getTag('x', namespace=common.xmpp.NS_DATA)
-            found = helpers.replace_dataform_media(captcha, msg)
-            if not found:
-                self.get_bob_data(uri_data, frm, self.dispatch_gc_message,
-                    [msg, frm, msgtxt, jid, tim], 0)
-                return
-        self.dispatch('GC_MSG', (frm, msgtxt, tim, has_timestamp,
-            msg.getXHTML(), statusCode, displaymarking, captcha))
-
-        tim_int = int(float(mktime(tim)))
-        if gajim.config.should_log(self.name, jid) and not \
-        tim_int <= self.last_history_time[jid] and msgtxt and frm.find('/') >= 0:
-            # if frm.find('/') < 0, it means message comes from room itself
-            # usually it hold description and can be send at each connection
-            # so don't store it in logs
-            try:
-                gajim.logger.write('gc_msg', frm, msgtxt, tim=tim)
-                # store in memory time of last message logged.
-                # this will also be saved in rooms_last_message_time table
-                # when we quit this muc
-                self.last_history_time[jid] = mktime(tim)
-
-            except exceptions.PysqliteOperationalError, e:
-                self.dispatch('DB_ERROR', (_('Disk Write Error'), str(e)))
-            except exceptions.DatabaseMalformed:
-                pritext = _('Database Error')
-                sectext = _('The database file (%s) cannot be read. Try to '
-                    'repair it (see http://trac.gajim.org/wiki/DatabaseBackup) '
-                    'or remove it (all history will be lost).') % \
-                    common.logger.LOG_DB_PATH
-                self.dispatch('DB_ERROR', (pritext, sectext))
-
     def _presenceCB(self, con, prs):
         """
         Called when we receive a presence
