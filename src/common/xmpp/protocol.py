@@ -779,10 +779,11 @@ class Message(Protocol):
     def buildReply(self, text=None):
         """
         Builds and returns another message object with specified text. The to,
-        from and thread properties of new message are pre-set as reply to this
-        message
+        from, thread and type properties of new message are pre-set as reply to
+        this message
         """
-        m = Message(to=self.getFrom(), frm=self.getTo(), body=text)
+        m = Message(to=self.getFrom(), frm=self.getTo(), body=text,
+            typ=self.getType())
         th = self.getThread()
         if th:
             m.setThread(th)
@@ -939,11 +940,20 @@ class Iq(Protocol):
         if queryNS:
             self.setQueryNS(queryNS)
 
+    def getQuery(self):
+        """
+        Return the IQ's child element if it exists, None otherwise.
+        """
+        children = self.getChildren()
+        if children and self.getType() != 'error' and \
+        children[0].getName() != 'error':
+            return children[0]
+
     def getQueryNS(self):
         """
         Return the namespace of the 'query' child element
         """
-        tag = self.getTag('query')
+        tag = self.getQuery()
         if tag:
             return tag.getNamespace()
 
@@ -951,13 +961,15 @@ class Iq(Protocol):
         """
         Return the 'node' attribute value of the 'query' child element
         """
-        return self.getTagAttr('query', 'node')
+        tag = self.getQuery()
+        if tag:
+            return tag.getAttr('node')
 
     def getQueryPayload(self):
         """
         Return the 'query' child element payload
         """
-        tag = self.getTag('query')
+        tag = self.getQuery()
         if tag:
             return tag.getPayload()
 
@@ -965,36 +977,49 @@ class Iq(Protocol):
         """
         Return the 'query' child element child nodes
         """
-        tag = self.getTag('query')
+        tag = self.getQuery()
         if tag:
             return tag.getChildren()
+
+    def setQuery(self, name=None):
+        """
+        Change the name of the query node, creating it if needed. Keep the
+        existing name if none is given (use 'query' if it's a creation).
+        Return the query node.
+        """
+        query = self.getQuery()
+        if query is None:
+            query = self.addChild('query')
+        if name is not None:
+            query.setName(name)
+        return query
 
     def setQueryNS(self, namespace):
         """
         Set the namespace of the 'query' child element
         """
-        self.setTag('query').setNamespace(namespace)
+        self.setQuery().setNamespace(namespace)
 
     def setQueryPayload(self, payload):
         """
         Set the 'query' child element payload
         """
-        self.setTag('query').setPayload(payload)
+        self.setQuery().setPayload(payload)
 
     def setQuerynode(self, node):
         """
         Set the 'node' attribute value of the 'query' child element
         """
-        self.setTagAttr('query', 'node', node)
+        self.setQuery().setAttr('node', node)
 
     def buildReply(self, typ):
         """
         Build and return another Iq object of specified type. The to, from and
         query child node of new Iq are pre-set as reply to this Iq.
         """
-        iq = Iq(typ, to=self.getFrom(), frm=self.getTo(), attrs={'id': self.getID()})
-        if self.getTag('query'):
-            iq.setQueryNS(self.getQueryNS())
+        iq = Iq(typ, to=self.getFrom(), frm=self.getTo(),
+            attrs={'id': self.getID()})
+        iq.setQuery(self.getQuery().getName()).setNamespace(self.getQueryNS())
         return iq
 
 class Acks(Node):
