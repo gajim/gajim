@@ -1515,14 +1515,14 @@ class Connection(CommonConnection, ConnectionHandlers):
         Build a Privacy rule stanza for invisibility
         """
         iq = common.xmpp.Iq('set', common.xmpp.NS_PRIVACY, xmlns = '')
-        l = iq.getTag('query').setTag('list', {'name': name})
+        l = iq.setQuery().setTag('list', {'name': name})
         i = l.setTag('item', {'action': action, 'order': str(order)})
         i.setTag('presence-out')
         return iq
 
     def build_invisible_rule(self):
         iq = common.xmpp.Iq('set', common.xmpp.NS_PRIVACY, xmlns = '')
-        l = iq.getTag('query').setTag('list', {'name': 'invisible'})
+        l = iq.setQuery().setTag('list', {'name': 'invisible'})
         if self.name in gajim.interface.status_sent_to_groups and \
         len(gajim.interface.status_sent_to_groups[self.name]) > 0:
             for group in gajim.interface.status_sent_to_groups[self.name]:
@@ -1552,7 +1552,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         if not gajim.account_is_connected(self.name):
             return
         iq = common.xmpp.Iq('set', common.xmpp.NS_PRIVACY, xmlns = '')
-        iq.getTag('query').setTag('active', {'name': name})
+        iq.setQuery().setTag('active', {'name': name})
         self.connection.send(iq)
 
     def send_invisible_presence(self, msg, signed, initial = False):
@@ -1905,7 +1905,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         if name:
             infos['name'] = name
         iq = common.xmpp.Iq('set', common.xmpp.NS_ROSTER)
-        q = iq.getTag('query')
+        q = iq.setQuery()
         item = q.addChild('item', attrs=infos)
         for g in groups:
             item.addChild('group').setData(g)
@@ -1950,7 +1950,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         if not gajim.account_is_connected(self.name):
             return
         iq = common.xmpp.Iq('set', common.xmpp.NS_REGISTER, to = agent)
-        iq.getTag('query').setTag('remove')
+        iq.setQuery().setTag('remove')
         id_ = self.connection.getAnID()
         iq.setID(id_)
         self.awaiting_answers[id_] = (AGENT_REMOVED, agent)
@@ -2408,7 +2408,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             return
         iq = common.xmpp.Iq(typ = 'set', queryNS = common.xmpp.NS_MUC_OWNER,
                 to = room_jid)
-        destroy = iq.getTag('query').setTag('destroy')
+        destroy = iq.setQuery().setTag('destroy')
         if reason:
             destroy.setTagData('reason', reason)
         if jid:
@@ -2455,7 +2455,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             return
         iq = common.xmpp.Iq(typ = 'set', to = room_jid, queryNS =\
                 common.xmpp.NS_MUC_ADMIN)
-        item = iq.getTag('query').setTag('item')
+        item = iq.setQuery().setTag('item')
         item.setAttr('nick', nick)
         item.setAttr('role', role)
         if reason:
@@ -2470,7 +2470,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             return
         iq = common.xmpp.Iq(typ = 'set', to = room_jid, queryNS =\
                 common.xmpp.NS_MUC_ADMIN)
-        item = iq.getTag('query').setTag('item')
+        item = iq.setQuery().setTag('item')
         item.setAttr('jid', jid)
         item.setAttr('affiliation', affiliation)
         if reason:
@@ -2482,7 +2482,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             return
         iq = common.xmpp.Iq(typ = 'set', to = room_jid, queryNS = \
                 common.xmpp.NS_MUC_ADMIN)
-        item = iq.getTag('query')
+        item = iq.setQuery()
         for jid in users_dict:
             item_tag = item.addChild('item', {'jid': jid,
                     'affiliation': users_dict[jid]['affiliation']})
@@ -2495,7 +2495,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             return
         iq = common.xmpp.Iq(typ = 'get', to = room_jid, queryNS = \
                 common.xmpp.NS_MUC_ADMIN)
-        item = iq.getTag('query').setTag('item')
+        item = iq.setQuery().setTag('item')
         item.setAttr('affiliation', affiliation)
         self.connection.send(iq)
 
@@ -2504,7 +2504,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             return
         iq = common.xmpp.Iq(typ = 'set', to = room_jid, queryNS =\
                 common.xmpp.NS_MUC_OWNER)
-        query = iq.getTag('query')
+        query = iq.setQuery()
         form.setAttr('type', 'submit')
         query.addChild(node = form)
         self.connection.send(iq)
@@ -2629,7 +2629,7 @@ class Connection(CommonConnection, ConnectionHandlers):
     def send_search_form(self, jid, form, is_form):
         iq = common.xmpp.Iq(typ = 'set', to = jid, queryNS = \
             common.xmpp.NS_SEARCH)
-        item = iq.getTag('query')
+        item = iq.setQuery()
         if is_form:
             item.addChild(node=form)
         else:

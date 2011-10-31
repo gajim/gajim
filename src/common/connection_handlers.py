@@ -151,7 +151,7 @@ class ConnectionDisco:
             return
         if is_form:
             iq = common.xmpp.Iq('set', common.xmpp.NS_REGISTER, to=agent)
-            query = iq.getTag('query')
+            query = iq.setQuery()
             info.setAttr('type', 'submit')
             query.addChild(node=info)
             self.connection.SendAndCallForResponse(iq,
@@ -233,8 +233,7 @@ class ConnectionDisco:
         log.debug('DiscoverInfoGetCB')
         if not self.connection or self.connected < 2:
             return
-        q = iq_obj.getTag('query')
-        node = q.getAttr('node')
+        node = iq_obj.getQuerynode()
 
         if self.commandInfoQuery(con, iq_obj):
             raise common.xmpp.NodeProcessed
@@ -245,7 +244,7 @@ class ConnectionDisco:
             raise common.xmpp.NodeProcessed
 
         iq = iq_obj.buildReply('result')
-        q = iq.getTag('query')
+        q = iq.setQuery()
         if node:
             q.setAttr('node', node)
         q.addChild('identity', attrs=gajim.gajim_identity)
@@ -390,7 +389,7 @@ class ConnectionVcard:
         iq = common.xmpp.Iq(typ='get')
         if jid:
             iq.setTo(jid)
-        iq.setTag(common.xmpp.NS_VCARD + ' vCard')
+        iq.setQuery('vCard').setNamespace(common.xmpp.NS_VCARD)
 
         id_ = self.connection.getAnID()
         iq.setID(id_)
@@ -532,6 +531,8 @@ class ConnectionVcard:
                 return
             if iq_obj.getType() == 'result':
                 query = iq_obj.getTag('query')
+                if not query:
+                    return
                 delimiter = query.getTagData('roster')
                 if delimiter:
                     self.nested_group_delimiter = delimiter
@@ -651,9 +652,8 @@ class ConnectionVcard:
                         with_ = element.getAttr('with')
                         start_ = element.getAttr('start')
                         self.request_collection_page(with_, start_)
-                    elif element.getName() == 'removed':
+                    #elif element.getName() == 'removed':
                         # do nothing
-                        pass
 
         del self.awaiting_answers[id_]
 
@@ -1471,7 +1471,7 @@ ConnectionJingle, ConnectionIBBytestream):
         if obj.conn.name != self.name:
             return
         iq_obj = obj.stanza.buildReply('result')
-        qp = iq_obj.getTag('query')
+        qp = iq_obj.setQuery()
         qp.setTagData('name', 'Gajim')
         qp.setTagData('version', gajim.version)
         send_os = gajim.config.get_per('accounts', self.name, 'send_os_info')
@@ -1494,7 +1494,7 @@ ConnectionJingle, ConnectionIBBytestream):
         if HAS_IDLE and gajim.config.get_per('accounts', self.name,
         'send_idle_time'):
             iq_obj = obj.stanza.buildReply('result')
-            qp = iq_obj.getTag('query')
+            qp = iq_obj.setQuery()
             qp.attrs['seconds'] = int(self.sleeper.getIdleSec())
         else:
             iq_obj = obj.stanza.buildReply('error')
@@ -1521,7 +1521,7 @@ ConnectionJingle, ConnectionIBBytestream):
             return
         if gajim.config.get_per('accounts', self.name, 'send_time_info'):
             iq_obj = obj.stanza.buildReply('result')
-            qp = iq_obj.getTag('query')
+            qp = iq_obj.setQuery()
             qp.setTagData('utc', strftime('%Y%m%dT%H:%M:%S', gmtime()))
             qp.setTagData('tz', helpers.decode_string(tzname[daylight]))
             qp.setTagData('display', helpers.decode_string(strftime('%c',
