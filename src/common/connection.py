@@ -1266,10 +1266,16 @@ class Connection(CommonConnection, ConnectionHandlers):
             return
         con.RegisterDisconnectHandler(self._on_disconnected)
         if _con_type == 'plain' and gajim.config.get_per('accounts', self.name,
-        'warn_when_plaintext_connection'):
+        'action_when_plaintext_connection') == 'warn':
             gajim.nec.push_incoming_event(PlainConnectionEvent(None, conn=self,
                 xmpp_client=con))
             return True
+        if _con_type == 'plain' and gajim.config.get_per('accounts', self.name,
+        'action_when_plaintext_connection') == 'disconnect':
+            self.disconnect(on_purpose=True)
+            gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
+                show='offline'))
+            return False
         if _con_type in ('tls', 'ssl') and con.Connection.ssl_lib != 'PYOPENSSL' \
         and gajim.config.get_per('accounts', self.name,
         'warn_when_insecure_ssl_connection') and \

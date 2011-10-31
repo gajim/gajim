@@ -1254,6 +1254,9 @@ class Interface:
         # ('PLAIN_CONNECTION', account, (connection))
         def on_ok(is_checked):
             if not is_checked[0]:
+                if is_checked[1]:
+                    gajim.config.set_per('accounts', obj.conn.name,
+                        'action_when_plaintext_connection', 'disconnect')
                 on_cancel()
                 return
             # On cancel call del self.instances, so don't call it another time
@@ -1262,7 +1265,7 @@ class Interface:
                 ['plain_connection']
             if is_checked[1]:
                 gajim.config.set_per('accounts', obj.conn.name,
-                    'warn_when_plaintext_connection', False)
+                    'action_when_plaintext_connection', 'connect')
             obj.conn.connection_accepted(obj.xmpp_client, 'plain')
 
         def on_cancel():
@@ -1275,18 +1278,20 @@ class Interface:
         pritext = _('Insecure connection')
         sectext = _('You are about to connect to the account %(account)s '
             '(%(server)s) with an insecure connection. This means all your '
-            'conversations will be exchanged unencrypted. Are you sure you '
-            'want to do that?') % {'account': obj.conn.name,
+            'conversations will be exchanged unencrypted. This type of '
+            'connection is really discouraged.\nAre you sure you want to do '
+            'that?') % {'account': obj.conn.name,
             'server': gajim.get_hostname_from_account(obj.conn.name)}
         checktext1 = _('Yes, I really want to connect insecurely')
+        tooltip1 = _('Gajim will NOT connect unless you check this box')
         checktext2 = _('_Do not ask me again')
         if 'plain_connection' in self.instances[obj.conn.name]['online_dialog']:
             self.instances[obj.conn.name]['online_dialog']['plain_connection'].\
                 destroy()
         self.instances[obj.conn.name]['online_dialog']['plain_connection'] = \
             dialogs.ConfirmationDialogDoubleCheck(pritext, sectext, checktext1,
-            checktext2, on_response_ok=on_ok, on_response_cancel=on_cancel,
-            is_modal=False)
+            checktext2, tooltip1=tooltip1, on_response_ok=on_ok,
+            on_response_cancel=on_cancel, is_modal=False)
 
     def handle_event_insecure_ssl_connection(self, obj):
         # ('INSECURE_SSL_CONNECTION', account, (connection, connection_type))
