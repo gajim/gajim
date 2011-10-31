@@ -1929,6 +1929,8 @@ class GroupchatControl(ChatControlBase):
             self._nec_gc_config_changed_received)
         gajim.ged.remove_event_handler('signed-in', ged.GUI1,
             self._nec_signed_in)
+        gajim.ged.remove_event_handler('decrypted-message-received', ged.GUI2,
+            self._nec_decrypted_message_received)
 
         if self.room_jid in gajim.gc_connected[self.account] and \
         gajim.gc_connected[self.account][self.room_jid]:
