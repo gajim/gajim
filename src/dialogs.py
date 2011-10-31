@@ -1722,7 +1722,8 @@ class ConfirmationDialogDoubleCheck(ConfirmationDialog):
     """
 
     def __init__(self, pritext, sectext='', checktext1='', checktext2='',
-            on_response_ok=None, on_response_cancel=None, is_modal=True):
+    tooltip1='', tooltip2='', on_response_ok=None, on_response_cancel=None,
+    is_modal=True):
         self.user_response_ok = on_response_ok
         self.user_response_cancel = on_response_cancel
 
@@ -1741,11 +1742,15 @@ class ConfirmationDialogDoubleCheck(ConfirmationDialog):
 
         if checktext1:
             self.checkbutton1 = gtk.CheckButton(checktext1)
+            if tooltip1:
+                self.checkbutton1.set_tooltip_text(tooltip1)
             self.vbox.pack_start(self.checkbutton1, expand=False, fill=True)
         else:
             self.checkbutton1 = None
         if checktext2:
             self.checkbutton2 = gtk.CheckButton(checktext2)
+            if tooltip2:
+                self.checkbutton2.set_tooltip_text(tooltip2)
             self.vbox.pack_start(self.checkbutton2, expand=False, fill=True)
         else:
             self.checkbutton2 = None
