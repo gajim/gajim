@@ -115,7 +115,7 @@ class SocksQueue:
                 for proxy in file_props['proxyhosts']:
                     if proxy['host'] == streamhost['host']:
                         self.on_success[file_props['sid']](proxy)
-                        return 2
+                        return 1
             return 0
         if 'streamhosts' in file_props:
             for host in file_props['streamhosts']:
@@ -154,6 +154,10 @@ class SocksQueue:
                     idx = self.idx
                     self.idx = self.idx + 1
                 self.type = 'sender'
+                if 'type' in streamhost and streamhost['type'] == 'proxy':
+                    file_props['is_a_proxy'] = True
+                    file_props['proxy_sender'] = streamhost['target']
+                    file_props['proxy_receiver'] = streamhost['initiator']
                 socks5obj = Socks5Sender(self.idlequeue, idx,
                     self, mode='client' , _sock=None,
                     host=str(streamhost['host']), port=int(streamhost['port']),

@@ -223,9 +223,6 @@ class JingleTransportSocks5(JingleTransport):
         proxyhosts = socks5conn._get_file_transfer_proxies_from_config(self.file_props)
 
         if proxyhosts:
-            self.file_props['proxy_receiver'] = unicode(
-                self.file_props['receiver'])
-            self.file_props['proxy_sender'] = unicode(self.file_props['sender'])
             self.file_props['proxyhosts'] = proxyhosts
 
             for proxyhost in proxyhosts:

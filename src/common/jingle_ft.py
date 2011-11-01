@@ -387,6 +387,12 @@ class JingleFileTransfer(JingleContent):
             
         if streamhost_used['type'] == 'proxy':
             self.file_props['is_a_proxy'] = True
+            if self.weinitiate:
+                self.file_props['proxy_sender'] = streamhost_used['initiator']
+                self.file_props['proxy_receiver'] = streamhost_used['target']
+            else:
+                self.file_props['proxy_sender'] = streamhost_used['target']
+                self.file_props['proxy_receiver'] = streamhost_used['initiator']
 
         if not self.weinitiate and streamhost_used['type'] == 'proxy':
             r = gajim.socks5queue.readers
@@ -394,7 +400,14 @@ class JingleFileTransfer(JingleContent):
                 if r[reader].host == streamhost_used['host'] and \
                 r[reader].connected:
                     return
-        
+
+        if self.weinitiate and streamhost_used['type'] == 'proxy':
+            s = gajim.socks5queue.senders
+            for sender in s:
+                if s[sender].host == streamhost_used['host'] and \
+                s[sender].connected:
+                    return
+
         if streamhost_used['type'] == 'proxy': 
             self.file_props['streamhost-used'] = True
             streamhost_used['sid'] = self.file_props['sid']
@@ -402,11 +415,11 @@ class JingleFileTransfer(JingleContent):
             self.file_props['streamhosts'].append(streamhost_used)
             self.file_props['proxyhosts'] = []
             self.file_props['proxyhosts'].append(streamhost_used)
-            self.file_props['is_a_proxy'] = True
-            
-            gajim.socks5queue.idx += 1
-            idx = gajim.socks5queue.idx
-            sockobj = Socks5Sender(gajim.idlequeue, idx,
+
+            if self.weinitiate:
+                gajim.socks5queue.idx += 1
+                idx = gajim.socks5queue.idx
+                sockobj = Socks5Sender(gajim.idlequeue, idx,
                                        gajim.socks5queue, 
                                        mode='client', 
                                        _sock=None,
@@ -415,6 +428,10 @@ class JingleFileTransfer(JingleContent):
                                        fingerprint=None, 
                                        connected=False, 
                                        file_props=self.file_props)
+            else:
+                sockobj = Socks5Receiver(gajim.idlequeue, streamhost_used,
+                    sid=self.file_props['sid'], mode='client',
+                    file_props=self.file_props, fingerprint=None)
             sockobj.proxy = True
             sockobj.streamhost = streamhost_used             
             gajim.socks5queue.add_sockobj(self.session.connection.name, 
