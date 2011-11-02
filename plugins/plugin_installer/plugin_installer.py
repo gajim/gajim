@@ -33,9 +33,16 @@ import sys
 from common import gajim
 from plugins import GajimPlugin
 from plugins.helpers import log_calls, log
-from dialogs import WarningDialog, HigDialog
+from dialogs import WarningDialog, HigDialog, YesNoDialog
 from plugins.gui import GajimPluginConfigDialog
 
+
+def convert_version_to_list(version_str):
+    version_list = version_str.split('.')
+    l = []
+    while len(version_list):
+        l.append(int(version_list.pop(0)))
+    return l
 
 class PluginInstaller(GajimPlugin):
 
@@ -44,6 +51,10 @@ class PluginInstaller(GajimPlugin):
         self.description = _('Install and upgrade plugins from ftp')
         self.config_dialog = PluginInstallerPluginConfigDialog(self)
         self.config_default_values = {'ftp_server': ('ftp.gajim.org', '')}
+        self.window = None
+        self.progressbar = None
+        self.available_plugins_model = None
+        self.upgrading = False # True when opened from upgrade popup dialog
 
     @log_calls('PluginInstallerPlugin')
     def activate(self):
@@ -52,6 +63,50 @@ class PluginInstaller(GajimPlugin):
         self.id_ = self.pl_menuitem.connect_after('activate', self.on_activate)
         if 'plugins' in gajim.interface.instances:
             self.on_activate(None)
+        gobject.timeout_add_seconds(30, self.check_update)
+
+    @log_calls('PluginInstallerPlugin')
+    def warn_update(self, plugins):
+        def open_update(dummy):
+            self.upgrading = True
+            self.pl_menuitem.activate()
+            nb = gajim.interface.instances['plugins'].plugins_notebook
+            gobject.idle_add(nb.set_current_page, 1)
+        if plugins:
+            plugins_str = '\n'.join(plugins)
+            YesNoDialog(_('Plugins updates'), _('Some updates are available for'
+                ' your installer plugins. Do you want to update those plugins:'
+                '\n%s') % plugins_str, on_response_yes=open_update)
+
+    @log_calls('PluginInstallerPlugin')
+    def check_update(self):
+        def _run():
+            to_update = []
+            con = ftplib.FTP(ftp.server)
+            con.login()
+            con.cwd('plugins')
+            plugins_dirs = con.nlst()
+            for dir_ in plugins_dirs:
+                try:
+                    con.retrbinary('RETR %s/manifest.ini' % dir_,
+                        ftp.handleDownload)
+                except Exception, error:
+                    if str(error).startswith('550'):
+                        continue
+                ftp.config.readfp(io.BytesIO(ftp.buffer_.getvalue()))
+                local_version = ftp.get_plugin_version(ftp.config.get('info',
+                    'name'))
+                if local_version:
+                    local = convert_version_to_list(local_version)
+                    remote = convert_version_to_list(ftp.config.get('info',
+                        'version'))
+                    if remote > local:
+                        to_update.append(ftp.config.get('info', 'name'))
+            con.quit()
+            gobject.idle_add(self.warn_update, to_update)
+        ftp = Ftp(self)
+        ftp.run = _run
+        ftp.start()
 
     @log_calls('PluginInstallerPlugin')
     def deactivate(self):
@@ -152,12 +207,13 @@ class PluginInstaller(GajimPlugin):
         else:
             self.inslall_upgrade_button.set_property('sensitive', True)
 
-    def on_notebook_switch_page(self, widget, page, page_num,):
+    def on_notebook_switch_page(self, widget, page, page_num):
         if not hasattr(self, 'ftp') and self.page_num == page_num:
             self.available_plugins_model.clear()
             self.progressbar.show()
             self.ftp = Ftp(self)
             self.ftp.remote_dirs = None
+            self.ftp.upgrading = True
             self.ftp.start()
 
     def on_inslall_upgrade_clicked(self, widget):
@@ -309,6 +365,7 @@ class PluginInstaller(GajimPlugin):
 class Ftp(threading.Thread):
     def __init__(self, plugin):
         super(Ftp, self).__init__()
+        self.plugin = plugin
         self.window = plugin.window
         self.server = plugin.config['ftp_server']
         self.progressbar = plugin.progressbar
@@ -317,6 +374,7 @@ class Ftp(threading.Thread):
         self.buffer_ = io.BytesIO()
         self.remote_dirs = None
         self.append_to_model = True
+        self.upgrading = False
 
     def model_append(self, row):
         self.model.append(row)
@@ -357,9 +415,19 @@ class Ftp(threading.Thread):
                     self.config.readfp(io.BytesIO(self.buffer_.getvalue()))
                     local_version = self.get_plugin_version(
                         self.config.get('info', 'name'))
+                    upgrade = False
+                    if self.upgrading and local_version:
+                        local = convert_version_to_list(local_version)
+                        remote = convert_version_to_list(self.config.get('info',
+                            'version'))
+                        if remote > local:
+                            upgrade = True
+                            gobject.idle_add(
+                                self.plugin.inslall_upgrade_button.set_property,
+                                'sensitive', True)
                     gobject.idle_add(self.model_append, [dir_,
                         self.config.get('info', 'name'), local_version,
-                        self.config.get('info', 'version'), False,
+                        self.config.get('info', 'version'), upgrade,
                         self.config.get('info', 'description'),
                         self.config.get('info', 'authors'),
                         self.config.get('info', 'homepage'), ])
