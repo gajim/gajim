@@ -361,6 +361,8 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             streamhost.setAttr('jid', sender)
 
     def _add_local_ips_as_streamhosts_to_query(self, query, file_props):
+        if not gajim.config.get_per('accounts', self.name, 'ft_send_local_ips'):
+            return
         try:
             my_ips = [self.peerhost[0]] # The ip we're connected to server with
             # all IPs from local DNS
