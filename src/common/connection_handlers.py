@@ -1469,13 +1469,18 @@ ConnectionJingle, ConnectionIBBytestream):
     def _nec_version_request_received(self, obj):
         if obj.conn.name != self.name:
             return
-        iq_obj = obj.stanza.buildReply('result')
-        qp = iq_obj.setQuery()
-        qp.setTagData('name', 'Gajim')
-        qp.setTagData('version', gajim.version)
         send_os = gajim.config.get_per('accounts', self.name, 'send_os_info')
         if send_os:
+            iq_obj = obj.stanza.buildReply('result')
+            qp = iq_obj.getQuery()
+            qp.setTagData('name', 'Gajim')
+            qp.setTagData('version', gajim.version)
             qp.setTagData('os', helpers.get_os_info())
+        else:
+            iq_obj = obj.stanza.buildReply('error')
+            err = common.xmpp.ErrorNode(name=common.xmpp.NS_STANZAS + \
+                ' service-unavailable')
+            iq_obj.addChild(node=err)
         self.connection.send(iq_obj)
 
     def _LastCB(self, con, iq_obj):
