@@ -87,7 +87,7 @@ class Secrets:
         try:
             pk = self.privkeys[account]
         except KeyError:
-            pk = Crypto.PublicKey.RSA.generate(384, crypto.random_bytes)
+            pk = Crypto.PublicKey.RSA.generate(2048, crypto.random_bytes)
 
             self.privkeys[account] = pk
             self.save()
