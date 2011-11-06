@@ -1709,6 +1709,13 @@ class Connection(CommonConnection, ConnectionHandlers):
                     self.archive_manual_supported = True
                 if common.xmpp.NS_ARCHIVE_PREF in obj.features:
                     self.archive_pref_supported = True
+                if common.xmpp.NS_CARBONS in obj.features and \
+                gajim.config.get_per('accounts', self.name,
+                'enable_message_carbons'):
+                    # Server supports carbons, activate it
+                    iq = common.xmpp.Iq('set')
+                    iq.setTag('enable', namespace=common.xmpp.NS_CARBONS)
+                    self.connection.send(iq)
             if common.xmpp.NS_BYTESTREAM in obj.features and \
             gajim.config.get_per('accounts', self.name, 'use_ft_proxies'):
                 our_fjid = helpers.parse_jid(our_jid + '/' + \

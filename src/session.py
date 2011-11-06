@@ -79,9 +79,13 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
             if not obj.stanza.getTag('body') and obj.chatstate is None:
                 return
 
-            log_type = 'chat_msg_recv'
+            log_type = 'chat_msg'
         else:
-            log_type = 'single_msg_recv'
+            log_type = 'single_msg'
+        end = '_recv'
+        if obj.forwarded and obj.sent:
+            end = '_sent'
+        log_type += end
 
         if self.is_loggable() and obj.msgtxt:
             try:
@@ -113,7 +117,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
         # Handle chat states
         contact = gajim.contacts.get_contact(self.conn.name, obj.jid,
             obj.resource)
-        if contact:
+        if contact and (not obj.forwarded or not obj.sent):
             if self.control and self.control.type_id == \
             message_control.TYPE_CHAT:
                 if obj.chatstate is not None:
@@ -237,7 +241,8 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
         if not self.control:
             event = gajim.events.create_event(type_, (obj.msgtxt, obj.subject,
                 obj.mtype, obj.timestamp, obj.encrypted, obj.resource,
-                obj.msg_id, obj.xhtml, self, obj.form_node, obj.displaymarking),
+                obj.msg_id, obj.xhtml, self, obj.form_node, obj.displaymarking,
+                obj.forwarded and obj.sent),
                 show_in_roster=obj.show_in_roster,
                 show_in_systray=obj.show_in_systray)
 

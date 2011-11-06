@@ -2924,12 +2924,12 @@ class ChatControl(ChatControlBase):
                 kind = 'info'
             else:
                 kind = 'print_queue'
-            dm = None
-            if len(data) > 10:
-                dm = data[10]
+            if data[11]:
+                kind = 'out'
+            dm = data[10]
             self.print_conversation(data[0], kind, tim=data[3],
-                    encrypted=data[4], subject=data[1], xhtml=data[7],
-                    displaymarking=dm)
+                encrypted=data[4], subject=data[1], xhtml=data[7],
+                displaymarking=dm)
             if len(data) > 6 and isinstance(data[6], int):
                 message_ids.append(data[6])
 

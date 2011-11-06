@@ -381,6 +381,7 @@ class Config:
                     'roster_version': [opt_str, ''],
                     'subscription_request_msg': [opt_str, '', _('Message that is sent to contacts you want to add')],
                     'last_archiving_time': [opt_str, '1970-01-01T00:00:00Z', _('Last time we syncronized with logs from server.')],
+                    'enable_message_carbons': [ opt_bool, False, _('If enabled and if server supports this feature, Gajim will receive messages sent and received by other resources.')],
             }, {}),
             'statusmsg': ({
                     'message': [ opt_str, '' ],
