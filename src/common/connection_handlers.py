@@ -61,14 +61,7 @@ from common import ged
 from common import nec
 from common.nec import NetworkEvent
 
-if gajim.HAVE_FARSIGHT:
-    from common.jingle import ConnectionJingle
-else:
-    class ConnectionJingle():
-        def __init__(self):
-            pass
-        def _JingleCB(self, con, stanza):
-            pass
+from common.jingle import ConnectionJingle
 
 from common import dbus_support
 if dbus_support.supported:
