@@ -82,8 +82,9 @@ class PluginInstaller(GajimPlugin):
     def check_update(self):
         def _run():
             to_update = []
-            con = ftplib.FTP(ftp.server)
+            con = ftplib.FTP_TLS(ftp.server)
             con.login()
+            con.prot_p()
             con.cwd('plugins')
             plugins_dirs = con.nlst()
             for dir_ in plugins_dirs:
@@ -393,8 +394,9 @@ class Ftp(threading.Thread):
         try:
             gobject.idle_add(self.progressbar.set_text,
                 _('Connecting to server'))
-            self.ftp = ftplib.FTP(self.server)
+            self.ftp = ftplib.FTP_TLS(self.server)
             self.ftp.login()
+            self.ftp.prot_p()
             self.ftp.cwd('plugins')
             if not self.remote_dirs:
                 self.plugins_dirs = self.ftp.nlst()
