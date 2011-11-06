@@ -988,6 +988,8 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.conn = self.base_event.conn
         self.stanza = self.base_event.stanza
         self.get_id()
+        self.forwarded = False
+        self.sent = False
 
         account = self.conn.name
 
@@ -1023,6 +1025,39 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                         'jid'))
                     return
                 self.jid = gajim.get_jid_without_resource(self.fjid)
+
+        forward_tag = self.stanza.getTag('forwarded', namespace=xmpp.NS_FORWARD)
+        # Be sure it comes from one of our resource, else ignore forward element
+        if forward_tag and self.jid == gajim.get_jid_from_account(account):
+            received_tag = forward_tag.getTag('received',
+                namespace=xmpp.NS_CARBONS)
+            sent_tag = forward_tag.getTag('sent', namespace=xmpp.NS_CARBONS)
+            if received_tag:
+                msg = forward_tag.getTag('message')
+                self.stanza = xmpp.Message(node=msg)
+                try:
+                    self.get_jid_resource()
+                except helpers.InvalidFormat:
+                    self.conn.dispatch('ERROR', (_('Invalid Jabber ID'),
+                        _('A message from a non-valid JID arrived, it has been '
+                        'ignored.')))
+                    return
+                self.forwarded = True
+            elif sent_tag:
+                msg = forward_tag.getTag('message')
+                self.stanza = xmpp.Message(node=msg)
+                to = self.stanza.getTo()
+                self.stanza.setTo(self.stanza.getFrom())
+                self.stanza.setFrom(to)
+                try:
+                    self.get_jid_resource()
+                except helpers.InvalidFormat:
+                    self.conn.dispatch('ERROR', (_('Invalid Jabber ID'),
+                        _('A message from a non-valid JID arrived, it has been '
+                        'ignored.')))
+                    return
+                self.forwarded = True
+                self.sent = True
 
         self.enc_tag = self.stanza.getTag('x', namespace=xmpp.NS_ENCRYPTED)
 
@@ -1063,7 +1098,8 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             self.session.last_receive = time_time()
 
         # check if the message is a XEP-0020 feature negotiation request
-        if self.stanza.getTag('feature', namespace=xmpp.NS_FEATURE):
+        if not self.forwarded and self.stanza.getTag('feature',
+        namespace=xmpp.NS_FEATURE):
             if gajim.HAVE_PYCRYPTO:
                 feature = self.stanza.getTag(name='feature',
                     namespace=xmpp.NS_FEATURE)
@@ -1080,7 +1116,8 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                     self.conn.connection.send(reply)
             return
 
-        if self.stanza.getTag('init', namespace=xmpp.NS_ESESSION_INIT):
+        if not self.forwarded and self.stanza.getTag('init',
+        namespace=xmpp.NS_ESESSION_INIT):
             init = self.stanza.getTag(name='init',
                 namespace=xmpp.NS_ESESSION_INIT)
             form = xmpp.DataForm(node=init.getTag('x'))
@@ -1095,6 +1132,9 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         xep_200_encrypted = self.stanza.getTag('c',
             namespace=xmpp.NS_STANZA_CRYPTO)
         if xep_200_encrypted:
+            if self.forwarded:
+                # Ignore E2E forwarded encrypted messages
+                return False
             self.encrypted = 'xep200'
 
         return True
@@ -1166,6 +1206,8 @@ class DecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.session = self.msg_obj.session
         self.timestamp = self.msg_obj.timestamp
         self.encrypted = self.msg_obj.encrypted
+        self.forwarded = self.msg_obj.forwarded
+        self.sent = self.msg_obj.sent
         self.popup = False
 
         self.receipt_request_tag = self.stanza.getTag('request',
