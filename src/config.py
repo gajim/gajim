@@ -535,6 +535,14 @@ class PreferencesWindow:
         else:
             w.set_active(st)
 
+        # send absolute time info
+        w = self.xml.get_object('send_time_info_checkbutton')
+        st = self.get_per_account_option('send_time_info')
+        if st == 'mixed':
+            w.set_inconsistent(True)
+        else:
+            w.set_active(st)
+
         # send idle time
         w = self.xml.get_object('send_idle_time_checkbutton')
         st = self.get_per_account_option('send_idle_time')
@@ -1165,6 +1173,10 @@ class PreferencesWindow:
     def on_send_os_info_checkbutton_toggled(self, widget):
         widget.set_inconsistent(False)
         self.on_per_account_checkbutton_toggled(widget, 'send_os_info')
+
+    def on_send_time_info_checkbutton_toggled(self, widget):
+        widget.set_inconsistent(False)
+        self.on_per_account_checkbutton_toggled(widget, 'send_time_info')
 
     def on_send_idle_time_checkbutton_toggled(self, widget):
         widget.set_inconsistent(False)

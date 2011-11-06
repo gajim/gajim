@@ -2567,7 +2567,7 @@ to discover one from server.</property>
                             </child>
                             <child>
                               <object class="GtkCheckButton" id="send_os_info_checkbutton">
-                                <property name="label" translatable="yes">Allow _OS information to be sent</property>
+                                <property name="label" translatable="yes">Allow client / _OS information to be sent</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -2582,6 +2582,24 @@ to discover one from server.</property>
                               </packing>
                             </child>
                             <child>
+                              <object class="GtkCheckButton" id="send_time_info_checkbutton">
+                                <property name="label" translatable="yes">Allow local system time information to be sent</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
+                                <property name="tooltip_text" translatable="yes">If checked, Gajim will allow others to detect the time on your system</property>
+                                <property name="use_underline">True</property>
+                                <property name="draw_indicator">True</property>
+                                <signal name="toggled" handler="on_send_time_info_checkbutton_toggled"/>
+                              </object>
+                              <packing>
+                                <property name="top_attach">2</property>
+                                <property name="bottom_attach">3</property>
+                              </packing>
+                            </child>
+
+
+                            <child>
                               <object class="GtkCheckButton" id="log_encrypted_chats_checkbutton">
                                 <property name="label" translatable="yes">Log _encrypted chat session</property>
                                 <property name="visible">True</property>
@@ -2593,8 +2611,8 @@ to discover one from server.</property>
                                 <signal name="toggled" handler="on_log_encrypted_chats_checkbutton_toggled"/>
                               </object>
                               <packing>
-                                <property name="top_attach">2</property>
-                                <property name="bottom_attach">3</property>
+                                <property name="top_attach">3</property>
+                                <property name="bottom_attach">4</property>
                               </packing>
                             </child>
                             <child>
@@ -2608,8 +2626,8 @@ to discover one from server.</property>
                                 <signal name="toggled" handler="on_send_idle_time_checkbutton_toggled"/>
                               </object>
                               <packing>
-                                <property name="top_attach">3</property>
-                                <property name="bottom_attach">4</property>
+                                <property name="top_attach">4</property>
+                                <property name="bottom_attach">5</property>
                               </packing>
                             </child>
                           </object>
