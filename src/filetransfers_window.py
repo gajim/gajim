@@ -175,7 +175,8 @@ class FileTransfersWindow:
             (file_path, file_name) = os.path.split(file_props['file-name'])
         else:
             file_name = file_props['name']
-        sectext = '\t' + _('Filename: %s') % file_name
+        sectext = '\t' + _('Filename: %s') % gobject.markup_escape_text(
+            file_name)
         sectext += '\n\t' + _('Size: %s') % \
         helpers.convert_bytes(file_props['size'])
         if file_props['type'] == 'r':
@@ -231,7 +232,8 @@ class FileTransfersWindow:
             file_name = os.path.basename(file_props['file-name'])
         else:
             file_name = file_props['name']
-        sectext = '\t' + _('Filename: %s') % file_name
+        sectext = '\t' + _('Filename: %s') % gobject.markup_escape_text(
+            file_name)
         sectext += '\n\t' + _('Recipient: %s') % jid
         if error_msg:
             sectext += '\n\t' + _('Error message: %s') % error_msg
@@ -328,7 +330,8 @@ class FileTransfersWindow:
             if os.path.exists(file_path):
                 # check if we have write permissions
                 if not os.access(file_path, os.W_OK):
-                    file_name = os.path.basename(file_path)
+                    file_name = gobject.markup_escape_text(os.path.basename(
+                        file_path))
                     dialogs.ErrorDialog(
                         _('Cannot overwrite existing file "%s"' % file_name),
                         _('A file with this name already exists and you do not '
@@ -590,7 +593,7 @@ class FileTransfersWindow:
             iter_ = self.model.iter_next(iter_)
 
     def get_send_file_props(self, account, contact, file_path, file_name,
-                    file_desc=''):
+    file_desc=''):
         """
         Create new file_props dict and set initial file transfer properties in it
         """
