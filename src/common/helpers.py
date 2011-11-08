@@ -40,6 +40,7 @@ import errno
 import select
 import base64
 import hashlib
+import shlex
 import caps_cache
 
 from encodings.punycode import punycode_encode
@@ -381,8 +382,18 @@ def is_in_path(command, return_abs_path=False):
             pass
     return False
 
-def exec_command(command):
-    subprocess.Popen('%s &' % command, shell=True).wait()
+def exec_command(command, use_shell=False):
+    """
+    execute a command. if use_shell is True, we run the command as is it was
+    typed in a console. So it may be dangerous if you are not sure about what
+    is executed.
+    """
+    if use_shell:
+        subprocess.Popen('%s &' % command, shell=True).wait()
+    else:
+        args = shlex.split(command.encode('utf-8'))
+        p = subprocess.Popen(args)
+        gajim.thread_interface(p.wait)
 
 def build_command(executable, parameter):
     # we add to the parameter (can hold path with spaces)
