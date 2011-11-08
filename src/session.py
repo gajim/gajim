@@ -337,8 +337,9 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
                 contact)
 
         event = gajim.events.create_event(type_, (msg, subject, msg_type, tim,
-                encrypted, resource, msg_id, xhtml, self, form_node, displaymarking),
-                show_in_roster=show_in_roster, show_in_systray=show_in_systray)
+            encrypted, resource, msg_id, xhtml, self, form_node, displaymarking,
+            False), show_in_roster=show_in_roster,
+            show_in_systray=show_in_systray)
 
         gajim.events.add_event(self.conn.name, fjid, event)
 

@@ -1000,7 +1000,7 @@ class GroupchatControl(ChatControlBase):
         no_queue = len(gajim.events.get_events(self.account, fjid)) == 0
 
         event = gajim.events.create_event('pm', (msg, '', 'incoming', tim,
-            encrypted, '', msg_id, xhtml, session, displaymarking))
+            encrypted, '', msg_id, xhtml, session, None, displaymarking, False))
         gajim.events.add_event(self.account, fjid, event)
 
         autopopup = gajim.config.get('autopopup')
