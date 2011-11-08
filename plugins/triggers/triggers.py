@@ -48,8 +48,10 @@ class Triggers(GajimPlugin):
         if rule['recipient_type'] == 'contact' and obj.jid not in \
         rule_recipients:
             return False
-        contact_groups = gajim.contacts.get_first_contact_from_jid(
-            obj.conn.name, obj.jid).groups
+        contact = gajim.contacts.get_first_contact_from_jid(obj.conn.name, obj.jid)
+        if not contact:  # PM?
+            return False
+        contact_groups = contact.groups
         group_found = False
         for group in contact_groups:
             if group in rule_recipients:
