@@ -167,7 +167,7 @@ class Notification:
 
         if obj.do_command:
             try:
-                helpers.exec_command(obj.command)
+                helpers.exec_command(obj.command, use_shell=True)
             except Exception:
                 pass
 
