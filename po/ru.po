@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-08 00:24+0400\n"
-"PO-Revision-Date: 2011-11-10 21:47+0300\n"
+"POT-Creation-Date: 2011-11-11 00:06+0400\n"
+"PO-Revision-Date: 2011-11-11 00:17+0300\n"
 "Last-Translator: Fomin Denis <fominde@mail.ru>\n"
 "Language-Team: Linux Support LLC\n"
 "Language: ru\n"
@@ -126,15 +126,18 @@ msgstr "Управление..."
 #: ../data/gui/account_creation_wizard_window.ui.h:17
 #: ../data/gui/accounts_window.ui.h:41
 #: ../data/gui/change_mood_dialog.ui.h:3
-#: ../src/config.py:1301
-#: ../src/config.py:1404
-#: ../src/config.py:1715
-#: ../src/config.py:1720
-#: ../src/config.py:2296
-#: ../src/config.py:2375
-#: ../src/config.py:2388
-#: ../src/config.py:3667
-#: ../src/config.py:3742
+#: ../src/config.py:1264
+#: ../src/config.py:1278
+#: ../src/config.py:1283
+#: ../src/config.py:1331
+#: ../src/config.py:1434
+#: ../src/config.py:1745
+#: ../src/config.py:1750
+#: ../src/config.py:2326
+#: ../src/config.py:2405
+#: ../src/config.py:2418
+#: ../src/config.py:3697
+#: ../src/config.py:3772
 #: ../src/dialogs.py:311
 #: ../src/dialogs.py:313
 #: ../src/dialogs.py:519
@@ -317,8 +320,8 @@ msgstr "Имя:"
 #. No configured account
 #: ../data/gui/accounts_window.ui.h:26
 #: ../data/gui/roster_window.ui.h:5
-#: ../src/common/helpers.py:1148
-#: ../src/common/helpers.py:1160
+#: ../src/common/helpers.py:1159
+#: ../src/common/helpers.py:1171
 #: ../src/notify.py:314
 #: ../src/notify.py:337
 #: ../src/notify.py:387
@@ -374,7 +377,7 @@ msgstr "Информация о вас, сохраненная на сервер
 
 #: ../data/gui/accounts_window.ui.h:37
 #: ../data/gui/zeroconf_information_window.ui.h:4
-#: ../src/config.py:1838
+#: ../src/config.py:1868
 #: ../src/dialogs.py:837
 msgid "Jabber ID:"
 msgstr "Jabber ID:"
@@ -389,8 +392,8 @@ msgid "Mer_ge accounts"
 msgstr "_Объединить учетные записи"
 
 #: ../data/gui/accounts_window.ui.h:40
-#: ../src/config.py:1811
-#: ../src/config.py:2389
+#: ../src/config.py:1841
+#: ../src/config.py:2419
 msgid "No key selected"
 msgstr "Не выбран ключ"
 
@@ -481,6 +484,7 @@ msgid "_Hostname: "
 msgstr "_Хост: "
 
 #: ../data/gui/accounts_window.ui.h:64
+#: ../data/gui/preferences_window.ui.h:133
 msgid "_Manage..."
 msgstr "_Управление..."
 
@@ -510,7 +514,7 @@ msgid "Add New Contact"
 msgstr "Добавить новый контакт"
 
 #: ../data/gui/add_new_contact_window.ui.h:4
-#: ../src/common/helpers.py:1339
+#: ../src/common/helpers.py:1350
 msgid "I would like to add you to my contact list."
 msgstr "Вы не возражаете, если я добавлю Вас в контакт лист?"
 
@@ -1497,7 +1501,7 @@ msgid "Room:"
 msgstr "Комната:"
 
 #: ../data/gui/join_groupchat_window.ui.h:9
-#: ../src/config.py:1828
+#: ../src/config.py:1858
 msgid "Server:"
 msgstr "Сервер:"
 
@@ -1847,7 +1851,7 @@ msgstr "Окно контактов и окно с беседами"
 
 #: ../data/gui/preferences_window.ui.h:46
 #: ../src/config.py:170
-#: ../src/config.py:680
+#: ../src/config.py:682
 msgid "Disabled"
 msgstr "Отключены"
 
@@ -1892,142 +1896,146 @@ msgid "Gajim will notify you via a popup window in the bottom right of the scree
 msgstr "Gajim будет уведомлять вас об отсоединившемся контакте с помощью сообщения в правом нижнем углу экрана"
 
 #: ../data/gui/preferences_window.ui.h:58
+msgid "Global proxy:"
+msgstr "Глобальный прокси:"
+
+#: ../data/gui/preferences_window.ui.h:59
 msgid "Hide all buttons in chat windows"
 msgstr "Не показывать кнопки в окнах чата"
 
-#: ../data/gui/preferences_window.ui.h:59
+#: ../data/gui/preferences_window.ui.h:60
 msgid "If checked, Gajim will allow others to detect the operation system you are using"
 msgstr "Если отмечено, то Gajim будет разрешать определять операционную систему, которую вы используете"
 
-#: ../data/gui/preferences_window.ui.h:60
+#: ../data/gui/preferences_window.ui.h:61
 msgid "If checked, Gajim will allow others to detect the time on your system"
 msgstr "Если отмечено, то Gajim будет разрешать определять время в системе, которую вы используете"
 
-#: ../data/gui/preferences_window.ui.h:61
+#: ../data/gui/preferences_window.ui.h:62
 msgid "If checked, Gajim will also include information about the sender of the new emails"
 msgstr "Если отмечено, то Gajim будет включать информацию об отправителе новых писем."
 
-#: ../data/gui/preferences_window.ui.h:62
+#: ../data/gui/preferences_window.ui.h:63
 msgid "If checked, Gajim will change status to Away when the computer is unused."
 msgstr "Если отмечено, то Gajim изменит статус на Away, если компьютер не используется."
 
-#: ../data/gui/preferences_window.ui.h:63
+#: ../data/gui/preferences_window.ui.h:64
 msgid "If checked, Gajim will change status to Not Available when the computer has not been used even longer"
 msgstr "Если отмечено, Gajim будет менять статус на Недоступен, если компьютер долго не используется"
 
-#: ../data/gui/preferences_window.ui.h:64
+#: ../data/gui/preferences_window.ui.h:65
 msgid "If checked, Gajim will display avatars of contacts in roster window and in group chats"
 msgstr "Если отмечено, то Gajim будет показывать аватары контактов в окне ростера и в окнах комнат"
 
-#: ../data/gui/preferences_window.ui.h:65
+#: ../data/gui/preferences_window.ui.h:66
 msgid "If checked, Gajim will display status messages of contacts under the contact name in roster window and in group chats"
 msgstr "Если отмечено, то Gajim будет отображать сообщение о статусе контакта под его именем в окне ростера и в окнах комнат"
 
-#: ../data/gui/preferences_window.ui.h:66
+#: ../data/gui/preferences_window.ui.h:67
 msgid "If checked, Gajim will display the activity of contacts in the roster window"
 msgstr "Если отмечено, то Gajim будет показывать занятия контактов в окне ростера"
 
-#: ../data/gui/preferences_window.ui.h:67
+#: ../data/gui/preferences_window.ui.h:68
 msgid "If checked, Gajim will display the location of contacts in the roster window"
 msgstr "Если отмечено, то Gajim будет показывать местоположение контактов в окне ростера"
 
-#: ../data/gui/preferences_window.ui.h:68
+#: ../data/gui/preferences_window.ui.h:69
 msgid "If checked, Gajim will display the mood of contacts in the roster window"
 msgstr "Если отмечено, то Gajim будет показывать настроения контактов в окне ростера"
 
-#: ../data/gui/preferences_window.ui.h:69
+#: ../data/gui/preferences_window.ui.h:70
 msgid "If checked, Gajim will display the tunes of contacts in the roster window"
 msgstr "Если отмечено, то Gajim будет показывать tunes контактов в окне ростера"
 
-#: ../data/gui/preferences_window.ui.h:70
+#: ../data/gui/preferences_window.ui.h:71
 msgid "If checked, Gajim will highlight spelling errors in input fields of chat windows. If no language is explicitly set via right click on the input field, the default language will be used for this contact or group chat."
 msgstr "Если отмечено, Gajim будет выделять орфографические ошибки в полях ввода окон чата. Если язык проверки явно не задан, будет использован язык по умолчанию для данного контакта или комнаты."
 
-#: ../data/gui/preferences_window.ui.h:71
+#: ../data/gui/preferences_window.ui.h:72
 msgid "If checked, Gajim will ignore incoming events from unauthorized contacts. Use with caution, because it blocks all messages from any contact that is not in the roster"
 msgstr "Отметьте эту опцию, только если кто-то не из вашего ростера спамит/достает вас. Используйте с осторожностью, потому что это заблокирует все сообщения от контактов не из вашего ростера."
 
-#: ../data/gui/preferences_window.ui.h:72
+#: ../data/gui/preferences_window.ui.h:73
 msgid "If checked, Gajim will keep logs for encrypted messages. Please note that when using E2E encryption the remote party has to agree on logging, else the messages will not be logged."
 msgstr "Если отмечено, Gajim будет сохранять историю зашифрованных сообщений. Помните, что при использовании E2E шифрования удаленная сторона должна дать согласие на ведение истории, иначе сообщения не будут сохраняться."
 
-#: ../data/gui/preferences_window.ui.h:73
+#: ../data/gui/preferences_window.ui.h:74
 msgid "If checked, Gajim will show a notification when a new e-mail is received via GMail"
 msgstr "Если отмечено, то Gajim будет сообщать о новых письмах, полученных в GMail"
 
-#: ../data/gui/preferences_window.ui.h:74
+#: ../data/gui/preferences_window.ui.h:75
 msgid "If checked, Gajim will use protocol-specific status icons. (eg. A contact from MSN will have the equivalent msn icon for status online, away, busy, etc...)"
 msgstr "Если отмечено, то Gajim будет использовать для каждого протокола свои иконки (например, контакты из MSN будут иметь соответствующие иконки msn для статусов «в сети», «ушёл», «занят» и т.д.)"
 
-#: ../data/gui/preferences_window.ui.h:75
+#: ../data/gui/preferences_window.ui.h:76
 msgid "If enabled, Gajim will not ask for a status message. The specified default message will be used instead."
 msgstr "Если включено, Gajim не будет запрашивать сообщение о статусе. Вместо него будет использовано соответствующее сообщение по умолчанию."
 
-#: ../data/gui/preferences_window.ui.h:76
+#: ../data/gui/preferences_window.ui.h:77
 msgid "If not disabled, Gajim will replace ascii smilies like ':)' with equivalent animated or static graphical emoticons"
 msgstr "Gajim заменяет текстовые смайлики, например ':)', их графическим или анимированным эквивалентом. Выберите «Отключены», чтобы этого не происходило."
 
-#: ../data/gui/preferences_window.ui.h:77
+#: ../data/gui/preferences_window.ui.h:78
 msgid "Last state"
 msgstr "Последнее состояние"
 
-#: ../data/gui/preferences_window.ui.h:78
+#: ../data/gui/preferences_window.ui.h:79
 msgid "Log _encrypted chat session"
 msgstr "Записывать в лог _шифрованные сообщения"
 
-#: ../data/gui/preferences_window.ui.h:79
+#: ../data/gui/preferences_window.ui.h:80
 msgid "Ma_ke message windows compact"
 msgstr "_Компактное окно сообщений"
 
-#: ../data/gui/preferences_window.ui.h:80
+#: ../data/gui/preferences_window.ui.h:81
 msgid "Ma_nage..."
 msgstr "_Управление..."
 
-#: ../data/gui/preferences_window.ui.h:81
+#: ../data/gui/preferences_window.ui.h:82
 msgid "Never"
 msgstr "Никогда"
 
-#: ../data/gui/preferences_window.ui.h:82
+#: ../data/gui/preferences_window.ui.h:83
 msgid "Notifications"
 msgstr "Уведомления"
 
-#: ../data/gui/preferences_window.ui.h:83
+#: ../data/gui/preferences_window.ui.h:84
 msgid "Notify me about contacts that sign _in"
 msgstr "Уведомлять о контактах, которые _вошли: "
 
-#: ../data/gui/preferences_window.ui.h:84
+#: ../data/gui/preferences_window.ui.h:85
 msgid "Notify me about contacts that sign _out"
 msgstr "Уведомлять о контактах, которые _вышли: "
 
-#: ../data/gui/preferences_window.ui.h:85
+#: ../data/gui/preferences_window.ui.h:86
 msgid "Notify me about it"
 msgstr "Уведомлять об этом"
 
-#: ../data/gui/preferences_window.ui.h:86
+#: ../data/gui/preferences_window.ui.h:87
 msgid "Notify on new _GMail email"
 msgstr "Сообщать о новых письмах в _Gmail"
 
-#: ../data/gui/preferences_window.ui.h:87
+#: ../data/gui/preferences_window.ui.h:88
 msgid "Only when pending events"
 msgstr "Только при пропущенных событиях"
 
-#: ../data/gui/preferences_window.ui.h:88
+#: ../data/gui/preferences_window.ui.h:89
 msgid "Personal Events"
 msgstr "Расширенные статусы"
 
-#: ../data/gui/preferences_window.ui.h:89
+#: ../data/gui/preferences_window.ui.h:90
 msgid "Play _sounds"
 msgstr "Проигрывать _звук"
 
-#: ../data/gui/preferences_window.ui.h:90
+#: ../data/gui/preferences_window.ui.h:91
 msgid "Pop it up"
 msgstr "Показать"
 
-#: ../data/gui/preferences_window.ui.h:91
+#: ../data/gui/preferences_window.ui.h:92
 msgid "Preferences"
 msgstr "Настройки"
 
-#: ../data/gui/preferences_window.ui.h:92
+#: ../data/gui/preferences_window.ui.h:93
 msgid ""
 "STUN server hostname. If none given, Gajim will try\n"
 "to discover one from server."
@@ -2035,56 +2043,56 @@ msgstr ""
 "Адрес сервера STUN. Если не указано, Gajim попробует\n"
 "получить адрес с сервера."
 
-#: ../data/gui/preferences_window.ui.h:94
+#: ../data/gui/preferences_window.ui.h:95
 msgid "STUN server:"
 msgstr "STUN сервер:"
 
-#: ../data/gui/preferences_window.ui.h:95
+#: ../data/gui/preferences_window.ui.h:96
 msgid "Show notification area icon:"
 msgstr "Отображать значек в области уведомлений:"
 
-#: ../data/gui/preferences_window.ui.h:96
+#: ../data/gui/preferences_window.ui.h:97
 msgid "Show only in roster"
 msgstr "Показывать только в ростере"
 
-#: ../data/gui/preferences_window.ui.h:97
+#: ../data/gui/preferences_window.ui.h:98
 msgid "Sign _in"
 msgstr "В_ошел"
 
-#: ../data/gui/preferences_window.ui.h:98
+#: ../data/gui/preferences_window.ui.h:99
 msgid "Sign _out"
 msgstr "В_ышел"
 
-#: ../data/gui/preferences_window.ui.h:99
+#: ../data/gui/preferences_window.ui.h:100
 msgid "Single window for everything"
 msgstr "Всё в одном окне"
 
-#: ../data/gui/preferences_window.ui.h:100
+#: ../data/gui/preferences_window.ui.h:101
 msgid "Some messages may include rich content (formatting, colors etc). If checked, Gajim will just display the raw message text."
 msgstr "Некоторые сообщения могут содержать форматирование (цвет, шрифт и т.д.). Если отмечено, Gajim будет отображать только их текст, без форматирования."
 
-#: ../data/gui/preferences_window.ui.h:101
+#: ../data/gui/preferences_window.ui.h:102
 msgid "Sort contacts by status"
 msgstr "Сортировать контакты по статусу"
 
-#: ../data/gui/preferences_window.ui.h:102
+#: ../data/gui/preferences_window.ui.h:103
 #: ../src/config.py:400
 msgid "Status"
 msgstr "Статус"
 
-#: ../data/gui/preferences_window.ui.h:103
+#: ../data/gui/preferences_window.ui.h:104
 msgid "Status _iconset:"
 msgstr "Тема статусных _иконок:"
 
-#: ../data/gui/preferences_window.ui.h:104
+#: ../data/gui/preferences_window.ui.h:105
 msgid "Style"
 msgstr "Стиль"
 
-#: ../data/gui/preferences_window.ui.h:105
+#: ../data/gui/preferences_window.ui.h:106
 msgid "T_heme:"
 msgstr "_Тема:"
 
-#: ../data/gui/preferences_window.ui.h:106
+#: ../data/gui/preferences_window.ui.h:107
 msgid ""
 "The auto away status message. If empty, Gajim will not change the current status message\n"
 "$S will be replaced by previous status message\n"
@@ -2094,7 +2102,7 @@ msgstr ""
 "$S заменяется на предыдущее сообщение о статусе\n"
 "$T заменяется на время срабатывания автоматического сообщения о статусе «Ушел»"
 
-#: ../data/gui/preferences_window.ui.h:109
+#: ../data/gui/preferences_window.ui.h:110
 msgid ""
 "The auto not available status message. If empty, Gajim will not change the current status message\n"
 "$S will be replaced by previous status message\n"
@@ -2104,127 +2112,127 @@ msgstr ""
 "$S заменяется на предыдущее сообщение о статусе\n"
 "$T заменяется на время срабатывания автоматического сообщения о статусе «Недоступен»"
 
-#: ../data/gui/preferences_window.ui.h:112
+#: ../data/gui/preferences_window.ui.h:113
 msgid "Use _transports icons"
 msgstr "Использовать иконки _транспортов"
 
-#: ../data/gui/preferences_window.ui.h:113
+#: ../data/gui/preferences_window.ui.h:114
 msgid "Use default applications"
 msgstr "Использовать приложения по умолчанию"
 
-#: ../data/gui/preferences_window.ui.h:114
+#: ../data/gui/preferences_window.ui.h:115
 msgid "Use system _default"
 msgstr "Использовать _системный шрифт"
 
-#: ../data/gui/preferences_window.ui.h:115
+#: ../data/gui/preferences_window.ui.h:116
 msgid "Video framerate"
 msgstr "Частота кадров видео"
 
-#: ../data/gui/preferences_window.ui.h:116
+#: ../data/gui/preferences_window.ui.h:117
 msgid "Video input device"
 msgstr "Устройство захвата изображения"
 
-#: ../data/gui/preferences_window.ui.h:117
+#: ../data/gui/preferences_window.ui.h:118
 msgid "Video output device"
 msgstr "Устройство вывода изображения"
 
-#: ../data/gui/preferences_window.ui.h:118
+#: ../data/gui/preferences_window.ui.h:119
 msgid "Video size"
 msgstr "Разрешение видео"
 
-#: ../data/gui/preferences_window.ui.h:119
+#: ../data/gui/preferences_window.ui.h:120
 msgid "When new event is received:"
 msgstr "Когда получено новое сообытие:"
 
-#: ../data/gui/preferences_window.ui.h:120
+#: ../data/gui/preferences_window.ui.h:121
 msgid "Your message:"
 msgstr "Ваше сообщение:"
 
-#: ../data/gui/preferences_window.ui.h:121
+#: ../data/gui/preferences_window.ui.h:122
 msgid "Your nickname:"
 msgstr "Ваш ник:"
 
-#: ../data/gui/preferences_window.ui.h:122
+#: ../data/gui/preferences_window.ui.h:123
 msgid "_Away after:"
 msgstr "Авто-_отошел после:"
 
-#: ../data/gui/preferences_window.ui.h:123
+#: ../data/gui/preferences_window.ui.h:124
 msgid "_Browser:"
 msgstr "_Браузер:"
 
-#: ../data/gui/preferences_window.ui.h:124
+#: ../data/gui/preferences_window.ui.h:125
 msgid "_Display chat state notifications:"
 msgstr "_Отображать уведомления о состоянии чата:"
 
-#: ../data/gui/preferences_window.ui.h:125
+#: ../data/gui/preferences_window.ui.h:126
 msgid "_Emoticons:"
 msgstr "_Смайлики:"
 
-#: ../data/gui/preferences_window.ui.h:126
+#: ../data/gui/preferences_window.ui.h:127
 msgid "_File manager:"
 msgstr "_Менеджер файлов:"
 
-#: ../data/gui/preferences_window.ui.h:127
+#: ../data/gui/preferences_window.ui.h:128
 msgid "_Highlight misspelled words"
 msgstr "Выделять _слова с опечатками"
 
-#: ../data/gui/preferences_window.ui.h:128
+#: ../data/gui/preferences_window.ui.h:129
 msgid "_Ignore events from contacts not in the roster"
 msgstr "_Игнорировать события от контактов не из ростера"
 
-#: ../data/gui/preferences_window.ui.h:129
+#: ../data/gui/preferences_window.ui.h:130
 msgid "_Ignore rich content in incoming messages"
 msgstr "_Игнорировать форматирование во входящих сообщениях"
 
-#: ../data/gui/preferences_window.ui.h:130
+#: ../data/gui/preferences_window.ui.h:131
 msgid "_Log status changes of contacts"
 msgstr "_Записывать в лог изменения статусов контактов"
 
-#: ../data/gui/preferences_window.ui.h:131
+#: ../data/gui/preferences_window.ui.h:132
 msgid "_Mail client:"
 msgstr "_Почтовый клиент:"
 
-#: ../data/gui/preferences_window.ui.h:132
+#: ../data/gui/preferences_window.ui.h:134
 msgid "_Not available after:"
 msgstr "Авто-_недоступен после:"
 
-#: ../data/gui/preferences_window.ui.h:133
+#: ../data/gui/preferences_window.ui.h:135
 msgid "_Open..."
 msgstr "_Открыть..."
 
-#: ../data/gui/preferences_window.ui.h:134
+#: ../data/gui/preferences_window.ui.h:136
 msgid "_Reset to Default Colors"
 msgstr "_Вернуться к цветам по умолчанию"
 
-#: ../data/gui/preferences_window.ui.h:135
+#: ../data/gui/preferences_window.ui.h:137
 msgid "_Send chat state notifications:"
 msgstr "_Отправлять уведомления о состоянии чата:"
 
-#: ../data/gui/preferences_window.ui.h:136
+#: ../data/gui/preferences_window.ui.h:138
 msgid "_Show roster on startup:"
 msgstr "Показ_ывать ростер при запуске:"
 
-#: ../data/gui/preferences_window.ui.h:137
+#: ../data/gui/preferences_window.ui.h:139
 msgid "_Status message:"
 msgstr "_Сообщение о статусе:"
 
-#: ../data/gui/preferences_window.ui.h:138
+#: ../data/gui/preferences_window.ui.h:140
 msgid "_URL highlight:"
 msgstr "_Цвет ссылок:"
 
-#: ../data/gui/preferences_window.ui.h:139
+#: ../data/gui/preferences_window.ui.h:141
 msgid "_Window behavior:"
 msgstr "Поведение _окна:"
 
-#: ../data/gui/preferences_window.ui.h:140
+#: ../data/gui/preferences_window.ui.h:142
 msgid "in _group chats"
 msgstr "в _комнатах"
 
-#: ../data/gui/preferences_window.ui.h:141
+#: ../data/gui/preferences_window.ui.h:143
 msgid "in _roster"
 msgstr "в _ростере"
 
-#: ../data/gui/preferences_window.ui.h:142
+#: ../data/gui/preferences_window.ui.h:144
 msgid "minutes"
 msgstr "минут"
 
@@ -3102,8 +3110,8 @@ msgstr "Требует python-farsight."
 #: ../src/chat_control.py:1703
 #: ../src/common/contacts.py:149
 #: ../src/common/contacts.py:270
-#: ../src/common/helpers.py:60
-#: ../src/common/helpers.py:254
+#: ../src/common/helpers.py:61
+#: ../src/common/helpers.py:255
 #: ../src/dialogs.py:1099
 #: ../src/dialogs.py:2227
 #: ../src/dialogs.py:2256
@@ -3254,7 +3262,7 @@ msgstr "Если вы закроете эту вкладку и у вас отк
 #: ../src/common/connection_handlers.py:938
 #: ../src/common/connection_handlers.py:1050
 #: ../src/common/connection.py:451
-#: ../src/common/logger.py:1127
+#: ../src/common/logger.py:1131
 #: ../src/gajim.py:209
 #: ../src/session.py:101
 msgid "Database Error"
@@ -3394,7 +3402,7 @@ msgid "Online"
 msgstr "В сети"
 
 #: ../src/common/commands.py:109
-#: ../src/common/helpers.py:242
+#: ../src/common/helpers.py:243
 #: ../src/tooltips.py:193
 msgid "Away"
 msgstr "Ушел"
@@ -3441,7 +3449,7 @@ msgstr "Выберите конференции, которые вы хотит�
 #. Make special context menu if group is Groupchats
 #: ../src/common/commands.py:215
 #: ../src/common/contacts.py:128
-#: ../src/common/helpers.py:60
+#: ../src/common/helpers.py:61
 #: ../src/roster_window.py:817
 #: ../src/roster_window.py:1648
 #: ../src/roster_window.py:1650
@@ -3556,7 +3564,7 @@ msgstr "Список (через пробел) строк (учётных зап
 
 #. sorted alphanum
 #: ../src/common/config.py:108
-#: ../src/common/config.py:500
+#: ../src/common/config.py:501
 #: ../src/common/optparser.py:296
 #: ../src/common/optparser.py:492
 #: ../src/common/optparser.py:526
@@ -3769,7 +3777,7 @@ msgstr "может быть «none», «all» или «in_and_out». Если у
 
 #: ../src/common/config.py:238
 msgid "Log XHTML messages instead of plain text messages."
-msgstr ""
+msgstr "Сохранять XHTML сообщения вместо простых текстовых сообщений"
 
 #: ../src/common/config.py:239
 msgid "Background color of contacts when they just signed in."
@@ -3823,6 +3831,10 @@ msgid ""
 "'never' - Never show roster.\n"
 "'last_state' - Restore the last state roster."
 msgstr ""
+"Показывать ростер при запуске.\n"
+"'always' - Всегда показывать ростер.\n"
+"'never' - Никогда не показывать ростер.\n"
+"'last_state' - Восстанавливать последнее состояние ростера."
 
 #: ../src/common/config.py:252
 msgid "If False, you will no longer see the avatar in the chat window."
@@ -3964,249 +3976,253 @@ msgstr "Сервер STUN для использования с jingle"
 msgid "If True, Gajim will show affiliation of groupchat occupants by adding a colored square to the status icon"
 msgstr "Если включено, Gajim покажет принадлежность пользователей группового чата, добавив цветные квадраты к значку статуса"
 
-#: ../src/common/config.py:306
+#: ../src/common/config.py:293
+msgid "Proxy used for all outgoing connections if the account does not have a specific proxy configured"
+msgstr "Прокси используется для всех исходящих соединений, если в настройках учетной записи не задан прокси "
+
+#: ../src/common/config.py:307
 msgid "Priority will change automatically according to your status. Priorities are defined in autopriority_* options."
 msgstr "Приоритет будет изменяться автоматически согласно вашему статусу. Приоритеты для статусов задаются в пункте autopriority_* ."
 
-#: ../src/common/config.py:314
+#: ../src/common/config.py:315
 msgid "Status used to autoconnect as. Can be online, chat, away, xa, dnd, invisible. NOTE: this option is used only if restore_last_status is disabled"
 msgstr "Статус, используемый при автоподключении. Варианты: отключен, в сети, готов поболтать, отошел, недоступен, не беспокоить, невидимка"
 
-#: ../src/common/config.py:315
+#: ../src/common/config.py:316
 msgid "If enabled, restore the last status that was used."
 msgstr "Если включено, восстанавливать последний использованный статус."
 
-#: ../src/common/config.py:317
+#: ../src/common/config.py:318
 msgid "If True, Contacts requesting authorization will be automatically accepted."
 msgstr "Если активно, контакты, запрашивающие авторизацию, будут автоматически её получать."
 
-#: ../src/common/config.py:318
+#: ../src/common/config.py:319
 msgid "If False, this account will be disabled and will not appear in roster window."
 msgstr "Если неактивно, эта учетная запись будет отключена и не будет отображаться в окне ростера."
 
-#: ../src/common/config.py:321
+#: ../src/common/config.py:322
 msgid "If disabled, don't sign presences with GPG key, even if GPG is configured."
 msgstr "Если отключено, не подписывать присутствие ключом GPG, даже если GPG настроен."
 
-#: ../src/common/config.py:323
+#: ../src/common/config.py:324
 msgid "Enable ESessions encryption for this account."
 msgstr "Включить ESessions шифрование для данной учетной записи."
 
-#: ../src/common/config.py:324
+#: ../src/common/config.py:325
 msgid "Should Gajim automatically start an encrypted session when possible?"
 msgstr "Должен ли Gajim по возможности автоматически начинать зашифрованный сеанс?"
 
-#: ../src/common/config.py:325
+#: ../src/common/config.py:326
 msgid "Ordered list (space separated) of connection type to try. Can contain tls, ssl or plain"
 msgstr "Упорядоченный список (разделённый пробелами) типов подключения, которые будут перепробованы. Может включать tls, ssl или plain"
 
-#: ../src/common/config.py:326
+#: ../src/common/config.py:327
 msgid "Show a warning dialog before sending password on an plaintext connection. Can be 'warn', 'connect', 'disconnect'"
 msgstr "Если отмечено, то Gajim будет будет спрашивать вас перед отправкой пароля через незащищенное соединение. Может быть 'warn', 'connect', 'disconnect'"
 
-#: ../src/common/config.py:327
+#: ../src/common/config.py:328
 msgid "Show a warning dialog before using standard SSL library."
 msgstr "Предупреждать, прежде чем использовать стандартную библиотеку SSL."
 
-#: ../src/common/config.py:328
+#: ../src/common/config.py:329
 msgid "Show a warning dialog before sending PLAIN password over a plain connection."
 msgstr "Показывать предупреждение перед отправкой пароля через незащищенное соединение."
 
-#: ../src/common/config.py:330
+#: ../src/common/config.py:331
 msgid "Space separated list of ssl errors to ignore."
 msgstr "Разделенный пробелами список игнорирования ошибок ssl"
 
-#: ../src/common/config.py:336
+#: ../src/common/config.py:337
 msgid "Space separated list of JIDs for which you do not want to store logs. You can also add account name to log nothing for this account."
 msgstr ""
 
-#: ../src/common/config.py:337
+#: ../src/common/config.py:338
 msgid "Space separated list of JIDs for which you accept to not log conversations if he does not want to."
 msgstr ""
 
-#: ../src/common/config.py:340
+#: ../src/common/config.py:341
 msgid "Whitespace sent after inactivity"
 msgstr "Пробел, посылаемый после бездействия"
 
 # дословно: пинг XMPP послал после бездействия. Возможно, ошибка в оригинале.
-#: ../src/common/config.py:341
+#: ../src/common/config.py:342
 msgid "XMPP ping sent after inactivity"
 msgstr "пинг XMPP, посылаемый после бездействия"
 
-#: ../src/common/config.py:345
+#: ../src/common/config.py:346
 msgid "How many seconds to wait for the answer of ping alive packet before we try to reconnect."
 msgstr "Время ожидания (в секундах) ответа на пинг перед повторной попыткой соединения."
 
 #. yes, no, ask
-#: ../src/common/config.py:349
+#: ../src/common/config.py:350
 msgid "Jabberd2 workaround"
 msgstr "Костыль для jabberd2"
 
-#: ../src/common/config.py:352
+#: ../src/common/config.py:353
 msgid "If checked, Gajim will use your IP and proxies defined in file_transfer_proxies option for file transfer."
 msgstr "Если отмечено, Gajim будет использовать ваш IP и прокси, определенные в параметре file_transfer_proxies для передачи файлов"
 
-#: ../src/common/config.py:353
+#: ../src/common/config.py:354
 msgid "If True, Gajim will test file transfer proxies on startup to be sure it works. Openfire's proxies are known to fail this test even if they work."
 msgstr ""
 
-#: ../src/common/config.py:367
+#: ../src/common/config.py:368
 msgid "Answer to receipt requests"
 msgstr "Отвечать на запросы уведомления"
 
-#: ../src/common/config.py:368
+#: ../src/common/config.py:369
 msgid "Sent receipt requests"
 msgstr "Посылать запросы уведомления"
 
-#: ../src/common/config.py:377
+#: ../src/common/config.py:378
 msgid "Allow Gajim to send information about the operating system you are running."
 msgstr "Разрешить Gajim отправлять информацию о операционной системе, которую вы используете"
 
-#: ../src/common/config.py:378
+#: ../src/common/config.py:379
 msgid "Allow Gajim to send your local time."
 msgstr "Разрешить Gajim отправлять ваше локальное время."
 
-#: ../src/common/config.py:379
+#: ../src/common/config.py:380
 msgid "When negotiating an encrypted session, should Gajim assume you want your messages to be logged?"
 msgstr "Когда устанавливается зашифрованный сеанс, должен ли Gajim предположить, что вы хотите сохранить историю сообщений?"
 
-#: ../src/common/config.py:382
+#: ../src/common/config.py:383
 msgid "Message that is sent to contacts you want to add"
 msgstr "Сообщение отправляемое контактам, которых вы хотите добавить"
 
-#: ../src/common/config.py:383
+#: ../src/common/config.py:384
 msgid "Last time we syncronized with logs from server."
 msgstr "Время последней синхронизации с сервером."
 
-#: ../src/common/config.py:384
+#: ../src/common/config.py:385
 msgid "If enabled and if server supports this feature, Gajim will receive messages sent and received by other resources."
 msgstr ""
 
-#: ../src/common/config.py:385
+#: ../src/common/config.py:386
 msgid "If enabled, Gajim will send your local IPs so your contact can connect to your machine to transfer files."
 msgstr ""
 
-#: ../src/common/config.py:447
+#: ../src/common/config.py:448
 msgid "Is OpenPGP enabled for this contact?"
 msgstr "Используется ли для этого контакта OpenPGP?"
 
-#: ../src/common/config.py:448
+#: ../src/common/config.py:449
 msgid "Should Gajim automatically start an encrypted session with this contact when possible?"
 msgstr "Должен ли Gajim по возможности автоматически начинать для данного контакта зашифрованный сеанс?"
 
-#: ../src/common/config.py:449
-#: ../src/common/config.py:452
+#: ../src/common/config.py:450
+#: ../src/common/config.py:453
 msgid "Language for which we want to check misspelled words"
 msgstr "Язык, который используется при проверке правописания"
 
-#: ../src/common/config.py:455
+#: ../src/common/config.py:456
 msgid "State whether plugins should be activated on exit (this is saved on Gajim exit). This option SHOULD NOT be used to (de)activate plug-ins. Use GUI instead."
 msgstr "Состояние модулей при выходе(это сохраняется при выключении Gajim). Эта опция НЕ ДОЛЖНА использоваться для включения или выключения модулей. Используйте графический интерфейс для этого."
 
-#: ../src/common/config.py:460
+#: ../src/common/config.py:461
 #: ../src/common/pep.py:157
 msgid "Sleeping"
 msgstr "Сплю"
 
-#: ../src/common/config.py:461
+#: ../src/common/config.py:462
 msgid "Back soon"
 msgstr "Скоро буду"
 
-#: ../src/common/config.py:461
+#: ../src/common/config.py:462
 msgid "Back in some minutes."
 msgstr "Вернусь через несколько минут"
 
-#: ../src/common/config.py:462
+#: ../src/common/config.py:463
 #: ../src/common/pep.py:127
 msgid "Eating"
 msgstr "Ем"
 
-#: ../src/common/config.py:462
+#: ../src/common/config.py:463
 msgid "I'm eating, so leave me a message."
 msgstr "Кушаю, так что оставьте сообщение секретарю."
 
-#: ../src/common/config.py:463
+#: ../src/common/config.py:464
 msgid "Movie"
 msgstr "В кино"
 
-#: ../src/common/config.py:463
+#: ../src/common/config.py:464
 msgid "I'm watching a movie."
 msgstr "Смотрю кино"
 
-#: ../src/common/config.py:464
+#: ../src/common/config.py:465
 #: ../src/common/pep.py:186
 msgid "Working"
 msgstr "Работаю"
 
-#: ../src/common/config.py:464
+#: ../src/common/config.py:465
 msgid "I'm working."
 msgstr "Работаю"
 
-#: ../src/common/config.py:465
+#: ../src/common/config.py:466
 msgid "Phone"
 msgstr "Телефон"
 
-#: ../src/common/config.py:465
+#: ../src/common/config.py:466
 msgid "I'm on the phone."
 msgstr "Говорю по телефону"
 
-#: ../src/common/config.py:466
+#: ../src/common/config.py:467
 msgid "Out"
 msgstr "Вышел"
 
-#: ../src/common/config.py:466
+#: ../src/common/config.py:467
 msgid "I'm out enjoying life."
 msgstr "Наслаждаюсь жизнью, чего и вам желаю."
 
-#: ../src/common/config.py:477
+#: ../src/common/config.py:478
 msgid "I'm available."
 msgstr "Я здесь."
 
-#: ../src/common/config.py:478
+#: ../src/common/config.py:479
 msgid "I'm free for chat."
 msgstr "Я готов поболтать."
 
-#: ../src/common/config.py:479
-#: ../src/config.py:1621
+#: ../src/common/config.py:480
+#: ../src/config.py:1651
 msgid "Be right back."
 msgstr "Скоро буду."
 
-#: ../src/common/config.py:480
+#: ../src/common/config.py:481
 msgid "I'm not available."
 msgstr "Меня нет."
 
-#: ../src/common/config.py:481
+#: ../src/common/config.py:482
 msgid "Do not disturb."
 msgstr "Не беспокоить."
 
-#: ../src/common/config.py:482
 #: ../src/common/config.py:483
+#: ../src/common/config.py:484
 msgid "Bye!"
 msgstr "Пока!"
 
-#: ../src/common/config.py:493
+#: ../src/common/config.py:494
 msgid "Sound to play when a group chat message contains one of the words in muc_highlight_words, or when a group chat message contains your nickname."
 msgstr "Звук, который нужно воспроизвести, когда в MUC появляется сообщение, которое содержит слово из списка muc_highlight_words, или когда сообщение содержит ваш ник."
 
-#: ../src/common/config.py:494
+#: ../src/common/config.py:495
 msgid "Sound to play when any MUC message arrives."
 msgstr "Звук, который нужно проигрывать, когда приходит любое сообщение MUC."
 
-#: ../src/common/config.py:503
+#: ../src/common/config.py:504
 #: ../src/common/optparser.py:310
 msgid "green"
 msgstr "зеленый"
 
-#: ../src/common/config.py:507
+#: ../src/common/config.py:508
 #: ../src/common/optparser.py:296
 msgid "grocery"
 msgstr "овощной"
 
-#: ../src/common/config.py:511
+#: ../src/common/config.py:512
 msgid "human"
 msgstr "телесный"
 
-#: ../src/common/config.py:515
+#: ../src/common/config.py:516
 msgid "marine"
 msgstr "морской"
 
@@ -4225,7 +4241,7 @@ msgstr "%s хочет отменить подписку"
 #: ../src/common/connection_handlers.py:936
 #: ../src/common/connection_handlers.py:1048
 #: ../src/common/connection.py:448
-#: ../src/common/logger.py:1125
+#: ../src/common/logger.py:1129
 #: ../src/gajim.py:391
 msgid "Disk Write Error"
 msgstr "Ошибка записи на диск"
@@ -4234,7 +4250,7 @@ msgstr "Ошибка записи на диск"
 #: ../src/common/connection_handlers.py:939
 #: ../src/common/connection_handlers.py:1051
 #: ../src/common/connection.py:452
-#: ../src/common/logger.py:1128
+#: ../src/common/logger.py:1132
 #: ../src/gajim.py:210
 #: ../src/session.py:102
 #, python-format
@@ -4256,10 +4272,10 @@ msgstr "Взамен, вы можете присоединиться к комн
 #: ../src/common/connection_handlers_events.py:1030
 #: ../src/common/connection_handlers_events.py:1044
 #: ../src/common/connection.py:259
-#: ../src/config.py:2118
-#: ../src/config.py:2127
-#: ../src/config.py:2195
-#: ../src/config.py:3631
+#: ../src/config.py:2148
+#: ../src/config.py:2157
+#: ../src/config.py:2225
+#: ../src/config.py:3661
 #: ../src/dataforms_widget.py:623
 #: ../src/dialogs.py:3090
 msgid "Invalid Jabber ID"
@@ -4398,12 +4414,12 @@ msgid "Registration with agent %(agent)s failed with error %(error)s: %(error_ms
 msgstr "Регистрация сервиса %(agent)s завершилась ошибкой: %(error)s: %(error_msg)s"
 
 #: ../src/common/connection_handlers.py:567
-#: ../src/common/connection.py:1552
+#: ../src/common/connection.py:1519
 msgid "Invisibility not supported"
 msgstr "Невидимость не поддерживается"
 
 #: ../src/common/connection_handlers.py:568
-#: ../src/common/connection.py:1553
+#: ../src/common/connection.py:1520
 #, python-format
 msgid "Account %s doesn't support invisibility."
 msgstr "Учетная запись %s не поддерживает невидимость."
@@ -4602,46 +4618,46 @@ msgstr "Неверный ответ"
 msgid "Transport %(name)s answered wrongly to register request: %(error)s"
 msgstr "Транспорт %(name)s неверно ответил на запрос о регистрации: %(error)s"
 
-#: ../src/common/connection.py:1224
-#: ../src/common/connection.py:1364
-#: ../src/common/connection.py:1987
+#: ../src/common/connection.py:1191
+#: ../src/common/connection.py:1331
+#: ../src/common/connection.py:1954
 #: ../src/common/zeroconf/connection_zeroconf.py:204
 #, python-format
 msgid "Could not connect to \"%s\""
 msgstr "Не могу соединиться с «%s»"
 
-#: ../src/common/connection.py:1225
+#: ../src/common/connection.py:1192
 #: ../src/gui_interface.py:524
 msgid "Check your connection or try again later."
 msgstr "Проверьте настройки сети или попробуйте еще раз позже."
 
-#: ../src/common/connection.py:1230
+#: ../src/common/connection.py:1197
 #, python-format
 msgid "Server replied: %s"
 msgstr "Сервер ответил: %s"
 
-#: ../src/common/connection.py:1243
+#: ../src/common/connection.py:1210
 msgid "Connection to proxy failed"
 msgstr "Соединение с прокси разорвалось"
 
-#: ../src/common/connection.py:1281
-#: ../src/common/connection.py:1343
+#: ../src/common/connection.py:1248
+#: ../src/common/connection.py:1310
 #, python-format
 msgid "Could not connect to account %s"
 msgstr "Не могу соединиться с %s"
 
-#: ../src/common/connection.py:1282
-#: ../src/common/connection.py:1344
+#: ../src/common/connection.py:1249
+#: ../src/common/connection.py:1311
 #, python-format
 msgid "Connection with account %s has been lost. Retry connecting."
 msgstr "Связь с учетной записью %s была потеряна.Попытка подключения."
 
-#: ../src/common/connection.py:1307
+#: ../src/common/connection.py:1274
 #, python-format
 msgid "The authenticity of the %s certificate could be invalid."
 msgstr "Достоверность сертификата %s может быть недействительной."
 
-#: ../src/common/connection.py:1310
+#: ../src/common/connection.py:1277
 #, python-format
 msgid ""
 "\n"
@@ -4650,7 +4666,7 @@ msgstr ""
 "\n"
 "Ошибка SSL: <b>%s</b>"
 
-#: ../src/common/connection.py:1312
+#: ../src/common/connection.py:1279
 #, python-format
 msgid ""
 "\n"
@@ -4659,60 +4675,60 @@ msgstr ""
 "\n"
 "Неизвестная ошибка SSL: %d"
 
-#: ../src/common/connection.py:1365
+#: ../src/common/connection.py:1332
 msgid "Check your connection or try again later"
 msgstr "Проверьте настройки сети или попробуйте еще раз позже"
 
-#: ../src/common/connection.py:1399
+#: ../src/common/connection.py:1366
 #, python-format
 msgid "Authentication failed with \"%s\""
 msgstr "Ошибка аутентификации с «%s»"
 
-#: ../src/common/connection.py:1401
+#: ../src/common/connection.py:1368
 msgid "Please check your login and password for correctness."
 msgstr "Проверьте правильность логина и пароля."
 
-#: ../src/common/connection.py:1474
+#: ../src/common/connection.py:1441
 msgid "Error while removing privacy list"
 msgstr "Ошибка при удалении списка доступа"
 
-#: ../src/common/connection.py:1475
+#: ../src/common/connection.py:1442
 #, python-format
 msgid "Privacy list %s has not been removed. It is maybe active in one of your connected resources. Deactivate it and try again."
 msgstr "Список доступа %s не может быть удален. Возможно, он используется одним из ваших активных ресурсов. Отключите ресурс и попробуйте снова."
 
-#: ../src/common/connection.py:1854
+#: ../src/common/connection.py:1821
 #, python-format
 msgid "Sent contact: \"%s\" (%s)"
 msgstr "Контакт для отправки: «%s» (%s)"
 
-#: ../src/common/connection.py:1857
+#: ../src/common/connection.py:1824
 msgid "Sent contacts:"
 msgstr "Контакты для отправки:"
 
-#: ../src/common/connection.py:2004
-#: ../src/common/connection.py:2027
+#: ../src/common/connection.py:1971
+#: ../src/common/connection.py:1994
 msgid "Not fetched because of invisible status"
 msgstr "Нельзя получить из-за невидимости"
 
-#: ../src/common/connection.py:2558
+#: ../src/common/connection.py:2525
 msgid "Unregister failed"
 msgstr "Ошибка отказа от регистрации"
 
-#: ../src/common/connection.py:2559
+#: ../src/common/connection.py:2526
 #, python-format
 msgid "Unregistration with server %(server)s failed: %(error)s"
 msgstr "Отказ от регистрации на сервере %(server)s завершился ошибкой: %(error)s"
 
 #: ../src/common/contacts.py:126
-#: ../src/common/helpers.py:60
+#: ../src/common/helpers.py:61
 #: ../src/gui_interface.py:467
 msgid "Observers"
 msgstr "Наблюдатели"
 
 #: ../src/common/contacts.py:130
 #: ../src/common/contacts.py:358
-#: ../src/common/helpers.py:60
+#: ../src/common/helpers.py:61
 #: ../src/disco.py:120
 #: ../src/disco.py:121
 #: ../src/disco.py:1517
@@ -4948,240 +4964,240 @@ msgstr "Конец недели"
 msgid "Weekend!"
 msgstr "Выходные!"
 
-#: ../src/common/helpers.py:151
+#: ../src/common/helpers.py:152
 msgid "Username must be between 1 and 1023 chars"
 msgstr "Имя должно быть от 1 до 1023 символов"
 
-#: ../src/common/helpers.py:156
+#: ../src/common/helpers.py:157
 msgid "Invalid character in username."
 msgstr "Неверный символ в имени пользователя."
 
-#: ../src/common/helpers.py:162
+#: ../src/common/helpers.py:163
 msgid "Server must be between 1 and 1023 chars"
 msgstr "Имя сервера должно быть от 1 до 1023 символов"
 
-#: ../src/common/helpers.py:167
+#: ../src/common/helpers.py:168
 msgid "Invalid character in hostname."
 msgstr "Неверный символ в имени сервера"
 
-#: ../src/common/helpers.py:169
+#: ../src/common/helpers.py:170
 msgid "Server address required."
 msgstr "Требуется адрес сервера."
 
-#: ../src/common/helpers.py:173
+#: ../src/common/helpers.py:174
 msgid "Resource must be between 1 and 1023 chars"
 msgstr "Имя ресурса должно быть от 1 до 1023 символов"
 
-#: ../src/common/helpers.py:178
+#: ../src/common/helpers.py:179
 msgid "Invalid character in resource."
 msgstr "Неверный символ в ресурсе"
 
-#: ../src/common/helpers.py:218
+#: ../src/common/helpers.py:219
 msgid "_Busy"
 msgstr "_Занят"
 
-#: ../src/common/helpers.py:220
+#: ../src/common/helpers.py:221
 #: ../src/tooltips.py:195
 msgid "Busy"
 msgstr "Занят"
 
-#: ../src/common/helpers.py:223
+#: ../src/common/helpers.py:224
 msgid "_Not Available"
 msgstr "_Недоступен"
 
-#: ../src/common/helpers.py:225
+#: ../src/common/helpers.py:226
 #: ../src/tooltips.py:197
 msgid "Not Available"
 msgstr "Недоступен"
 
-#: ../src/common/helpers.py:228
+#: ../src/common/helpers.py:229
 msgid "_Free for Chat"
 msgstr "_Готов поболтать"
 
-#: ../src/common/helpers.py:230
+#: ../src/common/helpers.py:231
 #: ../src/tooltips.py:191
 msgid "Free for Chat"
 msgstr "Готов поболтать"
 
-#: ../src/common/helpers.py:233
+#: ../src/common/helpers.py:234
 msgid "?user status:_Available"
 msgstr "Д_оступен"
 
-#: ../src/common/helpers.py:235
+#: ../src/common/helpers.py:236
 #: ../src/tooltips.py:189
 msgid "?user status:Available"
 msgstr "Доступен"
 
-#: ../src/common/helpers.py:237
+#: ../src/common/helpers.py:238
 msgid "Connecting"
 msgstr "Соединяюсь"
 
-#: ../src/common/helpers.py:240
+#: ../src/common/helpers.py:241
 msgid "A_way"
 msgstr "_Ушел"
 
-#: ../src/common/helpers.py:245
+#: ../src/common/helpers.py:246
 msgid "_Offline"
 msgstr "_Отключен"
 
-#: ../src/common/helpers.py:247
+#: ../src/common/helpers.py:248
 #: ../src/tooltips.py:199
 msgid "Offline"
 msgstr "Отключен"
 
-#: ../src/common/helpers.py:250
+#: ../src/common/helpers.py:251
 msgid "_Invisible"
 msgstr "_Невидимка"
 
-#: ../src/common/helpers.py:252
+#: ../src/common/helpers.py:253
 msgid "Invisible"
 msgstr "Невидимка"
 
-#: ../src/common/helpers.py:256
+#: ../src/common/helpers.py:257
 msgid "?contact has status:Unknown"
 msgstr "Неизвестен"
 
-#: ../src/common/helpers.py:258
+#: ../src/common/helpers.py:259
 msgid "?contact has status:Has errors"
 msgstr "Ошибка"
 
-#: ../src/common/helpers.py:263
+#: ../src/common/helpers.py:264
 msgid "?Subscription we already have:None"
 msgstr "Нет"
 
-#: ../src/common/helpers.py:265
+#: ../src/common/helpers.py:266
 msgid "To"
 msgstr "К"
 
-#: ../src/common/helpers.py:267
+#: ../src/common/helpers.py:268
 msgid "From"
 msgstr "От"
 
-#: ../src/common/helpers.py:269
+#: ../src/common/helpers.py:270
 msgid "Both"
 msgstr "Оба"
 
-#: ../src/common/helpers.py:277
+#: ../src/common/helpers.py:278
 msgid "?Ask (for Subscription):None"
 msgstr "Нет"
 
-#: ../src/common/helpers.py:279
+#: ../src/common/helpers.py:280
 msgid "Subscribe"
 msgstr "Подписаться"
 
-#: ../src/common/helpers.py:288
+#: ../src/common/helpers.py:289
 msgid "?Group Chat Contact Role:None"
 msgstr "Отсутствует"
 
-#: ../src/common/helpers.py:291
+#: ../src/common/helpers.py:292
 msgid "Moderators"
 msgstr "Модераторы"
 
-#: ../src/common/helpers.py:293
+#: ../src/common/helpers.py:294
 msgid "Moderator"
 msgstr "Модератор"
 
-#: ../src/common/helpers.py:296
+#: ../src/common/helpers.py:297
 msgid "Participants"
 msgstr "Участники"
 
-#: ../src/common/helpers.py:298
+#: ../src/common/helpers.py:299
 msgid "Participant"
 msgstr "Участник"
 
-#: ../src/common/helpers.py:301
+#: ../src/common/helpers.py:302
 msgid "Visitors"
 msgstr "Посетители"
 
-#: ../src/common/helpers.py:303
+#: ../src/common/helpers.py:304
 msgid "Visitor"
 msgstr "Посетитель"
 
-#: ../src/common/helpers.py:309
+#: ../src/common/helpers.py:310
 #: ../src/tooltips.py:210
 msgid "?Group Chat Contact Affiliation:None"
 msgstr "?Group Chat Contact Affiliation:Отсутствует"
 
-#: ../src/common/helpers.py:311
+#: ../src/common/helpers.py:312
 #: ../src/tooltips.py:216
 msgid "Owner"
 msgstr "Владелец"
 
-#: ../src/common/helpers.py:313
+#: ../src/common/helpers.py:314
 #: ../src/tooltips.py:214
 msgid "Administrator"
 msgstr "Администратор"
 
-#: ../src/common/helpers.py:315
+#: ../src/common/helpers.py:316
 #: ../src/tooltips.py:212
 msgid "Member"
 msgstr "Участник"
 
-#: ../src/common/helpers.py:354
+#: ../src/common/helpers.py:355
 msgid "is paying attention to the conversation"
 msgstr "читает сообщение"
 
-#: ../src/common/helpers.py:356
+#: ../src/common/helpers.py:357
 msgid "is doing something else"
 msgstr "занят чем-то еще"
 
-#: ../src/common/helpers.py:358
+#: ../src/common/helpers.py:359
 msgid "is composing a message..."
 msgstr "печатает сообщение..."
 
 #. paused means he or she was composing but has stopped for a while
-#: ../src/common/helpers.py:361
+#: ../src/common/helpers.py:362
 msgid "paused composing a message"
 msgstr "перестал печатать сообщение"
 
-#: ../src/common/helpers.py:363
+#: ../src/common/helpers.py:364
 msgid "has closed the chat window or tab"
 msgstr "закрыл окно чата или вкладку"
 
 #. GiB means gibibyte
-#: ../src/common/helpers.py:628
+#: ../src/common/helpers.py:639
 #, python-format
 msgid "%s GiB"
 msgstr "%s GiB"
 
 #. GB means gigabyte
-#: ../src/common/helpers.py:631
+#: ../src/common/helpers.py:642
 #, python-format
 msgid "%s GB"
 msgstr "%s GB"
 
 #. MiB means mibibyte
-#: ../src/common/helpers.py:635
+#: ../src/common/helpers.py:646
 #, python-format
 msgid "%s MiB"
 msgstr "%s MiB"
 
 #. MB means megabyte
-#: ../src/common/helpers.py:638
+#: ../src/common/helpers.py:649
 #, python-format
 msgid "%s MB"
 msgstr "%s MB"
 
 #. KiB means kibibyte
-#: ../src/common/helpers.py:642
+#: ../src/common/helpers.py:653
 #, python-format
 msgid "%s KiB"
 msgstr "%s KiB"
 
 #. KB means kilo bytes
-#: ../src/common/helpers.py:645
+#: ../src/common/helpers.py:656
 #, python-format
 msgid "%s KB"
 msgstr "%s KB"
 
 #. B means bytes
-#: ../src/common/helpers.py:648
+#: ../src/common/helpers.py:659
 #, python-format
 msgid "%s B"
 msgstr "%s B"
 
-#: ../src/common/helpers.py:1099
-#: ../src/common/helpers.py:1106
+#: ../src/common/helpers.py:1110
+#: ../src/common/helpers.py:1117
 #, python-format
 msgid "%d message pending"
 msgid_plural "%d messages pending"
@@ -5189,24 +5205,24 @@ msgstr[0] "%d пропущенное сообщение"
 msgstr[1] "%d пропущенных сообщения"
 msgstr[2] "%d пропущенных сообщений"
 
-#: ../src/common/helpers.py:1112
+#: ../src/common/helpers.py:1123
 #, python-format
 msgid " from room %s"
 msgstr " в комнате %s"
 
-#: ../src/common/helpers.py:1115
-#: ../src/common/helpers.py:1132
+#: ../src/common/helpers.py:1126
+#: ../src/common/helpers.py:1143
 #, python-format
 msgid " from user %s"
 msgstr " от пользователя %s"
 
-#: ../src/common/helpers.py:1117
+#: ../src/common/helpers.py:1128
 #, python-format
 msgid " from %s"
 msgstr " от %s"
 
-#: ../src/common/helpers.py:1124
-#: ../src/common/helpers.py:1130
+#: ../src/common/helpers.py:1135
+#: ../src/common/helpers.py:1141
 #, python-format
 msgid "%d event pending"
 msgid_plural "%d events pending"
@@ -5214,12 +5230,12 @@ msgstr[0] "%d событие пропущено"
 msgstr[1] "%d события пропущено"
 msgstr[2] "%d событий пропущено"
 
-#: ../src/common/helpers.py:1162
+#: ../src/common/helpers.py:1173
 #, python-format
 msgid "Gajim - %s"
 msgstr "Gajim — %s"
 
-#: ../src/common/helpers.py:1341
+#: ../src/common/helpers.py:1352
 msgid "Hello, I am $name."
 msgstr "Привет, я $name."
 
@@ -6107,31 +6123,31 @@ msgstr "Включено"
 
 #: ../src/config.py:468
 #: ../src/config.py:472
-#: ../src/config.py:3127
+#: ../src/config.py:3157
 msgid "Default"
 msgstr "По умолчанию"
 
-#: ../src/config.py:754
+#: ../src/config.py:756
 #: ../src/dialogs.py:1493
 #, python-format
 msgid "Dictionary for lang %s not available"
 msgstr "Нет словаря для языка %s"
 
-#: ../src/config.py:755
+#: ../src/config.py:757
 #, python-format
 msgid "You have to install %s dictionary to use spellchecking, or choose another language by setting the speller_language option."
 msgstr "Чтобы воспользоваться проверкой правописания, установите словарь для языка %s или выберите другой язык, исправив настройку speller_language."
 
-#: ../src/config.py:1235
+#: ../src/config.py:1237
 msgid "status message title"
 msgstr "заголовок сообщения о статусе"
 
-#: ../src/config.py:1235
+#: ../src/config.py:1237
 msgid "status message text"
 msgstr "текст сообщения о статусе"
 
 #. Name column
-#: ../src/config.py:1535
+#: ../src/config.py:1565
 #: ../src/dialogs.py:2534
 #: ../src/dialogs.py:2601
 #: ../src/dialogs.py:3393
@@ -6142,120 +6158,120 @@ msgstr "текст сообщения о статусе"
 msgid "Name"
 msgstr "Имя"
 
-#: ../src/config.py:1630
+#: ../src/config.py:1660
 msgid "Relogin now?"
 msgstr "Переподключиться сейчас?"
 
-#: ../src/config.py:1631
+#: ../src/config.py:1661
 msgid "If you want all the changes to apply instantly, you must relogin."
 msgstr "Если вы хотите, чтобы изменения были применены немедленно, вы должны переподключиться."
 
-#: ../src/config.py:1785
-#: ../src/config.py:1918
+#: ../src/config.py:1815
+#: ../src/config.py:1948
 msgid "OpenPGP is not usable on this computer"
 msgstr "Невозможно использовать OpenPGP на этом компьютере"
 
-#: ../src/config.py:1958
-#: ../src/config.py:2005
+#: ../src/config.py:1988
+#: ../src/config.py:2035
 msgid "Unread events"
 msgstr "Непросмотренные события"
 
-#: ../src/config.py:1959
+#: ../src/config.py:1989
 msgid "Read all pending events before removing this account."
 msgstr "Просмотрите все ожидающие события перед удалением учетной записи."
 
-#: ../src/config.py:1988
+#: ../src/config.py:2018
 #, python-format
 msgid "You have opened chat in account %s"
 msgstr "У вас есть окна чата под учётной записью %s"
 
-#: ../src/config.py:1989
+#: ../src/config.py:2019
 msgid "All chat and groupchat windows will be closed. Do you want to continue?"
 msgstr "Все окна чатов и комнат будут закрыты. Продолжить?"
 
-#: ../src/config.py:2001
-#: ../src/config.py:2543
-#: ../src/config.py:2579
+#: ../src/config.py:2031
+#: ../src/config.py:2573
+#: ../src/config.py:2609
 msgid "You are currently connected to the server"
 msgstr "Вы сейчас подсоединены к серверу"
 
-#: ../src/config.py:2002
+#: ../src/config.py:2032
 msgid "To change the account name, you must be disconnected."
 msgstr "Для смены имени учетной записи необходимо отключиться."
 
-#: ../src/config.py:2006
+#: ../src/config.py:2036
 msgid "To change the account name, you must read all pending events."
 msgstr "Для смены имени учетной записи необходимо просмотреть ожидающие события."
 
-#: ../src/config.py:2012
+#: ../src/config.py:2042
 msgid "Account Name Already Used"
 msgstr "Такое имя учетной записи уже используется"
 
-#: ../src/config.py:2013
+#: ../src/config.py:2043
 msgid "This name is already used by another of your accounts. Please choose another name."
 msgstr "Это имя уже используется в другой вашей учетной записи. Выберите другое."
 
-#: ../src/config.py:2017
-#: ../src/config.py:2021
+#: ../src/config.py:2047
+#: ../src/config.py:2051
 msgid "Invalid account name"
 msgstr "Неверное имя учетной записи"
 
-#: ../src/config.py:2018
+#: ../src/config.py:2048
 msgid "Account name cannot be empty."
 msgstr "Имя учетной записи не может быть пустым."
 
-#: ../src/config.py:2022
+#: ../src/config.py:2052
 msgid "Account name cannot contain spaces."
 msgstr "Имя учетной записи не может содержать пробелы."
 
-#: ../src/config.py:2099
+#: ../src/config.py:2129
 msgid "Rename Account"
 msgstr "Переименовать учетную запись"
 
-#: ../src/config.py:2100
+#: ../src/config.py:2130
 #, python-format
 msgid "Enter a new name for account %s"
 msgstr "Введите новое название для учетной записи %s"
 
-#: ../src/config.py:2128
+#: ../src/config.py:2158
 msgid "A Jabber ID must be in the form \"user@servername\"."
 msgstr "Jabber ID должен иметь формат «имя_пользователя@сервер»."
 
-#: ../src/config.py:2351
-#: ../src/config.py:3677
+#: ../src/config.py:2381
+#: ../src/config.py:3707
 msgid "Invalid entry"
 msgstr "Неверная запись"
 
-#: ../src/config.py:2352
-#: ../src/config.py:3678
+#: ../src/config.py:2382
+#: ../src/config.py:3708
 msgid "Custom port must be a port number."
 msgstr "В качестве номера порта должно выступать число"
 
-#: ../src/config.py:2373
+#: ../src/config.py:2403
 msgid "Failed to get secret keys"
 msgstr "Не удалось получить секретный ключ"
 
-#: ../src/config.py:2374
+#: ../src/config.py:2404
 msgid "There is no OpenPGP secret key available."
 msgstr "Нет секретного ключа OpenPGP."
 
-#: ../src/config.py:2408
+#: ../src/config.py:2438
 msgid "OpenPGP Key Selection"
 msgstr "Выбор ключа OpenPGP"
 
-#: ../src/config.py:2409
+#: ../src/config.py:2439
 msgid "Choose your OpenPGP key"
 msgstr "Выберите свой ключ OpenPGP"
 
-#: ../src/config.py:2416
+#: ../src/config.py:2446
 msgid "No such account available"
 msgstr "Такая учетная запись недоступна"
 
-#: ../src/config.py:2417
+#: ../src/config.py:2447
 msgid "You must create your account before editing your personal information."
 msgstr "Перед редактированием личных данных необходимо сначала создать учетную запись."
 
-#: ../src/config.py:2424
+#: ../src/config.py:2454
 #: ../src/dialogs.py:2286
 #: ../src/dialogs.py:2523
 #: ../src/dialogs.py:2711
@@ -6264,84 +6280,84 @@ msgstr "Перед редактированием личных данных не
 msgid "You are not connected to the server"
 msgstr "Вы не подключены к серверу"
 
-#: ../src/config.py:2425
+#: ../src/config.py:2455
 msgid "Without a connection, you can not edit your personal information."
 msgstr "Чтобы отредактировать личную информацию, нужно подключиться к серверу."
 
-#: ../src/config.py:2429
+#: ../src/config.py:2459
 msgid "Your server doesn't support Vcard"
 msgstr "Сервер не поддерживает Vcard"
 
-#: ../src/config.py:2430
+#: ../src/config.py:2460
 msgid "Your server can't save your personal information."
 msgstr "Ваш сервер не может хранить личную информацию."
 
-#: ../src/config.py:2544
-#: ../src/config.py:2580
+#: ../src/config.py:2574
+#: ../src/config.py:2610
 msgid "To disable the account, you must be disconnected."
 msgstr "Чтобы отключить эту учетную запись, необходимо отсоединиться от сервера."
 
-#: ../src/config.py:2549
+#: ../src/config.py:2579
 msgid "Account Local already exists."
 msgstr "Учётная запись Local уже существует."
 
-#: ../src/config.py:2550
+#: ../src/config.py:2580
 msgid "Please rename or remove it before enabling link-local messaging."
 msgstr "Переименуйте или удалите её, прежде чем включать локальные сообщения."
 
-#: ../src/config.py:2707
+#: ../src/config.py:2737
 #, python-format
 msgid "Edit %s"
 msgstr "Править %s"
 
-#: ../src/config.py:2709
+#: ../src/config.py:2739
 #, python-format
 msgid "Register to %s"
 msgstr "Зарегистрировать %s"
 
 #. list at the beginning
-#: ../src/config.py:2745
+#: ../src/config.py:2775
 msgid "Ban List"
 msgstr "Черный список"
 
-#: ../src/config.py:2746
+#: ../src/config.py:2776
 msgid "Member List"
 msgstr "Список участников"
 
-#: ../src/config.py:2746
+#: ../src/config.py:2776
 msgid "Owner List"
 msgstr "Список владельцев"
 
-#: ../src/config.py:2747
+#: ../src/config.py:2777
 msgid "Administrator List"
 msgstr "Список администраторов"
 
 #. Address column
 #. holds JID (who said this)
-#: ../src/config.py:2811
+#: ../src/config.py:2841
 #: ../src/disco.py:893
 #: ../src/history_manager.py:207
 msgid "JID"
 msgstr "JID"
 
-#: ../src/config.py:2821
+#: ../src/config.py:2851
 msgid "Reason"
 msgstr "Причина"
 
-#: ../src/config.py:2828
+#: ../src/config.py:2858
 msgid "Nick"
 msgstr "Ник"
 
-#: ../src/config.py:2834
+#: ../src/config.py:2864
 msgid "Role"
 msgstr "Обязанность"
 
-#: ../src/config.py:2861
+#: ../src/config.py:2891
 msgid "Banning..."
 msgstr "Баню..."
 
 #. You can move '\n' before user@domain if that line is TOO BIG
-#: ../src/config.py:2863
+#: ../src/config.py:2893
 msgid ""
 "<b>Whom do you want to ban?</b>\n"
 "\n"
@@ -6349,11 +6365,11 @@ msgstr ""
 "<b>Кого вы хотите забанить?</b>\n"
 "\n"
 
-#: ../src/config.py:2865
+#: ../src/config.py:2895
 msgid "Adding Member..."
 msgstr "Добавляю участника..."
 
-#: ../src/config.py:2866
+#: ../src/config.py:2896
 msgid ""
 "<b>Whom do you want to make a member?</b>\n"
 "\n"
@@ -6361,11 +6377,11 @@ msgstr ""
 "<b>Кого вы хотите сделать участником?</b>\n"
 "\n"
 
-#: ../src/config.py:2868
+#: ../src/config.py:2898
 msgid "Adding Owner..."
 msgstr "Добавляю владельца..."
 
-#: ../src/config.py:2869
+#: ../src/config.py:2899
 msgid ""
 "<b>Whom do you want to make an owner?</b>\n"
 "\n"
@@ -6373,11 +6389,11 @@ msgstr ""
 "<b>Кого вы хотите сделать владельцем?</b>\n"
 "\n"
 
-#: ../src/config.py:2871
+#: ../src/config.py:2901
 msgid "Adding Administrator..."
 msgstr "Добавляю администратора..."
 
-#: ../src/config.py:2872
+#: ../src/config.py:2902
 msgid ""
 "<b>Whom do you want to make an administrator?</b>\n"
 "\n"
@@ -6385,7 +6401,7 @@ msgstr ""
 "<b>Кого вы хотите сделать администратором?</b>\n"
 "\n"
 
-#: ../src/config.py:2873
+#: ../src/config.py:2903
 msgid ""
 "Can be one of the following:\n"
 "1. user@domain/resource (only that resource matches).\n"
@@ -6401,148 +6417,148 @@ msgstr ""
 "4. domain (сам домен, т.е. как любое сочетание user@domain,\n"
 "domain/resource, так и адрес, содержащий этот поддомен)"
 
-#: ../src/config.py:2974
+#: ../src/config.py:3004
 #, python-format
 msgid "Removing %s account"
 msgstr "Удаление учетной записи %s"
 
-#: ../src/config.py:2989
+#: ../src/config.py:3019
 msgid "Account is disabled"
 msgstr "Учетная запись отключена"
 
-#: ../src/config.py:2990
+#: ../src/config.py:3020
 msgid "To unregister from a server, account must be enabled."
 msgstr "Для удаления регистрации с сервера, учетная запись должна быть активна."
 
-#: ../src/config.py:3003
+#: ../src/config.py:3033
 #: ../src/gui_interface.py:278
 #: ../src/gui_interface.py:696
 msgid "Password Required"
 msgstr "Требуется пароль"
 
-#: ../src/config.py:3004
+#: ../src/config.py:3034
 #: ../src/gui_interface.py:676
 #, python-format
 msgid "Enter your password for account %s"
 msgstr "Введите пароль для учетной записи %s"
 
-#: ../src/config.py:3005
+#: ../src/config.py:3035
 #: ../src/gui_interface.py:696
 msgid "Save password"
 msgstr "Сохранить пароль"
 
-#: ../src/config.py:3015
+#: ../src/config.py:3045
 #, python-format
 msgid "Account \"%s\" is connected to the server"
 msgstr "Учетная запись «%s» подключена к серверу"
 
-#: ../src/config.py:3016
+#: ../src/config.py:3046
 msgid "If you remove it, the connection will be lost."
 msgstr "Если вы удалите его, произойдет отключение."
 
-#: ../src/config.py:3030
+#: ../src/config.py:3060
 #, python-format
 msgid "Connection to server %s failed"
 msgstr "Не удалось соединиться с сервером %s"
 
-#: ../src/config.py:3031
+#: ../src/config.py:3061
 msgid "What would you like to do?"
 msgstr "Что вы хотите сделать?"
 
-#: ../src/config.py:3032
+#: ../src/config.py:3062
 msgid "Remove only from Gajim"
 msgstr "Удалить только из Gajim"
 
-#: ../src/config.py:3033
+#: ../src/config.py:3063
 msgid "Don't remove anything. I'll try again later"
 msgstr "Ничего не удалять. Я попробую позже."
 
-#: ../src/config.py:3127
+#: ../src/config.py:3157
 msgid "?print_status:All"
 msgstr "?print_status:Все"
 
-#: ../src/config.py:3128
+#: ../src/config.py:3158
 msgid "Enter and leave only"
 msgstr "Только приход и уход"
 
-#: ../src/config.py:3129
+#: ../src/config.py:3159
 msgid "?print_status:None"
 msgstr "?print_status:Нет"
 
-#: ../src/config.py:3201
+#: ../src/config.py:3231
 msgid "New Group Chat"
 msgstr "Новая комната"
 
-#: ../src/config.py:3234
+#: ../src/config.py:3264
 msgid "This bookmark has invalid data"
 msgstr "Эта закладка содержит неверные данные"
 
-#: ../src/config.py:3235
+#: ../src/config.py:3265
 msgid "Please be sure to fill out server and room fields or remove this bookmark."
 msgstr "Удостоверьтесь, что заполнены поля с именем сервера и комнаты, либо удалите эту закладку."
 
 #. invalid char
-#: ../src/config.py:3360
+#: ../src/config.py:3390
 #: ../src/dialogs.py:2075
 msgid "Invalid nickname"
 msgstr "Неверное имя пользователя"
 
-#: ../src/config.py:3361
-#: ../src/config.py:3372
-#: ../src/config.py:3381
-#: ../src/config.py:3392
-#: ../src/config.py:3400
+#: ../src/config.py:3391
+#: ../src/config.py:3402
+#: ../src/config.py:3411
+#: ../src/config.py:3422
+#: ../src/config.py:3430
 msgid "Character not allowed"
 msgstr "Символ недопустим"
 
-#: ../src/config.py:3372
-#: ../src/config.py:3380
-#: ../src/config.py:3392
-#: ../src/config.py:3653
+#: ../src/config.py:3402
+#: ../src/config.py:3410
+#: ../src/config.py:3422
+#: ../src/config.py:3683
 msgid "Invalid server"
 msgstr "Неверный сервер"
 
-#: ../src/config.py:3399
+#: ../src/config.py:3429
 msgid "Invalid room"
 msgstr "Неверная комната"
 
-#: ../src/config.py:3569
+#: ../src/config.py:3599
 msgid "Account has been added successfully"
 msgstr "Учетная запись успешно добавлена"
 
-#: ../src/config.py:3570
-#: ../src/config.py:3576
+#: ../src/config.py:3600
+#: ../src/config.py:3606
 msgid "You can set advanced account options by pressing the Advanced button, or later by choosing the Accounts menu item under the Edit menu from the main window."
 msgstr "Вы можете установить расширенные настройки учетной записи нажатием кнопки «Дополнительно», или сделать это позже посредством пункта «Учетные записи» меню «Правка» в главном окне программы."
 
-#: ../src/config.py:3575
+#: ../src/config.py:3605
 msgid "Your new account has been created successfully"
 msgstr "Ваша новая учетная запись успешно создана"
 
-#: ../src/config.py:3614
+#: ../src/config.py:3644
 msgid "Invalid username"
 msgstr "Неверное имя пользователя"
 
-#: ../src/config.py:3616
+#: ../src/config.py:3646
 msgid "You must provide a username to configure this account."
 msgstr "Для настройки учетной записи необходимо ввести имя пользователя."
 
-#: ../src/config.py:3654
+#: ../src/config.py:3684
 msgid "Please provide a server on which you want to register."
 msgstr "Укажите сервер, на котором вы хотите зарегистрироваться."
 
-#: ../src/config.py:3710
+#: ../src/config.py:3740
 #: ../src/gui_interface.py:1174
 msgid "Certificate Already in File"
 msgstr "Сертификат уже находится в файле"
 
-#: ../src/config.py:3711
+#: ../src/config.py:3741
 #: ../src/gui_interface.py:1175
 #, python-format
 msgid "This certificate is already in file %s, so it's not added again."
 msgstr "Этот сертификат уже есть в файле %s, поэтому он не был добавлен."
 
-#: ../src/config.py:3798
+#: ../src/config.py:3828
 #, python-format
 msgid ""
 "<b>Security Warning</b>\n"
@@ -6557,7 +6573,7 @@ msgstr ""
 "Ошибка SSL: %(error)s\n"
 "Соединиться с этим сервером?"
 
-#: ../src/config.py:3804
+#: ../src/config.py:3834
 #: ../src/gui_interface.py:1203
 #, python-format
 msgid ""
@@ -6569,75 +6585,75 @@ msgstr ""
 "Отпечаток SHA1 сертификата:\n"
 "%s"
 
-#: ../src/config.py:3836
-#: ../src/config.py:3870
+#: ../src/config.py:3866
+#: ../src/config.py:3900
 msgid "An error occurred during account creation"
 msgstr "Произошла ошибка при создании учетной записи"
 
-#: ../src/config.py:3935
+#: ../src/config.py:3965
 msgid "Account name is in use"
 msgstr "Такое имя учетной записи уже используется"
 
-#: ../src/config.py:3936
+#: ../src/config.py:3966
 msgid "You already have an account using this name."
 msgstr "У вас уже есть учетная запись с таким именем."
 
-#: ../src/config.py:4066
+#: ../src/config.py:4096
 msgid "PEP node was not removed"
 msgstr "PEP узел не был удален"
 
-#: ../src/config.py:4067
+#: ../src/config.py:4097
 #, python-format
 msgid "PEP node %(node)s was not removed: %(message)s"
 msgstr "PEP узел %(node)s не был удален: %(message)s"
 
-#: ../src/config.py:4095
+#: ../src/config.py:4125
 #, python-format
 msgid "Configure %s"
 msgstr "Настроить %s"
 
-#: ../src/config.py:4111
+#: ../src/config.py:4141
 #: ../src/plugins/gui.py:73
 msgid "Active"
 msgstr "Активен"
 
-#: ../src/config.py:4119
+#: ../src/config.py:4149
 msgid "Event"
 msgstr "Событие"
 
-#: ../src/config.py:4154
+#: ../src/config.py:4184
 msgid "First Message Received"
 msgstr "Получено первое сообщение"
 
-#: ../src/config.py:4155
+#: ../src/config.py:4185
 msgid "Next Message Received Focused"
 msgstr "Следующее сообщение получено в окне с фокусом"
 
-#: ../src/config.py:4157
+#: ../src/config.py:4187
 msgid "Next Message Received Unfocused"
 msgstr "Следующее сообщение получено в окне без фокуса"
 
-#: ../src/config.py:4158
+#: ../src/config.py:4188
 msgid "Contact Connected"
 msgstr "Контакт подключился"
 
-#: ../src/config.py:4159
+#: ../src/config.py:4189
 msgid "Contact Disconnected"
 msgstr "Контакт отключился"
 
-#: ../src/config.py:4160
+#: ../src/config.py:4190
 msgid "Message Sent"
 msgstr "Сообщение отправлено"
 
-#: ../src/config.py:4161
+#: ../src/config.py:4191
 msgid "Group Chat Message Highlight"
 msgstr "Вас упомянули в комнате"
 
-#: ../src/config.py:4162
+#: ../src/config.py:4192
 msgid "Group Chat Message Received"
 msgstr "Получено сообщение в комнате"
 
-#: ../src/config.py:4163
+#: ../src/config.py:4193
 msgid "GMail Email Received"
 msgstr "Получено письмо на Gmail"
 
@@ -9848,12 +9864,12 @@ msgstr "Нет результата"
 msgid "Disk WriteError"
 msgstr "Ошибка записи на диск"
 
-#: ../src/session.py:409
-#: ../src/session.py:468
+#: ../src/session.py:410
+#: ../src/session.py:469
 msgid "Confirm these session options"
 msgstr "Подтвердить данные настройки сеанса"
 
-#: ../src/session.py:411
+#: ../src/session.py:412
 #, fuzzy, python-format
 msgid ""
 "The remote client wants to negotiate a session with these features:\n"
@@ -9869,7 +9885,7 @@ msgstr ""
 "\n"
 "Приемлемы ли эти настройки?"
 
-#: ../src/session.py:470
+#: ../src/session.py:471
 #, python-format
 msgid ""
 "The remote client selected these options:\n"
@@ -9884,7 +9900,7 @@ msgstr ""
 "\n"
 "Продолжить этот сеанс?"
 
-#: ../src/session.py:473
+#: ../src/session.py:474
 #, fuzzy
 msgid "Always accept for this contact"
 msgstr "Используется ли для этого контакта OpenPGP?"
