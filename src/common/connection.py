@@ -993,7 +993,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                 if weightsum >= rndint:
                     return host
 
-    def connect(self, data = None):
+    def connect(self, data=None):
         """
         Start a connection to the Jabber server
 
@@ -1010,11 +1010,19 @@ class Connection(CommonConnection, ConnectionHandlers):
             self.try_connecting_for_foo_secs = gajim.config.get_per('accounts',
                 self.name, 'try_connecting_for_foo_secs')
             use_custom = False
+            proxy = helpers.get_proxy_info(self.name)
 
         elif data:
             hostname = data['hostname']
             self.try_connecting_for_foo_secs = 45
             p = data['proxy']
+            if p and p in gajim.config.get_per('proxies'):
+                proxy = {}
+                proxyptr = gajim.config.get_per('proxies', p)
+                for key in proxyptr.keys():
+                    proxy[key] = proxyptr[key][1]
+            else:
+                proxy = None
             use_srv = True
             use_custom = data['use_custom_host']
             if use_custom:
@@ -1025,7 +1033,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             usessl = gajim.config.get_per('accounts', self.name, 'usessl')
             self.try_connecting_for_foo_secs = gajim.config.get_per('accounts',
                     self.name, 'try_connecting_for_foo_secs')
-            p = gajim.config.get_per('accounts', self.name, 'proxy')
+            proxy = helpers.get_proxy_info(self.name)
             use_srv = gajim.config.get_per('accounts', self.name, 'use_srv')
             use_custom = gajim.config.get_per('accounts', self.name,
                     'use_custom_host')
@@ -1034,52 +1042,10 @@ class Connection(CommonConnection, ConnectionHandlers):
 
         # create connection if it doesn't already exist
         self.connected = 1
-        if p and p in gajim.config.get_per('proxies'):
-            proxy = {}
-            proxyptr = gajim.config.get_per('proxies', p)
-            for key in proxyptr.keys():
-                proxy[key] = proxyptr[key][1]
 
-        elif gajim.config.get_per('accounts', self.name, 'use_env_http_proxy'):
-            try:
-                try:
-                    env_http_proxy = os.environ['HTTP_PROXY']
-                except Exception:
-                    env_http_proxy = os.environ['http_proxy']
-                env_http_proxy = env_http_proxy.strip('"')
-                # Dispose of the http:// prefix
-                env_http_proxy = env_http_proxy.split('://')
-                env_http_proxy = env_http_proxy[len(env_http_proxy)-1]
-                env_http_proxy = env_http_proxy.split('@')
-
-                if len(env_http_proxy) == 2:
-                    login = env_http_proxy[0].split(':')
-                    addr = env_http_proxy[1].split(':')
-                else:
-                    login = ['', '']
-                    addr = env_http_proxy[0].split(':')
-
-                proxy = {'host': addr[0], 'type' : u'http', 'user':login[0]}
-
-                if len(addr) == 2:
-                    proxy['port'] = addr[1]
-                else:
-                    proxy['port'] = 3128
-
-                if len(login) == 2:
-                    proxy['pass'] = login[1]
-                    proxy['useauth'] = True
-                else:
-                    proxy['pass'] = u''
-
-            except Exception:
-                proxy = None
-        else:
-            proxy = None
         h = hostname
         p = 5222
         ssl_p = 5223
-#                       use_srv = False # wants ssl? disable srv lookup
         if use_custom:
             h = custom_h
             p = custom_p
@@ -1094,8 +1060,8 @@ class Connection(CommonConnection, ConnectionHandlers):
         if use_srv:
             # add request for srv query to the resolve, on result '_on_resolve'
             # will be called
-            gajim.resolver.resolve('_xmpp-client._tcp.' + helpers.idn_to_ascii(h),
-                    self._on_resolve)
+            gajim.resolver.resolve('_xmpp-client._tcp.' + helpers.idn_to_ascii(
+                h), self._on_resolve)
         else:
             self._on_resolve('', [])
 
@@ -1106,7 +1072,8 @@ class Connection(CommonConnection, ConnectionHandlers):
             # Add ssl port
             ssl_p = 5223
             if gajim.config.get_per('accounts', self.name, 'use_custom_host'):
-                ssl_p = gajim.config.get_per('accounts', self.name, 'custom_port')
+                ssl_p = gajim.config.get_per('accounts', self.name,
+                    'custom_port')
             for i in self._hosts:
                 i['ssl_port'] = ssl_p
         self._connect_to_next_host()

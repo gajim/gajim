@@ -551,6 +551,8 @@ class PreferencesWindow:
         else:
             w.set_active(st)
 
+        self.update_proxy_list()
+
         # check if gajm is default
         st = gajim.config.get('check_if_gajim_is_default')
         self.xml.get_object('check_default_client_checkbutton').set_active(st)
@@ -1255,6 +1257,34 @@ class PreferencesWindow:
     def on_msg_treeview_key_press_event(self, widget, event):
         if event.keyval == gtk.keysyms.Delete:
             self.on_delete_msg_button_clicked(widget)
+
+    def on_proxies_combobox_changed(self, widget):
+        active = widget.get_active()
+        proxy = widget.get_model()[active][0].decode('utf-8')
+        if proxy == _('None'):
+            proxy = ''
+
+        gajim.config.set('global_proxy', proxy)
+
+    def on_manage_proxies_button_clicked(self, widget):
+        if 'manage_proxies' in gajim.interface.instances:
+            gajim.interface.instances['manage_proxies'].window.present()
+        else:
+            gajim.interface.instances['manage_proxies'] = ManageProxiesWindow()
+
+    def update_proxy_list(self):
+        our_proxy = gajim.config.get('global_proxy')
+        if not our_proxy:
+            our_proxy = _('None')
+        proxy_combobox = self.xml.get_object('proxies_combobox')
+        model = proxy_combobox.get_model()
+        model.clear()
+        l = gajim.config.get_per('proxies')
+        l.insert(0, _('None'))
+        for i in xrange(len(l)):
+            model.append([l[i]])
+            if our_proxy == l[i]:
+                proxy_combobox.set_active(i)
 
     def on_open_advanced_editor_button_clicked(self, widget, data = None):
         if 'advanced_config' in gajim.interface.instances:
