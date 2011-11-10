@@ -295,7 +295,7 @@ class Base(object):
         iconset = gtk.IconSet(pixbuf=pixbuf)
         factory.add('oval_tool', iconset)
         factory.add_default()
-        img.set_from_stock('whiteboard', gtk.ICON_SIZE_BUTTON)
+        img.set_from_stock('whiteboard', gtk.ICON_SIZE_MENU)
         self.button.set_image(img)
         send_button = self.chat_control.xml.get_object('send_button')
         send_button_pos = actions_hbox.child_get_property(send_button,
