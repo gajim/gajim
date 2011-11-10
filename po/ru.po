@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-11-08 00:24+0400\n"
-"PO-Revision-Date: 2011-11-08 00:46+0300\n"
+"PO-Revision-Date: 2011-11-10 21:47+0300\n"
 "Last-Translator: Fomin Denis <fominde@mail.ru>\n"
 "Language-Team: Linux Support LLC\n"
 "Language: ru\n"
@@ -1400,7 +1400,7 @@ msgstr "Поиск:"
 #: ../data/gui/history_window.ui.h:6
 #: ../data/gui/zeroconf_information_window.ui.h:10
 msgid "_Log conversation history"
-msgstr "_История сообщения"
+msgstr "_Сохранять историю переписки"
 
 #: ../data/gui/item_archiving_preferences_window.ui.h:1
 msgid "approve"
