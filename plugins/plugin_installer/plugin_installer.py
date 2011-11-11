@@ -81,30 +81,34 @@ class PluginInstaller(GajimPlugin):
     @log_calls('PluginInstallerPlugin')
     def check_update(self):
         def _run():
-            to_update = []
-            con = ftplib.FTP_TLS(ftp.server)
-            con.login()
-            con.prot_p()
-            con.cwd('plugins')
-            plugins_dirs = con.nlst()
-            for dir_ in plugins_dirs:
-                try:
-                    con.retrbinary('RETR %s/manifest.ini' % dir_,
-                        ftp.handleDownload)
-                except Exception, error:
-                    if str(error).startswith('550'):
-                        continue
-                ftp.config.readfp(io.BytesIO(ftp.buffer_.getvalue()))
-                local_version = ftp.get_plugin_version(ftp.config.get('info',
-                    'name'))
-                if local_version:
-                    local = convert_version_to_list(local_version)
-                    remote = convert_version_to_list(ftp.config.get('info',
-                        'version'))
-                    if remote > local:
-                        to_update.append(ftp.config.get('info', 'name'))
-            con.quit()
-            gobject.idle_add(self.warn_update, to_update)
+            try:
+                to_update = []
+                con = ftplib.FTP_TLS(ftp.server)
+                con.login()
+                con.prot_p()
+                con.cwd('plugins')
+                plugins_dirs = con.nlst()
+                for dir_ in plugins_dirs:
+                    try:
+                        con.retrbinary('RETR %s/manifest.ini' % dir_,
+                            ftp.handleDownload)
+                    except Exception, error:
+                        if str(error).startswith('550'):
+                            continue
+                    ftp.config.readfp(io.BytesIO(ftp.buffer_.getvalue()))
+                    local_version = ftp.get_plugin_version(ftp.config.get(
+                        'info', 'name'))
+                    if local_version:
+                        local = convert_version_to_list(local_version)
+                        remote = convert_version_to_list(ftp.config.get('info',
+                            'version'))
+                        if remote > local:
+                            to_update.append(ftp.config.get('info', 'name'))
+                con.quit()
+                gobject.idle_add(self.warn_update, to_update)
+            except Exception, e:
+                WarningDialog(_('Ftp error'), str(e),
+                    gajim.interface.roster.window)
         ftp = Ftp(self)
         ftp.run = _run
         ftp.start()
