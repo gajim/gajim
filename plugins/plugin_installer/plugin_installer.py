@@ -107,8 +107,7 @@ class PluginInstaller(GajimPlugin):
                 con.quit()
                 gobject.idle_add(self.warn_update, to_update)
             except Exception, e:
-                WarningDialog(_('Ftp error'), str(e),
-                    gajim.interface.roster.window)
+                log.debug('Ftp error when check updates: %s' % str(e))
         ftp = Ftp(self)
         ftp.run = _run
         ftp.start()
