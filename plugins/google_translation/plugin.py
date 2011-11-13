@@ -28,6 +28,7 @@ Translates (currently only incoming) messages using Google Translate.
 
 import re
 import urllib2
+import HTMLParser
 import new
 from pprint import pformat
 from sys import getfilesystemencoding
@@ -47,7 +48,7 @@ class GoogleTranslationPlugin(GajimPlugin):
         self.description = _('Translates (currently only incoming)'
             'messages using Google Translate.')
         self.config_dialog = None
-        #self.gui_extension_points = {}
+
         self.config_default_values = {
             'from_lang' :
                 (u'en', u'Language of text to be translated'),
@@ -59,12 +60,11 @@ class GoogleTranslationPlugin(GajimPlugin):
                 u'User Agent data to be used with urllib2 '
                 'when connecting to Google Translate service')}
 
-        #self.events_handlers = {}
-
-        self.events = [GoogleTranslateMessageReceivedEvent]
+        self.events_handlers = {'decrypted-message-received': (ged.PREGUI,
+            self._nec_decrypted_message_received)}
 
         self.translated_text_re = re.compile(
-            r'google.language.callbacks.id100\(\'22\','
+            r'google.language.callbacks.id100\(\'22\', '
             '{"translatedText":"(?P<text>[^"]*)"}, 200, null, 200\)')
 
     @log_calls('GoogleTranslationPlugin')
@@ -90,8 +90,24 @@ class GoogleTranslationPlugin(GajimPlugin):
         translated_text = self.translated_text_re.search(results).group('text')
 
         if translated_text:
+            try:
+                translated_text = unicode(translated_text, 'unicode_escape')
+                htmlparser = HTMLParser.HTMLParser()
+                translated_text = htmlparser.unescape(translated_text)
+            except Exception:
+                pass
             return translated_text
         return text
+
+    @log_calls('GoogleTranslationPlugin')
+    def _nec_decrypted_message_received(self, obj):
+        if not obj.msgtxt:
+            return
+        from_lang = self.config['from_lang']
+        to_lang = self.config['to_lang']
+        translated_text = self.translate_text(obj.msgtxt, from_lang, to_lang)
+        if translated_text:
+            obj.msgtxt = translated_text
 
     @log_calls('GoogleTranslationPlugin')
     def activate(self):
@@ -100,21 +116,3 @@ class GoogleTranslationPlugin(GajimPlugin):
     @log_calls('GoogleTranslationPlugin')
     def deactivate(self):
         pass
-
-class GoogleTranslateMessageReceivedEvent(nec.NetworkIncomingEvent):
-    name = 'google-translate-message-received'
-    base_network_events = ['raw-message-received']
-
-    def generate(self):
-        msg_type = self.base_event.stanza.attrs.get('type', None)
-        if msg_type == u'chat':
-            msg_text = "".join(self.base_event.stanza.kids[0].data)
-            if msg_text:
-                from_lang = self.plugin.config['from_lang']
-                to_lang = self.plugin.config['to_lang']
-                self.base_event.stanza.kids[0].setData(
-                    self.plugin.translate_text(msg_text, from_lang, to_lang))
-
-        # We only want to modify old event, not emit another, so we return False
-        # here.
-        return False
