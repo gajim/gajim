@@ -191,6 +191,12 @@ try:
 except ImportError:
     HAVE_UPNP_IGD = False
 
+HAVE_PYCURL = True
+try:
+    __import__('pycurl')
+except ImportError:
+    HAVE_PYCURL = False
+
 
 gajim_identity = {'type': 'pc', 'category': 'client', 'name': 'Gajim'}
 gajim_common_features = [xmpp.NS_BYTESTREAM, xmpp.NS_SI, xmpp.NS_FILE,
