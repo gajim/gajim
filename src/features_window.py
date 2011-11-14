@@ -111,7 +111,7 @@ class FeaturesWindow:
                 _('Ability to request your router to forward port for file transfer.'),
                 _('Requires python-gupnp-igd.'),
                 _('Feature not available under Windows.')),
-            _('UPower'): (self.gupnp_igd_available,
+            _('UPower'): (self.upower_available,
                 _('Ability to disconnect properly just before suspending the machine.'),
                 _('Requires upower and python-dbus.'),
                 _('Feature not available under Windows.')),
@@ -260,3 +260,9 @@ class FeaturesWindow:
 
     def gupnp_igd_available(self):
         return gajim.HAVE_UPNP_IGD
+
+    def upower_available(self):
+        if os.name == 'nt':
+            return False
+        import upower_listener
+        return upower_listener.supported
