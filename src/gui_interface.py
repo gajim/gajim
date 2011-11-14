@@ -1179,8 +1179,8 @@ class Interface:
                     f.write(server + '\n')
                     f.write(obj.cert + '\n\n')
                     f.close()
-                gajim.config.set_per('accounts', account,
-                    'ssl_fingerprint_sha1', obj.fingerprint)
+            gajim.config.set_per('accounts', account, 'ssl_fingerprint_sha1',
+                obj.fingerprint)
             if is_checked[1]:
                 ignore_ssl_errors = gajim.config.get_per('accounts', account,
                     'ignore_ssl_errors').split()
