@@ -41,8 +41,6 @@ import gtk
 import xml.sax, xml.sax.handler
 import re
 from cStringIO import StringIO
-import socket
-import time
 import urllib2
 import operator
 
@@ -55,9 +53,6 @@ if __name__ == '__main__':
 from common import gajim
 from gtkgui_helpers import get_icon_pixmap
 from common import helpers
-
-if gajim.HAVE_PYCURL:
-    import pycurl
 
 import tooltips
 import logging
@@ -494,118 +489,8 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
             tag.title = title
         return tag
 
-    def _get_img_direct(self, attrs):
-        """
-        Download an image. This function is launched in a separate thread.
-        """
-        mem, alt = '', ''
-        # Wait maximum 5s for connection
-        socket.setdefaulttimeout(5)
-        try:
-            req = urllib2.Request(attrs['src'])
-            req.add_header('User-Agent', 'Gajim ' + gajim.version)
-            f = urllib2.urlopen(req)
-        except Exception, ex:
-            log.debug('Error loading image %s ' % attrs['src']  + str(ex))
-            pixbuf = None
-            alt = attrs.get('alt', 'Broken image')
-        else:
-            # Wait 0.5s between each byte
-            try:
-                f.fp._sock.fp._sock.settimeout(0.5)
-            except Exception:
-                pass
-            # Max image size = 2 MB (to try to prevent DoS)
-            deadline = time.time() + 3
-            while True:
-                if time.time() > deadline:
-                    log.debug(str('Timeout loading image %s ' % \
-                        attrs['src'] + ex))
-                    mem = ''
-                    alt = attrs.get('alt', '')
-                    if alt:
-                        alt += '\n'
-                    alt += _('Timeout loading image')
-                    break
-                try:
-                    temp = f.read(100)
-                except socket.timeout, ex:
-                    log.debug('Timeout loading image %s ' % \
-                        attrs['src'] + str(ex))
-                    alt = attrs.get('alt', '')
-                    if alt:
-                        alt += '\n'
-                    alt += _('Timeout loading image')
-                    break
-                if temp:
-                    mem += temp
-                else:
-                    break
-                if len(mem) > 2*1024*1024:
-                    alt = attrs.get('alt', '')
-                    if alt:
-                        alt += '\n'
-                    alt += _('Image is too big')
-                    break
-        return (mem, alt)
-
-    def _get_img_proxy(self, attrs, proxy):
-        """
-        Download an image through a proxy. This function is launched in a
-        separate thread.
-        """
-        if not gajim.HAVE_PYCURL:
-            return '', _('PyCURL is not installed')
-        mem, alt = '', ''
-        try:
-            b = StringIO()
-            c = pycurl.Curl()
-            c.setopt(pycurl.URL, attrs['src'].encode('utf-8'))
-            c.setopt(pycurl.FOLLOWLOCATION, 1)
-            c.setopt(pycurl.CONNECTTIMEOUT, 5)
-            c.setopt(pycurl.TIMEOUT, 10)
-            c.setopt(pycurl.MAXFILESIZE, 2000000)
-            c.setopt(pycurl.WRITEFUNCTION, b.write)
-            c.setopt(pycurl.USERAGENT, 'Gajim ' + gajim.version)
-            # set proxy
-            c.setopt(pycurl.PROXY, proxy['host'].encode('utf-8'))
-            c.setopt(pycurl.PROXYPORT, proxy['port'])
-            if proxy['useauth']:
-                c.setopt(pycurl.PROXYUSERPWD, proxy['user'].encode('utf-8')\
-                    + ':' + proxy['pass'].encode('utf-8'))
-                c.setopt(pycurl.PROXYAUTH, pycurl.HTTPAUTH_ANY)
-            if proxy['type'] == 'http':
-                c.setopt(pycurl.PROXYTYPE, pycurl.PROXYTYPE_HTTP)
-            elif proxy['type'] == 'socks5':
-                c.setopt(pycurl.PROXYTYPE, pycurl.PROXYTYPE_SOCKS5)
-            x = c.perform()
-            c.close()
-            t = b.getvalue()
-            return (t, attrs.get('alt', ''))
-        except pycurl.error, ex:
-            alt = attrs.get('alt', '')
-            if alt:
-                alt += '\n'
-            if ex[0] == pycurl.E_FILESIZE_EXCEEDED:
-                alt += _('Image is too big')
-            elif ex[0] == pycurl.E_OPERATION_TIMEOUTED:
-                alt += _('Timeout loading image')
-            else:
-                alt += _('Error loading image')
-        except Exception, ex:
-            log.debug('Error loading image %s ' % attrs['src']  + str(ex))
-            pixbuf = None
-            alt = attrs.get('alt', 'Broken image')
-        return ('', alt)
-
-    def _get_img(self, attrs):
-        proxy = helpers.get_proxy_info(self.conv_textview.account)
-        if proxy and proxy['type'] in ('http', 'socks5'):
-            return self._get_img_proxy(attrs, proxy)
-        return self._get_img_direct(attrs)
-
     def _update_img(self, (mem, alt), attrs, img_mark):
-        '''Callback function called after the function _get_img above.
+        '''Callback function called after the function helpers.download_image.
         '''
         self._process_img(attrs, (mem, alt, img_mark))
 
@@ -628,8 +513,9 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                 update = True
             else:
                 img_mark = self.textbuf.create_mark(None, self.iter, True)
-                gajim.thread_interface(self._get_img, [attrs], \
-                    self._update_img, [attrs, img_mark])
+                gajim.thread_interface(helpers.download_image, [
+                    self.conv_textview.account, attrs], self._update_img,
+                    [attrs, img_mark])
                 alt = attrs.get('alt', '')
                 if alt:
                     alt += '\n'
