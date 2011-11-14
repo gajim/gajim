@@ -519,6 +519,10 @@ class Config:
 
     }
 
+    proxies_default = {
+        _('Tor'): ['socks5', 'localhost', 9050],
+    }
+
     def foreach(self, cb, data = None):
         for opt in self.__options:
             cb(data, opt, None, self.__options[opt])

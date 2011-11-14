@@ -2656,6 +2656,18 @@ class Interface:
                 for o in d:
                     gajim.config.set_per('themes', theme_name, o,
                         theme[d.index(o)])
+        # Add Tor proxy if there is not in the config
+        if len(gajim.config.get_per('proxies')) == 0:
+            default = gajim.config.proxies_default
+            for proxy in default:
+                gajim.config.add_per('proxies', proxy)
+                gajim.config.set_per('proxies', proxy, 'type',
+                    default[proxy][0])
+                gajim.config.set_per('proxies', proxy, 'host',
+                    default[proxy][1])
+                gajim.config.set_per('proxies', proxy, 'port',
+                    default[proxy][2])
+
 
         gajim.idlequeue = idlequeue.get_idlequeue()
         # resolve and keep current record of resolved hosts
