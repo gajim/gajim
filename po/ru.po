@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-11-11 00:06+0400\n"
-"PO-Revision-Date: 2011-11-11 00:17+0300\n"
+"PO-Revision-Date: 2011-11-15 23:22+0300\n"
 "Last-Translator: Fomin Denis <fominde@mail.ru>\n"
 "Language-Team: Linux Support LLC\n"
 "Language: ru\n"
@@ -984,7 +984,6 @@ msgid "Invite _Contacts"
 msgstr "Пригласить _участников"
 
 #: ../data/gui/contact_context_menu.ui.h:8
-#, fuzzy
 msgid "M_anage Contact"
 msgstr "_Управление контактом"
 
@@ -3289,19 +3288,16 @@ msgid "%(name)s is now %(status)s"
 msgstr "%(name)s теперь %(status)s"
 
 #: ../src/chat_control.py:3196
-#, fuzzy
 msgid "File transfer"
 msgstr "Передача файлов"
 
 #: ../src/chat_control.py:3199
-#, fuzzy
 msgid "Size"
-msgstr "Размер: %s"
+msgstr "Размер"
 
 #: ../src/chat_control.py:3201
-#, fuzzy
 msgid "_Accept"
-msgstr "Принять"
+msgstr "_Принять"
 
 #: ../src/chat_control.py:3224
 #: ../src/filetransfers_window.py:204
