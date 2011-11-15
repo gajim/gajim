@@ -392,7 +392,7 @@ class GroupchatControl(ChatControlBase):
         self.tooltip = tooltips.GCTooltip()
 
         # nickname coloring
-        self.gc_count_nicknames_colors = 0
+        self.gc_count_nicknames_colors = -1
         self.gc_custom_colors = {}
         self.number_of_colors = len(gajim.config.get('gc_nicknames_colors').\
             split(':'))
