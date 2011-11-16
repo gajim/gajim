@@ -116,11 +116,7 @@ class GoogleTranslationPlugin(GajimPlugin):
 
         self.config_default_values = {
             'per_jid_config': ({}, ''),
-            'user_agent' :
-                (u'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.12) '
-                'Gecko/20080213 Firefox/2.0.0.11',
-                u'User Agent data to be used with urllib2 '
-                'when connecting to Google Translate service')}
+        }
 
         self.events_handlers = {'decrypted-message-received': (ged.PREGUI,
             self._nec_decrypted_message_received)}
@@ -136,25 +132,20 @@ class GoogleTranslationPlugin(GajimPlugin):
             '{"translatedText":"(?P<text>[^"]*)"}, 200, null, 200\)')
 
     @log_calls('GoogleTranslationPlugin')
-    def translate_text(self, text, from_lang, to_lang):
+    def translate_text(self, account, text, from_lang, to_lang):
         # Converts text so it can be used within URL as query to Google
         # Translate.
         quoted_text = urllib2.quote(text.encode(getfilesystemencoding()))
         # prepare url
-        headers = { 'User-Agent' : self.config['user_agent'] }
         translation_url = u'http://www.google.com/uds/Gtranslate?callback='\
             'google.language.callbacks.id100&context=22&q=%(quoted_text)s&'\
             'langpair=%(from_lang)s%%7C%(to_lang)s&key=notsupplied&v=1.0' % \
             locals()
-        request = urllib2.Request(translation_url, headers=headers)
 
-        try:
-            response = urllib2.urlopen(request)
-        except urllib2.URLError, e:
-            # print e
+        results = helpers.download_image(account, {'src': translation_url})[0]
+        if not results:
             return text
 
-        results = response.read()
         translated_text = self.translated_text_re.search(results).group('text')
 
         if translated_text:
@@ -177,7 +168,8 @@ class GoogleTranslationPlugin(GajimPlugin):
             return
         from_lang = self.config['per_jid_config'][obj.jid]['from']
         to_lang = self.config['per_jid_config'][obj.jid]['to']
-        translated_text = self.translate_text(obj.msgtxt, from_lang, to_lang)
+        translated_text = self.translate_text(obj.conn.name, obj.msgtxt,
+            from_lang, to_lang)
         if translated_text:
             obj.msgtxt = translated_text + '\n/' + _('Original text:') + '/ ' +\
                 obj.msgtxt
