@@ -129,7 +129,7 @@ class GoogleTranslationPlugin(GajimPlugin):
         self.controls = []
         self.translated_text_re = re.compile(
             r'google.language.callbacks.id100\(\'22\', '
-            '{"translatedText":"(?P<text>[^"]*)"}, 200, null, 200\)')
+            '{(?P<text>[^\}]*)}, 200, null, 200\)')
 
     @log_calls('GoogleTranslationPlugin')
     def translate_text(self, account, text, from_lang, to_lang):
@@ -146,7 +146,13 @@ class GoogleTranslationPlugin(GajimPlugin):
         if not results:
             return text
 
-        translated_text = self.translated_text_re.search(results).group('text')
+        result = self.translated_text_re.search(results)
+        if not result:
+            return text
+
+        dict_ = eval('{' + result.group('text') + '}')
+
+        translated_text = dict_.get('translatedText', '')
 
         if translated_text:
             try:
