@@ -1,4 +1,4 @@
-SUBDIRS = src data plugins po icons
+SUBDIRS = src data po icons
 
 ACLOCAL_AMFLAGS = -I m4
 
