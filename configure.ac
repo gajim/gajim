@@ -79,7 +79,6 @@ AC_CONFIG_FILES([
 	scripts/gajim-remote:scripts/gajim.in
 	scripts/gajim-history-manager:scripts/gajim.in
 	po/Makefile.in
-	plugins/Makefile
 ])
 AC_OUTPUT
 echo "
