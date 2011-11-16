@@ -26,12 +26,10 @@ Translates (currently only incoming) messages using Google Translate.
 :license: GPL
 '''
 
-import re
+import json
 import urllib2
 import HTMLParser
-import new
 import gtk
-from pprint import pformat
 from sys import getfilesystemencoding
 
 import chat_control
@@ -43,7 +41,6 @@ from common import gajim
 from plugins import GajimPlugin
 from plugins.helpers import log_calls, log
 from common import ged
-from common import nec
 
 languages = {
     _('Afrikaans'): 'af',
@@ -127,9 +124,6 @@ class GoogleTranslationPlugin(GajimPlugin):
         }
 
         self.controls = []
-        self.translated_text_re = re.compile(
-            r'google.language.callbacks.id100\(\'22\', '
-            '{(?P<text>[^\}]*)}, 200, null, 200\)')
 
     @log_calls('GoogleTranslationPlugin')
     def translate_text(self, account, text, from_lang, to_lang):
@@ -137,8 +131,8 @@ class GoogleTranslationPlugin(GajimPlugin):
         # Translate.
         quoted_text = urllib2.quote(text.encode(getfilesystemencoding()))
         # prepare url
-        translation_url = u'http://www.google.com/uds/Gtranslate?callback='\
-            'google.language.callbacks.id100&context=22&q=%(quoted_text)s&'\
+        translation_url = u'https://ajax.googleapis.com/ajax/services/' \
+            'language/translate?q=%(quoted_text)s&' \
             'langpair=%(from_lang)s%%7C%(to_lang)s&key=notsupplied&v=1.0' % \
             locals()
 
@@ -146,17 +140,14 @@ class GoogleTranslationPlugin(GajimPlugin):
         if not results:
             return text
 
-        result = self.translated_text_re.search(results)
-        if not result:
+        result = json.loads(results)
+
+        if result.get('responseStatus', '') != 200:
             return text
 
-        dict_ = eval('{' + result.group('text') + '}')
-
-        translated_text = dict_.get('translatedText', '')
-
+        translated_text = result['responseData'].get('translatedText', '')
         if translated_text:
             try:
-                translated_text = unicode(translated_text, 'unicode_escape')
                 htmlparser = HTMLParser.HTMLParser()
                 translated_text = htmlparser.unescape(translated_text)
             except Exception:
