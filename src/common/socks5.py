@@ -1088,6 +1088,7 @@ class Socks5Server(Socks5):
 
         Socks5.__init__(self, idlequeue, host, port, initiator, target, sid)
         
+        self.type = 'server'
 
     def main(self):
         """
@@ -1190,6 +1191,8 @@ class Socks5Client(Socks5):
 
         Socks5.__init__(self, idlequeue, host, port, initiator, target, sid)
      
+        self.type = 'client'
+
     def main(self, timeout=0):
         """
         Begin negotiation. on success 'address' != 0
@@ -1341,7 +1344,6 @@ class Socks5SenderClient(Socks5Client, Socks5Sender):
         Socks5Sender.__init__(self,idlequeue, sock_hash, parent,_sock, 
                 host, port, fingerprint , connected, file_props)
 
-        self.type = 'client'
 
 
 
@@ -1358,7 +1360,6 @@ class Socks5SenderServer(Socks5Server, Socks5Sender):
                 host, port, fingerprint , connected, file_props)
 
 
-        self.type = 'server'
 
 class Socks5ReceiverClient(Socks5Client, Socks5Receiver):
 
@@ -1371,7 +1372,6 @@ class Socks5ReceiverClient(Socks5Client, Socks5Receiver):
         Socks5Receiver.__init__(self, idlequeue, streamhost, sid, file_props,
                        fingerprint)
 
-        self.type = 'client'
 
         
 
@@ -1387,7 +1387,6 @@ class Socks5ReceiverServer(Socks5Server, Socks5Receiver):
         Socks5Receiver.__init__(self, idlequeue, streamhost, sid, file_props,
                        fingerprint)
 
-        self.type = 'server'
 
 
 class Socks5Listener(IdleObject):
