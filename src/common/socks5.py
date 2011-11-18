@@ -144,8 +144,8 @@ class SocksQueue:
                 fp = fingerprint
             if receiving:
                 self.type = 'receiver'
-                socks5obj = Socks5Receiver(self.idlequeue, streamhost, sid,
-                    'client', file_props, fingerprint=fp)
+                socks5obj = Socks5ReceiverClient(self.idlequeue, streamhost, sid,
+                     file_props, fingerprint=fp)
                 self.add_sockobj(account, socks5obj)
             else:
                 if 'sha_str' in file_props:
@@ -158,10 +158,10 @@ class SocksQueue:
                     file_props['is_a_proxy'] = True
                     file_props['proxy_sender'] = streamhost['target']
                     file_props['proxy_receiver'] = streamhost['initiator']
-                socks5obj = Socks5Sender(self.idlequeue, idx,
-                    self, mode='client' , _sock=None,
-                    host=str(streamhost['host']), port=int(streamhost['port']),
-                    fingerprint=fp, connected=False, file_props=file_props)
+                socks5obj = Socks5SenderClient(self.idlequeue, idx,
+                    self, _sock=None,host=str(streamhost['host']), 
+                    port=int(streamhost['port']),fingerprint=fp, 
+                    connected=False, file_props=file_props)
                 socks5obj.streamhost = streamhost
                 self.add_sockobj(account, socks5obj, type='sender')
 
@@ -214,8 +214,8 @@ class SocksQueue:
                 if host['state'] == -2:
                     host['state'] = 0
                     # FIXME: make the sender reconnect also
-                    client = Socks5Receiver(self.idlequeue, host, host['sid'],
-                        'client',file_props)
+                    client = Socks5ReceiverClient(self.idlequeue, host, host['sid'],
+                        file_props)
                     self.add_sockobj(client.account, client)
                     host['idx'] = client.queue_idx
             # we still have chances to connect
@@ -311,8 +311,13 @@ class SocksQueue:
 
     def send_file(self, file_props, account, type):
         for key in self.senders.keys():
+            if isinstance(self.senders[key], Socks5SenderClient):
+                objtype = 'client'
+            else:
+                objtype = 'server'
+
             if file_props['name'] in key and file_props['sid'] in key \
-            and self.senders[key].mode == type:
+            and objtype == type:
 
                 log.info("socks5: sending file")
                 sender = self.senders[key]
@@ -372,7 +377,7 @@ class SocksQueue:
         if self.type == 'sender' and \
         not self.isHashInSockObjs(self.senders, sock_hash):
 
-            sockobj =  Socks5Sender(self.idlequeue, sock_hash, self, 'server',
+            sockobj =  Socks5SenderServer(self.idlequeue, sock_hash, self,
                 sock[0],  sock[1][0], sock[1][1], fingerprint='server',
                 file_props=listener.file_props)
             self._add(sockobj, self.senders, listener.file_props, sock_hash)
@@ -388,9 +393,9 @@ class SocksQueue:
             sh['initiator'] = None
             sh['target'] = None
 
-            sockobj =  Socks5Receiver(idlequeue=self.idlequeue,
+            sockobj =  Socks5ReceiverServer(idlequeue=self.idlequeue,
                 streamhost=sh,sid=None, file_props=listener.file_props,
-                mode='server',fingerprint='server')
+                fingerprint='server')
 
             self._add(sockobj, self.readers, listener.file_props, sock_hash)
 
@@ -429,10 +434,12 @@ class SocksQueue:
                     self.idlequeue.remove_timeout(reader.fd)
                     if do_disconnect:
                         reader.disconnect()
+                        break
                     else:
                         if reader.streamhost is not None:
                             reader.streamhost['state'] = -1
                         del(self.readers[key])
+                        break
 
     def remove_sender(self, idx, do_disconnect=True):
         """
@@ -482,11 +489,6 @@ class Socks5:
         self.connected = False
         self.type = ''
 
-    def start_transfer(self):
-        """
-        Must be implemented by subclass.
-        """
-        pass
 
     def _is_connected(self):
         if self.state < 5:
@@ -557,255 +559,6 @@ class Socks5:
         self.idlequeue.plug_idle(self, True, False)
         return 1 # we are connected
 
-    def svr_main(self):
-        """
-        Initial requests for verifying the connection
-        """
-        if self.state == 1: # initial read
-            buff = self.receive()
-            if not self.connected:
-                return -1
-            mechs = self._parse_auth_buff(buff)
-            if mechs is None:
-                return -1 # invalid auth methods received
-        elif self.state == 3: # get next request
-            buff = self.receive()
-            req_type, self.sha_msg = self._parse_request_buff(buff)[:2]
-            if req_type != 0x01:
-                return -1 # request is not of type 'connect'
-        self.state += 1 # go to the next step
-        # unplug & plug for writing
-        self.idlequeue.plug_idle(self, True, False)
-        return None
-
-    def clnt_main(self, timeout=0):
-        """
-        Begin negotiation. on success 'address' != 0
-        """
-        result = 1
-        buff = self.receive()
-        if buff == '':
-            # end connection
-            self.pollend()
-            return
-
-        if self.state == 2: # read auth response
-            if buff is None or len(buff) != 2:
-                return None
-            version, method = struct.unpack('!BB', buff[:2])
-            if version != 0x05 or method == 0xff:
-                self.disconnect()
-        elif self.state == 4: # get approve of our request
-            if buff is None:
-                return None
-            sub_buff = buff[:4]
-            if len(sub_buff) < 4:
-                return None
-            version, address_type = struct.unpack('!BxxB', buff[:4])
-            addrlen = 0
-            if address_type == 0x03:
-                addrlen = ord(buff[4])
-                address = struct.unpack('!%ds' % addrlen, buff[5:addrlen + 5])
-                portlen = len(buff[addrlen + 5:])
-                if portlen == 1:
-                    port, = struct.unpack('!B', buff[addrlen + 5])
-                elif portlen == 2:
-                    port, = struct.unpack('!H', buff[addrlen + 5:])
-                else: # Gaim bug :)
-                    port, = struct.unpack('!H', buff[addrlen + 5:addrlen + 7])
-                    self.remaining_buff = buff[addrlen + 7:]
-            self.state = 5 # for senders: init file_props and send '\n'
-            if self.queue.on_success:
-                result = self.queue.send_success_reply(self.file_props,
-                    self.streamhost)
-                if self.type == 'sender' and self.proxy:
-                    self.queue.process_result( self.send_file()
-                            , self)
-                    return
-
-                if result == 0:
-                    self.state = 8
-                    self.disconnect()
-
-        # for senders: init file_props
-        if result == 1 and self.state == 5:
-            if self.file_props['type'] == 's':
-                self.file_props['error'] = 0
-                self.file_props['disconnect_cb'] = self.disconnect
-                self.file_props['started'] = True
-                self.file_props['completed'] = False
-                self.file_props['paused'] = False
-                self.file_props['stalled'] = False
-                self.file_props['elapsed-time'] = 0
-                self.file_props['last-time'] = self.idlequeue.current_time()
-                self.file_props['received-len'] = 0
-                self.pauses = 0
-                # start sending file contents to socket
-                #self.idlequeue.set_read_timeout(self.fd, STALLED_TIMEOUT)
-                #self.idlequeue.plug_idle(self, True, False)
-                self.idlequeue.plug_idle(self, False, False)
-            else:
-                # receiving file contents from socket
-                self.idlequeue.plug_idle(self, False, True)
-
-            self.file_props['continue_cb'] = self.continue_paused_transfer
-            # we have set up the connection, next - retrieve file
-            self.state = 6
-        if self.state < 5:
-            self.idlequeue.plug_idle(self, True, False)
-            self.state += 1
-            return None
-
-    def pollout(self):
-        if self.mode == 'client':
-            self.clnt_pollout()
-        elif self.mode == 'server':
-            self.svr_pollout()
-
-    def svr_pollout(self):
-        if not self.connected:
-            self.disconnect()
-            return
-        self.idlequeue.remove_timeout(self.fd)
-        if self.state == 2: # send reply with desired auth type
-            self.send_raw(self._get_auth_response())
-        elif self.state == 4: # send positive response to the 'connect'
-            self.send_raw(self._get_request_buff(self.sha_msg, 0x00))
-        elif self.state == 7:
-            if self.file_props['paused']:
-                self.file_props['continue_cb'] = self.continue_paused_transfer
-                self.idlequeue.plug_idle(self, False, False)
-                return
-            result = self.start_transfer() # send
-            self.queue.process_result(result, self)
-            if result is None or result <= 0:
-                self.disconnect()
-                return
-            self.idlequeue.set_read_timeout(self.fd, STALLED_TIMEOUT)
-        elif self.state == 8:
-            self.disconnect()
-            return
-        else:
-            self.disconnect()
-        if self.state < 5:
-            self.state += 1
-            # unplug and plug this time for reading
-            self.idlequeue.plug_idle(self, False, True)
-
-    def clnt_pollout(self):
-        self.idlequeue.remove_timeout(self.fd)
-        try:
-            if self.state == 0:
-                self.do_connect()
-                return
-            elif self.state == 1: # send initially: version and auth types
-                self.send_raw(self._get_auth_buff())
-            elif self.state == 3: # send 'connect' request
-                self.send_raw(self._get_request_buff(self._get_sha1_auth()))
-            elif self.file_props['type'] != 'r':
-                if self.file_props['paused']:
-                    self.idlequeue.plug_idle(self, False, False)
-                    return
-                result = self.start_transfer() # send
-                self.queue.process_result(result, self)
-                return
-        except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError,
-        OpenSSL.SSL.WantX509LookupError), e:
-            log.info('caught SSL exception, ignored')
-            return
-        self.state += 1
-        # unplug and plug for reading
-        self.idlequeue.plug_idle(self, False, True)
-        self.idlequeue.set_read_timeout(self.fd, CONNECT_TIMEOUT)
-
-
-    def pollin(self):
-        if self.mode == 'client':
-            self.clnt_pollin()
-        elif self.mode == 'server':
-            self.svr_pollin()
-
-    def svr_pollin(self):
-        if self.connected:
-            try:
-                if self.state < 5:
-                    result = self.svr_main()
-                    if self.state == 4:
-                        self.queue.result_sha(self.sha_msg, self.queue_idx)
-                    if result == -1:
-                        self.disconnect()
-
-                elif self.state == 5:
-                    self.state = 7
-                    if self.type == 'sender':
-                        # We wait for the end of the negotiation to
-                        # send the file
-                        self.idlequeue.plug_idle(self, False, False)
-                    else:
-                        # We plug for reading
-                        self.idlequeue.plug_idle(self, False, True)
-                        return
-
-                elif self.state == 7:
-                    if self.file_props['paused']:
-                        self.file_props['continue_cb'] = self.continue_paused_transfer
-                        self.idlequeue.plug_idle(self, False, False)
-                        return
-                    self.idlequeue.set_read_timeout(self.fd, STALLED_TIMEOUT)
-                    result = self.start_transfer() # send
-                    self.queue.process_result(result, self)
-            except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError,
-            OpenSSL.SSL.WantX509LookupError), e:
-                log.info('caught SSL exception, ignored')
-        else:
-            self.disconnect()
-
-    def clnt_pollin(self):
-        self.idlequeue.remove_timeout(self.fd)
-        if self.connected:
-            try:
-                if self.file_props['paused']:
-                    self.idlequeue.plug_idle(self, False, False)
-                    return
-                if self.state < 5:
-                    self.idlequeue.set_read_timeout(self.fd, CONNECT_TIMEOUT)
-                    result = self.clnt_main(0)
-                    self.queue.process_result(result, self)
-                elif self.state == 5: # wait for proxy reply
-                    pass
-                elif self.file_props['type'] == 'r':
-                    self.idlequeue.set_read_timeout(self.fd, STALLED_TIMEOUT)
-                    result = self.start_transfer() # receive
-                    self.queue.process_result(result, self)
-            except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError,
-            OpenSSL.SSL.WantX509LookupError), e:
-                log.info('caught SSL exception, ignored')
-                return
-        else:
-            self.disconnect()
-
-
-    def pollend(self):
-        if self.mode == 'client':
-            self.clnt_pollend()
-        elif self.mode == 'server':
-            self.svr_pollend()
-
-    def svr_pollend(self):
-        self.state = 8 # end connection
-        self.disconnect()
-        self.file_props['error'] = -1
-        self.queue.process_result(-1, self)
-
-    def clnt_pollend(self):
-        if self.state >= 5:
-            # error during transfer
-            self.disconnect()
-            self.file_props['error'] = -1
-            self.queue.process_result(-1, self)
-        else:
-            self.queue.reconnect_client(self, self.streamhost)
-
     def read_timeout(self):
         self.idlequeue.remove_timeout(self.fd)
         if self.state > 5:
@@ -822,7 +575,8 @@ class Socks5:
                 self.pollend()
 
         else:
-            if self.mode == 'client':
+            if isinstance(self, Socks5SenderClient) or isinstance(self, 
+                    Socks5ReceiverClient):
                 self.queue.reconnect_client(self, self.streamhost)
 
     def open_file_for_reading(self):
@@ -1162,24 +916,23 @@ class Socks5:
                 self.file_props['proxy_receiver'])).hexdigest()
         return hashlib.sha1('%s%s%s' % (self.sid, self.initiator, self.target)).\
                 hexdigest()
+                
 
-class Socks5Sender(Socks5, IdleObject):
+class Socks5Sender(IdleObject):
     """
     Class for sending file to socket over socks5
     """
 
-    def __init__(self, idlequeue, sock_hash, parent, mode,_sock, host=None,
+    def __init__(self, idlequeue, sock_hash, parent, _sock, host=None,
     port=None, fingerprint = None, connected=True, file_props={}):
 
         self.fingerprint = fingerprint
         self.queue_idx = sock_hash
         self.queue = parent
-        self.mode = mode # client or server
         self.file_props = file_props
         self.proxy = False
 
 
-        Socks5.__init__(self, idlequeue, host, port, None, None,file_props['sid'])
         self._sock = _sock
 
 
@@ -1258,6 +1011,383 @@ class Socks5Sender(Socks5, IdleObject):
             self.file_props['disconnect_cb'] = None
         if self.queue is not None:
             self.queue.remove_sender(self.queue_idx, False)
+
+class Socks5Receiver(IdleObject):
+
+    def __init__(self, idlequeue, streamhost, sid, file_props = None,
+    fingerprint=None):
+        """
+        fingerprint: fingerprint of certificates we shall use, set to None if
+        TLS connection not desired
+        """
+        self.queue_idx = -1
+        self.streamhost = streamhost
+        self.queue = None
+        self.fingerprint = fingerprint
+        self.connect_timeout = 0
+        self.connected = False
+        self.pauses = 0
+        self.file_props = file_props
+        self.file_props['disconnect_cb'] = self.disconnect
+        self.file_props['error'] = 0
+        self.file_props['started'] = True
+        self.file_props['completed'] = False
+        self.file_props['paused'] = False
+        self.file_props['continue_cb'] = self.continue_paused_transfer
+        self.file_props['stalled'] = False
+        self.file_props['received-len'] = 0
+        
+
+    def receive_file(self):
+        """
+        Start receiving the file over verified connection
+        """
+        if self.file_props['started']:
+            return
+        self.file_props['error'] = 0
+        self.file_props['disconnect_cb'] = self.disconnect
+        self.file_props['started'] = True
+        self.file_props['completed'] = False
+        self.file_props['paused'] = False
+        self.file_props['continue_cb'] = self.continue_paused_transfer
+        self.file_props['stalled'] = False
+        self.file_props['connected'] = True
+        self.file_props['elapsed-time'] = 0
+        self.file_props['last-time'] = self.idlequeue.current_time()
+        self.file_props['received-len'] = 0
+        self.pauses = 0
+        self.state = 7
+        # plug for reading
+        self.idlequeue.plug_idle(self, False, True)
+        return self.get_file_contents(0) # initial for nl byte
+
+    def start_transfer(self):
+        """
+        Receive the file
+        """
+        return self.get_file_contents(0)
+
+    def set_sock(self, _sock):
+        self._sock = _sock
+        self._sock.setblocking(False)
+        self.fd = _sock.fileno()
+        self._recv = _sock.recv
+        self._send = _sock.send
+        self.connected = True
+        self.state = 1 # waiting for first bytes
+        # start waiting for data
+        self.idlequeue.plug_idle(self, False, True)
+
+    def disconnect(self, cb=True):
+        """
+        Close the socket. Remove self from queue if cb is True
+        """
+        # close connection
+        Socks5.disconnect(self)
+        if cb is True:
+            self.file_props['disconnect_cb'] = None
+        if self.queue is not None:
+            self.queue.remove_receiver(self.queue_idx, False)
+
+class Socks5Server(Socks5):
+    def __init__(self, idlequeue, host, port, initiator, target, sid):
+
+        Socks5.__init__(self, idlequeue, host, port, initiator, target, sid)
+        
+
+    def main(self):
+        """
+        Initial requests for verifying the connection
+        """
+        if self.state == 1: # initial read
+            buff = self.receive()
+            if not self.connected:
+                return -1
+            mechs = self._parse_auth_buff(buff)
+            if mechs is None:
+                return -1 # invalid auth methods received
+        elif self.state == 3: # get next request
+            buff = self.receive()
+            req_type, self.sha_msg = self._parse_request_buff(buff)[:2]
+            if req_type != 0x01:
+                return -1 # request is not of type 'connect'
+        self.state += 1 # go to the next step
+        # unplug & plug for writing
+        self.idlequeue.plug_idle(self, True, False)
+        return None
+
+
+    def pollin(self):
+        if self.connected:
+            try:
+                if self.state < 5:
+                    result = self.main()
+                    if self.state == 4:
+                        self.queue.result_sha(self.sha_msg, self.queue_idx)
+                    if result == -1:
+                        self.disconnect()
+
+                elif self.state == 5:
+                    self.state = 7
+                    if self.type == 'sender':
+                        # We wait for the end of the negotiation to
+                        # send the file
+                        self.idlequeue.plug_idle(self, False, False)
+                    else:
+                        # We plug for reading
+                        self.idlequeue.plug_idle(self, False, True)
+                        return
+
+                elif self.state == 7:
+                    if self.file_props['paused']:
+                        self.file_props['continue_cb'] = self.continue_paused_transfer
+                        self.idlequeue.plug_idle(self, False, False)
+                        return
+                    self.idlequeue.set_read_timeout(self.fd, STALLED_TIMEOUT)
+                    result = self.start_transfer() # send
+                    self.queue.process_result(result, self)
+            except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError,
+            OpenSSL.SSL.WantX509LookupError), e:
+                log.info('caught SSL exception, ignored')
+        else:
+            self.disconnect()
+
+
+    def pollend(self):
+        self.state = 8 # end connection
+        self.disconnect()
+        self.file_props['error'] = -1
+        self.queue.process_result(-1, self)
+
+    def pollout(self):
+        if not self.connected:
+            self.disconnect()
+            return
+        self.idlequeue.remove_timeout(self.fd)
+        if self.state == 2: # send reply with desired auth type
+            self.send_raw(self._get_auth_response())
+        elif self.state == 4: # send positive response to the 'connect'
+            self.send_raw(self._get_request_buff(self.sha_msg, 0x00))
+        elif self.state == 7:
+            if self.file_props['paused']:
+                self.file_props['continue_cb'] = self.continue_paused_transfer
+                self.idlequeue.plug_idle(self, False, False)
+                return
+            result = self.start_transfer() # send
+            self.queue.process_result(result, self)
+            if result is None or result <= 0:
+                self.disconnect()
+                return
+            self.idlequeue.set_read_timeout(self.fd, STALLED_TIMEOUT)
+        elif self.state == 8:
+            self.disconnect()
+            return
+        else:
+            self.disconnect()
+        if self.state < 5:
+            self.state += 1
+            # unplug and plug this time for reading
+            self.idlequeue.plug_idle(self, False, True)
+
+
+class Socks5Client(Socks5):
+
+    def __init__(self, idlequeue, host, port, initiator, target, sid):
+
+        Socks5.__init__(self, idlequeue, host, port, initiator, target, sid)
+     
+    def main(self, timeout=0):
+        """
+        Begin negotiation. on success 'address' != 0
+        """
+        result = 1
+        buff = self.receive()
+        if buff == '':
+            # end connection
+            self.pollend()
+            return
+
+        if self.state == 2: # read auth response
+            if buff is None or len(buff) != 2:
+                return None
+            version, method = struct.unpack('!BB', buff[:2])
+            if version != 0x05 or method == 0xff:
+                self.disconnect()
+        elif self.state == 4: # get approve of our request
+            if buff is None:
+                return None
+            sub_buff = buff[:4]
+            if len(sub_buff) < 4:
+                return None
+            version, address_type = struct.unpack('!BxxB', buff[:4])
+            addrlen = 0
+            if address_type == 0x03:
+                addrlen = ord(buff[4])
+                address = struct.unpack('!%ds' % addrlen, buff[5:addrlen + 5])
+                portlen = len(buff[addrlen + 5:])
+                if portlen == 1:
+                    port, = struct.unpack('!B', buff[addrlen + 5])
+                elif portlen == 2:
+                    port, = struct.unpack('!H', buff[addrlen + 5:])
+                else: # Gaim bug :)
+                    port, = struct.unpack('!H', buff[addrlen + 5:addrlen + 7])
+                    self.remaining_buff = buff[addrlen + 7:]
+            self.state = 5 # for senders: init file_props and send '\n'
+            if self.queue.on_success:
+                result = self.queue.send_success_reply(self.file_props,
+                    self.streamhost)
+                if self.type == 'sender' and self.proxy:
+                    self.queue.process_result( self.send_file()
+                            , self)
+                    return
+
+                if result == 0:
+                    self.state = 8
+                    self.disconnect()
+
+        # for senders: init file_props
+        if result == 1 and self.state == 5:
+            if self.file_props['type'] == 's':
+                self.file_props['error'] = 0
+                self.file_props['disconnect_cb'] = self.disconnect
+                self.file_props['started'] = True
+                self.file_props['completed'] = False
+                self.file_props['paused'] = False
+                self.file_props['stalled'] = False
+                self.file_props['elapsed-time'] = 0
+                self.file_props['last-time'] = self.idlequeue.current_time()
+                self.file_props['received-len'] = 0
+                self.pauses = 0
+                # start sending file contents to socket
+                #self.idlequeue.set_read_timeout(self.fd, STALLED_TIMEOUT)
+                #self.idlequeue.plug_idle(self, True, False)
+                self.idlequeue.plug_idle(self, False, False)
+            else:
+                # receiving file contents from socket
+                self.idlequeue.plug_idle(self, False, True)
+
+            self.file_props['continue_cb'] = self.continue_paused_transfer
+            # we have set up the connection, next - retrieve file
+            self.state = 6
+        if self.state < 5:
+            self.idlequeue.plug_idle(self, True, False)
+            self.state += 1
+            return None
+
+
+    def pollin(self):
+        self.idlequeue.remove_timeout(self.fd)
+        if self.connected:
+            try:
+                if self.file_props['paused']:
+                    self.idlequeue.plug_idle(self, False, False)
+                    return
+                if self.state < 5:
+                    self.idlequeue.set_read_timeout(self.fd, CONNECT_TIMEOUT)
+                    result = self.main(0)
+                    self.queue.process_result(result, self)
+                elif self.state == 5: # wait for proxy reply
+                    pass
+                elif self.file_props['type'] == 'r':
+                    self.idlequeue.set_read_timeout(self.fd, STALLED_TIMEOUT)
+                    result = self.start_transfer() # receive
+                    self.queue.process_result(result, self)
+            except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError,
+            OpenSSL.SSL.WantX509LookupError), e:
+                log.info('caught SSL exception, ignored')
+                return
+        else:
+            self.disconnect()
+
+    def pollout(self):
+        self.idlequeue.remove_timeout(self.fd)
+        try:
+            if self.state == 0:
+                self.do_connect()
+                return
+            elif self.state == 1: # send initially: version and auth types
+                self.send_raw(self._get_auth_buff())
+            elif self.state == 3: # send 'connect' request
+                self.send_raw(self._get_request_buff(self._get_sha1_auth()))
+            elif self.file_props['type'] != 'r':
+                if self.file_props['paused']:
+                    self.idlequeue.plug_idle(self, False, False)
+                    return
+                result = self.start_transfer() # send
+                self.queue.process_result(result, self)
+                return
+        except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError,
+        OpenSSL.SSL.WantX509LookupError), e:
+            log.info('caught SSL exception, ignored')
+            return
+        self.state += 1
+        # unplug and plug for reading
+        self.idlequeue.plug_idle(self, False, True)
+        self.idlequeue.set_read_timeout(self.fd, CONNECT_TIMEOUT)
+
+    def pollend(self):
+        if self.state >= 5:
+            # error during transfer
+            self.disconnect()
+            self.file_props['error'] = -1
+            self.queue.process_result(-1, self)
+        else:
+            self.queue.reconnect_client(self, self.streamhost)
+
+
+
+class Socks5SenderClient(Socks5Client, Socks5Sender):
+
+    def __init__(self, idlequeue, sock_hash, parent,_sock, host=None,
+            port=None, fingerprint = None, connected=True, file_props={}):
+
+        Socks5.__init__(self, idlequeue, host, port, None, None,
+                file_props['sid'])
+
+        Socks5Sender.__init__(self,idlequeue, sock_hash, parent,_sock, 
+                host, port, fingerprint , connected, file_props)
+
+
+
+
+class Socks5SenderServer(Socks5Server, Socks5Sender):
+    
+    def __init__(self, idlequeue, sock_hash, parent,_sock, host=None,
+            port=None, fingerprint = None, connected=True, file_props={}):
+
+        Socks5.__init__(self, idlequeue, host, port, None, None,
+                file_props['sid'])
+
+        Socks5Sender.__init__(self,idlequeue, sock_hash, parent, _sock, 
+                host, port, fingerprint , connected, file_props)
+
+
+class Socks5ReceiverClient(Socks5Client, Socks5Receiver):
+
+    def __init__(self, idlequeue, streamhost, sid, file_props = None,
+            fingerprint=None):
+        Socks5.__init__(self, idlequeue, streamhost['host'],
+                int(streamhost['port']), streamhost['initiator'], 
+                streamhost['target'], sid)
+
+        Socks5Receiver.__init__(self, idlequeue, streamhost, sid, file_props,
+                       fingerprint)
+
+
+
+class Socks5ReceiverServer(Socks5Server, Socks5Receiver):
+
+    def __init__(self, idlequeue, streamhost, sid, file_props = None,
+    fingerprint=None):
+
+        Socks5.__init__(self, idlequeue, streamhost['host'],
+                int(streamhost['port']), streamhost['initiator'], 
+                streamhost['target'], sid)
+
+        Socks5Receiver.__init__(self, idlequeue, streamhost, sid, file_props,
+                       fingerprint)
+
+
 
 class Socks5Listener(IdleObject):
     def __init__(self, idlequeue, port, fp, fingerprint=None):
@@ -1359,82 +1489,4 @@ class Socks5Listener(IdleObject):
         _sock[0].setblocking(False)
         return _sock
 
-class Socks5Receiver(Socks5, IdleObject):
-    def __init__(self, idlequeue, streamhost, sid, mode, file_props = None,
-    fingerprint=None):
-        """
-        fingerprint: fingerprint of certificates we shall use, set to None if
-        TLS connection not desired
-        """
-        self.queue_idx = -1
-        self.streamhost = streamhost
-        self.queue = None
-        self.fingerprint = fingerprint
-        self.connect_timeout = 0
-        self.connected = False
-        self.pauses = 0
-        self.file_props = file_props
-        self.file_props['disconnect_cb'] = self.disconnect
-        self.file_props['error'] = 0
-        self.file_props['started'] = True
-        self.file_props['completed'] = False
-        self.file_props['paused'] = False
-        self.file_props['continue_cb'] = self.continue_paused_transfer
-        self.file_props['stalled'] = False
-        self.file_props['received-len'] = 0
-        self.mode = mode # client or server
-        Socks5.__init__(self, idlequeue, streamhost['host'],
-                int(streamhost['port']), streamhost['initiator'], streamhost['target'],
-                sid)
 
-
-    def receive_file(self):
-        """
-        Start receiving the file over verified connection
-        """
-        if self.file_props['started']:
-            return
-        self.file_props['error'] = 0
-        self.file_props['disconnect_cb'] = self.disconnect
-        self.file_props['started'] = True
-        self.file_props['completed'] = False
-        self.file_props['paused'] = False
-        self.file_props['continue_cb'] = self.continue_paused_transfer
-        self.file_props['stalled'] = False
-        self.file_props['connected'] = True
-        self.file_props['elapsed-time'] = 0
-        self.file_props['last-time'] = self.idlequeue.current_time()
-        self.file_props['received-len'] = 0
-        self.pauses = 0
-        self.state = 7
-        # plug for reading
-        self.idlequeue.plug_idle(self, False, True)
-        return self.get_file_contents(0) # initial for nl byte
-
-    def start_transfer(self):
-        """
-        Receive the file
-        """
-        return self.get_file_contents(0)
-
-    def set_sock(self, _sock):
-        self._sock = _sock
-        self._sock.setblocking(False)
-        self.fd = _sock.fileno()
-        self._recv = _sock.recv
-        self._send = _sock.send
-        self.connected = True
-        self.state = 1 # waiting for first bytes
-        # start waiting for data
-        self.idlequeue.plug_idle(self, False, True)
-
-    def disconnect(self, cb=True):
-        """
-        Close the socket. Remove self from queue if cb is True
-        """
-        # close connection
-        Socks5.disconnect(self)
-        if cb is True:
-            self.file_props['disconnect_cb'] = None
-        if self.queue is not None:
-            self.queue.remove_receiver(self.queue_idx, False)

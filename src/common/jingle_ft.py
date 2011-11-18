@@ -24,7 +24,7 @@ import xmpp
 from jingle_content import contents, JingleContent
 from jingle_transport import JingleTransportICEUDP, JingleTransportSocks5
 from common import helpers
-from common.socks5 import Socks5Receiver, Socks5Sender
+from common.socks5 import Socks5ReceiverClient, Socks5SenderClient
 from common.connection_handlers_events import FileRequestReceivedEvent
 
 import logging
@@ -419,9 +419,8 @@ class JingleFileTransfer(JingleContent):
             if self.weinitiate:
                 gajim.socks5queue.idx += 1
                 idx = gajim.socks5queue.idx
-                sockobj = Socks5Sender(gajim.idlequeue, idx,
+                sockobj = Socks5SenderClient(gajim.idlequeue, idx,
                                        gajim.socks5queue, 
-                                       mode='client', 
                                        _sock=None,
                                        host=str(streamhost_used['host']), 
                                        port=int(streamhost_used['port']),
@@ -429,8 +428,8 @@ class JingleFileTransfer(JingleContent):
                                        connected=False, 
                                        file_props=self.file_props)
             else:
-                sockobj = Socks5Receiver(gajim.idlequeue, streamhost_used,
-                    sid=self.file_props['sid'], mode='client',
+                sockobj = Socks5ReceiverClient(gajim.idlequeue, streamhost_used,
+                    sid=self.file_props['sid'],
                     file_props=self.file_props, fingerprint=None)
             sockobj.proxy = True
             sockobj.streamhost = streamhost_used             
