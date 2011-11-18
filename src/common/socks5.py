@@ -311,13 +311,8 @@ class SocksQueue:
 
     def send_file(self, file_props, account, type):
         for key in self.senders.keys():
-            if isinstance(self.senders[key], Socks5SenderClient):
-                objtype = 'client'
-            else:
-                objtype = 'server'
-
-            if file_props['name'] in key and file_props['sid'] in key \
-            and objtype == type:
+           if file_props['name'] in key and file_props['sid'] in key \
+            and self.senders[key].type == type:
 
                 log.info("socks5: sending file")
                 sender = self.senders[key]
@@ -575,8 +570,7 @@ class Socks5:
                 self.pollend()
 
         else:
-            if isinstance(self, Socks5SenderClient) or isinstance(self, 
-                    Socks5ReceiverClient):
+            if self.type == 'client':
                 self.queue.reconnect_client(self, self.streamhost)
 
     def open_file_for_reading(self):
@@ -1347,6 +1341,8 @@ class Socks5SenderClient(Socks5Client, Socks5Sender):
         Socks5Sender.__init__(self,idlequeue, sock_hash, parent,_sock, 
                 host, port, fingerprint , connected, file_props)
 
+        self.type = 'client'
+
 
 
 
@@ -1362,6 +1358,8 @@ class Socks5SenderServer(Socks5Server, Socks5Sender):
                 host, port, fingerprint , connected, file_props)
 
 
+        self.type = 'server'
+
 class Socks5ReceiverClient(Socks5Client, Socks5Receiver):
 
     def __init__(self, idlequeue, streamhost, sid, file_props = None,
@@ -1373,7 +1371,9 @@ class Socks5ReceiverClient(Socks5Client, Socks5Receiver):
         Socks5Receiver.__init__(self, idlequeue, streamhost, sid, file_props,
                        fingerprint)
 
+        self.type = 'client'
 
+        
 
 class Socks5ReceiverServer(Socks5Server, Socks5Receiver):
 
@@ -1387,6 +1387,7 @@ class Socks5ReceiverServer(Socks5Server, Socks5Receiver):
         Socks5Receiver.__init__(self, idlequeue, streamhost, sid, file_props,
                        fingerprint)
 
+        self.type = 'server'
 
 
 class Socks5Listener(IdleObject):
