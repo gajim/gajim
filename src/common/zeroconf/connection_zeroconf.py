@@ -340,7 +340,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
 
         def on_send_ok(msg_id):
             gajim.nec.push_incoming_event(MessageSentEvent(None, conn=self,
-                jid=jid, message=msg, keyID=keyID))
+                jid=jid, message=msg, keyID=keyID, chatstate=None))
             if callback:
                 callback(msg_id, *callback_args)
 
@@ -377,7 +377,8 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
 
         def on_send_ok(msg_id):
             gajim.nec.push_incoming_event(MessageSentEvent(None, conn=self,
-                jid=obj.jid, message=obj.message, keyID=obj.keyID))
+                jid=obj.jid, message=obj.message, keyID=obj.keyID,
+                chatstate=None))
             if obj.callback:
                 obj.callback(obj.msg_id, *obj.callback_args)
 

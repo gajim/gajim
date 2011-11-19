@@ -2348,7 +2348,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             msg_iq.addChild(node = label)
         self.connection.send(msg_iq)
         gajim.nec.push_incoming_event(MessageSentEvent(None, conn=self,
-            jid=jid, message=msg, keyID=None))
+            jid=jid, message=msg, keyID=None, chatstate=None))
 
     def send_gc_subject(self, jid, subject):
         if not gajim.account_is_connected(self.name):
