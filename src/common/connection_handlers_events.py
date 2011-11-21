@@ -2248,7 +2248,7 @@ class NotificationEvent(nec.NetworkIncomingEvent):
             self.handle_incoming_pres_event(self.base_event)
         return True
 
-class MessageOutgoingEvent(nec.NetworkIncomingEvent):
+class MessageOutgoingEvent(nec.NetworkOutgoingEvent):
     name = 'message-outgoing'
     base_network_events = []
 
