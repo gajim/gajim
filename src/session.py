@@ -96,14 +96,18 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
                 obj.msg_id = gajim.logger.write(log_type, obj.fjid,
                     msg_to_log, tim=obj.timestamp, subject=obj.subject)
             except exceptions.PysqliteOperationalError, e:
-                self.conn.dispatch('ERROR', (_('Disk WriteError'), str(e)))
+                gajim.nec.push_incoming_event(InformationEvent(None,
+                    conn=self.conn, level='error', pri_txt=_('Disk WriteError'),
+                    sec_txt=str(e)))
             except exceptions.DatabaseMalformed:
                 pritext = _('Database Error')
                 sectext = _('The database file (%s) cannot be read. Try to '
                     'repair it (see http://trac.gajim.org/wiki/DatabaseBackup) '
                     'or remove it (all history will be lost).') % \
                     common.logger.LOG_DB_PATH
-                self.conn.dispatch('ERROR', (pritext, sectext))
+                gajim.nec.push_incoming_event(InformationEvent(None,
+                    conn=self.conn, level='error', pri_txt=pritxt,
+                    sec_txt=sectxt))
 
         treat_as = gajim.config.get('treat_incoming_messages')
         if treat_as:

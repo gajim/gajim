@@ -997,8 +997,9 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         try:
             self.get_jid_resource()
         except helpers.InvalidFormat:
-            self.conn.dispatch('ERROR', (_('Invalid Jabber ID'),
-                _('A message from a non-valid JID arrived, it has been '
+            gajim.nec.push_incoming_event(InformationEvent(None, conn=self.conn,
+                level='error', pri_txt=_('Invalid Jabber ID'),
+                sec_txt=_('A message from a non-valid JID arrived, it has been '
                 'ignored.')))
             return
 
@@ -1027,9 +1028,11 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                 try:
                     self.get_jid_resource()
                 except helpers.InvalidFormat:
-                    self.conn.dispatch('ERROR', (_('Invalid Jabber ID'),
-                        _('A message from a non-valid JID arrived, it has been '
-                        'ignored.')))
+                    gajim.nec.push_incoming_event(InformationEvent(None,
+                        conn=self.conn, level='error',
+                        pri_txt=_('Invalid Jabber ID'),
+                        sec_txt=_('A message from a non-valid JID arrived, it '
+                        'has been ignored.')))
                     return
                 self.forwarded = True
             elif sent_tag:
@@ -1041,9 +1044,11 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                 try:
                     self.get_jid_resource()
                 except helpers.InvalidFormat:
-                    self.conn.dispatch('ERROR', (_('Invalid Jabber ID'),
-                        _('A message from a non-valid JID arrived, it has been '
-                        'ignored.')))
+                    gajim.nec.push_incoming_event(InformationEvent(None,
+                        conn=self.conn, level='error',
+                        pri_txt=_('Invalid Jabber ID'),
+                        sec_txt=_('A message from a non-valid JID arrived, it '
+                        'has been ignored.')))
                     return
                 self.forwarded = True
                 self.sent = True
@@ -2268,3 +2273,10 @@ class MessageOutgoingEvent(nec.NetworkOutgoingEvent):
 class ClientCertPassphraseEvent(nec.NetworkIncomingEvent):
     name = 'client-cert-passphrase'
     base_network_events = []
+
+class InformationEvent(nec.NetworkIncomingEvent):
+    name = 'information'
+    base_network_events = []
+
+    def init(self):
+        self.popup = True

@@ -2575,10 +2575,11 @@ class AccountsWindow:
             return
         if gajim.ZEROCONF_ACC_NAME in gajim.connections and not \
         gajim.connections[gajim.ZEROCONF_ACC_NAME].is_zeroconf:
-            gajim.connections[gajim.ZEROCONF_ACC_NAME].dispatch('ERROR',
-                    (_('Account Local already exists.'),
-                    _('Please rename or remove it before enabling link-local messaging'
-                    '.')))
+            gajim.nec.push_incoming_event(InformationEvent(None,
+                conn=gajim.connections[gajim.ZEROCONF_ACC_NAME],
+                level='error', pri_txt=_('Account Local already exists.'),
+                sec_txt=_('Please rename or remove it before enabling '
+                'link-local messaging.')))
             return
 
         if gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'active') \

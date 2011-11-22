@@ -125,8 +125,9 @@ class ConnectionDisco:
 
     def _agent_registered_cb(self, con, resp, agent):
         if resp.getType() == 'result':
-            self.dispatch('INFORMATION', (_('Registration succeeded'),
-                _('Registration with agent %s succeeded') % agent))
+            gajim.nec.push_incoming_event(InformationEvent(None, conn=self,
+                level='info', pri_txt=_('Registration succeeded'), sec_txt=_(
+                'Registration with agent %s succeeded') % agent))
             self.request_subscription(agent, auto_auth=True)
             self.agent_registrations[agent]['roster_push'] = True
             if self.agent_registrations[agent]['sub_received']:
@@ -134,9 +135,10 @@ class ConnectionDisco:
                 p = self.add_sha(p)
                 self.connection.send(p)
         if resp.getType() == 'error':
-            self.dispatch('ERROR', (_('Registration failed'), _('Registration '
-                'with agent %(agent)s failed with error %(error)s: '
-                '%(error_msg)s') % {'agent': agent, 'error': resp.getError(),
+            gajim.nec.push_incoming_event(InformationEvent(None, conn=self,
+                level='error', pri_txt=_('Registration failed'), sec_txt=_(
+                'Registration with agent %(agent)s failed with error %(error)s:'
+                ' %(error_msg)s') % {'agent': agent, 'error': resp.getError(),
                 'error_msg': resp.getErrorMsg()}))
 
     def register_agent(self, agent, info, is_form=False):
@@ -328,7 +330,8 @@ class ConnectionVcard:
             fil.write(str(card))
             fil.close()
         except IOError, e:
-            self.dispatch('ERROR', (_('Disk Write Error'), str(e)))
+            gajim.nec.push_incoming_event(InformationEvent(None, conn=self,
+                level='error', pri_txt=_('Disk Write Error'), sec_txt=str(e)))
 
     def get_cached_vcard(self, fjid, is_fake_jid=False):
         """
@@ -564,9 +567,10 @@ class ConnectionVcard:
                     self.disconnect(on_purpose=True)
                     gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
                         show='offline'))
-                    self.dispatch('ERROR', (_('Invisibility not supported'),
-                        _('Account %s doesn\'t support invisibility.') % \
-                        self.name))
+                    gajim.nec.push_incoming_event(InformationEvent(None,
+                        conn=self, level='error', pri_txt=_('Invisibility not '
+                        'supported'), sec_txt=_('Account %s doesn\'t support '
+                        'invisibility.') % self.name))
                     return
             # Ask metacontacts before roster
             self.get_metacontacts()
