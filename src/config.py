@@ -68,6 +68,7 @@ except ImportError:
     HAS_GST = False
 
 from common.exceptions import GajimGeneralException
+from common.connection_handlers_events import InformationEvent
 
 #---------- PreferencesWindow class -------------#
 class PreferencesWindow:

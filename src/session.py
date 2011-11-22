@@ -28,7 +28,8 @@ from common import gajim
 from common import stanza_session
 from common import contacts
 from common import ged
-from common.connection_handlers_events import ChatstateReceivedEvent
+from common.connection_handlers_events import ChatstateReceivedEvent, \
+    InformationEvent
 
 import common.xmpp
 
