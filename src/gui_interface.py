@@ -105,10 +105,6 @@ class Interface:
 ### Methods handling events from connection
 ################################################################################
 
-    def handle_event_error(self, unused, data):
-        #('ERROR', account, (title_text, section_text))
-        dialogs.ErrorDialog(data[0], data[1])
-
     def handle_event_db_error(self, unused, data):
         #('DB_ERROR', account, (title_text, section_text))
         if self.db_error_dialog:
@@ -118,9 +114,18 @@ class Interface:
             self.db_error_dialog = None
         self.db_error_dialog.connect('destroy', destroyed)
 
-    def handle_event_information(self, unused, data):
-        #('INFORMATION', account, (title_text, section_text))
-        dialogs.InformationDialog(data[0], data[1])
+    def handle_event_information(self, obj):
+        if obj.popup:
+            if obj.level == 'error':
+                cls = dialogs.ErrorDialog
+            elif obj.level == 'warn':
+                cls = dialogs.WarningDialog
+            elif obj.level == 'info':
+                cls = dialogs.InformationDialog
+            else:
+                return
+
+            cls(obj.pri_txt, obj.sec_txt)
 
     def handle_ask_new_nick(self, account, room_jid):
         title = _('Unable to join group chat')
@@ -1377,9 +1382,7 @@ class Interface:
 
     def create_core_handlers_list(self):
         self.handlers = {
-            'ERROR': [self.handle_event_error],
             'DB_ERROR': [self.handle_event_db_error],
-            'INFORMATION': [self.handle_event_information],
             'FILE_SEND_ERROR': [self.handle_event_file_send_error],
             'atom-entry-received': [self.handle_atom_entry],
             'bad-gpg-passphrase': [self.handle_event_bad_gpg_passphrase],
@@ -1397,6 +1400,7 @@ class Interface:
             'gpg-password-required': [self.handle_event_gpg_password_required],
             'gpg-trust-key': [self.handle_event_gpg_trust_key],
             'http-auth-received': [self.handle_event_http_auth],
+            'information': [self.handle_event_information],
             'insecure-password': [self.handle_event_insecure_password],
             'insecure-ssl-connection': \
                 [self.handle_event_insecure_ssl_connection],

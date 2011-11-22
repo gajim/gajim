@@ -103,11 +103,12 @@ class JingleRTPContent(JingleContent):
             bin = gst.parse_bin_from_description(pipeline, True)
             return bin
         except GError, error_str:
-            self.session.connection.dispatch('ERROR',
-                    (_("%s configuration error") % text.capitalize(),
-                            _("Couldn't setup %s. Check your configuration.\n\n"
-                                    "Pipeline was:\n%s\n\n"
-                                    "Error was:\n%s") % (text, pipeline, error_str)))
+            gajim.nec.push_incoming_event(InformationEvent(None,
+                conn=self.session.connection, level='error',
+                pri_txt=_('%s configuration error') % text.capitalize(),
+                sec_txt=_("Couldn't setup %s. Check your configuration.\n\n"
+                "Pipeline was:\n%s\n\nError was:\n%s") % (text, pipeline,
+                error_str)))
             raise JingleContentSetupException
 
     def add_remote_candidates(self, candidates):
@@ -201,10 +202,11 @@ class JingleRTPContent(JingleContent):
             # or raise an error, Jingle way
             # or maybe one-sided stream?
             if not self.stream_failed_once:
-                self.session.connection.dispatch('ERROR',
-                        (_("GStreamer error"),
-                         _("Error: %s\nDebug: %s" % (message.structure['gerror'],
-                                message.structure['debug']))))
+                gajim.nec.push_incoming_event(InformationEvent(None,
+                    conn=self.session.connection, level='error',
+                    pri_txt=_('GStreamer error'), sec_txt=_('Error: %s\nDebug: '
+                    '%s' % (message.structure['gerror'],
+                    message.structure['debug']))))
 
             sink_pad = self.p2psession.get_property('sink-pad')
 

@@ -374,8 +374,9 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             port = gajim.config.get('file_transfers_port')
             self._add_streamhosts_to_query(query, sender, port, my_ips)
         except socket.gaierror:
-            self.dispatch('ERROR', (_('Wrong host'),
-                    _('Invalid local address? :-O')))
+            gajim.nec.push_incoming_event(InformationEvent(None, conn=self,
+                level='error', pri_txt=_('Wrong host'),
+                sec_txt=_('Invalid local address? :-O')))
 
     def _add_addiditional_streamhosts_to_query(self, query, file_props):
         sender = file_props['sender']

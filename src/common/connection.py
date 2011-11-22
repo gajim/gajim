@@ -256,9 +256,10 @@ class CommonConnection:
         try:
             jid = self.check_jid(jid)
         except helpers.InvalidFormat:
-            self.dispatch('ERROR', (_('Invalid Jabber ID'),
-                    _('It is not possible to send a message to %s, this JID is not '
-                    'valid.') % jid))
+            gajim.nec.push_incoming_event(InformationEvent(None, conn=self,
+                level='error', pri_txt=_('Invalid Jabber ID'), sec_txt=_(
+                'It is not possible to send a message to %s, this JID is not '
+                'valid.') % jid))
             return
 
         if msg and not xhtml and gajim.config.get(
@@ -924,9 +925,10 @@ class Connection(CommonConnection, ConnectionHandlers):
                     self.disconnect(on_purpose=True)
                     return
                 if not data[1]: # wrong answer
-                    self.dispatch('ERROR', (_('Invalid answer'),
-                        _('Transport %(name)s answered wrongly to register '
-                        'request: %(error)s') % {'name': data[0],
+                    gajim.nec.push_incoming_event(InformationEvent(None,
+                        conn=self, level='error', pri_txt=_('Invalid answer'),
+                        sec_txt=_('Transport %(name)s answered wrongly to '
+                        'register request: %(error)s') % {'name': data[0],
                         'error': data[3]}))
                     return
                 is_form = data[2]
@@ -1207,7 +1209,9 @@ class Connection(CommonConnection, ConnectionHandlers):
                     key = common.xmpp.NS_XMPP_STREAMS + ' ' + self.streamError
                     if key in common.xmpp.ERRORS:
                         sectxt2 = _('Server replied: %s') % common.xmpp.ERRORS[key][2]
-                        self.dispatch('ERROR', (pritxt, '%s\n%s' % (sectxt2, sectxt)))
+                        gajim.nec.push_incoming_event(InformationEvent(None,
+                            conn=self, level='error', pri_txt=pritxt,
+                            sec_txt='%s\n%s' % (sectxt2, sectxt)))
                         return
                 # show popup
                 gajim.nec.push_incoming_event(ConnectionLostEvent(None,
@@ -1375,9 +1379,10 @@ class Connection(CommonConnection, ConnectionHandlers):
             self.disconnect(on_purpose = True)
             gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
                 show='offline'))
-            self.dispatch('ERROR', (_('Authentication failed with "%s"') % \
-                    self._hostname,
-                    _('Please check your login and password for correctness.')))
+            gajim.nec.push_incoming_event(InformationEvent(None, conn=self,
+                level='error', pri_txt=_('Authentication failed with "%s"') % \
+                self._hostname, sec_txt=_('Please check your login and password'
+                'for correctness.')))
             if self.on_connect_auth:
                 self.on_connect_auth(None)
                 self.on_connect_auth = None
@@ -1450,10 +1455,11 @@ class Connection(CommonConnection, ConnectionHandlers):
                 gajim.nec.push_incoming_event(PrivacyListRemovedEvent(None,
                     conn=self, list_name=privacy_list))
             else:
-                self.dispatch('ERROR', (_('Error while removing privacy list'),
-                        _('Privacy list %s has not been removed. It is maybe active in '
-                        'one of your connected resources. Deactivate it and try '
-                        'again.') % privacy_list))
+                gajim.nec.push_incoming_event(InformationEvent(None, conn=self,
+                    level='error', pri_txt=_('Error while removing privacy '
+                    'list'), sec_txt=_('Privacy list %s has not been removed. '
+                    'It is maybe active in one of your connected resources. '
+                    'Deactivate it and tryagain.') % privacy_list))
         common.xmpp.features_nb.delPrivacyList(self.connection, privacy_list,
                 _on_del_privacy_list_result)
 
@@ -1528,8 +1534,10 @@ class Connection(CommonConnection, ConnectionHandlers):
         if not self.privacy_rules_supported:
             gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
                 show=gajim.SHOW_LIST[self.connected]))
-            self.dispatch('ERROR', (_('Invisibility not supported'),
-                    _('Account %s doesn\'t support invisibility.') % self.name))
+            gajim.nec.push_incoming_event(InformationEvent(None, conn=self,
+                level='error', pri_txt=_('Invisibility not supported',
+                sec_txt=_('Account %s doesn\'t support invisibility.') % \
+                self.name)))
             return
         # If we are already connected, and privacy rules are supported, send
         # offline presence first as it's required by XEP-0126
@@ -2535,9 +2543,11 @@ class Connection(CommonConnection, ConnectionHandlers):
                     if result.getID() == id_:
                         on_remove_success(True)
                         return
-                    self.dispatch('ERROR', (_('Unregister failed'),
-                        _('Unregistration with server %(server)s failed: '
-                        '%(error)s') % {'server': hostname,
+                    gajim.nec.push_incoming_event(InformationEvent(None,
+                        conn=self, level='error',
+                        pri_txt=_('Unregister failed'),
+                        sec_txt=_('Unregistration with server %(server)s '
+                        'failed: %(error)s') % {'server': hostname,
                         'error': result.getErrorMsg()}))
                     on_remove_success(False)
                 con.RegisterHandler('iq', _on_answer, 'result', system=True)

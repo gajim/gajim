@@ -189,8 +189,9 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
             alt_name=alt_name))
 
     def _on_error(self, message):
-        self.dispatch('ERROR', (_('Avahi error'),
-                _('%s\nLink-local messaging might not work properly.') % message))
+        gajim.nec.push_incoming_event(InformationEvent(None, conn=self,
+            level='error', pri_txt=_('Avahi error'), sec_txt=_('%s\nLink-local '
+            'messaging might not work properly.') % message))
 
     def connect(self, show='online', msg=''):
         self.get_config_values_or_default()
