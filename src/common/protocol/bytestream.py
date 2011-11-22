@@ -38,7 +38,7 @@ from common import gajim
 from common import helpers
 from common import dataforms
 from common.connection_handlers_events import FileRequestReceivedEvent, \
-    FileRequestErrorEvent
+    FileRequestErrorEvent, InformationEvent
 from common import ged
 
 from common.socks5 import Socks5Receiver

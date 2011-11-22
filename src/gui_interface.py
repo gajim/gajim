@@ -81,7 +81,7 @@ from common import dataforms
 from common import passwords
 from common import logging_helpers
 from common.connection_handlers_events import OurShowEvent, \
-    FileRequestErrorEvent
+    FileRequestErrorEvent, InformationEvent
 from common.connection import Connection
 
 import roster_window

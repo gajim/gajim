@@ -28,6 +28,7 @@ import gajim
 
 from jingle_transport import JingleTransportICEUDP
 from jingle_content import contents, JingleContent, JingleContentSetupException
+from connection_handlers_events import InformationEvent
 
 
 import logging
