@@ -25,6 +25,8 @@ Global Events Dispatcher module.
 :license: GPL
 '''
 
+import traceback
+
 import logging
 log = logging.getLogger('gajim.c.ged')
 
@@ -85,5 +87,10 @@ class GlobalEventsDispatcher(object):
         log.debug('%s\nArgs: %s'%(event_name, str(args)))
         if event_name in self.handlers:
             for priority, handler in self.handlers[event_name]:
-                if handler(*args, **kwargs):
-                    return True
+                try:
+                    if handler(*args, **kwargs):
+                        return True
+                except Exception, e:
+                    log.error('Error while running an even handler: %s' % \
+                        handler)
+                    traceback.print_exc()
