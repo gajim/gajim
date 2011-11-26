@@ -62,6 +62,7 @@ class PluginsWindow(object):
         self.installed_plugins_model = gtk.ListStore(gobject.TYPE_PYOBJECT,
             gobject.TYPE_STRING, gobject.TYPE_BOOLEAN)
         self.installed_plugins_treeview.set_model(self.installed_plugins_model)
+        self.installed_plugins_treeview.set_rules_hint(True)
 
         renderer = gtk.CellRendererText()
         col = gtk.TreeViewColumn(_('Plugin'), renderer, text=1)
