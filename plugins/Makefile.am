@@ -8,8 +8,7 @@ dist_gajimplugins_PYTHON =
 nobase_gajimplugins_DATA = \
 	$(srcdir)/*/*.py \
 	$(srcdir)/*/manifest.ini \
-	$(srcdir)/*/*.ui \
-	$(srcdir)/*/*.png
+	$(srcdir)/*/*.ui
 
 
 MAINTAINERCLEANFILES = Makefile.in
