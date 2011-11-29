@@ -3335,7 +3335,10 @@ class RosterWindow:
         """
         self.tooltip.hide_tooltip()
         if event.keyval == gtk.keysyms.Escape:
-            self.tree.get_selection().unselect_all()
+            if self.rfilter_enabled:
+                self.disable_rfilter()
+            else:
+                self.tree.get_selection().unselect_all()
         elif event.keyval == gtk.keysyms.F2:
             treeselection = self.tree.get_selection()
             model, list_of_paths = treeselection.get_selected_rows()
@@ -3877,6 +3880,9 @@ class RosterWindow:
 
     def on_roster_window_key_press_event(self, widget, event):
         if event.keyval == gtk.keysyms.Escape:
+            if self.rfilter_enabled:
+                self.disable_rfilter()
+                return
             if gajim.interface.msg_win_mgr.mode == \
             MessageWindowMgr.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER and \
             gajim.interface.msg_win_mgr.one_window_opened():
@@ -4226,6 +4232,15 @@ class RosterWindow:
         if self.rfilter_string == '':
             self.disable_rfilter()
         self.refilter_shown_roster_items()
+        # select first row
+        self.tree.get_selection().unselect_all()
+        def _func(model, path, iter_):
+            if model[iter_][C_TYPE] == 'contact' and self.rfilter_string in \
+            model[iter_][C_NAME].lower():
+                col = self.tree.get_column(0)
+                self.tree.set_cursor_on_cell(path, col)
+                return True
+        self.modelfilter.foreach(_func)
 
     def on_rfilter_entry_icon_press(self, widget, icon, event):
         """
@@ -4233,16 +4248,32 @@ class RosterWindow:
         """
         self.disable_rfilter()
 
+    def on_rfilter_entry_key_press_event(self, widget, event):
+        if event.keyval == gtk.keysyms.Escape:
+            self.disable_rfilter()
+        elif event.keyval == gtk.keysyms.Return:
+            self.tree.grab_focus()
+            self.tree.emit('key_press_event', event)
+            self.disable_rfilter()
+        elif event.keyval in (gtk.keysyms.Up, gtk.keysyms.Down):
+            self.tree.grab_focus()
+            self.tree.emit('key_press_event', event)
+
     def enable_rfilter(self, search_string):
-        self.rfilter_enabled = True
+        if self.rfilter_enabled:
+            self.rfilter_entry.set_text(self.rfilter_entry.get_text() + \
+                search_string)
+        else:
+            self.rfilter_enabled = True
+            self.rfilter_entry.set_text(search_string)
         self.rfilter_entry.set_visible(True)
         self.rfilter_entry.set_editable(True)
-        self.rfilter_entry.set_text(search_string)
         self.rfilter_entry.grab_focus()
         self.rfilter_entry.set_position(-1)
 
     def disable_rfilter(self):
         self.rfilter_enabled = False
+        self.rfilter_entry.set_text('')
         self.rfilter_entry.set_visible(False)
         self.rfilter_entry.set_editable(False)
         self.refilter_shown_roster_items()
@@ -6436,6 +6467,8 @@ class RosterWindow:
         self.rfilter_entry = self.xml.get_object('rfilter_entry')
         self.rfilter_string = ''
         self.rfilter_enabled = False
+        self.rfilter_entry.connect('key-press-event',
+            self.on_rfilter_entry_key_press_event)
 
         gajim.ged.register_event_handler('presence-received', ged.GUI1,
             self._nec_presence_received)
