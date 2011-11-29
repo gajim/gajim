@@ -5,10 +5,11 @@ gajimpluginsdir = $(gajim_pluginsdir)
 
 dist_gajimplugins_PYTHON = 
 
-nobase_gajimplugins_DATA = \
-	$(srcdir)/*/*.py \
-	$(srcdir)/*/manifest.ini \
-	$(srcdir)/*/*.ui
+pluginsdirs = ${sort ${dir ${wildcard ${srcdir}/*/ ${srcdir}/*/*/}}}
+
+pluginsfiles = $(wildcard ${p}/*.py ${p}/manifest.ini ${p}/*.ui ${p}/*.png)
+
+nobase_gajimplugins_DATA = $(foreach p, ${pluginsdirs}, $(pluginsfiles))
 
 
 MAINTAINERCLEANFILES = Makefile.in
