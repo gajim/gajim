@@ -47,11 +47,6 @@ class StandardCommonCommands(CommandContainer):
     HOSTS = ChatCommands, PrivateChatCommands, GroupChatCommands
 
     @command
-    @doc(_("Clear the text window"))
-    def clear(self):
-        self.conv_textview.clear()
-
-    @command
     @doc(_("Hide the chat buttons"))
     def compact(self):
         new_status = not self.hide_chat_buttons
@@ -169,6 +164,11 @@ class StandardCommonChatCommands(CommandContainer):
     HOSTS = ChatCommands, PrivateChatCommands
 
     @command
+    @doc(_("Clear the text window"))
+    def clear(self):
+        self.conv_textview.clear()
+
+    @command
     @doc(_("Toggle the GPG encryption"))
     def gpg(self):
         self._toggle_gpg()
@@ -239,6 +239,13 @@ class StandardGroupChatCommands(CommandContainer):
 
     AUTOMATIC = True
     HOSTS = GroupChatCommands,
+
+    @command
+    @doc(_("Clear the text window"))
+    def clear(self):
+        self.conv_textview.clear()
+        self.gc_count_nicknames_colors = -1
+        self.gc_custom_colors = {}
 
     @command(raw=True)
     @doc(_("Change your nickname in a group chat"))
