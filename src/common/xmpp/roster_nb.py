@@ -342,7 +342,7 @@ class NonBlockingRoster(PlugIn):
             self._owner.Dispatcher.ProcessNonBlocking(data)
         if not self._set:
             return
-        if not self._owner:
+        if not hasattr(self, '_owner') or not self._owner:
             # Connection has been closed by receiving a <stream:error> for ex,
             return
         self._owner.onreceive(None)
