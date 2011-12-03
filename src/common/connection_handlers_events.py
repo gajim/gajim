@@ -1203,6 +1203,7 @@ class DecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.forwarded = self.msg_obj.forwarded
         self.sent = self.msg_obj.sent
         self.popup = False
+        self.msg_id = None # id in log database
 
         self.receipt_request_tag = self.stanza.getTag('request',
             namespace=xmpp.NS_RECEIPTS)
