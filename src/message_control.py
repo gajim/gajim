@@ -219,7 +219,7 @@ class MessageControl(object):
             ArchivingStanzaSession) and oldsession.archiving)
 
         if crypto_changed or archiving_changed:
-            self.print_session_details()
+            self.print_session_details(oldsession)
 
     def remove_session(self, session):
         if session != self.session:

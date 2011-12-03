@@ -2380,8 +2380,9 @@ class ChatControl(ChatControlBase):
         self._show_lock_image(e2e_is_active, 'E2E', e2e_is_active, self.session and \
                         self.session.is_loggable(), self.session and self.session.verified_identity)
 
-    def print_session_details(self):
-        if isinstance(self.session, EncryptedStanzaSession):
+    def print_session_details(self, old_session=None):
+        if isinstance(self.session, EncryptedStanzaSession) or \
+        (old_session and isinstance(old_session, EncryptedStanzaSession)):
             self.print_esession_details()
         elif isinstance(self.session, ArchivingStanzaSession):
             self.print_archiving_session_details()
