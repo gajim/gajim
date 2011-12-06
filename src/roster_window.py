@@ -1515,6 +1515,8 @@ class RosterWindow:
         return False
 
     def contact_is_visible(self, contact, account):
+        if self.rfilter_enabled:
+            return self.rfilter_string in contact.get_shown_name().lower()
         if self.contact_has_pending_roster_events(contact, account):
             return True
 
@@ -1556,9 +1558,17 @@ class RosterWindow:
                     accounts = [account]
                 for _acc in accounts:
                     for contact in gajim.contacts.iter_contacts(_acc):
-                        if group in contact.get_shown_groups() and \
-                        self.contact_has_pending_roster_events(contact, _acc):
-                            return True
+                        if group in contact.get_shown_groups():
+                            if self.rfilter_enabled:
+                                if self.rfilter_string in \
+                                contact.get_shown_name().lower():
+                                    return True
+                            elif self.contact_has_pending_roster_events(contact,
+                            _acc):
+                                return True
+                    if self.rfilter_enabled:
+                        # No transport has been found
+                        return False
                 return gajim.config.get('show_transports_group') and \
                     (gajim.account_is_connected(account) or \
                     gajim.config.get('showoffline'))
@@ -1610,12 +1620,16 @@ class RosterWindow:
                     account, jid)
                 return self.contact_is_visible(contact, account)
         if type_ == 'agent':
+            if self.rfilter_enabled:
+                return self.rfilter_string in model[titer][C_NAME].lower()
             contact = gajim.contacts.get_contact_with_highest_priority(account,
                 jid)
             return self.contact_has_pending_roster_events(contact, account) or \
                 (gajim.config.get('show_transports_group') and \
                 (gajim.account_is_connected(account) or \
                 gajim.config.get('showoffline')))
+        if type_ == 'groupchat' and self.rfilter_enabled:
+            return self.rfilter_string in model[titer][C_NAME].lower()
         return True
 
     def _compareIters(self, model, iter1, iter2, data=None):
