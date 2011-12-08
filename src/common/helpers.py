@@ -1461,7 +1461,7 @@ def _get_img_direct(attrs):
         deadline = time.time() + 3
         while True:
             if time.time() > deadline:
-                log.debug('Timeout loading image %s ' % attrs['src'] + str(ex))
+                log.debug('Timeout loading image %s ' % attrs['src'])
                 mem = ''
                 alt = attrs.get('alt', '')
                 if alt:
