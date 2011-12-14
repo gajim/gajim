@@ -186,6 +186,7 @@ if os.name == 'nt':
 warnings.filterwarnings('error', module='gtk')
 try:
     import gobject
+    gobject.set_prgname('gajim')
     import gtk
 except Warning, msg2:
     if str(msg2) == 'could not open display':
@@ -195,7 +196,6 @@ except Warning, msg2:
     sys.exit()
 warnings.resetwarnings()
 
-gobject.set_prgname('gajim')
 
 if os.name == 'nt':
     warnings.filterwarnings(action='ignore')
