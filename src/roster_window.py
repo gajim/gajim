@@ -1450,6 +1450,11 @@ class RosterWindow:
         self.tree.scroll_to_cell(path)
         self.tree.set_cursor(path)
 
+    def _readjust_expand_collapse_state(self):
+        for account in gajim.connections:
+            self._adjust_account_expand_collapse_state(account)
+            for group in gajim.groups[account]:
+                self._adjust_group_expand_collapse_state(group, account)
 
     def _adjust_account_expand_collapse_state(self, account):
         """
@@ -4033,6 +4038,8 @@ class RosterWindow:
             group = model[titer][C_JID].decode('utf-8')
             child_model[child_iter][C_IMG] = \
                 gajim.interface.jabber_state_images['16']['opened']
+            if self.rfilter_enabled:
+                return
             for account in accounts:
                 if group in gajim.groups[account]: # This account has this group
                     gajim.groups[account][group]['expand'] = True
@@ -4094,6 +4101,8 @@ class RosterWindow:
         if type_ == 'group':
             child_model[child_iter][C_IMG] = gajim.interface.\
                 jabber_state_images['16']['closed']
+            if self.rfilter_enabled:
+                return
             group = model[titer][C_JID].decode('utf-8')
             for account in accounts:
                 if group in gajim.groups[account]: # This account has this group
@@ -4280,6 +4289,7 @@ class RosterWindow:
         else:
             self.rfilter_enabled = True
             self.rfilter_entry.set_text(search_string)
+            self.tree.expand_all()
         self.rfilter_entry.set_visible(True)
         self.rfilter_entry.set_editable(True)
         self.rfilter_entry.grab_focus()
@@ -4292,6 +4302,7 @@ class RosterWindow:
         self.rfilter_entry.set_editable(False)
         self.refilter_shown_roster_items()
         self.tree.grab_focus()
+        self._readjust_expand_collapse_state()
 
     def on_roster_hpaned_notify(self, pane, gparamspec):
         """
