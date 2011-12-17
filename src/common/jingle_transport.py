@@ -72,7 +72,10 @@ class JingleTransport(object):
         return []
 
 
-import farsight
+try:
+    import farsight
+except Exception:
+    pass
 
 class JingleTransportICEUDP(JingleTransport):
     def __init__(self):
