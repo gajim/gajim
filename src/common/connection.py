@@ -318,6 +318,7 @@ class CommonConnection:
                 original_message, fjid, resource, jid, xhtml, subject,
                 chatstate, msg_id, label, forward_from, delayed, session,
                 form_node, user_nick, keyID, callback)
+            return
 
         self._on_continue_message(type_, msg, msgtxt, original_message, fjid,
             resource, jid, xhtml, subject, msgenc, keyID, chatstate, msg_id,
@@ -333,8 +334,8 @@ class CommonConnection:
         if msgenc and not error:
             msgtxt = '[This message is *encrypted* (See :XEP:`27`]'
             lang = os.getenv('LANG')
-            if lang is not None and lang != 'en': # we're not english
-                # one in locale and one en
+            if lang is not None and not lang.startswith('en'):
+                # we're not english: one in locale and one en
                 msgtxt = _('[This message is *encrypted* (See :XEP:`27`]') + \
                         ' (' + msgtxt + ')'
             self._on_continue_message(type_, msg, msgtxt, original_message,
