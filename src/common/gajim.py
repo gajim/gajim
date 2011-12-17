@@ -157,11 +157,12 @@ except ImportError:
     HAVE_GPG = False
 else:
     import os
+    import subprocess
     if os.name == 'nt':
         gpg_cmd = 'gpg -h >nul 2>&1'
     else:
         gpg_cmd = 'gpg -h >/dev/null 2>&1'
-    if os.system(gpg_cmd):
+    if subprocess.call(gpg_cmd, shell=True):
         HAVE_GPG = False
 
 # Depends on use_latex option. Will be correctly set after we config options are
