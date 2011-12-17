@@ -493,6 +493,8 @@ class NonBlockingClient:
         if self._sasl:
             auth_nb.SASL.get_instance(self._User, self._Password,
                     self._on_start_sasl).PlugIn(self)
+        if not hasattr(self, 'SASL'):
+            return
         if not self._sasl or self.SASL.startsasl == 'not-supported':
             if not self._Resource:
                 self._Resource = 'xmpppy'
