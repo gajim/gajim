@@ -237,12 +237,7 @@ SectionEnd
 
 Section "Plugins" SecPlugins
 	SetOutPath "$INSTDIR\plugins"
-	File /r "plugins\acronyms_expander"
-	File /r "plugins\banner_tweaks"
-	File /r "plugins\length_notifier"
 	File /r "plugins\plugin_installer"
-	File /r "plugins\triggers"
-	File /r "plugins\whiteboard"
 SectionEnd
 
 SectionGroup $(NAME_Emoticons)
@@ -711,12 +706,7 @@ Section "Uninstall"
 	RMDir /r "$INSTDIR\data\iconsets\transports"
 	RMDir "$INSTDIR\data\iconsets"
 	RMDir "$INSTDIR\data"
-	RMDir /r "$INSTDIR\plugins\acronyms_expander"
-	RMDir /r "$INSTDIR\plugins\banner_tweaks"
-	RMDir /r "$INSTDIR\plugins\length_notifier"
 	RMDir /r "$INSTDIR\plugins\plugin_installer"
-	RMDir /r "$INSTDIR\plugins\triggers"
-	RMDir /r "$INSTDIR\plugins\whiteboard"
 	RMDir "$INSTDIR\plugins"
 	RMDir /r "$INSTDIR\icons\hicolor"
 	RMDir "$INSTDIR\icons"
