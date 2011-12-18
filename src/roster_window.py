@@ -1654,8 +1654,8 @@ class RosterWindow:
         if type2 == 'self_contact':
             return 1
         if type1 == 'group':
-            name1 = model[iter1][C_JID]
-            name2 = model[iter2][C_JID]
+            name1 = model[iter1][C_JID].decode('utf-8')
+            name2 = model[iter2][C_JID].decode('utf-8')
             if name1 == _('Transports'):
                 return 1
             if name2 == _('Transports'):
