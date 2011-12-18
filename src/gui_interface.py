@@ -701,6 +701,30 @@ class Interface:
             _('Password Required'), text, _('Save password'), ok_handler=on_ok,
             cancel_handler=on_cancel)
 
+    def handle_oauth2_credentials(self, obj):
+        account = obj.conn.name
+        def on_ok(refresh):
+            gajim.config.set_per('accounts', account, 'oauth2_refresh_token',
+                refresh)
+            st = gajim.config.get_per('accounts', account, 'last_status')
+            msg = helpers.from_one_line(gajim.config.get_per('accounts',
+                account, 'last_status_msg'))
+            gajim.interface.roster.send_status(account, st, msg)
+            del self.pass_dialog[account]
+
+        def on_cancel():
+            gajim.config.set_per('accounts', account, 'oauth2_refresh_token',
+                '')
+            self.roster.set_state(account, 'offline')
+            self.roster.update_status_combobox()
+            del self.pass_dialog[account]
+
+        instruction = _('Please copy / paste the refresh token from the website'
+            ' that has just been opened.')
+        self.pass_dialog[account] = dialogs.InputTextDialog(
+            _('Oauth2 Credentials'), instruction, is_modal=False,
+            ok_handler=on_ok, cancel_handler=on_cancel)
+
     def handle_event_roster_info(self, obj):
         #('ROSTER_INFO', account, (jid, name, sub, ask, groups))
         account = obj.conn.name
@@ -1412,6 +1436,7 @@ class Interface:
             'metacontacts-received': [self.handle_event_metacontacts],
             'muc-admin-received': [self.handle_event_gc_affiliation],
             'muc-owner-received': [self.handle_event_gc_config],
+            'oauth2-credentials-required': [self.handle_oauth2_credentials],
             'our-show': [self.handle_event_status],
             'password-required': [self.handle_event_password_required],
             'plain-connection': [self.handle_event_plain_connection],

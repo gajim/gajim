@@ -40,6 +40,7 @@ import operator
 import time
 import locale
 import hmac
+import json
 
 try:
     randomsource = random.SystemRandom()
@@ -2492,6 +2493,32 @@ class Connection(CommonConnection, ConnectionHandlers):
 
     def get_password(self, callback, type_):
         self.pasword_callback = (callback, type_)
+        if type_ == 'X-MESSENGER-OAUTH2':
+            client_id = gajim.config.get_per('accounts', self.name,
+                'oauth2_client_id')
+            refresh_token = gajim.config.get_per('accounts', self.name,
+                'oauth2_refresh_token')
+            if refresh_token:
+                renew_URL = 'https://oauth.live.com/token?client_id=' \
+                    '%(client_id)s&redirect_uri=https%%3A%%2F%%2Foauth.live.' \
+                    'com%%2Fdesktop&grant_type=refresh_token&refresh_token=' \
+                    '%(refresh_token)s' % locals()
+                result = helpers.download_image(self.name, {'src': renew_URL})[0]
+                if result:
+                    dict_ = json.loads(result)
+                    if 'access_token' in dict_:
+                        self.set_password(dict_['access_token'])
+                        return
+            script_url = gajim.config.get_per('accounts', self.name,
+                'oauth2_redirect_url')
+            token_URL = 'https://oauth.live.com/authorize?client_id=' \
+                '%(client_id)s&scope=wl.messenger%%20wl.offline_access&' \
+                'response_type=code&redirect_uri=%(script_url)s' % locals()
+            helpers.launch_browser_mailer('url', token_URL)
+            self.disconnect(on_purpose=True)
+            gajim.nec.push_incoming_event(Oauth2CredentialsRequiredEvent(None,
+                conn=self))
+            return
         if self.password:
             self.set_password(self.password)
             return

@@ -264,6 +264,12 @@ class SASL(PlugIn):
             self._owner._caller.get_password(self.set_password, self.mechanism)
             self.startsasl = SASL_IN_PROCESS
             raise NodeProcessed
+        if 'X-MESSENGER-OAUTH2' in self.mecs:
+            self.mecs.remove('X-MESSENGER-OAUTH2')
+            self.mechanism = 'X-MESSENGER-OAUTH2'
+            self._owner._caller.get_password(self.set_password, self.mechanism)
+            self.startsasl = SASL_IN_PROCESS
+            raise NodeProcessed
         self.startsasl = SASL_FAILURE
         log.info('I can only use EXTERNAL, SCRAM-SHA-1, DIGEST-MD5, GSSAPI and '
             'PLAIN mecanisms.')
@@ -497,6 +503,10 @@ class SASL(PlugIn):
                 '\n', '')
             node = Node('auth', attrs={'xmlns': NS_SASL, 'mechanism': 'PLAIN'},
                 payload=[sasl_data])
+        elif self.mechanism == 'X-MESSENGER-OAUTH2':
+            node = Node('auth', attrs={'xmlns': NS_SASL,
+                'mechanism': 'X-MESSENGER-OAUTH2'})
+            node.addData(password)
         self._owner.send(str(node))
 
 

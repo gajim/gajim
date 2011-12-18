@@ -2165,6 +2165,7 @@ class DoubleInputDialog:
     def on_okbutton_clicked(self, widget):
         user_input1 = self.input_entry1.get_text().decode('utf-8')
         user_input2 = self.input_entry2.get_text().decode('utf-8')
+        self.cancel_handler = None
         self.dialog.destroy()
         if not self.ok_handler:
             return

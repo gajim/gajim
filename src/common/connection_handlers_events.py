@@ -1783,6 +1783,10 @@ class PasswordRequiredEvent(nec.NetworkIncomingEvent):
     name = 'password-required'
     base_network_events = []
 
+class Oauth2CredentialsRequiredEvent(nec.NetworkIncomingEvent):
+    name = 'oauth2-credentials-required'
+    base_network_events = []
+
 class FailedDecryptEvent(nec.NetworkIncomingEvent):
     name = 'failed-decrypt'
     base_network_events = []

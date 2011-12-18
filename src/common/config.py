@@ -384,6 +384,9 @@ class Config:
                     'last_archiving_time': [opt_str, '1970-01-01T00:00:00Z', _('Last time we syncronized with logs from server.')],
                     'enable_message_carbons': [ opt_bool, False, _('If enabled and if server supports this feature, Gajim will receive messages sent and received by other resources.')],
                     'ft_send_local_ips': [ opt_bool, True, _('If enabled, Gajim will send your local IPs so your contact can connect to your machine to transfer files.')],
+                    'oauth2_refresh_token': [ opt_str, '', _('Latest token for Oauth2 authentication.')],
+                    'oauth2_client_id': [ opt_str, '0000000044077801', _('client_id for Oauth2 authentication.')],
+                    'oauth2_redirect_url': [ opt_str, 'http%3A%2F%2Fgajim.org%2Fmsnauth%2Findex.cgi', _('redirect_url for Oauth2 authentication.')],
             }, {}),
             'statusmsg': ({
                     'message': [ opt_str, '' ],

@@ -63,7 +63,7 @@ if os.name == 'nt':
         os.environ['PATH'] = ';'.join(new_list)
 
 from common import demandimport
-#demandimport.enable()
+demandimport.enable()
 demandimport.ignore += ['gobject._gobject', 'libasyncns', 'i18n',
     'logging.NullHandler', 'dbus.glib', 'dbus.service',
     'command_system.implementation.standard',
