@@ -264,14 +264,6 @@ class SASL(PlugIn):
             self._owner._caller.get_password(self.set_password, self.mechanism)
             self.startsasl = SASL_IN_PROCESS
             raise NodeProcessed
-        if 'X-MESSENGER-OAUTH2' in self.mecs:
-            node = Node('auth', attrs={'xmlns': NS_SASL,
-                'mechanism': 'X-MESSENGER-OAUTH2'})
-            node.addData('EwAgAq1DBAAUlbRWyAJjK5w968Ru3Cyt%2f6GvwXwAAcTdgGswey64ckzDPgGJVuMGOs3CcFncUI%2bkiga88Tn%2b1o4UowmCbz7vJTKpSrg5vA%2bQxMulY%2f3gjwkXUf10lDYzkn%2bykrPVVqp%2fd7KVLYey4sEm9HeVVXi1dxf1TfPDl%2f2QCkq5qNePldvpwja16J%2fRvP2IRvU4lNzJ0i510FUNc%2b%2fvvFLv7omxupg4Xzl%2bI4bbC2xs9m%2feeCsMP%2fdnrB8A3C2DQrHOa9LpjfCUZq04o%2bXB2GtTaCAaTDgPD02h34ykHQrUrtRU0ap3nh0Qnlt7JRpqVOUwTvb0Hn%2fv5h9cLwcCv3uwTbW91BPHOyaPaRmPCRvaZlKi%2bZ0hsCDuBzEDZgAACJG%2fIXBWykrg8AAXGWphNX%2fkakslIltlWqFQ1S9bGLVwNhdv4v455BE1Nl3akYcHKzggIWeBx%2fYjqCxyPPRpCXUr6RRFh6%2f2a9BdvFiJDQeFyrRbruxu5%2bwYJ5S2v2t1H9gBNjRfYmiSVldMzh9NmBvO7juwyodwEeEW%2fgzNIy6cQ9g9shCG8Q9oqn9Y1VOQRQ3RGRdvVS5Uzksc%2fAXAmS6eS7N5wWBvrlrP2EkJamRtTZwpnhwwW8sG%2bOjMi9eiB4GQajBZm%2bVNH4tRJvjbSTfQ2zm414D24xGSdSG6HvamKkaF5C8XaOPfF6XNfy0l8zr4pg5Nm%2fJBuA8AAA%3d%3d')
-            self.mechanism = 'X-MESSENGER-OAUTH2'
-            self.startsasl = SASL_IN_PROCESS
-            self._owner.send(str(node))
-            raise NodeProcessed
         self.startsasl = SASL_FAILURE
         log.info('I can only use EXTERNAL, SCRAM-SHA-1, DIGEST-MD5, GSSAPI and '
             'PLAIN mecanisms.')
