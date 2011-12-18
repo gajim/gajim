@@ -629,7 +629,8 @@ class Logger:
         results = self.cur.fetchall()
         return results
 
-    def get_search_results_for_query(self, jid, query, account):
+    def get_search_results_for_query(self, jid, query, account, year=False,
+        month=False, day=False):
         """
         Returns contact_name, time, kind, show, message
 
@@ -652,7 +653,19 @@ class Logger:
         else: # user just typed something, we search in message column
             where_sql, jid_tuple = self._build_contact_where(account, jid)
             like_sql = '%' + query.replace("'", "''") + '%'
-            self.cur.execute('''
+            if year:
+                start_of_day = self.get_unix_time_from_date(year, month, day)
+                seconds_in_a_day = 86400 # 60 * 60 * 24
+                last_second_of_day = start_of_day + seconds_in_a_day - 1
+                self.cur.execute('''
+                SELECT contact_name, time, kind, show, message, subject FROM logs
+                WHERE (%s) AND message LIKE '%s'
+                AND time BETWEEN %d AND %d
+                ORDER BY time
+                ''' % (where_sql, like_sql, start_of_day, last_second_of_day),
+                    jid_tuple)
+            else:
+                self.cur.execute('''
                 SELECT contact_name, time, kind, show, message, subject FROM logs
                 WHERE (%s) AND message LIKE '%s'
                 ORDER BY time
