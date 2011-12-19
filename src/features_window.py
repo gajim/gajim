@@ -82,7 +82,7 @@ class FeaturesWindow:
             _('Spell Checker'): (self.speller_available,
                 _('Spellchecking of composed messages.'),
                 _('Requires libgtkspell.'),
-                _('Feature not available under Windows.')),
+                _('Requires libgtkspell and libenchant.')),
             _('Notification'): (self.notification_available,
                 _('Passive popups notifying for new events.'),
                 _('Requires python-notify or instead python-dbus in conjunction with notification-daemon.'),
