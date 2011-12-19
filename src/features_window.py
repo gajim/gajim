@@ -217,8 +217,6 @@ class FeaturesWindow:
         return helpers.is_in_path('nslookup')
 
     def speller_available(self):
-        if os.name == 'nt':
-            return False
         try:
             __import__('gtkspell')
         except ImportError:
