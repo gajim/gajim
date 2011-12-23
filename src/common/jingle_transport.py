@@ -59,6 +59,8 @@ class JingleTransport(object):
         Build a candidate stanza for the given candidate
         """
         pass
+    
+    
 
     def make_transport(self, candidates=None):
         """
@@ -77,6 +79,20 @@ class JingleTransport(object):
         Return the list of transport candidates from a transport stanza
         """
         return []
+    
+    def set_connection(self, conn):
+        self.connection = conn
+        if not self.sid:
+            self.sid = self.connection.connection.getAnID()
+
+    def set_file_props(self, file_props):
+        self.file_props = file_props
+
+    def set_our_jid(self, jid):
+        self.ourjid = jid
+        
+    def set_sid(self, sid):
+        self.sid = sid
 
 class JingleTransportSocks5(JingleTransport):
     """
@@ -91,16 +107,6 @@ class JingleTransportSocks5(JingleTransport):
         if node and node.getAttr('sid'):
             self.sid = node.getAttr('sid')
 
-    def set_file_props(self, file_props):
-        self.file_props = file_props
-
-    def set_our_jid(self, jid):
-        self.ourjid = jid
-
-    def set_connection(self, conn):
-        self.connection = conn
-        if not self.sid:
-            self.sid = self.connection.connection.getAnID()
 
     def make_candidate(self, candidate):
         import logging
@@ -309,9 +315,6 @@ class JingleTransportIBB(JingleTransport):
             self.sid = node.getAttr('sid')
 
 
-    def set_sid(self, sid):
-        self.sid = sid
-
     def make_transport(self):
 
         transport = xmpp.Node('transport')
@@ -319,11 +322,7 @@ class JingleTransportIBB(JingleTransport):
         transport.setAttr('block-size', self.block_sz)
         transport.setAttr('sid', self.sid)
         return transport
-
-    def set_file_props(self, file_props):
-        self.file_props = file_props
-
-
+    
 import farsight
 
 class JingleTransportICEUDP(JingleTransport):
