@@ -376,13 +376,13 @@ class JingleFileTransfer(JingleContent):
         self.state = STATE_TRANSFERING
         
         # It tells wether we start the transfer as client or server
-        type = None
+        mode = None
 
         if self.isOurCandUsed():
-            type = 'client'
+            mode = 'client'
             streamhost_used = self.nominated_cand['our-cand']
         else:
-            type = 'server'
+            mode = 'server'
             streamhost_used = self.nominated_cand['peer-cand']
             
         if streamhost_used['type'] == 'proxy':
@@ -445,7 +445,7 @@ class JingleFileTransfer(JingleContent):
         else:
             jid = gajim.get_jid_without_resource(self.session.ourjid)
             gajim.socks5queue.send_file(self.file_props,
-                self.session.connection.name, type)
+                self.session.connection.name, mode)
 
 def get_content(desc):
     return JingleFileTransfer

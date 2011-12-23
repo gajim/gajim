@@ -309,10 +309,10 @@ class SocksQueue:
                     result = reader.write_next()
                     self.process_result(result, reader)
 
-    def send_file(self, file_props, account, type):
+    def send_file(self, file_props, account, mode):
         for key in self.senders.keys():
            if file_props['name'] in key and file_props['sid'] in key \
-            and self.senders[key].type == type:
+            and self.senders[key].mode == mode:
 
                 log.info("socks5: sending file")
                 sender = self.senders[key]
@@ -570,7 +570,7 @@ class Socks5:
                 self.pollend()
 
         else:
-            if self.type == 'client':
+            if self.mode == 'client':
                 self.queue.reconnect_client(self, self.streamhost)
 
     def open_file_for_reading(self):
@@ -1088,7 +1088,7 @@ class Socks5Server(Socks5):
 
         Socks5.__init__(self, idlequeue, host, port, initiator, target, sid)
         
-        self.type = 'server'
+        self.mode = 'server'
 
     def main(self):
         """
@@ -1191,7 +1191,7 @@ class Socks5Client(Socks5):
 
         Socks5.__init__(self, idlequeue, host, port, initiator, target, sid)
      
-        self.type = 'client'
+        self.mode = 'client'
 
     def main(self, timeout=0):
         """
@@ -1338,7 +1338,7 @@ class Socks5SenderClient(Socks5Client, Socks5Sender):
     def __init__(self, idlequeue, sock_hash, parent,_sock, host=None,
             port=None, fingerprint = None, connected=True, file_props={}):
 
-        Socks5.__init__(self, idlequeue, host, port, None, None,
+        Socks5Client.__init__(self, idlequeue, host, port, None, None,
                 file_props['sid'])
 
         Socks5Sender.__init__(self,idlequeue, sock_hash, parent,_sock, 
@@ -1353,7 +1353,7 @@ class Socks5SenderServer(Socks5Server, Socks5Sender):
     def __init__(self, idlequeue, sock_hash, parent,_sock, host=None,
             port=None, fingerprint = None, connected=True, file_props={}):
 
-        Socks5.__init__(self, idlequeue, host, port, None, None,
+        Socks5Server.__init__(self, idlequeue, host, port, None, None,
                 file_props['sid'])
 
         Socks5Sender.__init__(self,idlequeue, sock_hash, parent, _sock, 
@@ -1365,7 +1365,7 @@ class Socks5ReceiverClient(Socks5Client, Socks5Receiver):
 
     def __init__(self, idlequeue, streamhost, sid, file_props = None,
             fingerprint=None):
-        Socks5.__init__(self, idlequeue, streamhost['host'],
+        Socks5Client.__init__(self, idlequeue, streamhost['host'],
                 int(streamhost['port']), streamhost['initiator'], 
                 streamhost['target'], sid)
 
@@ -1380,7 +1380,7 @@ class Socks5ReceiverServer(Socks5Server, Socks5Receiver):
     def __init__(self, idlequeue, streamhost, sid, file_props = None,
     fingerprint=None):
 
-        Socks5.__init__(self, idlequeue, streamhost['host'],
+        Socks5Server.__init__(self, idlequeue, streamhost['host'],
                 int(streamhost['port']), streamhost['initiator'], 
                 streamhost['target'], sid)
 
