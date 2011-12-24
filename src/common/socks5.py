@@ -93,19 +93,19 @@ class SocksQueue:
         sid = fp['sid']
         self.type = type # It says whether we are sending or receiving
         self.sha_handlers[sha_str] = (sha_handler, sid)
-        if self.listener is None:
-            self.listener = Socks5Listener(self.idlequeue, port, fp,
+        self.listener = Socks5Listener(self.idlequeue, port, fp,
                 fingerprint=fingerprint)
-            self.listener.queue = self
-            self.listener.bind()
-            if self.listener.started is False:
-                self.listener = None
-                # We cannot bind port, call error callback and fail
-                self.error_cb(_('Unable to bind to port %s.') % port,
+        self.listener.queue = self
+        self.listener.bind()
+        if self.listener.started is False:
+            self.listener = None
+            # We cannot bind port, call error callback and fail
+            self.error_cb(_('Unable to bind to port %s.') % port,
                     _('Maybe you have another running instance of Gajim. File '
                     'Transfer will be cancelled.'))
-                return None
-            self.connected += 1
+            return None
+        
+        self.connected += 1
         return self.listener
 
     def send_success_reply(self, file_props, streamhost):
@@ -311,6 +311,12 @@ class SocksQueue:
 
     def send_file(self, file_props, account, mode):
         for key in self.senders.keys():
+           if self.senders == {}:
+               # Python acts very weird with this. When there is no keys 
+               # in the dictionary It says that it has a key. 
+               # Maybe it is my machine. Without this there is a KeyError 
+               # traceback.
+               return
            if file_props['name'] in key and file_props['sid'] in key \
             and self.senders[key].mode == mode:
 
@@ -416,7 +422,7 @@ class SocksQueue:
         elif self.progress_transfer_cb is not None:
             self.progress_transfer_cb(actor.account, actor.file_props)
 
-    def remove_receiver(self, idx, do_disconnect=True):
+    def remove_receiver(self, idx, do_disconnect=True, remove_all=False):
         """
         Remove reciver from the list and decrease the number of active
         connections with 1
@@ -429,14 +435,16 @@ class SocksQueue:
                     self.idlequeue.remove_timeout(reader.fd)
                     if do_disconnect:
                         reader.disconnect()
-                        break
+                        if not remove_all:
+                            break
                     else:
                         if reader.streamhost is not None:
                             reader.streamhost['state'] = -1
                         del(self.readers[key])
-                        break
-
-    def remove_sender(self, idx, do_disconnect=True):
+                        if not remove_all:
+                            break
+                    
+    def remove_sender(self, idx, do_disconnect=True, remove_all=False):
         """
         Remove sender from the list of senders and decrease the number of active
         connections with 1
@@ -447,13 +455,16 @@ class SocksQueue:
                     sender = self.senders[key]
                     if do_disconnect:
                         sender.disconnect()
-                        return
+                        if not remove_all:
+                            break
                     else:
                         self.idlequeue.unplug_idle(sender.fd)
                         self.idlequeue.remove_timeout(sender.fd)
                         del(self.senders[key])
                         if self.connected > 0:
                             self.connected -= 1
+                        if not remove_all:
+                            break
             if len(self.senders) == 0 and self.listener is not None:
                 self.listener.disconnect()
                 self.listener = None
@@ -483,6 +494,7 @@ class Socks5:
         self.file = None
         self.connected = False
         self.type = ''
+        self.mode = ''
 
 
     def _is_connected(self):
@@ -796,6 +808,8 @@ class Socks5:
         self.close_file()
         self.idlequeue.remove_timeout(self.fd)
         self.idlequeue.unplug_idle(self.fd)
+        if self.mode == 'server':
+            self.queue.listener.disconnect()
         try:
             self._sock.shutdown(socket.SHUT_RDWR)
             self._sock.close()

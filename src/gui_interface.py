@@ -918,9 +918,10 @@ class Interface:
 
         if file_props['type'] == 'r': # we receive a file
             jid = unicode(file_props['sender'])
+            gajim.socks5queue.remove_receiver(file_props['sid'], True, True)
         else: # we send a file
             jid = unicode(file_props['receiver'])
-
+            gajim.socks5queue.remove_sender(file_props['sid'], True, True)
         # End jingle session
         if file_props.get('session-type') == 'jingle' and file_props['type'] ==\
         'r':
@@ -957,7 +958,7 @@ class Interface:
         elif file_props['error'] in (-1, -6):
             msg_type = 'file-stopped'
             event_type = _('File Transfer Stopped')
-
+            
         if event_type == '':
             # FIXME: ugly workaround (this can happen Gajim sent, Gaim recvs)
             # this should never happen but it does. see process_result() in
