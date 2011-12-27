@@ -243,10 +243,15 @@ class JingleSession(object):
             elif content and self.weinitiate:
                 self.__content_accept(content)
         elif self.state == JingleStates.active:
-            # We can either send a content-add or a content-accept
+            # We can either send a content-add or a content-accept. However, if
+            # we are sending a file we can only use session_initiate.
             if not content:
                 return
-            if (content.creator == 'initiator') == self.weinitiate:
+            we_created_content = (content.creator == 'initiator') \
+                                 == self.weinitiate
+            if we_created_content and content.media == 'file':
+                self.__session_initiate()
+            if we_created_content:
                 # We initiated this content. It's a pending content-add.
                 self.__content_add(content)
             else:
@@ -694,7 +699,6 @@ class JingleSession(object):
         self.connection.connection.send(stanza)
 
     def _session_terminate(self, reason=None):
-        assert self.state != JingleStates.ended
         stanza, jingle = self.__make_jingle('session-terminate', reason=reason)
         self.__broadcast_all(stanza, jingle, None, 'session-terminate-sent')
         if self.connection.connection and self.connection.connected >= 2:

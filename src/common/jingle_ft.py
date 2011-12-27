@@ -372,7 +372,10 @@ class JingleFileTransfer(JingleContent):
 
 
     def start_transfer(self):
-
+        
+        # We start the transfer, session negociation is over.
+        self.session.state = 0 # STATE 0 SESSION_ENDED
+        
         self.state = STATE_TRANSFERING
         
         # It tells wether we start the transfer as client or server

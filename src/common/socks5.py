@@ -93,17 +93,22 @@ class SocksQueue:
         sid = fp['sid']
         self.type = type # It says whether we are sending or receiving
         self.sha_handlers[sha_str] = (sha_handler, sid)
-        self.listener = Socks5Listener(self.idlequeue, port, fp,
-                fingerprint=fingerprint)
-        self.listener.queue = self
-        self.listener.bind()
-        if self.listener.started is False:
-            self.listener = None
-            # We cannot bind port, call error callback and fail
-            self.error_cb(_('Unable to bind to port %s.') % port,
-                    _('Maybe you have another running instance of Gajim. File '
-                    'Transfer will be cancelled.'))
-            return None
+        if self.listener is None or self.listener.connections == []:
+            self.listener = Socks5Listener(self.idlequeue, port, fp,
+                    fingerprint=fingerprint)
+            self.listener.queue = self
+            self.listener.bind()
+            if self.listener.started is False:
+                self.listener = None
+                # We cannot bind port, call error callback and fail
+                self.error_cb(_('Unable to bind to port %s.') % port,
+                        _('Maybe you have another running instance of Gajim. File '
+                        'Transfer will be cancelled.'))
+                return None
+        else:
+            # There is already a listener, we update the file's information
+            # on the new connection.
+            self.listener.file_props = fp
         
         self.connected += 1
         return self.listener
@@ -724,6 +729,7 @@ class Socks5:
         """
         Read file contents from socket and write them to file
         """
+        
         if self.file_props is None or ('file-name' in self.file_props) is False:
             self.file_props['error'] = -2
             return None
@@ -773,14 +779,14 @@ class Socks5:
                 # Transfer stopped  somehow:
                 # reset, paused or network error
                 self.rem_fd(fd)
-                self.disconnect(False)
+                self.disconnect()
                 self.file_props['error'] = -1
                 return 0
             try:
                 fd.write(buff)
             except IOError, e:
                 self.rem_fd(fd)
-                self.disconnect(False)
+                self.disconnect()
                 self.file_props['error'] = -6 # file system error
                 return 0
             if self.file_props['received-len'] >= int(self.file_props['size']):
@@ -809,7 +815,12 @@ class Socks5:
         self.idlequeue.remove_timeout(self.fd)
         self.idlequeue.unplug_idle(self.fd)
         if self.mode == 'server':
-            self.queue.listener.disconnect()
+            try:
+                self.queue.listener.connections.remove(self._sock)
+            except ValueError:
+                pass # Not in list
+            if self.queue.listener.connections == []:
+                self.queue.listener.disconnect()
         try:
             self._sock.shutdown(socket.SHUT_RDWR)
             self._sock.close()
@@ -1127,6 +1138,7 @@ class Socks5Server(Socks5):
 
 
     def pollin(self):
+        self.idlequeue.remove_timeout(self.fd)
         if self.connected:
             try:
                 if self.state < 5:
@@ -1426,6 +1438,7 @@ class Socks5Listener(IdleObject):
         self.fd = -1
         self.fingerprint = fingerprint
         self.file_props = fp
+        self.connections = []
 
     def bind(self):
         for ai in self.ais:
@@ -1501,6 +1514,7 @@ class Socks5Listener(IdleObject):
         """
         _sock  = self._serv.accept()
         _sock[0].setblocking(False)
+        self.connections.append(_sock[0])
         return _sock
 
 
