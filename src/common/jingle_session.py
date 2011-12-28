@@ -488,19 +488,25 @@ class JingleSession(object):
         # subscription) and the receiver has a policy of not communicating via
         # Jingle with unknown entities, it SHOULD return a <service-unavailable/>
         # error.
-
-        # Check if there's already a session with this user:
-        for session in self.connection.iter_jingle_sessions(self.peerjid):
-            if not session is self:
-                reason = xmpp.Node('reason')
-                alternative_session = reason.setTag('alternative-session')
-                alternative_session.setTagData('sid', session.sid)
-                self.__ack(stanza, jingle, error, action)
-                self._session_terminate(reason)
-                raise xmpp.NodeProcessed
-
+        
+        
         # Lets check what kind of jingle session does the peer want
         contents, contents_rejected, reason_txt = self.__parse_contents(jingle)
+        
+        
+        # If we are not receivin a file
+        # Check if there's already a session with this user:
+        if contents[0][0] != 'file':
+            for session in self.connection.iter_jingle_sessions(self.peerjid):
+                if not session is self:
+                    reason = xmpp.Node('reason')
+                    alternative_session = reason.setTag('alternative-session')
+                    alternative_session.setTagData('sid', session.sid)
+                    self.__ack(stanza, jingle, error, action)
+                    self._session_terminate(reason)
+                    raise xmpp.NodeProcessed
+
+        
 
         # If there's no content we understand...
         if not contents:
@@ -699,6 +705,7 @@ class JingleSession(object):
         self.connection.connection.send(stanza)
 
     def _session_terminate(self, reason=None):
+        assert self.state != JingleStates.ended
         stanza, jingle = self.__make_jingle('session-terminate', reason=reason)
         self.__broadcast_all(stanza, jingle, None, 'session-terminate-sent')
         if self.connection.connection and self.connection.connected >= 2:

@@ -517,10 +517,10 @@ class Socks5:
         for ai in self.ais:
             try:
                 self._sock = socket.socket(*ai[:3])
-                '''
+                
                 if not self.fingerprint is None:
                     self._sock = OpenSSL.SSL.Connection(
-                        jingle_xtls.get_context('client'), self._sock)'''
+                        jingle_xtls.get_context('client'), self._sock)
                 # this will not block the GUI
                 self._sock.setblocking(False)
                 self._server = ai[4]
@@ -956,12 +956,12 @@ class Socks5Sender(IdleObject):
 
 
         if _sock is not None:
-            '''if self.fingerprint is not None:
+            if self.fingerprint is not None:
                 self._sock = OpenSSL.SSL.Connection(
                                jingle_xtls.get_context('server'), _sock)
             else:
                 self._sock.setblocking(False)
-            '''
+            
             self.fd = _sock.fileno()
             self._recv = _sock.recv
             self._send = _sock.send
@@ -1445,9 +1445,9 @@ class Socks5Listener(IdleObject):
             # try the different possibilities (ipv6, ipv4, etc.)
             try:
                 self._serv = socket.socket(*ai[:3])
-                '''if self.fingerprint is not None:
+                if self.fingerprint is not None:
                     self._serv = OpenSSL.SSL.Connection(
-                        jingle_xtls.get_context('server'), self._serv)'''
+                        jingle_xtls.get_context('server'), self._serv)
             except socket.error, e:
                 if e.args[0] == EAFNOSUPPORT:
                     self.ai = None
