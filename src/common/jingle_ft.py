@@ -116,6 +116,7 @@ class JingleFileTransfer(JingleContent):
         if self.state == STATE_TRANSPORT_REPLACE:
             # We ack the session accept
             response = stanza.buildReply('result')
+            response.delChild(response.getQuery())
             con.connection.send(response)
             # We send the file
             con.files_props[self.file_props['sid']] = self.file_props
@@ -131,6 +132,7 @@ class JingleFileTransfer(JingleContent):
                 host['sid'] = self.file_props['sid']
 
         response = stanza.buildReply('result')
+        response.delChild(response.getQuery())
         con.connection.send(response)
 
         if not gajim.socks5queue.get_file_props(
@@ -174,6 +176,7 @@ class JingleFileTransfer(JingleContent):
                     self.session.transport_replace()
                 else:
                     response = stanza.buildReply('result')
+                    response.delChild(response.getQuery())
                     self.session.connection.connection.send(response)
                     self.start_transfer()
                     raise xmpp.NodeProcessed
@@ -203,6 +206,7 @@ class JingleFileTransfer(JingleContent):
         self.nominated_cand['peer-cand'] = streamhost_used
         if self.state == STATE_CAND_SENT_PENDING_REPLY:
             response = stanza.buildReply('result')
+            response.delChild(response.getQuery())
             self.session.connection.connection.send(response)
             self.start_transfer()
             raise xmpp.NodeProcessed
