@@ -41,8 +41,6 @@ import gtk
 import xml.sax, xml.sax.handler
 import re
 from cStringIO import StringIO
-import socket
-import time
 import urllib2
 import operator
 
@@ -54,6 +52,7 @@ if __name__ == '__main__':
     import gtkgui_helpers
 from common import gajim
 from gtkgui_helpers import get_icon_pixmap
+from common import helpers
 
 import tooltips
 import logging
@@ -76,14 +75,19 @@ classes = {
 
 # styles for elements
 element_styles = {
-                'u'                     : ';text-decoration: underline',
+                'u'             : ';text-decoration: underline',
                 'em'            : ';font-style: oblique',
-                'cite'          : '; background-color:rgb(170,190,250); font-style: oblique',
+                'cite'          : '; background-color:rgb(170,190,250);'
+                                  'font-style: oblique',
                 'li'            : '; margin-left: 1em; margin-right: 10%',
                 'strong'        : ';font-weight: bold',
-                'pre'           : '; background-color:rgb(190,190,190); font-family: monospace; white-space: pre; margin-left: 1em; margin-right: 10%',
-                'kbd'           : ';background-color:rgb(210,210,210);font-family: monospace',
-                'blockquote': '; background-color:rgb(170,190,250); margin-left: 2em; margin-right: 10%',
+                'pre'           : '; background-color:rgb(190,190,190);'
+                                  'font-family: monospace; white-space: pre;'
+                                  'margin-left: 1em; margin-right: 10%',
+                'kbd'           : ';background-color:rgb(210,210,210);'
+                                  'font-family: monospace',
+                'blockquote'    : '; background-color:rgb(170,190,250);'
+                                  'margin-left: 2em; margin-right: 10%',
                 'dt'            : ';font-weight: bold; font-style: oblique',
                 'dd'            : ';margin-left: 2em; font-style: oblique'
 }
@@ -485,62 +489,8 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
             tag.title = title
         return tag
 
-    def _get_img(self, attrs):
-        '''Download an image. This function is launched in a separate thread.
-        '''
-        mem, alt = '', ''
-        # Wait maximum 5s for connection
-        socket.setdefaulttimeout(5)
-        try:
-            req = urllib2.Request(attrs['src'])
-            req.add_header('User-Agent', 'Gajim ' + gajim.version)
-            f = urllib2.urlopen(req)
-        except Exception, ex:
-            log.debug('Error loading image %s ' % attrs['src']  + str(ex))
-            pixbuf = None
-            alt = attrs.get('alt', 'Broken image')
-        else:
-            # Wait 0.5s between each byte
-            try:
-                f.fp._sock.fp._sock.settimeout(0.5)
-            except Exception:
-                pass
-            # Max image size = 2 MB (to try to prevent DoS)
-            deadline = time.time() + 3
-            while True:
-                if time.time() > deadline:
-                    log.debug(str('Timeout loading image %s ' % \
-                        attrs['src'] + ex))
-                    mem = ''
-                    alt = attrs.get('alt', '')
-                    if alt:
-                        alt += '\n'
-                    alt += _('Timeout loading image')
-                    break
-                try:
-                    temp = f.read(100)
-                except socket.timeout, ex:
-                    log.debug('Timeout loading image %s ' % \
-                        attrs['src'] + str(ex))
-                    alt = attrs.get('alt', '')
-                    if alt:
-                        alt += '\n'
-                    alt += _('Timeout loading image')
-                    break
-                if temp:
-                    mem += temp
-                else:
-                    break
-                if len(mem) > 2*1024*1024:
-                    alt = attrs.get('alt', '')
-                    if alt:
-                        alt += '\n'
-                    alt += _('Image is too big')
-                    break
-        return (mem, alt)
-
     def _update_img(self, (mem, alt), attrs, img_mark):
-        '''Callback function called after the function _get_img above.
+        '''Callback function called after the function helpers.download_image.
         '''
         self._process_img(attrs, (mem, alt, img_mark))
 
@@ -563,8 +513,9 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                 update = True
             else:
                 img_mark = self.textbuf.create_mark(None, self.iter, True)
-                gajim.thread_interface(self._get_img, [attrs], \
-                    self._update_img, [attrs, img_mark])
+                gajim.thread_interface(helpers.download_image, [
+                    self.conv_textview.account, attrs], self._update_img,
+                    [attrs, img_mark])
                 alt = attrs.get('alt', '')
                 if alt:
                     alt += '\n'
@@ -794,7 +745,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
         elif name in ('a', 'img', 'body', 'html'):
             pass
         elif name in INLINE:
-            self._jump_line()
+            pass
         else:
             log.warning('Unhandled element "%s"' % name)
 
@@ -830,6 +781,8 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
         elif name in BLOCK:
             if name == 'pre':
                 endPreserving = True
+            elif name in BLOCK_STRUCT:
+                newLine = True
         else:
             log.warning("Unhandled element '%s'" % name)
         self._flush_text()
@@ -838,8 +791,6 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
         if newLine:
             self._jump_line()
         self._end_span()
-        #if not self._starts_line():
-        #    self.text = ' '
 
 class HtmlTextView(gtk.TextView):
 
@@ -855,7 +806,8 @@ class HtmlTextView(gtk.TextView):
         self.connect('realize', self.on_html_text_view_realized)
         self.connect('unrealize', self.on_html_text_view_unrealized)
         self.connect('copy-clipboard', self.on_html_text_view_copy_clipboard)
-        self.get_buffer().connect_after('mark-set', self.on_text_buffer_mark_set)
+        self.id_ = self.connect('button-release-event',
+            self.on_left_mouse_button_release)
         self.get_buffer().create_tag('eol', scale = pango.SCALE_XX_SMALL)
         self.tooltip = tooltips.BaseTooltip()
         self.config = gajim.config
@@ -939,7 +891,10 @@ class HtmlTextView(gtk.TextView):
         self.get_buffer().add_selection_clipboard(self.get_clipboard(
             gtk.gdk.SELECTION_PRIMARY))
 
-    def on_text_buffer_mark_set(self, location, mark, unused_data):
+    def on_left_mouse_button_release(self, widget, event):
+        if event.button != 1:
+            return
+
         bounds = self.get_buffer().get_selection_bounds()
         if bounds:
             # textview can be hidden while we add a new line in it.
@@ -978,6 +933,12 @@ if __name__ == '__main__':
 
     log = logging.getLogger()
     gaj.Interface()
+
+    # create fake gajim.plugin_manager.gui_extension_point method for tests
+    def gui_extension_point(*args):
+        pass
+    gajim.plugin_manager = gaj.Interface()
+    gajim.plugin_manager.gui_extension_point = gui_extension_point
 
     htmlview = ConversationTextview(None)
 

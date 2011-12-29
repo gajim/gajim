@@ -58,7 +58,7 @@ class StanzaSession(object):
         self.conn = conn
         self.jid = jid
         self.type = type_
-        self.resource = None
+        self.resource = jid.getResource()
 
         if thread_id:
             self.received_thread_id = True
@@ -491,6 +491,12 @@ class EncryptedStanzaSession(ArchivingStanzaSession):
 
         for child in parsed.getChildren():
             stanza.addChild(node=child)
+
+        # replace non-character unicode
+        body = stanza.getBody()
+        if body:
+            stanza.setBody(
+                self.conn.connection.Dispatcher.replace_non_character(body))
 
         return stanza
 
@@ -1148,8 +1154,10 @@ class EncryptedStanzaSession(ArchivingStanzaSession):
         return xmpp.DataField(name=name, typ='hidden', value=dhs)
 
     def terminate_e2e(self):
-        self.terminate()
         self.enable_encryption = False
+        if self.control:
+            self.control.print_session_details()
+        self.terminate()
 
     def acknowledge_termination(self):
         StanzaSession.acknowledge_termination(self)

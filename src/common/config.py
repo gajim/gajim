@@ -86,7 +86,8 @@ class Config:
             'autoxa_message': [ opt_str, _('$S (Not available as a result of being idle more than $T min)'), _('$S will be replaced by current status message, $T by autoxa time.') ],
             'ask_online_status': [ opt_bool, False ],
             'ask_offline_status': [ opt_bool, False ],
-            'trayicon': [opt_str, 'always', _("When to show notification area icon. Can be 'never', 'on_event', 'always'."), True],
+            'trayicon': [opt_str, 'always', _("When to show notification area icon. Can be 'never', 'on_event', 'always'."), False],
+            'allow_hide_roster': [opt_bool, False, _("Allow to hide the roster window even if the tray icon is not shown."), False],
             'iconset': [ opt_str, DEFAULT_ICONSET, '', True ],
             'mood_iconset': [ opt_str, DEFAULT_MOOD_ICONSET, '', True ],
             'activity_iconset': [ opt_str, DEFAULT_ACTIVITY_ICONSET, '', True ],
@@ -184,7 +185,7 @@ class Config:
             'networkmanager_support': [opt_bool, True, _('If True, listen to D-Bus signals from NetworkManager and change the status of accounts (provided they do not have listen_to_network_manager set to False and they sync with global status) based upon the status of the network connection.'), True],
             'outgoing_chat_state_notifications': [opt_str, 'all', _('Sent chat state notifications. Can be one of all, composing_only, disabled.')],
             'displayed_chat_state_notifications': [opt_str, 'all', _('Displayed chat state notifications in chat windows. Can be one of all, composing_only, disabled.')],
-            'autodetect_browser_mailer': [opt_bool, False, '', True],
+            'autodetect_browser_mailer': [opt_bool, True, '', True],
             'print_ichat_every_foo_minutes': [opt_int, 5, _('When not printing time for every message (print_time==sometimes), print it every x minutes.')],
             'confirm_close_muc': [opt_bool, True, _('Ask before closing a group chat tab/window.')],
             'confirm_close_muc_rooms': [opt_str, '', _('Always ask before closing group chat tab/window in this space separated list of group chat jids.')],
@@ -286,9 +287,10 @@ class Config:
             'video_size': [opt_str, '', _('Optionally resize jingle output video. Example: 320x240')],
             'audio_input_volume': [opt_int, 50],
             'audio_output_volume': [opt_int, 50],
-            'use_stun_server': [opt_bool, True, _('If True, Gajim will try to use a STUN server when using jingle. The one in "stun_server" option, or the one given by the jabber server.')],
+            'use_stun_server': [opt_bool, False, _('If True, Gajim will try to use a STUN server when using jingle. The one in "stun_server" option, or the one given by the jabber server.')],
             'stun_server': [opt_str, '', _('STUN server to use when using jingle')],
             'show_affiliation_in_groupchat': [opt_bool, True, _('If True, Gajim will show affiliation of groupchat occupants by adding a colored square to the status icon')],
+            'global_proxy': [opt_str, '', _('Proxy used for all outgoing connections if the account does not have a specific proxy configured')],
     }
 
     __options_per_key = {
@@ -297,6 +299,7 @@ class Config:
                     'hostname': [ opt_str, '', '', True ],
                     'anonymous_auth': [ opt_bool, False ],
                     'client_cert': [ opt_str, '', '', True ],
+                    'client_cert_encrypted': [ opt_bool, False, '', False ],
                     'savepass': [ opt_bool, False ],
                     'password': [ opt_str, '' ],
                     'resource': [ opt_str, 'gajim', '', True ],
@@ -321,7 +324,7 @@ class Config:
                     'enable_esessions': [opt_bool, True, _('Enable ESessions encryption for this account.')],
                     'autonegotiate_esessions': [opt_bool, True, _('Should Gajim automatically start an encrypted session when possible?')],
                     'connection_types': [ opt_str, 'tls ssl plain', _('Ordered list (space separated) of connection type to try. Can contain tls, ssl or plain')],
-                    'warn_when_plaintext_connection': [ opt_bool, True, _('Show a warning dialog before sending password on an plaintext connection.') ],
+                    'action_when_plaintext_connection': [ opt_str, 'warn', _('Show a warning dialog before sending password on an plaintext connection. Can be \'warn\', \'connect\', \'disconnect\'') ],
                     'warn_when_insecure_ssl_connection': [ opt_bool, True, _('Show a warning dialog before using standard SSL library.') ],
                     'warn_when_insecure_password': [ opt_bool, True, _('Show a warning dialog before sending PLAIN password over a plain connection.') ],
                     'ssl_fingerprint_sha1': [ opt_str, '', '', True ],
@@ -331,7 +334,8 @@ class Config:
                     'custom_port': [ opt_int, 5222, '', True ],
                     'custom_host': [ opt_str, '', '', True ],
                     'sync_with_global_status': [ opt_bool, False, ],
-                    'no_log_for': [ opt_str, '' ],
+                    'no_log_for': [ opt_str, '', _('Space separated list of JIDs for which you do not want to store logs. You can also add account name to log nothing for this account.')],
+                    'allow_no_log_for': [ opt_str, '', _('Space separated list of JIDs for which you accept to not log conversations if he does not want to.')],
                     'minimized_gc': [ opt_str, '' ],
                     'attached_gpg_keys': [ opt_str, '' ],
                     'keep_alives_enabled': [ opt_bool, True, _('Whitespace sent after inactivity')],
@@ -347,6 +351,7 @@ class Config:
                     # proxy65 for FT
                     'file_transfer_proxies': [opt_str, 'proxy.eu.jabber.org, proxy.jabber.ru, proxy.jabbim.cz'],
                     'use_ft_proxies': [opt_bool, True, _('If checked, Gajim will use your IP and proxies defined in file_transfer_proxies option for file transfer.'), True],
+                    'test_ft_proxies_on_startup': [opt_bool, True, _('If True, Gajim will test file transfer proxies on startup to be sure it works. Openfire\'s proxies are known to fail this test even if they work.')],
                     'msgwin-x-position': [opt_int, -1], # Default is to let the wm decide
                     'msgwin-y-position': [opt_int, -1], # Default is to let the wm decide
                     'msgwin-width': [opt_int, 480],
@@ -377,6 +382,11 @@ class Config:
                     'roster_version': [opt_str, ''],
                     'subscription_request_msg': [opt_str, '', _('Message that is sent to contacts you want to add')],
                     'last_archiving_time': [opt_str, '1970-01-01T00:00:00Z', _('Last time we syncronized with logs from server.')],
+                    'enable_message_carbons': [ opt_bool, False, _('If enabled and if server supports this feature, Gajim will receive messages sent and received by other resources.')],
+                    'ft_send_local_ips': [ opt_bool, True, _('If enabled, Gajim will send your local IPs so your contact can connect to your machine to transfer files.')],
+                    'oauth2_refresh_token': [ opt_str, '', _('Latest token for Oauth2 authentication.')],
+                    'oauth2_client_id': [ opt_str, '0000000044077801', _('client_id for Oauth2 authentication.')],
+                    'oauth2_redirect_url': [ opt_str, 'http%3A%2F%2Fgajim.org%2Fmsnauth%2Findex.cgi', _('redirect_url for Oauth2 authentication.')],
             }, {}),
             'statusmsg': ({
                     'message': [ opt_str, '' ],
@@ -510,6 +520,10 @@ class Config:
                                     '', 'I', '#000000', '', '', '', '',
                                     '#918caa', '', 'B' ],
 
+    }
+
+    proxies_default = {
+        _('Tor'): ['socks5', 'localhost', 9050],
     }
 
     def foreach(self, cb, data = None):

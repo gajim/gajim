@@ -158,8 +158,13 @@ try:
 except ImportError:
     HAVE_GPG = False
 else:
-    from os import system
-    if system('gpg -h >/dev/null 2>&1'):
+    import os
+    import subprocess
+    if os.name == 'nt':
+        gpg_cmd = 'gpg -h >nul 2>&1'
+    else:
+        gpg_cmd = 'gpg -h >/dev/null 2>&1'
+    if subprocess.call(gpg_cmd, shell=True):
         HAVE_GPG = False
 
 # Depends on use_latex option. Will be correctly set after we config options are
@@ -168,10 +173,34 @@ HAVE_LATEX = False
 
 HAVE_FARSIGHT = True
 try:
-    __import__('farsight')
-    __import__('gst')
+    farsight = __import__('farsight')
+    import gst
+    import glib
+    try:
+        conference = gst.element_factory_make('fsrtpconference')
+        session = conference.new_session(farsight.MEDIA_TYPE_AUDIO)
+        del session
+        del conference
+    except glib.GError:
+        HAVE_FARSIGHT = False
+
 except ImportError:
     HAVE_FARSIGHT = False
+
+HAVE_UPNP_IGD = True
+try:
+    import gupnp.igd
+    gupnp_igd = gupnp.igd.Simple()
+except ImportError:
+    HAVE_UPNP_IGD = False
+
+HAVE_PYCURL = True
+try:
+    __import__('pycurl')
+except ImportError:
+    HAVE_PYCURL = False
+
+
 gajim_identity = {'type': 'pc', 'category': 'client', 'name': 'Gajim'}
 gajim_common_features = [xmpp.NS_BYTESTREAM, xmpp.NS_SI, xmpp.NS_FILE,
         xmpp.NS_MUC, xmpp.NS_MUC_USER, xmpp.NS_MUC_ADMIN, xmpp.NS_MUC_OWNER,

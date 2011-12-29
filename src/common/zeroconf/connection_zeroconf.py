@@ -43,6 +43,7 @@ import gobject
 
 from common.connection import CommonConnection
 from common import gajim
+from common import ged
 from common.zeroconf import client_zeroconf
 from common.zeroconf import zeroconf
 from connection_handlers_zeroconf import *
@@ -63,6 +64,9 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
 
         CommonConnection.__init__(self, name)
         self.is_zeroconf = True
+
+        gajim.ged.register_event_handler('message-outgoing', ged.OUT_CORE,
+            self._nec_message_outgoing)
 
     def get_config_values_or_default(self):
         """
@@ -185,8 +189,9 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
             alt_name=alt_name))
 
     def _on_error(self, message):
-        self.dispatch('ERROR', (_('Avahi error'),
-                _('%s\nLink-local messaging might not work properly.') % message))
+        gajim.nec.push_incoming_event(InformationEvent(None, conn=self,
+            level='error', pri_txt=_('Avahi error'), sec_txt=_('%s\nLink-local '
+            'messaging might not work properly.') % message))
 
     def connect(self, show='online', msg=''):
         self.get_config_values_or_default()
@@ -329,14 +334,14 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
                 msg=_('Please check if avahi-daemon is running.')))
 
     def send_message(self, jid, msg, keyID, type_='chat', subject='',
-    chatstate=None, msg_id=None, composing_xep=None, resource=None,
-    user_nick=None, xhtml=None, label=None, session=None, forward_from=None,
-    form_node=None, original_message=None, delayed=None, callback=None,
-    callback_args=[], now=True):
+    chatstate=None, msg_id=None, resource=None, user_nick=None, xhtml=None,
+    label=None, session=None, forward_from=None, form_node=None,
+    original_message=None, delayed=None, callback=None, callback_args=[],
+    now=True):
 
         def on_send_ok(msg_id):
             gajim.nec.push_incoming_event(MessageSentEvent(None, conn=self,
-                jid=jid, message=msg, keyID=keyID))
+                jid=jid, message=msg, keyID=keyID, chatstate=None))
             if callback:
                 callback(msg_id, *callback_args)
 
@@ -362,10 +367,51 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
                     msg=None, time_=None, session=session))
 
         self._prepare_message(jid, msg, keyID, type_=type_, subject=subject,
-                chatstate=chatstate, msg_id=msg_id, composing_xep=composing_xep,
-                resource=resource, user_nick=user_nick, xhtml=xhtml, session=session,
+                chatstate=chatstate, msg_id=msg_id, resource=resource,
+                user_nick=user_nick, xhtml=xhtml, session=session,
                 forward_from=forward_from, form_node=form_node,
                 original_message=original_message, delayed=delayed, callback=cb)
+
+    def _nec_message_outgoing(self, obj):
+        if obj.account != self.name:
+            return
+
+        def on_send_ok(msg_id):
+            gajim.nec.push_incoming_event(MessageSentEvent(None, conn=self,
+                jid=obj.jid, message=obj.message, keyID=obj.keyID,
+                chatstate=None))
+            if obj.callback:
+                obj.callback(obj.msg_id, *obj.callback_args)
+
+            if not obj.is_loggable:
+                return
+            self.log_message(obj.jid, obj.message, obj.forward_from,
+                obj.session, obj.original_message, obj.subject, obj.type_)
+
+        def on_send_not_ok(reason):
+            reason += ' ' + _('Your message could not be sent.')
+            gajim.nec.push_incoming_event(MessageErrorEvent(None, conn=self,
+                fjid=obj.jid, error_code=-1, error_msg=reason, msg=None,
+                time_=None, session=obj.session))
+
+        def cb(jid, msg, keyID, forward_from, session, original_message, subject,
+        type_, msg_iq, xhtml):
+            ret = self.connection.send(msg_iq, msg is not None, on_ok=on_send_ok,
+                    on_not_ok=on_send_not_ok)
+
+            if ret == -1:
+                # Contact Offline
+                gajim.nec.push_incoming_event(MessageErrorEvent(None, conn=self,
+                    fjid=jid, error_code=-1, error_msg=_(
+                    'Contact is offline. Your message could not be sent.'),
+                    msg=None, time_=None, session=session))
+
+        self._prepare_message(obj.jid, obj.message, obj.keyID, type_=obj.type_,
+            subject=obj.subject, chatstate=obj.chatstate, msg_id=obj.msg_id,
+            resource=obj.resource, user_nick=obj.user_nick, xhtml=obj.xhtml,
+            label=obj.label, session=obj.session, forward_from=obj.forward_from,
+            form_node=obj.form_node, original_message=obj.original_message,
+            delayed=obj.delayed, callback=cb)
 
     def send_stanza(self, stanza):
         # send a stanza untouched

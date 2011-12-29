@@ -3,15 +3,13 @@ INCLUDES = \
 
 gajimpluginsdir = $(gajim_pluginsdir)
 
-installedplugins = acronyms_expander banner_tweaks ftp_manager length_notifier whiteboard
+dist_gajimplugins_PYTHON = 
 
-installedpluginsfiles = $(wildcard ${srcdir}/${p}/*.py ${srcdir}/${p}/manifest.ini ${srcdir}/${p}/*.ui ${srcdir}/${p}/*.png)
+pluginsdirs = ${sort ${dir ${wildcard ${srcdir}/*/ ${srcdir}/*/*/}}}
 
-nobase_dist_gajimplugins_PYTHON = $(foreach p, ${installedplugins}, $(installedpluginsfiles))
+pluginsfiles = $(wildcard ${p}/*.py ${p}/manifest.ini ${p}/*.ui ${p}/*.png)
 
-EXTRA_DIST = \
-	$(srcdir)/*/*.py \
-	$(srcdir)/*/manifest.ini \
-	$(srcdir)/*/*.ui
+nobase_gajimplugins_DATA = $(foreach p, ${pluginsdirs}, $(pluginsfiles))
+
 
 MAINTAINERCLEANFILES = Makefile.in

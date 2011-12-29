@@ -59,8 +59,6 @@ class JingleTransport(object):
         Build a candidate stanza for the given candidate
         """
         pass
-    
-    
 
     def make_transport(self, candidates=None):
         """
@@ -323,7 +321,10 @@ class JingleTransportIBB(JingleTransport):
         transport.setAttr('sid', self.sid)
         return transport
     
-import farsight
+try:
+    import farsight
+except Exception:
+    pass
 
 class JingleTransportICEUDP(JingleTransport):
     def __init__(self, node):

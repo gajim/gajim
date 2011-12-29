@@ -10,7 +10,7 @@
         <property name="layout_style">spread</property>
         <child>
           <object class="GtkButton" id="roster_button_1">
-            <property name="label" translatable="yes">1</property>
+            <property name="label">1</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
@@ -24,7 +24,7 @@
         </child>
         <child>
           <object class="GtkButton" id="roster_button_2">
-            <property name="label" translatable="yes">2</property>
+            <property name="label">2</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
@@ -38,7 +38,7 @@
         </child>
         <child>
           <object class="GtkButton" id="roster_button_3">
-            <property name="label" translatable="yes">3</property>
+            <property name="label">3</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
@@ -52,7 +52,7 @@
         </child>
         <child>
           <object class="GtkButton" id="roster_button_4">
-            <property name="label" translatable="yes">4</property>
+            <property name="label">4</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>

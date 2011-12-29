@@ -138,8 +138,7 @@ class Remote:
 
     def on_chatstate_received(self, obj):
         self.raise_signal('ChatState', (obj.conn.name, [
-            obj.jid, obj.fjid, obj.stanza, obj.resource, obj.composing_xep,
-            obj.chatstate]))
+            obj.jid, obj.fjid, obj.stanza, obj.resource, obj.chatstate]))
 
     def on_message_sent(self, obj):
         try:
@@ -433,7 +432,18 @@ class SignalObject(dbus.service.Object):
         connected_account, contact = self._get_account_and_contact(account, jid)
         if connected_account:
             connection = gajim.connections[connected_account]
-            connection.send_message(jid, message, keyID, type_, subject)
+            sessions = connection.get_sessions(jid)
+            if sessions:
+                session = sessions[0]
+            else:
+                session = connection.make_new_session(jid)
+            ctrl = gajim.interface.msg_win_mgr.search_control(jid,
+                connected_account)
+            if ctrl:
+                ctrl.print_conversation(message, frm='outgoing')
+
+            connection.send_message(jid, message, keyID, type_, subject,
+                session=session)
             return DBUS_BOOLEAN(True)
         return DBUS_BOOLEAN(False)
 
@@ -594,7 +604,10 @@ class SignalObject(dbus.service.Object):
         Show the window(s) with next pending event in tabbed/group chats
         """
         if gajim.events.get_nb_events():
-            gajim.interface.systray.handle_first_event()
+            account, jid, event = gajim.events.get_first_systray_event()
+            if not event:
+                return
+            gajim.interface.handle_event(account, jid, event.type_)
 
     @dbus.service.method(INTERFACE, in_signature='s', out_signature='a{sv}')
     def contact_info(self, jid):

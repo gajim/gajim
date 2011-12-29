@@ -28,7 +28,8 @@ from common import gajim
 from common import stanza_session
 from common import contacts
 from common import ged
-from common.connection_handlers_events import ChatstateReceivedEvent
+from common.connection_handlers_events import ChatstateReceivedEvent, \
+    InformationEvent
 
 import common.xmpp
 
@@ -73,15 +74,17 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
             if self.control and self.control.resource:
                 self.control.change_resource(self.resource)
 
-        msg_id = None
-
         if obj.mtype == 'chat':
             if not obj.stanza.getTag('body') and obj.chatstate is None:
                 return
 
-            log_type = 'chat_msg_recv'
+            log_type = 'chat_msg'
         else:
-            log_type = 'single_msg_recv'
+            log_type = 'single_msg'
+        end = '_recv'
+        if obj.forwarded and obj.sent:
+            end = '_sent'
+        log_type += end
 
         if self.is_loggable() and obj.msgtxt:
             try:
@@ -89,19 +92,21 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
                     msg_to_log = obj.xhtml
                 else:
                     msg_to_log = obj.msgtxt
-                msg_id = gajim.logger.write(log_type, obj.fjid,
+                obj.msg_id = gajim.logger.write(log_type, obj.fjid,
                     msg_to_log, tim=obj.timestamp, subject=obj.subject)
             except exceptions.PysqliteOperationalError, e:
-                self.conn.dispatch('ERROR', (_('Disk WriteError'), str(e)))
+                gajim.nec.push_incoming_event(InformationEvent(None,
+                    conn=self.conn, level='error', pri_txt=_('Disk WriteError'),
+                    sec_txt=str(e)))
             except exceptions.DatabaseMalformed:
                 pritext = _('Database Error')
                 sectext = _('The database file (%s) cannot be read. Try to '
                     'repair it (see http://trac.gajim.org/wiki/DatabaseBackup) '
                     'or remove it (all history will be lost).') % \
                     common.logger.LOG_DB_PATH
-                self.conn.dispatch('ERROR', (pritext, sectext))
-
-        obj.msg_id = msg_id
+                gajim.nec.push_incoming_event(InformationEvent(None,
+                    conn=self.conn, level='error', pri_txt=pritxt,
+                    sec_txt=sectxt))
 
         treat_as = gajim.config.get('treat_incoming_messages')
         if treat_as:
@@ -115,9 +120,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
         # Handle chat states
         contact = gajim.contacts.get_contact(self.conn.name, obj.jid,
             obj.resource)
-        if contact:
-            if contact.composing_xep != 'XEP-0085': # We cache xep85 support
-                contact.composing_xep = obj.composing_xep
+        if contact and (not obj.forwarded or not obj.sent):
             if self.control and self.control.type_id == \
             message_control.TYPE_CHAT:
                 if obj.chatstate is not None:
@@ -134,8 +137,8 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
                 # Brand new message, incoming.
                 contact.our_chatstate = obj.chatstate
                 contact.chatstate = obj.chatstate
-                if msg_id: # Do not overwrite an existing msg_id with None
-                    contact.msg_id = msg_id
+                if obj.msg_id: # Do not overwrite an existing msg_id with None
+                    contact.msg_id = obj.msg_id
 
         # THIS MUST BE AFTER chatstates handling
         # AND BEFORE playsound (else we ear sounding on chatstates!)
@@ -155,14 +158,9 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
             obj.resource == highest_contact.resource or highest_contact.show ==\
             'offline'
 
-        if not pm and is_highest:
-            jid_of_control = obj.jid
-        else:
-            jid_of_control = obj.fjid
-
         if not self.control:
-            ctrl = gajim.interface.msg_win_mgr.get_control(jid_of_control,
-                self.conn.name)
+            ctrl = gajim.interface.msg_win_mgr.search_control(obj.jid,
+                obj.conn.name, obj.resource)
             if ctrl:
                 self.control = ctrl
                 self.control.set_session(self)
@@ -173,8 +171,8 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
         if gajim.interface.remote_ctrl:
             gajim.interface.remote_ctrl.raise_signal('NewMessage', (
                 self.conn.name, [obj.fjid, obj.msgtxt, obj.timestamp,
-                obj.encrypted, obj.mtype, obj.subject, obj.chatstate, msg_id,
-                obj.composing_xep, obj.user_nick, obj.xhtml, obj.form_node]))
+                obj.encrypted, obj.mtype, obj.subject, obj.chatstate,
+                obj.msg_id, obj.user_nick, obj.xhtml, obj.form_node]))
 
     def roster_message2(self, obj):
         """
@@ -183,8 +181,6 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
         contact = None
         jid = obj.jid
         resource = obj.resource
-        # if chat window will be for specific resource
-        resource_for_chat = resource
 
         fjid = jid
 
@@ -211,7 +207,6 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
             else:
                 # Default to highest prio
                 fjid = jid
-                resource_for_chat = None
                 contact = highest_contact
 
         if not contact:
@@ -220,21 +215,15 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
                 obj.conn.name, jid, obj.user_nick)
 
         if not self.control:
-            ctrl = gajim.interface.msg_win_mgr.get_control(fjid, self.conn.name)
+            ctrl = gajim.interface.msg_win_mgr.search_control(obj.jid,
+                obj.conn.name, obj.resource)
             if ctrl:
                 self.control = ctrl
                 self.control.set_session(self)
             else:
-                # if no control exists and message comes from highest prio,
-                # the new control shouldn't have a resource
-                if highest_contact and contact.resource == \
-                highest_contact.resource and jid != gajim.get_jid_from_account(
-                self.conn.name):
-                    fjid = jid
-                    resource_for_chat = None
+                fjid = jid
 
         obj.popup = helpers.allow_popup_window(self.conn.name)
-        obj.resource_for_chat = resource_for_chat
 
         type_ = 'chat'
         event_type = 'message_received'
@@ -255,7 +244,8 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
         if not self.control:
             event = gajim.events.create_event(type_, (obj.msgtxt, obj.subject,
                 obj.mtype, obj.timestamp, obj.encrypted, obj.resource,
-                obj.msg_id, obj.xhtml, self, obj.form_node, obj.displaymarking),
+                obj.msg_id, obj.xhtml, self, obj.form_node, obj.displaymarking,
+                obj.forwarded and obj.sent),
                 show_in_roster=obj.show_in_roster,
                 show_in_systray=obj.show_in_systray)
 
@@ -268,9 +258,6 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
         Display the message or show notification in the roster
         """
         contact = None
-        # if chat window will be for specific resource
-        resource_for_chat = resource
-
         fjid = jid
 
         # Try to catch the contact with correct resource
@@ -298,7 +285,6 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
             else:
                 # Default to highest prio
                 fjid = jid
-                resource_for_chat = None
                 contact = highest_contact
 
         if not contact:
@@ -312,12 +298,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
                 self.control = ctrl
                 self.control.set_session(self)
             else:
-                # if no control exists and message comes from highest prio, the new
-                # control shouldn't have a resource
-                if highest_contact and contact.resource == highest_contact.resource\
-                and not jid == gajim.get_jid_from_account(self.conn.name):
-                    fjid = jid
-                    resource_for_chat = None
+                fjid = jid
 
         # Do we have a queue?
         no_queue = len(gajim.events.get_events(self.conn.name, fjid)) == 0
@@ -359,15 +340,16 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
                 contact)
 
         event = gajim.events.create_event(type_, (msg, subject, msg_type, tim,
-                encrypted, resource, msg_id, xhtml, self, form_node, displaymarking),
-                show_in_roster=show_in_roster, show_in_systray=show_in_systray)
+            encrypted, resource, msg_id, xhtml, self, form_node, displaymarking,
+            False), show_in_roster=show_in_roster,
+            show_in_systray=show_in_systray)
 
         gajim.events.add_event(self.conn.name, fjid, event)
 
         if popup:
             if not self.control:
                 self.control = gajim.interface.new_chat(contact,
-                        self.conn.name, resource=resource_for_chat, session=self)
+                    self.conn.name, session=self)
 
                 if len(gajim.events.get_events(self.conn.name, fjid)):
                     self.control.read_queue()
@@ -429,13 +411,11 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
                                 not_acceptable)
 
                         self.dialog = dialogs.YesNoDialog(_('Confirm these '
-                            'session options'), _('''The remote client wants '
-                            'to negotiate an session with these features:
-
-%s
-
-Are these options acceptable?''') % (negotiation.describe_features(
-                            ask_user)),
+                            'session options'),
+                            _('The remote client wants to negotiate a session '
+                            'with these features:\n\n%s\n\nAre these options '
+                            'acceptable?''') % (
+                            negotiation.describe_features(ask_user)),
                             on_response_yes=accept_nondefault_options,
                             on_response_no=reject_nondefault_options)
                     else:
@@ -459,7 +439,18 @@ Are these options acceptable?''') % (negotiation.describe_features(
 
                 if ask_user:
                     def accept_nondefault_options(is_checked):
-                        dialog.destroy()
+                        if dialog:
+                            dialog.destroy()
+
+                        if is_checked:
+                            allow_no_log_for = gajim.config.get_per(
+                                'accounts', self.conn.name,
+                                'allow_no_log_for').split()
+                            jid = str(self.jid)
+                            if jid not in allow_no_log_for:
+                                allow_no_log_for.append(jid)
+                                gajim.config.set_per('accounts', self.conn.name,
+                                'allow_no_log_for', ' '.join(allow_no_log_for))
 
                         negotiated.update(ask_user)
 
@@ -472,10 +463,18 @@ Are these options acceptable?''') % (negotiation.describe_features(
                         self.reject_negotiation()
                         dialog.destroy()
 
-                    dialog = dialogs.YesNoDialog(_('Confirm these session options'),
-                            _('The remote client selected these options:\n\n%s\n\n'
-                            'Continue with the session?') % (
+                    allow_no_log_for = gajim.config.get_per('accounts',
+                        self.conn.name, 'allow_no_log_for').split()
+                    if str(self.jid) in allow_no_log_for:
+                        dialog = None
+                        accept_nondefault_options(False)
+                    else:
+                        dialog = dialogs.YesNoDialog(_('Confirm these session '
+                            'options'),
+                            _('The remote client selected these options:\n\n%s'
+                            '\n\nContinue with the session?') % (
                             negotiation.describe_features(ask_user)),
+                            _('Always accept for this contact'),
                             on_response_yes = accept_nondefault_options,
                             on_response_no = reject_nondefault_options)
                 else:
@@ -526,10 +525,11 @@ Are these options acceptable?''') % (negotiation.describe_features(
         # around to test my test suite.
         if form.getType() == 'form':
             if not self.control:
-                jid, resource = gajim.get_room_and_nick_from_fjid(self.jid)
+                jid, resource = gajim.get_room_and_nick_from_fjid(str(self.jid))
 
                 account = self.conn.name
-                contact = gajim.contacts.get_contact(account, self.jid, resource)
+                contact = gajim.contacts.get_contact(account, str(self.jid),
+                    resource)
 
                 if not contact:
                     contact = gajim.contacts.create_contact(jid=jid, account=account,
@@ -538,4 +538,5 @@ Are these options acceptable?''') % (negotiation.describe_features(
                 gajim.interface.new_chat(contact, account, resource=resource,
                         session=self)
 
-            negotiation.FeatureNegotiationWindow(account, self.jid, self, form)
+            negotiation.FeatureNegotiationWindow(account, str(self.jid), self,
+                form)

@@ -61,7 +61,6 @@ class GroupsPostWindow:
         author.addChild('name', {}, [self.from_entry.get_text()])
         item.addChild('generator', {}, ['Gajim'])
         item.addChild('title', {}, [self.subject_entry.get_text()])
-        item.addChild('id', {}, ['0'])
 
         buf = self.contents_textview.get_buffer()
         item.addChild('content', {}, [buf.get_text(buf.get_start_iter(), buf.get_end_iter())])

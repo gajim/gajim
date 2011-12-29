@@ -47,12 +47,14 @@ NS_BOB            = 'urn:xmpp:bob'                                    # XEP-0231
 NS_BOOKMARKS      = 'storage:bookmarks'                               # XEP-0048
 NS_BROWSE         = 'jabber:iq:browse'
 NS_BROWSING       = 'http://jabber.org/protocol/browsing'             # XEP-0195
-NS_BYTESTREAM     = 'http://jabber.org/protocol/bytestreams'          # JEP-0065
-NS_CAPS           = 'http://jabber.org/protocol/caps'                 # JEP-0115
+NS_BYTESTREAM     = 'http://jabber.org/protocol/bytestreams'          # XEP-0065
+NS_CAPS           = 'http://jabber.org/protocol/caps'                 # XEP-0115
 NS_CAPTCHA        = 'urn:xmpp:captcha'                                # XEP-0158
-NS_CHATSTATES     = 'http://jabber.org/protocol/chatstates'           # JEP-0085
+NS_CARBONS        = 'urn:xmpp:carbons:1'                              # XEP-0280
+NS_CHATSTATES     = 'http://jabber.org/protocol/chatstates'           # XEP-0085
 NS_CHATTING       = 'http://jabber.org/protocol/chatting'             # XEP-0194
 NS_CLIENT         = 'jabber:client'
+NS_CONDITIONS     = 'urn:xmpp:muc:conditions:0'                       # XEP-0306
 NS_COMMANDS       = 'http://jabber.org/protocol/commands'
 NS_COMPONENT_ACCEPT = 'jabber:component:accept'
 NS_COMPONENT_1    = 'http://jabberd.jabberstudio.org/ns/component/1.0'
@@ -69,9 +71,10 @@ NS_DISCO_ITEMS    = NS_DISCO + '#items'
 NS_ENCRYPTED      = 'jabber:x:encrypted'                              # XEP-0027
 NS_ESESSION       = 'http://www.xmpp.org/extensions/xep-0116.html#ns'
 NS_ESESSION_INIT  = 'http://www.xmpp.org/extensions/xep-0116.html#ns-init' # XEP-0116
-NS_EVENT                = 'jabber:x:event'                            # XEP-0022
+NS_EVENT          = 'jabber:x:event'                                  # XEP-0022
 NS_FEATURE        = 'http://jabber.org/protocol/feature-neg'
-NS_FILE      = 'http://jabber.org/protocol/si/profile/file-transfer'  # JEP-0096
+NS_FILE           = 'http://jabber.org/protocol/si/profile/file-transfer' # XEP-0096
+NS_FORWARD        = 'urn:xmpp:forward:0'                              # XEP-0297
 NS_GAMING         = 'http://jabber.org/protocol/gaming'               # XEP-0196
 NS_GATEWAY        = 'jabber:iq:gateway'                               # XEP-0100
 NS_GEOLOC         = 'http://jabber.org/protocol/geoloc'               # XEP-0080
@@ -105,7 +108,7 @@ NS_MUC_CONFIG     = NS_MUC + '#roomconfig'
 NS_NICK           = 'http://jabber.org/protocol/nick'                 # XEP-0172
 NS_OFFLINE        = 'http://www.jabber.org/jeps/jep-0030.html'        # XEP-0013
 NS_PHYSLOC        = 'http://jabber.org/protocol/physloc'              # XEP-0112
-NS_PING           = 'urn:xmpp:ping'                                   # SEP-0199
+NS_PING           = 'urn:xmpp:ping'                                   # XEP-0199
 NS_PRESENCE       = 'presence'                                        # Jabberd2
 NS_PRIVACY        = 'jabber:iq:privacy'
 NS_PRIVATE        = 'jabber:iq:private'
@@ -113,7 +116,7 @@ NS_PROFILE        = 'http://jabber.org/protocol/profile'              # XEP-0154
 NS_PUBSUB         = 'http://jabber.org/protocol/pubsub'               # XEP-0060
 NS_PUBSUB_EVENT   = 'http://jabber.org/protocol/pubsub#event'
 NS_PUBSUB_PUBLISH_OPTIONS = NS_PUBSUB + '#publish-options'            # XEP-0060
-NS_PUBSUB_OWNER   = 'http://jabber.org/protocol/pubsub#owner'         # JEP-0060
+NS_PUBSUB_OWNER   = 'http://jabber.org/protocol/pubsub#owner'         # XEP-0060
 NS_REGISTER       = 'jabber:iq:register'
 NS_ROSTER         = 'jabber:iq:roster'
 NS_ROSTERNOTES    = 'storage:rosternotes'
@@ -123,7 +126,7 @@ NS_RPC            = 'jabber:iq:rpc'                                   # XEP-0009
 NS_RSM            = 'http://jabber.org/protocol/rsm'
 NS_SASL           = 'urn:ietf:params:xml:ns:xmpp-sasl'
 NS_SECLABEL       = 'urn:xmpp:sec-label:0'
-NS_SECLABEL_CATALOG = 'urn:xmpp:sec-label:catalog:0'
+NS_SECLABEL_CATALOG = 'urn:xmpp:sec-label:catalog:2'
 NS_SEARCH         = 'jabber:iq:search'
 NS_SERVER         = 'jabber:server'
 NS_SESSION        = 'urn:ietf:params:xml:ns:xmpp-session'
@@ -153,9 +156,10 @@ NS_DATA_LAYOUT    = 'http://jabber.org/protocol/xdata-layout'         # XEP-0141
 NS_DATA_VALIDATE  = 'http://jabber.org/protocol/xdata-validate'       # XEP-0122
 NS_XMPP_STREAMS   = 'urn:ietf:params:xml:ns:xmpp-streams'
 NS_RECEIPTS       = 'urn:xmpp:receipts'
-NS_PUBKEY_PUBKEY='urn:xmpp:pubkey:2'                                              # XEP-0189
-NS_PUBKEY_REVOKE='urn:xmpp:revoke:2'
-NS_PUBKEY_ATTEST='urn:xmpp:attest:2'
+NS_PUBKEY_PUBKEY  = 'urn:xmpp:pubkey:2'                                              # XEP-0189
+NS_PUBKEY_REVOKE  = 'urn:xmpp:revoke:2'
+NS_PUBKEY_ATTEST  = 'urn:xmpp:attest:2'
+NS_STREAM_MGMT    = 'urn:xmpp:sm:2'                                   # XEP-198
 
 xmpp_stream_error_conditions = '''
 bad-format --  --  -- The entity has sent XML that cannot be processed.
@@ -631,6 +635,17 @@ class Protocol(Node):
         """
         return self.getTagAttr('error', 'code')
 
+    def getStatusConditions(self):
+        """
+        Return the status conditions list as defined in XEP-0306.
+        """
+        conds = []
+        condtag = self.getTag('conditions', namespace=NS_CONDITIONS)
+        if condtag:
+            for tag in condtag.getChildren():
+                conds.append(tag.getName())
+        return conds
+
     def setError(self, error, code=None):
         """
         Set the error code. Obsolete. Use error-conditions instead
@@ -773,10 +788,11 @@ class Message(Protocol):
     def buildReply(self, text=None):
         """
         Builds and returns another message object with specified text. The to,
-        from and thread properties of new message are pre-set as reply to this
-        message
+        from, thread and type properties of new message are pre-set as reply to
+        this message
         """
-        m = Message(to=self.getFrom(), frm=self.getTo(), body=text)
+        m = Message(to=self.getFrom(), frm=self.getTo(), body=text,
+            typ=self.getType())
         th = self.getThread()
         if th:
             m.setThread(th)
@@ -933,11 +949,20 @@ class Iq(Protocol):
         if queryNS:
             self.setQueryNS(queryNS)
 
+    def getQuery(self):
+        """
+        Return the IQ's child element if it exists, None otherwise.
+        """
+        children = self.getChildren()
+        if children and self.getType() != 'error' and \
+        children[0].getName() != 'error':
+            return children[0]
+
     def getQueryNS(self):
         """
         Return the namespace of the 'query' child element
         """
-        tag = self.getTag('query')
+        tag = self.getQuery()
         if tag:
             return tag.getNamespace()
 
@@ -945,13 +970,15 @@ class Iq(Protocol):
         """
         Return the 'node' attribute value of the 'query' child element
         """
-        return self.getTagAttr('query', 'node')
+        tag = self.getQuery()
+        if tag:
+            return tag.getAttr('node')
 
     def getQueryPayload(self):
         """
         Return the 'query' child element payload
         """
-        tag = self.getTag('query')
+        tag = self.getQuery()
         if tag:
             return tag.getPayload()
 
@@ -959,37 +986,78 @@ class Iq(Protocol):
         """
         Return the 'query' child element child nodes
         """
-        tag = self.getTag('query')
+        tag = self.getQuery()
         if tag:
             return tag.getChildren()
+
+    def setQuery(self, name=None):
+        """
+        Change the name of the query node, creating it if needed. Keep the
+        existing name if none is given (use 'query' if it's a creation).
+        Return the query node.
+        """
+        query = self.getQuery()
+        if query is None:
+            query = self.addChild('query')
+        if name is not None:
+            query.setName(name)
+        return query
 
     def setQueryNS(self, namespace):
         """
         Set the namespace of the 'query' child element
         """
-        self.setTag('query').setNamespace(namespace)
+        self.setQuery().setNamespace(namespace)
 
     def setQueryPayload(self, payload):
         """
         Set the 'query' child element payload
         """
-        self.setTag('query').setPayload(payload)
+        self.setQuery().setPayload(payload)
 
     def setQuerynode(self, node):
         """
         Set the 'node' attribute value of the 'query' child element
         """
-        self.setTagAttr('query', 'node', node)
+        self.setQuery().setAttr('node', node)
 
     def buildReply(self, typ):
         """
         Build and return another Iq object of specified type. The to, from and
         query child node of new Iq are pre-set as reply to this Iq.
         """
-        iq = Iq(typ, to=self.getFrom(), frm=self.getTo(), attrs={'id': self.getID()})
-        if self.getTag('query'):
-            iq.setQueryNS(self.getQueryNS())
+        iq = Iq(typ, to=self.getFrom(), frm=self.getTo(),
+            attrs={'id': self.getID()})
+        iq.setQuery(self.getQuery().getName()).setNamespace(self.getQueryNS())
         return iq
+
+class Acks(Node):
+    """
+    Acknowledgement elements for Stream Management
+    """
+    def __init__(self, nsp=NS_STREAM_MGMT):
+        Node.__init__(self, None, {}, [], None, None,False, None)
+        self.setNamespace(nsp)
+
+    def buildAnswer(self, handled):
+        """
+        handled is the number of stanzas handled
+        """
+        self.setName('a')
+        self.setAttr('h', handled)
+
+    def buildRequest(self):
+        self.setName('r')
+
+    def buildEnable(self, resume=False):
+        self.setName('enable')
+        if resume:
+            self.setAttr('resume', 'true')
+
+    def buildResume(self, handled, previd):
+        self.setName('resume')
+        self.setAttr('h', handled)
+        self.setAttr('previd', previd)
 
 class ErrorNode(Node):
     """

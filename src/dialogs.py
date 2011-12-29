@@ -1270,10 +1270,10 @@ class AboutDialog:
             text = open(copying_file_path).read()
             dlg.set_license(text)
 
-        dlg.set_comments('%s\n%s %s\n%s %s' % (_('A GTK+ jabber client'),
+        dlg.set_comments('%s\n%s %s\n%s %s' % (_('A GTK+ Jabber/XMPP client'),
             _('GTK+ Version:'), self.tuple2str(gtk.gtk_version), \
             _('PyGTK Version:'), self.tuple2str(gtk.pygtk_version)))
-        dlg.set_website('http://www.gajim.org/')
+        dlg.set_website('http://gajim.org/')
 
         authors_file_path = self.get_path('AUTHORS')
         if authors_file_path:
@@ -1534,12 +1534,16 @@ class NonModalConfirmationDialog(HigDialog):
     """
 
     def __init__(self, pritext, sectext='', on_response_ok=None,
-                             on_response_cancel=None):
+    on_response_cancel=None):
         self.user_response_ok = on_response_ok
         self.user_response_cancel = on_response_cancel
-        HigDialog.__init__(self, None,
-           gtk.MESSAGE_QUESTION, gtk.BUTTONS_OK_CANCEL, pritext, sectext,
-           self.on_response_ok, self.on_response_cancel)
+        if hasattr(gajim.interface, 'roster') and gajim.interface.roster:
+            parent = gajim.interface.roster.window
+        else:
+            parent = None
+        HigDialog.__init__(self, parent, gtk.MESSAGE_QUESTION,
+            gtk.BUTTONS_OK_CANCEL, pritext, sectext, self.on_response_ok,
+            self.on_response_cancel)
         self.set_modal(False)
 
     def on_response_ok(self, widget):
@@ -1566,14 +1570,12 @@ class WarningDialog(HigDialog):
     """
 
     def __init__(self, pritext, sectext='', transient_for=None):
-        HigDialog.__init__(self, None, gtk.MESSAGE_WARNING, gtk.BUTTONS_OK,
-            pritext, sectext)
-        self.set_modal(False)
-        if transient_for is None and hasattr(gajim.interface, 'roster') and \
+        if not transient_for and hasattr(gajim.interface, 'roster') and \
         gajim.interface.roster:
             transient_for = gajim.interface.roster.window
-        if transient_for:
-            self.set_transient_for(transient_for)
+        HigDialog.__init__(self, transient_for, gtk.MESSAGE_WARNING,
+            gtk.BUTTONS_OK, pritext, sectext)
+        self.set_modal(False)
         self.popup()
 
 class InformationDialog(HigDialog):
@@ -1582,10 +1584,13 @@ class InformationDialog(HigDialog):
     """
 
     def __init__(self, pritext, sectext=''):
-        HigDialog.__init__(self, None, gtk.MESSAGE_INFO, gtk.BUTTONS_OK,
+        if hasattr(gajim.interface, 'roster') and gajim.interface.roster:
+            parent = gajim.interface.roster.window
+        else:
+            parent = None
+        HigDialog.__init__(self, parent, gtk.MESSAGE_INFO, gtk.BUTTONS_OK,
             pritext, sectext)
         self.set_modal(False)
-        self.set_transient_for(gajim.interface.roster.window)
         self.popup()
 
 class ErrorDialog(HigDialog):
@@ -1595,7 +1600,11 @@ class ErrorDialog(HigDialog):
 
     def __init__(self, pritext, sectext='', on_response_ok=None,
     on_response_cancel=None):
-        HigDialog.__init__( self, None, gtk.MESSAGE_ERROR, gtk.BUTTONS_OK,
+        if hasattr(gajim.interface, 'roster') and gajim.interface.roster:
+            parent = gajim.interface.roster.window
+        else:
+            parent = None
+        HigDialog.__init__(self, parent, gtk.MESSAGE_ERROR, gtk.BUTTONS_OK,
             pritext, sectext, on_response_ok=on_response_ok,
             on_response_cancel=on_response_cancel)
         self.popup()
@@ -1609,8 +1618,13 @@ class YesNoDialog(HigDialog):
     on_response_no=None):
         self.user_response_yes = on_response_yes
         self.user_response_no = on_response_no
-        HigDialog.__init__(self, None, gtk.MESSAGE_QUESTION, gtk.BUTTONS_YES_NO,
-            pritext, sectext, on_response_yes=self.on_response_yes,
+        if hasattr(gajim.interface, 'roster') and gajim.interface.roster:
+            parent = gajim.interface.roster.window
+        else:
+            parent = None
+        HigDialog.__init__(self, parent, gtk.MESSAGE_QUESTION,
+            gtk.BUTTONS_YES_NO, pritext, sectext,
+            on_response_yes=self.on_response_yes,
             on_response_no=self.on_response_no)
 
         if checktext:
@@ -1658,7 +1672,11 @@ class ConfirmationDialogCheck(ConfirmationDialog):
         self.user_response_ok = on_response_ok
         self.user_response_cancel = on_response_cancel
 
-        HigDialog.__init__(self, None, gtk.MESSAGE_QUESTION,
+        if hasattr(gajim.interface, 'roster') and gajim.interface.roster:
+            parent = gajim.interface.roster.window
+        else:
+            parent = None
+        HigDialog.__init__(self, parent, gtk.MESSAGE_QUESTION,
            gtk.BUTTONS_OK_CANCEL, pritext, sectext, self.on_response_ok,
            self.on_response_cancel)
 
@@ -1704,11 +1722,16 @@ class ConfirmationDialogDoubleCheck(ConfirmationDialog):
     """
 
     def __init__(self, pritext, sectext='', checktext1='', checktext2='',
-            on_response_ok=None, on_response_cancel=None, is_modal=True):
+    tooltip1='', tooltip2='', on_response_ok=None, on_response_cancel=None,
+    is_modal=True):
         self.user_response_ok = on_response_ok
         self.user_response_cancel = on_response_cancel
 
-        HigDialog.__init__(self, None, gtk.MESSAGE_QUESTION,
+        if hasattr(gajim.interface, 'roster') and gajim.interface.roster:
+            parent = gajim.interface.roster.window
+        else:
+            parent = None
+        HigDialog.__init__(self, parent, gtk.MESSAGE_QUESTION,
            gtk.BUTTONS_OK_CANCEL, pritext, sectext, self.on_response_ok,
            self.on_response_cancel)
 
@@ -1719,11 +1742,15 @@ class ConfirmationDialogDoubleCheck(ConfirmationDialog):
 
         if checktext1:
             self.checkbutton1 = gtk.CheckButton(checktext1)
+            if tooltip1:
+                self.checkbutton1.set_tooltip_text(tooltip1)
             self.vbox.pack_start(self.checkbutton1, expand=False, fill=True)
         else:
             self.checkbutton1 = None
         if checktext2:
             self.checkbutton2 = gtk.CheckButton(checktext2)
+            if tooltip2:
+                self.checkbutton2.set_tooltip_text(tooltip2)
             self.vbox.pack_start(self.checkbutton2, expand=False, fill=True)
         else:
             self.checkbutton2 = None
@@ -1772,7 +1799,11 @@ class ConfirmationDialogDoubleRadio(ConfirmationDialog):
         self.user_response_ok = on_response_ok
         self.user_response_cancel = on_response_cancel
 
-        HigDialog.__init__(self, None, gtk.MESSAGE_QUESTION,
+        if hasattr(gajim.interface, 'roster') and gajim.interface.roster:
+            parent = gajim.interface.roster.window
+        else:
+            parent = None
+        HigDialog.__init__(self, parent, gtk.MESSAGE_QUESTION,
                 gtk.BUTTONS_OK_CANCEL, pritext, sectext, self.on_response_ok,
                 self.on_response_cancel)
 
@@ -1828,9 +1859,13 @@ class FTOverwriteConfirmationDialog(ConfirmationDialog):
     """
 
     def __init__(self, pritext, sectext='', propose_resume=True,
-                             on_response=None):
-        HigDialog.__init__(self, None, gtk.MESSAGE_QUESTION, gtk.BUTTONS_CANCEL,
-            pritext, sectext)
+    on_response=None):
+        if hasattr(gajim.interface, 'roster') and gajim.interface.roster:
+            parent = gajim.interface.roster.window
+        else:
+            parent = None
+        HigDialog.__init__(self, parent, gtk.MESSAGE_QUESTION,
+            gtk.BUTTONS_CANCEL, pritext, sectext)
 
         self.on_response = on_response
 
@@ -2130,6 +2165,7 @@ class DoubleInputDialog:
     def on_okbutton_clicked(self, widget):
         user_input1 = self.input_entry1.get_text().decode('utf-8')
         user_input2 = self.input_entry2.get_text().decode('utf-8')
+        self.cancel_handler = None
         self.dialog.destroy()
         if not self.ok_handler:
             return
@@ -2451,7 +2487,8 @@ class JoinGroupchatWindow:
                     _('The group chat Jabber ID has not allowed characters.'))
             return
 
-        if gajim.contacts.get_contact(self.account, room_jid):
+        if gajim.contacts.get_contact(self.account, room_jid) and \
+        not gajim.contacts.get_contact(self.account, room_jid).is_groupchat():
             ErrorDialog(_('This is not a group chat'),
                 _('%s is not the name of a group chat.') % room_jid)
             return
@@ -3036,7 +3073,12 @@ class SingleMessageWindow:
                 _('Please make sure you are connected with "%s".') % self.account)
             return
         if isinstance(self.to, list):
-            sender_list = [i[0].jid + '/' + i[0].resource for i in self.to]
+            sender_list = []
+            for i in self.to:
+                if i[0].resource:
+                    sender_list.append(i[0].jid + '/' + i[0].resource)
+                else:
+                    sender_list.append(i[0].jid)
         else:
             sender_list = [self.to_entry.get_text().decode('utf-8')]
 
@@ -5198,8 +5240,8 @@ class SSLErrorDialog(ConfirmationDialogDoubleCheck):
         self.account = account
         self.cert = certificate
         ConfirmationDialogDoubleCheck.__init__(self, pritext, sectext,
-            checktext1, checktext2, on_response_ok, on_response_cancel,
-            is_modal=False)
+            checktext1, checktext2, on_response_ok=on_response_ok,
+            on_response_cancel=on_response_cancel, is_modal=False)
         b = gtk.Button(_('View cert...'))
         b.connect('clicked', self.on_cert_clicked)
         b.show_all()

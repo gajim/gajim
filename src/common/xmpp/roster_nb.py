@@ -45,7 +45,7 @@ class NonBlockingRoster(PlugIn):
         PlugIn.__init__(self)
         self.version = version
         self._data = {}
-        self.set=None
+        self._set=None
         self._exported_methods=[self.getRoster]
         self.received_from_server = False
 
@@ -54,8 +54,8 @@ class NonBlockingRoster(PlugIn):
         Request roster from server if it were not yet requested (or if the
         'force' argument is set)
         """
-        if self.set is None:
-            self.set = 0
+        if self._set is None:
+            self._set = 0
         elif not force:
             return
 
@@ -100,7 +100,7 @@ class NonBlockingRoster(PlugIn):
                     if group.getData() not in self._data[jid]['groups']:
                         self._data[jid]['groups'].append(group.getData())
         self._data[self._owner.User+'@'+self._owner.Server]={'resources': {}, 'name': None, 'ask': None, 'subscription': None, 'groups': None,}
-        self.set=1
+        self._set=1
         # Looks like we have a workaround
         # raise NodeProcessed # a MUST. Otherwise you'll get back an <iq type='error'/>
 
@@ -323,7 +323,7 @@ class NonBlockingRoster(PlugIn):
                         'subscription': None,
                         'groups': None
         }
-        self.set = 1
+        self._set = 1
 
     def plugin(self, owner, request=1):
         """
@@ -340,9 +340,9 @@ class NonBlockingRoster(PlugIn):
     def _on_roster_set(self, data):
         if data:
             self._owner.Dispatcher.ProcessNonBlocking(data)
-        if not self.set:
+        if not self._set:
             return
-        if not self._owner:
+        if not hasattr(self, '_owner') or not self._owner:
             # Connection has been closed by receiving a <stream:error> for ex,
             return
         self._owner.onreceive(None)
@@ -356,7 +356,7 @@ class NonBlockingRoster(PlugIn):
         Request roster from server if neccessary and returns self
         """
         return_self = True
-        if not self.set:
+        if not self._set:
             self.on_ready = on_ready
             self._owner.onreceive(self._on_roster_set)
             return_self = False

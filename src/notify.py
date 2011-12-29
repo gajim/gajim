@@ -72,169 +72,6 @@ def get_show_in_systray(event, account, contact, type_=None):
         return False
     return gajim.config.get('trayicon_notification_on_events')
 
-def notify(event, jid, account, parameters):
-    """
-    Check what type of notifications we want, depending on basic and the
-    advanced configuration of notifications and do these notifications;
-    """
-    # First, find what notifications we want
-    do_popup = False
-    do_sound = False
-    do_cmd = False
-    if event == 'status_change':
-        new_show = parameters[0]
-        status_message = parameters[1]
-        # Default: No popup for status change
-    elif event == 'contact_connected':
-        status_message = parameters
-        j = gajim.get_jid_without_resource(jid)
-        server = gajim.get_server_from_jid(j)
-        account_server = account + '/' + server
-        block_transport = False
-        if account_server in gajim.block_signed_in_notifications and \
-        gajim.block_signed_in_notifications[account_server]:
-            block_transport = True
-        if helpers.allow_showing_notification(account, 'notify_on_signin') and \
-        not gajim.block_signed_in_notifications[account] and \
-        not block_transport:
-            do_popup = True
-        if gajim.config.get_per('soundevents', 'contact_connected',
-        'enabled') and not gajim.block_signed_in_notifications[account] and \
-        not block_transport and helpers.allow_sound_notification(account,
-        event):
-            do_sound = True
-    elif event == 'contact_disconnected':
-        status_message = parameters
-        if helpers.allow_showing_notification(account, 'notify_on_signout'):
-            do_popup = True
-        if gajim.config.get_per('soundevents', 'contact_disconnected',
-        'enabled') and helpers.allow_sound_notification(account, event):
-            do_sound = True
-    elif event == 'new_message':
-        message_type = parameters[0]
-        is_first_message = parameters[1]
-        nickname = parameters[2]
-        if gajim.config.get('notification_preview_message'):
-            message = parameters[3]
-            if message.startswith('/me ') or message.startswith('/me\n'):
-                message = '* ' + nickname + message[3:]
-        else:
-            # We don't want message preview, do_preview = False
-            message = ''
-        focused = parameters[4]
-        if helpers.allow_showing_notification(account, 'notify_on_new_message',
-        is_first_message):
-            do_popup = True
-        if is_first_message and helpers.allow_sound_notification(account,
-        'first_message_received'):
-            do_sound = True
-        elif not is_first_message and focused and \
-        helpers.allow_sound_notification(account,
-        'next_message_received_focused'):
-            do_sound = True
-        elif not is_first_message and not focused and \
-        helpers.allow_sound_notification(account,
-        'next_message_received_unfocused'):
-            do_sound = True
-    else:
-        print '*Event not implemeted yet*'
-
-    # Do the wanted notifications
-    if do_popup:
-        if event in ('contact_connected', 'contact_disconnected',
-        'status_change'): # Common code for popup for these three events
-            if event == 'contact_disconnected':
-                show_image = 'offline.png'
-                suffix = '_notif_size_bw'
-            else: # Status Change or Connected
-                # FIXME: for status change,
-                # we don't always 'online.png', but we
-                # first need 48x48 for all status
-                show_image = 'online.png'
-                suffix = '_notif_size_colored'
-            transport_name = gajim.get_transport_name_from_jid(jid)
-            img_path = None
-            if transport_name:
-                img_path = os.path.join(helpers.get_transport_path(
-                    transport_name), '48x48', show_image)
-            if not img_path or not os.path.isfile(img_path):
-                iconset = gajim.config.get('iconset')
-                img_path = os.path.join(helpers.get_iconset_path(iconset),
-                    '48x48', show_image)
-            path = gtkgui_helpers.get_path_to_generic_or_avatar(img_path,
-                jid=jid, suffix=suffix)
-            if event == 'status_change':
-                title = _('%(nick)s Changed Status') % \
-                    {'nick': gajim.get_name_from_jid(account, jid)}
-                text = _('%(nick)s is now %(status)s') % \
-                    {'nick': gajim.get_name_from_jid(account, jid),\
-                    'status': helpers.get_uf_show(gajim.SHOW_LIST[new_show])}
-                if status_message:
-                    text = text + " : " + status_message
-                popup(_('Contact Changed Status'), jid, account,
-                    path_to_image=path, title=title, text=text)
-            elif event == 'contact_connected':
-                title = _('%(nickname)s Signed In') % \
-                    {'nickname': gajim.get_name_from_jid(account, jid)}
-                text = ''
-                if status_message:
-                    text = status_message
-                popup(_('Contact Signed In'), jid, account,
-                    path_to_image=path, title=title, text=text)
-            elif event == 'contact_disconnected':
-                title = _('%(nickname)s Signed Out') % \
-                    {'nickname': gajim.get_name_from_jid(account, jid)}
-                text = ''
-                if status_message:
-                    text = status_message
-                popup(_('Contact Signed Out'), jid, account,
-                    path_to_image=path, title=title, text=text)
-        elif event == 'new_message':
-            if message_type == 'normal': # single message
-                event_type = _('New Single Message')
-                img_name = 'gajim-single_msg_recv'
-                title = _('New Single Message from %(nickname)s') % \
-                    {'nickname': nickname}
-                text = message
-            elif message_type == 'pm': # private message
-                event_type = _('New Private Message')
-                room_name = gajim.get_nick_from_jid(jid)
-                img_name = 'gajim-priv_msg_recv'
-                title = _('New Private Message from group chat %s') % room_name
-                if message:
-                    text = _('%(nickname)s: %(message)s') % \
-                        {'nickname': nickname, 'message': message}
-                else:
-                    text = _('Messaged by %(nickname)s') % \
-                        {'nickname': nickname}
-
-            else: # chat message
-                event_type = _('New Message')
-                img_name = 'gajim-chat_msg_recv'
-                title = _('New Message from %(nickname)s') % \
-                    {'nickname': nickname}
-                text = message
-            img_path = gtkgui_helpers.get_icon_path(img_name, 48)
-            popup(event_type, jid, account, message_type,
-                path_to_image=img_path, title=title, text=text)
-
-    if do_sound:
-        snd_file = None
-        snd_event = None # If not snd_file, play the event
-        if event == 'new_message':
-            if is_first_message:
-                snd_event = 'first_message_received'
-            elif focused:
-                snd_event = 'next_message_received_focused'
-            else:
-                snd_event = 'next_message_received_unfocused'
-        elif event in ('contact_connected', 'contact_disconnected'):
-            snd_event = event
-        if snd_file:
-            helpers.play_sound_file(snd_file)
-        if snd_event:
-            helpers.play_sound(snd_event)
-
 def popup(event_type, jid, account, msg_type='', path_to_image=None, title=None,
 text=None):
     """
@@ -330,7 +167,7 @@ class Notification:
 
         if obj.do_command:
             try:
-                helpers.exec_command(obj.command)
+                helpers.exec_command(obj.command, use_shell=True)
             except Exception:
                 pass
 
@@ -355,11 +192,14 @@ class NotificationResponseManager:
         self.interface.connect_to_signal('NotificationClosed', self.on_closed)
 
     def on_action_invoked(self, id_, reason):
-        self.received.append((id_, time.time(), reason))
         if id_ in self.pending:
             notification = self.pending[id_]
             notification.on_action_invoked(id_, reason)
             del self.pending[id_]
+            return
+        # got an action on popup that isn't handled yet? Maybe user clicked too
+        # fast. Remember it.
+        self.received.append((id_, time.time(), reason))
         if len(self.received) > 20:
             curt = time.time()
             for rec in self.received:
@@ -396,7 +236,7 @@ class DesktopNotification:
 
     def __init__(self, event_type, jid, account, msg_type='',
     path_to_image=None, title=None, text=None):
-        self.path_to_image = path_to_image
+        self.path_to_image = os.path.abspath(path_to_image)
         self.event_type = event_type
         self.title = title
         self.text = text
@@ -527,10 +367,11 @@ class DesktopNotification:
                 # it seems notification-daemon doesn't like empty text
                 if self.text:
                     text = self.text
+                    if len(self.text) > 200:
+                        text = '%s\n...' % self.text[:200]
                 else:
                     text = ' '
                 if os.environ.get('KDE_FULL_SESSION') == 'true':
-                    self.path_to_image = os.path.abspath(self.path_to_image)
                     text = '<table style=\'padding: 3px\'><tr><td>' \
                         '<img src=\"%s\"></td><td width=20> </td>' \
                         '<td>%s</td></tr></table>' % (self.path_to_image,
@@ -573,9 +414,8 @@ class DesktopNotification:
                     self.notify_another_way(e)
 
     def attach_by_id(self, id_):
-        self.id = id_
         notification_response_manager.attach_to_interface()
-        notification_response_manager.add_pending(self.id, self)
+        notification_response_manager.add_pending(id_, self)
 
     def notify_another_way(self, e):
         gajim.log.debug('Error when trying to use notification daemon: %s' % \

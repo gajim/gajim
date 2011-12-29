@@ -688,6 +688,9 @@ class DBusPlugin(GajimPlugin):
 
     @log_calls('DBusPlugin')
     def init(self):
+        self.description = _('D-Bus support.'
+            ' Based on remote_control module from'
+            '\nGajim core but uses new events handling system.')
         self.config_dialog = None
         #self.gui_extension_points = {}
         #self.config_default_values = {}

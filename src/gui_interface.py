@@ -81,7 +81,7 @@ from common import dataforms
 from common import passwords
 from common import logging_helpers
 from common.connection_handlers_events import OurShowEvent, \
-    FileRequestErrorEvent
+    FileRequestErrorEvent, InformationEvent
 from common.connection import Connection
 from common import jingle
 
@@ -106,10 +106,6 @@ class Interface:
 ### Methods handling events from connection
 ################################################################################
 
-    def handle_event_error(self, unused, data):
-        #('ERROR', account, (title_text, section_text))
-        dialogs.ErrorDialog(data[0], data[1])
-
     def handle_event_db_error(self, unused, data):
         #('DB_ERROR', account, (title_text, section_text))
         if self.db_error_dialog:
@@ -119,9 +115,18 @@ class Interface:
             self.db_error_dialog = None
         self.db_error_dialog.connect('destroy', destroyed)
 
-    def handle_event_information(self, unused, data):
-        #('INFORMATION', account, (title_text, section_text))
-        dialogs.InformationDialog(data[0], data[1])
+    def handle_event_information(self, obj):
+        if obj.popup:
+            if obj.level == 'error':
+                cls = dialogs.ErrorDialog
+            elif obj.level == 'warn':
+                cls = dialogs.WarningDialog
+            elif obj.level == 'info':
+                cls = dialogs.InformationDialog
+            else:
+                return
+
+            cls(obj.pri_txt, obj.sec_txt)
 
     def handle_ask_new_nick(self, account, room_jid):
         title = _('Unable to join group chat')
@@ -245,13 +250,21 @@ class Interface:
                 gc_control.error_dialog = None
             gc_control.error_dialog = dialogs.ErrorDialog(pritext, sectext,
                 on_response_ok=on_close, on_response_cancel=on_close)
+            gc_control.error_dialog.set_modal(False)
+            if gc_control.parent_win:
+                gc_control.error_dialog.set_transient_for(
+                    gc_control.parent_win.window)
         else:
-            dialogs.ErrorDialog(pritext, sectext)
+            d = dialogs.ErrorDialog(pritext, sectext)
+            if gc_control and gc_control.parent_win:
+                d.set_transient_for(gc_control.parent_win.window)
+            d.set_modal(False)
 
     def handle_gc_password_required(self, account, room_jid, nick):
         def on_ok(text):
             gajim.connections[account].join_gc(nick, room_jid, text)
             gajim.gc_passwords[room_jid] = text
+            gc_control.error_dialog = None
 
         def on_cancel():
             # get and destroy window
@@ -261,17 +274,18 @@ class Interface:
                 win = self.msg_win_mgr.get_window(room_jid, account)
                 ctrl = self.msg_win_mgr.get_gc_control(room_jid, account)
                 win.remove_tab(ctrl, 3)
+            gc_control.error_dialog = None
 
         gc_control = self.msg_win_mgr.get_gc_control(room_jid, account)
         if gc_control:
             if gc_control.error_dialog:
                 gc_control.error_dialog.destroy()
 
-        gc_control.error_dialog = dialogs.InputDialog(_('Password Required'),
-            _('A Password is required to join the room %s. Please type it.') % \
-            room_jid, is_modal=False, ok_handler=on_ok,
-            cancel_handler=on_cancel)
-        gc_control.error_dialog.input_entry.set_visibility(False)
+            gc_control.error_dialog = dialogs.InputDialog(_('Password Required'),
+                _('A Password is required to join the room %s. Please type it.') % \
+                room_jid, is_modal=False, ok_handler=on_ok,
+                cancel_handler=on_cancel)
+            gc_control.error_dialog.input_entry.set_visibility(False)
 
     def handle_event_gc_presence(self, obj):
         gc_control = obj.gc_control
@@ -280,8 +294,8 @@ class Interface:
                 # maximum user number reached
                 self.handle_gc_error(gc_control,
                     _('Unable to join group chat'),
-                    _('Maximum number of users for %s has been reached') % \
-                    obj.room_jid)
+                    _('Maximum number of users for <b>%s</b> has been reached')\
+                    % obj.room_jid)
             elif (obj.errcode == '401') or (obj.errcon == 'not-authorized'):
                 # password required to join
                 self.handle_gc_password_required(obj.conn.name, obj.room_jid,
@@ -289,19 +303,20 @@ class Interface:
             elif (obj.errcode == '403') or (obj.errcon == 'forbidden'):
                 # we are banned
                 self.handle_gc_error(gc_control, _('Unable to join group chat'),
-                    _('You are banned from group chat %s.') % obj.room_jid)
+                    _('You are banned from group chat <b>%s</b>.') % \
+                    obj.room_jid)
             elif (obj.errcode == '404') or (obj.errcon in ('item-not-found',
             'remote-server-not-found')):
                 # group chat does not exist
                 self.handle_gc_error(gc_control, _('Unable to join group chat'),
-                    _('Group chat %s does not exist.') % obj.room_jid)
+                    _('Group chat <b>%s</b> does not exist.') % obj.room_jid)
             elif (obj.errcode == '405') or (obj.errcon == 'not-allowed'):
                 self.handle_gc_error(gc_control, _('Unable to join group chat'),
                     _('Group chat creation is restricted.'))
             elif (obj.errcode == '406') or (obj.errcon == 'not-acceptable'):
                 self.handle_gc_error(gc_control, _('Unable to join group chat'),
                     _('Your registered nickname must be used in group chat '
-                    '%s.') % obj.room_jid)
+                    '<b>%s</b>.') % obj.room_jid)
             elif (obj.errcode == '407') or (obj.errcon == \
             'registration-required'):
                 self.handle_gc_error(gc_control, _('Unable to join group chat'),
@@ -346,66 +361,18 @@ class Interface:
             gobject.timeout_add_seconds(30,
                 self.unblock_signed_in_notifications, account_jid)
 
-        else:
-            # It isn't an agent
-            # Notifications
-            obj.show_notif = True
-            for c in obj.contact_list:
-                if c.resource == resource:
-                    # we look for other connected resources
-                    continue
-                if c.show not in ('offline', 'error'):
-                    obj.show_notif = False
-                    break
-            if obj.show_notif:
-                # no other resource is connected, let's look in metacontacts
-                family = gajim.contacts.get_metacontacts_family(account,
-                    jid)
-                for info in family:
-                    acct_ = info['account']
-                    jid_ = info['jid']
-                    c_ = gajim.contacts.get_contact_with_highest_priority(
-                        acct_, jid_)
-                    if not c_:
-                        continue
-                    if c_.show not in ('offline', 'error'):
-                        obj.show_notif = False
-                        break
-            if obj.show_notif:
-                if obj.old_show < 2 and obj.new_show > 1:
-                    notify.notify('contact_connected', jid, account, status)
-
-                elif obj.old_show > 1 and obj.new_show < 2:
-                    notify.notify('contact_disconnected', jid, account, status)
-                # Status change (not connected/disconnected or
-                # error (<1))
-                elif obj.new_show > 1:
-                    notify.notify('status_change', jid, account, [obj.new_show,
-                        status])
-
         highest = gajim.contacts.get_contact_with_highest_priority(account, jid)
         is_highest = (highest and highest.resource == resource)
 
-        # disconnect the session from the ctrl if the highest resource has
-        # changed
-        if (obj.was_highest and not is_highest) or \
-        (not obj.was_highest and is_highest):
-            ctrl = self.msg_win_mgr.get_control(jid, account)
-            if ctrl:
-                ctrl.no_autonegotiation = False
-                ctrl.set_session(None)
-                ctrl.contact = highest
+        ctrl = self.msg_win_mgr.get_control(jid, account)
+        if ctrl and ctrl.session and ctrl.session.resource == resource:
+            ctrl.remove_session(ctrl.session)
 
     def handle_event_msgerror(self, obj):
         #'MSGERROR' (account, (jid, error_code, error_msg, msg, time[session]))
         account = obj.conn.name
         jids = obj.fjid.split('/', 1)
         jid = jids[0]
-
-        if obj.error_code == '503':
-            # If we get server-not-found error, stop sending chatstates
-            for contact in gajim.contacts.get_contacts(account, jid):
-                contact.composing_xep = False
 
         session = obj.session
 
@@ -670,6 +637,19 @@ class Interface:
                 _('You are currently connected without your OpenPGP key.'))
         self.forget_gpg_passphrase(obj.keyID)
 
+    def handle_event_client_cert_passphrase(self, obj):
+        def on_ok(passphrase, checked):
+            obj.conn.on_client_cert_passphrase(passphrase, obj.con, obj.port,
+                obj.secure_tuple)
+
+        def on_cancel():
+            obj.conn.on_client_cert_passphrase('', obj.con, obj.port,
+                obj.secure_tuple)
+
+        dialogs.PassphraseDialog(_('Certificate Passphrase Required'),
+            _('Enter the passphrase for the certificate for account %s') % \
+            obj.conn.name, ok_handler=on_ok, cancel_handler=on_cancel)
+
     def handle_event_gpg_password_required(self, obj):
         #('GPG_PASSWORD_REQUIRED', account, (callback,))
         if obj.keyid in self.gpg_passphrase:
@@ -702,9 +682,9 @@ class Interface:
         text = _('Enter your password for account %s') % account
         if passwords.USER_HAS_GNOMEKEYRING and \
         not passwords.USER_USES_GNOMEKEYRING:
-            text += '\n' + _('Gnome Keyring is installed but not \
-                correctly started (environment variable probably not \
-                correctly set)')
+            text += '\n' + _('Gnome Keyring is installed but not '
+                'correctly started (environment variable probably not '
+                'correctly set)')
 
         def on_ok(passphrase, save):
             if save:
@@ -721,6 +701,30 @@ class Interface:
         self.pass_dialog[account] = dialogs.PassphraseDialog(
             _('Password Required'), text, _('Save password'), ok_handler=on_ok,
             cancel_handler=on_cancel)
+
+    def handle_oauth2_credentials(self, obj):
+        account = obj.conn.name
+        def on_ok(refresh):
+            gajim.config.set_per('accounts', account, 'oauth2_refresh_token',
+                refresh)
+            st = gajim.config.get_per('accounts', account, 'last_status')
+            msg = helpers.from_one_line(gajim.config.get_per('accounts',
+                account, 'last_status_msg'))
+            gajim.interface.roster.send_status(account, st, msg)
+            del self.pass_dialog[account]
+
+        def on_cancel():
+            gajim.config.set_per('accounts', account, 'oauth2_refresh_token',
+                '')
+            self.roster.set_state(account, 'offline')
+            self.roster.update_status_combobox()
+            del self.pass_dialog[account]
+
+        instruction = _('Please copy / paste the refresh token from the website'
+            ' that has just been opened.')
+        self.pass_dialog[account] = dialogs.InputTextDialog(
+            _('Oauth2 Credentials'), instruction, is_modal=False,
+            ok_handler=on_ok, cancel_handler=on_cancel)
 
     def handle_event_roster_info(self, obj):
         #('ROSTER_INFO', account, (jid, name, sub, ask, groups))
@@ -1222,8 +1226,8 @@ class Interface:
                     f.write(server + '\n')
                     f.write(obj.cert + '\n\n')
                     f.close()
-                gajim.config.set_per('accounts', account,
-                    'ssl_fingerprint_sha1', obj.fingerprint)
+            gajim.config.set_per('accounts', account, 'ssl_fingerprint_sha1',
+                obj.fingerprint)
             if is_checked[1]:
                 ignore_ssl_errors = gajim.config.get_per('accounts', account,
                     'ignore_ssl_errors').split()
@@ -1292,6 +1296,9 @@ class Interface:
         # ('PLAIN_CONNECTION', account, (connection))
         def on_ok(is_checked):
             if not is_checked[0]:
+                if is_checked[1]:
+                    gajim.config.set_per('accounts', obj.conn.name,
+                        'action_when_plaintext_connection', 'disconnect')
                 on_cancel()
                 return
             # On cancel call del self.instances, so don't call it another time
@@ -1300,7 +1307,7 @@ class Interface:
                 ['plain_connection']
             if is_checked[1]:
                 gajim.config.set_per('accounts', obj.conn.name,
-                    'warn_when_plaintext_connection', False)
+                    'action_when_plaintext_connection', 'connect')
             obj.conn.connection_accepted(obj.xmpp_client, 'plain')
 
         def on_cancel():
@@ -1313,18 +1320,20 @@ class Interface:
         pritext = _('Insecure connection')
         sectext = _('You are about to connect to the account %(account)s '
             '(%(server)s) with an insecure connection. This means all your '
-            'conversations will be exchanged unencrypted. Are you sure you '
-            'want to do that?') % {'account': obj.conn.name,
+            'conversations will be exchanged unencrypted. This type of '
+            'connection is really discouraged.\nAre you sure you want to do '
+            'that?') % {'account': obj.conn.name,
             'server': gajim.get_hostname_from_account(obj.conn.name)}
         checktext1 = _('Yes, I really want to connect insecurely')
+        tooltip1 = _('Gajim will NOT connect unless you check this box')
         checktext2 = _('_Do not ask me again')
         if 'plain_connection' in self.instances[obj.conn.name]['online_dialog']:
             self.instances[obj.conn.name]['online_dialog']['plain_connection'].\
                 destroy()
         self.instances[obj.conn.name]['online_dialog']['plain_connection'] = \
             dialogs.ConfirmationDialogDoubleCheck(pritext, sectext, checktext1,
-            checktext2, on_response_ok=on_ok, on_response_cancel=on_cancel,
-            is_modal=False)
+            checktext2, tooltip1=tooltip1, on_response_ok=on_ok,
+            on_response_cancel=on_cancel, is_modal=False)
 
     def handle_event_insecure_ssl_connection(self, obj):
         # ('INSECURE_SSL_CONNECTION', account, (connection, connection_type))
@@ -1410,13 +1419,13 @@ class Interface:
 
     def create_core_handlers_list(self):
         self.handlers = {
-            'ERROR': [self.handle_event_error],
             'DB_ERROR': [self.handle_event_db_error],
-            'INFORMATION': [self.handle_event_information],
             'FILE_SEND_ERROR': [self.handle_event_file_send_error],
             'atom-entry-received': [self.handle_atom_entry],
             'bad-gpg-passphrase': [self.handle_event_bad_gpg_passphrase],
             'bookmarks-received': [self.handle_event_bookmarks],
+            'client-cert-passphrase': [
+                self.handle_event_client_cert_passphrase],
             'connection-lost': [self.handle_event_connection_lost],
             'failed-decrypt': [(self.handle_event_failed_decrypt, ged.GUI2)],
             'file-request-error': [self.handle_event_file_request_error],
@@ -1428,6 +1437,7 @@ class Interface:
             'gpg-password-required': [self.handle_event_gpg_password_required],
             'gpg-trust-key': [self.handle_event_gpg_trust_key],
             'http-auth-received': [self.handle_event_http_auth],
+            'information': [self.handle_event_information],
             'insecure-password': [self.handle_event_insecure_password],
             'insecure-ssl-connection': \
                 [self.handle_event_insecure_ssl_connection],
@@ -1444,6 +1454,7 @@ class Interface:
             'metacontacts-received': [self.handle_event_metacontacts],
             'muc-admin-received': [self.handle_event_gc_affiliation],
             'muc-owner-received': [self.handle_event_gc_config],
+            'oauth2-credentials-required': [self.handle_oauth2_credentials],
             'our-show': [self.handle_event_status],
             'password-required': [self.handle_event_password_required],
             'plain-connection': [self.handle_event_plain_connection],
@@ -1943,7 +1954,8 @@ class Interface:
         Join the room immediately
         """
 
-        if gajim.contacts.get_contact(account, room_jid):
+        if gajim.contacts.get_contact(account, room_jid) and \
+        not gajim.contacts.get_contact(account, room_jid).is_groupchat():
             dialogs.ErrorDialog(_('This is not a group chat'),
                 _('%s is not the name of a group chat.') % room_jid)
             return
@@ -1951,11 +1963,17 @@ class Interface:
         if not nick:
             nick = gajim.nicks[account]
 
-        if self.msg_win_mgr.has_window(room_jid, account) and \
-        gajim.gc_connected[account][room_jid]:
-            gc_ctrl = self.msg_win_mgr.get_gc_control(room_jid, account)
-            win = gc_ctrl.parent_win
-            win.set_active_tab(gc_ctrl)
+        minimized_control = gajim.interface.minimized_controls[account].get(
+            room_jid, None)
+
+        if (self.msg_win_mgr.has_window(room_jid, account) or \
+        minimized_control) and gajim.gc_connected[account][room_jid]:
+            if self.msg_win_mgr.has_window(room_jid, account):
+                gc_ctrl = self.msg_win_mgr.get_gc_control(room_jid, account)
+                win = gc_ctrl.parent_win
+                win.set_active_tab(gc_ctrl)
+            else:
+                self.roster.on_groupchat_maximized(None, room_jid, account)
             dialogs.ErrorDialog(_('You are already in group chat %s') % \
                 room_jid)
             return
@@ -1965,9 +1983,6 @@ class Interface:
             dialogs.ErrorDialog(
                 _('You cannot join a group chat while you are invisible'))
             return
-
-        minimized_control = gajim.interface.minimized_controls[account].get(
-            room_jid, None)
 
         if minimized_control is None and not self.msg_win_mgr.has_window(
         room_jid, account):
@@ -1988,10 +2003,6 @@ class Interface:
             gc_control = self.msg_win_mgr.get_gc_control(room_jid, account)
             gc_control.nick = nick
             gc_control.parent_win.set_active_tab(gc_control)
-        else:
-            # We are already in this groupchat and it is minimized
-            minimized_control.nick = nick
-            self.roster.add_groupchat(room_jid, account)
 
         # Connect
         gajim.connections[account].join_gc(nick, room_jid, password)
@@ -2687,6 +2698,18 @@ class Interface:
                 for o in d:
                     gajim.config.set_per('themes', theme_name, o,
                         theme[d.index(o)])
+        # Add Tor proxy if there is not in the config
+        if len(gajim.config.get_per('proxies')) == 0:
+            default = gajim.config.proxies_default
+            for proxy in default:
+                gajim.config.add_per('proxies', proxy)
+                gajim.config.set_per('proxies', proxy, 'type',
+                    default[proxy][0])
+                gajim.config.set_per('proxies', proxy, 'host',
+                    default[proxy][1])
+                gajim.config.set_per('proxies', proxy, 'port',
+                    default[proxy][2])
+
 
         gajim.idlequeue = idlequeue.get_idlequeue()
         # resolve and keep current record of resolved hosts
@@ -2758,6 +2781,9 @@ class Interface:
         if gajim.config.get('networkmanager_support') and \
         dbus_support.supported:
             import network_manager_listener
+
+        if dbus_support.supported:
+            import upower_listener
 
         # Handle gnome screensaver
         if dbus_support.supported:

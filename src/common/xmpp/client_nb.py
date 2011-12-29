@@ -493,6 +493,8 @@ class NonBlockingClient:
         if self._sasl:
             auth_nb.SASL.get_instance(self._User, self._Password,
                     self._on_start_sasl).PlugIn(self)
+        if not hasattr(self, 'SASL'):
+            return
         if not self._sasl or self.SASL.startsasl == 'not-supported':
             if not self._Resource:
                 self._Resource = 'xmpppy'
@@ -521,7 +523,16 @@ class NonBlockingClient:
             self.connected = None # FIXME: is this intended? We use ''elsewhere
             self._on_sasl_auth(None)
         elif self.SASL.startsasl == 'success':
-            auth_nb.NonBlockingBind.get_instance().PlugIn(self)
+            nb_bind = auth_nb.NonBlockingBind.get_instance()
+            sm = self._caller.sm
+            if  sm._owner and sm.resumption:
+                nb_bind.resuming = True
+                sm.set_owner(self)
+                self.Dispatcher.sm = sm
+                nb_bind.PlugIn(self)
+                return
+
+            nb_bind.PlugIn(self)
             self.onreceive(self._on_auth_bind)
         return True
 

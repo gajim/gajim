@@ -55,15 +55,17 @@ class Proxy65Manager:
         # dict {account: proxy} default proxy for account
         self.default_proxies = {}
 
-    def resolve(self, proxy, connection, sender_jid, default=None):
+    def resolve(self, proxy, connection, sender_jid, default=None,
+    testit=True):
         """
         Start
+        if testit=False, Gajim won't try to resolve it
         """
         if proxy in self.proxies:
             resolver = self.proxies[proxy]
         else:
             # proxy is being ressolved for the first time
-            resolver = ProxyResolver(proxy, sender_jid)
+            resolver = ProxyResolver(proxy, sender_jid, testit)
             self.proxies[proxy] = resolver
             resolver.add_connection(connection)
         if default:
@@ -115,6 +117,9 @@ class ProxyResolver:
         self.host = str(host)
         self.port = int(port)
         self.jid = unicode(jid)
+        if not self.testit:
+            self.state = S_FINISHED
+            return
         self.state = S_INITIAL
         log.info('start resolving %s:%s' % (self.host, self.port))
         self.receiver_tester = ReceiverTester(self.host, self.port, self.jid,
@@ -209,7 +214,10 @@ class ProxyResolver:
         query.setNamespace(common.xmpp.NS_BYTESTREAM)
         connection.send(iq)
 
-    def __init__(self, proxy, sender_jid):
+    def __init__(self, proxy, sender_jid, testit):
+        """
+        if testit is False, don't test it, only get IP/port
+        """
         self.proxy = proxy
         self.state = S_INITIAL
         self.active_connection = None
@@ -221,6 +229,7 @@ class ProxyResolver:
         self.port = None
         self.sid = helpers.get_random_string_16()
         self.sender_jid = sender_jid
+        self.testit = testit
 
 class HostTester(Socks5, IdleObject):
     """

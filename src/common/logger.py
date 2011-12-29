@@ -569,7 +569,7 @@ class Logger:
         except exceptions.PysqliteOperationalError, e:
             # Error trying to create a new jid_id. This means there is no log
             return []
-        where_sql = self._build_contact_where(account, jid)
+        where_sql, jid_tuple = self._build_contact_where(account, jid)
 
         now = int(float(time.time()))
         timed_out = now - (timeout * 60) # before that they are too old
@@ -577,14 +577,13 @@ class Logger:
         # 3 - 8 (we avoid the last 2 lines but we still return 5 asked)
         try:
             self.cur.execute('''
-                    SELECT time, kind, message FROM logs
-                    WHERE (%s) AND kind IN (%d, %d, %d, %d, %d) AND time > %d
-                    ORDER BY time DESC LIMIT %d OFFSET %d
-                    ''' % (where_sql, constants.KIND_SINGLE_MSG_RECV,
-                            constants.KIND_CHAT_MSG_RECV, constants.KIND_SINGLE_MSG_SENT,
-                            constants.KIND_CHAT_MSG_SENT, constants.KIND_ERROR,
-                            timed_out, restore_how_many_rows, pending_how_many)
-                    )
+                SELECT time, kind, message FROM logs
+                WHERE (%s) AND kind IN (%d, %d, %d, %d, %d) AND time > %d
+                ORDER BY time DESC LIMIT %d OFFSET %d
+                ''' % (where_sql, constants.KIND_SINGLE_MSG_RECV,
+                constants.KIND_CHAT_MSG_RECV, constants.KIND_SINGLE_MSG_SENT,
+                constants.KIND_CHAT_MSG_SENT, constants.KIND_ERROR, timed_out,
+                restore_how_many_rows, pending_how_many), jid_tuple)
 
             results = self.cur.fetchall()
         except sqlite.DatabaseError:
@@ -614,23 +613,24 @@ class Logger:
         except exceptions.PysqliteOperationalError, e:
             # Error trying to create a new jid_id. This means there is no log
             return []
-        where_sql = self._build_contact_where(account, jid)
+        where_sql, jid_tuple = self._build_contact_where(account, jid)
 
         start_of_day = self.get_unix_time_from_date(year, month, day)
         seconds_in_a_day = 86400 # 60 * 60 * 24
         last_second_of_day = start_of_day + seconds_in_a_day - 1
 
         self.cur.execute('''
-                SELECT contact_name, time, kind, show, message, subject FROM logs
-                WHERE (%s)
-                AND time BETWEEN %d AND %d
-                ORDER BY time
-                ''' % (where_sql, start_of_day, last_second_of_day))
+            SELECT contact_name, time, kind, show, message, subject FROM logs
+            WHERE (%s)
+            AND time BETWEEN %d AND %d
+            ORDER BY time
+            ''' % (where_sql, start_of_day, last_second_of_day), jid_tuple)
 
         results = self.cur.fetchall()
         return results
 
-    def get_search_results_for_query(self, jid, query, account):
+    def get_search_results_for_query(self, jid, query, account, year=False,
+        month=False, day=False):
         """
         Returns contact_name, time, kind, show, message
 
@@ -651,13 +651,25 @@ class Logger:
                 return results
 
         else: # user just typed something, we search in message column
-            where_sql = self._build_contact_where(account, jid)
+            where_sql, jid_tuple = self._build_contact_where(account, jid)
             like_sql = '%' + query.replace("'", "''") + '%'
-            self.cur.execute('''
-                    SELECT contact_name, time, kind, show, message, subject FROM logs
-                    WHERE (%s) AND message LIKE '%s'
-                    ORDER BY time
-                    ''' % (where_sql, like_sql))
+            if year:
+                start_of_day = self.get_unix_time_from_date(year, month, day)
+                seconds_in_a_day = 86400 # 60 * 60 * 24
+                last_second_of_day = start_of_day + seconds_in_a_day - 1
+                self.cur.execute('''
+                SELECT contact_name, time, kind, show, message, subject FROM logs
+                WHERE (%s) AND message LIKE '%s'
+                AND time BETWEEN %d AND %d
+                ORDER BY time
+                ''' % (where_sql, like_sql, start_of_day, last_second_of_day),
+                    jid_tuple)
+            else:
+                self.cur.execute('''
+                SELECT contact_name, time, kind, show, message, subject FROM logs
+                WHERE (%s) AND message LIKE '%s'
+                ORDER BY time
+                ''' % (where_sql, like_sql), jid_tuple)
 
         results = self.cur.fetchall()
         return results
@@ -672,7 +684,7 @@ class Logger:
             # Error trying to create a new jid_id. This means there is no log
             return []
         days_with_logs = []
-        where_sql = self._build_contact_where(account, jid)
+        where_sql, jid_tuple = self._build_contact_where(account, jid)
 
         # First select all date of month whith logs we want
         start_of_month = self.get_unix_time_from_date(year, month, 1)
@@ -684,13 +696,13 @@ class Logger:
         # and take only one of the same values (distinct)
         # Now we have timestamps of time 0:00 of every day with logs
         self.cur.execute('''
-                SELECT DISTINCT time/(86400)*86400 FROM logs
-                WHERE (%s)
-                AND time BETWEEN %d AND %d
-                AND kind NOT IN (%d, %d)
-                ORDER BY time
-                ''' % (where_sql, start_of_month, last_second_of_month,
-                constants.KIND_STATUS, constants.KIND_GCSTATUS))
+            SELECT DISTINCT time/(86400)*86400 FROM logs
+            WHERE (%s)
+            AND time BETWEEN %d AND %d
+            AND kind NOT IN (%d, %d)
+            ORDER BY time
+            ''' % (where_sql, start_of_month, last_second_of_month,
+            constants.KIND_STATUS, constants.KIND_GCSTATUS), jid_tuple)
         result = self.cur.fetchall()
 
         # convert timestamps to day of month
@@ -706,19 +718,21 @@ class Logger:
         """
         where_sql = ''
         if not is_room:
-            where_sql = self._build_contact_where(account, jid)
+            where_sql, jid_tuple = self._build_contact_where(account, jid)
         else:
             try:
                 jid_id = self.get_jid_id(jid, 'ROOM')
             except exceptions.PysqliteOperationalError, e:
                 # Error trying to create a new jid_id. This means there is no log
                 return None
-            where_sql = 'jid_id = %s' % jid_id
+            where_sql = 'jid_id = ?'
+            jid_tuple = (jid_id,)
         self.cur.execute('''
-                SELECT MAX(time) FROM logs
-                WHERE (%s)
-                AND kind NOT IN (%d, %d)
-                ''' % (where_sql, constants.KIND_STATUS, constants.KIND_GCSTATUS))
+            SELECT MAX(time) FROM logs
+            WHERE (%s)
+            AND kind NOT IN (%d, %d)
+            ''' % (where_sql, constants.KIND_STATUS, constants.KIND_GCSTATUS),
+            jid_tuple)
 
         results = self.cur.fetchone()
         if results is not None:
@@ -766,6 +780,7 @@ class Logger:
         Build the where clause for a jid, including metacontacts jid(s) if any
         """
         where_sql = ''
+        jid_tuple = ()
         # will return empty list if jid is not associated with
         # any metacontacts
         family = gajim.contacts.get_metacontacts_family(account, jid)
@@ -775,13 +790,15 @@ class Logger:
                     jid_id = self.get_jid_id(user['jid'])
                 except exceptions.PysqliteOperationalError, e:
                     continue
-                where_sql += 'jid_id = %s' % jid_id
+                where_sql += 'jid_id = ?'
+                jid_tuple += (jid_id,)
                 if user != family[-1]:
                     where_sql += ' OR '
         else: # if jid was not associated with metacontacts
             jid_id = self.get_jid_id(jid)
-            where_sql = 'jid_id = %s' % jid_id
-        return where_sql
+            where_sql = 'jid_id = ?'
+            jid_tuple += (jid_id,)
+        return where_sql, jid_tuple
 
     def save_transport_type(self, jid, type_):
         """
@@ -1106,9 +1123,10 @@ class Logger:
         self.write(type_, with_, message=msg, tim=tim)
 
     def _nec_gc_message_received(self, obj):
-        tim_int = int(float(time.mktime(obj.timestamp)))
+        tim_f = float(time.mktime(obj.timestamp))
+        tim_int = int(tim_f)
         if gajim.config.should_log(obj.conn.name, obj.jid) and not \
-        tim_int <= obj.conn.last_history_time[obj.jid] and obj.msgtxt and \
+        tim_int < obj.conn.last_history_time[obj.jid] and obj.msgtxt and \
         obj.nick:
             # if not obj.nick, it means message comes from room itself
             # usually it hold description and can be send at each connection
@@ -1118,14 +1136,14 @@ class Logger:
                 # store in memory time of last message logged.
                 # this will also be saved in rooms_last_message_time table
                 # when we quit this muc
-                obj.conn.last_history_time[obj.jid] = time.mktime(obj.timestamp)
+                obj.conn.last_history_time[obj.jid] = tim_f
 
             except exceptions.PysqliteOperationalError, e:
-                self.conn.dispatch('DB_ERROR', (_('Disk Write Error'), str(e)))
+                obj.conn.dispatch('DB_ERROR', (_('Disk Write Error'), str(e)))
             except exceptions.DatabaseMalformed:
                 pritext = _('Database Error')
                 sectext = _('The database file (%s) cannot be read. Try to '
                     'repair it (see http://trac.gajim.org/wiki/DatabaseBackup) '
                     'or remove it (all history will be lost).') % \
                     LOG_DB_PATH
-                self.conn.dispatch('DB_ERROR', (pritext, sectext))
+                obj.conn.dispatch('DB_ERROR', (pritext, sectext))

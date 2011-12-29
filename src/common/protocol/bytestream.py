@@ -381,8 +381,8 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             self._add_addiditional_streamhosts_to_query(query, file_props)
             self._add_local_ips_as_streamhosts_to_query(query, file_props)
             self._add_proxy_streamhosts_to_query(query, file_props)
-
-            self.connection.send(iq)
+            self._add_upnp_igd_as_streamhost_to_query(query, file_props, iq)
+            # Upnp-igd is ascynchronous, so it will send the iq itself
 
     def _add_streamhosts_to_query(self, query, sender, port, hosts):
         for host in hosts:
@@ -393,6 +393,8 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             streamhost.setAttr('jid', sender)
 
     def _add_local_ips_as_streamhosts_to_query(self, query, file_props):
+        if not gajim.config.get_per('accounts', self.name, 'ft_send_local_ips'):
+            return
         try:
             my_ips = [self.peerhost[0]] # The ip we're connected to server with
             # all IPs from local DNS
@@ -404,8 +406,10 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             port = gajim.config.get('file_transfers_port')
             self._add_streamhosts_to_query(query, sender, port, my_ips)
         except socket.gaierror:
-            self.dispatch('ERROR', (_('Wrong host'),
-                    _('Invalid local address? :-O')))
+            from common.connection_handlers_events import InformationEvent
+            gajim.nec.push_incoming_event(InformationEvent(None, conn=self,
+                level='error', pri_txt=_('Wrong host'),
+                sec_txt=_('Invalid local address? :-O')))
 
     def _add_addiditional_streamhosts_to_query(self, query, file_props):
         sender = file_props['sender']
@@ -417,6 +421,84 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
         else:
             additional_hosts = []
         self._add_streamhosts_to_query(query, sender, port, additional_hosts)
+
+    def _add_upnp_igd_as_streamhost_to_query(self, query, file_props, iq):
+        if not gajim.HAVE_UPNP_IGD:
+            self.connection.send(iq)
+            return
+
+        def ip_is_local(ip):
+            if '.' not in ip:
+                # it's an IPv6
+                return True
+            ip_s = ip.split('.')
+            ip_l = long(ip_s[0])<<24 | long(ip_s[1])<<16 | long(ip_s[2])<<8 | \
+                 long(ip_s[3])
+            # 10/8
+            if ip_l & (255<<24) == 10<<24:
+                return True
+            # 172.16/12
+            if ip_l & (255<<24 | 240<<16) == (172<<24 | 16<<16):
+                return True
+            # 192.168
+            if ip_l & (255<<24 | 255<<16) == (192<<24 | 168<<16):
+                return True
+            return False
+
+
+        my_ip = self.peerhost[0]
+
+        if not ip_is_local(my_ip):
+            self.connection.send(iq)
+            return
+
+        self.no_gupnp_reply_id = 0
+
+        def cleanup_gupnp():
+            if self.no_gupnp_reply_id:
+                gobject.source_remove(self.no_gupnp_reply_id)
+                self.no_gupnp_reply_id = 0
+            gajim.gupnp_igd.disconnect(self.ok_id)
+            gajim.gupnp_igd.disconnect(self.fail_id)
+
+        def ok(s, proto, ext_ip, re, ext_port, local_ip, local_port, desc):
+            log.debug('Got GUPnP-IGD answer: external: %s:%s, internal: %s:%s',
+                ext_ip, ext_port, local_ip, local_port)
+            if local_port != gajim.config.get('file_transfers_port'):
+                sender = file_props['sender']
+                receiver = file_props['receiver']
+                sha_str = helpers.get_auth_sha(file_props['sid'], sender,
+                    receiver)
+                listener = gajim.socks5queue.start_listener(local_port, sha_str,
+                    self._result_socks5_sid, file_props['sid'])
+                if listener:
+                    self._add_streamhosts_to_query(query, sender, ext_port,
+                        [ext_ip])
+            self.connection.send(iq)
+            cleanup_gupnp()
+
+        def fail(s, error, proto, ext_ip, local_ip, local_port, desc):
+            log.debug('Got GUPnP-IGD error : %s', str(error))
+            self.connection.send(iq)
+            cleanup_gupnp()
+
+        def no_upnp_reply():
+            log.debug('Got not GUPnP-IGD answer')
+            # stop trying to use it
+            gajim.HAVE_UPNP_IGD = False
+            self.no_gupnp_reply_id = 0
+            self.connection.send(iq)
+            cleanup_gupnp()
+            return False
+
+
+        self.ok_id = gajim.gupnp_igd.connect('mapped-external-port', ok)
+        self.fail_id = gajim.gupnp_igd.connect('error-mapping-port', fail)
+
+        port = gajim.config.get('file_transfers_port')
+        self.no_gupnp_reply_id = gobject.timeout_add_seconds(10, no_upnp_reply)
+        gajim.gupnp_igd.add_port('TCP', 0, my_ip, port, 3600,
+            'Gajim file transfer')
 
     def _add_proxy_streamhosts_to_query(self, query, file_props):
         proxyhosts = self._get_file_transfer_proxies_from_config(file_props)
@@ -554,6 +636,12 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
                 }
                 for attr in item.getAttrs():
                     host_dict[attr] = item.getAttr(attr)
+                if 'host' not in host_dict:
+                    continue
+                if 'jid' not in host_dict:
+                    continue
+                if 'port' not in host_dict:
+                    continue
                 streamhosts.append(host_dict)
         if file_props is None:
             if sid in self.files_props:
@@ -570,6 +658,10 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
                     gajim.socks5queue.connect_to_hosts(self.name, sid,
                             self.send_success_connect_reply, None)
                 raise xmpp.NodeProcessed
+
+        if file_props is None:
+            log.warn('Gajim got streamhosts for unknown transfer. Ignoring it.')
+            raise xmpp.NodeProcessed
 
         file_props['streamhosts'] = streamhosts
         if file_props['type'] == 'r':
@@ -675,11 +767,6 @@ class ConnectionIBBytestream(ConnectionBytestream):
     def __init__(self):
         ConnectionBytestream.__init__(self)
         self._streams = {}
-        self._ampnode = xmpp.Node(xmpp.NS_AMP + ' amp', payload=[xmpp.Node(
-            'rule', {'condition': 'deliver-at', 'value': 'stored',
-            'action': 'error'}), xmpp.Node('rule',
-            {'condition': 'match-resource', 'value': 'exact',
-            'action':'error'})])
         self.last_sent_ibb_id = None
 
     def IBBIqHandler(self, conn, stanza):
@@ -794,8 +881,9 @@ class ConnectionIBBytestream(ConnectionBytestream):
                     file_props['started'] = True
                     if file_props['seq'] == 65536:
                         file_props['seq'] = 0
-                    self.last_sent_ibb_id = self.connection.send(xmpp.Protocol('iq',
-                        file_props['direction'][1:], 'set', payload=[datanode]))
+                    self.last_sent_ibb_id = self.connection.send(xmpp.Protocol(
+                        name='iq', to=file_props['direction'][1:], typ='set',
+                        payload=[datanode]))
                     current_time = time.time()
                     file_props['elapsed-time'] += current_time - file_props[
                         'last-time']

@@ -915,9 +915,10 @@ class ConversationTextview(gobject.GObject):
                     self.on_join_group_chat_menuitem_activate, text)
             self.handlers[id_] = childs[6]
 
-            if self.account:
-                id_ = childs[7].connect('activate', self.on_add_to_roster_activate,
-                        text)
+            if self.account and gajim.connections[self.account].\
+            roster_supported:
+                id_ = childs[7].connect('activate',
+                    self.on_add_to_roster_activate, text)
                 self.handlers[id_] = childs[7]
                 childs[7].show() # show add to roster menuitem
             else:
@@ -1038,6 +1039,15 @@ class ConversationTextview(gobject.GObject):
         Is called by detect_and_print_special_text and prints special text
         (emots, links, formatting)
         """
+
+
+        # PluginSystem: adding GUI extension point for ConversationTextview
+        self.plugin_modified = False
+        gajim.plugin_manager.gui_extension_point('print_special_text', self,
+            special_text, other_tags, graphics)
+        if self.plugin_modified:
+            return
+
         tags = []
         use_other_tags = True
         text_is_valid_uri = False

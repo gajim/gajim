@@ -20,6 +20,7 @@
 
 import datetime
 import sys
+import os
 from time import (localtime, time as time_time)
 from calendar import timegm
 import hmac
@@ -34,12 +35,35 @@ from common import exceptions
 from common.zeroconf import zeroconf
 from common.logger import LOG_DB_PATH
 from common.pep import SUPPORTED_PERSONAL_USER_EVENTS
+from common.xmpp.protocol import NS_CHATSTATES
 from common.jingle_transport import JingleTransportSocks5
 
 import gtkgui_helpers
 
 import logging
 log = logging.getLogger('gajim.c.connection_handlers_events')
+
+CONDITION_TO_CODE = {
+    'realjid-public': 100,
+    'affiliation-changed': 101,
+    'unavailable-shown': 102,
+    'unavailable-not-shown': 103,
+    'configuration-changed': 104,
+    'self-presence': 110,
+    'logging-enabled': 170,
+    'logging-disabled': 171,
+    'non-anonymous': 172,
+    'semi-anonymous': 173,
+    'fully-anonymous': 174,
+    'room-created': 201,
+    'nick-assigned': 210,
+    'banned': 301,
+    'new-nick': 303,
+    'kicked': 307,
+    'removed-affiliation': 321,
+    'removed-membership': 322,
+    'removed-shutdown': 332,
+}
 
 class HelperEvent:
     def get_jid_resource(self, check_fake_jid=False):
@@ -74,28 +98,16 @@ class HelperEvent:
         Extract chatstate from a <message/> stanza
         Requires self.stanza and self.msgtxt
         """
-        self.composing_xep = None
         self.chatstate = None
 
         # chatstates - look for chatstate tags in a message if not delayed
         delayed = self.stanza.getTag('x', namespace=xmpp.NS_DELAY) is not None
         if not delayed:
-            self.composing_xep = False
             children = self.stanza.getChildren()
             for child in children:
-                if child.getNamespace() == 'http://jabber.org/protocol/chatstates':
+                if child.getNamespace() == NS_CHATSTATES:
                     self.chatstate = child.getName()
-                    self.composing_xep = 'XEP-0085'
                     break
-            # No XEP-0085 support, fallback to XEP-0022
-            if not self.chatstate:
-                chatstate_child = self.stanza.getTag('x',
-                    namespace=xmpp.NS_EVENT)
-                if chatstate_child:
-                    self.chatstate = 'active'
-                    self.composing_xep = 'XEP-0022'
-                    if not self.msgtxt and chatstate_child.getTag('composing'):
-                        self.chatstate = 'composing'
 
 class HttpAuthReceivedEvent(nec.NetworkIncomingEvent):
     name = 'http-auth-received'
@@ -711,6 +723,8 @@ PresenceHelperEvent):
         self.need_add_in_roster = False
         self.need_redraw = False
 
+        self.popup = False # Do we want to open chat window ?
+
         if not self.conn or self.conn.connected < 2:
             log.debug('account is no more connected')
             return
@@ -719,6 +733,7 @@ PresenceHelperEvent):
         try:
             self.get_jid_resource()
         except Exception:
+            log.warn('Invalid JID: %s, ignoring it' % self.stanza.getFrom())
             return
         jid_list = gajim.contacts.get_jid_list(self.conn.name)
         self.timestamp = None
@@ -825,6 +840,7 @@ class ZeroconfPresenceReceivedEvent(nec.NetworkIncomingEvent):
         self.transport_auto_auth = False
         self.errcode = None
         self.errmsg = ''
+        self.popup = False # Do we want to open chat window ?
         return True
 
 class GcPresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
@@ -905,7 +921,15 @@ class GcPresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             self.status_code = ['destroyed']
         else:
             self.reason = self.stanza.getReason()
-            self.status_code = self.stanza.getStatusCode()
+            conditions = self.stanza.getStatusConditions()
+            if conditions:
+                self.status_code = []
+                for condition in conditions:
+                    if condition in CONDITION_TO_CODE:
+                        self.status_code.append(CONDITION_TO_CODE[condition])
+            else:
+                self.status_code = self.stanza.getStatusCode()
+
         self.role = self.stanza.getRole()
         self.affiliation = self.stanza.getAffiliation()
         self.real_jid = self.stanza.getJid()
@@ -954,6 +978,8 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.conn = self.base_event.conn
         self.stanza = self.base_event.stanza
         self.get_id()
+        self.forwarded = False
+        self.sent = False
 
         account = self.conn.name
 
@@ -972,8 +998,9 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         try:
             self.get_jid_resource()
         except helpers.InvalidFormat:
-            self.conn.dispatch('ERROR', (_('Invalid Jabber ID'),
-                _('A message from a non-valid JID arrived, it has been '
+            gajim.nec.push_incoming_event(InformationEvent(None, conn=self.conn,
+                level='error', pri_txt=_('Invalid Jabber ID'),
+                sec_txt=_('A message from a non-valid JID arrived, it has been '
                 'ignored.')))
             return
 
@@ -989,6 +1016,43 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                         'jid'))
                     return
                 self.jid = gajim.get_jid_without_resource(self.fjid)
+
+        forward_tag = self.stanza.getTag('forwarded', namespace=xmpp.NS_FORWARD)
+        # Be sure it comes from one of our resource, else ignore forward element
+        if forward_tag and self.jid == gajim.get_jid_from_account(account):
+            received_tag = forward_tag.getTag('received',
+                namespace=xmpp.NS_CARBONS)
+            sent_tag = forward_tag.getTag('sent', namespace=xmpp.NS_CARBONS)
+            if received_tag:
+                msg = forward_tag.getTag('message')
+                self.stanza = xmpp.Message(node=msg)
+                try:
+                    self.get_jid_resource()
+                except helpers.InvalidFormat:
+                    gajim.nec.push_incoming_event(InformationEvent(None,
+                        conn=self.conn, level='error',
+                        pri_txt=_('Invalid Jabber ID'),
+                        sec_txt=_('A message from a non-valid JID arrived, it '
+                        'has been ignored.')))
+                    return
+                self.forwarded = True
+            elif sent_tag:
+                msg = forward_tag.getTag('message')
+                self.stanza = xmpp.Message(node=msg)
+                to = self.stanza.getTo()
+                self.stanza.setTo(self.stanza.getFrom())
+                self.stanza.setFrom(to)
+                try:
+                    self.get_jid_resource()
+                except helpers.InvalidFormat:
+                    gajim.nec.push_incoming_event(InformationEvent(None,
+                        conn=self.conn, level='error',
+                        pri_txt=_('Invalid Jabber ID'),
+                        sec_txt=_('A message from a non-valid JID arrived, it '
+                        'has been ignored.')))
+                    return
+                self.forwarded = True
+                self.sent = True
 
         self.enc_tag = self.stanza.getTag('x', namespace=xmpp.NS_ENCRYPTED)
 
@@ -1009,6 +1073,12 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.get_gc_control()
 
         if self.gc_control and self.jid == self.fjid:
+            if self.mtype == 'error':
+                self.msgtxt = _('error while sending %(message)s ( %(error)s )'\
+                    ) % {'message': self.msgtxt,
+                    'error': self.stanza.getErrorMsg()}
+                if self.stanza.getTag('html'):
+                    self.stanza.delChild('html')
             # message from a gc without a resource
             self.mtype = 'groupchat'
 
@@ -1023,7 +1093,8 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             self.session.last_receive = time_time()
 
         # check if the message is a XEP-0020 feature negotiation request
-        if self.stanza.getTag('feature', namespace=xmpp.NS_FEATURE):
+        if not self.forwarded and self.stanza.getTag('feature',
+        namespace=xmpp.NS_FEATURE):
             if gajim.HAVE_PYCRYPTO:
                 feature = self.stanza.getTag(name='feature',
                     namespace=xmpp.NS_FEATURE)
@@ -1040,7 +1111,8 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                     self.conn.connection.send(reply)
             return
 
-        if self.stanza.getTag('init', namespace=xmpp.NS_ESESSION_INIT):
+        if not self.forwarded and self.stanza.getTag('init',
+        namespace=xmpp.NS_ESESSION_INIT):
             init = self.stanza.getTag(name='init',
                 namespace=xmpp.NS_ESESSION_INIT)
             form = xmpp.DataForm(node=init.getTag('x'))
@@ -1055,6 +1127,9 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         xep_200_encrypted = self.stanza.getTag('c',
             namespace=xmpp.NS_STANZA_CRYPTO)
         if xep_200_encrypted:
+            if self.forwarded:
+                # Ignore E2E forwarded encrypted messages
+                return False
             self.encrypted = 'xep200'
 
         return True
@@ -1126,6 +1201,10 @@ class DecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.session = self.msg_obj.session
         self.timestamp = self.msg_obj.timestamp
         self.encrypted = self.msg_obj.encrypted
+        self.forwarded = self.msg_obj.forwarded
+        self.sent = self.msg_obj.sent
+        self.popup = False
+        self.msg_id = None # id in log database
 
         self.receipt_request_tag = self.stanza.getTag('request',
             namespace=xmpp.NS_RECEIPTS)
@@ -1162,7 +1241,6 @@ class ChatstateReceivedEvent(nec.NetworkIncomingEvent):
         self.jid = self.msg_obj.jid
         self.fjid = self.msg_obj.fjid
         self.resource = self.msg_obj.resource
-        self.composing_xep = self.msg_obj.composing_xep
         self.chatstate = self.msg_obj.chatstate
         return True
 
@@ -1199,7 +1277,14 @@ class GcMessageReceivedEvent(nec.NetworkIncomingEvent):
                 conn=self.conn, msg_event=self))
             return
 
-        self.status_code = self.stanza.getStatusCode()
+        conditions = self.stanza.getStatusConditions()
+        if conditions:
+            self.status_code = []
+            for condition in conditions:
+                if condition in CONDITION_TO_CODE:
+                    self.status_code.append(CONDITION_TO_CODE[condition])
+        else:
+            self.status_code = self.stanza.getStatusCode()
 
         if not self.stanza.getTag('body'): # no <body>
             # It could be a config change. See
@@ -1699,6 +1784,10 @@ class PasswordRequiredEvent(nec.NetworkIncomingEvent):
     name = 'password-required'
     base_network_events = []
 
+class Oauth2CredentialsRequiredEvent(nec.NetworkIncomingEvent):
+    name = 'oauth2-credentials-required'
+    base_network_events = []
+
 class FailedDecryptEvent(nec.NetworkIncomingEvent):
     name = 'failed-decrypt'
     base_network_events = []
@@ -1934,13 +2023,16 @@ class GatewayPromptReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
 
 class NotificationEvent(nec.NetworkIncomingEvent):
     name = 'notification'
-    base_network_events = ['decrypted-message-received', 'gc-message-received']
+    base_network_events = ['decrypted-message-received', 'gc-message-received',
+        'presence-received']
 
     def detect_type(self):
         if self.base_event.name == 'decrypted-message-received':
             self.notif_type = 'msg'
         if self.base_event.name == 'gc-message-received':
             self.notif_type = 'gc-msg'
+        if self.base_event.name == 'presence-received':
+            self.notif_type = 'pres'
 
     def get_focused(self):
         self.control_focused = False
@@ -1985,11 +2077,13 @@ class NotificationEvent(nec.NetworkIncomingEvent):
             # We don't want message preview, do_preview = False
             self.popup_text = ''
         if msg_obj.mtype == 'normal': # single message
+            self.popup_msg_type = 'normal'
             self.popup_event_type = _('New Single Message')
             self.popup_image = 'gajim-single_msg_recv'
             self.popup_title = _('New Single Message from %(nickname)s') % \
                 {'nickname': nick}
         elif msg_obj.mtype == 'pm':
+            self.popup_msg_type = 'pm'
             self.popup_event_type = _('New Private Message')
             self.popup_image = 'gajim-priv_msg_recv'
             self.popup_title = _('New Private Message from group chat %s') % \
@@ -2001,6 +2095,7 @@ class NotificationEvent(nec.NetworkIncomingEvent):
                 self.popup_text = _('Messaged by %(nickname)s') % \
                     {'nickname': nick}
         else: # chat message
+            self.popup_msg_type = 'chat'
             self.popup_event_type = _('New Message')
             self.popup_image = 'gajim-chat_msg_recv'
             self.popup_title = _('New Message from %(nickname)s') % \
@@ -2031,24 +2126,134 @@ class NotificationEvent(nec.NetworkIncomingEvent):
             self.do_sound = True
 
     def handle_incoming_gc_msg_event(self, msg_obj):
+        if not msg_obj.msg_obj.gc_control:
+            # we got a message from a room we're not in? ignore it
+            return
         sound = msg_obj.msg_obj.gc_control.highlighting_for_message(
             msg_obj.msgtxt, msg_obj.timestamp)[1]
-        self.do_sound = True
-        if sound == 'received':
-            self.sound_event = 'muc_message_received'
-        elif sound == 'highlight':
-            self.sound_event = 'muc_message_highlight'
+
+        if msg_obj.nickname != msg_obj.msg_obj.gc_control.nick:
+            self.do_sound = True
+            if sound == 'received':
+                self.sound_event = 'muc_message_received'
+            elif sound == 'highlight':
+                self.sound_event = 'muc_message_highlight'
+            else:
+                self.do_sound = False
         else:
             self.do_sound = False
 
         self.do_popup = False
 
-    def handle_incoming_pres_event(self, msg_obj):
-        pass
+    def handle_incoming_pres_event(self, pres_obj):
+        if gajim.jid_is_transport(pres_obj.jid):
+            return True
+        account = pres_obj.conn.name
+        self.jid = pres_obj.jid
+        resource = pres_obj.resource or ''
+        # It isn't an agent
+        for c in pres_obj.contact_list:
+            if c.resource == resource:
+                # we look for other connected resources
+                continue
+            if c.show not in ('offline', 'error'):
+                return True
+
+
+        # no other resource is connected, let's look in metacontacts
+        family = gajim.contacts.get_metacontacts_family(account, self.jid)
+        for info in family:
+            acct_ = info['account']
+            jid_ = info['jid']
+            c_ = gajim.contacts.get_contact_with_highest_priority(acct_, jid_)
+            if not c_:
+                continue
+            if c_.jid == self.jid:
+                continue
+            if c_.show not in ('offline', 'error'):
+                return True
+
+        if pres_obj.old_show < 2 and pres_obj.new_show > 1:
+            event = 'contact_connected'
+            show_image = 'online.png'
+            suffix = '_notif_size_colored'
+            server = gajim.get_server_from_jid(self.jid)
+            account_server = account + '/' + server
+            block_transport = False
+            if account_server in gajim.block_signed_in_notifications and \
+            gajim.block_signed_in_notifications[account_server]:
+                block_transport = True
+            if helpers.allow_showing_notification(account, 'notify_on_signin') \
+            and not gajim.block_signed_in_notifications[account] and \
+            not block_transport:
+                self.do_popup = True
+            if gajim.config.get_per('soundevents', 'contact_connected',
+            'enabled') and not gajim.block_signed_in_notifications[account] and\
+            not block_transport and helpers.allow_sound_notification(account,
+            'contact_connected'):
+                self.sound_event = event
+                self.do_sound = True
+
+        elif pres_obj.old_show > 1 and pres_obj.new_show < 2:
+            event = 'contact_disconnected'
+            show_image = 'offline.png'
+            suffix = '_notif_size_bw'
+            if helpers.allow_showing_notification(account, 'notify_on_signout'):
+                self.do_popup = True
+            if gajim.config.get_per('soundevents', 'contact_disconnected',
+            'enabled') and helpers.allow_sound_notification(account, event):
+                self.sound_event = event
+                self.do_sound = True
+        # Status change (not connected/disconnected or error (<1))
+        elif pres_obj.new_show > 1:
+            event = 'status_change'
+            # FIXME: we don't always 'online.png', but we first need 48x48 for
+            # all status
+            show_image = 'online.png'
+            suffix = '_notif_size_colored'
+        else:
+            return True
+
+        transport_name = gajim.get_transport_name_from_jid(self.jid)
+        img_path = None
+        if transport_name:
+            img_path = os.path.join(helpers.get_transport_path(
+                transport_name), '48x48', show_image)
+        if not img_path or not os.path.isfile(img_path):
+            iconset = gajim.config.get('iconset')
+            img_path = os.path.join(helpers.get_iconset_path(iconset),
+                '48x48', show_image)
+        self.popup_image = gtkgui_helpers.get_path_to_generic_or_avatar(
+            img_path, jid=self.jid, suffix=suffix)
+
+        if event == 'status_change':
+            self.popup_title = _('%(nick)s Changed Status') % \
+                {'nick': gajim.get_name_from_jid(account, self.jid)}
+            self.popup_text = _('%(nick)s is now %(status)s') % \
+                {'nick': gajim.get_name_from_jid(account, self.jid),\
+                'status': helpers.get_uf_show(pres_obj.show)}
+            if pres_obj.status:
+                self.popup_text = self.popup_text + " : " + pres_obj.status
+            self.popup_event_type = _('Contact Changed Status')
+        elif event == 'contact_connected':
+            self.popup_title = _('%(nickname)s Signed In') % \
+                {'nickname': gajim.get_name_from_jid(account, self.jid)}
+            self.popup_text = ''
+            if pres_obj.status:
+                self.popup_text = pres_obj.status
+            self.popup_event_type = _('Contact Signed In')
+        elif event == 'contact_disconnected':
+            self.popup_title = _('%(nickname)s Signed Out') % \
+                {'nickname': gajim.get_name_from_jid(account, self.jid)}
+            self.popup_text = ''
+            if pres_obj.status:
+                self.popup_text = pres_obj.status
+            self.popup_event_type = _('Contact Signed Out')
 
     def generate(self):
         # what's needed to compute output
         self.conn = self.base_event.conn
+        self.jid = ''
         self.control = None
         self.control_focused = False
         self.first_unread = False
@@ -2082,7 +2287,7 @@ class NotificationEvent(nec.NetworkIncomingEvent):
             self.handle_incoming_pres_event(self.base_event)
         return True
 
-class MessageOutgoingEvent(nec.NetworkIncomingEvent):
+class MessageOutgoingEvent(nec.NetworkOutgoingEvent):
     name = 'message-outgoing'
     base_network_events = []
 
@@ -2093,7 +2298,6 @@ class MessageOutgoingEvent(nec.NetworkIncomingEvent):
         self.subject = ''
         self.chatstate = None
         self.msg_id = None
-        self.composing_xep = None
         self.resource = None
         self.user_nick = None
         self.xhtml = None
@@ -2107,6 +2311,18 @@ class MessageOutgoingEvent(nec.NetworkIncomingEvent):
         self.callback_args = []
         self.now = False
         self.is_loggable = True
+        self.control = None
 
     def generate(self):
         return True
+
+class ClientCertPassphraseEvent(nec.NetworkIncomingEvent):
+    name = 'client-cert-passphrase'
+    base_network_events = []
+
+class InformationEvent(nec.NetworkIncomingEvent):
+    name = 'information'
+    base_network_events = []
+
+    def init(self):
+        self.popup = True

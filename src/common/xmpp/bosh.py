@@ -413,15 +413,15 @@ class NonBlockingBOSH(NonBlockingTransport):
                             'xmlns:xmpp': 'urn:xmpp:xbosh'})
         else:
             t = BOSHBody(
-                    attrs={ 'content': self.bosh_content,
-                            'hold': str(self.bosh_hold),
-                            'route': '%s:%s' % (self.route_host, self.route_port),
-                            'to': self.bosh_to,
-                            'wait': str(self.bosh_wait),
-                            'xml:lang': self.bosh_xml_lang,
-                            'xmpp:version': '1.0',
-                            'ver': '1.6',
-                            'xmlns:xmpp': 'urn:xmpp:xbosh'})
+                attrs={ 'content': self.bosh_content,
+                    'hold': str(self.bosh_hold),
+                    'route': 'xmpp:%s:%s' % (self.route_host, self.route_port),
+                    'to': self.bosh_to,
+                    'wait': str(self.bosh_wait),
+                    'xml:lang': self.bosh_xml_lang,
+                    'xmpp:version': '1.0',
+                    'ver': '1.6',
+                    'xmlns:xmpp': 'urn:xmpp:xbosh'})
         self.send_BOSH((t, True))
 
     def start_disconnect(self):

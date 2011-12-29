@@ -1,20 +1,12 @@
-SUBDIRS = src data plugins po icons
+SUBDIRS = src data po icons plugins
 
 ACLOCAL_AMFLAGS = -I m4
 
 bin_SCRIPTS = scripts/gajim scripts/gajim-history-manager scripts/gajim-remote
 
-docfilesdir = $(docdir)
-docfiles_DATA = README \
-				README.html \
-				ChangeLog \
-				COPYING \
-				THANKS \
-				THANKS.artists \
-				AUTHORS 
-
 EXTRA_DIST = \
-	$(docfiles_DATA) \
+	README.html \
+	THANKS.artists \
 	autogen.sh			\
 	intltool-extract.in \
 	intltool-merge.in 	\

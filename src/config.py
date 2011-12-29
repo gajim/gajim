@@ -68,6 +68,7 @@ except ImportError:
     HAS_GST = False
 
 from common.exceptions import GajimGeneralException
+from common.connection_handlers_events import InformationEvent
 
 #---------- PreferencesWindow class -------------#
 class PreferencesWindow:
@@ -535,6 +536,14 @@ class PreferencesWindow:
         else:
             w.set_active(st)
 
+        # send absolute time info
+        w = self.xml.get_object('send_time_info_checkbutton')
+        st = self.get_per_account_option('send_time_info')
+        if st == 'mixed':
+            w.set_inconsistent(True)
+        else:
+            w.set_active(st)
+
         # send idle time
         w = self.xml.get_object('send_idle_time_checkbutton')
         st = self.get_per_account_option('send_idle_time')
@@ -542,6 +551,8 @@ class PreferencesWindow:
             w.set_inconsistent(True)
         else:
             w.set_active(st)
+
+        self.update_proxy_list()
 
         # check if gajm is default
         st = gajim.config.get('check_if_gajim_is_default')
@@ -1166,6 +1177,10 @@ class PreferencesWindow:
         widget.set_inconsistent(False)
         self.on_per_account_checkbutton_toggled(widget, 'send_os_info')
 
+    def on_send_time_info_checkbutton_toggled(self, widget):
+        widget.set_inconsistent(False)
+        self.on_per_account_checkbutton_toggled(widget, 'send_time_info')
+
     def on_send_idle_time_checkbutton_toggled(self, widget):
         widget.set_inconsistent(False)
         self.on_per_account_checkbutton_toggled(widget, 'send_idle_time')
@@ -1243,6 +1258,34 @@ class PreferencesWindow:
     def on_msg_treeview_key_press_event(self, widget, event):
         if event.keyval == gtk.keysyms.Delete:
             self.on_delete_msg_button_clicked(widget)
+
+    def on_proxies_combobox_changed(self, widget):
+        active = widget.get_active()
+        proxy = widget.get_model()[active][0].decode('utf-8')
+        if proxy == _('None'):
+            proxy = ''
+
+        gajim.config.set('global_proxy', proxy)
+
+    def on_manage_proxies_button_clicked(self, widget):
+        if 'manage_proxies' in gajim.interface.instances:
+            gajim.interface.instances['manage_proxies'].window.present()
+        else:
+            gajim.interface.instances['manage_proxies'] = ManageProxiesWindow()
+
+    def update_proxy_list(self):
+        our_proxy = gajim.config.get('global_proxy')
+        if not our_proxy:
+            our_proxy = _('None')
+        proxy_combobox = self.xml.get_object('proxies_combobox')
+        model = proxy_combobox.get_model()
+        model.clear()
+        l = gajim.config.get_per('proxies')
+        l.insert(0, _('None'))
+        for i in xrange(len(l)):
+            model.append([l[i]])
+            if our_proxy == l[i]:
+                proxy_combobox.set_active(i)
 
     def on_open_advanced_editor_button_clicked(self, widget, data = None):
         if 'advanced_config' in gajim.interface.instances:
@@ -1851,6 +1894,10 @@ class AccountsWindow:
 
         client_cert = gajim.config.get_per('accounts', account, 'client_cert')
         self.xml.get_object('cert_entry1').set_text(client_cert)
+        client_cert_encrypted = gajim.config.get_per('accounts', account,
+            'client_cert_encrypted')
+        self.xml.get_object('client_cert_encrypted_checkbutton1').\
+            set_active(client_cert_encrypted)
 
         self.xml.get_object('adjust_priority_with_status_checkbutton1').\
             set_active(gajim.config.get_per('accounts', account,
@@ -2222,6 +2269,12 @@ class AccountsWindow:
             # if we showed ErrorDialog, there will not be dialog instance
             return
 
+    def on_client_cert_encrypted_checkbutton1_toggled(self, widget):
+        if self.ignore_events:
+            return
+        self.on_checkbutton_toggled(widget, 'client_cert_encrypted',
+            account=self.current_account)
+
     def on_autoconnect_checkbutton_toggled(self, widget):
         if self.ignore_events:
             return
@@ -2523,10 +2576,11 @@ class AccountsWindow:
             return
         if gajim.ZEROCONF_ACC_NAME in gajim.connections and not \
         gajim.connections[gajim.ZEROCONF_ACC_NAME].is_zeroconf:
-            gajim.connections[gajim.ZEROCONF_ACC_NAME].dispatch('ERROR',
-                    (_('Account Local already exists.'),
-                    _('Please rename or remove it before enabling link-local messaging'
-                    '.')))
+            gajim.nec.push_incoming_event(InformationEvent(None,
+                conn=gajim.connections[gajim.ZEROCONF_ACC_NAME],
+                level='error', pri_txt=_('Account Local already exists.'),
+                sec_txt=_('Please rename or remove it before enabling '
+                'link-local messaging.')))
             return
 
         if gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'active') \
@@ -3512,6 +3566,7 @@ class AccountCreationWizardWindow:
 
     def on_back_button_clicked(self, widget):
         cur_page = self.notebook.get_current_page()
+        self.forward_button.set_sensitive(True)
         if cur_page in (1, 2):
             self.notebook.set_current_page(0)
             self.back_button.set_sensitive(False)
@@ -3753,6 +3808,16 @@ class AccountCreationWizardWindow:
             self.data_form_widget = dataforms_widget.DataFormWidget(dataform)
         else:
             self.data_form_widget = FakeDataForm(obj.config)
+            empty_config = True
+            for field in obj.config:
+                if field in ('key', 'instructions', 'x', 'registered'):
+                    continue
+                empty_config = False
+                break
+            if empty_config:
+                self.forward_button.set_sensitive(False)
+                self.notebook.set_current_page(4) # show form page
+                return
         self.data_form_widget.show_all()
         self.xml.get_object('form_vbox').pack_start(self.data_form_widget)
         self.ssl_fingerprint = obj.ssl_fingerprint

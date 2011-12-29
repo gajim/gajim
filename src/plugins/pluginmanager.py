@@ -144,6 +144,13 @@ class PluginManager(object):
             self.add_plugin(plugin_class)
 
     @log_calls('PluginManager')
+    def get_active_plugin(self, plugin_name):
+        for plugin in self.active_plugins:
+            if plugin.short_name == plugin_name:
+                return plugin
+        return None
+
+    @log_calls('PluginManager')
     def gui_extension_point(self, gui_extpoint_name, *args):
         '''
         Invokes all handlers (from plugins) for particular GUI extension point
@@ -208,9 +215,13 @@ class PluginManager(object):
                 extension point name) to identify element to be removed.
         :type args: tuple
         '''
-
         if gui_extpoint_name in self.gui_extension_points:
-            self.gui_extension_points[gui_extpoint_name].remove(args)
+            extension_points = list(self.gui_extension_points[gui_extpoint_name])
+            for ext_point in extension_points:
+                if args[0] in ext_point:
+                    self.gui_extension_points[gui_extpoint_name].remove(
+                        ext_point)
+
 
     @log_calls('PluginManager')
     def _add_gui_extension_point_call_to_list(self, gui_extpoint_name, *args):
@@ -393,6 +404,7 @@ class PluginManager(object):
         :todo: add scanning packages
         :todo: add scanning zipped modules
         '''
+        from plugins.plugins_i18n import _
         plugins_found = []
         conf = ConfigParser.ConfigParser()
         fields = ('name', 'short_name', 'version', 'description', 'authors',
@@ -414,9 +426,9 @@ class PluginManager(object):
                 try:
                     module = __import__(module_name)
                 except ValueError, value_error:
-                    pass
+                    log.debug(value_error)
                 except ImportError, import_error:
-                    pass
+                    log.debug(import_error)
 
             elif os.path.isdir(file_path) and scan_dirs:
                 module_name = elem_name
@@ -424,9 +436,9 @@ class PluginManager(object):
                 try:
                     module = __import__(module_name)
                 except ValueError, value_error:
-                    pass
+                    log.debug(value_error)
                 except ImportError, import_error:
-                    pass
+                    log.debug(import_error)
 
 
             if module is None:
@@ -462,11 +474,20 @@ class PluginManager(object):
                     plugins_found.append(module_attr)
 
                 except TypeError, type_error:
-                    pass
+                    # set plugin localization
+                    module_attr._ = _
                 except ConfigParser.NoOptionError, type_error:
                     # all fields are required
                     log.debug('%s : %s' % (module_attr_name,
                         'wrong manifest file. all fields are required!'))
+                except ConfigParser.NoSectionError, type_error:
+                    # info section are required
+                    log.debug('%s : %s' % (module_attr_name,
+                        'wrong manifest file. info section are required!'))
+                except ConfigParser.MissingSectionHeaderError, type_error:
+                    # info section are required
+                    log.debug('%s : %s' % (module_attr_name,
+                        'wrong manifest file. section are required!'))
 
         return plugins_found
 
@@ -540,7 +561,7 @@ class PluginManager(object):
             self.plugins.remove(plugin)
             if self._plugin_has_entry_in_global_config(plugin):
                 self._remove_plugin_entry_in_global_config(plugin)
-            del sys.modules[plugin.__module__.split('.')[-1]]
+            del sys.modules[plugin.__module__.split('.')[0]]
             del plugin.__module__.split('.')[-1]
             del plugin
 

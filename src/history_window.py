@@ -83,6 +83,7 @@ class HistoryWindow:
         self.query_combobox.set_active(0)
         self.results_treeview = xml.get_object('results_treeview')
         self.results_window = xml.get_object('results_scrolledwindow')
+        self.search_in_date = xml.get_object('search_in_date')
 
         # contact_name, date, message, time
         model = gtk.ListStore(str, str, str, str, str)
@@ -511,9 +512,14 @@ class HistoryWindow:
                 # This may leed to wrong self nick in the displayed history (Uggh!)
                 account = gajim.contacts.get_accounts()[0]
 
+            year, month, day = False, False, False
+            if self.search_in_date.get_active():
+                year, month, day = self.calendar.get_date() # integers
+                month = gtkgui_helpers.make_gtk_month_python_month(month)
+
             # contact_name, time, kind, show, message, subject
             results = gajim.logger.get_search_results_for_query(
-                                    jid, text, account)
+                                    jid, text, account, year, month, day)
             #FIXME:
             # add "subject:  | message: " in message column if kind is single
             # also do we need show at all? (we do not search on subject)

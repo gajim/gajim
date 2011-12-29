@@ -359,7 +359,8 @@ class NonBlockingTLS(PlugIn):
             tcpsock._sslContext = OpenSSL.SSL.Context(OpenSSL.SSL.TLSv1_METHOD)
             log.debug('Using client cert and key from %s' % conn.client_cert)
             try:
-                p12 = OpenSSL.crypto.load_pkcs12(open(conn.client_cert).read())
+                p12 = OpenSSL.crypto.load_pkcs12(open(conn.client_cert).read(),
+                    conn.client_cert_passphrase)
             except OpenSSL.crypto.Error, exception_obj:
                 log.warning('Unable to load client pkcs12 certificate from '
                     'file %s: %s ... Is it a valid PKCS12 cert?' % \

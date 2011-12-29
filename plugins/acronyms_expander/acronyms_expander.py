@@ -36,6 +36,8 @@ class AcronymsExpanderPlugin(GajimPlugin):
 
     @log_calls('AcronymsExpanderPlugin')
     def init(self):
+        self.description = _('Replaces acronyms (or other strings) '
+            'with given expansions/substitutes.')
         self.config_dialog = None
 
         self.gui_extension_points = {
@@ -44,7 +46,7 @@ class AcronymsExpanderPlugin(GajimPlugin):
         }
 
         self.config_default_values = {
-            'INVOKER': (' ', _('')),
+            'INVOKER': (' ', ''),
             'ACRONYMS': ({'RTFM': 'Read The Friendly Manual',
                           '/slap': '/me slaps',
                           'PS-': 'plug-in system',
@@ -53,7 +55,7 @@ class AcronymsExpanderPlugin(GajimPlugin):
                           'GW-': 'http://trac.gajim.org/',
                           'GTS-': 'http://trac.gajim.org/report',
                          },
-            _('')),
+            ''),
         }
 
     @log_calls('AcronymsExpanderPlugin')

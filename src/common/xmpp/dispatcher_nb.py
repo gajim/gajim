@@ -21,6 +21,7 @@ different handlers to different XMPP stanzas and namespaces
 """
 
 import simplexml, sys, locale
+import re
 from xml.parsers.expat import ExpatError
 from plugin import PlugIn
 from protocol import (NS_STREAMS, NS_XMPP_STREAMS, NS_HTTP_BIND, Iq, Presence,
@@ -89,6 +90,27 @@ class XMPPDispatcher(PlugIn):
                 self.UnregisterHandler, self.RegisterProtocol,
                 self.SendAndWaitForResponse, self.SendAndCallForResponse,
                 self.getAnID, self.Event, self.send]
+
+        # Let the dispatcher know if there is support for stream management
+        self.sm = None
+
+        # \ufddo -> \ufdef range
+        c = u'\ufdd0'
+        r = c.encode('utf8')
+        while (c < u'\ufdef'):
+            c = unichr(ord(c) + 1)
+            r += '|' + c.encode('utf8')
+
+        # \ufffe-\uffff, \u1fffe-\u1ffff, ..., \u10fffe-\u10ffff
+        c = u'\ufffe'
+        r += '|' + c.encode('utf8')
+        r += '|' + unichr(ord(c) + 1).encode('utf8')
+        while (c < u'\U0010fffe'):
+            c = unichr(ord(c) + 0x10000)
+            r += '|' + c.encode('utf8')
+            r += '|' + unichr(ord(c) + 1).encode('utf8')
+
+        self.invalid_chars_re = re.compile(r)
 
     def getAnID(self):
         global outgoingID
@@ -175,6 +197,9 @@ class XMPPDispatcher(PlugIn):
             raise ValueError('Incorrect stream start: (%s,%s). Terminating.'
                     % (tag, ns))
 
+    def replace_non_character(self, data):
+        return re.sub(self.invalid_chars_re, u'\ufffd'.encode('utf-8'), data)
+
     def ProcessNonBlocking(self, data):
         """
         Check incoming stream for data waiting
@@ -190,6 +215,7 @@ class XMPPDispatcher(PlugIn):
         # disconnect method will never be called.
         # Is this intended?
         # also look at transports start_disconnect()
+        data = self.replace_non_character(data)
         for handler in self._cycleHandlers:
             handler(self)
         if len(self._pendingExceptions) > 0:
@@ -417,6 +443,12 @@ class XMPPDispatcher(PlugIn):
         stanza.props = stanza.getProperties()
         ID = stanza.getID()
 
+        # If server supports stream management
+        if self.sm and self.sm.enabled and (stanza.getName() != 'r' and
+        stanza.getName() != 'a' and stanza.getName() != 'enabled' and
+        stanza.getName() != 'resumed'):
+            # increments the number of stanzas that has been handled
+            self.sm.in_h = self.sm.in_h + 1
         list_ = ['default'] # we will use all handlers:
         if typ in self.handlers[xmlns][name]:
             list_.append(typ) # from very common...
@@ -525,6 +557,14 @@ class XMPPDispatcher(PlugIn):
                     ID = stanza.getID()
                 if self._owner._registered_name and not stanza.getAttr('from'):
                     stanza.setAttr('from', self._owner._registered_name)
+
+        # If no ID then it is a whitespace
+        if self.sm and self.sm.enabled and ID:
+            self.sm.uqueue.append(stanza)
+            self.sm.out_h = self.sm.out_h + 1
+            if len(self.sm.uqueue) > self.sm.max_queue:
+                self.sm.request_ack()
+
         self._owner.Connection.send(stanza, now)
         return ID
 

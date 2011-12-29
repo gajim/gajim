@@ -62,14 +62,7 @@ from common import ged
 from common import nec
 from common.nec import NetworkEvent
 
-if gajim.HAVE_FARSIGHT:
-    from common.jingle import ConnectionJingle
-else:
-    class ConnectionJingle():
-        def __init__(self):
-            pass
-        def _JingleCB(self, con, stanza):
-            pass
+from common.jingle import ConnectionJingle
 
 from common import dbus_support
 if dbus_support.supported:
@@ -133,8 +126,9 @@ class ConnectionDisco:
 
     def _agent_registered_cb(self, con, resp, agent):
         if resp.getType() == 'result':
-            self.dispatch('INFORMATION', (_('Registration succeeded'),
-                _('Registration with agent %s succeeded') % agent))
+            gajim.nec.push_incoming_event(InformationEvent(None, conn=self,
+                level='info', pri_txt=_('Registration succeeded'), sec_txt=_(
+                'Registration with agent %s succeeded') % agent))
             self.request_subscription(agent, auto_auth=True)
             self.agent_registrations[agent]['roster_push'] = True
             if self.agent_registrations[agent]['sub_received']:
@@ -142,9 +136,10 @@ class ConnectionDisco:
                 p = self.add_sha(p)
                 self.connection.send(p)
         if resp.getType() == 'error':
-            self.dispatch('ERROR', (_('Registration failed'), _('Registration '
-                'with agent %(agent)s failed with error %(error)s: '
-                '%(error_msg)s') % {'agent': agent, 'error': resp.getError(),
+            gajim.nec.push_incoming_event(InformationEvent(None, conn=self,
+                level='error', pri_txt=_('Registration failed'), sec_txt=_(
+                'Registration with agent %(agent)s failed with error %(error)s:'
+                ' %(error_msg)s') % {'agent': agent, 'error': resp.getError(),
                 'error_msg': resp.getErrorMsg()}))
 
     def register_agent(self, agent, info, is_form=False):
@@ -152,7 +147,7 @@ class ConnectionDisco:
             return
         if is_form:
             iq = common.xmpp.Iq('set', common.xmpp.NS_REGISTER, to=agent)
-            query = iq.getTag('query')
+            query = iq.setQuery()
             info.setAttr('type', 'submit')
             query.addChild(node=info)
             self.connection.SendAndCallForResponse(iq,
@@ -237,8 +232,7 @@ class ConnectionDisco:
         log.debug('DiscoverInfoGetCB')
         if not self.connection or self.connected < 2:
             return
-        q = iq_obj.getTag('query')
-        node = q.getAttr('node')
+        node = iq_obj.getQuerynode()
 
         if self.commandInfoQuery(con, iq_obj):
             raise common.xmpp.NodeProcessed
@@ -249,7 +243,7 @@ class ConnectionDisco:
             raise common.xmpp.NodeProcessed
 
         iq = iq_obj.buildReply('result')
-        q = iq.getTag('query')
+        q = iq.setQuery()
         if node:
             q.setAttr('node', node)
         q.addChild('identity', attrs=gajim.gajim_identity)
@@ -340,7 +334,8 @@ class ConnectionVcard:
             fil.write(str(card))
             fil.close()
         except IOError, e:
-            self.dispatch('ERROR', (_('Disk Write Error'), str(e)))
+            gajim.nec.push_incoming_event(InformationEvent(None, conn=self,
+                level='error', pri_txt=_('Disk Write Error'), sec_txt=str(e)))
 
     def get_cached_vcard(self, fjid, is_fake_jid=False):
         """
@@ -394,7 +389,7 @@ class ConnectionVcard:
         iq = common.xmpp.Iq(typ='get')
         if jid:
             iq.setTo(jid)
-        iq.setTag(common.xmpp.NS_VCARD + ' vCard')
+        iq.setQuery('vCard').setNamespace(common.xmpp.NS_VCARD)
 
         id_ = self.connection.getAnID()
         iq.setID(id_)
@@ -536,6 +531,8 @@ class ConnectionVcard:
                 return
             if iq_obj.getType() == 'result':
                 query = iq_obj.getTag('query')
+                if not query:
+                    return
                 delimiter = query.getTagData('roster')
                 if delimiter:
                     self.nested_group_delimiter = delimiter
@@ -554,6 +551,15 @@ class ConnectionVcard:
                     roster = self.connection.getRoster(force=True)
                     roster.setRaw(roster_data)
                 self._getRoster()
+            elif iq_obj.getType() == 'error':
+                self.roster_supported = False
+                self.discoverItems(gajim.config.get_per('accounts', self.name,
+                    'hostname'), id_prefix='Gajim_')
+                if gajim.config.get_per('accounts', self.name,
+                'use_ft_proxies'):
+                    self.discover_ft_proxies()
+                gajim.nec.push_incoming_event(RosterReceivedEvent(None,
+                    conn=self))
         elif self.awaiting_answers[id_][0] == PRIVACY_ARRIVED:
             if iq_obj.getType() != 'error':
                 self.privacy_rules_supported = True
@@ -565,9 +571,10 @@ class ConnectionVcard:
                     self.disconnect(on_purpose=True)
                     gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
                         show='offline'))
-                    self.dispatch('ERROR', (_('Invisibility not supported'),
-                        _('Account %s doesn\'t support invisibility.') % \
-                        self.name))
+                    gajim.nec.push_incoming_event(InformationEvent(None,
+                        conn=self, level='error', pri_txt=_('Invisibility not '
+                        'supported'), sec_txt=_('Account %s doesn\'t support '
+                        'invisibility.') % self.name))
                     return
             # Ask metacontacts before roster
             self.get_metacontacts()
@@ -646,9 +653,8 @@ class ConnectionVcard:
                         with_ = element.getAttr('with')
                         start_ = element.getAttr('start')
                         self.request_collection_page(with_, start_)
-                    elif element.getName() == 'removed':
+                    #elif element.getName() == 'removed':
                         # do nothing
-                        pass
 
         del self.awaiting_answers[id_]
 
@@ -765,6 +771,8 @@ class ConnectionHandlersBase:
             self._nec_iq_error_received)
         gajim.ged.register_event_handler('presence-received', ged.CORE,
             self._nec_presence_received)
+        gajim.ged.register_event_handler('gc-presence-received', ged.CORE,
+            self._nec_gc_presence_received)
         gajim.ged.register_event_handler('message-received', ged.CORE,
             self._nec_message_received)
         gajim.ged.register_event_handler('decrypted-message-received', ged.CORE,
@@ -775,6 +783,8 @@ class ConnectionHandlersBase:
             self._nec_iq_error_received)
         gajim.ged.remove_event_handler('presence-received', ged.CORE,
             self._nec_presence_received)
+        gajim.ged.remove_event_handler('gc-presence-received', ged.CORE,
+            self._nec_gc_presence_received)
         gajim.ged.remove_event_handler('message-received', ged.CORE,
             self._nec_message_received)
         gajim.ged.remove_event_handler('decrypted-message-received', ged.CORE,
@@ -902,8 +912,7 @@ class ConnectionHandlersBase:
         # reset chatstate if needed:
         # (when contact signs out or has errors)
         if obj.show in ('offline', 'error'):
-            obj.contact.our_chatstate = obj.contact.chatstate = \
-                obj.contact.composing_xep = None
+            obj.contact.our_chatstate = obj.contact.chatstate = None
 
             # TODO: This causes problems when another
             # resource signs off!
@@ -917,27 +926,15 @@ class ConnectionHandlersBase:
             # there won't be any sessions here if the contact terminated
             # their sessions before going offline (which we do)
             for sess in self.get_sessions(jid):
-                if obj.fjid != str(sess.jid):
+                sess_fjid = sess.jid.getStripped()
+                if sess.resource:
+                    sess_fjid += '/' + sess.resource
+                if obj.fjid != sess_fjid:
                     continue
                 if sess.control:
                     sess.control.no_autonegotiation = False
                 if sess.enable_encryption:
                     sess.terminate_e2e()
-                    self.delete_session(jid, sess.thread_id)
-
-        if obj.ptype == 'unavailable':
-            for jid in (obj.jid, obj.fjid):
-                if jid not in self.sessions:
-                    continue
-                # automatically terminate sessions that they haven't sent a
-                # thread ID in, only if other part support thread ID
-                for sess in self.sessions[jid].values():
-                    if not sess.received_thread_id:
-                        contact = gajim.contacts.get_contact(self.name, jid)
-                        if contact and (contact.supports(xmpp.NS_SSN) or \
-                        contact.supports(xmpp.NS_ESESSION)):
-                            sess.terminate()
-                            del self.sessions[jid][sess.thread_id]
 
         if gajim.config.get('log_contact_status_changes') and \
         gajim.config.should_log(self.name, obj.jid):
@@ -952,6 +949,15 @@ class ConnectionHandlersBase:
                     'or remove it (all history will be lost).') % LOG_DB_PATH
                 self.dispatch('DB_ERROR', (pritext, sectext))
             our_jid = gajim.get_jid_from_account(self.name)
+
+    def _nec_gc_presence_received(self, obj):
+        if obj.conn.name != self.name:
+            return
+        for sess in self.get_sessions(obj.fjid):
+            if obj.fjid != sess.jid:
+                continue
+            if sess.enable_encryption:
+                sess.terminate_e2e()
 
     def _nec_message_received(self, obj):
         if obj.conn.name != self.name:
@@ -972,6 +978,8 @@ class ConnectionHandlersBase:
             if keyID:
                 def decrypt_thread(encmsg, keyID, obj):
                     decmsg = self.gpg.decrypt(encmsg, keyID)
+                    decmsg = self.connection.Dispatcher.replace_non_character(
+                        decmsg)
                     # \x00 chars are not allowed in C (so in GTK)
                     obj.msgtxt = helpers.decode_string(decmsg.replace('\x00',
                         ''))
@@ -1406,17 +1414,21 @@ ConnectionJingle, ConnectionIBBytestream):
         log.debug('SecLabelCB')
         query = iq_obj.getTag('catalog')
         to = query.getAttr('to')
-        items = query.getTags('securitylabel')
+        items = query.getTags('item')
         labels = {}
         ll = []
+        default = None
         for item in items:
-            label = item.getTag('displaymarking').getData()
-            labels[label] = item
+            label = item.getAttr('selector')
+            labels[label] = item.getTag('securitylabel')
             ll.append(label)
+            if item.getAttr('default') == 'true':
+                default = label
         if to not in self.seclabel_catalogues:
-            self.seclabel_catalogues[to] = [[], None, None]
+            self.seclabel_catalogues[to] = [[], None, None, None]
         self.seclabel_catalogues[to][1] = labels
         self.seclabel_catalogues[to][2] = ll
+        self.seclabel_catalogues[to][3] = default
         for callback in self.seclabel_catalogues[to][0]:
             callback()
         self.seclabel_catalogues[to][0] = []
@@ -1458,13 +1470,18 @@ ConnectionJingle, ConnectionIBBytestream):
     def _nec_version_request_received(self, obj):
         if obj.conn.name != self.name:
             return
-        iq_obj = obj.stanza.buildReply('result')
-        qp = iq_obj.getTag('query')
-        qp.setTagData('name', 'Gajim')
-        qp.setTagData('version', gajim.version)
         send_os = gajim.config.get_per('accounts', self.name, 'send_os_info')
         if send_os:
+            iq_obj = obj.stanza.buildReply('result')
+            qp = iq_obj.getQuery()
+            qp.setTagData('name', 'Gajim')
+            qp.setTagData('version', gajim.version)
             qp.setTagData('os', helpers.get_os_info())
+        else:
+            iq_obj = obj.stanza.buildReply('error')
+            err = common.xmpp.ErrorNode(name=common.xmpp.NS_STANZAS + \
+                ' service-unavailable')
+            iq_obj.addChild(node=err)
         self.connection.send(iq_obj)
 
     def _LastCB(self, con, iq_obj):
@@ -1482,7 +1499,7 @@ ConnectionJingle, ConnectionIBBytestream):
         if HAS_IDLE and gajim.config.get_per('accounts', self.name,
         'send_idle_time'):
             iq_obj = obj.stanza.buildReply('result')
-            qp = iq_obj.getTag('query')
+            qp = iq_obj.setQuery()
             qp.attrs['seconds'] = int(self.sleeper.getIdleSec())
         else:
             iq_obj = obj.stanza.buildReply('error')
@@ -1509,7 +1526,7 @@ ConnectionJingle, ConnectionIBBytestream):
             return
         if gajim.config.get_per('accounts', self.name, 'send_time_info'):
             iq_obj = obj.stanza.buildReply('result')
-            qp = iq_obj.getTag('query')
+            qp = iq_obj.setQuery()
             qp.setTagData('utc', strftime('%Y%m%dT%H:%M:%S', gmtime()))
             qp.setTagData('tz', helpers.decode_string(tzname[daylight]))
             qp.setTagData('display', helpers.decode_string(strftime('%c',
@@ -1661,55 +1678,6 @@ ConnectionJingle, ConnectionIBBytestream):
             namespace=common.xmpp.NS_BOB)
         self.connection.SendAndCallForResponse(iq, self._on_bob_received,
             {'cid': cid})
-
-    # process and dispatch a groupchat message
-    def dispatch_gc_message(self, msg, frm, msgtxt, jid, tim):
-        has_timestamp = bool(msg.timestamp)
-
-        statusCode = msg.getStatusCode()
-
-        displaymarking = None
-        seclabel = msg.getTag('securitylabel')
-        if seclabel and seclabel.getNamespace() == common.xmpp.NS_SECLABEL:
-            # Ignore message from room in which we are not
-            displaymarking = seclabel.getTag('displaymarking')
-
-        if jid not in self.last_history_time:
-            return
-
-        captcha = msg.getTag('captcha', namespace=common.xmpp.NS_CAPTCHA)
-        if captcha:
-            captcha = captcha.getTag('x', namespace=common.xmpp.NS_DATA)
-            found = helpers.replace_dataform_media(captcha, msg)
-            if not found:
-                self.get_bob_data(uri_data, frm, self.dispatch_gc_message,
-                    [msg, frm, msgtxt, jid, tim], 0)
-                return
-        self.dispatch('GC_MSG', (frm, msgtxt, tim, has_timestamp,
-            msg.getXHTML(), statusCode, displaymarking, captcha))
-
-        tim_int = int(float(mktime(tim)))
-        if gajim.config.should_log(self.name, jid) and not \
-        tim_int <= self.last_history_time[jid] and msgtxt and frm.find('/') >= 0:
-            # if frm.find('/') < 0, it means message comes from room itself
-            # usually it hold description and can be send at each connection
-            # so don't store it in logs
-            try:
-                gajim.logger.write('gc_msg', frm, msgtxt, tim=tim)
-                # store in memory time of last message logged.
-                # this will also be saved in rooms_last_message_time table
-                # when we quit this muc
-                self.last_history_time[jid] = mktime(tim)
-
-            except exceptions.PysqliteOperationalError, e:
-                self.dispatch('DB_ERROR', (_('Disk Write Error'), str(e)))
-            except exceptions.DatabaseMalformed:
-                pritext = _('Database Error')
-                sectext = _('The database file (%s) cannot be read. Try to '
-                    'repair it (see http://trac.gajim.org/wiki/DatabaseBackup) '
-                    'or remove it (all history will be lost).') % \
-                    common.logger.LOG_DB_PATH
-                self.dispatch('DB_ERROR', (pritext, sectext))
 
     def _presenceCB(self, con, prs):
         """
@@ -1877,10 +1845,13 @@ ConnectionJingle, ConnectionIBBytestream):
             'file_transfer_proxies')
         our_jid = helpers.parse_jid(gajim.get_jid_from_account(self.name) + \
             '/' + self.server_resource)
+        testit = gajim.config.get_per('accounts', self.name,
+            'test_ft_proxies_on_startup')
         if cfg_proxies:
             proxies = [e.strip() for e in cfg_proxies.split(',')]
             for proxy in proxies:
-                gajim.proxy65_manager.resolve(proxy, self.connection, our_jid)
+                gajim.proxy65_manager.resolve(proxy, self.connection, our_jid,
+                    testit=testit)
 
     def _on_roster_set(self, roster):
         gajim.nec.push_incoming_event(RosterReceivedEvent(None, conn=self,

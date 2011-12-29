@@ -1450,6 +1450,11 @@ class RosterWindow:
         self.tree.scroll_to_cell(path)
         self.tree.set_cursor(path)
 
+    def _readjust_expand_collapse_state(self):
+        for account in gajim.connections:
+            self._adjust_account_expand_collapse_state(account)
+            for group in gajim.groups[account]:
+                self._adjust_group_expand_collapse_state(group, account)
 
     def _adjust_account_expand_collapse_state(self, account):
         """
@@ -1495,11 +1500,6 @@ class RosterWindow:
 ### Roster and Modelfilter handling
 ##############################################################################
 
-    def _search_roster_func(self, model, column, key, titer):
-        key = key.decode('utf-8').lower()
-        name = model[titer][C_NAME].decode('utf-8').lower()
-        return not (key in name)
-
     def refilter_shown_roster_items(self):
         self.filtering = True
         self.modelfilter.refilter()
@@ -1520,6 +1520,8 @@ class RosterWindow:
         return False
 
     def contact_is_visible(self, contact, account):
+        if self.rfilter_enabled:
+            return self.rfilter_string in contact.get_shown_name().lower()
         if self.contact_has_pending_roster_events(contact, account):
             return True
 
@@ -1561,9 +1563,17 @@ class RosterWindow:
                     accounts = [account]
                 for _acc in accounts:
                     for contact in gajim.contacts.iter_contacts(_acc):
-                        if group in contact.get_shown_groups() and \
-                        self.contact_has_pending_roster_events(contact, _acc):
-                            return True
+                        if group in contact.get_shown_groups():
+                            if self.rfilter_enabled:
+                                if self.rfilter_string in \
+                                contact.get_shown_name().lower():
+                                    return True
+                            elif self.contact_has_pending_roster_events(contact,
+                            _acc):
+                                return True
+                    if self.rfilter_enabled:
+                        # No transport has been found
+                        return False
                 return gajim.config.get('show_transports_group') and \
                     (gajim.account_is_connected(account) or \
                     gajim.config.get('showoffline'))
@@ -1615,12 +1625,16 @@ class RosterWindow:
                     account, jid)
                 return self.contact_is_visible(contact, account)
         if type_ == 'agent':
+            if self.rfilter_enabled:
+                return self.rfilter_string in model[titer][C_NAME].lower()
             contact = gajim.contacts.get_contact_with_highest_priority(account,
                 jid)
             return self.contact_has_pending_roster_events(contact, account) or \
                 (gajim.config.get('show_transports_group') and \
                 (gajim.account_is_connected(account) or \
                 gajim.config.get('showoffline')))
+        if type_ == 'groupchat' and self.rfilter_enabled:
+            return self.rfilter_string in model[titer][C_NAME].lower()
         return True
 
     def _compareIters(self, model, iter1, iter2, data=None):
@@ -1641,7 +1655,11 @@ class RosterWindow:
             return 1
         if type1 == 'group':
             name1 = model[iter1][C_JID]
+            if name1:
+                name1 = name1.decode('utf-8')
             name2 = model[iter2][C_JID]
+            if name2:
+                name2 = name2.decode('utf-8')
             if name1 == _('Transports'):
                 return 1
             if name2 == _('Transports'):
@@ -2091,11 +2109,6 @@ class RosterWindow:
                     if gajim.gc_connected[account][gc_control.room_jid]:
                         gajim.connections[account].send_gc_status(
                             gc_control.nick, gc_control.room_jid, status, txt)
-                    else:
-                        # for some reason, we are not connected to the room even
-                        # if tab is opened, send initial join_gc()
-                        gajim.connections[account].join_gc(gc_control.nick,
-                        gc_control.room_jid, None)
             if was_invisible and status != 'offline':
                 # We come back from invisible, join bookmarks
                 gajim.interface.auto_join_bookmarks(account)
@@ -2315,9 +2328,9 @@ class RosterWindow:
         """
         Main window X button was clicked
         """
-        if gajim.interface.systray_enabled and not gajim.config.get(
-        'quit_on_roster_x_button') and gajim.config.get('trayicon') != \
-        'on_event':
+        if not gajim.config.get('quit_on_roster_x_button') and (
+        (gajim.interface.systray_enabled and gajim.config.get('trayicon') != \
+        'on_event') or gajim.config.get('allow_hide_roster')):
             self.tooltip.hide_tooltip()
             if gajim.config.get('save-roster-position'):
                 x, y = self.window.get_position()
@@ -2397,12 +2410,14 @@ class RosterWindow:
                     self.quit_on_next_offline += 1
                     accounts_to_disconnect.append(acct)
 
+            if not self.quit_on_next_offline:
+                # all accounts offline, quit
+                self.quit_gtkgui_interface()
+                return
+
             for acct in accounts_to_disconnect:
                 self.send_status(acct, 'offline', message)
                 self.send_pep(acct, pep_dict)
-
-            if not self.quit_on_next_offline:
-                self.quit_gtkgui_interface()
 
         def on_continue2(message, pep_dict):
             # check if there is an active file transfer
@@ -2497,6 +2512,15 @@ class RosterWindow:
         if obj.contact:
             self.chg_contact_status(obj.contact, obj.show, obj.status, account)
 
+        if obj.popup:
+            ctrl = gajim.interface.msg_win_mgr.search_control(jid, account)
+            if ctrl:
+                gobject.idle_add(ctrl.parent_win.set_active_tab, ctrl)
+            else:
+                ctrl = gajim.interface.new_chat(obj.contact, account)
+                if len(gajim.events.get_events(account, obj.jid)):
+                    ctrl.read_queue()
+
     def _nec_gc_presence_received(self, obj):
         account = obj.conn.name
         if obj.room_jid in gajim.interface.minimized_controls[account]:
@@ -2583,21 +2607,20 @@ class RosterWindow:
             typ = ''
             if obj.mtype == 'error':
                 typ = 'error'
+            if obj.forwarded and obj.sent:
+                typ = 'out'
 
             obj.session.control.print_conversation(obj.msgtxt, typ,
-            tim=obj.timestamp, encrypted=obj.encrypted, subject=obj.subject,
-            xhtml=obj.xhtml, displaymarking=obj.displaymarking)
+                tim=obj.timestamp, encrypted=obj.encrypted, subject=obj.subject,
+                xhtml=obj.xhtml, displaymarking=obj.displaymarking)
             if obj.msg_id:
                 gajim.logger.set_read_messages([obj.msg_id])
         elif obj.popup:
-            if not obj.session.control:
-                contact = gajim.contacts.get_contact(obj.conn.name, obj.jid,
-                    obj.resource_for_chat)
-                obj.session.control = gajim.interface.new_chat(contact,
-                    obj.conn.name, resource=obj.resource_for_chat,
-                    session=obj.session)
-                if len(gajim.events.get_events(obj.conn.name, obj.fjid)):
-                    obj.session.control.read_queue()
+            contact = gajim.contacts.get_contact(obj.conn.name, obj.jid)
+            obj.session.control = gajim.interface.new_chat(contact,
+                obj.conn.name, session=obj.session)
+            if len(gajim.events.get_events(obj.conn.name, obj.fjid)):
+                obj.session.control.read_queue()
 
         if obj.show_in_roster:
             self.draw_contact(obj.jid, obj.conn.name)
@@ -3335,7 +3358,10 @@ class RosterWindow:
         """
         self.tooltip.hide_tooltip()
         if event.keyval == gtk.keysyms.Escape:
-            self.tree.get_selection().unselect_all()
+            if self.rfilter_enabled:
+                self.disable_rfilter()
+            else:
+                self.tree.get_selection().unselect_all()
         elif event.keyval == gtk.keysyms.F2:
             treeselection = self.tree.get_selection()
             model, list_of_paths = treeselection.get_selected_rows()
@@ -3371,6 +3397,10 @@ class RosterWindow:
                 self.on_req_usub(widget, list_)
             elif type_ == 'agent':
                 self.on_remove_agent(widget, list_)
+
+        elif gtk.gdk.keyval_to_unicode(event.keyval): # if we got unicode symbol
+            num = gtk.gdk.keyval_to_unicode(event.keyval)
+            self.enable_rfilter(unichr(num))
 
     def on_roster_treeview_button_release_event(self, widget, event):
         try:
@@ -3873,14 +3903,19 @@ class RosterWindow:
 
     def on_roster_window_key_press_event(self, widget, event):
         if event.keyval == gtk.keysyms.Escape:
+            if self.rfilter_enabled:
+                self.disable_rfilter()
+                return
             if gajim.interface.msg_win_mgr.mode == \
             MessageWindowMgr.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER and \
             gajim.interface.msg_win_mgr.one_window_opened():
                 # let message window close the tab
                 return
             list_of_paths = self.tree.get_selection().get_selected_rows()[1]
-            if not len(list_of_paths) and gajim.interface.systray_enabled and \
-            not gajim.config.get('quit_on_roster_x_button'):
+            if not len(list_of_paths) and not gajim.config.get(
+            'quit_on_roster_x_button') and ((gajim.interface.systray_enabled and\
+            gajim.config.get('trayicon') == 'always') or gajim.config.get(
+            'allow_hide_roster')):
                 self.tooltip.hide_tooltip()
                 self.window.hide()
         elif event.state & gtk.gdk.CONTROL_MASK and event.keyval == \
@@ -4007,6 +4042,8 @@ class RosterWindow:
             group = model[titer][C_JID].decode('utf-8')
             child_model[child_iter][C_IMG] = \
                 gajim.interface.jabber_state_images['16']['opened']
+            if self.rfilter_enabled:
+                return
             for account in accounts:
                 if group in gajim.groups[account]: # This account has this group
                     gajim.groups[account][group]['expand'] = True
@@ -4068,6 +4105,8 @@ class RosterWindow:
         if type_ == 'group':
             child_model[child_iter][C_IMG] = gajim.interface.\
                 jabber_state_images['16']['closed']
+            if self.rfilter_enabled:
+                return
             group = model[titer][C_JID].decode('utf-8')
             for account in accounts:
                 if group in gajim.groups[account]: # This account has this group
@@ -4218,25 +4257,56 @@ class RosterWindow:
         """ When we update the content of the filter """
         self.rfilter_string = widget.get_text().lower()
         if self.rfilter_string == '':
-            self.rfilter_enabled = False
-        else:
-            self.rfilter_enabled = True
+            self.disable_rfilter()
         self.refilter_shown_roster_items()
+        # select first row
+        self.tree.get_selection().unselect_all()
+        def _func(model, path, iter_):
+            if model[iter_][C_TYPE] == 'contact' and self.rfilter_string in \
+            model[iter_][C_NAME].lower():
+                col = self.tree.get_column(0)
+                self.tree.set_cursor_on_cell(path, col)
+                return True
+        self.modelfilter.foreach(_func)
 
     def on_rfilter_entry_icon_press(self, widget, icon, event):
-        """ Disable the roster filtering by clicking the icon in the textEntry """
-        self.xml.get_object('show_rfilter_menuitem').set_active(False)
-        self.rfilter_enabled = False
-        self.refilter_shown_roster_items()
+        """
+        Disable the roster filtering by clicking the icon in the textEntry
+        """
+        self.disable_rfilter()
 
-    def on_show_rfilter_menuitem_toggled(self, widget):
-        """ Show the roster filter entry """
-        self.rfilter_enabled = widget.get_active()
-        self.rfilter_entry.set_visible(self.rfilter_enabled)
-        self.rfilter_entry.set_editable(self.rfilter_enabled)
+    def on_rfilter_entry_key_press_event(self, widget, event):
+        if event.keyval == gtk.keysyms.Escape:
+            self.disable_rfilter()
+        elif event.keyval == gtk.keysyms.Return:
+            self.tree.grab_focus()
+            self.tree.emit('key_press_event', event)
+            self.disable_rfilter()
+        elif event.keyval in (gtk.keysyms.Up, gtk.keysyms.Down):
+            self.tree.grab_focus()
+            self.tree.emit('key_press_event', event)
+
+    def enable_rfilter(self, search_string):
         if self.rfilter_enabled:
-            self.rfilter_entry.set_text('')
-            self.rfilter_entry.grab_focus()
+            self.rfilter_entry.set_text(self.rfilter_entry.get_text() + \
+                search_string)
+        else:
+            self.rfilter_enabled = True
+            self.rfilter_entry.set_text(search_string)
+            self.tree.expand_all()
+        self.rfilter_entry.set_visible(True)
+        self.rfilter_entry.set_editable(True)
+        self.rfilter_entry.grab_focus()
+        self.rfilter_entry.set_position(-1)
+
+    def disable_rfilter(self):
+        self.rfilter_enabled = False
+        self.rfilter_entry.set_text('')
+        self.rfilter_entry.set_visible(False)
+        self.rfilter_entry.set_editable(False)
+        self.refilter_shown_roster_items()
+        self.tree.grab_focus()
+        self._readjust_expand_collapse_state()
 
     def on_roster_hpaned_notify(self, pane, gparamspec):
         """
@@ -5391,8 +5461,11 @@ class RosterWindow:
 
             edit_account_menuitem.connect('activate', self.on_edit_account,
                 account)
-            add_contact_menuitem.connect('activate', self.on_add_new_contact,
-                account)
+            if gajim.connections[account].roster_supported:
+                add_contact_menuitem.connect('activate',
+                    self.on_add_new_contact, account)
+            else:
+                add_contact_menuitem.set_sensitive(False)
             service_discovery_menuitem.connect('activate',
                 self.on_service_disco_menuitem_activate, account)
             hostname = gajim.config.get_per('accounts', account, 'hostname')
@@ -6357,9 +6430,6 @@ class RosterWindow:
         col.set_visible(False)
         self.tree.set_expander_column(col)
 
-        # set search function
-        self.tree.set_search_equal_func(self._search_roster_func)
-
         # signals
         self.TARGET_TYPE_URI_LIST = 80
         TARGETS = [('MY_TREE_MODEL_ROW',
@@ -6426,6 +6496,8 @@ class RosterWindow:
         self.rfilter_entry = self.xml.get_object('rfilter_entry')
         self.rfilter_string = ''
         self.rfilter_enabled = False
+        self.rfilter_entry.connect('key-press-event',
+            self.on_rfilter_entry_key_press_event)
 
         gajim.ged.register_event_handler('presence-received', ged.GUI1,
             self._nec_presence_received)

@@ -54,6 +54,7 @@ from common.pep import MOODS, ACTIVITIES
 from common.xmpp.protocol import NS_XHTML, NS_XHTML_IM, NS_FILE, NS_MUC
 from common.xmpp.protocol import NS_RECEIPTS, NS_ESESSION
 from common.xmpp.protocol import NS_JINGLE_RTP_AUDIO, NS_JINGLE_RTP_VIDEO, NS_JINGLE_ICE_UDP, NS_JINGLE_FILE_TRANSFER
+from common.xmpp.protocol import NS_CHATSTATES
 from common.connection_handlers_events import MessageOutgoingEvent
 
 from command_system.implementation.middleware import ChatCommandProcessor
@@ -63,6 +64,7 @@ from command_system.implementation.hosts import ChatCommands
 # Here we load the module with the standard commands, so they are being detected
 # and dispatched.
 import command_system.implementation.standard
+import command_system.implementation.execute
 
 try:
     import gtkspell
@@ -309,9 +311,16 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
     def on_seclabels_ready(self):
         lb = self.seclabel_combo.get_model()
         lb.clear()
-        for label in gajim.connections[self.account].seclabel_catalogues[self.contact.jid][2]:
+        i = 0
+        sel = 0
+        catalogue = gajim.connections[self.account].seclabel_catalogues[
+            self.contact.jid]
+        for label in catalogue[2]:
             lb.append([label])
-        self.seclabel_combo.set_active(0)
+            if label == catalogue[3]:
+                sel = i
+            i += 1
+        self.seclabel_combo.set_active(sel)
         self.seclabel_combo.set_no_show_all(False)
         self.seclabel_combo.show_all()
 
@@ -521,8 +530,12 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         super(ChatControlBase, self).shutdown()
         # PluginSystem: removing GUI extension points connected with ChatControlBase
         # instance object
-        gajim.plugin_manager.remove_gui_extension_point('chat_control_base', self)
-        gajim.plugin_manager.remove_gui_extension_point('chat_control_base_draw_banner', self)
+        gajim.plugin_manager.remove_gui_extension_point('chat_control_base',
+            self)
+        gajim.plugin_manager.remove_gui_extension_point(
+            'chat_control_base_draw_banner', self)
+        gajim.plugin_manager.remove_gui_extension_point('print_special_text',
+            self)
         gajim.ged.remove_event_handler('our-show', ged.GUI1,
             self._nec_our_status)
 
@@ -850,8 +863,8 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         return label
 
     def send_message(self, message, keyID='', type_='chat', chatstate=None,
-    msg_id=None, composing_xep=None, resource=None, xhtml=None, callback=None,
-    callback_args=[], process_commands=True):
+    msg_id=None, resource=None, xhtml=None, callback=None, callback_args=[],
+    process_commands=True):
         """
         Send the given message to the active tab. Doesn't return None if error
         """
@@ -866,9 +879,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         gajim.nec.push_outgoing_event(MessageOutgoingEvent(None,
             account=self.account, jid=self.contact.jid, message=message,
             keyID=keyID, type_=type_, chatstate=chatstate, msg_id=msg_id,
-            composing_xep=composing_xep, resource=resource,
-            user_nick=self.user_nick, xhtml=xhtml, label=label,
-            callback=callback, callback_args= callback_args))
+            resource=resource, user_nick=self.user_nick, xhtml=xhtml,
+            label=label, callback=callback, callback_args=callback_args,
+            control=self))
 
         # Record the history of sent messages
         self.save_message(message, 'sent')
@@ -1426,18 +1439,6 @@ class ChatControl(ChatControlBase):
         ChatControlBase.__init__(self, self.TYPE_ID, parent_win,
                 'chat_control', contact, acct, resource)
 
-        self._dbus_message_sent_match = None
-        if dbus_support.supported:
-            bus = dbus_support.session_bus.bus()
-            try:
-                obj = bus.get_object(remote_control.SERVICE, remote_control.OBJ_PATH)
-            except:
-                # likely dbus service not started
-                pass
-            else:
-                iface = dbus.Interface(obj, remote_control.INTERFACE)
-                self._dbus_message_sent_match = iface.connect_to_signal("MessageSent", self.on_message_sent)
-
         self.gpg_is_active = False
         # for muc use:
         # widget = self.xml.get_object('muc_window_actions_button')
@@ -1591,6 +1592,22 @@ class ChatControl(ChatControlBase):
         id_ = widget.connect('value_changed', self.on_sound_hscale_value_changed)
         self.handlers[id_] = widget
 
+        self.info_bar = gtk.InfoBar()
+        content_area = self.info_bar.get_content_area()
+        self.info_bar_label = gtk.Label()
+        self.info_bar_label.set_use_markup(True)
+        self.info_bar_label.set_alignment(0, 0)
+        content_area.add(self.info_bar_label)
+        self.info_bar.set_no_show_all(True)
+        widget = self.xml.get_object('vbox2')
+        widget.pack_start(self.info_bar, expand=False, padding=5)
+        widget.reorder_child(self.info_bar, 1)
+
+        # List of waiting infobar messages
+        self.info_bar_queue = []
+
+        self.subscribe_events()
+
         if not session:
             # Don't use previous session if we want to a specific resource
             # and it's not the same
@@ -1660,6 +1677,20 @@ class ChatControl(ChatControlBase):
         # instance object
         gajim.plugin_manager.gui_extension_point('chat_control', self)
 
+    def subscribe_events(self):
+        """
+        Register listeners to the events class
+        """
+        gajim.events.event_added_subscribe(self.on_event_added)
+        gajim.events.event_removed_subscribe(self.on_event_removed)
+
+    def unsubscribe_events(self):
+        """
+        Unregister listeners to the events class
+        """
+        gajim.events.event_added_unsubscribe(self.on_event_added)
+        gajim.events.event_removed_unsubscribe(self.on_event_removed)
+
     def _update_toolbar(self):
         # Formatting
         if self.contact.supports(NS_XHTML_IM) and not self.gpg_is_active:
@@ -1669,7 +1700,8 @@ class ChatControl(ChatControlBase):
 
         # Add to roster
         if not isinstance(self.contact, GC_Contact) \
-        and _('Not in Roster') in self.contact.groups:
+        and _('Not in Roster') in self.contact.groups and \
+        gajim.connections[self.account].roster_supported:
             self._add_to_roster_button.show()
         else:
             self._add_to_roster_button.hide()
@@ -2036,24 +2068,13 @@ class ChatControl(ChatControlBase):
         if cs and st in ('composing_only', 'all'):
             if contact.show == 'offline':
                 chatstate = ''
-            elif contact.composing_xep == 'XEP-0085':
-                if st == 'all' or cs == 'composing':
-                    chatstate = helpers.get_uf_chatstate(cs)
-                else:
-                    chatstate = ''
-            elif contact.composing_xep == 'XEP-0022':
-                if cs in ('composing', 'paused'):
-                    # only print composing, paused
-                    chatstate = helpers.get_uf_chatstate(cs)
-                else:
-                    chatstate = ''
-            else:
-                # When does that happen ? See [7797] and [7804]
+            elif st == 'all' or cs == 'composing':
                 chatstate = helpers.get_uf_chatstate(cs)
+            else:
+                chatstate = ''
 
             label_text = '<span %s>%s</span><span %s>%s %s</span>' \
-                    % (font_attrs, name, font_attrs_small,
-                    acct_info, chatstate)
+                % (font_attrs, name, font_attrs_small, acct_info, chatstate)
             if acct_info:
                 acct_info = ' ' + acct_info
             label_tooltip = '%s%s %s' % (name, acct_info, chatstate)
@@ -2209,7 +2230,7 @@ class ChatControl(ChatControlBase):
             dialogs.ESessionInfoWindow(self.session)
 
     def send_message(self, message, keyID='', chatstate=None, xhtml=None,
-                    process_commands=True):
+    process_commands=True):
         """
         Send a message to contact
         """
@@ -2233,25 +2254,9 @@ class ChatControl(ChatControlBase):
 
         chatstates_on = gajim.config.get('outgoing_chat_state_notifications') != \
                 'disabled'
-        composing_xep = contact.composing_xep
         chatstate_to_send = None
         if chatstates_on and contact is not None:
-            if composing_xep is None:
-                # no info about peer
-                # send active to discover chat state capabilities
-                # this is here (and not in send_chatstate)
-                # because we want it sent with REAL message
-                # (not standlone) eg. one that has body
-
-                if contact.our_chatstate:
-                    # We already asked for xep 85, don't ask it twice
-                    composing_xep = 'asked_once'
-
-                chatstate_to_send = 'active'
-                contact.our_chatstate = 'ask' # pseudo state
-            # if peer supports jep85 and we are not 'ask', send 'active'
-            # NOTE: first active and 'ask' is set in gajim.py
-            elif composing_xep is not False:
+            if contact.supports(NS_CHATSTATES):
                 # send active chatstate on every message (as XEP says)
                 chatstate_to_send = 'active'
                 contact.our_chatstate = 'active'
@@ -2274,27 +2279,9 @@ class ChatControl(ChatControlBase):
                     xep0184_id=xep0184_id, xhtml=xhtml, displaymarking=displaymarking)
 
         ChatControlBase.send_message(self, message, keyID, type_='chat',
-                chatstate=chatstate_to_send, composing_xep=composing_xep,
-                xhtml=xhtml, callback=_on_sent,
-                callback_args=[contact, message, encrypted, xhtml, self.get_seclabel()],
-                process_commands=process_commands)
-
-
-    def on_message_sent(self, account_and_message):
-        # this is called when an external application sends a chat
-        # message using DBus. So we likely need to update the UI
-        # accordingly.
-        message = account_and_message[1][1]
-        jid_and_resource = account_and_message[1][0]
-        if not message:
-            return
-
-        # try to filter based on jid/resource to avoid duplicate
-        # messages.
-        if jid_and_resource.find('/') > -1:
-            jid = jid_and_resource.split('/')[0]
-            if jid == self.contact.jid:
-                self.print_conversation(message, frm='outgoing')
+            chatstate=chatstate_to_send, xhtml=xhtml, callback=_on_sent,
+            callback_args=[contact, message, encrypted, xhtml,
+            self.get_seclabel()], process_commands=process_commands)
 
     def check_for_possible_paused_chatstate(self, arg):
         """
@@ -2393,11 +2380,15 @@ class ChatControl(ChatControlBase):
         self._show_lock_image(e2e_is_active, 'E2E', e2e_is_active, self.session and \
                         self.session.is_loggable(), self.session and self.session.verified_identity)
 
-    def print_session_details(self):
-        if isinstance(self.session, EncryptedStanzaSession):
+    def print_session_details(self, old_session=None):
+        if isinstance(self.session, EncryptedStanzaSession) or \
+        (old_session and isinstance(old_session, EncryptedStanzaSession)):
             self.print_esession_details()
         elif isinstance(self.session, ArchivingStanzaSession):
             self.print_archiving_session_details()
+
+    def get_our_nick(self):
+        return gajim.nicks[self.account]
 
     def print_conversation(self, text, frm='', tim=None, encrypted=False,
                     subject=None, xhtml=None, simple=False, xep0184_id=None,
@@ -2455,7 +2446,7 @@ class ChatControl(ChatControlBase):
                 name = contact.get_shown_name()
             else:
                 kind = 'outgoing'
-                name = gajim.nicks[self.account]
+                name = self.get_our_nick()
                 if not xhtml and not (encrypted and self.gpg_is_active) and \
                 gajim.config.get('rst_formatting_outgoing_messages'):
                     from common.rst_xhtml_generator import create_xhtml
@@ -2597,7 +2588,7 @@ class ChatControl(ChatControlBase):
         if contact.show == 'offline':
             return
 
-        if contact.composing_xep is False: # jid cannot do xep85 nor xep22
+        if not contact.supports(NS_CHATSTATES):
             return
 
         # if the new state we wanna send (state) equals
@@ -2605,51 +2596,27 @@ class ChatControl(ChatControlBase):
         if contact.our_chatstate == state:
             return
 
-        if contact.composing_xep is None:
-            # we don't know anything about jid, so return
-            # NOTE:
-            # send 'active', set current state to 'ask' and return is done
-            # in self.send_message() because we need REAL message (with <body>)
-            # for that procedure so return to make sure we send only once
-            # 'active' until we know peer supports jep85
-            return
-
-        if contact.our_chatstate == 'ask':
-            return
-
-        # in JEP22, when we already sent stop composing
-        # notification on paused, don't resend it
-        if contact.composing_xep == 'XEP-0022' and \
-        contact.our_chatstate in ('paused', 'active', 'inactive') and \
-        state is not 'composing': # not composing == in (active, inactive, gone)
-            contact.our_chatstate = 'active'
-            self.reset_kbd_mouse_timeout_vars()
-            return
-
-        # if we're inactive prevent composing (JEP violation)
+        # if wel're inactive prevent composing (XEP violation)
         if contact.our_chatstate == 'inactive' and state == 'composing':
             # go active before
             gajim.nec.push_outgoing_event(MessageOutgoingEvent(None,
-                account=self.account, jid=self.contact.jid, chatstate='active'))
+                account=self.account, jid=self.contact.jid, chatstate='active',
+                control=self))
             contact.our_chatstate = 'active'
             self.reset_kbd_mouse_timeout_vars()
 
         gajim.nec.push_outgoing_event(MessageOutgoingEvent(None,
             account=self.account, jid=self.contact.jid, chatstate=state,
-            msg_id=contact.msg_id, composing_xep=contact.composing_xep))
+            msg_id=contact.msg_id, control=self))
 
         contact.our_chatstate = state
-        if contact.our_chatstate == 'active':
+        if state == 'active':
             self.reset_kbd_mouse_timeout_vars()
 
     def shutdown(self):
         # PluginSystem: removing GUI extension points connected with ChatControl
         # instance object
         gajim.plugin_manager.remove_gui_extension_point('chat_control', self)
-
-        # disconnect from the dbus MessageSent signal.
-        if self._dbus_message_sent_match:
-            self._dbus_message_sent_match.remove()
 
         gajim.ged.remove_event_handler('pep-received', ged.GUI1,
             self._nec_pep_received)
@@ -2661,6 +2628,8 @@ class ChatControl(ChatControlBase):
             self._nec_chatstate_received)
         gajim.ged.remove_event_handler('caps-received', ged.GUI1,
             self._nec_caps_received)
+
+        self.unsubscribe_events()
 
         # Send 'gone' chatstate
         self.send_chatstate('gone', self.contact)
@@ -2906,7 +2875,7 @@ class ChatControl(ChatControlBase):
             if row[1] in (constants.KIND_CHAT_MSG_SENT,
                             constants.KIND_SINGLE_MSG_SENT):
                 kind = 'outgoing'
-                name = gajim.nicks[self.account]
+                name = self.get_our_nick()
             elif row[1] in (constants.KIND_SINGLE_MSG_RECV,
                             constants.KIND_CHAT_MSG_RECV):
                 kind = 'incoming'
@@ -2956,12 +2925,12 @@ class ChatControl(ChatControlBase):
                 kind = 'info'
             else:
                 kind = 'print_queue'
-            dm = None
-            if len(data) > 10:
-                dm = data[10]
+            if data[11]:
+                kind = 'out'
+            dm = data[10]
             self.print_conversation(data[0], kind, tim=data[3],
-                    encrypted=data[4], subject=data[1], xhtml=data[7],
-                    displaymarking=dm)
+                encrypted=data[4], subject=data[1], xhtml=data[7],
+                displaymarking=dm)
             if len(data) > 6 and isinstance(data[6], int):
                 message_ids.append(data[6])
 
@@ -3173,3 +3142,144 @@ class ChatControl(ChatControlBase):
             self.print_conversation(' (', 'status', simple=True)
             self.print_conversation('%s' % (status), 'status', simple=True)
             self.print_conversation(')', 'status', simple=True)
+
+    def _info_bar_show_message(self):
+        if self.info_bar.get_visible():
+            # A message is already shown
+            return
+        if not self.info_bar_queue:
+            return
+        markup, buttons, args, type_ = self.info_bar_queue[0]
+        self.info_bar_label.set_markup(markup)
+
+        # Remove old buttons
+        area = self.info_bar.get_action_area()
+        for b in area.get_children():
+            area.remove(b)
+
+        # Add new buttons
+        for button in buttons:
+            self.info_bar.add_action_widget(button, 0)
+
+        self.info_bar.set_message_type(type_)
+        self.info_bar.set_no_show_all(False)
+        self.info_bar.show_all()
+
+    def _add_info_bar_message(self, markup, buttons, args,
+    type_=gtk.MESSAGE_INFO):
+        self.info_bar_queue.append((markup, buttons, args, type_))
+        self._info_bar_show_message()
+
+    def _get_file_props_event(self, file_props, type_):
+        evs = gajim.events.get_events(self.account, self.contact.jid, [type_])
+        for ev in evs:
+            if ev.parameters == file_props:
+                return ev
+        return None
+
+    def _on_accept_file_request(self, widget, file_props):
+        gajim.interface.instances['file_transfers'].on_file_request_accepted(
+            self.account, self.contact, file_props)
+        ev = self._get_file_props_event(file_props, 'file-request')
+        if ev:
+            gajim.events.remove_events(self.account, self.contact.jid, event=ev)
+
+    def _on_cancel_file_request(self, widget, file_props):
+        gajim.connections[self.account].send_file_rejection(file_props)
+        ev = self._get_file_props_event(file_props, 'file-request')
+        if ev:
+            gajim.events.remove_events(self.account, self.contact.jid, event=ev)
+
+    def _got_file_request(self, file_props):
+        """
+        Show an InfoBar on top of control
+        """
+        markup = '<b>%s:</b> %s' % (_('File transfer'), file_props['name'])
+        if 'desc' in file_props and file_props['desc']:
+            markup += ' (%s)' % file_props['desc']
+        markup += '\n%s: %s' % (_('Size'), helpers.convert_bytes(
+            file_props['size']))
+        b1 = gtk.Button(_('_Accept'))
+        b1.connect('clicked', self._on_accept_file_request, file_props)
+        b2 = gtk.Button(stock=gtk.STOCK_CANCEL)
+        b2.connect('clicked', self._on_cancel_file_request, file_props)
+        self._add_info_bar_message(markup, [b1, b2], file_props,
+            gtk.MESSAGE_QUESTION)
+
+    def _on_open_ft_folder(self, widget, file_props):
+        if 'file-name' not in file_props:
+            return
+        path = os.path.split(file_props['file-name'])[0]
+        if os.path.exists(path) and os.path.isdir(path):
+            helpers.launch_file_manager(path)
+        ev = self._get_file_props_event(file_props, 'file-completed')
+        if ev:
+            gajim.events.remove_events(self.account, self.contact.jid, event=ev)
+
+    def _on_ok(self, widget, file_props, type_):
+        ev = self._get_file_props_event(file_props, type_)
+        if ev:
+            gajim.events.remove_events(self.account, self.contact.jid, event=ev)
+
+    def _got_file_completed(self, file_props):
+        markup = '<b>%s:</b> %s' % (_('File transfer completed'),
+            file_props['name'])
+        if 'desc' in file_props and file_props['desc']:
+            markup += ' (%s)' % file_props['desc']
+        b1 = gtk.Button(_('_Open Containing Folder'))
+        b1.connect('clicked', self._on_open_ft_folder, file_props)
+        b2 = gtk.Button(stock=gtk.STOCK_OK)
+        b2.connect('clicked', self._on_ok, file_props, 'file-completed')
+        self._add_info_bar_message(markup, [b1, b2], file_props)
+
+    def _got_file_error(self, file_props, type_, pri_txt, sec_txt):
+        markup = '<b>%s:</b> %s' % (pri_txt, sec_txt)
+        b = gtk.Button(stock=gtk.STOCK_OK)
+        b.connect('clicked', self._on_ok, file_props, type_)
+        self._add_info_bar_message(markup, [b], file_props, gtk.MESSAGE_ERROR)
+
+    def on_event_added(self, event):
+        if event.account != self.account:
+            return
+        if event.jid != self.contact.jid:
+            return
+        if event.type_ == 'file-request':
+            self._got_file_request(event.parameters)
+        elif event.type_ == 'file-completed':
+            self._got_file_completed(event.parameters)
+        elif event.type_ in ('file-error', 'file-stopped'):
+            msg_err = ''
+            if event.parameters['error'] == -1:
+                msg_err = _('Remote contact stopped transfer')
+            elif event.parameters['error'] == -6:
+                msg_err = _('Error opening file')
+            self._got_file_error(event.parameters, event.type_,
+                _('File transfer stopped'), msg_err)
+        elif event.type_ in ('file-request-error', 'file-send-error'):
+            self._got_file_error(event.parameters, event.type_,
+                _('File transfer cancelled'),
+                _('Connection with peer cannot be established.'))
+
+    def on_event_removed(self, event_list):
+        """
+        Called when one or more events are removed from the event list
+        """
+        for ev in event_list:
+            if ev.account != self.account:
+                continue
+            if ev.jid != self.contact.jid:
+                continue
+            if ev.type_ not in ('file-request', 'file-completed', 'file-error',
+            'file-stopped', 'file-request-error', 'file-send-error'):
+                continue
+            i = 0
+            for ib_msg in self.info_bar_queue:
+                if ib_msg[2] == ev.parameters:
+                    self.info_bar_queue.remove(ib_msg)
+                    if i == 0:
+                        # We are removing the one currently displayed
+                        self.info_bar.hide()
+                        # show next one?
+                        gobject.idle_add(self._info_bar_show_message)
+                    break
+                i += 1

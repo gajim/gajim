@@ -425,13 +425,17 @@ control=None, gc_contact=None):
             revoke_auth_menuitem.connect('activate', roster.revoke_auth, jid,
                     account)
 
-    else:
+    elif gajim.connections[account].roster_supported:
         # contact is in group 'Not in Roster'
         add_to_roster_menuitem.set_no_show_all(False)
         subscription_menuitem.set_sensitive(False)
 
         add_to_roster_menuitem.connect('activate', roster.on_add_to_roster,
                 contact, account)
+    else:
+        add_to_roster_menuitem.hide()
+        add_to_roster_menuitem.set_no_show_all(True)
+        subscription_menuitem.set_sensitive(False)
 
     set_custom_avatar_menuitem.connect('activate',
             roster.on_set_custom_avatar_activate, contact, account)

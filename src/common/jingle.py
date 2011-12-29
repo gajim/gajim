@@ -32,11 +32,12 @@ Handles the jingle signalling protocol
 
 import xmpp
 import helpers
+import gajim
 
 from jingle_session import JingleSession, JingleStates
-from jingle_rtp import JingleAudio, JingleVideo
+if gajim.HAVE_FARSIGHT:
+    from jingle_rtp import JingleAudio, JingleVideo
 from jingle_ft import JingleFileTransfer
-import gajim
 
 import logging
 logger = logging.getLogger('gajim.c.jingle')

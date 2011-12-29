@@ -122,8 +122,10 @@ class Events:
     def remove_account(self, account):
         del self._events[account]
 
-    def create_event(self, type_, parameters, time_ = time.time(),
-    show_in_roster = False, show_in_systray = True):
+    def create_event(self, type_, parameters, time_=None,
+    show_in_roster=False, show_in_systray=True):
+        if not time_:
+            time_ = time.time()
         return Event(type_, time_, parameters, show_in_roster,
                 show_in_systray)
 
@@ -219,10 +221,12 @@ class Events:
                 events_list.append(ev)
         return events_list
 
-    def get_first_event(self, account, jid = None, type_ = None):
+    def get_first_event(self, account=None, jid=None, type_=None):
         """
         Return the first event of type type_ if given
         """
+        if not account:
+            return self._get_first_event_with_attribute(self._events)
         events_list = self.get_events(account, jid, type_)
         # be sure it's bigger than latest event
         first_event_time = time.time() + 1
