@@ -927,19 +927,10 @@ class Interface:
             jid = unicode(file_props['receiver'])
             gajim.socks5queue.remove_sender(file_props['sid'], True, True)
         # End jingle session
-        if file_props.get('session-type') == 'jingle' and file_props['type'] ==\
-        'r':
-            session = gajim.connections[account].get_jingle_session(jid,
+        session = gajim.connections[account].get_jingle_session(jid,
                 sid=file_props['session-sid'])
-            # get content:
-            content = None
-            for c in session.contents.values():
-                if c.file_props['sid'] == file_props['sid']:
-                    content = c
-                    break
-            if not content:
-                return
-            session.remove_content('initiator', c.name)
+        if session:
+            session.end_session()
 
         if helpers.allow_popup_window(account):
             if file_props['error'] == 0:
