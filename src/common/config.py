@@ -386,7 +386,7 @@ class Config:
                     'ft_send_local_ips': [ opt_bool, True, _('If enabled, Gajim will send your local IPs so your contact can connect to your machine to transfer files.')],
                     'oauth2_refresh_token': [ opt_str, '', _('Latest token for Oauth2 authentication.')],
                     'oauth2_client_id': [ opt_str, '0000000044077801', _('client_id for Oauth2 authentication.')],
-                    'oauth2_redirect_url': [ opt_str, 'http%3A%2F%2Fgajim.org%2Fmsnauth%2Findex.cgi', _('redirect_url for Oauth2 authentication.')],
+                    'oauth2_redirect_url': [ opt_str, 'https%3A%2F%2Fgajim.org%2Fmsnauth%2Findex.cgi', _('redirect_url for Oauth2 authentication.')],
             }, {}),
             'statusmsg': ({
                     'message': [ opt_str, '' ],
