@@ -58,6 +58,7 @@ from common import gajim
 from common import gpg
 from common import passwords
 from common import exceptions
+from common import check_X509
 from connection_handlers import *
 
 from xmpp import Smacks
@@ -98,6 +99,7 @@ ssl_error = {
 31: _("Authority and issuer serial number mismatch"),
 32: _("Key usage does not include certificate signing"),
 50: _("Application verification failure")
+#100 is for internal usage: host not correct
 }
 
 class CommonConnection:
@@ -1276,9 +1278,9 @@ class Connection(CommonConnection, ConnectionHandlers):
         except AttributeError:
             errnum = -1 # we don't have an errnum
         if errnum > 0 and str(errnum) not in gajim.config.get_per('accounts',
-        self.name, 'ignore_ssl_errors'):
-            text = _('The authenticity of the %s certificate could be invalid.') %\
-                    hostname
+        self.name, 'ignore_ssl_errors').split():
+            text = _('The authenticity of the %s certificate could be invalid.'
+                ) % hostname
             if errnum in ssl_error:
                 text += _('\nSSL Error: <b>%s</b>') % ssl_error[errnum]
             else:
@@ -1290,7 +1292,8 @@ class Connection(CommonConnection, ConnectionHandlers):
                 certificate=con.Connection.ssl_certificate))
             return True
         if hasattr(con.Connection, 'ssl_fingerprint_sha1'):
-            saved_fingerprint = gajim.config.get_per('accounts', self.name, 'ssl_fingerprint_sha1')
+            saved_fingerprint = gajim.config.get_per('accounts', self.name,
+                'ssl_fingerprint_sha1')
             if saved_fingerprint:
                 # Check sha1 fingerprint
                 if con.Connection.ssl_fingerprint_sha1 != saved_fingerprint:
@@ -1299,8 +1302,19 @@ class Connection(CommonConnection, ConnectionHandlers):
                         new_fingerprint=con.Connection.ssl_fingerprint_sha1))
                     return True
             else:
-                gajim.config.set_per('accounts', self.name, 'ssl_fingerprint_sha1',
-                        con.Connection.ssl_fingerprint_sha1)
+                gajim.config.set_per('accounts', self.name,
+                    'ssl_fingerprint_sha1', con.Connection.ssl_fingerprint_sha1)
+        if not check_X509.check_certificate(con.Connection.ssl_certificate,
+        hostname) and '100' not in gajim.config.get_per('accounts', self.name,
+        'ignore_ssl_errors').split():
+            txt = _('The authenticity of the %s certificate could be invalid.'
+                '\nThe certificate does not cover this domain.') % hostname
+            gajim.nec.push_incoming_event(SSLErrorEvent(None, conn=self,
+                error_text=txt, error_num=100, cert=con.Connection.ssl_cert_pem,
+                fingerprint=con.Connection.ssl_fingerprint_sha1,
+                certificate=con.Connection.ssl_certificate))
+            return True
+
         self._register_handlers(con, con_type)
         con.auth(
                 user=name,

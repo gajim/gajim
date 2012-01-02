@@ -451,8 +451,6 @@ class NonBlockingTLS(PlugIn):
         try:
             self._owner.ssl_fingerprint_sha1 = cert.digest('sha1')
             self._owner.ssl_certificate = cert
-            if errnum == 0:
-                return True
             self._owner.ssl_errnum = errnum
             self._owner.ssl_cert_pem = OpenSSL.crypto.dump_certificate(
                     OpenSSL.crypto.FILETYPE_PEM, cert)
