@@ -49,8 +49,8 @@ class FeaturesWindow:
         self.features = {
             _('SSL certificate validation'): (self.pyopenssl_available,
                 _('A library used to validate server certificates to ensure a secure connection.'),
-                _('Requires python-pyopenssl.'),
-                _('Requires python-pyopenssl.')),
+                _('Requires python-pyopenssl > 0.12 and pyasn1.'),
+                _('Requires python-pyopenssl > 0.12 and pyasn1.')),
             _('Bonjour / Zeroconf'): (self.zeroconf_available,
                 _('Serverless chatting with autodetected clients in a local network.'),
                 _('Requires python-avahi.'),
