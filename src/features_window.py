@@ -169,6 +169,11 @@ class FeaturesWindow:
         try:
             import OpenSSL.SSL
             import OpenSSL.crypto
+            ver = OpenSSL.__version__
+            ver_l = [int(i) for i in ver.split('.')]
+            if ver_l < [0, 12]:
+                raise ImportError
+            import pyasn1
         except Exception:
             return False
         return True
