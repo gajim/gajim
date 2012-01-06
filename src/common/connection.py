@@ -1304,24 +1304,22 @@ class Connection(CommonConnection, ConnectionHandlers):
             else:
                 gajim.config.set_per('accounts', self.name,
                     'ssl_fingerprint_sha1', con.Connection.ssl_fingerprint_sha1)
-        if not check_X509.check_certificate(con.Connection.ssl_certificate,
-        hostname) and '100' not in gajim.config.get_per('accounts', self.name,
-        'ignore_ssl_errors').split():
-            txt = _('The authenticity of the %s certificate could be invalid.'
-                '\nThe certificate does not cover this domain.') % hostname
-            gajim.nec.push_incoming_event(SSLErrorEvent(None, conn=self,
-                error_text=txt, error_num=100, cert=con.Connection.ssl_cert_pem,
-                fingerprint=con.Connection.ssl_fingerprint_sha1,
-                certificate=con.Connection.ssl_certificate))
-            return True
+            if not check_X509.check_certificate(con.Connection.ssl_certificate,
+            hostname) and '100' not in gajim.config.get_per('accounts',
+            self.name, 'ignore_ssl_errors').split():
+                txt = _('The authenticity of the %s certificate could be '
+                    'invalid.\nThe certificate does not cover this domain.') % \
+                    hostname
+                gajim.nec.push_incoming_event(SSLErrorEvent(None, conn=self,
+                    error_text=txt, error_num=100,
+                    cert=con.Connection.ssl_cert_pem,
+                    fingerprint=con.Connection.ssl_fingerprint_sha1,
+                    certificate=con.Connection.ssl_certificate))
+                return True
 
         self._register_handlers(con, con_type)
-        con.auth(
-                user=name,
-                password=self.password,
-                resource=self.server_resource,
-                sasl=1,
-                on_auth=self.__on_auth)
+        con.auth(user=name, password=self.password,
+            resource=self.server_resource, sasl=1, on_auth=self.__on_auth)
 
     def ssl_certificate_accepted(self):
         if not self.connection:
