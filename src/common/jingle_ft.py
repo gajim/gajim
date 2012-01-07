@@ -22,7 +22,7 @@ Handles  Jingle File Transfer (XEP 0234)
 import gajim
 import xmpp
 from jingle_content import contents, JingleContent
-from jingle_transport import JingleTransportICEUDP, JingleTransportSocks5
+from jingle_transport import JingleTransportICEUDP, JingleTransportSocks5, JingleTransportIBB, TransportType
 from common import helpers
 from common.socks5 import Socks5ReceiverClient, Socks5SenderClient
 from common.connection_handlers_events import FileRequestReceivedEvent
@@ -61,7 +61,7 @@ class JingleFileTransfer(JingleContent):
         self.callbacks['session-terminate'] += [self.__on_session_terminate]
         self.callbacks['transport-accept'] += [self.__on_transport_accept]
         self.callbacks['transport-replace'] += [self.__on_transport_replace]
-        self.callbacks['session-accept-sent'] += [self._listen_host]
+        self.callbacks['session-accept-sent'] += [self.__transport_setup]
         # fallback transport method
         self.callbacks['transport-reject'] += [self.__on_transport_reject]
         self.callbacks['transport-info'] += [self.__on_transport_info]
@@ -119,10 +119,7 @@ class JingleFileTransfer(JingleContent):
             response.delChild(response.getQuery())
             con.connection.send(response)
             # We send the file
-            con.files_props[self.file_props['sid']] = self.file_props
-            fp = open(self.file_props['file-name'], 'r')
-            con.OpenStream( self.transport.sid, self.session.peerjid,
-                            fp,    blocksize=4096)
+            self.__start_IBB_transfer(con)
             raise xmpp.NodeProcessed
 
         self.file_props['streamhosts'] = self.transport.remote_candidates
@@ -142,11 +139,14 @@ class JingleFileTransfer(JingleContent):
         fingerprint = None
         if self.use_security:
             fingerprint = 'client'
-        gajim.socks5queue.connect_to_hosts(self.session.connection.name,
+        if self.transport.type == TransportType.SOCKS5:
+            gajim.socks5queue.connect_to_hosts(self.session.connection.name,
                        self.file_props['sid'], self.send_candidate_used,
                          self._on_connect_error, fingerprint=fingerprint,
                          receiving=False)
-
+        elif self.transport.type == TransportType.IBB:
+            self.state = STATE_TRANSFERING
+            self.__start_IBB_transfer(self.session.connection)
         raise xmpp.NodeProcessed
 
     def __on_session_terminate(self, stanza, content, error, action):
@@ -224,6 +224,7 @@ class JingleFileTransfer(JingleContent):
                 self.file_props
             # Listen on configured port for file transfer
             self._listen_host()
+        
         elif not self.weinitiate and self.state == STATE_NOT_STARTED:
             # session-accept iq-result
             if not self.negotiated:
@@ -254,6 +255,22 @@ class JingleFileTransfer(JingleContent):
                 return
             # initiate transfer
             self.start_transfer()
+            
+    def __start_IBB_transfer(self, con):
+        con.files_props[self.file_props['sid']] = self.file_props
+        fp = open(self.file_props['file-name'], 'r')
+        con.OpenStream( self.transport.sid, self.session.peerjid,
+                            fp,    blocksize=4096)
+
+    def __transport_setup(self, stanza=None, content=None, error=None
+                     , action=None):
+        # Sets up a few transport specific things for the file transfer
+        if self.transport.type == TransportType.SOCKS5:
+            self._listen_host()
+            
+        if self.transport.type == TransportType.IBB:
+            self.state = STATE_TRANSFERING
+            
 
     def send_candidate_used(self, streamhost):
         """
@@ -328,8 +345,7 @@ class JingleFileTransfer(JingleContent):
         # callback from socsk5queue.start_listener
         self.file_props['hash'] = hash_id
 
-    def _listen_host(self, stanza=None, content=None, error=None
-                     , action=None):
+    def _listen_host(self):
 
         receiver = self.file_props['receiver']
         sender = self.file_props['sender']

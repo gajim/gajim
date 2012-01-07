@@ -36,8 +36,9 @@ class TransportType(object):
     """
     Possible types of a JingleTransport
     """
-    datagram = 1
-    streaming = 2
+    ICEUDP = 1
+    SOCKS5 = 2
+    IBB = 3
 
 
 class JingleTransport(object):
@@ -98,7 +99,7 @@ class JingleTransportSocks5(JingleTransport):
     Note: Don't forget to call set_file_props after initialization
     """
     def __init__(self, node=None):
-        JingleTransport.__init__(self, TransportType.streaming)
+        JingleTransport.__init__(self, TransportType.SOCKS5)
         self.connection = None
         self.remote_candidates = []
         self.sid = None
@@ -300,7 +301,7 @@ class JingleTransportIBB(JingleTransport):
 
     def __init__(self, node=None, block_sz=None):
 
-        JingleTransport.__init__(self, TransportType.streaming)
+        JingleTransport.__init__(self, TransportType.IBB)
 
         if block_sz:
             self.block_sz = block_sz
@@ -328,7 +329,7 @@ except Exception:
 
 class JingleTransportICEUDP(JingleTransport):
     def __init__(self, node):
-        JingleTransport.__init__(self, TransportType.datagram)
+        JingleTransport.__init__(self, TransportType.ICEUDP)
 
     def make_candidate(self, candidate):
         types = {farsight.CANDIDATE_TYPE_HOST: 'host',
