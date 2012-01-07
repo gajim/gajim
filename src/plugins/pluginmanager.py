@@ -475,7 +475,10 @@ class PluginManager(object):
 
                 except TypeError, type_error:
                     # set plugin localization
-                    module_attr._ = _
+                    try:
+                        module_attr._ = _
+                    except AttributeError, type_error:
+                        pass
                 except ConfigParser.NoOptionError, type_error:
                     # all fields are required
                     log.debug('%s : %s' % (module_attr_name,
