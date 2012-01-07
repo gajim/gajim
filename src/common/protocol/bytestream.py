@@ -780,7 +780,7 @@ class ConnectionIBBytestream(ConnectionBytestream):
         elif typ == 'set' and stanza.getTag('close', namespace=xmpp.NS_IBB):
             self.StreamCloseHandler(conn, stanza)
         elif typ == 'result':
-            self.StreamCommitHandler(conn, stanza)
+            self.SendHandler()
         elif typ == 'error':
             self.StreamOpenReplyHandler(conn, stanza)
         else:
