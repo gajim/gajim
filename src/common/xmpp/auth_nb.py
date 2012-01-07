@@ -577,8 +577,19 @@ class NonBlockingNonSASL(PlugIn):
         else:
             log.warn("Secure methods unsupported, performing plain text \
                 authentication")
-            query.setTagData('password', self.password)
             self._method = 'plain'
+            self._owner._caller.get_password(self._on_password, self._method)
+            return
+        resp = self.owner.Dispatcher.SendAndWaitForResponse(iq,
+            func=self._on_auth)
+
+    def _on_password(self, password):
+        self.password = '' if password is None else password
+        iq=Iq('set', NS_AUTH)
+        query = iq.getTag('query')
+        query.setTagData('username', self.user)
+        query.setTagData('resource', self.resource)
+        query.setTagData('password', self.password)
         resp = self.owner.Dispatcher.SendAndWaitForResponse(iq,
             func=self._on_auth)
 
