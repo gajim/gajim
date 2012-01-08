@@ -782,7 +782,7 @@ class ConnectionIBBytestream(ConnectionBytestream):
         elif typ == 'result':
             self.SendHandler()
         elif typ == 'error':
-            self.StreamOpenReplyHandler(conn, stanza)
+            gajim.socks5queue.error_cb()
         else:
             conn.send(xmpp.Error(stanza, xmpp.ERR_BAD_REQUEST))
         raise xmpp.NodeProcessed
