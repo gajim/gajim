@@ -38,6 +38,7 @@ from jingle_session import JingleSession, JingleStates
 if gajim.HAVE_FARSIGHT:
     from jingle_rtp import JingleAudio, JingleVideo
 from jingle_ft import JingleFileTransfer
+from jingle_transport import JingleTransportSocks5, JingleTransportIBB
 
 import logging
 logger = logging.getLogger('gajim.c.jingle')
@@ -150,8 +151,12 @@ class ConnectionJingle(object):
         jingle = JingleSession(self, weinitiate=True, jid=jid)
         self._sessions[jingle.sid] = jingle
         file_props['sid'] = jingle.sid
-        c = JingleFileTransfer(jingle, file_props=file_props,
-            use_security=use_security)
+        if contact.supports(xmpp.NS_JINGLE_BYTESTREAM):
+            transport = JingleTransportSocks5()
+        elif contact.supports(xmpp.NS_JINGLE_IBB):
+            transport = JingleTransportIBB()
+        c = JingleFileTransfer(jingle, transport=transport,
+            file_props=file_props, use_security=use_security)
         jingle.add_content('file' + helpers.get_random_string_16(), c)
         jingle.start_session()
         return c.transport.sid
