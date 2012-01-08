@@ -22,7 +22,8 @@ Handles  Jingle File Transfer (XEP 0234)
 import gajim
 import xmpp
 from jingle_content import contents, JingleContent
-from jingle_transport import JingleTransportICEUDP, JingleTransportSocks5, JingleTransportIBB, TransportType
+from jingle_transport import JingleTransportICEUDP, JingleTransportSocks5
+from jingle_transport import JingleTransportIBB, TransportType
 from common import helpers
 from common.socks5 import Socks5ReceiverClient, Socks5SenderClient
 from common.connection_handlers_events import FileRequestReceivedEvent
@@ -124,9 +125,9 @@ class JingleFileTransfer(JingleContent):
 
         self.file_props['streamhosts'] = self.transport.remote_candidates
         for host in self.file_props['streamhosts']:
-                host['initiator'] = self.session.initiator
-                host['target'] = self.session.responder
-                host['sid'] = self.file_props['sid']
+            host['initiator'] = self.session.initiator
+            host['target'] = self.session.responder
+            host['sid'] = self.file_props['sid']
 
         response = stanza.buildReply('result')
         response.delChild(response.getQuery())
@@ -135,15 +136,15 @@ class JingleFileTransfer(JingleContent):
         if not gajim.socks5queue.get_file_props(
            self.session.connection.name, self.file_props['sid']):
             gajim.socks5queue.add_file_props(self.session.connection.name,
-                                            self.file_props)
+                self.file_props)
         fingerprint = None
         if self.use_security:
             fingerprint = 'client'
         if self.transport.type == TransportType.SOCKS5:
             gajim.socks5queue.connect_to_hosts(self.session.connection.name,
-                       self.file_props['sid'], self.send_candidate_used,
-                         self._on_connect_error, fingerprint=fingerprint,
-                         receiving=False)
+                self.file_props['sid'], self.send_candidate_used,
+                self._on_connect_error, fingerprint=fingerprint,
+                receiving=False)
         elif self.transport.type == TransportType.IBB:
             self.state = STATE_TRANSFERING
             self.__start_IBB_transfer(self.session.connection)
@@ -213,8 +214,6 @@ class JingleFileTransfer(JingleContent):
         else:
             self.state = STATE_CAND_RECEIVED_PENDING_REPLY
 
-
-
     def __on_iq_result(self, stanza, content, error, action):
         log.info("__on_iq_result")
 
@@ -224,7 +223,7 @@ class JingleFileTransfer(JingleContent):
                 self.file_props
             # Listen on configured port for file transfer
             self._listen_host()
-        
+
         elif not self.weinitiate and self.state == STATE_NOT_STARTED:
             # session-accept iq-result
             if not self.negotiated:
@@ -255,22 +254,21 @@ class JingleFileTransfer(JingleContent):
                 return
             # initiate transfer
             self.start_transfer()
-            
+
     def __start_IBB_transfer(self, con):
         con.files_props[self.file_props['sid']] = self.file_props
         fp = open(self.file_props['file-name'], 'r')
-        con.OpenStream( self.transport.sid, self.session.peerjid,
-                            fp,    blocksize=4096)
+        con.OpenStream( self.transport.sid, self.session.peerjid, fp,
+            blocksize=4096)
 
-    def __transport_setup(self, stanza=None, content=None, error=None
-                     , action=None):
+    def __transport_setup(self, stanza=None, content=None, error=None,
+    action=None):
         # Sets up a few transport specific things for the file transfer
         if self.transport.type == TransportType.SOCKS5:
             self._listen_host()
-            
+
         if self.transport.type == TransportType.IBB:
             self.state = STATE_TRANSFERING
-            
 
     def send_candidate_used(self, streamhost):
         """
@@ -302,7 +300,6 @@ class JingleFileTransfer(JingleContent):
 
         self.session.send_transport_info(content)
 
-
     def _on_connect_error(self, sid):
         self.nominated_cand['our-cand'] = False
         self.send_error_candidate()
@@ -311,7 +308,6 @@ class JingleFileTransfer(JingleContent):
             self.state = STATE_CAND_SENT_AND_RECEIVED
         else:
             self.state = STATE_CAND_SENT_PENDING_REPLY
-
 
         log.info('connect error, sid=' + sid)
 
@@ -346,11 +342,10 @@ class JingleFileTransfer(JingleContent):
         self.file_props['hash'] = hash_id
 
     def _listen_host(self):
-
         receiver = self.file_props['receiver']
         sender = self.file_props['sender']
         sha_str = helpers.get_auth_sha(self.file_props['sid'], sender,
-                receiver)
+            receiver)
         self.file_props['sha_str'] = sha_str
 
         port = gajim.config.get('file_transfers_port')
@@ -361,22 +356,22 @@ class JingleFileTransfer(JingleContent):
 
         if self.weinitiate:
             listener = gajim.socks5queue.start_listener(port, sha_str,
-                    self._store_socks5_sid, self.file_props,
-                    fingerprint=fingerprint, type='sender')
+                self._store_socks5_sid, self.file_props,
+                fingerprint=fingerprint, type='sender')
         else:
             listener = gajim.socks5queue.start_listener(port, sha_str,
-                    self._store_socks5_sid, self.file_props,
-                    fingerprint=fingerprint, type='receiver')
+                self._store_socks5_sid, self.file_props,
+                fingerprint=fingerprint, type='receiver')
 
         if not listener:
-        # send error message, notify the user
+            # send error message, notify the user
             return
+
     def isOurCandUsed(self):
         '''
         If this method returns true then the candidate we nominated will be
         used, if false, the candidate nominated by peer will be used
         '''
-
         if self.nominated_cand['peer-cand'] == False:
             return True
         if self.nominated_cand['our-cand'] == False:
@@ -390,11 +385,9 @@ class JingleFileTransfer(JingleContent):
         else:
             return self.weinitiate
 
-
     def start_transfer(self):
-        
         self.state = STATE_TRANSFERING
-        
+
         # It tells wether we start the transfer as client or server
         mode = None
 
@@ -404,7 +397,7 @@ class JingleFileTransfer(JingleContent):
         else:
             mode = 'server'
             streamhost_used = self.nominated_cand['peer-cand']
-            
+
         if streamhost_used['type'] == 'proxy':
             self.file_props['is_a_proxy'] = True
             if self.weinitiate:
@@ -428,7 +421,7 @@ class JingleFileTransfer(JingleContent):
                 s[sender].connected:
                     return
 
-        if streamhost_used['type'] == 'proxy': 
+        if streamhost_used['type'] == 'proxy':
             self.file_props['streamhost-used'] = True
             streamhost_used['sid'] = self.file_props['sid']
             self.file_props['streamhosts'] = []
@@ -440,21 +433,18 @@ class JingleFileTransfer(JingleContent):
                 gajim.socks5queue.idx += 1
                 idx = gajim.socks5queue.idx
                 sockobj = Socks5SenderClient(gajim.idlequeue, idx,
-                                       gajim.socks5queue, 
-                                       _sock=None,
-                                       host=str(streamhost_used['host']), 
-                                       port=int(streamhost_used['port']),
-                                       fingerprint=None, 
-                                       connected=False, 
-                                       file_props=self.file_props)
+                    gajim.socks5queue, _sock=None,
+                    host=str(streamhost_used['host']),
+                    port=int(streamhost_used['port']), fingerprint=None,
+                    connected=False, file_props=self.file_props)
             else:
                 sockobj = Socks5ReceiverClient(gajim.idlequeue, streamhost_used,
                     sid=self.file_props['sid'],
                     file_props=self.file_props, fingerprint=None)
             sockobj.proxy = True
-            sockobj.streamhost = streamhost_used             
-            gajim.socks5queue.add_sockobj(self.session.connection.name, 
-                                           sockobj, 'sender')
+            sockobj.streamhost = streamhost_used
+            gajim.socks5queue.add_sockobj(self.session.connection.name,
+                sockobj, 'sender')
             streamhost_used['idx'] = sockobj.queue_idx
             # If we offered the nominated candidate used, we activate
             # the proxy
