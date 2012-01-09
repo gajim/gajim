@@ -3803,23 +3803,24 @@ class AccountCreationWizardWindow:
         self.back_button.show()
         self.forward_button.show()
         self.is_form = obj.is_form
+        empty_config = True
         if obj.is_form:
             dataform = dataforms.ExtendForm(node=obj.config)
             self.data_form_widget = dataforms_widget.DataFormWidget(dataform)
+            empty_config = False
         else:
             self.data_form_widget = FakeDataForm(obj.config)
-            empty_config = True
             for field in obj.config:
                 if field in ('key', 'instructions', 'x', 'registered'):
                     continue
                 empty_config = False
                 break
-            if empty_config:
-                self.forward_button.set_sensitive(False)
-                self.notebook.set_current_page(4) # show form page
-                return
         self.data_form_widget.show_all()
         self.xml.get_object('form_vbox').pack_start(self.data_form_widget)
+        if empty_config:
+            self.forward_button.set_sensitive(False)
+            self.notebook.set_current_page(4) # show form page
+            return
         self.ssl_fingerprint = obj.ssl_fingerprint
         self.ssl_cert = obj.ssl_cert
         if obj.ssl_msg:
