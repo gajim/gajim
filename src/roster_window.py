@@ -4765,22 +4765,21 @@ class RosterWindow:
         """
         Initialize opened and closed 'transport' iconset dict
         """
-        if gajim.config.get('use_transports_iconsets'):
-            folder = os.path.join(helpers.get_transport_path(transport),
-                '16x16')
-            pixo, pixc = gtkgui_helpers.load_icons_meta()
-            self.transports_state_images['opened'][transport] = \
-                gtkgui_helpers.load_iconset(folder, pixo, transport=True)
-            self.transports_state_images['closed'][transport] = \
-                gtkgui_helpers.load_iconset(folder, pixc, transport=True)
-            folder = os.path.join(helpers.get_transport_path(transport),
-                '32x32')
-            self.transports_state_images['32'][transport] = \
-                gtkgui_helpers.load_iconset(folder, transport=True)
-            folder = os.path.join(helpers.get_transport_path(transport),
-                '16x16')
-            self.transports_state_images['16'][transport] = \
-                gtkgui_helpers.load_iconset(folder, transport=True)
+        if not gajim.config.get('use_transports_iconsets'):
+            return
+
+        folder = os.path.join(helpers.get_transport_path(transport), '32x32')
+        self.transports_state_images['32'][transport] = \
+            gtkgui_helpers.load_iconset(folder, transport=True)
+        folder = os.path.join(helpers.get_transport_path(transport), '16x16')
+        self.transports_state_images['16'][transport] = \
+            gtkgui_helpers.load_iconset(folder, transport=True)
+
+        pixo, pixc = gtkgui_helpers.load_icons_meta()
+        self.transports_state_images['opened'][transport] = \
+            gtkgui_helpers.load_iconset(folder, pixo, transport=True)
+        self.transports_state_images['closed'][transport] = \
+            gtkgui_helpers.load_iconset(folder, pixc, transport=True)
 
     def update_jabber_state_images(self):
         # Update the roster
