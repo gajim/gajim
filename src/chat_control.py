@@ -3327,6 +3327,7 @@ class ChatControl(ChatControlBase):
                     self.info_bar_queue.remove(ib_msg)
                     if i == 0:
                         # We are removing the one currently displayed
+                        self.info_bar.set_no_show_all(True)
                         self.info_bar.hide()
                         # show next one?
                         gobject.idle_add(self._info_bar_show_message)
