@@ -52,8 +52,6 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
     def detach_from_control(self):
         if self.control:
             self.control.set_session(None)
-        gajim.ged.remove_event_handler('decrypted-message-received',
-            ged.GUI1, self._nec_decrypted_message_received)
 
     def acknowledge_termination(self):
         self.detach_from_control()
