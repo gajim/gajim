@@ -7,7 +7,7 @@
 ##      - Travis Shirk <travis@pobox.com>
 ## - Stefan Bethge <stefan@lanpartei.de>
 ##
-## Copyright (C) 2003-2010 Yann Leboulanger <asterix@lagaule.org>
+## Copyright (C) 2003-2012 Yann Leboulanger <asterix@lagaule.org>
 ## Copyright (C) 2003-2004 Vincent Hanquez <tab@snarc.org>
 ## Copyright (C) 2006 Nikos Kouremenos <nkour@jabber.org>
 ##                    Dimitur Kirov <dkirov@gmail.com>
