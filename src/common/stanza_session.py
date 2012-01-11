@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ## src/common/stanza_session.py
 ##
-## Copyright (C) 2007-2010 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2007-2012 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2007 Julien Pivotto <roidelapluie AT gmail.com>
 ## Copyright (C) 2007-2008 Brendan Taylor <whateley AT gmail.com>
 ##                         Jean-Marie Traissard <jim AT lapin.org>
