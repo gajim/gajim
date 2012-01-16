@@ -1451,10 +1451,27 @@ class RosterWindow:
         self.tree.set_cursor(path)
 
     def _readjust_expand_collapse_state(self):
-        for account in gajim.connections:
-            self._adjust_account_expand_collapse_state(account)
-            for group in gajim.groups[account]:
-                self._adjust_group_expand_collapse_state(group, account)
+        def func(model, path, iter_):
+            type_ = model[iter_][C_TYPE]
+            acct = model[iter_][C_ACCOUNT].decode('utf-8')
+            jid = model[iter_][C_JID].decode('utf-8')
+            key = None
+            if type_ == 'account':
+                key = acct
+            elif type_ == 'group':
+                key = acct + jid
+            elif type_ == 'contact':
+                parent_iter = model.iter_parent(iter_)
+                ptype = model[parent_iter][C_TYPE]
+                if ptype == 'group':
+                    grp = model[parent_iter][C_JID].decode('utf-8')
+                    key = acct + grp + jid
+            if key:
+                if key in self.collapsed_rows:
+                    self.tree.collapse_row(path)
+                else:
+                    self.tree.expand_row(path, False)
+        self.modelfilter.foreach(func)
 
     def _adjust_account_expand_collapse_state(self, account):
         """
@@ -4123,7 +4140,10 @@ class RosterWindow:
             jid = model[titer][C_JID].decode('utf-8')
             account = model[titer][C_ACCOUNT].decode('utf-8')
             contact = gajim.contacts.get_contact(account, jid)
-            for group in contact.groups:
+            groups = contact.groups
+            if not groups:
+                groups = [_('General')]
+            for group in groups:
                 if account + group + jid not in self.collapsed_rows:
                     self.collapsed_rows.append(account + group + jid)
             family = gajim.contacts.get_metacontacts_family(account, jid)
