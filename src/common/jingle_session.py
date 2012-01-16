@@ -98,7 +98,7 @@ class JingleSession(object):
 
 
         self.accepted = True # is this session accepted by user
-
+        self.file_hash = None
         # callbacks to call on proper contents
         # use .prepend() to add new callbacks, especially when you're going
         # to send error instead of ack
@@ -126,6 +126,7 @@ class JingleSession(object):
                 'iq-result':            [self.__broadcast],
                 'iq-error':             [self.__on_error],
         }
+        
 
     def collect_iq_id(self, iq_id):
         if iq_id is not None:
@@ -416,9 +417,20 @@ class JingleSession(object):
     def __on_session_info(self, stanza, jingle, error, action):
         # TODO: ringing, active, (un)hold, (un)mute
         payload = jingle.getPayload()
-        if payload:
-            self.__send_error(stanza, 'feature-not-implemented', 'unsupported-info', type_='modify')
-            raise xmpp.NodeProcessed
+        for p in payload:
+            if p.getName() == 'checksum':
+                hashes = p.getTag('file').getTag(name='hashes', 
+                                        namespace=xmpp.NS_HASHES)
+                for hash in hashes.getChildren():
+                    algo = hash.getAttr('algo')
+                    if algo in xmpp.Hashes.supported:
+                        data = hash.getData()
+                        self.file_hash = data
+                        print data
+                        raise xmpp.NodeProcessed
+        self.__send_error(stanza, 'feature-not-implemented', 'unsupported-info', type_='modify')
+        raise xmpp.NodeProcessed
+        
 
     def __on_content_remove(self, stanza, jingle, error, action):
         for content in jingle.iterTags('content'):
@@ -704,6 +716,13 @@ class JingleSession(object):
         if payload:
             jingle.addChild(node=payload)
         self.connection.connection.send(stanza)
+        
+    def _JingleFileTransfer__session_info(self, p):
+        # For some strange reason when I call
+        # self.session.__session_info(h) from the jingleFileTransfer object
+        # within a thread, this method gets called instead. Even though, it
+        # isn't being called explicitly.
+        self.__session_info(p)
 
     def _session_terminate(self, reason=None):
         assert self.state != JingleStates.ended

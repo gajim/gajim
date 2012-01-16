@@ -26,7 +26,7 @@ from jingle_transport import JingleTransportICEUDP, JingleTransportSocks5, Jingl
 from common import helpers
 from common.socks5 import Socks5ReceiverClient, Socks5SenderClient
 from common.connection_handlers_events import FileRequestReceivedEvent
-
+import threading
 import logging
 log = logging.getLogger('gajim.c.jingle_ft')
 
@@ -56,9 +56,11 @@ class JingleFileTransfer(JingleContent):
 
         # events we might be interested in
         self.callbacks['session-initiate'] += [self.__on_session_initiate]
+        self.callbacks['session-initiate-sent'] += [self.__on_session_initiate_sent]
         self.callbacks['content-add'] += [self.__on_session_initiate]
         self.callbacks['session-accept'] += [self.__on_session_accept]
-        self.callbacks['session-terminate'] += [self.__on_session_terminate]
+        self.callbacks['session-terminate'] += [self.__on_session_terminate]        
+        self.callbacks['session-info'] += [self.__on_session_info]
         self.callbacks['transport-accept'] += [self.__on_transport_accept]
         self.callbacks['transport-replace'] += [self.__on_transport_replace]
         self.callbacks['session-accept-sent'] += [self.__transport_setup]
@@ -99,12 +101,36 @@ class JingleFileTransfer(JingleContent):
         self.session = session
         self.media = 'file'
         self.nominated_cand = {}
+        
+        # Hash algorithm that we are using to calculate the integrity of the 
+        # file. Could be 'md5', 'sha-1', etc...
+        self.hash_algo = None
 
     def __on_session_initiate(self, stanza, content, error, action):
         gajim.nec.push_incoming_event(FileRequestReceivedEvent(None,
             conn=self.session.connection, stanza=stanza, jingle_content=content,
             FT_content=self))
-
+    def __on_session_initiate_sent(self, stanza, content, error, action):
+        # Calculate file_hash in a new thread
+        self.hashThread = threading.Thread(target=self.__calcHash)
+        self.hashThread.start()
+        
+    def __calcHash(self):
+        if self.hash_algo == None:
+            return
+        try:
+            file = open(self.file_props['file-name'], 'r')
+        except:
+            return
+        h = xmpp.Hashes()
+        h.calculateHash(self.hash_algo, file)
+        checksum = xmpp.Node(tag='checksum',  
+                             payload=[xmpp.Node(tag='file', payload=[h])])
+        checksum.setNamespace(xmpp.NS_JINGLE_FILE_TRANSFER)
+        # Send hash in a session info
+        self.session.__session_info(checksum )
+    
+        
     def __on_session_accept(self, stanza, content, error, action):
         log.info("__on_session_accept")
         con = self.session.connection
@@ -152,6 +178,9 @@ class JingleFileTransfer(JingleContent):
     def __on_session_terminate(self, stanza, content, error, action):
         log.info("__on_session_terminate")
 
+    def __on_session_info(self, stanza, content, error, action):
+        pass
+        
     def __on_transport_accept(self, stanza, content, error, action):
         log.info("__on_transport_accept")
 
@@ -164,8 +193,6 @@ class JingleFileTransfer(JingleContent):
     def __on_transport_info(self, stanza, content, error, action):
         log.info("__on_transport_info")
 
-        #if not self.weinitiate: # proxy activated from initiator
-        #    return
         if content.getTag('transport').getTag('candidate-error'):
             self.nominated_cand['peer-cand'] = False
             if self.state == STATE_CAND_SENT_PENDING_REPLY:
@@ -392,7 +419,7 @@ class JingleFileTransfer(JingleContent):
 
 
     def start_transfer(self):
-        
+
         self.state = STATE_TRANSFERING
         
         # It tells wether we start the transfer as client or server

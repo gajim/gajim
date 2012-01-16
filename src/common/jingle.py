@@ -151,10 +151,24 @@ class ConnectionJingle(object):
         file_props['sid'] = jingle.sid
         c = JingleFileTransfer(jingle, file_props=file_props,
                                use_security=use_security)
+        c.hash_algo = self.__hash_support(contact) 
         jingle.add_content('file' + helpers.get_random_string_16(), c)
         jingle.start_session()
         return c.transport.sid
 
+    def __hash_support(self, contact):
+        
+        if contact.supports(xmpp.NS_HASHES):
+            if contact.supports(xmpp.NS_HASHES_MD5):
+                return 'md5'
+            elif contact.supports(xmpp.NS_HASHES_SHA1):
+                return 'sha-1'
+            elif contact.supports(xmpp.NS_HASHES_SHA256):
+                return 'sha-256'
+            elif contact.supports(xmpp.NS_HASHES_SHA512):
+                return 'sha-512'
+            
+        return None
 
     def iter_jingle_sessions(self, jid, sid=None, media=None):
         if sid:
