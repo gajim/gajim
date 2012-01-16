@@ -38,6 +38,7 @@ from jingle_session import JingleSession, JingleStates
 if gajim.HAVE_FARSIGHT:
     from jingle_rtp import JingleAudio, JingleVideo
 from jingle_ft import JingleFileTransfer
+from jingle_transport import JingleTransportSocks5, JingleTransportIBB
 
 import logging
 logger = logging.getLogger('gajim.c.jingle')
@@ -78,11 +79,11 @@ class ConnectionJingle(object):
         """
         # get data
         jid = helpers.get_full_jid_from_iq(stanza)
-        id = stanza.getID()
+        id_ = stanza.getID()
 
-        if (jid, id) in self.__iq_responses.keys():
-            self.__iq_responses[(jid, id)].on_stanza(stanza)
-            del self.__iq_responses[(jid, id)]
+        if (jid, id_) in self.__iq_responses.keys():
+            self.__iq_responses[(jid, id_)].on_stanza(stanza)
+            del self.__iq_responses[(jid, id_)]
             raise xmpp.NodeProcessed
 
         jingle = stanza.getTag('jingle')
@@ -93,7 +94,7 @@ class ConnectionJingle(object):
         else:
             sid = None
             for sesn in self._sessions.values():
-                if id in sesn.iq_ids:
+                if id_ in sesn.iq_ids:
                     sesn.on_stanza(stanza)
             return
 
@@ -101,14 +102,15 @@ class ConnectionJingle(object):
         if sid not in self._sessions:
             #TODO: tie-breaking and other things...
             newjingle = JingleSession(con=self, weinitiate=False, jid=jid,
-                iq_id=id, sid=sid)
+                iq_id=id_, sid=sid)
             self._sessions[sid] = newjingle
 
         # we already have such session in dispatcher...
-        self._sessions[sid].collect_iq_id(id)
+        self._sessions[sid].collect_iq_id(id_)
         self._sessions[sid].on_stanza(stanza)
         # Delete invalid/unneeded sessions
-        if sid in self._sessions and self._sessions[sid].state == JingleStates.ended:
+        if sid in self._sessions and \
+        self._sessions[sid].state == JingleStates.ended:
             self.delete_jingle_session(sid)
 
         raise xmpp.NodeProcessed
@@ -142,16 +144,20 @@ class ConnectionJingle(object):
     def start_file_transfer(self, jid, file_props):
         logger.info("start file transfer with file: %s" % file_props)
         contact = gajim.contacts.get_contact_with_highest_priority(self.name,
-                                                                   gajim.get_jid_without_resource(jid))
+            gajim.get_jid_without_resource(jid))
         if contact is None:
             return
         use_security = contact.supports(xmpp.NS_JINGLE_XTLS)
         jingle = JingleSession(self, weinitiate=True, jid=jid)
         self._sessions[jingle.sid] = jingle
         file_props['sid'] = jingle.sid
-        c = JingleFileTransfer(jingle, file_props=file_props,
-                               use_security=use_security)
-        c.hash_algo = self.__hash_support(contact) 
+        if contact.supports(xmpp.NS_JINGLE_BYTESTREAM):
+            transport = JingleTransportSocks5()
+        elif contact.supports(xmpp.NS_JINGLE_IBB):
+            transport = JingleTransportIBB()
+        c = JingleFileTransfer(jingle, transport=transport,
+            file_props=file_props, use_security=use_security)
+		c.hash_algo = self.__hash_support(contact) 
         jingle.add_content('file' + helpers.get_random_string_16(), c)
         jingle.start_session()
         return c.transport.sid
@@ -172,13 +178,16 @@ class ConnectionJingle(object):
 
     def iter_jingle_sessions(self, jid, sid=None, media=None):
         if sid:
-            return (session for session in self._sessions.values() if session.sid == sid)
-        sessions = (session for session in self._sessions.values() if session.peerjid == jid)
+            return (session for session in self._sessions.values() if \
+                session.sid == sid)
+        sessions = (session for session in self._sessions.values() if \
+            session.peerjid == jid)
         if media:
             if media not in ('audio', 'video', 'file'):
                 return tuple()
             else:
-                return (session for session in sessions if session.get_content(media))
+                return (session for session in sessions if \
+                    session.get_content(media))
         else:
             return sessions
 
