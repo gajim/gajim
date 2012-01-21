@@ -2465,8 +2465,9 @@ class JoinGroupchatWindow:
                 'groupchat.'))
             return
         nickname = self._nickname_entry.get_text().decode('utf-8')
-        server = self.server_comboboxentry.child.get_text().decode('utf-8')
-        room = self._room_jid_entry.get_text().decode('utf-8')
+        server = self.server_comboboxentry.child.get_text().decode('utf-8').\
+            strip()
+        room = self._room_jid_entry.get_text().decode('utf-8').strip()
         room_jid = room + '@' + server
         password = self._password_entry.get_text().decode('utf-8')
         try:
