@@ -1432,6 +1432,8 @@ def get_proxy_info(account):
     if p:
         proxy = {}
         proxyptr = gajim.config.get_per('proxies', p)
+        if not proxyptr:
+            return proxy
         for key in proxyptr.keys():
             proxy[key] = proxyptr[key][1]
         return proxy
