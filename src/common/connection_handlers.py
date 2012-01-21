@@ -865,7 +865,7 @@ class ConnectionHandlersBase:
             elif obj.contact.show in statuss:
                 obj.old_show = statuss.index(obj.contact.show)
             if (resources != [''] and (len(obj.contact_list) != 1 or \
-            obj.contact_list[0].show != 'offline')) and \
+            obj.contact_list[0].show not in ('not in roster', 'offline'))) and \
             not gajim.jid_is_transport(jid):
                 # Another resource of an existing contact connected
                 obj.old_show = 0
