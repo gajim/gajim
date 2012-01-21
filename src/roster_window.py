@@ -726,17 +726,9 @@ class RosterWindow:
         if not contact:
             return
 
-        if not force and (self.contact_has_pending_roster_events(contact,
-        account) or gajim.interface.msg_win_mgr.get_control(jid, account)):
-            # Contact has pending events or window
-            #TODO: or single message windows? Bur they are not listed for the
-            # moment
-            key = (jid, account)
-            if not key in self.contacts_to_be_removed:
-                self.contacts_to_be_removed[key] = {'backend': backend}
-            # if more pending event, don't remove from roster
-            if self.contact_has_pending_roster_events(contact, account):
-                return False
+        if not force and self.contact_has_pending_roster_events(contact,
+        account):
+            return False
 
         iters = self._get_contact_iter(jid, account, contact, self.model)
         if iters:
@@ -749,25 +741,36 @@ class RosterWindow:
             else:
                 self._remove_entity(contact, account)
 
-        if backend and (not gajim.interface.msg_win_mgr.get_control(jid,
-        account) or force):
-            # If a window is still opened: don't remove contact instance
-            # Remove contact before redrawing, otherwise the old
-            # numbers will still be show
-            gajim.contacts.remove_jid(account, jid, remove_meta=True)
-            if iters:
-                rest_of_family = [data for data in family
-                    if account != data['account'] or jid != data['jid']]
-                if rest_of_family:
-                    # reshow the rest of the family
-                    brothers = self._add_metacontact_family(rest_of_family,
-                        account)
-                    for c, acc in brothers:
-                        self.draw_completely(c.jid, acc)
+        old_grps = []
+        if backend:
+            if not gajim.interface.msg_win_mgr.get_control(jid, account) or \
+            force:
+                # If a window is still opened: don't remove contact instance
+                # Remove contact before redrawing, otherwise the old
+                # numbers will still be show
+                gajim.contacts.remove_jid(account, jid, remove_meta=True)
+                if iters:
+                    rest_of_family = [data for data in family
+                        if account != data['account'] or jid != data['jid']]
+                    if rest_of_family:
+                        # reshow the rest of the family
+                        brothers = self._add_metacontact_family(rest_of_family,
+                            account)
+                        for c, acc in brothers:
+                            self.draw_completely(c.jid, acc)
+            else:
+                for c in gajim.contacts.get_contacts(account, jid):
+                    c.sub = 'none'
+                    c.show = 'not in roster'
+                    c.status = ''
+                    old_grps = c.get_shown_groups()
+                    c.groups = [_('Not in Roster')]
+                    self._add_entity(c, account)
+                    self.draw_contact(jid, account)
 
         if iters:
             # Draw all groups of the contact
-            for group in contact.get_shown_groups():
+            for group in contact.get_shown_groups() + old_grps:
                 self.draw_group(group, account)
             self.draw_account(account)
 
