@@ -1722,18 +1722,19 @@ class ChatControl(ChatControlBase):
         self._video_button.set_sensitive(self.video_available)
 
         # Send file
-        if self.contact.supports(NS_FILE) and self.contact.resource:
+        if self.contact.supports(NS_FILE) and (self.type_id == 'chat' or \
+        self.gc_contact.resource):
             self._send_file_button.set_sensitive(True)
             self._send_file_button.set_tooltip_text('')
         else:
             self._send_file_button.set_sensitive(False)
             if not self.contact.supports(NS_FILE):
                 self._send_file_button.set_tooltip_text(_(
-                        "This contact does not support file transfer."))
+                    "This contact does not support file transfer."))
             else:
                 self._send_file_button.set_tooltip_text(
-                        _("You need to know the real JID of the contact to send him or "
-                        "her a file."))
+                    _("You need to know the real JID of the contact to send "
+                    "him or her a file."))
 
         # Convert to GC
         if self.contact.supports(NS_MUC):
