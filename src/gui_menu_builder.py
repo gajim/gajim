@@ -272,8 +272,9 @@ control=None, gc_contact=None):
 
     # Unsensitive many items when account is offline
     if gajim.account_is_disconnected(account):
-        for widget in (start_chat_menuitem,     rename_menuitem,
-        edit_groups_menuitem, send_file_menuitem, convert_to_gc_menuitem):
+        for widget in (start_chat_menuitem, rename_menuitem,
+        edit_groups_menuitem, send_file_menuitem, convert_to_gc_menuitem,
+        information_menuitem):
             widget.set_sensitive(False)
 
     if not show_start_chat:

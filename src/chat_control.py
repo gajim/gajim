@@ -1437,22 +1437,22 @@ class ChatControl(ChatControlBase):
 
     def __init__(self, parent_win, contact, acct, session, resource=None):
         ChatControlBase.__init__(self, self.TYPE_ID, parent_win,
-                'chat_control', contact, acct, resource)
+            'chat_control', contact, acct, resource)
 
         self.gpg_is_active = False
         # for muc use:
         # widget = self.xml.get_object('muc_window_actions_button')
         self.actions_button = self.xml.get_object('message_window_actions_button')
         id_ = self.actions_button.connect('clicked',
-                self.on_actions_button_clicked)
+            self.on_actions_button_clicked)
         self.handlers[id_] = self.actions_button
 
         self._formattings_button = self.xml.get_object('formattings_button')
 
         self._add_to_roster_button = self.xml.get_object(
-                'add_to_roster_button')
+            'add_to_roster_button')
         id_ = self._add_to_roster_button.connect('clicked',
-                self._on_add_to_roster_menuitem_activate)
+            self._on_add_to_roster_menuitem_activate)
         self.handlers[id_] = self._add_to_roster_button
 
         self._audio_button = self.xml.get_object('audio_togglebutton')
@@ -1460,14 +1460,14 @@ class ChatControl(ChatControlBase):
         self.handlers[id_] = self._audio_button
         # add a special img
         gtkgui_helpers.add_image_to_button(self._audio_button,
-                'gajim-mic_inactive')
+            'gajim-mic_inactive')
 
         self._video_button = self.xml.get_object('video_togglebutton')
         id_ = self._video_button.connect('toggled', self.on_video_button_toggled)
         self.handlers[id_] = self._video_button
         # add a special img
         gtkgui_helpers.add_image_to_button(self._video_button,
-                'gajim-cam_inactive')
+            'gajim-cam_inactive')
 
         self._send_file_button = self.xml.get_object('send_file_button')
         # add a special img for send file button
@@ -1476,30 +1476,30 @@ class ChatControl(ChatControlBase):
         img.set_from_file(path_to_upload_img)
         self._send_file_button.set_image(img)
         id_ = self._send_file_button.connect('clicked',
-                self._on_send_file_menuitem_activate)
+            self._on_send_file_menuitem_activate)
         self.handlers[id_] = self._send_file_button
 
         self._convert_to_gc_button = self.xml.get_object(
-                'convert_to_gc_button')
+            'convert_to_gc_button')
         id_ = self._convert_to_gc_button.connect('clicked',
-                self._on_convert_to_gc_menuitem_activate)
+            self._on_convert_to_gc_menuitem_activate)
         self.handlers[id_] = self._convert_to_gc_button
 
-        contact_information_button = self.xml.get_object(
-                'contact_information_button')
-        id_ = contact_information_button.connect('clicked',
-                self._on_contact_information_menuitem_activate)
-        self.handlers[id_] = contact_information_button
+        self._contact_information_button = self.xml.get_object(
+            'contact_information_button')
+        id_ = self._contact_information_button.connect('clicked',
+            self._on_contact_information_menuitem_activate)
+        self.handlers[id_] = self._contact_information_button
 
         compact_view = gajim.config.get('compact_view')
         self.chat_buttons_set_visible(compact_view)
         self.widget_set_visible(self.xml.get_object('banner_eventbox'),
-                gajim.config.get('hide_chat_banner'))
+            gajim.config.get('hide_chat_banner'))
 
         self.authentication_button = self.xml.get_object(
-                'authentication_button')
+            'authentication_button')
         id_ = self.authentication_button.connect('clicked',
-                self._on_authentication_button_clicked)
+            self._on_authentication_button_clicked)
         self.handlers[id_] = self.authentication_button
 
         # Add lock image to show chat encryption
@@ -1541,31 +1541,31 @@ class ChatControl(ChatControlBase):
 
         # Hook up signals
         id_ = self.parent_win.window.connect('motion-notify-event',
-                self._on_window_motion_notify)
+            self._on_window_motion_notify)
         self.handlers[id_] = self.parent_win.window
         message_tv_buffer = self.msg_textview.get_buffer()
         id_ = message_tv_buffer.connect('changed',
-                self._on_message_tv_buffer_changed)
+            self._on_message_tv_buffer_changed)
         self.handlers[id_] = message_tv_buffer
 
         widget = self.xml.get_object('avatar_eventbox')
         widget.set_property('height-request', gajim.config.get(
-                'chat_avatar_height'))
+            'chat_avatar_height'))
         id_ = widget.connect('enter-notify-event',
-                self.on_avatar_eventbox_enter_notify_event)
+            self.on_avatar_eventbox_enter_notify_event)
         self.handlers[id_] = widget
 
         id_ = widget.connect('leave-notify-event',
-                self.on_avatar_eventbox_leave_notify_event)
+            self.on_avatar_eventbox_leave_notify_event)
         self.handlers[id_] = widget
 
         id_ = widget.connect('button-press-event',
-                self.on_avatar_eventbox_button_press_event)
+            self.on_avatar_eventbox_button_press_event)
         self.handlers[id_] = widget
 
         widget = self.xml.get_object('location_eventbox')
         id_ = widget.connect('button-release-event',
-                self.on_location_eventbox_button_release_event)
+            self.on_location_eventbox_button_release_event)
         self.handlers[id_] = widget
 
         for key in ('1', '2', '3', '4', '5', '6', '7', '8', '9', '*', '0', '#'):
@@ -1614,7 +1614,7 @@ class ChatControl(ChatControlBase):
             if not resource:
                 resource = contact.resource
             session = gajim.connections[self.account].find_controlless_session(
-                    self.contact.jid, resource)
+                self.contact.jid, resource)
 
         self.setup_seclabel(self.xml.get_object('label_selector'))
         if session:
@@ -1627,8 +1627,7 @@ class ChatControl(ChatControlBase):
         # Enable encryption if needed
         self.no_autonegotiation = False
         e2e_is_active = self.session and self.session.enable_encryption
-        gpg_pref = gajim.config.get_per('contacts', contact.jid,
-                'gpg_enabled')
+        gpg_pref = gajim.config.get_per('contacts', contact.jid, 'gpg_enabled')
 
         # try GPG first
         if not e2e_is_active and gpg_pref and \
@@ -1637,15 +1636,15 @@ class ChatControl(ChatControlBase):
             self.gpg_is_active = True
             gajim.encrypted_chats[self.account].append(contact.jid)
             msg = _('GPG encryption enabled')
-            ChatControlBase.print_conversation_line(self, msg,
-                    'status', '', None)
+            ChatControlBase.print_conversation_line(self, msg, 'status', '',
+                None)
 
             if self.session:
                 self.session.loggable = gajim.config.get_per('accounts',
-                        self.account, 'log_encrypted_sessions')
+                    self.account, 'log_encrypted_sessions')
             # GPG is always authenticated as we use GPG's WoT
             self._show_lock_image(self.gpg_is_active, 'GPG', self.gpg_is_active,
-                    self.session and self.session.is_loggable(), True)
+                self.session and self.session.is_loggable(), True)
 
         self.update_ui()
         # restore previous conversation
@@ -1742,6 +1741,13 @@ class ChatControl(ChatControlBase):
             self._convert_to_gc_button.set_sensitive(True)
         else:
             self._convert_to_gc_button.set_sensitive(False)
+
+        # Information
+        if gajim.account_is_disconnected(self.account):
+            self._contact_information_button.set_sensitive(False)
+        else:
+            self._contact_information_button.set_sensitive(True)
+
 
     def update_all_pep_types(self):
         for pep_type in self._pep_images:
