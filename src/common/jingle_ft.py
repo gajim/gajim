@@ -122,9 +122,9 @@ class JingleFileTransfer(JingleContent):
         except:
             return
         h = xmpp.Hashes()
-        hash = h.calculateHash(self.session.hash_algo, file)
-        self.file_props['hash'] = hash
-        h.addHash(hash, self.session.hash_algo)
+        hash_ = h.calculateHash(self.session.hash_algo, file)
+        self.file_props['hash'] = hash_
+        h.addHash(hash_, self.session.hash_algo)
         checksum = xmpp.Node(tag='checksum',  
                              payload=[xmpp.Node(tag='file', payload=[h])])
         checksum.setNamespace(xmpp.NS_JINGLE_FILE_TRANSFER)
