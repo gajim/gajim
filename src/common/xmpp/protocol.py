@@ -1067,7 +1067,6 @@ class Hashes(Node):
         """
         hl = None
         hash = None
-        
         # file_string can be a string or a file
         if type(file_string) == str: # if it is a string
             if algo == 'md5':
@@ -1104,7 +1103,7 @@ class Hashes(Node):
                     hl.update(line)
                 hash = hl.hexdigest()
                 
-        self.addHash(hash, algo)
+        return hash        
             
     def addHash(self, hash, algo):
         """

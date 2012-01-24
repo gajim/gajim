@@ -98,6 +98,9 @@ class JingleSession(object):
 
 
         self.accepted = True # is this session accepted by user
+        # Hash algorithm that we are using to calculate the integrity of the 
+        # file. Could be 'md5', 'sha-1', etc...
+        self.hash_algo = None
         self.file_hash = None
         # callbacks to call on proper contents
         # use .prepend() to add new callbacks, especially when you're going
@@ -424,9 +427,11 @@ class JingleSession(object):
                 for hash in hashes.getChildren():
                     algo = hash.getAttr('algo')
                     if algo in xmpp.Hashes.supported:
+                        self.hash_algo = algo
                         data = hash.getData()
+                        # This only works because there is only one session
+                        # per file in jingleFT
                         self.file_hash = data
-                        print data
                         raise xmpp.NodeProcessed
         self.__send_error(stanza, 'feature-not-implemented', 'unsupported-info', type_='modify')
         raise xmpp.NodeProcessed

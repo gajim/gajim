@@ -103,9 +103,7 @@ class JingleFileTransfer(JingleContent):
         self.media = 'file'
         self.nominated_cand = {}
         
-        # Hash algorithm that we are using to calculate the integrity of the 
-        # file. Could be 'md5', 'sha-1', etc...
-        self.hash_algo = None
+        
 
     def __on_session_initiate(self, stanza, content, error, action):
         gajim.nec.push_incoming_event(FileRequestReceivedEvent(None,
@@ -117,14 +115,16 @@ class JingleFileTransfer(JingleContent):
         self.hashThread.start()
         
     def __calcHash(self):
-        if self.hash_algo == None:
+        if self.session.hash_algo == None:
             return
         try:
             file = open(self.file_props['file-name'], 'r')
         except:
             return
         h = xmpp.Hashes()
-        h.calculateHash(self.hash_algo, file)
+        hash = h.calculateHash(self.session.hash_algo, file)
+        self.file_props['hash'] = hash
+        h.addHash(hash, self.session.hash_algo)
         checksum = xmpp.Node(tag='checksum',  
                              payload=[xmpp.Node(tag='file', payload=[h])])
         checksum.setNamespace(xmpp.NS_JINGLE_FILE_TRANSFER)

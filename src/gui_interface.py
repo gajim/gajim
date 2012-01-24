@@ -71,6 +71,7 @@ from session import ChatControlSession
 import common.sleepy
 
 from common.xmpp import idlequeue
+from common.xmpp import Hashes
 from common.zeroconf import connection_zeroconf
 from common import resolver
 from common import caps_cache
@@ -908,6 +909,22 @@ class Interface:
             self.last_ftwindow_update = time.time()
             self.instances['file_transfers'].set_progress(file_props['type'],
                     file_props['sid'], file_props['received-len'])
+    def __compare_hashes(self, account, file_props):
+        session = gajim.connections[account].get_jingle_session(jid=None,
+                sid=file_props['session-sid'])
+        h = Hashes()
+        try:
+            file = open(file_props['file-name'], 'r')
+        except:
+            return
+        hash = h.calculateHash(session.hash_algo, file)
+        # If the hash we received and the hash of the file are the same,
+        # then the file is not corrupt
+        if session.file_hash == hash:
+            print "they are te same"
+        # End jingle session
+        if session:
+            session.end_session()
 
     def handle_event_file_rcv_completed(self, account, file_props):
         ft = self.instances['file_transfers']
@@ -919,18 +936,17 @@ class Interface:
         if 'stalled' in file_props and file_props['stalled'] or \
                 'paused' in file_props and file_props['paused']:
             return
-
+        
         if file_props['type'] == 'r': # we receive a file
             jid = unicode(file_props['sender'])
+            # Compare hashes in a new thread
+            self.hashThread = Thread(target=self.__compare_hashes, 
+                                 args=(account, file_props)) 
+            self.hashThread.start()
             gajim.socks5queue.remove_receiver(file_props['sid'], True, True)
         else: # we send a file
             jid = unicode(file_props['receiver'])
             gajim.socks5queue.remove_sender(file_props['sid'], True, True)
-        # End jingle session
-        session = gajim.connections[account].get_jingle_session(jid,
-                sid=file_props['session-sid'])
-        if session:
-            session.end_session()
 
         if helpers.allow_popup_window(account):
             if file_props['error'] == 0:

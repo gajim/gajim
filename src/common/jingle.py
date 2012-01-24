@@ -157,7 +157,7 @@ class ConnectionJingle(object):
             transport = JingleTransportIBB()
         c = JingleFileTransfer(jingle, transport=transport,
             file_props=file_props, use_security=use_security)
-		c.hash_algo = self.__hash_support(contact) 
+        jingle.hash_algo = self.__hash_support(contact) 
         jingle.add_content('file' + helpers.get_random_string_16(), c)
         jingle.start_session()
         return c.transport.sid
