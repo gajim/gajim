@@ -909,18 +909,20 @@ class Interface:
             self.last_ftwindow_update = time.time()
             self.instances['file_transfers'].set_progress(file_props['type'],
                     file_props['sid'], file_props['received-len'])
+
     def __compare_hashes(self, account, file_props):
         session = gajim.connections[account].get_jingle_session(jid=None,
-                sid=file_props['session-sid'])
+            sid=file_props['session-sid'])
         h = Hashes()
         try:
-            file = open(file_props['file-name'], 'r')
+            file_ = open(file_props['file-name'], 'r')
         except:
             return
-        hash = h.calculateHash(session.hash_algo, file)
+        hash_ = h.calculateHash(session.hash_algo, file_)
+        file_.close()
         # If the hash we received and the hash of the file are the same,
         # then the file is not corrupt
-        if session.file_hash == hash:
+        if session.file_hash == hash_:
             print "they are te same"
         # End jingle session
         if session:
@@ -930,18 +932,18 @@ class Interface:
         ft = self.instances['file_transfers']
         if file_props['error'] == 0:
             ft.set_progress(file_props['type'], file_props['sid'],
-                    file_props['received-len'])
+                file_props['received-len'])
         else:
             ft.set_status(file_props['type'], file_props['sid'], 'stop')
         if 'stalled' in file_props and file_props['stalled'] or \
-                'paused' in file_props and file_props['paused']:
+        'paused' in file_props and file_props['paused']:
             return
-        
+
         if file_props['type'] == 'r': # we receive a file
             jid = unicode(file_props['sender'])
             # Compare hashes in a new thread
-            self.hashThread = Thread(target=self.__compare_hashes, 
-                                 args=(account, file_props)) 
+            self.hashThread = Thread(target=self.__compare_hashes,
+                args=(account, file_props))
             self.hashThread.start()
             gajim.socks5queue.remove_receiver(file_props['sid'], True, True)
         else: # we send a file
@@ -969,7 +971,7 @@ class Interface:
         elif file_props['error'] in (-1, -6):
             msg_type = 'file-stopped'
             event_type = _('File Transfer Stopped')
-            
+
         if event_type == '':
             # FIXME: ugly workaround (this can happen Gajim sent, Gaim recvs)
             # this should never happen but it does. see process_result() in

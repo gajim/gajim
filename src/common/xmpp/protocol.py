@@ -1066,7 +1066,7 @@ class Hashes(Node):
         instead of doing it all over the place in Gajim.
         """
         hl = None
-        hash = None
+        hash_ = None
         # file_string can be a string or a file
         if type(file_string) == str: # if it is a string
             if algo == 'md5':
@@ -1083,7 +1083,7 @@ class Hashes(Node):
                 raise Exception('Hash algorithm not supported')
             else:
                 hl.update(file_string)
-                hash = hl.hexdigest()
+                hash_ = hl.hexdigest()
         else: # if it is a file
                 
             if algo == 'md5':
@@ -1101,25 +1101,25 @@ class Hashes(Node):
             else:
                 for line in file_string:
                     hl.update(line)
-                hash = hl.hexdigest()
+                hash_ = hl.hexdigest()
                 
-        return hash        
+        return hash_        
             
-    def addHash(self, hash, algo):
+    def addHash(self, hash_, algo):
         """
         More than one hash can be added. Although it is permitted, it should
         not be done for big files because it could slow down Gajim.
         """
         attrs = {}
         attrs['algo'] = algo 
-        self.addChild('hash', attrs, [hash])
+        self.addChild('hash', attrs, [hash_])
      
 class Acks(Node):
     """
     Acknowledgement elements for Stream Management
     """
     def __init__(self, nsp=NS_STREAM_MGMT):
-        Node.__init__(self, None, {}, [], None, None,False, None)
+        Node.__init__(self, None, {}, [], None, None, False, None)
         self.setNamespace(nsp)
 
     def buildAnswer(self, handled):
