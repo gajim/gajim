@@ -118,11 +118,15 @@ class JingleFileTransfer(JingleContent):
         if self.session.hash_algo == None:
             return
         try:
-            file = open(self.file_props['file-name'], 'r')
+            file_ = open(self.file_props['file-name'], 'r')
         except:
+            # can't open file
             return
         h = xmpp.Hashes()
-        hash_ = h.calculateHash(self.session.hash_algo, file)
+        hash_ = h.calculateHash(self.session.hash_algo, file_)
+        if not hash_:
+            # Hash alogrithm not supported
+            return
         self.file_props['hash'] = hash_
         h.addHash(hash_, self.session.hash_algo)
         checksum = xmpp.Node(tag='checksum',  

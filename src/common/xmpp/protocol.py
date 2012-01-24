@@ -1078,10 +1078,7 @@ class Hashes(Node):
             elif algo == 'sha-512':
                 hl = hashlib.sha512()
                 
-            if hl == None:
-                # Raise exception
-                raise Exception('Hash algorithm not supported')
-            else:
+            if hl:
                 hl.update(file_string)
                 hash_ = hl.hexdigest()
         else: # if it is a file
@@ -1095,10 +1092,7 @@ class Hashes(Node):
             elif algo == 'sha-512':
                 hl = hashlib.sha512()
                 
-            if hl == None:
-                # Raise exception
-                raise Exception('Hash algorithm not supported')
-            else:
+            if hl:
                 for line in file_string:
                     hl.update(line)
                 hash_ = hl.hexdigest()
