@@ -1937,6 +1937,9 @@ class CommonInputDialog:
     def on_cancelbutton_clicked(self, widget):
         self.dialog.destroy()
 
+    def destroy(self):
+        self.dialog.destroy()
+
 class InputDialog(CommonInputDialog):
     """
     Class for Input dialog
