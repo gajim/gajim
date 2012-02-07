@@ -1027,15 +1027,20 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                     return
                 self.jid = gajim.get_jid_without_resource(self.fjid)
 
-        forward_tag = self.stanza.getTag('forwarded', namespace=xmpp.NS_FORWARD)
+        carbon_marker = self.stanza.getTag('sent', namespace=xmpp.NS_CARBONS)
+        if not carbon_marker:
+            carbon_marker = self.stanza.getTag('received', namespace=xmpp.NS_CARBONS)
         # Be sure it comes from one of our resource, else ignore forward element
-        if forward_tag and self.jid == gajim.get_jid_from_account(account):
-            received_tag = forward_tag.getTag('received',
-                namespace=xmpp.NS_CARBONS)
-            sent_tag = forward_tag.getTag('sent', namespace=xmpp.NS_CARBONS)
-            if received_tag:
+        if carbon_marker and self.jid == gajim.get_jid_from_account(account):
+            forward_tag = self.stanza.getTag('forwarded', namespace=xmpp.NS_FORWARD)
+            if forward_tag:
                 msg = forward_tag.getTag('message')
                 self.stanza = xmpp.Message(node=msg)
+                if carbon_marker.getName() == 'sent':
+                    to = self.stanza.getTo()
+                    self.stanza.setTo(self.stanza.getFrom())
+                    self.stanza.setFrom(to)
+                    self.sent = True
                 try:
                     self.get_jid_resource()
                 except helpers.InvalidFormat:
@@ -1046,23 +1051,6 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                         'has been ignored.')))
                     return
                 self.forwarded = True
-            elif sent_tag:
-                msg = forward_tag.getTag('message')
-                self.stanza = xmpp.Message(node=msg)
-                to = self.stanza.getTo()
-                self.stanza.setTo(self.stanza.getFrom())
-                self.stanza.setFrom(to)
-                try:
-                    self.get_jid_resource()
-                except helpers.InvalidFormat:
-                    gajim.nec.push_incoming_event(InformationEvent(None,
-                        conn=self.conn, level='error',
-                        pri_txt=_('Invalid Jabber ID'),
-                        sec_txt=_('A message from a non-valid JID arrived, it '
-                        'has been ignored.')))
-                    return
-                self.forwarded = True
-                self.sent = True
 
         self.enc_tag = self.stanza.getTag('x', namespace=xmpp.NS_ENCRYPTED)
 
