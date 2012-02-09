@@ -810,6 +810,9 @@ class Connection(CommonConnection, ConnectionHandlers):
             if not (self.sm and self.sm.resumption):
                 gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
                     show='offline'))
+            else:
+                gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
+                    show='error'))
             self.disconnect()
             if gajim.config.get_per('accounts', self.name, 'autoreconnect'):
                 self.connected = -1
