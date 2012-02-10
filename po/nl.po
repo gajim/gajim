@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-22 18:56+0100\n"
+"POT-Creation-Date: 2012-02-12 20:36+0100\n"
 "PO-Revision-Date: 2005-12-19 18:44+0100\n"
 "Last-Translator: Stéphan Kochen <stephan@kochen.nl>\n"
 "Language-Team: none\n"
@@ -227,8 +227,8 @@ msgid "Accounts"
 msgstr "Accounts"
 
 #. Change label for accept_button to action name instead of 'OK'.
-#: ../data/gui/accounts_window.ui.h:8 ../src/dialogs.py:3383
-#: ../src/dialogs.py:3429
+#: ../data/gui/accounts_window.ui.h:8 ../src/dialogs.py:3386
+#: ../src/dialogs.py:3432
 #, fuzzy
 msgid "Add"
 msgstr "Adres"
@@ -299,8 +299,8 @@ msgid "Connection"
 msgstr "Verbinding"
 
 #. Change label for accept_button to action name instead of 'OK'.
-#: ../data/gui/accounts_window.ui.h:23 ../src/dialogs.py:3387
-#: ../src/dialogs.py:3484
+#: ../data/gui/accounts_window.ui.h:23 ../src/dialogs.py:3390
+#: ../src/dialogs.py:3487
 #, fuzzy
 msgid "Delete"
 msgstr "Wis MOTD"
@@ -1558,7 +1558,7 @@ msgstr ""
 msgid "Bro_wse Rooms"
 msgstr "_Bladeren"
 
-#: ../data/gui/join_groupchat_window.ui.h:3 ../src/dialogs.py:2333
+#: ../data/gui/join_groupchat_window.ui.h:3 ../src/dialogs.py:2336
 msgid "Join Group Chat"
 msgstr "Neem deel aan Groepsgesprek"
 
@@ -2534,7 +2534,7 @@ msgstr "Jabber ID:"
 msgid "Order:"
 msgstr "Server:"
 
-#: ../data/gui/privacy_list_window.ui.h:12 ../src/dialogs.py:3978
+#: ../data/gui/privacy_list_window.ui.h:12 ../src/dialogs.py:3981
 msgid "Privacy List"
 msgstr ""
 
@@ -3432,8 +3432,8 @@ msgstr ""
 #. Add to roster
 #: ../src/chat_control.py:1701 ../src/common/contacts.py:158
 #: ../src/common/contacts.py:277 ../src/common/helpers.py:67
-#: ../src/common/helpers.py:261 ../src/dialogs.py:1099 ../src/dialogs.py:2227
-#: ../src/dialogs.py:2256 ../src/gui_interface.py:477
+#: ../src/common/helpers.py:261 ../src/dialogs.py:1099 ../src/dialogs.py:2230
+#: ../src/dialogs.py:2259 ../src/gui_interface.py:477
 #: ../src/gui_menu_builder.py:254 ../src/gui_menu_builder.py:405
 #: ../src/roster_window.py:767 ../src/roster_window.py:1687
 #: ../src/roster_window.py:1689 ../src/roster_window.py:2022
@@ -3462,7 +3462,7 @@ msgstr ""
 "%(nickname)s in ruimte %(room_name)s heeft je een nieuw bericht gestuurd."
 
 #. No key assigned nor a key is used by remote contact
-#: ../src/chat_control.py:2162 ../src/dialogs.py:5039
+#: ../src/chat_control.py:2162 ../src/dialogs.py:5042
 msgid "No GPG key assigned"
 msgstr ""
 
@@ -3782,7 +3782,7 @@ msgstr "Verander Bij_naam"
 
 #. invalid char
 #: ../src/command_system/implementation/standard.py:267 ../src/config.py:3392
-#: ../src/dialogs.py:2075
+#: ../src/dialogs.py:2078
 #, fuzzy
 msgid "Invalid nickname"
 msgstr "Ongeldige gebruikersnaam"
@@ -4995,107 +4995,105 @@ msgid "You can join this room instead: %s"
 msgstr ""
 
 #: ../src/common/connection_handlers_events.py:1012
-#: ../src/common/connection_handlers_events.py:1044
-#: ../src/common/connection_handlers_events.py:1060
+#: ../src/common/connection_handlers_events.py:1049
 #: ../src/common/connection.py:262 ../src/config.py:2149 ../src/config.py:2158
 #: ../src/config.py:2226 ../src/config.py:3663 ../src/dataforms_widget.py:623
-#: ../src/dialogs.py:3091
+#: ../src/dialogs.py:3094
 msgid "Invalid Jabber ID"
 msgstr "Ongeldige Jabber ID"
 
 #: ../src/common/connection_handlers_events.py:1013
-#: ../src/common/connection_handlers_events.py:1045
-#: ../src/common/connection_handlers_events.py:1061
+#: ../src/common/connection_handlers_events.py:1050
 msgid "A message from a non-valid JID arrived, it has been ignored."
 msgstr ""
 
 #. ('MSGNOTSENT', account, (jid, ierror_msg, msg, time, session))
-#: ../src/common/connection_handlers_events.py:1087
+#: ../src/common/connection_handlers_events.py:1075
 #: ../src/gui_interface.py:425 ../src/gui_interface.py:439
 #, fuzzy, python-format
 msgid "error while sending %(message)s ( %(error)s )"
 msgstr "fout tijdens versturen"
 
-#: ../src/common/connection_handlers_events.py:1520
+#: ../src/common/connection_handlers_events.py:1508
 #, fuzzy, python-format
 msgid "Unknown SSL error: %d"
 msgstr "Onbekende D-Bus versie: %s"
 
-#: ../src/common/connection_handlers_events.py:2048 ../src/dialogs.py:2778
+#: ../src/common/connection_handlers_events.py:2036 ../src/dialogs.py:2781
 #: ../src/notify.py:263
 msgid "New Single Message"
 msgstr "Nieuw Enkel Bericht"
 
-#: ../src/common/connection_handlers_events.py:2050
+#: ../src/common/connection_handlers_events.py:2038
 #, fuzzy, python-format
 msgid "New Single Message from %(nickname)s"
 msgstr "Nieuw Enkel Bericht"
 
-#: ../src/common/connection_handlers_events.py:2054 ../src/dialogs.py:2779
+#: ../src/common/connection_handlers_events.py:2042 ../src/dialogs.py:2782
 #: ../src/notify.py:264
 msgid "New Private Message"
 msgstr "Nieuw Privé Bericht"
 
-#: ../src/common/connection_handlers_events.py:2056
+#: ../src/common/connection_handlers_events.py:2044
 #, fuzzy, python-format
 msgid "New Private Message from group chat %s"
 msgstr "Nieuw Privé Bericht"
 
-#: ../src/common/connection_handlers_events.py:2059
+#: ../src/common/connection_handlers_events.py:2047
 #, python-format
 msgid "%(nickname)s: %(message)s"
 msgstr ""
 
-#: ../src/common/connection_handlers_events.py:2062
+#: ../src/common/connection_handlers_events.py:2050
 #, fuzzy, python-format
 msgid "Messaged by %(nickname)s"
 msgstr "Nieuw Enkel Bericht"
 
-#: ../src/common/connection_handlers_events.py:2066 ../src/dialogs.py:2778
+#: ../src/common/connection_handlers_events.py:2054 ../src/dialogs.py:2781
 #: ../src/notify.py:263
 msgid "New Message"
 msgstr "Nieuw Bericht"
 
-#: ../src/common/connection_handlers_events.py:2068
+#: ../src/common/connection_handlers_events.py:2056
 #, python-format
 msgid "New Message from %(nickname)s"
 msgstr ""
 
-#: ../src/common/connection_handlers_events.py:2197
+#: ../src/common/connection_handlers_events.py:2185
 #, fuzzy, python-format
 msgid "%(nick)s Changed Status"
 msgstr "%(nick)s is nu %(status)s"
 
-#: ../src/common/connection_handlers_events.py:2199
+#: ../src/common/connection_handlers_events.py:2187
 #: ../src/groupchat_control.py:205 ../src/groupchat_control.py:1766
 #: ../src/history_window.py:447
 #, python-format
 msgid "%(nick)s is now %(status)s"
 msgstr "%(nick)s is nu %(status)s"
 
-#: ../src/common/connection_handlers_events.py:2204 ../src/dialogs.py:2790
+#: ../src/common/connection_handlers_events.py:2192 ../src/dialogs.py:2793
 #: ../src/notify.py:277
 #, fuzzy
 msgid "Contact Changed Status"
 msgstr "Contact is Uitgelogd"
 
-#: ../src/common/connection_handlers_events.py:2206
+#: ../src/common/connection_handlers_events.py:2194
 #, fuzzy, python-format
 msgid "%(nickname)s Signed In"
 msgstr "Contact is Ingelogd"
 
 #. default value
-#: ../src/common/connection_handlers_events.py:2211 ../src/dialogs.py:2774
+#: ../src/common/connection_handlers_events.py:2199 ../src/dialogs.py:2777
 #: ../src/notify.py:259
 msgid "Contact Signed In"
 msgstr "Contact is Ingelogd"
 
-#: ../src/common/connection_handlers_events.py:2213
+#: ../src/common/connection_handlers_events.py:2201
 #, fuzzy, python-format
 msgid "%(nickname)s Signed Out"
 msgstr "Contact is Uitgelogd"
 
-#: ../src/common/connection_handlers_events.py:2218 ../src/dialogs.py:2776
+#: ../src/common/connection_handlers_events.py:2206 ../src/dialogs.py:2779
 #: ../src/notify.py:261
 msgid "Contact Signed Out"
 msgstr "Contact is Uitgelogd"
@@ -5132,11 +5130,11 @@ msgid ""
 "Registration with agent %(agent)s failed with error %(error)s: %(error_msg)s"
 msgstr ""
 
-#: ../src/common/connection_handlers.py:571 ../src/common/connection.py:1551
+#: ../src/common/connection_handlers.py:571 ../src/common/connection.py:1554
 msgid "Invisibility not supported"
 msgstr ""
 
-#: ../src/common/connection_handlers.py:572 ../src/common/connection.py:1552
+#: ../src/common/connection_handlers.py:572 ../src/common/connection.py:1555
 #, python-format
 msgid "Account %s doesn't support invisibility."
 msgstr ""
@@ -5275,7 +5273,7 @@ msgstr ""
 msgid "Application verification failure"
 msgstr ""
 
-#: ../src/common/connection.py:263 ../src/dialogs.py:3092
+#: ../src/common/connection.py:263 ../src/dialogs.py:3095
 #, fuzzy, python-format
 msgid "It is not possible to send a message to %s, this JID is not valid."
 msgstr "Het is onmogelijk lege bestanden te sturen"
@@ -5304,141 +5302,141 @@ msgstr ""
 "Onderwerp: %s\n"
 "%s"
 
-#: ../src/common/connection.py:861
+#: ../src/common/connection.py:864
 #, python-format
 msgid "Connection with account \"%s\" has been lost"
 msgstr "Verbinding met account \"%s\" verbroken"
 
-#: ../src/common/connection.py:862
+#: ../src/common/connection.py:865
 msgid "Reconnect manually."
 msgstr ""
 
 #. it's a new account
 #. wrong answer
-#: ../src/common/connection.py:873
+#: ../src/common/connection.py:876
 #, python-format
 msgid "Server %(name)s answered wrongly to register request: %(error)s"
 msgstr ""
 
 #. requested config has changed since first connection
-#: ../src/common/connection.py:915
+#: ../src/common/connection.py:918
 #, python-format
 msgid "Server %s provided a different registration form"
 msgstr ""
 
-#: ../src/common/connection.py:932
+#: ../src/common/connection.py:935
 #, fuzzy
 msgid "Invalid answer"
 msgstr "Ongeldig wachtwoord"
 
-#: ../src/common/connection.py:933
+#: ../src/common/connection.py:936
 #, python-format
 msgid "Transport %(name)s answered wrongly to register request: %(error)s"
 msgstr ""
 
-#: ../src/common/connection.py:1208 ../src/common/connection.py:1360
-#: ../src/common/connection.py:1988
+#: ../src/common/connection.py:1211 ../src/common/connection.py:1363
+#: ../src/common/connection.py:1991
 #: ../src/common/zeroconf/connection_zeroconf.py:205
 #, python-format
 msgid "Could not connect to \"%s\""
 msgstr "Kon geen verbinding maken met \"%s\""
 
-#: ../src/common/connection.py:1209 ../src/gui_interface.py:534
+#: ../src/common/connection.py:1212 ../src/gui_interface.py:534
 msgid "Check your connection or try again later."
 msgstr "Controleer de verbinding of probeer later nogmaals."
 
-#: ../src/common/connection.py:1214
+#: ../src/common/connection.py:1217
 #, fuzzy, python-format
 msgid "Server replied: %s"
 msgstr "Opgeslagen in: %s"
 
-#: ../src/common/connection.py:1229
+#: ../src/common/connection.py:1232
 #, fuzzy
 msgid "Connection to proxy failed"
 msgstr "Verbinding"
 
-#: ../src/common/connection.py:1267 ../src/common/connection.py:1339
+#: ../src/common/connection.py:1270 ../src/common/connection.py:1342
 #, fuzzy, python-format
 msgid "Could not connect to account %s"
 msgstr "Kon geen verbinding maken met \"%s\""
 
-#: ../src/common/connection.py:1268 ../src/common/connection.py:1340
+#: ../src/common/connection.py:1271 ../src/common/connection.py:1343
 #, fuzzy, python-format
 msgid "Connection with account %s has been lost. Retry connecting."
 msgstr "Verbinding met account \"%s\" verbroken"
 
-#: ../src/common/connection.py:1293
+#: ../src/common/connection.py:1296
 #, python-format
 msgid "The authenticity of the %s certificate could be invalid."
 msgstr ""
 
-#: ../src/common/connection.py:1296
+#: ../src/common/connection.py:1299
 #, python-format
 msgid ""
 "\n"
 "SSL Error: <b>%s</b>"
 msgstr ""
 
-#: ../src/common/connection.py:1298
+#: ../src/common/connection.py:1301
 #, fuzzy, python-format
 msgid ""
 "\n"
 "Unknown SSL error: %d"
 msgstr "Onbekende D-Bus versie: %s"
 
-#: ../src/common/connection.py:1321
+#: ../src/common/connection.py:1324
 #, python-format
 msgid ""
 "The authenticity of the %s certificate could be invalid.\n"
 "The certificate does not cover this domain."
 msgstr ""
 
-#: ../src/common/connection.py:1361
+#: ../src/common/connection.py:1364
 msgid "Check your connection or try again later"
 msgstr "Controleer je verbinding of probeer later nogmaals"
 
-#: ../src/common/connection.py:1396
+#: ../src/common/connection.py:1399
 #, python-format
 msgid "Authentication failed with \"%s\""
 msgstr "Inloggen mislukt met \"%s\""
 
-#: ../src/common/connection.py:1397
+#: ../src/common/connection.py:1400
 #, fuzzy
 msgid "Please check your login and passwordfor correctness."
 msgstr "Controleer gebruikersnaam en wachtwoord."
 
-#: ../src/common/connection.py:1472
+#: ../src/common/connection.py:1475
 #, fuzzy
 msgid "Error while removing privacy list"
 msgstr "fout tijdens versturen"
 
-#: ../src/common/connection.py:1473
+#: ../src/common/connection.py:1476
 #, python-format
 msgid ""
 "Privacy list %s has not been removed. It is maybe active in one of your "
 "connected resources. Deactivate it and tryagain."
 msgstr ""
 
-#: ../src/common/connection.py:1855
+#: ../src/common/connection.py:1858
 #, python-format
 msgid "Sent contact: \"%s\" (%s)"
 msgstr ""
 
-#: ../src/common/connection.py:1858
+#: ../src/common/connection.py:1861
 #, fuzzy
 msgid "Sent contacts:"
 msgstr "_Inhoud"
 
-#: ../src/common/connection.py:2005 ../src/common/connection.py:2028
+#: ../src/common/connection.py:2008 ../src/common/connection.py:2031
 msgid "Not fetched because of invisible status"
 msgstr ""
 
-#: ../src/common/connection.py:2561
+#: ../src/common/connection.py:2564
 #, fuzzy
 msgid "Unregister failed"
 msgstr "vCard publicatie is mislukt"
 
-#: ../src/common/connection.py:2562
+#: ../src/common/connection.py:2565
 #, python-format
 msgid "Unregistration with server %(server)s failed: %(error)s"
 msgstr ""
@@ -6935,8 +6933,8 @@ msgid "status message text"
 msgstr "statusbericht"
 
 #. Name column
-#: ../src/config.py:1566 ../src/dialogs.py:2535 ../src/dialogs.py:2602
-#: ../src/dialogs.py:3394 ../src/disco.py:886 ../src/disco.py:1744
+#: ../src/config.py:1566 ../src/dialogs.py:2538 ../src/dialogs.py:2605
+#: ../src/dialogs.py:3397 ../src/disco.py:886 ../src/disco.py:1744
 #: ../src/disco.py:2046 ../src/history_window.py:90
 msgid "Name"
 msgstr "Naam"
@@ -7058,8 +7056,8 @@ msgstr ""
 "Je moet een account aanmaken voordat persoonlijke informatie kan worden "
 "aangepast."
 
-#: ../src/config.py:2455 ../src/dialogs.py:2286 ../src/dialogs.py:2524
-#: ../src/dialogs.py:2712 ../src/disco.py:515 ../src/profile_window.py:361
+#: ../src/config.py:2455 ../src/dialogs.py:2289 ../src/dialogs.py:2527
+#: ../src/dialogs.py:2715 ../src/disco.py:515 ../src/profile_window.py:361
 msgid "You are not connected to the server"
 msgstr "Er is geen verbinding met de server"
 
@@ -7635,7 +7633,7 @@ msgid "Please fill in the data of the contact you want to add"
 msgstr "Vul de informatie in van de contactpersoon die je toe wilt voegen"
 
 #: ../src/dialogs.py:1074 ../src/dialogs.py:1080 ../src/dialogs.py:1085
-#: ../src/dialogs.py:3627
+#: ../src/dialogs.py:3630
 msgid "Invalid User ID"
 msgstr "Ongeldige Gebruikers ID"
 
@@ -7717,43 +7715,43 @@ msgstr ""
 msgid "Re_place"
 msgstr ""
 
-#: ../src/dialogs.py:2076 ../src/dialogs.py:2476
+#: ../src/dialogs.py:2079 ../src/dialogs.py:2479
 #, fuzzy
 msgid "The nickname has not allowed characters."
 msgstr "Bijnaam niet gevonden: %s"
 
-#: ../src/dialogs.py:2194
+#: ../src/dialogs.py:2197
 #, fuzzy, python-format
 msgid "Subscription request for account %(account)s from %(jid)s"
 msgstr "Abonnerings aanvraag voor account %s van %s"
 
-#: ../src/dialogs.py:2197
+#: ../src/dialogs.py:2200
 #, python-format
 msgid "Subscription request from %s"
 msgstr "Abonnering aangevraagd van %s"
 
-#: ../src/dialogs.py:2281 ../src/gui_interface.py:1939
+#: ../src/dialogs.py:2284 ../src/gui_interface.py:1939
 #, fuzzy, python-format
 msgid "You are already in group chat %s"
 msgstr "Je bent al in ruimte %s"
 
-#: ../src/dialogs.py:2287
+#: ../src/dialogs.py:2290
 msgid "You can not join a group chat unless you are connected."
 msgstr ""
 "Het is niet mogelijk aan een groepsgesprek deel te nemen zonder verbonden te "
 "zijn."
 
-#: ../src/dialogs.py:2331
+#: ../src/dialogs.py:2334
 #, python-format
 msgid "Join Group Chat with account %s"
 msgstr "Neem deel aan Groepsgesprek met account %s"
 
-#: ../src/dialogs.py:2462
+#: ../src/dialogs.py:2465
 #, fuzzy
 msgid "Invalid Account"
 msgstr "Ongeldige account naam"
 
-#: ../src/dialogs.py:2463
+#: ../src/dialogs.py:2466
 #, fuzzy
 msgid ""
 "You have to choose an account from which you want to join the groupchat."
@@ -7761,70 +7759,70 @@ msgstr ""
 "Je moet een account aanmaken voor je gesprekken kunt voeren met andere "
 "contacten."
 
-#: ../src/dialogs.py:2475
+#: ../src/dialogs.py:2478
 #, fuzzy
 msgid "Invalid Nickname"
 msgstr "Ongeldige gebruikersnaam"
 
-#: ../src/dialogs.py:2480 ../src/dialogs.py:2486
+#: ../src/dialogs.py:2483 ../src/dialogs.py:2489
 #: ../src/groupchat_control.py:2092
 #, fuzzy
 msgid "Invalid group chat Jabber ID"
 msgstr "Ongeldige Jabber ID"
 
-#: ../src/dialogs.py:2481
+#: ../src/dialogs.py:2484
 msgid "Please enter the group chat Jabber ID as room@server."
 msgstr ""
 
-#: ../src/dialogs.py:2487 ../src/groupchat_control.py:2093
+#: ../src/dialogs.py:2490 ../src/groupchat_control.py:2093
 msgid "The group chat Jabber ID has not allowed characters."
 msgstr ""
 
-#: ../src/dialogs.py:2492 ../src/gui_interface.py:1921
+#: ../src/dialogs.py:2495 ../src/gui_interface.py:1921
 msgid "This is not a group chat"
 msgstr ""
 
-#: ../src/dialogs.py:2493 ../src/gui_interface.py:1922
+#: ../src/dialogs.py:2496 ../src/gui_interface.py:1922
 #, fuzzy, python-format
 msgid "%s is not the name of a group chat."
 msgstr ""
 "Vraag bevestiging voor het sluiten van een groepsgespreksvenster of -tab."
 
-#: ../src/dialogs.py:2525
+#: ../src/dialogs.py:2528
 #, fuzzy
 msgid "Without a connection, you can not synchronise your contacts."
 msgstr "Zonder verbinding is het niet mogelijk je wachtwoord te veranderen."
 
-#: ../src/dialogs.py:2538
+#: ../src/dialogs.py:2541
 msgid "Server"
 msgstr "Server"
 
-#: ../src/dialogs.py:2574
+#: ../src/dialogs.py:2577
 #, fuzzy
 msgid "This account is not connected to the server"
 msgstr "Account \"%s\" heeft verbinding met de server"
 
-#: ../src/dialogs.py:2575
+#: ../src/dialogs.py:2578
 #, fuzzy
 msgid "You cannot synchronize with an account unless it is connected."
 msgstr ""
 "Het is niet mogelijk aan een groepsgesprek deel te nemen zonder verbonden te "
 "zijn."
 
-#: ../src/dialogs.py:2600
+#: ../src/dialogs.py:2603
 msgid "Synchronise"
 msgstr ""
 
-#: ../src/dialogs.py:2661
+#: ../src/dialogs.py:2664
 #, python-format
 msgid "Start Chat with account %s"
 msgstr "Start Gesprek met account %s"
 
-#: ../src/dialogs.py:2663
+#: ../src/dialogs.py:2666
 msgid "Start Chat"
 msgstr "Start Gesprek"
 
-#: ../src/dialogs.py:2664
+#: ../src/dialogs.py:2667
 #, fuzzy
 msgid ""
 "Fill in the nickname or the Jabber ID of the contact you would like\n"
@@ -7834,142 +7832,142 @@ msgstr ""
 "worden:"
 
 #. if offline or connecting
-#: ../src/dialogs.py:2691 ../src/dialogs.py:3072 ../src/dialogs.py:3307
+#: ../src/dialogs.py:2694 ../src/dialogs.py:3075 ../src/dialogs.py:3310
 msgid "Connection not available"
 msgstr "Verbinding niet beschikbaar"
 
-#: ../src/dialogs.py:2692 ../src/dialogs.py:3073 ../src/dialogs.py:3308
+#: ../src/dialogs.py:2695 ../src/dialogs.py:3076 ../src/dialogs.py:3311
 #, python-format
 msgid "Please make sure you are connected with \"%s\"."
 msgstr "Zorg ervoor dat je verbinding hebt met \"%s\"."
 
-#: ../src/dialogs.py:2701 ../src/dialogs.py:2704
+#: ../src/dialogs.py:2704 ../src/dialogs.py:2707
 #, fuzzy
 msgid "Invalid JID"
 msgstr "Ongeldige Jabber ID"
 
-#: ../src/dialogs.py:2704
+#: ../src/dialogs.py:2707
 #, python-format
 msgid "Unable to parse \"%s\"."
 msgstr ""
 
-#: ../src/dialogs.py:2713
+#: ../src/dialogs.py:2716
 msgid "Without a connection, you can not change your password."
 msgstr "Zonder verbinding is het niet mogelijk je wachtwoord te veranderen."
 
-#: ../src/dialogs.py:2732
+#: ../src/dialogs.py:2735
 msgid "Invalid password"
 msgstr "Ongeldig wachtwoord"
 
-#: ../src/dialogs.py:2732
+#: ../src/dialogs.py:2735
 msgid "You must enter a password."
 msgstr "Je moet een wachtwoord opgeven."
 
-#: ../src/dialogs.py:2736
+#: ../src/dialogs.py:2739
 msgid "Passwords do not match"
 msgstr "Wachtwoord komt niet overeen"
 
-#: ../src/dialogs.py:2737
+#: ../src/dialogs.py:2740
 msgid "The passwords typed in both fields must be identical."
 msgstr "De wachtwoorden in beide velden moeten identiek zijn"
 
-#: ../src/dialogs.py:2779 ../src/gui_interface.py:823 ../src/notify.py:273
+#: ../src/dialogs.py:2782 ../src/gui_interface.py:823 ../src/notify.py:273
 msgid "New E-mail"
 msgstr ""
 
-#: ../src/dialogs.py:2781 ../src/gui_interface.py:878 ../src/notify.py:266
+#: ../src/dialogs.py:2784 ../src/gui_interface.py:878 ../src/notify.py:266
 msgid "File Transfer Request"
 msgstr "Bestandsoverdracht Verzoek"
 
-#: ../src/dialogs.py:2783 ../src/gui_interface.py:785
+#: ../src/dialogs.py:2786 ../src/gui_interface.py:785
 #: ../src/gui_interface.py:849 ../src/notify.py:268
 msgid "File Transfer Error"
 msgstr "Bestandsoverdracht Fout"
 
-#: ../src/dialogs.py:2785 ../src/gui_interface.py:924
+#: ../src/dialogs.py:2788 ../src/gui_interface.py:924
 #: ../src/gui_interface.py:947 ../src/gui_interface.py:964
 #: ../src/notify.py:270
 msgid "File Transfer Completed"
 msgstr "Bestandsoverdracht Voltooid"
 
-#: ../src/dialogs.py:2786 ../src/gui_interface.py:927 ../src/notify.py:271
+#: ../src/dialogs.py:2789 ../src/gui_interface.py:927 ../src/notify.py:271
 msgid "File Transfer Stopped"
 msgstr "Bestandsoverdracht Gestopt"
 
-#: ../src/dialogs.py:2788 ../src/gui_interface.py:619 ../src/notify.py:275
+#: ../src/dialogs.py:2791 ../src/gui_interface.py:619 ../src/notify.py:275
 #, fuzzy
 msgid "Groupchat Invitation"
 msgstr "?Group Chat Contact Role:Geen"
 
-#: ../src/dialogs.py:2991
+#: ../src/dialogs.py:2994
 #, fuzzy, python-format
 msgid "Single Message using account %s"
 msgstr "Enkel Bericht met account %s"
 
-#: ../src/dialogs.py:2993
+#: ../src/dialogs.py:2996
 #, fuzzy, python-format
 msgid "Single Message in account %s"
 msgstr "Enkel Bericht met account %s"
 
-#: ../src/dialogs.py:2995
+#: ../src/dialogs.py:2998
 msgid "Single Message"
 msgstr "Enkel Bericht"
 
 #. prepare UI for Sending
-#: ../src/dialogs.py:2998
+#: ../src/dialogs.py:3001
 #, python-format
 msgid "Send %s"
 msgstr "Stuur %s"
 
 #. prepare UI for Receiving
-#: ../src/dialogs.py:3021
+#: ../src/dialogs.py:3024
 #, python-format
 msgid "Received %s"
 msgstr "Ontvangen %s"
 
 #. prepare UI for Receiving
-#: ../src/dialogs.py:3044
+#: ../src/dialogs.py:3047
 #, fuzzy, python-format
 msgid "Form %s"
 msgstr "Van %s"
 
 #. we create a new blank window to send and we preset RE: and to jid
-#: ../src/dialogs.py:3128
+#: ../src/dialogs.py:3131
 #, python-format
 msgid "RE: %s"
 msgstr "RE: %s"
 
-#: ../src/dialogs.py:3129
+#: ../src/dialogs.py:3132
 #, python-format
 msgid "%s wrote:\n"
 msgstr "%s schreef:\n"
 
-#: ../src/dialogs.py:3188
+#: ../src/dialogs.py:3191
 #, python-format
 msgid "XML Console for %s"
 msgstr "XML Console voor %s"
 
-#: ../src/dialogs.py:3190
+#: ../src/dialogs.py:3193
 msgid "XML Console"
 msgstr "XML Console"
 
 #. Action that can be done with an incoming list of contacts
-#: ../src/dialogs.py:3337
+#: ../src/dialogs.py:3340
 #, fuzzy
 msgid "add"
 msgstr "Vastgelopen"
 
-#: ../src/dialogs.py:3337
+#: ../src/dialogs.py:3340
 #, fuzzy
 msgid "modify"
 msgstr "Be_werk"
 
-#: ../src/dialogs.py:3338
+#: ../src/dialogs.py:3341
 #, fuzzy
 msgid "remove"
 msgstr "_Verwijder"
 
-#: ../src/dialogs.py:3367
+#: ../src/dialogs.py:3370
 #, fuzzy, python-format
 msgid ""
 "<b>%(jid)s</b> would like you to <b>%(action)s</b> some contacts in your "
@@ -7977,184 +7975,184 @@ msgid ""
 msgstr "Ik wil je graag toevoegen aan mijn contactlijst"
 
 #. Change label for accept_button to action name instead of 'OK'.
-#: ../src/dialogs.py:3385 ../src/dialogs.py:3460
+#: ../src/dialogs.py:3388 ../src/dialogs.py:3463
 #, fuzzy
 msgid "Modify"
 msgstr "Be_werk"
 
-#: ../src/dialogs.py:3391
+#: ../src/dialogs.py:3394
 #, fuzzy
 msgid "Jabber ID"
 msgstr "Jabber ID:"
 
-#: ../src/dialogs.py:3397
+#: ../src/dialogs.py:3400
 #, fuzzy
 msgid "Groups"
 msgstr "Groep"
 
 #. it is selected
 #. remote_jid = model[iter_][1].decode('utf-8')
-#: ../src/dialogs.py:3505
+#: ../src/dialogs.py:3508
 #, fuzzy, python-format
 msgid "%s suggested me to add you in my roster."
 msgstr "Ik zou je graag aan mijn rooster willen toevoegen."
 
-#: ../src/dialogs.py:3519
+#: ../src/dialogs.py:3522
 #, fuzzy, python-format
 msgid "Added  %s contacts"
 msgstr "_Contact Toevoegen"
 
-#: ../src/dialogs.py:3556
+#: ../src/dialogs.py:3559
 #, fuzzy, python-format
 msgid "Removed  %s contacts"
 msgstr "Verwijdert contact van rooster"
 
-#: ../src/dialogs.py:3596 ../src/dialogs.py:3773
+#: ../src/dialogs.py:3599 ../src/dialogs.py:3776
 #, python-format
 msgid "Archiving Preferences for %s"
 msgstr ""
 
-#: ../src/dialogs.py:3636
+#: ../src/dialogs.py:3639
 #, fuzzy
 msgid "Invalid expire value"
 msgstr "Ongeldige gebruikersnaam"
 
-#: ../src/dialogs.py:3637
+#: ../src/dialogs.py:3640
 msgid "Expire must be a valid positive integer."
 msgstr ""
 
-#: ../src/dialogs.py:3684
+#: ../src/dialogs.py:3687
 msgid "There is an error with the form"
 msgstr ""
 
-#: ../src/dialogs.py:3904
+#: ../src/dialogs.py:3907
 msgid "There is an error"
 msgstr ""
 
-#: ../src/dialogs.py:3972
+#: ../src/dialogs.py:3975
 #, python-format
 msgid "Privacy List <b><i>%s</i></b>"
 msgstr ""
 
-#: ../src/dialogs.py:3976
+#: ../src/dialogs.py:3979
 #, python-format
 msgid "Privacy List for %s"
 msgstr ""
 
-#: ../src/dialogs.py:4043
+#: ../src/dialogs.py:4046
 #, python-format
 msgid "Order: %(order)s, action: %(action)s, type: %(type)s, value: %(value)s"
 msgstr ""
 
-#: ../src/dialogs.py:4048
+#: ../src/dialogs.py:4051
 #, fuzzy, python-format
 msgid "Order: %(order)s, action: %(action)s"
 msgstr "Beschrijving: %s"
 
-#: ../src/dialogs.py:4099
+#: ../src/dialogs.py:4102
 #, fuzzy
 msgid "<b>Edit a rule</b>"
 msgstr "<b>Formatteer een gespreksregel</b>"
 
-#: ../src/dialogs.py:4210
+#: ../src/dialogs.py:4213
 #, fuzzy
 msgid "<b>Add a rule</b>"
 msgstr "<b>Formatteer een gespreksregel</b>"
 
-#: ../src/dialogs.py:4309
+#: ../src/dialogs.py:4312
 #, python-format
 msgid "Privacy Lists for %s"
 msgstr ""
 
-#: ../src/dialogs.py:4311
+#: ../src/dialogs.py:4314
 #, fuzzy
 msgid "Privacy Lists"
 msgstr "Start Gesprek"
 
-#: ../src/dialogs.py:4400
+#: ../src/dialogs.py:4403
 #, fuzzy
 msgid "Invalid List Name"
 msgstr "Ongeldige gebruikersnaam"
 
-#: ../src/dialogs.py:4401
+#: ../src/dialogs.py:4404
 #, fuzzy
 msgid "You must enter a name to create a privacy list."
 msgstr "Je moet een wachtwoord invullen voor de nieuwe account"
 
-#: ../src/dialogs.py:4433
+#: ../src/dialogs.py:4436
 #, fuzzy
 msgid "You are invited to a groupchat"
 msgstr "Je bent uit deze ruimte verbannen."
 
-#: ../src/dialogs.py:4436
+#: ../src/dialogs.py:4439
 #, fuzzy
 msgid "$Contact has invited you to join a discussion"
 msgstr "%(contact_jid)s is uitgenodigd %(room_jid)s binnen te komen."
 
-#: ../src/dialogs.py:4438
+#: ../src/dialogs.py:4441
 #, fuzzy, python-format
 msgid "$Contact has invited you to group chat %(room_jid)s"
 msgstr "%(contact_jid)s is uitgenodigd %(room_jid)s binnen te komen."
 
-#: ../src/dialogs.py:4446
+#: ../src/dialogs.py:4449
 #, python-format
 msgid "Comment: %s"
 msgstr "Commentaar: %s"
 
-#: ../src/dialogs.py:4448
+#: ../src/dialogs.py:4451
 msgid "Do you want to accept the invitation?"
 msgstr ""
 
-#: ../src/dialogs.py:4510
+#: ../src/dialogs.py:4513
 msgid "Choose Client Cert #PCKS12"
 msgstr ""
 
-#: ../src/dialogs.py:4520 ../src/dialogs.py:4562 ../src/dialogs.py:4618
-#: ../src/dialogs.py:4706
+#: ../src/dialogs.py:4523 ../src/dialogs.py:4565 ../src/dialogs.py:4621
+#: ../src/dialogs.py:4709
 msgid "All files"
 msgstr "Alle bestanden"
 
-#: ../src/dialogs.py:4525
+#: ../src/dialogs.py:4528
 msgid "PKCS12 Files"
 msgstr ""
 
-#: ../src/dialogs.py:4552
+#: ../src/dialogs.py:4555
 msgid "Choose Sound"
 msgstr "Kies Geluid"
 
-#: ../src/dialogs.py:4567
+#: ../src/dialogs.py:4570
 msgid "Wav Sounds"
 msgstr "Wav Geluiden"
 
-#: ../src/dialogs.py:4605
+#: ../src/dialogs.py:4608
 msgid "Choose Image"
 msgstr "Kies Afbeelding"
 
-#: ../src/dialogs.py:4623
+#: ../src/dialogs.py:4626
 msgid "Images"
 msgstr "Afbeeldingen"
 
-#: ../src/dialogs.py:4693
+#: ../src/dialogs.py:4696
 #, fuzzy
 msgid "Choose Archive"
 msgstr "Kies Afbeelding"
 
-#: ../src/dialogs.py:4711
+#: ../src/dialogs.py:4714
 #, fuzzy
 msgid "Zip files"
 msgstr "Alle bestanden"
 
-#: ../src/dialogs.py:4737
+#: ../src/dialogs.py:4740
 #, python-format
 msgid "When %s becomes:"
 msgstr ""
 
-#: ../src/dialogs.py:4739
+#: ../src/dialogs.py:4742
 #, python-format
 msgid "Adding Special Notification for %s"
 msgstr ""
 
-#: ../src/dialogs.py:4959
+#: ../src/dialogs.py:4962
 #, python-format
 msgid ""
 "Your chat session with <b>%(jid)s</b> is encrypted.\n"
@@ -8162,38 +8160,38 @@ msgid ""
 "This session's Short Authentication String is <b>%(sas)s</b>."
 msgstr ""
 
-#: ../src/dialogs.py:4962
+#: ../src/dialogs.py:4965
 msgid "You have already verified this contact's identity."
 msgstr ""
 
-#: ../src/dialogs.py:4968 ../src/dialogs.py:5052
+#: ../src/dialogs.py:4971 ../src/dialogs.py:5055
 msgid "Contact's identity verified"
 msgstr ""
 
-#: ../src/dialogs.py:4974
+#: ../src/dialogs.py:4977
 msgid "Verify again..."
 msgstr ""
 
-#: ../src/dialogs.py:4979
+#: ../src/dialogs.py:4982
 msgid ""
 "To be certain that <b>only</b> the expected person can read your messages or "
 "send you messages, you need to verify their identity by clicking the button "
 "below."
 msgstr ""
 
-#: ../src/dialogs.py:4982 ../src/dialogs.py:5033 ../src/dialogs.py:5046
+#: ../src/dialogs.py:4985 ../src/dialogs.py:5036 ../src/dialogs.py:5049
 msgid "Contact's identity NOT verified"
 msgstr ""
 
-#: ../src/dialogs.py:4987
+#: ../src/dialogs.py:4990
 msgid "Verify..."
 msgstr ""
 
-#: ../src/dialogs.py:4998
+#: ../src/dialogs.py:5001
 msgid "Have you verified the contact's identity?"
 msgstr ""
 
-#: ../src/dialogs.py:4999
+#: ../src/dialogs.py:5002
 #, python-format
 msgid ""
 "To prevent talking to an unknown person, you should speak to <b>%(jid)s</b> "
@@ -8203,56 +8201,56 @@ msgid ""
 "This session's Short Authentication String is <b>%(sas)s</b>."
 msgstr ""
 
-#: ../src/dialogs.py:5000
+#: ../src/dialogs.py:5003
 msgid "Did you talk to the remote contact and verify the SAS?"
 msgstr ""
 
-#: ../src/dialogs.py:5034
+#: ../src/dialogs.py:5037
 #, python-format
 msgid "The contact's key (%s) <b>does not match</b> the key assigned in Gajim."
 msgstr ""
 
-#: ../src/dialogs.py:5040
+#: ../src/dialogs.py:5043
 msgid "No GPG key is assigned to this contact. So you cannot encrypt messages."
 msgstr ""
 
-#: ../src/dialogs.py:5047
+#: ../src/dialogs.py:5050
 msgid ""
 "GPG key is assigned to this contact, but <b>you do not trust his key</b>, so "
 "message <b>cannot</b> be encrypted. Use your GPG client to trust this key."
 msgstr ""
 
-#: ../src/dialogs.py:5053
+#: ../src/dialogs.py:5056
 msgid ""
 "GPG Key is assigned to this contact, and you trust his key, so messages will "
 "be encrypted."
 msgstr ""
 
-#: ../src/dialogs.py:5118
+#: ../src/dialogs.py:5121
 msgid "an audio and video"
 msgstr ""
 
-#: ../src/dialogs.py:5120
+#: ../src/dialogs.py:5123
 msgid "an audio"
 msgstr ""
 
-#: ../src/dialogs.py:5122
+#: ../src/dialogs.py:5125
 msgid "a video"
 msgstr ""
 
-#: ../src/dialogs.py:5126
+#: ../src/dialogs.py:5129
 #, python-format
 msgid ""
 "%(contact)s wants to start %(type)s session with you. Do you want to answer "
 "the call?"
 msgstr ""
 
-#: ../src/dialogs.py:5194
+#: ../src/dialogs.py:5197
 #, fuzzy, python-format
 msgid "Certificate for account %s"
 msgstr "voor account %s"
 
-#: ../src/dialogs.py:5194
+#: ../src/dialogs.py:5197
 #, python-format
 msgid ""
 "<b>Issued to:</b>\n"
@@ -8274,7 +8272,7 @@ msgid ""
 "SHA1 Fingerprint: %(sha1)s"
 msgstr ""
 
-#: ../src/dialogs.py:5228 ../src/dialogs.py:5245
+#: ../src/dialogs.py:5231 ../src/dialogs.py:5248
 msgid "View cert..."
 msgstr ""
 

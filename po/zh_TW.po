@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 0.15a1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-22 18:56+0100\n"
+"POT-Creation-Date: 2012-02-12 20:36+0100\n"
 "PO-Revision-Date: 2011-09-07 23:11+0800\n"
 "Last-Translator: Wei-Lun Chao <chaoweilun@gmail.com>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -215,8 +215,8 @@ msgid "Accounts"
 msgstr "帳號"
 
 #. Change label for accept_button to action name instead of 'OK'.
-#: ../data/gui/accounts_window.ui.h:8 ../src/dialogs.py:3383
-#: ../src/dialogs.py:3429
+#: ../data/gui/accounts_window.ui.h:8 ../src/dialogs.py:3386
+#: ../src/dialogs.py:3432
 msgid "Add"
 msgstr "加入"
 
@@ -279,8 +279,8 @@ msgid "Connection"
 msgstr "連線"
 
 #. Change label for accept_button to action name instead of 'OK'.
-#: ../data/gui/accounts_window.ui.h:23 ../src/dialogs.py:3387
-#: ../src/dialogs.py:3484
+#: ../data/gui/accounts_window.ui.h:23 ../src/dialogs.py:3390
+#: ../src/dialogs.py:3487
 msgid "Delete"
 msgstr "刪除"
 
@@ -1444,7 +1444,7 @@ msgstr "stream"
 msgid "Bro_wse Rooms"
 msgstr "Bro_wse Rooms"
 
-#: ../data/gui/join_groupchat_window.ui.h:3 ../src/dialogs.py:2333
+#: ../data/gui/join_groupchat_window.ui.h:3 ../src/dialogs.py:2336
 msgid "Join Group Chat"
 msgstr "加入多人聊天"
 
@@ -2313,7 +2313,7 @@ msgstr "JabberID"
 msgid "Order:"
 msgstr "Order:"
 
-#: ../data/gui/privacy_list_window.ui.h:12 ../src/dialogs.py:3978
+#: ../data/gui/privacy_list_window.ui.h:12 ../src/dialogs.py:3981
 msgid "Privacy List"
 msgstr "隱私策略清單"
 
@@ -3128,8 +3128,8 @@ msgstr "需要 python-farsight。"
 #. Add to roster
 #: ../src/chat_control.py:1701 ../src/common/contacts.py:158
 #: ../src/common/contacts.py:277 ../src/common/helpers.py:67
-#: ../src/common/helpers.py:261 ../src/dialogs.py:1099 ../src/dialogs.py:2227
-#: ../src/dialogs.py:2256 ../src/gui_interface.py:477
+#: ../src/common/helpers.py:261 ../src/dialogs.py:1099 ../src/dialogs.py:2230
+#: ../src/dialogs.py:2259 ../src/gui_interface.py:477
 #: ../src/gui_menu_builder.py:254 ../src/gui_menu_builder.py:405
 #: ../src/roster_window.py:767 ../src/roster_window.py:1687
 #: ../src/roster_window.py:1689 ../src/roster_window.py:2022
@@ -3156,7 +3156,7 @@ msgid "%(nickname)s from group chat %(room_name)s"
 msgstr "聊天室 %(room_name)s 的 %(nickname)s"
 
 #. No key assigned nor a key is used by remote contact
-#: ../src/chat_control.py:2162 ../src/dialogs.py:5039
+#: ../src/chat_control.py:2162 ../src/dialogs.py:5042
 msgid "No GPG key assigned"
 msgstr "沒有指定 GPG 密鑰"
 
@@ -3466,7 +3466,7 @@ msgstr "變更您的暱稱(Ctrl+N)"
 
 #. invalid char
 #: ../src/command_system/implementation/standard.py:267 ../src/config.py:3392
-#: ../src/dialogs.py:2075
+#: ../src/dialogs.py:2078
 msgid "Invalid nickname"
 msgstr "無效的暱稱"
 
@@ -4662,106 +4662,104 @@ msgid "You can join this room instead: %s"
 msgstr "做為替代，您可以加入這個聊天室: %s"
 
 #: ../src/common/connection_handlers_events.py:1012
-#: ../src/common/connection_handlers_events.py:1044
-#: ../src/common/connection_handlers_events.py:1060
+#: ../src/common/connection_handlers_events.py:1049
 #: ../src/common/connection.py:262 ../src/config.py:2149 ../src/config.py:2158
 #: ../src/config.py:2226 ../src/config.py:3663 ../src/dataforms_widget.py:623
-#: ../src/dialogs.py:3091
+#: ../src/dialogs.py:3094
 msgid "Invalid Jabber ID"
 msgstr "無效的 Jabber ID"
 
 #: ../src/common/connection_handlers_events.py:1013
-#: ../src/common/connection_handlers_events.py:1045
-#: ../src/common/connection_handlers_events.py:1061
+#: ../src/common/connection_handlers_events.py:1050
 msgid "A message from a non-valid JID arrived, it has been ignored."
 msgstr "收到了一個從一個無效的 JID 傳送的訊息，它已經被忽略了。"
 
 #. ('MSGNOTSENT', account, (jid, ierror_msg, msg, time, session))
-#: ../src/common/connection_handlers_events.py:1087
+#: ../src/common/connection_handlers_events.py:1075
 #: ../src/gui_interface.py:425 ../src/gui_interface.py:439
 #, python-format
 msgid "error while sending %(message)s ( %(error)s )"
 msgstr "傳送 %(message)s 時出現錯誤( %(error)s )"
 
-#: ../src/common/connection_handlers_events.py:1520
+#: ../src/common/connection_handlers_events.py:1508
 #, python-format
 msgid "Unknown SSL error: %d"
 msgstr "不明的 SSL 錯誤: %d"
 
-#: ../src/common/connection_handlers_events.py:2048 ../src/dialogs.py:2778
+#: ../src/common/connection_handlers_events.py:2036 ../src/dialogs.py:2781
 #: ../src/notify.py:263
 msgid "New Single Message"
 msgstr "新單條訊息"
 
-#: ../src/common/connection_handlers_events.py:2050
+#: ../src/common/connection_handlers_events.py:2038
 #, python-format
 msgid "New Single Message from %(nickname)s"
 msgstr " %(nickname)s 發來的新訊息"
 
-#: ../src/common/connection_handlers_events.py:2054 ../src/dialogs.py:2779
+#: ../src/common/connection_handlers_events.py:2042 ../src/dialogs.py:2782
 #: ../src/notify.py:264
 msgid "New Private Message"
 msgstr "新個人訊息"
 
-#: ../src/common/connection_handlers_events.py:2056
+#: ../src/common/connection_handlers_events.py:2044
 #, python-format
 msgid "New Private Message from group chat %s"
 msgstr "來自聊天室 %s 的私人訊息"
 
-#: ../src/common/connection_handlers_events.py:2059
+#: ../src/common/connection_handlers_events.py:2047
 #, python-format
 msgid "%(nickname)s: %(message)s"
 msgstr "%(nickname)s:  %(message)s"
 
-#: ../src/common/connection_handlers_events.py:2062
+#: ../src/common/connection_handlers_events.py:2050
 #, python-format
 msgid "Messaged by %(nickname)s"
 msgstr "來自 %(nickname)s 的訊息"
 
-#: ../src/common/connection_handlers_events.py:2066 ../src/dialogs.py:2778
+#: ../src/common/connection_handlers_events.py:2054 ../src/dialogs.py:2781
 #: ../src/notify.py:263
 msgid "New Message"
 msgstr "新訊息"
 
-#: ../src/common/connection_handlers_events.py:2068
+#: ../src/common/connection_handlers_events.py:2056
 #, python-format
 msgid "New Message from %(nickname)s"
 msgstr "來自 %(nickname)s 的新訊息"
 
-#: ../src/common/connection_handlers_events.py:2197
+#: ../src/common/connection_handlers_events.py:2185
 #, python-format
 msgid "%(nick)s Changed Status"
 msgstr "%(nick)s 變更了狀態"
 
-#: ../src/common/connection_handlers_events.py:2199
+#: ../src/common/connection_handlers_events.py:2187
 #: ../src/groupchat_control.py:205 ../src/groupchat_control.py:1766
 #: ../src/history_window.py:447
 #, python-format
 msgid "%(nick)s is now %(status)s"
 msgstr "%(nick)s 的狀態是 %(status)s"
 
-#: ../src/common/connection_handlers_events.py:2204 ../src/dialogs.py:2790
+#: ../src/common/connection_handlers_events.py:2192 ../src/dialogs.py:2793
 #: ../src/notify.py:277
 msgid "Contact Changed Status"
 msgstr "聯絡人狀態變更"
 
-#: ../src/common/connection_handlers_events.py:2206
+#: ../src/common/connection_handlers_events.py:2194
 #, python-format
 msgid "%(nickname)s Signed In"
 msgstr "%(nickname)s 上線了"
 
 #. default value
-#: ../src/common/connection_handlers_events.py:2211 ../src/dialogs.py:2774
+#: ../src/common/connection_handlers_events.py:2199 ../src/dialogs.py:2777
 #: ../src/notify.py:259
 msgid "Contact Signed In"
 msgstr "聯絡人登入"
 
-#: ../src/common/connection_handlers_events.py:2213
+#: ../src/common/connection_handlers_events.py:2201
 #, python-format
 msgid "%(nickname)s Signed Out"
 msgstr "%(nickname)s 離開了"
 
-#: ../src/common/connection_handlers_events.py:2218 ../src/dialogs.py:2776
+#: ../src/common/connection_handlers_events.py:2206 ../src/dialogs.py:2779
 #: ../src/notify.py:261
 msgid "Contact Signed Out"
 msgstr "聯絡人離開登入"
@@ -4795,11 +4793,11 @@ msgid ""
 "Registration with agent %(agent)s failed with error %(error)s: %(error_msg)s"
 msgstr "註冊失敗，agent %(agent)s，錯誤 %(error)s: %(error_msg)s"
 
-#: ../src/common/connection_handlers.py:571 ../src/common/connection.py:1551
+#: ../src/common/connection_handlers.py:571 ../src/common/connection.py:1554
 msgid "Invisibility not supported"
 msgstr "不支援隱身"
 
-#: ../src/common/connection_handlers.py:572 ../src/common/connection.py:1552
+#: ../src/common/connection_handlers.py:572 ../src/common/connection.py:1555
 #, python-format
 msgid "Account %s doesn't support invisibility."
 msgstr "帳號 %s 不支援隱身"
@@ -4936,7 +4934,7 @@ msgstr "密鑰用途中不包含證書籤名稱"
 msgid "Application verification failure"
 msgstr "應用程式驗證失敗"
 
-#: ../src/common/connection.py:263 ../src/dialogs.py:3092
+#: ../src/common/connection.py:263 ../src/dialogs.py:3095
 #, python-format
 msgid "It is not possible to send a message to %s, this JID is not valid."
 msgstr "不能向 %s 傳送訊息，無效的 JID。"
@@ -4964,73 +4962,73 @@ msgstr ""
 "主題: %(subject)s\n"
 "%(message)s"
 
-#: ../src/common/connection.py:861
+#: ../src/common/connection.py:864
 #, python-format
 msgid "Connection with account \"%s\" has been lost"
 msgstr "帳號\"%s\"的連線丟失"
 
-#: ../src/common/connection.py:862
+#: ../src/common/connection.py:865
 msgid "Reconnect manually."
 msgstr "手動重連。"
 
 #. it's a new account
 #. wrong answer
-#: ../src/common/connection.py:873
+#: ../src/common/connection.py:876
 #, python-format
 msgid "Server %(name)s answered wrongly to register request: %(error)s"
 msgstr "伺服器 %(name)s 對註冊請求的回應有誤: %(error)s"
 
 #. requested config has changed since first connection
-#: ../src/common/connection.py:915
+#: ../src/common/connection.py:918
 #, python-format
 msgid "Server %s provided a different registration form"
 msgstr "伺服器 %s 提供了一個不同的註冊表單"
 
-#: ../src/common/connection.py:932
+#: ../src/common/connection.py:935
 msgid "Invalid answer"
 msgstr "答案錯誤"
 
-#: ../src/common/connection.py:933
+#: ../src/common/connection.py:936
 #, python-format
 msgid "Transport %(name)s answered wrongly to register request: %(error)s"
 msgstr "服務代理 %(name)s 對註冊請求的回應有誤: %(error)s"
 
-#: ../src/common/connection.py:1208 ../src/common/connection.py:1360
-#: ../src/common/connection.py:1988
+#: ../src/common/connection.py:1211 ../src/common/connection.py:1363
+#: ../src/common/connection.py:1991
 #: ../src/common/zeroconf/connection_zeroconf.py:205
 #, python-format
 msgid "Could not connect to \"%s\""
 msgstr "沒有能夠連線到\"%s\""
 
-#: ../src/common/connection.py:1209 ../src/gui_interface.py:534
+#: ../src/common/connection.py:1212 ../src/gui_interface.py:534
 msgid "Check your connection or try again later."
 msgstr "檢查連線或稍後重試。"
 
-#: ../src/common/connection.py:1214
+#: ../src/common/connection.py:1217
 #, python-format
 msgid "Server replied: %s"
 msgstr "伺服器回應: %s"
 
-#: ../src/common/connection.py:1229
+#: ../src/common/connection.py:1232
 msgid "Connection to proxy failed"
 msgstr "連線代理伺服器失敗"
 
-#: ../src/common/connection.py:1267 ../src/common/connection.py:1339
+#: ../src/common/connection.py:1270 ../src/common/connection.py:1342
 #, python-format
 msgid "Could not connect to account %s"
 msgstr "沒有能夠連線到帳號 %s"
 
-#: ../src/common/connection.py:1268 ../src/common/connection.py:1340
+#: ../src/common/connection.py:1271 ../src/common/connection.py:1343
 #, python-format
 msgid "Connection with account %s has been lost. Retry connecting."
 msgstr "帳號 %s 的連線丟失。重新嘗試連線。"
 
-#: ../src/common/connection.py:1293
+#: ../src/common/connection.py:1296
 #, python-format
 msgid "The authenticity of the %s certificate could be invalid."
 msgstr "%s 證書的認證可能是無效的"
 
-#: ../src/common/connection.py:1296
+#: ../src/common/connection.py:1299
 #, python-format
 msgid ""
 "\n"
@@ -5039,7 +5037,7 @@ msgstr ""
 "\n"
 "SSL 錯誤: <b>%s</b>"
 
-#: ../src/common/connection.py:1298
+#: ../src/common/connection.py:1301
 #, python-format
 msgid ""
 "\n"
@@ -5048,32 +5046,32 @@ msgstr ""
 "\n"
 "不明 SSL 錯誤: %d"
 
-#: ../src/common/connection.py:1321
+#: ../src/common/connection.py:1324
 #, fuzzy, python-format
 msgid ""
 "The authenticity of the %s certificate could be invalid.\n"
 "The certificate does not cover this domain."
 msgstr "%s 證書的認證可能是無效的"
 
-#: ../src/common/connection.py:1361
+#: ../src/common/connection.py:1364
 msgid "Check your connection or try again later"
 msgstr "檢查連線或稍後重試"
 
-#: ../src/common/connection.py:1396
+#: ../src/common/connection.py:1399
 #, python-format
 msgid "Authentication failed with \"%s\""
 msgstr "\"%s\"登入驗證失敗"
 
-#: ../src/common/connection.py:1397
+#: ../src/common/connection.py:1400
 #, fuzzy
 msgid "Please check your login and passwordfor correctness."
 msgstr "請檢查登入資訊和密碼的正確性"
 
-#: ../src/common/connection.py:1472
+#: ../src/common/connection.py:1475
 msgid "Error while removing privacy list"
 msgstr "移除隱私策略清單時發生錯誤"
 
-#: ../src/common/connection.py:1473
+#: ../src/common/connection.py:1476
 #, fuzzy, python-format
 msgid ""
 "Privacy list %s has not been removed. It is maybe active in one of your "
@@ -5082,24 +5080,24 @@ msgstr ""
 "隱私策略清單 %s 還沒有被移除。它可能在您的某個連線的資源中是活動的。停用它然"
 "後重試。"
 
-#: ../src/common/connection.py:1855
+#: ../src/common/connection.py:1858
 #, python-format
 msgid "Sent contact: \"%s\" (%s)"
 msgstr "已傳送聯絡人: \"%s\" (%s)"
 
-#: ../src/common/connection.py:1858
+#: ../src/common/connection.py:1861
 msgid "Sent contacts:"
 msgstr "已傳送聯絡人:"
 
-#: ../src/common/connection.py:2005 ../src/common/connection.py:2028
+#: ../src/common/connection.py:2008 ../src/common/connection.py:2031
 msgid "Not fetched because of invisible status"
 msgstr "由於隱身狀態，未獲取"
 
-#: ../src/common/connection.py:2561
+#: ../src/common/connection.py:2564
 msgid "Unregister failed"
 msgstr "移除註冊失敗"
 
-#: ../src/common/connection.py:2562
+#: ../src/common/connection.py:2565
 #, python-format
 msgid "Unregistration with server %(server)s failed: %(error)s"
 msgstr "在伺服器上 %(server)s 移除註冊失敗: %(error)s"
@@ -6526,8 +6524,8 @@ msgid "status message text"
 msgstr "狀態訊息文字"
 
 #. Name column
-#: ../src/config.py:1566 ../src/dialogs.py:2535 ../src/dialogs.py:2602
-#: ../src/dialogs.py:3394 ../src/disco.py:886 ../src/disco.py:1744
+#: ../src/config.py:1566 ../src/dialogs.py:2538 ../src/dialogs.py:2605
+#: ../src/dialogs.py:3397 ../src/disco.py:886 ../src/disco.py:1744
 #: ../src/disco.py:2046 ../src/history_window.py:90
 msgid "Name"
 msgstr "名稱"
@@ -6640,8 +6638,8 @@ msgstr "不明的帳號可用"
 msgid "You must create your account before editing your personal information."
 msgstr "您必須在編輯個人資訊前建立帳號。"
 
-#: ../src/config.py:2455 ../src/dialogs.py:2286 ../src/dialogs.py:2524
-#: ../src/dialogs.py:2712 ../src/disco.py:515 ../src/profile_window.py:361
+#: ../src/config.py:2455 ../src/dialogs.py:2289 ../src/dialogs.py:2527
+#: ../src/dialogs.py:2715 ../src/disco.py:515 ../src/profile_window.py:361
 msgid "You are not connected to the server"
 msgstr "尚未連線到伺服器"
 
@@ -7186,7 +7184,7 @@ msgid "Please fill in the data of the contact you want to add"
 msgstr "請填入您想加入的聯絡人的資訊"
 
 #: ../src/dialogs.py:1074 ../src/dialogs.py:1080 ../src/dialogs.py:1085
-#: ../src/dialogs.py:3627
+#: ../src/dialogs.py:3630
 msgid "Invalid User ID"
 msgstr "無效的使用者ID"
 
@@ -7271,236 +7269,236 @@ msgstr "再續(_R)"
 msgid "Re_place"
 msgstr "置換(_P)"
 
-#: ../src/dialogs.py:2076 ../src/dialogs.py:2476
+#: ../src/dialogs.py:2079 ../src/dialogs.py:2479
 msgid "The nickname has not allowed characters."
 msgstr "暱稱包含不合法字元。"
 
-#: ../src/dialogs.py:2194
+#: ../src/dialogs.py:2197
 #, python-format
 msgid "Subscription request for account %(account)s from %(jid)s"
 msgstr "%(jid)s 對帳號 %(account)s 的認證請求"
 
-#: ../src/dialogs.py:2197
+#: ../src/dialogs.py:2200
 #, python-format
 msgid "Subscription request from %s"
 msgstr "%s 的認證請求"
 
-#: ../src/dialogs.py:2281 ../src/gui_interface.py:1939
+#: ../src/dialogs.py:2284 ../src/gui_interface.py:1939
 #, python-format
 msgid "You are already in group chat %s"
 msgstr "您已經在聊天室 %s"
 
-#: ../src/dialogs.py:2287
+#: ../src/dialogs.py:2290
 msgid "You can not join a group chat unless you are connected."
 msgstr "您必須連線才能加入聊天室。"
 
-#: ../src/dialogs.py:2331
+#: ../src/dialogs.py:2334
 #, python-format
 msgid "Join Group Chat with account %s"
 msgstr "使用帳號 %s 加入聊天室"
 
-#: ../src/dialogs.py:2462
+#: ../src/dialogs.py:2465
 msgid "Invalid Account"
 msgstr "無效的帳號"
 
-#: ../src/dialogs.py:2463
+#: ../src/dialogs.py:2466
 msgid ""
 "You have to choose an account from which you want to join the groupchat."
 msgstr "您需要選擇一個帳號，用它來加入聊天室。"
 
-#: ../src/dialogs.py:2475
+#: ../src/dialogs.py:2478
 msgid "Invalid Nickname"
 msgstr "不合法的暱稱"
 
-#: ../src/dialogs.py:2480 ../src/dialogs.py:2486
+#: ../src/dialogs.py:2483 ../src/dialogs.py:2489
 #: ../src/groupchat_control.py:2092
 msgid "Invalid group chat Jabber ID"
 msgstr "無效的聊天室 Jabber ID"
 
-#: ../src/dialogs.py:2481
+#: ../src/dialogs.py:2484
 msgid "Please enter the group chat Jabber ID as room@server."
 msgstr "請輸入聊天室的 Jabber ID，以 room@server 的形式。"
 
-#: ../src/dialogs.py:2487 ../src/groupchat_control.py:2093
+#: ../src/dialogs.py:2490 ../src/groupchat_control.py:2093
 msgid "The group chat Jabber ID has not allowed characters."
 msgstr "聊天室 Jabber ID 包含不合法字元。"
 
-#: ../src/dialogs.py:2492 ../src/gui_interface.py:1921
+#: ../src/dialogs.py:2495 ../src/gui_interface.py:1921
 msgid "This is not a group chat"
 msgstr "這不是一個聊天室"
 
-#: ../src/dialogs.py:2493 ../src/gui_interface.py:1922
+#: ../src/dialogs.py:2496 ../src/gui_interface.py:1922
 #, python-format
 msgid "%s is not the name of a group chat."
 msgstr "%s 不是一個聊天室的名稱。"
 
-#: ../src/dialogs.py:2525
+#: ../src/dialogs.py:2528
 msgid "Without a connection, you can not synchronise your contacts."
 msgstr "未連線時，您不能同步您的聯絡人。"
 
-#: ../src/dialogs.py:2538
+#: ../src/dialogs.py:2541
 msgid "Server"
 msgstr "伺服器"
 
-#: ../src/dialogs.py:2574
+#: ../src/dialogs.py:2577
 msgid "This account is not connected to the server"
 msgstr "這個帳號已經連線到伺服器"
 
-#: ../src/dialogs.py:2575
+#: ../src/dialogs.py:2578
 msgid "You cannot synchronize with an account unless it is connected."
 msgstr "這個帳號連線後您才可以與之同步"
 
-#: ../src/dialogs.py:2600
+#: ../src/dialogs.py:2603
 msgid "Synchronise"
 msgstr "同步"
 
-#: ../src/dialogs.py:2661
+#: ../src/dialogs.py:2664
 #, python-format
 msgid "Start Chat with account %s"
 msgstr "使用帳號 %s 開始聊天"
 
-#: ../src/dialogs.py:2663
+#: ../src/dialogs.py:2666
 msgid "Start Chat"
 msgstr "開始聊天"
 
-#: ../src/dialogs.py:2664
+#: ../src/dialogs.py:2667
 msgid ""
 "Fill in the nickname or the Jabber ID of the contact you would like\n"
 "to send a chat message to:"
 msgstr "填寫一個暱稱或是 Jabber ID，您將要給其傳送聊天訊息:"
 
 #. if offline or connecting
-#: ../src/dialogs.py:2691 ../src/dialogs.py:3072 ../src/dialogs.py:3307
+#: ../src/dialogs.py:2694 ../src/dialogs.py:3075 ../src/dialogs.py:3310
 msgid "Connection not available"
 msgstr "連線無法使用"
 
-#: ../src/dialogs.py:2692 ../src/dialogs.py:3073 ../src/dialogs.py:3308
+#: ../src/dialogs.py:2695 ../src/dialogs.py:3076 ../src/dialogs.py:3311
 #, python-format
 msgid "Please make sure you are connected with \"%s\"."
 msgstr "請確認您已經連線到 \"%s\"。"
 
-#: ../src/dialogs.py:2701 ../src/dialogs.py:2704
+#: ../src/dialogs.py:2704 ../src/dialogs.py:2707
 msgid "Invalid JID"
 msgstr "無效的 JID"
 
-#: ../src/dialogs.py:2704
+#: ../src/dialogs.py:2707
 #, python-format
 msgid "Unable to parse \"%s\"."
 msgstr "無法解析 \"%s\"。"
 
-#: ../src/dialogs.py:2713
+#: ../src/dialogs.py:2716
 msgid "Without a connection, you can not change your password."
 msgstr "連線後才可變更密碼。"
 
-#: ../src/dialogs.py:2732
+#: ../src/dialogs.py:2735
 msgid "Invalid password"
 msgstr "無效密碼"
 
-#: ../src/dialogs.py:2732
+#: ../src/dialogs.py:2735
 msgid "You must enter a password."
 msgstr "您必須輸入密碼"
 
-#: ../src/dialogs.py:2736
+#: ../src/dialogs.py:2739
 msgid "Passwords do not match"
 msgstr "密碼不符"
 
-#: ../src/dialogs.py:2737
+#: ../src/dialogs.py:2740
 msgid "The passwords typed in both fields must be identical."
 msgstr "在兩個輸入框中輸入的密碼必須一致。"
 
-#: ../src/dialogs.py:2779 ../src/gui_interface.py:823 ../src/notify.py:273
+#: ../src/dialogs.py:2782 ../src/gui_interface.py:823 ../src/notify.py:273
 msgid "New E-mail"
 msgstr "新電子郵件"
 
-#: ../src/dialogs.py:2781 ../src/gui_interface.py:878 ../src/notify.py:266
+#: ../src/dialogs.py:2784 ../src/gui_interface.py:878 ../src/notify.py:266
 msgid "File Transfer Request"
 msgstr "檔案傳輸請求"
 
-#: ../src/dialogs.py:2783 ../src/gui_interface.py:785
+#: ../src/dialogs.py:2786 ../src/gui_interface.py:785
 #: ../src/gui_interface.py:849 ../src/notify.py:268
 msgid "File Transfer Error"
 msgstr "檔案傳輸錯誤"
 
-#: ../src/dialogs.py:2785 ../src/gui_interface.py:924
+#: ../src/dialogs.py:2788 ../src/gui_interface.py:924
 #: ../src/gui_interface.py:947 ../src/gui_interface.py:964
 #: ../src/notify.py:270
 msgid "File Transfer Completed"
 msgstr "檔案傳輸完成"
 
-#: ../src/dialogs.py:2786 ../src/gui_interface.py:927 ../src/notify.py:271
+#: ../src/dialogs.py:2789 ../src/gui_interface.py:927 ../src/notify.py:271
 msgid "File Transfer Stopped"
 msgstr "檔案傳輸已停止"
 
-#: ../src/dialogs.py:2788 ../src/gui_interface.py:619 ../src/notify.py:275
+#: ../src/dialogs.py:2791 ../src/gui_interface.py:619 ../src/notify.py:275
 msgid "Groupchat Invitation"
 msgstr "多人聊天邀請"
 
-#: ../src/dialogs.py:2991
+#: ../src/dialogs.py:2994
 #, python-format
 msgid "Single Message using account %s"
 msgstr "單條訊息，使用帳號 %s"
 
-#: ../src/dialogs.py:2993
+#: ../src/dialogs.py:2996
 #, python-format
 msgid "Single Message in account %s"
 msgstr "單條訊息，在帳號 %s"
 
-#: ../src/dialogs.py:2995
+#: ../src/dialogs.py:2998
 msgid "Single Message"
 msgstr "單條訊息"
 
 #. prepare UI for Sending
-#: ../src/dialogs.py:2998
+#: ../src/dialogs.py:3001
 #, python-format
 msgid "Send %s"
 msgstr "傳送 %s"
 
 #. prepare UI for Receiving
-#: ../src/dialogs.py:3021
+#: ../src/dialogs.py:3024
 #, python-format
 msgid "Received %s"
 msgstr "已接收 %s"
 
 #. prepare UI for Receiving
-#: ../src/dialogs.py:3044
+#: ../src/dialogs.py:3047
 #, python-format
 msgid "Form %s"
 msgstr "來自 %s"
 
 #. we create a new blank window to send and we preset RE: and to jid
-#: ../src/dialogs.py:3128
+#: ../src/dialogs.py:3131
 #, python-format
 msgid "RE: %s"
 msgstr "回復: %s"
 
-#: ../src/dialogs.py:3129
+#: ../src/dialogs.py:3132
 #, python-format
 msgid "%s wrote:\n"
 msgstr "%s 寫道: \n"
 
-#: ../src/dialogs.py:3188
+#: ../src/dialogs.py:3191
 #, python-format
 msgid "XML Console for %s"
 msgstr "帳號 %s 的 XML 主控臺"
 
-#: ../src/dialogs.py:3190
+#: ../src/dialogs.py:3193
 msgid "XML Console"
 msgstr " XML 主控臺"
 
 #. Action that can be done with an incoming list of contacts
-#: ../src/dialogs.py:3337
+#: ../src/dialogs.py:3340
 msgid "add"
 msgstr "加入"
 
-#: ../src/dialogs.py:3337
+#: ../src/dialogs.py:3340
 msgid "modify"
 msgstr "修改"
 
-#: ../src/dialogs.py:3338
+#: ../src/dialogs.py:3341
 msgid "remove"
 msgstr "移除"
 
-#: ../src/dialogs.py:3367
+#: ../src/dialogs.py:3370
 #, python-format
 msgid ""
 "<b>%(jid)s</b> would like you to <b>%(action)s</b> some contacts in your "
@@ -7508,171 +7506,171 @@ msgid ""
 msgstr "<b>%(jid)s</b> 希望您 <b>%(action)s</b> 您的一些聯絡人。"
 
 #. Change label for accept_button to action name instead of 'OK'.
-#: ../src/dialogs.py:3385 ../src/dialogs.py:3460
+#: ../src/dialogs.py:3388 ../src/dialogs.py:3463
 msgid "Modify"
 msgstr "修改"
 
-#: ../src/dialogs.py:3391
+#: ../src/dialogs.py:3394
 msgid "Jabber ID"
 msgstr "Jabber ID"
 
-#: ../src/dialogs.py:3397
+#: ../src/dialogs.py:3400
 msgid "Groups"
 msgstr "群組"
 
 #. it is selected
 #. remote_jid = model[iter_][1].decode('utf-8')
-#: ../src/dialogs.py:3505
+#: ../src/dialogs.py:3508
 #, python-format
 msgid "%s suggested me to add you in my roster."
 msgstr "%s 建議我將您加入到我的聯絡人清單。"
 
-#: ../src/dialogs.py:3519
+#: ../src/dialogs.py:3522
 #, python-format
 msgid "Added  %s contacts"
 msgstr "加入了 %s 聯絡人"
 
-#: ../src/dialogs.py:3556
+#: ../src/dialogs.py:3559
 #, python-format
 msgid "Removed  %s contacts"
 msgstr "移除了 %s 聯絡人"
 
-#: ../src/dialogs.py:3596 ../src/dialogs.py:3773
+#: ../src/dialogs.py:3599 ../src/dialogs.py:3776
 #, python-format
 msgid "Archiving Preferences for %s"
 msgstr "%s 的存檔偏好設定"
 
-#: ../src/dialogs.py:3636
+#: ../src/dialogs.py:3639
 msgid "Invalid expire value"
 msgstr "無效的過期值"
 
-#: ../src/dialogs.py:3637
+#: ../src/dialogs.py:3640
 msgid "Expire must be a valid positive integer."
 msgstr "過期值必須是一個有效的正整數。"
 
-#: ../src/dialogs.py:3684
+#: ../src/dialogs.py:3687
 msgid "There is an error with the form"
 msgstr "在表格中有一處錯誤"
 
-#: ../src/dialogs.py:3904
+#: ../src/dialogs.py:3907
 msgid "There is an error"
 msgstr "有一處錯誤"
 
-#: ../src/dialogs.py:3972
+#: ../src/dialogs.py:3975
 #, python-format
 msgid "Privacy List <b><i>%s</i></b>"
 msgstr "隱私策略清單 <b><i>%s</i></b>"
 
-#: ../src/dialogs.py:3976
+#: ../src/dialogs.py:3979
 #, python-format
 msgid "Privacy List for %s"
 msgstr "%s 的隱私策略清單"
 
-#: ../src/dialogs.py:4043
+#: ../src/dialogs.py:4046
 #, python-format
 msgid "Order: %(order)s, action: %(action)s, type: %(type)s, value: %(value)s"
 msgstr "順序: %(order)s，動作: %(action)s，類型: %(type)s，值: %(value)s"
 
-#: ../src/dialogs.py:4048
+#: ../src/dialogs.py:4051
 #, python-format
 msgid "Order: %(order)s, action: %(action)s"
 msgstr "順序: %(order)s，動作: %(action)s"
 
-#: ../src/dialogs.py:4099
+#: ../src/dialogs.py:4102
 msgid "<b>Edit a rule</b>"
 msgstr "<b>編輯規則</b>"
 
-#: ../src/dialogs.py:4210
+#: ../src/dialogs.py:4213
 msgid "<b>Add a rule</b>"
 msgstr "<b>加入規則</b>"
 
-#: ../src/dialogs.py:4309
+#: ../src/dialogs.py:4312
 #, python-format
 msgid "Privacy Lists for %s"
 msgstr "%s 的隱私策略清單"
 
-#: ../src/dialogs.py:4311
+#: ../src/dialogs.py:4314
 msgid "Privacy Lists"
 msgstr "隱私策略清單"
 
-#: ../src/dialogs.py:4400
+#: ../src/dialogs.py:4403
 msgid "Invalid List Name"
 msgstr "不合法的清單名稱"
 
-#: ../src/dialogs.py:4401
+#: ../src/dialogs.py:4404
 msgid "You must enter a name to create a privacy list."
 msgstr "您必須輸入一個名稱以建立一個隱私策略清單。"
 
-#: ../src/dialogs.py:4433
+#: ../src/dialogs.py:4436
 msgid "You are invited to a groupchat"
 msgstr "您被邀請到一個聊天室"
 
-#: ../src/dialogs.py:4436
+#: ../src/dialogs.py:4439
 msgid "$Contact has invited you to join a discussion"
 msgstr "$Contact 邀請您加入一個聊天室"
 
-#: ../src/dialogs.py:4438
+#: ../src/dialogs.py:4441
 #, python-format
 msgid "$Contact has invited you to group chat %(room_jid)s"
 msgstr "$Contact 邀請您參加聊天室 %(room_jid)s"
 
-#: ../src/dialogs.py:4446
+#: ../src/dialogs.py:4449
 #, python-format
 msgid "Comment: %s"
 msgstr "註釋: %s"
 
-#: ../src/dialogs.py:4448
+#: ../src/dialogs.py:4451
 msgid "Do you want to accept the invitation?"
 msgstr "您是否接受邀請?"
 
-#: ../src/dialogs.py:4510
+#: ../src/dialogs.py:4513
 msgid "Choose Client Cert #PCKS12"
 msgstr "選擇客戶端證書 #PCKS12"
 
-#: ../src/dialogs.py:4520 ../src/dialogs.py:4562 ../src/dialogs.py:4618
-#: ../src/dialogs.py:4706
+#: ../src/dialogs.py:4523 ../src/dialogs.py:4565 ../src/dialogs.py:4621
+#: ../src/dialogs.py:4709
 msgid "All files"
 msgstr "所有檔案"
 
-#: ../src/dialogs.py:4525
+#: ../src/dialogs.py:4528
 msgid "PKCS12 Files"
 msgstr "PKCS12 檔案"
 
-#: ../src/dialogs.py:4552
+#: ../src/dialogs.py:4555
 msgid "Choose Sound"
 msgstr "選擇聲音"
 
-#: ../src/dialogs.py:4567
+#: ../src/dialogs.py:4570
 msgid "Wav Sounds"
 msgstr "Wav聲音"
 
-#: ../src/dialogs.py:4605
+#: ../src/dialogs.py:4608
 msgid "Choose Image"
 msgstr "選擇圖像"
 
-#: ../src/dialogs.py:4623
+#: ../src/dialogs.py:4626
 msgid "Images"
 msgstr "圖像"
 
-#: ../src/dialogs.py:4693
+#: ../src/dialogs.py:4696
 msgid "Choose Archive"
 msgstr "選擇歸檔檔案"
 
-#: ../src/dialogs.py:4711
+#: ../src/dialogs.py:4714
 msgid "Zip files"
 msgstr "Zip 檔案"
 
-#: ../src/dialogs.py:4737
+#: ../src/dialogs.py:4740
 #, python-format
 msgid "When %s becomes:"
 msgstr "當 %s 變為:"
 
-#: ../src/dialogs.py:4739
+#: ../src/dialogs.py:4742
 #, python-format
 msgid "Adding Special Notification for %s"
 msgstr "正在為 %s 加入特殊提示"
 
-#: ../src/dialogs.py:4959
+#: ../src/dialogs.py:4962
 #, python-format
 msgid ""
 "Your chat session with <b>%(jid)s</b> is encrypted.\n"
@@ -7683,19 +7681,19 @@ msgstr ""
 "\n"
 "作業階段的短認證字串是 <b>%(sas)s</b>。"
 
-#: ../src/dialogs.py:4962
+#: ../src/dialogs.py:4965
 msgid "You have already verified this contact's identity."
 msgstr "您已經確認了這個聯絡人的身分。"
 
-#: ../src/dialogs.py:4968 ../src/dialogs.py:5052
+#: ../src/dialogs.py:4971 ../src/dialogs.py:5055
 msgid "Contact's identity verified"
 msgstr "聯絡人身分已確認"
 
-#: ../src/dialogs.py:4974
+#: ../src/dialogs.py:4977
 msgid "Verify again..."
 msgstr "重新驗證…"
 
-#: ../src/dialogs.py:4979
+#: ../src/dialogs.py:4982
 msgid ""
 "To be certain that <b>only</b> the expected person can read your messages or "
 "send you messages, you need to verify their identity by clicking the button "
@@ -7704,19 +7702,19 @@ msgstr ""
 "為了確保<b>只有</b>您期望的人可以看到您傳送的訊息或給您傳送訊息，您需要驗證他"
 "們的身分資訊。請點擊下面的按鈕。"
 
-#: ../src/dialogs.py:4982 ../src/dialogs.py:5033 ../src/dialogs.py:5046
+#: ../src/dialogs.py:4985 ../src/dialogs.py:5036 ../src/dialogs.py:5049
 msgid "Contact's identity NOT verified"
 msgstr "聯絡人身分未確認"
 
-#: ../src/dialogs.py:4987
+#: ../src/dialogs.py:4990
 msgid "Verify..."
 msgstr "確認…"
 
-#: ../src/dialogs.py:4998
+#: ../src/dialogs.py:5001
 msgid "Have you verified the contact's identity?"
 msgstr "您確認了聯絡人的身分嗎?"
 
-#: ../src/dialogs.py:4999
+#: ../src/dialogs.py:5002
 #, python-format
 msgid ""
 "To prevent talking to an unknown person, you should speak to <b>%(jid)s</b> "
@@ -7730,20 +7728,20 @@ msgstr ""
 "\n"
 "這次作業階段的短認證字串是 <b>%(sas)s</b>"
 
-#: ../src/dialogs.py:5000
+#: ../src/dialogs.py:5003
 msgid "Did you talk to the remote contact and verify the SAS?"
 msgstr "您與遠端聯絡人通話並驗證了 SAS 嗎?"
 
-#: ../src/dialogs.py:5034
+#: ../src/dialogs.py:5037
 #, python-format
 msgid "The contact's key (%s) <b>does not match</b> the key assigned in Gajim."
 msgstr "聯絡人的密鑰(%s)與在 Gajim 中指定的密鑰<b>不匹配</b>。"
 
-#: ../src/dialogs.py:5040
+#: ../src/dialogs.py:5043
 msgid "No GPG key is assigned to this contact. So you cannot encrypt messages."
 msgstr "沒有為這個聯絡人指定密鑰。因此您無法加密訊息。"
 
-#: ../src/dialogs.py:5047
+#: ../src/dialogs.py:5050
 msgid ""
 "GPG key is assigned to this contact, but <b>you do not trust his key</b>, so "
 "message <b>cannot</b> be encrypted. Use your GPG client to trust this key."
@@ -7751,37 +7749,37 @@ msgstr ""
 "盡管為這個聯絡人指定了密鑰，但您<b>不信任</b>他的密鑰，因此訊息<b>無法</b>被"
 "加密。使用您的 GPG 客戶端以信任他的密鑰。"
 
-#: ../src/dialogs.py:5053
+#: ../src/dialogs.py:5056
 msgid ""
 "GPG Key is assigned to this contact, and you trust his key, so messages will "
 "be encrypted."
 msgstr "聯絡人被指定了 GPG 密鑰，且您信任他的密鑰，所以訊息會被加密。"
 
-#: ../src/dialogs.py:5118
+#: ../src/dialogs.py:5121
 msgid "an audio and video"
 msgstr "一個音訊和視訊"
 
-#: ../src/dialogs.py:5120
+#: ../src/dialogs.py:5123
 msgid "an audio"
 msgstr "一個音訊"
 
-#: ../src/dialogs.py:5122
+#: ../src/dialogs.py:5125
 msgid "a video"
 msgstr "一個視訊"
 
-#: ../src/dialogs.py:5126
+#: ../src/dialogs.py:5129
 #, python-format
 msgid ""
 "%(contact)s wants to start %(type)s session with you. Do you want to answer "
 "the call?"
 msgstr "%(contact)s 想要與您發起一個 %(type)s 作業階段。您要回應嗎?"
 
-#: ../src/dialogs.py:5194
+#: ../src/dialogs.py:5197
 #, python-format
 msgid "Certificate for account %s"
 msgstr "帳號憑證 %s"
 
-#: ../src/dialogs.py:5194
+#: ../src/dialogs.py:5197
 #, python-format
 msgid ""
 "<b>Issued to:</b>\n"
@@ -7820,7 +7818,7 @@ msgstr ""
 "<b>指紋</b>\n"
 "SHA1 指紋:%(sha1)s"
 
-#: ../src/dialogs.py:5228 ../src/dialogs.py:5245
+#: ../src/dialogs.py:5231 ../src/dialogs.py:5248
 msgid "View cert..."
 msgstr "檢視憑證…"
 

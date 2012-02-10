@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim 0.12\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-22 18:56+0100\n"
+"POT-Creation-Date: 2012-02-12 20:36+0100\n"
 "PO-Revision-Date: 2009-08-19 23:43+0200\n"
 "Last-Translator: Yavor Doganov <yavor@gnu.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -215,8 +215,8 @@ msgid "Accounts"
 msgstr "Акаунти"
 
 #. Change label for accept_button to action name instead of 'OK'.
-#: ../data/gui/accounts_window.ui.h:8 ../src/dialogs.py:3383
-#: ../src/dialogs.py:3429
+#: ../data/gui/accounts_window.ui.h:8 ../src/dialogs.py:3386
+#: ../src/dialogs.py:3432
 msgid "Add"
 msgstr ""
 
@@ -287,8 +287,8 @@ msgid "Connection"
 msgstr "Свързване"
 
 #. Change label for accept_button to action name instead of 'OK'.
-#: ../data/gui/accounts_window.ui.h:23 ../src/dialogs.py:3387
-#: ../src/dialogs.py:3484
+#: ../data/gui/accounts_window.ui.h:23 ../src/dialogs.py:3390
+#: ../src/dialogs.py:3487
 msgid "Delete"
 msgstr "Изтриване"
 
@@ -1497,7 +1497,7 @@ msgstr ""
 msgid "Bro_wse Rooms"
 msgstr "_Търсене"
 
-#: ../data/gui/join_groupchat_window.ui.h:3 ../src/dialogs.py:2333
+#: ../data/gui/join_groupchat_window.ui.h:3 ../src/dialogs.py:2336
 msgid "Join Group Chat"
 msgstr "Влизане в стая"
 
@@ -2442,7 +2442,7 @@ msgstr "Jabber ID"
 msgid "Order:"
 msgstr "Ред:"
 
-#: ../data/gui/privacy_list_window.ui.h:12 ../src/dialogs.py:3978
+#: ../data/gui/privacy_list_window.ui.h:12 ../src/dialogs.py:3981
 msgid "Privacy List"
 msgstr "Филтър за уединение"
 
@@ -3273,8 +3273,8 @@ msgstr "Изисква python-avahi."
 #. Add to roster
 #: ../src/chat_control.py:1701 ../src/common/contacts.py:158
 #: ../src/common/contacts.py:277 ../src/common/helpers.py:67
-#: ../src/common/helpers.py:261 ../src/dialogs.py:1099 ../src/dialogs.py:2227
-#: ../src/dialogs.py:2256 ../src/gui_interface.py:477
+#: ../src/common/helpers.py:261 ../src/dialogs.py:1099 ../src/dialogs.py:2230
+#: ../src/dialogs.py:2259 ../src/gui_interface.py:477
 #: ../src/gui_menu_builder.py:254 ../src/gui_menu_builder.py:405
 #: ../src/roster_window.py:767 ../src/roster_window.py:1687
 #: ../src/roster_window.py:1689 ../src/roster_window.py:2022
@@ -3302,7 +3302,7 @@ msgid "%(nickname)s from group chat %(room_name)s"
 msgstr "%(nickname)s от стая %(room_name)s"
 
 #. No key assigned nor a key is used by remote contact
-#: ../src/chat_control.py:2162 ../src/dialogs.py:5039
+#: ../src/chat_control.py:2162 ../src/dialogs.py:5042
 msgid "No GPG key assigned"
 msgstr "Няма зададен ключ на GPG"
 
@@ -3625,7 +3625,7 @@ msgstr "Смяна на псевдоним (Ctrl+N)"
 
 #. invalid char
 #: ../src/command_system/implementation/standard.py:267 ../src/config.py:3392
-#: ../src/dialogs.py:2075
+#: ../src/dialogs.py:2078
 msgid "Invalid nickname"
 msgstr "Невалиден псевдоним"
 
@@ -4934,106 +4934,104 @@ msgid "You can join this room instead: %s"
 msgstr "Вместо това може да влезете в тази стая: %s"
 
 #: ../src/common/connection_handlers_events.py:1012
-#: ../src/common/connection_handlers_events.py:1044
-#: ../src/common/connection_handlers_events.py:1060
+#: ../src/common/connection_handlers_events.py:1049
 #: ../src/common/connection.py:262 ../src/config.py:2149 ../src/config.py:2158
 #: ../src/config.py:2226 ../src/config.py:3663 ../src/dataforms_widget.py:623
-#: ../src/dialogs.py:3091
+#: ../src/dialogs.py:3094
 msgid "Invalid Jabber ID"
 msgstr "Невалиден Jabber ID"
 
 #: ../src/common/connection_handlers_events.py:1013
-#: ../src/common/connection_handlers_events.py:1045
-#: ../src/common/connection_handlers_events.py:1061
+#: ../src/common/connection_handlers_events.py:1050
 msgid "A message from a non-valid JID arrived, it has been ignored."
 msgstr ""
 
 #. ('MSGNOTSENT', account, (jid, ierror_msg, msg, time, session))
-#: ../src/common/connection_handlers_events.py:1087
+#: ../src/common/connection_handlers_events.py:1075
 #: ../src/gui_interface.py:425 ../src/gui_interface.py:439
 #, python-format
 msgid "error while sending %(message)s ( %(error)s )"
 msgstr "грешка при изпращане на %(message)s ( %(error)s )"
 
-#: ../src/common/connection_handlers_events.py:1520
+#: ../src/common/connection_handlers_events.py:1508
 #, python-format
 msgid "Unknown SSL error: %d"
 msgstr "Неизвестна грешка на SSL: %d"
 
-#: ../src/common/connection_handlers_events.py:2048 ../src/dialogs.py:2778
+#: ../src/common/connection_handlers_events.py:2036 ../src/dialogs.py:2781
 #: ../src/notify.py:263
 msgid "New Single Message"
 msgstr "Ново еднократно съобщение"
 
-#: ../src/common/connection_handlers_events.py:2050
+#: ../src/common/connection_handlers_events.py:2038
 #, python-format
 msgid "New Single Message from %(nickname)s"
 msgstr "Ново еднократно съобщение от %(nickname)s"
 
-#: ../src/common/connection_handlers_events.py:2054 ../src/dialogs.py:2779
+#: ../src/common/connection_handlers_events.py:2042 ../src/dialogs.py:2782
 #: ../src/notify.py:264
 msgid "New Private Message"
 msgstr "Ново лично съобщение"
 
-#: ../src/common/connection_handlers_events.py:2056
+#: ../src/common/connection_handlers_events.py:2044
 #, python-format
 msgid "New Private Message from group chat %s"
 msgstr "Ново лично съобщение от стая „%s“"
 
-#: ../src/common/connection_handlers_events.py:2059
+#: ../src/common/connection_handlers_events.py:2047
 #, python-format
 msgid "%(nickname)s: %(message)s"
 msgstr "%(nickname)s: %(message)s"
 
-#: ../src/common/connection_handlers_events.py:2062
+#: ../src/common/connection_handlers_events.py:2050
 #, python-format
 msgid "Messaged by %(nickname)s"
 msgstr "Съобщение от %(nickname)s"
 
-#: ../src/common/connection_handlers_events.py:2066 ../src/dialogs.py:2778
+#: ../src/common/connection_handlers_events.py:2054 ../src/dialogs.py:2781
 #: ../src/notify.py:263
 msgid "New Message"
 msgstr "Ново съобщение"
 
-#: ../src/common/connection_handlers_events.py:2068
+#: ../src/common/connection_handlers_events.py:2056
 #, python-format
 msgid "New Message from %(nickname)s"
 msgstr "Ново съобщение от %(nickname)s"
 
-#: ../src/common/connection_handlers_events.py:2197
+#: ../src/common/connection_handlers_events.py:2185
 #, python-format
 msgid "%(nick)s Changed Status"
 msgstr "%(nick)s промени състоянието си"
 
-#: ../src/common/connection_handlers_events.py:2199
+#: ../src/common/connection_handlers_events.py:2187
 #: ../src/groupchat_control.py:205 ../src/groupchat_control.py:1766
 #: ../src/history_window.py:447
 #, python-format
 msgid "%(nick)s is now %(status)s"
 msgstr "%(nick)s вече е %(status)s"
 
-#: ../src/common/connection_handlers_events.py:2204 ../src/dialogs.py:2790
+#: ../src/common/connection_handlers_events.py:2192 ../src/dialogs.py:2793
 #: ../src/notify.py:277
 msgid "Contact Changed Status"
 msgstr "Контактът промени състоянието си"
 
-#: ../src/common/connection_handlers_events.py:2206
+#: ../src/common/connection_handlers_events.py:2194
 #, python-format
 msgid "%(nickname)s Signed In"
 msgstr "%(nickname)s се включи"
 
 #. default value
-#: ../src/common/connection_handlers_events.py:2211 ../src/dialogs.py:2774
+#: ../src/common/connection_handlers_events.py:2199 ../src/dialogs.py:2777
 #: ../src/notify.py:259
 msgid "Contact Signed In"
 msgstr "Включи се контакт"
 
-#: ../src/common/connection_handlers_events.py:2213
+#: ../src/common/connection_handlers_events.py:2201
 #, python-format
 msgid "%(nickname)s Signed Out"
 msgstr "%(nickname)s се изключи"
 
-#: ../src/common/connection_handlers_events.py:2218 ../src/dialogs.py:2776
+#: ../src/common/connection_handlers_events.py:2206 ../src/dialogs.py:2779
 #: ../src/notify.py:261
 msgid "Contact Signed Out"
 msgstr "Изключи се контакт"
@@ -5069,11 +5067,11 @@ msgid ""
 "Registration with agent %(agent)s failed with error %(error)s: %(error_msg)s"
 msgstr ""
 
-#: ../src/common/connection_handlers.py:571 ../src/common/connection.py:1551
+#: ../src/common/connection_handlers.py:571 ../src/common/connection.py:1554
 msgid "Invisibility not supported"
 msgstr "Състоянието „Невидим“ не се поддържа."
 
-#: ../src/common/connection_handlers.py:572 ../src/common/connection.py:1552
+#: ../src/common/connection_handlers.py:572 ../src/common/connection.py:1555
 #, python-format
 msgid "Account %s doesn't support invisibility."
 msgstr "Акаунтът „%s“ не поддържа невидимост."
@@ -5216,7 +5214,7 @@ msgstr "Основната употреба не включва подписва
 msgid "Application verification failure"
 msgstr "Грешка на приложението за проверка"
 
-#: ../src/common/connection.py:263 ../src/dialogs.py:3092
+#: ../src/common/connection.py:263 ../src/dialogs.py:3095
 #, fuzzy, python-format
 msgid "It is not possible to send a message to %s, this JID is not valid."
 msgstr "Не е възможно да бъдат изпращани празни файлове"
@@ -5244,18 +5242,18 @@ msgstr ""
 "Тема: %(subject)s\n"
 "%(message)s"
 
-#: ../src/common/connection.py:861
+#: ../src/common/connection.py:864
 #, python-format
 msgid "Connection with account \"%s\" has been lost"
 msgstr "Връзката на акаунт „%s“ се разпадна"
 
-#: ../src/common/connection.py:862
+#: ../src/common/connection.py:865
 msgid "Reconnect manually."
 msgstr "Свържете се наново."
 
 #. it's a new account
 #. wrong answer
-#: ../src/common/connection.py:873
+#: ../src/common/connection.py:876
 #, python-format
 msgid "Server %(name)s answered wrongly to register request: %(error)s"
 msgstr ""
@@ -5263,58 +5261,58 @@ msgstr ""
 "%(error)s"
 
 #. requested config has changed since first connection
-#: ../src/common/connection.py:915
+#: ../src/common/connection.py:918
 #, python-format
 msgid "Server %s provided a different registration form"
 msgstr "Сървърът „%s“ предостави различна форма за регистрация"
 
-#: ../src/common/connection.py:932
+#: ../src/common/connection.py:935
 msgid "Invalid answer"
 msgstr "Невалиден отговор"
 
-#: ../src/common/connection.py:933
+#: ../src/common/connection.py:936
 #, python-format
 msgid "Transport %(name)s answered wrongly to register request: %(error)s"
 msgstr ""
 "Транспортът „%(name)s“ отговори погрешно на запитването за регистрация: "
 "%(error)s"
 
-#: ../src/common/connection.py:1208 ../src/common/connection.py:1360
-#: ../src/common/connection.py:1988
+#: ../src/common/connection.py:1211 ../src/common/connection.py:1363
+#: ../src/common/connection.py:1991
 #: ../src/common/zeroconf/connection_zeroconf.py:205
 #, python-format
 msgid "Could not connect to \"%s\""
 msgstr "Неуспех при свързване с „%s“"
 
-#: ../src/common/connection.py:1209 ../src/gui_interface.py:534
+#: ../src/common/connection.py:1212 ../src/gui_interface.py:534
 msgid "Check your connection or try again later."
 msgstr "Проверете връзката или опитайте отново по-късно."
 
-#: ../src/common/connection.py:1214
+#: ../src/common/connection.py:1217
 #, fuzzy, python-format
 msgid "Server replied: %s"
 msgstr "Запазен в: %s"
 
-#: ../src/common/connection.py:1229
+#: ../src/common/connection.py:1232
 msgid "Connection to proxy failed"
 msgstr "Неуспех при свързването със сървъра-посредник"
 
-#: ../src/common/connection.py:1267 ../src/common/connection.py:1339
+#: ../src/common/connection.py:1270 ../src/common/connection.py:1342
 #, python-format
 msgid "Could not connect to account %s"
 msgstr "Неуспех при свързване с акаунт „%s“"
 
-#: ../src/common/connection.py:1268 ../src/common/connection.py:1340
+#: ../src/common/connection.py:1271 ../src/common/connection.py:1343
 #, python-format
 msgid "Connection with account %s has been lost. Retry connecting."
 msgstr "Връзката на акаунт „%s“ се разпадна. Опит за повторно свързване."
 
-#: ../src/common/connection.py:1293
+#: ../src/common/connection.py:1296
 #, python-format
 msgid "The authenticity of the %s certificate could be invalid."
 msgstr "Автентичността на сертификата на %s може да е под въпрос."
 
-#: ../src/common/connection.py:1296
+#: ../src/common/connection.py:1299
 #, python-format
 msgid ""
 "\n"
@@ -5323,7 +5321,7 @@ msgstr ""
 "\n"
 "Грешка на SSL: <b>%s</b>"
 
-#: ../src/common/connection.py:1298
+#: ../src/common/connection.py:1301
 #, python-format
 msgid ""
 "\n"
@@ -5332,32 +5330,32 @@ msgstr ""
 "\n"
 "Неизвестна грешка на SSL: %d"
 
-#: ../src/common/connection.py:1321
+#: ../src/common/connection.py:1324
 #, fuzzy, python-format
 msgid ""
 "The authenticity of the %s certificate could be invalid.\n"
 "The certificate does not cover this domain."
 msgstr "Автентичността на сертификата на %s може да е под въпрос."
 
-#: ../src/common/connection.py:1361
+#: ../src/common/connection.py:1364
 msgid "Check your connection or try again later"
 msgstr "Проверете връзката или опитайте отново по-късно"
 
-#: ../src/common/connection.py:1396
+#: ../src/common/connection.py:1399
 #, python-format
 msgid "Authentication failed with \"%s\""
 msgstr "Неуспех при удостоверяването с „%s“"
 
-#: ../src/common/connection.py:1397
+#: ../src/common/connection.py:1400
 #, fuzzy
 msgid "Please check your login and passwordfor correctness."
 msgstr "Проверете дали името и паролата са правилни."
 
-#: ../src/common/connection.py:1472
+#: ../src/common/connection.py:1475
 msgid "Error while removing privacy list"
 msgstr "Грешка при премахването на списъка за уединение"
 
-#: ../src/common/connection.py:1473
+#: ../src/common/connection.py:1476
 #, fuzzy, python-format
 msgid ""
 "Privacy list %s has not been removed. It is maybe active in one of your "
@@ -5366,26 +5364,26 @@ msgstr ""
 "Списъкът за уединение „%s“ не беше премахнат. Навярно е активен в някой от "
 "свързаните ви ресурси. Изключете го и опитайте отново."
 
-#: ../src/common/connection.py:1855
+#: ../src/common/connection.py:1858
 #, python-format
 msgid "Sent contact: \"%s\" (%s)"
 msgstr ""
 
-#: ../src/common/connection.py:1858
+#: ../src/common/connection.py:1861
 #, fuzzy
 msgid "Sent contacts:"
 msgstr "Покана на _контакти"
 
-#: ../src/common/connection.py:2005 ../src/common/connection.py:2028
+#: ../src/common/connection.py:2008 ../src/common/connection.py:2031
 msgid "Not fetched because of invisible status"
 msgstr "Не е изтеглен, понеже е в състояние „Невидим“"
 
-#: ../src/common/connection.py:2561
+#: ../src/common/connection.py:2564
 #, fuzzy
 msgid "Unregister failed"
 msgstr "Неуспех при свързването"
 
-#: ../src/common/connection.py:2562
+#: ../src/common/connection.py:2565
 #, python-format
 msgid "Unregistration with server %(server)s failed: %(error)s"
 msgstr ""
@@ -6818,8 +6816,8 @@ msgid "status message text"
 msgstr "текст на съобщението за състояние"
 
 #. Name column
-#: ../src/config.py:1566 ../src/dialogs.py:2535 ../src/dialogs.py:2602
-#: ../src/dialogs.py:3394 ../src/disco.py:886 ../src/disco.py:1744
+#: ../src/config.py:1566 ../src/dialogs.py:2538 ../src/dialogs.py:2605
+#: ../src/dialogs.py:3397 ../src/disco.py:886 ../src/disco.py:1744
 #: ../src/disco.py:2046 ../src/history_window.py:90
 msgid "Name"
 msgstr "Име"
@@ -6940,8 +6938,8 @@ msgid "You must create your account before editing your personal information."
 msgstr ""
 "Трябва първо да създадете акаунт и след това да редактирате личните данни."
 
-#: ../src/config.py:2455 ../src/dialogs.py:2286 ../src/dialogs.py:2524
-#: ../src/dialogs.py:2712 ../src/disco.py:515 ../src/profile_window.py:361
+#: ../src/config.py:2455 ../src/dialogs.py:2289 ../src/dialogs.py:2527
+#: ../src/dialogs.py:2715 ../src/disco.py:515 ../src/profile_window.py:361
 msgid "You are not connected to the server"
 msgstr "Не сте свързани към сървъра."
 
@@ -7506,7 +7504,7 @@ msgid "Please fill in the data of the contact you want to add"
 msgstr "Попълнете данните за контакта, който искате да добавите"
 
 #: ../src/dialogs.py:1074 ../src/dialogs.py:1080 ../src/dialogs.py:1085
-#: ../src/dialogs.py:3627
+#: ../src/dialogs.py:3630
 msgid "Invalid User ID"
 msgstr "Невалиден идентификатор"
 
@@ -7594,102 +7592,102 @@ msgstr ""
 msgid "Re_place"
 msgstr ""
 
-#: ../src/dialogs.py:2076 ../src/dialogs.py:2476
+#: ../src/dialogs.py:2079 ../src/dialogs.py:2479
 msgid "The nickname has not allowed characters."
 msgstr "Псевдонимът съдържа непозволени знаци."
 
-#: ../src/dialogs.py:2194
+#: ../src/dialogs.py:2197
 #, python-format
 msgid "Subscription request for account %(account)s from %(jid)s"
 msgstr "Искане за записване за акаунт „%(account)s“ от %(jid)s"
 
-#: ../src/dialogs.py:2197
+#: ../src/dialogs.py:2200
 #, python-format
 msgid "Subscription request from %s"
 msgstr "Искане за записване от %s"
 
-#: ../src/dialogs.py:2281 ../src/gui_interface.py:1939
+#: ../src/dialogs.py:2284 ../src/gui_interface.py:1939
 #, python-format
 msgid "You are already in group chat %s"
 msgstr "Вече сте в стая „%s“"
 
-#: ../src/dialogs.py:2287
+#: ../src/dialogs.py:2290
 msgid "You can not join a group chat unless you are connected."
 msgstr "Трябва да сте свързани, за да влезете в стая."
 
-#: ../src/dialogs.py:2331
+#: ../src/dialogs.py:2334
 #, python-format
 msgid "Join Group Chat with account %s"
 msgstr "Влизане в стая с акаунт „%s“"
 
-#: ../src/dialogs.py:2462
+#: ../src/dialogs.py:2465
 #, fuzzy
 msgid "Invalid Account"
 msgstr "Невалидно име на акаунт"
 
-#: ../src/dialogs.py:2463
+#: ../src/dialogs.py:2466
 #, fuzzy
 msgid ""
 "You have to choose an account from which you want to join the groupchat."
 msgstr "Акаунт, от който искате да влезете в стаята"
 
-#: ../src/dialogs.py:2475
+#: ../src/dialogs.py:2478
 msgid "Invalid Nickname"
 msgstr "Невалиден псевдоним"
 
-#: ../src/dialogs.py:2480 ../src/dialogs.py:2486
+#: ../src/dialogs.py:2483 ../src/dialogs.py:2489
 #: ../src/groupchat_control.py:2092
 msgid "Invalid group chat Jabber ID"
 msgstr "Невалиден Jabber ID на стая"
 
-#: ../src/dialogs.py:2481
+#: ../src/dialogs.py:2484
 #, fuzzy
 msgid "Please enter the group chat Jabber ID as room@server."
 msgstr "Jabber ID на стаята съдържа непозволени знаци."
 
-#: ../src/dialogs.py:2487 ../src/groupchat_control.py:2093
+#: ../src/dialogs.py:2490 ../src/groupchat_control.py:2093
 msgid "The group chat Jabber ID has not allowed characters."
 msgstr "Jabber ID на стаята съдържа непозволени знаци."
 
-#: ../src/dialogs.py:2492 ../src/gui_interface.py:1921
+#: ../src/dialogs.py:2495 ../src/gui_interface.py:1921
 msgid "This is not a group chat"
 msgstr "Това не е стая"
 
-#: ../src/dialogs.py:2493 ../src/gui_interface.py:1922
+#: ../src/dialogs.py:2496 ../src/gui_interface.py:1922
 #, python-format
 msgid "%s is not the name of a group chat."
 msgstr "%s не е име на стая."
 
-#: ../src/dialogs.py:2525
+#: ../src/dialogs.py:2528
 msgid "Without a connection, you can not synchronise your contacts."
 msgstr "Трябва да сте свързани, за да синхронизирате контактите си."
 
-#: ../src/dialogs.py:2538
+#: ../src/dialogs.py:2541
 msgid "Server"
 msgstr "Сървър"
 
-#: ../src/dialogs.py:2574
+#: ../src/dialogs.py:2577
 msgid "This account is not connected to the server"
 msgstr "Този акаунт не е свързан към сървъра"
 
-#: ../src/dialogs.py:2575
+#: ../src/dialogs.py:2578
 msgid "You cannot synchronize with an account unless it is connected."
 msgstr "Не може да се синхронизирате с акаунт, ако не е свързан."
 
-#: ../src/dialogs.py:2600
+#: ../src/dialogs.py:2603
 msgid "Synchronise"
 msgstr "Синхронизиране"
 
-#: ../src/dialogs.py:2661
+#: ../src/dialogs.py:2664
 #, python-format
 msgid "Start Chat with account %s"
 msgstr "Започване на разговор с акаунт „%s“"
 
-#: ../src/dialogs.py:2663
+#: ../src/dialogs.py:2666
 msgid "Start Chat"
 msgstr "Започване на разговор"
 
-#: ../src/dialogs.py:2664
+#: ../src/dialogs.py:2667
 msgid ""
 "Fill in the nickname or the Jabber ID of the contact you would like\n"
 "to send a chat message to:"
@@ -7698,140 +7696,140 @@ msgstr ""
 "искате да изпратите съобщение:"
 
 #. if offline or connecting
-#: ../src/dialogs.py:2691 ../src/dialogs.py:3072 ../src/dialogs.py:3307
+#: ../src/dialogs.py:2694 ../src/dialogs.py:3075 ../src/dialogs.py:3310
 msgid "Connection not available"
 msgstr "В момента няма връзка"
 
-#: ../src/dialogs.py:2692 ../src/dialogs.py:3073 ../src/dialogs.py:3308
+#: ../src/dialogs.py:2695 ../src/dialogs.py:3076 ../src/dialogs.py:3311
 #, python-format
 msgid "Please make sure you are connected with \"%s\"."
 msgstr "Уверете се, че сте свързани към „%s“."
 
-#: ../src/dialogs.py:2701 ../src/dialogs.py:2704
+#: ../src/dialogs.py:2704 ../src/dialogs.py:2707
 msgid "Invalid JID"
 msgstr "Невалиден JID"
 
-#: ../src/dialogs.py:2704
+#: ../src/dialogs.py:2707
 #, python-format
 msgid "Unable to parse \"%s\"."
 msgstr "Неуспех при анализирането на „%s“."
 
-#: ../src/dialogs.py:2713
+#: ../src/dialogs.py:2716
 msgid "Without a connection, you can not change your password."
 msgstr "Трябва да сте свързани, за да променяте паролата."
 
-#: ../src/dialogs.py:2732
+#: ../src/dialogs.py:2735
 msgid "Invalid password"
 msgstr "Невалидна парола"
 
-#: ../src/dialogs.py:2732
+#: ../src/dialogs.py:2735
 msgid "You must enter a password."
 msgstr "Трябва да въведете парола."
 
-#: ../src/dialogs.py:2736
+#: ../src/dialogs.py:2739
 msgid "Passwords do not match"
 msgstr "Паролите не съвпадат"
 
-#: ../src/dialogs.py:2737
+#: ../src/dialogs.py:2740
 msgid "The passwords typed in both fields must be identical."
 msgstr "Паролите, написани в двете полета, трябва да са едни и същи."
 
-#: ../src/dialogs.py:2779 ../src/gui_interface.py:823 ../src/notify.py:273
+#: ../src/dialogs.py:2782 ../src/gui_interface.py:823 ../src/notify.py:273
 msgid "New E-mail"
 msgstr "Нова е-поща"
 
-#: ../src/dialogs.py:2781 ../src/gui_interface.py:878 ../src/notify.py:266
+#: ../src/dialogs.py:2784 ../src/gui_interface.py:878 ../src/notify.py:266
 msgid "File Transfer Request"
 msgstr "Запитване за файлов трансфер"
 
-#: ../src/dialogs.py:2783 ../src/gui_interface.py:785
+#: ../src/dialogs.py:2786 ../src/gui_interface.py:785
 #: ../src/gui_interface.py:849 ../src/notify.py:268
 msgid "File Transfer Error"
 msgstr "Грешка при файловия трансфер"
 
-#: ../src/dialogs.py:2785 ../src/gui_interface.py:924
+#: ../src/dialogs.py:2788 ../src/gui_interface.py:924
 #: ../src/gui_interface.py:947 ../src/gui_interface.py:964
 #: ../src/notify.py:270
 msgid "File Transfer Completed"
 msgstr "Файловият трансфер е приключен"
 
-#: ../src/dialogs.py:2786 ../src/gui_interface.py:927 ../src/notify.py:271
+#: ../src/dialogs.py:2789 ../src/gui_interface.py:927 ../src/notify.py:271
 msgid "File Transfer Stopped"
 msgstr "Файловият трансфер е преустановен"
 
-#: ../src/dialogs.py:2788 ../src/gui_interface.py:619 ../src/notify.py:275
+#: ../src/dialogs.py:2791 ../src/gui_interface.py:619 ../src/notify.py:275
 msgid "Groupchat Invitation"
 msgstr "Покана за разговор в стая"
 
-#: ../src/dialogs.py:2991
+#: ../src/dialogs.py:2994
 #, python-format
 msgid "Single Message using account %s"
 msgstr "Еднократно съобщение с акаунт „%s“"
 
-#: ../src/dialogs.py:2993
+#: ../src/dialogs.py:2996
 #, python-format
 msgid "Single Message in account %s"
 msgstr "Еднократно съобщение за акаунт „%s“"
 
-#: ../src/dialogs.py:2995
+#: ../src/dialogs.py:2998
 msgid "Single Message"
 msgstr "Еднократно съобщение"
 
 #. prepare UI for Sending
-#: ../src/dialogs.py:2998
+#: ../src/dialogs.py:3001
 #, python-format
 msgid "Send %s"
 msgstr "Изпращане на %s"
 
 #. prepare UI for Receiving
-#: ../src/dialogs.py:3021
+#: ../src/dialogs.py:3024
 #, python-format
 msgid "Received %s"
 msgstr "Получено %s"
 
 #. prepare UI for Receiving
-#: ../src/dialogs.py:3044
+#: ../src/dialogs.py:3047
 #, python-format
 msgid "Form %s"
 msgstr "От %s"
 
 #. we create a new blank window to send and we preset RE: and to jid
-#: ../src/dialogs.py:3128
+#: ../src/dialogs.py:3131
 #, python-format
 msgid "RE: %s"
 msgstr "Относно: %s"
 
-#: ../src/dialogs.py:3129
+#: ../src/dialogs.py:3132
 #, python-format
 msgid "%s wrote:\n"
 msgstr "%s написа:\n"
 
-#: ../src/dialogs.py:3188
+#: ../src/dialogs.py:3191
 #, python-format
 msgid "XML Console for %s"
 msgstr "XML конзола за %s"
 
-#: ../src/dialogs.py:3190
+#: ../src/dialogs.py:3193
 msgid "XML Console"
 msgstr "XML конзола"
 
 #. Action that can be done with an incoming list of contacts
-#: ../src/dialogs.py:3337
+#: ../src/dialogs.py:3340
 #, fuzzy
 msgid "add"
 msgstr "Тъжен"
 
-#: ../src/dialogs.py:3337
+#: ../src/dialogs.py:3340
 #, fuzzy
 msgid "modify"
 msgstr "Унил"
 
-#: ../src/dialogs.py:3338
+#: ../src/dialogs.py:3341
 #, fuzzy
 msgid "remove"
 msgstr "П_ремахване"
 
-#: ../src/dialogs.py:3367
+#: ../src/dialogs.py:3370
 #, fuzzy, python-format
 msgid ""
 "<b>%(jid)s</b> would like you to <b>%(action)s</b> some contacts in your "
@@ -7839,181 +7837,181 @@ msgid ""
 msgstr "Бих искал(а) да ви добавя към списъка си."
 
 #. Change label for accept_button to action name instead of 'OK'.
-#: ../src/dialogs.py:3385 ../src/dialogs.py:3460
+#: ../src/dialogs.py:3388 ../src/dialogs.py:3463
 #, fuzzy
 msgid "Modify"
 msgstr "Унил"
 
-#: ../src/dialogs.py:3391
+#: ../src/dialogs.py:3394
 #, fuzzy
 msgid "Jabber ID"
 msgstr "Jabber ID:"
 
-#: ../src/dialogs.py:3397
+#: ../src/dialogs.py:3400
 #, fuzzy
 msgid "Groups"
 msgstr "Група"
 
 #. it is selected
 #. remote_jid = model[iter_][1].decode('utf-8')
-#: ../src/dialogs.py:3505
+#: ../src/dialogs.py:3508
 #, fuzzy, python-format
 msgid "%s suggested me to add you in my roster."
 msgstr ""
 "Бих искал(а) да ви добавя към списъка си. I would like to add you to my "
 "roster."
 
-#: ../src/dialogs.py:3519
+#: ../src/dialogs.py:3522
 #, fuzzy, python-format
 msgid "Added  %s contacts"
 msgstr "Добавяне на _контакт"
 
-#: ../src/dialogs.py:3556
+#: ../src/dialogs.py:3559
 #, fuzzy, python-format
 msgid "Removed  %s contacts"
 msgstr "Премахване на контакт от списъка"
 
-#: ../src/dialogs.py:3596 ../src/dialogs.py:3773
+#: ../src/dialogs.py:3599 ../src/dialogs.py:3776
 #, python-format
 msgid "Archiving Preferences for %s"
 msgstr ""
 
-#: ../src/dialogs.py:3636
+#: ../src/dialogs.py:3639
 #, fuzzy
 msgid "Invalid expire value"
 msgstr "Невалидно име на сървър"
 
-#: ../src/dialogs.py:3637
+#: ../src/dialogs.py:3640
 msgid "Expire must be a valid positive integer."
 msgstr ""
 
-#: ../src/dialogs.py:3684
+#: ../src/dialogs.py:3687
 msgid "There is an error with the form"
 msgstr ""
 
-#: ../src/dialogs.py:3904
+#: ../src/dialogs.py:3907
 #, fuzzy
 msgid "There is an error"
 msgstr "Услугата върна грешка."
 
-#: ../src/dialogs.py:3972
+#: ../src/dialogs.py:3975
 #, python-format
 msgid "Privacy List <b><i>%s</i></b>"
 msgstr "Филтър за уединение <b><i>%s</i></b>"
 
-#: ../src/dialogs.py:3976
+#: ../src/dialogs.py:3979
 #, python-format
 msgid "Privacy List for %s"
 msgstr "Филтър за уединение за %s"
 
-#: ../src/dialogs.py:4043
+#: ../src/dialogs.py:4046
 #, python-format
 msgid "Order: %(order)s, action: %(action)s, type: %(type)s, value: %(value)s"
 msgstr ""
 "Ред: %(order)s, действие: %(action)s, вид: %(type)s, стойност: %(value)s"
 
-#: ../src/dialogs.py:4048
+#: ../src/dialogs.py:4051
 #, python-format
 msgid "Order: %(order)s, action: %(action)s"
 msgstr "Ред: %(order)s, действие: %(action)s"
 
-#: ../src/dialogs.py:4099
+#: ../src/dialogs.py:4102
 msgid "<b>Edit a rule</b>"
 msgstr "<b>Редактиране на правило</b>"
 
-#: ../src/dialogs.py:4210
+#: ../src/dialogs.py:4213
 msgid "<b>Add a rule</b>"
 msgstr "<b>Добавяне на правило</b>"
 
-#: ../src/dialogs.py:4309
+#: ../src/dialogs.py:4312
 #, python-format
 msgid "Privacy Lists for %s"
 msgstr "Филтри за уединение за %s"
 
-#: ../src/dialogs.py:4311
+#: ../src/dialogs.py:4314
 msgid "Privacy Lists"
 msgstr "Филтри за уединение"
 
-#: ../src/dialogs.py:4400
+#: ../src/dialogs.py:4403
 msgid "Invalid List Name"
 msgstr "Невалидно име на филтър"
 
-#: ../src/dialogs.py:4401
+#: ../src/dialogs.py:4404
 msgid "You must enter a name to create a privacy list."
 msgstr "Трябва да въведете име, за да се създаде филтър за уединение."
 
-#: ../src/dialogs.py:4433
+#: ../src/dialogs.py:4436
 msgid "You are invited to a groupchat"
 msgstr "Поканени сте в стая."
 
-#: ../src/dialogs.py:4436
+#: ../src/dialogs.py:4439
 msgid "$Contact has invited you to join a discussion"
 msgstr "$Contact ви покани да се присъедините към дискусия"
 
-#: ../src/dialogs.py:4438
+#: ../src/dialogs.py:4441
 #, python-format
 msgid "$Contact has invited you to group chat %(room_jid)s"
 msgstr "$Contact ви покани в стая %(room_jid)s."
 
-#: ../src/dialogs.py:4446
+#: ../src/dialogs.py:4449
 #, python-format
 msgid "Comment: %s"
 msgstr "Коментар: %s"
 
-#: ../src/dialogs.py:4448
+#: ../src/dialogs.py:4451
 msgid "Do you want to accept the invitation?"
 msgstr "Искате ли да приемете поканата?"
 
-#: ../src/dialogs.py:4510
+#: ../src/dialogs.py:4513
 msgid "Choose Client Cert #PCKS12"
 msgstr ""
 
-#: ../src/dialogs.py:4520 ../src/dialogs.py:4562 ../src/dialogs.py:4618
-#: ../src/dialogs.py:4706
+#: ../src/dialogs.py:4523 ../src/dialogs.py:4565 ../src/dialogs.py:4621
+#: ../src/dialogs.py:4709
 msgid "All files"
 msgstr "Всички файлове"
 
-#: ../src/dialogs.py:4525
+#: ../src/dialogs.py:4528
 msgid "PKCS12 Files"
 msgstr ""
 
-#: ../src/dialogs.py:4552
+#: ../src/dialogs.py:4555
 msgid "Choose Sound"
 msgstr "Избор на звук"
 
-#: ../src/dialogs.py:4567
+#: ../src/dialogs.py:4570
 msgid "Wav Sounds"
 msgstr "Формат WAV"
 
-#: ../src/dialogs.py:4605
+#: ../src/dialogs.py:4608
 msgid "Choose Image"
 msgstr "Избор на изображение"
 
-#: ../src/dialogs.py:4623
+#: ../src/dialogs.py:4626
 msgid "Images"
 msgstr "Изображения"
 
-#: ../src/dialogs.py:4693
+#: ../src/dialogs.py:4696
 #, fuzzy
 msgid "Choose Archive"
 msgstr "Избор на изображение"
 
-#: ../src/dialogs.py:4711
+#: ../src/dialogs.py:4714
 #, fuzzy
 msgid "Zip files"
 msgstr "Всички файлове"
 
-#: ../src/dialogs.py:4737
+#: ../src/dialogs.py:4740
 #, python-format
 msgid "When %s becomes:"
 msgstr "Когато %s стане:"
 
-#: ../src/dialogs.py:4739
+#: ../src/dialogs.py:4742
 #, python-format
 msgid "Adding Special Notification for %s"
 msgstr "Добавяне на специално уведомление за %s"
 
-#: ../src/dialogs.py:4959
+#: ../src/dialogs.py:4962
 #, python-format
 msgid ""
 "Your chat session with <b>%(jid)s</b> is encrypted.\n"
@@ -8024,19 +8022,19 @@ msgstr ""
 "\n"
 "Краткият удостоверителен низ (SAS) на сесията е <b>%(sas)s</b>."
 
-#: ../src/dialogs.py:4962
+#: ../src/dialogs.py:4965
 msgid "You have already verified this contact's identity."
 msgstr "Вече се проверили идентичността на този контакт."
 
-#: ../src/dialogs.py:4968 ../src/dialogs.py:5052
+#: ../src/dialogs.py:4971 ../src/dialogs.py:5055
 msgid "Contact's identity verified"
 msgstr "Идентичността на контакта проверена"
 
-#: ../src/dialogs.py:4974
+#: ../src/dialogs.py:4977
 msgid "Verify again..."
 msgstr "Проверка наново…"
 
-#: ../src/dialogs.py:4979
+#: ../src/dialogs.py:4982
 msgid ""
 "To be certain that <b>only</b> the expected person can read your messages or "
 "send you messages, you need to verify their identity by clicking the button "
@@ -8046,19 +8044,19 @@ msgstr ""
 "съобщения или да ви изпраща такива, е необходимо да проверите идентичността "
 "му като натиснете бутона по-долу."
 
-#: ../src/dialogs.py:4982 ../src/dialogs.py:5033 ../src/dialogs.py:5046
+#: ../src/dialogs.py:4985 ../src/dialogs.py:5036 ../src/dialogs.py:5049
 msgid "Contact's identity NOT verified"
 msgstr "Идентичността на контакта НЕ Е проверена"
 
-#: ../src/dialogs.py:4987
+#: ../src/dialogs.py:4990
 msgid "Verify..."
 msgstr "Проверка…"
 
-#: ../src/dialogs.py:4998
+#: ../src/dialogs.py:5001
 msgid "Have you verified the contact's identity?"
 msgstr "Проверихте ли идентичността на контакта?"
 
-#: ../src/dialogs.py:4999
+#: ../src/dialogs.py:5002
 #, python-format
 msgid ""
 "To prevent talking to an unknown person, you should speak to <b>%(jid)s</b> "
@@ -8073,22 +8071,22 @@ msgstr ""
 "\n"
 "Краткият удостоверителен низ на тази сесия е <b>%(sas)s</b>."
 
-#: ../src/dialogs.py:5000
+#: ../src/dialogs.py:5003
 msgid "Did you talk to the remote contact and verify the SAS?"
 msgstr "Говорихте ли с отдалечение контакт за проверка на SAS?"
 
-#: ../src/dialogs.py:5034
+#: ../src/dialogs.py:5037
 #, python-format
 msgid "The contact's key (%s) <b>does not match</b> the key assigned in Gajim."
 msgstr "Ключът на контакта (%s) <b>не съвпада</b> с този, зададен в Gajim."
 
-#: ../src/dialogs.py:5040
+#: ../src/dialogs.py:5043
 msgid "No GPG key is assigned to this contact. So you cannot encrypt messages."
 msgstr ""
 "Няма зададен ключ на GPG за този контакт, така че не може да шифрирате "
 "съобщения."
 
-#: ../src/dialogs.py:5047
+#: ../src/dialogs.py:5050
 msgid ""
 "GPG key is assigned to this contact, but <b>you do not trust his key</b>, so "
 "message <b>cannot</b> be encrypted. Use your GPG client to trust this key."
@@ -8097,7 +8095,7 @@ msgstr ""
 "така че съобщенията <b>не могат</b> да се шифрират. За да се доверите на "
 "този ключ, използвайте клиент на GPG."
 
-#: ../src/dialogs.py:5053
+#: ../src/dialogs.py:5056
 msgid ""
 "GPG Key is assigned to this contact, and you trust his key, so messages will "
 "be encrypted."
@@ -8105,31 +8103,31 @@ msgstr ""
 "Има зададен ключ на GPG за този контакт и вие му се доверявате, така че "
 "съобщенията ще бъдат шифрирани."
 
-#: ../src/dialogs.py:5118
+#: ../src/dialogs.py:5121
 msgid "an audio and video"
 msgstr ""
 
-#: ../src/dialogs.py:5120
+#: ../src/dialogs.py:5123
 msgid "an audio"
 msgstr ""
 
-#: ../src/dialogs.py:5122
+#: ../src/dialogs.py:5125
 msgid "a video"
 msgstr ""
 
-#: ../src/dialogs.py:5126
+#: ../src/dialogs.py:5129
 #, python-format
 msgid ""
 "%(contact)s wants to start %(type)s session with you. Do you want to answer "
 "the call?"
 msgstr ""
 
-#: ../src/dialogs.py:5194
+#: ../src/dialogs.py:5197
 #, fuzzy, python-format
 msgid "Certificate for account %s"
 msgstr "за акаунт „%s“"
 
-#: ../src/dialogs.py:5194
+#: ../src/dialogs.py:5197
 #, python-format
 msgid ""
 "<b>Issued to:</b>\n"
@@ -8151,7 +8149,7 @@ msgid ""
 "SHA1 Fingerprint: %(sha1)s"
 msgstr ""
 
-#: ../src/dialogs.py:5228 ../src/dialogs.py:5245
+#: ../src/dialogs.py:5231 ../src/dialogs.py:5248
 msgid "View cert..."
 msgstr ""
 
