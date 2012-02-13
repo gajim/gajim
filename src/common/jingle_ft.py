@@ -34,18 +34,16 @@ log = logging.getLogger('gajim.c.jingle_ft')
 STATE_NOT_STARTED = 0
 STATE_INITIALIZED = 1
 STATE_ACCEPTED = 2
-STATE_TRANSPORT_INFO = 3
-STATE_PROXY_ACTIVATED = 4
 # We send the candidates and we are waiting for a reply
-STATE_CAND_SENT_PENDING_REPLY = 5
+STATE_CAND_SENT = 3
 # We received the candidates and we are waiting to reply
-STATE_CAND_RECEIVED_PENDING_REPLY = 6
+STATE_CAND_RECEIVED = 4
 # We have sent and received the candidates
 # This also includes any candidate-error received or sent
-STATE_CAND_SENT_AND_RECEIVED = 7
+STATE_CAND_SENT_AND_RECEIVED = 5
+STATE_TRANSPORT_REPLACE = 6
 # We are transfering the file
-STATE_TRANSFERING = 8
-STATE_TRANSPORT_REPLACE = 9
+STATE_TRANSFERING = 7
 
 
 class JingleFileTransfer(JingleContent):
@@ -200,7 +198,7 @@ class JingleFileTransfer(JingleContent):
 
         if content.getTag('transport').getTag('candidate-error'):
             self.nominated_cand['peer-cand'] = False
-            if self.state == STATE_CAND_SENT_PENDING_REPLY:
+            if self.state == STATE_CAND_SENT:
                 if not self.nominated_cand['our-cand'] and \
                    not self.nominated_cand['peer-cand']:
                     if not self.weinitiate:
@@ -213,7 +211,7 @@ class JingleFileTransfer(JingleContent):
                     self.start_transfer()
                     raise xmpp.NodeProcessed
             else:
-                self.state = STATE_CAND_RECEIVED_PENDING_REPLY
+                self.state = STATE_CAND_RECEIVED
 
             return
 
@@ -236,14 +234,14 @@ class JingleFileTransfer(JingleContent):
             return
         # We save the candidate nominated by peer
         self.nominated_cand['peer-cand'] = streamhost_used
-        if self.state == STATE_CAND_SENT_PENDING_REPLY:
+        if self.state == STATE_CAND_SENT:
             response = stanza.buildReply('result')
             response.delChild(response.getQuery())
             self.session.connection.connection.send(response)
             self.start_transfer()
             raise xmpp.NodeProcessed
         else:
-            self.state = STATE_CAND_RECEIVED_PENDING_REPLY
+            self.state = STATE_CAND_RECEIVED
 
 
 
@@ -272,12 +270,6 @@ class JingleFileTransfer(JingleContent):
             gajim.socks5queue.connect_to_hosts(self.session.connection.name,
                 self.file_props['sid'], self.send_candidate_used,
                 self._on_connect_error, fingerprint=fingerprint)
-        elif not self.weinitiate and self.state == STATE_ACCEPTED:
-            # transport-info iq-result
-            self.state = STATE_TRANSPORT_INFO
-        elif self.weinitiate and self.state == STATE_INITIALIZED:
-            # proxy activated
-            self.state = STATE_PROXY_ACTIVATED
         elif self.state == STATE_CAND_SENT_AND_RECEIVED:
             if not self.nominated_cand['our-cand'] and \
             not self.nominated_cand['peer-cand']:
@@ -313,10 +305,10 @@ class JingleFileTransfer(JingleContent):
             return
 
         self.nominated_cand['our-cand'] = streamhost
-        if self.state == STATE_CAND_RECEIVED_PENDING_REPLY:
+        if self.state == STATE_CAND_RECEIVED:
             self.state = STATE_CAND_SENT_AND_RECEIVED
         else:
-            self.state = STATE_CAND_SENT_PENDING_REPLY
+            self.state = STATE_CAND_SENT
 
         content = xmpp.Node('content')
         content.setAttr('creator', 'initiator')
@@ -339,10 +331,10 @@ class JingleFileTransfer(JingleContent):
         self.nominated_cand['our-cand'] = False
         self.send_error_candidate()
 
-        if self.state == STATE_CAND_RECEIVED_PENDING_REPLY:
+        if self.state == STATE_CAND_RECEIVED:
             self.state = STATE_CAND_SENT_AND_RECEIVED
         else:
-            self.state = STATE_CAND_SENT_PENDING_REPLY
+            self.state = STATE_CAND_SENT
 
 
         log.info('connect error, sid=' + sid)
