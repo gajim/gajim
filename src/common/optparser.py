@@ -50,7 +50,7 @@ class OptionsParser:
         except Exception:
             if os.path.exists(self.__filename):
                 #we talk about a file
-                print _('error: cannot open %s for reading') % self.__filename
+                print _('Error: cannot open %s for reading') % self.__filename
             return False
 
         new_version = gajim.config.get('version')

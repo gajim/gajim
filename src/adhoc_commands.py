@@ -99,7 +99,7 @@ class CommandWindow:
             self.stage1()
 
         # displaying the window
-        self.window.set_title('Ad-hoc Commands - Gajim')
+        self.window.set_title(_('Ad-hoc Commands - Gajim'))
         self.xml.connect_signals(self)
         self.window.show_all()
 
@@ -415,7 +415,7 @@ class CommandWindow:
                 return
             self.data_form_widget.show()
             if self.data_form_widget.title:
-                self.window.set_title('%s - Ad-hoc Commands - Gajim' % \
+                self.window.set_title(_('%s - Ad-hoc Commands - Gajim') % \
                         self.data_form_widget.title)
         else:
             self.data_form_widget.hide()
