@@ -125,17 +125,6 @@ class StandardCommonCommands(CommandContainer):
 
             self.echo(formatted)
 
-    def _get_connected_accounts(self):
-        conns = []
-        for conn in gajim.connections.itervalues():
-            if not gajim.config.get_per('accounts', conn.name,
-            'sync_with_global_status'):
-                continue
-            if conn.connected <= 2:
-                continue
-            conns.append(conn)
-        return conns
-
     @command(raw=True, empty=True)
     @doc(_("""
     Set current the status
@@ -146,7 +135,12 @@ class StandardCommonCommands(CommandContainer):
     def status(self, status, message):
         if status not in ('online', 'away', 'chat', 'xa', 'dnd'):
             raise CommandError("Invalid status given")
-        for connection in self._get_connected_accounts():
+        for connection in gajim.connections.itervalues():
+            if not gajim.config.get_per('accounts', connection.name,
+            'sync_with_global_status'):
+                continue
+            if connection.connected <= 2:
+                continue
             connection.change_status(status, message)
 
     @command(raw=True, empty=True)
@@ -154,7 +148,13 @@ class StandardCommonCommands(CommandContainer):
     def away(self, message):
         if not message:
             message = _("Away")
-        for connection in self._get_connected_accounts():
+
+        for connection in gajim.connections.itervalues():
+            if not gajim.config.get_per('accounts', connection.name,
+            'sync_with_global_status'):
+                continue
+            if connection.connected <= 2:
+                continue
             connection.change_status('away', message)
 
     @command('back', raw=True, empty=True)
@@ -162,7 +162,13 @@ class StandardCommonCommands(CommandContainer):
     def online(self, message):
         if not message:
             message = _("Available")
-        for connection in self._get_connected_accounts():
+
+        for connection in gajim.connections.itervalues():
+            if not gajim.config.get_per('accounts', connection.name,
+            'sync_with_global_status'):
+                continue
+            if connection.connected <= 2:
+                continue
             connection.change_status('online', message)
 
 class StandardCommonChatCommands(CommandContainer):
