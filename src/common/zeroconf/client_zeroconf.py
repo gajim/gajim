@@ -803,11 +803,19 @@ class ClientZeroconf:
         def on_ok(_waitid):
 #            if timeout:
 #                self._owner.set_timeout(timeout)
-            to = stanza.getTo()
+            to = unicode(stanza.getTo())
+            to = gajim.get_jid_without_resource(to)
+
+            try:
+                item = self.roster[to]
+            except KeyError:
+                # Contact offline
+                item = None
+
             conn = None
             if to in self.recipient_to_hash:
                 conn = self.connections[self.recipient_to_hash[to]]
-            elif item['address'] in self.ip_to_hash:
+            elif item and item['address'] in self.ip_to_hash:
                 hash_ = self.ip_to_hash[item['address']]
                 if self.hash_to_port[hash_] == item['port']:
                     conn = self.connections[hash_]
