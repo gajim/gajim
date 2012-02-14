@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-12 20:36+0100\n"
+"POT-Creation-Date: 2012-02-14 20:43+0100\n"
 "PO-Revision-Date: 2010-01-22 14:35+0100\n"
 "Last-Translator: Petr Menšík <pihhan@cipis.net>\n"
 "Language-Team: <>\n"
@@ -461,8 +461,8 @@ msgid "Synchroni_ze account status with global status"
 msgstr "Synch_ronizovat stav účtu s globálním stavem"
 
 #: ../data/gui/accounts_window.ui.h:54
-#: ../data/gui/synchronise_select_account_dialog.ui.h:2
-msgid "Synchronise contacts"
+#, fuzzy
+msgid "Synchronize contacts"
 msgstr "Synchronizovat kontakty"
 
 #: ../data/gui/accounts_window.ui.h:55
@@ -583,7 +583,8 @@ msgstr "<b>Nastala chyba:</b>"
 msgid "<b>Choose command to execute:</b>"
 msgstr "<b>Vyber příkaz k provedení:</b>"
 
-#: ../data/gui/adhoc_commands_window.ui.h:3
+#. displaying the window
+#: ../data/gui/adhoc_commands_window.ui.h:3 ../src/adhoc_commands.py:102
 msgid "Ad-hoc Commands - Gajim"
 msgstr "Ad-hoc příkazy - Gajim"
 
@@ -2708,7 +2709,7 @@ msgstr "Zobrazit pouze _aktivní kontakty"
 
 #: ../data/gui/roster_window.ui.h:12
 #, fuzzy
-msgid "Show T_rans_ports"
+msgid "Show T_ransports"
 msgstr "Zobrazuj trans_porty"
 
 #: ../data/gui/roster_window.ui.h:13
@@ -2839,6 +2840,10 @@ msgstr "O_dmítnout"
 #: ../data/gui/synchronise_select_account_dialog.ui.h:1
 msgid "Select the account with which you want to synchronise"
 msgstr "Vybrat účet pro synchronizaci"
+
+#: ../data/gui/synchronise_select_account_dialog.ui.h:2
+msgid "Synchronise contacts"
+msgstr "Synchronizovat kontakty"
 
 #: ../data/gui/synchronise_select_contacts_dialog.ui.h:1
 msgid "Select the contacts you want to synchronise"
@@ -3037,6 +3042,11 @@ msgstr "Služba odeslala chybné data"
 #: ../src/adhoc_commands.py:399
 msgid "Service changed the session identifier."
 msgstr "Služba změnila identifikátor sezení."
+
+#: ../src/adhoc_commands.py:418
+#, fuzzy, python-format
+msgid "%s - Ad-hoc Commands - Gajim"
+msgstr "Ad-hoc příkazy - Gajim"
 
 #. when stanza doesn't have error description
 #: ../src/adhoc_commands.py:513
@@ -5975,10 +5985,12 @@ msgid "X Window System (without Xv)"
 msgstr ""
 
 #. we talk about a file
-#: ../src/common/optparser.py:53
+#. we talk about file
+#: ../src/common/optparser.py:53 ../src/gtkgui_helpers.py:203
+#: ../src/gtkgui_helpers.py:219
 #, python-format
-msgid "error: cannot open %s for reading"
-msgstr "chyba: nemůžu otevřít %s pro čtení"
+msgid "Error: cannot open %s for reading"
+msgstr "Chyba: nemůžu otevřít %s pro čtení"
 
 #: ../src/common/optparser.py:305 ../src/common/optparser.py:306
 msgid "cyan"
@@ -9404,12 +9416,6 @@ msgstr "_Ohlásit chybu"
 msgid "Details"
 msgstr "Detaily"
 
-#. we talk about file
-#: ../src/gtkgui_helpers.py:203 ../src/gtkgui_helpers.py:219
-#, python-format
-msgid "Error: cannot open %s for reading"
-msgstr "Chyba: nemůžu otevřít %s pro čtení"
-
 #: ../src/gtkgui_helpers.py:348
 msgid "Error reading file:"
 msgstr "Chyba při čtení souboru:"
@@ -10829,6 +10835,9 @@ msgstr "Není zde žádný nevyřízený požadavek."
 #: ../src/vcard.py:399 ../src/vcard.py:453 ../src/vcard.py:575
 msgid " resource with priority "
 msgstr "zdroj s prioritou "
+
+#~ msgid "error: cannot open %s for reading"
+#~ msgstr "chyba: nemůžu otevřít %s pro čtení"
 
 #, fuzzy
 #~ msgid "Choose Client Cert"

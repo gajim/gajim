@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim - A Jabber Instant Messager 0.14.0.1-2fa5ddcd1adf\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-12 20:36+0100\n"
+"POT-Creation-Date: 2012-02-14 20:43+0100\n"
 "PO-Revision-Date: 2011-10-19 12:08+0300\n"
 "Last-Translator: Sergiy Yegorov <prapor@unixzone.org.ua>\n"
 "Language-Team: Ukrainian <kde-i18n-doc@kde.org>\n"
@@ -455,8 +455,8 @@ msgid "Synchroni_ze account status with global status"
 msgstr "_Синхронізувати стан облікового запису з загальним"
 
 #: ../data/gui/accounts_window.ui.h:54
-#: ../data/gui/synchronise_select_account_dialog.ui.h:2
-msgid "Synchronise contacts"
+#, fuzzy
+msgid "Synchronize contacts"
 msgstr "Синхронізувати контакти"
 
 #: ../data/gui/accounts_window.ui.h:55
@@ -577,7 +577,8 @@ msgstr "<b>Сталася помилка:</b>"
 msgid "<b>Choose command to execute:</b>"
 msgstr "<b>Оберіть команду для виконання:</b>"
 
-#: ../data/gui/adhoc_commands_window.ui.h:3
+#. displaying the window
+#: ../data/gui/adhoc_commands_window.ui.h:3 ../src/adhoc_commands.py:102
 msgid "Ad-hoc Commands - Gajim"
 msgstr "Ad-hoc команди — Gajim"
 
@@ -2645,7 +2646,8 @@ msgid "Show Only _Active Contacts"
 msgstr "Показувати лише _активні контакти"
 
 #: ../data/gui/roster_window.ui.h:12
-msgid "Show T_rans_ports"
+#, fuzzy
+msgid "Show T_ransports"
 msgstr "Показувати транс_порти"
 
 #: ../data/gui/roster_window.ui.h:13
@@ -2780,6 +2782,10 @@ msgstr "_Заборонити"
 #: ../data/gui/synchronise_select_account_dialog.ui.h:1
 msgid "Select the account with which you want to synchronise"
 msgstr "Оберіть обліковий запис, з яким слід виконати синхронізацію"
+
+#: ../data/gui/synchronise_select_account_dialog.ui.h:2
+msgid "Synchronise contacts"
+msgstr "Синхронізувати контакти"
 
 #: ../data/gui/synchronise_select_contacts_dialog.ui.h:1
 msgid "Select the contacts you want to synchronise"
@@ -2973,6 +2979,11 @@ msgstr "Служба надіслала неправильно форматов�
 #: ../src/adhoc_commands.py:399
 msgid "Service changed the session identifier."
 msgstr "Служба змінила ідентифікатор сеансу."
+
+#: ../src/adhoc_commands.py:418
+#, fuzzy, python-format
+msgid "%s - Ad-hoc Commands - Gajim"
+msgstr "Ad-hoc команди — Gajim"
 
 #. when stanza doesn't have error description
 #: ../src/adhoc_commands.py:513
@@ -5997,10 +6008,12 @@ msgid "X Window System (without Xv)"
 msgstr "Система X Window (без Xv)"
 
 #. we talk about a file
-#: ../src/common/optparser.py:53
+#. we talk about file
+#: ../src/common/optparser.py:53 ../src/gtkgui_helpers.py:203
+#: ../src/gtkgui_helpers.py:219
 #, python-format
-msgid "error: cannot open %s for reading"
-msgstr "помилка: не вдалося відкрити %s для читання"
+msgid "Error: cannot open %s for reading"
+msgstr "Помилка: не вдалося відкрити %s для читання"
 
 #: ../src/common/optparser.py:305 ../src/common/optparser.py:306
 msgid "cyan"
@@ -9474,12 +9487,6 @@ msgstr "_Повідомити про помилку"
 msgid "Details"
 msgstr "Подробиці"
 
-#. we talk about file
-#: ../src/gtkgui_helpers.py:203 ../src/gtkgui_helpers.py:219
-#, python-format
-msgid "Error: cannot open %s for reading"
-msgstr "Помилка: не вдалося відкрити %s для читання"
-
 #: ../src/gtkgui_helpers.py:348
 msgid "Error reading file:"
 msgstr "Помилка під час спроби прочитати файл:"
@@ -10899,6 +10906,9 @@ msgstr "У черзі немає запитів на підписку."
 #: ../src/vcard.py:399 ../src/vcard.py:453 ../src/vcard.py:575
 msgid " resource with priority "
 msgstr " пріоритетний ресурс"
+
+#~ msgid "error: cannot open %s for reading"
+#~ msgstr "помилка: не вдалося відкрити %s для читання"
 
 #~ msgid "Requires pybonjour (http://o2s.csail.mit.edu/o2s-wiki/pybonjour)."
 #~ msgstr "Потрібен pybonjour (http://o2s.csail.mit.edu/o2s-wiki/pybonjour)."

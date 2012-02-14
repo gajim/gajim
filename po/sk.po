@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-12 20:36+0100\n"
+"POT-Creation-Date: 2012-02-14 20:43+0100\n"
 "PO-Revision-Date: 2010-02-28 20:43+0100\n"
 "Last-Translator: Pavol Klačanský <pavol@klacansky.com>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -451,8 +451,8 @@ msgid "Synchroni_ze account status with global status"
 msgstr "Synchroni_zovať stav účtu s globálnym stavom"
 
 #: ../data/gui/accounts_window.ui.h:54
-#: ../data/gui/synchronise_select_account_dialog.ui.h:2
-msgid "Synchronise contacts"
+#, fuzzy
+msgid "Synchronize contacts"
 msgstr "Synchronizovať kontakty"
 
 #: ../data/gui/accounts_window.ui.h:55
@@ -573,7 +573,8 @@ msgstr "<b>Vyskytla sa chyba:</b>"
 msgid "<b>Choose command to execute:</b>"
 msgstr "<b>Vyberte príkaz na vykonanie:</b>"
 
-#: ../data/gui/adhoc_commands_window.ui.h:3
+#. displaying the window
+#: ../data/gui/adhoc_commands_window.ui.h:3 ../src/adhoc_commands.py:102
 msgid "Ad-hoc Commands - Gajim"
 msgstr "Ad-hoc príkazy - Gajim"
 
@@ -2678,7 +2679,7 @@ msgstr "Zobraziť len _aktívne kontakty"
 
 #: ../data/gui/roster_window.ui.h:12
 #, fuzzy
-msgid "Show T_rans_ports"
+msgid "Show T_ransports"
 msgstr "Zobraziť trans_porty"
 
 #: ../data/gui/roster_window.ui.h:13
@@ -2810,6 +2811,10 @@ msgstr "_Zakázať"
 #: ../data/gui/synchronise_select_account_dialog.ui.h:1
 msgid "Select the account with which you want to synchronise"
 msgstr "Zvoľte účet, s ktorým sa chcete synchronizovať"
+
+#: ../data/gui/synchronise_select_account_dialog.ui.h:2
+msgid "Synchronise contacts"
+msgstr "Synchronizovať kontakty"
 
 #: ../data/gui/synchronise_select_contacts_dialog.ui.h:1
 msgid "Select the contacts you want to synchronise"
@@ -3009,6 +3014,11 @@ msgstr ""
 #: ../src/adhoc_commands.py:399
 msgid "Service changed the session identifier."
 msgstr "Služba zmenila identifikátor relácie."
+
+#: ../src/adhoc_commands.py:418
+#, fuzzy, python-format
+msgid "%s - Ad-hoc Commands - Gajim"
+msgstr "Ad-hoc príkazy - Gajim"
 
 #. when stanza doesn't have error description
 #: ../src/adhoc_commands.py:513
@@ -5893,10 +5903,12 @@ msgid "X Window System (without Xv)"
 msgstr "X Window System (bez Xv)"
 
 #. we talk about a file
-#: ../src/common/optparser.py:53
+#. we talk about file
+#: ../src/common/optparser.py:53 ../src/gtkgui_helpers.py:203
+#: ../src/gtkgui_helpers.py:219
 #, python-format
-msgid "error: cannot open %s for reading"
-msgstr "chyba: nie je možné otvoriť %s na čítanie"
+msgid "Error: cannot open %s for reading"
+msgstr "Chyba: nie je možné otvoriť %s na čítanie"
 
 #: ../src/common/optparser.py:305 ../src/common/optparser.py:306
 msgid "cyan"
@@ -9293,12 +9305,6 @@ msgstr "Sp_ráva o chybe"
 msgid "Details"
 msgstr "Podrobnosti"
 
-#. we talk about file
-#: ../src/gtkgui_helpers.py:203 ../src/gtkgui_helpers.py:219
-#, python-format
-msgid "Error: cannot open %s for reading"
-msgstr "Chyba: nie je možné otvoriť %s na čítanie"
-
 #: ../src/gtkgui_helpers.py:348
 msgid "Error reading file:"
 msgstr "Chyba čítania súboru:"
@@ -10708,6 +10714,9 @@ msgstr "Nie sú tu žiadne čakajúce požiadavky o zapísanie."
 #: ../src/vcard.py:399 ../src/vcard.py:453 ../src/vcard.py:575
 msgid " resource with priority "
 msgstr " zdroj s prioritou "
+
+#~ msgid "error: cannot open %s for reading"
+#~ msgstr "chyba: nie je možné otvoriť %s na čítanie"
 
 #, fuzzy
 #~ msgid "Choose Client Cert"

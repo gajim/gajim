@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.10.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-12 20:36+0100\n"
+"POT-Creation-Date: 2012-02-14 20:43+0100\n"
 "PO-Revision-Date: 2009-08-19 23:42+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -462,9 +462,8 @@ msgid "Synchroni_ze account status with global status"
 msgstr "С_інхранізаваць стан рахунка з глабальным станам"
 
 #: ../data/gui/accounts_window.ui.h:54
-#: ../data/gui/synchronise_select_account_dialog.ui.h:2
 #, fuzzy
-msgid "Synchronise contacts"
+msgid "Synchronize contacts"
 msgstr "Паказаць _адлучаных людзей"
 
 #: ../data/gui/accounts_window.ui.h:55
@@ -593,7 +592,8 @@ msgstr "<b>Адбылася памылка:</b>"
 msgid "<b>Choose command to execute:</b>"
 msgstr "<b>Выберыце загад для выканання:</b>"
 
-#: ../data/gui/adhoc_commands_window.ui.h:3
+#. displaying the window
+#: ../data/gui/adhoc_commands_window.ui.h:3 ../src/adhoc_commands.py:102
 msgid "Ad-hoc Commands - Gajim"
 msgstr "Свае загады - Gajim"
 
@@ -2801,7 +2801,7 @@ msgstr "Паказаць _адлучаных людзей"
 
 #: ../data/gui/roster_window.ui.h:12
 #, fuzzy
-msgid "Show T_rans_ports"
+msgid "Show T_ransports"
 msgstr "Паказаць _транспарты"
 
 #: ../data/gui/roster_window.ui.h:13
@@ -2936,6 +2936,11 @@ msgstr "_Адмовіць"
 #: ../data/gui/synchronise_select_account_dialog.ui.h:1
 msgid "Select the account with which you want to synchronise"
 msgstr ""
+
+#: ../data/gui/synchronise_select_account_dialog.ui.h:2
+#, fuzzy
+msgid "Synchronise contacts"
+msgstr "Паказаць _адлучаных людзей"
 
 #: ../data/gui/synchronise_select_contacts_dialog.ui.h:1
 #, fuzzy
@@ -3144,6 +3149,11 @@ msgstr ""
 #: ../src/adhoc_commands.py:399
 msgid "Service changed the session identifier."
 msgstr ""
+
+#: ../src/adhoc_commands.py:418
+#, fuzzy, python-format
+msgid "%s - Ad-hoc Commands - Gajim"
+msgstr "Свае загады - Gajim"
 
 #. when stanza doesn't have error description
 #: ../src/adhoc_commands.py:513
@@ -6064,10 +6074,12 @@ msgid "X Window System (without Xv)"
 msgstr ""
 
 #. we talk about a file
-#: ../src/common/optparser.py:53
+#. we talk about file
+#: ../src/common/optparser.py:53 ../src/gtkgui_helpers.py:203
+#: ../src/gtkgui_helpers.py:219
 #, python-format
-msgid "error: cannot open %s for reading"
-msgstr "памылка: немагчыма прачытаць %s"
+msgid "Error: cannot open %s for reading"
+msgstr "Памылка: немагчыма прачытаць %s"
 
 #: ../src/common/optparser.py:305 ../src/common/optparser.py:306
 msgid "cyan"
@@ -9568,12 +9580,6 @@ msgstr "_Паведаміць пра памылку"
 msgid "Details"
 msgstr "Падрабязнасці"
 
-#. we talk about file
-#: ../src/gtkgui_helpers.py:203 ../src/gtkgui_helpers.py:219
-#, python-format
-msgid "Error: cannot open %s for reading"
-msgstr "Памылка: немагчыма прачытаць %s"
-
 #: ../src/gtkgui_helpers.py:348
 msgid "Error reading file:"
 msgstr "Памылка чытання файла:"
@@ -10974,6 +10980,9 @@ msgstr ""
 #: ../src/vcard.py:399 ../src/vcard.py:453 ../src/vcard.py:575
 msgid " resource with priority "
 msgstr " рэсурс з прыярытэтам "
+
+#~ msgid "error: cannot open %s for reading"
+#~ msgstr "памылка: немагчыма прачытаць %s"
 
 #, fuzzy
 #~ msgid "Choose Client Cert"

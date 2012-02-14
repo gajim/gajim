@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-12 20:36+0100\n"
+"POT-Creation-Date: 2012-02-14 20:43+0100\n"
 "PO-Revision-Date: 2010-01-01 20:42+0100\n"
 "Last-Translator: Jacek Sowiński <mruwek@mruwek.pl>\n"
 "Language-Team: Polish <dominik@kozaczko.info, translation-team-pl@lists."
@@ -454,8 +454,8 @@ msgid "Synchroni_ze account status with global status"
 msgstr "Synch_ronizuj status konta z globalnym statusem"
 
 #: ../data/gui/accounts_window.ui.h:54
-#: ../data/gui/synchronise_select_account_dialog.ui.h:2
-msgid "Synchronise contacts"
+#, fuzzy
+msgid "Synchronize contacts"
 msgstr "Synchronizuj kontakty"
 
 #: ../data/gui/accounts_window.ui.h:55
@@ -577,7 +577,8 @@ msgstr "<b>Wystąpił błąd:</b>"
 msgid "<b>Choose command to execute:</b>"
 msgstr "<b>Wybierz komendę do wykonania:</b>"
 
-#: ../data/gui/adhoc_commands_window.ui.h:3
+#. displaying the window
+#: ../data/gui/adhoc_commands_window.ui.h:3 ../src/adhoc_commands.py:102
 msgid "Ad-hoc Commands - Gajim"
 msgstr "Komendy ad-hoc - Gajim"
 
@@ -2674,7 +2675,7 @@ msgstr "Pokaż kontakty _połączone"
 
 #: ../data/gui/roster_window.ui.h:12
 #, fuzzy
-msgid "Show T_rans_ports"
+msgid "Show T_ransports"
 msgstr "Pokaż trans_porty"
 
 #: ../data/gui/roster_window.ui.h:13
@@ -2807,6 +2808,10 @@ msgstr "O_dmów"
 #: ../data/gui/synchronise_select_account_dialog.ui.h:1
 msgid "Select the account with which you want to synchronise"
 msgstr "Wskaż konto, z którym chcesz zsynchronizować kontakty"
+
+#: ../data/gui/synchronise_select_account_dialog.ui.h:2
+msgid "Synchronise contacts"
+msgstr "Synchronizuj kontakty"
 
 #: ../data/gui/synchronise_select_contacts_dialog.ui.h:1
 msgid "Select the contacts you want to synchronise"
@@ -3005,6 +3010,11 @@ msgstr "Usługa wysłała niepoprawne dane"
 #: ../src/adhoc_commands.py:399
 msgid "Service changed the session identifier."
 msgstr "Klient na %s anulował negocjację sesji"
+
+#: ../src/adhoc_commands.py:418
+#, fuzzy, python-format
+msgid "%s - Ad-hoc Commands - Gajim"
+msgstr "Komendy ad-hoc - Gajim"
 
 #. when stanza doesn't have error description
 #: ../src/adhoc_commands.py:513
@@ -5984,9 +5994,11 @@ msgid "X Window System (without Xv)"
 msgstr ""
 
 #. we talk about a file
-#: ../src/common/optparser.py:53
+#. we talk about file
+#: ../src/common/optparser.py:53 ../src/gtkgui_helpers.py:203
+#: ../src/gtkgui_helpers.py:219
 #, python-format
-msgid "error: cannot open %s for reading"
+msgid "Error: cannot open %s for reading"
 msgstr "błąd: nie można otworzyć %s do odczytu"
 
 #: ../src/common/optparser.py:305 ../src/common/optparser.py:306
@@ -9417,12 +9429,6 @@ msgstr "_Zgłoś Błąd"
 msgid "Details"
 msgstr "Szczegóły"
 
-#. we talk about file
-#: ../src/gtkgui_helpers.py:203 ../src/gtkgui_helpers.py:219
-#, python-format
-msgid "Error: cannot open %s for reading"
-msgstr "błąd: nie można otworzyć %s do odczytu"
-
 #: ../src/gtkgui_helpers.py:348
 msgid "Error reading file:"
 msgstr "Błąd odczytu pliku:"
@@ -10851,6 +10857,9 @@ msgstr "Nie ma oczekujących żądań autoryzacji."
 #: ../src/vcard.py:399 ../src/vcard.py:453 ../src/vcard.py:575
 msgid " resource with priority "
 msgstr " zasób o wysokim priorytecie "
+
+#~ msgid "error: cannot open %s for reading"
+#~ msgstr "błąd: nie można otworzyć %s do odczytu"
 
 #, fuzzy
 #~ msgid "Choose Client Cert"

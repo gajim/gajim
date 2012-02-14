@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 0.15a1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-12 20:36+0100\n"
+"POT-Creation-Date: 2012-02-14 20:43+0100\n"
 "PO-Revision-Date: 2011-09-07 23:11+0800\n"
 "Last-Translator: Wei-Lun Chao <chaoweilun@gmail.com>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -437,8 +437,8 @@ msgid "Synchroni_ze account status with global status"
 msgstr "將帳號狀態與全域狀態同步(_Z)"
 
 #: ../data/gui/accounts_window.ui.h:54
-#: ../data/gui/synchronise_select_account_dialog.ui.h:2
-msgid "Synchronise contacts"
+#, fuzzy
+msgid "Synchronize contacts"
 msgstr "同步聯絡人"
 
 #: ../data/gui/accounts_window.ui.h:55
@@ -558,7 +558,8 @@ msgstr "<b>發生了一個錯誤:</b>"
 msgid "<b>Choose command to execute:</b>"
 msgstr "<b>選擇要執行的命令</b>"
 
-#: ../data/gui/adhoc_commands_window.ui.h:3
+#. displaying the window
+#: ../data/gui/adhoc_commands_window.ui.h:3 ../src/adhoc_commands.py:102
 msgid "Ad-hoc Commands - Gajim"
 msgstr "Ad-hoc 命令 - Gajim"
 
@@ -2579,7 +2580,7 @@ msgstr "只顯示活動的聯絡人(_A)"
 
 #: ../data/gui/roster_window.ui.h:12
 #, fuzzy
-msgid "Show T_rans_ports"
+msgid "Show T_ransports"
 msgstr "顯示代理(_P)"
 
 #: ../data/gui/roster_window.ui.h:13
@@ -2710,6 +2711,10 @@ msgstr "拒絕(_D)"
 #: ../data/gui/synchronise_select_account_dialog.ui.h:1
 msgid "Select the account with which you want to synchronise"
 msgstr "選擇您想要與之同步的帳號"
+
+#: ../data/gui/synchronise_select_account_dialog.ui.h:2
+msgid "Synchronise contacts"
+msgstr "同步聯絡人"
 
 #: ../data/gui/synchronise_select_contacts_dialog.ui.h:1
 msgid "Select the contacts you want to synchronise"
@@ -2903,6 +2908,11 @@ msgstr "服務傳送了異常的資料"
 #: ../src/adhoc_commands.py:399
 msgid "Service changed the session identifier."
 msgstr "服務變更了作業階段識別碼"
+
+#: ../src/adhoc_commands.py:418
+#, fuzzy, python-format
+msgid "%s - Ad-hoc Commands - Gajim"
+msgstr "Ad-hoc 命令 - Gajim"
 
 #. when stanza doesn't have error description
 #: ../src/adhoc_commands.py:513
@@ -5740,10 +5750,12 @@ msgid "X Window System (without Xv)"
 msgstr "X 視窗系統 (沒有Xv)"
 
 #. we talk about a file
-#: ../src/common/optparser.py:53
+#. we talk about file
+#: ../src/common/optparser.py:53 ../src/gtkgui_helpers.py:203
+#: ../src/gtkgui_helpers.py:219
 #, python-format
-msgid "error: cannot open %s for reading"
-msgstr "錯誤: 無法讀取檔案 %s"
+msgid "Error: cannot open %s for reading"
+msgstr "錯誤: 無法按讀開啟檔案 %s"
 
 #: ../src/common/optparser.py:305 ../src/common/optparser.py:306
 msgid "cyan"
@@ -9112,12 +9124,6 @@ msgstr "報告錯誤(_R)"
 msgid "Details"
 msgstr "細節"
 
-#. we talk about file
-#: ../src/gtkgui_helpers.py:203 ../src/gtkgui_helpers.py:219
-#, python-format
-msgid "Error: cannot open %s for reading"
-msgstr "錯誤: 無法按讀開啟檔案 %s"
-
 #: ../src/gtkgui_helpers.py:348
 msgid "Error reading file:"
 msgstr "讀檔案錯誤:"
@@ -10478,6 +10484,9 @@ msgstr "沒有未處理的認證請求"
 #: ../src/vcard.py:399 ../src/vcard.py:453 ../src/vcard.py:575
 msgid " resource with priority "
 msgstr "帶有優先等級的資源"
+
+#~ msgid "error: cannot open %s for reading"
+#~ msgstr "錯誤: 無法讀取檔案 %s"
 
 #~ msgid "A GTK+ jabber client"
 #~ msgstr "一個 GTK+ Jabber 客戶端"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-12 20:36+0100\n"
+"POT-Creation-Date: 2012-02-14 20:43+0100\n"
 "PO-Revision-Date: 2009-10-29 23:50+0100\n"
 "Last-Translator: Branko Kokanovic <branko.kokanovic@gmail.com>\n"
 "Language-Team:  <sr@li.org>\n"
@@ -452,8 +452,8 @@ msgid "Synchroni_ze account status with global status"
 msgstr "Синхрони_зуј статус налога са глобалним статусом"
 
 #: ../data/gui/accounts_window.ui.h:54
-#: ../data/gui/synchronise_select_account_dialog.ui.h:2
-msgid "Synchronise contacts"
+#, fuzzy
+msgid "Synchronize contacts"
 msgstr "Синхронизуј контакте"
 
 #: ../data/gui/accounts_window.ui.h:55
@@ -575,7 +575,8 @@ msgstr "<b>Догодила се грешка:</b>"
 msgid "<b>Choose command to execute:</b>"
 msgstr "<b>Одаберите команду за извршење:</b>"
 
-#: ../data/gui/adhoc_commands_window.ui.h:3
+#. displaying the window
+#: ../data/gui/adhoc_commands_window.ui.h:3 ../src/adhoc_commands.py:102
 msgid "Ad-hoc Commands - Gajim"
 msgstr "Ад-хок команде - Гајим"
 
@@ -2693,7 +2694,7 @@ msgstr "Прикажи само _активне контакте"
 
 #: ../data/gui/roster_window.ui.h:12
 #, fuzzy
-msgid "Show T_rans_ports"
+msgid "Show T_ransports"
 msgstr "Прикажи транс_порте"
 
 #: ../data/gui/roster_window.ui.h:13
@@ -2824,6 +2825,10 @@ msgstr "_Одбиј"
 #: ../data/gui/synchronise_select_account_dialog.ui.h:1
 msgid "Select the account with which you want to synchronise"
 msgstr "Одаберите налог са којим желите да се синхронизујете"
+
+#: ../data/gui/synchronise_select_account_dialog.ui.h:2
+msgid "Synchronise contacts"
+msgstr "Синхронизуј контакте"
 
 #: ../data/gui/synchronise_select_contacts_dialog.ui.h:1
 msgid "Select the contacts you want to synchronise"
@@ -3022,6 +3027,11 @@ msgstr "Сервис је послао лоше податке"
 #: ../src/adhoc_commands.py:399
 msgid "Service changed the session identifier."
 msgstr "Сервис је изменио идентификатор сесије."
+
+#: ../src/adhoc_commands.py:418
+#, fuzzy, python-format
+msgid "%s - Ad-hoc Commands - Gajim"
+msgstr "Ад-хок команде - Гајим"
 
 #. when stanza doesn't have error description
 #: ../src/adhoc_commands.py:513
@@ -5972,10 +5982,12 @@ msgid "X Window System (without Xv)"
 msgstr ""
 
 #. we talk about a file
-#: ../src/common/optparser.py:53
+#. we talk about file
+#: ../src/common/optparser.py:53 ../src/gtkgui_helpers.py:203
+#: ../src/gtkgui_helpers.py:219
 #, python-format
-msgid "error: cannot open %s for reading"
-msgstr "грешка: не могу отворити %s за читање"
+msgid "Error: cannot open %s for reading"
+msgstr "Грешка: није могуће отворити %s за читање"
 
 #: ../src/common/optparser.py:305 ../src/common/optparser.py:306
 msgid "cyan"
@@ -9402,12 +9414,6 @@ msgstr "_Пријави грешку"
 msgid "Details"
 msgstr "Детаљи"
 
-#. we talk about file
-#: ../src/gtkgui_helpers.py:203 ../src/gtkgui_helpers.py:219
-#, python-format
-msgid "Error: cannot open %s for reading"
-msgstr "Грешка: није могуће отворити %s за читање"
-
 #: ../src/gtkgui_helpers.py:348
 msgid "Error reading file:"
 msgstr "Грешка при читању датотеке:"
@@ -10837,6 +10843,9 @@ msgstr "Нема захтева за претплатом на чекању."
 #: ../src/vcard.py:399 ../src/vcard.py:453 ../src/vcard.py:575
 msgid " resource with priority "
 msgstr " ресурс са приоритетом "
+
+#~ msgid "error: cannot open %s for reading"
+#~ msgstr "грешка: не могу отворити %s за читање"
 
 #, fuzzy
 #~ msgid "Choose Client Cert"

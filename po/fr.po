@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 0.12 svn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-12 20:36+0100\n"
+"POT-Creation-Date: 2012-02-14 20:43+0100\n"
 "PO-Revision-Date: 2011-05-30 08:28+0100\n"
 "Last-Translator: Florent Le Coz <louizatakk@fedoraproject.org>\n"
 "Language-Team: <>\n"
@@ -458,8 +458,8 @@ msgid "Synchroni_ze account status with global status"
 msgstr "S_ynchroniser l'état du compte avec l'état global"
 
 #: ../data/gui/accounts_window.ui.h:54
-#: ../data/gui/synchronise_select_account_dialog.ui.h:2
-msgid "Synchronise contacts"
+#, fuzzy
+msgid "Synchronize contacts"
 msgstr "Synchroniser les contacts"
 
 #: ../data/gui/accounts_window.ui.h:55
@@ -580,7 +580,8 @@ msgstr "<b>Une erreur est survenue :</b>"
 msgid "<b>Choose command to execute:</b>"
 msgstr "<b>Commande à exécuter :</b>"
 
-#: ../data/gui/adhoc_commands_window.ui.h:3
+#. displaying the window
+#: ../data/gui/adhoc_commands_window.ui.h:3 ../src/adhoc_commands.py:102
 msgid "Ad-hoc Commands - Gajim"
 msgstr "Commandes Ad-hoc - Gajim"
 
@@ -2661,7 +2662,7 @@ msgstr "Afficher seulement les contacts _Actifs"
 
 #: ../data/gui/roster_window.ui.h:12
 #, fuzzy
-msgid "Show T_rans_ports"
+msgid "Show T_ransports"
 msgstr "Afficher les Passerelles"
 
 #: ../data/gui/roster_window.ui.h:13
@@ -2794,6 +2795,10 @@ msgstr "_Refuser"
 #: ../data/gui/synchronise_select_account_dialog.ui.h:1
 msgid "Select the account with which you want to synchronise"
 msgstr "Sélectionnez le compte avec lequel vous voulez vous synchroniser"
+
+#: ../data/gui/synchronise_select_account_dialog.ui.h:2
+msgid "Synchronise contacts"
+msgstr "Synchroniser les contacts"
 
 #: ../data/gui/synchronise_select_contacts_dialog.ui.h:1
 msgid "Select the contacts you want to synchronise"
@@ -2989,6 +2994,11 @@ msgstr "Le service a envoyé des données mal-formées"
 #: ../src/adhoc_commands.py:399
 msgid "Service changed the session identifier."
 msgstr "Le service a modifié l'identifiant de la session."
+
+#: ../src/adhoc_commands.py:418
+#, fuzzy, python-format
+msgid "%s - Ad-hoc Commands - Gajim"
+msgstr "Commandes Ad-hoc - Gajim"
 
 #. when stanza doesn't have error description
 #: ../src/adhoc_commands.py:513
@@ -6006,10 +6016,12 @@ msgid "X Window System (without Xv)"
 msgstr "X Window System (without Xv)"
 
 #. we talk about a file
-#: ../src/common/optparser.py:53
+#. we talk about file
+#: ../src/common/optparser.py:53 ../src/gtkgui_helpers.py:203
+#: ../src/gtkgui_helpers.py:219
 #, python-format
-msgid "error: cannot open %s for reading"
-msgstr "erreur : impossible d'ouvrir %s en lecture"
+msgid "Error: cannot open %s for reading"
+msgstr "Erreur : impossible d'ouvrir %s en lecture"
 
 #: ../src/common/optparser.py:305 ../src/common/optparser.py:306
 msgid "cyan"
@@ -9454,12 +9466,6 @@ msgstr "_Rapporter l'anomalie"
 msgid "Details"
 msgstr "Détails"
 
-#. we talk about file
-#: ../src/gtkgui_helpers.py:203 ../src/gtkgui_helpers.py:219
-#, python-format
-msgid "Error: cannot open %s for reading"
-msgstr "Erreur : impossible d'ouvrir %s en lecture"
-
 #: ../src/gtkgui_helpers.py:348
 msgid "Error reading file:"
 msgstr "Erreur de lecture du fichier :"
@@ -10893,6 +10899,9 @@ msgstr "Il n'y a aucune requête d'inscription en attente."
 #: ../src/vcard.py:399 ../src/vcard.py:453 ../src/vcard.py:575
 msgid " resource with priority "
 msgstr " ressource avec la priorité "
+
+#~ msgid "error: cannot open %s for reading"
+#~ msgstr "erreur : impossible d'ouvrir %s en lecture"
 
 #~ msgid "Choose Client Cert"
 #~ msgstr "Choisissez le certificat client"

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-12 20:36+0100\n"
+"POT-Creation-Date: 2012-02-14 20:43+0100\n"
 "PO-Revision-Date: 2010-10-31 17:37+0800\n"
 "Last-Translator: Guanhao Yin <yinguanhao@gmail.com>\n"
 "Language-Team: \n"
@@ -438,8 +438,8 @@ msgid "Synchroni_ze account status with global status"
 msgstr "将帐户状态与全局状态同步(_Z)"
 
 #: ../data/gui/accounts_window.ui.h:54
-#: ../data/gui/synchronise_select_account_dialog.ui.h:2
-msgid "Synchronise contacts"
+#, fuzzy
+msgid "Synchronize contacts"
 msgstr "同步联系人"
 
 #: ../data/gui/accounts_window.ui.h:55
@@ -559,7 +559,8 @@ msgstr "<b>发生了一个错误: </b>"
 msgid "<b>Choose command to execute:</b>"
 msgstr "<b>选择要执行的命令</b>"
 
-#: ../data/gui/adhoc_commands_window.ui.h:3
+#. displaying the window
+#: ../data/gui/adhoc_commands_window.ui.h:3 ../src/adhoc_commands.py:102
 msgid "Ad-hoc Commands - Gajim"
 msgstr "Ad-hoc 命令 - Gajim"
 
@@ -2586,7 +2587,7 @@ msgstr "只显示活动的联系人(_A)"
 
 #: ../data/gui/roster_window.ui.h:12
 #, fuzzy
-msgid "Show T_rans_ports"
+msgid "Show T_ransports"
 msgstr "显示代理(_P)"
 
 #: ../data/gui/roster_window.ui.h:13
@@ -2717,6 +2718,10 @@ msgstr "拒绝(_D)"
 #: ../data/gui/synchronise_select_account_dialog.ui.h:1
 msgid "Select the account with which you want to synchronise"
 msgstr "选择您想要与之同步的账户"
+
+#: ../data/gui/synchronise_select_account_dialog.ui.h:2
+msgid "Synchronise contacts"
+msgstr "同步联系人"
 
 #: ../data/gui/synchronise_select_contacts_dialog.ui.h:1
 msgid "Select the contacts you want to synchronise"
@@ -2912,6 +2917,11 @@ msgstr "服务发送了畸形的数据"
 #: ../src/adhoc_commands.py:399
 msgid "Service changed the session identifier."
 msgstr "服务改变了会话标识符"
+
+#: ../src/adhoc_commands.py:418
+#, fuzzy, python-format
+msgid "%s - Ad-hoc Commands - Gajim"
+msgstr "Ad-hoc 命令 - Gajim"
 
 #. when stanza doesn't have error description
 #: ../src/adhoc_commands.py:513
@@ -5753,10 +5763,12 @@ msgid "X Window System (without Xv)"
 msgstr "X 窗口系统 (没有Xv)"
 
 #. we talk about a file
-#: ../src/common/optparser.py:53
+#. we talk about file
+#: ../src/common/optparser.py:53 ../src/gtkgui_helpers.py:203
+#: ../src/gtkgui_helpers.py:219
 #, python-format
-msgid "error: cannot open %s for reading"
-msgstr "错误: 无法读取文件 %s"
+msgid "Error: cannot open %s for reading"
+msgstr "错误: 无法按读打开文件 %s"
 
 #: ../src/common/optparser.py:305 ../src/common/optparser.py:306
 msgid "cyan"
@@ -9108,12 +9120,6 @@ msgstr "报告错误(_R)"
 msgid "Details"
 msgstr "细节"
 
-#. we talk about file
-#: ../src/gtkgui_helpers.py:203 ../src/gtkgui_helpers.py:219
-#, python-format
-msgid "Error: cannot open %s for reading"
-msgstr "错误: 无法按读打开文件 %s"
-
 #: ../src/gtkgui_helpers.py:348
 msgid "Error reading file:"
 msgstr "读文件错误: "
@@ -10487,6 +10493,9 @@ msgstr "没有未处理的认证请求"
 #: ../src/vcard.py:399 ../src/vcard.py:453 ../src/vcard.py:575
 msgid " resource with priority "
 msgstr "带有优先级的资源"
+
+#~ msgid "error: cannot open %s for reading"
+#~ msgstr "错误: 无法读取文件 %s"
 
 #~ msgid "Choose Client Cert"
 #~ msgstr "选择客户端证书"

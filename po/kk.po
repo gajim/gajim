@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim.trunk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-12 20:36+0100\n"
+"POT-Creation-Date: 2012-02-14 20:43+0100\n"
 "PO-Revision-Date: 2011-02-03 14:51+0600\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <kk_KZ@googlegroups.com>\n"
@@ -449,8 +449,8 @@ msgid "Synchroni_ze account status with global status"
 msgstr "Тіркел_гі күйін ортақ күймен тең ұстау"
 
 #: ../data/gui/accounts_window.ui.h:54
-#: ../data/gui/synchronise_select_account_dialog.ui.h:2
-msgid "Synchronise contacts"
+#, fuzzy
+msgid "Synchronize contacts"
 msgstr "Контакттарды синхрондау"
 
 #: ../data/gui/accounts_window.ui.h:55
@@ -571,7 +571,8 @@ msgstr "<b>Қате орын алды:</b>"
 msgid "<b>Choose command to execute:</b>"
 msgstr "<b>Орындау үшін команда таңдаңыз:</b>"
 
-#: ../data/gui/adhoc_commands_window.ui.h:3
+#. displaying the window
+#: ../data/gui/adhoc_commands_window.ui.h:3 ../src/adhoc_commands.py:102
 msgid "Ad-hoc Commands - Gajim"
 msgstr "Ad-hoc командалары - Gajim"
 
@@ -2633,7 +2634,7 @@ msgstr "Те_к белсенді контакттарды көрсету"
 
 #: ../data/gui/roster_window.ui.h:12
 #, fuzzy
-msgid "Show T_rans_ports"
+msgid "Show T_ransports"
 msgstr "Транс_порттарды көрсету"
 
 #: ../data/gui/roster_window.ui.h:13
@@ -2766,6 +2767,10 @@ msgstr "_Блоктау"
 #: ../data/gui/synchronise_select_account_dialog.ui.h:1
 msgid "Select the account with which you want to synchronise"
 msgstr "Синхрондау үшін тіркелгіні таңдаңыз"
+
+#: ../data/gui/synchronise_select_account_dialog.ui.h:2
+msgid "Synchronise contacts"
+msgstr "Контакттарды синхрондау"
 
 #: ../data/gui/synchronise_select_contacts_dialog.ui.h:1
 msgid "Select the contacts you want to synchronise"
@@ -2962,6 +2967,11 @@ msgstr "Қызмет қате ақпаратты жіберген"
 #: ../src/adhoc_commands.py:399
 msgid "Service changed the session identifier."
 msgstr "Қызмет сессия анықтағышын өзгерткен."
+
+#: ../src/adhoc_commands.py:418
+#, fuzzy, python-format
+msgid "%s - Ad-hoc Commands - Gajim"
+msgstr "Ad-hoc командалары - Gajim"
 
 #. when stanza doesn't have error description
 #: ../src/adhoc_commands.py:513
@@ -5919,10 +5929,12 @@ msgid "X Window System (without Xv)"
 msgstr "X Window System (Xv жоқ)"
 
 #. we talk about a file
-#: ../src/common/optparser.py:53
+#. we talk about file
+#: ../src/common/optparser.py:53 ../src/gtkgui_helpers.py:203
+#: ../src/gtkgui_helpers.py:219
 #, python-format
-msgid "error: cannot open %s for reading"
-msgstr "қате: оқу үшін %s ашу мүмкін емес"
+msgid "Error: cannot open %s for reading"
+msgstr "Қате: оқу үшін %s ашу мүмкін емес"
 
 #: ../src/common/optparser.py:305 ../src/common/optparser.py:306
 msgid "cyan"
@@ -9325,12 +9337,6 @@ msgstr "Ақаулық жөнінде хаба_рлау"
 msgid "Details"
 msgstr "Көбірек"
 
-#. we talk about file
-#: ../src/gtkgui_helpers.py:203 ../src/gtkgui_helpers.py:219
-#, python-format
-msgid "Error: cannot open %s for reading"
-msgstr "Қате: оқу үшін %s ашу мүмкін емес"
-
 #: ../src/gtkgui_helpers.py:348
 msgid "Error reading file:"
 msgstr "Файлды оқу қатесі:"
@@ -10742,6 +10748,9 @@ msgstr "Кезекте жазылуға сұранымдар жоқ."
 #: ../src/vcard.py:399 ../src/vcard.py:453 ../src/vcard.py:575
 msgid " resource with priority "
 msgstr " ресурс приоритеті"
+
+#~ msgid "error: cannot open %s for reading"
+#~ msgstr "қате: оқу үшін %s ашу мүмкін емес"
 
 #~ msgid "Choose Client Cert"
 #~ msgstr "Клиент сертификатын таңдау"

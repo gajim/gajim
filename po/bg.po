@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim 0.12\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-12 20:36+0100\n"
+"POT-Creation-Date: 2012-02-14 20:43+0100\n"
 "PO-Revision-Date: 2009-08-19 23:43+0200\n"
 "Last-Translator: Yavor Doganov <yavor@gnu.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -457,8 +457,8 @@ msgid "Synchroni_ze account status with global status"
 msgstr "Син_хронизиране на състоянието на акаунта с общото състояние"
 
 #: ../data/gui/accounts_window.ui.h:54
-#: ../data/gui/synchronise_select_account_dialog.ui.h:2
-msgid "Synchronise contacts"
+#, fuzzy
+msgid "Synchronize contacts"
 msgstr "Синхронизиране на контакти"
 
 #: ../data/gui/accounts_window.ui.h:55
@@ -589,7 +589,8 @@ msgstr "<b>Възникна грешка:</b>"
 msgid "<b>Choose command to execute:</b>"
 msgstr "<b>Изберете команда за изпълнение:</b>"
 
-#: ../data/gui/adhoc_commands_window.ui.h:3
+#. displaying the window
+#: ../data/gui/adhoc_commands_window.ui.h:3 ../src/adhoc_commands.py:102
 msgid "Ad-hoc Commands - Gajim"
 msgstr "Специални команди - Gajim"
 
@@ -2712,7 +2713,7 @@ msgstr "Показване на изкл_ючените контакти"
 
 #: ../data/gui/roster_window.ui.h:12
 #, fuzzy
-msgid "Show T_rans_ports"
+msgid "Show T_ransports"
 msgstr "Показване на т_ранспорти"
 
 #: ../data/gui/roster_window.ui.h:13
@@ -2844,6 +2845,10 @@ msgstr "_Отказване"
 #: ../data/gui/synchronise_select_account_dialog.ui.h:1
 msgid "Select the account with which you want to synchronise"
 msgstr "Изберете акаунт, с който искате да синхронизирате"
+
+#: ../data/gui/synchronise_select_account_dialog.ui.h:2
+msgid "Synchronise contacts"
+msgstr "Синхронизиране на контакти"
 
 #: ../data/gui/synchronise_select_contacts_dialog.ui.h:1
 msgid "Select the contacts you want to synchronise"
@@ -3043,6 +3048,11 @@ msgstr "Услугата изпрати лошо форматирани данн
 #: ../src/adhoc_commands.py:399
 msgid "Service changed the session identifier."
 msgstr "Услугата промени идентификатора на сесията."
+
+#: ../src/adhoc_commands.py:418
+#, fuzzy, python-format
+msgid "%s - Ad-hoc Commands - Gajim"
+msgstr "Специални команди - Gajim"
 
 #. when stanza doesn't have error description
 #: ../src/adhoc_commands.py:513
@@ -6026,10 +6036,12 @@ msgid "X Window System (without Xv)"
 msgstr ""
 
 #. we talk about a file
-#: ../src/common/optparser.py:53
+#. we talk about file
+#: ../src/common/optparser.py:53 ../src/gtkgui_helpers.py:203
+#: ../src/gtkgui_helpers.py:219
 #, python-format
-msgid "error: cannot open %s for reading"
-msgstr "грешка: %s не може да бъде отворен за четене"
+msgid "Error: cannot open %s for reading"
+msgstr "Грешка: %s не може да бъде отворен за четене"
 
 #: ../src/common/optparser.py:305 ../src/common/optparser.py:306
 msgid "cyan"
@@ -9507,12 +9519,6 @@ msgstr "_Докладване на грешка"
 msgid "Details"
 msgstr "Подробности"
 
-#. we talk about file
-#: ../src/gtkgui_helpers.py:203 ../src/gtkgui_helpers.py:219
-#, python-format
-msgid "Error: cannot open %s for reading"
-msgstr "Грешка: %s не може да бъде отворен за четене"
-
 #: ../src/gtkgui_helpers.py:348
 msgid "Error reading file:"
 msgstr "Грешка при четене на файл:"
@@ -10953,6 +10959,9 @@ msgstr "Няма чакащо запитване за записване."
 #: ../src/vcard.py:399 ../src/vcard.py:453 ../src/vcard.py:575
 msgid " resource with priority "
 msgstr " ресурс с приоритет "
+
+#~ msgid "error: cannot open %s for reading"
+#~ msgstr "грешка: %s не може да бъде отворен за четене"
 
 #, fuzzy
 #~ msgid "Choose Client Cert"

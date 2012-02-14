@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-12 20:36+0100\n"
+"POT-Creation-Date: 2012-02-14 20:43+0100\n"
 "PO-Revision-Date: 2009-08-19 23:51+0200\n"
 "Last-Translator: Iván Méndez López <>\n"
 "Language-Team:  <softwarelibre@udc.es>\n"
@@ -472,9 +472,8 @@ msgid "Synchroni_ze account status with global status"
 msgstr "Sinc_ronizar o estado da conta co estado global"
 
 #: ../data/gui/accounts_window.ui.h:54
-#: ../data/gui/synchronise_select_account_dialog.ui.h:2
 #, fuzzy
-msgid "Synchronise contacts"
+msgid "Synchronize contacts"
 msgstr "Amosar os contactos desconectados"
 
 #: ../data/gui/accounts_window.ui.h:55
@@ -605,7 +604,8 @@ msgstr "<b>Produciuse un erro:</b>"
 msgid "<b>Choose command to execute:</b>"
 msgstr "<b>Elixa o comando para executar:</b>"
 
-#: ../data/gui/adhoc_commands_window.ui.h:3
+#. displaying the window
+#: ../data/gui/adhoc_commands_window.ui.h:3 ../src/adhoc_commands.py:102
 msgid "Ad-hoc Commands - Gajim"
 msgstr "Comandos ad-hoc - Gajim"
 
@@ -2817,7 +2817,7 @@ msgstr "Amosar os contactos desconectados"
 
 #: ../data/gui/roster_window.ui.h:12
 #, fuzzy
-msgid "Show T_rans_ports"
+msgid "Show T_ransports"
 msgstr "Amosar os trans_portes"
 
 #: ../data/gui/roster_window.ui.h:13
@@ -2956,6 +2956,11 @@ msgstr "_Denegar"
 #: ../data/gui/synchronise_select_account_dialog.ui.h:1
 msgid "Select the account with which you want to synchronise"
 msgstr ""
+
+#: ../data/gui/synchronise_select_account_dialog.ui.h:2
+#, fuzzy
+msgid "Synchronise contacts"
+msgstr "Amosar os contactos desconectados"
 
 #: ../data/gui/synchronise_select_contacts_dialog.ui.h:1
 #, fuzzy
@@ -3165,6 +3170,11 @@ msgstr ""
 #: ../src/adhoc_commands.py:399
 msgid "Service changed the session identifier."
 msgstr ""
+
+#: ../src/adhoc_commands.py:418
+#, fuzzy, python-format
+msgid "%s - Ad-hoc Commands - Gajim"
+msgstr "Comandos ad-hoc - Gajim"
 
 #. when stanza doesn't have error description
 #: ../src/adhoc_commands.py:513
@@ -6105,10 +6115,12 @@ msgid "X Window System (without Xv)"
 msgstr ""
 
 #. we talk about a file
-#: ../src/common/optparser.py:53
+#. we talk about file
+#: ../src/common/optparser.py:53 ../src/gtkgui_helpers.py:203
+#: ../src/gtkgui_helpers.py:219
 #, python-format
-msgid "error: cannot open %s for reading"
-msgstr "erro: non se pode abrir %s para lectura"
+msgid "Error: cannot open %s for reading"
+msgstr "Erro: non se pode abrir %s para lectura"
 
 #: ../src/common/optparser.py:305 ../src/common/optparser.py:306
 msgid "cyan"
@@ -9635,12 +9647,6 @@ msgstr "_Informar do erro"
 msgid "Details"
 msgstr "Detalles"
 
-#. we talk about file
-#: ../src/gtkgui_helpers.py:203 ../src/gtkgui_helpers.py:219
-#, python-format
-msgid "Error: cannot open %s for reading"
-msgstr "Erro: non se pode abrir %s para lectura"
-
 #: ../src/gtkgui_helpers.py:348
 msgid "Error reading file:"
 msgstr "Erro ao ler o ficheiro:"
@@ -11049,6 +11055,9 @@ msgstr ""
 #: ../src/vcard.py:399 ../src/vcard.py:453 ../src/vcard.py:575
 msgid " resource with priority "
 msgstr " recurso con prioridade "
+
+#~ msgid "error: cannot open %s for reading"
+#~ msgstr "erro: non se pode abrir %s para lectura"
 
 #, fuzzy
 #~ msgid "Choose Client Cert"

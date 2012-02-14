@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-12 20:36+0100\n"
+"POT-Creation-Date: 2012-02-14 20:43+0100\n"
 "PO-Revision-Date: 2009-10-29 10:21+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -453,8 +453,8 @@ msgid "Synchroni_ze account status with global status"
 msgstr "Synk_ronisera kontostatus med global status"
 
 #: ../data/gui/accounts_window.ui.h:54
-#: ../data/gui/synchronise_select_account_dialog.ui.h:2
-msgid "Synchronise contacts"
+#, fuzzy
+msgid "Synchronize contacts"
 msgstr "Synkronisera kontakter"
 
 #: ../data/gui/accounts_window.ui.h:55
@@ -576,7 +576,8 @@ msgstr "<b>Ett fel har inträffat:</b>"
 msgid "<b>Choose command to execute:</b>"
 msgstr "<b>Välj kommando att köra:</b>"
 
-#: ../data/gui/adhoc_commands_window.ui.h:3
+#. displaying the window
+#: ../data/gui/adhoc_commands_window.ui.h:3 ../src/adhoc_commands.py:102
 msgid "Ad-hoc Commands - Gajim"
 msgstr ""
 
@@ -2693,7 +2694,7 @@ msgstr "Visa endast _aktiva kontakter"
 
 #: ../data/gui/roster_window.ui.h:12
 #, fuzzy
-msgid "Show T_rans_ports"
+msgid "Show T_ransports"
 msgstr "Visa _transporter"
 
 #: ../data/gui/roster_window.ui.h:13
@@ -2826,6 +2827,10 @@ msgstr "_Neka"
 #: ../data/gui/synchronise_select_account_dialog.ui.h:1
 msgid "Select the account with which you want to synchronise"
 msgstr "Välj kontot med vilket du vill synkronisera"
+
+#: ../data/gui/synchronise_select_account_dialog.ui.h:2
+msgid "Synchronise contacts"
+msgstr "Synkronisera kontakter"
 
 #: ../data/gui/synchronise_select_contacts_dialog.ui.h:1
 msgid "Select the contacts you want to synchronise"
@@ -3024,6 +3029,11 @@ msgstr ""
 
 #: ../src/adhoc_commands.py:399
 msgid "Service changed the session identifier."
+msgstr ""
+
+#: ../src/adhoc_commands.py:418
+#, python-format
+msgid "%s - Ad-hoc Commands - Gajim"
 msgstr ""
 
 #. when stanza doesn't have error description
@@ -5914,10 +5924,12 @@ msgid "X Window System (without Xv)"
 msgstr ""
 
 #. we talk about a file
-#: ../src/common/optparser.py:53
+#. we talk about file
+#: ../src/common/optparser.py:53 ../src/gtkgui_helpers.py:203
+#: ../src/gtkgui_helpers.py:219
 #, python-format
-msgid "error: cannot open %s for reading"
-msgstr "fel: kan inte öppna %s för läsning"
+msgid "Error: cannot open %s for reading"
+msgstr "Fel: kan inte öppna %s för läsning"
 
 #: ../src/common/optparser.py:305 ../src/common/optparser.py:306
 msgid "cyan"
@@ -9349,12 +9361,6 @@ msgstr "_Rapportera fel"
 msgid "Details"
 msgstr "Detaljer"
 
-#. we talk about file
-#: ../src/gtkgui_helpers.py:203 ../src/gtkgui_helpers.py:219
-#, python-format
-msgid "Error: cannot open %s for reading"
-msgstr "Fel: kan inte öppna %s för läsning"
-
 #: ../src/gtkgui_helpers.py:348
 msgid "Error reading file:"
 msgstr "Fel vid läsning av fil:"
@@ -10785,6 +10791,9 @@ msgstr "Det finns inga väntande prenumerationsbegäran."
 #: ../src/vcard.py:399 ../src/vcard.py:453 ../src/vcard.py:575
 msgid " resource with priority "
 msgstr " resurs med prioritet "
+
+#~ msgid "error: cannot open %s for reading"
+#~ msgstr "fel: kan inte öppna %s för läsning"
 
 #, fuzzy
 #~ msgid "Choose Client Cert"

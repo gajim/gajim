@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim 2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-12 20:36+0100\n"
+"POT-Creation-Date: 2012-02-14 20:43+0100\n"
 "PO-Revision-Date: 2009-08-19 23:53+0200\n"
 "Last-Translator: neoex <neoex.dc@gmail.com>\n"
 "Language-Team: Italian <>\n"
@@ -461,8 +461,8 @@ msgid "Synchroni_ze account status with global status"
 msgstr "Sinc_ronizza lo stato dell'account con lo stato globale"
 
 #: ../data/gui/accounts_window.ui.h:54
-#: ../data/gui/synchronise_select_account_dialog.ui.h:2
-msgid "Synchronise contacts"
+#, fuzzy
+msgid "Synchronize contacts"
 msgstr "Sincronizza contatti"
 
 #: ../data/gui/accounts_window.ui.h:55
@@ -591,7 +591,8 @@ msgstr "<b>Si è verificato un errore:</b>"
 msgid "<b>Choose command to execute:</b>"
 msgstr "<b>Scegli il comando da eseguire:</b>"
 
-#: ../data/gui/adhoc_commands_window.ui.h:3
+#. displaying the window
+#: ../data/gui/adhoc_commands_window.ui.h:3 ../src/adhoc_commands.py:102
 msgid "Ad-hoc Commands - Gajim"
 msgstr "Comandi ad-hoc - Gajim"
 
@@ -2768,7 +2769,7 @@ msgstr "Mostra contatti _offline"
 
 #: ../data/gui/roster_window.ui.h:12
 #, fuzzy
-msgid "Show T_rans_ports"
+msgid "Show T_ransports"
 msgstr "Mostra tras_porti"
 
 #: ../data/gui/roster_window.ui.h:13
@@ -2901,6 +2902,10 @@ msgstr "_Nega"
 #: ../data/gui/synchronise_select_account_dialog.ui.h:1
 msgid "Select the account with which you want to synchronise"
 msgstr "Seleziona l'account con cui vuoi effettuare la sincronizzazione"
+
+#: ../data/gui/synchronise_select_account_dialog.ui.h:2
+msgid "Synchronise contacts"
+msgstr "Sincronizza contatti"
 
 #: ../data/gui/synchronise_select_contacts_dialog.ui.h:1
 msgid "Select the contacts you want to synchronise"
@@ -3109,6 +3114,11 @@ msgstr ""
 #, fuzzy
 msgid "Service changed the session identifier."
 msgstr "Il client a %s ha annullato la negoziazione della sessione."
+
+#: ../src/adhoc_commands.py:418
+#, fuzzy, python-format
+msgid "%s - Ad-hoc Commands - Gajim"
+msgstr "Comandi ad-hoc - Gajim"
 
 #. when stanza doesn't have error description
 #: ../src/adhoc_commands.py:513
@@ -6050,10 +6060,12 @@ msgid "X Window System (without Xv)"
 msgstr ""
 
 #. we talk about a file
-#: ../src/common/optparser.py:53
+#. we talk about file
+#: ../src/common/optparser.py:53 ../src/gtkgui_helpers.py:203
+#: ../src/gtkgui_helpers.py:219
 #, python-format
-msgid "error: cannot open %s for reading"
-msgstr "errore: impossibile aprire %s per lettura"
+msgid "Error: cannot open %s for reading"
+msgstr "Errore: impossibile aprire %s in lettura"
 
 #: ../src/common/optparser.py:305 ../src/common/optparser.py:306
 msgid "cyan"
@@ -9604,12 +9616,6 @@ msgstr "_Segnala bug"
 msgid "Details"
 msgstr "Dettagli"
 
-#. we talk about file
-#: ../src/gtkgui_helpers.py:203 ../src/gtkgui_helpers.py:219
-#, python-format
-msgid "Error: cannot open %s for reading"
-msgstr "Errore: impossibile aprire %s in lettura"
-
 #: ../src/gtkgui_helpers.py:348
 msgid "Error reading file:"
 msgstr "Errore leggendo il file:"
@@ -11024,6 +11030,9 @@ msgstr ""
 #: ../src/vcard.py:399 ../src/vcard.py:453 ../src/vcard.py:575
 msgid " resource with priority "
 msgstr " risorsa con priorità "
+
+#~ msgid "error: cannot open %s for reading"
+#~ msgstr "errore: impossibile aprire %s per lettura"
 
 #, fuzzy
 #~ msgid "Choose Client Cert"

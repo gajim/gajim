@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim 0.13\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-12 20:36+0100\n"
+"POT-Creation-Date: 2012-02-14 20:43+0100\n"
 "PO-Revision-Date: 2009-11-18 19:33+0100\n"
 "Last-Translator: Niels Felsted Thorsen <felsted@fsfe.org>\n"
 "Language-Team:  <>\n"
@@ -452,8 +452,8 @@ msgid "Synchroni_ze account status with global status"
 msgstr "Synk_roniser konto status med global status"
 
 #: ../data/gui/accounts_window.ui.h:54
-#: ../data/gui/synchronise_select_account_dialog.ui.h:2
-msgid "Synchronise contacts"
+#, fuzzy
+msgid "Synchronize contacts"
 msgstr "Synkroniser kontakter"
 
 #: ../data/gui/accounts_window.ui.h:55
@@ -575,7 +575,8 @@ msgstr "<b>En fejl er opstået:</b>"
 msgid "<b>Choose command to execute:</b>"
 msgstr "<b>Vælg kommando som skal udføres:</b>"
 
-#: ../data/gui/adhoc_commands_window.ui.h:3
+#. displaying the window
+#: ../data/gui/adhoc_commands_window.ui.h:3 ../src/adhoc_commands.py:102
 msgid "Ad-hoc Commands - Gajim"
 msgstr "Ad-hoc Kommandoer - Gajim"
 
@@ -2685,7 +2686,7 @@ msgstr "Vis Kun _Aktive Kontakter"
 
 #: ../data/gui/roster_window.ui.h:12
 #, fuzzy
-msgid "Show T_rans_ports"
+msgid "Show T_ransports"
 msgstr "Vis Trans_porter"
 
 #: ../data/gui/roster_window.ui.h:13
@@ -2820,6 +2821,10 @@ msgstr "_Nægt"
 #: ../data/gui/synchronise_select_account_dialog.ui.h:1
 msgid "Select the account with which you want to synchronise"
 msgstr "Vælg den konto som du vil synkronisere med"
+
+#: ../data/gui/synchronise_select_account_dialog.ui.h:2
+msgid "Synchronise contacts"
+msgstr "Synkroniser kontakter"
 
 #: ../data/gui/synchronise_select_contacts_dialog.ui.h:1
 msgid "Select the contacts you want to synchronise"
@@ -3019,6 +3024,11 @@ msgstr "Tjeneste sendte malformeret data"
 #: ../src/adhoc_commands.py:399
 msgid "Service changed the session identifier."
 msgstr "Tjeneste ændrede sessionsnøglen."
+
+#: ../src/adhoc_commands.py:418
+#, fuzzy, python-format
+msgid "%s - Ad-hoc Commands - Gajim"
+msgstr "Ad-hoc Kommandoer - Gajim"
 
 #. when stanza doesn't have error description
 #: ../src/adhoc_commands.py:513
@@ -5992,10 +6002,12 @@ msgid "X Window System (without Xv)"
 msgstr ""
 
 #. we talk about a file
-#: ../src/common/optparser.py:53
+#. we talk about file
+#: ../src/common/optparser.py:53 ../src/gtkgui_helpers.py:203
+#: ../src/gtkgui_helpers.py:219
 #, python-format
-msgid "error: cannot open %s for reading"
-msgstr "fejl: kan ikke åbne %s for læsning"
+msgid "Error: cannot open %s for reading"
+msgstr "Fejl: kan ikke åbne %s for læsning"
 
 #: ../src/common/optparser.py:305 ../src/common/optparser.py:306
 msgid "cyan"
@@ -9434,12 +9446,6 @@ msgstr "_Rapporter Fejl"
 msgid "Details"
 msgstr "Detaljer"
 
-#. we talk about file
-#: ../src/gtkgui_helpers.py:203 ../src/gtkgui_helpers.py:219
-#, python-format
-msgid "Error: cannot open %s for reading"
-msgstr "Fejl: kan ikke åbne %s for læsning"
-
 #: ../src/gtkgui_helpers.py:348
 msgid "Error reading file:"
 msgstr "Fejl ved læsning af fil:"
@@ -10869,6 +10875,9 @@ msgstr "Der er ikke nogen ventende abbonerings forespørgsler."
 #: ../src/vcard.py:399 ../src/vcard.py:453 ../src/vcard.py:575
 msgid " resource with priority "
 msgstr " ressource med prioritet "
+
+#~ msgid "error: cannot open %s for reading"
+#~ msgstr "fejl: kan ikke åbne %s for læsning"
 
 #, fuzzy
 #~ msgid "Choose Client Cert"

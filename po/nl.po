@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-12 20:36+0100\n"
+"POT-Creation-Date: 2012-02-14 20:43+0100\n"
 "PO-Revision-Date: 2005-12-19 18:44+0100\n"
 "Last-Translator: Stéphan Kochen <stephan@kochen.nl>\n"
 "Language-Team: none\n"
@@ -470,9 +470,8 @@ msgid "Synchroni_ze account status with global status"
 msgstr "Synch_roniseer account status met globale status"
 
 #: ../data/gui/accounts_window.ui.h:54
-#: ../data/gui/synchronise_select_account_dialog.ui.h:2
 #, fuzzy
-msgid "Synchronise contacts"
+msgid "Synchronize contacts"
 msgstr "_Offline Contacten Weergeven"
 
 #: ../data/gui/accounts_window.ui.h:55
@@ -604,7 +603,8 @@ msgstr "Een protocolfout is opgetreden:"
 msgid "<b>Choose command to execute:</b>"
 msgstr ""
 
-#: ../data/gui/adhoc_commands_window.ui.h:3
+#. displaying the window
+#: ../data/gui/adhoc_commands_window.ui.h:3 ../src/adhoc_commands.py:102
 msgid "Ad-hoc Commands - Gajim"
 msgstr ""
 
@@ -2836,7 +2836,7 @@ msgstr "_Offline Contacten Weergeven"
 
 #: ../data/gui/roster_window.ui.h:12
 #, fuzzy
-msgid "Show T_rans_ports"
+msgid "Show T_ransports"
 msgstr "Transporten"
 
 #: ../data/gui/roster_window.ui.h:13
@@ -2978,6 +2978,11 @@ msgstr "_Weigeren"
 #: ../data/gui/synchronise_select_account_dialog.ui.h:1
 msgid "Select the account with which you want to synchronise"
 msgstr ""
+
+#: ../data/gui/synchronise_select_account_dialog.ui.h:2
+#, fuzzy
+msgid "Synchronise contacts"
+msgstr "_Offline Contacten Weergeven"
 
 #: ../data/gui/synchronise_select_contacts_dialog.ui.h:1
 #, fuzzy
@@ -3191,6 +3196,11 @@ msgstr ""
 
 #: ../src/adhoc_commands.py:399
 msgid "Service changed the session identifier."
+msgstr ""
+
+#: ../src/adhoc_commands.py:418
+#, python-format
+msgid "%s - Ad-hoc Commands - Gajim"
 msgstr ""
 
 #. when stanza doesn't have error description
@@ -6090,10 +6100,12 @@ msgid "X Window System (without Xv)"
 msgstr ""
 
 #. we talk about a file
-#: ../src/common/optparser.py:53
+#. we talk about file
+#: ../src/common/optparser.py:53 ../src/gtkgui_helpers.py:203
+#: ../src/gtkgui_helpers.py:219
 #, python-format
-msgid "error: cannot open %s for reading"
-msgstr "fout: kan %s niet voor lezen openen"
+msgid "Error: cannot open %s for reading"
+msgstr "Fout: kan %s niet voor lezen openen"
 
 #: ../src/common/optparser.py:305 ../src/common/optparser.py:306
 msgid "cyan"
@@ -9642,12 +9654,6 @@ msgstr "_Rapporteer Fout"
 msgid "Details"
 msgstr "Details"
 
-#. we talk about file
-#: ../src/gtkgui_helpers.py:203 ../src/gtkgui_helpers.py:219
-#, python-format
-msgid "Error: cannot open %s for reading"
-msgstr "Fout: kan %s niet voor lezen openen"
-
 #: ../src/gtkgui_helpers.py:348
 msgid "Error reading file:"
 msgstr "Fout bij lezen bestand:"
@@ -11081,6 +11087,9 @@ msgstr ""
 #: ../src/vcard.py:399 ../src/vcard.py:453 ../src/vcard.py:575
 msgid " resource with priority "
 msgstr " bron met prioriteit"
+
+#~ msgid "error: cannot open %s for reading"
+#~ msgstr "fout: kan %s niet voor lezen openen"
 
 #, fuzzy
 #~ msgid "Choose Client Cert"

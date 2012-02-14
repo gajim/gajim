@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-12 20:36+0100\n"
+"POT-Creation-Date: 2012-02-14 20:43+0100\n"
 "PO-Revision-Date: 2011-11-15 23:22+0300\n"
 "Last-Translator: Fomin Denis <fominde@mail.ru>\n"
 "Language-Team: Linux Support LLC\n"
@@ -457,8 +457,8 @@ msgid "Synchroni_ze account status with global status"
 msgstr "Син_хронизировать статус учетной записи с глобальным статусом"
 
 #: ../data/gui/accounts_window.ui.h:54
-#: ../data/gui/synchronise_select_account_dialog.ui.h:2
-msgid "Synchronise contacts"
+#, fuzzy
+msgid "Synchronize contacts"
 msgstr "Объединить контакты"
 
 #: ../data/gui/accounts_window.ui.h:55
@@ -580,7 +580,8 @@ msgstr "<b>Произошла ошибка:</b>"
 msgid "<b>Choose command to execute:</b>"
 msgstr "<b>Выберите команду:</b>"
 
-#: ../data/gui/adhoc_commands_window.ui.h:3
+#. displaying the window
+#: ../data/gui/adhoc_commands_window.ui.h:3 ../src/adhoc_commands.py:102
 msgid "Ad-hoc Commands - Gajim"
 msgstr "Специальные команды — Gajim"
 
@@ -2641,7 +2642,8 @@ msgid "Show Only _Active Contacts"
 msgstr "Показать _только активных"
 
 #: ../data/gui/roster_window.ui.h:12
-msgid "Show T_rans_ports"
+#, fuzzy
+msgid "Show T_ransports"
 msgstr "Показать Т_ранс_порты"
 
 #: ../data/gui/roster_window.ui.h:13
@@ -2772,6 +2774,10 @@ msgstr "_Отклонить"
 #: ../data/gui/synchronise_select_account_dialog.ui.h:1
 msgid "Select the account with which you want to synchronise"
 msgstr "Выберите учетную запись для объединения"
+
+#: ../data/gui/synchronise_select_account_dialog.ui.h:2
+msgid "Synchronise contacts"
+msgstr "Объединить контакты"
 
 #: ../data/gui/synchronise_select_contacts_dialog.ui.h:1
 msgid "Select the contacts you want to synchronise"
@@ -2968,6 +2974,11 @@ msgstr "Сервис отправил недопустимые данные"
 #: ../src/adhoc_commands.py:399
 msgid "Service changed the session identifier."
 msgstr "Сервис изменил идентификатор сеанса."
+
+#: ../src/adhoc_commands.py:418
+#, fuzzy, python-format
+msgid "%s - Ad-hoc Commands - Gajim"
+msgstr "Специальные команды — Gajim"
 
 #. when stanza doesn't have error description
 #: ../src/adhoc_commands.py:513
@@ -5941,10 +5952,12 @@ msgid "X Window System (without Xv)"
 msgstr "Система X Window (без Xv)"
 
 #. we talk about a file
-#: ../src/common/optparser.py:53
+#. we talk about file
+#: ../src/common/optparser.py:53 ../src/gtkgui_helpers.py:203
+#: ../src/gtkgui_helpers.py:219
 #, python-format
-msgid "error: cannot open %s for reading"
-msgstr "ошибка: не могу открыть %s для чтения"
+msgid "Error: cannot open %s for reading"
+msgstr "Ошибка: не могу открыть %s для чтения"
 
 #: ../src/common/optparser.py:305 ../src/common/optparser.py:306
 msgid "cyan"
@@ -9366,12 +9379,6 @@ msgstr "_Сообщить об ошибке"
 msgid "Details"
 msgstr "Детали"
 
-#. we talk about file
-#: ../src/gtkgui_helpers.py:203 ../src/gtkgui_helpers.py:219
-#, python-format
-msgid "Error: cannot open %s for reading"
-msgstr "Ошибка: не могу открыть %s для чтения"
-
 #: ../src/gtkgui_helpers.py:348
 msgid "Error reading file:"
 msgstr "Ошибка чтения файла:"
@@ -10779,6 +10786,9 @@ msgstr "Нет ожидающего запроса на подписку."
 #: ../src/vcard.py:399 ../src/vcard.py:453 ../src/vcard.py:575
 msgid " resource with priority "
 msgstr " ресурс с приоритетом "
+
+#~ msgid "error: cannot open %s for reading"
+#~ msgstr "ошибка: не могу открыть %s для чтения"
 
 #~ msgid "Requires pybonjour (http://o2s.csail.mit.edu/o2s-wiki/pybonjour)."
 #~ msgstr "Требует pybonjour (http://o2s.csail.mit.edu/o2s-wiki/pybonjour)."

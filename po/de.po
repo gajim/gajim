@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 0.13\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-12 20:36+0100\n"
+"POT-Creation-Date: 2012-02-14 20:43+0100\n"
 "PO-Revision-Date: 2010-08-03 22:43+0200\n"
 "Last-Translator: Nico Gulden <cilugnedon@gmx.de>\n"
 "Language-Team: German <translators@gajim.org>\n"
@@ -459,8 +459,8 @@ msgid "Synchroni_ze account status with global status"
 msgstr "Konto-Status mit globalem Status synchroni_sieren"
 
 #: ../data/gui/accounts_window.ui.h:54
-#: ../data/gui/synchronise_select_account_dialog.ui.h:2
-msgid "Synchronise contacts"
+#, fuzzy
+msgid "Synchronize contacts"
 msgstr "Kontakte synchronisieren"
 
 #: ../data/gui/accounts_window.ui.h:55
@@ -581,7 +581,8 @@ msgstr "<b>Es ist ein Fehler aufgetreten:</b>"
 msgid "<b>Choose command to execute:</b>"
 msgstr "<b>Wählen Sie den auszuführenden Befehl:</b>"
 
-#: ../data/gui/adhoc_commands_window.ui.h:3
+#. displaying the window
+#: ../data/gui/adhoc_commands_window.ui.h:3 ../src/adhoc_commands.py:102
 msgid "Ad-hoc Commands - Gajim"
 msgstr "Ad-hoc Befehle - Gajim"
 
@@ -2682,7 +2683,7 @@ msgstr "Nur _aktive Kontakte anzeigen"
 
 #: ../data/gui/roster_window.ui.h:12
 #, fuzzy
-msgid "Show T_rans_ports"
+msgid "Show T_ransports"
 msgstr "Trans_porte anzeigen"
 
 #: ../data/gui/roster_window.ui.h:13
@@ -2815,6 +2816,10 @@ msgstr "_Ablehnen"
 #: ../data/gui/synchronise_select_account_dialog.ui.h:1
 msgid "Select the account with which you want to synchronise"
 msgstr "Das Konto auswählen, das Sie synchronisieren möchten"
+
+#: ../data/gui/synchronise_select_account_dialog.ui.h:2
+msgid "Synchronise contacts"
+msgstr "Kontakte synchronisieren"
 
 #: ../data/gui/synchronise_select_contacts_dialog.ui.h:1
 msgid "Select the contacts you want to synchronise"
@@ -3013,6 +3018,11 @@ msgstr "Der Dienst sendete unzureichende Daten."
 #: ../src/adhoc_commands.py:399
 msgid "Service changed the session identifier."
 msgstr "Der Dienst änderte die Sitzungskennung."
+
+#: ../src/adhoc_commands.py:418
+#, fuzzy, python-format
+msgid "%s - Ad-hoc Commands - Gajim"
+msgstr "Ad-hoc Befehle - Gajim"
 
 #. when stanza doesn't have error description
 #: ../src/adhoc_commands.py:513
@@ -6051,10 +6061,12 @@ msgid "X Window System (without Xv)"
 msgstr "X Window System (ohne Xv)"
 
 #. we talk about a file
-#: ../src/common/optparser.py:53
+#. we talk about file
+#: ../src/common/optparser.py:53 ../src/gtkgui_helpers.py:203
+#: ../src/gtkgui_helpers.py:219
 #, python-format
-msgid "error: cannot open %s for reading"
-msgstr "Fehler: %s kann nicht zum Lesen geöffnet werden"
+msgid "Error: cannot open %s for reading"
+msgstr "Fehler: Kann %s kann nicht zum Lesen öffnen"
 
 #: ../src/common/optparser.py:305 ../src/common/optparser.py:306
 msgid "cyan"
@@ -9547,12 +9559,6 @@ msgstr "Fehler melden"
 msgid "Details"
 msgstr "Details"
 
-#. we talk about file
-#: ../src/gtkgui_helpers.py:203 ../src/gtkgui_helpers.py:219
-#, python-format
-msgid "Error: cannot open %s for reading"
-msgstr "Fehler: Kann %s kann nicht zum Lesen öffnen"
-
 #: ../src/gtkgui_helpers.py:348
 msgid "Error reading file:"
 msgstr "Fehler beim Lesen der Datei:"
@@ -11017,6 +11023,9 @@ msgstr "Es gibt keine offenen Abonnementanfragen."
 #: ../src/vcard.py:399 ../src/vcard.py:453 ../src/vcard.py:575
 msgid " resource with priority "
 msgstr " Resource mit Priorität "
+
+#~ msgid "error: cannot open %s for reading"
+#~ msgstr "Fehler: %s kann nicht zum Lesen geöffnet werden"
 
 #~ msgid "Choose Client Cert"
 #~ msgstr "Clientzertifikat auswählen …"

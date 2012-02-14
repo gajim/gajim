@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim - A Jabber Instant Messager 0.13\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-12 20:36+0100\n"
+"POT-Creation-Date: 2012-02-14 20:43+0100\n"
 "PO-Revision-Date: 2009-11-20 20:49+1100\n"
 "Last-Translator: Jeff Bailes <thepizzaking@gmail.com>\n"
 "Language-Team: English <en_gb@li.org>\n"
@@ -449,8 +449,8 @@ msgid "Synchroni_ze account status with global status"
 msgstr "Synchroni_se account status with global status"
 
 #: ../data/gui/accounts_window.ui.h:54
-#: ../data/gui/synchronise_select_account_dialog.ui.h:2
-msgid "Synchronise contacts"
+#, fuzzy
+msgid "Synchronize contacts"
 msgstr "Synchronise contacts"
 
 #: ../data/gui/accounts_window.ui.h:55
@@ -572,7 +572,8 @@ msgstr "<b>An error has occurred:</b>"
 msgid "<b>Choose command to execute:</b>"
 msgstr "<b>Choose command to execute:</b>"
 
-#: ../data/gui/adhoc_commands_window.ui.h:3
+#. displaying the window
+#: ../data/gui/adhoc_commands_window.ui.h:3 ../src/adhoc_commands.py:102
 msgid "Ad-hoc Commands - Gajim"
 msgstr "Ad-hoc Commands - Gajim"
 
@@ -2686,7 +2687,7 @@ msgstr "Show Only _Active Contacts"
 
 #: ../data/gui/roster_window.ui.h:12
 #, fuzzy
-msgid "Show T_rans_ports"
+msgid "Show T_ransports"
 msgstr "Show Trans_ports"
 
 #: ../data/gui/roster_window.ui.h:13
@@ -2819,6 +2820,10 @@ msgstr "_Deny"
 #: ../data/gui/synchronise_select_account_dialog.ui.h:1
 msgid "Select the account with which you want to synchronise"
 msgstr "Select the account with which you want to synchronise"
+
+#: ../data/gui/synchronise_select_account_dialog.ui.h:2
+msgid "Synchronise contacts"
+msgstr "Synchronise contacts"
 
 #: ../data/gui/synchronise_select_contacts_dialog.ui.h:1
 msgid "Select the contacts you want to synchronise"
@@ -3018,6 +3023,11 @@ msgstr "Service sent malformed data"
 #: ../src/adhoc_commands.py:399
 msgid "Service changed the session identifier."
 msgstr "Service changed the session identifier."
+
+#: ../src/adhoc_commands.py:418
+#, fuzzy, python-format
+msgid "%s - Ad-hoc Commands - Gajim"
+msgstr "Ad-hoc Commands - Gajim"
 
 #. when stanza doesn't have error description
 #: ../src/adhoc_commands.py:513
@@ -5951,10 +5961,12 @@ msgid "X Window System (without Xv)"
 msgstr ""
 
 #. we talk about a file
-#: ../src/common/optparser.py:53
+#. we talk about file
+#: ../src/common/optparser.py:53 ../src/gtkgui_helpers.py:203
+#: ../src/gtkgui_helpers.py:219
 #, python-format
-msgid "error: cannot open %s for reading"
-msgstr "error: cannot open %s for reading"
+msgid "Error: cannot open %s for reading"
+msgstr "Error: cannot open %s for reading"
 
 #: ../src/common/optparser.py:305 ../src/common/optparser.py:306
 msgid "cyan"
@@ -9375,12 +9387,6 @@ msgstr "_Report Bug"
 msgid "Details"
 msgstr "Details"
 
-#. we talk about file
-#: ../src/gtkgui_helpers.py:203 ../src/gtkgui_helpers.py:219
-#, python-format
-msgid "Error: cannot open %s for reading"
-msgstr "Error: cannot open %s for reading"
-
 #: ../src/gtkgui_helpers.py:348
 msgid "Error reading file:"
 msgstr "Error reading file:"
@@ -10803,6 +10809,9 @@ msgstr "There is no pending subscription request."
 #: ../src/vcard.py:399 ../src/vcard.py:453 ../src/vcard.py:575
 msgid " resource with priority "
 msgstr " resource with priority "
+
+#~ msgid "error: cannot open %s for reading"
+#~ msgstr "error: cannot open %s for reading"
 
 #, fuzzy
 #~ msgid "Choose Client Cert"
