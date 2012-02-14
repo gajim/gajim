@@ -94,7 +94,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
                     msg_to_log, tim=obj.timestamp, subject=obj.subject)
             except exceptions.PysqliteOperationalError, e:
                 gajim.nec.push_incoming_event(InformationEvent(None,
-                    conn=self.conn, level='error', pri_txt=_('Disk WriteError'),
+                    conn=self.conn, level='error', pri_txt=_('Disk Write Error'),
                     sec_txt=str(e)))
             except exceptions.DatabaseMalformed:
                 pritext = _('Database Error')
