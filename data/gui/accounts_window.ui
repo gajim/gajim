@@ -308,7 +308,7 @@
                                     <property name="homogeneous">True</property>
                                     <child>
                                       <object class="GtkButton" id="synchronise_contacts_button1">
-                                        <property name="label" translatable="yes">Synchronise contacts</property>
+                                        <property name="label" translatable="yes">Synchronize contacts</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
