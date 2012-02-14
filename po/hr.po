@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 0.12\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-14 20:43+0100\n"
+"POT-Creation-Date: 2012-02-14 20:47+0100\n"
 "PO-Revision-Date: 2009-10-31 20:49+0100\n"
 "Last-Translator: Adrian C. <anrxc@sysphere.org>\n"
 "Language-Team: Croatian\n"
@@ -4881,7 +4881,7 @@ msgstr "Zahtjev za ukidanjem pretplate od %s"
 #: ../src/common/connection_handlers.py:334
 #: ../src/common/connection_handlers.py:941
 #: ../src/common/connection_handlers.py:1053 ../src/common/connection.py:464
-#: ../src/common/logger.py:1129 ../src/gajim.py:392
+#: ../src/common/logger.py:1129 ../src/gajim.py:392 ../src/session.py:97
 msgid "Disk Write Error"
 msgstr "Disk Write Error"
 
@@ -10599,10 +10599,6 @@ msgstr "Greška u primljenom podatkovnom obrascu"
 msgid "No result"
 msgstr "Nema rezultata"
 
-#: ../src/session.py:97
-msgid "Disk WriteError"
-msgstr "Disk WriteError"
-
 #: ../src/session.py:414 ../src/session.py:473
 msgid "Confirm these session options"
 msgstr "Potvrdi ove sesijske postavke"
@@ -10859,6 +10855,9 @@ msgstr "Niti jedan zahtjev za pretplatu nije u toku."
 #: ../src/vcard.py:399 ../src/vcard.py:453 ../src/vcard.py:575
 msgid " resource with priority "
 msgstr " resurs s prioritetom "
+
+#~ msgid "Disk WriteError"
+#~ msgstr "Disk WriteError"
 
 #~ msgid "error: cannot open %s for reading"
 #~ msgstr "greška: nemogu otvoriti %s za čitanje"

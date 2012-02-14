@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-14 20:43+0100\n"
+"POT-Creation-Date: 2012-02-14 20:47+0100\n"
 "PO-Revision-Date: 2010-02-28 20:43+0100\n"
 "Last-Translator: Pavol Klačanský <pavol@klacansky.com>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -4789,7 +4789,7 @@ msgstr "požiadavka na odhlásenie od %s"
 #: ../src/common/connection_handlers.py:334
 #: ../src/common/connection_handlers.py:941
 #: ../src/common/connection_handlers.py:1053 ../src/common/connection.py:464
-#: ../src/common/logger.py:1129 ../src/gajim.py:392
+#: ../src/common/logger.py:1129 ../src/gajim.py:392 ../src/session.py:97
 msgid "Disk Write Error"
 msgstr "Chyba pri zápise na disk"
 
@@ -10459,10 +10459,6 @@ msgstr ""
 msgid "No result"
 msgstr "Žiadny výsledok"
 
-#: ../src/session.py:97
-msgid "Disk WriteError"
-msgstr "Chyba pri zápise na disk"
-
 #: ../src/session.py:414 ../src/session.py:473
 msgid "Confirm these session options"
 msgstr "Potvrdiť tieto voľby relácie"
@@ -10714,6 +10710,9 @@ msgstr "Nie sú tu žiadne čakajúce požiadavky o zapísanie."
 #: ../src/vcard.py:399 ../src/vcard.py:453 ../src/vcard.py:575
 msgid " resource with priority "
 msgstr " zdroj s prioritou "
+
+#~ msgid "Disk WriteError"
+#~ msgstr "Chyba pri zápise na disk"
 
 #~ msgid "error: cannot open %s for reading"
 #~ msgstr "chyba: nie je možné otvoriť %s na čítanie"

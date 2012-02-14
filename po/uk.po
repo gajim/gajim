@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim - A Jabber Instant Messager 0.14.0.1-2fa5ddcd1adf\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-14 20:43+0100\n"
+"POT-Creation-Date: 2012-02-14 20:47+0100\n"
 "PO-Revision-Date: 2011-10-19 12:08+0300\n"
 "Last-Translator: Sergiy Yegorov <prapor@unixzone.org.ua>\n"
 "Language-Team: Ukrainian <kde-i18n-doc@kde.org>\n"
@@ -4882,7 +4882,7 @@ msgstr "запит на скасування підписки від %s"
 #: ../src/common/connection_handlers.py:334
 #: ../src/common/connection_handlers.py:941
 #: ../src/common/connection_handlers.py:1053 ../src/common/connection.py:464
-#: ../src/common/logger.py:1129 ../src/gajim.py:392
+#: ../src/common/logger.py:1129 ../src/gajim.py:392 ../src/session.py:97
 msgid "Disk Write Error"
 msgstr "Помилка під час спроби запису на диск"
 
@@ -10647,10 +10647,6 @@ msgstr "Помилка у отриманих даних"
 msgid "No result"
 msgstr "Результату немає"
 
-#: ../src/session.py:97
-msgid "Disk WriteError"
-msgstr "Помилка під час запису на диск"
-
 #: ../src/session.py:414 ../src/session.py:473
 msgid "Confirm these session options"
 msgstr "Підтвердити параметри цих сеансів"
@@ -10906,6 +10902,9 @@ msgstr "У черзі немає запитів на підписку."
 #: ../src/vcard.py:399 ../src/vcard.py:453 ../src/vcard.py:575
 msgid " resource with priority "
 msgstr " пріоритетний ресурс"
+
+#~ msgid "Disk WriteError"
+#~ msgstr "Помилка під час запису на диск"
 
 #~ msgid "error: cannot open %s for reading"
 #~ msgstr "помилка: не вдалося відкрити %s для читання"

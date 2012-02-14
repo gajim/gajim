@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-14 20:43+0100\n"
+"POT-Creation-Date: 2012-02-14 20:47+0100\n"
 "PO-Revision-Date: 2009-08-19 23:49+0200\n"
 "Last-Translator: Membris Khan <frank@giingo.org>\n"
 "Language-Team: none <>\n"
@@ -4900,7 +4900,7 @@ msgstr "petición de eliminación de suscripción de %s"
 #: ../src/common/connection_handlers.py:334
 #: ../src/common/connection_handlers.py:941
 #: ../src/common/connection_handlers.py:1053 ../src/common/connection.py:464
-#: ../src/common/logger.py:1129 ../src/gajim.py:392
+#: ../src/common/logger.py:1129 ../src/gajim.py:392 ../src/session.py:97
 msgid "Disk Write Error"
 msgstr "Error de escritura en disco"
 
@@ -10637,10 +10637,6 @@ msgstr "Error en la información recibida del formulario"
 msgid "No result"
 msgstr "Sin resultados"
 
-#: ../src/session.py:97
-msgid "Disk WriteError"
-msgstr "Error de escritura en disco"
-
 #: ../src/session.py:414 ../src/session.py:473
 msgid "Confirm these session options"
 msgstr "Confirma estas opciones de la sesión"
@@ -10900,6 +10896,9 @@ msgstr "No hay ninguna suscripción pendiente."
 #: ../src/vcard.py:399 ../src/vcard.py:453 ../src/vcard.py:575
 msgid " resource with priority "
 msgstr " recurso con prioridad "
+
+#~ msgid "Disk WriteError"
+#~ msgstr "Error de escritura en disco"
 
 #~ msgid "error: cannot open %s for reading"
 #~ msgstr "error: no se puede abrir %s para lectura"

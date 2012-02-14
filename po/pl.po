@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-14 20:43+0100\n"
+"POT-Creation-Date: 2012-02-14 20:47+0100\n"
 "PO-Revision-Date: 2010-01-01 20:42+0100\n"
 "Last-Translator: Jacek Sowiński <mruwek@mruwek.pl>\n"
 "Language-Team: Polish <dominik@kozaczko.info, translation-team-pl@lists."
@@ -4874,7 +4874,7 @@ msgstr "Prośba o cofnięcie autoryzacji od %s"
 #: ../src/common/connection_handlers.py:334
 #: ../src/common/connection_handlers.py:941
 #: ../src/common/connection_handlers.py:1053 ../src/common/connection.py:464
-#: ../src/common/logger.py:1129 ../src/gajim.py:392
+#: ../src/common/logger.py:1129 ../src/gajim.py:392 ../src/session.py:97
 msgid "Disk Write Error"
 msgstr "Błąd zapisu na dysk"
 
@@ -10597,10 +10597,6 @@ msgstr "Błąd w odebranych danych"
 msgid "No result"
 msgstr "Brak wyników"
 
-#: ../src/session.py:97
-msgid "Disk WriteError"
-msgstr "Błąd zapisu na dysk"
-
 #: ../src/session.py:414 ../src/session.py:473
 msgid "Confirm these session options"
 msgstr "Potwierdź opcje sesji"
@@ -10857,6 +10853,9 @@ msgstr "Nie ma oczekujących żądań autoryzacji."
 #: ../src/vcard.py:399 ../src/vcard.py:453 ../src/vcard.py:575
 msgid " resource with priority "
 msgstr " zasób o wysokim priorytecie "
+
+#~ msgid "Disk WriteError"
+#~ msgstr "Błąd zapisu na dysk"
 
 #~ msgid "error: cannot open %s for reading"
 #~ msgstr "błąd: nie można otworzyć %s do odczytu"

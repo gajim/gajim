@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-14 20:43+0100\n"
+"POT-Creation-Date: 2012-02-14 20:47+0100\n"
 "PO-Revision-Date: 2011-11-15 23:22+0300\n"
 "Last-Translator: Fomin Denis <fominde@mail.ru>\n"
 "Language-Team: Linux Support LLC\n"
@@ -4837,7 +4837,7 @@ msgstr "%s хочет отменить подписку"
 #: ../src/common/connection_handlers.py:334
 #: ../src/common/connection_handlers.py:941
 #: ../src/common/connection_handlers.py:1053 ../src/common/connection.py:464
-#: ../src/common/logger.py:1129 ../src/gajim.py:392
+#: ../src/common/logger.py:1129 ../src/gajim.py:392 ../src/session.py:97
 msgid "Disk Write Error"
 msgstr "Ошибка записи на диск"
 
@@ -10528,10 +10528,6 @@ msgstr "Ошибка в принятой форме данных"
 msgid "No result"
 msgstr "Нет результата"
 
-#: ../src/session.py:97
-msgid "Disk WriteError"
-msgstr "Ошибка записи на диск"
-
 #: ../src/session.py:414 ../src/session.py:473
 msgid "Confirm these session options"
 msgstr "Подтвердить данные настройки сеанса"
@@ -10786,6 +10782,9 @@ msgstr "Нет ожидающего запроса на подписку."
 #: ../src/vcard.py:399 ../src/vcard.py:453 ../src/vcard.py:575
 msgid " resource with priority "
 msgstr " ресурс с приоритетом "
+
+#~ msgid "Disk WriteError"
+#~ msgstr "Ошибка записи на диск"
 
 #~ msgid "error: cannot open %s for reading"
 #~ msgstr "ошибка: не могу открыть %s для чтения"

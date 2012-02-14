@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-14 20:43+0100\n"
+"POT-Creation-Date: 2012-02-14 20:47+0100\n"
 "PO-Revision-Date: 2010-10-31 17:37+0800\n"
 "Last-Translator: Guanhao Yin <yinguanhao@gmail.com>\n"
 "Language-Team: \n"
@@ -4657,7 +4657,7 @@ msgstr "来自 %s 的解除认证请求"
 #: ../src/common/connection_handlers.py:334
 #: ../src/common/connection_handlers.py:941
 #: ../src/common/connection_handlers.py:1053 ../src/common/connection.py:464
-#: ../src/common/logger.py:1129 ../src/gajim.py:392
+#: ../src/common/logger.py:1129 ../src/gajim.py:392 ../src/session.py:97
 msgid "Disk Write Error"
 msgstr "磁盘写入错误"
 
@@ -10239,10 +10239,6 @@ msgstr "在收到的数据表中有错误"
 msgid "No result"
 msgstr "无结果"
 
-#: ../src/session.py:97
-msgid "Disk WriteError"
-msgstr "磁盘写入错误"
-
 #: ../src/session.py:414 ../src/session.py:473
 msgid "Confirm these session options"
 msgstr "确定这些会话属性"
@@ -10493,6 +10489,9 @@ msgstr "没有未处理的认证请求"
 #: ../src/vcard.py:399 ../src/vcard.py:453 ../src/vcard.py:575
 msgid " resource with priority "
 msgstr "带有优先级的资源"
+
+#~ msgid "Disk WriteError"
+#~ msgstr "磁盘写入错误"
 
 #~ msgid "error: cannot open %s for reading"
 #~ msgstr "错误: 无法读取文件 %s"

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 0.15a1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-14 20:43+0100\n"
+"POT-Creation-Date: 2012-02-14 20:47+0100\n"
 "PO-Revision-Date: 2011-09-07 23:11+0800\n"
 "Last-Translator: Wei-Lun Chao <chaoweilun@gmail.com>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -4644,7 +4644,7 @@ msgstr "來自 %s 的解除認證請求"
 #: ../src/common/connection_handlers.py:334
 #: ../src/common/connection_handlers.py:941
 #: ../src/common/connection_handlers.py:1053 ../src/common/connection.py:464
-#: ../src/common/logger.py:1129 ../src/gajim.py:392
+#: ../src/common/logger.py:1129 ../src/gajim.py:392 ../src/session.py:97
 msgid "Disk Write Error"
 msgstr "磁碟寫入錯誤"
 
@@ -10230,10 +10230,6 @@ msgstr "在收到的資料表中有錯誤"
 msgid "No result"
 msgstr "無結果"
 
-#: ../src/session.py:97
-msgid "Disk WriteError"
-msgstr "磁碟寫入錯誤"
-
 #: ../src/session.py:414 ../src/session.py:473
 msgid "Confirm these session options"
 msgstr "確定這些作業階段屬性"
@@ -10484,6 +10480,9 @@ msgstr "沒有未處理的認證請求"
 #: ../src/vcard.py:399 ../src/vcard.py:453 ../src/vcard.py:575
 msgid " resource with priority "
 msgstr "帶有優先等級的資源"
+
+#~ msgid "Disk WriteError"
+#~ msgstr "磁碟寫入錯誤"
 
 #~ msgid "error: cannot open %s for reading"
 #~ msgstr "錯誤: 無法讀取檔案 %s"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim 0.15 ja\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-14 20:43+0100\n"
+"POT-Creation-Date: 2012-02-14 20:47+0100\n"
 "PO-Revision-Date: 2012-01-22 21:59+0900\n"
 "Last-Translator: Mako N <mako@pasero.net>\n"
 "Language-Team: Japanese\n"
@@ -4806,7 +4806,7 @@ msgstr "%s から継読中止の要求"
 #: ../src/common/connection_handlers.py:334
 #: ../src/common/connection_handlers.py:941
 #: ../src/common/connection_handlers.py:1053 ../src/common/connection.py:464
-#: ../src/common/logger.py:1129 ../src/gajim.py:392
+#: ../src/common/logger.py:1129 ../src/gajim.py:392 ../src/session.py:97
 msgid "Disk Write Error"
 msgstr "ディスクの書き込みエラー"
 
@@ -10513,10 +10513,6 @@ msgstr "ファイルを受ける際のエラー"
 msgid "No result"
 msgstr "見つかりません"
 
-#: ../src/session.py:97
-msgid "Disk WriteError"
-msgstr "ディスクの書き込みエラー"
-
 #: ../src/session.py:414 ../src/session.py:473
 msgid "Confirm these session options"
 msgstr "セッションのオプションを確認する"
@@ -10769,6 +10765,9 @@ msgstr "保留中の在席通知の申し込みはありません。"
 #: ../src/vcard.py:399 ../src/vcard.py:453 ../src/vcard.py:575
 msgid " resource with priority "
 msgstr " リソース。優先順位は "
+
+#~ msgid "Disk WriteError"
+#~ msgstr "ディスクの書き込みエラー"
 
 #~ msgid "error: cannot open %s for reading"
 #~ msgstr "エラー: 読み込みモードで %s を開けません"

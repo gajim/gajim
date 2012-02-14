@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim 2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-14 20:43+0100\n"
+"POT-Creation-Date: 2012-02-14 20:47+0100\n"
 "PO-Revision-Date: 2009-08-19 23:53+0200\n"
 "Last-Translator: neoex <neoex.dc@gmail.com>\n"
 "Language-Team: Italian <>\n"
@@ -4942,7 +4942,7 @@ msgstr "richiesta di cancellazione abbonamento da %s"
 #: ../src/common/connection_handlers.py:334
 #: ../src/common/connection_handlers.py:941
 #: ../src/common/connection_handlers.py:1053 ../src/common/connection.py:464
-#: ../src/common/logger.py:1129 ../src/gajim.py:392
+#: ../src/common/logger.py:1129 ../src/gajim.py:392 ../src/session.py:97
 msgid "Disk Write Error"
 msgstr "Errore di scrittura su disco"
 
@@ -10764,11 +10764,6 @@ msgstr "Errore nella ricezione dei dati"
 msgid "No result"
 msgstr "Nessun risultato"
 
-#: ../src/session.py:97
-#, fuzzy
-msgid "Disk WriteError"
-msgstr "Errore di scrittura su disco"
-
 #: ../src/session.py:414 ../src/session.py:473
 msgid "Confirm these session options"
 msgstr "Conferma queste opzioni di sessione"
@@ -11030,6 +11025,10 @@ msgstr ""
 #: ../src/vcard.py:399 ../src/vcard.py:453 ../src/vcard.py:575
 msgid " resource with priority "
 msgstr " risorsa con priorità "
+
+#, fuzzy
+#~ msgid "Disk WriteError"
+#~ msgstr "Errore di scrittura su disco"
 
 #~ msgid "error: cannot open %s for reading"
 #~ msgstr "errore: impossibile aprire %s per lettura"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim 0.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-14 20:43+0100\n"
+"POT-Creation-Date: 2012-02-14 20:47+0100\n"
 "PO-Revision-Date: 2009-11-18 15:50+0100\n"
 "Last-Translator: Stian B. Barmen <stian@barmen.nu>\n"
 "Language-Team: <>\n"
@@ -4870,7 +4870,7 @@ msgstr "frakoblings ønske fra %s"
 #: ../src/common/connection_handlers.py:334
 #: ../src/common/connection_handlers.py:941
 #: ../src/common/connection_handlers.py:1053 ../src/common/connection.py:464
-#: ../src/common/logger.py:1129 ../src/gajim.py:392
+#: ../src/common/logger.py:1129 ../src/gajim.py:392 ../src/session.py:97
 msgid "Disk Write Error"
 msgstr "Disk Skrive Feil"
 
@@ -10588,10 +10588,6 @@ msgstr "Feil i motatt dataskjema"
 msgid "No result"
 msgstr "Ingen resultater"
 
-#: ../src/session.py:97
-msgid "Disk WriteError"
-msgstr "Disk SkriveFeil"
-
 #: ../src/session.py:414 ../src/session.py:473
 msgid "Confirm these session options"
 msgstr "Bekreft disse sesjons valgene"
@@ -10849,6 +10845,9 @@ msgstr "Det er ingen ventende abonnements forespørsler."
 #: ../src/vcard.py:399 ../src/vcard.py:453 ../src/vcard.py:575
 msgid " resource with priority "
 msgstr " ressurs med prioritet"
+
+#~ msgid "Disk WriteError"
+#~ msgstr "Disk SkriveFeil"
 
 #~ msgid "error: cannot open %s for reading"
 #~ msgstr "feil: kan ikke åpne %s for lesing"

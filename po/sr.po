@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-14 20:43+0100\n"
+"POT-Creation-Date: 2012-02-14 20:47+0100\n"
 "PO-Revision-Date: 2009-10-29 23:50+0100\n"
 "Last-Translator: Branko Kokanovic <branko.kokanovic@gmail.com>\n"
 "Language-Team:  <sr@li.org>\n"
@@ -4872,7 +4872,7 @@ msgstr "захтев за укидање претплате од контакт�
 #: ../src/common/connection_handlers.py:334
 #: ../src/common/connection_handlers.py:941
 #: ../src/common/connection_handlers.py:1053 ../src/common/connection.py:464
-#: ../src/common/logger.py:1129 ../src/gajim.py:392
+#: ../src/common/logger.py:1129 ../src/gajim.py:392 ../src/session.py:97
 msgid "Disk Write Error"
 msgstr "Грешка при упису на диск"
 
@@ -10582,10 +10582,6 @@ msgstr "Грешка у примању форме за податке"
 msgid "No result"
 msgstr "Нема резултата"
 
-#: ../src/session.py:97
-msgid "Disk WriteError"
-msgstr "Грешка при упису на диск"
-
 #: ../src/session.py:414 ../src/session.py:473
 msgid "Confirm these session options"
 msgstr "Потврди ове опције сесије"
@@ -10843,6 +10839,9 @@ msgstr "Нема захтева за претплатом на чекању."
 #: ../src/vcard.py:399 ../src/vcard.py:453 ../src/vcard.py:575
 msgid " resource with priority "
 msgstr " ресурс са приоритетом "
+
+#~ msgid "Disk WriteError"
+#~ msgstr "Грешка при упису на диск"
 
 #~ msgid "error: cannot open %s for reading"
 #~ msgstr "грешка: не могу отворити %s за читање"

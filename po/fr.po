@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 0.12 svn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-14 20:43+0100\n"
+"POT-Creation-Date: 2012-02-14 20:47+0100\n"
 "PO-Revision-Date: 2011-05-30 08:28+0100\n"
 "Last-Translator: Florent Le Coz <louizatakk@fedoraproject.org>\n"
 "Language-Team: <>\n"
@@ -4890,7 +4890,7 @@ msgstr "Requête de désinscription de la part de %s"
 #: ../src/common/connection_handlers.py:334
 #: ../src/common/connection_handlers.py:941
 #: ../src/common/connection_handlers.py:1053 ../src/common/connection.py:464
-#: ../src/common/logger.py:1129 ../src/gajim.py:392
+#: ../src/common/logger.py:1129 ../src/gajim.py:392 ../src/session.py:97
 msgid "Disk Write Error"
 msgstr "Erreur d'Écriture du disque"
 
@@ -10640,10 +10640,6 @@ msgstr "Erreur dans la forme des données reçues"
 msgid "No result"
 msgstr "Aucun résultat."
 
-#: ../src/session.py:97
-msgid "Disk WriteError"
-msgstr "Erreur d'écriture du disque"
-
 #: ../src/session.py:414 ../src/session.py:473
 msgid "Confirm these session options"
 msgstr "Confirmer ces options de session"
@@ -10899,6 +10895,9 @@ msgstr "Il n'y a aucune requête d'inscription en attente."
 #: ../src/vcard.py:399 ../src/vcard.py:453 ../src/vcard.py:575
 msgid " resource with priority "
 msgstr " ressource avec la priorité "
+
+#~ msgid "Disk WriteError"
+#~ msgstr "Erreur d'écriture du disque"
 
 #~ msgid "error: cannot open %s for reading"
 #~ msgstr "erreur : impossible d'ouvrir %s en lecture"

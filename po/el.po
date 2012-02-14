@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-14 20:43+0100\n"
+"POT-Creation-Date: 2012-02-14 20:47+0100\n"
 "PO-Revision-Date: 2009-08-19 23:46+0200\n"
 "Last-Translator: Stavros Giannouris <stavrosg@hellug.gr>\n"
 "Language-Team:  <>\n"
@@ -4982,7 +4982,7 @@ msgstr "αίτηση αφαίρεσης εξουσιοδότησης από %s"
 #: ../src/common/connection_handlers.py:334
 #: ../src/common/connection_handlers.py:941
 #: ../src/common/connection_handlers.py:1053 ../src/common/connection.py:464
-#: ../src/common/logger.py:1129 ../src/gajim.py:392
+#: ../src/common/logger.py:1129 ../src/gajim.py:392 ../src/session.py:97
 msgid "Disk Write Error"
 msgstr ""
 
@@ -10861,10 +10861,6 @@ msgstr ""
 #. No result
 #: ../src/search_window.py:177 ../src/search_window.py:212
 msgid "No result"
-msgstr ""
-
-#: ../src/session.py:97
-msgid "Disk WriteError"
 msgstr ""
 
 #: ../src/session.py:414 ../src/session.py:473
