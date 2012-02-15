@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-14 20:47+0100\n"
-"PO-Revision-Date: 2011-11-15 23:22+0300\n"
+"POT-Creation-Date: 2012-02-15 09:32+0100\n"
+"PO-Revision-Date: 2012-02-14 18:25+0300\n"
 "Last-Translator: Fomin Denis <fominde@mail.ru>\n"
 "Language-Team: Linux Support LLC\n"
 "Language: ru\n"
@@ -3434,43 +3434,43 @@ msgstr ""
 
 #: ../src/command_system/implementation/execute.py:53
 msgid "Execute expression inside a shell, show output"
-msgstr ""
+msgstr "Выполнить выражение в командной оболочке,показать вывод"
 
 #: ../src/command_system/implementation/execute.py:109
 msgid "Execute expression inside a shell, send output"
-msgstr ""
+msgstr "Выполнить выражение в командной оболочке,показать вывод"
 
 #: ../src/command_system/implementation/standard.py:50
-#, fuzzy
 msgid "Hide the chat buttons"
-msgstr "Использование: /%s, скрывает кнопки беседы."
+msgstr "Спрятать кнопки чата"
 
 #: ../src/command_system/implementation/standard.py:56
 msgid ""
 "Show help on a given command or a list of available commands if -a is given"
 msgstr ""
+"Показать подсказку по указанной команде или список доступных команд если "
+"указан ключ -a"
 
 #: ../src/command_system/implementation/standard.py:83
-#, fuzzy
 msgid "Send a message to the contact"
-msgstr "Использование: /%s, посылает сообщение контакту"
+msgstr "Отправить сообщение собеседнику"
 
 #: ../src/command_system/implementation/standard.py:88
 msgid "Send action (in the third person) to the current chat"
-msgstr ""
+msgstr "Отправить сообщение от третьего лица"
 
 #: ../src/command_system/implementation/standard.py:93
 msgid "Show logged messages which mention given text"
-msgstr ""
+msgstr "Показать сообщения из логов содержащие указанный текст"
 
 #: ../src/command_system/implementation/standard.py:99
-#, fuzzy, python-format
+#, python-format
 msgid "%s: Nothing found"
-msgstr "%s не найден"
+msgstr "%s: Ничего не найдено"
 
 #: ../src/command_system/implementation/standard.py:105
 msgid "Limit must be an integer"
-msgstr ""
+msgstr "Количество результатов поиска должно быть числом"
 
 #: ../src/command_system/implementation/standard.py:140
 msgid ""
@@ -3481,10 +3481,15 @@ msgid ""
 "    chat, xa, dnd.\n"
 "    "
 msgstr ""
+"\n"
+"    Установить статус\n"
+"\n"
+"    Возможные значения статуса: online, away,\n"
+"    chat, xa, dnd."
 
 #: ../src/command_system/implementation/standard.py:153
 msgid "Set the current status to away"
-msgstr ""
+msgstr "Установить статус в ушел"
 
 #: ../src/command_system/implementation/standard.py:156
 #: ../src/common/commands.py:109 ../src/common/helpers.py:249
@@ -3494,7 +3499,7 @@ msgstr "Ушел"
 
 #: ../src/command_system/implementation/standard.py:161
 msgid "Set the current status to online"
-msgstr ""
+msgstr "Установить статус в доступен"
 
 #: ../src/command_system/implementation/standard.py:164
 msgid "Available"
@@ -3502,22 +3507,18 @@ msgstr "Доступен"
 
 #: ../src/command_system/implementation/standard.py:178
 #: ../src/command_system/implementation/standard.py:255
-#, fuzzy
 msgid "Clear the text window"
-msgstr "Использование: /%s, очищает текстовое окно."
+msgstr "Очистить текстовое окно"
 
 #: ../src/command_system/implementation/standard.py:183
-#, fuzzy
 msgid "Toggle the GPG encryption"
-msgstr "Включить Open_PGP шифрование"
+msgstr "Переключить Open_PGP шифрование"
 
 #: ../src/command_system/implementation/standard.py:188
-#, fuzzy
 msgid "Send a ping to the contact"
-msgstr "Использование: /%s, посылает пинг контакту"
+msgstr " Послать пинг контакту"
 
 #: ../src/command_system/implementation/standard.py:191
-#, fuzzy
 msgid "Command is not supported for zeroconf accounts"
 msgstr "Команда не поддерживается учетной записью zeroconf."
 
@@ -3536,19 +3537,16 @@ msgid "%s is not a valid tone"
 msgstr "%s не является допустимым loglevel"
 
 #: ../src/command_system/implementation/standard.py:211
-#, fuzzy
 msgid "Audio sessions are not available"
-msgstr "Подключение недоступно"
+msgstr "Аудио сеанс недоступен"
 
 #: ../src/command_system/implementation/standard.py:221
-#, fuzzy
 msgid "Video sessions are not available"
-msgstr "Соединение недоступно"
+msgstr "Видео сеанс недоступен"
 
 #: ../src/command_system/implementation/standard.py:262
-#, fuzzy
 msgid "Change your nickname in a group chat"
-msgstr "Изменить ник (Ctrl+N)"
+msgstr "Изменить ник в конференции"
 
 #. invalid char
 #: ../src/command_system/implementation/standard.py:267 ../src/config.py:3392
@@ -3557,10 +3555,8 @@ msgid "Invalid nickname"
 msgstr "Неверное имя пользователя"
 
 #: ../src/command_system/implementation/standard.py:272
-#, fuzzy
 msgid "Open a private chat window with a specified occupant"
-msgstr ""
-"Использование: /%s <ник>, открывает окно привата с указанным посетителем."
+msgstr "Открыть окно привата с указанным посетителем"
 
 #: ../src/command_system/implementation/standard.py:278
 #: ../src/command_system/implementation/standard.py:287
@@ -3569,25 +3565,22 @@ msgid "Nickname not found"
 msgstr "Ник не обнаружен"
 
 #: ../src/command_system/implementation/standard.py:281
-#, fuzzy
 msgid ""
 "Open a private chat window with a specified occupant and send him a message"
-msgstr ""
-"Использование: /%s <ник>, открывает окно привата с указанным посетителем."
+msgstr "Открыть окно привата с указанным посетителем и отправить ему сообщение"
 
 #: ../src/command_system/implementation/standard.py:290
-#, fuzzy
 msgid "Display or change a group chat topic"
-msgstr "Спрашивать перед закрытием окна/вкладки комнаты."
+msgstr "Показать или изменить тему конференции"
 
 #: ../src/command_system/implementation/standard.py:298
 msgid "Invite a user to a room for a reason"
-msgstr ""
+msgstr "Пригласить пользователя в конференцию с указанием причины"
 
 #: ../src/command_system/implementation/standard.py:301
-#, fuzzy, python-format
+#, python-format
 msgid "Invited %s to %s"
-msgstr "Отправить %s контакту %s"
+msgstr " %s приглашен в %s"
 
 #: ../src/command_system/implementation/standard.py:304
 msgid "Join a group chat given by a jid, optionally using given nickname"
@@ -3608,14 +3601,12 @@ msgid ""
 msgstr ""
 
 #: ../src/command_system/implementation/standard.py:338
-#, fuzzy
 msgid "Kick user by a nick from a groupchat"
-msgstr "Вы приглашены в конференцию"
+msgstr "Выгнать из конференции пользователя с указанным ником"
 
 #: ../src/command_system/implementation/standard.py:345
-#, fuzzy
 msgid "Display names of all group chat occupants"
-msgstr "Использование: /%s, показывает список присутствующих в комнате."
+msgstr "Показывает список присутствующих в комнате"
 
 #: ../src/command_system/implementation/standard.py:367
 msgid "Forbid an occupant to send you public or private messages"
@@ -5816,14 +5807,12 @@ msgid "Image is too big"
 msgstr "Изображение слишком большое"
 
 #: ../src/common/helpers.py:1500
-#, fuzzy
 msgid "PyCURL is not installed"
-msgstr "CRL ещё не действителен"
+msgstr "PyCURL не установлен"
 
 #: ../src/common/helpers.py:1536
-#, fuzzy
 msgid "Error loading image"
-msgstr "Не могу загрузить изображение"
+msgstr "Ошибка загрузки изображения"
 
 #: ../src/common/jingle_rtp.py:109
 #, python-format
@@ -8189,9 +8178,8 @@ msgstr ""
 "сервера для того, чтобы удостовериться в защищенности соединения."
 
 #: ../src/features_window.py:52 ../src/features_window.py:53
-#, fuzzy
 msgid "Requires python-pyopenssl > 0.12 and pyasn1."
-msgstr "Требует python-pyopenssl."
+msgstr "Требует python-pyopenssl > 0.12 и pyasn1."
 
 #: ../src/features_window.py:54
 msgid "Bonjour / Zeroconf"
@@ -8212,6 +8200,8 @@ msgid ""
 "Requires pybonjour and bonjour SDK running (http://developer.apple.com/"
 "opensource/)."
 msgstr ""
+"Требует pybonjour и запущенный bonjour SDK(http://developer.apple.com/"
+"opensource/)."
 
 #: ../src/features_window.py:58
 msgid "Command line"
@@ -8315,9 +8305,8 @@ msgid "Requires libgtkspell."
 msgstr "Требует библиотеку libgtkspell."
 
 #: ../src/features_window.py:85
-#, fuzzy
 msgid "Requires libgtkspell and libenchant."
-msgstr "Требует библиотеку libgtkspell."
+msgstr "Требует библиотеку libgtkspell и libenchant."
 
 #: ../src/features_window.py:86
 msgid "Notification"
@@ -8414,11 +8403,11 @@ msgstr "Требует python-farsight и gstreamer-plugins-bad."
 
 #: ../src/features_window.py:110
 msgid "UPnP-IGD"
-msgstr ""
+msgstr "UPnP-IGD"
 
 #: ../src/features_window.py:111
 msgid "Ability to request your router to forward port for file transfer."
-msgstr ""
+msgstr "Возможность запроса порта для передачи файлов у роутера."
 
 #: ../src/features_window.py:112
 msgid "Requires python-gupnp-igd."
@@ -8426,11 +8415,11 @@ msgstr "Требует python-gupnp-igd."
 
 #: ../src/features_window.py:114
 msgid "UPower"
-msgstr ""
+msgstr "UPower"
 
 #: ../src/features_window.py:115
 msgid "Ability to disconnect properly just before suspending the machine."
-msgstr ""
+msgstr "Возможность выполнить отключение перед тем как компьютер уснёт."
 
 #: ../src/features_window.py:116
 msgid "Requires upower and python-dbus."
@@ -9566,9 +9555,9 @@ msgid "Certificate Passphrase Required"
 msgstr "Сертификат просрочен"
 
 #: ../src/gui_interface.py:654
-#, fuzzy, python-format
+#, python-format
 msgid "Enter the passphrase for the certificate for account %s"
-msgstr "Введите пароль для ключа %(keyid)s (аккаунт %(account)s)."
+msgstr "Введите пароль для сертификата аккаунта %s"
 
 #: ../src/gui_interface.py:676
 msgid "GPG key not trusted"
@@ -10533,7 +10522,7 @@ msgid "Confirm these session options"
 msgstr "Подтвердить данные настройки сеанса"
 
 #: ../src/session.py:416
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "The remote client wants to negotiate a session with these features:\n"
 "\n"
@@ -10541,8 +10530,7 @@ msgid ""
 "\n"
 "Are these options acceptable?"
 msgstr ""
-"Удаленный клиент хочет '\n"
-"                    установить сеанс со следующими параметрами:\n"
+"Удаленный клиент хочет установить сеанс со следующими параметрами:\n"
 "\n"
 "%s\n"
 "\n"
@@ -10783,11 +10771,11 @@ msgstr "Нет ожидающего запроса на подписку."
 msgid " resource with priority "
 msgstr " ресурс с приоритетом "
 
-#~ msgid "Disk WriteError"
-#~ msgstr "Ошибка записи на диск"
-
 #~ msgid "error: cannot open %s for reading"
 #~ msgstr "ошибка: не могу открыть %s для чтения"
+
+#~ msgid "Disk WriteError"
+#~ msgstr "Ошибка записи на диск"
 
 #~ msgid "Requires pybonjour (http://o2s.csail.mit.edu/o2s-wiki/pybonjour)."
 #~ msgstr "Требует pybonjour (http://o2s.csail.mit.edu/o2s-wiki/pybonjour)."
