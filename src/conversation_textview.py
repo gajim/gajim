@@ -925,7 +925,8 @@ class ConversationTextview(gobject.GObject):
                 childs[7].hide() # hide add to roster menuitem
 
             if kind == 'xmpp':
-                id_ = childs[0].connect('activate', self.on_copy_link_activate, text)
+                id_ = childs[0].connect('activate', self.on_copy_link_activate,
+                    'xmpp:' + text)
                 self.handlers[id_] = childs[0]
                 childs[2].hide() # copy mail address
                 childs[3].hide() # open mail composer
