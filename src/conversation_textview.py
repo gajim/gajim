@@ -934,7 +934,8 @@ class ConversationTextview(gobject.GObject):
                 childs[6].hide() # join group chat
                 childs[7].hide() # add to roster
 
-            childs[0].hide() # copy link location
+            if kind != 'xmpp':
+                childs[0].hide() # copy link location
             childs[1].hide() # open link in browser
 
         menu.popup(None, None, None, event.button, event.time)
