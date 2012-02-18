@@ -1274,7 +1274,7 @@ class GroupchatControl(ChatControlBase):
         gajim.gc_connected[obj.conn.name][self.room_jid]:
             return
         password = gajim.gc_passwords.get(self.room_jid, '')
-        obj.conn.join_gc(self.nick, self.room_jid, password)
+        obj.conn.join_gc(self.nick, self.room_jid, password, rejoin=True)
 
     def _nec_decrypted_message_received(self, obj):
         if obj.conn.name != self.account:
@@ -1351,7 +1351,7 @@ class GroupchatControl(ChatControlBase):
             return False
         password = gajim.gc_passwords.get(self.room_jid, '')
         gajim.connections[self.account].join_gc(self.nick, self.room_jid,
-            password)
+            password, rejoin=True)
         return True
 
     def draw_roster(self):

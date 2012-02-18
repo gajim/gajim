@@ -2304,7 +2304,8 @@ class Connection(CommonConnection, ConnectionHandlers):
                 room_id=resp.getTag('unique').getData()))
         self.connection.SendAndCallForResponse(iq, _on_response)
 
-    def join_gc(self, nick, room_jid, password, change_nick=False):
+    def join_gc(self, nick, room_jid, password, change_nick=False,
+    rejoin=False):
         # FIXME: This room JID needs to be normalized; see #1364
         if not gajim.account_is_connected(self.name):
             return
@@ -2353,6 +2354,10 @@ class Connection(CommonConnection, ConnectionHandlers):
                 last_date = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(
                     last_date))
                 tags['since'] = last_date
+                if rejoin:
+                    tags['since'] = time.strftime('%Y-%m-%dT%H:%M:%SZ',
+                    time.gmtime(gajim.logger.get_last_date_that_has_logs(
+                    room_jid, is_room=True) + 1))
             nb = gajim.config.get('muc_restore_lines')
             if nb >= 0:
                 tags['maxstanzas'] = nb
