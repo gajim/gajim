@@ -2369,7 +2369,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                 if rejoin:
                     tags['since'] = time.strftime('%Y-%m-%dT%H:%M:%SZ',
                     time.gmtime(gajim.logger.get_last_date_that_has_logs(
-                    room_jid, is_room=True) + 1))
+                    room_jid, is_room=True)))
             nb = gajim.config.get('muc_restore_lines')
             if nb >= 0:
                 tags['maxstanzas'] = nb
