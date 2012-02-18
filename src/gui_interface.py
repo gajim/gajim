@@ -929,7 +929,7 @@ class Interface:
         # If the hash we received and the hash of the file are the same,
         # then the file is not corrupt
         jid = unicode(file_props['sender'])
-        if session.file_hash != hash_:
+        if session.file_hash == hash_:
             self.popup_ft_result(account, jid, file_props)
             ft_win.set_status(file_props['type'], file_props['sid'], 'ok')
         else:
