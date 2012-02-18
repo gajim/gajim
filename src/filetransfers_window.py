@@ -46,7 +46,8 @@ C_FILE = 2
 C_TIME = 3
 C_PROGRESS = 4
 C_PERCENT = 5
-C_SID = 6
+C_PULSE = 6
+C_SID = 7
 
 
 class FileTransfersWindow:
@@ -65,7 +66,8 @@ class FileTransfersWindow:
         shall_notify = gajim.config.get('notify_on_file_complete')
         self.notify_ft_checkbox.set_active(shall_notify
                                                                                                 )
-        self.model = gtk.ListStore(gtk.gdk.Pixbuf, str, str, str, str, int, str)
+        self.model = gtk.ListStore(gtk.gdk.Pixbuf, str, str, str, str, int,
+            int, str)
         self.tree.set_model(self.model)
         col = gtk.TreeViewColumn()
 
@@ -112,6 +114,7 @@ class FileTransfersWindow:
         col.pack_start(renderer, expand=False)
         col.add_attribute(renderer, 'text', C_PROGRESS)
         col.add_attribute(renderer, 'value', C_PERCENT)
+        col.add_attribute(renderer, 'pulse', C_PULSE)
         col.set_resizable(True)
         col.set_expand(False)
         self.tree.append_column(col)
@@ -125,6 +128,8 @@ class FileTransfersWindow:
                 'pause': gtk.STOCK_MEDIA_PAUSE,
                 'continue': gtk.STOCK_MEDIA_PLAY,
                 'ok': gtk.STOCK_APPLY,
+                'computing': gtk.STOCK_EXECUTE,
+                'hash_error': gtk.STOCK_STOP,
         }
 
         self.tree.get_selection().set_mode(gtk.SELECTION_SINGLE)
@@ -243,6 +248,21 @@ class FileTransfersWindow:
             sectext += '\n\t' + _('Error message: %s') % error_msg
         dialogs.ErrorDialog(_('File transfer stopped'), sectext)
         self.tree.get_selection().unselect_all()
+
+    def show_hash_error(self, jid, file_props):
+        def on_yes(dummy):
+            # TODO: Request the file to the sender
+            pass
+
+        if file_props['type'] == 'r':
+            file_name = os.path.basename(file_props['file-name'])
+        else:
+            file_name = file_props['name']
+        dialogs.YesNoDialog(('File transfer error'),
+            _('The file %(file)s has been fully received, but it seems to be '
+            'wrongly received.\nDo you want to reload it?') % \
+            {'file': file_name}, on_response_yes=on_yes,
+            type_=gtk.MESSAGE_ERROR)
 
     def show_file_send_request(self, account, contact):
         win = gtk.ScrolledWindow()
@@ -449,6 +469,36 @@ class FileTransfersWindow:
             file_props['stopped'] = True
         elif status == 'ok':
             file_props['completed'] = True
+            text = self._format_percent(100)
+            received_size = int(file_props['received-len'])
+            full_size = int(file_props['size'])
+            text += helpers.convert_bytes(received_size) + '/' + \
+                helpers.convert_bytes(full_size)
+            self.model.set(iter_, C_PROGRESS, text)
+            self.model.set(iter_, C_PULSE, gobject.constants.G_MAXINT)
+        elif status == 'computing':
+            self.model.set(iter_, C_PULSE, 1)
+            text = _('Checking file...') + '\n'
+            received_size = int(file_props['received-len'])
+            full_size = int(file_props['size'])
+            text += helpers.convert_bytes(received_size) + '/' + \
+                helpers.convert_bytes(full_size)
+            self.model.set(iter_, C_PROGRESS, text)
+            def pulse():
+                p = self.model.get(iter_, C_PULSE)[0]
+                if p == gobject.constants.G_MAXINT:
+                    return False
+                self.model.set(iter_, C_PULSE, p + 1)
+                return True
+            gobject.timeout_add(100, pulse)
+        elif status == 'hash_error':
+            text = _('File error') + '\n'
+            received_size = int(file_props['received-len'])
+            full_size = int(file_props['size'])
+            text += helpers.convert_bytes(received_size) + '/' + \
+                helpers.convert_bytes(full_size)
+            self.model.set(iter_, C_PROGRESS, text)
+            self.model.set(iter_, C_PULSE, gobject.constants.G_MAXINT)
         self.model.set(iter_, C_IMAGE, self.get_icon(status))
         path = self.model.get_path(iter_)
         self.select_func(path)
@@ -589,7 +639,10 @@ class FileTransfersWindow:
                 status = 'stop'
             self.model.set(iter_, 0, self.get_icon(status))
             if transfered_size == full_size:
-                self.set_status(typ, sid, 'ok')
+                if file_props['type'] == 'r':
+                    self.set_status(typ, sid, 'computing')
+                else:
+                    self.set_status(typ, sid, 'ok')
             elif just_began:
                 path = self.model.get_path(iter_)
                 self.select_func(path)
@@ -655,7 +708,7 @@ class FileTransfersWindow:
             file_name = file_props['name']
         text_props = gobject.markup_escape_text(file_name) + '\n'
         text_props += contact.get_shown_name()
-        self.model.set(iter_, 1, text_labels, 2, text_props, C_SID,
+        self.model.set(iter_, 1, text_labels, 2, text_props, C_PULSE, -1, C_SID,
                 file_props['type'] + file_props['sid'])
         self.set_progress(file_props['type'], file_props['sid'], 0, iter_)
         if 'started' in file_props and file_props['started'] is False:

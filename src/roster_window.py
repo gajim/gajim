@@ -1917,6 +1917,9 @@ class RosterWindow:
             ft.show_stopped(jid, data, error_msg=msg_err)
             gajim.events.remove_events(account, jid, event)
             return True
+        elif event.type_ == 'file-hash-error':
+            ft.show_hash_error(jid, data)
+            gajim.events.remove_events(account, jid, event)
         elif event.type_ == 'file-completed':
             ft.show_completed(jid, data)
             gajim.events.remove_events(account, jid, event)
