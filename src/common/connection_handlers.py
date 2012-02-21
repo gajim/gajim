@@ -893,7 +893,13 @@ class ConnectionHandlersBase:
         obj.contact.show = obj.show
         obj.contact.status = obj.status
         obj.contact.priority = obj.prio
-        obj.contact.keyID = obj.keyID
+        attached_keys = gajim.config.get_per('accounts', account,
+            'attached_gpg_keys').split()
+        if jid in attached_keys:
+            obj.contact.keyID = attached_keys[attached_keys.index(jid) + 1]
+        else:
+            # Do not override assigned key
+            obj.contact.keyID = obj.keyID
         if obj.timestamp:
             obj.contact.last_status_time = obj.timestamp
         elif not gajim.block_signed_in_notifications[account]:
