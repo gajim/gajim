@@ -2361,15 +2361,11 @@ class Connection(CommonConnection, ConnectionHandlers):
                 last_date = self.last_history_time[room_jid]
                 if last_date == 0:
                     last_date = time.time() - timeout
-                else:
+                elif not rejoin:
                     last_date = min(last_date, time.time() - timeout)
                 last_date = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(
                     last_date))
                 tags['since'] = last_date
-                if rejoin:
-                    tags['since'] = time.strftime('%Y-%m-%dT%H:%M:%SZ',
-                    time.gmtime(gajim.logger.get_last_date_that_has_logs(
-                    room_jid, is_room=True)))
             nb = gajim.config.get('muc_restore_lines')
             if nb >= 0:
                 tags['maxstanzas'] = nb
