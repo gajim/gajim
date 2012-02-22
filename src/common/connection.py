@@ -1387,7 +1387,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             gajim.nec.push_incoming_event(InformationEvent(None, conn=self,
                 level='error', pri_txt=_('Authentication failed with "%s"') % \
                 self._hostname, sec_txt=_('Please check your login and password'
-                'for correctness.')))
+                ' for correctness.')))
             if self.on_connect_auth:
                 self.on_connect_auth(None)
                 self.on_connect_auth = None
@@ -1464,7 +1464,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                     level='error', pri_txt=_('Error while removing privacy '
                     'list'), sec_txt=_('Privacy list %s has not been removed. '
                     'It is maybe active in one of your connected resources. '
-                    'Deactivate it and tryagain.') % privacy_list))
+                    'Deactivate it and try again.') % privacy_list))
         common.xmpp.features_nb.delPrivacyList(self.connection, privacy_list,
                 _on_del_privacy_list_result)
 
