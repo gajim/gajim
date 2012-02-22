@@ -5249,7 +5249,7 @@ msgstr "\"%s\" үішн аутентификация сәтсіз"
 
 #: ../src/common/connection.py:1400
 #, fuzzy
-msgid "Please check your login and passwordfor correctness."
+msgid "Please check your login and password for correctness."
 msgstr "Тіркелгі атын мен пароліңізді тексеріңіз."
 
 #: ../src/common/connection.py:1475
@@ -5260,7 +5260,7 @@ msgstr "Жекелік тізімін өшіру кезінде қате кет�
 #, fuzzy, python-format
 msgid ""
 "Privacy list %s has not been removed. It is maybe active in one of your "
-"connected resources. Deactivate it and tryagain."
+"connected resources. Deactivate it and try again."
 msgstr ""
 "%s жекелік тізімі өшірілмеген. Байланысқан ресурстарыңыздың біреу үшін болуы "
 "мүмкін. Оны сөндіріп, қайталар көріңіз."

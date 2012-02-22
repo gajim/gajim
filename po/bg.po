@@ -5358,7 +5358,7 @@ msgstr "Неуспех при удостоверяването с „%s“"
 
 #: ../src/common/connection.py:1400
 #, fuzzy
-msgid "Please check your login and passwordfor correctness."
+msgid "Please check your login and password for correctness."
 msgstr "Проверете дали името и паролата са правилни."
 
 #: ../src/common/connection.py:1475
@@ -5369,7 +5369,7 @@ msgstr "Грешка при премахването на списъка за у
 #, fuzzy, python-format
 msgid ""
 "Privacy list %s has not been removed. It is maybe active in one of your "
-"connected resources. Deactivate it and tryagain."
+"connected resources. Deactivate it and try again."
 msgstr ""
 "Списъкът за уединение „%s“ не беше премахнат. Навярно е активен в някой от "
 "свързаните ви ресурси. Изключете го и опитайте отново."

@@ -5304,7 +5304,7 @@ msgstr "Autentisering feilet med \"%s\""
 
 #: ../src/common/connection.py:1400
 #, fuzzy
-msgid "Please check your login and passwordfor correctness."
+msgid "Please check your login and password for correctness."
 msgstr "Vennligst sjekk at brukernavn og passord er korrekt."
 
 #: ../src/common/connection.py:1475
@@ -5315,7 +5315,7 @@ msgstr "Feil ved fjerning av liste over uønskede"
 #, fuzzy, python-format
 msgid ""
 "Privacy list %s has not been removed. It is maybe active in one of your "
-"connected resources. Deactivate it and tryagain."
+"connected resources. Deactivate it and try again."
 msgstr ""
 "Privatlivs listen %s har ikke blitt fjernet. Den er kanskje aktiv i en av "
 "dine tilkoblede ressurser. Deaktiver den og prøv igjen."

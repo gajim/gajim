@@ -5412,7 +5412,7 @@ msgstr "\"%s\" -rekin autentifikazioak huts egin du"
 
 #: ../src/common/connection.py:1400
 #, fuzzy
-msgid "Please check your login and passwordfor correctness."
+msgid "Please check your login and password for correctness."
 msgstr "Mesedez begira ezazu zure izena eta pasahitza xehetasun handiz."
 
 #: ../src/common/connection.py:1475
@@ -5424,7 +5424,7 @@ msgstr "Errorea zerbitzarian sartzean.%s"
 #, python-format
 msgid ""
 "Privacy list %s has not been removed. It is maybe active in one of your "
-"connected resources. Deactivate it and tryagain."
+"connected resources. Deactivate it and try again."
 msgstr ""
 
 #: ../src/common/connection.py:1858

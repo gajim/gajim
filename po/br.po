@@ -5368,7 +5368,7 @@ msgstr "C'hwitet an diskleriadenn gant \"%s\""
 
 #: ../src/common/connection.py:1400
 #, fuzzy
-msgid "Please check your login and passwordfor correctness."
+msgid "Please check your login and password for correctness."
 msgstr "Gwiriekait ho ker-kuzh hag anv-lugañ."
 
 #: ../src/common/connection.py:1475
@@ -5380,7 +5380,7 @@ msgstr "fazi en ur gas %s ( %s )"
 #, python-format
 msgid ""
 "Privacy list %s has not been removed. It is maybe active in one of your "
-"connected resources. Deactivate it and tryagain."
+"connected resources. Deactivate it and try again."
 msgstr ""
 
 #: ../src/common/connection.py:1858

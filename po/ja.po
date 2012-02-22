@@ -5239,7 +5239,7 @@ msgid "Authentication failed with \"%s\""
 msgstr "\"%s\" の認証に失敗しました"
 
 #: ../src/common/connection.py:1400
-msgid "Please check your login and passwordfor correctness."
+msgid "Please check your login and password for correctness."
 msgstr "整合性のために、ログインとパスワードを確認してください。"
 
 #: ../src/common/connection.py:1475
@@ -5250,7 +5250,7 @@ msgstr "プライバシーリストを削除する際のエラー"
 #, python-format
 msgid ""
 "Privacy list %s has not been removed. It is maybe active in one of your "
-"connected resources. Deactivate it and tryagain."
+"connected resources. Deactivate it and try again."
 msgstr ""
 "プライバシーリスト %s は削除されませんでした。現在の接続に使用されているよう"
 "です。使用をやめて、もういちど試してください。"

@@ -5379,7 +5379,7 @@ msgstr "Autenticazione con \"%s\" fallita"
 
 #: ../src/common/connection.py:1400
 #, fuzzy
-msgid "Please check your login and passwordfor correctness."
+msgid "Please check your login and password for correctness."
 msgstr "Verificare la correttezza di login e password."
 
 #: ../src/common/connection.py:1475
@@ -5390,7 +5390,7 @@ msgstr "Errore durante la rimozione della lista privacy"
 #, fuzzy, python-format
 msgid ""
 "Privacy list %s has not been removed. It is maybe active in one of your "
-"connected resources. Deactivate it and tryagain."
+"connected resources. Deactivate it and try again."
 msgstr ""
 "La lista privacy %s non è stata rimossa. Potrebbe essere attiva in una delle "
 "risorse connesse. Disattivarla e riprovare."

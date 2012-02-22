@@ -5324,7 +5324,7 @@ msgstr "Спроба розпізнавання за допомогою «%s» �
 
 #: ../src/common/connection.py:1400
 #, fuzzy
-msgid "Please check your login and passwordfor correctness."
+msgid "Please check your login and password for correctness."
 msgstr "Будь ласка, перевірте, чи правильно вказано ім’я користувача і пароль."
 
 #: ../src/common/connection.py:1475
@@ -5335,7 +5335,7 @@ msgstr "Помилка під час вилучення списку конфі�
 #, fuzzy, python-format
 msgid ""
 "Privacy list %s has not been removed. It is maybe active in one of your "
-"connected resources. Deactivate it and tryagain."
+"connected resources. Deactivate it and try again."
 msgstr ""
 "Список конфіденційності %s не було вилучено. Ймовірно, він використовується "
 "у одному з ресурсів, з яким з’єднано ваш клієнт. Вимкніть цей ресурс і "

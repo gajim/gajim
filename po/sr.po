@@ -5304,7 +5304,7 @@ msgstr "Пријављивање са \"%s\" неуспешно"
 
 #: ../src/common/connection.py:1400
 #, fuzzy
-msgid "Please check your login and passwordfor correctness."
+msgid "Please check your login and password for correctness."
 msgstr "Молимо Вас да проверите Ваше корисничко име и лозинку од грешака."
 
 #: ../src/common/connection.py:1475
@@ -5315,7 +5315,7 @@ msgstr "Грешка приликом уклањања листа приватн
 #, fuzzy, python-format
 msgid ""
 "Privacy list %s has not been removed. It is maybe active in one of your "
-"connected resources. Deactivate it and tryagain."
+"connected resources. Deactivate it and try again."
 msgstr ""
 "Листа приватности %s није уклоњена. Можда је активна у неком од Ваших "
 "ресурса на вези. Деактивирајте је тамо и покушајте поново."

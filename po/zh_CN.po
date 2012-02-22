@@ -5087,7 +5087,7 @@ msgstr "\"%s\"登录验证失败"
 
 #: ../src/common/connection.py:1400
 #, fuzzy
-msgid "Please check your login and passwordfor correctness."
+msgid "Please check your login and password for correctness."
 msgstr "请检查登录信息和密码的正确性"
 
 #: ../src/common/connection.py:1475
@@ -5098,7 +5098,7 @@ msgstr "移除隐私策略列表时出错"
 #, fuzzy, python-format
 msgid ""
 "Privacy list %s has not been removed. It is maybe active in one of your "
-"connected resources. Deactivate it and tryagain."
+"connected resources. Deactivate it and try again."
 msgstr ""
 "隐私策略列表 %s 还没有被移除。它可能在您的某个连接的资源中是活动的。禁用它然"
 "后重试。"

@@ -5224,7 +5224,7 @@ msgstr "Overenie zlyhalo s \"%s\""
 
 #: ../src/common/connection.py:1400
 #, fuzzy
-msgid "Please check your login and passwordfor correctness."
+msgid "Please check your login and password for correctness."
 msgstr "Prosím, skontrolujte správnosť prihlasovacieho mena a hesla."
 
 #: ../src/common/connection.py:1475
@@ -5235,7 +5235,7 @@ msgstr "Chyba počas odstraňovania súkromného zoznamu"
 #, fuzzy, python-format
 msgid ""
 "Privacy list %s has not been removed. It is maybe active in one of your "
-"connected resources. Deactivate it and tryagain."
+"connected resources. Deactivate it and try again."
 msgstr ""
 "Súkromný zoznam %s nebol odstránený. Možno je používaný jedným z vašich "
 "pripojených zdrojov. Deaktivujte ho a skúste to znovu."

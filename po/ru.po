@@ -5260,7 +5260,7 @@ msgstr "Ошибка аутентификации с «%s»"
 
 #: ../src/common/connection.py:1400
 #, fuzzy
-msgid "Please check your login and passwordfor correctness."
+msgid "Please check your login and password for correctness."
 msgstr "Проверьте правильность логина и пароля."
 
 #: ../src/common/connection.py:1475
@@ -5271,7 +5271,7 @@ msgstr "Ошибка при удалении списка доступа"
 #, fuzzy, python-format
 msgid ""
 "Privacy list %s has not been removed. It is maybe active in one of your "
-"connected resources. Deactivate it and tryagain."
+"connected resources. Deactivate it and try again."
 msgstr ""
 "Список доступа %s не может быть удален. Возможно, он используется одним из "
 "ваших активных ресурсов. Отключите ресурс и попробуйте снова."
