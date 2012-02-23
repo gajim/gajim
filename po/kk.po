@@ -1,14 +1,14 @@
 # Kazakh translation for gajim.
-# Copyright (C) 2009 gajim team
-# This file is distributed under the same license as the PACKAGE package.
-# Baurzhan Muftakhidinov <baurthefirst@gmail.com>, 2010.
+# Copyright (C) 2012 The Gajim team
+# This file is distributed under the same license as the gajim package.
+# Baurzhan Muftakhidinov <baurthefirst@gmail.com>, 2010-2012.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gajim.trunk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-14 20:47+0100\n"
-"PO-Revision-Date: 2011-02-03 14:51+0600\n"
+"POT-Creation-Date: 2012-02-23 13:42+0100\n"
+"PO-Revision-Date: 2012-02-23 13:32+0600\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <kk_KZ@googlegroups.com>\n"
 "Language: kk\n"
@@ -25,7 +25,7 @@ msgstr "Чат _бөлмесіне кіру..."
 
 #: ../data/gui/account_context_menu.ui.h:2
 msgid "_Add Contact..."
-msgstr "_Контакт қосу..."
+msgstr "_Контактты қосу..."
 
 #: ../data/gui/account_context_menu.ui.h:3 ../data/gui/roster_window.ui.h:19
 msgid "_Discover Services"
@@ -240,9 +240,8 @@ msgid "C_onnect on Gajim startup"
 msgstr "Gajim қосылғанда, байланыс _орнату"
 
 #: ../data/gui/accounts_window.ui.h:14
-#, fuzzy
 msgid "Certificate is e_ncrypted"
-msgstr "Сертификат тайдырылған"
+msgstr "Сертификат шифр_ленген"
 
 #: ../data/gui/accounts_window.ui.h:15
 msgid "Chan_ge Password"
@@ -449,7 +448,6 @@ msgid "Synchroni_ze account status with global status"
 msgstr "Тіркел_гі күйін ортақ күймен тең ұстау"
 
 #: ../data/gui/accounts_window.ui.h:54
-#, fuzzy
 msgid "Synchronize contacts"
 msgstr "Контакттарды синхрондау"
 
@@ -898,12 +896,12 @@ msgid "Show the contact's profile (Ctrl+I)"
 msgstr "Контакт профайлын көрсету (Ctrl+I)"
 
 #: ../data/gui/chat_control.ui.h:20
-#: ../src/command_system/implementation/standard.py:208
+#: ../src/command_system/implementation/standard.py:214
 msgid "Toggle audio session"
 msgstr "Аудио сессияны ауыстыру"
 
 #: ../data/gui/chat_control.ui.h:21
-#: ../src/command_system/implementation/standard.py:218
+#: ../src/command_system/implementation/standard.py:224
 msgid "Toggle video session"
 msgstr "Видео сессияны ауыстыру"
 
@@ -974,9 +972,8 @@ msgid "Invite _Contacts"
 msgstr "Контакттарды _шақыру"
 
 #: ../data/gui/contact_context_menu.ui.h:8
-#, fuzzy
 msgid "M_anage Contact"
-msgstr "_Контактты басқару"
+msgstr "Контактты _басқару"
 
 #: ../data/gui/contact_context_menu.ui.h:9
 msgid "Remo_ve"
@@ -1259,9 +1256,8 @@ msgid "_Minimize on close"
 msgstr "_Жабылғанда, ростерге орналастыру"
 
 #: ../data/gui/gc_control_popup_menu.ui.h:9
-#, fuzzy
 msgid "_Request Voice"
-msgstr "_Даусы бар"
+msgstr "_Даусты сұрау"
 
 #: ../data/gui/gc_occupants_menu.ui.h:2
 msgid "Mo_derator"
@@ -1626,9 +1622,8 @@ msgid "Homepage:"
 msgstr "Үй парағы:"
 
 #: ../data/gui/plugins_window.ui.h:7
-#, fuzzy
 msgid "Install from zip"
-msgstr "Орнату"
+msgstr "zip ішінен орнату"
 
 #: ../data/gui/plugins_window.ui.h:8
 msgid "Installed"
@@ -1756,14 +1751,12 @@ msgid "All chat states"
 msgstr "Барлық чат күйлері"
 
 #: ../data/gui/preferences_window.ui.h:25
-#, fuzzy
 msgid "Allow client / _OS information to be sent"
-msgstr "_ОЖ ақпаратын жіберуге рұқсат ету"
+msgstr "Клиент / _ОЖ ақпаратын жіберуге рұқсат ету"
 
 #: ../data/gui/preferences_window.ui.h:26
-#, fuzzy
 msgid "Allow local system time information to be sent"
-msgstr "_ОЖ ақпаратын жіберуге рұқсат ету"
+msgstr "Жергілікті жүйе уақыты ақпаратын жіберуге рұқсат ету"
 
 #: ../data/gui/preferences_window.ui.h:27
 msgid "Allow my _idle time to be sent"
@@ -1904,7 +1897,7 @@ msgstr ""
 
 #: ../data/gui/preferences_window.ui.h:58
 msgid "Global proxy:"
-msgstr ""
+msgstr "Глобалды прокси:"
 
 #: ../data/gui/preferences_window.ui.h:59
 msgid "Hide all buttons in chat windows"
@@ -1919,11 +1912,10 @@ msgstr ""
 "рұқсат етеді"
 
 #: ../data/gui/preferences_window.ui.h:61
-#, fuzzy
 msgid "If checked, Gajim will allow others to detect the time on your system"
 msgstr ""
-"Белгіленген болса, Gajim басқаларға сіздің операциялық жүйеңізді анықтауға "
-"рұқсат етеді"
+"Белгіленген болса, Gajim басқаларға сіздің жүйеңіздің уақытын білуге рұқсат "
+"етеді"
 
 #: ../data/gui/preferences_window.ui.h:62
 msgid ""
@@ -2051,9 +2043,8 @@ msgstr ""
 "сурет смайликтерімен алмастырады"
 
 #: ../data/gui/preferences_window.ui.h:78
-#, fuzzy
 msgid "Last state"
-msgstr "Соңғы қалып-күйі: %s"
+msgstr "Соңғы қалып-күйі"
 
 #: ../data/gui/preferences_window.ui.h:79
 msgid "Log _encrypted chat session"
@@ -2293,7 +2284,7 @@ msgstr "_Чат күй өзгеруін жіберу:"
 
 #: ../data/gui/preferences_window.ui.h:138
 msgid "_Show roster on startup:"
-msgstr ""
+msgstr "І_ске қосылғанда ростерді көрсету:"
 
 #: ../data/gui/preferences_window.ui.h:139
 msgid "_Status message:"
@@ -2633,7 +2624,6 @@ msgid "Show Only _Active Contacts"
 msgstr "Те_к белсенді контакттарды көрсету"
 
 #: ../data/gui/roster_window.ui.h:12
-#, fuzzy
 msgid "Show T_ransports"
 msgstr "Транс_порттарды көрсету"
 
@@ -2810,9 +2800,8 @@ msgid "<b>Client:</b>"
 msgstr "<b>Клиент:</b>"
 
 #: ../data/gui/vcard_information_window.ui.h:8
-#, fuzzy
 msgid "<b>Configured avatar:</b>"
-msgstr "Бапталған аватар:"
+msgstr "<b>Бапталған аватар:</b>"
 
 #: ../data/gui/vcard_information_window.ui.h:9
 msgid "<b>Contact time:</b>"
@@ -2840,9 +2829,8 @@ msgid "<b>System:</b>"
 msgstr "<b>Жүйе:</b>"
 
 #: ../data/gui/vcard_information_window.ui.h:40
-#, fuzzy
 msgid "<b>User avatar:</b>"
-msgstr "<b>Аватар:</b>"
+msgstr "<b>Пайдаланушы аватары:</b>"
 
 #: ../data/gui/vcard_information_window.ui.h:43
 msgid "Comments"
@@ -2969,9 +2957,9 @@ msgid "Service changed the session identifier."
 msgstr "Қызмет сессия анықтағышын өзгерткен."
 
 #: ../src/adhoc_commands.py:418
-#, fuzzy, python-format
+#, python-format
 msgid "%s - Ad-hoc Commands - Gajim"
-msgstr "Ad-hoc командалары - Gajim"
+msgstr "%s - Ad-hoc командалары - Gajim"
 
 #. when stanza doesn't have error description
 #: ../src/adhoc_commands.py:513
@@ -3350,8 +3338,8 @@ msgstr ""
 "жоғалтылады."
 
 #: ../src/chat_control.py:2924 ../src/common/connection_handlers_events.py:898
-#: ../src/common/connection_handlers.py:943
-#: ../src/common/connection_handlers.py:1055 ../src/common/connection.py:467
+#: ../src/common/connection_handlers.py:949
+#: ../src/common/connection_handlers.py:1061 ../src/common/connection.py:467
 #: ../src/common/logger.py:1131 ../src/gajim.py:210 ../src/session.py:100
 msgid "Database Error"
 msgstr "Дерекқор қатесі"
@@ -3380,19 +3368,16 @@ msgid "%(name)s is now %(status)s"
 msgstr "%(name)s қазір %(status)s"
 
 #: ../src/chat_control.py:3253
-#, fuzzy
 msgid "File transfer"
 msgstr "Файлдармен алмасу"
 
 #: ../src/chat_control.py:3256
-#, fuzzy
 msgid "Size"
-msgstr "Өлшемі: %s"
+msgstr "Өлшемі"
 
 #: ../src/chat_control.py:3258
-#, fuzzy
 msgid "_Accept"
-msgstr "_Тіркелгілер"
+msgstr "Қаб_ылдау"
 
 #: ../src/chat_control.py:3281 ../src/filetransfers_window.py:204
 msgid "File transfer completed"
@@ -3424,48 +3409,49 @@ msgstr "Тораппен байланысты орнату мүмкін емес
 
 #: ../src/command_system/implementation/custom.py:105
 msgid "The same as using a doc-string, except it supports translation"
-msgstr ""
+msgstr "doc-string қоллданғаны тура сияқты, тек бұл аударуды қолдайды"
 
 #: ../src/command_system/implementation/execute.py:53
 msgid "Execute expression inside a shell, show output"
-msgstr ""
+msgstr "Қоршам ішінде өрнекті орындау, шығысын көрсету"
 
 #: ../src/command_system/implementation/execute.py:109
 msgid "Execute expression inside a shell, send output"
-msgstr ""
+msgstr "Қоршам ішінде өрнекті орындау, шығысын жіберу"
 
 #: ../src/command_system/implementation/standard.py:50
 msgid "Hide the chat buttons"
-msgstr ""
+msgstr "Чат батырмаларын жасыру"
 
 #: ../src/command_system/implementation/standard.py:56
 msgid ""
 "Show help on a given command or a list of available commands if -a is given"
 msgstr ""
+"Көрсетілген команда үшін көмекті көрсету, -a берілсе, барлық қолжетерлік "
+"командаларды шығару"
 
 #: ../src/command_system/implementation/standard.py:83
-#, fuzzy
 msgid "Send a message to the contact"
-msgstr "Контактқа файлды жібереді"
+msgstr "Контактқа хабарламаны жіберу"
 
 #: ../src/command_system/implementation/standard.py:88
 msgid "Send action (in the third person) to the current chat"
-msgstr ""
+msgstr "Ағымдағы чатқа әрекетті жіберу (үшінші жақта)"
 
 #: ../src/command_system/implementation/standard.py:93
 msgid "Show logged messages which mention given text"
-msgstr ""
+msgstr "Тарихтан көрсетілген мәтіні бар хабарламаларды көрсету"
 
 #: ../src/command_system/implementation/standard.py:99
-#, fuzzy, python-format
+#, python-format
 msgid "%s: Nothing found"
-msgstr "%s табылмады"
+msgstr "%s: Ешнәрсе табылмады"
 
 #: ../src/command_system/implementation/standard.py:105
 msgid "Limit must be an integer"
-msgstr ""
+msgstr "Лимит бүтін сан болуы тиіс"
 
-#: ../src/command_system/implementation/standard.py:140
+#: ../src/command_system/implementation/standard.py:129
 msgid ""
 "\n"
 "    Set current the status\n"
@@ -3474,12 +3460,18 @@ msgid ""
 "    chat, xa, dnd.\n"
 "    "
 msgstr ""
+"\n"
+"    Ағымдағы күйді орнату\n"
+"\n"
+"    Күй келесі мәндердің біреуімен берілуі мүмкін: online, away,\n"
+"    chat, xa, dnd.\n"
+"    "
 
-#: ../src/command_system/implementation/standard.py:153
+#: ../src/command_system/implementation/standard.py:147
 msgid "Set the current status to away"
-msgstr ""
+msgstr "Ағымдағы күйді кетіп қалған етіп орнату"
 
-#: ../src/command_system/implementation/standard.py:156
+#: ../src/command_system/implementation/standard.py:150
 #: ../src/common/commands.py:109 ../src/common/helpers.py:249
 #: ../src/tooltips.py:194
 msgid "Away"
@@ -3487,107 +3479,101 @@ msgstr "Кетіп қалған"
 
 #: ../src/command_system/implementation/standard.py:161
 msgid "Set the current status to online"
-msgstr ""
+msgstr "Ағымдағы күйді осында етіп орнату"
 
 #: ../src/command_system/implementation/standard.py:164
 msgid "Available"
 msgstr "Қолжетерлік"
 
-#: ../src/command_system/implementation/standard.py:178
-#: ../src/command_system/implementation/standard.py:255
-#, fuzzy
+#: ../src/command_system/implementation/standard.py:184
+#: ../src/command_system/implementation/standard.py:261
 msgid "Clear the text window"
-msgstr "Терезені жасырады"
+msgstr "Мәтін терезесін тазартады"
 
-#: ../src/command_system/implementation/standard.py:183
-#, fuzzy
+#: ../src/command_system/implementation/standard.py:189
 msgid "Toggle the GPG encryption"
-msgstr "OpenPGP _шифрлеуін қосу/сөндіру"
+msgstr "GPG шифрлеуін іске қосу не сөндіру"
 
-#: ../src/command_system/implementation/standard.py:188
-#, fuzzy
+#: ../src/command_system/implementation/standard.py:194
 msgid "Send a ping to the contact"
-msgstr "Контактқа файлды жібереді"
+msgstr "Контактқа пинг жіберу"
 
-#: ../src/command_system/implementation/standard.py:191
+#: ../src/command_system/implementation/standard.py:197
 msgid "Command is not supported for zeroconf accounts"
-msgstr ""
-
-#: ../src/command_system/implementation/standard.py:195
-msgid "Send DTMF sequence through an open audio session"
-msgstr ""
-
-#: ../src/command_system/implementation/standard.py:198
-msgid "No open audio sessions with the contact"
-msgstr ""
+msgstr "Команданың zeroconf тіркелгілері үшін қолдауы жоқ"
 
 #: ../src/command_system/implementation/standard.py:201
-#, fuzzy, python-format
+msgid "Send DTMF sequence through an open audio session"
+msgstr "Ашық аудио сессиясы арқылы DTMF тізбегін жіберу"
+
+#: ../src/command_system/implementation/standard.py:204
+msgid "No open audio sessions with the contact"
+msgstr "Контактпен ашық аудио сессиялары жоқ"
+
+#: ../src/command_system/implementation/standard.py:207
+#, python-format
 msgid "%s is not a valid tone"
-msgstr "%s дұрыс loglevel емес"
+msgstr "%s дұрыс tone емес"
 
-#: ../src/command_system/implementation/standard.py:211
-#, fuzzy
+#: ../src/command_system/implementation/standard.py:217
 msgid "Audio sessions are not available"
-msgstr "Байланыс қолжетерсіз"
+msgstr "Аудио сессиялары қолжетерсіз"
 
-#: ../src/command_system/implementation/standard.py:221
-#, fuzzy
+#: ../src/command_system/implementation/standard.py:227
 msgid "Video sessions are not available"
-msgstr "Байланыс қолжетерсіз"
+msgstr "Видео сессиялары қолжетерсіз"
 
-#: ../src/command_system/implementation/standard.py:262
-#, fuzzy
+#: ../src/command_system/implementation/standard.py:268
 msgid "Change your nickname in a group chat"
-msgstr "Сіздің ник атыңызды өзгерту (Ctrl+N)"
+msgstr "Топ чатында сіздің ник атыңызды өзгерту"
 
 #. invalid char
-#: ../src/command_system/implementation/standard.py:267 ../src/config.py:3392
+#: ../src/command_system/implementation/standard.py:273 ../src/config.py:3392
 #: ../src/dialogs.py:2078
 msgid "Invalid nickname"
 msgstr "Ник қате"
 
-#: ../src/command_system/implementation/standard.py:272
-#, fuzzy
-msgid "Open a private chat window with a specified occupant"
-msgstr "Па_йдаланушымен чат терезесін ашу"
-
 #: ../src/command_system/implementation/standard.py:278
-#: ../src/command_system/implementation/standard.py:287
-#: ../src/command_system/implementation/standard.py:341
-#, fuzzy
-msgid "Nickname not found"
-msgstr "Қолданылатын ник"
+msgid "Open a private chat window with a specified occupant"
+msgstr "Көрсетілген па_йдаланушымен жеке чат терезесін ашу"
 
-#: ../src/command_system/implementation/standard.py:281
+#: ../src/command_system/implementation/standard.py:284
+#: ../src/command_system/implementation/standard.py:293
+#: ../src/command_system/implementation/standard.py:347
+msgid "Nickname not found"
+msgstr "Ник аты табылмады"
+
+#: ../src/command_system/implementation/standard.py:287
 msgid ""
 "Open a private chat window with a specified occupant and send him a message"
 msgstr ""
+"Көрсетілген пайдаланушымен жеке чат терезесін ашу мен оған хабарламаны жіберу"
 
-#: ../src/command_system/implementation/standard.py:290
-#, fuzzy
+#: ../src/command_system/implementation/standard.py:296
 msgid "Display or change a group chat topic"
-msgstr "Топ чат беті/терезесін жабу алдында сұрау."
-
-#: ../src/command_system/implementation/standard.py:298
-msgid "Invite a user to a room for a reason"
-msgstr ""
-
-#: ../src/command_system/implementation/standard.py:301
-#, fuzzy, python-format
-msgid "Invited %s to %s"
-msgstr "%s қазір %s үшін жіберу"
+msgstr "Топ чат тақырыбын көрсету не өзгерту"
 
 #: ../src/command_system/implementation/standard.py:304
+msgid "Invite a user to a room for a reason"
+msgstr "Пайдаланушыны топтық чатқа себеппен шақыру"
+
+#: ../src/command_system/implementation/standard.py:307
+#, python-format
+msgid "Invited %s to %s"
+msgstr "%s шақырылды %s ішіне"
+
+#: ../src/command_system/implementation/standard.py:310
 msgid "Join a group chat given by a jid, optionally using given nickname"
 msgstr ""
+"jid арқылы берілген топтық чатына кіру, қосымша көрсетілген ник атын қолданып"
 
-#: ../src/command_system/implementation/standard.py:321
+#: ../src/command_system/implementation/standard.py:327
 msgid ""
 "Leave the groupchat, optionally giving a reason, and close tab or window"
 msgstr ""
+"Топ чатынан шығу, қосымша түрде себебін көрсету, және бет не терезені жабу"
 
-#: ../src/command_system/implementation/standard.py:326
+#: ../src/command_system/implementation/standard.py:332
 msgid ""
 "\n"
 "    Ban user by a nick or a jid from a groupchat\n"
@@ -3595,24 +3581,27 @@ msgid ""
 "    If given nickname is not found it will be treated as a jid.\n"
 "    "
 msgstr ""
+"\n"
+"    Пайдаланушыны топ чатынан ник не jid арқылы бандау\n"
+"\n"
+"    Егер белірген ник аты табылмаса, ол jid ретінде саналады.\n"
+"    "
 
-#: ../src/command_system/implementation/standard.py:338
-#, fuzzy
+#: ../src/command_system/implementation/standard.py:344
 msgid "Kick user by a nick from a groupchat"
-msgstr "Сізді топтық чатқа шақырған"
+msgstr "Топ чатынан пайдаланушы ник бойынша тебу"
 
-#: ../src/command_system/implementation/standard.py:345
-#, fuzzy
+#: ../src/command_system/implementation/standard.py:351
 msgid "Display names of all group chat occupants"
-msgstr "%s топтық чаттың аты емес."
+msgstr "Топ чаттың барлық пайдаланушылардың аттарын көрсету"
 
-#: ../src/command_system/implementation/standard.py:367
+#: ../src/command_system/implementation/standard.py:373
 msgid "Forbid an occupant to send you public or private messages"
-msgstr ""
+msgstr "Пайдаланушыға сізге ортақ не жеке хабарламаларды жіберуге тыйым салу"
 
-#: ../src/command_system/implementation/standard.py:372
+#: ../src/command_system/implementation/standard.py:378
 msgid "Allow an occupant to send you public or private messages"
-msgstr ""
+msgstr "Пайдаланушыға сізге ортақ не жеке хабарламаларды жіберуге рұқсат ету"
 
 #: ../src/common/check_paths.py:38
 msgid "creating logs database"
@@ -3779,6 +3768,7 @@ msgstr ""
 #: ../src/common/config.py:90
 msgid "Allow to hide the roster window even if the tray icon is not shown."
 msgstr ""
+"Жүйелік сөреде таңбашасы болмаса да, ростер терезесін жасыруға рұқсат ету"
 
 #: ../src/common/config.py:95
 msgid "Incoming nickname color."
@@ -3900,6 +3890,8 @@ msgid ""
 "If true, Gajim will save roster position when hiding roster, and restore it "
 "when showing roster."
 msgstr ""
+"Ақиқат болса, Gajim ростерді жасырған кезде оның орның сақтайды, ал ростерді "
+"көрсеткенде оны қалпына келтіреді."
 
 #: ../src/common/config.py:162
 msgid ""
@@ -3944,20 +3936,20 @@ msgid "How many minutes should last lines from previous conversation last."
 msgstr "Алдыңғы сөйлесуден қалған соңғы жолдар қанша минут бойы қалуы керек."
 
 #: ../src/common/config.py:172
-#, fuzzy
 msgid ""
 "How many lines to request to server when entering a groupchat. -1 means no "
 "limit"
-msgstr "Топ чатына кірген кезде серверден қанша тарих жолын сұрау керек."
+msgstr ""
+"Топ чатына кірген кезде серверден қанша тарих жолын сұрау керек. Шексіз үшін "
+"-1."
 
 #: ../src/common/config.py:173
-#, fuzzy
 msgid ""
 "How many minutes back to request logs when a entering a groupchat. -1 means "
 "no limit"
 msgstr ""
-"Топ чатына кірген кезде қанша минут бұрынғы сөйлесулердің тарих жолдарын "
-"сұрау керек."
+"Топ чатына кіргеннен кейін қанша минут бұрынғы сөйлесулер тарих жолдарын "
+"сұрау керек. Шексіз үшін -1."
 
 #: ../src/common/config.py:174
 msgid ""
@@ -4178,7 +4170,7 @@ msgstr ""
 
 #: ../src/common/config.py:238
 msgid "Log XHTML messages instead of plain text messages."
-msgstr ""
+msgstr "XHTML хабарламаларын ашық мәтін орнына тарихқа сақтау."
 
 #: ../src/common/config.py:239
 msgid "Background color of contacts when they just signed in."
@@ -4250,6 +4242,10 @@ msgid ""
 "'never' - Never show roster.\n"
 "'last_state' - Restore the last state roster."
 msgstr ""
+"Іске қосылғанда ростерді көрсету.\n"
+"'always' - Ростерді әрқашан көрсету.\n"
+"'never' - Ростерді ешқашан көрсетпеу.\n"
+"'last_state' - Ростердің соңғы күйін қалпына келтіру."
 
 #: ../src/common/config.py:252
 msgid "If False, you will no longer see the avatar in the chat window."
@@ -4485,6 +4481,8 @@ msgid ""
 "Proxy used for all outgoing connections if the account does not have a "
 "specific proxy configured"
 msgstr ""
+"Тіркелгінің барлық шығыс байланыстары үшін қолданылатын прокси, егер "
+"тіркелгіде арнайы прокси көрсетілмеген болса"
 
 #: ../src/common/config.py:307
 msgid ""
@@ -4544,25 +4542,23 @@ msgstr ""
 "tls, ssl не plain бола алады"
 
 #: ../src/common/config.py:327
-#, fuzzy
 msgid ""
 "Show a warning dialog before sending password on an plaintext connection. "
 "Can be 'warn', 'connect', 'disconnect'"
 msgstr ""
-"Парольдерді шифрленбеген байланыс арқылы беру алдында ескерту сұхбатын "
-"көрсету."
+"Парольді ашық мәтіндік байланыс арқылы жіберу алдында ескертуді көрсету. "
+"Келесіден біреу болуы мүмкін: 'warn', 'connect', 'disconnect'"
 
 #: ../src/common/config.py:328
 msgid "Show a warning dialog before using standard SSL library."
 msgstr "Қалыпты SSL жинығын қолдану алдында ескерту сұхбатын көрсету."
 
 #: ../src/common/config.py:329
-#, fuzzy
 msgid ""
 "Show a warning dialog before sending PLAIN password over a plain connection."
 msgstr ""
-"ШИФРЛЕНБЕГЕН парольдерді шифрленбеген байланыс арқылы беру алдында ескерту "
-"сұхбатын көрсету."
+"Парольдерді АШЫҚ мәтінмен ашық мәтіндік байланыс арқылы жіберу алдында "
+"ескертуді көрсету."
 
 #: ../src/common/config.py:331
 msgid "Space separated list of ssl errors to ignore."
@@ -4573,12 +4569,17 @@ msgid ""
 "Space separated list of JIDs for which you do not want to store logs. You "
 "can also add account name to log nothing for this account."
 msgstr ""
+"Сөйлесулер тарихы сақталмайтын JID-тар тізімі, бос аралықпен ажыратылған. "
+"Сонымен қатар тіркелгі үшін ешнәрсе сақтамау үшін, ол тіркелгінің атын "
+"жазыңыз."
 
 #: ../src/common/config.py:338
 msgid ""
 "Space separated list of JIDs for which you accept to not log conversations "
 "if he does not want to."
 msgstr ""
+"Сіз сөйлесулер тарихын сақтамауға келісетін JID-тар тізімі, егер олар ондай "
+"тарихты сақтамауды қаласа. Тізім бос аралықтармен ажыратылсын."
 
 #: ../src/common/config.py:341
 msgid "Whitespace sent after inactivity"
@@ -4614,6 +4615,9 @@ msgid ""
 "If True, Gajim will test file transfer proxies on startup to be sure it "
 "works. Openfire's proxies are known to fail this test even if they work."
 msgstr ""
+"Ақиқат болса, Gajim файлдармен алмасу проксилерін оларды жұмыс істеуіне "
+"тексереді. Openfire проксилері жұмыс істеп тұрса да, бұл тексеруден өте "
+"алмайтыны белгілі."
 
 #: ../src/common/config.py:368
 msgid "Answer to receipt requests"
@@ -4653,12 +4657,16 @@ msgid ""
 "If enabled and if server supports this feature, Gajim will receive messages "
 "sent and received by other resources."
 msgstr ""
+"Іске қосулы болса және сервер бұл мүмкіндікті қолдайтын болса, Gajim басқа "
+"ресурстармен жіберілген не алынған хабарламаларды алатын болады."
 
 #: ../src/common/config.py:386
 msgid ""
 "If enabled, Gajim will send your local IPs so your contact can connect to "
 "your machine to transfer files."
 msgstr ""
+"Іске қосулы болса, Gajim сіздің жергілікті IP адрестерін жібереді, "
+"контактіңіз файлдармен алмасу үшін компьютеріңізге қосыла алатын болады."
 
 #: ../src/common/config.py:448
 msgid "Is OpenPGP enabled for this contact?"
@@ -4789,9 +4797,8 @@ msgid "marine"
 msgstr "marine"
 
 #: ../src/common/config.py:523
-#, fuzzy
 msgid "Tor"
-msgstr "Оған"
+msgstr "Tor"
 
 #: ../src/common/connection_handlers_events.py:378
 #, python-format
@@ -4810,15 +4817,15 @@ msgstr "%s жіберген жазылудан бас тарту сұраным�
 
 #: ../src/common/connection_handlers_events.py:895
 #: ../src/common/connection_handlers.py:334
-#: ../src/common/connection_handlers.py:941
-#: ../src/common/connection_handlers.py:1053 ../src/common/connection.py:464
+#: ../src/common/connection_handlers.py:947
+#: ../src/common/connection_handlers.py:1059 ../src/common/connection.py:464
 #: ../src/common/logger.py:1129 ../src/gajim.py:392 ../src/session.py:97
 msgid "Disk Write Error"
 msgstr "Дискке жазу қатесі"
 
 #: ../src/common/connection_handlers_events.py:899
-#: ../src/common/connection_handlers.py:944
-#: ../src/common/connection_handlers.py:1056 ../src/common/connection.py:468
+#: ../src/common/connection_handlers.py:950
+#: ../src/common/connection_handlers.py:1062 ../src/common/connection.py:468
 #: ../src/common/logger.py:1132 ../src/gajim.py:211 ../src/session.py:101
 #, python-format
 msgid ""
@@ -4982,7 +4989,7 @@ msgstr "Жасырын болуға қолдау жоқ"
 msgid "Account %s doesn't support invisibility."
 msgstr "%s тіркелгісі жасырын болуды қолдамайды."
 
-#: ../src/common/connection_handlers.py:1715
+#: ../src/common/connection_handlers.py:1721
 msgid "I would like to add you to my roster."
 msgstr "Мен өз ростеріме сізді қосқым келеді"
 
@@ -5232,11 +5239,13 @@ msgstr ""
 "Белгісіз SSL қатесі: %d"
 
 #: ../src/common/connection.py:1324
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "The authenticity of the %s certificate could be invalid.\n"
 "The certificate does not cover this domain."
-msgstr "%s сертификатының нақтылығы қате болуы мүмкін."
+msgstr ""
+"%s сертификатының нақтылығы қате болуы мүмкін.\n"
+"Сертификат бұл доменге арналмаған."
 
 #: ../src/common/connection.py:1364
 msgid "Check your connection or try again later"
@@ -5248,22 +5257,21 @@ msgid "Authentication failed with \"%s\""
 msgstr "\"%s\" үішн аутентификация сәтсіз"
 
 #: ../src/common/connection.py:1400
-#, fuzzy
 msgid "Please check your login and password for correctness."
-msgstr "Тіркелгі атын мен пароліңізді тексеріңіз."
+msgstr "Тіркелгі атыңыз бен пароліңізді дұрыстығына тексеріңіз."
 
 #: ../src/common/connection.py:1475
 msgid "Error while removing privacy list"
 msgstr "Жекелік тізімін өшіру кезінде қате кетті"
 
 #: ../src/common/connection.py:1476
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Privacy list %s has not been removed. It is maybe active in one of your "
 "connected resources. Deactivate it and try again."
 msgstr ""
-"%s жекелік тізімі өшірілмеген. Байланысқан ресурстарыңыздың біреу үшін болуы "
-"мүмкін. Оны сөндіріп, қайталар көріңіз."
+"%s жекелік тізімі өшірілмеген. Байланысқан ресурстарыңыздың біреу үшін "
+"белсенді болуы мүмкін. Оны сөндіріп, қайталап көріңіз."
 
 #: ../src/common/connection.py:1858
 #, python-format
@@ -5278,11 +5286,11 @@ msgstr "Жіберілген контакттар:"
 msgid "Not fetched because of invisible status"
 msgstr "Жасырын қалып-күй нәтижесінде алынбаған"
 
-#: ../src/common/connection.py:2564
+#: ../src/common/connection.py:2565
 msgid "Unregister failed"
 msgstr "Тіркелгіні өшіру сәтсіз"
 
-#: ../src/common/connection.py:2565
+#: ../src/common/connection.py:2566
 #, python-format
 msgid "Unregistration with server %(server)s failed: %(error)s"
 msgstr "%(server)s серверінен тіркелгіні өшіру сәтсіз: %(error)s"
@@ -5793,14 +5801,12 @@ msgid "Image is too big"
 msgstr "Сурет тым үлкен"
 
 #: ../src/common/helpers.py:1500
-#, fuzzy
 msgid "PyCURL is not installed"
-msgstr "CRL мерзімі әлі басталмаған"
+msgstr "PyCURL орнатылмаған"
 
 #: ../src/common/helpers.py:1536
-#, fuzzy
 msgid "Error loading image"
-msgstr "Суретті жүктеу уақыты бітті"
+msgstr "Суретті жүктеу қатесі"
 
 #: ../src/common/jingle_rtp.py:109
 #, python-format
@@ -5896,9 +5902,9 @@ msgstr "ALSA: %s"
 #. Pulseaudio sink
 #: ../src/common/multimedia_helpers.py:69
 #: ../src/common/multimedia_helpers.py:83
-#, fuzzy, python-format
+#, python-format
 msgid "Pulse: %s"
-msgstr "Файл: %s"
+msgstr "Pulse: %s"
 
 #. Fake sink
 #. Fake video output
@@ -7257,15 +7263,15 @@ msgid "Open as _Link"
 msgstr "Сіл_теме ретінде ашу"
 
 #. %i is day in year (1-365)
-#: ../src/conversation_textview.py:1319
-#, fuzzy, python-format
+#: ../src/conversation_textview.py:1323
+#, python-format
 msgid "Yesterday"
 msgid_plural "%(nb_days)i days ago"
 msgstr[0] "Кеше"
-msgstr[1] "%i күн бұрын"
+msgstr[1] "%(nb_days)i күн бұрын"
 
 #. if we have subject, show it too!
-#: ../src/conversation_textview.py:1368 ../src/history_window.py:480
+#: ../src/conversation_textview.py:1372 ../src/history_window.py:480
 #, python-format
 msgid "Subject: %s\n"
 msgstr "Тақырыбы: %s\n"
@@ -7413,9 +7419,8 @@ msgid "User ID:"
 msgstr "Пайдаланушы ID-і:"
 
 #: ../src/dialogs.py:1273
-#, fuzzy
 msgid "A GTK+ Jabber/XMPP client"
-msgstr "GTK+ Jabber қолданбасы"
+msgstr "GTK+ Jabber/XMPP клиенті"
 
 #: ../src/dialogs.py:1274
 msgid "GTK+ Version:"
@@ -7986,9 +7991,9 @@ msgstr ""
 "бересіз бе?"
 
 #: ../src/dialogs.py:5197
-#, fuzzy, python-format
+#, python-format
 msgid "Certificate for account %s"
-msgstr "%s тіркелгісі үшін"
+msgstr "%s тіркелгісі үшін сертификат"
 
 #: ../src/dialogs.py:5197
 #, python-format
@@ -8011,10 +8016,27 @@ msgid ""
 "<b>Fingerprint</b>\n"
 "SHA1 Fingerprint: %(sha1)s"
 msgstr ""
+"<b>Кімге берілген:</b>\n"
+"Жалпы аты (CN): %(scn)s\n"
+"Ұйым (O): %(sorg)s\n"
+"Ұйым бөлімшесі (OU): %(sou)s\n"
+"Сериялық нөмірі: %(sn)s\n"
+"\n"
+"<b>Кім шығарған:</b>\n"
+"Жалпы аты (CN): %(icn)s\n"
+"Ұйым (O): %(iorg)s\n"
+"Ұйым бөлімшесі (OU): %(iou)s\n"
+"\n"
+"<b>Істеп тұр ма:</b>\n"
+"Қашан берілген: %(io)s\n"
+"Мерзімі бітеді: %(eo)s\n"
+"\n"
+"<b>Баспа</b>\n"
+"SHA1 баспасы: %(sha1)s"
 
 #: ../src/dialogs.py:5231 ../src/dialogs.py:5248
 msgid "View cert..."
-msgstr ""
+msgstr "Сертификатты қарау..."
 
 #: ../src/disco.py:119
 msgid "Others"
@@ -8142,7 +8164,6 @@ msgid "_Unsubscribe"
 msgstr "Жа_зылудан бас тарту"
 
 #: ../src/features_window.py:50
-#, fuzzy
 msgid "SSL certificate validation"
 msgstr "SSL сертификатын растау"
 
@@ -8154,9 +8175,8 @@ msgstr ""
 "жинақ."
 
 #: ../src/features_window.py:52 ../src/features_window.py:53
-#, fuzzy
 msgid "Requires python-pyopenssl > 0.12 and pyasn1."
-msgstr "Python-pyopenssl талап етеді."
+msgstr "Талап етеді:  python-pyopenssl > 0.12 және pyasn1."
 
 #: ../src/features_window.py:54
 msgid "Bonjour / Zeroconf"
@@ -8177,6 +8197,8 @@ msgid ""
 "Requires pybonjour and bonjour SDK running (http://developer.apple.com/"
 "opensource/)."
 msgstr ""
+"Талап етеді: pybonjour және іске қосулы bonjour SDK (http://developer.apple."
+"com/opensource/)."
 
 #: ../src/features_window.py:58
 msgid "Command line"
@@ -8279,9 +8301,8 @@ msgid "Requires libgtkspell."
 msgstr "Талап етеді: libgtkspell."
 
 #: ../src/features_window.py:85
-#, fuzzy
 msgid "Requires libgtkspell and libenchant."
-msgstr "Талап етеді: libgtkspell."
+msgstr "Талап етеді: libgtkspell және libenchant."
 
 #: ../src/features_window.py:86
 msgid "Notification"
@@ -8374,35 +8395,33 @@ msgid "Ability to start audio and video chat."
 msgstr "Аудио мен видео чаттарды іске асыру мүмкіндігі."
 
 #: ../src/features_window.py:108
-#, fuzzy
 msgid "Requires python-farsight and gstreamer-plugins-bad."
-msgstr "Талап етеді: python-farsight."
+msgstr "Талап етеді:  python-farsight және gstreamer-plugins-bad."
 
 #: ../src/features_window.py:110
 msgid "UPnP-IGD"
-msgstr ""
+msgstr "UPnP-IGD"
 
 #: ../src/features_window.py:111
 msgid "Ability to request your router to forward port for file transfer."
 msgstr ""
+"Роутеріңізді файлдармен алмасулар үшін портты бағдарлауды сұрау мүмкіндігі."
 
 #: ../src/features_window.py:112
-#, fuzzy
 msgid "Requires python-gupnp-igd."
-msgstr "Талап етеді: python-gnome2."
+msgstr "Талап етеді:  python-gupnp-igd."
 
 #: ../src/features_window.py:114
 msgid "UPower"
-msgstr ""
+msgstr "UPower"
 
 #: ../src/features_window.py:115
 msgid "Ability to disconnect properly just before suspending the machine."
-msgstr ""
+msgstr "Компьютеріңізді ұйықтатқанға дейін байланысты дұрыс аяқтау мүмкіндігі."
 
 #: ../src/features_window.py:116
-#, fuzzy
 msgid "Requires upower and python-dbus."
-msgstr "python-dbus талап етеді."
+msgstr "Талап етеді:  upower және python-dbus."
 
 #: ../src/features_window.py:124
 msgid "?features:Available"
@@ -9429,28 +9448,28 @@ msgid "A Password is required to join the room %s. Please type it."
 msgstr "%s бөлмесіне кіру үшін пароль керек. Оны көрсетіңіз."
 
 #: ../src/gui_interface.py:296
-#, fuzzy, python-format
+#, python-format
 msgid "Maximum number of users for <b>%s</b> has been reached"
-msgstr "%s үшін пайдаланушылар саны максималды санына жетті"
+msgstr "<b>%s</b> үшін пайдаланушылар саны максималды санына жетті"
 
 #: ../src/gui_interface.py:305
-#, fuzzy, python-format
+#, python-format
 msgid "You are banned from group chat <b>%s</b>."
-msgstr "Сізді %s топ чатынан бандаған."
+msgstr "Сізді <b>%s</b> топ чатынан бандаған."
 
 #: ../src/gui_interface.py:311
-#, fuzzy, python-format
+#, python-format
 msgid "Group chat <b>%s</b> does not exist."
-msgstr "%s топтық чаты жоқ."
+msgstr "<b>%s</b> топтық чаты жоқ."
 
 #: ../src/gui_interface.py:314
 msgid "Group chat creation is restricted."
 msgstr "Топтық чаттарды жасау рұқсат етілмеген."
 
 #: ../src/gui_interface.py:317
-#, fuzzy, python-format
+#, python-format
 msgid "Your registered nickname must be used in group chat <b>%s</b>."
-msgstr "Сіздің тіркелген ник атыңыз %s топ чатында қолданылуы керек."
+msgstr "Сіздің тіркелген ник атыңыз <b>%s</b> топ чатында қолданылуы керек."
 
 #: ../src/gui_interface.py:322
 #, python-format
@@ -9518,15 +9537,13 @@ msgid "OpenGPG Passphrase Incorrect"
 msgstr "OpenGPG кілтсөзі қате"
 
 #: ../src/gui_interface.py:653
-#, fuzzy
 msgid "Certificate Passphrase Required"
-msgstr "Сертификат мерзімі біткен"
+msgstr "Сертификаттың кілттік фразасы керек"
 
 #: ../src/gui_interface.py:654
-#, fuzzy, python-format
+#, python-format
 msgid "Enter the passphrase for the certificate for account %s"
-msgstr ""
-"%(keyid)s кілті үшін GPG кілт құпия сөзін енгізіңіз (%(account)s тіркелгісі)."
+msgstr "%s тіркелгісінің сертификаты үшін кілттік фразаны енгізіңіз"
 
 #: ../src/gui_interface.py:676
 msgid "GPG key not trusted"
@@ -9541,13 +9558,12 @@ msgstr ""
 "шифрлеуді шынымен қалайсыз ба?"
 
 #: ../src/gui_interface.py:689
-#, fuzzy
 msgid ""
 "Gnome Keyring is installed but not correctly started (environment variable "
 "probably not correctly set)"
 msgstr ""
-"Gnome Keyring орнатулы тұр, бірақ дұрыс қосылмаған (қоршам айнымалысы дұрыс "
-"орнатылмаған сияқты)"
+"Gnome Keyring орнатылған, бірақ дұрыс іске қосылмаған (мүмкін, қоршам "
+"айнымалысы дұрыс орнатылмаған)"
 
 #: ../src/gui_interface.py:796
 #, python-format
@@ -9681,16 +9697,17 @@ msgid "Insecure connection"
 msgstr "Қауіпсіз емес байланыс"
 
 #: ../src/gui_interface.py:1284
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "You are about to connect to the account %(account)s (%(server)s) with an "
 "insecure connection. This means all your conversations will be exchanged "
 "unencrypted. This type of connection is really discouraged.\n"
 "Are you sure you want to do that?"
 msgstr ""
-"Сіз серверге қауіпсіз емес байланысты орнатасыз. Бұл дегеніміз, сіздің "
-"барлық сөйлесулеріңіз шифрленбеген түрде жүреді. Осыны жасауды шынымен "
-"қалайсыз ба?"
+"Сіз %(account)s (%(server)s) тіркелгісіне қауіпсіз емес байланыс орнатасыз. "
+"Бұл дегеніміз, сіздің барлық сөйлесулеріңіз шифрленбеген түрде жүреді. "
+"Мұндай байланыс түрін қолдану ұсынылмайды.\n"
+"Осыны жасауды шынымен қалайсыз ба?"
 
 #: ../src/gui_interface.py:1290 ../src/gui_interface.py:1331
 #: ../src/gui_interface.py:1372
@@ -9699,7 +9716,7 @@ msgstr "Иә, қауіпсіз емес байланысты орнатқым к
 
 #: ../src/gui_interface.py:1291
 msgid "Gajim will NOT connect unless you check this box"
-msgstr ""
+msgstr "Бұл жалауша қойылмаса, Gajim байланысты ОРНАТПАЙДЫ"
 
 #: ../src/gui_interface.py:1328
 msgid ""
@@ -9840,9 +9857,8 @@ msgstr ""
 "ИӘ шертсеңіз, күте тұрыңыз..."
 
 #: ../src/history_manager.py:259
-#, fuzzy
 msgid "Database Cleanup"
-msgstr "Дерекқор қатесі"
+msgstr "Дерекқорды тазарту"
 
 #: ../src/history_manager.py:477
 msgid "Exporting History Logs..."
@@ -9854,23 +9870,23 @@ msgid "%(who)s on %(time)s said: %(message)s\n"
 msgstr "%(time)s уақытында %(who)s айтқан: %(message)s\n"
 
 #: ../src/history_manager.py:592
-#, fuzzy, python-format
+#, python-format
 msgid "Do you really want to delete the logs of %(jid)s?"
-msgstr "Ерекшеленген хабарламаны өшіруді шынымен қалайсыз ба?"
+msgstr ""
+"%(jid)s контактымен барлық хабарламалар тарихын өшіруді шынымен қалайсыз ба?"
 
 #: ../src/history_manager.py:596
-#, fuzzy
 msgid "Do you really want to delete logs of the selected contacts?"
-msgstr "Ерекшеленген контактпен барлық сөйлесулер тарихын өшіруді қалайсыз ба?"
+msgstr ""
+"Ерекшеленген контакттармен барлық сөйлесулер тарихын өшіруді қалайсыз ба?"
 
 #: ../src/history_manager.py:598 ../src/history_manager.py:637
 msgid "This is an irreversible operation."
 msgstr "Бұл қайтарылмайтын әрекет."
 
 #: ../src/history_manager.py:600 ../src/history_manager.py:639
-#, fuzzy
 msgid "Deletion Confirmation"
-msgstr "Растауды тайдыру"
+msgstr "Өшіруді растау"
 
 #: ../src/history_manager.py:634
 msgid "Do you really want to delete the selected message?"
@@ -9912,9 +9928,8 @@ msgid "Status is now: %(status)s"
 msgstr "Қазір қалып-күйі: %(status)s"
 
 #: ../src/htmltextview.py:522
-#, fuzzy
 msgid "Loading"
-msgstr "Код жазуда"
+msgstr "Жүктелуде"
 
 #: ../src/message_window.py:222
 msgid "You are going to close several tabs"
@@ -10495,7 +10510,7 @@ msgid "Confirm these session options"
 msgstr "Бұл сессия опцияларын растау"
 
 #: ../src/session.py:416
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "The remote client wants to negotiate a session with these features:\n"
 "\n"
@@ -10503,8 +10518,7 @@ msgid ""
 "\n"
 "Are these options acceptable?"
 msgstr ""
-"Қашықтағы контакт сессияны '\n"
-"                            келесі мүмкіндіктермен бастағысы келеді:\n"
+"Қашықтағы контакт сессияны келесі мүмкіндіктермен бастағысы келеді:\n"
 "\n"
 "%s\n"
 "\n"
@@ -10526,9 +10540,8 @@ msgstr ""
 "Сессияны жалғастыру керек пе?"
 
 #: ../src/session.py:478
-#, fuzzy
 msgid "Always accept for this contact"
-msgstr "Бұл контакт үшін OpenPGP қосулы тұр ма?"
+msgstr "Бұл контакт үшін әрқашан қабылдау"
 
 #: ../src/statusicon.py:228
 msgid "_Change Status Message..."
@@ -10679,7 +10692,7 @@ msgstr ""
 
 #: ../src/upower_listener.py:31
 msgid "Machine going to sleep"
-msgstr ""
+msgstr "Компьютер ұйықтатылады"
 
 #: ../src/vcard.py:285
 msgid "?Client:Unknown"
