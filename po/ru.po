@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-11-11 00:06+0400\n"
-"PO-Revision-Date: 2011-11-15 23:22+0300\n"
+"PO-Revision-Date: 2012-02-24 21:41+0300\n"
 "Last-Translator: Fomin Denis <fominde@mail.ru>\n"
 "Language-Team: Linux Support LLC\n"
 "Language: ru\n"
@@ -2483,7 +2483,7 @@ msgstr "<b>Что вы хотите сделать?</b>"
 
 #: ../data/gui/remove_account_window.ui.h:2
 msgid "Remove account _only from Gajim"
-msgstr "Удалит учетную запись _только из Gajim"
+msgstr "Удалить учетную запись _только из Gajim"
 
 #: ../data/gui/remove_account_window.ui.h:3
 msgid "Remove account from Gajim and from _server"
