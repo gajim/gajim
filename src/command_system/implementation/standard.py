@@ -127,7 +127,7 @@ class StandardCommonCommands(CommandContainer):
 
     @command(raw=True, empty=True)
     @doc(_("""
-    Set current the status
+    Set the current the status
 
     Status can be given as one of the following values: online, away,
     chat, xa, dnd.
