@@ -920,10 +920,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             self.received_history_pos = pos
 
     def print_conversation_line(self, text, kind, name, tim,
-                    other_tags_for_name=[], other_tags_for_time=[],
-                    other_tags_for_text=[], count_as_new=True, subject=None,
-                    old_kind=None, xhtml=None, simple=False, xep0184_id=None,
-                    graphics=True, displaymarking=None):
+    other_tags_for_name=[], other_tags_for_time=[], other_tags_for_text=[],
+    count_as_new=True, subject=None, old_kind=None, xhtml=None, simple=False,
+    xep0184_id=None, graphics=True, displaymarking=None, msg_id=None):
         """
         Print 'chat' type messages
         """
@@ -934,9 +933,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         if self.was_at_the_end or kind == 'outgoing':
             end = True
         textview.print_conversation_line(text, jid, kind, name, tim,
-                other_tags_for_name, other_tags_for_time, other_tags_for_text,
-                subject, old_kind, xhtml, simple=simple, graphics=graphics,
-                displaymarking=displaymarking)
+            other_tags_for_name, other_tags_for_time, other_tags_for_text,
+            subject, old_kind, xhtml, simple=simple, graphics=graphics,
+            displaymarking=displaymarking)
 
         if xep0184_id is not None:
             textview.show_xep0184_warning(xep0184_id)
@@ -979,18 +978,18 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
                     type_ = 'printed_' + self.type_id
                     event = 'message_received'
                 show_in_roster = notify.get_show_in_roster(event,
-                        self.account, self.contact, self.session)
+                    self.account, self.contact, self.session)
                 show_in_systray = notify.get_show_in_systray(event,
-                        self.account, self.contact, type_)
+                    self.account, self.contact, type_)
 
-                event = gajim.events.create_event(type_, (self,),
+                event = gajim.events.create_event(type_, (self, msg_id),
                     show_in_roster=show_in_roster,
                     show_in_systray=show_in_systray)
                 gajim.events.add_event(self.account, full_jid, event)
                 # We need to redraw contact if we show in roster
                 if show_in_roster:
                     gajim.interface.roster.draw_contact(self.contact.jid,
-                            self.account)
+                        self.account)
 
         if not self.parent_win:
             return
@@ -2398,8 +2397,8 @@ class ChatControl(ChatControlBase):
         return gajim.nicks[self.account]
 
     def print_conversation(self, text, frm='', tim=None, encrypted=False,
-                    subject=None, xhtml=None, simple=False, xep0184_id=None,
-                    displaymarking=None):
+    subject=None, xhtml=None, simple=False, xep0184_id=None,
+    displaymarking=None, msg_id=None):
         """
         Print a line in the conversation
 
@@ -2430,21 +2429,22 @@ class ChatControl(ChatControlBase):
                 # ESessions
                 if not encrypted:
                     msg = _('The following message was NOT encrypted')
-                    ChatControlBase.print_conversation_line(self, msg, 'status', '',
-                            tim)
+                    ChatControlBase.print_conversation_line(self, msg, 'status',
+                        '',  tim)
             else:
                 # GPG encryption
                 if encrypted and not self.gpg_is_active:
                     msg = _('The following message was encrypted')
-                    ChatControlBase.print_conversation_line(self, msg, 'status', '',
-                            tim)
-                    # turn on OpenPGP if this was in fact a XEP-0027 encrypted message
+                    ChatControlBase.print_conversation_line(self, msg, 'status',
+                        '', tim)
+                    # turn on OpenPGP if this was in fact a XEP-0027 encrypted
+                    # message
                     if encrypted == 'xep27':
                         self._toggle_gpg()
                 elif not encrypted and self.gpg_is_active:
                     msg = _('The following message was NOT encrypted')
-                    ChatControlBase.print_conversation_line(self, msg, 'status', '',
-                            tim)
+                    ChatControlBase.print_conversation_line(self, msg, 'status',
+                        '', tim)
             if not frm:
                 kind = 'incoming'
                 name = contact.get_shown_name()
@@ -2461,8 +2461,9 @@ class ChatControl(ChatControlBase):
                     if xhtml:
                         xhtml = '<body xmlns="%s">%s</body>' % (NS_XHTML, xhtml)
         ChatControlBase.print_conversation_line(self, text, kind, name, tim,
-                subject=subject, old_kind=self.old_msg_kind, xhtml=xhtml,
-                simple=simple, xep0184_id=xep0184_id, displaymarking=displaymarking)
+            subject=subject, old_kind=self.old_msg_kind, xhtml=xhtml,
+            simple=simple, xep0184_id=xep0184_id, displaymarking=displaymarking,
+            msg_id=msg_id)
         if text.startswith('/me ') or text.startswith('/me\n'):
             self.old_msg_kind = None
         else:

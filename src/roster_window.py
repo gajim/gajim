@@ -1889,6 +1889,18 @@ class RosterWindow:
         Only performed if removal was requested before but the contact still had
         pending events
         """
+
+        msg_ids = []
+        for ev in event_list:
+            if ev.type_ != 'printed_chat':
+                continue
+            if len(ev.parameters) > 1 and ev.parameters[1]:
+                # There is a msg_id
+                msg_ids.append(ev.parameters[1])
+
+        if msg_ids:
+            gajim.logger.set_read_messages(msg_ids)
+
         contact_list = ((event.jid.split('/')[0], event.account) for event in \
                 event_list)
 
@@ -2632,9 +2644,14 @@ class RosterWindow:
 
             obj.session.control.print_conversation(obj.msgtxt, typ,
                 tim=obj.timestamp, encrypted=obj.encrypted, subject=obj.subject,
-                xhtml=obj.xhtml, displaymarking=obj.displaymarking)
+                xhtml=obj.xhtml, displaymarking=obj.displaymarking,
+                msg_id=obj.msg_id)
             if obj.msg_id:
-                gajim.logger.set_read_messages([obj.msg_id])
+                pw = obj.session.control.parent_win
+                end = obj.session.control.was_at_the_end
+                if not pw or (pw.get_active_control() and obj.session.control \
+                == pw.get_active_control() and pw.is_active() and end):
+                    gajim.logger.set_read_messages([obj.msg_id])
         elif obj.popup:
             contact = gajim.contacts.get_contact(obj.conn.name, obj.jid)
             obj.session.control = gajim.interface.new_chat(contact,
