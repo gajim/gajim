@@ -468,7 +468,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         self.user_nick = None
 
         self.smooth = True
-        self.msg_textview.grab_focus()
 
         self.command_hits = []
         self.last_key_tabs = False
