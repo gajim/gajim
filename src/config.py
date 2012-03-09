@@ -3655,7 +3655,11 @@ class AccountCreationWizardWindow:
             password = self.xml.get_object('password_entry').get_text().decode(
                 'utf-8')
 
-            jid = username + '@' + server
+            if anonymous:
+                jid = ''
+            else:
+                jid = username + '@'
+            jid += server
             # check if jid is conform to RFC and stringprep it
             try:
                 jid = helpers.parse_jid(jid)
