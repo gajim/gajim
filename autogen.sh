@@ -22,8 +22,10 @@
   && ls -1 data/gajim.desktop.in.in \
   src/*.py src/common/*.py src/command_system/implementation/*.py src/common/zeroconf/*.py src/plugins/*.py | grep -v ipython_view.py >> \
   po/POTFILES.in \
-  && echo -e "data/gajim.desktop.in\nsrc/ipython_view.py" > po/POTFILES.skip \
-  && ls -1 plugins/*/*.py plugins/*/*.ui >> po/POTFILES.skip || exit 1
+  && echo -e "data/gajim.desktop.in\nsrc/ipython_view.py" > po/POTFILES.skip  || exit 1
+  if [ $(find plugins/ -name '*.py' | wc -l) -gt 0 ];then
+    ls -1 plugins/*/*.py plugins/*/*.ui >> po/POTFILES.skip
+  fi
   if test -z `which pkg-config 2>/dev/null`;then
     echo "***Error: pkg-config not found***"
 	echo "See README.html for build requirements."
