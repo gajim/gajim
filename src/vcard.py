@@ -242,7 +242,7 @@ class VcardWindow:
             return
         if obj.resource:
             # It's a muc occupant vcard
-            if obj.fjid != self.real_jid:
+            if obj.fjid != self.contact.jid:
                 return
         else:
             if obj.jid != self.contact.jid:
@@ -257,11 +257,15 @@ class VcardWindow:
             self.update_progressbar_timeout_id = None
 
     def set_last_status_time(self, obj):
+        if obj.conn.name != self.account:
+            return
         if obj.fjid != self.real_jid:
             return
         self.fill_status_label()
 
     def set_os_info(self, obj):
+        if obj.conn.name != self.account:
+            return
         if self.xml.get_object('information_notebook').get_n_pages() < 5:
             return
         if obj.fjid != self.real_jid:
@@ -291,9 +295,11 @@ class VcardWindow:
         self.test_remove_progressbar()
 
     def set_entity_time(self, obj):
+        if obj.conn.name != self.account:
+            return
         if self.xml.get_object('information_notebook').get_n_pages() < 5:
             return
-        if obj.fjid != self.real_jid:
+        if obj.fjid != self.contact.jid:
             return
         i = 0
         time_s = ''
