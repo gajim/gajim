@@ -1292,6 +1292,8 @@ class GcMessageReceivedEvent(nec.NetworkIncomingEvent):
                 if self.status_code != []:
                     gajim.nec.push_incoming_event(GcConfigChangedReceivedEvent(
                         None, conn=self.conn, msg_event=self))
+            if self.msg_obj.form_node:
+                return True
             return
 
         self.displaymarking = None
