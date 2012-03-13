@@ -5158,6 +5158,7 @@ class VoIPCallReceivedDialog(object):
         session = gajim.connections[self.account].get_jingle_session(self.fjid,
             self.sid)
         if not session:
+            dialog.destroy()
             return
         if response == gtk.RESPONSE_YES:
             #TODO: Ensure that ctrl.contact.resource == resource
