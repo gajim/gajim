@@ -498,6 +498,11 @@ class RosterTooltip(NotificationAreaTooltip):
         name_markup = u'<span weight="bold">' + \
                 gobject.markup_escape_text(prim_contact.get_shown_name())\
                 + '</span>'
+        if gajim.config.get('mergeaccounts'):
+          name_markup += u" <span foreground='#888A85'>(" + \
+                gobject.markup_escape_text(prim_contact.account.name) \
+                + ')</span>'
+
         if self.account and helpers.jid_is_blocked(self.account,
         prim_contact.jid):
             name_markup += _(' [blocked]')

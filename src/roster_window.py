@@ -1163,29 +1163,6 @@ class RosterWindow:
             name += i18n.paragraph_direction_mark(unicode(name))
             name += u' (%d)' % nb_connected_contact
 
-        # show (account_name) if there are 2 contact with same jid
-        # in merged mode
-        if self.regroup:
-            add_acct = False
-            # look through all contacts of all accounts
-            for account_ in gajim.connections:
-                # useless to add account name
-                if account_ == account:
-                    continue
-                for jid_ in gajim.contacts.get_jid_list(account_):
-                    contact_ = gajim.contacts.get_first_contact_from_jid(
-                            account_, jid_)
-                    if contact_.get_shown_name() == contact.get_shown_name() \
-                    and (jid_, account_) != (jid, account):
-                        add_acct = True
-                        break
-                if add_acct:
-                    # No need to continue in other account
-                    # if we already found one
-                    break
-            if add_acct:
-                name += ' (' + account + ')'
-
         # add status msg, if not empty, under contact name in
         # the treeview
         if contact.status and gajim.config.get('show_status_msgs_in_roster'):
