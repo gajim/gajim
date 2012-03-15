@@ -811,6 +811,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                 gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
                     show='offline'))
             else:
+                self.sm.enabled = False
                 gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
                     show='error'))
             self.disconnect()
