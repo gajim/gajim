@@ -114,6 +114,7 @@ class Smacks():
         # Ask for service discovery, etc..
         if stanza.getTag('item-not-found'):
             self.resuming = False
+            self.enabled = False
             # we need to bind a resource
             self._owner.NonBlockingBind.resuming = False
             self._owner._on_auth_bind(None)
