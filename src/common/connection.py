@@ -1344,7 +1344,10 @@ class Connection(CommonConnection, ConnectionHandlers):
                 msg=_('Connection with account %s has been lost. Retry '
                 'connecting.') % self.name))
             return
-        name = gajim.config.get_per('accounts', self.name, 'name')
+        if gajim.config.get_per('accounts', self.name, 'anonymous_auth'):
+            name = None
+        else:
+            name = gajim.config.get_per('accounts', self.name, 'name')
         self._register_handlers(self.connection, 'ssl')
         self.connection.auth(name, self.password, self.server_resource, 1,
                 self.__on_auth)
