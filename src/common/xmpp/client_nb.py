@@ -530,6 +530,7 @@ class NonBlockingClient:
                 sm.set_owner(self)
                 self.Dispatcher.sm = sm
                 nb_bind.PlugIn(self)
+                self.on_auth(self, 'sasl')
                 return
 
             nb_bind.PlugIn(self)
