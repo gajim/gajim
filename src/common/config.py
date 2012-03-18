@@ -456,7 +456,7 @@ class Config:
                     'speller_language': [ opt_str, '', _('Language for which we want to check misspelled words')],
             }, {}),
             'plugins': ({
-                'active': [opt_bool, False, _('State whether plugins should be activated on exit (this is saved on Gajim exit). This option SHOULD NOT be used to (de)activate plug-ins. Use GUI instead.')],
+                'active': [opt_bool, False, _('State whether plugins should be activated on startup (this is saved on Gajim exit). This option SHOULD NOT be used to (de)activate plug-ins. Use GUI instead.')],
             },{}),
     }
 
