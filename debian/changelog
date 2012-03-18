@@ -1,11 +1,11 @@
-gajim (0.15~beta4-1) unstable; urgency=low
+gajim (0.15-1) unstable; urgency=low
 
   * New upstream release.
   * remove 00_debian-copying.diff because upstream doesn't install it anymore
   * remove 01_configure-ac.diff because upstream changed configure dependencies
   * remove python-gnupginterface from recommands list, it's no more used
 
- -- Yann Leboulanger <asterix@lagaule.org>  Sat, 08 Oct 2011 22:15:03 +0200
+ -- Yann Leboulanger <asterix@lagaule.org>  Sat, 18 Mar 2012 10:32:38 +0100
 
 gajim (0.14.4-1) unstable; urgency=low
 
