@@ -32,7 +32,8 @@ import subprocess
 try:
     node = subprocess.Popen('hg tip --template "{node|short}"', shell=True,
         stdout=subprocess.PIPE).communicate()[0]
-    version += '-' + node
+    if node:
+        version += '-' + node
 except Exception:
     pass
 
