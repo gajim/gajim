@@ -103,6 +103,7 @@ class Smacks():
                 self.uqueue.pop(0)
 
         if stanza.getName() == 'resumed':
+            self.enabled = True
             self.resuming = True
             self.con.set_oldst()
             if self.uqueue != []:
