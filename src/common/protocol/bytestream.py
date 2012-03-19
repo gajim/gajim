@@ -195,6 +195,10 @@ class ConnectionBytestream:
         # user response to ConfirmationDialog may come after we've disconneted
         if not self.connection or self.connected < 2:
             return
+        if file_props['session-type'] == 'jingle':
+            jingle = self._sessions[file_props['session-sid']]
+            jingle.cancel_session()
+            return
         iq = xmpp.Iq(to=unicode(file_props['sender']), typ='error')
         iq.setAttr('id', file_props['request-id'])
         if code == '400' and typ in ('stream', 'profile'):

@@ -148,6 +148,14 @@ class JingleSession(object):
         reason = xmpp.Node('reason')
         reason.addChild('decline')
         self._session_terminate(reason)
+        
+    def cancel_session(self):
+        """
+        Called when user declines session in UI (when we aren't the initiator)
+        """
+        reason = xmpp.Node('reason')
+        reason.addChild('cancel')
+        self._session_terminate(reason)
 
     def approve_content(self, media, name=None):
         content = self.get_content(media, name)
@@ -730,7 +738,6 @@ class JingleSession(object):
         self.__session_info(p)
 
     def _session_terminate(self, reason=None):
-        assert self.state != JingleStates.ended
         stanza, jingle = self.__make_jingle('session-terminate', reason=reason)
         self.__broadcast_all(stanza, jingle, None, 'session-terminate-sent')
         if self.connection.connection and self.connection.connected >= 2:
