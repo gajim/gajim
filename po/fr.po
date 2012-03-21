@@ -1755,7 +1755,7 @@ msgstr "<b>Notifications visuelles</b>"
 
 #: ../data/gui/preferences_window.ui.h:22
 msgid "<i>(example: stunserver.org)</i>"
-msgstr "<i>(exemple: stunserver.org)>/i>"
+msgstr "<i>(exemple: stunserver.org)</i>"
 
 #: ../data/gui/preferences_window.ui.h:23
 msgid "Advanced"
