@@ -1150,6 +1150,24 @@ class Interface:
             'resource. Please type a new one'), resource=proposed_resource,
             ok_handler=on_ok)
 
+    def handle_event_jingleft_cancel(self, obj):
+        ft = self.instances['file_transfers']
+        file_props = None
+        
+        # get the file_props of our session
+        for sid in obj.conn.files_props:
+            fp = obj.conn.files_props[sid]
+            if fp['session-sid'] == obj.sid:
+                file_props = fp
+                break
+                
+        ft.set_status(file_props['type'], file_props['sid'], 'stop')
+        file_props['error'] = -4 # is it the right error code?
+
+        ft.show_stopped(obj.jid, file_props, 'Peer cancelled ' +
+                            'the transfer')
+        obj.conn.delete_jingle_session(obj.sid)
+        
     def handle_event_jingle_incoming(self, obj):
         # ('JINGLE_INCOMING', account, peer jid, sid, tuple-of-contents==(type,
         # data...))
@@ -1486,6 +1504,7 @@ class Interface:
                 self.handle_event_jingle_disconnected],
             'jingle-error-received': [self.handle_event_jingle_error],
             'jingle-request-received': [self.handle_event_jingle_incoming],
+            'jingleFT-cancelled-received': [self.handle_event_jingleft_cancel],
             'last-result-received': [self.handle_event_last_status_time],
             'message-error': [self.handle_event_msgerror],
             'message-not-sent': [self.handle_event_msgnotsent],

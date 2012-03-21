@@ -585,7 +585,7 @@ class JingleSession(object):
         else:
             # TODO
             text = reason
-        gajim.nec.push_incoming_event(JingleDisconnectedReceivedEvent(None,
+        gajim.nec.push_incoming_event(JingleTransferCancelledEvent(None,
             conn=self.connection, jingle_session=self, media=None,
             reason=text))
 
