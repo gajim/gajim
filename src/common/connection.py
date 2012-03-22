@@ -1616,8 +1616,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         if not gajim.account_is_connected(self.name):
             return
         self.connection.set_send_timeout(self.keepalives, self.send_keepalive)
-        self.connection.set_send_timeout2(self.pingalives,
-        	self.sm.enabled and self.sm.request_ack or self.sendPing)
+        self.connection.set_send_timeout2(self.pingalives, self.sendPing)
         self.connection.onreceive(None)
 
         self.privacy_rules_requested = False
