@@ -102,6 +102,8 @@ class JingleSession(object):
         # file. Could be 'md5', 'sha-1', etc...
         self.hash_algo = None
         self.file_hash = None
+        # Tells whether this session is a file transfer or not
+        self.session_type_FT = False
         # callbacks to call on proper contents
         # use .prepend() to add new callbacks, especially when you're going
         # to send error instead of ack
@@ -585,9 +587,11 @@ class JingleSession(object):
         else:
             # TODO
             text = reason
-        gajim.nec.push_incoming_event(JingleTransferCancelledEvent(None,
-            conn=self.connection, jingle_session=self, media=None,
-            reason=text))
+            
+        if reason == 'cancel' and self.session_type_FT:
+            gajim.nec.push_incoming_event(JingleTransferCancelledEvent(None,
+                conn=self.connection, jingle_session=self, media=None,
+                reason=text))
 
     def __broadcast_all(self, stanza, jingle, error, action):
         """

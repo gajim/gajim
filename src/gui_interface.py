@@ -1166,7 +1166,6 @@ class Interface:
 
         ft.show_stopped(obj.jid, file_props, 'Peer cancelled ' +
                             'the transfer')
-        obj.conn.delete_jingle_session(obj.sid)
         
     def handle_event_jingle_incoming(self, obj):
         # ('JINGLE_INCOMING', account, peer jid, sid, tuple-of-contents==(type,

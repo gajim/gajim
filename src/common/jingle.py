@@ -149,6 +149,8 @@ class ConnectionJingle(object):
             return
         use_security = contact.supports(xmpp.NS_JINGLE_XTLS)
         jingle = JingleSession(self, weinitiate=True, jid=jid)
+        # this is a file transfer
+        jingle.session_type_FT = True
         self._sessions[jingle.sid] = jingle
         file_props['sid'] = jingle.sid
         if contact.supports(xmpp.NS_JINGLE_BYTESTREAM):
