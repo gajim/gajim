@@ -268,7 +268,7 @@ class VcardWindow:
             return
         if self.xml.get_object('information_notebook').get_n_pages() < 5:
             return
-        if obj.fjid != self.contact.jid:
+        if obj.fjid != self.contact.jid and obj.fjid != self.real_jid:
             return
         i = 0
         client = ''
@@ -299,7 +299,7 @@ class VcardWindow:
             return
         if self.xml.get_object('information_notebook').get_n_pages() < 5:
             return
-        if obj.fjid != self.contact.jid:
+        if obj.fjid != self.contact.jid and obj.fjid != self.real_jid:
             return
         i = 0
         time_s = ''
