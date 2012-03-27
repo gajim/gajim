@@ -5,8 +5,7 @@ try:
     import OpenSSL.SSL
     import OpenSSL.crypto
     ver = OpenSSL.__version__
-    ver_l = [int(i) for i in ver.split('.')]
-    if ver_l < [0, 12]:
+    if ver < '0.12':
         raise ImportError
     from pyasn1.type import univ, constraint, char, namedtype, tag
     from pyasn1.codec.der.decoder import decode
