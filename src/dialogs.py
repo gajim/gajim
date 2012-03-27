@@ -2776,25 +2776,25 @@ class PopupNotificationWindow:
             path_to_image = gtkgui_helpers.get_icon_path('gajim-chat_msg_recv', 48)
 
         if event_type == _('Contact Signed In'):
-            bg_color = 'limegreen'
+            bg_color = gajim.config.get('notif_signin_color')
         elif event_type == _('Contact Signed Out'):
-            bg_color = 'red'
+            bg_color = gajim.config.get('notif_signout_color')
         elif event_type in (_('New Message'), _('New Single Message'),
             _('New Private Message'), _('New E-mail')):
-            bg_color = 'dodgerblue'
+            bg_color = gajim.config.get('notif_message_color')
         elif event_type == _('File Transfer Request'):
-            bg_color = 'khaki'
+            bg_color = gajim.config.get('notif_ftrequest_color')
         elif event_type == _('File Transfer Error'):
-            bg_color = 'firebrick'
+            bg_color = gajim.config.get('notif_fterror_color')
         elif event_type in (_('File Transfer Completed'),
                                                 _('File Transfer Stopped')):
-            bg_color = 'yellowgreen'
+            bg_color = gajim.config.get('notif_ftcomplete_color')
         elif event_type == _('Groupchat Invitation'):
-            bg_color = 'tan1'
+            bg_color = gajim.config.get('notif_invite_color')
         elif event_type == _('Contact Changed Status'):
-            bg_color = 'thistle2'
+            bg_color = gajim.config.get('notif_status_color')
         else: # Unknown event! Shouldn't happen but deal with it
-            bg_color = 'white'
+            bg_color = gajim.config.get('notif_other_color')
         popup_bg_color = gtk.gdk.color_parse(bg_color)
         close_button.modify_bg(gtk.STATE_NORMAL, popup_bg_color)
         eventbox.modify_bg(gtk.STATE_NORMAL, popup_bg_color)

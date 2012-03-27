@@ -99,6 +99,15 @@ class Config:
             'statusmsgcolor': [ opt_color, '#4e9a06', _('Status message text color.'), True ],
             'markedmsgcolor': [ opt_color, '#ff8080', '', True ],
             'urlmsgcolor': [ opt_color, '#204a87', '', True ],
+            'notif_signin_color': [ opt_color, '#32CD32', _('Contact signed in notification color.') ], # limegreen
+            'notif_signout_color': [ opt_color, '#FF0000', _('Contact signout notification color') ], # red
+            'notif_message_color': [ opt_color, '#1E90FF', _('New message/email notification color.') ], # dodgerblue
+            'notif_ftrequest_color': [ opt_color, '#F0E68C', _('File transfer request notification color.') ], # khaki
+            'notif_fterror_color': [ opt_color, '#B22222', _('File transfer error notification color.') ], # firebrick
+            'notif_ftcomplete_color': [ opt_color, '#9ACD32', _('File transfer complete or stopped notification color.') ], # yellowgreen
+            'notif_invite_color': [ opt_color, '#D2B48C', _('Groupchat invitation notification color') ], # tan1
+            'notif_status_color': [ opt_color, '#D8BFD8', _('Status changed notification background color') ], # thistle2
+            'notif_other_color': [ opt_color, '#FFFFFF', _('Other dialogs color.') ], # white
             'inmsgfont': [ opt_str, '', _('Incoming nickname font.'), True ],
             'outmsgfont': [ opt_str, '', _('Outgoing nickname font.'), True ],
             'inmsgtxtfont': [ opt_str, '', _('Incoming text font.'), True ],
