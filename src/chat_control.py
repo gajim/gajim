@@ -1648,15 +1648,15 @@ class ChatControl(ChatControlBase):
         self.restore_conversation()
         self.msg_textview.grab_focus()
 
-        # change tooltip text for audio and video buttons if python-farstream is
+        # change tooltip text for audio and video buttons if python-farsight is
         # not installed
-        if not gajim.HAVE_FARSTREAM:
+        if not gajim.HAVE_FARSIGHT:
             tooltip_text = self._audio_button.get_tooltip_text()
             self._audio_button.set_tooltip_text(
-                '%s\n%s' % (tooltip_text, _('Requires python-farstream.')))
+                '%s\n%s' % (tooltip_text, _('Requires python-farsight.')))
             tooltip_text = self._video_button.get_tooltip_text()
             self._video_button.set_tooltip_text(
-                '%s\n%s' % (tooltip_text, _('Requires python-farstream.')))
+                '%s\n%s' % (tooltip_text, _('Requires python-farsight.')))
 
         gajim.ged.register_event_handler('pep-received', ged.GUI1,
             self._nec_pep_received)
@@ -1704,7 +1704,7 @@ class ChatControl(ChatControlBase):
 
         # Jingle detection
         if self.contact.supports(NS_JINGLE_ICE_UDP) and \
-        gajim.HAVE_FARSTREAM and self.contact.resource:
+        gajim.HAVE_FARSIGHT and self.contact.resource:
             self.audio_available = self.contact.supports(NS_JINGLE_RTP_AUDIO)
             self.video_available = self.contact.supports(NS_JINGLE_RTP_VIDEO)
         else:
