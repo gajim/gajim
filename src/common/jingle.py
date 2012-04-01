@@ -35,7 +35,7 @@ import helpers
 import gajim
 
 from jingle_session import JingleSession, JingleStates
-if gajim.HAVE_FARSIGHT:
+if gajim.HAVE_FARSTREAM:
     from jingle_rtp import JingleAudio, JingleVideo
 
 

@@ -103,9 +103,9 @@ class FeaturesWindow:
                 _('Generate XHTML output from RST code (see http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html).'),
                 _('Requires python-docutils.'),
                 _('Requires python-docutils.')),
-            _('Audio / Video'): (self.farsight_available,
+            _('Audio / Video'): (self.farstream_available,
                 _('Ability to start audio and video chat.'),
-                _('Requires python-farsight and gstreamer-plugins-bad.'),
+                _('Requires python-farstream and gstreamer-plugins-bad.'),
                 _('Feature not available under Windows.')),
             _('UPnP-IGD'): (self.gupnp_igd_available,
                 _('Ability to request your router to forward port for file transfer.'),
@@ -258,8 +258,8 @@ class FeaturesWindow:
             return False
         return True
 
-    def farsight_available(self):
-        return gajim.HAVE_FARSIGHT
+    def farstream_available(self):
+        return gajim.HAVE_FARSTREAM
 
     def gupnp_igd_available(self):
         return gajim.HAVE_UPNP_IGD

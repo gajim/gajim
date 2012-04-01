@@ -1330,7 +1330,7 @@ def update_optional_features(account = None):
             gajim.gajim_optional_features[a].append(xmpp.NS_ESESSION)
         if gajim.config.get_per('accounts', a, 'answer_receipts'):
             gajim.gajim_optional_features[a].append(xmpp.NS_RECEIPTS)
-        if gajim.HAVE_FARSIGHT:
+        if gajim.HAVE_FARSTREAM:
             gajim.gajim_optional_features[a].append(xmpp.NS_JINGLE)
             gajim.gajim_optional_features[a].append(xmpp.NS_JINGLE_RTP)
             gajim.gajim_optional_features[a].append(xmpp.NS_JINGLE_RTP_AUDIO)
