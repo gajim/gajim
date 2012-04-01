@@ -233,12 +233,12 @@ else:
         elif sysname in ('FreeBSD', 'OpenBSD', 'NetBSD'):
             libc.setproctitle('gajim')
 
-    if gtk.pygtk_version < (2, 16, 0):
-        pritext = _('Gajim needs PyGTK 2.16 or above')
-        sectext = _('Gajim needs PyGTK 2.16 or above to run. Quiting...')
-    elif gtk.gtk_version < (2, 16, 0):
-        pritext = _('Gajim needs GTK 2.16 or above')
-        sectext = _('Gajim needs GTK 2.16 or above to run. Quiting...')
+    if gtk.pygtk_version < (2, 22, 0):
+        pritext = _('Gajim needs PyGTK 2.22 or above')
+        sectext = _('Gajim needs PyGTK 2.22 or above to run. Quiting...')
+    elif gtk.gtk_version < (2, 22, 0):
+        pritext = _('Gajim needs GTK 2.22 or above')
+        sectext = _('Gajim needs GTK 2.22 or above to run. Quiting...')
 
     from common import check_paths
 
