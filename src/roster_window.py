@@ -1871,9 +1871,9 @@ class RosterWindow:
         for ev in event_list:
             if ev.type_ != 'printed_chat':
                 continue
-            if len(ev.parameters) > 1 and ev.parameters[1]:
+            if len(ev.parameters) > 3 and ev.parameters[3]:
                 # There is a msg_id
-                msg_ids.append(ev.parameters[1])
+                msg_ids.append(ev.parameters[3])
 
         if msg_ids:
             gajim.logger.set_read_messages(msg_ids)

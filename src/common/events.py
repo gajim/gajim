@@ -45,7 +45,7 @@ class Event:
                         where kind in error, incoming
                 file-*: file_props
                 gc_msg: None
-                printed_chat: control
+                printed_chat: [message, subject, control, msg_id]
                 printed_*: None
                         messages that are already printed in chat, but not read
                 gc-invitation: [room_jid, reason, password, is_continued]

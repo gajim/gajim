@@ -1560,7 +1560,7 @@ class Interface:
                     return
 
             if type_ == 'printed_chat':
-                ctrl = event.parameters[0]
+                ctrl = event.parameters[2]
             elif type_ == 'chat':
                 session = event.parameters[8]
                 ctrl = session.control
@@ -1598,7 +1598,7 @@ class Interface:
                 event = gajim.events.get_first_event(account, jid, type_)
 
             if type_ == 'printed_pm':
-                ctrl = event.parameters[0]
+                ctrl = event.parameters[2]
             elif type_ == 'pm':
                 session = event.parameters[8]
 
