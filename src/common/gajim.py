@@ -169,21 +169,21 @@ else:
 # read.
 HAVE_LATEX = False
 
-HAVE_FARSIGHT = True
+HAVE_FARSTREAM = True
 try:
-    farsight = __import__('farsight')
+    farstream = __import__('farstream')
     import gst
     import glib
     try:
         conference = gst.element_factory_make('fsrtpconference')
-        session = conference.new_session(farsight.MEDIA_TYPE_AUDIO)
+        session = conference.new_session(farstream.MEDIA_TYPE_AUDIO)
         del session
         del conference
     except glib.GError:
-        HAVE_FARSIGHT = False
+        HAVE_FARSTREAM = False
 
 except ImportError:
-    HAVE_FARSIGHT = False
+    HAVE_FARSTREAM = False
 
 HAVE_UPNP_IGD = True
 try:
