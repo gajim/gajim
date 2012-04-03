@@ -34,6 +34,7 @@ import time
 import datetime
 from gzip import GzipFile
 from cStringIO import StringIO
+import gobject
 
 import exceptions
 import gajim
@@ -106,6 +107,7 @@ class Logger:
     def __init__(self):
         self.jids_already_in = [] # holds jids that we already have in DB
         self.con = None
+        self.commit_timout_id = None
 
         if not os.path.exists(LOG_DB_PATH):
             # this can happen only the first time (the time we create the db)
@@ -163,15 +165,25 @@ class Logger:
         self.open_db()
         self.get_jids_already_in_db()
 
+    def _really_commit(self):
+        try:
+            self.con.commit()
+        except sqlite.OperationalError, e:
+            print >> sys.stderr, str(e)
+        self.commit_timout_id = None
+        return False
+
+    def _timeout_commit(self):
+        if self.commit_timout_id:
+            return
+        self.commit_timout_id = gobject.timeout_add(500, self._really_commit)
+
     def simple_commit(self, sql_to_commit):
         """
         Helper to commit
         """
         self.cur.execute(sql_to_commit)
-        try:
-            self.con.commit()
-        except sqlite.OperationalError, e:
-            print >> sys.stderr, str(e)
+        self._timeout_commit()
 
     def get_jids_already_in_db(self):
         try:
@@ -398,12 +410,14 @@ class Logger:
         except sqlite.OperationalError, e:
             raise exceptions.PysqliteOperationalError(str(e))
         message_id = None
-        try:
-            self.con.commit()
-            if write_unread:
+        if write_unread:
+            try:
+                self.con.commit()
                 message_id = self.cur.lastrowid
-        except sqlite.OperationalError, e:
-            print >> sys.stderr, str(e)
+            except sqlite.OperationalError, e:
+                print >> sys.stderr, str(e)
+        else:
+            self._timeout_commit()
         if message_id:
             self.insert_unread_events(message_id, values[0])
         return message_id
@@ -909,10 +923,7 @@ class Logger:
                 VALUES (?, ?, ?, ?);
                 ''', (hash_method, hash_, buffer(data), int(time.time())))
         # (1) -- note above
-        try:
-            self.con.commit()
-        except sqlite.OperationalError, e:
-            print >> sys.stderr, str(e)
+        self._timeout_commit()
 
     def update_caps_time(self, method, hash_):
         sql = '''UPDATE caps_cache SET last_seen = %d
@@ -950,9 +961,9 @@ class Logger:
         # Fill roster tables with the new roster
         for jid in roster:
             self.add_or_update_contact(account_jid, jid, roster[jid]['name'],
-                    roster[jid]['subscription'], roster[jid]['ask'],
-                    roster[jid]['groups'], commit=False)
-        self.con.commit()
+                roster[jid]['subscription'], roster[jid]['ask'],
+                roster[jid]['groups'], commit=False)
+        self._timeout_commit()
 
         # At this point, we are sure the replacement works properly so we can
         # set the new roster_version value.
@@ -974,7 +985,7 @@ class Logger:
         self.cur.execute(
                 'DELETE FROM roster_entry WHERE account_jid_id=? AND jid_id=?',
                 (account_jid_id, jid_id))
-        self.con.commit()
+        self._timeout_commit()
 
     def add_or_update_contact(self, account_jid, jid, name, sub, ask, groups,
     commit=True):
@@ -1009,7 +1020,7 @@ class Logger:
                 self.convert_human_subscription_values_to_db_api_values(sub),
                 bool(ask)))
         if commit:
-            self.con.commit()
+            self._timeout_commit()
 
     def get_roster(self, account_jid):
         """
@@ -1062,7 +1073,7 @@ class Logger:
                 (account_jid_id,))
         self.cur.execute('DELETE FROM roster_group WHERE account_jid_id=?',
                 (account_jid_id,))
-        self.con.commit()
+        self._timeout_commit()
 
     def save_if_not_exists(self, with_, direction, tim, msg='', nick=None):
         if tim:
