@@ -2768,9 +2768,9 @@ class RosterWindow:
                 return
             if model[titer][C_TYPE] in ('contact', 'self_contact'):
                 # we're on a contact entry in the roster
-                account = model[titer][C_ACCOUNT].decode('utf-8')
-                jid = model[titer][C_JID].decode('utf-8')
                 if self.tooltip.timeout == 0 or self.tooltip.id != props[0]:
+                    account = model[titer][C_ACCOUNT].decode('utf-8')
+                    jid = model[titer][C_JID].decode('utf-8')
                     self.tooltip.id = row
                     contacts = gajim.contacts.get_contacts(account, jid)
                     connected_contacts = []
@@ -2782,76 +2782,79 @@ class RosterWindow:
                         connected_contacts = contacts
                     self.tooltip.account = account
                     self.tooltip.timeout = gobject.timeout_add(500,
-                            self.show_tooltip, connected_contacts)
+                        self.show_tooltip, connected_contacts)
             elif model[titer][C_TYPE] == 'groupchat':
-                account = model[titer][C_ACCOUNT].decode('utf-8')
-                jid = model[titer][C_JID].decode('utf-8')
                 if self.tooltip.timeout == 0 or self.tooltip.id != props[0]:
+                    account = model[titer][C_ACCOUNT].decode('utf-8')
+                    jid = model[titer][C_JID].decode('utf-8')
                     self.tooltip.id = row
                     contact = gajim.contacts.get_contacts(account, jid)
                     self.tooltip.account = account
                     self.tooltip.timeout = gobject.timeout_add(500,
-                            self.show_tooltip, contact)
+                        self.show_tooltip, contact)
             elif model[titer][C_TYPE] == 'account':
                 # we're on an account entry in the roster
-                account = model[titer][C_ACCOUNT].decode('utf-8')
-                if account == 'all':
-                    if self.tooltip.timeout == 0 or self.tooltip.id != props[0]:
+                if self.tooltip.timeout == 0 or self.tooltip.id != props[0]:
+                    account = model[titer][C_ACCOUNT].decode('utf-8')
+                    if account == 'all':
                         self.tooltip.id = row
                         self.tooltip.account = None
                         self.tooltip.timeout = gobject.timeout_add(500,
-                                self.show_tooltip, [])
-                    return
-                jid = gajim.get_jid_from_account(account)
-                contacts = []
-                connection = gajim.connections[account]
-                # get our current contact info
+                            self.show_tooltip, [])
+                        return
+                    jid = gajim.get_jid_from_account(account)
+                    contacts = []
+                    connection = gajim.connections[account]
+                    # get our current contact info
 
-                nbr_on, nbr_total = gajim.contacts.get_nb_online_total_contacts(
-                        accounts = [account])
-                account_name = account
-                if gajim.account_is_connected(account):
-                    account_name += ' (%s/%s)' % (repr(nbr_on), repr(nbr_total))
-                contact = gajim.contacts.create_self_contact(jid=jid,
-                    account=account, name=account_name,
-                    show=connection.get_status(), status=connection.status,
-                    resource=connection.server_resource,
-                    priority=connection.priority)
-                if gajim.connections[account].gpg:
-                    contact.keyID = gajim.config.get_per('accounts',
-                        connection.name, 'keyid')
-                contacts.append(contact)
-                # if we're online ...
-                if connection.connection:
-                    roster = connection.connection.getRoster()
-                    # in threadless connection when no roster stanza is sent,
-                    # 'roster' is None
-                    if roster and roster.getItem(jid):
-                        resources = roster.getResources(jid)
-                        # ...get the contact info for our other online resources
-                        for resource in resources:
-                            # Check if we already have this resource
-                            found = False
-                            for contact_ in contacts:
-                                if contact_.resource == resource:
-                                    found = True
-                                    break
-                            if found:
-                                continue
-                            show = roster.getShow(jid+'/'+resource)
-                            if not show:
-                                show = 'online'
-                            contact = gajim.contacts.create_self_contact(
-                                jid=jid, account=account, show=show,
-                                status=roster.getStatus(jid + '/' + resource),
-                                priority=roster.getPriority(
-                                jid + '/' + resource), resource=resource)
-                            contacts.append(contact)
-                if self.tooltip.timeout == 0 or self.tooltip.id != props[0]:
+                    nbr_on, nbr_total = gajim.\
+                        contacts.get_nb_online_total_contacts(
+                        accounts=[account])
+                    account_name = account
+                    if gajim.account_is_connected(account):
+                        account_name += ' (%s/%s)' % (repr(nbr_on),
+                            repr(nbr_total))
+                    contact = gajim.contacts.create_self_contact(jid=jid,
+                        account=account, name=account_name,
+                        show=connection.get_status(), status=connection.status,
+                        resource=connection.server_resource,
+                        priority=connection.priority)
+                    if gajim.connections[account].gpg:
+                        contact.keyID = gajim.config.get_per('accounts',
+                            connection.name, 'keyid')
+                    contacts.append(contact)
+                    # if we're online ...
+                    if connection.connection:
+                        roster = connection.connection.getRoster()
+                        # in threadless connection when no roster stanza is sent
+                        # 'roster' is None
+                        if roster and roster.getItem(jid):
+                            resources = roster.getResources(jid)
+                            # ...get the contact info for our other online
+                            # resources
+                            for resource in resources:
+                                # Check if we already have this resource
+                                found = False
+                                for contact_ in contacts:
+                                    if contact_.resource == resource:
+                                        found = True
+                                        break
+                                if found:
+                                    continue
+                                show = roster.getShow(jid+'/'+resource)
+                                if not show:
+                                    show = 'online'
+                                contact = gajim.contacts.create_self_contact(
+                                    jid=jid, account=account, show=show,
+                                    status=roster.getStatus(
+                                    jid + '/' + resource),
+                                    priority=roster.getPriority(
+                                    jid + '/' + resource), resource=resource)
+                                contacts.append(contact)
                     self.tooltip.id = row
                     self.tooltip.account = None
                     self.tooltip.timeout = gobject.timeout_add(500,
-                            self.show_tooltip, contacts)
+                        self.show_tooltip, contacts)
 
     def on_agent_logging(self, widget, jid, state, account):
         """
