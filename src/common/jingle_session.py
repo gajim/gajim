@@ -381,7 +381,6 @@ class JingleSession(object):
             self.modify_content(creator, name, transport)
             cont = self.contents[(creator, name)]
             cont.transport = transport
-            cont.state =  STATE_TRANSPORT_REPLACE
             
         stanza, jingle = self.__make_jingle('transport-replace')
         self.__append_contents(jingle)
