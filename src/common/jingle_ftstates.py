@@ -37,12 +37,12 @@ class StateInitialized(JingleFileTransferStates):
     '''
 
     def action(self, args=None):
+        self.jft._listen_host() 
         if self.jft.weinitiate:
             # update connection's fileprops
             self.jft.session.connection.files_props[self.jft.file_props['sid']] = \
                 self.jft.file_props
             # Listen on configured port for file transfer
-            self.jft._listen_host() # TODO: Rename this to listen_host()
         else:
             # Add file_props to the queue
             if not gajim.socks5queue.get_file_props(

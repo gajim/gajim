@@ -33,17 +33,16 @@ log = logging.getLogger('gajim.c.jingle_ft')
 
 STATE_NOT_STARTED = 0
 STATE_INITIALIZED = 1
-STATE_ACCEPTED = 2
 # We send the candidates and we are waiting for a reply
-STATE_CAND_SENT = 3
+STATE_CAND_SENT = 2
 # We received the candidates and we are waiting to reply
-STATE_CAND_RECEIVED = 4
+STATE_CAND_RECEIVED = 3
 # We have sent and received the candidates
 # This also includes any candidate-error received or sent
-STATE_CAND_SENT_AND_RECEIVED = 5
-STATE_TRANSPORT_REPLACE = 6
+STATE_CAND_SENT_AND_RECEIVED = 4
+STATE_TRANSPORT_REPLACE = 5
 # We are transfering the file
-STATE_TRANSFERING = 7
+STATE_TRANSFERING = 6
 
 
 class JingleFileTransfer(JingleContent):
@@ -264,11 +263,9 @@ class JingleFileTransfer(JingleContent):
     def __transport_setup(self, stanza=None, content=None, error=None,
     action=None):
         # Sets up a few transport specific things for the file transfer
-        # TODO: Do this inside of a state class
-        if self.transport.type == TransportType.SOCKS5:
-            self._listen_host()
             
         if self.transport.type == TransportType.IBB:
+            # No action required, just set the state to transfering
             self.state = STATE_TRANSFERING
             
 
@@ -283,15 +280,14 @@ class JingleFileTransfer(JingleContent):
                 'sendCand'   : True}
 
         self.nominated_cand['our-cand'] = streamhost
-        if self.state == STATE_CAND_RECEIVED:
-            self.__state_changed(STATE_CAND_SENT_AND_RECEIVED, args)
-        else:
-            self.__state_changed(STATE_CAND_SENT, args)
-
+        self.__sendCand(args)
 
     def _on_connect_error(self, sid):
         log.info('connect error, sid=' + sid)
         args = {'candError' : True}
+        self.__sendCand(args)
+
+    def __sendCand(self, args):
         if self.state == STATE_CAND_RECEIVED:
             self.__state_changed(STATE_CAND_SENT_AND_RECEIVED, args)
         else:
