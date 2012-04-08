@@ -27,6 +27,7 @@ Global Events Dispatcher module.
 
 import traceback
 
+from common.xmpp import NodeProcessed
 import logging
 log = logging.getLogger('gajim.c.ged')
 
@@ -86,11 +87,16 @@ class GlobalEventsDispatcher(object):
     def raise_event(self, event_name, *args, **kwargs):
         log.debug('%s\nArgs: %s'%(event_name, str(args)))
         if event_name in self.handlers:
+            node_processed = False
             for priority, handler in self.handlers[event_name]:
                 try:
                     if handler(*args, **kwargs):
                         return True
+                except NodeProcessed:
+                    node_processed = True
                 except Exception, e:
                     log.error('Error while running an even handler: %s' % \
                         handler)
                     traceback.print_exc()
+            if node_processed:
+                raise NodeProcessed
