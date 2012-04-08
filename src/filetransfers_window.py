@@ -639,7 +639,9 @@ class FileTransfersWindow:
                 status = 'stop'
             self.model.set(iter_, 0, self.get_icon(status))
             if transfered_size == full_size:
-                if file_props['type'] == 'r':
+                # If we are receiver and this is a jingle session
+                if file_props['type'] == 'r' and 'session-sid' in file_props:
+                    # Show that we are computing the hash
                     self.set_status(typ, sid, 'computing')
                 else:
                     self.set_status(typ, sid, 'ok')

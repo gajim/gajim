@@ -34,7 +34,6 @@
 ## You should have received a copy of the GNU General Public License
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
-
 import os
 import sys
 import re
@@ -954,11 +953,13 @@ class Interface:
             return
 
         if file_props['type'] == 'r': # we receive a file
-            jid = unicode(file_props['sender'])
-            # Compare hashes in a new thread
-            self.hashThread = Thread(target=self.__compare_hashes,
-                args=(account, file_props))
-            self.hashThread.start()
+            # If we have a jingle session id, it is a jingle transfer
+            # we compare hashes
+            if 'session-sid' in file_props:
+                # Compare hashes in a new thread
+                self.hashThread = Thread(target=self.__compare_hashes,
+                    args=(account, file_props))
+                self.hashThread.start()
             gajim.socks5queue.remove_receiver(file_props['sid'], True, True)
         else: # we send a file
             jid = unicode(file_props['receiver'])
