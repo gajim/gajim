@@ -65,7 +65,7 @@ class Config:
     DEFAULT_MAILAPP = 'mozilla-thunderbird -compose'
     DEFAULT_FILE_MANAGER = 'xffm'
 
-    __options = {
+    __options = ({
             # name: [ type, default_value, help_string ]
             'verbose': [ opt_bool, False, '', True ],
             'autopopup': [ opt_bool, False ],
@@ -301,7 +301,7 @@ class Config:
             'show_affiliation_in_groupchat': [opt_bool, True, _('If True, Gajim will show affiliation of groupchat occupants by adding a colored square to the status icon')],
             'global_proxy': [opt_str, '', _('Proxy used for all outgoing connections if the account does not have a specific proxy configured')],
             'ignore_incoming_attention': [opt_bool, False, _('If True, Gajim will ignore incoming attention requestd ("wizz").')],
-    }
+    }, {})
 
     __options_per_key = {
             'accounts': ({
@@ -537,9 +537,9 @@ class Config:
         _('Tor'): ['socks5', 'localhost', 9050],
     }
 
-    def foreach(self, cb, data = None):
-        for opt in self.__options:
-            cb(data, opt, None, self.__options[opt])
+    def foreach(self, cb, data=None):
+        for opt in self.__options[1]:
+            cb(data, opt, None, self.__options[1][opt])
         for opt in self.__options_per_key:
             cb(data, opt, None, None)
             dict_ = self.__options_per_key[opt][1]
@@ -553,7 +553,7 @@ class Config:
         Tree-like interface
         """
         if node is None:
-            for child, option in self.__options.iteritems():
+            for child, option in self.__options[1].iteritems():
                 yield (child, ), option
             for grandparent in self.__options_per_key:
                 yield (grandparent, ), None
@@ -609,35 +609,44 @@ class Config:
                 return None
 
     def set(self, optname, value):
-        if optname not in self.__options:
+        if optname not in self.__options[1]:
 #                       raise RuntimeError, 'option %s does not exist' % optname
             return
-        opt = self.__options[optname]
-        value = self.is_valid(opt[OPT_TYPE], value)
+        value = self.is_valid(self.__options[0][optname][OPT_TYPE], value)
         if value is None:
 #                       raise RuntimeError, 'value of %s cannot be None' % optname
             return
 
-        opt[OPT_VAL] = value
+        self.__options[1][optname] = value
 
-    def get(self, optname = None):
+    def get(self, optname=None):
         if not optname:
-            return self.__options.keys()
-        if optname not in self.__options:
+            return self.__options[1].keys()
+        if optname not in self.__options[1]:
             return None
-        return self.__options[optname][OPT_VAL]
+        return self.__options[1][optname]
+
+    def get_default(self, optname):
+        if optname not in self.__options[0]:
+            return None
+        return self.__options[0][optname][OPT_VAL]
+
+    def get_type(self, optname):
+        if optname not in self.__options[0]:
+            return None
+        return self.__options[0][optname][OPT_TYPE][0]
 
     def get_desc(self, optname):
-        if optname not in self.__options:
+        if optname not in self.__options[0]:
             return None
-        if len(self.__options[optname]) > OPT_DESC:
-            return self.__options[optname][OPT_DESC]
+        if len(self.__options[0][optname]) > OPT_DESC:
+            return self.__options[0][optname][OPT_DESC]
 
     def get_restart(self, optname):
-        if optname not in self.__options:
+        if optname not in self.__options[0]:
             return None
-        if len(self.__options[optname]) > OPT_RESTART:
-            return self.__options[optname][OPT_RESTART]
+        if len(self.__options[0][optname]) > OPT_RESTART:
+            return self.__options[0][optname][OPT_RESTART]
 
     def add_per(self, typename, name): # per_group_of_option
         if typename not in self.__options_per_key:
@@ -648,7 +657,9 @@ class Config:
         if name in opt[1]:
             # we already have added group name before
             return 'you already have added %s before' % name
-        opt[1][name] = copy.deepcopy(opt[0])
+        opt[1][name] = {}
+        for o in opt[0]:
+            opt[1][name][o] = opt[0][o][OPT_VAL]
 
     def del_per(self, typename, name, subname = None): # per_group_of_option
         if typename not in self.__options_per_key:
@@ -676,36 +687,50 @@ class Config:
         if subname not in obj:
 #                       raise RuntimeError, '%s is not a key of %s' % (subname, obj)
             return
-        subobj = obj[subname]
-        value = self.is_valid(subobj[OPT_TYPE], value)
+        typ = self.__options_per_key[optname][0][subname][OPT_TYPE]
+        value = self.is_valid(typ, value)
         if value is None:
 #                       raise RuntimeError, '%s of %s cannot be None' % optname
             return
-        subobj[OPT_VAL] = value
+        obj[subname] = value
 
-    def get_per(self, optname, key = None, subname = None): # per_group_of_option
+    def get_per(self, optname, key=None, subname=None): # per_group_of_option
         if optname not in self.__options_per_key:
             return None
         dict_ = self.__options_per_key[optname][1]
         if not key:
             return dict_.keys()
         if key not in dict_:
-            if optname in self.__options_per_key \
-            and subname in self.__options_per_key[optname][0]:
-                return self.__options_per_key \
-                        [optname][0][subname][1]
+            if subname in self.__options_per_key[optname][0]:
+                return self.__options_per_key[optname][0][subname][1]
             return None
         obj = dict_[key]
         if not subname:
             return obj
         if subname not in obj:
             return None
-        return obj[subname][OPT_VAL]
+        return obj[subname]
 
-    def get_desc_per(self, optname, key = None, subname = None):
+    def get_default_per(self, optname, subname):
         if optname not in self.__options_per_key:
             return None
-        dict_ = self.__options_per_key[optname][1]
+        dict_ = self.__options_per_key[optname][0]
+        if subname not in dict_:
+            return None
+        return dict_[subname][OPT_VAL]
+
+    def get_type_per(self, optname, subname):
+        if optname not in self.__options_per_key:
+            return None
+        dict_ = self.__options_per_key[optname][0]
+        if subname not in dict_:
+            return None
+        return dict_[subname][OPT_TYPE][0]
+
+    def get_desc_per(self, optname, key=None, subname=None):
+        if optname not in self.__options_per_key:
+            return None
+        dict_ = self.__options_per_key[optname][0]
         if not key:
             return None
         if key not in dict_:
@@ -719,10 +744,10 @@ class Config:
             return obj[subname][OPT_DESC]
         return None
 
-    def get_restart_per(self, optname, key = None, subname = None):
+    def get_restart_per(self, optname, key=None, subname=None):
         if optname not in self.__options_per_key:
             return False
-        dict_ = self.__options_per_key[optname][1]
+        dict_ = self.__options_per_key[optname][0]
         if not key:
             return False
         if key not in dict_:
@@ -749,8 +774,13 @@ class Config:
 
         return (account not in no_log_for) and (jid not in no_log_for)
 
+    def _init_options(self):
+        for opt in self.__options[0]:
+            self.__options[1][opt] = self.__options[0][opt][OPT_VAL]
+
     def __init__(self):
         #init default values
+        self._init_options()
         for event in self.soundevents_default:
             default = self.soundevents_default[event]
             self.add_per('soundevents', event)

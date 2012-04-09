@@ -81,6 +81,7 @@ class AdvancedConfigurationWindow(object):
         self.entry = self.xml.get_object('advanced_entry')
         self.desc_label = self.xml.get_object('advanced_desc_label')
         self.restart_label = self.xml.get_object('restart_label')
+        self.reset_button = self.xml.get_object('reset_button')
 
         # Format:
         # key = option name (root/subopt/opt separated by \n then)
@@ -174,6 +175,13 @@ class AdvancedConfigurationWindow(object):
             else:
                 #we talk about option description in advanced configuration editor
                 self.desc_label.set_text(_('(None)'))
+            if len(opt_path) == 3 or (len(opt_path) == 1 and not \
+            model.iter_has_child(iter_)):
+                self.reset_button.set_sensitive(True)
+            else:
+                self.reset_button.set_sensitive(False)
+        else:
+            self.reset_button.set_sensitive(False)
 
     def remember_option(self, option, oldval, newval):
         if option in self.changed_opts:
@@ -195,7 +203,6 @@ class AdvancedConfigurationWindow(object):
                 optname = optnamerow[0].decode('utf-8')
                 keyrow = self.model[modelpath[:2]]
                 key = keyrow[0].decode('utf-8')
-                gajim.config.get_desc_per(optname, key, option)
                 self.remember_option(option + '\n' + key + '\n' + optname,
                         modelrow[1], newval)
                 gajim.config.set_per(optname, key, option, newval)
@@ -244,6 +251,42 @@ class AdvancedConfigurationWindow(object):
     def on_advanced_configuration_window_destroy(self, widget):
         del gajim.interface.instances['advanced_config']
 
+    def on_reset_button_clicked(self, widget):
+        model, iter_ = self.treeview.get_selection().get_selected()
+        # Check for GtkTreeIter
+        if iter_:
+            path = model.get_path(iter_)
+            opt_path =  self.get_option_path(model, iter_)
+            if len(opt_path) == 1:
+                default = gajim.config.get_default(opt_path[0])
+            elif len(opt_path) == 3:
+                default = gajim.config.get_default_per(opt_path[2], opt_path[0])
+
+            if model[iter_][C_TYPE] == self.types['boolean']:
+                if self.right_true_dict[default] == model[iter_][C_VALUE]:
+                    return
+                modelpath = self.modelfilter.convert_path_to_child_path(path)
+                modelrow = self.model[modelpath]
+                option = modelrow[0].decode('utf-8')
+                if len(modelpath) > 1:
+                    optnamerow = self.model[modelpath[0]]
+                    optname = optnamerow[0].decode('utf-8')
+                    keyrow = self.model[modelpath[:2]]
+                    key = keyrow[0].decode('utf-8')
+                    self.remember_option(option + '\n' + key + '\n' + optname,
+                        modelrow[C_VALUE], default)
+                    gajim.config.set_per(optname, key, option, default)
+                else:
+                    self.remember_option(option, modelrow[C_VALUE], default)
+                    gajim.config.set(option, default)
+                gajim.interface.save_config()
+                modelrow[C_VALUE] = self.right_true_dict[default]
+                self.check_for_restart()
+            else:
+                if str(default) == model[iter_][C_VALUE]:
+                    return
+                self.on_config_edited(None, path, str(default))
+
     def on_advanced_close_button_clicked(self, widget):
         self.window.destroy()
 
@@ -254,14 +297,18 @@ class AdvancedConfigurationWindow(object):
                 newparent = self.model.append(parent, [name, '', ''])
                 self.fill_model(item, newparent)
             else: # Leaf
-                type_ = self.types[option[OPT_TYPE][0]]
+                if len(item) == 1:
+                    type_ = self.types[gajim.config.get_type(name)]
+                elif len(item) == 3:
+                    type_ = self.types[gajim.config.get_type_per(item[0],
+                        item[2])]
                 if name == 'password':
                     value = _('Hidden')
                 else:
                     if type_ == self.types['boolean']:
-                        value = self.right_true_dict[option[OPT_VAL]]
+                        value = self.right_true_dict[option]
                     else:
-                        value = option[OPT_VAL]
+                        value = option
                 self.model.append(parent, [name, value, type_])
 
     def visible_func(self, model, treeiter):
