@@ -12,7 +12,7 @@ Package: gajim
 Architecture: all
 Depends: ${misc:Depends}, ${python:Depends}, python-gtk2 (>= 2.22.0), dnsutils
 Recommends: dbus, python-dbus, notification-daemon, python-openssl (>= 0.12), python-crypto, python-pyasn1
-Suggests: python-gconf, python-gnome2, nautilus-sendto, avahi-daemon, python-avahi, network-manager, libgtkspell0, aspell-en, python-gnomekeyring, gnome-keyring, python-kerberos (>= 1.1), texlive-latex-base, dvipng, python-farstream, gstreamer0.10-plugins-ugly, python-pycurl
+Suggests: python-gconf, python-gnome2, nautilus-sendto, avahi-daemon, python-avahi, network-manager, libgtkspell0, aspell-en, python-gnomekeyring, gnome-keyring, python-kerberos (>= 1.1), texlive-latex-base, dvipng, python-farstream, gstreamer0.10-plugins-ugly, python-pycurl, python-gupnp-igd
 Description: Jabber client written in PyGTK
  Gajim is a Jabber client. It has a tabbed user interface with normal chats,
  group chats, and has many features such as, TLS, GPG, SSL, multiple accounts,
