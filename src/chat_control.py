@@ -56,6 +56,7 @@ from common.xmpp.protocol import NS_RECEIPTS, NS_ESESSION
 from common.xmpp.protocol import NS_JINGLE_RTP_AUDIO, NS_JINGLE_RTP_VIDEO, NS_JINGLE_ICE_UDP
 from common.xmpp.protocol import NS_CHATSTATES
 from common.connection_handlers_events import MessageOutgoingEvent
+from common.exceptions import GajimGeneralException
 
 from command_system.implementation.middleware import ChatCommandProcessor
 from command_system.implementation.middleware import CommandTools
@@ -3246,6 +3247,36 @@ class ChatControl(ChatControlBase):
         b.connect('clicked', self._on_ok, file_props, type_)
         self._add_info_bar_message(markup, [b], file_props, gtk.MESSAGE_ERROR)
 
+    def _on_accept_gc_invitation(self, widget, event):
+        room_jid = event.parameters[0]
+        password = event.parameters[2]
+        is_continued = event.parameters[3]
+        try:
+            if is_continued:
+                gajim.interface.join_gc_room(self.account, room_jid,
+                    gajim.nicks[self.account], password, is_continued=True)
+            else:
+                dialogs.JoinGroupchatWindow(self.account, room_jid)
+        except GajimGeneralException:
+            pass
+        gajim.events.remove_events(self.account, self.contact.jid, event=event)
+
+    def _on_cancel_gc_invitation(self, widget, event):
+        gajim.events.remove_events(self.account, self.contact.jid, event=event)
+
+    def _get_gc_invitation(self, event):
+        room_jid = event.parameters[0]
+        comment = event.parameters[1]
+        markup = '<b>%s:</b> %s' % (_('Groupchat Invitation'), room_jid)
+        if comment:
+            markup += ' (%s)' % comment
+        b1 = gtk.Button(_('_Join'))
+        b1.connect('clicked', self._on_accept_gc_invitation, event)
+        b2 = gtk.Button(stock=gtk.STOCK_CANCEL)
+        b2.connect('clicked', self._on_cancel_gc_invitation, event)
+        self._add_info_bar_message(markup, [b1, b2], event.parameters,
+            gtk.MESSAGE_QUESTION)
+
     def on_event_added(self, event):
         if event.account != self.account:
             return
@@ -3267,6 +3298,8 @@ class ChatControl(ChatControlBase):
             self._got_file_error(event.parameters, event.type_,
                 _('File transfer cancelled'),
                 _('Connection with peer cannot be established.'))
+        elif event.type_ == 'gc-invitation':
+            self._get_gc_invitation(event)
 
     def on_event_removed(self, event_list):
         """
@@ -3278,12 +3311,21 @@ class ChatControl(ChatControlBase):
             if ev.jid != self.contact.jid:
                 continue
             if ev.type_ not in ('file-request', 'file-completed', 'file-error',
-            'file-stopped', 'file-request-error', 'file-send-error'):
+            'file-stopped', 'file-request-error', 'file-send-error',
+            'gc-invitation'):
                 continue
             i = 0
+            removed = False
             for ib_msg in self.info_bar_queue:
-                if ib_msg[2] == ev.parameters:
-                    self.info_bar_queue.remove(ib_msg)
+                if ev.type_ == 'gc-invitation':
+                    if ev.parameters[0] == ib_msg[2][0]:
+                        self.info_bar_queue.remove(ib_msg)
+                        removed = True
+                else: # file-*
+                    if ib_msg[2] == ev.parameters:
+                        self.info_bar_queue.remove(ib_msg)
+                        removed = True
+                if removed:
                     if i == 0:
                         # We are removing the one currently displayed
                         self.info_bar.set_no_show_all(True)
