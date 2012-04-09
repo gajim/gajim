@@ -3418,6 +3418,27 @@ class RosterWindow:
             num = gtk.gdk.keyval_to_unicode(event.keyval)
             self.enable_rfilter(unichr(num))
 
+        elif event.keyval == gtk.keysyms.Left:
+            treeselection = self.tree.get_selection()
+            model, list_of_paths = treeselection.get_selected_rows()
+            if len(list_of_paths) != 1:
+                return
+            path = list_of_paths[0]
+            iter_ = model.get_iter(path)
+            if model.iter_has_child(iter_):
+                self.tree.collapse_row(path)
+                return True
+        elif event.keyval == gtk.keysyms.Right:
+            treeselection = self.tree.get_selection()
+            model, list_of_paths = treeselection.get_selected_rows()
+            if len(list_of_paths) != 1:
+                return
+            path = list_of_paths[0]
+            iter_ = model.get_iter(path)
+            if model.iter_has_child(iter_):
+                self.tree.expand_row(path, False)
+                return True
+
     def on_roster_treeview_button_release_event(self, widget, event):
         try:
             path = self.tree.get_path_at_pos(int(event.x), int(event.y))[0]
