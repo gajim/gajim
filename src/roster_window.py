@@ -3412,9 +3412,9 @@ class RosterWindow:
             elif type_ == 'agent':
                 self.on_remove_agent(widget, list_)
 
-        elif not (event.state & (gtk.gdk.SHIFT_MASK | gtk.gdk.CONTROL_MASK | \
-        gtk.gdk.MOD1_MASK)) and gtk.gdk.keyval_to_unicode(event.keyval):
-            # if we got unicode symbol without ctrl / shift / alt
+        elif not (event.state & (gtk.gdk.CONTROL_MASK | gtk.gdk.MOD1_MASK)) and\
+        gtk.gdk.keyval_to_unicode(event.keyval):
+            # if we got unicode symbol without ctrl / alt
             num = gtk.gdk.keyval_to_unicode(event.keyval)
             self.enable_rfilter(unichr(num))
 
