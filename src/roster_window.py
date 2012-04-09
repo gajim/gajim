@@ -3418,6 +3418,10 @@ class RosterWindow:
             num = gtk.gdk.keyval_to_unicode(event.keyval)
             self.enable_rfilter(unichr(num))
 
+        elif event.state & gtk.gdk.CONTROL_MASK and event.state & gtk.gdk.SHIFT_MASK and event.keyval == gtk.keysyms.U:
+            self.enable_rfilter('')
+            self.rfilter_entry.emit('key_press_event', event)
+
         elif event.keyval == gtk.keysyms.Left:
             treeselection = self.tree.get_selection()
             model, list_of_paths = treeselection.get_selected_rows()
@@ -4325,6 +4329,9 @@ class RosterWindow:
         elif event.keyval in (gtk.keysyms.Up, gtk.keysyms.Down):
             self.tree.grab_focus()
             self.tree.emit('key_press_event', event)
+        elif event.keyval == gtk.keysyms.BackSpace:
+            if widget.get_text() == '':
+                self.disable_rfilter()
 
     def enable_rfilter(self, search_string):
         if self.rfilter_enabled:
