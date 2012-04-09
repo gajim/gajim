@@ -212,7 +212,8 @@ class PrivateChatControl(ChatControl):
             self.parent_win.redraw_tab(self)
             self.update_ui()
 
-    def send_message(self, message, xhtml=None, process_commands=True):
+    def send_message(self, message, xhtml=None, process_commands=True,
+    attention=False):
         """
         Call this method to send the message
         """
@@ -237,7 +238,7 @@ class PrivateChatControl(ChatControl):
                 return
 
         ChatControl.send_message(self, message, xhtml=xhtml,
-            process_commands=process_commands)
+            process_commands=process_commands, attention=attention)
 
     def update_ui(self):
         if self.contact.show == 'offline':

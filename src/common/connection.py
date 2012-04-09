@@ -253,7 +253,7 @@ class CommonConnection:
     def _prepare_message(self, jid, msg, keyID, type_='chat', subject='',
     chatstate=None, msg_id=None, resource=None, user_nick=None, xhtml=None,
     session=None, forward_from=None, form_node=None, label=None,
-    original_message=None, delayed=None, callback=None):
+    original_message=None, delayed=None, attention=False, callback=None):
         if not self.connection or self.connected < 2:
             return 1
         try:
@@ -304,7 +304,8 @@ class CommonConnection:
                                     msgtxt, original_message, fjid, resource,
                                     jid, xhtml, subject, chatstate, msg_id,
                                     label, forward_from, delayed, session,
-                                    form_node, user_nick, keyID, callback)
+                                    form_node, user_nick, keyID, attention,
+                                    callback)
                         gajim.nec.push_incoming_event(GPGTrustKeyEvent(None,
                             conn=self, callback=_on_always_trust))
                     else:
@@ -312,7 +313,7 @@ class CommonConnection:
                             original_message, fjid, resource, jid, xhtml,
                             subject, chatstate, msg_id, label, forward_from,
                             delayed, session, form_node, user_nick, keyID,
-                            callback)
+                            attention, callback)
                 gajim.thread_interface(encrypt_thread, [msg, keyID, False],
                     _on_encrypted, [])
                 return
@@ -320,18 +321,18 @@ class CommonConnection:
             self._message_encrypted_cb(('', error), type_, msg, msgtxt,
                 original_message, fjid, resource, jid, xhtml, subject,
                 chatstate, msg_id, label, forward_from, delayed, session,
-                form_node, user_nick, keyID, callback)
+                form_node, user_nick, keyID, attention, callback)
             return
 
         self._on_continue_message(type_, msg, msgtxt, original_message, fjid,
             resource, jid, xhtml, subject, msgenc, keyID, chatstate, msg_id,
             label, forward_from, delayed, session, form_node, user_nick,
-            callback)
+            attention, callback)
 
     def _message_encrypted_cb(self, output, type_, msg, msgtxt,
     original_message, fjid, resource, jid, xhtml, subject, chatstate, msg_id,
     label, forward_from, delayed, session, form_node, user_nick, keyID,
-    callback):
+    attention, callback):
         msgenc, error = output
 
         if msgenc and not error:
@@ -344,7 +345,7 @@ class CommonConnection:
             self._on_continue_message(type_, msg, msgtxt, original_message,
                 fjid, resource, jid, xhtml, subject, msgenc, keyID,
                 chatstate, msg_id, label, forward_from, delayed, session,
-                form_node, user_nick, callback)
+                form_node, user_nick, attention, callback)
             return
         # Encryption failed, do not send message
         tim = localtime()
@@ -353,7 +354,8 @@ class CommonConnection:
 
     def _on_continue_message(self, type_, msg, msgtxt, original_message, fjid,
     resource, jid, xhtml, subject, msgenc, keyID, chatstate, msg_id,
-    label, forward_from, delayed, session, form_node, user_nick, callback):
+    label, forward_from, delayed, session, form_node, user_nick, attention,
+    callback):
         if type_ == 'chat':
             msg_iq = common.xmpp.Message(to=fjid, body=msgtxt, typ=type_,
                     xhtml=xhtml)
@@ -423,6 +425,10 @@ class CommonConnection:
             # XEP-0200
             if session.enable_encryption:
                 msg_iq = session.encrypt_stanza(msg_iq)
+
+        # XEP-0224
+        if attention:
+            msg_iq.setTag('attention', namespace=common.xmpp.NS_ATTENTION)
 
         if callback:
             callback(jid, msg, keyID, forward_from, session, original_message,
@@ -1794,8 +1800,8 @@ class Connection(CommonConnection, ConnectionHandlers):
     def send_message(self, jid, msg, keyID=None, type_='chat', subject='',
     chatstate=None, msg_id=None, resource=None, user_nick=None, xhtml=None,
     label=None, session=None, forward_from=None, form_node=None,
-    original_message=None, delayed=None, callback=None, callback_args=[],
-    now=False):
+    original_message=None, delayed=None, attention=False, callback=None,
+    callback_args=[], now=False):
 
         def cb(jid, msg, keyID, forward_from, session, original_message,
         subject, type_, msg_iq, xhtml):
@@ -1813,7 +1819,8 @@ class Connection(CommonConnection, ConnectionHandlers):
             chatstate=chatstate, msg_id=msg_id, resource=resource,
             user_nick=user_nick, xhtml=xhtml, label=label, session=session,
             forward_from=forward_from, form_node=form_node,
-            original_message=original_message, delayed=delayed, callback=cb)
+            original_message=original_message, delayed=delayed,
+            attention=attention, callback=cb)
 
     def _nec_message_outgoing(self, obj):
         if obj.account != self.name:
@@ -1838,7 +1845,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             resource=obj.resource, user_nick=obj.user_nick, xhtml=obj.xhtml,
             label=obj.label, session=obj.session, forward_from=obj.forward_from,
             form_node=obj.form_node, original_message=obj.original_message,
-            delayed=obj.delayed, callback=cb)
+            delayed=obj.delayed, attention=obj.attention, callback=cb)
 
     def send_contacts(self, contacts, jid):
         """

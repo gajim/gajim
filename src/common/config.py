@@ -300,6 +300,7 @@ class Config:
             'stun_server': [opt_str, '', _('STUN server to use when using jingle')],
             'show_affiliation_in_groupchat': [opt_bool, True, _('If True, Gajim will show affiliation of groupchat occupants by adding a colored square to the status icon')],
             'global_proxy': [opt_str, '', _('Proxy used for all outgoing connections if the account does not have a specific proxy configured')],
+            'ignore_incoming_attention': [opt_bool, False, _('If True, Gajim will ignore incoming attention requestd ("wizz").')],
     }
 
     __options_per_key = {
@@ -497,6 +498,7 @@ class Config:
     }
 
     soundevents_default = {
+            'attention_received': [True, 'attention.wav'],
             'first_message_received': [ True, 'message1.wav' ],
             'next_message_received_focused': [ True, 'message2.wav' ],
             'next_message_received_unfocused': [ True, 'message2.wav' ],

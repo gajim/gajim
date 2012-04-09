@@ -336,8 +336,8 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
     def send_message(self, jid, msg, keyID, type_='chat', subject='',
     chatstate=None, msg_id=None, resource=None, user_nick=None, xhtml=None,
     label=None, session=None, forward_from=None, form_node=None,
-    original_message=None, delayed=None, callback=None, callback_args=[],
-    now=True):
+    original_message=None, delayed=None, attention=False, callback=None,
+    callback_args=[], now=True):
 
         def on_send_ok(msg_id):
             gajim.nec.push_incoming_event(MessageSentEvent(None, conn=self,
@@ -370,7 +370,8 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
                 chatstate=chatstate, msg_id=msg_id, resource=resource,
                 user_nick=user_nick, xhtml=xhtml, session=session,
                 forward_from=forward_from, form_node=form_node,
-                original_message=original_message, delayed=delayed, callback=cb)
+                original_message=original_message, delayed=delayed,
+                attention=attention, callback=cb)
 
     def _nec_message_outgoing(self, obj):
         if obj.account != self.name:
@@ -411,7 +412,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
             resource=obj.resource, user_nick=obj.user_nick, xhtml=obj.xhtml,
             label=obj.label, session=obj.session, forward_from=obj.forward_from,
             form_node=obj.form_node, original_message=obj.original_message,
-            delayed=obj.delayed, callback=cb)
+            delayed=obj.delayed, attention=obj.attention, callback=cb)
 
     def send_stanza(self, stanza):
         # send a stanza untouched

@@ -230,6 +230,11 @@ class StandardCommonChatCommands(CommandContainer):
         state = self._video_button.get_active()
         self._video_button.set_active(not state)
 
+    @command(raw=True)
+    @doc(_("Send a message to the contact that will attract his (her) attention"))
+    def attention(self, message):
+        self.send_message(message, process_commands=False, attention=True)
+
 class StandardChatCommands(CommandContainer):
     """
     This command container contains standard commands which are unique

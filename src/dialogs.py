@@ -2745,7 +2745,7 @@ class ChangePasswordDialog:
 
 class PopupNotificationWindow:
     def __init__(self, event_type, jid, account, msg_type='',
-                             path_to_image=None, title=None, text=None):
+    path_to_image=None, title=None, text=None, timeout=-1):
         self.account = account
         self.jid = jid
         self.msg_type = msg_type
@@ -2765,8 +2765,8 @@ class PopupNotificationWindow:
             title = ''
 
         event_type_label.set_markup(
-                '<span foreground="black" weight="bold">%s</span>' %
-                gobject.markup_escape_text(title))
+            '<span foreground="black" weight="bold">%s</span>' %
+            gobject.markup_escape_text(title))
 
         # set colors [ http://www.pitt.edu/~nisg/cis/web/cgi/rgb.html ]
         self.window.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('black'))
@@ -2787,7 +2787,7 @@ class PopupNotificationWindow:
         elif event_type == _('File Transfer Error'):
             bg_color = gajim.config.get('notif_fterror_color')
         elif event_type in (_('File Transfer Completed'),
-                                                _('File Transfer Stopped')):
+        _('File Transfer Stopped')):
             bg_color = gajim.config.get('notif_ftcomplete_color')
         elif event_type == _('Groupchat Invitation'):
             bg_color = gajim.config.get('notif_invite_color')
@@ -2813,13 +2813,13 @@ class PopupNotificationWindow:
         pos_y = gajim.config.get('notification_position_y')
         if pos_y < 0:
             pos_y = gtk.gdk.screen_height() - \
-                      gajim.interface.roster.popups_notification_height + pos_y + 1
+                gajim.interface.roster.popups_notification_height + pos_y + 1
         self.window.move(pos_x, pos_y)
 
         xml.connect_signals(self)
         self.window.show_all()
-        timeout = gajim.config.get('notification_timeout')
-        gobject.timeout_add_seconds(timeout, self.on_timeout)
+        if timeout > 0:
+            gobject.timeout_add_seconds(timeout, self.on_timeout)
 
     def on_close_button_clicked(self, widget):
         self.adjust_height_and_move_popup_notification_windows()

@@ -40,6 +40,7 @@ NS_ARCHIVE_MANAGE = NS_ARCHIVE + ':manage'                            # XEP-0136
 NS_ARCHIVE_MANUAL = NS_ARCHIVE + ':manual'                            # XEP-0136
 NS_ARCHIVE_PREF   = NS_ARCHIVE + ':pref'
 NS_ATOM           = 'http://www.w3.org/2005/Atom'
+NS_ATTENTION      = 'urn:xmpp:attention:0'                            # XEP-0224
 NS_AUTH           = 'jabber:iq:auth'
 NS_AVATAR         = 'http://www.xmpp.org/extensions/xep-0084.html#ns-metadata'
 NS_BIND           = 'urn:ietf:params:xml:ns:xmpp-bind'

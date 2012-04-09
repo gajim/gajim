@@ -1192,6 +1192,7 @@ class DecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.sent = self.msg_obj.sent
         self.popup = False
         self.msg_id = None # id in log database
+        self.attention = False # XEP-0224
 
         self.receipt_request_tag = self.stanza.getTag('request',
             namespace=xmpp.NS_RECEIPTS)
@@ -1205,6 +1206,9 @@ class DecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             namespace=xmpp.NS_SECLABEL)
         if self.seclabel:
             self.displaymarking = self.seclabel.getTag('displaymarking')
+
+        if self.stanza.getTag('attention', namespace=xmpp.NS_ATTENTION):
+            self.attention = True
 
         self.form_node = self.stanza.getTag('x', namespace=xmpp.NS_DATA)
 
@@ -2062,7 +2066,19 @@ class NotificationEvent(nec.NetworkIncomingEvent):
             # we're online or chat
             self.do_popup = True
 
-        if self.first_unread and helpers.allow_sound_notification(
+        if msg_obj.attention and not gajim.config.get(
+        'ignore_incoming_attention'):
+            self.popup_timeout = 0
+            self.do_popup = True
+        else:
+            self.popup_timeout = gajim.config.get('notification_timeout')
+
+        if msg_obj.attention and not gajim.config.get(
+        'ignore_incoming_attention') and gajim.config.get_per('soundevents',
+        'attention_received', 'enabled'):
+            self.sound_event = 'attention_received'
+            self.do_sound = True
+        elif self.first_unread and helpers.allow_sound_notification(
         self.conn.name, 'first_message_received'):
             self.do_sound = True
         elif not self.first_unread and self.control_focused and \
@@ -2175,6 +2191,8 @@ class NotificationEvent(nec.NetworkIncomingEvent):
         self.popup_image = gtkgui_helpers.get_path_to_generic_or_avatar(
             img_path, jid=self.jid, suffix=suffix)
 
+        self.popup_timeout = gajim.config.get('notification_timeout')
+
         if event == 'status_change':
             self.popup_title = _('%(nick)s Changed Status') % \
                 {'nick': gajim.get_name_from_jid(account, self.jid)}
@@ -2219,6 +2237,7 @@ class NotificationEvent(nec.NetworkIncomingEvent):
         self.popup_event_type = ''
         self.popup_msg_type = ''
         self.popup_image = ''
+        self.popup_timeout = -1
 
         self.do_command = False
         self.command = ''
@@ -2261,6 +2280,7 @@ class MessageOutgoingEvent(nec.NetworkOutgoingEvent):
         self.now = False
         self.is_loggable = True
         self.control = None
+        self.attention = False
 
     def generate(self):
         return True

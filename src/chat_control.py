@@ -863,7 +863,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
     def send_message(self, message, keyID='', type_='chat', chatstate=None,
     msg_id=None, resource=None, xhtml=None, callback=None, callback_args=[],
-    process_commands=True):
+    process_commands=True, attention=False):
         """
         Send the given message to the active tab. Doesn't return None if error
         """
@@ -880,7 +880,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             keyID=keyID, type_=type_, chatstate=chatstate, msg_id=msg_id,
             resource=resource, user_nick=self.user_nick, xhtml=xhtml,
             label=label, callback=callback, callback_args=callback_args,
-            control=self))
+            control=self, attention=attention))
 
         # Record the history of sent messages
         self.save_message(message, 'sent')
@@ -2235,7 +2235,7 @@ class ChatControl(ChatControlBase):
             dialogs.ESessionInfoWindow(self.session)
 
     def send_message(self, message, keyID='', chatstate=None, xhtml=None,
-    process_commands=True):
+    process_commands=True, attention=False):
         """
         Send a message to contact
         """
@@ -2286,7 +2286,8 @@ class ChatControl(ChatControlBase):
         ChatControlBase.send_message(self, message, keyID, type_='chat',
             chatstate=chatstate_to_send, xhtml=xhtml, callback=_on_sent,
             callback_args=[contact, message, encrypted, xhtml,
-            self.get_seclabel()], process_commands=process_commands)
+            self.get_seclabel()], process_commands=process_commands,
+            attention=attention)
 
     def check_for_possible_paused_chatstate(self, arg):
         """

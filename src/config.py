@@ -4188,6 +4188,7 @@ class ManageSoundsWindow:
         # NOTE: sounds_ui_names MUST have all items of
         # sounds = gajim.config.get_per('soundevents') as keys
         sounds_dict = {
+                'attention_received': _('Attention Message Received'),
                 'first_message_received': _('First Message Received'),
                 'next_message_received_focused': _('Next Message Received Focused'),
                 'next_message_received_unfocused':
