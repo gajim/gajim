@@ -1024,7 +1024,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                 proxy = {}
                 proxyptr = gajim.config.get_per('proxies', p)
                 for key in proxyptr.keys():
-                    proxy[key] = proxyptr[key][1]
+                    proxy[key] = proxyptr[key]
             else:
                 proxy = None
             use_srv = True

@@ -1485,8 +1485,7 @@ class ManageProxiesWindow:
         gajim.config.del_per('proxies', old_name)
         gajim.config.add_per('proxies', new_name)
         for option in config:
-            gajim.config.set_per('proxies', new_name, option,
-                    config[option][common.config.OPT_VAL])
+            gajim.config.set_per('proxies', new_name, option, config[option])
         model.set_value(iter_, 0, new_name)
 
     def on_proxytype_combobox_changed(self, widget):
@@ -2116,7 +2115,7 @@ class AccountsWindow:
             gajim.config.add_per('accounts', new_name)
             old_config = gajim.config.get_per('accounts', old_name)
             for opt in old_config:
-                gajim.config.set_per('accounts', new_name, opt, old_config[opt][1])
+                gajim.config.set_per('accounts', new_name, opt, old_config[opt])
             gajim.config.del_per('accounts', old_name)
             if self.current_account == old_name:
                 self.current_account = new_name

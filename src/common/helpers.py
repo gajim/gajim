@@ -1435,7 +1435,7 @@ def get_proxy_info(account):
         if not proxyptr:
             return proxy
         for key in proxyptr.keys():
-            proxy[key] = proxyptr[key][1]
+            proxy[key] = proxyptr[key]
         return proxy
 
 def _get_img_direct(attrs):
