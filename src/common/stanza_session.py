@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ## src/common/stanza_session.py
 ##
-## Copyright (C) 2007-2010 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2007-2012 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2007 Julien Pivotto <roidelapluie AT gmail.com>
 ## Copyright (C) 2007-2008 Brendan Taylor <whateley AT gmail.com>
 ##                         Jean-Marie Traissard <jim AT lapin.org>
@@ -99,7 +99,7 @@ class StanzaSession(object):
             for event in gajim.events.get_events(self.conn.name, j, types=types):
                 # the event wasn't in this session
                 if (event.type_ == 'chat' and event.parameters[8] != self) or \
-                (event.type_ == 'printed_chat' and event.parameters[0].session != \
+                (event.type_ == 'printed_chat' and event.parameters[2].session != \
                 self):
                     continue
 

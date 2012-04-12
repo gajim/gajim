@@ -103,6 +103,7 @@ class Smacks():
                 self.uqueue.pop(0)
 
         if stanza.getName() == 'resumed':
+            self.enabled = True
             self.resuming = True
             self.con.set_oldst()
             if self.uqueue != []:
@@ -114,6 +115,7 @@ class Smacks():
         # Ask for service discovery, etc..
         if stanza.getTag('item-not-found'):
             self.resuming = False
+            self.enabled = False
             # we need to bind a resource
             self._owner.NonBlockingBind.resuming = False
             self._owner._on_auth_bind(None)

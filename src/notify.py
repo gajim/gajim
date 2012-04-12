@@ -4,7 +4,7 @@
 ## Copyright (C) 2005 Sebastian Estienne
 ## Copyright (C) 2005-2006 Andrew Sayman <lorien420 AT myrealbox.com>
 ## Copyright (C) 2005-2007 Nikos Kouremenos <kourem AT gmail.com>
-## Copyright (C) 2005-2010 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2005-2012 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2006 Travis Shirk <travis AT pobox.com>
 ## Copyright (C) 2006-2008 Jean-Marie Traissard <jim AT lapin.org>
 ## Copyright (C) 2007 Julien Pivotto <roidelapluie AT gmail.com>
@@ -73,7 +73,7 @@ def get_show_in_systray(event, account, contact, type_=None):
     return gajim.config.get('trayicon_notification_on_events')
 
 def popup(event_type, jid, account, msg_type='', path_to_image=None, title=None,
-text=None):
+text=None, timeout=-1):
     """
     Notify a user of an event. It first tries to a valid implementation of
     the Desktop Notification Specification. If that fails, then we fall back to
@@ -83,11 +83,14 @@ text=None):
     if not path_to_image:
         path_to_image = gtkgui_helpers.get_icon_path('gajim-chat_msg_recv', 48)
 
+    if timeout < 0:
+        timeout = gajim.config.get('notification_timeout')
+
     # Try to show our popup via D-Bus and notification daemon
     if gajim.config.get('use_notif_daemon') and dbus_support.supported:
         try:
             DesktopNotification(event_type, jid, account, msg_type,
-                path_to_image, title, gobject.markup_escape_text(text))
+                path_to_image, title, gobject.markup_escape_text(text), timeout)
             return  # sucessfully did D-Bus Notification procedure!
         except dbus.DBusException, e:
             # Connection to D-Bus failed
@@ -112,8 +115,7 @@ text=None):
             _title = title
 
         notification = pynotify.Notification(_title, _text)
-        timeout = gajim.config.get('notification_timeout') * 1000 # make it ms
-        notification.set_timeout(timeout)
+        notification.set_timeout(timeout*1000)
 
         notification.set_category(event_type)
         notification.set_data('event_type', event_type)
@@ -134,7 +136,7 @@ text=None):
 
     # Either nothing succeeded or the user wants old-style notifications
     instance = PopupNotificationWindow(event_type, jid, account, msg_type,
-        path_to_image, title, text)
+        path_to_image, title, text, timeout)
     gajim.interface.roster.popup_notification_windows.append(instance)
 
 def on_pynotify_notification_clicked(notification, action):
@@ -157,7 +159,8 @@ class Notification:
         if obj.do_popup:
             popup(obj.popup_event_type, obj.jid, obj.conn.name,
                 obj.popup_msg_type, path_to_image=obj.popup_image,
-                title=obj.popup_title, text=obj.popup_text)
+                title=obj.popup_title, text=obj.popup_text,
+                timeout=obj.popup_timeout)
 
         if obj.do_sound:
             if obj.sound_file:
@@ -235,11 +238,12 @@ class DesktopNotification:
     """
 
     def __init__(self, event_type, jid, account, msg_type='',
-    path_to_image=None, title=None, text=None):
+    path_to_image=None, title=None, text=None, timeout=-1):
         self.path_to_image = os.path.abspath(path_to_image)
         self.event_type = event_type
         self.title = title
         self.text = text
+        self.timeout = timeout
         # 0.3.1 is the only version of notification daemon that has no way
         # to determine which version it is. If no method exists, it means
         # they're using that one.
@@ -302,7 +306,6 @@ class DesktopNotification:
             self.get_version()
 
     def attempt_notify(self):
-        timeout = gajim.config.get('notification_timeout') # in seconds
         ntype = self.ntype
         if self.kde_notifications:
             notification_text = ('<html><img src="%(image)s" align=left />' \
@@ -320,8 +323,8 @@ class DesktopNotification:
                     # actions (stringlist)
                     (dbus.String('default'), dbus.String(self.event_type),
                     dbus.String('ignore'), dbus.String(_('Ignore'))),
-                    [],                                                                             # hints (not used in KDE yet)
-                    dbus.UInt32(timeout*1000),      # timeout (int), in ms
+                    [], # hints (not used in KDE yet)
+                    dbus.UInt32(self.timeout*1000), # timeout (int), in ms
                     reply_handler=self.attach_by_id,
                     error_handler=self.notify_another_way)
                 return
@@ -345,7 +348,7 @@ class DesktopNotification:
                     actions,
                     [''],
                     True,
-                    dbus.UInt32(timeout),
+                    dbus.UInt32(self.timeout),
                     reply_handler=self.attach_by_id,
                     error_handler=self.notify_another_way)
             except AttributeError:
@@ -392,7 +395,7 @@ class DesktopNotification:
                         dbus.String(text),
                         actions,
                         hints,
-                        dbus.UInt32(timeout*1000),
+                        dbus.UInt32(self.timeout*1000),
                         reply_handler=self.attach_by_id,
                         error_handler=self.notify_another_way)
                 except Exception, e:
@@ -407,7 +410,7 @@ class DesktopNotification:
                         dbus.String(self.text),
                         dbus.String(''),
                         hints,
-                        dbus.UInt32(timeout*1000),
+                        dbus.UInt32(self.timeout*1000),
                         reply_handler=self.attach_by_id,
                         error_handler=self.notify_another_way)
                 except Exception, e:
@@ -422,7 +425,7 @@ class DesktopNotification:
             str(e))
         instance = PopupNotificationWindow(self.event_type, self.jid,
             self.account, self.msg_type, self.path_to_image, self.title,
-            self.text)
+            self.text, self.timeout)
         gajim.interface.roster.popup_notification_windows.append(instance)
 
     def on_action_invoked(self, id_, reason):

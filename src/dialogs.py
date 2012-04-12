@@ -2,7 +2,7 @@
 ## src/dialogs.py
 ##
 ## Copyright (C) 2003-2005 Vincent Hanquez <tab AT snarc.org>
-## Copyright (C) 2003-2010 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2003-2012 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2005 Alex Mauer <hawke AT hawkesnest.net>
 ## Copyright (C) 2005-2006 Dimitur Kirov <dkirov AT gmail.com>
 ##                         Travis Shirk <travis AT pobox.com>
@@ -233,7 +233,7 @@ class PassphraseDialog:
         cancelbutton.connect('clicked', self.on_cancelbutton_clicked)
 
         self.xml.connect_signals(self)
-        self.window.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
+        self.window.set_transient_for(gajim.interface.roster.window)
         self.window.show_all()
 
         self.check = bool(checkbuttontext)
@@ -1936,6 +1936,9 @@ class CommonInputDialog:
     def on_cancelbutton_clicked(self, widget):
         self.dialog.destroy()
 
+    def destroy(self):
+        self.dialog.destroy()
+
 class InputDialog(CommonInputDialog):
     """
     Class for Input dialog
@@ -2464,8 +2467,9 @@ class JoinGroupchatWindow:
                 'groupchat.'))
             return
         nickname = self._nickname_entry.get_text().decode('utf-8')
-        server = self.server_comboboxentry.child.get_text().decode('utf-8')
-        room = self._room_jid_entry.get_text().decode('utf-8')
+        server = self.server_comboboxentry.child.get_text().decode('utf-8').\
+            strip()
+        room = self._room_jid_entry.get_text().decode('utf-8').strip()
         room_jid = room + '@' + server
         password = self._password_entry.get_text().decode('utf-8')
         try:
@@ -2740,7 +2744,7 @@ class ChangePasswordDialog:
 
 class PopupNotificationWindow:
     def __init__(self, event_type, jid, account, msg_type='',
-                             path_to_image=None, title=None, text=None):
+    path_to_image=None, title=None, text=None, timeout=-1):
         self.account = account
         self.jid = jid
         self.msg_type = msg_type
@@ -2760,8 +2764,8 @@ class PopupNotificationWindow:
             title = ''
 
         event_type_label.set_markup(
-                '<span foreground="black" weight="bold">%s</span>' %
-                gobject.markup_escape_text(title))
+            '<span foreground="black" weight="bold">%s</span>' %
+            gobject.markup_escape_text(title))
 
         # set colors [ http://www.pitt.edu/~nisg/cis/web/cgi/rgb.html ]
         self.window.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('black'))
@@ -2771,25 +2775,25 @@ class PopupNotificationWindow:
             path_to_image = gtkgui_helpers.get_icon_path('gajim-chat_msg_recv', 48)
 
         if event_type == _('Contact Signed In'):
-            bg_color = 'limegreen'
+            bg_color = gajim.config.get('notif_signin_color')
         elif event_type == _('Contact Signed Out'):
-            bg_color = 'red'
+            bg_color = gajim.config.get('notif_signout_color')
         elif event_type in (_('New Message'), _('New Single Message'),
             _('New Private Message'), _('New E-mail')):
-            bg_color = 'dodgerblue'
+            bg_color = gajim.config.get('notif_message_color')
         elif event_type == _('File Transfer Request'):
-            bg_color = 'khaki'
+            bg_color = gajim.config.get('notif_ftrequest_color')
         elif event_type == _('File Transfer Error'):
-            bg_color = 'firebrick'
+            bg_color = gajim.config.get('notif_fterror_color')
         elif event_type in (_('File Transfer Completed'),
-                                                _('File Transfer Stopped')):
-            bg_color = 'yellowgreen'
+        _('File Transfer Stopped')):
+            bg_color = gajim.config.get('notif_ftcomplete_color')
         elif event_type == _('Groupchat Invitation'):
-            bg_color = 'tan1'
+            bg_color = gajim.config.get('notif_invite_color')
         elif event_type == _('Contact Changed Status'):
-            bg_color = 'thistle2'
+            bg_color = gajim.config.get('notif_status_color')
         else: # Unknown event! Shouldn't happen but deal with it
-            bg_color = 'white'
+            bg_color = gajim.config.get('notif_other_color')
         popup_bg_color = gtk.gdk.color_parse(bg_color)
         close_button.modify_bg(gtk.STATE_NORMAL, popup_bg_color)
         eventbox.modify_bg(gtk.STATE_NORMAL, popup_bg_color)
@@ -2808,13 +2812,13 @@ class PopupNotificationWindow:
         pos_y = gajim.config.get('notification_position_y')
         if pos_y < 0:
             pos_y = gtk.gdk.screen_height() - \
-                      gajim.interface.roster.popups_notification_height + pos_y + 1
+                gajim.interface.roster.popups_notification_height + pos_y + 1
         self.window.move(pos_x, pos_y)
 
         xml.connect_signals(self)
         self.window.show_all()
-        timeout = gajim.config.get('notification_timeout')
-        gobject.timeout_add_seconds(timeout, self.on_timeout)
+        if timeout > 0:
+            gobject.timeout_add_seconds(timeout, self.on_timeout)
 
     def on_close_button_clicked(self, widget):
         self.adjust_height_and_move_popup_notification_windows()
@@ -5154,6 +5158,7 @@ class VoIPCallReceivedDialog(object):
         session = gajim.connections[self.account].get_jingle_session(self.fjid,
             self.sid)
         if not session:
+            dialog.destroy()
             return
         if response == gtk.RESPONSE_YES:
             #TODO: Ensure that ctrl.contact.resource == resource

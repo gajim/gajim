@@ -2,7 +2,7 @@
 ## src/chat_control.py
 ##
 ## Copyright (C) 2006 Dimitur Kirov <dkirov AT gmail.com>
-## Copyright (C) 2006-2010 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2006-2012 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2006-2008 Jean-Marie Traissard <jim AT lapin.org>
 ##                         Nikos Kouremenos <kourem AT gmail.com>
 ##                         Travis Shirk <travis AT pobox.com>
@@ -56,6 +56,7 @@ from common.xmpp.protocol import NS_RECEIPTS, NS_ESESSION
 from common.xmpp.protocol import NS_JINGLE_RTP_AUDIO, NS_JINGLE_RTP_VIDEO, NS_JINGLE_ICE_UDP, NS_JINGLE_FILE_TRANSFER
 from common.xmpp.protocol import NS_CHATSTATES
 from common.connection_handlers_events import MessageOutgoingEvent
+from common.exceptions import GajimGeneralException
 
 from command_system.implementation.middleware import ChatCommandProcessor
 from command_system.implementation.middleware import CommandTools
@@ -469,7 +470,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         self.user_nick = None
 
         self.smooth = True
-        self.msg_textview.grab_focus()
 
         self.command_hits = []
         self.last_key_tabs = False
@@ -864,7 +864,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
     def send_message(self, message, keyID='', type_='chat', chatstate=None,
     msg_id=None, resource=None, xhtml=None, callback=None, callback_args=[],
-    process_commands=True):
+    process_commands=True, attention=False):
         """
         Send the given message to the active tab. Doesn't return None if error
         """
@@ -881,7 +881,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             keyID=keyID, type_=type_, chatstate=chatstate, msg_id=msg_id,
             resource=resource, user_nick=self.user_nick, xhtml=xhtml,
             label=label, callback=callback, callback_args=callback_args,
-            control=self))
+            control=self, attention=attention))
 
         # Record the history of sent messages
         self.save_message(message, 'sent')
@@ -920,10 +920,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             self.received_history_pos = pos
 
     def print_conversation_line(self, text, kind, name, tim,
-                    other_tags_for_name=[], other_tags_for_time=[],
-                    other_tags_for_text=[], count_as_new=True, subject=None,
-                    old_kind=None, xhtml=None, simple=False, xep0184_id=None,
-                    graphics=True, displaymarking=None):
+    other_tags_for_name=[], other_tags_for_time=[], other_tags_for_text=[],
+    count_as_new=True, subject=None, old_kind=None, xhtml=None, simple=False,
+    xep0184_id=None, graphics=True, displaymarking=None, msg_id=None):
         """
         Print 'chat' type messages
         """
@@ -934,9 +933,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         if self.was_at_the_end or kind == 'outgoing':
             end = True
         textview.print_conversation_line(text, jid, kind, name, tim,
-                other_tags_for_name, other_tags_for_time, other_tags_for_text,
-                subject, old_kind, xhtml, simple=simple, graphics=graphics,
-                displaymarking=displaymarking)
+            other_tags_for_name, other_tags_for_time, other_tags_for_text,
+            subject, old_kind, xhtml, simple=simple, graphics=graphics,
+            displaymarking=displaymarking)
 
         if xep0184_id is not None:
             textview.show_xep0184_warning(xep0184_id)
@@ -979,18 +978,18 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
                     type_ = 'printed_' + self.type_id
                     event = 'message_received'
                 show_in_roster = notify.get_show_in_roster(event,
-                        self.account, self.contact, self.session)
+                    self.account, self.contact, self.session)
                 show_in_systray = notify.get_show_in_systray(event,
-                        self.account, self.contact, type_)
+                    self.account, self.contact, type_)
 
-                event = gajim.events.create_event(type_, (self,),
-                    show_in_roster=show_in_roster,
+                event = gajim.events.create_event(type_, (text, subject, self,
+                    msg_id), show_in_roster=show_in_roster,
                     show_in_systray=show_in_systray)
                 gajim.events.add_event(self.account, full_jid, event)
                 # We need to redraw contact if we show in roster
                 if show_in_roster:
                     gajim.interface.roster.draw_contact(self.contact.jid,
-                            self.account)
+                        self.account)
 
         if not self.parent_win:
             return
@@ -1437,22 +1436,22 @@ class ChatControl(ChatControlBase):
 
     def __init__(self, parent_win, contact, acct, session, resource=None):
         ChatControlBase.__init__(self, self.TYPE_ID, parent_win,
-                'chat_control', contact, acct, resource)
+            'chat_control', contact, acct, resource)
 
         self.gpg_is_active = False
         # for muc use:
         # widget = self.xml.get_object('muc_window_actions_button')
         self.actions_button = self.xml.get_object('message_window_actions_button')
         id_ = self.actions_button.connect('clicked',
-                self.on_actions_button_clicked)
+            self.on_actions_button_clicked)
         self.handlers[id_] = self.actions_button
 
         self._formattings_button = self.xml.get_object('formattings_button')
 
         self._add_to_roster_button = self.xml.get_object(
-                'add_to_roster_button')
+            'add_to_roster_button')
         id_ = self._add_to_roster_button.connect('clicked',
-                self._on_add_to_roster_menuitem_activate)
+            self._on_add_to_roster_menuitem_activate)
         self.handlers[id_] = self._add_to_roster_button
 
         self._audio_button = self.xml.get_object('audio_togglebutton')
@@ -1460,14 +1459,14 @@ class ChatControl(ChatControlBase):
         self.handlers[id_] = self._audio_button
         # add a special img
         gtkgui_helpers.add_image_to_button(self._audio_button,
-                'gajim-mic_inactive')
+            'gajim-mic_inactive')
 
         self._video_button = self.xml.get_object('video_togglebutton')
         id_ = self._video_button.connect('toggled', self.on_video_button_toggled)
         self.handlers[id_] = self._video_button
         # add a special img
         gtkgui_helpers.add_image_to_button(self._video_button,
-                'gajim-cam_inactive')
+            'gajim-cam_inactive')
 
         self._send_file_button = self.xml.get_object('send_file_button')
         # add a special img for send file button
@@ -1476,30 +1475,30 @@ class ChatControl(ChatControlBase):
         img.set_from_file(path_to_upload_img)
         self._send_file_button.set_image(img)
         id_ = self._send_file_button.connect('clicked',
-                self._on_send_file_menuitem_activate)
+            self._on_send_file_menuitem_activate)
         self.handlers[id_] = self._send_file_button
 
         self._convert_to_gc_button = self.xml.get_object(
-                'convert_to_gc_button')
+            'convert_to_gc_button')
         id_ = self._convert_to_gc_button.connect('clicked',
-                self._on_convert_to_gc_menuitem_activate)
+            self._on_convert_to_gc_menuitem_activate)
         self.handlers[id_] = self._convert_to_gc_button
 
-        contact_information_button = self.xml.get_object(
-                'contact_information_button')
-        id_ = contact_information_button.connect('clicked',
-                self._on_contact_information_menuitem_activate)
-        self.handlers[id_] = contact_information_button
+        self._contact_information_button = self.xml.get_object(
+            'contact_information_button')
+        id_ = self._contact_information_button.connect('clicked',
+            self._on_contact_information_menuitem_activate)
+        self.handlers[id_] = self._contact_information_button
 
         compact_view = gajim.config.get('compact_view')
         self.chat_buttons_set_visible(compact_view)
         self.widget_set_visible(self.xml.get_object('banner_eventbox'),
-                gajim.config.get('hide_chat_banner'))
+            gajim.config.get('hide_chat_banner'))
 
         self.authentication_button = self.xml.get_object(
-                'authentication_button')
+            'authentication_button')
         id_ = self.authentication_button.connect('clicked',
-                self._on_authentication_button_clicked)
+            self._on_authentication_button_clicked)
         self.handlers[id_] = self.authentication_button
 
         # Add lock image to show chat encryption
@@ -1541,31 +1540,31 @@ class ChatControl(ChatControlBase):
 
         # Hook up signals
         id_ = self.parent_win.window.connect('motion-notify-event',
-                self._on_window_motion_notify)
+            self._on_window_motion_notify)
         self.handlers[id_] = self.parent_win.window
         message_tv_buffer = self.msg_textview.get_buffer()
         id_ = message_tv_buffer.connect('changed',
-                self._on_message_tv_buffer_changed)
+            self._on_message_tv_buffer_changed)
         self.handlers[id_] = message_tv_buffer
 
         widget = self.xml.get_object('avatar_eventbox')
         widget.set_property('height-request', gajim.config.get(
-                'chat_avatar_height'))
+            'chat_avatar_height'))
         id_ = widget.connect('enter-notify-event',
-                self.on_avatar_eventbox_enter_notify_event)
+            self.on_avatar_eventbox_enter_notify_event)
         self.handlers[id_] = widget
 
         id_ = widget.connect('leave-notify-event',
-                self.on_avatar_eventbox_leave_notify_event)
+            self.on_avatar_eventbox_leave_notify_event)
         self.handlers[id_] = widget
 
         id_ = widget.connect('button-press-event',
-                self.on_avatar_eventbox_button_press_event)
+            self.on_avatar_eventbox_button_press_event)
         self.handlers[id_] = widget
 
         widget = self.xml.get_object('location_eventbox')
         id_ = widget.connect('button-release-event',
-                self.on_location_eventbox_button_release_event)
+            self.on_location_eventbox_button_release_event)
         self.handlers[id_] = widget
 
         for key in ('1', '2', '3', '4', '5', '6', '7', '8', '9', '*', '0', '#'):
@@ -1614,7 +1613,7 @@ class ChatControl(ChatControlBase):
             if not resource:
                 resource = contact.resource
             session = gajim.connections[self.account].find_controlless_session(
-                    self.contact.jid, resource)
+                self.contact.jid, resource)
 
         self.setup_seclabel(self.xml.get_object('label_selector'))
         if session:
@@ -1627,8 +1626,7 @@ class ChatControl(ChatControlBase):
         # Enable encryption if needed
         self.no_autonegotiation = False
         e2e_is_active = self.session and self.session.enable_encryption
-        gpg_pref = gajim.config.get_per('contacts', contact.jid,
-                'gpg_enabled')
+        gpg_pref = gajim.config.get_per('contacts', contact.jid, 'gpg_enabled')
 
         # try GPG first
         if not e2e_is_active and gpg_pref and \
@@ -1637,30 +1635,30 @@ class ChatControl(ChatControlBase):
             self.gpg_is_active = True
             gajim.encrypted_chats[self.account].append(contact.jid)
             msg = _('GPG encryption enabled')
-            ChatControlBase.print_conversation_line(self, msg,
-                    'status', '', None)
+            ChatControlBase.print_conversation_line(self, msg, 'status', '',
+                None)
 
             if self.session:
                 self.session.loggable = gajim.config.get_per('accounts',
-                        self.account, 'log_encrypted_sessions')
+                    self.account, 'log_encrypted_sessions')
             # GPG is always authenticated as we use GPG's WoT
             self._show_lock_image(self.gpg_is_active, 'GPG', self.gpg_is_active,
-                    self.session and self.session.is_loggable(), True)
+                self.session and self.session.is_loggable(), True)
 
         self.update_ui()
         # restore previous conversation
         self.restore_conversation()
         self.msg_textview.grab_focus()
 
-        # change tooltip text for audio and video buttons if python-farsight is
+        # change tooltip text for audio and video buttons if python-farstream is
         # not installed
-        if not gajim.HAVE_FARSIGHT:
+        if not gajim.HAVE_FARSTREAM:
             tooltip_text = self._audio_button.get_tooltip_text()
             self._audio_button.set_tooltip_text(
-                '%s\n%s' % (tooltip_text, _('Requires python-farsight.')))
+                '%s\n%s' % (tooltip_text, _('Requires python-farstream.')))
             tooltip_text = self._video_button.get_tooltip_text()
             self._video_button.set_tooltip_text(
-                '%s\n%s' % (tooltip_text, _('Requires python-farsight.')))
+                '%s\n%s' % (tooltip_text, _('Requires python-farstream.')))
 
         gajim.ged.register_event_handler('pep-received', ged.GUI1,
             self._nec_pep_received)
@@ -1708,7 +1706,7 @@ class ChatControl(ChatControlBase):
 
         # Jingle detection
         if self.contact.supports(NS_JINGLE_ICE_UDP) and \
-        gajim.HAVE_FARSIGHT and self.contact.resource:
+        gajim.HAVE_FARSTREAM and self.contact.resource:
             self.audio_available = self.contact.supports(NS_JINGLE_RTP_AUDIO)
             self.video_available = self.contact.supports(NS_JINGLE_RTP_VIDEO)
         else:
@@ -1724,24 +1722,32 @@ class ChatControl(ChatControlBase):
         self._video_button.set_sensitive(self.video_available)
 
         # Send file
-        if (self.contact.supports(NS_FILE) or self.contact.supports(NS_JINGLE_FILE_TRANSFER)) and self.contact.resource:
+        if (self.contact.supports(NS_FILE) or self.contact.supports(NS_JINGLE_FILE_TRANSFER)) and (self.type_id == 'chat' or \
+        self.gc_contact.resource):
             self._send_file_button.set_sensitive(True)
             self._send_file_button.set_tooltip_text('')
         else:
             self._send_file_button.set_sensitive(False)
             if not (self.contact.supports(NS_FILE) or self.contact.supports(NS_JINGLE_FILE_TRANSFER)):
                 self._send_file_button.set_tooltip_text(_(
-                        "This contact does not support file transfer."))
+                    "This contact does not support file transfer."))
             else:
                 self._send_file_button.set_tooltip_text(
-                        _("You need to know the real JID of the contact to send him or "
-                        "her a file."))
+                    _("You need to know the real JID of the contact to send "
+                    "him or her a file."))
 
         # Convert to GC
         if self.contact.supports(NS_MUC):
             self._convert_to_gc_button.set_sensitive(True)
         else:
             self._convert_to_gc_button.set_sensitive(False)
+
+        # Information
+        if gajim.account_is_disconnected(self.account):
+            self._contact_information_button.set_sensitive(False)
+        else:
+            self._contact_information_button.set_sensitive(True)
+
 
     def update_all_pep_types(self):
         for pep_type in self._pep_images:
@@ -2230,7 +2236,7 @@ class ChatControl(ChatControlBase):
             dialogs.ESessionInfoWindow(self.session)
 
     def send_message(self, message, keyID='', chatstate=None, xhtml=None,
-    process_commands=True):
+    process_commands=True, attention=False):
         """
         Send a message to contact
         """
@@ -2281,7 +2287,8 @@ class ChatControl(ChatControlBase):
         ChatControlBase.send_message(self, message, keyID, type_='chat',
             chatstate=chatstate_to_send, xhtml=xhtml, callback=_on_sent,
             callback_args=[contact, message, encrypted, xhtml,
-            self.get_seclabel()], process_commands=process_commands)
+            self.get_seclabel()], process_commands=process_commands,
+            attention=attention)
 
     def check_for_possible_paused_chatstate(self, arg):
         """
@@ -2391,8 +2398,8 @@ class ChatControl(ChatControlBase):
         return gajim.nicks[self.account]
 
     def print_conversation(self, text, frm='', tim=None, encrypted=False,
-                    subject=None, xhtml=None, simple=False, xep0184_id=None,
-                    displaymarking=None):
+    subject=None, xhtml=None, simple=False, xep0184_id=None,
+    displaymarking=None, msg_id=None):
         """
         Print a line in the conversation
 
@@ -2423,21 +2430,22 @@ class ChatControl(ChatControlBase):
                 # ESessions
                 if not encrypted:
                     msg = _('The following message was NOT encrypted')
-                    ChatControlBase.print_conversation_line(self, msg, 'status', '',
-                            tim)
+                    ChatControlBase.print_conversation_line(self, msg, 'status',
+                        '',  tim)
             else:
                 # GPG encryption
                 if encrypted and not self.gpg_is_active:
                     msg = _('The following message was encrypted')
-                    ChatControlBase.print_conversation_line(self, msg, 'status', '',
-                            tim)
-                    # turn on OpenPGP if this was in fact a XEP-0027 encrypted message
+                    ChatControlBase.print_conversation_line(self, msg, 'status',
+                        '', tim)
+                    # turn on OpenPGP if this was in fact a XEP-0027 encrypted
+                    # message
                     if encrypted == 'xep27':
                         self._toggle_gpg()
                 elif not encrypted and self.gpg_is_active:
                     msg = _('The following message was NOT encrypted')
-                    ChatControlBase.print_conversation_line(self, msg, 'status', '',
-                            tim)
+                    ChatControlBase.print_conversation_line(self, msg, 'status',
+                        '', tim)
             if not frm:
                 kind = 'incoming'
                 name = contact.get_shown_name()
@@ -2454,8 +2462,9 @@ class ChatControl(ChatControlBase):
                     if xhtml:
                         xhtml = '<body xmlns="%s">%s</body>' % (NS_XHTML, xhtml)
         ChatControlBase.print_conversation_line(self, text, kind, name, tim,
-                subject=subject, old_kind=self.old_msg_kind, xhtml=xhtml,
-                simple=simple, xep0184_id=xep0184_id, displaymarking=displaymarking)
+            subject=subject, old_kind=self.old_msg_kind, xhtml=xhtml,
+            simple=simple, xep0184_id=xep0184_id, displaymarking=displaymarking,
+            msg_id=msg_id)
         if text.startswith('/me ') or text.startswith('/me\n'):
             self.old_msg_kind = None
         else:
@@ -3238,6 +3247,36 @@ class ChatControl(ChatControlBase):
         b.connect('clicked', self._on_ok, file_props, type_)
         self._add_info_bar_message(markup, [b], file_props, gtk.MESSAGE_ERROR)
 
+    def _on_accept_gc_invitation(self, widget, event):
+        room_jid = event.parameters[0]
+        password = event.parameters[2]
+        is_continued = event.parameters[3]
+        try:
+            if is_continued:
+                gajim.interface.join_gc_room(self.account, room_jid,
+                    gajim.nicks[self.account], password, is_continued=True)
+            else:
+                dialogs.JoinGroupchatWindow(self.account, room_jid)
+        except GajimGeneralException:
+            pass
+        gajim.events.remove_events(self.account, self.contact.jid, event=event)
+
+    def _on_cancel_gc_invitation(self, widget, event):
+        gajim.events.remove_events(self.account, self.contact.jid, event=event)
+
+    def _get_gc_invitation(self, event):
+        room_jid = event.parameters[0]
+        comment = event.parameters[1]
+        markup = '<b>%s:</b> %s' % (_('Groupchat Invitation'), room_jid)
+        if comment:
+            markup += ' (%s)' % comment
+        b1 = gtk.Button(_('_Join'))
+        b1.connect('clicked', self._on_accept_gc_invitation, event)
+        b2 = gtk.Button(stock=gtk.STOCK_CANCEL)
+        b2.connect('clicked', self._on_cancel_gc_invitation, event)
+        self._add_info_bar_message(markup, [b1, b2], event.parameters,
+            gtk.MESSAGE_QUESTION)
+
     def on_event_added(self, event):
         if event.account != self.account:
             return
@@ -3259,6 +3298,8 @@ class ChatControl(ChatControlBase):
             self._got_file_error(event.parameters, event.type_,
                 _('File transfer cancelled'),
                 _('Connection with peer cannot be established.'))
+        elif event.type_ == 'gc-invitation':
+            self._get_gc_invitation(event)
 
     def on_event_removed(self, event_list):
         """
@@ -3270,14 +3311,24 @@ class ChatControl(ChatControlBase):
             if ev.jid != self.contact.jid:
                 continue
             if ev.type_ not in ('file-request', 'file-completed', 'file-error',
-            'file-stopped', 'file-request-error', 'file-send-error'):
+            'file-stopped', 'file-request-error', 'file-send-error',
+            'gc-invitation'):
                 continue
             i = 0
+            removed = False
             for ib_msg in self.info_bar_queue:
-                if ib_msg[2] == ev.parameters:
-                    self.info_bar_queue.remove(ib_msg)
+                if ev.type_ == 'gc-invitation':
+                    if ev.parameters[0] == ib_msg[2][0]:
+                        self.info_bar_queue.remove(ib_msg)
+                        removed = True
+                else: # file-*
+                    if ib_msg[2] == ev.parameters:
+                        self.info_bar_queue.remove(ib_msg)
+                        removed = True
+                if removed:
                     if i == 0:
                         # We are removing the one currently displayed
+                        self.info_bar.set_no_show_all(True)
                         self.info_bar.hide()
                         # show next one?
                         gobject.idle_add(self._info_bar_show_message)

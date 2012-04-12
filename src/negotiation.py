@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ## src/negotiation.py
 ##
-## Copyright (C) 2007-2010 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2007-2012 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2007-2008 Brendan Taylor <whateley AT gmail.com>
 ##
 ## This file is part of Gajim.

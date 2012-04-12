@@ -6,7 +6,7 @@
 ## Copyright (C) 2006-2007 Tomasz Melcer <liori AT exroot.org>
 ##                         Travis Shirk <travis AT pobox.com>
 ##                         Nikos Kouremenos <kourem AT gmail.com>
-## Copyright (C) 2006-2010 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2006-2012 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2007 Julien Pivotto <roidelapluie AT gmail.com>
 ## Copyright (C) 2007-2008 Brendan Taylor <whateley AT gmail.com>
 ##                         Jean-Marie Traissard <jim AT lapin.org>
@@ -869,7 +869,7 @@ class ConnectionHandlersBase:
             elif obj.contact.show in statuss:
                 obj.old_show = statuss.index(obj.contact.show)
             if (resources != [''] and (len(obj.contact_list) != 1 or \
-            obj.contact_list[0].show != 'offline')) and \
+            obj.contact_list[0].show not in ('not in roster', 'offline'))) and \
             not gajim.jid_is_transport(jid):
                 # Another resource of an existing contact connected
                 obj.old_show = 0
@@ -897,7 +897,13 @@ class ConnectionHandlersBase:
         obj.contact.show = obj.show
         obj.contact.status = obj.status
         obj.contact.priority = obj.prio
-        obj.contact.keyID = obj.keyID
+        attached_keys = gajim.config.get_per('accounts', account,
+            'attached_gpg_keys').split()
+        if jid in attached_keys:
+            obj.contact.keyID = attached_keys[attached_keys.index(jid) + 1]
+        else:
+            # Do not override assigned key
+            obj.contact.keyID = obj.keyID
         if obj.timestamp:
             obj.contact.last_status_time = obj.timestamp
         elif not gajim.block_signed_in_notifications[account]:

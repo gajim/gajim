@@ -501,7 +501,7 @@ if dbus_support.supported:
                         for node in path:
                             key += node + '#'
                     key += name
-                    prefs_dict[DBUS_STRING(key)] = DBUS_STRING(value[1])
+                    prefs_dict[DBUS_STRING(key)] = DBUS_STRING(value)
                 gajim.config.foreach(get_prefs)
                 return prefs_dict
 

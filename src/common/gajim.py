@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ## src/common/gajim.py
 ##
-## Copyright (C) 2003-2010 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2003-2012 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2005-2006 Dimitur Kirov <dkirov AT gmail.com>
 ##                         Travis Shirk <travis AT pobox.com>
 ##                         Nikos Kouremenos <kourem AT gmail.com>
@@ -171,21 +171,21 @@ else:
 # read.
 HAVE_LATEX = False
 
-HAVE_FARSIGHT = True
+HAVE_FARSTREAM = True
 try:
-    farsight = __import__('farsight')
+    farstream = __import__('farstream')
     import gst
     import glib
     try:
         conference = gst.element_factory_make('fsrtpconference')
-        session = conference.new_session(farsight.MEDIA_TYPE_AUDIO)
+        session = conference.new_session(farstream.MEDIA_TYPE_AUDIO)
         del session
         del conference
     except glib.GError:
-        HAVE_FARSIGHT = False
+        HAVE_FARSTREAM = False
 
 except ImportError:
-    HAVE_FARSIGHT = False
+    HAVE_FARSTREAM = False
 
 HAVE_UPNP_IGD = True
 try:

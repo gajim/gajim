@@ -47,11 +47,11 @@ AC_ARG_ENABLE(site-packages,
 instead of DATADIR/gajim/src.])]
 ,
 AC_SUBST([gajim_srcdir], [\${pkgpythondir}])
-AC_SUBST([gajim_pluginsdir], [\${pkgpythondir}])
 ,
 AC_SUBST([gajim_srcdir], [\${datadir}/\${PACKAGE}/src])
-AC_SUBST([gajim_pluginsdir], [\${datadir}/\${PACKAGE}/plugins])
 )
+
+AC_SUBST([gajim_pluginsdir], [\${datadir}/\${PACKAGE}/plugins])
 
 AS_AC_EXPAND(GAJIM_SRCDIR, "${gajim_srcdir}")
 AS_AC_EXPAND(PKGDATADIR, "${datadir}/${PACKAGE}")

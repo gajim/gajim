@@ -5,7 +5,7 @@
 ##                    Stéphan Kochen <stephan AT kochen.nl>
 ## Copyright (C) 2005-2006 Dimitur Kirov <dkirov AT gmail.com>
 ## Copyright (C) 2005-2007 Nikos Kouremenos <kourem AT gmail.com>
-## Copyright (C) 2005-2010 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2005-2012 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2006 Travis Shirk <travis AT pobox.com>
 ##                    Stefan Bethge <stefan AT lanpartei.de>
 ## Copyright (C) 2006-2007 Jean-Marie Traissard <jim AT lapin.org>
@@ -498,6 +498,11 @@ class RosterTooltip(NotificationAreaTooltip):
         name_markup = u'<span weight="bold">' + \
                 gobject.markup_escape_text(prim_contact.get_shown_name())\
                 + '</span>'
+        if gajim.config.get('mergeaccounts'):
+          name_markup += u" <span foreground='#888A85'>(" + \
+                gobject.markup_escape_text(prim_contact.account.name) \
+                + ')</span>'
+
         if self.account and helpers.jid_is_blocked(self.account,
         prim_contact.jid):
             name_markup += _(' [blocked]')

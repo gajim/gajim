@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ## src/common/connection_handlers_events.py
 ##
-## Copyright (C) 2010 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2010-2012 Yann Leboulanger <asterix AT lagaule.org>
 ##
 ## This file is part of Gajim.
 ##
@@ -1017,15 +1017,20 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                     return
                 self.jid = gajim.get_jid_without_resource(self.fjid)
 
-        forward_tag = self.stanza.getTag('forwarded', namespace=xmpp.NS_FORWARD)
+        carbon_marker = self.stanza.getTag('sent', namespace=xmpp.NS_CARBONS)
+        if not carbon_marker:
+            carbon_marker = self.stanza.getTag('received', namespace=xmpp.NS_CARBONS)
         # Be sure it comes from one of our resource, else ignore forward element
-        if forward_tag and self.jid == gajim.get_jid_from_account(account):
-            received_tag = forward_tag.getTag('received',
-                namespace=xmpp.NS_CARBONS)
-            sent_tag = forward_tag.getTag('sent', namespace=xmpp.NS_CARBONS)
-            if received_tag:
+        if carbon_marker and self.jid == gajim.get_jid_from_account(account):
+            forward_tag = self.stanza.getTag('forwarded', namespace=xmpp.NS_FORWARD)
+            if forward_tag:
                 msg = forward_tag.getTag('message')
                 self.stanza = xmpp.Message(node=msg)
+                if carbon_marker.getName() == 'sent':
+                    to = self.stanza.getTo()
+                    self.stanza.setTo(self.stanza.getFrom())
+                    self.stanza.setFrom(to)
+                    self.sent = True
                 try:
                     self.get_jid_resource()
                 except helpers.InvalidFormat:
@@ -1036,23 +1041,6 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                         'has been ignored.')))
                     return
                 self.forwarded = True
-            elif sent_tag:
-                msg = forward_tag.getTag('message')
-                self.stanza = xmpp.Message(node=msg)
-                to = self.stanza.getTo()
-                self.stanza.setTo(self.stanza.getFrom())
-                self.stanza.setFrom(to)
-                try:
-                    self.get_jid_resource()
-                except helpers.InvalidFormat:
-                    gajim.nec.push_incoming_event(InformationEvent(None,
-                        conn=self.conn, level='error',
-                        pri_txt=_('Invalid Jabber ID'),
-                        sec_txt=_('A message from a non-valid JID arrived, it '
-                        'has been ignored.')))
-                    return
-                self.forwarded = True
-                self.sent = True
 
         self.enc_tag = self.stanza.getTag('x', namespace=xmpp.NS_ENCRYPTED)
 
@@ -1205,6 +1193,7 @@ class DecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.sent = self.msg_obj.sent
         self.popup = False
         self.msg_id = None # id in log database
+        self.attention = False # XEP-0224
 
         self.receipt_request_tag = self.stanza.getTag('request',
             namespace=xmpp.NS_RECEIPTS)
@@ -1218,6 +1207,9 @@ class DecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             namespace=xmpp.NS_SECLABEL)
         if self.seclabel:
             self.displaymarking = self.seclabel.getTag('displaymarking')
+
+        if self.stanza.getTag('attention', namespace=xmpp.NS_ATTENTION):
+            self.attention = True
 
         self.form_node = self.stanza.getTag('x', namespace=xmpp.NS_DATA)
 
@@ -1293,6 +1285,8 @@ class GcMessageReceivedEvent(nec.NetworkIncomingEvent):
                 if self.status_code != []:
                     gajim.nec.push_incoming_event(GcConfigChangedReceivedEvent(
                         None, conn=self.conn, msg_event=self))
+            if self.msg_obj.form_node:
+                return True
             return
 
         self.displaymarking = None
@@ -2123,7 +2117,19 @@ class NotificationEvent(nec.NetworkIncomingEvent):
             # we're online or chat
             self.do_popup = True
 
-        if self.first_unread and helpers.allow_sound_notification(
+        if msg_obj.attention and not gajim.config.get(
+        'ignore_incoming_attention'):
+            self.popup_timeout = 0
+            self.do_popup = True
+        else:
+            self.popup_timeout = gajim.config.get('notification_timeout')
+
+        if msg_obj.attention and not gajim.config.get(
+        'ignore_incoming_attention') and gajim.config.get_per('soundevents',
+        'attention_received', 'enabled'):
+            self.sound_event = 'attention_received'
+            self.do_sound = True
+        elif self.first_unread and helpers.allow_sound_notification(
         self.conn.name, 'first_message_received'):
             self.do_sound = True
         elif not self.first_unread and self.control_focused and \
@@ -2236,6 +2242,8 @@ class NotificationEvent(nec.NetworkIncomingEvent):
         self.popup_image = gtkgui_helpers.get_path_to_generic_or_avatar(
             img_path, jid=self.jid, suffix=suffix)
 
+        self.popup_timeout = gajim.config.get('notification_timeout')
+
         if event == 'status_change':
             self.popup_title = _('%(nick)s Changed Status') % \
                 {'nick': gajim.get_name_from_jid(account, self.jid)}
@@ -2280,6 +2288,7 @@ class NotificationEvent(nec.NetworkIncomingEvent):
         self.popup_event_type = ''
         self.popup_msg_type = ''
         self.popup_image = ''
+        self.popup_timeout = -1
 
         self.do_command = False
         self.command = ''
@@ -2322,6 +2331,7 @@ class MessageOutgoingEvent(nec.NetworkOutgoingEvent):
         self.now = False
         self.is_loggable = True
         self.control = None
+        self.attention = False
 
     def generate(self):
         return True

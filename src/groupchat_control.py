@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ## src/groupchat_control.py
 ##
-## Copyright (C) 2003-2010 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2003-2012 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2005-2007 Nikos Kouremenos <kourem AT gmail.com>
 ## Copyright (C) 2006 Dimitur Kirov <dkirov AT gmail.com>
 ##                    Alex Mauer <hawke AT hawkesnest.net>
@@ -212,7 +212,8 @@ class PrivateChatControl(ChatControl):
             self.parent_win.redraw_tab(self)
             self.update_ui()
 
-    def send_message(self, message, xhtml=None, process_commands=True):
+    def send_message(self, message, xhtml=None, process_commands=True,
+    attention=False):
         """
         Call this method to send the message
         """
@@ -237,7 +238,7 @@ class PrivateChatControl(ChatControl):
                 return
 
         ChatControl.send_message(self, message, xhtml=xhtml,
-            process_commands=process_commands)
+            process_commands=process_commands, attention=attention)
 
     def update_ui(self):
         if self.contact.show == 'offline':
@@ -1274,7 +1275,7 @@ class GroupchatControl(ChatControlBase):
         gajim.gc_connected[obj.conn.name][self.room_jid]:
             return
         password = gajim.gc_passwords.get(self.room_jid, '')
-        obj.conn.join_gc(self.nick, self.room_jid, password)
+        obj.conn.join_gc(self.nick, self.room_jid, password, rejoin=True)
 
     def _nec_decrypted_message_received(self, obj):
         if obj.conn.name != self.account:
@@ -1307,7 +1308,6 @@ class GroupchatControl(ChatControlBase):
         self._update_banner_state_image()
         if self.parent_win:
             self.parent_win.redraw_tab(self)
-        gobject.idle_add(self.msg_textview.grab_focus)
 
     def got_disconnected(self):
         self.list_treeview.set_model(None)
@@ -1351,7 +1351,7 @@ class GroupchatControl(ChatControlBase):
             return False
         password = gajim.gc_passwords.get(self.room_jid, '')
         gajim.connections[self.account].join_gc(self.nick, self.room_jid,
-            password)
+            password, rejoin=True)
         return True
 
     def draw_roster(self):

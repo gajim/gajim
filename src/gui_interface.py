@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ## src/gajim.py
 ##
-## Copyright (C) 2003-2010 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2003-2012 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2004-2005 Vincent Hanquez <tab AT snarc.org>
 ## Copyright (C) 2005 Alex Podaras <bigpod AT gmail.com>
 ##                    Norman Rasmussen <norman AT rasmussen.co.za>
@@ -329,6 +329,16 @@ class Interface:
                     obj.errmsg))
             if gc_control and gc_control.autorejoin:
                 gc_control.autorejoin = False
+
+    def handle_event_gc_message(self, obj):
+        if not obj.stanza.getTag('body'): # no <body>
+            # It could be a voice request. See
+            # http://www.xmpp.org/extensions/xep-0045.html#voiceapprove
+            if obj.msg_obj.form_node:
+                dialogs.SingleMessageWindow(obj.conn.name, obj.fjid,
+                    action='receive', from_whom=obj.fjid,
+                    subject='', message='', resource='', session=None,
+                    form_node=obj.msg_obj.form_node)
 
     def handle_event_presence(self, obj):
         # 'NOTIFY' (account, (jid, status, status message, resource,
@@ -1490,6 +1500,7 @@ class Interface:
             'fingerprint-error': [self.handle_event_fingerprint_error],
             'gc-invitation-received': [self.handle_event_gc_invitation],
             'gc-presence-received': [self.handle_event_gc_presence],
+            'gc-message-received': [self.handle_event_gc_message],
             'gmail-notify': [self.handle_event_gmail_notify],
             'gpg-password-required': [self.handle_event_gpg_password_required],
             'gpg-trust-key': [self.handle_event_gpg_trust_key],
@@ -1625,7 +1636,7 @@ class Interface:
                     return
 
             if type_ == 'printed_chat':
-                ctrl = event.parameters[0]
+                ctrl = event.parameters[2]
             elif type_ == 'chat':
                 session = event.parameters[8]
                 ctrl = session.control
@@ -1663,7 +1674,7 @@ class Interface:
                 event = gajim.events.get_first_event(account, jid, type_)
 
             if type_ == 'printed_pm':
-                ctrl = event.parameters[0]
+                ctrl = event.parameters[2]
             elif type_ == 'pm':
                 session = event.parameters[8]
 

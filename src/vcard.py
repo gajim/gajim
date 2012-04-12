@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ## src/vcard.py
 ##
-## Copyright (C) 2003-2010 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2003-2012 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2005 Vincent Hanquez <tab AT snarc.org>
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem AT gmail.com>
 ## Copyright (C) 2006 Junglecow J <junglecow AT gmail.com>
@@ -242,7 +242,7 @@ class VcardWindow:
             return
         if obj.resource:
             # It's a muc occupant vcard
-            if obj.fjid != self.real_jid:
+            if obj.fjid != self.contact.jid:
                 return
         else:
             if obj.jid != self.contact.jid:
@@ -257,14 +257,18 @@ class VcardWindow:
             self.update_progressbar_timeout_id = None
 
     def set_last_status_time(self, obj):
+        if obj.conn.name != self.account:
+            return
         if obj.fjid != self.real_jid:
             return
         self.fill_status_label()
 
     def set_os_info(self, obj):
+        if obj.conn.name != self.account:
+            return
         if self.xml.get_object('information_notebook').get_n_pages() < 5:
             return
-        if obj.fjid != self.real_jid:
+        if obj.fjid != self.contact.jid and obj.fjid != self.real_jid:
             return
         i = 0
         client = ''
@@ -291,9 +295,11 @@ class VcardWindow:
         self.test_remove_progressbar()
 
     def set_entity_time(self, obj):
+        if obj.conn.name != self.account:
+            return
         if self.xml.get_object('information_notebook').get_n_pages() < 5:
             return
-        if obj.fjid != self.real_jid:
+        if obj.fjid != self.contact.jid and obj.fjid != self.real_jid:
             return
         i = 0
         time_s = ''

@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ## src/common/helpers.py
 ##
-## Copyright (C) 2003-2010 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2003-2012 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2005-2006 Dimitur Kirov <dkirov AT gmail.com>
 ##                         Nikos Kouremenos <kourem AT gmail.com>
 ## Copyright (C) 2006 Alex Mauer <hawke AT hawkesnest.net>
@@ -1330,7 +1330,7 @@ def update_optional_features(account = None):
             gajim.gajim_optional_features[a].append(xmpp.NS_ESESSION)
         if gajim.config.get_per('accounts', a, 'answer_receipts'):
             gajim.gajim_optional_features[a].append(xmpp.NS_RECEIPTS)
-        if gajim.HAVE_FARSIGHT:
+        if gajim.HAVE_FARSTREAM:
             gajim.gajim_optional_features[a].append(xmpp.NS_JINGLE)
             gajim.gajim_optional_features[a].append(xmpp.NS_JINGLE_RTP)
             gajim.gajim_optional_features[a].append(xmpp.NS_JINGLE_RTP_AUDIO)
@@ -1436,8 +1436,10 @@ def get_proxy_info(account):
     if p:
         proxy = {}
         proxyptr = gajim.config.get_per('proxies', p)
+        if not proxyptr:
+            return proxy
         for key in proxyptr.keys():
-            proxy[key] = proxyptr[key][1]
+            proxy[key] = proxyptr[key]
         return proxy
 
 def _get_img_direct(attrs):

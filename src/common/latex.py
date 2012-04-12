@@ -5,7 +5,7 @@
 ## Copyright (C) 2005-2006 Alex Mauer <hawke AT hawkesnest.net>
 ##                         Travis Shirk <travis AT pobox.com>
 ## Copyright (C) 2005-2007 Nikos Kouremenos <kourem AT gmail.com>
-## Copyright (C) 2005-2010 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2005-2012 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2006 Dimitur Kirov <dkirov AT gmail.com>
 ## Copyright (C) 2006-2008 Jean-Marie Traissard <jim AT lapin.org>
 ## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
@@ -59,8 +59,21 @@ def check_blacklist(str_):
 
 def get_tmpfile_name():
     random.seed()
-    int_ = random.randint(0, 100)
-    return os.path.join(gettempdir(), 'gajimtex_' + int_.__str__())
+    nb = 0
+    while(nb < 100):
+        int_ = random.randint(0, 10000)
+        filename = os.path.join(gettempdir(), 'gajimtex_' + int_.__str__())
+        # Check if a file to not overwrite it
+        ok = True
+        extensions = ['.tex', '.log', '.aux', '.dvi']
+        for ext in extensions:
+            if os.path.exists(filename + ext):
+                ok = False
+                break
+        if ok:
+            return filename
+        nb += 1
+    return filename
 
 def write_latex(filename, str_):
     texstr = '\\documentclass[12pt]{article}\\usepackage[dvips]{graphicx}'

@@ -962,7 +962,7 @@ class Sign(object):
 
     def handle_status(self, key, value):
         if key in ("USERID_HINT", "NEED_PASSPHRASE", "BAD_PASSPHRASE",
-                   "GOOD_PASSPHRASE", "BEGIN_SIGNING"):
+                   "GOOD_PASSPHRASE", "BEGIN_SIGNING", "MISSING_PASSPHRASE"):
             pass
         elif key == "SIG_CREATED":
             (self.type,

@@ -3,7 +3,7 @@
 ##
 ## Copyright (C) 2006 Jean-Marie Traissard <jim AT lapin.org>
 ##                    Nikos Kouremenos <kourem AT gmail.com>
-## Copyright (C) 2006-2010 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2006-2012 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2007 Julien Pivotto <roidelapluie AT gmail.com>
 ## Copyright (C) 2007-2008 Stephan Erb <steve-e AT h3c.de>
 ## Copyright (C) 2008 Brendan Taylor <whateley AT gmail.com>
@@ -45,7 +45,7 @@ class Event:
                         where kind in error, incoming
                 file-*: file_props
                 gc_msg: None
-                printed_chat: control
+                printed_chat: [message, subject, control, msg_id]
                 printed_*: None
                         messages that are already printed in chat, but not read
                 gc-invitation: [room_jid, reason, password, is_continued]

@@ -5,7 +5,7 @@
 ##                    Julien Pivotto <roidelapluie AT gmail.com>
 ##                    Stefan Bethge <stefan AT lanpartei.de>
 ##                    Stephan Erb <steve-e AT h3c.de>
-## Copyright (C) 2007-2010 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2007-2012 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
 ##
 ## This file is part of Gajim.
@@ -49,12 +49,12 @@ class FeaturesWindow:
         self.features = {
             _('SSL certificate validation'): (self.pyopenssl_available,
                 _('A library used to validate server certificates to ensure a secure connection.'),
-                _('Requires python-pyopenssl.'),
-                _('Requires python-pyopenssl.')),
+                _('Requires python-pyopenssl > 0.12 and pyasn1.'),
+                _('Requires python-pyopenssl > 0.12 and pyasn1.')),
             _('Bonjour / Zeroconf'): (self.zeroconf_available,
                 _('Serverless chatting with autodetected clients in a local network.'),
                 _('Requires python-avahi.'),
-                _('Requires pybonjour (http://o2s.csail.mit.edu/o2s-wiki/pybonjour).')),
+                _('Requires pybonjour and bonjour SDK running (http://developer.apple.com/opensource/).')),
             _('Command line'): (self.dbus_available,
                 _('A script to control Gajim via commandline.'),
                 _('Requires python-dbus.'),
@@ -103,9 +103,9 @@ class FeaturesWindow:
                 _('Generate XHTML output from RST code (see http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html).'),
                 _('Requires python-docutils.'),
                 _('Requires python-docutils.')),
-            _('Audio / Video'): (self.farsight_available,
+            _('Audio / Video'): (self.farstream_available,
                 _('Ability to start audio and video chat.'),
-                _('Requires python-farsight and gstreamer-plugins-bad.'),
+                _('Requires python-farstream and gstreamer-plugins-bad.'),
                 _('Feature not available under Windows.')),
             _('UPnP-IGD'): (self.gupnp_igd_available,
                 _('Ability to request your router to forward port for file transfer.'),
@@ -169,6 +169,11 @@ class FeaturesWindow:
         try:
             import OpenSSL.SSL
             import OpenSSL.crypto
+            ver = OpenSSL.__version__
+            ver_l = [int(i) for i in ver.split('.')]
+            if ver_l < [0, 12]:
+                raise ImportError
+            import pyasn1
         except Exception:
             return False
         return True
@@ -253,8 +258,8 @@ class FeaturesWindow:
             return False
         return True
 
-    def farsight_available(self):
-        return gajim.HAVE_FARSIGHT
+    def farstream_available(self):
+        return gajim.HAVE_FARSTREAM
 
     def gupnp_igd_available(self):
         return gajim.HAVE_UPNP_IGD

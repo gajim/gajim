@@ -2,7 +2,7 @@
 ## src/common/connection.py
 ##
 ## Copyright (C) 2003-2005 Vincent Hanquez <tab AT snarc.org>
-## Copyright (C) 2003-2010 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2003-2012 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2005 Alex Mauer <hawke AT hawkesnest.net>
 ##                    Stéphan Kochen <stephan AT kochen.nl>
 ## Copyright (C) 2005-2006 Dimitur Kirov <dkirov AT gmail.com>
@@ -58,6 +58,7 @@ from common import gajim
 from common import gpg
 from common import passwords
 from common import exceptions
+from common import check_X509
 from connection_handlers import *
 
 from xmpp import Smacks
@@ -98,6 +99,7 @@ ssl_error = {
 31: _("Authority and issuer serial number mismatch"),
 32: _("Key usage does not include certificate signing"),
 50: _("Application verification failure")
+#100 is for internal usage: host not correct
 }
 
 class CommonConnection:
@@ -251,7 +253,7 @@ class CommonConnection:
     def _prepare_message(self, jid, msg, keyID, type_='chat', subject='',
     chatstate=None, msg_id=None, resource=None, user_nick=None, xhtml=None,
     session=None, forward_from=None, form_node=None, label=None,
-    original_message=None, delayed=None, callback=None):
+    original_message=None, delayed=None, attention=False, callback=None):
         if not self.connection or self.connected < 2:
             return 1
         try:
@@ -302,7 +304,8 @@ class CommonConnection:
                                     msgtxt, original_message, fjid, resource,
                                     jid, xhtml, subject, chatstate, msg_id,
                                     label, forward_from, delayed, session,
-                                    form_node, user_nick, keyID, callback)
+                                    form_node, user_nick, keyID, attention,
+                                    callback)
                         gajim.nec.push_incoming_event(GPGTrustKeyEvent(None,
                             conn=self, callback=_on_always_trust))
                     else:
@@ -310,7 +313,7 @@ class CommonConnection:
                             original_message, fjid, resource, jid, xhtml,
                             subject, chatstate, msg_id, label, forward_from,
                             delayed, session, form_node, user_nick, keyID,
-                            callback)
+                            attention, callback)
                 gajim.thread_interface(encrypt_thread, [msg, keyID, False],
                     _on_encrypted, [])
                 return
@@ -318,18 +321,18 @@ class CommonConnection:
             self._message_encrypted_cb(('', error), type_, msg, msgtxt,
                 original_message, fjid, resource, jid, xhtml, subject,
                 chatstate, msg_id, label, forward_from, delayed, session,
-                form_node, user_nick, keyID, callback)
+                form_node, user_nick, keyID, attention, callback)
             return
 
         self._on_continue_message(type_, msg, msgtxt, original_message, fjid,
             resource, jid, xhtml, subject, msgenc, keyID, chatstate, msg_id,
             label, forward_from, delayed, session, form_node, user_nick,
-            callback)
+            attention, callback)
 
     def _message_encrypted_cb(self, output, type_, msg, msgtxt,
     original_message, fjid, resource, jid, xhtml, subject, chatstate, msg_id,
     label, forward_from, delayed, session, form_node, user_nick, keyID,
-    callback):
+    attention, callback):
         msgenc, error = output
 
         if msgenc and not error:
@@ -342,7 +345,7 @@ class CommonConnection:
             self._on_continue_message(type_, msg, msgtxt, original_message,
                 fjid, resource, jid, xhtml, subject, msgenc, keyID,
                 chatstate, msg_id, label, forward_from, delayed, session,
-                form_node, user_nick, callback)
+                form_node, user_nick, attention, callback)
             return
         # Encryption failed, do not send message
         tim = localtime()
@@ -351,7 +354,8 @@ class CommonConnection:
 
     def _on_continue_message(self, type_, msg, msgtxt, original_message, fjid,
     resource, jid, xhtml, subject, msgenc, keyID, chatstate, msg_id,
-    label, forward_from, delayed, session, form_node, user_nick, callback):
+    label, forward_from, delayed, session, form_node, user_nick, attention,
+    callback):
         if type_ == 'chat':
             msg_iq = common.xmpp.Message(to=fjid, body=msgtxt, typ=type_,
                     xhtml=xhtml)
@@ -421,6 +425,10 @@ class CommonConnection:
             # XEP-0200
             if session.enable_encryption:
                 msg_iq = session.encrypt_stanza(msg_iq)
+
+        # XEP-0224
+        if attention:
+            msg_iq.setTag('attention', namespace=common.xmpp.NS_ATTENTION)
 
         if callback:
             callback(jid, msg, keyID, forward_from, session, original_message,
@@ -808,6 +816,10 @@ class Connection(CommonConnection, ConnectionHandlers):
             if not (self.sm and self.sm.resumption):
                 gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
                     show='offline'))
+            else:
+                self.sm.enabled = False
+                gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
+                    show='error'))
             self.disconnect()
             if gajim.config.get_per('accounts', self.name, 'autoreconnect'):
                 self.connected = -1
@@ -1012,7 +1024,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                 proxy = {}
                 proxyptr = gajim.config.get_per('proxies', p)
                 for key in proxyptr.keys():
-                    proxy[key] = proxyptr[key][1]
+                    proxy[key] = proxyptr[key]
             else:
                 proxy = None
             use_srv = True
@@ -1276,9 +1288,9 @@ class Connection(CommonConnection, ConnectionHandlers):
         except AttributeError:
             errnum = -1 # we don't have an errnum
         if errnum > 0 and str(errnum) not in gajim.config.get_per('accounts',
-        self.name, 'ignore_ssl_errors'):
-            text = _('The authenticity of the %s certificate could be invalid.') %\
-                    hostname
+        self.name, 'ignore_ssl_errors').split():
+            text = _('The authenticity of the %s certificate could be invalid.'
+                ) % hostname
             if errnum in ssl_error:
                 text += _('\nSSL Error: <b>%s</b>') % ssl_error[errnum]
             else:
@@ -1290,7 +1302,8 @@ class Connection(CommonConnection, ConnectionHandlers):
                 certificate=con.Connection.ssl_certificate))
             return True
         if hasattr(con.Connection, 'ssl_fingerprint_sha1'):
-            saved_fingerprint = gajim.config.get_per('accounts', self.name, 'ssl_fingerprint_sha1')
+            saved_fingerprint = gajim.config.get_per('accounts', self.name,
+                'ssl_fingerprint_sha1')
             if saved_fingerprint:
                 # Check sha1 fingerprint
                 if con.Connection.ssl_fingerprint_sha1 != saved_fingerprint:
@@ -1299,15 +1312,24 @@ class Connection(CommonConnection, ConnectionHandlers):
                         new_fingerprint=con.Connection.ssl_fingerprint_sha1))
                     return True
             else:
-                gajim.config.set_per('accounts', self.name, 'ssl_fingerprint_sha1',
-                        con.Connection.ssl_fingerprint_sha1)
+                gajim.config.set_per('accounts', self.name,
+                    'ssl_fingerprint_sha1', con.Connection.ssl_fingerprint_sha1)
+            if not check_X509.check_certificate(con.Connection.ssl_certificate,
+            hostname) and '100' not in gajim.config.get_per('accounts',
+            self.name, 'ignore_ssl_errors').split():
+                txt = _('The authenticity of the %s certificate could be '
+                    'invalid.\nThe certificate does not cover this domain.') % \
+                    hostname
+                gajim.nec.push_incoming_event(SSLErrorEvent(None, conn=self,
+                    error_text=txt, error_num=100,
+                    cert=con.Connection.ssl_cert_pem,
+                    fingerprint=con.Connection.ssl_fingerprint_sha1,
+                    certificate=con.Connection.ssl_certificate))
+                return True
+
         self._register_handlers(con, con_type)
-        con.auth(
-                user=name,
-                password=self.password,
-                resource=self.server_resource,
-                sasl=1,
-                on_auth=self.__on_auth)
+        con.auth(user=name, password=self.password,
+            resource=self.server_resource, sasl=1, on_auth=self.__on_auth)
 
     def ssl_certificate_accepted(self):
         if not self.connection:
@@ -1317,7 +1339,10 @@ class Connection(CommonConnection, ConnectionHandlers):
                 msg=_('Connection with account %s has been lost. Retry '
                 'connecting.') % self.name))
             return
-        name = gajim.config.get_per('accounts', self.name, 'name')
+        if gajim.config.get_per('accounts', self.name, 'anonymous_auth'):
+            name = None
+        else:
+            name = gajim.config.get_per('accounts', self.name, 'name')
         self._register_handlers(self.connection, 'ssl')
         self.connection.auth(name, self.password, self.server_resource, 1,
                 self.__on_auth)
@@ -1372,7 +1397,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             gajim.nec.push_incoming_event(InformationEvent(None, conn=self,
                 level='error', pri_txt=_('Authentication failed with "%s"') % \
                 self._hostname, sec_txt=_('Please check your login and password'
-                'for correctness.')))
+                ' for correctness.')))
             if self.on_connect_auth:
                 self.on_connect_auth(None)
                 self.on_connect_auth = None
@@ -1449,7 +1474,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                     level='error', pri_txt=_('Error while removing privacy '
                     'list'), sec_txt=_('Privacy list %s has not been removed. '
                     'It is maybe active in one of your connected resources. '
-                    'Deactivate it and tryagain.') % privacy_list))
+                    'Deactivate it and try again.') % privacy_list))
         common.xmpp.features_nb.delPrivacyList(self.connection, privacy_list,
                 _on_del_privacy_list_result)
 
@@ -1775,8 +1800,8 @@ class Connection(CommonConnection, ConnectionHandlers):
     def send_message(self, jid, msg, keyID=None, type_='chat', subject='',
     chatstate=None, msg_id=None, resource=None, user_nick=None, xhtml=None,
     label=None, session=None, forward_from=None, form_node=None,
-    original_message=None, delayed=None, callback=None, callback_args=[],
-    now=False):
+    original_message=None, delayed=None, attention=False, callback=None,
+    callback_args=[], now=False):
 
         def cb(jid, msg, keyID, forward_from, session, original_message,
         subject, type_, msg_iq, xhtml):
@@ -1794,7 +1819,8 @@ class Connection(CommonConnection, ConnectionHandlers):
             chatstate=chatstate, msg_id=msg_id, resource=resource,
             user_nick=user_nick, xhtml=xhtml, label=label, session=session,
             forward_from=forward_from, form_node=form_node,
-            original_message=original_message, delayed=delayed, callback=cb)
+            original_message=original_message, delayed=delayed,
+            attention=attention, callback=cb)
 
     def _nec_message_outgoing(self, obj):
         if obj.account != self.name:
@@ -1819,7 +1845,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             resource=obj.resource, user_nick=obj.user_nick, xhtml=obj.xhtml,
             label=obj.label, session=obj.session, forward_from=obj.forward_from,
             form_node=obj.form_node, original_message=obj.original_message,
-            delayed=obj.delayed, callback=cb)
+            delayed=obj.delayed, attention=obj.attention, callback=cb)
 
     def send_contacts(self, contacts, jid):
         """
@@ -2289,7 +2315,8 @@ class Connection(CommonConnection, ConnectionHandlers):
                 room_id=resp.getTag('unique').getData()))
         self.connection.SendAndCallForResponse(iq, _on_response)
 
-    def join_gc(self, nick, room_jid, password, change_nick=False):
+    def join_gc(self, nick, room_jid, password, change_nick=False,
+    rejoin=False):
         # FIXME: This room JID needs to be normalized; see #1364
         if not gajim.account_is_connected(self.name):
             return
@@ -2333,7 +2360,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                 last_date = self.last_history_time[room_jid]
                 if last_date == 0:
                     last_date = time.time() - timeout
-                else:
+                elif not rejoin:
                     last_date = min(last_date, time.time() - timeout)
                 last_date = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(
                     last_date))

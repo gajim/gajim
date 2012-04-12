@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ## src/gajim.py
 ##
-## Copyright (C) 2003-2010 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2003-2012 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2004-2005 Vincent Hanquez <tab AT snarc.org>
 ## Copyright (C) 2005 Alex Podaras <bigpod AT gmail.com>
 ##                    Norman Rasmussen <norman AT rasmussen.co.za>
@@ -233,12 +233,12 @@ else:
         elif sysname in ('FreeBSD', 'OpenBSD', 'NetBSD'):
             libc.setproctitle('gajim')
 
-    if gtk.pygtk_version < (2, 16, 0):
-        pritext = _('Gajim needs PyGTK 2.16 or above')
-        sectext = _('Gajim needs PyGTK 2.16 or above to run. Quiting...')
-    elif gtk.gtk_version < (2, 16, 0):
-        pritext = _('Gajim needs GTK 2.16 or above')
-        sectext = _('Gajim needs GTK 2.16 or above to run. Quiting...')
+    if gtk.pygtk_version < (2, 22, 0):
+        pritext = _('Gajim needs PyGTK 2.22 or above')
+        sectext = _('Gajim needs PyGTK 2.22 or above to run. Quiting...')
+    elif gtk.gtk_version < (2, 22, 0):
+        pritext = _('Gajim needs GTK 2.22 or above')
+        sectext = _('Gajim needs GTK 2.22 or above to run. Quiting...')
 
     from common import check_paths
 

@@ -2,7 +2,7 @@
 ## src/common/xmpp/stringprepare.py
 ##
 ## Copyright (C) 2001-2005 Twisted Matrix Laboratories
-## Copyright (C) 2005-2011 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2005-2012 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2006 Stefan Bethge <stefan AT lanpartei.de>
 ## Copyright (C) 2007 Jean-Marie Traissard <jim AT lapin.org>
 ##

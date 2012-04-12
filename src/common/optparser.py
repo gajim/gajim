@@ -2,7 +2,7 @@
 ## src/common/optparser.py
 ##
 ## Copyright (C) 2003-2005 Vincent Hanquez <tab AT snarc.org>
-## Copyright (C) 2003-2010 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2003-2012 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2005-2006 Dimitur Kirov <dkirov AT gmail.com>
 ##                         Nikos Kouremenos <kourem AT gmail.com>
 ## Copyright (C) 2006-2008 Jean-Marie Traissard <jim AT lapin.org>
@@ -50,7 +50,7 @@ class OptionsParser:
         except Exception:
             if os.path.exists(self.__filename):
                 #we talk about a file
-                print _('error: cannot open %s for reading') % self.__filename
+                print _('Error: cannot open %s for reading') % self.__filename
             return False
 
         new_version = gajim.config.get('version')
@@ -85,7 +85,6 @@ class OptionsParser:
     def write_line(self, fd, opt, parents, value):
         if value is None:
             return
-        value = value[1]
         # convert to utf8 before writing to file if needed
         if isinstance(value, unicode):
             value = value.encode('utf-8')

@@ -127,7 +127,7 @@ class StandardCommonCommands(CommandContainer):
 
     @command(raw=True, empty=True)
     @doc(_("""
-    Set current the status
+    Set the current the status
 
     Status can be given as one of the following values: online, away,
     chat, xa, dnd.
@@ -136,6 +136,11 @@ class StandardCommonCommands(CommandContainer):
         if status not in ('online', 'away', 'chat', 'xa', 'dnd'):
             raise CommandError("Invalid status given")
         for connection in gajim.connections.itervalues():
+            if not gajim.config.get_per('accounts', connection.name,
+            'sync_with_global_status'):
+                continue
+            if connection.connected < 2:
+                continue
             connection.change_status(status, message)
 
     @command(raw=True, empty=True)
@@ -143,7 +148,13 @@ class StandardCommonCommands(CommandContainer):
     def away(self, message):
         if not message:
             message = _("Away")
+
         for connection in gajim.connections.itervalues():
+            if not gajim.config.get_per('accounts', connection.name,
+            'sync_with_global_status'):
+                continue
+            if connection.connected < 2:
+                continue
             connection.change_status('away', message)
 
     @command('back', raw=True, empty=True)
@@ -151,7 +162,13 @@ class StandardCommonCommands(CommandContainer):
     def online(self, message):
         if not message:
             message = _("Available")
+
         for connection in gajim.connections.itervalues():
+            if not gajim.config.get_per('accounts', connection.name,
+            'sync_with_global_status'):
+                continue
+            if connection.connected < 2:
+                continue
             connection.change_status('online', message)
 
 class StandardCommonChatCommands(CommandContainer):
@@ -212,6 +229,11 @@ class StandardCommonChatCommands(CommandContainer):
         # appropriate button.
         state = self._video_button.get_active()
         self._video_button.set_active(not state)
+
+    @command(raw=True)
+    @doc(_("Send a message to the contact that will attract his (her) attention"))
+    def attention(self, message):
+        self.send_message(message, process_commands=False, attention=True)
 
 class StandardChatCommands(CommandContainer):
     """

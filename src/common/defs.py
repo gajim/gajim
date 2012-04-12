@@ -2,7 +2,7 @@
 ## src/common/defs.py
 ##
 ## Copyright (C) 2006 Nikos Kouremenos <kourem AT gmail.com>
-## Copyright (C) 2006-2010 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2006-2012 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2006-2008 Jean-Marie Traissard <jim AT lapin.org>
 ## Copyright (C) 2007 Brendan Taylor <whateley AT gmail.com>
 ##                    Tomasz Melcer <liori AT exroot.org>
@@ -27,12 +27,13 @@ docdir = '../'
 basedir   = '../'
 localedir = '../po'
 
-version = '0.15-beta3'
+version = '0.15'
 import subprocess
 try:
     node = subprocess.Popen('hg tip --template "{node|short}"', shell=True,
         stdout=subprocess.PIPE).communicate()[0]
-    version += '-' + node
+    if node:
+        version += '-' + node
 except Exception:
     pass
 

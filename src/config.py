@@ -2,7 +2,7 @@
 ## src/config.py
 ##
 ## Copyright (C) 2003-2005 Vincent Hanquez <tab AT snarc.org>
-## Copyright (C) 2003-2010 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2003-2012 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2005 Alex Podaras <bigpod AT gmail.com>
 ##                    Stéphan Kochen <stephan AT kochen.nl>
 ## Copyright (C) 2005-2006 Dimitur Kirov <dkirov AT gmail.com>
@@ -1485,8 +1485,7 @@ class ManageProxiesWindow:
         gajim.config.del_per('proxies', old_name)
         gajim.config.add_per('proxies', new_name)
         for option in config:
-            gajim.config.set_per('proxies', new_name, option,
-                    config[option][common.config.OPT_VAL])
+            gajim.config.set_per('proxies', new_name, option, config[option])
         model.set_value(iter_, 0, new_name)
 
     def on_proxytype_combobox_changed(self, widget):
@@ -2116,7 +2115,7 @@ class AccountsWindow:
             gajim.config.add_per('accounts', new_name)
             old_config = gajim.config.get_per('accounts', old_name)
             for opt in old_config:
-                gajim.config.set_per('accounts', new_name, opt, old_config[opt][1])
+                gajim.config.set_per('accounts', new_name, opt, old_config[opt])
             gajim.config.del_per('accounts', old_name)
             if self.current_account == old_name:
                 self.current_account = new_name
@@ -3655,7 +3654,11 @@ class AccountCreationWizardWindow:
             password = self.xml.get_object('password_entry').get_text().decode(
                 'utf-8')
 
-            jid = username + '@' + server
+            if anonymous:
+                jid = ''
+            else:
+                jid = username + '@'
+            jid += server
             # check if jid is conform to RFC and stringprep it
             try:
                 jid = helpers.parse_jid(jid)
@@ -3803,23 +3806,24 @@ class AccountCreationWizardWindow:
         self.back_button.show()
         self.forward_button.show()
         self.is_form = obj.is_form
+        empty_config = True
         if obj.is_form:
             dataform = dataforms.ExtendForm(node=obj.config)
             self.data_form_widget = dataforms_widget.DataFormWidget(dataform)
+            empty_config = False
         else:
             self.data_form_widget = FakeDataForm(obj.config)
-            empty_config = True
             for field in obj.config:
                 if field in ('key', 'instructions', 'x', 'registered'):
                     continue
                 empty_config = False
                 break
-            if empty_config:
-                self.forward_button.set_sensitive(False)
-                self.notebook.set_current_page(4) # show form page
-                return
         self.data_form_widget.show_all()
         self.xml.get_object('form_vbox').pack_start(self.data_form_widget)
+        if empty_config:
+            self.forward_button.set_sensitive(False)
+            self.notebook.set_current_page(4) # show form page
+            return
         self.ssl_fingerprint = obj.ssl_fingerprint
         self.ssl_cert = obj.ssl_cert
         if obj.ssl_msg:
@@ -4183,6 +4187,7 @@ class ManageSoundsWindow:
         # NOTE: sounds_ui_names MUST have all items of
         # sounds = gajim.config.get_per('soundevents') as keys
         sounds_dict = {
+                'attention_received': _('Attention Message Received'),
                 'first_message_received': _('First Message Received'),
                 'next_message_received_focused': _('Next Message Received Focused'),
                 'next_message_received_unfocused':

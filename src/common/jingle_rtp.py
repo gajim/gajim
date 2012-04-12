@@ -21,7 +21,7 @@ import gobject
 import socket
 
 import xmpp
-import farsight, gst
+import farstream, gst
 from glib import GError
 
 import gajim
@@ -42,8 +42,8 @@ class JingleRTPContent(JingleContent):
         JingleContent.__init__(self, session, transport)
         self.media = media
         self._dtmf_running = False
-        self.farsight_media = {'audio': farsight.MEDIA_TYPE_AUDIO,
-                                                        'video': farsight.MEDIA_TYPE_VIDEO}[media]
+        self.farstream_media = {'audio': farstream.MEDIA_TYPE_AUDIO,
+                                                        'video': farstream.MEDIA_TYPE_VIDEO}[media]
 
         self.pipeline = None
         self.src_bin = None
@@ -59,7 +59,7 @@ class JingleRTPContent(JingleContent):
         self.callbacks['session-terminate'] += [self.__stop]
         self.callbacks['session-terminate-sent'] += [self.__stop]
 
-    def setup_stream(self):
+    def setup_stream(self, on_src_pad_added):
         # pipeline and bus
         self.pipeline = gst.Pipeline()
         bus = self.pipeline.get_bus()
@@ -68,13 +68,12 @@ class JingleRTPContent(JingleContent):
 
         # conference
         self.conference = gst.element_factory_make('fsrtpconference')
-        self.conference.set_property('sdes-cname', self.session.ourjid)
         self.pipeline.add(self.conference)
         self.funnel = None
 
-        self.p2psession = self.conference.new_session(self.farsight_media)
+        self.p2psession = self.conference.new_session(self.farstream_media)
 
-        participant = self.conference.new_participant(self.session.peerjid)
+        participant = self.conference.new_participant()
         # FIXME: Consider a workaround, here...
         # pidgin and telepathy-gabble don't follow the XEP, and it won't work
         # due to bad controlling-mode
@@ -93,7 +92,9 @@ class JingleRTPContent(JingleContent):
                     params['stun-ip'] = ip
 
         self.p2pstream = self.p2psession.new_stream(participant,
-                farsight.DIRECTION_RECV, 'nice', params)
+                farstream.DIRECTION_RECV)
+        self.p2pstream.connect('src-pad-added', on_src_pad_added)
+        self.p2pstream.set_transmitter('nice', params)
 
     def is_ready(self):
         return (JingleContent.is_ready(self) and self.candidates_ready)
@@ -117,7 +118,7 @@ class JingleRTPContent(JingleContent):
         # FIXME: connectivity should not be etablished yet
         # Instead, it should be etablished after session-accept!
         if self.sent:
-            self.p2pstream.set_remote_candidates(candidates)
+            self.p2pstream.add_remote_candidates(candidates)
 
     def batch_dtmf(self, events):
         """
@@ -140,15 +141,14 @@ class JingleRTPContent(JingleContent):
 
     def _start_dtmf(self, event):
         if event in ('*', '#'):
-            event = {'*': farsight.DTMF_EVENT_STAR,
-                    '#': farsight.DTMF_EVENT_POUND}[event]
+            event = {'*': farstream.DTMF_EVENT_STAR,
+                    '#': farstream.DTMF_EVENT_POUND}[event]
         else:
             event = int(event)
-        self.p2psession.start_telephony_event(event, 2,
-                farsight.DTMF_METHOD_RTP_RFC4733)
+        self.p2psession.start_telephony_event(event, 2)
 
     def _stop_dtmf(self):
-        self.p2psession.stop_telephony_event(farsight.DTMF_METHOD_RTP_RFC4733)
+        self.p2psession.stop_telephony_event()
 
     def _fill_content(self, content):
         content.addChild(xmpp.NS_JINGLE_RTP + ' description',
@@ -170,34 +170,33 @@ class JingleRTPContent(JingleContent):
         if message.type == gst.MESSAGE_ELEMENT:
             name = message.structure.get_name()
             log.debug('gst element message: %s: %s' % (name, message))
-            if name == 'farsight-new-active-candidate-pair':
+            if name == 'farstream-new-active-candidate-pair':
                 pass
-            elif name == 'farsight-recv-codecs-changed':
+            elif name == 'farstream-recv-codecs-changed':
                 pass
-            elif name == 'farsight-codecs-changed':
-                if self.sent and self.p2psession.get_property('codecs-ready'):
+            elif name == 'farstream-codecs-changed':
+                if self.sent and self.p2psession.get_property('codecs'):
                     self.send_description_info()
-            elif name == 'farsight-local-candidates-prepared':
+            elif name == 'farstream-local-candidates-prepared':
                 self.candidates_ready = True
                 if self.is_ready():
                     self.session.on_session_state_changed(self)
-            elif name == 'farsight-new-local-candidate':
+            elif name == 'farstream-new-local-candidate':
                 candidate = message.structure['candidate']
                 self.transport.candidates.append(candidate)
                 if self.sent:
                     # FIXME: Is this case even possible?
                     self.send_candidate(candidate)
-            elif name == 'farsight-component-state-changed':
+            elif name == 'farstream-component-state-changed':
                 state = message.structure['state']
-                if state == farsight.STREAM_STATE_FAILED:
+                if state == farstream.STREAM_STATE_FAILED:
                     reason = xmpp.Node('reason')
                     reason.setTag('failed-transport')
                     self.session.remove_content(self.creator, self.name, reason)
-            elif name == 'farsight-error':
-                log.error('Farsight error #%d!\nMessage: %s\nDebug: %s' % (
+            elif name == 'farstream-error':
+                log.error('Farstream error #%d!\nMessage: %s' % (
                     message.structure['error-no'],
-                    message.structure['error-msg'],
-                    message.structure['debug-msg']))
+                    message.structure['error-msg']))
         elif message.type == gst.MESSAGE_ERROR:
             # TODO: Fix it to fallback to videotestsrc anytime an error occur,
             # or raise an error, Jingle way
@@ -236,10 +235,10 @@ class JingleRTPContent(JingleContent):
     def on_negotiated(self):
         if self.accepted:
             if self.transport.remote_candidates:
-                self.p2pstream.set_remote_candidates(self.transport.remote_candidates)
+                self.p2pstream.add_remote_candidates(self.transport.remote_candidates)
                 self.transport.remote_candidates = []
-            # TODO: farsight.DIRECTION_BOTH only if senders='both'
-            self.p2pstream.set_property('direction', farsight.DIRECTION_BOTH)
+            # TODO: farstream.DIRECTION_BOTH only if senders='both'
+            self.p2pstream.set_property('direction', farstream.DIRECTION_BOTH)
         JingleContent.on_negotiated(self)
 
     def __on_remote_codecs(self, stanza, content, error, action):
@@ -252,8 +251,8 @@ class JingleRTPContent(JingleContent):
             if not codec['id'] or not codec['name'] or not codec['clockrate']:
                 # ignore invalid payload-types
                 continue
-            c = farsight.Codec(int(codec['id']), codec['name'],
-                    self.farsight_media, int(codec['clockrate']))
+            c = farstream.Codec(int(codec['id']), codec['name'],
+                    self.farstream_media, int(codec['clockrate']))
             if 'channels' in codec:
                 c.channels = int(codec['channels'])
             else:
@@ -318,7 +317,7 @@ class JingleAudio(JingleRTPContent):
         self.out_volume.set_property('volume', vol)
 
     def setup_stream(self):
-        JingleRTPContent.setup_stream(self)
+        JingleRTPContent.setup_stream(self, self._on_src_pad_added)
 
         # Configure SPEEX
         # Workaround for psi (not needed since rev
@@ -326,10 +325,10 @@ class JingleAudio(JingleRTPContent):
         #  place 16kHz before 8kHz, as buggy psi versions will take in
         #  account only the first codec
 
-        codecs = [farsight.Codec(farsight.CODEC_ID_ANY, 'SPEEX',
-                farsight.MEDIA_TYPE_AUDIO, 16000),
-                farsight.Codec(farsight.CODEC_ID_ANY, 'SPEEX',
-                farsight.MEDIA_TYPE_AUDIO, 8000)]
+        codecs = [farstream.Codec(farstream.CODEC_ID_ANY, 'SPEEX',
+                farstream.MEDIA_TYPE_AUDIO, 16000),
+                farstream.Codec(farstream.CODEC_ID_ANY, 'SPEEX',
+                farstream.MEDIA_TYPE_AUDIO, 8000)]
         self.p2psession.set_codec_preferences(codecs)
 
         # the local parts
@@ -348,9 +347,8 @@ class JingleAudio(JingleRTPContent):
 
         self.src_bin.get_pad('src').link(self.p2psession.get_property(
                 'sink-pad'))
-        self.p2pstream.connect('src-pad-added', self._on_src_pad_added)
 
-        # The following is needed for farsight to process ICE requests:
+        # The following is needed for farstream to process ICE requests:
         self.pipeline.set_state(gst.STATE_PLAYING)
 
 
@@ -363,7 +361,7 @@ class JingleVideo(JingleRTPContent):
         # TODO: Everything is not working properly:
         # sometimes, one window won't show up,
         # sometimes it'll freeze...
-        JingleRTPContent.setup_stream(self)
+        JingleRTPContent.setup_stream(self, self._on_src_pad_added)
 
         # the local parts
         if gajim.config.get('video_framerate'):
@@ -395,9 +393,8 @@ class JingleVideo(JingleRTPContent):
 
         self.src_bin.get_pad('src').link(self.p2psession.get_property(
             'sink-pad'))
-        self.p2pstream.connect('src-pad-added', self._on_src_pad_added)
 
-        # The following is needed for farsight to process ICE requests:
+        # The following is needed for farstream to process ICE requests:
         self.pipeline.set_state(gst.STATE_PLAYING)
 
     def get_fallback_src(self):

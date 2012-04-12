@@ -3,7 +3,7 @@
 ##
 ## Copyright (C) 2006 Gustavo J. A. M. Carneiro <gjcarneiro AT gmail.com>
 ##                    Nikos Kouremenos <kourem AT gmail.com>
-## Copyright (C) 2006-2010 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2006-2012 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2007 Jean-Marie Traissard <jim AT lapin.org>
 ##                    Julien Pivotto <roidelapluie AT gmail.com>
 ## Copyright (C) 2008 Stephan Erb <steve-e AT h3c.de>
@@ -63,7 +63,7 @@ class GnomePasswordStorage(PasswordStorage):
     def __init__(self):
         self.keyring = gnomekeyring.get_default_keyring_sync()
         if self.keyring is None:
-            self.keyring = 'default'
+            self.keyring = 'login'
         try:
             gnomekeyring.create_sync(self.keyring, None)
         except gnomekeyring.AlreadyExistsError:

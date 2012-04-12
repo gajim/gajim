@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ## src/common/commands.py
 ##
-## Copyright (C) 2006-2010 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2006-2012 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2006-2007 Tomasz Melcer <liori AT exroot.org>
 ## Copyright (C) 2007 Jean-Marie Traissard <jim AT lapin.org>
 ## Copyright (C) 2008 Brendan Taylor <whateley AT gmail.com>
@@ -56,10 +56,10 @@ class AdHocCommand:
         assert status in ('executing', 'completed', 'canceled')
 
         response = request.buildReply('result')
-        cmd = response.addChild('command', namespace=xmpp.NS_COMMANDS, attrs={
-                'sessionid': self.sessionid,
-                'node': self.commandnode,
-                'status': status})
+        cmd = response.getTag('command', namespace=xmpp.NS_COMMANDS)
+        cmd.setAttr('sessionid', self.sessionid)
+        cmd.setAttr('node', self.commandnode)
+        cmd.setAttr('status', status)
         if defaultaction is not None or actions is not None:
             if defaultaction is not None:
                 assert defaultaction in ('cancel', 'execute', 'prev', 'next',
@@ -277,13 +277,17 @@ class ForwardMessagesCommand(AdHocCommand):
     def execute(self, request):
         account = self.connection.name
         # Forward messages
-        events = gajim.events.get_events(account, types=['chat', 'normal'])
+        events = gajim.events.get_events(account, types=['chat', 'normal',
+            'printed_chat'])
         j, resource = gajim.get_room_and_nick_from_fjid(self.jid)
         for jid in events:
             for event in events[jid]:
+                ev_typ = event.type_
+                if ev_typ == 'printed_chat':
+                    ev_typ = 'chat'
                 self.connection.send_message(j, event.parameters[0], '',
-                        type_=event.type_, subject=event.parameters[1],
-                        resource=resource, forward_from=jid, delayed=event.time_)
+                    type_=ev_typ, subject=event.parameters[1],
+                    resource=resource, forward_from=jid, delayed=event.time_)
 
         # Inform other client of completion
         response, cmd = self.buildResponse(request, status = 'completed')

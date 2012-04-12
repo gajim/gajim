@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ## src/common/config.py
 ##
-## Copyright (C) 2003-2010 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2003-2012 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2004-2005 Vincent Hanquez <tab AT snarc.org>
 ## Copyright (C) 2005 Stéphan Kochen <stephan AT kochen.nl>
 ## Copyright (C) 2005-2006 Dimitur Kirov <dkirov AT gmail.com>
@@ -65,7 +65,7 @@ class Config:
     DEFAULT_MAILAPP = 'mozilla-thunderbird -compose'
     DEFAULT_FILE_MANAGER = 'xffm'
 
-    __options = {
+    __options = ({
             # name: [ type, default_value, help_string ]
             'verbose': [ opt_bool, False, '', True ],
             'autopopup': [ opt_bool, False ],
@@ -99,6 +99,15 @@ class Config:
             'statusmsgcolor': [ opt_color, '#4e9a06', _('Status message text color.'), True ],
             'markedmsgcolor': [ opt_color, '#ff8080', '', True ],
             'urlmsgcolor': [ opt_color, '#204a87', '', True ],
+            'notif_signin_color': [ opt_color, '#32CD32', _('Contact signed in notification color.') ], # limegreen
+            'notif_signout_color': [ opt_color, '#FF0000', _('Contact signout notification color') ], # red
+            'notif_message_color': [ opt_color, '#1E90FF', _('New message/email notification color.') ], # dodgerblue
+            'notif_ftrequest_color': [ opt_color, '#F0E68C', _('File transfer request notification color.') ], # khaki
+            'notif_fterror_color': [ opt_color, '#B22222', _('File transfer error notification color.') ], # firebrick
+            'notif_ftcomplete_color': [ opt_color, '#9ACD32', _('File transfer complete or stopped notification color.') ], # yellowgreen
+            'notif_invite_color': [ opt_color, '#D2B48C', _('Groupchat invitation notification color') ], # tan1
+            'notif_status_color': [ opt_color, '#D8BFD8', _('Status changed notification background color') ], # thistle2
+            'notif_other_color': [ opt_color, '#FFFFFF', _('Other dialogs color.') ], # white
             'inmsgfont': [ opt_str, '', _('Incoming nickname font.'), True ],
             'outmsgfont': [ opt_str, '', _('Outgoing nickname font.'), True ],
             'inmsgtxtfont': [ opt_str, '', _('Incoming text font.'), True ],
@@ -169,7 +178,7 @@ class Config:
             'change_roster_title': [ opt_bool, True, _('Add * and [n] in roster title?')],
             'restore_lines': [opt_int, 4, _('How many lines to remember from previous conversation when a chat tab/window is reopened.')],
             'restore_timeout': [opt_int, 60, _('How many minutes should last lines from previous conversation last.')],
-            'muc_restore_lines': [opt_int, 20, _('How many lines to request to server when entering a groupchat. -1 means no limit')],
+            'muc_restore_lines': [opt_int, 20, _('How many lines to request from server when entering a groupchat. -1 means no limit')],
             'muc_restore_timeout': [opt_int, 60, _('How many minutes back to request logs when a entering a groupchat. -1 means no limit')],
             'muc_autorejoin_timeout': [opt_int, 1, _('How many seconds to wait before trying to autorejoin to a conference you are being disconnected from. Set to 0 to disable autorejoining.')],
             'muc_autorejoin_on_kick': [opt_bool, False, _('Should autorejoin be activated when we are being kicked from a conference?')],
@@ -291,7 +300,8 @@ class Config:
             'stun_server': [opt_str, '', _('STUN server to use when using jingle')],
             'show_affiliation_in_groupchat': [opt_bool, True, _('If True, Gajim will show affiliation of groupchat occupants by adding a colored square to the status icon')],
             'global_proxy': [opt_str, '', _('Proxy used for all outgoing connections if the account does not have a specific proxy configured')],
-    }
+            'ignore_incoming_attention': [opt_bool, False, _('If True, Gajim will ignore incoming attention requestd ("wizz").')],
+    }, {})
 
     __options_per_key = {
             'accounts': ({
@@ -386,7 +396,7 @@ class Config:
                     'ft_send_local_ips': [ opt_bool, True, _('If enabled, Gajim will send your local IPs so your contact can connect to your machine to transfer files.')],
                     'oauth2_refresh_token': [ opt_str, '', _('Latest token for Oauth2 authentication.')],
                     'oauth2_client_id': [ opt_str, '0000000044077801', _('client_id for Oauth2 authentication.')],
-                    'oauth2_redirect_url': [ opt_str, 'http%3A%2F%2Fgajim.org%2Fmsnauth%2Findex.cgi', _('redirect_url for Oauth2 authentication.')],
+                    'oauth2_redirect_url': [ opt_str, 'https%3A%2F%2Fgajim.org%2Fmsnauth%2Findex.cgi', _('redirect_url for Oauth2 authentication.')],
             }, {}),
             'statusmsg': ({
                     'message': [ opt_str, '' ],
@@ -456,7 +466,7 @@ class Config:
                     'speller_language': [ opt_str, '', _('Language for which we want to check misspelled words')],
             }, {}),
             'plugins': ({
-                'active': [opt_bool, False, _('State whether plugins should be activated on exit (this is saved on Gajim exit). This option SHOULD NOT be used to (de)activate plug-ins. Use GUI instead.')],
+                'active': [opt_bool, False, _('State whether plugins should be activated on startup (this is saved on Gajim exit). This option SHOULD NOT be used to (de)activate plug-ins. Use GUI instead.')],
             },{}),
     }
 
@@ -488,6 +498,7 @@ class Config:
     }
 
     soundevents_default = {
+            'attention_received': [True, 'attention.wav'],
             'first_message_received': [ True, 'message1.wav' ],
             'next_message_received_focused': [ True, 'message2.wav' ],
             'next_message_received_unfocused': [ True, 'message2.wav' ],
@@ -526,9 +537,9 @@ class Config:
         _('Tor'): ['socks5', 'localhost', 9050],
     }
 
-    def foreach(self, cb, data = None):
-        for opt in self.__options:
-            cb(data, opt, None, self.__options[opt])
+    def foreach(self, cb, data=None):
+        for opt in self.__options[1]:
+            cb(data, opt, None, self.__options[1][opt])
         for opt in self.__options_per_key:
             cb(data, opt, None, None)
             dict_ = self.__options_per_key[opt][1]
@@ -542,7 +553,7 @@ class Config:
         Tree-like interface
         """
         if node is None:
-            for child, option in self.__options.iteritems():
+            for child, option in self.__options[1].iteritems():
                 yield (child, ), option
             for grandparent in self.__options_per_key:
                 yield (grandparent, ), None
@@ -598,35 +609,44 @@ class Config:
                 return None
 
     def set(self, optname, value):
-        if optname not in self.__options:
+        if optname not in self.__options[1]:
 #                       raise RuntimeError, 'option %s does not exist' % optname
             return
-        opt = self.__options[optname]
-        value = self.is_valid(opt[OPT_TYPE], value)
+        value = self.is_valid(self.__options[0][optname][OPT_TYPE], value)
         if value is None:
 #                       raise RuntimeError, 'value of %s cannot be None' % optname
             return
 
-        opt[OPT_VAL] = value
+        self.__options[1][optname] = value
 
-    def get(self, optname = None):
+    def get(self, optname=None):
         if not optname:
-            return self.__options.keys()
-        if optname not in self.__options:
+            return self.__options[1].keys()
+        if optname not in self.__options[1]:
             return None
-        return self.__options[optname][OPT_VAL]
+        return self.__options[1][optname]
+
+    def get_default(self, optname):
+        if optname not in self.__options[0]:
+            return None
+        return self.__options[0][optname][OPT_VAL]
+
+    def get_type(self, optname):
+        if optname not in self.__options[0]:
+            return None
+        return self.__options[0][optname][OPT_TYPE][0]
 
     def get_desc(self, optname):
-        if optname not in self.__options:
+        if optname not in self.__options[0]:
             return None
-        if len(self.__options[optname]) > OPT_DESC:
-            return self.__options[optname][OPT_DESC]
+        if len(self.__options[0][optname]) > OPT_DESC:
+            return self.__options[0][optname][OPT_DESC]
 
     def get_restart(self, optname):
-        if optname not in self.__options:
+        if optname not in self.__options[0]:
             return None
-        if len(self.__options[optname]) > OPT_RESTART:
-            return self.__options[optname][OPT_RESTART]
+        if len(self.__options[0][optname]) > OPT_RESTART:
+            return self.__options[0][optname][OPT_RESTART]
 
     def add_per(self, typename, name): # per_group_of_option
         if typename not in self.__options_per_key:
@@ -637,7 +657,9 @@ class Config:
         if name in opt[1]:
             # we already have added group name before
             return 'you already have added %s before' % name
-        opt[1][name] = copy.deepcopy(opt[0])
+        opt[1][name] = {}
+        for o in opt[0]:
+            opt[1][name][o] = opt[0][o][OPT_VAL]
 
     def del_per(self, typename, name, subname = None): # per_group_of_option
         if typename not in self.__options_per_key:
@@ -665,36 +687,50 @@ class Config:
         if subname not in obj:
 #                       raise RuntimeError, '%s is not a key of %s' % (subname, obj)
             return
-        subobj = obj[subname]
-        value = self.is_valid(subobj[OPT_TYPE], value)
+        typ = self.__options_per_key[optname][0][subname][OPT_TYPE]
+        value = self.is_valid(typ, value)
         if value is None:
 #                       raise RuntimeError, '%s of %s cannot be None' % optname
             return
-        subobj[OPT_VAL] = value
+        obj[subname] = value
 
-    def get_per(self, optname, key = None, subname = None): # per_group_of_option
+    def get_per(self, optname, key=None, subname=None): # per_group_of_option
         if optname not in self.__options_per_key:
             return None
         dict_ = self.__options_per_key[optname][1]
         if not key:
             return dict_.keys()
         if key not in dict_:
-            if optname in self.__options_per_key \
-            and subname in self.__options_per_key[optname][0]:
-                return self.__options_per_key \
-                        [optname][0][subname][1]
+            if subname in self.__options_per_key[optname][0]:
+                return self.__options_per_key[optname][0][subname][1]
             return None
         obj = dict_[key]
         if not subname:
             return obj
         if subname not in obj:
             return None
-        return obj[subname][OPT_VAL]
+        return obj[subname]
 
-    def get_desc_per(self, optname, key = None, subname = None):
+    def get_default_per(self, optname, subname):
         if optname not in self.__options_per_key:
             return None
-        dict_ = self.__options_per_key[optname][1]
+        dict_ = self.__options_per_key[optname][0]
+        if subname not in dict_:
+            return None
+        return dict_[subname][OPT_VAL]
+
+    def get_type_per(self, optname, subname):
+        if optname not in self.__options_per_key:
+            return None
+        dict_ = self.__options_per_key[optname][0]
+        if subname not in dict_:
+            return None
+        return dict_[subname][OPT_TYPE][0]
+
+    def get_desc_per(self, optname, key=None, subname=None):
+        if optname not in self.__options_per_key:
+            return None
+        dict_ = self.__options_per_key[optname][0]
         if not key:
             return None
         if key not in dict_:
@@ -708,10 +744,10 @@ class Config:
             return obj[subname][OPT_DESC]
         return None
 
-    def get_restart_per(self, optname, key = None, subname = None):
+    def get_restart_per(self, optname, key=None, subname=None):
         if optname not in self.__options_per_key:
             return False
-        dict_ = self.__options_per_key[optname][1]
+        dict_ = self.__options_per_key[optname][0]
         if not key:
             return False
         if key not in dict_:
@@ -738,8 +774,13 @@ class Config:
 
         return (account not in no_log_for) and (jid not in no_log_for)
 
+    def _init_options(self):
+        for opt in self.__options[0]:
+            self.__options[1][opt] = self.__options[0][opt][OPT_VAL]
+
     def __init__(self):
         #init default values
+        self._init_options()
         for event in self.soundevents_default:
             default = self.soundevents_default[event]
             self.add_per('soundevents', event)

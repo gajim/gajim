@@ -4,7 +4,7 @@
 ## Copyright (C) 2005-2006 Andrew Sayman <lorien420 AT myrealbox.com>
 ##                         Dimitur Kirov <dkirov AT gmail.com>
 ##                         Nikos Kouremenos <kourem AT gmail.com>
-## Copyright (C) 2005-2010 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2005-2012 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2006-2007 Travis Shirk <travis AT pobox.com>
 ## Copyright (C) 2006-2008 Jean-Marie Traissard <jim AT lapin.org>
 ## Copyright (C) 2007 Lukas Petrovicky <lukas AT petrovicky.net>
@@ -723,7 +723,7 @@ class SignalObject(dbus.service.Object):
                 for node in path:
                     key += node + '#'
             key += name
-            prefs_dict[DBUS_STRING(key)] = DBUS_STRING(value[1])
+            prefs_dict[DBUS_STRING(key)] = DBUS_STRING(value)
         gajim.config.foreach(get_prefs)
         return prefs_dict
 

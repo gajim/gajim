@@ -5,7 +5,7 @@
 ## Copyright (C) 2005-2006 Alex Mauer <hawke AT hawkesnest.net>
 ##                         Travis Shirk <travis AT pobox.com>
 ## Copyright (C) 2005-2007 Nikos Kouremenos <kourem AT gmail.com>
-## Copyright (C) 2005-2010 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2005-2012 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2006 Dimitur Kirov <dkirov AT gmail.com>
 ## Copyright (C) 2006-2008 Jean-Marie Traissard <jim AT lapin.org>
 ## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
@@ -925,6 +925,9 @@ class ConversationTextview(gobject.GObject):
                 childs[7].hide() # hide add to roster menuitem
 
             if kind == 'xmpp':
+                id_ = childs[0].connect('activate', self.on_copy_link_activate,
+                    'xmpp:' + text)
+                self.handlers[id_] = childs[0]
                 childs[2].hide() # copy mail address
                 childs[3].hide() # open mail composer
                 childs[4].hide() # jid section separator
@@ -934,7 +937,8 @@ class ConversationTextview(gobject.GObject):
                 childs[6].hide() # join group chat
                 childs[7].hide() # add to roster
 
-            childs[0].hide() # copy link location
+            if kind != 'xmpp':
+                childs[0].hide() # copy link location
             childs[1].hide() # open link in browser
 
         menu.popup(None, None, None, event.button, event.time)

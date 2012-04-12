@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ## src/session.py
 ##
-## Copyright (C) 2008-2010 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2008-2012 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2008 Brendan Taylor <whateley AT gmail.com>
 ##                    Jonathan Schleifer <js-gajim AT webkeks.org>
 ##                    Stephan Erb <steve-e AT h3c.de>
@@ -52,8 +52,6 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
     def detach_from_control(self):
         if self.control:
             self.control.set_session(None)
-        gajim.ged.remove_event_handler('decrypted-message-received',
-            ged.GUI1, self._nec_decrypted_message_received)
 
     def acknowledge_termination(self):
         self.detach_from_control()
@@ -96,7 +94,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
                     msg_to_log, tim=obj.timestamp, subject=obj.subject)
             except exceptions.PysqliteOperationalError, e:
                 gajim.nec.push_incoming_event(InformationEvent(None,
-                    conn=self.conn, level='error', pri_txt=_('Disk WriteError'),
+                    conn=self.conn, level='error', pri_txt=_('Disk Write Error'),
                     sec_txt=str(e)))
             except exceptions.DatabaseMalformed:
                 pritext = _('Database Error')

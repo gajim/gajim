@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ## src/message_window.py
 ##
-## Copyright (C) 2003-2010 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2003-2012 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2005-2008 Travis Shirk <travis AT pobox.com>
 ##                         Nikos Kouremenos <kourem AT gmail.com>
 ## Copyright (C) 2006 Geobert Quach <geobert AT gmail.com>
@@ -307,7 +307,6 @@ class MessageWindow(object):
         # NOTE: we do not call set_control_active(True) since we don't know
         # whether the tab is the active one.
         self.show_title()
-        gobject.idle_add(control.msg_textview.grab_focus)
 
     def on_tab_eventbox_button_press_event(self, widget, event, child):
         if event.button == 3: # right click
