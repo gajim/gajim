@@ -59,6 +59,7 @@ def check_blacklist(str_):
 
 def get_tmpfile_name():
     random.seed()
+    nb = 0
     while(nb < 100):
         int_ = random.randint(0, 10000)
         filename = os.path.join(gettempdir(), 'gajimtex_' + int_.__str__())
@@ -71,6 +72,7 @@ def get_tmpfile_name():
                 break
         if ok:
             return filename
+        nb += 1
     return filename
 
 def write_latex(filename, str_):
