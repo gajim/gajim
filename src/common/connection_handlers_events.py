@@ -36,6 +36,7 @@ from common.zeroconf import zeroconf
 from common.logger import LOG_DB_PATH
 from common.pep import SUPPORTED_PERSONAL_USER_EVENTS
 from common.xmpp.protocol import NS_CHATSTATES
+from common.jingle_transport import JingleTransportSocks5
 
 import gtkgui_helpers
 
@@ -1392,6 +1393,16 @@ class JingleDisconnectedReceivedEvent(nec.NetworkIncomingEvent):
         self.jid, self.resource = gajim.get_room_and_nick_from_fjid(self.fjid)
         self.sid = self.jingle_session.sid
         return True
+    
+class JingleTransferCancelledEvent(nec.NetworkIncomingEvent):
+    name = 'jingleFT-cancelled-received'
+    base_network_events = []
+
+    def generate(self):
+        self.fjid = self.jingle_session.peerjid
+        self.jid, self.resource = gajim.get_room_and_nick_from_fjid(self.fjid)
+        self.sid = self.jingle_session.sid
+        return True
 
 class JingleErrorReceivedEvent(nec.NetworkIncomingEvent):
     name = 'jingle-error-received'
@@ -1901,6 +1912,10 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
     name = 'file-request-received'
     base_network_events = []
 
+    def init(self):
+        self.jingle_content = None
+        self.FT_content = None
+
     def generate(self):
         self.get_id()
         self.fjid = self.conn._ft_get_from(self.stanza)
@@ -1908,28 +1923,36 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.file_props = {'type': 'r'}
         self.file_props['sender'] = self.fjid
         self.file_props['request-id'] = self.id_
-        si = self.stanza.getTag('si')
-        profile = si.getAttr('profile')
-        if profile != xmpp.NS_FILE:
-            self.conn.send_file_rejection(self.file_props, code='400', typ='profile')
-            raise xmpp.NodeProcessed
-        feature_tag = si.getTag('feature', namespace=xmpp.NS_FEATURE)
-        if not feature_tag:
-            return
-        form_tag = feature_tag.getTag('x', namespace=xmpp.NS_DATA)
-        if not form_tag:
-            return
-        self.dataform = dataforms.ExtendForm(node=form_tag)
-        for f in self.dataform.iter_fields():
-            if f.var == 'stream-method' and f.type == 'list-single':
-                values = [o[1] for o in f.options]
-                self.file_props['stream-methods'] = ' '.join(values)
-                if xmpp.NS_BYTESTREAM in values or xmpp.NS_IBB in values:
-                    break
+        if self.jingle_content:
+            self.file_props['session-type'] = 'jingle'
+            self.file_props['stream-methods'] = xmpp.NS_BYTESTREAM
+            file_tag = self.jingle_content.getTag('description').getTag(
+                'offer').getTag('file')
         else:
-            self.conn.send_file_rejection(self.file_props, code='400', typ='stream')
-            raise xmpp.NodeProcessed
-        file_tag = si.getTag('file')
+            si = self.stanza.getTag('si')
+            profile = si.getAttr('profile')
+            if profile != xmpp.NS_FILE:
+                self.conn.send_file_rejection(self.file_props, code='400',
+                    typ='profile')
+                raise xmpp.NodeProcessed
+            feature_tag = si.getTag('feature', namespace=xmpp.NS_FEATURE)
+            if not feature_tag:
+                return
+            form_tag = feature_tag.getTag('x', namespace=xmpp.NS_DATA)
+            if not form_tag:
+                return
+            self.dataform = dataforms.ExtendForm(node=form_tag)
+            for f in self.dataform.iter_fields():
+                if f.var == 'stream-method' and f.type == 'list-single':
+                    values = [o[1] for o in f.options]
+                    self.file_props['stream-methods'] = ' '.join(values)
+                    if xmpp.NS_BYTESTREAM in values or xmpp.NS_IBB in values:
+                        break
+            else:
+                self.conn.send_file_rejection(self.file_props, code='400',
+                    typ='stream')
+                raise xmpp.NodeProcessed
+            file_tag = si.getTag('file')
         for attribute in file_tag.getAttrs():
             if attribute in ('name', 'size', 'hash', 'date'):
                 val = file_tag.getAttr(attribute)
@@ -1940,13 +1963,41 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         if file_desc_tag is not None:
             self.file_props['desc'] = file_desc_tag.getData()
 
-        mime_type = si.getAttr('mime-type')
-        if mime_type is not None:
-            self.file_props['mime-type'] = mime_type
+        if not self.jingle_content:
+            mime_type = si.getAttr('mime-type')
+            if mime_type is not None:
+                self.file_props['mime-type'] = mime_type
 
         self.file_props['receiver'] = self.conn._ft_get_our_jid()
-        self.file_props['sid'] = unicode(si.getAttr('id'))
         self.file_props['transfered_size'] = []
+        if self.jingle_content:
+            self.FT_content.use_security = bool(self.jingle_content.getTag(
+                'security'))
+            self.file_props['session-sid'] = unicode(self.stanza.getTag(
+                'jingle').getAttr('sid'))
+
+            self.FT_content.file_props = self.file_props
+            if not self.FT_content.transport:
+                self.FT_content.transport = JingleTransportSocks5()
+                self.FT_content.transport.set_our_jid(
+                    self.FT_content.session.ourjid)
+                self.FT_content.transport.set_connection(
+                    self.FT_content.session.connection)
+            self.file_props['sid'] = self.FT_content.transport.sid
+            self.FT_content.session.connection.files_props[
+                self.file_props['sid']] = self.file_props
+            self.FT_content.transport.set_file_props(self.file_props)
+            if self.file_props.has_key('streamhosts'):
+                self.file_props['streamhosts'].extend(
+                    self.FT_content.transport.remote_candidates)
+            else:
+                self.file_props['streamhosts'] = \
+                    self.FT_content.transport.remote_candidates
+            for host in self.file_props['streamhosts']:
+                host['initiator'] = self.FT_content.session.initiator
+                host['target'] = self.FT_content.session.responder
+        else:
+            self.file_props['sid'] = unicode(si.getAttr('id'))
         return True
 
 class FileRequestErrorEvent(nec.NetworkIncomingEvent):

@@ -45,6 +45,7 @@ from common import helpers
 from common import gajim
 from common import exceptions
 from common import dataforms
+from common import jingle_xtls
 from common.commands import ConnectionCommands
 from common.pubsub import ConnectionPubSub
 from common.pep import ConnectionPEP
@@ -189,7 +190,10 @@ class ConnectionDisco:
         query.setAttr('node', 'http://gajim.org#' + gajim.version.split('-', 1)[
             0])
         for f in (common.xmpp.NS_BYTESTREAM, common.xmpp.NS_SI,
-        common.xmpp.NS_FILE, common.xmpp.NS_COMMANDS):
+        common.xmpp.NS_FILE, common.xmpp.NS_COMMANDS, 
+        common.xmpp.NS_JINGLE_FILE_TRANSFER, common.xmpp.NS_JINGLE_XTLS,
+        common.xmpp.NS_PUBKEY_PUBKEY, common.xmpp.NS_PUBKEY_REVOKE,
+        common.xmpp.NS_PUBKEY_ATTEST):
             feature = common.xmpp.Node('feature')
             feature.setAttr('var', f)
             query.addChild(node=feature)
@@ -1979,10 +1983,37 @@ ConnectionJingle, ConnectionIBBytestream):
         gajim.nec.push_incoming_event(SearchFormReceivedEvent(None,
             conn=self, stanza=iq_obj))
 
-    def _StreamCB(self, con, iq_obj):
-        log.debug('StreamCB')
-        gajim.nec.push_incoming_event(StreamReceivedEvent(None,
-            conn=self, stanza=iq_obj))
+    def _search_fields_received(self, con, iq_obj):
+        jid = jid = helpers.get_jid_from_iq(iq_obj)
+        tag = iq_obj.getTag('query', namespace = common.xmpp.NS_SEARCH)
+        if not tag:
+            self.dispatch('SEARCH_FORM', (jid, None, False))
+            return
+        df = tag.getTag('x', namespace = common.xmpp.NS_DATA)
+        if df:
+            self.dispatch('SEARCH_FORM', (jid, df, True))
+            return
+        df = {}
+        for i in iq_obj.getQueryPayload():
+            df[i.getName()] = i.getData()
+        self.dispatch('SEARCH_FORM', (jid, df, False))
+
+    def _PubkeyGetCB(self, con, iq_obj):
+        log.info('PubkeyGetCB')
+        jid_from = helpers.get_full_jid_from_iq(iq_obj)
+        sid = iq_obj.getAttr('id')
+        jingle_xtls.send_cert(con, jid_from, sid)
+        raise common.xmpp.NodeProcessed
+
+    def _PubkeyResultCB(self, con, iq_obj):
+        log.info('PubkeyResultCB')
+        jid_from = helpers.get_full_jid_from_iq(iq_obj)
+        jingle_xtls.handle_new_cert(con, iq_obj, jid_from)
+
+    def _StreamCB(self, con, obj):
+        if obj.getTag('conflict'):
+            # disconnected because of a resource conflict
+            self.dispatch('RESOURCE_CONFLICT', ())
 
     def _register_handlers(self, con, con_type):
         # try to find another way to register handlers in each class
@@ -2070,5 +2101,7 @@ ConnectionJingle, ConnectionIBBytestream):
         con.RegisterHandler('iq', self._ResultCB, 'result')
         con.RegisterHandler('presence', self._StanzaArrivedCB)
         con.RegisterHandler('message', self._StanzaArrivedCB)
-        con.RegisterHandler('unknown', self._StreamCB,
-            common.xmpp.NS_XMPP_STREAMS, xmlns=common.xmpp.NS_STREAMS)
+        con.RegisterHandler('unknown', self._StreamCB, 'urn:ietf:params:xml:ns:xmpp-streams', xmlns='http://etherx.jabber.org/streams')
+        con.RegisterHandler('iq', self._PubkeyGetCB, 'get', common.xmpp.NS_PUBKEY_PUBKEY)
+        con.RegisterHandler('iq', self._PubkeyResultCB, 'result', common.xmpp.NS_PUBKEY_PUBKEY)
+

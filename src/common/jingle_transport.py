@@ -16,21 +16,29 @@ Handles Jingle Transports (currently only ICE-UDP)
 """
 
 import xmpp
+import socket
+from common import gajim
+from common.protocol.bytestream import ConnectionSocks5Bytestream
+import logging
+
+log = logging.getLogger('gajim.c.jingle_transport')
+
 
 transports = {}
 
 def get_jingle_transport(node):
     namespace = node.getNamespace()
     if namespace in transports:
-        return transports[namespace]()
+        return transports[namespace](node)
 
 
 class TransportType(object):
     """
     Possible types of a JingleTransport
     """
-    datagram = 1
-    streaming = 2
+    ICEUDP = 1
+    SOCKS5 = 2
+    IBB = 3
 
 
 class JingleTransport(object):
@@ -70,16 +78,258 @@ class JingleTransport(object):
         Return the list of transport candidates from a transport stanza
         """
         return []
+    
+    def set_connection(self, conn):
+        self.connection = conn
+        if not self.sid:
+            self.sid = self.connection.connection.getAnID()
+
+    def set_file_props(self, file_props):
+        self.file_props = file_props
+
+    def set_our_jid(self, jid):
+        self.ourjid = jid
+        
+    def set_sid(self, sid):
+        self.sid = sid
+
+class JingleTransportSocks5(JingleTransport):
+    """
+    Socks5 transport in jingle scenario
+    Note: Don't forget to call set_file_props after initialization
+    """
+    def __init__(self, node=None):
+        JingleTransport.__init__(self, TransportType.SOCKS5)
+        self.connection = None
+        self.remote_candidates = []
+        self.sid = None
+        if node and node.getAttr('sid'):
+            self.sid = node.getAttr('sid')
 
 
+    def make_candidate(self, candidate):
+        import logging
+        log = logging.getLogger()
+        log.info('candidate dict, %s' % candidate)
+        attrs = {
+            'cid': candidate['candidate_id'],
+            'host': candidate['host'],
+            'jid': candidate['jid'],
+            'port': candidate['port'],
+            'priority': candidate['priority'],
+            'type': candidate['type']
+        }
+
+        return xmpp.Node('candidate', attrs=attrs)
+
+    def make_transport(self, candidates=None, add_candidates = True):
+        if  add_candidates:
+            self._add_local_ips_as_candidates()
+            self._add_additional_candidates()
+            self._add_proxy_candidates()
+            transport = JingleTransport.make_transport(self, candidates)
+        else:
+            transport = xmpp.Node('transport')
+        transport.setNamespace(xmpp.NS_JINGLE_BYTESTREAM)
+        transport.setAttr('sid', self.sid)
+        return transport
+
+    def parse_transport_stanza(self, transport):
+        candidates = []
+        for candidate in transport.iterTags('candidate'):
+            typ = 'direct' # default value
+            if candidate.has_attr('type'):
+                typ = candidate['type']
+            cand = {
+                'state': 0,
+                'target': self.ourjid,
+                'host': candidate['host'],
+                'port': int(candidate['port']),
+                'cid': candidate['cid'],
+                'type': typ,
+                'priority': candidate['priority']
+            }
+            candidates.append(cand)
+
+            # we need this when we construct file_props on session-initiation
+        self.remote_candidates = candidates
+        return candidates
+
+
+    def _add_candidates(self, candidates):
+        for cand in candidates:
+            in_remote = False
+            for cand2 in self.remote_candidates:
+                if cand['host'] == cand2['host'] and \
+                cand['port'] == cand2['port']:
+                    in_remote = True
+                    break
+            if not in_remote:
+                self.candidates.append(cand)
+
+    def _add_local_ips_as_candidates(self):
+        if not self.connection:
+            return
+        local_ip_cand = []
+        port = int(gajim.config.get('file_transfers_port'))
+        type_preference = 126 #type preference of connection type. XEP-0260 section 2.2
+        c = {'host': self.connection.peerhost[0]}
+        c['candidate_id'] = self.connection.connection.getAnID()
+        c['port'] = port
+        c['type'] = 'direct'
+        c['jid'] = self.ourjid
+        c['priority'] = (2**16) * type_preference
+
+        local_ip_cand.append(c)
+
+        for addr in socket.getaddrinfo(socket.gethostname(), None):
+            if not addr[4][0] in local_ip_cand and not addr[4][0].startswith('127'):
+                c = {'host': addr[4][0]}
+                c['candidate_id'] = self.connection.connection.getAnID()
+                c['port'] = port
+                c['type'] = 'direct'
+                c['jid'] = self.ourjid
+                c['priority'] = (2**16) * type_preference
+                c['initiator'] = self.file_props['sender']
+                c['target'] = self.file_props['receiver']
+                local_ip_cand.append(c)
+
+        self._add_candidates(local_ip_cand)
+
+    def _add_additional_candidates(self):
+        if not self.connection:
+            return
+        type_preference = 126
+        additional_ip_cand = []
+        port = int(gajim.config.get('file_transfers_port'))
+        ft_add_hosts = gajim.config.get('ft_add_hosts_to_send')
+
+        if ft_add_hosts:
+            hosts = [e.strip() for e in ft_add_hosts.split(',')]
+            for h in hosts:
+                c = {'host': h}
+                c['candidate_id'] = self.connection.connection.getAnID()
+                c['port'] = port
+                c['type'] = 'direct'
+                c['jid'] = self.ourjid
+                c['priority'] = (2**16) * type_preference
+                c['initiator'] = self.file_props['sender']
+                c['target'] = self.file_props['receiver']
+                additional_ip_cand.append(c)
+
+        self._add_candidates(additional_ip_cand)
+
+    def _add_proxy_candidates(self):
+        if not self.connection:
+            return
+        type_preference = 10
+        proxy_cand = []
+        socks5conn = self.connection
+        proxyhosts = socks5conn._get_file_transfer_proxies_from_config(self.file_props)
+
+        if proxyhosts:
+            self.file_props['proxyhosts'] = proxyhosts
+
+            for proxyhost in proxyhosts:
+                c = {'host': proxyhost['host']}
+                c['candidate_id'] = self.connection.connection.getAnID()
+                c['port'] = int(proxyhost['port'])
+                c['type'] = 'proxy'
+                c['jid'] = proxyhost['jid']
+                c['priority'] = (2**16) * type_preference
+                c['initiator'] = self.file_props['sender']
+                c['target'] = self.file_props['receiver']
+                proxy_cand.append(c)
+
+        self._add_candidates(proxy_cand)
+
+    def get_content(self):
+        sesn = self.connection.get_jingle_session(self.ourjid,
+            self.file_props['session-sid'])
+        for content in sesn.contents.values():
+            if content.transport == self:
+                return content
+
+    def _on_proxy_auth_ok(self, proxy):
+        log.info('proxy auth ok for ' + str(proxy))
+        # send activate request to proxy, send activated confirmation to peer
+        if not self.connection:
+            return
+        sesn = self.connection.get_jingle_session(self.ourjid,
+            self.file_props['session-sid'])
+        if sesn is None:
+            return
+        
+        iq = xmpp.Iq(to=proxy['jid'], frm=self.ourjid, typ='set')
+        auth_id = "au_" + proxy['sid']
+        iq.setID(auth_id)
+        query = iq.setTag('query', namespace=xmpp.NS_BYTESTREAM)
+        query.setAttr('sid', proxy['sid'])
+        activate = query.setTag('activate')
+        activate.setData(sesn.peerjid)
+        iq.setID(auth_id)
+        self.connection.connection.send(iq)
+
+
+        content = xmpp.Node('content')
+        content.setAttr('creator', 'initiator')
+        c = self.get_content()
+        content.setAttr('name', c.name)
+        transport = xmpp.Node('transport')
+        transport.setNamespace(xmpp.NS_JINGLE_BYTESTREAM)
+        transport.setAttr('sid', proxy['sid'])
+        activated = xmpp.Node('activated')
+        cid = None
+
+        if 'cid' in proxy:
+            cid = proxy['cid']
+        else:
+            for host in self.candidates:
+                if host['host'] == proxy['host'] and host['jid'] == proxy['jid'] \
+                and host['port'] == proxy['port']:
+                    cid = host['candidate_id']
+                    break
+        if cid is None:
+            raise Exception, 'cid is missing'
+        activated.setAttr('cid', cid)
+        transport.addChild(node=activated)
+        content.addChild(node=transport)
+        sesn.send_transport_info(content)
+
+
+class JingleTransportIBB(JingleTransport):
+
+    def __init__(self, node=None, block_sz=None):
+
+        JingleTransport.__init__(self, TransportType.IBB)
+
+        if block_sz:
+            self.block_sz = block_sz
+        else:
+            self.block_sz = '4096'
+
+        self.connection = None
+        self.sid = None
+        if node and node.getAttr('sid'):
+            self.sid = node.getAttr('sid')
+
+
+    def make_transport(self):
+
+        transport = xmpp.Node('transport')
+        transport.setNamespace(xmpp.NS_JINGLE_IBB)
+        transport.setAttr('block-size', self.block_sz)
+        transport.setAttr('sid', self.sid)
+        return transport
+    
 try:
     import farstream
 except Exception:
     pass
 
 class JingleTransportICEUDP(JingleTransport):
-    def __init__(self):
-        JingleTransport.__init__(self, TransportType.datagram)
+    def __init__(self, node):
+        JingleTransport.__init__(self, TransportType.ICEUDP)
 
     def make_candidate(self, candidate):
         types = {farstream.CANDIDATE_TYPE_HOST: 'host',
@@ -149,3 +399,5 @@ class JingleTransportICEUDP(JingleTransport):
         return candidates
 
 transports[xmpp.NS_JINGLE_ICE_UDP] = JingleTransportICEUDP
+transports[xmpp.NS_JINGLE_BYTESTREAM] = JingleTransportSocks5
+transports[xmpp.NS_JINGLE_IBB] = JingleTransportIBB

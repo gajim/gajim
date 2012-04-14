@@ -34,7 +34,6 @@
 ## You should have received a copy of the GNU General Public License
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
-
 import os
 import sys
 import re
@@ -71,6 +70,7 @@ from session import ChatControlSession
 import common.sleepy
 
 from common.xmpp import idlequeue
+from common.xmpp import Hashes
 from common.zeroconf import connection_zeroconf
 from common import resolver
 from common import caps_cache
@@ -83,6 +83,7 @@ from common import logging_helpers
 from common.connection_handlers_events import OurShowEvent, \
     FileRequestErrorEvent, InformationEvent
 from common.connection import Connection
+from common import jingle
 
 import roster_window
 import profile_window
@@ -918,21 +919,65 @@ class Interface:
             self.instances['file_transfers'].set_progress(file_props['type'],
                     file_props['sid'], file_props['received-len'])
 
+    def __compare_hashes(self, account, file_props):
+        session = gajim.connections[account].get_jingle_session(jid=None,
+            sid=file_props['session-sid'])
+        ft_win = self.instances['file_transfers']
+        if not session.file_hash:
+            # We disn't get the hash, sender probably don't support that
+            jid = unicode(file_props['sender'])
+            self.popup_ft_result(account, jid, file_props)
+            ft_win.set_status(file_props['type'], file_props['sid'], 'ok')
+        h = Hashes()
+        try:
+            file_ = open(file_props['file-name'], 'r')
+        except:
+            return
+        hash_ = h.calculateHash(session.hash_algo, file_)
+        file_.close()
+        # If the hash we received and the hash of the file are the same,
+        # then the file is not corrupt
+        jid = unicode(file_props['sender'])
+        if session.file_hash == hash_:
+            self.popup_ft_result(account, jid, file_props)
+            ft_win.set_status(file_props['type'], file_props['sid'], 'ok')
+        else:
+            # wrong hash, we need to get the file again!
+            file_props['error'] = -10
+            self.popup_ft_result(account, jid, file_props)
+            ft_win.set_status(file_props['type'], file_props['sid'],
+                'hash_error')
+        # End jingle session
+        if session:
+            session.end_session()
+
     def handle_event_file_rcv_completed(self, account, file_props):
         ft = self.instances['file_transfers']
         if file_props['error'] == 0:
             ft.set_progress(file_props['type'], file_props['sid'],
-                    file_props['received-len'])
+                file_props['received-len'])
         else:
             ft.set_status(file_props['type'], file_props['sid'], 'stop')
         if 'stalled' in file_props and file_props['stalled'] or \
-                'paused' in file_props and file_props['paused']:
+        'paused' in file_props and file_props['paused']:
             return
+
         if file_props['type'] == 'r': # we receive a file
-            jid = unicode(file_props['sender'])
+            # If we have a jingle session id, it is a jingle transfer
+            # we compare hashes
+            if 'session-sid' in file_props:
+                # Compare hashes in a new thread
+                self.hashThread = Thread(target=self.__compare_hashes,
+                    args=(account, file_props))
+                self.hashThread.start()
+            gajim.socks5queue.remove_receiver(file_props['sid'], True, True)
         else: # we send a file
             jid = unicode(file_props['receiver'])
+            gajim.socks5queue.remove_sender(file_props['sid'], True, True)
+            self.popup_ft_result(account, jid, file_props)
 
+    def popup_ft_result(self, account, jid, file_props):
+        ft = self.instances['file_transfers']
         if helpers.allow_popup_window(account):
             if file_props['error'] == 0:
                 if gajim.config.get('notify_on_file_complete'):
@@ -943,6 +988,8 @@ class Interface:
             elif file_props['error'] == -6:
                 ft.show_stopped(jid, file_props,
                     error_msg=_('Error opening file'))
+            elif file_props['error'] == -10:
+                ft.show_hash_error(jid, file_props)
             return
 
         msg_type = ''
@@ -954,6 +1001,9 @@ class Interface:
         elif file_props['error'] in (-1, -6):
             msg_type = 'file-stopped'
             event_type = _('File Transfer Stopped')
+        elif file_props['error']  == -10:
+            msg_type = 'file-hash-error'
+            event_type = _('File Transfer Failed')
 
         if event_type == '':
             # FIXME: ugly workaround (this can happen Gajim sent, Gaim recvs)
@@ -971,15 +1021,19 @@ class Interface:
                 # get the name of the sender, as it is in the roster
                 sender = unicode(file_props['sender']).split('/')[0]
                 name = gajim.contacts.get_first_contact_from_jid(account,
-                        sender).get_shown_name()
+                    sender).get_shown_name()
                 filename = os.path.basename(file_props['file-name'])
                 if event_type == _('File Transfer Completed'):
                     txt = _('You successfully received %(filename)s from '
                         '%(name)s.') % {'filename': filename, 'name': name}
                     img_name = 'gajim-ft_done'
-                else: # ft stopped
+                elif event_type == _('File Transfer Stopped'):
                     txt = _('File transfer of %(filename)s from %(name)s '
                         'stopped.') % {'filename': filename, 'name': name}
+                    img_name = 'gajim-ft_stopped'
+                else: # ft hash error
+                    txt = _('File transfer of %(filename)s from %(name)s '
+                        'failed.') % {'filename': filename, 'name': name}
                     img_name = 'gajim-ft_stopped'
             else:
                 receiver = file_props['receiver']
@@ -988,15 +1042,19 @@ class Interface:
                 receiver = receiver.split('/')[0]
                 # get the name of the contact, as it is in the roster
                 name = gajim.contacts.get_first_contact_from_jid(account,
-                        receiver).get_shown_name()
+                    receiver).get_shown_name()
                 filename = os.path.basename(file_props['file-name'])
                 if event_type == _('File Transfer Completed'):
                     txt = _('You successfully sent %(filename)s to %(name)s.')\
-                            % {'filename': filename, 'name': name}
+                        % {'filename': filename, 'name': name}
                     img_name = 'gajim-ft_done'
-                else: # ft stopped
+                elif event_type == _('File Transfer Stopped'):
                     txt = _('File transfer of %(filename)s to %(name)s '
                         'stopped.') % {'filename': filename, 'name': name}
+                    img_name = 'gajim-ft_stopped'
+                else: # ft hash error
+                    txt = _('File transfer of %(filename)s to %(name)s '
+                        'failed.') % {'filename': filename, 'name': name}
                     img_name = 'gajim-ft_stopped'
             path = gtkgui_helpers.get_icon_path(img_name, 48)
         else:
@@ -1004,8 +1062,8 @@ class Interface:
             path = ''
 
         if gajim.config.get('notify_on_file_complete') and \
-                (gajim.config.get('autopopupaway') or \
-                gajim.connections[account].connected in (2, 3)):
+        (gajim.config.get('autopopupaway') or \
+        gajim.connections[account].connected in (2, 3)):
             # we want to be notified and we are online/chat or we don't mind
             # bugged when away/na/busy
             notify.popup(event_type, jid, account, msg_type, path_to_image=path,
@@ -1103,6 +1161,23 @@ class Interface:
             'resource. Please type a new one'), resource=proposed_resource,
             ok_handler=on_ok)
 
+    def handle_event_jingleft_cancel(self, obj):
+        ft = self.instances['file_transfers']
+        file_props = None
+        
+        # get the file_props of our session
+        for sid in obj.conn.files_props:
+            fp = obj.conn.files_props[sid]
+            if fp['session-sid'] == obj.sid:
+                file_props = fp
+                break
+                
+        ft.set_status(file_props['type'], file_props['sid'], 'stop')
+        file_props['error'] = -4 # is it the right error code?
+
+        ft.show_stopped(obj.jid, file_props, 'Peer cancelled ' +
+                            'the transfer')
+        
     def handle_event_jingle_incoming(self, obj):
         # ('JINGLE_INCOMING', account, peer jid, sid, tuple-of-contents==(type,
         # data...))
@@ -1440,6 +1515,7 @@ class Interface:
                 self.handle_event_jingle_disconnected],
             'jingle-error-received': [self.handle_event_jingle_error],
             'jingle-request-received': [self.handle_event_jingle_incoming],
+            'jingleFT-cancelled-received': [self.handle_event_jingleft_cancel],
             'last-result-received': [self.handle_event_last_status_time],
             'message-error': [self.handle_event_msgerror],
             'message-not-sent': [self.handle_event_msgnotsent],
@@ -1498,7 +1574,7 @@ class Interface:
         no_queue = len(gajim.events.get_events(account, jid)) == 0
         # type_ can be gc-invitation file-send-error file-error
         #  file-request-error file-request file-completed file-stopped
-        #  jingle-incoming
+        #  file-hash-error jingle-incoming
         # event_type can be in advancedNotificationWindow.events_list
         event_types = {'file-request': 'ft_request',
             'file-completed': 'ft_finished'}
@@ -1627,7 +1703,7 @@ class Interface:
             w = ctrl.parent_win
         elif type_ in ('normal', 'file-request', 'file-request-error',
         'file-send-error', 'file-error', 'file-stopped', 'file-completed',
-        'jingle-incoming'):
+        'file-hash-error', 'jingle-incoming'):
             # Get the first single message event
             event = gajim.events.get_first_event(account, fjid, type_)
             if not event:

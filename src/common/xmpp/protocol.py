@@ -23,6 +23,7 @@ sub- stanzas) handling routines
 from simplexml import Node, NodeBuilder
 import time
 import string
+import hashlib
 
 def ascii_upper(s):
     trans_table = string.maketrans(string.ascii_lowercase,
@@ -90,8 +91,12 @@ NS_JINGLE_ERRORS  = 'urn:xmpp:jingle:errors:1'                        # XEP-0166
 NS_JINGLE_RTP     = 'urn:xmpp:jingle:apps:rtp:1'                      # XEP-0167
 NS_JINGLE_RTP_AUDIO = 'urn:xmpp:jingle:apps:rtp:audio'                # XEP-0167
 NS_JINGLE_RTP_VIDEO = 'urn:xmpp:jingle:apps:rtp:video'                # XEP-0167
+NS_JINGLE_FILE_TRANSFER ='urn:xmpp:jingle:apps:file-transfer:3'        # XEP-0234
+NS_JINGLE_XTLS='urn:xmpp:jingle:security:xtls:0'                      # XTLS: EXPERIMENTAL security layer of jingle
 NS_JINGLE_RAW_UDP = 'urn:xmpp:jingle:transports:raw-udp:1'            # XEP-0177
 NS_JINGLE_ICE_UDP = 'urn:xmpp:jingle:transports:ice-udp:1'            # XEP-0176
+NS_JINGLE_BYTESTREAM ='urn:xmpp:jingle:transports:s5b:1'              # XEP-0260
+NS_JINGLE_IBB     = 'urn:xmpp:jingle:transports:ibb:1'                # XEP-0261
 NS_LAST           = 'jabber:iq:last'
 NS_LOCATION       = 'http://jabber.org/protocol/geoloc'               # XEP-0080
 NS_MESSAGE        = 'message'                                         # Jabberd2
@@ -153,8 +158,16 @@ NS_DATA_LAYOUT    = 'http://jabber.org/protocol/xdata-layout'         # XEP-0141
 NS_DATA_VALIDATE  = 'http://jabber.org/protocol/xdata-validate'       # XEP-0122
 NS_XMPP_STREAMS   = 'urn:ietf:params:xml:ns:xmpp-streams'
 NS_RECEIPTS       = 'urn:xmpp:receipts'
+NS_PUBKEY_PUBKEY  = 'urn:xmpp:pubkey:2'                                              # XEP-0189
+NS_PUBKEY_REVOKE  = 'urn:xmpp:revoke:2'
+NS_PUBKEY_ATTEST  = 'urn:xmpp:attest:2'
 NS_STREAM_MGMT    = 'urn:xmpp:sm:2'                                   # XEP-198
-
+NS_HASHES         = 'urn:xmpp:hashes:0'                               # XEP-300
+NS_HASHES_MD5     = 'urn:xmpp:hash-function-textual-names:md5'
+NS_HASHES_SHA1    = 'urn:xmpp:hash-function-textual-names:sha-1'
+NS_HASHES_SHA256  = 'urn:xmpp:hash-function-textual-names:sha-256'
+NS_HASHES_SHA512  = 'urn:xmpp:hash-function-textual-names:sha-512'
+                 
 xmpp_stream_error_conditions = '''
 bad-format --  --  -- The entity has sent XML that cannot be processed.
 bad-namespace-prefix --  --  -- The entity has sent a namespace prefix that is unsupported, or has sent no namespace prefix on an element that requires such a prefix.
@@ -1024,13 +1037,84 @@ class Iq(Protocol):
             attrs={'id': self.getID()})
         iq.setQuery(self.getQuery().getName()).setNamespace(self.getQueryNS())
         return iq
-
+    
+class Hashes(Node): 
+    """
+    Hash elements for various XEPs as defined in XEP-300
+    """
+    
+    """
+    RECOMENDED HASH USE:
+    Algorithm     Support
+    MD2           MUST NOT
+    MD4           MUST NOT
+    MD5           MAY
+    SHA-1         MUST
+    SHA-256       MUST
+    SHA-512       SHOULD
+    """
+    
+    supported = ('md5', 'sha-1', 'sha-256', 'sha-512')
+    
+    def __init__(self, nsp=NS_HASHES):
+        Node.__init__(self, None, {}, [], None, None,False, None)
+        self.setNamespace(nsp)
+        self.setName('hashes')
+    
+    def calculateHash(self, algo, file_string):
+        """
+        Calculate the hash and add it. It is preferable doing it here
+        instead of doing it all over the place in Gajim.
+        """
+        hl = None
+        hash_ = None
+        # file_string can be a string or a file
+        if type(file_string) == str: # if it is a string
+            if algo == 'md5':
+                hl = hashlib.md5()
+            elif algo == 'sha-1':
+                hl = hashlib.sha1()
+            elif algo == 'sha-256':
+                hl = hashlib.sha256()
+            elif algo == 'sha-512':
+                hl = hashlib.sha512()
+                
+            if hl:
+                hl.update(file_string)
+                hash_ = hl.hexdigest()
+        else: # if it is a file
+                
+            if algo == 'md5':
+                hl = hashlib.md5()
+            elif algo == 'sha-1':
+                hl = hashlib.sha1()
+            elif algo == 'sha-256':
+                hl = hashlib.sha256()
+            elif algo == 'sha-512':
+                hl = hashlib.sha512()
+                
+            if hl:
+                for line in file_string:
+                    hl.update(line)
+                hash_ = hl.hexdigest()
+                
+        return hash_        
+            
+    def addHash(self, hash_, algo):
+        """
+        More than one hash can be added. Although it is permitted, it should
+        not be done for big files because it could slow down Gajim.
+        """
+        attrs = {}
+        attrs['algo'] = algo 
+        self.addChild('hash', attrs, [hash_])
+     
 class Acks(Node):
     """
     Acknowledgement elements for Stream Management
     """
     def __init__(self, nsp=NS_STREAM_MGMT):
-        Node.__init__(self, None, {}, [], None, None,False, None)
+        Node.__init__(self, None, {}, [], None, None, False, None)
         self.setNamespace(nsp)
 
     def buildAnswer(self, handled):
@@ -1407,3 +1491,4 @@ class DataForm(Node):
         Simple dictionary interface for setting datafields values by their names
         """
         return self.setField(name).setValue(val)
+

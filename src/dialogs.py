@@ -1615,16 +1615,15 @@ class YesNoDialog(HigDialog):
     """
 
     def __init__(self, pritext, sectext='', checktext='', on_response_yes=None,
-    on_response_no=None):
+    on_response_no=None, type_=gtk.MESSAGE_QUESTION):
         self.user_response_yes = on_response_yes
         self.user_response_no = on_response_no
         if hasattr(gajim.interface, 'roster') and gajim.interface.roster:
             parent = gajim.interface.roster.window
         else:
             parent = None
-        HigDialog.__init__(self, parent, gtk.MESSAGE_QUESTION,
-            gtk.BUTTONS_YES_NO, pritext, sectext,
-            on_response_yes=self.on_response_yes,
+        HigDialog.__init__(self, parent, type_, gtk.BUTTONS_YES_NO, pritext,
+            sectext, on_response_yes=self.on_response_yes,
             on_response_no=self.on_response_no)
 
         if checktext:

@@ -53,7 +53,7 @@ from common.logger import constants
 from common.pep import MOODS, ACTIVITIES
 from common.xmpp.protocol import NS_XHTML, NS_XHTML_IM, NS_FILE, NS_MUC
 from common.xmpp.protocol import NS_RECEIPTS, NS_ESESSION
-from common.xmpp.protocol import NS_JINGLE_RTP_AUDIO, NS_JINGLE_RTP_VIDEO, NS_JINGLE_ICE_UDP
+from common.xmpp.protocol import NS_JINGLE_RTP_AUDIO, NS_JINGLE_RTP_VIDEO, NS_JINGLE_ICE_UDP, NS_JINGLE_FILE_TRANSFER
 from common.xmpp.protocol import NS_CHATSTATES
 from common.connection_handlers_events import MessageOutgoingEvent
 from common.exceptions import GajimGeneralException
@@ -1722,13 +1722,13 @@ class ChatControl(ChatControlBase):
         self._video_button.set_sensitive(self.video_available)
 
         # Send file
-        if self.contact.supports(NS_FILE) and (self.type_id == 'chat' or \
+        if (self.contact.supports(NS_FILE) or self.contact.supports(NS_JINGLE_FILE_TRANSFER)) and (self.type_id == 'chat' or \
         self.gc_contact.resource):
             self._send_file_button.set_sensitive(True)
             self._send_file_button.set_tooltip_text('')
         else:
             self._send_file_button.set_sensitive(False)
-            if not self.contact.supports(NS_FILE):
+            if not (self.contact.supports(NS_FILE) or self.contact.supports(NS_JINGLE_FILE_TRANSFER)):
                 self._send_file_button.set_tooltip_text(_(
                     "This contact does not support file transfer."))
             else:

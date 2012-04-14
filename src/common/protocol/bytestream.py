@@ -37,9 +37,8 @@ from common import xmpp
 from common import gajim
 from common import helpers
 from common import dataforms
-from common.connection_handlers_events import FileRequestReceivedEvent, \
-    FileRequestErrorEvent, InformationEvent
 from common import ged
+from common import jingle_xtls
 
 from common.socks5 import Socks5Receiver
 
@@ -140,6 +139,34 @@ class ConnectionBytestream:
         # user response to ConfirmationDialog may come after we've disconneted
         if not self.connection or self.connected < 2:
             return
+
+        # file transfer initiated by a jingle session
+        log.info("send_file_approval: jingle session accept")
+        if file_props.get('session-type') == 'jingle':
+            session = self.get_jingle_session(file_props['sender'],
+                file_props['session-sid'])
+            if not session:
+                return
+            content = None
+            for c in session.contents.values():
+                if c.transport.sid == file_props['sid']:
+                    content = c
+                    break
+            if not content:
+                return
+            gajim.socks5queue.add_file_props(self.name, file_props)
+
+            if not session.accepted:
+                if session.get_content('file', content.name).use_security:
+                    id_ = jingle_xtls.send_cert_request(self,
+                        file_props['sender'])
+                    jingle_xtls.key_exchange_pend(id_, content)
+                    return
+                session.approve_session()
+
+            session.approve_content('file', content.name)
+            return
+
         iq = xmpp.Iq(to=unicode(file_props['sender']), typ='result')
         iq.setAttr('id', file_props['request-id'])
         si = iq.setTag('si', namespace=xmpp.NS_SI)
@@ -167,6 +194,10 @@ class ConnectionBytestream:
         """
         # user response to ConfirmationDialog may come after we've disconneted
         if not self.connection or self.connected < 2:
+            return
+        if file_props['session-type'] == 'jingle':
+            jingle = self._sessions[file_props['session-sid']]
+            jingle.cancel_session()
             return
         iq = xmpp.Iq(to=unicode(file_props['sender']), typ='error')
         iq.setAttr('id', file_props['request-id'])
@@ -221,6 +252,7 @@ class ConnectionBytestream:
             raise xmpp.NodeProcessed
 
     def _siSetCB(self, con, iq_obj):
+        from common.connection_handlers_events import FileRequestReceivedEvent
         gajim.nec.push_incoming_event(FileRequestReceivedEvent(None, conn=self,
             stanza=iq_obj))
         raise xmpp.NodeProcessed
@@ -240,6 +272,7 @@ class ConnectionBytestream:
             return
         jid = self._ft_get_from(iq_obj)
         file_props['error'] = -3
+        from common.connection_handlers_events import FileRequestErrorEvent
         gajim.nec.push_incoming_event(FileRequestErrorEvent(None, conn=self,
             jid=jid, file_props=file_props, error_msg=''))
         raise xmpp.NodeProcessed
@@ -273,6 +306,8 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             if contact.get_full_jid() == receiver_jid:
                 file_props['error'] = -5
                 self.remove_transfer(file_props)
+                from common.connection_handlers_events import \
+                    FileRequestErrorEvent
                 gajim.nec.push_incoming_event(FileRequestErrorEvent(None,
                     conn=self, jid=contact.jid, file_props=file_props,
                     error_msg=''))
@@ -332,9 +367,10 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
 
         port = gajim.config.get('file_transfers_port')
         listener = gajim.socks5queue.start_listener(port, sha_str,
-                self._result_socks5_sid, file_props['sid'])
+                self._result_socks5_sid, file_props)
         if not listener:
             file_props['error'] = -5
+            from common.connection_handlers_events import FileRequestErrorEvent
             gajim.nec.push_incoming_event(FileRequestErrorEvent(None, conn=self,
                 jid=unicode(receiver), file_props=file_props, error_msg=''))
             self._connect_error(unicode(receiver), file_props['sid'],
@@ -374,6 +410,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             port = gajim.config.get('file_transfers_port')
             self._add_streamhosts_to_query(query, sender, port, my_ips)
         except socket.gaierror:
+            from common.connection_handlers_events import InformationEvent
             gajim.nec.push_incoming_event(InformationEvent(None, conn=self,
                 level='error', pri_txt=_('Wrong host'),
                 sec_txt=_('Invalid local address? :-O')))
@@ -546,6 +583,8 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             if file_props is not None:
                 self.disconnect_transfer(file_props)
                 file_props['error'] = -3
+                from common.connection_handlers_events import \
+                    FileRequestErrorEvent
                 gajim.nec.push_incoming_event(FileRequestErrorEvent(None,
                     conn=self, jid=to, file_props=file_props, error_msg=msg))
 
@@ -578,6 +617,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             return
         file_props = self.files_props[id_]
         file_props['error'] = -4
+        from common.connection_handlers_events import FileRequestErrorEvent
         gajim.nec.push_incoming_event(FileRequestErrorEvent(None, conn=self,
             jid=jid, file_props=file_props, error_msg=''))
         raise xmpp.NodeProcessed
@@ -713,7 +753,10 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             raise xmpp.NodeProcessed
 
         else:
-            gajim.socks5queue.send_file(file_props, self.name)
+            if 'stopped' in file_props and file_props['stopped']:
+                self.remove_transfer(file_props)
+            else:
+                gajim.socks5queue.send_file(file_props, self.name, 'client')
             if 'fast' in file_props:
                 fasts = file_props['fast']
                 if len(fasts) > 0:
@@ -741,9 +784,9 @@ class ConnectionIBBytestream(ConnectionBytestream):
         elif typ == 'set' and stanza.getTag('close', namespace=xmpp.NS_IBB):
             self.StreamCloseHandler(conn, stanza)
         elif typ == 'result':
-            self.StreamCommitHandler(conn, stanza)
+            self.SendHandler()
         elif typ == 'error':
-            self.StreamOpenReplyHandler(conn, stanza)
+            gajim.socks5queue.error_cb()
         else:
             conn.send(xmpp.Error(stanza, xmpp.ERR_BAD_REQUEST))
         raise xmpp.NodeProcessed
@@ -918,13 +961,17 @@ class ConnectionIBBytestream(ConnectionBytestream):
         log.debug('StreamCloseHandler called sid->%s' % sid)
         # look in sending files
         if sid in self.files_props.keys():
-            conn.send(stanza.buildReply('result'))
-            gajim.socks5queue.complete_transfer_cb(self.name, file_props)
+            reply = stanza.buildReply('result')
+            reply.delChild('close')
+            conn.send(reply)
+            gajim.socks5queue.complete_transfer_cb(self.name, self.files_props[sid])
             del self.files_props[sid]
         # look in receiving files
         elif gajim.socks5queue.get_file_props(self.name, sid):
             file_props = gajim.socks5queue.get_file_props(self.name, sid)
-            conn.send(stanza.buildReply('result'))
+            reply = stanza.buildReply('result')
+            reply.delChild('close')
+            conn.send(reply)
             file_props['fp'].close()
             gajim.socks5queue.complete_transfer_cb(self.name, file_props)
             gajim.socks5queue.remove_file_props(self.name, sid)
@@ -964,6 +1011,7 @@ class ConnectionIBBytestream(ConnectionBytestream):
             if stanza.getTag('data'):
                 if self.IBBMessageHandler(conn, stanza):
                     reply = stanza.buildReply('result')
+                    reply.delChild('data')
                     conn.send(reply)
                     raise xmpp.NodeProcessed
             elif syn_id == self.last_sent_ibb_id:

@@ -37,7 +37,11 @@ import gajim
 from jingle_session import JingleSession, JingleStates
 if gajim.HAVE_FARSTREAM:
     from jingle_rtp import JingleAudio, JingleVideo
+from jingle_ft import JingleFileTransfer
+from jingle_transport import JingleTransportSocks5, JingleTransportIBB
 
+import logging
+logger = logging.getLogger('gajim.c.jingle')
 
 class ConnectionJingle(object):
     """
@@ -75,27 +79,38 @@ class ConnectionJingle(object):
         """
         # get data
         jid = helpers.get_full_jid_from_iq(stanza)
-        id = stanza.getID()
+        id_ = stanza.getID()
 
-        if (jid, id) in self.__iq_responses.keys():
-            self.__iq_responses[(jid, id)].on_stanza(stanza)
-            del self.__iq_responses[(jid, id)]
+        if (jid, id_) in self.__iq_responses.keys():
+            self.__iq_responses[(jid, id_)].on_stanza(stanza)
+            del self.__iq_responses[(jid, id_)]
             raise xmpp.NodeProcessed
 
         jingle = stanza.getTag('jingle')
-        if not jingle: return
-        sid = jingle.getAttr('sid')
+        # a jingle element is not necessary in iq-result stanza
+        # don't check for that
+        if jingle:
+            sid = jingle.getAttr('sid')
+        else:
+            sid = None
+            for sesn in self._sessions.values():
+                if id_ in sesn.iq_ids:
+                    sesn.on_stanza(stanza)
+            return
 
         # do we need to create a new jingle object
         if sid not in self._sessions:
             #TODO: tie-breaking and other things...
-            newjingle = JingleSession(con=self, weinitiate=False, jid=jid, sid=sid)
+            newjingle = JingleSession(con=self, weinitiate=False, jid=jid,
+                iq_id=id_, sid=sid)
             self._sessions[sid] = newjingle
 
         # we already have such session in dispatcher...
+        self._sessions[sid].collect_iq_id(id_)
         self._sessions[sid].on_stanza(stanza)
         # Delete invalid/unneeded sessions
-        if sid in self._sessions and self._sessions[sid].state == JingleStates.ended:
+        if sid in self._sessions and \
+        self._sessions[sid].state == JingleStates.ended:
             self.delete_jingle_session(sid)
 
         raise xmpp.NodeProcessed
@@ -126,16 +141,55 @@ class ConnectionJingle(object):
             jingle.start_session()
         return jingle.sid
 
+    def start_file_transfer(self, jid, file_props):
+        logger.info("start file transfer with file: %s" % file_props)
+        contact = gajim.contacts.get_contact_with_highest_priority(self.name,
+            gajim.get_jid_without_resource(jid))
+        if contact is None:
+            return
+        use_security = contact.supports(xmpp.NS_JINGLE_XTLS)
+        jingle = JingleSession(self, weinitiate=True, jid=jid)
+        # this is a file transfer
+        jingle.session_type_FT = True
+        self._sessions[jingle.sid] = jingle
+        file_props['sid'] = jingle.sid
+        if contact.supports(xmpp.NS_JINGLE_BYTESTREAM):
+            transport = JingleTransportSocks5()
+        elif contact.supports(xmpp.NS_JINGLE_IBB):
+            transport = JingleTransportIBB()
+        c = JingleFileTransfer(jingle, transport=transport,
+            file_props=file_props, use_security=use_security)
+        jingle.hash_algo = self.__hash_support(contact) 
+        jingle.add_content('file' + helpers.get_random_string_16(), c)
+        jingle.start_session()
+        return c.transport.sid
+
+    def __hash_support(self, contact):
+        
+        if contact.supports(xmpp.NS_HASHES):
+            if contact.supports(xmpp.NS_HASHES_MD5):
+                return 'md5'
+            elif contact.supports(xmpp.NS_HASHES_SHA1):
+                return 'sha-1'
+            elif contact.supports(xmpp.NS_HASHES_SHA256):
+                return 'sha-256'
+            elif contact.supports(xmpp.NS_HASHES_SHA512):
+                return 'sha-512'
+            
+        return None
 
     def iter_jingle_sessions(self, jid, sid=None, media=None):
         if sid:
-            return (session for session in self._sessions.values() if session.sid == sid)
-        sessions = (session for session in self._sessions.values() if session.peerjid == jid)
+            return (session for session in self._sessions.values() if \
+                session.sid == sid)
+        sessions = (session for session in self._sessions.values() if \
+            session.peerjid == jid)
         if media:
-            if media not in ('audio', 'video'):
+            if media not in ('audio', 'video', 'file'):
                 return tuple()
             else:
-                return (session for session in sessions if session.get_content(media))
+                return (session for session in sessions if \
+                    session.get_content(media))
         else:
             return sessions
 
@@ -147,6 +201,8 @@ class ConnectionJingle(object):
             else:
                 return None
         elif media:
+            if media not in ('audio', 'video', 'file'):
+                return None
             for session in self._sessions.values():
                 if session.peerjid == jid and session.get_content(media):
                     return session

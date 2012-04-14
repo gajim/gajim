@@ -62,6 +62,7 @@ MY_ICONSETS_PATH = gajimpaths['MY_ICONSETS']
 MY_MOOD_ICONSETS_PATH = gajimpaths['MY_MOOD_ICONSETS']
 MY_ACTIVITY_ICONSETS_PATH = gajimpaths['MY_ACTIVITY_ICONSETS']
 MY_CACERTS = gajimpaths['MY_CACERTS']
+MY_PEER_CERTS_PATH = gajimpaths['MY_PEER_CERTS']
 TMP = gajimpaths['TMP']
 DATA_DIR = gajimpaths['DATA']
 ICONS_DIR = gajimpaths['ICONS']
@@ -69,6 +70,7 @@ HOME_DIR = gajimpaths['HOME']
 PLUGINS_DIRS = [gajimpaths['PLUGINS_BASE'],
                 gajimpaths['PLUGINS_USER']]
 PLUGINS_CONFIG_DIR = gajimpaths['PLUGINS_CONFIG_DIR']
+MY_CERT_DIR = gajimpaths['MY_CERT']
 
 try:
     LANG = locale.getdefaultlocale()[0] # en_US, fr_FR, el_GR etc..
@@ -206,7 +208,9 @@ gajim_common_features = [xmpp.NS_BYTESTREAM, xmpp.NS_SI, xmpp.NS_FILE,
         'jabber:iq:gateway', xmpp.NS_LAST, xmpp.NS_PRIVACY, xmpp.NS_PRIVATE,
         xmpp.NS_REGISTER, xmpp.NS_VERSION, xmpp.NS_DATA, xmpp.NS_ENCRYPTED, 'msglog',
         'sslc2s', 'stringprep', xmpp.NS_PING, xmpp.NS_TIME_REVISED, xmpp.NS_SSN,
-        xmpp.NS_MOOD, xmpp.NS_ACTIVITY, xmpp.NS_NICK, xmpp.NS_ROSTERX, xmpp.NS_SECLABEL]
+        xmpp.NS_MOOD, xmpp.NS_ACTIVITY, xmpp.NS_NICK, xmpp.NS_ROSTERX, xmpp.NS_SECLABEL,
+        xmpp.NS_HASHES, xmpp.NS_HASHES_MD5, xmpp.NS_HASHES_SHA1,
+        xmpp.NS_HASHES_SHA256, xmpp.NS_HASHES_SHA512]
 
 # Optional features gajim supports per account
 gajim_optional_features = {}
