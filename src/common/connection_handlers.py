@@ -1296,6 +1296,8 @@ ConnectionJingle, ConnectionIBBytestream):
             ged.POSTGUI, self._nec_unsubscribed_presence_received_end)
         gajim.ged.register_event_handler('agent-removed', ged.CORE,
             self._nec_agent_removed)
+        gajim.ged.register_event_handler('stream-other-host-received', ged.CORE,
+            self._nec_stream_other_host_received)
 
     def cleanup(self):
         ConnectionHandlersBase.cleanup(self)
@@ -1338,6 +1340,8 @@ ConnectionJingle, ConnectionIBBytestream):
             ged.POSTGUI, self._nec_unsubscribed_presence_received_end)
         gajim.ged.remove_event_handler('agent-removed', ged.CORE,
             self._nec_agent_removed)
+        gajim.ged.remove_event_handler('stream-other-host-received', ged.CORE,
+            self._nec_stream_other_host_received)
 
     def build_http_auth_answer(self, iq_obj, answer):
         if not self.connection or self.connected < 2:
@@ -1979,6 +1983,13 @@ ConnectionJingle, ConnectionIBBytestream):
         log.debug('SearchCB')
         gajim.nec.push_incoming_event(SearchFormReceivedEvent(None,
             conn=self, stanza=iq_obj))
+
+    def _nec_stream_other_host_received(self, obj):
+        if obj.conn.name != self.name:
+            return
+        self.redirected = obj.redirected
+        self.disconnect(on_purpose=True)
+        self.connect()
 
     def _StreamCB(self, con, iq_obj):
         log.debug('StreamCB')
