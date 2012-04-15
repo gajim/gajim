@@ -689,6 +689,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.try_connecting_for_foo_secs = 45
         # holds the actual hostname to which we are connected
         self.connected_hostname = None
+        self.redirected = None
         self.last_time_to_reconnect = None
         self.new_account_info = None
         self.new_account_form = None
@@ -1039,10 +1040,17 @@ class Connection(CommonConnection, ConnectionHandlers):
                     self.name, 'try_connecting_for_foo_secs')
             proxy = helpers.get_proxy_info(self.name)
             use_srv = gajim.config.get_per('accounts', self.name, 'use_srv')
-            use_custom = gajim.config.get_per('accounts', self.name,
+            if self.redirected:
+                use_custom = True
+                custom_h = self.redirected['host']
+                custom_p = self.redirected['port']
+            else:
+                use_custom = gajim.config.get_per('accounts', self.name,
                     'use_custom_host')
-            custom_h = gajim.config.get_per('accounts', self.name, 'custom_host')
-            custom_p = gajim.config.get_per('accounts', self.name, 'custom_port')
+                custom_h = gajim.config.get_per('accounts', self.name,
+                    'custom_host')
+                custom_p = gajim.config.get_per('accounts', self.name,
+                    'custom_port')
 
         # create connection if it doesn't already exist
         self.connected = 1
@@ -1054,8 +1062,10 @@ class Connection(CommonConnection, ConnectionHandlers):
             h = custom_h
             p = custom_p
             ssl_p = custom_p
-            use_srv = False
+            if not self.redirected:
+                use_srv = False
 
+        self.redirected = None
         # SRV resolver
         self._proxy = proxy
         self._hosts = [ {'host': h, 'port': p, 'ssl_port': ssl_p, 'prio': 10,

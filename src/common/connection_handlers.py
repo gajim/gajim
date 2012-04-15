@@ -190,7 +190,7 @@ class ConnectionDisco:
         query.setAttr('node', 'http://gajim.org#' + gajim.version.split('-', 1)[
             0])
         for f in (common.xmpp.NS_BYTESTREAM, common.xmpp.NS_SI,
-        common.xmpp.NS_FILE, common.xmpp.NS_COMMANDS, 
+        common.xmpp.NS_FILE, common.xmpp.NS_COMMANDS,
         common.xmpp.NS_JINGLE_FILE_TRANSFER, common.xmpp.NS_JINGLE_XTLS,
         common.xmpp.NS_PUBKEY_PUBKEY, common.xmpp.NS_PUBKEY_REVOKE,
         common.xmpp.NS_PUBKEY_ATTEST):
@@ -2014,6 +2014,21 @@ ConnectionJingle, ConnectionIBBytestream):
         if obj.getTag('conflict'):
             # disconnected because of a resource conflict
             self.dispatch('RESOURCE_CONFLICT', ())
+        other_host = obj.getTag('see-other-host')
+        if other_host and self.last_connection_type in ('ssl', 'tls'):
+            host = other_host.getData()
+            if ':' in host:
+                host_l = host.split(':', 1)
+                h = host_l[0]
+                p = host_l[1]
+            else:
+                h = host
+                p = 5222
+            if h.startswith('[') and h.endswith(']'):
+                h = h[1:-1]
+            self.redirected = {'host': h, 'port': p}
+            self.disconnect(on_purpose=True)
+            self.connect()
 
     def _register_handlers(self, con, con_type):
         # try to find another way to register handlers in each class
