@@ -153,7 +153,7 @@ def build_invite_submenu(invite_menuitem, list_, ignore_rooms=[]):
 
 def get_contact_menu(contact, account, use_multiple_contacts=True,
 show_start_chat=True, show_encryption=False, show_buttonbar_items=True,
-control=None, gc_contact=None):
+control=None, gc_contact=None, is_anonymous=True):
     """
     Build contact popup menu for roster and chat window. If control is not set,
     we hide invite_contacts_menuitem
@@ -236,8 +236,14 @@ control=None, gc_contact=None):
 
         if contact.supports(NS_COMMANDS):
             execute_command_menuitem.set_sensitive(True)
-            execute_command_menuitem.connect('activate', roster.on_execute_command,
-                    contact, account, contact.resource)
+            if gc_contact and gc_contact.jid and not is_anonymous:
+                execute_command_menuitem.connect('activate',
+                    roster.on_execute_command, gc_contact, account,
+                    gc_contact.resource)
+            else:
+                execute_command_menuitem.connect('activate',
+                    roster.on_execute_command, contact, account,
+                    contact.resource)
         else:
             execute_command_menuitem.set_sensitive(False)
 

@@ -271,7 +271,8 @@ class PrivateChatControl(ChatControl):
             use_multiple_contacts=False, show_start_chat=False,
             show_encryption=True, control=self,
             show_buttonbar_items=not hide_buttonbar_items,
-            gc_contact=self.gc_contact)
+            gc_contact=self.gc_contact,
+            is_anonymous=self.room_ctrl.is_anonymous)
         return menu
 
 class GroupchatControl(ChatControlBase):
