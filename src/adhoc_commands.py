@@ -408,6 +408,7 @@ class CommandWindow:
 
             self.data_form_widget.set_sensitive(True)
             try:
+                self.data_form_widget.selectable = True
                 self.data_form_widget.data_form = self.dataform
             except dataforms.Error:
                 self.stage5(error=_('Service sent malformed data'),
