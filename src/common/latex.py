@@ -166,6 +166,8 @@ def latex_to_image(str_):
 
     if exitcode == 0:
         os.rename(tmpfile + '.png', tmppng)
+    else:
+        os.remove(tmppng)
 
     os.rmdir(tmpdir)
 
