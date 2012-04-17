@@ -3441,8 +3441,11 @@ class RosterWindow:
                 return
             path = list_of_paths[0]
             iter_ = model.get_iter(path)
-            if model.iter_has_child(iter_):
+            if model.iter_has_child(iter_) and self.tree.row_expanded(path):
                 self.tree.collapse_row(path)
+                return True
+            elif len(path) > 1:
+                self.tree.set_cursor(path[:-1])
                 return True
         elif event.keyval == gtk.keysyms.Right:
             treeselection = self.tree.get_selection()
