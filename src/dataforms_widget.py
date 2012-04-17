@@ -52,6 +52,7 @@ class DataFormWidget(gtk.Alignment, object):
         gtk.Alignment.__init__(self, xscale=1.0, yscale=1.0)
 
         self._data_form = None
+        self.selectable = False
 
         self.xml = gtkgui_helpers.get_gtk_builder('data_form_window.ui',
                 'data_form_vbox')
@@ -147,7 +148,8 @@ class DataFormWidget(gtk.Alignment, object):
 
         self.clean_data_form()
 
-        self.singleform = SingleForm(self._data_form)
+        self.singleform = SingleForm(self._data_form,
+            selectable=self.selectable)
         def _on_validated(widget):
             self.emit('validated')
         self.singleform.connect('validated', _on_validated)
@@ -314,7 +316,7 @@ class SingleForm(gtk.Table, object):
         validated = (gobject.SIGNAL_RUN_LAST | gobject.SIGNAL_ACTION, None, ())
     )
 
-    def __init__(self, dataform):
+    def __init__(self, dataform, selectable=False):
         assert isinstance(dataform, dataforms.SimpleDataForm)
 
         gtk.Table.__init__(self)
@@ -368,6 +370,7 @@ class SingleForm(gtk.Table, object):
 
                 commonwidget = False
                 widget = gtk.Label(field.value)
+                widget.set_property('selectable', selectable)
                 widget.set_line_wrap(True)
                 self.attach(widget, leftattach, rightattach, linecounter,
                         linecounter+1, xoptions=gtk.FILL, yoptions=gtk.FILL)
@@ -506,7 +509,13 @@ class SingleForm(gtk.Table, object):
                 textwidget.get_buffer().connect('changed',
                         self.on_text_multi_textbuffer_changed, field)
                 textwidget.get_buffer().set_text(field.value)
-                textwidget.set_sensitive(readwrite)
+                if readwrite:
+                    textwidget.set_sensitive(True)
+                else:
+                    if selectable:
+                        textwidget.set_editable(True)
+                    else:
+                        textwidget.set_sensitive(False)
 
                 widget = gtk.ScrolledWindow()
                 widget.add(textwidget)
@@ -535,6 +544,7 @@ class SingleForm(gtk.Table, object):
                 else:
                     commonwidget=False
                     widget = gtk.Label(field.value)
+                    widget.set_property('selectable', selectable)
                     widget.set_sensitive(True)
                     widget.set_alignment(0.0, 0.5)
                     widget=decorate_with_tooltip(widget, field)
