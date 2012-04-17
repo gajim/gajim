@@ -1598,6 +1598,12 @@ class RosterWindow:
             return False
         if type_ == 'contact':
             if self.rfilter_enabled:
+                if model.iter_has_child(titer):
+                    iter_c = model.iter_children(titer)
+                    while iter_c:
+                        if self.rfilter_string in model[iter_c][C_NAME].lower():
+                            return True
+                        iter_c = model.iter_next(iter_c)
                 return self.rfilter_string in model[titer][C_NAME].lower()
             if gajim.config.get('showoffline'):
                 return True
