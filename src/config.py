@@ -32,6 +32,7 @@
 ##
 
 import gtk
+import pango
 import gobject
 import os, sys
 import common.config
@@ -443,6 +444,8 @@ class PreferencesWindow:
         key=None):
             combobox = self.xml.get_object(opt_name + '_combobox')
             cell = gtk.CellRendererText()
+            cell.set_property('ellipsize', pango.ELLIPSIZE_END)
+            cell.set_property('ellipsize-set', True)
             combobox.pack_start(cell, True)
             combobox.add_attribute(cell, 'text', 0)
             model = gtk.ListStore(str, str)
