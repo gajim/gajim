@@ -602,7 +602,9 @@ class HistoryWindow:
         """
         start_iter = self.history_buffer.get_start_iter()
         local_time = time.localtime(float(unix_time))
-        tim = time.strftime('%X', local_time)
+        timestamp_str = gajim.config.get('time_stamp')
+        timestamp_str = helpers.from_one_line(timestamp_str)
+        tim = time.strftime(timestamp_str, local_time)
         result = start_iter.forward_search(tim, gtk.TEXT_SEARCH_VISIBLE_ONLY,
                 None)
         if result is not None:
