@@ -234,7 +234,11 @@ class ProfileWindow:
 
     def set_value(self, entry_name, value):
         try:
-            self.xml.get_object(entry_name).set_text(value)
+            widget = self.xml.get_object(entry_name)
+            val = widget.get_text()
+            if val:
+                value = val + ' / ' + value
+            widget.set_text(value)
         except AttributeError:
             pass
 
