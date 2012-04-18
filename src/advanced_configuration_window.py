@@ -209,7 +209,6 @@ class AdvancedConfigurationWindow(object):
             else:
                 self.remember_option(option, modelrow[1], newval)
                 gajim.config.set(option, newval)
-            gajim.interface.save_config()
             modelrow[1] = self.right_true_dict[newval]
             self.check_for_restart()
 
@@ -244,7 +243,6 @@ class AdvancedConfigurationWindow(object):
         else:
             self.remember_option(option, modelrow[1], text)
             gajim.config.set(option, text)
-        gajim.interface.save_config()
         modelrow[1] = text
         self.check_for_restart()
 
@@ -279,7 +277,6 @@ class AdvancedConfigurationWindow(object):
                 else:
                     self.remember_option(option, modelrow[C_VALUE], default)
                     gajim.config.set(option, default)
-                gajim.interface.save_config()
                 modelrow[C_VALUE] = self.right_true_dict[default]
                 self.check_for_restart()
             else:

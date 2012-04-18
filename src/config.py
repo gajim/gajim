@@ -610,7 +610,6 @@ class PreferencesWindow:
         if change_sensitivity_widgets:
             for w in change_sensitivity_widgets:
                 w.set_sensitive(widget.get_active())
-        gajim.interface.save_config()
 
     def on_per_account_checkbutton_toggled(self, widget, config_name,
     change_sensitivity_widgets=None):
@@ -620,7 +619,6 @@ class PreferencesWindow:
         if change_sensitivity_widgets:
             for w in change_sensitivity_widgets:
                 w.set_sensitive(widget.get_active())
-        gajim.interface.save_config()
 
     def _get_all_controls(self):
         for ctrl in gajim.interface.msg_win_mgr.get_controls():
@@ -700,21 +698,18 @@ class PreferencesWindow:
         active = widget.get_active()
         config_type = common.config.opt_one_window_types[active]
         gajim.config.set('one_message_window', config_type)
-        gajim.interface.save_config()
         gajim.interface.msg_win_mgr.reconfig()
 
     def on_show_roster_on_startup_changed(self, widget):
         active = widget.get_active()
         config_type = common.config.opt_show_roster_on_startup[active]
         gajim.config.set('show_roster_on_startup', config_type)
-        gajim.interface.save_config()
 
     def on_compact_view_checkbutton_toggled(self, widget):
         active = widget.get_active()
         for ctrl in self._get_all_controls():
             ctrl.chat_buttons_set_visible(active)
         gajim.config.set('compact_view', active)
-        gajim.interface.save_config()
 
     def on_xhtml_checkbutton_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'ignore_incoming_xhtml')
@@ -744,7 +739,6 @@ class PreferencesWindow:
     def on_speller_checkbutton_toggled(self, widget):
         active = widget.get_active()
         gajim.config.set('use_speller', active)
-        gajim.interface.save_config()
         if active:
             lang = gajim.config.get('speller_language')
             if not lang:
@@ -776,7 +770,6 @@ class PreferencesWindow:
         # begin repainting themed widgets throughout
         gajim.interface.roster.repaint_themed_widgets()
         gajim.interface.roster.change_roster_style(None)
-        gajim.interface.save_config()
 
     def update_theme_list(self):
         theme_combobox = self.xml.get_object('theme_combobox')
@@ -803,7 +796,6 @@ class PreferencesWindow:
         icon_string = model[active][1].decode('utf-8')
         gajim.config.set('iconset', icon_string)
         gtkgui_helpers.reload_jabber_state_images()
-        gajim.interface.save_config()
 
     def on_transports_iconsets_checkbutton_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'use_transports_iconsets')
@@ -898,7 +890,6 @@ class PreferencesWindow:
         color_string = gtkgui_helpers.make_color_string(color)
         gajim.config.set(text, color_string)
         self.update_text_tags()
-        gajim.interface.save_config()
 
     def on_preference_widget_font_set(self, widget, text):
         if widget:
@@ -907,7 +898,6 @@ class PreferencesWindow:
             font = ''
         gajim.config.set(text, font)
         self.update_text_font()
-        gajim.interface.save_config()
 
     def update_text_font(self):
         """
@@ -988,7 +978,6 @@ class PreferencesWindow:
         self.draw_color_widgets()
 
         self.update_text_tags()
-        gajim.interface.save_config()
 
     def _set_color(self, state, widget_name, option):
         """
@@ -1000,7 +989,6 @@ class PreferencesWindow:
         else:
             color_string = ''
         gajim.config.set(option, color_string)
-        gajim.interface.save_config()
 
     def on_incoming_msg_checkbutton_toggled(self, widget):
         state = widget.get_active()
@@ -1022,7 +1010,6 @@ class PreferencesWindow:
         gajim.interface.sleeper = common.sleepy.Sleepy(
                                 gajim.config.get('autoawaytime') * 60,
                                 gajim.config.get('autoxatime') * 60)
-        gajim.interface.save_config()
 
     def on_auto_away_message_entry_changed(self, widget):
         gajim.config.set('autoaway_message', widget.get_text().decode('utf-8'))
@@ -1037,7 +1024,6 @@ class PreferencesWindow:
         gajim.interface.sleeper = common.sleepy.Sleepy(
                                 gajim.config.get('autoawaytime') * 60,
                                 gajim.config.get('autoxatime') * 60)
-        gajim.interface.save_config()
 
     def on_auto_xa_message_entry_changed(self, widget):
         gajim.config.set('autoxa_message', widget.get_text().decode('utf-8'))
@@ -1106,7 +1092,6 @@ class PreferencesWindow:
                         model[iter_][i].decode('utf-8'))
                     i += 1
             iter_ = model.iter_next(iter_)
-        gajim.interface.save_config()
 
     def on_msg_treemodel_row_changed(self, model, path, iter_):
         self.save_status_messages(model)
@@ -1152,19 +1137,15 @@ class PreferencesWindow:
         elif widget.get_active() == 1:
             gajim.config.set('autodetect_browser_mailer', False)
             self.xml.get_object('custom_apps_frame').show()
-        gajim.interface.save_config()
 
     def on_custom_browser_entry_changed(self, widget):
         gajim.config.set('custombrowser', widget.get_text().decode('utf-8'))
-        gajim.interface.save_config()
 
     def on_custom_mail_client_entry_changed(self, widget):
         gajim.config.set('custommailapp', widget.get_text().decode('utf-8'))
-        gajim.interface.save_config()
 
     def on_custom_file_manager_entry_changed(self, widget):
         gajim.config.set('custom_file_manager', widget.get_text().decode('utf-8'))
-        gajim.interface.save_config()
 
     def on_log_show_changes_checkbutton_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'log_contact_status_changes')
@@ -2472,7 +2453,6 @@ class AccountsWindow:
         if change_sensitivity_widgets:
             for w in change_sensitivity_widgets:
                 w.set_sensitive(widget.get_active())
-        gajim.interface.save_config()
 
     def on_merge_checkbutton_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'mergeaccounts')
@@ -2487,7 +2467,6 @@ class AccountsWindow:
         if account == gajim.ZEROCONF_ACC_NAME:
             gajim.connections[account].disable_account()
         del gajim.connections[account]
-        gajim.interface.save_config()
         del gajim.interface.instances[account]
         del gajim.interface.minimized_controls[account]
         del gajim.nicks[account]
@@ -2557,7 +2536,6 @@ class AccountsWindow:
             gajim.interface.roster.regroup = False
         gajim.interface.roster.setup_and_draw_roster()
         gajim.interface.roster.set_actions_menu_needs_rebuild()
-        gajim.interface.save_config()
 
     def on_enable_zeroconf_checkbutton2_toggled(self, widget):
         # don't do anything if there is an account with the local name but is a
@@ -3072,7 +3050,6 @@ class RemoveAccountWindow:
             del gajim.connections[self.account]
         gajim.logger.remove_roster(gajim.get_jid_from_account(self.account))
         gajim.config.del_per('accounts', self.account)
-        gajim.interface.save_config()
         del gajim.interface.instances[self.account]
         if self.account in gajim.nicks:
             del gajim.interface.minimized_controls[self.account]
@@ -4025,7 +4002,6 @@ class AccountCreationWizardWindow:
             gajim.interface.roster.regroup = False
         gajim.interface.roster.setup_and_draw_roster()
         gajim.interface.roster.set_actions_menu_needs_rebuild()
-        gajim.interface.save_config()
 
 class ManagePEPServicesWindow:
     def __init__(self, account):
@@ -4173,7 +4149,6 @@ class ManageSoundsWindow:
                                 bool(model[path][0]))
         gajim.config.set_per('soundevents', sound_event, 'path',
                                 model[iter_][2].decode('utf-8'))
-        gajim.interface.save_config()
 
     def sound_toggled_cb(self, cell, path):
         model = self.sound_tree.get_model()

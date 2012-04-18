@@ -828,7 +828,6 @@ _('This type of service does not contain any items to browse.'))
             self.address_comboboxentry.append_text(j)
         gajim.config.set('latest_disco_addresses',
                 ' '.join(self.latest_addresses))
-        gajim.interface.save_config()
         self.travel(jid, '')
 
     def on_services_treeview_row_activated(self, widget, path, col = 0):

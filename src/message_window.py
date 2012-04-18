@@ -1198,7 +1198,6 @@ class MessageWindowMgr(gobject.GObject):
     def reconfig(self):
         for w in self.windows():
             self.save_state(w)
-        gajim.interface.save_config()
         mode = gajim.config.get('one_message_window')
         if self.mode == common.config.opt_one_window_types.index(mode):
             # No change
