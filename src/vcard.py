@@ -198,7 +198,11 @@ class VcardWindow:
                 table = self.xml.get_object('personal_info_table')
                 table.attach(widget, 1, 4, 3, 4, yoptions = 0)
             else:
-                self.xml.get_object(entry_name).set_text(value)
+                widget = self.xml.get_object(entry_name)
+                val = widget.get_text()
+                if val:
+                    value = val + ' / ' + value
+                widget.set_text(value)
         except AttributeError:
             pass
 
