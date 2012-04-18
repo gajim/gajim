@@ -2983,7 +2983,6 @@ class SingleMessageWindow:
         width, height = self.window.get_size()
         gajim.config.set('single-msg-width', width)
         gajim.config.set('single-msg-height', height)
-        gajim.interface.save_config()
 
     def on_single_message_window_delete_event(self, window, ev):
         self.save_pos()

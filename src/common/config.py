@@ -36,7 +36,9 @@ import sys
 import re
 import copy
 import defs
+import gobject
 
+from common import gajim
 
 (
 OPT_TYPE,
@@ -605,6 +607,7 @@ class Config:
             return
 
         opt[OPT_VAL] = value
+        self._timeout_save()
 
     def get(self, optname = None):
         if not optname:
@@ -635,6 +638,7 @@ class Config:
             # we already have added group name before
             return 'you already have added %s before' % name
         opt[1][name] = copy.deepcopy(opt[0])
+        self._timeout_save()
 
     def del_per(self, typename, name, subname = None): # per_group_of_option
         if typename not in self.__options_per_key:
@@ -647,6 +651,7 @@ class Config:
         # if subname is specified, delete the item in the group.
         elif subname in opt[1][name]:
             del opt[1][name][subname]
+        self._timeout_save()
 
     def set_per(self, optname, key, subname, value): # per_group_of_option
         if optname not in self.__options_per_key:
@@ -668,6 +673,7 @@ class Config:
 #                       raise RuntimeError, '%s of %s cannot be None' % optname
             return
         subobj[OPT_VAL] = value
+        self._timeout_save()
 
     def get_per(self, optname, key = None, subname = None): # per_group_of_option
         if optname not in self.__options_per_key:
@@ -735,8 +741,18 @@ class Config:
 
         return (account not in no_log_for) and (jid not in no_log_for)
 
+    def _really_save(self):
+        gajim.interface.save_config()
+        return False
+
+    def _timeout_save(self):
+        if self.save_timeout_id:
+            return
+        self.save_timeout_id = gobject.timeout_add(1000, self._really_save)
+
     def __init__(self):
         #init default values
+        self.save_timeout_id = None
         for event in self.soundevents_default:
             default = self.soundevents_default[event]
             self.add_per('soundevents', event)

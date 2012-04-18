@@ -367,7 +367,6 @@ class StatusIcon:
 
     def on_sounds_mute_menuitem_activate(self, widget):
         gajim.config.set('sounds_on', not widget.get_active())
-        gajim.interface.save_config()
 
     def on_show_roster_menuitem_activate(self, widget):
         win = gajim.interface.roster.window

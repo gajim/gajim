@@ -291,12 +291,10 @@ class GajimThemesWindow:
         # use faster functions for this
         if self.current_option == 'banner':
             gajim.interface.roster.repaint_themed_widgets()
-            gajim.interface.save_config()
             return
         if self.no_update:
             return
         gajim.interface.roster.change_roster_style(self.current_option)
-        gajim.interface.save_config()
 
     def _set_font(self):
         """
@@ -318,7 +316,6 @@ class GajimThemesWindow:
         if self.no_update:
             return
         gajim.interface.roster.change_roster_style(self.current_option)
-        gajim.interface.save_config()
 
     def _toggle_font_widgets(self, font_props):
         """

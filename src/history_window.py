@@ -648,5 +648,3 @@ class HistoryWindow:
         gajim.config.set('history_window_y-position', y)
         gajim.config.set('history_window_width', width);
         gajim.config.set('history_window_height', height);
-
-        gajim.interface.save_config()
