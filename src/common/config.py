@@ -785,7 +785,8 @@ class Config:
             self.__options[1][opt] = self.__options[0][opt][OPT_VAL]
 
     def _really_save(self):
-        gajim.interface.save_config()
+        if gajim.interface:
+            gajim.interface.save_config()
         self.save_timeout_id = None
         return False
 
