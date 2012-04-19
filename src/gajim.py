@@ -413,6 +413,7 @@ if __name__ == '__main__':
         sys.exit(5)
     # ^C exits the application normally to delete pid file
     signal.signal(signal.SIGINT, sigint_cb)
+    signal.signal(signal.SIGTERM, sigint_cb)
 
     log.info("Encodings: d:%s, fs:%s, p:%s", sys.getdefaultencoding(), \
             sys.getfilesystemencoding(), locale.getpreferredencoding())
