@@ -1164,20 +1164,20 @@ class Interface:
     def handle_event_jingleft_cancel(self, obj):
         ft = self.instances['file_transfers']
         file_props = None
-        
+
         # get the file_props of our session
         for sid in obj.conn.files_props:
             fp = obj.conn.files_props[sid]
             if fp['session-sid'] == obj.sid:
                 file_props = fp
                 break
-                
+
         ft.set_status(file_props['type'], file_props['sid'], 'stop')
         file_props['error'] = -4 # is it the right error code?
 
         ft.show_stopped(obj.jid, file_props, 'Peer cancelled ' +
                             'the transfer')
-        
+
     def handle_event_jingle_incoming(self, obj):
         # ('JINGLE_INCOMING', account, peer jid, sid, tuple-of-contents==(type,
         # data...))
