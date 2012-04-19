@@ -742,7 +742,8 @@ class Config:
         return (account not in no_log_for) and (jid not in no_log_for)
 
     def _really_save(self):
-        gajim.interface.save_config()
+        if gajim.interface:
+            gajim.interface.save_config()
         self.save_timeout_id = None
         return False
 
