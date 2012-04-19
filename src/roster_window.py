@@ -1374,8 +1374,21 @@ class RosterWindow:
         self.tree.set_model(None)
         # disable sorting
         self.model.set_sort_column_id(-2, gtk.SORT_ASCENDING)
+        self.starting = True
 
     def _after_fill(self):
+        self.starting = False
+        for account in gajim.connections:
+
+            jids = gajim.contacts.get_jid_list(account)
+            for jid in jids:
+                self.draw_completely(jid, account)
+
+            # Draw all known groups
+            for group in gajim.groups[account]:
+                self.draw_group(group, account)
+            self.draw_account(account)
+
         self.model.set_sort_column_id(1, gtk.SORT_ASCENDING)
         self.tree.set_model(self.modelfilter)
         self.tree.thaw_child_notify()
