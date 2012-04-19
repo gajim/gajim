@@ -38,8 +38,6 @@ import copy
 import defs
 import gobject
 
-from common import gajim
-
 (
 OPT_TYPE,
 OPT_VAL,
@@ -742,6 +740,7 @@ class Config:
         return (account not in no_log_for) and (jid not in no_log_for)
 
     def _really_save(self):
+        from common import gajim
         if gajim.interface:
             gajim.interface.save_config()
         self.save_timeout_id = None
