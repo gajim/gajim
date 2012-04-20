@@ -364,13 +364,9 @@ class JingleVideo(JingleRTPContent):
         JingleRTPContent.setup_stream(self, self._on_src_pad_added)
 
         # the local parts
-        if gajim.config.get('video_input_device').startswith('ximagesrc'):
-            colorspace = 'rgb'
-        else:
-            colorspace = 'yuv'
         if gajim.config.get('video_framerate'):
-            framerate = 'videorate ! video/x-raw-%s,framerate=%s ! ' % \
-                (colorspace, gajim.config.get('video_framerate'))
+            framerate = 'videorate ! video/x-raw-yuv,framerate=%s ! ' % \
+                gajim.config.get('video_framerate')
         else:
             framerate = ''
         try:
@@ -378,8 +374,7 @@ class JingleVideo(JingleRTPContent):
         except:
             w = h = None
         if w and h:
-            video_size = 'video/x-raw-%s,width=%s,height=%s ! ' % (colorspace,
-                w, h)
+            video_size = 'video/x-raw-yuv,width=%s,height=%s ! ' % (w, h)
         else:
             video_size = ''
         self.src_bin = self.make_bin_from_config('video_input_device',
