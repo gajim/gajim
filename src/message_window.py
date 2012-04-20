@@ -1244,3 +1244,15 @@ class MessageWindowMgr(gobject.GObject):
                                         ctrl.type_id)
             ctrl.parent_win = mw
             mw.new_tab(ctrl)
+
+    def save_opened_controls(self):
+        chat_controls = {}
+        for acct in gajim.connections:
+            chat_controls[acct] = []
+        for ctrl in self.get_controls(type_=message_control.TYPE_CHAT):
+            acct = ctrl.account
+            if ctrl.contact.jid not in chat_controls[acct]:
+                chat_controls[acct].append(ctrl.contact.jid)
+        for acct in gajim.connections:
+            gajim.config.set_per('accounts', acct, 'opened_chat_controls',
+                ','.join(chat_controls[acct]))

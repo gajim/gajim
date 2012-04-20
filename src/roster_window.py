@@ -2381,6 +2381,8 @@ class RosterWindow:
         return True # do NOT destroy the window
 
     def prepare_quit(self):
+        if self.save_done:
+            return
         msgwin_width_adjust = 0
 
         # in case show_roster_on_start is False and roster is never shown
@@ -2403,6 +2405,7 @@ class RosterWindow:
                 msgwin_width_adjust = -1 * width
         gajim.config.set('last_roster_visible',
                 self.window.get_property('visible'))
+        gajim.interface.msg_win_mgr.save_opened_controls()
         gajim.interface.msg_win_mgr.shutdown(msgwin_width_adjust)
 
         gajim.config.set('collapsed_rows', '\t'.join(self.collapsed_rows))
@@ -2412,6 +2415,7 @@ class RosterWindow:
             self.close_all(account)
         if gajim.interface.systray_enabled:
             gajim.interface.hide_systray()
+        self.save_done = True
 
     def quit_gtkgui_interface(self):
         """
@@ -2573,6 +2577,14 @@ class RosterWindow:
             self.add_account_contacts(obj.conn.name)
             self.fire_up_unread_messages_events(obj.conn.name)
         else:
+            account = obj.conn.name
+            controls = gajim.config.get_per('accounts', account,
+                'opened_chat_controls')
+            if controls:
+                for jid in controls.split(','):
+                    contact = gajim.contacts.get_contact_with_highest_priority(
+                        account, jid)
+                    gajim.interface.on_open_chat_window(None, contact, account)
             gobject.idle_add(self.refilter_shown_roster_items)
 
     def _nec_anonymous_auth(self, obj):
@@ -6296,6 +6308,8 @@ class RosterWindow:
         self.filtering = False
         # Number of renderers plugins added
         self.nb_ext_renderers = 0
+        # When we quit, rememver if we already saved config once
+        self.save_done = False
         # [icon, name, type, jid, account, editable, mood_pixbuf,
         # activity_pixbuf, tune_pixbuf, location_pixbuf, avatar_pixbuf,
         # padlock_pixbuf]
