@@ -95,7 +95,7 @@ class VideoInputManager(DeviceManager):
         self.detect_element('v4l2src', _('V4L2: %s'))
         # Funny things, just to test...
         # self.devices['GOOM'] = 'audiotestsrc ! goom'
-        # self.devices['screen'] = 'ximagesrc'
+        self.detect_element('ximagesrc', _('Screen'))
 
 
 class VideoOutputManager(DeviceManager):
