@@ -684,6 +684,25 @@ class StreamConflictReceivedEvent(nec.NetworkIncomingEvent):
         if self.base_event.stanza.getTag('conflict'):
             self.conn = self.base_event.conn
             return True
+class StreamOtherHostReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'stream-other-host-received'
+    base_network_events = ['stream-received']
+
+    def generate(self):
+        other_host = obj.getTag('see-other-host')
+        if other_host and self.conn.last_connection_type in ('ssl', 'tls'):
+            host = other_host.getData()
+            if ':' in host:
+                host_l = host.split(':', 1)
+                h = host_l[0]
+                p = host_l[1]
+            else:
+                h = host
+                p = 5222
+            if h.startswith('[') and h.endswith(']'):
+                h = h[1:-1]
+            self.redirected = {'host': h, 'port': p}
+            return True
 
 class PresenceHelperEvent:
     def _generate_show(self):
