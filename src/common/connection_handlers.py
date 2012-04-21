@@ -1299,6 +1299,8 @@ ConnectionJingle, ConnectionIBBytestream):
             ged.POSTGUI, self._nec_unsubscribed_presence_received_end)
         gajim.ged.register_event_handler('agent-removed', ged.CORE,
             self._nec_agent_removed)
+        gajim.ged.register_event_handler('stream-other-host-received', ged.CORE,
+            self._nec_stream_other_host_received)
 
     def cleanup(self):
         ConnectionHandlersBase.cleanup(self)
@@ -1341,6 +1343,8 @@ ConnectionJingle, ConnectionIBBytestream):
             ged.POSTGUI, self._nec_unsubscribed_presence_received_end)
         gajim.ged.remove_event_handler('agent-removed', ged.CORE,
             self._nec_agent_removed)
+        gajim.ged.remove_event_handler('stream-other-host-received', ged.CORE,
+            self._nec_stream_other_host_received)
 
     def build_http_auth_answer(self, iq_obj, answer):
         if not self.connection or self.connected < 2:
@@ -2010,25 +2014,17 @@ ConnectionJingle, ConnectionIBBytestream):
         jid_from = helpers.get_full_jid_from_iq(iq_obj)
         jingle_xtls.handle_new_cert(con, iq_obj, jid_from)
 
+    def _nec_stream_other_host_received(self, obj):
+        if obj.conn.name != self.name:
+            return
+        self.redirected = obj.redirected
+        self.disconnect(on_purpose=True)
+        self.connect()
+
     def _StreamCB(self, con, obj):
-        if obj.getTag('conflict'):
-            # disconnected because of a resource conflict
-            self.dispatch('RESOURCE_CONFLICT', ())
-        other_host = obj.getTag('see-other-host')
-        if other_host and self.last_connection_type in ('ssl', 'tls'):
-            host = other_host.getData()
-            if ':' in host:
-                host_l = host.split(':', 1)
-                h = host_l[0]
-                p = host_l[1]
-            else:
-                h = host
-                p = 5222
-            if h.startswith('[') and h.endswith(']'):
-                h = h[1:-1]
-            self.redirected = {'host': h, 'port': p}
-            self.disconnect(on_purpose=True)
-            self.connect()
+        log.debug('StreamCB')
+        gajim.nec.push_incoming_event(StreamReceivedEvent(None,
+            conn=self, stanza=iq_obj))
 
     def _register_handlers(self, con, con_type):
         # try to find another way to register handlers in each class
@@ -2116,7 +2112,9 @@ ConnectionJingle, ConnectionIBBytestream):
         con.RegisterHandler('iq', self._ResultCB, 'result')
         con.RegisterHandler('presence', self._StanzaArrivedCB)
         con.RegisterHandler('message', self._StanzaArrivedCB)
-        con.RegisterHandler('unknown', self._StreamCB, 'urn:ietf:params:xml:ns:xmpp-streams', xmlns='http://etherx.jabber.org/streams')
-        con.RegisterHandler('iq', self._PubkeyGetCB, 'get', common.xmpp.NS_PUBKEY_PUBKEY)
-        con.RegisterHandler('iq', self._PubkeyResultCB, 'result', common.xmpp.NS_PUBKEY_PUBKEY)
-
+        con.RegisterHandler('unknown', self._StreamCB,
+            common.xmpp.NS_XMPP_STREAMS, xmlns=common.xmpp.NS_STREAMS)
+        con.RegisterHandler('iq', self._PubkeyGetCB, 'get',
+            common.xmpp.NS_PUBKEY_PUBKEY)
+        con.RegisterHandler('iq', self._PubkeyResultCB, 'result',
+            common.xmpp.NS_PUBKEY_PUBKEY)

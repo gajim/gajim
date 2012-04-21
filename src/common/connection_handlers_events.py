@@ -675,6 +675,26 @@ class StreamConflictReceivedEvent(nec.NetworkIncomingEvent):
             self.conn = self.base_event.conn
             return True
 
+class StreamOtherHostReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'stream-other-host-received'
+    base_network_events = ['stream-received']
+
+    def generate(self):
+        other_host = obj.getTag('see-other-host')
+        if other_host and self.conn.last_connection_type in ('ssl', 'tls'):
+            host = other_host.getData()
+            if ':' in host:
+                host_l = host.split(':', 1)
+                h = host_l[0]
+                p = host_l[1]
+            else:
+                h = host
+                p = 5222
+            if h.startswith('[') and h.endswith(']'):
+                h = h[1:-1]
+            self.redirected = {'host': h, 'port': p}
+            return True
+
 class PresenceHelperEvent:
     def _generate_show(self):
         self.show = self.stanza.getShow()
@@ -1393,7 +1413,7 @@ class JingleDisconnectedReceivedEvent(nec.NetworkIncomingEvent):
         self.jid, self.resource = gajim.get_room_and_nick_from_fjid(self.fjid)
         self.sid = self.jingle_session.sid
         return True
-    
+
 class JingleTransferCancelledEvent(nec.NetworkIncomingEvent):
     name = 'jingleFT-cancelled-received'
     base_network_events = []
