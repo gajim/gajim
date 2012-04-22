@@ -36,7 +36,7 @@ def approve_pending_content(id_):
     content.session.approve_content('file', name=content.name)
 
 try:
-    import OpenSSL
+    import OpenSSL.SSL
     PYOPENSSL_PRESENT = True
 except ImportError:
     log.info("PyOpenSSL not available")
