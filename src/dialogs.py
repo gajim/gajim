@@ -2748,6 +2748,7 @@ class PopupNotificationWindow:
         self.account = account
         self.jid = jid
         self.msg_type = msg_type
+        self.index = len(gajim.interface.roster.popup_notification_windows)
 
         xml = gtkgui_helpers.get_gtk_builder('popup_notification_window.ui')
         self.window = xml.get_object('popup_notification_window')
@@ -2832,12 +2833,15 @@ class PopupNotificationWindow:
         self.window.destroy()
 
         if len(gajim.interface.roster.popup_notification_windows) > 0:
-            # we want to remove the first window added in the list
-            gajim.interface.roster.popup_notification_windows.pop(0)
+            # we want to remove the destroyed window from the list
+            gajim.interface.roster.popup_notification_windows.pop(self.index)
 
         # move the rest of popup windows
         gajim.interface.roster.popups_notification_height = 0
+        current_index = 0
         for window_instance in gajim.interface.roster.popup_notification_windows:
+            window_instance.index = current_index
+            current_index += 1
             window_width, window_height = window_instance.window.get_size()
             gajim.interface.roster.popups_notification_height += window_height
             window_instance.window.move(gtk.gdk.screen_width() - window_width,
