@@ -2832,7 +2832,7 @@ class PopupNotificationWindow:
         gajim.interface.roster.popups_notification_height -= self.window_height
         self.window.destroy()
 
-        if len(gajim.interface.roster.popup_notification_windows) > 0:
+        if len(gajim.interface.roster.popup_notification_windows) > self.index:
             # we want to remove the destroyed window from the list
             gajim.interface.roster.popup_notification_windows.pop(self.index)
 
