@@ -25,8 +25,6 @@ Network Events Controller.
 :license: GPL
 '''
 
-from pprint import pformat
-
 #from plugins.helpers import log
 from common import gajim
 
@@ -157,12 +155,6 @@ class NetworkEvent(object):
     def _set_kwargs_as_attributes(self, **kwargs):
         for k, v in kwargs.iteritems():
             setattr(self, k, v)
-
-    def __str__(self):
-        return '<NetworkEvent object> Attributes: %s'%(pformat(self.__dict__))
-
-    def __repr__(self):
-        return '<NetworkEvent object> Attributes: %s'%(pformat(self.__dict__))
 
 
 class NetworkIncomingEvent(NetworkEvent):
