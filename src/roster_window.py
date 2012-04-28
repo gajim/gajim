@@ -1375,6 +1375,7 @@ class RosterWindow:
         # disable sorting
         self.model.set_sort_column_id(-2, gtk.SORT_ASCENDING)
         self.starting = True
+        self.starting_filtering = True
 
     def _after_fill(self):
         self.starting = False
@@ -1392,6 +1393,8 @@ class RosterWindow:
         self.model.set_sort_column_id(1, gtk.SORT_ASCENDING)
         self.tree.set_model(self.modelfilter)
         self.tree.thaw_child_notify()
+        self.starting_filtering = False
+        self.refilter_shown_roster_items()
 
     def setup_and_draw_roster(self):
         """
@@ -1548,6 +1551,8 @@ class RosterWindow:
         """
         Determine whether iter should be visible in the treeview
         """
+        if self.starting_filtering:
+            return False
         type_ = model[titer][C_TYPE]
         if not type_:
             return False
@@ -6288,6 +6293,8 @@ class RosterWindow:
 
     def __init__(self):
         self.filtering = False
+        self.starting = False
+        self.starting_filtering = False
         # Number of renderers plugins added
         self.nb_ext_renderers = 0
         # [icon, name, type, jid, account, editable, mood_pixbuf,
