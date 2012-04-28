@@ -1009,7 +1009,7 @@ class RosterWindow:
 ### Methods for adding and removing roster window items
 ################################################################################
 
-    def draw_account(self, account):
+    def _really_draw_account(self, account):
         child_iter = self._get_account_iter(account, self.model)
         if not child_iter:
             assert False, 'Account iter of %s could not be found.' % account
@@ -1073,9 +1073,21 @@ class RosterWindow:
                 asPixbufIcon()
         else:
             self.model[child_iter][C_LOCATION_PIXBUF] = None
+
+    def _really_draw_accounts(self):
+        for acct in self.accounts_to_draw:
+            self._really_draw_account(acct)
+        self.accounts_to_draw = []
         return False
 
-    def draw_group(self, group, account):
+    def draw_account(self, account):
+        if account in self.accounts_to_draw:
+            return
+        self.accounts_to_draw.append(account)
+        if len(self.accounts_to_draw) == 1:
+            gobject.timeout_add(200, self._really_draw_accounts)
+
+    def _really_draw_group(self, group, account):
         child_iter = self._get_group_iter(group, account, model=self.model)
         if not child_iter:
             # Eg. We redraw groups after we removed a entitiy
@@ -1094,7 +1106,22 @@ class RosterWindow:
             text += ' (%s/%s)' % (repr(nbr_on), repr(nbr_total))
 
         self.model[child_iter][C_NAME] = text
+
+    def _really_draw_groups(self):
+        for ag in self.groups_to_draw.values():
+            acct = ag['account']
+            grp = ag['group']
+            self._really_draw_group(grp, acct)
+        self.groups_to_draw = {}
         return False
+
+    def draw_group(self, group, account):
+        ag = account + group
+        if ag in self.groups_to_draw:
+            return
+        self.groups_to_draw[ag] = {'group': group, 'account': account}
+        if len(self.groups_to_draw) == 1:
+            gobject.timeout_add(200, self._really_draw_groups)
 
     def draw_parent_contact(self, jid, account):
         child_iters = self._get_contact_iter(jid, account, model=self.model)
@@ -6382,6 +6409,11 @@ class RosterWindow:
         # it means we are waiting for this number of accounts to disconnect
         # before quitting
         self.quit_on_next_offline = -1
+        
+        # groups to draw next time we draw groups.
+        self.groups_to_draw = {}
+        # accounts to draw next time we draw accounts.
+        self.accounts_to_draw = []
 
         # uf_show, img, show, sensitive
         liststore = gtk.ListStore(str, gtk.Image, str, bool)
