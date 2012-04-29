@@ -91,10 +91,6 @@ class FeaturesWindow:
                 _('Ability to measure idle time, in order to set auto status.'),
                 _('Requires libxss library.'),
                 _('Requires python2.5.')),
-            _('LaTeX'): (self.latex_available,
-                _('Transform LaTeX expressions between $$ $$.'),
-                _('Requires texlive-latex-base and (dvipng or ImageMagick). You have to set \'use_latex\' to True in the Advanced Configuration Editor.'),
-                _('Requires texlive-latex-base and (dvipng or ImageMagick) (All is in MikTeX). You have to set \'use_latex\' to True in the Advanced Configuration Editor.')),
             _('End to End message encryption'): (self.pycrypto_available,
                 _('Encrypting chat messages.'),
                 _('Requires python-crypto.'),
@@ -243,10 +239,6 @@ class FeaturesWindow:
     def idle_available(self):
         from common import sleepy
         return sleepy.SUPPORTED
-
-    def latex_available(self):
-        from common import latex
-        return latex.check_for_latex_support()
 
     def pycrypto_available(self):
         return gajim.HAVE_PYCRYPTO

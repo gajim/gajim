@@ -167,10 +167,6 @@ else:
     if subprocess.call(gpg_cmd, shell=True):
         HAVE_GPG = False
 
-# Depends on use_latex option. Will be correctly set after we config options are
-# read.
-HAVE_LATEX = False
-
 HAVE_FARSTREAM = True
 try:
     farstream = __import__('farstream')

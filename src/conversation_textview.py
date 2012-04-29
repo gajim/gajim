@@ -1148,31 +1148,6 @@ class ConversationTextview(gobject.GObject):
             else:
                 if not show_ascii_formatting_chars:
                     special_text = special_text[1:-1] # remove _ _
-        elif gajim.HAVE_LATEX and special_text.startswith('$$') and \
-        special_text.endswith('$$') and graphics:
-            try:
-                imagepath = latex.latex_to_image(special_text[2:-2])
-            except LatexError, e:
-                # print the error after the line has been written
-                gobject.idle_add(self.print_conversation_line, str(e), '', 'info',
-                        '', None)
-                imagepath = None
-            end_iter = buffer_.get_end_iter()
-            if imagepath is not None:
-                anchor = buffer_.create_child_anchor(end_iter)
-                img = TextViewImage(anchor, special_text)
-                img.set_from_file(imagepath)
-                img.show()
-                # add
-                self.tv.add_child_at_anchor(img, anchor)
-                # delete old file
-                try:
-                    os.remove(imagepath)
-                except Exception:
-                    pass
-            else:
-                buffer_.insert(end_iter, special_text)
-            use_other_tags = False
         else:
             # It's nothing special
             if use_other_tags:

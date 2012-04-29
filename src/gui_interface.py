@@ -1838,16 +1838,10 @@ class Interface:
             r'(?<!\S)' r'/[^\s/]' r'([^/]*[^\s/])?' r'/(?!\S)|'\
             r'(?<!\w)' r'_[^\s_]' r'([^_]*[^\s_])?' r'_(?!\w)'
 
-        latex = r'|\$\$[^$\\]*?([\]\[0-9A-Za-z()|+*/-]|'\
-            r'[\\][\]\[0-9A-Za-z()|{}$])(.*?[^\\])?\$\$'
-
         basic_pattern = links + '|' + mail + '|' + legacy_prefixes
 
         link_pattern = basic_pattern
         self.link_pattern_re = re.compile(link_pattern, re.I | re.U)
-
-        if gajim.config.get('use_latex'):
-            basic_pattern += latex
 
         if gajim.config.get('ascii_formatting'):
             basic_pattern += formatting
@@ -2704,10 +2698,6 @@ class Interface:
         self.emoticons_images = {}
 
         cfg_was_read = parser.read()
-
-        from common import latex
-        gajim.HAVE_LATEX = gajim.config.get('use_latex') and \
-                latex.check_for_latex_support()
 
         gajim.logger.reset_shown_unread_messages()
         # override logging settings from config (don't take care of '-q' option)
