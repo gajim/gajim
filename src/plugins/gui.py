@@ -60,7 +60,7 @@ class PluginsWindow(object):
         self.plugin_name_label.set_attributes(attr_list)
 
         self.installed_plugins_model = gtk.ListStore(gobject.TYPE_PYOBJECT,
-            gobject.TYPE_STRING, gobject.TYPE_BOOLEAN)
+            gobject.TYPE_STRING, gobject.TYPE_BOOLEAN, gobject.TYPE_BOOLEAN)
         self.installed_plugins_treeview.set_model(self.installed_plugins_model)
         self.installed_plugins_treeview.set_rules_hint(True)
 
@@ -69,9 +69,8 @@ class PluginsWindow(object):
         self.installed_plugins_treeview.append_column(col)
 
         renderer = gtk.CellRendererToggle()
-        renderer.set_property('activatable', True)
         renderer.connect('toggled', self.installed_plugins_toggled_cb)
-        col = gtk.TreeViewColumn(_('Active'), renderer, active=2)
+        col = gtk.TreeViewColumn(_('Active'), renderer, active=2, activatable=3)
         self.installed_plugins_treeview.append_column(col)
 
         # connect signal for selection change
@@ -146,7 +145,7 @@ class PluginsWindow(object):
 
         for plugin in pm.plugins:
             self.installed_plugins_model.append([plugin, plugin.name,
-                plugin.active])
+                plugin.active, plugin.activatable])
 
     @log_calls('PluginsWindow')
     def installed_plugins_toggled_cb(self, cell, path):
@@ -230,7 +229,8 @@ class PluginsWindow(object):
                         model.remove(model.get_iter((row, 0)))
                         break
 
-                iter_ = model.append([plugin, plugin.name, False])
+                iter_ = model.append([plugin, plugin.name, False,
+                    plugin.activatable])
                 sel = self.installed_plugins_treeview.get_selection()
                 sel.select_iter(iter_)
 
@@ -252,7 +252,8 @@ class PluginsWindow(object):
                 show_warn_dialog()
                 return
             model = self.installed_plugins_model
-            iter_ = model.append([plugin, plugin.name, False])
+            iter_ = model.append([plugin, plugin.name, False,
+                plugin.activatable])
             sel = self.installed_plugins_treeview.get_selection()
             sel.select_iter(iter_)
 
