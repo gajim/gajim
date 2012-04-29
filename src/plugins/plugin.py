@@ -154,6 +154,7 @@ class GajimPlugin(object):
 
         :type: `plugins.plugin.GajimPluginConfig`
         '''
+        self.activatable = True
         self.load_config()
         self.config_dialog = GajimPluginConfigDialog(self)
         self.init()
