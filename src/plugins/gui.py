@@ -114,10 +114,13 @@ class PluginsWindow(object):
 
         desc_textbuffer = self.plugin_description_textview.get_buffer()
         from plugins.plugins_i18n import _
-        desc_textbuffer.set_text(_(plugin.description))
+        txt = plugin.description
+        if plugin.available_text:
+            txt += '\n\n' + _('Warning: %s') % plugin.available_text
+        desc_textbuffer.set_text(txt)
         self.plugin_description_textview.set_property('sensitive', True)
         self.uninstall_plugin_button.set_property('sensitive',
-                                    gajim.PLUGINS_DIRS[1] in plugin.__path__)
+            gajim.PLUGINS_DIRS[1] in plugin.__path__)
         if plugin.config_dialog is None:
             self.configure_plugin_button.set_property('sensitive', False)
         else:
@@ -145,7 +148,7 @@ class PluginsWindow(object):
 
         for plugin in pm.plugins:
             self.installed_plugins_model.append([plugin, plugin.name,
-                plugin.active, plugin.activatable])
+                plugin.active and plugin.activatable, plugin.activatable])
 
     @log_calls('PluginsWindow')
     def installed_plugins_toggled_cb(self, cell, path):
