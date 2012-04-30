@@ -183,7 +183,7 @@ def get_storage():
         if gajim.config.get('use_gnomekeyring'):
             global gnomekeyring
             try:
-                import gnomekeyring
+                __import__('gnomekeyring')
             except ImportError:
                 pass
             else:
