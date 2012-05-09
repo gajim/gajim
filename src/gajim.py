@@ -454,6 +454,9 @@ if __name__ == '__main__':
             # This makes Gajim unusable under windows, and threads are used only
             # for GPG, so not under windows
             gtk.gdk.threads_init()
+            gtk.gdk.threads_enter()
         gtk.main()
+        if os.name != 'nt':
+            gtk.gdk.threads_leave()
     except KeyboardInterrupt:
         print >> sys.stderr, 'KeyboardInterrupt'
