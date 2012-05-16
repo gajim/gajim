@@ -3390,9 +3390,6 @@ class RosterWindow:
                 mw.window.window.focus(gtk.get_current_event_time())
             return
         ctrl = gajim.interface.minimized_controls[account][jid]
-        # redrawing partipiant list
-        sw = ctrl.xml.get_object('list_scrolledwindow')
-        sw.queue_draw()
         mw = gajim.interface.msg_win_mgr.get_window(jid, account)
         if not mw:
             mw = gajim.interface.msg_win_mgr.create_window(ctrl.contact,
