@@ -72,8 +72,8 @@ if HAVE_GPG:
 
             if result.fingerprint:
                 return self._stripHeaderFooter(str(result))
-#            if 'KEYEXPIRED' in resp:
-#                return 'KEYEXPIRED'
+            if result.status == 'key expired':
+                return 'KEYEXPIRED'
             return 'BAD_PASSPHRASE'
 
         def verify(self, str_, sign):
