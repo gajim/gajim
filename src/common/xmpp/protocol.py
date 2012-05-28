@@ -162,7 +162,7 @@ NS_PUBKEY_PUBKEY  = 'urn:xmpp:pubkey:2'                                         
 NS_PUBKEY_REVOKE  = 'urn:xmpp:revoke:2'
 NS_PUBKEY_ATTEST  = 'urn:xmpp:attest:2'
 NS_STREAM_MGMT    = 'urn:xmpp:sm:2'                                   # XEP-198
-NS_HASHES         = 'urn:xmpp:hashes:0'                               # XEP-300
+NS_HASHES         = 'urn:xmpp:hashes:1'                               # XEP-300
 NS_HASHES_MD5     = 'urn:xmpp:hash-function-textual-names:md5'
 NS_HASHES_SHA1    = 'urn:xmpp:hash-function-textual-names:sha-1'
 NS_HASHES_SHA256  = 'urn:xmpp:hash-function-textual-names:sha-256'
@@ -1057,9 +1057,9 @@ class Hashes(Node):
     supported = ('md5', 'sha-1', 'sha-256', 'sha-512')
     
     def __init__(self, nsp=NS_HASHES):
-        Node.__init__(self, None, {}, [], None, None,False, None)
+        Node.__init__(self, None, {}, [], None, None, False, None)
         self.setNamespace(nsp)
-        self.setName('hashes')
+        self.setName('hash')
     
     def calculateHash(self, algo, file_string):
         """
@@ -1101,13 +1101,8 @@ class Hashes(Node):
         return hash_        
             
     def addHash(self, hash_, algo):
-        """
-        More than one hash can be added. Although it is permitted, it should
-        not be done for big files because it could slow down Gajim.
-        """
-        attrs = {}
-        attrs['algo'] = algo 
-        self.addChild('hash', attrs, [hash_])
+        self.setAttr('algo', algo)
+        self.setData(hash_)
      
 class Acks(Node):
     """
