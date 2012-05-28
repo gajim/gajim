@@ -132,6 +132,8 @@ class JingleFileTransfer(JingleContent):
             return
         h = xmpp.Hashes()
         hash_ = h.calculateHash(self.session.hash_algo, file_)
+        # DEBUG
+        #hash_ = '1294809248109223'
         if not hash_:
             # Hash alogrithm not supported
             return
@@ -293,32 +295,6 @@ class JingleFileTransfer(JingleContent):
             self.__state_changed(STATE_CAND_SENT_AND_RECEIVED, args)
         else:
             self.__state_changed(STATE_CAND_SENT, args)
-
-    def _fill_content(self, content):
-        description_node = xmpp.simplexml.Node(
-            tag=xmpp.NS_JINGLE_FILE_TRANSFER + ' description')
-
-        sioffer = xmpp.simplexml.Node(tag='offer')
-        file_tag = sioffer.setTag('file', namespace=xmpp.NS_FILE)
-        file_tag.setAttr('name', self.file_props['name'])
-        file_tag.setAttr('size', self.file_props['size'])
-        desc = file_tag.setTag('desc')
-        if 'desc' in self.file_props:
-            desc.setData(self.file_props['desc'])
-
-        description_node.addChild(node=sioffer)
-
-        if self.use_security:
-            security = xmpp.simplexml.Node(
-                tag=xmpp.NS_JINGLE_XTLS + ' security')
-            # TODO: add fingerprint element
-            for m in ('x509', ): # supported authentication methods
-                method = xmpp.simplexml.Node(tag='method')
-                method.setAttr('name', m)
-                security.addChild(node=method)
-            content.addChild(node=security)
-
-        content.addChild(node=description_node)
 
     def _store_socks5_sid(self, sid, hash_id):
         # callback from socsk5queue.start_listener

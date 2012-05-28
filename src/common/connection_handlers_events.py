@@ -1973,12 +1973,13 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                     typ='stream')
                 raise xmpp.NodeProcessed
             file_tag = si.getTag('file')
-        for attribute in file_tag.getAttrs():
-            if attribute in ('name', 'size', 'hash', 'date'):
-                val = file_tag.getAttr(attribute)
+        for child in file_tag.getChildren():
+            name = child.getName()
+            if name in ('name', 'size', 'hash', 'date'):
+                val = child.getData()
                 if val is None:
                     continue
-                self.file_props[attribute] = val
+                self.file_props[name] = val
         file_desc_tag = file_tag.getTag('desc')
         if file_desc_tag is not None:
             self.file_props['desc'] = file_desc_tag.getData()

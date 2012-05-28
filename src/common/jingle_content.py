@@ -162,6 +162,46 @@ class JingleContent(object):
         self.sent = True
         content.addChild(node=self.transport.make_transport())
 
+    def _fill_content(self, content, action):
+        description_node = xmpp.simplexml.Node(
+            tag=xmpp.NS_JINGLE_FILE_TRANSFER + ' description')
+
+        if self.session.werequest:
+            simode = xmpp.simplexml.Node(tag='request')
+        else:
+            simode = xmpp.simplexml.Node(tag='offer')
+
+        file_tag = simode.setTag('file', namespace=xmpp.NS_FILE)
+        if 'name' in self.file_props:
+            node = xmpp.simplexml.Node(tag='name')
+            node.addData(self.file_props['name'])
+            file_tag.addChild(node=node)
+        if 'size' in self.file_props:
+            node = xmpp.simplexml.Node(tag='size')
+            node.addData(self.file_props['size'])
+            file_tag.addChild(node=node)
+        if 'hash' in self.file_props:
+            # TODO: use xep-300 for this bit
+            pass
+        desc = file_tag.setTag('desc')
+        if 'desc' in self.file_props:
+            desc.setData(self.file_props['desc'])
+
+        description_node.addChild(node=simode)
+
+        if self.use_security:
+            security = xmpp.simplexml.Node(
+                tag=xmpp.NS_JINGLE_XTLS + ' security')
+            # TODO: add fingerprint element
+            for m in ('x509', ): # supported authentication methods
+                method = xmpp.simplexml.Node(tag='method')
+                method.setAttr('name', m)
+                security.addChild(node=method)
+            content.addChild(node=security)
+
+        content.addChild(node=description_node)
+
+
     def destroy(self):
         self.callbacks = None
         del self.session.contents[(self.creator, self.name)]

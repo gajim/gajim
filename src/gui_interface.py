@@ -989,7 +989,7 @@ class Interface:
                 ft.show_stopped(jid, file_props,
                     error_msg=_('Error opening file'))
             elif file_props['error'] == -10:
-                ft.show_hash_error(jid, file_props)
+                ft.show_hash_error(jid, file_props, account)
             return
 
         msg_type = ''

@@ -101,7 +101,7 @@ class ConnectionJingle(object):
         # do we need to create a new jingle object
         if sid not in self._sessions:
             #TODO: tie-breaking and other things...
-            newjingle = JingleSession(con=self, weinitiate=False, jid=jid,
+            newjingle = JingleSession(con=self, werequest=False, weinitiate=False, jid=jid,
                 iq_id=id_, sid=sid)
             self._sessions[sid] = newjingle
 
@@ -141,14 +141,14 @@ class ConnectionJingle(object):
             jingle.start_session()
         return jingle.sid
 
-    def start_file_transfer(self, jid, file_props):
+    def start_file_transfer(self, jid, file_props, request=False):
         logger.info("start file transfer with file: %s" % file_props)
         contact = gajim.contacts.get_contact_with_highest_priority(self.name,
             gajim.get_jid_without_resource(jid))
         if contact is None:
             return
         use_security = contact.supports(xmpp.NS_JINGLE_XTLS)
-        jingle = JingleSession(self, weinitiate=True, jid=jid)
+        jingle = JingleSession(self, request, weinitiate=True, jid=jid)
         # this is a file transfer
         jingle.session_type_FT = True
         self._sessions[jingle.sid] = jingle

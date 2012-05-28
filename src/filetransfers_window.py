@@ -37,7 +37,6 @@ from common.protocol.bytestream import (is_transfer_active, is_transfer_paused,
         is_transfer_stopped)
 from common.xmpp.protocol import NS_JINGLE_FILE_TRANSFER
 import logging
-
 log = logging.getLogger('gajim.filetransfer_window')
 
 C_IMAGE = 0
@@ -249,10 +248,14 @@ class FileTransfersWindow:
         dialogs.ErrorDialog(_('File transfer stopped'), sectext)
         self.tree.get_selection().unselect_all()
 
-    def show_hash_error(self, jid, file_props):
+    def show_hash_error(self, jid, file_props, account):
         def on_yes(dummy):
-            # TODO: Request the file to the sender
-            pass
+            # Request the file to the sender
+            sid = gajim.connections[account].start_file_transfer(jid, 
+                                                            file_props, 
+                                                                True)
+            file_props['sid'] = sid
+            
 
         if file_props['type'] == 'r':
             file_name = os.path.basename(file_props['file-name'])

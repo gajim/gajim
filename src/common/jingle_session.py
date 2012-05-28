@@ -63,7 +63,7 @@ class JingleSession(object):
     negotiated between an initiator and a responder.
     """
 
-    def __init__(self, con, weinitiate, jid, iq_id=None, sid=None):
+    def __init__(self, con, werequest, weinitiate, jid, iq_id=None, sid=None):
         """
         con -- connection object,
         weinitiate -- boolean, are we the initiator?
@@ -83,6 +83,8 @@ class JingleSession(object):
         self.responder = weinitiate and self.peerjid or self.ourjid
         # are we an initiator?
         self.weinitiate = weinitiate
+        # Are we requesting or offering a file?
+        self.werequest = werequest
         # what state is session in? (one from JingleStates)
         self.state = JingleStates.ended
         if not sid:
