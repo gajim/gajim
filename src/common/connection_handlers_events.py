@@ -1980,6 +1980,10 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                 if val is None:
                     continue
                 self.file_props[name] = val
+                # Delete this, it shouldn't be necesary after file_props gets
+                # refactored.
+                if name == 'hash':
+                    self.file_props['algo'] = child.getAttr('algo')
         file_desc_tag = file_tag.getTag('desc')
         if file_desc_tag is not None:
             self.file_props['desc'] = file_desc_tag.getData()

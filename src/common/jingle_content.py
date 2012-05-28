@@ -162,7 +162,7 @@ class JingleContent(object):
         self.sent = True
         content.addChild(node=self.transport.make_transport())
 
-    def _fill_content(self, content, action):
+    def _fill_content(self, content):
         description_node = xmpp.simplexml.Node(
             tag=xmpp.NS_JINGLE_FILE_TRANSFER + ' description')
 
@@ -183,6 +183,11 @@ class JingleContent(object):
         if 'hash' in self.file_props:
             # TODO: use xep-300 for this bit
             pass
+        # if the file is less than 10 mb, then it is small
+        # lets calculate it right away
+        if int(self.file_props['size']) < 10000000:
+            h  = self._calcHash()
+            file_tag.addChild(node=h)
         desc = file_tag.setTag('desc')
         if 'desc' in self.file_props:
             desc.setData(self.file_props['desc'])

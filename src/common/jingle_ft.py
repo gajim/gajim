@@ -117,12 +117,27 @@ class JingleFileTransfer(JingleContent):
         gajim.nec.push_incoming_event(FileRequestReceivedEvent(None,
             conn=self.session.connection, stanza=stanza, jingle_content=content,
             FT_content=self))
+        # Delete this after file_props refactoring this shouldn't be necesary
+        self.session.file_hash = self.file_props['hash']
+        self.session.hash_algo = self.file_props['algo']
     def __on_session_initiate_sent(self, stanza, content, error, action):
         # Calculate file_hash in a new thread
-        self.hashThread = threading.Thread(target=self.__calcHash)
-        self.hashThread.start()
+        # if we haven't sent the hash already.
+        if 'hash' not in self.file_props:
+            self.hashThread = threading.Thread(target=self.__send_hash)
+            self.hashThread.start()
         
-    def __calcHash(self):
+    def __send_hash(self):
+        # Send hash in a session info
+        checksum = xmpp.Node(tag='checksum',  
+                             payload=[xmpp.Node(tag='file',
+                                 payload=[self._calcHash()])])
+        checksum.setNamespace(xmpp.NS_JINGLE_FILE_TRANSFER)
+        self.session.__session_info(checksum )
+    
+
+    def _calcHash(self):
+        # Caculates the hash and returns a xep-300 hash stanza
         if self.session.hash_algo == None:
             return
         try:
@@ -139,13 +154,8 @@ class JingleFileTransfer(JingleContent):
             return
         self.file_props['hash'] = hash_
         h.addHash(hash_, self.session.hash_algo)
-        checksum = xmpp.Node(tag='checksum',  
-                             payload=[xmpp.Node(tag='file', payload=[h])])
-        checksum.setNamespace(xmpp.NS_JINGLE_FILE_TRANSFER)
-        # Send hash in a session info
-        self.session.__session_info(checksum )
-    
-        
+        return h
+                
     def __on_session_accept(self, stanza, content, error, action):
         log.info("__on_session_accept")
         con = self.session.connection

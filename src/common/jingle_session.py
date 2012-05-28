@@ -433,17 +433,16 @@ class JingleSession(object):
         payload = jingle.getPayload()
         for p in payload:
             if p.getName() == 'checksum':
-                hashes = p.getTag('file').getTag(name='hashes', 
+                hash_ = p.getTag('file').getTag(name='hash', 
                                         namespace=xmpp.NS_HASHES)
-                for hash in hashes.getChildren():
-                    algo = hash.getAttr('algo')
-                    if algo in xmpp.Hashes.supported:
-                        self.hash_algo = algo
-                        data = hash.getData()
-                        # This only works because there is only one session
-                        # per file in jingleFT
-                        self.file_hash = data
-                        raise xmpp.NodeProcessed
+                algo = hash_.getAttr('algo')
+                if algo in xmpp.Hashes.supported:
+                    self.hash_algo = algo
+                    data = hash_.getData()
+                    # This only works because there is only one session
+                    # per file in jingleFT
+                    self.file_hash = data
+                    raise xmpp.NodeProcessed
         self.__send_error(stanza, 'feature-not-implemented', 'unsupported-info', type_='modify')
         raise xmpp.NodeProcessed
         
