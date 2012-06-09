@@ -22,7 +22,6 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-
 import socket
 import struct
 import hashlib
@@ -98,13 +97,6 @@ class SocksQueue:
                     fingerprint=fingerprint)
             self.listener.queue = self
             self.listener.bind()
-            if self.listener.started is False:
-                self.listener = None
-                # We cannot bind port, call error callback and fail
-                self.error_cb(_('Unable to bind to port %s.') % port,
-                        _('Maybe you have another running instance of Gajim. File '
-                        'Transfer will be cancelled.'))
-                return None
         else:
             # There is already a listener, we update the file's information
             # on the new connection.
@@ -1473,7 +1465,7 @@ class Socks5Listener(IdleObject):
                 self.ai = None
                 continue
         if not self.ai:
-            # unable to bind, show error dialog
+            log.error('unable to bind to port ' + str(self.port))
             return None
         self._serv.listen(socket.SOMAXCONN)
         self._serv.setblocking(False)
