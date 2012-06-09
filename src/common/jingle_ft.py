@@ -117,9 +117,11 @@ class JingleFileTransfer(JingleContent):
         gajim.nec.push_incoming_event(FileRequestReceivedEvent(None,
             conn=self.session.connection, stanza=stanza, jingle_content=content,
             FT_content=self))
+        self._listen_host() 
         # Delete this after file_props refactoring this shouldn't be necesary
         self.session.file_hash = self.file_props['hash']
         self.session.hash_algo = self.file_props['algo']
+
     def __on_session_initiate_sent(self, stanza, content, error, action):
         # Calculate file_hash in a new thread
         # if we haven't sent the hash already.
