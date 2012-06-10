@@ -63,7 +63,8 @@ class JingleSession(object):
     negotiated between an initiator and a responder.
     """
 
-    def __init__(self, con, werequest, weinitiate, jid, iq_id=None, sid=None):
+    def __init__(self, con, weinitiate, jid, iq_id=None, sid=None,
+                werequest=False):
         """
         con -- connection object,
         weinitiate -- boolean, are we the initiator?
