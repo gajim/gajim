@@ -135,14 +135,8 @@ class BaseTooltip:
     def expose(self, widget, event):
         style = self.win.get_style()
         size = self.win.get_size()
-        style.paint_flat_box(self.win.window, gtk.STATE_NORMAL, gtk.SHADOW_OUT,
-                None, self.win, 'tooltip', 0, 0, -1, 1)
-        style.paint_flat_box(self.win.window, gtk.STATE_NORMAL, gtk.SHADOW_OUT,
-                None, self.win, 'tooltip', 0, size[1] - 1, -1, 1)
-        style.paint_flat_box(self.win.window, gtk.STATE_NORMAL, gtk.SHADOW_OUT,
-                None, self.win, 'tooltip', 0, 0, 1, -1)
-        style.paint_flat_box(self.win.window, gtk.STATE_NORMAL, gtk.SHADOW_OUT,
-                None, self.win, 'tooltip', size[0] - 1, 0, 1, -1)
+        style.paint_shadow(self.win.window, gtk.STATE_NORMAL, gtk.SHADOW_OUT,
+            None, self.win, 'tooltip', 0, 0, size[0], size[1])
         return True
 
     def show_tooltip(self, data, widget_height, widget_y_position):
