@@ -78,7 +78,7 @@ class JingleTransport(object):
         Return the list of transport candidates from a transport stanza
         """
         return []
-    
+
     def set_connection(self, conn):
         self.connection = conn
         if not self.sid:
@@ -89,7 +89,7 @@ class JingleTransport(object):
 
     def set_our_jid(self, jid):
         self.ourjid = jid
-        
+
     def set_sid(self, sid):
         self.sid = sid
 
@@ -168,6 +168,9 @@ class JingleTransportSocks5(JingleTransport):
                 self.candidates.append(cand)
 
     def _add_local_ips_as_candidates(self):
+        if not gajim.config.get_per('accounts', self.connection.name,
+        'ft_send_local_ips'):
+            return
         if not self.connection:
             return
         local_ip_cand = []
@@ -259,7 +262,7 @@ class JingleTransportSocks5(JingleTransport):
             self.file_props.session_sid)
         if sesn is None:
             return
-        
+
         iq = xmpp.Iq(to=proxy['jid'], frm=self.ourjid, typ='set')
         auth_id = "au_" + proxy['sid']
         iq.setID(auth_id)
@@ -321,7 +324,7 @@ class JingleTransportIBB(JingleTransport):
         transport.setAttr('block-size', self.block_sz)
         transport.setAttr('sid', self.sid)
         return transport
-    
+
 try:
     import farstream
 except Exception:
