@@ -134,6 +134,7 @@ class FileProp(object):
         self.fd = None
         self.startexmpp = None
         self.session_type = None
+        self.request_id = None
 
     def getsid(self):
         # Getter of the property sid
