@@ -569,7 +569,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
         err.setData(msg)
         self.connection.send(iq)
         if code == 404:
-            file_props = FilesProp.getFileProp(self.name, sid) 
+            file_props = FilesProp.getFileProp(self.name, sid)
             if file_props is not None:
                 self.disconnect_transfer(file_props)
                 file_props.error = -3
@@ -584,7 +584,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
         """
         if not self.connection or self.connected < 2:
             return
-        file_props = FilesProp.getFileProp(self.connection, proxy['sid']) 
+        file_props = FilesProp.getFileProp(self.connection, proxy['sid'])
         iq = xmpp.Iq(to=proxy['initiator'],     typ='set')
         auth_id = "au_" + proxy['sid']
         iq.setID(auth_id)
@@ -617,7 +617,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
         id_ = unicode(iq_obj.getAttr('id'))
         query = iq_obj.getTag('query')
         sid = unicode(query.getAttr('sid'))
-        file_props = FilesProp.getFileProp(self.name, sid) 
+        file_props = FilesProp.getFileProp(self.name, sid)
         streamhosts = []
         for item in query.getChildren():
             if item.getName() == 'streamhost':
@@ -780,14 +780,14 @@ class ConnectionIBBytestream(ConnectionBytestream):
         blocksize = stanza.getTagAttr('open', 'block-size')
         log.debug('StreamOpenHandler called sid->%s blocksize->%s' % (sid,
             blocksize))
-        file_props = FilesProp.getFileProp(self.name, sid) 
+        file_props = FilesProp.getFileProp(self.name, sid)
         try:
             blocksize = int(blocksize)
         except:
             err = xmpp.ERR_BAD_REQUEST
         if not sid or not blocksize:
             err = xmpp.ERR_BAD_REQUEST
-        elif not file_props: 
+        elif not file_props:
             err = xmpp.ERR_UNEXPECTED_REQUEST
         if err:
             rep = xmpp.Error(stanza, err)
@@ -900,8 +900,8 @@ class ConnectionIBBytestream(ConnectionBytestream):
             seq = ''
             data = ''
         err = None
-        file_props = FilesProp.getFileProp(self.name, sid) 
-        if file_props is None: 
+        file_props = FilesProp.getFileProp(self.name, sid)
+        if file_props is None:
             err = xmpp.ERR_ITEM_NOT_FOUND
         else:
             if not data:

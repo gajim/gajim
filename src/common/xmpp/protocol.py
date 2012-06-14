@@ -167,7 +167,7 @@ NS_HASHES_MD5     = 'urn:xmpp:hash-function-textual-names:md5'
 NS_HASHES_SHA1    = 'urn:xmpp:hash-function-textual-names:sha-1'
 NS_HASHES_SHA256  = 'urn:xmpp:hash-function-textual-names:sha-256'
 NS_HASHES_SHA512  = 'urn:xmpp:hash-function-textual-names:sha-512'
-                 
+
 xmpp_stream_error_conditions = '''
 bad-format --  --  -- The entity has sent XML that cannot be processed.
 bad-namespace-prefix --  --  -- The entity has sent a namespace prefix that is unsupported, or has sent no namespace prefix on an element that requires such a prefix.
@@ -1037,12 +1037,12 @@ class Iq(Protocol):
             attrs={'id': self.getID()})
         iq.setQuery(self.getQuery().getName()).setNamespace(self.getQueryNS())
         return iq
-    
-class Hashes(Node): 
+
+class Hashes(Node):
     """
     Hash elements for various XEPs as defined in XEP-300
     """
-    
+
     """
     RECOMENDED HASH USE:
     Algorithm     Support
@@ -1053,14 +1053,14 @@ class Hashes(Node):
     SHA-256       MUST
     SHA-512       SHOULD
     """
-    
+
     supported = ('md5', 'sha-1', 'sha-256', 'sha-512')
-    
+
     def __init__(self, nsp=NS_HASHES):
         Node.__init__(self, None, {}, [], None, None, False, None)
         self.setNamespace(nsp)
         self.setName('hash')
-    
+
     def calculateHash(self, algo, file_string):
         """
         Calculate the hash and add it. It is preferable doing it here
@@ -1078,12 +1078,12 @@ class Hashes(Node):
                 hl = hashlib.sha256()
             elif algo == 'sha-512':
                 hl = hashlib.sha512()
-                
+
             if hl:
                 hl.update(file_string)
                 hash_ = hl.hexdigest()
         else: # if it is a file
-                
+
             if algo == 'md5':
                 hl = hashlib.md5()
             elif algo == 'sha-1':
@@ -1092,18 +1092,18 @@ class Hashes(Node):
                 hl = hashlib.sha256()
             elif algo == 'sha-512':
                 hl = hashlib.sha512()
-                
+
             if hl:
                 for line in file_string:
                     hl.update(line)
                 hash_ = hl.hexdigest()
-                
-        return hash_        
-            
+
+        return hash_
+
     def addHash(self, hash_, algo):
         self.setAttr('algo', algo)
         self.setData(hash_)
-     
+
 class Acks(Node):
     """
     Acknowledgement elements for Stream Management

@@ -1978,6 +1978,21 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             self.file_props.stream_methods = xmpp.NS_BYTESTREAM
             file_tag = self.jingle_content.getTag('description').getTag(
                 'offer').getTag('file')
+            for child in file_tag.getChildren():
+                name = child.getName()
+                val = child.getData()
+                if val is None:
+                    continue
+                if name == 'name':
+                    self.file_props.name = val
+                if name == 'size':
+                    self.file_props.size = val
+                if name == 'hash':
+                    self.file_props.algo = child.getAttr('algo')
+                    self.file_props.hash_ = val
+                if name == 'date':
+                    self.file_props.date = val
+
         else:
             profile = si.getAttr('profile')
             if profile != xmpp.NS_FILE:
@@ -2002,20 +2017,13 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                     typ='stream')
                 raise xmpp.NodeProcessed
             file_tag = si.getTag('file')
-        for child in file_tag.getChildren():
-            name = child.getName()
-            val = child.getData()
-            if val is None:
-                continue
-            if name == 'name':
-                self.file_props.name = val
-            if name == 'size':
-                self.file_props.size = val
-            if name == 'hash':
-                self.file_props.algo = child.getAttr('algo')
-                self.file_props.hash_ = val
-            if name == 'date':
-                self.file_props.date = val
+            for name, val in file_tag.getAttrs().items():
+                if val is None:
+                    continue
+                if name == 'name':
+                    self.file_props.name = val
+                if name == 'size':
+                    self.file_props.size = val
         file_desc_tag = file_tag.getTag('desc')
         if file_desc_tag is not None:
             self.file_props.desc = file_desc_tag.getData()
