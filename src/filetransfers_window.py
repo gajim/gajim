@@ -250,11 +250,11 @@ class FileTransfersWindow:
     def show_hash_error(self, jid, file_props, account):
         def on_yes(dummy):
             # Request the file to the sender
-            sid = gajim.connections[account].start_file_transfer(jid, 
-                                                            file_props, 
+            sid = gajim.connections[account].start_file_transfer(jid,
+                                                            file_props,
                                                                 True)
             file_props.sid = sid
-            
+
 
         if file_props.type_ == 'r':
             file_name = os.path.basename(file_props.file_name)
@@ -336,7 +336,7 @@ class FileTransfersWindow:
                         file_path, file_name, file_desc)
         if file_props is None:
             return False
-        if contact.supports(NS_JINGLE_FILE_TRANSFER):
+        if contact.supports(NS_JINGLE_FILE_TRANSFER) and False:
             log.info("contact %s supports jingle file transfer"%(contact.get_full_jid()))
             gajim.connections[account].start_file_transfer(contact.get_full_jid(),
                                                            file_props)
@@ -574,7 +574,7 @@ class FileTransfersWindow:
                         gajim.events.remove_events(account, jid, event)
                         gajim.interface.roster.draw_contact(jid, account)
                         gajim.interface.roster.show_title()
-        FilesProp.deleteFileProp(files_props)
+        FilesProp.deleteFileProp(file_props)
         del(file_props)
 
     def set_progress(self, typ, sid, transfered_size, iter_=None):

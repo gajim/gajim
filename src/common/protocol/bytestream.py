@@ -216,7 +216,7 @@ class ConnectionBytestream:
         self.connection.send(iq)
 
     def _siResultCB(self, con, iq_obj):
-        file_props = FilesProp.getFileProp(con.name, iq_obj.getAttr('id'))
+        file_props = FilesProp.getFileProp(self.name, iq_obj.getAttr('id'))
         if not file_props:
             return
         if file_props.request_id:
