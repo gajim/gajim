@@ -31,6 +31,7 @@ from common import gajim
 from common import helpers
 from socks5 import Socks5
 from common.xmpp.idlequeue import IdleObject
+from common.file_props import FilesProp
 
 S_INITIAL = 0
 S_STARTED = 1
@@ -248,9 +249,10 @@ class HostTester(Socks5, IdleObject):
         self.on_success = on_success
         self.on_failure = on_failure
         self._sock = None
-        self.file_props = {'is_a_proxy': True,
-                'proxy_sender': sender_jid,
-                'proxy_receiver': 'test@gajim.org/test2'}
+        self.file_props = FilesProp.getNewFileProp(jid, sid)
+        self.file_props.is_a_proxy = True
+        self.file_props.proxy_sender = sender_jid
+        self.file_props.proxy_receiver = 'test@gajim.org/test2'
         Socks5.__init__(self, gajim.idlequeue, host, port, None, None, None)
         self.sid = sid
 
@@ -367,9 +369,10 @@ class ReceiverTester(Socks5, IdleObject):
         self.on_success = on_success
         self.on_failure = on_failure
         self._sock = None
-        self.file_props = {'is_a_proxy': True,
-                'proxy_sender': sender_jid,
-                'proxy_receiver': 'test@gajim.org/test2'}
+        self.file_props = FilesProp.getNewFileProp(jid, sid)
+        self.file_props.is_a_proxy = True
+        self.file_props.proxy_sender = sender_jid
+        self.file_props.proxy_receiver = 'test@gajim.org/test2'
         Socks5.__init__(self, gajim.idlequeue, host, port, None, None, None)
         self.sid = sid
 

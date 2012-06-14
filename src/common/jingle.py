@@ -152,7 +152,7 @@ class ConnectionJingle(object):
         # this is a file transfer
         jingle.session_type_FT = True
         self._sessions[jingle.sid] = jingle
-        file_props['sid'] = jingle.sid
+        file_props.sid = jingle.sid
         if contact.supports(xmpp.NS_JINGLE_BYTESTREAM):
             transport = JingleTransportSocks5()
         elif contact.supports(xmpp.NS_JINGLE_IBB):

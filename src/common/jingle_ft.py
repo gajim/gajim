@@ -76,11 +76,11 @@ class JingleFileTransfer(JingleContent):
             self.weinitiate = True
 
         if self.file_props is not None:
-            self.file_props['sender'] = session.ourjid
-            self.file_props['receiver'] = session.peerjid
-            self.file_props['session-type'] = 'jingle'
-            self.file_props['session-sid'] = session.sid
-            self.file_props['transfered_size'] = []
+            self.file_props.sender = session.ourjid
+            self.file_props.receiver = session.peerjid
+            self.file_props.session_type = 'jingle'
+            self.file_props.session_sid = session.sid
+            self.file_props.transfered_size = []
 
         log.info("FT request: %s" % file_props)
 
@@ -92,7 +92,7 @@ class JingleFileTransfer(JingleContent):
         log.info('ourjid: %s' % session.ourjid)
 
         if self.file_props is not None:
-            self.file_props['sid'] = self.transport.sid
+            self.file_props.sid = self.transport.sid
 
         self.session = session
         self.media = 'file'
@@ -119,13 +119,12 @@ class JingleFileTransfer(JingleContent):
             FT_content=self))
         self._listen_host() 
         # Delete this after file_props refactoring this shouldn't be necesary
-        self.session.file_hash = self.file_props['hash']
-        self.session.hash_algo = self.file_props['algo']
-
+        self.session.file_hash = self.file_props.hash_
+        self.session.hash_algo = self.file_props.algo
     def __on_session_initiate_sent(self, stanza, content, error, action):
         # Calculate file_hash in a new thread
         # if we haven't sent the hash already.
-        if 'hash' not in self.file_props:
+        if self.file_props.hash_ is None:
             self.hashThread = threading.Thread(target=self.__send_hash)
             self.hashThread.start()
         
@@ -143,7 +142,7 @@ class JingleFileTransfer(JingleContent):
         if self.session.hash_algo == None:
             return
         try:
-            file_ = open(self.file_props['file-name'], 'r')
+            file_ = open(self.file_props.file_name, 'r')
         except:
             # can't open file
             return
@@ -154,7 +153,7 @@ class JingleFileTransfer(JingleContent):
         if not hash_:
             # Hash alogrithm not supported
             return
-        self.file_props['hash'] = hash_
+        self.file_props.hash_ = hash_
         h.addHash(hash_, self.session.hash_algo)
         return h
                 
@@ -175,26 +174,21 @@ class JingleFileTransfer(JingleContent):
             self.__state_changed(STATE_TRANSFERING)
             raise xmpp.NodeProcessed
 
-        self.file_props['streamhosts'] = self.transport.remote_candidates
-        for host in self.file_props['streamhosts']:
+        self.file_props.streamhosts = self.transport.remote_candidates
+        for host in self.file_props.streamhosts:
             host['initiator'] = self.session.initiator
             host['target'] = self.session.responder
-            host['sid'] = self.file_props['sid']
+            host['sid'] = self.file_props.sid
 
         response = stanza.buildReply('result')
         response.delChild(response.getQuery())
         con.connection.send(response)
-
-        if not gajim.socks5queue.get_file_props(
-           self.session.connection.name, self.file_props['sid']):
-            gajim.socks5queue.add_file_props(self.session.connection.name,
-                self.file_props)
         fingerprint = None
         if self.use_security:
             fingerprint = 'client'
         if self.transport.type == TransportType.SOCKS5:
             gajim.socks5queue.connect_to_hosts(self.session.connection.name,
-                self.file_props['sid'], self.on_connect,
+                self.file_props.sid, self.on_connect,
                 self._on_connect_error, fingerprint=fingerprint,
                 receiving=False)
             return
@@ -310,15 +304,15 @@ class JingleFileTransfer(JingleContent):
 
     def _store_socks5_sid(self, sid, hash_id):
         # callback from socsk5queue.start_listener
-        self.file_props['hash'] = hash_id
+        self.file_props.hash_ = hash_id
 
     def _listen_host(self):
 
-        receiver = self.file_props['receiver']
-        sender = self.file_props['sender']
-        sha_str = helpers.get_auth_sha(self.file_props['sid'], sender,
+        receiver = self.file_props.receiver
+        sender = self.file_props.sender
+        sha_str = helpers.get_auth_sha(self.file_props.sid, sender,
             receiver)
-        self.file_props['sha_str'] = sha_str
+        self.file_props.sha_str = sha_str
 
         port = gajim.config.get('file_transfers_port')
 

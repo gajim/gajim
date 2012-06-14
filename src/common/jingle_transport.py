@@ -190,8 +190,8 @@ class JingleTransportSocks5(JingleTransport):
                 c['type'] = 'direct'
                 c['jid'] = self.ourjid
                 c['priority'] = (2**16) * type_preference
-                c['initiator'] = self.file_props['sender']
-                c['target'] = self.file_props['receiver']
+                c['initiator'] = self.file_props.sender
+                c['target'] = self.file_props.receiver
                 local_ip_cand.append(c)
 
         self._add_candidates(local_ip_cand)
@@ -213,8 +213,8 @@ class JingleTransportSocks5(JingleTransport):
                 c['type'] = 'direct'
                 c['jid'] = self.ourjid
                 c['priority'] = (2**16) * type_preference
-                c['initiator'] = self.file_props['sender']
-                c['target'] = self.file_props['receiver']
+                c['initiator'] = self.file_props.sender
+                c['target'] = self.file_props.receiver
                 additional_ip_cand.append(c)
 
         self._add_candidates(additional_ip_cand)
@@ -228,7 +228,7 @@ class JingleTransportSocks5(JingleTransport):
         proxyhosts = socks5conn._get_file_transfer_proxies_from_config(self.file_props)
 
         if proxyhosts:
-            self.file_props['proxyhosts'] = proxyhosts
+            self.file_props.proxyhosts = proxyhosts
 
             for proxyhost in proxyhosts:
                 c = {'host': proxyhost['host']}
@@ -237,15 +237,15 @@ class JingleTransportSocks5(JingleTransport):
                 c['type'] = 'proxy'
                 c['jid'] = proxyhost['jid']
                 c['priority'] = (2**16) * type_preference
-                c['initiator'] = self.file_props['sender']
-                c['target'] = self.file_props['receiver']
+                c['initiator'] = self.file_props.sender
+                c['target'] = self.file_props.receiver
                 proxy_cand.append(c)
 
         self._add_candidates(proxy_cand)
 
     def get_content(self):
         sesn = self.connection.get_jingle_session(self.ourjid,
-            self.file_props['session-sid'])
+            self.file_props.session_sid)
         for content in sesn.contents.values():
             if content.transport == self:
                 return content
@@ -256,7 +256,7 @@ class JingleTransportSocks5(JingleTransport):
         if not self.connection:
             return
         sesn = self.connection.get_jingle_session(self.ourjid,
-            self.file_props['session-sid'])
+            self.file_props.session_sid)
         if sesn is None:
             return
         
