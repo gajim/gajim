@@ -181,18 +181,21 @@ class BaseTooltip:
         semantics. Color palette is the Tango.
         """
         formatted = "<span foreground='%s'>%s</span>"
+        color = None
         if status.startswith(Q_("?user status:Available")):
-            status = formatted % ('#73D216', status)
+            color = gajim.config.get('tooltip_status_online_color')
         elif status.startswith(_("Free for Chat")):
-            status = formatted % ('#3465A4', status)
+            color = gajim.config.get('tooltip_status_free_for_chat_color')
         elif status.startswith(_("Away")):
-            status = formatted % ('#EDD400', status)
+            color = gajim.config.get('tooltip_status_away_color')
         elif status.startswith(_("Busy")):
-            status = formatted % ('#F57900', status)
+            color = gajim.config.get('tooltip_status_busy_color')
         elif status.startswith(_("Not Available")):
-            status = formatted % ('#CC0000', status)
+            color = gajim.config.get('tooltip_status_na_color')
         elif status.startswith(_("Offline")):
-            status = formatted % ('#555753', status)
+            color = gajim.config.get('tooltip_status_offline_color')
+        if color:
+            status = formatted % (color, status)
         return status
 
     @staticmethod
@@ -202,14 +205,17 @@ class BaseTooltip:
         it's semantics. Color palette is the Tango.
         """
         formatted = "<span foreground='%s'>%s</span>"
+        color = None
         if affiliation.startswith(Q_("?Group Chat Contact Affiliation:None")):
-            affiliation = formatted % ('#555753', affiliation)
+            color = gajim.conig.get('tooltip_affiliation_none_color')
         elif affiliation.startswith(_("Member")):
-            affiliation = formatted % ('#73D216', affiliation)
+            color = gajim.conig.get('tooltip_affiliation_member_color')
         elif affiliation.startswith(_("Administrator")):
-            affiliation = formatted % ('#F57900', affiliation)
+            color = gajim.conig.get('tooltip_affiliation_administrator_color')
         elif affiliation.startswith(_("Owner")):
-            affiliation = formatted % ('#CC0000', affiliation)
+            color = gajim.conig.get('tooltip_affiliation_owner_color')
+        if color:
+            affiliation = formatted % (color, affiliation)
         return affiliation
 
 class StatusTable:
@@ -493,9 +499,9 @@ class RosterTooltip(NotificationAreaTooltip):
                 gobject.markup_escape_text(prim_contact.get_shown_name())\
                 + '</span>'
         if gajim.config.get('mergeaccounts'):
-          name_markup += u" <span foreground='#888A85'>(" + \
-                gobject.markup_escape_text(prim_contact.account.name) \
-                + ')</span>'
+            name_markup += u" <span foreground='%s'>(%s)</span>" % (
+                gajim.config.get('tooltip_account_name_color'),
+                gobject.markup_escape_text(prim_contact.account.name))
 
         if self.account and helpers.jid_is_blocked(self.account,
         prim_contact.jid):
@@ -528,7 +534,8 @@ class RosterTooltip(NotificationAreaTooltip):
                 iconset = gajim.config.get('iconset')
                 if not iconset:
                     iconset = 'dcraven'
-                file_path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
+                file_path = os.path.join(helpers.get_iconset_path(iconset),
+                    '16x16')
 
             contact_keys = sorted(contacts_dict.keys())
             contact_keys.reverse()
@@ -641,7 +648,9 @@ class RosterTooltip(NotificationAreaTooltip):
             # is no meaningful difference between last activity time and
             # current time.
             if diff.days > 0 or diff.seconds > 0:
-                cs = "<span foreground='#888A85'>%s</span>"
+                cs = "<span foreground='%s'>" % gajim.config.get(
+                    'tooltip_idle_color')
+                cs += '%s</span>'
                 properties.append((str(), None))
                 properties.append(((cs % _("Idle since %s")) % formatted, None))
                 properties.append(((cs % _("Idle for %s")) % str(diff), None))
