@@ -1722,8 +1722,9 @@ class ChatControl(ChatControlBase):
         self._video_button.set_sensitive(self.video_available)
 
         # Send file
-        if (self.contact.supports(NS_FILE) or self.contact.supports(NS_JINGLE_FILE_TRANSFER)) and (self.type_id == 'chat' or \
-        self.gc_contact.resource):
+        if (self.contact.supports(NS_FILE) or \
+                self.contact.supports(NS_JINGLE_FILE_TRANSFER)) or \
+                        self.type_id == 'chat' or self.gc_contact.resource:
             self._send_file_button.set_sensitive(True)
             self._send_file_button.set_tooltip_text('')
         else:

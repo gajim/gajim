@@ -19,6 +19,7 @@
 Handles  Jingle File Transfer (XEP 0234)
 """
 
+import hashlib
 import gajim
 import xmpp
 from jingle_content import contents, JingleContent
@@ -97,7 +98,13 @@ class JingleFileTransfer(JingleContent):
         self.session = session
         self.media = 'file'
         self.nominated_cand = {}
-
+        if gajim.contacts.is_gc_contact(session.connection.name, 
+                                        session.peerjid):
+            roomjid = session.peerjid.split('/')[0]
+            dstaddr = hashlib.sha1('%s%s%s' % (self.file_props['sid'],
+                                     session.ourjid,
+                                     roomjid)).hexdigest()
+            self.file_props['dstaddr'] = dstaddr
         self.state = STATE_NOT_STARTED
         self.states = {STATE_INITIALIZED   : StateInitialized(self),
                        STATE_CAND_SENT     : StateCandSent(self),

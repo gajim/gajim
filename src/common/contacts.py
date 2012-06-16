@@ -28,10 +28,13 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-
-from common import caps_cache
-from common.account import Account
-import common.gajim
+try:
+    from common import caps_cache
+    from common.account import Account
+    import common.gajim
+except ImportError, e:
+    if __name__ != "__main__":
+        raise ImportError(e)
 
 class XMPPEntity(object):
     """
@@ -411,6 +414,9 @@ class LegacyContactsAPI:
     def get_gc_contact(self, account, room_jid, nick):
         return self._accounts[account].gc_contacts.get_gc_contact(room_jid, nick)
 
+    def is_gc_contact(self, account, jid):
+        return self._accounts[account].gc_contacts.is_gc_contact(jid)
+
     def get_nb_role_total_gc_contacts(self, account, room_jid, role):
         return self._accounts[account].gc_contacts.get_nb_role_total_gc_contacts(room_jid, role)
 
@@ -563,6 +569,21 @@ class GC_Contacts():
         if not nick in nick_list:
             return None
         return self._rooms[room_jid][nick]
+
+    def is_gc_contact(self, jid):
+        """
+        >>> gc = GC_Contacts()
+        >>> gc._rooms = {'gajim@conference.gajim.org' : {'test' : True}}
+        >>> gc.is_gc_contact('gajim@conference.gajim.org/test')
+        True
+        >>> gc.is_gc_contact('test@jabbim.com')
+        False
+        """
+        jid = jid.split('/')
+        if len(jid) != 2:
+            return False
+        gcc = self.get_gc_contact(jid[0], jid[1])
+        return gcc != None
 
     def get_nb_role_total_gc_contacts(self, room_jid, role):
         """
@@ -827,3 +848,8 @@ class MetacontactManager():
         """
         family.sort(cmp=self._compare_metacontacts)
         return family[-1]
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()

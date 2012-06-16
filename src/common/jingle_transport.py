@@ -132,6 +132,8 @@ class JingleTransportSocks5(JingleTransport):
             transport = xmpp.Node('transport')
         transport.setNamespace(xmpp.NS_JINGLE_BYTESTREAM)
         transport.setAttr('sid', self.sid)
+        if 'dstaddr' in self.file_props:
+            transport.setAttr('dstaddr', self.file_props['dstaddr'])
         return transport
 
     def parse_transport_stanza(self, transport):

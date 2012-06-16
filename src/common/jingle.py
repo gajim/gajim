@@ -145,6 +145,10 @@ class ConnectionJingle(object):
         logger.info("start file transfer with file: %s" % file_props)
         contact = gajim.contacts.get_contact_with_highest_priority(self.name,
             gajim.get_jid_without_resource(jid))
+        if gajim.contacts.is_gc_contact(self.name,jid):
+            gcc = jid.split('/')
+            if len(gcc) == 2:
+                contact = gajim.contacts.get_gc_contact(self.name, gcc[0], gcc[1])
         if contact is None:
             return
         use_security = contact.supports(xmpp.NS_JINGLE_XTLS)
