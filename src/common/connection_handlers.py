@@ -1994,7 +1994,7 @@ ConnectionJingle, ConnectionIBBytestream):
     def _StreamCB(self, con, iq_obj):
         log.debug('StreamCB')
         gajim.nec.push_incoming_event(StreamReceivedEvent(None,
-            conn=self, stanza=iq_obj))
+            conn=self, stanza=obj))
 
     def _register_handlers(self, con, con_type):
         # try to find another way to register handlers in each class
