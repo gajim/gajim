@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-  gajimversion="0.15"
+  gajimversion="0.15.0.1"
   if [ -d ".hg" ]; then
     node=$(hg  tip --template "{node}")
     hgversion="-${node:0:12}"
@@ -10,11 +10,6 @@
 
   AM_ARGS="--add-missing --gnu --copy -Wno-portability"
   CONF_ARGS=""
-  if test x`uname -s 2>/dev/null` = 'xDarwin' -a -f /Library/Frameworks/GTK+.framework/Versions/Current/env; then
-    . /Library/Frameworks/GTK+.framework/Versions/Current/env
-    AM_ARGS="${AM_ARGS} --ignore-deps"
-    CONF_ARGS="${CONF_ARGS} --disable-idle --without-x"
-  fi
 
   echo "[encoding: UTF-8]" > po/POTFILES.in \
   && for p in `ls data/gui/*.ui`; do echo "[type: gettext/glade]$p" >> \
