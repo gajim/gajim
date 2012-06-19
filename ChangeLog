@@ -1,3 +1,11 @@
+Gajim 0.15.1 ()
+
+  * improve performences
+  * Fix roster filter with unicode chars
+  * Fix connection to msn jabber server
+  * Fix some GPG issues
+  * Fix other small issues
+
 Gajim 0.15 (18 March 2012)
 
   * Plugin system
