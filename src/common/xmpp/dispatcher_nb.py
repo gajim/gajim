@@ -415,6 +415,9 @@ class XMPPDispatcher(PlugIn):
         if name == 'features':
             self._owner.got_features = True
             session.Stream.features = stanza
+        if name == 'error':
+            if stanza.getTag('see-other-host'):
+                self._owner.got_see_other_host = stanza
 
         xmlns = stanza.getNamespace()
 

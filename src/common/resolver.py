@@ -63,6 +63,7 @@ class CommonResolver():
         self.handlers = {}
 
     def resolve(self, host, on_ready, type='srv'):
+        host = host.lower()
         log.debug('resolve %s type=%s' % (host, type))
         assert(type in ['srv', 'txt'])
         if not host:
@@ -88,6 +89,7 @@ class CommonResolver():
 
     def _on_ready(self, host, type, result_list):
         # practically it is impossible to be the opposite, but who knows :)
+        host = host.lower()
         log.debug('Resolving result for %s: %s' % (host, result_list))
         if not self.resolved_hosts.has_key(host+type):
             self.resolved_hosts[host+type] = result_list

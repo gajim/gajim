@@ -1134,6 +1134,10 @@ class Connection(CommonConnection, ConnectionHandlers):
                 self._disconnectedReconnCB()
 
     def connect_to_next_type(self, retry=False):
+        if self.redirected:
+            self.disconnect(on_purpose=True)
+            self.connect()
+            return
         if len(self._connection_types):
             self._current_type = self._connection_types.pop(0)
             if self.last_connection:
@@ -1194,6 +1198,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             on_connect=self.on_connect_success,
             on_proxy_failure=self.on_proxy_failure,
             on_connect_failure=self.connect_to_next_type,
+            on_stream_error_cb=self._StreamCB,
             proxy=self._proxy,
             secure_tuple = secure_tuple)
 
