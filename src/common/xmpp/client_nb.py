@@ -67,6 +67,7 @@ class NonBlockingClient:
         self.on_connect_failure = None
         self.proxy = None
         self.got_features = False
+        self.got_see_other_host = None
         self.stream_started = False
         self.disconnecting = False
         self.protocol_type = 'XMPP'
@@ -138,8 +139,8 @@ class NonBlockingClient:
         self.disconnecting = False
 
     def connect(self, on_connect, on_connect_failure, hostname=None, port=5222,
-                    on_proxy_failure=None, proxy=None, secure_tuple=('plain', None,
-                            None)):
+    on_proxy_failure=None, on_stream_error_cb=None, proxy=None,
+    secure_tuple=('plain', None, None)):
         """
         Open XMPP connection (open XML streams in both directions)
 
@@ -161,6 +162,7 @@ class NonBlockingClient:
         self.on_connect = on_connect
         self.on_connect_failure=on_connect_failure
         self.on_proxy_failure = on_proxy_failure
+        self.on_stream_error_cb = on_stream_error_cb
         self.desired_security, self.cacerts, self.mycerts = secure_tuple
         self.Connection = None
         self.Port = port
@@ -350,7 +352,10 @@ class NonBlockingClient:
                 # sometimes <features> are received together with document
                 # attributes and sometimes on next receive...
                 self.Dispatcher.ProcessNonBlocking(data)
-            if not self.got_features:
+            if self.got_see_other_host:
+                log.info('got see-other-host')
+                self.on_stream_error_cb(self, self.got_see_other_host)
+            elif not self.got_features:
                 self._xmpp_connect_machine(
                         mode='FAILURE',
                         data='Missing <features> in 1.0 stream')

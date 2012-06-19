@@ -1254,6 +1254,7 @@ ConnectionJingle, ConnectionIBBytestream):
             PrivateStorageRosternotesReceivedEvent)
         gajim.nec.register_incoming_event(RosternotesReceivedEvent)
         gajim.nec.register_incoming_event(StreamConflictReceivedEvent)
+        gajim.nec.register_incoming_event(StreamOtherHostReceivedEvent)
         gajim.nec.register_incoming_event(MessageReceivedEvent)
         gajim.nec.register_incoming_event(ArchivingErrorReceivedEvent)
         gajim.nec.register_incoming_event(
@@ -1988,8 +1989,6 @@ ConnectionJingle, ConnectionIBBytestream):
         if obj.conn.name != self.name:
             return
         self.redirected = obj.redirected
-        self.disconnect(on_purpose=True)
-        self.connect()
 
     def _StreamCB(self, con, iq_obj):
         log.debug('StreamCB')

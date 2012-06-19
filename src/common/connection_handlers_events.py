@@ -689,8 +689,10 @@ class StreamOtherHostReceivedEvent(nec.NetworkIncomingEvent):
     base_network_events = ['stream-received']
 
     def generate(self):
-        other_host = obj.getTag('see-other-host')
-        if other_host and self.conn.last_connection_type in ('ssl', 'tls'):
+        self.conn = self.base_event.conn
+        self.stanza = self.base_event.stanza
+        other_host = self.stanza.getTag('see-other-host')
+        if other_host and self.conn._current_type in ('ssl', 'tls'):
             host = other_host.getData()
             if ':' in host:
                 host_l = host.split(':', 1)
