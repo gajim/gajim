@@ -207,13 +207,13 @@ class BaseTooltip:
         formatted = "<span foreground='%s'>%s</span>"
         color = None
         if affiliation.startswith(Q_("?Group Chat Contact Affiliation:None")):
-            color = gajim.conig.get('tooltip_affiliation_none_color')
+            color = gajim.config.get('tooltip_affiliation_none_color')
         elif affiliation.startswith(_("Member")):
-            color = gajim.conig.get('tooltip_affiliation_member_color')
+            color = gajim.config.get('tooltip_affiliation_member_color')
         elif affiliation.startswith(_("Administrator")):
-            color = gajim.conig.get('tooltip_affiliation_administrator_color')
+            color = gajim.config.get('tooltip_affiliation_administrator_color')
         elif affiliation.startswith(_("Owner")):
-            color = gajim.conig.get('tooltip_affiliation_owner_color')
+            color = gajim.config.get('tooltip_affiliation_owner_color')
         if color:
             affiliation = formatted % (color, affiliation)
         return affiliation
