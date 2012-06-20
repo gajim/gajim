@@ -100,7 +100,7 @@ class SocksQueue:
             # There is already a listener, we update the file's information
             # on the new connection.
             self.listener.file_props = file_props
-        
+
         self.connected += 1
         return self.listener
 
@@ -116,13 +116,13 @@ class SocksQueue:
                 return 0
         streamhost['state'] = 1
         self.on_success[file_props.sid](streamhost)
-        return 1 
+        return 1
 
     def connect_to_hosts(self, account, sid, on_success=None, on_failure=None,
     fingerprint=None, receiving=True):
         self.on_success[sid] = on_success
         self.on_failure[sid] = on_failure
-        file_props = FilesProp.getFileProp(account, sid) 
+        file_props = FilesProp.getFileProp(account, sid)
         file_props.failure_cb = on_failure
 
         if not file_props.streamhosts:
@@ -151,8 +151,8 @@ class SocksQueue:
                     file_props.proxy_sender = streamhost['target']
                     file_props.proxy_receiver = streamhost['initiator']
                 socks5obj = Socks5SenderClient(self.idlequeue, idx,
-                    self, _sock=None,host=str(streamhost['host']), 
-                    port=int(streamhost['port']),fingerprint=fp, 
+                    self, _sock=None,host=str(streamhost['host']),
+                    port=int(streamhost['port']),fingerprint=fp,
                     connected=False, file_props=file_props)
                 socks5obj.streamhost = streamhost
                 self.add_sockobj(account, socks5obj, type='sender')
@@ -302,20 +302,20 @@ class SocksQueue:
 
     def send_file(self, file_props, account, mode):
         for key in self.senders.keys():
-           if self.senders == {}:
-               # Python acts very weird with this. When there is no keys 
-               # in the dictionary It says that it has a key. 
-               # Maybe it is my machine. Without this there is a KeyError 
-               # traceback.
-               return
-           if file_props.name in key and file_props.sid in key \
+            if self.senders == {}:
+                # Python acts very weird with this. When there is no keys
+                # in the dictionary It says that it has a key.
+                # Maybe it is my machine. Without this there is a KeyError
+                # traceback.
+                return
+            if file_props.name in key and file_props.sid in key \
             and self.senders[key].mode == mode:
 
                 log.info("socks5: sending file")
                 sender = self.senders[key]
                 file_props.streamhost_used = True
                 sender.account = account
-                
+
                 sender.file_props = file_props
                 result = sender.send_file()
                 self.process_result(result, sender)
@@ -323,7 +323,7 @@ class SocksQueue:
     def remove_file_props(self, account, sid):
         fp = FilesProp.getFileProp(account, sid)
         if not fp:
-            log.warning('trying to remove a file props that doesnt exist ' + 
+            log.warning('trying to remove a file props that doesnt exist ' +
                         'from account ' + str(account) + ' and sid ' + str(sid))
             return
         if sid in self.on_success:
@@ -415,7 +415,7 @@ class SocksQueue:
                         del(self.readers[key])
                         if not remove_all:
                             break
-                    
+
     def remove_sender(self, idx, do_disconnect=True, remove_all=False):
         """
         Remove sender from the list of senders and decrease the number of active
@@ -484,7 +484,7 @@ class Socks5:
         for ai in self.ais:
             try:
                 self._sock = socket.socket(*ai[:3])
-                
+
                 if not self.fingerprint is None:
                     self._sock = OpenSSL.SSL.Connection(
                         jingle_xtls.get_context('client'), self._sock)
@@ -696,7 +696,7 @@ class Socks5:
         """
         Read file contents from socket and write them to file
         """
-        
+
         if self.file_props is None or not self.file_props.file_name:
             self.file_props.error = -2
             return None
@@ -894,7 +894,7 @@ class Socks5:
         """
         Get sha of sid + Initiator jid + Target jid
         """
-         
+
         if self.file_props.is_a_proxy:
             self.file_props.is_a_proxy = None # Is this necesary?
             return hashlib.sha1('%s%s%s' % (self.sid,
@@ -902,7 +902,7 @@ class Socks5:
                 self.file_props.proxy_receiver)).hexdigest()
         return hashlib.sha1('%s%s%s' % (self.sid, self.initiator, self.target)).\
                 hexdigest()
-                
+
 
 class Socks5Sender(IdleObject):
     """
@@ -928,7 +928,7 @@ class Socks5Sender(IdleObject):
                                jingle_xtls.get_context('server'), _sock)
             else:
                 self._sock.setblocking(False)
-            
+
             self.fd = _sock.fileno()
             self._recv = _sock.recv
             self._send = _sock.send
@@ -1022,7 +1022,7 @@ class Socks5Receiver(IdleObject):
         self.file_props.continue_cb = self.continue_paused_transfer
         self.file_props.stalled = False
         self.file_props.received_len = 0
-        
+
 
     def receive_file(self):
         """
@@ -1079,7 +1079,7 @@ class Socks5Server(Socks5):
     def __init__(self, idlequeue, host, port, initiator, target, sid):
 
         Socks5.__init__(self, idlequeue, host, port, initiator, target, sid)
-        
+
         self.mode = 'server'
 
     def main(self):
@@ -1183,7 +1183,7 @@ class Socks5Client(Socks5):
     def __init__(self, idlequeue, host, port, initiator, target, sid):
 
         Socks5.__init__(self, idlequeue, host, port, initiator, target, sid)
-     
+
         self.mode = 'client'
 
     def main(self, timeout=0):
@@ -1334,7 +1334,7 @@ class Socks5SenderClient(Socks5Client, Socks5Sender):
         Socks5Client.__init__(self, idlequeue, host, port, None, None,
                 file_props.sid)
 
-        Socks5Sender.__init__(self,idlequeue, sock_hash, parent,_sock, 
+        Socks5Sender.__init__(self,idlequeue, sock_hash, parent,_sock,
                 host, port, fingerprint , connected, file_props)
 
 
@@ -1342,14 +1342,14 @@ class Socks5SenderClient(Socks5Client, Socks5Sender):
 
 
 class Socks5SenderServer(Socks5Server, Socks5Sender):
-    
+
     def __init__(self, idlequeue, sock_hash, parent,_sock, host=None,
             port=None, fingerprint = None, connected=True, file_props={}):
 
         Socks5Server.__init__(self, idlequeue, host, port, None, None,
                 file_props.sid)
 
-        Socks5Sender.__init__(self,idlequeue, sock_hash, parent, _sock, 
+        Socks5Sender.__init__(self,idlequeue, sock_hash, parent, _sock,
                 host, port, fingerprint , connected, file_props)
 
 
@@ -1359,14 +1359,14 @@ class Socks5ReceiverClient(Socks5Client, Socks5Receiver):
     def __init__(self, idlequeue, streamhost, sid, file_props = None,
             fingerprint=None):
         Socks5Client.__init__(self, idlequeue, streamhost['host'],
-                int(streamhost['port']), streamhost['initiator'], 
+                int(streamhost['port']), streamhost['initiator'],
                 streamhost['target'], sid)
 
         Socks5Receiver.__init__(self, idlequeue, streamhost, sid, file_props,
                        fingerprint)
 
 
-        
+
 
 class Socks5ReceiverServer(Socks5Server, Socks5Receiver):
 
@@ -1374,7 +1374,7 @@ class Socks5ReceiverServer(Socks5Server, Socks5Receiver):
     fingerprint=None):
 
         Socks5Server.__init__(self, idlequeue, streamhost['host'],
-                int(streamhost['port']), streamhost['initiator'], 
+                int(streamhost['port']), streamhost['initiator'],
                 streamhost['target'], sid)
 
         Socks5Receiver.__init__(self, idlequeue, streamhost, sid, file_props,
