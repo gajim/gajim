@@ -639,7 +639,6 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
                 streamhosts.append(host_dict)
         file_props = FilesProp.getFilePropBySid(sid)
         if file_props is not None:
-            file_props.fast = streamhosts
             if file_props.type_ == 's': # FIXME: remove fast xmlns
                 # only psi do this
                 if file_props.streamhosts:
@@ -648,7 +647,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
                     file_props.streamhosts = streamhosts
                 gajim.socks5queue.connect_to_hosts(self.name, sid,
                         self.send_success_connect_reply, None)
-            raise xmpp.NodeProcessed
+                raise xmpp.NodeProcessed
         else:
             log.warn('Gajim got streamhosts for unknown transfer. Ignoring it.')
             raise xmpp.NodeProcessed
@@ -685,7 +684,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
         except Exception: # this bytestream result is not what we need
             pass
         id_ = real_id[3:]
-        file_props = FilesProp.getFileProp(con.name, id_)
+        file_props = FilesProp.getFileProp(self.name, id_)
         if file_props is None:
             raise xmpp.NodeProcessed
         if streamhost is None:
@@ -737,11 +736,6 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
                 self.remove_transfer(file_props)
             else:
                 gajim.socks5queue.send_file(file_props, self.name, 'client')
-            if file_props.fast:
-                fasts = file_props.fast
-                if len(fasts) > 0:
-                    self._connect_error(frm, fasts[0]['id'], file_props.sid,
-                            code=406)
 
         raise xmpp.NodeProcessed
 
