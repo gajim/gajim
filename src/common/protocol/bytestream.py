@@ -735,7 +735,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             if file_props.stopped:
                 self.remove_transfer(file_props)
             else:
-                gajim.socks5queue.send_file(file_props, self.name, 'client')
+                gajim.socks5queue.send_file(file_props, self.name, 'server')
 
         raise xmpp.NodeProcessed
 

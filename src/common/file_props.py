@@ -135,6 +135,7 @@ class FileProp(object):
         self.startexmpp = None
         self.session_type = None
         self.request_id = None
+        self.proxyhosts = None
 
     def getsid(self):
         # Getter of the property sid
