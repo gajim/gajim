@@ -354,6 +354,7 @@ class NonBlockingClient:
                 self.Dispatcher.ProcessNonBlocking(data)
             if self.got_see_other_host:
                 log.info('got see-other-host')
+                self.onreceive(None)
                 self.on_stream_error_cb(self, self.got_see_other_host)
             elif not self.got_features:
                 self._xmpp_connect_machine(
