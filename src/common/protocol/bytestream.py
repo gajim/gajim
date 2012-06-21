@@ -549,12 +549,16 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
         file_props.hash_ = hash_id
         return
 
-    def _connect_error(self, to, _id, sid, code=404):
+    def _connect_error(self,sid, code=404):
         """
         Called when there is an error establishing BS connection, or when
         connection is rejected
         """
         if not self.connection or self.connected < 2:
+            return
+        file_props = FilesProp.getFileProp(self.name, sid)
+        if file_props is None:
+            log.error('can not send iq error on failed transfer')
             return
         msg_dict = {
                 404: 'Could not connect to given hosts',
@@ -562,21 +566,23 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
                 406: 'Not acceptable',
         }
         msg = msg_dict[code]
+        if file_props.type_ == 's':
+            to = file_props.receiver
+        else:
+            to = file_props.sender
         iq = xmpp.Iq(to=to,     typ='error')
-        iq.setAttr('id', _id)
+        iq.setAttr('id', file_props.session_sid)
         err = iq.setTag('error')
         err.setAttr('code', unicode(code))
         err.setData(msg)
         self.connection.send(iq)
         if code == 404:
-            file_props = FilesProp.getFileProp(self.name, sid)
-            if file_props is not None:
-                self.disconnect_transfer(file_props)
-                file_props.error = -3
-                from common.connection_handlers_events import \
-                    FileRequestErrorEvent
-                gajim.nec.push_incoming_event(FileRequestErrorEvent(None,
-                    conn=self, jid=to, file_props=file_props, error_msg=msg))
+            self.disconnect_transfer(file_props)
+            file_props.error = -3
+            from common.connection_handlers_events import \
+                FileRequestErrorEvent
+            gajim.nec.push_incoming_event(FileRequestErrorEvent(None,
+                conn=self, jid=to, file_props=file_props, error_msg=msg))
 
     def _proxy_auth_ok(self, proxy):
         """

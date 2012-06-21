@@ -553,6 +553,8 @@ class FileTransfersWindow:
 
     def _remove_transfer(self, iter_, sid, file_props):
         self.model.remove(iter_)
+        if not file_props:
+            return
         if file_props.tt_account:
             # file transfer is set
             account = file_props.tt_account
