@@ -142,8 +142,8 @@ class VcardWindow:
             buffer_.set_text(annotations[self.contact.jid])
 
         self.xml.connect_signals(self)
-        self.window.show_all()
         self.xml.get_object('close_button').grab_focus()
+        self.window.show_all()
 
     def update_progressbar(self):
         self.progressbar.pulse()
