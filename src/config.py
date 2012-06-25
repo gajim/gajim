@@ -1559,7 +1559,6 @@ class AccountsWindow:
         self.update_proxy_list()
         self.xml.connect_signals(self)
         self.init_accounts()
-        self.xml.get_object('close_button').grab_focus()
         self.window.show_all()
 
         # Merge accounts
@@ -1575,6 +1574,8 @@ class AccountsWindow:
             import avahi
         except ImportError:
             self.avahi_available = False
+
+        self.xml.get_object('close_button').grab_focus()
 
     def on_accounts_window_key_press_event(self, widget, event):
         if event.keyval == gtk.keysyms.Escape:
@@ -1603,6 +1604,9 @@ class AccountsWindow:
         for account in gajim.config.get_per('accounts'):
             iter_ = model.append()
             model.set(iter_, 0, account)
+
+        self.selection = self.accounts_treeview.get_selection()
+        self.selection.select_iter(model.get_iter_root())
 
     def resend(self, account):
         if not account in gajim.connections:
