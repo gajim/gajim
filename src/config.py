@@ -1558,6 +1558,7 @@ class AccountsWindow:
         self.update_proxy_list()
         self.xml.connect_signals(self)
         self.init_accounts()
+        self.xml.get_object('close_button').grab_focus()
         self.window.show_all()
 
         # Merge accounts
