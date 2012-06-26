@@ -41,7 +41,7 @@ from common import dataforms
 from common import ged
 from common import jingle_xtls
 from common.file_props import FilesProp
-from common.socks5 import Socks5Receiver
+from common.socks5 import Socks5ReceiverClient
 
 import logging
 log = logging.getLogger('gajim.c.p.bytestream')
@@ -730,9 +730,8 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             file_props.streamhost_used = True
             file_props.streamhosts.append(proxy)
             file_props.is_a_proxy = True
-            receiver = Socks5Receiver(gajim.idlequeue, proxy,
+            receiver = Socks5ReceiverClient(gajim.idlequeue, proxy,
                     file_props.sid, file_props)
-            gajim.socks5queue.add_receiver(self.name, receiver)
             proxy['idx'] = receiver.queue_idx
             gajim.socks5queue.on_success = self._proxy_auth_ok
             raise xmpp.NodeProcessed
