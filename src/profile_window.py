@@ -73,6 +73,10 @@ class ProfileWindow:
         gajim.ged.register_event_handler('vcard-received', ged.GUI1,
             self._nec_vcard_received)
         self.window.show_all()
+        self.xml.get_object('ok_button').grab_focus()
+
+    def on_information_notebook_switch_page(self, widget, page, page_num):
+        gobject.idle_add(self.xml.get_object('ok_button').grab_focus)
 
     def update_progressbar(self):
         self.progressbar.pulse()
