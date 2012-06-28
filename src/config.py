@@ -582,9 +582,13 @@ class PreferencesWindow:
         self.sounds_preferences = None
 
         self.notebook.set_current_page(0)
+        self.xml.get_object('close_button').grab_focus()
 
         self.window.show_all()
         gtkgui_helpers.possibly_move_window_in_current_desktop(self.window)
+
+    def on_preferences_notebook_switch_page(self, widget, page, page_num):
+        gobject.idle_add(self.xml.get_object('close_button').grab_focus)
 
     def on_preferences_window_key_press_event(self, widget, event):
         if event.keyval == gtk.keysyms.Escape:
