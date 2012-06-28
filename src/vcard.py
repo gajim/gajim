@@ -173,6 +173,9 @@ class VcardWindow:
         if event.keyval == gtk.keysyms.Escape:
             self.window.destroy()
 
+    def on_information_notebook_switch_page(self, widget, page, page_num):
+        gobject.idle_add(self.xml.get_object('close_button').grab_focus)
+
     def on_PHOTO_eventbox_button_press_event(self, widget, event):
         """
         If right-clicked, show popup
