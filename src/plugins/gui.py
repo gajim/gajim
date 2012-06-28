@@ -82,13 +82,18 @@ class PluginsWindow(object):
         self._clear_installed_plugin_info()
 
         self.fill_installed_plugins_model()
+        selection.select_iter(self.installed_plugins_model.get_iter_root())
 
         self.xml.connect_signals(self)
 
         self.plugins_notebook.set_current_page(0)
+        self.xml.get_object('close_button').grab_focus()
 
         self.window.show_all()
         gtkgui_helpers.possibly_move_window_in_current_desktop(self.window)
+
+    def on_plugins_notebook_switch_page(self, widget, page, page_num):
+        gobject.idle_add(self.xml.get_object('close_button').grab_focus)
 
     @log_calls('PluginsWindow')
     def installed_plugins_treeview_selection_changed(self, treeview_selection):

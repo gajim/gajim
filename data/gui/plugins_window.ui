@@ -20,6 +20,7 @@
           <object class="GtkNotebook" id="plugins_notebook">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
+            <signal name="switch_page" handler="on_plugins_notebook_switch_page"/>
             <child>
               <object class="GtkHPaned" id="hpaned1">
                 <property name="visible">True</property>
