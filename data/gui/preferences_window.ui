@@ -166,6 +166,7 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="show_border">False</property>
+            <signal name="switch_page" handler="on_preferences_notebook_switch_page"/>
             <child>
               <object class="GtkVBox" id="vbox41">
                 <property name="visible">True</property>
@@ -1059,7 +1060,7 @@
                               </object>
                               <packing>
                                 <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"></property>
+                                <property name="y_options"/>
                               </packing>
                             </child>
                             <child>
@@ -1077,7 +1078,7 @@
                                 <property name="top_attach">1</property>
                                 <property name="bottom_attach">2</property>
                                 <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"></property>
+                                <property name="y_options"/>
                               </packing>
                             </child>
                             <child>
@@ -1090,7 +1091,7 @@
                                 <property name="left_attach">2</property>
                                 <property name="right_attach">3</property>
                                 <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"></property>
+                                <property name="y_options"/>
                               </packing>
                             </child>
                             <child>
@@ -1105,7 +1106,7 @@
                                 <property name="top_attach">1</property>
                                 <property name="bottom_attach">2</property>
                                 <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"></property>
+                                <property name="y_options"/>
                               </packing>
                             </child>
                             <child>
@@ -1168,7 +1169,7 @@ $T will be replaced by auto-away timeout</property>
                               <packing>
                                 <property name="left_attach">3</property>
                                 <property name="right_attach">4</property>
-                                <property name="y_options"></property>
+                                <property name="y_options"/>
                               </packing>
                             </child>
                             <child>
@@ -1185,7 +1186,7 @@ $T will be replaced by auto-not-available timeout</property>
                                 <property name="right_attach">4</property>
                                 <property name="top_attach">1</property>
                                 <property name="bottom_attach">2</property>
-                                <property name="y_options"></property>
+                                <property name="y_options"/>
                               </packing>
                             </child>
                           </object>
@@ -1698,7 +1699,7 @@ $T will be replaced by auto-not-available timeout</property>
                               </object>
                               <packing>
                                 <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"></property>
+                                <property name="y_options"/>
                               </packing>
                             </child>
                             <child>
@@ -1713,7 +1714,7 @@ $T will be replaced by auto-not-available timeout</property>
                                 <property name="left_attach">2</property>
                                 <property name="right_attach">3</property>
                                 <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"></property>
+                                <property name="y_options"/>
                               </packing>
                             </child>
                             <child>
@@ -1728,7 +1729,7 @@ $T will be replaced by auto-not-available timeout</property>
                                 <property name="top_attach">2</property>
                                 <property name="bottom_attach">3</property>
                                 <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"></property>
+                                <property name="y_options"/>
                               </packing>
                             </child>
                             <child>
@@ -1744,7 +1745,7 @@ $T will be replaced by auto-not-available timeout</property>
                                 <property name="top_attach">2</property>
                                 <property name="bottom_attach">3</property>
                                 <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"></property>
+                                <property name="y_options"/>
                               </packing>
                             </child>
                             <child>
@@ -1827,7 +1828,7 @@ $T will be replaced by auto-not-available timeout</property>
                                 <property name="top_attach">1</property>
                                 <property name="bottom_attach">2</property>
                                 <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"></property>
+                                <property name="y_options"/>
                               </packing>
                             </child>
                             <child>
@@ -1842,7 +1843,7 @@ $T will be replaced by auto-not-available timeout</property>
                                 <property name="top_attach">1</property>
                                 <property name="bottom_attach">2</property>
                                 <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"></property>
+                                <property name="y_options"/>
                               </packing>
                             </child>
                             <child>
@@ -1881,8 +1882,8 @@ $T will be replaced by auto-not-available timeout</property>
                                 <property name="right_attach">2</property>
                                 <property name="top_attach">1</property>
                                 <property name="bottom_attach">2</property>
-                                <property name="x_options"></property>
-                                <property name="y_options"></property>
+                                <property name="x_options"/>
+                                <property name="y_options"/>
                               </packing>
                             </child>
                             <child>
@@ -1921,8 +1922,8 @@ $T will be replaced by auto-not-available timeout</property>
                                 <property name="right_attach">4</property>
                                 <property name="top_attach">1</property>
                                 <property name="bottom_attach">2</property>
-                                <property name="x_options"></property>
-                                <property name="y_options"></property>
+                                <property name="x_options"/>
+                                <property name="y_options"/>
                               </packing>
                             </child>
                             <child>
@@ -1951,7 +1952,7 @@ $T will be replaced by auto-not-available timeout</property>
                                 <property name="left_attach">1</property>
                                 <property name="right_attach">2</property>
                                 <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"></property>
+                                <property name="y_options"/>
                               </packing>
                             </child>
                             <child>
@@ -1982,7 +1983,7 @@ $T will be replaced by auto-not-available timeout</property>
                                 <property name="top_attach">2</property>
                                 <property name="bottom_attach">3</property>
                                 <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"></property>
+                                <property name="y_options"/>
                               </packing>
                             </child>
                             <child>
@@ -2011,7 +2012,7 @@ $T will be replaced by auto-not-available timeout</property>
                                 <property name="left_attach">3</property>
                                 <property name="right_attach">4</property>
                                 <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"></property>
+                                <property name="y_options"/>
                               </packing>
                             </child>
                             <child>
@@ -2042,7 +2043,7 @@ $T will be replaced by auto-not-available timeout</property>
                                 <property name="top_attach">2</property>
                                 <property name="bottom_attach">3</property>
                                 <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"></property>
+                                <property name="y_options"/>
                               </packing>
                             </child>
                           </object>
@@ -2447,7 +2448,7 @@ to discover one from server.</property>
                                             <property name="right_attach">2</property>
                                             <property name="top_attach">2</property>
                                             <property name="bottom_attach">3</property>
-                                            <property name="y_options"></property>
+                                            <property name="y_options"/>
                                           </packing>
                                         </child>
                                         <child>
@@ -2462,7 +2463,7 @@ to discover one from server.</property>
                                             <property name="top_attach">2</property>
                                             <property name="bottom_attach">3</property>
                                             <property name="x_options">GTK_FILL</property>
-                                            <property name="y_options"></property>
+                                            <property name="y_options"/>
                                           </packing>
                                         </child>
                                         <child>
@@ -2474,7 +2475,7 @@ to discover one from server.</property>
                                           <packing>
                                             <property name="left_attach">1</property>
                                             <property name="right_attach">2</property>
-                                            <property name="y_options"></property>
+                                            <property name="y_options"/>
                                           </packing>
                                         </child>
                                         <child>
@@ -2488,7 +2489,7 @@ to discover one from server.</property>
                                             <property name="right_attach">2</property>
                                             <property name="top_attach">1</property>
                                             <property name="bottom_attach">2</property>
-                                            <property name="y_options"></property>
+                                            <property name="y_options"/>
                                           </packing>
                                         </child>
                                         <child>
@@ -2503,7 +2504,7 @@ to discover one from server.</property>
                                             <property name="top_attach">1</property>
                                             <property name="bottom_attach">2</property>
                                             <property name="x_options">GTK_FILL</property>
-                                            <property name="y_options"></property>
+                                            <property name="y_options"/>
                                           </packing>
                                         </child>
                                         <child>
@@ -2516,7 +2517,7 @@ to discover one from server.</property>
                                           </object>
                                           <packing>
                                             <property name="x_options">GTK_FILL</property>
-                                            <property name="y_options"></property>
+                                            <property name="y_options"/>
                                           </packing>
                                         </child>
                                       </object>
