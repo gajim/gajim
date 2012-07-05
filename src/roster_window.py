@@ -3215,7 +3215,7 @@ class RosterWindow:
 
         dialogs.ChooseGPGKeyDialog(_('Assign OpenPGP Key'),
             _('Select a key to apply to the contact'), public_keys,
-            on_key_selected, selected=keyID)
+            on_key_selected, selected=keyID, transient_for=self.window)
 
     def on_set_custom_avatar_activate(self, widget, contact, account):
         def on_ok(widget, path_to_file):
