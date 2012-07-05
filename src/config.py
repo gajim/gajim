@@ -2429,7 +2429,8 @@ class AccountsWindow:
                         keyID[0])
 
         dialogs.ChooseGPGKeyDialog(_('OpenPGP Key Selection'),
-                _('Choose your OpenPGP key'), secret_keys, on_key_selected)
+            _('Choose your OpenPGP key'), secret_keys, on_key_selected,
+            transient_for=self.window)
 
     def on_use_gpg_agent_checkbutton_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'use_gpg_agent')

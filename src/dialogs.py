@@ -277,12 +277,14 @@ class ChooseGPGKeyDialog:
     """
 
     def __init__(self, title_text, prompt_text, secret_keys, on_response,
-                             selected=None):
+            selected=None, transient_for=None):
         '''secret_keys : {keyID: userName, ...}'''
         self.on_response = on_response
         xml = gtkgui_helpers.get_gtk_builder('choose_gpg_key_dialog.ui')
         self.window = xml.get_object('choose_gpg_key_dialog')
         self.window.set_title(title_text)
+        if not transient_for:
+            self.window.set_transient_for(gajim.interface.roster.window)
         self.keys_treeview = xml.get_object('keys_treeview')
         prompt_label = xml.get_object('prompt_label')
         prompt_label.set_text(prompt_text)
