@@ -45,6 +45,7 @@ import cell_renderer_image
 import message_control
 import chat_control
 import dataforms_widget
+import profile_window
 
 try:
     import gtkspell
@@ -2454,7 +2455,11 @@ class AccountsWindow:
             _("Your server can't save your personal information."))
             return
 
-        gajim.interface.edit_own_details(self.current_account)
+        jid = gajim.get_jid_from_account(self.current_account)
+        if 'profile' not in gajim.interface.instances[self.current_account]:
+            gajim.interface.instances[self.current_account]['profile'] = \
+                profile_window.ProfileWindow(self.current_account, self.window)
+            gajim.connections[self.current_account].request_vcard(jid)
 
     def on_checkbutton_toggled(self, widget, config_name,
             change_sensitivity_widgets = None, account = None):
