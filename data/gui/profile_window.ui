@@ -4,6 +4,7 @@
   <!-- interface-naming-policy toplevel-contextual -->
   <object class="GtkWindow" id="profile_window">
     <property name="title" translatable="yes">Personal Information</property>
+    <property name="window_position">center-on-parent</property>
     <property name="type_hint">dialog</property>
     <signal name="destroy" handler="on_profile_window_destroy"/>
     <signal name="key_press_event" handler="on_profile_window_key_press_event"/>
