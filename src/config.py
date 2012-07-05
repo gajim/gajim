@@ -2458,7 +2458,7 @@ class AccountsWindow:
         jid = gajim.get_jid_from_account(self.current_account)
         if 'profile' not in gajim.interface.instances[self.current_account]:
             gajim.interface.instances[self.current_account]['profile'] = \
-                profile_window.ProfileWindow(self.current_account, self.window)
+                profile_window.ProfileWindow(self.current_account, transient_for=self.window)
             gajim.connections[self.current_account].request_vcard(jid)
 
     def on_checkbutton_toggled(self, widget, config_name,
