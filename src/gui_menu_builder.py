@@ -386,6 +386,9 @@ control=None, gc_contact=None, is_anonymous=True):
     else:
         build_invite_submenu(invite_menuitem, [(contact, account)])
 
+    if gajim.account_is_disconnected(account):
+        invite_menuitem.set_sensitive(False)
+
     # One or several resource, we do the same for send_custom_status
     status_menuitems = gtk.Menu()
     send_custom_status_menuitem.set_submenu(status_menuitems)
