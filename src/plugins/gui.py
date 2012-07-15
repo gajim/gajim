@@ -166,7 +166,8 @@ class PluginsWindow(object):
             try:
                 gajim.plugin_manager.activate_plugin(plugin)
             except GajimPluginActivateException, e:
-                WarningDialog(_('Plugin failed'), str(e))
+                WarningDialog(_('Plugin failed'), str(e),
+                    transient_for=self.window)
                 return
 
         self.installed_plugins_model[path][2] = not is_active
