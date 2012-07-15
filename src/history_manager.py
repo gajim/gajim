@@ -153,7 +153,7 @@ class HistoryManager:
         self.jids_listview.get_selection().set_mode(gtk.SELECTION_MULTIPLE)
 
         renderer_text = gtk.CellRendererText()  # holds jid
-        col = gtk.TreeViewColumn(_('Contacts'), renderer_text, text=0)
+        col = gtk.TreeViewColumn(_('Jabber ID'), renderer_text, text=0)
         self.jids_listview.append_column(col)
 
         self.jids_listview.get_selection().connect('changed',
