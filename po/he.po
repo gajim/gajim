@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gajim 0.15\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-07-04 22:54+0400\n"
-"PO-Revision-Date: 2012-07-15 12:46+0200\n"
+"PO-Revision-Date: 2012-07-17 21:41+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
 "Language: he\n"
@@ -1864,7 +1864,7 @@ msgstr "לוח החברים מנותק עם שיחות מופרדות"
 
 #: ../data/gui/preferences_window.ui.h:13
 msgid "Detached roster with single chat"
-msgstr "לוח החברים מנותק עם שיחה בודדת"
+msgstr "לוח החברים מנותק עם שיחה יחידה"
 
 #: ../data/gui/preferences_window.ui.h:14
 msgid "Single window for everything"
@@ -2916,11 +2916,11 @@ msgstr "שיחת _קבוצה"
 
 #: ../data/gui/systray_context_menu.ui.h:4
 msgid "Send Single _Message"
-msgstr "_שליחת הודעה בודדת..."
+msgstr "שליחת הודעה _בודדת"
 
 #: ../data/gui/systray_context_menu.ui.h:5
 msgid "Show All Pending _Events"
-msgstr "הצגת אירועים תלויים ועומדים"
+msgstr "הצגת _אירועים תלויים ועומדים"
 
 # ה_דממת
 #: ../data/gui/systray_context_menu.ui.h:6
@@ -3414,10 +3414,9 @@ msgid "is"
 msgstr "הינה"
 
 # Needs to be tested
-# *אינה*
 #: ../src/chat_control.py:2207
 msgid "is NOT"
-msgstr "<b>אינה</b>"
+msgstr "*אינה*"
 
 # Needs to be tested
 #. chat session %s be logged
@@ -3425,11 +3424,9 @@ msgstr "<b>אינה</b>"
 msgid "will"
 msgstr "יירשם"
 
-# Needs to be tested
-# *לא* יירשם
 #: ../src/chat_control.py:2209
 msgid "will NOT"
-msgstr "<b>לא</b> יירשם"
+msgstr "לא יירשם"
 
 # Needs to be tested
 #. About encrypted chat session
@@ -3471,7 +3468,7 @@ msgstr "סשן זה לא יושם בארכיון על שרת"
 
 #: ../src/chat_control.py:2373
 msgid "This session is encrypted"
-msgstr "סשן זה מוצפן"
+msgstr "סשן זה הינו מוצפן"
 
 #: ../src/chat_control.py:2376
 msgid " and WILL be logged"
@@ -3483,7 +3480,7 @@ msgstr " ולא יירשם"
 
 #: ../src/chat_control.py:2383
 msgid "Remote contact's identity not verified. Click the shield button for more details."
-msgstr "זהות איש־קשר מרוחק לא מאומתת. לחצו על כפתור המגן עבור פרטים נוספים."
+msgstr "זהות איש־קשר מרוחק לא מאומתת. נא ללחוץ על כפתור המגן עבור פרטים נוספים."
 
 #: ../src/chat_control.py:2385
 msgid "E2E encryption disabled"
@@ -3492,7 +3489,7 @@ msgstr "הצפנת E2E (קצה אל קצה) מנוטרלת"
 #: ../src/chat_control.py:2433
 #: ../src/chat_control.py:2447
 msgid "The following message was NOT encrypted"
-msgstr "ההודעה שלהלן <b>לא</b> הוצפנה"
+msgstr "ההודעה שלהלן *לא* הוצפנה"
 
 #: ../src/chat_control.py:2439
 msgid "The following message was encrypted"
@@ -4513,6 +4510,7 @@ msgstr "במידה והעדפה זו מופעלת, Gajim יעשה שימוש ב�
 msgid "If True, Gajim will show number of online and total contacts in account and group rows."
 msgstr "במידה והעדפה זו מופעלת, Gajim יציג מספר של אנשי־קשר מקוונים בשורות חשבון וקבוצה."
 
+# what type?
 # אפשרי שיהיה
 #: ../src/common/config.py:291
 #, fuzzy
@@ -4553,7 +4551,7 @@ msgstr "תרשים uri תקף. תרשימים המצויים ברשימה בלב
 # שידור בקשות
 #: ../src/common/config.py:298
 msgid "Ask offline status message to all offline contacts when connection to an accoutn is established. WARNING: This causes a lot of requests to be sent!"
-msgstr "בקש הודעות מצב לא מקוונות מכל אנשי־הקשר הבלתי מקוונים כאשר חיבור אל חשבון מבוסס. אזהרה: זה עלול לגרום לשליחת מספר רב של בקשות!"
+msgstr "בקש הודעות מצב לא מקוונות מכל אנשי־הקשר הבלתי מקוונים כאשר חיבור אל חשבון מבוסס. אזהרה: זו עלולה לגרום לשליחת מספר רב של בקשות!"
 
 #: ../src/common/config.py:299
 msgid "If True, completion in groupchats will be like a shell auto-completion"
@@ -5283,7 +5281,7 @@ msgstr "המפתח של איש־הקשר (%s) לא תואם את המפתח המ
 #. we're not english: one in locale and one en
 #: ../src/common/connection.py:343
 msgid "[This message is *encrypted* (See :XEP:`27`]"
-msgstr "[הודעה זו הינה *מוצפנת* (ראה :XEP:`27`]"
+msgstr "[הודעה זו הינה *מוצפנת* (ראו :XEP:`27`]"
 
 #: ../src/common/connection.py:446
 #, python-format
@@ -5387,6 +5385,7 @@ msgstr ""
 
 # חסרת תוקף
 # שם תחום
+# כוללת
 #: ../src/common/connection.py:1335
 #, python-format
 msgid ""
@@ -5691,11 +5690,7 @@ msgstr "סוף השבוע"
 msgid "Weekend!"
 msgstr "סופשבוע!"
 
-# What does it mean?
-# 1 and 1023 chars
-# 1 to 1023 characters?
 #: ../src/common/helpers.py:158
-#, fuzzy
 msgid "Username must be between 1 and 1023 chars"
 msgstr "שם משתמש מוכרח להיות בין 1 אל 1023 תווים"
 
@@ -5706,7 +5701,6 @@ msgid "Invalid character in username."
 msgstr "Invalid character in username."
 
 #: ../src/common/helpers.py:169
-#, fuzzy
 msgid "Server must be between 1 and 1023 chars"
 msgstr "שרת מוכרח להיות בין 1 אל 1023 תווים"
 
@@ -5721,7 +5715,6 @@ msgid "Server address required."
 msgstr "נדרשת כתובת שרת."
 
 #: ../src/common/helpers.py:180
-#, fuzzy
 msgid "Resource must be between 1 and 1023 chars"
 msgstr "משאב מוכרח להיות בין 1 אל 1023 תווים"
 
@@ -8544,9 +8537,7 @@ msgstr "יש צורך בהתקנת python-avahi."
 
 #: ../src/features_window.py:57
 msgid "Requires pybonjour and bonjour SDK running (http://developer.apple.com/opensource/)."
-msgstr ""
-"יש צורך בהתקנת ובהרצת pybonjour וגם bonjour SDK\n"
-"http://developer.apple.com/opensource/ ."
+msgstr "יש צורך בהתקנת ובהרצת pybonjour וגם bonjour SDK ‏(https://developer.apple.com/opensource)."
 
 #: ../src/features_window.py:58
 msgid "Command line"
@@ -8582,9 +8573,7 @@ msgstr "הצפנת הודעות שיחה באמצעות מפתחות gpg."
 
 #: ../src/features_window.py:64
 msgid "Requires gpg and python-gnupg (http://code.google.com/p/python-gnupg/)."
-msgstr ""
-"יש צורך בהתקנת gpg וגם python-gnupg\n"
-"http://code.google.com/p/python-gnupg/ ."
+msgstr "יש צורך בהתקנת gpg וגם python-gnupg ‏(https://code.google.com/p/python-gnupg)."
 
 #: ../src/features_window.py:65
 msgid "Requires gpg.exe in PATH."
@@ -8711,9 +8700,7 @@ msgstr "מחולל RST"
 
 #: ../src/features_window.py:99
 msgid "Generate XHTML output from RST code (see http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html)."
-msgstr ""
-"מחולל פלט XHTML מתוך קוד RST \n"
-"http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html"
+msgstr "מחולל פלט XHTML מתוך קוד RST ‏(http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html)."
 
 #: ../src/features_window.py:100
 #: ../src/features_window.py:101
@@ -10315,7 +10302,7 @@ msgstr "ערכת הרגשונים שהגדרת לא נמצאה, ומשכך הר�
 
 #: ../src/gui_interface.py:2003
 msgid "Your configured emoticons theme cannot been loaded. You maybe need to update the format of emoticons.py file. See http://trac.gajim.org/wiki/Emoticons for more details."
-msgstr "מוטיב הרגשונים שהגדרת לא ניתן לטעינה. ייתכן וקיים הצורך לעדכן את תסדיר קובץ ה־emoticons.py. עבור פרטים נוספים, ניתן לבקר בכתובת http://trac.gajim.org/wiki/Emoticons."
+msgstr "מוטיב הרגשונים שהגדרת לא ניתן לטעינה. ייתכן וקיים הצורך לעדכן את תסדיר קובץ ה־emoticons.py. עבור פרטים נוספים, ראו http://trac.gajim.org/wiki/Emoticons."
 
 #: ../src/gui_interface.py:2047
 #: ../src/roster_window.py:3927
@@ -10469,7 +10456,8 @@ msgstr "היסטוריית שיחה עם %s"
 msgid "Disk Error"
 msgstr "שגיאת דיסק"
 
-# NOTICE: There is a PDF character before %(status_msg)s)
+# NOTICE: There is an LRE character before %(status_msg)s)
+# PDF character before %(status_msg)s) failed
 # This is a LRE:
 # כעת ‪(Auto Status (idle))
 # ‫%(nick)s כרגע %(status)s: %(status_msg)s
@@ -10478,7 +10466,7 @@ msgstr "שגיאת דיסק"
 #: ../src/history_window.py:444
 #, python-format
 msgid "%(nick)s is now %(status)s: %(status_msg)s"
-msgstr "‫%(nick)s מצוי/ה במצב %(status)s כעת: ‬%(status_msg)s"
+msgstr "‫%(nick)s מצוי/ה במצב %(status)s כעת: ‪%(status_msg)s"
 
 #: ../src/history_window.py:455
 #, python-format
@@ -10643,7 +10631,7 @@ msgstr "הדיוקן נשלח כעת..."
 # Needs to be tested
 #: ../src/profile_window.py:402
 msgid "Information NOT published"
-msgstr "המידע <b>לא</b> פורסם"
+msgstr "המידע *לא* פורסם"
 
 #: ../src/profile_window.py:409
 msgid "vCard publication failed"
@@ -10738,13 +10726,14 @@ msgstr "אם תצא/י עכשיו, הקובץ או הקבצים שמועברים
 #: ../src/roster_window.py:2534
 #: ../src/roster_window.py:2966
 msgid "You have unread messages"
-msgstr "יש לך הודעות שלא נראו"
+msgstr "יש לך הודעות שלא נקראו"
 
 # BUG: and (A or THE) contact
 # קיימת לרשותך
+# היסטוריה מאופשרת
 #: ../src/roster_window.py:2535
 msgid "Messages will only be available for reading them later if you have history enabled and contact is in your roster."
-msgstr "הודעות יהיו זמינות לקריאה מאוחרת רק אם היסטוריה מאופשרת ואיש־הקשר מצוי ברשימת החברים שלך."
+msgstr "הודעות יהיו זמינות לקריאה מאוחרת רק אם אפשרת רישום היסטוריה ואיש־הקשר מצוי ברשימת החברים שלך."
 
 # לקרואן
 #: ../src/roster_window.py:2967
@@ -11185,7 +11174,7 @@ msgstr "מצב: "
 #: ../src/tooltips.py:572
 #, python-format
 msgid "Last status: %s"
-msgstr "מצב־חיבור אחרון: %s"
+msgstr "מצב אחרון: %s"
 
 #: ../src/tooltips.py:574
 #, python-format
