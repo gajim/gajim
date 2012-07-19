@@ -1655,10 +1655,20 @@ class ChatControl(ChatControlBase):
         if not gajim.HAVE_FARSTREAM:
             tooltip_text = self._audio_button.get_tooltip_text()
             self._audio_button.set_tooltip_text(
-                '%s\n%s' % (tooltip_text, _('Requires python-farstream.')))
+                '%s\n%s' % (tooltip_text,
+                _('Feature not available, see Help->Features')))
             tooltip_text = self._video_button.get_tooltip_text()
             self._video_button.set_tooltip_text(
-                '%s\n%s' % (tooltip_text, _('Requires python-farstream.')))
+                '%s\n%s' % (tooltip_text,
+                _('Feature not available, see Help->Features')))
+        elif not self.audio_available :
+            self._audio_button.set_tooltip_text(
+                '%s\n%s' % (tooltip_text,
+                _('Feature not supported by remote client')))
+            tooltip_text = self._video_button.get_tooltip_text()
+            self._video_button.set_tooltip_text(
+                '%s\n%s' % (tooltip_text,
+                _('Feature not supported by remote client')))
 
         gajim.ged.register_event_handler('pep-received', ged.GUI1,
             self._nec_pep_received)
