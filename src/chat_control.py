@@ -1650,26 +1650,6 @@ class ChatControl(ChatControlBase):
         self.restore_conversation()
         self.msg_textview.grab_focus()
 
-        # change tooltip text for audio and video buttons if python-farstream is
-        # not installed
-        if not gajim.HAVE_FARSTREAM:
-            tooltip_text = self._audio_button.get_tooltip_text()
-            self._audio_button.set_tooltip_text(
-                '%s\n%s' % (tooltip_text,
-                _('Feature not available, see Help->Features')))
-            tooltip_text = self._video_button.get_tooltip_text()
-            self._video_button.set_tooltip_text(
-                '%s\n%s' % (tooltip_text,
-                _('Feature not available, see Help->Features')))
-        elif not self.audio_available :
-            self._audio_button.set_tooltip_text(
-                '%s\n%s' % (tooltip_text,
-                _('Feature not supported by remote client')))
-            tooltip_text = self._video_button.get_tooltip_text()
-            self._video_button.set_tooltip_text(
-                '%s\n%s' % (tooltip_text,
-                _('Feature not supported by remote client')))
-
         gajim.ged.register_event_handler('pep-received', ged.GUI1,
             self._nec_pep_received)
         gajim.ged.register_event_handler('vcard-received', ged.GUI1,
@@ -1730,6 +1710,22 @@ class ChatControl(ChatControlBase):
 
         # Video buttons
         self._video_button.set_sensitive(self.video_available)
+
+        # change tooltip text for audio and video buttons if python-farstream is
+        # not installed
+        audio_tooltip_text = _('Toggle audio session') + '\n'
+        video_tooltip_text = _('Toggle video session') + '\n'
+        if not gajim.HAVE_FARSTREAM:
+            ext_text = _('Feature not available, see Help->Features')
+            self._audio_button.set_tooltip_text(audio_tooltip_text + ext_text)
+            self._video_button.set_tooltip_text(video_tooltip_text + ext_text)
+        elif not self.audio_available :
+            ext_text =_('Feature not supported by remote client')
+            self._audio_button.set_tooltip_text(audio_tooltip_text + ext_text)
+            self._video_button.set_tooltip_text(video_tooltip_text + ext_text)
+        else:
+            self._audio_button.set_tooltip_text(audio_tooltip_text[:-1])
+            self._video_button.set_tooltip_text(video_tooltip_text[:-1])
 
         # Send file
         if (self.contact.supports(NS_FILE) or \
