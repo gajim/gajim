@@ -251,11 +251,11 @@ class FileTransfersWindow:
     def show_hash_error(self, jid, file_props, account):
         def on_yes(dummy):
             # Request the file to the sender
-            sid = gajim.connections[account].start_file_transfer(jid, 
-                                                            file_props, 
+            sid = gajim.connections[account].start_file_transfer(jid,
+                                                            file_props,
                                                                 True)
             file_props['sid'] = sid
-            
+
 
         if file_props['type'] == 'r':
             file_name = os.path.basename(file_props['file-name'])
@@ -876,7 +876,7 @@ class FileTransfersWindow:
             self.continue_menuitem.set_no_show_all(True)
 
         else:
-            label = _('_Continue')
+            label = _('Continue')
             self.pause_button.set_label(label)
             self.pause_button.set_image(gtk.image_new_from_stock(
                     gtk.STOCK_MEDIA_PLAY, gtk.ICON_SIZE_MENU))
