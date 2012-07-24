@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gajim 0.15\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-07-04 22:54+0400\n"
-"PO-Revision-Date: 2012-07-17 21:41+0200\n"
+"PO-Revision-Date: 2012-07-24 11:05+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
 "Language: he\n"
@@ -913,7 +913,7 @@ msgstr "הצגת רשימת עיצובים"
 
 #: ../data/gui/chat_control.ui.h:3
 msgid "Add this contact to roster (Ctrl+D)"
-msgstr "הוספת אישקשר זה אל לוח החברים (Ctrl+D)"
+msgstr "הוספת איש־קשר זה אל לוח החברים (Ctrl+D)"
 
 #: ../data/gui/chat_control.ui.h:4
 #: ../src/command_system/implementation/standard.py:214
@@ -1899,7 +1899,7 @@ msgstr "במידה ואפשרות זו מסומנת, Gajim יציג אווטאר
 
 #: ../data/gui/preferences_window.ui.h:21
 msgid "Display status _messages of contacts in roster"
-msgstr "הצגת הו_דעות מצב־החיבור של אנשי־קשר בלוח החברים"
+msgstr "הצגת הו_דעות מצב של אנשי־קשר בלוח החברים"
 
 # BUG: a dot at the end
 #: ../data/gui/preferences_window.ui.h:22
@@ -1909,7 +1909,7 @@ msgstr "במידה ואפשרות זו מסומנת, Gajim יציג את הוד�
 # מ_צבי הרוח
 #: ../data/gui/preferences_window.ui.h:23
 msgid "Display m_ood of contacts in roster"
-msgstr "הצגת צמ_בי רוח של אנשי־קשר בלוח החברים"
+msgstr "הצגת מצ_בי רוח של אנשי־קשר בלוח החברים"
 
 # BUG: a dot at the end
 #: ../data/gui/preferences_window.ui.h:24
@@ -3326,7 +3326,7 @@ msgstr "האם באמת לשלוח קובץ?"
 #: ../src/chat_control.py:1154
 #, python-format
 msgid "If you send a file to %s, he/she will know your real Jabber ID."
-msgstr "אם תשלח קובץ אל %s, הוא/היא ידעו את כתובת ה־JID המלאה שלך."
+msgstr "אם תשלח קובץ אל %s, הוא/היא ידעו את כתובתך (JID) המלאה."
 
 # Changed enabled with activated
 # Enabled = מאופשרת
@@ -3368,7 +3368,7 @@ msgstr "איש־קשר זה אינו תומך בהעברת קבצים."
 
 #: ../src/chat_control.py:1737
 msgid "You need to know the real JID of the contact to send him or her a file."
-msgstr "יש צורך לדעת את כתובת ה־JID של איש־הקשר כדי לשלוח אליהם קובץ."
+msgstr "יש צורך לדעת את הכתובת (JID) של איש־הקשר כדי לשלוח אליו/אליה קובץ."
 
 #: ../src/chat_control.py:1851
 #, python-format
@@ -4420,7 +4420,7 @@ msgid ""
 "'never' - Never show roster.\n"
 "'last_state' - Restore the last state roster."
 msgstr ""
-"הצגת לח החברים בעת הפעלה.\n"
+"הצגת לוח החברים בעת הפעלה.\n"
 "‏'always' - תמיד להציג את לוח החברים.\n"
 "‏'never' - לא להציג את לוח החברים בכלל.\n"
 "‏'last_state' - שחזור המצב האחרון של לוח החברים."
@@ -7260,7 +7260,7 @@ msgstr "נדרשת מילת־מעבר"
 #: ../src/gui_interface.py:692
 #, python-format
 msgid "Enter your password for account %s"
-msgstr "נא להזין את מילת־המעבר של עבור החשבון %s"
+msgstr "נא להזין את מילת־המעבר עבור החשבון %s"
 
 #: ../src/config.py:3026
 #: ../src/gui_interface.py:712
@@ -7575,7 +7575,7 @@ msgstr "כתובת JID כבר מצויה ברשימה"
 
 #: ../src/dataforms_widget.py:638
 msgid "The Jabber ID you entered is already in the list. Choose another one."
-msgstr "כתובת ה־JID שהזנת כבר מצויה ברשימה. נא לבחור כתובת אחרת."
+msgstr "הכתובת (JID) שהזנת כבר מצויה ברשימה. נא לבחור כתובת אחרת."
 
 #. Default jid
 #: ../src/dataforms_widget.py:649
@@ -7827,7 +7827,7 @@ msgstr "נא להזין כתובת JID של שיחת הקבוצה באופן ז�
 #: ../src/dialogs.py:2490
 #: ../src/groupchat_control.py:2095
 msgid "The group chat Jabber ID has not allowed characters."
-msgstr "כתובת ה־JID של שיחת הקבוצה מכילה תווים אסורים."
+msgstr "כתובת (JID) שיחת קבוצה מכילה תווים אסורים."
 
 # זו לא
 #: ../src/dialogs.py:2495
@@ -8065,7 +8065,7 @@ msgstr "קבוצות"
 #: ../src/dialogs.py:3511
 #, python-format
 msgid "%s suggested me to add you in my roster."
-msgstr "‫%s הציע לי להוסיפך אל אל לוח החברים שלי."
+msgstr "‫%s הציע לי להוסיפך אל לוח החברים שלי."
 
 #: ../src/dialogs.py:3525
 #, python-format
@@ -9648,7 +9648,7 @@ msgstr "הנושא הוגדר על ידי %(nick)s אל %(subject)s"
 #: ../src/groupchat_control.py:1245
 #: ../src/groupchat_control.py:1512
 msgid "Any occupant is allowed to see your full JID"
-msgstr "כל הנוכחים מורשים לראות את כתובת ה־JID המלאה שלך"
+msgstr "כל הנוכחים מורשים לראות את כתובתך (JID) המלאה"
 
 # BUG: members?
 #: ../src/groupchat_control.py:1248
@@ -10801,7 +10801,7 @@ msgstr "האם ברצונך להסיר את הקבוצה %s מלוח החברי�
 
 #: ../src/roster_window.py:3195
 msgid "Also remove all contacts in this group from your roster"
-msgstr "הסר בנוסף את כל אנשי־הקשר שבקבוצה זו מלוח החברים"
+msgstr "הסר בנוסף את כל אנשי־הקשר שבקבוצה זו מלוח החברים שלך"
 
 #: ../src/roster_window.py:3234
 msgid "Assign OpenPGP Key"
@@ -10904,7 +10904,7 @@ msgstr "אנשי־קשר-מוצמדים (Metacontacts) הינה דרך לאחד 
 
 #: ../src/roster_window.py:4686
 msgid "Invalid file URI:"
-msgstr "כתובת URI שגויה של קובץ:"
+msgstr "כתובת URI של קובץ שגויה:"
 
 #: ../src/roster_window.py:4698
 #, python-format
