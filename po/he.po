@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gajim 0.15\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-07-04 22:54+0400\n"
-"PO-Revision-Date: 2012-07-24 11:05+0200\n"
+"PO-Revision-Date: 2012-07-26 14:47+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
 "Language: he\n"
@@ -5133,7 +5133,7 @@ msgstr "לא ניתן לפענח חתימת CRL"
 # Is deode different from decrypt?
 #: ../src/common/connection.py:74
 msgid "Unable to decode issuer public key"
-msgstr "לא ניתן לפענח את המפתח הציבורי של המנפיק"
+msgstr "לא ניתן לפענח מפתח ציבורי של מנפיק"
 
 # תעודת חתימה נכשל
 #: ../src/common/connection.py:75
@@ -5185,29 +5185,25 @@ msgid "Out of memory"
 msgstr ""
 
 #: ../src/common/connection.py:86
-#, fuzzy
 msgid "Self signed certificate"
-msgstr "תעודה"
+msgstr "תעודה חתומה עצמית"
 
 #: ../src/common/connection.py:87
-#, fuzzy
 msgid "Self signed certificate in certificate chain"
-msgstr "תעודה"
+msgstr "תעודה חתומה עצמית בשרשרת התעודה"
 
 #: ../src/common/connection.py:88
-#, fuzzy
 msgid "Unable to get local issuer certificate"
-msgstr "לא ניתן לקבל תעודת מנפיק מקומי"
+msgstr "לא ניתן לקבל תעודת מנפיק מקומית"
 
 #: ../src/common/connection.py:89
 msgid "Unable to verify the first certificate"
 msgstr "לא ניתן לאמת את התעודה הראשונה"
 
-# מחרוזת?
+# מחרוזת
 #: ../src/common/connection.py:90
-#, fuzzy
 msgid "Certificate chain too long"
-msgstr "שרשרת התעודה ארוכה מידי"
+msgstr "שרשרת תעודה ארוכה מידי"
 
 # נפסלה
 #: ../src/common/connection.py:91
@@ -5243,15 +5239,13 @@ msgid "Subject issuer mismatch"
 msgstr ""
 
 #: ../src/common/connection.py:98
-#, fuzzy
 msgid "Authority and subject key identifier mismatch"
-msgstr "רשות ומזהה מפתח נושא לא תואמים"
+msgstr "רשות ונושא מזהה מפתח לא תואמים"
 
-# ומספר סידורי של מנפיק
+# ומספר מנפיק סידורי
 #: ../src/common/connection.py:99
-#, fuzzy
 msgid "Authority and issuer serial number mismatch"
-msgstr "רשות ומספר מנפיק סידורי לא תואמים"
+msgstr "רשות ומספר סידורי של מנפיק לא תואמים"
 
 #: ../src/common/connection.py:100
 msgid "Key usage does not include certificate signing"
@@ -9841,10 +9835,10 @@ msgstr ""
 "בחרת להחריב את חדר זה.\n"
 "באפשרותך לציין סיבה למטה:"
 
+# מקום מפגש
 #: ../src/groupchat_control.py:2104
-#, fuzzy
 msgid "You may also enter an alternate venue:"
-msgstr "באפשרותך להזין גם venue אלטרנטיבי/ת:"
+msgstr "באפשרותך להזין זירה אלטרנטיבית:"
 
 #. ask for reason
 #: ../src/groupchat_control.py:2299
@@ -10648,7 +10642,7 @@ msgstr "חשבונות ממוזגים"
 
 #: ../src/roster_window.py:2042
 msgid "Authorization has been sent"
-msgstr "ההרשאה נשלחה"
+msgstr "הרשאה נשלחה"
 
 #: ../src/roster_window.py:2043
 #, python-format
@@ -10668,7 +10662,7 @@ msgstr "אם בקשתך תתקבל על ידי \"%s\" מצב־החיבור של�
 
 #: ../src/roster_window.py:2081
 msgid "Authorization has been removed"
-msgstr "ההרשאה הוסרה"
+msgstr "הרשאה הוסרה"
 
 #: ../src/roster_window.py:2082
 #, python-format
