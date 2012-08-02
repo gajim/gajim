@@ -447,7 +447,7 @@ class P2PConnection(IdleObject, PlugIn):
                     self._owner.Dispatcher.Event('', DATA_ERROR, (
                         self.client.to, thread_id))
                 else:
-                    self._owner.on_not_ok('conenction timeout')
+                    self._owner.on_not_ok('connection timeout')
             ids[self.fd] = []
         self.pollend()
 
