@@ -3752,7 +3752,7 @@ class RosterWindow:
             send_it()
             return
         pritext = _('You are about to send a custom status. Are you sure you '
-            'want  to continue?')
+            'want to continue?')
         sectext = _('This contact will temporarily see you as %(status)s, '
             'but only until you change your status. Then he or she will see '
             'your global status.') % {'status': show}
@@ -4469,7 +4469,7 @@ class RosterWindow:
             dialogs.WarningDialog(_('Metacontacts storage not supported by '
                 'your server'),
                 _('Your server does not support storing metacontacts '
-                'information. So those information will not be saved on next '
+                'information. So this information will not be saved on next '
                 'reconnection.'))
 
         def merge_contacts(is_checked=None):
