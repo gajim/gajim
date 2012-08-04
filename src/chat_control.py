@@ -1735,10 +1735,14 @@ class ChatControl(ChatControlBase):
                     "him or her a file."))
 
         # Convert to GC
-        if self.contact.supports(NS_MUC):
-            self._convert_to_gc_button.set_sensitive(True)
+        if gajim.config.get_per('accounts', self.account, 'is_zeroconf'):
+            self._convert_to_gc_button.set_no_show_all(True)
+            self._convert_to_gc_button.hide()
         else:
-            self._convert_to_gc_button.set_sensitive(False)
+            if self.contact.supports(NS_MUC):
+                self._convert_to_gc_button.set_sensitive(True)
+            else:
+                self._convert_to_gc_button.set_sensitive(False)
 
         # Information
         if gajim.account_is_disconnected(self.account):
