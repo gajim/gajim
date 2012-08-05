@@ -1246,6 +1246,8 @@ class MessageWindowMgr(gobject.GObject):
             mw.new_tab(ctrl)
 
     def save_opened_controls(self):
+        if not gajim.config.get('remember_opened_chat_controls'):
+            return
         chat_controls = {}
         for acct in gajim.connections:
             chat_controls[acct] = []

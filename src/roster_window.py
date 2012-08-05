@@ -2609,14 +2609,17 @@ class RosterWindow:
             self.add_account_contacts(obj.conn.name)
             self.fire_up_unread_messages_events(obj.conn.name)
         else:
-            account = obj.conn.name
-            controls = gajim.config.get_per('accounts', account,
-                'opened_chat_controls')
-            if controls:
-                for jid in controls.split(','):
-                    contact = gajim.contacts.get_contact_with_highest_priority(
-                        account, jid)
-                    gajim.interface.on_open_chat_window(None, contact, account)
+            if gajim.config.get('remember_opened_chat_controls'):
+                account = obj.conn.name
+                controls = gajim.config.get_per('accounts', account,
+                    'opened_chat_controls')
+                if controls:
+                    for jid in controls.split(','):
+                        contact = \
+                            gajim.contacts.get_contact_with_highest_priority(
+                            account, jid)
+                        gajim.interface.on_open_chat_window(None, contact,
+                            account)
             gobject.idle_add(self.refilter_shown_roster_items)
 
     def _nec_anonymous_auth(self, obj):

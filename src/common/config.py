@@ -311,6 +311,7 @@ class Config:
             'show_affiliation_in_groupchat': [opt_bool, True, _('If True, Gajim will show affiliation of groupchat occupants by adding a colored square to the status icon')],
             'global_proxy': [opt_str, '', _('Proxy used for all outgoing connections if the account does not have a specific proxy configured')],
             'ignore_incoming_attention': [opt_bool, False, _('If True, Gajim will ignore incoming attention requestd ("wizz").')],
+            'remember_opened_chat_controls': [ opt_bool, True, _('If enabled, Gajim will reopen chat windows that were opened last time Gajim was closed.')],
     }, {})
 
     __options_per_key = {
