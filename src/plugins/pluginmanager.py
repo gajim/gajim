@@ -100,7 +100,7 @@ class PluginManager(object):
         '''
         Registered handlers of GUI extension points.
         '''
-        for path in [gajim.PLUGINS_DIRS[1], gajim.PLUGINS_DIRS[0]):
+        for path in [gajim.PLUGINS_DIRS[1], gajim.PLUGINS_DIRS[0]]:
             pc = PluginManager.scan_dir_for_plugins(path)
             self.add_plugins(pc)
         self._activate_all_plugins_from_global_config()
