@@ -100,7 +100,7 @@ class PluginManager(object):
         '''
         Registered handlers of GUI extension points.
         '''
-        for path in gajim.PLUGINS_DIRS:
+        for path in [gajim.PLUGINS_DIRS[1], gajim.PLUGINS_DIRS[0]):
             pc = PluginManager.scan_dir_for_plugins(path)
             self.add_plugins(pc)
         self._activate_all_plugins_from_global_config()
@@ -433,6 +433,9 @@ class PluginManager(object):
 
             elif os.path.isdir(file_path) and scan_dirs:
                 module_name = elem_name
+                if module_name in sys.modules:
+                # do not load the module twice
+                    continue
                 file_path += os.path.sep
                 try:
                     module = __import__(module_name)
