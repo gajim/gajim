@@ -2620,8 +2620,8 @@ class RosterWindow:
                             account, jid)
                         gajim.interface.on_open_chat_window(None, contact,
                             account)
-                gajim.config.set_per('accounts', acct, 'opened_chat_controls',
-                    '')
+                gajim.config.set_per('accounts', account,
+                    'opened_chat_controls', '')
             gobject.idle_add(self.refilter_shown_roster_items)
 
     def _nec_anonymous_auth(self, obj):
