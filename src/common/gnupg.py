@@ -64,7 +64,7 @@ try:
 except NameError:
     _py3k = True
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('gajim.c.gnupg')
 if not logger.handlers:
     logger.addHandler(NullHandler())
 
