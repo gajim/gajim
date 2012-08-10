@@ -850,7 +850,12 @@ class Connection(CommonConnection, ConnectionHandlers):
                 # show error dialog
                 self._connection_lost()
         else:
-            self.disconnect()
+            if self.redirected:
+                self.disconnect(on_purpose=True)
+                self.connect()
+                return
+            else:
+                self.disconnect()
         self.on_purpose = False
     # END disconnectedReconnCB
 
