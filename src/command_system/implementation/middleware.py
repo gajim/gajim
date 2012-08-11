@@ -71,7 +71,7 @@ class ChatCommandProcessor(CommandProcessor):
         except CommandError, error:
             self.echo_error("%s: %s" % (error.name, error.message))
         except Exception:
-            self.echo_error("Error during command execution!")
+            self.echo_error(_("Error during command execution!"))
             print_exc()
         else:
             self.command_succeeded = True
