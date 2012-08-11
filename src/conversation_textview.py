@@ -43,7 +43,6 @@ import urllib
 import gtkgui_helpers
 from common import gajim
 from common import helpers
-from common import latex
 from common import i18n
 from calendar import timegm
 from common.fuzzyclock import FuzzyClock
