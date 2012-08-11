@@ -21,7 +21,6 @@ import logging
 log = logging.getLogger('gajim.c.z.zeroconf_avahi')
 
 try:
-    import dbus.glib
     import dbus.exceptions
 except ImportError, e:
     pass

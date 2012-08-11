@@ -64,7 +64,6 @@ from common import dbus_support
 
 if dbus_support.supported:
     import dbus
-    import dbus.glib
 
     try:
         from common.dbus_support import system_bus

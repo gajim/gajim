@@ -43,7 +43,6 @@ if dbus_support.supported:
     import dbus
     if dbus_support:
         import dbus.service
-        import dbus.glib
 
 INTERFACE = 'org.gajim.dbus.RemoteInterface'
 OBJ_PATH = '/org/gajim/dbus/RemoteObject'
