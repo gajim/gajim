@@ -34,7 +34,6 @@ def on_suspend(*args, **kwargs):
 
 if dbus_support.supported:
     import dbus
-    import dbus.glib
 
     try:
         from common.dbus_support import system_bus

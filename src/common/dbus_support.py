@@ -33,7 +33,8 @@ _GAJIM_ERROR_IFACE = 'org.gajim.dbus.Error'
 
 try:
     import dbus
-    import dbus.glib
+    from dbus.mainloop.glib import DBusGMainLoop
+    DBusGMainLoop(set_as_default=True)
 except ImportError:
     supported = False
     if not os.name == 'nt': # only say that to non Windows users

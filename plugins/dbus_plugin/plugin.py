@@ -48,7 +48,6 @@ if dbus_support.supported:
         SERVICE = 'org.gajim.dbusplugin'
 
         import dbus.service
-        import dbus.glib
         # type mapping
 
         # in most cases it is a utf-8 string

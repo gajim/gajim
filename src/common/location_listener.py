@@ -25,7 +25,6 @@ from common import pep
 from common import dbus_support
 if dbus_support.supported:
     import dbus
-    import dbus.glib
 
 class LocationListener:
     _instance = None

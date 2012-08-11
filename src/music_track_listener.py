@@ -31,7 +31,6 @@ if __name__ == '__main__':
 from common import dbus_support
 if dbus_support.supported:
     import dbus
-    import dbus.glib
 
 class MusicTrackInfo(object):
     __slots__ = ['title', 'album', 'artist', 'duration', 'track_number',
