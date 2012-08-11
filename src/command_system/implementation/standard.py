@@ -352,6 +352,30 @@ class StandardGroupChatCommands(CommandContainer):
             raise CommandError(_("Nickname not found"))
         self.connection.gc_set_role(self.room_jid, who, 'none', reason or str())
 
+    @command(raw=True)
+    @doc(_("""Set occupant role in group chat.
+    Role can be given as one of the following values:
+    moderator, participant, visitor, none"""))
+    def role(self, who, role):
+        if role not in ('moderator', 'participant', 'visitor', 'none'):
+            raise CommandError(_("Invalid role given"))
+        if not who in gajim.contacts.get_nick_list(self.account, self.room_jid):
+            raise CommandError(_("Nickname not found"))
+        self.connection.gc_set_role(self.room_jid, who, role)
+
+    @command(raw=True)
+    @doc(_("""Set occupant affiliation in group chat.
+    Affiliation can be given as one of the following values:
+    owner, admin, member, outcast, none"""))
+    def affiliate(self, who, affiliation):
+        if affiliation not in ('owner', 'admin', 'member', 'outcast', 'none'):
+            raise CommandError(_("Invalid affiliation given"))
+        if not who in gajim.contacts.get_nick_list(self.account, self.room_jid):
+            raise CommandError(_("Nickname not found"))
+        contact = gajim.contacts.get_gc_contact(self.account, self.room_jid, who)
+        self.connection.gc_set_affiliation(self.room_jid, contact.jid,
+            affiliation)
+
     @command
     @doc(_("Display names of all group chat occupants"))
     def names(self, verbose=False):

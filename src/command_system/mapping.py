@@ -162,7 +162,7 @@ def adapt_arguments(command, arguments, args, opts):
                 try:
                     stopper, (start, end) = args[spec_len - 2]
                 except IndexError:
-                    raise CommandError("Missing arguments", command)
+                    raise CommandError(_("Missing arguments"), command)
 
                 # The essential point of the whole play. After
                 # boundaries are being determined (supposingly correct)
@@ -172,7 +172,7 @@ def adapt_arguments(command, arguments, args, opts):
                 raw = raw.strip() or None
 
                 if not raw and not command.empty:
-                    raise CommandError("Missing arguments", command)
+                    raise CommandError(_("Missing arguments"), command)
 
                 # Discard residual arguments and all of the options as
                 # raw command does not support options and if an option
@@ -192,7 +192,7 @@ def adapt_arguments(command, arguments, args, opts):
             if command.empty:
                 args.append((None, (0, 0)))
             else:
-                raise CommandError("Missing arguments", command)
+                raise CommandError(_("Missing arguments"), command)
 
     # The first stage of transforming options we have got to a format
     # that can be used to associate them with declared keyword
@@ -259,7 +259,7 @@ def adapt_arguments(command, arguments, args, opts):
             for arg, (spec_key, spec_value) in zip(overlapped, spec_kwargs):
                 opts.append((spec_key, arg))
         else:
-            raise CommandError("Excessive arguments", command)
+            raise CommandError(_("Excessive arguments"), command)
 
     # Detect every switch and ensure it will not receive any arguments.
     # Normally this does not happen unless overlapping is enabled.
