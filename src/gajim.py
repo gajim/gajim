@@ -65,9 +65,7 @@ if os.name == 'nt':
 from common import demandimport
 demandimport.enable()
 demandimport.ignore += ['gobject._gobject', 'libasyncns', 'i18n',
-    'logging.NullHandler', 'dbus.service',
-    'command_system.implementation.standard',
-    'command_system.implementation.execute', 'OpenSSL.SSL', 'OpenSSL.crypto',
+    'logging.NullHandler', 'dbus.service', 'OpenSSL.SSL', 'OpenSSL.crypto',
     'common.sleepy', 'DLFCN', 'dl', 'xml.sax', 'xml.sax.handler', 'ic',
     'Crypto.PublicKey']
 
