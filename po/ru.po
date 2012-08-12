@@ -9983,7 +9983,7 @@ msgstr "Модуль"
 
 #: ../src/plugins/gui.py:162
 msgid "Plugin failed"
-msgstr "Неудачный модуль"
+msgstr "Ошибка в модуле"
 
 #: ../src/plugins/gui.py:206
 msgid "Unable to properly remove the plugin"
