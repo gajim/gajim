@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-03-01 11:01+0400\n"
-"PO-Revision-Date: 2012-03-01 11:08+0300\n"
+"PO-Revision-Date: 2012-08-12 21:54+0300\n"
 "Last-Translator: Fomin Denis <fominde@mail.ru>\n"
 "Language-Team: Linux Support LLC\n"
 "Language: ru\n"
@@ -3430,9 +3430,8 @@ msgstr "Доступен"
 
 #: ../src/command_system/implementation/standard.py:184
 #: ../src/command_system/implementation/standard.py:261
-#, fuzzy
 msgid "Clear the text window"
-msgstr "Использование: /%s, очищает текстовое окно."
+msgstr "Очистить текстовое окно"
 
 #: ../src/command_system/implementation/standard.py:189
 #, fuzzy
@@ -9602,7 +9601,7 @@ msgstr "Модуль"
 
 #: ../src/plugins/gui.py:162
 msgid "Plugin failed"
-msgstr "Неудачный модуль"
+msgstr "Ошибка в модуле"
 
 #: ../src/plugins/gui.py:206
 msgid "Unable to properly remove the plugin"
