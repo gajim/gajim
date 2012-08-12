@@ -62,8 +62,8 @@ from command_system.implementation.hosts import ChatCommands
 
 # Here we load the module with the standard commands, so they are being detected
 # and dispatched.
-import command_system.implementation.standard
-import command_system.implementation.execute
+from command_system.implementation.standard import StandardChatCommands
+from command_system.implementation.execute import Execute, Show
 
 try:
     import gtkspell
@@ -81,7 +81,15 @@ if dbus_support.supported:
 ##!/bin/sh
 #LANG=$(for i in *.po; do j=${i/.po/}; echo -n "_('"$j"')":" '"$j"', " ; done)
 #echo "{_('en'):'en'",$LANG"}"
-langs = {_('English'): 'en', _('Belarusian'): 'be', _('Bulgarian'): 'bg', _('Breton'): 'br', _('Czech'): 'cs', _('German'): 'de', _('Greek'): 'el', _('British'): 'en_GB', _('Esperanto'): 'eo', _('Spanish'): 'es', _('Basque'): 'eu', _('French'): 'fr', _('Croatian'): 'hr', _('Italian'): 'it', _('Norwegian (b)'): 'nb', _('Dutch'): 'nl', _('Norwegian'): 'no', _('Polish'): 'pl', _('Portuguese'): 'pt', _('Brazilian Portuguese'): 'pt_BR', _('Russian'): 'ru', _('Serbian'): 'sr', _('Slovak'): 'sk', _('Swedish'): 'sv', _('Chinese (Ch)'): 'zh_CN'}
+langs = {_('English'): 'en', _('Belarusian'): 'be', _('Bulgarian'): 'bg',
+        _('Breton'): 'br', _('Czech'): 'cs', _('German'): 'de',
+        _('Greek'): 'el', _('British'): 'en_GB', _('Esperanto'): 'eo',
+        _('Spanish'): 'es', _('Basque'): 'eu', _('French'): 'fr',
+        _('Croatian'): 'hr', _('Italian'): 'it', _('Norwegian (b)'): 'nb',
+        _('Dutch'): 'nl', _('Norwegian'): 'no', _('Polish'): 'pl',
+        _('Portuguese'): 'pt', _('Brazilian Portuguese'): 'pt_BR',
+        _('Russian'): 'ru', _('Serbian'): 'sr', _('Slovak'): 'sk',
+        _('Swedish'): 'sv', _('Chinese (Ch)'): 'zh_CN'}
 
 if gajim.config.get('use_speller') and HAS_GTK_SPELL:
     # loop removing non-existent dictionaries
@@ -2311,7 +2319,7 @@ class ChatControl(ChatControlBase):
             else:
                 displaymarking = None
             self.print_conversation(message, self.contact.jid, encrypted=encrypted,
-                    xep0184_id=xep0184_id, xhtml=xhtml, displaymarking=displaymarking)
+                xep0184_id=xep0184_id, xhtml=xhtml, displaymarking=displaymarking)
 
         ChatControlBase.send_message(self, message, keyID, type_='chat',
                 chatstate=chatstate_to_send, composing_xep=composing_xep,
@@ -2926,7 +2934,8 @@ class ChatControl(ChatControlBase):
         except exceptions.DatabaseMalformed:
             import common.logger
             dialogs.ErrorDialog(_('Database Error'),
-                    _('The database file (%s) cannot be read. Try to repair it or remove it (all history will be lost).') % common.logger.LOG_DB_PATH)
+                _('The database file (%s) cannot be read. Try to repair it or \
+                remove it (all history will be lost).') % common.logger.LOG_DB_PATH)
             rows = []
         local_old_kind = None
         for row in rows: # row[0] time, row[1] has kind, row[2] the message
