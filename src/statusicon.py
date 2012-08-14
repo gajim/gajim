@@ -129,13 +129,28 @@ class StatusIcon:
         """
         Apart from image, we also update tooltip text here
         """
+        def really_set_img():
+            if image.get_storage_type() == gtk.IMAGE_PIXBUF:
+                self.status_icon.set_from_pixbuf(image.get_pixbuf())
+            # FIXME: oops they forgot to support GIF animation?
+            # or they were lazy to get it to work under Windows! WTF!
+            elif image.get_storage_type() == gtk.IMAGE_ANIMATION:
+                self.status_icon.set_from_pixbuf(
+                        image.get_animation().get_static_image())
+            #       self.status_icon.set_from_animation(image.get_animation())
+
         if not gajim.interface.systray_enabled:
             return
         if gajim.config.get('trayicon') == 'always':
             self.status_icon.set_visible(True)
         if gajim.events.get_nb_systray_events():
             self.status_icon.set_visible(True)
-            self.status_icon.set_blinking(True)
+            if gajim.config.get('trayicon_blink'):
+                self.status_icon.set_blinking(True)
+            else:
+                image = gtkgui_helpers.load_icon('event')
+                really_set_img()
+                return
         else:
             if gajim.config.get('trayicon') == 'on_event':
                 self.status_icon.set_visible(False)
@@ -143,14 +158,7 @@ class StatusIcon:
 
         image = gajim.interface.jabber_state_images[self.statusicon_size][
                                                                 self.status]
-        if image.get_storage_type() == gtk.IMAGE_PIXBUF:
-            self.status_icon.set_from_pixbuf(image.get_pixbuf())
-        # FIXME: oops they forgot to support GIF animation?
-        # or they were lazy to get it to work under Windows! WTF!
-        elif image.get_storage_type() == gtk.IMAGE_ANIMATION:
-            self.status_icon.set_from_pixbuf(
-                    image.get_animation().get_static_image())
-        #       self.img_tray.set_from_animation(image.get_animation())
+        really_set_img()
 
     def change_status(self, global_status):
         """
