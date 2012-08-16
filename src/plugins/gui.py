@@ -27,7 +27,7 @@ GUI classes related to plug-in management.
 __all__ = ['PluginsWindow']
 
 import pango
-import gtk, gobject
+import gtk, gobject, os
 
 import gtkgui_helpers
 from dialogs import WarningDialog, YesNoDialog, ArchiveChooserDialog
@@ -69,12 +69,18 @@ class PluginsWindow(object):
         self.plugin_name_label.set_attributes(attr_list)
 
         self.installed_plugins_model = gtk.ListStore(gobject.TYPE_PYOBJECT,
-            gobject.TYPE_STRING, gobject.TYPE_BOOLEAN, gobject.TYPE_BOOLEAN)
+            gobject.TYPE_STRING, gobject.TYPE_BOOLEAN, gobject.TYPE_BOOLEAN,
+            gtk.gdk.Pixbuf)
         self.installed_plugins_treeview.set_model(self.installed_plugins_model)
         self.installed_plugins_treeview.set_rules_hint(True)
 
         renderer = gtk.CellRendererText()
-        col = gtk.TreeViewColumn(_('Plugin'), renderer, text=NAME)
+        col = gtk.TreeViewColumn(_('Plugin'))#, renderer, text=NAME)
+        cell = gtk.CellRendererPixbuf()
+        col.pack_start(cell, False)
+        col.add_attribute(cell, 'pixbuf', ICON)
+        col.pack_start(renderer, True)
+        col.add_attribute(renderer, 'text', NAME)
         self.installed_plugins_treeview.append_column(col)
 
         renderer = gtk.CellRendererToggle()
@@ -82,6 +88,10 @@ class PluginsWindow(object):
         col = gtk.TreeViewColumn(_('Active'), renderer, active=ACTIVE,
             activatable=ACTIVATABLE)
         self.installed_plugins_treeview.append_column(col)
+
+        icon = gtk.Image()
+        self.def_icon = icon.render_icon(gtk.STOCK_PREFERENCES,
+            gtk.ICON_SIZE_MENU)
 
         # connect signal for selection change
         selection = self.installed_plugins_treeview.get_selection()
@@ -101,6 +111,7 @@ class PluginsWindow(object):
 
         self.window.show_all()
         gtkgui_helpers.possibly_move_window_in_current_desktop(self.window)
+
 
     def on_plugins_notebook_switch_page(self, widget, page, page_num):
         gobject.idle_add(self.xml.get_object('close_button').grab_focus)
@@ -162,8 +173,17 @@ class PluginsWindow(object):
         self.installed_plugins_model.set_sort_column_id(1, gtk.SORT_ASCENDING)
 
         for plugin in pm.plugins:
+            icon = self.get_plugin_icon(plugin)
             self.installed_plugins_model.append([plugin, plugin.name,
-                plugin.active and plugin.activatable, plugin.activatable])
+                plugin.active and plugin.activatable, plugin.activatable, icon])
+
+    def get_plugin_icon(self, plugin):
+        icon_file = os.path.join(plugin.__path__, os.path.split(
+                plugin.__path__)[1]) + '.png'
+        icon = self.def_icon
+        if os.path.isfile(icon_file):
+            icon = gtk.gdk.pixbuf_new_from_file_at_size(icon_file, 16, 16)
+        return icon
 
     @log_calls('PluginsWindow')
     def installed_plugins_toggled_cb(self, cell, path):
@@ -249,7 +269,7 @@ class PluginsWindow(object):
                         break
 
                 iter_ = model.append([plugin, plugin.name, False,
-                    plugin.activatable])
+                    plugin.activatable, self.get_plugin_icon(plugin)])
                 sel = self.installed_plugins_treeview.get_selection()
                 sel.select_iter(iter_)
 
@@ -272,7 +292,7 @@ class PluginsWindow(object):
                 return
             model = self.installed_plugins_model
             iter_ = model.append([plugin, plugin.name, False,
-                plugin.activatable])
+                plugin.activatable], self.get_plugin_icon(plugin))
             sel = self.installed_plugins_treeview.get_selection()
             sel.select_iter(iter_)
 
