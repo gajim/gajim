@@ -36,6 +36,15 @@ from plugins.helpers import log_calls, log
 from plugins.helpers import GajimPluginActivateException
 from common.exceptions import PluginsystemError
 
+(
+PLUGIN,
+NAME,
+ACTIVE,
+ACTIVATABLE,
+ICON,
+) = range(5)
+
+
 class PluginsWindow(object):
     '''Class for Plugins window'''
 
@@ -65,12 +74,13 @@ class PluginsWindow(object):
         self.installed_plugins_treeview.set_rules_hint(True)
 
         renderer = gtk.CellRendererText()
-        col = gtk.TreeViewColumn(_('Plugin'), renderer, text=1)
+        col = gtk.TreeViewColumn(_('Plugin'), renderer, text=NAME)
         self.installed_plugins_treeview.append_column(col)
 
         renderer = gtk.CellRendererToggle()
         renderer.connect('toggled', self.installed_plugins_toggled_cb)
-        col = gtk.TreeViewColumn(_('Active'), renderer, active=2, activatable=3)
+        col = gtk.TreeViewColumn(_('Active'), renderer, active=ACTIVE,
+            activatable=ACTIVATABLE)
         self.installed_plugins_treeview.append_column(col)
 
         # connect signal for selection change
@@ -99,9 +109,9 @@ class PluginsWindow(object):
     def installed_plugins_treeview_selection_changed(self, treeview_selection):
         model, iter = treeview_selection.get_selected()
         if iter:
-            plugin = model.get_value(iter, 0)
-            plugin_name = model.get_value(iter, 1)
-            is_active = model.get_value(iter, 2)
+            plugin = model.get_value(iter, PLUGIN)
+            plugin_name = model.get_value(iter, NAME)
+            is_active = model.get_value(iter, ACTIVE)
 
             self._display_installed_plugin_info(plugin)
         else:
@@ -157,8 +167,8 @@ class PluginsWindow(object):
 
     @log_calls('PluginsWindow')
     def installed_plugins_toggled_cb(self, cell, path):
-        is_active = self.installed_plugins_model[path][2]
-        plugin = self.installed_plugins_model[path][0]
+        is_active = self.installed_plugins_model[path][ACTIVE]
+        plugin = self.installed_plugins_model[path][PLUGIN]
 
         if is_active:
             gajim.plugin_manager.deactivate_plugin(plugin)
@@ -170,7 +180,7 @@ class PluginsWindow(object):
                     transient_for=self.window)
                 return
 
-        self.installed_plugins_model[path][2] = not is_active
+        self.installed_plugins_model[path][ACTIVE] = not is_active
 
     @log_calls('PluginsWindow')
     def on_plugins_window_destroy(self, widget):
@@ -187,9 +197,9 @@ class PluginsWindow(object):
         selection = self.installed_plugins_treeview.get_selection()
         model, iter = selection.get_selected()
         if iter:
-            plugin = model.get_value(iter, 0)
-            plugin_name = model.get_value(iter, 1)
-            is_active = model.get_value(iter, 2)
+            plugin = model.get_value(iter, PLUGIN)
+            plugin_name = model.get_value(iter, NAME)
+            is_active = model.get_value(iter, ACTIVE)
 
 
             result = plugin.config_dialog.run(self.window)
@@ -205,9 +215,9 @@ class PluginsWindow(object):
         selection = self.installed_plugins_treeview.get_selection()
         model, iter = selection.get_selected()
         if iter:
-            plugin = model.get_value(iter, 0)
-            plugin_name = model.get_value(iter, 1).decode('utf-8')
-            is_active = model.get_value(iter, 2)
+            plugin = model.get_value(iter, PLUGIN)
+            plugin_name = model.get_value(iter, NAME).decode('utf-8')
+            is_active = model.get_value(iter, ACTIVE)
             try:
                 gajim.plugin_manager.remove_plugin(plugin)
             except PluginsystemError, e:
@@ -234,8 +244,8 @@ class PluginsWindow(object):
                 model = self.installed_plugins_model
 
                 for row in xrange(len(model)):
-                    if plugin == model[row][0]:
-                        model.remove(model.get_iter((row, 0)))
+                    if plugin == model[row][PLUGIN]:
+                        model.remove(model.get_iter((row, PLUGIN)))
                         break
 
                 iter_ = model.append([plugin, plugin.name, False,
