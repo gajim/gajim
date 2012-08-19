@@ -1102,13 +1102,16 @@ class Connection(CommonConnection, ConnectionHandlers):
         log.debug('Connection to next host')
         if len(self._hosts):
             # No config option exist when creating a new account
-            if self.last_connection_type:
-                self._connection_types = [self.last_connection_type]
-            elif self.name in gajim.config.get_per('accounts'):
+            if self.name in gajim.config.get_per('accounts'):
                 self._connection_types = gajim.config.get_per('accounts', self.name,
                         'connection_types').split()
             else:
                 self._connection_types = ['tls', 'ssl', 'plain']
+            if self.last_connection_type:
+                if self.last_connection_type in self._connection_types:
+                    self._connection_types.remove(self.last_connection_type)
+                self._connection_types.insert(0, self.last_connection_type)
+
 
             if self._proxy and self._proxy['type']=='bosh':
                 # with BOSH, we can't do TLS negotiation with <starttls>, we do only "plain"
