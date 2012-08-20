@@ -219,12 +219,7 @@ class MessageControl(object):
     def remove_session(self, session):
         if session != self.session:
             return
-        last_session = None
-        if self.other_sessions:
-            last_session = self.other_sessions.pop(0)
-        if session not in self.other_sessions:
-            self.other_sessions.append(session)
-        self.session = last_session
+        self.session = None
 
     def _nec_message_outgoing(self, obj):
         # Send the given message to the active tab.
