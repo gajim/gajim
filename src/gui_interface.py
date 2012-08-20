@@ -375,7 +375,7 @@ class Interface:
         is_highest = (highest and highest.resource == resource)
 
         ctrl = self.msg_win_mgr.get_control(jid, account)
-        if ctrl and ctrl.session and ctrl.session.resource == resource:
+        if ctrl and ctrl.session and len(obj.contact_list) > 1:
             ctrl.remove_session(ctrl.session)
 
     def handle_event_msgerror(self, obj):

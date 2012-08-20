@@ -60,7 +60,6 @@ class MessageControl(object):
         self.resource = resource
 
         self.session = None
-        self.other_sessions = []
 
         gajim.last_message_time[self.account][self.get_full_jid()] = 0
 
@@ -203,10 +202,6 @@ class MessageControl(object):
 
         if oldsession:
             oldsession.control = None
-            self.other_sessions.append(oldsession)
-
-        if self.session in self.other_sessions:
-            self.other_sessions.remove(self.session)
 
         crypto_changed = bool(session and isinstance(session,
             EncryptedStanzaSession) and session.enable_encryption) != \
@@ -229,8 +224,7 @@ class MessageControl(object):
             last_session = self.other_sessions.pop(0)
         if session not in self.other_sessions:
             self.other_sessions.append(session)
-        if last_session:
-            self.session = last_session
+        self.session = last_session
 
     def _nec_message_outgoing(self, obj):
         # Send the given message to the active tab.
