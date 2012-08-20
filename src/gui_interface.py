@@ -596,6 +596,12 @@ class Interface:
                 for jid in gajim.automatic_rooms[account][obj.jid]['invities']:
                     obj.conn.send_invite(obj.jid, jid,
                         continue_tag=continue_tag)
+                    gc_control = self.msg_win_mgr.get_gc_control(obj.jid,
+                        account)
+                    if gc_control:
+                        gc_control.print_conversation(
+                            _('%(jid)s has been invited in this room') % {
+                            'jid': jid}, graphics=False)
             del gajim.automatic_rooms[account][obj.jid]
         elif obj.jid not in self.instances[account]['gc_config']:
             self.instances[account]['gc_config'][obj.jid] = \

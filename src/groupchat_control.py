@@ -2132,6 +2132,8 @@ class GroupchatControl(ChatControlBase):
             return
         contact_jid = data.decode('utf-8')
         gajim.connections[self.account].send_invite(self.room_jid, contact_jid)
+        self.print_conversation(_('%(jid)s has been invited in this room') % {
+            'jid': contact_jid}, graphics=False)
 
     def handle_message_textview_mykey_press(self, widget, event_keyval,
     event_keymod):
