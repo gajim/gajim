@@ -3376,6 +3376,12 @@ class RosterWindow:
             if resource: # we MUST have one contact only in list_
                 contact_jid += '/' + resource
             gajim.connections[room_account].send_invite(room_jid, contact_jid)
+            gc_control = gajim.interface.msg_win_mgr.get_gc_control(room_jid,
+                room_account)
+            if gc_control:
+                gc_control.print_conversation(
+                    _('%(jid)s has been invited in this room') % {
+                    'jid': contact_jid}, graphics=False)
 
     def on_all_groupchat_maximized(self, widget, group_list):
         for (contact, account) in group_list:
