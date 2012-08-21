@@ -6002,7 +6002,7 @@ msgstr "מתחבר כעת"
 
 #: ../src/common/helpers.py:247
 msgid "A_way"
-msgstr "לא נ_מצא"
+msgstr "_נעדר"
 
 #: ../src/common/helpers.py:252
 msgid "_Offline"
