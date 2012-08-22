@@ -1140,26 +1140,31 @@ class Socks5Server(Socks5):
             self.disconnect()
             return
         self.idlequeue.remove_timeout(self.fd)
-        if self.state == 2: # send reply with desired auth type
-            self.send_raw(self._get_auth_response())
-        elif self.state == 4: # send positive response to the 'connect'
-            self.send_raw(self._get_request_buff(self.sha_msg, 0x00))
-        elif self.state == 7:
-            if self.file_props.paused:
-                self.file_props.continue_cb = self.continue_paused_transfer
-                self.idlequeue.plug_idle(self, False, False)
-                return
-            result = self.start_transfer() # send
-            self.queue.process_result(result, self)
-            if result is None or result <= 0:
+        try:
+            if self.state == 2: # send reply with desired auth type
+                self.send_raw(self._get_auth_response())
+            elif self.state == 4: # send positive response to the 'connect'
+                self.send_raw(self._get_request_buff(self.sha_msg, 0x00))
+            elif self.state == 7:
+                if self.file_props.paused:
+                    self.file_props.continue_cb = self.continue_paused_transfer
+                    self.idlequeue.plug_idle(self, False, False)
+                    return
+                result = self.start_transfer() # send
+                self.queue.process_result(result, self)
+                if result is None or result <= 0:
+                    self.disconnect()
+                    return
+                self.idlequeue.set_read_timeout(self.fd, STALLED_TIMEOUT)
+            elif self.state == 8:
                 self.disconnect()
                 return
-            self.idlequeue.set_read_timeout(self.fd, STALLED_TIMEOUT)
-        elif self.state == 8:
-            self.disconnect()
+            else:
+                self.disconnect()
+        except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError,
+        OpenSSL.SSL.WantX509LookupError), e:
+            log.info('caught SSL exception, ignored')
             return
-        else:
-            self.disconnect()
         if self.state < 5:
             self.state += 1
             # unplug and plug this time for reading
