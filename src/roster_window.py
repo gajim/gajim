@@ -1194,9 +1194,9 @@ class RosterWindow:
         # the treeview
         if contact.status and gajim.config.get('show_status_msgs_in_roster'):
             status = contact.status.strip()
-                if status != '':
-                    status = helpers.reduce_chars_newlines(status,
-                        max_lines = 1)
+            if status != '':
+                status = helpers.reduce_chars_newlines(status,
+                    max_lines = 1)
                 # escape markup entities and make them small
                 # italic and fg color color is calcuted to be
                 # always readable
