@@ -92,9 +92,6 @@ class JingleFileTransfer(JingleContent):
         self.transport.set_our_jid(session.ourjid)
         log.info('ourjid: %s' % session.ourjid)
 
-        if self.file_props is not None:
-            self.file_props.sid = self.transport.sid
-
         self.session = session
         self.media = 'file'
         self.nominated_cand = {}

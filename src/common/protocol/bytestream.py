@@ -325,8 +325,6 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             return
         self.disconnect_transfer(file_props)
         sid = file_props.sid
-        gajim.socks5queue.remove_file_props(self.name, sid)
-
 
     def disconnect_transfer(self, file_props):
         if file_props is None:
@@ -339,11 +337,6 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
                 if 'idx' in host and host['idx'] > 0:
                     gajim.socks5queue.remove_receiver(host['idx'])
                     gajim.socks5queue.remove_sender(host['idx'])
-
-        if file_props.direction:
-            # it's a IBB
-            FilesProp.deleteFileProp(file_props)
-            del(file_props)
 
     def _send_socks5_info(self, file_props):
         """
@@ -880,8 +873,6 @@ class ConnectionIBBytestream(ConnectionBytestream):
                         payload=[xmpp.Node(xmpp.NS_IBB + ' close',
                         {'sid':sid})]))
                     file_props.completed = True
-                    FilesProp.deleteFileProp(file_props)
-                    del(file_props)
 
     def IBBMessageHandler(self, conn, stanza):
         """
@@ -947,7 +938,6 @@ class ConnectionIBBytestream(ConnectionBytestream):
             conn.send(reply)
             file_props.fp.close()
             gajim.socks5queue.complete_transfer_cb(self.name, file_props)
-            gajim.socks5queue.remove_file_props(self.name, sid)
         else:
             conn.send(xmpp.Error(stanza, xmpp.ERR_ITEM_NOT_FOUND))
 
@@ -970,8 +960,6 @@ class ConnectionIBBytestream(ConnectionBytestream):
                         conn.Event('IBB', 'ERROR ON RECEIVE', file_props)
                     else:
                         conn.Event('IBB', 'ERROR ON SEND', file_props)
-                    FilesProp.deleteFileProp(file_props)
-                    del(file_props)
                 elif stanza.getType() == 'result':
                     if file_props.direction[0] == '|':
                         file_props.direction = file_props.direction[1:]

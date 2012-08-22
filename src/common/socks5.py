@@ -320,22 +320,6 @@ class SocksQueue:
                 result = sender.send_file()
                 self.process_result(result, sender)
 
-    def remove_file_props(self, account, sid):
-        fp = FilesProp.getFileProp(account, sid)
-        if not fp:
-            log.warning('trying to remove a file props that doesnt exist ' +
-                'from account ' + str(account) + ' and sid ' + str(sid))
-            return
-        if sid in self.on_success:
-            del self.on_success[fp.sid]
-        if sid in self.on_failure:
-            del self.on_failure[fp.sid]
-
-        FilesProp.deleteFileProp(fp)
-
-        if len(FilesProp.getFilePropByAccount(account)) == 0:
-            self.connected = 0
-
     def isHashInSockObjs(self, sockobjs, hash):
         '''
         It tells wether there is a particular hash in sockobjs or not
