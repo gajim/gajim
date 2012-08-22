@@ -295,23 +295,23 @@ class NsLookup(IdleCommand):
         IdleCommand.__init__(self, on_result)
         self.commandtimeout = 10
         self.host = host.lower()
-        self.type = type.lower()
+        self.type_ = type.lower()
         if not host_pattern.match(self.host):
             # invalid host name
             log.error('Invalid host: %s' % self.host)
             self.canexecute = False
             return
-        if not ns_type_pattern.match(self.type):
-            log.error('Invalid querytype: %s' % self.type)
+        if not ns_type_pattern.match(self.type_):
+            log.error('Invalid querytype: %s' % self.type_)
             self.canexecute = False
             return
 
     def _compose_command_args(self):
-        return ['nslookup', '-type=' + self.type, self.host]
+        return ['nslookup', '-type=' + self.type_, self.host]
 
     def _return_result(self):
         if self.result_handler:
-            self.result_handler(self.host, self.type, self.result)
+            self.result_handler(self.host, self.type_, self.result)
         self.result_handler = None
 
 # below lines is on how to use API and assist in testing

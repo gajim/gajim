@@ -219,8 +219,8 @@ class StateTransfering(JingleFileTransferStates):
                 self.jft.session.connection.name, mode)
 
     def action(self, args=None):
-        if self.jft.transport.type == TransportType.IBB:
+        if self.jft.transport.type_ == TransportType.IBB:
             self.__start_IBB_transfer(self.jft.session.connection)
 
-        elif self.jft.transport.type == TransportType.SOCKS5:
+        elif self.jft.transport.type_ == TransportType.SOCKS5:
             self.__start_SOCK5_transfer()

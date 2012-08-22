@@ -4103,7 +4103,7 @@ class ManagePEPServicesWindow:
 
     def _nec_pep_config_received(self, obj):
         def on_ok(form, node):
-            form.type = 'submit'
+            form.type_ = 'submit'
             our_jid = gajim.get_jid_from_account(self.account)
             gajim.connections[self.account].send_pb_configure(our_jid, node, form)
         window = dialogs.DataFormWindow(obj.form, (on_ok, obj.node))

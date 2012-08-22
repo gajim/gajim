@@ -1683,7 +1683,7 @@ class PEPReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             pep = pep_class.get_tag_as_PEP(self.fjid, self.conn.name,
                 self.event_tag)
             if pep:
-                self.pep_type = pep.type
+                self.pep_type = pep.type_
                 return True
 
         items = self.event_tag.getTag('items')
@@ -2007,7 +2007,7 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                 return
             self.dataform = dataforms.ExtendForm(node=form_tag)
             for f in self.dataform.iter_fields():
-                if f.var == 'stream-method' and f.type == 'list-single':
+                if f.var == 'stream-method' and f.type_ == 'list-single':
                     values = [o[1] for o in f.options]
                     self.file_props.stream_methods = ' '.join(values)
                     if xmpp.NS_BYTESTREAM in values or xmpp.NS_IBB in values:

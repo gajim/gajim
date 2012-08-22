@@ -47,7 +47,7 @@ class JingleTransport(object):
     """
 
     def __init__(self, type_):
-        self.type = type_
+        self.type_ = type_
         self.candidates = []
         self.remote_candidates = []
 

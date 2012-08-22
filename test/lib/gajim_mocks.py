@@ -133,7 +133,7 @@ class MockSession(Mock):
 
         self.conn = conn
         self.jid = jid
-        self.type = type_
+        self.type_ = type_
         self.thread_id = thread_id
 
         if not self.thread_id:

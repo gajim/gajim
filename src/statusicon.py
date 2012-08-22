@@ -439,7 +439,7 @@ class StatusIcon:
 
     def on_clicked(self, widget, event):
         self.on_tray_leave_notify_event(widget, None)
-        if event.type != gtk.gdk.BUTTON_PRESS:
+        if event.type_ != gtk.gdk.BUTTON_PRESS:
             return
         if event.button == 1: # Left click
             self.on_left_click()

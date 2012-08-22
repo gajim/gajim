@@ -185,7 +185,7 @@ class DataFormWidget(gtk.Alignment, object):
             # note: we store also text-private and hidden fields,
             # we just do not display them.
             # TODO: boolean fields
-            #elif field.type=='boolean': fieldtypes.append(bool)
+            #elif field.type_=='boolean': fieldtypes.append(bool)
             fieldtypes.append(str)
             fieldvars.append(field.var)
 
@@ -215,7 +215,7 @@ class DataFormWidget(gtk.Alignment, object):
 
         self.clean_data_form = self.clean_multiple_data_form
 
-        readwrite = self._data_form.type != 'result'
+        readwrite = self._data_form.type_ != 'result'
         if not readwrite:
             self.buttons_vbox.set_no_show_all(True)
             self.buttons_vbox.hide()
@@ -343,25 +343,25 @@ class SingleForm(gtk.Table, object):
         linecounter = 0
 
         # is the form changeable?
-        readwrite = dataform.type != 'result'
+        readwrite = dataform.type_ != 'result'
 
         # for each field...
         for field in self._data_form.iter_fields():
-            if field.type == 'hidden': continue
+            if field.type_ == 'hidden': continue
 
             commonlabel = True
             commonlabelcenter = False
             commonwidget = True
             widget = None
 
-            if field.type == 'boolean':
+            if field.type_ == 'boolean':
                 commonlabelcenter = True
                 widget = gtk.CheckButton()
                 widget.connect('toggled', self.on_boolean_checkbutton_toggled,
                         field)
                 widget.set_active(field.value)
 
-            elif field.type == 'fixed':
+            elif field.type_ == 'fixed':
                 leftattach = 1
                 rightattach = 2
                 if field.label is None:
@@ -375,7 +375,7 @@ class SingleForm(gtk.Table, object):
                 self.attach(widget, leftattach, rightattach, linecounter,
                         linecounter+1, xoptions=gtk.FILL, yoptions=gtk.FILL)
 
-            elif field.type == 'list-single':
+            elif field.type_ == 'list-single':
                 # TODO: What if we have radio buttons and non-required field?
                 # TODO: We cannot deactivate them all...
                 if len(field.options) < 6:
@@ -409,7 +409,7 @@ class SingleForm(gtk.Table, object):
                     widget.connect('changed', on_list_single_combobox_changed, field)
                 widget.set_sensitive(readwrite)
 
-            elif field.type == 'list-multi':
+            elif field.type_ == 'list-multi':
                 # TODO: When more than few choices, make a list
                 if len(field.options) < 6:
                     # 5 option max: show checkbutton
@@ -439,12 +439,12 @@ class SingleForm(gtk.Table, object):
                             on_list_multi_treeview_changed, field)
                     tv.set_sensitive(readwrite)
 
-            elif field.type == 'jid-single':
+            elif field.type_ == 'jid-single':
                 widget = gtk.Entry()
                 widget.connect('changed', self.on_text_single_entry_changed, field)
                 widget.set_text(field.value)
 
-            elif field.type == 'jid-multi':
+            elif field.type_ == 'jid-multi':
                 commonwidget = False
 
                 xml = gtkgui_helpers.get_gtk_builder('data_form_window.ui',
@@ -493,14 +493,14 @@ class SingleForm(gtk.Table, object):
 
                 del xml
 
-            elif field.type == 'text-private':
+            elif field.type_ == 'text-private':
                 commonlabelcenter = True
                 widget = gtk.Entry()
                 widget.connect('changed', self.on_text_single_entry_changed, field)
                 widget.set_visibility(False)
                 widget.set_text(field.value)
 
-            elif field.type == 'text-multi':
+            elif field.type_ == 'text-multi':
                 # TODO: bigger text view
                 commonwidget = False
 
@@ -524,7 +524,7 @@ class SingleForm(gtk.Table, object):
                 self.attach(widget, 1, 2, linecounter, linecounter+1)
 
             else:
-                # field.type == 'text-single' or field.type is nonstandard:
+                # field.type_ == 'text-single' or field.type_ is nonstandard:
                 # JEP says that if we don't understand some type, we
                 # should handle it as text-single
                 commonlabelcenter = True

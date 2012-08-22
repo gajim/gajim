@@ -186,7 +186,7 @@ class JingleFileTransfer(JingleContent):
         fingerprint = None
         if self.use_security:
             fingerprint = 'client'
-        if self.transport.type == TransportType.SOCKS5:
+        if self.transport.type_ == TransportType.SOCKS5:
             gajim.socks5queue.connect_to_hosts(self.session.connection.name,
                 self.file_props.sid, self.on_connect,
                 self._on_connect_error, fingerprint=fingerprint,
@@ -272,7 +272,7 @@ class JingleFileTransfer(JingleContent):
     action=None):
         # Sets up a few transport specific things for the file transfer
 
-        if self.transport.type == TransportType.IBB:
+        if self.transport.type_ == TransportType.IBB:
             # No action required, just set the state to transfering
             self.state = STATE_TRANSFERING
 
@@ -323,11 +323,11 @@ class JingleFileTransfer(JingleContent):
         if self.weinitiate:
             listener = gajim.socks5queue.start_listener(port, sha_str,
                 self._store_socks5_sid, self.file_props,
-                fingerprint=fingerprint, type='sender')
+                fingerprint=fingerprint, typ='sender')
         else:
             listener = gajim.socks5queue.start_listener(port, sha_str,
                 self._store_socks5_sid, self.file_props,
-                fingerprint=fingerprint, type='receiver')
+                fingerprint=fingerprint, typ='receiver')
 
         if not listener:
             # send error message, notify the user

@@ -120,7 +120,7 @@ class DataField(ExtendedNode):
         if extend is None:
             ExtendedNode.__init__(self, 'field')
 
-            self.type = typ
+            self.type_ = typ
             self.var = var
             if value is not None:
                 self.value = value
@@ -248,7 +248,7 @@ class DataField(ExtendedNode):
                 self.delChild(t)
 
         return locals()
-    
+
     def is_valid(self):
         return True
 
@@ -463,7 +463,7 @@ class ListMultiField(ListField):
     def iter_values(self):
         for element in self.getTags('value'):
             yield element.getData()
-            
+
     def is_valid(self):
         if not self.required:
             return True
@@ -577,7 +577,7 @@ class DataRecord(ExtendedNode):
 
     def __getitem__(self, item):
         return self.vars[item]
-    
+
     def is_valid(self):
         for f in self.iter_fields():
             if not f.is_valid():
