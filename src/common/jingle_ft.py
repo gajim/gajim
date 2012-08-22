@@ -110,9 +110,12 @@ class JingleFileTransfer(JingleContent):
 
     def __state_changed(self, nextstate, args=None):
         # Executes the next state action and sets the next state
+        current_state = self.state
         st = self.states[nextstate]
         st.action(args)
-        self.state = nextstate
+        # state can have been changed during the action. Don't go back.
+        if self.state == current_state:
+            self.state = nextstate
 
     def __on_session_initiate(self, stanza, content, error, action):
         gajim.nec.push_incoming_event(FileRequestReceivedEvent(None,
