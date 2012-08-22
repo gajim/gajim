@@ -1163,7 +1163,7 @@ class Interface:
         ft = self.instances['file_transfers']
         file_props = None
         # get the file_props of our session
-        file_props = FilesProp.getFileProp(obj.conn.name, sid)
+        file_props = FilesProp.getFileProp(obj.conn.name, obj.sid)
         ft.set_status(file_props, 'stop')
         file_props.error = -4 # is it the right error code?
         ft.show_stopped(obj.jid, file_props, 'Peer cancelled ' +
