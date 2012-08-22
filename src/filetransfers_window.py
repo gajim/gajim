@@ -336,7 +336,7 @@ class FileTransfersWindow:
                         file_path, file_name, file_desc)
         if file_props is None:
             return False
-        if contact.supports(NS_JINGLE_FILE_TRANSFER) and False:
+        if contact.supports(NS_JINGLE_FILE_TRANSFER):
             log.info("contact %s supports jingle file transfer"%(contact.get_full_jid()))
             gajim.connections[account].start_file_transfer(contact.get_full_jid(),
                                                            file_props)
