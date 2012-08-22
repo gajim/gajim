@@ -63,8 +63,8 @@ def load_cert_file(cert_path, cert_store):
     try:
         f = open(cert_path)
     except IOError, e:
-        log.warning('Unable to open certificate file %s: %s' % \
-                (cert_path, str(e)))
+        log.warning('Unable to open certificate file %s: %s' % (cert_path,
+            str(e)))
         return
     lines = f.readlines()
     i = 0
@@ -76,14 +76,14 @@ def load_cert_file(cert_path, cert_store):
             cert = ''.join(lines[begin:i+2])
             try:
                 x509cert = OpenSSL.crypto.load_certificate(
-                        OpenSSL.crypto.FILETYPE_PEM, cert)
+                    OpenSSL.crypto.FILETYPE_PEM, cert)
                 cert_store.add_cert(x509cert)
             except OpenSSL.crypto.Error, exception_obj:
                 log.warning('Unable to load a certificate from file %s: %s' %\
-                            (cert_path, exception_obj.args[0][0][2]))
+                    (cert_path, exception_obj.args[0][0][2]))
             except:
                 log.warning('Unknown error while loading certificate from file '
-                            '%s' % cert_path)
+                    '%s' % cert_path)
             begin = -1
         i += 1
 
@@ -94,7 +94,8 @@ def get_context(fingerprint, verify_cb=None):
     ctx = SSL.Context(SSL.TLSv1_METHOD)
 
     if fingerprint == 'server': # for testing purposes only
-        ctx.set_verify(SSL.VERIFY_NONE|SSL.VERIFY_FAIL_IF_NO_PEER_CERT, verify_cb or default_callback)
+        ctx.set_verify(SSL.VERIFY_NONE|SSL.VERIFY_FAIL_IF_NO_PEER_CERT,
+            verify_cb or default_callback)
     elif fingerprint == 'client':
         ctx.set_verify(SSL.VERIFY_PEER, verify_cb or default_callback)
 
@@ -103,13 +104,15 @@ def get_context(fingerprint, verify_cb=None):
     ctx.use_certificate_file(cert_name + '.cert')
     store = ctx.get_cert_store()
     for f in os.listdir(os.path.expanduser(gajim.MY_PEER_CERTS_PATH)):
-        load_cert_file(os.path.join(os.path.expanduser(gajim.MY_PEER_CERTS_PATH), f), store)
+        load_cert_file(os.path.join(os.path.expanduser(
+            gajim.MY_PEER_CERTS_PATH), f), store)
         log.debug('certificate file ' + f + ' loaded fingerprint ' + \
             fingerprint)
     return ctx
 
 def send_cert(con, jid_from, sid):
-    certpath = os.path.join(gajim.MY_CERT_DIR, SELF_SIGNED_CERTIFICATE) + '.cert'
+    certpath = os.path.join(gajim.MY_CERT_DIR, SELF_SIGNED_CERTIFICATE) + \
+        '.cert'
     certfile = open(certpath, 'r')
     certificate = ''
     for line in certfile.readlines():
@@ -225,14 +228,17 @@ def createCertificate(req, (issuerCert, issuerKey), serial, (notBefore, notAfter
 def make_certs(filepath, CN):
     """
     make self signed certificates
-    filepath : absolute path of certificate file, will be appended the '.pkey' and '.cert' extensions
+    filepath : absolute path of certificate file, will be appended the '.pkey'
+    and '.cert' extensions
     CN : common name
     """
     key = createKeyPair(TYPE_RSA, 1024)
     req = createCertRequest(key, CN=CN)
     cert = createCertificate(req, (req, key), 0, (0, 60*60*24*365*5)) # five years
-    open(filepath + '.pkey', 'w').write(crypto.dump_privatekey(crypto.FILETYPE_PEM, key))
-    open(filepath + '.cert', 'w').write(crypto.dump_certificate(crypto.FILETYPE_PEM, cert))
+    open(filepath + '.pkey', 'w').write(crypto.dump_privatekey(
+        crypto.FILETYPE_PEM, key))
+    open(filepath + '.cert', 'w').write(crypto.dump_certificate(
+        crypto.FILETYPE_PEM, cert))
 
 
 if __name__ == '__main__':

@@ -54,7 +54,8 @@ class JingleFileTransfer(JingleContent):
 
         # events we might be interested in
         self.callbacks['session-initiate'] += [self.__on_session_initiate]
-        self.callbacks['session-initiate-sent'] += [self.__on_session_initiate_sent]
+        self.callbacks['session-initiate-sent'] += [
+            self.__on_session_initiate_sent]
         self.callbacks['content-add'] += [self.__on_session_initiate]
         self.callbacks['session-accept'] += [self.__on_session_accept]
         self.callbacks['session-terminate'] += [self.__on_session_terminate]
@@ -105,7 +106,7 @@ class JingleFileTransfer(JingleContent):
                        STATE_TRANSFERING   : StateTransfering(self),
                    STATE_TRANSPORT_REPLACE : StateTransportReplace(self),
               STATE_CAND_SENT_AND_RECEIVED : StateCandSentAndRecv(self)
-                      }
+        }
 
     def __state_changed(self, nextstate, args=None):
         # Executes the next state action and sets the next state
@@ -130,9 +131,8 @@ class JingleFileTransfer(JingleContent):
 
     def __send_hash(self):
         # Send hash in a session info
-        checksum = xmpp.Node(tag='checksum',
-                             payload=[xmpp.Node(tag='file',
-                                 payload=[self._calcHash()])])
+        checksum = xmpp.Node(tag='checksum', payload=[xmpp.Node(tag='file',
+            payload=[self._calcHash()])])
         checksum.setNamespace(xmpp.NS_JINGLE_FILE_TRANSFER)
         self.session.__session_info(checksum )
 

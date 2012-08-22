@@ -17,11 +17,11 @@ from jingle_transport import *
 from common.socks5 import Socks5ReceiverClient, Socks5SenderClient
 
 class JingleFileTransferStates:
-
-    # This class implements the state machine design pattern
+    '''
+    This class implements the state machine design pattern
+    '''
 
     def __init__(self, jingleft):
-
         self.jft = jingleft
 
     def action(self, args=None):
@@ -32,7 +32,6 @@ class JingleFileTransferStates:
 
 
 class StateInitialized(JingleFileTransferStates):
-
     '''
     This state initializes the file transfer
     '''
@@ -40,21 +39,19 @@ class StateInitialized(JingleFileTransferStates):
     def action(self, args=None):
         if self.jft.weinitiate:
             # update connection's fileprops
-            self.jft._listen_host() 
+            self.jft._listen_host()
             # Listen on configured port for file transfer
         else:
             fingerprint = None
             if self.jft.use_security:
                 fingerprint = 'client'
             # Connect to the candidate host, on success call on_connect method
-            gajim.socks5queue.connect_to_hosts(
-                            self.jft.session.connection.name,
-                            self.jft.file_props.sid, self.jft.on_connect,
-                            self.jft._on_connect_error, fingerprint=fingerprint)
+            gajim.socks5queue.connect_to_hosts(self.jft.session.connection.name,
+                self.jft.file_props.sid, self.jft.on_connect,
+                self.jft._on_connect_error, fingerprint=fingerprint)
 
 
 class StateCandSent(JingleFileTransferStates):
-
     '''
     This state sends our nominated candidate
     '''
@@ -89,7 +86,6 @@ class StateCandSent(JingleFileTransferStates):
         self._sendCand(args)
 
 class  StateCandReceived(JingleFileTransferStates):
-
     '''
     This state happens when we receive a candidate.
     It takes the arguments: canError if we receive a candidate-error
@@ -112,13 +108,10 @@ class  StateCandReceived(JingleFileTransferStates):
         # We save the candidate nominated by peer
         self.jft.nominated_cand['peer-cand'] = streamhost_used
 
-
-
     def action(self, args=None):
         self._recvCand(args)
 
 class StateCandSentAndRecv( StateCandSent, StateCandReceived):
-
     '''
     This state happens when we have received and sent the candidates.
     It takes the boolean argument: sendCand in order to decide whether
@@ -126,14 +119,12 @@ class StateCandSentAndRecv( StateCandSent, StateCandReceived):
     '''
 
     def action(self, args=None):
-
         if args['sendCand']:
             self._sendCand(args)
         else:
             self._recvCand(args)
 
 class StateTransportReplace(JingleFileTransferStates):
-
     '''
     This state initiates transport replace
     '''
@@ -142,7 +133,6 @@ class StateTransportReplace(JingleFileTransferStates):
         self.jft.session.transport_replace()
 
 class StateTransfering(JingleFileTransferStates):
-
     '''
     This state will start the transfer depeding on the type of transport
     we have.
@@ -150,8 +140,8 @@ class StateTransfering(JingleFileTransferStates):
 
     def __start_IBB_transfer(self, con):
         fp = open(self.jft.file_props.file_name, 'r')
-        con.OpenStream( self.jft.transport.sid, 
-                self.jft.session.peerjid, fp, blocksize=4096)
+        con.OpenStream( self.jft.transport.sid, self.jft.session.peerjid, fp,
+            blocksize=4096)
 
     def __start_SOCK5_transfer(self):
         # It tells wether we start the transfer as client or server
@@ -163,7 +153,7 @@ class StateTransfering(JingleFileTransferStates):
         else:
             mode = 'server'
             streamhost_used = self.jft.nominated_cand['peer-cand']
-            
+
         if streamhost_used['type'] == 'proxy':
             self.jft.file_props.is_a_proxy = True
             # This needs to be changed when requesting
@@ -172,7 +162,8 @@ class StateTransfering(JingleFileTransferStates):
                 self.jft.file_props.proxy_receiver = streamhost_used['target']
             else:
                 self.jft.file_props.proxy_sender = streamhost_used['target']
-                self.jft.file_props.proxy_receiver = streamhost_used['initiator']
+                self.jft.file_props.proxy_receiver = streamhost_used[
+                    'initiator']
 
         # This needs to be changed when requesting
         if not self.jft.weinitiate and streamhost_used['type'] == 'proxy':
@@ -190,7 +181,7 @@ class StateTransfering(JingleFileTransferStates):
                 s[sender].connected:
                     return
 
-        if streamhost_used['type'] == 'proxy': 
+        if streamhost_used['type'] == 'proxy':
             self.jft.file_props.streamhost_used = True
             streamhost_used['sid'] = self.jft.file_props.sid
             self.jft.file_props.streamhosts = []
