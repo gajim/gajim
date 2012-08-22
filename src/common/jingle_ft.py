@@ -57,7 +57,7 @@ class JingleFileTransfer(JingleContent):
         self.callbacks['session-initiate-sent'] += [self.__on_session_initiate_sent]
         self.callbacks['content-add'] += [self.__on_session_initiate]
         self.callbacks['session-accept'] += [self.__on_session_accept]
-        self.callbacks['session-terminate'] += [self.__on_session_terminate]        
+        self.callbacks['session-terminate'] += [self.__on_session_terminate]
         self.callbacks['session-info'] += [self.__on_session_info]
         self.callbacks['transport-accept'] += [self.__on_transport_accept]
         self.callbacks['transport-replace'] += [self.__on_transport_replace]
@@ -117,7 +117,7 @@ class JingleFileTransfer(JingleContent):
         gajim.nec.push_incoming_event(FileRequestReceivedEvent(None,
             conn=self.session.connection, stanza=stanza, jingle_content=content,
             FT_content=self))
-        self._listen_host() 
+        self._listen_host()
         # Delete this after file_props refactoring this shouldn't be necesary
         self.session.file_hash = self.file_props.hash_
         self.session.hash_algo = self.file_props.algo
@@ -127,15 +127,15 @@ class JingleFileTransfer(JingleContent):
         if self.file_props.hash_ is None:
             self.hashThread = threading.Thread(target=self.__send_hash)
             self.hashThread.start()
-        
+
     def __send_hash(self):
         # Send hash in a session info
-        checksum = xmpp.Node(tag='checksum',  
+        checksum = xmpp.Node(tag='checksum',
                              payload=[xmpp.Node(tag='file',
                                  payload=[self._calcHash()])])
         checksum.setNamespace(xmpp.NS_JINGLE_FILE_TRANSFER)
         self.session.__session_info(checksum )
-    
+
 
     def _calcHash(self):
         # Caculates the hash and returns a xep-300 hash stanza
@@ -156,7 +156,7 @@ class JingleFileTransfer(JingleContent):
         self.file_props.hash_ = hash_
         h.addHash(hash_, self.session.hash_algo)
         return h
-                
+
     def __on_session_accept(self, stanza, content, error, action):
         log.info("__on_session_accept")
         con = self.session.connection
@@ -200,7 +200,7 @@ class JingleFileTransfer(JingleContent):
 
     def __on_session_info(self, stanza, content, error, action):
         pass
-        
+
     def __on_transport_accept(self, stanza, content, error, action):
         log.info("__on_transport_accept")
 
@@ -267,15 +267,15 @@ class JingleFileTransfer(JingleContent):
                 return
             # initiate transfer
             self.__state_changed(STATE_TRANSFERING)
-            
+
     def __transport_setup(self, stanza=None, content=None, error=None,
     action=None):
         # Sets up a few transport specific things for the file transfer
-            
+
         if self.transport.type == TransportType.IBB:
             # No action required, just set the state to transfering
             self.state = STATE_TRANSFERING
-            
+
 
     def on_connect(self, streamhost):
         """
