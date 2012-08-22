@@ -259,6 +259,8 @@ class GajimPluginConfig():
                     s = shelve.open(self.FILE_PATH)
                     for (k, v) in s.iteritems():
                         self.data[k] = v
+                    if not isinstance(self.data, dict):
+                        raise GajimPluginException
                     s.close()
                     self.save()
                 except:
