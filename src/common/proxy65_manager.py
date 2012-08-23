@@ -174,9 +174,11 @@ class ProxyResolver:
     def disconnect(self, connection):
         if self.host_tester:
             self.host_tester.disconnect()
+            FilesProp.deleteFileProp(self.host_tester.file_props)
             self.host_tester = None
         if self.receiver_tester:
             self.receiver_tester.disconnect()
+            FilesProp.deleteFileProp(self.receiver_tester.file_props)
             self.receiver_tester = None
         try:
             self.connections.remove(connection)
