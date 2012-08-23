@@ -1615,8 +1615,8 @@ class YesNoDialog(HigDialog):
     HIG compliant YesNo dialog
     """
 
-    def __init__(self, pritext, sectext='', checktext='', on_response_yes=None,
-    on_response_no=None, type_=gtk.MESSAGE_QUESTION):
+    def __init__(self, pritext, sectext='', checktext='', text_label=None,
+    on_response_yes=None, on_response_no=None, type_=gtk.MESSAGE_QUESTION):
         self.user_response_yes = on_response_yes
         self.user_response_no = on_response_no
         if hasattr(gajim.interface, 'roster') and gajim.interface.roster:
@@ -1632,25 +1632,59 @@ class YesNoDialog(HigDialog):
             self.vbox.pack_start(self.checkbutton, expand=False, fill=True)
         else:
             self.checkbutton = None
+        if text_label:
+            label = gtk.Label(text_label)
+            self.vbox.pack_start(label, expand=False, fill=True)
+            buff = gtk.TextBuffer()
+            self.textview = gtk.TextView(buff)
+            frame = gtk.Frame()
+            frame.set_shadow_type(gtk.SHADOW_IN)
+            frame.add(self.textview)
+            self.vbox.pack_start(frame, expand=False, fill=True)
+        else:
+            self.textview = None
         self.set_modal(False)
         self.popup()
 
     def on_response_yes(self, widget):
         if self.user_response_yes:
+            if self.textview:
+                buff = self.textview.get_buffer()
+                start, end = buff.get_bounds()
+                txt = self.textview.get_buffer().get_text(start, end)
+
             if isinstance(self.user_response_yes, tuple):
-                self.user_response_yes[0](self.is_checked(),
-                    *self.user_response_yes[1:])
+                if self.textview:
+                    self.user_response_yes[0](self.is_checked(), txt,
+                        *self.user_response_yes[1:])
+                else:
+                    self.user_response_yes[0](self.is_checked(),
+                        *self.user_response_yes[1:])
             else:
-                self.user_response_yes(self.is_checked())
+                if self.textview:
+                    self.user_response_yes(self.is_checked())
+                else:
+                    self.user_response_yes(self.is_checked(), txt)
         self.call_cancel_on_destroy = False
         self.destroy()
 
     def on_response_no(self, widget):
         if self.user_response_no:
+            if self.textview:
+                buff = self.textview.get_buffer()
+                start, end = buff.get_bounds()
+                txt = self.textview.get_buffer().get_text(start, end)
+
             if isinstance(self.user_response_no, tuple):
-                self.user_response_no[0](*self.user_response_no[1:])
+                if self.textview:
+                    self.user_response_no[0](txt, *self.user_response_no[1:])
+                else:
+                    self.user_response_no[0](*self.user_response_no[1:])
             else:
-                self.user_response_no()
+                if self.textview:
+                    self.user_response_no(txt)
+                else:
+                    self.user_response_no()
         self.call_cancel_on_destroy = False
         self.destroy()
 
@@ -4436,6 +4470,7 @@ class InvitationReceivedDialog:
         self.account = account
         self.password = password
         self.is_continued = is_continued
+        self.contact_jid = contact_jid
 
         pritext = _('''You are invited to a groupchat''')
         #Don't translate $Contact
@@ -4454,7 +4489,7 @@ class InvitationReceivedDialog:
             sectext += '\n\n%s' % comment
         sectext += '\n\n' + _('Do you want to accept the invitation?')
 
-        def on_yes(checked):
+        def on_yes(checked, text):
             try:
                 if self.is_continued:
                     gajim.interface.join_gc_room(self.account, self.room_jid,
@@ -4464,7 +4499,12 @@ class InvitationReceivedDialog:
             except GajimGeneralException:
                 pass
 
-        YesNoDialog(pritext, sectext, on_response_yes=on_yes)
+        def on_no(text):
+            gajim.connections[account].decline_invitation(self.room_jid,
+                self.contact_jid, text)
+
+        YesNoDialog(pritext, sectext, text_label=_('Reason:'),
+            on_response_yes=on_yes, on_response_no=on_no)
 
 class ProgressDialog:
     def __init__(self, title_text, during_text, messages_queue):
@@ -5231,8 +5271,9 @@ class CheckFingerprintDialog(YesNoDialog):
     on_response_yes=None, on_response_no=None, account=None, certificate=None):
         self.account = account
         self.cert = certificate
-        YesNoDialog.__init__(self, pritext, sectext, checktext, on_response_yes,
-            on_response_no)
+        YesNoDialog.__init__(self, pritext, sectext=sectext,
+            checktext=checktext, on_response_yes=on_response_yes,
+            on_response_no=on_response_no)
         b = gtk.Button(_('View cert...'))
         b.connect('clicked', self.on_cert_clicked)
         b.show_all()

@@ -2629,11 +2629,22 @@ class Connection(CommonConnection, ConnectionHandlers):
         """
         Send invitation
         """
-        message=common.xmpp.Message(to = room)
-        c = message.addChild(name = 'x', namespace = common.xmpp.NS_MUC_USER)
-        c = c.addChild(name = 'invite', attrs={'to' : to})
+        message=common.xmpp.Message(to=room)
+        c = message.addChild(name='x', namespace=common.xmpp.NS_MUC_USER)
+        c = c.addChild(name='invite', attrs={'to': to})
         if continue_tag:
-            c.addChild(name = 'continue')
+            c.addChild(name='continue')
+        if reason != '':
+            c.setTagData('reason', reason)
+        self.connection.send(message)
+
+    def decline_invitation(self, room, to, reason=''):
+        """
+        decline a groupchat invitation
+        """
+        message=common.xmpp.Message(to=room)
+        c = message.addChild(name='x', namespace=common.xmpp.NS_MUC_USER)
+        c = c.addChild(name='decline', attrs={'to': to})
         if reason != '':
             c.setTagData('reason', reason)
         self.connection.send(message)
