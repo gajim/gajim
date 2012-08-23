@@ -69,11 +69,9 @@ def is_transfer_active(file_props):
 def is_transfer_stopped(file_props):
     if not file_props:
         return True
-    if file_props.error != 0:
+    if file_props.error:
         return True
     if file_props.completed:
-        return True
-    if not file_props.connected:
         return True
     if not file_props.stopped:
         return False
