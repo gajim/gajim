@@ -211,14 +211,14 @@ import gtkgui_helpers
 
 class AbstractPEP(object):
 
-    type = ''
+    type_ = ''
     namespace = ''
 
     @classmethod
     def get_tag_as_PEP(cls, jid, account, event_tag):
         items = event_tag.getTag('items', {'node': cls.namespace})
         if items:
-            log.debug("Received PEP 'user %s' from %s" % (cls.type, jid))
+            log.debug("Received PEP 'user %s' from %s" % (cls.type_, jid))
             return cls(jid, account, items)
         else:
             return None
@@ -237,18 +237,18 @@ class AbstractPEP(object):
     def _update_contacts(self, jid, account):
         for contact in gajim.contacts.get_contacts(account, jid):
             if self._retracted:
-                if self.type in contact.pep:
-                    del contact.pep[self.type]
+                if self.type_ in contact.pep:
+                    del contact.pep[self.type_]
             else:
-                contact.pep[self.type] = self
+                contact.pep[self.type_] = self
 
     def _update_account(self, account):
         acc = gajim.connections[account]
         if self._retracted:
-            if self.type in acc.pep:
-                del acc.pep[self.type]
+            if self.type_ in acc.pep:
+                del acc.pep[self.type_]
         else:
-            acc.pep[self.type] = self
+            acc.pep[self.type_] = self
 
     def asPixbufIcon(self):
         '''SHOULD be implemented by subclasses'''
@@ -262,7 +262,7 @@ class AbstractPEP(object):
 class UserMoodPEP(AbstractPEP):
     '''XEP-0107: User Mood'''
 
-    type = 'mood'
+    type_ = 'mood'
     namespace = xmpp.NS_MOOD
 
     def _extract_info(self, items):
@@ -308,7 +308,7 @@ class UserMoodPEP(AbstractPEP):
 class UserTunePEP(AbstractPEP):
     '''XEP-0118: User Tune'''
 
-    type = 'tune'
+    type_ = 'tune'
     namespace = xmpp.NS_TUNE
 
     def _extract_info(self, items):
@@ -354,7 +354,7 @@ class UserTunePEP(AbstractPEP):
 class UserActivityPEP(AbstractPEP):
     '''XEP-0108: User Activity'''
 
-    type = 'activity'
+    type_ = 'activity'
     namespace = xmpp.NS_ACTIVITY
 
     def _extract_info(self, items):
@@ -420,7 +420,7 @@ class UserActivityPEP(AbstractPEP):
 class UserNicknamePEP(AbstractPEP):
     '''XEP-0172: User Nickname'''
 
-    type = 'nickname'
+    type_ = 'nickname'
     namespace = xmpp.NS_NICK
 
     def _extract_info(self, items):
@@ -449,7 +449,7 @@ class UserNicknamePEP(AbstractPEP):
 class UserLocationPEP(AbstractPEP):
     '''XEP-0080: User Location'''
 
-    type = 'location'
+    type_ = 'location'
     namespace = xmpp.NS_LOCATION
 
     def _extract_info(self, items):

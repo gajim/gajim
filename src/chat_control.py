@@ -1737,8 +1737,8 @@ class ChatControl(ChatControlBase):
 
         # Send file
         if (self.contact.supports(NS_FILE) or \
-                self.contact.supports(NS_JINGLE_FILE_TRANSFER)) or \
-                        self.type_id == 'chat' or self.gc_contact.resource:
+        self.contact.supports(NS_JINGLE_FILE_TRANSFER)) or \
+        self.type_id == 'chat' or self.gc_contact.resource:
             self._send_file_button.set_sensitive(True)
             self._send_file_button.set_tooltip_text('')
         else:
@@ -3223,11 +3223,11 @@ class ChatControl(ChatControlBase):
         """
         Show an InfoBar on top of control
         """
-        markup = '<b>%s:</b> %s' % (_('File transfer'), file_props['name'])
-        if 'desc' in file_props and file_props['desc']:
-            markup += ' (%s)' % file_props['desc']
+        markup = '<b>%s:</b> %s' % (_('File transfer'), file_props.name)
+        if file_props.desc:
+            markup += ' (%s)' % file_props.desc
         markup += '\n%s: %s' % (_('Size'), helpers.convert_bytes(
-            file_props['size']))
+            file_props.size))
         b1 = gtk.Button(_('_Accept'))
         b1.connect('clicked', self._on_accept_file_request, file_props)
         b2 = gtk.Button(stock=gtk.STOCK_CANCEL)
@@ -3236,9 +3236,7 @@ class ChatControl(ChatControlBase):
             gtk.MESSAGE_QUESTION)
 
     def _on_open_ft_folder(self, widget, file_props):
-        if 'file-name' not in file_props:
-            return
-        path = os.path.split(file_props['file-name'])[0]
+        path = os.path.split(file_props.file_name)[0]
         if os.path.exists(path) and os.path.isdir(path):
             helpers.launch_file_manager(path)
         ev = self._get_file_props_event(file_props, 'file-completed')
@@ -3252,9 +3250,9 @@ class ChatControl(ChatControlBase):
 
     def _got_file_completed(self, file_props):
         markup = '<b>%s:</b> %s' % (_('File transfer completed'),
-            file_props['name'])
-        if 'desc' in file_props and file_props['desc']:
-            markup += ' (%s)' % file_props['desc']
+            file_props.name)
+        if file_props.desc:
+            markup += ' (%s)' % file_props.desc
         b1 = gtk.Button(_('_Open Containing Folder'))
         b1.connect('clicked', self._on_open_ft_folder, file_props)
         b2 = gtk.Button(stock=gtk.STOCK_OK)

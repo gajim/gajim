@@ -47,7 +47,7 @@ class JingleTransport(object):
     """
 
     def __init__(self, type_):
-        self.type = type_
+        self.type_ = type_
         self.candidates = []
         self.remote_candidates = []
 
@@ -78,7 +78,7 @@ class JingleTransport(object):
         Return the list of transport candidates from a transport stanza
         """
         return []
-    
+
     def set_connection(self, conn):
         self.connection = conn
         if not self.sid:
@@ -89,7 +89,7 @@ class JingleTransport(object):
 
     def set_our_jid(self, jid):
         self.ourjid = jid
-        
+
     def set_sid(self, sid):
         self.sid = sid
 
@@ -132,8 +132,8 @@ class JingleTransportSocks5(JingleTransport):
             transport = xmpp.Node('transport')
         transport.setNamespace(xmpp.NS_JINGLE_BYTESTREAM)
         transport.setAttr('sid', self.sid)
-        if 'dstaddr' in self.file_props:
-            transport.setAttr('dstaddr', self.file_props['dstaddr'])
+        if self.file_props.dstaddr:
+            transport.setAttr('dstaddr', self.file_props.dstaddr)
         return transport
 
     def parse_transport_stanza(self, transport):
@@ -170,6 +170,9 @@ class JingleTransportSocks5(JingleTransport):
                 self.candidates.append(cand)
 
     def _add_local_ips_as_candidates(self):
+        if not gajim.config.get_per('accounts', self.connection.name,
+        'ft_send_local_ips'):
+            return
         if not self.connection:
             return
         local_ip_cand = []
@@ -192,8 +195,8 @@ class JingleTransportSocks5(JingleTransport):
                 c['type'] = 'direct'
                 c['jid'] = self.ourjid
                 c['priority'] = (2**16) * type_preference
-                c['initiator'] = self.file_props['sender']
-                c['target'] = self.file_props['receiver']
+                c['initiator'] = self.file_props.sender
+                c['target'] = self.file_props.receiver
                 local_ip_cand.append(c)
 
         self._add_candidates(local_ip_cand)
@@ -215,8 +218,8 @@ class JingleTransportSocks5(JingleTransport):
                 c['type'] = 'direct'
                 c['jid'] = self.ourjid
                 c['priority'] = (2**16) * type_preference
-                c['initiator'] = self.file_props['sender']
-                c['target'] = self.file_props['receiver']
+                c['initiator'] = self.file_props.sender
+                c['target'] = self.file_props.receiver
                 additional_ip_cand.append(c)
 
         self._add_candidates(additional_ip_cand)
@@ -230,7 +233,7 @@ class JingleTransportSocks5(JingleTransport):
         proxyhosts = socks5conn._get_file_transfer_proxies_from_config(self.file_props)
 
         if proxyhosts:
-            self.file_props['proxyhosts'] = proxyhosts
+            self.file_props.proxyhosts = proxyhosts
 
             for proxyhost in proxyhosts:
                 c = {'host': proxyhost['host']}
@@ -239,15 +242,15 @@ class JingleTransportSocks5(JingleTransport):
                 c['type'] = 'proxy'
                 c['jid'] = proxyhost['jid']
                 c['priority'] = (2**16) * type_preference
-                c['initiator'] = self.file_props['sender']
-                c['target'] = self.file_props['receiver']
+                c['initiator'] = self.file_props.sender
+                c['target'] = self.file_props.receiver
                 proxy_cand.append(c)
 
         self._add_candidates(proxy_cand)
 
     def get_content(self):
         sesn = self.connection.get_jingle_session(self.ourjid,
-            self.file_props['session-sid'])
+            self.file_props.session_sid)
         for content in sesn.contents.values():
             if content.transport == self:
                 return content
@@ -258,10 +261,10 @@ class JingleTransportSocks5(JingleTransport):
         if not self.connection:
             return
         sesn = self.connection.get_jingle_session(self.ourjid,
-            self.file_props['session-sid'])
+            self.file_props.session_sid)
         if sesn is None:
             return
-        
+
         iq = xmpp.Iq(to=proxy['jid'], frm=self.ourjid, typ='set')
         auth_id = "au_" + proxy['sid']
         iq.setID(auth_id)
@@ -323,7 +326,7 @@ class JingleTransportIBB(JingleTransport):
         transport.setAttr('block-size', self.block_sz)
         transport.setAttr('sid', self.sid)
         return transport
-    
+
 try:
     import farstream
 except Exception:

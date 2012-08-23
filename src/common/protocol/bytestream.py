@@ -32,6 +32,7 @@ import socket
 import base64
 import gobject
 import time
+import pdb
 
 from common import xmpp
 from common import gajim
@@ -39,40 +40,40 @@ from common import helpers
 from common import dataforms
 from common import ged
 from common import jingle_xtls
-
-from common.socks5 import Socks5Receiver
+from common.file_props import FilesProp
+from common.socks5 import Socks5ReceiverClient
 
 import logging
 log = logging.getLogger('gajim.c.p.bytestream')
 
 def is_transfer_paused(file_props):
-    if 'stopped' in file_props and file_props['stopped']:
+    if file_props.stopped:
         return False
-    if 'completed' in file_props and file_props['completed']:
+    if file_props.completed:
         return False
-    if 'disconnect_cb' not in file_props:
+    if file_props.disconnect_cb:
         return False
-    return file_props['paused']
+    return file_props.paused
 
 def is_transfer_active(file_props):
-    if 'stopped' in file_props and file_props['stopped']:
+    if file_props.stopped:
         return False
-    if 'completed' in file_props and file_props['completed']:
+    if file_props.completed:
         return False
-    if 'started' not in file_props or not file_props['started']:
+    if not file_props.started:
         return False
-    if 'paused' not in file_props:
+    if file_props.paused:
         return True
-    return not file_props['paused']
+    return not file_props.paused
 
 def is_transfer_stopped(file_props):
-    if 'error' in file_props and file_props['error'] != 0:
+    if not file_props:
         return True
-    if 'completed' in file_props and file_props['completed']:
+    if file_props.error:
         return True
-    if 'connected' in file_props and file_props['connected'] == False:
+    if file_props.completed:
         return True
-    if 'stopped' not in file_props or not file_props['stopped']:
+    if not file_props.stopped:
         return False
     return True
 
@@ -80,7 +81,6 @@ def is_transfer_stopped(file_props):
 class ConnectionBytestream:
 
     def __init__(self):
-        self.files_props = {}
         gajim.ged.register_event_handler('file-request-received', ged.GUI1,
             self._nec_file_request_received)
 
@@ -94,7 +94,7 @@ class ConnectionBytestream:
         return our_jid + '/' + resource
 
     def _ft_get_receiver_jid(self, file_props):
-        return file_props['receiver'].jid + '/' + file_props['receiver'].resource
+        return file_props.receiver.jid + '/' + file_props.receiver.resource
 
     def _ft_get_from(self, iq_obj):
         return helpers.get_full_jid_from_iq(iq_obj)
@@ -108,20 +108,19 @@ class ConnectionBytestream:
         """
         if not self.connection or self.connected < 2:
             return
-        file_props['sender'] = self._ft_get_our_jid()
+        file_props.sender = self._ft_get_our_jid()
         fjid = self._ft_get_receiver_jid(file_props)
         iq = xmpp.Iq(to=fjid, typ='set')
-        iq.setID(file_props['sid'])
-        self.files_props[file_props['sid']] = file_props
+        iq.setID(file_props.sid)
         si = iq.setTag('si', namespace=xmpp.NS_SI)
         si.setAttr('profile', xmpp.NS_FILE)
-        si.setAttr('id', file_props['sid'])
+        si.setAttr('id', file_props.sid)
         file_tag = si.setTag('file', namespace=xmpp.NS_FILE)
-        file_tag.setAttr('name', file_props['name'])
-        file_tag.setAttr('size', file_props['size'])
+        file_tag.setAttr('name', file_props.name)
+        file_tag.setAttr('size', file_props.size)
         desc = file_tag.setTag('desc')
-        if 'desc' in file_props:
-            desc.setData(file_props['desc'])
+        if file_props.desc:
+            desc.setData(file_props.desc)
         file_tag.setTag('range')
         feature = si.setTag('feature', namespace=xmpp.NS_FEATURE)
         _feature = xmpp.DataForm(typ='form')
@@ -142,24 +141,22 @@ class ConnectionBytestream:
 
         # file transfer initiated by a jingle session
         log.info("send_file_approval: jingle session accept")
-        if file_props.get('session-type') == 'jingle':
-            session = self.get_jingle_session(file_props['sender'],
-                file_props['session-sid'])
+        if file_props.session_type == 'jingle':
+            session = self.get_jingle_session(file_props.sender,
+                file_props.session_sid)
             if not session:
                 return
             content = None
             for c in session.contents.values():
-                if c.transport.sid == file_props['sid']:
+                if c.transport.sid == file_props.sid:
                     content = c
                     break
             if not content:
                 return
-            gajim.socks5queue.add_file_props(self.name, file_props)
-
             if not session.accepted:
                 if session.get_content('file', content.name).use_security:
                     id_ = jingle_xtls.send_cert_request(self,
-                        file_props['sender'])
+                        file_props.sender)
                     jingle_xtls.key_exchange_pend(id_, content)
                     return
                 session.approve_session()
@@ -167,19 +164,19 @@ class ConnectionBytestream:
             session.approve_content('file', content.name)
             return
 
-        iq = xmpp.Iq(to=unicode(file_props['sender']), typ='result')
-        iq.setAttr('id', file_props['request-id'])
+        iq = xmpp.Iq(to=unicode(file_props.sender), typ='result')
+        iq.setAttr('id', file_props.request_id)
         si = iq.setTag('si', namespace=xmpp.NS_SI)
-        if 'offset' in file_props and file_props['offset']:
+        if file_props.offset:
             file_tag = si.setTag('file', namespace=xmpp.NS_FILE)
             range_tag = file_tag.setTag('range')
-            range_tag.setAttr('offset', file_props['offset'])
+            range_tag.setAttr('offset', file_props.offset)
         feature = si.setTag('feature', namespace=xmpp.NS_FEATURE)
         _feature = xmpp.DataForm(typ='submit')
         feature.addChild(node=_feature)
         field = _feature.setField('stream-method')
         field.delAttr('type')
-        if xmpp.NS_BYTESTREAM in file_props['stream-methods']:
+        if xmpp.NS_BYTESTREAM in file_props.stream_methods:
             field.setValue(xmpp.NS_BYTESTREAM)
         else:
             field.setValue(xmpp.NS_IBB)
@@ -195,12 +192,12 @@ class ConnectionBytestream:
         # user response to ConfirmationDialog may come after we've disconneted
         if not self.connection or self.connected < 2:
             return
-        if file_props['session-type'] == 'jingle':
-            jingle = self._sessions[file_props['session-sid']]
+        if file_props.session_type == 'jingle':
+            jingle = self._sessions[file_props.session_sid]
             jingle.cancel_session()
             return
-        iq = xmpp.Iq(to=unicode(file_props['sender']), typ='error')
-        iq.setAttr('id', file_props['request-id'])
+        iq = xmpp.Iq(to=unicode(file_props.sender), typ='error')
+        iq.setAttr('id', file_props.request_id)
         if code == '400' and typ in ('stream', 'profile'):
             name = 'bad-request'
             text = ''
@@ -217,13 +214,13 @@ class ConnectionBytestream:
         self.connection.send(iq)
 
     def _siResultCB(self, con, iq_obj):
-        file_props = self.files_props.get(iq_obj.getAttr('id'))
+        file_props = FilesProp.getFileProp(self.name, iq_obj.getAttr('id'))
         if not file_props:
             return
-        if 'request-id' in file_props:
+        if file_props.request_id:
             # we have already sent streamhosts info
             return
-        file_props['receiver'] = self._ft_get_from(iq_obj)
+        file_props.receiver = self._ft_get_from(iq_obj)
         si = iq_obj.getTag('si')
         file_tag = si.getTag('file')
         range_tag = None
@@ -232,10 +229,10 @@ class ConnectionBytestream:
         if range_tag:
             offset = range_tag.getAttr('offset')
             if offset:
-                file_props['offset'] = int(offset)
+                file_props.offset = int(offset)
             length = range_tag.getAttr('length')
             if length:
-                file_props['length'] = int(length)
+                file_props.length = int(length)
         feature = si.setTag('feature')
         if feature.getNamespace() != xmpp.NS_FEATURE:
             return
@@ -246,9 +243,9 @@ class ConnectionBytestream:
             self._send_socks5_info(file_props)
             raise xmpp.NodeProcessed
         if field.getValue() == xmpp.NS_IBB:
-            sid = file_props['sid']
-            fp = open(file_props['file-name'], 'r')
-            self.OpenStream(sid, file_props['receiver'], fp)
+            sid = file_props.sid
+            fp = open(file_props.file_name, 'r')
+            self.OpenStream(sid, file_props.receiver, fp)
             raise xmpp.NodeProcessed
 
     def _siSetCB(self, con, iq_obj):
@@ -258,20 +255,18 @@ class ConnectionBytestream:
         raise xmpp.NodeProcessed
 
     def _nec_file_request_received(self, obj):
-        if obj.conn.name != self.name:
-            return
-        gajim.socks5queue.add_file_props(self.name, obj.file_props)
+        pass
 
     def _siErrorCB(self, con, iq_obj):
         si = iq_obj.getTag('si')
         profile = si.getAttr('profile')
         if profile != xmpp.NS_FILE:
             return
-        file_props = self.files_props.get(iq_obj.getAttr('id'))
+        file_props = FilesProp.getFileProp(con.name, iq_obj.getAttr('id'))
         if not file_props:
             return
         jid = self._ft_get_from(iq_obj)
-        file_props['error'] = -3
+        file_props.error = -3
         from common.connection_handlers_events import FileRequestErrorEvent
         gajim.nec.push_incoming_event(FileRequestErrorEvent(None, conn=self,
             jid=jid, file_props=file_props, error_msg=''))
@@ -299,59 +294,47 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
         """
         Stop all active transfer to or from the given contact
         """
-        for file_props in self.files_props.values():
+        for file_props in FilesProp.getAllFileProp():
             if is_transfer_stopped(file_props):
                 continue
-            receiver_jid = unicode(file_props['receiver'])
+            receiver_jid = unicode(file_props.receiver)
             if contact.get_full_jid() == receiver_jid:
-                file_props['error'] = -5
+                file_props.error = -5
                 self.remove_transfer(file_props)
                 from common.connection_handlers_events import \
                     FileRequestErrorEvent
                 gajim.nec.push_incoming_event(FileRequestErrorEvent(None,
                     conn=self, jid=contact.jid, file_props=file_props,
                     error_msg=''))
-            sender_jid = unicode(file_props['sender'])
+            sender_jid = unicode(file_props.sender)
             if contact.get_full_jid() == sender_jid:
-                file_props['error'] = -3
+                file_props.error = -3
                 self.remove_transfer(file_props)
 
     def remove_all_transfers(self):
         """
         Stop and remove all active connections from the socks5 pool
         """
-        for file_props in self.files_props.values():
+        for file_props in FilesProp.getAllFileProp():
             self.remove_transfer(file_props, remove_from_list=False)
-        self.files_props = {}
 
     def remove_transfer(self, file_props, remove_from_list=True):
         if file_props is None:
             return
         self.disconnect_transfer(file_props)
-        sid = file_props['sid']
-        gajim.socks5queue.remove_file_props(self.name, sid)
-
-        if remove_from_list:
-            if 'sid' in self.files_props:
-                del(self.files_props['sid'])
+        sid = file_props.sid
 
     def disconnect_transfer(self, file_props):
         if file_props is None:
             return
-        if 'hash' in file_props:
-            gajim.socks5queue.remove_sender(file_props['hash'])
+        if file_props.hash_:
+            gajim.socks5queue.remove_sender(file_props.hash_)
 
-        if 'streamhosts' in file_props:
-            for host in file_props['streamhosts']:
+        if file_props.streamhosts:
+            for host in file_props.streamhosts:
                 if 'idx' in host and host['idx'] > 0:
                     gajim.socks5queue.remove_receiver(host['idx'])
                     gajim.socks5queue.remove_sender(host['idx'])
-
-        if 'direction' in file_props:
-            # it's a IBB
-            sid = file_props['sid']
-            if sid in self.files_props:
-                del self.files_props[sid]
 
     def _send_socks5_info(self, file_props):
         """
@@ -359,28 +342,28 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
         """
         if not self.connection or self.connected < 2:
             return
-        receiver = file_props['receiver']
-        sender = file_props['sender']
+        receiver = file_props.receiver
+        sender = file_props.sender
 
-        sha_str = helpers.get_auth_sha(file_props['sid'], sender, receiver)
-        file_props['sha_str'] = sha_str
+        sha_str = helpers.get_auth_sha(file_props.sid, sender, receiver)
+        file_props.sha_str = sha_str
 
         port = gajim.config.get('file_transfers_port')
         listener = gajim.socks5queue.start_listener(port, sha_str,
                 self._result_socks5_sid, file_props)
         if not listener:
-            file_props['error'] = -5
+            file_props.error = -5
             from common.connection_handlers_events import FileRequestErrorEvent
             gajim.nec.push_incoming_event(FileRequestErrorEvent(None, conn=self,
                 jid=unicode(receiver), file_props=file_props, error_msg=''))
-            self._connect_error(unicode(receiver), file_props['sid'],
-                    file_props['sid'], code=406)
+            self._connect_error(unicode(receiver), file_props.sid,
+                    file_props.sid, code=406)
         else:
             iq = xmpp.Iq(to=unicode(receiver), typ='set')
-            file_props['request-id'] = 'id_' + file_props['sid']
-            iq.setID(file_props['request-id'])
+            file_props.request_id = 'id_' + file_props.sid
+            iq.setID(file_props.request_id)
             query = iq.setTag('query', namespace=xmpp.NS_BYTESTREAM)
-            query.setAttr('sid', file_props['sid'])
+            query.setAttr('sid', file_props.sid)
 
             self._add_addiditional_streamhosts_to_query(query, file_props)
             self._add_local_ips_as_streamhosts_to_query(query, file_props)
@@ -406,7 +389,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
                 if not addr[4][0] in my_ips and not addr[4][0].startswith('127'):
                     my_ips.append(addr[4][0])
 
-            sender = file_props['sender']
+            sender = file_props.sender
             port = gajim.config.get('file_transfers_port')
             self._add_streamhosts_to_query(query, sender, port, my_ips)
         except socket.gaierror:
@@ -416,7 +399,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
                 sec_txt=_('Invalid local address? :-O')))
 
     def _add_addiditional_streamhosts_to_query(self, query, file_props):
-        sender = file_props['sender']
+        sender = file_props.sender
         port = gajim.config.get('file_transfers_port')
         ft_add_hosts_to_send = gajim.config.get('ft_add_hosts_to_send')
         additional_hosts = []
@@ -469,12 +452,12 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             log.debug('Got GUPnP-IGD answer: external: %s:%s, internal: %s:%s',
                 ext_ip, ext_port, local_ip, local_port)
             if local_port != gajim.config.get('file_transfers_port'):
-                sender = file_props['sender']
-                receiver = file_props['receiver']
-                sha_str = helpers.get_auth_sha(file_props['sid'], sender,
+                sender = file_props.sender
+                receiver = file_props.receiver
+                sha_str = helpers.get_auth_sha(file_props.sid, sender,
                     receiver)
                 listener = gajim.socks5queue.start_listener(local_port, sha_str,
-                    self._result_socks5_sid, file_props['sid'])
+                    self._result_socks5_sid, file_props.sid)
                 if listener:
                     self._add_streamhosts_to_query(query, sender, ext_port,
                         [ext_ip])
@@ -507,9 +490,9 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
     def _add_proxy_streamhosts_to_query(self, query, file_props):
         proxyhosts = self._get_file_transfer_proxies_from_config(file_props)
         if proxyhosts:
-            file_props['proxy_receiver'] = unicode(file_props['receiver'])
-            file_props['proxy_sender'] = unicode(file_props['sender'])
-            file_props['proxyhosts'] = proxyhosts
+            file_props.proxy_receiver = unicode(file_props.receiver)
+            file_props.proxy_sender = unicode(file_props.sender)
+            file_props.proxyhosts = proxyhosts
 
             for proxyhost in proxyhosts:
                 self._add_streamhosts_to_query(query, proxyhost['jid'],
@@ -536,9 +519,9 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
                     continue
                 host_dict = {
                         'state': 0,
-                        'target': unicode(file_props['receiver']),
-                        'id': file_props['sid'],
-                        'sid': file_props['sid'],
+                        'target': unicode(file_props.receiver),
+                        'id': file_props.sid,
+                        'sid': file_props.sid,
                         'initiator': proxy,
                         'host': host,
                         'port': unicode(_port),
@@ -553,18 +536,20 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
         """
         Store the result of SHA message from auth
         """
-        if sid not in self.files_props:
-            return
-        file_props = self.files_props[sid]
-        file_props['hash'] = hash_id
+        file_props = FilesProp.getFilePropBySid(sid)
+        file_props.hash_ = hash_id
         return
 
-    def _connect_error(self, to, _id, sid, code=404):
+    def _connect_error(self,sid, code=404):
         """
         Called when there is an error establishing BS connection, or when
         connection is rejected
         """
         if not self.connection or self.connected < 2:
+            return
+        file_props = FilesProp.getFileProp(self.name, sid)
+        if file_props is None:
+            log.error('can not send iq error on failed transfer')
             return
         msg_dict = {
                 404: 'Could not connect to given hosts',
@@ -572,21 +557,23 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
                 406: 'Not acceptable',
         }
         msg = msg_dict[code]
+        if file_props.type_ == 's':
+            to = file_props.receiver
+        else:
+            to = file_props.sender
         iq = xmpp.Iq(to=to,     typ='error')
-        iq.setAttr('id', _id)
+        iq.setAttr('id', file_props.session_sid)
         err = iq.setTag('error')
         err.setAttr('code', unicode(code))
         err.setData(msg)
         self.connection.send(iq)
         if code == 404:
-            file_props = gajim.socks5queue.get_file_props(self.name, sid)
-            if file_props is not None:
-                self.disconnect_transfer(file_props)
-                file_props['error'] = -3
-                from common.connection_handlers_events import \
-                    FileRequestErrorEvent
-                gajim.nec.push_incoming_event(FileRequestErrorEvent(None,
-                    conn=self, jid=to, file_props=file_props, error_msg=msg))
+            self.disconnect_transfer(file_props)
+            file_props.error = -3
+            from common.connection_handlers_events import \
+                FileRequestErrorEvent
+            gajim.nec.push_incoming_event(FileRequestErrorEvent(None,
+                conn=self, jid=to, file_props=file_props, error_msg=msg))
 
     def _proxy_auth_ok(self, proxy):
         """
@@ -594,14 +581,14 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
         """
         if not self.connection or self.connected < 2:
             return
-        file_props = self.files_props[proxy['sid']]
+        file_props = FilesProp.getFileProp(self.connection, proxy['sid'])
         iq = xmpp.Iq(to=proxy['initiator'],     typ='set')
         auth_id = "au_" + proxy['sid']
         iq.setID(auth_id)
         query = iq.setTag('query', namespace=xmpp.NS_BYTESTREAM)
         query.setAttr('sid', proxy['sid'])
         activate = query.setTag('activate')
-        activate.setData(file_props['proxy_receiver'])
+        activate.setData(file_props.proxy_receiver)
         iq.setID(auth_id)
         self.connection.send(iq)
 
@@ -613,10 +600,10 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
         gajim.proxy65_manager.error_cb(frm, query)
         jid = helpers.get_jid_from_iq(iq_obj)
         id_ = id_[3:]
-        if id_ not in self.files_props:
+        file_props = FilesProp.getFilePropBySid(id_)
+        if not file_props:
             return
-        file_props = self.files_props[id_]
-        file_props['error'] = -4
+        file_props.error = -4
         from common.connection_handlers_events import FileRequestErrorEvent
         gajim.nec.push_incoming_event(FileRequestErrorEvent(None, conn=self,
             jid=jid, file_props=file_props, error_msg=''))
@@ -627,7 +614,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
         id_ = unicode(iq_obj.getAttr('id'))
         query = iq_obj.getTag('query')
         sid = unicode(query.getAttr('sid'))
-        file_props = gajim.socks5queue.get_file_props(self.name, sid)
+        file_props = FilesProp.getFileProp(self.name, sid)
         streamhosts = []
         for item in query.getChildren():
             if item.getName() == 'streamhost':
@@ -647,28 +634,23 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
                 if 'port' not in host_dict:
                     continue
                 streamhosts.append(host_dict)
-        if file_props is None:
-            if sid in self.files_props:
-                file_props = self.files_props[sid]
-                file_props['fast'] = streamhosts
-                if file_props['type'] == 's': # FIXME: remove fast xmlns
-                    # only psi do this
-                    if 'streamhosts' in file_props:
-                        file_props['streamhosts'].extend(streamhosts)
-                    else:
-                        file_props['streamhosts'] = streamhosts
-                    if not gajim.socks5queue.get_file_props(self.name, sid):
-                        gajim.socks5queue.add_file_props(self.name, file_props)
-                    gajim.socks5queue.connect_to_hosts(self.name, sid,
-                            self.send_success_connect_reply, None)
+        file_props = FilesProp.getFilePropBySid(sid)
+        if file_props is not None:
+            if file_props.type_ == 's': # FIXME: remove fast xmlns
+                # only psi do this
+                if file_props.streamhosts:
+                    file_props.streamhosts.extend(streamhosts)
+                else:
+                    file_props.streamhosts = streamhosts
+                gajim.socks5queue.connect_to_hosts(self.name, sid,
+                        self.send_success_connect_reply, None)
                 raise xmpp.NodeProcessed
-
-        if file_props is None:
+        else:
             log.warn('Gajim got streamhosts for unknown transfer. Ignoring it.')
             raise xmpp.NodeProcessed
 
-        file_props['streamhosts'] = streamhosts
-        if file_props['type'] == 'r':
+        file_props.streamhosts = streamhosts
+        if file_props.type_ == 'r':
             gajim.socks5queue.connect_to_hosts(self.name, sid,
                     self.send_success_connect_reply, self._connect_error)
         raise xmpp.NodeProcessed
@@ -681,13 +663,12 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             return
         frm = self._ft_get_from(iq_obj)
         id_ = real_id[3:]
-        if id_ in self.files_props:
-            file_props = self.files_props[id_]
-            if file_props['streamhost-used']:
-                for host in file_props['proxyhosts']:
-                    if host['initiator'] == frm and 'idx' in host:
-                        gajim.socks5queue.activate_proxy(host['idx'])
-                        raise xmpp.NodeProcessed
+        file_props = FilesProp.getFilePropBySid(id_)
+        if file_props.streamhost_used:
+            for host in file_props.proxyhosts:
+                if host['initiator'] == frm and 'idx' in host:
+                    gajim.socks5queue.activate_proxy(host['idx'])
+                    raise xmpp.NodeProcessed
 
     def _bytestreamResultCB(self, con, iq_obj):
         frm = self._ft_get_from(iq_obj)
@@ -700,68 +681,57 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
         except Exception: # this bytestream result is not what we need
             pass
         id_ = real_id[3:]
-        if id_ in self.files_props:
-            file_props = self.files_props[id_]
-        else:
+        file_props = FilesProp.getFileProp(self.name, id_)
+        if file_props is None:
             raise xmpp.NodeProcessed
         if streamhost is None:
             # proxy approves the activate query
             if real_id.startswith('au_'):
-                if 'streamhost-used' not in file_props or \
-                file_props['streamhost-used'] is False:
+                if file_props.streamhost_used is False:
                     raise xmpp.NodeProcessed
-                if 'proxyhosts' not in file_props:
+                if  not file_props.proxyhosts:
                     raise xmpp.NodeProcessed
-                for host in file_props['proxyhosts']:
+                for host in file_props.proxyhosts:
                     if host['initiator'] == frm and \
-                    unicode(query.getAttr('sid')) == file_props['sid']:
+                    unicode(query.getAttr('sid')) == file_props.sid:
                         gajim.socks5queue.activate_proxy(host['idx'])
                         break
             raise xmpp.NodeProcessed
         jid = self._ft_get_streamhost_jid_attr(streamhost)
-        if 'streamhost-used' in file_props and \
-                file_props['streamhost-used'] is True:
+        if file_props.streamhost_used is True:
             raise xmpp.NodeProcessed
 
         if real_id.startswith('au_'):
-            if 'stopped' in file_props and file_props['stopped']:
+            if file_props.stopped:
                 self.remove_transfer(file_props)
             else:
                 gajim.socks5queue.send_file(file_props, self.name)
             raise xmpp.NodeProcessed
 
         proxy = None
-        if 'proxyhosts' in file_props:
-            for proxyhost in file_props['proxyhosts']:
+        if file_props.proxyhosts:
+            for proxyhost in file_props.proxyhosts:
                 if proxyhost['jid'] == jid:
                     proxy = proxyhost
 
-        if 'stopped' in file_props and file_props['stopped']:
+        if file_props.stopped:
             self.remove_transfer(file_props)
             raise xmpp.NodeProcessed
         if proxy is not None:
-            file_props['streamhost-used'] = True
-            if 'streamhosts' not in file_props:
-                file_props['streamhosts'] = []
-            file_props['streamhosts'].append(proxy)
-            file_props['is_a_proxy'] = True
-            receiver = Socks5Receiver(gajim.idlequeue, proxy,
-                    file_props['sid'], file_props)
-            gajim.socks5queue.add_receiver(self.name, receiver)
+            file_props.streamhost_used = True
+            file_props.streamhosts.append(proxy)
+            file_props.is_a_proxy = True
+            receiver = Socks5ReceiverClient(gajim.idlequeue, proxy,
+                    file_props.sid, file_props)
             proxy['idx'] = receiver.queue_idx
             gajim.socks5queue.on_success = self._proxy_auth_ok
             raise xmpp.NodeProcessed
 
         else:
-            if 'stopped' in file_props and file_props['stopped']:
+            if file_props.stopped:
                 self.remove_transfer(file_props)
             else:
-                gajim.socks5queue.send_file(file_props, self.name, 'client')
-            if 'fast' in file_props:
-                fasts = file_props['fast']
-                if len(fasts) > 0:
-                    self._connect_error(frm, fasts[0]['id'], file_props['sid'],
-                            code=406)
+                gajim.socks5queue.send_file(file_props, self.name, 'server')
 
         raise xmpp.NodeProcessed
 
@@ -800,33 +770,33 @@ class ConnectionIBBytestream(ConnectionBytestream):
         blocksize = stanza.getTagAttr('open', 'block-size')
         log.debug('StreamOpenHandler called sid->%s blocksize->%s' % (sid,
             blocksize))
+        file_props = FilesProp.getFileProp(self.name, sid)
         try:
             blocksize = int(blocksize)
         except:
             err = xmpp.ERR_BAD_REQUEST
         if not sid or not blocksize:
             err = xmpp.ERR_BAD_REQUEST
-        elif not gajim.socks5queue.get_file_props(self.name, sid):
+        elif not file_props:
             err = xmpp.ERR_UNEXPECTED_REQUEST
         if err:
             rep = xmpp.Error(stanza, err)
         else:
-            file_props = gajim.socks5queue.get_file_props(self.name, sid)
             log.debug("Opening stream: id %s, block-size %s" % (sid, blocksize))
             rep = xmpp.Protocol('iq', stanza.getFrom(), 'result',
                 stanza.getTo(), {'id': stanza.getID()})
-            file_props['block-size'] = blocksize
-            file_props['seq'] = 0
-            file_props['received-len'] = 0
-            file_props['last-time'] = time.time()
-            file_props['error'] = 0
-            file_props['paused'] = False
-            file_props['connected'] = True
-            file_props['completed'] = False
-            file_props['disconnect_cb'] = None
-            file_props['continue_cb'] = None
-            file_props['syn_id'] = stanza.getID()
-            file_props['fp'] = open(file_props['file-name'], 'w')
+            file_props.block_size = blocksize
+            file_props.seq = 0
+            file_props.received_len = 0
+            file_props.last_time = time.time()
+            file_props.error = 0
+            file_props.paused = False
+            file_props.connected = True
+            file_props.completed = False
+            file_props.disconnect_cb = None
+            file_props.continue_cb = None
+            file_props.syn_id = stanza.getID()
+            file_props.fp = open(file_props.file_name, 'w')
         conn.send(rep)
 
     def OpenStream(self, sid, to, fp, blocksize=4096):
@@ -837,62 +807,59 @@ class ConnectionIBBytestream(ConnectionBytestream):
         Take into account that recommended stanza size is 4k and IBB uses
         base64 encoding that increases size of data by 1/3.
         """
-        if sid not in self.files_props.keys():
-            return
         if not xmpp.JID(to).getResource():
             return
-        self.files_props[sid]['direction'] = '|>' + to
-        self.files_props[sid]['block-size'] = blocksize
-        self.files_props[sid]['fp'] = fp
-        self.files_props[sid]['seq'] = 0
-        self.files_props[sid]['error'] = 0
-        self.files_props[sid]['paused'] = False
-        self.files_props[sid]['received-len'] = 0
-        self.files_props[sid]['last-time'] = time.time()
-        self.files_props[sid]['connected'] = True
-        self.files_props[sid]['completed'] = False
-        self.files_props[sid]['disconnect_cb'] = None
-        self.files_props[sid]['continue_cb'] = None
+        file_props = FilesProp.getFilePropBySid(sid)
+        file_props.direction = '|>' + to
+        file_props.block_size = blocksize
+        file_props.fp = fp
+        file_props.seq = 0
+        file_props.error = 0
+        file_props.paused = False
+        file_props.received_len = 0
+        file_props.last_time = time.time()
+        file_props.connected = True
+        file_props.completed = False
+        file_props.disconnect_cb = None
+        file_props.continue_cb = None
         syn = xmpp.Protocol('iq', to, 'set', payload=[xmpp.Node(xmpp.NS_IBB + \
             ' open', {'sid': sid, 'block-size': blocksize, 'stanza': 'iq'})])
         self.connection.send(syn)
-        self.files_props[sid]['syn_id'] = syn.getID()
-        return self.files_props[sid]
+        file_props.syn_id = syn.getID()
+        return file_props
 
     def SendHandler(self):
         """
         Send next portion of data if it is time to do it. Used internally.
         """
         log.debug('SendHandler called')
-        if not self.files_props:
-            return
-        for file_props in self.files_props.values():
-            if 'direction' not in file_props:
+        #pdb.set_trace()
+        for file_props in FilesProp.getAllFileProp():
+            if not file_props.direction:
                 # it's socks5 bytestream
                 continue
-            sid = file_props['sid']
-            if file_props['direction'][:2] == '|>':
+            sid = file_props.sid
+            if file_props.direction[:2] == '|>':
                 # We waitthat other part accept stream
                 continue
-            if file_props['direction'][0] == '>':
-                if 'paused' in file_props and file_props['paused']:
+            if file_props.direction[0] == '>':
+                if file_props.paused:
                     continue
-                chunk = file_props['fp'].read(file_props['block-size'])
+                chunk = file_props.fp.read(file_props.block_size)
                 if chunk:
                     datanode = xmpp.Node(xmpp.NS_IBB + ' data', {'sid': sid,
-                        'seq': file_props['seq']}, base64.encodestring(chunk))
-                    file_props['seq'] += 1
-                    file_props['started'] = True
-                    if file_props['seq'] == 65536:
-                        file_props['seq'] = 0
+                        'seq': file_props.seq}, base64.encodestring(chunk))
+                    file_props.seq += 1
+                    file_props.started = True
+                    if file_props.seq == 65536:
+                        file_props.seq = 0
                     self.last_sent_ibb_id = self.connection.send(xmpp.Protocol(
-                        name='iq', to=file_props['direction'][1:], typ='set',
+                        name='iq', to=file_props.direction[1:], typ='set',
                         payload=[datanode]))
                     current_time = time.time()
-                    file_props['elapsed-time'] += current_time - file_props[
-                        'last-time']
-                    file_props['last-time'] = current_time
-                    file_props['received-len'] += len(chunk)
+                    file_props.elapsed_time += current_time - file_props.last_time
+                    file_props.last_time = current_time
+                    file_props.received_len += len(chunk)
                     gajim.socks5queue.progress_transfer_cb(self.name,
                         file_props)
                 else:
@@ -900,11 +867,10 @@ class ConnectionIBBytestream(ConnectionBytestream):
                     # notify the local user about sucessfull send
                     # delete the local stream
                     self.connection.send(xmpp.Protocol('iq',
-                        file_props['direction'][1:], 'set',
+                        file_props.direction[1:], 'set',
                         payload=[xmpp.Node(xmpp.NS_IBB + ' close',
                         {'sid':sid})]))
-                    file_props['completed'] = True
-                    del self.files_props[sid]
+                    file_props.completed = True
 
     def IBBMessageHandler(self, conn, stanza):
         """
@@ -922,28 +888,27 @@ class ConnectionIBBytestream(ConnectionBytestream):
             seq = ''
             data = ''
         err = None
-        if not gajim.socks5queue.get_file_props(self.name, sid):
+        file_props = FilesProp.getFileProp(self.name, sid)
+        if file_props is None:
             err = xmpp.ERR_ITEM_NOT_FOUND
         else:
-            file_props = gajim.socks5queue.get_file_props(self.name, sid)
             if not data:
                 err = xmpp.ERR_BAD_REQUEST
-            elif seq <> file_props['seq']:
+            elif seq <> file_props.seq:
                 err = xmpp.ERR_UNEXPECTED_REQUEST
             else:
                 log.debug('Successfull receive sid->%s %s+%s bytes' % (sid,
-                    file_props['fp'].tell(), len(data)))
-                file_props['seq'] += 1
-                file_props['started'] = True
-                file_props['fp'].write(data)
+                    file_props.fp.tell(), len(data)))
+                file_props.seq += 1
+                file_props.started = True
+                file_props.fp.write(data)
                 current_time = time.time()
-                file_props['elapsed-time'] += current_time - file_props[
-                    'last-time']
-                file_props['last-time'] = current_time
-                file_props['received-len'] += len(data)
+                file_props.elapsed_time += current_time - file_props.last_time
+                file_props.last_time = current_time
+                file_props.received_len += len(data)
                 gajim.socks5queue.progress_transfer_cb(self.name, file_props)
-                if file_props['received-len'] >= file_props['size']:
-                    file_props['completed'] = True
+                if file_props.received_len >= file_props.size:
+                    file_props.completed = True
         if err:
             log.debug('Error on receive: %s' % err)
             conn.send(xmpp.Error(xmpp.Iq(to=stanza.getFrom(),
@@ -960,21 +925,17 @@ class ConnectionIBBytestream(ConnectionBytestream):
         sid = stanza.getTagAttr('close', 'sid')
         log.debug('StreamCloseHandler called sid->%s' % sid)
         # look in sending files
-        if sid in self.files_props.keys():
+        file_props = FilesProp.getFileProp(self.name, sid)
+        if file_props:
             reply = stanza.buildReply('result')
             reply.delChild('close')
             conn.send(reply)
-            gajim.socks5queue.complete_transfer_cb(self.name, self.files_props[sid])
-            del self.files_props[sid]
-        # look in receiving files
-        elif gajim.socks5queue.get_file_props(self.name, sid):
-            file_props = gajim.socks5queue.get_file_props(self.name, sid)
+            # look in receiving files
             reply = stanza.buildReply('result')
             reply.delChild('close')
             conn.send(reply)
-            file_props['fp'].close()
+            file_props.fp.close()
             gajim.socks5queue.complete_transfer_cb(self.name, file_props)
-            gajim.socks5queue.remove_file_props(self.name, sid)
         else:
             conn.send(xmpp.Error(stanza, xmpp.ERR_ITEM_NOT_FOUND))
 
@@ -987,21 +948,19 @@ class ConnectionIBBytestream(ConnectionBytestream):
         """
         syn_id = stanza.getID()
         log.debug('IBBAllIqHandler called syn_id->%s' % syn_id)
-        for sid in self.files_props.keys():
-            file_props = self.files_props[sid]
-            if not 'direction' in file_props:
+        for file_props in FilesProp.getAllFileProp():
+            if not file_props.direction:
                 # It's socks5 bytestream
                 continue
-            if file_props['syn_id'] == syn_id:
+            if file_props.syn_id == syn_id:
                 if stanza.getType() == 'error':
-                    if file_props['direction'][0] == '<':
+                    if file_props.direction[0] == '<':
                         conn.Event('IBB', 'ERROR ON RECEIVE', file_props)
                     else:
                         conn.Event('IBB', 'ERROR ON SEND', file_props)
-                    del self.files_props[sid]
                 elif stanza.getType() == 'result':
-                    if file_props['direction'][0] == '|':
-                        file_props['direction'] = file_props['direction'][1:]
+                    if file_props.direction[0] == '|':
+                        file_props.direction = file_props.direction[1:]
                         self.SendHandler()
                     else:
                         conn.send(xmpp.Error(stanza,
@@ -1026,7 +985,7 @@ class ConnectionSocks5BytestreamZeroconf(ConnectionSocks5Bytestream):
         return gajim.get_jid_from_account(self.name)
 
     def _ft_get_receiver_jid(self, file_props):
-        return file_props['receiver'].jid
+        return file_props.receiver.jid
 
     def _ft_get_streamhost_jid_attr(self, streamhost):
         return streamhost.getAttr('jid')

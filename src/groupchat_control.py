@@ -950,7 +950,7 @@ class GroupchatControl(ChatControlBase):
                 if not self.form_widget:
                     return
                 form_node = self.form_widget.data_form.get_purged()
-                form_node.type = 'submit'
+                form_node.type_ = 'submit'
                 obj.conn.send_captcha(self.room_jid, form_node)
                 self.form_widget.hide()
                 self.form_widget.destroy()

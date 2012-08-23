@@ -37,6 +37,7 @@ from common.logger import LOG_DB_PATH
 from common.pep import SUPPORTED_PERSONAL_USER_EVENTS
 from common.xmpp.protocol import NS_CHATSTATES
 from common.jingle_transport import JingleTransportSocks5
+from common.file_props import FilesProp
 
 import gtkgui_helpers
 
@@ -1684,7 +1685,7 @@ class PEPReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             pep = pep_class.get_tag_as_PEP(self.fjid, self.conn.name,
                 self.event_tag)
             if pep:
-                self.pep_type = pep.type
+                self.pep_type = pep.type_
                 return True
 
         items = self.event_tag.getTag('items')
@@ -1942,16 +1943,59 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.get_id()
         self.fjid = self.conn._ft_get_from(self.stanza)
         self.jid = gajim.get_jid_without_resource(self.fjid)
-        self.file_props = {'type': 'r'}
-        self.file_props['sender'] = self.fjid
-        self.file_props['request-id'] = self.id_
         if self.jingle_content:
-            self.file_props['session-type'] = 'jingle'
-            self.file_props['stream-methods'] = xmpp.NS_BYTESTREAM
-            file_tag = self.jingle_content.getTag('description').getTag(
-                'offer').getTag('file')
+            self.FT_content.use_security = bool(self.jingle_content.getTag(
+                'security'))
+            if not self.FT_content.transport:
+                self.FT_content.transport = JingleTransportSocks5()
+                self.FT_content.transport.set_our_jid(
+                    self.FT_content.session.ourjid)
+                self.FT_content.transport.set_connection(
+                    self.FT_content.session.connection)
+            sid = self.FT_content.transport.sid
+            self.file_props = FilesProp.getNewFileProp(self.conn.name, sid)
+            self.file_props.session_sid = unicode(
+                                self.stanza.getTag('jingle').getAttr('sid')
+                                                 )
+            self.FT_content.file_props = self.file_props
+            self.FT_content.transport.set_file_props(self.file_props)
+            if self.file_props.streamhosts:
+                self.file_props.streamhosts.extend(
+                    self.FT_content.transport.remote_candidates)
+            else:
+                self.file_props.streamhosts = \
+                    self.FT_content.transport.remote_candidates
+            for host in self.file_props.streamhosts:
+                host['initiator'] = self.FT_content.session.initiator
+                host['target'] = self.FT_content.session.responder
         else:
             si = self.stanza.getTag('si')
+            self.file_props = FilesProp.getNewFileProp(self.conn.name,
+                                               unicode(si.getAttr('id'))
+                                                      )
+        self.file_props.sender = self.fjid
+        self.file_props.request_id = self.id_
+        if self.jingle_content:
+            self.file_props.session_type = 'jingle'
+            self.file_props.stream_methods = xmpp.NS_BYTESTREAM
+            file_tag = self.jingle_content.getTag('description').getTag(
+                'offer').getTag('file')
+            for child in file_tag.getChildren():
+                name = child.getName()
+                val = child.getData()
+                if val is None:
+                    continue
+                if name == 'name':
+                    self.file_props.name = val
+                if name == 'size':
+                    self.file_props.size = val
+                if name == 'hash':
+                    self.file_props.algo = child.getAttr('algo')
+                    self.file_props.hash_ = val
+                if name == 'date':
+                    self.file_props.date = val
+
+        else:
             profile = si.getAttr('profile')
             if profile != xmpp.NS_FILE:
                 self.conn.send_file_rejection(self.file_props, code='400',
@@ -1965,9 +2009,9 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                 return
             self.dataform = dataforms.ExtendForm(node=form_tag)
             for f in self.dataform.iter_fields():
-                if f.var == 'stream-method' and f.type == 'list-single':
+                if f.var == 'stream-method' and f.type_ == 'list-single':
                     values = [o[1] for o in f.options]
-                    self.file_props['stream-methods'] = ' '.join(values)
+                    self.file_props.stream_methods = ' '.join(values)
                     if xmpp.NS_BYTESTREAM in values or xmpp.NS_IBB in values:
                         break
             else:
@@ -1975,56 +2019,25 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                     typ='stream')
                 raise xmpp.NodeProcessed
             file_tag = si.getTag('file')
-        for child in file_tag.getChildren():
-            name = child.getName()
-            if name in ('name', 'size', 'hash', 'date'):
-                val = child.getData()
+            for name, val in file_tag.getAttrs().items():
                 if val is None:
                     continue
-                self.file_props[name] = val
-                # Delete this, it shouldn't be necesary after file_props gets
-                # refactored.
-                if name == 'hash':
-                    self.file_props['algo'] = child.getAttr('algo')
+                if name == 'name':
+                    self.file_props.name = val
+                if name == 'size':
+                    self.file_props.size = val
         file_desc_tag = file_tag.getTag('desc')
         if file_desc_tag is not None:
-            self.file_props['desc'] = file_desc_tag.getData()
+            self.file_props.desc = file_desc_tag.getData()
 
         if not self.jingle_content:
             mime_type = si.getAttr('mime-type')
             if mime_type is not None:
-                self.file_props['mime-type'] = mime_type
+                self.file_props.mime_type = mime_type
 
-        self.file_props['receiver'] = self.conn._ft_get_our_jid()
-        self.file_props['transfered_size'] = []
-        if self.jingle_content:
-            self.FT_content.use_security = bool(self.jingle_content.getTag(
-                'security'))
-            self.file_props['session-sid'] = unicode(self.stanza.getTag(
-                'jingle').getAttr('sid'))
+        self.file_props.receiver = self.conn._ft_get_our_jid()
+        self.file_props.transfered_size = []
 
-            self.FT_content.file_props = self.file_props
-            if not self.FT_content.transport:
-                self.FT_content.transport = JingleTransportSocks5()
-                self.FT_content.transport.set_our_jid(
-                    self.FT_content.session.ourjid)
-                self.FT_content.transport.set_connection(
-                    self.FT_content.session.connection)
-            self.file_props['sid'] = self.FT_content.transport.sid
-            self.FT_content.session.connection.files_props[
-                self.file_props['sid']] = self.file_props
-            self.FT_content.transport.set_file_props(self.file_props)
-            if self.file_props.has_key('streamhosts'):
-                self.file_props['streamhosts'].extend(
-                    self.FT_content.transport.remote_candidates)
-            else:
-                self.file_props['streamhosts'] = \
-                    self.FT_content.transport.remote_candidates
-            for host in self.file_props['streamhosts']:
-                host['initiator'] = self.FT_content.session.initiator
-                host['target'] = self.FT_content.session.responder
-        else:
-            self.file_props['sid'] = unicode(si.getAttr('id'))
         return True
 
 class FileRequestErrorEvent(nec.NetworkIncomingEvent):

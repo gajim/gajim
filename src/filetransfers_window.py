@@ -33,6 +33,7 @@ import dialogs
 
 from common import gajim
 from common import helpers
+from common.file_props import FilesProp
 from common.protocol.bytestream import (is_transfer_active, is_transfer_paused,
         is_transfer_stopped)
 from common.xmpp.protocol import NS_JINGLE_FILE_TRANSFER
@@ -147,22 +148,20 @@ class FileTransfersWindow:
         Find all transfers with peer 'jid' that belong to 'account'
         """
         active_transfers = [[], []] # ['senders', 'receivers']
-
-        # 'account' is the sender
-        for file_props in self.files_props['s'].values():
-            if file_props['tt_account'] == account:
-                receiver_jid = unicode(file_props['receiver']).split('/')[0]
-                if jid == receiver_jid:
-                    if not is_transfer_stopped(file_props):
-                        active_transfers[0].append(file_props)
-
-        # 'account' is the recipient
-        for file_props in self.files_props['r'].values():
-            if file_props['tt_account'] == account:
-                sender_jid = unicode(file_props['sender']).split('/')[0]
-                if jid == sender_jid:
-                    if not is_transfer_stopped(file_props):
-                        active_transfers[1].append(file_props)
+        allfp = FilesProp.getAllFileProp()
+        for file_props in allfp:
+            if file_props.type_ == 's' and file_props.tt_account == account:
+                # 'account' is the sender
+                receiver_jid = unicode(file_props.receiver).split('/')[0]
+                if jid == receiver_jid and not is_transfer_stopped(file_props):
+                    active_transfers[0].append(file_props)
+            elif file_props.type_ == 'r' and file_props.tt_account == account:
+                # 'account' is the recipient
+                sender_jid = unicode(file_props.sender).split('/')[0]
+                if jid == sender_jid and not is_transfer_stopped(file_props):
+                    active_transfers[1].append(file_props)
+            else:
+                raise Exception('file_props has no type')
         return active_transfers
 
     def show_completed(self, jid, file_props):
@@ -171,46 +170,46 @@ class FileTransfersWindow:
         """
         def on_open(widget, file_props):
             dialog.destroy()
-            if 'file-name' not in file_props:
+            if not file_props.file_name:
                 return
-            path = os.path.split(file_props['file-name'])[0]
+            path = os.path.split(file_props.file_name)[0]
             if os.path.exists(path) and os.path.isdir(path):
                 helpers.launch_file_manager(path)
             self.tree.get_selection().unselect_all()
 
-        if file_props['type'] == 'r':
+        if file_props.type_ == 'r':
             # file path is used below in 'Save in'
-            (file_path, file_name) = os.path.split(file_props['file-name'])
+            (file_path, file_name) = os.path.split(file_props.file_name)
         else:
-            file_name = file_props['name']
+            file_name = file_props.name
         sectext = '\t' + _('Filename: %s') % gobject.markup_escape_text(
             file_name)
         sectext += '\n\t' + _('Size: %s') % \
-        helpers.convert_bytes(file_props['size'])
-        if file_props['type'] == 'r':
-            jid = unicode(file_props['sender']).split('/')[0]
+        helpers.convert_bytes(file_props.size)
+        if file_props.type_ == 'r':
+            jid = unicode(file_props.sender).split('/')[0]
             sender_name = gajim.contacts.get_first_contact_from_jid(
-                    file_props['tt_account'], jid).get_shown_name()
+                    file_props.tt_account, jid).get_shown_name()
             sender = sender_name
         else:
             #You is a reply of who sent a file
             sender = _('You')
         sectext += '\n\t' + _('Sender: %s') % sender
         sectext += '\n\t' + _('Recipient: ')
-        if file_props['type'] == 's':
-            jid = unicode(file_props['receiver']).split('/')[0]
+        if file_props.type_ == 's':
+            jid = unicode(file_props.receiver).split('/')[0]
             receiver_name = gajim.contacts.get_first_contact_from_jid(
-                    file_props['tt_account'], jid).get_shown_name()
+                    file_props.tt_account, jid).get_shown_name()
             recipient = receiver_name
         else:
             #You is a reply of who received a file
             recipient = _('You')
         sectext += recipient
-        if file_props['type'] == 'r':
+        if file_props.type_ == 'r':
             sectext += '\n\t' + _('Saved in: %s') % file_path
         dialog = dialogs.HigDialog(None, gtk.MESSAGE_INFO, gtk.BUTTONS_NONE,
                         _('File transfer completed'), sectext)
-        if file_props['type'] == 'r':
+        if file_props.type_ == 'r':
             button = gtk.Button(_('_Open Containing Folder'))
             button.connect('clicked', on_open, file_props)
             dialog.action_area.pack_start(button)
@@ -236,10 +235,10 @@ class FileTransfersWindow:
         self.tree.get_selection().unselect_all()
 
     def show_stopped(self, jid, file_props, error_msg=''):
-        if file_props['type'] == 'r':
-            file_name = os.path.basename(file_props['file-name'])
+        if file_props.type_ == 'r':
+            file_name = os.path.basename(file_props.file_name)
         else:
-            file_name = file_props['name']
+            file_name = file_props.name
         sectext = '\t' + _('Filename: %s') % gobject.markup_escape_text(
             file_name)
         sectext += '\n\t' + _('Recipient: %s') % jid
@@ -254,13 +253,13 @@ class FileTransfersWindow:
             sid = gajim.connections[account].start_file_transfer(jid,
                                                             file_props,
                                                                 True)
-            file_props['sid'] = sid
+            file_props.sid = sid
 
 
-        if file_props['type'] == 'r':
-            file_name = os.path.basename(file_props['file-name'])
+        if file_props.type_ == 'r':
+            file_name = os.path.basename(file_props.file_name)
         else:
-            file_name = file_props['name']
+            file_name = file_props.name
         dialogs.YesNoDialog(('File transfer error'),
             _('The file %(file)s has been fully received, but it seems to be '
             'wrongly received.\nDo you want to reload it?') % \
@@ -339,10 +338,8 @@ class FileTransfersWindow:
             return False
         if contact.supports(NS_JINGLE_FILE_TRANSFER):
             log.info("contact %s supports jingle file transfer"%(contact.get_full_jid()))
-            # this call has the side effect of setting file_props['sid'] to the jingle sid, but for the sake of clarity
-            # make it explicit here
-            sid = gajim.connections[account].start_file_transfer(contact.get_full_jid(), file_props)
-            file_props['sid'] = sid
+            gajim.connections[account].start_file_transfer(contact.get_full_jid(),
+                                                           file_props)
             self.add_transfer(account, contact, file_props)
         else:
             log.info("contact does not support jingle file transfer")
@@ -354,7 +351,8 @@ class FileTransfersWindow:
         file_dir = os.path.dirname(file_path)
         if file_dir:
             gajim.config.set('last_save_dir', file_dir)
-        file_props['file-name'] = file_path
+        file_props.file_name = file_path
+        file_props.type_ = 'r'
         self.add_transfer(account, contact, file_props)
         gajim.connections[account].send_file_approval(file_props)
 
@@ -375,14 +373,14 @@ class FileTransfersWindow:
                     return
                 stat = os.stat(file_path)
                 dl_size = stat.st_size
-                file_size = file_props['size']
+                file_size = file_props.size
                 dl_finished = dl_size >= file_size
 
                 def on_response(response):
                     if response < 0:
                         return
                     elif response == 100:
-                        file_props['offset'] = dl_size
+                        file_props.offset = dl_size
                     dialog2.destroy()
                     self._start_receive(file_path, account, contact, file_props)
 
@@ -419,7 +417,7 @@ class FileTransfersWindow:
             on_response_ok=(on_ok, account, contact, file_props),
             on_response_cancel=(on_cancel, account, contact, file_props))
 
-        dialog2.set_current_name(file_props['name'])
+        dialog2.set_current_name(file_props.name)
         dialog2.connect('delete-event', lambda widget, event:
             on_cancel(widget, account, contact, file_props))
 
@@ -428,17 +426,17 @@ class FileTransfersWindow:
         Show dialog asking for comfirmation and store location of new file
         requested by a contact
         """
-        if file_props is None or 'name' not in file_props:
+        if not file_props or not file_props.name:
             return
         sec_text = '\t' + _('File: %s') % gobject.markup_escape_text(
-                file_props['name'])
-        if 'size' in file_props:
+                file_props.name)
+        if file_props.size:
             sec_text += '\n\t' + _('Size: %s') % \
-                    helpers.convert_bytes(file_props['size'])
-        if 'mime-type' in file_props:
-            sec_text += '\n\t' + _('Type: %s') % file_props['mime-type']
-        if 'desc' in file_props:
-            sec_text += '\n\t' + _('Description: %s') % file_props['desc']
+                    helpers.convert_bytes(file_props.size)
+        if file_props.mime_type:
+            sec_text += '\n\t' + _('Type: %s') % file_props.mime_type
+        if  file_props.desc:
+            sec_text += '\n\t' + _('Description: %s') % file_props.desc
         prim_text = _('%s wants to send you a file:') % contact.jid
         dialog = None
 
@@ -459,22 +457,21 @@ class FileTransfersWindow:
         return self.images.setdefault(ident,
                 self.window.render_icon(self.icons[ident], gtk.ICON_SIZE_MENU))
 
-    def set_status(self, typ, sid, status):
+    def set_status(self,file_props, status):
         """
         Change the status of a transfer to state 'status'
         """
-        iter_ = self.get_iter_by_sid(typ, sid)
+        iter_ = self.get_iter_by_sid(file_props.type_, file_props.sid)
         if iter_ is None:
             return
-        sid = self.model[iter_][C_SID].decode('utf-8')
-        file_props = self.files_props[sid[0]][sid[1:]]
+        self.model[iter_][C_SID].decode('utf-8')
         if status == 'stop':
-            file_props['stopped'] = True
+            file_props.stopped = True
         elif status == 'ok':
-            file_props['completed'] = True
+            file_props.completed = True
             text = self._format_percent(100)
-            received_size = int(file_props['received-len'])
-            full_size = int(file_props['size'])
+            received_size = int(file_props.received_len)
+            full_size = int(file_props.size)
             text += helpers.convert_bytes(received_size) + '/' + \
                 helpers.convert_bytes(full_size)
             self.model.set(iter_, C_PROGRESS, text)
@@ -482,8 +479,8 @@ class FileTransfersWindow:
         elif status == 'computing':
             self.model.set(iter_, C_PULSE, 1)
             text = _('Checking file...') + '\n'
-            received_size = int(file_props['received-len'])
-            full_size = int(file_props['size'])
+            received_size = int(file_props.received_len)
+            full_size = int(file_props.size)
             text += helpers.convert_bytes(received_size) + '/' + \
                 helpers.convert_bytes(full_size)
             self.model.set(iter_, C_PROGRESS, text)
@@ -496,8 +493,8 @@ class FileTransfersWindow:
             gobject.timeout_add(100, pulse)
         elif status == 'hash_error':
             text = _('File error') + '\n'
-            received_size = int(file_props['received-len'])
-            full_size = int(file_props['size'])
+            received_size = int(file_props.received_len)
+            full_size = int(file_props.size)
             text += helpers.convert_bytes(received_size) + '/' + \
                 helpers.convert_bytes(full_size)
             self.model.set(iter_, C_PROGRESS, text)
@@ -535,14 +532,14 @@ class FileTransfersWindow:
         return _('%(hours)02.d:%(minutes)02.d:%(seconds)02.d') % times
 
     def _get_eta_and_speed(self, full_size, transfered_size, file_props):
-        if len(file_props['transfered_size']) == 0:
+        if len(file_props.transfered_size) == 0:
             return 0., 0.
-        elif len(file_props['transfered_size']) == 1:
-            speed = round(float(transfered_size) / file_props['elapsed-time'])
+        elif len(file_props.transfered_size) == 1:
+            speed = round(float(transfered_size) / file_props.elapsed_time)
         else:
             # first and last are (time, transfered_size)
-            first = file_props['transfered_size'][0]
-            last = file_props['transfered_size'][-1]
+            first = file_props.transfered_size[0]
+            last = file_props.transfered_size[-1]
             transfered = last[1] - first[1]
             tim = last[0] - first[0]
             if tim == 0:
@@ -556,16 +553,18 @@ class FileTransfersWindow:
 
     def _remove_transfer(self, iter_, sid, file_props):
         self.model.remove(iter_)
-        if  'tt_account' in file_props:
+        if not file_props:
+            return
+        if file_props.tt_account:
             # file transfer is set
-            account = file_props['tt_account']
+            account = file_props.tt_account
             if account in gajim.connections:
                 # there is a connection to the account
                 gajim.connections[account].remove_transfer(file_props)
-            if file_props['type'] == 'r': # we receive a file
-                other = file_props['sender']
+            if file_props.type_ == 'r': # we receive a file
+                other = file_props.sender
             else: # we send a file
-                other = file_props['receiver']
+                other = file_props.receiver
             if isinstance(other, unicode):
                 jid = gajim.get_jid_without_resource(other)
             else: # It's a Contact instance
@@ -573,21 +572,19 @@ class FileTransfersWindow:
             for ev_type in ('file-error', 'file-completed', 'file-request-error',
             'file-send-error', 'file-stopped'):
                 for event in gajim.events.get_events(account, jid, [ev_type]):
-                    if event.parameters['sid'] == file_props['sid']:
+                    if event.parameters['sid'] == file_props.sid:
                         gajim.events.remove_events(account, jid, event)
                         gajim.interface.roster.draw_contact(jid, account)
                         gajim.interface.roster.show_title()
-        del(self.files_props[sid[0]][sid[1:]])
+        FilesProp.deleteFileProp(file_props)
         del(file_props)
 
     def set_progress(self, typ, sid, transfered_size, iter_=None):
         """
         Change the progress of a transfer with new transfered size
         """
-        if sid not in self.files_props[typ]:
-            return
-        file_props = self.files_props[typ][sid]
-        full_size = int(file_props['size'])
+        file_props = FilesProp.getFilePropByType(typ, sid)
+        full_size = int(file_props.size)
         if full_size == 0:
             percent = 0
         else:
@@ -607,14 +604,14 @@ class FileTransfersWindow:
             # Kb/s
 
             # remaining time
-            if 'offset' in file_props and file_props['offset']:
-                transfered_size -= file_props['offset']
-                full_size -= file_props['offset']
+            if file_props.offset:
+                transfered_size -= file_props.offset
+                full_size -= file_props.offset
 
-            if file_props['elapsed-time'] > 0:
-                file_props['transfered_size'].append((file_props['last-time'], transfered_size))
-            if len(file_props['transfered_size']) > 6:
-                file_props['transfered_size'].pop(0)
+            if file_props.elapsed_time > 0:
+                file_props.transfered_size.append((file_props.last_time, transfered_size))
+            if len(file_props.transfered_size) > 6:
+                file_props.transfered_size.pop(0)
             eta, speed = self._get_eta_and_speed(full_size, transfered_size,
                     file_props)
 
@@ -630,24 +627,24 @@ class FileTransfersWindow:
             self.model.set(iter_, C_TIME, text)
 
             # try to guess what should be the status image
-            if file_props['type'] == 'r':
+            if file_props.type_ == 'r':
                 status = 'download'
             else:
                 status = 'upload'
-            if 'paused' in file_props and file_props['paused'] == True:
+            if file_props.paused == True:
                 status = 'pause'
-            elif 'stalled' in file_props and file_props['stalled'] == True:
+            elif file_props.stalled == True:
                 status = 'waiting'
-            if 'connected' in file_props and file_props['connected'] == False:
+            if file_props.connected == False:
                 status = 'stop'
             self.model.set(iter_, 0, self.get_icon(status))
             if transfered_size == full_size:
                 # If we are receiver and this is a jingle session
-                if file_props['type'] == 'r' and 'session-sid' in file_props:
+                if file_props.type_ == 'r' and  file_props.session_sid:
                     # Show that we are computing the hash
-                    self.set_status(typ, sid, 'computing')
+                    self.set_status(file_props, 'computing')
                 else:
-                    self.set_status(typ, sid, 'ok')
+                    self.set_status(file_props, 'ok')
             elif just_began:
                 path = self.model.get_path(iter_)
                 self.select_func(path)
@@ -668,8 +665,6 @@ class FileTransfersWindow:
         """
         Create new file_props dict and set initial file transfer properties in it
         """
-        file_props = {'file-name' : file_path, 'name' : file_name,
-                'type' : 's', 'desc' : file_desc}
         if os.path.isfile(file_path):
             stat = os.stat(file_path)
         else:
@@ -679,16 +674,17 @@ class FileTransfersWindow:
             dialogs.ErrorDialog(_('Invalid File'),
             _('It is not possible to send empty files'))
             return None
-        file_props['elapsed-time'] = 0
-        file_props['size'] = unicode(stat[6])
-        file_props['sid'] = helpers.get_random_string_16()
-        file_props['completed'] = False
-        file_props['started'] = False
-        file_props['sender'] = account
-        file_props['receiver'] = contact
-        file_props['tt_account'] = account
-        # keep the last time: transfered_size to compute transfer speed
-        file_props['transfered_size'] = []
+        file_props = FilesProp.getNewFileProp(account,
+                                    sid=helpers.get_random_string_16())
+        file_props.file_name = file_path
+        file_props.name = file_name
+        file_props.type_ = 's'
+        file_props.desc = file_desc
+        file_props.elapsed_time = 0
+        file_props.size = unicode(stat[6])
+        file_props.sender = account
+        file_props.receiver = contact
+        file_props.tt_account = account
         return file_props
 
     def add_transfer(self, account, contact, file_props):
@@ -698,32 +694,31 @@ class FileTransfersWindow:
         self.on_transfers_list_leave_notify_event(None)
         if file_props is None:
             return
-        file_props['elapsed-time'] = 0
-        self.files_props[file_props['type']][file_props['sid']] = file_props
+        file_props.elapsed_time = 0
         iter_ = self.model.prepend()
         text_labels = '<b>' + _('Name: ') + '</b>\n'
-        if file_props['type'] == 'r':
+        if file_props.type_ == 'r':
             text_labels += '<b>' + _('Sender: ') + '</b>'
         else:
             text_labels += '<b>' + _('Recipient: ') + '</b>'
 
-        if file_props['type'] == 'r':
-            file_name = os.path.split(file_props['file-name'])[1]
+        if file_props.type_ == 'r':
+            file_name = os.path.split(file_props.file_name)[1]
         else:
-            file_name = file_props['name']
+            file_name = file_props.name
         text_props = gobject.markup_escape_text(file_name) + '\n'
         text_props += contact.get_shown_name()
         self.model.set(iter_, 1, text_labels, 2, text_props, C_PULSE, -1, C_SID,
-                file_props['type'] + file_props['sid'])
-        self.set_progress(file_props['type'], file_props['sid'], 0, iter_)
-        if 'started' in file_props and file_props['started'] is False:
+                file_props.type_ + file_props.sid)
+        self.set_progress(file_props.type_, file_props.sid, 0, iter_)
+        if file_props.started is False:
             status = 'waiting'
-        elif file_props['type'] == 'r':
+        elif file_props.type_ == 'r':
             status = 'download'
         else:
             status = 'upload'
-        file_props['tt_account'] = account
-        self.set_status(file_props['type'], file_props['sid'], status)
+        file_props.tt_account = account
+        self.set_status(file_props, status)
         self.set_cleanup_sensitivity()
         self.window.show_all()
 
@@ -743,7 +738,7 @@ class FileTransfersWindow:
                 self.tooltip.hide_tooltip()
                 return
             sid = self.model[iter_][C_SID].decode('utf-8')
-            file_props = self.files_props[sid[0]][sid[1:]]
+            file_props = FilesProp.getFilePropByType(sid[0], sid[1:])
             if file_props is not None:
                 if self.tooltip.timeout == 0 or self.tooltip.id != props[0]:
                     self.tooltip.id = row
@@ -798,7 +793,7 @@ class FileTransfersWindow:
             return
         current_iter = self.model.get_iter(path)
         sid = self.model[current_iter][C_SID].decode('utf-8')
-        file_props = self.files_props[sid[0]][sid[1:]]
+        file_props = FilesProp.getFilePropByType(sid[0], sid[1:])
         self.remove_menuitem.set_sensitive(is_row_selected)
         self.open_folder_menuitem.set_sensitive(is_row_selected)
         is_stopped = False
@@ -856,7 +851,7 @@ class FileTransfersWindow:
         while i >= 0:
             iter_ = self.model.get_iter((i))
             sid = self.model[iter_][C_SID].decode('utf-8')
-            file_props = self.files_props[sid[0]][sid[1:]]
+            file_props = FilesProp.getFilePropByType(sid[0], sid[1:])
             if is_transfer_stopped(file_props):
                 self._remove_transfer(iter_, sid, file_props)
             i -= 1
@@ -876,7 +871,7 @@ class FileTransfersWindow:
             self.continue_menuitem.set_no_show_all(True)
 
         else:
-            label = _('Continue')
+            label = _('_Continue')
             self.pause_button.set_label(label)
             self.pause_button.set_image(gtk.image_new_from_stock(
                     gtk.STOCK_MEDIA_PLAY, gtk.ICON_SIZE_MENU))
@@ -891,20 +886,20 @@ class FileTransfersWindow:
             return
         s_iter = selected[1]
         sid = self.model[s_iter][C_SID].decode('utf-8')
-        file_props = self.files_props[sid[0]][sid[1:]]
+        file_props = FilesProp.getFilePropByType(sid[0], sid[1:])
         if is_transfer_paused(file_props):
-            file_props['last-time'] = time.time()
-            file_props['paused'] = False
+            file_props.last_time = time.time()
+            file_props.paused = False
             types = {'r' : 'download', 's' : 'upload'}
-            self.set_status(file_props['type'], file_props['sid'], types[sid[0]])
+            self.set_status(file_props, types[sid[0]])
             self.toggle_pause_continue(True)
-            if file_props['continue_cb']:
-                file_props['continue_cb']()
+            if file_props.continue_cb:
+                file_props.continue_cb()
         elif is_transfer_active(file_props):
-            file_props['paused'] = True
-            self.set_status(file_props['type'], file_props['sid'], 'pause')
+            file_props.paused = True
+            self.set_status(file_props, 'pause')
             # reset that to compute speed only when we resume
-            file_props['transfered_size'] = []
+            file_props.transfered_size = []
             self.toggle_pause_continue(False)
 
     def on_cancel_button_clicked(self, widget):
@@ -913,14 +908,12 @@ class FileTransfersWindow:
             return
         s_iter = selected[1]
         sid = self.model[s_iter][C_SID].decode('utf-8')
-        file_props = self.files_props[sid[0]][sid[1:]]
-        if 'tt_account' not in file_props:
-            return
-        account = file_props['tt_account']
+        file_props = FilesProp.getFilePropByType(sid[0], sid[1:])
+        account = file_props.tt_account
         if account not in gajim.connections:
             return
         gajim.connections[account].disconnect_transfer(file_props)
-        self.set_status(file_props['type'], file_props['sid'], 'stop')
+        self.set_status(file_props, 'stop')
 
     def show_tooltip(self, widget):
         if self.height_diff == 0:
@@ -934,7 +927,7 @@ class FileTransfersWindow:
         if props and self.tooltip.id == props[0]:
             iter_ = self.model.get_iter(props[0])
             sid = self.model[iter_][C_SID].decode('utf-8')
-            file_props = self.files_props[sid[0]][sid[1:]]
+            file_props = FilesProp.getFilePropByType(sid[0], sid[1:])
             # bounding rectangle of coordinates for the cell within the treeview
             rect = self.tree.get_cell_area(props[0], props[1])
             # position of the treeview on the screen
@@ -1022,10 +1015,10 @@ class FileTransfersWindow:
             return
         s_iter = selected[1]
         sid = self.model[s_iter][C_SID].decode('utf-8')
-        file_props = self.files_props[sid[0]][sid[1:]]
-        if 'file-name' not in file_props:
+        file_props = FilesProp.getFilePropByType(sid[0], sid[1:])
+        if not file_props.file_name:
             return
-        path = os.path.split(file_props['file-name'])[0]
+        path = os.path.split(file_props.file_name)[0]
         if os.path.exists(path) and os.path.isdir(path):
             helpers.launch_file_manager(path)
 
@@ -1044,7 +1037,7 @@ class FileTransfersWindow:
             return
         s_iter = selected[1]
         sid = self.model[s_iter][C_SID].decode('utf-8')
-        file_props = self.files_props[sid[0]][sid[1:]]
+        file_props = FilesProp.getFilePropByType(sid[0], sid[1:])
         self._remove_transfer(s_iter, sid, file_props)
         self.set_all_insensitive()
 

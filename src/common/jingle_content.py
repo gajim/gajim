@@ -172,25 +172,25 @@ class JingleContent(object):
             simode = xmpp.simplexml.Node(tag='offer')
 
         file_tag = simode.setTag('file', namespace=xmpp.NS_FILE)
-        if 'name' in self.file_props:
+        if self.file_props.name:
             node = xmpp.simplexml.Node(tag='name')
-            node.addData(self.file_props['name'])
+            node.addData(self.file_props.name)
             file_tag.addChild(node=node)
-        if 'size' in self.file_props:
+        if self.file_props.size:
             node = xmpp.simplexml.Node(tag='size')
-            node.addData(self.file_props['size'])
+            node.addData(self.file_props.size)
             file_tag.addChild(node=node)
-        if 'hash' in self.file_props:
+        if self.file_props.hash_:
             # TODO: use xep-300 for this bit
             pass
         # if the file is less than 10 mb, then it is small
         # lets calculate it right away
-        if int(self.file_props['size']) < 10000000:
+        if int(self.file_props.size) < 10000000:
             h  = self._calcHash()
             file_tag.addChild(node=h)
         desc = file_tag.setTag('desc')
-        if 'desc' in self.file_props:
-            desc.setData(self.file_props['desc'])
+        if self.file_props.desc:
+            desc.setData(self.file_props.desc)
 
         description_node.addChild(node=simode)
 

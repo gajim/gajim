@@ -371,7 +371,7 @@ class CommandWindow:
                     _('The form is not filled correctly.'))
                 self.data_form_widget.set_sensitive(True)
                 return
-            self.data_form_widget.data_form.type = 'submit'
+            self.data_form_widget.data_form.type_ = 'submit'
         else:
             self.data_form_widget.hide()
 
