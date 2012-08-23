@@ -1068,11 +1068,17 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.enc_tag = self.stanza.getTag('x', namespace=xmpp.NS_ENCRYPTED)
 
         self.invite_tag = None
+        self.decline_tag = None
         if not self.enc_tag:
             self.invite_tag = self.stanza.getTag('x',
                 namespace=xmpp.NS_MUC_USER)
             if self.invite_tag and not self.invite_tag.getTag('invite'):
                 self.invite_tag = None
+
+            self.decline_tag = self.stanza.getTag('x',
+                namespace=xmpp.NS_MUC_USER)
+            if self.decline_tag and not self.decline_tag.getTag('decline'):
+                self.decline_tag = None
 
         self.thread_id = self.stanza.getThread()
         self.mtype = self.stanza.getType()
@@ -1191,6 +1197,28 @@ class GcInvitationReceivedEvent(nec.NetworkIncomingEvent):
         self.is_continued = False
         if item.getTag('continue'):
             self.is_continued = True
+
+        return True
+
+class GcDeclineReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'gc-decline-received'
+    base_network_events = []
+
+    def generate(self):
+        self.room_jid = self.msg_obj.fjid
+
+        item = self.msg_obj.invite_tag.getTag('decline')
+        try:
+            self.jid_from = helpers.parse_jid(item.getAttr('from'))
+        except helpers.InvalidFormat:
+            log.warn('Invalid JID: %s, ignoring it' % item.getAttr('from'))
+            return
+        jid = gajim.get_jid_without_resource(self.jid_from)
+        if gajim.config.get_per('accounts', self.conn.name,
+        'ignore_unknown_contacts') and not gajim.contacts.get_contacts(
+        self.conn.name, jid):
+            return
+        self.reason = item.getTagData('reason')
 
         return True
 

@@ -615,6 +615,14 @@ class Interface:
             self.instances[account]['gc_config'][obj.jid].\
                 affiliation_list_received(obj.users_dict)
 
+    def handle_event_gc_decline(self, obj):
+        account = obj.conn.name
+        gc_control = self.msg_win_mgr.get_gc_control(obj.room_jid, account)
+        if gc_control:
+            gc_control.print_conversation(
+                _('%(jid)s declined the invitation') % {'jid': obj.room_jid},
+                graphics=False)
+
     def handle_event_gc_invitation(self, obj):
         #('GC_INVITATION', (room_jid, jid_from, reason, password, is_continued))
         jid = gajim.get_jid_without_resource(obj.jid_from)
@@ -1497,6 +1505,7 @@ class Interface:
             'file-request-received': [self.handle_event_file_request],
             'fingerprint-error': [self.handle_event_fingerprint_error],
             'gc-invitation-received': [self.handle_event_gc_invitation],
+            'gc-decline-received': [self.handle_event_gc_decline],
             'gc-presence-received': [self.handle_event_gc_presence],
             'gc-message-received': [self.handle_event_gc_message],
             'gmail-notify': [self.handle_event_gmail_notify],
