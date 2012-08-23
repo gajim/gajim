@@ -770,7 +770,10 @@ class Socks5:
             if self.queue.listener.connections == []:
                 self.queue.listener.disconnect()
         try:
-            self._sock.shutdown(socket.SHUT_RDWR)
+            if isinstance(self._sock, OpenSSL.SSL.Connection):
+                self._sock.shutdown()
+            else:
+                self._sock.shutdown(socket.SHUT_RDWR)
             self._sock.close()
         except Exception:
             # socket is already closed
@@ -901,7 +904,8 @@ class Socks5Sender(IdleObject):
         self._sock = _sock
 
         if _sock is not None:
-            if self.fingerprint is not None:
+            if self.fingerprint is not None and not isinstance(self._sock,
+            OpenSSL.SSL.Connection):
                 self._sock = OpenSSL.SSL.Connection(
                     jingle_xtls.get_context('server'), _sock)
             else:
@@ -938,7 +942,7 @@ class Socks5Sender(IdleObject):
 
         if self.fingerprint is not None:
             self._sock = OpenSSL.SSL.Connection(
-                jingle_xtls.get_context('client'), self._sock)
+                jingle_xtls.get_context('client'), _sock)
         else:
             self._sock.setblocking(False)
 
