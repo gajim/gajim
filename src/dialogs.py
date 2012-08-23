@@ -1662,9 +1662,9 @@ class YesNoDialog(HigDialog):
                         *self.user_response_yes[1:])
             else:
                 if self.textview:
-                    self.user_response_yes(self.is_checked())
-                else:
                     self.user_response_yes(self.is_checked(), txt)
+                else:
+                    self.user_response_yes(self.is_checked())
         self.call_cancel_on_destroy = False
         self.destroy()
 

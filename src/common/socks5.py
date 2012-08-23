@@ -26,7 +26,6 @@ import socket
 import struct
 import hashlib
 import os
-
 from errno import EWOULDBLOCK
 from errno import ENOBUFS
 from errno import EINTR
@@ -36,29 +35,23 @@ from errno import EAFNOSUPPORT
 from xmpp.idlequeue import IdleObject
 from file_props import FilesProp
 import jingle_xtls
-
 if jingle_xtls.PYOPENSSL_PRESENT:
     import OpenSSL
-
 import logging
 log = logging.getLogger('gajim.c.socks5')
-
 MAX_BUFF_LEN = 65536
-
 # after foo seconds without activity label transfer as 'stalled'
 STALLED_TIMEOUT = 10
-
 # after foo seconds of waiting to connect, disconnect from
 # streamhost and try next one
 CONNECT_TIMEOUT = 30
-
 # nothing received for the last foo seconds - stop transfer
 # if it is 0, then transfer will wait forever
 READ_TIMEOUT = 180
-
 # nothing sent for the last foo seconds - stop transfer
 # if it is 0, then transfer will wait forever
 SEND_TIMEOUT = 180
+
 
 class SocksQueue:
     """
@@ -100,7 +93,6 @@ class SocksQueue:
             # There is already a listener, we update the file's information
             # on the new connection.
             self.listener.file_props = file_props
-
         self.connected += 1
         return self.listener
 
@@ -124,10 +116,8 @@ class SocksQueue:
         self.on_failure[sid] = on_failure
         file_props = FilesProp.getFileProp(account, sid)
         file_props.failure_cb = on_failure
-
         if not file_props.streamhosts:
             on_failure(file_props.sid)
-
         # add streamhosts to the queue
         for streamhost in file_props.streamhosts:
             if 'type' in streamhost and streamhost['type'] == 'proxy':
@@ -310,12 +300,10 @@ class SocksQueue:
                 return
             if file_props.name in key and file_props.sid in key \
             and self.senders[key].mode == mode:
-
                 log.info('socks5: sending file')
                 sender = self.senders[key]
                 file_props.streamhost_used = True
                 sender.account = account
-
                 sender.file_props = file_props
                 result = sender.send_file()
                 self.process_result(result, sender)
@@ -333,7 +321,6 @@ class SocksQueue:
         sock_hash = sock.__hash__()
         if self.type_ == 'sender' and \
         not self.isHashInSockObjs(self.senders, sock_hash):
-
             sockobj =  Socks5SenderServer(self.idlequeue, sock_hash, self,
                 sock[0],  sock[1][0], sock[1][1], fingerprint='server',
                 file_props=listener.file_props)
@@ -341,7 +328,6 @@ class SocksQueue:
             # Start waiting for data
             self.idlequeue.plug_idle(sockobj, False, True)
             self.connected += 1
-
         if self.type_ == 'receiver' and \
         not self.isHashInSockObjs(self.readers, sock_hash):
             sh = {}
@@ -349,13 +335,11 @@ class SocksQueue:
             sh['port'] = sock[1][1]
             sh['initiator'] = None
             sh['target'] = None
-
             sockobj =  Socks5ReceiverServer(idlequeue=self.idlequeue,
                 streamhost=sh,sid=None, file_props=listener.file_props,
                 fingerprint='server')
 
             self._add(sockobj, self.readers, listener.file_props, sock_hash)
-
             sockobj.set_sock(sock[0])
             sockobj.queue = self
             self.connected += 1
@@ -425,6 +409,7 @@ class SocksQueue:
                 self.listener = None
                 self.connected -= 1
 
+
 class Socks5:
     def __init__(self, idlequeue, host, port, initiator, target, sid):
         if host is not None:
@@ -451,7 +436,6 @@ class Socks5:
         self.type_ = ''
         self.mode = ''
 
-
     def _is_connected(self):
         if self.state < 5:
             return False
@@ -463,11 +447,9 @@ class Socks5:
         """
         if self.ais is None:
             return None
-
         for ai in self.ais:
             try:
                 self._sock = socket.socket(*ai[:3])
-
                 if not self.fingerprint is None:
                     self._sock = OpenSSL.SSL.Connection(
                         jingle_xtls.get_context('client'), self._sock)
@@ -514,7 +496,6 @@ class Socks5:
         self.file_props.disconnect_cb = self.disconnect
         self.file_props.paused = False
         self.state = 1 # connected
-
         # stop all others connections to sender's streamhosts
         self.queue._socket_connected(self.streamhost, self.file_props)
         self.idlequeue.plug_idle(self, True, False)
@@ -677,7 +658,6 @@ class Socks5:
         """
         Read file contents from socket and write them to file
         """
-
         if self.file_props is None or not self.file_props.file_name:
             self.file_props.error = -2
             return None
@@ -900,9 +880,7 @@ class Socks5Sender(IdleObject):
         self.queue = parent
         self.file_props = file_props
         self.proxy = False
-
         self._sock = _sock
-
         if _sock is not None:
             if self.fingerprint is not None and not isinstance(self._sock,
             OpenSSL.SSL.Connection):
@@ -910,7 +888,6 @@ class Socks5Sender(IdleObject):
                     jingle_xtls.get_context('server'), _sock)
             else:
                 self._sock.setblocking(False)
-
             self.fd = _sock.fileno()
             self._recv = _sock.recv
             self._send = _sock.send
@@ -939,13 +916,11 @@ class Socks5Sender(IdleObject):
 
     def set_connection_sock(self, _sock):
         self._sock = _sock
-
         if self.fingerprint is not None:
             self._sock = OpenSSL.SSL.Connection(
                 jingle_xtls.get_context('client'), _sock)
         else:
             self._sock.setblocking(False)
-
         self.fd = _sock.fileno()
         self._recv = _sock.recv
         self._send = _sock.send
@@ -959,7 +934,6 @@ class Socks5Sender(IdleObject):
         """
         Start sending the file over verified connection
         """
-
         self.pauses = 0
         self.state = 7
         # plug for writing
@@ -977,6 +951,7 @@ class Socks5Sender(IdleObject):
             self.file_props.disconnect_cb = None
         if self.queue is not None:
             self.queue.remove_sender(self.queue_idx, False)
+
 
 class Socks5Receiver(IdleObject):
 
@@ -1055,6 +1030,7 @@ class Socks5Receiver(IdleObject):
             self.queue.remove_receiver(self.queue_idx, False)
 
 class Socks5Server(Socks5):
+
     def __init__(self, idlequeue, host, port, initiator, target, sid):
         Socks5.__init__(self, idlequeue, host, port, initiator, target, sid)
         self.mode = 'server'
@@ -1090,7 +1066,6 @@ class Socks5Server(Socks5):
                         self.queue.result_sha(self.sha_msg, self.queue_idx)
                     if result == -1:
                         self.disconnect()
-
                 elif self.state == 5:
                     self.state = 7
                     if self.type_ == 'sender':
@@ -1101,7 +1076,6 @@ class Socks5Server(Socks5):
                         # We plug for reading
                         self.idlequeue.plug_idle(self, False, True)
                         return
-
                 elif self.state == 7:
                     if self.file_props.paused:
                         self.file_props.continue_cb = \
@@ -1175,7 +1149,6 @@ class Socks5Client(Socks5):
             # end connection
             self.pollend()
             return
-
         if self.state == 2: # read auth response
             if buff is None or len(buff) != 2:
                 return None
@@ -1208,11 +1181,9 @@ class Socks5Client(Socks5):
                 if self.type_ == 'sender' and self.proxy:
                     self.queue.process_result(self.send_file(), self)
                     return
-
                 if result == 0:
                     self.state = 8
                     self.disconnect()
-
         # for senders: init file_props
         if result == 1 and self.state == 5:
             if self.file_props.type_ == 's':
@@ -1233,7 +1204,6 @@ class Socks5Client(Socks5):
             else:
                 # receiving file contents from socket
                 self.idlequeue.plug_idle(self, False, True)
-
             self.file_props.continue_cb = self.continue_paused_transfer
             # we have set up the connection, next - retrieve file
             self.state = 6
@@ -1445,3 +1415,5 @@ class Socks5Listener(IdleObject):
         _sock[0].setblocking(False)
         self.connections.append(_sock[0])
         return _sock
+
+

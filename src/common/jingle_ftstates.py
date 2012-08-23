@@ -16,6 +16,7 @@ import xmpp
 from jingle_transport import *
 from common.socks5 import Socks5ReceiverClient, Socks5SenderClient
 
+
 class JingleFileTransferStates:
     '''
     This class implements the state machine design pattern
@@ -64,26 +65,21 @@ class StateCandSent(JingleFileTransferStates):
         # Send candidate used
         streamhost = args['streamhost']
         self.jft.nominated_cand['our-cand'] = streamhost
-
         content = xmpp.Node('content')
         content.setAttr('creator', 'initiator')
         content.setAttr('name', self.jft.name)
-
         transport = xmpp.Node('transport')
         transport.setNamespace(xmpp.NS_JINGLE_BYTESTREAM)
         transport.setAttr('sid', self.jft.transport.sid)
-
         candidateused = xmpp.Node('candidate-used')
         candidateused.setAttr('cid', streamhost['cid'])
-
         transport.addChild(node=candidateused)
         content.addChild(node=transport)
-
         self.jft.session.send_transport_info(content)
-
 
     def action(self, args=None):
         self._sendCand(args)
+
 
 class  StateCandReceived(JingleFileTransferStates):
     '''
@@ -111,6 +107,7 @@ class  StateCandReceived(JingleFileTransferStates):
     def action(self, args=None):
         self._recvCand(args)
 
+
 class StateCandSentAndRecv( StateCandSent, StateCandReceived):
     '''
     This state happens when we have received and sent the candidates.
@@ -124,6 +121,7 @@ class StateCandSentAndRecv( StateCandSent, StateCandReceived):
         else:
             self._recvCand(args)
 
+
 class StateTransportReplace(JingleFileTransferStates):
     '''
     This state initiates transport replace
@@ -131,6 +129,7 @@ class StateTransportReplace(JingleFileTransferStates):
 
     def action(self, args=None):
         self.jft.session.transport_replace()
+
 
 class StateTransfering(JingleFileTransferStates):
     '''
@@ -146,14 +145,12 @@ class StateTransfering(JingleFileTransferStates):
     def __start_SOCK5_transfer(self):
         # It tells wether we start the transfer as client or server
         mode = None
-
         if self.jft.isOurCandUsed():
             mode = 'client'
             streamhost_used = self.jft.nominated_cand['our-cand']
         else:
             mode = 'server'
             streamhost_used = self.jft.nominated_cand['peer-cand']
-
         if streamhost_used['type'] == 'proxy':
             self.jft.file_props.is_a_proxy = True
             # This needs to be changed when requesting
@@ -164,7 +161,6 @@ class StateTransfering(JingleFileTransferStates):
                 self.jft.file_props.proxy_sender = streamhost_used['target']
                 self.jft.file_props.proxy_receiver = streamhost_used[
                     'initiator']
-
         # This needs to be changed when requesting
         if not self.jft.weinitiate and streamhost_used['type'] == 'proxy':
             r = gajim.socks5queue.readers
@@ -172,7 +168,6 @@ class StateTransfering(JingleFileTransferStates):
                 if r[reader].host == streamhost_used['host'] and \
                 r[reader].connected:
                     return
-
         # This needs to be changed when requesting
         if self.jft.weinitiate and streamhost_used['type'] == 'proxy':
             s = gajim.socks5queue.senders
@@ -180,7 +175,6 @@ class StateTransfering(JingleFileTransferStates):
                 if s[sender].host == streamhost_used['host'] and \
                 s[sender].connected:
                     return
-
         if streamhost_used['type'] == 'proxy':
             self.jft.file_props.streamhost_used = True
             streamhost_used['sid'] = self.jft.file_props.sid
@@ -188,7 +182,6 @@ class StateTransfering(JingleFileTransferStates):
             self.jft.file_props.streamhosts.append(streamhost_used)
             self.jft.file_props.proxyhosts = []
             self.jft.file_props.proxyhosts.append(streamhost_used)
-
             # This needs to be changed when requesting
             if self.jft.weinitiate:
                 gajim.socks5queue.idx += 1
@@ -224,3 +217,5 @@ class StateTransfering(JingleFileTransferStates):
 
         elif self.jft.transport.type_ == TransportType.SOCKS5:
             self.__start_SOCK5_transfer()
+
+

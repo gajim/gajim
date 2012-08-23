@@ -50,9 +50,7 @@ class JingleFileTransfer(JingleContent):
     def __init__(self, session, transport=None, file_props=None,
     use_security=False):
         JingleContent.__init__(self, session, transport)
-
         log.info("transport value: %s" % transport)
-
         # events we might be interested in
         self.callbacks['session-initiate'] += [self.__on_session_initiate]
         self.callbacks['session-initiate-sent'] += [
@@ -68,31 +66,25 @@ class JingleFileTransfer(JingleContent):
         self.callbacks['transport-reject'] += [self.__on_transport_reject]
         self.callbacks['transport-info'] += [self.__on_transport_info]
         self.callbacks['iq-result'] += [self.__on_iq_result]
-
         self.use_security = use_security
-
         self.file_props = file_props
         if file_props is None:
             self.weinitiate = False
         else:
             self.weinitiate = True
-
         if self.file_props is not None:
             self.file_props.sender = session.ourjid
             self.file_props.receiver = session.peerjid
             self.file_props.session_type = 'jingle'
             self.file_props.session_sid = session.sid
             self.file_props.transfered_size = []
-
         log.info("FT request: %s" % file_props)
-
         if transport is None:
             self.transport = JingleTransportSocks5()
         self.transport.set_connection(session.connection)
         self.transport.set_file_props(self.file_props)
         self.transport.set_our_jid(session.ourjid)
         log.info('ourjid: %s' % session.ourjid)
-
         self.session = session
         self.media = 'file'
         self.nominated_cand = {}
@@ -128,6 +120,7 @@ class JingleFileTransfer(JingleContent):
         # Delete this after file_props refactoring this shouldn't be necesary
         self.session.file_hash = self.file_props.hash_
         self.session.hash_algo = self.file_props.algo
+
     def __on_session_initiate_sent(self, stanza, content, error, action):
         # Calculate file_hash in a new thread
         # if we haven't sent the hash already.
@@ -142,7 +135,6 @@ class JingleFileTransfer(JingleContent):
         checksum.setNamespace(xmpp.NS_JINGLE_FILE_TRANSFER)
         self.session.__session_info(checksum )
 
-
     def _calcHash(self):
         # Caculates the hash and returns a xep-300 hash stanza
         if self.session.hash_algo == None:
@@ -155,7 +147,7 @@ class JingleFileTransfer(JingleContent):
         h = xmpp.Hashes()
         hash_ = h.calculateHash(self.session.hash_algo, file_)
         # DEBUG
-        #hash_ = '1294809248109223'
+        hash_ = '1294809248109223'
         if not hash_:
             # Hash alogrithm not supported
             return
@@ -169,8 +161,6 @@ class JingleFileTransfer(JingleContent):
         security = content.getTag('security')
         if not security: # responder can not verify our fingerprint
             self.use_security = False
-
-
         if self.state == STATE_TRANSPORT_REPLACE:
             # We ack the session accept
             response = stanza.buildReply('result')
@@ -179,13 +169,11 @@ class JingleFileTransfer(JingleContent):
             # We send the file
             self.__state_changed(STATE_TRANSFERING)
             raise xmpp.NodeProcessed
-
         self.file_props.streamhosts = self.transport.remote_candidates
         for host in self.file_props.streamhosts:
             host['initiator'] = self.session.initiator
             host['target'] = self.session.responder
             host['sid'] = self.file_props.sid
-
         response = stanza.buildReply('result')
         response.delChild(response.getQuery())
         con.connection.send(response)
@@ -218,7 +206,6 @@ class JingleFileTransfer(JingleContent):
 
     def __on_transport_info(self, stanza, content, error, action):
         log.info("__on_transport_info")
-
         if content.getTag('transport').getTag('candidate-error'):
             self.nominated_cand['peer-cand'] = False
             if self.state == STATE_CAND_SENT:
@@ -244,7 +231,6 @@ class JingleFileTransfer(JingleContent):
             gajim.socks5queue.send_file(self.file_props,
                 self.session.connection.name, 'client')
             return
-
         args = {'content' : content,
                 'sendCand' : False}
         if self.state == STATE_CAND_SENT:
@@ -256,8 +242,6 @@ class JingleFileTransfer(JingleContent):
             raise xmpp.NodeProcessed
         else:
             self.__state_changed(STATE_CAND_RECEIVED, args)
-
-
 
     def __on_iq_result(self, stanza, content, error, action):
         log.info("__on_iq_result")
@@ -277,11 +261,9 @@ class JingleFileTransfer(JingleContent):
     def __transport_setup(self, stanza=None, content=None, error=None,
     action=None):
         # Sets up a few transport specific things for the file transfer
-
         if self.transport.type_ == TransportType.IBB:
             # No action required, just set the state to transfering
             self.state = STATE_TRANSFERING
-
 
     def on_connect(self, streamhost):
         """
@@ -292,7 +274,6 @@ class JingleFileTransfer(JingleContent):
             return
         args = {'streamhost' : streamhost,
                 'sendCand'   : True}
-
         self.nominated_cand['our-cand'] = streamhost
         self.__sendCand(args)
 
@@ -313,19 +294,15 @@ class JingleFileTransfer(JingleContent):
         self.file_props.hash_ = hash_id
 
     def _listen_host(self):
-
         receiver = self.file_props.receiver
         sender = self.file_props.sender
         sha_str = helpers.get_auth_sha(self.file_props.sid, sender,
             receiver)
         self.file_props.sha_str = sha_str
-
         port = gajim.config.get('file_transfers_port')
-
         fingerprint = None
         if self.use_security:
             fingerprint = 'server'
-
         if self.weinitiate:
             listener = gajim.socks5queue.start_listener(port, sha_str,
                 self._store_socks5_sid, self.file_props,
@@ -334,10 +311,10 @@ class JingleFileTransfer(JingleContent):
             listener = gajim.socks5queue.start_listener(port, sha_str,
                 self._store_socks5_sid, self.file_props,
                 fingerprint=fingerprint, typ='receiver')
-
         if not listener:
             # send error message, notify the user
             return
+
     def isOurCandUsed(self):
         '''
         If this method returns true then the candidate we nominated will be
@@ -348,10 +325,8 @@ class JingleFileTransfer(JingleContent):
             return True
         if self.nominated_cand['our-cand'] == False:
             return False
-
         peer_pr = int(self.nominated_cand['peer-cand']['priority'])
         our_pr = int(self.nominated_cand['our-cand']['priority'])
-
         if peer_pr != our_pr:
             return our_pr > peer_pr
         else:
