@@ -185,10 +185,11 @@ class Interface:
             if len(obj.id_) > 3 and obj.id_[2] == '_':
                 sid = obj.id_[3:]
             file_props = FilesProp.getFileProp(obj.conn.name, sid)
-            self.handle_event_file_send_error(obj.conn.name, (obj.fjid,
-                file_props))
-            obj.conn.disconnect_transfer(file_props)
-            return
+            if file_props:
+                self.handle_event_file_send_error(obj.conn.name, (obj.fjid,
+                    file_props))
+                obj.conn.disconnect_transfer(file_props)
+                return
 
         ctrl = self.msg_win_mgr.get_control(obj.fjid, obj.conn.name)
         if ctrl and ctrl.type_id == message_control.TYPE_GC:
