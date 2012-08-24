@@ -4482,7 +4482,7 @@ class InvitationReceivedDialog:
             sectext = _('$Contact has invited you to group chat %(room_jid)s')\
                 % {'room_jid': room_jid}
         contact = gajim.contacts.get_first_contact_from_jid(account, jid)
-        contact_text = contact and contact.name or contact_jid
+        contact_text = contact and contact.name or jid
         sectext = sectext.replace('$Contact', contact_text)
 
         if comment: # only if not None and not ''
