@@ -625,7 +625,6 @@ class Interface:
 
     def handle_event_gc_invitation(self, obj):
         #('GC_INVITATION', (room_jid, jid_from, reason, password, is_continued))
-        jid = gajim.get_jid_without_resource(obj.jid_from)
         account = obj.conn.name
         if helpers.allow_popup_window(account) or not self.systray_enabled:
             dialogs.InvitationReceivedDialog(account, obj.room_jid,

@@ -1043,6 +1043,10 @@ class ConnectionHandlersBase:
             gajim.nec.push_incoming_event(GcInvitationReceivedEvent(None,
                 conn=self, msg_obj=obj))
             return True
+        elif obj.decline_tag is not None:
+            gajim.nec.push_incoming_event(GcDeclineReceivedEvent(None,
+                conn=self, msg_obj=obj))
+            return True
 
     # process and dispatch an error message
     def dispatch_error_message(self, msg, msgtxt, session, frm, tim):
