@@ -3540,6 +3540,27 @@ class RosterWindow:
                     self.on_row_activated(widget, path)
                 self.clicked_path = None
 
+    def accel_group_func(self, accel_group, acceleratable, keyval, modifier):
+        # CTRL mask
+        if modifier & gtk.gdk.CONTROL_MASK:
+            if keyval == gtk.keysyms.s: # CTRL + s
+                model = self.status_combobox.get_model()
+                accounts = gajim.connections.keys()
+                status = model[self.previous_status_combobox_active][2].decode(
+                    'utf-8')
+                def on_response(message, pep_dict):
+                    if message is not None: # None if user pressed Cancel
+                        for account in accounts:
+                            if not gajim.config.get_per('accounts', account,
+                            'sync_with_global_status'):
+                                continue
+                            current_show = gajim.SHOW_LIST[
+                                gajim.connections[account].connected]
+                            self.send_status(account, current_show, message)
+                            self.send_pep(account, pep_dict)
+                dialogs.ChangeStatusMessageDialog(on_response, status)
+                return
+
     def on_roster_treeview_button_press_event(self, widget, event):
         # hide tooltip, no matter the button is pressed
         self.tooltip.hide_tooltip()
@@ -6359,8 +6380,8 @@ class RosterWindow:
         # activity_pixbuf, tune_pixbuf, location_pixbuf, avatar_pixbuf,
         # padlock_pixbuf]
         self.columns = [gtk.Image, str, str, str, str,
-                gtk.gdk.Pixbuf, gtk.gdk.Pixbuf, gtk.gdk.Pixbuf,
-                gtk.gdk.Pixbuf, gtk.gdk.Pixbuf, gtk.gdk.Pixbuf]
+            gtk.gdk.Pixbuf, gtk.gdk.Pixbuf, gtk.gdk.Pixbuf, gtk.gdk.Pixbuf,
+            gtk.gdk.Pixbuf, gtk.gdk.Pixbuf]
         self.xml = gtkgui_helpers.get_gtk_builder('roster_window.ui')
         self.window = self.xml.get_object('roster_window')
         self.hpaned = self.xml.get_object('roster_hpaned')
@@ -6629,6 +6650,13 @@ class RosterWindow:
         new_chat_menuitem = self.xml.get_object('new_chat_menuitem')
         new_chat_menuitem.add_accelerator('activate', accel_group,
             gtk.keysyms.n, gtk.gdk.CONTROL_MASK, gtk.ACCEL_VISIBLE)
+
+        # Setting CTRL+S to be the shortcut to change status message
+        accel_group = gtk.AccelGroup()
+        keyval, mod = gtk.accelerator_parse('<Control>s')
+        accel_group.connect_group(keyval, mod, gtk.ACCEL_VISIBLE,
+            self.accel_group_func)
+        self.window.add_accel_group(accel_group)
 
         # Setting the search stuff
         self.rfilter_entry = self.xml.get_object('rfilter_entry')
