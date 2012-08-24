@@ -248,13 +248,16 @@ class FileTransfersWindow:
         self.tree.get_selection().unselect_all()
 
     def show_hash_error(self, jid, file_props, account):
+
         def on_yes(dummy):
             # Request the file to the sender
-            sid = gajim.connections[account].start_file_transfer(jid,
+            contact = gajim.contacts.get_contact_with_highest_priority(account,
+                                                                       jid)
+            fjid = contact.get_full_jid()
+            sid = gajim.connections[account].start_file_transfer(fjid,
                                                             file_props,
                                                                 True)
             file_props.sid = sid
-
 
         if file_props.type_ == 'r':
             file_name = os.path.basename(file_props.file_name)
