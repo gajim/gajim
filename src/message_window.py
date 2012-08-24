@@ -144,8 +144,6 @@ class MessageWindow(object):
         self.notebook.set_show_border(gajim.config.get('tabs_border'))
         self.show_icon()
 
-        gobject.idle_add(self.notebook.grab_focus)
-
     def change_account_name(self, old_name, new_name):
         if old_name in self._controls:
             self._controls[new_name] = self._controls[old_name]
@@ -307,6 +305,7 @@ class MessageWindow(object):
         # NOTE: we do not call set_control_active(True) since we don't know
         # whether the tab is the active one.
         self.show_title()
+        gobject.timeout_add(500, control.msg_textview.grab_focus)
 
     def on_tab_eventbox_button_press_event(self, widget, event, child):
         if event.button == 3: # right click
