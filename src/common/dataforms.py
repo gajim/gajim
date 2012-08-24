@@ -132,7 +132,7 @@ class DataField(ExtendedNode):
             self.options = options
 
     @nested_property
-    def type():
+    def type_():
         """
         Type of field. Recognized values are: 'boolean', 'fixed', 'hidden',
         'jid-multi', 'jid-single', 'list-multi', 'list-single', 'text-multi',
@@ -598,7 +598,7 @@ class DataForm(ExtendedNode):
             self.instructions=instructions
 
     @nested_property
-    def type():
+    def type_():
         """
         Type of the form. Must be one of: 'form', 'submit', 'cancel', 'result'.
         'form' - this form is to be filled in; you will be able soon to do:
