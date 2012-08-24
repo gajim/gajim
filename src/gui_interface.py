@@ -628,18 +628,19 @@ class Interface:
         jid = gajim.get_jid_without_resource(obj.jid_from)
         account = obj.conn.name
         if helpers.allow_popup_window(account) or not self.systray_enabled:
-            dialogs.InvitationReceivedDialog(account, obj.room_jid, jid,
-                obj.password, obj.reason, is_continued=obj.is_continued)
+            dialogs.InvitationReceivedDialog(account, obj.room_jid,
+                obj.jid_from, obj.password, obj.reason,
+                is_continued=obj.is_continued)
             return
 
-        self.add_event(account, jid, 'gc-invitation', (obj.room_jid,
+        self.add_event(account, obj.jid_from, 'gc-invitation', (obj.room_jid,
             obj.reason, obj.password, obj.is_continued))
 
         if helpers.allow_showing_notification(account):
             path = gtkgui_helpers.get_icon_path('gajim-gc_invitation', 48)
             event_type = _('Groupchat Invitation')
-            notify.popup(event_type, jid, account, 'gc-invitation', path,
-                event_type, obj.room_jid)
+            notify.popup(event_type, obj.jid_from, account, 'gc-invitation',
+                path, event_type, obj.room_jid)
 
     def forget_gpg_passphrase(self, keyid):
         if keyid in self.gpg_passphrase:

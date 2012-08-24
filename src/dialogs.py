@@ -4463,14 +4463,16 @@ class PrivacyListsWindow:
                      PrivacyListWindow(self.account, name, 'EDIT')
 
 class InvitationReceivedDialog:
-    def __init__(self, account, room_jid, contact_jid, password=None,
-                             comment=None, is_continued=False):
+    def __init__(self, account, room_jid, contact_fjid, password=None,
+    comment=None, is_continued=False):
 
         self.room_jid = room_jid
         self.account = account
         self.password = password
         self.is_continued = is_continued
-        self.contact_jid = contact_jid
+        self.contact_fjid = contact_fjid
+
+        jid = gajim.get_jid_without_resource(contact_fjid)
 
         pritext = _('''You are invited to a groupchat''')
         #Don't translate $Contact
@@ -4478,8 +4480,8 @@ class InvitationReceivedDialog:
             sectext = _('$Contact has invited you to join a discussion')
         else:
             sectext = _('$Contact has invited you to group chat %(room_jid)s')\
-                            % {'room_jid': room_jid}
-        contact = gajim.contacts.get_first_contact_from_jid(account, contact_jid)
+                % {'room_jid': room_jid}
+        contact = gajim.contacts.get_first_contact_from_jid(account, jid)
         contact_text = contact and contact.name or contact_jid
         sectext = sectext.replace('$Contact', contact_text)
 
@@ -4501,7 +4503,7 @@ class InvitationReceivedDialog:
 
         def on_no(text):
             gajim.connections[account].decline_invitation(self.room_jid,
-                self.contact_jid, text)
+                self.contact_fjid, text)
 
         YesNoDialog(pritext, sectext, text_label=_('Reason:'),
             on_response_yes=on_yes, on_response_no=on_no)
