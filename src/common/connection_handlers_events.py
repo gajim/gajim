@@ -2006,8 +2006,11 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         if self.jingle_content:
             self.file_props.session_type = 'jingle'
             self.file_props.stream_methods = xmpp.NS_BYTESTREAM
-            file_tag = self.jingle_content.getTag('description').getTag(
-                'offer').getTag('file')
+            desc = self.jingle_content.getTag('description')
+            if desc.getTag('offer'):
+                file_tag = desc.getTag('offer').getTag('file')
+            else:
+                file_tag = desc.getTag('request').getTag('file')
             for child in file_tag.getChildren():
                 name = child.getName()
                 val = child.getData()
