@@ -633,7 +633,7 @@ class Interface:
             return
 
         self.add_event(account, obj.jid_from, 'gc-invitation', (obj.room_jid,
-            obj.reason, obj.password, obj.is_continued))
+            obj.reason, obj.password, obj.is_continued, obj.jid_from))
 
         if helpers.allow_showing_notification(account):
             path = gtkgui_helpers.get_icon_path('gajim-gc_invitation', 48)

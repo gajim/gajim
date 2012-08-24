@@ -1985,8 +1985,8 @@ class RosterWindow:
             gajim.events.remove_events(account, jid, event)
             return True
         elif event.type_ == 'gc-invitation':
-            dialogs.InvitationReceivedDialog(account, data[0], jid, data[2],
-                    data[1])
+            dialogs.InvitationReceivedDialog(account, data[0], data[4], data[2],
+                data[1], is_continued=data[3])
             gajim.events.remove_events(account, jid, event)
             return True
         elif event.type_ == 'subscription_request':

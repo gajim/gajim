@@ -1207,7 +1207,7 @@ class GcDeclineReceivedEvent(nec.NetworkIncomingEvent):
     def generate(self):
         self.room_jid = self.msg_obj.fjid
 
-        item = self.msg_obj.invite_tag.getTag('decline')
+        item = self.msg_obj.decline_tag.getTag('decline')
         try:
             self.jid_from = helpers.parse_jid(item.getAttr('from'))
         except helpers.InvalidFormat:
@@ -1234,6 +1234,7 @@ class DecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.resource = self.msg_obj.resource
         self.mtype = self.msg_obj.mtype
         self.invite_tag = self.msg_obj.invite_tag
+        self.decline_tag = self.msg_obj.decline_tag
         self.thread_id = self.msg_obj.thread_id
         self.msgtxt = self.msg_obj.msgtxt
         self.gc_control = self.msg_obj.gc_control
