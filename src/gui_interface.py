@@ -954,13 +954,13 @@ class Interface:
         # then the file is not corrupt
         jid = unicode(file_props.sender)
         if session.file_hash == hash_:
-            self.popup_ft_result(account, jid, file_props)
-            ft_win.set_status(file_props, 'ok')
+            gobject.idle_add(self.popup_ft_result, account, jid, file_props)
+            gobject.idle_add(ft_win.set_status, file_props, 'ok')
         else:
             # wrong hash, we need to get the file again!
             file_props.error = -10
-            self.popup_ft_result(account, jid, file_props)
-            ft_win.set_status(file_props, 'hash_error')
+            gobject.idle_add(self.popup_ft_result, account, jid, file_props)
+            gobject.idle_add(ft_win.set_status, file_props, 'hash_error')
         # End jingle session
         if session:
             session.end_session()
