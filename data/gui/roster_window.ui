@@ -12,9 +12,9 @@
     <accel-groups>
       <group name="accelgroup1"/>
     </accel-groups>
-    <signal name="focus_in_event" handler="on_roster_window_focus_in_event"/>
     <signal name="key_press_event" handler="on_roster_window_key_press_event"/>
     <signal name="delete_event" handler="on_roster_window_delete_event"/>
+    <signal name="focus_in_event" handler="on_roster_window_focus_in_event"/>
     <signal name="focus_out_event" handler="on_roster_window_focus_out_event"/>
     <signal name="popup_menu" handler="on_roster_window_popup_menu"/>
     <child>
@@ -283,6 +283,16 @@
                       </object>
                     </child>
                     <child>
+                      <object class="GtkImageMenuItem" id="keyboard_shortcuts_menuitem">
+                        <property name="label" translatable="yes">Keyboard Shortcuts</property>
+                        <property name="visible">True</property>
+                        <property name="use_underline">True</property>
+                        <property name="image">image14</property>
+                        <property name="use_stock">False</property>
+                        <signal name="activate" handler="on_keyboard_shortcuts_menuitem_activate"/>
+                      </object>
+                    </child>
+                    <child>
                       <object class="GtkSeparatorMenuItem" id="menuitem1">
                         <property name="visible">True</property>
                       </object>
@@ -465,6 +475,11 @@
   <object class="GtkImage" id="image13">
     <property name="visible">True</property>
     <property name="stock">gtk-disconnect</property>
+    <property name="icon-size">1</property>
+  </object>
+  <object class="GtkImage" id="image14">
+    <property name="visible">True</property>
+    <property name="stock">gtk-info</property>
     <property name="icon-size">1</property>
   </object>
 </interface>

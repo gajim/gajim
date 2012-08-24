@@ -3978,6 +3978,10 @@ class RosterWindow:
         helpers.launch_browser_mailer('url',
             'http://trac.gajim.org/wiki/GajimFaq')
 
+    def on_keyboard_shortcuts_menuitem_activate(self, widget):
+        helpers.launch_browser_mailer('url',
+            'http://trac.gajim.org/wiki/KeyboardShortcuts')
+
     def on_features_menuitem_activate(self, widget):
         features_window.FeaturesWindow()
 
