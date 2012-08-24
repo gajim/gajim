@@ -620,8 +620,8 @@ class Interface:
         gc_control = self.msg_win_mgr.get_gc_control(obj.room_jid, account)
         if gc_control:
             gc_control.print_conversation(
-                _('%(jid)s declined the invitation') % {'jid': obj.room_jid},
-                graphics=False)
+                _('%(jid)s declined the invitation: %(reason)s') % {
+                'jid': obj.room_jid, 'reason': obj.reason}, graphics=False)
 
     def handle_event_gc_invitation(self, obj):
         #('GC_INVITATION', (room_jid, jid_from, reason, password, is_continued))
