@@ -147,7 +147,7 @@ class JingleFileTransfer(JingleContent):
         h = xmpp.Hashes()
         hash_ = h.calculateHash(self.session.hash_algo, file_)
         # DEBUG
-        hash_ = '1294809248109223'
+        #hash_ = '1294809248109223'
         if not hash_:
             # Hash alogrithm not supported
             return
