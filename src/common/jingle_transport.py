@@ -250,7 +250,7 @@ class JingleTransportSocks5(JingleTransport):
 
     def get_content(self):
         sesn = self.connection.get_jingle_session(self.ourjid,
-            self.file_props.session_sid)
+            self.file_props.sid)
         for content in sesn.contents.values():
             if content.transport == self:
                 return content
@@ -261,7 +261,7 @@ class JingleTransportSocks5(JingleTransport):
         if not self.connection:
             return
         sesn = self.connection.get_jingle_session(self.ourjid,
-            self.file_props.session_sid)
+            self.file_props.sid)
         if sesn is None:
             return
 

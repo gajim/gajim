@@ -941,7 +941,7 @@ class Interface:
 
     def __compare_hashes(self, account, file_props):
         session = gajim.connections[account].get_jingle_session(jid=None,
-            sid=file_props.session_sid)
+            sid=file_props.sid)
         ft_win = self.instances['file_transfers']
         if not file_props.hash_:
             # We disn't get the hash, sender probably don't support that
@@ -981,9 +981,8 @@ class Interface:
             return
 
         if file_props.type_ == 'r': # we receive a file
-            # If we have a jingle session id, it is a jingle transfer
             # we compare hashes
-            if file_props.session_sid:
+            if file_props.session_type == 'jingle':
                 # Compare hashes in a new thread
                 self.hashThread = Thread(target=self.__compare_hashes,
                     args=(account, file_props))

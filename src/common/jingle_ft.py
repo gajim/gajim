@@ -76,8 +76,9 @@ class JingleFileTransfer(JingleContent):
             self.file_props.sender = session.ourjid
             self.file_props.receiver = session.peerjid
             self.file_props.session_type = 'jingle'
-            self.file_props.session_sid = session.sid
+            self.file_props.sid = session.sid
             self.file_props.transfered_size = []
+            self.file_props.transport_sid = self.transport.sid
         log.info("FT request: %s" % file_props)
         if transport is None:
             self.transport = JingleTransportSocks5()

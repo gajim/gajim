@@ -257,7 +257,7 @@ class FileTransfersWindow:
             sid = gajim.connections[account].start_file_transfer(fjid,
                                                             file_props,
                                                                 True)
-            file_props.sid = sid
+            file_props.transport_sid = sid
 
         if file_props.type_ == 'r':
             file_name = os.path.basename(file_props.file_name)
@@ -643,7 +643,8 @@ class FileTransfersWindow:
             self.model.set(iter_, 0, self.get_icon(status))
             if transfered_size == full_size:
                 # If we are receiver and this is a jingle session
-                if file_props.type_ == 'r' and  file_props.session_sid:
+                if file_props.type_ == 'r' and  \
+                        file_props.session_type == 'jingle':
                     # Show that we are computing the hash
                     self.set_status(file_props, 'computing')
                 else:

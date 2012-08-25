@@ -1981,11 +1981,9 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                     self.FT_content.session.ourjid)
                 self.FT_content.transport.set_connection(
                     self.FT_content.session.connection)
-            sid = self.FT_content.transport.sid
+            sid = unicode(self.stanza.getTag('jingle').getAttr('sid'))
             self.file_props = FilesProp.getNewFileProp(self.conn.name, sid)
-            self.file_props.session_sid = unicode(
-                                self.stanza.getTag('jingle').getAttr('sid')
-                                                 )
+            self.file_props.transport_sid = self.FT_content.transport.sid
             self.FT_content.file_props = self.file_props
             self.FT_content.transport.set_file_props(self.file_props)
             if self.file_props.streamhosts:

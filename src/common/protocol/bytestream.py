@@ -143,12 +143,12 @@ class ConnectionBytestream:
         log.info("send_file_approval: jingle session accept")
         if file_props.session_type == 'jingle':
             session = self.get_jingle_session(file_props.sender,
-                file_props.session_sid)
+                file_props.sid)
             if not session:
                 return
             content = None
             for c in session.contents.values():
-                if c.transport.sid == file_props.sid:
+                if c.transport.sid == file_props.transport_sid:
                     content = c
                     break
             if not content:
@@ -193,7 +193,7 @@ class ConnectionBytestream:
         if not self.connection or self.connected < 2:
             return
         if file_props.session_type == 'jingle':
-            jingle = self._sessions[file_props.session_sid]
+            jingle = self._sessions[file_props.sid]
             jingle.cancel_session()
             return
         iq = xmpp.Iq(to=unicode(file_props.sender), typ='error')
@@ -562,7 +562,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
         else:
             to = file_props.sender
         iq = xmpp.Iq(to=to,     typ='error')
-        iq.setAttr('id', file_props.session_sid)
+        iq.setAttr('id', file_props.sid)
         err = iq.setTag('error')
         err.setAttr('code', unicode(code))
         err.setData(msg)

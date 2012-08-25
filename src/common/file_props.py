@@ -123,6 +123,7 @@ class FileProp(object):
         self.tt_account = None
         self.size = None
         self._sid = sid
+        self.transport_sid = None
         self.account = account
         self.mime_type = None
         self.algo = None
@@ -130,7 +131,6 @@ class FileProp(object):
         self.syn_id = None
         self.seq = None
         self.hash_ = None
-        self.session_sid = None
         self.fd = None
         self.startexmpp = None
         self.session_type = None
