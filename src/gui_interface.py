@@ -938,7 +938,7 @@ class Interface:
         session = gajim.connections[account].get_jingle_session(jid=None,
             sid=file_props.session_sid)
         ft_win = self.instances['file_transfers']
-        if not session.file_hash:
+        if not file_props.hash_:
             # We disn't get the hash, sender probably don't support that
             jid = unicode(file_props.sender)
             self.popup_ft_result(account, jid, file_props)
@@ -948,12 +948,12 @@ class Interface:
             file_ = open(file_props.file_name, 'r')
         except:
             return
-        hash_ = h.calculateHash(session.hash_algo, file_)
+        hash_ = h.calculateHash(file_props.algo, file_)
         file_.close()
         # If the hash we received and the hash of the file are the same,
         # then the file is not corrupt
         jid = unicode(file_props.sender)
-        if session.file_hash == hash_:
+        if file_props.hash_ == hash_:
             gobject.idle_add(self.popup_ft_result, account, jid, file_props)
             gobject.idle_add(ft_win.set_status, file_props, 'ok')
         else:

@@ -98,34 +98,33 @@ class JingleSession(object):
         else:
             self.iq_ids = []
         self.accepted = True # is this session accepted by user
-        # Hash algorithm that we are using to calculate the integrity of the 
-        # file. Could be 'md5', 'sha-1', etc...
-        self.hash_algo = None
-        self.file_hash = None
         # Tells whether this session is a file transfer or not
         self.session_type_FT = False
         # callbacks to call on proper contents
         # use .prepend() to add new callbacks, especially when you're going
         # to send error instead of ack
         self.callbacks = {
-                'content-accept':       [self.__on_content_accept, self.__broadcast,
-                        self.__ack],
+                'content-accept':       [self.__on_content_accept, 
+                                         self.__broadcast, self.__ack],
                 'content-add':          [self.__on_content_add, self.__broadcast,
-                        self.__ack], #TODO
+                                         self.__ack], #TODO
                 'content-modify':       [self.__ack], #TODO
-                'content-reject':       [self.__ack, self.__on_content_remove], #TODO
+                'content-reject':       [self.__ack, self.__on_content_remove],
                 'content-remove':       [self.__ack, self.__on_content_remove],
                 'description-info':     [self.__broadcast, self.__ack], #TODO
                 'security-info':        [self.__ack], #TODO
-                'session-accept':       [self.__on_session_accept, self.__on_content_accept,
-                        self.__broadcast],
-                'session-info':         [self.__broadcast, self.__on_session_info, self.__ack],
-                'session-initiate':     [self.__on_session_initiate, self.__broadcast,
-                        self.__ack],
-                'session-terminate':    [self.__on_session_terminate, self.__broadcast_all,
-                        self.__ack],
+                'session-accept':       [self.__on_session_accept,
+                                         self.__on_content_accept,
+                                         self.__broadcast],
+                'session-info':         [self.__broadcast, 
+                                         self.__on_session_info, self.__ack],
+                'session-initiate':     [self.__on_session_initiate, 
+                                         self.__broadcast, self.__ack],
+                'session-terminate':    [self.__on_session_terminate, 
+                                         self.__broadcast_all, self.__ack],
                 'transport-info':       [self.__broadcast, self.__ack],
-                'transport-replace':    [self.__broadcast, self.__on_transport_replace], #TODO
+                'transport-replace':    [self.__broadcast, 
+                                         self.__on_transport_replace], #TODO
                 'transport-accept':     [self.__ack], #TODO
                 'transport-reject':     [self.__ack], #TODO
                 'iq-result':            [self.__broadcast],
@@ -327,7 +326,8 @@ class JingleSession(object):
                 self.__send_error(stanza, 'bad-request')
                 return
             # FIXME: If we aren't initiated and it's not a session-initiate...
-            if action not in ['session-initiate','session-terminate'] and self.state == JingleStates.ended:
+            if action not in ['session-initiate','session-terminate'] \
+                    and self.state == JingleStates.ended:
                 self.__send_error(stanza, 'item-not-found', 'unknown-session')
                 return
         else:
@@ -364,6 +364,7 @@ class JingleSession(object):
             elif child.getNamespace() == xmpp.NS_STANZAS:
                 error_name = child.getName()
         self.__dispatch_error(error_name, text, error.getAttr('type'))
+
         # FIXME: Not sure when we would want to do that...
     def transport_replace(self):
         transport = JingleTransportIBB()
@@ -416,6 +417,8 @@ class JingleSession(object):
 
     def __on_session_info(self, stanza, jingle, error, action):
         # TODO: ringing, active, (un)hold, (un)mute
+        if self.state != JingleStates.active:
+            raise OutOfOrder
         payload = jingle.getPayload()
         for p in payload:
             if p.getName() == 'checksum':
@@ -423,13 +426,13 @@ class JingleSession(object):
                                         namespace=xmpp.NS_HASHES)
                 algo = hash_.getAttr('algo')
                 if algo in xmpp.Hashes.supported:
-                    self.hash_algo = algo
-                    data = hash_.getData()
-                    # This only works because there is only one session
-                    # per file in jingleFT
-                    self.file_hash = data
+                    file_props = FilesProp.getFileProp(self.connection.name,
+                                                       self.sid)
+                    file_props.algo = algo
+                    file_props.hash_ = hash_.getData()
                     raise xmpp.NodeProcessed
-        self.__send_error(stanza, 'feature-not-implemented', 'unsupported-info', type_='modify')
+        self.__send_error(stanza, 'feature-not-implemented', 'unsupported-info', 
+                          type_='modify')
         raise xmpp.NodeProcessed
 
     def __on_content_remove(self, stanza, jingle, error, action):

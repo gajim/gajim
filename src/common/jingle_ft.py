@@ -117,12 +117,9 @@ class JingleFileTransfer(JingleContent):
             conn=self.session.connection, stanza=stanza, jingle_content=content,
             FT_content=self))
         self._listen_host()
-        # Delete this after file_props refactoring this shouldn't be necesary
-        self.session.file_hash = self.file_props.hash_
-        self.session.hash_algo = self.file_props.algo
 
     def __on_session_initiate_sent(self, stanza, content, error, action):
-        # Calculate file_hash in a new thread
+        # Calculate file hash in a new thread
         # if we haven't sent the hash already.
         if self.file_props.hash_ is None:
             self.hashThread = threading.Thread(target=self.__send_hash)
@@ -137,7 +134,7 @@ class JingleFileTransfer(JingleContent):
 
     def _calcHash(self):
         # Caculates the hash and returns a xep-300 hash stanza
-        if self.session.hash_algo == None:
+        if self.file_props.algo == None:
             return
         try:
             file_ = open(self.file_props.file_name, 'r')
@@ -145,14 +142,14 @@ class JingleFileTransfer(JingleContent):
             # can't open file
             return
         h = xmpp.Hashes()
-        hash_ = h.calculateHash(self.session.hash_algo, file_)
+        hash_ = h.calculateHash(self.file_props.algo, file_)
         # DEBUG
         #hash_ = '1294809248109223'
         if not hash_:
             # Hash alogrithm not supported
             return
         self.file_props.hash_ = hash_
-        h.addHash(hash_, self.session.hash_algo)
+        h.addHash(hash_, self.file_props.algo)
         return h
 
     def __on_session_accept(self, stanza, content, error, action):
