@@ -119,11 +119,7 @@ class JingleFileTransfer(JingleContent):
         self._listen_host()
 
     def __on_session_initiate_sent(self, stanza, content, error, action):
-        # Calculate file hash in a new thread
-        # if we haven't sent the hash already.
-        if self.file_props.hash_ is None:
-            self.hashThread = threading.Thread(target=self.__send_hash)
-            self.hashThread.start()
+        pass
 
     def __send_hash(self):
         # Send hash in a session info
@@ -167,6 +163,11 @@ class JingleFileTransfer(JingleContent):
             self.__state_changed(STATE_TRANSFERING)
             raise xmpp.NodeProcessed
         self.file_props.streamhosts = self.transport.remote_candidates
+        # Calculate file hash in a new thread
+        # if we haven't sent the hash already.
+        if self.file_props.hash_ is None:
+            self.hashThread = threading.Thread(target=self.__send_hash)
+            self.hashThread.start()
         for host in self.file_props.streamhosts:
             host['initiator'] = self.session.initiator
             host['target'] = self.session.responder
