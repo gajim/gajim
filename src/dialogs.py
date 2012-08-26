@@ -3112,7 +3112,7 @@ class SingleMessageWindow:
             # if offline or connecting
             ErrorDialog(_('Connection not available'),
                 _('Please make sure you are connected with "%s".') % self.account)
-            return
+            return True
         if isinstance(self.to, list):
             sender_list = []
             for i in self.to:
@@ -3132,7 +3132,7 @@ class SingleMessageWindow:
                 ErrorDialog(_('Invalid Jabber ID'),
                     _('It is not possible to send a message to %s, this JID is not '
                     'valid.') % to_whom_jid)
-                return
+                return True
 
             subject = self.subject_entry.get_text().decode('utf-8')
             begin, end = self.message_tv_buffer.get_bounds()
@@ -3176,7 +3176,8 @@ class SingleMessageWindow:
             session=self.session)
 
     def on_send_and_close_button_clicked(self, widget):
-        self.send_single_message()
+        if self.send_single_message():
+            return
         self.save_pos()
         self.window.destroy()
 
