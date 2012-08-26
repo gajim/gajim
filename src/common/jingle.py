@@ -80,12 +80,10 @@ class ConnectionJingle(object):
         # get data
         jid = helpers.get_full_jid_from_iq(stanza)
         id_ = stanza.getID()
-
         if (jid, id_) in self.__iq_responses.keys():
             self.__iq_responses[(jid, id_)].on_stanza(stanza)
             del self.__iq_responses[(jid, id_)]
             raise xmpp.NodeProcessed
-
         jingle = stanza.getTag('jingle')
         # a jingle element is not necessary in iq-result stanza
         # don't check for that
@@ -97,14 +95,12 @@ class ConnectionJingle(object):
                 if id_ in sesn.iq_ids:
                     sesn.on_stanza(stanza)
             return
-
         # do we need to create a new jingle object
         if sid not in self._sessions:
             #TODO: tie-breaking and other things...
             newjingle = JingleSession(con=self, weinitiate=False, jid=jid,
                 iq_id=id_, sid=sid)
             self._sessions[sid] = newjingle
-
         # we already have such session in dispatcher...
         self._sessions[sid].collect_iq_id(id_)
         self._sessions[sid].on_stanza(stanza)
@@ -112,7 +108,6 @@ class ConnectionJingle(object):
         if sid in self._sessions and \
         self._sessions[sid].state == JingleStates.ended:
             self.delete_jingle_session(sid)
-
         raise xmpp.NodeProcessed
 
     def start_audio(self, jid):
