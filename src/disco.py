@@ -2098,8 +2098,11 @@ class DiscussionGroupsBrowser(AgentBrowser):
         name = gobject.markup_escape_text(name)
         name = '<b>%s</b>' % name
 
-        parent_iter = self._get_iter(parent_node)
-        if not self._in_list(node):
+        if parent_node:
+            parent_iter = self._get_iter(parent_node)
+        else:
+            parent_iter = None
+        if not node or not self._in_list(node):
             self.model.append(parent_iter, (jid, node, name, dunno, subscribed))
             self.cache.get_items(jid, node, self._add_items, force = force,
                     args = (force,))
