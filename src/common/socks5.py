@@ -34,6 +34,7 @@ from errno import EINPROGRESS
 from errno import EAFNOSUPPORT
 from xmpp.idlequeue import IdleObject
 from file_props import FilesProp
+from common import gajim
 import jingle_xtls
 if jingle_xtls.PYOPENSSL_PRESENT:
     import OpenSSL
@@ -116,10 +117,15 @@ class SocksQueue:
         self.on_failure[sid] = on_failure
         file_props = FilesProp.getFileProp(account, sid)
         file_props.failure_cb = on_failure
+        con = gajim.connections[account]
         if not file_props.streamhosts:
             on_failure(file_props.sid)
         # add streamhosts to the queue
         for streamhost in file_props.streamhosts:
+            if streamhost['host'] == '127.0.0.1' or \
+                    streamhost['host'] == '::1' or \
+                    streamhost['host'] == con.peerhost[0]:
+                continue
             if 'type' in streamhost and streamhost['type'] == 'proxy':
                 fp = None
             else:
