@@ -130,7 +130,8 @@ def latex_to_image(str_):
 
     try:
         tmpdir = mkdtemp(prefix='gajimtex')
-        tmppng = mkstemp(prefix='gajim_tex', suffix='.png')[1]
+        tmpfd, tmppng = mkstemp(prefix='gajim_tex', suffix='.png')
+        tmpfd.close()
     except Exception:
         raise LatexError('could not securely create one or more temporary files'
             ' for LaTeX conversion')
