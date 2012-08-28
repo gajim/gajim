@@ -1792,9 +1792,12 @@ class Connection(CommonConnection, ConnectionHandlers):
 
     def _change_from_invisible(self):
         if self.privacy_rules_supported:
-            iq = self.build_privacy_rule('visible', 'allow')
-            self.connection.send(iq)
-            self.activate_privacy_rule('visible')
+            if self.blocked_list:
+                self.activate_privacy_rule('block')
+            else:
+                iq = self.build_privacy_rule('visible', 'allow')
+                self.connection.send(iq)
+                self.activate_privacy_rule('visible')
 
     def _update_status(self, show, msg):
         xmpp_show = helpers.get_xmpp_show(show)
