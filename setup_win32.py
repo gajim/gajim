@@ -31,7 +31,7 @@ if 'gtk' in os.listdir('.'):
 
 options = {
    'build_exe': {
-       'includes': ['gtk.keysyms', 'dumbdbm', 'dbhash', 'bsddb', 'new', 'potr',
+       'includes': ['gtk.keysyms', 'dumbdbm', 'dbhash', 'bsddb', 'new',
             'goocanvas'],
        'base': 'Win32GUI',
 	   'bin_excludes': [
