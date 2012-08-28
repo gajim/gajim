@@ -41,7 +41,7 @@ from common import dataforms
 from common import ged
 from common import jingle_xtls
 from common.file_props import FilesProp
-from common.socks5 import Socks5ReceiverClient
+from common.socks5 import Socks5SenderClient
 
 import logging
 log = logging.getLogger('gajim.c.p.bytestream')
@@ -581,8 +581,8 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
         """
         if not self.connection or self.connected < 2:
             return
-        file_props = FilesProp.getFileProp(self.connection, proxy['sid'])
-        iq = xmpp.Iq(to=proxy['initiator'],     typ='set')
+        file_props = FilesProp.getFileProp(self.name, proxy['sid'])
+        iq = xmpp.Iq(to=proxy['initiator'], typ='set')
         auth_id = "au_" + proxy['sid']
         iq.setID(auth_id)
         query = iq.setTag('query', namespace=xmpp.NS_BYTESTREAM)
@@ -721,10 +721,15 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             file_props.streamhost_used = True
             file_props.streamhosts.append(proxy)
             file_props.is_a_proxy = True
-            receiver = Socks5ReceiverClient(gajim.idlequeue, proxy,
-                    file_props.sid, file_props)
-            proxy['idx'] = receiver.queue_idx
-            gajim.socks5queue.on_success = self._proxy_auth_ok
+            idx = gajim.socks5queue.idx
+            sender = Socks5SenderClient(gajim.idlequeue, idx,
+                gajim.socks5queue, _sock=None, host=str(proxy['host']),
+                port=int(proxy['port']), fingerprint=None,
+                connected=False, file_props=file_props)
+            sender.streamhost = proxy
+            gajim.socks5queue.add_sockobj(self.name, sender, 'sender')
+            proxy['idx'] = sender.queue_idx
+            gajim.socks5queue.on_success[file_props.sid] = self._proxy_auth_ok
             raise xmpp.NodeProcessed
 
         else:

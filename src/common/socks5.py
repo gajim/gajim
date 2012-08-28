@@ -263,32 +263,30 @@ class SocksQueue:
             props[0](props[1], idx)
 
     def activate_proxy(self, idx):
-        if not self.isHashInSockObjs(self.readers, idx):
+        if not self.isHashInSockObjs(self.senders, idx):
             return
-        for key in self.readers.keys():
+        for key in self.senders.keys():
             if idx in key:
-                reader = self.readers[key]
-                if reader.file_props.type_ != 's':
+                sender = self.senders[key]
+                if sender.file_props.type_ != 's':
                     return
-                if reader.state != 5:
-                    return
-                reader.state = 6
-                if reader.connected:
-                    reader.file_props.error = 0
-                    reader.file_props.disconnect_cb = reader.disconnect
-                    reader.file_props.started = True
-                    reader.file_props.completed = False
-                    reader.file_props.paused = False
-                    reader.file_props.stalled = False
-                    reader.file_props.elapsed_time = 0
-                    reader.file_props.last_time = self.idlequeue.current_time()
-                    reader.file_props.received_len = 0
-                    reader.pauses = 0
+                sender.state = 6
+                if sender.connected:
+                    sender.file_props.error = 0
+                    sender.file_props.disconnect_cb = sender.disconnect
+                    sender.file_props.started = True
+                    sender.file_props.completed = False
+                    sender.file_props.paused = False
+                    sender.file_props.stalled = False
+                    sender.file_props.elapsed_time = 0
+                    sender.file_props.last_time = self.idlequeue.current_time()
+                    sender.file_props.received_len = 0
+                    sender.pauses = 0
                     # start sending file to proxy
-                    self.idlequeue.set_read_timeout(reader.fd, STALLED_TIMEOUT)
-                    self.idlequeue.plug_idle(reader, True, False)
-                    result = reader.write_next()
-                    self.process_result(result, reader)
+                    self.idlequeue.set_read_timeout(sender.fd, STALLED_TIMEOUT)
+                    self.idlequeue.plug_idle(sender, True, False)
+                    result = sender.write_next()
+                    self.process_result(result, sender)
 
     def send_file(self, file_props, account, mode):
         for key in self.senders.keys():
