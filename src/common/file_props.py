@@ -116,7 +116,7 @@ class FileProp(object):
         # full file path
         self.file_name = None
         self.name = None
-        self.file_desc = None
+        self.desc = None
         self.offset = None
         self.sender = None
         self.receiver = None
