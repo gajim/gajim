@@ -1,5 +1,6 @@
 Gajim 0.15.1 ()
 
+  * Switch from python-farsight to python-farstream
   * improve performences
   * Fix roster filter with unicode chars
   * Fix connection to msn jabber server
