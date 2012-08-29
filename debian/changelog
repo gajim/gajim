@@ -1,3 +1,13 @@
+gajim (0.15.1-1) unstable; urgency=low
+
+  * New upstream release.
+  * change python-farsight to python-farstream in suggests list. Closes: #682598
+  * Add python-gupnp-igd to suggests list. Closes: #668194
+  * Fix shortcut behaviour in roster window. Closes: #667870
+  * Improve GPG status handling. Closes: #670243
+
+ -- Yann Leboulanger <asterix@lagaule.org>  Tue, 29 Aug 2012 09:51:52 +0200
+
 gajim (0.15-1) unstable; urgency=low
 
   * New upstream release.

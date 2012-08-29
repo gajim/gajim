@@ -31,8 +31,9 @@ if 'gtk' in os.listdir('.'):
 
 options = {
    'build_exe': {
-       'includes': ['gtk.keysyms', 'dumbdbm', 'dbhash', 'bsddb', 'new', 'potr',
-            'goocanvas'],
+       'includes': ['gtk.keysyms', 'dumbdbm', 'dbhash', 'bsddb', 'new',
+            'goocanvas', 'Crypto.PublicKey.DSA', 'Crypto.Hash.HMAC',
+            'numbers'],
        'base': 'Win32GUI',
 	   'bin_excludes': [
             'iconv.dll', 'intl.dll', 'libatk-1.0-0.dll',
@@ -50,7 +51,7 @@ options = {
 
 setup(
     name='Gajim',
-    version='0.15',
+    version='0.15.1',
     description='A full featured Jabber client',
     author='Gajim Development Team',
     url='http://gajim.org/',
