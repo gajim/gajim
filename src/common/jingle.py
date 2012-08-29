@@ -55,6 +55,7 @@ class ConnectionJingle(object):
         # dictionary: (jid, iq stanza id) => JingleSession object,
         # one time callbacks
         self.__iq_responses = {}
+        self.files = []
 
     def delete_jingle_session(self, sid):
         """
@@ -192,6 +193,20 @@ class ConnectionJingle(object):
         else:
             return sessions
 
+    def set_files_info(self, file_):
+        # Saves information about the files we have transfered in case they need
+        # to be requested again.
+        self.files.append(file_)
+
+    def get_files_info(self, hash_=None, name=None):
+        if hash_:
+            for f in self.files:
+                if f['hash'] == hash_:
+                    return f
+        elif name:
+            for f in self.files:
+                if f['name'] == name:
+                    return f
 
     def get_jingle_session(self, jid, sid=None, media=None):
         if sid:

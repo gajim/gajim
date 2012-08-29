@@ -511,6 +511,22 @@ class JingleSession(object):
                     self.__ack(stanza, jingle, error, action)
                     self._session_terminate(reason)
                     raise xmpp.NodeProcessed
+        else:
+            # Stop if we don't have the requested file
+            request = \
+                 jingle.getTag('content').getTag('description').getTag('request')
+            if request:
+                h = request.getTag('file').getTag('hash')
+                n = request.getTag('file').getTag('name')
+                if h:
+                    file_info = self.connection.get_files_info(hash_=h)
+                elif n:
+                    file_info = self.connection.get_files_info(name=n)
+                if not file_info:
+                    # Send 404 error?
+                    log.warning('The peer ' + self.peerjid + \
+                                ' is requesting a ' + \
+                                'file that we dont have')
         # If there's no content we understand...
         if not contents:
             # TODO: http://xmpp.org/extensions/xep-0166.html#session-terminate

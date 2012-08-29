@@ -128,6 +128,13 @@ class JingleFileTransfer(JingleContent):
             payload=[self._calcHash()])])
         checksum.setNamespace(xmpp.NS_JINGLE_FILE_TRANSFER)
         self.session.__session_info(checksum )
+        file_info = {'name' : self.file_props.name,
+                     'hash' : self.file_props.hash_,
+                     'size' : self.file_props.size,
+                     'date' : self.file_props.date
+                    }
+        self.session.connection.set_files_info(file_info)
+
 
     def _calcHash(self):
         # Caculates the hash and returns a xep-300 hash stanza

@@ -165,12 +165,10 @@ class JingleContent(object):
     def _fill_content(self, content):
         description_node = xmpp.simplexml.Node(
             tag=xmpp.NS_JINGLE_FILE_TRANSFER + ' description')
-
         if self.session.werequest:
             simode = xmpp.simplexml.Node(tag='request')
         else:
             simode = xmpp.simplexml.Node(tag='offer')
-
         file_tag = simode.setTag('file', namespace=xmpp.NS_FILE)
         if self.file_props.name:
             node = xmpp.simplexml.Node(tag='name')
@@ -188,15 +186,20 @@ class JingleContent(object):
         else:
             # if the file is less than 10 mb, then it is small
             # lets calculate it right away
-            if int(self.file_props.size) < 10000000:
+            if int(self.file_props.size) < 10000000 and not \
+                                        self.file_props.hash_:
                 h  = self._calcHash()
                 file_tag.addChild(node=h)
+            	file_info = {'name' : self.file_props.name,
+                	         'hash' : self.file_props.hash_,
+                	         'size' : self.file_props.size,
+                	         'date' : self.file_props.date
+                	        }
+            	self.session.connection.set_files_info(file_info)
         desc = file_tag.setTag('desc')
         if self.file_props.desc:
             desc.setData(self.file_props.desc)
-
         description_node.addChild(node=simode)
-
         if self.use_security:
             security = xmpp.simplexml.Node(
                 tag=xmpp.NS_JINGLE_XTLS + ' security')
@@ -206,9 +209,7 @@ class JingleContent(object):
                 method.setAttr('name', m)
                 security.addChild(node=method)
             content.addChild(node=security)
-
         content.addChild(node=description_node)
-
 
     def destroy(self):
         self.callbacks = None
