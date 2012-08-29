@@ -2546,6 +2546,7 @@ class AccountsWindow:
         gajim.transport_avatar[account] = {}
         gajim.gajim_optional_features[account] = []
         gajim.caps_hash[account] = ''
+        helpers.update_optional_features(account)
         # refresh roster
         if len(gajim.connections) >= 2:
             # Do not merge accounts if only one exists
@@ -4009,6 +4010,7 @@ class AccountCreationWizardWindow:
         gajim.transport_avatar[self.account] = {}
         gajim.gajim_optional_features[self.account] = []
         gajim.caps_hash[self.account] = ''
+        helpers.update_optional_features(self.account)
         # refresh accounts window
         if 'accounts' in gajim.interface.instances:
             gajim.interface.instances['accounts'].init_accounts()
