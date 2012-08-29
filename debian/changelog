@@ -6,7 +6,7 @@ gajim (0.15.1-1) unstable; urgency=low
   * Fix shortcut behaviour in roster window. Closes: #667870
   * Improve GPG status handling. Closes: #670243
 
- -- Yann Leboulanger <asterix@lagaule.org>  Tue, 28 Aug 2012 11:42:26 +0200
+ -- Yann Leboulanger <asterix@lagaule.org>  Tue, 29 Aug 2012 09:51:52 +0200
 
 gajim (0.15-1) unstable; urgency=low
 
