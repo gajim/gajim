@@ -180,14 +180,17 @@ class JingleContent(object):
             node = xmpp.simplexml.Node(tag='size')
             node.addData(self.file_props.size)
             file_tag.addChild(node=node)
-        if self.file_props.hash_:
-            # TODO: use xep-300 for this bit
-            pass
-        # if the file is less than 10 mb, then it is small
-        # lets calculate it right away
-        if int(self.file_props.size) < 10000000:
-            h  = self._calcHash()
-            file_tag.addChild(node=h)
+        if self.file_props.type_ == 'r':
+            if self.file_props.hash_:
+                h = file_tag.addChild('hash', attrs={
+                    'algo': self.file_props.algo}, namespace=xmpp.NS_HASHES,
+                    payload=self.file_props.hash_)
+        else:
+            # if the file is less than 10 mb, then it is small
+            # lets calculate it right away
+            if int(self.file_props.size) < 10000000:
+                h  = self._calcHash()
+                file_tag.addChild(node=h)
         desc = file_tag.setTag('desc')
         if self.file_props.desc:
             desc.setData(self.file_props.desc)
