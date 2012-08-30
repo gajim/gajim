@@ -139,7 +139,7 @@ class StateTransfering(JingleFileTransferStates):
 
     def __start_IBB_transfer(self, con):
         fp = open(self.jft.file_props.file_name, 'r')
-        con.OpenStream( self.jft.transport.sid, self.jft.session.peerjid, fp,
+        con.OpenStream( self.jft.file_props.sid, self.jft.session.peerjid, fp,
             blocksize=4096)
 
     def __start_SOCK5_transfer(self):
