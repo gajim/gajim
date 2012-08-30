@@ -117,7 +117,6 @@ class JingleFileTransfer(JingleContent):
         gajim.nec.push_incoming_event(FileRequestReceivedEvent(None,
             conn=self.session.connection, stanza=stanza, jingle_content=content,
             FT_content=self))
-        self._listen_host()
 
     def __on_session_initiate_sent(self, stanza, content, error, action):
         pass
@@ -213,6 +212,8 @@ class JingleFileTransfer(JingleContent):
     def __on_transport_info(self, stanza, content, error, action):
         log.info("__on_transport_info")
         if content.getTag('transport').getTag('candidate-error'):
+            if not gajim.socks5queue.listener.connections:
+                gajim.socks5queue.listener.disconnect()
             self.nominated_cand['peer-cand'] = False
             if self.state == STATE_CAND_SENT:
                 if not self.nominated_cand['our-cand'] and \
@@ -230,6 +231,18 @@ class JingleFileTransfer(JingleContent):
                 args = {'candError' : True}
                 self.__state_changed(STATE_CAND_RECEIVED, args)
             return
+        if content.getTag('transport').getTag('candidate-used'):
+            streamhost_cid = content.getTag('transport').getTag(
+                'candidate-used').getAttr('cid')
+            streamhost_used = None
+            for cand in self.transport.candidates:
+                if cand['candidate_id'] == streamhost_cid:
+                    streamhost_used = cand
+                    break
+            if streamhost_used == None or streamhost_used['type'] == 'proxy':
+                if not gajim.socks5queue.listener.connections:
+                    gajim.socks5queue.listener.disconnect()
+                    pass
 
         if content.getTag('transport').getTag('activated'):
             self.state = STATE_TRANSFERING
@@ -270,6 +283,8 @@ class JingleFileTransfer(JingleContent):
         if self.transport.type_ == TransportType.IBB:
             # No action required, just set the state to transfering
             self.state = STATE_TRANSFERING
+        else:
+            self._listen_host()
 
     def on_connect(self, streamhost):
         """
