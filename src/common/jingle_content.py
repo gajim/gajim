@@ -190,12 +190,12 @@ class JingleContent(object):
                                         self.file_props.hash_:
                 h  = self._calcHash()
                 file_tag.addChild(node=h)
-            	file_info = {'name' : self.file_props.name,
-                	         'hash' : self.file_props.hash_,
-                	         'size' : self.file_props.size,
-                	         'date' : self.file_props.date
-                	        }
-            	self.session.connection.set_files_info(file_info)
+                file_info = {'name' : self.file_props.name,
+                             'hash' : self.file_props.hash_,
+                             'size' : self.file_props.size,
+                             'date' : self.file_props.date
+                            }
+                self.session.connection.set_files_info(file_info)
         desc = file_tag.setTag('desc')
         if self.file_props.desc:
             desc.setData(self.file_props.desc)
@@ -214,3 +214,5 @@ class JingleContent(object):
     def destroy(self):
         self.callbacks = None
         del self.session.contents[(self.creator, self.name)]
+
+

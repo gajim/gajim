@@ -527,6 +527,7 @@ class JingleSession(object):
                     log.warning('The peer ' + self.peerjid + \
                                 ' is requesting a ' + \
                                 'file that we dont have')
+                    self.decline_session()
         # If there's no content we understand...
         if not contents:
             # TODO: http://xmpp.org/extensions/xep-0166.html#session-terminate
