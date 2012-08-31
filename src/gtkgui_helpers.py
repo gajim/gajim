@@ -1049,7 +1049,6 @@ def make_jabber_state_images():
     if (os.path.exists(path)):
         gajim.interface.jabber_state_images['24'] = load_iconset(path)
     else:
-        gajim.interface.jabber_state_images['24'] = {}
         # Resize 32x32 icons to 24x24
         for each in gajim.interface.jabber_state_images['32']:
             img = gtk.Image()

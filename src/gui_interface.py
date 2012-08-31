@@ -916,7 +916,7 @@ class Interface:
             request = obj.stanza.getTag('jingle').getTag('content')\
                         .getTag('description').getTag('request')
             if request:
-                # If we get a request instead 
+                # If we get a request instead
                 return
         contact = gajim.contacts.get_first_contact_from_jid(account, obj.jid)
         if helpers.allow_popup_window(account):
@@ -2675,8 +2675,8 @@ class Interface:
         gajim.thread_interface = ThreadInterface
         # This is the manager and factory of message windows set by the module
         self.msg_win_mgr = None
-        self.jabber_state_images = {'16': {}, '32': {}, 'opened': {},
-                'closed': {}}
+        self.jabber_state_images = {'16': {}, '24': {}, '32': {}, 'opened': {},
+            'closed': {}}
         self.emoticons_menu = None
         # handler when an emoticon is clicked in emoticons_menu
         self.emoticon_menuitem_clicked = None
