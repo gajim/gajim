@@ -1986,23 +1986,11 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             self.file_props.transport_sid = self.FT_content.transport.sid
             self.FT_content.file_props = self.file_props
             self.FT_content.transport.set_file_props(self.file_props)
-            if self.file_props.streamhosts:
-                self.file_props.streamhosts.extend(
+            self.file_props.streamhosts.extend(
                     self.FT_content.transport.remote_candidates)
-            else:
-                self.file_props.streamhosts = \
-                    self.FT_content.transport.remote_candidates
             for host in self.file_props.streamhosts:
                 host['initiator'] = self.FT_content.session.initiator
                 host['target'] = self.FT_content.session.responder
-        else:
-            si = self.stanza.getTag('si')
-            self.file_props = FilesProp.getNewFileProp(self.conn.name,
-                                               unicode(si.getAttr('id'))
-                                                      )
-        self.file_props.sender = self.fjid
-        self.file_props.request_id = self.id_
-        if self.jingle_content:
             self.file_props.session_type = 'jingle'
             self.file_props.stream_methods = xmpp.NS_BYTESTREAM
             desc = self.jingle_content.getTag('description')
@@ -2024,8 +2012,11 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                     self.file_props.hash_ = val
                 if name == 'date':
                     self.file_props.date = val
-
         else:
+            si = self.stanza.getTag('si')
+            self.file_props = FilesProp.getNewFileProp(self.conn.name,
+                                               unicode(si.getAttr('id'))
+                                                      )
             profile = si.getAttr('profile')
             if profile != xmpp.NS_FILE:
                 self.conn.send_file_rejection(self.file_props, code='400',
@@ -2056,18 +2047,16 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                     self.file_props.name = val
                 if name == 'size':
                     self.file_props.size = val
-        file_desc_tag = file_tag.getTag('desc')
-        if file_desc_tag is not None:
-            self.file_props.desc = file_desc_tag.getData()
-
-        if not self.jingle_content:
             mime_type = si.getAttr('mime-type')
             if mime_type is not None:
                 self.file_props.mime_type = mime_type
-
+        self.file_props.sender = self.fjid
+        self.file_props.request_id = self.id_
+        file_desc_tag = file_tag.getTag('desc')
+        if file_desc_tag is not None:
+            self.file_props.desc = file_desc_tag.getData()
         self.file_props.receiver = self.conn._ft_get_our_jid()
         self.file_props.transfered_size = []
-
         return True
 
 class FileRequestErrorEvent(nec.NetworkIncomingEvent):

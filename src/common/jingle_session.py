@@ -335,8 +335,8 @@ class JingleSession(object):
             action = 'iq-result'
         callables = self.callbacks[action]
         try:
-            for callable in callables:
-                callable(stanza=stanza, jingle=jingle, error=error, action=action)
+            for call in callables:
+                call(stanza=stanza, jingle=jingle, error=error, action=action)
         except xmpp.NodeProcessed:
             pass
         except TieBreak:
@@ -528,6 +528,7 @@ class JingleSession(object):
                                 ' is requesting a ' + \
                                 'file that we dont have')
                     self.decline_session()
+                    raise xmpp.NodeProcessed
         # If there's no content we understand...
         if not contents:
             # TODO: http://xmpp.org/extensions/xep-0166.html#session-terminate
