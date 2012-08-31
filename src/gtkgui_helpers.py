@@ -1042,6 +1042,13 @@ def make_jabber_state_images():
         iconset = gajim.config.DEFAULT_ICONSET
         gajim.config.set('iconset', iconset)
 
+    path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
+    gajim.interface.jabber_state_images['16'] = load_iconset(path)
+
+    pixo, pixc = load_icons_meta()
+    gajim.interface.jabber_state_images['opened'] = load_iconset(path, pixo)
+    gajim.interface.jabber_state_images['closed'] = load_iconset(path, pixc)
+
     path = os.path.join(helpers.get_iconset_path(iconset), '32x32')
     gajim.interface.jabber_state_images['32'] = load_iconset(path)
 
@@ -1052,17 +1059,22 @@ def make_jabber_state_images():
         # Resize 32x32 icons to 24x24
         for each in gajim.interface.jabber_state_images['32']:
             img = gtk.Image()
-            pix = gajim.interface.jabber_state_images['32'][each].get_pixbuf()
-            scaled_pix = pix.scale_simple(24, 24, gtk.gdk.INTERP_BILINEAR)
+            pix = gajim.interface.jabber_state_images['32'][each]
+            pix_type = pix.get_storage_type()
+            if pix_type == gtk.IMAGE_ANIMATION:
+                animation = pix.get_animation()
+                pixbuf = animation.get_static_image()
+            elif pix_type == gtk.IMAGE_EMPTY:
+                pix = gajim.interface.jabber_state_images['16'][each]
+                pix_16_type = pix.get_storage_type()
+                if pix_16_type == gtk.IMAGE_ANIMATION:
+                    animation = pix.get_animation()
+                    pixbuf = animation.get_static_image()
+            else:
+                pixbuf = pix.get_pixbuf()
+            scaled_pix = pixbuf.scale_simple(24, 24, gtk.gdk.INTERP_BILINEAR)
             img.set_from_pixbuf(scaled_pix)
             gajim.interface.jabber_state_images['24'][each] = img
-
-    path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
-    gajim.interface.jabber_state_images['16'] = load_iconset(path)
-
-    pixo, pixc = load_icons_meta()
-    gajim.interface.jabber_state_images['opened'] = load_iconset(path, pixo)
-    gajim.interface.jabber_state_images['closed'] = load_iconset(path, pixc)
 
 def reload_jabber_state_images():
     make_jabber_state_images()
