@@ -178,7 +178,7 @@ class JingleTransportSocks5(JingleTransport):
         local_ip_cand = []
         port = int(gajim.config.get('file_transfers_port'))
         #type preference of connection type. XEP-0260 section 2.2
-        type_preference = 126 
+        type_preference = 126
         c = {'host': self.connection.peerhost[0]}
         c['candidate_id'] = self.connection.connection.getAnID()
         c['port'] = port
@@ -351,6 +351,7 @@ class JingleTransportICEUDP(JingleTransport):
                 'network': '0',
                 'port': candidate.port,
                 'priority': int(candidate.priority), # hack
+                'id': gajim.get_an_id()
         }
         if candidate.type in types:
             attrs['type'] = types[candidate.type]
