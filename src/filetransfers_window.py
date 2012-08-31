@@ -664,10 +664,19 @@ class FileTransfersWindow:
                 return iter_
             iter_ = self.model.iter_next(iter_)
 
+    def __convert_date(self, epoch):
+        # Converts date-time from seconds from epoch to iso 8601
+        import time, datetime
+        ts = time.gmtime(epoch)
+        dt = datetime.datetime(ts.tm_year, ts.tm_mon, ts.tm_mday, ts.tm_hour, 
+                               ts.tm_min,  ts.tm_sec)
+        return dt.isoformat()
+
     def get_send_file_props(self, account, contact, file_path, file_name,
     file_desc=''):
         """
-        Create new file_props dict and set initial file transfer properties in it
+        Create new file_props object and set initial file transfer 
+        properties in it
         """
         if os.path.isfile(file_path):
             stat = os.stat(file_path)
@@ -680,8 +689,10 @@ class FileTransfersWindow:
             return None
         file_props = FilesProp.getNewFileProp(account,
                                     sid=helpers.get_random_string_16())
+        mod_date = os.path.getmtime(file_path)
         file_props.file_name = file_path
         file_props.name = file_name
+        file_props.date = self.__convert_date(mod_date)
         file_props.type_ = 's'
         file_props.desc = file_desc
         file_props.elapsed_time = 0

@@ -174,6 +174,10 @@ class JingleContent(object):
             node = xmpp.simplexml.Node(tag='name')
             node.addData(self.file_props.name)
             file_tag.addChild(node=node)
+        if self.file_props.date:
+            node = xmpp.simplexml.Node(tag='date')
+            node.addData(self.file_props.date)
+            file_tag.addChild(node=node)
         if self.file_props.size:
             node = xmpp.simplexml.Node(tag='size')
             node.addData(self.file_props.size)
