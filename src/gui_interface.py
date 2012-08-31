@@ -912,15 +912,18 @@ class Interface:
                 account=account, keyID=keyID)
             gajim.contacts.add_contact(account, contact)
             self.roster.add_contact(obj.jid, account)
+        if obj.file_props.session_type == 'jingle':
+            request = obj.stanza.getTag('jingle').getTag('content')\
+                        .getTag('description').getTag('request')
+            if request:
+                # If we get a request instead 
+                return
         contact = gajim.contacts.get_first_contact_from_jid(account, obj.jid)
-
         if helpers.allow_popup_window(account):
             self.instances['file_transfers'].show_file_request(account, contact,
                 obj.file_props)
             return
-
         self.add_event(account, obj.jid, 'file-request', obj.file_props)
-
         if helpers.allow_showing_notification(account):
             path = gtkgui_helpers.get_icon_path('gajim-ft_request', 48)
             txt = _('%s wants to send you a file.') % gajim.get_name_from_jid(
