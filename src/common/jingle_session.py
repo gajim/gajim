@@ -522,8 +522,11 @@ class JingleSession(object):
                     file_info = self.connection.get_files_info(hash_=h)
                 elif n:
                     file_info = self.connection.get_files_info(name=n)
-                if not file_info:
-                    # Send 404 error?
+                if file_info:
+                    file_props = FilesProp.getFileProp(self.connection.name,
+                                                       self.sid)
+                    file_props.file_name = file_info['file-name']
+                else:
                     log.warning('The peer ' + self.peerjid + \
                                 ' is requesting a ' + \
                                 'file that we dont have')

@@ -1996,8 +1996,13 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             desc = self.jingle_content.getTag('description')
             if desc.getTag('offer'):
                 file_tag = desc.getTag('offer').getTag('file')
+                self.file_props.sender = self.fjid
+                self.file_props.receiver = self.conn._ft_get_our_jid()
             else:
                 file_tag = desc.getTag('request').getTag('file')
+                self.file_props.sender = self.conn._ft_get_our_jid()
+                self.file_props.receiver = self.fjid
+                self.file_props.type_ = 's'
             for child in file_tag.getChildren():
                 name = child.getName()
                 val = child.getData()
@@ -2050,12 +2055,12 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             mime_type = si.getAttr('mime-type')
             if mime_type is not None:
                 self.file_props.mime_type = mime_type
-        self.file_props.sender = self.fjid
+            self.file_props.sender = self.fjid
+            self.file_props.receiver = self.conn._ft_get_our_jid()
         self.file_props.request_id = self.id_
         file_desc_tag = file_tag.getTag('desc')
         if file_desc_tag is not None:
             self.file_props.desc = file_desc_tag.getData()
-        self.file_props.receiver = self.conn._ft_get_our_jid()
         self.file_props.transfered_size = []
         return True
 

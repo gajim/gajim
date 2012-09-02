@@ -32,7 +32,6 @@ import socket
 import base64
 import gobject
 import time
-import pdb
 
 from common import xmpp
 from common import gajim
@@ -838,7 +837,6 @@ class ConnectionIBBytestream(ConnectionBytestream):
         Send next portion of data if it is time to do it. Used internally.
         """
         log.debug('SendHandler called')
-        #pdb.set_trace()
         for file_props in FilesProp.getAllFileProp():
             if not file_props.direction:
                 # it's socks5 bytestream

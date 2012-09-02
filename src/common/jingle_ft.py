@@ -128,6 +128,7 @@ class JingleFileTransfer(JingleContent):
         checksum.setNamespace(xmpp.NS_JINGLE_FILE_TRANSFER)
         self.session.__session_info(checksum )
         file_info = {'name' : self.file_props.name,
+                     'file-name' : self.file_props.file_name,
                      'hash' : self.file_props.hash_,
                      'size' : self.file_props.size,
                      'date' : self.file_props.date
