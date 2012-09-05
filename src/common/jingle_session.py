@@ -86,6 +86,7 @@ class JingleSession(object):
         self.weinitiate = weinitiate
         # Are we requesting or offering a file?
         self.werequest = werequest
+        self.request = False
         # what state is session in? (one from JingleStates)
         self.state = JingleStates.ended
         if not sid:
@@ -516,17 +517,14 @@ class JingleSession(object):
             request = \
                  jingle.getTag('content').getTag('description').getTag('request')
             if request:
+                self.request = True
                 h = request.getTag('file').getTag('hash')
                 n = request.getTag('file').getTag('name')
                 if h:
                     file_info = self.connection.get_files_info(hash_=h)
                 elif n:
                     file_info = self.connection.get_files_info(name=n)
-                if file_info:
-                    file_props = FilesProp.getFileProp(self.connection.name,
-                                                       self.sid)
-                    file_props.file_name = file_info['file-name']
-                else:
+                if not file_info:
                     log.warning('The peer ' + self.peerjid + \
                                 ' is requesting a ' + \
                                 'file that we dont have')

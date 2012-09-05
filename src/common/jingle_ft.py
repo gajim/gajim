@@ -47,6 +47,7 @@ STATE_TRANSFERING = 6
 
 
 class JingleFileTransfer(JingleContent):
+
     def __init__(self, session, transport=None, file_props=None,
     use_security=False):
         JingleContent.__init__(self, session, transport)
@@ -117,6 +118,10 @@ class JingleFileTransfer(JingleContent):
         gajim.nec.push_incoming_event(FileRequestReceivedEvent(None,
             conn=self.session.connection, stanza=stanza, jingle_content=content,
             FT_content=self))
+        if self.session.request:
+            # accept the request
+            self.session.approve_content(self.media, self.name)
+            self.session.accept_session()
 
     def __on_session_initiate_sent(self, stanza, content, error, action):
         pass
