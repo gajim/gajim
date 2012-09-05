@@ -103,8 +103,8 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
                     'or remove it (all history will be lost).') % \
                     common.logger.LOG_DB_PATH
                 gajim.nec.push_incoming_event(InformationEvent(None,
-                    conn=self.conn, level='error', pri_txt=pritxt,
-                    sec_txt=sectxt))
+                    conn=self.conn, level='error', pri_txt=pritext,
+                    sec_txt=sectext))
 
         treat_as = gajim.config.get('treat_incoming_messages')
         if treat_as:
