@@ -91,7 +91,7 @@ langs = {_('English'): 'en', _('Belarusian'): 'be', _('Bulgarian'): 'bg',
         _('Dutch'): 'nl', _('Norwegian'): 'no', _('Polish'): 'pl',
         _('Portuguese'): 'pt', _('Brazilian Portuguese'): 'pt_BR',
         _('Russian'): 'ru', _('Serbian'): 'sr', _('Slovak'): 'sk',
-        _('Swedish'): 'sv', _('Chinese (Ch)'): 'zh_CN'}
+        _('Swedish'): 'sv', _('Chinese (Ch)'): 'zh_CN', _('Hebrew'): 'he'}
 
 if gajim.config.get('use_speller') and HAS_GTK_SPELL:
     # loop removing non-existent dictionaries
