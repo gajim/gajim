@@ -254,10 +254,20 @@ class FileTransfersWindow:
             contact = gajim.contacts.get_contact_with_highest_priority(account,
                                                                        jid)
             fjid = contact.get_full_jid()
-            sid = gajim.connections[account].start_file_transfer(fjid,
-                                                            file_props,
+            sid = helpers.get_random_string_16()
+            new_file_props = FilesProp.getNewFileProp(account, sid)
+            new_file_props.file_name = file_props.file_name
+            new_file_props.name = file_props.name
+            new_file_props.desc = file_props.desc
+            new_file_props.size = file_props.size
+            new_file_props.date = file_props.date
+            new_file_props.hash_ = file_props.hash_
+            new_file_props.type_ = 'r'
+            tsid = gajim.connections[account].start_file_transfer(fjid,
+                                                            new_file_props,
                                                                 True)
-            file_props.transport_sid = sid
+            new_file_props.transport_sid = tsid
+            self.add_transfer(account, contact, new_file_props)
 
         if file_props.type_ == 'r':
             file_name = os.path.basename(file_props.file_name)

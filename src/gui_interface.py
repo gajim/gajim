@@ -912,13 +912,15 @@ class Interface:
                 account=account, keyID=keyID)
             gajim.contacts.add_contact(account, contact)
             self.roster.add_contact(obj.jid, account)
+        contact = gajim.contacts.get_first_contact_from_jid(account, obj.jid)
         if obj.file_props.session_type == 'jingle':
             request = obj.stanza.getTag('jingle').getTag('content')\
                         .getTag('description').getTag('request')
             if request:
                 # If we get a request instead
+                ft_win = self.instances['file_transfers']
+                ft_win.add_transfer(account, contact, obj.file_props)
                 return
-        contact = gajim.contacts.get_first_contact_from_jid(account, obj.jid)
         if helpers.allow_popup_window(account):
             self.instances['file_transfers'].show_file_request(account, contact,
                 obj.file_props)
