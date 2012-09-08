@@ -250,6 +250,8 @@ class FileTransfersWindow:
     def show_hash_error(self, jid, file_props, account):
 
         def on_yes(dummy):
+            # Delete old file
+            os.remove(file_props.file_name)
             # Request the file to the sender
             contact = gajim.contacts.get_contact_with_highest_priority(account,
                                                                        jid)
