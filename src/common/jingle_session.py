@@ -366,7 +366,6 @@ class JingleSession(object):
                 error_name = child.getName()
         self.__dispatch_error(error_name, text, error.getAttr('type'))
 
-        # FIXME: Not sure when we would want to do that...
     def transport_replace(self):
         transport = JingleTransportIBB()
         # For debug only, delete this and replace for a function
@@ -399,6 +398,7 @@ class JingleSession(object):
                     self.contents[(creator,name)].state = STATE_TRANSPORT_REPLACE
                     self.__ack(stanza, jingle, error, action)
                     self.__session_accept()
+                    self.contents[(creator,name)].start_IBB_transfer()
                 else:
                     stanza, jingle = self.__make_jingle('transport-reject')
                     content = jingle.setTag('content', attrs={'creator': creator,

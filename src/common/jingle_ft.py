@@ -69,13 +69,15 @@ class JingleFileTransfer(JingleContent):
         self.callbacks['iq-result'] += [self.__on_iq_result]
         self.use_security = use_security
         self.file_props = file_props
-        if file_props is None:
-            self.weinitiate = False
-        else:
-            self.weinitiate = True
+        self.weinitiate = self.session.weinitiate
+        self.werequest = self.session.werequest 
         if self.file_props is not None:
-            self.file_props.sender = session.ourjid
-            self.file_props.receiver = session.peerjid
+            if self.session.werequest:
+                self.file_props.sender = self.session.peerjid
+                self.file_props.receiver = self.session.ourjid
+            else:
+                self.file_props.sender = self.session.ourjid
+                self.file_props.receiver = self.session.peerjid
             self.file_props.session_type = 'jingle'
             self.file_props.sid = session.sid
             self.file_props.transfered_size = []
@@ -172,6 +174,9 @@ class JingleFileTransfer(JingleContent):
             response = stanza.buildReply('result')
             response.delChild(response.getQuery())
             con.connection.send(response)
+            # If we are requesting we don't have the file
+            if self.session.werequest:
+                raise xmpp.NodeProcessed
             # We send the file
             self.__state_changed(STATE_TRANSFERING)
             raise xmpp.NodeProcessed
@@ -358,6 +363,10 @@ class JingleFileTransfer(JingleContent):
             return our_pr > peer_pr
         else:
             return self.weinitiate
+
+    def start_IBB_transfer(self):
+        if self.file_props.type_ == 's':
+            self.__state_changed(STATE_TRANSFERING)
 
 
 def get_content(desc):
