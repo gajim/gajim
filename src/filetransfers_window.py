@@ -249,13 +249,17 @@ class FileTransfersWindow:
 
     def show_hash_error(self, jid, file_props, account):
 
-        def on_yes(dummy):
+        def on_yes(dummy, fjid, file_props, account):
             # Delete old file
             os.remove(file_props.file_name)
+            jid, resource = gajim.get_room_and_nick_from_fjid(fjid)
+            if resource:
+                contact = gajim.contacts.get_contact(account, jid, resource)
+            else:
+                contact = gajim.contacts.get_contact_with_highest_priority(
+                    account, jid)
+                fjid = contact.get_full_jid()
             # Request the file to the sender
-            contact = gajim.contacts.get_contact_with_highest_priority(account,
-                                                                       jid)
-            fjid = contact.get_full_jid()
             sid = helpers.get_random_string_16()
             new_file_props = FilesProp.getNewFileProp(account, sid)
             new_file_props.file_name = file_props.file_name
@@ -278,8 +282,8 @@ class FileTransfersWindow:
         dialogs.YesNoDialog(('File transfer error'),
             _('The file %(file)s has been fully received, but it seems to be '
             'wrongly received.\nDo you want to reload it?') % \
-            {'file': file_name}, on_response_yes=on_yes,
-            type_=gtk.MESSAGE_ERROR)
+            {'file': file_name}, on_response_yes=(on_yes, jid, file_props,
+            account), type_=gtk.MESSAGE_ERROR)
 
     def show_file_send_request(self, account, contact):
         win = gtk.ScrolledWindow()
