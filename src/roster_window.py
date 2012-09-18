@@ -4409,6 +4409,9 @@ class RosterWindow:
                 self.disable_rfilter()
 
     def enable_rfilter(self, search_string):
+        self.rfilter_entry.set_visible(True)
+        self.rfilter_entry.set_editable(True)
+        self.rfilter_entry.grab_focus()
         if self.rfilter_enabled:
             self.rfilter_entry.set_text(self.rfilter_entry.get_text() + \
                 search_string)
@@ -4416,9 +4419,6 @@ class RosterWindow:
             self.rfilter_enabled = True
             self.rfilter_entry.set_text(search_string)
             self.tree.expand_all()
-        self.rfilter_entry.set_visible(True)
-        self.rfilter_entry.set_editable(True)
-        self.rfilter_entry.grab_focus()
         self.rfilter_entry.set_position(-1)
 
     def disable_rfilter(self):
