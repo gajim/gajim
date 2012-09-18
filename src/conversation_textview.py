@@ -50,7 +50,7 @@ from common.fuzzyclock import FuzzyClock
 
 from htmltextview import HtmlTextView
 from common.exceptions import GajimGeneralException
-from common.exceptions import LatexError
+from encodings.punycode import punycode_encode as puny_encode
 
 NOT_SHOWN = 0
 ALREADY_RECEIVED = 1
@@ -1191,6 +1191,11 @@ class ConversationTextview(gobject.GObject):
             # convert all names to TextTag
             all_tags = [(ttt.lookup(t) if isinstance(t, str) else t) for t in all_tags]
             buffer_.insert_with_tags(end_iter, special_text, *all_tags)
+            if 'url' in tags:
+                puny_text = puny_encode(special_text)
+                if not puny_text.endswith('-'):
+                    end_iter = buffer_.get_end_iter()
+                    buffer_.insert(end_iter, " (%s)" % puny_text)
 
     def print_empty_line(self):
         buffer_ = self.tv.get_buffer()
