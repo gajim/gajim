@@ -197,8 +197,8 @@ class ConnectionJingle(object):
     def get_files_info(self, hash_=None, name=None):
         if hash_:
             for f in self.files: # DEBUG
-                if f['hash'] == '1294809248109223':
-                #if f['hash'] == hash_:
+                #if f['hash'] == '1294809248109223':
+                if f['hash'] == hash_:
                     return f
         elif name:
             for f in self.files:
