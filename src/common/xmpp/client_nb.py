@@ -85,6 +85,7 @@ class NonBlockingClient:
 
         log.info('Disconnecting NBClient: %s' % message)
 
+        sasl_failed = False
         if 'NonBlockingRoster' in self.__dict__:
             self.NonBlockingRoster.PlugOut()
         if 'NonBlockingBind' in self.__dict__:
@@ -92,7 +93,12 @@ class NonBlockingClient:
         if 'NonBlockingNonSASL' in self.__dict__:
             self.NonBlockingNonSASL.PlugOut()
         if 'SASL' in self.__dict__:
-            self.SASL.PlugOut()
+            if self.SASL.startsasl == 'failure-in-process':
+                sasl_failed = True
+                self.SASL.startsasl = 'failure'
+                self._on_start_sasl()
+            else:
+                self.SASL.PlugOut()
         if 'NonBlockingTCP' in self.__dict__:
             self.NonBlockingTCP.PlugOut()
         if 'NonBlockingHTTP' in self.__dict__:
@@ -111,7 +117,9 @@ class NonBlockingClient:
         self.disconnecting = True
 
         log.debug('Client disconnected..')
-        if connected == '':
+        # Don't call any callback when it's a SASL failure.
+        # SASL handler is already called
+        if connected == '' and not sasl_failed:
             # if we're disconnecting before connection to XMPP sever is opened,
             # we don't call disconnect handlers but on_connect_failure callback
             if self.proxy:
@@ -121,7 +129,7 @@ class NonBlockingClient:
             else:
                 log.debug('calling on_connect_failure cb')
                 self.on_connect_failure()
-        else:
+        elif not sasl_failed:
             # we are connected to XMPP server
             if not stream_started:
                 # if error occur before XML stream was opened, e.g. no response on
