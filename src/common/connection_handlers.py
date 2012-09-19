@@ -965,7 +965,7 @@ class ConnectionHandlersBase:
             if sess.enable_encryption:
                 sess.terminate_e2e()
 
-    def decrypt_thread(encmsg, keyID, obj):
+    def decrypt_thread(self, encmsg, keyID, obj):
         decmsg = self.gpg.decrypt(encmsg, keyID)
         decmsg = self.connection.Dispatcher.replace_non_character(decmsg)
         # \x00 chars are not allowed in C (so in GTK)
