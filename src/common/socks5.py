@@ -864,12 +864,6 @@ class Socks5:
         """
         Get sha of sid + Initiator jid + Target jid
         """
-
-        if self.file_props.is_a_proxy:
-            self.file_props.is_a_proxy = None # Is this necesary?
-            return hashlib.sha1('%s%s%s' % (self.sid,
-                self.file_props.proxy_sender,
-                self.file_props.proxy_receiver)).hexdigest()
         return hashlib.sha1('%s%s%s' % (self.sid, self.initiator,
             self.target)).hexdigest()
 

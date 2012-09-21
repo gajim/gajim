@@ -142,7 +142,6 @@ class JingleFileTransfer(JingleContent):
                     }
         self.session.connection.set_files_info(file_info)
 
-
     def _calcHash(self):
         # Caculates the hash and returns a xep-300 hash stanza
         if self.file_props.algo == None:
@@ -222,7 +221,12 @@ class JingleFileTransfer(JingleContent):
 
     def __on_transport_info(self, stanza, content, error, action):
         log.info("__on_transport_info")
-        if content.getTag('transport').getTag('candidate-error'):
+        candError = content.getTag('transport').getTag('candidate-error')
+        candUsed  = content.getTag('transport').getTag('candidate-used')
+        if (candError or candUsed) and \
+                self.state >= STATE_CAND_SENT_AND_RECEIVED:
+            raise xmpp.OutOfOrder
+        if candError:
             if not gajim.socks5queue.listener.connections:
                 gajim.socks5queue.listener.disconnect()
             self.nominated_cand['peer-cand'] = False
@@ -242,9 +246,8 @@ class JingleFileTransfer(JingleContent):
                 args = {'candError' : True}
                 self.__state_changed(STATE_CAND_RECEIVED, args)
             return
-        if content.getTag('transport').getTag('candidate-used'):
-            streamhost_cid = content.getTag('transport').getTag(
-                'candidate-used').getAttr('cid')
+        if candUsed:
+            streamhost_cid = candUsed.getAttr('cid')
             streamhost_used = None
             for cand in self.transport.candidates:
                 if cand['candidate_id'] == streamhost_cid:
@@ -253,8 +256,6 @@ class JingleFileTransfer(JingleContent):
             if streamhost_used == None or streamhost_used['type'] == 'proxy':
                 if not gajim.socks5queue.listener.connections:
                     gajim.socks5queue.listener.disconnect()
-                    pass
-
         if content.getTag('transport').getTag('activated'):
             self.state = STATE_TRANSFERING
             jid = gajim.get_jid_without_resource(self.session.ourjid)
