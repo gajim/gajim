@@ -134,11 +134,13 @@ class JingleFileTransfer(JingleContent):
             payload=[self._calcHash()])])
         checksum.setNamespace(xmpp.NS_JINGLE_FILE_TRANSFER)
         self.session.__session_info(checksum )
+        pjid = gajim.get_jid_without_resource(self.session.peerjid)
         file_info = {'name' : self.file_props.name,
                      'file-name' : self.file_props.file_name,
                      'hash' : self.file_props.hash_,
                      'size' : self.file_props.size,
-                     'date' : self.file_props.date
+                     'date' : self.file_props.date,
+                     'peerjid' : pjid
                     }
         self.session.connection.set_files_info(file_info)
 

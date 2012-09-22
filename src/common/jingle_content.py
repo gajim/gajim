@@ -15,6 +15,7 @@
 Handles Jingle contents (XEP 0166)
 """
 
+import gajim
 import xmpp
 from jingle_transport import JingleTransportIBB
 
@@ -194,11 +195,13 @@ class JingleContent(object):
                                         self.file_props.hash_:
                 h  = self._calcHash()
                 file_tag.addChild(node=h)
+                pjid = gajim.get_jid_without_resource(self.session.peerjid)
                 file_info = {'name' : self.file_props.name,
                              'file-name' : self.file_props.file_name,
                              'hash' : self.file_props.hash_,
                              'size' : self.file_props.size,
-                             'date' : self.file_props.date
+                             'date' : self.file_props.date,
+                             'peerjid' : pjid
                             }
                 self.session.connection.set_files_info(file_info)
         desc = file_tag.setTag('desc')

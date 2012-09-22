@@ -513,7 +513,8 @@ class JingleSession(object):
                     self._session_terminate(reason)
                     raise xmpp.NodeProcessed
         else:
-            # Stop if we don't have the requested file
+            # Stop if we don't have the requested file or the peer is not
+            # allowed to request the file
             request = \
                  jingle.getTag('content').getTag('description').getTag('request')
             if request:
@@ -524,10 +525,12 @@ class JingleSession(object):
                     file_info = self.connection.get_files_info(hash_=h)
                 elif n:
                     file_info = self.connection.get_files_info(name=n)
-                if not file_info:
-                    log.warning('The peer ' + self.peerjid + \
+                pjid = gajim.get_jid_without_resource(self.peerjid)
+                if not file_info or file_info['peerjid'] != pjid:
+                    log.warning('The peer ' + pjid + \
                                 ' is requesting a ' + \
-                                'file that we dont have')
+                                'file that we dont have or' + \
+                                'it is not allowed to request')
                     self.decline_session()
                     raise xmpp.NodeProcessed
         # If there's no content we understand...
