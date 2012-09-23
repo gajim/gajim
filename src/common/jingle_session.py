@@ -522,9 +522,9 @@ class JingleSession(object):
                 h = request.getTag('file').getTag('hash')
                 n = request.getTag('file').getTag('name')
                 if h:
-                    file_info = self.connection.get_files_info(hash_=h)
+                    file_info = self.connection.get_file_info(hash_=h)
                 elif n:
-                    file_info = self.connection.get_files_info(name=n)
+                    file_info = self.connection.get_file_info(name=n)
                 pjid = gajim.get_jid_without_resource(self.peerjid)
                 if not file_info or file_info['peerjid'] != pjid:
                     log.warning('The peer ' + pjid + \

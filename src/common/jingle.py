@@ -189,12 +189,12 @@ class ConnectionJingle(object):
         else:
             return sessions
 
-    def set_files_info(self, file_):
+    def set_file_info(self, file_):
         # Saves information about the files we have transfered in case they need
         # to be requested again.
         self.files.append(file_)
 
-    def get_files_info(self, hash_=None, name=None):
+    def get_file_info(self, hash_=None, name=None):
         if hash_:
             for f in self.files: # DEBUG
                 #if f['hash'] == '1294809248109223':
@@ -217,5 +217,5 @@ class ConnectionJingle(object):
             for session in self._sessions.values():
                 if session.peerjid == jid and session.get_content(media):
                     return session
-
         return None
+

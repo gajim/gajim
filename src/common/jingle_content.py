@@ -203,7 +203,7 @@ class JingleContent(object):
                              'date' : self.file_props.date,
                              'peerjid' : pjid
                             }
-                self.session.connection.set_files_info(file_info)
+                self.session.connection.set_file_info(file_info)
         desc = file_tag.setTag('desc')
         if self.file_props.desc:
             desc.setData(self.file_props.desc)

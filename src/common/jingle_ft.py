@@ -142,7 +142,7 @@ class JingleFileTransfer(JingleContent):
                      'date' : self.file_props.date,
                      'peerjid' : pjid
                     }
-        self.session.connection.set_files_info(file_info)
+        self.session.connection.set_file_info(file_info)
 
     def _calcHash(self):
         # Caculates the hash and returns a xep-300 hash stanza
