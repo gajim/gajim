@@ -129,8 +129,8 @@ class StandardCommonCommands(CommandContainer):
     @doc(_("""
     Set the current status
 
-    Status can be given as one of the following values: online, away,
-    chat, xa, dnd.
+    Status can be given as one of the following values:
+    online, away, chat, xa, dnd.
     """))
     def status(self, status, message):
         if status not in ('online', 'away', 'chat', 'xa', 'dnd'):
