@@ -370,7 +370,7 @@ class LegacyContactsAPI:
                 self.is_big_brother(account, jid, accounts):
                     # count metacontacts only once
                     continue
-                contact = self.get_contact_with_highest_priority(account, jid)
+                contact = self._accounts[account].contacts._contacts[jid][0]
                 if _('Not in roster') in contact.groups:
                     continue
                 in_groups = False
