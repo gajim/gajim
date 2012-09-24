@@ -1136,16 +1136,18 @@ class RosterWindow:
         self.draw_contact(parent_jid, parent_account)
         return False
 
-    def draw_contact(self, jid, account, selected=False, focus=False):
+    def draw_contact(self, jid, account, selected=False, focus=False, contact_instances=None, contact=None):
         """
         Draw the correct state image, name BUT not avatar
         """
         # focus is about if the roster window has toplevel-focus or not
         # FIXME: We really need a custom cell_renderer
 
-        contact_instances = gajim.contacts.get_contacts(account, jid)
-        contact = gajim.contacts.get_highest_prio_contact_from_contacts(
-            contact_instances)
+        if not contact_instances:
+            contact_instances = gajim.contacts.get_contacts(account, jid)
+        if not contact:
+            contact = gajim.contacts.get_highest_prio_contact_from_contacts(
+                contact_instances)
         if not contact:
             return False
 
@@ -1308,11 +1310,11 @@ class RosterWindow:
         else:
             return False
 
-    def draw_all_pep_types(self, jid, account):
+    def draw_all_pep_types(self, jid, account, contact=None):
         for pep_type in self._pep_type_to_model_column:
-            self.draw_pep(jid, account, pep_type)
+            self.draw_pep(jid, account, pep_type, contact=contact)
 
-    def draw_pep(self, jid, account, pep_type):
+    def draw_pep(self, jid, account, pep_type, contact=None):
         if pep_type not in self._pep_type_to_model_column:
             return
         if not self._is_pep_shown_in_roster(pep_type):
@@ -1322,7 +1324,8 @@ class RosterWindow:
         iters = self._get_contact_iter(jid, account, model=self.model)
         if not iters:
             return
-        contact = gajim.contacts.get_contact(account, jid)
+        if not contact:
+            contact = gajim.contacts.get_contact(account, jid)
         if pep_type in contact.pep:
             pixbuf = contact.pep[pep_type].asPixbufIcon()
         else:
@@ -1345,8 +1348,12 @@ class RosterWindow:
         return False
 
     def draw_completely(self, jid, account):
-        self.draw_contact(jid, account)
-        self.draw_all_pep_types(jid, account)
+        contact_instances = gajim.contacts.get_contacts(account, jid)
+        contact = gajim.contacts.get_highest_prio_contact_from_contacts(
+            contact_instances)
+        self.draw_contact(jid, account, contact_instances=contact_instances,
+            contact=contact)
+        self.draw_all_pep_types(jid, account, contact=contact)
         self.draw_avatar(jid, account)
 
     def adjust_and_draw_contact_context(self, jid, account):
