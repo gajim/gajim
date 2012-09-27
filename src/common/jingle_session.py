@@ -521,15 +521,12 @@ class JingleSession(object):
                 self.request = True
                 h = request.getTag('file').getTag('hash')
                 n = request.getTag('file').getTag('name')
-                if h:
-                    file_info = self.connection.get_file_info(hash_=h)
-                elif n:
-                    file_info = self.connection.get_file_info(name=n)
                 pjid = gajim.get_jid_without_resource(self.peerjid)
-                if not file_info or file_info['peerjid'] != pjid:
+                file_info = self.connection.get_file_info(pjid, h, n)
+                if not file_info:
                     log.warning('The peer ' + pjid + \
                                 ' is requesting a ' + \
-                                'file that we dont have or' + \
+                                'file that we dont have or ' + \
                                 'it is not allowed to request')
                     self.decline_session()
                     raise xmpp.NodeProcessed

@@ -194,15 +194,15 @@ class ConnectionJingle(object):
         # to be requested again.
         self.files.append(file_)
 
-    def get_file_info(self, hash_=None, name=None):
+    def get_file_info(self, peerjid, hash_=None, name=None):
         if hash_:
             for f in self.files: # DEBUG
                 #if f['hash'] == '1294809248109223':
-                if f['hash'] == hash_:
+                if f['hash'] == hash_ and f['peerjid'] == peerjid:
                     return f
         elif name:
             for f in self.files:
-                if f['name'] == name:
+                if f['name'] == name and f['peerjid'] == peerjid:
                     return f
 
     def get_jingle_session(self, jid, sid=None, media=None):

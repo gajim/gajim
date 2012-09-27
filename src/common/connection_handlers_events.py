@@ -2002,10 +2002,8 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                 file_tag = desc.getTag('request').getTag('file')
                 h = file_tag.getTag('hash')
                 n = file_tag.getTag('name')
-                if h:
-                    file_info = self.conn.get_file_info(hash_=h)
-                elif n:
-                    file_info = self.conn.get_file_info(name=n)
+                pjid = gajim.get_jid_without_resource(self.fjid)
+                file_info = self.conn.get_file_info(pjid, hash_=h, name=n)
                 self.file_props.file_name = file_info['file-name']
                 self.file_props.sender = self.conn._ft_get_our_jid()
                 self.file_props.receiver = self.fjid
