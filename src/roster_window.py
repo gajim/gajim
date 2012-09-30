@@ -3566,7 +3566,7 @@ class RosterWindow:
                             self.send_status(account, current_show, message)
                             self.send_pep(account, pep_dict)
                 dialogs.ChangeStatusMessageDialog(on_response, status)
-                return
+                return True
 
     def on_roster_treeview_button_press_event(self, widget, event):
         # hide tooltip, no matter the button is pressed
