@@ -110,7 +110,7 @@ class MessageWindow(object):
         for key in keys:
             keyval, mod = gtk.accelerator_parse(key)
             accel_group.connect_group(keyval, mod, gtk.ACCEL_VISIBLE,
-                    self.accel_group_func)
+                self.accel_group_func)
         self.window.add_accel_group(accel_group)
 
         # gtk+ doesn't make use of the motion notify on gtkwindow by default
@@ -118,10 +118,10 @@ class MessageWindow(object):
         self.window.add_events(gtk.gdk.POINTER_MOTION_MASK)
 
         id_ = self.notebook.connect('switch-page',
-                self._on_notebook_switch_page)
+            self._on_notebook_switch_page)
         self.handlers[id_] = self.notebook
         id_ = self.notebook.connect('key-press-event',
-                self._on_notebook_key_press)
+            self._on_notebook_key_press)
         self.handlers[id_] = self.notebook
 
         # Tab customizations
@@ -352,6 +352,7 @@ class MessageWindow(object):
         if modifier & gtk.gdk.CONTROL_MASK:
             if keyval == gtk.keysyms.h: # CTRL + h
                 control._on_history_menuitem_activate()
+                return True
             elif control.type_id == message_control.TYPE_CHAT and \
             keyval == gtk.keysyms.f: # CTRL + f
                 # CTRL + f moves cursor one char forward when user uses Emacs
@@ -359,28 +360,36 @@ class MessageWindow(object):
                 if not gtk.settings_get_default().get_property(
                 'gtk-key-theme-name') == 'Emacs':
                     control._on_send_file_menuitem_activate(None)
+                    return True
             elif control.type_id == message_control.TYPE_CHAT and \
             keyval == gtk.keysyms.g: # CTRL + g
                 control._on_convert_to_gc_menuitem_activate(None)
+                return True
             elif control.type_id in (message_control.TYPE_CHAT,
             message_control.TYPE_PM) and keyval == gtk.keysyms.i: # CTRL + i
                 control._on_contact_information_menuitem_activate(None)
+                return True
             elif keyval == gtk.keysyms.l or keyval == gtk.keysyms.L: # CTRL + l|L
                 control.conv_textview.clear()
+                return True
             elif keyval == gtk.keysyms.u: # CTRL + u: emacs style clear line
                 control.clear(control.msg_textview)
+                return True
             elif control.type_id == message_control.TYPE_GC and \
             keyval == gtk.keysyms.b: # CTRL + b
                 control._on_bookmark_room_menuitem_activate(None)
+                return True
             # Tab switch bindings
             elif keyval == gtk.keysyms.F4: # CTRL + F4
                 self.remove_tab(control, self.CLOSE_CTRL_KEY)
+                return True
             elif keyval == gtk.keysyms.w: # CTRL + w
                 # CTRL + w removes latest word before sursor when User uses emacs
                 # theme
                 if not gtk.settings_get_default().get_property(
                 'gtk-key-theme-name') == 'Emacs':
                     self.remove_tab(control, self.CLOSE_CTRL_KEY)
+                    return True
             elif keyval in (gtk.keysyms.Page_Up, gtk.keysyms.Page_Down):
                 # CTRL + PageUp | PageDown
                 # Create event and send it to notebook
@@ -390,12 +399,14 @@ class MessageWindow(object):
                 event.state = gtk.gdk.CONTROL_MASK
                 event.keyval = int(keyval)
                 self.notebook.emit('key_press_event', event)
+                return True
 
             if modifier & gtk.gdk.SHIFT_MASK:
                 # CTRL + SHIFT
                 if control.type_id == message_control.TYPE_GC and \
                 keyval == gtk.keysyms.n: # CTRL + SHIFT + n
                     control._on_change_nick_menuitem_activate(None)
+                    return True
         # MOD1 (ALT) mask
         elif modifier & gtk.gdk.MOD1_MASK:
             # Tab switch bindings
@@ -404,26 +415,34 @@ class MessageWindow(object):
                 if new >= self.notebook.get_n_pages():
                     new = 0
                 self.notebook.set_current_page(new)
+                return True
             elif keyval == gtk.keysyms.Left: # ALT + LEFT
                 new = self.notebook.get_current_page() - 1
                 if new < 0:
                     new = self.notebook.get_n_pages() - 1
                 self.notebook.set_current_page(new)
+                return True
             elif chr(keyval) in st: # ALT + 1,2,3..
                 self.notebook.set_current_page(st.index(chr(keyval)))
+                return True
             elif keyval == gtk.keysyms.c: # ALT + C toggles chat buttons
                 control.chat_buttons_set_visible(not control.hide_chat_buttons)
+                return True
             elif keyval == gtk.keysyms.m: # ALT + M show emoticons menu
                 control.show_emoticons_menu()
+                return True
             elif keyval == gtk.keysyms.d: # ALT + D show actions menu
                 control.on_actions_button_clicked(control.actions_button)
+                return True
             elif control.type_id == message_control.TYPE_GC and \
             keyval == gtk.keysyms.t: # ALT + t
                 control._on_change_subject_menuitem_activate(None)
+                return True
         # Close tab bindings
         elif keyval == gtk.keysyms.Escape and \
-                        gajim.config.get('escape_key_closes'): # Escape
+        gajim.config.get('escape_key_closes'): # Escape
             self.remove_tab(control, self.CLOSE_ESC)
+            return True
 
     def _on_close_button_clicked(self, button, control):
         """
