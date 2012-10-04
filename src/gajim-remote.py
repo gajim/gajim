@@ -544,30 +544,42 @@ class GajimRemote:
         if not '?' in uri:
             self.command = sys.argv[1] = 'open_chat'
             return
-        if 'body=' in uri:
-            # Open chat window and paste the text in the input message dialog
-            self.command = sys.argv[1] = 'open_chat'
-            message = uri.split('body=')
-            message = message[1].split(';')[0]
-            try:
-                message = urllib.unquote(message)
-            except UnicodeDecodeError:
-                pass
-            sys.argv[2] = uri.split('?')[0]
-            if len(sys.argv) == 4:
-                # jid in the sys.argv
-                sys.argv.append(message)
-            else:
-                sys.argv.append('')
-                sys.argv.append(message)
-                sys.argv[3] = ''
-                sys.argv[4] = message
-            return
-        (jid, action) = uri.split('?', 1)
+        jid, args = uri.split('?', 1)
         try:
             jid = urllib.unquote(jid)
         except UnicodeDecodeError:
             pass
+        args = args.split(';')
+        action = None
+        options = {}
+        if args:
+            action = args[0]
+            for arg in args[1:]:
+                opt = arg.split('=', 1)
+                if len(opt) != 2:
+                    continue
+                options[opt[0]] = opt[1]
+
+        if action == 'message':
+            self.command = sys.argv[1] = 'open_chat'
+            sys.argv[2] = jid
+            if 'body' in options:
+                # Open chat window and paste the text in the input message
+                # dialog
+                message = options['body']
+                try:
+                    message = urllib.unquote(message)
+                except UnicodeDecodeError:
+                    pass
+                if len(sys.argv) == 4:
+                    # jid in the sys.argv
+                    sys.argv.append(message)
+                else:
+                    sys.argv.append('')
+                    sys.argv.append(message)
+                    sys.argv[3] = ''
+                    sys.argv[4] = message
+            return
         sys.argv[2] = jid
         if action == 'join':
             self.command = sys.argv[1] = 'join_room'
@@ -576,7 +588,7 @@ class GajimRemote:
             sys.argv.append(sys.argv[3])
             sys.argv[3] = ''
             return
-        if action.startswith('roster'):
+        if action == 'roster':
             # Add contact to roster
             self.command = sys.argv[1] = 'add_contact'
             return
