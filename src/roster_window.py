@@ -5019,7 +5019,10 @@ class RosterWindow:
         """
         When a row is added, set properties for icon renderer
         """
-        type_ = model[titer][C_TYPE]
+        try:
+            type_ = model[titer][C_TYPE]
+        except TypeError:
+            return
         if type_ == 'account':
             self._set_account_row_background_color(renderer)
             renderer.set_property('xalign', 0)
@@ -5049,8 +5052,11 @@ class RosterWindow:
         """
         When a row is added, set properties for name renderer
         """
+        try:
+            type_ = model[titer][C_TYPE]
+        except TypeError:
+            return
         theme = gajim.config.get('roster_theme')
-        type_ = model[titer][C_TYPE]
         if type_ == 'account':
             color = gajim.config.get_per('themes', theme, 'accounttextcolor')
             if color:
@@ -5112,7 +5118,10 @@ class RosterWindow:
         """
         When a row is added, draw the respective pep icon
         """
-        type_ = model[titer][C_TYPE]
+        try:
+            type_ = model[titer][C_TYPE]
+        except TypeError:
+            return
 
         # allocate space for the icon only if needed
         if not model[titer][data]:
@@ -5136,7 +5145,11 @@ class RosterWindow:
         """
         When a row is added, set properties for avatar renderer
         """
-        type_ = model[titer][C_TYPE]
+        try:
+            type_ = model[titer][C_TYPE]
+        except TypeError:
+            return
+
         if type_ in ('group', 'account'):
             renderer.set_property('visible', False)
             return
@@ -5168,7 +5181,11 @@ class RosterWindow:
         """
         When a row is added, set properties for padlock renderer
         """
-        type_ = model[titer][C_TYPE]
+        try:
+            type_ = model[titer][C_TYPE]
+        except TypeError:
+            return
+
         # allocate space for the icon only if needed
         if type_ == 'account' and model[titer][C_PADLOCK_PIXBUF]:
             renderer.set_property('visible', True)
