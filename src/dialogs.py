@@ -2925,7 +2925,7 @@ class SingleMessageWindow:
         self.conversation_scrolledwindow = self.xml.get_object(
                 'conversation_scrolledwindow')
         self.conversation_textview = conversation_textview.ConversationTextview(
-                account)
+            account, used_in_history_window=True)
         self.conversation_textview.tv.show()
         self.conversation_tv_buffer = self.conversation_textview.tv.get_buffer()
         self.xml.get_object('conversation_scrolledwindow').add(
