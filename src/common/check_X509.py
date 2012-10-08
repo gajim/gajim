@@ -133,7 +133,12 @@ try:
         for i in range(0, cnt):
             ext = cert.get_extension(i)
             if ext.get_short_name() == 'subjectAltName':
-                r = _parse_asn1(ext.get_data())
+                try:
+                    r = _parse_asn1(ext.get_data())
+                except:
+                    log.error('Wrong data in certificate: subjectAltName=%s' % \
+                        ext.get_data())
+                    continue
                 if 'otherName' in r:
                     if oid_xmppaddr in r['otherName']:
                         for host in r['otherName'][oid_xmppaddr]:
