@@ -2001,9 +2001,12 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             else:
                 file_tag = desc.getTag('request').getTag('file')
                 h = file_tag.getTag('hash')
+                h = h.getData() if h else None
                 n = file_tag.getTag('name')
+                n = n.getData() if n else None
                 pjid = gajim.get_jid_without_resource(self.fjid)
-                file_info = self.conn.get_file_info(pjid, hash_=h, name=n)
+                file_info = self.conn.get_file_info(pjid, hash_=h,
+                                                name=n,account=self.conn.name)
                 self.file_props.file_name = file_info['file-name']
                 self.file_props.sender = self.conn._ft_get_our_jid()
                 self.file_props.receiver = self.fjid

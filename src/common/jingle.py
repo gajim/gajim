@@ -161,7 +161,6 @@ class ConnectionJingle(object):
         return c.transport.sid
 
     def __hash_support(self, contact):
-
         if contact.supports(xmpp.NS_HASHES):
             if contact.supports(xmpp.NS_HASHES_MD5):
                 return 'md5'
@@ -171,7 +170,6 @@ class ConnectionJingle(object):
                 return 'sha-256'
             elif contact.supports(xmpp.NS_HASHES_SHA512):
                 return 'sha-512'
-
         return None
 
     def iter_jingle_sessions(self, jid, sid=None, media=None):
@@ -194,7 +192,7 @@ class ConnectionJingle(object):
         # to be requested again.
         self.files.append(file_)
 
-    def get_file_info(self, peerjid, hash_=None, name=None):
+    def get_file_info(self, peerjid, hash_=None, name=None, account=None):
         if hash_:
             for f in self.files: # DEBUG
                 #if f['hash'] == '1294809248109223':
