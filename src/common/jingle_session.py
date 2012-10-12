@@ -105,26 +105,27 @@ class JingleSession(object):
         # use .prepend() to add new callbacks, especially when you're going
         # to send error instead of ack
         self.callbacks = {
-                'content-accept':       [self.__on_content_accept, 
-                                         self.__broadcast, self.__ack],
-                'content-add':          [self.__on_content_add, self.__broadcast,
-                                         self.__ack], #TODO
+                'content-accept':       [self.__ack, self.__on_content_accept, 
+                                         self.__broadcast],
+                'content-add':          [self.__ack, 
+                                        self.__on_content_add, self.__broadcast
+                                        ], #TODO
                 'content-modify':       [self.__ack], #TODO
                 'content-reject':       [self.__ack, self.__on_content_remove],
                 'content-remove':       [self.__ack, self.__on_content_remove],
-                'description-info':     [self.__broadcast, self.__ack], #TODO
+                'description-info':     [self.__ack, self.__broadcast], #TODO
                 'security-info':        [self.__ack], #TODO
-                'session-accept':       [self.__on_session_accept,
+                'session-accept':       [self.__ack, self.__on_session_accept,
                                          self.__on_content_accept,
                                          self.__broadcast],
-                'session-info':         [self.__broadcast, 
-                                         self.__on_session_info, self.__ack],
-                'session-initiate':     [self.__on_session_initiate, 
-                                         self.__broadcast, self.__ack],
-                'session-terminate':    [self.__on_session_terminate, 
-                                         self.__broadcast_all, self.__ack],
-                'transport-info':       [self.__broadcast, self.__ack],
-                'transport-replace':    [self.__broadcast, 
+                'session-info':         [self.__ack, self.__broadcast, 
+                                         self.__on_session_info ],
+                'session-initiate':     [self.__ack, self.__on_session_initiate, 
+                                         self.__broadcast],
+                'session-terminate':    [self.__ack,self.__on_session_terminate, 
+                                         self.__broadcast_all],
+                'transport-info':       [self.__ack, self.__broadcast],
+                'transport-replace':    [self.__ack, self.__broadcast, 
                                          self.__on_transport_replace], #TODO
                 'transport-accept':     [self.__ack], #TODO
                 'transport-reject':     [self.__ack], #TODO
