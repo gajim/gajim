@@ -184,7 +184,8 @@ class JingleFileTransfer(JingleContent):
         self.file_props.streamhosts = self.transport.remote_candidates
         # Calculate file hash in a new thread
         # if we haven't sent the hash already.
-        if self.file_props.hash_ is None and self.file_props.algo:
+        if self.file_props.hash_ is None and self.file_props.algo and \
+                                             not self.werequest:
             self.hashThread = threading.Thread(target=self.__send_hash)
             self.hashThread.start()
         for host in self.file_props.streamhosts:

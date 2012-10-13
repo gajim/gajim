@@ -660,7 +660,7 @@ class FileTransfersWindow:
             if transfered_size == full_size:
                 # If we are receiver and this is a jingle session
                 if file_props.type_ == 'r' and  \
-                        file_props.session_type == 'jingle':
+                      file_props.session_type == 'jingle' and file_props.hash_:
                     # Show that we are computing the hash
                     self.set_status(file_props, 'computing')
                 else:

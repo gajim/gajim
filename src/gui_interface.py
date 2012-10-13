@@ -985,7 +985,7 @@ class Interface:
         if file_props.stalled or file_props.paused:
             return
 
-        if file_props.type_ == 'r': # we receive a file
+        if file_props.type_ == 'r' and file_props.hash_: # we receive a file
             # we compare hashes
             if file_props.session_type == 'jingle':
                 # Compare hashes in a new thread
