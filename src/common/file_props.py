@@ -110,7 +110,8 @@ class FileProp(object):
         # transfer type: 's' for sending and 'r' for receiving
         self.type_ = None
         self.error = None
-        self.elapsed_time = None
+        # Elapsed time of the file transfer
+        self.elapsed_time = 0
         self.last_time = None
         self.received_len = None
         # full file path
