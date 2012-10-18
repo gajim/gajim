@@ -118,13 +118,16 @@ class StatusIcon:
     def on_status_icon_size_changed(self, statusicon, size):
         if size > 31:
             self.statusicon_size = '32'
-        elif size > 23: 
+        elif size > 23:
             self.statusicon_size = '24'
         else:
             self.statusicon_size = '16'
         if os.environ.get('KDE_FULL_SESSION') == 'true':
         # detect KDE session. see #5476
             self.statusicon_size = '32'
+        if os.environ.get('MATE_DESKTOP_SESSION_ID'):
+        # detect MATE session.
+            self.statusicon_size = '16'
         self.set_img()
 
     def set_img(self):
