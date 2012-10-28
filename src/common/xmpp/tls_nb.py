@@ -418,13 +418,13 @@ class NonBlockingTLS(PlugIn):
         tcpsock._send = wrapper.send
 
         log.debug("Initiating handshake...")
-        tcpsock._sslObj.setblocking(True)
         try:
             tcpsock._sslObj.do_handshake()
+        except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError), e:
+            pass
         except:
             log.error('Error while TLS handshake: ', exc_info=True)
             return False
-        tcpsock._sslObj.setblocking(False)
         self._owner.ssl_lib = PYOPENSSL
         return True
 
