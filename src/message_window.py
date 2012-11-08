@@ -351,8 +351,10 @@ class MessageWindow(object):
         # CTRL mask
         if modifier & gtk.gdk.CONTROL_MASK:
             if keyval == gtk.keysyms.h: # CTRL + h
-                control._on_history_menuitem_activate()
-                return True
+                if gtk.settings_get_default().get_property(
+                'gtk-key-theme-name') != 'Emacs':
+                    control._on_history_menuitem_activate()
+                    return True
             elif control.type_id == message_control.TYPE_CHAT and \
             keyval == gtk.keysyms.f: # CTRL + f
                 # CTRL + f moves cursor one char forward when user uses Emacs
@@ -432,8 +434,10 @@ class MessageWindow(object):
                 control.show_emoticons_menu()
                 return True
             elif keyval == gtk.keysyms.d: # ALT + D show actions menu
-                control.on_actions_button_clicked(control.actions_button)
-                return True
+                if gtk.settings_get_default().get_property(
+                'gtk-key-theme-name') != 'Emacs':
+                    control.on_actions_button_clicked(control.actions_button)
+                    return True
             elif control.type_id == message_control.TYPE_GC and \
             keyval == gtk.keysyms.t: # ALT + t
                 control._on_change_subject_menuitem_activate(None)
