@@ -489,7 +489,7 @@ class RosterTooltip(NotificationAreaTooltip):
             table_size = 4
         else:
             self.avatar_image.set_from_pixbuf(None)
-        vcard_table = gtk.Table(table_size, 1)
+        vcard_table = gtk.Table(1,table_size)
         vcard_table.set_property('column-spacing', 2)
         vcard_table.set_homogeneous(False)
         vcard_current_row = 1
@@ -685,7 +685,10 @@ class RosterTooltip(NotificationAreaTooltip):
         self.avatar_image.set_alignment(0, 0)
         if table_size == 4:
             vcard_table.attach(self.avatar_image, 3, 4, 2,
-                    vcard_current_row + 1, gtk.FILL, gtk.FILL | gtk.EXPAND, 3, 3)
+                vcard_current_row + 1, gtk.FILL, gtk.FILL | gtk.EXPAND, 3, 3)
+
+        gajim.plugin_manager.gui_extension_point('roster_tooltip_populate',
+            self, contacts, vcard_table)
         self.win.add(vcard_table)
 
     def update_last_time(self, last_time):
