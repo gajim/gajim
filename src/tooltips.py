@@ -444,6 +444,8 @@ class GCTooltip(BaseTooltip):
         self.avatar_image.set_alignment(0, 0)
         vcard_table.attach(self.avatar_image, 3, 4, 2, vcard_current_row + 1,
                 gtk.FILL, gtk.FILL | gtk.EXPAND, 3, 3)
+        gajim.plugin_manager.gui_extension_point('gc_tooltip_populate',
+            self, contact, vcard_table)
         self.win.add(vcard_table)
 
 class RosterTooltip(NotificationAreaTooltip):
