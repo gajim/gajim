@@ -57,6 +57,7 @@ from advanced_configuration_window import AdvancedConfigurationWindow
 
 from common import gajim
 from common import helpers
+from common import i18n
 from common import dataforms
 from common.exceptions import GajimGeneralException
 
@@ -3558,7 +3559,8 @@ class RosterItemExchangeWindow:
                             self.account, groups=groups, nickname=model[iter_][2],
                             auto_auth=True)
                 iter_ = model.iter_next(iter_)
-            InformationDialog(_('Added  %s contacts') % str(a))
+            InformationDialog(i18n.ngettext('Added %d contact',
+                'Added %d contacts', a, a, a))
         elif self.action == 'modify':
             a = 0
             while iter_:
@@ -3595,7 +3597,8 @@ class RosterItemExchangeWindow:
                     gajim.interface.roster.remove_contact(jid, self.account)
                     gajim.contacts.remove_jid(self.account, jid)
                 iter_ = model.iter_next(iter_)
-            InformationDialog(_('Removed  %s contacts') % str(a))
+            InformationDialog(i18n.ngettext('Removed %d contact',
+                'Removed %d contacts', a, a, a))
         self.window.destroy()
 
     def on_cancel_button_clicked(self, widget):

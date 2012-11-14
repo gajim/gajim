@@ -7544,13 +7544,23 @@ msgstr ""
 
 #: ../src/dialogs.py:3477
 #, python-format
-msgid "Added  %s contacts"
-msgstr "%s Kontakte hinzugefügt"
+msgid "Added %d contacts"
+msgstr "%d Kontakte hinzugefügt"
+
+#: ../src/dialogs.py:3477
+#, python-format
+msgid "Added %d contact"
+msgstr "%d Kontakt hinzugefügt"
 
 #: ../src/dialogs.py:3514
 #, python-format
-msgid "Removed  %s contacts"
-msgstr "%s Kontakte entfernt"
+msgid "Removed %d contacts"
+msgstr "%d Kontakte entfernt"
+
+#: ../src/dialogs.py:3514
+#, python-format
+msgid "Removed %d contact"
+msgstr "%d Kontakt entfernt"
 
 #: ../src/dialogs.py:3554 ../src/dialogs.py:3731
 #, python-format
