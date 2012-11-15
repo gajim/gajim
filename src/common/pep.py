@@ -190,10 +190,29 @@ ACTIVITIES = {
 
 TUNE_DATA = ['artist', 'title', 'source', 'track', 'length']
 
-LOCATION_DATA = ['accuracy', 'alt', 'area', 'bearing', 'building', 'country',
-                'countrycode', 'datum', 'description', 'error', 'floor', 'lat',
-                'locality', 'lon', 'postalcode', 'region', 'room', 'speed',
-                'street', 'text', 'timestamp', 'uri']
+LOCATION_DATA = {
+        'accuracy':     _('accuracy'),
+        'alt':          _('alt'),
+        'area':         _('area'),
+        'bearing':      _('bearing'),
+        'building':     _('building'),
+        'country':      _('country'),
+        'countrycode':  _('countrycode'),
+        'datum':        _('datum'),
+        'description':  _('description'),
+        'error':        _('error'),
+        'floor':        _('floor'),
+        'lat':          _('lat'),
+        'locality':     _('locality'),
+        'lon':          _('lon'),
+        'postalcode':   _('postalcode'),
+        'region':       _('region'),
+        'room':         _('room'),
+        'speed':        _('speed'),
+        'street':       _('street'),
+        'text':         _('text'),
+        'timestamp':    _('timestamp'),
+        'uri':          _('uri')}
 
 import gobject
 import gtk
@@ -483,8 +502,10 @@ class UserLocationPEP(AbstractPEP):
         for entry in location.keys():
             text = location[entry]
             text = gobject.markup_escape_text(text)
+            # Translate standart location tag
+            tag = LOCATION_DATA.get(entry, entry)
             location_string += '\n<b>%(tag)s</b>: %(text)s' % \
-                    {'tag': entry.capitalize(), 'text': text}
+                    {'tag': tag.capitalize(), 'text': text}
 
         return location_string.strip()
 
