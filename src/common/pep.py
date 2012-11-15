@@ -121,7 +121,7 @@ ACTIVITIES = {
                 'running_an_errand':                    _('Running an Errand'),
                 'walking_the_dog':                      _('Walking the Dog')},
         'drinking': {'category':                _('Drinking'),
-                'having_a_beer'                         _('Having a Beer'),
+                'having_a_beer':                         _('Having a Beer'),
                 'having_coffee':                        _('Having Coffee'),
                 'having_tea':                           _('Having Tea')},
         'eating': {'category':                  _('Eating'),
