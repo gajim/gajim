@@ -1429,7 +1429,7 @@ def get_proxy_info(account):
             except Exception:
                 proxy = None
         p = gajim.config.get('global_proxy')
-    if p:
+    if p and p in gajim.config.get_per('proxies'):
         proxy = {}
         proxyptr = gajim.config.get_per('proxies', p)
         if not proxyptr:
