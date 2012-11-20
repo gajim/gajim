@@ -327,8 +327,10 @@ class GroupchatControl(ChatControlBase):
             if gtkgui_helpers.gtk_icon_theme.has_icon('bookmark-new'):
                 img = self.xml.get_object('image7')
                 img.set_from_icon_name('bookmark-new', gtk.ICON_SIZE_MENU)
-
-            widget.show()
+            if not gajim.connections[self.account].private_storage_supported:
+                widget.hide()
+            else:
+                widget.show()
 
         widget = self.xml.get_object('list_treeview')
         id_ = widget.connect('row_expanded', self.on_list_treeview_row_expanded)
