@@ -328,10 +328,11 @@ class GroupchatControl(ChatControlBase):
             if gtkgui_helpers.gtk_icon_theme.has_icon('bookmark-new'):
                 img = self.xml.get_object('image7')
                 img.set_from_icon_name('bookmark-new', gtk.ICON_SIZE_MENU)
-            if not gajim.connections[self.account].private_storage_supported:
-                widget.hide()
-            else:
-                widget.show()
+            widget.set_sensitive(
+                gajim.connections[self.account].private_storage_supported or \
+                (gajim.connections[self.account].pubsub_supported and \
+                gajim.connections[self.account].pubsub_publish_options_supported))
+            widget.show()
 
         widget = self.xml.get_object('list_treeview')
         id_ = widget.connect('row_expanded', self.on_list_treeview_row_expanded)
@@ -843,7 +844,9 @@ class GroupchatControl(ChatControlBase):
         if self.contact.jid in gajim.config.get_per('accounts', self.account,
         'minimized_gc').split(' '):
             minimize_menuitem.set_active(True)
-        if not gajim.connections[self.account].private_storage_supported:
+        conn = gajim.connections[self.account]
+        if not conn.private_storage_supported and (not conn.pubsub_supported or \
+        not conn.pubsub_publish_options_supported):
             bookmark_room_menuitem.set_sensitive(False)
         if gajim.gc_connected[self.account][self.room_jid]:
             c = gajim.contacts.get_gc_contact(self.account, self.room_jid,
