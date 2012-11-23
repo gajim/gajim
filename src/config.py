@@ -3192,19 +3192,6 @@ class ManageBookmarksWindow:
         # select root iter
         self.selection.select_iter(self.treestore.get_iter_root())
 
-    def on_bookmarks_treeview_button_press_event(self, widget, event):
-        (model, iter_) = self.selection.get_selected()
-        if not iter_:
-            # Removed a bookmark before
-            return
-
-        if model.iter_parent(iter_):
-            # The currently selected node is a bookmark
-            return not self.check_valid_bookmark()
-
-    def on_manage_bookmarks_window_destroy(self, widget, event):
-        del gajim.interface.instances['manage_bookmarks']
-
     def on_add_bookmark_button_clicked(self, widget):
         """
         Add a new bookmark
