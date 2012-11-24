@@ -1822,7 +1822,8 @@ class GroupchatControl(ChatControlBase):
                         fake_jid)
         if nick == self.nick: # we became online
             self.got_connected()
-        self.list_treeview.expand_row((self.model.get_path(role_iter)), False)
+        if self.list_treeview.get_model():
+            self.list_treeview.expand_row((self.model.get_path(role_iter)), False)
         if self.is_continued:
             self.draw_banner_text()
         return iter_
