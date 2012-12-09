@@ -697,6 +697,19 @@ class SignalObject(dbus.service.Object):
                 win.window.focus(long(time()))
 
     @dbus.service.method(INTERFACE, in_signature='', out_signature='')
+    def show_roster(self):
+        """
+        Show the roster window
+        """
+        win = gajim.interface.roster.window
+        win.present()
+        # preserve the 'steal focus preservation'
+        if self._is_first():
+            win.window.focus(gtk.get_current_event_time())
+        else:
+            win.window.focus(long(time()))
+
+    @dbus.service.method(INTERFACE, in_signature='', out_signature='')
     def toggle_ipython(self):
         """
         Show/hide the ipython window

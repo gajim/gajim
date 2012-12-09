@@ -359,7 +359,25 @@ def pid_alive():
     # Assume Gajim is running.
     return True
 
+def show_remote_gajim_roster():
+    try:
+        import dbus
+
+        OBJ_PATH = '/org/gajim/dbus/RemoteObject'
+        INTERFACE = 'org.gajim.dbus.RemoteInterface'
+        SERVICE = 'org.gajim.dbus'
+
+        # Attempt to call show_roster
+        dbus.Interface(dbus.SessionBus().get_object(SERVICE, OBJ_PATH), INTERFACE).__getattr__("show_roster")()
+
+        return True
+    except Exception:
+        return False
+
 if pid_alive():
+    if (show_remote_gajim_roster()):
+        print("Gajim is already running, bringing the roster to front...")
+        sys.exit(0)
     pix = gtkgui_helpers.get_icon_pixmap('gajim', 48)
     gtk.window_set_default_icon(pix) # set the icon to all newly opened wind
     pritext = _('Gajim is already running')
