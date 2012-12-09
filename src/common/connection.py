@@ -2383,7 +2383,12 @@ class Connection(CommonConnection, ConnectionHandlers):
         if not change_nick:
             t = p.setTag(common.xmpp.NS_MUC + ' x')
             tags = {}
-            timeout = gajim.config.get('muc_restore_timeout') * 60
+            timeout = gajim.config.get_per('room', room_jid,
+                'muc_restore_timeout')
+            if timeout is None:
+                timeout = gajim.config.get('muc_restore_timeout') * 60
+            else:
+                timeout *= 60
             if timeout >= 0:
                 last_date = self.last_history_time[room_jid]
                 if last_date == 0:
@@ -2393,7 +2398,9 @@ class Connection(CommonConnection, ConnectionHandlers):
                 last_date = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(
                     last_date))
                 tags['since'] = last_date
-            nb = gajim.config.get('muc_restore_lines')
+            nb = gajim.config.get_per('room', room_jid, 'muc_restore_lines')
+            if nb is None:
+                nb = gajim.config.get('muc_restore_lines')
             if nb >= 0:
                 tags['maxstanzas'] = nb
             if tags:
