@@ -21,7 +21,8 @@
 
 '''Window to create new post for discussion groups service.'''
 
-from common import gajim, xmpp
+from common import gajim
+from nbxmpp import Node
 import gtkgui_helpers
 
 class GroupsPostWindow:
@@ -56,7 +57,7 @@ class GroupsPostWindow:
         Gather info from widgets and send it as a message
         """
         # constructing item to publish... that's atom:entry element
-        item = xmpp.Node('entry', {'xmlns':'http://www.w3.org/2005/Atom'})
+        item = Node('entry', {'xmlns':'http://www.w3.org/2005/Atom'})
         author = item.addChild('author')
         author.addChild('name', {}, [self.from_entry.get_text()])
         item.addChild('generator', {}, ['Gajim'])

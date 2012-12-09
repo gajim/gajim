@@ -31,8 +31,6 @@ from common import ged
 from common.connection_handlers_events import ChatstateReceivedEvent, \
     InformationEvent
 
-import common.xmpp
-
 import message_control
 
 import notify

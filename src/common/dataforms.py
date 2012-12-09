@@ -26,19 +26,19 @@ This module contains wrappers for different parts of data forms (JEP 0004). For
 information how to use them, read documentation
 """
 
-import xmpp
+import nbxmpp
 import helpers
 
 # exceptions used in this module
 # base class
 class Error(Exception): pass
-# when we get xmpp.Node which we do not understand
+# when we get nbxmpp.Node which we do not understand
 class UnknownDataForm(Error): pass
-# when we get xmpp.Node which contains bad fields
+# when we get nbxmpp.Node which contains bad fields
 class WrongFieldValue(Error): pass
 
 # helper class to change class of already existing object
-class ExtendedNode(xmpp.Node, object):
+class ExtendedNode(nbxmpp.Node, object):
     @classmethod
     def __new__(cls,  *a, **b):
         if 'extend' not in b.keys() or not b['extend']:
@@ -234,7 +234,7 @@ class DataField(ExtendedNode):
         Media data
         """
         def fget(self):
-            media = self.getTag('media', namespace=xmpp.NS_DATA_MEDIA)
+            media = self.getTag('media', namespace=nbxmpp.NS_DATA_MEDIA)
             if media:
                 return Media(media)
 
@@ -252,9 +252,9 @@ class DataField(ExtendedNode):
     def is_valid(self):
         return True
 
-class Uri(xmpp.Node):
+class Uri(nbxmpp.Node):
     def __init__(self, uri_tag):
-        xmpp.Node.__init__(self, node=uri_tag)
+        nbxmpp.Node.__init__(self, node=uri_tag)
 
     @nested_property
     def type_():
@@ -288,9 +288,9 @@ class Uri(xmpp.Node):
 
         return locals()
 
-class Media(xmpp.Node):
+class Media(nbxmpp.Node):
     def __init__(self, media_tag):
-        xmpp.Node.__init__(self, node=media_tag)
+        nbxmpp.Node.__init__(self, node=media_tag)
 
     @nested_property
     def uris():
@@ -522,12 +522,12 @@ class DataRecord(ExtendedNode):
         self.vars = {}
         if extend is None:
             # we have to build this object from scratch
-            xmpp.Node.__init__(self)
+            nbxmpp.Node.__init__(self)
 
             if fields is not None:
                 self.fields = fields
         else:
-            # we already have xmpp.Node inside - try to convert all
+            # we already have nbxmpp.Node inside - try to convert all
             # fields into DataField objects
             if fields is None:
                 for field in self.iterTags('field'):
@@ -588,7 +588,7 @@ class DataForm(ExtendedNode):
     def __init__(self, type_=None, title=None, instructions=None, extend=None):
         if extend is None:
             # we have to build form from scratch
-            xmpp.Node.__init__(self, 'x', attrs={'xmlns': xmpp.NS_DATA})
+            nbxmpp.Node.__init__(self, 'x', attrs={'xmlns': nbxmpp.NS_DATA})
 
         if type_ is not None:
             self.type_=type_
@@ -700,7 +700,7 @@ class MultipleDataForm(DataForm):
             if items is not None:
                 self.items = items
         else:
-            # we already have xmpp.Node inside - try to convert all
+            # we already have nbxmpp.Node inside - try to convert all
             # fields into DataField objects
             if items is None:
                 self.items = list(self.iterTags('item'))

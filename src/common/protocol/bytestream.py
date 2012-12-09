@@ -33,7 +33,7 @@ import base64
 import gobject
 import time
 
-from common import xmpp
+import nbxmpp
 from common import gajim
 from common import helpers
 from common import dataforms
@@ -109,25 +109,25 @@ class ConnectionBytestream:
             return
         file_props.sender = self._ft_get_our_jid()
         fjid = self._ft_get_receiver_jid(file_props)
-        iq = xmpp.Iq(to=fjid, typ='set')
+        iq = nbxmpp.Iq(to=fjid, typ='set')
         iq.setID(file_props.sid)
-        si = iq.setTag('si', namespace=xmpp.NS_SI)
-        si.setAttr('profile', xmpp.NS_FILE)
+        si = iq.setTag('si', namespace=nbxmpp.NS_SI)
+        si.setAttr('profile', nbxmpp.NS_FILE)
         si.setAttr('id', file_props.sid)
-        file_tag = si.setTag('file', namespace=xmpp.NS_FILE)
+        file_tag = si.setTag('file', namespace=nbxmpp.NS_FILE)
         file_tag.setAttr('name', file_props.name)
         file_tag.setAttr('size', file_props.size)
         desc = file_tag.setTag('desc')
         if file_props.desc:
             desc.setData(file_props.desc)
         file_tag.setTag('range')
-        feature = si.setTag('feature', namespace=xmpp.NS_FEATURE)
-        _feature = xmpp.DataForm(typ='form')
+        feature = si.setTag('feature', namespace=nbxmpp.NS_FEATURE)
+        _feature = nbxmpp.DataForm(typ='form')
         feature.addChild(node=_feature)
         field = _feature.setField('stream-method')
         field.setAttr('type', 'list-single')
-        field.addOption(xmpp.NS_BYTESTREAM)
-        field.addOption(xmpp.NS_IBB)
+        field.addOption(nbxmpp.NS_BYTESTREAM)
+        field.addOption(nbxmpp.NS_IBB)
         self.connection.send(iq)
 
     def send_file_approval(self, file_props):
@@ -163,22 +163,22 @@ class ConnectionBytestream:
             session.approve_content('file', content.name)
             return
 
-        iq = xmpp.Iq(to=unicode(file_props.sender), typ='result')
+        iq = nbxmpp.Iq(to=unicode(file_props.sender), typ='result')
         iq.setAttr('id', file_props.request_id)
-        si = iq.setTag('si', namespace=xmpp.NS_SI)
+        si = iq.setTag('si', namespace=nbxmpp.NS_SI)
         if file_props.offset:
-            file_tag = si.setTag('file', namespace=xmpp.NS_FILE)
+            file_tag = si.setTag('file', namespace=nbxmpp.NS_FILE)
             range_tag = file_tag.setTag('range')
             range_tag.setAttr('offset', file_props.offset)
-        feature = si.setTag('feature', namespace=xmpp.NS_FEATURE)
-        _feature = xmpp.DataForm(typ='submit')
+        feature = si.setTag('feature', namespace=nbxmpp.NS_FEATURE)
+        _feature = nbxmpp.DataForm(typ='submit')
         feature.addChild(node=_feature)
         field = _feature.setField('stream-method')
         field.delAttr('type')
-        if xmpp.NS_BYTESTREAM in file_props.stream_methods:
-            field.setValue(xmpp.NS_BYTESTREAM)
+        if nbxmpp.NS_BYTESTREAM in file_props.stream_methods:
+            field.setValue(nbxmpp.NS_BYTESTREAM)
         else:
-            field.setValue(xmpp.NS_IBB)
+            field.setValue(nbxmpp.NS_IBB)
         self.connection.send(iq)
 
     def send_file_rejection(self, file_props, code='403', typ=None):
@@ -195,7 +195,7 @@ class ConnectionBytestream:
             jingle = self._sessions[file_props.sid]
             jingle.cancel_session()
             return
-        iq = xmpp.Iq(to=unicode(file_props.sender), typ='error')
+        iq = nbxmpp.Iq(to=unicode(file_props.sender), typ='error')
         iq.setAttr('id', file_props.request_id)
         if code == '400' and typ in ('stream', 'profile'):
             name = 'bad-request'
@@ -203,12 +203,12 @@ class ConnectionBytestream:
         else:
             name = 'forbidden'
             text = 'Offer Declined'
-        err = xmpp.ErrorNode(code=code, typ='cancel', name=name, text=text)
+        err = nbxmpp.ErrorNode(code=code, typ='cancel', name=name, text=text)
         if code == '400' and typ in ('stream', 'profile'):
             if typ == 'stream':
-                err.setTag('no-valid-streams', namespace=xmpp.NS_SI)
+                err.setTag('no-valid-streams', namespace=nbxmpp.NS_SI)
             else:
-                err.setTag('bad-profile', namespace=xmpp.NS_SI)
+                err.setTag('bad-profile', namespace=nbxmpp.NS_SI)
         iq.addChild(node=err)
         self.connection.send(iq)
 
@@ -233,25 +233,25 @@ class ConnectionBytestream:
             if length:
                 file_props.length = int(length)
         feature = si.setTag('feature')
-        if feature.getNamespace() != xmpp.NS_FEATURE:
+        if feature.getNamespace() != nbxmpp.NS_FEATURE:
             return
         form_tag = feature.getTag('x')
-        form = xmpp.DataForm(node=form_tag)
+        form = nbxmpp.DataForm(node=form_tag)
         field = form.getField('stream-method')
-        if field.getValue() == xmpp.NS_BYTESTREAM:
+        if field.getValue() == nbxmpp.NS_BYTESTREAM:
             self._send_socks5_info(file_props)
-            raise xmpp.NodeProcessed
-        if field.getValue() == xmpp.NS_IBB:
+            raise nbxmpp.NodeProcessed
+        if field.getValue() == nbxmpp.NS_IBB:
             sid = file_props.sid
             fp = open(file_props.file_name, 'r')
             self.OpenStream(sid, file_props.receiver, fp)
-            raise xmpp.NodeProcessed
+            raise nbxmpp.NodeProcessed
 
     def _siSetCB(self, con, iq_obj):
         from common.connection_handlers_events import FileRequestReceivedEvent
         gajim.nec.push_incoming_event(FileRequestReceivedEvent(None, conn=self,
             stanza=iq_obj))
-        raise xmpp.NodeProcessed
+        raise nbxmpp.NodeProcessed
 
     def _nec_file_request_received(self, obj):
         pass
@@ -259,7 +259,7 @@ class ConnectionBytestream:
     def _siErrorCB(self, con, iq_obj):
         si = iq_obj.getTag('si')
         profile = si.getAttr('profile')
-        if profile != xmpp.NS_FILE:
+        if profile != nbxmpp.NS_FILE:
             return
         file_props = FilesProp.getFileProp(con.name, iq_obj.getAttr('id'))
         if not file_props:
@@ -269,7 +269,7 @@ class ConnectionBytestream:
         from common.connection_handlers_events import FileRequestErrorEvent
         gajim.nec.push_incoming_event(FileRequestErrorEvent(None, conn=self,
             jid=jid, file_props=file_props, error_msg=''))
-        raise xmpp.NodeProcessed
+        raise nbxmpp.NodeProcessed
 
 class ConnectionSocks5Bytestream(ConnectionBytestream):
 
@@ -281,10 +281,10 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             return
         if streamhost is None:
             return None
-        iq = xmpp.Iq(to=streamhost['initiator'], typ='result',
+        iq = nbxmpp.Iq(to=streamhost['initiator'], typ='result',
                 frm=streamhost['target'])
         iq.setAttr('id', streamhost['id'])
-        query = iq.setTag('query', namespace=xmpp.NS_BYTESTREAM)
+        query = iq.setTag('query', namespace=nbxmpp.NS_BYTESTREAM)
         stream_tag = query.setTag('streamhost-used')
         stream_tag.setAttr('jid', streamhost['jid'])
         self.connection.send(iq)
@@ -358,10 +358,10 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             self._connect_error(unicode(receiver), file_props.sid,
                     file_props.sid, code=406)
         else:
-            iq = xmpp.Iq(to=unicode(receiver), typ='set')
+            iq = nbxmpp.Iq(to=unicode(receiver), typ='set')
             file_props.request_id = 'id_' + file_props.sid
             iq.setID(file_props.request_id)
-            query = iq.setTag('query', namespace=xmpp.NS_BYTESTREAM)
+            query = iq.setTag('query', namespace=nbxmpp.NS_BYTESTREAM)
             query.setAttr('sid', file_props.sid)
 
             self._add_addiditional_streamhosts_to_query(query, file_props)
@@ -372,7 +372,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
 
     def _add_streamhosts_to_query(self, query, sender, port, hosts):
         for host in hosts:
-            streamhost = xmpp.Node(tag='streamhost')
+            streamhost = nbxmpp.Node(tag='streamhost')
             query.addChild(node=streamhost)
             streamhost.setAttr('port', unicode(port))
             streamhost.setAttr('host', host)
@@ -560,7 +560,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             to = file_props.receiver
         else:
             to = file_props.sender
-        iq = xmpp.Iq(to=to,     typ='error')
+        iq = nbxmpp.Iq(to=to,     typ='error')
         iq.setAttr('id', file_props.sid)
         err = iq.setTag('error')
         err.setAttr('code', unicode(code))
@@ -581,10 +581,10 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
         if not self.connection or self.connected < 2:
             return
         file_props = FilesProp.getFileProp(self.name, proxy['sid'])
-        iq = xmpp.Iq(to=proxy['initiator'], typ='set')
+        iq = nbxmpp.Iq(to=proxy['initiator'], typ='set')
         auth_id = "au_" + proxy['sid']
         iq.setID(auth_id)
-        query = iq.setTag('query', namespace=xmpp.NS_BYTESTREAM)
+        query = iq.setTag('query', namespace=nbxmpp.NS_BYTESTREAM)
         query.setAttr('sid', proxy['sid'])
         activate = query.setTag('activate')
         activate.setData(file_props.proxy_receiver)
@@ -606,7 +606,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
         from common.connection_handlers_events import FileRequestErrorEvent
         gajim.nec.push_incoming_event(FileRequestErrorEvent(None, conn=self,
             jid=jid, file_props=file_props, error_msg=''))
-        raise xmpp.NodeProcessed
+        raise nbxmpp.NodeProcessed
 
     def _bytestreamSetCB(self, con, iq_obj):
         target = unicode(iq_obj.getAttr('to'))
@@ -643,16 +643,16 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
                     file_props.streamhosts = streamhosts
                 gajim.socks5queue.connect_to_hosts(self.name, sid,
                         self.send_success_connect_reply, None)
-                raise xmpp.NodeProcessed
+                raise nbxmpp.NodeProcessed
         else:
             log.warn('Gajim got streamhosts for unknown transfer. Ignoring it.')
-            raise xmpp.NodeProcessed
+            raise nbxmpp.NodeProcessed
 
         file_props.streamhosts = streamhosts
         if file_props.type_ == 'r':
             gajim.socks5queue.connect_to_hosts(self.name, sid,
                     self.send_success_connect_reply, self._connect_error)
-        raise xmpp.NodeProcessed
+        raise nbxmpp.NodeProcessed
 
     def _ResultCB(self, con, iq_obj):
         # if we want to respect xep-0065 we have to check for proxy
@@ -667,7 +667,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             for host in file_props.proxyhosts:
                 if host['initiator'] == frm and 'idx' in host:
                     gajim.socks5queue.activate_proxy(host['idx'])
-                    raise xmpp.NodeProcessed
+                    raise nbxmpp.NodeProcessed
 
     def _bytestreamResultCB(self, con, iq_obj):
         frm = self._ft_get_from(iq_obj)
@@ -682,30 +682,30 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
         id_ = real_id[3:]
         file_props = FilesProp.getFileProp(self.name, id_)
         if file_props is None:
-            raise xmpp.NodeProcessed
+            raise nbxmpp.NodeProcessed
         if streamhost is None:
             # proxy approves the activate query
             if real_id.startswith('au_'):
                 if file_props.streamhost_used is False:
-                    raise xmpp.NodeProcessed
+                    raise nbxmpp.NodeProcessed
                 if  not file_props.proxyhosts:
-                    raise xmpp.NodeProcessed
+                    raise nbxmpp.NodeProcessed
                 for host in file_props.proxyhosts:
                     if host['initiator'] == frm and \
                     unicode(query.getAttr('sid')) == file_props.sid:
                         gajim.socks5queue.activate_proxy(host['idx'])
                         break
-            raise xmpp.NodeProcessed
+            raise nbxmpp.NodeProcessed
         jid = self._ft_get_streamhost_jid_attr(streamhost)
         if file_props.streamhost_used is True:
-            raise xmpp.NodeProcessed
+            raise nbxmpp.NodeProcessed
 
         if real_id.startswith('au_'):
             if file_props.stopped:
                 self.remove_transfer(file_props)
             else:
                 gajim.socks5queue.send_file(file_props, self.name)
-            raise xmpp.NodeProcessed
+            raise nbxmpp.NodeProcessed
 
         proxy = None
         if file_props.proxyhosts:
@@ -715,7 +715,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
 
         if file_props.stopped:
             self.remove_transfer(file_props)
-            raise xmpp.NodeProcessed
+            raise nbxmpp.NodeProcessed
         if proxy is not None:
             file_props.streamhost_used = True
             file_props.streamhosts.append(proxy)
@@ -729,7 +729,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             gajim.socks5queue.add_sockobj(self.name, sender, 'sender')
             proxy['idx'] = sender.queue_idx
             gajim.socks5queue.on_success[file_props.sid] = self._proxy_auth_ok
-            raise xmpp.NodeProcessed
+            raise nbxmpp.NodeProcessed
 
         else:
             if file_props.stopped:
@@ -737,7 +737,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             else:
                 gajim.socks5queue.send_file(file_props, self.name, 'server')
 
-        raise xmpp.NodeProcessed
+        raise nbxmpp.NodeProcessed
 
 
 class ConnectionIBBytestream(ConnectionBytestream):
@@ -753,17 +753,17 @@ class ConnectionIBBytestream(ConnectionBytestream):
         """
         typ = stanza.getType()
         log.debug('IBBIqHandler called typ->%s' % typ)
-        if typ == 'set' and stanza.getTag('open', namespace=xmpp.NS_IBB):
+        if typ == 'set' and stanza.getTag('open', namespace=nbxmpp.NS_IBB):
             self.StreamOpenHandler(conn, stanza)
-        elif typ == 'set' and stanza.getTag('close', namespace=xmpp.NS_IBB):
+        elif typ == 'set' and stanza.getTag('close', namespace=nbxmpp.NS_IBB):
             self.StreamCloseHandler(conn, stanza)
         elif typ == 'result':
             self.SendHandler()
         elif typ == 'error':
             gajim.socks5queue.error_cb()
         else:
-            conn.send(xmpp.Error(stanza, xmpp.ERR_BAD_REQUEST))
-        raise xmpp.NodeProcessed
+            conn.send(nbxmpp.Error(stanza, nbxmpp.ERR_BAD_REQUEST))
+        raise nbxmpp.NodeProcessed
 
     def StreamOpenHandler(self, conn, stanza):
         """
@@ -778,16 +778,16 @@ class ConnectionIBBytestream(ConnectionBytestream):
         try:
             blocksize = int(blocksize)
         except:
-            err = xmpp.ERR_BAD_REQUEST
+            err = nbxmpp.ERR_BAD_REQUEST
         if not sid or not blocksize:
-            err = xmpp.ERR_BAD_REQUEST
+            err = nbxmpp.ERR_BAD_REQUEST
         elif not file_props:
-            err = xmpp.ERR_UNEXPECTED_REQUEST
+            err = nbxmpp.ERR_UNEXPECTED_REQUEST
         if err:
-            rep = xmpp.Error(stanza, err)
+            rep = nbxmpp.Error(stanza, err)
         else:
             log.debug("Opening stream: id %s, block-size %s" % (sid, blocksize))
-            rep = xmpp.Protocol('iq', stanza.getFrom(), 'result',
+            rep = nbxmpp.Protocol('iq', stanza.getFrom(), 'result',
                 stanza.getTo(), {'id': stanza.getID()})
             file_props.block_size = blocksize
             file_props.seq = 0
@@ -811,7 +811,7 @@ class ConnectionIBBytestream(ConnectionBytestream):
         Take into account that recommended stanza size is 4k and IBB uses
         base64 encoding that increases size of data by 1/3.
         """
-        if not xmpp.JID(to).getResource():
+        if not nbxmpp.JID(to).getResource():
             return
         file_props = FilesProp.getFilePropBySid(sid)
         file_props.direction = '|>' + to
@@ -826,8 +826,9 @@ class ConnectionIBBytestream(ConnectionBytestream):
         file_props.completed = False
         file_props.disconnect_cb = None
         file_props.continue_cb = None
-        syn = xmpp.Protocol('iq', to, 'set', payload=[xmpp.Node(xmpp.NS_IBB + \
-            ' open', {'sid': sid, 'block-size': blocksize, 'stanza': 'iq'})])
+        syn = nbxmpp.Protocol('iq', to, 'set', payload=[nbxmpp.Node(
+            nbxmpp.NS_IBB + ' open', {'sid': sid, 'block-size': blocksize,
+            'stanza': 'iq'})])
         self.connection.send(syn)
         file_props.syn_id = syn.getID()
         return file_props
@@ -850,15 +851,15 @@ class ConnectionIBBytestream(ConnectionBytestream):
                     continue
                 chunk = file_props.fp.read(file_props.block_size)
                 if chunk:
-                    datanode = xmpp.Node(xmpp.NS_IBB + ' data', {'sid': sid,
+                    datanode = nbxmpp.Node(nbxmpp.NS_IBB + ' data', {'sid': sid,
                         'seq': file_props.seq}, base64.encodestring(chunk))
                     file_props.seq += 1
                     file_props.started = True
                     if file_props.seq == 65536:
                         file_props.seq = 0
-                    self.last_sent_ibb_id = self.connection.send(xmpp.Protocol(
-                        name='iq', to=file_props.direction[1:], typ='set',
-                        payload=[datanode]))
+                    self.last_sent_ibb_id = self.connection.send(
+                        nbxmpp.Protocol(name='iq', to=file_props.direction[1:],
+                        typ='set', payload=[datanode]))
                     current_time = time.time()
                     file_props.elapsed_time += current_time - file_props.last_time
                     file_props.last_time = current_time
@@ -869,9 +870,9 @@ class ConnectionIBBytestream(ConnectionBytestream):
                     # notify the other side about stream closing
                     # notify the local user about sucessfull send
                     # delete the local stream
-                    self.connection.send(xmpp.Protocol('iq',
+                    self.connection.send(nbxmpp.Protocol('iq',
                         file_props.direction[1:], 'set',
-                        payload=[xmpp.Node(xmpp.NS_IBB + ' close',
+                        payload=[nbxmpp.Node(nbxmpp.NS_IBB + ' close',
                         {'sid':sid})]))
                     file_props.completed = True
 
@@ -893,12 +894,12 @@ class ConnectionIBBytestream(ConnectionBytestream):
         err = None
         file_props = FilesProp.getFileProp(self.name, sid)
         if file_props is None:
-            err = xmpp.ERR_ITEM_NOT_FOUND
+            err = nbxmpp.ERR_ITEM_NOT_FOUND
         else:
             if not data:
-                err = xmpp.ERR_BAD_REQUEST
+                err = nbxmpp.ERR_BAD_REQUEST
             elif seq <> file_props.seq:
-                err = xmpp.ERR_UNEXPECTED_REQUEST
+                err = nbxmpp.ERR_UNEXPECTED_REQUEST
             else:
                 log.debug('Successfull receive sid->%s %s+%s bytes' % (sid,
                     file_props.fp.tell(), len(data)))
@@ -914,9 +915,9 @@ class ConnectionIBBytestream(ConnectionBytestream):
                     file_props.completed = True
         if err:
             log.debug('Error on receive: %s' % err)
-            conn.send(xmpp.Error(xmpp.Iq(to=stanza.getFrom(),
+            conn.send(nbxmpp.Error(nbxmpp.Iq(to=stanza.getFrom(),
                 frm=stanza.getTo(),
-                payload=[xmpp.Node(xmpp.NS_IBB + ' close')]), err, reply=0))
+                payload=[nbxmpp.Node(nbxmpp.NS_IBB + ' close')]), err, reply=0))
         else:
             return True
 
@@ -940,7 +941,7 @@ class ConnectionIBBytestream(ConnectionBytestream):
             file_props.fp.close()
             gajim.socks5queue.complete_transfer_cb(self.name, file_props)
         else:
-            conn.send(xmpp.Error(stanza, xmpp.ERR_ITEM_NOT_FOUND))
+            conn.send(nbxmpp.Error(stanza, nbxmpp.ERR_ITEM_NOT_FOUND))
 
     def IBBAllIqHandler(self, conn, stanza):
         """
@@ -966,8 +967,8 @@ class ConnectionIBBytestream(ConnectionBytestream):
                         file_props.direction = file_props.direction[1:]
                         self.SendHandler()
                     else:
-                        conn.send(xmpp.Error(stanza,
-                            xmpp.ERR_UNEXPECTED_REQUEST))
+                        conn.send(nbxmpp.Error(stanza,
+                            nbxmpp.ERR_UNEXPECTED_REQUEST))
                 break
         else:
             if stanza.getTag('data'):
@@ -975,7 +976,7 @@ class ConnectionIBBytestream(ConnectionBytestream):
                     reply = stanza.buildReply('result')
                     reply.delChild('data')
                     conn.send(reply)
-                    raise xmpp.NodeProcessed
+                    raise nbxmpp.NodeProcessed
             elif syn_id == self.last_sent_ibb_id:
                 self.SendHandler()
 

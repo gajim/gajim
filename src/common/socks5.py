@@ -32,7 +32,7 @@ from errno import EINTR
 from errno import EISCONN
 from errno import EINPROGRESS
 from errno import EAFNOSUPPORT
-from xmpp.idlequeue import IdleObject
+from nbxmpp.idlequeue import IdleObject
 from file_props import FilesProp
 from common import gajim
 import jingle_xtls

@@ -16,7 +16,7 @@ Handles Jingle contents (XEP 0166)
 """
 
 import gajim
-import xmpp
+import nbxmpp
 from jingle_transport import JingleTransportIBB
 
 contents = {}
@@ -127,7 +127,7 @@ class JingleContent(object):
         """
         Build a XML content-wrapper for our data
         """
-        return xmpp.Node('content',
+        return nbxmpp.Node('content',
                 attrs={'name': self.name, 'creator': self.creator},
                 payload=payload)
 
@@ -164,29 +164,29 @@ class JingleContent(object):
         content.addChild(node=self.transport.make_transport())
 
     def _fill_content(self, content):
-        description_node = xmpp.simplexml.Node(
-            tag=xmpp.NS_JINGLE_FILE_TRANSFER + ' description')
+        description_node = nbxmpp.simplexml.Node(
+            tag=nbxmpp.NS_JINGLE_FILE_TRANSFER + ' description')
         if self.session.werequest:
-            simode = xmpp.simplexml.Node(tag='request')
+            simode = nbxmpp.simplexml.Node(tag='request')
         else:
-            simode = xmpp.simplexml.Node(tag='offer')
-        file_tag = simode.setTag('file', namespace=xmpp.NS_FILE)
+            simode = nbxmpp.simplexml.Node(tag='offer')
+        file_tag = simode.setTag('file', namespace=nbxmpp.NS_FILE)
         if self.file_props.name:
-            node = xmpp.simplexml.Node(tag='name')
+            node = nbxmpp.simplexml.Node(tag='name')
             node.addData(self.file_props.name)
             file_tag.addChild(node=node)
         if self.file_props.date:
-            node = xmpp.simplexml.Node(tag='date')
+            node = nbxmpp.simplexml.Node(tag='date')
             node.addData(self.file_props.date)
             file_tag.addChild(node=node)
         if self.file_props.size:
-            node = xmpp.simplexml.Node(tag='size')
+            node = nbxmpp.simplexml.Node(tag='size')
             node.addData(self.file_props.size)
             file_tag.addChild(node=node)
         if self.file_props.type_ == 'r':
             if self.file_props.hash_:
                 h = file_tag.addChild('hash', attrs={
-                    'algo': self.file_props.algo}, namespace=xmpp.NS_HASHES,
+                    'algo': self.file_props.algo}, namespace=nbxmpp.NS_HASHES,
                     payload=self.file_props.hash_)
         else:
             # if the file is less than 10 mb, then it is small
@@ -209,11 +209,11 @@ class JingleContent(object):
             desc.setData(self.file_props.desc)
         description_node.addChild(node=simode)
         if self.use_security:
-            security = xmpp.simplexml.Node(
-                tag=xmpp.NS_JINGLE_XTLS + ' security')
+            security = nbxmpp.simplexml.Node(
+                tag=nbxmpp.NS_JINGLE_XTLS + ' security')
             # TODO: add fingerprint element
             for m in ('x509', ): # supported authentication methods
-                method = xmpp.simplexml.Node(tag='method')
+                method = nbxmpp.simplexml.Node(tag='method')
                 method.setAttr('name', m)
                 security.addChild(node=method)
             content.addChild(node=security)

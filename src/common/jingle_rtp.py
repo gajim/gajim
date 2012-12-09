@@ -20,7 +20,7 @@ from collections import deque
 import gobject
 import socket
 
-import xmpp
+import nbxmpp
 import farstream, gst
 from glib import GError
 
@@ -151,7 +151,7 @@ class JingleRTPContent(JingleContent):
         self.p2psession.stop_telephony_event()
 
     def _fill_content(self, content):
-        content.addChild(xmpp.NS_JINGLE_RTP + ' description',
+        content.addChild(nbxmpp.NS_JINGLE_RTP + ' description',
                 attrs={'media': self.media}, payload=self.iter_codecs())
 
     def _setup_funnel(self):
@@ -190,7 +190,7 @@ class JingleRTPContent(JingleContent):
             elif name == 'farstream-component-state-changed':
                 state = message.structure['state']
                 if state == farstream.STREAM_STATE_FAILED:
-                    reason = xmpp.Node('reason')
+                    reason = nbxmpp.Node('reason')
                     reason.setTag('failed-transport')
                     self.session.remove_content(self.creator, self.name, reason)
             elif name == 'farstream-error':
@@ -222,7 +222,7 @@ class JingleRTPContent(JingleContent):
                 self.src_bin.get_pad('src').link(sink_pad)
                 self.stream_failed_once = True
             else:
-                reason = xmpp.Node('reason')
+                reason = nbxmpp.Node('reason')
                 reason.setTag('failed-application')
                 self.session.remove_content(self.creator, self.name, reason)
 
@@ -276,11 +276,11 @@ class JingleRTPContent(JingleContent):
             if codec.clock_rate:
                 attrs['clockrate'] = codec.clock_rate
             if codec.optional_params:
-                payload = (xmpp.Node('parameter', {'name': name, 'value': value})
-                        for name, value in codec.optional_params)
+                payload = (nbxmpp.Node('parameter', {'name': name,
+                    'value': value}) for name, value in codec.optional_params)
             else:
                 payload = ()
-            yield xmpp.Node('payload-type', attrs, payload)
+            yield nbxmpp.Node('payload-type', attrs, payload)
 
     def __stop(self, *things):
         self.pipeline.set_state(gst.STATE_NULL)
@@ -408,4 +408,4 @@ def get_content(desc):
     elif desc['media'] == 'video':
         return JingleVideo
 
-contents[xmpp.NS_JINGLE_RTP] = get_content
+contents[nbxmpp.NS_JINGLE_RTP] = get_content

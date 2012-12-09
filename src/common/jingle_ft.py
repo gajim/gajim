@@ -21,7 +21,7 @@ Handles  Jingle File Transfer (XEP 0234)
 
 import hashlib
 import gajim
-import xmpp
+import nbxmpp
 from jingle_content import contents, JingleContent
 from jingle_transport import *
 from common import helpers
@@ -70,7 +70,7 @@ class JingleFileTransfer(JingleContent):
         self.use_security = use_security
         self.file_props = file_props
         self.weinitiate = self.session.weinitiate
-        self.werequest = self.session.werequest 
+        self.werequest = self.session.werequest
         if self.file_props is not None:
             if self.session.werequest:
                 self.file_props.sender = self.session.peerjid
@@ -130,9 +130,9 @@ class JingleFileTransfer(JingleContent):
 
     def __send_hash(self):
         # Send hash in a session info
-        checksum = xmpp.Node(tag='checksum', payload=[xmpp.Node(tag='file',
+        checksum = nbxmpp.Node(tag='checksum', payload=[nbxmpp.Node(tag='file',
             payload=[self._calcHash()])])
-        checksum.setNamespace(xmpp.NS_JINGLE_FILE_TRANSFER)
+        checksum.setNamespace(nbxmpp.NS_JINGLE_FILE_TRANSFER)
         self.session.__session_info(checksum )
         pjid = gajim.get_jid_without_resource(self.session.peerjid)
         file_info = {'name' : self.file_props.name,
@@ -153,7 +153,7 @@ class JingleFileTransfer(JingleContent):
         except:
             # can't open file
             return
-        h = xmpp.Hashes()
+        h = nbxmpp.Hashes()
         hash_ = h.calculateHash(self.file_props.algo, file_)
         # DEBUG
         #hash_ = '1294809248109223'
@@ -177,10 +177,10 @@ class JingleFileTransfer(JingleContent):
             con.connection.send(response)
             # If we are requesting we don't have the file
             if self.session.werequest:
-                raise xmpp.NodeProcessed
+                raise nbxmpp.NodeProcessed
             # We send the file
             self.__state_changed(STATE_TRANSFERING)
-            raise xmpp.NodeProcessed
+            raise nbxmpp.NodeProcessed
         self.file_props.streamhosts = self.transport.remote_candidates
         # Calculate file hash in a new thread
         # if we haven't sent the hash already.
@@ -205,7 +205,7 @@ class JingleFileTransfer(JingleContent):
                 receiving=False)
             return
         self.__state_changed(STATE_TRANSFERING)
-        raise xmpp.NodeProcessed
+        raise nbxmpp.NodeProcessed
 
     def __on_session_terminate(self, stanza, content, error, action):
         log.info("__on_session_terminate")
@@ -228,7 +228,7 @@ class JingleFileTransfer(JingleContent):
         candUsed  = content.getTag('transport').getTag('candidate-used')
         if (candError or candUsed) and \
                 self.state >= STATE_CAND_SENT_AND_RECEIVED:
-            raise xmpp.OutOfOrder
+            raise nbxmpp.OutOfOrder
         if candError:
             if not gajim.socks5queue.listener.connections:
                 gajim.socks5queue.listener.disconnect()
@@ -244,7 +244,7 @@ class JingleFileTransfer(JingleContent):
                     response.delChild(response.getQuery())
                     self.session.connection.connection.send(response)
                     self.__state_changed(STATE_TRANSFERING)
-                    raise xmpp.NodeProcessed
+                    raise nbxmpp.NodeProcessed
             else:
                 args = {'candError' : True}
                 self.__state_changed(STATE_CAND_RECEIVED, args)
@@ -273,7 +273,7 @@ class JingleFileTransfer(JingleContent):
             response.delChild(response.getQuery())
             self.session.connection.connection.send(response)
             self.__state_changed(STATE_TRANSFERING)
-            raise xmpp.NodeProcessed
+            raise nbxmpp.NodeProcessed
         else:
             self.__state_changed(STATE_CAND_RECEIVED, args)
 
@@ -376,4 +376,4 @@ class JingleFileTransfer(JingleContent):
 def get_content(desc):
     return JingleFileTransfer
 
-contents[xmpp.NS_JINGLE_FILE_TRANSFER] = get_content
+contents[nbxmpp.NS_JINGLE_FILE_TRANSFER] = get_content

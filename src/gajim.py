@@ -62,6 +62,12 @@ if os.name == 'nt':
         new_list.insert(0, os.path.join(os.getcwd(), 'gtk', 'bin'))
         os.environ['PATH'] = ';'.join(new_list)
 
+try:
+    import nbxmpp
+except ImportError:
+    print 'Gajim needs python-nbxmpp to run. Quiting...'
+    sys.exit()
+
 from common import demandimport
 demandimport.enable()
 demandimport.ignore += ['gobject._gobject', 'libasyncns', 'i18n',

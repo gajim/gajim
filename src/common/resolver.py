@@ -31,7 +31,7 @@ if __name__ == '__main__':
     common.configpaths.gajimpaths.init_profile()
 
 from common import helpers
-from common.xmpp.idlequeue import IdleCommand
+from nbxmpp.idlequeue import IdleCommand
 
 # it is good to check validity of arguments, when calling system commands
 ns_type_pattern = re.compile('^[a-z]+$')
@@ -320,7 +320,7 @@ class NsLookup(IdleCommand):
 if __name__ == '__main__':
     import gobject
     import gtk
-    from xmpp import idlequeue
+    from nbxmpp import idlequeue
 
     idlequeue = idlequeue.get_idlequeue()
     resolver = get_resolver(idlequeue)

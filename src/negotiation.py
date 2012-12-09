@@ -24,7 +24,7 @@ import dataforms_widget
 
 from common import dataforms
 from common import gajim
-from common import xmpp
+import nbxmpp
 
 def describe_features(features):
     """
@@ -55,10 +55,10 @@ class FeatureNegotiationWindow:
         self.window.show_all()
 
     def on_ok_button_clicked(self, widget):
-        acceptance = xmpp.Message(self.jid)
+        acceptance = nbxmpp.Message(self.jid)
         acceptance.setThread(self.session.thread_id)
         feature = acceptance.NT.feature
-        feature.setNamespace(xmpp.NS_FEATURE)
+        feature.setNamespace(nbxmpp.NS_FEATURE)
 
         form = self.data_form_widget.data_form
         form.setAttr('type', 'submit')
@@ -70,14 +70,14 @@ class FeatureNegotiationWindow:
         self.window.destroy()
 
     def on_cancel_button_clicked(self, widget):
-        rejection = xmpp.Message(self.jid)
+        rejection = nbxmpp.Message(self.jid)
         rejection.setThread(self.session.thread_id)
         feature = rejection.NT.feature
-        feature.setNamespace(xmpp.NS_FEATURE)
+        feature.setNamespace(nbxmpp.NS_FEATURE)
 
-        x = xmpp.DataForm(typ='submit')
-        x.addChild(node=xmpp.DataField('FORM_TYPE', value='urn:xmpp:ssn'))
-        x.addChild(node=xmpp.DataField('accept', value='false', typ='boolean'))
+        x = nbxmpp.DataForm(typ='submit')
+        x.addChild(node=nbxmpp.DataField('FORM_TYPE', value='urn:xmpp:ssn'))
+        x.addChild(node=nbxmpp.DataField('accept', value='false', typ='boolean'))
 
         feature.addChild(node=x)
 

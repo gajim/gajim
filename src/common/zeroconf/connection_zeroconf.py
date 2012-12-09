@@ -418,14 +418,14 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
         # send a stanza untouched
         if not self.connection:
             return
-        if not isinstance(stanza, common.xmpp.Node):
-            stanza = common.xmpp.Protocol(node=stanza)
+        if not isinstance(stanza, nbxmpp.Node):
+            stanza = nbxmpp.Protocol(node=stanza)
         self.connection.send(stanza)
 
     def _event_dispatcher(self, realm, event, data):
         CommonConnection._event_dispatcher(self, realm, event, data)
         if realm == '':
-            if event == common.xmpp.transports_nb.DATA_ERROR:
+            if event == nbxmpp.transports_nb.DATA_ERROR:
                 thread_id = data[1]
                 frm = unicode(data[0])
                 session = self.get_or_create_session(frm, thread_id)

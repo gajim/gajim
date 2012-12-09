@@ -36,7 +36,7 @@ from common import helpers
 from common.file_props import FilesProp
 from common.protocol.bytestream import (is_transfer_active, is_transfer_paused,
         is_transfer_stopped)
-from common.xmpp.protocol import NS_JINGLE_FILE_TRANSFER
+from nbxmpp.protocol import NS_JINGLE_FILE_TRANSFER
 import logging
 log = logging.getLogger('gajim.filetransfer_window')
 
@@ -684,14 +684,14 @@ class FileTransfersWindow:
         # Converts date-time from seconds from epoch to iso 8601
         import time, datetime
         ts = time.gmtime(epoch)
-        dt = datetime.datetime(ts.tm_year, ts.tm_mon, ts.tm_mday, ts.tm_hour, 
+        dt = datetime.datetime(ts.tm_year, ts.tm_mon, ts.tm_mday, ts.tm_hour,
                                ts.tm_min,  ts.tm_sec)
         return dt.isoformat()
 
     def get_send_file_props(self, account, contact, file_path, file_name,
     file_desc=''):
         """
-        Create new file_props object and set initial file transfer 
+        Create new file_props object and set initial file transfer
         properties in it
         """
         if os.path.isfile(file_path):

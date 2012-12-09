@@ -70,7 +70,7 @@ from common import dbus_support
 if dbus_support.supported:
     import dbus
 
-from common.xmpp.protocol import NS_FILE
+from nbxmpp.protocol import NS_FILE
 from common.pep import MOODS, ACTIVITIES
 
 #(icon, name, type, jid, account, editable, second pixbuf)

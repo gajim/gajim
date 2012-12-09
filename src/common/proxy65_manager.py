@@ -26,11 +26,11 @@ import errno
 import logging
 log = logging.getLogger('gajim.c.proxy65_manager')
 
-import common.xmpp
+import nbxmpp
 from common import gajim
 from common import helpers
 from socks5 import Socks5
-from common.xmpp.idlequeue import IdleObject
+from nbxmpp.idlequeue import IdleObject
 from common.file_props import FilesProp
 
 S_INITIAL = 0
@@ -90,7 +90,7 @@ class Proxy65Manager:
                     self.proxies[proxy]._on_connect_failure()
                 self.proxies[proxy].resolve_result(host, port, jid)
                 # we can have only one streamhost
-                raise common.xmpp.NodeProcessed
+                raise nbxmpp.NodeProcessed
 
     def error_cb(self, proxy, query):
         sid = query.getAttr('sid')
@@ -138,9 +138,9 @@ class ProxyResolver:
 
     def _on_connect_success(self):
         log.debug('Host successfully connected %s:%s' % (self.host, self.port))
-        iq = common.xmpp.Protocol(name='iq', to=self.jid, typ='set')
+        iq = nbxmpp.Protocol(name='iq', to=self.jid, typ='set')
         query = iq.setTag('query')
-        query.setNamespace(common.xmpp.NS_BYTESTREAM)
+        query.setNamespace(nbxmpp.NS_BYTESTREAM)
         query.setAttr('sid',  self.sid)
 
         activate = query.setTag('activate')
@@ -212,9 +212,9 @@ class ProxyResolver:
         """
         self.state = S_STARTED
         self.active_connection = connection
-        iq = common.xmpp.Protocol(name='iq', to=self.proxy, typ='get')
+        iq = nbxmpp.Protocol(name='iq', to=self.proxy, typ='get')
         query = iq.setTag('query')
-        query.setNamespace(common.xmpp.NS_BYTESTREAM)
+        query.setNamespace(nbxmpp.NS_BYTESTREAM)
         connection.send(iq)
 
     def __init__(self, proxy, sender_jid, testit):

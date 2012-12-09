@@ -18,7 +18,7 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-import common.xmpp
+import nbxmpp
 from common import gajim
 from common import ged
 from common.connection_handlers_events import ArchivingReceivedEvent
@@ -52,16 +52,16 @@ class ConnectionArchive:
             self._nec_archiving_changed_received)
 
     def request_message_archiving_preferences(self):
-        iq_ = common.xmpp.Iq('get')
-        iq_.setTag('pref', namespace=common.xmpp.NS_ARCHIVE)
+        iq_ = nbxmpp.Iq('get')
+        iq_.setTag('pref', namespace=nbxmpp.NS_ARCHIVE)
         self.connection.send(iq_)
 
     def set_pref(self, name, **data):
         '''
         data contains names and values of pref name attributes.
         '''
-        iq_ = common.xmpp.Iq('set')
-        pref = iq_.setTag('pref', namespace=common.xmpp.NS_ARCHIVE)
+        iq_ = nbxmpp.Iq('set')
+        pref = iq_.setTag('pref', namespace=nbxmpp.NS_ARCHIVE)
         tag = pref.setTag(name)
         for key, value in data.items():
             if value is not None:
@@ -81,21 +81,21 @@ class ConnectionArchive:
         self.set_pref('item', jid=jid, otr=otr, save=save)
 
     def remove_item(self, jid):
-        iq_ = common.xmpp.Iq('set')
-        itemremove = iq_.setTag('itemremove', namespace=common.xmpp.NS_ARCHIVE)
+        iq_ = nbxmpp.Iq('set')
+        itemremove = iq_.setTag('itemremove', namespace=nbxmpp.NS_ARCHIVE)
         item = itemremove.setTag('item')
         item.setAttr('jid', jid)
         self.connection.send(iq_)
 
     def stop_archiving_session(self, thread_id):
-        iq_ = common.xmpp.Iq('set')
-        pref = iq_.setTag('pref', namespace=common.xmpp.NS_ARCHIVE)
+        iq_ = nbxmpp.Iq('set')
+        pref = iq_.setTag('pref', namespace=nbxmpp.NS_ARCHIVE)
         session = pref.setTag('session', attrs={'thread': thread_id,
             'save': 'false', 'otr': 'concede'})
         self.connection.send(iq_)
 
     def get_item_pref(self, jid):
-        jid = common.xmpp.JID(jid)
+        jid = nbxmpp.JID(jid)
         if unicode(jid) in self.items:
             return self.items[jid]
 
@@ -142,7 +142,7 @@ class ConnectionArchive:
         log.debug('_ArchiveCB %s' % iq_obj.getType())
         gajim.nec.push_incoming_event(ArchivingReceivedEvent(None, conn=self,
             stanza=iq_obj))
-        raise common.xmpp.NodeProcessed
+        raise nbxmpp.NodeProcessed
 
     def _nec_archiving_changed_received(self, obj):
         if obj.conn.name != self.name:
@@ -160,8 +160,8 @@ class ConnectionArchive:
 
     def request_collections_list_page(self, with_='', start=None, end=None,
     after=None, max=30, exact_match=False):
-        iq_ = common.xmpp.Iq('get')
-        list_ = iq_.setTag('list', namespace=common.xmpp.NS_ARCHIVE)
+        iq_ = nbxmpp.Iq('get')
+        list_ = iq_.setTag('list', namespace=nbxmpp.NS_ARCHIVE)
         if with_:
             list_.setAttr('with', with_)
             if exact_match:
@@ -170,7 +170,7 @@ class ConnectionArchive:
             list_.setAttr('start', start)
         if end:
             list_.setAttr('end', end)
-        set_ = list_.setTag('set', namespace=common.xmpp.NS_RSM)
+        set_ = list_.setTag('set', namespace=nbxmpp.NS_RSM)
         set_.setTagData('max', max)
         if after:
             set_.setTagData('after', after)
@@ -181,12 +181,12 @@ class ConnectionArchive:
 
     def request_collection_page(self, with_, start, end=None, after=None,
     max=30, exact_match=False):
-        iq_ = common.xmpp.Iq('get')
-        retrieve = iq_.setTag('retrieve', namespace=common.xmpp.NS_ARCHIVE,
+        iq_ = nbxmpp.Iq('get')
+        retrieve = iq_.setTag('retrieve', namespace=nbxmpp.NS_ARCHIVE,
                 attrs={'with': with_, 'start': start})
         if exact_match:
             retrieve.setAttr('exactmatch', 'true')
-        set_ = retrieve.setTag('set', namespace=common.xmpp.NS_RSM)
+        set_ = retrieve.setTag('set', namespace=nbxmpp.NS_RSM)
         set_.setTagData('max', max)
         if after:
             set_.setTagData('after', after)
@@ -197,8 +197,8 @@ class ConnectionArchive:
 
     def remove_collection(self, with_='', start=None, end=None,
     exact_match=False, open=False):
-        iq_ = common.xmpp.Iq('set')
-        remove = iq_.setTag('remove', namespace=common.xmpp.NS_ARCHIVE)
+        iq_ = nbxmpp.Iq('set')
+        remove = iq_.setTag('remove', namespace=nbxmpp.NS_ARCHIVE)
         if with_:
             remove.setAttr('with', with_)
             if exact_match:
@@ -212,10 +212,10 @@ class ConnectionArchive:
         self.connection.send(iq_)
 
     def request_modifications_page(self, start, max=30):
-        iq_ = common.xmpp.Iq('get')
-        moified = iq_.setTag('modified', namespace=common.xmpp.NS_ARCHIVE,
+        iq_ = nbxmpp.Iq('get')
+        moified = iq_.setTag('modified', namespace=nbxmpp.NS_ARCHIVE,
                 attrs={'start': start})
-        set_ = moified.setTag('set', namespace=common.xmpp.NS_RSM)
+        set_ = moified.setTag('set', namespace=nbxmpp.NS_RSM)
         set_.setTagData('max', max)
         id_ = self.connection.getAnID()
         iq_.setID(id_)

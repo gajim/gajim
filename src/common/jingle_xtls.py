@@ -17,6 +17,7 @@
 ##
 
 import os
+import nbxmpp
 
 import logging
 import common
@@ -56,7 +57,7 @@ def default_callback(connection, certificate, error_num, depth, return_code):
 
 def load_cert_file(cert_path, cert_store):
     """
-    This is almost identical to the one in common.xmpp.tls_nb
+    This is almost identical to the one in nbxmpp.tls_nb
     """
     if not os.path.isfile(cert_path):
         return
@@ -118,11 +119,11 @@ def send_cert(con, jid_from, sid):
     for line in certfile.readlines():
         if not line.startswith('-'):
             certificate += line
-    iq = common.xmpp.Iq('result', to=jid_from);
+    iq = nbxmpp.Iq('result', to=jid_from);
     iq.setAttr('id', sid)
 
     pubkey = iq.setTag('pubkeys')
-    pubkey.setNamespace(common.xmpp.NS_PUBKEY_PUBKEY)
+    pubkey.setNamespace(nbxmpp.NS_PUBKEY_PUBKEY)
 
     keyinfo = pubkey.setTag('keyinfo')
     name = keyinfo.setTag('name')
@@ -151,11 +152,11 @@ def handle_new_cert(con, obj, jid_from):
     approve_pending_content(id_)
 
 def send_cert_request(con, to_jid):
-    iq = common.xmpp.Iq('get', to=to_jid)
+    iq = nbxmpp.Iq('get', to=to_jid)
     id_ = con.connection.getAnID()
     iq.setAttr('id', id_)
     pubkey = iq.setTag('pubkeys')
-    pubkey.setNamespace(common.xmpp.NS_PUBKEY_PUBKEY)
+    pubkey.setNamespace(nbxmpp.NS_PUBKEY_PUBKEY)
     con.connection.send(iq)
     return unicode(id_)
 

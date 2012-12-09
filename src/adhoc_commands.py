@@ -28,7 +28,9 @@
 import gobject
 import gtk
 
-from common import xmpp, gajim, dataforms
+import nbxmpp
+from common import gajim
+from common import dataforms
 
 import gtkgui_helpers
 import dialogs
@@ -386,7 +388,7 @@ class CommandWindow:
         self.send_command(action)
 
     def stage3_next_form(self, command):
-        if not isinstance(command, xmpp.Node):
+        if not isinstance(command, nbxmpp.Node):
             self.stage5(error=_('Service sent malformed data'), senderror=True)
             return
 
@@ -506,8 +508,8 @@ class CommandWindow:
         if errorid:
             # we've got error code, display appropriate message
             try:
-                errorname = xmpp.NS_STANZAS + ' ' + str(errorid)
-                errordesc = xmpp.ERRORS[errorname][2]
+                errorname = nbxmpp.NS_STANZAS + ' ' + str(errorid)
+                errordesc = nbxmpp.ERRORS[errorname][2]
                 error = errordesc.decode('utf-8')
                 del errorname, errordesc
             except KeyError:        # when stanza doesn't have error description
@@ -570,9 +572,9 @@ class CommandWindow:
         """
         Request the command list. Change stage on delivery
         """
-        query = xmpp.Iq(typ='get', to=xmpp.JID(self.jid),
-            queryNS=xmpp.NS_DISCO_ITEMS)
-        query.setQuerynode(xmpp.NS_COMMANDS)
+        query = nbxmpp.Iq(typ='get', to=xmpp.JID(self.jid),
+            queryNS=nbxmpp.NS_DISCO_ITEMS)
+        query.setQuerynode(nbxmpp.NS_COMMANDS)
 
         def callback(response):
             '''Called on response to query.'''
@@ -580,14 +582,14 @@ class CommandWindow:
             # is error => error stage
             error = response.getError()
             if error:
-                # extracting error description from xmpp/protocol.py
-                self.stage5(errorid = error)
+                # extracting error description
+                self.stage5(errorid=error)
                 return
 
             # no commands => no commands stage
             # commands => command selection stage
             query = response.getTag('query')
-            if query and query.getAttr('node') == xmpp.NS_COMMANDS:
+            if query and query.getAttr('node') == nbxmpp.NS_COMMANDS:
                 items = query.getTags('item')
             else:
                 items = []
@@ -609,9 +611,9 @@ class CommandWindow:
         assert isinstance(self.commandnode, unicode)
         assert action in ('execute', 'prev', 'next', 'complete')
 
-        stanza = xmpp.Iq(typ='set', to=self.jid)
-        cmdnode = stanza.addChild('command', namespace=xmpp.NS_COMMANDS, attrs={
-                'node':self.commandnode, 'action':action})
+        stanza = nbxmpp.Iq(typ='set', to=self.jid)
+        cmdnode = stanza.addChild('command', namespace=nbxmpp.NS_COMMANDS,
+            attrs={'node':self.commandnode, 'action':action})
 
         if self.sessionid:
             cmdnode.setAttr('sessionid', self.sessionid)
@@ -636,8 +638,8 @@ class CommandWindow:
         assert self.commandnode
         if self.sessionid and self.account.connection:
             # we already have sessionid, so the service sent at least one reply.
-            stanza = xmpp.Iq(typ='set', to=self.jid)
-            stanza.addChild('command', namespace=xmpp.NS_COMMANDS, attrs={
+            stanza = nbxmpp.Iq(typ='set', to=self.jid)
+            stanza.addChild('command', namespace=nbxmpp.NS_COMMANDS, attrs={
                             'node':self.commandnode,
                             'sessionid':self.sessionid,
                             'action':'cancel'

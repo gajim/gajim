@@ -59,7 +59,7 @@ import adhoc_commands
 import search_window
 
 from common import gajim
-from common import xmpp
+import nbxmpp
 from common.exceptions import GajimGeneralException
 from common import helpers
 from common import ged
@@ -350,7 +350,7 @@ class ServicesCache:
         # NS_DISCO_ITEMS anyways.
         # Allow browsing for unknown types aswell.
         if (not features and not identities) or \
-        xmpp.NS_DISCO_ITEMS in features or xmpp.NS_BROWSE in features:
+        nbxmpp.NS_DISCO_ITEMS in features or nbxmpp.NS_BROWSE in features:
             return ToplevelAgentBrowser
         return None
 
@@ -1502,11 +1502,11 @@ class ToplevelAgentBrowser(AgentBrowser):
 
     def _update_actions(self, jid, node, identities, features, data):
         AgentBrowser._update_actions(self, jid, node, identities, features, data)
-        if self.execute_button and xmpp.NS_COMMANDS in features:
+        if self.execute_button and nbxmpp.NS_COMMANDS in features:
             self.execute_button.set_sensitive(True)
-        if self.search_button and xmpp.NS_SEARCH in features:
+        if self.search_button and nbxmpp.NS_SEARCH in features:
             self.search_button.set_sensitive(True)
-        if self.register_button and xmpp.NS_REGISTER in features:
+        if self.register_button and nbxmpp.NS_REGISTER in features:
             # We can register this agent
             registered_transports = []
             jid_list = gajim.contacts.get_jid_list(self.account)
@@ -1520,13 +1520,13 @@ class ToplevelAgentBrowser(AgentBrowser):
             else:
                 self.register_button.set_label(_('Re_gister'))
             self.register_button.set_sensitive(True)
-        if self.join_button and xmpp.NS_MUC in features:
+        if self.join_button and nbxmpp.NS_MUC in features:
             self.join_button.set_sensitive(True)
 
     def _default_action(self, jid, node, identities, features, data):
         if AgentBrowser._default_action(self, jid, node, identities, features, data):
             return True
-        if xmpp.NS_REGISTER in features:
+        if nbxmpp.NS_REGISTER in features:
             # Register if we can't browse
             self.on_register_button_clicked()
             return True
@@ -2239,7 +2239,7 @@ class DiscussionGroupsBrowser(AgentBrowser):
         # we now know subscriptions, update button states
         self.update_actions()
 
-        raise xmpp.NodeProcessed
+        raise nbxmpp.NodeProcessed
 
     def _on_pep_subscribe(self, conn, request, groupnode):
         """
@@ -2255,7 +2255,7 @@ class DiscussionGroupsBrowser(AgentBrowser):
 
         self.update_actions()
 
-        raise xmpp.NodeProcessed
+        raise nbxmpp.NodeProcessed
 
     def _on_pep_unsubscribe(self, conn, request, groupnode):
         """
@@ -2271,7 +2271,7 @@ class DiscussionGroupsBrowser(AgentBrowser):
 
         self.update_actions()
 
-        raise xmpp.NodeProcessed
+        raise nbxmpp.NodeProcessed
 
 # Fill the global agent type info dictionary
 _agent_type_info = _gen_agent_type_info()

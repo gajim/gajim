@@ -52,7 +52,7 @@ import signal
 if os.name != 'nt':
     signal.signal(signal.SIGPIPE, signal.SIG_DFL)
 
-import common.xmpp
+import nbxmpp
 from common import helpers
 from common import gajim
 from common import gpg
@@ -61,7 +61,7 @@ from common import exceptions
 from common import check_X509
 from connection_handlers import *
 
-from xmpp import Smacks
+from nbxmpp import Smacks
 from string import Template
 import logging
 log = logging.getLogger('gajim.c.connection')
@@ -357,21 +357,21 @@ class CommonConnection:
     label, forward_from, delayed, session, form_node, user_nick, attention,
     callback):
         if type_ == 'chat':
-            msg_iq = common.xmpp.Message(to=fjid, body=msgtxt, typ=type_,
+            msg_iq = nbxmpp.Message(to=fjid, body=msgtxt, typ=type_,
                     xhtml=xhtml)
         else:
             if subject:
-                msg_iq = common.xmpp.Message(to=fjid, body=msgtxt, typ='normal',
+                msg_iq = nbxmpp.Message(to=fjid, body=msgtxt, typ='normal',
                         subject=subject, xhtml=xhtml)
             else:
-                msg_iq = common.xmpp.Message(to=fjid, body=msgtxt, typ='normal',
+                msg_iq = nbxmpp.Message(to=fjid, body=msgtxt, typ='normal',
                         xhtml=xhtml)
 
         if msg_id:
             msg_iq.setID(msg_id)
 
         if msgenc:
-            msg_iq.setTag(common.xmpp.NS_ENCRYPTED + ' x').setData(msgenc)
+            msg_iq.setTag(nbxmpp.NS_ENCRYPTED + ' x').setData(msgenc)
 
         if form_node:
             msg_iq.addChild(node=form_node)
@@ -380,7 +380,7 @@ class CommonConnection:
 
         # XEP-0172: user_nickname
         if user_nick:
-            msg_iq.setTag('nick', namespace = common.xmpp.NS_NICK).setData(
+            msg_iq.setTag('nick', namespace = nbxmpp.NS_NICK).setData(
                     user_nick)
 
         # TODO: We might want to write a function so we don't need to
@@ -399,7 +399,7 @@ class CommonConnection:
 
         if forward_from:
             addresses = msg_iq.addChild('addresses',
-                namespace=common.xmpp.NS_ADDRESS)
+                namespace=nbxmpp.NS_ADDRESS)
             addresses.addChild('address', attrs = {'type': 'ofrom',
                 'jid': forward_from})
 
@@ -408,14 +408,14 @@ class CommonConnection:
             our_jid = gajim.get_jid_from_account(self.name) + '/' + \
                     self.server_resource
             timestamp = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(delayed))
-            msg_iq.addChild('delay', namespace=common.xmpp.NS_DELAY2,
+            msg_iq.addChild('delay', namespace=nbxmpp.NS_DELAY2,
                     attrs={'from': our_jid, 'stamp': timestamp})
 
         # XEP-0184
         if msgtxt and gajim.config.get_per('accounts', self.name,
         'request_receipt') and contact and contact.supports(
-        common.xmpp.NS_RECEIPTS):
-            msg_iq.setTag('request', namespace=common.xmpp.NS_RECEIPTS)
+        nbxmpp.NS_RECEIPTS):
+            msg_iq.setTag('request', namespace=nbxmpp.NS_RECEIPTS)
 
         if session:
             # XEP-0201
@@ -428,7 +428,7 @@ class CommonConnection:
 
         # XEP-0224
         if attention:
-            msg_iq.setTag('attention', namespace=common.xmpp.NS_ATTENTION)
+            msg_iq.setTag('attention', namespace=nbxmpp.NS_ATTENTION)
 
         if callback:
             callback(jid, msg, keyID, forward_from, session, original_message,
@@ -453,7 +453,7 @@ class CommonConnection:
                     try:
                         if xhtml and gajim.config.get('log_xhtml_messages'):
                             log_msg = '<body xmlns="%s">%s</body>' % (
-                                common.xmpp.NS_XHTML, xhtml)
+                                nbxmpp.NS_XHTML, xhtml)
                         gajim.logger.write(kind, jid, log_msg)
                     except exceptions.PysqliteOperationalError, e:
                         self.dispatch('DB_ERROR', (_('Disk Write Error'),
@@ -546,8 +546,7 @@ class CommonConnection:
         to_whom_jid = jid
         if resource:
             to_whom_jid += '/' + resource
-        iq = common.xmpp.Iq(to=to_whom_jid, typ='get', queryNS=\
-            common.xmpp.NS_LAST)
+        iq = nbxmpp.Iq(to=to_whom_jid, typ='get', queryNS=nbxmpp.NS_LAST)
         id_ = self.connection.getAnID()
         iq.setID(id_)
         if groupchat_jid:
@@ -615,10 +614,10 @@ class CommonConnection:
 
     def _event_dispatcher(self, realm, event, data):
         if realm == '':
-            if event == common.xmpp.transports_nb.DATA_RECEIVED:
+            if event == nbxmpp.transports_nb.DATA_RECEIVED:
                 gajim.nec.push_incoming_event(StanzaReceivedEvent(None,
                     conn=self, stanza_str=unicode(data, errors='ignore')))
-            elif event == common.xmpp.transports_nb.DATA_SENT:
+            elif event == nbxmpp.transports_nb.DATA_SENT:
                 gajim.nec.push_incoming_event(StanzaSentEvent(None, conn=self,
                     stanza_str=unicode(data)))
 
@@ -646,7 +645,7 @@ class CommonConnection:
         if show == 'offline':
             self.connected = 0
             if self.connection:
-                p = common.xmpp.Presence(typ = 'unavailable')
+                p = nbxmpp.Presence(typ = 'unavailable')
                 p = self.add_sha(p, False)
                 if msg:
                     p.setStatus(msg)
@@ -868,8 +867,8 @@ class Connection(CommonConnection, ConnectionHandlers):
 
     def _event_dispatcher(self, realm, event, data):
         CommonConnection._event_dispatcher(self, realm, event, data)
-        if realm == common.xmpp.NS_REGISTER:
-            if event == common.xmpp.features_nb.REGISTER_DATA_RECEIVED:
+        if realm == nbxmpp.NS_REGISTER:
+            if event == nbxmpp.features_nb.REGISTER_DATA_RECEIVED:
                 # data is (agent, DataFrom, is_form, error_msg)
                 if self.new_account_info and \
                 self.new_account_info['hostname'] == data[0]:
@@ -887,7 +886,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                         helpers.replace_dataform_media(conf, data[4])
                     if self.new_account_form:
                         def _on_register_result(result):
-                            if not common.xmpp.isResultNode(result):
+                            if not nbxmpp.isResultNode(result):
                                 gajim.nec.push_incoming_event(AccountNotCreatedEvent(
                                     None, conn=self, reason=result.getError()))
                                 return
@@ -908,7 +907,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                         # typed, so send them
                         if is_form:
                             #TODO: Check if form has changed
-                            iq = common.xmpp.Iq('set', common.xmpp.NS_REGISTER,
+                            iq = nbxmpp.Iq('set', nbxmpp.NS_REGISTER,
                                 to=self._hostname)
                             iq.setTag('query').addChild(node=self.new_account_form)
                             self.connection.SendAndCallForResponse(iq,
@@ -922,7 +921,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                                 gajim.nec.push_incoming_event(AccountNotCreatedEvent(
                                     None, conn=self, reason=reason))
                                 return
-                            common.xmpp.features_nb.register(self.connection,
+                            nbxmpp.features_nb.register(self.connection,
                                     self._hostname, self.new_account_form,
                                     _on_register_result)
                         return
@@ -944,12 +943,12 @@ class Connection(CommonConnection, ConnectionHandlers):
                 gajim.nec.push_incoming_event(RegisterAgentInfoReceivedEvent(
                     None, conn=self, agent=data[0], config=conf,
                     is_form=is_form))
-        elif realm == common.xmpp.NS_PRIVACY:
-            if event == common.xmpp.features_nb.PRIVACY_LISTS_RECEIVED:
+        elif realm == nbxmpp.NS_PRIVACY:
+            if event == nbxmpp.features_nb.PRIVACY_LISTS_RECEIVED:
                 # data is (list)
                 gajim.nec.push_incoming_event(PrivacyListsReceivedEvent(None,
                     conn=self, lists_list=data))
-            elif event == common.xmpp.features_nb.PRIVACY_LIST_RECEIVED:
+            elif event == nbxmpp.features_nb.PRIVACY_LIST_RECEIVED:
                 # data is (resp)
                 if not data:
                     return
@@ -971,7 +970,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                                 'order':dict_item['order'], 'child':childs})
                 gajim.nec.push_incoming_event(PrivacyListReceivedEvent(None,
                     conn=self, list_name=name, rules=rules))
-            elif event == common.xmpp.features_nb.PRIVACY_LISTS_ACTIVE_DEFAULT:
+            elif event == nbxmpp.features_nb.PRIVACY_LISTS_ACTIVE_DEFAULT:
                 # data is (dict)
                 gajim.nec.push_incoming_event(PrivacyListActiveDefaultEvent(
                     None, conn=self, active_list=data['active'],
@@ -1116,7 +1115,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             if self._proxy and self._proxy['type']=='bosh':
                 # with BOSH, we can't do TLS negotiation with <starttls>, we do only "plain"
                 # connection and TLS with handshake right after TCP connecting ("ssl")
-                scheme = common.xmpp.transports_nb.urisplit(self._proxy['bosh_uri'])[0]
+                scheme = nbxmpp.transports_nb.urisplit(self._proxy['bosh_uri'])[0]
                 if scheme=='https':
                     self._connection_types = ['ssl']
                 else:
@@ -1172,14 +1171,14 @@ class Connection(CommonConnection, ConnectionHandlers):
             mycerts = common.gajim.MY_CACERTS
             secure_tuple = (self._current_type, cacerts, mycerts)
 
-            con = common.xmpp.NonBlockingClient(
+            con = nbxmpp.NonBlockingClient(
                 domain=self._hostname,
                 caller=self,
                 idlequeue=gajim.idlequeue)
 
             self.last_connection = con
             # increase default timeout for server responses
-            common.xmpp.dispatcher_nb.DEFAULT_TIMEOUT_SECONDS = \
+            nbxmpp.dispatcher_nb.DEFAULT_TIMEOUT_SECONDS = \
                 self.try_connecting_for_foo_secs
             # FIXME: this is a hack; need a better way
             if self.on_connect_success == self._on_new_account:
@@ -1231,9 +1230,9 @@ class Connection(CommonConnection, ConnectionHandlers):
                 sectxt = _('Check your connection or try again later.')
                 if self.streamError:
                     # show error dialog
-                    key = common.xmpp.NS_XMPP_STREAMS + ' ' + self.streamError
-                    if key in common.xmpp.ERRORS:
-                        sectxt2 = _('Server replied: %s') % common.xmpp.ERRORS[key][2]
+                    key = nbxmpp.NS_XMPP_STREAMS + ' ' + self.streamError
+                    if key in nbxmpp.ERRORS:
+                        sectxt2 = _('Server replied: %s') % nbxmpp.ERRORS[key][2]
                         gajim.nec.push_incoming_event(InformationEvent(None,
                             conn=self, level='error', pri_txt=pritxt,
                             sec_txt='%s\n%s' % (sectxt2, sectxt)))
@@ -1433,7 +1432,7 @@ class Connection(CommonConnection, ConnectionHandlers):
     def get_privacy_lists(self):
         if not gajim.account_is_connected(self.name):
             return
-        common.xmpp.features_nb.getPrivacyLists(self.connection)
+        nbxmpp.features_nb.getPrivacyLists(self.connection)
 
     def send_keepalive(self):
         # nothing received for the last foo seconds
@@ -1460,12 +1459,12 @@ class Connection(CommonConnection, ConnectionHandlers):
         else:
             to = gajim.config.get_per('accounts', self.name, 'hostname')
             self.awaiting_xmpp_ping_id = id_
-        iq = common.xmpp.Iq('get', to=to)
-        iq.addChild(name = 'ping', namespace = common.xmpp.NS_PING)
+        iq = nbxmpp.Iq('get', to=to)
+        iq.addChild(name='ping', namespace=nbxmpp.NS_PING)
         iq.setID(id_)
         def _on_response(resp):
             timePong = time_time()
-            if not common.xmpp.isResultNode(resp):
+            if not nbxmpp.isResultNode(resp):
                 gajim.nec.push_incoming_event(PingErrorEvent(None, conn=self,
                     contact=pingTo))
                 return
@@ -1478,12 +1477,12 @@ class Connection(CommonConnection, ConnectionHandlers):
         else:
             self.connection.SendAndCallForResponse(iq, self._on_xmpp_ping_answer)
             gajim.idlequeue.set_alarm(self.check_pingalive, gajim.config.get_per(
-                    'accounts', self.name, 'time_for_ping_alive_answer'))
+                'accounts', self.name, 'time_for_ping_alive_answer'))
 
     def get_active_default_lists(self):
         if not gajim.account_is_connected(self.name):
             return
-        common.xmpp.features_nb.getActiveAndDefaultPrivacyLists(self.connection)
+        nbxmpp.features_nb.getActiveAndDefaultPrivacyLists(self.connection)
 
     def del_privacy_list(self, privacy_list):
         if not gajim.account_is_connected(self.name):
@@ -1498,41 +1497,42 @@ class Connection(CommonConnection, ConnectionHandlers):
                     'list'), sec_txt=_('Privacy list %s has not been removed. '
                     'It is maybe active in one of your connected resources. '
                     'Deactivate it and try again.') % privacy_list))
-        common.xmpp.features_nb.delPrivacyList(self.connection, privacy_list,
-                _on_del_privacy_list_result)
+        nbxmpp.features_nb.delPrivacyList(self.connection, privacy_list,
+            _on_del_privacy_list_result)
 
     def get_privacy_list(self, title):
         if not gajim.account_is_connected(self.name):
             return
-        common.xmpp.features_nb.getPrivacyList(self.connection, title)
+        nbxmpp.features_nb.getPrivacyList(self.connection, title)
 
     def set_privacy_list(self, listname, tags):
         if not gajim.account_is_connected(self.name):
             return
-        common.xmpp.features_nb.setPrivacyList(self.connection, listname, tags)
+        nbxmpp.features_nb.setPrivacyList(self.connection, listname, tags)
 
     def set_active_list(self, listname):
         if not gajim.account_is_connected(self.name):
             return
-        common.xmpp.features_nb.setActivePrivacyList(self.connection, listname, 'active')
+        nbxmpp.features_nb.setActivePrivacyList(self.connection, listname,
+            'active')
 
     def set_default_list(self, listname):
         if not gajim.account_is_connected(self.name):
             return
-        common.xmpp.features_nb.setDefaultPrivacyList(self.connection, listname)
+        nbxmpp.features_nb.setDefaultPrivacyList(self.connection, listname)
 
     def build_privacy_rule(self, name, action, order=1):
         """
         Build a Privacy rule stanza for invisibility
         """
-        iq = common.xmpp.Iq('set', common.xmpp.NS_PRIVACY, xmlns = '')
+        iq = nbxmpp.Iq('set', nbxmpp.NS_PRIVACY, xmlns='')
         l = iq.setQuery().setTag('list', {'name': name})
         i = l.setTag('item', {'action': action, 'order': str(order)})
         i.setTag('presence-out')
         return iq
 
     def build_invisible_rule(self):
-        iq = common.xmpp.Iq('set', common.xmpp.NS_PRIVACY, xmlns = '')
+        iq = nbxmpp.Iq('set', nbxmpp.NS_PRIVACY, xmlns='')
         l = iq.setQuery().setTag('list', {'name': 'invisible'})
         if self.name in gajim.interface.status_sent_to_groups and \
         len(gajim.interface.status_sent_to_groups[self.name]) > 0:
@@ -1562,7 +1562,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         """
         if not gajim.account_is_connected(self.name):
             return
-        iq = common.xmpp.Iq('set', common.xmpp.NS_PRIVACY, xmlns = '')
+        iq = nbxmpp.Iq('set', nbxmpp.NS_PRIVACY, xmlns='')
         iq.setQuery().setTag('active', {'name': name})
         self.connection.send(iq)
 
@@ -1581,7 +1581,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         # offline presence first as it's required by XEP-0126
         if self.connected > 1 and self.privacy_rules_supported:
             self.on_purpose = True
-            p = common.xmpp.Presence(typ = 'unavailable')
+            p = nbxmpp.Presence(typ='unavailable')
             p = self.add_sha(p, False)
             if msg:
                 p.setStatus(msg)
@@ -1602,12 +1602,12 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.connected = gajim.SHOW_LIST.index('invisible')
         self.status = msg
         priority = unicode(gajim.get_priority(self.name, 'invisible'))
-        p = common.xmpp.Presence(priority = priority)
+        p = nbxmpp.Presence(priority=priority)
         p = self.add_sha(p, True)
         if msg:
             p.setStatus(msg)
         if signed:
-            p.setTag(common.xmpp.NS_SIGNED + ' x').setData(signed)
+            p.setTag(nbxmpp.NS_SIGNED + ' x').setData(signed)
         self.connection.send(p)
         self.priority = priority
         gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
@@ -1669,7 +1669,7 @@ class Connection(CommonConnection, ConnectionHandlers):
     def _request_privacy(self):
         if not gajim.account_is_connected(self.name) or not self.connection:
             return
-        iq = common.xmpp.Iq('get', common.xmpp.NS_PRIVACY, xmlns = '')
+        iq = nbxmpp.Iq('get', nbxmpp.NS_PRIVACY, xmlns='')
         id_ = self.connection.getAnID()
         iq.setID(id_)
         self.awaiting_answers[id_] = (PRIVACY_ARRIVED, )
@@ -1704,44 +1704,43 @@ class Connection(CommonConnection, ConnectionHandlers):
             hostname = gajim.config.get_per('accounts', self.name, 'hostname')
             our_jid = gajim.get_jid_from_account(self.name)
             if obj.fjid == hostname:
-                if common.xmpp.NS_GMAILNOTIFY in obj.features:
+                if nbxmpp.NS_GMAILNOTIFY in obj.features:
                     gajim.gmail_domains.append(obj.fjid)
                     self.request_gmail_notifications()
-                if common.xmpp.NS_SECLABEL in obj.features:
+                if nbxmpp.NS_SECLABEL in obj.features:
                     self.seclabel_supported = True
                 for identity in obj.identities:
                     if identity['category'] == 'pubsub' and identity.get(
                     'type') == 'pep':
                         self.pep_supported = True
                         break
-                if common.xmpp.NS_VCARD in obj.features:
+                if nbxmpp.NS_VCARD in obj.features:
                     self.vcard_supported = True
-                if common.xmpp.NS_PUBSUB in obj.features:
+                if nbxmpp.NS_PUBSUB in obj.features:
                     self.pubsub_supported = True
-                    if common.xmpp.NS_PUBSUB_PUBLISH_OPTIONS in obj.features:
+                    if nbxmpp.NS_PUBSUB_PUBLISH_OPTIONS in obj.features:
                         self.pubsub_publish_options_supported = True
                     else:
                         # Remove stored bookmarks accessible to everyone.
                         self.send_pb_purge(our_jid, 'storage:bookmarks')
                         self.send_pb_delete(our_jid, 'storage:bookmarks')
-                if common.xmpp.NS_ARCHIVE in obj.features:
+                if nbxmpp.NS_ARCHIVE in obj.features:
                     self.archiving_supported = True
-                if common.xmpp.NS_ARCHIVE_AUTO in obj.features:
+                if nbxmpp.NS_ARCHIVE_AUTO in obj.features:
                     self.archive_auto_supported = True
-                if common.xmpp.NS_ARCHIVE_MANAGE in obj.features:
+                if nbxmpp.NS_ARCHIVE_MANAGE in obj.features:
                     self.archive_manage_supported = True
-                if common.xmpp.NS_ARCHIVE_MANUAL in obj.features:
+                if nbxmpp.NS_ARCHIVE_MANUAL in obj.features:
                     self.archive_manual_supported = True
-                if common.xmpp.NS_ARCHIVE_PREF in obj.features:
+                if nbxmpp.NS_ARCHIVE_PREF in obj.features:
                     self.archive_pref_supported = True
-                if common.xmpp.NS_CARBONS in obj.features and \
-                gajim.config.get_per('accounts', self.name,
-                'enable_message_carbons'):
+                if nbxmpp.NS_CARBONS in obj.features and gajim.config.get_per(
+                    'accounts', self.name, 'enable_message_carbons'):
                     # Server supports carbons, activate it
-                    iq = common.xmpp.Iq('set')
-                    iq.setTag('enable', namespace=common.xmpp.NS_CARBONS)
+                    iq = nbxmpp.Iq('set')
+                    iq.setTag('enable', namespace=nbxmpp.NS_CARBONS)
                     self.connection.send(iq)
-            if common.xmpp.NS_BYTESTREAM in obj.features and \
+            if nbxmpp.NS_BYTESTREAM in obj.features and \
             gajim.config.get_per('accounts', self.name, 'use_ft_proxies'):
                 our_fjid = helpers.parse_jid(our_jid + '/' + \
                     self.server_resource)
@@ -1749,7 +1748,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                     'test_ft_proxies_on_startup')
                 gajim.proxy65_manager.resolve(obj.fjid, self.connection,
                     our_fjid, default=self.name, testit=testit)
-            if common.xmpp.NS_MUC in obj.features and is_muc:
+            if nbxmpp.NS_MUC in obj.features and is_muc:
                 type_ = transport_type or 'jabber'
                 self.muc_jid[type_] = obj.fjid
             if transport_type:
@@ -1770,20 +1769,19 @@ class Connection(CommonConnection, ConnectionHandlers):
         if not msg:
             msg = ''
         if show == 'offline':
-            p = common.xmpp.Presence(typ = 'unavailable', to = jid)
+            p = nbxmpp.Presence(typ='unavailable', to=jid)
             p = self.add_sha(p, False)
             if msg:
                 p.setStatus(msg)
         else:
             signed = self.get_signed_presence(msg)
             priority = unicode(gajim.get_priority(self.name, sshow))
-            p = common.xmpp.Presence(typ = None, priority = priority, show = sshow,
-                    to = jid)
+            p = nbxmpp.Presence(typ=None, priority=priority, show=sshow, to=jid)
             p = self.add_sha(p)
             if msg:
                 p.setStatus(msg)
             if signed:
-                p.setTag(common.xmpp.NS_SIGNED + ' x').setData(signed)
+                p.setTag(nbxmpp.NS_SIGNED + ' x').setData(signed)
         self.connection.send(p)
 
     def _change_to_invisible(self, msg):
@@ -1802,24 +1800,24 @@ class Connection(CommonConnection, ConnectionHandlers):
     def _update_status(self, show, msg):
         xmpp_show = helpers.get_xmpp_show(show)
         priority = unicode(gajim.get_priority(self.name, xmpp_show))
-        p = common.xmpp.Presence(typ=None, priority=priority, show=xmpp_show)
+        p = nbxmpp.Presence(typ=None, priority=priority, show=xmpp_show)
         p = self.add_sha(p)
         if msg:
             p.setStatus(msg)
         signed = self.get_signed_presence(msg)
         if signed:
-            p.setTag(common.xmpp.NS_SIGNED + ' x').setData(signed)
+            p.setTag(nbxmpp.NS_SIGNED + ' x').setData(signed)
         if self.connection:
             self.connection.send(p)
             self.priority = priority
             gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
                 show=show))
 
-    def send_motd(self, jid, subject = '', msg = '', xhtml = None):
+    def send_motd(self, jid, subject='', msg='', xhtml=None):
         if not gajim.account_is_connected(self.name):
             return
-        msg_iq = common.xmpp.Message(to = jid, body = msg, subject = subject,
-                xhtml = xhtml)
+        msg_iq = nbxmpp.Message(to=jid, body=msg, subject=subject,
+            xhtml=xhtml)
 
         self.connection.send(msg_iq)
 
@@ -1887,8 +1885,8 @@ class Connection(CommonConnection, ConnectionHandlers):
             for contact in contacts:
                 msg += '\n "%s" (%s)' % (contact.get_full_jid(),
                         contact.get_shown_name())
-        msg_iq = common.xmpp.Message(to=jid, body=msg)
-        x = msg_iq.addChild(name='x', namespace=common.xmpp.NS_ROSTERX)
+        msg_iq = nbxmpp.Message(to=jid, body=msg)
+        x = msg_iq.addChild(name='x', namespace=nbxmpp.NS_ROSTERX)
         for contact in contacts:
             x.addChild(name='item', attrs={'action': 'add', 'jid': contact.jid,
                     'name': contact.get_shown_name()})
@@ -1906,14 +1904,14 @@ class Connection(CommonConnection, ConnectionHandlers):
         if not gajim.account_is_connected(self.name):
             return
         log.debug('ack\'ing subscription complete for %s' % jid)
-        p = common.xmpp.Presence(jid, 'subscribe')
+        p = nbxmpp.Presence(jid, 'subscribe')
         self.connection.send(p)
 
     def ack_unsubscribed(self, jid):
         if not gajim.account_is_connected(self.name):
             return
         log.debug('ack\'ing unsubscription complete for %s' % jid)
-        p = common.xmpp.Presence(jid, 'unsubscribe')
+        p = nbxmpp.Presence(jid, 'unsubscribe')
         self.connection.send(p)
 
     def request_subscription(self, jid, msg='', name='', groups=[],
@@ -1927,16 +1925,16 @@ class Connection(CommonConnection, ConnectionHandlers):
         infos = {'jid': jid}
         if name:
             infos['name'] = name
-        iq = common.xmpp.Iq('set', common.xmpp.NS_ROSTER)
+        iq = nbxmpp.Iq('set', nbxmpp.NS_ROSTER)
         q = iq.setQuery()
         item = q.addChild('item', attrs=infos)
         for g in groups:
             item.addChild('group').setData(g)
         self.connection.send(iq)
 
-        p = common.xmpp.Presence(jid, 'subscribe')
+        p = nbxmpp.Presence(jid, 'subscribe')
         if user_nick:
-            p.setTag('nick', namespace = common.xmpp.NS_NICK).setData(user_nick)
+            p.setTag('nick', namespace = nbxmpp.NS_NICK).setData(user_nick)
         p = self.add_sha(p)
         if msg:
             p.setStatus(msg)
@@ -1945,14 +1943,14 @@ class Connection(CommonConnection, ConnectionHandlers):
     def send_authorization(self, jid):
         if not gajim.account_is_connected(self.name):
             return
-        p = common.xmpp.Presence(jid, 'subscribed')
+        p = nbxmpp.Presence(jid, 'subscribed')
         p = self.add_sha(p)
         self.connection.send(p)
 
     def refuse_authorization(self, jid):
         if not gajim.account_is_connected(self.name):
             return
-        p = common.xmpp.Presence(jid, 'unsubscribed')
+        p = nbxmpp.Presence(jid, 'unsubscribed')
         p = self.add_sha(p)
         self.connection.send(p)
 
@@ -1972,7 +1970,7 @@ class Connection(CommonConnection, ConnectionHandlers):
     def unsubscribe_agent(self, agent):
         if not gajim.account_is_connected(self.name):
             return
-        iq = common.xmpp.Iq('set', common.xmpp.NS_REGISTER, to = agent)
+        iq = nbxmpp.Iq('set', nbxmpp.NS_REGISTER, to=agent)
         iq.setQuery().setTag('remove')
         id_ = self.connection.getAnID()
         iq.setID(id_)
@@ -2019,7 +2017,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             return
         self.on_connect_failure = None
         self.connection = con
-        common.xmpp.features_nb.getRegInfo(con, self._hostname)
+        nbxmpp.features_nb.getRegInfo(con, self._hostname)
 
     def request_os_info(self, jid, resource, groupchat_jid=None):
         """
@@ -2035,8 +2033,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         to_whom_jid = jid
         if resource:
             to_whom_jid += '/' + resource
-        iq = common.xmpp.Iq(to=to_whom_jid, typ='get', queryNS=\
-                common.xmpp.NS_VERSION)
+        iq = nbxmpp.Iq(to=to_whom_jid, typ='get', queryNS=nbxmpp.NS_VERSION)
         id_ = self.connection.getAnID()
         iq.setID(id_)
         if groupchat_jid:
@@ -2058,8 +2055,8 @@ class Connection(CommonConnection, ConnectionHandlers):
         to_whom_jid = jid
         if resource:
             to_whom_jid += '/' + resource
-        iq = common.xmpp.Iq(to=to_whom_jid, typ='get')
-        iq.addChild('time', namespace=common.xmpp.NS_TIME_REVISED)
+        iq = nbxmpp.Iq(to=to_whom_jid, typ='get')
+        iq.addChild('time', namespace=nbxmpp.NS_TIME_REVISED)
         id_ = self.connection.getAnID()
         iq.setID(id_)
         if groupchat_jid:
@@ -2075,8 +2072,8 @@ class Connection(CommonConnection, ConnectionHandlers):
             typ_ = 'set'
         else:
             typ_ = 'get'
-        iq = common.xmpp.Iq(typ=typ_, to=jid)
-        query = iq.addChild(name='query', namespace=common.xmpp.NS_GATEWAY)
+        iq = nbxmpp.Iq(typ=typ_, to=jid)
+        query = iq.addChild(name='query', namespace=nbxmpp.NS_GATEWAY)
         if prompt:
             query.setTagData('prompt', prompt)
         self.connection.SendAndCallForResponse(iq, _on_prompt_result)
@@ -2087,8 +2084,8 @@ class Connection(CommonConnection, ConnectionHandlers):
         """
         if not gajim.account_is_connected(self.name):
             return
-        iq = common.xmpp.Iq(typ='get')
-        iq2 = iq.addChild(name='query', namespace=common.xmpp.NS_PRIVATE)
+        iq = nbxmpp.Iq(typ='get')
+        iq2 = iq.addChild(name='query', namespace=nbxmpp.NS_PRIVATE)
         iq2.addChild(name='gajim', namespace='gajim:prefs')
         self.connection.send(iq)
 
@@ -2097,8 +2094,8 @@ class Connection(CommonConnection, ConnectionHandlers):
             return
         self.seclabel_catalogue_request(to, callback)
         server = gajim.get_jid_from_account(self.name).split("@")[1] # Really, no better way?
-        iq = common.xmpp.Iq(typ='get', to=server)
-        iq2 = iq.addChild(name='catalog', namespace=common.xmpp.NS_SECLABEL_CATALOG)
+        iq = nbxmpp.Iq(typ='get', to=server)
+        iq2 = iq.addChild(name='catalog', namespace=nbxmpp.NS_SECLABEL_CATALOG)
         iq2.setAttr('to', to)
         self.connection.send(iq)
 
@@ -2135,8 +2132,8 @@ class Connection(CommonConnection, ConnectionHandlers):
     def _request_bookmarks_xml(self):
         if not gajim.account_is_connected(self.name):
             return
-        iq = common.xmpp.Iq(typ='get')
-        iq2 = iq.addChild(name='query', namespace=common.xmpp.NS_PRIVATE)
+        iq = nbxmpp.Iq(typ='get')
+        iq2 = iq.addChild(name='query', namespace=nbxmpp.NS_PRIVATE)
         iq2.addChild(name='storage', namespace='storage:bookmarks')
         self.connection.send(iq)
 
@@ -2170,7 +2167,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         """
         if not gajim.account_is_connected(self.name):
             return
-        iq = common.xmpp.Node(tag='storage', attrs={'xmlns': 'storage:bookmarks'})
+        iq = nbxmpp.Node(tag='storage', attrs={'xmlns': 'storage:bookmarks'})
         for bm in self.bookmarks:
             iq2 = iq.addChild(name = "conference")
             iq2.setAttr('jid', bm['jid'])
@@ -2189,11 +2186,11 @@ class Connection(CommonConnection, ConnectionHandlers):
 
         if self.pubsub_supported and self.pubsub_publish_options_supported and \
         storage_type != 'xml':
-            options = common.xmpp.Node(common.xmpp.NS_DATA + ' x',
+            options = nbxmpp.Node(nbxmpp.NS_DATA + ' x',
                 attrs={'type': 'submit'})
             f = options.addChild('field', attrs={'var': 'FORM_TYPE',
                 'type': 'hidden'})
-            f.setTagData('value', common.xmpp.NS_PUBSUB_PUBLISH_OPTIONS)
+            f.setTagData('value', nbxmpp.NS_PUBSUB_PUBLISH_OPTIONS)
             f = options.addChild('field', attrs={'var': 'pubsub#persist_items'})
             f.setTagData('value', 'true')
             f = options.addChild('field', attrs={'var': 'pubsub#access_model'})
@@ -2201,8 +2198,8 @@ class Connection(CommonConnection, ConnectionHandlers):
             self.send_pb_publish('', 'storage:bookmarks', iq, 'current',
                 options=options)
         if storage_type != 'pubsub':
-            iqA = common.xmpp.Iq(typ='set')
-            iqB = iqA.addChild(name='query', namespace=common.xmpp.NS_PRIVATE)
+            iqA = nbxmpp.Iq(typ='set')
+            iqB = iqA.addChild(name='query', namespace=nbxmpp.NS_PRIVATE)
             iqB.addChild(node=iq)
             self.connection.send(iqA)
 
@@ -2213,8 +2210,8 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.annotations = {}
         if not gajim.account_is_connected(self.name):
             return
-        iq = common.xmpp.Iq(typ='get')
-        iq2 = iq.addChild(name='query', namespace=common.xmpp.NS_PRIVATE)
+        iq = nbxmpp.Iq(typ='get')
+        iq2 = iq.addChild(name='query', namespace=nbxmpp.NS_PRIVATE)
         iq2.addChild(name='storage', namespace='storage:rosternotes')
         self.connection.send(iq)
 
@@ -2224,8 +2221,8 @@ class Connection(CommonConnection, ConnectionHandlers):
         """
         if not gajim.account_is_connected(self.name):
             return
-        iq = common.xmpp.Iq(typ='set')
-        iq2 = iq.addChild(name='query', namespace=common.xmpp.NS_PRIVATE)
+        iq = nbxmpp.Iq(typ='set')
+        iq2 = iq.addChild(name='query', namespace=nbxmpp.NS_PRIVATE)
         iq3 = iq2.addChild(name='storage', namespace='storage:rosternotes')
         for jid in self.annotations.keys():
             if self.annotations[jid]:
@@ -2240,8 +2237,8 @@ class Connection(CommonConnection, ConnectionHandlers):
         """
         if not gajim.account_is_connected(self.name):
             return
-        iq = common.xmpp.Iq(typ='get')
-        iq2 = iq.addChild(name='query', namespace=common.xmpp.NS_PRIVATE)
+        iq = nbxmpp.Iq(typ='get')
+        iq2 = iq.addChild(name='query', namespace=nbxmpp.NS_PRIVATE)
         iq2.addChild(name='roster', namespace='roster:delimiter')
         id_ = self.connection.getAnID()
         iq.setID(id_)
@@ -2254,8 +2251,8 @@ class Connection(CommonConnection, ConnectionHandlers):
         """
         if not gajim.account_is_connected(self.name):
             return
-        iq = common.xmpp.Iq(typ='set')
-        iq2 = iq.addChild(name='query', namespace=common.xmpp.NS_PRIVATE)
+        iq = nbxmpp.Iq(typ='set')
+        iq2 = iq.addChild(name='query', namespace=nbxmpp.NS_PRIVATE)
         iq3 = iq2.addChild(name='roster', namespace='roster:delimiter')
         iq3.setData(delimiter)
 
@@ -2267,8 +2264,8 @@ class Connection(CommonConnection, ConnectionHandlers):
         """
         if not gajim.account_is_connected(self.name):
             return
-        iq = common.xmpp.Iq(typ='get')
-        iq2 = iq.addChild(name='query', namespace=common.xmpp.NS_PRIVATE)
+        iq = nbxmpp.Iq(typ='get')
+        iq2 = iq.addChild(name='query', namespace=nbxmpp.NS_PRIVATE)
         iq2.addChild(name='storage', namespace='storage:metacontacts')
         id_ = self.connection.getAnID()
         iq.setID(id_)
@@ -2281,8 +2278,8 @@ class Connection(CommonConnection, ConnectionHandlers):
         """
         if not gajim.account_is_connected(self.name):
             return
-        iq = common.xmpp.Iq(typ='set')
-        iq2 = iq.addChild(name='query', namespace=common.xmpp.NS_PRIVATE)
+        iq = nbxmpp.Iq(typ='set')
+        iq2 = iq.addChild(name='query', namespace=nbxmpp.NS_PRIVATE)
         iq3 = iq2.addChild(name='storage', namespace='storage:metacontacts')
         for tag in tags_list:
             for data in tags_list[tag]:
@@ -2290,14 +2287,14 @@ class Connection(CommonConnection, ConnectionHandlers):
                 dict_ = {'jid': jid, 'tag': tag}
                 if 'order' in data:
                     dict_['order'] = data['order']
-                iq3.addChild(name = 'meta', attrs = dict_)
+                iq3.addChild(name='meta', attrs=dict_)
         self.connection.send(iq)
 
     def request_roster(self):
         version = None
         features =  self.connection.Dispatcher.Stream.features
         if features and features.getTag('ver',
-        namespace=common.xmpp.NS_ROSTER_VER):
+        namespace=nbxmpp.NS_ROSTER_VER):
             version = gajim.config.get_per('accounts', self.name,
                 'roster_version')
             if version and not gajim.contacts.get_contacts_jid_list(
@@ -2313,26 +2310,26 @@ class Connection(CommonConnection, ConnectionHandlers):
         if not gajim.account_is_connected(self.name):
             return
         show = helpers.get_xmpp_show(gajim.SHOW_LIST[self.connected])
-        p = common.xmpp.Presence(to = agent, typ = ptype, show = show)
+        p = nbxmpp.Presence(to=agent, typ=ptype, show=show)
         p = self.add_sha(p, ptype != 'unavailable')
         self.connection.send(p)
 
     def send_captcha(self, jid, form_node):
         if not gajim.account_is_connected(self.name):
             return
-        iq = common.xmpp.Iq(typ='set', to=jid)
-        captcha = iq.addChild(name='captcha', namespace=common.xmpp.NS_CAPTCHA)
+        iq = nbxmpp.Iq(typ='set', to=jid)
+        captcha = iq.addChild(name='captcha', namespace=nbxmpp.NS_CAPTCHA)
         captcha.addChild(node=form_node)
         self.connection.send(iq)
 
     def check_unique_room_id_support(self, server, instance):
         if not gajim.account_is_connected(self.name):
             return
-        iq = common.xmpp.Iq(typ = 'get', to = server)
+        iq = nbxmpp.Iq(typ='get', to=server)
         iq.setAttr('id', 'unique1')
-        iq.addChild('unique', namespace=common.xmpp.NS_MUC_UNIQUE)
+        iq.addChild('unique', namespace=nbxmpp.NS_MUC_UNIQUE)
         def _on_response(resp):
-            if not common.xmpp.isResultNode(resp):
+            if not nbxmpp.isResultNode(resp):
                 gajim.nec.push_incoming_event(UniqueRoomIdNotSupportedEvent(
                     None, conn=self, instance=instance, server=server))
                 return
@@ -2369,7 +2366,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                 last_log = 0
             self.last_history_time[room_jid] = last_log
 
-        p = common.xmpp.Presence(to='%s/%s' % (room_jid, nick),
+        p = nbxmpp.Presence(to='%s/%s' % (room_jid, nick),
                 show=show, status=self.status)
         h = hmac.new(self.secret_hmac, room_jid).hexdigest()[:6]
         id_ = self.connection.getAnID()
@@ -2379,7 +2376,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             p = self.add_sha(p)
         self.add_lang(p)
         if not change_nick:
-            t = p.setTag(common.xmpp.NS_MUC + ' x')
+            t = p.setTag(nbxmpp.NS_MUC + ' x')
             tags = {}
             timeout = gajim.config.get_per('room', room_jid,
                 'muc_restore_timeout')
@@ -2407,13 +2404,13 @@ class Connection(CommonConnection, ConnectionHandlers):
                 t.setTagData('password', password)
         self.connection.send(p)
 
-    def send_gc_message(self, jid, msg, xhtml = None, label = None):
+    def send_gc_message(self, jid, msg, xhtml=None, label=None):
         if not gajim.account_is_connected(self.name):
             return
         if not xhtml and gajim.config.get('rst_formatting_outgoing_messages'):
             from common.rst_xhtml_generator import create_xhtml
             xhtml = create_xhtml(msg)
-        msg_iq = common.xmpp.Message(jid, msg, typ = 'groupchat', xhtml = xhtml)
+        msg_iq = nbxmpp.Message(jid, msg, typ='groupchat', xhtml=xhtml)
         if label is not None:
             msg_iq.addChild(node = label)
         self.connection.send(msg_iq)
@@ -2423,22 +2420,22 @@ class Connection(CommonConnection, ConnectionHandlers):
     def send_gc_subject(self, jid, subject):
         if not gajim.account_is_connected(self.name):
             return
-        msg_iq = common.xmpp.Message(jid, typ = 'groupchat', subject = subject)
+        msg_iq = nbxmpp.Message(jid, typ='groupchat', subject=subject)
         self.connection.send(msg_iq)
 
     def request_gc_config(self, room_jid):
         if not gajim.account_is_connected(self.name):
             return
-        iq = common.xmpp.Iq(typ = 'get', queryNS = common.xmpp.NS_MUC_OWNER,
-                to = room_jid)
+        iq = nbxmpp.Iq(typ='get', queryNS=nbxmpp.NS_MUC_OWNER,
+            to=room_jid)
         self.add_lang(iq)
         self.connection.send(iq)
 
     def destroy_gc_room(self, room_jid, reason = '', jid = ''):
         if not gajim.account_is_connected(self.name):
             return
-        iq = common.xmpp.Iq(typ = 'set', queryNS = common.xmpp.NS_MUC_OWNER,
-                to = room_jid)
+        iq = nbxmpp.Iq(typ='set', queryNS=nbxmpp.NS_MUC_OWNER,
+            to=room_jid)
         destroy = iq.setQuery().setTag('destroy')
         if reason:
             destroy.setTagData('reason', reason)
@@ -2455,8 +2452,8 @@ class Connection(CommonConnection, ConnectionHandlers):
         if show == 'offline':
             ptype = 'unavailable'
         xmpp_show = helpers.get_xmpp_show(show)
-        p = common.xmpp.Presence(to = '%s/%s' % (jid, nick), typ = ptype,
-                show = xmpp_show, status = status)
+        p = nbxmpp.Presence(to='%s/%s' % (jid, nick), typ=ptype,
+            show=xmpp_show, status=status)
         h = hmac.new(self.secret_hmac, jid).hexdigest()[:6]
         id_ = self.connection.getAnID()
         id_ = 'gajim_muc_' + id_ + '_' + h
@@ -2478,19 +2475,18 @@ class Connection(CommonConnection, ConnectionHandlers):
         """
         gajim.logger.set_room_last_message_time(room_jid, self.last_history_time[room_jid])
 
-    def gc_set_role(self, room_jid, nick, role, reason = ''):
+    def gc_set_role(self, room_jid, nick, role, reason=''):
         """
         Role is for all the life of the room so it's based on nick
         """
         if not gajim.account_is_connected(self.name):
             return
-        iq = common.xmpp.Iq(typ = 'set', to = room_jid, queryNS =\
-                common.xmpp.NS_MUC_ADMIN)
+        iq = nbxmpp.Iq(typ='set', to=room_jid, queryNS=nbxmpp.NS_MUC_ADMIN)
         item = iq.setQuery().setTag('item')
         item.setAttr('nick', nick)
         item.setAttr('role', role)
         if reason:
-            item.addChild(name = 'reason', payload = reason)
+            item.addChild(name='reason', payload=reason)
         self.connection.send(iq)
 
     def gc_set_affiliation(self, room_jid, jid, affiliation, reason = ''):
@@ -2499,8 +2495,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         """
         if not gajim.account_is_connected(self.name):
             return
-        iq = common.xmpp.Iq(typ = 'set', to = room_jid, queryNS =\
-                common.xmpp.NS_MUC_ADMIN)
+        iq = nbxmpp.Iq(typ='set', to=room_jid, queryNS=nbxmpp.NS_MUC_ADMIN)
         item = iq.setQuery().setTag('item')
         item.setAttr('jid', jid)
         item.setAttr('affiliation', affiliation)
@@ -2511,8 +2506,7 @@ class Connection(CommonConnection, ConnectionHandlers):
     def send_gc_affiliation_list(self, room_jid, users_dict):
         if not gajim.account_is_connected(self.name):
             return
-        iq = common.xmpp.Iq(typ = 'set', to = room_jid, queryNS = \
-                common.xmpp.NS_MUC_ADMIN)
+        iq = nbxmpp.Iq(typ='set', to=room_jid, queryNS=nbxmpp.NS_MUC_ADMIN)
         item = iq.setQuery()
         for jid in users_dict:
             item_tag = item.addChild('item', {'jid': jid,
@@ -2524,8 +2518,7 @@ class Connection(CommonConnection, ConnectionHandlers):
     def get_affiliation_list(self, room_jid, affiliation):
         if not gajim.account_is_connected(self.name):
             return
-        iq = common.xmpp.Iq(typ = 'get', to = room_jid, queryNS = \
-                common.xmpp.NS_MUC_ADMIN)
+        iq = nbxmpp.Iq(typ='get', to=room_jid, queryNS=nbxmpp.NS_MUC_ADMIN)
         item = iq.setQuery().setTag('item')
         item.setAttr('affiliation', affiliation)
         self.connection.send(iq)
@@ -2533,8 +2526,7 @@ class Connection(CommonConnection, ConnectionHandlers):
     def send_gc_config(self, room_jid, form):
         if not gajim.account_is_connected(self.name):
             return
-        iq = common.xmpp.Iq(typ = 'set', to = room_jid, queryNS =\
-                common.xmpp.NS_MUC_OWNER)
+        iq = nbxmpp.Iq(typ='set', to=room_jid, queryNS=nbxmpp.NS_MUC_OWNER)
         query = iq.setQuery()
         form.setAttr('type', 'submit')
         query.addChild(node = form)
@@ -2545,8 +2537,8 @@ class Connection(CommonConnection, ConnectionHandlers):
             return
         hostname = gajim.config.get_per('accounts', self.name, 'hostname')
         username = gajim.config.get_per('accounts', self.name, 'name')
-        iq = common.xmpp.Iq(typ = 'set', to = hostname)
-        q = iq.setTag(common.xmpp.NS_REGISTER + ' query')
+        iq = nbxmpp.Iq(typ='set', to=hostname)
+        q = iq.setTag(nbxmpp.NS_REGISTER + ' query')
         q.setTagData('username', username)
         q.setTagData('password', password)
         self.connection.send(iq)
@@ -2610,10 +2602,10 @@ class Connection(CommonConnection, ConnectionHandlers):
             self.on_connect_auth = None
             if gajim.account_is_connected(self.name):
                 hostname = gajim.config.get_per('accounts', self.name, 'hostname')
-                iq = common.xmpp.Iq(typ = 'set', to = hostname)
+                iq = nbxmpp.Iq(typ='set', to=hostname)
                 id_ = self.connection.getAnID()
                 iq.setID(id_)
-                iq.setTag(common.xmpp.NS_REGISTER + ' query').setTag('remove')
+                iq.setTag(nbxmpp.NS_REGISTER + ' query').setTag('remove')
                 def _on_answer(con, result):
                     if result.getID() == id_:
                         on_remove_success(True)
@@ -2639,8 +2631,8 @@ class Connection(CommonConnection, ConnectionHandlers):
         """
         Send invitation
         """
-        message=common.xmpp.Message(to=room)
-        c = message.addChild(name='x', namespace=common.xmpp.NS_MUC_USER)
+        message=nbxmpp.Message(to=room)
+        c = message.addChild(name='x', namespace=nbxmpp.NS_MUC_USER)
         c = c.addChild(name='invite', attrs={'to': to})
         if continue_tag:
             c.addChild(name='continue')
@@ -2652,8 +2644,8 @@ class Connection(CommonConnection, ConnectionHandlers):
         """
         decline a groupchat invitation
         """
-        message=common.xmpp.Message(to=room)
-        c = message.addChild(name='x', namespace=common.xmpp.NS_MUC_USER)
+        message=nbxmpp.Message(to=room)
+        c = message.addChild(name='x', namespace=nbxmpp.NS_MUC_USER)
         c = c.addChild(name='decline', attrs={'to': to})
         if reason != '':
             c.setTagData('reason', reason)
@@ -2663,11 +2655,11 @@ class Connection(CommonConnection, ConnectionHandlers):
         """
         Request voice in a moderated room
         """
-        message = common.xmpp.Message(to=room)
+        message = nbxmpp.Message(to=room)
 
         x = xmpp.DataForm(typ='submit')
         x.addChild(node=xmpp.DataField(name='FORM_TYPE',
-            value=common.xmpp.NS_MUC + '#request'))
+            value=nbxmpp.NS_MUC + '#request'))
         x.addChild(node=xmpp.DataField(name='muc#role', value='participant',
             typ='text-single'))
 
@@ -2692,13 +2684,11 @@ class Connection(CommonConnection, ConnectionHandlers):
                 self.time_to_reconnect = None
 
     def request_search_fields(self, jid):
-        iq = common.xmpp.Iq(typ = 'get', to = jid, queryNS = \
-                common.xmpp.NS_SEARCH)
+        iq = nbxmpp.Iq(typ='get', to=jid, queryNS=nbxmpp.NS_SEARCH)
         self.connection.send(iq)
 
     def send_search_form(self, jid, form, is_form):
-        iq = common.xmpp.Iq(typ = 'set', to = jid, queryNS = \
-            common.xmpp.NS_SEARCH)
+        iq = nbxmpp.Iq(typ='set', to=jid, queryNS=nbxmpp.NS_SEARCH)
         item = iq.setQuery()
         if is_form:
             item.addChild(node=form)

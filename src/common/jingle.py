@@ -26,7 +26,7 @@ Handles the jingle signalling protocol
 #   * config:
 #     - codecs
 
-import xmpp
+import nbxmpp
 import helpers
 import gajim
 
@@ -80,7 +80,7 @@ class ConnectionJingle(object):
         if (jid, id_) in self.__iq_responses.keys():
             self.__iq_responses[(jid, id_)].on_stanza(stanza)
             del self.__iq_responses[(jid, id_)]
-            raise xmpp.NodeProcessed
+            raise nbxmpp.NodeProcessed
         jingle = stanza.getTag('jingle')
         # a jingle element is not necessary in iq-result stanza
         # don't check for that
@@ -105,7 +105,7 @@ class ConnectionJingle(object):
         if sid in self._sessions and \
         self._sessions[sid].state == JingleStates.ended:
             self.delete_jingle_session(sid)
-        raise xmpp.NodeProcessed
+        raise nbxmpp.NodeProcessed
 
     def start_audio(self, jid):
         if self.get_jingle_session(jid, media='audio'):
@@ -143,15 +143,15 @@ class ConnectionJingle(object):
                 contact = gajim.contacts.get_gc_contact(self.name, gcc[0], gcc[1])
         if contact is None:
             return
-        use_security = contact.supports(xmpp.NS_JINGLE_XTLS)
+        use_security = contact.supports(nbxmpp.NS_JINGLE_XTLS)
         jingle = JingleSession(self, weinitiate=True, jid=jid, werequest=request)
         # this is a file transfer
         jingle.session_type_FT = True
         self._sessions[jingle.sid] = jingle
         file_props.sid = jingle.sid
-        if contact.supports(xmpp.NS_JINGLE_BYTESTREAM):
+        if contact.supports(nbxmpp.NS_JINGLE_BYTESTREAM):
             transport = JingleTransportSocks5()
-        elif contact.supports(xmpp.NS_JINGLE_IBB):
+        elif contact.supports(nbxmpp.NS_JINGLE_IBB):
             transport = JingleTransportIBB()
         c = JingleFileTransfer(jingle, transport=transport,
             file_props=file_props, use_security=use_security)
@@ -161,14 +161,14 @@ class ConnectionJingle(object):
         return c.transport.sid
 
     def __hash_support(self, contact):
-        if contact.supports(xmpp.NS_HASHES):
-            if contact.supports(xmpp.NS_HASHES_MD5):
+        if contact.supports(nbxmpp.NS_HASHES):
+            if contact.supports(nbxmpp.NS_HASHES_MD5):
                 return 'md5'
-            elif contact.supports(xmpp.NS_HASHES_SHA1):
+            elif contact.supports(nbxmpp.NS_HASHES_SHA1):
                 return 'sha-1'
-            elif contact.supports(xmpp.NS_HASHES_SHA256):
+            elif contact.supports(nbxmpp.NS_HASHES_SHA256):
                 return 'sha-256'
-            elif contact.supports(xmpp.NS_HASHES_SHA512):
+            elif contact.supports(nbxmpp.NS_HASHES_SHA512):
                 return 'sha-512'
         return None
 

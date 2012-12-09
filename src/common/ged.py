@@ -27,7 +27,7 @@ Global Events Dispatcher module.
 
 import traceback
 
-from common.xmpp import NodeProcessed
+from nbxmpp import NodeProcessed
 import logging
 log = logging.getLogger('gajim.c.ged')
 

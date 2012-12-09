@@ -25,7 +25,8 @@ import message_control
 
 from common import gajim
 from common import helpers
-from common.xmpp.protocol import NS_COMMANDS, NS_FILE, NS_MUC, NS_ESESSION, NS_JINGLE_FILE_TRANSFER
+from nbxmpp.protocol import NS_COMMANDS, NS_FILE, NS_MUC, NS_ESESSION
+from nbxmpp.protocol import NS_JINGLE_FILE_TRANSFER
 
 def build_resources_submenu(contacts, account, action, room_jid=None,
                 room_account=None, cap=None):

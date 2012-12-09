@@ -27,7 +27,7 @@ Handles Jingle sessions (XEP 0166)
 # * timeout
 
 import gajim #Get rid of that?
-import xmpp
+import nbxmpp
 from jingle_transport import get_jingle_transport, JingleTransportIBB
 from jingle_content import get_jingle_content, JingleContentSetupException
 from jingle_content import JingleContent
@@ -105,9 +105,9 @@ class JingleSession(object):
         # use .prepend() to add new callbacks, especially when you're going
         # to send error instead of ack
         self.callbacks = {
-                'content-accept':       [self.__ack, self.__on_content_accept, 
+                'content-accept':       [self.__ack, self.__on_content_accept,
                                          self.__broadcast],
-                'content-add':          [self.__ack, 
+                'content-add':          [self.__ack,
                                         self.__on_content_add, self.__broadcast
                                         ], #TODO
                 'content-modify':       [self.__ack], #TODO
@@ -118,14 +118,14 @@ class JingleSession(object):
                 'session-accept':       [self.__ack, self.__on_session_accept,
                                          self.__on_content_accept,
                                          self.__broadcast],
-                'session-info':         [self.__ack, self.__broadcast, 
+                'session-info':         [self.__ack, self.__broadcast,
                                          self.__on_session_info ],
-                'session-initiate':     [self.__ack, self.__on_session_initiate, 
+                'session-initiate':     [self.__ack, self.__on_session_initiate,
                                          self.__broadcast],
-                'session-terminate':    [self.__ack,self.__on_session_terminate, 
+                'session-terminate':    [self.__ack,self.__on_session_terminate,
                                          self.__broadcast_all],
                 'transport-info':       [self.__ack, self.__broadcast],
-                'transport-replace':    [self.__ack, self.__broadcast, 
+                'transport-replace':    [self.__ack, self.__broadcast,
                                          self.__on_transport_replace], #TODO
                 'transport-accept':     [self.__ack], #TODO
                 'transport-reject':     [self.__ack], #TODO
@@ -147,15 +147,15 @@ class JingleSession(object):
         """
         Called when user declines session in UI (when we aren't the initiator)
         """
-        reason = xmpp.Node('reason')
+        reason = nbxmpp.Node('reason')
         reason.addChild('decline')
         self._session_terminate(reason)
-        
+
     def cancel_session(self):
         """
         Called when user declines session in UI (when we aren't the initiator)
         """
-        reason = xmpp.Node('reason')
+        reason = nbxmpp.Node('reason')
         reason.addChild('cancel')
         self._session_terminate(reason)
 
@@ -177,7 +177,7 @@ class JingleSession(object):
         """
         Called when user stops or cancel session in UI
         """
-        reason = xmpp.Node('reason')
+        reason = nbxmpp.Node('reason')
         if self.state == JingleStates.active:
             reason.addChild('success')
         else:
@@ -227,7 +227,7 @@ class JingleSession(object):
             self.end_session()
 
     def modify_content(self, creator, name, transport = None):
-        ''' 
+        '''
         Currently used for transport replacement
         '''
         content = self.contents[(creator,name)]
@@ -314,7 +314,7 @@ class JingleSession(object):
         """
         A callback for ConnectionJingle. It gets stanza, then tries to send it to
         all internally registered callbacks. First one to raise
-        xmpp.NodeProcessed breaks function
+        nbxmpp.NodeProcessed breaks function
         """
         jingle = stanza.getTag('jingle')
         error = stanza.getTag('error')
@@ -339,7 +339,7 @@ class JingleSession(object):
         try:
             for call in callables:
                 call(stanza=stanza, jingle=jingle, error=error, action=action)
-        except xmpp.NodeProcessed:
+        except nbxmpp.NodeProcessed:
             pass
         except TieBreak:
             self.__send_error(stanza, 'conflict', 'tiebreak')
@@ -360,10 +360,10 @@ class JingleSession(object):
         text = error.getTagData('text')
         error_name = None
         for child in error.getChildren():
-            if child.getNamespace() == xmpp.NS_JINGLE_ERRORS:
+            if child.getNamespace() == nbxmpp.NS_JINGLE_ERRORS:
                 error_name = child.getName()
                 break
-            elif child.getNamespace() == xmpp.NS_STANZAS:
+            elif child.getNamespace() == nbxmpp.NS_STANZAS:
                 error_name = child.getName()
         self.__dispatch_error(error_name, text, error.getAttr('type'))
 
@@ -387,12 +387,12 @@ class JingleSession(object):
             name = content['name']
             if (creator, name) in self.contents:
                 transport_ns = content.getTag('transport').getNamespace()
-                if transport_ns == xmpp.NS_JINGLE_ICE_UDP:
+                if transport_ns == nbxmpp.NS_JINGLE_ICE_UDP:
                     # FIXME: We don't manage anything else than ICE-UDP now...
                     # What was the previous transport?!?
                     # Anyway, content's transport is not modifiable yet
                     pass
-                elif transport_ns == xmpp.NS_JINGLE_IBB:
+                elif transport_ns == nbxmpp.NS_JINGLE_IBB:
                     transport = JingleTransportIBB()
                     self.modify_content(creator, name, transport)
                     self.state = JingleStates.pending
@@ -406,7 +406,7 @@ class JingleSession(object):
                             'name': name})
                     content.setTag('transport', namespace=transport_ns)
                     self.connection.connection.send(stanza)
-                    raise xmpp.NodeProcessed
+                    raise nbxmpp.NodeProcessed
             else:
                 # FIXME: This ressource is unknown to us, what should we do?
                 # For now, reject the transport
@@ -415,7 +415,7 @@ class JingleSession(object):
                         'name': name})
                 c.setTag('transport', namespace=transport_ns)
                 self.connection.connection.send(stanza)
-                raise xmpp.NodeProcessed
+                raise nbxmpp.NodeProcessed
 
     def __on_session_info(self, stanza, jingle, error, action):
         # TODO: ringing, active, (un)hold, (un)mute
@@ -424,18 +424,18 @@ class JingleSession(object):
         payload = jingle.getPayload()
         for p in payload:
             if p.getName() == 'checksum':
-                hash_ = p.getTag('file').getTag(name='hash', 
-                                        namespace=xmpp.NS_HASHES)
+                hash_ = p.getTag('file').getTag(name='hash',
+                    namespace=nbxmpp.NS_HASHES)
                 algo = hash_.getAttr('algo')
-                if algo in xmpp.Hashes.supported:
+                if algo in nbxmpp.Hashes.supported:
                     file_props = FilesProp.getFileProp(self.connection.name,
                                                        self.sid)
                     file_props.algo = algo
                     file_props.hash_ = hash_.getData()
-                    raise xmpp.NodeProcessed
-        self.__send_error(stanza, 'feature-not-implemented', 'unsupported-info', 
+                    raise nbxmpp.NodeProcessed
+        self.__send_error(stanza, 'feature-not-implemented', 'unsupported-info',
                           type_='modify')
-        raise xmpp.NodeProcessed
+        raise nbxmpp.NodeProcessed
 
     def __on_content_remove(self, stanza, jingle, error, action):
         for content in jingle.iterTags('content'):
@@ -449,7 +449,7 @@ class JingleSession(object):
                     media=content.media, reason='removed'))
                 content.destroy()
         if not self.contents:
-            reason = xmpp.Node('reason')
+            reason = nbxmpp.Node('reason')
             reason.setTag('success')
             self._session_terminate(reason)
 
@@ -507,12 +507,12 @@ class JingleSession(object):
         if contents[0][0] != 'file':
             for session in self.connection.iter_jingle_sessions(self.peerjid):
                 if not session is self:
-                    reason = xmpp.Node('reason')
+                    reason = nbxmpp.Node('reason')
                     alternative_session = reason.setTag('alternative-session')
                     alternative_session.setTagData('sid', session.sid)
                     self.__ack(stanza, jingle, error, action)
                     self._session_terminate(reason)
-                    raise xmpp.NodeProcessed
+                    raise nbxmpp.NodeProcessed
         else:
             # Stop if we don't have the requested file or the peer is not
             # allowed to request the file
@@ -533,15 +533,15 @@ class JingleSession(object):
                                 'file that we dont have or ' + \
                                 'it is not allowed to request')
                     self.decline_session()
-                    raise xmpp.NodeProcessed
+                    raise nbxmpp.NodeProcessed
         # If there's no content we understand...
         if not contents:
             # TODO: http://xmpp.org/extensions/xep-0166.html#session-terminate
-            reason = xmpp.Node('reason')
+            reason = nbxmpp.Node('reason')
             reason.setTag(reason_txt)
             self.__ack(stanza, jingle, error, action)
             self._session_terminate(reason)
-            raise xmpp.NodeProcessed
+            raise nbxmpp.NodeProcessed
         self.state = JingleStates.pending
         # Send event about starting a session
         gajim.nec.push_incoming_event(JingleRequestReceivedEvent(None,
@@ -566,7 +566,7 @@ class JingleSession(object):
             if (creator, name) not in self.contents:
                 text = 'Content %s (created by %s) does not exist' % (name, creator)
                 self.__send_error(stanza, 'bad-request', text=text, type_='_modify')
-                raise xmpp.NodeProcessed
+                raise nbxmpp.NodeProcessed
             else:
                 cn = self.contents[(creator, name)]
                 cn.on_stanza(stanza, content, error, action)
@@ -654,23 +654,24 @@ class JingleSession(object):
         return (reason, text)
 
     def __make_jingle(self, action, reason=None):
-        stanza = xmpp.Iq(typ='set', to=xmpp.JID(self.peerjid),
-                        frm=self.ourjid)
+        stanza = nbxmpp.Iq(typ='set', to=nbxmpp.JID(self.peerjid),
+            frm=self.ourjid)
         attrs = {'action': action,
                 'sid': self.sid,
                 'initiator' : self.initiator}
-        jingle = stanza.addChild('jingle', attrs=attrs, namespace=xmpp.NS_JINGLE)
+        jingle = stanza.addChild('jingle', attrs=attrs,
+            namespace=nbxmpp.NS_JINGLE)
         if reason is not None:
             jingle.addChild(node=reason)
         return stanza, jingle
 
     def __send_error(self, stanza, error, jingle_error=None, text=None, type_=None):
-        err_stanza = xmpp.Error(stanza, '%s %s' % (xmpp.NS_STANZAS, error))
+        err_stanza = nbxmpp.Error(stanza, '%s %s' % (nbxmpp.NS_STANZAS, error))
         err = err_stanza.getTag('error')
         if type_:
             err.setAttr('type', type_)
         if jingle_error:
-            err.setTag(jingle_error, namespace=xmpp.NS_JINGLE_ERRORS)
+            err.setTag(jingle_error, namespace=nbxmpp.NS_JINGLE_ERRORS)
         if text:
             err.setTagData('text', text)
         self.connection.connection.send(err_stanza)
@@ -718,7 +719,7 @@ class JingleSession(object):
         if payload:
             jingle.addChild(node=payload)
         self.connection.connection.send(stanza)
-        
+
     def _JingleFileTransfer__session_info(self, p):
         # For some strange reason when I call
         # self.session.__session_info(h) from the jingleFileTransfer object

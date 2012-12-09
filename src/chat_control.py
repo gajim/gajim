@@ -51,10 +51,11 @@ from common.stanza_session import EncryptedStanzaSession, ArchivingStanzaSession
 from common.contacts import GC_Contact
 from common.logger import constants
 from common.pep import MOODS, ACTIVITIES
-from common.xmpp.protocol import NS_XHTML, NS_XHTML_IM, NS_FILE, NS_MUC
-from common.xmpp.protocol import NS_RECEIPTS, NS_ESESSION
-from common.xmpp.protocol import NS_JINGLE_RTP_AUDIO, NS_JINGLE_RTP_VIDEO, NS_JINGLE_ICE_UDP, NS_JINGLE_FILE_TRANSFER
-from common.xmpp.protocol import NS_CHATSTATES
+from nbxmpp.protocol import NS_XHTML, NS_XHTML_IM, NS_FILE, NS_MUC
+from nbxmpp.protocol import NS_RECEIPTS, NS_ESESSION
+from nbxmpp.protocol import NS_JINGLE_RTP_AUDIO, NS_JINGLE_RTP_VIDEO
+from nbxmpp.protocol import NS_JINGLE_ICE_UDP, NS_JINGLE_FILE_TRANSFER
+from nbxmpp.protocol import NS_CHATSTATES
 from common.connection_handlers_events import MessageOutgoingEvent
 from common.exceptions import GajimGeneralException
 

@@ -28,7 +28,7 @@ import socket
 
 from calendar import timegm
 
-import common.xmpp
+import nbxmpp
 
 from common import helpers
 from common import gajim
@@ -111,12 +111,12 @@ connection_handlers.ConnectionHandlersBase, connection_handlers.ConnectionJingle
             return
 
         if self.commandItemsQuery(con, iq_obj):
-            raise common.xmpp.NodeProcessed
+            raise nbxmpp.NodeProcessed
         node = iq_obj.getTagAttr('query', 'node')
         if node is None:
             result = iq_obj.buildReply('result')
             self.connection.send(result)
-            raise common.xmpp.NodeProcessed
-        if node==common.xmpp.NS_COMMANDS:
+            raise nbxmpp.NodeProcessed
+        if node==nbxmpp.NS_COMMANDS:
             self.commandListQuery(con, iq_obj)
-            raise common.xmpp.NodeProcessed
+            raise nbxmpp.NodeProcessed

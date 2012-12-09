@@ -69,8 +69,8 @@ from session import ChatControlSession
 
 import common.sleepy
 
-from common.xmpp import idlequeue
-from common.xmpp import Hashes
+from nbxmpp import idlequeue
+from nbxmpp import Hashes
 from common.zeroconf import connection_zeroconf
 from common import resolver
 from common import caps_cache

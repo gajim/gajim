@@ -12,7 +12,7 @@
 ##
 
 import gajim
-import xmpp
+import nbxmpp
 from jingle_transport import *
 from common.socks5 import Socks5ReceiverClient, Socks5SenderClient
 
@@ -65,13 +65,13 @@ class StateCandSent(JingleFileTransferStates):
         # Send candidate used
         streamhost = args['streamhost']
         self.jft.nominated_cand['our-cand'] = streamhost
-        content = xmpp.Node('content')
+        content = nbxmpp.Node('content')
         content.setAttr('creator', 'initiator')
         content.setAttr('name', self.jft.name)
-        transport = xmpp.Node('transport')
-        transport.setNamespace(xmpp.NS_JINGLE_BYTESTREAM)
+        transport = nbxmpp.Node('transport')
+        transport.setNamespace(nbxmpp.NS_JINGLE_BYTESTREAM)
         transport.setAttr('sid', self.jft.transport.sid)
-        candidateused = xmpp.Node('candidate-used')
+        candidateused = nbxmpp.Node('candidate-used')
         candidateused.setAttr('cid', streamhost['cid'])
         transport.addChild(node=candidateused)
         content.addChild(node=transport)

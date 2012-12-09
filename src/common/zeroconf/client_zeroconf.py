@@ -18,15 +18,15 @@
 ## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 ##
 from common import gajim
-import common.xmpp
-from common.xmpp.idlequeue import IdleObject
-from common.xmpp import dispatcher_nb, simplexml
-from common.xmpp.plugin import *
-from common.xmpp.simplexml import ustr
-from common.xmpp.transports_nb import DATA_RECEIVED, DATA_SENT, DATA_ERROR
+import nbxmpp
+from nbxmpp.idlequeue import IdleObject
+from nbxmpp import dispatcher_nb, simplexml
+from nbxmpp.plugin import *
+from nbxmpp.simplexml import ustr
+from nbxmpp.transports_nb import DATA_RECEIVED, DATA_SENT, DATA_ERROR
 from common.zeroconf import zeroconf
 
-from common.xmpp.protocol import *
+from nbxmpp.protocol import *
 import socket
 import errno
 import sys
@@ -309,24 +309,23 @@ class P2PClient(IdleObject):
         self._caller.peerhost = self.Connection._sock.getsockname()
         self.RegisterHandler('message', lambda conn,
             data:self._caller._messageCB(self.Server, conn, data))
-        self.RegisterHandler('iq', self._caller._siSetCB, 'set',
-            common.xmpp.NS_SI)
+        self.RegisterHandler('iq', self._caller._siSetCB, 'set', nbxmpp.NS_SI)
         self.RegisterHandler('iq', self._caller._siErrorCB, 'error',
-            common.xmpp.NS_SI)
+            nbxmpp.NS_SI)
         self.RegisterHandler('iq', self._caller._siResultCB, 'result',
-            common.xmpp.NS_SI)
+            nbxmpp.NS_SI)
         self.RegisterHandler('iq', self._caller._bytestreamSetCB, 'set',
-            common.xmpp.NS_BYTESTREAM)
+            nbxmpp.NS_BYTESTREAM)
         self.RegisterHandler('iq', self._caller._bytestreamResultCB, 'result',
-            common.xmpp.NS_BYTESTREAM)
+            nbxmpp.NS_BYTESTREAM)
         self.RegisterHandler('iq', self._caller._bytestreamErrorCB, 'error',
-            common.xmpp.NS_BYTESTREAM)
+            nbxmpp.NS_BYTESTREAM)
         self.RegisterHandler('iq', self._caller._DiscoverItemsGetCB, 'get',
-            common.xmpp.NS_DISCO_ITEMS)
+            nbxmpp.NS_DISCO_ITEMS)
         self.RegisterHandler('iq', self._caller._JingleCB, 'result')
         self.RegisterHandler('iq', self._caller._JingleCB, 'error')
         self.RegisterHandler('iq', self._caller._JingleCB, 'set',
-            common.xmpp.NS_JINGLE)
+            nbxmpp.NS_JINGLE)
 
 class P2PConnection(IdleObject, PlugIn):
     def __init__(self, sock_hash, _sock, host=None, port=None, caller=None,

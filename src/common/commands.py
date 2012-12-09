@@ -22,7 +22,7 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-import xmpp
+import nbxmpp
 import helpers
 import dataforms
 import gajim
@@ -33,7 +33,7 @@ log = logging.getLogger('gajim.c.commands')
 class AdHocCommand:
     commandnode = 'command'
     commandname = 'The Command'
-    commandfeatures = (xmpp.NS_DATA,)
+    commandfeatures = (nbxmpp.NS_DATA,)
 
     @staticmethod
     def isVisibleFor(samejid):
@@ -56,7 +56,7 @@ class AdHocCommand:
         assert status in ('executing', 'completed', 'canceled')
 
         response = request.buildReply('result')
-        cmd = response.getTag('command', namespace=xmpp.NS_COMMANDS)
+        cmd = response.getTag('command', namespace=nbxmpp.NS_COMMANDS)
         cmd.setAttr('sessionid', self.sessionid)
         cmd.setAttr('node', self.commandnode)
         cmd.setAttr('status', status)
@@ -72,8 +72,8 @@ class AdHocCommand:
         return response, cmd
 
     def badRequest(self, stanza):
-        self.connection.connection.send(xmpp.Error(stanza, xmpp.NS_STANZAS + \
-                ' bad-request'))
+        self.connection.connection.send(nbxmpp.Error(stanza,
+            nbxmpp.NS_STANZAS + ' bad-request'))
 
     def cancel(self, request):
         response = self.buildResponse(request, status = 'canceled')[0]
@@ -354,14 +354,14 @@ class ConnectionCommands:
         """
         Test if the bare jid given is the same as our bare jid
         """
-        return xmpp.JID(jid).getStripped() == self.getOurBareJID()
+        return nbxmpp.JID(jid).getStripped() == self.getOurBareJID()
 
     def commandListQuery(self, con, iq_obj):
         iq = iq_obj.buildReply('result')
         jid = helpers.get_full_jid_from_iq(iq_obj)
         q = iq.getTag('query')
         # buildReply don't copy the node attribute. Re-add it
-        q.setAttr('node', xmpp.NS_COMMANDS)
+        q.setAttr('node', nbxmpp.NS_COMMANDS)
 
         for node, cmd in self.__commands.iteritems():
             if cmd.isVisibleFor(self.isSameJID(jid)):
@@ -394,7 +394,7 @@ class ConnectionCommands:
             q.addChild('identity', attrs = {'type': 'command-node',
                     'category': 'automation',
                     'name': cmd.commandname})
-            q.addChild('feature', attrs = {'var': xmpp.NS_COMMANDS})
+            q.addChild('feature', attrs = {'var': nbxmpp.NS_COMMANDS})
             for feature in cmd.commandfeatures:
                 q.addChild('feature', attrs = {'var': feature})
 
@@ -436,8 +436,8 @@ class ConnectionCommands:
             # and command exist
             if node not in self.__commands.keys():
                 self.connection.send(
-                        xmpp.Error(iq_obj, xmpp.NS_STANZAS + ' item-not-found'))
-                raise xmpp.NodeProcessed
+                    nbxmpp.Error(iq_obj, nbxmpp.NS_STANZAS + ' item-not-found'))
+                raise nbxmpp.NodeProcessed
 
             newcmd = self.__commands[node]
             if not newcmd.isVisibleFor(self.isSameJID(jid)):
@@ -451,7 +451,7 @@ class ConnectionCommands:
             rc = obj.execute(iq_obj)
             if rc:
                 self.__sessions[(jid, sessionid, node)] = obj
-            raise xmpp.NodeProcessed
+            raise nbxmpp.NodeProcessed
         else:
             # the command is already running, check for it
             magictuple = (jid, sessionid, node)
@@ -486,4 +486,4 @@ class ConnectionCommands:
             if not rc:
                 del self.__sessions[magictuple]
 
-            raise xmpp.NodeProcessed
+            raise nbxmpp.NodeProcessed

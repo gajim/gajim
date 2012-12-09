@@ -29,13 +29,13 @@ from common import atom
 from common import nec
 from common import helpers
 from common import gajim
-from common import xmpp
+import nbxmpp
 from common import dataforms
 from common import exceptions
 from common.zeroconf import zeroconf
 from common.logger import LOG_DB_PATH
 from common.pep import SUPPORTED_PERSONAL_USER_EVENTS
-from common.xmpp.protocol import NS_CHATSTATES
+from nbxmpp.protocol import NS_CHATSTATES
 from common.jingle_transport import JingleTransportSocks5
 from common.file_props import FilesProp
 
@@ -102,7 +102,7 @@ class HelperEvent:
         self.chatstate = None
 
         # chatstates - look for chatstate tags in a message if not delayed
-        delayed = self.stanza.getTag('x', namespace=xmpp.NS_DELAY) is not None
+        delayed = self.stanza.getTag('x', namespace=nbxmpp.NS_DELAY) is not None
         if not delayed:
             children = self.stanza.getChildren()
             for child in children:
@@ -243,7 +243,7 @@ class GMailQueryReceivedEvent(nec.NetworkIncomingEvent):
         if not mb.getAttr('url'):
             return
         self.conn.gmail_url = mb.getAttr('url')
-        if mb.getNamespace() != xmpp.NS_GMAILNOTIFY:
+        if mb.getNamespace() != nbxmpp.NS_GMAILNOTIFY:
             return
         self.newmsgs = mb.getAttr('total-matched')
         if not self.newmsgs:
@@ -303,7 +303,7 @@ class RosterItemExchangeEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.action = items_list[0].getAttr('action')
         if self.action is None:
             self.action = 'add'
-        for item in self.stanza.getTag('x', namespace=xmpp.NS_ROSTERX).\
+        for item in self.stanza.getTag('x', namespace=nbxmpp.NS_ROSTERX).\
         getChildren():
             try:
                 jid = helpers.parse_jid(item.getAttr('jid'))
@@ -412,7 +412,7 @@ class RosterSetReceivedEvent(nec.NetworkIncomingEvent):
             self.items[jid] = {'name': name, 'sub': sub, 'ask': ask,
                 'groups': groups}
         if self.conn.connection and self.conn.connected > 1:
-            reply = xmpp.Iq(typ='result', attrs={'id': self.stanza.getID()},
+            reply = nbxmpp.Iq(typ='result', attrs={'id': self.stanza.getID()},
                 to=self.stanza.getFrom(), frm=self.stanza.getTo(), xmlns=None)
             self.conn.connection.send(reply)
         return True
@@ -430,7 +430,7 @@ class MucOwnerReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         qp = self.stanza.getQueryPayload()
         self.form_node = None
         for q in qp:
-            if q.getNamespace() == xmpp.NS_DATA:
+            if q.getNamespace() == nbxmpp.NS_DATA:
                 self.form_node = q
                 self.dataform = dataforms.ExtendForm(node=self.form_node)
                 return True
@@ -442,7 +442,7 @@ class MucAdminReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
     def generate(self):
         self.get_jid_resource()
         items = self.stanza.getTag('query',
-            namespace=xmpp.NS_MUC_ADMIN).getTags('item')
+            namespace=nbxmpp.NS_MUC_ADMIN).getTags('item')
         self.users_dict = {}
         for item in items:
             if item.has_attr('jid') and item.has_attr('affiliation'):
@@ -514,7 +514,7 @@ BookmarksHelper):
     def generate(self):
         self.conn = self.base_event.conn
         self.storage_node = self.base_event.storage_node
-        if self.base_event.namespace != xmpp.NS_BOOKMARKS:
+        if self.base_event.namespace != nbxmpp.NS_BOOKMARKS:
             return
         self.parse_bookmarks()
         return True
@@ -535,7 +535,7 @@ class PrivateStorageRosternotesReceivedEvent(nec.NetworkIncomingEvent):
 
     def generate(self):
         self.conn = self.base_event.conn
-        if self.base_event.namespace != xmpp.NS_ROSTERNOTES:
+        if self.base_event.namespace != nbxmpp.NS_ROSTERNOTES:
             return
         notes = self.base_event.storage_node.getTags('note')
         self.annotations = {}
@@ -587,7 +587,7 @@ class PubsubBookmarksReceivedEvent(nec.NetworkIncomingEvent, BookmarksHelper):
         self.conn = self.base_event.conn
         self.storage_node = self.base_event.node
         ns = self.storage_node.getNamespace()
-        if ns != xmpp.NS_BOOKMARKS:
+        if ns != nbxmpp.NS_BOOKMARKS:
             return
         self.parse_bookmarks()
         return True
@@ -600,10 +600,10 @@ class SearchFormReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.get_jid_resource()
         self.data = None
         self.is_dataform = False
-        tag = self.stanza.getTag('query', namespace=xmpp.NS_SEARCH)
+        tag = self.stanza.getTag('query', namespace=nbxmpp.NS_SEARCH)
         if not tag:
             return True
-        self.data = tag.getTag('x', namespace=xmpp.NS_DATA)
+        self.data = tag.getTag('x', namespace=nbxmpp.NS_DATA)
         if self.data:
             self.is_dataform = True
             return True
@@ -621,10 +621,10 @@ class SearchResultReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.get_jid_resource()
         self.data = None
         self.is_dataform = False
-        tag = self.stanza.getTag('query', namespace=xmpp.NS_SEARCH)
+        tag = self.stanza.getTag('query', namespace=nbxmpp.NS_SEARCH)
         if not tag:
             return True
-        self.data = tag.getTag('x', namespace=xmpp.NS_DATA)
+        self.data = tag.getTag('x', namespace=nbxmpp.NS_DATA)
         if self.data:
             self.is_dataform = True
             return True
@@ -655,7 +655,8 @@ class GmailNewMailReceivedEvent(nec.NetworkIncomingEvent):
     def generate(self):
         if not self.stanza.getTag('new-mail'):
             return
-        if self.stanza.getTag('new-mail').getNamespace() != xmpp.NS_GMAILNOTIFY:
+        if self.stanza.getTag('new-mail').getNamespace() != \
+        nbxmpp.NS_GMAILNOTIFY:
             return
         return True
 
@@ -769,20 +770,20 @@ PresenceHelperEvent):
         self.contact_nickname = None
         self.transport_auto_auth = False
         # XEP-0203
-        delay_tag = self.stanza.getTag('delay', namespace=xmpp.NS_DELAY2)
+        delay_tag = self.stanza.getTag('delay', namespace=nbxmpp.NS_DELAY2)
         if delay_tag:
             self._generate_timestamp(self.stanza.getTimestamp2())
         xtags = self.stanza.getTags('x')
         for x in xtags:
             namespace = x.getNamespace()
-            if namespace.startswith(xmpp.NS_MUC):
+            if namespace.startswith(nbxmpp.NS_MUC):
                 self.is_gc = True
-            elif namespace == xmpp.NS_SIGNED:
+            elif namespace == nbxmpp.NS_SIGNED:
                 sig_tag = x
-            elif namespace == xmpp.NS_VCARD_UPDATE:
+            elif namespace == nbxmpp.NS_VCARD_UPDATE:
                 self.avatar_sha = x.getTagData('photo')
                 self.contact_nickname = x.getTagData('nickname')
-            elif namespace == xmpp.NS_DELAY and not self.timestamp:
+            elif namespace == nbxmpp.NS_DELAY and not self.timestamp:
                 # XEP-0091
                 self._generate_timestamp(self.stanza.getTimestamp())
             elif namespace == 'http://delx.cjb.net/protocol/roster-subsync':
@@ -922,7 +923,7 @@ class GcPresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         # NOTE: if it's a gc presence, don't ask vcard here.
         # We may ask it to real jid in gui part.
         self.status_code = []
-        ns_muc_user_x = self.stanza.getTag('x', namespace=xmpp.NS_MUC_USER)
+        ns_muc_user_x = self.stanza.getTag('x', namespace=nbxmpp.NS_MUC_USER)
         if ns_muc_user_x:
             destroy = ns_muc_user_x.getTag('destroy')
         else:
@@ -1007,13 +1008,13 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         account = self.conn.name
 
         # check if the message is a roster item exchange (XEP-0144)
-        if self.stanza.getTag('x', namespace=xmpp.NS_ROSTERX):
+        if self.stanza.getTag('x', namespace=nbxmpp.NS_ROSTERX):
             gajim.nec.push_incoming_event(RosterItemExchangeEvent(None,
                 conn=self.conn, stanza=self.stanza))
             return
 
         # check if the message is a XEP-0070 confirmation request
-        if self.stanza.getTag('confirm', namespace=xmpp.NS_HTTP_AUTH):
+        if self.stanza.getTag('confirm', namespace=nbxmpp.NS_HTTP_AUTH):
             gajim.nec.push_incoming_event(HttpAuthReceivedEvent(None,
                 conn=self.conn, stanza=self.stanza))
             return
@@ -1027,7 +1028,8 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                 'ignored.')))
             return
 
-        address_tag = self.stanza.getTag('addresses', namespace=xmpp.NS_ADDRESS)
+        address_tag = self.stanza.getTag('addresses',
+            namespace=nbxmpp.NS_ADDRESS)
         # Be sure it comes from one of our resource, else ignore address element
         if address_tag and self.jid == gajim.get_jid_from_account(account):
             address = address_tag.getTag('address', attrs={'type': 'ofrom'})
@@ -1040,15 +1042,17 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                     return
                 self.jid = gajim.get_jid_without_resource(self.fjid)
 
-        carbon_marker = self.stanza.getTag('sent', namespace=xmpp.NS_CARBONS)
+        carbon_marker = self.stanza.getTag('sent', namespace=nbxmpp.NS_CARBONS)
         if not carbon_marker:
-            carbon_marker = self.stanza.getTag('received', namespace=xmpp.NS_CARBONS)
+            carbon_marker = self.stanza.getTag('received',
+                namespace=nbxmpp.NS_CARBONS)
         # Be sure it comes from one of our resource, else ignore forward element
         if carbon_marker and self.jid == gajim.get_jid_from_account(account):
-            forward_tag = self.stanza.getTag('forwarded', namespace=xmpp.NS_FORWARD)
+            forward_tag = self.stanza.getTag('forwarded',
+                namespace=nbxmpp.NS_FORWARD)
             if forward_tag:
                 msg = forward_tag.getTag('message')
-                self.stanza = xmpp.Message(node=msg)
+                self.stanza = nbxmpp.Message(node=msg)
                 if carbon_marker.getName() == 'sent':
                     to = self.stanza.getTo()
                     self.stanza.setTo(self.stanza.getFrom())
@@ -1065,18 +1069,18 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                     return
                 self.forwarded = True
 
-        self.enc_tag = self.stanza.getTag('x', namespace=xmpp.NS_ENCRYPTED)
+        self.enc_tag = self.stanza.getTag('x', namespace=nbxmpp.NS_ENCRYPTED)
 
         self.invite_tag = None
         self.decline_tag = None
         if not self.enc_tag:
             self.invite_tag = self.stanza.getTag('x',
-                namespace=xmpp.NS_MUC_USER)
+                namespace=nbxmpp.NS_MUC_USER)
             if self.invite_tag and not self.invite_tag.getTag('invite'):
                 self.invite_tag = None
 
             self.decline_tag = self.stanza.getTag('x',
-                namespace=xmpp.NS_MUC_USER)
+                namespace=nbxmpp.NS_MUC_USER)
             if self.decline_tag and not self.decline_tag.getTag('decline'):
                 self.decline_tag = None
 
@@ -1111,11 +1115,11 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
 
         # check if the message is a XEP-0020 feature negotiation request
         if not self.forwarded and self.stanza.getTag('feature',
-        namespace=xmpp.NS_FEATURE):
+        namespace=nbxmpp.NS_FEATURE):
             if gajim.HAVE_PYCRYPTO:
                 feature = self.stanza.getTag(name='feature',
-                    namespace=xmpp.NS_FEATURE)
-                form = xmpp.DataForm(node=feature.getTag('x'))
+                    namespace=nbxmpp.NS_FEATURE)
+                form = nbxmpp.DataForm(node=feature.getTag('x'))
 
                 if form['FORM_TYPE'] == 'urn:xmpp:ssn':
                     self.session.handle_negotiation(form)
@@ -1123,16 +1127,16 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                     reply = self.stanza.buildReply()
                     reply.setType('error')
                     reply.addChild(feature)
-                    err = xmpp.ErrorNode('service-unavailable', typ='cancel')
+                    err = nbxmpp.ErrorNode('service-unavailable', typ='cancel')
                     reply.addChild(node=err)
                     self.conn.connection.send(reply)
             return
 
         if not self.forwarded and self.stanza.getTag('init',
-        namespace=xmpp.NS_ESESSION_INIT):
+        namespace=nbxmpp.NS_ESESSION_INIT):
             init = self.stanza.getTag(name='init',
-                namespace=xmpp.NS_ESESSION_INIT)
-            form = xmpp.DataForm(node=init.getTag('x'))
+                namespace=nbxmpp.NS_ESESSION_INIT)
+            form = nbxmpp.DataForm(node=init.getTag('x'))
 
             self.session.handle_negotiation(form)
 
@@ -1142,7 +1146,7 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
 
         self.encrypted = False
         xep_200_encrypted = self.stanza.getTag('c',
-            namespace=xmpp.NS_STANZA_CRYPTO)
+            namespace=nbxmpp.NS_STANZA_CRYPTO)
         if xep_200_encrypted:
             if self.forwarded:
                 # Ignore E2E forwarded encrypted messages
@@ -1248,22 +1252,22 @@ class DecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.attention = False # XEP-0224
 
         self.receipt_request_tag = self.stanza.getTag('request',
-            namespace=xmpp.NS_RECEIPTS)
+            namespace=nbxmpp.NS_RECEIPTS)
         self.receipt_received_tag = self.stanza.getTag('received',
-            namespace=xmpp.NS_RECEIPTS)
+            namespace=nbxmpp.NS_RECEIPTS)
 
         self.subject = self.stanza.getSubject()
 
         self.displaymarking = None
         self.seclabel = self.stanza.getTag('securitylabel',
-            namespace=xmpp.NS_SECLABEL)
+            namespace=nbxmpp.NS_SECLABEL)
         if self.seclabel:
             self.displaymarking = self.seclabel.getTag('displaymarking')
 
-        if self.stanza.getTag('attention', namespace=xmpp.NS_ATTENTION):
+        if self.stanza.getTag('attention', namespace=nbxmpp.NS_ATTENTION):
             self.attention = True
 
-        self.form_node = self.stanza.getTag('x', namespace=xmpp.NS_DATA)
+        self.form_node = self.stanza.getTag('x', namespace=nbxmpp.NS_DATA)
 
         if gajim.config.get('ignore_incoming_xhtml'):
             self.xhtml = None
@@ -1343,7 +1347,7 @@ class GcMessageReceivedEvent(nec.NetworkIncomingEvent):
 
         self.displaymarking = None
         seclabel = self.stanza.getTag('securitylabel')
-        if seclabel and seclabel.getNamespace() == xmpp.NS_SECLABEL:
+        if seclabel and seclabel.getNamespace() == nbxmpp.NS_SECLABEL:
             # Ignore message from room in which we are not
             self.displaymarking = seclabel.getTag('displaymarking')
 
@@ -1351,9 +1355,10 @@ class GcMessageReceivedEvent(nec.NetworkIncomingEvent):
             return
 
         self.captcha_form = None
-        captcha_tag = self.stanza.getTag('captcha', namespace=xmpp.NS_CAPTCHA)
+        captcha_tag = self.stanza.getTag('captcha', namespace=nbxmpp.NS_CAPTCHA)
         if captcha_tag:
-            self.captcha_form = captcha_tag.getTag('x', namespace=xmpp.NS_DATA)
+            self.captcha_form = captcha_tag.getTag('x',
+                namespace=nbxmpp.NS_DATA)
             for field in self.captcha_form.getTags('field'):
                 for media in field.getTags('media'):
                     for uri in media.getTags('uri'):
@@ -1362,7 +1367,7 @@ class GcMessageReceivedEvent(nec.NetworkIncomingEvent):
                             uri_data = uri_data[4:]
                             found = False
                             for data in self.stanza.getTags('data',
-                            namespace=xmpp.NS_BOB):
+                            namespace=nbxmpp.NS_BOB):
                                 if data.getAttr('cid') == uri_data:
                                     uri.setData(data.getData())
                                     found = True
@@ -1644,7 +1649,7 @@ PresenceHelperEvent):
     base_network_events = ['raw-pres-received']
 
     def _extract_caps_from_presence(self):
-        caps_tag = self.stanza.getTag('c', namespace=xmpp.NS_CAPS)
+        caps_tag = self.stanza.getTag('c', namespace=nbxmpp.NS_CAPS)
         if caps_tag:
             self.hash_method = caps_tag['hash']
             self.node = caps_tag['node']
@@ -1722,11 +1727,11 @@ class PEPReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             # for each entry in feed (there shouldn't be more than one, but to
             # be sure...
             for item in items.getTags('item'):
-                entry = item.getTag('entry', namespace=xmpp.NS_ATOM)
+                entry = item.getTag('entry', namespace=nbxmpp.NS_ATOM)
                 if entry:
                     gajim.nec.push_incoming_event(AtomEntryReceived(None,
                         conn=self.conn, node=entry))
-        raise xmpp.NodeProcessed
+        raise nbxmpp.NodeProcessed
 
 class AtomEntryReceived(nec.NetworkIncomingEvent):
     name = 'atom-entry-received'
@@ -1878,7 +1883,7 @@ class AgentItemsReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             qp = []
         for i in qp:
             # CDATA payload is not processed, only nodes
-            if not isinstance(i, xmpp.simplexml.Node):
+            if not isinstance(i, nbxmpp.simplexml.Node):
                 continue
             attr = {}
             for key in i.getAttrs():
@@ -1940,8 +1945,8 @@ class AgentInfoReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                 var = i.getAttr('var')
                 if var:
                     self.features.append(var)
-            elif i.getName() == 'x' and i.getNamespace() == xmpp.NS_DATA:
-                self.data.append(xmpp.DataForm(node=i))
+            elif i.getName() == 'x' and i.getNamespace() == nbxmpp.NS_DATA:
+                self.data.append(nbxmpp.DataForm(node=i))
 
         if not self.identities:
             # ejabberd doesn't send identities when we browse online users
@@ -1992,7 +1997,7 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                 host['initiator'] = self.FT_content.session.initiator
                 host['target'] = self.FT_content.session.responder
             self.file_props.session_type = 'jingle'
-            self.file_props.stream_methods = xmpp.NS_BYTESTREAM
+            self.file_props.stream_methods = nbxmpp.NS_BYTESTREAM
             desc = self.jingle_content.getTag('description')
             if desc.getTag('offer'):
                 file_tag = desc.getTag('offer').getTag('file')
@@ -2031,14 +2036,14 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                                                unicode(si.getAttr('id'))
                                                       )
             profile = si.getAttr('profile')
-            if profile != xmpp.NS_FILE:
+            if profile != nbxmpp.NS_FILE:
                 self.conn.send_file_rejection(self.file_props, code='400',
                     typ='profile')
-                raise xmpp.NodeProcessed
-            feature_tag = si.getTag('feature', namespace=xmpp.NS_FEATURE)
+                raise nbxmpp.NodeProcessed
+            feature_tag = si.getTag('feature', namespace=nbxmpp.NS_FEATURE)
             if not feature_tag:
                 return
-            form_tag = feature_tag.getTag('x', namespace=xmpp.NS_DATA)
+            form_tag = feature_tag.getTag('x', namespace=nbxmpp.NS_DATA)
             if not form_tag:
                 return
             self.dataform = dataforms.ExtendForm(node=form_tag)
@@ -2046,12 +2051,13 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                 if f.var == 'stream-method' and f.type_ == 'list-single':
                     values = [o[1] for o in f.options]
                     self.file_props.stream_methods = ' '.join(values)
-                    if xmpp.NS_BYTESTREAM in values or xmpp.NS_IBB in values:
+                    if nbxmpp.NS_BYTESTREAM in values or \
+                    nbxmpp.NS_IBB in values:
                         break
             else:
                 self.conn.send_file_rejection(self.file_props, code='400',
                     typ='stream')
-                raise xmpp.NodeProcessed
+                raise nbxmpp.NodeProcessed
             file_tag = si.getTag('file')
             for name, val in file_tag.getAttrs().items():
                 if val is None:

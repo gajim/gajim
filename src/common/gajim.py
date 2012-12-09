@@ -32,7 +32,7 @@ import logging
 import locale
 
 import config
-import xmpp
+import nbxmpp
 import defs
 import common.ged
 
@@ -203,15 +203,16 @@ except ImportError:
 
 
 gajim_identity = {'type': 'pc', 'category': 'client', 'name': 'Gajim'}
-gajim_common_features = [xmpp.NS_BYTESTREAM, xmpp.NS_SI, xmpp.NS_FILE,
-    xmpp.NS_MUC, xmpp.NS_MUC_USER, xmpp.NS_MUC_ADMIN, xmpp.NS_MUC_OWNER,
-    xmpp.NS_MUC_CONFIG, xmpp.NS_COMMANDS, xmpp.NS_DISCO_INFO, 'ipv6',
-    'jabber:iq:gateway', xmpp.NS_LAST, xmpp.NS_PRIVACY, xmpp.NS_PRIVATE,
-    xmpp.NS_REGISTER, xmpp.NS_VERSION, xmpp.NS_DATA, xmpp.NS_ENCRYPTED, 'msglog',
-    'sslc2s', 'stringprep', xmpp.NS_PING, xmpp.NS_TIME_REVISED, xmpp.NS_SSN,
-    xmpp.NS_MOOD, xmpp.NS_ACTIVITY, xmpp.NS_NICK, xmpp.NS_ROSTERX, xmpp.NS_SECLABEL,
-    xmpp.NS_HASHES, xmpp.NS_HASHES_MD5, xmpp.NS_HASHES_SHA1,
-    xmpp.NS_HASHES_SHA256, xmpp.NS_HASHES_SHA512]
+gajim_common_features = [nbxmpp.NS_BYTESTREAM, nbxmpp.NS_SI, nbxmpp.NS_FILE,
+    nbxmpp.NS_MUC, nbxmpp.NS_MUC_USER, nbxmpp.NS_MUC_ADMIN, nbxmpp.NS_MUC_OWNER,
+    nbxmpp.NS_MUC_CONFIG, nbxmpp.NS_COMMANDS, nbxmpp.NS_DISCO_INFO, 'ipv6',
+    'jabber:iq:gateway', nbxmpp.NS_LAST, nbxmpp.NS_PRIVACY, nbxmpp.NS_PRIVATE,
+    nbxmpp.NS_REGISTER, nbxmpp.NS_VERSION, nbxmpp.NS_DATA, nbxmpp.NS_ENCRYPTED,
+    'msglog', 'sslc2s', 'stringprep', nbxmpp.NS_PING, nbxmpp.NS_TIME_REVISED,
+    nbxmpp.NS_SSN, nbxmpp.NS_MOOD, nbxmpp.NS_ACTIVITY, nbxmpp.NS_NICK,
+    nbxmpp.NS_ROSTERX, nbxmpp.NS_SECLABEL, nbxmpp.NS_HASHES,
+    nbxmpp.NS_HASHES_MD5, nbxmpp.NS_HASHES_SHA1, nbxmpp.NS_HASHES_SHA256,
+    nbxmpp.NS_HASHES_SHA512]
 
 # Optional features gajim supports per account
 gajim_optional_features = {}

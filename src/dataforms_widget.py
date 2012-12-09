@@ -78,7 +78,7 @@ class DataFormWidget(gtk.Alignment, object):
 
     def set_data_form(self, dataform):
         """
-        Set the data form (xmpp.DataForm) displayed in widget
+        Set the data form (nbxmpp.DataForm) displayed in widget
         """
         assert isinstance(dataform, dataforms.DataForm)
 

@@ -29,10 +29,10 @@ if you need
 # suggestion: rewrite functions that return dates to return standard python time tuples,
 # exteneded to contain timezone
 
-import xmpp
+import nbxmpp
 import time
 
-class PersonConstruct(xmpp.Node, object):
+class PersonConstruct(nb.Node, object):
     """
     Not used for now, as we don't need authors/contributors in pubsub.com feeds.
     They rarely exist there
@@ -40,7 +40,7 @@ class PersonConstruct(xmpp.Node, object):
 
     def __init__(self, node):
         ''' Create person construct from node. '''
-        xmpp.Node.__init__(self, node=node)
+        nbxmpp.Node.__init__(self, node=node)
 
     def get_name(self):
         return self.getTagData('name')
@@ -63,14 +63,14 @@ class PersonConstruct(xmpp.Node, object):
             '''Conveys an e-mail address associated with the person. Might be None when
             not set.''')
 
-class Entry(xmpp.Node, object):
+class Entry(nbxmpp.Node, object):
     def __init__(self, node=None):
-        xmpp.Node.__init__(self, 'entry', node=node)
+        nbxmpp.Node.__init__(self, 'entry', node=node)
 
     def __repr__(self):
         return '<Atom:Entry object of id="%r">' % self.getAttr('id')
 
-class OldEntry(xmpp.Node, object):
+class OldEntry(nbxmpp.Node, object):
     """
     Parser for feeds from pubsub.com. They use old Atom 0.3 format with their
     extensions
@@ -78,7 +78,7 @@ class OldEntry(xmpp.Node, object):
 
     def __init__(self, node=None):
         ''' Create new Atom 0.3 entry object. '''
-        xmpp.Node.__init__(self, 'entry', node=node)
+        nbxmpp.Node.__init__(self, 'entry', node=node)
 
     def __repr__(self):
         return '<Atom0.3:Entry object of id="%r">' % self.getAttr('id')

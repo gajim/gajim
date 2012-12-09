@@ -15,7 +15,7 @@
 Handles Jingle Transports (currently only ICE-UDP)
 """
 
-import xmpp
+import nbxmpp
 import socket
 from common import gajim
 from common.protocol.bytestream import ConnectionSocks5Bytestream
@@ -70,7 +70,7 @@ class JingleTransport(object):
             candidates = self._iter_candidates()
         else:
             candidates = (self.make_candidate(candidate) for candidate in candidates)
-        transport = xmpp.Node('transport', payload=candidates)
+        transport = nbxmpp.Node('transport', payload=candidates)
         return transport
 
     def parse_transport_stanza(self, transport):
@@ -120,7 +120,7 @@ class JingleTransportSocks5(JingleTransport):
             'type': candidate['type']
         }
 
-        return xmpp.Node('candidate', attrs=attrs)
+        return nbxmpp.Node('candidate', attrs=attrs)
 
     def make_transport(self, candidates=None, add_candidates = True):
         if  add_candidates:
@@ -129,8 +129,8 @@ class JingleTransportSocks5(JingleTransport):
             self._add_proxy_candidates()
             transport = JingleTransport.make_transport(self, candidates)
         else:
-            transport = xmpp.Node('transport')
-        transport.setNamespace(xmpp.NS_JINGLE_BYTESTREAM)
+            transport = nbxmpp.Node('transport')
+        transport.setNamespace(nbxmpp.NS_JINGLE_BYTESTREAM)
         transport.setAttr('sid', self.sid)
         if self.file_props.dstaddr:
             transport.setAttr('dstaddr', self.file_props.dstaddr)
@@ -266,10 +266,10 @@ class JingleTransportSocks5(JingleTransport):
         if sesn is None:
             return
 
-        iq = xmpp.Iq(to=proxy['jid'], frm=self.ourjid, typ='set')
+        iq = nbxmpp.Iq(to=proxy['jid'], frm=self.ourjid, typ='set')
         auth_id = "au_" + proxy['sid']
         iq.setID(auth_id)
-        query = iq.setTag('query', namespace=xmpp.NS_BYTESTREAM)
+        query = iq.setTag('query', namespace=nbxmpp.NS_BYTESTREAM)
         query.setAttr('sid', proxy['sid'])
         activate = query.setTag('activate')
         activate.setData(sesn.peerjid)
@@ -277,14 +277,14 @@ class JingleTransportSocks5(JingleTransport):
         self.connection.connection.send(iq)
 
 
-        content = xmpp.Node('content')
+        content = nbxmpp.Node('content')
         content.setAttr('creator', 'initiator')
         c = self.get_content()
         content.setAttr('name', c.name)
-        transport = xmpp.Node('transport')
-        transport.setNamespace(xmpp.NS_JINGLE_BYTESTREAM)
+        transport = nbxmpp.Node('transport')
+        transport.setNamespace(nbxmpp.NS_JINGLE_BYTESTREAM)
         transport.setAttr('sid', proxy['sid'])
-        activated = xmpp.Node('activated')
+        activated = nbxmpp.Node('activated')
         cid = None
 
         if 'cid' in proxy:
@@ -322,8 +322,8 @@ class JingleTransportIBB(JingleTransport):
 
     def make_transport(self):
 
-        transport = xmpp.Node('transport')
-        transport.setNamespace(xmpp.NS_JINGLE_IBB)
+        transport = nbxmpp.Node('transport')
+        transport.setNamespace(nbxmpp.NS_JINGLE_IBB)
         transport.setAttr('block-size', self.block_sz)
         transport.setAttr('sid', self.sid)
         return transport
@@ -360,11 +360,11 @@ class JingleTransportICEUDP(JingleTransport):
         else:
             # we actually don't handle properly different tcp options in jingle
             attrs['protocol'] = 'tcp'
-        return xmpp.Node('candidate', attrs=attrs)
+        return nbxmpp.Node('candidate', attrs=attrs)
 
     def make_transport(self, candidates=None):
         transport = JingleTransport.make_transport(self, candidates)
-        transport.setNamespace(xmpp.NS_JINGLE_ICE_UDP)
+        transport.setNamespace(nbxmpp.NS_JINGLE_ICE_UDP)
         if self.candidates and self.candidates[0].username and \
                 self.candidates[0].password:
             transport.setAttr('ufrag', self.candidates[0].username)
@@ -405,6 +405,6 @@ class JingleTransportICEUDP(JingleTransport):
         self.remote_candidates.extend(candidates)
         return candidates
 
-transports[xmpp.NS_JINGLE_ICE_UDP] = JingleTransportICEUDP
-transports[xmpp.NS_JINGLE_BYTESTREAM] = JingleTransportSocks5
-transports[xmpp.NS_JINGLE_IBB] = JingleTransportIBB
+transports[nbxmpp.NS_JINGLE_ICE_UDP] = JingleTransportICEUDP
+transports[nbxmpp.NS_JINGLE_BYTESTREAM] = JingleTransportSocks5
+transports[nbxmpp.NS_JINGLE_IBB] = JingleTransportIBB

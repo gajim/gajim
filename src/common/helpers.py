@@ -142,7 +142,7 @@ def parse_resource(resource):
     """
     if resource:
         try:
-            from xmpp.stringprepare import resourceprep
+            from nbxmpp.stringprepare import resourceprep
             return resourceprep.prepare(unicode(resource))
         except UnicodeError:
             raise InvalidFormat, 'Invalid character in resource.'
@@ -157,7 +157,7 @@ def prep(user, server, resource):
         if len(user) < 1 or len(user) > 1023:
             raise InvalidFormat, _('Username must be between 1 and 1023 chars')
         try:
-            from xmpp.stringprepare import nodeprep
+            from nbxmpp.stringprepare import nodeprep
             user = nodeprep.prepare(unicode(user))
         except UnicodeError:
             raise InvalidFormat, _('Invalid character in username.')
@@ -168,7 +168,7 @@ def prep(user, server, resource):
         if len(server) < 1 or len(server) > 1023:
             raise InvalidFormat, _('Server must be between 1 and 1023 chars')
         try:
-            from xmpp.stringprepare import nameprep
+            from nbxmpp.stringprepare import nameprep
             server = nameprep.prepare(unicode(server))
         except UnicodeError:
             raise InvalidFormat, _('Invalid character in hostname.')
@@ -179,7 +179,7 @@ def prep(user, server, resource):
         if len(resource) < 1 or len(resource) > 1023:
             raise InvalidFormat, _('Resource must be between 1 and 1023 chars')
         try:
-            from xmpp.stringprepare import resourceprep
+            from nbxmpp.stringprepare import resourceprep
             resource = resourceprep.prepare(unicode(resource))
         except UnicodeError:
             raise InvalidFormat, _('Invalid character in resource.')
@@ -1300,7 +1300,7 @@ def prepare_and_validate_gpg_keyID(account, jid, keyID):
     return keyID
 
 def update_optional_features(account = None):
-    import xmpp
+    import nbxmpp
     if account:
         accounts = [account]
     else:
@@ -1308,38 +1308,41 @@ def update_optional_features(account = None):
     for a in accounts:
         gajim.gajim_optional_features[a] = []
         if gajim.config.get_per('accounts', a, 'subscribe_mood'):
-            gajim.gajim_optional_features[a].append(xmpp.NS_MOOD + '+notify')
+            gajim.gajim_optional_features[a].append(nbxmpp.NS_MOOD + '+notify')
         if gajim.config.get_per('accounts', a, 'subscribe_activity'):
-            gajim.gajim_optional_features[a].append(xmpp.NS_ACTIVITY + '+notify')
+            gajim.gajim_optional_features[a].append(nbxmpp.NS_ACTIVITY + \
+                '+notify')
         if gajim.config.get_per('accounts', a, 'publish_tune'):
-            gajim.gajim_optional_features[a].append(xmpp.NS_TUNE)
+            gajim.gajim_optional_features[a].append(nbxmpp.NS_TUNE)
         if gajim.config.get_per('accounts', a, 'publish_location'):
-            gajim.gajim_optional_features[a].append(xmpp.NS_LOCATION)
+            gajim.gajim_optional_features[a].append(nbxmpp.NS_LOCATION)
         if gajim.config.get_per('accounts', a, 'subscribe_tune'):
-            gajim.gajim_optional_features[a].append(xmpp.NS_TUNE + '+notify')
+            gajim.gajim_optional_features[a].append(nbxmpp.NS_TUNE + '+notify')
         if gajim.config.get_per('accounts', a, 'subscribe_nick'):
-            gajim.gajim_optional_features[a].append(xmpp.NS_NICK + '+notify')
+            gajim.gajim_optional_features[a].append(nbxmpp.NS_NICK + '+notify')
         if gajim.config.get_per('accounts', a, 'subscribe_location'):
-            gajim.gajim_optional_features[a].append(xmpp.NS_LOCATION + '+notify')
+            gajim.gajim_optional_features[a].append(nbxmpp.NS_LOCATION + \
+                '+notify')
         if gajim.config.get('outgoing_chat_state_notifactions') != 'disabled':
-            gajim.gajim_optional_features[a].append(xmpp.NS_CHATSTATES)
+            gajim.gajim_optional_features[a].append(nbxmpp.NS_CHATSTATES)
         if not gajim.config.get('ignore_incoming_xhtml'):
-            gajim.gajim_optional_features[a].append(xmpp.NS_XHTML_IM)
+            gajim.gajim_optional_features[a].append(nbxmpp.NS_XHTML_IM)
         if gajim.HAVE_PYCRYPTO \
         and gajim.config.get_per('accounts', a, 'enable_esessions'):
-            gajim.gajim_optional_features[a].append(xmpp.NS_ESESSION)
+            gajim.gajim_optional_features[a].append(nbxmpp.NS_ESESSION)
         if gajim.config.get_per('accounts', a, 'answer_receipts'):
-            gajim.gajim_optional_features[a].append(xmpp.NS_RECEIPTS)
+            gajim.gajim_optional_features[a].append(nbxmpp.NS_RECEIPTS)
         if gajim.HAVE_FARSTREAM:
-            gajim.gajim_optional_features[a].append(xmpp.NS_JINGLE)
-            gajim.gajim_optional_features[a].append(xmpp.NS_JINGLE_RTP)
-            gajim.gajim_optional_features[a].append(xmpp.NS_JINGLE_RTP_AUDIO)
-            gajim.gajim_optional_features[a].append(xmpp.NS_JINGLE_RTP_VIDEO)
-            gajim.gajim_optional_features[a].append(xmpp.NS_JINGLE_ICE_UDP)
-            gajim.gajim_optional_features[a].append(xmpp.NS_JINGLE_FILE_TRANSFER)
-            gajim.gajim_optional_features[a].append(xmpp.NS_JINGLE_XTLS)
-            gajim.gajim_optional_features[a].append(xmpp.NS_JINGLE_BYTESTREAM)
-            gajim.gajim_optional_features[a].append(xmpp.NS_JINGLE_IBB)
+            gajim.gajim_optional_features[a].append(nbxmpp.NS_JINGLE)
+            gajim.gajim_optional_features[a].append(nbxmpp.NS_JINGLE_RTP)
+            gajim.gajim_optional_features[a].append(nbxmpp.NS_JINGLE_RTP_AUDIO)
+            gajim.gajim_optional_features[a].append(nbxmpp.NS_JINGLE_RTP_VIDEO)
+            gajim.gajim_optional_features[a].append(nbxmpp.NS_JINGLE_ICE_UDP)
+            gajim.gajim_optional_features[a].append(
+                nbxmpp.NS_JINGLE_FILE_TRANSFER)
+            gajim.gajim_optional_features[a].append(nbxmpp.NS_JINGLE_XTLS)
+            gajim.gajim_optional_features[a].append(nbxmpp.NS_JINGLE_BYTESTREAM)
+            gajim.gajim_optional_features[a].append(nbxmpp.NS_JINGLE_IBB)
         gajim.caps_hash[a] = caps_cache.compute_caps_hash([gajim.gajim_identity],
                 gajim.gajim_common_features + gajim.gajim_optional_features[a])
         # re-send presence with new hash
@@ -1381,7 +1384,7 @@ def get_subscription_request_msg(account=None):
         return s
 
 def replace_dataform_media(form, stanza):
-    import xmpp
+    import nbxmpp
     found = False
     for field in form.getTags('field'):
         for media in field.getTags('media'):
@@ -1389,7 +1392,7 @@ def replace_dataform_media(form, stanza):
                 uri_data = uri.getData()
                 if uri_data.startswith('cid:'):
                     uri_data = uri_data[4:]
-                    for data in stanza.getTags('data', namespace=xmpp.NS_BOB):
+                    for data in stanza.getTags('data', namespace=nbxmpp.NS_BOB):
                         if data.getAttr('cid') == uri_data:
                             uri.setData(data.getData())
                             found = True

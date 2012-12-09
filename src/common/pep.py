@@ -221,7 +221,7 @@ import logging
 log = logging.getLogger('gajim.c.pep')
 
 from common import helpers
-from common import xmpp
+import nbxmpp
 from common import gajim
 
 import gtkgui_helpers
@@ -281,7 +281,7 @@ class UserMoodPEP(AbstractPEP):
     '''XEP-0107: User Mood'''
 
     type_ = 'mood'
-    namespace = xmpp.NS_MOOD
+    namespace = nbxmpp.NS_MOOD
 
     def _extract_info(self, items):
         mood_dict = {}
@@ -327,7 +327,7 @@ class UserTunePEP(AbstractPEP):
     '''XEP-0118: User Tune'''
 
     type_ = 'tune'
-    namespace = xmpp.NS_TUNE
+    namespace = nbxmpp.NS_TUNE
 
     def _extract_info(self, items):
         tune_dict = {}
@@ -373,7 +373,7 @@ class UserActivityPEP(AbstractPEP):
     '''XEP-0108: User Activity'''
 
     type_ = 'activity'
-    namespace = xmpp.NS_ACTIVITY
+    namespace = nbxmpp.NS_ACTIVITY
 
     def _extract_info(self, items):
         activity_dict = {}
@@ -439,7 +439,7 @@ class UserNicknamePEP(AbstractPEP):
     '''XEP-0172: User Nickname'''
 
     type_ = 'nickname'
-    namespace = xmpp.NS_NICK
+    namespace = nbxmpp.NS_NICK
 
     def _extract_info(self, items):
         nick = ''
@@ -468,7 +468,7 @@ class UserLocationPEP(AbstractPEP):
     '''XEP-0080: User Location'''
 
     type_ = 'location'
-    namespace = xmpp.NS_LOCATION
+    namespace = nbxmpp.NS_LOCATION
 
     def _extract_info(self, items):
         location_dict = {}
@@ -562,7 +562,7 @@ class ConnectionPEP(object):
             return
         if not self.pep_supported:
             return
-        item = xmpp.Node('activity', {'xmlns': xmpp.NS_ACTIVITY})
+        item = nbxmpp.Node('activity', {'xmlns': nbxmpp.NS_ACTIVITY})
         if activity:
             i = item.addChild(activity)
         if subactivity:
@@ -570,14 +570,15 @@ class ConnectionPEP(object):
         if message:
             i = item.addChild('text')
             i.addData(message)
-        self._pubsub_connection.send_pb_publish('', xmpp.NS_ACTIVITY, item, '0')
+        self._pubsub_connection.send_pb_publish('', nbxmpp.NS_ACTIVITY, item,
+            '0')
 
     def retract_activity(self):
         if not self.pep_supported:
             return
         self.send_activity(None)
         # not all client support new XEP, so we still retract
-        self._pubsub_connection.send_pb_retract('', xmpp.NS_ACTIVITY, '0')
+        self._pubsub_connection.send_pb_retract('', nbxmpp.NS_ACTIVITY, '0')
 
     def send_mood(self, mood, message=None):
         if self.connected == 1:
@@ -587,20 +588,20 @@ class ConnectionPEP(object):
             return
         if not self.pep_supported:
             return
-        item = xmpp.Node('mood', {'xmlns': xmpp.NS_MOOD})
+        item = nbxmpp.Node('mood', {'xmlns': nbxmpp.NS_MOOD})
         if mood:
             item.addChild(mood)
         if message:
             i = item.addChild('text')
             i.addData(message)
-        self._pubsub_connection.send_pb_publish('', xmpp.NS_MOOD, item, '0')
+        self._pubsub_connection.send_pb_publish('', nbxmpp.NS_MOOD, item, '0')
 
     def retract_mood(self):
         if not self.pep_supported:
             return
         self.send_mood(None)
         # not all client support new XEP, so we still retract
-        self._pubsub_connection.send_pb_retract('', xmpp.NS_MOOD, '0')
+        self._pubsub_connection.send_pb_retract('', nbxmpp.NS_MOOD, '0')
 
     def send_tune(self, artist='', title='', source='', track=0, length=0,
     items=None):
@@ -611,7 +612,7 @@ class ConnectionPEP(object):
             return
         if not self.pep_supported:
             return
-        item = xmpp.Node('tune', {'xmlns': xmpp.NS_TUNE})
+        item = nbxmpp.Node('tune', {'xmlns': nbxmpp.NS_TUNE})
         if artist:
             i = item.addChild('artist')
             i.addData(artist)
@@ -629,14 +630,14 @@ class ConnectionPEP(object):
             i.addData(length)
         if items:
             item.addChild(payload=items)
-        self._pubsub_connection.send_pb_publish('', xmpp.NS_TUNE, item, '0')
+        self._pubsub_connection.send_pb_publish('', nbxmpp.NS_TUNE, item, '0')
 
     def retract_tune(self):
         if not self.pep_supported:
             return
         self.send_tune(None)
         # not all client support new XEP, so we still retract
-        self._pubsub_connection.send_pb_retract('', xmpp.NS_TUNE, '0')
+        self._pubsub_connection.send_pb_retract('', nbxmpp.NS_TUNE, '0')
 
     def send_nickname(self, nick):
         if self.connected == 1:
@@ -646,16 +647,16 @@ class ConnectionPEP(object):
             return
         if not self.pep_supported:
             return
-        item = xmpp.Node('nick', {'xmlns': xmpp.NS_NICK})
+        item = nbxmpp.Node('nick', {'xmlns': nbxmpp.NS_NICK})
         item.addData(nick)
-        self._pubsub_connection.send_pb_publish('', xmpp.NS_NICK, item, '0')
+        self._pubsub_connection.send_pb_publish('', nbxmpp.NS_NICK, item, '0')
 
     def retract_nickname(self):
         if not self.pep_supported:
             return
         self.send_nickname(None)
         # not all client support new XEP, so we still retract
-        self._pubsub_connection.send_pb_retract('', xmpp.NS_NICK, '0')
+        self._pubsub_connection.send_pb_retract('', nbxmpp.NS_NICK, '0')
 
     def send_location(self, info):
         if self.connected == 1:
@@ -665,16 +666,16 @@ class ConnectionPEP(object):
             return
         if not self.pep_supported:
             return
-        item = xmpp.Node('geoloc', {'xmlns': xmpp.NS_LOCATION})
+        item = nbxmpp.Node('geoloc', {'xmlns': nbxmpp.NS_LOCATION})
         for field in LOCATION_DATA:
             if info.get(field, None):
                 i = item.addChild(field)
                 i.addData(info[field])
-        self._pubsub_connection.send_pb_publish('', xmpp.NS_LOCATION, item, '0')
+        self._pubsub_connection.send_pb_publish('', nbxmpp.NS_LOCATION, item, '0')
 
     def retract_location(self):
         if not self.pep_supported:
             return
         self.send_location({})
         # not all client support new XEP, so we still retract
-        self._pubsub_connection.send_pb_retract('', xmpp.NS_LOCATION, '0')
+        self._pubsub_connection.send_pb_retract('', nbxmpp.NS_LOCATION, '0')
