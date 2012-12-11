@@ -7,7 +7,6 @@ nobase_dist_gajimsrc_PYTHON = \
 	$(srcdir)/*.py \
 	$(srcdir)/common/*.py \
 	$(srcdir)/common/protocol/*.py \
-	$(srcdir)/common/xmpp/*.py \
 	$(srcdir)/common/zeroconf/*.py \
 	$(srcdir)/command_system/*.py \
 	$(srcdir)/command_system/implementation/*.py \
