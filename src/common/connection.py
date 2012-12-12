@@ -2641,6 +2641,9 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.connection.send(message)
 
     def check_pingalive(self):
+        if not gajim.config.get_per('accounts', self.name, 'active'):
+            # Account may have been disabled
+            return
         if self.awaiting_xmpp_ping_id:
             # We haven't got the pong in time, disco and reconnect
             log.warn("No reply received for keepalive ping. Reconnecting.")
