@@ -32,7 +32,7 @@ if you need
 import nbxmpp
 import time
 
-class PersonConstruct(nb.Node, object):
+class PersonConstruct(nbxmpp.Node, object):
     """
     Not used for now, as we don't need authors/contributors in pubsub.com feeds.
     They rarely exist there
