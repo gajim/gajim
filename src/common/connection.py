@@ -2385,10 +2385,9 @@ class Connection(CommonConnection, ConnectionHandlers):
             tags = {}
             timeout = gajim.config.get_per('room', room_jid,
                 'muc_restore_timeout')
-            if timeout is None:
-                timeout = gajim.config.get('muc_restore_timeout') * 60
-            else:
-                timeout *= 60
+            if timeout is None or timeout == -2:
+                timeout = gajim.config.get('muc_restore_timeout')
+            timeout *= 60
             if timeout >= 0:
                 last_date = self.last_history_time[room_jid]
                 if last_date == 0:
@@ -2399,7 +2398,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                     last_date))
                 tags['since'] = last_date
             nb = gajim.config.get_per('room', room_jid, 'muc_restore_lines')
-            if nb is None:
+            if nb is None or nb == -2:
                 nb = gajim.config.get('muc_restore_lines')
             if nb >= 0:
                 tags['maxstanzas'] = nb

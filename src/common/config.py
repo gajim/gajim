@@ -463,6 +463,8 @@ class Config:
             }, {}),
             'rooms': ({
                     'speller_language': [ opt_str, '', _('Language for which we want to check misspelled words')],
+                    'muc_restore_lines': [opt_int, -2, _('How many lines to request from server when entering a groupchat. -1 means no limit, -2 means global value')],
+                    'muc_restore_timeout': [opt_int, -2, _('How many minutes back to request logs when a entering a groupchat. -1 means no limit, -2 means global value')],
             }, {}),
             'plugins': ({
                 'active': [opt_bool, False, _('State whether plugins should be activated on exit (this is saved on Gajim exit). This option SHOULD NOT be used to (de)activate plug-ins. Use GUI instead.')],
