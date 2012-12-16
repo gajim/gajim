@@ -219,6 +219,7 @@ class MessageControl(object):
     def remove_session(self, session):
         if session != self.session:
             return
+        self.session.control = None
         self.session = None
 
     def _nec_message_outgoing(self, obj):
