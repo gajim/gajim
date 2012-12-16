@@ -1722,7 +1722,7 @@ ConnectionJingle, ConnectionIBBytestream):
         gajim.jid_is_transport(obj.fjid) or obj.jid in self.jids_for_auto_auth \
         or obj.transport_auto_auth:
             if self.connection:
-                p = xmpp.Presence(obj.fjid, 'subscribed')
+                p = nbxmpp.Presence(obj.fjid, 'subscribed')
                 p = self.add_sha(p)
                 self.connection.send(p)
             if gajim.jid_is_transport(obj.fjid) or obj.transport_auto_auth:

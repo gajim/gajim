@@ -2656,10 +2656,10 @@ class Connection(CommonConnection, ConnectionHandlers):
         """
         message = nbxmpp.Message(to=room)
 
-        x = xmpp.DataForm(typ='submit')
-        x.addChild(node=xmpp.DataField(name='FORM_TYPE',
+        x = nbxmpp.DataForm(typ='submit')
+        x.addChild(node=nbxmpp.DataField(name='FORM_TYPE',
             value=nbxmpp.NS_MUC + '#request'))
-        x.addChild(node=xmpp.DataField(name='muc#role', value='participant',
+        x.addChild(node=nbxmpp.DataField(name='muc#role', value='participant',
             typ='text-single'))
 
         message.addChild(node=x)

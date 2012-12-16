@@ -572,7 +572,7 @@ class CommandWindow:
         """
         Request the command list. Change stage on delivery
         """
-        query = nbxmpp.Iq(typ='get', to=xmpp.JID(self.jid),
+        query = nbxmpp.Iq(typ='get', to=nbxmpp.JID(self.jid),
             queryNS=nbxmpp.NS_DISCO_ITEMS)
         query.setQuerynode(nbxmpp.NS_COMMANDS)
 
