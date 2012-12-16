@@ -813,7 +813,7 @@ class EncryptedStanzaSession(ArchivingStanzaSession):
         # the offset of the group we chose (need it to match up with the dhhash)
         group_order = 0
         self.modp = int(form.getField('modp').getOptions()[group_order][1])
-        x.addChild(node=xmpp.DataField(name='modp', value=self.modp))
+        x.addChild(node=nbxmpp.DataField(name='modp', value=self.modp))
 
         g = dh.generators[self.modp]
         p = dh.primes[self.modp]
