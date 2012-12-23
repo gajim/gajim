@@ -31,9 +31,10 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-import gtk
-import pango
-import gobject
+from gi.repository import Gtk
+from gi.repository import Gdk
+from gi.repository import Pango
+from gi.repository import GObject
 import os, sys
 import common.config
 import common.sleepy
@@ -63,6 +64,7 @@ from common import gpg
 from common import ged
 
 try:
+    raise ImportError
     from common.multimedia_helpers import AudioInputManager, AudioOutputManager
     from common.multimedia_helpers import VideoInputManager, VideoOutputManager
     HAS_GST = True
@@ -158,10 +160,10 @@ class PreferencesWindow:
         # user themes
         if os.path.isdir(gajim.MY_EMOTS_PATH):
             emoticons_list += os.listdir(gajim.MY_EMOTS_PATH)
-        renderer_text = gtk.CellRendererText()
+        renderer_text = Gtk.CellRendererText()
         emoticons_combobox.pack_start(renderer_text, True)
         emoticons_combobox.add_attribute(renderer_text, 'text', 0)
-        model = gtk.ListStore(str)
+        model = Gtk.ListStore(str)
         emoticons_combobox.set_model(model)
         l = []
         for dir_ in emoticons_list:
@@ -213,7 +215,7 @@ class PreferencesWindow:
         ### Style tab ###
         # Themes
         theme_combobox = self.xml.get_object('theme_combobox')
-        cell = gtk.CellRendererText()
+        cell = Gtk.CellRendererText()
         theme_combobox.pack_start(cell, True)
         theme_combobox.add_attribute(cell, 'text', 0)
         self.update_theme_list()
@@ -223,13 +225,13 @@ class PreferencesWindow:
         if os.path.isdir(gajim.MY_ICONSETS_PATH):
             iconsets_list += os.listdir(gajim.MY_ICONSETS_PATH)
         # new model, image in 0, string in 1
-        model = gtk.ListStore(gtk.Image, str)
+        model = Gtk.ListStore(Gtk.Image, str)
         renderer_image = cell_renderer_image.CellRendererImage(0, 0)
-        renderer_text = gtk.CellRendererText()
+        renderer_text = Gtk.CellRendererText()
         renderer_text.set_property('xpad', 5)
-        self.iconset_combobox.pack_start(renderer_image, expand = False)
-        self.iconset_combobox.pack_start(renderer_text, expand = True)
-        self.iconset_combobox.set_attributes(renderer_text, text = 1)
+        self.iconset_combobox.pack_start(renderer_image, False)
+        self.iconset_combobox.pack_start(renderer_text, True)
+        self.iconset_combobox.add_attribute(renderer_text, 'text', 1)
         self.iconset_combobox.add_attribute(renderer_image, 'image', 0)
         self.iconset_combobox.set_model(model)
         l = []
@@ -242,7 +244,7 @@ class PreferencesWindow:
         if l.count == 0:
             l.append(' ')
         for i in xrange(len(l)):
-            preview = gtk.Image()
+            preview = Gtk.Image()
             files = []
             files.append(os.path.join(helpers.get_iconset_path(l[i]), '16x16',
                     'online.png'))
@@ -395,45 +397,45 @@ class PreferencesWindow:
 
         # Default Status messages
         self.default_msg_tree = self.xml.get_object('default_msg_treeview')
-        col2 = self.default_msg_tree.rc_get_style().bg[gtk.STATE_ACTIVE].\
+        col2 = self.default_msg_tree.get_style().bg[Gtk.StateType.ACTIVE].\
             to_string()
         # (status, translated_status, message, enabled)
-        model = gtk.ListStore(str, str, str, bool)
+        model = Gtk.ListStore(str, str, str, bool)
         self.default_msg_tree.set_model(model)
-        col = gtk.TreeViewColumn(_('Status'))
+        col = Gtk.TreeViewColumn(_('Status'))
         col.set_resizable(True)
         self.default_msg_tree.append_column(col)
-        renderer = gtk.CellRendererText()
+        renderer = Gtk.CellRendererText()
         col.pack_start(renderer, False)
-        col.set_attributes(renderer, text = 1)
-        col = gtk.TreeViewColumn(_('Default Message'))
+        col.add_attribute(renderer, 'text', 1)
+        col = Gtk.TreeViewColumn(_('Default Message'))
         col.set_resizable(True)
         self.default_msg_tree.append_column(col)
-        renderer = gtk.CellRendererText()
+        renderer = Gtk.CellRendererText()
         col.pack_start(renderer, True)
-        col.set_attributes(renderer, text = 2)
+        col.add_attribute(renderer, 'text', 2)
         renderer.connect('edited', self.on_default_msg_cell_edited)
         renderer.set_property('editable', True)
         renderer.set_property('cell-background', col2)
-        col = gtk.TreeViewColumn(_('Enabled'))
+        col = Gtk.TreeViewColumn(_('Enabled'))
         col.set_resizable(True)
         self.default_msg_tree.append_column(col)
-        renderer = gtk.CellRendererToggle()
+        renderer = Gtk.CellRendererToggle()
         col.pack_start(renderer, False)
-        col.set_attributes(renderer, active = 3)
+        col.add_attribute(renderer, 'active', 3)
         renderer.set_property('activatable', True)
         renderer.connect('toggled', self.default_msg_toggled_cb)
         self.fill_default_msg_treeview()
 
         # Status messages
         self.msg_tree = self.xml.get_object('msg_treeview')
-        model = gtk.ListStore(str, str, str, str, str, str, str)
+        model = Gtk.ListStore(str, str, str, str, str, str, str)
         self.msg_tree.set_model(model)
-        col = gtk.TreeViewColumn('name')
+        col = Gtk.TreeViewColumn('name')
         self.msg_tree.append_column(col)
-        renderer = gtk.CellRendererText()
+        renderer = Gtk.CellRendererText()
         col.pack_start(renderer, True)
-        col.set_attributes(renderer, text = 0)
+        col.add_attribute(renderer, 'text', 0)
         renderer.connect('edited', self.on_msg_cell_edited)
         renderer.set_property('editable', True)
         self.fill_msg_treeview()
@@ -444,12 +446,12 @@ class PreferencesWindow:
         def create_av_combobox(opt_name, device_dict, config_name=None,
         key=None):
             combobox = self.xml.get_object(opt_name + '_combobox')
-            cell = gtk.CellRendererText()
-            cell.set_property('ellipsize', pango.ELLIPSIZE_END)
+            cell = Gtk.CellRendererText()
+            cell.set_property('ellipsize', Pango.EllipsizeMode.END)
             cell.set_property('ellipsize-set', True)
             combobox.pack_start(cell, True)
             combobox.add_attribute(cell, 'text', 0)
-            model = gtk.ListStore(str, str)
+            model = Gtk.ListStore(str, str)
             combobox.set_model(model)
             if config_name:
                 config = gajim.config.get(config_name)
@@ -589,10 +591,10 @@ class PreferencesWindow:
         gtkgui_helpers.possibly_move_window_in_current_desktop(self.window)
 
     def on_preferences_notebook_switch_page(self, widget, page, page_num):
-        gobject.idle_add(self.xml.get_object('close_button').grab_focus)
+        GObject.idle_add(self.xml.get_object('close_button').grab_focus)
 
     def on_preferences_window_key_press_event(self, widget, event):
-        if event.keyval == gtk.keysyms.Escape:
+        if event.keyval == Gdk.KEY_Escape:
             self.window.hide()
 
     def get_per_account_option(self, opt):
@@ -751,7 +753,7 @@ class PreferencesWindow:
             lang = gajim.config.get('speller_language')
             if not lang:
                 lang = gajim.LANG
-            tv = gtk.TextView()
+            tv = Gtk.TextView()
             try:
                 gtkspell.Spell(tv, lang)
             except (TypeError, RuntimeError, OSError):
@@ -781,7 +783,7 @@ class PreferencesWindow:
 
     def update_theme_list(self):
         theme_combobox = self.xml.get_object('theme_combobox')
-        model = gtk.ListStore(str)
+        model = Gtk.ListStore(str)
         theme_combobox.set_model(model)
         i = 0
         for config_theme in gajim.config.get_per('themes'):
@@ -958,21 +960,21 @@ class PreferencesWindow:
             if col:
                 if isinstance(col_to_widget[c], list):
                     self.xml.get_object(col_to_widget[c][0]).set_color(
-                            gtk.gdk.color_parse(col))
+                            Gdk.color_parse(col))
                     self.xml.get_object(col_to_widget[c][0]).set_sensitive(True)
                     self.xml.get_object(col_to_widget[c][1]).set_active(True)
                 else:
                     self.xml.get_object(col_to_widget[c]).set_color(
-                            gtk.gdk.color_parse(col))
+                            Gdk.color_parse(col))
             else:
                 if isinstance(col_to_widget[c], list):
                     self.xml.get_object(col_to_widget[c][0]).set_color(
-                            gtk.gdk.color_parse('#000000'))
+                            Gdk.color_parse('#000000'))
                     self.xml.get_object(col_to_widget[c][0]).set_sensitive(False)
                     self.xml.get_object(col_to_widget[c][1]).set_active(False)
                 else:
                     self.xml.get_object(col_to_widget[c]).set_color(
-                            gtk.gdk.color_parse('#000000'))
+                            Gdk.color_parse('#000000'))
 
     def on_reset_colors_button_clicked(self, widget):
         col_to_widget = {'inmsgcolor': 'incoming_nick_colorbutton',
@@ -1078,7 +1080,7 @@ class PreferencesWindow:
         eventbox = self.xml.get_object('default_status_eventbox')
         vbox = self.xml.get_object('status_vbox')
         vbox.set_child_packing(eventbox, not expander.get_expanded(), True, 0,
-                gtk.PACK_START)
+                Gtk.PACK_START)
 
     def save_status_messages(self, model):
         for msg in gajim.config.get_per('statusmsg'):
@@ -1242,10 +1244,10 @@ class PreferencesWindow:
             return
         buf = self.xml.get_object('msg_textview').get_buffer()
         first_iter, end_iter = buf.get_bounds()
-        model.set_value(iter_, 1, buf.get_text(first_iter, end_iter))
+        model.set_value(iter_, 1, buf.get_text(first_iter, end_iter, True))
 
     def on_msg_treeview_key_press_event(self, widget, event):
-        if event.keyval == gtk.keysyms.Delete:
+        if event.keyval == Gdk.KEY_Delete:
             self.on_delete_msg_button_clicked(widget)
 
     def on_proxies_combobox_changed(self, widget):
@@ -1288,7 +1290,7 @@ class ManageProxiesWindow:
     def __init__(self):
         self.xml = gtkgui_helpers.get_gtk_builder('manage_proxies_window.ui')
         self.window = self.xml.get_object('manage_proxies_window')
-        self.window.set_transient_for(gajim.interface.roster.window)
+        self.set_transient_for(gajim.interface.roster.window)
         self.proxies_treeview = self.xml.get_object('proxies_treeview')
         self.proxyname_entry = self.xml.get_object('proxyname_entry')
         self.proxytype_combobox = self.xml.get_object('proxytype_combobox')
@@ -1327,12 +1329,12 @@ class ManageProxiesWindow:
         self.xml.get_object('remove_proxy_button').set_sensitive(False)
         self.proxytype_combobox.set_sensitive(False)
         self.xml.get_object('proxy_table').set_sensitive(False)
-        model = gtk.ListStore(str)
+        model = Gtk.ListStore(str)
         self.proxies_treeview.set_model(model)
-        col = gtk.TreeViewColumn('Proxies')
+        col = Gtk.TreeViewColumn('Proxies')
         self.proxies_treeview.append_column(col)
-        renderer = gtk.CellRendererText()
-        col.pack_start(renderer, True)
+        renderer = Gtk.CellRendererText()
+        col.pack_start(renderer, True, True, 0)
         col.set_attributes(renderer, text = 0)
         self.fill_proxies_treeview()
         self.xml.get_object('proxytype_combobox').set_active(0)
@@ -1455,7 +1457,7 @@ class ManageProxiesWindow:
         self.block_signal = False
 
     def on_proxies_treeview_key_press_event(self, widget, event):
-        if event.keyval == gtk.keysyms.Delete:
+        if event.keyval == Gdk.KEY_Delete:
             self.on_remove_proxy_button_clicked(widget)
 
     def on_proxyname_entry_changed(self, widget):
@@ -1547,12 +1549,15 @@ class AccountsWindow:
         img.set_from_file(path_to_kbd_input_img)
         self.notebook = self.xml.get_object('notebook')
         # Name
-        model = gtk.ListStore(str)
+        model = Gtk.ListStore(str)
         self.accounts_treeview.set_model(model)
         # column
-        renderer = gtk.CellRendererText()
-        self.accounts_treeview.insert_column_with_attributes(-1, _('Name'),
-                renderer, text=0)
+        renderer = Gtk.CellRendererText()
+        col = Gtk.TreeViewColumn()
+        col.set_title(_('Name'))
+        col.pack_start(renderer, False)
+        col.add_attribute(renderer, 'text', 0)
+        self.accounts_treeview.insert_column(col, -1)
 
         self.current_account = None
         # When we fill info, we don't want to handle the changed signals
@@ -1582,13 +1587,13 @@ class AccountsWindow:
         self.xml.get_object('close_button').grab_focus()
 
     def on_accounts_window_key_press_event(self, widget, event):
-        if event.keyval == gtk.keysyms.Escape:
+        if event.keyval == Gdk.KEY_Escape:
             self.check_resend_relog()
             self.window.destroy()
 
     def select_account(self, account):
         model = self.accounts_treeview.get_model()
-        iter_ = model.get_iter_root()
+        iter_ = model.get_iter_first()
         while iter_:
             acct = model[iter_][0].decode('utf-8')
             if account == acct:
@@ -1610,7 +1615,7 @@ class AccountsWindow:
             model.set(iter_, 0, account)
 
         self.selection = self.accounts_treeview.get_selection()
-        self.selection.select_iter(model.get_iter_root())
+        self.selection.select_iter(model.get_iter_first())
 
     def resend(self, account):
         if not account in gajim.connections:
@@ -1643,7 +1648,7 @@ class AccountsWindow:
                 status_before = gajim.connections[account].status
                 gajim.interface.roster.send_status(account, 'offline',
                         _('Be right back.'))
-                gobject.timeout_add(500, login, account, show_before, status_before)
+                GObject.timeout_add(500, login, account, show_before, status_before)
 
             def on_yes(checked, account):
                 relog(account)
@@ -1667,11 +1672,14 @@ class AccountsWindow:
         Activate modify buttons when a row is selected, update accounts info
         """
         sel = self.accounts_treeview.get_selection()
-        (model, iter_) = sel.get_selected()
-        if iter_:
-            account = model[iter_][0].decode('utf-8')
+        if sel:
+            (model, iter_) = sel.get_selected()
+            if iter_:
+                account = model[iter_][0].decode('utf-8')
+            else:
+                account = None
         else:
-            account = None
+            iter_ = account = None
         if self.current_account and self.current_account == account:
             # We're comming back to our current account, no need to update widgets
             return
@@ -1738,7 +1746,7 @@ class AccountsWindow:
         if not our_proxy:
             our_proxy = _('None')
         proxy_combobox = self.xml.get_object('proxies_combobox1')
-        model = gtk.ListStore(str)
+        model = Gtk.ListStore(str)
         proxy_combobox.set_model(model)
         l = gajim.config.get_per('proxies')
         l.insert(0, _('None'))
@@ -2141,7 +2149,7 @@ class AccountsWindow:
             if not widget.is_focus():
                 pritext = _('Invalid Jabber ID')
                 dialogs.ErrorDialog(pritext, str(s))
-                gobject.idle_add(lambda: widget.grab_focus())
+                GObject.idle_add(lambda: widget.grab_focus())
             return True
 
         jid_splited = jid.split('@', 1)
@@ -2151,7 +2159,7 @@ class AccountsWindow:
                 pritext = _('Invalid Jabber ID')
                 sectext = _('A Jabber ID must be in the form "user@servername".')
                 dialogs.ErrorDialog(pritext, sectext)
-                gobject.idle_add(lambda: widget.grab_focus())
+                GObject.idle_add(lambda: widget.grab_focus())
             return True
 
 
@@ -2218,7 +2226,7 @@ class AccountsWindow:
             if not widget.is_focus():
                 pritext = _('Invalid Jabber ID')
                 dialogs.ErrorDialog(pritext, str(s))
-                gobject.idle_add(lambda: widget.grab_focus())
+                GObject.idle_add(lambda: widget.grab_focus())
             return True
 
         if self.option_changed('resource', resource):
@@ -2374,7 +2382,7 @@ class AccountsWindow:
             if not widget.is_focus():
                 dialogs.ErrorDialog(_('Invalid entry'),
                         _('Custom port must be a port number.'))
-                gobject.idle_add(lambda: widget.grab_focus())
+                GObject.idle_add(lambda: widget.grab_focus())
             return True
         if self.option_changed('custom_port', custom_port):
             self.need_relogin = True
@@ -2662,14 +2670,14 @@ class AccountsWindow:
         gajim.config.set_per('accounts', self.current_account,
                 'zeroconf_email', email)
 
-class FakeDataForm(gtk.Table, object):
+class FakeDataForm(Gtk.Table, object):
     """
     Class for forms that are in XML format <entry1>value1</entry1> infos in a
     table {entry1: value1}
     """
 
     def __init__(self, infos):
-        gtk.Table.__init__(self)
+        GObject.GObject.__init__(self)
         self.infos = infos
         self.entries = {}
         self._draw_table()
@@ -2682,7 +2690,7 @@ class FakeDataForm(gtk.Table, object):
         if 'instructions' in self.infos:
             nbrow = 1
             self.resize(rows = nbrow, columns = 2)
-            label = gtk.Label(self.infos['instructions'])
+            label = Gtk.Label(label=self.infos['instructions'])
             self.attach(label, 0, 2, 0, 1, 0, 0, 0, 0)
         for name in self.infos.keys():
             if name in ('key', 'instructions', 'x', 'registered'):
@@ -2692,9 +2700,9 @@ class FakeDataForm(gtk.Table, object):
 
             nbrow = nbrow + 1
             self.resize(rows = nbrow, columns = 2)
-            label = gtk.Label(name.capitalize() + ':')
+            label = Gtk.Label(label=name.capitalize() + ':')
             self.attach(label, 0, 1, nbrow - 1, nbrow, 0, 0, 0, 0)
-            entry = gtk.Entry()
+            entry = Gtk.Entry()
             entry.set_activates_default(True)
             if self.infos[name]:
                 entry.set_text(self.infos[name])
@@ -2722,7 +2730,7 @@ class ServiceRegistrationWindow:
         self.is_form = is_form
         self.xml = gtkgui_helpers.get_gtk_builder('service_registration_window.ui')
         self.window = self.xml.get_object('service_registration_window')
-        self.window.set_transient_for(gajim.interface.roster.window)
+        self.set_transient_for(gajim.interface.roster.window)
         if self.is_form:
             dataform = dataforms.ExtendForm(node = infos)
             self.data_form_widget = dataforms_widget.DataFormWidget(dataform)
@@ -2777,7 +2785,7 @@ class GroupchatConfigWindow:
         self.xml = gtkgui_helpers.get_gtk_builder('data_form_window.ui',
             'data_form_window')
         self.window = self.xml.get_object('data_form_window')
-        self.window.set_transient_for(gajim.interface.roster.window)
+        self.set_transient_for(gajim.interface.roster.window)
 
         if self.form:
             config_vbox = self.xml.get_object('config_vbox')
@@ -2786,7 +2794,7 @@ class GroupchatConfigWindow:
             # widget
             sw = self.data_form_widget.xml.get_object(
                 'single_form_scrolledwindow')
-            sw.set_policy(gtk.POLICY_NEVER, gtk.POLICY_NEVER)
+            sw.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.NEVER)
             if self.form.title:
                 self.xml.get_object('title_label').set_text(self.form.title)
             else:
@@ -2794,7 +2802,7 @@ class GroupchatConfigWindow:
                 self.xml.get_object('title_hseparator').hide()
 
             self.data_form_widget.show()
-            config_vbox.pack_start(self.data_form_widget)
+            config_vbox.pack_start(self.data_form_widget, True, True, 0)
         else:
             self.xml.get_object('title_label').set_no_show_all(True)
             self.xml.get_object('title_label').hide()
@@ -2808,67 +2816,67 @@ class GroupchatConfigWindow:
 
         for affiliation in self.affiliation_labels.keys():
             self.start_users_dict[affiliation] = {}
-            hbox = gtk.HBox(spacing=5)
-            add_on_vbox.pack_start(hbox, False)
+            hbox = Gtk.HBox(spacing=5)
+            add_on_vbox.pack_start(hbox, False, True, 0)
 
-            label = gtk.Label(self.affiliation_labels[affiliation])
-            hbox.pack_start(label, False)
+            label = Gtk.Label(label=self.affiliation_labels[affiliation])
+            hbox.pack_start(label, False, True, 0)
 
-            bb = gtk.HButtonBox()
-            bb.set_layout(gtk.BUTTONBOX_END)
+            bb = Gtk.HButtonBox()
+            bb.set_layout(Gtk.ButtonBoxStyle.END)
             bb.set_spacing(5)
-            hbox.pack_start(bb)
-            add_button = gtk.Button(stock=gtk.STOCK_ADD)
+            hbox.pack_start(bb, True, True, 0)
+            add_button = Gtk.Button(stock=Gtk.STOCK_ADD)
             add_button.connect('clicked', self.on_add_button_clicked,
                 affiliation)
-            bb.pack_start(add_button)
-            self.remove_button[affiliation] = gtk.Button(stock=gtk.STOCK_REMOVE)
+            bb.pack_start(add_button, True, True, 0)
+            self.remove_button[affiliation] = Gtk.Button(stock=Gtk.STOCK_REMOVE)
             self.remove_button[affiliation].set_sensitive(False)
             self.remove_button[affiliation].connect('clicked',
                     self.on_remove_button_clicked, affiliation)
-            bb.pack_start(self.remove_button[affiliation])
+            bb.pack_start(self.remove_button[affiliation], True, True, 0)
 
             # jid, reason, nick, role
-            liststore = gtk.ListStore(str, str, str, str)
-            self.affiliation_treeview[affiliation] = gtk.TreeView(liststore)
+            liststore = Gtk.ListStore(str, str, str, str)
+            self.affiliation_treeview[affiliation] = Gtk.TreeView(liststore)
             self.affiliation_treeview[affiliation].get_selection().set_mode(
-                gtk.SELECTION_MULTIPLE)
+                Gtk.SelectionMode.MULTIPLE)
             self.affiliation_treeview[affiliation].connect('cursor-changed',
                 self.on_affiliation_treeview_cursor_changed, affiliation)
-            renderer = gtk.CellRendererText()
-            col = gtk.TreeViewColumn(_('JID'), renderer)
+            renderer = Gtk.CellRendererText()
+            col = Gtk.TreeViewColumn(_('JID'), renderer)
             col.add_attribute(renderer, 'text', 0)
             col.set_resizable(True)
             col.set_sort_column_id(0)
             self.affiliation_treeview[affiliation].append_column(col)
 
             if affiliation == 'outcast':
-                renderer = gtk.CellRendererText()
+                renderer = Gtk.CellRendererText()
                 renderer.set_property('editable', True)
                 renderer.connect('edited', self.on_cell_edited)
-                col = gtk.TreeViewColumn(_('Reason'), renderer)
+                col = Gtk.TreeViewColumn(_('Reason'), renderer)
                 col.add_attribute(renderer, 'text', 1)
                 col.set_resizable(True)
                 col.set_sort_column_id(1)
                 self.affiliation_treeview[affiliation].append_column(col)
             elif affiliation == 'member':
-                renderer = gtk.CellRendererText()
-                col = gtk.TreeViewColumn(_('Nick'), renderer)
+                renderer = Gtk.CellRendererText()
+                col = Gtk.TreeViewColumn(_('Nick'), renderer)
                 col.add_attribute(renderer, 'text', 2)
                 col.set_resizable(True)
                 col.set_sort_column_id(2)
                 self.affiliation_treeview[affiliation].append_column(col)
-                renderer = gtk.CellRendererText()
-                col = gtk.TreeViewColumn(_('Role'), renderer)
+                renderer = Gtk.CellRendererText()
+                col = Gtk.TreeViewColumn(_('Role'), renderer)
                 col.add_attribute(renderer, 'text', 3)
                 col.set_resizable(True)
                 col.set_sort_column_id(3)
                 self.affiliation_treeview[affiliation].append_column(col)
 
-            sw = gtk.ScrolledWindow()
-            sw.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_NEVER)
+            sw = Gtk.ScrolledWindow()
+            sw.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.NEVER)
             sw.add(self.affiliation_treeview[affiliation])
-            add_on_vbox.pack_start(sw)
+            add_on_vbox.pack_start(sw, True, True, 0)
             gajim.connections[self.account].get_affiliation_list(self.room_jid,
                 affiliation)
 
@@ -2917,7 +2925,7 @@ class GroupchatConfigWindow:
         model, paths = selection.get_selected_rows()
         row_refs = []
         for path in paths:
-            row_refs.append(gtk.TreeRowReference(model, path))
+            row_refs.append(Gtk.TreeRowReference(model, path))
         for row_ref in row_refs:
             path = row_ref.get_path()
             iter_ = model.get_iter(path)
@@ -2996,7 +3004,7 @@ class RemoveAccountWindow:
         self.account = account
         xml = gtkgui_helpers.get_gtk_builder('remove_account_window.ui')
         self.window = xml.get_object('remove_account_window')
-        self.window.set_transient_for(gajim.interface.roster.window)
+        self.set_transient_for(gajim.interface.roster.window)
         self.remove_and_unregister_radiobutton = xml.get_object(
                 'remove_and_unregister_radiobutton')
         self.window.set_title(_('Removing %s account') % self.account)
@@ -3103,12 +3111,12 @@ class ManageBookmarksWindow:
     def __init__(self):
         self.xml = gtkgui_helpers.get_gtk_builder('manage_bookmarks_window.ui')
         self.window = self.xml.get_object('manage_bookmarks_window')
-        self.window.set_transient_for(gajim.interface.roster.window)
+        self.set_transient_for(gajim.interface.roster.window)
 
         # Account-JID, RoomName, Room-JID, Autojoin, Minimize, Passowrd, Nick,
         # Show_Status
-        self.treestore = gtk.TreeStore(str, str, str, bool, bool, str, str, str)
-        self.treestore.set_sort_column_id(1, gtk.SORT_ASCENDING)
+        self.treestore = Gtk.TreeStore(str, str, str, bool, bool, str, str, str)
+        self.treestore.set_sort_column_id(1, Gtk.SortType.ASCENDING)
 
         # Store bookmarks in treeview.
         for account in gajim.connections:
@@ -3149,7 +3157,7 @@ class ManageBookmarksWindow:
                                 print_status ])
 
         self.print_status_combobox = self.xml.get_object('print_status_combobox')
-        model = gtk.ListStore(str, str)
+        model = Gtk.ListStore(str, str)
 
         self.option_list = {'': _('Default'), 'all': Q_('?print_status:All'),
                 'in_and_out': _('Enter and leave only'),
@@ -3165,8 +3173,8 @@ class ManageBookmarksWindow:
         self.view.set_model(self.treestore)
         self.view.expand_all()
 
-        renderer = gtk.CellRendererText()
-        column = gtk.TreeViewColumn('Bookmarks', renderer, text=1)
+        renderer = Gtk.CellRendererText()
+        column = Gtk.TreeViewColumn('Bookmarks', renderer, text=1)
         self.view.append_column(column)
 
         self.selection = self.view.get_selection()
@@ -3189,7 +3197,7 @@ class ManageBookmarksWindow:
         self.xml.connect_signals(self)
         self.window.show_all()
         # select root iter
-        self.selection.select_iter(self.treestore.get_iter_root())
+        self.selection.select_iter(self.treestore.get_iter_first())
 
     def on_add_bookmark_button_clicked(self, widget):
         """
@@ -3456,38 +3464,22 @@ class AccountCreationWizardWindow:
         self.window = self.xml.get_object('account_creation_wizard_window')
         self.window.set_transient_for(gajim.interface.roster.window)
 
-        completion = gtk.EntryCompletion()
-        completion1 = gtk.EntryCompletion()
-        # Connect events from comboboxentry.child
+        # Connect events from comboboxentry.get_child()
         server_comboboxentry = self.xml.get_object('server_comboboxentry')
-        entry = server_comboboxentry.child
+        entry = server_comboboxentry.get_child()
         entry.connect('key_press_event',
             self.on_server_comboboxentry_key_press_event, server_comboboxentry)
-        entry.set_completion(completion)
         # Do the same for the other server comboboxentry
         server_comboboxentry1 = self.xml.get_object('server_comboboxentry1')
-        entry = server_comboboxentry1.child
-        entry.set_completion(completion1)
 
         self.update_proxy_list()
 
         # parse servers.xml
         servers_xml = os.path.join(gajim.DATA_DIR, 'other', 'servers.xml')
         servers = gtkgui_helpers.parse_server_xml(servers_xml)
-        servers_model = gtk.ListStore(str)
+        servers_model = self.xml.get_object('server_liststore')
         for server in servers:
             servers_model.append((server,))
-
-        completion.set_model(servers_model)
-        completion.set_text_column(0)
-        completion1.set_model(servers_model)
-        completion1.set_text_column(0)
-
-        # Put servers into comboboxentries
-        server_comboboxentry.set_model(servers_model)
-        server_comboboxentry.set_text_column(0)
-        server_comboboxentry1.set_model(servers_model)
-        server_comboboxentry1.set_text_column(0)
 
         # Generic widgets
         self.notebook = self.xml.get_object('notebook')
@@ -3597,7 +3589,7 @@ class AccountCreationWizardWindow:
         self.go_online_checkbutton.show()
         img = self.xml.get_object('finish_image')
         if self.modify:
-            img.set_from_stock(gtk.STOCK_APPLY, gtk.ICON_SIZE_DIALOG)
+            img.set_from_stock(Gtk.STOCK_APPLY, Gtk.IconSize.DIALOG)
         else:
             path_to_file = gtkgui_helpers.get_icon_path('gajim', 48)
             img.set_from_file(path_to_file)
@@ -3630,7 +3622,7 @@ class AccountCreationWizardWindow:
                     'You must provide a username to configure this account.')
                 dialogs.ErrorDialog(pritext, sectext)
                 return
-            server = self.xml.get_object('server_comboboxentry').child.\
+            server = self.xml.get_object('server_comboboxentry').get_child().\
                 get_text().decode('utf-8').strip()
             savepass = self.xml.get_object('save_password_checkbutton').\
                 get_active()
@@ -3664,7 +3656,7 @@ class AccountCreationWizardWindow:
             self.show_finish_page()
         elif cur_page == 2:
             # We are creating a new account
-            server = self.xml.get_object('server_comboboxentry1').child.\
+            server = self.xml.get_object('server_comboboxentry1').get_child().\
                 get_text().decode('utf-8')
 
             if not server:
@@ -3707,7 +3699,7 @@ class AccountCreationWizardWindow:
                 self.notebook.set_current_page(5) # show creating page
                 self.back_button.hide()
                 self.forward_button.hide()
-                self.update_progressbar_timeout_id = gobject.timeout_add(100,
+                self.update_progressbar_timeout_id = GObject.timeout_add(100,
                     self.update_progressbar)
                 # Get form from serveur
                 con = connection.Connection(self.account)
@@ -3749,12 +3741,12 @@ class AccountCreationWizardWindow:
             self.notebook.set_current_page(5) # show creating page
             self.back_button.hide()
             self.forward_button.hide()
-            self.update_progressbar_timeout_id = gobject.timeout_add(100,
+            self.update_progressbar_timeout_id = GObject.timeout_add(100,
                 self.update_progressbar)
 
     def update_proxy_list(self):
         proxies_combobox = self.xml.get_object('proxies_combobox')
-        model = gtk.ListStore(str)
+        model = Gtk.ListStore(str)
         proxies_combobox.set_model(model)
         l = gajim.config.get_per('proxies')
         l.insert(0, _('None'))
@@ -3785,7 +3777,7 @@ class AccountCreationWizardWindow:
         if obj.conn.name != self.account:
             return
         if self.update_progressbar_timeout_id is not None:
-            gobject.source_remove(self.update_progressbar_timeout_id)
+            GObject.source_remove(self.update_progressbar_timeout_id)
         self.back_button.show()
         self.forward_button.show()
         self.is_form = obj.is_form
@@ -3802,7 +3794,7 @@ class AccountCreationWizardWindow:
                 empty_config = False
                 break
         self.data_form_widget.show_all()
-        self.xml.get_object('form_vbox').pack_start(self.data_form_widget)
+        self.xml.get_object('form_vbox').pack_start(self.data_form_widget, True, True, 0)
         if empty_config:
             self.forward_button.set_sensitive(False)
             self.notebook.set_current_page(4) # show form page
@@ -3841,7 +3833,7 @@ class AccountCreationWizardWindow:
         if self.account not in gajim.connections:
             return
         if self.update_progressbar_timeout_id is not None:
-            gobject.source_remove(self.update_progressbar_timeout_id)
+            GObject.source_remove(self.update_progressbar_timeout_id)
         del gajim.connections[self.account]
         if self.account in gajim.config.get_per('accounts'):
             gajim.config.del_per('accounts', self.account)
@@ -3850,7 +3842,7 @@ class AccountCreationWizardWindow:
         self.go_online_checkbutton.hide()
         self.show_vcard_checkbutton.hide()
         img = self.xml.get_object('finish_image')
-        img.set_from_stock(gtk.STOCK_DIALOG_ERROR, gtk.ICON_SIZE_DIALOG)
+        img.set_from_stock(Gtk.STOCK_DIALOG_ERROR, Gtk.IconSize.DIALOG)
         finish_text = '<big><b>%s</b></big>\n\n%s' % (
             _('An error occurred during account creation'), obj.reason)
         self.finish_label.set_markup(finish_text)
@@ -3867,7 +3859,7 @@ class AccountCreationWizardWindow:
         self.show_finish_page()
 
         if self.update_progressbar_timeout_id is not None:
-            gobject.source_remove(self.update_progressbar_timeout_id)
+            GObject.source_remove(self.update_progressbar_timeout_id)
 
     def _nec_acc_is_not_ok(self, obj):
         """
@@ -3884,14 +3876,14 @@ class AccountCreationWizardWindow:
         if self.account in gajim.config.get_per('accounts'):
             gajim.config.del_per('accounts', self.account)
         img = self.xml.get_object('finish_image')
-        img.set_from_stock(gtk.STOCK_DIALOG_ERROR, gtk.ICON_SIZE_DIALOG)
+        img.set_from_stock(Gtk.STOCK_DIALOG_ERROR, Gtk.IconSize.DIALOG)
         finish_text = '<big><b>%s</b></big>\n\n%s' % (_(
             'An error occurred during account creation'), obj.reason)
         self.finish_label.set_markup(finish_text)
         self.notebook.set_current_page(6) # show finish page
 
         if self.update_progressbar_timeout_id is not None:
-            gobject.source_remove(self.update_progressbar_timeout_id)
+            GObject.source_remove(self.update_progressbar_timeout_id)
 
     def on_advanced_button_clicked(self, widget):
         if 'accounts' in gajim.interface.instances:
@@ -3912,15 +3904,15 @@ class AccountCreationWizardWindow:
 
     def on_username_entry_key_press_event(self, widget, event):
         # Check for pressed @ and jump to combobox if found
-        if event.keyval == gtk.keysyms.at:
+        if event.keyval == Gdk.KEY_at:
             combobox = self.xml.get_object('server_comboboxentry')
             combobox.grab_focus()
-            combobox.child.set_position(-1)
+            combobox.get_child().set_position(-1)
             return True
 
     def on_server_comboboxentry_key_press_event(self, widget, event, combobox):
         # If backspace is pressed in empty field, return to the nick entry field
-        backspace = event.keyval == gtk.keysyms.BackSpace
+        backspace = event.keyval == Gdk.KEY_BackSpace
         empty = len(combobox.get_active_text()) == 0
         if backspace and empty and self.modify:
             username_entry = self.xml.get_object('username_entry')
@@ -4014,7 +4006,7 @@ class ManagePEPServicesWindow:
     def __init__(self, account):
         self.xml = gtkgui_helpers.get_gtk_builder('manage_pep_services_window.ui')
         self.window = self.xml.get_object('manage_pep_services_window')
-        self.window.set_transient_for(gajim.interface.roster.window)
+        self.set_transient_for(gajim.interface.roster.window)
         self.xml.get_object('configure_button').set_sensitive(False)
         self.xml.get_object('delete_button').set_sensitive(False)
         self.xml.connect_signals(self)
@@ -4049,14 +4041,14 @@ class ManagePEPServicesWindow:
     def init_services(self):
         self.treeview = self.xml.get_object('services_treeview')
         # service, access_model, group
-        self.treestore = gtk.ListStore(str)
+        self.treestore = Gtk.ListStore(str)
         self.treeview.set_model(self.treestore)
 
-        col = gtk.TreeViewColumn('Service')
+        col = Gtk.TreeViewColumn('Service')
         self.treeview.append_column(col)
 
-        cellrenderer_text = gtk.CellRendererText()
-        col.pack_start(cellrenderer_text)
+        cellrenderer_text = Gtk.CellRendererText()
+        col.pack_start(cellrenderer_text, True, True, 0)
         col.add_attribute(cellrenderer_text, 'text', 0)
 
         our_jid = gajim.get_jid_from_account(self.account)
@@ -4072,7 +4064,7 @@ class ManagePEPServicesWindow:
         if jid != gajim.get_jid_from_account(self.account):
             return
         model = self.treeview.get_model()
-        iter_ = model.get_iter_root()
+        iter_ = model.get_iter_first()
         while iter_:
             if model[iter_][0] == node:
                 model.remove(iter_)
@@ -4124,21 +4116,21 @@ class ManageSoundsWindow:
         self.sound_tree = self.xml.get_object('sounds_treeview')
 
         # active, event ui name, path to sound file, event_config_name
-        model = gtk.ListStore(bool, str, str, str)
+        model = Gtk.ListStore(bool, str, str, str)
         self.sound_tree.set_model(model)
 
-        col = gtk.TreeViewColumn(_('Active'))
+        col = Gtk.TreeViewColumn(_('Active'))
         self.sound_tree.append_column(col)
-        renderer = gtk.CellRendererToggle()
+        renderer = Gtk.CellRendererToggle()
         renderer.set_property('activatable', True)
         renderer.connect('toggled', self.sound_toggled_cb)
-        col.pack_start(renderer)
+        col.pack_start(renderer, True, True, 0)
         col.set_attributes(renderer, active = 0)
 
-        col = gtk.TreeViewColumn(_('Event'))
+        col = Gtk.TreeViewColumn(_('Event'))
         self.sound_tree.append_column(col)
-        renderer = gtk.CellRendererText()
-        col.pack_start(renderer)
+        renderer = Gtk.CellRendererText()
+        col.pack_start(renderer, True, True, 0)
         col.set_attributes(renderer, text = 1)
 
         self.fill_sound_treeview()
@@ -4164,7 +4156,7 @@ class ManageSoundsWindow:
     def fill_sound_treeview(self):
         model = self.sound_tree.get_model()
         model.clear()
-        model.set_sort_column_id(1, gtk.SORT_ASCENDING)
+        model.set_sort_column_id(1, Gtk.SortType.ASCENDING)
 
         # NOTE: sounds_ui_names MUST have all items of
         # sounds = gajim.config.get_per('soundevents') as keys

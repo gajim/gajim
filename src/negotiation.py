@@ -49,7 +49,7 @@ class FeatureNegotiationWindow:
         dataform = dataforms.ExtendForm(node = self.form)
         self.data_form_widget = dataforms_widget.DataFormWidget(dataform)
         self.data_form_widget.show()
-        config_vbox.pack_start(self.data_form_widget)
+        config_vbox.pack_start(self.data_form_widget, True, True, 0)
 
         self.xml.connect_signals(self)
         self.window.show_all()

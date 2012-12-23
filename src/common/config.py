@@ -36,7 +36,7 @@ import sys
 import re
 import copy
 import defs
-import gobject
+from gi.repository import GObject
 
 (
 OPT_TYPE,
@@ -807,7 +807,7 @@ class Config:
     def _timeout_save(self):
         if self.save_timeout_id:
             return
-        self.save_timeout_id = gobject.timeout_add(1000, self._really_save)
+        self.save_timeout_id = GObject.timeout_add(1000, self._really_save)
 
     def __init__(self):
         #init default values

@@ -68,12 +68,12 @@ except ImportError:
     print 'Gajim needs python-nbxmpp to run. Quiting...'
     sys.exit()
 
-from common import demandimport
-demandimport.enable()
-demandimport.ignore += ['gobject._gobject', 'libasyncns', 'i18n',
-    'logging.NullHandler', 'dbus.service', 'OpenSSL.SSL', 'OpenSSL.crypto',
-    'common.sleepy', 'DLFCN', 'dl', 'xml.sax', 'xml.sax.handler', 'ic',
-    'Crypto.PublicKey', 'IPython']
+#from common import demandimport
+#demandimport.enable()
+#demandimport.ignore += ['GObject._gobject', 'libasyncns', 'i18n',
+#    'logging.NullHandler', 'dbus.service', 'OpenSSL.SSL', 'OpenSSL.crypto',
+#    'common.sleepy', 'DLFCN', 'dl', 'xml.sax', 'xml.sax.handler', 'ic',
+#    'Crypto.PublicKey', 'IPython']
 
 if os.name == 'nt':
     import locale
@@ -110,6 +110,12 @@ logging_helpers.init('TERM' in os.environ)
 import logging
 # gajim.gui or gajim.gtk more appropriate ?
 log = logging.getLogger('gajim.gajim')
+
+#import gi
+#gi.require_version('Gtk', '3.0')
+#gi.require_version('Gdk', '2.0')
+#gi.require_version('GObject', '2.0')
+#gi.require_version('Pango', '1.0')
 
 import getopt
 from common import i18n
@@ -190,9 +196,10 @@ if os.name == 'nt':
 # PyGTK2.10+ only throws a warning
 warnings.filterwarnings('error', module='gtk')
 try:
-    import gobject
-    gobject.set_prgname('gajim')
-    import gtk
+    from gi.repository import GObject
+    GObject.set_prgname('gajim')
+    from gi.repository import Gtk
+    from gi.repository import Gdk
 except Warning, msg2:
     if str(msg2) == 'could not open display':
         print >> sys.stderr, _('Gajim needs X server to run. Quiting...')
@@ -237,12 +244,14 @@ else:
         elif sysname in ('FreeBSD', 'OpenBSD', 'NetBSD'):
             libc.setproctitle('gajim')
 
-    if gtk.pygtk_version < (2, 22, 0):
-        pritext = _('Gajim needs PyGTK 2.22 or above')
-        sectext = _('Gajim needs PyGTK 2.22 or above to run. Quiting...')
-    elif gtk.gtk_version < (2, 22, 0):
-        pritext = _('Gajim needs GTK 2.22 or above')
-        sectext = _('Gajim needs GTK 2.22 or above to run. Quiting...')
+#    if Gtk.pygtk_version < (2, 22, 0):
+#        pritext = _('Gajim needs PyGTK 2.22 or above')
+#        sectext = _('Gajim needs PyGTK 2.22 or above to run. Quiting...')
+#    elif Gtk.gtk_version < (2, 22, 0):
+#    if (Gtk.get_major_version(), Gtk.get_minor_version(),
+#    Gtk.get_micro_version()) < (2, 22, 0):
+#        pritext = _('Gajim needs GTK 2.22 or above')
+#        sectext = _('Gajim needs GTK 2.22 or above to run. Quiting...')
 
     from common import check_paths
 
@@ -257,9 +266,9 @@ else:
                 'http://sourceforge.net/project/showfiles.php?group_id=78018'
 
 if pritext:
-    dlg = gtk.MessageDialog(None,
-            gtk.DIALOG_DESTROY_WITH_PARENT | gtk.DIALOG_MODAL,
-            gtk.MESSAGE_ERROR, gtk.BUTTONS_OK, message_format = pritext)
+    dlg = Gtk.MessageDialog(None,
+            Gtk.DialogFlags.DESTROY_WITH_PARENT | Gtk.DialogFlags.MODAL,
+            Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, message_format = pritext)
 
     dlg.format_secondary_text(sectext)
     dlg.run()
@@ -385,12 +394,12 @@ if pid_alive():
         print("Gajim is already running, bringing the roster to front...")
         sys.exit(0)
     pix = gtkgui_helpers.get_icon_pixmap('gajim', 48)
-    gtk.window_set_default_icon(pix) # set the icon to all newly opened wind
+    Gtk.window_set_default_icon(pix) # set the icon to all newly opened wind
     pritext = _('Gajim is already running')
     sectext = _('Another instance of Gajim seems to be running\nRun anyway?')
     dialog = dialogs.YesNoDialog(pritext, sectext)
     dialog.popup()
-    if dialog.run() != gtk.RESPONSE_YES:
+    if dialog.run() != Gtk.ResponseType.YES:
         sys.exit(3)
     dialog.destroy()
     # run anyway, delete pid and useless global vars
@@ -440,31 +449,31 @@ if __name__ == '__main__':
     log.info("Encodings: d:%s, fs:%s, p:%s", sys.getdefaultencoding(), \
             sys.getfilesystemencoding(), locale.getpreferredencoding())
 
-    if os.name != 'nt':
-        # Session Management support
-        try:
-            import gnome.ui
-            raise ImportError
-        except ImportError:
-            pass
-        else:
-            def die_cb(dummy):
-                gajim.interface.roster.quit_gtkgui_interface()
-            gnome.program_init('gajim', gajim.version)
-            cli = gnome.ui.master_client()
-            cli.connect('die', die_cb)
+    #if os.name != 'nt':
+        ## Session Management support
+        #try:
+            #import gnome.ui
+            #raise ImportError
+        #except ImportError:
+            #pass
+        #else:
+            #def die_cb(dummy):
+                #gajim.interface.roster.quit_gtkgui_interface()
+            #gnome.program_init('gajim', gajim.version)
+            #cli = gnome.ui.master_client()
+            #cli.connect('die', die_cb)
 
-            path_to_gajim_script = gtkgui_helpers.get_abspath_for_script(
-                'gajim')
+            #path_to_gajim_script = gtkgui_helpers.get_abspath_for_script(
+                #'gajim')
 
-            if path_to_gajim_script:
-                argv = [path_to_gajim_script]
-                try:
-                    cli.set_restart_command(argv)
-                except TypeError:
-                    # Fedora systems have a broken gnome-python wrapper for this
-                    # function.
-                    cli.set_restart_command(len(argv), argv)
+            #if path_to_gajim_script:
+                #argv = [path_to_gajim_script]
+                #try:
+                    #cli.set_restart_command(argv)
+                #except TypeError:
+                    ## Fedora systems have a broken gnome-python wrapper for this
+                    ## function.
+                    #cli.set_restart_command(len(argv), argv)
 
     check_paths.check_and_possibly_create_paths()
 
@@ -475,10 +484,10 @@ if __name__ == '__main__':
         if os.name != 'nt':
             # This makes Gajim unusable under windows, and threads are used only
             # for GPG, so not under windows
-            gtk.gdk.threads_init()
-            gtk.gdk.threads_enter()
-        gtk.main()
+            Gdk.threads_init()
+            Gdk.threads_enter()
+        Gtk.main()
         if os.name != 'nt':
-            gtk.gdk.threads_leave()
+            Gdk.threads_leave()
     except KeyboardInterrupt:
         print >> sys.stderr, 'KeyboardInterrupt'

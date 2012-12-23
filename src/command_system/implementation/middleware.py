@@ -34,7 +34,7 @@ don't need to dig up the code itself to write basic commands.
 from types import StringTypes
 from traceback import print_exc
 
-from pango import FontDescription
+from gi.repository import Pango
 from common import gajim
 
 from ..framework import CommandProcessor
@@ -117,7 +117,7 @@ class CommandTools:
 
         name = gconf("/desktop/gnome/interface/monospace_font_name")
         name = name if name else "Monospace"
-        font = FontDescription(name)
+        font = Pango.FontDescription(name)
 
         command_ok_tag = buffer.create_tag("command_ok")
         command_ok_tag.set_property("font-desc", font)

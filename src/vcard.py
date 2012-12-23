@@ -31,8 +31,8 @@
 
 # THIS FILE IS FOR **OTHERS'** PROFILE (when we VIEW their INFO)
 
-import gtk
-import gobject
+from gi.repository import Gtk
+from gi.repository import GObject
 import base64
 import time
 import locale
@@ -123,7 +123,7 @@ class VcardWindow:
         self.vcard_arrived = False
         self.os_info_arrived = False
         self.entity_time_arrived = False
-        self.update_progressbar_timeout_id = gobject.timeout_add(100,
+        self.update_progressbar_timeout_id = GObject.timeout_add(100,
                 self.update_progressbar)
 
         gajim.ged.register_event_handler('version-result-received', ged.GUI1,
@@ -151,11 +151,11 @@ class VcardWindow:
 
     def on_vcard_information_window_destroy(self, widget):
         if self.update_progressbar_timeout_id is not None:
-            gobject.source_remove(self.update_progressbar_timeout_id)
+            GObject.source_remove(self.update_progressbar_timeout_id)
         del gajim.interface.instances[self.account]['infos'][self.contact.jid]
         buffer_ = self.xml.get_object('textview_annotation').get_buffer()
         annotation = buffer_.get_text(buffer_.get_start_iter(),
-                buffer_.get_end_iter())
+                buffer_.get_end_iter(), True)
         connection = gajim.connections[self.account]
         if annotation != connection.annotations.get(self.contact.jid, ''):
             connection.annotations[self.contact.jid] = annotation
@@ -170,19 +170,19 @@ class VcardWindow:
             self._nec_vcard_received)
 
     def on_vcard_information_window_key_press_event(self, widget, event):
-        if event.keyval == gtk.keysyms.Escape:
+        if event.keyval == Gdk.KEY_Escape:
             self.window.destroy()
 
     def on_information_notebook_switch_page(self, widget, page, page_num):
-        gobject.idle_add(self.xml.get_object('close_button').grab_focus)
+        GObject.idle_add(self.xml.get_object('close_button').grab_focus)
 
     def on_PHOTO_eventbox_button_press_event(self, widget, event):
         """
         If right-clicked, show popup
         """
         if event.button == 3: # right click
-            menu = gtk.Menu()
-            menuitem = gtk.ImageMenuItem(gtk.STOCK_SAVE_AS)
+            menu = Gtk.Menu()
+            menuitem = Gtk.ImageMenuItem(Gtk.STOCK_SAVE_AS)
             menuitem.connect('activate',
                     gtkgui_helpers.on_avatar_save_as_menuitem_activate,
                     self.contact.jid, self.contact.get_shown_name())
@@ -195,7 +195,7 @@ class VcardWindow:
     def set_value(self, entry_name, value):
         try:
             if value and entry_name == 'URL_label':
-                widget = gtk.LinkButton(value, value)
+                widget = Gtk.LinkButton(value, value)
                 widget.set_alignment(0, 0)
                 widget.show()
                 table = self.xml.get_object('personal_info_table')
@@ -220,7 +220,7 @@ class VcardWindow:
                 self.xml.get_object('user_avatar_label').show()
                 if not pixbuf:
                     image.set_from_icon_name('stock_person',
-                            gtk.ICON_SIZE_DIALOG)
+                            Gtk.IconSize.DIALOG)
                     continue
                 pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'vcard')
                 image.set_from_pixbuf(pixbuf)
@@ -259,7 +259,7 @@ class VcardWindow:
     def test_remove_progressbar(self):
         if self.update_progressbar_timeout_id is not None and \
         self.vcard_arrived and self.os_info_arrived and self.entity_time_arrived:
-            gobject.source_remove(self.update_progressbar_timeout_id)
+            GObject.source_remove(self.update_progressbar_timeout_id)
             self.progressbar.hide()
             self.update_progressbar_timeout_id = None
 
@@ -432,10 +432,10 @@ class VcardWindow:
         else: # Request os info if contact is connected
             if self.gc_contact:
                 j, r = gajim.get_room_and_nick_from_fjid(self.real_jid)
-                gobject.idle_add(gajim.connections[self.account].request_os_info,
+                GObject.idle_add(gajim.connections[self.account].request_os_info,
                         j, r, self.contact.jid)
             else:
-                gobject.idle_add(gajim.connections[self.account].request_os_info,
+                GObject.idle_add(gajim.connections[self.account].request_os_info,
                         self.contact.jid, self.contact.resource)
 
         # do not wait for entity_time if contact is not connected or has error
@@ -446,10 +446,10 @@ class VcardWindow:
         else: # Request entity time if contact is connected
             if self.gc_contact:
                 j, r = gajim.get_room_and_nick_from_fjid(self.real_jid)
-                gobject.idle_add(gajim.connections[self.account].\
+                GObject.idle_add(gajim.connections[self.account].\
                         request_entity_time, j, r, self.contact.jid)
             else:
-                gobject.idle_add(gajim.connections[self.account].\
+                GObject.idle_add(gajim.connections[self.account].\
                         request_entity_time, self.contact.jid, self.contact.resource)
 
         self.os_info = {0: {'resource': self.real_resource, 'client': '',
@@ -465,10 +465,10 @@ class VcardWindow:
                     uf_resources += '\n' + c.resource + \
                             _(' resource with priority ') + unicode(c.priority)
                     if c.show not in ('offline', 'error'):
-                        gobject.idle_add(
+                        GObject.idle_add(
                                 gajim.connections[self.account].request_os_info, c.jid,
                                 c.resource)
-                        gobject.idle_add(gajim.connections[self.account].\
+                        GObject.idle_add(gajim.connections[self.account].\
                                 request_entity_time, c.jid, c.resource)
                     self.os_info[i] = {'resource': c.resource, 'client': '',
                             'os': ''}
@@ -516,7 +516,7 @@ class ZeroconfVcardWindow:
         del gajim.interface.instances[self.account]['infos'][self.contact.jid]
 
     def on_zeroconf_information_window_key_press_event(self, widget, event):
-        if event.keyval == gtk.keysyms.Escape:
+        if event.keyval == Gdk.KEY_Escape:
             self.window.destroy()
 
     def on_PHOTO_eventbox_button_press_event(self, widget, event):
@@ -524,8 +524,8 @@ class ZeroconfVcardWindow:
         If right-clicked, show popup
         """
         if event.button == 3: # right click
-            menu = gtk.Menu()
-            menuitem = gtk.ImageMenuItem(gtk.STOCK_SAVE_AS)
+            menu = Gtk.Menu()
+            menuitem = Gtk.ImageMenuItem(Gtk.STOCK_SAVE_AS)
             menuitem.connect('activate',
                     gtkgui_helpers.on_avatar_save_as_menuitem_activate,
                     self.contact.jid, self.contact.get_shown_name())
@@ -538,7 +538,7 @@ class ZeroconfVcardWindow:
     def set_value(self, entry_name, value):
         try:
             if value and entry_name == 'URL_label':
-                widget = gtk.LinkButton(value, value)
+                widget = Gtk.LinkButton(value, value)
                 widget.set_alignment(0, 0)
                 table = self.xml.get_object('personal_info_table')
                 table.attach(widget, 1, 4, 3, 4, yoptions = 0)

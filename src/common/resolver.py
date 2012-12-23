@@ -318,8 +318,8 @@ class NsLookup(IdleCommand):
 
 # below lines is on how to use API and assist in testing
 if __name__ == '__main__':
-    import gobject
-    import gtk
+    from gi.repository import GObject
+    from gi.repository import Gtk
     from nbxmpp import idlequeue
 
     idlequeue = idlequeue.get_idlequeue()
@@ -331,19 +331,19 @@ if __name__ == '__main__':
         def on_result(host, result_array):
             print 'Result:\n' + repr(result_array)
         resolver.resolve(host, on_result)
-    win = gtk.Window()
+    win = Gtk.Window()
     win.set_border_width(6)
-    text_view = gtk.Entry()
+    text_view = Gtk.Entry()
     text_view.set_text('_xmpp-client._tcp.jabber.org')
-    hbox = gtk.HBox()
+    hbox = Gtk.HBox()
     hbox.set_spacing(3)
-    but = gtk.Button(' Lookup SRV ')
-    hbox.pack_start(text_view, 5)
-    hbox.pack_start(but, 0)
+    but = Gtk.Button(' Lookup SRV ')
+    hbox.pack_start(text_view, 5, True, 0)
+    hbox.pack_start(but, 0, True, 0)
     but.connect('clicked', clicked)
     win.add(hbox)
     win.show_all()
-    gobject.timeout_add(200, idlequeue.process)
+    GObject.timeout_add(200, idlequeue.process)
     if USE_LIBASYNCNS:
-        gobject.timeout_add(200, resolver.process)
-    gtk.main()
+        GObject.timeout_add(200, resolver.process)
+    Gtk.main()

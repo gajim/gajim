@@ -30,7 +30,7 @@
 
 import socket
 import base64
-import gobject
+from gi.repository import GObject
 import time
 
 import nbxmpp
@@ -442,7 +442,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
 
         def cleanup_gupnp():
             if self.no_gupnp_reply_id:
-                gobject.source_remove(self.no_gupnp_reply_id)
+                GObject.source_remove(self.no_gupnp_reply_id)
                 self.no_gupnp_reply_id = 0
             gajim.gupnp_igd.disconnect(self.ok_id)
             gajim.gupnp_igd.disconnect(self.fail_id)
@@ -482,7 +482,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
         self.fail_id = gajim.gupnp_igd.connect('error-mapping-port', fail)
 
         port = gajim.config.get('file_transfers_port')
-        self.no_gupnp_reply_id = gobject.timeout_add_seconds(10, no_upnp_reply)
+        self.no_gupnp_reply_id = GObject.timeout_add_seconds(10, no_upnp_reply)
         gajim.gupnp_igd.add_port('TCP', 0, my_ip, port, 3600,
             'Gajim file transfer')
 

@@ -25,8 +25,8 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-import gtk
-import gobject
+from gi.repository import Gtk
+from gi.repository import GObject
 import time
 import calendar
 
@@ -78,7 +78,7 @@ class HistoryWindow:
                 self.on_log_history_checkbutton_toggled)
         self.query_entry = xml.get_object('query_entry')
         self.query_combobox = xml.get_object('query_combobox')
-        self.jid_entry = self.query_combobox.child
+        self.jid_entry = self.query_combobox.get_child()
         self.jid_entry.connect('activate', self.on_jid_entry_activate)
         self.query_combobox.set_active(0)
         self.results_treeview = xml.get_object('results_treeview')
@@ -86,28 +86,28 @@ class HistoryWindow:
         self.search_in_date = xml.get_object('search_in_date')
 
         # contact_name, date, message, time
-        model = gtk.ListStore(str, str, str, str, str)
+        model = Gtk.ListStore(str, str, str, str, str)
         self.results_treeview.set_model(model)
-        col = gtk.TreeViewColumn(_('Name'))
+        col = Gtk.TreeViewColumn(_('Name'))
         self.results_treeview.append_column(col)
-        renderer = gtk.CellRendererText()
-        col.pack_start(renderer)
+        renderer = Gtk.CellRendererText()
+        col.pack_start(renderer, True, True, 0)
         col.set_attributes(renderer, text = C_CONTACT_NAME)
         col.set_sort_column_id(C_CONTACT_NAME) # user can click this header and sort
         col.set_resizable(True)
 
-        col = gtk.TreeViewColumn(_('Date'))
+        col = Gtk.TreeViewColumn(_('Date'))
         self.results_treeview.append_column(col)
-        renderer = gtk.CellRendererText()
-        col.pack_start(renderer)
+        renderer = Gtk.CellRendererText()
+        col.pack_start(renderer, True, True, 0)
         col.set_attributes(renderer, text = C_UNIXTIME)
         col.set_sort_column_id(C_UNIXTIME) # user can click this header and sort
         col.set_resizable(True)
 
-        col = gtk.TreeViewColumn(_('Message'))
+        col = Gtk.TreeViewColumn(_('Message'))
         self.results_treeview.append_column(col)
-        renderer = gtk.CellRendererText()
-        col.pack_start(renderer)
+        renderer = Gtk.CellRendererText()
+        col.pack_start(renderer, True, True, 0)
         col.set_attributes(renderer, text = C_MESSAGE)
         col.set_resizable(True)
 
@@ -118,7 +118,7 @@ class HistoryWindow:
         self.jids_to_search = []
 
         # This will load history too
-        gobject.idle_add(self._fill_completion_dict().next)
+        GObject.idle_add(self._fill_completion_dict().next)
 
         if jid:
             self.jid_entry.set_text(jid)
@@ -231,7 +231,7 @@ class HistoryWindow:
         del gajim.interface.instances['logs']
 
     def on_history_window_key_press_event(self, widget, event):
-        if event.keyval == gtk.keysyms.Escape:
+        if event.keyval == Gdk.KEY_Escape:
             self.save_state()
             self.window.destroy()
 
@@ -605,7 +605,7 @@ class HistoryWindow:
         timestamp_str = gajim.config.get('time_stamp')
         timestamp_str = helpers.from_one_line(timestamp_str)
         tim = time.strftime(timestamp_str, local_time)
-        result = start_iter.forward_search(tim, gtk.TEXT_SEARCH_VISIBLE_ONLY,
+        result = start_iter.forward_search(tim, Gtk.TextSearchFlags.VISIBLE_ONLY,
                 None)
         if result is not None:
             match_start_iter, match_end_iter = result
@@ -641,7 +641,7 @@ class HistoryWindow:
         self.jid_entry.set_text(jid)
         if account and account not in self.accounts_seen_online:
             # Update dict to not only show bare jid
-            gobject.idle_add(self._fill_completion_dict().next)
+            GObject.idle_add(self._fill_completion_dict().next)
         else:
             # Only in that case because it's called by self._fill_completion_dict()
             # otherwise

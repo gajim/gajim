@@ -25,8 +25,9 @@ Words single and multiple refers here to types of data forms:
 single means these with one record of data (without <reported/> element),
 multiple - these which may contain more data (with <reported/> element).'''
 
-import gtk
-import gobject
+from gi.repository import Gtk
+from gi.repository import GdkPixbuf
+from gi.repository import GObject
 import base64
 
 import gtkgui_helpers
@@ -37,19 +38,19 @@ from common import helpers
 
 import itertools
 
-class DataFormWidget(gtk.Alignment, object):
+class DataFormWidget(Gtk.Alignment, object):
 # "public" interface
     """
     Data Form widget. Use like any other widget
     """
 
     __gsignals__ = dict(
-        validated = (gobject.SIGNAL_RUN_LAST | gobject.SIGNAL_ACTION, None, ())
+        validated = (GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION, None, ())
     )
 
     def __init__(self, dataformnode=None):
         ''' Create a widget. '''
-        gtk.Alignment.__init__(self, xscale=1.0, yscale=1.0)
+        GObject.GObject.__init__(self, xscale=1.0, yscale=1.0)
 
         self._data_form = None
         self.selectable = False
@@ -71,7 +72,7 @@ class DataFormWidget(gtk.Alignment, object):
 
         selection = self.records_treeview.get_selection()
         selection.connect('changed', self.on_records_selection_changed)
-        selection.set_mode(gtk.SELECTION_MULTIPLE)
+        selection.set_mode(Gtk.SelectionMode.MULTIPLE)
 
     def on_data_form_vbox_key_press_event(self, widget, event):
         print 'key pressed'
@@ -189,7 +190,7 @@ class DataFormWidget(gtk.Alignment, object):
             fieldtypes.append(str)
             fieldvars.append(field.var)
 
-        self.multiplemodel = gtk.ListStore(*fieldtypes)
+        self.multiplemodel = Gtk.ListStore(*fieldtypes)
 
         # moving all data to model
         for item in self._data_form.iter_records():
@@ -203,7 +204,7 @@ class DataFormWidget(gtk.Alignment, object):
         for field, counter in zip(self._data_form.reported.iter_fields(),
         itertools.count()):
             self.records_treeview.append_column(
-                    gtk.TreeViewColumn(field.label, gtk.CellRendererText(),
+                    Gtk.TreeViewColumn(field.label, Gtk.CellRendererText(),
                             text=counter))
 
         self.records_treeview.set_model(self.multiplemodel)
@@ -277,7 +278,7 @@ class DataFormWidget(gtk.Alignment, object):
         model, rowrefs = selection.get_selected_rows()
         # rowref is a list of paths
         for i in xrange(len(rowrefs)):
-            rowrefs[i] = gtk.TreeRowReference(model, rowrefs[i])
+            rowrefs[i] = Gtk.TreeRowReference(model, rowrefs[i])
         # rowref is a list of row references; need to convert because we will
         # modify the model, paths would change
         for rowref in rowrefs:
@@ -305,7 +306,7 @@ class DataFormWidget(gtk.Alignment, object):
     def on_records_selection_changed(self, widget):
         self.refresh_multiple_buttons()
 
-class SingleForm(gtk.Table, object):
+class SingleForm(Gtk.Table, object):
     """
     Widget that represent DATAFORM_SINGLE mode form. Because this is used not
     only to display single forms, but to form input windows of multiple-type
@@ -313,13 +314,13 @@ class SingleForm(gtk.Table, object):
     """
 
     __gsignals__ = dict(
-        validated = (gobject.SIGNAL_RUN_LAST | gobject.SIGNAL_ACTION, None, ())
+        validated = (GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION, None, ())
     )
 
     def __init__(self, dataform, selectable=False):
         assert isinstance(dataform, dataforms.SimpleDataForm)
 
-        gtk.Table.__init__(self)
+        GObject.GObject.__init__(self)
         self.set_col_spacings(12)
         self.set_row_spacings(6)
 
@@ -330,8 +331,8 @@ class SingleForm(gtk.Table, object):
             widget
             """
             if field.description != '':
-                if widget.flags() & gtk.NO_WINDOW:
-                    evbox = gtk.EventBox()
+                if widget.flags() & Gtk.NO_WINDOW:
+                    evbox = Gtk.EventBox()
                     evbox.add(widget)
                     widget = evbox
                 widget.set_tooltip_text(field.description)
@@ -356,7 +357,7 @@ class SingleForm(gtk.Table, object):
 
             if field.type_ == 'boolean':
                 commonlabelcenter = True
-                widget = gtk.CheckButton()
+                widget = Gtk.CheckButton()
                 widget.connect('toggled', self.on_boolean_checkbutton_toggled,
                         field)
                 widget.set_active(field.value)
@@ -369,23 +370,23 @@ class SingleForm(gtk.Table, object):
                     leftattach = 0
 
                 commonwidget = False
-                widget = gtk.Label(field.value)
+                widget = Gtk.Label(label=field.value)
                 widget.set_property('selectable', selectable)
                 widget.set_line_wrap(True)
                 self.attach(widget, leftattach, rightattach, linecounter,
-                        linecounter+1, xoptions=gtk.FILL, yoptions=gtk.FILL)
+                        linecounter+1, xoptions=Gtk.AttachOptions.FILL, yoptions=Gtk.AttachOptions.FILL)
 
             elif field.type_ == 'list-single':
                 # TODO: What if we have radio buttons and non-required field?
                 # TODO: We cannot deactivate them all...
                 if len(field.options) < 6:
                     # 5 option max: show radiobutton
-                    widget = gtk.VBox()
+                    widget = Gtk.VBox()
                     first_radio = None
                     for value, label in field.iter_options():
                         if not label:
                             label = value
-                        radio = gtk.RadioButton(first_radio, label=label)
+                        radio = Gtk.RadioButton(first_radio, label=label)
                         radio.connect('toggled',
                                 self.on_list_single_radiobutton_toggled, field, value)
                         if first_radio is None:
@@ -394,7 +395,7 @@ class SingleForm(gtk.Table, object):
                                 field.value = value
                         if value == field.value:
                             radio.set_active(True)
-                        widget.pack_start(radio, expand=False)
+                        widget.pack_start(radio, False, True, 0)
                 else:
                     # more than 5 options: show combobox
                     def on_list_single_combobox_changed(combobox, f):
@@ -413,13 +414,13 @@ class SingleForm(gtk.Table, object):
                 # TODO: When more than few choices, make a list
                 if len(field.options) < 6:
                     # 5 option max: show checkbutton
-                    widget = gtk.VBox()
+                    widget = Gtk.VBox()
                     for value, label in field.iter_options():
-                        check = gtk.CheckButton(label, use_underline=False)
+                        check = Gtk.CheckButton(label, use_underline=False)
                         check.set_active(value in field.values)
                         check.connect('toggled',
                                 self.on_list_multi_checkbutton_toggled, field, value)
-                        widget.pack_start(check, expand=False)
+                        widget.pack_start(check, False, True, 0)
                         widget.set_sensitive(readwrite)
                 else:
                     # more than 5 options: show combobox
@@ -429,8 +430,8 @@ class SingleForm(gtk.Table, object):
                         vals = []
                         selection.selected_foreach(for_selected)
                         field.values = vals[:]
-                    widget = gtk.ScrolledWindow()
-                    widget.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+                    widget = Gtk.ScrolledWindow()
+                    widget.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
                     tv = gtkgui_helpers.create_list_multi(field.options,
                             field.values)
                     widget.add(tv)
@@ -440,7 +441,7 @@ class SingleForm(gtk.Table, object):
                     tv.set_sensitive(readwrite)
 
             elif field.type_ == 'jid-single':
-                widget = gtk.Entry()
+                widget = Gtk.Entry()
                 widget.connect('changed', self.on_text_single_entry_changed, field)
                 widget.set_text(field.value)
 
@@ -452,20 +453,20 @@ class SingleForm(gtk.Table, object):
                 widget = xml.get_object('multiple_form_hbox')
                 treeview = xml.get_object('records_treeview')
 
-                listmodel = gtk.ListStore(str)
+                listmodel = Gtk.ListStore(str)
                 for value in field.iter_values():
                     # nobody will create several megabytes long stanza
                     listmodel.insert(999999, (value,))
 
                 treeview.set_model(listmodel)
 
-                renderer = gtk.CellRendererText()
+                renderer = Gtk.CellRendererText()
                 renderer.set_property('editable', True)
                 renderer.connect('edited',
                         self.on_jid_multi_cellrenderertext_edited, treeview, listmodel,
                         field)
 
-                treeview.append_column(gtk.TreeViewColumn(None, renderer,
+                treeview.append_column(Gtk.TreeViewColumn(None, renderer,
                         text=0))
 
                 decorate_with_tooltip(treeview, field)
@@ -495,7 +496,7 @@ class SingleForm(gtk.Table, object):
 
             elif field.type_ == 'text-private':
                 commonlabelcenter = True
-                widget = gtk.Entry()
+                widget = Gtk.Entry()
                 widget.connect('changed', self.on_text_single_entry_changed, field)
                 widget.set_visibility(False)
                 widget.set_text(field.value)
@@ -504,8 +505,8 @@ class SingleForm(gtk.Table, object):
                 # TODO: bigger text view
                 commonwidget = False
 
-                textwidget = gtk.TextView()
-                textwidget.set_wrap_mode(gtk.WRAP_WORD)
+                textwidget = Gtk.TextView()
+                textwidget.set_wrap_mode(Gtk.WrapMode.WORD)
                 textwidget.get_buffer().connect('changed',
                         self.on_text_multi_textbuffer_changed, field)
                 textwidget.get_buffer().set_text(field.value)
@@ -517,7 +518,7 @@ class SingleForm(gtk.Table, object):
                     else:
                         textwidget.set_sensitive(False)
 
-                widget = gtk.ScrolledWindow()
+                widget = Gtk.ScrolledWindow()
                 widget.add(textwidget)
 
                 widget=decorate_with_tooltip(widget, field)
@@ -529,10 +530,10 @@ class SingleForm(gtk.Table, object):
                 # should handle it as text-single
                 commonlabelcenter = True
                 if readwrite:
-                    widget = gtk.Entry()
+                    widget = Gtk.Entry()
                     def kpe(widget, event):
-                        if event.keyval == gtk.keysyms.Return or \
-                        event.keyval == gtk.keysyms.KP_Enter:
+                        if event.keyval == Gdk.KEY_Return or \
+                        event.keyval == Gdk.KEY_KP_Enter:
                             self.emit('validated')
                     widget.connect('key-press-event', kpe)
                     widget.connect('changed', self.on_text_single_entry_changed,
@@ -543,52 +544,52 @@ class SingleForm(gtk.Table, object):
                     widget.set_text(field.value)
                 else:
                     commonwidget=False
-                    widget = gtk.Label(field.value)
+                    widget = Gtk.Label(label=field.value)
                     widget.set_property('selectable', selectable)
                     widget.set_sensitive(True)
                     widget.set_alignment(0.0, 0.5)
                     widget=decorate_with_tooltip(widget, field)
                     self.attach(widget, 1, 2, linecounter, linecounter+1,
-                            yoptions=gtk.FILL)
+                            yoptions=Gtk.AttachOptions.FILL)
 
             if commonlabel and field.label is not None:
-                label = gtk.Label(field.label)
+                label = Gtk.Label(label=field.label)
                 if commonlabelcenter:
                     label.set_alignment(0.0, 0.5)
                 else:
                     label.set_alignment(0.0, 0.0)
                 label = decorate_with_tooltip(label, field)
                 self.attach(label, 0, 1, linecounter, linecounter+1,
-                        xoptions=gtk.FILL, yoptions=gtk.FILL)
+                        xoptions=Gtk.AttachOptions.FILL, yoptions=Gtk.AttachOptions.FILL)
 
             if field.media is not None:
                 for uri in field.media.uris:
                     if uri.type_.startswith('image/'):
                         try:
                             img_data = base64.decodestring(uri.uri_data)
-                            pixbuf_l = gtk.gdk.PixbufLoader()
+                            pixbuf_l = GdkPixbuf.PixbufLoader()
                             pixbuf_l.write(img_data)
                             pixbuf_l.close()
-                            media = gtk.image_new_from_pixbuf(pixbuf_l.\
+                            media = Gtk.image_new_from_pixbuf(pixbuf_l.\
                                 get_pixbuf())
                         except Exception:
-                            media = gtk.Label(_('Unable to load image'))
+                            media = Gtk.Label(label=_('Unable to load image'))
                     else:
-                        media = gtk.Label(_('Media type not supported: %s') % \
+                        media = Gtk.Label(label=_('Media type not supported: %s') % \
                             uri.type_)
                     linecounter += 1
                     self.attach(media, 0, 1, linecounter, linecounter+1,
-                        xoptions=gtk.FILL, yoptions=gtk.FILL)
+                        xoptions=Gtk.AttachOptions.FILL, yoptions=Gtk.AttachOptions.FILL)
 
             if commonwidget:
                 assert widget is not None
                 widget.set_sensitive(readwrite)
                 widget = decorate_with_tooltip(widget, field)
                 self.attach(widget, 1, 2, linecounter, linecounter+1,
-                        yoptions=gtk.FILL)
+                        yoptions=Gtk.AttachOptions.FILL)
 
             if field.required:
-                label = gtk.Label('*')
+                label = Gtk.Label(label='*')
                 label.set_tooltip_text(_('This field is required'))
                 self.attach(label, 2, 3, linecounter, linecounter+1, xoptions=0,
                     yoptions=0)
@@ -618,9 +619,8 @@ class SingleForm(gtk.Table, object):
         field.value = widget.get_text()
 
     def on_text_multi_textbuffer_changed(self, widget, field):
-        field.value = widget.get_text(
-                widget.get_start_iter(),
-                widget.get_end_iter())
+        field.value = widget.get_text(widget.get_start_iter(),
+            widget.get_end_iter(), True)
 
     def on_jid_multi_cellrenderertext_edited(self, cell, path, newtext, treeview,
     model, field):
@@ -636,7 +636,7 @@ class SingleForm(gtk.Table, object):
             dialogs.ErrorDialog(
                     _('Jabber ID already in list'),
                     _('The Jabber ID you entered is already in the list. Choose another one.'))
-            gobject.idle_add(treeview.set_cursor, path)
+            GObject.idle_add(treeview.set_cursor, path)
             return
         model[path][0]=newtext
 

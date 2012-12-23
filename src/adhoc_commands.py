@@ -25,8 +25,8 @@
 # FIXME: think if we need caching command list. it may be wrong if there will
 # be entities that often change the list, it may be slow to fetch it every time
 
-import gobject
-import gtk
+from gi.repository import GObject
+from gi.repository import Gtk
 
 import nbxmpp
 from common import gajim
@@ -91,7 +91,7 @@ class CommandWindow:
             self.data_form_widget.destroy()
         self.data_form_widget = dataforms_widget.DataFormWidget()
         self.data_form_widget.show()
-        self.sending_form_stage_vbox.pack_start(self.data_form_widget)
+        self.sending_form_stage_vbox.pack_start(self.data_form_widget, True, True, 0)
 
         if self.commandnode:
             # Execute command
@@ -236,13 +236,13 @@ class CommandWindow:
         # build the commands list radiobuttons
         first_radio = None
         for (commandnode, commandname) in self.commandlist:
-            radio = gtk.RadioButton(first_radio, label=commandname)
+            radio = Gtk.RadioButton(first_radio, label=commandname)
             radio.connect("toggled", self.on_command_radiobutton_toggled,
                 commandnode)
             if not first_radio:
                 first_radio = radio
                 self.commandnode = commandnode
-            self.command_list_vbox.pack_start(radio, expand=False)
+            self.command_list_vbox.pack_start(radio, False, True, 0)
         self.command_list_vbox.show_all()
 
         self.stage_finish = self.stage2_finish
@@ -321,8 +321,8 @@ class CommandWindow:
             dialog.destroy()
             cb()
 
-        dialog = dialogs.HigDialog(self.window, gtk.DIALOG_DESTROY_WITH_PARENT \
-            | gtk.DIALOG_MODAL, gtk.BUTTONS_YES_NO, _('Cancel confirmation'),
+        dialog = dialogs.HigDialog(self.window, Gtk.DialogFlags.DESTROY_WITH_PARENT \
+            | Gtk.DialogFlags.MODAL, Gtk.ButtonsType.YES_NO, _('Cancel confirmation'),
             _('You are in process of executing command. Do you really want to '
             'cancel it?'), on_response_yes=on_yes)
         dialog.popup()
@@ -550,21 +550,21 @@ class CommandWindow:
         progressbar.pulse() method
         """
         assert not self.pulse_id
-        assert isinstance(progressbar, gtk.ProgressBar)
+        assert isinstance(progressbar, Gtk.ProgressBar)
 
         def callback():
             progressbar.pulse()
             return True     # important to keep callback be called back!
 
         # 12 times per second (80 miliseconds)
-        self.pulse_id = gobject.timeout_add(80, callback)
+        self.pulse_id = GObject.timeout_add(80, callback)
 
     def remove_pulsing(self):
         """
         Stop pulsing, useful when especially when removing widget
         """
         if self.pulse_id:
-            gobject.source_remove(self.pulse_id)
+            GObject.source_remove(self.pulse_id)
         self.pulse_id = None
 
 # handling xml stanzas

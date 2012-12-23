@@ -22,8 +22,9 @@
 
 # THIS FILE IS FOR **OUR** PROFILE (when we edit our INFO)
 
-import gtk
-import gobject
+from gi.repository import Gtk
+from gi.repository import GdkPixbuf
+from gi.repository import GObject
 import base64
 import mimetypes
 import os
@@ -45,7 +46,7 @@ class ProfileWindow:
     def __init__(self, account, transient_for=None):
         self.xml = gtkgui_helpers.get_gtk_builder('profile_window.ui')
         self.window = self.xml.get_object('profile_window')
-        self.window.set_transient_for(transient_for)
+        self.set_transient_for(transient_for)
         self.progressbar = self.xml.get_object('progressbar')
         self.statusbar = self.xml.get_object('statusbar')
         self.context_id = self.statusbar.get_context_id('profile')
@@ -58,12 +59,12 @@ class ProfileWindow:
         self.avatar_encoded = None
         self.message_id = self.statusbar.push(self.context_id,
             _('Retrieving profile...'))
-        self.update_progressbar_timeout_id = gobject.timeout_add(100,
+        self.update_progressbar_timeout_id = GObject.timeout_add(100,
             self.update_progressbar)
         self.remove_statusbar_timeout_id = None
 
         # Create Image for avatar button
-        image = gtk.Image()
+        image = Gtk.Image()
         self.xml.get_object('PHOTO_button').set_image(image)
         self.xml.connect_signals(self)
         gajim.ged.register_event_handler('vcard-published', ged.GUI1,
@@ -76,7 +77,7 @@ class ProfileWindow:
         self.xml.get_object('ok_button').grab_focus()
 
     def on_information_notebook_switch_page(self, widget, page, page_num):
-        gobject.idle_add(self.xml.get_object('ok_button').grab_focus)
+        GObject.idle_add(self.xml.get_object('ok_button').grab_focus)
 
     def update_progressbar(self):
         self.progressbar.pulse()
@@ -88,9 +89,9 @@ class ProfileWindow:
 
     def on_profile_window_destroy(self, widget):
         if self.update_progressbar_timeout_id is not None:
-            gobject.source_remove(self.update_progressbar_timeout_id)
+            GObject.source_remove(self.update_progressbar_timeout_id)
         if self.remove_statusbar_timeout_id is not None:
-            gobject.source_remove(self.remove_statusbar_timeout_id)
+            GObject.source_remove(self.remove_statusbar_timeout_id)
         gajim.ged.remove_event_handler('vcard-published', ged.GUI1,
             self._nec_vcard_published)
         gajim.ged.remove_event_handler('vcard-not-published', ged.GUI1,
@@ -102,7 +103,7 @@ class ProfileWindow:
             self.dialog.destroy()
 
     def on_profile_window_key_press_event(self, widget, event):
-        if event.keyval == gtk.keysyms.Escape:
+        if event.keyval == Gdk.KEY_Escape:
             self.window.destroy()
 
     def on_clear_button_clicked(self, widget):
@@ -132,12 +133,12 @@ class ProfileWindow:
                 msg = _('File does not exist')
             if not invalid_file and filesize > 16384: # 16 kb
                 try:
-                    pixbuf = gtk.gdk.pixbuf_new_from_file(path_to_file)
+                    pixbuf = GdkPixbuf.Pixbuf.new_from_file(path_to_file)
                     # get the image at 'notification size'
                     # and hope that user did not specify in ACE crazy size
                     scaled_pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf,
                             'tooltip')
-                except gobject.GError, msg: # unknown format
+                except GObject.GError, msg: # unknown format
                     # msg should be string, not object instance
                     msg = str(msg)
                     invalid_file = True
@@ -198,7 +199,7 @@ class ProfileWindow:
         If right-clicked, show popup
         """
         if event.button == 3 and self.avatar_encoded: # right click
-            menu = gtk.Menu()
+            menu = Gtk.Menu()
 
             # Try to get pixbuf
             pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(self.jid,
@@ -206,13 +207,13 @@ class ProfileWindow:
 
             if pixbuf not in (None, 'ask'):
                 nick = gajim.config.get_per('accounts', self.account, 'name')
-                menuitem = gtk.ImageMenuItem(gtk.STOCK_SAVE_AS)
+                menuitem = Gtk.ImageMenuItem(Gtk.STOCK_SAVE_AS)
                 menuitem.connect('activate',
                     gtkgui_helpers.on_avatar_save_as_menuitem_activate,
                     self.jid, nick)
                 menu.append(menuitem)
             # show clear
-            menuitem = gtk.ImageMenuItem(gtk.STOCK_CLEAR)
+            menuitem = Gtk.ImageMenuItem(Gtk.STOCK_CLEAR)
             menuitem.connect('activate', self.on_clear_button_clicked)
             menu.append(menuitem)
             menu.connect('selection-done', lambda w:w.destroy())
@@ -233,7 +234,7 @@ class ProfileWindow:
                 pritext = _('Wrong date format')
                 dialogs.ErrorDialog(pritext, _('Format of the date must be '
                     'YYYY-MM-DD'))
-                gobject.idle_add(lambda: widget.grab_focus())
+                GObject.idle_add(lambda: widget.grab_focus())
             return True
 
     def set_value(self, entry_name, value):
@@ -290,9 +291,9 @@ class ProfileWindow:
                 self.statusbar.remove_message(self.context_id, self.message_id)
             self.message_id = self.statusbar.push(self.context_id,
                     _('Information received'))
-            self.remove_statusbar_timeout_id = gobject.timeout_add_seconds(3,
+            self.remove_statusbar_timeout_id = GObject.timeout_add_seconds(3,
                     self.remove_statusbar, self.message_id)
-            gobject.source_remove(self.update_progressbar_timeout_id)
+            GObject.source_remove(self.update_progressbar_timeout_id)
             self.progressbar.hide()
             self.progressbar.set_fraction(0)
             self.update_progressbar_timeout_id = None
@@ -350,7 +351,7 @@ class ProfileWindow:
         buff = self.xml.get_object('DESC_textview').get_buffer()
         start_iter = buff.get_start_iter()
         end_iter = buff.get_end_iter()
-        txt = buff.get_text(start_iter, end_iter, 0)
+        txt = buff.get_text(start_iter, end_iter, False)
         if txt != '':
             vcard_['DESC'] = txt.decode('utf-8')
 
@@ -382,14 +383,14 @@ class ProfileWindow:
         self.message_id = self.statusbar.push(self.context_id,
                 _('Sending profile...'))
         self.progressbar.show()
-        self.update_progressbar_timeout_id = gobject.timeout_add(100,
+        self.update_progressbar_timeout_id = GObject.timeout_add(100,
                 self.update_progressbar)
 
     def _nec_vcard_published(self, obj):
         if obj.conn.name != self.account:
             return
         if self.update_progressbar_timeout_id is not None:
-            gobject.source_remove(self.update_progressbar_timeout_id)
+            GObject.source_remove(self.update_progressbar_timeout_id)
             self.update_progressbar_timeout_id = None
         self.window.destroy()
 
@@ -400,10 +401,10 @@ class ProfileWindow:
             self.statusbar.remove_message(self.context_id, self.message_id)
         self.message_id = self.statusbar.push(self.context_id,
             _('Information NOT published'))
-        self.remove_statusbar_timeout_id = gobject.timeout_add_seconds(3,
+        self.remove_statusbar_timeout_id = GObject.timeout_add_seconds(3,
             self.remove_statusbar, self.message_id)
         if self.update_progressbar_timeout_id is not None:
-            gobject.source_remove(self.update_progressbar_timeout_id)
+            GObject.source_remove(self.update_progressbar_timeout_id)
             self.progressbar.set_fraction(0)
             self.update_progressbar_timeout_id = None
         dialogs.InformationDialog(_('vCard publication failed'),

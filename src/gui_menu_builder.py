@@ -18,7 +18,7 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-import gtk
+from gi.repository import Gtk
 import os
 import gtkgui_helpers
 import message_control
@@ -35,7 +35,7 @@ def build_resources_submenu(contacts, account, action, room_jid=None,
     action self.on_invite_to_room
     """
     roster = gajim.interface.roster
-    sub_menu = gtk.Menu()
+    sub_menu = Gtk.Menu()
 
     iconset = gajim.config.get('iconset')
     if not iconset:
@@ -44,7 +44,7 @@ def build_resources_submenu(contacts, account, action, room_jid=None,
     for c in contacts:
         # icon MUST be different instance for every item
         state_images = gtkgui_helpers.load_iconset(path)
-        item = gtk.ImageMenuItem('%s (%s)' % (c.resource, str(c.priority)))
+        item = Gtk.ImageMenuItem('%s (%s)' % (c.resource, str(c.priority)))
         icon_name = helpers.get_icon_name_to_show(c, account)
         icon = state_images[icon_name]
         item.set_image(icon)
@@ -89,10 +89,10 @@ def build_invite_submenu(invite_menuitem, list_, ignore_rooms=[]):
         # they are not all from the same transport
         invite_menuitem.set_sensitive(False)
         return
-    invite_to_submenu = gtk.Menu()
+    invite_to_submenu = Gtk.Menu()
     invite_menuitem.set_submenu(invite_to_submenu)
-    invite_to_new_room_menuitem = gtk.ImageMenuItem(_('_New Group Chat'))
-    icon = gtk.image_new_from_stock(gtk.STOCK_NEW, gtk.ICON_SIZE_MENU)
+    invite_to_new_room_menuitem = Gtk.ImageMenuItem(_('_New Group Chat'))
+    icon = Gtk.Image.new_from_stock(Gtk.STOCK_NEW, Gtk.IconSize.MENU)
     invite_to_new_room_menuitem.set_image(icon)
     if len(contact_list) > 1: # several resources
         invite_to_new_room_menuitem.set_submenu(build_resources_submenu(
@@ -136,10 +136,10 @@ def build_invite_submenu(invite_menuitem, list_, ignore_rooms=[]):
         contacts_transport == gajim.get_transport_name_from_jid(room_jid):
             rooms.append((room_jid, acct))
     if len(rooms):
-        item = gtk.SeparatorMenuItem() # separator
+        item = Gtk.SeparatorMenuItem() # separator
         invite_to_submenu.append(item)
         for (room_jid, account) in rooms:
-            menuitem = gtk.MenuItem(room_jid.split('@')[0])
+            menuitem = Gtk.MenuItem(room_jid.split('@')[0])
             if len(contact_list) > 1: # several resources
                 menuitem.set_submenu(build_resources_submenu(
                         contact_list, account, roster.on_invite_to_room, room_jid,
@@ -207,7 +207,7 @@ control=None, gc_contact=None, is_anonymous=True):
 
     # add a special img for send file menuitem
     path_to_upload_img = gtkgui_helpers.get_icon_path('gajim-upload')
-    img = gtk.Image()
+    img = Gtk.Image()
     img.set_from_file(path_to_upload_img)
     send_file_menuitem.set_image(img)
 
@@ -373,7 +373,7 @@ control=None, gc_contact=None, is_anonymous=True):
         send_custom_status_menuitem.set_image(gtkgui_helpers.load_icon(
                 gajim.interface.status_sent_to_users[account][jid]))
     else:
-        icon = gtk.image_new_from_stock(gtk.STOCK_NETWORK, gtk.ICON_SIZE_MENU)
+        icon = Gtk.Image.new_from_stock(Gtk.STOCK_NETWORK, Gtk.IconSize.MENU)
         send_custom_status_menuitem.set_image(icon)
 
     muc_icon = gtkgui_helpers.load_icon('muc_active')
@@ -393,14 +393,14 @@ control=None, gc_contact=None, is_anonymous=True):
         invite_menuitem.set_sensitive(False)
 
     # One or several resource, we do the same for send_custom_status
-    status_menuitems = gtk.Menu()
+    status_menuitems = Gtk.Menu()
     send_custom_status_menuitem.set_submenu(status_menuitems)
     iconset = gajim.config.get('iconset')
     path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
     for s in ('online', 'chat', 'away', 'xa', 'dnd', 'offline'):
         # icon MUST be different instance for every item
         state_images = gtkgui_helpers.load_iconset(path)
-        status_menuitem = gtk.ImageMenuItem(helpers.get_uf_show(s))
+        status_menuitem = Gtk.ImageMenuItem(helpers.get_uf_show(s))
         status_menuitem.connect('activate', roster.on_send_custom_status,
                 [(contact, account)], s)
         icon = state_images[s]

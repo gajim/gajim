@@ -26,8 +26,11 @@ GUI classes related to plug-in management.
 
 __all__ = ['PluginsWindow']
 
-import pango
-import gtk, gobject, os
+from gi.repository import Pango
+from gi.repository import Gtk
+from gi.repository import GdkPixbuf
+from gi.repository import GObject
+import os
 
 import gtkgui_helpers
 from dialogs import WarningDialog, YesNoDialog, ArchiveChooserDialog
@@ -53,7 +56,7 @@ class PluginsWindow(object):
         '''Initialize Plugins window'''
         self.xml = gtkgui_helpers.get_gtk_builder('plugins_window.ui')
         self.window = self.xml.get_object('plugins_window')
-        self.window.set_transient_for(gajim.interface.roster.window)
+        self.set_transient_for(gajim.interface.roster.window)
 
         widgets_to_extract = ('plugins_notebook', 'plugin_name_label',
             'plugin_version_label', 'plugin_authors_label',
@@ -64,45 +67,45 @@ class PluginsWindow(object):
         for widget_name in widgets_to_extract:
             setattr(self, widget_name, self.xml.get_object(widget_name))
 
-        attr_list = pango.AttrList()
-        attr_list.insert(pango.AttrWeight(pango.WEIGHT_BOLD, 0, -1))
+        attr_list = Pango.AttrList()
+        attr_list.insert(Pango.AttrWeight(Pango.Weight.BOLD, 0, -1))
         self.plugin_name_label.set_attributes(attr_list)
 
-        self.installed_plugins_model = gtk.ListStore(gobject.TYPE_PYOBJECT,
-            gobject.TYPE_STRING, gobject.TYPE_BOOLEAN, gobject.TYPE_BOOLEAN,
-            gtk.gdk.Pixbuf)
+        self.installed_plugins_model = Gtk.ListStore(GObject.TYPE_PYOBJECT,
+            GObject.TYPE_STRING, GObject.TYPE_BOOLEAN, GObject.TYPE_BOOLEAN,
+            GdkPixbuf.Pixbuf)
         self.installed_plugins_treeview.set_model(self.installed_plugins_model)
         self.installed_plugins_treeview.set_rules_hint(True)
 
-        renderer = gtk.CellRendererText()
-        col = gtk.TreeViewColumn(_('Plugin'))#, renderer, text=NAME)
-        cell = gtk.CellRendererPixbuf()
-        col.pack_start(cell, False)
+        renderer = Gtk.CellRendererText()
+        col = Gtk.TreeViewColumn(_('Plugin'))#, renderer, text=NAME)
+        cell = Gtk.CellRendererPixbuf()
+        col.pack_start(cell, False, True, 0)
         col.add_attribute(cell, 'pixbuf', ICON)
-        col.pack_start(renderer, True)
+        col.pack_start(renderer, True, True, 0)
         col.add_attribute(renderer, 'text', NAME)
         self.installed_plugins_treeview.append_column(col)
 
-        renderer = gtk.CellRendererToggle()
+        renderer = Gtk.CellRendererToggle()
         renderer.connect('toggled', self.installed_plugins_toggled_cb)
-        col = gtk.TreeViewColumn(_('Active'), renderer, active=ACTIVE,
+        col = Gtk.TreeViewColumn(_('Active'), renderer, active=ACTIVE,
             activatable=ACTIVATABLE)
         self.installed_plugins_treeview.append_column(col)
 
-        icon = gtk.Image()
-        self.def_icon = icon.render_icon(gtk.STOCK_PREFERENCES,
-            gtk.ICON_SIZE_MENU)
+        icon = Gtk.Image()
+        self.def_icon = icon.render_icon(Gtk.STOCK_PREFERENCES,
+            Gtk.IconSize.MENU)
 
         # connect signal for selection change
         selection = self.installed_plugins_treeview.get_selection()
         selection.connect('changed',
             self.installed_plugins_treeview_selection_changed)
-        selection.set_mode(gtk.SELECTION_SINGLE)
+        selection.set_mode(Gtk.SelectionMode.SINGLE)
 
         self._clear_installed_plugin_info()
 
         self.fill_installed_plugins_model()
-        selection.select_iter(self.installed_plugins_model.get_iter_root())
+        selection.select_iter(self.installed_plugins_model.get_iter_first())
 
         self.xml.connect_signals(self)
 
@@ -114,7 +117,7 @@ class PluginsWindow(object):
 
 
     def on_plugins_notebook_switch_page(self, widget, page, page_num):
-        gobject.idle_add(self.xml.get_object('close_button').grab_focus)
+        GObject.idle_add(self.xml.get_object('close_button').grab_focus)
 
     @log_calls('PluginsWindow')
     def installed_plugins_treeview_selection_changed(self, treeview_selection):
@@ -133,7 +136,7 @@ class PluginsWindow(object):
         self.plugin_version_label.set_text(plugin.version)
         self.plugin_authors_label.set_text(plugin.authors)
         label = self.plugin_homepage_linkbutton.get_children()[0]
-        label.set_ellipsize(pango.ELLIPSIZE_END)
+        label.set_ellipsize(Pango.EllipsizeMode.END)
         self.plugin_homepage_linkbutton.set_uri(plugin.homepage)
         self.plugin_homepage_linkbutton.set_label(plugin.homepage)
         self.plugin_homepage_linkbutton.set_property('sensitive', True)
@@ -170,7 +173,7 @@ class PluginsWindow(object):
     def fill_installed_plugins_model(self):
         pm = gajim.plugin_manager
         self.installed_plugins_model.clear()
-        self.installed_plugins_model.set_sort_column_id(1, gtk.SORT_ASCENDING)
+        self.installed_plugins_model.set_sort_column_id(1, Gtk.SortType.ASCENDING)
 
         for plugin in pm.plugins:
             icon = self.get_plugin_icon(plugin)
@@ -182,7 +185,7 @@ class PluginsWindow(object):
                 plugin.__path__)[1]) + '.png'
         icon = self.def_icon
         if os.path.isfile(icon_file):
-            icon = gtk.gdk.pixbuf_new_from_file_at_size(icon_file, 16, 16)
+            icon = GdkPixbuf.Pixbuf.new_from_file_at_size(icon_file, 16, 16)
         return icon
 
     @log_calls('PluginsWindow')
@@ -299,16 +302,16 @@ class PluginsWindow(object):
         self.dialog = ArchiveChooserDialog(on_response_ok=_try_install)
 
 
-class GajimPluginConfigDialog(gtk.Dialog):
+class GajimPluginConfigDialog(Gtk.Dialog):
 
     @log_calls('GajimPluginConfigDialog')
     def __init__(self, plugin, **kwargs):
-        gtk.Dialog.__init__(self, '%s %s'%(plugin.name, _('Configuration')),
+        Gtk.Dialog.__init__(self, '%s %s'%(plugin.name, _('Configuration')),
                                                                     **kwargs)
         self.plugin = plugin
-        self.add_button('gtk-close', gtk.RESPONSE_CLOSE)
+        self.add_button('gtk-close', Gtk.ResponseType.CLOSE)
 
-        self.child.set_spacing(3)
+        self.get_child().set_spacing(3)
 
         self.init()
 

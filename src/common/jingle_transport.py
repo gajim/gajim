@@ -329,6 +329,7 @@ class JingleTransportIBB(JingleTransport):
         return transport
 
 try:
+    raise ImportError
     import farstream
 except Exception:
     pass

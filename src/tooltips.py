@@ -28,8 +28,9 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-import gtk
-import gobject
+from gi.repository import Gtk
+from gi.repository import Gdk
+from gi.repository import GObject
 import os
 import time
 import locale
@@ -78,20 +79,20 @@ class BaseTooltip:
         implementation: show data as value of a label
         """
         self.create_window()
-        self.win.add(gtk.Label(data))
+        self.win.add(Gtk.Label(label=data))
 
     def create_window(self):
         """
         Create a popup window each time tooltip is requested
         """
-        self.win = gtk.Window(gtk.WINDOW_POPUP)
+        self.win = Gtk.Window(Gtk.WindowType.POPUP)
         self.win.set_title('tooltip')
         self.win.set_border_width(3)
         self.win.set_resizable(False)
         self.win.set_name('gtk-tooltips')
-        self.win.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_TOOLTIP)
+        self.win.set_type_hint(Gdk.WindowTypeHint.TOOLTIP)
 
-        self.win.set_events(gtk.gdk.POINTER_MOTION_MASK)
+        self.win.set_events(Gdk.EventMask.POINTER_MOTION_MASK)
         self.win.connect_after('expose_event', self.expose)
         self.win.connect('size-request', self.on_size_request)
         self.win.connect('motion-notify-event', self.motion_notify_event)
@@ -135,7 +136,7 @@ class BaseTooltip:
     def expose(self, widget, event):
         style = self.win.get_style()
         size = self.win.get_size()
-        style.paint_shadow(self.win.window, gtk.STATE_NORMAL, gtk.SHADOW_OUT,
+        style.paint_shadow(self.win.window, Gtk.StateType.NORMAL, Gtk.ShadowType.OUT,
             None, self.win, 'tooltip', 0, 0, size[0], size[1])
         return True
 
@@ -165,7 +166,7 @@ class BaseTooltip:
 
     def hide_tooltip(self):
         if self.timeout > 0:
-            gobject.source_remove(self.timeout)
+            GObject.source_remove(self.timeout)
             self.timeout = 0
         if self.win:
             self.win.destroy()
@@ -231,12 +232,12 @@ class StatusTable:
         self.spacer_label = '   '
 
     def create_table(self):
-        self.table = gtk.Table(4, 1)
+        self.table = Gtk.Table(4, 1)
         self.table.set_property('column-spacing', 2)
 
     def add_text_row(self, text, col_inc = 0):
         self.current_row += 1
-        self.text_label = gtk.Label()
+        self.text_label = Gtk.Label()
         self.text_label.set_line_wrap(True)
         self.text_label.set_alignment(0, 0)
         self.text_label.set_selectable(False)
@@ -254,8 +255,8 @@ class StatusTable:
                     status = unicode(status, encoding='utf-8')
                 # reduce to 100 chars, 1 line
                 status = helpers.reduce_chars_newlines(status, 100, 1)
-                str_status = gobject.markup_escape_text(str_status)
-                status = gobject.markup_escape_text(status)
+                str_status = GObject.markup_escape_text(str_status)
+                status = GObject.markup_escape_text(status)
                 str_status += ' - <i>' + status + '</i>'
         return str_status
 
@@ -269,29 +270,29 @@ class StatusTable:
         files = []
         files.append(os.path.join(file_path, state_file + '.png'))
         files.append(os.path.join(file_path, state_file + '.gif'))
-        image = gtk.Image()
+        image = Gtk.Image()
         image.set_from_pixbuf(None)
         for f in files:
             if os.path.exists(f):
                 image.set_from_file(f)
                 break
-        spacer = gtk.Label(self.spacer_label)
+        spacer = Gtk.Label(label=self.spacer_label)
         image.set_alignment(1, 0.5)
         if indent:
             self.table.attach(spacer, 1, 2, self.current_row,
                     self.current_row + 1, 0, 0, 0, 0)
         self.table.attach(image, 2, 3, self.current_row,
-                self.current_row + 1, gtk.FILL, gtk.FILL, 2, 0)
-        status_label = gtk.Label()
+                self.current_row + 1, Gtk.AttachOptions.FILL, Gtk.AttachOptions.FILL, 2, 0)
+        status_label = Gtk.Label()
         status_label.set_markup(str_status)
         status_label.set_alignment(0, 0)
         status_label.set_line_wrap(True)
         self.table.attach(status_label, 3, 4, self.current_row,
-                self.current_row + 1, gtk.FILL | gtk.EXPAND, 0, 0, 0)
+                self.current_row + 1, Gtk.AttachOptions.FILL | Gtk.AttachOptions.EXPAND, 0, 0, 0)
         if show_lock:
-            lock_image = gtk.Image()
-            lock_image.set_from_stock(gtk.STOCK_DIALOG_AUTHENTICATION,
-                    gtk.ICON_SIZE_MENU)
+            lock_image = Gtk.Image()
+            lock_image.set_from_stock(Gtk.STOCK_DIALOG_AUTHENTICATION,
+                    Gtk.IconSize.MENU)
             self.table.attach(lock_image, 4, 5, self.current_row,
                     self.current_row + 1, 0, 0, 0, 0)
 
@@ -316,7 +317,7 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
             if isinstance(message, str):
                 message = unicode(message, encoding = 'utf-8')
             message = helpers.reduce_chars_newlines(message, 100, 1)
-            message = gobject.markup_escape_text(message)
+            message = GObject.markup_escape_text(message)
             if acct['name'] in gajim.con_types and \
                     gajim.con_types[acct['name']] in ('tls', 'ssl'):
                 show_lock = True
@@ -324,11 +325,11 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
                 show_lock = False
             if message:
                 self.add_status_row(file_path, acct['show'],
-                        gobject.markup_escape_text(acct['name']) + \
+                        GObject.markup_escape_text(acct['name']) + \
                         ' - ' + message, show_lock=show_lock, indent=False)
             else:
                 self.add_status_row(file_path, acct['show'],
-                        gobject.markup_escape_text(acct['name'])
+                        GObject.markup_escape_text(acct['name'])
                         , show_lock=show_lock, indent=False)
             for line in acct['event_lines']:
                 self.add_text_row('  ' + line, 1)
@@ -340,7 +341,7 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
         accounts = helpers.get_notification_icon_tooltip_dict()
         self.table.resize(2, 1)
         self.fill_table_with_accounts(accounts)
-        self.hbox = gtk.HBox()
+        self.hbox = Gtk.HBox()
         self.table.set_property('column-spacing', 1)
 
         self.hbox.add(self.table)
@@ -353,11 +354,11 @@ class GCTooltip(BaseTooltip):
 
     def __init__(self):
         self.account = None
-        self.text_label = gtk.Label()
+        self.text_label = Gtk.Label()
         self.text_label.set_line_wrap(True)
         self.text_label.set_alignment(0, 0)
         self.text_label.set_selectable(False)
-        self.avatar_image = gtk.Image()
+        self.avatar_image = Gtk.Image()
 
         BaseTooltip.__init__(self)
 
@@ -365,14 +366,14 @@ class GCTooltip(BaseTooltip):
         if not contact:
             return
         self.create_window()
-        vcard_table = gtk.Table(3, 1)
+        vcard_table = Gtk.Table(3, 1)
         vcard_table.set_property('column-spacing', 2)
         vcard_table.set_homogeneous(False)
         vcard_current_row = 1
         properties = []
 
         nick_markup = '<b>' + \
-                gobject.markup_escape_text(contact.get_shown_name()) \
+                GObject.markup_escape_text(contact.get_shown_name()) \
                 + '</b>'
         properties.append((nick_markup, None))
 
@@ -382,7 +383,7 @@ class GCTooltip(BaseTooltip):
                 # escape markup entities
                 status = helpers.reduce_chars_newlines(status, 300, 5)
                 status = '<i>' +\
-                        gobject.markup_escape_text(status) + '</i>'
+                        GObject.markup_escape_text(status) + '</i>'
                 properties.append((status, None))
 
         show = helpers.get_uf_show(contact.show)
@@ -394,7 +395,7 @@ class GCTooltip(BaseTooltip):
 
         if hasattr(contact, 'resource') and contact.resource.strip():
             properties.append((_('Resource: '),
-                    gobject.markup_escape_text(contact.resource)))
+                    GObject.markup_escape_text(contact.resource)))
 
         if contact.affiliation != 'none':
             uf_affiliation = helpers.get_uf_affiliation(contact.affiliation)
@@ -419,31 +420,31 @@ class GCTooltip(BaseTooltip):
         while properties:
             property_ = properties.pop(0)
             vcard_current_row += 1
-            vertical_fill = gtk.FILL
+            vertical_fill = Gtk.AttachOptions.FILL
             if not properties:
-                vertical_fill |= gtk.EXPAND
-            label = gtk.Label()
+                vertical_fill |= Gtk.AttachOptions.EXPAND
+            label = Gtk.Label()
             label.set_alignment(0, 0)
             if property_[1]:
                 label.set_markup(property_[0])
                 vcard_table.attach(label, 1, 2, vcard_current_row,
-                        vcard_current_row + 1, gtk.FILL, vertical_fill, 0, 0)
-                label = gtk.Label()
+                        vcard_current_row + 1, Gtk.AttachOptions.FILL, vertical_fill, 0, 0)
+                label = Gtk.Label()
                 label.set_alignment(0, 0)
                 label.set_markup(property_[1])
                 label.set_line_wrap(True)
                 vcard_table.attach(label, 2, 3, vcard_current_row,
-                        vcard_current_row + 1, gtk.EXPAND | gtk.FILL,
+                        vcard_current_row + 1, Gtk.AttachOptions.EXPAND | Gtk.AttachOptions.FILL,
                         vertical_fill, 0, 0)
             else:
                 label.set_markup(property_[0])
                 label.set_line_wrap(True)
                 vcard_table.attach(label, 1, 3, vcard_current_row,
-                        vcard_current_row + 1, gtk.FILL, vertical_fill, 0)
+                        vcard_current_row + 1, Gtk.AttachOptions.FILL, vertical_fill, 0)
 
         self.avatar_image.set_alignment(0, 0)
         vcard_table.attach(self.avatar_image, 3, 4, 2, vcard_current_row + 1,
-                gtk.FILL, gtk.FILL | gtk.EXPAND, 3, 3)
+                Gtk.AttachOptions.FILL, Gtk.AttachOptions.FILL | Gtk.AttachOptions.EXPAND, 3, 3)
         gajim.plugin_manager.gui_extension_point('gc_tooltip_populate',
             self, contact, vcard_table)
         self.win.add(vcard_table)
@@ -455,11 +456,11 @@ class RosterTooltip(NotificationAreaTooltip):
 
     def __init__(self):
         self.account = None
-        self.image = gtk.Image()
+        self.image = Gtk.Image()
         self.image.set_alignment(0, 0)
         # padding is independent of the total length and better than alignment
         self.image.set_padding(1, 2)
-        self.avatar_image = gtk.Image()
+        self.avatar_image = Gtk.Image()
         NotificationAreaTooltip.__init__(self)
 
     def populate(self, contacts):
@@ -491,19 +492,19 @@ class RosterTooltip(NotificationAreaTooltip):
             table_size = 4
         else:
             self.avatar_image.set_from_pixbuf(None)
-        vcard_table = gtk.Table(1,table_size)
+        vcard_table = Gtk.Table(1,table_size)
         vcard_table.set_property('column-spacing', 2)
         vcard_table.set_homogeneous(False)
         vcard_current_row = 1
         properties = []
 
         name_markup = u'<span weight="bold">' + \
-                gobject.markup_escape_text(prim_contact.get_shown_name())\
+                GObject.markup_escape_text(prim_contact.get_shown_name())\
                 + '</span>'
         if gajim.config.get('mergeaccounts'):
             name_markup += u" <span foreground='%s'>(%s)</span>" % (
                 gajim.config.get('tooltip_account_name_color'),
-                gobject.markup_escape_text(prim_contact.account.name))
+                GObject.markup_escape_text(prim_contact.account.name))
 
         if self.account and helpers.jid_is_blocked(self.account,
         prim_contact.jid):
@@ -604,7 +605,7 @@ class RosterTooltip(NotificationAreaTooltip):
                         # status is wrapped
                         status = helpers.reduce_chars_newlines(status, 300, 5)
                         # escape markup entities.
-                        status = gobject.markup_escape_text(status)
+                        status = GObject.markup_escape_text(status)
                         properties.append(('<i>%s</i>' % status, None))
                 properties.append((show, None))
 
@@ -615,14 +616,14 @@ class RosterTooltip(NotificationAreaTooltip):
         # contact has only one ressource
         if num_resources == 1 and contact.resource:
             properties.append((_('Resource: '),
-                    gobject.markup_escape_text(contact.resource) +\
+                    GObject.markup_escape_text(contact.resource) +\
                     ' (' + unicode(contact.priority) + ')'))
 
         if self.account and prim_contact.sub and prim_contact.sub != 'both' and\
         prim_contact.jid not in gajim.gc_connected[self.account]:
             # ('both' is the normal sub so we don't show it)
             properties.append(( _('Subscription: '),
-                    gobject.markup_escape_text(helpers.get_uf_sub(prim_contact.sub))))
+                    GObject.markup_escape_text(helpers.get_uf_sub(prim_contact.sub))))
 
         if prim_contact.keyID:
             keyID = None
@@ -632,7 +633,7 @@ class RosterTooltip(NotificationAreaTooltip):
                 keyID = prim_contact.keyID[8:]
             if keyID:
                 properties.append((_('OpenPGP: '),
-                        gobject.markup_escape_text(keyID)))
+                        GObject.markup_escape_text(keyID)))
 
         if contact.last_activity_time:
             last_active = datetime(*contact.last_activity_time[:6])
@@ -660,21 +661,21 @@ class RosterTooltip(NotificationAreaTooltip):
         while properties:
             property_ = properties.pop(0)
             vcard_current_row += 1
-            vertical_fill = gtk.FILL
+            vertical_fill = Gtk.AttachOptions.FILL
             if not properties and table_size == 4:
-                vertical_fill |= gtk.EXPAND
-            label = gtk.Label()
+                vertical_fill |= Gtk.AttachOptions.EXPAND
+            label = Gtk.Label()
             label.set_alignment(0, 0)
             if property_[1]:
                 label.set_markup(property_[0])
                 vcard_table.attach(label, 1, 2, vcard_current_row,
-                        vcard_current_row + 1, gtk.FILL, vertical_fill, 0, 0)
-                label = gtk.Label()
+                        vcard_current_row + 1, Gtk.AttachOptions.FILL, vertical_fill, 0, 0)
+                label = Gtk.Label()
                 label.set_alignment(0, 0)
                 label.set_markup(property_[1])
                 label.set_line_wrap(True)
                 vcard_table.attach(label, 2, 3, vcard_current_row,
-                        vcard_current_row + 1, gtk.EXPAND | gtk.FILL,
+                        vcard_current_row + 1, Gtk.AttachOptions.EXPAND | Gtk.AttachOptions.FILL,
                                 vertical_fill, 0, 0)
             else:
                 if isinstance(property_[0], (unicode, str)): # FIXME: rm unicode?
@@ -683,11 +684,11 @@ class RosterTooltip(NotificationAreaTooltip):
                 else:
                     label = property_[0]
                 vcard_table.attach(label, 1, 3, vcard_current_row,
-                        vcard_current_row + 1, gtk.FILL, vertical_fill, 0)
+                        vcard_current_row + 1, Gtk.AttachOptions.FILL, vertical_fill, 0)
         self.avatar_image.set_alignment(0, 0)
         if table_size == 4:
             vcard_table.attach(self.avatar_image, 3, 4, 2,
-                vcard_current_row + 1, gtk.FILL, gtk.FILL | gtk.EXPAND, 3, 3)
+                vcard_current_row + 1, Gtk.AttachOptions.FILL, Gtk.AttachOptions.FILL | Gtk.AttachOptions.EXPAND, 3, 3)
 
         gajim.plugin_manager.gui_extension_point('roster_tooltip_populate',
             self, contacts, vcard_table)
@@ -733,7 +734,7 @@ class FileTransfersTooltip(BaseTooltip):
         BaseTooltip.__init__(self)
 
     def populate(self, file_props):
-        ft_table = gtk.Table(2, 1)
+        ft_table = Gtk.Table(2, 1)
         ft_table.set_property('column-spacing', 2)
         current_row = 1
         self.create_window()
@@ -744,7 +745,7 @@ class FileTransfersTooltip(BaseTooltip):
         else:
             file_name = file_props.name
         properties.append((_('Name: '),
-                gobject.markup_escape_text(file_name)))
+                GObject.markup_escape_text(file_name)))
         if file_props.type_ == 'r':
             type_ = _('Download')
             actor = _('Sender: ')
@@ -760,7 +761,7 @@ class FileTransfersTooltip(BaseTooltip):
             else:
                 name = receiver.split('/')[0]
         properties.append((_('Type: '), type_))
-        properties.append((actor, gobject.markup_escape_text(name)))
+        properties.append((actor, GObject.markup_escape_text(name)))
 
         transfered_len = file_props.received_len
         if not transfered_len:
@@ -788,22 +789,22 @@ class FileTransfersTooltip(BaseTooltip):
             status = _('Not started')
         properties.append((_('Status: '), status))
         file_desc = file_props.desc
-        properties.append((_('Description: '), gobject.markup_escape_text(
+        properties.append((_('Description: '), GObject.markup_escape_text(
                 file_desc)))
         while properties:
             property_ = properties.pop(0)
             current_row += 1
-            label = gtk.Label()
+            label = Gtk.Label()
             label.set_alignment(0, 0)
             label.set_markup(property_[0])
             ft_table.attach(label, 1, 2, current_row, current_row + 1,
-                    gtk.FILL, gtk.FILL, 0, 0)
-            label = gtk.Label()
+                    Gtk.AttachOptions.FILL, Gtk.AttachOptions.FILL, 0, 0)
+            label = Gtk.Label()
             label.set_alignment(0, 0)
             label.set_line_wrap(True)
             label.set_markup(property_[1])
             ft_table.attach(label, 2, 3, current_row, current_row + 1,
-                    gtk.EXPAND | gtk.FILL, gtk.FILL, 0, 0)
+                    Gtk.AttachOptions.EXPAND | Gtk.AttachOptions.FILL, Gtk.AttachOptions.FILL, 0, 0)
 
         self.win.add(ft_table)
 
@@ -814,7 +815,7 @@ class ServiceDiscoveryTooltip(BaseTooltip):
     """
     def populate(self, status):
         self.create_window()
-        label = gtk.Label()
+        label = Gtk.Label()
         label.set_line_wrap(True)
         label.set_alignment(0, 0)
         label.set_selectable(False)

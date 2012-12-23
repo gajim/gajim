@@ -34,7 +34,7 @@ import time
 import datetime
 from gzip import GzipFile
 from cStringIO import StringIO
-import gobject
+from gi.repository import GObject
 
 import exceptions
 import gajim
@@ -176,7 +176,7 @@ class Logger:
     def _timeout_commit(self):
         if self.commit_timout_id:
             return
-        self.commit_timout_id = gobject.timeout_add(500, self._really_commit)
+        self.commit_timout_id = GObject.timeout_add(500, self._really_commit)
 
     def simple_commit(self, sql_to_commit):
         """

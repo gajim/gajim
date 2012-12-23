@@ -17,7 +17,7 @@ Handles Jingle RTP sessions (XEP 0167)
 
 from collections import deque
 
-import gobject
+from gi.repository import GObject
 import socket
 
 import nbxmpp
@@ -129,13 +129,13 @@ class JingleRTPContent(JingleContent):
         events = deque(events)
         self._dtmf_running = True
         self._start_dtmf(events.popleft())
-        gobject.timeout_add(500, self._next_dtmf, events)
+        GObject.timeout_add(500, self._next_dtmf, events)
 
     def _next_dtmf(self, events):
         self._stop_dtmf()
         if events:
             self._start_dtmf(events.popleft())
-            gobject.timeout_add(500, self._next_dtmf, events)
+            GObject.timeout_add(500, self._next_dtmf, events)
         else:
             self._dtmf_running = False
 

@@ -13,7 +13,6 @@
           <object class="GtkNotebook" id="notebook">
             <property name="visible">True</property>
             <property name="scrollable">True</property>
-            <property name="tab_border">0</property>
           </object>
         </child>
       </object>

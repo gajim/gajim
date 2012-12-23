@@ -28,10 +28,12 @@
 ##
 
 import xml.sax.saxutils
-import gtk
+from gi.repository import Gtk
+from gi.repository import Gdk
+from gi.repository import GdkPixbuf
 import glib
-import gobject
-import pango
+from gi.repository import GObject
+from gi.repository import Pango
 import os
 import sys
 
@@ -41,13 +43,13 @@ log = logging.getLogger('gajim.gtkgui_helpers')
 from common import i18n
 from common import gajim
 
-gtk_icon_theme = gtk.icon_theme_get_default()
+gtk_icon_theme = Gtk.IconTheme.get_default()
 gtk_icon_theme.append_search_path(gajim.ICONS_DIR)
 
 def get_icon_pixmap(icon_name, size=16):
     try:
         return gtk_icon_theme.load_icon(icon_name, size, 0)
-    except gobject.GError, e:
+    except GObject.GError, e:
         log.error('Unable to load icon %s: %s' % (icon_name, str(e)))
 
 def get_icon_path(icon_name, size=16):
@@ -58,7 +60,7 @@ def get_icon_path(icon_name, size=16):
             return ""
         else:
             return icon_info.get_filename()
-    except gobject.GError, e:
+    except GObject.GError, e:
         log.error("Unable to find icon %s: %s" % (icon_name, str(e)))
 
 import vcard
@@ -76,11 +78,11 @@ if os.name == 'nt':
 
 from common import helpers
 
-screen_w = gtk.gdk.screen_width()
-screen_h = gtk.gdk.screen_height()
+screen_w = Gdk.Screen.width()
+screen_h = Gdk.Screen.height()
 
 def add_image_to_menuitem(menuitem, icon_name):
-    img = gtk.Image()
+    img = Gtk.Image()
     path_img = get_icon_path(icon_name)
     img.set_from_file(path_img)
     menuitem.set_image(img)
@@ -91,7 +93,7 @@ def add_image_to_button(button, icon_name):
 GUI_DIR = os.path.join(gajim.DATA_DIR, 'gui')
 def get_gtk_builder(file_name, widget=None):
     file_path = os.path.join(GUI_DIR, file_name)
-    builder = gtk.Builder()
+    builder = Gtk.Builder()
     builder.set_translation_domain(i18n.APP)
     if widget:
         builder.add_objects_from_file(file_path, [widget])
@@ -104,15 +106,15 @@ def get_completion_liststore(entry):
     Create a completion model for entry widget completion list consists of
     (Pixbuf, Text) rows
     """
-    completion = gtk.EntryCompletion()
-    liststore = gtk.ListStore(gtk.gdk.Pixbuf, str)
+    completion = Gtk.EntryCompletion()
+    liststore = Gtk.ListStore(GdkPixbuf.Pixbuf, str)
 
-    render_pixbuf = gtk.CellRendererPixbuf()
-    completion.pack_start(render_pixbuf, expand = False)
+    render_pixbuf = Gtk.CellRendererPixbuf()
+    completion.pack_start(render_pixbuf, False, True, 0)
     completion.add_attribute(render_pixbuf, 'pixbuf', 0)
 
-    render_text = gtk.CellRendererText()
-    completion.pack_start(render_text, expand = True)
+    render_text = Gtk.CellRendererText()
+    completion.pack_start(render_text, True, True, 0)
     completion.add_attribute(render_text, 'text', 1)
     completion.set_property('text_column', 1)
     completion.set_model(liststore)
@@ -138,7 +140,7 @@ def popup_emoticons_under_button(menu, button, parent_win):
 
         ## should we pop down or up?
         if (y + button.allocation.height + menu_height
-                < gtk.gdk.screen_height()):
+                < Gdk.Screen.height()):
             # now move the menu below the button
             y += button.allocation.height
         else:
@@ -156,14 +158,14 @@ def get_theme_font_for_option(theme, option):
     Return string description of the font, stored in theme preferences
     """
     font_name = gajim.config.get_per('themes', theme, option)
-    font_desc = pango.FontDescription()
+    font_desc = Pango.FontDescription()
     font_prop_str =  gajim.config.get_per('themes', theme, option + 'attrs')
     if font_prop_str:
         if font_prop_str.find('B') != -1:
-            font_desc.set_weight(pango.WEIGHT_BOLD)
+            font_desc.set_weight(Pango.Weight.BOLD)
         if font_prop_str.find('I') != -1:
-            font_desc.set_style(pango.STYLE_ITALIC)
-    fd = pango.FontDescription(font_name)
+            font_desc.set_style(Pango.Style.ITALIC)
+    fd = Pango.FontDescription(font_name)
     fd.merge(font_desc, True)
     return fd.to_string()
 
@@ -188,7 +190,7 @@ def get_default_font():
     if xdg_config_home == '':
         xdg_config_home = os.path.expanduser('~/.config') # default
     xfce_config_file = os.path.join(xdg_config_home,
-        'xfce4/mcs_settings/gtk.xml')
+        'xfce4/mcs_settings/Gtk.xml')
 
     kde_config_file = os.path.expanduser('~/.kde/share/config/kdeglobals')
 
@@ -406,15 +408,15 @@ def get_abspath_for_script(scriptname, want_type = False):
 
 def get_pixbuf_from_data(file_data, want_type = False):
     """
-    Get image data and returns gtk.gdk.Pixbuf if want_type is True it also
+    Get image data and returns GdkPixbuf.Pixbuf if want_type is True it also
     returns 'jpeg', 'png' etc
     """
-    pixbufloader = gtk.gdk.PixbufLoader()
+    pixbufloader = GdkPixbuf.PixbufLoader()
     try:
         pixbufloader.write(file_data)
         pixbufloader.close()
         pixbuf = pixbufloader.get_pixbuf()
-    except gobject.GError: # 'unknown image format'
+    except GObject.GError: # 'unknown image format'
         pixbufloader.close()
         pixbuf = None
         if want_type:
@@ -429,9 +431,9 @@ def get_pixbuf_from_data(file_data, want_type = False):
         return pixbuf
 
 def get_invisible_cursor():
-    pixmap = gtk.gdk.Pixmap(None, 1, 1, 1)
-    color = gtk.gdk.Color()
-    cursor = gtk.gdk.Cursor(pixmap, pixmap, color, color, 0, 0)
+    pixmap = Gdk.Pixmap(None, 1, 1, 1)
+    color = Gdk.Color()
+    cursor = Gdk.Cursor.new(pixmap, pixmap, color, color, 0, 0)
     return cursor
 
 def get_current_desktop(window):
@@ -457,10 +459,16 @@ def possibly_move_window_in_current_desktop(window):
 
     NOTE: Window is a GDK window.
     """
+    #TODO: property_get doesn't work:
+    #prop_atom = Gdk.Atom.intern('_NET_CURRENT_DESKTOP', False)
+    #type_atom = Gdk.Atom.intern("CARDINAL", False)
+    #w = Gdk.Screen.get_default().get_root_window()
+    #Gdk.property_get(w, prop_atom, type_atom, 0, 9999, False)
+    return False
     if os.name == 'nt':
         return False
 
-    root_window = gtk.gdk.screen_get_default().get_root_window()
+    root_window = Gdk.Screen.get_default().get_root_window()
     # current user's vd
     current_virtual_desktop_no = get_current_desktop(root_window)
 
@@ -514,20 +522,20 @@ def get_fade_color(treeview, selected, focused):
     Get a gdk color that is between foreground and background in 0.3
     0.7 respectively colors of the cell for the given treeview
     """
-    style = treeview.style
+    style = treeview.get_style()
     if selected:
         if focused: # is the window focused?
-            state = gtk.STATE_SELECTED
+            state = Gtk.StateType.SELECTED
         else: # is it not? NOTE: many gtk themes change bg on this
-            state = gtk.STATE_ACTIVE
+            state = Gtk.StateType.ACTIVE
     else:
-        state = gtk.STATE_NORMAL
+        state = Gtk.StateType.NORMAL
     bg = style.base[state]
     fg = style.text[state]
 
     p = 0.3 # background
     q = 0.7 # foreground # p + q should do 1.0
-    return gtk.gdk.Color(int(bg.red*p + fg.red*q),
+    return Gdk.Color(int(bg.red*p + fg.red*q),
                                     int(bg.green*p + fg.green*q),
                                     int(bg.blue*p + fg.blue*q))
 
@@ -557,7 +565,7 @@ def get_scaled_pixbuf(pixbuf, kind):
     else:
         h = height
         w = int(h * ratio)
-    scaled_buf = pixbuf.scale_simple(w, h, gtk.gdk.INTERP_HYPER)
+    scaled_buf = pixbuf.scale_simple(w, h, GdkPixbuf.InterpType.HYPER)
     return scaled_buf
 
 def get_avatar_pixbuf_from_cache(fjid, use_local=True):
@@ -743,9 +751,9 @@ Description=xmpp
             gajim.config.set('check_if_gajim_is_default', False)
 
     try:
-        import gconf
+        from gi.repository import GConf
         # in try because daemon may not be there
-        client = gconf.client_get_default()
+        client = GConf.Client.get_default()
     except Exception:
         return
 
@@ -786,7 +794,7 @@ def get_state_image_from_file_path_show(file_path, show):
     files = []
     files.append(os.path.join(file_path, state_file + '.png'))
     files.append(os.path.join(file_path, state_file + '.gif'))
-    image = gtk.Image()
+    image = Gtk.Image()
     image.set_from_pixbuf(None)
     for file_ in files:
         if os.path.exists(file_):
@@ -799,7 +807,7 @@ def get_possible_button_event(event):
     """
     Mouse or keyboard caused the event?
     """
-    if event.type == gtk.gdk.KEY_PRESS:
+    if event.type == Gdk.KEY_PRESS:
         return 0 # no event.button so pass 0
     # BUTTON_PRESS event, so pass event.button
     return event.button
@@ -870,9 +878,9 @@ def on_avatar_save_as_menuitem_activate(widget, jid, default_name=''):
         dialog.destroy()
 
     dialog = dialogs.FileChooserDialog(title_text=_('Save Image as...'),
-        action=gtk.FILE_CHOOSER_ACTION_SAVE, buttons=(gtk.STOCK_CANCEL,
-        gtk.RESPONSE_CANCEL, gtk.STOCK_SAVE, gtk.RESPONSE_OK),
-        default_response=gtk.RESPONSE_OK,
+        action=Gtk.FileChooserAction.SAVE, buttons=(Gtk.STOCK_CANCEL,
+        Gtk.ResponseType.CANCEL, Gtk.STOCK_SAVE, Gtk.ResponseType.OK),
+        default_response=Gtk.ResponseType.OK,
         current_folder=gajim.config.get('last_save_dir'), on_response_ok=on_ok,
         on_response_cancel=on_cancel)
 
@@ -881,16 +889,16 @@ def on_avatar_save_as_menuitem_activate(widget, jid, default_name=''):
         on_cancel(widget))
 
 def on_bm_header_changed_state(widget, event):
-    widget.set_state(gtk.STATE_NORMAL) #do not allow selected_state
+    widget.set_state(Gtk.StateType.NORMAL) #do not allow selected_state
 
 def create_combobox(value_list, selected_value = None):
     """
     Value_list is [(label1, value1)]
     """
-    liststore = gtk.ListStore(str, str)
-    combobox = gtk.ComboBox(liststore)
-    cell = gtk.CellRendererText()
-    combobox.pack_start(cell, True)
+    liststore = Gtk.ListStore(str, str)
+    combobox = Gtk.ComboBox(liststore)
+    cell = Gtk.CellRendererText()
+    combobox.pack_start(cell, True, True, 0)
     combobox.add_attribute(cell, 'text', 0)
     i = -1
     for value in value_list:
@@ -906,14 +914,14 @@ def create_list_multi(value_list, selected_values=None):
     """
     Value_list is [(label1, value1)]
     """
-    liststore = gtk.ListStore(str, str)
-    treeview = gtk.TreeView(liststore)
-    treeview.get_selection().set_mode(gtk.SELECTION_MULTIPLE)
+    liststore = Gtk.ListStore(str, str)
+    treeview = Gtk.TreeView(liststore)
+    treeview.get_selection().set_mode(Gtk.SelectionMode.MULTIPLE)
     treeview.set_headers_visible(False)
-    col = gtk.TreeViewColumn()
+    col = Gtk.TreeViewColumn()
     treeview.append_column(col)
-    cell = gtk.CellRendererText()
-    col.pack_start(cell, True)
+    cell = Gtk.CellRendererText()
+    col.pack_start(cell, True, True, 0)
     col.set_attributes(cell, text=0)
     for value in value_list:
         iter = liststore.append(value)
@@ -982,7 +990,7 @@ def load_icons_meta():
     if not os.path.isfile(path_opened):
         path_opened = os.path.join(path, 'opened.png')
     if os.path.isfile(path_opened):
-        pixo = gtk.gdk.pixbuf_new_from_file(path_opened)
+        pixo = GdkPixbuf.Pixbuf.new_from_file(path_opened)
     else:
         pixo = None
     # Same thing for closed
@@ -990,7 +998,7 @@ def load_icons_meta():
     if not os.path.isfile(path_closed):
         path_closed = os.path.join(path, 'closed.png')
     if os.path.isfile(path_closed):
-        pixc = gtk.gdk.pixbuf_new_from_file(path_closed)
+        pixc = GdkPixbuf.Pixbuf.new_from_file(path_closed)
     else:
         pixc = None
     return pixo, pixc
@@ -1007,19 +1015,19 @@ def _load_icon_list(icons_list, path, pixbuf2 = None):
         files = []
         files.append(path + icon_file + '.gif')
         files.append(path + icon_file + '.png')
-        image = gtk.Image()
+        image = Gtk.Image()
         image.show()
         imgs[icon] = image
         for file_ in files: # loop seeking for either gif or png
             if os.path.exists(file_):
                 image.set_from_file(file_)
-                if pixbuf2 and image.get_storage_type() == gtk.IMAGE_PIXBUF:
+                if pixbuf2 and image.get_storage_type() == Gtk.ImageType.PIXBUF:
                     # add pixbuf2 on top-left corner of image
                     pixbuf1 = image.get_pixbuf()
                     pixbuf2.composite(pixbuf1, 0, 0,
                             pixbuf2.get_property('width'),
                             pixbuf2.get_property('height'), 0, 0, 1.0, 1.0,
-                            gtk.gdk.INTERP_NEAREST, 255)
+                            GdkPixbuf.InterpType.NEAREST, 255)
                     image.set_from_pixbuf(pixbuf1)
                 break
     return imgs
@@ -1058,21 +1066,21 @@ def make_jabber_state_images():
     else:
         # Resize 32x32 icons to 24x24
         for each in gajim.interface.jabber_state_images['32']:
-            img = gtk.Image()
+            img = Gtk.Image()
             pix = gajim.interface.jabber_state_images['32'][each]
             pix_type = pix.get_storage_type()
-            if pix_type == gtk.IMAGE_ANIMATION:
+            if pix_type == Gtk.ImageType.ANIMATION:
                 animation = pix.get_animation()
                 pixbuf = animation.get_static_image()
-            elif pix_type == gtk.IMAGE_EMPTY:
+            elif pix_type == Gtk.ImageType.EMPTY:
                 pix = gajim.interface.jabber_state_images['16'][each]
                 pix_16_type = pix.get_storage_type()
-                if pix_16_type == gtk.IMAGE_ANIMATION:
+                if pix_16_type == Gtk.ImageType.ANIMATION:
                     animation = pix.get_animation()
                     pixbuf = animation.get_static_image()
             else:
                 pixbuf = pix.get_pixbuf()
-            scaled_pix = pixbuf.scale_simple(24, 24, gtk.gdk.INTERP_BILINEAR)
+            scaled_pix = pixbuf.scale_simple(24, 24, GdkPixbuf.InterpType.BILINEAR)
             img.set_from_pixbuf(scaled_pix)
             gajim.interface.jabber_state_images['24'][each] = img
 
@@ -1085,11 +1093,11 @@ def label_set_autowrap(widget):
     Make labels automatically re-wrap if their containers are resized.
     Accepts label or container widgets
     """
-    if isinstance (widget, gtk.Container):
+    if isinstance (widget, Gtk.Container):
         children = widget.get_children()
         for i in xrange (len (children)):
             label_set_autowrap(children[i])
-    elif isinstance(widget, gtk.Label):
+    elif isinstance(widget, Gtk.Label):
         widget.set_line_wrap(True)
         widget.connect_after('size-allocate', __label_size_allocate)
 
@@ -1101,13 +1109,13 @@ def __label_size_allocate(widget, allocation):
 
     lw_old, lh_old = layout.get_size()
     # fixed width labels
-    if lw_old/pango.SCALE == allocation.width:
+    if lw_old/Pango.SCALE == allocation.width:
         return
 
-    # set wrap width to the pango.Layout of the labels ###
+    # set wrap width to the Pango.Layout of the labels ###
     widget.set_alignment(0.0, 0.0)
-    layout.set_width (allocation.width * pango.SCALE)
+    layout.set_width (allocation.width * Pango.SCALE)
     lh = layout.get_size()[1]
 
     if lh_old != lh:
-        widget.set_size_request (-1, lh / pango.SCALE)
+        widget.set_size_request (-1, lh / Pango.SCALE)

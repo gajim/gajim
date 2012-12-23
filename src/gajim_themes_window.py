@@ -22,8 +22,8 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-import gtk
-import pango
+from gi.repository import Gtk
+from gi.repository import Pango
 import dialogs
 import gtkgui_helpers
 
@@ -34,7 +34,7 @@ class GajimThemesWindow:
     def __init__(self):
         self.xml = gtkgui_helpers.get_gtk_builder('gajim_themes_window.ui')
         self.window = self.xml.get_object('gajim_themes_window')
-        self.window.set_transient_for(gajim.interface.roster.window)
+        self.set_transient_for(gajim.interface.roster.window)
 
         self.options = ['account', 'group', 'contact', 'banner']
         self.options_combobox = self.xml.get_object('options_combobox')
@@ -54,12 +54,12 @@ class GajimThemesWindow:
         'muc_msg', 'muc_directed_msg'):
             self.colorbuttons[chatstate] = self.xml.get_object(chatstate + \
                     '_colorbutton')
-        model = gtk.ListStore(str)
+        model = Gtk.ListStore(str)
         self.themes_tree.set_model(model)
-        col = gtk.TreeViewColumn(_('Theme'))
+        col = Gtk.TreeViewColumn(_('Theme'))
         self.themes_tree.append_column(col)
-        renderer = gtk.CellRendererText()
-        col.pack_start(renderer, True)
+        renderer = Gtk.CellRendererText()
+        col.pack_start(renderer, True, True, 0)
         col.set_attributes(renderer, text = 0)
         renderer.connect('edited', self.on_theme_cell_edited)
         renderer.set_property('editable', True)
@@ -125,7 +125,7 @@ class GajimThemesWindow:
 
     def select_active_theme(self):
         model = self.themes_tree.get_model()
-        iter_ = model.get_iter_root()
+        iter_ = model.get_iter_first()
         active_theme = gajim.config.get('roster_theme').replace('_', ' ')
         while iter_:
             theme = model[iter_][0]
@@ -198,7 +198,7 @@ class GajimThemesWindow:
         textcolor = gajim.config.get_per('themes', theme, option + 'textcolor')
         if textcolor:
             state = True
-            self.text_colorbutton.set_color(gtk.gdk.color_parse(textcolor))
+            self.text_colorbutton.set_color(Gdk.color_parse(textcolor))
         else:
             state = False
         self.textcolor_checkbutton.set_active(state)
@@ -206,7 +206,7 @@ class GajimThemesWindow:
         bgcolor = gajim.config.get_per('themes', theme, option + 'bgcolor')
         if bgcolor:
             state = True
-            self.background_colorbutton.set_color(gtk.gdk.color_parse(
+            self.background_colorbutton.set_color(Gdk.color_parse(
                     bgcolor))
         else:
             state = False
@@ -231,7 +231,7 @@ class GajimThemesWindow:
         'muc_msg', 'muc_directed_msg'):
             color = gajim.config.get_per('themes', theme, 'state_' + chatstate + \
                     '_color')
-            self.colorbuttons[chatstate].set_color(gtk.gdk.color_parse(color))
+            self.colorbuttons[chatstate].set_color(Gdk.color_parse(color))
 
     def on_textcolor_checkbutton_toggled(self, widget):
         state = widget.get_active()
@@ -328,11 +328,11 @@ class GajimThemesWindow:
         """
         Return a FontDescription from togglebuttons states
         """
-        fd = pango.FontDescription()
+        fd = Pango.FontDescription()
         if self.bold_togglebutton.get_active():
-            fd.set_weight(pango.WEIGHT_BOLD)
+            fd.set_weight(Pango.Weight.BOLD)
         if self.italic_togglebutton.get_active():
-            fd.set_style(pango.STYLE_ITALIC)
+            fd.set_style(Pango.Style.ITALIC)
         return fd
 
     def _set_font_widgets(self, font_attrs):
@@ -365,10 +365,10 @@ class GajimThemesWindow:
         Get tuple of font properties: weight, style
         """
         font_props = [False, False, False]
-        font_description = pango.FontDescription(font_name)
-        if font_description.get_weight() != pango.WEIGHT_NORMAL:
+        font_description = Pango.FontDescription(font_name)
+        if font_description.get_weight() != Pango.Weight.NORMAL:
             font_props[0] = True
-        if font_description.get_style() != pango.STYLE_ITALIC:
+        if font_description.get_style() != Pango.Style.ITALIC:
             font_props[1] = True
         return font_props
 

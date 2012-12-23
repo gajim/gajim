@@ -25,7 +25,7 @@
 
 import os
 import sys
-import gtk
+from gi.repository import Gtk
 import gtkgui_helpers
 
 from common import gajim
@@ -41,7 +41,7 @@ class FeaturesWindow:
     def __init__(self):
         self.xml = gtkgui_helpers.get_gtk_builder('features_window.ui')
         self.window = self.xml.get_object('features_window')
-        self.window.set_transient_for(gajim.interface.roster.window)
+        self.set_transient_for(gajim.interface.roster.window)
         treeview = self.xml.get_object('features_treeview')
         self.desc_label = self.xml.get_object('feature_desc_label')
 
@@ -114,20 +114,20 @@ class FeaturesWindow:
         }
 
         # name, supported
-        self.model = gtk.ListStore(str, bool)
+        self.model = Gtk.ListStore(str, bool)
         treeview.set_model(self.model)
 
-        col = gtk.TreeViewColumn(Q_('?features:Available'))
+        col = Gtk.TreeViewColumn(Q_('?features:Available'))
         treeview.append_column(col)
-        cell = gtk.CellRendererToggle()
+        cell = Gtk.CellRendererToggle()
         cell.set_property('radio', True)
-        col.pack_start(cell)
+        col.pack_start(cell, True, True, 0)
         col.set_attributes(cell, active = 1)
 
-        col = gtk.TreeViewColumn(_('Feature'))
+        col = Gtk.TreeViewColumn(_('Feature'))
         treeview.append_column(col)
-        cell = gtk.CellRendererText()
-        col.pack_start(cell, expand = True)
+        cell = Gtk.CellRendererText()
+        col.pack_start(cell, True, True, 0)
         col.add_attribute(cell, 'text', 0)
 
         # Fill model
@@ -136,7 +136,7 @@ class FeaturesWindow:
             rep = func()
             self.model.append([feature, rep])
 
-        self.model.set_sort_column_id(0, gtk.SORT_ASCENDING)
+        self.model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
         self.xml.connect_signals(self)
         self.window.show_all()

@@ -174,6 +174,7 @@ else:
 
 HAVE_FARSTREAM = True
 try:
+    raise ImportError
     farstream = __import__('farstream')
     import gst
     import glib
@@ -190,6 +191,7 @@ except ImportError:
 
 HAVE_UPNP_IGD = True
 try:
+    raise ImportError
     import gupnp.igd
     gupnp_igd = gupnp.igd.Simple()
 except ImportError:

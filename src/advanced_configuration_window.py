@@ -23,9 +23,9 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-import gtk
+from gi.repository import Gtk
 import gtkgui_helpers
-import gobject
+from gi.repository import GObject
 
 from common import gajim
 
@@ -50,12 +50,12 @@ def rate_limit(rate):
         timeout = [None]
         def f(*args, **kwargs):
             if timeout[0] is not None:
-                gobject.source_remove(timeout[0])
+                GObject.source_remove(timeout[0])
                 timeout[0] = None
             def timeout_func():
                 func(*args, **kwargs)
                 timeout[0] = None
-            timeout[0] = gobject.timeout_add(int(1000.0 / rate), timeout_func)
+            timeout[0] = GObject.timeout_add(int(1000.0 / rate), timeout_func)
         return f
     return decorator
 
@@ -76,7 +76,7 @@ class AdvancedConfigurationWindow(object):
     def __init__(self):
         self.xml = gtkgui_helpers.get_gtk_builder('advanced_configuration_window.ui')
         self.window = self.xml.get_object('advanced_configuration_window')
-        self.window.set_transient_for(
+        self.set_transient_for(
                 gajim.interface.instances['preferences'].window)
         self.entry = self.xml.get_object('advanced_entry')
         self.desc_label = self.xml.get_object('advanced_desc_label')
@@ -98,18 +98,18 @@ class AdvancedConfigurationWindow(object):
 
         treeview = self.xml.get_object('advanced_treeview')
         self.treeview = treeview
-        self.model = gtk.TreeStore(str, str, str)
+        self.model = Gtk.TreeStore(str, str, str)
         self.fill_model()
-        self.model.set_sort_column_id(0, gtk.SORT_ASCENDING)
+        self.model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
         self.modelfilter = self.model.filter_new()
         self.modelfilter.set_visible_func(self.visible_func)
 
-        renderer_text = gtk.CellRendererText()
+        renderer_text = Gtk.CellRendererText()
         col = treeview.insert_column_with_attributes(-1, _('Preference Name'),
                 renderer_text, text = 0)
         col.set_resizable(True)
 
-        renderer_text = gtk.CellRendererText()
+        renderer_text = Gtk.CellRendererText()
         renderer_text.connect('edited', self.on_config_edited)
         col = treeview.insert_column_with_attributes(-1, _('Value'),
                 renderer_text, text = 1)
@@ -118,7 +118,7 @@ class AdvancedConfigurationWindow(object):
         col.props.resizable = True
         col.set_max_width(250)
 
-        renderer_text = gtk.CellRendererText()
+        renderer_text = Gtk.CellRendererText()
         treeview.insert_column_with_attributes(-1, _('Type'),
                 renderer_text, text = 2)
 

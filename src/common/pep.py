@@ -214,8 +214,9 @@ LOCATION_DATA = {
         'timestamp':    _('timestamp'),
         'uri':          _('uri')}
 
-import gobject
-import gtk
+from gi.repository import GObject
+from gi.repository import Gtk
+from gi.repository import GdkPixbuf
 
 import logging
 log = logging.getLogger('gajim.c.pep')
@@ -310,10 +311,10 @@ class UserMoodPEP(AbstractPEP):
         assert not self._retracted
         untranslated_mood = self._pep_specific_data['mood']
         mood = self._translate_mood(untranslated_mood)
-        markuptext = '<b>%s</b>' % gobject.markup_escape_text(mood)
+        markuptext = '<b>%s</b>' % GObject.markup_escape_text(mood)
         if 'text' in self._pep_specific_data:
             text = self._pep_specific_data['text']
-            markuptext += ' (%s)' % gobject.markup_escape_text(text)
+            markuptext += ' (%s)' % GObject.markup_escape_text(text)
         return markuptext
 
     def _translate_mood(self, mood):
@@ -348,20 +349,20 @@ class UserTunePEP(AbstractPEP):
     def asPixbufIcon(self):
         import os
         path = os.path.join(gajim.DATA_DIR, 'emoticons', 'static', 'music.png')
-        return gtk.gdk.pixbuf_new_from_file(path)
+        return GdkPixbuf.Pixbuf.new_from_file(path)
 
     def asMarkupText(self):
         assert not self._retracted
         tune = self._pep_specific_data
 
         artist = tune.get('artist', _('Unknown Artist'))
-        artist = gobject.markup_escape_text(artist)
+        artist = GObject.markup_escape_text(artist)
 
         title = tune.get('title', _('Unknown Title'))
-        title = gobject.markup_escape_text(title)
+        title = GObject.markup_escape_text(title)
 
         source = tune.get('source', _('Unknown Source'))
-        source = gobject.markup_escape_text(source)
+        source = GObject.markup_escape_text(source)
 
         tune_string =  _('<b>"%(title)s"</b> by <i>%(artist)s</i>\n'
                 'from <i>%(source)s</i>') % {'title': title,
@@ -426,12 +427,12 @@ class UserActivityPEP(AbstractPEP):
                 subactivity = ACTIVITIES[activity][subactivity]
             activity = ACTIVITIES[activity]['category']
 
-        markuptext = '<b>' + gobject.markup_escape_text(activity)
+        markuptext = '<b>' + GObject.markup_escape_text(activity)
         if subactivity:
-            markuptext += ': ' + gobject.markup_escape_text(subactivity)
+            markuptext += ': ' + GObject.markup_escape_text(subactivity)
         markuptext += '</b>'
         if text:
-            markuptext += ' (%s)' % gobject.markup_escape_text(text)
+            markuptext += ' (%s)' % GObject.markup_escape_text(text)
         return markuptext
 
 
@@ -492,7 +493,7 @@ class UserLocationPEP(AbstractPEP):
 
     def asPixbufIcon(self):
         path = gtkgui_helpers.get_icon_path('gajim-earth')
-        return gtk.gdk.pixbuf_new_from_file(path)
+        return GdkPixbuf.Pixbuf.new_from_file(path)
 
     def asMarkupText(self):
         assert not self._retracted
@@ -501,7 +502,7 @@ class UserLocationPEP(AbstractPEP):
 
         for entry in location.keys():
             text = location[entry]
-            text = gobject.markup_escape_text(text)
+            text = GObject.markup_escape_text(text)
             # Translate standart location tag
             tag = LOCATION_DATA.get(entry, entry)
             location_string += '\n<b>%(tag)s</b>: %(text)s' % \

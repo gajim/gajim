@@ -30,9 +30,9 @@
 import os
 import time
 from dialogs import PopupNotificationWindow
-import gobject
+from gi.repository import GObject
 import gtkgui_helpers
-import gtk
+from gi.repository import Gtk
 
 from common import gajim
 from common import helpers
@@ -45,8 +45,8 @@ if dbus_support.supported:
 
 USER_HAS_PYNOTIFY = True # user has pynotify module
 try:
-    import pynotify
-    pynotify.init('Gajim Notification')
+    from gi.repository import Notify
+    Notify.init('Gajim Notification')
 except ImportError:
     USER_HAS_PYNOTIFY = False
 
@@ -89,7 +89,7 @@ text=None, timeout=-1):
     if gajim.config.get('use_notif_daemon') and dbus_support.supported:
         try:
             DesktopNotification(event_type, jid, account, msg_type,
-                path_to_image, title, gobject.markup_escape_text(text), timeout)
+                path_to_image, title, GObject.markup_escape_text(text), timeout)
             return  # sucessfully did D-Bus Notification procedure!
         except dbus.DBusException, e:
             # Connection to D-Bus failed
@@ -103,17 +103,17 @@ text=None, timeout=-1):
         if not text and event_type == 'new_message':
             # empty text for new_message means do_preview = False
             # -> default value for text
-            _text = gobject.markup_escape_text(
+            _text = GObject.markup_escape_text(
                 gajim.get_name_from_jid(account, jid))
         else:
-            _text = gobject.markup_escape_text(text)
+            _text = GObject.markup_escape_text(text)
 
         if not title:
             _title = ''
         else:
             _title = title
 
-        notification = pynotify.Notification(_title, _text)
+        notification = Notify.Notification(_title, _text)
         notification.set_timeout(timeout*1000)
 
         notification.set_category(event_type)
@@ -122,14 +122,14 @@ text=None, timeout=-1):
         notification.set_data('account', account)
         notification.set_data('msg_type', msg_type)
         notification.set_property('icon-name', path_to_image)
-        if 'actions' in pynotify.get_server_caps():
+        if 'actions' in Notify.get_server_caps():
             notification.add_action('default', 'Default Action',
                     on_pynotify_notification_clicked)
 
         try:
             notification.show()
             return
-        except gobject.GError, e:
+        except GObject.GError, e:
             # Connection to notification-daemon failed, see #2893
             gajim.log.debug(str(e))
 
