@@ -1308,34 +1308,40 @@ class Connection(CommonConnection, ConnectionHandlers):
         try:
             errnum = con.Connection.ssl_errnum
         except AttributeError:
-            errnum = -1 # we don't have an errnum
-        if errnum > 0 and str(errnum) not in gajim.config.get_per('accounts',
-        self.name, 'ignore_ssl_errors').split():
-            text = _('The authenticity of the %s certificate could be invalid.'
-                ) % hostname
-            if errnum in ssl_error:
-                text += _('\nSSL Error: <b>%s</b>') % ssl_error[errnum]
-            else:
-                text += _('\nUnknown SSL error: %d') % errnum
-            gajim.nec.push_incoming_event(SSLErrorEvent(None, conn=self,
-                error_text=text, error_num=errnum,
-                cert=con.Connection.ssl_cert_pem,
-                fingerprint=con.Connection.ssl_fingerprint_sha1,
-                certificate=con.Connection.ssl_certificate))
-            return True
+            errnum = [] # we don't have an errnum
+        i = 0
+        for er in errnum:
+            if er > 0 and str(er) not in gajim.config.get_per('accounts',
+            self.name, 'ignore_ssl_errors').split():
+                text = _('The authenticity of the %s certificate could be '
+                    'invalid.') % hostname
+                if er in ssl_error:
+                    text += _('\nSSL Error: <b>%s</b>') % ssl_error[er]
+                else:
+                    text += _('\nUnknown SSL error: %d') % er
+                gajim.nec.push_incoming_event(SSLErrorEvent(None, conn=self,
+                    error_text=text, error_num=er,
+                    cert=con.Connection.ssl_cert_pem[i],
+                    fingerprint=con.Connection.ssl_fingerprint_sha1[i],
+                    certificate=con.Connection.ssl_certificate[i]))
+                return True
+            i += 1
         if hasattr(con.Connection, 'ssl_fingerprint_sha1'):
             saved_fingerprint = gajim.config.get_per('accounts', self.name,
                 'ssl_fingerprint_sha1')
             if saved_fingerprint:
                 # Check sha1 fingerprint
-                if con.Connection.ssl_fingerprint_sha1 != saved_fingerprint:
+                if con.Connection.ssl_fingerprint_sha1[-1] != saved_fingerprint:
                     gajim.nec.push_incoming_event(FingerprintErrorEvent(None,
-                        conn=self, certificate=con.Connection.ssl_certificate,
-                        new_fingerprint=con.Connection.ssl_fingerprint_sha1))
+                        conn=self,
+                        certificate=con.Connection.ssl_certificate,
+                        new_fingerprint=con.Connection.ssl_fingerprint_sha1[
+                        -1]))
                     return True
             else:
                 gajim.config.set_per('accounts', self.name,
-                    'ssl_fingerprint_sha1', con.Connection.ssl_fingerprint_sha1)
+                    'ssl_fingerprint_sha1',
+                    con.Connection.ssl_fingerprint_sha1[-1])
             if not check_X509.check_certificate(con.Connection.ssl_certificate,
             hostname) and '100' not in gajim.config.get_per('accounts',
             self.name, 'ignore_ssl_errors').split():
@@ -1344,8 +1350,8 @@ class Connection(CommonConnection, ConnectionHandlers):
                     hostname
                 gajim.nec.push_incoming_event(SSLErrorEvent(None, conn=self,
                     error_text=txt, error_num=100,
-                    cert=con.Connection.ssl_cert_pem,
-                    fingerprint=con.Connection.ssl_fingerprint_sha1,
+                    cert=con.Connection.ssl_cert_pem[-1],
+                    fingerprint=con.Connection.ssl_fingerprint_sha1[-1],
                     certificate=con.Connection.ssl_certificate))
                 return True
 
