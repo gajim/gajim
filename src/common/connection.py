@@ -1337,7 +1337,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                 if con.Connection.ssl_fingerprint_sha1[-1] != saved_fingerprint:
                     gajim.nec.push_incoming_event(FingerprintErrorEvent(None,
                         conn=self,
-                        certificate=con.Connection.ssl_certificate,
+                        certificate=con.Connection.ssl_certificate[-1],
                         new_fingerprint=con.Connection.ssl_fingerprint_sha1[
                         -1]))
                     return True
@@ -1345,8 +1345,8 @@ class Connection(CommonConnection, ConnectionHandlers):
                 gajim.config.set_per('accounts', self.name,
                     'ssl_fingerprint_sha1',
                     con.Connection.ssl_fingerprint_sha1[-1])
-            if not check_X509.check_certificate(con.Connection.ssl_certificate,
-            hostname) and '100' not in gajim.config.get_per('accounts',
+            if not check_X509.check_certificate(con.Connection.ssl_certificate[
+            -1], hostname) and '100' not in gajim.config.get_per('accounts',
             self.name, 'ignore_ssl_errors').split():
                 txt = _('The authenticity of the %s certificate could be '
                     'invalid.\nThe certificate does not cover this domain.') % \
@@ -1355,7 +1355,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                     error_text=txt, error_num=100,
                     cert=con.Connection.ssl_cert_pem[-1],
                     fingerprint=con.Connection.ssl_fingerprint_sha1[-1],
-                    certificate=con.Connection.ssl_certificate))
+                    certificate=con.Connection.ssl_certificate[-1]))
                 return True
 
         self._register_handlers(con, con_type)
