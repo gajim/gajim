@@ -848,7 +848,11 @@ class FileTransfersWindow:
         account = file_props['tt_account']
         if account not in gajim.connections:
             return
-        gajim.connections[account].disconnect_transfer(file_props)
+        con = gajim.connections[account]
+        # Check if we are in a IBB transfer
+        if 'direction' in file_props and file_props['direction']:
+            con.CloseIBBStream(file_props)
+        con.disconnect_transfer(file_props)
         self.set_status(file_props['type'], file_props['sid'], 'stop')
 
     def show_tooltip(self, widget):

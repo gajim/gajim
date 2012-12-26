@@ -794,6 +794,16 @@ class ConnectionIBBytestream(ConnectionBytestream):
             file_props['fp'] = open(file_props['file-name'], 'w')
         conn.send(rep)
 
+    def CloseIBBStream(self, file_props):
+        file_props.connected = False
+        file_props.fp.close()
+        file_props.stopped = True
+        self.connection.send(nbxmpp.Protocol('iq',
+            file_props.direction[1:], 'set',
+            payload=[nbxmpp.Node(nbxmpp.NS_IBB + ' close',
+            {'sid':file_props.sid})]))
+
+
     def OpenStream(self, sid, to, fp, blocksize=4096):
         """
         Start new stream. You should provide stream id 'sid', the endpoind jid
@@ -841,6 +851,9 @@ class ConnectionIBBytestream(ConnectionBytestream):
                 continue
             if file_props['direction'][0] == '>':
                 if 'paused' in file_props and file_props['paused']:
+                    continue
+                if 'connected' in file_props and file_props['connected']:
+                    #TODO: Reply with out of order error
                     continue
                 chunk = file_props['fp'].read(file_props['block-size'])
                 if chunk:
@@ -934,6 +947,10 @@ class ConnectionIBBytestream(ConnectionBytestream):
             file_props = gajim.socks5queue.get_file_props(self.name, sid)
             conn.send(stanza.buildReply('result'))
             file_props['fp'].close()
+            file_props['completed'] = file_props['received_len'] >= \
+                file_props['size']
+            if not file_props['completed']:
+                file_props['error'] = -1
             gajim.socks5queue.complete_transfer_cb(self.name, file_props)
             gajim.socks5queue.remove_file_props(self.name, sid)
         else:
@@ -950,8 +967,10 @@ class ConnectionIBBytestream(ConnectionBytestream):
         log.debug('IBBAllIqHandler called syn_id->%s' % syn_id)
         for sid in self.files_props.keys():
             file_props = self.files_props[sid]
-            if not 'direction' in file_props:
+            if not 'direction' in file_props or not 'connected' in file_props \
+            or not file_props['connected']:
                 # It's socks5 bytestream
+                # Or we closed the IBB stream
                 continue
             if file_props['syn_id'] == syn_id:
                 if stanza.getType() == 'error':
