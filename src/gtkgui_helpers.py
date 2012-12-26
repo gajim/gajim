@@ -31,7 +31,6 @@ import xml.sax.saxutils
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
-import glib
 from gi.repository import GObject
 from gi.repository import Pango
 import os
@@ -175,11 +174,11 @@ def get_default_font():
     Xfce and last KDE it returns None on failure or else a string 'Font Size'
     """
     try:
-        from gconf import client_get_default
-        client = client_get_default()
+        from gi.repository import GConf
+        client = GConf.Client.get_default()
         value = client.get_string("/desktop/gnome/interface/font_name")
         return value.decode("utf8")
-    except ImportError, glib.GError:
+    except ImportError:
         pass
 
     # try to get Xfce default font
@@ -833,7 +832,7 @@ def on_avatar_save_as_menuitem_activate(widget, jid, default_name=''):
         # Save image
         try:
             pixbuf.save(file_path, image_format)
-        except glib.GError, e:
+        except Exception, e:
             log.debug('Error saving avatar: %s' % str(e))
             if os.path.exists(file_path):
                 os.remove(file_path)
