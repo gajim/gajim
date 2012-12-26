@@ -2279,7 +2279,7 @@ class RosterWindow:
             else:
                 # No need to redraw contacts if we're quitting
                 if child_iterA:
-                    self.model[child_iterA][C_AVATAR_PIXBUF] = None
+                    self.model[child_iterA][C_AVATAR_PIXBUF] = ''
                 if account in gajim.con_types:
                     gajim.con_types[account] = None
                 for jid in gajim.contacts.get_jid_list(account):
@@ -2343,10 +2343,12 @@ class RosterWindow:
         table = {'offline':9, 'connecting':9, 'online':0, 'chat':1, 'away':2,
             'xa':3, 'dnd':4, 'invisible':5}
 
+        liststore = self.status_combobox.get_model()
         # we check if there are more options in the combobox that it should
         # if yes, we remove the first ones
-        while len(self.status_combobox.get_model()) > len(table)+2:
-            self.status_combobox.remove_text(0)
+        while len(liststore) > len(table)+2:
+            titer = liststore.get_iter_first()
+            liststore.remove(titer)
 
         show = helpers.get_global_show()
         # temporarily block signal in order not to send status that we show
@@ -2356,7 +2358,6 @@ class RosterWindow:
             self.status_combobox.set_active(table[show])
         else:
             uf_show = helpers.get_uf_show(show)
-            liststore = self.status_combobox.get_model()
             liststore.prepend(['SEPARATOR', None, '', True])
             status_combobox_text = uf_show + ' (' + _("desync'ed") +')'
             liststore.prepend([status_combobox_text,

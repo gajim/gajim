@@ -235,7 +235,7 @@ class PassphraseDialog:
         cancelbutton.connect('clicked', self.on_cancelbutton_clicked)
 
         self.xml.connect_signals(self)
-        self.set_transient_for(gajim.interface.roster.window)
+        self.window.set_transient_for(gajim.interface.roster.window)
         self.window.show_all()
 
         self.check = bool(checkbuttontext)
