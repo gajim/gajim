@@ -1215,7 +1215,10 @@ class PreferencesWindow:
         model.set_value(iter_, 0, new_text)
 
     def on_msg_treeview_cursor_changed(self, widget, data = None):
-        (model, iter_) = self.msg_tree.get_selection().get_selected()
+        sel = self.msg_tree.get_selection()
+        if not sel:
+            return
+        (model, iter_) = sel.get_selected()
         if not iter_:
             return
         self.xml.get_object('delete_msg_button').set_sensitive(True)
@@ -1230,7 +1233,10 @@ class PreferencesWindow:
         self.msg_tree.set_cursor(model.get_path(iter_))
 
     def on_delete_msg_button_clicked(self, widget, data = None):
-        (model, iter_) = self.msg_tree.get_selection().get_selected()
+        sel = self.msg_tree.get_selection()
+        if not sel:
+            return
+        (model, iter_) = sel.get_selected()
         if not iter_:
             return
         buf = self.xml.get_object('msg_textview').get_buffer()
@@ -1239,7 +1245,10 @@ class PreferencesWindow:
         self.xml.get_object('delete_msg_button').set_sensitive(False)
 
     def on_msg_textview_changed(self, widget, data = None):
-        (model, iter_) = self.msg_tree.get_selection().get_selected()
+        sel = self.msg_tree.get_selection()
+        if not sel:
+            return
+        (model, iter_) = sel.get_selected()
         if not iter_:
             return
         buf = self.xml.get_object('msg_textview').get_buffer()
@@ -1357,7 +1366,10 @@ class ManageProxiesWindow:
         self.proxies_treeview.set_cursor(model.get_path(iter_))
 
     def on_remove_proxy_button_clicked(self, widget):
-        (model, iter_) = self.proxies_treeview.get_selection().get_selected()
+        sel = self.proxies_treeview.get_selection()
+        if not sel:
+            return
+        (model, iter_) = sel.get_selected()
         if not iter_:
             return
         proxy = model[iter_][0].decode('utf-8')
@@ -1412,7 +1424,11 @@ class ManageProxiesWindow:
         #useauth_checkbutton.set_active(False)
         #self.on_useauth_checkbutton_toggled(useauth_checkbutton)
 
-        (model, iter_) = widget.get_selection().get_selected()
+        sel = widget.get_selection()
+        if sel:
+            (model, iter_) = sel.get_selected()
+        else:
+            iter_ = None
         if not iter_:
             self.xml.get_object('proxyname_entry').set_text('')
             self.xml.get_object('proxytype_combobox').set_sensitive(False)
@@ -1463,7 +1479,10 @@ class ManageProxiesWindow:
     def on_proxyname_entry_changed(self, widget):
         if self.block_signal:
             return
-        (model, iter_) = self.proxies_treeview.get_selection().get_selected()
+        sel = self.proxies_treeview.get_selection()
+        if not sel:
+            return
+        (model, iter_) = sel.get_selected()
         if not iter_:
             return
         old_name = model.get_value(iter_, 0).decode('utf-8')
@@ -4182,8 +4201,12 @@ class ManageSoundsWindow:
             model.append((enabled, sound_ui_name, path, sound_event_config_name))
 
     def on_treeview_sounds_cursor_changed(self, widget, data = None):
-        (model, iter_) = self.sound_tree.get_selection().get_selected()
         sounds_entry = self.xml.get_object('sounds_entry')
+        sel = self.sound_tree.get_selection()
+        if not sel:
+            sounds_entry.set_text('')
+            return
+        (model, iter_) = sel.get_selected()
         if not iter_:
             sounds_entry.set_text('')
             return
@@ -4191,7 +4214,10 @@ class ManageSoundsWindow:
         sounds_entry.set_text(path_to_snd_file)
 
     def on_browse_for_sounds_button_clicked(self, widget, data = None):
-        (model, iter_) = self.sound_tree.get_selection().get_selected()
+        sel = self.sound_tree.get_selection()
+        if not sel:
+            return
+        (model, iter_) = sel.get_selected()
         if not iter_:
             return
         def on_ok(widget, path_to_snd_file):
@@ -4223,7 +4249,10 @@ class ManageSoundsWindow:
         model[iter_][2] = path_to_snd_file # set new path to sounds_model
 
     def on_play_button_clicked(self, widget):
-        model, iter_ = self.sound_tree.get_selection().get_selected()
+        sel = self.sound_tree.get_selection()
+        if not sel:
+            return
+        model, iter_ = sel.get_selected()
         if not iter_:
             return
         snd_event_config_name = model[iter_][3]
