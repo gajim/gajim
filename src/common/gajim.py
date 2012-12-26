@@ -191,9 +191,8 @@ except ImportError:
 
 HAVE_UPNP_IGD = True
 try:
-    raise ImportError
-    import gupnp.igd
-    gupnp_igd = gupnp.igd.Simple()
+    from gi.repository import GUPnPIgd
+    gupnp_igd = GUPnPIgd.SimpleIgd()
 except ImportError:
     HAVE_UPNP_IGD = False
 
