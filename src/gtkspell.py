@@ -19,7 +19,7 @@
 import ctypes
 import ctypes.util
 
-import gtk
+from gi.repository import Gtk
 
 
 gboolean = ctypes.c_int
@@ -63,8 +63,8 @@ def ensure_attached(func):
 class Spell(object):
 
     def __init__(self, textview, language=None, create=True):
-        if not isinstance(textview, gtk.TextView):
-            raise TypeError("Textview must be derived from gtk.TextView")
+        if not isinstance(textview, Gtk.TextView):
+            raise TypeError("Textview must be derived from Gtk.TextView")
         tv = PyGObject.from_address(id(textview)).obj
         spell = libgtkspell.gtkspell_get_from_text_view(tv)
         if create:
