@@ -449,32 +449,6 @@ if __name__ == '__main__':
     log.info("Encodings: d:%s, fs:%s, p:%s", sys.getdefaultencoding(), \
             sys.getfilesystemencoding(), locale.getpreferredencoding())
 
-    #if os.name != 'nt':
-        ## Session Management support
-        #try:
-            #import gnome.ui
-            #raise ImportError
-        #except ImportError:
-            #pass
-        #else:
-            #def die_cb(dummy):
-                #gajim.interface.roster.quit_gtkgui_interface()
-            #gnome.program_init('gajim', gajim.version)
-            #cli = gnome.ui.master_client()
-            #cli.connect('die', die_cb)
-
-            #path_to_gajim_script = gtkgui_helpers.get_abspath_for_script(
-                #'gajim')
-
-            #if path_to_gajim_script:
-                #argv = [path_to_gajim_script]
-                #try:
-                    #cli.set_restart_command(argv)
-                #except TypeError:
-                    ## Fedora systems have a broken gnome-python wrapper for this
-                    ## function.
-                    #cli.set_restart_command(len(argv), argv)
-
     check_paths.check_and_possibly_create_paths()
 
     interface = Interface()

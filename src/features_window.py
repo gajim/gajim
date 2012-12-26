@@ -67,10 +67,6 @@ class FeaturesWindow:
                 _('Autodetection of network status.'),
                 _('Requires gnome-network-manager and python-dbus.'),
                 _('Feature not available under Windows.')),
-            _('Session Management'): (self.session_management_available,
-                _('Gajim session is stored on logout and restored on login.'),
-                _('Requires python-gnome2.'),
-                _('Feature not available under Windows.')),
             _('Password encryption'): (self.some_keyring_available,
                 _('Passwords can be stored securely and not just in plaintext.'),
                 _('Requires gnome-keyring and python-gnome2-desktop, or kwalletcli.'),
@@ -192,22 +188,13 @@ class FeaturesWindow:
         import network_manager_listener
         return network_manager_listener.supported
 
-    def session_management_available(self):
-        if os.name == 'nt':
-            return False
-        try:
-            __import__('gnome.ui')
-        except Exception:
-            return False
-        return True
-
     def some_keyring_available(self):
         if os.name == 'nt':
             return False
         if kwalletbinding.kwallet_available():
             return True
         try:
-            __import__('gnomekeyring')
+            from gi.repository import GnomeKeyring
         except Exception:
             return False
         return True
