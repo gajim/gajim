@@ -219,7 +219,7 @@ class ProfileWindow:
             menu.connect('selection-done', lambda w:w.destroy())
             # show the menu
             menu.show_all()
-            menu.popup(None, None, None, event.button, event.time)
+            menu.popup(None, None, None, None, event.button, event.time)
         elif event.button == 1: # left click
             self.on_set_avatar_button_clicked(widget)
 

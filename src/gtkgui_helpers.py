@@ -109,12 +109,9 @@ def get_completion_liststore(entry):
     liststore = Gtk.ListStore(GdkPixbuf.Pixbuf, str)
 
     render_pixbuf = Gtk.CellRendererPixbuf()
-    completion.pack_start(render_pixbuf, False, True, 0)
+    completion.pack_start(render_pixbuf, False)
     completion.add_attribute(render_pixbuf, 'pixbuf', 0)
 
-    render_text = Gtk.CellRendererText()
-    completion.pack_start(render_text, True, True, 0)
-    completion.add_attribute(render_text, 'text', 1)
     completion.set_property('text_column', 1)
     completion.set_model(liststore)
     entry.set_completion(completion)
@@ -125,10 +122,11 @@ def popup_emoticons_under_button(menu, button, parent_win):
     """
     Popup the emoticons menu under button, which is in parent_win
     """
-    window_x1, window_y1 = parent_win.get_origin()
-    def position_menu_under_button(menu):
+    window_x1, window_y1 = parent_win.get_origin()[1:]
+    def position_menu_under_button(menu, data):
         # inline function, which will not keep refs, when used as CB
-        button_x, button_y = button.allocation.x, button.allocation.y
+        alloc = button.get_allocation()
+        button_x, button_y = alloc.x, alloc.y
 
         # now convert them to X11-relative
         window_x, window_y = window_x1, window_y1
@@ -138,10 +136,9 @@ def popup_emoticons_under_button(menu, button, parent_win):
         menu_height = menu.size_request()[1]
 
         ## should we pop down or up?
-        if (y + button.allocation.height + menu_height
-                < Gdk.Screen.height()):
+        if (y + alloc.height + menu_height < Gdk.Screen.height()):
             # now move the menu below the button
-            y += button.allocation.height
+            y += alloc.height
         else:
             # now move the menu above the button
             y -= menu_height
@@ -150,7 +147,7 @@ def popup_emoticons_under_button(menu, button, parent_win):
         push_in = True
         return (x, y, push_in)
 
-    menu.popup(None, None, position_menu_under_button, 1, 0)
+    menu.popup(None, None, position_menu_under_button, None, 1, 0)
 
 def get_theme_font_for_option(theme, option):
     """
@@ -806,7 +803,7 @@ def get_possible_button_event(event):
     """
     Mouse or keyboard caused the event?
     """
-    if event.type == Gdk.KEY_PRESS:
+    if event.type == Gdk.EventType.KEY_PRESS:
         return 0 # no event.button so pass 0
     # BUTTON_PRESS event, so pass event.button
     return event.button

@@ -30,6 +30,7 @@
 ##
 
 from gi.repository import Gtk
+from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import GObject
 import os
@@ -915,11 +916,11 @@ class AddNewContactWindow:
         # Combobox with transport/jabber icons
         liststore = Gtk.ListStore(str, GdkPixbuf.Pixbuf, str)
         cell = Gtk.CellRendererPixbuf()
-        self.protocol_combobox.pack_start(cell, False, True, 0)
+        self.protocol_combobox.pack_start(cell, False)
         self.protocol_combobox.add_attribute(cell, 'pixbuf', 1)
         cell = Gtk.CellRendererText()
         cell.set_property('xpad', 5)
-        self.protocol_combobox.pack_start(cell, True, True, 0)
+        self.protocol_combobox.pack_start(cell, True)
         self.protocol_combobox.add_attribute(cell, 'text', 0)
         self.protocol_combobox.set_model(liststore)
         uf_type = {'jabber': 'Jabber', 'aim': 'AIM', 'gadu-gadu': 'Gadu Gadu',
@@ -996,7 +997,7 @@ class AddNewContactWindow:
                 self.group_comboboxentry.set_active(i)
             i += 1
 
-        self.set_transient_for(gajim.interface.roster.window)
+        self.window.set_transient_for(gajim.interface.roster.window)
         self.window.show_all()
 
         if self.account:
@@ -2703,6 +2704,7 @@ class NewChatDialog(InputDialog):
             title = _('Start Chat')
         prompt_text = _('Fill in the nickname or the Jabber ID of the contact you would like\nto send a chat message to:')
         InputDialog.__init__(self, title, prompt_text, is_modal=False)
+        self.input_entry.set_placeholder_text(_('Nickname / Jabber ID'))
 
         self.completion_dict = {}
         liststore = gtkgui_helpers.get_completion_liststore(self.input_entry)

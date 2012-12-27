@@ -369,8 +369,7 @@ class StatusIcon:
                 self.added_hide_menuitem = True
 
         self.systray_context_menu.show_all()
-        self.systray_context_menu.popup(None, None, None, 0,
-                event_time)
+        self.systray_context_menu.popup(None, None, None, None, 0, event_time)
 
     def on_show_all_events_menuitem_activate(self, widget):
         events = gajim.events.get_systray_events()

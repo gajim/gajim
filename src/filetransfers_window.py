@@ -963,7 +963,7 @@ class FileTransfersWindow:
             # bounding rectangle of coordinates for the cell within the treeview
             rect = self.tree.get_cell_area(props[0], props[1])
             # position of the treeview on the screen
-            position = widget.window.get_origin()
+            position = widget.get_window().get_origin()[1:]
             self.tooltip.show_tooltip(file_props, rect.height,
                                                     position[1] + rect.y + self.height_diff)
         else:
@@ -989,7 +989,7 @@ class FileTransfersWindow:
 
         event_button = gtkgui_helpers.get_possible_button_event(event)
         self.file_transfers_menu.show_all()
-        self.file_transfers_menu.popup(None, self.tree, None,
+        self.file_transfers_menu.popup(None, self.tree, None, None,
                 event_button, event.time)
 
     def on_transfers_list_key_press_event(self, widget, event):

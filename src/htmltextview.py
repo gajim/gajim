@@ -843,7 +843,7 @@ class HtmlTextView(Gtk.TextView):
             text = getattr(tag, 'title', False)
             if text:
                 pointer = self.get_pointer()
-                position = self.get_window(Gtk.TextWindowType.TEXT).get_origin()
+                position = self.get_window(Gtk.TextWindowType.TEXT).get_origin()[1:]
                 self.tooltip.show_tooltip(text, 8, position[1] + pointer[2])
 
     def __motion_notify_event(self, widget, event):

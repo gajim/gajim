@@ -2151,7 +2151,7 @@ class GroupchatControl(ChatControlBase):
             # Textview is not sensitive, don't handle keypress
             return
         # construct event instance from binding
-        event = Gdk.Event(Gdk.KEY_PRESS) # it's always a key-press here
+        event = Gdk.Event(Gdk.EventType.KEY_PRESS) # it's always a key-press here
         event.keyval = event_keyval
         event.state = event_keymod
         event.time = 0 # assign current time
@@ -2452,7 +2452,7 @@ class GroupchatControl(ChatControlBase):
         # show the popup now!
         menu = xml.get_object('gc_occupants_menu')
         menu.show_all()
-        menu.popup(None, None, None, event.button, event.time)
+        menu.popup(None, None, None, None, event.button, event.time)
 
     def _start_private_message(self, nick):
         gc_c = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
@@ -2591,7 +2591,7 @@ class GroupchatControl(ChatControlBase):
         # as it was before setting the timeout
         if props and self.tooltip.id == props[0]:
             rect = self.list_treeview.get_cell_area(props[0], props[1])
-            position = self.list_treeview.window.get_origin()
+            position = self.list_treeview.get_window().get_origin()[1:]
             self.tooltip.show_tooltip(contact, rect.height,
                 position[1] + rect.y)
         else:

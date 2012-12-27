@@ -464,7 +464,7 @@ class HistoryManager:
                     self.on_delete_menuitem_activate, widget)
 
             xml.connect_signals(self)
-            xml.get_object('context_menu').popup(None, None, None,
+            xml.get_object('context_menu').popup(None, None, None, None,
                     event.button, event.time)
             return True
 

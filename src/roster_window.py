@@ -2392,7 +2392,7 @@ class RosterWindow:
             if isinstance(w, dict):
                 self.close_all_from_dict(w)
             else:
-                w.window.destroy()
+                w.window().destroy()
 
     def close_all(self, account, force=False):
         """
@@ -2403,7 +2403,7 @@ class RosterWindow:
             self.close_all_from_dict(gajim.interface.instances[account])
         for ctrl in gajim.interface.msg_win_mgr.get_controls(acct=account):
             ctrl.parent_win.remove_tab(ctrl, ctrl.parent_win.CLOSE_CLOSE_BUTTON,
-                    force = force)
+                force=force)
 
     def on_roster_window_delete_event(self, widget, event):
         """
@@ -4113,7 +4113,7 @@ class RosterWindow:
                 self.on_history(widget, contact, account)
 
     def on_roster_window_popup_menu(self, widget):
-        event = Gdk.Event(Gdk.KEY_PRESS)
+        event = Gdk.Event(Gdk.EventType.KEY_PRESS)
         self.show_treeview_menu(event)
 
     def on_row_activated(self, widget, path):
@@ -4909,7 +4909,7 @@ class RosterWindow:
             menu.attach_to_widget(self.tree, None)
             menu.connect('selection-done', gtkgui_helpers.destroy_widget)
             menu.show_all()
-            menu.popup(None, None, None, 1, etime)
+            menu.popup(None, None, None, None, 1, etime)
 
 ################################################################################
 ### Everything about images and icons....
@@ -5751,7 +5751,7 @@ class RosterWindow:
         menu.attach_to_widget(self.tree, None)
         menu.connect('selection-done', gtkgui_helpers.destroy_widget)
         menu.show_all()
-        menu.popup(None, None, None, event_button, event.time)
+        menu.popup(None, None, None, None, event_button, event.time)
 
     def make_group_menu(self, event, titer):
         """
@@ -5913,7 +5913,7 @@ class RosterWindow:
         menu.attach_to_widget(self.tree, None)
         menu.connect('selection-done', gtkgui_helpers.destroy_widget)
         menu.show_all()
-        menu.popup(None, None, None, event_button, event.time)
+        menu.popup(None, None, None, None, event_button, event.time)
 
     def make_contact_menu(self, event, titer):
         """
@@ -5926,7 +5926,7 @@ class RosterWindow:
         menu = gui_menu_builder.get_contact_menu(contact, account)
         event_button = gtkgui_helpers.get_possible_button_event(event)
         menu.attach_to_widget(self.tree, None)
-        menu.popup(None, None, None, event_button, event.time)
+        menu.popup(None, None, None, None, event_button, event.time)
 
     def make_multiple_contact_menu(self, event, iters):
         """
@@ -6030,7 +6030,7 @@ class RosterWindow:
         menu.attach_to_widget(self.tree, None)
         menu.connect('selection-done', gtkgui_helpers.destroy_widget)
         menu.show_all()
-        menu.popup(None, None, None, event_button, event.time)
+        menu.popup(None, None, None, None, event_button, event.time)
 
     def make_transport_menu(self, event, titer):
         """
@@ -6169,7 +6169,7 @@ class RosterWindow:
         menu.attach_to_widget(self.tree, None)
         menu.connect('selection-done', gtkgui_helpers.destroy_widget)
         menu.show_all()
-        menu.popup(None, None, None, event_button, event.time)
+        menu.popup(None, None, None, None, event_button, event.time)
 
     def make_groupchat_menu(self, event, titer):
         model = self.modelfilter
@@ -6219,7 +6219,7 @@ class RosterWindow:
         menu.attach_to_widget(self.tree, None)
         menu.connect('selection-done', gtkgui_helpers.destroy_widget)
         menu.show_all()
-        menu.popup(None, None, None, event_button, event.time)
+        menu.popup(None, None, None, None, event_button, event.time)
 
     def get_and_connect_advanced_menuitem_menu(self, account):
         """

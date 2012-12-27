@@ -600,7 +600,7 @@ class ConversationTextview(GObject.GObject):
                 break
         if xep0184_warning and not self.xep0184_warning_tooltip.win:
             # check if the current pointer is still over the line
-            position = self.tv.get_window(Gtk.TextWindowType.TEXT).get_origin()
+            position = self.tv.get_window(Gtk.TextWindowType.TEXT).get_origin()[1:]
             self.xep0184_warning_tooltip.show_tooltip(_('This icon indicates that '
                     'this message has not yet\nbeen received by the remote end. '
                     "If this icon stays\nfor a long time, it's likely the message got "
@@ -619,7 +619,7 @@ class ConversationTextview(GObject.GObject):
                 break
         if over_line and not self.line_tooltip.win:
             # check if the current pointer is still over the line
-            position = self.tv.get_window(Gtk.TextWindowType.TEXT).get_origin()
+            position = self.tv.get_window(Gtk.TextWindowType.TEXT).get_origin()[1:]
             self.line_tooltip.show_tooltip(_('Text below this line is what has '
                     'been said since the\nlast time you paid attention to this group '
                     'chat'), 8, position[1] + pointer[2])
@@ -945,7 +945,7 @@ class ConversationTextview(GObject.GObject):
                 childs[0].hide() # copy link location
             childs[1].hide() # open link in browser
 
-        menu.popup(None, None, None, event.button, event.time)
+        menu.popup(None, None, None, None, event.button, event.time)
 
     def hyperlink_handler(self, texttag, widget, event, iter_, kind):
         if event.type == Gdk.EventType.BUTTON_PRESS:

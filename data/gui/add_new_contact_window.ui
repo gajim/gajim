@@ -1,22 +1,23 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <requires lib="gtk+" version="2.16"/>
-  <!-- interface-naming-policy toplevel-contextual -->
+  <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkWindow" id="add_new_contact_window">
+    <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes">Add New Contact</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
-    <signal name="destroy" handler="on_add_new_contact_window_destroy"/>
-    <signal name="key_press_event" handler="on_add_new_contact_window_key_press_event"/>
+    <signal name="destroy" handler="on_add_new_contact_window_destroy" swapped="no"/>
+    <signal name="key-press-event" handler="on_add_new_contact_window_key_press_event" swapped="no"/>
     <child>
       <object class="GtkVBox" id="vbox8">
         <property name="visible">True</property>
-        <property name="orientation">vertical</property>
+        <property name="can_focus">False</property>
         <property name="spacing">6</property>
         <child>
           <object class="GtkLabel" id="prompt_label">
             <property name="visible">True</property>
+            <property name="can_focus">False</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -27,10 +28,12 @@
         <child>
           <object class="GtkHBox" id="account_hbox">
             <property name="visible">True</property>
+            <property name="can_focus">False</property>
             <property name="spacing">6</property>
             <child>
               <object class="GtkLabel" id="account_label">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="xalign">0</property>
                 <property name="label" translatable="yes">A_ccount:</property>
                 <property name="use_underline">True</property>
@@ -44,8 +47,9 @@
             <child>
               <object class="GtkComboBox" id="account_combobox">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="model">liststore3</property>
-                <signal name="changed" handler="on_account_combobox_changed"/>
+                <signal name="changed" handler="on_account_combobox_changed" swapped="no"/>
                 <child>
                   <object class="GtkCellRendererText" id="cellrenderertext3"/>
                   <attributes>
@@ -64,16 +68,20 @@
             </child>
           </object>
           <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
             <property name="position">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkHBox" id="protocol_hbox">
             <property name="visible">True</property>
+            <property name="can_focus">False</property>
             <property name="spacing">6</property>
             <child>
               <object class="GtkLabel" id="protocol_label">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="xalign">0</property>
                 <property name="label" translatable="yes">_Protocol:</property>
                 <property name="use_underline">True</property>
@@ -88,7 +96,8 @@
             <child>
               <object class="GtkComboBox" id="protocol_combobox">
                 <property name="visible">True</property>
-                <signal name="changed" handler="on_protocol_combobox_changed"/>
+                <property name="can_focus">False</property>
+                <signal name="changed" handler="on_protocol_combobox_changed" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -99,9 +108,10 @@
             <child>
               <object class="GtkComboBox" id="protocol_jid_combobox">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
                 <property name="model">liststore2</property>
-                <signal name="changed" handler="on_protocol_jid_combobox_changed"/>
+                <signal name="changed" handler="on_protocol_jid_combobox_changed" swapped="no"/>
                 <child>
                   <object class="GtkCellRendererText" id="cellrenderertext2"/>
                   <attributes>
@@ -110,17 +120,22 @@
                 </child>
               </object>
               <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
                 <property name="position">2</property>
               </packing>
             </child>
           </object>
           <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
             <property name="position">2</property>
           </packing>
         </child>
         <child>
           <object class="GtkTable" id="subscription_table">
             <property name="visible">True</property>
+            <property name="can_focus">False</property>
             <property name="no_show_all">True</property>
             <property name="border_width">6</property>
             <property name="n_rows">3</property>
@@ -130,6 +145,7 @@
             <child>
               <object class="GtkLabel" id="uid_label">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="xalign">0</property>
                 <property name="label" translatable="yes">_User ID:</property>
                 <property name="use_underline">True</property>
@@ -137,7 +153,7 @@
               </object>
               <packing>
                 <property name="x_options">GTK_FILL</property>
-                <property name="y_options"></property>
+                <property name="y_options"/>
               </packing>
             </child>
             <child>
@@ -145,16 +161,18 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="activates_default">True</property>
+                <property name="placeholder_text">Type User ID</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
                 <property name="right_attach">2</property>
-                <property name="y_options"></property>
+                <property name="y_options"/>
               </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label188">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="xalign">0</property>
                 <property name="label" translatable="yes">_Nickname:</property>
                 <property name="use_underline">True</property>
@@ -164,7 +182,7 @@
                 <property name="top_attach">1</property>
                 <property name="bottom_attach">2</property>
                 <property name="x_options">GTK_FILL</property>
-                <property name="y_options"></property>
+                <property name="y_options"/>
               </packing>
             </child>
             <child>
@@ -172,18 +190,20 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="activates_default">True</property>
+                <property name="placeholder_text">Type Nickname</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
                 <property name="right_attach">2</property>
                 <property name="top_attach">1</property>
                 <property name="bottom_attach">2</property>
-                <property name="y_options"></property>
+                <property name="y_options"/>
               </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label223">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="xalign">0</property>
                 <property name="label" translatable="yes">_Group:</property>
                 <property name="use_underline">True</property>
@@ -192,37 +212,48 @@
                 <property name="top_attach">2</property>
                 <property name="bottom_attach">3</property>
                 <property name="x_options">GTK_FILL</property>
-                <property name="y_options"></property>
+                <property name="y_options"/>
               </packing>
             </child>
             <child>
-              <object class="GtkComboBoxEntry" id="group_comboboxentry">
+              <object class="GtkComboBoxText" id="group_comboboxentry">
                 <property name="visible">True</property>
-                <property name="model">groups_liststore</property>
-                <property name="text_column">0</property>
+                <property name="can_focus">False</property>
+                <property name="has_entry">True</property>
+                <property name="entry_text_column">0</property>
+                <property name="id_column">1</property>
+                <child internal-child="entry">
+                  <object class="GtkEntry" id="comboboxtext-entry">
+                    <property name="can_focus">True</property>
+                    <property name="placeholder_text">Choose a group of type a new group</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
                 <property name="right_attach">2</property>
                 <property name="top_attach">2</property>
                 <property name="bottom_attach">3</property>
-                <property name="x_options">GTK_FILL</property>
               </packing>
             </child>
           </object>
           <packing>
             <property name="expand">False</property>
+            <property name="fill">True</property>
             <property name="position">3</property>
           </packing>
         </child>
         <child>
           <object class="GtkCheckButton" id="auto_authorize_checkbutton">
             <property name="label" translatable="yes">A_llow this contact to view my status</property>
+            <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
             <property name="no_show_all">True</property>
+            <property name="use_action_appearance">False</property>
             <property name="use_underline">True</property>
+            <property name="xalign">0</property>
             <property name="active">True</property>
             <property name="draw_indicator">True</property>
           </object>
@@ -238,9 +269,8 @@
             <property name="can_focus">True</property>
             <property name="no_show_all">True</property>
             <property name="border_width">6</property>
-            <property name="hscrollbar_policy">automatic</property>
-            <property name="vscrollbar_policy">automatic</property>
             <property name="shadow_type">etched-in</property>
+            <property name="min_content_height">5</property>
             <child>
               <object class="GtkTextView" id="message_textview">
                 <property name="visible">True</property>
@@ -251,30 +281,39 @@
             </child>
           </object>
           <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
             <property name="position">5</property>
           </packing>
         </child>
         <child>
           <object class="GtkCheckButton" id="save_message_checkbutton">
             <property name="label" translatable="yes">_Save subscription message</property>
+            <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
+            <property name="use_action_appearance">False</property>
             <property name="use_underline">True</property>
+            <property name="xalign">0</property>
             <property name="draw_indicator">True</property>
           </object>
           <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
             <property name="position">6</property>
           </packing>
         </child>
         <child>
           <object class="GtkHBox" id="register_hbox">
             <property name="visible">True</property>
+            <property name="can_focus">False</property>
             <property name="no_show_all">True</property>
             <property name="spacing">6</property>
             <child>
               <object class="GtkLabel" id="label224">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="xalign">0</property>
                 <property name="label" translatable="yes">You have to register with this transport
 to be able to add a contact from this
@@ -283,18 +322,22 @@ proceed.</property>
                 <property name="wrap">True</property>
               </object>
               <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
                 <property name="position">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkButton" id="register_button">
                 <property name="label" translatable="yes">_Register</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="receives_default">False</property>
+                <property name="use_action_appearance">False</property>
                 <property name="use_underline">True</property>
-                <signal name="clicked" handler="on_register_button_clicked"/>
+                <signal name="clicked" handler="on_register_button_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -304,12 +347,15 @@ proceed.</property>
             </child>
           </object>
           <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
             <property name="position">7</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel" id="connected_label">
             <property name="visible">True</property>
+            <property name="can_focus">False</property>
             <property name="no_show_all">True</property>
             <property name="label" translatable="yes">You must be connected to the transport to be able
 to add a contact from this protocol.</property>
@@ -323,18 +369,21 @@ to add a contact from this protocol.</property>
         <child>
           <object class="GtkHButtonBox" id="hbuttonbox1">
             <property name="visible">True</property>
+            <property name="can_focus">False</property>
             <property name="border_width">5</property>
             <property name="spacing">12</property>
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="cancel_button">
                 <property name="label">gtk-cancel</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="receives_default">False</property>
+                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
-                <signal name="clicked" handler="on_cancel_button_clicked"/>
+                <signal name="clicked" handler="on_cancel_button_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -345,13 +394,15 @@ to add a contact from this protocol.</property>
             <child>
               <object class="GtkButton" id="add_button">
                 <property name="label">gtk-add</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
                 <property name="receives_default">False</property>
+                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
-                <signal name="clicked" handler="on_add_button_clicked"/>
+                <signal name="clicked" handler="on_add_button_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -368,9 +419,6 @@ to add a contact from this protocol.</property>
         </child>
       </object>
     </child>
-  </object>
-  <object class="GtkTextBuffer" id="textbuffer1">
-    <property name="text" translatable="yes">I would like to add you to my contact list.</property>
   </object>
   <object class="GtkListStore" id="groups_liststore">
     <columns>
@@ -389,5 +437,8 @@ to add a contact from this protocol.</property>
       <!-- column-name item -->
       <column type="gchararray"/>
     </columns>
+  </object>
+  <object class="GtkTextBuffer" id="textbuffer1">
+    <property name="text" translatable="yes">I would like to add you to my contact list.</property>
   </object>
 </interface>

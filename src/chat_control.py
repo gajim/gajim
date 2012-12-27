@@ -255,7 +255,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         Derives types SHOULD implement this, rather than connection to the even
         itself
         """
-        event = Gdk.Event(Gdk.KEY_PRESS)
+        event = Gdk.Event(Gdk.EventType.KEY_PRESS)
         event.keyval = event_keyval
         event.state = event_keymod
         event.time = 0
@@ -709,7 +709,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         def set_emoticons_menu_position(w, msg_tv=self.msg_textview):
             window = msg_tv.get_window(Gtk.TextWindowType.WIDGET)
             # get the window position
-            origin = window.get_origin()
+            origin = window.get_origin()[1:]
             size = window.get_size()
             buf = msg_tv.get_buffer()
             # get the cursor position
@@ -734,7 +734,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             return (x, y, True)  # push_in True
         gajim.interface.emoticon_menuitem_clicked = self.append_emoticon
         gajim.interface.emoticons_menu.popup(None, None,
-                set_emoticons_menu_position, 1, 0)
+                set_emoticons_menu_position, None, 1, 0)
 
     def _on_message_textview_key_press_event(self, widget, event):
         if event.keyval == Gdk.KEY_space:
@@ -788,7 +788,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         xhtml = self.msg_textview.get_xhtml()
 
         # construct event instance from binding
-        event = Gdk.Event(Gdk.KEY_PRESS)  # it's always a key-press here
+        event = Gdk.Event(Gdk.EventType.KEY_PRESS)  # it's always a key-press here
         event.keyval = event_keyval
         event.state = event_keymod
         event.time = 0  # assign current time
@@ -1981,7 +1981,7 @@ class ChatControl(ChatControlBase):
             menu.connect('selection-done', lambda w: w.destroy())
             # show the menu
             menu.show_all()
-            menu.popup(None, None, None, event.button, event.time)
+            menu.popup(None, None, None, None, event.button, event.time)
         return True
 
     def on_location_eventbox_button_release_event(self, widget, event):
@@ -3049,7 +3049,7 @@ class ChatControl(ChatControlBase):
         window.window.shape_combine_mask(mask, 0, 0)
 
         # make the bigger avatar window show up centered
-        x0, y0 = small_avatar.window.get_origin()
+        x0, y0 = small_avatar.window.get_origin()[1:]
         x0 += small_avatar.allocation.x
         y0 += small_avatar.allocation.y
         center_x= x0 + (small_avatar.allocation.width / 2)

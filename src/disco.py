@@ -1244,7 +1244,7 @@ class ToplevelAgentBrowser(AgentBrowser):
             # bounding rectangle of coordinates for the cell within the treeview
             rect = view.get_cell_area(props[0], props[1])
             # position of the treeview on the screen
-            position = view.window.get_origin()
+            position = view.get_window().get_origin()[1:]
             self.tooltip.show_tooltip(state, rect.height, position[1] + rect.y)
         else:
             self.tooltip.hide_tooltip()

@@ -325,7 +325,7 @@ class MessageWindow(object):
         # NOTE: handles mykeypress which is custom signal; see message_textview.py
 
         # construct event instance from binding
-        event = Gdk.Event(Gdk.KEY_PRESS) # it's always a key-press here
+        event = Gdk.Event(Gdk.EventType.KEY_PRESS) # it's always a key-press here
         event.keyval = event_keyval
         event.state = event_keymod
         event.time = 0 # assign current time
@@ -395,7 +395,7 @@ class MessageWindow(object):
             elif keyval in (Gdk.KEY_Page_Up, Gdk.KEY_Page_Down):
                 # CTRL + PageUp | PageDown
                 # Create event and send it to notebook
-                event = Gdk.Event(Gdk.KEY_PRESS)
+                event = Gdk.Event(Gdk.EventType.KEY_PRESS)
                 event.window = self.window.window
                 event.time = int(time.time())
                 event.state = Gdk.ModifierType.CONTROL_MASK
@@ -686,7 +686,7 @@ class MessageWindow(object):
         return self.window.is_active()
 
     def get_origin(self):
-        return self.window.window.get_origin()
+        return self.window.get_window().get_origin()
 
     def get_control(self, key, acct):
         """
@@ -791,7 +791,7 @@ class MessageWindow(object):
     def popup_menu(self, event):
         menu = self.get_active_control().prepare_context_menu()
         # show the menu
-        menu.popup(None, None, None, event.button, event.time)
+        menu.popup(None, None, None, None, event.button, event.time)
         menu.show_all()
 
     def _on_notebook_switch_page(self, notebook, page, page_num):

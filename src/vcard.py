@@ -190,7 +190,7 @@ class VcardWindow:
             menu.connect('selection-done', lambda w:w.destroy())
             # show the menu
             menu.show_all()
-            menu.popup(None, None, None, event.button, event.time)
+            menu.popup(None, None, None, None, event.button, event.time)
 
     def set_value(self, entry_name, value):
         try:
@@ -533,7 +533,7 @@ class ZeroconfVcardWindow:
             menu.connect('selection-done', lambda w:w.destroy())
             # show the menu
             menu.show_all()
-            menu.popup(None, None, None, event.button, event.time)
+            menu.popup(None, None, None, None, event.button, event.time)
 
     def set_value(self, entry_name, value):
         try:

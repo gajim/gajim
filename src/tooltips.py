@@ -93,8 +93,8 @@ class BaseTooltip:
         self.win.set_type_hint(Gdk.WindowTypeHint.TOOLTIP)
 
         self.win.set_events(Gdk.EventMask.POINTER_MOTION_MASK)
-        self.win.connect_after('expose_event', self.expose)
-        self.win.connect('size-request', self.on_size_request)
+#        self.win.connect_after('draw', self.on_draw)
+#        self.win.connect('size-request', self.on_size_request)
         self.win.connect('motion-notify-event', self.motion_notify_event)
         self.screen = self.win.get_screen()
 
@@ -133,12 +133,12 @@ class BaseTooltip:
             self.preferred_position[1] = 0
         self.win.move(self.preferred_position[0], self.preferred_position[1])
 
-    def expose(self, widget, event):
-        style = self.win.get_style()
-        size = self.win.get_size()
-        style.paint_shadow(self.win.window, Gtk.StateType.NORMAL, Gtk.ShadowType.OUT,
-            None, self.win, 'tooltip', 0, 0, size[0], size[1])
-        return True
+#    def expose(self, widget, event):
+#        style = self.win.get_style()
+#        size = self.win.get_size()
+#        style.paint_shadow(self.win.window, Gtk.StateType.NORMAL, Gtk.ShadowType.OUT,
+#            None, self.win, 'tooltip', 0, 0, size[0], size[1])
+#        return True
 
     def show_tooltip(self, data, widget_height, widget_y_position):
         """
