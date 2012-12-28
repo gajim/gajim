@@ -26,6 +26,7 @@ import traceback
 import threading
 
 from gi.repository import Gtk
+from gi.repository import Gdk
 from gi.repository import Pango
 from common import i18n # installs _() function
 import dialogs
