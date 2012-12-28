@@ -2045,7 +2045,7 @@ class RosterWindow:
 
             # position of the treeview on the screen
             position = self.tree.get_window().get_origin()
-            self.tooltip.show_tooltip(contact, rect.height, position[1] + \
+            self.tooltip.show_tooltip(contact, rect.height, position[2] + \
                 rect.y)
         else:
             self.tooltip.hide_tooltip()

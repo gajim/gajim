@@ -93,8 +93,7 @@ class BaseTooltip:
         self.win.set_type_hint(Gdk.WindowTypeHint.TOOLTIP)
 
         self.win.set_events(Gdk.EventMask.POINTER_MOTION_MASK)
-#        self.win.connect_after('draw', self.on_draw)
-#        self.win.connect('size-request', self.on_size_request)
+        self.win.connect('size-allocate', self.on_size_allocate)
         self.win.connect('motion-notify-event', self.motion_notify_event)
         self.screen = self.win.get_screen()
 
@@ -114,31 +113,21 @@ class BaseTooltip:
     def motion_notify_event(self, widget, event):
         self.hide_tooltip()
 
-    def on_size_request(self, widget, requisition):
-        half_width = requisition.width / 2 + 1
+    def on_size_allocate(self, widget, rect):
+        half_width = rect.width / 2 + 1
         if self.preferred_position[0] < half_width:
             self.preferred_position[0] = 0
-        elif self.preferred_position[0] + requisition.width > \
-                self.screen.get_width() + half_width:
-            self.preferred_position[0] = self.screen.get_width() - \
-                    requisition.width
+        elif self.preferred_position[0] + rect.width > \
+        self.screen.get_width() + half_width:
+            self.preferred_position[0] = self.screen.get_width() - rect.width
         elif not self.check_last_time:
             self.preferred_position[0] -= half_width
-        if self.preferred_position[1] + requisition.height > \
-                self.screen.get_height():
+        if self.preferred_position[1] + rect.height > self.screen.get_height():
             # flip tooltip up
-            self.preferred_position[1] -= requisition.height + \
-                    self.widget_height + 8
+            self.preferred_position[1] -= rect.height + self.widget_height + 8
         if self.preferred_position[1] < 0:
             self.preferred_position[1] = 0
         self.win.move(self.preferred_position[0], self.preferred_position[1])
-
-#    def expose(self, widget, event):
-#        style = self.win.get_style()
-#        size = self.win.get_size()
-#        style.paint_shadow(self.win.window, Gtk.StateType.NORMAL, Gtk.ShadowType.OUT,
-#            None, self.win, 'tooltip', 0, 0, size[0], size[1])
-#        return True
 
     def show_tooltip(self, data, widget_height, widget_y_position):
         """
