@@ -41,7 +41,7 @@ class FeaturesWindow:
     def __init__(self):
         self.xml = gtkgui_helpers.get_gtk_builder('features_window.ui')
         self.window = self.xml.get_object('features_window')
-        self.set_transient_for(gajim.interface.roster.window)
+        self.window.set_transient_for(gajim.interface.roster.window)
         treeview = self.xml.get_object('features_treeview')
         self.desc_label = self.xml.get_object('feature_desc_label')
 
@@ -117,13 +117,13 @@ class FeaturesWindow:
         treeview.append_column(col)
         cell = Gtk.CellRendererToggle()
         cell.set_property('radio', True)
-        col.pack_start(cell, True, True, 0)
-        col.set_attributes(cell, active = 1)
+        col.pack_start(cell, True)
+        col.add_attribute(cell, 'active', 1)
 
         col = Gtk.TreeViewColumn(_('Feature'))
         treeview.append_column(col)
         cell = Gtk.CellRendererText()
-        col.pack_start(cell, True, True, 0)
+        col.pack_start(cell, True)
         col.add_attribute(cell, 'text', 0)
 
         # Fill model
