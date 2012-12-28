@@ -14,8 +14,9 @@
 
 <h2>Runtime Requirements</h2>
 <ul>
-<li>python2.5 or higher</li>
-<li>pygtk2.22 or higher</li>
+<li>python2.7 or higher</li>
+<li>python-gi</li>
+<li>gir1.2-gtk-3.0</li>
 <li>python-nbxmpp</li>
 </ul>
 
@@ -28,7 +29,7 @@
 <li>For zeroconf (bonjour), the "enable link-local messaging" checkbox, you need dbus-glib, python-avahi</li>
 <li>dnsutils (or whatever package provides the nslookup binary) for SRV support</li>
 <li>gtkspell and aspell-LANG where lang is your locale eg. en, fr etc</li>
-<li>gnome-python-desktop (for GnomeKeyring support as password storage)</li>
+<li>gir1.2-gnomekeyring-1.0 for GnomeKeyring support as password storage</li>
 <li>kwalletcli (for support of KDE Wallet as password storage)</li>
 <li>notification-daemon or notify-python (and D-Bus) to get cooler popups</li>
 <li>D-Bus running to have gajim-remote working. Some distributions split dbus-x11, which is needed for dbus to work with Gajim. Version >= 0.80 is required.</li>
