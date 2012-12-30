@@ -487,11 +487,11 @@ class RosterTooltip(NotificationAreaTooltip):
         vcard_current_row = 1
         properties = []
 
-        name_markup = u'<span weight="bold">' + \
+        name_markup = '<span weight="bold">' + \
                 GObject.markup_escape_text(prim_contact.get_shown_name())\
                 + '</span>'
         if gajim.config.get('mergeaccounts'):
-            name_markup += u" <span foreground='%s'>(%s)</span>" % (
+            name_markup += " <span foreground='%s'>(%s)</span>" % (
                 gajim.config.get('tooltip_account_name_color'),
                 GObject.markup_escape_text(prim_contact.account.name))
 

@@ -46,6 +46,7 @@ import caps_cache
 import socket
 import time
 
+from gi.repository import GObject
 from encodings.punycode import punycode_encode
 from string import Template
 
@@ -473,6 +474,17 @@ def ensure_utf8_string(string):
     except Exception:
         pass
     return string
+
+def wrapped_ensure_utf8_string(fn):
+    def wrapped(n):
+        return ensure_utf8_string(n)
+    return wrapped
+
+@wrapped_ensure_utf8_string
+def escape_text(text):
+    return GObject.markup_escape_text(text)
+
+GObject.markup_escape_text = escape_text
 
 def get_windows_reg_env(varname, default=''):
     """
