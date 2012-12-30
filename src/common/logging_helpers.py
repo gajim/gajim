@@ -152,6 +152,12 @@ def init(use_color=False):
     root_log.addHandler(consoleloghandler)
     root_log.propagate = False
 
+    # handle nbxmpp logs too
+    root_log = logging.getLogger('nbxmpp')
+    root_log.setLevel(logging.WARNING)
+    root_log.addHandler(consoleloghandler)
+    root_log.propagate = False
+
 def set_loglevels(loglevels_string):
     parseAndSetLogLevels(loglevels_string)
 
