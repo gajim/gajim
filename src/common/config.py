@@ -305,6 +305,7 @@ class Config:
             'video_output_device': [opt_str, 'autovideosink'],
             'video_framerate': [opt_str, '', _('Optionally fix jingle output video framerate. Example: 10/1 or 25/2')],
             'video_size': [opt_str, '', _('Optionally resize jingle output video. Example: 320x240')],
+            'video_see_self': [opt_bool, True, _('If True, You will also see your webcam')],
             'audio_input_volume': [opt_int, 50],
             'audio_output_volume': [opt_int, 50],
             'use_stun_server': [opt_bool, False, _('If True, Gajim will try to use a STUN server when using jingle. The one in "stun_server" option, or the one given by the jabber server.')],

@@ -2151,10 +2151,27 @@ class ChatControl(ChatControlBase):
         if widget.get_active():
             if getattr(self, jingle_type + '_state') == \
             self.JINGLE_STATE_NULL:
-                sid = getattr(gajim.connections[self.account],
+                if jingle_type == 'video':
+                    video_hbox = self.xml.get_object('video_hbox')
+                    video_hbox.set_no_show_all(False)
+                    if gajim.config.get('video_see_self'):
+                        fixed = self.xml.get_object('outgoing_fixed')
+                        fixed.set_no_show_all(False)
+                    video_hbox.show_all()
+                    in_xid = self.xml.get_object('incoming_drawingarea').window.xid
+                    out_xid = self.xml.get_object('outgoing_drawingarea').window.xid
+                    sid = gajim.connections[self.account].start_video(
+                        self.contact.get_full_jid(), in_xid, out_xid)
+                else:
+                    sid = getattr(gajim.connections[self.account],
                         'start_' + jingle_type)(self.contact.get_full_jid())
                 getattr(self, 'set_' + jingle_type + '_state')('connecting', sid)
         else:
+            video_hbox = self.xml.get_object('video_hbox')
+            video_hbox.set_no_show_all(True)
+            video_hbox.hide()
+            fixed = self.xml.get_object('outgoing_fixed')
+            fixed.set_no_show_all(True)
             self.close_jingle_content(jingle_type)
 
         img = getattr(self, '_' + jingle_type + '_button').get_property('image')

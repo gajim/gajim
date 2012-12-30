@@ -102,7 +102,7 @@ class VideoOutputManager(DeviceManager):
     def detect(self):
         self.devices = {}
         # Fake video output
-        self.detect_element('fakesink', _('Fake audio output'))
+        self.detect_element('fakesink', _('Fake video output'))
         # Auto sink
         self.detect_element('xvimagesink',
             _('X Window System (X11/XShm/Xv): %s'))

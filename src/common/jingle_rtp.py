@@ -22,6 +22,7 @@ import socket
 
 import nbxmpp
 import farstream, gst
+import gst.interfaces
 from glib import GError
 
 import gajim
@@ -63,6 +64,7 @@ class JingleRTPContent(JingleContent):
         # pipeline and bus
         self.pipeline = gst.Pipeline()
         bus = self.pipeline.get_bus()
+        bus.enable_sync_message_emission()
         bus.add_signal_watch()
         bus.connect('message', self._on_gst_message)
 
@@ -366,8 +368,11 @@ class JingleAudio(JingleRTPContent):
 
 
 class JingleVideo(JingleRTPContent):
-    def __init__(self, session, transport=None):
+    def __init__(self, session, transport=None, in_xid=0, out_xid=0):
         JingleRTPContent.__init__(self, session, 'video', transport)
+        self.in_xid = in_xid
+        self.out_xid = out_xid
+        self.out_xid_set = False
         self.setup_stream()
 
     def setup_stream(self):
@@ -375,6 +380,8 @@ class JingleVideo(JingleRTPContent):
         # sometimes, one window won't show up,
         # sometimes it'll freeze...
         JingleRTPContent.setup_stream(self, self._on_src_pad_added)
+        bus = self.pipeline.get_bus()
+        bus.connect('sync-message::element', self._on_sync_message)
 
         # the local parts
         if gajim.config.get('video_framerate'):
@@ -390,17 +397,25 @@ class JingleVideo(JingleRTPContent):
             video_size = 'video/x-raw-yuv,width=%s,height=%s ! ' % (w, h)
         else:
             video_size = ''
+        if gajim.config.get('video_see_self'):
+            tee = '! tee name=t ! queue ! videoscale ! ' + \
+                'video/x-raw-yuv,width=160,height=120 ! ffmpegcolorspace ! ' + \
+                '%s t. ! queue ' % gajim.config.get(
+                'video_output_device')
+        else:
+            tee = ''
+
         self.src_bin = self.make_bin_from_config('video_input_device',
-            '%%s ! %svideoscale ! %sffmpegcolorspace' % (framerate, video_size),
-            _("video input"))
-        #caps = gst.element_factory_make('capsfilter')
-        #caps.set_property('caps', gst.caps_from_string('video/x-raw-yuv, width=320, height=240'))
+            '%%s %s! %svideoscale ! %sffmpegcolorspace' % (tee, framerate,
+            video_size), _("video input"))
+
 
         self.pipeline.add(self.src_bin)#, caps)
+        self.pipeline.set_state(gst.STATE_PLAYING)
         #src_bin.link(caps)
 
         self.sink = self.make_bin_from_config('video_output_device',
-            'videoscale ! ffmpegcolorspace ! %s force-aspect-ratio=True',
+            'videoscale ! ffmpegcolorspace ! %s',
             _("video output"))
         self.pipeline.add(self.sink)
 
@@ -410,10 +425,26 @@ class JingleVideo(JingleRTPContent):
         # The following is needed for farstream to process ICE requests:
         self.pipeline.set_state(gst.STATE_PLAYING)
 
+    def _on_sync_message(self, bus, message):
+        if message.structure is None:
+            return False
+        if message.structure.get_name() == 'prepare-xwindow-id':
+            message.src.set_property('force-aspect-ratio', True)
+            imagesink = message.src
+            if gajim.config.get('video_see_self') and not self.out_xid_set:
+                imagesink.set_xwindow_id(self.out_xid)
+                self.out_xid_set = True
+            else:
+                imagesink.set_xwindow_id(self.in_xid)
+
     def get_fallback_src(self):
         # TODO: Use avatar?
         pipeline = 'videotestsrc is-live=true ! video/x-raw-yuv,framerate=10/1 ! ffmpegcolorspace'
         return gst.parse_bin_from_description(pipeline, True)
+
+    def destroy(self):
+        JingleRTPContent.destroy(self)
+        self.pipeline.get_bus().disconnect_by_func(self._on_sync_message)
 
 def get_content(desc):
     if desc['media'] == 'audio':
