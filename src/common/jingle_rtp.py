@@ -177,6 +177,15 @@ class JingleRTPContent(JingleContent):
             elif name == 'farstream-codecs-changed':
                 if self.sent and self.p2psession.get_property('codecs'):
                     self.send_description_info()
+                    if self.transport.remote_candidates:
+                        # those lines MUST be done after we get info on our
+                        # codecs
+                        self.p2pstream.add_remote_candidates(
+                            self.transport.remote_candidates)
+                        self.transport.remote_candidates = []
+                        self.p2pstream.set_property('direction',
+                            farstream.DIRECTION_BOTH)
+
             elif name == 'farstream-local-candidates-prepared':
                 self.candidates_ready = True
                 if self.is_ready():
@@ -234,11 +243,15 @@ class JingleRTPContent(JingleContent):
 
     def on_negotiated(self):
         if self.accepted:
-            if self.transport.remote_candidates:
-                self.p2pstream.add_remote_candidates(self.transport.remote_candidates)
-                self.transport.remote_candidates = []
-            # TODO: farstream.DIRECTION_BOTH only if senders='both'
-            self.p2pstream.set_property('direction', farstream.DIRECTION_BOTH)
+            if self.p2psession.get_property('codecs'):
+                # those lines MUST be done after we get info on our codecs
+                if self.transport.remote_candidates:
+                    self.p2pstream.add_remote_candidates(
+                        self.transport.remote_candidates)
+                    self.transport.remote_candidates = []
+                # TODO: farstream.DIRECTION_BOTH only if senders='both'
+                self.p2pstream.set_property('direction',
+                    farstream.DIRECTION_BOTH)
         JingleContent.on_negotiated(self)
 
     def __on_remote_codecs(self, stanza, content, error, action):
