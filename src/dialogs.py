@@ -201,17 +201,18 @@ class EditGroupsDialog:
         column.set_expand(True)
         self.treeview.append_column(column)
         renderer = Gtk.CellRendererText()
-        column.pack_start(renderer, True, True, 0)
-        column.set_attributes(renderer, text=0)
+        column.pack_start(renderer, True)
+        column.add_attribute(renderer, 'text', 0)
 
         column = Gtk.TreeViewColumn(_('In the group'))
         column.set_expand(False)
         self.treeview.append_column(column)
         renderer = Gtk.CellRendererToggle()
-        column.pack_start(renderer, True, True, 0)
+        column.pack_start(renderer, True)
         renderer.set_property('activatable', True)
         renderer.connect('toggled', self.group_toggled_cb)
-        column.set_attributes(renderer, active=1, inconsistent=2)
+        column.add_attribute(renderer, 'active', 1)
+        column.add_attribute(renderer, 'inconsistent', 2)
 
 class PassphraseDialog:
     """
@@ -1963,7 +1964,7 @@ class CommonInputDialog:
     def on_okbutton_clicked(self, widget):
         user_input = self.get_text()
         if user_input:
-            user_input = user_input.decode('utf-8')
+            user_input = user_input
         self.cancel_handler = None
         self.dialog.destroy()
         if isinstance(self.ok_handler, tuple):
