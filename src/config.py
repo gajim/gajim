@@ -480,6 +480,8 @@ class PreferencesWindow:
                 '800x600': '800x600', '640x480': '640x480',
                 '320x240': '320x240'}, 'video_size', key=lambda x: -1 if \
                 not x[1] else int(x[0][:3]))
+            st = gajim.config.get('video_see_self')
+            self.xml.get_object('video_see_self_checkbutton').set_active(st)
 
         else:
             for opt_name in ('audio_input', 'audio_output', 'video_input',
@@ -1132,6 +1134,9 @@ class PreferencesWindow:
 
     def on_video_size_combobox_changed(self, widget):
         self.on_av_combobox_changed(widget, 'video_size')
+
+    def on_video_see_self_checkbutton_toggled(self, widget):
+        self.on_checkbutton_toggled(widget, 'video_see_self')
 
     def on_stun_checkbutton_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'use_stun_server',
