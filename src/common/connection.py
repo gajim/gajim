@@ -619,7 +619,7 @@ class CommonConnection:
                     conn=self, stanza_str=unicode(data, errors='ignore')))
             elif event == nbxmpp.transports_nb.DATA_SENT:
                 gajim.nec.push_incoming_event(StanzaSentEvent(None, conn=self,
-                    stanza_str=unicode(data)))
+                    stanza_str=data))
 
     def change_status(self, show, msg, auto=False):
         if not msg:
