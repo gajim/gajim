@@ -23,6 +23,7 @@
 # THIS FILE IS FOR **OUR** PROFILE (when we edit our INFO)
 
 from gi.repository import Gtk
+from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import GObject
 import base64
@@ -46,7 +47,7 @@ class ProfileWindow:
     def __init__(self, account, transient_for=None):
         self.xml = gtkgui_helpers.get_gtk_builder('profile_window.ui')
         self.window = self.xml.get_object('profile_window')
-        self.set_transient_for(transient_for)
+        self.window.set_transient_for(transient_for)
         self.progressbar = self.xml.get_object('progressbar')
         self.statusbar = self.xml.get_object('statusbar')
         self.context_id = self.statusbar.get_context_id('profile')
@@ -84,7 +85,7 @@ class ProfileWindow:
         return True # loop forever
 
     def remove_statusbar(self, message_id):
-        self.statusbar.remove_message(self.context_id, message_id)
+        self.statusbar.remove(self.context_id, message_id)
         self.remove_statusbar_timeout_id = None
 
     def on_profile_window_destroy(self, widget):
@@ -288,7 +289,7 @@ class ProfileWindow:
                     self.set_value(i + '_entry', vcard_[i])
         if self.update_progressbar_timeout_id is not None:
             if self.message_id:
-                self.statusbar.remove_message(self.context_id, self.message_id)
+                self.statusbar.remove(self.context_id, self.message_id)
             self.message_id = self.statusbar.push(self.context_id,
                     _('Information received'))
             self.remove_statusbar_timeout_id = GObject.timeout_add_seconds(3,
@@ -398,7 +399,7 @@ class ProfileWindow:
         if obj.conn.name != self.account:
             return
         if self.message_id:
-            self.statusbar.remove_message(self.context_id, self.message_id)
+            self.statusbar.remove(self.context_id, self.message_id)
         self.message_id = self.statusbar.push(self.context_id,
             _('Information NOT published'))
         self.remove_statusbar_timeout_id = GObject.timeout_add_seconds(3,

@@ -1458,9 +1458,9 @@ class FileChooserDialog(Gtk.FileChooserDialog):
     select_multiple=False, current_folder=None, on_response_ok=None,
     on_response_cancel=None):
 
-        GObject.GObject.__init__(self, title=title_text, action=action,
-            buttons=buttons)
-
+        GObject.GObject.__init__(self, title=title_text, action=action)
+        self.add_button(buttons[0],buttons[1])
+        self.add_button(buttons[2],buttons[3])
         self.set_default_response(default_response)
         self.set_select_multiple(select_multiple)
         if current_folder and os.path.isdir(current_folder):
@@ -4702,7 +4702,8 @@ class ImageChooserDialog(FileChooserDialog):
         if path_to_file is None or os.path.isdir(path_to_file):
             # nothing to preview or directory
             # make sure you clean image do show nothing
-            widget.get_preview_widget().set_from_file(None)
+            preview = widget.get_preview_widget()
+            preview.clear()
             return
         try:
             pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(path_to_file, 100, 100)
