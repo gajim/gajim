@@ -28,6 +28,7 @@ import gtkgui_helpers
 from gi.repository import GObject
 
 from common import gajim
+from common import helpers
 
 (
 OPT_TYPE,
@@ -76,7 +77,7 @@ class AdvancedConfigurationWindow(object):
     def __init__(self):
         self.xml = gtkgui_helpers.get_gtk_builder('advanced_configuration_window.ui')
         self.window = self.xml.get_object('advanced_configuration_window')
-        self.set_transient_for(
+        self.window.set_transient_for(
                 gajim.interface.instances['preferences'].window)
         self.entry = self.xml.get_object('advanced_entry')
         self.desc_label = self.xml.get_object('advanced_desc_label')
@@ -105,22 +106,22 @@ class AdvancedConfigurationWindow(object):
         self.modelfilter.set_visible_func(self.visible_func)
 
         renderer_text = Gtk.CellRendererText()
-        col = treeview.insert_column_with_attributes(-1, _('Preference Name'),
-                renderer_text, text = 0)
+        col = Gtk.TreeViewColumn(_('Preference Name'), renderer_text, text = 0)
+        treeview.insert_column(col, -1)
         col.set_resizable(True)
 
         renderer_text = Gtk.CellRendererText()
         renderer_text.connect('edited', self.on_config_edited)
-        col = treeview.insert_column_with_attributes(-1, _('Value'),
-                renderer_text, text = 1)
+        col = Gtk.TreeViewColumn(_('Value'),renderer_text, text = 1)
+        treeview.insert_column(col, -1)
         col.set_cell_data_func(renderer_text, self.cb_value_column_data)
 
         col.props.resizable = True
         col.set_max_width(250)
 
         renderer_text = Gtk.CellRendererText()
-        treeview.insert_column_with_attributes(-1, _('Type'),
-                renderer_text, text = 2)
+        col = Gtk.TreeViewColumn(_('Type'), renderer_text, text = 2)
+        treeview.insert_column(col, -1)
 
         treeview.set_model(self.modelfilter)
 
@@ -133,7 +134,7 @@ class AdvancedConfigurationWindow(object):
         self.restart_label.hide()
         gajim.interface.instances['advanced_config'] = self
 
-    def cb_value_column_data(self, col, cell, model, iter_):
+    def cb_value_column_data(self, col, cell, model, iter_, data):
         """
         Check if it's boolen or holds password stuff and if yes  make the
         cellrenderertext not editable, else - it's editable
@@ -228,8 +229,10 @@ class AdvancedConfigurationWindow(object):
 
     def on_config_edited(self, cell, path, text):
         # convert modelfilter path to model path
+        path=Gtk.TreePath.new_from_string(path)
         modelpath = self.modelfilter.convert_path_to_child_path(path)
         modelrow = self.model[modelpath]
+        modelpath = modelpath.get_indices()
         option = modelrow[0].decode('utf-8')
         text = text.decode('utf-8')
         if len(modelpath) > 1:
@@ -305,10 +308,14 @@ class AdvancedConfigurationWindow(object):
                     if type_ == self.types['boolean']:
                         value = self.right_true_dict[option]
                     else:
-                        value = option
+                        try:
+                            value = str(option)
+                        except:
+                            value = option
+                    value = helpers.ensure_utf8_string(value)
                 self.model.append(parent, [name, value, type_])
 
-    def visible_func(self, model, treeiter):
+    def visible_func(self, model, treeiter, data):
         search_string  = self.entry.get_text().decode('utf-8').lower()
         for it in tree_model_pre_order(model, treeiter):
             if model[it][C_TYPE] != '':
