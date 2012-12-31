@@ -1275,9 +1275,11 @@ class AboutDialog:
             text = open(copying_file_path).read()
             dlg.set_license(text)
 
+        gtk_ver = '%i.%i.%i' % (Gtk.get_major_version(),
+            Gtk.get_minor_version(), Gtk.get_micro_version())
+        gobject_ver = self.tuple2str(GObject.pygobject_version)
         dlg.set_comments('%s\n%s %s\n%s %s' % (_('A GTK+ Jabber/XMPP client'),
-            _('GTK+ Version:'), self.tuple2str(Gtk.gtk_version), \
-            _('PyGTK Version:'), self.tuple2str(Gtk.pygtk_version)))
+            _('GTK+ Version:'), gtk_ver, _('PyGobject Version:'), gobject_ver))
         dlg.set_website('http://gajim.org/')
 
         authors_file_path = self.get_path('AUTHORS')
@@ -1297,12 +1299,13 @@ class AboutDialog:
             if thanks_file_path:
                 authors.append('\n' + _('THANKS:'))
 
-                text = open(thanks_file_path).read()
+                text = helpers.ensure_utf8_string(open(thanks_file_path).read())
                 text_splitted = text.split('\n')
                 text = '\n'.join(text_splitted[:-2]) # remove one english sentence
                 # and add it manually as translatable
-                text += '\n%s\n' % _('Last but not least, we would like to thank all '
-                    'the package maintainers.')
+                text += helpers.ensure_utf8_string('\n%s\n' % _('Last but not '
+                    'least, we would like to thank all the package maintainers.'
+                    ))
                 authors.append(text)
 
             dlg.set_authors(authors)
