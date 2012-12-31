@@ -197,12 +197,12 @@ class AdvancedConfigurationWindow(object):
         if modelrow[2] == self.types['boolean']:
             for key in self.right_true_dict.keys():
                 if self.right_true_dict[key] == modelrow[1]:
-                    modelrow[1] = key
+                    modelrow[1] = str(key)
             newval = {'False': True, 'True': False}[modelrow[1]]
-            if len(modelpath) > 1:
-                optnamerow = self.model[modelpath[0]]
+            if len(modelpath.get_indices()) > 1:
+                optnamerow = self.model[modelpath.get_indices()[0]]
                 optname = optnamerow[0].decode('utf-8')
-                keyrow = self.model[modelpath[:2]]
+                keyrow = self.model[modelpath.get_indices()[:2]]
                 key = keyrow[0].decode('utf-8')
                 self.remember_option(option + '\n' + key + '\n' + optname,
                         modelrow[1], newval)
