@@ -150,7 +150,7 @@ class ProfileWindow:
                 if scaled_pixbuf:
                     path_to_file = os.path.join(gajim.TMP,
                             'avatar_scaled.png')
-                    scaled_pixbuf.save(path_to_file, 'png')
+                    scaled_pixbuf.savev(path_to_file, 'png', [], [])
                     must_delete = True
 
             fd = open(path_to_file, 'rb')

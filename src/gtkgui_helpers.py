@@ -421,7 +421,7 @@ def get_pixbuf_from_data(file_data, want_type = False):
             return None
 
     if want_type:
-        typ = pixbufloader.get_format()['name']
+        typ = pixbufloader.get_format().get_name()
         return pixbuf, typ
     else:
         return pixbuf
@@ -828,14 +828,14 @@ def on_avatar_save_as_menuitem_activate(widget, jid, default_name=''):
 
         # Save image
         try:
-            pixbuf.save(file_path, image_format)
+            pixbuf.savev(file_path, image_format, [], [])
         except Exception, e:
             log.debug('Error saving avatar: %s' % str(e))
             if os.path.exists(file_path):
                 os.remove(file_path)
             new_file_path = '.'.join(file_path.split('.')[:-1]) + '.jpeg'
             def on_ok(file_path, pixbuf):
-                pixbuf.save(file_path, 'jpeg')
+                pixbuf.savev(file_path, 'jpeg', [], [])
             dialogs.ConfirmationDialog(_('Extension not supported'),
                 _('Image cannot be saved in %(type)s format. Save as '
                 '%(new_filename)s?') % {'type': image_format,

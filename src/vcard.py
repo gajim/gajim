@@ -33,6 +33,7 @@
 
 from gi.repository import Gtk
 from gi.repository import GObject
+from gi.repository import Gdk
 import base64
 import time
 import locale

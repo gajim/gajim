@@ -2489,7 +2489,7 @@ class Interface:
                 extension = '.png'
         path_to_original_file = path_to_file + extension
         try:
-            pixbuf.save(path_to_original_file, typ)
+            pixbuf.savev(path_to_original_file, typ, [], [])
         except Exception, e:
             log.error('Error writing avatar file %s: %s' % (
                 path_to_original_file, str(e)))
@@ -2499,7 +2499,7 @@ class Interface:
             path_to_normal_file = path_to_file + '_notif_size_colored' + \
                 extension
             try:
-                pixbuf.save(path_to_normal_file, 'png')
+                pixbuf.savev(path_to_normal_file, 'png', [], [])
             except Exception, e:
                 log.error('Error writing avatar file %s: %s' % \
                     (path_to_original_file, str(e)))
@@ -2509,7 +2509,7 @@ class Interface:
             if bwbuf:
                 path_to_bw_file = path_to_file + '_notif_size_bw' + extension
                 try:
-                    bwbuf.save(path_to_bw_file, 'png')
+                    bwbuf.savev(path_to_bw_file, 'png', [], [])
                 except Exception, e:
                     log.error('Error writing avatar file %s: %s' % \
                         (path_to_original_file, str(e)))
