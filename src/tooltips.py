@@ -644,8 +644,10 @@ class RosterTooltip(NotificationAreaTooltip):
                     'tooltip_idle_color')
                 cs += '%s</span>'
                 properties.append((str(), None))
-                properties.append(((cs % _("Idle since %s")) % formatted, None))
-                properties.append(((cs % _("Idle for %s")) % str(diff), None))
+                idle_since = helpers.ensure_utf8_string(cs % _("Idle since %s"))
+                properties.append((idle_since % formatted, None))
+                idle_for = helpers.ensure_utf8_string(cs % _("Idle for %s"))
+                properties.append((idle_for % str(diff), None))
 
         while properties:
             property_ = properties.pop(0)
@@ -658,14 +660,15 @@ class RosterTooltip(NotificationAreaTooltip):
             if property_[1]:
                 label.set_markup(property_[0])
                 vcard_table.attach(label, 1, 2, vcard_current_row,
-                        vcard_current_row + 1, Gtk.AttachOptions.FILL, vertical_fill, 0, 0)
+                    vcard_current_row + 1, Gtk.AttachOptions.FILL,
+                    vertical_fill, 0, 0)
                 label = Gtk.Label()
                 label.set_alignment(0, 0)
                 label.set_markup(property_[1])
                 label.set_line_wrap(True)
                 vcard_table.attach(label, 2, 3, vcard_current_row,
-                        vcard_current_row + 1, Gtk.AttachOptions.EXPAND | Gtk.AttachOptions.FILL,
-                                vertical_fill, 0, 0)
+                    vcard_current_row + 1, Gtk.AttachOptions.EXPAND | \
+                    Gtk.AttachOptions.FILL, vertical_fill, 0, 0)
             else:
                 if isinstance(property_[0], (unicode, str)): # FIXME: rm unicode?
                     label.set_markup(property_[0])
@@ -673,11 +676,13 @@ class RosterTooltip(NotificationAreaTooltip):
                 else:
                     label = property_[0]
                 vcard_table.attach(label, 1, 3, vcard_current_row,
-                        vcard_current_row + 1, Gtk.AttachOptions.FILL, vertical_fill, 0)
+                    vcard_current_row + 1, Gtk.AttachOptions.FILL,
+                    vertical_fill, 0)
         self.avatar_image.set_alignment(0, 0)
         if table_size == 4:
             vcard_table.attach(self.avatar_image, 3, 4, 2,
-                vcard_current_row + 1, Gtk.AttachOptions.FILL, Gtk.AttachOptions.FILL | Gtk.AttachOptions.EXPAND, 3, 3)
+                vcard_current_row + 1, Gtk.AttachOptions.FILL,
+                Gtk.AttachOptions.FILL | Gtk.AttachOptions.EXPAND, 3, 3)
 
         gajim.plugin_manager.gui_extension_point('roster_tooltip_populate',
             self, contacts, vcard_table)
