@@ -56,7 +56,7 @@ class PluginsWindow(object):
         '''Initialize Plugins window'''
         self.xml = gtkgui_helpers.get_gtk_builder('plugins_window.ui')
         self.window = self.xml.get_object('plugins_window')
-        self.set_transient_for(gajim.interface.roster.window)
+        self.window.set_transient_for(gajim.interface.roster.window)
 
         widgets_to_extract = ('plugins_notebook', 'plugin_name_label',
             'plugin_version_label', 'plugin_authors_label',
@@ -67,10 +67,6 @@ class PluginsWindow(object):
         for widget_name in widgets_to_extract:
             setattr(self, widget_name, self.xml.get_object(widget_name))
 
-        attr_list = Pango.AttrList()
-        attr_list.insert(Pango.AttrWeight(Pango.Weight.BOLD, 0, -1))
-        self.plugin_name_label.set_attributes(attr_list)
-
         self.installed_plugins_model = Gtk.ListStore(GObject.TYPE_PYOBJECT,
             GObject.TYPE_STRING, GObject.TYPE_BOOLEAN, GObject.TYPE_BOOLEAN,
             GdkPixbuf.Pixbuf)
@@ -80,9 +76,9 @@ class PluginsWindow(object):
         renderer = Gtk.CellRendererText()
         col = Gtk.TreeViewColumn(_('Plugin'))#, renderer, text=NAME)
         cell = Gtk.CellRendererPixbuf()
-        col.pack_start(cell, False, True, 0)
+        col.pack_start(cell, False)
         col.add_attribute(cell, 'pixbuf', ICON)
-        col.pack_start(renderer, True, True, 0)
+        col.pack_start(renderer, True)
         col.add_attribute(renderer, 'text', NAME)
         self.installed_plugins_treeview.append_column(col)
 
@@ -105,7 +101,9 @@ class PluginsWindow(object):
         self._clear_installed_plugin_info()
 
         self.fill_installed_plugins_model()
-        selection.select_iter(self.installed_plugins_model.get_iter_first())
+        root_iter = self.installed_plugins_model.get_iter_first()
+        if root_iter:
+            selection.select_iter(root_iter )
 
         self.xml.connect_signals(self)
 
