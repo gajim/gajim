@@ -287,7 +287,7 @@ class ChooseGPGKeyDialog:
         xml = gtkgui_helpers.get_gtk_builder('choose_gpg_key_dialog.ui')
         self.window = xml.get_object('choose_gpg_key_dialog')
         self.window.set_title(title_text)
-        self.set_transient_for(transient_for)
+        self.window.set_transient_for(transient_for)
         self.keys_treeview = xml.get_object('keys_treeview')
         prompt_label = xml.get_object('prompt_label')
         prompt_label.set_text(prompt_text)
@@ -353,7 +353,7 @@ class ChangeActivityDialog:
         self.text = text
         self.xml = gtkgui_helpers.get_gtk_builder('change_activity_dialog.ui')
         self.window = self.xml.get_object('change_activity_dialog')
-        self.set_transient_for(gajim.interface.roster.window)
+        self.window.set_transient_for(gajim.interface.roster.window)
 
         self.checkbutton = self.xml.get_object('enable_checkbutton')
         self.notebook = self.xml.get_object('notebook')
@@ -476,7 +476,7 @@ class ChangeMoodDialog:
         self.xml = gtkgui_helpers.get_gtk_builder('change_mood_dialog.ui')
 
         self.window = self.xml.get_object('change_mood_dialog')
-        self.set_transient_for(gajim.interface.roster.window)
+        self.window.set_transient_for(gajim.interface.roster.window)
         self.window.set_title(_('Set Mood'))
 
         table = self.xml.get_object('mood_icons_table')
@@ -2359,7 +2359,7 @@ class JoinGroupchatWindow:
         self._empty_required_widgets = []
 
         self.window = self.xml.get_object('join_groupchat_window')
-        self.set_transient_for(gajim.interface.roster.window)
+        self.window.set_transient_for(gajim.interface.roster.window)
         self._room_jid_entry = self.xml.get_object('room_jid_entry')
         self._nickname_entry = self.xml.get_object('nickname_entry')
         self._password_entry = self.xml.get_object('password_entry')

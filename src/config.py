@@ -1299,7 +1299,7 @@ class ManageProxiesWindow:
     def __init__(self):
         self.xml = gtkgui_helpers.get_gtk_builder('manage_proxies_window.ui')
         self.window = self.xml.get_object('manage_proxies_window')
-        self.set_transient_for(gajim.interface.roster.window)
+        self.window.set_transient_for(gajim.interface.roster.window)
         self.proxies_treeview = self.xml.get_object('proxies_treeview')
         self.proxyname_entry = self.xml.get_object('proxyname_entry')
         self.proxytype_combobox = self.xml.get_object('proxytype_combobox')
@@ -2749,7 +2749,7 @@ class ServiceRegistrationWindow:
         self.is_form = is_form
         self.xml = gtkgui_helpers.get_gtk_builder('service_registration_window.ui')
         self.window = self.xml.get_object('service_registration_window')
-        self.set_transient_for(gajim.interface.roster.window)
+        self.window.set_transient_for(gajim.interface.roster.window)
         if self.is_form:
             dataform = dataforms.ExtendForm(node = infos)
             self.data_form_widget = dataforms_widget.DataFormWidget(dataform)
@@ -2804,7 +2804,7 @@ class GroupchatConfigWindow:
         self.xml = gtkgui_helpers.get_gtk_builder('data_form_window.ui',
             'data_form_window')
         self.window = self.xml.get_object('data_form_window')
-        self.set_transient_for(gajim.interface.roster.window)
+        self.window.set_transient_for(gajim.interface.roster.window)
 
         if self.form:
             config_vbox = self.xml.get_object('config_vbox')
@@ -3023,7 +3023,7 @@ class RemoveAccountWindow:
         self.account = account
         xml = gtkgui_helpers.get_gtk_builder('remove_account_window.ui')
         self.window = xml.get_object('remove_account_window')
-        self.set_transient_for(gajim.interface.roster.window)
+        self.window.set_transient_for(gajim.interface.roster.window)
         self.remove_and_unregister_radiobutton = xml.get_object(
                 'remove_and_unregister_radiobutton')
         self.window.set_title(_('Removing %s account') % self.account)
@@ -3130,7 +3130,7 @@ class ManageBookmarksWindow:
     def __init__(self):
         self.xml = gtkgui_helpers.get_gtk_builder('manage_bookmarks_window.ui')
         self.window = self.xml.get_object('manage_bookmarks_window')
-        self.set_transient_for(gajim.interface.roster.window)
+        self.window.set_transient_for(gajim.interface.roster.window)
 
         # Account-JID, RoomName, Room-JID, Autojoin, Minimize, Passowrd, Nick,
         # Show_Status
@@ -4025,7 +4025,7 @@ class ManagePEPServicesWindow:
     def __init__(self, account):
         self.xml = gtkgui_helpers.get_gtk_builder('manage_pep_services_window.ui')
         self.window = self.xml.get_object('manage_pep_services_window')
-        self.set_transient_for(gajim.interface.roster.window)
+        self.window.set_transient_for(gajim.interface.roster.window)
         self.xml.get_object('configure_button').set_sensitive(False)
         self.xml.get_object('delete_button').set_sensitive(False)
         self.xml.connect_signals(self)
