@@ -63,7 +63,7 @@ def load_cert_file(cert_path, cert_store):
         return
     try:
         f = open(cert_path)
-    except IOError, e:
+    except IOError as e:
         log.warning('Unable to open certificate file %s: %s' % (cert_path,
             str(e)))
         return
@@ -79,7 +79,7 @@ def load_cert_file(cert_path, cert_store):
                 x509cert = OpenSSL.crypto.load_certificate(
                     OpenSSL.crypto.FILETYPE_PEM, cert)
                 cert_store.add_cert(x509cert)
-            except OpenSSL.crypto.Error, exception_obj:
+            except OpenSSL.crypto.Error as exception_obj:
                 log.warning('Unable to load a certificate from file %s: %s' %\
                     (cert_path, exception_obj.args[0][0][2]))
             except:

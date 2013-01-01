@@ -149,7 +149,7 @@ class Logger:
     def attach_cache_database(self):
         try:
             self.cur.execute("ATTACH DATABASE '%s' AS cache" % CACHE_DB_PATH)
-        except sqlite.Error, e:
+        except sqlite.Error as e:
             log.debug("Failed to attach cache database: %s" % str(e))
 
     def set_synchronous(self, sync):
@@ -158,7 +158,7 @@ class Logger:
                 self.cur.execute("PRAGMA synchronous = NORMAL")
             else:
                 self.cur.execute("PRAGMA synchronous = OFF")
-        except sqlite.Error, e:
+        except sqlite.Error as e:
             log.debug("Failed to set_synchronous(%s): %s" % (sync, str(e)))
 
     def init_vars(self):
@@ -168,7 +168,7 @@ class Logger:
     def _really_commit(self):
         try:
             self.con.commit()
-        except sqlite.OperationalError, e:
+        except sqlite.OperationalError as e:
             print(str(e), file=sys.stderr)
         self.commit_timout_id = None
         return False
@@ -256,11 +256,11 @@ class Logger:
             self.cur.execute('INSERT INTO jids (jid, type) VALUES (?, ?)', (jid,
                     typ))
             self.con.commit()
-        except sqlite.IntegrityError, e:
+        except sqlite.IntegrityError as e:
             # Jid already in DB, maybe added by another instance. re-read DB
             self.get_jids_already_in_db()
             return self.get_jid_id(jid, typestr)
-        except sqlite.OperationalError, e:
+        except sqlite.OperationalError as e:
             raise exceptions.PysqliteOperationalError(str(e))
         jid_id = self.cur.lastrowid
         self.jids_already_in.append(jid)
@@ -407,14 +407,14 @@ class Logger:
             self.cur.execute(sql, values)
         except sqlite.DatabaseError:
             raise exceptions.DatabaseMalformed
-        except sqlite.OperationalError, e:
+        except sqlite.OperationalError as e:
             raise exceptions.PysqliteOperationalError(str(e))
         message_id = None
         if write_unread:
             try:
                 self.con.commit()
                 message_id = self.cur.lastrowid
-            except sqlite.OperationalError, e:
+            except sqlite.OperationalError as e:
                 print(str(e), file=sys.stderr)
         else:
             self._timeout_commit()
@@ -522,7 +522,7 @@ class Logger:
             # status for roster items
             try:
                 jid_id = self.get_jid_id(jid)
-            except exceptions.PysqliteOperationalError, e:
+            except exceptions.PysqliteOperationalError as e:
                 raise exceptions.PysqliteOperationalError(str(e))
             if show is None: # show is None (xmpp), but we say that 'online'
                 show_col = constants.SHOW_ONLINE
@@ -535,7 +535,7 @@ class Logger:
             try:
                 # re-get jid_id for the new jid
                 jid_id = self.get_jid_id(jid, 'ROOM')
-            except exceptions.PysqliteOperationalError, e:
+            except exceptions.PysqliteOperationalError as e:
                 raise exceptions.PysqliteOperationalError(str(e))
             contact_name_col = nick
 
@@ -549,13 +549,13 @@ class Logger:
             try:
                 # re-get jid_id for the new jid
                 jid_id = self.get_jid_id(jid, 'ROOM')
-            except exceptions.PysqliteOperationalError, e:
+            except exceptions.PysqliteOperationalError as e:
                 raise exceptions.PysqliteOperationalError(str(e))
             contact_name_col = nick
         else:
             try:
                 jid_id = self.get_jid_id(jid)
-            except exceptions.PysqliteOperationalError, e:
+            except exceptions.PysqliteOperationalError as e:
                 raise exceptions.PysqliteOperationalError(str(e))
             if kind == 'chat_msg_recv':
                 if not self.jid_is_from_pm(jid):
@@ -580,7 +580,7 @@ class Logger:
         """
         try:
             self.get_jid_id(jid)
-        except exceptions.PysqliteOperationalError, e:
+        except exceptions.PysqliteOperationalError as e:
             # Error trying to create a new jid_id. This means there is no log
             return []
         where_sql, jid_tuple = self._build_contact_where(account, jid)
@@ -624,7 +624,7 @@ class Logger:
         """
         try:
             self.get_jid_id(jid)
-        except exceptions.PysqliteOperationalError, e:
+        except exceptions.PysqliteOperationalError as e:
             # Error trying to create a new jid_id. This means there is no log
             return []
         where_sql, jid_tuple = self._build_contact_where(account, jid)
@@ -653,14 +653,14 @@ class Logger:
         """
         try:
             self.get_jid_id(jid)
-        except exceptions.PysqliteOperationalError, e:
+        except exceptions.PysqliteOperationalError as e:
             # Error trying to create a new jid_id. This means there is no log
             return []
 
         if False: # query.startswith('SELECT '): # it's SQL query (FIXME)
             try:
                 self.cur.execute(query)
-            except sqlite.OperationalError, e:
+            except sqlite.OperationalError as e:
                 results = [('', '', '', '', str(e))]
                 return results
 
@@ -694,7 +694,7 @@ class Logger:
         """
         try:
             self.get_jid_id(jid)
-        except exceptions.PysqliteOperationalError, e:
+        except exceptions.PysqliteOperationalError as e:
             # Error trying to create a new jid_id. This means there is no log
             return []
         days_with_logs = []
@@ -736,7 +736,7 @@ class Logger:
         else:
             try:
                 jid_id = self.get_jid_id(jid, 'ROOM')
-            except exceptions.PysqliteOperationalError, e:
+            except exceptions.PysqliteOperationalError as e:
                 # Error trying to create a new jid_id. This means there is no log
                 return None
             where_sql = 'jid_id = ?'
@@ -762,7 +762,7 @@ class Logger:
         """
         try:
             jid_id = self.get_jid_id(jid, 'ROOM')
-        except exceptions.PysqliteOperationalError, e:
+        except exceptions.PysqliteOperationalError as e:
             # Error trying to create a new jid_id. This means there is no log
             return None
         where_sql = 'jid_id = %s' % jid_id
@@ -802,7 +802,7 @@ class Logger:
             for user in family:
                 try:
                     jid_id = self.get_jid_id(user['jid'])
-                except exceptions.PysqliteOperationalError, e:
+                except exceptions.PysqliteOperationalError as e:
                     continue
                 where_sql += 'jid_id = ?'
                 jid_tuple += (jid_id,)
@@ -988,7 +988,7 @@ class Logger:
         try:
             account_jid_id = self.get_jid_id(account_jid)
             jid_id = self.get_jid_id(jid)
-        except exceptions.PysqliteOperationalError, e:
+        except exceptions.PysqliteOperationalError as e:
             raise exceptions.PysqliteOperationalError(str(e))
         self.cur.execute(
                 'DELETE FROM roster_group WHERE account_jid_id=? AND jid_id=?',
@@ -1010,7 +1010,7 @@ class Logger:
         try:
             account_jid_id = self.get_jid_id(account_jid)
             jid_id = self.get_jid_id(jid)
-        except exceptions.PysqliteOperationalError, e:
+        except exceptions.PysqliteOperationalError as e:
             raise exceptions.PysqliteOperationalError(str(e))
 
         # Update groups information
@@ -1150,7 +1150,7 @@ class Logger:
                 # when we quit this muc
                 obj.conn.last_history_time[obj.jid] = tim_f
 
-            except exceptions.PysqliteOperationalError, e:
+            except exceptions.PysqliteOperationalError as e:
                 obj.conn.dispatch('DB_ERROR', (_('Disk Write Error'), str(e)))
             except exceptions.DatabaseMalformed:
                 pritext = _('Database Error')

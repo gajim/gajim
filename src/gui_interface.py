@@ -2490,7 +2490,7 @@ class Interface:
         path_to_original_file = path_to_file + extension
         try:
             pixbuf.savev(path_to_original_file, typ, [], [])
-        except Exception, e:
+        except Exception as e:
             log.error('Error writing avatar file %s: %s' % (
                 path_to_original_file, str(e)))
         # Generate and save the resized, color avatar
@@ -2500,7 +2500,7 @@ class Interface:
                 extension
             try:
                 pixbuf.savev(path_to_normal_file, 'png', [], [])
-            except Exception, e:
+            except Exception as e:
                 log.error('Error writing avatar file %s: %s' % \
                     (path_to_original_file, str(e)))
             # Generate and save the resized, black and white avatar
@@ -2510,7 +2510,7 @@ class Interface:
                 path_to_bw_file = path_to_file + '_notif_size_bw' + extension
                 try:
                     bwbuf.savev(path_to_bw_file, 'png', [], [])
-                except Exception, e:
+                except Exception as e:
                     log.error('Error writing avatar file %s: %s' % \
                         (path_to_original_file, str(e)))
 

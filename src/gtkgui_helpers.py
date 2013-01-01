@@ -48,7 +48,7 @@ gtk_icon_theme.append_search_path(gajim.ICONS_DIR)
 def get_icon_pixmap(icon_name, size=16):
     try:
         return gtk_icon_theme.load_icon(icon_name, size, 0)
-    except GObject.GError, e:
+    except GObject.GError as e:
         log.error('Unable to load icon %s: %s' % (icon_name, str(e)))
 
 def get_icon_path(icon_name, size=16):
@@ -59,7 +59,7 @@ def get_icon_path(icon_name, size=16):
             return ""
         else:
             return icon_info.get_filename()
-    except GObject.GError, e:
+    except GObject.GError as e:
         log.error("Unable to find icon %s: %s" % (icon_name, str(e)))
 
 import vcard
@@ -342,10 +342,10 @@ def parse_server_xml(path_to_file):
         xml.sax.parse(path_to_file, handler)
         return handler.servers
     # handle exception if unable to open file
-    except IOError, message:
+    except IOError as message:
         print(_('Error reading file:') + message, file=sys.stderr)
     # handle exception parsing file
-    except xml.sax.SAXParseException, message:
+    except xml.sax.SAXParseException as message:
         print(_('Error parsing file:') + message, file=sys.stderr)
 
 def set_unset_urgency_hint(window, unread_messages_no):
@@ -829,7 +829,7 @@ def on_avatar_save_as_menuitem_activate(widget, jid, default_name=''):
         # Save image
         try:
             pixbuf.savev(file_path, image_format, [], [])
-        except Exception, e:
+        except Exception as e:
             log.debug('Error saving avatar: %s' % str(e))
             if os.path.exists(file_path):
                 os.remove(file_path)

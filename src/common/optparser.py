@@ -102,11 +102,11 @@ class OptionsParser:
         self.__tempfile = os.path.join(base_dir, '.' + filename)
         try:
             f = open(self.__tempfile, 'w')
-        except IOError, e:
+        except IOError as e:
             return str(e)
         try:
             gajim.config.foreach(self.write_line, f)
-        except IOError, e:
+        except IOError as e:
             return str(e)
         f.flush()
         os.fsync(f.fileno())
@@ -120,7 +120,7 @@ class OptionsParser:
                     pass
         try:
             os.rename(self.__tempfile, self.__filename)
-        except IOError, e:
+        except IOError as e:
             return str(e)
         os.chmod(self.__filename, 0600)
 
@@ -648,7 +648,7 @@ class OptionsParser:
                     '''
             )
             con.commit()
-        except sqlite.OperationalError, e:
+        except sqlite.OperationalError as e:
             pass
         con.close()
         gajim.config.set('version', '0.11.4.4')

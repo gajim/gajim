@@ -463,7 +463,7 @@ class Socks5:
                 self._sock.setblocking(False)
                 self._server = ai[4]
                 break
-            except socket.error, e:
+            except socket.error as e:
                 if not isinstance(e, basestring) and e[0] == EINPROGRESS:
                     break
                 # for all other errors, we try other addresses
@@ -481,7 +481,7 @@ class Socks5:
             self._sock.setblocking(False)
             self._send=self._sock.send
             self._recv=self._sock.recv
-        except Exception, ee:
+        except Exception as ee:
             errnum = ee[0]
             self.connect_timeout += 1
             if errnum == 111 or self.connect_timeout > 1000:
@@ -533,7 +533,7 @@ class Socks5:
                     self.size = self.file_props.offset
                     self.file.seek(self.size)
                     self.file_props.received_len = self.size
-            except IOError, e:
+            except IOError as e:
                 self.close_file()
                 raise IOError, e
 
@@ -583,7 +583,7 @@ class Socks5:
         try:
             add = self._recv(64)
         except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError,
-        OpenSSL.SSL.WantX509LookupError), e:
+        OpenSSL.SSL.WantX509LookupError) as e:
             log.info('SSL rehandshake request : ' + repr(e))
             raise e
         except Exception:
@@ -600,10 +600,10 @@ class Socks5:
         try:
             self._send(raw_data)
         except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError,
-        OpenSSL.SSL.WantX509LookupError), e:
+        OpenSSL.SSL.WantX509LookupError) as e:
             log.info('SSL rehandshake request :' + repr(e))
             raise e
-        except Exception, e:
+        except Exception as e:
             self.disconnect()
         return len(raw_data)
 
@@ -614,7 +614,7 @@ class Socks5:
         else:
             try:
                 self.open_file_for_reading()
-            except IOError, e:
+            except IOError as e:
                 self.state = 8 # end connection
                 self.disconnect()
                 self.file_props.error = -7 # unable to read from file
@@ -625,10 +625,10 @@ class Socks5:
             try:
                 lenn = self._send(buff)
             except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError,
-            OpenSSL.SSL.WantX509LookupError), e:
+            OpenSSL.SSL.WantX509LookupError) as e:
                 log.info('SSL rehandshake request :' + repr(e))
                 raise e
-            except Exception, e:
+            except Exception as e:
                 if e.args[0] not in (EINTR, ENOBUFS, EWOULDBLOCK):
                     # peer stopped reading
                     self.state = 8 # end connection
@@ -671,7 +671,7 @@ class Socks5:
         if self.remaining_buff != '':
             try:
                 fd = self.get_fd()
-            except IOError, e:
+            except IOError as e:
                 self.disconnect(False)
                 self.file_props.error = -6 # file system error
                 return 0
@@ -692,14 +692,14 @@ class Socks5:
         else:
             try:
                 fd = self.get_fd()
-            except IOError, e:
+            except IOError as e:
                 self.disconnect(False)
                 self.file_props.error = -6 # file system error
                 return 0
             try:
                 buff = self._recv(MAX_BUFF_LEN)
             except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError,
-            OpenSSL.SSL.WantX509LookupError), e:
+            OpenSSL.SSL.WantX509LookupError) as e:
                 log.info('SSL rehandshake request :' + repr(e))
                 raise e
             except Exception:
@@ -718,7 +718,7 @@ class Socks5:
                 return 0
             try:
                 fd.write(buff)
-            except IOError, e:
+            except IOError as e:
                 self.rem_fd(fd)
                 self.disconnect()
                 self.file_props.error = -6 # file system error
@@ -842,7 +842,7 @@ class Socks5:
         try:
             buff = self._recv()
         except (SSL.WantReadError, SSL.WantWriteError,
-                SSL.WantX509LookupError), e:
+        SSL.WantX509LookupError) as e:
             log.info("SSL rehandshake request : " + repr(e))
             raise e
         try:
@@ -1085,7 +1085,7 @@ class Socks5Server(Socks5):
                     result = self.start_transfer() # send
                     self.queue.process_result(result, self)
             except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError,
-            OpenSSL.SSL.WantX509LookupError), e:
+            OpenSSL.SSL.WantX509LookupError) as e:
                 log.info('caught SSL exception, ignored')
         else:
             self.disconnect()
@@ -1123,7 +1123,7 @@ class Socks5Server(Socks5):
             else:
                 self.disconnect()
         except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError,
-        OpenSSL.SSL.WantX509LookupError), e:
+        OpenSSL.SSL.WantX509LookupError) as e:
             log.info('caught SSL exception, ignored')
             return
         if self.state < 5:
@@ -1229,7 +1229,7 @@ class Socks5Client(Socks5):
                     result = self.start_transfer() # receive
                     self.queue.process_result(result, self)
             except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError,
-            OpenSSL.SSL.WantX509LookupError), e:
+            OpenSSL.SSL.WantX509LookupError) as e:
                 log.info('caught SSL exception, ignored')
                 return
         else:
@@ -1253,7 +1253,7 @@ class Socks5Client(Socks5):
                 self.queue.process_result(result, self)
                 return
         except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError,
-        OpenSSL.SSL.WantX509LookupError), e:
+        OpenSSL.SSL.WantX509LookupError) as e:
             log.info('caught SSL exception, ignored')
             return
         self.state += 1
@@ -1346,7 +1346,7 @@ class Socks5Listener(IdleObject):
                 if self.fingerprint is not None:
                     self._serv = OpenSSL.SSL.Connection(
                         jingle_xtls.get_context('server'), self._serv)
-            except socket.error, e:
+            except socket.error as e:
                 if e.args[0] == EAFNOSUPPORT:
                     self.ai = None
                     continue

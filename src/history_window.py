@@ -352,7 +352,7 @@ class HistoryWindow:
         try:
             log_days = gajim.logger.get_days_with_logs(self.jid, year, month,
                 days_in_this_month, self.account)
-        except exceptions.PysqliteOperationalError, e:
+        except exceptions.PysqliteOperationalError as e:
             dialogs.ErrorDialog(_('Disk Error'), str(e))
             return
         for day in log_days:

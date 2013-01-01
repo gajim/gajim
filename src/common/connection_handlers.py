@@ -331,7 +331,7 @@ class ConnectionVcard:
             fil = open(path_to_file, 'w')
             fil.write(str(card))
             fil.close()
-        except IOError, e:
+        except IOError as e:
             gajim.nec.push_incoming_event(InformationEvent(None, conn=self,
                 level='error', pri_txt=_('Disk Write Error'), sec_txt=str(e)))
 
@@ -947,7 +947,7 @@ class ConnectionHandlersBase:
         gajim.config.should_log(self.name, obj.jid):
             try:
                 gajim.logger.write('status', obj.jid, obj.status, obj.show)
-            except exceptions.PysqliteOperationalError, e:
+            except exceptions.PysqliteOperationalError as e:
                 self.dispatch('DB_ERROR', (_('Disk Write Error'), str(e)))
             except exceptions.DatabaseMalformed:
                 pritext = _('Database Error')
@@ -1069,7 +1069,7 @@ class ConnectionHandlersBase:
             try:
                 gajim.logger.write('error', frm, error_msg, tim=tim,
                     subject=subject)
-            except exceptions.PysqliteOperationalError, e:
+            except exceptions.PysqliteOperationalError as e:
                 self.dispatch('DB_ERROR', (_('Disk Write Error'), str(e)))
             except exceptions.DatabaseMalformed:
                 pritext = _('Database Error')

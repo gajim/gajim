@@ -333,7 +333,7 @@ class HostTester(Socks5, IdleObject):
             log.debug('Host Connecting to %s:%s' % (self.host, self.port))
             self._send = self._sock.send
             self._recv = self._sock.recv
-        except Exception, ee:
+        except Exception as ee:
             errnum = ee[0]
             # 56 is for freebsd
             if errnum in (errno.EINPROGRESS, errno.EALREADY, errno.EWOULDBLOCK):
@@ -461,7 +461,7 @@ class ReceiverTester(Socks5, IdleObject):
             log.debug('Receiver Connecting to %s:%s' % (self.host, self.port))
             self._send = self._sock.send
             self._recv = self._sock.recv
-        except Exception, ee:
+        except Exception as ee:
             errnum = ee[0]
             # 56 is for freebsd
             if errnum in (errno.EINPROGRESS, errno.EALREADY, errno.EWOULDBLOCK):

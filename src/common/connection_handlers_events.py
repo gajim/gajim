@@ -220,11 +220,11 @@ class TimeResultReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
 
         try:
             t = datetime.datetime.strptime(utc_time, '%Y-%m-%dT%H:%M:%SZ')
-        except ValueError, e:
+        except ValueError as e:
             try:
                 t = datetime.datetime.strptime(utc_time,
                     '%Y-%m-%dT%H:%M:%S.%fZ')
-            except ValueError, e:
+            except ValueError as e:
                 log.info('Wrong time format: %s' % str(e))
                 return
 
@@ -905,7 +905,7 @@ class GcPresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             try:
                 gajim.logger.write('gcstatus', self.fjid, st,
                     self.show)
-            except exceptions.PysqliteOperationalError, e:
+            except exceptions.PysqliteOperationalError as e:
                 self.conn.dispatch('DB_ERROR', (_('Disk Write Error'),
                     str(e)))
             except exceptions.DatabaseMalformed:

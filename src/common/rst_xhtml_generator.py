@@ -65,7 +65,7 @@ else:
                 options={}, content=[]):
             try:
                 valid_text = validator(text)
-            except ValueError, e:
+            except ValueError as e:
                 msg = inliner.reporter.error( e.message % dict(text=text), line=lineno)
                 prb = inliner.problematic(rawtext, rawtext, msg)
                 return [prb], [msg]

@@ -165,7 +165,7 @@ class Command(object):
         # command or name attributes set. They will be set to a
         # corresponding values right here in case if they was not set by
         # the one who raised an exception.
-        except CommandError, error:
+        except CommandError as error:
             if not error.command and not error.name:
                 raise CommandError(error.message, self)
             raise

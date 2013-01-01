@@ -196,7 +196,7 @@ class PluginsWindow(object):
         else:
             try:
                 gajim.plugin_manager.activate_plugin(plugin)
-            except GajimPluginActivateException, e:
+            except GajimPluginActivateException as e:
                 WarningDialog(_('Plugin failed'), str(e),
                     transient_for=self.window)
                 return
@@ -241,7 +241,7 @@ class PluginsWindow(object):
             is_active = model.get_value(iter, ACTIVE)
             try:
                 gajim.plugin_manager.remove_plugin(plugin)
-            except PluginsystemError, e:
+            except PluginsystemError as e:
                 WarningDialog(_('Unable to properly remove the plugin'),
                     str(e), self.window)
                 return
@@ -280,7 +280,7 @@ class PluginsWindow(object):
         def _try_install(zip_filename):
             try:
                 plugin = gajim.plugin_manager.install_from_zip(zip_filename)
-            except PluginsystemError, er_type:
+            except PluginsystemError as er_type:
                 error_text = str(er_type)
                 if error_text == _('Plugin already exists'):
                     _on_plugin_exists(zip_filename)

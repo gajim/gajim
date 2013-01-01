@@ -24,7 +24,7 @@ from common.zeroconf.zeroconf import C_BARE_NAME, C_DOMAIN
 
 try:
     import pybonjour
-except ImportError, e:
+except ImportError as e:
     pass
 
 
@@ -224,7 +224,7 @@ class Zeroconf:
                     regtype = self.stype, port = self.port, txtRecord = self.txt,
                     callBack = self.service_added_callback)
             self.service_sdRef = sdRef
-        except pybonjour.BonjourError, e:
+        except pybonjour.BonjourError as e:
             self.service_add_fail_callback(e)
         else:
             gajim.log.debug('Publishing service %s of type %s' % (self.name, self.stype))
@@ -248,7 +248,7 @@ class Zeroconf:
             self.service_sdRef.close()
             self.announced = False
             return True
-        except pybonjour.BonjourError, e:
+        except pybonjour.BonjourError as e:
             gajim.log.debug(e)
             return False
 
@@ -282,7 +282,7 @@ class Zeroconf:
         gajim.log.debug('starting to browse')
         try:
             self.browse_sdRef = pybonjour.DNSServiceBrowse(regtype=self.stype, domain=domain, callBack=self.browse_callback)
-        except pybonjour.BonjourError, e:
+        except pybonjour.BonjourError as e:
             self.error_CB("Error while browsing: %s" % e)
 
     def browse_loop(self):

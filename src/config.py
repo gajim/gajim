@@ -2161,7 +2161,7 @@ class AccountsWindow:
         # check if jid is conform to RFC and stringprep it
         try:
             jid = helpers.parse_jid(jid)
-        except helpers.InvalidFormat, s:
+        except helpers.InvalidFormat as s:
             if not widget.is_focus():
                 pritext = _('Invalid Jabber ID')
                 dialogs.ErrorDialog(pritext, str(s))
@@ -2238,7 +2238,7 @@ class AccountsWindow:
                 'utf-8')
         try:
             resource = helpers.parse_resource(resource)
-        except helpers.InvalidFormat, s:
+        except helpers.InvalidFormat as s:
             if not widget.is_focus():
                 pritext = _('Invalid Jabber ID')
                 dialogs.ErrorDialog(pritext, str(s))
@@ -3385,7 +3385,7 @@ class ManageBookmarksWindow:
             nick = self.nick_entry.get_text()
             try:
                 nick = helpers.parse_resource(nick)
-            except helpers.InvalidFormat, e:
+            except helpers.InvalidFormat as e:
                 dialogs.ErrorDialog(_('Invalid nickname'),
                         _('Character not allowed'))
                 self.nick_entry.set_text(model[iter_][6])
@@ -3405,7 +3405,7 @@ class ManageBookmarksWindow:
                 server.strip()
         try:
             room_jid = helpers.parse_resource(room_jid)
-        except helpers.InvalidFormat, e:
+        except helpers.InvalidFormat as e:
             dialogs.ErrorDialog(_('Invalid server'),
                     _('Character not allowed'))
             self.server_entry.set_text(model[iter_][2].split('@')[1])
@@ -3424,7 +3424,7 @@ class ManageBookmarksWindow:
             self.server_entry.get_text().strip()
         try:
             room_jid = helpers.parse_resource(room_jid)
-        except helpers.InvalidFormat, e:
+        except helpers.InvalidFormat as e:
             dialogs.ErrorDialog(_('Invalid room'),
                     _('Character not allowed'))
             self.room_entry.set_text(model[iter_][2].split('@')[0])
@@ -3644,7 +3644,7 @@ class AccountCreationWizardWindow:
             # check if jid is conform to RFC and stringprep it
             try:
                 jid = helpers.parse_jid(jid)
-            except helpers.InvalidFormat, s:
+            except helpers.InvalidFormat as s:
                 pritext = _('Invalid Jabber ID')
                 dialogs.ErrorDialog(pritext, str(s))
                 return

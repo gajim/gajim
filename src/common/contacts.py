@@ -32,7 +32,7 @@ try:
     from common import caps_cache
     from common.account import Account
     import common.gajim
-except ImportError, e:
+except ImportError as e:
     if __name__ != "__main__":
         raise ImportError(e)
 

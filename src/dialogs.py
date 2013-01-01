@@ -1073,7 +1073,7 @@ class AddNewContactWindow:
         # check if jid is conform to RFC and stringprep it
         try:
             jid = helpers.parse_jid(jid)
-        except helpers.InvalidFormat, s:
+        except helpers.InvalidFormat as s:
             pritext = _('Invalid User ID')
             ErrorDialog(pritext, str(s))
             return
@@ -2740,7 +2740,7 @@ class NewChatDialog(InputDialog):
         else:
             try:
                 jid = helpers.parse_jid(jid)
-            except helpers.InvalidFormat, e:
+            except helpers.InvalidFormat as e:
                 ErrorDialog(_('Invalid JID'), e[0])
                 return
             except:
@@ -3672,7 +3672,7 @@ class ItemArchivingPreferencesWindow:
         if self.item != 'Default':
             try:
                 item = helpers.parse_jid(item)
-            except helpers.InvalidFormat, s:
+            except helpers.InvalidFormat as s:
                 pritext = _('Invalid User ID')
                 ErrorDialog(pritext, str(s))
                 return

@@ -64,7 +64,7 @@ def parseOpts():
         shortargs = 'hc:'
         longargs = 'help config_path='
         opts = getopt.getopt(sys.argv[1:], shortargs, longargs.split())[0]
-    except getopt.error, msg:
+    except getopt.error as msg:
         print(str(msg))
         print('for help use --help')
         sys.exit(2)

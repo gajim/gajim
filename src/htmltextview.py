@@ -587,7 +587,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                     self.textbuf.delete_mark(tmpmark)
             else:
                 self._insert_text('[IMG: %s]' % alt, working_iter)
-        except Exception, ex:
+        except Exception as ex:
             log.error('Error loading image ' + str(ex))
             pixbuf = None
             alt = attrs.get('alt', 'Broken image')
@@ -764,7 +764,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                     self.textview.focus_out_line_pixbuf)
                 #self._insert_text('\u2550'*40)
                 self._jump_line()
-            except Exception, e:
+            except Exception as e:
                 log.debug(str('Error in hr'+e))
         elif name in LIST_ELEMS:
             self.list_counters.pop()

@@ -629,7 +629,7 @@ class SingleForm(Gtk.Table, object):
             return
         try:
             newtext = helpers.parse_jid(newtext)
-        except helpers.InvalidFormat, s:
+        except helpers.InvalidFormat as s:
             dialogs.ErrorDialog(_('Invalid Jabber ID'), str(s))
             return
         if newtext in field.values:

@@ -1366,7 +1366,7 @@ class ConversationTextview(GObject.GObject):
                     xhtml = xhtml.replace('/me', '<i>* %s</i>' % (name,), 1)
                 self.tv.display_html(xhtml.encode('utf-8'), self)
                 return
-            except Exception, e:
+            except Exception as e:
                 gajim.log.debug('Error processing xhtml' + str(e))
                 gajim.log.debug('with |' + xhtml + '|')
 

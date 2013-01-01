@@ -17,7 +17,7 @@ try:
     shortargs = 'hnv:'
     longargs = 'help no-x verbose='
     opts, args = getopt.getopt(sys.argv[1:], shortargs, longargs.split())
-except getopt.error, msg:
+except getopt.error as msg:
     print(msg)
     print('for help use --help')
     sys.exit(2)

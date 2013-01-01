@@ -154,7 +154,7 @@ def get_interface(interface, path, start_service=True):
             return None
         obj = bus.get_object(interface, path)
         return dbus.Interface(obj, interface)
-    except Exception, e:
+    except Exception as e:
         gajim.log.debug(str(e))
         return None
 

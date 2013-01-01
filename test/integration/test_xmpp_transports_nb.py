@@ -72,7 +72,7 @@ class TestNonBlockingTCP(AbstractTransportTest):
                 ips = socket.getaddrinfo('gajim.org', 5222,
                         socket.AF_UNSPEC, socket.SOCK_STREAM)
                 ip = ips[0]
-            except socket.error, e:
+            except socket.error as e:
                 self.testcase.fail(msg=str(e))
 
             self.socket = transports_nb.NonBlockingTCP(

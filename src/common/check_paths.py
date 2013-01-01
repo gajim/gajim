@@ -161,7 +161,7 @@ def split_db():
             con.commit()
             cur.executescript('DROP TABLE %s;' % table)
             con.commit()
-        except sqlite.OperationalError, e:
+        except sqlite.OperationalError as e:
             print('error moving table %s to cache.db: %s' % (table, str(e)),
                 file=sys.stderr)
     con.close()

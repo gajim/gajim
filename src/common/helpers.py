@@ -207,7 +207,7 @@ def temp_failure_retry(func, *args, **kwargs):
     while True:
         try:
             return func(*args, **kwargs)
-        except (os.error, IOError, select.error), ex:
+        except (os.error, IOError, select.error) as ex:
             if ex.errno == errno.EINTR:
                 continue
             else:
@@ -1465,7 +1465,7 @@ def _get_img_direct(attrs):
         req = urllib2.Request(attrs['src'])
         req.add_header('User-Agent', 'Gajim ' + gajim.version)
         f = urllib2.urlopen(req)
-    except Exception, ex:
+    except Exception as ex:
         log.debug('Error loading image %s ' % attrs['src']  + str(ex))
         pixbuf = None
         alt = attrs.get('alt', 'Broken image')
@@ -1488,7 +1488,7 @@ def _get_img_direct(attrs):
                 break
             try:
                 temp = f.read(100)
-            except socket.timeout, ex:
+            except socket.timeout as ex:
                 log.debug('Timeout loading image %s ' % attrs['src'] + str(ex))
                 alt = attrs.get('alt', '')
                 if alt:
@@ -1540,7 +1540,7 @@ def _get_img_proxy(attrs, proxy):
         c.close()
         t = b.getvalue()
         return (t, attrs.get('alt', ''))
-    except pycurl.error, ex:
+    except pycurl.error as ex:
         alt = attrs.get('alt', '')
         if alt:
             alt += '\n'
@@ -1550,7 +1550,7 @@ def _get_img_proxy(attrs, proxy):
             alt += _('Timeout loading image')
         else:
             alt += _('Error loading image')
-    except Exception, ex:
+    except Exception as ex:
         log.debug('Error loading image %s ' % attrs['src']  + str(ex))
         pixbuf = None
         alt = attrs.get('alt', 'Broken image')

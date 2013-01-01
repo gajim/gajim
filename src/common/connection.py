@@ -455,7 +455,7 @@ class CommonConnection:
                             log_msg = '<body xmlns="%s">%s</body>' % (
                                 nbxmpp.NS_XHTML, xhtml)
                         gajim.logger.write(kind, jid, log_msg)
-                    except exceptions.PysqliteOperationalError, e:
+                    except exceptions.PysqliteOperationalError as e:
                         self.dispatch('DB_ERROR', (_('Disk Write Error'),
                             str(e)))
                     except exceptions.DatabaseMalformed:

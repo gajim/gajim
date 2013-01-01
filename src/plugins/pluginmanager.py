@@ -302,7 +302,7 @@ class PluginManager(object):
             self.active_plugins.append(plugin)
             try:
                 plugin.activate()
-            except GajimPluginException, e:
+            except GajimPluginException as e:
                 self.deactivate_plugin(plugin)
                 raise GajimPluginActivateException(str(e))
             self._set_plugin_active_in_global_config(plugin)
@@ -426,9 +426,9 @@ class PluginManager(object):
                 module_name = os.path.splitext(elem_name)[0]
                 try:
                     module = __import__(module_name)
-                except ValueError, value_error:
+                except ValueError as value_error:
                     log.debug(value_error)
-                except ImportError, import_error:
+                except ImportError as import_error:
                     log.debug(import_error)
 
             elif os.path.isdir(file_path) and scan_dirs:
@@ -439,9 +439,9 @@ class PluginManager(object):
                 file_path += os.path.sep
                 try:
                     module = __import__(module_name)
-                except ValueError, value_error:
+                except ValueError as value_error:
                     log.debug(value_error)
-                except ImportError, import_error:
+                except ImportError as import_error:
                     log.debug(import_error)
 
 
@@ -477,21 +477,21 @@ class PluginManager(object):
 
                     plugins_found.append(module_attr)
 
-                except TypeError, type_error:
+                except TypeError as type_error:
                     # set plugin localization
                     try:
                         module_attr._ = _
-                    except AttributeError, type_error:
+                    except AttributeError as type_error:
                         pass
-                except ConfigParser.NoOptionError, type_error:
+                except ConfigParser.NoOptionError as type_error:
                     # all fields are required
                     log.debug('%s : %s' % (module_attr_name,
                         'wrong manifest file. all fields are required!'))
-                except ConfigParser.NoSectionError, type_error:
+                except ConfigParser.NoSectionError as type_error:
                     # info section are required
                     log.debug('%s : %s' % (module_attr_name,
                         'wrong manifest file. info section are required!'))
-                except ConfigParser.MissingSectionHeaderError, type_error:
+                except ConfigParser.MissingSectionHeaderError as type_error:
                     # info section are required
                     log.debug('%s : %s' % (module_attr_name,
                         'wrong manifest file. section are required!'))
@@ -504,10 +504,10 @@ class PluginManager(object):
         '''
         try:
             zip_file = zipfile.ZipFile(zip_filename)
-        except zipfile.BadZipfile, e:
+        except zipfile.BadZipfile as e:
             # it is not zip file
             raise PluginsystemError(_('Archive corrupted'))
-        except IOError,e:
+        except IOError as e:
             raise PluginsystemError(_('Archive empty'))
 
         if zip_file.testzip():

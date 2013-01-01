@@ -68,7 +68,7 @@ try:
 
     rootwindow = libX11.XDefaultRootWindow(dpy_p)
     xss_available = True
-except OSError, e:
+except OSError as e:
     # Logging?
     xss_available = False
 

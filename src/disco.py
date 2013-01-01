@@ -803,7 +803,7 @@ _('This type of service does not contain any items to browse.'))
             jid = self.address_comboboxentry.get_child().get_text()
             try:
                 jid = helpers.parse_jid(jid)
-            except helpers.InvalidFormat, s:
+            except helpers.InvalidFormat as s:
                 pritext = _('Invalid Server Name')
                 dialogs.ErrorDialog(pritext, str(s))
                 return
@@ -813,7 +813,7 @@ _('This type of service does not contain any items to browse.'))
         jid = self.address_comboboxentry.get_child().get_text()
         try:
             jid = helpers.parse_jid(jid)
-        except helpers.InvalidFormat, s:
+        except helpers.InvalidFormat as s:
             pritext = _('Invalid Server Name')
             dialogs.ErrorDialog(pritext, str(s))
             return

@@ -90,7 +90,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
                     msg_to_log = obj.msgtxt
                 obj.msg_id = gajim.logger.write(log_type, obj.fjid,
                     msg_to_log, tim=obj.timestamp, subject=obj.subject)
-            except exceptions.PysqliteOperationalError, e:
+            except exceptions.PysqliteOperationalError as e:
                 gajim.nec.push_incoming_event(InformationEvent(None,
                     conn=self.conn, level='error', pri_txt=_('Disk Write Error'),
                     sec_txt=str(e)))
@@ -423,7 +423,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
             'submit':
                 try:
                     self.archiving_accepted(form)
-                except exceptions.NegotiationError, details:
+                except exceptions.NegotiationError as details:
                     self.fail_bad_negotiation(details)
 
                 return
@@ -452,7 +452,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 
                         try:
                             self.accept_e2e_alice(form, negotiated)
-                        except exceptions.NegotiationError, details:
+                        except exceptions.NegotiationError as details:
                             self.fail_bad_negotiation(details)
 
                     def reject_nondefault_options():
@@ -476,7 +476,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
                 else:
                     try:
                         self.accept_e2e_alice(form, negotiated)
-                    except exceptions.NegotiationError, details:
+                    except exceptions.NegotiationError as details:
                         self.fail_bad_negotiation(details)
 
                 return
@@ -484,21 +484,21 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
             'result':
                 try:
                     self.we_accept_archiving(form)
-                except exceptions.NegotiationError, details:
+                except exceptions.NegotiationError as details:
                     self.fail_bad_negotiation(details)
 
                 return
             elif self.status == 'responded-e2e' and form.getType() == 'result':
                 try:
                     self.accept_e2e_bob(form)
-                except exceptions.NegotiationError, details:
+                except exceptions.NegotiationError as details:
                     self.fail_bad_negotiation(details)
 
                 return
             elif self.status == 'identified-alice' and form.getType() == 'result':
                 try:
                     self.final_steps_alice(form)
-                except exceptions.NegotiationError, details:
+                except exceptions.NegotiationError as details:
                     self.fail_bad_negotiation(details)
 
                 return

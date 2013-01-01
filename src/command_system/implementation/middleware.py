@@ -62,13 +62,13 @@ class ChatCommandProcessor(CommandProcessor):
         try:
             parents = super(ChatCommandProcessor, self)
             parents.execute_command(name, arguments)
-        except NoCommandError, error:
+        except NoCommandError as error:
             details = dict(name=error.name, message=error.message)
             message = "%(name)s: %(message)s\n" % details
             message += "Try using the //%(name)s or /say /%(name)s " % details
             message += "construct if you intended to send it as a text."
             self.echo_error(message)
-        except CommandError, error:
+        except CommandError as error:
             self.echo_error("%s: %s" % (error.name, error.message))
         except Exception:
             self.echo_error(_("Error during command execution!"))

@@ -139,7 +139,7 @@ class ProfileWindow:
                     # and hope that user did not specify in ACE crazy size
                     scaled_pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf,
                             'tooltip')
-                except GObject.GError, msg: # unknown format
+                except GObject.GError as msg: # unknown format
                     # msg should be string, not object instance
                     msg = str(msg)
                     invalid_file = True
