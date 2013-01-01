@@ -188,7 +188,7 @@ class Logger:
     def get_jids_already_in_db(self):
         try:
             self.cur.execute('SELECT jid FROM jids')
-            # list of tupples: [(u'aaa@bbb',), (u'cc@dd',)]
+            # list of tupples: [('aaa@bbb',), ('cc@dd',)]
             rows = self.cur.fetchall()
         except sqlite.DatabaseError:
             raise exceptions.DatabaseMalformed
@@ -1048,6 +1048,8 @@ class Logger:
                 FROM roster_entry re, jids j
                 WHERE re.account_jid_id=? AND j.jid_id=re.jid_id''', (account_jid_id,))
         for jid, jid_id, name, subscription, ask in self.cur:
+            jid = jid.encode('utf-8')
+            name = name.encode('utf-8')
             data[jid] = {}
             if name:
                 data[jid]['name'] = name
@@ -1071,6 +1073,7 @@ class Logger:
                     WHERE account_jid_id=? AND jid_id=?''',
                     (account_jid_id, data[jid]['id']))
             for (group_name,) in self.cur:
+                group_name = group_name.encode('utf-8')
                 data[jid]['groups'].append(group_name)
             del data[jid]['id']
 

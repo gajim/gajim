@@ -65,12 +65,12 @@ def parseOpts():
         longargs = 'help config_path='
         opts = getopt.getopt(sys.argv[1:], shortargs, longargs.split())[0]
     except getopt.error, msg:
-        print str(msg)
-        print 'for help use --help'
+        print(str(msg))
+        print('for help use --help')
         sys.exit(2)
     for o, a in opts:
         if o in ('-h', '--help'):
-            print 'history_manager [--help] [--config-path]'
+            print('history_manager [--help] [--config-path]')
             sys.exit()
         elif o in ('-c', '--config-path'):
             config_path = a
@@ -264,7 +264,7 @@ class HistoryManager:
         # get those jids that have at least one entry in logs
         self.cur.execute('SELECT jid, jid_id FROM jids WHERE jid_id IN ('
                 'SELECT distinct logs.jid_id FROM logs) ORDER BY jid')
-        # list of tupples: [(u'aaa@bbb',), (u'cc@dd',)]
+        # list of tupples: [('aaa@bbb',), ('cc@dd',)]
         rows = self.cur.fetchall()
         for row in rows:
             self.jids_already_in.append(row[0])  # jid
@@ -291,7 +291,7 @@ class HistoryManager:
             path = rowref.get_path()
             if path is None:
                 continue
-            jid = liststore[path][0].decode('utf-8')  # jid
+            jid = liststore[path][0]  # jid
             self._fill_logs_listview(jid)
 
     def _get_jid_id(self, jid):
@@ -642,7 +642,7 @@ class HistoryManager:
         dialog.set_transient_for(self.window)
 
     def on_search_db_button_clicked(self, widget):
-        text = self.search_entry.get_text().decode('utf-8')
+        text = self.search_entry.get_text()
         if not text:
             return
 
@@ -655,7 +655,7 @@ class HistoryManager:
     def on_search_results_listview_row_activated(self, widget, path, column):
         # get log_line_id, jid_id from row we double clicked
         log_line_id = self.search_results_liststore[path][0]
-        jid = self.search_results_liststore[path][1].decode('utf-8')
+        jid = self.search_results_liststore[path][1]
         # make it string as in gtk liststores I have them all as strings
         # as this is what db returns so I don't have to fight with types
         jid_id = self._get_jid_id(jid)

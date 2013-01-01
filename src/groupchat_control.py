@@ -364,7 +364,7 @@ class GroupchatControl(ChatControlBase):
         self.handlers[id_] = widget
 
         self.room_jid = self.contact.jid
-        self.nick = contact.name.decode('utf-8')
+        self.nick = contact.name
         self.new_nick = ''
         self.name = ''
         for bm in gajim.connections[self.account].bookmarks:
@@ -528,8 +528,6 @@ class GroupchatControl(ChatControlBase):
         nick2 = model[iter2][C_NICK]
         if not nick1 or not nick2:
             return 0
-        nick1 = nick1.decode('utf-8')
-        nick2 = nick2.decode('utf-8')
         if type1 == 'role':
             return locale.strcoll(nick1, nick2)
         if type1 == 'contact':
@@ -631,7 +629,7 @@ class GroupchatControl(ChatControlBase):
         """
         # Get the room_jid from treeview
         for contact in self.iter_contact_rows():
-            nick = contact[C_NICK].decode('utf-8')
+            nick = contact[C_NICK]
             self.draw_contact(nick)
 
     def on_list_treeview_selection_changed(self, selection):
@@ -643,7 +641,7 @@ class GroupchatControl(ChatControlBase):
             self._last_selected_contact = None
             return
         contact = model[selected_iter]
-        nick = contact[C_NICK].decode('utf-8')
+        nick = contact[C_NICK]
         self._last_selected_contact = nick
         if contact[C_TYPE] != 'contact':
             return
@@ -1042,7 +1040,7 @@ class GroupchatControl(ChatControlBase):
         while role_iter:
             user_iter = self.model.iter_children(role_iter)
             while user_iter:
-                if nick == self.model[user_iter][C_NICK].decode('utf-8'):
+                if nick == self.model[user_iter][C_NICK]:
                     return user_iter
                 else:
                     user_iter = self.model.iter_next(user_iter)
@@ -1379,7 +1377,7 @@ class GroupchatControl(ChatControlBase):
         contact in a room
         """
         if nick is None:
-            nick = model[iter_][C_NICK].decode('utf-8')
+            nick = model[iter_][C_NICK]
 
         ctrl = self._start_private_message(nick)
         if ctrl and msg:
@@ -1832,7 +1830,7 @@ class GroupchatControl(ChatControlBase):
     def get_role_iter(self, role):
         role_iter = self.model.get_iter_first()
         while role_iter:
-            role_name = self.model[role_iter][C_NICK].decode('utf-8')
+            role_name = self.model[role_iter][C_NICK]
             if role == role_name:
                 return role_iter
             role_iter = self.model.iter_next(role_iter)
@@ -2137,7 +2135,7 @@ class GroupchatControl(ChatControlBase):
         type_ = model[iter_][2]
         if type_ != 'contact': # source is not a contact
             return
-        contact_jid = data.decode('utf-8')
+        contact_jid = data
         gajim.connections[self.account].send_invite(self.room_jid, contact_jid)
         self.print_conversation(_('%(jid)s has been invited in this room') % {
             'jid': contact_jid}, graphics=False)
@@ -2311,7 +2309,7 @@ class GroupchatControl(ChatControlBase):
         """
         Make contact's popup menu
         """
-        nick = self.model[iter_][C_NICK].decode('utf-8')
+        nick = self.model[iter_][C_NICK]
         c = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
         fjid = self.room_jid + '/' + nick
         jid = c.jid
@@ -2478,7 +2476,7 @@ class GroupchatControl(ChatControlBase):
             else:
                 widget.expand_row(path, False)
         else: # We want to send a private message
-            nick = self.model[path][C_NICK].decode('utf-8')
+            nick = self.model[path][C_NICK]
             self._start_private_message(nick)
 
     def on_list_treeview_row_activated(self, widget, path, col=0):
@@ -2511,7 +2509,7 @@ class GroupchatControl(ChatControlBase):
             widget.get_selection().select_path(path)
             iter_ = self.model.get_iter(path)
             if len(path) == 2:
-                nick = self.model[iter_][C_NICK].decode('utf-8')
+                nick = self.model[iter_][C_NICK]
                 self._start_private_message(nick)
             return True
 
@@ -2521,7 +2519,7 @@ class GroupchatControl(ChatControlBase):
                 return True
             else:
                 iter_ = self.model.get_iter(path)
-                nick = self.model[iter_][C_NICK].decode('utf-8')
+                nick = self.model[iter_][C_NICK]
                 if not nick in gajim.contacts.get_nick_list(self.account,
                 self.room_jid):
                     # it's a group
@@ -2564,13 +2562,13 @@ class GroupchatControl(ChatControlBase):
             except Exception:
                 self.tooltip.hide_tooltip()
                 return
-            typ = self.model[iter_][C_TYPE].decode('utf-8')
+            typ = self.model[iter_][C_TYPE]
             if typ == 'contact':
                 account = self.account
 
                 if self.tooltip.timeout == 0 or self.tooltip.id != props[0]:
                     self.tooltip.id = row
-                    nick = self.model[iter_][C_NICK].decode('utf-8')
+                    nick = self.model[iter_][C_NICK]
                     self.tooltip.timeout = GObject.timeout_add(500,
                         self.show_tooltip, gajim.contacts.get_gc_contact(
                         account, self.room_jid, nick))
@@ -2707,8 +2705,8 @@ class GroupchatControl(ChatControlBase):
         connection = gajim.connections[self.account]
         if fjid in connection.blocked_contacts:
             return
-        new_rule = {'order': u'1', 'type': u'jid', 'action': u'deny',
-            'value' : fjid, 'child': [u'message', u'iq', u'presence-out']}
+        new_rule = {'order': '1', 'type': 'jid', 'action': 'deny',
+            'value' : fjid, 'child': ['message', 'iq', 'presence-out']}
         connection.blocked_list.append(new_rule)
         connection.blocked_contacts.append(fjid)
         self.draw_contact(nick)

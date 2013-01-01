@@ -344,7 +344,7 @@ class ProfileWindow:
                 'ADR_WORK_REGION', 'ADR_WORK_PCODE', 'ADR_WORK_CTRY']
         vcard_ = {}
         for e in entries:
-            txt = self.xml.get_object(e + '_entry').get_text().decode('utf-8')
+            txt = self.xml.get_object(e + '_entry').get_text()
             if txt != '':
                 vcard_ = self.add_to_vcard(vcard_, e, txt)
 
@@ -354,7 +354,7 @@ class ProfileWindow:
         end_iter = buff.get_end_iter()
         txt = buff.get_text(start_iter, end_iter, False)
         if txt != '':
-            vcard_['DESC'] = txt.decode('utf-8')
+            vcard_['DESC'] = txt
 
         # Avatar
         if self.avatar_encoded:

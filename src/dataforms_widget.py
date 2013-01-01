@@ -114,12 +114,12 @@ class DataFormWidget(Gtk.Alignment, object):
     def get_title(self):
         """
         Get the title of data form, as a unicode object. If no title or no form,
-        returns u''. Useful for setting window title
+        returns ''. Useful for setting window title
         """
         if self._data_form is not None:
             if self._data_form.title is not None:
                 return self._data_form.title
-        return u''
+        return ''
 
     title = property(get_title, None, None, 'Data form title')
 
@@ -540,7 +540,7 @@ class SingleForm(Gtk.Table, object):
                             field)
                     widget.set_sensitive(readwrite)
                     if field.value is None:
-                        field.value = u''
+                        field.value = ''
                     widget.set_text(field.value)
                 else:
                     commonwidget=False

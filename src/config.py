@@ -684,7 +684,7 @@ class PreferencesWindow:
     def on_emoticons_combobox_changed(self, widget):
         active = widget.get_active()
         model = widget.get_model()
-        emot_theme = model[active][0].decode('utf-8')
+        emot_theme = model[active][0]
         if emot_theme == _('Disabled'):
             gajim.config.set('emoticons_theme', '')
         else:
@@ -770,7 +770,7 @@ class PreferencesWindow:
     def on_theme_combobox_changed(self, widget):
         model = widget.get_model()
         active = widget.get_active()
-        config_theme = model[active][0].decode('utf-8').replace(' ', '_')
+        config_theme = model[active][0].replace(' ', '_')
 
         gajim.config.set('roster_theme', config_theme)
 
@@ -800,7 +800,7 @@ class PreferencesWindow:
     def on_iconset_combobox_changed(self, widget):
         model = widget.get_model()
         active = widget.get_active()
-        icon_string = model[active][1].decode('utf-8')
+        icon_string = model[active][1]
         gajim.config.set('iconset', icon_string)
         gtkgui_helpers.reload_jabber_state_images()
 
@@ -1019,7 +1019,7 @@ class PreferencesWindow:
                                 gajim.config.get('autoxatime') * 60)
 
     def on_auto_away_message_entry_changed(self, widget):
-        gajim.config.set('autoaway_message', widget.get_text().decode('utf-8'))
+        gajim.config.set('autoaway_message', widget.get_text())
 
     def on_auto_xa_checkbutton_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'autoxa',
@@ -1033,7 +1033,7 @@ class PreferencesWindow:
                                 gajim.config.get('autoxatime') * 60)
 
     def on_auto_xa_message_entry_changed(self, widget):
-        gajim.config.set('autoxa_message', widget.get_text().decode('utf-8'))
+        gajim.config.set('autoxa_message', widget.get_text())
 
     def on_prompt_online_status_message_checkbutton_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'ask_online_status')
@@ -1067,7 +1067,7 @@ class PreferencesWindow:
 
     def on_default_msg_treemodel_row_changed(self, model, path, iter_):
         status = model[iter_][0]
-        message = model[iter_][2].decode('utf-8')
+        message = model[iter_][2]
         message = helpers.to_one_line(message)
         gajim.config.set_per('defaultstatusmsg', status, 'enabled',
                 model[iter_][3])
@@ -1084,20 +1084,18 @@ class PreferencesWindow:
             gajim.config.del_per('statusmsg', msg)
         iter_ = model.get_iter_first()
         while iter_:
-            val = model[iter_][0].decode('utf-8')
+            val = model[iter_][0]
             if model[iter_][1]: # we have a preset message
                 if not val: # no title, use message text for title
                     val = model[iter_][1]
                 gajim.config.add_per('statusmsg', val)
-                msg = helpers.to_one_line(model[iter_][1].decode('utf-8'))
+                msg = helpers.to_one_line(model[iter_][1])
                 gajim.config.set_per('statusmsg', val, 'message', msg)
                 i = 2
                 # store mood / activity
                 for subname in ('activity', 'subactivity', 'activity_text',
                 'mood', 'mood_text'):
                     val = model[iter_][i]
-                    if val:
-                        val = val.decode('utf-8')
                     gajim.config.set_per('statusmsg', val, subname, val)
                     i += 1
             iter_ = model.iter_next(iter_)
@@ -1111,7 +1109,7 @@ class PreferencesWindow:
     def on_av_combobox_changed(self, combobox, config_name):
         model = combobox.get_model()
         active = combobox.get_active()
-        device = model[active][1].decode('utf-8')
+        device = model[active][1]
         gajim.config.set(config_name, device)
 
     def on_audio_input_combobox_changed(self, widget):
@@ -1137,7 +1135,7 @@ class PreferencesWindow:
                 [self.xml.get_object('stun_server_entry')])
 
     def stun_server_entry_changed(self, widget):
-        gajim.config.set('stun_server', widget.get_text().decode('utf-8'))
+        gajim.config.set('stun_server', widget.get_text())
 
     def on_applications_combobox_changed(self, widget):
         if widget.get_active() == 0:
@@ -1148,13 +1146,13 @@ class PreferencesWindow:
             self.xml.get_object('custom_apps_frame').show()
 
     def on_custom_browser_entry_changed(self, widget):
-        gajim.config.set('custombrowser', widget.get_text().decode('utf-8'))
+        gajim.config.set('custombrowser', widget.get_text())
 
     def on_custom_mail_client_entry_changed(self, widget):
-        gajim.config.set('custommailapp', widget.get_text().decode('utf-8'))
+        gajim.config.set('custommailapp', widget.get_text())
 
     def on_custom_file_manager_entry_changed(self, widget):
-        gajim.config.set('custom_file_manager', widget.get_text().decode('utf-8'))
+        gajim.config.set('custom_file_manager', widget.get_text())
 
     def on_log_show_changes_checkbutton_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'log_contact_status_changes')
@@ -1260,7 +1258,7 @@ class PreferencesWindow:
 
     def on_proxies_combobox_changed(self, widget):
         active = widget.get_active()
-        proxy = widget.get_model()[active][0].decode('utf-8')
+        proxy = widget.get_model()[active][0]
         if proxy == _('None'):
             proxy = ''
 
@@ -1371,7 +1369,7 @@ class ManageProxiesWindow:
         (model, iter_) = sel.get_selected()
         if not iter_:
             return
-        proxy = model[iter_][0].decode('utf-8')
+        proxy = model[iter_][0]
         model.remove(iter_)
         gajim.config.del_per('proxies', proxy)
         self.xml.get_object('remove_proxy_button').set_sensitive(False)
@@ -1386,7 +1384,7 @@ class ManageProxiesWindow:
         if self.block_signal:
             return
         act = widget.get_active()
-        proxy = self.proxyname_entry.get_text().decode('utf-8')
+        proxy = self.proxyname_entry.get_text()
         gajim.config.set_per('proxies', proxy, 'useauth', act)
         self.xml.get_object('proxyuser_entry').set_sensitive(act)
         self.xml.get_object('proxypass_entry').set_sensitive(act)
@@ -1395,7 +1393,7 @@ class ManageProxiesWindow:
         if self.block_signal:
             return
         act = widget.get_active()
-        proxy = self.proxyname_entry.get_text().decode('utf-8')
+        proxy = self.proxyname_entry.get_text()
         gajim.config.set_per('proxies', proxy, 'bosh_useproxy', act)
         self.xml.get_object('proxyhost_entry').set_sensitive(act)
         self.xml.get_object('proxyport_entry').set_sensitive(act)
@@ -1484,8 +1482,8 @@ class ManageProxiesWindow:
         (model, iter_) = sel.get_selected()
         if not iter_:
             return
-        old_name = model.get_value(iter_, 0).decode('utf-8')
-        new_name = widget.get_text().decode('utf-8')
+        old_name = model.get_value(iter_, 0)
+        new_name = widget.get_text()
         if new_name == '':
             return
         if new_name == old_name:
@@ -1503,42 +1501,42 @@ class ManageProxiesWindow:
         types = ['http', 'socks5', 'bosh']
         type_ = self.proxytype_combobox.get_active()
         self.show_bosh_fields(types[type_]=='bosh')
-        proxy = self.proxyname_entry.get_text().decode('utf-8')
+        proxy = self.proxyname_entry.get_text()
         gajim.config.set_per('proxies', proxy, 'type', types[type_])
 
     def on_proxyhost_entry_changed(self, widget):
         if self.block_signal:
             return
-        value = widget.get_text().decode('utf-8')
-        proxy = self.proxyname_entry.get_text().decode('utf-8')
+        value = widget.get_text()
+        proxy = self.proxyname_entry.get_text()
         gajim.config.set_per('proxies', proxy, 'host', value)
 
     def on_proxyport_entry_changed(self, widget):
         if self.block_signal:
             return
-        value = widget.get_text().decode('utf-8')
-        proxy = self.proxyname_entry.get_text().decode('utf-8')
+        value = widget.get_text()
+        proxy = self.proxyname_entry.get_text()
         gajim.config.set_per('proxies', proxy, 'port', value)
 
     def on_proxyuser_entry_changed(self, widget):
         if self.block_signal:
             return
-        value = widget.get_text().decode('utf-8')
-        proxy = self.proxyname_entry.get_text().decode('utf-8')
+        value = widget.get_text()
+        proxy = self.proxyname_entry.get_text()
         gajim.config.set_per('proxies', proxy, 'user', value)
 
     def on_boshuri_entry_changed(self, widget):
         if self.block_signal:
             return
-        value = widget.get_text().decode('utf-8')
-        proxy = self.proxyname_entry.get_text().decode('utf-8')
+        value = widget.get_text()
+        proxy = self.proxyname_entry.get_text()
         gajim.config.set_per('proxies', proxy, 'bosh_uri', value)
 
     def on_proxypass_entry_changed(self, widget):
         if self.block_signal:
             return
-        value = widget.get_text().decode('utf-8')
-        proxy = self.proxyname_entry.get_text().decode('utf-8')
+        value = widget.get_text()
+        proxy = self.proxyname_entry.get_text()
         gajim.config.set_per('proxies', proxy, 'pass', value)
 
 
@@ -1613,7 +1611,7 @@ class AccountsWindow:
         model = self.accounts_treeview.get_model()
         iter_ = model.get_iter_first()
         while iter_:
-            acct = model[iter_][0].decode('utf-8')
+            acct = model[iter_][0]
             if account == acct:
                 self.accounts_treeview.set_cursor(model.get_path(iter_))
                 return
@@ -1693,7 +1691,7 @@ class AccountsWindow:
         if sel:
             (model, iter_) = sel.get_selected()
             if iter_:
-                account = model[iter_][0].decode('utf-8')
+                account = model[iter_][0]
             else:
                 account = None
         else:
@@ -2342,7 +2340,7 @@ class AccountsWindow:
 
     def on_proxies_combobox1_changed(self, widget):
         active = widget.get_active()
-        proxy = widget.get_model()[active][0].decode('utf-8')
+        proxy = widget.get_model()[active][0]
         if proxy == _('None'):
             proxy = ''
 
@@ -2384,7 +2382,7 @@ class AccountsWindow:
     def on_custom_host_entry1_changed(self, widget):
         if self.ignore_events:
             return
-        host = widget.get_text().decode('utf-8')
+        host = widget.get_text()
         if self.option_changed('custom_host', host):
             self.need_relogin = True
         gajim.config.set_per('accounts', self.current_account, 'custom_host',
@@ -2655,7 +2653,7 @@ class AccountsWindow:
     def on_first_name_entry2_changed(self, widget):
         if self.ignore_events:
             return
-        name = widget.get_text().decode('utf-8')
+        name = widget.get_text()
         if self.option_changed('zeroconf_first_name', name):
             self.need_relogin = True
         gajim.config.set_per('accounts', self.current_account,
@@ -2664,7 +2662,7 @@ class AccountsWindow:
     def on_last_name_entry2_changed(self, widget):
         if self.ignore_events:
             return
-        name = widget.get_text().decode('utf-8')
+        name = widget.get_text()
         if self.option_changed('zeroconf_last_name', name):
             self.need_relogin = True
         gajim.config.set_per('accounts', self.current_account,
@@ -2673,7 +2671,7 @@ class AccountsWindow:
     def on_jabber_id_entry2_changed(self, widget):
         if self.ignore_events:
             return
-        id_ = widget.get_text().decode('utf-8')
+        id_ = widget.get_text()
         if self.option_changed('zeroconf_jabber_id', id_):
             self.need_relogin = True
         gajim.config.set_per('accounts', self.current_account,
@@ -2682,7 +2680,7 @@ class AccountsWindow:
     def on_email_entry2_changed(self, widget):
         if self.ignore_events:
             return
-        email = widget.get_text().decode('utf-8')
+        email = widget.get_text()
         if self.option_changed('zeroconf_email', email):
             self.need_relogin = True
         gajim.config.set_per('accounts', self.current_account,
@@ -2733,7 +2731,7 @@ class FakeDataForm(Gtk.Table, object):
 
     def get_infos(self):
         for name in self.entries.keys():
-            self.infos[name] = self.entries[name].get_text().decode('utf-8')
+            self.infos[name] = self.entries[name].get_text()
         return self.infos
 
 class ServiceRegistrationWindow:
@@ -2906,7 +2904,7 @@ class GroupchatConfigWindow:
 
     def on_cell_edited(self, cell, path, new_text):
         model = self.affiliation_treeview['outcast'].get_model()
-        new_text = new_text.decode('utf-8')
+        new_text = new_text
         iter_ = model.get_iter(path)
         model[iter_][1] = new_text
 
@@ -2984,12 +2982,12 @@ class GroupchatConfigWindow:
             iter_ = model.get_iter_first()
             # add new jid
             while iter_:
-                jid = model[iter_][0].decode('utf-8')
+                jid = model[iter_][0]
                 actual_jid_list.append(jid)
                 if jid not in self.start_users_dict[affiliation] or \
                 (affiliation == 'outcast' and 'reason' in self.start_users_dict[
                 affiliation][jid] and self.start_users_dict[affiliation][jid]\
-                ['reason'] != model[iter_][1].decode('utf-8')):
+                ['reason'] != model[iter_][1]):
                     users_dict[jid] = {'affiliation': affiliation}
                     if affiliation == 'outcast':
                         users_dict[jid]['reason'] = model[iter_][1].decode(
@@ -3236,7 +3234,7 @@ class ManageBookmarksWindow:
             # No parent, so we got an account -> add to this.
             add_to = iter_
 
-        account = model[add_to][1].decode('utf-8')
+        account = model[add_to][1]
         nick = gajim.nicks[account]
         iter_ = self.treestore.append(add_to, [account, _('New Group Chat'),
             '@', False, False, '', nick, 'in_and_out'])
@@ -3269,8 +3267,8 @@ class ManageBookmarksWindow:
             #Account data can't be changed
             return
 
-        if self.server_entry.get_text().decode('utf-8') == '' or \
-        self.room_entry.get_text().decode('utf-8') == '':
+        if self.server_entry.get_text() == '' or \
+        self.room_entry.get_text() == '':
             dialogs.ErrorDialog(_('This bookmark has invalid data'),
                     _('Please be sure to fill out server and room fields or remove this'
                     ' bookmark.'))
@@ -3290,7 +3288,7 @@ class ManageBookmarksWindow:
                 return
 
         for account in self.treestore:
-            account_unicode = account[1].decode('utf-8')
+            account_unicode = account[1]
             gajim.connections[account_unicode].bookmarks = []
 
             for bm in account.iterchildren():
@@ -3298,17 +3296,9 @@ class ManageBookmarksWindow:
                 autojoin = unicode(int(bm[3]))
                 minimize = unicode(int(bm[4]))
                 name = bm[1]
-                if name:
-                    name = name.decode('utf-8')
                 jid = bm[2]
-                if jid:
-                    jid = jid.decode('utf-8')
                 pw = bm[5]
-                if pw:
-                    pw = pw.decode('utf-8')
                 nick = bm[6]
-                if nick:
-                    nick = nick.decode('utf-8')
 
                 # create the bookmark-dict
                 bmdict = { 'name': name, 'jid': jid, 'autojoin': autojoin,
@@ -3353,7 +3343,7 @@ class ManageBookmarksWindow:
 
         # Fill in the data for childs
         self.title_entry.set_text(model[iter_][1])
-        room_jid = model[iter_][2].decode('utf-8')
+        room_jid = model[iter_][2]
         (room, server) = room_jid.split('@')
         self.room_entry.set_text(room)
         self.server_entry.set_text(server)
@@ -3364,7 +3354,7 @@ class ManageBookmarksWindow:
         self.minimize_checkbutton.set_sensitive(model[iter_][3])
 
         if model[iter_][5] is not None:
-            password = model[iter_][5].decode('utf-8')
+            password = model[iter_][5]
         else:
             password = None
 
@@ -3374,7 +3364,6 @@ class ManageBookmarksWindow:
             self.pass_entry.set_text('')
         nick = model[iter_][6]
         if nick:
-            nick = nick.decode('utf-8')
             self.nick_entry.set_text(nick)
         else:
             self.nick_entry.set_text('')
@@ -3393,7 +3382,7 @@ class ManageBookmarksWindow:
     def on_nick_entry_changed(self, widget):
         (model, iter_) = self.selection.get_selected()
         if iter_:
-            nick = self.nick_entry.get_text().decode('utf-8')
+            nick = self.nick_entry.get_text()
             try:
                 nick = helpers.parse_resource(nick)
             except helpers.InvalidFormat, e:
@@ -3407,12 +3396,12 @@ class ManageBookmarksWindow:
         (model, iter_) = self.selection.get_selected()
         if not iter_:
             return
-        server = widget.get_text().decode('utf-8')
+        server = widget.get_text()
         if '@' in server:
             dialogs.ErrorDialog(_('Invalid server'), _('Character not allowed'))
             widget.set_text(server.replace('@', ''))
 
-        room_jid = self.room_entry.get_text().decode('utf-8').strip() + '@' + \
+        room_jid = self.room_entry.get_text().strip() + '@' + \
                 server.strip()
         try:
             room_jid = helpers.parse_resource(room_jid)
@@ -3427,12 +3416,12 @@ class ManageBookmarksWindow:
         (model, iter_) = self.selection.get_selected()
         if not iter_:
             return
-        room = widget.get_text().decode('utf-8')
+        room = widget.get_text()
         if '@' in room:
             dialogs.ErrorDialog(_('Invalid server'), _('Character not allowed'))
             widget.set_text(room.replace('@', ''))
         room_jid = room.strip() + '@' + \
-            self.server_entry.get_text().decode('utf-8').strip()
+            self.server_entry.get_text().strip()
         try:
             room_jid = helpers.parse_resource(room_jid)
         except helpers.InvalidFormat, e:
@@ -3641,7 +3630,7 @@ class AccountCreationWizardWindow:
                 dialogs.ErrorDialog(pritext, sectext)
                 return
             server = self.xml.get_object('server_comboboxentry').get_child().\
-                get_text().decode('utf-8').strip()
+                get_text().strip()
             savepass = self.xml.get_object('save_password_checkbutton').\
                 get_active()
             password = self.xml.get_object('password_entry').get_text().decode(
@@ -3675,7 +3664,7 @@ class AccountCreationWizardWindow:
         elif cur_page == 2:
             # We are creating a new account
             server = self.xml.get_object('server_comboboxentry1').get_child().\
-                get_text().decode('utf-8')
+                get_text()
 
             if not server:
                 dialogs.ErrorDialog(_('Invalid server'),
@@ -3691,7 +3680,7 @@ class AccountCreationWizardWindow:
             # Get advanced options
             proxies_combobox = self.xml.get_object('proxies_combobox')
             active = proxies_combobox.get_active()
-            proxy = proxies_combobox.get_model()[active][0].decode('utf-8')
+            proxy = proxies_combobox.get_model()[active][0]
             if proxy == _('None'):
                 proxy = ''
             config['proxy'] = proxy
@@ -3707,7 +3696,7 @@ class AccountCreationWizardWindow:
                 return
             config['custom_port'] = custom_port
             config['custom_host'] = self.xml.get_object(
-                'custom_host_entry').get_text().decode('utf-8')
+                'custom_host_entry').get_text()
 
             if self.xml.get_object('anonymous_checkbutton2').get_active():
                 self.modify = True
@@ -4161,11 +4150,11 @@ class ManageSoundsWindow:
         self.window.show_all()
 
     def on_sounds_treemodel_row_changed(self, model, path, iter_):
-        sound_event = model[iter_][3].decode('utf-8')
+        sound_event = model[iter_][3]
         gajim.config.set_per('soundevents', sound_event, 'enabled',
-                                bool(model[path][0]))
+            bool(model[path][0]))
         gajim.config.set_per('soundevents', sound_event, 'path',
-                                model[iter_][2].decode('utf-8'))
+            model[iter_][2])
 
     def sound_toggled_cb(self, cell, path):
         model = self.sound_tree.get_model()
@@ -4238,7 +4227,7 @@ class ManageSoundsWindow:
         def on_cancel(widget):
             self.dialog.destroy()
 
-        path_to_snd_file = model[iter_][2].decode('utf-8')
+        path_to_snd_file = model[iter_][2]
         self.dialog = dialogs.SoundChooserDialog(path_to_snd_file, on_ok,
                 on_cancel)
 

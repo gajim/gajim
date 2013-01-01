@@ -620,7 +620,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         message_buffer = self.msg_textview.get_buffer()
         start_iter = message_buffer.get_start_iter()
         end_iter = message_buffer.get_end_iter()
-        message = message_buffer.get_text(start_iter, end_iter, False).decode('utf-8')
+        message = message_buffer.get_text(start_iter, end_iter, False)
         xhtml = self.msg_textview.get_xhtml()
 
         # send the message
@@ -2842,7 +2842,7 @@ class ChatControl(ChatControlBase):
         type_ = model[iter_][2]
         if type_ != 'contact': # source is not a contact
             return
-        dropped_jid = data.decode('utf-8')
+        dropped_jid = data
 
         dropped_transport = gajim.get_transport_name_from_jid(dropped_jid)
         c_transport = gajim.get_transport_name_from_jid(c.jid)

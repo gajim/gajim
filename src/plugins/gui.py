@@ -237,7 +237,7 @@ class PluginsWindow(object):
         model, iter = selection.get_selected()
         if iter:
             plugin = model.get_value(iter, PLUGIN)
-            plugin_name = model.get_value(iter, NAME).decode('utf-8')
+            plugin_name = model.get_value(iter, NAME)
             is_active = model.get_value(iter, ACTIVE)
             try:
                 gajim.plugin_manager.remove_plugin(plugin)

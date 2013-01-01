@@ -37,11 +37,11 @@ def paragraph_direction_mark(text):
     for char in text:
         bidi = unicodedata.bidirectional(char)
         if bidi == 'L':
-            return u'\u200E'
+            return '\u200E'
         elif bidi == 'AL' or bidi == 'R':
-            return u'\u200F'
+            return '\u200F'
 
-    return u'\u200E'
+    return '\u200E'
 
 APP = 'gajim'
 DIR = defs.localedir
@@ -61,7 +61,7 @@ if os.name == 'nt':
     if lang:
         os.environ['LANG'] = lang
 
-gettext.install(APP, DIR, unicode = True)
+gettext.install(APP, DIR, unicode=False)
 if gettext._translations:
     _translation = gettext._translations.values()[0]
 else:

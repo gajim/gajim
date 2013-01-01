@@ -61,7 +61,7 @@ class OptionsParser:
 
         for line in fd:
             try:
-                line = line.decode('utf-8')
+                line = helpers.ensure_utf8_string(line)
             except UnicodeDecodeError:
                 line = line.decode(locale.getpreferredencoding())
             optname, key, subname, value = regex.match(line).groups()
@@ -715,7 +715,7 @@ class OptionsParser:
         """
         dirs = ['../data', gajim.gajimpaths.data_root, gajim.DATA_DIR]
         if os.name != 'nt':
-            dirs.append(os.path.expanduser(u'~/.gajim'))
+            dirs.append(os.path.expanduser('~/.gajim'))
         for evt in gajim.config.get_per('soundevents'):
             path = gajim.config.get_per('soundevents', evt, 'path')
             # absolute and relative passes are necessary

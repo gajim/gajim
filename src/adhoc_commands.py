@@ -452,7 +452,7 @@ class CommandWindow:
 
         note = command.getTag('note')
         if note:
-            self.notes_label.set_text(note.getData().decode('utf-8'))
+            self.notes_label.set_text(note.getData())
             self.notes_label.set_no_show_all(False)
             self.notes_label.show()
         else:
@@ -510,7 +510,7 @@ class CommandWindow:
             try:
                 errorname = nbxmpp.NS_STANZAS + ' ' + str(errorid)
                 errordesc = nbxmpp.ERRORS[errorname][2]
-                error = errordesc.decode('utf-8')
+                error = errordesc
                 del errorname, errordesc
             except KeyError:        # when stanza doesn't have error description
                 error = _('Service returned an error.')

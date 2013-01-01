@@ -1906,8 +1906,8 @@ class Interface:
         self.sth_at_sth_dot_sth = r'\S+@\S+\.\S*[^\s)?]'
 
         # Invalid XML chars
-        self.invalid_XML_chars = u'[\x00-\x08]|[\x0b-\x0c]|[\x0e-\x1f]|'\
-            u'[\ud800-\udfff]|[\ufffe-\uffff]'
+        self.invalid_XML_chars = '[\x00-\x08]|[\x0b-\x0c]|[\x0e-\x1f]|'\
+            '[\ud800-\udfff]|[\ufffe-\uffff]'
 
     def popup_emoticons_under_button(self, button, parent_win):
         """
@@ -1969,7 +1969,7 @@ class Interface:
             if not self.image_is_ok(emot_file):
                 continue
             for emot in emots[emot_filename]:
-                emot = emot.decode('utf-8')
+                emot = emot
                 # This avoids duplicated emoticons with the same image eg. :)
                 # and :-)
                 if not emot_file in self.emoticons.values():

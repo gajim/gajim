@@ -120,7 +120,7 @@ else:
             # in the JEP
             # &nbsp; ==  u"\u00a0"
             self.pub.writer.translator_class.attribution_formats['dash'] = (
-                    u'\u2014', '')
+                    '\u2014', '')
             self.pub.process_programmatic_settings(settings_spec,
                     settings_overrides,
                     config_section)
@@ -137,7 +137,7 @@ else:
             output = self.pub.publish(enable_exit_status=enable_exit_status)
             # kludge until we can get docutils to stop generating (rare) &nbsp;
             # entities
-            return u'\u00a0'.join(self.pub.writer.parts['fragment'].strip().split(
+            return '\u00a0'.join(self.pub.writer.parts['fragment'].strip().split(
                     '&nbsp;'))
 
     Generator = HTMLGenerator()

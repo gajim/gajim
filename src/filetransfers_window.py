@@ -484,7 +484,7 @@ class FileTransfersWindow:
         iter_ = self.get_iter_by_sid(file_props.type_, file_props.sid)
         if iter_ is None:
             return
-        self.model[iter_][C_SID].decode('utf-8')
+        self.model[iter_][C_SID]
         if status == 'stop':
             file_props.stopped = True
         elif status == 'ok':
@@ -677,7 +677,7 @@ class FileTransfersWindow:
         """
         iter_ = self.model.get_iter_first()
         while iter_:
-            if typ + sid == self.model[iter_][C_SID].decode('utf-8'):
+            if typ + sid == self.model[iter_][C_SID]:
                 return iter_
             iter_ = self.model.iter_next(iter_)
 
@@ -769,7 +769,7 @@ class FileTransfersWindow:
             except Exception:
                 self.tooltip.hide_tooltip()
                 return
-            sid = self.model[iter_][C_SID].decode('utf-8')
+            sid = self.model[iter_][C_SID]
             file_props = FilesProp.getFilePropByType(sid[0], sid[1:])
             if file_props is not None:
                 if self.tooltip.timeout == 0 or self.tooltip.id != props[0]:
@@ -824,7 +824,7 @@ class FileTransfersWindow:
             self.set_all_insensitive()
             return
         current_iter = self.model.get_iter(path)
-        sid = self.model[current_iter][C_SID].decode('utf-8')
+        sid = self.model[current_iter][C_SID]
         file_props = FilesProp.getFilePropByType(sid[0], sid[1:])
         self.remove_menuitem.set_sensitive(is_row_selected)
         self.open_folder_menuitem.set_sensitive(is_row_selected)
@@ -882,7 +882,7 @@ class FileTransfersWindow:
         i = len(self.model) - 1
         while i >= 0:
             iter_ = self.model.get_iter((i))
-            sid = self.model[iter_][C_SID].decode('utf-8')
+            sid = self.model[iter_][C_SID]
             file_props = FilesProp.getFilePropByType(sid[0], sid[1:])
             if is_transfer_stopped(file_props):
                 self._remove_transfer(iter_, sid, file_props)
@@ -917,7 +917,7 @@ class FileTransfersWindow:
         if selected is None or selected[1] is None:
             return
         s_iter = selected[1]
-        sid = self.model[s_iter][C_SID].decode('utf-8')
+        sid = self.model[s_iter][C_SID]
         file_props = FilesProp.getFilePropByType(sid[0], sid[1:])
         if is_transfer_paused(file_props):
             file_props.last_time = time.time()
@@ -939,7 +939,7 @@ class FileTransfersWindow:
         if selected is None or selected[1] is None:
             return
         s_iter = selected[1]
-        sid = self.model[s_iter][C_SID].decode('utf-8')
+        sid = self.model[s_iter][C_SID]
         file_props = FilesProp.getFilePropByType(sid[0], sid[1:])
         account = file_props.tt_account
         if account not in gajim.connections:
@@ -958,7 +958,7 @@ class FileTransfersWindow:
         # as it was before setting the timeout
         if props and self.tooltip.id == props[0]:
             iter_ = self.model.get_iter(props[0])
-            sid = self.model[iter_][C_SID].decode('utf-8')
+            sid = self.model[iter_][C_SID]
             file_props = FilesProp.getFilePropByType(sid[0], sid[1:])
             # bounding rectangle of coordinates for the cell within the treeview
             rect = self.tree.get_cell_area(props[0], props[1])
@@ -1046,7 +1046,7 @@ class FileTransfersWindow:
         if not selected or not selected[1]:
             return
         s_iter = selected[1]
-        sid = self.model[s_iter][C_SID].decode('utf-8')
+        sid = self.model[s_iter][C_SID]
         file_props = FilesProp.getFilePropByType(sid[0], sid[1:])
         if not file_props.file_name:
             return
@@ -1068,7 +1068,7 @@ class FileTransfersWindow:
         if not selected or not selected[1]:
             return
         s_iter = selected[1]
-        sid = self.model[s_iter][C_SID].decode('utf-8')
+        sid = self.model[s_iter][C_SID]
         file_props = FilesProp.getFilePropByType(sid[0], sid[1:])
         self._remove_transfer(s_iter, sid, file_props)
         self.set_all_insensitive()

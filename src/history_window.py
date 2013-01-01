@@ -165,7 +165,7 @@ class HistoryWindow:
 
         keys = completion_dict.keys()
         # Move the actual jid at first so we load history faster
-        actual_jid = self.jid_entry.get_text().decode('utf-8')
+        actual_jid = self.jid_entry.get_text()
         if actual_jid in keys:
             keys.remove(actual_jid)
             keys.insert(0, actual_jid)
@@ -244,7 +244,7 @@ class HistoryWindow:
             # Don't disable querybox when we have changed the combobox
             # to GC or All and hit enter
             return
-        jid = self.jid_entry.get_text().decode('utf-8')
+        jid = self.jid_entry.get_text()
         account = None # we don't know the account, could be any. Search for it!
         self._load_history(jid, account)
         self.results_window.set_property('visible', False)

@@ -40,7 +40,7 @@ class GajimPlugin(object):
     '''
     Base class for implementing Gajim plugins.
     '''
-    name = u''
+    name = ''
     '''
     Name of plugin.
 
@@ -48,7 +48,7 @@ class GajimPlugin(object):
 
     :type: unicode
     '''
-    short_name = u''
+    short_name = ''
     '''
     Short name of plugin.
 
@@ -59,7 +59,7 @@ class GajimPlugin(object):
     :todo: decide whether we really need this one, because class name (with
             module name) can act as such short name
     '''
-    version = u''
+    version = ''
     '''
     Version of plugin.
 
@@ -71,7 +71,7 @@ class GajimPlugin(object):
             same plugin class but with different version and we want only the newest
             one to be active - is such policy good?
     '''
-    description = u''
+    description = ''
     '''
     Plugin description.
 
@@ -88,7 +88,7 @@ class GajimPlugin(object):
     :todo: should we decide on any particular format of author strings?
             Especially: should we force format of giving author's e-mail?
     '''
-    homepage = u''
+    homepage = ''
     '''
     URL to plug-in's homepage.
 

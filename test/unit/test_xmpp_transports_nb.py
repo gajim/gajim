@@ -40,38 +40,38 @@ class TestModuleLevelFunctions(unittest.TestCase):
             self.assertEqual(_user, user)
             self.assertEqual(_passwd, passwd)
 
-        bosh_dict = {'bosh_content': u'text/xml; charset=utf-8',
+        bosh_dict = {'bosh_content': 'text/xml; charset=utf-8',
                                         'bosh_hold': 2,
                                         'bosh_http_pipelining': False,
-                                        'bosh_uri': u'http://gajim.org:5280/http-bind',
+                                        'bosh_uri': 'http://gajim.org:5280/http-bind',
                                         'bosh_useproxy': False,
                                         'bosh_wait': 30,
                                         'bosh_wait_for_restart_response': False,
-                                        'host': u'172.16.99.11',
-                                        'pass': u'pass',
+                                        'host': '172.16.99.11',
+                                        'pass': 'pass',
                                         'port': 3128,
-                                        'type': u'bosh',
+                                        'type': 'bosh',
                                         'useauth': True,
-                                        'user': u'user'}
-        check_dict(bosh_dict, host=u'gajim.org', port=5280, user=u'user',
-                passwd=u'pass')
+                                        'user': 'user'}
+        check_dict(bosh_dict, host='gajim.org', port=5280, user='user',
+                passwd='pass')
 
-        proxy_dict = {'bosh_content': u'text/xml; charset=utf-8',
+        proxy_dict = {'bosh_content': 'text/xml; charset=utf-8',
                                         'bosh_hold': 2,
                                         'bosh_http_pipelining': False,
                                         'bosh_port': 5280,
-                                        'bosh_uri': u'',
+                                        'bosh_uri': '',
                                         'bosh_useproxy': True,
                                         'bosh_wait': 30,
                                         'bosh_wait_for_restart_response': False,
-                                        'host': u'172.16.99.11',
-                                        'pass': u'pass',
+                                        'host': '172.16.99.11',
+                                        'pass': 'pass',
                                         'port': 3128,
                                         'type': 'socks5',
                                         'useauth': True,
-                                        'user': u'user'}
-        check_dict(proxy_dict, host=u'172.16.99.11', port=3128, user=u'user',
-                passwd=u'pass')
+                                        'user': 'user'}
+        check_dict(proxy_dict, host='172.16.99.11', port=3128, user='user',
+                passwd='pass')
 
 
 if __name__ == '__main__':

@@ -800,7 +800,7 @@ _('This type of service does not contain any items to browse.'))
     def on_address_comboboxentry_changed(self, widget):
         if self.address_comboboxentry.get_active() != -1:
             # user selected one of the entries so do auto-visit
-            jid = self.address_comboboxentry.get_child().get_text().decode('utf-8')
+            jid = self.address_comboboxentry.get_child().get_text()
             try:
                 jid = helpers.parse_jid(jid)
             except helpers.InvalidFormat, s:
@@ -810,7 +810,7 @@ _('This type of service does not contain any items to browse.'))
             self.travel(jid, '')
 
     def on_go_button_clicked(self, widget):
-        jid = self.address_comboboxentry.get_child().get_text().decode('utf-8')
+        jid = self.address_comboboxentry.get_child().get_text()
         try:
             jid = helpers.parse_jid(jid)
         except helpers.InvalidFormat, s:
@@ -998,9 +998,9 @@ class AgentBrowser:
         model, iter_ = self.window.services_treeview.get_selection().get_selected()
         if not iter_:
             return
-        jid = model[iter_][0].decode('utf-8')
+        jid = model[iter_][0]
         if jid:
-            node = model[iter_][1].decode('utf-8')
+            node = model[iter_][1]
             self.window.open(jid, node)
 
     def update_actions(self):
@@ -1012,8 +1012,8 @@ class AgentBrowser:
         model, iter_ = self.window.services_treeview.get_selection().get_selected()
         if not iter_:
             return
-        jid = model[iter_][0].decode('utf-8')
-        node = model[iter_][1].decode('utf-8')
+        jid = model[iter_][0]
+        node = model[iter_][1]
         if jid:
             self.cache.get_info(jid, node, self._update_actions, nofetch = True)
 
@@ -1035,8 +1035,8 @@ class AgentBrowser:
         model, iter_ = self.window.services_treeview.get_selection().get_selected()
         if not iter_:
             return
-        jid = model[iter_][0].decode('utf-8')
-        node = model[iter_][1].decode('utf-8')
+        jid = model[iter_][0]
+        node = model[iter_][1]
         if jid:
             self.cache.get_info(jid, node, self._default_action, nofetch = True)
 
@@ -1077,8 +1077,8 @@ class AgentBrowser:
         """
         iter_ = self.model.get_iter_first()
         while iter_:
-            cjid = self.model.get_value(iter_, 0).decode('utf-8')
-            cnode = self.model.get_value(iter_, 1).decode('utf-8')
+            cjid = self.model.get_value(iter_, 0)
+            cnode = self.model.get_value(iter_, 1)
             if jid == cjid and node == cnode:
                 break
             iter_ = self.model.iter_next(iter_)
@@ -1226,10 +1226,10 @@ class ToplevelAgentBrowser(AgentBrowser):
             # These can be None, apparently
             descr1 = model.get_value(iter1, 3)
             if descr1:
-                descr1 = descr1.decode('utf-8')
+                descr1 = descr1
             descr2 = model.get_value(iter2, 3)
             if descr2:
-                descr2 = descr2.decode('utf-8')
+                descr2 = descr2
             # Compare strings
             return cmp(descr1, descr2)
         return statecmp
@@ -1402,7 +1402,7 @@ class ToplevelAgentBrowser(AgentBrowser):
         model, iter_ = self.window.services_treeview.get_selection().get_selected()
         if not iter_:
             return
-        service = model[iter_][0].decode('utf-8')
+        service = model[iter_][0]
         if service in gajim.interface.instances[self.account]['search']:
             gajim.interface.instances[self.account]['search'][service].window.\
                     present()
@@ -1428,8 +1428,8 @@ class ToplevelAgentBrowser(AgentBrowser):
         model, iter_ = self.window.services_treeview.get_selection().get_selected()
         if not iter_:
             return
-        service = model[iter_][0].decode('utf-8')
-        node = model[iter_][1].decode('utf-8')
+        service = model[iter_][0]
+        node = model[iter_][1]
         adhoc_commands.CommandWindow(self.account, service, commandnode=node)
 
     def on_register_button_clicked(self, widget = None):
@@ -1440,7 +1440,7 @@ class ToplevelAgentBrowser(AgentBrowser):
         model, iter_ = self.window.services_treeview.get_selection().get_selected()
         if not iter_:
             return
-        jid = model[iter_][0].decode('utf-8')
+        jid = model[iter_][0]
         if jid:
             gajim.connections[self.account].request_register_agent_info(jid)
             self.window.destroy(chain = True)
@@ -1453,7 +1453,7 @@ class ToplevelAgentBrowser(AgentBrowser):
         model, iter_ = self.window.services_treeview.get_selection().get_selected()
         if not iter_:
             return
-        service = model[iter_][0].decode('utf-8')
+        service = model[iter_][0]
         if 'join_gc' not in gajim.interface.instances[self.account]:
             try:
                 dialogs.JoinGroupchatWindow(self.account, service)
@@ -1486,7 +1486,7 @@ class ToplevelAgentBrowser(AgentBrowser):
                 self.register_button.set_sensitive(True)
             # Guess what kind of service we're dealing with
             if self.browse_button:
-                jid = model[iter_][0].decode('utf-8')
+                jid = model[iter_][0]
                 type_ = gajim.get_transport_name_from_jid(jid,
                                         use_config_setting = False)
                 if type_:
@@ -1614,7 +1614,7 @@ class ToplevelAgentBrowser(AgentBrowser):
         cat = self._friendly_category(cat, type_)[0]
         iter_ = self.model.get_iter_first()
         while iter_:
-            if self.model.get_value(iter_, 3).decode('utf-8') == cat:
+            if self.model.get_value(iter_, 3) == cat:
                 break
             iter_ = self.model.iter_next(iter_)
         if iter_:
@@ -1627,8 +1627,8 @@ class ToplevelAgentBrowser(AgentBrowser):
         while cat_iter and not iter_:
             iter_ = self.model.iter_children(cat_iter)
             while iter_:
-                cjid = self.model.get_value(iter_, 0).decode('utf-8')
-                cnode = self.model.get_value(iter_, 1).decode('utf-8')
+                cjid = self.model.get_value(iter_, 0)
+                cnode = self.model.get_value(iter_, 1)
                 if jid == cjid and node == cnode:
                     break
                 iter_ = self.model.iter_next(iter_)
@@ -1699,7 +1699,7 @@ class ToplevelAgentBrowser(AgentBrowser):
 
         # Check if we have to move categories
         old_cat_iter = self.model.iter_parent(iter_)
-        old_cat = self.model.get_value(old_cat_iter, 3).decode('utf-8')
+        old_cat = self.model.get_value(old_cat_iter, 3)
         if self.model.get_value(old_cat_iter, 3) == cat:
             # Already in the right category, just update
             self.model[iter_][2] = pix
@@ -1819,7 +1819,7 @@ class MucBrowser(AgentBrowser):
         if not iter:
             return
         name = gajim.config.get_per('accounts', self.account, 'name')
-        room_jid = model[iter][0].decode('utf-8')
+        room_jid = model[iter][0]
         bm = {
                 'name': room_jid.split('@')[0],
                 'jid': room_jid,
@@ -1853,7 +1853,7 @@ class MucBrowser(AgentBrowser):
         model, iter_ = self.window.services_treeview.get_selection().get_selected()
         if not iter_:
             return
-        service = model[iter_][0].decode('utf-8')
+        service = model[iter_][0]
         if 'join_gc' not in gajim.interface.instances[self.account]:
             try:
                 dialogs.JoinGroupchatWindow(self.account, service)
@@ -1926,8 +1926,8 @@ class MucBrowser(AgentBrowser):
             pass
         while iter_ and self.model.get_path(iter_) != end:
             if not self.model.get_value(iter_, 6):
-                jid = self.model.get_value(iter_, 0).decode('utf-8')
-                node = self.model.get_value(iter_, 1).decode('utf-8')
+                jid = self.model.get_value(iter_, 0)
+                node = self.model.get_value(iter_, 1)
                 self.cache.get_info(jid, node, self._agent_info)
                 self._fetch_source = True
                 return

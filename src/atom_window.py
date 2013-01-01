@@ -84,20 +84,20 @@ class AtomWindow:
         # fill the fields
         if newentry.feed_link is not None:
             self.feed_title_label.set_markup(
-                u'<span foreground="blue" underline="single">%s</span>' % \
+                '<span foreground="blue" underline="single">%s</span>' % \
                 GObject.markup_escape_text(newentry.feed_title))
         else:
             self.feed_title_label.set_markup(
                 GObject.markup_escape_text(newentry.feed_title))
 
         self.feed_tagline_label.set_markup(
-            u'<small>%s</small>' % \
+            '<small>%s</small>' % \
             GObject.markup_escape_text(newentry.feed_tagline))
 
         if newentry.title:
             if newentry.uri is not None:
                 self.entry_title_label.set_markup(
-                    u'<span foreground="blue" underline="single">%s</span>' % \
+                    '<span foreground="blue" underline="single">%s</span>' % \
                     GObject.markup_escape_text(newentry.title))
             else:
                 self.entry_title_label.set_markup(

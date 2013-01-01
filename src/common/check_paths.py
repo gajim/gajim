@@ -133,11 +133,11 @@ def split_db():
         try:
             import configpaths
             OLD_LOG_DB_FOLDER = os.path.join(configpaths.fse(
-                os.environ[u'appdata']), u'Gajim')
+                os.environ['appdata']), 'Gajim')
         except KeyError:
-            OLD_LOG_DB_FOLDER = u'.'
+            OLD_LOG_DB_FOLDER = '.'
     else:
-        OLD_LOG_DB_FOLDER = os.path.expanduser(u'~/.gajim')
+        OLD_LOG_DB_FOLDER = os.path.expanduser('~/.gajim')
 
     tmp = logger.CACHE_DB_PATH
     logger.CACHE_DB_PATH = os.path.join(OLD_LOG_DB_FOLDER, 'cache.db')
@@ -148,7 +148,7 @@ def split_db():
     os.chdir(back)
     cur = con.cursor()
     cur.execute('''SELECT name FROM sqlite_master WHERE type = 'table';''')
-    tables = cur.fetchall() # we get [(u'jids',), (u'unread_messages',), ...
+    tables = cur.fetchall() # we get [('jids',), ('unread_messages',), ...
     tables = [t[0] for t in tables]
     cur.execute("ATTACH DATABASE '%s' AS cache" % logger.CACHE_DB_PATH)
     for table in ('caps_cache', 'rooms_last_message_time', 'roster_entry',
@@ -189,22 +189,22 @@ def check_and_possibly_move_config():
     if os.name == 'nt':
         try:
             OLD_LOG_DB_FOLDER = os.path.join(configpaths.fse(
-                os.environ[u'appdata']), u'Gajim')
+                os.environ['appdata']), 'Gajim')
         except KeyError:
-            OLD_LOG_DB_FOLDER = u'.'
+            OLD_LOG_DB_FOLDER = '.'
     else:
-        OLD_LOG_DB_FOLDER = os.path.expanduser(u'~/.gajim')
+        OLD_LOG_DB_FOLDER = os.path.expanduser('~/.gajim')
     if not os.path.exists(OLD_LOG_DB_FOLDER):
         return
-    OLD_LOG_DB_PATH = os.path.join(OLD_LOG_DB_FOLDER, u'logs.db')
-    OLD_CACHE_DB_PATH = os.path.join(OLD_LOG_DB_FOLDER, u'cache.db')
-    vars['OLD_VCARD_PATH'] = os.path.join(OLD_LOG_DB_FOLDER, u'vcards')
-    vars['OLD_AVATAR_PATH'] = os.path.join(OLD_LOG_DB_FOLDER, u'avatars')
-    vars['OLD_MY_EMOTS_PATH'] = os.path.join(OLD_LOG_DB_FOLDER, u'emoticons')
-    vars['OLD_MY_ICONSETS_PATH'] = os.path.join(OLD_LOG_DB_FOLDER, u'iconsets')
-    vars['OLD_MY_MOOD_ICONSETS_PATH'] = os.path.join(OLD_LOG_DB_FOLDER, u'moods')
+    OLD_LOG_DB_PATH = os.path.join(OLD_LOG_DB_FOLDER, 'logs.db')
+    OLD_CACHE_DB_PATH = os.path.join(OLD_LOG_DB_FOLDER, 'cache.db')
+    vars['OLD_VCARD_PATH'] = os.path.join(OLD_LOG_DB_FOLDER, 'vcards')
+    vars['OLD_AVATAR_PATH'] = os.path.join(OLD_LOG_DB_FOLDER, 'avatars')
+    vars['OLD_MY_EMOTS_PATH'] = os.path.join(OLD_LOG_DB_FOLDER, 'emoticons')
+    vars['OLD_MY_ICONSETS_PATH'] = os.path.join(OLD_LOG_DB_FOLDER, 'iconsets')
+    vars['OLD_MY_MOOD_ICONSETS_PATH'] = os.path.join(OLD_LOG_DB_FOLDER, 'moods')
     vars['OLD_MY_ACTIVITY_ICONSETS_PATH'] = os.path.join(OLD_LOG_DB_FOLDER,
-            u'activities')
+            'activities')
     OLD_CONFIG_FILES = []
     OLD_DATA_FILES = []
     for f in os.listdir(OLD_LOG_DB_FOLDER):
@@ -345,7 +345,7 @@ def check_and_possibly_create_paths():
         print(_('%s is a directory but should be a file') % CACHE_DB_PATH)
         print(_('Gajim will now exit'))
         sys.exit()
-        
+
     if not os.path.exists(XTLS_CERTS):
         create_path(XTLS_CERTS)
     if not os.path.exists(LOCAL_XTLS_CERTS):

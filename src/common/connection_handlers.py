@@ -1017,7 +1017,7 @@ class ConnectionHandlersBase:
         gc_contact = gajim.contacts.get_gc_contact(self.name, obj.jid, nick)
         if obj.receipt_request_tag and gajim.config.get_per('accounts',
         self.name, 'answer_receipts') and ((contact and contact.sub \
-        not in (u'to', u'none')) or gc_contact) and obj.mtype != 'error':
+        not in ('to', 'none')) or gc_contact) and obj.mtype != 'error':
             receipt = nbxmpp.Message(to=obj.fjid, typ='chat')
             receipt.setID(obj.id_)
             receipt.setTag('received', namespace='urn:xmpp:receipts',

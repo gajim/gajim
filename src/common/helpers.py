@@ -144,7 +144,7 @@ def parse_resource(resource):
     if resource:
         try:
             from nbxmpp.stringprepare import resourceprep
-            return resourceprep.prepare(unicode(resource))
+            return resourceprep.prepare(resource)
         except UnicodeError:
             raise InvalidFormat, 'Invalid character in resource.'
 
@@ -159,7 +159,7 @@ def prep(user, server, resource):
             raise InvalidFormat, _('Username must be between 1 and 1023 chars')
         try:
             from nbxmpp.stringprepare import nodeprep
-            user = nodeprep.prepare(unicode(user))
+            user = nodeprep.prepare(unicode(user)).encode('utf-8')
         except UnicodeError:
             raise InvalidFormat, _('Invalid character in username.')
     else:
@@ -170,7 +170,7 @@ def prep(user, server, resource):
             raise InvalidFormat, _('Server must be between 1 and 1023 chars')
         try:
             from nbxmpp.stringprepare import nameprep
-            server = nameprep.prepare(unicode(server))
+            server = nameprep.prepare(unicode(server)).encode('utf-8')
         except UnicodeError:
             raise InvalidFormat, _('Invalid character in hostname.')
     else:
@@ -181,7 +181,7 @@ def prep(user, server, resource):
             raise InvalidFormat, _('Resource must be between 1 and 1023 chars')
         try:
             from nbxmpp.stringprepare import resourceprep
-            resource = resourceprep.prepare(unicode(resource))
+            resource = resourceprep.prepare(unicode(resource)).encode('utf-8')
         except UnicodeError:
             raise InvalidFormat, _('Invalid character in resource.')
     else:
@@ -264,7 +264,7 @@ def get_uf_show(show, use_mnemonic = False):
         uf_show = Q_('?contact has status:Unknown')
     else:
         uf_show = Q_('?contact has status:Has errors')
-    return unicode(uf_show)
+    return uf_show
 
 def get_uf_sub(sub):
     if sub == 'none':
@@ -278,7 +278,7 @@ def get_uf_sub(sub):
     else:
         uf_sub = sub
 
-    return unicode(uf_sub)
+    return uf_sub
 
 def get_uf_ask(ask):
     if ask is None:
@@ -288,7 +288,7 @@ def get_uf_ask(ask):
     else:
         uf_ask = ask
 
-    return unicode(uf_ask)
+    return uf_ask
 
 def get_uf_role(role, plural = False):
     ''' plural determines if you get Moderators or Moderator'''
@@ -576,9 +576,6 @@ def reduce_chars_newlines(text, max_chars = 0, max_lines = 0):
         if len(string) > max_chars:
             string = string[:max_chars - 3] + '...'
         return string
-
-    if isinstance(text, str):
-        text = text.decode('utf-8')
 
     if max_lines == 0:
         lines = text.split('\n')
@@ -1431,7 +1428,7 @@ def get_proxy_info(account):
                     login = ['', '']
                     addr = env_http_proxy[0].split(':')
 
-                proxy = {'host': addr[0], 'type' : u'http', 'user':login[0]}
+                proxy = {'host': addr[0], 'type' : 'http', 'user':login[0]}
 
                 if len(addr) == 2:
                     proxy['port'] = addr[1]
@@ -1442,7 +1439,7 @@ def get_proxy_info(account):
                     proxy['pass'] = login[1]
                     proxy['useauth'] = True
                 else:
-                    proxy['pass'] = u''
+                    proxy['pass'] = ''
                 return proxy
 
             except Exception:

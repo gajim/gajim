@@ -127,7 +127,7 @@ class EditGroupsDialog:
         gajim.interface.roster.draw_group(_('General'), account)
 
     def on_add_button_clicked(self, widget):
-        group = self.xml.get_object('group_entry').get_text().decode('utf-8')
+        group = self.xml.get_object('group_entry').get_text()
         if not group:
             return
         # Do not allow special groups
@@ -137,7 +137,7 @@ class EditGroupsDialog:
         model = self.treeview.get_model()
         iter_ = model.get_iter_first()
         while iter_:
-            if model.get_value(iter_, 0).decode('utf-8') == group:
+            if model.get_value(iter_, 0) == group:
                 return
             iter_ = model.iter_next(iter_)
         self.changes_made = True
@@ -153,7 +153,7 @@ class EditGroupsDialog:
             model[path][1] = True
         else:
             model[path][1] = not model[path][1]
-        group = model[path][0].decode('utf-8')
+        group = model[path][0]
         if model[path][1]:
             self.add_group(group)
         else:
@@ -251,7 +251,7 @@ class PassphraseDialog:
         if not self.ok_handler:
             return
 
-        passph = self.passphrase_entry.get_text().decode('utf-8')
+        passph = self.passphrase_entry.get_text()
 
         if self.check:
             checked = self.xml.get_object('save_passphrase_checkbutton').\
@@ -325,8 +325,7 @@ class ChooseGPGKeyDialog:
         selection = self.keys_treeview.get_selection()
         (model, iter_) = selection.get_selected()
         if iter_ and response == Gtk.ResponseType.OK:
-            keyID = [ model[iter_][0].decode('utf-8'),
-                    model[iter_][1].decode('utf-8') ]
+            keyID = [ model[iter_][0], model[iter_][1] ]
         else:
             keyID = None
         self.on_response(keyID)
@@ -458,7 +457,7 @@ class ChangeActivityDialog:
         """
         if self.checkbutton.get_active():
             self.on_response(self.activity, self.subactivity,
-                    self.entry.get_text().decode('utf-8'))
+                    self.entry.get_text())
         else:
             self.on_response(None, None, '')
         self.window.destroy()
@@ -541,7 +540,7 @@ class ChangeMoodDialog:
 
     def on_ok_button_clicked(self, widget):
         '''Return mood and messsage (None if no mood selected)'''
-        message = self.entry.get_text().decode('utf-8')
+        message = self.entry.get_text()
         self.on_response(self.mood, message)
         self.window.destroy()
 
@@ -713,8 +712,7 @@ class ChangeStatusMessageDialog(TimeoutDialog):
     def on_dialog_response(self, dialog, response):
         if response == Gtk.ResponseType.OK:
             beg, end = self.message_buffer.get_bounds()
-            message = self.message_buffer.get_text(beg, end, True).decode('utf-8')\
-                    .strip()
+            message = self.message_buffer.get_text(beg, end, True).strip()
             message = helpers.remove_invalid_xml_chars(message)
             msg = helpers.to_one_line(message)
             if self.show:
@@ -742,7 +740,7 @@ class ChangeStatusMessageDialog(TimeoutDialog):
         active = widget.get_active()
         if active < 0:
             return None
-        name = model[active][0].decode('utf-8')
+        name = model[active][0]
         self.message_buffer.set_text(self.preset_messages_dict[name][0])
         self.pep_dict['activity'] = self.preset_messages_dict[name][1]
         self.pep_dict['subactivity'] = self.preset_messages_dict[name][2]
@@ -778,10 +776,10 @@ class ChangeStatusMessageDialog(TimeoutDialog):
         status_message_to_save_as_preset = self.message_buffer.get_text(
                 start_iter, finish_iter, True)
         def on_ok(msg_name):
-            msg_text = status_message_to_save_as_preset.decode('utf-8')
+            msg_text = status_message_to_save_as_preset
             msg_text_1l = helpers.to_one_line(msg_text)
             if not msg_name: # msg_name was ''
-                msg_name = msg_text_1l.decode('utf-8')
+                msg_name = msg_text_1l
 
             def on_ok2():
                 self.preset_messages_dict[msg_name] = [
@@ -1034,7 +1032,7 @@ class AddNewContactWindow:
             self._nec_gateway_prompt_received)
 
     def on_register_button_clicked(self, widget):
-        jid = self.protocol_jid_combobox.get_active_text().decode('utf-8')
+        jid = self.protocol_jid_combobox.get_active_text()
         gajim.connections[self.account].request_register_agent_info(jid)
 
     def on_add_new_contact_window_key_press_event(self, widget, event):
@@ -1051,7 +1049,7 @@ class AddNewContactWindow:
         """
         When Subscribe button is clicked
         """
-        jid = self.uid_entry.get_text().decode('utf-8').strip()
+        jid = self.uid_entry.get_text().strip()
         if not jid:
             return
 
@@ -1091,7 +1089,7 @@ class AddNewContactWindow:
             ErrorDialog(pritext, _('You cannot add yourself to your roster.'))
             return
 
-        nickname = self.nickname_entry.get_text().decode('utf-8') or ''
+        nickname = self.nickname_entry.get_text() or ''
         # get value of account combobox, if account was not specified
         if not self.account:
             model = self.account_combobox.get_model()
@@ -1110,14 +1108,14 @@ class AddNewContactWindow:
             message_buffer = self.message_textview.get_buffer()
             start_iter = message_buffer.get_start_iter()
             end_iter = message_buffer.get_end_iter()
-            message = message_buffer.get_text(start_iter, end_iter, True).decode('utf-8')
+            message = message_buffer.get_text(start_iter, end_iter, True)
             if self.save_message_checkbutton.get_active():
                 msg = helpers.to_one_line(message)
                 gajim.config.set_per('accounts', self.account,
                     'subscription_request_msg', msg)
         else:
             message= ''
-        group = self.group_comboboxentry.get_child().get_text().decode('utf-8')
+        group = self.group_comboboxentry.get_child().get_text()
         groups = []
         if group:
             groups = [group]
@@ -1268,7 +1266,7 @@ class AboutDialog:
         dlg.set_transient_for(gajim.interface.roster.window)
         dlg.set_name('Gajim')
         dlg.set_version(gajim.version)
-        s = u'Copyright © 2003-2012 Gajim Team'
+        s = 'Copyright © 2003-2012 Gajim Team'
         dlg.set_copyright(s)
         copying_file_path = self.get_path('COPYING')
         if copying_file_path:
@@ -2006,7 +2004,7 @@ class InputDialog(CommonInputDialog):
         self.input_entry.select_region(0, -1) # select all
 
     def get_text(self):
-        return self.input_entry.get_text().decode('utf-8')
+        return self.input_entry.get_text()
 
 class InputDialogCheck(InputDialog):
     """
@@ -2032,7 +2030,7 @@ class InputDialogCheck(InputDialog):
     def on_okbutton_clicked(self, widget):
         user_input = self.get_text()
         if user_input:
-            user_input = user_input.decode('utf-8')
+            user_input = user_input
         self.cancel_handler = None
         self.dialog.destroy()
         if isinstance(self.ok_handler, tuple):
@@ -2041,7 +2039,7 @@ class InputDialogCheck(InputDialog):
             self.ok_handler(user_input, self.is_checked())
 
     def get_text(self):
-        return self.input_entry.get_text().decode('utf-8')
+        return self.input_entry.get_text()
 
     def is_checked(self):
         """
@@ -2110,7 +2108,7 @@ class ChangeNickDialog(InputDialogCheck):
     def on_okbutton_clicked(self, widget):
         nick = self.get_text()
         if nick:
-            nick = nick.decode('utf-8')
+            nick = nick
         # send presence to room
         try:
             nick = helpers.parse_resource(nick)
@@ -2162,7 +2160,7 @@ class InputTextDialog(CommonInputDialog):
 
     def get_text(self):
         start_iter, end_iter = self.input_buffer.get_bounds()
-        return self.input_buffer.get_text(start_iter, end_iter, True).decode('utf-8')
+        return self.input_buffer.get_text(start_iter, end_iter, True)
 
 class DoubleInputDialog:
     """
@@ -2207,8 +2205,8 @@ class DoubleInputDialog:
             self.cancel_handler()
 
     def on_okbutton_clicked(self, widget):
-        user_input1 = self.input_entry1.get_text().decode('utf-8')
-        user_input2 = self.input_entry2.get_text().decode('utf-8')
+        user_input1 = self.input_entry1.get_text()
+        user_input2 = self.input_entry2.get_text()
         self.cancel_handler = None
         self.dialog.destroy()
         if not self.ok_handler:
@@ -2457,7 +2455,7 @@ class JoinGroupchatWindow:
     def on_account_combobox_changed(self, widget):
         model = widget.get_model()
         iter_ = widget.get_active_iter()
-        self.account = model[iter_][0].decode('utf-8')
+        self.account = model[iter_][0]
         self.on_required_entry_changed(self._nickname_entry)
 
     def _set_room_jid(self, room_jid):
@@ -2468,11 +2466,11 @@ class JoinGroupchatWindow:
     def on_recently_combobox_changed(self, widget):
         model = widget.get_model()
         iter_ = widget.get_active_iter()
-        room_jid = model[iter_][0].decode('utf-8')
+        room_jid = model[iter_][0]
         self._set_room_jid(room_jid)
 
     def on_browse_rooms_button_clicked(self, widget):
-        server = self.server_comboboxentry.get_child().get_text().decode('utf-8')
+        server = self.server_comboboxentry.get_child().get_text()
         if server in gajim.interface.instances[self.account]['disco']:
             gajim.interface.instances[self.account]['disco'][server].window.\
                 present()
@@ -2508,12 +2506,11 @@ class JoinGroupchatWindow:
                 _('You have to choose an account from which you want to join the '
                 'groupchat.'))
             return
-        nickname = self._nickname_entry.get_text().decode('utf-8')
-        server = self.server_comboboxentry.get_child().get_text().decode('utf-8').\
-            strip()
-        room = self._room_jid_entry.get_text().decode('utf-8').strip()
+        nickname = self._nickname_entry.get_text()
+        server = self.server_comboboxentry.get_child().get_text().strip()
+        room = self._room_jid_entry.get_text().strip()
         room_jid = room + '@' + server
-        password = self._password_entry.get_text().decode('utf-8')
+        password = self._password_entry.get_text()
         try:
             nickname = helpers.parse_resource(nickname)
         except Exception:
@@ -2613,7 +2610,7 @@ class SynchroniseSelectAccountDialog:
         (model, iter_) = sel.get_selected()
         if not iter_:
             return
-        remote_account = model.get_value(iter_, 0).decode('utf-8')
+        remote_account = model.get_value(iter_, 0)
 
         if gajim.connections[remote_account].connected < 2:
             ErrorDialog(_('This account is not connected to the server'),
@@ -2686,7 +2683,7 @@ class SynchroniseSelectContactsDialog:
         while iter_:
             if model[iter_][0]:
                 # it is selected
-                remote_jid = model[iter_][1].decode('utf-8')
+                remote_jid = model[iter_][1]
                 message = 'I\'m synchronizing my contacts from my %s account, could you please add this address to your contact list?' % \
                     gajim.get_hostname_from_account(self.remote_account)
                 remote_contact = gajim.contacts.get_first_contact_from_jid(
@@ -2773,11 +2770,11 @@ class ChangePasswordDialog:
             dialog.destroy()
             self.on_response(None)
             return
-        password1 = self.password1_entry.get_text().decode('utf-8')
+        password1 = self.password1_entry.get_text()
         if not password1:
             ErrorDialog(_('Invalid password'), _('You must enter a password.'))
             return
-        password2 = self.password2_entry.get_text().decode('utf-8')
+        password2 = self.password2_entry.get_text()
         if password1 != password2:
             ErrorDialog(_('Passwords do not match'),
                 _('The passwords typed in both fields must be identical.'))
@@ -3129,7 +3126,7 @@ class SingleMessageWindow:
                 else:
                     sender_list.append(i[0].jid)
         else:
-            sender_list = [self.to_entry.get_text().decode('utf-8')]
+            sender_list = [self.to_entry.get_text()]
 
         for to_whom_jid in sender_list:
             if to_whom_jid in self.completion_dict:
@@ -3142,9 +3139,9 @@ class SingleMessageWindow:
                     'valid.') % to_whom_jid)
                 return True
 
-            subject = self.subject_entry.get_text().decode('utf-8')
+            subject = self.subject_entry.get_text()
             begin, end = self.message_tv_buffer.get_bounds()
-            message = self.message_tv_buffer.get_text(begin, end, True).decode('utf-8')
+            message = self.message_tv_buffer.get_text(begin, end, True)
 
             if '/announce/' in to_whom_jid:
                 gajim.connections[self.account].send_motd(to_whom_jid, subject,
@@ -3551,14 +3548,14 @@ class RosterItemExchangeWindow:
                 if model[iter_][0]:
                     a+=1
                     # it is selected
-                    #remote_jid = model[iter_][1].decode('utf-8')
+                    #remote_jid = model[iter_][1]
                     message = _('%s suggested me to add you in my roster.'
                             % self.jid_from)
                     # keep same groups and same nickname
                     groups = model[iter_][3].split(', ')
                     if groups == ['']:
                         groups = []
-                    jid = model[iter_][1].decode('utf-8')
+                    jid = model[iter_][1]
                     if gajim.jid_is_transport(self.jid_from):
                         gajim.connections[self.account].automatically_added.append(
                                 jid)
@@ -3574,7 +3571,7 @@ class RosterItemExchangeWindow:
                 if model[iter_][0]:
                     a+=1
                     # it is selected
-                    jid = model[iter_][1].decode('utf-8')
+                    jid = model[iter_][1]
                     # keep same groups and same nickname
                     groups = model[iter_][3].split(', ')
                     if groups == ['']:
@@ -3599,7 +3596,7 @@ class RosterItemExchangeWindow:
                 if model[iter_][0]:
                     a+=1
                     # it is selected
-                    jid = model[iter_][1].decode('utf-8')
+                    jid = model[iter_][1]
                     gajim.connections[self.account].unsubscribe(jid)
                     gajim.interface.roster.remove_contact(jid, self.account)
                     gajim.contacts.remove_jid(self.account, jid)
@@ -4154,7 +4151,7 @@ class PrivacyListWindow:
             self.active_rule = ''
         else:
             self.active_rule = \
-                self.list_of_rules_combobox.get_active_text().decode('utf-8')
+                self.list_of_rules_combobox.get_active_text()
         if self.active_rule != '':
             rule_info = self.global_rules[self.active_rule]
             self.edit_order_spinbutton.set_value(int(rule_info['order']))
@@ -4952,7 +4949,7 @@ class TransformChatToMUC:
         guests = self.guests_treeview.get_selection().get_selected_rows()
         for guest in guests[1]:
             iter_ = self.store.get_iter(guest)
-            guest_list.append(self.store[iter_][2].decode('utf-8'))
+            guest_list.append(self.store[iter_][2])
         for guest in self.auto_jids:
             guest_list.append(guest)
         room_jid = obj.room_id + '@' + obj.server

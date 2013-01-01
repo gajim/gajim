@@ -195,7 +195,7 @@ def get_default_font():
             for line in open(xfce_config_file):
                 if line.find('name="Gtk/FontName"') != -1:
                     start = line.find('value="') + 7
-                    return line[start:line.find('"', start)].decode('utf-8')
+                    return line[start:line.find('"', start)]
         except Exception:
             #we talk about file
             print(_('Error: cannot open %s for reading') % xfce_config_file,
@@ -211,7 +211,7 @@ def get_default_font():
                     font_name = values[0]
                     font_size = values[1]
                     font_string = '%s %s' % (font_name, font_size) # Verdana 9
-                    return font_string.decode('utf-8')
+                    return font_string
         except Exception:
             #we talk about file
             print(_('Error: cannot open %s for reading') % kde_config_file,
@@ -684,7 +684,7 @@ def decode_filechooser_file_paths(file_paths):
                 file_path = file_path.decode(sys.getfilesystemencoding())
             except Exception:
                 try:
-                    file_path = file_path.decode('utf-8')
+                    file_path = file_path
                 except Exception:
                     pass
             file_paths_list.append(file_path)

@@ -762,7 +762,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
             try:
                 self.textbuf.insert_pixbuf(self.iter,
                     self.textview.focus_out_line_pixbuf)
-                #self._insert_text(u'\u2550'*40)
+                #self._insert_text('\u2550'*40)
                 self._jump_line()
             except Exception, e:
                 log.debug(str('Error in hr'+e))
@@ -913,7 +913,7 @@ class HtmlTextView(Gtk.TextView):
 
             while (search_iter.compare(end)):
                 character = search_iter.get_char()
-                if character == u'\ufffc':
+                if character == '\ufffc':
                     anchor = search_iter.get_child_anchor()
                     if anchor:
                         text = anchor.get_data('plaintext')
