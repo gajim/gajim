@@ -429,16 +429,13 @@ class PreferencesWindow:
 
         # Status messages
         self.msg_tree = self.xml.get_object('msg_treeview')
-        model = Gtk.ListStore(str, str, str, str, str, str, str)
-        self.msg_tree.set_model(model)
-        col = Gtk.TreeViewColumn('name')
-        self.msg_tree.append_column(col)
         renderer = Gtk.CellRendererText()
-        col.pack_start(renderer, True)
-        col.add_attribute(renderer, 'text', 0)
         renderer.connect('edited', self.on_msg_cell_edited)
         renderer.set_property('editable', True)
+        col = Gtk.TreeViewColumn('name', renderer, text=0)
+        self.msg_tree.append_column(col)
         self.fill_msg_treeview()
+
         buf = self.xml.get_object('msg_textview').get_buffer()
         buf.connect('changed', self.on_msg_textview_changed)
 
@@ -1098,8 +1095,10 @@ class PreferencesWindow:
                 # store mood / activity
                 for subname in ('activity', 'subactivity', 'activity_text',
                 'mood', 'mood_text'):
-                    gajim.config.set_per('statusmsg', val, subname,
-                        model[iter_][i].decode('utf-8'))
+                    val = model[iter_][i]
+                    if val:
+                        val = val.decode('utf-8')
+                    gajim.config.set_per('statusmsg', val, subname, val)
                     i += 1
             iter_ = model.iter_next(iter_)
 
@@ -4143,21 +4142,21 @@ class ManageSoundsWindow:
         renderer = Gtk.CellRendererToggle()
         renderer.set_property('activatable', True)
         renderer.connect('toggled', self.sound_toggled_cb)
-        col.pack_start(renderer, True, True, 0)
-        col.set_attributes(renderer, active = 0)
+        col.pack_start(renderer, True)
+        col.add_attribute(renderer, 'active', 0)
 
         col = Gtk.TreeViewColumn(_('Event'))
         self.sound_tree.append_column(col)
         renderer = Gtk.CellRendererText()
-        col.pack_start(renderer, True, True, 0)
-        col.set_attributes(renderer, text = 1)
+        col.pack_start(renderer, True)
+        col.add_attribute(renderer, 'text', 1)
 
         self.fill_sound_treeview()
 
         self.xml.connect_signals(self)
 
         self.sound_tree.get_model().connect('row-changed',
-                self.on_sounds_treemodel_row_changed)
+            self.on_sounds_treemodel_row_changed)
 
         self.window.show_all()
 
