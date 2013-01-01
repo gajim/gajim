@@ -75,7 +75,7 @@ class DataFormWidget(Gtk.Alignment, object):
         selection.set_mode(Gtk.SelectionMode.MULTIPLE)
 
     def on_data_form_vbox_key_press_event(self, widget, event):
-        print 'key pressed'
+        print('key pressed')
 
     def set_data_form(self, dataform):
         """

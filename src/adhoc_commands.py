@@ -159,7 +159,7 @@ class CommandWindow:
         return self.stage_adhoc_commands_window_delete_event(self.window)
 
     def __del__(self):
-        print 'Object has been deleted.'
+        print('Object has been deleted.')
 
 # stage 1: waiting for command list
     def stage1(self):

@@ -2446,7 +2446,7 @@ class Interface:
     def save_config(self):
         err_str = parser.write()
         if err_str is not None:
-            print >> sys.stderr, err_str
+            print(err_str, file=sys.stderr)
             # it is good to notify the user
             # in case he or she cannot see the output of the console
             dialogs.ErrorDialog(_('Could not save your settings and '
@@ -2608,7 +2608,7 @@ class Interface:
         try:
             from ipython_view import IPythonView
         except ImportError:
-            print 'ipython_view not found'
+            print('ipython_view not found')
             return
         from gi.repository import Pango
 

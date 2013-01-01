@@ -366,10 +366,10 @@ class RosterReceivedEvent(nec.NetworkIncomingEvent):
                 try:
                     j = helpers.parse_jid(jid)
                 except Exception:
-                    print >> sys.stderr, _('JID %s is not RFC compliant. It '
-                        'will not be added to your roster. Use roster '
-                        'management tools such as '
-                        'http://jru.jabberstudio.org/ to remove it') % jid
+                    print(_('JID %s is not RFC compliant. It will not be added '
+                        'to your roster. Use roster management tools such as '
+                        'http://jru.jabberstudio.org/ to remove it') % jid,
+                        file=sys.stderr)
                 else:
                     infos = raw_roster[jid]
                     if jid != our_jid and (not infos['subscription'] or \

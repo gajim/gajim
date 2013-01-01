@@ -169,7 +169,7 @@ class Logger:
         try:
             self.con.commit()
         except sqlite.OperationalError, e:
-            print >> sys.stderr, str(e)
+            print(str(e), file=sys.stderr)
         self.commit_timout_id = None
         return False
 
@@ -415,7 +415,7 @@ class Logger:
                 self.con.commit()
                 message_id = self.cur.lastrowid
             except sqlite.OperationalError, e:
-                print >> sys.stderr, str(e)
+                print(str(e), file=sys.stderr)
         else:
             self._timeout_commit()
         if message_id:

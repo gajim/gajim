@@ -94,6 +94,6 @@ def close():
 if __name__ == '__main__':
     import time
     time.sleep(2.1)
-    print getIdleSec()
+    print(getIdleSec())
     close()
-    print getIdleSec()
+    print(getIdleSec())

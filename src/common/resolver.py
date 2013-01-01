@@ -329,7 +329,7 @@ if __name__ == '__main__':
         global resolver
         host = text_view.get_text()
         def on_result(host, result_array):
-            print 'Result:\n' + repr(result_array)
+            print('Result:\n' + repr(result_array))
         resolver.resolve(host, on_result)
     win = Gtk.Window()
     win.set_border_width(6)

@@ -42,7 +42,7 @@ except Exception:
 
 def send_error(error_message):
     '''Writes error message to stderr and exits'''
-    print >> sys.stderr, error_message.encode(PREFERRED_ENCODING)
+    print(error_message.encode(PREFERRED_ENCODING), file=sys.stderr)
     sys.exit(1)
 
 try:
@@ -52,7 +52,7 @@ try:
     # test if dbus-x11 is installed
     bus = dbus.SessionBus()
 except Exception:
-    print _('D-Bus is not present on this machine or python module is missing')
+    print(_('D-Bus is not present on this machine or python module is missing'))
     sys.exit(1)
 
 OBJ_PATH = '/org/gajim/dbus/RemoteObject'
@@ -310,14 +310,15 @@ class GajimRemote:
         self.command = sys.argv[1]
         if self.command == 'help':
             if self.argv_len == 3:
-                print self.help_on_command(sys.argv[2]).encode(PREFERRED_ENCODING)
+                print(self.help_on_command(sys.argv[2]).encode(
+                    PREFERRED_ENCODING))
             else:
-                print self.compose_help().encode(PREFERRED_ENCODING)
+                print(self.compose_help().encode(PREFERRED_ENCODING))
             sys.exit(0)
         if self.command == 'handle_uri':
             self.handle_uri()
         if self.command == 'check_gajim_running':
-            print self.check_gajim_running()
+            print(self.check_gajim_running())
             sys.exit(0)
         self.init_connection()
         self.check_arguments()
@@ -354,27 +355,27 @@ class GajimRemote:
                 if isinstance(res, list):
                     for account in res:
                         if isinstance(account, unicode):
-                            print account.encode(PREFERRED_ENCODING)
+                            print(account.encode(PREFERRED_ENCODING))
                         else:
-                            print account
+                            print(account)
             elif self.command == 'account_info':
                 if res:
-                    print self.print_info(0, res, True)
+                    print(self.print_info(0, res, True))
             elif self.command == 'list_contacts':
                 for account_dict in res:
-                    print self.print_info(0, account_dict, True)
+                    print(self.print_info(0, account_dict, True))
             elif self.command == 'prefs_list':
                 pref_keys = sorted(res.keys())
                 for pref_key in pref_keys:
                     result = '%s = %s' % (pref_key, res[pref_key])
                     if isinstance(result, unicode):
-                        print result.encode(PREFERRED_ENCODING)
+                        print(result.encode(PREFERRED_ENCODING))
                     else:
-                        print result
+                        print(result)
             elif self.command == 'contact_info':
-                print self.print_info(0, res, True)
+                print(self.print_info(0, res, True))
             elif res:
-                print unicode(res).encode(PREFERRED_ENCODING)
+                print(unicode(res).encode(PREFERRED_ENCODING))
 
     def check_gajim_running(self):
         if not self.sbus:

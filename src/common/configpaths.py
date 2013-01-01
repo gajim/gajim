@@ -162,8 +162,8 @@ class ConfigPaths:
         try:
             self.add('TMP', None, fse(tempfile.gettempdir()))
         except IOError, e:
-            print >> sys.stderr, 'Error opening tmp folder: %s\nUsing %s' % (
-                    str(e), os.path.expanduser('~'))
+            print('Error opening tmp folder: %s\nUsing %s' % (str(e),
+                os.path.expanduser('~')), file=sys.stderr)
             self.add('TMP', None, fse(os.path.expanduser('~')))
 
         try:

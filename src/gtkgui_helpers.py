@@ -198,8 +198,8 @@ def get_default_font():
                     return line[start:line.find('"', start)].decode('utf-8')
         except Exception:
             #we talk about file
-            print >> sys.stderr, _('Error: cannot open %s for reading') % \
-                xfce_config_file
+            print(_('Error: cannot open %s for reading') % xfce_config_file,
+                file=sys.stderr)
 
     elif os.path.exists(kde_config_file):
         try:
@@ -214,8 +214,8 @@ def get_default_font():
                     return font_string.decode('utf-8')
         except Exception:
             #we talk about file
-            print >> sys.stderr, _('Error: cannot open %s for reading') % \
-                kde_config_file
+            print(_('Error: cannot open %s for reading') % kde_config_file,
+                file=sys.stderr)
 
     return None
 
@@ -343,10 +343,10 @@ def parse_server_xml(path_to_file):
         return handler.servers
     # handle exception if unable to open file
     except IOError, message:
-        print >> sys.stderr, _('Error reading file:'), message
+        print(_('Error reading file:') + message, file=sys.stderr)
     # handle exception parsing file
     except xml.sax.SAXParseException, message:
-        print >> sys.stderr, _('Error parsing file:'), message
+        print(_('Error parsing file:') + message, file=sys.stderr)
 
 def set_unset_urgency_hint(window, unread_messages_no):
     """
@@ -389,7 +389,7 @@ def get_abspath_for_script(scriptname, want_type = False):
                 #we talk about a file here
                 s = _('Could not write to %s. Session Management support will '
                     'not work') % path_to_script
-                print >> sys.stderr, s
+                print(s, file=sys.stderr)
 
     else: # normal user (not svn user)
         type_ = 'install'

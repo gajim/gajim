@@ -28,7 +28,7 @@ try:
     from docutils import nodes, utils
     from docutils.parsers.rst.roles import set_classes
 except ImportError:
-    print "Requires docutils 0.4 for set_classes to be available"
+    print("Requires docutils 0.4 for set_classes to be available")
     def create_xhtml(text):
         return None
 else:
@@ -147,7 +147,7 @@ else:
 
 
 if __name__ == '__main__':
-    print "test 1\n", Generator.create_xhtml("""
+    print("test 1\n" + Generator.create_xhtml("""
 test::
 
 >>> print 1
@@ -157,10 +157,10 @@ test::
 
 this `` should    trigger`` should trigger the &nbsp; problem.
 
-""")
-    print "test 2\n", Generator.create_xhtml("""
+"""))
+    print("test 2\n" + Generator.create_xhtml("""
 *test1
 
 test2_
-""")
-    print "test 3\n", Generator.create_xhtml(""":ticket:`316` implements :xep:`71`""")
+"""))
+    print("test 3\n" + Generator.create_xhtml(""":ticket:`316` implements :xep:`71`"""))

@@ -132,7 +132,7 @@ class TestNonBlockingClient(unittest.TestCase):
         self.assert_(self.connection.con)
         features = self.client.Dispatcher.Stream.features
         if not features.getTag('auth'):
-            print "Server doesn't support old authentication type, ignoring test"
+            print("Server doesn't support old authentication type, ignoring test")
         else:
             self.assert_(self.connection.auth=='old_auth',
                     msg='Unable to auth via old_auth')

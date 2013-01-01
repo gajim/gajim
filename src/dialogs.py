@@ -4812,7 +4812,6 @@ class AddSpecialNotificationDialog:
         if active == 1: # user selected 'choose sound'
             def on_ok(widget, path_to_snd_file):
                 pass
-                #print path_to_snd_file
 
             def on_cancel(widget):
                 widget.set_active(0) # go back to No Sound

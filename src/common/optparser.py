@@ -50,7 +50,8 @@ class OptionsParser:
         except Exception:
             if os.path.exists(self.__filename):
                 #we talk about a file
-                print _('Error: cannot open %s for reading') % self.__filename
+                print(_('Error: cannot open %s for reading') % self.__filename,
+                    file=sys.stderr)
             return False
 
         new_version = gajim.config.get('version')
@@ -381,7 +382,7 @@ class OptionsParser:
         """
         Apply indeces to the logs database
         """
-        print _('migrating logs database to indices')
+        print(_('migrating logs database to indices'))
         # FIXME see #2812
         back = os.getcwd()
         os.chdir(logger.LOG_DB_FOLDER)

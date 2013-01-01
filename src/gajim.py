@@ -42,7 +42,7 @@ import warnings
 if os.name == 'nt':
     log_path = os.path.join(os.environ['APPDATA'], 'Gajim')
     if not os.path.exists(log_path):
-        os.mkdir(log_path, 0700)
+        os.mkdir(log_path, 0o700)
     log_file = os.path.join(log_path, 'gajim.log')
     fout = open(log_file, 'a')
     sys.stdout = fout
@@ -65,7 +65,7 @@ if os.name == 'nt':
 try:
     import nbxmpp
 except ImportError:
-    print 'Gajim needs python-nbxmpp to run. Quiting...'
+    print('Gajim needs python-nbxmpp to run. Quiting...')
     sys.exit()
 
 #from common import demandimport
@@ -131,15 +131,15 @@ def parseOpts():
         longargs += ' class= name= screen= gtk-module= sync g-fatal-warnings'
         longargs += ' sm-client-id= sm-client-state-file= sm-disable'
         opts = getopt.getopt(sys.argv[1:], shortargs, longargs.split())[0]
-    except getopt.error, msg1:
-        print msg1
-        print 'for help use --help'
+    except getopt.error as msg1:
+        print(msg1)
+        print('for help use --help')
         sys.exit(2)
     for o, a in opts:
         if o in ('-h', '--help'):
-            print 'gajim [--help] [--quiet] [--verbose] ' + \
+            print('gajim [--help] [--quiet] [--verbose] ' + \
                 '[--loglevel subsystem=level[,subsystem=level[...]]] ' + \
-                '[--profile name] [--config-path]'
+                '[--profile name] [--config-path]')
             sys.exit()
         elif o in ('-q', '--quiet'):
             logging_helpers.set_quiet()
@@ -182,7 +182,7 @@ if os.name == 'nt':
             if self._file is None and self._error is None:
                 try:
                     self._file = open(fname, 'a')
-                except Exception, details:
+                except Exception as details:
                     self._error = details
             if self._file is not None:
                 self._file.write(text)
@@ -200,11 +200,11 @@ try:
     GObject.set_prgname('gajim')
     from gi.repository import Gtk
     from gi.repository import Gdk
-except Warning, msg2:
+except Warning as msg2:
     if str(msg2) == 'could not open display':
-        print >> sys.stderr, _('Gajim needs X server to run. Quiting...')
+        print(_('Gajim needs X server to run. Quiting...'), file=sys.stderr)
     else:
-        print >> sys.stderr, _('importing PyGTK failed: %s') % str(msg2)
+        print(_('importing PyGTK failed: %s') % str(msg2), file=sys.stderr)
     sys.exit()
 warnings.resetwarnings()
 
@@ -357,7 +357,7 @@ def pid_alive():
 
         try:
             f1 = open('/proc/%d/cmdline'% pid)
-        except IOError, e1:
+        except IOError as e1:
             if e1.errno == errno.ENOENT:
                 return False # file/pid does not exist
             raise
@@ -419,7 +419,7 @@ try:
     f2 = open(pid_filename, 'w')
     f2.write(str(os.getpid()))
     f2.close()
-except IOError, e2:
+except IOError as e2:
     dlg = dialogs.ErrorDialog(_('Disk Write Error'), str(e2))
     dlg.run()
     dlg.destroy()
@@ -464,4 +464,4 @@ if __name__ == '__main__':
         if os.name != 'nt':
             Gdk.threads_leave()
     except KeyboardInterrupt:
-        print >> sys.stderr, 'KeyboardInterrupt'
+        print('KeyboardInterrupt', file=sys.stderr)

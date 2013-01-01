@@ -593,7 +593,7 @@ class ConnectionVcard:
 
         elif self.awaiting_answers[id_][0] == ARCHIVING_COLLECTIONS_ARRIVED:
             # TODO
-            print 'ARCHIVING_COLLECTIONS_ARRIVED'
+            print('ARCHIVING_COLLECTIONS_ARRIVED')
 
         elif self.awaiting_answers[id_][0] == ARCHIVING_COLLECTION_ARRIVED:
             def save_if_not_exists(with_, nick, direction, tim, payload):
@@ -603,7 +603,7 @@ class ConnectionVcard:
                     gajim.logger.save_if_not_exists(with_, direction, tim,
                         msg=payload[0].getData(), nick=nick)
                 elif payload[0].getName() == 'message':
-                    print 'Not implemented'
+                    print('Not implemented')
             chat = iq_obj.getTag('chat')
             if chat:
                 with_ = chat.getAttr('with')
