@@ -81,30 +81,36 @@
                             <child>
                               <object class="GtkImage" id="mood_image">
                                 <property name="no_show_all">True</property>
-                                <property name="stock">None</property>
+                                <property name="stock">gtk-missing-image</property>
                                 <property name="icon-size">1</property>
                               </object>
                               <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
                                 <property name="position">0</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkImage" id="activity_image">
                                 <property name="no_show_all">True</property>
-                                <property name="stock">None</property>
+                                <property name="stock">gtk-missing-image</property>
                                 <property name="icon-size">1</property>
                               </object>
                               <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
                                 <property name="position">1</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkImage" id="tune_image">
                                 <property name="no_show_all">True</property>
-                                <property name="stock">None</property>
+                                <property name="stock">gtk-missing-image</property>
                                 <property name="icon-size">1</property>
                               </object>
                               <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
                                 <property name="position">2</property>
                               </packing>
                             </child>
@@ -115,7 +121,7 @@
                                 <child>
                                   <object class="GtkImage" id="location_image">
                                     <property name="no_show_all">True</property>
-                                    <property name="stock">None</property>
+                                    <property name="stock">gtk-missing-image</property>
                                     <property name="icon-size">1</property>
                                   </object>
                                 </child>
@@ -128,21 +134,25 @@
                             </child>
                             <child>
                               <object class="GtkImage" id="audio_banner_image">
-                                <property name="visible">True</property>
-                                <property name="stock">None</property>
+                                <property name="no_show_all">True</property>
+                                <property name="stock">gtk-missing-image</property>
                                 <property name="icon-size">1</property>
                               </object>
                               <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
                                 <property name="position">4</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkImage" id="video_banner_image">
-                                <property name="visible">True</property>
-                                <property name="stock">None</property>
+                                <property name="no_show_all">True</property>
+                                <property name="stock">gtk-missing-image</property>
                                 <property name="icon-size">1</property>
                               </object>
                               <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
                                 <property name="position">5</property>
                               </packing>
                             </child>
@@ -155,6 +165,8 @@
                                 </child>
                               </object>
                               <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
                                 <property name="position">6</property>
                               </packing>
                             </child>
@@ -172,7 +184,7 @@
                             <child>
                               <object class="GtkImage" id="avatar_image">
                                 <property name="visible">True</property>
-                                <property name="stock">None</property>
+                                <property name="stock">gtk-missing-image</property>
                               </object>
                             </child>
                           </object>
@@ -712,8 +724,8 @@ audio-mic-volume-low</property>
             <property name="relief">none</property>
           </object>
           <packing>
-            <property name="x_options"></property>
-            <property name="y_options"></property>
+            <property name="x_options"/>
+            <property name="y_options"/>
           </packing>
         </child>
         <child>
@@ -727,8 +739,8 @@ audio-mic-volume-low</property>
           <packing>
             <property name="left_attach">1</property>
             <property name="right_attach">2</property>
-            <property name="x_options"></property>
-            <property name="y_options"></property>
+            <property name="x_options"/>
+            <property name="y_options"/>
           </packing>
         </child>
         <child>
@@ -742,8 +754,8 @@ audio-mic-volume-low</property>
           <packing>
             <property name="left_attach">2</property>
             <property name="right_attach">3</property>
-            <property name="x_options"></property>
-            <property name="y_options"></property>
+            <property name="x_options"/>
+            <property name="y_options"/>
           </packing>
         </child>
         <child>
@@ -757,8 +769,8 @@ audio-mic-volume-low</property>
           <packing>
             <property name="top_attach">1</property>
             <property name="bottom_attach">2</property>
-            <property name="x_options"></property>
-            <property name="y_options"></property>
+            <property name="x_options"/>
+            <property name="y_options"/>
           </packing>
         </child>
         <child>
@@ -774,8 +786,8 @@ audio-mic-volume-low</property>
             <property name="right_attach">2</property>
             <property name="top_attach">1</property>
             <property name="bottom_attach">2</property>
-            <property name="x_options"></property>
-            <property name="y_options"></property>
+            <property name="x_options"/>
+            <property name="y_options"/>
           </packing>
         </child>
         <child>
@@ -791,8 +803,8 @@ audio-mic-volume-low</property>
             <property name="right_attach">3</property>
             <property name="top_attach">1</property>
             <property name="bottom_attach">2</property>
-            <property name="x_options"></property>
-            <property name="y_options"></property>
+            <property name="x_options"/>
+            <property name="y_options"/>
           </packing>
         </child>
         <child>
@@ -806,8 +818,8 @@ audio-mic-volume-low</property>
           <packing>
             <property name="top_attach">2</property>
             <property name="bottom_attach">3</property>
-            <property name="x_options"></property>
-            <property name="y_options"></property>
+            <property name="x_options"/>
+            <property name="y_options"/>
           </packing>
         </child>
         <child>
@@ -823,8 +835,8 @@ audio-mic-volume-low</property>
             <property name="right_attach">2</property>
             <property name="top_attach">2</property>
             <property name="bottom_attach">3</property>
-            <property name="x_options"></property>
-            <property name="y_options"></property>
+            <property name="x_options"/>
+            <property name="y_options"/>
           </packing>
         </child>
         <child>
@@ -840,8 +852,8 @@ audio-mic-volume-low</property>
             <property name="right_attach">3</property>
             <property name="top_attach">2</property>
             <property name="bottom_attach">3</property>
-            <property name="x_options"></property>
-            <property name="y_options"></property>
+            <property name="x_options"/>
+            <property name="y_options"/>
           </packing>
         </child>
         <child>
@@ -855,8 +867,8 @@ audio-mic-volume-low</property>
           <packing>
             <property name="top_attach">3</property>
             <property name="bottom_attach">4</property>
-            <property name="x_options"></property>
-            <property name="y_options"></property>
+            <property name="x_options"/>
+            <property name="y_options"/>
           </packing>
         </child>
         <child>
@@ -872,8 +884,8 @@ audio-mic-volume-low</property>
             <property name="right_attach">2</property>
             <property name="top_attach">3</property>
             <property name="bottom_attach">4</property>
-            <property name="x_options"></property>
-            <property name="y_options"></property>
+            <property name="x_options"/>
+            <property name="y_options"/>
           </packing>
         </child>
         <child>
@@ -889,8 +901,8 @@ audio-mic-volume-low</property>
             <property name="right_attach">3</property>
             <property name="top_attach">3</property>
             <property name="bottom_attach">4</property>
-            <property name="x_options"></property>
-            <property name="y_options"></property>
+            <property name="x_options"/>
+            <property name="y_options"/>
           </packing>
         </child>
       </object>
