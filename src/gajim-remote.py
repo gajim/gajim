@@ -354,10 +354,7 @@ class GajimRemote:
             elif self.command == 'list_accounts':
                 if isinstance(res, list):
                     for account in res:
-                        if isinstance(account, unicode):
-                            print(account.encode(PREFERRED_ENCODING))
-                        else:
-                            print(account)
+                        print(account)
             elif self.command == 'account_info':
                 if res:
                     print(self.print_info(0, res, True))
@@ -368,14 +365,11 @@ class GajimRemote:
                 pref_keys = sorted(res.keys())
                 for pref_key in pref_keys:
                     result = '%s = %s' % (pref_key, res[pref_key])
-                    if isinstance(result, unicode):
-                        print(result.encode(PREFERRED_ENCODING))
-                    else:
-                        print(result)
+                    print(result)
             elif self.command == 'contact_info':
                 print(self.print_info(0, res, True))
             elif res:
-                print(unicode(res).encode(PREFERRED_ENCODING))
+                print(res)
 
     def check_gajim_running(self):
         if not self.sbus:
@@ -470,7 +464,7 @@ class GajimRemote:
                     ret_str +='\t'
                 elif isinstance(val, int):
                     ret_str +='\t' + str(val)
-                elif isinstance(val, (str, unicode)):
+                elif isinstance(val, str):
                     ret_str +='\t' + val
                 elif isinstance(val, (list, tuple)):
                     res = ''
@@ -485,7 +479,7 @@ class GajimRemote:
             for key in prop_dict.keys():
                 val = prop_dict[key]
                 spacing = ' ' * level * 4
-                if isinstance(val, (unicode, int, str)):
+                if isinstance(val, (int, str)):
                     if val is not None:
                         val = val.strip()
                         ret_str += '%s%-10s: %s\n' % (spacing, key, val)

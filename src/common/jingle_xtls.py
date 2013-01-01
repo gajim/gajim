@@ -158,7 +158,7 @@ def send_cert_request(con, to_jid):
     pubkey = iq.setTag('pubkeys')
     pubkey.setNamespace(nbxmpp.NS_PUBKEY_PUBKEY)
     con.connection.send(iq)
-    return unicode(id_)
+    return str(id_)
 
 # the following code is partly due to pyopenssl examples
 

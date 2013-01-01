@@ -39,7 +39,7 @@ from time import (altzone, daylight, gmtime, localtime, mktime, strftime,
 from calendar import timegm
 
 import nbxmpp
-import common.caps_cache as capscache
+from common import caps_cache as capscache
 
 from common import helpers
 from common import gajim
@@ -181,8 +181,8 @@ class ConnectionDisco:
         if not self.connection or self.connected < 2:
             return
         frm = helpers.get_full_jid_from_iq(iq_obj)
-        to = unicode(iq_obj.getAttr('to'))
-        id_ = unicode(iq_obj.getAttr('id'))
+        to = iq_obj.getAttr('to')
+        id_ = iq_obj.getAttr('id')
         iq = nbxmpp.Iq(to=frm, typ='result', queryNS=nbxmpp.NS_DISCO, frm=to)
         iq.setAttr('id', id_)
         query = iq.setTag('query')
@@ -235,7 +235,7 @@ class ConnectionDisco:
         if self.commandInfoQuery(con, iq_obj):
             raise nbxmpp.NodeProcessed
 
-        id_ = unicode(iq_obj.getAttr('id'))
+        id_ = iq_obj.getAttr('id')
         if id_[:6] == 'Gajim_':
             # We get this request from echo.server
             raise nbxmpp.NodeProcessed

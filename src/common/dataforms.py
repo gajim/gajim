@@ -27,7 +27,7 @@ information how to use them, read documentation
 """
 
 import nbxmpp
-import helpers
+from common import helpers
 
 # exceptions used in this module
 # base class
@@ -345,7 +345,7 @@ class StringField(DataField):
     @nested_property
     def value():
         """
-        Value of field. May be any unicode string
+        Value of field. May be any string
         """
         def fget(self):
             return self.getTagData('value') or ''

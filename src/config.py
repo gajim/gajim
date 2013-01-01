@@ -1355,11 +1355,11 @@ class ManageProxiesWindow:
         model = self.proxies_treeview.get_model()
         proxies = gajim.config.get_per('proxies')
         i = 1
-        while ('proxy' + unicode(i)) in proxies:
+        while ('proxy' + str(i)) in proxies:
             i += 1
         iter_ = model.append()
-        model.set(iter_, 0, 'proxy' + unicode(i))
-        gajim.config.add_per('proxies', 'proxy' + unicode(i))
+        model.set(iter_, 0, 'proxy' + str(i))
+        gajim.config.add_per('proxies', 'proxy' + str(i))
         self.proxies_treeview.set_cursor(model.get_path(iter_))
 
     def on_remove_proxy_button_clicked(self, widget):
@@ -1453,7 +1453,7 @@ class ManageProxiesWindow:
             self.xml.get_object('proxy_table').set_sensitive(True)
             proxyhost_entry.set_text(gajim.config.get_per('proxies', proxy,
                     'host'))
-            proxyport_entry.set_text(unicode(gajim.config.get_per('proxies',
+            proxyport_entry.set_text(str(gajim.config.get_per('proxies',
                     proxy, 'port')))
             proxyuser_entry.set_text(gajim.config.get_per('proxies', proxy,
                     'user'))
@@ -1955,7 +1955,7 @@ class AccountsWindow:
         if not custom_port:
             custom_port = 5222
             gajim.config.set_per('accounts', account, 'custom_port', custom_port)
-        self.xml.get_object('custom_port_entry1').set_text(unicode(custom_port))
+        self.xml.get_object('custom_port_entry1').set_text(str(custom_port))
 
         # Personal tab
         gpg_key_label = self.xml.get_object('gpg_key_label1')
@@ -3288,13 +3288,13 @@ class ManageBookmarksWindow:
                 return
 
         for account in self.treestore:
-            account_unicode = account[1]
-            gajim.connections[account_unicode].bookmarks = []
+            acct = account[1]
+            gajim.connections[acct].bookmarks = []
 
             for bm in account.iterchildren():
                 # Convert True/False/None to '1' or '0'
-                autojoin = unicode(int(bm[3]))
-                minimize = unicode(int(bm[4]))
+                autojoin = str(int(bm[3]))
+                minimize = str(int(bm[4]))
                 name = bm[1]
                 jid = bm[2]
                 pw = bm[5]
@@ -3305,9 +3305,9 @@ class ManageBookmarksWindow:
                     'minimize': minimize, 'password': pw, 'nick': nick,
                     'print_status': bm[7]}
 
-                gajim.connections[account_unicode].bookmarks.append(bmdict)
+                gajim.connections[acct].bookmarks.append(bmdict)
 
-            gajim.connections[account_unicode].store_bookmarks()
+            gajim.connections[acct].store_bookmarks()
         gajim.interface.roster.set_actions_menu_needs_rebuild()
         self.window.destroy()
 

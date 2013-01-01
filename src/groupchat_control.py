@@ -687,7 +687,7 @@ class GroupchatControl(ChatControlBase):
         if num_unread == 1:
             unread = '*'
         elif num_unread > 1:
-            unread = '[' + unicode(num_unread) + ']'
+            unread = '[' + str(num_unread) + ']'
         label_str = unread + label_str
         return (label_str, color)
 
@@ -1048,9 +1048,7 @@ class GroupchatControl(ChatControlBase):
         return None
 
     def print_old_conversation(self, text, contact='', tim=None, xhtml = None,
-        displaymarking=None):
-        if isinstance(text, str):
-            text = unicode(text, 'utf-8')
+    displaymarking=None):
         if contact:
             if contact == self.nick: # it's us
                 kind = 'outgoing'
@@ -1076,8 +1074,6 @@ class GroupchatControl(ChatControlBase):
         (contact = 'info' in such a case).
         If contact is not set: it's a message from the server or help.
         """
-        if isinstance(text, str):
-            text = unicode(text, 'utf-8')
         other_tags_for_name = []
         other_tags_for_text = []
         if contact:
@@ -2200,7 +2196,7 @@ class GroupchatControl(ChatControlBase):
                 self.nick_hits = [] # clear the hit list
                 list_nick = gajim.contacts.get_nick_list(self.account,
                     self.room_jid)
-                list_nick.sort(key=unicode.lower) # case-insensitive sort
+                list_nick.sort(key=str.lower) # case-insensitive sort
                 if begin == '':
                     # empty message, show lasts nicks that highlighted us first
                     for nick in self.attention_list:

@@ -498,7 +498,7 @@ class MessageWindow(object):
 
         unread_str = ''
         if unread > 1:
-            unread_str = '[' + unicode(unread) + '] '
+            unread_str = '[' + str(unread) + '] '
         elif unread == 1:
             unread_str = '* '
         else:
@@ -693,10 +693,8 @@ class MessageWindow(object):
         Return the MessageControl for jid or n, where n is a notebook page index.
         When key is an int index acct may be None
         """
-        if isinstance(key, str):
-            key = unicode(key, 'utf-8')
 
-        if isinstance(key, unicode):
+        if isinstance(key, str):
             jid = key
             try:
                 return self._controls[acct][jid]

@@ -163,7 +163,7 @@ class ConnectionBytestream:
             session.approve_content('file', content.name)
             return
 
-        iq = nbxmpp.Iq(to=unicode(file_props.sender), typ='result')
+        iq = nbxmpp.Iq(to=file_props.sender, typ='result')
         iq.setAttr('id', file_props.request_id)
         si = iq.setTag('si', namespace=nbxmpp.NS_SI)
         if file_props.offset:
@@ -195,7 +195,7 @@ class ConnectionBytestream:
             jingle = self._sessions[file_props.sid]
             jingle.cancel_session()
             return
-        iq = nbxmpp.Iq(to=unicode(file_props.sender), typ='error')
+        iq = nbxmpp.Iq(to=file_props.sender, typ='error')
         iq.setAttr('id', file_props.request_id)
         if code == '400' and typ in ('stream', 'profile'):
             name = 'bad-request'
@@ -296,7 +296,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
         for file_props in FilesProp.getAllFileProp():
             if is_transfer_stopped(file_props):
                 continue
-            receiver_jid = unicode(file_props.receiver)
+            receiver_jid = file_props.receiver
             if contact.get_full_jid() == receiver_jid:
                 file_props.error = -5
                 self.remove_transfer(file_props)
@@ -305,7 +305,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
                 gajim.nec.push_incoming_event(FileRequestErrorEvent(None,
                     conn=self, jid=contact.jid, file_props=file_props,
                     error_msg=''))
-            sender_jid = unicode(file_props.sender)
+            sender_jid = file_props.sender
             if contact.get_full_jid() == sender_jid:
                 file_props.error = -3
                 self.remove_transfer(file_props)
@@ -354,11 +354,11 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             file_props.error = -5
             from common.connection_handlers_events import FileRequestErrorEvent
             gajim.nec.push_incoming_event(FileRequestErrorEvent(None, conn=self,
-                jid=unicode(receiver), file_props=file_props, error_msg=''))
-            self._connect_error(unicode(receiver), file_props.sid,
+                jid=receiver, file_props=file_props, error_msg=''))
+            self._connect_error(receiver, file_props.sid,
                     file_props.sid, code=406)
         else:
-            iq = nbxmpp.Iq(to=unicode(receiver), typ='set')
+            iq = nbxmpp.Iq(to=receiver, typ='set')
             file_props.request_id = 'id_' + file_props.sid
             iq.setID(file_props.request_id)
             query = iq.setTag('query', namespace=nbxmpp.NS_BYTESTREAM)
@@ -374,7 +374,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
         for host in hosts:
             streamhost = nbxmpp.Node(tag='streamhost')
             query.addChild(node=streamhost)
-            streamhost.setAttr('port', unicode(port))
+            streamhost.setAttr('port', str(port))
             streamhost.setAttr('host', host)
             streamhost.setAttr('jid', sender)
 
@@ -489,8 +489,8 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
     def _add_proxy_streamhosts_to_query(self, query, file_props):
         proxyhosts = self._get_file_transfer_proxies_from_config(file_props)
         if proxyhosts:
-            file_props.proxy_receiver = unicode(file_props.receiver)
-            file_props.proxy_sender = unicode(file_props.sender)
+            file_props.proxy_receiver = file_props.receiver
+            file_props.proxy_sender = file_props.sender
             file_props.proxyhosts = proxyhosts
 
             for proxyhost in proxyhosts:
@@ -518,12 +518,12 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
                     continue
                 host_dict = {
                         'state': 0,
-                        'target': unicode(file_props.receiver),
+                        'target': file_props.receiver,
                         'id': file_props.sid,
                         'sid': file_props.sid,
                         'initiator': proxy,
                         'host': host,
-                        'port': unicode(_port),
+                        'port': str(_port),
                         'jid': jid
                 }
                 proxyhost_dicts.append(host_dict)
@@ -563,7 +563,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
         iq = nbxmpp.Iq(to=to,     typ='error')
         iq.setAttr('id', file_props.sid)
         err = iq.setTag('error')
-        err.setAttr('code', unicode(code))
+        err.setAttr('code', str(code))
         err.setData(msg)
         self.connection.send(iq)
         if code == 404:
@@ -593,7 +593,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
 
     # register xmpppy handlers for bytestream and FT stanzas
     def _bytestreamErrorCB(self, con, iq_obj):
-        id_ = unicode(iq_obj.getAttr('id'))
+        id_ = iq_obj.getAttr('id')
         frm = helpers.get_full_jid_from_iq(iq_obj)
         query = iq_obj.getTag('query')
         gajim.proxy65_manager.error_cb(frm, query)
@@ -609,10 +609,10 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
         raise nbxmpp.NodeProcessed
 
     def _bytestreamSetCB(self, con, iq_obj):
-        target = unicode(iq_obj.getAttr('to'))
-        id_ = unicode(iq_obj.getAttr('id'))
+        target = iq_obj.getAttr('to')
+        id_ = iq_obj.getAttr('id')
         query = iq_obj.getTag('query')
-        sid = unicode(query.getAttr('sid'))
+        sid = query.getAttr('sid')
         file_props = FilesProp.getFileProp(self.name, sid)
         streamhosts = []
         for item in query.getChildren():
@@ -657,7 +657,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
     def _ResultCB(self, con, iq_obj):
         # if we want to respect xep-0065 we have to check for proxy
         # activation result in any result iq
-        real_id = unicode(iq_obj.getAttr('id'))
+        real_id = iq_obj.getAttr('id')
         if not real_id.startswith('au_'):
             return
         frm = self._ft_get_from(iq_obj)
@@ -671,7 +671,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
 
     def _bytestreamResultCB(self, con, iq_obj):
         frm = self._ft_get_from(iq_obj)
-        real_id = unicode(iq_obj.getAttr('id'))
+        real_id = iq_obj.getAttr('id')
         query = iq_obj.getTag('query')
         gajim.proxy65_manager.resolve_result(frm, query)
 
@@ -692,7 +692,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
                     raise nbxmpp.NodeProcessed
                 for host in file_props.proxyhosts:
                     if host['initiator'] == frm and \
-                    unicode(query.getAttr('sid')) == file_props.sid:
+                    query.getAttr('sid') == file_props.sid:
                         gajim.socks5queue.activate_proxy(host['idx'])
                         break
             raise nbxmpp.NodeProcessed
@@ -983,7 +983,7 @@ class ConnectionIBBytestream(ConnectionBytestream):
 class ConnectionSocks5BytestreamZeroconf(ConnectionSocks5Bytestream):
 
     def _ft_get_from(self, iq_obj):
-        return unicode(iq_obj.getFrom())
+        return iq_obj.getFrom()
 
     def _ft_get_our_jid(self):
         return gajim.get_jid_from_account(self.name)

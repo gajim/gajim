@@ -164,7 +164,7 @@ class Interface:
 
     def handle_event_iq_error(self, obj):
         #('ERROR_ANSWER', account, (id_, fjid, errmsg, errcode))
-        if unicode(obj.errcode) in ('400', '403', '406') and obj.id_:
+        if str(obj.errcode) in ('400', '403', '406') and obj.id_:
             # show the error dialog
             ft = self.instances['file_transfers']
             sid = obj.id_
@@ -172,7 +172,7 @@ class Interface:
                 sid = obj.id_[3:]
             file_props = FilesProp.getFileProp(obj.conn.name, sid)
             if file_props :
-                if unicode(obj.errcode) == '400':
+                if str(obj.errcode) == '400':
                     file_props.error = -3
                 else:
                     file_props.error = -4
@@ -181,7 +181,7 @@ class Interface:
                     error_msg=obj.errmsg))
                 obj.conn.disconnect_transfer(file_props)
                 return
-        elif unicode(obj.errcode) == '404':
+        elif str(obj.errcode) == '404':
             sid = obj.id_
             if len(obj.id_) > 3 and obj.id_[2] == '_':
                 sid = obj.id_[3:]
@@ -951,7 +951,7 @@ class Interface:
         ft_win = self.instances['file_transfers']
         if not file_props.hash_:
             # We disn't get the hash, sender probably don't support that
-            jid = unicode(file_props.sender)
+            jid = file_props.sender
             self.popup_ft_result(account, jid, file_props)
             ft_win.set_status(file_props, 'ok')
         h = Hashes()
@@ -963,7 +963,7 @@ class Interface:
         file_.close()
         # If the hash we received and the hash of the file are the same,
         # then the file is not corrupt
-        jid = unicode(file_props.sender)
+        jid = file_props.sender
         if file_props.hash_ == hash_:
             GObject.idle_add(self.popup_ft_result, account, jid, file_props)
             GObject.idle_add(ft_win.set_status, file_props, 'ok')
@@ -995,7 +995,7 @@ class Interface:
                 self.hashThread.start()
             gajim.socks5queue.remove_receiver(file_props.sid, True, True)
         else: # we send a file
-            jid = unicode(file_props.receiver)
+            jid = file_props.receiver
             gajim.socks5queue.remove_sender(file_props.sid, True, True)
             self.popup_ft_result(account, jid, file_props)
 
@@ -1042,7 +1042,7 @@ class Interface:
         if file_props is not None:
             if file_props.type_ == 'r':
                 # get the name of the sender, as it is in the roster
-                sender = unicode(file_props.sender).split('/')[0]
+                sender = file_props.sender.split('/')[0]
                 name = gajim.contacts.get_first_contact_from_jid(account,
                     sender).get_shown_name()
                 filename = os.path.basename(file_props.file_name)

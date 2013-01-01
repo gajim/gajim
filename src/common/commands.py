@@ -23,9 +23,9 @@
 ##
 
 import nbxmpp
-import helpers
-import dataforms
-import gajim
+from common import helpers
+from common import dataforms
+from common import gajim
 
 import logging
 log = logging.getLogger('gajim.c.commands')

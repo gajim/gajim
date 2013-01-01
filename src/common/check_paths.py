@@ -29,7 +29,7 @@ import sys
 import stat
 
 from common import gajim
-import logger
+from common import logger
 from common import jingle_xtls
 
 # DO NOT MOVE ABOVE OF import gajim

@@ -113,7 +113,7 @@ class DataFormWidget(Gtk.Alignment, object):
 
     def get_title(self):
         """
-        Get the title of data form, as a unicode object. If no title or no form,
+        Get the title of data form. If no title or no form,
         returns ''. Useful for setting window title
         """
         if self._data_form is not None:

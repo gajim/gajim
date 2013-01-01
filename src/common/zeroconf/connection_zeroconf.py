@@ -91,7 +91,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
                     'is_zeroconf', True)
             gajim.config.set_per('accounts', gajim.ZEROCONF_ACC_NAME,
                     'use_ft_proxies', False)
-        self.host = unicode(socket.gethostname(), locale.getpreferredencoding())
+        self.host = socket.gethostname()
         gajim.config.set_per('accounts', gajim.ZEROCONF_ACC_NAME, 'hostname',
                 self.host)
         self.port = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME,
@@ -110,8 +110,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
                 'zeroconf_email')
 
         if not self.username:
-            self.username = unicode(getpass.getuser(),
-                locale.getpreferredencoding())
+            self.username = getpass.getuser()
             gajim.config.set_per('accounts', gajim.ZEROCONF_ACC_NAME, 'name',
                 self.username)
         else:
@@ -427,7 +426,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
         if realm == '':
             if event == nbxmpp.transports_nb.DATA_ERROR:
                 thread_id = data[1]
-                frm = unicode(data[0])
+                frm = data[0]
                 session = self.get_or_create_session(frm, thread_id)
                 gajim.nec.push_incoming_event(MessageErrorEvent(
                     None, conn=self, fjid=frm, error_code=-1, error_msg=_(

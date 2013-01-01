@@ -42,7 +42,7 @@ import select
 import base64
 import hashlib
 import shlex
-import caps_cache
+from common import caps_cache
 import socket
 import time
 
@@ -159,7 +159,7 @@ def prep(user, server, resource):
             raise InvalidFormat, _('Username must be between 1 and 1023 chars')
         try:
             from nbxmpp.stringprepare import nodeprep
-            user = nodeprep.prepare(unicode(user)).encode('utf-8')
+            user = nodeprep.prepare(user)
         except UnicodeError:
             raise InvalidFormat, _('Invalid character in username.')
     else:
@@ -170,7 +170,7 @@ def prep(user, server, resource):
             raise InvalidFormat, _('Server must be between 1 and 1023 chars')
         try:
             from nbxmpp.stringprepare import nameprep
-            server = nameprep.prepare(unicode(server)).encode('utf-8')
+            server = nameprep.prepare(server)
         except UnicodeError:
             raise InvalidFormat, _('Invalid character in hostname.')
     else:
@@ -181,7 +181,7 @@ def prep(user, server, resource):
             raise InvalidFormat, _('Resource must be between 1 and 1023 chars')
         try:
             from nbxmpp.stringprepare import resourceprep
-            resource = resourceprep.prepare(unicode(resource)).encode('utf-8')
+            resource = resourceprep.prepare(resource)
         except UnicodeError:
             raise InvalidFormat, _('Invalid character in resource.')
     else:
@@ -448,43 +448,43 @@ def get_output_of_command(command):
 
     return output
 
-def decode_string(string):
-    """
-    Try to decode (to make it Unicode instance) given string
-    """
-    if isinstance(string, unicode):
-        return string
-    # by the time we go to iso15 it better be the one else we show bad characters
-    encodings = (locale.getpreferredencoding(), 'utf-8', 'iso-8859-15')
-    for encoding in encodings:
-        try:
-            string = string.decode(encoding)
-        except UnicodeError:
-            continue
-        break
+#def decode_string(string):
+    #"""
+    #Try to decode (to make it Unicode instance) given string
+    #"""
+    #if isinstance(string, unicode):
+        #return string
+    ## by the time we go to iso15 it better be the one else we show bad characters
+    #encodings = (locale.getpreferredencoding(), 'utf-8', 'iso-8859-15')
+    #for encoding in encodings:
+        #try:
+            #string = string.decode(encoding)
+        #except UnicodeError:
+            #continue
+        #break
 
-    return string
+    #return string
 
-def ensure_utf8_string(string):
-    """
-    Make sure string is in UTF-8
-    """
-    try:
-        string = decode_string(string).encode('utf-8')
-    except Exception:
-        pass
-    return string
+#def ensure_utf8_string(string):
+    #"""
+    #Make sure string is in UTF-8
+    #"""
+    #try:
+        #string = decode_string(string).encode('utf-8')
+    #except Exception:
+        #pass
+    #return string
 
-def wrapped_ensure_utf8_string(fn):
-    def wrapped(n):
-        return ensure_utf8_string(n)
-    return wrapped
+#def wrapped_ensure_utf8_string(fn):
+    #def wrapped(n):
+        #return ensure_utf8_string(n)
+    #return wrapped
 
-@wrapped_ensure_utf8_string
-def escape_text(text):
-    return GObject.markup_escape_text(text)
+#@wrapped_ensure_utf8_string
+#def escape_text(text):
+    #return GObject.markup_escape_text(text)
 
-GObject.markup_escape_text = escape_text
+#GObject.markup_escape_text = escape_text
 
 def get_windows_reg_env(varname, default=''):
     """
@@ -645,13 +645,13 @@ def convert_bytes(string):
     # but do we use the standard?
     use_kib_mib = gajim.config.get('use_kib_mib')
     align = 1024.
-    bytes = float(string)
-    if bytes >= align:
-        bytes = round(bytes/align, 1)
-        if bytes >= align:
-            bytes = round(bytes/align, 1)
-            if bytes >= align:
-                bytes = round(bytes/align, 1)
+    bytes_ = float(string)
+    if bytes_ >= align:
+        bytes_ = round(bytes_/align, 1)
+        if bytes_ >= align:
+            bytes_ = round(bytes_/align, 1)
+            if bytes_ >= align:
+                bytes_ = round(bytes_/align, 1)
                 if use_kib_mib:
                     #GiB means gibibyte
                     suffix = _('%s GiB')
@@ -675,7 +675,7 @@ def convert_bytes(string):
     else:
         #B means bytes
         suffix = _('%s B')
-    return suffix % unicode(bytes)
+    return suffix % str(bytes_)
 
 def get_contact_dict_for_account(account):
     """
@@ -901,13 +901,13 @@ def get_icon_name_to_show(contact, account = None):
 
 def get_full_jid_from_iq(iq_obj):
     """
-    Return the full jid (with resource) from an iq as unicode
+    Return the full jid (with resource) from an iq
     """
-    return parse_jid(str(iq_obj.getFrom()))
+    return parse_jid(iq_obj.getFrom())
 
 def get_jid_from_iq(iq_obj):
     """
-    Return the jid (without resource) from an iq as unicode
+    Return the jid (without resource) from an iq
     """
     jid = get_full_jid_from_iq(iq_obj)
     return gajim.get_jid_without_resource(jid)

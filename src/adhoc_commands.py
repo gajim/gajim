@@ -281,8 +281,6 @@ class CommandWindow:
         # close old stage
         self.stage_finish()
 
-        assert isinstance(self.commandnode, unicode)
-
         self.form_status = None
 
         self.stages_notebook.set_current_page(
@@ -608,7 +606,6 @@ class CommandWindow:
         Send the command with data form. Wait for reply
         """
         # create the stanza
-        assert isinstance(self.commandnode, unicode)
         assert action in ('execute', 'prev', 'next', 'complete')
 
         stanza = nbxmpp.Iq(typ='set', to=self.jid)

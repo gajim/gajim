@@ -84,7 +84,7 @@ if os.name == 'nt':
     os.environ['LANG'] = lang
     gettext.bindtextdomain(APP, DIR)
     gettext.textdomain(APP)
-    gettext.install(APP, DIR, unicode=True)
+    gettext.install(APP, DIR)
 
     locale.setlocale(locale.LC_ALL, '')
     import ctypes
@@ -155,11 +155,7 @@ def parseOpts():
 
 import locale
 profile, config_path = parseOpts()
-if config_path:
-    config_path = unicode(config_path, locale.getpreferredencoding())
 del parseOpts
-
-profile = unicode(profile, locale.getpreferredencoding())
 
 import common.configpaths
 common.configpaths.gajimpaths.init(config_path)

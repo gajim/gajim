@@ -46,7 +46,7 @@ class GajimPlugin(object):
 
     Will be shown in plugins management GUI.
 
-    :type: unicode
+    :type: str
     '''
     short_name = ''
     '''
@@ -54,7 +54,7 @@ class GajimPlugin(object):
 
     Used for quick indentification of plugin.
 
-    :type: unicode
+    :type: str
 
     :todo: decide whether we really need this one, because class name (with
             module name) can act as such short name
@@ -63,7 +63,7 @@ class GajimPlugin(object):
     '''
     Version of plugin.
 
-    :type: unicode
+    :type: str
 
     :todo: decide how to compare version between each other (which one
             is higher). Also rethink: do we really need to compare versions
@@ -75,7 +75,7 @@ class GajimPlugin(object):
     '''
     Plugin description.
 
-    :type: unicode
+    :type: str
 
     :todo: should be allow rich text here (like HTML or reStructuredText)?
     '''
@@ -83,7 +83,7 @@ class GajimPlugin(object):
     '''
     Plugin authors.
 
-    :type: [] of unicode
+    :type: [] of str
 
     :todo: should we decide on any particular format of author strings?
             Especially: should we force format of giving author's e-mail?
@@ -92,7 +92,7 @@ class GajimPlugin(object):
     '''
     URL to plug-in's homepage.
 
-    :type: unicode
+    :type: str
 
     :todo: should we check whether provided string is valid URI? (Maybe
     using 'property')
@@ -120,7 +120,7 @@ class GajimPlugin(object):
 
     Values are tuples: (default_value, option_description). The first one can
     be anything (this is the advantage of using shelve/pickle instead of
-    custom-made     config I/O handling); the second one should be unicode (gettext
+    custom-made     config I/O handling); the second one should be str (gettext
     can be used if need and/or translation is planned).
 
     :type: {} of 2-element tuples

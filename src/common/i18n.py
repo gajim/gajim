@@ -24,7 +24,7 @@
 import locale
 import gettext
 import os
-import defs
+from common import defs
 import unicodedata
 
 def paragraph_direction_mark(text):
@@ -61,7 +61,7 @@ if os.name == 'nt':
     if lang:
         os.environ['LANG'] = lang
 
-gettext.install(APP, DIR, unicode=False)
+gettext.install(APP, DIR)
 if gettext._translations:
     _translation = gettext._translations.values()[0]
 else:

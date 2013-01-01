@@ -117,7 +117,7 @@ class ProxyResolver:
         """
         self.host = str(host)
         self.port = int(port)
-        self.jid = unicode(jid)
+        self.jid = str(jid)
         if not self.testit:
             self.state = S_FINISHED
             return

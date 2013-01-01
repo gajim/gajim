@@ -23,10 +23,10 @@ import re
 from types import FunctionType
 from inspect import getargspec, getdoc
 
-from dispatcher import Host, Container
-from dispatcher import get_command, list_commands
-from mapping import parse_arguments, adapt_arguments
-from errors import DefinitionError, CommandError, NoCommandError
+from .dispatcher import Host, Container
+from .dispatcher import get_command, list_commands
+from mmapping import parse_arguments, adapt_arguments
+from .errors import DefinitionError, CommandError, NoCommandError
 
 class CommandHost(object):
     """

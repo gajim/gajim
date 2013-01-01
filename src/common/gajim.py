@@ -31,10 +31,10 @@ import sys
 import logging
 import locale
 
-import config
+from common import config
 import nbxmpp
-import defs
-import common.ged
+from common import defs
+from common import ged
 
 interface = None # The actual interface (the gtk one for the moment)
 thread_interface = None # Interface to run a thread and then a callback
@@ -280,13 +280,8 @@ def get_jid_without_resource(jid):
     return jid.split('/')[0]
 
 def construct_fjid(room_jid, nick):
-    """
-    Nick is in UTF-8 (taken from treeview); room_jid is in unicode
-    """
     # fake jid is the jid for a contact in a room
     # gaim@conference.jabber.org/nick
-    if isinstance(nick, str):
-        nick = unicode(nick, 'utf-8')
     return room_jid + '/' + nick
 
 def get_resource_from_jid(jid):

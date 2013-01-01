@@ -158,7 +158,7 @@ class PluginManager(object):
         active yet).
 
         :param gui_extpoint_name: name of GUI extension point.
-        :type gui_extpoint_name: unicode
+        :type gui_extpoint_name: str
         :param args: parameters to be passed to extension point handlers
                 (typically and object that invokes `gui_extension_point`;
                 however, this can be practically anything)
@@ -209,7 +209,7 @@ class PluginManager(object):
                 freedom, but is this necessary?
 
         :param gui_extpoint_name: name of GUI extension point.
-        :type gui_extpoint_name: unicode
+        :type gui_extpoint_name: str
         :param args: arguments that `PluginManager.gui_extension_point` was
                 called with for this extension point. This is used (along with
                 extension point name) to identify element to be removed.
@@ -394,7 +394,7 @@ class PluginManager(object):
         Scans given directory for plugin classes.
 
         :param path: directory to scan for plugins
-        :type path: unicode
+        :type path: str
 
         :return: list of found plugin classes (subclasses of `GajimPlugin`
         :rtype: [] of class objects

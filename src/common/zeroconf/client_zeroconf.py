@@ -418,18 +418,11 @@ class P2PConnection(IdleObject, PlugIn):
         """
         Append stanza to the queue of messages to be send if now is False, else
         send it instantly
-
-        If supplied data is unicode string, encode it to UTF-8.
         """
         if self.state <= 0:
             return
 
         r = packet
-
-        if isinstance(r, unicode):
-            r = r.encode('utf-8')
-        elif not isinstance(r, str):
-            r = ustr(r).encode('utf-8')
 
         if now:
             self.sendqueue.insert(0, (r, is_message))
@@ -737,7 +730,7 @@ class ClientZeroconf:
     def send(self, stanza, is_message=False, now=False, on_ok=None,
     on_not_ok=None):
         stanza.setFrom(self.roster.zeroconf.name)
-        to = unicode(stanza.getTo())
+        to = stanza.getTo()
         to = gajim.get_jid_without_resource(to)
 
         try:
@@ -802,7 +795,7 @@ class ClientZeroconf:
         def on_ok(_waitid):
 #            if timeout:
 #                self._owner.set_timeout(timeout)
-            to = unicode(stanza.getTo())
+            to = stanza.getTo()
             to = gajim.get_jid_without_resource(to)
 
             try:

@@ -3110,7 +3110,7 @@ class SingleMessageWindow:
 
     def update_char_counter(self, widget):
         characters_no = self.message_tv_buffer.get_char_count()
-        self.count_chars_label.set_text(unicode(characters_no))
+        self.count_chars_label.set_text(characters_no)
 
     def send_single_message(self):
         if gajim.connections[self.account].connected <= 1:

@@ -26,7 +26,7 @@ import re
 from types import BooleanType, UnicodeType
 from operator import itemgetter
 
-from errors import DefinitionError, CommandError
+from .errors import DefinitionError, CommandError
 
 # Quite complex piece of regular expression logic to parse options and
 # arguments. Might need some tweaking along the way.
@@ -268,12 +268,6 @@ def adapt_arguments(command, arguments, args, opts):
         if isinstance(initial, BooleanType):
             if not isinstance(value, BooleanType):
                 raise CommandError("%s: Switch can not take an argument" % key, command)
-
-    # We need to encode every keyword argument to a simple string, not
-    # the unicode one, because ** expansion does not support it.
-    for index, (key, value) in enumerate(opts):
-        if isinstance(key, UnicodeType):
-            opts[index] = (key.encode(KEY_ENCODING), value)
 
     # Inject the source arguments as a string as a first argument, if
     # command has enabled the corresponding option.

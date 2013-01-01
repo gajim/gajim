@@ -153,12 +153,12 @@ class FileTransfersWindow:
         for file_props in allfp:
             if file_props.type_ == 's' and file_props.tt_account == account:
                 # 'account' is the sender
-                receiver_jid = unicode(file_props.receiver).split('/')[0]
+                receiver_jid = file_props.receiver.split('/')[0]
                 if jid == receiver_jid and not is_transfer_stopped(file_props):
                     active_transfers[0].append(file_props)
             elif file_props.type_ == 'r' and file_props.tt_account == account:
                 # 'account' is the recipient
-                sender_jid = unicode(file_props.sender).split('/')[0]
+                sender_jid = file_props.sender.split('/')[0]
                 if jid == sender_jid and not is_transfer_stopped(file_props):
                     active_transfers[1].append(file_props)
             else:
@@ -188,7 +188,7 @@ class FileTransfersWindow:
         sectext += '\n\t' + _('Size: %s') % \
         helpers.convert_bytes(file_props.size)
         if file_props.type_ == 'r':
-            jid = unicode(file_props.sender).split('/')[0]
+            jid = file_props.sender.split('/')[0]
             sender_name = gajim.contacts.get_first_contact_from_jid(
                     file_props.tt_account, jid).get_shown_name()
             sender = sender_name
@@ -198,7 +198,7 @@ class FileTransfersWindow:
         sectext += '\n\t' + _('Sender: %s') % sender
         sectext += '\n\t' + _('Recipient: ')
         if file_props.type_ == 's':
-            jid = unicode(file_props.receiver).split('/')[0]
+            jid = file_props.receiver.split('/')[0]
             receiver_name = gajim.contacts.get_first_contact_from_jid(
                     file_props.tt_account, jid).get_shown_name()
             recipient = receiver_name
@@ -533,7 +533,7 @@ class FileTransfersWindow:
             _str += ' '
         if percent < 10:
             _str += ' '
-        _str += unicode(percent) + '%          \n'
+        _str += str(percent) + '%          \n'
         return _str
 
     def _format_time(self, _time):
@@ -585,7 +585,7 @@ class FileTransfersWindow:
                 other = file_props.sender
             else: # we send a file
                 other = file_props.receiver
-            if isinstance(other, unicode):
+            if isinstance(other, str):
                 jid = gajim.get_jid_without_resource(other)
             else: # It's a Contact instance
                 jid = other.jid
@@ -713,7 +713,7 @@ class FileTransfersWindow:
         file_props.type_ = 's'
         file_props.desc = file_desc
         file_props.elapsed_time = 0
-        file_props.size = unicode(stat[6])
+        file_props.size = str(stat[6])
         file_props.sender = account
         file_props.receiver = contact
         file_props.tt_account = account

@@ -1202,7 +1202,7 @@ class RosterWindow:
                 nb_connected_contact += 1
         if nb_connected_contact > 1:
             # switch back to default writing direction
-            name += i18n.paragraph_direction_mark(unicode(name))
+            name += i18n.paragraph_direction_mark(name)
             name += ' (%d)' % nb_connected_contact
 
         # add status msg, if not empty, under contact name in
@@ -3512,8 +3512,8 @@ class RosterWindow:
             elif type_ == 'agent':
                 self.on_remove_agent(widget, list_)
 
-        elif not (event.get_state() & (Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.MOD1_MASK)) and\
-        Gdk.keyval_to_unicode(event.keyval):
+        elif not (event.get_state() & (Gdk.ModifierType.CONTROL_MASK | \
+        Gdk.ModifierType.MOD1_MASK)) and Gdk.keyval_to_unicode(event.keyval):
             # if we got unicode symbol without ctrl / alt
             num = Gdk.keyval_to_unicode(event.keyval)
             self.enable_rfilter(unichr(num))

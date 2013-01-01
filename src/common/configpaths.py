@@ -61,7 +61,7 @@ def fse(s):
     """
     Convert from filesystem encoding if not already Unicode
     """
-    return unicode(s, sys.getfilesystemencoding())
+    return s
 
 def windowsify(s):
     if os.name == 'nt':

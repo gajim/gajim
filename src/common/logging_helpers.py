@@ -19,7 +19,7 @@
 ##
 
 import logging
-import i18n
+from common import i18n
 
 def parseLogLevel(arg):
     """

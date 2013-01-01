@@ -224,14 +224,7 @@ class Zeroconf:
         return show
 
     def avahi_txt(self):
-        utf8_dict = {}
-        for key in self.txt:
-            val = self.txt[key]
-            if isinstance(val, unicode):
-                utf8_dict[key] = val.encode('utf-8')
-            else:
-                utf8_dict[key] = val
-        return self.avahi.dict_to_txt_array(utf8_dict)
+        return self.avahi.dict_to_txt_array(self.txt)
 
     def create_service(self):
         try:

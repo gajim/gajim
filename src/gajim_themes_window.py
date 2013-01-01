@@ -168,10 +168,10 @@ class GajimThemesWindow:
         # don't confuse translators
         theme_name = _('theme name')
         theme_name_ns = theme_name.replace(' ', '_')
-        while theme_name_ns + unicode(i) in gajim.config.get_per('themes'):
+        while theme_name_ns + str(i) in gajim.config.get_per('themes'):
             i += 1
-        model.set_value(iter_, 0, theme_name + unicode(i))
-        gajim.config.add_per('themes', theme_name_ns + unicode(i))
+        model.set_value(iter_, 0, theme_name + str(i))
+        gajim.config.add_per('themes', theme_name_ns + str(i))
         self.themes_tree.get_selection().select_iter(iter_)
         col = self.themes_tree.get_column(0)
         path = model.get_path(iter_)

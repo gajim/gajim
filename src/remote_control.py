@@ -72,7 +72,7 @@ def get_dbus_struct(obj):
     """
     if obj is None:
         return DBUS_NONE()
-    if isinstance(obj, (unicode, str)):
+    if isinstance(obj, str):
         return DBUS_STRING(obj)
     if isinstance(obj, int):
         return DBUS_INT32(obj)
@@ -613,8 +613,8 @@ class SignalObject(dbus.service.Object):
         """
         Get vcard info for a contact. Return cached value of the vcard
         """
-        if not isinstance(jid, unicode):
-            jid = unicode(jid)
+        if not isinstance(jid, str):
+            jid = str(jid)
         if not jid:
             raise dbus_support.MissingArgument()
         jid = self._get_real_jid(jid)
@@ -652,9 +652,9 @@ class SignalObject(dbus.service.Object):
             result['name'] = DBUS_STRING(con.name)
             result['jid'] = DBUS_STRING(gajim.get_jid_from_account(con.name))
             result['message'] = DBUS_STRING(con.status)
-            result['priority'] = DBUS_STRING(unicode(con.priority))
-            result['resource'] = DBUS_STRING(unicode(gajim.config.get_per(
-                    'accounts', con.name, 'resource')))
+            result['priority'] = DBUS_STRING(str(con.priority))
+            result['resource'] = DBUS_STRING(gajim.config.get_per('accounts',
+                con.name, 'resource'))
         return result
 
     @dbus.service.method(INTERFACE, in_signature='s', out_signature='aa{sv}')

@@ -39,7 +39,7 @@ from nbxmpp.protocol import NS_CHATSTATES
 from common.jingle_transport import JingleTransportSocks5
 from common.file_props import FilesProp
 
-import gtkgui_helpers
+from . import gtkgui_helpers
 
 import logging
 log = logging.getLogger('gajim.c.connection_handlers_events')
@@ -1169,7 +1169,6 @@ class ZeroconfMessageReceivedEvent(MessageReceivedEvent):
                     self.fjid = key
                     break
 
-        self.fjid = unicode(self.fjid)
         self.jid, self.resource = gajim.get_room_and_nick_from_fjid(self.fjid)
 
     def generate(self):
@@ -1986,7 +1985,7 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                     self.FT_content.session.ourjid)
                 self.FT_content.transport.set_connection(
                     self.FT_content.session.connection)
-            sid = unicode(self.stanza.getTag('jingle').getAttr('sid'))
+            sid = self.stanza.getTag('jingle').getAttr('sid')
             self.file_props = FilesProp.getNewFileProp(self.conn.name, sid)
             self.file_props.transport_sid = self.FT_content.transport.sid
             self.FT_content.file_props = self.file_props
@@ -2033,8 +2032,7 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         else:
             si = self.stanza.getTag('si')
             self.file_props = FilesProp.getNewFileProp(self.conn.name,
-                                               unicode(si.getAttr('id'))
-                                                      )
+                si.getAttr('id'))
             profile = si.getAttr('profile')
             if profile != nbxmpp.NS_FILE:
                 self.conn.send_file_rejection(self.file_props, code='400',

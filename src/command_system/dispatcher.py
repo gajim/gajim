@@ -32,7 +32,7 @@ over the process.
 """
 
 from types import NoneType
-from tools import remove
+from .tools import remove
 
 COMMANDS = {}
 CONTAINERS = {}

@@ -2505,7 +2505,7 @@ class ChatControl(ChatControlBase):
         if num_unread == 1 and not gajim.config.get('show_unread_tab_icon'):
             unread = '*'
         elif num_unread > 1:
-            unread = '[' + unicode(num_unread) + ']'
+            unread = '[' + str(num_unread) + ']'
 
         # Draw tab label using chatstate
         theme = gajim.config.get('roster_theme')
