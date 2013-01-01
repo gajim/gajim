@@ -23,6 +23,7 @@
 ##
 
 from gi.repository import Gtk
+from gi.repository import Gdk
 from gi.repository import Pango
 import dialogs
 import gtkgui_helpers
@@ -59,8 +60,8 @@ class GajimThemesWindow:
         col = Gtk.TreeViewColumn(_('Theme'))
         self.themes_tree.append_column(col)
         renderer = Gtk.CellRendererText()
-        col.pack_start(renderer, True, True, 0)
-        col.set_attributes(renderer, text = 0)
+        col.pack_start(renderer, True)
+        col.add_attribute(renderer, 'text', 0)
         renderer.connect('edited', self.on_theme_cell_edited)
         renderer.set_property('editable', True)
         self.current_theme = gajim.config.get('roster_theme')

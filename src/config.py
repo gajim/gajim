@@ -1343,8 +1343,8 @@ class ManageProxiesWindow:
         col = Gtk.TreeViewColumn('Proxies')
         self.proxies_treeview.append_column(col)
         renderer = Gtk.CellRendererText()
-        col.pack_start(renderer, True, True, 0)
-        col.set_attributes(renderer, text = 0)
+        col.pack_start(renderer, True)
+        col.add_attribute(renderer, 'text', 0)
         self.fill_proxies_treeview()
         self.xml.get_object('proxytype_combobox').set_active(0)
 
