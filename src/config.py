@@ -438,7 +438,7 @@ class PreferencesWindow:
         renderer.set_property('editable', True)
         self.fill_msg_treeview()
         buf = self.xml.get_object('msg_textview').get_buffer()
-        buf.connect('changed', self.on_msg_textview_changed)
+        buf.connect('end-user-action', self.on_msg_textview_changed)
 
         ### Audio / Video tab ###
         def create_av_combobox(opt_name, device_dict, config_name=None,
