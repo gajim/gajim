@@ -141,7 +141,8 @@ class AdvancedConfigurationWindow(object):
         """
         optname = model[iter_][C_PREFNAME]
         opttype = model[iter_][C_TYPE]
-        if opttype == self.types['boolean'] or optname == 'password':
+
+        if opttype.decode('utf-8') == self.types['boolean'] or optname == 'password':
             cell.set_property('editable', False)
         else:
             cell.set_property('editable', True)
@@ -194,9 +195,9 @@ class AdvancedConfigurationWindow(object):
         modelpath = self.modelfilter.convert_path_to_child_path(path)
         modelrow = self.model[modelpath]
         option = modelrow[0].decode('utf-8')
-        if modelrow[2] == self.types['boolean']:
+        if modelrow[2].decode('utf-8') == self.types['boolean']:
             for key in self.right_true_dict.keys():
-                if self.right_true_dict[key] == modelrow[1]:
+                if self.right_true_dict[key] == modelrow[1].decode('utf-8'):
                     modelrow[1] = str(key)
             newval = {'False': True, 'True': False}[modelrow[1]]
             if len(modelpath.get_indices()) > 1:
