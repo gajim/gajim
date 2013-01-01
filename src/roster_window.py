@@ -90,6 +90,9 @@ from common.pep import MOODS, ACTIVITIES
     C_PADLOCK_PIXBUF, # use for account row only
 ) = range(11)
 
+empty_pixbuf = GdkPixbuf.Pixbuf.new(GdkPixbuf.Colorspace.RGB, True, 8, 1, 1)
+
+
 class RosterWindow:
     """
     Class for main window of the GTK+ interface
@@ -1035,7 +1038,7 @@ class RosterWindow:
                 Gtk.STOCK_DIALOG_AUTHENTICATION, Gtk.IconSize.MENU)
             self.model[child_iter][C_PADLOCK_PIXBUF] = tls_pixbuf
         else:
-            self.model[child_iter][C_PADLOCK_PIXBUF] = ""
+            self.model[child_iter][C_PADLOCK_PIXBUF] = empty_pixbuf
 
         if self.regroup:
             account_name = _('Merged accounts')
@@ -1060,29 +1063,29 @@ class RosterWindow:
         pep_dict = gajim.connections[account].pep
         if gajim.config.get('show_mood_in_roster') and 'mood' in pep_dict:
             self.model[child_iter][C_MOOD_PIXBUF] = pep_dict['mood'].\
-                asPixbufIcon()
+                    asPixbufIcon()
         else:
-            self.model[child_iter][C_MOOD_PIXBUF] = ""
+            self.model[child_iter][C_MOOD_PIXBUF] = empty_pixbuf
 
         if gajim.config.get('show_activity_in_roster') and 'activity' in \
         pep_dict:
             self.model[child_iter][C_ACTIVITY_PIXBUF] = pep_dict['activity'].\
                 asPixbufIcon()
         else:
-            self.model[child_iter][C_ACTIVITY_PIXBUF] = ""
+            self.model[child_iter][C_ACTIVITY_PIXBUF] = empty_pixbuf
 
         if gajim.config.get('show_tunes_in_roster') and 'tune' in pep_dict:
             self.model[child_iter][C_TUNE_PIXBUF] = pep_dict['tune'].\
                 asPixbufIcon()
         else:
-            self.model[child_iter][C_TUNE_PIXBUF] = ""
+            self.model[child_iter][C_TUNE_PIXBUF] = empty_pixbuf
 
         if gajim.config.get('show_location_in_roster') and 'location' in \
         pep_dict:
             self.model[child_iter][C_LOCATION_PIXBUF] = pep_dict['location'].\
                 asPixbufIcon()
         else:
-            self.model[child_iter][C_LOCATION_PIXBUF] = ""
+            self.model[child_iter][C_LOCATION_PIXBUF] = empty_pixbuf
 
     def _really_draw_accounts(self):
         for acct in self.accounts_to_draw:
@@ -1339,7 +1342,7 @@ class RosterWindow:
         if pep_type in contact.pep:
             pixbuf = contact.pep[pep_type].asPixbufIcon()
         else:
-            pixbuf = ""
+            pixbuf = empty_pixbuf
         for child_iter in iters:
             self.model[child_iter][model_column] = pixbuf
 
@@ -1350,7 +1353,7 @@ class RosterWindow:
         jid = self.model[iters[0]][C_JID].decode('utf-8')
         pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(jid)
         if pixbuf in (None, 'ask'):
-            scaled_pixbuf = ""
+            scaled_pixbuf = empty_pixbuf
         else:
             scaled_pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'roster')
         for child_iter in iters:
@@ -2279,7 +2282,7 @@ class RosterWindow:
             else:
                 # No need to redraw contacts if we're quitting
                 if child_iterA:
-                    self.model[child_iterA][C_AVATAR_PIXBUF] = ''
+                    self.model[child_iterA][C_AVATAR_PIXBUF] = empty_pixbuf
                 if account in gajim.con_types:
                     gajim.con_types[account] = None
                 for jid in gajim.contacts.get_jid_list(account):
