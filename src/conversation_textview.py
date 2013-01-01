@@ -728,7 +728,7 @@ class ConversationTextview(GObject.GObject):
         """
         separator_menuitem_was_added = False
         if not self.used_in_history_window:
-            item = Gtk.SeparatorMenuItem()
+            item = Gtk.SeparatorMenuItem.new()
             menu.prepend(item)
             separator_menuitem_was_added = True
 
@@ -739,7 +739,7 @@ class ConversationTextview(GObject.GObject):
 
         if self.selected_phrase:
             if not separator_menuitem_was_added:
-                item = Gtk.SeparatorMenuItem()
+                item = Gtk.SeparatorMenuItem.new()
                 menu.prepend(item)
 
             if not self.used_in_history_window:

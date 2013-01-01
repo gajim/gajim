@@ -5470,7 +5470,7 @@ class RosterWindow:
                             item.set_sensitive(False)
 
         # Manage GC bookmarks
-        newitem = Gtk.SeparatorMenuItem() # separator
+        newitem = Gtk.SeparatorMenuItem.new() # separator
         gc_sub_menu.append(newitem)
 
         newitem = Gtk.ImageMenuItem(_('_Manage Bookmarks...'))
@@ -5579,7 +5579,7 @@ class RosterWindow:
             status_menuitem.set_submenu(sub_menu)
 
             for show in ('online', 'chat', 'away', 'xa', 'dnd', 'invisible'):
-                uf_show = helpers.get_uf_show(show, use_mnemonic=True)
+                uf_show = helpers.get_uf_show(show, use_mnemonic=False)
                 item = Gtk.ImageMenuItem(uf_show)
                 icon = state_images[show]
                 item.set_image(icon)
@@ -5591,7 +5591,7 @@ class RosterWindow:
                 else:
                     item.connect('activate', self.change_status, account, show)
 
-            item = Gtk.SeparatorMenuItem()
+            item = Gtk.SeparatorMenuItem.new()
             sub_menu.append(item)
 
             item = Gtk.ImageMenuItem(_('_Change Status Message'))
@@ -5602,7 +5602,7 @@ class RosterWindow:
             if gajim.connections[account].connected < 2:
                 item.set_sensitive(False)
 
-            item = Gtk.SeparatorMenuItem()
+            item = Gtk.SeparatorMenuItem.new()
             sub_menu.append(item)
 
             uf_show = helpers.get_uf_show('offline', use_mnemonic=True)
@@ -5633,7 +5633,7 @@ class RosterWindow:
                     self.on_publish_location_toggled)
 
                 pep_config = Gtk.ImageMenuItem(_('Configure Services...'))
-                item = Gtk.SeparatorMenuItem()
+                item = Gtk.SeparatorMenuItem.new()
                 pep_submenu.append(item)
                 pep_config.set_sensitive(True)
                 pep_submenu.append(pep_config)
@@ -5699,7 +5699,7 @@ class RosterWindow:
                 sub_menu.append(item)
                 item.connect('activate', self.change_status, account, show)
 
-            item = Gtk.SeparatorMenuItem()
+            item = Gtk.SeparatorMenuItem.new()
             sub_menu.append(item)
 
             item = Gtk.ImageMenuItem(_('_Change Status Message'))
@@ -5853,7 +5853,7 @@ class RosterWindow:
                 send_group_message_item.set_sensitive(False)
 
         if not group in helpers.special_groups:
-            item = Gtk.SeparatorMenuItem() # separator
+            item = Gtk.SeparatorMenuItem.new() # separator
             menu.append(item)
 
             # Rename
@@ -5979,7 +5979,7 @@ class RosterWindow:
         gui_menu_builder.build_invite_submenu(invite_item, list_)
         menu.append(invite_item)
 
-        item = Gtk.SeparatorMenuItem() # separator
+        item = Gtk.SeparatorMenuItem.new() # separator
         menu.append(item)
 
         # Manage Transport submenu
@@ -5998,7 +5998,7 @@ class RosterWindow:
         manage_contacts_submenu.append(edit_groups_item)
         edit_groups_item.connect('activate', self.on_edit_groups, list_)
 
-        item = Gtk.SeparatorMenuItem() # separator
+        item = Gtk.SeparatorMenuItem.new() # separator
         manage_contacts_submenu.append(item)
 
         # Block
@@ -6090,7 +6090,7 @@ class RosterWindow:
                 status_menuitems.append(status_menuitem)
         menu.append(send_custom_status_menuitem)
 
-        item = Gtk.SeparatorMenuItem() # separator
+        item = Gtk.SeparatorMenuItem.new() # separator
         menu.append(item)
 
         # Execute Command
@@ -6131,7 +6131,7 @@ class RosterWindow:
         if gajim.account_is_disconnected(account):
             item.set_sensitive(False)
 
-        item = Gtk.SeparatorMenuItem() # separator
+        item = Gtk.SeparatorMenuItem.new() # separator
         manage_transport_submenu.append(item)
 
         # Block
@@ -6157,7 +6157,7 @@ class RosterWindow:
         if gajim.account_is_disconnected(account):
             item.set_sensitive(False)
 
-        item = Gtk.SeparatorMenuItem() # separator
+        item = Gtk.SeparatorMenuItem.new() # separator
         menu.append(item)
 
         # Information
@@ -6207,7 +6207,7 @@ class RosterWindow:
             account)
         menu.append(disconnect_menuitem)
 
-        item = Gtk.SeparatorMenuItem() # separator
+        item = Gtk.SeparatorMenuItem.new() # separator
         menu.append(item)
 
         history_menuitem = Gtk.ImageMenuItem(_('_History'))
@@ -6284,7 +6284,7 @@ class RosterWindow:
         """
         Add a seperator and History Manager menuitem BELOW for account menuitems
         """
-        item = Gtk.SeparatorMenuItem() # separator
+        item = Gtk.SeparatorMenuItem.new() # separator
         menu.append(item)
 
         # History manager
@@ -6308,7 +6308,7 @@ class RosterWindow:
 
         # User has at least one bookmark.
         if gajim.connections[account].bookmarks:
-            item = Gtk.SeparatorMenuItem()
+            item = Gtk.SeparatorMenuItem.new()
             gc_sub_menu.append(item)
 
         for bookmark in gajim.connections[account].bookmarks:

@@ -525,7 +525,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         """
         Override the default context menu and add our own menutiems
         """
-        item = Gtk.SeparatorMenuItem()
+        item = Gtk.SeparatorMenuItem.new()
         menu.prepend(item)
 
         menu2 = self.prepare_context_menu()
@@ -573,7 +573,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         id_ = item.connect('activate', self.msg_textview.undo)
         self.handlers[id_] = item
 
-        item = Gtk.SeparatorMenuItem()
+        item = Gtk.SeparatorMenuItem.new()
         menu.prepend(item)
 
         item = Gtk.ImageMenuItem(Gtk.STOCK_CLEAR)
@@ -1066,7 +1066,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
                     menuitem[1])
             menu.append(item)
 
-        item = Gtk.SeparatorMenuItem() # separator
+        item = Gtk.SeparatorMenuItem.new() # separator
         menu.append(item)
 
         item = Gtk.ImageMenuItem(_('Color'))
@@ -1081,7 +1081,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         item.connect('activate', self.on_font_menuitem_activale)
         menu.append(item)
 
-        item = Gtk.SeparatorMenuItem() # separator
+        item = Gtk.SeparatorMenuItem.new() # separator
         menu.append(item)
 
         item = Gtk.ImageMenuItem(_('Clear formating'))

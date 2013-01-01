@@ -563,7 +563,7 @@ class GroupchatControl(ChatControlBase):
         and the ability to insert a nick
         """
         ChatControlBase.on_msg_textview_populate_popup(self, textview, menu)
-        item = Gtk.SeparatorMenuItem()
+        item = Gtk.SeparatorMenuItem.new()
         menu.prepend(item)
 
         item = Gtk.MenuItem(_('Insert Nickname'))

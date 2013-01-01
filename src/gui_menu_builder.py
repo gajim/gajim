@@ -136,7 +136,7 @@ def build_invite_submenu(invite_menuitem, list_, ignore_rooms=[]):
         contacts_transport == gajim.get_transport_name_from_jid(room_jid):
             rooms.append((room_jid, acct))
     if len(rooms):
-        item = Gtk.SeparatorMenuItem() # separator
+        item = Gtk.SeparatorMenuItem.new() # separator
         invite_to_submenu.append(item)
         for (room_jid, account) in rooms:
             menuitem = Gtk.MenuItem(room_jid.split('@')[0])

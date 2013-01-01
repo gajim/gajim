@@ -235,7 +235,7 @@ class StatusIcon:
             sub_menu.append(item)
             item.connect('activate', self.on_show_menuitem_activate, show)
 
-        item = Gtk.SeparatorMenuItem()
+        item = Gtk.SeparatorMenuItem.new()
         sub_menu.append(item)
 
         item = Gtk.ImageMenuItem(_('_Change Status Message...'))
@@ -249,7 +249,7 @@ class StatusIcon:
 
         connected_accounts_with_private_storage = 0
 
-        item = Gtk.SeparatorMenuItem()
+        item = Gtk.SeparatorMenuItem.new()
         sub_menu.append(item)
 
         uf_show = helpers.get_uf_show('offline', use_mnemonic = True)
@@ -336,7 +336,7 @@ class StatusIcon:
                 gc_item.set_submenu(gc_menuitem_menu)
                 gc_sub_menu.show_all()
 
-        newitem = Gtk.SeparatorMenuItem() # separator
+        newitem = Gtk.SeparatorMenuItem.new() # separator
         gc_sub_menu.append(newitem)
         newitem = Gtk.ImageMenuItem(_('_Manage Bookmarks...'))
         img = Gtk.Image.new_from_stock(Gtk.STOCK_PREFERENCES, Gtk.IconSize.MENU)
@@ -363,7 +363,7 @@ class StatusIcon:
 
         if os.name == 'nt':
             if self.added_hide_menuitem is False:
-                self.systray_context_menu.prepend(Gtk.SeparatorMenuItem())
+                self.systray_context_menu.prepend(Gtk.SeparatorMenuItem.new())
                 item = Gtk.MenuItem(_('Hide this menu'))
                 self.systray_context_menu.prepend(item)
                 self.added_hide_menuitem = True
