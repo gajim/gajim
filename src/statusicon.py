@@ -299,7 +299,7 @@ class StatusIcon:
                         connected_accounts_with_private_storage += 1
 
                     # for single message
-                    single_message_menuitemset_submenu(None)
+                    single_message_menuitem.set_submenu(None)
                     self.single_message_handler_id = single_message_menuitem.\
                             connect('activate',
                             self.on_single_message_menuitem_activate, account)
