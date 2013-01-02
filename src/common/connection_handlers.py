@@ -431,7 +431,8 @@ class ConnectionVcard:
         if 'PHOTO' in vcard and isinstance(vcard['PHOTO'], dict) and \
         'BINVAL' in vcard['PHOTO']:
             photo = vcard['PHOTO']['BINVAL']
-            photo_decoded = base64.decodestring(photo)
+            photo_decoded = base64.b64decode(photo.encode('utf-8')).decode(
+                'utf-8')
             gajim.interface.save_avatar_files(our_jid, photo_decoded)
             avatar_sha = hashlib.sha1(photo_decoded).hexdigest()
             iq2.getTag('PHOTO').setTagData('SHA', avatar_sha)
@@ -684,7 +685,7 @@ class ConnectionVcard:
         'BINVAL' in vcard['PHOTO']:
             photo = vcard['PHOTO']['BINVAL']
             try:
-                photo_decoded = base64.decodestring(photo)
+                photo_decoded = base64.b64decode(photo.encode('utf-8')).decode('utf-8')
                 avatar_sha = hashlib.sha1(photo_decoded).hexdigest()
             except Exception:
                 avatar_sha = ''
@@ -970,7 +971,7 @@ class ConnectionHandlersBase:
         decmsg = self.gpg.decrypt(encmsg, keyID)
         decmsg = self.connection.Dispatcher.replace_non_character(decmsg)
         # \x00 chars are not allowed in C (so in GTK)
-        obj.msgtxt = helpers.decode_string(decmsg.replace('\x00', ''))
+        obj.msgtxt = decmsg.replace('\x00', '')
         obj.encrypted = 'xep27'
         self.gpg_messages_to_decrypt.remove([encmsg, keyID, obj])
 
@@ -1095,7 +1096,7 @@ class ConnectionHandlersBase:
             jid = gajim.get_jid_without_resource(jid)
 
         try:
-            return self.sessions[jid].values()
+            return list(self.sessions[jid].values())
         except KeyError:
             return []
 
@@ -1157,7 +1158,7 @@ class ConnectionHandlersBase:
         received a thread_id yet and returns the session that we last sent a
         message to
         """
-        sessions = self.sessions[jid].values()
+        sessions = list(self.sessions[jid].values())
 
         # sessions that we haven't received a thread ID in
         idless = [s for s in sessions if not s.received_thread_id]
@@ -1178,7 +1179,7 @@ class ConnectionHandlersBase:
         Find an active session that doesn't have a control attached
         """
         try:
-            sessions = self.sessions[jid].values()
+            sessions = list(self.sessions[jid].values())
 
             # filter out everything except the default session type
             chat_sessions = [s for s in sessions if isinstance(s,
@@ -1549,9 +1550,8 @@ ConnectionJingle, ConnectionIBBytestream):
             iq_obj = obj.stanza.buildReply('result')
             qp = iq_obj.setQuery()
             qp.setTagData('utc', strftime('%Y%m%dT%H:%M:%S', gmtime()))
-            qp.setTagData('tz', helpers.decode_string(tzname[daylight]))
-            qp.setTagData('display', helpers.decode_string(strftime('%c',
-                localtime())))
+            qp.setTagData('tz', tzname[daylight])
+            qp.setTagData('display', strftime('%c', localtime()))
         else:
             iq_obj = obj.stanza.buildReply('error')
             err = nbxmpp.ErrorNode(name=nbxmpp.NS_STANZAS + \

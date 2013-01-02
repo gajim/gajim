@@ -171,7 +171,8 @@ class ProfileWindow:
             button.show()
             text_button = self.xml.get_object('NOPHOTO_button')
             text_button.hide()
-            self.avatar_encoded = base64.encodestring(data)
+            self.avatar_encoded = base64.b64encode(data.encode('utf-8')).decode(
+                'utf-8')
             # returns None if unknown type
             self.avatar_mime_type = mimetypes.guess_type(path_to_file)[0]
             if must_delete:

@@ -173,7 +173,7 @@ class P2PClient(IdleObject):
                 id_ = stanza.getID()
                 if not id_:
                     id_ = self.Dispatcher.getAnID()
-                if self.conn_holder.ids_of_awaiting_messages.has_key(self.fd):
+                if self.fd in self.conn_holder.ids_of_awaiting_messages:
                     self.conn_holder.ids_of_awaiting_messages[self.fd].append((
                         id_, thread_id))
                 else:
@@ -195,7 +195,7 @@ class P2PClient(IdleObject):
             id_ = stanza.getID()
             if not id_:
                 id_ = self.Dispatcher.getAnID()
-            if self.conn_holder.ids_of_awaiting_messages.has_key(self.fd):
+            if self.fd in self.conn_holder.ids_of_awaiting_messages:
                 self.conn_holder.ids_of_awaiting_messages[self.fd].append((id_,
                     thread_id))
             else:
@@ -253,10 +253,10 @@ class P2PClient(IdleObject):
                     'Incorrect answer from server.')
             return
         if self.sock_type == TYPE_SERVER:
-            if attrs.has_key('from'):
+            if 'from' in attrs:
                 self.to = attrs['from']
             self.send_stream_header()
-            if attrs.has_key('version') and attrs['version'] == '1.0':
+            if 'version' in attrs and attrs['version'] == '1.0':
                 # other part supports stream features
                 features = Node('stream:features')
                 self.Dispatcher.send(features)
@@ -270,12 +270,12 @@ class P2PClient(IdleObject):
 
     def on_disconnect(self):
         if self.conn_holder:
-            if self.conn_holder.ids_of_awaiting_messages.has_key(self.fd):
+            if self.fd in self.conn_holder.ids_of_awaiting_messages:
                 del self.conn_holder.ids_of_awaiting_messages[self.fd]
             self.conn_holder.remove_connection(self.sock_hash)
-        if self.__dict__.has_key('Dispatcher'):
+        if 'Dispatcher' in self.__dict__:
             self.Dispatcher.PlugOut()
-        if self.__dict__.has_key('P2PConnection'):
+        if 'P2PConnection' in self.__dict__:
             self.P2PConnection.PlugOut()
         self.Connection = None
         self._caller = None
@@ -294,7 +294,7 @@ class P2PClient(IdleObject):
                 self.Dispatcher.Stream._document_attrs is None:
             return
         self.onreceive(None)
-        if self.Dispatcher.Stream._document_attrs.has_key('version') and \
+        if 'version' in self.Dispatcher.Stream._document_attrs and \
         self.Dispatcher.Stream._document_attrs['version'] == '1.0':
                 #~ self.onreceive(self._on_receive_stream_features)
                 #XXX continue with TLS
@@ -710,7 +710,7 @@ class ClientZeroconf:
             if self.ip_to_hash[i] == sock_hash:
                 del self.ip_to_hash[i]
                 break
-        if self.hash_to_port.has_key(sock_hash):
+        if sock_hash in self.hash_to_port:
             del self.hash_to_port[sock_hash]
 
     def start_listener(self, port):

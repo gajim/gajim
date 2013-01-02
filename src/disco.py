@@ -193,7 +193,6 @@ class CacheDictionary:
 
     def __contains__(self, key):
         return key in self.cache
-    has_key = __contains__
 
 _icon_cache = CacheDictionary(15)
 

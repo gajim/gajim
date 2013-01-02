@@ -566,7 +566,8 @@ class SingleForm(Gtk.Table, object):
                 for uri in field.media.uris:
                     if uri.type_.startswith('image/'):
                         try:
-                            img_data = base64.decodestring(uri.uri_data)
+                            img_data = base64.b64decode(uri.uri_data.encode(
+                                'utf-8')).decode('utf-8')
                             pixbuf_l = GdkPixbuf.PixbufLoader()
                             pixbuf_l.write(img_data)
                             pixbuf_l.close()

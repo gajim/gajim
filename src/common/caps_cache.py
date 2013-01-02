@@ -163,7 +163,7 @@ def compute_caps_hash(identities, features, dataforms=[], hash_method='sha-1'):
         hash_ = hashlib.md5(S.encode('utf-8'))
     else:
         return ''
-    return base64.b64encode(hash_.digest())
+    return base64.b64encode(hash_.digest()).decode('utf-8')
 
 
 ################################################################################

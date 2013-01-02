@@ -633,8 +633,6 @@ def datetime_tuple(timestamp):
     from time import strptime
     return strptime(timestamp, '%Y%m%dT%H:%M:%S')
 
-# import gajim only when needed (after decode_string is defined) see #4764
-
 from common import gajim
 if gajim.HAVE_PYCURL:
     import pycurl
@@ -904,7 +902,7 @@ def get_full_jid_from_iq(iq_obj):
     """
     Return the full jid (with resource) from an iq
     """
-    return parse_jid(iq_obj.getFrom())
+    return parse_jid(str(iq_obj.getFrom()))
 
 def get_jid_from_iq(iq_obj):
     """

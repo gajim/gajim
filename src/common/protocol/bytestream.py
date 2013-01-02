@@ -852,7 +852,8 @@ class ConnectionIBBytestream(ConnectionBytestream):
                 chunk = file_props.fp.read(file_props.block_size)
                 if chunk:
                     datanode = nbxmpp.Node(nbxmpp.NS_IBB + ' data', {'sid': sid,
-                        'seq': file_props.seq}, base64.encodestring(chunk))
+                        'seq': file_props.seq}, base64.b64encode(chunk.encode(
+                        'utf-8')).decode('utf-8'))
                     file_props.seq += 1
                     file_props.started = True
                     if file_props.seq == 65536:
@@ -887,7 +888,7 @@ class ConnectionIBBytestream(ConnectionBytestream):
         log.debug('ReceiveHandler called sid->%s seq->%s' % (sid, seq))
         try:
             seq = int(seq)
-            data = base64.decodestring(data)
+            data = base64.b64decode(data.encode('utf-8')).decode('utf-8')
         except Exception:
             seq = ''
             data = ''

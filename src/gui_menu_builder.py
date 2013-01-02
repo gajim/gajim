@@ -122,7 +122,7 @@ def build_invite_submenu(invite_menuitem, list_, ignore_rooms=[]):
     minimized_controls = []
     for account in connected_accounts:
         minimized_controls += \
-            gajim.interface.minimized_controls[account].values()
+            list(gajim.interface.minimized_controls[account].values())
     for gc_control in gajim.interface.msg_win_mgr.get_controls(
     message_control.TYPE_GC) + minimized_controls:
         acct = gc_control.account

@@ -61,7 +61,7 @@ def get_avatar_pixbuf_encoded_mime(photo):
         img_encoded = photo['BINVAL']
         avatar_encoded = img_encoded
         try:
-            img_decoded = base64.decodestring(img_encoded)
+            img_decoded = base64.b64decode(img_encoded.encode('utf-8')).decode('utf-8')
         except Exception:
             pass
     if img_decoded:

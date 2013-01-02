@@ -907,7 +907,7 @@ class SignalObject(dbus.service.Object):
         if not invalid_file and filesize < 16384:
             fd = open(picture, 'rb')
             data = fd.read()
-            avatar = base64.encodestring(data)
+            avatar = base64.b64encode(data.encode('utf-8')).decode('utf-8')
             avatar_mime_type = mimetypes.guess_type(picture)[0]
             vcard={}
             vcard['PHOTO'] = {'BINVAL': avatar}

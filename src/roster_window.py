@@ -2186,7 +2186,7 @@ class RosterWindow:
                 gajim.interface.status_sent_to_groups[account] = {}
             for gc_control in gajim.interface.msg_win_mgr.get_controls(
             message_control.TYPE_GC) + \
-            gajim.interface.minimized_controls[account].values():
+            list(gajim.interface.minimized_controls[account].values()):
                 if gc_control.account == account:
                     if gajim.gc_connected[account][gc_control.room_jid]:
                         gajim.connections[account].send_gc_status(
@@ -3923,7 +3923,7 @@ class RosterWindow:
                 )
 
     def on_plugins_menuitem_activate(self, widget):
-        if gajim.interface.instances.has_key('plugins'):
+        if 'plugins' in gajim.interface.instances:
             gajim.interface.instances['plugins'].window.present()
         else:
             gajim.interface.instances['plugins'] = plugins.gui.PluginsWindow()

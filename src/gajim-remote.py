@@ -42,7 +42,7 @@ except Exception:
 
 def send_error(error_message):
     '''Writes error message to stderr and exits'''
-    print(error_message.encode(PREFERRED_ENCODING), file=sys.stderr)
+    print(error_message, file=sys.stderr)
     sys.exit(1)
 
 try:
