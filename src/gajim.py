@@ -219,6 +219,10 @@ except exceptions.DatabaseMalformed:
         'http://trac.gajim.org/wiki/DatabaseBackup) or remove it (all history '
         'will be lost).') % common.logger.LOG_DB_PATH
 else:
+    from common import logger
+    gajim.logger = logger.Logger()
+    from common import caps_cache
+    caps_cache.initialize(gajim.logger)
     from common import dbus_support
     if dbus_support.supported:
         from music_track_listener import MusicTrackListener

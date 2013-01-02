@@ -15,9 +15,9 @@
 Handles Jingle contents (XEP 0166)
 """
 
-import gajim
+from common import gajim
 import nbxmpp
-from jingle_transport import JingleTransportIBB
+from common.jingle_transport import JingleTransportIBB
 
 contents = {}
 

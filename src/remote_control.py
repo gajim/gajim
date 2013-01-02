@@ -619,7 +619,7 @@ class SignalObject(dbus.service.Object):
             raise dbus_support.MissingArgument()
         jid = self._get_real_jid(jid)
 
-        cached_vcard = gajim.connections.values()[0].get_cached_vcard(jid)
+        cached_vcard = list(gajim.connections.values())[0].get_cached_vcard(jid)
         if cached_vcard:
             return get_dbus_struct(cached_vcard)
 

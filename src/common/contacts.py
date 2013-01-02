@@ -94,6 +94,8 @@ class Contact(CommonContact):
     sub='', ask='', resource='', priority=0, keyID='', client_caps=None,
     our_chatstate=None, chatstate=None, last_status_time=None, msg_id=None,
     last_activity_time=None):
+        if not isinstance(jid, str):
+            print('no str')
 
         CommonContact.__init__(self, jid, account, resource, show, status, name,
             our_chatstate, chatstate, client_caps=client_caps)
@@ -494,7 +496,7 @@ class Contacts():
         return self._contacts.keys()
 
     def get_contacts_jid_list(self):
-        return [jid for jid, contact in self._contacts.iteritems() if not
+        return [jid for jid, contact in self._contacts.items() if not
                 contact[0].is_groupchat()]
 
     def get_contact_from_full_jid(self, fjid):

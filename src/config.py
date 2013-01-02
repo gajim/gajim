@@ -455,8 +455,8 @@ class PreferencesWindow:
             else:
                 config = gajim.config.get(opt_name + '_device')
 
-            for index, (name, value) in enumerate(sorted(device_dict.\
-            iteritems(), key=key)):
+            for index, (name, value) in enumerate(sorted(device_dict.items(),
+            key=key)):
                 model.append((name, value))
                 if config == value:
                     combobox.set_active(index)

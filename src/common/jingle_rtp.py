@@ -21,14 +21,15 @@ from gi.repository import GObject
 import socket
 
 import nbxmpp
-import farstream, gst
+import farstream
+import gst
 from glib import GError
 
-import gajim
+from common import gajim
 
-from jingle_transport import JingleTransportICEUDP
-from jingle_content import contents, JingleContent, JingleContentSetupException
-from connection_handlers_events import InformationEvent
+from common.jingle_transport import JingleTransportICEUDP
+from common.jingle_content import contents, JingleContent, JingleContentSetupException
+from common.connection_handlers_events import InformationEvent
 
 
 import logging

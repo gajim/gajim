@@ -35,7 +35,7 @@ import locale
 import os
 import subprocess
 import urllib
-import urllib2
+import urllib
 import webbrowser
 import errno
 import select
@@ -50,8 +50,8 @@ from gi.repository import GObject
 from encodings.punycode import punycode_encode
 from string import Template
 
-from i18n import Q_
-from i18n import ngettext
+from common.i18n import Q_
+from common.i18n import ngettext
 
 try:
     import winsound # windows-only built-in module for playing wav
@@ -122,7 +122,7 @@ def idn_to_ascii(host):
     labels = idna.dots.split(host)
     converted_labels = []
     for label in labels:
-        converted_labels.append(idna.ToASCII(label))
+        converted_labels.append(idna.ToASCII(label).decode('utf-8'))
     return ".".join(converted_labels)
 
 def ascii_to_idn(host):
@@ -146,7 +146,7 @@ def parse_resource(resource):
             from nbxmpp.stringprepare import resourceprep
             return resourceprep.prepare(resource)
         except UnicodeError:
-            raise InvalidFormat, 'Invalid character in resource.'
+            raise InvalidFormat('Invalid character in resource.')
 
 def prep(user, server, resource):
     """
@@ -156,34 +156,34 @@ def prep(user, server, resource):
     #http://svn.twistedmatrix.com/cvs/trunk/twisted/words/protocols/jabber/jid.py
     if user is not None:
         if len(user) < 1 or len(user) > 1023:
-            raise InvalidFormat, _('Username must be between 1 and 1023 chars')
+            raise InvalidFormat(_('Username must be between 1 and 1023 chars'))
         try:
             from nbxmpp.stringprepare import nodeprep
             user = nodeprep.prepare(user)
         except UnicodeError:
-            raise InvalidFormat, _('Invalid character in username.')
+            raise InvalidFormat(_('Invalid character in username.'))
     else:
         user = None
 
     if server is not None:
         if len(server) < 1 or len(server) > 1023:
-            raise InvalidFormat, _('Server must be between 1 and 1023 chars')
+            raise InvalidFormat(_('Server must be between 1 and 1023 chars'))
         try:
             from nbxmpp.stringprepare import nameprep
             server = nameprep.prepare(server)
         except UnicodeError:
-            raise InvalidFormat, _('Invalid character in hostname.')
+            raise InvalidFormat(_('Invalid character in hostname.'))
     else:
-        raise InvalidFormat, _('Server address required.')
+        raise InvalidFormat(_('Server address required.'))
 
     if resource is not None:
         if len(resource) < 1 or len(resource) > 1023:
-            raise InvalidFormat, _('Resource must be between 1 and 1023 chars')
+            raise InvalidFormat(_('Resource must be between 1 and 1023 chars'))
         try:
             from nbxmpp.stringprepare import resourceprep
             resource = resourceprep.prepare(resource)
         except UnicodeError:
-            raise InvalidFormat, _('Invalid character in resource.')
+            raise InvalidFormat(_('Invalid character in resource.'))
     else:
         resource = None
 
@@ -493,7 +493,7 @@ def get_windows_reg_env(varname, default=''):
             'AppData' = %USERPROFILE%\Application Data (also an ENV)
             'Desktop' = %USERPROFILE%\Desktop
             'Favorites' = %USERPROFILE%\Favorites
-            'NetHood' = %USERPROFILE%\NetHood
+            'NetHood' = %USERPROFILE%\ NetHood
             'Personal' = D:\My Documents (PATH TO MY DOCUMENTS)
             'PrintHood' = %USERPROFILE%\PrintHood
             'Programs' = %USERPROFILE%\Start Menu\Programs
@@ -555,7 +555,8 @@ def sanitize_filename(filename):
         hash = hashlib.md5(filename)
         filename = base64.b64encode(hash.digest())
 
-    filename = punycode_encode(filename) # make it latin chars only
+    # make it latin chars only
+    filename = punycode_encode(filename).decode('utf-8')
     filename = filename.replace('/', '_')
     if os.name == 'nt':
         filename = filename.replace('?', '_').replace(':', '_')\
@@ -634,10 +635,10 @@ def datetime_tuple(timestamp):
 
 # import gajim only when needed (after decode_string is defined) see #4764
 
-import gajim
+from common import gajim
 if gajim.HAVE_PYCURL:
     import pycurl
-    from cStringIO import StringIO
+    from io import StringIO
 
 def convert_bytes(string):
     suffix = ''
@@ -1462,9 +1463,9 @@ def _get_img_direct(attrs):
     # Wait maximum 5s for connection
     socket.setdefaulttimeout(5)
     try:
-        req = urllib2.Request(attrs['src'])
+        req = urllib.request.Request(attrs['src'])
         req.add_header('User-Agent', 'Gajim ' + gajim.version)
-        f = urllib2.urlopen(req)
+        f = urllib.request.urlopen(req)
     except Exception as ex:
         log.debug('Error loading image %s ' % attrs['src']  + str(ex))
         pixbuf = None

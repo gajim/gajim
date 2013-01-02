@@ -223,7 +223,7 @@ class Closure(object):
         self.removeargs = removeargs
         if isinstance(cb, types.MethodType):
             self.meth_self = weakref.ref(cb.im_self, self._remove)
-            self.meth_name = cb.func_name
+            self.meth_name = cb.__name__
         elif callable(cb):
             self.meth_self = None
             self.cb = weakref.ref(cb, self._remove)
@@ -515,7 +515,7 @@ class ServiceDiscoveryWindow(object):
         if gajim.connections[account].connected < 2:
             dialogs.ErrorDialog(_('You are not connected to the server'),
 _('Without a connection, you can not browse available services'))
-            raise RuntimeError, 'You must be connected to browse services'
+            raise RuntimeError('You must be connected to browse services')
 
         # Get a ServicesCache object.
         try:

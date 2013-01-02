@@ -35,7 +35,7 @@
 import sys
 import re
 import copy
-import defs
+from common import defs
 from gi.repository import GObject
 
 (
@@ -568,7 +568,7 @@ class Config:
         Tree-like interface
         """
         if node is None:
-            for child, option in self.__options[1].iteritems():
+            for child, option in self.__options[1].items():
                 yield (child, ), option
             for grandparent in self.__options_per_key:
                 yield (grandparent, ), None
@@ -579,7 +579,7 @@ class Config:
         elif len(node) == 2:
             grandparent, parent = node
             children = self.__options_per_key[grandparent][1][parent]
-            for child, option in children.iteritems():
+            for child, option in children.items():
                 yield (grandparent, parent, child), option
         else:
             raise ValueError('Invalid node')
@@ -625,11 +625,9 @@ class Config:
 
     def set(self, optname, value):
         if optname not in self.__options[1]:
-#                       raise RuntimeError, 'option %s does not exist' % optname
             return
         value = self.is_valid(self.__options[0][optname][OPT_TYPE], value)
         if value is None:
-#                       raise RuntimeError, 'value of %s cannot be None' % optname
             return
 
         self.__options[1][optname] = value
@@ -666,7 +664,6 @@ class Config:
 
     def add_per(self, typename, name): # per_group_of_option
         if typename not in self.__options_per_key:
-#                       raise RuntimeError, 'option %s does not exist' % typename
             return
 
         opt = self.__options_per_key[typename]
@@ -680,7 +677,6 @@ class Config:
 
     def del_per(self, typename, name, subname = None): # per_group_of_option
         if typename not in self.__options_per_key:
-#                       raise RuntimeError, 'option %s does not exist' % typename
             return
 
         opt = self.__options_per_key[typename]
@@ -693,22 +689,18 @@ class Config:
 
     def set_per(self, optname, key, subname, value): # per_group_of_option
         if optname not in self.__options_per_key:
-#                       raise RuntimeError, 'option %s does not exist' % optname
             return
         if not key:
             return
         dict_ = self.__options_per_key[optname][1]
         if key not in dict_:
-#                       raise RuntimeError, '%s is not a key of %s' % (key, dict_)
             self.add_per(optname, key)
         obj = dict_[key]
         if subname not in obj:
-#                       raise RuntimeError, '%s is not a key of %s' % (subname, obj)
             return
         typ = self.__options_per_key[optname][0][subname][OPT_TYPE]
         value = self.is_valid(typ, value)
         if value is None:
-#                       raise RuntimeError, '%s of %s cannot be None' % optname
             return
         obj[subname] = value
         self._timeout_save()

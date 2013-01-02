@@ -898,7 +898,7 @@ class ConnectionIBBytestream(ConnectionBytestream):
         else:
             if not data:
                 err = nbxmpp.ERR_BAD_REQUEST
-            elif seq <> file_props.seq:
+            elif seq != file_props.seq:
                 err = nbxmpp.ERR_UNEXPECTED_REQUEST
             else:
                 log.debug('Successfull receive sid->%s %s+%s bytes' % (sid,

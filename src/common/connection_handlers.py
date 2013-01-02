@@ -322,7 +322,7 @@ class ConnectionVcard:
                 os.remove(path)
             # create folder if needed
             if not os.path.isdir(path):
-                os.mkdir(path, 0700)
+                os.mkdir(path, 0o700)
             puny_nick = helpers.sanitize_filename(nick)
             path_to_file = os.path.join(gajim.VCARD_PATH, puny_jid, puny_nick)
         else:
@@ -706,7 +706,7 @@ class ConnectionVcard:
             puny_nick = helpers.sanitize_filename(resource)
             # create folder if needed
             if not os.path.isdir(begin_path):
-                os.mkdir(begin_path, 0700)
+                os.mkdir(begin_path, 0o700)
             begin_path = os.path.join(begin_path, puny_nick)
             frm_jid += '/' + resource
         if photo_decoded:

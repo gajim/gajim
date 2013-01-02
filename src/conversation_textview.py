@@ -38,7 +38,7 @@ import os
 import tooltips
 import dialogs
 import locale
-import Queue
+import queue
 import urllib
 
 import gtkgui_helpers
@@ -335,7 +335,7 @@ class ConversationTextview(GObject.GObject):
         # One mark at the begining then 2 marks between each lines
         size = gajim.config.get('max_conversation_lines')
         size = 2 * size - 1
-        self.marks_queue = Queue.Queue(size)
+        self.marks_queue = queue.Queue(size)
 
         self.allow_focus_out_line = True
         # holds a mark at the end of --- line
@@ -709,7 +709,7 @@ class ConversationTextview(GObject.GObject):
         buffer_.delete(start, end)
         size = gajim.config.get('max_conversation_lines')
         size = 2 * size - 1
-        self.marks_queue = Queue.Queue(size)
+        self.marks_queue = queue.Queue(size)
         self.focus_out_end_mark = None
         self.just_cleared = True
 
@@ -1171,7 +1171,7 @@ class ConversationTextview(GObject.GObject):
             all_tags = [(ttt.lookup(t) if isinstance(t, str) else t) for t in all_tags]
             buffer_.insert_with_tags(end_iter, special_text, *all_tags)
             if 'url' in tags:
-                puny_text = puny_encode(special_text)
+                puny_text = puny_encode(special_text).decode('utf-8')
                 if not puny_text.endswith('-'):
                     end_iter = buffer_.get_end_iter()
                     buffer_.insert(end_iter, " (%s)" % puny_text)

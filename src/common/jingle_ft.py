@@ -20,16 +20,16 @@ Handles  Jingle File Transfer (XEP 0234)
 """
 
 import hashlib
-import gajim
+from common import gajim
 import nbxmpp
-from jingle_content import contents, JingleContent
-from jingle_transport import *
+from common.jingle_content import contents, JingleContent
+from common.jingle_transport import *
 from common import helpers
 from common.socks5 import Socks5ReceiverClient, Socks5SenderClient
 from common.connection_handlers_events import FileRequestReceivedEvent
 import threading
 import logging
-from jingle_ftstates import *
+from common.jingle_ftstates import *
 log = logging.getLogger('gajim.c.jingle_ft')
 
 STATE_NOT_STARTED = 0

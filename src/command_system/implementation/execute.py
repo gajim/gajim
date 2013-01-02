@@ -35,7 +35,7 @@ commands as a frontend.
 from subprocess import Popen, PIPE
 from os.path import expanduser
 
-from glib import timeout_add
+from gi.repository import GObject
 
 from ..framework import CommandContainer, command, doc
 from .hosts import *
@@ -64,7 +64,7 @@ class Execute(CommandContainer):
     @classmethod
     def monitor(cls, processor, popen):
         poller = cls.poller(processor, popen)
-        timeout_add(cls.POLL_INTERVAL, poller.next)
+        GObject.timeout_add(cls.POLL_INTERVAL, poller.next)
 
     @classmethod
     def poller(cls, processor, popen):

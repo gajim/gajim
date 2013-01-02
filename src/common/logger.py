@@ -33,16 +33,16 @@ import sys
 import time
 import datetime
 from gzip import GzipFile
-from cStringIO import StringIO
+from io import BytesIO
 from gi.repository import GObject
 
-import exceptions
-import gajim
-import ged
+from common import exceptions
+from common import gajim
+from common import ged
 
 import sqlite3 as sqlite
 
-import configpaths
+from common import configpaths
 LOG_DB_PATH = configpaths.gajimpaths['LOG_DB']
 LOG_DB_FOLDER, LOG_DB_FILE = os.path.split(LOG_DB_PATH)
 CACHE_DB_PATH = configpaths.gajimpaths['CACHE_DB']
@@ -884,7 +884,7 @@ class Logger:
             #   ..., 'FEAT', feature1, feature2, ...).join(' '))
             # NOTE: if there's a need to do more gzip, put that to a function
             try:
-                data = GzipFile(fileobj=StringIO(str(data))).read().split('\0')
+                data = GzipFile(fileobj=BytesIO(data)).read().decode('utf-8').split('\0')
             except IOError:
                 # This data is corrupted. It probably contains non-ascii chars
                 to_be_removed.append((hash_method, hash_))
@@ -1046,8 +1046,8 @@ class Logger:
                 FROM roster_entry re, jids j
                 WHERE re.account_jid_id=? AND j.jid_id=re.jid_id''', (account_jid_id,))
         for jid, jid_id, name, subscription, ask in self.cur:
-            jid = jid.encode('utf-8')
-            name = name.encode('utf-8')
+            jid = jid
+            name = name
             data[jid] = {}
             if name:
                 data[jid]['name'] = name
@@ -1071,7 +1071,7 @@ class Logger:
                     WHERE account_jid_id=? AND jid_id=?''',
                     (account_jid_id, data[jid]['id']))
             for (group_name,) in self.cur:
-                group_name = group_name.encode('utf-8')
+                group_name = group_name
                 data[jid]['groups'].append(group_name)
             del data[jid]['id']
 

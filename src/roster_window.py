@@ -1062,28 +1062,28 @@ class RosterWindow:
 
         pep_dict = gajim.connections[account].pep
         if gajim.config.get('show_mood_in_roster') and 'mood' in pep_dict:
-            self.model[child_iter][C_MOOD_PIXBUF] = pep_dict['mood'].\
-                    asPixbufIcon()
+            self.model[child_iter][C_MOOD_PIXBUF] = \
+                gtkgui_helpers.get_pep_as_pixbuf(pep_dict['mood'])
         else:
             self.model[child_iter][C_MOOD_PIXBUF] = empty_pixbuf
 
         if gajim.config.get('show_activity_in_roster') and 'activity' in \
         pep_dict:
-            self.model[child_iter][C_ACTIVITY_PIXBUF] = pep_dict['activity'].\
-                asPixbufIcon()
+            self.model[child_iter][C_ACTIVITY_PIXBUF] = \
+                gtkgui_helpers.get_pep_as_pixbuf(pep_dict['activity'])
         else:
             self.model[child_iter][C_ACTIVITY_PIXBUF] = empty_pixbuf
 
         if gajim.config.get('show_tunes_in_roster') and 'tune' in pep_dict:
-            self.model[child_iter][C_TUNE_PIXBUF] = pep_dict['tune'].\
-                asPixbufIcon()
+            self.model[child_iter][C_TUNE_PIXBUF] = \
+                gtkgui_helpers.get_pep_as_pixbuf(pep_dict['tune'])
         else:
             self.model[child_iter][C_TUNE_PIXBUF] = empty_pixbuf
 
         if gajim.config.get('show_location_in_roster') and 'location' in \
         pep_dict:
-            self.model[child_iter][C_LOCATION_PIXBUF] = pep_dict['location'].\
-                asPixbufIcon()
+            self.model[child_iter][C_LOCATION_PIXBUF] = \
+                gtkgui_helpers.get_pep_as_pixbuf(pep_dict['location'])
         else:
             self.model[child_iter][C_LOCATION_PIXBUF] = empty_pixbuf
 
@@ -1340,7 +1340,7 @@ class RosterWindow:
         if not contact:
             contact = gajim.contacts.get_contact(account, jid)
         if pep_type in contact.pep:
-            pixbuf = contact.pep[pep_type].asPixbufIcon()
+            pixbuf = gtkgui_helpers.get_pep_as_pixbuf(contact.pep[pep_type])
         else:
             pixbuf = empty_pixbuf
         for child_iter in iters:

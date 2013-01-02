@@ -296,7 +296,7 @@ class JingleTransportSocks5(JingleTransport):
                     cid = host['candidate_id']
                     break
         if cid is None:
-            raise Exception, 'cid is missing'
+            raise Exception('cid is missing')
         activated.setAttr('cid', cid)
         transport.addChild(node=activated)
         content.addChild(node=transport)

@@ -63,7 +63,7 @@ if os.name == 'nt':
 
 gettext.install(APP, DIR)
 if gettext._translations:
-    _translation = gettext._translations.values()[0]
+    _translation = list(gettext._translations.values())[0]
 else:
     _translation = gettext.NullTranslations()
 

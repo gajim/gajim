@@ -59,7 +59,7 @@ from common import gpg
 from common import passwords
 from common import exceptions
 from common import check_X509
-from connection_handlers import *
+from common.connection_handlers import *
 
 from nbxmpp import Smacks
 from string import Template

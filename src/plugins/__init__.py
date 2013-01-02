@@ -24,7 +24,7 @@ Main file of plugins package.
 :license: GPL
 '''
 
-from pluginmanager import PluginManager
-from plugin import GajimPlugin
+from .pluginmanager import PluginManager
+from .plugin import GajimPlugin
 
 __all__ = ['PluginManager', 'GajimPlugin']

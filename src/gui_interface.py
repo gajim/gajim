@@ -68,7 +68,7 @@ from groupchat_control import PrivateChatControl
 from atom_window import AtomWindow
 from session import ChatControlSession
 
-import common.sleepy
+from common import sleepy
 
 from nbxmpp import idlequeue
 from nbxmpp import Hashes
@@ -93,7 +93,7 @@ import config
 from threading import Thread
 from common import ged
 
-gajimpaths = common.configpaths.gajimpaths
+from common.configpaths import gajimpaths
 config_filename = gajimpaths['CONFIG_FILE']
 
 from common import optparser
@@ -1111,11 +1111,11 @@ class Interface:
             # Ask offline status in 1 minute so w'are sure we got all online
             # presences
             GObject.timeout_add_seconds(60, self.ask_offline_status, account)
-        if state != common.sleepy.STATE_UNKNOWN and connected in (2, 3):
+        if state != sleepy.STATE_UNKNOWN and connected in (2, 3):
             # we go online or free for chat, so we activate auto status
             gajim.sleeper_state[account] = 'online'
-        elif not ((state == common.sleepy.STATE_AWAY and connected == 4) or \
-        (state == common.sleepy.STATE_XA and connected == 5)):
+        elif not ((state == sleepy.STATE_AWAY and connected == 4) or \
+        (state == sleepy.STATE_XA and connected == 5)):
             # If we are autoaway/xa and come back after a disconnection, do
             # nothing
             # Else disable autoaway
@@ -1568,7 +1568,7 @@ class Interface:
 
         This is part of rewriting whole events handling system to use GED.
         """
-        for event_name, event_handlers in self.handlers.iteritems():
+        for event_name, event_handlers in self.handlers.items():
             for event_handler in event_handlers:
                 prio = ged.GUI1
                 if type(event_handler) == tuple:
@@ -2341,14 +2341,14 @@ class Interface:
             if account not in gajim.sleeper_state or \
             not gajim.sleeper_state[account]:
                 continue
-            if state == common.sleepy.STATE_AWAKE and \
+            if state == sleepy.STATE_AWAKE and \
             gajim.sleeper_state[account] in ('autoaway', 'autoxa'):
                 # we go online
                 self.roster.send_status(account, 'online',
                         gajim.status_before_autoaway[account])
                 gajim.status_before_autoaway[account] = ''
                 gajim.sleeper_state[account] = 'online'
-            elif state == common.sleepy.STATE_AWAY and \
+            elif state == sleepy.STATE_AWAY and \
             gajim.sleeper_state[account] == 'online' and \
             gajim.config.get('autoaway'):
                 # we save out online status
@@ -2368,7 +2368,7 @@ class Interface:
                 self.roster.send_status(account, 'away', auto_message,
                     auto=True)
                 gajim.sleeper_state[account] = 'autoaway'
-            elif state == common.sleepy.STATE_XA and \
+            elif state == sleepy.STATE_XA and \
             gajim.sleeper_state[account] in ('online', 'autoaway',
             'autoaway-forced') and gajim.config.get('autoxa'):
                 # we go extended away [we pass True to auto param]
@@ -2912,7 +2912,7 @@ class Interface:
 
         self.show_vcard_when_connect = []
 
-        self.sleeper = common.sleepy.Sleepy(
+        self.sleeper = sleepy.Sleepy(
             gajim.config.get('autoawaytime') * 60, # make minutes to seconds
             gajim.config.get('autoxatime') * 60)
 

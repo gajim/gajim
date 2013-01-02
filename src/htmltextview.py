@@ -42,8 +42,8 @@ from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 import xml.sax, xml.sax.handler
 import re
-from cStringIO import StringIO
-import urllib2
+from io import StringIO
+import urllib
 import operator
 
 if __name__ == '__main__':
@@ -491,9 +491,10 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
             tag.title = title
         return tag
 
-    def _update_img(self, (mem, alt), attrs, img_mark):
+    def _update_img(self, output, attrs, img_mark):
         '''Callback function called after the function helpers.download_image.
         '''
+        mem, alt = output
         self._process_img(attrs, (mem, alt, img_mark))
 
     def _process_img(self, attrs, loaded=None):
@@ -509,7 +510,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                 # The "data" URL scheme http://tools.ietf.org/html/rfc2397
                 import base64
                 img = attrs['src'].split(',')[1]
-                mem = base64.standard_b64decode(urllib2.unquote(img))
+                mem = base64.standard_b64decode(urllib.parse.unquote(img))
             elif loaded is not None:
                 (mem, alt, replace_mark) = loaded
                 update = True

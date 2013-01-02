@@ -637,9 +637,9 @@ class RosterTooltip(NotificationAreaTooltip):
                     'tooltip_idle_color')
                 cs += '%s</span>'
                 properties.append((str(), None))
-                idle_since = helpers.ensure_utf8_string(cs % _("Idle since %s"))
+                idle_since = cs % _("Idle since %s")
                 properties.append((idle_since % formatted, None))
-                idle_for = helpers.ensure_utf8_string(cs % _("Idle for %s"))
+                idle_for = cs % _("Idle for %s")
                 properties.append((idle_for % str(diff), None))
 
         while properties:

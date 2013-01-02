@@ -239,7 +239,7 @@ class Zeroconf:
             txt = {}
 
             # remove empty keys
-            for key, val in self.txt.iteritems():
+            for key, val in self.txt.items():
                 if val:
                     txt[key] = val
 

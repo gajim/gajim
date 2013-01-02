@@ -196,7 +196,7 @@ class GajimPlugin(object):
     def deactivate(self):
         pass
 
-import cPickle
+import pickle
 
 class GajimPluginConfig():
     @log_calls('GajimPluginConfig')
@@ -242,7 +242,7 @@ class GajimPluginConfig():
     @log_calls('GajimPluginConfig')
     def save(self):
         fd = open(self.FILE_PATH, 'wb')
-        cPickle.dump(self.data, fd)
+        pickle.dump(self.data, fd)
         fd.close()
 
     @log_calls('GajimPluginConfig')
@@ -250,14 +250,14 @@ class GajimPluginConfig():
         if os.path.isfile(self.FILE_PATH):
             fd = open(self.FILE_PATH, 'rb')
             try:
-                self.data = cPickle.load(fd)
+                self.data = pickle.load(fd)
                 fd.close()
             except:
                 fd.close()
                 try:
                     import shelve
                     s = shelve.open(self.FILE_PATH)
-                    for (k, v) in s.iteritems():
+                    for (k, v) in s.items():
                         self.data[k] = v
                     if not isinstance(self.data, dict):
                         raise GajimPluginException

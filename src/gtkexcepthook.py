@@ -29,9 +29,9 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import Pango
 from common import i18n # installs _() function
-import dialogs
+from dialogs import HigDialog
 
-from cStringIO import StringIO
+from io import StringIO
 from common import helpers
 
 _exception_in_progress = threading.Lock()
@@ -43,7 +43,7 @@ def _info(type_, value, tb):
         _excepthook_save(type_, value, tb)
         return
 
-    dialog = dialogs.HigDialog(None, Gtk.MessageType.WARNING, Gtk.ButtonsType.NONE,
+    dialog = HigDialog(None, Gtk.MessageType.WARNING, Gtk.ButtonsType.NONE,
                             _('A programming error has been detected'),
                             _('It probably is not fatal, but should be reported '
                             'to the developers nonetheless.'))

@@ -25,7 +25,7 @@
 import os
 import sys
 import tempfile
-import defs
+from common import defs
 HAVE_XDG = True
 try:
     __import__(xdg)
@@ -130,7 +130,7 @@ class ConfigPaths:
         except KeyError:
             return default
 
-    def iteritems(self):
+    def items(self):
         for key in self.paths.iterkeys():
             yield (key, self[key])
 

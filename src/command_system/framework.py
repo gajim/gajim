@@ -25,7 +25,7 @@ from inspect import getargspec, getdoc
 
 from .dispatcher import Host, Container
 from .dispatcher import get_command, list_commands
-from mmapping import parse_arguments, adapt_arguments
+from .mapping import parse_arguments, adapt_arguments
 from .errors import DefinitionError, CommandError, NoCommandError
 
 class CommandHost(object):
@@ -153,7 +153,7 @@ class Command(object):
 
         # Automatically set all the properties passed to a constructor
         # by the command decorator.
-        for key, value in properties.iteritems():
+        for key, value in properties.items():
             setattr(self, key, value)
 
     def __call__(self, *args, **kwargs):

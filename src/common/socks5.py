@@ -33,9 +33,9 @@ from errno import EISCONN
 from errno import EINPROGRESS
 from errno import EAFNOSUPPORT
 from nbxmpp.idlequeue import IdleObject
-from file_props import FilesProp
+from common.file_props import FilesProp
 from common import gajim
-import jingle_xtls
+from common import jingle_xtls
 if jingle_xtls.PYOPENSSL_PRESENT:
     import OpenSSL
 import logging
@@ -535,7 +535,7 @@ class Socks5:
                     self.file_props.received_len = self.size
             except IOError as e:
                 self.close_file()
-                raise IOError, e
+                raise IOError(str(e))
 
     def close_file(self):
         if self.file:

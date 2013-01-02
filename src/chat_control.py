@@ -1785,7 +1785,7 @@ class ChatControl(ChatControlBase):
         pep = self.contact.pep
         img = self._pep_images[pep_type]
         if pep_type in pep:
-            img.set_from_pixbuf(pep[pep_type].asPixbufIcon())
+            img.set_from_pixbuf(gtkgui_helpers.get_pep_as_pixbuf(pep[pep_type]))
             img.set_tooltip_markup(pep[pep_type].asMarkupText())
             img.show()
         else:
@@ -3020,7 +3020,7 @@ class ChatControl(ChatControlBase):
         # It's why I set it transparent.
         image = self.xml.get_object('avatar_image')
         pixbuf = image.get_pixbuf()
-        pixbuf.fill(0xffffff00L) # RGBA
+        pixbuf.fill(0xffffff00) # RGBA
         image.queue_draw()
 
         screen_w = Gdk.Screen.width()

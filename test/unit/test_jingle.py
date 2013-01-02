@@ -135,8 +135,8 @@ class TestJingle(unittest.TestCase):
         self.dispatcher.RegisterHandler('iq', self.con._JingleCB, 'set'
                                         , common.xmpp.NS_JINGLE)
         self.dispatcher.ProcessNonBlocking(session_init)
-        session = self.con._sessions.values()[0] # The only session we have
-        jft = session.contents.values()[0] # jingleFT object
+        session = list(self.con._sessions.values())[0] # The only session we have
+        jft = list(session.contents.values())[0] # jingleFT object
         jft.file_props = self.recieve_file # We plug file_props manually
         # The user accepts to recieve the file
         # we have to manually simulate this behavior

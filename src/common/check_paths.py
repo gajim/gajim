@@ -38,7 +38,7 @@ import sqlite3 as sqlite
 def create_log_db():
     print(_('creating logs database'))
     con = sqlite.connect(logger.LOG_DB_PATH)
-    os.chmod(logger.LOG_DB_PATH, 0600) # rw only for us
+    os.chmod(logger.LOG_DB_PATH, 0o600) # rw only for us
     cur = con.cursor()
     # create the tables
     # kind can be
@@ -86,7 +86,7 @@ def create_log_db():
 def create_cache_db():
     print(_('creating cache database'))
     con = sqlite.connect(logger.CACHE_DB_PATH)
-    os.chmod(logger.CACHE_DB_PATH, 0600) # rw only for us
+    os.chmod(logger.CACHE_DB_PATH, 0o600) # rw only for us
     cur = con.cursor()
     cur.executescript(
             '''
@@ -177,7 +177,7 @@ def check_and_possibly_move_config():
     vars['MY_ICONSETS_PATH'] = gajim.MY_ICONSETS_PATH
     vars['MY_MOOD_ICONSETS_PATH'] = gajim.MY_MOOD_ICONSETS_PATH
     vars['MY_ACTIVITY_ICONSETS_PATH'] = gajim.MY_ACTIVITY_ICONSETS_PATH
-    import configpaths
+    from common import configpaths
     MY_DATA = configpaths.gajimpaths['MY_DATA']
     MY_CONFIG = configpaths.gajimpaths['MY_CONFIG']
     MY_CACHE = configpaths.gajimpaths['MY_CACHE']
@@ -263,7 +263,7 @@ def check_and_possibly_create_paths():
 
     VCARD_PATH = gajim.VCARD_PATH
     AVATAR_PATH = gajim.AVATAR_PATH
-    import configpaths
+    from common import configpaths
     MY_DATA = configpaths.gajimpaths['MY_DATA']
     MY_CONFIG = configpaths.gajimpaths['MY_CONFIG']
     MY_CACHE = configpaths.gajimpaths['MY_CACHE']
@@ -364,4 +364,4 @@ def create_path(directory):
     if os.path.exists(directory):
         return
     print(('creating %s directory') % directory)
-    os.mkdir(directory, 0700)
+    os.mkdir(directory, 0o700)

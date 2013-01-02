@@ -1297,13 +1297,12 @@ class AboutDialog:
             if thanks_file_path:
                 authors.append('\n' + _('THANKS:'))
 
-                text = helpers.ensure_utf8_string(open(thanks_file_path).read())
+                text = open(thanks_file_path).read()
                 text_splitted = text.split('\n')
                 text = '\n'.join(text_splitted[:-2]) # remove one english sentence
                 # and add it manually as translatable
-                text += helpers.ensure_utf8_string('\n%s\n' % _('Last but not '
-                    'least, we would like to thank all the package maintainers.'
-                    ))
+                text += '\n%s\n' % _('Last but not least, we would like to '
+                    'thank all the package maintainers.')
                 authors.append(text)
 
             dlg.set_authors(authors)
@@ -2322,13 +2321,13 @@ class JoinGroupchatWindow:
             if room_jid != '' and room_jid in gajim.gc_connected[account] and\
        gajim.gc_connected[account][room_jid]:
                 ErrorDialog(_('You are already in group chat %s') % room_jid)
-                raise GajimGeneralException, 'You are already in this group chat'
+                raise GajimGeneralException('You are already in this group chat')
             if nick == '':
                 nick = gajim.nicks[account]
             if gajim.connections[account].connected < 2:
                 ErrorDialog(_('You are not connected to the server'),
                     _('You can not join a group chat unless you are connected.'))
-                raise GajimGeneralException, 'You must be connected to join a groupchat'
+                raise GajimGeneralException('You must be connected to join a groupchat')
 
         self.xml = gtkgui_helpers.get_gtk_builder('join_groupchat_window.ui')
 
@@ -2565,7 +2564,7 @@ class SynchroniseSelectAccountDialog:
         if not account or gajim.connections[account].connected < 2:
             ErrorDialog(_('You are not connected to the server'),
                 _('Without a connection, you can not synchronise your contacts.'))
-            raise GajimGeneralException, 'You are not connected to the server'
+            raise GajimGeneralException('You are not connected to the server')
         self.account = account
         self.xml = gtkgui_helpers.get_gtk_builder('synchronise_select_account_dialog.ui')
         self.dialog = self.xml.get_object('synchronise_select_account_dialog')
@@ -2754,7 +2753,7 @@ class ChangePasswordDialog:
         if not account or gajim.connections[account].connected < 2:
             ErrorDialog(_('You are not connected to the server'),
                 _('Without a connection, you can not change your password.'))
-            raise GajimGeneralException, 'You are not connected to the server'
+            raise GajimGeneralException('You are not connected to the server')
         self.account = account
         self.on_response = on_response
         self.xml = gtkgui_helpers.get_gtk_builder('change_password_dialog.ui')

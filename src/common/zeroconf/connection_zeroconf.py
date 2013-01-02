@@ -46,7 +46,7 @@ from common import gajim
 from common import ged
 from common.zeroconf import client_zeroconf
 from common.zeroconf import zeroconf
-from connection_handlers_zeroconf import *
+from common.zeroconf.connection_handlers_zeroconf import *
 from common.connection_handlers_events import *
 
 import locale

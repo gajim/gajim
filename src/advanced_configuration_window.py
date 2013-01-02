@@ -311,7 +311,6 @@ class AdvancedConfigurationWindow(object):
                             value = str(option)
                         except:
                             value = option
-                    value = helpers.ensure_utf8_string(value)
                 self.model.append(parent, [name, value, type_])
 
     def visible_func(self, model, treeiter, data):

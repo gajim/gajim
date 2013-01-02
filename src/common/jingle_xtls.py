@@ -20,7 +20,6 @@ import os
 import nbxmpp
 
 import logging
-import common
 from common import gajim
 log = logging.getLogger('gajim.c.jingle_xtls')
 
@@ -201,7 +200,7 @@ def createCertRequest(pkey, digest="md5", **name):
     req.sign(pkey, digest)
     return req
 
-def createCertificate(req, (issuerCert, issuerKey), serial, (notBefore, notAfter), digest="md5"):
+def createCertificate(req, issuerCert, issuerKey, serial, notBefore, notAfter, digest="md5"):
     """
     Generate a certificate given a certificate request.
 
@@ -235,7 +234,7 @@ def make_certs(filepath, CN):
     """
     key = createKeyPair(TYPE_RSA, 1024)
     req = createCertRequest(key, CN=CN)
-    cert = createCertificate(req, (req, key), 0, (0, 60*60*24*365*5)) # five years
+    cert = createCertificate(req, req, key, 0, 0, 60*60*24*365*5) # five years
     open(filepath + '.pkey', 'w').write(crypto.dump_privatekey(
         crypto.FILETYPE_PEM, key))
     open(filepath + '.cert', 'w').write(crypto.dump_certificate(

@@ -363,7 +363,7 @@ class ConnectionCommands:
         # buildReply don't copy the node attribute. Re-add it
         q.setAttr('node', nbxmpp.NS_COMMANDS)
 
-        for node, cmd in self.__commands.iteritems():
+        for node, cmd in self.__commands.items():
             if cmd.isVisibleFor(self.isSameJID(jid)):
                 q.addChild('item', {
                         # TODO: find the jid

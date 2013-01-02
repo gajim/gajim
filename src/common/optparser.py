@@ -36,7 +36,7 @@ from common import helpers
 from common import caps_cache
 
 import sqlite3 as sqlite
-import logger
+from common import logger
 
 class OptionsParser:
     def __init__(self, filename):
@@ -60,10 +60,6 @@ class OptionsParser:
         regex = re.compile(r"(?P<optname>[^.]+)(?:(?:\.(?P<key>.+))?\.(?P<subname>[^.]+))?\s=\s(?P<value>.*)")
 
         for line in fd:
-            try:
-                line = helpers.ensure_utf8_string(line)
-            except UnicodeDecodeError:
-                line = line.decode(locale.getpreferredencoding())
             optname, key, subname, value = regex.match(line).groups()
             if key is None:
                 self.old_values[optname] = value
@@ -122,7 +118,7 @@ class OptionsParser:
             os.rename(self.__tempfile, self.__filename)
         except IOError as e:
             return str(e)
-        os.chmod(self.__filename, 0600)
+        os.chmod(self.__filename, 0o600)
 
     def update_config(self, old_version, new_version):
         old_version_list = old_version.split('.') # convert '0.x.y' to (0, x, y)

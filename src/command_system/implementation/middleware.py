@@ -31,7 +31,6 @@ support interaction between the two and a few utility methods so you
 don't need to dig up the code itself to write basic commands.
 """
 
-from types import StringTypes
 from traceback import print_exc
 
 from gi.repository import Pango
@@ -98,7 +97,7 @@ class ChatCommandProcessor(CommandProcessor):
     def command_postprocessor(self, command, name, arguments, args, kwargs, value):
         # If command returns a string - print it to a user. A convenient
         # and sufficient in most simple cases shortcut to a using echo.
-        if value and isinstance(value, StringTypes):
+        if value and isinstance(value, str):
             self.echo(value)
 
 class CommandTools:

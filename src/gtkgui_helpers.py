@@ -41,6 +41,7 @@ log = logging.getLogger('gajim.gtkgui_helpers')
 
 from common import i18n
 from common import gajim
+from common import pep
 
 gtk_icon_theme = Gtk.IconTheme.get_default()
 gtk_icon_theme.append_search_path(gajim.ICONS_DIR)
@@ -384,7 +385,7 @@ def get_abspath_for_script(scriptname, want_type = False):
                 script += '\nexec python -OOt gajim.py $0 $@\n'
                 f.write(script)
                 f.close()
-                os.chmod(path_to_script, 0700)
+                os.chmod(path_to_script, 0o700)
             except OSError: # do not traceback (could be a permission problem)
                 #we talk about a file here
                 s = _('Could not write to %s. Session Management support will '
@@ -607,7 +608,7 @@ def get_avatar_pixbuf_from_cache(fjid, use_local=True):
     if not os.path.isfile(path):
         return 'ask'
 
-    vcard_dict = gajim.connections.values()[0].get_cached_vcard(fjid,
+    vcard_dict = list(gajim.connections.values())[0].get_cached_vcard(fjid,
             is_groupchat_contact)
     if not vcard_dict: # This can happen if cached vcard is too old
         return 'ask'
@@ -644,28 +645,6 @@ def make_pixbuf_grayscale(pixbuf):
     pixbuf2 = pixbuf.copy()
     pixbuf.saturate_and_pixelate(pixbuf2, 0.0, False)
     return pixbuf2
-
-def get_path_to_generic_or_avatar(generic, jid = None, suffix = None):
-    """
-    Choose between avatar image and default image
-
-    Returns full path to the avatar image if it exists, otherwise returns full
-    path to the image.  generic must be with extension and suffix without
-    """
-    if jid:
-        # we want an avatar
-        puny_jid = helpers.sanitize_filename(jid)
-        path_to_file = os.path.join(gajim.AVATAR_PATH, puny_jid) + suffix
-        path_to_local_file = path_to_file + '_local'
-        for extension in ('.png', '.jpeg'):
-            path_to_local_file_full = path_to_local_file + extension
-            if os.path.exists(path_to_local_file_full):
-                return path_to_local_file_full
-        for extension in ('.png', '.jpeg'):
-            path_to_file_full = path_to_file + extension
-            if os.path.exists(path_to_file_full):
-                return path_to_file_full
-    return os.path.abspath(generic)
 
 def decode_filechooser_file_paths(file_paths):
     """
@@ -973,6 +952,38 @@ def load_activity_icon(category, activity = None):
         activity = 'category'
     icon_list = _load_icon_list([activity], path)
     return icon_list[activity]
+
+def get_pep_as_pixbuf(pep_class):
+    if isinstance(pep_class, pep.UserMoodPEP):
+        assert not pep_class._retracted
+        received_mood = pep_class._pep_specific_data['mood']
+        mood = received_mood if received_mood in pep.MOODS else 'unknown'
+        pixbuf = load_mood_icon(mood).get_pixbuf()
+        return pixbuf
+    elif isinstance(pep_class, pep.UserTunePEP):
+        path = os.path.join(gajim.DATA_DIR, 'emoticons', 'static', 'music.png')
+        return GdkPixbuf.Pixbuf.new_from_file(path)
+    elif isinstance(pep_class, pep.UserActivityPEP):
+        assert not pep_class._retracted
+        pep_ = pep_class._pep_specific_data
+        activity = pep_['activity']
+
+        has_known_activity = activity in pep.ACTIVITIES
+        has_known_subactivity = (has_known_activity  and ('subactivity' in pep_)
+                and (pep_['subactivity'] in pep.ACTIVITIES[activity]))
+
+        if has_known_activity:
+            if has_known_subactivity:
+                subactivity = pep_['subactivity']
+                return load_activity_icon(activity, subactivity).get_pixbuf()
+            else:
+                return load_activity_icon(activity).get_pixbuf()
+        else:
+            return load_activity_icon('unknown').get_pixbuf()
+    elif isinstance(pep_class, pep.UserLocationPEP):
+        path = get_icon_path('gajim-earth')
+        return GdkPixbuf.Pixbuf.new_from_file(path)
+    return None
 
 def load_icons_meta():
     """

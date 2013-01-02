@@ -34,7 +34,7 @@ import locale
 from common import config
 import nbxmpp
 from common import defs
-from common import ged
+from common import ged as ged_module
 
 interface = None # The actual interface (the gtk one for the moment)
 thread_interface = None # Interface to run a thread and then a callback
@@ -43,16 +43,15 @@ version = config.get('version')
 connections = {} # 'account name': 'account (connection.Connection) instance'
 ipython_window = None
 
-ged = common.ged.GlobalEventsDispatcher() # Global Events Dispatcher
+ged = ged_module.GlobalEventsDispatcher() # Global Events Dispatcher
 nec = None # Network Events Controller
 plugin_manager = None # Plugins Manager
 
 log = logging.getLogger('gajim')
 
-import logger
-logger = logger.Logger() # init the logger
+logger = None
 
-import configpaths
+from common import configpaths
 gajimpaths = configpaths.gajimpaths
 
 VCARD_PATH = gajimpaths['VCARD']
@@ -84,8 +83,8 @@ else:
 
 os_info = None # used to cache os information
 
-from contacts import LegacyContactsAPI
-from events import Events
+from common.contacts import LegacyContactsAPI
+from common.events import Events
 
 gmail_domains = ['gmail.com', 'googlemail.com']
 
@@ -220,9 +219,6 @@ gajim_optional_features = {}
 
 # Capabilities hash per account
 caps_hash = {}
-
-import caps_cache
-caps_cache.initialize(logger)
 
 global_id = 0
 def get_an_id():

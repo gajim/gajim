@@ -39,8 +39,6 @@ from nbxmpp.protocol import NS_CHATSTATES
 from common.jingle_transport import JingleTransportSocks5
 from common.file_props import FilesProp
 
-from . import gtkgui_helpers
-
 import logging
 log = logging.getLogger('gajim.c.connection_handlers_events')
 
@@ -2181,8 +2179,6 @@ class NotificationEvent(nec.NetworkIncomingEvent):
             self.popup_title = _('New Message from %(nickname)s') % \
                 {'nickname': nick}
 
-        self.popup_image = gtkgui_helpers.get_icon_path(self.popup_image, 48)
-
         if not gajim.config.get('notify_on_new_message') or \
         not self.first_unread:
             self.do_popup = False
@@ -2236,6 +2232,28 @@ class NotificationEvent(nec.NetworkIncomingEvent):
             self.do_sound = False
 
         self.do_popup = False
+
+    def get_path_to_generic_or_avatar(self, generic, jid=None, suffix=None):
+        """
+        Choose between avatar image and default image
+
+        Returns full path to the avatar image if it exists, otherwise returns full
+        path to the image.  generic must be with extension and suffix without
+        """
+        if jid:
+            # we want an avatar
+            puny_jid = helpers.sanitize_filename(jid)
+            path_to_file = os.path.join(gajim.AVATAR_PATH, puny_jid) + suffix
+            path_to_local_file = path_to_file + '_local'
+            for extension in ('.png', '.jpeg'):
+                path_to_local_file_full = path_to_local_file + extension
+                if os.path.exists(path_to_local_file_full):
+                    return path_to_local_file_full
+            for extension in ('.png', '.jpeg'):
+                path_to_file_full = path_to_file + extension
+                if os.path.exists(path_to_file_full):
+                    return path_to_file_full
+        return os.path.abspath(generic)
 
     def handle_incoming_pres_event(self, pres_obj):
         if gajim.jid_is_transport(pres_obj.jid):
@@ -2315,8 +2333,8 @@ class NotificationEvent(nec.NetworkIncomingEvent):
             iconset = gajim.config.get('iconset')
             img_path = os.path.join(helpers.get_iconset_path(iconset),
                 '48x48', show_image)
-        self.popup_image = gtkgui_helpers.get_path_to_generic_or_avatar(
-            img_path, jid=self.jid, suffix=suffix)
+        self.popup_image = self.get_path_to_generic_or_avatar(img_path,
+            jid=self.jid, suffix=suffix)
 
         self.popup_timeout = gajim.config.get('notification_timeout')
 

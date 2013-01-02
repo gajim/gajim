@@ -153,7 +153,7 @@ class NetworkEvent(object):
         return True
 
     def _set_kwargs_as_attributes(self, **kwargs):
-        for k, v in kwargs.iteritems():
+        for k, v in kwargs.items():
             setattr(self, k, v)
 
 
