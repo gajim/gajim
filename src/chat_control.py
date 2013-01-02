@@ -2700,7 +2700,7 @@ class ChatControl(ChatControlBase):
                 backend=backend)
         # remove all register handlers on widgets, created by self.xml
         # to prevent circular references among objects
-        for i in self.handlers.keys():
+        for i in list(self.handlers.keys()):
             if self.handlers[i].handler_is_connected(i):
                 self.handlers[i].disconnect(i)
             del self.handlers[i]
