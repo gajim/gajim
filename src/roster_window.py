@@ -91,6 +91,7 @@ from common.pep import MOODS, ACTIVITIES
 ) = range(11)
 
 empty_pixbuf = GdkPixbuf.Pixbuf.new(GdkPixbuf.Colorspace.RGB, True, 8, 1, 1)
+empty_pixbuf.fill(0xffffff00)
 
 
 class RosterWindow:
