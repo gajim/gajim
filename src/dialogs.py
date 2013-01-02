@@ -1643,7 +1643,7 @@ class YesNoDialog(HigDialog):
             label = Gtk.Label(label=text_label)
             self.vbox.pack_start(label, False, True, 0)
             buff = Gtk.TextBuffer()
-            self.textview = Gtk.TextView(buff)
+            self.textview = Gtk.TextView.new_with_buffer(buff)
             frame = Gtk.Frame()
             frame.set_shadow_type(Gtk.ShadowType.IN)
             frame.add(self.textview)
@@ -2341,7 +2341,7 @@ class JoinGroupchatWindow:
         liststore = Gtk.ListStore(str)
         account_combobox.set_model(liststore)
         cell = Gtk.CellRendererText()
-        account_combobox.pack_start(cell, True, True, 0)
+        account_combobox.pack_start(cell, True)
         account_combobox.add_attribute(cell, 'text', 0)
         account_combobox.set_active(-1)
 
@@ -2350,7 +2350,7 @@ class JoinGroupchatWindow:
         gajim.account_is_connected(a)]:
             if gajim.connections[acct].is_zeroconf:
                 continue
-            account_combobox.append_text(acct)
+            liststore.append([acct])
             if account and account == acct:
                 account_combobox.set_active(liststore.iter_n_children(None)-1)
 
@@ -2379,7 +2379,13 @@ class JoinGroupchatWindow:
         self.window.set_title(title)
 
         self.server_comboboxentry = self.xml.get_object('server_comboboxentry')
-        self.server_model = self.server_comboboxentry.get_model()
+        liststore = Gtk.ListStore(str)
+        self.server_comboboxentry.set_model(liststore)
+        cell = Gtk.CellRendererText()
+        self.server_comboboxentry.pack_start(cell, True)
+        self.server_comboboxentry.add_attribute(cell, 'text', 0)
+        self.server_comboboxentry.set_active(-1)
+        self.server_model = liststore#self.server_comboboxentry.get_model()
         server_list = []
         # get the muc server of our server
         if 'jabber' in gajim.connections[account].muc_jid:
@@ -2389,11 +2395,11 @@ class JoinGroupchatWindow:
         liststore = Gtk.ListStore(str)
         self.recently_combobox.set_model(liststore)
         cell = Gtk.CellRendererText()
-        self.recently_combobox.pack_start(cell, True, True, 0)
+        self.recently_combobox.pack_start(cell, True)
         self.recently_combobox.add_attribute(cell, 'text', 0)
         self.recently_groupchat = gajim.config.get('recently_groupchat').split()
         for g in self.recently_groupchat:
-            self.recently_combobox.append_text(g)
+            liststore.append([g])
             server = gajim.get_server_from_jid(g)
             if server not in server_list and not server.startswith('irc'):
                 server_list.append(server)
@@ -2463,7 +2469,9 @@ class JoinGroupchatWindow:
     def _set_room_jid(self, room_jid):
         room, server = gajim.get_name_and_server_from_jid(room_jid)
         self._room_jid_entry.set_text(room)
-        self.server_comboboxentry.get_child().set_text(server)
+        model = self.server_comboboxentry.get_model()
+        model.append([server])
+        #self.server_comboboxentry.set_active(0)
 
     def on_recently_combobox_changed(self, widget):
         model = widget.get_model()
@@ -2509,8 +2517,9 @@ class JoinGroupchatWindow:
                 'groupchat.'))
             return
         nickname = self._nickname_entry.get_text().decode('utf-8')
-        server = self.server_comboboxentry.get_child().get_text().decode('utf-8').\
-            strip()
+        row = self.server_comboboxentry.get_child().get_displayed_row()
+        model = self.server_comboboxentry.get_model()
+        server = model[row][0].decode('utf-8').strip()
         room = self._room_jid_entry.get_text().decode('utf-8').strip()
         room_jid = room + '@' + server
         password = self._password_entry.get_text().decode('utf-8')

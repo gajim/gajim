@@ -1489,7 +1489,10 @@ class RosterWindow:
             # do not change selection while DND'ing
             return
         # Expand his parent, so this path is visible, don't expand it.
-        self.tree.expand_to_path(path[:-1])
+        path_ = str(path.get_indices()[:-1])[1:-1]
+        path_ = path_.replace(', ', ':')
+        path = path.new_from_string(path_)
+        self.tree.expand_to_path(path)
         self.tree.scroll_to_cell(path)
         self.tree.set_cursor(path)
 
@@ -2395,7 +2398,7 @@ class RosterWindow:
             if isinstance(w, dict):
                 self.close_all_from_dict(w)
             else:
-                w.window().destroy()
+                w.window.destroy()
 
     def close_all(self, account, force=False):
         """

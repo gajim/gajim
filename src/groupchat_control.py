@@ -470,7 +470,7 @@ class GroupchatControl(ChatControlBase):
         # workaround to avoid gtk arrows to be shown
         column = Gtk.TreeViewColumn() # 2nd COLUMN
         renderer = Gtk.CellRendererPixbuf()
-        column.pack_start(renderer, False, True, 0)
+        column.pack_start(renderer, False)
         self.list_treeview.append_column(column)
         column.set_visible(False)
         self.list_treeview.set_expander_column(column)
@@ -508,7 +508,7 @@ class GroupchatControl(ChatControlBase):
 
     def fill_column(self, col):
         for rend in self.renderers_list:
-            col.pack_start(rend[1], rend[2], True, 0)
+            col.pack_start(rend[1], rend[2])
             col.add_attribute(rend[1], rend[3], rend[4])
             col.set_cell_data_func(rend[1], rend[5], rend[6])
         # set renderers propertys
@@ -594,8 +594,9 @@ class GroupchatControl(ChatControlBase):
         """
         The MUC treeview has resized. Move the hpaned in all tabs to match
         """
-        if gparamspec.name != 'position':
-            return
+       # print pane, dir(pane)
+        #if gparamspec.name != 'position':
+            #return
         if self.resize_from_another_muc:
             # Don't send the event to other MUC
             return
@@ -1430,7 +1431,7 @@ class GroupchatControl(ChatControlBase):
         gc_contact.affiliation != 'none' and gajim.config.get(
         'show_affiliation_in_groupchat'):
             pixbuf1 = image.get_pixbuf().copy()
-            pixbuf2 = GdkPixbuf.Pixbuf(GdkPixbuf.Colorspace.RGB, True, 8, 4, 4)
+            pixbuf2 = GdkPixbuf.Pixbuf.new(GdkPixbuf.Colorspace.RGB, True, 8, 4, 4)
             if gc_contact.affiliation == 'owner':
                 pixbuf2.fill(0xff0000ff) # Red
             elif gc_contact.affiliation == 'admin':
@@ -1440,7 +1441,7 @@ class GroupchatControl(ChatControlBase):
             pixbuf2.composite(pixbuf1, 12, 12, pixbuf2.get_property('width'),
                 pixbuf2.get_property('height'), 0, 0, 1.0, 1.0,
                 GdkPixbuf.InterpType.HYPER, 127)
-            image = Gtk.image_new_from_pixbuf(pixbuf1)
+            image = Gtk.Image.new_from_pixbuf(pixbuf1)
         self.model[iter_][C_IMG] = image
         self.model[iter_][C_TEXT] = name
 
@@ -1453,7 +1454,7 @@ class GroupchatControl(ChatControlBase):
         fake_jid = self.room_jid + '/' + nick
         pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(fake_jid)
         if pixbuf in ('ask', None):
-            scaled_pixbuf = None
+            scaled_pixbuf = ''
         else:
             scaled_pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'roster')
         self.model[iter_][C_AVATAR] = scaled_pixbuf

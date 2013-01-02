@@ -570,7 +570,7 @@ class SingleForm(Gtk.Table, object):
                             pixbuf_l = GdkPixbuf.PixbufLoader()
                             pixbuf_l.write(img_data)
                             pixbuf_l.close()
-                            media = Gtk.image_new_from_pixbuf(pixbuf_l.\
+                            media = Gtk.Image.new_from_pixbuf(pixbuf_l.\
                                 get_pixbuf())
                         except Exception:
                             media = Gtk.Label(label=_('Unable to load image'))
