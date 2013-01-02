@@ -635,7 +635,7 @@ class Config:
 
     def get(self, optname=None):
         if not optname:
-            return self.__options[1].keys()
+            return list(self.__options[1].keys())
         if optname not in self.__options[1]:
             return None
         return self.__options[1][optname]
@@ -710,7 +710,7 @@ class Config:
             return None
         dict_ = self.__options_per_key[optname][1]
         if not key:
-            return dict_.keys()
+            return list(dict_.keys())
         if key not in dict_:
             if subname in self.__options_per_key[optname][0]:
                 return self.__options_per_key[optname][0][subname][1]
