@@ -2583,11 +2583,11 @@ class GroupchatControl(ChatControlBase):
                 self.tooltip.hide_tooltip()
 
     def show_tooltip(self, contact):
-        if not self.list_treeview.window:
+        if not self.list_treeview.get_window():
             # control has been destroyed since tooltip was requested
             return
         pointer = self.list_treeview.get_pointer()
-        props = self.list_treeview.get_path_at_pos(pointer[1], pointer[2])
+        props = self.list_treeview.get_path_at_pos(pointer[0], pointer[1])
         # check if the current pointer is at the same path
         # as it was before setting the timeout
         if props and self.tooltip.id == props[0]:

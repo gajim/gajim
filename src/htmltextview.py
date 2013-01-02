@@ -824,7 +824,7 @@ class HtmlTextView(Gtk.TextView):
     def __leave_event(self, widget, event):
         if self._changed_cursor:
             window = widget.get_window(Gtk.TextWindowType.TEXT)
-            window.set_cursor(Gdk.Cursor.new(Gdk.XTERM))
+            window.set_cursor(Gdk.Cursor.new(Gdk.CursorType.XTERM))
             self._changed_cursor = False
 
     def show_tooltip(self, tag):
@@ -857,13 +857,13 @@ class HtmlTextView(Gtk.TextView):
                 self.tooltip.hide_tooltip()
         if not self._changed_cursor and anchor_tags:
             window = widget.get_window(Gtk.TextWindowType.TEXT)
-            window.set_cursor(Gdk.Cursor.new(Gdk.HAND2))
+            window.set_cursor(Gdk.Cursor.new(Gdk.CursorType.HAND2))
             self._changed_cursor = True
             self.tooltip.timeout = GObject.timeout_add(500, self.show_tooltip,
                 anchor_tags[0])
         elif self._changed_cursor and not anchor_tags:
             window = widget.get_window(Gtk.TextWindowType.TEXT)
-            window.set_cursor(Gdk.Cursor.new(Gdk.XTERM))
+            window.set_cursor(Gdk.Cursor.new(Gdk.CursorType.XTERM))
             self._changed_cursor = False
         return False
 
@@ -963,14 +963,14 @@ if __name__ == '__main__':
         tags = htmlview.tv.get_iter_at_location(x, y).get_tags()
         if change_cursor:
             htmlview.tv.get_window(Gtk.TextWindowType.TEXT).set_cursor(
-                Gdk.Cursor.new(Gdk.XTERM))
+                Gdk.Cursor.new(Gdk.CursorType.XTERM))
             change_cursor = None
         tag_table = htmlview.tv.get_buffer().get_tag_table()
         for tag in tags:
             try:
                 if tag.is_anchor:
                     htmlview.tv.get_window(Gtk.TextWindowType.TEXT).set_cursor(
-                        Gdk.Cursor.new(Gdk.HAND2))
+                        Gdk.Cursor.new(Gdk.CursorType.HAND2))
                     change_cursor = tag
                 elif tag == tag_table.lookup('focus-out-line'):
                     over_line = True

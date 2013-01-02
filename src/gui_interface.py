@@ -1758,7 +1758,7 @@ class Interface:
             self.roster.draw_contact(jid, account)
         if w:
             w.set_active_tab(ctrl)
-            w.window.window.focus(Gtk.get_current_event_time())
+            w.window.get_window().focus(Gtk.get_current_event_time())
             # Using isinstance here because we want to catch all derived types
             if isinstance(ctrl, ChatControlBase):
                 tv = ctrl.conv_textview
@@ -2102,6 +2102,7 @@ class Interface:
         gc_control = GroupchatControl(mw, contact, account,
             is_continued=is_continued)
         mw.new_tab(gc_control)
+        mw.set_active_tab(gc_control)
 
     def new_private_chat(self, gc_contact, account, session=None):
         conn = gajim.connections[account]

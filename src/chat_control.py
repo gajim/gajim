@@ -1293,7 +1293,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         if not self.conv_textview.auto_scrolling:
             self.conv_textview.stop_scrolling()
         self.was_at_the_end = (adjustment.get_upper() - adjustment.get_value() \
-            - adjustment.page_size) < 18
+            - adjustment.get_page_size()) < 18
         if self.resource:
             jid = self.contact.get_full_jid()
         else:

@@ -30,6 +30,7 @@
 from threading import Timer # for smooth scrolling
 
 from gi.repository import Gtk
+from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import Pango
 from gi.repository import GObject
@@ -663,16 +664,17 @@ class ConversationTextview(GObject.GObject):
         tags = self.tv.get_iter_at_location(x, y).get_tags()
         if self.change_cursor:
             self.tv.get_window(Gtk.TextWindowType.TEXT).set_cursor(
-                    Gdk.Cursor.new(Gdk.XTERM))
+                    Gdk.Cursor.new(Gdk.CursorType.XTERM))
             self.change_cursor = False
         tag_table = self.tv.get_buffer().get_tag_table()
         over_line = False
         xep0184_warning = False
+
         for tag in tags:
             if tag in (tag_table.lookup('url'), tag_table.lookup('mail'), \
             tag_table.lookup('xmpp'), tag_table.lookup('sth_at_sth')):
                 self.tv.get_window(Gtk.TextWindowType.TEXT).set_cursor(
-                        Gdk.Cursor.new(Gdk.HAND2))
+                        Gdk.Cursor.new(Gdk.CursorType.HAND2))
                 self.change_cursor = True
             elif tag == tag_table.lookup('focus-out-line'):
                 over_line = True
