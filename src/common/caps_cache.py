@@ -130,7 +130,8 @@ def compute_caps_hash(identities, features, dataforms=[], hash_method='sha-1'):
         return 1
 
     S = ''
-    identities.sort(cmp=sort_identities_func)
+    from functools import cmp_to_key
+    identities.sort(key=cmp_to_key(sort_identities_func))
     for i in identities:
         c = i['category']
         type_ = i.get('type', '')
@@ -140,7 +141,7 @@ def compute_caps_hash(identities, features, dataforms=[], hash_method='sha-1'):
     features.sort()
     for f in features:
         S += '%s<' % f
-    dataforms.sort(cmp=sort_dataforms_func)
+    dataforms.sort(key=cmp_to_key(sort_dataforms_func))
     for dataform in dataforms:
         # fields indexed by var
         fields = {}
@@ -157,12 +158,12 @@ def compute_caps_hash(identities, features, dataforms=[], hash_method='sha-1'):
                 S += '%s<' % value
 
     if hash_method == 'sha-1':
-        hash_ = hashlib.sha1(S)
+        hash_ = hashlib.sha1(S.encode('utf-8'))
     elif hash_method == 'md5':
-        hash_ = hashlib.md5(S)
+        hash_ = hashlib.md5(S.encode('utf-8'))
     else:
         return ''
-    return base64.b64encode(hash_.digest())
+    return base64.b64encode(hash_.digest()).decode('utf-8')
 
 
 ################################################################################

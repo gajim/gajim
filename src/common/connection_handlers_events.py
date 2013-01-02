@@ -39,8 +39,6 @@ from nbxmpp.protocol import NS_CHATSTATES
 from common.jingle_transport import JingleTransportSocks5
 from common.file_props import FilesProp
 
-import gtkgui_helpers
-
 import logging
 log = logging.getLogger('gajim.c.connection_handlers_events')
 
@@ -220,11 +218,11 @@ class TimeResultReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
 
         try:
             t = datetime.datetime.strptime(utc_time, '%Y-%m-%dT%H:%M:%SZ')
-        except ValueError, e:
+        except ValueError as e:
             try:
                 t = datetime.datetime.strptime(utc_time,
                     '%Y-%m-%dT%H:%M:%S.%fZ')
-            except ValueError, e:
+            except ValueError as e:
                 log.info('Wrong time format: %s' % str(e))
                 return
 
@@ -366,10 +364,10 @@ class RosterReceivedEvent(nec.NetworkIncomingEvent):
                 try:
                     j = helpers.parse_jid(jid)
                 except Exception:
-                    print >> sys.stderr, _('JID %s is not RFC compliant. It '
-                        'will not be added to your roster. Use roster '
-                        'management tools such as '
-                        'http://jru.jabberstudio.org/ to remove it') % jid
+                    print(_('JID %s is not RFC compliant. It will not be added '
+                        'to your roster. Use roster management tools such as '
+                        'http://jru.jabberstudio.org/ to remove it') % jid,
+                        file=sys.stderr)
                 else:
                     infos = raw_roster[jid]
                     if jid != our_jid and (not infos['subscription'] or \
@@ -905,7 +903,7 @@ class GcPresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             try:
                 gajim.logger.write('gcstatus', self.fjid, st,
                     self.show)
-            except exceptions.PysqliteOperationalError, e:
+            except exceptions.PysqliteOperationalError as e:
                 self.conn.dispatch('DB_ERROR', (_('Disk Write Error'),
                     str(e)))
             except exceptions.DatabaseMalformed:
@@ -1169,7 +1167,6 @@ class ZeroconfMessageReceivedEvent(MessageReceivedEvent):
                     self.fjid = key
                     break
 
-        self.fjid = unicode(self.fjid)
         self.jid, self.resource = gajim.get_room_and_nick_from_fjid(self.fjid)
 
     def generate(self):
@@ -1986,7 +1983,7 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                     self.FT_content.session.ourjid)
                 self.FT_content.transport.set_connection(
                     self.FT_content.session.connection)
-            sid = unicode(self.stanza.getTag('jingle').getAttr('sid'))
+            sid = self.stanza.getTag('jingle').getAttr('sid')
             self.file_props = FilesProp.getNewFileProp(self.conn.name, sid)
             self.file_props.transport_sid = self.FT_content.transport.sid
             self.FT_content.file_props = self.file_props
@@ -2033,8 +2030,7 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         else:
             si = self.stanza.getTag('si')
             self.file_props = FilesProp.getNewFileProp(self.conn.name,
-                                               unicode(si.getAttr('id'))
-                                                      )
+                si.getAttr('id'))
             profile = si.getAttr('profile')
             if profile != nbxmpp.NS_FILE:
                 self.conn.send_file_rejection(self.file_props, code='400',
@@ -2183,8 +2179,6 @@ class NotificationEvent(nec.NetworkIncomingEvent):
             self.popup_title = _('New Message from %(nickname)s') % \
                 {'nickname': nick}
 
-        self.popup_image = gtkgui_helpers.get_icon_path(self.popup_image, 48)
-
         if not gajim.config.get('notify_on_new_message') or \
         not self.first_unread:
             self.do_popup = False
@@ -2238,6 +2232,28 @@ class NotificationEvent(nec.NetworkIncomingEvent):
             self.do_sound = False
 
         self.do_popup = False
+
+    def get_path_to_generic_or_avatar(self, generic, jid=None, suffix=None):
+        """
+        Choose between avatar image and default image
+
+        Returns full path to the avatar image if it exists, otherwise returns full
+        path to the image.  generic must be with extension and suffix without
+        """
+        if jid:
+            # we want an avatar
+            puny_jid = helpers.sanitize_filename(jid)
+            path_to_file = os.path.join(gajim.AVATAR_PATH, puny_jid) + suffix
+            path_to_local_file = path_to_file + '_local'
+            for extension in ('.png', '.jpeg'):
+                path_to_local_file_full = path_to_local_file + extension
+                if os.path.exists(path_to_local_file_full):
+                    return path_to_local_file_full
+            for extension in ('.png', '.jpeg'):
+                path_to_file_full = path_to_file + extension
+                if os.path.exists(path_to_file_full):
+                    return path_to_file_full
+        return os.path.abspath(generic)
 
     def handle_incoming_pres_event(self, pres_obj):
         if gajim.jid_is_transport(pres_obj.jid):
@@ -2317,8 +2333,8 @@ class NotificationEvent(nec.NetworkIncomingEvent):
             iconset = gajim.config.get('iconset')
             img_path = os.path.join(helpers.get_iconset_path(iconset),
                 '48x48', show_image)
-        self.popup_image = gtkgui_helpers.get_path_to_generic_or_avatar(
-            img_path, jid=self.jid, suffix=suffix)
+        self.popup_image = self.get_path_to_generic_or_avatar(img_path,
+            jid=self.jid, suffix=suffix)
 
         self.popup_timeout = gajim.config.get('notification_timeout')
 

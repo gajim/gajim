@@ -139,7 +139,7 @@ class ProfileWindow:
                     # and hope that user did not specify in ACE crazy size
                     scaled_pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf,
                             'tooltip')
-                except GObject.GError, msg: # unknown format
+                except GObject.GError as msg: # unknown format
                     # msg should be string, not object instance
                     msg = str(msg)
                     invalid_file = True
@@ -171,7 +171,8 @@ class ProfileWindow:
             button.show()
             text_button = self.xml.get_object('NOPHOTO_button')
             text_button.hide()
-            self.avatar_encoded = base64.encodestring(data)
+            self.avatar_encoded = base64.b64encode(data.encode('utf-8')).decode(
+                'utf-8')
             # returns None if unknown type
             self.avatar_mime_type = mimetypes.guess_type(path_to_file)[0]
             if must_delete:
@@ -344,7 +345,7 @@ class ProfileWindow:
                 'ADR_WORK_REGION', 'ADR_WORK_PCODE', 'ADR_WORK_CTRY']
         vcard_ = {}
         for e in entries:
-            txt = self.xml.get_object(e + '_entry').get_text().decode('utf-8')
+            txt = self.xml.get_object(e + '_entry').get_text()
             if txt != '':
                 vcard_ = self.add_to_vcard(vcard_, e, txt)
 
@@ -354,7 +355,7 @@ class ProfileWindow:
         end_iter = buff.get_end_iter()
         txt = buff.get_text(start_iter, end_iter, False)
         if txt != '':
-            vcard_['DESC'] = txt.decode('utf-8')
+            vcard_['DESC'] = txt
 
         # Avatar
         if self.avatar_encoded:

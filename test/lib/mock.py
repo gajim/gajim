@@ -212,7 +212,7 @@ class MockCall:
         elif isinstance(n, str):
             return self.kwparams[n]
         else:
-            raise IndexError, 'illegal index type for getParam'
+            raise IndexError('illegal index type for getParam')
 
     def getNumParams(self):
         return len(self.params)

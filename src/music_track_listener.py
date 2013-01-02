@@ -290,14 +290,14 @@ class MusicTrackListener(GObject.GObject):
 if __name__ == '__main__':
     def music_track_change_cb(listener, music_track_info):
         if music_track_info is None:
-            print 'Stop!'
+            print('Stop!')
         else:
-            print music_track_info.title
+            print(music_track_info.title)
     listener = MusicTrackListener.get()
     listener.connect('music-track-changed', music_track_change_cb)
     track = listener.get_playing_track()
     if track is None:
-        print 'Now not playing anything'
+        print('Now not playing anything')
     else:
-        print 'Now playing: "%s" by %s' % (track.title, track.artist)
+        print('Now playing: "%s" by %s' % (track.title, track.artist))
     GObject.MainLoop().run()

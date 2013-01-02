@@ -46,14 +46,14 @@ def kwallet_get(folder, entry):
     • folder: The top-level category to use (normally the programme name)
     • entry: The key of the entry to retrieve
 
-    Returns the passphrase as unicode, False if it cannot be found,
+    Returns the passphrase, False if it cannot be found,
     or None if an error occured.
     """
     p = subprocess.Popen(["kwalletcli", "-q", "-f", folder.encode('utf-8'),
      "-e", entry.encode('utf-8')], stdout=subprocess.PIPE)
     pw = p.communicate()[0]
     if p.returncode == 0:
-        return unicode(pw.decode('utf-8'))
+        return pw
     if p.returncode == 1 or p.returncode == 4:
         # ENOENT
         return False

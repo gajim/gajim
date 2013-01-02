@@ -89,8 +89,7 @@ class GajimThemesWindow:
     def on_theme_cell_edited(self, cell, row, new_name):
         model = self.themes_tree.get_model()
         iter_ = model.get_iter_from_string(row)
-        old_name = model.get_value(iter_, 0).decode('utf-8')
-        new_name = new_name.decode('utf-8')
+        old_name = model.get_value(iter_, 0)
         if old_name == new_name:
             return
         if old_name == 'default':
@@ -150,7 +149,7 @@ class GajimThemesWindow:
             self.theme_options_vbox.set_sensitive(False)
             self.theme_options_table.set_sensitive(False)
             return
-        self.current_theme = model.get_value(iter_, 0).decode('utf-8')
+        self.current_theme = model.get_value(iter_, 0)
         self.current_theme = self.current_theme.replace(' ', '_')
         self.set_theme_options(self.current_theme)
         if self.current_theme == 'default':
@@ -169,10 +168,10 @@ class GajimThemesWindow:
         # don't confuse translators
         theme_name = _('theme name')
         theme_name_ns = theme_name.replace(' ', '_')
-        while theme_name_ns + unicode(i) in gajim.config.get_per('themes'):
+        while theme_name_ns + str(i) in gajim.config.get_per('themes'):
             i += 1
-        model.set_value(iter_, 0, theme_name + unicode(i))
-        gajim.config.add_per('themes', theme_name_ns + unicode(i))
+        model.set_value(iter_, 0, theme_name + str(i))
+        gajim.config.add_per('themes', theme_name_ns + str(i))
         self.themes_tree.get_selection().select_iter(iter_)
         col = self.themes_tree.get_column(0)
         path = model.get_path(iter_)

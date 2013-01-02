@@ -91,10 +91,10 @@ text=None, timeout=-1):
             DesktopNotification(event_type, jid, account, msg_type,
                 path_to_image, title, GObject.markup_escape_text(text), timeout)
             return  # sucessfully did D-Bus Notification procedure!
-        except dbus.DBusException, e:
+        except dbus.DBusException as e:
             # Connection to D-Bus failed
             gajim.log.debug(str(e))
-        except TypeError, e:
+        except TypeError as e:
             # This means that we sent the message incorrectly
             gajim.log.debug(str(e))
 
@@ -129,7 +129,7 @@ text=None, timeout=-1):
         try:
             notification.show()
             return
-        except GObject.GError, e:
+        except GObject.GError as e:
             # Connection to notification-daemon failed, see #2893
             gajim.log.debug(str(e))
 
@@ -156,6 +156,9 @@ class Notification:
 
     def _nec_notification(self, obj):
         if obj.do_popup:
+            if isinstance(obj.popup_image, str):
+                obj.popup_image = gtkgui_helpers.get_icon_path(obj.popup_image,
+                    48)
             popup(obj.popup_event_type, obj.jid, obj.conn.name,
                 obj.popup_msg_type, path_to_image=obj.popup_image,
                 title=obj.popup_title, text=obj.popup_text,
@@ -397,7 +400,7 @@ class DesktopNotification:
                         dbus.UInt32(self.timeout*1000),
                         reply_handler=self.attach_by_id,
                         error_handler=self.notify_another_way)
-                except Exception, e:
+                except Exception as e:
                     self.notify_another_way(e)
             else:
                 try:
@@ -412,7 +415,7 @@ class DesktopNotification:
                         dbus.UInt32(self.timeout*1000),
                         reply_handler=self.attach_by_id,
                         error_handler=self.notify_another_way)
-                except Exception, e:
+                except Exception as e:
                     self.notify_another_way(e)
 
     def attach_by_id(self, id_):

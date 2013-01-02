@@ -21,14 +21,15 @@ from gi.repository import GObject
 import socket
 
 import nbxmpp
-import farstream, gst
+import farstream
+import gst
 from glib import GError
 
-import gajim
+from common import gajim
 
-from jingle_transport import JingleTransportICEUDP
-from jingle_content import contents, JingleContent, JingleContentSetupException
-from connection_handlers_events import InformationEvent
+from common.jingle_transport import JingleTransportICEUDP
+from common.jingle_content import contents, JingleContent, JingleContentSetupException
+from common.connection_handlers_events import InformationEvent
 
 
 import logging
@@ -86,8 +87,8 @@ class JingleRTPContent(JingleContent):
                 try:
                     ip = socket.getaddrinfo(stun_server, 0, socket.AF_UNSPEC,
                             socket.SOCK_STREAM)[0][4][0]
-                except socket.gaierror, (errnum, errstr):
-                    log.warn('Lookup of stun ip failed: %s' % errstr)
+                except socket.gaierror as e:
+                    log.warn('Lookup of stun ip failed: %s' % str(e))
                 else:
                     params['stun-ip'] = ip
 
@@ -104,7 +105,7 @@ class JingleRTPContent(JingleContent):
         try:
             bin = gst.parse_bin_from_description(pipeline, True)
             return bin
-        except GError, error_str:
+        except GError as error_str:
             gajim.nec.push_incoming_event(InformationEvent(None,
                 conn=self.session.connection, level='error',
                 pri_txt=_('%s configuration error') % text.capitalize(),

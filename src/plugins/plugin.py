@@ -40,30 +40,30 @@ class GajimPlugin(object):
     '''
     Base class for implementing Gajim plugins.
     '''
-    name = u''
+    name = ''
     '''
     Name of plugin.
 
     Will be shown in plugins management GUI.
 
-    :type: unicode
+    :type: str
     '''
-    short_name = u''
+    short_name = ''
     '''
     Short name of plugin.
 
     Used for quick indentification of plugin.
 
-    :type: unicode
+    :type: str
 
     :todo: decide whether we really need this one, because class name (with
             module name) can act as such short name
     '''
-    version = u''
+    version = ''
     '''
     Version of plugin.
 
-    :type: unicode
+    :type: str
 
     :todo: decide how to compare version between each other (which one
             is higher). Also rethink: do we really need to compare versions
@@ -71,11 +71,11 @@ class GajimPlugin(object):
             same plugin class but with different version and we want only the newest
             one to be active - is such policy good?
     '''
-    description = u''
+    description = ''
     '''
     Plugin description.
 
-    :type: unicode
+    :type: str
 
     :todo: should be allow rich text here (like HTML or reStructuredText)?
     '''
@@ -83,16 +83,16 @@ class GajimPlugin(object):
     '''
     Plugin authors.
 
-    :type: [] of unicode
+    :type: [] of str
 
     :todo: should we decide on any particular format of author strings?
             Especially: should we force format of giving author's e-mail?
     '''
-    homepage = u''
+    homepage = ''
     '''
     URL to plug-in's homepage.
 
-    :type: unicode
+    :type: str
 
     :todo: should we check whether provided string is valid URI? (Maybe
     using 'property')
@@ -120,7 +120,7 @@ class GajimPlugin(object):
 
     Values are tuples: (default_value, option_description). The first one can
     be anything (this is the advantage of using shelve/pickle instead of
-    custom-made     config I/O handling); the second one should be unicode (gettext
+    custom-made     config I/O handling); the second one should be str (gettext
     can be used if need and/or translation is planned).
 
     :type: {} of 2-element tuples
@@ -196,7 +196,7 @@ class GajimPlugin(object):
     def deactivate(self):
         pass
 
-import cPickle
+import pickle
 
 class GajimPluginConfig():
     @log_calls('GajimPluginConfig')
@@ -242,7 +242,7 @@ class GajimPluginConfig():
     @log_calls('GajimPluginConfig')
     def save(self):
         fd = open(self.FILE_PATH, 'wb')
-        cPickle.dump(self.data, fd)
+        pickle.dump(self.data, fd)
         fd.close()
 
     @log_calls('GajimPluginConfig')
@@ -250,14 +250,14 @@ class GajimPluginConfig():
         if os.path.isfile(self.FILE_PATH):
             fd = open(self.FILE_PATH, 'rb')
             try:
-                self.data = cPickle.load(fd)
+                self.data = pickle.load(fd)
                 fd.close()
             except:
                 fd.close()
                 try:
                     import shelve
                     s = shelve.open(self.FILE_PATH)
-                    for (k, v) in s.iteritems():
+                    for (k, v) in s.items():
                         self.data[k] = v
                     if not isinstance(self.data, dict):
                         raise GajimPluginException

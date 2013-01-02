@@ -141,8 +141,7 @@ class AdvancedConfigurationWindow(object):
         """
         optname = model[iter_][C_PREFNAME]
         opttype = model[iter_][C_TYPE]
-
-        if opttype.decode('utf-8') == self.types['boolean'] or optname == 'password':
+        if opttype == self.types['boolean'] or optname == 'password':
             cell.set_property('editable', False)
         else:
             cell.set_property('editable', True)
@@ -153,10 +152,10 @@ class AdvancedConfigurationWindow(object):
         # path[1] is the key name
         # path[2] is the root of tree
         # last two is optional
-        path = [model[iter_][0].decode('utf-8')]
+        path = [model[iter_][0]]
         parent = model.iter_parent(iter_)
         while parent:
-            path.append(model[parent][0].decode('utf-8'))
+            path.append(model[parent][0])
             parent = model.iter_parent(parent)
         return path
 
@@ -194,17 +193,17 @@ class AdvancedConfigurationWindow(object):
     def on_advanced_treeview_row_activated(self, treeview, path, column):
         modelpath = self.modelfilter.convert_path_to_child_path(path)
         modelrow = self.model[modelpath]
-        option = modelrow[0].decode('utf-8')
-        if modelrow[2].decode('utf-8') == self.types['boolean']:
+        option = modelrow[0]
+        if modelrow[2] == self.types['boolean']:
             for key in self.right_true_dict.keys():
-                if self.right_true_dict[key] == modelrow[1].decode('utf-8'):
+                if self.right_true_dict[key] == modelrow[1]:
                     modelrow[1] = str(key)
             newval = {'False': True, 'True': False}[modelrow[1]]
             if len(modelpath.get_indices()) > 1:
                 optnamerow = self.model[modelpath.get_indices()[0]]
-                optname = optnamerow[0].decode('utf-8')
+                optname = optnamerow[0]
                 keyrow = self.model[modelpath.get_indices()[:2]]
-                key = keyrow[0].decode('utf-8')
+                key = keyrow[0]
                 self.remember_option(option + '\n' + key + '\n' + optname,
                         modelrow[1], newval)
                 gajim.config.set_per(optname, key, option, newval)
@@ -234,13 +233,12 @@ class AdvancedConfigurationWindow(object):
         modelpath = self.modelfilter.convert_path_to_child_path(path)
         modelrow = self.model[modelpath]
         modelpath = modelpath.get_indices()
-        option = modelrow[0].decode('utf-8')
-        text = text.decode('utf-8')
+        option = modelrow[0]
         if len(modelpath) > 1:
             optnamerow = self.model[modelpath[0]]
-            optname = optnamerow[0].decode('utf-8')
+            optname = optnamerow[0]
             keyrow = self.model[modelpath[:2]]
-            key = keyrow[0].decode('utf-8')
+            key = keyrow[0]
             self.remember_option(option + '\n' + key + '\n' + optname, modelrow[1],
                     text)
             gajim.config.set_per(optname, key, option, text)
@@ -269,12 +267,12 @@ class AdvancedConfigurationWindow(object):
                     return
                 modelpath = self.modelfilter.convert_path_to_child_path(path)
                 modelrow = self.model[modelpath]
-                option = modelrow[0].decode('utf-8')
+                option = modelrow[0]
                 if len(modelpath) > 1:
                     optnamerow = self.model[modelpath[0]]
-                    optname = optnamerow[0].decode('utf-8')
+                    optname = optnamerow[0]
                     keyrow = self.model[modelpath[:2]]
-                    key = keyrow[0].decode('utf-8')
+                    key = keyrow[0]
                     self.remember_option(option + '\n' + key + '\n' + optname,
                         modelrow[C_VALUE], default)
                     gajim.config.set_per(optname, key, option, default)
@@ -313,11 +311,10 @@ class AdvancedConfigurationWindow(object):
                             value = str(option)
                         except:
                             value = option
-                    value = helpers.ensure_utf8_string(value)
                 self.model.append(parent, [name, value, type_])
 
     def visible_func(self, model, treeiter, data):
-        search_string  = self.entry.get_text().decode('utf-8').lower()
+        search_string  = self.entry.get_text().lower()
         for it in tree_model_pre_order(model, treeiter):
             if model[it][C_TYPE] != '':
                 opt_path = self.get_option_path(model, it)

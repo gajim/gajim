@@ -159,7 +159,7 @@ class CommandWindow:
         return self.stage_adhoc_commands_window_delete_event(self.window)
 
     def __del__(self):
-        print 'Object has been deleted.'
+        print('Object has been deleted.')
 
 # stage 1: waiting for command list
     def stage1(self):
@@ -280,8 +280,6 @@ class CommandWindow:
     def stage3(self):
         # close old stage
         self.stage_finish()
-
-        assert isinstance(self.commandnode, unicode)
 
         self.form_status = None
 
@@ -452,7 +450,7 @@ class CommandWindow:
 
         note = command.getTag('note')
         if note:
-            self.notes_label.set_text(note.getData().decode('utf-8'))
+            self.notes_label.set_text(note.getData())
             self.notes_label.set_no_show_all(False)
             self.notes_label.show()
         else:
@@ -510,7 +508,7 @@ class CommandWindow:
             try:
                 errorname = nbxmpp.NS_STANZAS + ' ' + str(errorid)
                 errordesc = nbxmpp.ERRORS[errorname][2]
-                error = errordesc.decode('utf-8')
+                error = errordesc
                 del errorname, errordesc
             except KeyError:        # when stanza doesn't have error description
                 error = _('Service returned an error.')
@@ -608,7 +606,6 @@ class CommandWindow:
         Send the command with data form. Wait for reply
         """
         # create the stanza
-        assert isinstance(self.commandnode, unicode)
         assert action in ('execute', 'prev', 'next', 'complete')
 
         stanza = nbxmpp.Iq(typ='set', to=self.jid)

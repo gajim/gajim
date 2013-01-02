@@ -11,9 +11,9 @@
 ## GNU General Public License for more details.
 ##
 
-import gajim
+from common import gajim
 import nbxmpp
-from jingle_transport import *
+from common.jingle_transport import *
 from common.socks5 import Socks5ReceiverClient, Socks5SenderClient
 
 

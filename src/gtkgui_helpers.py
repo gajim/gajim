@@ -41,6 +41,7 @@ log = logging.getLogger('gajim.gtkgui_helpers')
 
 from common import i18n
 from common import gajim
+from common import pep
 
 gtk_icon_theme = Gtk.IconTheme.get_default()
 gtk_icon_theme.append_search_path(gajim.ICONS_DIR)
@@ -48,7 +49,7 @@ gtk_icon_theme.append_search_path(gajim.ICONS_DIR)
 def get_icon_pixmap(icon_name, size=16):
     try:
         return gtk_icon_theme.load_icon(icon_name, size, 0)
-    except GObject.GError, e:
+    except GObject.GError as e:
         log.error('Unable to load icon %s: %s' % (icon_name, str(e)))
 
 def get_icon_path(icon_name, size=16):
@@ -59,7 +60,7 @@ def get_icon_path(icon_name, size=16):
             return ""
         else:
             return icon_info.get_filename()
-    except GObject.GError, e:
+    except GObject.GError as e:
         log.error("Unable to find icon %s: %s" % (icon_name, str(e)))
 
 import vcard
@@ -195,11 +196,11 @@ def get_default_font():
             for line in open(xfce_config_file):
                 if line.find('name="Gtk/FontName"') != -1:
                     start = line.find('value="') + 7
-                    return line[start:line.find('"', start)].decode('utf-8')
+                    return line[start:line.find('"', start)]
         except Exception:
             #we talk about file
-            print >> sys.stderr, _('Error: cannot open %s for reading') % \
-                xfce_config_file
+            print(_('Error: cannot open %s for reading') % xfce_config_file,
+                file=sys.stderr)
 
     elif os.path.exists(kde_config_file):
         try:
@@ -211,11 +212,11 @@ def get_default_font():
                     font_name = values[0]
                     font_size = values[1]
                     font_string = '%s %s' % (font_name, font_size) # Verdana 9
-                    return font_string.decode('utf-8')
+                    return font_string
         except Exception:
             #we talk about file
-            print >> sys.stderr, _('Error: cannot open %s for reading') % \
-                kde_config_file
+            print(_('Error: cannot open %s for reading') % kde_config_file,
+                file=sys.stderr)
 
     return None
 
@@ -316,7 +317,7 @@ class HashDigest:
 
     def __str__(self):
         prettydigest = ''
-        for i in xrange(0, len(self.digest), 2):
+        for i in list(range(0, len(self.digest), 2)):
             prettydigest += self.digest[i:i + 2] + ':'
         return prettydigest[:-1]
 
@@ -342,11 +343,11 @@ def parse_server_xml(path_to_file):
         xml.sax.parse(path_to_file, handler)
         return handler.servers
     # handle exception if unable to open file
-    except IOError, message:
-        print >> sys.stderr, _('Error reading file:'), message
+    except IOError as message:
+        print(_('Error reading file:') + message, file=sys.stderr)
     # handle exception parsing file
-    except xml.sax.SAXParseException, message:
-        print >> sys.stderr, _('Error parsing file:'), message
+    except xml.sax.SAXParseException as message:
+        print(_('Error parsing file:') + message, file=sys.stderr)
 
 def set_unset_urgency_hint(window, unread_messages_no):
     """
@@ -384,12 +385,12 @@ def get_abspath_for_script(scriptname, want_type = False):
                 script += '\nexec python -OOt gajim.py $0 $@\n'
                 f.write(script)
                 f.close()
-                os.chmod(path_to_script, 0700)
+                os.chmod(path_to_script, 0o700)
             except OSError: # do not traceback (could be a permission problem)
                 #we talk about a file here
                 s = _('Could not write to %s. Session Management support will '
                     'not work') % path_to_script
-                print >> sys.stderr, s
+                print(s, file=sys.stderr)
 
     else: # normal user (not svn user)
         type_ = 'install'
@@ -607,7 +608,7 @@ def get_avatar_pixbuf_from_cache(fjid, use_local=True):
     if not os.path.isfile(path):
         return 'ask'
 
-    vcard_dict = gajim.connections.values()[0].get_cached_vcard(fjid,
+    vcard_dict = list(gajim.connections.values())[0].get_cached_vcard(fjid,
             is_groupchat_contact)
     if not vcard_dict: # This can happen if cached vcard is too old
         return 'ask'
@@ -645,28 +646,6 @@ def make_pixbuf_grayscale(pixbuf):
     pixbuf.saturate_and_pixelate(pixbuf2, 0.0, False)
     return pixbuf2
 
-def get_path_to_generic_or_avatar(generic, jid = None, suffix = None):
-    """
-    Choose between avatar image and default image
-
-    Returns full path to the avatar image if it exists, otherwise returns full
-    path to the image.  generic must be with extension and suffix without
-    """
-    if jid:
-        # we want an avatar
-        puny_jid = helpers.sanitize_filename(jid)
-        path_to_file = os.path.join(gajim.AVATAR_PATH, puny_jid) + suffix
-        path_to_local_file = path_to_file + '_local'
-        for extension in ('.png', '.jpeg'):
-            path_to_local_file_full = path_to_local_file + extension
-            if os.path.exists(path_to_local_file_full):
-                return path_to_local_file_full
-        for extension in ('.png', '.jpeg'):
-            path_to_file_full = path_to_file + extension
-            if os.path.exists(path_to_file_full):
-                return path_to_file_full
-    return os.path.abspath(generic)
-
 def decode_filechooser_file_paths(file_paths):
     """
     Decode as UTF-8 under Windows and ask sys.getfilesystemencoding() in POSIX
@@ -684,7 +663,7 @@ def decode_filechooser_file_paths(file_paths):
                 file_path = file_path.decode(sys.getfilesystemencoding())
             except Exception:
                 try:
-                    file_path = file_path.decode('utf-8')
+                    file_path = file_path
                 except Exception:
                     pass
             file_paths_list.append(file_path)
@@ -829,7 +808,7 @@ def on_avatar_save_as_menuitem_activate(widget, jid, default_name=''):
         # Save image
         try:
             pixbuf.savev(file_path, image_format, [], [])
-        except Exception, e:
+        except Exception as e:
             log.debug('Error saving avatar: %s' % str(e))
             if os.path.exists(file_path):
                 os.remove(file_path)
@@ -974,6 +953,38 @@ def load_activity_icon(category, activity = None):
     icon_list = _load_icon_list([activity], path)
     return icon_list[activity]
 
+def get_pep_as_pixbuf(pep_class):
+    if isinstance(pep_class, pep.UserMoodPEP):
+        assert not pep_class._retracted
+        received_mood = pep_class._pep_specific_data['mood']
+        mood = received_mood if received_mood in pep.MOODS else 'unknown'
+        pixbuf = load_mood_icon(mood).get_pixbuf()
+        return pixbuf
+    elif isinstance(pep_class, pep.UserTunePEP):
+        path = os.path.join(gajim.DATA_DIR, 'emoticons', 'static', 'music.png')
+        return GdkPixbuf.Pixbuf.new_from_file(path)
+    elif isinstance(pep_class, pep.UserActivityPEP):
+        assert not pep_class._retracted
+        pep_ = pep_class._pep_specific_data
+        activity = pep_['activity']
+
+        has_known_activity = activity in pep.ACTIVITIES
+        has_known_subactivity = (has_known_activity  and ('subactivity' in pep_)
+                and (pep_['subactivity'] in pep.ACTIVITIES[activity]))
+
+        if has_known_activity:
+            if has_known_subactivity:
+                subactivity = pep_['subactivity']
+                return load_activity_icon(activity, subactivity).get_pixbuf()
+            else:
+                return load_activity_icon(activity).get_pixbuf()
+        else:
+            return load_activity_icon('unknown').get_pixbuf()
+    elif isinstance(pep_class, pep.UserLocationPEP):
+        path = get_icon_path('gajim-earth')
+        return GdkPixbuf.Pixbuf.new_from_file(path)
+    return None
+
 def load_icons_meta():
     """
     Load and return  - AND + small icons to put on top left of an icon for meta
@@ -1091,7 +1102,7 @@ def label_set_autowrap(widget):
     """
     if isinstance (widget, Gtk.Container):
         children = widget.get_children()
-        for i in xrange (len (children)):
+        for i in list(range (len (children))):
             label_set_autowrap(children[i])
     elif isinstance(widget, Gtk.Label):
         widget.set_line_wrap(True)

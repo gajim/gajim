@@ -68,7 +68,7 @@ from groupchat_control import PrivateChatControl
 from atom_window import AtomWindow
 from session import ChatControlSession
 
-import common.sleepy
+from common import sleepy
 
 from nbxmpp import idlequeue
 from nbxmpp import Hashes
@@ -93,7 +93,7 @@ import config
 from threading import Thread
 from common import ged
 
-gajimpaths = common.configpaths.gajimpaths
+from common.configpaths import gajimpaths
 config_filename = gajimpaths['CONFIG_FILE']
 
 from common import optparser
@@ -164,7 +164,7 @@ class Interface:
 
     def handle_event_iq_error(self, obj):
         #('ERROR_ANSWER', account, (id_, fjid, errmsg, errcode))
-        if unicode(obj.errcode) in ('400', '403', '406') and obj.id_:
+        if str(obj.errcode) in ('400', '403', '406') and obj.id_:
             # show the error dialog
             ft = self.instances['file_transfers']
             sid = obj.id_
@@ -172,7 +172,7 @@ class Interface:
                 sid = obj.id_[3:]
             file_props = FilesProp.getFileProp(obj.conn.name, sid)
             if file_props :
-                if unicode(obj.errcode) == '400':
+                if str(obj.errcode) == '400':
                     file_props.error = -3
                 else:
                     file_props.error = -4
@@ -181,7 +181,7 @@ class Interface:
                     error_msg=obj.errmsg))
                 obj.conn.disconnect_transfer(file_props)
                 return
-        elif unicode(obj.errcode) == '404':
+        elif str(obj.errcode) == '404':
             sid = obj.id_
             if len(obj.id_) > 3 and obj.id_[2] == '_':
                 sid = obj.id_[3:]
@@ -951,7 +951,7 @@ class Interface:
         ft_win = self.instances['file_transfers']
         if not file_props.hash_:
             # We disn't get the hash, sender probably don't support that
-            jid = unicode(file_props.sender)
+            jid = file_props.sender
             self.popup_ft_result(account, jid, file_props)
             ft_win.set_status(file_props, 'ok')
         h = Hashes()
@@ -963,7 +963,7 @@ class Interface:
         file_.close()
         # If the hash we received and the hash of the file are the same,
         # then the file is not corrupt
-        jid = unicode(file_props.sender)
+        jid = file_props.sender
         if file_props.hash_ == hash_:
             GObject.idle_add(self.popup_ft_result, account, jid, file_props)
             GObject.idle_add(ft_win.set_status, file_props, 'ok')
@@ -995,7 +995,7 @@ class Interface:
                 self.hashThread.start()
             gajim.socks5queue.remove_receiver(file_props.sid, True, True)
         else: # we send a file
-            jid = unicode(file_props.receiver)
+            jid = file_props.receiver
             gajim.socks5queue.remove_sender(file_props.sid, True, True)
             self.popup_ft_result(account, jid, file_props)
 
@@ -1042,7 +1042,7 @@ class Interface:
         if file_props is not None:
             if file_props.type_ == 'r':
                 # get the name of the sender, as it is in the roster
-                sender = unicode(file_props.sender).split('/')[0]
+                sender = file_props.sender.split('/')[0]
                 name = gajim.contacts.get_first_contact_from_jid(account,
                     sender).get_shown_name()
                 filename = os.path.basename(file_props.file_name)
@@ -1111,11 +1111,11 @@ class Interface:
             # Ask offline status in 1 minute so w'are sure we got all online
             # presences
             GObject.timeout_add_seconds(60, self.ask_offline_status, account)
-        if state != common.sleepy.STATE_UNKNOWN and connected in (2, 3):
+        if state != sleepy.STATE_UNKNOWN and connected in (2, 3):
             # we go online or free for chat, so we activate auto status
             gajim.sleeper_state[account] = 'online'
-        elif not ((state == common.sleepy.STATE_AWAY and connected == 4) or \
-        (state == common.sleepy.STATE_XA and connected == 5)):
+        elif not ((state == sleepy.STATE_AWAY and connected == 4) or \
+        (state == sleepy.STATE_XA and connected == 5)):
             # If we are autoaway/xa and come back after a disconnection, do
             # nothing
             # Else disable autoaway
@@ -1568,7 +1568,7 @@ class Interface:
 
         This is part of rewriting whole events handling system to use GED.
         """
-        for event_name, event_handlers in self.handlers.iteritems():
+        for event_name, event_handlers in self.handlers.items():
             for event_handler in event_handlers:
                 prio = ged.GUI1
                 if type(event_handler) == tuple:
@@ -1906,8 +1906,8 @@ class Interface:
         self.sth_at_sth_dot_sth = r'\S+@\S+\.\S*[^\s)?]'
 
         # Invalid XML chars
-        self.invalid_XML_chars = u'[\x00-\x08]|[\x0b-\x0c]|[\x0e-\x1f]|'\
-            u'[\ud800-\udfff]|[\ufffe-\uffff]'
+        self.invalid_XML_chars = '[\x00-\x08]|[\x0b-\x0c]|[\x0e-\x1f]|'\
+            '[\ud800-\udfff]|[\ufffe-\uffff]'
 
     def popup_emoticons_under_button(self, button, parent_win):
         """
@@ -1969,7 +1969,7 @@ class Interface:
             if not self.image_is_ok(emot_file):
                 continue
             for emot in emots[emot_filename]:
-                emot = emot.decode('utf-8')
+                emot = emot
                 # This avoids duplicated emoticons with the same image eg. :)
                 # and :-)
                 if not emot_file in self.emoticons.values():
@@ -2342,14 +2342,14 @@ class Interface:
             if account not in gajim.sleeper_state or \
             not gajim.sleeper_state[account]:
                 continue
-            if state == common.sleepy.STATE_AWAKE and \
+            if state == sleepy.STATE_AWAKE and \
             gajim.sleeper_state[account] in ('autoaway', 'autoxa'):
                 # we go online
                 self.roster.send_status(account, 'online',
                         gajim.status_before_autoaway[account])
                 gajim.status_before_autoaway[account] = ''
                 gajim.sleeper_state[account] = 'online'
-            elif state == common.sleepy.STATE_AWAY and \
+            elif state == sleepy.STATE_AWAY and \
             gajim.sleeper_state[account] == 'online' and \
             gajim.config.get('autoaway'):
                 # we save out online status
@@ -2369,7 +2369,7 @@ class Interface:
                 self.roster.send_status(account, 'away', auto_message,
                     auto=True)
                 gajim.sleeper_state[account] = 'autoaway'
-            elif state == common.sleepy.STATE_XA and \
+            elif state == sleepy.STATE_XA and \
             gajim.sleeper_state[account] in ('online', 'autoaway',
             'autoaway-forced') and gajim.config.get('autoxa'):
                 # we go extended away [we pass True to auto param]
@@ -2447,7 +2447,7 @@ class Interface:
     def save_config(self):
         err_str = parser.write()
         if err_str is not None:
-            print >> sys.stderr, err_str
+            print(err_str, file=sys.stderr)
             # it is good to notify the user
             # in case he or she cannot see the output of the console
             dialogs.ErrorDialog(_('Could not save your settings and '
@@ -2491,7 +2491,7 @@ class Interface:
         path_to_original_file = path_to_file + extension
         try:
             pixbuf.savev(path_to_original_file, typ, [], [])
-        except Exception, e:
+        except Exception as e:
             log.error('Error writing avatar file %s: %s' % (
                 path_to_original_file, str(e)))
         # Generate and save the resized, color avatar
@@ -2501,7 +2501,7 @@ class Interface:
                 extension
             try:
                 pixbuf.savev(path_to_normal_file, 'png', [], [])
-            except Exception, e:
+            except Exception as e:
                 log.error('Error writing avatar file %s: %s' % \
                     (path_to_original_file, str(e)))
             # Generate and save the resized, black and white avatar
@@ -2511,7 +2511,7 @@ class Interface:
                 path_to_bw_file = path_to_file + '_notif_size_bw' + extension
                 try:
                     bwbuf.savev(path_to_bw_file, 'png', [], [])
-                except Exception, e:
+                except Exception as e:
                     log.error('Error writing avatar file %s: %s' % \
                         (path_to_original_file, str(e)))
 
@@ -2609,7 +2609,7 @@ class Interface:
         try:
             from ipython_view import IPythonView
         except ImportError:
-            print 'ipython_view not found'
+            print('ipython_view not found')
             return
         from gi.repository import Pango
 
@@ -2913,7 +2913,7 @@ class Interface:
 
         self.show_vcard_when_connect = []
 
-        self.sleeper = common.sleepy.Sleepy(
+        self.sleeper = sleepy.Sleepy(
             gajim.config.get('autoawaytime') * 60, # make minutes to seconds
             gajim.config.get('autoxatime') * 60)
 

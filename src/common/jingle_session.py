@@ -26,12 +26,12 @@ Handles Jingle sessions (XEP 0166)
 #   - Tie-breaking
 # * timeout
 
-import gajim #Get rid of that?
+from common import gajim
 import nbxmpp
-from jingle_transport import get_jingle_transport, JingleTransportIBB
-from jingle_content import get_jingle_content, JingleContentSetupException
-from jingle_content import JingleContent
-from jingle_ft import STATE_TRANSPORT_REPLACE
+from common.jingle_transport import get_jingle_transport, JingleTransportIBB
+from common.jingle_content import get_jingle_content, JingleContentSetupException
+from common.jingle_content import JingleContent
+from common.jingle_ft import STATE_TRANSPORT_REPLACE
 from common.connection_handlers_events import *
 import logging
 log = logging.getLogger("gajim.c.jingle_session")
@@ -73,7 +73,6 @@ class JingleSession(object):
         self.contents = {} # negotiated contents
         self.connection = con # connection to use
         # our full jid
-        #FIXME: Get rid of gajim here?
         self.ourjid = gajim.get_jid_from_account(self.connection.name)
         if con.server_resource:
             self.ourjid = self.ourjid + '/' + con.server_resource

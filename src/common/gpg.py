@@ -22,11 +22,11 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-from gajim import HAVE_GPG
+from common.gajim import HAVE_GPG
 import os
 
 if HAVE_GPG:
-    import gnupg
+    from common import gnupg
 
     class GnuPG(gnupg.GPG):
         def __init__(self, use_agent=False):

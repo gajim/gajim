@@ -235,13 +235,10 @@ class StatusTable:
                 self.current_row + 1)
 
     def get_status_info(self, resource, priority, show, status):
-        str_status = resource + ' (' + unicode(priority) + ')'
+        str_status = resource + ' (' + str(priority) + ')'
         if status:
             status = status.strip()
             if status != '':
-                # make sure 'status' is unicode before we send to to reduce_chars
-                if isinstance(status, str):
-                    status = unicode(status, encoding='utf-8')
                 # reduce to 100 chars, 1 line
                 status = helpers.reduce_chars_newlines(status, 100, 1)
                 str_status = GObject.markup_escape_text(str_status)
@@ -301,10 +298,6 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
         file_path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
         for acct in accounts:
             message = acct['message']
-            # before reducing the chars we should assure we send unicode, else
-            # there are possible pango TBs on 'set_markup'
-            if isinstance(message, str):
-                message = unicode(message, encoding = 'utf-8')
             message = helpers.reduce_chars_newlines(message, 100, 1)
             message = GObject.markup_escape_text(message)
             if acct['name'] in gajim.con_types and \
@@ -606,7 +599,7 @@ class RosterTooltip(NotificationAreaTooltip):
         if num_resources == 1 and contact.resource:
             properties.append((_('Resource: '),
                     GObject.markup_escape_text(contact.resource) +\
-                    ' (' + unicode(contact.priority) + ')'))
+                    ' (' + str(contact.priority) + ')'))
 
         if self.account and prim_contact.sub and prim_contact.sub != 'both' and\
         prim_contact.jid not in gajim.gc_connected[self.account]:
@@ -644,9 +637,9 @@ class RosterTooltip(NotificationAreaTooltip):
                     'tooltip_idle_color')
                 cs += '%s</span>'
                 properties.append((str(), None))
-                idle_since = helpers.ensure_utf8_string(cs % _("Idle since %s"))
+                idle_since = cs % _("Idle since %s")
                 properties.append((idle_since % formatted, None))
-                idle_for = helpers.ensure_utf8_string(cs % _("Idle for %s"))
+                idle_for = cs % _("Idle for %s")
                 properties.append((idle_for % str(diff), None))
 
         while properties:
@@ -670,7 +663,7 @@ class RosterTooltip(NotificationAreaTooltip):
                     vcard_current_row + 1, Gtk.AttachOptions.EXPAND | \
                     Gtk.AttachOptions.FILL, vertical_fill, 0, 0)
             else:
-                if isinstance(property_[0], (unicode, str)): # FIXME: rm unicode?
+                if isinstance(property_[0], str):
                     label.set_markup(property_[0])
                     label.set_line_wrap(True)
                 else:
@@ -743,7 +736,7 @@ class FileTransfersTooltip(BaseTooltip):
         if file_props.type_ == 'r':
             type_ = _('Download')
             actor = _('Sender: ')
-            sender = unicode(file_props.sender).split('/')[0]
+            sender = file_props.sender.split('/')[0]
             name = gajim.contacts.get_first_contact_from_jid(
                     file_props.tt_account, sender).get_shown_name()
         else:

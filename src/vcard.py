@@ -61,7 +61,7 @@ def get_avatar_pixbuf_encoded_mime(photo):
         img_encoded = photo['BINVAL']
         avatar_encoded = img_encoded
         try:
-            img_decoded = base64.decodestring(img_encoded)
+            img_decoded = base64.b64decode(img_encoded.encode('utf-8')).decode('utf-8')
         except Exception:
             pass
     if img_decoded:
@@ -408,10 +408,10 @@ class VcardWindow:
                 tt_text = _("There is no pending subscription request.")
             eb.set_tooltip_text(tt_text)
 
-        resources = '%s (%s)' % (self.contact.resource, unicode(
-                self.contact.priority))
+        resources = '%s (%s)' % (self.contact.resource, str(
+            self.contact.priority))
         uf_resources = self.contact.resource + _(' resource with priority ')\
-                + unicode(self.contact.priority)
+                + str(self.contact.priority)
         if not self.contact.status:
             self.contact.status = ''
 
@@ -462,9 +462,9 @@ class VcardWindow:
             for c in contact_list:
                 if c.resource != self.contact.resource:
                     resources += '\n%s (%s)' % (c.resource,
-                            unicode(c.priority))
+                            str(c.priority))
                     uf_resources += '\n' + c.resource + \
-                            _(' resource with priority ') + unicode(c.priority)
+                            _(' resource with priority ') + str(c.priority)
                     if c.show not in ('offline', 'error'):
                         GObject.idle_add(
                                 gajim.connections[self.account].request_os_info, c.jid,
@@ -584,10 +584,10 @@ class ZeroconfVcardWindow:
                 '</span></b>')
         self.xml.get_object('local_jid_label').set_text(self.contact.jid)
 
-        resources = '%s (%s)' % (self.contact.resource, unicode(
-                self.contact.priority))
+        resources = '%s (%s)' % (self.contact.resource, str(
+            self.contact.priority))
         uf_resources = self.contact.resource + _(' resource with priority ')\
-                + unicode(self.contact.priority)
+                + str(self.contact.priority)
         if not self.contact.status:
             self.contact.status = ''
 

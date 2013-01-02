@@ -33,16 +33,16 @@ import sys
 import time
 import datetime
 from gzip import GzipFile
-from cStringIO import StringIO
+from io import BytesIO
 from gi.repository import GObject
 
-import exceptions
-import gajim
-import ged
+from common import exceptions
+from common import gajim
+from common import ged
 
 import sqlite3 as sqlite
 
-import configpaths
+from common import configpaths
 LOG_DB_PATH = configpaths.gajimpaths['LOG_DB']
 LOG_DB_FOLDER, LOG_DB_FILE = os.path.split(LOG_DB_PATH)
 CACHE_DB_PATH = configpaths.gajimpaths['CACHE_DB']
@@ -149,7 +149,7 @@ class Logger:
     def attach_cache_database(self):
         try:
             self.cur.execute("ATTACH DATABASE '%s' AS cache" % CACHE_DB_PATH)
-        except sqlite.Error, e:
+        except sqlite.Error as e:
             log.debug("Failed to attach cache database: %s" % str(e))
 
     def set_synchronous(self, sync):
@@ -158,7 +158,7 @@ class Logger:
                 self.cur.execute("PRAGMA synchronous = NORMAL")
             else:
                 self.cur.execute("PRAGMA synchronous = OFF")
-        except sqlite.Error, e:
+        except sqlite.Error as e:
             log.debug("Failed to set_synchronous(%s): %s" % (sync, str(e)))
 
     def init_vars(self):
@@ -168,8 +168,8 @@ class Logger:
     def _really_commit(self):
         try:
             self.con.commit()
-        except sqlite.OperationalError, e:
-            print >> sys.stderr, str(e)
+        except sqlite.OperationalError as e:
+            print(str(e), file=sys.stderr)
         self.commit_timout_id = None
         return False
 
@@ -188,7 +188,7 @@ class Logger:
     def get_jids_already_in_db(self):
         try:
             self.cur.execute('SELECT jid FROM jids')
-            # list of tupples: [(u'aaa@bbb',), (u'cc@dd',)]
+            # list of tupples: [('aaa@bbb',), ('cc@dd',)]
             rows = self.cur.fetchall()
         except sqlite.DatabaseError:
             raise exceptions.DatabaseMalformed
@@ -256,11 +256,11 @@ class Logger:
             self.cur.execute('INSERT INTO jids (jid, type) VALUES (?, ?)', (jid,
                     typ))
             self.con.commit()
-        except sqlite.IntegrityError, e:
+        except sqlite.IntegrityError as e:
             # Jid already in DB, maybe added by another instance. re-read DB
             self.get_jids_already_in_db()
             return self.get_jid_id(jid, typestr)
-        except sqlite.OperationalError, e:
+        except sqlite.OperationalError as e:
             raise exceptions.PysqliteOperationalError(str(e))
         jid_id = self.cur.lastrowid
         self.jids_already_in.append(jid)
@@ -407,15 +407,15 @@ class Logger:
             self.cur.execute(sql, values)
         except sqlite.DatabaseError:
             raise exceptions.DatabaseMalformed
-        except sqlite.OperationalError, e:
+        except sqlite.OperationalError as e:
             raise exceptions.PysqliteOperationalError(str(e))
         message_id = None
         if write_unread:
             try:
                 self.con.commit()
                 message_id = self.cur.lastrowid
-            except sqlite.OperationalError, e:
-                print >> sys.stderr, str(e)
+            except sqlite.OperationalError as e:
+                print(str(e), file=sys.stderr)
         else:
             self._timeout_commit()
         if message_id:
@@ -522,7 +522,7 @@ class Logger:
             # status for roster items
             try:
                 jid_id = self.get_jid_id(jid)
-            except exceptions.PysqliteOperationalError, e:
+            except exceptions.PysqliteOperationalError as e:
                 raise exceptions.PysqliteOperationalError(str(e))
             if show is None: # show is None (xmpp), but we say that 'online'
                 show_col = constants.SHOW_ONLINE
@@ -535,7 +535,7 @@ class Logger:
             try:
                 # re-get jid_id for the new jid
                 jid_id = self.get_jid_id(jid, 'ROOM')
-            except exceptions.PysqliteOperationalError, e:
+            except exceptions.PysqliteOperationalError as e:
                 raise exceptions.PysqliteOperationalError(str(e))
             contact_name_col = nick
 
@@ -549,13 +549,13 @@ class Logger:
             try:
                 # re-get jid_id for the new jid
                 jid_id = self.get_jid_id(jid, 'ROOM')
-            except exceptions.PysqliteOperationalError, e:
+            except exceptions.PysqliteOperationalError as e:
                 raise exceptions.PysqliteOperationalError(str(e))
             contact_name_col = nick
         else:
             try:
                 jid_id = self.get_jid_id(jid)
-            except exceptions.PysqliteOperationalError, e:
+            except exceptions.PysqliteOperationalError as e:
                 raise exceptions.PysqliteOperationalError(str(e))
             if kind == 'chat_msg_recv':
                 if not self.jid_is_from_pm(jid):
@@ -580,7 +580,7 @@ class Logger:
         """
         try:
             self.get_jid_id(jid)
-        except exceptions.PysqliteOperationalError, e:
+        except exceptions.PysqliteOperationalError as e:
             # Error trying to create a new jid_id. This means there is no log
             return []
         where_sql, jid_tuple = self._build_contact_where(account, jid)
@@ -624,7 +624,7 @@ class Logger:
         """
         try:
             self.get_jid_id(jid)
-        except exceptions.PysqliteOperationalError, e:
+        except exceptions.PysqliteOperationalError as e:
             # Error trying to create a new jid_id. This means there is no log
             return []
         where_sql, jid_tuple = self._build_contact_where(account, jid)
@@ -653,14 +653,14 @@ class Logger:
         """
         try:
             self.get_jid_id(jid)
-        except exceptions.PysqliteOperationalError, e:
+        except exceptions.PysqliteOperationalError as e:
             # Error trying to create a new jid_id. This means there is no log
             return []
 
         if False: # query.startswith('SELECT '): # it's SQL query (FIXME)
             try:
                 self.cur.execute(query)
-            except sqlite.OperationalError, e:
+            except sqlite.OperationalError as e:
                 results = [('', '', '', '', str(e))]
                 return results
 
@@ -694,7 +694,7 @@ class Logger:
         """
         try:
             self.get_jid_id(jid)
-        except exceptions.PysqliteOperationalError, e:
+        except exceptions.PysqliteOperationalError as e:
             # Error trying to create a new jid_id. This means there is no log
             return []
         days_with_logs = []
@@ -736,7 +736,7 @@ class Logger:
         else:
             try:
                 jid_id = self.get_jid_id(jid, 'ROOM')
-            except exceptions.PysqliteOperationalError, e:
+            except exceptions.PysqliteOperationalError as e:
                 # Error trying to create a new jid_id. This means there is no log
                 return None
             where_sql = 'jid_id = ?'
@@ -762,7 +762,7 @@ class Logger:
         """
         try:
             jid_id = self.get_jid_id(jid, 'ROOM')
-        except exceptions.PysqliteOperationalError, e:
+        except exceptions.PysqliteOperationalError as e:
             # Error trying to create a new jid_id. This means there is no log
             return None
         where_sql = 'jid_id = %s' % jid_id
@@ -802,7 +802,7 @@ class Logger:
             for user in family:
                 try:
                     jid_id = self.get_jid_id(user['jid'])
-                except exceptions.PysqliteOperationalError, e:
+                except exceptions.PysqliteOperationalError as e:
                     continue
                 where_sql += 'jid_id = ?'
                 jid_tuple += (jid_id,)
@@ -884,8 +884,7 @@ class Logger:
             #   ..., 'FEAT', feature1, feature2, ...).join(' '))
             # NOTE: if there's a need to do more gzip, put that to a function
             try:
-                data = GzipFile(fileobj=StringIO(str(data))).read().decode(
-                        'utf-8').split('\0')
+                data = GzipFile(fileobj=BytesIO(data)).read().decode('utf-8').split('\0')
             except IOError:
                 # This data is corrupted. It probably contains non-ascii chars
                 to_be_removed.append((hash_method, hash_))
@@ -927,7 +926,6 @@ class Logger:
         # if there's a need to do more gzip, put that to a function
         string = StringIO()
         gzip = GzipFile(fileobj=string, mode='w')
-        data = data.encode('utf-8') # the gzip module can't handle unicode objects
         gzip.write(data)
         gzip.close()
         data = string.getvalue()
@@ -990,7 +988,7 @@ class Logger:
         try:
             account_jid_id = self.get_jid_id(account_jid)
             jid_id = self.get_jid_id(jid)
-        except exceptions.PysqliteOperationalError, e:
+        except exceptions.PysqliteOperationalError as e:
             raise exceptions.PysqliteOperationalError(str(e))
         self.cur.execute(
                 'DELETE FROM roster_group WHERE account_jid_id=? AND jid_id=?',
@@ -1012,7 +1010,7 @@ class Logger:
         try:
             account_jid_id = self.get_jid_id(account_jid)
             jid_id = self.get_jid_id(jid)
-        except exceptions.PysqliteOperationalError, e:
+        except exceptions.PysqliteOperationalError as e:
             raise exceptions.PysqliteOperationalError(str(e))
 
         # Update groups information
@@ -1048,6 +1046,8 @@ class Logger:
                 FROM roster_entry re, jids j
                 WHERE re.account_jid_id=? AND j.jid_id=re.jid_id''', (account_jid_id,))
         for jid, jid_id, name, subscription, ask in self.cur:
+            jid = jid
+            name = name
             data[jid] = {}
             if name:
                 data[jid]['name'] = name
@@ -1071,6 +1071,7 @@ class Logger:
                     WHERE account_jid_id=? AND jid_id=?''',
                     (account_jid_id, data[jid]['id']))
             for (group_name,) in self.cur:
+                group_name = group_name
                 data[jid]['groups'].append(group_name)
             del data[jid]['id']
 
@@ -1149,7 +1150,7 @@ class Logger:
                 # when we quit this muc
                 obj.conn.last_history_time[obj.jid] = tim_f
 
-            except exceptions.PysqliteOperationalError, e:
+            except exceptions.PysqliteOperationalError as e:
                 obj.conn.dispatch('DB_ERROR', (_('Disk Write Error'), str(e)))
             except exceptions.DatabaseMalformed:
                 pritext = _('Database Error')

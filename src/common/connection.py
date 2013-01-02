@@ -59,7 +59,7 @@ from common import gpg
 from common import passwords
 from common import exceptions
 from common import check_X509
-from connection_handlers import *
+from common.connection_handlers import *
 
 from nbxmpp import Smacks
 from string import Template
@@ -455,7 +455,7 @@ class CommonConnection:
                             log_msg = '<body xmlns="%s">%s</body>' % (
                                 nbxmpp.NS_XHTML, xhtml)
                         gajim.logger.write(kind, jid, log_msg)
-                    except exceptions.PysqliteOperationalError, e:
+                    except exceptions.PysqliteOperationalError as e:
                         self.dispatch('DB_ERROR', (_('Disk Write Error'),
                             str(e)))
                     except exceptions.DatabaseMalformed:
@@ -616,7 +616,7 @@ class CommonConnection:
         if realm == '':
             if event == nbxmpp.transports_nb.DATA_RECEIVED:
                 gajim.nec.push_incoming_event(StanzaReceivedEvent(None,
-                    conn=self, stanza_str=unicode(data, errors='ignore')))
+                    conn=self, stanza_str=data))
             elif event == nbxmpp.transports_nb.DATA_SENT:
                 gajim.nec.push_incoming_event(StanzaSentEvent(None, conn=self,
                     stanza_str=data))
@@ -1446,7 +1446,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             self.connection.send(' ')
 
     def _on_xmpp_ping_answer(self, iq_obj):
-        id_ = unicode(iq_obj.getAttr('id'))
+        id_ = iq_obj.getAttr('id')
         assert id_ == self.awaiting_xmpp_ping_id
         self.awaiting_xmpp_ping_id = None
 
@@ -1607,7 +1607,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.activate_privacy_rule('invisible')
         self.connected = gajim.SHOW_LIST.index('invisible')
         self.status = msg
-        priority = unicode(gajim.get_priority(self.name, 'invisible'))
+        priority = gajim.get_priority(self.name, 'invisible')
         p = nbxmpp.Presence(priority=priority)
         p = self.add_sha(p, True)
         if msg:
@@ -1781,7 +1781,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                 p.setStatus(msg)
         else:
             signed = self.get_signed_presence(msg)
-            priority = unicode(gajim.get_priority(self.name, sshow))
+            priority = gajim.get_priority(self.name, sshow)
             p = nbxmpp.Presence(typ=None, priority=priority, show=sshow, to=jid)
             p = self.add_sha(p)
             if msg:
@@ -1805,7 +1805,7 @@ class Connection(CommonConnection, ConnectionHandlers):
 
     def _update_status(self, show, msg):
         xmpp_show = helpers.get_xmpp_show(show)
-        priority = unicode(gajim.get_priority(self.name, xmpp_show))
+        priority = gajim.get_priority(self.name, xmpp_show)
         p = nbxmpp.Presence(typ=None, priority=priority, show=xmpp_show)
         p = self.add_sha(p)
         if msg:

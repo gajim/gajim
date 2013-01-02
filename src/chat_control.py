@@ -620,7 +620,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         message_buffer = self.msg_textview.get_buffer()
         start_iter = message_buffer.get_start_iter()
         end_iter = message_buffer.get_end_iter()
-        message = message_buffer.get_text(start_iter, end_iter, False).decode('utf-8')
+        message = message_buffer.get_text(start_iter, end_iter, False)
         xhtml = self.msg_textview.get_xhtml()
 
         # send the message
@@ -917,7 +917,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         scroll = False if pos == size else True # are we scrolling?
         # we don't want size of the buffer to grow indefinately
         max_size = gajim.config.get('key_up_lines')
-        for i in xrange(size - max_size + 1):
+        for i in range(size - max_size + 1):
             if pos == 0:
                 break
             history.pop(0)
@@ -1786,7 +1786,7 @@ class ChatControl(ChatControlBase):
         pep = self.contact.pep
         img = self._pep_images[pep_type]
         if pep_type in pep:
-            img.set_from_pixbuf(pep[pep_type].asPixbufIcon())
+            img.set_from_pixbuf(gtkgui_helpers.get_pep_as_pixbuf(pep[pep_type]))
             img.set_tooltip_markup(pep[pep_type].asMarkupText())
             img.show()
         else:
@@ -2506,7 +2506,7 @@ class ChatControl(ChatControlBase):
         if num_unread == 1 and not gajim.config.get('show_unread_tab_icon'):
             unread = '*'
         elif num_unread > 1:
-            unread = '[' + unicode(num_unread) + ']'
+            unread = '[' + str(num_unread) + ']'
 
         # Draw tab label using chatstate
         theme = gajim.config.get('roster_theme')
@@ -2843,7 +2843,7 @@ class ChatControl(ChatControlBase):
         type_ = model[iter_][2]
         if type_ != 'contact': # source is not a contact
             return
-        dropped_jid = data.decode('utf-8')
+        dropped_jid = data
 
         dropped_transport = gajim.get_transport_name_from_jid(dropped_jid)
         c_transport = gajim.get_transport_name_from_jid(c.jid)
@@ -3021,7 +3021,7 @@ class ChatControl(ChatControlBase):
         # It's why I set it transparent.
         image = self.xml.get_object('avatar_image')
         pixbuf = image.get_pixbuf()
-        pixbuf.fill(0xffffff00L) # RGBA
+        pixbuf.fill(0xffffff00) # RGBA
         image.queue_draw()
 
         screen_w = Gdk.Screen.width()

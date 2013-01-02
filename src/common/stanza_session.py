@@ -45,7 +45,7 @@ if gajim.HAVE_PYCRYPTO:
     from Crypto.PublicKey import RSA
 
     from common import dh
-    import secrets
+    from . import secrets
 
 XmlDsig = 'http://www.w3.org/2000/09/xmldsig#'
 

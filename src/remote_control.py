@@ -72,7 +72,7 @@ def get_dbus_struct(obj):
     """
     if obj is None:
         return DBUS_NONE()
-    if isinstance(obj, (unicode, str)):
+    if isinstance(obj, str):
         return DBUS_STRING(obj)
     if isinstance(obj, int):
         return DBUS_INT32(obj)
@@ -613,13 +613,13 @@ class SignalObject(dbus.service.Object):
         """
         Get vcard info for a contact. Return cached value of the vcard
         """
-        if not isinstance(jid, unicode):
-            jid = unicode(jid)
+        if not isinstance(jid, str):
+            jid = str(jid)
         if not jid:
             raise dbus_support.MissingArgument()
         jid = self._get_real_jid(jid)
 
-        cached_vcard = gajim.connections.values()[0].get_cached_vcard(jid)
+        cached_vcard = list(gajim.connections.values())[0].get_cached_vcard(jid)
         if cached_vcard:
             return get_dbus_struct(cached_vcard)
 
@@ -652,9 +652,9 @@ class SignalObject(dbus.service.Object):
             result['name'] = DBUS_STRING(con.name)
             result['jid'] = DBUS_STRING(gajim.get_jid_from_account(con.name))
             result['message'] = DBUS_STRING(con.status)
-            result['priority'] = DBUS_STRING(unicode(con.priority))
-            result['resource'] = DBUS_STRING(unicode(gajim.config.get_per(
-                    'accounts', con.name, 'resource')))
+            result['priority'] = DBUS_STRING(str(con.priority))
+            result['resource'] = DBUS_STRING(gajim.config.get_per('accounts',
+                con.name, 'resource'))
         return result
 
     @dbus.service.method(INTERFACE, in_signature='s', out_signature='aa{sv}')
@@ -743,7 +743,7 @@ class SignalObject(dbus.service.Object):
     def prefs_store(self):
         try:
             gajim.interface.save_config()
-        except Exception, e:
+        except Exception as e:
             return DBUS_BOOLEAN(False)
         return DBUS_BOOLEAN(True)
 
@@ -907,7 +907,7 @@ class SignalObject(dbus.service.Object):
         if not invalid_file and filesize < 16384:
             fd = open(picture, 'rb')
             data = fd.read()
-            avatar = base64.encodestring(data)
+            avatar = base64.b64encode(data.encode('utf-8')).decode('utf-8')
             avatar_mime_type = mimetypes.guess_type(picture)[0]
             vcard={}
             vcard['PHOTO'] = {'BINVAL': avatar}

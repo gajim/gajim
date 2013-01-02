@@ -296,7 +296,7 @@ class JingleTransportSocks5(JingleTransport):
                     cid = host['candidate_id']
                     break
         if cid is None:
-            raise Exception, 'cid is missing'
+            raise Exception('cid is missing')
         activated.setAttr('cid', cid)
         transport.addChild(node=activated)
         content.addChild(node=transport)
@@ -401,7 +401,7 @@ class JingleTransportICEUDP(JingleTransport):
             if 'type' in candidate and candidate['type'] in types:
                 cand.type = types[candidate['type']]
             else:
-                print 'Unknown type %s', candidate['type']
+                print('Unknown type %s' % candidate['type'])
             candidates.append(cand)
         self.remote_candidates.extend(candidates)
         return candidates

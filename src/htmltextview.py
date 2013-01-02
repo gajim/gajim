@@ -42,8 +42,8 @@ from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 import xml.sax, xml.sax.handler
 import re
-from cStringIO import StringIO
-import urllib2
+from io import StringIO
+import urllib
 import operator
 
 if __name__ == '__main__':
@@ -491,9 +491,10 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
             tag.title = title
         return tag
 
-    def _update_img(self, (mem, alt), attrs, img_mark):
+    def _update_img(self, output, attrs, img_mark):
         '''Callback function called after the function helpers.download_image.
         '''
+        mem, alt = output
         self._process_img(attrs, (mem, alt, img_mark))
 
     def _process_img(self, attrs, loaded=None):
@@ -509,7 +510,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                 # The "data" URL scheme http://tools.ietf.org/html/rfc2397
                 import base64
                 img = attrs['src'].split(',')[1]
-                mem = base64.standard_b64decode(urllib2.unquote(img))
+                mem = base64.standard_b64decode(urllib.parse.unquote(img))
             elif loaded is not None:
                 (mem, alt, replace_mark) = loaded
                 update = True
@@ -587,7 +588,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                     self.textbuf.delete_mark(tmpmark)
             else:
                 self._insert_text('[IMG: %s]' % alt, working_iter)
-        except Exception, ex:
+        except Exception as ex:
             log.error('Error loading image ' + str(ex))
             pixbuf = None
             alt = attrs.get('alt', 'Broken image')
@@ -762,9 +763,9 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
             try:
                 self.textbuf.insert_pixbuf(self.iter,
                     self.textview.focus_out_line_pixbuf)
-                #self._insert_text(u'\u2550'*40)
+                #self._insert_text('\u2550'*40)
                 self._jump_line()
-            except Exception, e:
+            except Exception as e:
                 log.debug(str('Error in hr'+e))
         elif name in LIST_ELEMS:
             self.list_counters.pop()
@@ -913,7 +914,7 @@ class HtmlTextView(Gtk.TextView):
 
             while (search_iter.compare(end)):
                 character = search_iter.get_char()
-                if character == u'\ufffc':
+                if character == '\ufffc':
                     anchor = search_iter.get_child_anchor()
                     if anchor:
                         text = anchor.get_data('plaintext')

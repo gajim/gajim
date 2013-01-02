@@ -309,11 +309,11 @@ class IterableIPShell:
         @param header: Header to be printed before output
         @type header: string
         """
-        if verbose or debug: print header+cmd
+        if verbose or debug: print(header+cmd)
         # flush stdout so we don't mangle python's buffering
         if not debug:
             input_, output = os.popen4(cmd)
-            print output.read()
+            print(output.read())
             output.close()
             input_.close()
 

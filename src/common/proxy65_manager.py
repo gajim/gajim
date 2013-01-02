@@ -29,7 +29,7 @@ log = logging.getLogger('gajim.c.proxy65_manager')
 import nbxmpp
 from common import gajim
 from common import helpers
-from socks5 import Socks5
+from common.socks5 import Socks5
 from nbxmpp.idlequeue import IdleObject
 from common.file_props import FilesProp
 
@@ -117,7 +117,7 @@ class ProxyResolver:
         """
         self.host = str(host)
         self.port = int(port)
-        self.jid = unicode(jid)
+        self.jid = str(jid)
         if not self.testit:
             self.state = S_FINISHED
             return
@@ -333,7 +333,7 @@ class HostTester(Socks5, IdleObject):
             log.debug('Host Connecting to %s:%s' % (self.host, self.port))
             self._send = self._sock.send
             self._recv = self._sock.recv
-        except Exception, ee:
+        except Exception as ee:
             errnum = ee[0]
             # 56 is for freebsd
             if errnum in (errno.EINPROGRESS, errno.EALREADY, errno.EWOULDBLOCK):
@@ -461,7 +461,7 @@ class ReceiverTester(Socks5, IdleObject):
             log.debug('Receiver Connecting to %s:%s' % (self.host, self.port))
             self._send = self._sock.send
             self._recv = self._sock.recv
-        except Exception, ee:
+        except Exception as ee:
             errnum = ee[0]
             # 56 is for freebsd
             if errnum in (errno.EINPROGRESS, errno.EALREADY, errno.EWOULDBLOCK):

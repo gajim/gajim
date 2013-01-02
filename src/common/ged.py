@@ -79,7 +79,7 @@ class GlobalEventsDispatcher(object):
         if event_name in self.handlers:
             try:
                 self.handlers[event_name].remove((priority, handler))
-            except ValueError, error:
+            except ValueError as error:
                 log.warn('''Function (%s) with priority "%s" never registered
                 as handler of event "%s". Couldn\'t remove. Error: %s'''
                                   %(handler, priority, event_name, error))
@@ -94,7 +94,7 @@ class GlobalEventsDispatcher(object):
                         return True
                 except NodeProcessed:
                     node_processed = True
-                except Exception, e:
+                except Exception as e:
                     log.error('Error while running an even handler: %s' % \
                         handler)
                     traceback.print_exc()

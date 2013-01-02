@@ -19,7 +19,7 @@
 ##
 
 import logging
-import i18n
+from common import i18n
 
 def parseLogLevel(arg):
     """
@@ -30,7 +30,7 @@ def parseLogLevel(arg):
     elif arg.isupper() and hasattr(logging, arg):
         return getattr(logging, arg)
     else:
-        print _('%s is not a valid loglevel') % repr(arg)
+        print(_('%s is not a valid loglevel') % repr(arg))
         return 0
 
 def parseLogTarget(arg):
@@ -72,7 +72,7 @@ def parseAndSetLogLevels(arg):
             target = parseLogTarget(target.strip())
             if target:
                 logging.getLogger(target).setLevel(level)
-                print "Logger %s level set to %d" % (target, level)
+                print("Logger %s level set to %d" % (target, level))
 
 
 class colors:
@@ -148,6 +148,12 @@ def init(use_color=False):
 
     # fake the root logger so we have 'gajim' root name instead of 'root'
     root_log = logging.getLogger('gajim')
+    root_log.setLevel(logging.WARNING)
+    root_log.addHandler(consoleloghandler)
+    root_log.propagate = False
+
+    # handle nbxmpp logs too
+    root_log = logging.getLogger('nbxmpp')
     root_log.setLevel(logging.WARNING)
     root_log.addHandler(consoleloghandler)
     root_log.propagate = False

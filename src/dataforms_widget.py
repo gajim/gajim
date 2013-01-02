@@ -75,7 +75,7 @@ class DataFormWidget(Gtk.Alignment, object):
         selection.set_mode(Gtk.SelectionMode.MULTIPLE)
 
     def on_data_form_vbox_key_press_event(self, widget, event):
-        print 'key pressed'
+        print('key pressed')
 
     def set_data_form(self, dataform):
         """
@@ -113,13 +113,13 @@ class DataFormWidget(Gtk.Alignment, object):
 
     def get_title(self):
         """
-        Get the title of data form, as a unicode object. If no title or no form,
-        returns u''. Useful for setting window title
+        Get the title of data form. If no title or no form,
+        returns ''. Useful for setting window title
         """
         if self._data_form is not None:
             if self._data_form.title is not None:
                 return self._data_form.title
-        return u''
+        return ''
 
     title = property(get_title, None, None, 'Data form title')
 
@@ -277,7 +277,7 @@ class DataFormWidget(Gtk.Alignment, object):
         selection = self.records_treeview.get_selection()
         model, rowrefs = selection.get_selected_rows()
         # rowref is a list of paths
-        for i in xrange(len(rowrefs)):
+        for i in list(range(len(rowrefs))):
             rowrefs[i] = Gtk.TreeRowReference(model, rowrefs[i])
         # rowref is a list of row references; need to convert because we will
         # modify the model, paths would change
@@ -540,7 +540,7 @@ class SingleForm(Gtk.Table, object):
                             field)
                     widget.set_sensitive(readwrite)
                     if field.value is None:
-                        field.value = u''
+                        field.value = ''
                     widget.set_text(field.value)
                 else:
                     commonwidget=False
@@ -629,7 +629,7 @@ class SingleForm(Gtk.Table, object):
             return
         try:
             newtext = helpers.parse_jid(newtext)
-        except helpers.InvalidFormat, s:
+        except helpers.InvalidFormat as s:
             dialogs.ErrorDialog(_('Invalid Jabber ID'), str(s))
             return
         if newtext in field.values:

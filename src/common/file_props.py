@@ -64,7 +64,7 @@ class FilesProp:
 
     @classmethod
     def getAllFileProp(cls):
-        return cls._files_props.values()
+        return list(cls._files_props.values())
 
     @classmethod
     def setFileProp(cls, fp, account, sid):

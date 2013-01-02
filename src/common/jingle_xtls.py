@@ -20,7 +20,6 @@ import os
 import nbxmpp
 
 import logging
-import common
 from common import gajim
 log = logging.getLogger('gajim.c.jingle_xtls')
 
@@ -63,7 +62,7 @@ def load_cert_file(cert_path, cert_store):
         return
     try:
         f = open(cert_path)
-    except IOError, e:
+    except IOError as e:
         log.warning('Unable to open certificate file %s: %s' % (cert_path,
             str(e)))
         return
@@ -79,7 +78,7 @@ def load_cert_file(cert_path, cert_store):
                 x509cert = OpenSSL.crypto.load_certificate(
                     OpenSSL.crypto.FILETYPE_PEM, cert)
                 cert_store.add_cert(x509cert)
-            except OpenSSL.crypto.Error, exception_obj:
+            except OpenSSL.crypto.Error as exception_obj:
                 log.warning('Unable to load a certificate from file %s: %s' %\
                     (cert_path, exception_obj.args[0][0][2]))
             except:
@@ -158,7 +157,7 @@ def send_cert_request(con, to_jid):
     pubkey = iq.setTag('pubkeys')
     pubkey.setNamespace(nbxmpp.NS_PUBKEY_PUBKEY)
     con.connection.send(iq)
-    return unicode(id_)
+    return str(id_)
 
 # the following code is partly due to pyopenssl examples
 
@@ -201,7 +200,7 @@ def createCertRequest(pkey, digest="md5", **name):
     req.sign(pkey, digest)
     return req
 
-def createCertificate(req, (issuerCert, issuerKey), serial, (notBefore, notAfter), digest="md5"):
+def createCertificate(req, issuerCert, issuerKey, serial, notBefore, notAfter, digest="md5"):
     """
     Generate a certificate given a certificate request.
 
@@ -235,7 +234,7 @@ def make_certs(filepath, CN):
     """
     key = createKeyPair(TYPE_RSA, 1024)
     req = createCertRequest(key, CN=CN)
-    cert = createCertificate(req, (req, key), 0, (0, 60*60*24*365*5)) # five years
+    cert = createCertificate(req, req, key, 0, 0, 60*60*24*365*5) # five years
     open(filepath + '.pkey', 'w').write(crypto.dump_privatekey(
         crypto.FILETYPE_PEM, key))
     open(filepath + '.cert', 'w').write(crypto.dump_certificate(
