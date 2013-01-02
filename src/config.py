@@ -173,7 +173,7 @@ class PreferencesWindow:
             if dir_ != '.svn':
                 l.append(dir_)
         l.append(_('Disabled'))
-        for i in xrange(len(l)):
+        for i in range(len(l)):
             model.append([l[i]])
             if gajim.config.get('emoticons_theme') == l[i]:
                 emoticons_combobox.set_active(i)
@@ -243,7 +243,7 @@ class PreferencesWindow:
                 l.append(dir)
         if l.count == 0:
             l.append(' ')
-        for i in xrange(len(l)):
+        for i in range(len(l)):
             preview = Gtk.Image()
             files = []
             files.append(os.path.join(helpers.get_iconset_path(l[i]), '16x16',
@@ -1279,7 +1279,7 @@ class PreferencesWindow:
         model.clear()
         l = gajim.config.get_per('proxies')
         l.insert(0, _('None'))
-        for i in xrange(len(l)):
+        for i in range(len(l)):
             model.append([l[i]])
             if our_proxy == l[i]:
                 proxy_combobox.set_active(i)
@@ -1766,7 +1766,7 @@ class AccountsWindow:
         proxy_combobox.set_model(model)
         l = gajim.config.get_per('proxies')
         l.insert(0, _('None'))
-        for i in xrange(len(l)):
+        for i in range(len(l)):
             model.append([l[i]])
             if our_proxy == l[i]:
                 proxy_combobox.set_active(i)
@@ -3757,7 +3757,7 @@ class AccountCreationWizardWindow:
         proxies_combobox.set_model(model)
         l = gajim.config.get_per('proxies')
         l.insert(0, _('None'))
-        for i in xrange(len(l)):
+        for i in range(len(l)):
             model.append([l[i]])
         proxies_combobox.set_active(0)
 

@@ -264,7 +264,7 @@ class PluginsWindow(object):
                     return
                 model = self.installed_plugins_model
 
-                for row in xrange(len(model)):
+                for row in list(range(len(model))):
                     if plugin == model[row][PLUGIN]:
                         model.remove(model.get_iter((row, PLUGIN)))
                         break

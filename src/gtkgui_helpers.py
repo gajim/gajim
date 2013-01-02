@@ -317,7 +317,7 @@ class HashDigest:
 
     def __str__(self):
         prettydigest = ''
-        for i in xrange(0, len(self.digest), 2):
+        for i in list(range(0, len(self.digest), 2)):
             prettydigest += self.digest[i:i + 2] + ':'
         return prettydigest[:-1]
 
@@ -1102,7 +1102,7 @@ def label_set_autowrap(widget):
     """
     if isinstance (widget, Gtk.Container):
         children = widget.get_children()
-        for i in xrange (len (children)):
+        for i in list(range (len (children))):
             label_set_autowrap(children[i])
     elif isinstance(widget, Gtk.Label):
         widget.set_line_wrap(True)

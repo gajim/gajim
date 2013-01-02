@@ -106,7 +106,7 @@ class MessageWindow(object):
                 '<Control>b', '<Control>F4',
                 '<Control>w', '<Control>Page_Up', '<Control>Page_Down', '<Alt>Right',
                 '<Alt>Left', '<Alt>d', '<Alt>c', '<Alt>m', '<Alt>t', 'Escape'] + \
-                ['<Alt>'+str(i) for i in xrange(10)]
+                ['<Alt>'+str(i) for i in list(range(10))]
         accel_group = Gtk.AccelGroup()
         for key in keys:
             keyval, mod = Gtk.accelerator_parse(key)
@@ -856,7 +856,7 @@ class MessageWindow(object):
         to_right = False
         horiz = self.notebook.get_tab_pos() == Gtk.PositionType.TOP or \
                 self.notebook.get_tab_pos() == Gtk.PositionType.BOTTOM
-        for i in xrange(self.notebook.get_n_pages()):
+        for i in list(range(self.notebook.get_n_pages())):
             page = self.notebook.get_nth_page(i)
             tab = self.notebook.get_tab_label(page)
             tab_alloc = tab.get_allocation()
@@ -882,7 +882,7 @@ class MessageWindow(object):
         Find the page num of the tab label
         """
         page_num = -1
-        for i in xrange(self.notebook.get_n_pages()):
+        for i in list(range(self.notebook.get_n_pages())):
             page = self.notebook.get_nth_page(i)
             tab = self.notebook.get_tab_label(page)
             if tab == tab_label:

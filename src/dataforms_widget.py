@@ -277,7 +277,7 @@ class DataFormWidget(Gtk.Alignment, object):
         selection = self.records_treeview.get_selection()
         model, rowrefs = selection.get_selected_rows()
         # rowref is a list of paths
-        for i in xrange(len(rowrefs)):
+        for i in list(range(len(rowrefs))):
             rowrefs[i] = Gtk.TreeRowReference(model, rowrefs[i])
         # rowref is a list of row references; need to convert because we will
         # modify the model, paths would change
@@ -566,8 +566,7 @@ class SingleForm(Gtk.Table, object):
                 for uri in field.media.uris:
                     if uri.type_.startswith('image/'):
                         try:
-                            img_data = base64.b64decode(uri.uri_data.encode(
-                                'utf-8')).decode('utf-8')
+                            img_data = base64.decodestring(uri.uri_data)
                             pixbuf_l = GdkPixbuf.PixbufLoader()
                             pixbuf_l.write(img_data)
                             pixbuf_l.close()

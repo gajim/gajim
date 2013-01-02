@@ -68,7 +68,7 @@ class Execute(CommandContainer):
 
     @classmethod
     def poller(cls, processor, popen):
-        for x in xrange(cls.POLL_COUNT):
+        for x in list(range(cls.POLL_COUNT)):
             yield cls.brush(processor, popen)
         cls.overdue(processor, popen)
         yield False

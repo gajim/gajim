@@ -28,6 +28,8 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
+from functools import cmp_to_key
+
 try:
     from common import caps_cache
     from common.account import Account
@@ -848,7 +850,7 @@ class MetacontactManager():
         Which of the family will be the big brother under wich all others will be
         ?
         """
-        family.sort(cmp=self._compare_metacontacts)
+        family.sort(key=cmp_to_key(self._compare_metacontacts))
         return family[-1]
 
 

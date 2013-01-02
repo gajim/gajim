@@ -916,7 +916,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         scroll = False if pos == size else True # are we scrolling?
         # we don't want size of the buffer to grow indefinately
         max_size = gajim.config.get('key_up_lines')
-        for i in xrange(size - max_size + 1):
+        for i in range(size - max_size + 1):
             if pos == 0:
                 break
             history.pop(0)
