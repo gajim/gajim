@@ -1270,7 +1270,9 @@ class AboutDialog:
         dlg.set_copyright(s)
         copying_file_path = self.get_path('COPYING')
         if copying_file_path:
-            text = open(copying_file_path).read()
+            fp = open(copying_file_path)
+            text = fp.read()
+            fp.close()
             dlg.set_license(text)
 
         gtk_ver = '%i.%i.%i' % (Gtk.get_major_version(),
@@ -1283,7 +1285,9 @@ class AboutDialog:
         authors_file_path = self.get_path('AUTHORS')
         if authors_file_path:
             authors = []
-            authors_file = open(authors_file_path).read()
+            fp = open(authors_file_path)
+            authors_file = fp.read()
+            fp.close()
             authors_file = authors_file.split('\n')
             for author in authors_file:
                 if author == 'CURRENT DEVELOPERS:':
@@ -1297,7 +1301,9 @@ class AboutDialog:
             if thanks_file_path:
                 authors.append('\n' + _('THANKS:'))
 
-                text = open(thanks_file_path).read()
+                fp = open(thanks_file_path)
+                text = fp.read()
+                fp.close()
                 text_splitted = text.split('\n')
                 text = '\n'.join(text_splitted[:-2]) # remove one english sentence
                 # and add it manually as translatable
@@ -1317,7 +1323,9 @@ class AboutDialog:
 
         thanks_artists_file_path = self.get_path('THANKS.artists')
         if thanks_artists_file_path:
-            artists_text = open(thanks_artists_file_path).read()
+            fp = open(thanks_artists_file_path)
+            artists_text = fp.read()
+            fp.close()
             artists = artists_text.split('\n')
             dlg.set_artists(artists)
         # connect close button to destroy() function
