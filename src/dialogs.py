@@ -1460,7 +1460,8 @@ class FileChooserDialog(Gtk.FileChooserDialog):
 
         GObject.GObject.__init__(self, title=title_text, action=action)
         self.add_button(buttons[0],buttons[1])
-        self.add_button(buttons[2],buttons[3])
+        if len(buttons) ==4:
+            self.add_button(buttons[2],buttons[3])
         self.set_default_response(default_response)
         self.set_select_multiple(select_multiple)
         if current_folder and os.path.isdir(current_folder):
@@ -4862,8 +4863,9 @@ class TransformChatToMUC:
         server_list = []
         self.servers = Gtk.ListStore(str)
         self.server_list_comboboxentry.set_model(self.servers)
-
-        self.server_list_comboboxentry.set_text_column(0)
+        cell = Gtk.CellRendererText()
+        self.server_list_comboboxentry.pack_start(cell, True)
+        self.server_list_comboboxentry.add_attribute(cell, 'text', 0)
 
         # get the muc server of our server
         if 'jabber' in gajim.connections[account].muc_jid:
@@ -4950,7 +4952,9 @@ class TransformChatToMUC:
             self.window.destroy()
 
     def on_invite_button_clicked(self, widget):
-        server = self.server_list_comboboxentry.get_active_text()
+        row = self.server_list_comboboxentry.get_child().get_displayed_row()
+        model = self.server_list_comboboxentry.get_model()
+        server = model[row][0].decode('utf-8').strip()
         if server == '':
             return
         gajim.connections[self.account].check_unique_room_id_support(server, self)

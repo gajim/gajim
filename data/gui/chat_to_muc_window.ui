@@ -75,7 +75,7 @@ Select the contacts you want to invite</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBoxEntry" id="server_list_comboboxentry">
+                  <object class="GtkComboBox" id="server_list_comboboxentry">
                     <property name="visible">True</property>
                   </object>
                   <packing>

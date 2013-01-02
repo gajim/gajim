@@ -119,11 +119,11 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
     keymap = Gdk.Keymap.get_default()
     try:
-        keycode_c = keymap.get_entries_for_keyval(Gdk.KEY_c)[0][0]
+        keycode_c = keymap.get_entries_for_keyval(Gdk.KEY_c)[1][0].keycode
     except TypeError:
         keycode_c = 54
     try:
-        keycode_ins = keymap.get_entries_for_keyval(Gdk.KEY_Insert)[0][0]
+        keycode_ins = keymap.get_entries_for_keyval(Gdk.KEY_Insert)[1][0].keycode
     except TypeError:
         keycode_ins = 118
 
@@ -693,10 +693,11 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
     def _conv_textview_key_press_event(self, widget, event):
         # translate any layout to latin_layout
-        keymap = Gdk.keymap_get_default()
-        keycode = keymap.get_entries_for_keyval(event.keyval)[0][0]
-        if (event.get_state() & Gdk.ModifierType.CONTROL_MASK and keycode in (self.keycode_c,
-        self.keycode_ins)) or (event.get_state() & Gdk.ModifierType.SHIFT_MASK and \
+        valid, entries = self.keymap.get_entries_for_keyval(event.keyval)
+        keycode = entries[0].keycode
+        if (event.get_state() & Gdk.ModifierType.CONTROL_MASK and keycode in (
+        self.keycode_c, self.keycode_ins)) or (
+        event.get_state() & Gdk.ModifierType.SHIFT_MASK and \
         event.keyval in (Gdk.KEY_Page_Down, Gdk.KEY_Page_Up)):
             return False
         self.parent_win.notebook.emit('key_press_event', event)
