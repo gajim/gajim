@@ -462,7 +462,7 @@ class ReceiverTester(Socks5, IdleObject):
             self._send = self._sock.send
             self._recv = self._sock.recv
         except Exception as ee:
-            errnum = ee[0]
+            errnum = ee.errno
             # 56 is for freebsd
             if errnum in (errno.EINPROGRESS, errno.EALREADY, errno.EWOULDBLOCK):
                 # still trying to connect
