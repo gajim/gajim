@@ -756,7 +756,7 @@ class ConversationTextview(GObject.GObject):
             menu.prepend(item)
             submenu = Gtk.Menu()
             item.set_submenu(submenu)
-            phrase_for_url = urllib.quote(self.selected_phrase.encode('utf-8'))
+            phrase_for_url = urllib.parse.quote(self.selected_phrase.encode('utf-8'))
 
             always_use_en = gajim.config.get('always_english_wikipedia')
             if always_use_en:
@@ -847,9 +847,8 @@ class ConversationTextview(GObject.GObject):
         if return_val: # if sth was selected when we right-clicked
             # get the selected text
             start_sel, finish_sel = return_val[0], return_val[1]
-            self.selected_phrase = buffer_.get_text(start_sel, finish_sel, True).decode(
-                    'utf-8')
-        elif ord(iter_.get_char()) > 31:
+            self.selected_phrase = buffer_.get_text(start_sel, finish_sel, True)
+        elif iter_.get_char() and ord(iter_.get_char()) > 31:
             # we clicked on a word, do as if it's selected for context menu
             start_sel = iter_.copy()
             if not start_sel.starts_word():
