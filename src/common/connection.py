@@ -715,7 +715,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.private_storage_supported = True
         self.privacy_rules_requested = False
         self.streamError = ''
-        self.secret_hmac = str(random.random())[2:]
+        self.secret_hmac = str(random.random())[2:].encode('utf-8')
 
         self.sm = Smacks(self) # Stream Management
 
@@ -2374,7 +2374,7 @@ class Connection(CommonConnection, ConnectionHandlers):
 
         p = nbxmpp.Presence(to='%s/%s' % (room_jid, nick),
                 show=show, status=self.status)
-        h = hmac.new(self.secret_hmac, room_jid).hexdigest()[:6]
+        h = hmac.new(self.secret_hmac, room_jid.encode('utf-8')).hexdigest()[:6]
         id_ = self.connection.getAnID()
         id_ = 'gajim_muc_' + id_ + '_' + h
         p.setID(id_)
@@ -2459,7 +2459,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         xmpp_show = helpers.get_xmpp_show(show)
         p = nbxmpp.Presence(to='%s/%s' % (jid, nick), typ=ptype,
             show=xmpp_show, status=status)
-        h = hmac.new(self.secret_hmac, jid).hexdigest()[:6]
+        h = hmac.new(self.secret_hmac, jid.encode('utf-8')).hexdigest()[:6]
         id_ = self.connection.getAnID()
         id_ = 'gajim_muc_' + id_ + '_' + h
         p.setID(id_)

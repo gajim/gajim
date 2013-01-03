@@ -795,7 +795,8 @@ PresenceHelperEvent):
         and self.ptype == 'error':
             # Error presences may not include sent stanza, so we don't detect
             # it's a muc presence. So detect it by ID
-            h = hmac.new(self.conn.secret_hmac, self.jid).hexdigest()[:6]
+            h = hmac.new(self.conn.secret_hmac, self.jid.encode('utf-8')).\
+                hexdigest()[:6]
             if self.id_.split('_')[-1] == h:
                 self.is_gc = True
         self.status = self.stanza.getStatus() or ''
