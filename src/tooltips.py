@@ -567,8 +567,7 @@ class RosterTooltip(NotificationAreaTooltip):
                         # time.strftime returns locale encoded string
                         local_time = time.strftime('%c',
                                 contact.last_status_time)
-                    local_time = local_time.decode(
-                            locale.getpreferredencoding())
+
                     text = text % local_time
                     show += text
                 if self.account and \
