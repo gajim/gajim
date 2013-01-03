@@ -154,8 +154,8 @@ class ProfileWindow:
                     scaled_pixbuf.savev(path_to_file, 'png', [], [])
                     must_delete = True
 
-            fd = open(path_to_file, 'rb')
-            data = fd.read()
+            with open(path_to_file, 'rb') as fd:
+                data = fd.read()
             pixbuf = gtkgui_helpers.get_pixbuf_from_data(data)
             try:
                 # rescale it
