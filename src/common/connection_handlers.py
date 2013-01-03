@@ -431,8 +431,7 @@ class ConnectionVcard:
         if 'PHOTO' in vcard and isinstance(vcard['PHOTO'], dict) and \
         'BINVAL' in vcard['PHOTO']:
             photo = vcard['PHOTO']['BINVAL']
-            photo_decoded = base64.b64decode(photo.encode('utf-8')).decode(
-                'utf-8')
+            photo_decoded = base64.b64decode(photo.encode('utf-8'))
             gajim.interface.save_avatar_files(our_jid, photo_decoded)
             avatar_sha = hashlib.sha1(photo_decoded).hexdigest()
             iq2.getTag('PHOTO').setTagData('SHA', avatar_sha)
@@ -685,7 +684,7 @@ class ConnectionVcard:
         'BINVAL' in vcard['PHOTO']:
             photo = vcard['PHOTO']['BINVAL']
             try:
-                photo_decoded = base64.b64decode(photo.encode('utf-8')).decode('utf-8')
+                photo_decoded = base64.b64decode(photo.encode('utf-8'))
                 avatar_sha = hashlib.sha1(photo_decoded).hexdigest()
             except Exception:
                 avatar_sha = ''
