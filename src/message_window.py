@@ -252,7 +252,7 @@ class MessageWindow(object):
         self._controls.clear()
         # Clean up handlers connected to the parent window, this is important since
         # self.window may be the RosterWindow
-        for i in self.handlers.keys():
+        for i in list(self.handlers.keys()):
             if self.handlers[i].handler_is_connected(i):
                 self.handlers[i].disconnect(i)
             del self.handlers[i]
@@ -1150,7 +1150,7 @@ class MessageWindowMgr(GObject.GObject):
         return ctrls
 
     def windows(self):
-        for w in self._windows.values():
+        for w in list(self._windows.values()):
             yield w
 
     def controls(self):
@@ -1237,7 +1237,7 @@ class MessageWindowMgr(GObject.GObject):
             else:
                 # Stash current size so it can be restored if the MessageWindow
                 # is not longer embedded
-                roster_width = w.parent_paned.get_child1().allocation.width
+                roster_width = w.parent_paned.get_position()
                 gajim.config.set('roster_width', roster_width)
 
             while w.notebook.get_n_pages():
