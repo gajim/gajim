@@ -31,6 +31,7 @@ import os
 import time
 import locale
 from gi.repository import Gtk
+from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import Pango
 from gi.repository import GObject
@@ -710,7 +711,7 @@ class GroupchatControl(ChatControlBase):
         model[iter_][C_NICK] = model[iter_][C_NICK]
 
     def change_roster_style(self):
-        self.model.foreach(self._change_style)
+        self.model.foreach(self._change_style, None)
 
     def repaint_themed_widgets(self):
         ChatControlBase.repaint_themed_widgets(self)
@@ -1971,7 +1972,7 @@ class GroupchatControl(ChatControlBase):
         gajim.config.set('gc-hpaned-position', self.hpaned.get_position())
         # remove all register handlers on wigets, created by self.xml
         # to prevent circular references among objects
-        for i in self.handlers.keys():
+        for i in list(self.handlers.keys()):
             if self.handlers[i].handler_is_connected(i):
                 self.handlers[i].disconnect(i)
             del self.handlers[i]
