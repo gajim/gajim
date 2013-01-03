@@ -374,8 +374,8 @@ class ChangeActivityDialog:
             act = category + '_other'
 
             if group:
-                rbtns[act] = new = Gtk.RadioButton()
-                new.join_group(group)
+                rbtns[act] = Gtk.RadioButton()
+                rbtns[act].join_group(group)
             else:
                 rbtns[act] = group = Gtk.RadioButton()
 
@@ -401,8 +401,8 @@ class ChangeActivityDialog:
                 act = category + '_' + activity
 
                 if group:
-                    rbtns[act] = new = Gtk.RadioButton()
-                    new.join_group(group)
+                    rbtns[act] = Gtk.RadioButton()
+                    rbtns[act].join_group(group)
                 else:
                     rbtns[act] = group = Gtk.RadioButton()
 
@@ -499,7 +499,8 @@ class ChangeMoodDialog:
         self.MOODS.sort()
 
         for mood in self.MOODS:
-            self.mood_buttons[mood] = Gtk.RadioButton(no_mood_button)
+            self.mood_buttons[mood] = Gtk.RadioButton()
+            self.mood_buttons[mood].join_group(no_mood_button)
             self.mood_buttons[mood].set_mode(False)
             self.mood_buttons[mood].add(gtkgui_helpers.load_mood_icon(mood))
             self.mood_buttons[mood].set_relief(Gtk.ReliefStyle.NONE)
