@@ -380,9 +380,10 @@ class ChangeActivityDialog:
                 rbtns[act] = group = Gtk.RadioButton()
 
             hbox = Gtk.HBox(False, 5)
-            hbox.pack_start(gtkgui_helpers.load_activity_icon(category, activity), False,
-                    False, 0)
-            lbl = Gtk.Label(label='<b>' + pep.ACTIVITIES[category]['category'] + '</b>')
+            hbox.pack_start(gtkgui_helpers.load_activity_icon(category,
+                activity), False, False, 0)
+            lbl = Gtk.Label(label='<b>' + pep.ACTIVITIES[category]['category'] \
+                + '</b>')
             lbl.set_use_markup(True)
             hbox.pack_start(lbl, False, False, 0)
             rbtns[act].add(hbox)
