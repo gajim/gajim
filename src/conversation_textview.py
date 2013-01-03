@@ -1297,9 +1297,9 @@ class ConversationTextview(GObject.GObject):
         # get difference in days since epoch (86400 = 24*3600)
         # number of days since epoch for current time (in GMT) -
         # number of days since epoch for message (in GMT)
-        diff_day = int(timegm(time.localtime())) / 86400 -\
-                int(timegm(tim)) / 86400
-        if diff_day == 0:
+        diff_day = int(int(timegm(time.localtime())) / 86400 -\
+                int(timegm(tim)) / 86400)
+        if diff_day == 0.0:
             day_str = ''
         else:
             #%i is day in year (1-365)
