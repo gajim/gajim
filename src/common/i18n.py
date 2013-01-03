@@ -94,7 +94,7 @@ def ngettext(s_sing, s_plural, n, replace_sing = None, replace_plural = None):
 
     In other words this is a hack to ngettext() to support %s %d etc..
     """
-    text = _translation.ungettext(s_sing, s_plural, n)
+    text = _translation.ngettext(s_sing, s_plural, n)
     if n == 1 and replace_sing is not None:
         text = text % replace_sing
     elif n > 1 and replace_plural is not None:
