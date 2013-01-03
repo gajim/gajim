@@ -232,13 +232,14 @@ class AdvancedConfigurationWindow(object):
         path=Gtk.TreePath.new_from_string(path)
         modelpath = self.modelfilter.convert_path_to_child_path(path)
         modelrow = self.model[modelpath]
-        modelpath = modelpath.get_indices()
         option = modelrow[0]
-        if len(modelpath) > 1:
-            optnamerow = self.model[modelpath[0]]
-            optname = optnamerow[0]
-            keyrow = self.model[modelpath[:2]]
+        if modelpath.get_depth() > 2:
+            modelpath.up() # Get parent
+            keyrow = self.model[modelpath]
             key = keyrow[0]
+            modelpath.up() # Get parent
+            optnamerow = self.model[modelpath]
+            optname = optnamerow[0]
             self.remember_option(option + '\n' + key + '\n' + optname, modelrow[1],
                     text)
             gajim.config.set_per(optname, key, option, text)
