@@ -2394,7 +2394,7 @@ class RosterWindow:
         """
         Close all the windows in the given dictionary
         """
-        for w in dic.values():
+        for w in list(dic.values()):
             if isinstance(w, dict):
                 self.close_all_from_dict(w)
             else:
