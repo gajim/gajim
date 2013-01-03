@@ -374,12 +374,13 @@ class ChangeActivityDialog:
             act = category + '_other'
 
             if group:
-                rbtns[act] = Gtk.RadioButton(group)
+                rbtns[act] = new = Gtk.RadioButton()
+                new.join_group(group)
             else:
                 rbtns[act] = group = Gtk.RadioButton()
 
             hbox = Gtk.HBox(False, 5)
-            hbox.pack_start(gtkgui_helpers.load_activity_icon(category, True, True, 0), False,
+            hbox.pack_start(gtkgui_helpers.load_activity_icon(category, activity), False,
                     False, 0)
             lbl = Gtk.Label(label='<b>' + pep.ACTIVITIES[category]['category'] + '</b>')
             lbl.set_use_markup(True)
@@ -393,7 +394,6 @@ class ChangeActivityDialog:
             for activity in pep.ACTIVITIES[category]:
                 activities.append(activity)
             activities.sort()
-
             for activity in activities:
                 if activity == 'category':
                     continue
@@ -401,14 +401,15 @@ class ChangeActivityDialog:
                 act = category + '_' + activity
 
                 if group:
-                    rbtns[act] = Gtk.RadioButton(group)
+                    rbtns[act] = new = Gtk.RadioButton()
+                    new.join_group(group)
                 else:
                     rbtns[act] = group = Gtk.RadioButton()
 
                 hbox = Gtk.HBox(False, 5)
                 hbox.pack_start(gtkgui_helpers.load_activity_icon(category,
                         activity), False, False, 0)
-                hbox.pack_start(Gtk.Label(pep.ACTIVITIES[category][activity], True, True, 0),
+                hbox.pack_start(Gtk.Label(pep.ACTIVITIES[category][activity]),
                         False, False, 0)
                 rbtns[act].connect('toggled', self.on_rbtn_toggled,
                         [category, activity])
@@ -638,7 +639,7 @@ class ChangeStatusMessageDialog(TimeoutDialog):
         self.message_combobox = self.xml.get_object('message_combobox')
         self.message_combobox.set_model(self.message_liststore)
         cellrenderertext = Gtk.CellRendererText()
-        self.message_combobox.pack_start(cellrenderertext, True, True, 0)
+        self.message_combobox.pack_start(cellrenderertext, True)
         self.message_combobox.add_attribute(cellrenderertext, 'text', 0)
         for msg_name in sorted_keys_list:
             self.message_liststore.append((msg_name,))
