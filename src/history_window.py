@@ -26,6 +26,7 @@
 ##
 
 from gi.repository import Gtk
+from gi.repository import Gdk
 from gi.repository import GObject
 import time
 import calendar
@@ -69,18 +70,17 @@ class HistoryWindow:
         self.calendar = xml.get_object('calendar')
         scrolledwindow = xml.get_object('scrolledwindow')
         self.history_textview = conversation_textview.ConversationTextview(
-                account, used_in_history_window = True)
+            account, used_in_history_window = True)
         scrolledwindow.add(self.history_textview.tv)
         self.history_buffer = self.history_textview.tv.get_buffer()
         self.history_buffer.create_tag('highlight', background = 'yellow')
         self.checkbutton = xml.get_object('log_history_checkbutton')
         self.checkbutton.connect('toggled',
-                self.on_log_history_checkbutton_toggled)
-        self.query_entry = xml.get_object('query_entry')
-        self.query_combobox = xml.get_object('query_combobox')
-        self.jid_entry = self.query_combobox.get_child()
+            self.on_log_history_checkbutton_toggled)
+        self.search_entry = xml.get_object('search_entry')
+        self.query_liststore = xml.get_object('query_liststore')
+        self.jid_entry = xml.get_object('query_entry')
         self.jid_entry.connect('activate', self.on_jid_entry_activate)
-        self.query_combobox.set_active(0)
         self.results_treeview = xml.get_object('results_treeview')
         self.results_window = xml.get_object('results_scrolledwindow')
         self.search_in_date = xml.get_object('search_in_date')
@@ -91,24 +91,24 @@ class HistoryWindow:
         col = Gtk.TreeViewColumn(_('Name'))
         self.results_treeview.append_column(col)
         renderer = Gtk.CellRendererText()
-        col.pack_start(renderer, True, True, 0)
-        col.set_attributes(renderer, text = C_CONTACT_NAME)
+        col.pack_start(renderer, True)
+        col.add_attribute(renderer, 'text', C_CONTACT_NAME)
         col.set_sort_column_id(C_CONTACT_NAME) # user can click this header and sort
         col.set_resizable(True)
 
         col = Gtk.TreeViewColumn(_('Date'))
         self.results_treeview.append_column(col)
         renderer = Gtk.CellRendererText()
-        col.pack_start(renderer, True, True, 0)
-        col.set_attributes(renderer, text = C_UNIXTIME)
+        col.pack_start(renderer, True)
+        col.add_attribute(renderer, 'text', C_UNIXTIME)
         col.set_sort_column_id(C_UNIXTIME) # user can click this header and sort
         col.set_resizable(True)
 
         col = Gtk.TreeViewColumn(_('Message'))
         self.results_treeview.append_column(col)
         renderer = Gtk.CellRendererText()
-        col.pack_start(renderer, True, True, 0)
-        col.set_attributes(renderer, text = C_MESSAGE)
+        col.pack_start(renderer, True)
+        col.add_attribute(renderer, 'text', C_MESSAGE)
         col.set_resizable(True)
 
         self.jid = None # The history we are currently viewing
@@ -118,7 +118,8 @@ class HistoryWindow:
         self.jids_to_search = []
 
         # This will load history too
-        GObject.idle_add(self._fill_completion_dict().next)
+        task = self._fill_completion_dict()
+        GObject.idle_add(next, task)
 
         if jid:
             self.jid_entry.set_text(jid)
@@ -152,7 +153,7 @@ class HistoryWindow:
         db_jids = gajim.logger.get_jids_in_db()
         completion_dict = dict.fromkeys(db_jids)
 
-        self.accounts_seen_online = gajim.contacts.get_accounts()[:]
+        self.accounts_seen_online = list(gajim.contacts.get_accounts())
 
         # Enhance contacts of online accounts with contact. Needed for mapping below
         for account in self.accounts_seen_online:
@@ -163,14 +164,14 @@ class HistoryWindow:
         muc_active_pix = muc_active_img.get_pixbuf()
         contact_pix = contact_img.get_pixbuf()
 
-        keys = completion_dict.keys()
+        keys = list(completion_dict.keys())
         # Move the actual jid at first so we load history faster
         actual_jid = self.jid_entry.get_text()
         if actual_jid in keys:
             keys.remove(actual_jid)
             keys.insert(0, actual_jid)
-        if None in keys:
-            keys.remove(None)
+        if '' in keys:
+            keys.remove('')
         # Map jid to info tuple
         # Warning : This for is time critical with big DB
         for key in keys:
@@ -240,10 +241,6 @@ class HistoryWindow:
         self.window.destroy()
 
     def on_jid_entry_activate(self, widget):
-        if not self.query_combobox.get_active() < 0:
-            # Don't disable querybox when we have changed the combobox
-            # to GC or All and hit enter
-            return
         jid = self.jid_entry.get_text()
         account = None # we don't know the account, could be any. Search for it!
         self._load_history(jid, account)
@@ -300,8 +297,8 @@ class HistoryWindow:
             self.calendar.select_month(gtk_month, y)
             self.calendar.select_day(d)
 
-            self.query_entry.set_sensitive(True)
-            self.query_entry.grab_focus()
+            self.search_entry.set_sensitive(True)
+            self.search_entry.grab_focus()
 
             title = _('Conversation History with %s') % info_name
             self.window.set_title(title)
@@ -313,7 +310,7 @@ class HistoryWindow:
             self.account = None
 
             self.history_buffer.set_text('') # clear the buffer
-            self.query_entry.set_sensitive(False)
+            self.search_entry.set_sensitive(False)
 
             self.checkbutton.set_sensitive(False)
             self.calendar.set_sensitive(False)
@@ -491,8 +488,8 @@ class HistoryWindow:
                 xhtml=xhtml)
         self.history_textview.print_real_text('\n')
 
-    def on_query_entry_activate(self, widget):
-        text = self.query_entry.get_text()
+    def on_search_entry_activate(self, widget):
+        text = self.search_entry.get_text()
         model = self.results_treeview.get_model()
         model.clear()
         if text == '':
@@ -502,7 +499,7 @@ class HistoryWindow:
             self.results_window.set_property('visible', True)
 
         # perform search in preselected jids
-        # jids are preselected with the query_combobox (all, single jid...)
+        # jids are preselected with the query_entry
         for jid in self.jids_to_search:
             account = self.completion_dict[jid][C_INFO_ACCOUNT]
             if account is None:
@@ -538,31 +535,7 @@ class HistoryWindow:
 
                 #  jid (to which log is assigned to), name, date, message,
                 # time (full unix time)
-                model.append((jid, contact_name, date, message, tim))
-
-    def on_query_combobox_changed(self, widget):
-        if self.query_combobox.get_active() < 0:
-            return # custom entry
-        self.account = None
-        self.jid = None
-        self.jids_to_search = []
-        self._load_history(None) # clear textview
-
-        if self.query_combobox.get_active() == 0:
-            # JID or Contact name
-            self.query_entry.set_sensitive(False)
-            self.jid_entry.grab_focus()
-        if self.query_combobox.get_active() == 1:
-            # Groupchat Histories
-            self.query_entry.set_sensitive(True)
-            self.query_entry.grab_focus()
-            self.jids_to_search = (jid for jid in gajim.logger.get_jids_in_db()
-                            if gajim.logger.jid_is_room_jid(jid))
-        if self.query_combobox.get_active() == 2:
-            # All Chat Histories
-            self.query_entry.set_sensitive(True)
-            self.query_entry.grab_focus()
-            self.jids_to_search = gajim.logger.get_jids_in_db()
+                model.append((jid, contact_name, date, message, str(tim)))
 
     def on_results_treeview_row_activated(self, widget, path, column):
         """
@@ -641,7 +614,7 @@ class HistoryWindow:
         self.jid_entry.set_text(jid)
         if account and account not in self.accounts_seen_online:
             # Update dict to not only show bare jid
-            GObject.idle_add(self._fill_completion_dict().next)
+            GObject.idle_add(next, self._fill_completion_dict())
         else:
             # Only in that case because it's called by self._fill_completion_dict()
             # otherwise
@@ -649,7 +622,7 @@ class HistoryWindow:
         self.results_window.set_property('visible', False)
 
     def save_state(self):
-        x, y = self.window.window.get_root_origin()
+        x, y = self.window.get_window().get_root_origin()
         width, height = self.window.get_size()
 
         gajim.config.set('history_window_x-position', x)
