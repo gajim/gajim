@@ -124,17 +124,22 @@ def popup_emoticons_under_button(menu, button, parent_win):
     Popup the emoticons menu under button, which is in parent_win
     """
     window_x1, window_y1 = parent_win.get_origin()[1:]
+
     def position_menu_under_button(menu, data):
         # inline function, which will not keep refs, when used as CB
         alloc = button.get_allocation()
         button_x, button_y = alloc.x, alloc.y
-
+        translated_coordinates = button.translate_coordinates(
+            gajim.interface.roster.window, 0, 0)
+        if translated_coordinates:
+            button_x, button_y = translated_coordinates
+        _alloc = parent_win.notebook.get_allocation()
         # now convert them to X11-relative
         window_x, window_y = window_x1, window_y1
         x = window_x + button_x
         y = window_y + button_y
 
-        menu_height = menu.size_request()[1]
+        menu_height = menu.size_request().height
 
         ## should we pop down or up?
         if (y + alloc.height + menu_height < Gdk.Screen.height()):
