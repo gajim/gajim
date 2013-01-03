@@ -1518,7 +1518,7 @@ class RosterWindow:
                     self.tree.collapse_row(path)
                 else:
                     self.tree.expand_row(path, False)
-        self.modelfilter.foreach(func)
+        self.modelfilter.foreach(func, None)
 
     def _adjust_account_expand_collapse_state(self, account):
         """
@@ -4441,7 +4441,7 @@ class RosterWindow:
                 col = self.tree.get_column(0)
                 self.tree.set_cursor_on_cell(path, col)
                 return True
-        self.modelfilter.foreach(_func)
+        self.modelfilter.foreach(_func, None)
 
     def on_rfilter_entry_icon_press(self, widget, icon, event):
         """

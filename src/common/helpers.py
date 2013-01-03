@@ -992,8 +992,10 @@ def get_os_info():
             p.wait()
             output = temp_failure_retry(p.stdout.readline).strip()
             # some distros put n/a in places, so remove those
-            output = output.replace('n/a', '').replace('N/A', '')
+            output = output.decode('utf-8').replace('n/a', '').replace('N/A', '')
             gajim.os_info = output
+            p.stdout.close()
+            p.stdin.close()
             return output
 
         # lsb_release executable not available, so parse files
