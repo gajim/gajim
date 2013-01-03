@@ -1415,7 +1415,7 @@ class RosterWindow:
             yield False
 
         task = _draw_all_contacts(jids, account)
-        GObject.idle_add(task.next)
+        GObject.idle_add(next, task)
 
     def _before_fill(self):
         self.tree.freeze_child_notify()

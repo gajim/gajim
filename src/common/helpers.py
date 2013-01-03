@@ -951,7 +951,7 @@ def get_random_string_16():
     """
     Create random string of length 16
     """
-    rng = range(65, 90)
+    rng = list(range(65, 90))
     rng.extend(range(48, 57))
     char_sequence = [chr(e) for e in rng]
     from random import sample
