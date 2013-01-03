@@ -856,8 +856,7 @@ class ConversationTextview(GObject.GObject):
             finish_sel = iter_.copy()
             if not finish_sel.ends_word():
                 finish_sel.forward_word_end()
-            self.selected_phrase = buffer_.get_text(start_sel, finish_sel, True).decode(
-                    'utf-8')
+            self.selected_phrase = buffer_.get_text(start_sel, finish_sel, True)
 
     def on_open_link_activate(self, widget, kind, text):
         helpers.launch_browser_mailer(kind, text)
@@ -970,8 +969,7 @@ class ConversationTextview(GObject.GObject):
                     # it's a JID or mail
                     kind = 'sth_at_sth'
             else:
-                word = self.tv.get_buffer().get_text(begin_iter, end_iter, True).decode(
-                    'utf-8')
+                word = self.tv.get_buffer().get_text(begin_iter, end_iter, True)
 
             if event.button == 3: # right click
                 self.make_link_menu(event, kind, word)

@@ -904,7 +904,8 @@ class HtmlTextView(Gtk.TextView):
             # textview can be hidden while we add a new line in it.
             if self.has_screen():
                 clipboard = self.get_clipboard(Gdk.SELECTION_PRIMARY)
-                clipboard.set_text(self.get_selected_text())
+                text = self.get_selected_text()
+                clipboard.set_text(text, len(text))
 
     def get_selected_text(self):
         bounds = self.get_buffer().get_selection_bounds()
