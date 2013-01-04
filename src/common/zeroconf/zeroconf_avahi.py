@@ -22,7 +22,7 @@ log = logging.getLogger('gajim.c.z.zeroconf_avahi')
 
 try:
     import dbus.exceptions
-except ImportError as e:
+except ImportError:
     pass
 
 from common.zeroconf.zeroconf import C_BARE_NAME, C_INTERFACE, C_PROTOCOL, C_DOMAIN

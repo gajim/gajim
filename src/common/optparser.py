@@ -644,7 +644,7 @@ class OptionsParser:
                     '''
             )
             con.commit()
-        except sqlite.OperationalError as e:
+        except sqlite.OperationalError:
             pass
         con.close()
         gajim.config.set('version', '0.11.4.4')

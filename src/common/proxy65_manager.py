@@ -310,7 +310,7 @@ class HostTester(Socks5, IdleObject):
             # read auth response
             if buff is None or len(buff) != 2:
                 return None
-            version, method = struct.unpack('!BB', buff[:2])
+            version, method = struct.unpack('!BB', buff[:2].encode('utf-8'))
             if version != 0x05 or method == 0xff:
                 self.pollend()
                 return
@@ -334,7 +334,7 @@ class HostTester(Socks5, IdleObject):
             self._send = self._sock.send
             self._recv = self._sock.recv
         except Exception as ee:
-            errnum = ee[0]
+            errnum = ee.errno
             # 56 is for freebsd
             if errnum in (errno.EINPROGRESS, errno.EALREADY, errno.EWOULDBLOCK):
                 # still trying to connect
@@ -431,7 +431,7 @@ class ReceiverTester(Socks5, IdleObject):
             # read auth response
             if buff is None or len(buff) != 2:
                 return None
-            version, method = struct.unpack('!BB', buff[:2])
+            version, method = struct.unpack('!BB', buff[:2].encode('utf-8'))
             if version != 0x05 or method == 0xff:
                 self.pollend()
                 return
@@ -443,7 +443,7 @@ class ReceiverTester(Socks5, IdleObject):
             # read connect response
             if buff is None or len(buff) < 2:
                 return None
-            version, reply = struct.unpack('!BB', buff[:2])
+            version, reply = struct.unpack('!BB', buff[:2].encode('utf-8'))
             if version != 0x05 or reply != 0x00:
                 self.pollend()
                 return

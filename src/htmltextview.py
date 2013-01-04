@@ -766,7 +766,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                 #self._insert_text('\u2550'*40)
                 self._jump_line()
             except Exception as e:
-                log.debug(str('Error in hr'+e))
+                log.debug('Error in hr' + str(e))
         elif name in LIST_ELEMS:
             self.list_counters.pop()
         elif name == 'li':

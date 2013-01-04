@@ -218,7 +218,7 @@ class TimeResultReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
 
         try:
             t = datetime.datetime.strptime(utc_time, '%Y-%m-%dT%H:%M:%SZ')
-        except ValueError as e:
+        except ValueError:
             try:
                 t = datetime.datetime.strptime(utc_time,
                     '%Y-%m-%dT%H:%M:%S.%fZ')

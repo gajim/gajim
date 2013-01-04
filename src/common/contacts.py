@@ -36,7 +36,7 @@ try:
     import common.gajim
 except ImportError as e:
     if __name__ != "__main__":
-        raise ImportError(e)
+        raise ImportError(str(e))
 
 class XMPPEntity(object):
     """

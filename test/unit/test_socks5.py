@@ -15,24 +15,21 @@ from common import jingle_xtls
 
 class fake_sock(Mock):
     def __init__(self, sockobj):
-         Mock.__init__(self)
+        Mock.__init__(self)
 
-         self.sockobj = sockobj
+        self.sockobj = sockobj
 
 
     def setup_stream(self):
-         sha1 = self.sockobj._get_sha1_auth()
+        sha1 = self.sockobj._get_sha1_auth()
 
-         self.incoming = []
-         self.incoming.append(self.sockobj._get_auth_response())
-         self.incoming.append(
-                self.sockobj._get_request_buff(sha1, 0x00)
-                             )
-         self.outgoing = []
-         self.outgoing.append(self.sockobj._get_auth_buff())
-         self.outgoing.append(self.sockobj._get_request_buff(
-                                                sha1
-                                                       ))
+        self.incoming = []
+        self.incoming.append(self.sockobj._get_auth_response())
+        self.incoming.append(self.sockobj._get_request_buff(sha1, 0x00))
+        self.outgoing = []
+        self.outgoing.append(self.sockobj._get_auth_buff())
+        self.outgoing.append(self.sockobj._get_request_buff(sha1))
+
     def switch_stream(self):
         # Roles are reversed, client will be expecting server stream
         # and server will be expecting client stream

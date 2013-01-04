@@ -357,8 +357,8 @@ class P2PConnection(IdleObject, PlugIn):
                 self.ais = socket.getaddrinfo(host, port, socket.AF_UNSPEC,
                         socket.SOCK_STREAM)
             except socket.gaierror as e:
-                log.info('Lookup failure for %s: %s[%s]', host, e[1],
-                    repr(e[0]), exc_info=True)
+                log.info('Lookup failure for %s: %s', host, str(e),
+                    exc_info=True)
             else:
                 self.connect_to_next_ip()
 
@@ -449,7 +449,8 @@ class P2PConnection(IdleObject, PlugIn):
             self._sock.connect(self._server)
             self._sock.setblocking(False)
         except Exception as ee:
-            (errnum, errstr) = ee
+            errnum = ee.errno
+            errstr = ee.strerror
         errors = (errno.EINPROGRESS, errno.EALREADY, errno.EWOULDBLOCK)
         if 'WSAEINVAL' in errno.__dict__:
             errors += (errno.WSAEINVAL,)
@@ -489,8 +490,7 @@ class P2PConnection(IdleObject, PlugIn):
             # get as many bites, as possible, but not more than RECV_BUFSIZE
             received = self._sock.recv(MAX_BUFF_LEN)
         except Exception as e:
-            if len(e.args) > 0 and isinstance(e.args[0], int):
-                errnum = e[0]
+            errnum = e.errno
             # "received" will be empty anyhow
         if errnum == socket.SSL_ERROR_WANT_READ:
             pass
@@ -560,7 +560,7 @@ class P2PConnection(IdleObject, PlugIn):
                 self._on_send()
 
         except socket.error as e:
-            if e[0] == socket.SSL_ERROR_WANT_WRITE:
+            if e.errno == socket.SSL_ERROR_WANT_WRITE:
                 return True
             if self.state < 0:
                 self.disconnect()

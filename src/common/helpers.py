@@ -915,7 +915,8 @@ def get_auth_sha(sid, initiator, target):
     """
     Return sha of sid + initiator + target used for proxy auth
     """
-    return hashlib.sha1("%s%s%s" % (sid, initiator, target)).hexdigest()
+    return hashlib.sha1(("%s%s%s" % (sid, initiator, target)).encode('utf-8')).\
+        hexdigest()
 
 def remove_invalid_xml_chars(string):
     if string:
@@ -1545,9 +1546,9 @@ def _get_img_proxy(attrs, proxy):
         alt = attrs.get('alt', '')
         if alt:
             alt += '\n'
-        if ex[0] == pycurl.E_FILESIZE_EXCEEDED:
+        if ex.errno == pycurl.E_FILESIZE_EXCEEDED:
             alt += _('Image is too big')
-        elif ex[0] == pycurl.E_OPERATION_TIMEOUTED:
+        elif ex.errno == pycurl.E_OPERATION_TIMEOUTED:
             alt += _('Timeout loading image')
         else:
             alt += _('Error loading image')

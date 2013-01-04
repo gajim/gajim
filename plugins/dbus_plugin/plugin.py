@@ -508,7 +508,7 @@ if dbus_support.supported:
             def prefs_store(self):
                 try:
                     gajim.interface.save_config()
-                except Exception as e:
+                except Exception:
                     return DBUS_BOOLEAN(False)
                 return DBUS_BOOLEAN(True)
 

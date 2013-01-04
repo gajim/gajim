@@ -105,13 +105,13 @@ class JingleRTPContent(JingleContent):
         try:
             bin = gst.parse_bin_from_description(pipeline, True)
             return bin
-        except GError as error_str:
+        except GError as e:
             gajim.nec.push_incoming_event(InformationEvent(None,
                 conn=self.session.connection, level='error',
                 pri_txt=_('%s configuration error') % text.capitalize(),
                 sec_txt=_("Couldn't setup %s. Check your configuration.\n\n"
                 "Pipeline was:\n%s\n\nError was:\n%s") % (text, pipeline,
-                error_str)))
+                str(e))))
             raise JingleContentSetupException
 
     def add_remote_candidates(self, candidates):

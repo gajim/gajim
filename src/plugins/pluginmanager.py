@@ -427,9 +427,9 @@ class PluginManager(object):
                 try:
                     module = __import__(module_name)
                 except ValueError as value_error:
-                    log.debug(value_error)
+                    log.debug(str(value_error))
                 except ImportError as import_error:
-                    log.debug(import_error)
+                    log.debug(str(import_error))
 
             elif os.path.isdir(file_path) and scan_dirs:
                 module_name = elem_name
@@ -440,9 +440,9 @@ class PluginManager(object):
                 try:
                     module = __import__(module_name)
                 except ValueError as value_error:
-                    log.debug(value_error)
+                    log.debug(str(value_error))
                 except ImportError as import_error:
-                    log.debug(import_error)
+                    log.debug(str(import_error))
 
 
             if module is None:
@@ -477,21 +477,21 @@ class PluginManager(object):
 
                     plugins_found.append(module_attr)
 
-                except TypeError as type_error:
+                except TypeError:
                     # set plugin localization
                     try:
                         module_attr._ = _
-                    except AttributeError as type_error:
+                    except AttributeError:
                         pass
-                except configparser.NoOptionError as type_error:
+                except configparser.NoOptionError:
                     # all fields are required
                     log.debug('%s : %s' % (module_attr_name,
                         'wrong manifest file. all fields are required!'))
-                except configparser.NoSectionError as type_error:
+                except configparser.NoSectionError:
                     # info section are required
                     log.debug('%s : %s' % (module_attr_name,
                         'wrong manifest file. info section are required!'))
-                except configparser.MissingSectionHeaderError as type_error:
+                except configparser.MissingSectionHeaderError:
                     # info section are required
                     log.debug('%s : %s' % (module_attr_name,
                         'wrong manifest file. section are required!'))
@@ -504,10 +504,10 @@ class PluginManager(object):
         '''
         try:
             zip_file = zipfile.ZipFile(zip_filename)
-        except zipfile.BadZipfile as e:
+        except zipfile.BadZipfile:
             # it is not zip file
             raise PluginsystemError(_('Archive corrupted'))
-        except IOError as e:
+        except IOError:
             raise PluginsystemError(_('Archive empty'))
 
         if zip_file.testzip():

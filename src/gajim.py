@@ -132,7 +132,7 @@ def parseOpts():
         longargs += ' sm-client-id= sm-client-state-file= sm-disable'
         opts = getopt.getopt(sys.argv[1:], shortargs, longargs.split())[0]
     except getopt.error as msg1:
-        print(msg1)
+        print(str(msg1))
         print('for help use --help')
         sys.exit(2)
     for o, a in opts:

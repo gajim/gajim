@@ -24,7 +24,7 @@ from common.zeroconf.zeroconf import C_BARE_NAME, C_DOMAIN
 
 try:
     import pybonjour
-except ImportError as e:
+except ImportError:
     pass
 
 
@@ -283,7 +283,7 @@ class Zeroconf:
         try:
             self.browse_sdRef = pybonjour.DNSServiceBrowse(regtype=self.stype, domain=domain, callBack=self.browse_callback)
         except pybonjour.BonjourError as e:
-            self.error_CB("Error while browsing: %s" % e)
+            self.error_CB("Error while browsing: %s" % str(e))
 
     def browse_loop(self):
         ready = select.select([self.browse_sdRef], [], [], 0)

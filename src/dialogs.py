@@ -2755,7 +2755,7 @@ class NewChatDialog(InputDialog):
             try:
                 jid = helpers.parse_jid(jid)
             except helpers.InvalidFormat as e:
-                ErrorDialog(_('Invalid JID'), e[0])
+                ErrorDialog(_('Invalid JID'), str(e))
                 return
             except:
                 ErrorDialog(_('Invalid JID'), _('Unable to parse "%s".') % jid)

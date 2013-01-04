@@ -256,7 +256,7 @@ class Logger:
             self.cur.execute('INSERT INTO jids (jid, type) VALUES (?, ?)', (jid,
                     typ))
             self.con.commit()
-        except sqlite.IntegrityError as e:
+        except sqlite.IntegrityError:
             # Jid already in DB, maybe added by another instance. re-read DB
             self.get_jids_already_in_db()
             return self.get_jid_id(jid, typestr)
@@ -580,7 +580,7 @@ class Logger:
         """
         try:
             self.get_jid_id(jid)
-        except exceptions.PysqliteOperationalError as e:
+        except exceptions.PysqliteOperationalError:
             # Error trying to create a new jid_id. This means there is no log
             return []
         where_sql, jid_tuple = self._build_contact_where(account, jid)
@@ -624,7 +624,7 @@ class Logger:
         """
         try:
             self.get_jid_id(jid)
-        except exceptions.PysqliteOperationalError as e:
+        except exceptions.PysqliteOperationalError:
             # Error trying to create a new jid_id. This means there is no log
             return []
         where_sql, jid_tuple = self._build_contact_where(account, jid)
@@ -653,7 +653,7 @@ class Logger:
         """
         try:
             self.get_jid_id(jid)
-        except exceptions.PysqliteOperationalError as e:
+        except exceptions.PysqliteOperationalError:
             # Error trying to create a new jid_id. This means there is no log
             return []
 
@@ -694,7 +694,7 @@ class Logger:
         """
         try:
             self.get_jid_id(jid)
-        except exceptions.PysqliteOperationalError as e:
+        except exceptions.PysqliteOperationalError:
             # Error trying to create a new jid_id. This means there is no log
             return []
         days_with_logs = []
@@ -736,7 +736,7 @@ class Logger:
         else:
             try:
                 jid_id = self.get_jid_id(jid, 'ROOM')
-            except exceptions.PysqliteOperationalError as e:
+            except exceptions.PysqliteOperationalError:
                 # Error trying to create a new jid_id. This means there is no log
                 return None
             where_sql = 'jid_id = ?'
@@ -762,7 +762,7 @@ class Logger:
         """
         try:
             jid_id = self.get_jid_id(jid, 'ROOM')
-        except exceptions.PysqliteOperationalError as e:
+        except exceptions.PysqliteOperationalError:
             # Error trying to create a new jid_id. This means there is no log
             return None
         where_sql = 'jid_id = %s' % jid_id
@@ -802,7 +802,7 @@ class Logger:
             for user in family:
                 try:
                     jid_id = self.get_jid_id(user['jid'])
-                except exceptions.PysqliteOperationalError as e:
+                except exceptions.PysqliteOperationalError:
                     continue
                 where_sql += 'jid_id = ?'
                 jid_tuple += (jid_id,)

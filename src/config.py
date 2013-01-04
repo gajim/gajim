@@ -3385,7 +3385,7 @@ class ManageBookmarksWindow:
             nick = self.nick_entry.get_text()
             try:
                 nick = helpers.parse_resource(nick)
-            except helpers.InvalidFormat as e:
+            except helpers.InvalidFormat:
                 dialogs.ErrorDialog(_('Invalid nickname'),
                         _('Character not allowed'))
                 self.nick_entry.set_text(model[iter_][6])
@@ -3424,7 +3424,7 @@ class ManageBookmarksWindow:
             self.server_entry.get_text().strip()
         try:
             room_jid = helpers.parse_resource(room_jid)
-        except helpers.InvalidFormat as e:
+        except helpers.InvalidFormat:
             dialogs.ErrorDialog(_('Invalid room'),
                     _('Character not allowed'))
             self.room_entry.set_text(model[iter_][2].split('@')[0])

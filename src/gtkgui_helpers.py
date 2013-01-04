@@ -349,10 +349,10 @@ def parse_server_xml(path_to_file):
         return handler.servers
     # handle exception if unable to open file
     except IOError as message:
-        print(_('Error reading file:') + message, file=sys.stderr)
+        print(_('Error reading file:') + str(message), file=sys.stderr)
     # handle exception parsing file
     except xml.sax.SAXParseException as message:
-        print(_('Error parsing file:') + message, file=sys.stderr)
+        print(_('Error parsing file:') + str(message), file=sys.stderr)
 
 def set_unset_urgency_hint(window, unread_messages_no):
     """
