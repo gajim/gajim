@@ -346,8 +346,7 @@ class VcardWindow:
                 stats += ': ' + self.contact.status
             if self.contact.last_status_time:
                 stats += '\n' + _('since %s') % time.strftime('%c',
-                        self.contact.last_status_time).decode(
-                        locale.getpreferredencoding())
+                        self.contact.last_status_time)
             for c in connected_contact_list:
                 if c.resource != self.contact.resource:
                     stats += '\n'
@@ -356,7 +355,7 @@ class VcardWindow:
                         stats += ': ' + c.status
                     if c.last_status_time:
                         stats += '\n' + _('since %s') % time.strftime('%c',
-                                c.last_status_time).decode(locale.getpreferredencoding())
+                                c.last_status_time)
         else: # Maybe gc_vcard ?
             stats = helpers.get_uf_show(self.contact.show)
             if self.contact.status:
