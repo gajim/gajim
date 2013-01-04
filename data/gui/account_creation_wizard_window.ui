@@ -12,6 +12,12 @@
       </row>
     </data>
   </object>
+  <object class="GtkListStore" id="server_liststore">
+    <columns>
+      <!-- column-name gchararray1 -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <object class="GtkEntryCompletion" id="server_entrycompletion">
     <property name="model">server_liststore</property>
     <property name="text_column">0</property>
@@ -36,6 +42,7 @@
           <object class="GtkNotebook" id="notebook">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="show_tabs">False</property>
             <property name="show_border">False</property>
             <child>
               <object class="GtkVBox" id="vbox78">
@@ -276,7 +283,7 @@ to the Jabber network.</property>
                         <property name="receives_default">False</property>
                         <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
-                        <property name="xalign">0.5</property>
+                        <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <signal name="toggled" handler="on_anonymous_checkbutton1_toggled" swapped="no"/>
                       </object>
@@ -404,7 +411,7 @@ to the Jabber network.</property>
                     <property name="receives_default">False</property>
                     <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0.5</property>
+                    <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                   </object>
                   <packing>
@@ -484,7 +491,7 @@ to the Jabber network.</property>
                             <property name="receives_default">False</property>
                             <property name="use_action_appearance">False</property>
                             <property name="use_underline">True</property>
-                            <property name="xalign">0.5</property>
+                            <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                             <signal name="toggled" handler="on_custom_host_port_checkbutton_toggled" swapped="no"/>
                           </object>
@@ -649,7 +656,7 @@ SHA1 fingerprint of the certificate:
                     <property name="receives_default">False</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="use_action_appearance">False</property>
-                    <property name="xalign">0.5</property>
+                    <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                   </object>
                   <packing>
@@ -793,7 +800,7 @@ Please wait...</property>
                     <property name="receives_default">False</property>
                     <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0.5</property>
+                    <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -812,7 +819,7 @@ Please wait...</property>
                     <property name="receives_default">False</property>
                     <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0.5</property>
+                    <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -1027,11 +1034,5 @@ Please wait...</property>
         </child>
       </object>
     </child>
-  </object>
-  <object class="GtkListStore" id="server_liststore">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-    </columns>
   </object>
 </interface>

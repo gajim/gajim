@@ -913,8 +913,8 @@ class Connection(CommonConnection, ConnectionHandlers):
                             self.connection.SendAndCallForResponse(iq,
                                     _on_register_result)
                         else:
-                            if self.new_account_form.keys().sort() != \
-                            conf.keys().sort():
+                            if list(self.new_account_form.keys()).sort() != \
+                            list(conf.keys()).sort():
                                 # requested config has changed since first connection
                                 reason = _('Server %s provided a different '
                                     'registration form') % data[0]

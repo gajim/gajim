@@ -26,6 +26,7 @@ single means these with one record of data (without <reported/> element),
 multiple - these which may contain more data (with <reported/> element).'''
 
 from gi.repository import Gtk
+from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import GObject
 import base64
@@ -566,7 +567,7 @@ class SingleForm(Gtk.Table, object):
                 for uri in field.media.uris:
                     if uri.type_.startswith('image/'):
                         try:
-                            img_data = base64.decodestring(uri.uri_data)
+                            img_data = base64.b64decode(uri.uri_data)
                             pixbuf_l = GdkPixbuf.PixbufLoader()
                             pixbuf_l.write(img_data)
                             pixbuf_l.close()
