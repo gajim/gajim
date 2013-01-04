@@ -33,6 +33,7 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import GObject
+import cairo
 import os
 
 import gtkgui_helpers
@@ -5325,3 +5326,50 @@ class SSLErrorDialog(ConfirmationDialogDoubleCheck):
 
     def on_cert_clicked(self, button):
         d = CertificatDialog(self, self.account, self.cert)
+
+
+class BigAvatarWindow(Gtk.Window):
+    def __init__(self, avatar, pos_x, pos_y, width, height, callback):
+        super(BigAvatarWindow, self).__init__(type=Gtk.WindowType.POPUP)
+        self.set_events(Gdk.EventMask.POINTER_MOTION_MASK)
+        self.avatar = avatar
+        self.callback = callback
+        self.screen = self.get_screen()
+        self.visual = self.screen.get_rgba_visual()
+        if self.visual != None and self.screen.is_composited():
+            self.set_visual(self.visual)
+        self.set_app_paintable(True)
+        self.set_size_request(width, height)
+        self.move(pos_x, pos_y)
+        self.connect("draw", self.area_draw)
+        # we should hide the window
+        self.connect('leave_notify_event', self._on_window_avatar_leave_notify)
+        self.connect('motion-notify-event', self._on_window_motion_notify)
+        self.realize()
+        # make the cursor invisible so we can see the image
+        invisible_cursor = gtkgui_helpers.get_invisible_cursor()
+        self.get_window().set_cursor(invisible_cursor)
+        self.show_all()
+
+    def area_draw(self, widget, cr):
+        cr.set_source_rgba(.2, .2, .2, 0.0)
+        cr.set_operator(cairo.OPERATOR_SOURCE)
+        Gdk.cairo_set_source_pixbuf(cr, self.avatar, 0, 0)
+        cr.paint()
+        cr.set_operator(cairo.OPERATOR_OVER)
+
+    def _on_window_avatar_leave_notify(self, widget, event):
+        """
+        Just left the popup window that holds avatar
+        """
+        self.destroy()
+        self.bigger_avatar_window = None
+        # Re-show the small avatar
+        self.callback()
+
+    def _on_window_motion_notify(self, widget, event):
+        """
+        Just moved the mouse so show the cursor
+        """
+        cursor = Gdk.Cursor.new(Gdk.CursorType.LEFT_PTR)
+        self.get_window().set_cursor(cursor)

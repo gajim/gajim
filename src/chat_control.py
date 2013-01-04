@@ -3007,9 +3007,9 @@ class ChatControl(ChatControlBase):
         Resize the avatar, if needed, so it has at max half the screen size and
         shows it
         """
-        if not small_avatar.window:
-            # Tab has been closed since we hovered the avatar
-            return
+        #if not small_avatar.window:
+            ### Tab has been closed since we hovered the avatar
+            #return
         avatar_pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(
                 self.contact.jid)
         if avatar_pixbuf in ('ask', None):
@@ -3022,7 +3022,8 @@ class ChatControl(ChatControlBase):
         image = self.xml.get_object('avatar_image')
         pixbuf = image.get_pixbuf()
         pixbuf.fill(0xffffff00) # RGBA
-        image.queue_draw()
+        image.set_from_pixbuf(pixbuf)
+        #image.queue_draw()
 
         screen_w = Gdk.Screen.width()
         screen_h = Gdk.Screen.height()
@@ -3034,56 +3035,24 @@ class ChatControl(ChatControlBase):
             avatar_w = half_scr_w
         if avatar_h > half_scr_h:
             avatar_h = half_scr_h
-        window = Gtk.Window(Gtk.WindowType.POPUP)
-        self.bigger_avatar_window = window
-        pixmap, mask = avatar_pixbuf.render_pixmap_and_mask()
-        window.set_size_request(avatar_w, avatar_h)
         # we should make the cursor visible
         # gtk+ doesn't make use of the motion notify on gtkwindow by default
         # so this line adds that
-        window.set_events(Gdk.EventMask.POINTER_MOTION_MASK)
-        window.set_app_paintable(True)
-        window.set_type_hint(Gdk.WindowTypeHint.TOOLTIP)
 
-        window.realize()
-        window.window.set_back_pixmap(pixmap, False) # make it transparent
-        window.window.shape_combine_mask(mask, 0, 0)
-
+        alloc = small_avatar.get_allocation()
         # make the bigger avatar window show up centered
-        x0, y0 = small_avatar.window.get_origin()[1:]
-        x0 += small_avatar.allocation.x
-        y0 += small_avatar.allocation.y
-        center_x= x0 + (small_avatar.allocation.width / 2)
-        center_y = y0 + (small_avatar.allocation.height / 2)
+        small_avatar_x, small_avatar_y = alloc.x, alloc.y
+        translated_coordinates = small_avatar.translate_coordinates(
+            gajim.interface.roster.window, 0, 0)
+        if translated_coordinates:
+            small_avatar_x, small_avatar_y = translated_coordinates
+        roster_x, roster_y  = self.parent_win.window.get_window().get_origin()[1:]
+        center_x = roster_x + small_avatar_x + (alloc.width / 2)
+        center_y = roster_y + small_avatar_y + (alloc.height / 2)
         pos_x, pos_y = center_x - (avatar_w / 2), center_y - (avatar_h / 2)
-        window.move(pos_x, pos_y)
-        # make the cursor invisible so we can see the image
-        invisible_cursor = gtkgui_helpers.get_invisible_cursor()
-        window.window.set_cursor(invisible_cursor)
 
-        # we should hide the window
-        window.connect('leave_notify_event',
-                self._on_window_avatar_leave_notify_event)
-        window.connect('motion-notify-event',
-                self._on_window_motion_notify_event)
-
-        window.show_all()
-
-    def _on_window_avatar_leave_notify_event(self, widget, event):
-        """
-        Just left the popup window that holds avatar
-        """
-        self.bigger_avatar_window.destroy()
-        self.bigger_avatar_window = None
-        # Re-show the small avatar
-        self.show_avatar()
-
-    def _on_window_motion_notify_event(self, widget, event):
-        """
-        Just moved the mouse so show the cursor
-        """
-        cursor = Gdk.Cursor.new(Gdk.CursorType.LEFT_PTR)
-        self.bigger_avatar_window.window.set_cursor(cursor)
+        dialogs.BigAvatarWindow(avatar_pixbuf, pos_x, pos_y, avatar_w,
+            avatar_h, self.show_avatar)
 
     def _on_send_file_menuitem_activate(self, widget):
         self._on_send_file()

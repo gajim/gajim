@@ -133,7 +133,7 @@ def popup_emoticons_under_button(menu, button, parent_win):
             gajim.interface.roster.window, 0, 0)
         if translated_coordinates:
             button_x, button_y = translated_coordinates
-        _alloc = parent_win.notebook.get_allocation()
+
         # now convert them to X11-relative
         window_x, window_y = window_x1, window_y1
         x = window_x + button_x
