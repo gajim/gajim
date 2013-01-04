@@ -1581,6 +1581,7 @@ class ChatControl(ChatControlBase):
             self.handlers[id_] = widget
 
         self.dtmf_window = self.xml.get_object('dtmf_window')
+        self.dtmf_window.get_child().set_direction(gtk.TEXT_DIR_LTR)
         id_ = self.dtmf_window.connect('focus-out-event',
             self.on_dtmf_window_focus_out_event)
         self.handlers[id_] = self.dtmf_window
