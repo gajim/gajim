@@ -2382,18 +2382,13 @@ class JoinGroupchatWindow:
             title = _('Join Group Chat')
         self.window.set_title(title)
 
-        self.server_comboboxentry = self.xml.get_object('server_comboboxentry')
-        liststore = Gtk.ListStore(str)
-        self.server_comboboxentry.set_model(liststore)
-        cell = Gtk.CellRendererText()
-        self.server_comboboxentry.pack_start(cell, True)
-        self.server_comboboxentry.add_attribute(cell, 'text', 0)
-        self.server_comboboxentry.set_active(-1)
-        self.server_model = liststore#self.server_comboboxentry.get_model()
-        server_list = []
-        # get the muc server of our server
-        if 'jabber' in gajim.connections[account].muc_jid:
-            server_list.append(gajim.connections[account].muc_jid['jabber'])
+
+        self.server_model = Gtk.ListStore(str)
+        self.server_comboboxentry = Gtk.ComboBox.new_with_model_and_entry(
+            self.server_model)
+        self.server_comboboxentry.set_entry_text_column(0)
+        hbox1 = self.xml.get_object('hbox1')
+        hbox1.pack_start(self.server_comboboxentry, False, False, 0)
 
         self.recently_combobox = self.xml.get_object('recently_combobox')
         liststore = Gtk.ListStore(str)
@@ -2402,6 +2397,11 @@ class JoinGroupchatWindow:
         self.recently_combobox.pack_start(cell, True)
         self.recently_combobox.add_attribute(cell, 'text', 0)
         self.recently_groupchat = gajim.config.get('recently_groupchat').split()
+
+        server_list = []
+        # get the muc server of our server
+        if 'jabber' in gajim.connections[account].muc_jid:
+            server_list.append(gajim.connections[account].muc_jid['jabber'])
         for g in self.recently_groupchat:
             liststore.append([g])
             server = gajim.get_server_from_jid(g)
@@ -2410,7 +2410,7 @@ class JoinGroupchatWindow:
 
         for s in server_list:
             self.server_model.append([s])
-        self.server_comboboxentry.set_active(0)
+
 
         self._set_room_jid(room_jid)
 
@@ -2474,8 +2474,7 @@ class JoinGroupchatWindow:
         room, server = gajim.get_name_and_server_from_jid(room_jid)
         self._room_jid_entry.set_text(room)
         model = self.server_comboboxentry.get_model()
-        model.append([server])
-        #self.server_comboboxentry.set_active(0)
+        self.server_comboboxentry.get_child().set_text(server)
 
     def on_recently_combobox_changed(self, widget):
         model = widget.get_model()
@@ -2521,10 +2520,8 @@ class JoinGroupchatWindow:
                 'groupchat.'))
             return
         nickname = self._nickname_entry.get_text()
-        row = self.server_comboboxentry.get_child().get_displayed_row()
-        model = self.server_comboboxentry.get_model()
-        server = model[row][0].strip()
-        room = self._room_jid_entry.get_text().decode('utf-8').strip()
+        server = self.server_comboboxentry.get_child().get_text()
+        room = self._room_jid_entry.get_text().strip()
         room_jid = room + '@' + server
         password = self._password_entry.get_text()
         try:
