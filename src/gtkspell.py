@@ -70,7 +70,8 @@ class Spell(object):
         if create:
             if spell:
                 raise RuntimeError("Textview has already a Spell obj attached")
-            self.spell = libgtkspell.gtkspell_new_attach(tv, language, None)
+            self.spell = libgtkspell.gtkspell_new_attach(tv, language.encode(
+                'utf-8'), None)
             if not self.spell:
                 raise OSError("Unable to attach spell object. "
                               "Language: '%s'" % str(language))
@@ -82,7 +83,8 @@ class Spell(object):
 
     @ensure_attached
     def set_language(self, language):
-        if libgtkspell.gtkspell_set_language(self.spell, language, None) == 0:
+        if libgtkspell.gtkspell_set_language(self.spell, language.encode(
+        'utf-8'), None) == 0:
             raise OSError("Unable to set language '%s'" % str(language))
 
     @ensure_attached
