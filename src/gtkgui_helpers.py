@@ -433,9 +433,11 @@ def get_pixbuf_from_data(file_data, want_type = False):
         return pixbuf
 
 def get_invisible_cursor():
-    pixmap = Gdk.Pixmap(None, 1, 1, 1)
-    color = Gdk.Color()
-    cursor = Gdk.Cursor.new(pixmap, pixmap, color, color, 0, 0)
+    import cairo
+    s = cairo.ImageSurface(cairo.FORMAT_A1, 1, 1)
+    cursor_pixbuf = Gdk.pixbuf_get_from_surface(s, 0, 0, 1, 1)
+    cursor = Gdk.Cursor.new_from_pixbuf(Gdk.Display.get_default(), \
+        cursor_pixbuf, 0, 0)
     return cursor
 
 def get_current_desktop(window):
