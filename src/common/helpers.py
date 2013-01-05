@@ -552,8 +552,8 @@ def sanitize_filename(filename):
     """
     # 48 is the limit
     if len(filename) > 48:
-        hash = hashlib.md5(filename)
-        filename = base64.b64encode(hash.digest())
+        hash = hashlib.md5(filename.encode('utf-8'))
+        filename = base64.b64encode(hash.digest()).decode('utf-8')
 
     # make it latin chars only
     filename = punycode_encode(filename).decode('utf-8')
