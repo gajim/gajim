@@ -49,6 +49,7 @@ import types
 import weakref
 from gi.repository import GObject
 from gi.repository import Gtk
+from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import Pango
 
