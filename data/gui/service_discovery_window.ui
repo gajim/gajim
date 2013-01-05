@@ -160,7 +160,7 @@ Agent JID - node</property>
                 <signal name="changed" handler="on_address_comboboxtext_changed" swapped="no"/>
                 <child internal-child="entry">
                   <object class="GtkEntry" id="address_entry">
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
                   </object>
                 </child>
