@@ -398,7 +398,7 @@ def exec_command(command, use_shell=False):
     if use_shell:
         subprocess.Popen('%s &' % command, shell=True).wait()
     else:
-        args = shlex.split(command.encode('utf-8'))
+        args = shlex.split(command)
         p = subprocess.Popen(args)
         gajim.thread_interface(p.wait)
 
