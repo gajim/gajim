@@ -757,7 +757,7 @@ class FileTransfersWindow:
     def on_transfers_list_motion_notify_event(self, widget, event):
         pointer = self.tree.get_pointer()
         props = widget.get_path_at_pos(int(event.x), int(event.y))
-        self.height_diff = pointer[2] - int(event.y)
+        self.height_diff = pointer[1] - int(event.y)
         if self.tooltip.timeout > 0:
             if not props or self.tooltip.id != props[0]:
                 self.tooltip.hide_tooltip()
@@ -775,7 +775,7 @@ class FileTransfersWindow:
                 if self.tooltip.timeout == 0 or self.tooltip.id != props[0]:
                     self.tooltip.id = row
                     self.tooltip.timeout = GObject.timeout_add(500,
-                            self.show_tooltip, widget)
+                        self.show_tooltip, widget)
 
     def on_transfers_list_leave_notify_event(self, widget=None, event=None):
         if event is not None:
@@ -783,7 +783,7 @@ class FileTransfersWindow:
         elif self.height_diff is 0:
             return
         pointer = self.tree.get_pointer()
-        props = self.tree.get_path_at_pos(pointer[1], pointer[2] - self.height_diff)
+        props = self.tree.get_path_at_pos(pointer[0], pointer[1] - self.height_diff)
         if self.tooltip.timeout > 0:
             if not props or self.tooltip.id == props[0]:
                 self.tooltip.hide_tooltip()
@@ -952,8 +952,8 @@ class FileTransfersWindow:
             self.tooltip.hide_tooltip()
             return
         pointer = self.tree.get_pointer()
-        props = self.tree.get_path_at_pos(pointer[1],
-                pointer[2] - self.height_diff)
+        props = self.tree.get_path_at_pos(pointer[0],
+            pointer[1] - self.height_diff)
         # check if the current pointer is at the same path
         # as it was before setting the timeout
         if props and self.tooltip.id == props[0]:
@@ -965,7 +965,7 @@ class FileTransfersWindow:
             # position of the treeview on the screen
             position = widget.get_window().get_origin()[1:]
             self.tooltip.show_tooltip(file_props, rect.height,
-                                                    position[1] + rect.y + self.height_diff)
+                position[1] + rect.y + self.height_diff)
         else:
             self.tooltip.hide_tooltip()
 
