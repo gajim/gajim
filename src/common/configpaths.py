@@ -131,7 +131,7 @@ class ConfigPaths:
             return default
 
     def items(self):
-        for key in self.paths.iterkeys():
+        for key in self.paths.keys():
             yield (key, self[key])
 
     def init(self, root=None):

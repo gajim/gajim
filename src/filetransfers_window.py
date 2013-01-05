@@ -327,7 +327,7 @@ class FileTransfersWindow:
         dialog.set_default_response(Gtk.ResponseType.OK)
 
         desc_hbox = Gtk.HBox(False, 5)
-        desc_hbox.pack_start(Gtk.Label(_('Description: ', True, True, 0)), False, False, 0)
+        desc_hbox.pack_start(Gtk.Label(_('Description: ')), False, False, 0)
         desc_hbox.pack_start(win, True, True, 0)
 
         dialog.vbox.pack_start(desc_hbox, False, False, 0)

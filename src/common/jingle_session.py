@@ -270,8 +270,8 @@ class JingleSession(object):
         """
         Return True when all codecs and candidates are ready (for all contents)
         """
-        return (any((content.is_ready() for content in self.contents.itervalues()))
-                and self.accepted)
+        return (any((content.is_ready() for content in self.contents.values()))
+            and self.accepted)
 
     def accept_session(self):
         """
@@ -589,7 +589,7 @@ class JingleSession(object):
         """
         Broadcast the stanza to all content handlers
         """
-        for content in self.contents.itervalues():
+        for content in self.contents.values():
             content.on_stanza(stanza, None, error, action)
 
     def __parse_contents(self, jingle):
