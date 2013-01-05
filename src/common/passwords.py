@@ -200,7 +200,7 @@ def get_storage():
             global GnomeKeyring
             try:
                 gir = __import__('gi.repository', globals(), locals(),
-                    ['GnomeKeyring'], 0)
+                    ['GnomeKeyring'], 1)
                 GnomeKeyring = gir.GnomeKeyring
             except ImportError:
                 pass
