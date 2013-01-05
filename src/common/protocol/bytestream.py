@@ -645,7 +645,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
                         self.send_success_connect_reply, None)
                 raise nbxmpp.NodeProcessed
         else:
-            log.warn('Gajim got streamhosts for unknown transfer. Ignoring it.')
+            log.warning('Gajim got streamhosts for unknown transfer. Ignoring it.')
             raise nbxmpp.NodeProcessed
 
         file_props.streamhosts = streamhosts

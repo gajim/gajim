@@ -449,7 +449,7 @@ class Interface:
         if not obj.session:
             # No session. This can happen when sending a message from
             # gajim-remote
-            log.warn(msg)
+            log.warning(msg)
             return
         obj.session.roster_message(obj.jid, msg, obj.time_, obj.conn.name,
             msg_type='error')

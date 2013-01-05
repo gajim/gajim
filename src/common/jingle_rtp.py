@@ -88,7 +88,7 @@ class JingleRTPContent(JingleContent):
                     ip = socket.getaddrinfo(stun_server, 0, socket.AF_UNSPEC,
                             socket.SOCK_STREAM)[0][4][0]
                 except socket.gaierror as e:
-                    log.warn('Lookup of stun ip failed: %s' % str(e))
+                    log.warning('Lookup of stun ip failed: %s' % str(e))
                 else:
                     params['stun-ip'] = ip
 

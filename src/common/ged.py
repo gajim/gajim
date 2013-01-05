@@ -80,7 +80,7 @@ class GlobalEventsDispatcher(object):
             try:
                 self.handlers[event_name].remove((priority, handler))
             except ValueError:
-                log.warn('''Function (%s) with priority "%s" never registered
+                log.warning('''Function (%s) with priority "%s" never registered
                 as handler of event "%s". Couldn\'t remove. Error: %s'''
                                   %(handler, priority, event_name, error))
 

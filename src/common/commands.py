@@ -381,7 +381,7 @@ class ConnectionCommands:
         try:
             jid = helpers.get_full_jid_from_iq(iq_obj)
         except helpers.InvalidFormat:
-            log.warn('Invalid JID: %s, ignoring it' % iq_obj.getFrom())
+            log.warning('Invalid JID: %s, ignoring it' % iq_obj.getFrom())
             return
         node = iq_obj.getTagAttr('query', 'node')
 

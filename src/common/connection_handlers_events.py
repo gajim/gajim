@@ -306,7 +306,7 @@ class RosterItemExchangeEvent(nec.NetworkIncomingEvent, HelperEvent):
             try:
                 jid = helpers.parse_jid(item.getAttr('jid'))
             except helpers.InvalidFormat:
-                log.warn('Invalid JID: %s, ignoring it' % item.getAttr('jid'))
+                log.warning('Invalid JID: %s, ignoring it' % item.getAttr('jid'))
                 continue
             name = item.getAttr('name')
             contact = gajim.contacts.get_contact(self.conn.name, jid)
@@ -399,7 +399,7 @@ class RosterSetReceivedEvent(nec.NetworkIncomingEvent):
             try:
                 jid = helpers.parse_jid(item.getAttr('jid'))
             except helpers.InvalidFormat:
-                log.warn('Invalid JID: %s, ignoring it' % item.getAttr('jid'))
+                log.warning('Invalid JID: %s, ignoring it' % item.getAttr('jid'))
                 continue
             name = item.getAttr('name')
             sub = item.getAttr('subscription')
@@ -447,7 +447,7 @@ class MucAdminReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                 try:
                     jid = helpers.parse_jid(item.getAttr('jid'))
                 except helpers.InvalidFormat:
-                    log.warn('Invalid JID: %s, ignoring it' % \
+                    log.warning('Invalid JID: %s, ignoring it' % \
                         item.getAttr('jid'))
                     continue
                 affiliation = item.getAttr('affiliation')
@@ -489,7 +489,7 @@ class BookmarksHelper:
             try:
                 jid = helpers.parse_jid(conf.getAttr('jid'))
             except helpers.InvalidFormat:
-                log.warn('Invalid JID: %s, ignoring it' % conf.getAttr('jid'))
+                log.warning('Invalid JID: %s, ignoring it' % conf.getAttr('jid'))
                 continue
             bm = {'name': conf.getAttr('name'),
                 'jid': jid,
@@ -541,7 +541,7 @@ class PrivateStorageRosternotesReceivedEvent(nec.NetworkIncomingEvent):
             try:
                 jid = helpers.parse_jid(note.getAttr('jid'))
             except helpers.InvalidFormat:
-                log.warn('Invalid JID: %s, ignoring it' % note.getAttr('jid'))
+                log.warning('Invalid JID: %s, ignoring it' % note.getAttr('jid'))
                 continue
             annotation = note.getData()
             self.annotations[jid] = annotation
@@ -755,7 +755,7 @@ PresenceHelperEvent):
         try:
             self.get_jid_resource()
         except Exception:
-            log.warn('Invalid JID: %s, ignoring it' % self.stanza.getFrom())
+            log.warning('Invalid JID: %s, ignoring it' % self.stanza.getFrom())
             return
         jid_list = gajim.contacts.get_jid_list(self.conn.name)
         self.timestamp = None
@@ -1036,7 +1036,7 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                 try:
                     self.fjid = helpers.parse_jid(address.getAttr('jid'))
                 except helpers.InvalidFormat:
-                    log.warn('Invalid JID: %s, ignoring it' % address.getAttr(
+                    log.warning('Invalid JID: %s, ignoring it' % address.getAttr(
                         'jid'))
                     return
                 self.jid = gajim.get_jid_without_resource(self.fjid)
@@ -1186,7 +1186,7 @@ class GcInvitationReceivedEvent(nec.NetworkIncomingEvent):
         try:
             self.jid_from = helpers.parse_jid(item.getAttr('from'))
         except helpers.InvalidFormat:
-            log.warn('Invalid JID: %s, ignoring it' % item.getAttr('from'))
+            log.warning('Invalid JID: %s, ignoring it' % item.getAttr('from'))
             return
         jid = gajim.get_jid_without_resource(self.jid_from)
         if gajim.config.get_per('accounts', self.conn.name,
@@ -1213,7 +1213,7 @@ class GcDeclineReceivedEvent(nec.NetworkIncomingEvent):
         try:
             self.jid_from = helpers.parse_jid(item.getAttr('from'))
         except helpers.InvalidFormat:
-            log.warn('Invalid JID: %s, ignoring it' % item.getAttr('from'))
+            log.warning('Invalid JID: %s, ignoring it' % item.getAttr('from'))
             return
         jid = gajim.get_jid_without_resource(self.jid_from)
         if gajim.config.get_per('accounts', self.conn.name,
@@ -1919,7 +1919,7 @@ class AgentInfoReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
     def generate(self):
         self.get_id()
         if self.id_ is None:
-            log.warn('Invalid IQ received without an ID. Ignoring it: %s' % \
+            log.warning('Invalid IQ received without an ID. Ignoring it: %s' % \
                 self.stanza)
             return
         # According to XEP-0030:

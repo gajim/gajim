@@ -2678,7 +2678,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             return
         if self.awaiting_xmpp_ping_id:
             # We haven't got the pong in time, disco and reconnect
-            log.warn("No reply received for keepalive ping. Reconnecting.")
+            log.warning("No reply received for keepalive ping. Reconnecting.")
             self._disconnectedReconnCB()
 
     def _reconnect_alarm(self):
