@@ -527,7 +527,6 @@ def get_fade_color(treeview, selected, focused):
     0.7 respectively colors of the cell for the given treeview
     """
     context = treeview.get_style_context()
-    style = treeview.get_style()
     if selected:
         if focused: # is the window focused?
             state = Gtk.StateFlags.SELECTED
