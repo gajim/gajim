@@ -2806,7 +2806,7 @@ class PopupNotificationWindow:
 
         xml = gtkgui_helpers.get_gtk_builder('popup_notification_window.ui')
         self.window = xml.get_object('popup_notification_window')
-        self.set_type_hint(Gdk.WindowTypeHint.TOOLTIP)
+        self.window.set_type_hint(Gdk.WindowTypeHint.TOOLTIP)
         close_button = xml.get_object('close_button')
         event_type_label = xml.get_object('event_type_label')
         event_description_label = xml.get_object('event_description_label')
