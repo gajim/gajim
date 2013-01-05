@@ -3370,8 +3370,7 @@ class XMLConsoleWindow:
                 self.account)
             return
         begin_iter, end_iter = self.input_tv_buffer.get_bounds()
-        stanza = self.input_tv_buffer.get_text(begin_iter, end_iter, True).decode(
-            'utf-8')
+        stanza = self.input_tv_buffer.get_text(begin_iter, end_iter, True)
         if stanza:
             gajim.connections[self.account].send_stanza(stanza)
             self.input_tv_buffer.set_text('') # we sent ok, clear the textview
