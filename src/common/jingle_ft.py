@@ -149,12 +149,13 @@ class JingleFileTransfer(JingleContent):
         if self.file_props.algo == None:
             return
         try:
-            file_ = open(self.file_props.file_name, 'r')
+            file_ = open(self.file_props.file_name, 'rb')
         except:
             # can't open file
             return
         h = nbxmpp.Hashes()
         hash_ = h.calculateHash(self.file_props.algo, file_)
+        file_.close()
         # DEBUG
         #hash_ = '1294809248109223'
         if not hash_:
