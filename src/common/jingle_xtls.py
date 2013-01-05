@@ -86,6 +86,7 @@ def load_cert_file(cert_path, cert_store):
                     '%s' % cert_path)
             begin = -1
         i += 1
+    f.close()
 
 def get_context(fingerprint, verify_cb=None):
     """
