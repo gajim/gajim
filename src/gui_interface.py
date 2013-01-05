@@ -1932,7 +1932,8 @@ class Interface:
         # Calculate the side lenght of the popup to make it a square
         size = int(round(math.sqrt(len(self.emoticons_images))))
         for image in self.emoticons_images:
-            item = Gtk.MenuItem()
+            # In Gtk 3.6, Gtk.MenuItem() doesn't contain a label child
+            item = Gtk.MenuItem('q')
             img = Gtk.Image()
             if isinstance(image[1], GdkPixbuf.PixbufAnimation):
                 img.set_from_animation(image[1])
