@@ -1498,7 +1498,7 @@ class RosterWindow:
         self.tree.set_cursor(path)
 
     def _readjust_expand_collapse_state(self):
-        def func(model, path, iter_):
+        def func(model, path, iter_, param):
             type_ = model[iter_][C_TYPE]
             acct = model[iter_][C_ACCOUNT]
             jid = model[iter_][C_JID]
@@ -2288,7 +2288,7 @@ class RosterWindow:
                     self.model[child_iterA][C_AVATAR_PIXBUF] = empty_pixbuf
                 if account in gajim.con_types:
                     gajim.con_types[account] = None
-                for jid in gajim.contacts.get_jid_list(account):
+                for jid in list(gajim.contacts.get_jid_list(account)):
                     lcontact = gajim.contacts.get_contacts(account, jid)
                     ctrl = gajim.interface.msg_win_mgr.get_gc_control(jid,
                         account)
@@ -3520,7 +3520,7 @@ class RosterWindow:
         Gdk.ModifierType.MOD1_MASK)) and Gdk.keyval_to_unicode(event.keyval):
             # if we got unicode symbol without ctrl / alt
             num = Gdk.keyval_to_unicode(event.keyval)
-            self.enable_rfilter(unichr(num))
+            self.enable_rfilter(chr(num))
 
         elif event.get_state() & Gdk.ModifierType.CONTROL_MASK and event.get_state() & Gdk.ModifierType.SHIFT_MASK and event.keyval == Gdk.KEY_U:
             self.enable_rfilter('')
@@ -4232,7 +4232,7 @@ class RosterWindow:
                             path = model.get_path(titer)
                             self.tree.expand_row(path, False)
         elif type_ == 'account':
-            account = accounts[0] # There is only one cause we don't use merge
+            account = list(accounts)[0] # There is only one cause we don't use merge
             if account in self.collapsed_rows:
                 self.collapsed_rows.remove(account)
             self.draw_account(account)
@@ -4435,11 +4435,11 @@ class RosterWindow:
         self.refilter_shown_roster_items()
         # select first row
         self.tree.get_selection().unselect_all()
-        def _func(model, path, iter_):
+        def _func(model, path, iter_, param):
             if model[iter_][C_TYPE] == 'contact' and self.rfilter_string in \
             model[iter_][C_NAME].lower():
                 col = self.tree.get_column(0)
-                self.tree.set_cursor_on_cell(path, col)
+                self.tree.set_cursor_on_cell(path, col, None, False)
                 return True
         self.modelfilter.foreach(_func, None)
 
@@ -5519,7 +5519,7 @@ class RosterWindow:
         if len(gajim.connections) == 0: # user has no accounts
             advanced_menuitem.set_sensitive(False)
         elif len(gajim.connections) == 1: # we have one acccount
-            account = gajim.connections.keys()[0]
+            account = list(gajim.connections.keys())[0]
             advanced_menuitem_menu = \
                 self.get_and_connect_advanced_menuitem_menu(account)
             self.advanced_menus.append(advanced_menuitem_menu)
