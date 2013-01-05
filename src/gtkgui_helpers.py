@@ -641,7 +641,8 @@ def make_color_string(color):
     """
     col = '#'
     for i in ('red', 'green', 'blue'):
-        h = hex(getattr(color, i) / (16*16)).split('x')[1]
+        h = hex(int(getattr(color, i) / (16*16)))
+        h = h.split('x')[1]
         if len(h) == 1:
             h = '0' + h
         col += h
