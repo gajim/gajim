@@ -75,7 +75,7 @@ class TextViewImage(Gtk.Image):
         self._selected = False
         self._disconnect_funcs = []
         self.connect('parent-set', self.on_parent_set)
-        self.connect('expose-event', self.on_expose)
+        self.connect('draw', self.on_expose)
         self.set_tooltip_text(text)
         self.anchor.set_data('plaintext', text)
 
@@ -1087,7 +1087,7 @@ class ConversationTextview(GObject.GObject):
             img = TextViewImage(anchor, special_text)
             animations = gajim.interface.emoticons_animations
             if not emot_ascii in animations:
-                animations[emot_ascii] = GdkPixbuf.PixbufAnimation(
+                animations[emot_ascii] = GdkPixbuf.PixbufAnimation.new_from_file(
                         gajim.interface.emoticons[emot_ascii])
             img.set_from_animation(animations[emot_ascii])
             img.show()
