@@ -114,11 +114,11 @@ def get_context(fingerprint, verify_cb=None):
 def send_cert(con, jid_from, sid):
     certpath = os.path.join(gajim.MY_CERT_DIR, SELF_SIGNED_CERTIFICATE) + \
         '.cert'
-    certfile = open(certpath, 'r')
     certificate = ''
-    for line in certfile.readlines():
-        if not line.startswith('-'):
-            certificate += line
+    with open(certpath, 'r') as certfile:
+        for line in certfile.readlines():
+            if not line.startswith('-'):
+                certificate += line
     iq = nbxmpp.Iq('result', to=jid_from);
     iq.setAttr('id', sid)
 
