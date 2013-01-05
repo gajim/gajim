@@ -181,7 +181,11 @@ class Command(object):
         return "<Command %s>" % ', '.join(self.names)
 
     def __cmp__(self, other):
-        return cmp(self.first_name, other.first_name)
+        if self.first_name > other.first_name:
+            return 1
+        if self.first_name < other.first_name:
+            return -1
+        return 0
 
     @property
     def first_name(self):

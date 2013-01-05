@@ -149,7 +149,7 @@ class CacheDictionary:
             return self.value
 
     def cleanup(self):
-        for key in self.cache.keys():
+        for key in list(self.cache.keys()):
             item = self.cache[key]
             if item.source:
                 GObject.source_remove(item.source)
@@ -171,7 +171,7 @@ class CacheDictionary:
         if item.source:
             GObject.source_remove(item.source)
         if self.lifetime:
-            source = GObject.timeout_add_seconds(self.lifetime/1000, self._expire_timeout, key)
+            source = GObject.timeout_add_seconds(int(self.lifetime/1000), self._expire_timeout, key)
             item.source = source
 
     def __getitem__(self, key):
@@ -221,7 +221,7 @@ class Closure(object):
         self.remove = remove
         self.removeargs = removeargs
         if isinstance(cb, types.MethodType):
-            self.meth_self = weakref.ref(cb.im_self, self._remove)
+            self.meth_self = weakref.ref(cb.__self__, self._remove)
             self.meth_name = cb.__name__
         elif callable(cb):
             self.meth_self = None
@@ -544,13 +544,13 @@ _('Without a connection, you can not browse available services'))
         self.action_buttonbox = self.xml.get_object('action_buttonbox')
 
         # Address combobox
-        self.address_comboboxentry = None
+        self.address_comboboxtext = None
         address_table = self.xml.get_object('address_table')
         if address_entry:
-            self.address_comboboxentry = self.xml.get_object(
-                    'address_comboboxentry')
-            self.address_comboboxentry_entry = self.address_comboboxentry.get_child()
-            self.address_comboboxentry_entry.set_activates_default(True)
+            self.address_comboboxtext = self.xml.get_object(
+                'address_comboboxtext')
+            self.address_comboboxtext_entry = self.xml.get_object(
+                'address_entry')
 
             self.latest_addresses = gajim.config.get(
                 'latest_disco_addresses').split()
@@ -560,8 +560,8 @@ _('Without a connection, you can not browse available services'))
             if len(self.latest_addresses) > 10:
                 self.latest_addresses = self.latest_addresses[0:10]
             for j in self.latest_addresses:
-                self.address_comboboxentry.append_text(j)
-            self.address_comboboxentry.get_child().set_text(jid)
+                self.address_comboboxtext.append_text(j)
+            self.address_comboboxtext.get_child().set_text(jid)
         else:
             # Don't show it at all if we didn't ask for it
             address_table.set_no_show_all(True)
@@ -754,7 +754,7 @@ _('Without a connection, you can not browse available services'))
         if self.dying or jid != self.jid or node != self.node:
             return
         if not identities:
-            if not self.address_comboboxentry:
+            if not self.address_comboboxtext:
                 # We can't travel anywhere else.
                 self.destroy()
             dialogs.ErrorDialog(_('The service could not be found'),
@@ -796,10 +796,10 @@ _('This type of service does not contain any items to browse.'))
     def on_close_button_clicked(self, widget):
         self.destroy()
 
-    def on_address_comboboxentry_changed(self, widget):
-        if self.address_comboboxentry.get_active() != -1:
+    def on_address_comboboxtext_changed(self, widget):
+        if self.address_comboboxtext.get_active() != -1:
             # user selected one of the entries so do auto-visit
-            jid = self.address_comboboxentry.get_child().get_text()
+            jid = self.address_comboboxtext_entry.get_text()
             try:
                 jid = helpers.parse_jid(jid)
             except helpers.InvalidFormat as s:
@@ -809,7 +809,7 @@ _('This type of service does not contain any items to browse.'))
             self.travel(jid, '')
 
     def on_go_button_clicked(self, widget):
-        jid = self.address_comboboxentry.get_child().get_text()
+        jid = self.address_comboboxtext_entry.get_text()
         try:
             jid = helpers.parse_jid(jid)
         except helpers.InvalidFormat as s:
@@ -823,9 +823,9 @@ _('This type of service does not contain any items to browse.'))
         self.latest_addresses.insert(0, jid)
         if len(self.latest_addresses) > 10:
             self.latest_addresses = self.latest_addresses[0:10]
-        self.address_comboboxentry.get_model().clear()
+        self.address_comboboxtext.get_model().clear()
         for j in self.latest_addresses:
-            self.address_comboboxentry.append_text(j)
+            self.address_comboboxtext.append_text(j)
         gajim.config.set('latest_disco_addresses',
                 ' '.join(self.latest_addresses))
         self.travel(jid, '')
@@ -884,15 +884,15 @@ class AgentBrowser:
         # Name column
         col = Gtk.TreeViewColumn(_('Name'))
         renderer = Gtk.CellRendererText()
-        col.pack_start(renderer, True, True, 0)
-        col.set_attributes(renderer, text = 2)
+        col.pack_start(renderer, True)
+        col.add_attribute(renderer, 'text', 2)
         self.window.services_treeview.insert_column(col, -1)
         col.set_resizable(True)
         # Address column
         col = Gtk.TreeViewColumn(_('JID'))
         renderer = Gtk.CellRendererText()
-        col.pack_start(renderer, True, True, 0)
-        col.set_attributes(renderer, text = 3)
+        col.pack_start(renderer, True)
+        col.add_attribute(renderer, 'text', 3)
         self.window.services_treeview.insert_column(col, -1)
         col.set_resizable(True)
         self.window.services_treeview.set_headers_visible(True)
@@ -914,7 +914,7 @@ class AgentBrowser:
         label.set_use_underline(True)
         hbox = Gtk.HBox()
         hbox.pack_start(image, False, True, 6)
-        hbox.pack_end(label, True, True)
+        hbox.pack_end(label, True, True, 6)
         self.browse_button.add(hbox)
         self.browse_button.connect('clicked', self.on_browse_button_clicked)
         self.window.action_buttonbox.add(self.browse_button)
@@ -1095,7 +1095,7 @@ class AgentBrowser:
         self.window.progressbar.hide()
         # The server returned an error
         if items == 0:
-            if not self.window.address_comboboxentry:
+            if not self.window.address_comboboxtext:
                 # We can't travel anywhere else.
                 self.window.destroy()
             dialogs.ErrorDialog(_('The service is not browsable'),
@@ -1180,7 +1180,7 @@ class ToplevelAgentBrowser(AgentBrowser):
         self._view_signals = []
         self._scroll_signal = None
 
-    def _pixbuf_renderer_data_func(self, col, cell, model, iter_):
+    def _pixbuf_renderer_data_func(self, col, cell, model, iter_, data=None):
         """
         Callback for setting the pixbuf renderer's properties
         """
@@ -1192,7 +1192,7 @@ class ToplevelAgentBrowser(AgentBrowser):
         else:
             cell.set_property('visible', False)
 
-    def _text_renderer_data_func(self, col, cell, model, iter_):
+    def _text_renderer_data_func(self, col, cell, model, iter_, data=None):
         """
         Callback for setting the text renderer's properties
         """
@@ -1215,28 +1215,30 @@ class ToplevelAgentBrowser(AgentBrowser):
                 cell.set_property('cell_background_set', True)
             cell.set_property('foreground_set', False)
 
-    def _treemodel_sort_func(self, model, iter1, iter2):
+    def _treemodel_sort_func(self, model, iter1, iter2, data=None):
         """
         Sort function for our treemode
         """
         # Compare state
-        statecmp = cmp(model.get_value(iter1, 4), model.get_value(iter2, 4))
-        if statecmp == 0:
-            # These can be None, apparently
-            descr1 = model.get_value(iter1, 3)
-            if descr1:
-                descr1 = descr1
-            descr2 = model.get_value(iter2, 3)
-            if descr2:
-                descr2 = descr2
-            # Compare strings
-            return cmp(descr1, descr2)
-        return statecmp
+        state1 = model.get_value(iter1, 4)
+        state2 = model.get_value(iter2, 4)
+        if state1 > state2:
+            return 1
+        if state1 < state2:
+            return -1
+        descr1 = model.get_value(iter1, 3)
+        descr2 = model.get_value(iter2, 3)
+        # Compare strings
+        if descr1 > descr2:
+            return 1
+        if descr1 < descr2:
+            return -1
+        return 0
 
     def _show_tooltip(self, state):
         view = self.window.services_treeview
         pointer = view.get_pointer()
-        props = view.get_path_at_pos(pointer[1], pointer[2])
+        props = view.get_path_at_pos(pointer[0], pointer[1])
         # check if the current pointer is at the same path
         # as it was before setting the timeout
         if props and self.tooltip.id == props[0]:
@@ -1296,11 +1298,11 @@ class ToplevelAgentBrowser(AgentBrowser):
         # Icon Renderer
         renderer = Gtk.CellRendererPixbuf()
         renderer.set_property('xpad', 6)
-        col.pack_start(renderer, False, True, 0)
+        col.pack_start(renderer, False)
         col.set_cell_data_func(renderer, self._pixbuf_renderer_data_func)
         # Text Renderer
         renderer = Gtk.CellRendererText()
-        col.pack_start(renderer, True, True, 0)
+        col.pack_start(renderer, True)
         col.set_cell_data_func(renderer, self._text_renderer_data_func)
         renderer.set_property('foreground', 'dark gray')
         # Save this so we can go along with theme changes
@@ -1343,7 +1345,7 @@ class ToplevelAgentBrowser(AgentBrowser):
         label.set_use_underline(True)
         hbox = Gtk.HBox()
         hbox.pack_start(image, False, True, 6)
-        hbox.pack_end(label, True, True)
+        hbox.pack_end(label, True, True, 6)
         self.execute_button.add(hbox)
         self.execute_button.connect('clicked', self.on_execute_button_clicked)
         self.window.action_buttonbox.add(self.execute_button)
@@ -1361,7 +1363,7 @@ class ToplevelAgentBrowser(AgentBrowser):
         label.set_use_underline(True)
         hbox = Gtk.HBox()
         hbox.pack_start(image, False, True, 6)
-        hbox.pack_end(label, True, True)
+        hbox.pack_end(label, True, True, 6)
         self.join_button.add(hbox)
         self.join_button.connect('clicked', self.on_join_button_clicked)
         self.window.action_buttonbox.add(self.join_button)
@@ -1373,7 +1375,7 @@ class ToplevelAgentBrowser(AgentBrowser):
         label.set_use_underline(True)
         hbox = Gtk.HBox()
         hbox.pack_start(image, False, True, 6)
-        hbox.pack_end(label, True, True)
+        hbox.pack_end(label, True, True, 6)
         self.search_button.add(hbox)
         self.search_button.connect('clicked', self.on_search_button_clicked)
         self.window.action_buttonbox.add(self.search_button)
@@ -1744,32 +1746,32 @@ class MucBrowser(AgentBrowser):
         col.set_sizing(Gtk.TreeViewColumnSizing.FIXED)
         col.set_fixed_width(100)
         renderer = Gtk.CellRendererText()
-        col.pack_start(renderer, True, True, 0)
-        col.set_attributes(renderer, text = 2)
+        col.pack_start(renderer, True)
+        col.add_attribute(renderer, 'text', 2)
         col.set_sort_column_id(2)
         self.window.services_treeview.insert_column(col, -1)
         col.set_resizable(True)
         # Users column
         col = Gtk.TreeViewColumn(_('Users'))
         renderer = Gtk.CellRendererText()
-        col.pack_start(renderer, True, True, 0)
-        col.set_attributes(renderer, text = 4)
+        col.pack_start(renderer, True)
+        col.add_attribute(renderer, 'text', 4)
         col.set_sort_column_id(3)
         self.window.services_treeview.insert_column(col, -1)
         col.set_resizable(True)
         # Description column
         col = Gtk.TreeViewColumn(_('Description'))
         renderer = Gtk.CellRendererText()
-        col.pack_start(renderer, True, True, 0)
-        col.set_attributes(renderer, text = 5)
+        col.pack_start(renderer, True)
+        col.add_attribute(renderer, 'text', 5)
         col.set_sort_column_id(4)
         self.window.services_treeview.insert_column(col, -1)
         col.set_resizable(True)
         # Id column
         col = Gtk.TreeViewColumn(_('Id'))
         renderer = Gtk.CellRendererText()
-        col.pack_start(renderer, True, True, 0)
-        col.set_attributes(renderer, text = 0)
+        col.pack_start(renderer, True)
+        col.add_attribute(renderer, 'text', 0)
         col.set_sort_column_id(0)
         self.window.services_treeview.insert_column(col, -1)
         col.set_resizable(True)
@@ -1906,7 +1908,7 @@ class MucBrowser(AgentBrowser):
         iter_ = end = None
         # Top row
         try:
-            sx, sy = view.tree_to_widget_coords(rect.x, rect.y)
+            sx, sy = view.convert_tree_to_bin_window_coords(rect.x, rect.y)
             spath = view.get_path_at_pos(sx, sy)[0]
             iter_ = self.model.get_iter(spath)
         except TypeError:
@@ -1915,8 +1917,8 @@ class MucBrowser(AgentBrowser):
         # Bottom row
         # Iter compare is broke, use the path instead
         try:
-            ex, ey = view.tree_to_widget_coords(rect.x + rect.height,
-                    rect.y + rect.height)
+            ex, ey = view.convert_tree_to_bin_window_coords(rect.x + \
+                rect.height, rect.y + rect.height)
             end = view.get_path_at_pos(ex, ey)[0]
             # end is the last visible, we want to query that aswell
             end = (end[0] + 1,)
@@ -1979,7 +1981,7 @@ class MucBrowser(AgentBrowser):
                 if users:
                     self.model[iter_][3] = int(users.getValue())
                     self.model[iter_][4] = users.getValue()
-                if descr:
+                if descr and descr.getValue():
                     self.model[iter_][5] = descr.getValue()
                 # Only set these when we find a form with additional info
                 # Some servers don't support forms and put extra info in
@@ -2043,8 +2045,8 @@ class DiscussionGroupsBrowser(AgentBrowser):
         # <small/> font
         renderer = Gtk.CellRendererText()
         col = Gtk.TreeViewColumn(_('Name'))
-        col.pack_start(renderer, True, True, 0)
-        col.set_attributes(renderer, markup=2)
+        col.pack_start(renderer, True)
+        col.add_attribute(renderer, 'markup', 2)
         col.set_resizable(True)
         self.window.services_treeview.insert_column(col, -1)
         self.window.services_treeview.set_headers_visible(True)
@@ -2052,16 +2054,17 @@ class DiscussionGroupsBrowser(AgentBrowser):
         # Subscription state
         renderer = Gtk.CellRendererToggle()
         col = Gtk.TreeViewColumn(_('Subscribed'))
-        col.pack_start(renderer, True, True, 0)
-        col.set_attributes(renderer, inconsistent=3, active=4)
+        col.pack_start(renderer, True)
+        col.add_attribute(renderer, 'inconsistent', 3)
+        col.add_attribute(renderer, 'active', 4)
         col.set_resizable(False)
         self.window.services_treeview.insert_column(col, -1)
 
         # Node Column
         renderer = Gtk.CellRendererText()
         col = Gtk.TreeViewColumn(_('Node'))
-        col.pack_start(renderer, True, True, 0)
-        col.set_attributes(renderer, markup=1)
+        col.pack_start(renderer, True)
+        col.add_attribute(renderer, 'markup', 1)
         col.set_resizable(True)
         self.window.services_treeview.insert_column(col, -1)
 

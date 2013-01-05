@@ -517,7 +517,7 @@ class GroupchatControl(ChatControlBase):
             renderer.set_property(self.renderers_propertys[renderer][0],
                 self.renderers_propertys[renderer][1])
 
-    def tree_compare_iters(self, model, iter1, iter2):
+    def tree_compare_iters(self, model, iter1, iter2, data=None):
         """
         Compare two iters to sort them
         """

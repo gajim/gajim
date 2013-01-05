@@ -254,7 +254,12 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
         """
         if value.endswith('%'):
             val = float(value[:-1])
-            sign = cmp(val, 0)
+            if val > 0:
+                sign = 1
+            elif val < 0:
+                sign = -1
+            else:
+                sign = 0
             # limits: 1% to 500%
             val = sign*max(1, min(abs(val), 500))
             frac = val/100
@@ -279,7 +284,12 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 
         def get_val():
             val = float(value[:-2])
-            sign = cmp(val, 0)
+            if val > 0:
+                sign = 1
+            elif val < 0:
+                sign = -1
+            else:
+                sign = 0
             # validate length
             return sign*max(minl, min(abs(val*display_resolution), maxl))
         if value.endswith('pt'): # points
@@ -304,7 +314,12 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
             try:
                 # TODO: isn't "no units" interpreted as pixels?
                 val = int(value)
-                sign = cmp(val, 0)
+                if val > 0:
+                    sign = 1
+                elif val < 0:
+                    sign = -1
+                else:
+                    sign = 0
                 # validate length
                 val = sign*max(minl, min(abs(val), maxl))
                 callback(val, *args)

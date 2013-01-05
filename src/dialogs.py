@@ -311,7 +311,7 @@ class ChooseGPGKeyDialog:
         self.window.set_position(Gtk.WindowPosition.CENTER_ON_PARENT)
         self.window.show_all()
 
-    def sort_keys(self, model, iter1, iter2):
+    def sort_keys(self, model, iter1, iter2, data=None):
         value1 = model[iter1][1]
         value2 = model[iter2][1]
         if value1 == _('None'):
@@ -3807,7 +3807,7 @@ class ArchivingPreferencesWindow:
 
         self.current_item = None
 
-        def sort_items(model, iter1, iter2):
+        def sort_items(model, iter1, iter2, data=None):
             item1 = model.get_value(iter1, 0)
             item2 = model.get_value(iter2, 0)
             if item1 == 'Default':
