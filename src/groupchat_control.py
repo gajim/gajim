@@ -73,12 +73,13 @@ def set_renderer_color(treeview, renderer, set_background=True):
     """
     Set style for group row, using PRELIGHT system color
     """
+    context = treeview.get_style_context()
     if set_background:
-        bgcolor = treeview.get_style().bg[Gtk.StateType.PRELIGHT]
-        renderer.set_property('cell-background-gdk', bgcolor)
+        bgcolor = context.get_background_color(Gtk.StateFlags.PRELIGHT)
+        renderer.set_property('cell-background-rgba', bgcolor)
     else:
-        fgcolor = treeview.get_style().fg[Gtk.StateType.PRELIGHT]
-        renderer.set_property('foreground-gdk', fgcolor)
+        fgcolor = context.get_color(Gtk.StateFlags.PRELIGHT)
+        renderer.set_property('foreground-rgba', fgcolor)
 
 def tree_cell_data_func(column, renderer, model, iter_, tv=None):
     # cell data func is global, because we don't want it to keep
@@ -661,21 +662,26 @@ class GroupchatControl(ChatControlBase):
         color_name = None
         color = None
         theme = gajim.config.get('roster_theme')
+        context = self.parent_win.notebook.get_style_context()
         if chatstate == 'attention' and (not has_focus or not current_tab):
             self.attention_flag = True
             color_name = gajim.config.get_per('themes', theme,
-                                            'state_muc_directed_msg_color')
+                'state_muc_directed_msg_color')
         elif chatstate:
             if chatstate == 'active' or (current_tab and has_focus):
                 self.attention_flag = False
                 # get active color from gtk
-                color = self.parent_win.notebook.get_style().fg[Gtk.StateType.ACTIVE]
+                color = context.get_color(Gtk.StateFlags.ACTIVE)
             elif chatstate == 'newmsg' and (not has_focus or not current_tab) \
             and not self.attention_flag:
                 color_name = gajim.config.get_per('themes', theme,
-                        'state_muc_msg_color')
+                    'state_muc_msg_color')
         if color_name:
-            color = Gdk.colormap_get_system().alloc_color(color_name)
+            color = Gdk.RGBA()
+            ok = Gdk.RGBA.parse(color, color_name)
+            if not ok:
+                del color
+                color = context.get_color(Gtk.StateFlags.ACTIVE)
 
         if self.is_continued:
             # if this is a continued conversation

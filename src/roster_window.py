@@ -5064,11 +5064,13 @@ class RosterWindow:
         Set style for treeview cell, using PRELIGHT system color
         """
         if set_background:
-            bgcolor = self.tree.get_style().bg[style]
-            renderer.set_property('cell-background-gdk', bgcolor)
+            context = self.tree.get_style_context()
+            bgcolor = context.get_background_color(style)
+            renderer.set_property('cell-background-rgba', bgcolor)
         else:
-            fgcolor = self.tree.get_style().fg[style]
-            renderer.set_property('foreground-gdk', fgcolor)
+            context = self.tree.get_style_context()
+            fgcolor = context.get_color(style)
+            renderer.set_property('foreground-rgba', fgcolor)
 
     def _iconCellDataFunc(self, column, renderer, model, titer, data=None):
         """
@@ -5117,7 +5119,7 @@ class RosterWindow:
             if color:
                 renderer.set_property('foreground', color)
             else:
-                self.set_renderer_color(renderer, Gtk.StateType.ACTIVE, False)
+                self.set_renderer_color(renderer, Gtk.StateFlags.ACTIVE, False)
             renderer.set_property('font',
                 gtkgui_helpers.get_theme_font_for_option(theme, 'accountfont'))
             renderer.set_property('xpad', 0)
@@ -5128,7 +5130,7 @@ class RosterWindow:
             if color:
                 renderer.set_property('foreground', color)
             else:
-                self.set_renderer_color(renderer, Gtk.StateType.PRELIGHT, False)
+                self.set_renderer_color(renderer, Gtk.StateFlags.PRELIGHT, False)
             renderer.set_property('font',
                 gtkgui_helpers.get_theme_font_for_option(theme, 'groupfont'))
             parent_iter = model.iter_parent(titer)
@@ -5255,7 +5257,7 @@ class RosterWindow:
         if color:
             renderer.set_property('cell-background', color)
         else:
-            self.set_renderer_color(renderer, Gtk.StateType.ACTIVE)
+            self.set_renderer_color(renderer, Gtk.StateFlags.ACTIVE)
 
     def _set_contact_row_background_color(self, renderer, jid, account):
         theme = gajim.config.get('roster_theme')
@@ -5275,7 +5277,7 @@ class RosterWindow:
         if color:
             renderer.set_property('cell-background', color)
         else:
-            self.set_renderer_color(renderer, Gtk.StateType.PRELIGHT)
+            self.set_renderer_color(renderer, Gtk.StateFlags.PRELIGHT)
 
 ################################################################################
 ### Everything about building menus

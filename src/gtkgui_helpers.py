@@ -523,25 +523,25 @@ def file_is_locked(path_to_file):
 
 def get_fade_color(treeview, selected, focused):
     """
-    Get a gdk color that is between foreground and background in 0.3
+    Get a gdk RGBA color that is between foreground and background in 0.3
     0.7 respectively colors of the cell for the given treeview
     """
+    context = treeview.get_style_context()
     style = treeview.get_style()
     if selected:
         if focused: # is the window focused?
-            state = Gtk.StateType.SELECTED
+            state = Gtk.StateFlags.SELECTED
         else: # is it not? NOTE: many gtk themes change bg on this
-            state = Gtk.StateType.ACTIVE
+            state = Gtk.StateFlags.ACTIVE
     else:
-        state = Gtk.StateType.NORMAL
-    bg = style.base[state]
-    fg = style.text[state]
+        state = Gtk.StateFlags.NORMAL
+    bg = context.get_background_color(state)
+    fg = context.get_color(state)
 
     p = 0.3 # background
     q = 0.7 # foreground # p + q should do 1.0
-    return Gdk.Color(int(bg.red*p + fg.red*q),
-                                    int(bg.green*p + fg.green*q),
-                                    int(bg.blue*p + fg.blue*q))
+    return Gdk.RGBA(bg.red*p + fg.red*q, bg.green*p + fg.green*q,
+        bg.blue*p + fg.blue*q)
 
 def get_scaled_pixbuf(pixbuf, kind):
     """

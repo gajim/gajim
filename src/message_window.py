@@ -639,8 +639,8 @@ class MessageWindow(object):
         (tab_label_str, tab_label_color) = ctrl.get_tab_label(chatstate)
         nick_label.set_markup(tab_label_str)
         if tab_label_color:
-            nick_label.modify_fg(Gtk.StateType.NORMAL, tab_label_color)
-            nick_label.modify_fg(Gtk.StateType.ACTIVE, tab_label_color)
+            nick_label.override_color(Gtk.StateFlags.NORMAL, tab_label_color)
+            nick_label.override_color(Gtk.StateFlags.ACTIVE, tab_label_color)
 
         tab_img = ctrl.get_tab_image()
         if tab_img:

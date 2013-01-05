@@ -2299,38 +2299,6 @@ class Interface:
             gajim.connections[acct].send_tune(artist, title, source)
             gajim.connections[acct].music_track_info = music_track_info
 
-    def get_bg_fg_colors(self):
-        def gdkcolor_to_rgb (gdkcolor):
-            return [c / 65535. for c in (gdkcolor.red, gdkcolor.green,
-                gdkcolor.blue)]
-
-        def format_rgb (r, g, b):
-            return ' '.join([str(c) for c in ('rgb', r, g, b)])
-
-        def format_gdkcolor (gdkcolor):
-            return format_rgb (*gdkcolor_to_rgb (gdkcolor))
-
-        # get style colors and create string for dvipng
-        dummy = Gtk.Invisible()
-        dummy.ensure_style()
-        style = dummy.get_style()
-        bg_str = format_gdkcolor(style.base[Gtk.StateType.NORMAL])
-        fg_str = format_gdkcolor(style.text[Gtk.StateType.NORMAL])
-        return (bg_str, fg_str)
-
-    def get_fg_color(self, fmt='hex'):
-        def format_gdkcolor (c):
-            if fmt == 'tex':
-                return ' '.join([str(s) for s in
-                    ('rgb', c.red_float, c.green_float, c.blue_float)])
-            elif fmt == 'hex':
-                return str(c)
-
-        # get foreground style color and create string
-        dummy = Gtk.Invisible()
-        dummy.ensure_style()
-        return format_gdkcolor(dummy.get_style().text[Gtk.StateType.NORMAL])
-
     def read_sleepy(self):
         """
         Check idle status and change that status if needed

@@ -672,7 +672,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
     def connect_style_event(self, widget, set_fg=False, set_bg=False):
         self.disconnect_style_event(widget)
         id_ = widget.connect('style-set', self._on_style_set_event, set_fg,
-                set_bg)
+            set_bg)
         self.handlers[id_] = widget
 
     def _on_style_set_event(self, widget, style, *opts):
@@ -683,12 +683,13 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         """
         banner_eventbox = self.xml.get_object('banner_eventbox')
         self.disconnect_style_event(widget)
+        context = widget.get_style_context()
         if opts[1]:
-            bg_color = widget.get_style().bg[Gtk.StateType.SELECTED]
-            banner_eventbox.modify_bg(Gtk.StateType.NORMAL, bg_color)
+            bg_color = context.get_background_color(Gtk.StateFlags.SELECTED)
+            banner_eventbox.override_background_color(Gtk.StateType.NORMAL, bg_color)
         if opts[0]:
-            fg_color = widget.get_style().fg[Gtk.StateType.SELECTED]
-            widget.modify_fg(Gtk.StateType.NORMAL, fg_color)
+            fg_color = context.get_color(Gtk.StateFlags.SELECTED)
+            widget.override_color(Gtk.StateType.NORMAL, fg_color)
         self.connect_style_event(widget, opts[0], opts[1])
 
     def _conv_textview_key_press_event(self, widget, event):
@@ -2510,34 +2511,38 @@ class ChatControl(ChatControlBase):
 
         # Draw tab label using chatstate
         theme = gajim.config.get('roster_theme')
-        color = None
+        color_s = None
         if not chatstate:
             chatstate = self.contact.chatstate
         if chatstate is not None:
             if chatstate == 'composing':
-                color = gajim.config.get_per('themes', theme,
-                                'state_composing_color')
+                color_s = gajim.config.get_per('themes', theme,
+                    'state_composing_color')
             elif chatstate == 'inactive':
-                color = gajim.config.get_per('themes', theme,
-                                'state_inactive_color')
+                color_s = gajim.config.get_per('themes', theme,
+                    'state_inactive_color')
             elif chatstate == 'gone':
-                color = gajim.config.get_per('themes', theme,
-                                'state_gone_color')
+                color_s = gajim.config.get_per('themes', theme,
+                    'state_gone_color')
             elif chatstate == 'paused':
-                color = gajim.config.get_per('themes', theme,
-                                'state_paused_color')
-        if color:
+                color_s = gajim.config.get_per('themes', theme,
+                    'state_paused_color')
+
+        context = self.parent_win.notebook.get_style_context()
+        if color_s:
             # We set the color for when it's the current tab or not
-            ok, color = Gdk.Color.parse(color)
+            color = Gdk.RGBA()
+            ok = Gdk.RGBA.parse(color, color_s)
             if not ok:
-                color = self.parent_win.notebook.get_style().fg[Gtk.StateType.ACTIVE]
+                del color
+                color = context.get_color(Gtk.StateFlags.ACTIVE)
             # In inactive tab color to be lighter against the darker inactive
             # background
             if chatstate in ('inactive', 'gone') and\
             self.parent_win.get_active_control() != self:
                 color = self.lighten_color(color)
         else: # active or not chatstate, get color from gtk
-            color = self.parent_win.notebook.get_style().fg[Gtk.StateType.ACTIVE]
+            color = context.get_color(Gtk.StateFlags.ACTIVE)
 
         name = self.contact.get_shown_name()
         if self.resource:

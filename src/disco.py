@@ -679,12 +679,14 @@ _('Without a connection, you can not browse available services'))
                 opts[1] == True -> set bg color
         """
         self.disconnect_style_event()
+        context = widget.get_style_context()
         if opts[1]:
-            bg_color = widget.get_style().bg[Gtk.StateType.SELECTED]
-            self.banner_eventbox.modify_bg(Gtk.StateType.NORMAL, bg_color)
+            bg_color = context.get_background_color(Gtk.StateFlags.SELECTED)
+            self.banner_eventbox.override_background_color(Gtk.StateType.NORMAL,
+                bg_color)
         if opts[0]:
-            fg_color = widget.get_style().fg[Gtk.StateType.SELECTED]
-            self.banner.modify_fg(Gtk.StateType.NORMAL, fg_color)
+            fg_color = context.get_color(Gtk.StateFlags.SELECTED)
+            self.banner.override_color(Gtk.StateType.NORMAL, fg_color)
         self.banner.ensure_style()
         self.connect_style_event(opts[0], opts[1])
 

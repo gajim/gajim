@@ -397,8 +397,11 @@ class PreferencesWindow:
 
         # Default Status messages
         self.default_msg_tree = self.xml.get_object('default_msg_treeview')
-        col2 = self.default_msg_tree.get_style().bg[Gtk.StateType.ACTIVE].\
-            to_string()
+
+        #FIXME: That doesn't seem to work:
+        context = self.default_msg_tree.get_style_context()
+        col2 = context.get_background_color(Gtk.StateFlags.ACTIVE)
+
         # (status, translated_status, message, enabled)
         model = Gtk.ListStore(str, str, str, bool)
         self.default_msg_tree.set_model(model)
@@ -416,7 +419,7 @@ class PreferencesWindow:
         col.add_attribute(renderer, 'text', 2)
         renderer.connect('edited', self.on_default_msg_cell_edited)
         renderer.set_property('editable', True)
-        renderer.set_property('cell-background', col2)
+        renderer.set_property('cell-background-rgba', col2)
         col = Gtk.TreeViewColumn(_('Enabled'))
         col.set_resizable(True)
         self.default_msg_tree.append_column(col)
