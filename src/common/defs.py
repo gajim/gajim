@@ -33,7 +33,7 @@ try:
     node = subprocess.Popen('hg tip --template "{node|short}"', shell=True,
         stdout=subprocess.PIPE).communicate()[0]
     if node:
-        version += '-' + node
+        version += '-' + node.decode('utf-8')
 except Exception:
     pass
 
