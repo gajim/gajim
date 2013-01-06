@@ -229,7 +229,7 @@ class StatusIcon:
             join_gc_menuitem.set_image(state_images['muc_active'])
 
         for show in ('online', 'chat', 'away', 'xa', 'dnd', 'invisible'):
-            uf_show = helpers.get_uf_show(show, use_mnemonic = True)
+            uf_show = helpers.get_uf_show(show, use_mnemonic = False)
             item = Gtk.ImageMenuItem(uf_show)
             item.set_image(state_images[show])
             sub_menu.append(item)
@@ -238,7 +238,7 @@ class StatusIcon:
         item = Gtk.SeparatorMenuItem.new()
         sub_menu.append(item)
 
-        item = Gtk.ImageMenuItem(_('_Change Status Message...'))
+        item = Gtk.ImageMenuItem(_('Change Status Message...'))
         gtkgui_helpers.add_image_to_menuitem(item, 'gajim-kbd_input')
         sub_menu.append(item)
         item.connect('activate', self.on_change_status_message_activate)
@@ -252,7 +252,7 @@ class StatusIcon:
         item = Gtk.SeparatorMenuItem.new()
         sub_menu.append(item)
 
-        uf_show = helpers.get_uf_show('offline', use_mnemonic = True)
+        uf_show = helpers.get_uf_show('offline', use_mnemonic = False)
         item = Gtk.ImageMenuItem(uf_show)
         item.set_image(state_images['offline'])
         sub_menu.append(item)
@@ -328,7 +328,7 @@ class StatusIcon:
 
                 # join gc
                 gc_item = Gtk.MenuItem(_('using account %s') % account,
-                    use_underline=False)
+                    use_underline=True)
                 gc_sub_menu.append(gc_item)
                 gc_menuitem_menu = Gtk.Menu()
                 gajim.interface.roster.add_bookmarks_list(gc_menuitem_menu,
@@ -338,7 +338,7 @@ class StatusIcon:
 
         newitem = Gtk.SeparatorMenuItem.new() # separator
         gc_sub_menu.append(newitem)
-        newitem = Gtk.ImageMenuItem(_('_Manage Bookmarks...'))
+        newitem = Gtk.ImageMenuItem(_('Manage Bookmarks...'))
         img = Gtk.Image.new_from_stock(Gtk.STOCK_PREFERENCES, Gtk.IconSize.MENU)
         newitem.set_image(img)
         newitem.connect('activate',

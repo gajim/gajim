@@ -293,8 +293,8 @@ class RosterWindow:
 
         # Draw all known groups
         for group in gajim.groups[account]:
-            self.draw_group(group, account)
-        self.draw_account(account)
+            self._really_draw_group(group, account)
+        self._really_draw_account(account)
 
         self.starting = False
 
@@ -897,7 +897,7 @@ class RosterWindow:
 
         # update all contacts in the given group
         if self.regroup:
-            accounts = gajim.connections.keys()
+            accounts = list(gajim.connections.keys())
         else:
             accounts = [account, ]
 
@@ -1122,7 +1122,7 @@ class RosterWindow:
         self.model[child_iter][C_NAME] = text
 
     def _really_draw_groups(self):
-        for ag in self.groups_to_draw.values():
+        for ag in list(self.groups_to_draw.values()):
             acct = ag['account']
             grp = ag['group']
             self._really_draw_group(grp, acct)
@@ -1135,7 +1135,7 @@ class RosterWindow:
             return
         self.groups_to_draw[ag] = {'group': group, 'account': account}
         if len(self.groups_to_draw) == 1:
-            GObject.timeout_add(200, self._really_draw_groups)
+            GObject.idle_add(self._really_draw_groups)
 
     def draw_parent_contact(self, jid, account):
         child_iters = self._get_contact_iter(jid, account, model=self.model)
@@ -1150,7 +1150,13 @@ class RosterWindow:
         self.draw_contact(parent_jid, parent_account)
         return False
 
-    def draw_contact(self, jid, account, selected=False, focus=False, contact_instances=None, contact=None):
+    def draw_contact(self, jid, account, selected=False, focus=False,
+        contact_instances=None, contact=None):
+        GObject.idle_add(self._really_draw_contact, jid, account, selected,
+            focus, contact_instances, contact)
+
+    def _really_draw_contact(self, jid, account, selected=False, focus=False,
+        contact_instances=None, contact=None):
         """
         Draw the correct state image, name BUT not avatar
         """
@@ -1329,6 +1335,10 @@ class RosterWindow:
             self.draw_pep(jid, account, pep_type, contact=contact)
 
     def draw_pep(self, jid, account, pep_type, contact=None):
+        GObject.idle_add(self._really_draw_pep, jid, account, pep_type,
+            contact)
+
+    def _really_draw_pep(self, jid, account, pep_type, contact=None):
         if pep_type not in self._pep_type_to_model_column:
             return
         if not self._is_pep_shown_in_roster(pep_type):
@@ -1348,6 +1358,9 @@ class RosterWindow:
             self.model[child_iter][model_column] = pixbuf
 
     def draw_avatar(self, jid, account):
+        GObject.idle_add(self._really_draw_avatar, jid, account)
+
+    def _really_draw_avatar(self, jid, account):
         iters = self._get_contact_iter(jid, account, model=self.model)
         if not iters or not gajim.config.get('show_avatars_in_roster'):
             return
@@ -1871,7 +1884,7 @@ class RosterWindow:
                 'groups': ['self_contact'], 'subscription': 'both',
                 'ask': 'none'}
         # .keys() is needed
-        for jid in array.keys():
+        for jid in list(array.keys()):
             # Remove the contact in roster. It might has changed
             self.remove_contact(jid, account, force=True)
             # Remove old Contact instances
@@ -1929,7 +1942,7 @@ class RosterWindow:
                 chat_control.contact = contact1
 
     def connected_rooms(self, account):
-        if account in gajim.gc_connected[account].values():
+        if account in list(gajim.gc_connected[account].values()):
             return True
         return False
 
@@ -1959,7 +1972,7 @@ class RosterWindow:
             self.draw_contact(jid, account)
             # Remove contacts in roster if removal was requested
             key = (jid, account)
-            if key in self.contacts_to_be_removed.keys():
+            if key in list(self.contacts_to_be_removed.keys()):
                 backend = self.contacts_to_be_removed[key]['backend']
                 del self.contacts_to_be_removed[key]
                 # Remove contact will delay removal if there are more events
@@ -2486,7 +2499,7 @@ class RosterWindow:
         Terminate all sessions and send offline to all connected account. We do
         NOT really quit gajim here
         """
-        accounts = gajim.connections.keys()
+        accounts = list(gajim.connections.keys())
         get_msg = False
         for acct in accounts:
             if gajim.connections[acct].connected:
@@ -3569,7 +3582,7 @@ class RosterWindow:
         if modifier & Gdk.ModifierType.CONTROL_MASK:
             if keyval == Gdk.KEY_s: # CTRL + s
                 model = self.status_combobox.get_model()
-                accounts = gajim.connections.keys()
+                accounts = list(gajim.connections.keys())
                 status = model[self.previous_status_combobox_active][2].decode(
                     'utf-8')
                 def on_response(message, pep_dict):
@@ -3826,7 +3839,7 @@ class RosterWindow:
         if not self.combobox_callback_active:
             self.previous_status_combobox_active = active
             return
-        accounts = gajim.connections.keys()
+        accounts = list(gajim.connections.keys())
         if len(accounts) == 0:
             dialogs.ErrorDialog(_('No account available'),
                 _('You must create an account before you can chat with other '
@@ -4206,7 +4219,7 @@ class RosterWindow:
         child_iter =  model.convert_iter_to_child_iter(titer)
 
         if self.regroup: # merged accounts
-            accounts = gajim.connections.keys()
+            accounts = list(gajim.connections.keys())
         else:
             accounts = [model[titer][C_ACCOUNT]]
 
@@ -4270,7 +4283,7 @@ class RosterWindow:
         child_iter =  model.convert_iter_to_child_iter(titer)
 
         if self.regroup: # merged accounts
-            accounts = gajim.connections.keys()
+            accounts = list(gajim.connections.keys())
         else:
             accounts = [model[titer][C_ACCOUNT]]
 
@@ -4679,7 +4692,7 @@ class RosterWindow:
         return True
 
     def move_group(self, old_name, new_name, account):
-        for group in gajim.groups[account].keys():
+        for group in list(gajim.groups[account].keys()):
             if group.startswith(old_name):
                 self.rename_group(group, group.replace(old_name, new_name),
                     account)
@@ -5047,7 +5060,7 @@ class RosterWindow:
         for account in gajim.connections:
             for addr in gajim.interface.instances[account]['disco']:
                 gajim.interface.instances[account]['disco'][addr].paint_banner()
-            for ctrl in gajim.interface.minimized_controls[account].values():
+            for ctrl in list(gajim.interface.minimized_controls[account].values()):
                 ctrl.repaint_themed_widgets()
 
     def update_avatar_in_gui(self, jid, account):
@@ -5597,7 +5610,7 @@ class RosterWindow:
             item = Gtk.SeparatorMenuItem.new()
             sub_menu.append(item)
 
-            item = Gtk.ImageMenuItem(_('_Change Status Message'))
+            item = Gtk.ImageMenuItem(_('Change Status Message'))
             gtkgui_helpers.add_image_to_menuitem(item, 'gajim-kbd_input')
             sub_menu.append(item)
             item.connect('activate', self.on_change_status_message_activate,
@@ -5608,7 +5621,7 @@ class RosterWindow:
             item = Gtk.SeparatorMenuItem.new()
             sub_menu.append(item)
 
-            uf_show = helpers.get_uf_show('offline', use_mnemonic=True)
+            uf_show = helpers.get_uf_show('offline', use_mnemonic=False)
             item = Gtk.ImageMenuItem(uf_show)
             icon = state_images['offline']
             item.set_image(icon)
@@ -5695,7 +5708,7 @@ class RosterWindow:
             status_menuitem.set_submenu(sub_menu)
 
             for show in ('online', 'away', 'dnd', 'invisible'):
-                uf_show = helpers.get_uf_show(show, use_mnemonic=True)
+                uf_show = helpers.get_uf_show(show, use_mnemonic=False)
                 item = Gtk.ImageMenuItem(uf_show)
                 icon = state_images[show]
                 item.set_image(icon)
@@ -5705,7 +5718,7 @@ class RosterWindow:
             item = Gtk.SeparatorMenuItem.new()
             sub_menu.append(item)
 
-            item = Gtk.ImageMenuItem(_('_Change Status Message'))
+            item = Gtk.ImageMenuItem(_('Change Status Message'))
             gtkgui_helpers.add_image_to_menuitem(item, 'gajim-kbd_input')
             sub_menu.append(item)
             item.connect('activate', self.on_change_status_message_activate,
@@ -5713,7 +5726,7 @@ class RosterWindow:
             if gajim.connections[account].connected < 2:
                 item.set_sensitive(False)
 
-            uf_show = helpers.get_uf_show('offline', use_mnemonic=True)
+            uf_show = helpers.get_uf_show('offline', use_mnemonic=False)
             item = Gtk.ImageMenuItem(uf_show)
             icon = state_images['offline']
             item.set_image(icon)
@@ -6302,7 +6315,7 @@ class RosterWindow:
         """
         Show join new group chat item and bookmarks list for an account
         """
-        item = Gtk.ImageMenuItem(_('_Join New Group Chat'))
+        item = Gtk.ImageMenuItem(_('Join New Group Chat'))
         icon = Gtk.Image.new_from_stock(Gtk.STOCK_NEW, Gtk.IconSize.MENU)
         item.set_image(icon)
         item.connect('activate', self.on_join_gc_activate, account)
@@ -6407,7 +6420,7 @@ class RosterWindow:
             col.add_attribute(rend[1], rend[3], rend[4])
             col.set_cell_data_func(rend[1], rend[5], rend[6])
         # set renderers propertys
-        for renderer in self.renderers_propertys.keys():
+        for renderer in list(self.renderers_propertys.keys()):
             renderer.set_property(self.renderers_propertys[renderer][0],
                 self.renderers_propertys[renderer][1])
 
