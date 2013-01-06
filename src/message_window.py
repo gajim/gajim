@@ -734,7 +734,7 @@ class MessageWindow(object):
             del gajim.last_message_time[acct][old_jid]
 
     def controls(self):
-        for jid_dict in self._controls.values():
+        for jid_dict in list(self._controls.values()):
             for ctrl in jid_dict.values():
                 yield ctrl
 
