@@ -789,8 +789,9 @@ class MessageWindow(object):
     def popup_menu(self, event):
         menu = self.get_active_control().prepare_context_menu()
         # show the menu
-        menu.popup(None, None, None, None, event.button, event.time)
+        menu.attach_to_widget(gajim.interface.roster.window, None)
         menu.show_all()
+        menu.popup(None, None, None, None, event.button, event.time)
 
     def _on_notebook_switch_page(self, notebook, page, page_num):
         old_no = notebook.get_current_page()
