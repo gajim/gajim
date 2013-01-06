@@ -2454,6 +2454,7 @@ class GroupchatControl(ChatControlBase):
         # show the popup now!
         menu = xml.get_object('gc_occupants_menu')
         menu.show_all()
+        menu.attach_to_widget(gajim.interface.roster.window, None)
         menu.popup(None, None, None, None, event.button, event.time)
 
     def _start_private_message(self, nick):
@@ -2505,7 +2506,7 @@ class GroupchatControl(ChatControlBase):
         if event.button == 3: # right click
             widget.get_selection().select_path(path)
             iter_ = self.model.get_iter(path)
-            if len(path) == 2:
+            if path.get_depth() == 2:
                 self.mk_menu(event, iter_)
             return True
 
