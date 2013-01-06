@@ -525,7 +525,8 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                 # The "data" URL scheme http://tools.ietf.org/html/rfc2397
                 import base64
                 img = attrs['src'].split(',')[1]
-                mem = base64.standard_b64decode(urllib.parse.unquote(img))
+                mem = base64.standard_b64decode(urllib.parse.unquote(
+                    img).encode('utf-8'))
             elif loaded is not None:
                 (mem, alt, replace_mark) = loaded
                 update = True

@@ -1363,7 +1363,7 @@ class ConversationTextview(GObject.GObject):
             try:
                 if name and (text.startswith('/me ') or text.startswith('/me\n')):
                     xhtml = xhtml.replace('/me', '<i>* %s</i>' % (name,), 1)
-                self.tv.display_html(xhtml.encode('utf-8'), self)
+                self.tv.display_html(xhtml, self)
                 return
             except Exception as e:
                 gajim.log.debug('Error processing xhtml' + str(e))
