@@ -2218,8 +2218,7 @@ class AccountsWindow:
     def on_password_entry1_changed(self, widget):
         if self.ignore_events:
             return
-        passwords.save_password(self.current_account, widget.get_text().decode(
-                'utf-8'))
+        passwords.save_password(self.current_account, widget.get_text())
 
     def on_save_password_checkbutton1_toggled(self, widget):
         if self.ignore_events:
