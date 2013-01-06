@@ -91,7 +91,7 @@ def build_invite_submenu(invite_menuitem, list_, ignore_rooms=[]):
         return
     invite_to_submenu = Gtk.Menu()
     invite_menuitem.set_submenu(invite_to_submenu)
-    invite_to_new_room_menuitem = Gtk.ImageMenuItem(_('_New Group Chat'))
+    invite_to_new_room_menuitem = Gtk.ImageMenuItem(_('New Group Chat'))
     icon = Gtk.Image.new_from_stock(Gtk.STOCK_NEW, Gtk.IconSize.MENU)
     invite_to_new_room_menuitem.set_image(icon)
     if len(contact_list) > 1: # several resources

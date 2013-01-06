@@ -734,7 +734,7 @@ class ConversationTextview(GObject.GObject):
             menu.prepend(item)
             separator_menuitem_was_added = True
 
-            item = Gtk.ImageMenuItem(Gtk.STOCK_CLEAR)
+            item = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_CLEAR, None)
             menu.prepend(item)
             id_ = item.connect('activate', self.clear)
             self.handlers[id_] = item
@@ -745,14 +745,14 @@ class ConversationTextview(GObject.GObject):
                 menu.prepend(item)
 
             if not self.used_in_history_window:
-                item = Gtk.MenuItem(_('_Quote'))
+                item = Gtk.MenuItem(_('Quote'))
                 id_ = item.connect('activate', self.on_quote)
                 self.handlers[id_] = item
                 menu.prepend(item)
 
             _selected_phrase = helpers.reduce_chars_newlines(
                     self.selected_phrase, 25, 2)
-            item = Gtk.MenuItem(_('_Actions for "%s"') % _selected_phrase)
+            item = Gtk.MenuItem(_('Actions for "%s"') % _selected_phrase)
             menu.prepend(item)
             submenu = Gtk.Menu()
             item.set_submenu(submenu)
