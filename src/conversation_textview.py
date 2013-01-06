@@ -765,12 +765,12 @@ class ConversationTextview(GObject.GObject):
             else:
                 link = 'http://%s.wikipedia.org/wiki/Special:Search?search=%s'\
                         % (gajim.LANG, phrase_for_url)
-            item = Gtk.MenuItem(_('Read _Wikipedia Article'))
+            item = Gtk.MenuItem(_('Read Wikipedia Article'))
             id_ = item.connect('activate', self.visit_url_from_menuitem, link)
             self.handlers[id_] = item
             submenu.append(item)
 
-            item = Gtk.MenuItem(_('Look it up in _Dictionary'))
+            item = Gtk.MenuItem(_('Look it up in Dictionary'))
             dict_link = gajim.config.get('dictionary_url')
             if dict_link == 'WIKTIONARY':
                 # special link (yeah undocumented but default)
@@ -803,13 +803,13 @@ class ConversationTextview(GObject.GObject):
                 item = Gtk.MenuItem(_('Web Search URL is missing an "%s"'))
                 item.set_property('sensitive', False)
             else:
-                item = Gtk.MenuItem(_('Web _Search for it'))
+                item = Gtk.MenuItem(_('Web Search for it'))
                 link =  search_link % phrase_for_url
                 id_ = item.connect('activate', self.visit_url_from_menuitem, link)
                 self.handlers[id_] = item
             submenu.append(item)
 
-            item = Gtk.MenuItem(_('Open as _Link'))
+            item = Gtk.MenuItem(_('Open as Link'))
             id_ = item.connect('activate', self.visit_url_from_menuitem, link)
             self.handlers[id_] = item
             submenu.append(item)
