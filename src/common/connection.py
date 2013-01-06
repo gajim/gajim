@@ -1326,7 +1326,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                     certificate=con.Connection.ssl_certificate[i]))
                 return True
             i += 1
-        if hasattr(con.Connection, 'ssl_fingerprint_sha1'):
+        if len(con.Connection.ssl_fingerprint_sha1):
             saved_fingerprint = gajim.config.get_per('accounts', self.name,
                 'ssl_fingerprint_sha1')
             if saved_fingerprint:

@@ -1568,10 +1568,10 @@ class NewAccountConnectedEvent(nec.NetworkIncomingEvent):
                 self.ssl_msg = ssl_error.get(er, _('Unknown SSL error: %d') % \
                     er)
         self.ssl_cert = ''
-        if hasattr(self.conn.connection.Connection, 'ssl_cert_pem'):
+        if len(self.conn.connection.Connection.ssl_cert_pem):
             self.ssl_cert = self.conn.connection.Connection.ssl_cert_pem
         self.ssl_fingerprint = ''
-        if hasattr(self.conn.connection.Connection, 'ssl_fingerprint_sha1'):
+        if len(self.conn.connection.Connection.ssl_fingerprint_sha1):
             self.ssl_fingerprint = \
                 self.conn.connection.Connection.ssl_fingerprint_sha1
         return True
