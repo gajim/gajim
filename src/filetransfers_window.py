@@ -320,7 +320,7 @@ class FileTransfersWindow:
                 on_response_cancel=lambda e:dialog.destroy()
                 )
 
-        btn = Gtk.Button(_('_Send'))
+        btn = Gtk.Button.new_with_mnemonic(_('_Send'))
         btn.set_property('can-default', True)
         # FIXME: add send icon to this button (JUMP_TO)
         dialog.add_action_widget(btn, Gtk.ResponseType.OK)
