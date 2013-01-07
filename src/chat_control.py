@@ -1973,7 +1973,7 @@ class ChatControl(ChatControlBase):
         """
         if event.button == 3: # right click
             menu = Gtk.Menu()
-            menuitem = Gtk.ImageMenuItem(Gtk.STOCK_SAVE_AS)
+            menuitem = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_SAVE_AS, None)
             id_ = menuitem.connect('activate',
                 gtkgui_helpers.on_avatar_save_as_menuitem_activate,
                 self.contact.jid, self.contact.get_shown_name())
@@ -1983,6 +1983,7 @@ class ChatControl(ChatControlBase):
             menu.connect('selection-done', lambda w: w.destroy())
             # show the menu
             menu.show_all()
+            menu.attach_to_widget(widget, None)
             menu.popup(None, None, None, None, event.button, event.time)
         return True
 
