@@ -5192,7 +5192,7 @@ class RosterWindow:
             return
 
         # allocate space for the icon only if needed
-        if not model[titer][data]:
+        if not model[titer][data] or model[titer][data] == empty_pixbuf:
             renderer.set_property('visible', False)
         else:
             renderer.set_property('visible', True)
@@ -5235,6 +5235,9 @@ class RosterWindow:
                 account = model[titer][C_ACCOUNT]
                 self._set_contact_row_background_color(renderer, jid, account)
         else:
+            renderer.set_property('visible', False)
+        if model[titer][C_AVATAR_PIXBUF] == empty_pixbuf and \
+        gajim.config.get('avatar_position_in_roster') != 'left':
             renderer.set_property('visible', False)
 
         if gajim.config.get('avatar_position_in_roster') == 'left':
