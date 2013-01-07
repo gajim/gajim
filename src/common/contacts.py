@@ -566,7 +566,7 @@ class GC_Contacts():
         gc_list = self.get_gc_list()
         if not room_jid in gc_list:
             return []
-        return self._rooms[room_jid].keys()
+        return list(self._rooms[room_jid].keys())
 
     def get_gc_contact(self, room_jid, nick):
         nick_list = self.get_nick_list(room_jid)
