@@ -2236,8 +2236,7 @@ class AccountsWindow:
     def on_resource_entry1_focus_out_event(self, widget, event):
         if self.ignore_events:
             return
-        resource = self.xml.get_object('resource_entry1').get_text().decode(
-                'utf-8')
+        resource = self.xml.get_object('resource_entry1').get_text()
         try:
             resource = helpers.parse_resource(resource)
         except helpers.InvalidFormat as s:
@@ -3623,8 +3622,7 @@ class AccountCreationWizardWindow:
             # We are adding an existing account
             anonymous = self.xml.get_object('anonymous_checkbutton1').\
                 get_active()
-            username = self.xml.get_object('username_entry').get_text().decode(
-                'utf-8').strip()
+            username = self.xml.get_object('username_entry').get_text().strip()
             if not username and not anonymous:
                 pritext = _('Invalid username')
                 sectext = _(
@@ -3635,8 +3633,7 @@ class AccountCreationWizardWindow:
                 get_text().strip()
             savepass = self.xml.get_object('save_password_checkbutton').\
                 get_active()
-            password = self.xml.get_object('password_entry').get_text().decode(
-                'utf-8')
+            password = self.xml.get_object('password_entry').get_text()
 
             if anonymous:
                 jid = ''
