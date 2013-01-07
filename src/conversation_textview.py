@@ -610,7 +610,7 @@ class ConversationTextview(GObject.GObject):
     def show_line_tooltip(self):
         pointer = self.tv.get_pointer()
         x, y = self.tv.window_to_buffer_coords(Gtk.TextWindowType.TEXT,
-                pointer[0], pointer[2])
+                pointer[0], pointer[1])
         tags = self.tv.get_iter_at_location(x, y).get_tags()
         tag_table = self.tv.get_buffer().get_tag_table()
         over_line = False
@@ -623,7 +623,7 @@ class ConversationTextview(GObject.GObject):
             position = self.tv.get_window(Gtk.TextWindowType.TEXT).get_origin()[1:]
             self.line_tooltip.show_tooltip(_('Text below this line is what has '
                     'been said since the\nlast time you paid attention to this group '
-                    'chat'), 8, position[1] + pointer[2])
+                    'chat'), 8, position[1] + pointer[1])
 
     def on_textview_draw(self, widget, ctx):
         return

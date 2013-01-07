@@ -375,7 +375,8 @@ class SingleForm(Gtk.Table, object):
                 widget.set_property('selectable', selectable)
                 widget.set_line_wrap(True)
                 self.attach(widget, leftattach, rightattach, linecounter,
-                        linecounter+1, xoptions=Gtk.AttachOptions.FILL, yoptions=Gtk.AttachOptions.FILL)
+                    linecounter+1, xoptions=Gtk.AttachOptions.FILL,
+                    yoptions=Gtk.AttachOptions.FILL)
 
             elif field.type_ == 'list-single':
                 # TODO: What if we have radio buttons and non-required field?
@@ -387,9 +388,10 @@ class SingleForm(Gtk.Table, object):
                     for value, label in field.iter_options():
                         if not label:
                             label = value
-                        radio = Gtk.RadioButton(first_radio, label=label)
+                        radio = Gtk.RadioButton.new_with_label_from_widget(
+                            first_radio, label)
                         radio.connect('toggled',
-                                self.on_list_single_radiobutton_toggled, field, value)
+                            self.on_list_single_radiobutton_toggled, field, value)
                         if first_radio is None:
                             first_radio = radio
                             if field.value == '':   # TODO: is None when done
