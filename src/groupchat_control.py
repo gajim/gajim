@@ -69,6 +69,9 @@ C_TEXT, # text shown in the cellrenderer
 C_AVATAR, # avatar of the contact
 ) = range(5)
 
+empty_pixbuf = GdkPixbuf.Pixbuf.new(GdkPixbuf.Colorspace.RGB, True, 8, 1, 1)
+empty_pixbuf.fill(0xffffff00)
+
 def set_renderer_color(treeview, renderer, set_background=True):
     """
     Set style for group row, using PRELIGHT system color
@@ -1455,9 +1458,11 @@ class GroupchatControl(ChatControlBase):
         fake_jid = self.room_jid + '/' + nick
         pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(fake_jid)
         if pixbuf in ('ask', None):
-            scaled_pixbuf = ''
+            scaled_pixbuf = empty_pixbuf
         else:
             scaled_pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'roster')
+            if not scaled_pixbuf:
+                scaled_pixbuf = empty_pixbuf
         self.model[iter_][C_AVATAR] = scaled_pixbuf
 
     def draw_role(self, role):
