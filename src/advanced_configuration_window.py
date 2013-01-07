@@ -285,7 +285,7 @@ class AdvancedConfigurationWindow(object):
             else:
                 if str(default) == model[iter_][C_VALUE]:
                     return
-                self.on_config_edited(None, path, str(default))
+                self.on_config_edited(None, path.to_string(), str(default))
 
     def on_advanced_close_button_clicked(self, widget):
         self.window.destroy()

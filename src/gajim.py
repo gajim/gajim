@@ -394,7 +394,7 @@ if pid_alive():
         print("Gajim is already running, bringing the roster to front...")
         sys.exit(0)
     pix = gtkgui_helpers.get_icon_pixmap('gajim', 48)
-    Gtk.window_set_default_icon(pix) # set the icon to all newly opened wind
+    Gtk.Window.set_default_icon(pix) # set the icon to all newly opened wind
     pritext = _('Gajim is already running')
     sectext = _('Another instance of Gajim seems to be running\nRun anyway?')
     dialog = dialogs.YesNoDialog(pritext, sectext)
