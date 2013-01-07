@@ -568,7 +568,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             spell.set_language(lang)
             widget.set_active(True)
 
-        item = Gtk.ImageMenuItem(Gtk.STOCK_UNDO)
+        item = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_UNDO, None)
         menu.prepend(item)
         id_ = item.connect('activate', self.msg_textview.undo)
         self.handlers[id_] = item
@@ -576,7 +576,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         item = Gtk.SeparatorMenuItem.new()
         menu.prepend(item)
 
-        item = Gtk.ImageMenuItem(Gtk.STOCK_CLEAR)
+        item = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_CLEAR, None)
         menu.prepend(item)
         id_ = item.connect('activate', self.msg_textview.clear)
         self.handlers[id_] = item
