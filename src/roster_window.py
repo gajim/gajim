@@ -3547,7 +3547,7 @@ class RosterWindow:
             if model.iter_has_child(iter_) and self.tree.row_expanded(path):
                 self.tree.collapse_row(path)
                 return True
-            elif len(path) > 1:
+            elif path.get_depth() > 1:
                 self.tree.set_cursor(path[:-1])
                 return True
         elif event.keyval == Gdk.KEY_Right:
