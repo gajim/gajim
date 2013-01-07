@@ -900,7 +900,7 @@ class HtmlTextView(Gtk.TextView):
 
     def on_html_text_view_copy_clipboard(self, unused_data):
         clipboard = self.get_clipboard(Gdk.SELECTION_CLIPBOARD)
-        clipboard.set_text(self.get_selected_text(), len(self.get_selected_text()))
+        clipboard.set_text(self.get_selected_text(), len(self.get_selected_text()) * 2)
         self.emit_stop_by_name('copy-clipboard')
 
     def on_html_text_view_realized(self, unused_data):
@@ -921,7 +921,7 @@ class HtmlTextView(Gtk.TextView):
             if self.has_screen():
                 clipboard = self.get_clipboard(Gdk.SELECTION_PRIMARY)
                 text = self.get_selected_text()
-                clipboard.set_text(text, len(text))
+                clipboard.set_text(text, len(text) * 2)
 
     def get_selected_text(self):
         bounds = self.get_buffer().get_selection_bounds()
