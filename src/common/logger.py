@@ -33,7 +33,7 @@ import sys
 import time
 import datetime
 from gzip import GzipFile
-from io import BytesIO
+from io import BytesIO, StringIO
 from gi.repository import GObject
 
 from common import exceptions
