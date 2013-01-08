@@ -1038,7 +1038,9 @@ class GroupchatControl(ChatControlBase):
         else:
             self._start_private_message(nick)
         # Scroll to line
-        self.list_treeview.expand_row(path[0:1], False)
+        path_ = path
+        path_.up()
+        self.list_treeview.expand_row(path_, False)
         self.list_treeview.scroll_to_cell(path)
         self.list_treeview.set_cursor(path)
         contact = gajim.contacts.get_contact_with_highest_priority(
