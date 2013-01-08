@@ -2480,7 +2480,7 @@ class GroupchatControl(ChatControlBase):
         When an iter is activated (dubblick or single click if gnome is set this
         way
         """
-        if len(path) == 1: # It's a group
+        if path.get_depth() == 1: # It's a group
             if (widget.row_expanded(path)):
                 widget.collapse_row(path)
             else:
