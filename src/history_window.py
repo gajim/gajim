@@ -431,7 +431,7 @@ class HistoryWindow:
             else:
                 # we don't have roster, we don't know our own nick, use first
                 # account one (urk!)
-                account = gajim.contacts.get_accounts()[0]
+                account = list(gajim.contacts.get_accounts())[0]
                 contact_name = gajim.nicks[account]
             tag_name = 'outgoing'
             tag_msg = 'outgoingtxt'
@@ -511,7 +511,7 @@ class HistoryWindow:
                 # or if we browse a groupchat history. The account is not needed, a dummy can
                 # be set.
                 # This may leed to wrong self nick in the displayed history (Uggh!)
-                account = gajim.contacts.get_accounts()[0]
+                account = list(gajim.contacts.get_accounts())[0]
 
             year, month, day = False, False, False
             if self.search_in_date.get_active():
