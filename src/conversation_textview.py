@@ -998,8 +998,10 @@ class ConversationTextview(GObject.GObject):
         print_conversation_line()
         """
         buffer_ = self.tv.get_buffer()
-
-        insert_tags_func = buffer_.insert_with_tags_by_name
+        if other_tags:
+            insert_tags_func = buffer_.insert_with_tags_by_name
+        else:
+            insert_tags_func = buffer_.insert
         # detect_and_print_special_text() is also used by
         # HtmlHandler.handle_specials() and there tags is Gtk.TextTag objects,
         # not strings
@@ -1026,7 +1028,10 @@ class ConversationTextview(GObject.GObject):
                 text_before_special_text = otext[index:start]
                 end_iter = buffer_.get_end_iter()
                 # we insert normal text
-                insert_tags_func(end_iter, text_before_special_text, *other_tags)
+                if other_tags:
+                    insert_tags_func(end_iter, text_before_special_text, *other_tags)
+                else:
+                    buffer_.insert(end_iter, text_before_special_text)
             index = end # update index
 
             # now print it
@@ -1158,8 +1163,10 @@ class ConversationTextview(GObject.GObject):
                 insert_tags_func = buffer_.insert_with_tags_by_name
                 if other_tags and isinstance(other_tags[0], Gtk.TextTag):
                     insert_tags_func = buffer_.insert_with_tags
-
-                insert_tags_func(end_iter, special_text, *other_tags)
+                if other_tags:
+                    insert_tags_func(end_iter, special_text, *other_tags)
+                else:
+                    buffer_.insert(end_iter, special_text)
 
         if tags:
             end_iter = buffer_.get_end_iter()
