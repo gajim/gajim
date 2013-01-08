@@ -4503,7 +4503,7 @@ class RosterWindow:
             return
         path = list_of_paths[0]
         data = ''
-        if len(path) >= 2:
+        if path.get_depth() >= 2:
             data = model[path][C_JID]
         selection.set(selection.target, 8, data)
 

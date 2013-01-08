@@ -2518,7 +2518,7 @@ class GroupchatControl(ChatControlBase):
         elif event.button == 2: # middle click
             widget.get_selection().select_path(path)
             iter_ = self.model.get_iter(path)
-            if len(path) == 2:
+            if path.get_depth() == 2:
                 nick = self.model[iter_][C_NICK]
                 self._start_private_message(nick)
             return True
