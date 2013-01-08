@@ -734,7 +734,7 @@ class ConversationTextview(GObject.GObject):
             menu.prepend(item)
             separator_menuitem_was_added = True
 
-            item = Gtk.ImageMenuItem(Gtk.STOCK_CLEAR)
+            item = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_CLEAR, None)
             menu.prepend(item)
             id_ = item.connect('activate', self.clear)
             self.handlers[id_] = item
@@ -745,18 +745,20 @@ class ConversationTextview(GObject.GObject):
                 menu.prepend(item)
 
             if not self.used_in_history_window:
-                item = Gtk.MenuItem(_('_Quote'))
+                item = Gtk.MenuItem.new_with_mnemonic(_('_Quote'))
                 id_ = item.connect('activate', self.on_quote)
                 self.handlers[id_] = item
                 menu.prepend(item)
 
             _selected_phrase = helpers.reduce_chars_newlines(
                     self.selected_phrase, 25, 2)
-            item = Gtk.MenuItem(_('_Actions for "%s"') % _selected_phrase)
+            item = Gtk.MenuItem.new_with_mnemonic(
+                _('_Actions for "%s"') % _selected_phrase)
             menu.prepend(item)
             submenu = Gtk.Menu()
             item.set_submenu(submenu)
-            phrase_for_url = urllib.parse.quote(self.selected_phrase.encode('utf-8'))
+            phrase_for_url = urllib.parse.quote(self.selected_phrase.encode(
+                'utf-8'))
 
             always_use_en = gajim.config.get('always_english_wikipedia')
             if always_use_en:
@@ -765,12 +767,12 @@ class ConversationTextview(GObject.GObject):
             else:
                 link = 'http://%s.wikipedia.org/wiki/Special:Search?search=%s'\
                         % (gajim.LANG, phrase_for_url)
-            item = Gtk.MenuItem(_('Read Wikipedia Article'))
+            item = Gtk.MenuItem.new_with_mnemonic(_('Read _Wikipedia Article'))
             id_ = item.connect('activate', self.visit_url_from_menuitem, link)
             self.handlers[id_] = item
             submenu.append(item)
 
-            item = Gtk.MenuItem(_('Look it up in Dictionary'))
+            item = Gtk.MenuItem.new_with_mnemonic(_('Look it up in _Dictionary'))
             dict_link = gajim.config.get('dictionary_url')
             if dict_link == 'WIKTIONARY':
                 # special link (yeah undocumented but default)
@@ -803,13 +805,13 @@ class ConversationTextview(GObject.GObject):
                 item = Gtk.MenuItem(_('Web Search URL is missing an "%s"'))
                 item.set_property('sensitive', False)
             else:
-                item = Gtk.MenuItem(_('Web Search for it'))
+                item = Gtk.MenuItem.new_with_mnemonic(_('Web _Search for it'))
                 link =  search_link % phrase_for_url
                 id_ = item.connect('activate', self.visit_url_from_menuitem, link)
                 self.handlers[id_] = item
             submenu.append(item)
 
-            item = Gtk.MenuItem(_('Open as Link'))
+            item = Gtk.MenuItem.new_with_mnemonic(_('Open as _Link'))
             id_ = item.connect('activate', self.visit_url_from_menuitem, link)
             self.handlers[id_] = item
             submenu.append(item)
