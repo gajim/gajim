@@ -5982,7 +5982,7 @@ class RosterWindow:
                 break
             account = current_account
         if account is not None:
-            send_group_message_item = Gtk.ImageMenuItem(
+            send_group_message_item = Gtk.ImageMenuItem.new_with_mnemonic(
                 _('Send Group M_essage'))
             icon = Gtk.Image.new_from_stock(Gtk.STOCK_NEW, Gtk.IconSize.MENU)
             send_group_message_item.set_image(icon)
@@ -5991,7 +5991,7 @@ class RosterWindow:
                 self.on_send_single_message_menuitem_activate, account, list_)
 
         # Invite to Groupchat
-        invite_item = Gtk.ImageMenuItem(_('In_vite to'))
+        invite_item = Gtk.ImageMenuItem.new_with_mnemonic(_('In_vite to'))
         muc_icon = gtkgui_helpers.load_icon('muc_active')
         if muc_icon:
             invite_item.set_image(muc_icon)
@@ -6003,7 +6003,7 @@ class RosterWindow:
         menu.append(item)
 
         # Manage Transport submenu
-        item = Gtk.ImageMenuItem(_('_Manage Contacts'))
+        item = Gtk.ImageMenuItem.new_with_mnemonic(_('_Manage Contacts'))
         icon = Gtk.Image.new_from_stock(Gtk.STOCK_PROPERTIES,
             Gtk.IconSize.MENU)
         item.set_image(icon)
@@ -6012,7 +6012,8 @@ class RosterWindow:
         menu.append(item)
 
         # Edit Groups
-        edit_groups_item = Gtk.ImageMenuItem(_('Edit _Groups'))
+        edit_groups_item = Gtk.ImageMenuItem.new_with_mnemonic(_(
+            'Edit _Groups'))
         icon = Gtk.Image.new_from_stock(Gtk.STOCK_EDIT, Gtk.IconSize.MENU)
         edit_groups_item.set_image(icon)
         manage_contacts_submenu.append(edit_groups_item)
@@ -6023,13 +6024,13 @@ class RosterWindow:
 
         # Block
         if is_blocked and privacy_rules_supported:
-            unblock_menuitem = Gtk.ImageMenuItem(_('_Unblock'))
+            unblock_menuitem = Gtk.ImageMenuItem.new_with_mnemonic(_('_Unblock'))
             icon = Gtk.Image.new_from_stock(Gtk.STOCK_STOP, Gtk.IconSize.MENU)
             unblock_menuitem.set_image(icon)
             unblock_menuitem.connect('activate', self.on_unblock, list_)
             manage_contacts_submenu.append(unblock_menuitem)
         else:
-            block_menuitem = Gtk.ImageMenuItem(_('_Block'))
+            block_menuitem = Gtk.ImageMenuItem.new_with_mnemonic(_('_Block'))
             icon = Gtk.Image.new_from_stock(Gtk.STOCK_STOP, Gtk.IconSize.MENU)
             block_menuitem.set_image(icon)
             block_menuitem.connect('activate', self.on_block, list_)
@@ -6039,7 +6040,7 @@ class RosterWindow:
                 block_menuitem.set_sensitive(False)
 
         # Remove
-        remove_item = Gtk.ImageMenuItem(_('_Remove'))
+        remove_item = Gtk.ImageMenuItem.new_with_mnemonic(_('_Remove'))
         icon = Gtk.Image.new_from_stock(Gtk.STOCK_REMOVE, Gtk.IconSize.MENU)
         remove_item.set_image(icon)
         manage_contacts_submenu.append(remove_item)
@@ -6067,7 +6068,7 @@ class RosterWindow:
         menu = Gtk.Menu()
 
         # Send single message
-        item = Gtk.ImageMenuItem(_('Send Single Message'))
+        item = Gtk.ImageMenuItem.new_with_mnemonic(_('Send Single Message'))
         icon = Gtk.Image.new_from_stock(Gtk.STOCK_NEW, Gtk.IconSize.MENU)
         item.set_image(icon)
         item.connect('activate',
@@ -6079,7 +6080,7 @@ class RosterWindow:
             blocked = True
 
         # Send Custom Status
-        send_custom_status_menuitem = Gtk.ImageMenuItem(
+        send_custom_status_menuitem = Gtk.ImageMenuItem.new_with_mnemonic(
             _('Send Cus_tom Status'))
         # add a special img for this menuitem
         if blocked:
@@ -6114,7 +6115,7 @@ class RosterWindow:
         menu.append(item)
 
         # Execute Command
-        item = Gtk.ImageMenuItem(_('Execute Command...'))
+        item = Gtk.ImageMenuItem.new_with_mnemonic(_('Execute Command...'))
         icon = Gtk.Image.new_from_stock(Gtk.STOCK_EXECUTE, Gtk.IconSize.MENU)
         item.set_image(icon)
         menu.append(item)
@@ -6124,7 +6125,7 @@ class RosterWindow:
             item.set_sensitive(False)
 
         # Manage Transport submenu
-        item = Gtk.ImageMenuItem(_('_Manage Transport'))
+        item = Gtk.ImageMenuItem.new_with_mnemonic(_('_Manage Transport'))
         icon = Gtk.Image.new_from_stock(Gtk.STOCK_PROPERTIES,
             Gtk.IconSize.MENU)
         item.set_image(icon)
@@ -6133,7 +6134,7 @@ class RosterWindow:
         menu.append(item)
 
         # Modify Transport
-        item = Gtk.ImageMenuItem(_('_Modify Transport'))
+        item = Gtk.ImageMenuItem.new_with_mnemonic(_('_Modify Transport'))
         icon = Gtk.Image.new_from_stock(Gtk.STOCK_PREFERENCES,
             Gtk.IconSize.MENU)
         item.set_image(icon)
@@ -6143,7 +6144,7 @@ class RosterWindow:
             item.set_sensitive(False)
 
         # Rename
-        item = Gtk.ImageMenuItem(_('_Rename'))
+        item = Gtk.ImageMenuItem.new_with_mnemonic(_('_Rename'))
         # add a special img for rename menuitem
         gtkgui_helpers.add_image_to_menuitem(item, 'gajim-kbd_input')
         manage_transport_submenu.append(item)
@@ -6156,10 +6157,10 @@ class RosterWindow:
 
         # Block
         if blocked:
-            item = Gtk.ImageMenuItem(_('_Unblock'))
+            item = Gtk.ImageMenuItem.new_with_mnemonic(_('_Unblock'))
             item.connect('activate', self.on_unblock, [(contact, account)])
         else:
-            item = Gtk.ImageMenuItem(_('_Block'))
+            item = Gtk.ImageMenuItem.new_with_mnemonic(_('_Block'))
             item.connect('activate', self.on_block, [(contact, account)])
 
         icon = Gtk.Image.new_from_stock(Gtk.STOCK_STOP, Gtk.IconSize.MENU)
@@ -6169,7 +6170,7 @@ class RosterWindow:
             item.set_sensitive(False)
 
         # Remove
-        item = Gtk.ImageMenuItem(_('_Remove'))
+        item = Gtk.ImageMenuItem.new_with_mnemonic(_('_Remove'))
         icon = Gtk.Image.new_from_stock(Gtk.STOCK_REMOVE, Gtk.IconSize.MENU)
         item.set_image(icon)
         manage_transport_submenu.append(item)
@@ -6181,7 +6182,8 @@ class RosterWindow:
         menu.append(item)
 
         # Information
-        information_menuitem = Gtk.ImageMenuItem(_('_Information'))
+        information_menuitem = Gtk.ImageMenuItem.new_with_mnemonic(_(
+            '_Information'))
         icon = Gtk.Image.new_from_stock(Gtk.STOCK_INFO, Gtk.IconSize.MENU)
         information_menuitem.set_image(icon)
         menu.append(information_menuitem)
@@ -6203,7 +6205,8 @@ class RosterWindow:
         menu = Gtk.Menu()
 
         if jid in gajim.interface.minimized_controls[account]:
-            maximize_menuitem = Gtk.ImageMenuItem(_('_Maximize'))
+            maximize_menuitem = Gtk.ImageMenuItem.new_with_mnemonic(_(
+                '_Maximize'))
             icon = Gtk.Image.new_from_stock(Gtk.STOCK_GOTO_TOP,
                 Gtk.IconSize.MENU)
             maximize_menuitem.set_image(icon)
@@ -6212,14 +6215,16 @@ class RosterWindow:
             menu.append(maximize_menuitem)
 
         if not gajim.gc_connected[account].get(jid, False):
-            connect_menuitem = Gtk.ImageMenuItem(_('_Reconnect'))
+            connect_menuitem = Gtk.ImageMenuItem.new_with_mnemonic(_(
+                '_Reconnect'))
             connect_icon = Gtk.Image.new_from_stock(Gtk.STOCK_CONNECT, \
                 Gtk.IconSize.MENU)
             connect_menuitem.set_image(connect_icon)
             connect_menuitem.connect('activate', self.on_reconnect, jid,
                 account)
             menu.append(connect_menuitem)
-        disconnect_menuitem = Gtk.ImageMenuItem(_('_Disconnect'))
+        disconnect_menuitem = Gtk.ImageMenuItem.new_with_mnemonic(_(
+            '_Disconnect'))
         disconnect_icon = Gtk.Image.new_from_stock(Gtk.STOCK_DISCONNECT, \
             Gtk.IconSize.MENU)
         disconnect_menuitem.set_image(disconnect_icon)
@@ -6230,7 +6235,7 @@ class RosterWindow:
         item = Gtk.SeparatorMenuItem.new() # separator
         menu.append(item)
 
-        history_menuitem = Gtk.ImageMenuItem(_('_History'))
+        history_menuitem = Gtk.ImageMenuItem.new_with_mnemonic(_('_History'))
         history_icon = Gtk.Image.new_from_stock(Gtk.STOCK_JUSTIFY_FILL, \
             Gtk.IconSize.MENU)
         history_menuitem.set_image(history_icon)
@@ -6308,7 +6313,7 @@ class RosterWindow:
         menu.append(item)
 
         # History manager
-        item = Gtk.ImageMenuItem(_('History Manager'))
+        item = Gtk.ImageMenuItem.new_with_mnemonic(_('History Manager'))
         icon = Gtk.Image.new_from_stock(Gtk.STOCK_JUSTIFY_FILL,
             Gtk.IconSize.MENU)
         item.set_image(icon)
@@ -6319,7 +6324,7 @@ class RosterWindow:
         """
         Show join new group chat item and bookmarks list for an account
         """
-        item = Gtk.ImageMenuItem(_('Join New Group Chat'))
+        item = Gtk.ImageMenuItem.new_with_mnemonic(_('Join New Group Chat'))
         icon = Gtk.Image.new_from_stock(Gtk.STOCK_NEW, Gtk.IconSize.MENU)
         item.set_image(icon)
         item.connect('activate', self.on_join_gc_activate, account)
