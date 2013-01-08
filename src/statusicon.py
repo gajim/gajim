@@ -229,8 +229,8 @@ class StatusIcon:
             join_gc_menuitem.set_image(state_images['muc_active'])
 
         for show in ('online', 'chat', 'away', 'xa', 'dnd', 'invisible'):
-            uf_show = helpers.get_uf_show(show, use_mnemonic = True)
-            item = Gtk.ImageMenuItem(uf_show)
+            uf_show = helpers.get_uf_show(show, use_mnemonic=True)
+            item = Gtk.ImageMenuItem.new_with_mnemonic(uf_show)
             item.set_image(state_images[show])
             sub_menu.append(item)
             item.connect('activate', self.on_show_menuitem_activate, show)
@@ -238,7 +238,7 @@ class StatusIcon:
         item = Gtk.SeparatorMenuItem.new()
         sub_menu.append(item)
 
-        item = Gtk.ImageMenuItem(_('_Change Status Message...'))
+        item = Gtk.ImageMenuItem.new_with_mnemonic(_('_Change Status Message...'))
         gtkgui_helpers.add_image_to_menuitem(item, 'gajim-kbd_input')
         sub_menu.append(item)
         item.connect('activate', self.on_change_status_message_activate)
@@ -252,8 +252,8 @@ class StatusIcon:
         item = Gtk.SeparatorMenuItem.new()
         sub_menu.append(item)
 
-        uf_show = helpers.get_uf_show('offline', use_mnemonic = True)
-        item = Gtk.ImageMenuItem(uf_show)
+        uf_show = helpers.get_uf_show('offline', use_mnemonic=True)
+        item = Gtk.ImageMenuItem.new_with_mnemonic(uf_show)
         item.set_image(state_images['offline'])
         sub_menu.append(item)
         item.connect('activate', self.on_show_menuitem_activate, 'offline')

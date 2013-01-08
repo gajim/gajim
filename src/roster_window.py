@@ -5583,8 +5583,8 @@ class RosterWindow:
             status_menuitem.set_submenu(sub_menu)
 
             for show in ('online', 'chat', 'away', 'xa', 'dnd', 'invisible'):
-                uf_show = helpers.get_uf_show(show, use_mnemonic=False)
-                item = Gtk.ImageMenuItem(uf_show)
+                uf_show = helpers.get_uf_show(show, use_mnemonic=True)
+                item = Gtk.ImageMenuItem.new_with_mnemonic(uf_show)
                 icon = state_images[show]
                 item.set_image(icon)
                 sub_menu.append(item)
@@ -5610,7 +5610,7 @@ class RosterWindow:
             sub_menu.append(item)
 
             uf_show = helpers.get_uf_show('offline', use_mnemonic=True)
-            item = Gtk.ImageMenuItem(uf_show)
+            item = Gtk.ImageMenuItem.new_with_mnemonic(uf_show)
             icon = state_images['offline']
             item.set_image(icon)
             sub_menu.append(item)
@@ -5697,7 +5697,7 @@ class RosterWindow:
 
             for show in ('online', 'away', 'dnd', 'invisible'):
                 uf_show = helpers.get_uf_show(show, use_mnemonic=True)
-                item = Gtk.ImageMenuItem(uf_show)
+                item = Gtk.ImageMenuItem.new_with_mnemonic(uf_show)
                 icon = state_images[show]
                 item.set_image(icon)
                 sub_menu.append(item)
@@ -5715,7 +5715,7 @@ class RosterWindow:
                 item.set_sensitive(False)
 
             uf_show = helpers.get_uf_show('offline', use_mnemonic=True)
-            item = Gtk.ImageMenuItem(uf_show)
+            item = Gtk.ImageMenuItem.new_with_mnemonic(uf_show)
             icon = state_images['offline']
             item.set_image(icon)
             sub_menu.append(item)
