@@ -1233,8 +1233,11 @@ class ConversationTextview(GObject.GObject):
         if current_print_time == 'always' and kind != 'info' and not simple:
             timestamp_str = self.get_time_to_show(tim)
             timestamp = time.strftime(timestamp_str, tim)
-            buffer_.insert_with_tags_by_name(end_iter, timestamp,
-                    *other_tags_for_time)
+            if other_tags_for_time:
+                buffer_.insert_with_tags_by_name(end_iter, timestamp,
+                        *other_tags_for_time)
+            else:
+                buffer_.insert (end_iter, timestamp)
         elif current_print_time == 'sometimes' and kind != 'info' and not simple:
             every_foo_seconds = 60 * gajim.config.get(
                     'print_ichat_every_foo_minutes')
@@ -1248,7 +1251,7 @@ class ConversationTextview(GObject.GObject):
                 else:
                     tim_format = self.get_time_to_show(tim)
                 buffer_.insert_with_tags_by_name(end_iter, tim_format + '\n',
-                        'time_sometimes')
+                    'time_sometimes')
         # If there's a displaymarking, print it here.
         if displaymarking:
             self.print_displaymarking(displaymarking)

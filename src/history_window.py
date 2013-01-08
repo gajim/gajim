@@ -472,8 +472,10 @@ class HistoryWindow:
                 after_str = gajim.config.get('after_nickname')
                 after_str = helpers.from_one_line(after_str)
                 format = before_str + contact_name + after_str + ' '
-                buf.insert_with_tags_by_name(end_iter, format, tag_name)
-
+                if tag_name:
+                    buf.insert_with_tags_by_name(end_iter, format, tag_name)
+                else:
+                    buf.insert(end_iter, format)
         if subject:
             message = _('Subject: %s\n') % subject + message
         xhtml = None
@@ -486,7 +488,9 @@ class HistoryWindow:
         else:
             self.history_textview.print_real_text(message, name=contact_name,
                 xhtml=xhtml)
-        self.history_textview.print_real_text('\n')
+        buffer_ = self.history_textview.tv.get_buffer()
+        eob = buffer_.get_end_iter()
+        buffer_.insert_with_tags_by_name(eob, '\n', 'eol')
 
     def on_search_entry_activate(self, widget):
         text = self.search_entry.get_text()
