@@ -202,7 +202,8 @@ class AdvancedConfigurationWindow(object):
             if len(modelpath.get_indices()) > 1:
                 optnamerow = self.model[modelpath.get_indices()[0]]
                 optname = optnamerow[0]
-                keyrow = self.model[modelpath.get_indices()[:2]]
+                modelpath.up()
+                keyrow = self.model[modelpath]
                 key = keyrow[0]
                 self.remember_option(option + '\n' + key + '\n' + optname,
                         modelrow[1], newval)

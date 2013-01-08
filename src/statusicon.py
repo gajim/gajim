@@ -338,7 +338,7 @@ class StatusIcon:
 
         newitem = Gtk.SeparatorMenuItem.new() # separator
         gc_sub_menu.append(newitem)
-        newitem = Gtk.ImageMenuItem(_('_Manage Bookmarks...'))
+        newitem = Gtk.ImageMenuItem.new_with_mnemonic(_('_Manage Bookmarks...'))
         img = Gtk.Image.new_from_stock(Gtk.STOCK_PREFERENCES, Gtk.IconSize.MENU)
         newitem.set_image(img)
         newitem.connect('activate',
