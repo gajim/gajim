@@ -293,8 +293,8 @@ class RosterWindow:
 
         # Draw all known groups
         for group in gajim.groups[account]:
-            self._really_draw_group(group, account)
-        self._really_draw_account(account)
+            self.draw_group(group, account)
+        self.draw_account(account)
 
         self.starting = False
 
@@ -897,7 +897,7 @@ class RosterWindow:
 
         # update all contacts in the given group
         if self.regroup:
-            accounts = list(gajim.connections.keys())
+            accounts = gajim.connections.keys()
         else:
             accounts = [account, ]
 
@@ -1122,7 +1122,7 @@ class RosterWindow:
         self.model[child_iter][C_NAME] = text
 
     def _really_draw_groups(self):
-        for ag in list(self.groups_to_draw.values()):
+        for ag in self.groups_to_draw.values():
             acct = ag['account']
             grp = ag['group']
             self._really_draw_group(grp, acct)
@@ -1135,7 +1135,7 @@ class RosterWindow:
             return
         self.groups_to_draw[ag] = {'group': group, 'account': account}
         if len(self.groups_to_draw) == 1:
-            GObject.idle_add(self._really_draw_groups)
+            GObject.timeout_add(200, self._really_draw_groups)
 
     def draw_parent_contact(self, jid, account):
         child_iters = self._get_contact_iter(jid, account, model=self.model)
@@ -1150,13 +1150,7 @@ class RosterWindow:
         self.draw_contact(parent_jid, parent_account)
         return False
 
-    def draw_contact(self, jid, account, selected=False, focus=False,
-        contact_instances=None, contact=None):
-        GObject.idle_add(self._really_draw_contact, jid, account, selected,
-            focus, contact_instances, contact)
-
-    def _really_draw_contact(self, jid, account, selected=False, focus=False,
-        contact_instances=None, contact=None):
+    def draw_contact(self, jid, account, selected=False, focus=False, contact_instances=None, contact=None):
         """
         Draw the correct state image, name BUT not avatar
         """
@@ -1335,10 +1329,6 @@ class RosterWindow:
             self.draw_pep(jid, account, pep_type, contact=contact)
 
     def draw_pep(self, jid, account, pep_type, contact=None):
-        GObject.idle_add(self._really_draw_pep, jid, account, pep_type,
-            contact)
-
-    def _really_draw_pep(self, jid, account, pep_type, contact=None):
         if pep_type not in self._pep_type_to_model_column:
             return
         if not self._is_pep_shown_in_roster(pep_type):
@@ -1358,9 +1348,6 @@ class RosterWindow:
             self.model[child_iter][model_column] = pixbuf
 
     def draw_avatar(self, jid, account):
-        GObject.idle_add(self._really_draw_avatar, jid, account)
-
-    def _really_draw_avatar(self, jid, account):
         iters = self._get_contact_iter(jid, account, model=self.model)
         if not iters or not gajim.config.get('show_avatars_in_roster'):
             return
@@ -5611,7 +5598,7 @@ class RosterWindow:
             item = Gtk.SeparatorMenuItem.new()
             sub_menu.append(item)
 
-            item = Gtk.ImageMenuItem.new_with_mnemonic(_('Change Status Message'))
+            item = Gtk.ImageMenuItem.new_with_mnemonic(_('_Change Status Message'))
             gtkgui_helpers.add_image_to_menuitem(item, 'gajim-kbd_input')
             sub_menu.append(item)
             item.connect('activate', self.on_change_status_message_activate,
@@ -5622,7 +5609,7 @@ class RosterWindow:
             item = Gtk.SeparatorMenuItem.new()
             sub_menu.append(item)
 
-            uf_show = helpers.get_uf_show('offline', use_mnemonic=False)
+            uf_show = helpers.get_uf_show('offline', use_mnemonic=True)
             item = Gtk.ImageMenuItem(uf_show)
             icon = state_images['offline']
             item.set_image(icon)
@@ -5709,7 +5696,7 @@ class RosterWindow:
             status_menuitem.set_submenu(sub_menu)
 
             for show in ('online', 'away', 'dnd', 'invisible'):
-                uf_show = helpers.get_uf_show(show, use_mnemonic=False)
+                uf_show = helpers.get_uf_show(show, use_mnemonic=True)
                 item = Gtk.ImageMenuItem(uf_show)
                 icon = state_images[show]
                 item.set_image(icon)
@@ -5719,7 +5706,7 @@ class RosterWindow:
             item = Gtk.SeparatorMenuItem.new()
             sub_menu.append(item)
 
-            item = Gtk.ImageMenuItem.new_with_mnemonic(_('Change Status Message'))
+            item = Gtk.ImageMenuItem.new_with_mnemonic(_('_Change Status Message'))
             gtkgui_helpers.add_image_to_menuitem(item, 'gajim-kbd_input')
             sub_menu.append(item)
             item.connect('activate', self.on_change_status_message_activate,
@@ -5727,7 +5714,7 @@ class RosterWindow:
             if gajim.connections[account].connected < 2:
                 item.set_sensitive(False)
 
-            uf_show = helpers.get_uf_show('offline', use_mnemonic=False)
+            uf_show = helpers.get_uf_show('offline', use_mnemonic=True)
             item = Gtk.ImageMenuItem(uf_show)
             icon = state_images['offline']
             item.set_image(icon)
@@ -6324,7 +6311,7 @@ class RosterWindow:
         """
         Show join new group chat item and bookmarks list for an account
         """
-        item = Gtk.ImageMenuItem.new_with_mnemonic(_('Join New Group Chat'))
+        item = Gtk.ImageMenuItem.new_with_mnemonic(_('_Join New Group Chat'))
         icon = Gtk.Image.new_from_stock(Gtk.STOCK_NEW, Gtk.IconSize.MENU)
         item.set_image(icon)
         item.connect('activate', self.on_join_gc_activate, account)
@@ -6429,7 +6416,7 @@ class RosterWindow:
             col.add_attribute(rend[1], rend[3], rend[4])
             col.set_cell_data_func(rend[1], rend[5], rend[6])
         # set renderers propertys
-        for renderer in list(self.renderers_propertys.keys()):
+        for renderer in self.renderers_propertys.keys():
             renderer.set_property(self.renderers_propertys[renderer][0],
                 self.renderers_propertys[renderer][1])
 
