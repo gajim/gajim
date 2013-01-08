@@ -701,7 +701,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         event.get_state() & Gdk.ModifierType.SHIFT_MASK and \
         event.keyval in (Gdk.KEY_Page_Down, Gdk.KEY_Page_Up)):
             return False
-        self.parent_win.notebook.emit('key_press_event', event)
+        self.parent_win.notebook.event(event)
         return True
 
     def show_emoticons_menu(self):
@@ -766,7 +766,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             # SHIFT + PAGE_[UP|DOWN]: send to conv_textview
             elif event.keyval == Gdk.KEY_Page_Down or \
                             event.keyval == Gdk.KEY_Page_Up:
-                self.conv_textview.tv.emit('key_press_event', event)
+                self.conv_textview.tv.event(event)
                 return True
         elif event.get_state() & Gdk.ModifierType.CONTROL_MASK:
             if event.keyval == Gdk.KEY_Tab:  # CTRL + TAB

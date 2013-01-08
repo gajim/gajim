@@ -337,9 +337,9 @@ class MessageWindow(object):
             elif event.keyval == Gdk.KEY_ISO_Left_Tab: # CTRL + SHIFT + TAB
                 self.move_to_next_unread_tab(False)
             elif event.keyval == Gdk.KEY_Page_Down: # CTRL + PAGE DOWN
-                self.notebook.emit('key_press_event', event)
+                self.notebook.event(event)
             elif event.keyval == Gdk.KEY_Page_Up: # CTRL + PAGE UP
-                self.notebook.emit('key_press_event', event)
+                self.notebook.event(event)
 
     def accel_group_func(self, accel_group, acceleratable, keyval, modifier):
         st = '1234567890' # alt+1 means the first tab (tab 0)
@@ -400,7 +400,7 @@ class MessageWindow(object):
                 event.time = int(time.time())
                 event.state = Gdk.ModifierType.CONTROL_MASK
                 event.keyval = int(keyval)
-                self.notebook.emit('key_press_event', event)
+                self.notebook.event(event)
                 return True
 
             if modifier & Gdk.ModifierType.SHIFT_MASK:
@@ -823,7 +823,7 @@ class MessageWindow(object):
                 return True
             # SHIFT + PAGE_[UP|DOWN]: send to conv_textview
             elif event.keyval in (Gdk.KEY_Page_Down, Gdk.KEY_Page_Up):
-                control.conv_textview.tv.emit('key_press_event', event)
+                control.conv_textview.tv.event(event)
                 return True
         elif event.get_state() & Gdk.ModifierType.CONTROL_MASK:
             if event.keyval == Gdk.KEY_Tab: # CTRL + TAB
@@ -845,7 +845,7 @@ class MessageWindow(object):
 
         if isinstance(control, ChatControlBase):
             # we forwarded it to message textview
-            control.msg_textview.emit('key_press_event', event)
+            control.msg_textview.event(event)
             control.msg_textview.grab_focus()
 
     def get_tab_at_xy(self, x, y):
