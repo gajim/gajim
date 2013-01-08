@@ -3515,14 +3515,17 @@ class RosterWindow:
                 self.on_remove_agent(widget, list_)
 
         elif not (event.get_state() & (Gdk.ModifierType.CONTROL_MASK | \
-        Gdk.ModifierType.MOD1_MASK)) and Gdk.keyval_to_unicode(event.keyval):
-            # if we got unicode symbol without ctrl / alt
+        Gdk.ModifierType.MOD1_MASK)):
             num = Gdk.keyval_to_unicode(event.keyval)
-            self.enable_rfilter(chr(num))
+            if num and num > 31:
+                # if we got unicode symbol without ctrl / alt
+                self.enable_rfilter(chr(num))
 
-        elif event.get_state() & Gdk.ModifierType.CONTROL_MASK and event.get_state() & Gdk.ModifierType.SHIFT_MASK and event.keyval == Gdk.KEY_U:
+        elif event.get_state() & Gdk.ModifierType.CONTROL_MASK and \
+        event.get_state() & Gdk.ModifierType.SHIFT_MASK and \
+        event.keyval == Gdk.KEY_U:
             self.enable_rfilter('')
-            self.rfilter_entry.emit('key_press_event', event)
+            self.rfilter_entry.event(event)
 
         elif event.keyval == Gdk.KEY_Left:
             treeselection = self.tree.get_selection()
@@ -4452,11 +4455,11 @@ class RosterWindow:
             self.disable_rfilter()
         elif event.keyval == Gdk.KEY_Return:
             self.tree.grab_focus()
-            self.tree.emit('key_press_event', event)
+            self.tree.event(event)
             self.disable_rfilter()
         elif event.keyval in (Gdk.KEY_Up, Gdk.KEY_Down):
             self.tree.grab_focus()
-            self.tree.emit('key_press_event', event)
+            self.tree.event(event)
         elif event.keyval == Gdk.KEY_BackSpace:
             if widget.get_text() == '':
                 self.disable_rfilter()
