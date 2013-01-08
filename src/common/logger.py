@@ -33,7 +33,7 @@ import sys
 import time
 import datetime
 from gzip import GzipFile
-from io import BytesIO, StringIO
+from io import BytesIO
 from gi.repository import GObject
 
 from common import exceptions
@@ -924,7 +924,7 @@ class Logger:
         data.extend(features)
         data = '\0'.join(data)
         # if there's a need to do more gzip, put that to a function
-        string = StringIO()
+        string = BytesIO()
         gzip = GzipFile(fileobj=string, mode='w')
         gzip.write(data)
         gzip.close()
