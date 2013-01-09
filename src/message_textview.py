@@ -174,15 +174,15 @@ class MessageTextView(Gtk.TextView):
 
         _buffer.apply_tag_by_name(tag_name, start, finish)
 
-    def font_set(self, widget, response, font):
-        if response == -6:
+    def font_set(self, widget, response):
+        if response == -6 or response == -4:
             widget.destroy()
             return
 
         _buffer = self.get_buffer()
 
-        font = font.get_font_name()
-        font_desc = Pango.FontDescription(font)
+        font = widget.get_font()
+        font_desc = widget.get_font_desc()
         family = font_desc.get_family()
         size = font_desc.get_size()
         size = size / Pango.SCALE
