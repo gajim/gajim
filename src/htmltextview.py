@@ -337,14 +337,23 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 
     def _parse_style_font_size(self, tag, value):
         try:
+            # see http://developer.gnome.org/pango/stable/pango-Text-Attributes.html#PANGO-SCALE-XX-SMALL:CAPS
+            # http://consciouslyusing.blogspot.ru/2012/01/heads-up-missing-pango-text-scale.html
             scale = {
-                    'xx-small': Pango.SCALE_XX_SMALL,
-                    'x-small': Pango.SCALE_X_SMALL,
-                    'small': Pango.SCALE_SMALL,
-                    'medium': Pango.SCALE_MEDIUM,
-                    'large': Pango.SCALE_LARGE,
-                    'x-large': Pango.SCALE_X_LARGE,
-                    'xx-large': Pango.SCALE_XX_LARGE,
+                    #'xx-small': Pango.SCALE_XX_SMALL,
+                    #'x-small': Pango.SCALE_X_SMALL,
+                    #'small': Pango.SCALE_SMALL,
+                    #'medium': Pango.SCALE_MEDIUM,
+                    #'large': Pango.SCALE_LARGE,
+                    #'x-large': Pango.SCALE_X_LARGE,
+                    #'xx-large': Pango.SCALE_XX_LARGE,
+                    'xx-small': 0.5787037037037,
+                    'x-small': 0.6444444444444,
+                    'small': 0.8333333333333,
+                    'medium': 1.0,
+                    'large': 1.2,
+                    'x-large': 1.4399999999999,
+                    'xx-large': 1.728,
                     } [value]
         except KeyError:
             pass
