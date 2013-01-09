@@ -146,19 +146,24 @@ class MessageTextView(Gtk.TextView):
         start, finish = self.get_active_iters()
         _buffer.remove_all_tags(start, finish)
 
-    def color_set(self, widget, response, color):
-        if response == -6:
+    def color_set(self, widget, response):
+        print (response)
+        if response == -6 or response == -4:
             widget.destroy()
             return
-        _buffer = self.get_buffer()
-        color = color.get_current_color()
+
+        color = widget.get_property('rgba')
         widget.destroy()
-        color_string = gtkgui_helpers.make_color_string(color)
+        _buffer = self.get_buffer()
+        # Create #aabbcc color string from rgba color
+        color_string = '#%02X%02X%02X' % (round(color.red*255),
+            round(color.green*255), round(color.blue*255))
+
         tag_name = 'color' + color_string
         if not tag_name in self.color_tags:
             tagColor = _buffer.create_tag(tag_name)
             tagColor.set_property('foreground', color_string)
-            self.begin_tags[tag_name] = '<span style="color: ' + color_string + ';">'
+            self.begin_tags[tag_name] = '<span style="color: %s;">' % color_string
             self.end_tags[tag_name] = '</span>'
             self.color_tags.append(tag_name)
 

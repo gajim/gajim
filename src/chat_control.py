@@ -1097,9 +1097,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
                 self.parent_win)
 
     def on_color_menuitem_activale(self, widget):
-        color_dialog = Gtk.ColorSelectionDialog('Select a color')
-        color_dialog.connect('response', self.msg_textview.color_set,
-                color_dialog.colorsel)
+        color_dialog = Gtk.ColorChooserDialog(None, self.parent_win.window)
+        color_dialog.set_use_alpha(False)
+        color_dialog.connect('response', self.msg_textview.color_set)
         color_dialog.show_all()
 
     def on_font_menuitem_activale(self, widget):
