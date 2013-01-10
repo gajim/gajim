@@ -999,6 +999,8 @@ class ConversationTextview(GObject.GObject):
         after *last* special text, so we can print it in
         print_conversation_line()
         """
+        if not otext:
+            return
         buffer_ = self.tv.get_buffer()
         if other_tags:
             insert_tags_func = buffer_.insert_with_tags_by_name
@@ -1378,7 +1380,7 @@ class ConversationTextview(GObject.GObject):
                 self.tv.display_html(xhtml, self)
                 return
             except Exception as e:
-                gajim.log.debug('Error processing xhtml' + str(e))
+                gajim.log.debug('Error processing xhtml: ' + str(e))
                 gajim.log.debug('with |' + xhtml + '|')
 
         # /me is replaced by name if name is given
