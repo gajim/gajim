@@ -268,7 +268,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             end = _buffer.get_iter_at_mark(position)
 
             text = _buffer.get_text(start, end, False)
-            text = text.decode('utf8')
 
             splitted = text.split()
 
@@ -785,8 +784,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         message_textview = widget
         message_buffer = message_textview.get_buffer()
         start_iter, end_iter = message_buffer.get_bounds()
-        message = message_buffer.get_text(start_iter, end_iter, False).decode(
-                'utf-8')
+        message = message_buffer.get_text(start_iter, end_iter, False)
         xhtml = self.msg_textview.get_xhtml()
 
         # construct event instance from binding
@@ -1366,8 +1364,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             # whatever is already typed
             start_iter = msg_buf.get_start_iter()
             end_iter = msg_buf.get_end_iter()
-            self.orig_msg = msg_buf.get_text(start_iter, end_iter, False).decode(
-                    'utf-8')
+            self.orig_msg = msg_buf.get_text(start_iter, end_iter, False)
         pos += -1 if direction == 'up' else +1
         if pos == -1:
             return
