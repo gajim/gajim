@@ -3428,6 +3428,8 @@ class RosterWindow:
         """
         When a key is pressed in the treeviews
         """
+        print 'tree', event.keyval
+        print gtk.gdk.keyval_to_unicode(event.keyval)
         self.tooltip.hide_tooltip()
         if event.keyval == gtk.keysyms.Escape:
             if self.rfilter_enabled:
@@ -4402,6 +4404,7 @@ class RosterWindow:
         self.disable_rfilter()
 
     def on_rfilter_entry_key_press_event(self, widget, event):
+        print 'rfilter', event.keyval
         if event.keyval == gtk.keysyms.Escape:
             self.disable_rfilter()
         elif event.keyval == gtk.keysyms.Return:

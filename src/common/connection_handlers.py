@@ -1829,6 +1829,9 @@ ConnectionJingle, ConnectionIBBytestream):
         if not self.connection or self.connected < 2:
             return
         iq_obj = obj.stanza.buildReply('result')
+        q = iq_obj.getTag('ping')
+        if q:
+            iq_obj.delChild(q)
         self.connection.send(iq_obj)
 
     def _PrivacySetCB(self, con, iq_obj):
