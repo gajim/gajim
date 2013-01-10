@@ -490,12 +490,12 @@ class Contacts():
                     return c
 
     def iter_contacts(self):
-        for jid in self._contacts.keys():
+        for jid in list(self._contacts.keys()):
             for contact in self._contacts[jid][:]:
                 yield contact
 
     def get_jid_list(self):
-        return self._contacts.keys()
+        return list(self._contacts.keys())
 
     def get_contacts_jid_list(self):
         return [jid for jid, contact in self._contacts.items() if not
