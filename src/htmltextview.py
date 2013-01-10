@@ -238,7 +238,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
     def _get_current_attributes(self):
         attrs = self.textview.get_default_attributes()
         self.iter.backward_char()
-        self.iter.get_attributes(attrs)
+        attrs = (self.iter.get_attributes())[1]
         self.iter.forward_char()
         return attrs
 
@@ -265,7 +265,8 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
             frac = val/100
             if font_relative:
                 attrs = self._get_current_attributes()
-                font_size = attrs.font.get_size() / Pango.SCALE
+                if not attrs.font:
+                    font_size = self.get_font_size()
                 callback(frac*display_resolution*font_size, *args)
             elif block_relative:
                 # CSS says 'Percentage values: refer to width of the closest
@@ -297,14 +298,17 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 
         elif value.endswith('em'): # ems, the width of the element's font
             attrs = self._get_current_attributes()
-            font_size = attrs.font.get_size() / Pango.SCALE
+            if not attrs.font:
+                font_size = self.get_font_size()
             callback(get_val()*display_resolution*font_size, *args)
 
         elif value.endswith('ex'): # x-height, ~ the height of the letter 'x'
             # FIXME: figure out how to calculate this correctly
             #        for now 'em' size is used as approximation
+
             attrs = self._get_current_attributes()
-            font_size = attrs.font.get_size() / Pango.SCALE
+            if not attrs.font:
+                font_size = self.get_font_size()
             callback(get_val()*display_resolution*font_size, *args)
 
         elif value.endswith('px'): # pixels
@@ -359,13 +363,14 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
             pass
         else:
             attrs = self._get_current_attributes()
-            tag.set_property('scale', scale / attrs.font_scale)
+            if attrs.font_scale ==0:
+                tag.set_property('scale', scale)
             return
         if value == 'smaller':
-            tag.set_property('scale', Pango.SCALE_SMALL)
+            tag.set_property('scale', 0.8333333333333)
             return
         if value == 'larger':
-            tag.set_property('scale', Pango.SCALE_LARGE)
+            tag.set_property('scale', 1.2)
             return
         # font relative (5 ~ 4pt, 110 ~ 72pt)
         self._parse_length(value, True, False, 5, 110,self.__parse_font_size_cb,
@@ -758,7 +763,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
             self.list_counters.append(0)
         elif name == 'li':
             if self.list_counters[-1] is None:
-                li_head = unichr(0x2022)
+                li_head = chr(0x2022)
             else:
                 self.list_counters[-1] += 1
                 li_head = '%i.' % self.list_counters[-1]
@@ -819,6 +824,11 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
         if newLine:
             self._jump_line()
         self._end_span()
+
+    def get_font_size(self):
+        context = self.conv_textview.tv.get_style_context()
+        font = context.get_font(Gtk.StateType.NORMAL)
+        return font.get_size() / Pango.SCALE
 
 class HtmlTextView(Gtk.TextView):
 

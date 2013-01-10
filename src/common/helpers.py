@@ -1460,7 +1460,8 @@ def _get_img_direct(attrs):
     """
     Download an image. This function should be launched in a separated thread.
     """
-    mem, alt = '', ''
+    mem = b''
+    alt = ''
     # Wait maximum 5s for connection
     socket.setdefaulttimeout(5)
     try:
