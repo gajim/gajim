@@ -458,7 +458,7 @@ class HistoryManager:
         if event.button == 3:  # right click
             xml = gtkgui_helpers.get_gtk_builder('history_manager.ui',
                 'context_menu')
-            if widget.name != 'jids_listview':
+            if gtk.Buildable.get_name(widget) != 'jids_listview':
                 xml.get_object('export_menuitem').hide()
             xml.get_object('delete_menuitem').connect('activate',
                     self.on_delete_menuitem_activate, widget)
