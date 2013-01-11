@@ -468,7 +468,10 @@ class PluginManager(object):
                         os.path.dirname(file_path))
 
                     # read metadata from manifest.ini
-                    conf.readfp(open(manifest_path, 'r'))
+                    conf_file = open(manifest_path)
+                    conf.read_file(conf_file)
+                    conf_file.close()
+
                     for option in fields:
                         if conf.get('info', option) is '':
                             raise configparser.NoOptionError('field empty')
@@ -476,7 +479,6 @@ class PluginManager(object):
                     conf.remove_section('info')
 
                     plugins_found.append(module_attr)
-
                 except TypeError:
                     # set plugin localization
                     try:
