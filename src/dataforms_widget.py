@@ -332,7 +332,8 @@ class SingleForm(Gtk.Table, object):
             widget
             """
             if field.description != '':
-                if widget.flags() & Gtk.NO_WINDOW:
+                if not widget.get_window():
+                #if widget.flags() & Gtk.NO_WINDOW:
                     evbox = Gtk.EventBox()
                     evbox.add(widget)
                     widget = evbox

@@ -236,7 +236,7 @@ class CommandWindow:
         # build the commands list radiobuttons
         first_radio = None
         for (commandnode, commandname) in self.commandlist:
-            radio = Gtk.RadioButton(first_radio, label=commandname)
+            radio = Gtk.RadioButton.new_with_label_from_widget(first_radio, commandname)
             radio.connect("toggled", self.on_command_radiobutton_toggled,
                 commandnode)
             if not first_radio:
@@ -255,9 +255,9 @@ class CommandWindow:
         """
         Remove widgets we created. Not needed when the window is destroyed
         """
-        def remove_widget(widget):
+        def remove_widget(widget, param):
             self.command_list_vbox.remove(widget)
-        self.command_list_vbox.foreach(remove_widget)
+        self.command_list_vbox.foreach(remove_widget, None)
 
     def stage2_close_button_clicked(self, widget):
         self.stage_finish()
