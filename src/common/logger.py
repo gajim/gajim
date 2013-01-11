@@ -926,13 +926,13 @@ class Logger:
         # if there's a need to do more gzip, put that to a function
         string = BytesIO()
         gzip = GzipFile(fileobj=string, mode='w')
-        gzip.write(data)
+        gzip.write(data.encode('utf-8'))
         gzip.close()
         data = string.getvalue()
         self.cur.execute('''
                 INSERT INTO caps_cache ( hash_method, hash, data, last_seen )
                 VALUES (?, ?, ?, ?);
-                ''', (hash_method, hash_, buffer(data), int(time.time())))
+                ''', (hash_method, hash_, memoryview(data), int(time.time())))
         # (1) -- note above
         self._timeout_commit()
 
