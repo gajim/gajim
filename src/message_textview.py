@@ -147,7 +147,6 @@ class MessageTextView(Gtk.TextView):
         _buffer.remove_all_tags(start, finish)
 
     def color_set(self, widget, response):
-        print (response)
         if response == -6 or response == -4:
             widget.destroy()
             return
@@ -174,12 +173,10 @@ class MessageTextView(Gtk.TextView):
 
         _buffer.apply_tag_by_name(tag_name, start, finish)
 
-    def font_set(self, widget, response):
+    def font_set(self, widget, response, start, finish):
         if response == -6 or response == -4:
             widget.destroy()
             return
-
-        _buffer = self.get_buffer()
 
         font = widget.get_font()
         font_desc = widget.get_font_desc()
@@ -191,6 +188,8 @@ class MessageTextView(Gtk.TextView):
 
         widget.destroy()
 
+        _buffer = self.get_buffer()
+
         tag_name = 'font' + font
         if not tag_name in self.fonts_tags:
             tagFont = _buffer.create_tag(tag_name)
@@ -200,8 +199,6 @@ class MessageTextView(Gtk.TextView):
                     'font-size: ' + str(size) + 'px">'
             self.end_tags[tag_name] = '</span>'
             self.fonts_tags.append(tag_name)
-
-        start, finish = self.get_active_iters()
 
         for tag in self.fonts_tags:
             _buffer.remove_tag_by_name(tag, start, finish)
