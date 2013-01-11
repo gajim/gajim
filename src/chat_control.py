@@ -771,6 +771,42 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             if event.keyval == Gdk.KEY_Tab:  # CTRL + TAB
                 self.parent_win.move_to_next_unread_tab(True)
                 return True
+################################################################################
+        # temporary solution instead Gtk.binding_entry_add_signal
+        if event.keyval == Gdk.KEY_Return or \
+        event.keyval == Gdk.KEY_KP_Enter:  # ENTER
+            message_textview = widget
+            message_buffer = message_textview.get_buffer()
+            start_iter, end_iter = message_buffer.get_bounds()
+            message = message_buffer.get_text(start_iter, end_iter, False)
+            xhtml = self.msg_textview.get_xhtml()
+
+            if gajim.config.get('send_on_ctrl_enter'):
+                if event.get_state() & Gdk.ModifierType.CONTROL_MASK:  # CTRL + ENTER
+                    send_message = True
+                else:
+                    end_iter = message_buffer.get_end_iter()
+                    message_buffer.insert_at_cursor('\n')
+                    send_message = False
+
+            else: # send on Enter, do newline on Ctrl Enter
+                if event.get_state() & Gdk.ModifierType.CONTROL_MASK:  # Ctrl + ENTER
+                    end_iter = message_buffer.get_end_iter()
+                    message_buffer.insert_at_cursor('\n')
+                    send_message = False
+                else: # ENTER
+                    send_message = True
+
+            if gajim.connections[self.account].connected < 2 and send_message:
+                # we are not connected
+                dialogs.ErrorDialog(_('A connection is not available'),
+                        _('Your message can not be sent until you are connected.'))
+                send_message = False
+
+            if send_message:
+                self.send_message(message, xhtml=xhtml) # send the message
+            return True
+################################################################################
         return False
 
     def _on_message_textview_mykeypress_event(self, widget, event_keyval,
