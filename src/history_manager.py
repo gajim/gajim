@@ -110,7 +110,7 @@ class HistoryManager:
     def __init__(self):
         pix = gtkgui_helpers.get_icon_pixmap('gajim')
         # set the icon to all newly opened windows
-        Gtk.window_set_default_icon(pix)
+        Gtk.Window.set_default_icon(pix)
 
         if not os.path.exists(LOG_DB_PATH):
             dialogs.ErrorDialog(_('Cannot find history logs database'),
@@ -199,7 +199,7 @@ class HistoryManager:
 
     def _init_search_results_listview(self):
         # log_line_id (HIDDEN), jid, time, message, subject, nickname
-        self.search_results_liststore = Gtk.ListStore(str, str, str, str, str,
+        self.search_results_liststore = Gtk.ListStore(int, str, str, str, str,
             str)
         self.search_results_listview.set_model(self.search_results_liststore)
 
@@ -268,7 +268,7 @@ class HistoryManager:
         rows = self.cur.fetchall()
         for row in rows:
             self.jids_already_in.append(row[0])  # jid
-            self.jids_liststore.append(row)  # jid, jid_id
+            self.jids_liststore.append([row[0], str(row[1])])  # jid, jid_id
 
     def on_jids_listview_selection_changed(self, widget, data=None):
         liststore, list_of_paths = self.jids_listview.get_selection()\
@@ -285,7 +285,7 @@ class HistoryManager:
 
         list_of_rowrefs = []
         for path in list_of_paths:  # make them treerowrefs (it's needed)
-            list_of_rowrefs.append(Gtk.TreeRowReference(liststore, path))
+            list_of_rowrefs.append(Gtk.TreeRowReference.new(liststore, path))
 
         for rowref in list_of_rowrefs:  # FILL THE STORE, for all rows selected
             path = rowref.get_path()
@@ -384,8 +384,7 @@ class HistoryManager:
             log_line_id, jid_id, time_, kind, message, subject, nickname, \
                 show = row
             try:
-                time_ = time.strftime('%x', time.localtime(float(time_))
-                    ).decode(locale.getpreferredencoding())
+                time_ = time.strftime('%x', time.localtime(float(time_)))
             except ValueError:
                 pass
             else:
@@ -414,7 +413,7 @@ class HistoryManager:
                     message_ += ' foreground="%s"' % color
                 message_ += '>%s</span>' % \
                         GObject.markup_escape_text(message)
-                self.logs_liststore.append((log_line_id, jid_id, time_,
+                self.logs_liststore.append((str(log_line_id), str(jid_id), time_,
                     message_, subject, nickname))
 
     def _fill_search_results_listview(self, text):
@@ -438,8 +437,7 @@ class HistoryManager:
             # log_line_id, jid (from jid_id), time, message, subject, nickname
             log_line_id, jid_id, time_, message, subject, nickname = row
             try:
-                time_ = time.strftime('%x', time.localtime(float(time_))
-                    ).decode(locale.getpreferredencoding())
+                time_ = time.strftime('%x', time.localtime(float(time_)))
             except ValueError:
                 pass
             else:
@@ -458,7 +456,7 @@ class HistoryManager:
         if event.button == 3:  # right click
             xml = gtkgui_helpers.get_gtk_builder('history_manager.ui',
                 'context_menu')
-            if widget.name != 'jids_listview':
+            if Gtk.Buildable.get_name(widget) != 'jids_listview':
                 xml.get_object('export_menuitem').hide()
             xml.get_object('delete_menuitem').connect('activate',
                     self.on_delete_menuitem_activate, widget)
@@ -511,7 +509,7 @@ class HistoryManager:
 
         list_of_rowrefs = []
         for path in list_of_paths:  # make them treerowrefs (it's needed)
-            list_of_rowrefs.append(Gtk.TreeRowReference(liststore, path))
+            list_of_rowrefs.append(Gtk.TreeRowReference.new(liststore, path))
 
         for rowref in list_of_rowrefs:
             path = rowref.get_path()
@@ -546,8 +544,7 @@ class HistoryManager:
                 continue
 
             try:
-                time_ = time.strftime('%c', time.localtime(float(time_))
-                    ).decode(locale.getpreferredencoding())
+                time_ = time.strftime('%c', time.localtime(float(time_)))
             except ValueError:
                 pass
 
@@ -563,7 +560,7 @@ class HistoryManager:
             # delete all rows from db that match jid_id
             list_of_rowrefs = []
             for path in list_of_paths:  # make them treerowrefs (it's needed)
-                list_of_rowrefs.append(Gtk.TreeRowReference(liststore, path))
+                list_of_rowrefs.append(Gtk.TreeRowReference.new(liststore, path))
 
             for rowref in list_of_rowrefs:
                 path = rowref.get_path()
@@ -612,7 +609,7 @@ class HistoryManager:
             # delete rows from db that match log_line_id
             list_of_rowrefs = []
             for path in list_of_paths:  # make them treerowrefs (it's needed)
-                list_of_rowrefs.append(Gtk.TreeRowReference(liststore, path))
+                list_of_rowrefs.append(Gtk.TreeRowReference.new(liststore, path))
 
             for rowref in list_of_rowrefs:
                 path = rowref.get_path()

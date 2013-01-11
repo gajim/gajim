@@ -2942,7 +2942,7 @@ class GroupchatConfigWindow:
         model, paths = selection.get_selected_rows()
         row_refs = []
         for path in paths:
-            row_refs.append(Gtk.TreeRowReference(model, path))
+            row_refs.append(Gtk.TreeRowReference.new(model, path))
         for row_ref in row_refs:
             path = row_ref.get_path()
             iter_ = model.get_iter(path)
