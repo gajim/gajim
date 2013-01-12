@@ -1036,7 +1036,9 @@ class AddNewContactWindow:
             self._nec_gateway_prompt_received)
 
     def on_register_button_clicked(self, widget):
-        jid = self.protocol_jid_combobox.get_active_text()
+        model = self.protocol_jid_combobox.get_model()
+        row = self.protocol_jid_combobox.get_active()
+        jid = model[row][0]
         gajim.connections[self.account].request_register_agent_info(jid)
 
     def on_add_new_contact_window_key_press_event(self, widget, event):
@@ -1058,11 +1060,12 @@ class AddNewContactWindow:
             return
 
         model = self.protocol_combobox.get_model()
-        iter_ = self.protocol_combobox.get_active_iter()
-        type_ = model[iter_][2]
+        row = self.protocol_combobox.get_active_iter()
+        type_ = model[row][2]
         if type_ != 'jabber':
-            transport = self.protocol_jid_combobox.get_active_text().decode(
-                'utf-8')
+            model = self.protocol_jid_combobox.get_model()
+            row = self.protocol_jid_combobox.get_active()
+            transport = model[row][0]
             if self.account:
                 self.adding_jid = (jid, transport, type_)
                 gajim.connections[self.account].request_gateway_prompt(
@@ -1210,7 +1213,9 @@ class AddNewContactWindow:
         else:
             self.register_hbox.hide()
             if type_ != 'jabber':
-                jid = self.protocol_jid_combobox.get_active_text()
+                model = self.protocol_jid_combobox.get_model()
+                row = self.protocol_jid_combobox.get_active()
+                jid = model[row][0]
                 contact = gajim.contacts.get_first_contact_from_jid(
                     self.account, jid)
                 if contact.show in ('offline', 'error'):
@@ -1225,7 +1230,10 @@ class AddNewContactWindow:
             self.add_button.set_sensitive(True)
 
     def transport_signed_in(self, jid):
-        if self.protocol_jid_combobox.get_active_text() == jid:
+        model = self.protocol_jid_combobox.get_model()
+        row = self.protocol_jid_combobox.get_active()
+        _jid = model[row][0]
+        if _jid == jid:
             self.register_hbox.hide()
             self.connected_label.hide()
             self.subscription_table.show()
@@ -1233,7 +1241,10 @@ class AddNewContactWindow:
             self.add_button.set_sensitive(True)
 
     def transport_signed_out(self, jid):
-        if self.protocol_jid_combobox.get_active_text() == jid:
+        model = self.protocol_jid_combobox.get_model()
+        row = self.protocol_jid_combobox.get_active()
+        _jid = model[row][0]
+        if _jid == jid:
             self.subscription_table.hide()
             self.auto_authorize_checkbutton.hide()
             self.connected_label.show()
