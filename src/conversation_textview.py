@@ -834,7 +834,6 @@ class ConversationTextview(GObject.GObject):
         iter_ = self.tv.get_iter_at_location(x, y)
         tags = iter_.get_tags()
 
-
         if tags: # we clicked on sth special (it can be status message too)
             for tag in tags:
                 tag_name = tag.get_property('name')
@@ -864,8 +863,8 @@ class ConversationTextview(GObject.GObject):
         helpers.launch_browser_mailer(kind, text)
 
     def on_copy_link_activate(self, widget, text):
-        clip = Gtk.clipboard_get()
-        clip.set_text(text)
+        clip = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+        clip.set_text(text, -1)
 
     def on_start_chat_activate(self, widget, jid):
         gajim.interface.new_chat_from_jid(self.account, jid)
@@ -947,7 +946,8 @@ class ConversationTextview(GObject.GObject):
                 childs[0].hide() # copy link location
             childs[1].hide() # open link in browser
 
-        menu.popup(None, None, None, None, event.button, event.time)
+        menu.attach_to_widget(self.tv, None)
+        menu.popup(None, None, None, None, event.button.button, event.time)
 
     def hyperlink_handler(self, texttag, widget, event, iter_, kind):
         if event.type == Gdk.EventType.BUTTON_PRESS:
@@ -972,8 +972,7 @@ class ConversationTextview(GObject.GObject):
                     kind = 'sth_at_sth'
             else:
                 word = self.tv.get_buffer().get_text(begin_iter, end_iter, True)
-
-            if event.button == 3: # right click
+            if event.button.button == 3: # right click
                 self.make_link_menu(event, kind, word)
                 return True
             else:
