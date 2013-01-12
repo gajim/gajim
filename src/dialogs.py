@@ -4057,11 +4057,12 @@ class PrivacyListWindow:
         if action == 'EDIT':
             self.refresh_rules()
 
+        model = self.edit_type_group_combobox.get_model()
         count = 0
         for group in gajim.groups[self.account]:
             self.list_of_groups[group] = count
             count += 1
-            self.edit_type_group_combobox.append_text(group)
+            model.append([group])
         self.edit_type_group_combobox.set_active(0)
 
         self.window.set_title(title)
@@ -4098,7 +4099,8 @@ class PrivacyListWindow:
             self.privacy_list_default_checkbutton.set_active(False)
 
     def privacy_list_received(self, rules):
-        self.list_of_rules_combobox.get_model().clear()
+        model = self.list_of_rules_combobox.get_model()
+        model.clear()
         self.global_rules = {}
         for rule in rules:
             if 'type' in rule:
@@ -4112,7 +4114,7 @@ class PrivacyListWindow:
             if int(rule['order']) > self.max_order:
                 self.max_order = int(rule['order'])
             self.global_rules[text_item] = rule
-            self.list_of_rules_combobox.append_text(text_item)
+            model.append([text_item])
         if len(rules) == 0:
             self.title_hbox.set_sensitive(False)
             self.list_of_rules_combobox.set_sensitive(False)
@@ -4142,9 +4144,12 @@ class PrivacyListWindow:
         gajim.connections[self.account].get_privacy_list(self.privacy_list_name)
 
     def on_delete_rule_button_clicked(self, widget):
+        model = self.list_of_rules_combobox.get_model()
+        iter_ = self.list_of_rules_combobox.get_active_iter()
+        _rule = model[iter_][0]
         tags = []
         for rule in self.global_rules:
-            if rule != self.list_of_rules_combobox.get_active_text():
+            if rule != _rule:
                 tags.append(self.global_rules[rule])
         gajim.connections[self.account].set_privacy_list(
                 self.privacy_list_name, tags)
@@ -4163,8 +4168,9 @@ class PrivacyListWindow:
         if active_num == -1:
             self.active_rule = ''
         else:
-            self.active_rule = \
-                self.list_of_rules_combobox.get_active_text()
+            model = self.list_of_rules_combobox.get_model()
+            iter_ = self.list_of_rules_combobox.get_active_iter()
+            self.active_rule = model[iter_][0]
         if self.active_rule != '':
             rule_info = self.global_rules[self.active_rule]
             self.edit_order_spinbutton.set_value(int(rule_info['order']))
@@ -4277,7 +4283,9 @@ class PrivacyListWindow:
             edit_value = self.edit_type_jabberid_entry.get_text()
         elif self.edit_type_group_radiobutton.get_active():
             edit_type = 'group'
-            edit_value = self.edit_type_group_combobox.get_active_text()
+            model = self.edit_type_group_combobox.get_model()
+            iter_ = self.edit_type_group_combobox.get_active_iter()
+            edit_value = model[iter_][0]
         elif self.edit_type_subscription_radiobutton.get_active():
             edit_type = 'subscription'
             subs = ['none', 'both', 'from', 'to']
@@ -4401,7 +4409,8 @@ class PrivacyListsWindow:
     def add_privacy_list_to_combobox(self, privacy_list):
         if privacy_list in self.privacy_lists_save:
             return
-        self.list_of_privacy_lists_combobox.append_text(privacy_list)
+        model = self.list_of_privacy_lists_combobox.get_model()
+        model.append([privacy_list])
         self.privacy_lists_save.append(privacy_list)
 
     def draw_privacy_lists_in_combobox(self, privacy_lists):
