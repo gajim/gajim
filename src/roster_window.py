@@ -3571,8 +3571,7 @@ class RosterWindow:
             if keyval == Gdk.KEY_s: # CTRL + s
                 model = self.status_combobox.get_model()
                 accounts = list(gajim.connections.keys())
-                status = model[self.previous_status_combobox_active][2].decode(
-                    'utf-8')
+                status = model[self.previous_status_combobox_active][2]
                 def on_response(message, pep_dict):
                     if message is not None: # None if user pressed Cancel
                         for account in accounts:
@@ -3841,8 +3840,7 @@ class RosterWindow:
         not statuses_unified):
             # 'Change status message' selected:
             # do not change show, just show change status dialog
-            status = model[self.previous_status_combobox_active][2].decode(
-                'utf-8')
+            status = model[self.previous_status_combobox_active][2]
             def on_response(message, pep_dict):
                 if message is not None: # None if user pressed Cancel
                     for account in accounts:
