@@ -384,8 +384,14 @@ if pid_alive():
     if (show_remote_gajim_roster()):
         print("Gajim is already running, bringing the roster to front...")
         sys.exit(0)
-    pix = gtkgui_helpers.get_icon_pixmap('gajim', 48)
-    gtk.window_set_default_icon(pix) # set the icon to all newly opened wind
+    pixs = []
+    for size in (16, 32, 48, 64, 128):
+        pix = gtkgui_helpers.get_icon_pixmap('gajim', size)
+        if pix:
+            pixs.append(pix)
+    if pixs:
+        # set the icon to all windows
+        gtk.window_set_default_icon_list(*pixs)
     pritext = _('Gajim is already running')
     sectext = _('Another instance of Gajim seems to be running\nRun anyway?')
     dialog = dialogs.YesNoDialog(pritext, sectext)
