@@ -186,7 +186,7 @@ class Config:
             'last_roster_visible': [opt_bool, True],
             'key_up_lines': [opt_int, 25, _('How many lines to store for Ctrl+KeyUP.')],
             'version': [ opt_str, defs.version ], # which version created the config
-            'search_engine': [opt_str, 'http://www.google.com/search?&q=%s&sourceid=gajim'],
+            'search_engine': [opt_str, 'https://www.google.com/search?&q=%s&sourceid=gajim'],
             'dictionary_url': [opt_str, 'WIKTIONARY', _("Either custom url with %s in it where %s is the word/phrase or 'WIKTIONARY' which means use wiktionary.")],
             'always_english_wikipedia': [opt_bool, False],
             'always_english_wiktionary': [opt_bool, True],
