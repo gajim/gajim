@@ -812,6 +812,14 @@ class ConnectionIBBytestream(ConnectionBytestream):
             file_props.direction[1:], 'set',
             payload=[nbxmpp.Node(nbxmpp.NS_IBB + ' close',
             {'sid':file_props.sid})]))
+        if file_props.session_type == 'jingle':
+            peerjid = \
+             file_props.receiver if file_props.type_ == 's' else file_props.sender
+            session = self.get_jingle_session(peerjid, file_props.sid, 'file')
+            # According to the xep, the initiator also cancels the jingle session
+            # if there are no more files to send using IBB
+            if session.weinitiate:
+                session.cancel_session()
 
     def OpenStream(self, sid, to, fp, blocksize=4096):
         """
