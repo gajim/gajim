@@ -4490,7 +4490,7 @@ class RosterWindow:
         (when a Gtk.Paned widget handle is dragged)
         """
         if gparamspec and gparamspec.name == 'position':
-            roster_width = pane.get_child1().allocation.width
+            roster_width = pane.get_child1().get_allocation().width
             gajim.config.set('roster_width', roster_width)
 
 ################################################################################
