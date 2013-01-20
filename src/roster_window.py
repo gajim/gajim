@@ -2705,7 +2705,7 @@ class RosterWindow:
     def _nec_decrypted_message_received(self, obj):
         if not obj.msgtxt: # empty message text
             return True
-        if obj.mtype not in ('norml', 'chat'):
+        if obj.mtype not in ('normal', 'chat'):
             return
         if obj.session.control:
             typ = ''
