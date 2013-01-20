@@ -1278,6 +1278,21 @@ class DecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.user_nick = self.stanza.getTagData('nick') or ''
 
         self.get_chatstate()
+
+        oob_node = self.stanza.getTag('x', namespace=nbxmpp.NS_X_OOB)
+        self.oob_url = None
+        self.oob_desc = None
+        if oob_node:
+            self.oob_url = oob_node.getTagData('url')
+            self.oob_desc = oob_node.getTagData('desc')
+            if self.oob_url:
+                self.msgtxt += '\n'
+                if self.oob_desc:
+                    self.msgtxt += self.oob_desc
+                else:
+                    self.msgtxt += _('URL:')
+                self.msgtxt += ' ' + self.oob_url
+
         return True
 
 class ChatstateReceivedEvent(nec.NetworkIncomingEvent):
