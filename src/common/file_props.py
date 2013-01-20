@@ -135,6 +135,7 @@ class FileProp(object):
         self.hash_ = None
         self.fd = None
         self.startexmpp = None
+        # Type of the session, if it is 'jingle' or 'si'
         self.session_type = None
         self.request_id = None
         self.proxyhosts = None
