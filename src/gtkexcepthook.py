@@ -74,7 +74,7 @@ def _info(type_, value, tb):
     textview.set_size_request(
             Gdk.Screen.width() / 3,
             Gdk.Screen.height() / 4)
-    expander = Gtk.Expander(_('Details'))
+    expander = Gtk.Expander(label=_('Details'))
     expander.add(frame)
     dialog.vbox.add(expander)
 
