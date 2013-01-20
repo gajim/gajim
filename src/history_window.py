@@ -172,6 +172,8 @@ class HistoryWindow:
             keys.insert(0, actual_jid)
         if '' in keys:
             keys.remove('')
+        if None in keys:
+            keys.remove(None)
         # Map jid to info tuple
         # Warning : This for is time critical with big DB
         for key in keys:
