@@ -3457,8 +3457,6 @@ class RosterWindow:
         """
         When a key is pressed in the treeviews
         """
-        print 'tree', event.keyval
-        print gtk.gdk.keyval_to_unicode(event.keyval)
         self.tooltip.hide_tooltip()
         if event.keyval == gtk.keysyms.Escape:
             if self.rfilter_enabled:
