@@ -2325,7 +2325,7 @@ class SubscriptionRequestWindow:
         menu = self.prepare_popup_menu()
         menu.show_all()
         gtkgui_helpers.popup_emoticons_under_button(menu, widget,
-            self.window.window)
+            self.window.get_window())
 
 
 class JoinGroupchatWindow:
