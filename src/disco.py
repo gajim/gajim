@@ -869,7 +869,7 @@ class AgentBrowser:
         """
         Set the initial window title based on agent address
         """
-        self.window.get_window().set_title(_('Browsing %(address)s using account '
+        self.window.window.set_title(_('Browsing %(address)s using account '
                 '%(account)s') % {'address': self._get_agent_address(),
                 'account': self.account})
         self.window._set_window_banner_text(self._get_agent_address())
