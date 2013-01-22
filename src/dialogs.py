@@ -952,6 +952,7 @@ class AddNewContactWindow:
         liststore = Gtk.ListStore(str)
         self.protocol_jid_combobox.set_model(liststore)
         if jid:
+            self.jid_escaped = True
             type_ = gajim.get_transport_name_from_jid(jid)
             if not type_:
                 type_ = 'jabber'
@@ -986,6 +987,7 @@ class AddNewContactWindow:
                 self.nickname_entry.set_text(user_nick)
             self.nickname_entry.grab_focus()
         else:
+            self.jid_escaped = False
             self.uid_entry.grab_focus()
         group_names = []
         for acct in accounts:
@@ -1062,7 +1064,7 @@ class AddNewContactWindow:
         model = self.protocol_combobox.get_model()
         row = self.protocol_combobox.get_active_iter()
         type_ = model[row][2]
-        if type_ != 'jabber':
+        if type_ != 'jabber' and not self.jid_escaped:
             model = self.protocol_jid_combobox.get_model()
             row = self.protocol_jid_combobox.get_active()
             transport = model[row][0]
