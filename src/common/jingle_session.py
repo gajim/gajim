@@ -311,6 +311,7 @@ class JingleSession(object):
         Default callback for action stanzas -- simple ack and stop processing
         """
         response = stanza.buildReply('result')
+        response.delChild(response.getQuery())
         self.connection.connection.send(response)
 
     def __on_error(self, stanza, jingle, error, action):

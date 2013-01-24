@@ -314,9 +314,16 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
 
         if 'direction' in file_props:
             # it's a IBB
-            sid = file_props['sid']
-            if sid in self.files_props:
-                del self.files_props[sid]
+            # Close file we're receiving into
+            if 'fp' in file_props:
+                fd = file_props['fp']
+                try:
+                    fd.close()
+                except Exception:
+                    pass
+            if gajim.socks5queue.get_file_props(self.name, file_props['sid']):
+                gajim.socks5queue.remove_file_props(self.name,
+                    file_props['sid'])
 
     def _send_socks5_info(self, file_props):
         """
@@ -741,9 +748,9 @@ class ConnectionIBBytestream(ConnectionBytestream):
         elif typ == 'set' and stanza.getTag('close', namespace=xmpp.NS_IBB):
             self.StreamCloseHandler(conn, stanza)
         elif typ == 'result':
-            self.StreamCommitHandler(conn, stanza)
+            self.SendHandler()
         elif typ == 'error':
-            self.StreamOpenReplyHandler(conn, stanza)
+            gajim.socks5queue.error_cb(_('File transfer canceled'), _('An error occured while transfering file.'))
         else:
             conn.send(xmpp.Error(stanza, xmpp.ERR_BAD_REQUEST))
         raise xmpp.NodeProcessed
@@ -773,6 +780,7 @@ class ConnectionIBBytestream(ConnectionBytestream):
             rep = xmpp.Protocol('iq', stanza.getFrom(), 'result',
                 stanza.getTo(), {'id': stanza.getID()})
             file_props['block-size'] = blocksize
+            file_props['direction'] = '<'
             file_props['seq'] = 0
             file_props['received-len'] = 0
             file_props['last-time'] = time.time()
@@ -964,6 +972,7 @@ class ConnectionIBBytestream(ConnectionBytestream):
             if stanza.getTag('data'):
                 if self.IBBMessageHandler(conn, stanza):
                     reply = stanza.buildReply('result')
+                    reply.delChild(reply.getQuery())
                     conn.send(reply)
                     raise xmpp.NodeProcessed
             elif syn_id == self.last_sent_ibb_id:

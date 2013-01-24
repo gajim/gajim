@@ -397,6 +397,7 @@ class Socks5:
                 raise IOError, e
 
     def close_file(self):
+        # Close file we're sending from
         if self.file:
             if not self.file.closed:
                 try:
@@ -404,6 +405,14 @@ class Socks5:
                 except Exception:
                     pass
             self.file = None
+        # Close file we're receiving into
+        if 'fd' in self.file_props:
+            fd = self.file_props['fd']
+            del self.file_props['fd']
+            try:
+                fd.close()
+            except Exception:
+                pass
 
     def get_fd(self):
         """
