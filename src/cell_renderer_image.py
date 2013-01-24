@@ -21,7 +21,7 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-
+from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GObject
@@ -62,21 +62,23 @@ class CellRendererImage(Gtk.CellRendererPixbuf):
         col = tree.get_column(self.col_index)
         cell_area = tree.get_cell_area(path, col)
 
-        tree.queue_draw_area(cell_area.x, cell_area.y,
-                                cell_area.width, cell_area.height)
+        tree.queue_draw_area(cell_area.x, cell_area.y, cell_area.width,
+            cell_area.height)
 
     def animation_timeout(self, tree, image):
         if image.get_storage_type() != Gtk.ImageType.ANIMATION:
             return
         self.redraw = 0
         iter_ = self.iters[image]
-        iter_.advance()
+        timeval = GLib.TimeVal()
+        timeval.tv_sec = GLib.get_current_time()
+        iter_.advance(timeval)
         model = tree.get_model()
         if model:
             model.foreach(self.func, (image, tree))
         if self.redraw:
             GObject.timeout_add(iter_.get_delay_time(),
-                            self.animation_timeout, tree, image)
+                self.animation_timeout, tree, image)
         elif image in self.iters:
             del self.iters[image]
 
@@ -89,7 +91,9 @@ class CellRendererImage(Gtk.CellRendererPixbuf):
                 if not isinstance(widget, Gtk.TreeView):
                     return
                 animation = self.image.get_animation()
-                iter_ = animation.get_iter()
+                timeval = GLib.TimeVal()
+                timeval.tv_sec = GLib.get_current_time()
+                iter_ = animation.get_iter(timeval)
                 self.iters[self.image] = iter_
                 GObject.timeout_add(iter_.get_delay_time(),
                     self.animation_timeout, widget, self.image)
@@ -115,7 +119,9 @@ class CellRendererImage(Gtk.CellRendererPixbuf):
             return 0, 0, 0, 0
         if self.image.get_storage_type() == Gtk.ImageType.ANIMATION:
             animation = self.image.get_animation()
-            pix = animation.get_iter().get_pixbuf()
+            timeval = GLib.TimeVal()
+            timeval.tv_sec = GLib.get_current_time()
+            pix = animation.get_iter(timeval).get_pixbuf()
         elif self.image.get_storage_type() == Gtk.ImageType.PIXBUF:
             pix = self.image.get_pixbuf()
         else:
