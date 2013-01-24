@@ -790,6 +790,7 @@ class ConnectionIBBytestream(ConnectionBytestream):
             rep = nbxmpp.Protocol('iq', stanza.getFrom(), 'result',
                 stanza.getTo(), {'id': stanza.getID()})
             file_props.block_size = blocksize
+            file_props.direction = '<'
             file_props.seq = 0
             file_props.received_len = 0
             file_props.last_time = time.time()
@@ -811,7 +812,6 @@ class ConnectionIBBytestream(ConnectionBytestream):
             file_props.direction[1:], 'set',
             payload=[nbxmpp.Node(nbxmpp.NS_IBB + ' close',
             {'sid':file_props.sid})]))
-
 
     def OpenStream(self, sid, to, fp, blocksize=4096):
         """
@@ -990,7 +990,10 @@ class ConnectionIBBytestream(ConnectionBytestream):
                 break
         else:
             if stanza.getTag('data'):
-                if self.IBBMessageHandler(conn, stanza):
+                sid = stanza.getTagAttr('data', 'sid')
+                file_props = FilesProp.getFileProp(self.name, sid)
+                if file_props.connected and self.IBBMessageHandler(conn,
+                stanza):
                     reply = stanza.buildReply('result')
                     reply.delChild('data')
                     conn.send(reply)
