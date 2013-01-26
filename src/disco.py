@@ -1906,35 +1906,17 @@ class MucBrowser(AgentBrowser):
             self._fetch_source = GObject.timeout_add(100, self._start_info_query)
             return
         # We have to do this in a pygtk <2.8 compatible way :/
-        #start, end = self.window.services_treeview.get_visible_range()
-        rect = view.get_visible_rect()
-        iter_ = end = None
-        # Top row
-        try:
-            sx, sy = view.convert_tree_to_bin_window_coords(rect.x, rect.y)
-            spath = view.get_path_at_pos(sx, sy)[0]
-            iter_ = self.model.get_iter(spath)
-        except TypeError:
-            self._fetch_source = None
-            return
-        # Bottom row
-        # Iter compare is broke, use the path instead
-        try:
-            ex, ey = view.convert_tree_to_bin_window_coords(rect.x + \
-                rect.height, rect.y + rect.height)
-            end = view.get_path_at_pos(ex, ey)[0]
-            # end is the last visible, we want to query that aswell
-            end = (end[0] + 1,)
-        except TypeError:
-            # We're at the end of the model, we can leave end=None though.
-            pass
-        while iter_ and self.model.get_path(iter_) != end:
+        start, end = view.get_visible_range()
+        iter_ = self.model.get_iter(start)
+        while iter_:
             if not self.model.get_value(iter_, 6):
                 jid = self.model.get_value(iter_, 0)
                 node = self.model.get_value(iter_, 1)
                 self.cache.get_info(jid, node, self._agent_info)
                 self._fetch_source = True
                 return
+            if self.model.get_path(iter_) == end:
+                break
             iter_ = self.model.iter_next(iter_)
         self._fetch_source = None
 
