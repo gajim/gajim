@@ -420,37 +420,59 @@ class PluginManager(object):
         for elem_name in dir_list:
             file_path = os.path.join(path, elem_name)
 
-            module = None
-
             if os.path.isfile(file_path) and fnmatch.fnmatch(file_path, '*.py'):
                 module_name = os.path.splitext(elem_name)[0]
-                try:
-                    module = __import__(module_name)
-                except ValueError as value_error:
-                    log.debug(str(value_error))
-                except ImportError as import_error:
-                    log.debug(str(import_error))
-
             elif os.path.isdir(file_path) and scan_dirs:
                 module_name = elem_name
-                if module_name in sys.modules:
-                # do not load the module twice
-                    continue
                 file_path += os.path.sep
-                try:
-                    module = __import__(module_name)
-                except ValueError as value_error:
-                    log.debug(str(value_error))
-                except ImportError as import_error:
-                    log.debug(str(import_error))
-
-
-            if module is None:
-                continue
 
             manifest_path = os.path.join(os.path.dirname(file_path),
                 'manifest.ini')
             if scan_dirs and (not os.path.isfile(manifest_path)):
+                continue
+
+            # read metadata from manifest.ini
+            conf.remove_section('info')
+            conf_file = open(manifest_path)
+            conf.read_file(conf_file)
+            conf_file.close()
+
+            try:
+                min_v = conf.get('info', 'min_gajim_version')
+            except Exception:
+                min_v = None
+            try:
+                max_v = conf.get('info', 'max_gajim_version')
+            except Exception:
+                max_v = None
+
+            gajim_v = gajim.config.get('version')
+            gajim_v = gajim_v.split('-', 1)[0]
+            gajim_v = gajim_v.split('.')
+
+            if min_v:
+                min_v = min_v.split('.')
+                if gajim_v < min_v:
+                    continue
+            if max_v:
+                max_v = max_v.split('.')
+                if gajim_v > max_v:
+                    continue
+
+
+            module = None
+
+            if module_name in sys.modules:
+            # do not load the module twice
+                continue
+            try:
+                module = __import__(module_name)
+            except ValueError as value_error:
+                log.debug(str(value_error))
+            except ImportError as import_error:
+                log.debug(str(import_error))
+
+            if module is None:
                 continue
 
             log.debug('Attributes processing started')
@@ -467,16 +489,10 @@ class PluginManager(object):
                     module_attr.__path__ = os.path.abspath(
                         os.path.dirname(file_path))
 
-                    # read metadata from manifest.ini
-                    conf_file = open(manifest_path)
-                    conf.read_file(conf_file)
-                    conf_file.close()
-
                     for option in fields:
                         if conf.get('info', option) is '':
                             raise configparser.NoOptionError('field empty')
                         setattr(module_attr, option, conf.get('info', option))
-                    conf.remove_section('info')
 
                     plugins_found.append(module_attr)
                 except TypeError:
