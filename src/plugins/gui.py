@@ -80,6 +80,7 @@ class PluginsWindow(object):
         col.add_attribute(cell, 'pixbuf', ICON)
         col.pack_start(renderer, True)
         col.add_attribute(renderer, 'text', NAME)
+        col.set_property('expand', True)
         self.installed_plugins_treeview.append_column(col)
 
         renderer = Gtk.CellRendererToggle()
