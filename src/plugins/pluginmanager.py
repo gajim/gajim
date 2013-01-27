@@ -41,7 +41,7 @@ from plugins.helpers import log, log_calls, Singleton
 from plugins.helpers import GajimPluginActivateException
 from plugins.plugin import GajimPlugin, GajimPluginException
 
-class PluginManager(object):
+class PluginManager(metaclass=Singleton):
     '''
     Main plug-in management class.
 

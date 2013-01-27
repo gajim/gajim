@@ -230,8 +230,8 @@ def adapt_arguments(command, arguments, args, opts):
 
     # Stripping down position information supplied with arguments and
     # options as it won't be needed again.
-    args = map(lambda t: t[0], t[1])
-    opts = map(lambda t: (t[0], t[1]), opts)
+    args = list(map(lambda t: t[0], args))
+    opts = list(map(lambda t: (t[0], t[1]), opts))
 
     # If command has extra option enabled - collect all extra arguments
     # and pass them to a last positional argument command defines as a

@@ -66,11 +66,13 @@ def traverse_commands(container):
             yield attribute
 
 def is_command(attribute):
-    from framework import Command
+    from .framework import Command
     return isinstance(attribute, Command)
 
 def is_root(namespace):
     metaclass = namespace.get("__metaclass__", None)
+    if not metaclass:
+        return False
     return issubclass(metaclass, Dispatchable)
 
 def get_command(host, name):

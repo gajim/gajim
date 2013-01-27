@@ -28,7 +28,7 @@ from .dispatcher import get_command, list_commands
 from .mapping import parse_arguments, adapt_arguments
 from .errors import DefinitionError, CommandError, NoCommandError
 
-class CommandHost(object):
+class CommandHost(metaclass=Host):
     """
     Command host is a hub between numerous command processors and
     command containers. Aimed to participate in a dispatching process in
@@ -40,7 +40,7 @@ class CommandHost(object):
     """
     __metaclass__ = Host
 
-class CommandContainer(object):
+class CommandContainer(metaclass=Container):
     """
     Command container is an entity which holds defined commands,
     allowing them to be dispatched and proccessed correctly. Each
@@ -143,7 +143,7 @@ class CommandProcessor(object):
     def list_commands(self):
         commands = list_commands(self.COMMAND_HOST)
         commands = dict(commands)
-        return sorted(commands.values())
+        return sorted(list(commands.values()), key=lambda k: k.__repr__())
 
 class Command(object):
 
