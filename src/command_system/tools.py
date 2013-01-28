@@ -27,10 +27,10 @@
 from types import *
 
 def remove(sequence, target):
-    if isinstance(sequence, ListType):
+    if isinstance(sequence, list):
         if target in sequence:
             sequence.remove(target)
-    elif isinstance(sequence, DictType):
+    elif isinstance(sequence, dict):
         if target in sequence:
             del sequence[target]
 
