@@ -193,6 +193,7 @@ if os.name == 'nt':
 warnings.filterwarnings('error', module='gtk')
 try:
     from gi.repository import GObject
+    GObject.threads_init()
     GObject.set_prgname('gajim')
     from gi.repository import Gtk
     from gi.repository import Gdk
