@@ -58,9 +58,7 @@ LangString DESC_SecGajim ${LANG_ENGLISH} "Installs the main Gajim files."
 LangString DESC_SecGtk ${LANG_ENGLISH} "Installs Gtk+ 2 (necessary to run Gajim)."
 LangString DESC_SecDesktopIcon ${LANG_ENGLISH} "If set, a shortcut for Gajim will be created on the desktop."
 LangString DESC_SecAutostart ${LANG_ENGLISH} "If set, Gajim will be automatically started when Windows starts."
-LangString STR_Installed ${LANG_ENGLISH} "Apparently, Gajim is already installed."
-LangString STR_Uninstall ${LANG_ENGLISH} "Launch Uninstaller"
-LangString STR_Cancel ${LANG_ENGLISH} "Cancel"
+LangString STR_Installed ${LANG_ENGLISH} "Apparently, Gajim is already installed. Uninstall it?"
 LangString STR_Running ${LANG_ENGLISH} "It appears that Gajim is currently running.$\n\
 		Please quit Gajim and restart the uninstaller."
 
@@ -76,9 +74,7 @@ LangString DESC_SecGajim ${LANG_FRENCH} "Installer les fichiers principaux de Ga
 LangString DESC_SecGtk ${LANG_FRENCH} "Installer Gtk+ 2 (nйcessaire а Gajim)."
 LangString DESC_SecDesktopIcon ${LANG_FRENCH} "Si selectionnй, un raccourci pour Gajim sera crйй sur le bureau."
 LangString DESC_SecAutostart ${LANG_FRENCH} "Si activй, Gajim sera automatiquement lancй au dйmarrage de Windows."
-LangString STR_Installed ${LANG_FRENCH} "Gajim est apparement dйja installй."
-LangString STR_Uninstall ${LANG_FRENCH} "Lancer la Dйsinstallation"
-LangString STR_Cancel ${LANG_FRENCH} "Annuler"
+LangString STR_Installed ${LANG_FRENCH} "Gajim est apparement dйjа installй. Lancer la dйsinstallation ?"
 LangString STR_Running ${LANG_FRENCH} "Gajim est apparament lancй.$\n\
 		Fermez-le et redйmarrez le dйsinstallateur."
 
@@ -94,9 +90,7 @@ LangString DESC_SecGajim ${LANG_GERMAN} "Installiert die Hauptdateien von Gajim.
 LangString DESC_SecGtk ${LANG_GERMAN} "Installert Gtk+ 2 (notwendig um Gajim zu benutzen)."
 LangString DESC_SecDesktopIcon ${LANG_GERMAN} "Wenn dies aktiviert wird, wird ein Icon fьr Gajim auf dem Desktop erstellt."
 LangString DESC_SecAutostart ${LANG_GERMAN} "Gajim wird automatisch gestartet, sowie Windows startet, wenn dies aktivier wird."
-LangString STR_Installed ${LANG_GERMAN} "Gajim scheint bereits installiert zu sein."
-LangString STR_Uninstall ${LANG_GERMAN} "Deinstallations-Programm starten"
-LangString STR_Cancel ${LANG_GERMAN} "Abbrechen"
+LangString STR_Installed ${LANG_GERMAN} "Gajim is apparently already installed. Uninstall it?"
 LangString STR_Running ${LANG_GERMAN} "Es scheint, dass Gajim bereits lдuft.$\n\
 		Bitte beenden Sie es und starten Sie den Installer erneut.."
 
@@ -112,9 +106,7 @@ LangString DESC_SecGajim ${LANG_ITALIAN} "Installa i file principali di Gajim."
 LangString DESC_SecGtk ${LANG_ITALIAN} "Installa Gtk+ 2 (necessario per eseguire Gajim)."
 LangString DESC_SecDesktopIcon ${LANG_ITALIAN} "Se selezionato, un'icona verrа creata sul desktop."
 LangString DESC_SecAutostart ${LANG_ITALIAN} "Se selezionato, Gajim sarа eseguito all'avvio di Windows."
-LangString STR_Installed ${LANG_ITALIAN} "Gajim is apparently already installed."
-LangString STR_Uninstall ${LANG_ITALIAN} "Launch Uninstall"
-LangString STR_Cancel ${LANG_ITALIAN} "Cancel"
+LangString STR_Installed ${LANG_ITALIAN} "Gajim is apparently already installed. Uninstall it?"
 LangString STR_Running ${LANG_ITALIAN} "It appears that Gajim is currently running.$\n\
 		Close it and restart uninstaller."
 
@@ -130,11 +122,8 @@ LangString DESC_SecGajim ${LANG_RUSSIAN} "Установка основных файлов Gajim."
 LangString DESC_SecGtk ${LANG_RUSSIAN} "Установка Gtk+ 2 (необходимо для работы Gajim)."
 LangString DESC_SecDesktopIcon ${LANG_RUSSIAN} "Если отмечено, на рабочем столе будет создан ярлык Gajim."
 LangString DESC_SecAutostart ${LANG_RUSSIAN} "Если отмечено, Gajim будет автоматически запускаться при загрузке Windows."
-LangString STR_Installed ${LANG_RUSSIAN} "Gajim is apparently already installed."
-LangString STR_Uninstall ${LANG_RUSSIAN} "Launch Uninstall"
-LangString STR_Cancel ${LANG_RUSSIAN} "Cancel"
-LangString STR_Running ${LANG_RUSSIAN} "It appears that Gajim is currently running.$\n\
-		Close it and restart uninstaller."
+LangString STR_Installed ${LANG_RUSSIAN} "Похоже, Gajim уже установлен. Деинсталлировать установленную версию?"
+LangString STR_Running ${LANG_RUSSIAN} "Похоже, Gajim уже запущен.$\nЗакройте его и запустите деинсталлятор снова."
 
 Section "Gajim" SecGajim
 	SectionIn RO
@@ -678,11 +667,7 @@ launch:
 	IntOp $0 $0 - 2
 	strcpy $1 $R0 $0 1
 	IfFileExists $1 +1 NotInstalled
-	messagebox::show MB_DEFBUTTON4|MB_TOPMOST "Gajim" \
-		"0,103" \
-		$(STR_Installed) \
-		$(STR_Uninstall) $(STR_Cancel)
-		Pop $R1
+	MessageBox MB_YESNO|MB_DEFBUTTON2|MB_TOPMOST $(STR_Installed) IDNO Quit
 	StrCmp $R1 2 Quit +1
 	ExecWait '$R0 _?=$INSTDIR' $R2
 	StrCmp $R2 0 +1 Quit
@@ -691,12 +676,7 @@ NotInstalled:
 ;	Check to see if new installer (NSIS)already installed
 	ReadRegStr $R3 HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Gajim" "UninstallString"
 	IfFileExists $R3 +1 ReallyNotInstalled
-	
-	messagebox::show MB_DEFBUTTON4|MB_TOPMOST "Gajim" \
-		"0,103" \
-		$(STR_Installed) \
-		$(STR_Uninstall) $(STR_Cancel)
-		Pop $R4
+	MessageBox MB_YESNO|MB_DEFBUTTON2|MB_TOPMOST $(STR_Installed) IDNO Quit
 	StrCmp $R4 2 Quit +1
 	ExecWait '$R3 _?=$INSTDIR' $R5
 	StrCmp $R5 0 ReallyNotInstalled Quit
