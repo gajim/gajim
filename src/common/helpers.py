@@ -448,44 +448,6 @@ def get_output_of_command(command):
 
     return output
 
-#def decode_string(string):
-    #"""
-    #Try to decode (to make it Unicode instance) given string
-    #"""
-    #if isinstance(string, unicode):
-        #return string
-    ## by the time we go to iso15 it better be the one else we show bad characters
-    #encodings = (locale.getpreferredencoding(), 'utf-8', 'iso-8859-15')
-    #for encoding in encodings:
-        #try:
-            #string = string.decode(encoding)
-        #except UnicodeError:
-            #continue
-        #break
-
-    #return string
-
-#def ensure_utf8_string(string):
-    #"""
-    #Make sure string is in UTF-8
-    #"""
-    #try:
-        #string = decode_string(string).encode('utf-8')
-    #except Exception:
-        #pass
-    #return string
-
-#def wrapped_ensure_utf8_string(fn):
-    #def wrapped(n):
-        #return ensure_utf8_string(n)
-    #return wrapped
-
-#@wrapped_ensure_utf8_string
-#def escape_text(text):
-    #return GObject.markup_escape_text(text)
-
-#GObject.markup_escape_text = escape_text
-
 def get_windows_reg_env(varname, default=''):
     """
     Ask for paths commonly used but not exposed as ENVs in english Windows 2003
