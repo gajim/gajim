@@ -134,10 +134,10 @@ class PluginsWindow(object):
         self.plugin_name_label.set_text(plugin.name)
         self.plugin_version_label.set_text(plugin.version)
         self.plugin_authors_label.set_text(plugin.authors)
-        label = self.plugin_homepage_linkbutton.get_children()[0]
-        label.set_ellipsize(Pango.EllipsizeMode.END)
         self.plugin_homepage_linkbutton.set_uri(plugin.homepage)
         self.plugin_homepage_linkbutton.set_label(plugin.homepage)
+        label = self.plugin_homepage_linkbutton.get_children()[0]
+        label.set_ellipsize(Pango.EllipsizeMode.END)
         self.plugin_homepage_linkbutton.set_property('sensitive', True)
 
         desc_textbuffer = self.plugin_description_textview.get_buffer()
