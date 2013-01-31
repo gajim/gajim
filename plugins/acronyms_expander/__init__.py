@@ -1,1 +1,1 @@
-from acronyms_expander import AcronymsExpanderPlugin
+from .acronyms_expander import AcronymsExpanderPlugin
