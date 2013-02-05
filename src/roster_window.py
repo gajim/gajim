@@ -2640,6 +2640,8 @@ class RosterWindow:
                         contact = \
                             gajim.contacts.get_contact_with_highest_priority(
                             account, jid)
+                        if not contact:
+                            continue
                         gajim.interface.on_open_chat_window(None, contact,
                             account)
                 gajim.config.set_per('accounts', account,
