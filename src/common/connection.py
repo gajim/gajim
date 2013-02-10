@@ -1879,26 +1879,30 @@ class Connection(CommonConnection, ConnectionHandlers):
             form_node=obj.form_node, original_message=obj.original_message,
             delayed=obj.delayed, attention=obj.attention, callback=cb)
 
-    def send_contacts(self, contacts, jid):
+    def send_contacts(self, contacts, fjid, type_='message'):
         """
         Send contacts with RosterX (Xep-0144)
         """
         if not gajim.account_is_connected(self.name):
             return
-        if len(contacts) == 1:
-            msg = _('Sent contact: "%s" (%s)') % (contacts[0].get_full_jid(),
+        if type_ == 'message':
+            if len(contacts) == 1:
+                msg = _('Sent contact: "%s" (%s)') % (contacts[0].get_full_jid(),
                     contacts[0].get_shown_name())
-        else:
-            msg = _('Sent contacts:')
-            for contact in contacts:
-                msg += '\n "%s" (%s)' % (contact.get_full_jid(),
+            else:
+                msg = _('Sent contacts:')
+                for contact in contacts:
+                    msg += '\n "%s" (%s)' % (contact.get_full_jid(),
                         contact.get_shown_name())
-        msg_iq = nbxmpp.Message(to=jid, body=msg)
-        x = msg_iq.addChild(name='x', namespace=nbxmpp.NS_ROSTERX)
+            stanza = nbxmpp.Message(to=gajim.get_jid_without_resource(fjid),
+                body=msg)
+        elif type_ == 'iq':
+            stanza = nbxmpp.Iq(to=fjid, typ='set')
+        x = stanza.addChild(name='x', namespace=nbxmpp.NS_ROSTERX)
         for contact in contacts:
             x.addChild(name='item', attrs={'action': 'add', 'jid': contact.jid,
-                    'name': contact.get_shown_name()})
-        self.connection.send(msg_iq)
+                'name': contact.get_shown_name()})
+        self.connection.send(stanza)
 
     def send_stanza(self, stanza):
         """
