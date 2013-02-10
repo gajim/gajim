@@ -70,7 +70,7 @@ from common import dbus_support
 if dbus_support.supported:
     import dbus
 
-from common.xmpp.protocol import NS_FILE
+from common.xmpp.protocol import NS_FILE, NS_ROSTERX
 from common.pep import MOODS, ACTIVITIES
 
 #(icon, name, type, jid, account, editable, second pixbuf)
@@ -4472,7 +4472,12 @@ class RosterWindow:
 
     def on_drop_rosterx(self, widget, account_source, c_source, account_dest,
     c_dest, was_big_brother, context, etime):
-        gajim.connections[account_dest].send_contacts([c_source], c_dest.jid)
+        type_ = 'message'
+        if c_dest.show not in ('offline', 'error') and c_dest.supports(
+        NS_ROSTERX):
+            type_ = 'iq'
+        gajim.connections[account_dest].send_contacts([c_source],
+             c_dest.get_full_jid(), type_=type_)
 
     def on_drop_in_contact(self, widget, account_source, c_source, account_dest,
     c_dest, was_big_brother, context, etime):
