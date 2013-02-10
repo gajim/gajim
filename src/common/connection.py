@@ -1168,6 +1168,8 @@ class Connection(CommonConnection, ConnectionHandlers):
                 port = self._current_host['port']
 
             cacerts = os.path.join(common.gajim.DATA_DIR, 'other', 'cacerts.pem')
+            if not os.path.exists(cacerts):
+                cacerts = ''
             mycerts = common.gajim.MY_CACERTS
             secure_tuple = (self._current_type, cacerts, mycerts)
 
