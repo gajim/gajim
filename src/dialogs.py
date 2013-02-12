@@ -3417,7 +3417,7 @@ class RosterItemExchangeWindow:
                 is_in_roster = True
                 contact = gajim.contacts.get_contact_with_highest_priority(
                     self.account, jid)
-                if not contact:
+                if not contact or _('Not in Roster') in contact.groups:
                     is_in_roster = False
                 name = self.exchange_list[jid][0]
                 num_list = len(self.exchange_list[jid][1])
