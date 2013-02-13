@@ -94,6 +94,7 @@ class NonBlockingClient:
             self.NonBlockingNonSASL.PlugOut()
         if 'SASL' in self.__dict__:
             if 'startsasl' in self.SASL.__dict__ and \
+            'startsasl' in self.SASL.__dict__ and \
             self.SASL.startsasl == 'failure-in-process':
                 sasl_failed = True
                 self.SASL.startsasl = 'failure'
