@@ -210,7 +210,7 @@ class Interface:
         #('STATUS', account, show)
         account = obj.conn.name
         if obj.show in ('offline', 'error'):
-            for name in self.instances[account]['online_dialog'].keys():
+            for name in list(self.instances[account]['online_dialog'].keys()):
                 # .keys() is needed to not have a dictionary length changed
                 # during iteration error
                 self.instances[account]['online_dialog'][name].destroy()
