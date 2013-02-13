@@ -311,6 +311,12 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
         self.proxy_dict = proxy_dict
         self.on_remote_disconnect = self.disconnect
 
+        # ssl variables
+        self.ssl_fingerprint_sha1 = []
+        self.ssl_certificate = []
+        self.ssl_errnum = []
+        self.ssl_cert_pem = []
+
     # FIXME: transport should not be aware xmpp
     def start_disconnect(self):
         NonBlockingTransport.start_disconnect(self)

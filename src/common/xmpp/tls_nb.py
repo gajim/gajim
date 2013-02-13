@@ -393,7 +393,7 @@ class NonBlockingTLS(PlugIn):
                 flags |= 16384
             tcpsock._sslContext.set_options(flags)
 
-        tcpsock.ssl_errnum = 0
+        tcpsock.ssl_errnum = [0]
         tcpsock._sslContext.set_verify(OpenSSL.SSL.VERIFY_PEER,
                 self._ssl_verify_callback)
         try:
@@ -449,11 +449,11 @@ class NonBlockingTLS(PlugIn):
     def _ssl_verify_callback(self, sslconn, cert, errnum, depth, ok):
         # Exceptions can't propagate up through this callback, so print them here.
         try:
-            self._owner.ssl_fingerprint_sha1 = cert.digest('sha1')
-            self._owner.ssl_certificate = cert
-            self._owner.ssl_errnum = errnum
-            self._owner.ssl_cert_pem = OpenSSL.crypto.dump_certificate(
-                    OpenSSL.crypto.FILETYPE_PEM, cert)
+            self._owner.ssl_fingerprint_sha1.ppend(cert.digest('sha1'))
+            self._owner.ssl_certificate.append(cert)
+            self._owner.ssl_errnum.append(errnum)
+            self._owner.ssl_cert_pem.append(OpenSSL.crypto.dump_certificate(
+                OpenSSL.crypto.FILETYPE_PEM, cert))
             return True
         except:
             log.error("Exception caught in _ssl_info_callback:", exc_info=True)
