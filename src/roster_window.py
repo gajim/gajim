@@ -3567,6 +3567,8 @@ class RosterWindow:
                             self.send_pep(account, pep_dict)
                 dialogs.ChangeStatusMessageDialog(on_response, status)
                 return True
+            elif keyval == gtk.keysyms.k: # CTRL + k
+                self.enable_rfilter('')
 
     def on_roster_treeview_button_press_event(self, widget, event):
         # hide tooltip, no matter the button is pressed
@@ -4435,7 +4437,6 @@ class RosterWindow:
         self.disable_rfilter()
 
     def on_rfilter_entry_key_press_event(self, widget, event):
-        print 'rfilter', event.keyval
         if event.keyval == gtk.keysyms.Escape:
             self.disable_rfilter()
         elif event.keyval == gtk.keysyms.Return:
@@ -4462,6 +4463,10 @@ class RosterWindow:
             self.tree.expand_all()
         self.rfilter_entry.set_position(-1)
 
+        # If roster is hidden, let's temporarily show it. This can happen if user
+        # enables rfilter via keyboard shortcut.
+        self.show_roster_vbox(True)
+
     def disable_rfilter(self):
         self.rfilter_enabled = False
         self.rfilter_entry.set_text('')
@@ -4470,6 +4475,9 @@ class RosterWindow:
         self.refilter_shown_roster_items()
         self.tree.grab_focus()
         self._readjust_expand_collapse_state()
+
+        # If roster was hidden before enable_rfilter was called, hide it back.
+        self.on_show_roster_menuitem_toggled(self.xml.get_object('show_roster_menuitem'))
 
     def on_roster_hpaned_notify(self, pane, gparamspec):
         """
@@ -6688,6 +6696,11 @@ class RosterWindow:
         # Setting CTRL+S to be the shortcut to change status message
         accel_group = gtk.AccelGroup()
         keyval, mod = gtk.accelerator_parse('<Control>s')
+        accel_group.connect_group(keyval, mod, gtk.ACCEL_VISIBLE,
+            self.accel_group_func)
+
+        # Setting CTRL+k to focus rfilter_entry
+        keyval, mod = gtk.accelerator_parse('<Control>k')
         accel_group.connect_group(keyval, mod, gtk.ACCEL_VISIBLE,
             self.accel_group_func)
         self.window.add_accel_group(accel_group)
