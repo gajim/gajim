@@ -1905,8 +1905,10 @@ class MucBrowser(AgentBrowser):
             # Prevent a silly warning, try again in a bit.
             self._fetch_source = GObject.timeout_add(100, self._start_info_query)
             return
-        # We have to do this in a pygtk <2.8 compatible way :/
-        start, end = view.get_visible_range()
+        range_ = view.get_visible_range()
+        if not range_:
+            return
+        start, end = range_
         iter_ = self.model.get_iter(start)
         while iter_:
             if not self.model.get_value(iter_, 6):
