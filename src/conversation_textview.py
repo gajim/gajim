@@ -1226,14 +1226,19 @@ class ConversationTextview(gobject.GObject):
             # We don't have tim for outgoing messages...
             tim = time.localtime()
         current_print_time = gajim.config.get('print_time')
+        direction_mark = i18n.paragraph_direction_mark(unicode(text))
+        # don't apply direction mark if it's status message
+        if kind == 'status':
+            direction_mark = ''
         if current_print_time == 'always' and kind != 'info' and not simple:
             timestamp_str = self.get_time_to_show(tim)
             timestamp = time.strftime(timestamp_str, tim)
+            timestamp = direction_mark + timestamp
             buffer_.insert_with_tags_by_name(end_iter, timestamp,
-                    *other_tags_for_time)
+                *other_tags_for_time)
         elif current_print_time == 'sometimes' and kind != 'info' and not simple:
             every_foo_seconds = 60 * gajim.config.get(
-                    'print_ichat_every_foo_minutes')
+                'print_ichat_every_foo_minutes')
             seconds_passed = time.mktime(tim) - self.last_time_printout
             if seconds_passed > every_foo_seconds:
                 self.last_time_printout = time.mktime(tim)
@@ -1259,12 +1264,14 @@ class ConversationTextview(gobject.GObject):
         else: # not status nor /me
             if gajim.config.get('chat_merge_consecutive_nickname'):
                 if kind != old_kind or self.just_cleared:
-                    self.print_name(name, kind, other_tags_for_name)
+                    self.print_name(name, kind, other_tags_for_name,
+                        direction_mark=direction_mark)
                 else:
                     self.print_real_text(gajim.config.get(
-                            'chat_merge_consecutive_nickname_indent'))
+                        'chat_merge_consecutive_nickname_indent'))
             else:
-                self.print_name(name, kind, other_tags_for_name)
+                self.print_name(name, kind, other_tags_for_name,
+                    direction_mark=direction_mark)
             if kind == 'incoming':
                 text_tags.append('incomingtxt')
             elif kind == 'outgoing':
@@ -1333,7 +1340,7 @@ class ConversationTextview(gobject.GObject):
             end_iter = buffer_.get_end_iter()
             buffer_.insert_with_tags(end_iter, ' ')
 
-    def print_name(self, name, kind, other_tags_for_name):
+    def print_name(self, name, kind, other_tags_for_name, direction_mark=''):
         if name:
             buffer_ = self.tv.get_buffer()
             end_iter = buffer_.get_end_iter()
@@ -1343,8 +1350,8 @@ class ConversationTextview(gobject.GObject):
             before_str = helpers.from_one_line(before_str)
             after_str = gajim.config.get('after_nickname')
             after_str = helpers.from_one_line(after_str)
-            format = before_str + name + after_str + ' '
-            buffer_.insert_with_tags_by_name(end_iter, format, *name_tags)
+            format_ = direction_mark + before_str + name + after_str + ' '
+            buffer_.insert_with_tags_by_name(end_iter, format_, *name_tags)
 
     def print_subject(self, subject):
         if subject: # if we have subject, show it too!
