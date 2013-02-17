@@ -1563,6 +1563,8 @@ class RosterWindow:
 ##############################################################################
 
     def refilter_shown_roster_items(self):
+        if self.filtering:
+            return
         self.filtering = True
         self.modelfilter.refilter()
         self.filtering = False
