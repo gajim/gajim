@@ -738,7 +738,7 @@ class MessageWindow(object):
 
     def controls(self):
         for jid_dict in list(self._controls.values()):
-            for ctrl in jid_dict.values():
+            for ctrl in list(jid_dict.values()):
                 yield ctrl
 
     def get_nb_controls(self):
