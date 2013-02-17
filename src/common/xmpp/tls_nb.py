@@ -449,7 +449,7 @@ class NonBlockingTLS(PlugIn):
     def _ssl_verify_callback(self, sslconn, cert, errnum, depth, ok):
         # Exceptions can't propagate up through this callback, so print them here.
         try:
-            self._owner.ssl_fingerprint_sha1.ppend(cert.digest('sha1'))
+            self._owner.ssl_fingerprint_sha1.append(cert.digest('sha1'))
             self._owner.ssl_certificate.append(cert)
             self._owner.ssl_errnum.append(errnum)
             self._owner.ssl_cert_pem.append(OpenSSL.crypto.dump_certificate(
