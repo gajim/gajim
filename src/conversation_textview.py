@@ -77,7 +77,7 @@ class TextViewImage(Gtk.Image):
         self.connect('parent-set', self.on_parent_set)
         self.connect('draw', self.on_expose)
         self.set_tooltip_text(text)
-        self.anchor.set_data('plaintext', text)
+        self.anchor.plaintext = text
 
     def _get_selected(self):
         parent = self.get_parent()
