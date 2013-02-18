@@ -954,7 +954,7 @@ class HtmlTextView(Gtk.TextView):
                 if character == '\ufffc':
                     anchor = search_iter.get_child_anchor()
                     if anchor:
-                        text = anchor.get_data('plaintext')
+                        text = anchor.plaintext
                         if text:
                             selection+=text
                     else:
