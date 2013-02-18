@@ -2350,7 +2350,7 @@ class NotificationEvent(nec.NetworkIncomingEvent):
             iconset = gajim.config.get('iconset')
             img_path = os.path.join(helpers.get_iconset_path(iconset),
                 '48x48', show_image)
-        self.popup_image = self.get_path_to_generic_or_avatar(img_path,
+        self.popup_image_path = self.get_path_to_generic_or_avatar(img_path,
             jid=self.jid, suffix=suffix)
 
         self.popup_timeout = gajim.config.get('notification_timeout')
@@ -2399,6 +2399,7 @@ class NotificationEvent(nec.NetworkIncomingEvent):
         self.popup_event_type = ''
         self.popup_msg_type = ''
         self.popup_image = ''
+        self.popup_image_path = ''
         self.popup_timeout = -1
 
         self.do_command = False
