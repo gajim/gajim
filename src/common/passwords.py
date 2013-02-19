@@ -126,14 +126,14 @@ class GnomePasswordStorage(PasswordStorage):
             password = str()
         try:
             auth_token = gnomekeyring.item_create_sync(
-                    self.keyring, gnomekeyring.ITEM_NETWORK_PASSWORD,
-                    display_name, attributes1, password, update)
-        except gnomekeyring.DeniedError:
+                self.keyring, gnomekeyring.ITEM_NETWORK_PASSWORD, display_name,
+                attributes1, password, update)
+        except (gnomekeyring.DeniedError, gnomekeyring.CancelledError):
             set_storage(SimplePasswordStorage())
             storage.save_password(account_name, password)
             return
         gajim.config.set_per('accounts', account_name, 'password',
-                'gnomekeyring:')
+            'gnomekeyring:')
         if account_name in gajim.connections:
             gajim.connections[account_name].password = password
 
