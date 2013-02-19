@@ -142,7 +142,8 @@ class GnomePasswordStorage(PasswordStorage):
             GnomeKeyring.ItemType.NETWORK_PASSWORD, display_name, attributes1,
             password, update)
         if err != GnomeKeyring.Result.OK:
-            if err == GnomeKeyring.Result.DENIED:
+            if err in (GnomeKeyring.Result.DENIED,
+            GnomeKeyring.Result.CANCELLED):
                 set_storage(SimplePasswordStorage())
                 storage.save_password(account_name, password)
                 return
