@@ -148,24 +148,6 @@
       </row>
     </data>
   </object>
-  <object class="GtkListStore" id="status_message_liststore">
-    <columns>
-      <!-- column-name name -->
-      <column type="gchararray"/>
-      <!-- column-name text -->
-      <column type="gchararray"/>
-      <!-- column-name activity -->
-      <column type="gchararray"/>
-      <!-- column-name sub_activity -->
-      <column type="gchararray"/>
-      <!-- column-name activity_text -->
-      <column type="gchararray"/>
-      <!-- column-name mood -->
-      <column type="gchararray"/>
-      <!-- column-name mood_text -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
   <object class="GtkWindow" id="preferences_window">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
@@ -1615,6 +1597,7 @@ $T will be replaced by auto-not-available timeout</property>
                                 <property name="shadow_type">in</property>
                                 <child>
                                   <object class="GtkTextView" id="msg_textview">
+                                    <property name="height_request">21</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="border_width">3</property>
@@ -3315,5 +3298,23 @@ to discover one from server.</property>
         </child>
       </object>
     </child>
+  </object>
+  <object class="GtkListStore" id="status_message_liststore">
+    <columns>
+      <!-- column-name name -->
+      <column type="gchararray"/>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name activity -->
+      <column type="gchararray"/>
+      <!-- column-name sub_activity -->
+      <column type="gchararray"/>
+      <!-- column-name activity_text -->
+      <column type="gchararray"/>
+      <!-- column-name mood -->
+      <column type="gchararray"/>
+      <!-- column-name mood_text -->
+      <column type="gchararray"/>
+    </columns>
   </object>
 </interface>
