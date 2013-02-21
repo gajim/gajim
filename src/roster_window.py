@@ -1653,10 +1653,12 @@ class RosterWindow:
                 if model.iter_has_child(titer):
                     iter_c = model.iter_children(titer)
                     while iter_c:
-                        if self.rfilter_string in model[iter_c][C_NAME].lower():
+                        if self.rfilter_string in model[iter_c][C_NAME].decode(
+                        'utf-8').lower():
                             return True
                         iter_c = model.iter_next(iter_c)
-                return self.rfilter_string in model[titer][C_NAME].lower()
+                return self.rfilter_string in model[titer][C_NAME].decode(
+                    'utf-8').lower()
             if gajim.config.get('showoffline'):
                 return True
             bb_jid = None
@@ -1681,7 +1683,8 @@ class RosterWindow:
                 return self.contact_is_visible(contact, account)
         if type_ == 'agent':
             if self.rfilter_enabled:
-                return self.rfilter_string in model[titer][C_NAME].lower()
+                return self.rfilter_string in model[titer][C_NAME].decode(
+                    'utf-8').lower()
             contact = gajim.contacts.get_contact_with_highest_priority(account,
                 jid)
             return self.contact_has_pending_roster_events(contact, account) or \
@@ -1689,7 +1692,8 @@ class RosterWindow:
                 (gajim.account_is_connected(account) or \
                 gajim.config.get('showoffline')))
         if type_ == 'groupchat' and self.rfilter_enabled:
-            return self.rfilter_string in model[titer][C_NAME].lower()
+            return self.rfilter_string in model[titer][C_NAME].decode('utf-8').\
+                lower()
         return True
 
     def _compareIters(self, model, iter1, iter2, data=None):
@@ -4383,7 +4387,7 @@ class RosterWindow:
 
     def on_rfilter_entry_changed(self, widget):
         """ When we update the content of the filter """
-        self.rfilter_string = widget.get_text().lower()
+        self.rfilter_string = widget.get_text().decode('utf-8').lower()
         if self.rfilter_string == '':
             self.disable_rfilter()
         self.refilter_shown_roster_items()
@@ -4391,7 +4395,7 @@ class RosterWindow:
         self.tree.get_selection().unselect_all()
         def _func(model, path, iter_):
             if model[iter_][C_TYPE] == 'contact' and self.rfilter_string in \
-            model[iter_][C_NAME].lower():
+            model[iter_][C_NAME].decode('utf-8').lower():
                 col = self.tree.get_column(0)
                 self.tree.set_cursor_on_cell(path, col)
                 return True
