@@ -77,6 +77,7 @@ class HistoryWindow:
         self.checkbutton = xml.get_object('log_history_checkbutton')
         self.checkbutton.connect('toggled',
             self.on_log_history_checkbutton_toggled)
+        self.show_status_checkbutton = xml.get_object('show_status_checkbutton')
         self.search_entry = xml.get_object('search_entry')
         self.query_liststore = xml.get_object('query_liststore')
         self.jid_entry = xml.get_object('query_entry')
@@ -326,7 +327,7 @@ class HistoryWindow:
     def on_calendar_day_selected(self, widget):
         if not self.jid:
             return
-        year, month, day = widget.get_date() # integers
+        year, month, day = self.calendar.get_date() # integers
         month = gtkgui_helpers.make_gtk_month_python_month(month)
         self._add_lines_for_date(year, month, day)
 
@@ -379,6 +380,7 @@ class HistoryWindow:
         """
         self.history_buffer.set_text('') # clear the buffer first
         self.last_time_printout = 0
+        show_status = self.show_status_checkbutton.get_active()
 
         lines = gajim.logger.get_conversation_for_date(self.jid, year, month, day, self.account)
         # lines holds list with tupples that have:
@@ -386,6 +388,9 @@ class HistoryWindow:
         for line in lines:
             # line[0] is contact_name, line[1] is time of message
             # line[2] is kind, line[3] is show, line[4] is message
+            if not show_status and line[2] in (constants.KIND_GCSTATUS,
+            constants.KIND_STATUS):
+                continue
             self._add_new_line(line[0], line[1], line[2], line[3], line[4],
                     line[5])
 
@@ -520,6 +525,8 @@ class HistoryWindow:
                 year, month, day = self.calendar.get_date() # integers
                 month = gtkgui_helpers.make_gtk_month_python_month(month)
 
+            show_status = self.show_status_checkbutton.get_active()
+
             # contact_name, time, kind, show, message, subject
             results = gajim.logger.get_search_results_for_query(
                                     jid, text, account, year, month, day)
@@ -527,6 +534,9 @@ class HistoryWindow:
             # add "subject:  | message: " in message column if kind is single
             # also do we need show at all? (we do not search on subject)
             for row in results:
+                if not show_status and row[2] in (constants.KIND_GCSTATUS,
+                constants.KIND_STATUS):
+                    continue
                 contact_name = row[0]
                 if not contact_name:
                     kind = row[2]
@@ -612,6 +622,10 @@ class HistoryWindow:
         if oldlog != log:
             gajim.config.set_per('accounts', self.account, 'no_log_for',
                     ' '.join(no_log_for))
+
+    def on_show_status_checkbutton_toggled(self, widget):
+        # reload logs
+        self.on_calendar_day_selected(None)
 
     def open_history(self, jid, account):
         """
