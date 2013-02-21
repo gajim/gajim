@@ -69,13 +69,13 @@ class HistoryWindow:
         self.calendar = xml.get_object('calendar')
         scrolledwindow = xml.get_object('scrolledwindow')
         self.history_textview = conversation_textview.ConversationTextview(
-                account, used_in_history_window = True)
+            account, used_in_history_window = True)
         scrolledwindow.add(self.history_textview.tv)
         self.history_buffer = self.history_textview.tv.get_buffer()
         self.history_buffer.create_tag('highlight', background = 'yellow')
         self.checkbutton = xml.get_object('log_history_checkbutton')
         self.checkbutton.connect('toggled',
-                self.on_log_history_checkbutton_toggled)
+            self.on_log_history_checkbutton_toggled)
         self.query_entry = xml.get_object('query_entry')
         self.query_combobox = xml.get_object('query_combobox')
         self.jid_entry = self.query_combobox.child
@@ -126,11 +126,11 @@ class HistoryWindow:
             self._load_history(None)
 
         gtkgui_helpers.resize_window(self.window,
-                gajim.config.get('history_window_width'),
-                gajim.config.get('history_window_height'))
+            gajim.config.get('history_window_width'),
+            gajim.config.get('history_window_height'))
         gtkgui_helpers.move_window(self.window,
-                gajim.config.get('history_window_x-position'),
-                gajim.config.get('history_window_y-position'))
+            gajim.config.get('history_window_x-position'),
+            gajim.config.get('history_window_y-position'))
 
         xml.connect_signals(self)
         self.window.show_all()
@@ -202,9 +202,9 @@ class HistoryWindow:
 
             liststore.append((pix, completed))
             self.completion_dict[key] = (info_jid, info_acc, info_name,
-                    info_completion)
+                info_completion)
             self.completion_dict[completed] = (info_jid, info_acc,
-                    info_name, info_completion)
+                info_name, info_completion)
             if key == actual_jid:
                 self._load_history(info_jid, info_acc)
             yield True
@@ -258,7 +258,8 @@ class HistoryWindow:
         """
         if jid_or_name and jid_or_name in self.completion_dict:
         # a full qualified jid or a contact name was entered
-            info_jid, info_account, info_name, info_completion = self.completion_dict[jid_or_name]
+            info_jid, info_account, info_name, info_completion = \
+                self.completion_dict[jid_or_name]
             self.jids_to_search = [info_jid]
             self.jid = info_jid
 
@@ -274,14 +275,14 @@ class HistoryWindow:
             else:
                 # Are log disabled for account ?
                 if self.account in gajim.config.get_per('accounts', self.account,
-                        'no_log_for').split(' '):
+                'no_log_for').split(' '):
                     self.checkbutton.set_active(False)
                     self.checkbutton.set_sensitive(False)
                 else:
                     # Are log disabled for jid ?
                     log = True
                     if self.jid in gajim.config.get_per('accounts', self.account,
-                            'no_log_for').split(' '):
+                    'no_log_for').split(' '):
                         log = False
                     self.checkbutton.set_active(log)
                     self.checkbutton.set_sensitive(True)
@@ -290,8 +291,8 @@ class HistoryWindow:
 
             # select logs for last date we have logs with contact
             self.calendar.set_sensitive(True)
-            last_log = \
-                    gajim.logger.get_last_date_that_has_logs(self.jid, self.account)
+            last_log = gajim.logger.get_last_date_that_has_logs(self.jid,
+                self.account)
 
             date = time.localtime(last_log)
 
@@ -381,7 +382,8 @@ class HistoryWindow:
         self.history_buffer.set_text('') # clear the buffer first
         self.last_time_printout = 0
 
-        lines = gajim.logger.get_conversation_for_date(self.jid, year, month, day, self.account)
+        lines = gajim.logger.get_conversation_for_date(self.jid, year, month,
+            day, self.account)
         # lines holds list with tupples that have:
         # contact_name, time, kind, show, message
         for line in lines:
@@ -395,7 +397,7 @@ class HistoryWindow:
         Add a new line in textbuffer
         """
         if not message and kind not in (constants.KIND_STATUS,
-                constants.KIND_GCSTATUS):
+        constants.KIND_GCSTATUS):
             return
         buf = self.history_buffer
         end_iter = buf.get_end_iter()
@@ -407,13 +409,13 @@ class HistoryWindow:
             buf.insert(end_iter, tim) # add time
         elif gajim.config.get('print_time') == 'sometimes':
             every_foo_seconds = 60 * gajim.config.get(
-                    'print_ichat_every_foo_minutes')
+                'print_ichat_every_foo_minutes')
             seconds_passed = tim - self.last_time_printout
             if seconds_passed > every_foo_seconds:
                 self.last_time_printout = tim
                 tim = time.strftime('%X ', time.localtime(float(tim)))
                 buf.insert_with_tags_by_name(end_iter, tim + '\n',
-                        'time_sometimes')
+                    'time_sometimes')
 
         tag_name = ''
         tag_msg = ''
@@ -442,11 +444,11 @@ class HistoryWindow:
             # message here (if not None) is status message
             if message:
                 message = _('%(nick)s is now %(status)s: %(status_msg)s') %\
-                        {'nick': contact_name, 'status': helpers.get_uf_show(show),
-                        'status_msg': message }
+                    {'nick': contact_name, 'status': helpers.get_uf_show(show),
+                    'status_msg': message }
             else:
-                message = _('%(nick)s is now %(status)s') % {'nick': contact_name,
-                        'status': helpers.get_uf_show(show) }
+                message = _('%(nick)s is now %(status)s') % {
+                    'nick': contact_name, 'status': helpers.get_uf_show(show) }
             tag_msg = 'status'
         else: # 'status'
             # message here (if not None) is status message
@@ -457,10 +459,10 @@ class HistoryWindow:
                     message = _('Error')
             elif message:
                 message = _('Status is now: %(status)s: %(status_msg)s') % \
-                        {'status': helpers.get_uf_show(show), 'status_msg': message}
+                    {'status': helpers.get_uf_show(show), 'status_msg': message}
             else:
                 message = _('Status is now: %(status)s') % { 'status':
-                        helpers.get_uf_show(show) }
+                    helpers.get_uf_show(show) }
             tag_msg = 'status'
 
         if message.startswith('/me ') or message.startswith('/me\n'):
@@ -485,7 +487,7 @@ class HistoryWindow:
 
         if tag_msg:
             self.history_textview.print_real_text(message, [tag_msg],
-                    name=contact_name, xhtml=xhtml)
+                name=contact_name, xhtml=xhtml)
         else:
             self.history_textview.print_real_text(message, name=contact_name,
                 xhtml=xhtml)
@@ -506,10 +508,11 @@ class HistoryWindow:
         for jid in self.jids_to_search:
             account = self.completion_dict[jid][C_INFO_ACCOUNT]
             if account is None:
-                # We do not know an account. This can only happen if the contact is offine,
-                # or if we browse a groupchat history. The account is not needed, a dummy can
-                # be set.
-                # This may leed to wrong self nick in the displayed history (Uggh!)
+                # We do not know an account. This can only happen if the contact
+                # is offine, or if we browse a groupchat history. The account is
+                # not needed, a dummy can be set.
+                # This may leed to wrong self nick in the displayed history
+                # (Uggh!)
                 account = gajim.contacts.get_accounts()[0]
 
             year, month, day = False, False, False
@@ -518,8 +521,8 @@ class HistoryWindow:
                 month = gtkgui_helpers.make_gtk_month_python_month(month)
 
             # contact_name, time, kind, show, message, subject
-            results = gajim.logger.get_search_results_for_query(
-                                    jid, text, account, year, month, day)
+            results = gajim.logger.get_search_results_for_query(jid, text,
+                account, year, month, day)
             #FIXME:
             # add "subject:  | message: " in message column if kind is single
             # also do we need show at all? (we do not search on subject)
@@ -557,7 +560,7 @@ class HistoryWindow:
             self.query_entry.set_sensitive(True)
             self.query_entry.grab_focus()
             self.jids_to_search = (jid for jid in gajim.logger.get_jids_in_db()
-                            if gajim.logger.jid_is_room_jid(jid))
+                if gajim.logger.jid_is_room_jid(jid))
         if self.query_combobox.get_active() == 2:
             # All Chat Histories
             self.query_entry.set_sensitive(True)
@@ -609,20 +612,21 @@ class HistoryWindow:
                 None)
         if result is not None:
             match_start_iter, match_end_iter = result
-            match_start_iter.backward_char() # include '[' or other character before time
+            # include '[' or other character before time
+            match_start_iter.backward_char()
             match_end_iter.forward_line() # highlight all message not just time
             self.history_buffer.apply_tag_by_name('highlight', match_start_iter,
-                    match_end_iter)
+                match_end_iter)
 
             match_start_mark = self.history_buffer.create_mark('match_start',
-                    match_start_iter, True)
+                match_start_iter, True)
             self.history_textview.tv.scroll_to_mark(match_start_mark, 0, True)
 
     def on_log_history_checkbutton_toggled(self, widget):
         # log conversation history?
         oldlog = True
         no_log_for = gajim.config.get_per('accounts', self.account,
-                'no_log_for').split()
+            'no_log_for').split()
         if self.jid in no_log_for:
             oldlog = False
         log = widget.get_active()
@@ -632,7 +636,7 @@ class HistoryWindow:
             no_log_for.remove(self.jid)
         if oldlog != log:
             gajim.config.set_per('accounts', self.account, 'no_log_for',
-                    ' '.join(no_log_for))
+                ' '.join(no_log_for))
 
     def open_history(self, jid, account):
         """
