@@ -1662,7 +1662,7 @@ class Connection(CommonConnection, ConnectionHandlers):
 
         # If we are not resuming, we ask for discovery info
         # and archiving preferences
-        if not self.sm.resuming:
+        if not self.sm.supports_sm or (not self.sm.resuming and self.sm.enabled):
             self.request_message_archiving_preferences()
             self.discoverInfo(gajim.config.get_per('accounts', self.name,
                 'hostname'), id_prefix='Gajim_')
