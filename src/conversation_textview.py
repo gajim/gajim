@@ -65,7 +65,8 @@ def is_selection_modified(mark):
         return False
 
 def has_focus(widget):
-    return widget.flags() & Gtk.HAS_FOCUS == Gtk.HAS_FOCUS
+    return widget.get_state_flags() & Gtk.StateFlags.FOCUSED == \
+        Gtk.StateFlags.FOCUSED
 
 class TextViewImage(Gtk.Image):
 
