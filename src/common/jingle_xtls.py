@@ -236,10 +236,10 @@ def make_certs(filepath, CN):
     key = createKeyPair(TYPE_RSA, 1024)
     req = createCertRequest(key, CN=CN)
     cert = createCertificate(req, req, key, 0, 0, 60*60*24*365*5) # five years
-    open(filepath + '.pkey', 'w').write(crypto.dump_privatekey(
-        crypto.FILETYPE_PEM, key))
-    open(filepath + '.cert', 'w').write(crypto.dump_certificate(
-        crypto.FILETYPE_PEM, cert))
+    with open(filepath + '.pkey', 'wb') as f:
+        f.write(crypto.dump_privatekey(crypto.FILETYPE_PEM, key))
+    with open(filepath + '.cert', 'wb') as f:
+        f.write(crypto.dump_certificate(crypto.FILETYPE_PEM, cert))
 
 
 if __name__ == '__main__':
