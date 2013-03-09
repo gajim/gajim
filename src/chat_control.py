@@ -1692,7 +1692,7 @@ class ChatControl(ChatControlBase):
                     self.account, 'log_encrypted_sessions')
             # GPG is always authenticated as we use GPG's WoT
             self._show_lock_image(self.gpg_is_active, 'OpenPGP',
-                self.gpg_is_active, self.session and self.session.is_loggable()
+                self.gpg_is_active, self.session and self.session.is_loggable(),
                 True)
 
         self.update_ui()
