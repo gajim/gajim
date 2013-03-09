@@ -655,8 +655,9 @@ class Interface:
     def handle_event_bad_gpg_passphrase(self, obj):
         #('BAD_PASSPHRASE', account, ())
         if obj.use_gpg_agent:
-            sectext = _('You configured Gajim to use GPG agent, but there is no'
-                ' GPG agent running or it returned a wrong passphrase.\n')
+            sectext = _('You configured Gajim to use OpenPGP agent, but there '
+                'is no OpenPGP agent running or it returned a wrong passphrase.'
+                '\n')
             sectext += _('You are currently connected without your OpenPGP '
                 'key.')
             dialogs.WarningDialog(_('Your passphrase is incorrect'), sectext)
@@ -664,7 +665,7 @@ class Interface:
             path = gtkgui_helpers.get_icon_path('gajim-warning', 48)
             account = obj.conn.name
             notify.popup('warning', account, account, 'warning', path,
-                _('OpenGPG Passphrase Incorrect'),
+                _('OpenPGP Passphrase Incorrect'),
                 _('You are currently connected without your OpenPGP key.'))
         self.forget_gpg_passphrase(obj.keyID)
 
@@ -700,9 +701,9 @@ class Interface:
         def on_no():
             obj.callback(False)
 
-        dialogs.YesNoDialog(_('GPG key not trusted'), _('The GPG key used to '
-            'encrypt this chat is not trusted. Do you really want to encrypt '
-            'this message?'), checktext=_('_Do not ask me again'),
+        dialogs.YesNoDialog(_('OpenPGP key not trusted'), _('The OpenPGP key '
+            'used to encrypt this chat is not trusted. Do you really want to '
+            'encrypt this message?'), checktext=_('_Do not ask me again'),
             on_response_yes=on_yes, on_response_no=on_no)
 
     def handle_event_password_required(self, obj):
@@ -2978,7 +2979,7 @@ class PassphraseRequest:
 
     def create_dialog(self, account):
         title = _('Passphrase Required')
-        second = _('Enter GPG key passphrase for key %(keyid)s (account '
+        second = _('Enter OpenPGP key passphrase for key %(keyid)s (account '
             '%(account)s).') % {'keyid': self.keyid, 'account': account}
 
         def _cancel():
@@ -2992,9 +2993,9 @@ class PassphraseRequest:
                 self.complete(passphrase)
                 return
             elif result == 'expired':
-                dialogs.ErrorDialog(_('GPG key expired'),
-                    _('Your GPG key has expired, you will be connected to %s '
-                    'without OpenPGP.') % account)
+                dialogs.ErrorDialog(_('OpenPGP key expired'),
+                    _('Your OpenPGP key has expired, you will be connected to '
+                    '%s without OpenPGP.') % account)
                 # Don't try to connect with GPG
                 gajim.connections[account].continue_connect_info[2] = False
                 self.complete(None)
@@ -3003,7 +3004,7 @@ class PassphraseRequest:
             if count < 3:
                 # ask again
                 dialogs.PassphraseDialog(_('Wrong Passphrase'),
-                    _('Please retype your GPG passphrase or press Cancel.'),
+                    _('Please retype your OpenPGP passphrase or press Cancel.'),
                     ok_handler=(_ok, count + 1), cancel_handler=_cancel)
             else:
                 # user failed 3 times, continue without GPG

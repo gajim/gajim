@@ -1683,7 +1683,7 @@ class ChatControl(ChatControlBase):
         gajim.connections[self.account].USE_GPG:
             self.gpg_is_active = True
             gajim.encrypted_chats[self.account].append(contact.jid)
-            msg = _('GPG encryption enabled')
+            msg = _('OpenPGP encryption enabled')
             ChatControlBase.print_conversation_line(self, msg, 'status', '',
                 None)
 
@@ -1691,8 +1691,9 @@ class ChatControl(ChatControlBase):
                 self.session.loggable = gajim.config.get_per('accounts',
                     self.account, 'log_encrypted_sessions')
             # GPG is always authenticated as we use GPG's WoT
-            self._show_lock_image(self.gpg_is_active, 'GPG', self.gpg_is_active,
-                self.session and self.session.is_loggable(), True)
+            self._show_lock_image(self.gpg_is_active, 'OpenPGP',
+                self.gpg_is_active, self.session and self.session.is_loggable()
+                True)
 
         self.update_ui()
         # restore previous conversation
@@ -2226,9 +2227,9 @@ class ChatControl(ChatControlBase):
 
     def _toggle_gpg(self):
         if not self.gpg_is_active and not self.contact.keyID:
-            dialogs.ErrorDialog(_('No GPG key assigned'),
-                    _('No GPG key is assigned to this contact. So you cannot '
-                            'encrypt messages with GPG.'))
+            dialogs.ErrorDialog(_('No OpenPGP key assigned'),
+                _('No OpenPGP key is assigned to this contact. So you cannot '
+                'encrypt messages with OpenPGP.'))
             return
         ec = gajim.encrypted_chats[self.account]
         if self.gpg_is_active:
@@ -2236,9 +2237,9 @@ class ChatControl(ChatControlBase):
             ec.remove(self.contact.jid)
             self.gpg_is_active = False
             loggable = False
-            msg = _('GPG encryption disabled')
-            ChatControlBase.print_conversation_line(self, msg,
-                    'status', '', None)
+            msg = _('OpenPGP encryption disabled')
+            ChatControlBase.print_conversation_line(self, msg, 'status', '',
+                None)
             if self.session:
                 self.session.loggable = True
 
@@ -2246,12 +2247,12 @@ class ChatControl(ChatControlBase):
             # Enable encryption
             ec.append(self.contact.jid)
             self.gpg_is_active = True
-            msg = _('GPG encryption enabled')
-            ChatControlBase.print_conversation_line(self, msg,
-                    'status', '', None)
+            msg = _('OpenPGP encryption enabled')
+            ChatControlBase.print_conversation_line(self, msg, 'status', '',
+                None)
 
             loggable = gajim.config.get_per('accounts', self.account,
-                    'log_encrypted_sessions')
+                'log_encrypted_sessions')
 
             if self.session:
                 self.session.loggable = loggable
@@ -2272,7 +2273,7 @@ class ChatControl(ChatControlBase):
         gajim.config.set_per('contacts', self.contact.jid,
                 'gpg_enabled', self.gpg_is_active)
 
-        self._show_lock_image(self.gpg_is_active, 'GPG',
+        self._show_lock_image(self.gpg_is_active, 'OpenPGP',
                 self.gpg_is_active, loggable, True)
 
     def _show_lock_image(self, visible, enc_type='', enc_enabled=False,

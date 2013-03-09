@@ -5127,26 +5127,26 @@ class GPGInfoWindow:
         if keyID.endswith('MISMATCH'):
             verification_status = _('''Contact's identity NOT verified''')
             info = _('The contact\'s key (%s) <b>does not match</b> the key '
-                             'assigned in Gajim.') % keyID[:8]
+                'assigned in Gajim.') % keyID[:8]
             image = 'gajim-security_low'
         elif not keyID:
             # No key assigned nor a key is used by remote contact
-            verification_status = _('No GPG key assigned')
-            info = _('No GPG key is assigned to this contact. So you cannot '
-                             'encrypt messages.')
+            verification_status = _('No OpenPGP key assigned')
+            info = _('No OpenPGP key is assigned to this contact. So you cannot'
+                ' encrypt messages.')
             image = 'gajim-security_low'
         else:
             error = gajim.connections[account].gpg.encrypt('test', [keyID])[1]
             if error:
                 verification_status = _('''Contact's identity NOT verified''')
-                info = _('GPG key is assigned to this contact, but <b>you do not '
-                    'trust his key</b>, so message <b>cannot</b> be encrypted. Use '
-                    'your GPG client to trust this key.')
+                info = _('OpenPGP key is assigned to this contact, but <b>you '
+                    'do not trust his key</b>, so message <b>cannot</b> be '
+                    'encrypted. Use your OpenPGP client to trust this key.')
                 image = 'gajim-security_low'
             else:
                 verification_status = _('''Contact's identity verified''')
-                info = _('GPG Key is assigned to this contact, and you trust his '
-                    'key, so messages will be encrypted.')
+                info = _('OpenPGP Key is assigned to this contact, and you '
+                    'trust his key, so messages will be encrypted.')
                 image = 'gajim-security_high'
 
         status_label.set_markup('<b><span size="x-large">%s</span></b>' % \
