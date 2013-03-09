@@ -2117,7 +2117,7 @@ class RosterWindow:
 
                 keyid = gajim.config.get_per('accounts', account, 'keyid')
                 if keyid and not gajim.connections[account].gpg:
-                    dialogs.WarningDialog(_('GPG is not usable'),
+                    dialogs.WarningDialog(_('OpenPGP is not usable'),
                         _('You will be connected to %s without OpenPGP.') % \
                         account)
 

@@ -186,7 +186,7 @@ class StandardCommonChatCommands(CommandContainer):
         self.conv_textview.clear()
 
     @command
-    @doc(_("Toggle the GPG encryption"))
+    @doc(_("Toggle the OpenPGP encryption"))
     def gpg(self):
         self._toggle_gpg()
 
