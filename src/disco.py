@@ -70,57 +70,57 @@ from common import ged
 # when it advertises disco as it's feature, False means it's never browsable.
 def _gen_agent_type_info():
     return {
-            # Defaults
-            (0, 0):                                                 (None, None),
+        # Defaults
+        (0, 0):                         (None, None),
 
-            # Jabber server
-            ('server', 'im'):                               (ToplevelAgentBrowser, 'jabber'),
-            ('services', 'jabber'):         (ToplevelAgentBrowser, 'jabber'),
-            ('hierarchy', 'branch'):        (AgentBrowser, 'jabber'),
+        # Jabber server
+        ('server', 'im'):               (ToplevelAgentBrowser, 'jabber'),
+        ('services', 'jabber'):         (ToplevelAgentBrowser, 'jabber'),
+        ('hierarchy', 'branch'):        (AgentBrowser, 'jabber'),
 
-            # Services
-            ('conference', 'text'):         (MucBrowser, 'conference'),
-            ('headline', 'rss'):                    (AgentBrowser, 'rss'),
-            ('headline', 'weather'):        (False, 'weather'),
-            ('gateway', 'weather'):         (False, 'weather'),
-            ('_jid', 'weather'):                    (False, 'weather'),
-            ('gateway', 'sip'):                     (False, 'sip'),
-            ('directory', 'user'):          (None, 'jud'),
-            ('pubsub', 'generic'):          (PubSubBrowser, 'pubsub'),
-            ('pubsub', 'service'):          (PubSubBrowser, 'pubsub'),
-            ('proxy', 'bytestreams'):       (None, 'bytestreams'), # Socks5 FT proxy
-            ('headline', 'newmail'):        (ToplevelAgentBrowser, 'mail'),
+        # Services
+        ('conference', 'text'):         (MucBrowser, 'conference'),
+        ('headline', 'rss'):            (AgentBrowser, 'rss'),
+        ('headline', 'weather'):        (False, 'weather'),
+        ('gateway', 'weather'):         (False, 'weather'),
+        ('_jid', 'weather'):            (False, 'weather'),
+        ('gateway', 'sip'):             (False, 'sip'),
+        ('directory', 'user'):          (None, 'jud'),
+        ('pubsub', 'generic'):          (PubSubBrowser, 'pubsub'),
+        ('pubsub', 'service'):          (PubSubBrowser, 'pubsub'),
+        ('proxy', 'bytestreams'):       (None, 'bytestreams'), # Socks5 FT proxy
+        ('headline', 'newmail'):        (ToplevelAgentBrowser, 'mail'),
 
-            # Transports
-            ('conference', 'irc'):          (ToplevelAgentBrowser, 'irc'),
-            ('_jid', 'irc'):                                (False, 'irc'),
-            ('gateway', 'aim'):                     (False, 'aim'),
-            ('_jid', 'aim'):                                (False, 'aim'),
-            ('gateway', 'gadu-gadu'):       (False, 'gadu-gadu'),
-            ('_jid', 'gadugadu'):           (False, 'gadu-gadu'),
-            ('gateway', 'http-ws'):         (False, 'http-ws'),
-            ('gateway', 'icq'):                     (False, 'icq'),
-            ('_jid', 'icq'):                                (False, 'icq'),
-            ('gateway', 'msn'):                     (False, 'msn'),
-            ('_jid', 'msn'):                                (False, 'msn'),
-            ('gateway', 'sms'):                     (False, 'sms'),
-            ('_jid', 'sms'):                                (False, 'sms'),
-            ('gateway', 'smtp'):                    (False, 'mail'),
-            ('gateway', 'yahoo'):           (False, 'yahoo'),
-            ('_jid', 'yahoo'):                      (False, 'yahoo'),
-            ('gateway', 'mrim'):                    (False, 'mrim'),
-            ('_jid', 'mrim'):                               (False, 'mrim'),
-            ('gateway', 'facebook'):        (False, 'facebook'),
-            ('_jid', 'facebook'):           (False, 'facebook'),
+        # Transports
+        ('conference', 'irc'):          (ToplevelAgentBrowser, 'irc'),
+        ('_jid', 'irc'):                (False, 'irc'),
+        ('gateway', 'aim'):             (False, 'aim'),
+        ('_jid', 'aim'):                (False, 'aim'),
+        ('gateway', 'gadu-gadu'):       (False, 'gadu-gadu'),
+        ('_jid', 'gadugadu'):           (False, 'gadu-gadu'),
+        ('gateway', 'http-ws'):         (False, 'http-ws'),
+        ('gateway', 'icq'):             (False, 'icq'),
+        ('_jid', 'icq'):                (False, 'icq'),
+        ('gateway', 'msn'):             (False, 'msn'),
+        ('_jid', 'msn'):                (False, 'msn'),
+        ('gateway', 'sms'):             (False, 'sms'),
+        ('_jid', 'sms'):                (False, 'sms'),
+        ('gateway', 'smtp'):            (False, 'mail'),
+        ('gateway', 'yahoo'):           (False, 'yahoo'),
+        ('_jid', 'yahoo'):              (False, 'yahoo'),
+        ('gateway', 'mrim'):            (False, 'mrim'),
+        ('_jid', 'mrim'):               (False, 'mrim'),
+        ('gateway', 'facebook'):        (False, 'facebook'),
+        ('_jid', 'facebook'):           (False, 'facebook'),
     }
 
 # Category type to "human-readable" description string, and sort priority
 _cat_to_descr = {
-        'other':                        (_('Others'),   2),
-        'gateway':              (_('Transports'),       0),
-        '_jid':                 (_('Transports'),       0),
+        'other':                (_('Others'),       2),
+        'gateway':              (_('Transports'),   0),
+        '_jid':                 (_('Transports'),   0),
         #conference is a category for listing mostly groupchats in service discovery
-        'conference':   (_('Conference'),       1),
+        'conference':           (_('Conference'),   1),
 }
 
 
@@ -1085,11 +1085,15 @@ class AgentBrowser:
             return iter_
         return None
 
+    def add_self_line(self):
+        pass
+
     def _agent_items(self, jid, node, items, force):
         """
         Callback for when we receive a list of agent items
         """
         self.model.clear()
+        self.add_self_line()
         self._total_items = 0
         gobject.source_remove(self._pulse_timeout)
         self.window.progressbar.hide()
@@ -1179,6 +1183,22 @@ class ToplevelAgentBrowser(AgentBrowser):
         # Keep track of our treeview signals
         self._view_signals = []
         self._scroll_signal = None
+
+    def add_self_line(self):
+        addr = get_agent_address(self.jid, self.node)
+        descr = "<b>%s</b>" % addr
+        # Guess which kind of service this is
+        identities = []
+        type_ = gajim.get_transport_name_from_jid(self.jid,
+            use_config_setting=False)
+        if type_:
+            identity = {'category': '_jid', 'type': type_}
+            identities.append(identity)
+        # Set the pixmap for the row
+        pix = self.cache.get_icon(identities)
+        self.model.append(None, (self.jid, self.node, pix, descr, 1))
+        # Grab info on the service
+        self.cache.get_info(self.jid, self.node, self._agent_info, force=False)
 
     def _pixbuf_renderer_data_func(self, col, cell, model, iter_):
         """
@@ -1624,6 +1644,11 @@ class ToplevelAgentBrowser(AgentBrowser):
         iter_ = None
         cat_iter = self.model.get_iter_root()
         while cat_iter and not iter_:
+            cjid = self.model.get_value(cat_iter, 0).decode('utf-8')
+            cnode = self.model.get_value(cat_iter, 1).decode('utf-8')
+            if jid == cjid and node == cnode:
+                iter_ = cat_iter
+                break
             iter_ = self.model.iter_children(cat_iter)
             while iter_:
                 cjid = self.model.get_value(iter_, 0).decode('utf-8')
@@ -1698,8 +1723,7 @@ class ToplevelAgentBrowser(AgentBrowser):
 
         # Check if we have to move categories
         old_cat_iter = self.model.iter_parent(iter_)
-        old_cat = self.model.get_value(old_cat_iter, 3).decode('utf-8')
-        if self.model.get_value(old_cat_iter, 3) == cat:
+        if not old_cat_iter or self.model.get_value(old_cat_iter, 3) == cat:
             # Already in the right category, just update
             self.model[iter_][2] = pix
             self.model[iter_][3] = descr
@@ -1708,6 +1732,7 @@ class ToplevelAgentBrowser(AgentBrowser):
         # Not in the right category, move it.
         self.model.remove(iter_)
 
+        old_cat = self.model.get_value(old_cat_iter, 3).decode('utf-8')
         # Check if the old category is empty
         if not self.model.iter_is_valid(old_cat_iter):
             old_cat_iter = self._find_category(old_cat)
