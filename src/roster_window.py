@@ -6729,7 +6729,7 @@ class RosterWindow:
 
         # Setting CTRL+k to focus rfilter_entry
         keyval, mod = Gtk.accelerator_parse('<Control>k')
-        accel_group.connect(keyval, mod, Gtk.AccelFlags.VISIBLE,,
+        accel_group.connect(keyval, mod, Gtk.AccelFlags.VISIBLE,
             self.accel_group_func)
         self.window.add_accel_group(accel_group)
 
