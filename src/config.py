@@ -2996,8 +2996,7 @@ class GroupchatConfigWindow:
                 ['reason'] != model[iter_][1]):
                     users_dict[jid] = {'affiliation': affiliation}
                     if affiliation == 'outcast':
-                        users_dict[jid]['reason'] = model[iter_][1].decode(
-                            'utf-8')
+                        users_dict[jid]['reason'] = model[iter_][1]
                 iter_ = model.iter_next(iter_)
             # remove removed one
             for jid in self.start_users_dict[affiliation]:

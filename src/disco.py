@@ -1649,8 +1649,8 @@ class ToplevelAgentBrowser(AgentBrowser):
         iter_ = None
         cat_iter = self.model.get_iter_first()
         while cat_iter and not iter_:
-            cjid = self.model.get_value(cat_iter, 0).decode('utf-8')
-            cnode = self.model.get_value(cat_iter, 1).decode('utf-8')
+            cjid = self.model.get_value(cat_iter, 0)
+            cnode = self.model.get_value(cat_iter, 1)
             if jid == cjid and node == cnode:
                 iter_ = cat_iter
                 break
