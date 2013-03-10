@@ -682,6 +682,7 @@ class NonBlockingBind(PlugIn):
                 sm = self._owner._caller.sm
                 if self.supports_sm:
                     # starts negociation
+                    sm.supports_sm = True
                     sm.set_owner(self._owner)
                     sm.negociate()
                     self._owner.Dispatcher.sm = sm

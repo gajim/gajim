@@ -25,10 +25,11 @@ class Smacks():
         self.resuming = False
         self.enabled = False # If SM is enabled
         self.location = None
+        self.failed_resume = False # If last resuming attempt failed
+        self.supports_sm = False # If server supports sm
 
     def set_owner(self, owner):
         self._owner = owner
-
         # Register handlers
         owner.Dispatcher.RegisterNamespace(NS_STREAM_MGMT)
         owner.Dispatcher.RegisterHandler('enabled', self._neg_response,
@@ -47,13 +48,14 @@ class Smacks():
         if r == 'true' or r == 'True' or r == '1':
             self.resumption = True
             self.session_id = stanza.getAttr('id')
-
         if r == 'false' or r == 'False' or r == '0':
             self.negociate(False)
-
         l = stanza.getAttr('location')
         if l:
             self.location = l
+        if self.failed_resume:
+            self.con._discover_server_at_connection(self.con.connection)
+            self.failed_resume = False
 
     def negociate(self, resume=True):
         # Every time we attempt to negociate, we must erase all previous info
@@ -119,6 +121,7 @@ class Smacks():
             # we need to bind a resource
             self._owner.NonBlockingBind.resuming = False
             self._owner._on_auth_bind(None)
+            self.failed_resume = True
             return
 
         # Doesn't support resumption
