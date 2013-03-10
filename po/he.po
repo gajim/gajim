@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gajim 0.15\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-11-15 14:27+0400\n"
-"PO-Revision-Date: 2013-01-06 13:21+0200\n"
+"PO-Revision-Date: 2013-02-22 00:22+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
 "Language: he\n"
@@ -2357,13 +2357,14 @@ msgstr "<b>צבעי שורות שיחה</b>"
 msgid "Style"
 msgstr "סגנון"
 
+# התקן
 #: ../data/gui/preferences_window.ui.h:107
 msgid "Audio input device"
-msgstr "תקן קלט שמע"
+msgstr "מכשיר קלט שמע"
 
 #: ../data/gui/preferences_window.ui.h:108
 msgid "Audio output device"
-msgstr "תקן פלט שמע"
+msgstr "מכשיר פלט שמע"
 
 #: ../data/gui/preferences_window.ui.h:109
 msgid "<b>Audio</b>"
@@ -2371,11 +2372,11 @@ msgstr "<b>שמע</b>"
 
 #: ../data/gui/preferences_window.ui.h:110
 msgid "Video input device"
-msgstr "תקן קלט וידאו"
+msgstr "מכשיר קלט וידאו"
 
 #: ../data/gui/preferences_window.ui.h:111
 msgid "Video output device"
-msgstr "תקן פלט וידאו"
+msgstr "מכשיר פלט וידאו"
 
 #: ../data/gui/preferences_window.ui.h:112
 msgid "Video framerate"
@@ -3089,26 +3090,25 @@ msgstr "הערות"
 msgid "<b>Jabber Traffic</b>"
 msgstr "<b>תעבורת Jabber</b>"
 
-# החבאת
 #: ../data/gui/xml_console_window.ui.h:4
 msgid "Hide IN stanzas"
-msgstr "הסתרת סטנזות IN"
+msgstr "הסתר סטנזות IN"
 
 #: ../data/gui/xml_console_window.ui.h:5
 msgid "Hide OUT stanzas"
-msgstr "הסתרת סטנזות OUT"
+msgstr "הסתר סטנזות OUT"
 
 #: ../data/gui/xml_console_window.ui.h:6
 msgid "Hide Presence stanzas"
-msgstr "הסתרת סטנזות נוכחות"
+msgstr "הסתר סטנזות נוכחות"
 
 #: ../data/gui/xml_console_window.ui.h:7
 msgid "Hide IQ stanzas"
-msgstr "הסתרת סטנזות IQ"
+msgstr "הסתר סטנזות IQ"
 
 #: ../data/gui/xml_console_window.ui.h:8
 msgid "Hide Message stanzas"
-msgstr "הסתרת סטנזות הודעה"
+msgstr "הסתר סטנזות הודעה"
 
 #: ../data/gui/xml_console_window.ui.h:9
 msgid "<b>Filter</b>"
@@ -5626,7 +5626,7 @@ msgstr "התעודה נדחתה"
 # קיימת אי תיאום עם/ב
 #: ../src/common/connection.py:97
 msgid "Subject issuer mismatch"
-msgstr ""
+msgstr "נושא מנפיק לא תואם"
 
 #: ../src/common/connection.py:98
 msgid "Authority and subject key identifier mismatch"
@@ -6423,7 +6423,7 @@ msgstr ""
 
 #: ../src/common/multimedia_helpers.py:39
 msgid " Default device"
-msgstr "תקן משתמט"
+msgstr "מכשיר משתמט"
 
 #. Test src
 #: ../src/common/multimedia_helpers.py:60
@@ -7405,10 +7405,9 @@ msgstr "תמליל הודעת מצב"
 msgid "Name"
 msgstr "שם"
 
-# התחבר/י מחדש כעת?
 #: ../src/config.py:1654
 msgid "Relogin now?"
-msgstr "התחברות מחודשת?"
+msgstr "להתחבר מחדש כעת?"
 
 #: ../src/config.py:1655
 msgid "If you want all the changes to apply instantly, you must relogin."
@@ -9053,7 +9052,7 @@ msgstr "יש צורך בהתקנת dnsutils."
 
 #: ../src/features_window.py:81
 msgid "Requires nslookup to use SRV records."
-msgstr "יש צורך בהתקנת nslookup גדי לעשות שימוש ברשומות SRV."
+msgstr "יש צורך בהתקנת nslookup כדי לעשות שימוש ברשומות SRV."
 
 #: ../src/features_window.py:82
 msgid "Spell Checker"
