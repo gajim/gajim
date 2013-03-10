@@ -999,7 +999,7 @@ class MessageWindowMgr(gobject.GObject):
             return
         win.resize(size[0], size[1])
         if win.parent_paned:
-            win.parent_paned.set_position(parent_size[0])
+            win.parent_paned.set_position(gajim.config.get('roster_hpaned_position'))
 
     def _position_window(self, win, acct, type_):
         """

@@ -162,6 +162,7 @@ class Config:
             'roster_y-position': [ opt_int, 0 ],
             'roster_width': [ opt_int, 200 ],
             'roster_height': [ opt_int, 400 ],
+            'roster_hpaned_position': [opt_int, 200],
             'history_window_width': [ opt_int, 650 ],
             'history_window_height': [ opt_int, 450 ],
             'history_window_x-position': [ opt_int, 0 ],

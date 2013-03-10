@@ -4491,6 +4491,7 @@ class RosterWindow:
         if gparamspec.name == 'position':
             roster_width = pane.get_child1().allocation.width
             gajim.config.set('roster_width', roster_width)
+            gajim.config.set('roster_hpaned_position', pane.get_position())
 
 ################################################################################
 ### Drag and Drop handling
