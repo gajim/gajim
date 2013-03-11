@@ -2833,6 +2833,7 @@ class Interface:
 
         if dbus_support.supported:
             import upower_listener
+            import logind_listener
 
         # Handle gnome screensaver
         if dbus_support.supported:
