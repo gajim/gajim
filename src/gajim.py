@@ -67,7 +67,7 @@ demandimport.enable()
 demandimport.ignore += ['gobject._gobject', 'libasyncns', 'i18n',
     'logging.NullHandler', 'dbus.service', 'OpenSSL.SSL', 'OpenSSL.crypto',
     'common.sleepy', 'DLFCN', 'dl', 'xml.sax', 'xml.sax.handler', 'ic',
-    'Crypto.PublicKey', 'IPython']
+    'Crypto.PublicKey', 'IPython', 'contextlib', 'imp']
 
 if os.name == 'nt':
     import locale
