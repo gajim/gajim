@@ -1526,15 +1526,18 @@ class ToplevelAgentBrowser(AgentBrowser):
             self.execute_button.set_sensitive(True)
         if self.search_button and nbxmpp.NS_SEARCH in features:
             self.search_button.set_sensitive(True)
-        if self.register_button and nbxmpp.NS_REGISTER in features:
+        # Don't autorize to register with a server via disco
+        if self.register_button and nbxmpp.NS_REGISTER in features and \
+        jid != self.jid:
             # We can register this agent
             registered_transports = []
             jid_list = gajim.contacts.get_jid_list(self.account)
-            for jid in jid_list:
+            for jid_ in jid_list:
                 contact = gajim.contacts.get_first_contact_from_jid(
-                        self.account, jid)
+                        self.account, jid_)
                 if _('Transports') in contact.groups:
-                    registered_transports.append(jid)
+                    registered_transports.append(jid_)
+            registered_transports.append(self.jid)
             if jid in registered_transports:
                 self.register_button.set_label(_('_Edit'))
             else:
