@@ -447,7 +447,7 @@ class Sign(object):
 
     def handle_status(self, key, value):
         if key in ("USERID_HINT", "NEED_PASSPHRASE", "BAD_PASSPHRASE",
-                   "GOOD_PASSPHRASE", "BEGIN_SIGNING", "CARDCTRL"):
+        "GOOD_PASSPHRASE", "BEGIN_SIGNING", "CARDCTRL", "MISSING_PASSPHRASE"):
             pass
         elif key in ("KEYEXPIRED", "SIGEXPIRED"):
             self.status = 'key expired'
