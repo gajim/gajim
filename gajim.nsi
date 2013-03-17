@@ -39,11 +39,15 @@ Var StartMenuFolder
 !insertmacro MUI_UNPAGE_INSTFILES
 !insertmacro MUI_UNPAGE_FINISH
 
+;Show all languages, despite user's codepage
+!define MUI_LANGDLL_ALLLANGUAGES
+
 !insertmacro MUI_LANGUAGE "English"
 !insertmacro MUI_LANGUAGE "French"
 !insertmacro MUI_LANGUAGE "German"
 !insertmacro MUI_LANGUAGE "Italian"
 !insertmacro MUI_LANGUAGE "Russian"
+!insertmacro MUI_LANGUAGE "Hebrew"
 !insertmacro MUI_RESERVEFILE_LANGDLL
 
 ; English
@@ -125,6 +129,22 @@ LangString DESC_SecAutostart ${LANG_RUSSIAN} "ֵסכט מעלוקוםמ, Gajim בףהוע אגעמלאע
 LangString STR_Installed ${LANG_RUSSIAN} "ֿמץמזו, Gajim ףזו ףסעאםמגכום. ִוטםסעאככטנמגאעü ףסעאםמגכוםםף‏ גונסט‏?"
 LangString STR_Running ${LANG_RUSSIAN} "ֿמץמזו, Gajim ףזו חאןףשום.$\nַאךנמיעו ודמ ט חאןףסעטעו הוטםסעאככÿעמנ סםמגא."
 
+; Hebrew
+LangString NAME_Emoticons ${LANG_HEBREW} "רגשונים"
+LangString NAME_Iconsets ${LANG_HEBREW} "מערכי צלמית"
+LangString NAME_Languages ${LANG_HEBREW} "שפות"
+LangString NAME_SecLanguagesOther ${LANG_HEBREW} "אחרות"
+LangString NAME_Themes ${LANG_HEBREW} "ערכאות נושא"
+LangString NAME_SecDesktopIcon ${LANG_HEBREW} "צור סמל בשולחן עבודה"
+LangString NAME_SecAutostart ${LANG_HEBREW} "הפעל את Gajim כאשר Windows מתחיל"
+LangString DESC_SecGajim ${LANG_HEBREW} "מתקין קבצי Gajim עיקריים."
+LangString DESC_SecGtk ${LANG_HEBREW} "מתקין Gtk+ 2 (נחוצה להרצת Gajim)."
+LangString DESC_SecDesktopIcon ${LANG_HEBREW} "במידה ונקבעת, קיצור דרך עבור Gajim יושם על שולחן העבודה."
+LangString DESC_SecAutostart ${LANG_HEBREW} "במידה ונקבעת, Gajim יופעל אוטומטית כאשר Windows מתחיל."
+LangString STR_Installed ${LANG_HEBREW} "כפי הנראה, Gajim כבר מותקן. להסיר אותו?"
+LangString STR_Running ${LANG_HEBREW} "נראה שהתוכנית Gajim מורצת כעת.$\n\
+        אנא צא מן Gajim ואתחל את מסיר ההתקנה."
+
 Section "Gajim" SecGajim
 	SectionIn RO
 
@@ -180,7 +200,7 @@ Section "Gajim" SecGajim
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Gajim" "DisplayName" "Gajim"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Gajim" "UninstallString" "$INSTDIR\Uninstall.exe"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Gajim" "DisplayIcon" "$INSTDIR\bin\Gajim.exe"
-	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Gajim" "DisplayVersion" "0.15.2"
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Gajim" "DisplayVersion" "0.15.3"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Gajim" "URLInfoAbout" "http://www.gajim.org/"
 	WriteUninstaller "$INSTDIR\Uninstall.exe"
 
@@ -343,6 +363,7 @@ Section $(NAME_SecLanguagesOther) SecLanguagesOther
 	File /r "po\eo"
 	File /r "po\eu"
 	File /r "po\gl"
+	File /r "po\he"
 	File /r "po\hr"
 	File /r "po\lt"
 	File /r "po\nb"
@@ -587,6 +608,7 @@ Section "Uninstall"
 	RMDir /r "$INSTDIR\po\eu"
 	RMDir /r "$INSTDIR\po\fr"
 	RMDir /r "$INSTDIR\po\gl"
+	RMDir /r "$INSTDIR\po\he"
 	RMDir /r "$INSTDIR\po\hr"
 	RMDir /r "$INSTDIR\po\it"
 	RMDir /r "$INSTDIR\po\lt"

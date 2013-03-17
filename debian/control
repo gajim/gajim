@@ -2,7 +2,7 @@ Source: gajim
 Section: net
 Priority: optional
 Maintainer: Yann Leboulanger <asterix@lagaule.org>
-Build-Depends: debhelper (>= 7.0.50~), python (>= 2.6.6-3~), gettext (>= 0.17-4), intltool (>= 0.40.1), imagemagick, libglib2.0-dev
+Build-Depends: debhelper (>= 7.0.50~), python (>= 2.6.6-3~), gettext (>= 0.17-4), intltool (>= 0.40.1), imagemagick, libglib2.0-dev, dpatch
 Standards-Version: 3.9.3
 Homepage: http://www.gajim.org
 Vcs-Hg: http://hg.gajim.org/gajim/

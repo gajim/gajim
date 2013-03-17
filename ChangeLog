@@ -1,3 +1,9 @@
+Gajim 0.15.3 (17 March 2013)
+  * Better handling of SSL errors
+  * Better handling of canceling file transfer
+  * Improve farstream calls
+  * Minor fixes and improvements
+
 Gajim 0.15.2 (30 October 2012)
 
   * Show punycode encoded urls if they contain non-ascii chars

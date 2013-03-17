@@ -1,7 +1,17 @@
 #!/usr/bin/make -f
+include /usr/share/dpatch/dpatch.make
 
 %:
 	dh $@ --with python2
+
+build: build-stamp
+
+build-stamp: patch-stamp
+	dh build
+	touch $@
+
+clean: unpatch
+	dh clean
 
 # test target is broken
 override_dh_auto_test:
