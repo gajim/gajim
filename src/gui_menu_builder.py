@@ -254,8 +254,8 @@ control=None, gc_contact=None, is_anonymous=True):
             account)
     history_menuitem.connect('activate', roster.on_history, contact, account)
     if gtkgui_helpers.gtk_icon_theme.has_icon('document-open-recent'):
-        img = Gtk.Image()
-        img.set_from_icon_name('document-open-recent', Gtk.IconSize.MENU)
+        img = gtk.Image()
+        img.set_from_icon_name('document-open-recent', gtk.ICON_SIZE_MENU)
         history_menuitem.set_image(img)
 
     if control:

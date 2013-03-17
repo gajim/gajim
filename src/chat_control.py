@@ -358,7 +358,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
                 img = self.xml.get_object('image8')
             else:
                 img = self.xml.get_object('image5')
-            img.set_from_icon_name('document-open-recent', Gtk.IconSize.MENU)
+            img.set_from_icon_name('document-open-recent', gtk.ICON_SIZE_MENU)
 
         id_ = widget.connect('clicked', self._on_history_menuitem_activate)
         self.handlers[id_] = widget
