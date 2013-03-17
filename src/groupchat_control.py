@@ -2423,6 +2423,10 @@ class GroupchatControl(ChatControlBase):
         self.handlers[id_] = item
 
         item = xml.get_object('history_menuitem')
+        if gtkgui_helpers.gtk_icon_theme.has_icon('document-open-recent'):
+            img = Gtk.Image()
+            img.set_from_icon_name('document-open-recent', Gtk.IconSize.MENU)
+            item.set_image(img)
         id_ = item.connect('activate', self.on_history, nick)
         self.handlers[id_] = item
 

@@ -6239,6 +6239,9 @@ class RosterWindow:
         history_menuitem = Gtk.ImageMenuItem.new_with_mnemonic(_('_History'))
         history_icon = Gtk.Image.new_from_stock(Gtk.STOCK_JUSTIFY_FILL, \
             Gtk.IconSize.MENU)
+        if gtkgui_helpers.gtk_icon_theme.has_icon('document-open-recent'):
+            history_icon = Gtk.Image()
+            history_icon.set_from_icon_name('document-open-recent', Gtk.IconSize.MENU)
         history_menuitem.set_image(history_icon)
         history_menuitem .connect('activate', self.on_history, contact, account)
         menu.append(history_menuitem)
@@ -6593,6 +6596,13 @@ class RosterWindow:
             show_transports_group)
 
         self.xml.get_object('show_roster_menuitem').set_active(True)
+
+        if gtkgui_helpers.gtk_icon_theme.has_icon('document-open-recent'):
+            history_icon = Gtk.Image()
+            history_icon.set_from_icon_name('document-open-recent',
+                Gtk.IconSize.MENU)
+            history_menuitem = self.xml.get_object('history_menuitem')
+            history_menuitem.set_image(history_icon)
 
         # columns
         col = Gtk.TreeViewColumn()
