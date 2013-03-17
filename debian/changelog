@@ -1,3 +1,10 @@
+gajim (0.15.3-1) unstable; urgency=low
+
+  * New upstream release
+  * Switch to 3.0 (quilt) source format.
+
+ -- Yann Leboulanger <yann@leboulanger.org>  Sun, 17 Mar 2013 18:32:12 +0200
+
 gajim (0.15.1-4) unstable; urgency=low
 
   * apply patches using dpatch in debian/rules
