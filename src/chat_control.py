@@ -355,10 +355,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         widget = self.xml.get_object('history_button')
         # set document-open-recent icon for history button
         if gtkgui_helpers.gtk_icon_theme.has_icon('document-open-recent'):
-            if widget_name == 'groupchat_control':
-                img = self.xml.get_object('image8')
-            else:
-                img = self.xml.get_object('image5')
+            img = self.xml.get_object('history_image')
             img.set_from_icon_name('document-open-recent', Gtk.IconSize.MENU)
 
         id_ = widget.connect('clicked', self._on_history_menuitem_activate)

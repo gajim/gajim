@@ -341,8 +341,8 @@ class GroupchatControl(ChatControlBase):
             widget.show()
 
         if gtkgui_helpers.gtk_icon_theme.has_icon('document-open-recent'):
-                img = self.xml.get_object('image8')
-                img.set_from_icon_name('document-open-recent', Gtk.IconSize.MENU)
+            img = self.xml.get_object('history_image')
+            img.set_from_icon_name('document-open-recent', Gtk.IconSize.MENU)
         widget = self.xml.get_object('list_treeview')
         id_ = widget.connect('row_expanded', self.on_list_treeview_row_expanded)
         self.handlers[id_] = widget
