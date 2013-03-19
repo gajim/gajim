@@ -37,6 +37,7 @@ from common import helpers
 from time import time
 from dialogs import AddNewContactWindow, NewChatDialog, JoinGroupchatWindow
 from common import ged
+from common.connection_handlers_events import MessageOutgoingEvent
 
 from common import dbus_support
 if dbus_support.supported:
@@ -442,8 +443,10 @@ class SignalObject(dbus.service.Object):
             if ctrl:
                 ctrl.print_conversation(message, frm='outgoing')
 
-            connection.send_message(jid, message, keyID, type_, subject,
-                session=session)
+            gajim.nec.push_outgoing_event(MessageOutgoingEvent(None,
+                account=connected_account, jid=jid, message=message,
+                keyID=keyID, type_=type_, control=ctrl))
+
             return DBUS_BOOLEAN(True)
         return DBUS_BOOLEAN(False)
 
@@ -463,7 +466,7 @@ class SignalObject(dbus.service.Object):
         keyID is specified, encrypt the message with the pgp key
         """
         jid = self._get_real_jid(jid, account)
-        return self._send_message(jid, message, keyID, account, type, subject)
+        return self._send_message(jid, message, keyID, account, 'normal', subject)
 
     @dbus.service.method(INTERFACE, in_signature='sss', out_signature='b')
     def send_groupchat_message(self, room_jid, message, account):
