@@ -719,7 +719,8 @@ class GroupchatControl(ChatControlBase):
         for nick in gajim.contacts.get_nick_list(self.account, self.room_jid):
             self.draw_contact(nick)
 
-    def _change_style(self, model, path, iter_):
+    def _change_style(self, model, path, iter_, option):
+        print(model, path, iter_, option)
         model[iter_][C_NICK] = model[iter_][C_NICK]
 
     def change_roster_style(self):
