@@ -1574,6 +1574,95 @@ class Connection(CommonConnection, ConnectionHandlers):
         iq.setQuery().setTag('active', {'name': name})
         self.connection.send(iq)
 
+    def block_contacts(self, contact_list, message):
+        if not self.privacy_rules_supported:
+            return
+        for contact in contact_list:
+            self.send_custom_status('offline', message, contact.jid)
+            new_rule = {'order': '1', 'type': 'jid', 'action': 'deny',
+                'value' : contact.jid, 'child': ['message', 'iq', 'presence-out']}
+            self.blocked_list.append(new_rule)
+            self.blocked_contacts.append(contact.jid)
+        self.set_privacy_list('block', self.blocked_list)
+        if len(self.blocked_list) == 1:
+            self.set_active_list('block')
+            self.set_default_list('block')
+        self.get_privacy_list('block')
+
+    def unblock_contacts(self, contact_list):
+        if not self.privacy_rules_supported:
+            return
+        self.new_blocked_list = []
+        self.to_unblock = []
+        for contact in contact_list:
+            self.to_unblock.append(contact.jid)
+            if contact.jid in self.blocked_contacts:
+                self.blocked_contacts.remove(contact.jid)
+        for rule in self.blocked_list:
+            if rule['action'] != 'deny' or rule['type'] != 'jid' \
+            or rule['value'] not in self.to_unblock:
+                self.new_blocked_list.append(rule)
+        self.set_privacy_list('block', self.new_blocked_list)
+        self.get_privacy_list('block')
+        if len(self.new_blocked_list) == 0:
+            self.blocked_list = []
+            self.blocked_contacts = []
+            self.blocked_groups = []
+            self.set_default_list('')
+            self.set_active_list('')
+            self.del_privacy_list('block')
+        if not gajim.interface.roster.regroup:
+            show = gajim.SHOW_LIST[self.connected]
+        else:   # accounts merged
+            show = helpers.get_global_show()
+        if show == 'invisible':
+            return
+        for contact in contact_list:
+            self.send_custom_status(show, self.status, contact.jid)
+
+    def block_group(self, group, contact_list, message):
+        if not self.privacy_rules_supported:
+            return
+        self.blocked_groups.append(group)
+        for contact in contact_list:
+            self.send_custom_status('offline', message, contact.jid)
+        new_rule = {'order': '1', 'type': 'group', 'action': 'deny',
+            'value' : group, 'child': ['message', 'iq', 'presence-out']}
+        self.blocked_list.append(new_rule)
+        self.set_privacy_list('block', self.blocked_list)
+        if len(self.blocked_list) == 1:
+            self.set_active_list('block')
+            self.set_default_list('block')
+        self.get_privacy_list('block')
+
+    def unblock_group(self, group, contact_list):
+        if not self.privacy_rules_supported:
+            return
+        if group in self.blocked_groups:
+            self.blocked_groups.remove(group)
+        self.new_blocked_list = []
+        for rule in self.blocked_list:
+            if rule['action'] != 'deny' or rule['type'] != 'group' or \
+            rule['value'] != group:
+                self.new_blocked_list.append(rule)
+        self.set_privacy_list('block', self.new_blocked_list)
+        self.get_privacy_list('block')
+        if len(self.new_blocked_list) == 0:
+            self.blocked_list = []
+            self.blocked_contacts = []
+            self.blocked_groups = []
+            self.set_default_list('')
+            self.set_active_list('')
+            self.del_privacy_list('block')
+        if not gajim.interface.roster.regroup:
+            show = gajim.SHOW_LIST[self.connected]
+        else:   # accounts merged
+            show = helpers.get_global_show()
+        if show == 'invisible':
+            return
+        for contact in contact_list:
+            self.send_custom_status(show, self.status, contact.jid)
+
     def send_invisible_presence(self, msg, signed, initial = False):
         if not gajim.account_is_connected(self.name):
             return
