@@ -80,6 +80,7 @@ METACONTACTS_ARRIVED = 'metacontacts_arrived'
 ROSTER_ARRIVED = 'roster_arrived'
 DELIMITER_ARRIVED = 'delimiter_arrived'
 PRIVACY_ARRIVED = 'privacy_arrived'
+BLOCKING_ARRIVED = 'blocking_arrived'
 PEP_CONFIG = 'pep_config'
 HAS_IDLE = True
 try:
@@ -562,8 +563,18 @@ class ConnectionVcard:
             if iq_obj.getType() != 'error':
                 self.privacy_rules_supported = True
                 self.get_privacy_list('block')
-            elif self.continue_connect_info:
-                if self.continue_connect_info[0] == 'invisible':
+            else:
+                if self.blocking_supported:
+                    iq = nbxmpp.Iq('get', xmlns='')
+                    query = iq.setQuery(name='blocklist')
+                    query.setNamespace(nbxmpp.NS_BLOCKING)
+                    id_ = self.connection.getAnID()
+                    iq.setID(id_)
+                    self.awaiting_answers[id_] = (BLOCKING_ARRIVED, )
+                    self.connection.send(iq)
+
+                if self.continue_connect_info and self.continue_connect_info[0]\
+                == 'invisible':
                     # Trying to login as invisible but privacy list not
                     # supported
                     self.disconnect(on_purpose=True)
@@ -576,6 +587,14 @@ class ConnectionVcard:
                     return
             # Ask metacontacts before roster
             self.get_metacontacts()
+        elif self.awaiting_answers[id_][0] == BLOCKING_ARRIVED:
+            if iq_obj.getType() == 'result':
+                list_node = iq_obj.getTag('blocklist')
+                if not list_node:
+                    return
+                self.blocked_contacts = []
+                for i in list_node.iterTags('item'):
+                    self.blocked_contacts.append(i.getAttr('jid'))
         elif self.awaiting_answers[id_][0] == PEP_CONFIG:
             if iq_obj.getType() == 'error':
                 return

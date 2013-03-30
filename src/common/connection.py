@@ -159,6 +159,7 @@ class CommonConnection:
         self.archiving_supported = False
         self.archive_pref_supported = False
         self.roster_supported = True
+        self.blocking_supported = False
 
         self.muc_jid = {} # jid of muc server for each transport type
         self._stun_servers = [] # STUN servers of our jabber server
@@ -1576,11 +1577,20 @@ class Connection(CommonConnection, ConnectionHandlers):
 
     def block_contacts(self, contact_list, message):
         if not self.privacy_rules_supported:
+            if self.blocking_supported: #XEP-0191
+                iq = nbxmpp.Iq('set', xmlns='')
+                query = iq.setQuery(name='block')
+                query.setNamespace(nbxmpp.NS_BLOCKING)
+                for contact in contact_list:
+                    self.blocked_contacts.append(contact.jid)
+                    query.addChild(name='item', attrs={'jid': contact.jid})
+                self.connection.send(iq)
             return
         for contact in contact_list:
             self.send_custom_status('offline', message, contact.jid)
             new_rule = {'order': '1', 'type': 'jid', 'action': 'deny',
-                'value' : contact.jid, 'child': ['message', 'iq', 'presence-out']}
+                'value' : contact.jid, 'child': ['message', 'iq',
+                'presence-out']}
             self.blocked_list.append(new_rule)
             self.blocked_contacts.append(contact.jid)
         self.set_privacy_list('block', self.blocked_list)
@@ -1591,6 +1601,14 @@ class Connection(CommonConnection, ConnectionHandlers):
 
     def unblock_contacts(self, contact_list):
         if not self.privacy_rules_supported:
+            if self.blocking_supported: #XEP-0191
+                iq = nbxmpp.Iq('set', xmlns='')
+                query = iq.setQuery(name='unblock')
+                query.setNamespace(nbxmpp.NS_BLOCKING)
+                for contact in contact_list:
+                    self.blocked_contacts.append(contact.jid)
+                    query.addChild(name='item', attrs={'jid': contact.jid})
+                self.connection.send(iq)
             return
         self.new_blocked_list = []
         self.to_unblock = []
@@ -1831,6 +1849,8 @@ class Connection(CommonConnection, ConnectionHandlers):
                     self.archive_manual_supported = True
                 if nbxmpp.NS_ARCHIVE_PREF in obj.features:
                     self.archive_pref_supported = True
+                if nbxmpp.NS_BLOCKING in obj.features:
+                    self.blocking_supported = True
                 if nbxmpp.NS_CARBONS in obj.features and gajim.config.get_per(
                     'accounts', self.name, 'enable_message_carbons'):
                     # Server supports carbons, activate it
