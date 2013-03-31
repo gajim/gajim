@@ -1,4 +1,14 @@
+Gajim 0.16 ()
+
+  * Improve File transfer support by adding Jingle file transfer
+  * use external python-nbxmpp library
+  * Improve audio / Video calls and add screensharing feature
+  * Support systemd-logind
+  * Support XEP-0224 (Attention)
+  * Support XEP-0191 blocking command
+
 Gajim 0.15.3 (17 March 2013)
+
   * Better handling of SSL errors
   * Better handling of canceling file transfer
   * Improve farstream calls
