@@ -1015,7 +1015,8 @@ class ConnectionHandlersBase:
                     gajim.thread_interface(self.decrypt_thread, [encmsg, keyID,
                         obj], self._on_message_decrypted, [obj])
                 return
-        self._on_message_decrypted(None, obj)
+        gajim.nec.push_incoming_event(DecryptedMessageReceivedEvent(None,
+            conn=self, msg_obj=obj))
 
     def _on_message_decrypted(self, output, obj):
         if len(self.gpg_messages_to_decrypt):
