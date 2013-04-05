@@ -468,8 +468,8 @@ control=None, gc_contact=None, is_anonymous=True):
         execute_command_menuitem, send_custom_status_menuitem):
             widget.set_sensitive(False)
 
-    if gajim.connections[account] and gajim.connections[account].\
-    privacy_rules_supported:
+    if gajim.connections[account] and (gajim.connections[account].\
+    privacy_rules_supported or gajim.connections[account].blocking_supported):
         if helpers.jid_is_blocked(account, jid):
             block_menuitem.set_no_show_all(True)
             block_menuitem.hide()
