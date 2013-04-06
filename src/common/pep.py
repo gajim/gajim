@@ -216,16 +216,12 @@ LOCATION_DATA = {
         'uri':          _('uri')}
 
 import gobject
-import gtk
-
 import logging
 log = logging.getLogger('gajim.c.pep')
 
 from common import helpers
 import nbxmpp
 from common import gajim
-
-import gtkgui_helpers
 
 
 class AbstractPEP(object):
@@ -302,10 +298,7 @@ class UserMoodPEP(AbstractPEP):
 
     def asPixbufIcon(self):
         assert not self._retracted
-        received_mood = self._pep_specific_data['mood']
-        mood = received_mood if received_mood in MOODS else 'unknown'
-        pixbuf = gtkgui_helpers.load_mood_icon(mood).get_pixbuf()
-        return pixbuf
+        return gajim.interface.get_pep_icon(self)
 
     def asMarkupText(self):
         assert not self._retracted
@@ -347,9 +340,7 @@ class UserTunePEP(AbstractPEP):
         return (tune_dict, retracted)
 
     def asPixbufIcon(self):
-        import os
-        path = os.path.join(gajim.DATA_DIR, 'emoticons', 'static', 'music.png')
-        return gtk.gdk.pixbuf_new_from_file(path)
+        return gajim.interface.get_pep_icon(self)
 
     def asMarkupText(self):
         assert not self._retracted
@@ -398,21 +389,7 @@ class UserActivityPEP(AbstractPEP):
 
     def asPixbufIcon(self):
         assert not self._retracted
-        pep = self._pep_specific_data
-        activity = pep['activity']
-
-        has_known_activity = activity in ACTIVITIES
-        has_known_subactivity = (has_known_activity  and ('subactivity' in pep)
-                and (pep['subactivity'] in ACTIVITIES[activity]))
-
-        if has_known_activity:
-            if has_known_subactivity:
-                subactivity = pep['subactivity']
-                return gtkgui_helpers.load_activity_icon(activity, subactivity).get_pixbuf()
-            else:
-                return gtkgui_helpers.load_activity_icon(activity).get_pixbuf()
-        else:
-            return gtkgui_helpers.load_activity_icon('unknown').get_pixbuf()
+        return gajim.interface.get_pep_icon(self)
 
     def asMarkupText(self):
         assert not self._retracted
@@ -492,8 +469,7 @@ class UserLocationPEP(AbstractPEP):
                 self._pep_specific_data
 
     def asPixbufIcon(self):
-        path = gtkgui_helpers.get_icon_path('gajim-earth')
-        return gtk.gdk.pixbuf_new_from_file(path)
+        return gajim.interface.get_pep_icon(self)
 
     def asMarkupText(self):
         assert not self._retracted

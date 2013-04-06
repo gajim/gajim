@@ -85,6 +85,7 @@ from common.connection_handlers_events import OurShowEvent, \
 from common.connection import Connection
 from common import jingle
 from common.file_props import FilesProp
+from common import pep
 
 import roster_window
 import profile_window
@@ -2602,6 +2603,36 @@ class Interface:
             gc_ctrl = self.minimized_controls[account][bare_jid]
 
         return gc_ctrl and gc_ctrl.type_id == message_control.TYPE_GC
+
+    def get_pep_icon(self, pep_obj):
+        if isinstance(pep_obj, pep.UserMoodPEP):
+            received_mood = pep_obj._pep_specific_data['mood']
+            mood = received_mood if received_mood in pep.MOODS else 'unknown'
+            return gtkgui_helpers.load_mood_icon(mood).get_pixbuf()
+        elif isinstance(pep_obj, pep.UserTunePEP):
+            path = os.path.join(gajim.DATA_DIR, 'emoticons', 'static', 'music.png')
+            return gtk.gdk.pixbuf_new_from_file(path)
+        elif isinstance(pep_obj, pep.UserActivityPEP):
+            pep_ = pep_obj._pep_specific_data
+            activity = pep_['activity']
+
+            has_known_activity = activity in pep.ACTIVITIES
+            has_known_subactivity = (has_known_activity  and ('subactivity' in
+                pep_) and (pep_['subactivity'] in pep.ACTIVITIES[activity]))
+
+            if has_known_activity:
+                if has_known_subactivity:
+                    subactivity = pep_['subactivity']
+                    return gtkgui_helpers.load_activity_icon(activity,
+                        subactivity).get_pixbuf()
+                else:
+                    return gtkgui_helpers.load_activity_icon(activity).\
+                        get_pixbuf()
+            else:
+                return gtkgui_helpers.load_activity_icon('unknown').get_pixbuf()
+        elif isinstance(pep_obj, pep.UserLocationPEP):
+            path = gtkgui_helpers.get_icon_path('gajim-earth')
+            return gtk.gdk.pixbuf_new_from_file(path)
 
     def create_ipython_window(self):
         try:
