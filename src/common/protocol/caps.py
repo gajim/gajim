@@ -34,9 +34,8 @@ from common.connection_handlers_events import CapsPresenceReceivedEvent, \
 
 class ConnectionCaps(object):
 
-    def __init__(self, account, dispatch_event, capscache, client_caps_factory):
+    def __init__(self, account, capscache, client_caps_factory):
         self._account = account
-        self._dispatch_event = dispatch_event
         self._capscache = capscache
         self._create_suitable_client_caps = client_caps_factory
         gajim.nec.register_incoming_event(CapsPresenceReceivedEvent)
