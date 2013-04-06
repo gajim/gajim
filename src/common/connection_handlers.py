@@ -1421,7 +1421,7 @@ ConnectionJingle, ConnectionIBBytestream):
         gajim.nec.register_incoming_event(PresenceReceivedEvent)
 
         ConnectionCaps.__init__(self, account=self.name,
-            dispatch_event=self.dispatch, capscache=capscache.capscache,
+            capscache=capscache.capscache,
             client_caps_factory=capscache.create_suitable_client_caps)
         ConnectionJingle.__init__(self)
         ConnectionHandlersBase.__init__(self)
