@@ -34,7 +34,6 @@ from common import helpers
 from common import gajim
 from common.zeroconf import zeroconf
 from common.commands import ConnectionCommands
-from common.pep import ConnectionPEP
 from common.protocol.bytestream import ConnectionSocks5BytestreamZeroconf
 from common.connection_handlers_events import ZeroconfMessageReceivedEvent
 
@@ -72,8 +71,9 @@ class ConnectionVcard(connection_handlers.ConnectionVcard):
 
 
 class ConnectionHandlersZeroconf(ConnectionVcard,
-ConnectionSocks5BytestreamZeroconf, ConnectionCommands, ConnectionPEP,
-connection_handlers.ConnectionHandlersBase, connection_handlers.ConnectionJingle):
+ConnectionSocks5BytestreamZeroconf, ConnectionCommands,
+connection_handlers.ConnectionPEP, connection_handlers.ConnectionHandlersBase,
+connection_handlers.ConnectionJingle):
     def __init__(self):
         ConnectionVcard.__init__(self)
         ConnectionSocks5BytestreamZeroconf.__init__(self)
