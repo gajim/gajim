@@ -6,7 +6,7 @@ import unittest
 import lib
 lib.setup_env()
 
-from common.xmpp import NS_MUC, NS_PING, NS_XHTML_IM
+from nbxmpp import NS_MUC, NS_PING, NS_XHTML_IM
 from common import caps_cache as caps
 from common.contacts import Contact
 

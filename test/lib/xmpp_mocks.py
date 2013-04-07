@@ -6,7 +6,7 @@ import threading, time
 
 from mock import Mock
 
-from common.xmpp import idlequeue
+from nbxmpp import idlequeue
 
 IDLEQUEUE_INTERVAL = 0.2 # polling interval. 200ms is used in Gajim as default
 IDLEMOCK_TIMEOUT = 30 # how long we wait for an event
@@ -54,7 +54,6 @@ class IdleMock:
 
     def set_event(self):
         self._event.set()
-
 
 class MockConnection(IdleMock, Mock):
     '''

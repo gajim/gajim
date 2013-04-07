@@ -7,7 +7,7 @@ import lib
 lib.setup_env()
 
 from common.contacts import CommonContact, Contact, GC_Contact, LegacyContactsAPI
-from common.xmpp import NS_MUC
+from nbxmpp import NS_MUC
 
 from common import caps_cache
 
