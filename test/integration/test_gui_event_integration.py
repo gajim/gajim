@@ -6,6 +6,8 @@ import unittest
 import lib
 lib.setup_env()
 
+import nbxmpp
+
 from common import gajim
 from common import contacts as contacts_module
 from gajim import Interface
@@ -46,8 +48,16 @@ class TestStatusChange(unittest.TestCase):
 
     def contact_comes_online(self, account, jid, resource, prio):
         '''a remote contact comes online'''
-        gajim.interface.handle_event_notify(account, (jid, 'online', "I'm back!",
-                resource, prio, None, time.time(), None))
+        xml = """<presence from='%s/%s' id='123'>
+            <c node='http://gajim.org' ver='pRCD6cgQ4SDqNMCjdhRV6TECx5o='
+            hash='sha-1' xmlns='http://jabber.org/protocol/caps'/>
+            <status>I'm back!</status>
+            </presence>
+        """ % (jid, resource)
+        msg = nbxmpp.protocol.Presence(node=nbxmpp.simplexml.XML2Node(xml))
+        gajim.connections[account]._presenceCB(None, msg)
+#        gajim.interface.handle_event_notify(account, (jid, 'online', "I'm back!",
+#                resource, prio, None, time.time(), None))
 
         contact = None
         for c in gajim.contacts.get_contacts(account, jid):

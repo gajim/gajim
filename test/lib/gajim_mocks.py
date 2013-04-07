@@ -6,12 +6,12 @@ from mock import Mock
 from common import gajim
 from common import ged
 
-from common.connection_handlers import ConnectionHandlersBase
+from common.connection_handlers import ConnectionHandlers
 
-class MockConnection(Mock, ConnectionHandlersBase):
+class MockConnection(Mock, ConnectionHandlers):
     def __init__(self, account, *args):
         Mock.__init__(self, *args)
-        ConnectionHandlersBase.__init__(self)
+        ConnectionHandlers.__init__(self)
 
         self.name = account
         self.connected = 2
@@ -19,6 +19,7 @@ class MockConnection(Mock, ConnectionHandlersBase):
         self.blocked_contacts = {}
         self.blocked_groups = {}
         self.sessions = {}
+        self.nested_group_delimiter = '::'
 
         gajim.interface.instances[account] = {'infos': {}, 'disco': {},
                 'gc_config': {}, 'search': {}, 'sub_request': {}}
@@ -40,6 +41,9 @@ class MockConnection(Mock, ConnectionHandlersBase):
         gajim.caps_hash[account] = ''
 
         gajim.connections[account] = self
+
+    def request_vcard(self, jid):
+        pass
 
 class MockWindow(Mock):
     def __init__(self, *args):
@@ -105,14 +109,14 @@ class MockInterface(Mock):
         self.status_sent_to_users = Mock()
 
         if gajim.use_x:
-            self.jabber_state_images = {'16': {}, '32': {}, 'opened': {},
-                    'closed': {}}
+            self.jabber_state_images = {'16': {}, '24': {}, '32': {},
+                'opened': {}, 'closed': {}}
 
             import gtkgui_helpers
             gtkgui_helpers.make_jabber_state_images()
         else:
-            self.jabber_state_images = {'16': Mock(), '32': Mock(),
-                    'opened': Mock(), 'closed': Mock()}
+            self.jabber_state_images = {'16': Mock(), '24': Mock(),
+                '32': Mock(), 'opened': Mock(), 'closed': Mock()}
 
 
 class MockLogger(Mock):
