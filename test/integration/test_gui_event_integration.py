@@ -10,6 +10,7 @@ import nbxmpp
 
 from common import gajim
 from common import contacts as contacts_module
+from common import caps_cache
 from gajim import Interface
 
 from gajim_mocks import *
@@ -21,17 +22,20 @@ import time
 from data import *
 
 import roster_window
-
+import plugins
 import notify
 
 class TestStatusChange(unittest.TestCase):
-    '''tests gajim.py's incredibly complex handle_event_notify'''
+    '''tests gajim.py's incredibly complex presence handling'''
 
     def setUp(self):
 
         gajim.connections = {}
         gajim.contacts = contacts_module.LegacyContactsAPI()
         gajim.interface.roster = roster_window.RosterWindow()
+        gajim.plugin_manager = plugins.PluginManager()
+        gajim.logger = MockLogger()
+        caps_cache.initialize(gajim.logger)
 
         for acc in contacts:
             gajim.connections[acc] = MockConnection(acc)
@@ -45,19 +49,20 @@ class TestStatusChange(unittest.TestCase):
 
     def tearDown(self):
         notify.notifications = []
+        for acc in contacts:
+            gajim.connections[acc].cleanup()
 
-    def contact_comes_online(self, account, jid, resource, prio):
+    def contact_comes_online(self, account, jid, resource, prio,
+    should_popup=True):
         '''a remote contact comes online'''
-        xml = """<presence from='%s/%s' id='123'>
+        xml = """<presence from='%s/%s' id='123'><priority>%s</priority>
             <c node='http://gajim.org' ver='pRCD6cgQ4SDqNMCjdhRV6TECx5o='
             hash='sha-1' xmlns='http://jabber.org/protocol/caps'/>
             <status>I'm back!</status>
             </presence>
-        """ % (jid, resource)
+        """ % (jid, resource, prio)
         msg = nbxmpp.protocol.Presence(node=nbxmpp.simplexml.XML2Node(xml))
         gajim.connections[account]._presenceCB(None, msg)
-#        gajim.interface.handle_event_notify(account, (jid, 'online', "I'm back!",
-#                resource, prio, None, time.time(), None))
 
         contact = None
         for c in gajim.contacts.get_contacts(account, jid):
@@ -70,13 +75,24 @@ class TestStatusChange(unittest.TestCase):
         self.assertEqual(prio, contact.priority)
 
         # the most recent notification is that the contact connected
-        self.assertEqual('contact_connected', notify.notifications[-1][0])
+        if should_popup:
+            self.assertEqual('Contact Signed In',
+                notify.notifications[-1].popup_event_type)
+        else:
+            self.assertEqual('', notify.notifications[-1].popup_event_type)
 
     def contact_goes_offline(self, account, jid, resource, prio,
     still_exists = True):
         '''a remote contact goes offline.'''
-        gajim.interface.handle_event_notify(account, (jid, 'offline', 'Goodbye!',
-                resource, prio, None, time.time(), None))
+        xml = """<presence type='unavailable' from='%s/%s' id='123'>
+            <priority>%s</priority>
+            <c node='http://gajim.org' ver='pRCD6cgQ4SDqNMCjdhRV6TECx5o='
+            hash='sha-1' xmlns='http://jabber.org/protocol/caps'/>
+            <status>Goodbye!</status>
+            </presence>
+        """ % (jid, resource, prio)
+        msg = nbxmpp.protocol.Presence(node=nbxmpp.simplexml.XML2Node(xml))
+        gajim.connections[account]._presenceCB(None, msg)
 
         contact = None
         for c in gajim.contacts.get_contacts(account, jid):
@@ -92,7 +108,8 @@ class TestStatusChange(unittest.TestCase):
         self.assertEqual('Goodbye!', contact.status)
         self.assertEqual(prio, contact.priority)
 
-        self.assertEqual('contact_disconnected', notify.notifications[-1][0])
+        self.assertEqual('Contact Signed Out',
+            notify.notifications[-1].popup_event_type)
 
     def user_starts_chatting(self, jid, account, resource=None):
         '''the user opens a chat window and starts talking'''
@@ -150,7 +167,8 @@ class TestStatusChange(unittest.TestCase):
 
         ctrl = self.user_starts_chatting(jid, account1)
 
-        self.contact_comes_online(account1, jid, 'highprio', 50)
+        self.contact_comes_online(account1, jid, 'highprio', 50,
+            should_popup=False)
 
         # old session was dropped
         self.assertEqual(None, ctrl.session)
@@ -159,12 +177,13 @@ class TestStatusChange(unittest.TestCase):
         jid = 'default1@gajim.org'
 
         self.contact_comes_online(account1, jid, 'lowprio', 1)
-        self.contact_comes_online(account1, jid, 'highprio', 50)
+        self.contact_comes_online(account1, jid, 'highprio', 50,
+            should_popup=False)
 
         ctrl = self.user_starts_chatting(jid, account1)
 
         self.contact_goes_offline(account1, jid, 'highprio', 50,
-                still_exists=False)
+            still_exists=False)
 
         # old session was dropped
         self.assertEqual(None, ctrl.session)
@@ -176,7 +195,8 @@ class TestStatusChange(unittest.TestCase):
 
         ctrl = self.user_starts_esession(jid, 'lowprio', account1)
 
-        self.contact_comes_online(account1, jid, 'highprio', 50)
+        self.contact_comes_online(account1, jid, 'highprio', 50,
+            should_popup=False)
 
         # session was associated with the low priority full jid, so it should
         # have been removed from the control

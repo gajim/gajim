@@ -11,9 +11,13 @@ from common.connection_handlers import ConnectionHandlers
 class MockConnection(Mock, ConnectionHandlers):
     def __init__(self, account, *args):
         Mock.__init__(self, *args)
-        ConnectionHandlers.__init__(self)
+
+        self.connection = Mock()
 
         self.name = account
+
+        ConnectionHandlers.__init__(self)
+
         self.connected = 2
         self.pep = {}
         self.blocked_contacts = {}
@@ -122,6 +126,7 @@ class MockInterface(Mock):
 class MockLogger(Mock):
     def __init__(self):
         Mock.__init__(self, {'write': None, 'get_transports_type': {}})
+        self.cur = Mock()
 
 
 class MockContact(Mock):
@@ -139,6 +144,7 @@ class MockSession(Mock):
         self.jid = jid
         self.type_ = type_
         self.thread_id = thread_id
+        self.resource = ''
 
         if not self.thread_id:
             self.thread_id = '%0x' % random.randint(0, 10000)
