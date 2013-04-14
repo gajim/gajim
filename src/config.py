@@ -2698,9 +2698,10 @@ class FakeDataForm(Gtk.Table, object):
     table {entry1: value1}
     """
 
-    def __init__(self, infos):
+    def __init__(self, infos, selectable=False):
         GObject.GObject.__init__(self)
         self.infos = infos
+        self.selectable = selectable
         self.entries = {}
         self._draw_table()
 
@@ -2713,6 +2714,8 @@ class FakeDataForm(Gtk.Table, object):
             nbrow = 1
             self.resize(rows = nbrow, columns = 2)
             label = Gtk.Label(label=self.infos['instructions'])
+            if self.selectable:
+                label.set_selectable(True)
             self.attach(label, 0, 2, 0, 1, 0, 0, 0, 0)
         for name in self.infos.keys():
             if name in ('key', 'instructions', 'x', 'registered'):
@@ -3794,10 +3797,12 @@ class AccountCreationWizardWindow:
         empty_config = True
         if obj.is_form:
             dataform = dataforms.ExtendForm(node=obj.config)
-            self.data_form_widget = dataforms_widget.DataFormWidget(dataform)
+            self.data_form_widget = dataforms_widget.DataFormWidget()
+            self.data_form_widget.selectable = True
+            self.data_form_widget.set_data_form(dataform)
             empty_config = False
         else:
-            self.data_form_widget = FakeDataForm(obj.config)
+            self.data_form_widget = FakeDataForm(obj.config, selectable=True)
             for field in obj.config:
                 if field in ('key', 'instructions', 'x', 'registered'):
                     continue
