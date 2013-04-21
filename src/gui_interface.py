@@ -1964,7 +1964,8 @@ class Interface:
         if need_reload:
             # we need to reload else that doesn't work when changing emoticon
             # set
-            reload(emoticons)
+            import imp
+            imp.reload(emoticons)
         emots = emoticons.emoticons
         for emot_filename in emots:
             emot_file = os.path.join(path, emot_filename)
