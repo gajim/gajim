@@ -76,7 +76,7 @@ def _info(type_, value, tb):
             Gdk.Screen.height() / 4)
     expander = Gtk.Expander(label=_('Details'))
     expander.add(frame)
-    dialog.vbox.add(expander)
+    dialog.vbox.pack_start(expander, True, True, 0)
 
     dialog.set_resizable(True)
     # on expand the details the dialog remains centered on screen
