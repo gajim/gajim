@@ -1470,7 +1470,7 @@ def _get_img_direct(attrs):
                     alt += '\n'
                 alt += _('Image is too big')
                 break
-    f.close()
+        f.close()
     return (mem, alt)
 
 def _get_img_proxy(attrs, proxy):
