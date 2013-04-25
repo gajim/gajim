@@ -74,7 +74,7 @@ class TextViewImage(gtk.Image):
         self._disconnect_funcs = []
         self.connect('parent-set', self.on_parent_set)
         self.connect('expose-event', self.on_expose)
-        self.set_tooltip_text(text)
+        self.set_tooltip_markup(text)
         self.anchor.set_data('plaintext', text)
 
     def _get_selected(self):
@@ -171,7 +171,9 @@ class ConversationTextview(gobject.GObject):
 
     FOCUS_OUT_LINE_PIXBUF = gtkgui_helpers.get_icon_pixmap('gajim-muc_separator')
     XEP0184_WARNING_PIXBUF = gtkgui_helpers.get_icon_pixmap(
-            'gajim-receipt_missing')
+        'gajim-receipt_missing')
+    MESSAGE_CORRECTED_PIXBUF = gtkgui_helpers.get_icon_pixmap(
+        'gajim-message_corrected')
 
     # smooth scroll constants
     MAX_SCROLL_TIME = 0.4 # seconds
@@ -205,6 +207,9 @@ class ConversationTextview(gobject.GObject):
         self.image_cache = {}
         self.xep0184_marks = {}
         self.xep0184_shown = {}
+        self.last_sent_message_marks = [None, None]
+        # A pair per occupant. Key is '' in normal chat
+        self.last_received_message_marks = {}
 
         # It's True when we scroll in the code, so we can detect scroll from user
         self.auto_scrolling = False
@@ -458,6 +463,51 @@ class ConversationTextview(gobject.GObject):
             gobject.source_remove(self.smooth_id)
             self.smooth_id = None
             self.smooth_scroll_timer.cancel()
+
+    def show_corrected_message_warning(self, iter_, text=''):
+        buffer_ = self.tv.get_buffer()
+        buffer_.begin_user_action()
+        buffer_.insert(iter_, ' ')
+        anchor = buffer_.create_child_anchor(iter_)
+        img = TextViewImage(anchor, text)
+        img.set_from_pixbuf(ConversationTextview.MESSAGE_CORRECTED_PIXBUF)
+        img.show()
+        self.tv.add_child_at_anchor(img, anchor)
+        buffer_.end_user_action()
+
+    def correct_last_sent_message(self, message, xhtml, name, old_txt):
+        m1 = self.last_sent_message_marks[0]
+        m2 = self.last_sent_message_marks[1]
+        buffer_ = self.tv.get_buffer()
+        i1 = buffer_.get_iter_at_mark(m1)
+        i2 = buffer_.get_iter_at_mark(m2)
+        txt = buffer_.get_text(i1, i2)
+        buffer_.delete(i1, i2)
+        i2 = self.print_real_text(message, text_tags=['outgoingtxt'], name=name,
+            xhtml=xhtml, iter_=i1)
+        tt_txt = _('<b>Message was corrected. Last message was:</b>\n  %s') % \
+            old_txt
+        self.show_corrected_message_warning(i2, tt_txt)
+        self.last_sent_message_marks[1] = buffer_.create_mark(None, i2,
+            left_gravity=True)
+
+    def correct_last_received_message(self, message, xhtml, name, old_txt):
+        if name not in self.last_received_message_marks:
+            return
+        m1 = self.last_received_message_marks[name][0]
+        m2 = self.last_received_message_marks[name][1]
+        buffer_ = self.tv.get_buffer()
+        i1 = buffer_.get_iter_at_mark(m1)
+        i2 = buffer_.get_iter_at_mark(m2)
+        txt = buffer_.get_text(i1, i2)
+        buffer_.delete(i1, i2)
+        i2 = self.print_real_text(message, text_tags=['incomingtxt'], name=name,
+            xhtml=xhtml, iter_=i1)
+        tt_txt = _('<b>Message was corrected. Last message was:</b>\n  %s') % \
+            old_txt
+        self.show_corrected_message_warning(i2, tt_txt)
+        self.last_received_message_marks[name][1] = buffer_.create_mark(None, i2,
+            left_gravity=True)
 
     def show_xep0184_warning(self, id_):
         if id_ in self.xep0184_marks:
@@ -985,7 +1035,8 @@ class ConversationTextview(gobject.GObject):
                 else:
                     helpers.launch_browser_mailer(kind, word)
 
-    def detect_and_print_special_text(self, otext, other_tags, graphics=True):
+    def detect_and_print_special_text(self, otext, other_tags, graphics=True,
+    iter_=None):
         """
         Detect special text (emots & links & formatting), print normal text
         before any special text it founds, then print special text (that happens
@@ -1015,6 +1066,10 @@ class ConversationTextview(gobject.GObject):
             iterator = gajim.interface.emot_and_basic_re.finditer(otext)
         else: # search for just urls + mail + formatting
             iterator = gajim.interface.basic_pattern_re.finditer(otext)
+        if iter_:
+            end_iter = iter_
+        else:
+            end_iter = buffer_.get_end_iter()
         for match in iterator:
             start, end = match.span()
             special_text = otext[start:end]
@@ -1026,18 +1081,19 @@ class ConversationTextview(gobject.GObject):
             index = end # update index
 
             # now print it
-            self.print_special_text(special_text, other_tags, graphics=graphics)
+            self.print_special_text(special_text, other_tags, graphics=graphics,
+                iter_=end_iter)
             specials_limit -= 1
             if specials_limit <= 0:
                 break
 
         # add the rest of text located in the index and after
-        end_iter = buffer_.get_end_iter()
         insert_tags_func(end_iter, otext[index:], *other_tags)
 
-        return buffer_.get_end_iter()
+        return end_iter
 
-    def print_special_text(self, special_text, other_tags, graphics=True):
+    def print_special_text(self, special_text, other_tags, graphics=True,
+    iter_=None):
         """
         Is called by detect_and_print_special_text and prints special text
         (emots, links, formatting)
@@ -1056,7 +1112,7 @@ class ConversationTextview(gobject.GObject):
         text_is_valid_uri = False
         is_xhtml_link = None
         show_ascii_formatting_chars = \
-                gajim.config.get('show_ascii_formatting_chars')
+            gajim.config.get('show_ascii_formatting_chars')
         buffer_ = self.tv.get_buffer()
 
         # Detect XHTML-IM link
@@ -1074,17 +1130,20 @@ class ConversationTextview(gobject.GObject):
                 text_is_valid_uri = True
 
         possible_emot_ascii_caps = special_text.upper() # emoticons keys are CAPS
+        if iter_:
+            end_iter = iter_
+        else:
+            end_iter = buffer_.get_end_iter()
         if gajim.config.get('emoticons_theme') and \
         possible_emot_ascii_caps in gajim.interface.emoticons.keys() and graphics:
             # it's an emoticon
             emot_ascii = possible_emot_ascii_caps
-            end_iter = buffer_.get_end_iter()
             anchor = buffer_.create_child_anchor(end_iter)
             img = TextViewImage(anchor, special_text)
             animations = gajim.interface.emoticons_animations
             if not emot_ascii in animations:
                 animations[emot_ascii] = gtk.gdk.PixbufAnimation(
-                        gajim.interface.emoticons[emot_ascii])
+                    gajim.interface.emoticons[emot_ascii])
             img.set_from_animation(animations[emot_ascii])
             img.show()
             self.images.append(img)
@@ -1095,13 +1154,13 @@ class ConversationTextview(gobject.GObject):
             text_is_valid_uri and not is_xhtml_link:
                 tags.append('url')
         elif special_text.startswith('mailto:') and not is_xhtml_link:
-                tags.append('mail')
+            tags.append('mail')
         elif special_text.startswith('xmpp:') and not is_xhtml_link:
-                tags.append('xmpp')
+            tags.append('xmpp')
         elif gajim.interface.sth_at_sth_dot_sth_re.match(special_text) and\
         not is_xhtml_link:
-                # it's a JID or mail
-                tags.append('sth_at_sth')
+            # it's a JID or mail
+            tags.append('sth_at_sth')
         elif special_text.startswith('*'): # it's a bold text
             tags.append('bold')
             if special_text[1] == '/' and special_text[-2] == '/' and\
@@ -1150,7 +1209,6 @@ class ConversationTextview(gobject.GObject):
         else:
             # It's nothing special
             if use_other_tags:
-                end_iter = buffer_.get_end_iter()
                 insert_tags_func = buffer_.insert_with_tags_by_name
                 if other_tags and isinstance(other_tags[0], gtk.TextTag):
                     insert_tags_func = buffer_.insert_with_tags
@@ -1158,7 +1216,6 @@ class ConversationTextview(gobject.GObject):
                 insert_tags_func(end_iter, special_text, *other_tags)
 
         if tags:
-            end_iter = buffer_.get_end_iter()
             all_tags = tags[:]
             if use_other_tags:
                 all_tags += other_tags
@@ -1168,7 +1225,6 @@ class ConversationTextview(gobject.GObject):
             if 'url' in tags:
                 puny_text = puny_encode(special_text)
                 if not puny_text.endswith('-'):
-                    end_iter = buffer_.get_end_iter()
                     buffer_.insert(end_iter, " (%s)" % puny_text)
 
     def print_empty_line(self):
@@ -1178,9 +1234,9 @@ class ConversationTextview(gobject.GObject):
         self.just_cleared = False
 
     def print_conversation_line(self, text, jid, kind, name, tim,
-                    other_tags_for_name=[], other_tags_for_time=[],
-                    other_tags_for_text=[], subject=None, old_kind=None, xhtml=None,
-                    simple=False, graphics=True, displaymarking=None):
+    other_tags_for_name=[], other_tags_for_time=[], other_tags_for_text=[],
+    subject=None, old_kind=None, xhtml=None, simple=False, graphics=True,
+    displaymarking=None):
         """
         Print 'chat' type messages
         """
@@ -1258,6 +1314,7 @@ class ConversationTextview(gobject.GObject):
             kind = 'status'
         other_text_tag = self.detect_other_text_tag(text, kind)
         text_tags = other_tags_for_text[:] # create a new list
+        mark1 = None
         if other_text_tag:
             # note that color of /me may be overwritten in gc_control
             text_tags.append(other_text_tag)
@@ -1274,11 +1331,21 @@ class ConversationTextview(gobject.GObject):
                     direction_mark=direction_mark)
             if kind == 'incoming':
                 text_tags.append('incomingtxt')
+                mark1 = buffer_.create_mark(None, buffer_.get_end_iter(),
+                    left_gravity=True)
             elif kind == 'outgoing':
                 text_tags.append('outgoingtxt')
+                mark1 = buffer_.create_mark(None, buffer_.get_end_iter(),
+                    left_gravity=True)
         self.print_subject(subject)
         self.print_real_text(text, text_tags, name, xhtml, graphics=graphics)
-
+        if mark1:
+            mark2 = buffer_.create_mark(None, buffer_.get_end_iter(),
+                left_gravity=True)
+            if kind == 'incoming':
+                self.last_received_message_marks[name] = [mark1, mark2]
+            elif kind == 'outgoing':
+                self.last_sent_message_marks = [mark1, mark2]
         # scroll to the end of the textview
         if at_the_end or kind == 'outgoing':
             # we are at the end or we are sending something
@@ -1353,16 +1420,19 @@ class ConversationTextview(gobject.GObject):
             format_ = direction_mark + before_str + name + after_str + ' '
             buffer_.insert_with_tags_by_name(end_iter, format_, *name_tags)
 
-    def print_subject(self, subject):
+    def print_subject(self, subject, iter_=None):
         if subject: # if we have subject, show it too!
             subject = _('Subject: %s\n') % subject
             buffer_ = self.tv.get_buffer()
-            end_iter = buffer_.get_end_iter()
+            if iter_:
+                end_iter = iter_
+            else:
+                end_iter = buffer_.get_end_iter()
             buffer_.insert(end_iter, subject)
             self.print_empty_line()
 
     def print_real_text(self, text, text_tags=[], name=None, xhtml=None,
-                    graphics=True):
+    graphics=True, iter_=None):
         """
         Add normal and special text. call this to add text
         """
@@ -1381,4 +1451,5 @@ class ConversationTextview(gobject.GObject):
             text = '* ' + name + text[3:]
             text_tags.append('italic')
         # detect urls formatting and if the user has it on emoticons
-        self.detect_and_print_special_text(text, text_tags, graphics=graphics)
+        return self.detect_and_print_special_text(text, text_tags, graphics=graphics,
+            iter_=iter_)

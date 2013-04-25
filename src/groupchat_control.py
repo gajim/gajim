@@ -1002,9 +1002,26 @@ class GroupchatControl(ChatControlBase):
                     tim=obj.timestamp, xhtml=None,
                     displaymarking=obj.displaymarking)
             else:
+                if obj.nick in self.last_received_txt and obj.correct_id and \
+                obj.correct_id == self.last_received_id[obj.nick]:
+                    if obj.nick == self.nick:
+                        old_txt = self.last_sent_txt
+                        self.last_sent_txt = obj.msgtxt
+                        self.conv_textview.correct_last_sent_message(obj.msgtxt,
+                            obj.xhtml_msgtxt, obj.nick, old_txt)
+                    else:
+                        old_txt = self.last_received_txt[obj.nick]
+                        self.conv_textview.correct_last_received_message(obj.msgtxt,
+                            obj.xhtml_msgtxt, obj.nick, old_txt)
+                    self.last_received_txt[obj.nick] = obj.msgtxt
+                    self.last_received_id[obj.nick] = obj.stanza.getID()
+                    return
+                if obj.nick == self.nick:
+                    self.last_sent_txt = obj.msgtxt
                 self.print_conversation(obj.msgtxt, contact=obj.nick,
                     tim=obj.timestamp, xhtml=obj.xhtml_msgtxt,
-                    displaymarking=obj.displaymarking)
+                    displaymarking=obj.displaymarking,
+                    correct_id=(obj.stanza.getID(), None))
         obj.needs_highlight = self.needs_visual_notification(obj.msgtxt)
 
     def on_private_message(self, nick, msg, tim, xhtml, session, msg_id=None,
@@ -1076,7 +1093,7 @@ class GroupchatControl(ChatControlBase):
             displaymarking=displaymarking)
 
     def print_conversation(self, text, contact='', tim=None, xhtml=None,
-    graphics=True, displaymarking=None):
+    graphics=True, displaymarking=None, correct_id=None):
         """
         Print a line in the conversation
 
@@ -1139,7 +1156,8 @@ class GroupchatControl(ChatControlBase):
 
         ChatControlBase.print_conversation_line(self, text, kind, contact, tim,
             other_tags_for_name, [], other_tags_for_text, xhtml=xhtml,
-            graphics=graphics, displaymarking=displaymarking)
+            graphics=graphics, displaymarking=displaymarking,
+            correct_id=correct_id)
 
     def get_nb_unread(self):
         type_events = ['printed_marked_gc_msg']
@@ -1580,6 +1598,18 @@ class GroupchatControl(ChatControlBase):
                     else:
                         s = _('%(nick)s is now known as %(new_nick)s') % {
                             'nick': obj.nick, 'new_nick': obj.new_nick}
+                    tv = self.conv_textview
+                    if obj.nick in tv.last_received_message_marks:
+                        tv.last_received_message_marks[obj.new_nick] = \
+                            tv.last_received_message_marks[obj.nick]
+                        del tv.last_received_message_marks[obj.nick]
+                    if obj.nick in self.last_received_txt:
+                        self.last_received_txt[obj.new_nick] = \
+                            self.last_received_txt[obj.nick]
+                        del self.last_received_txt[obj.nick]
+                        self.last_received_id[obj.new_nick] = \
+                            self.last_received_id[obj.nick]
+                        del self.last_received_id[obj.nick]
                     # We add new nick to muc roster here, so we don't see
                     # that "new_nick has joined the room" when he just changed
                     # nick.
@@ -1879,9 +1909,23 @@ class GroupchatControl(ChatControlBase):
         if message != '' or message != '\n':
             self.save_message(message, 'sent')
 
+            def _cb(msg, msg_txt):
+                # we'll save sent message text when we'll receive it in
+                # _nec_gc_message_received
+                self.last_sent_msg = msg
+                if self.correcting:
+                    self.correcting = False
+                    self.msg_textview.modify_base(gtk.STATE_NORMAL,
+                        self.old_message_tv_color)
+
+            if self.correcting and self.last_sent_msg:
+                correction_msg = self.last_sent_msg
+            else:
+                correction_msg = None
             # Send the message
             gajim.connections[self.account].send_gc_message(self.room_jid,
-                    message, xhtml=xhtml, label=label)
+                message, xhtml=xhtml, label=label,
+                correction_msg=correction_msg, callback=_cb)
             self.msg_textview.get_buffer().set_text('')
             self.msg_textview.grab_focus()
 

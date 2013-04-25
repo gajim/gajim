@@ -2704,7 +2704,7 @@ class RosterWindow:
             obj.session.control.print_conversation(obj.msgtxt, typ,
                 tim=obj.timestamp, encrypted=obj.encrypted, subject=obj.subject,
                 xhtml=obj.xhtml, displaymarking=obj.displaymarking,
-                msg_id=obj.msg_id)
+                msg_id=obj.msg_id, correct_id=(obj.id_, obj.correct_id))
             if obj.msg_id:
                 pw = obj.session.control.parent_win
                 end = obj.session.control.was_at_the_end
