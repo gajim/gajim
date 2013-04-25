@@ -99,7 +99,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
                 sectext = _('The database file (%s) cannot be read. Try to '
                     'repair it (see http://trac.gajim.org/wiki/DatabaseBackup) '
                     'or remove it (all history will be lost).') % \
-                    common.logger.LOG_DB_PATH
+                    gajim.logger.LOG_DB_PATH
                 gajim.nec.push_incoming_event(InformationEvent(None,
                     conn=self.conn, level='error', pri_txt=pritext,
                     sec_txt=sectext))

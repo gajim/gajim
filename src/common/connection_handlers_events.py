@@ -1248,6 +1248,7 @@ class DecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.popup = False
         self.msg_id = None # id in log database
         self.attention = False # XEP-0224
+        self.correct_id = None # XEP-0308
 
         self.receipt_request_tag = self.stanza.getTag('request',
             namespace=nbxmpp.NS_RECEIPTS)
@@ -1291,6 +1292,10 @@ class DecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                     self.msgtxt += _('URL:')
                 self.msgtxt += ' ' + self.oob_url
 
+        replace = self.stanza.getTag('replace', namespace=nbxmpp.NS_CORRECT)
+        if replace:
+            self.correct_id = replace.getAttr('id')
+
         return True
 
 class ChatstateReceivedEvent(nec.NetworkIncomingEvent):
@@ -1318,6 +1323,7 @@ class GcMessageReceivedEvent(nec.NetworkIncomingEvent):
         self.nickname = self.msg_obj.resource
         self.timestamp = self.msg_obj.timestamp
         self.xhtml_msgtxt = self.stanza.getXHTML()
+        self.correct_id = None # XEP-0308
 
         if gajim.config.get('ignore_incoming_xhtml'):
             self.xhtml_msgtxt = None
@@ -1389,6 +1395,10 @@ class GcMessageReceivedEvent(nec.NetworkIncomingEvent):
                                     self.conn._dispatch_gc_msg_with_captcha,
                                     [self.stanza, self.msg_obj], 0)
                                 return
+
+        replace = self.stanza.getTag('replace', namespace=nbxmpp.NS_CORRECT)
+        if replace:
+            self.correct_id = replace.getAttr('id')
 
         return True
 
@@ -2444,6 +2454,7 @@ class MessageOutgoingEvent(nec.NetworkOutgoingEvent):
         self.is_loggable = True
         self.control = None
         self.attention = False
+        self.correction_msg = None
 
     def generate(self):
         return True

@@ -344,13 +344,13 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         if resource is None:
             # We very likely got a contact with a random resource.
             # This is bad, we need the highest for caps etc.
-            c = gajim.contacts.get_contact_with_highest_priority(
-                    acct, contact.jid)
+            c = gajim.contacts.get_contact_with_highest_priority(acct,
+                contact.jid)
             if c and not isinstance(c, GC_Contact):
                 contact = c
 
         MessageControl.__init__(self, type_id, parent_win, widget_name,
-                contact, acct, resource=resource)
+            contact, acct, resource=resource)
 
         widget = self.xml.get_object('history_button')
         # set document-open-recent icon for history button
@@ -369,15 +369,15 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         # Create banner and connect signals
         widget = self.xml.get_object('banner_eventbox')
         id_ = widget.connect('button-press-event',
-                self._on_banner_eventbox_button_press_event)
+            self._on_banner_eventbox_button_press_event)
         self.handlers[id_] = widget
 
         self.urlfinder = re.compile(
-                r"(www\.(?!\.)|[a-z][a-z0-9+.-]*://)[^\s<>'\"]+[^!,\.\s<>\)'\"\]]")
+            r"(www\.(?!\.)|[a-z][a-z0-9+.-]*://)[^\s<>'\"]+[^!,\.\s<>\)'\"\]]")
 
         self.banner_status_label = self.xml.get_object('banner_label')
         id_ = self.banner_status_label.connect('populate_popup',
-                self.on_banner_label_populate_popup)
+            self.on_banner_label_populate_popup)
         self.handlers[id_] = self.banner_status_label
 
         # Init DND
@@ -397,34 +397,38 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         id_ = self.conv_textview.connect('quote', self.on_quote)
         self.handlers[id_] = self.conv_textview.tv
         id_ = self.conv_textview.tv.connect('key_press_event',
-                self._conv_textview_key_press_event)
+            self._conv_textview_key_press_event)
         self.handlers[id_] = self.conv_textview.tv
         # FIXME: DND on non editable TextView, find a better way
         self.drag_entered = False
         id_ = self.conv_textview.tv.connect('drag_data_received',
-                self._on_drag_data_received)
+            self._on_drag_data_received)
         self.handlers[id_] = self.conv_textview.tv
         id_ = self.conv_textview.tv.connect('drag_motion', self._on_drag_motion)
         self.handlers[id_] = self.conv_textview.tv
         id_ = self.conv_textview.tv.connect('drag_leave', self._on_drag_leave)
         self.handlers[id_] = self.conv_textview.tv
         self.conv_textview.tv.drag_dest_set(Gtk.DestDefaults.MOTION |
-                Gtk.DestDefaults.HIGHLIGHT |
-                Gtk.DestDefaults.DROP,
-                self.dnd_list, Gdk.DragAction.COPY)
+            Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP,
+            self.dnd_list, Gdk.DragAction.COPY)
 
         self.conv_scrolledwindow = self.xml.get_object(
-                'conversation_scrolledwindow')
+            'conversation_scrolledwindow')
         self.conv_scrolledwindow.add(self.conv_textview.tv)
         widget = self.conv_scrolledwindow.get_vadjustment()
         id_ = widget.connect('value-changed',
-                self.on_conversation_vadjustment_value_changed)
+            self.on_conversation_vadjustment_value_changed)
         self.handlers[id_] = widget
         id_ = widget.connect('changed',
-                self.on_conversation_vadjustment_changed)
+            self.on_conversation_vadjustment_changed)
         self.handlers[id_] = widget
         self.scroll_to_end_id = None
         self.was_at_the_end = True
+        self.correcting = False
+        self.last_sent_msg = None
+        self.last_sent_txt = None
+        self.last_received_txt = {} # one per name
+        self.last_received_id = {} # one per name
 
         # add MessageTextView to UI and connect signals
         self.msg_scrolledwindow = self.xml.get_object('message_scrolledwindow')
@@ -928,12 +932,23 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
         label = self.get_seclabel()
 
+        def _cb(msg, cb, *cb_args):
+            self.last_sent_msg = msg
+            self.last_sent_txt = cb_args[1]
+            if cb:
+                cb(msg, *cb_args)
+
+        if self.correcting and self.last_sent_msg:
+            correction_msg = self.last_sent_msg
+        else:
+            correction_msg = None
+
         gajim.nec.push_outgoing_event(MessageOutgoingEvent(None,
             account=self.account, jid=self.contact.jid, message=message,
             keyID=keyID, type_=type_, chatstate=chatstate, msg_id=msg_id,
             resource=resource, user_nick=self.user_nick, xhtml=xhtml,
-            label=label, callback=callback, callback_args=callback_args,
-            control=self, attention=attention))
+            label=label, callback=_cb, callback_args=[callback] + callback_args,
+            control=self, attention=attention, correction_msg=correction_msg))
 
         # Record the history of sent messages
         self.save_message(message, 'sent')
@@ -974,9 +989,11 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
     def print_conversation_line(self, text, kind, name, tim,
     other_tags_for_name=[], other_tags_for_time=[], other_tags_for_text=[],
     count_as_new=True, subject=None, old_kind=None, xhtml=None, simple=False,
-    xep0184_id=None, graphics=True, displaymarking=None, msg_id=None):
+    xep0184_id=None, graphics=True, displaymarking=None, msg_id=None,
+    correct_id=None):
         """
         Print 'chat' type messages
+        correct_id = (message_id, correct_id)
         """
         jid = self.contact.jid
         full_jid = self.get_full_jid()
@@ -984,16 +1001,28 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         end = False
         if self.was_at_the_end or kind == 'outgoing':
             end = True
-        textview.print_conversation_line(text, jid, kind, name, tim,
-            other_tags_for_name, other_tags_for_time, other_tags_for_text,
-            subject, old_kind, xhtml, simple=simple, graphics=graphics,
-            displaymarking=displaymarking)
+        old_txt = ''
+        if name in self.last_received_txt:
+            old_txt = self.last_received_txt[name]
+        if correct_id and correct_id[1] and \
+        name in self.conv_textview.last_received_message_marks and \
+        correct_id[1] == self.last_received_id[name]:
+            self.conv_textview.correct_last_received_message(text, xhtml,
+                name, old_txt)
+        else:
+            textview.print_conversation_line(text, jid, kind, name, tim,
+                other_tags_for_name, other_tags_for_time, other_tags_for_text,
+                subject, old_kind, xhtml, simple=simple, graphics=graphics,
+                displaymarking=displaymarking)
 
         if xep0184_id is not None:
             textview.show_xep0184_warning(xep0184_id)
 
         if not count_as_new:
             return
+        if kind in ('incoming', 'outgoing'):
+            self.last_received_txt[name] = text
+            self.last_received_id[name] = correct_id[0]
         if kind == 'incoming':
             if not self.type_id == message_control.TYPE_GC or \
             gajim.config.get('notify_on_all_muc_messages') or \
@@ -1407,6 +1436,21 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             start_iter = msg_buf.get_start_iter()
             end_iter = msg_buf.get_end_iter()
             self.orig_msg = msg_buf.get_text(start_iter, end_iter, False)
+        if pos == size and size > 0 and direction == 'up' and \
+        msg_type == 'sent' and not self.correcting:
+            self.correcting = True
+            self.old_message_tv_color = self.msg_textview.get_style().base[
+                Gtk.StateType.NORMAL]
+            self.msg_textview.modify_base(Gtk.StateType.NORMAL, Gdk.color_parse(
+                'PaleGoldenrod'))
+            message = history[pos - 1]
+            msg_buf.set_text(message)
+            return
+        if self.correcting:
+            # We were previously correcting
+            self.msg_textview.modify_base(Gtk.StateType.NORMAL,
+                self.old_message_tv_color)
+        self.correcting = False
         pos += -1 if direction == 'up' else +1
         if pos == -1:
             return
@@ -1492,6 +1536,8 @@ class ChatControl(ChatControlBase):
             'chat_control', contact, acct, resource)
 
         self.gpg_is_active = False
+        self.last_recv_message_id = None
+        self.last_recv_message_marks = None
         # for muc use:
         # widget = self.xml.get_object('muc_window_actions_button')
         self.actions_button = self.xml.get_object('message_window_actions_button')
@@ -2355,7 +2401,8 @@ class ChatControl(ChatControlBase):
                 GObject.source_remove(self.possible_inactive_timeout_id)
                 self._schedule_activity_timers()
 
-        def _on_sent(id_, contact, message, encrypted, xhtml, label):
+        def _on_sent(msg, contact, message, encrypted, xhtml, label, old_txt):
+            id_ = msg.getID()
             if contact.supports(NS_RECEIPTS) and gajim.config.get_per('accounts',
             self.account, 'request_receipt'):
                 xep0184_id = id_
@@ -2365,13 +2412,22 @@ class ChatControl(ChatControlBase):
                 displaymarking = label.getTag('displaymarking')
             else:
                 displaymarking = None
-            self.print_conversation(message, self.contact.jid, encrypted=encrypted,
-                xep0184_id=xep0184_id, xhtml=xhtml, displaymarking=displaymarking)
+            if self.correcting and \
+            self.conv_textview.last_sent_message_marks[0]:
+                self.conv_textview.correct_last_sent_message(message, xhtml,
+                    self.get_our_nick(), old_txt)
+                self.correcting = False
+                self.msg_textview.modify_base(Gtk.StateType.NORMAL,
+                    self.old_message_tv_color)
+                return
+            self.print_conversation(message, self.contact.jid,
+                encrypted=encrypted, xep0184_id=xep0184_id, xhtml=xhtml,
+                displaymarking=displaymarking)
 
         ChatControlBase.send_message(self, message, keyID, type_='chat',
             chatstate=chatstate_to_send, xhtml=xhtml, callback=_on_sent,
             callback_args=[contact, message, encrypted, xhtml,
-            self.get_seclabel()], process_commands=process_commands,
+            self.get_seclabel(), self.last_sent_txt], process_commands=process_commands,
             attention=attention)
 
     def check_for_possible_paused_chatstate(self, arg):
@@ -2483,7 +2539,7 @@ class ChatControl(ChatControlBase):
 
     def print_conversation(self, text, frm='', tim=None, encrypted=False,
     subject=None, xhtml=None, simple=False, xep0184_id=None,
-    displaymarking=None, msg_id=None):
+    displaymarking=None, msg_id=None, correct_id=None):
         """
         Print a line in the conversation
 
@@ -2548,7 +2604,7 @@ class ChatControl(ChatControlBase):
         ChatControlBase.print_conversation_line(self, text, kind, name, tim,
             subject=subject, old_kind=self.old_msg_kind, xhtml=xhtml,
             simple=simple, xep0184_id=xep0184_id, displaymarking=displaymarking,
-            msg_id=msg_id)
+            msg_id=msg_id, correct_id=correct_id)
         if text.startswith('/me ') or text.startswith('/me\n'):
             self.old_msg_kind = None
         else:
