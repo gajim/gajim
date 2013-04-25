@@ -4,8 +4,9 @@ Gajim 0.16 ()
   * use external python-nbxmpp library
   * Improve audio / Video calls and add screensharing feature
   * Support systemd-logind
-  * Support XEP-0224 (Attention)
-  * Support XEP-0191 blocking command
+  * Support XEP-0308 Last message correction
+  * Support XEP-0224 Attention
+  * Support XEP-0191 Blocking command
 
 Gajim 0.15.3 (17 March 2013)
 
