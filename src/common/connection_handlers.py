@@ -41,6 +41,7 @@ from calendar import timegm
 import nbxmpp
 import common.caps_cache as capscache
 
+from pep import LOCATION_DATA
 from common import helpers
 from common import gajim
 from common import exceptions
