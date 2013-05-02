@@ -1022,7 +1022,8 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             return
         if kind in ('incoming', 'outgoing'):
             self.last_received_txt[name] = text
-            self.last_received_id[name] = correct_id[0]
+            if correct_id:
+                self.last_received_id[name] = correct_id[0]
         if kind == 'incoming':
             if not self.type_id == message_control.TYPE_GC or \
             gajim.config.get('notify_on_all_muc_messages') or \
