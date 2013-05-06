@@ -64,7 +64,7 @@ class Execute(CommandContainer):
     @classmethod
     def monitor(cls, processor, popen):
         poller = cls.poller(processor, popen)
-        GObject.timeout_add(cls.POLL_INTERVAL, poller.next)
+        GObject.timeout_add(cls.POLL_INTERVAL, next, poller)
 
     @classmethod
     def poller(cls, processor, popen):
@@ -101,7 +101,7 @@ class Execute(CommandContainer):
     @staticmethod
     def clean(text):
         strip = chr(10) + chr(32)
-        return text.strip(strip)
+        return text.decode().strip(strip)
 
 class Show(Execute):
 
