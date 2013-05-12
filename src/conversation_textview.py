@@ -169,9 +169,12 @@ class ConversationTextview(gobject.GObject):
             )
     )
 
-    FOCUS_OUT_LINE_PIXBUF = gtkgui_helpers.get_icon_pixmap('gajim-muc_separator')
+    FOCUS_OUT_LINE_PIXBUF = gtkgui_helpers.get_icon_pixmap(
+        'gajim-muc_separator')
     XEP0184_WARNING_PIXBUF = gtkgui_helpers.get_icon_pixmap(
         'gajim-receipt_missing')
+    XEP0184_RECEIVED_PIXBUF = gtkgui_helpers.get_icon_pixmap(
+        'gajim-receipt_received')
     MESSAGE_CORRECTED_PIXBUF = gtkgui_helpers.get_icon_pixmap(
         'gajim-message_corrected')
 
@@ -549,22 +552,29 @@ class ConversationTextview(gobject.GObject):
         if id_ not in self.xep0184_marks:
             return
 
-        if self.xep0184_shown[id_] == NOT_SHOWN:
-            self.xep0184_shown[id_] = ALREADY_RECEIVED
-            return
-
         buffer_ = self.tv.get_buffer()
         buffer_.begin_user_action()
 
-        begin_iter = buffer_.get_iter_at_mark(self.xep0184_marks[id_])
+        if self.xep0184_shown[id_] != NOT_SHOWN:
+            begin_iter = buffer_.get_iter_at_mark(self.xep0184_marks[id_])
 
-        end_iter = begin_iter.copy()
-        # XXX: Is there a nicer way?
-        end_iter.forward_char()
-        end_iter.forward_char()
+            end_iter = begin_iter.copy()
+            # XXX: Is there a nicer way?
+            end_iter.forward_char()
+            end_iter.forward_char()
 
-        buffer_.delete(begin_iter, end_iter)
-        buffer_.delete_mark(self.xep0184_marks[id_])
+            buffer_.delete(begin_iter, end_iter)
+
+        if gajim.config.get('positive_184_ack'):
+            begin_iter = buffer_.get_iter_at_mark(self.xep0184_marks[id_])
+            buffer_.insert(begin_iter, ' ')
+            anchor = buffer_.create_child_anchor(begin_iter)
+            img = TextViewImage(anchor, '')
+            img.set_from_pixbuf(ConversationTextview.XEP0184_RECEIVED_PIXBUF)
+            img.show()
+            self.tv.add_child_at_anchor(img, anchor)
+
+        self.xep0184_shown[id_] = ALREADY_RECEIVED
 
         buffer_.end_user_action()
 
