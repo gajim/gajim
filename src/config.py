@@ -128,25 +128,16 @@ class PreferencesWindow:
         self.xml.get_object('show_status_msgs_in_roster_checkbutton'). \
                 set_active( st)
 
-        # Display mood in roster
-        st = gajim.config.get('show_mood_in_roster')
-        self.xml.get_object('show_mood_in_roster_checkbutton'). \
-                set_active(st)
-
-        # Display activity in roster
-        st = gajim.config.get('show_activity_in_roster')
-        self.xml.get_object('show_activity_in_roster_checkbutton'). \
-                set_active(st)
-
-        # Display tunes in roster
-        st = gajim.config.get('show_tunes_in_roster')
-        self.xml.get_object('show_tunes_in_roster_checkbutton'). \
-                set_active(st)
-
-        # Display location in roster
-        st = gajim.config.get('show_location_in_roster')
-        self.xml.get_object('show_location_in_roster_checkbutton'). \
-                set_active(st)
+        # Display PEP in roster
+        st1 = gajim.config.get('show_mood_in_roster')
+        st2 = gajim.config.get('show_activity_in_roster')
+        st3 = gajim.config.get('show_tunes_in_roster')
+        st4 = gajim.config.get('show_location_in_roster')
+        w = self.xml.get_object('show_pep_in_roster_checkbutton')
+        if st1 == st2 == st3 == st4:
+            w.set_active(st1)
+        else:
+            w.set_inconsistent(True)
 
         # Sort contacts by show
         st = gajim.config.get('sort_by_show_in_roster')
@@ -211,6 +202,10 @@ class PreferencesWindow:
             self.xml.get_object('speller_checkbutton').set_active(st)
         else:
             self.xml.get_object('speller_checkbutton').set_sensitive(False)
+
+        # XEP-0184 positive ack
+        st = gajim.config.get('positive_184_ack')
+        self.xml.get_object('positive_184_ack_checkbutton').set_active(st)
 
         ### Style tab ###
         # Themes
@@ -670,19 +665,10 @@ class PreferencesWindow:
         for ctrl in self._get_all_muc_controls():
             ctrl.update_ui()
 
-    def on_show_mood_in_roster_checkbutton_toggled(self, widget):
+    def on_show_pep_in_roster_checkbutton_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'show_mood_in_roster')
-        gajim.interface.roster.setup_and_draw_roster()
-
-    def on_show_activity_in_roster_checkbutton_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'show_activity_in_roster')
-        gajim.interface.roster.setup_and_draw_roster()
-
-    def on_show_tunes_in_roster_checkbutton_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'show_tunes_in_roster')
-        gajim.interface.roster.setup_and_draw_roster()
-
-    def on_show_location_in_roster_checkbutton_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'show_location_in_roster')
         gajim.interface.roster.setup_and_draw_roster()
 
@@ -771,6 +757,9 @@ class PreferencesWindow:
                 self.apply_speller()
         else:
             self.remove_speller()
+
+    def on_positive_184_ack_checkbutton_toggled(self, widget):
+        self.on_checkbutton_toggled(widget, 'positive_184_ack')
 
     def on_theme_combobox_changed(self, widget):
         model = widget.get_model()

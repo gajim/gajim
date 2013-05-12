@@ -148,6 +148,24 @@
       </row>
     </data>
   </object>
+  <object class="GtkListStore" id="status_message_liststore">
+    <columns>
+      <!-- column-name name -->
+      <column type="gchararray"/>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name activity -->
+      <column type="gchararray"/>
+      <!-- column-name sub_activity -->
+      <column type="gchararray"/>
+      <!-- column-name activity_text -->
+      <column type="gchararray"/>
+      <!-- column-name mood -->
+      <column type="gchararray"/>
+      <!-- column-name mood_text -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <object class="GtkWindow" id="preferences_window">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
@@ -234,8 +252,8 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkCheckButton" id="show_mood_in_roster_checkbutton">
-                                <property name="label" translatable="yes">Display m_ood of contacts in roster</property>
+                              <object class="GtkCheckButton" id="show_pep_in_roster_checkbutton">
+                                <property name="label" translatable="yes">Display e_xtra information of contacts in roster (mood, activity, ...)m_ood of contacts in roster</property>
                                 <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
@@ -245,73 +263,12 @@
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
-                                <signal name="toggled" handler="on_show_mood_in_roster_checkbutton_toggled" swapped="no"/>
+                                <signal name="toggled" handler="on_show_pep_in_roster_checkbutton_toggled" swapped="no"/>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">False</property>
                                 <property name="position">2</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkCheckButton" id="show_activity_in_roster_checkbutton">
-                                <property name="label" translatable="yes">Display _activity of contacts in roster</property>
-                                <property name="use_action_appearance">False</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
-                                <property name="tooltip_text" translatable="yes">If checked, Gajim will display the activity of contacts in the roster window</property>
-                                <property name="use_action_appearance">False</property>
-                                <property name="use_underline">True</property>
-                                <property name="xalign">0</property>
-                                <property name="draw_indicator">True</property>
-                                <signal name="toggled" handler="on_show_activity_in_roster_checkbutton_toggled" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">False</property>
-                                <property name="position">3</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkCheckButton" id="show_tunes_in_roster_checkbutton">
-                                <property name="label" translatable="yes">Display _tunes of contacts in roster</property>
-                                <property name="use_action_appearance">False</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
-                                <property name="tooltip_text" translatable="yes">If checked, Gajim will display the tunes of contacts in the roster window</property>
-                                <property name="use_action_appearance">False</property>
-                                <property name="use_underline">True</property>
-                                <property name="xalign">0</property>
-                                <property name="draw_indicator">True</property>
-                                <signal name="toggled" handler="on_show_tunes_in_roster_checkbutton_toggled" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">False</property>
-                                <property name="position">4</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkCheckButton" id="show_location_in_roster_checkbutton">
-                                <property name="label" translatable="yes">Display _location of contacts in roster</property>
-                                <property name="use_action_appearance">False</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
-                                <property name="has_tooltip">True</property>
-                                <property name="tooltip_text" translatable="yes">If checked, Gajim will display the location of contacts in the roster window</property>
-                                <property name="use_action_appearance">False</property>
-                                <property name="use_underline">True</property>
-                                <property name="xalign">0</property>
-                                <property name="draw_indicator">True</property>
-                                <signal name="toggled" handler="on_show_location_in_roster_checkbutton_toggled" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">False</property>
-                                <property name="position">5</property>
                               </packing>
                             </child>
                             <child>
@@ -373,7 +330,7 @@
                               <packing>
                                 <property name="expand">True</property>
                                 <property name="fill">True</property>
-                                <property name="position">6</property>
+                                <property name="position">3</property>
                               </packing>
                             </child>
                           </object>
@@ -415,7 +372,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="n_rows">6</property>
+                            <property name="n_rows">7</property>
                             <property name="n_columns">2</property>
                             <property name="column_spacing">6</property>
                             <property name="row_spacing">6</property>
@@ -583,6 +540,24 @@
                                 <property name="right_attach">2</property>
                                 <property name="top_attach">2</property>
                                 <property name="bottom_attach">3</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkCheckButton" id="positive_184_ack_checkbutton">
+                                <property name="label" translatable="yes">Show icon when your messages are received</property>
+                                <property name="use_action_appearance">False</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
+                                <property name="use_action_appearance">False</property>
+                                <property name="xalign">0</property>
+                                <property name="draw_indicator">True</property>
+                                <signal name="toggled" handler="on_positive_184_ack_checkbutton_toggled" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="right_attach">2</property>
+                                <property name="top_attach">6</property>
+                                <property name="bottom_attach">7</property>
                               </packing>
                             </child>
                           </object>
@@ -3298,23 +3273,5 @@ to discover one from server.</property>
         </child>
       </object>
     </child>
-  </object>
-  <object class="GtkListStore" id="status_message_liststore">
-    <columns>
-      <!-- column-name name -->
-      <column type="gchararray"/>
-      <!-- column-name text -->
-      <column type="gchararray"/>
-      <!-- column-name activity -->
-      <column type="gchararray"/>
-      <!-- column-name sub_activity -->
-      <column type="gchararray"/>
-      <!-- column-name activity_text -->
-      <column type="gchararray"/>
-      <!-- column-name mood -->
-      <column type="gchararray"/>
-      <!-- column-name mood_text -->
-      <column type="gchararray"/>
-    </columns>
   </object>
 </interface>
