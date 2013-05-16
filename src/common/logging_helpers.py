@@ -163,9 +163,11 @@ def set_loglevels(loglevels_string):
 
 def set_verbose():
     parseAndSetLogLevels('gajim=1')
+    parseAndSetLogLevels('.nbxmpp=1')
 
 def set_quiet():
     parseAndSetLogLevels('gajim=CRITICAL')
+    parseAndSetLogLevels('.nbxmpp=CRITICAL')
 
 
 # tests
