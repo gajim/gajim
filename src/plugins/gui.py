@@ -315,19 +315,22 @@ class GajimPluginConfigDialog(Gtk.Dialog):
         Gtk.Dialog.__init__(self, '%s %s'%(plugin.name, _('Configuration')),
                                                                     **kwargs)
         self.plugin = plugin
-        self.add_button('gtk-close', Gtk.ResponseType.CLOSE)
+        button = self.add_button('gtk-close', Gtk.ResponseType.CLOSE)
+        button.connect('clicked', self.on_close_button_clicked)
 
         self.get_child().set_spacing(3)
 
         self.init()
+
+    def on_close_button_clicked(self, widget):
+        self.hide()
 
     @log_calls('GajimPluginConfigDialog')
     def run(self, parent=None):
         self.set_transient_for(parent)
         self.on_run()
         self.show_all()
-        result =  super(GajimPluginConfigDialog, self).run()
-        self.hide()
+        result =  super(GajimPluginConfigDialog, self)
         return result
 
     def init(self):
