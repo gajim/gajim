@@ -2397,7 +2397,7 @@ class JoinGroupchatWindow:
             else:
                 show = r_jid
             liststore.append([show, g])
-            server = gajim.get_server_from_jid(r_jid)      
+            server = gajim.get_server_from_jid(r_jid)
             if server not in server_list and not server.startswith('irc'):
                 server_list.append(server)
 
@@ -2543,7 +2543,7 @@ class JoinGroupchatWindow:
             ErrorDialog(_('This is not a group chat'),
                 _('%s is not the name of a group chat.') % room_jid)
             return
-        
+
         full_jid = room_jid + '/' + nickname
         if full_jid in self.recently_groupchat:
             self.recently_groupchat.remove(full_jid)
