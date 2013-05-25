@@ -1,4 +1,11 @@
+Gajim 0.15.4 (25 May 2013)
+
+  * Fix usage of OTR plugin
+  * Fix connection to non-SSL server
+  * Fix receiving GPG-encrypted messages while offline.
+
 Gajim 0.15.3 (17 March 2013)
+
   * Better handling of SSL errors
   * Better handling of canceling file transfer
   * Improve farstream calls
