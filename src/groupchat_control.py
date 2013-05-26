@@ -2757,7 +2757,8 @@ class GroupchatControl(ChatControlBase):
         connection = gajim.connections[self.account]
         if fjid in connection.blocked_contacts:
             return
-        new_rule = {'order': u'1', 'type': u'jid', 'action': u'deny',
+        max_order = connection.get_max_blocked_list_order()
+        new_rule = {'order': str(max_order + 1), 'type': u'jid', 'action': u'deny',
             'value' : fjid, 'child': [u'message', u'iq', u'presence-out']}
         connection.blocked_list.append(new_rule)
         connection.blocked_contacts.append(fjid)
