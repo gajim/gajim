@@ -1603,6 +1603,14 @@ class Connection(CommonConnection, ConnectionHandlers):
         iq.setQuery().setTag('active', {'name': name})
         self.connection.send(iq)
 
+    def get_max_blocked_list_order(self):
+        max_order = 0
+        for rule in self.blocked_list:
+            order = int(rule['order'])
+            if order > max_order:
+                max_order = order
+        return max_order
+
     def block_contacts(self, contact_list, message):
         if not self.privacy_rules_supported:
             if self.blocking_supported: #XEP-0191
@@ -1616,7 +1624,8 @@ class Connection(CommonConnection, ConnectionHandlers):
             return
         for contact in contact_list:
             self.send_custom_status('offline', message, contact.jid)
-            new_rule = {'order': '1', 'type': 'jid', 'action': 'deny',
+            max_order = self.get_max_blocked_list_order()
+            new_rule = {'order': str(max_order + 1), 'type': 'jid', 'action': 'deny',
                 'value' : contact.jid, 'child': ['message', 'iq',
                 'presence-out']}
             self.blocked_list.append(new_rule)
@@ -1672,7 +1681,8 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.blocked_groups.append(group)
         for contact in contact_list:
             self.send_custom_status('offline', message, contact.jid)
-        new_rule = {'order': '1', 'type': 'group', 'action': 'deny',
+        max_order = self.get_max_blocked_list_order()
+        new_rule = {'order': str(max_order + 1), 'type': 'group', 'action': 'deny',
             'value' : group, 'child': ['message', 'iq', 'presence-out']}
         self.blocked_list.append(new_rule)
         self.set_privacy_list('block', self.blocked_list)
