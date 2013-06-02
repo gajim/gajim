@@ -92,7 +92,8 @@ class Constants:
                 self.TYPE_RSS,
                 self.TYPE_WEATHER,
                 self.TYPE_MRIM,
-        ) = range(14)
+                self.TYPE_NO_TRANSPORT,
+        ) = range(15)
 
         (
                 self.SUBSCRIPTION_NONE,
@@ -339,6 +340,8 @@ class Logger:
             return constants.TYPE_WEATHER
         if type_ == 'mrim':
             return constants.TYPE_MRIM
+        if type_ == 'jabber':
+            return constants.TYPE_NO_TRANSPORT
         return None
 
     def convert_api_values_to_human_transport_type(self, type_id):
@@ -373,6 +376,8 @@ class Logger:
             return 'weather'
         if type_id == constants.TYPE_MRIM:
             return 'mrim'
+        if type_id == constants.TYPE_NO_TRANSPORT:
+            return 'jabber'
 
     def convert_human_subscription_values_to_db_api_values(self, sub):
         """

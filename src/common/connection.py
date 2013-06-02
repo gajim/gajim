@@ -1845,11 +1845,14 @@ class Connection(CommonConnection, ConnectionHandlers):
             if 'category' in identity and identity['category'] in ('gateway',
             'headline') and 'type' in identity:
                 transport_type = identity['type']
+            if 'category' in identity and identity['category'] == 'server' and \
+            'type' in identity and identity['type'] == 'im':
+                transport_type = 'jabber' # it's a jabber server
             if 'category' in identity and identity['category'] == 'conference' \
             and 'type' in identity and identity['type'] == 'text':
                 is_muc = True
 
-        if transport_type and obj.fjid not in gajim.transport_type:
+        if transport_type != '' and obj.fjid not in gajim.transport_type:
             gajim.transport_type[obj.fjid] = transport_type
             gajim.logger.save_transport_type(obj.fjid, transport_type)
 
