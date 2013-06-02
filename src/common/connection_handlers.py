@@ -33,6 +33,7 @@ import base64
 import sys
 import operator
 import hashlib
+import gobject
 
 from time import (altzone, daylight, gmtime, localtime, mktime, strftime,
         time as time_time, timezone, tzname)
@@ -559,6 +560,7 @@ class ConnectionVcard:
                     self.discover_ft_proxies()
                 gajim.nec.push_incoming_event(RosterReceivedEvent(None,
                     conn=self))
+            gobject.timeout_add_seconds(10, self.discover_servers)
         elif self.awaiting_answers[id_][0] == PRIVACY_ARRIVED:
             if iq_obj.getType() != 'error':
                 self.privacy_rules_supported = True
@@ -2062,6 +2064,17 @@ ConnectionJingle, ConnectionIBBytestream):
             for proxy in proxies:
                 gajim.proxy65_manager.resolve(proxy, self.connection, our_jid,
                     testit=testit)
+
+    def discover_servers(self):
+        if not self.connection:
+            return
+        servers = []
+        for c in gajim.contacts.iter_contacts(self.name):
+            s = gajim.get_server_from_jid(c.jid)
+            if s not in servers and s not in gajim.transport_type:
+                servers.append(s)
+        for s in servers:
+            self.discoverInfo(s)
 
     def _on_roster_set(self, roster):
         gajim.nec.push_incoming_event(RosterReceivedEvent(None, conn=self,
