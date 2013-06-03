@@ -2402,10 +2402,10 @@ class ChatControl(ChatControlBase):
                 GObject.source_remove(self.possible_inactive_timeout_id)
                 self._schedule_activity_timers()
 
-        def _on_sent(msg, contact, message, encrypted, xhtml, label, old_txt):
-            id_ = msg.getID()
-            if contact.supports(NS_RECEIPTS) and gajim.config.get_per('accounts',
-            self.account, 'request_receipt'):
+        def _on_sent(msg_stanza, message, encrypted, xhtml, label, old_txt):
+            id_ = msg_stanza.getID()
+            if self.contact.supports(NS_RECEIPTS) and gajim.config.get_per(
+            'accounts', self.account, 'request_receipt'):
                 xep0184_id = id_
             else:
                 xep0184_id = None
@@ -2427,8 +2427,8 @@ class ChatControl(ChatControlBase):
 
         ChatControlBase.send_message(self, message, keyID, type_='chat',
             chatstate=chatstate_to_send, xhtml=xhtml, callback=_on_sent,
-            callback_args=[contact, message, encrypted, xhtml,
-            self.get_seclabel(), self.last_sent_txt], process_commands=process_commands,
+            callback_args=[message, encrypted, xhtml, self.get_seclabel(),
+            self.last_sent_txt], process_commands=process_commands,
             attention=attention)
 
     def check_for_possible_paused_chatstate(self, arg):
