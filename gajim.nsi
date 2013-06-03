@@ -168,6 +168,7 @@ Section "Gajim" SecGajim
 	File "bin\Crypto.Hash.SHA256.pyd"
 	File "bin\Crypto.Random.OSRNG.winrandom.pyd"
 	File "bin\Crypto.Util._counter.pyd"
+	File "bin\Crypto.Util.strxor.pyd"
 	File "bin\gajim.exe"
 	File "bin\gio._gio.pyd"
 	File "bin\glib._glib.pyd"
