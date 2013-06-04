@@ -393,7 +393,7 @@ class NonBlockingTLS(PlugIn):
                 flags |= 16384
             tcpsock._sslContext.set_options(flags)
 
-        tcpsock.ssl_errnum = [0]
+        tcpsock.ssl_errnum = []
         tcpsock._sslContext.set_verify(OpenSSL.SSL.VERIFY_PEER,
                 self._ssl_verify_callback)
         try:
