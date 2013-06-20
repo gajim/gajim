@@ -31,7 +31,6 @@ if HAVE_GPG:
     class GnuPG(gnupg.GPG):
         def __init__(self, use_agent=False):
             gnupg.GPG.__init__(self)
-            gnupg.GPG.decode_errors = 'replace'
             self.passphrase = None
             self.use_agent = use_agent
             self.always_trust = False

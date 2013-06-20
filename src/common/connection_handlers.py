@@ -34,6 +34,7 @@ import sys
 import operator
 import hashlib
 import gobject
+import locale
 
 from time import (altzone, daylight, gmtime, localtime, mktime, strftime,
         time as time_time, timezone, tzname)
@@ -1157,7 +1158,8 @@ class ConnectionHandlersBase:
         decmsg = self.gpg.decrypt(encmsg, keyID)
         decmsg = self.connection.Dispatcher.replace_non_character(decmsg)
         # \x00 chars are not allowed in C (so in GTK)
-        obj.msgtxt = helpers.decode_string(decmsg.replace('\x00', ''))
+        obj.msgtxt = decmsg.replace('\x00', '').encode(
+            locale.getpreferredencoding()).decode('utf-8')
         obj.encrypted = 'xep27'
         self.gpg_messages_to_decrypt.remove([encmsg, keyID, obj])
 

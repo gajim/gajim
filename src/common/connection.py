@@ -294,7 +294,8 @@ class CommonConnection:
             else:
                 def encrypt_thread(msg, keyID, always_trust=False):
                     # encrypt message. This function returns (msgenc, error)
-                    return self.gpg.encrypt(msg, [keyID], always_trust)
+                    return self.gpg.encrypt(msg.encode('utf-8'), [keyID],
+                        always_trust)
                 def _on_encrypted(output):
                     msgenc, error = output
                     if error == 'NOT_TRUSTED':
