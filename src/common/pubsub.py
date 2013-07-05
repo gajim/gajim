@@ -193,6 +193,8 @@ class ConnectionPubSub:
             conn=self, stanza=stanza))
 
     def _nec_pubsub_bookmarks_received(self, obj):
+        if obj.conn.name != self.name:
+            return
         bm_jids = [b['jid'] for b in self.bookmarks]
         for bm in obj.bookmarks:
             if bm['jid'] not in bm_jids:
