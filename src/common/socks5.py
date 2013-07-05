@@ -1365,9 +1365,10 @@ class Socks5Listener(IdleObject):
             # Doesn't work under windows XP
             if os.name == 'nt':
                 ver = os.sys.getwindowsversion()
-                if (ver[3], ver[0], ver[1]) == (2, 6, 0):
+                if (ver[3], ver[0]) == (2, 6): # Win Vista +
+                    # 47 is socket.IPPROTO_IPV6
                     # 27 is socket.IPV6_V6ONLY under windows, but not defined ...
-                    self._serv.setsockopt(socket.IPPROTO_IPV6, 27, 1)
+                    self._serv.setsockopt(41, 27, 0)
             # will fail when port as busy, or we don't have rights to bind
             try:
                 self._serv.bind(ai[4])
