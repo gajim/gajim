@@ -1121,7 +1121,6 @@ _('This service does not contain any items to browse.'))
                 if self._find_item(jid_, node_):
                     continue
                 self._total_items += 1
-                print 'adding item #', self._total_items
                 self._add_item(jid_, node_, node, item, force)
                 if (self._total_items % 10) == 0:
                     self.window.services_treeview.thaw_child_notify()
