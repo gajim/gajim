@@ -1109,16 +1109,29 @@ class AgentBrowser:
 _('This service does not contain any items to browse.'))
             return
         # We got a list of items
-        self.window.services_treeview.set_model(None)
-        for item in items:
-            jid_ = item['jid']
-            node_ = item.get('node', '')
-            # If such an item is already here: don't add it
-            if self._find_item(jid_, node_):
-                continue
-            self._total_items += 1
-            self._add_item(jid_, node_, node, item, force)
-        self.window.services_treeview.set_model(self.model)
+        def fill_partial_rows(items):
+            '''Generator to fill the listmodel of a treeview progressively.'''
+            self.window.services_treeview.freeze_child_notify()
+            for item in items:
+                if self.window.dying:
+                    yield False
+                jid_ = item['jid']
+                node_ = item.get('node', '')
+                # If such an item is already here: don't add it
+                if self._find_item(jid_, node_):
+                    continue
+                self._total_items += 1
+                print 'adding item #', self._total_items
+                self._add_item(jid_, node_, node, item, force)
+                if (self._total_items % 10) == 0:
+                    self.window.services_treeview.thaw_child_notify()
+                    yield True
+                    self.window.services_treeview.freeze_child_notify()
+            self.window.services_treeview.thaw_child_notify()
+            #stop idle_add()
+            yield False
+        loader = fill_partial_rows(items)
+        gobject.idle_add(loader.next)
 
     def _agent_info(self, jid, node, identities, features, data):
         """
