@@ -93,7 +93,7 @@ class GajimRemote:
                                 _('Prints a list of all contacts in the roster. Each contact '
                                 'appears on a separate line'),
                                 [
-                                        (_('account'), _('show only contacts of the given account'),
+                                    (_('?CLI:account'), _('show only contacts of the given account'),
                                                 False)
                                 ]
 
@@ -106,9 +106,9 @@ class GajimRemote:
                                 _('Changes the status of account or accounts'),
                                 [
 #offline, online, chat, away, xa, dnd, invisible should not be translated
-                                        (_('status'), _('one of: offline, online, chat, away, xa, dnd, invisible. If not set, use account\'s previous status'), False),
-                                        (_('message'), _('status message'), False),
-                                        (_('account'), _('change status of account "account". '
+                                    (_('?CLI:status'), _('one of: offline, online, chat, away, xa, dnd, invisible. If not set, use account\'s previous status'), False),
+                                    (_('?CLI:message'), _('status message'), False),
+                                    (_('?CLI:account'), _('change status of account "account". '
         'If not specified, try to change status of all accounts that have '
         '"sync with global status" option set'), False)
                                 ]
@@ -116,9 +116,9 @@ class GajimRemote:
                 'set_priority': [
                                 _('Changes the priority of account or accounts'),
                                 [
-                                        (_('priority'), _('priority you want to give to the account'),
+                                    (_('?CLI:priority'), _('priority you want to give to the account'),
                                                 True),
-                                        (_('account'), _('change the priority of the given account. '
+                                    (_('?CLI:account'), _('change the priority of the given account. '
                                                 'If not specified, change status of all accounts that have'
                                                 ' "sync with global status" option set'), False)
                                 ]
@@ -128,9 +128,9 @@ class GajimRemote:
                                 [
                                         ('jid', _('JID of the contact that you want to chat with'),
                                                 True),
-                                        (_('account'), _('if specified, contact is taken from the '
+                                        (_('?CLI:account'), _('if specified, contact is taken from the '
                                                 'contact list of this account'), False),
-                                        (_('message'),
+                                        (_('?CLI:message'),
                                                 _('message content. The account must be specified or ""'),
                                                 False)
                                 ]
@@ -141,10 +141,10 @@ class GajimRemote:
                                 'without \'OpenPGP key\', just set \'OpenPGP key\' to \'\'.'),
                                 [
                                         ('jid', _('JID of the contact that will receive the message'), True),
-                                        (_('message'), _('message contents'), True),
+                                        (_('?CLI:message'), _('message contents'), True),
                                         (_('pgp key'), _('if specified, the message will be encrypted '
                                                 'using this public key'), False),
-                                        (_('account'), _('if specified, the message will be sent '
+                                        (_('?CLI:account'), _('if specified, the message will be sent '
                                                 'using this account'), False),
                                 ]
                         ],
@@ -155,10 +155,10 @@ class GajimRemote:
                                 [
                                         ('jid', _('JID of the contact that will receive the message'), True),
                                         (_('subject'), _('message subject'), True),
-                                        (_('message'), _('message contents'), True),
+                                        (_('?CLI:message'), _('message contents'), True),
                                         (_('pgp key'), _('if specified, the message will be encrypted '
                                                 'using this public key'), False),
-                                        (_('account'), _('if specified, the message will be sent '
+                                        (_('?CLI:account'), _('if specified, the message will be sent '
                                                 'using this account'), False),
                                 ]
                         ],
@@ -166,8 +166,8 @@ class GajimRemote:
                                 _('Sends new message to a groupchat you\'ve joined.'),
                                 [
                                         ('room_jid', _('JID of the room that will receive the message'), True),
-                                        (_('message'), _('message contents'), True),
-                                        (_('account'), _('if specified, the message will be sent '
+                                        (_('?CLI:message'), _('message contents'), True),
+                                        (_('?CLI:account'), _('if specified, the message will be sent '
                                                 'using this account'), False),
                                 ]
                         ],
@@ -188,7 +188,7 @@ class GajimRemote:
                                 [
                                         (_('file'), _('File path'), True),
                                         ('jid', _('JID of the contact'), True),
-                                        (_('account'), _('if specified, file will be sent using this '
+                                        (_('?CLI:account'), _('if specified, file will be sent using this '
                                                 'account'), False)
                                 ]
                         ],
@@ -218,7 +218,7 @@ class GajimRemote:
                                 _('Removes contact from roster'),
                                 [
                                         ('jid', _('JID of the contact'), True),
-                                        (_('account'), _('if specified, contact is taken from the '
+                                        (_('?CLI:account'), _('if specified, contact is taken from the '
                                                 'contact list of this account'), False)
 
                                 ]
@@ -227,21 +227,21 @@ class GajimRemote:
                                 _('Adds contact to roster'),
                                 [
                                         (_('jid'), _('JID of the contact'), True),
-                                        (_('account'), _('Adds new contact to this account'), False)
+                                        (_('?CLI:account'), _('Adds new contact to this account'), False)
                                 ]
                         ],
 
                 'get_status': [
                         _('Returns current status (the global one unless account is specified)'),
                                 [
-                                        (_('account'), '', False)
+                                        (_('?CLI:account'), '', False)
                                 ]
                         ],
 
                 'get_status_message': [
                         _('Returns current status message (the global one unless account is specified)'),
                                 [
-                                        (_('account'), '', False)
+                                        (_('?CLI:account'), '', False)
                                 ]
                         ],
 
@@ -252,7 +252,7 @@ class GajimRemote:
                 'start_chat': [
                         _('Opens \'Start Chat\' dialog'),
                                 [
-                                        (_('account'), _('Starts chat, using this account'), True)
+                                        (_('?CLI:account'), _('Starts chat, using this account'), True)
                                 ]
                         ],
                 'send_xml': [
@@ -277,18 +277,18 @@ class GajimRemote:
                                 _('Handle a xmpp:/ uri'),
                                 [
                                         (_('uri'), _('URI to handle'), True),
-                                        (_('account'), _('Account in which you want to handle it'),
+                                        (_('?CLI:account'), _('Account in which you want to handle it'),
                                                 False),
-                                        (_('message'), _('Message content'), False)
+                                        (_('?CLI:message'), _('Message content'), False)
                                 ]
                         ],
                 'join_room': [
                                 _('Join a MUC room'),
                                 [
-                                        (_('room'), _('Room JID'), True),
-                                        (_('nick'), _('Nickname to use'), False),
-                                        (_('password'), _('Password to enter the room'), False),
-                                        (_('account'), _('Account from which you want to enter the '
+                                        (_('?CLI:room'), _('Room JID'), True),
+                                        (_('?CLI:nick'), _('Nickname to use'), False),
+                                        (_('?CLI:password'), _('Password to enter the room'), False),
+                                        (_('?CLI:account'), _('Account from which you want to enter the '
                                                 'room'), False)
                                 ]
                         ],
