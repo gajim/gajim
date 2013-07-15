@@ -726,7 +726,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
                 port=int(proxy['port']), fingerprint=None,
                 connected=False, file_props=file_props)
             sender.streamhost = proxy
-            gajim.socks5queue.add_sockobj(self.name, sender, 'sender')
+            gajim.socks5queue.add_sockobj(self.name, sender)
             proxy['idx'] = sender.queue_idx
             gajim.socks5queue.on_success[file_props.sid] = self._proxy_auth_ok
             raise nbxmpp.NodeProcessed
