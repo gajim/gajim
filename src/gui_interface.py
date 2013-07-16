@@ -788,21 +788,24 @@ class Interface:
                 # another of our instance removed a contact. Remove it here too
                 self.roster.remove_contact(obj.jid, account, backend=True)
                 return
+            update = False
             if contacts[0].sub != obj.sub or contacts[0].ask != obj.ask\
             or old_groups != obj.groups:
                 # c.get_shown_groups() has changed. Reflect that in
                 # roster_window
                 self.roster.remove_contact(obj.jid, account, force=True)
+                update = True
             for contact in contacts:
                 contact.name = obj.nickname or ''
                 contact.sub = obj.sub
                 contact.ask = obj.ask
                 contact.groups = obj.groups or []
-            self.roster.add_contact(obj.jid, account)
-            # Refilter and update old groups
-            for group in old_groups:
-                self.roster.draw_group(group, account)
-            self.roster.draw_contact(obj.jid, account)
+            if update:
+                self.roster.add_contact(obj.jid, account)
+                # Refilter and update old groups
+                for group in old_groups:
+                    self.roster.draw_group(group, account)
+                self.roster.draw_contact(obj.jid, account)
         if obj.jid in self.instances[account]['sub_request'] and obj.sub in (
         'from', 'both'):
             self.instances[account]['sub_request'][obj.jid].window.destroy()
