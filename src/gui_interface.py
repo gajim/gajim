@@ -773,9 +773,14 @@ class Interface:
             if obj.sub == 'remove':
                 return
             # Add new contact to roster
+            keyID = ''
+            attached_keys = gajim.config.get_per('accounts', account,
+                'attached_gpg_keys').split()
+            if obj.jid in attached_keys:
+                keyID = attached_keys[attached_keys.index(obj.jid) + 1]
             contact = gajim.contacts.create_contact(jid=obj.jid,
                 account=account, name=obj.nickname, groups=obj.groups,
-                show='offline', sub=obj.sub, ask=obj.ask)
+                show='offline', sub=obj.sub, ask=obj.ask, keyID=keyID)
             gajim.contacts.add_contact(account, contact)
             self.roster.add_contact(obj.jid, account)
         else:
