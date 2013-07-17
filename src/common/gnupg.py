@@ -494,6 +494,7 @@ class Sign(object):
         self.type = None
         self.hash_algo = None
         self.fingerprint = None
+        self.status = ''
 
     def __nonzero__(self):
         return self.fingerprint is not None
@@ -506,9 +507,11 @@ class Sign(object):
     def handle_status(self, key, value):
         if key in ("USERID_HINT", "NEED_PASSPHRASE", "BAD_PASSPHRASE",
                    "GOOD_PASSPHRASE", "BEGIN_SIGNING", "CARDCTRL", "INV_SGNR",
-                   "KEYEXPIRED", "SIGEXPIRED", "KEYREVOKED", "NO_SGNR",
-                   "MISSING_PASSPHRASE", "SC_OP_FAILURE", "SC_OP_SUCCESS"):
+                   "KEYREVOKED", "NO_SGNR", "MISSING_PASSPHRASE",
+                   "SC_OP_FAILURE", "SC_OP_SUCCESS"):
             pass
+        elif key in ("KEYEXPIRED", "SIGEXPIRED"):
+            self.status = 'key expired'
         elif key == "SIG_CREATED":
             (self.type,
              algo, self.hash_algo, cls,
