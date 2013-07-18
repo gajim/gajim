@@ -1055,7 +1055,10 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                 self.stanza = nbxmpp.Message(node=msg)
                 if carbon_marker.getName() == 'sent':
                     to = self.stanza.getTo()
-                    self.stanza.setTo(self.stanza.getFrom())
+                    frm = self.stanza.getFrom()
+                    if not frm:
+                        frm = gajim.get_jid_from_account(account)
+                    self.stanza.setTo(frm)
                     self.stanza.setFrom(to)
                     self.sent = True
                 try:
