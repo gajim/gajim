@@ -1409,23 +1409,11 @@ class Interface:
             gajim.nec.push_incoming_event(OurShowEvent(None, conn=obj.conn,
                 show='offline'))
 
-        pritext = _('Insecure connection')
-        sectext = _('You are about to connect to the account %(account)s '
-            '(%(server)s) with an insecure connection. This means all your '
-            'conversations will be exchanged unencrypted. This type of '
-            'connection is really discouraged.\nAre you sure you want to do '
-            'that?') % {'account': obj.conn.name,
-            'server': gajim.get_hostname_from_account(obj.conn.name)}
-        checktext1 = _('Yes, I really want to connect insecurely')
-        tooltip1 = _('Gajim will NOT connect unless you check this box')
-        checktext2 = _('_Do not ask me again')
         if 'plain_connection' in self.instances[obj.conn.name]['online_dialog']:
             self.instances[obj.conn.name]['online_dialog']['plain_connection'].\
                 destroy()
         self.instances[obj.conn.name]['online_dialog']['plain_connection'] = \
-            dialogs.ConfirmationDialogDoubleCheck(pritext, sectext, checktext1,
-            checktext2, tooltip1=tooltip1, on_response_ok=on_ok,
-            on_response_cancel=on_cancel, is_modal=False)
+            dialogs.PlainConnectionDialog(obj.conn.name, on_ok, on_cancel)
 
     def handle_event_insecure_ssl_connection(self, obj):
         # ('INSECURE_SSL_CONNECTION', account, (connection, connection_type))
