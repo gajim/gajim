@@ -1048,7 +1048,7 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                 namespace=nbxmpp.NS_CARBONS)
         # Be sure it comes from one of our resource, else ignore forward element
         if carbon_marker and self.jid == gajim.get_jid_from_account(account):
-            forward_tag = self.stanza.getTag('forwarded',
+            forward_tag = carbon_marker.getTag('forwarded',
                 namespace=nbxmpp.NS_FORWARD)
             if forward_tag:
                 msg = forward_tag.getTag('message')
