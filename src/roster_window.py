@@ -280,7 +280,7 @@ class RosterWindow:
         Add all contacts and groups of the given account to roster, draw them
         and account
         """
-        self.starting = True
+        self._before_fill()
         jids = gajim.contacts.get_jid_list(account)
 
         for jid in jids:
@@ -296,7 +296,7 @@ class RosterWindow:
             self.draw_group(group, account)
         self.draw_account(account)
 
-        self.starting = False
+        self._after_fill()
 
     def _add_group_iter(self, account, group):
         """
