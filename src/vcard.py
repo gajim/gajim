@@ -246,6 +246,22 @@ class VcardWindow:
         self.vcard_arrived = True
         self.test_remove_progressbar()
 
+    def clear_values(self):
+        for l in ('FN', 'NICKNAME', 'N_FAMILY', 'N_GIVEN', 'N_MIDDLE',
+        'N_PREFIX', 'N_SUFFIX', 'EMAIL_HOME_USERID', 'TEL_HOME_NUMBER', 'BDAY',
+        'ORG_ORGNAME', 'ORG_ORGUNIT', 'TITLE', 'ROLE', 'EMAIL_WORK_USERID',
+        'TEL_WORK_NUMBER'):
+            widget = self.xml.get_object(l + '_label')
+            print l
+            widget.set_text('')
+        for pref in ('ADR_HOME', 'ADR_WORK'):
+            for l in ('STREET', 'EXTADR', 'LOCALITY', 'PCODE', 'REGION',
+            'CTRY'):
+                widget = self.xml.get_object(pref + '_' + l + '_label')
+                widget.set_text('')
+        self.xml.get_object('DESC_textview').get_buffer().set_text('')
+
+
     def _nec_vcard_received(self, obj):
         if obj.conn.name != self.account:
             return
@@ -256,6 +272,7 @@ class VcardWindow:
         else:
             if obj.jid != self.contact.jid:
                 return
+        self.clear_values()
         self.set_values(obj.vcard_dict)
 
     def test_remove_progressbar(self):
