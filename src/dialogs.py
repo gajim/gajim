@@ -3165,7 +3165,8 @@ class SingleMessageWindow:
                 else:
                     sender_list.append(i[0].jid)
         else:
-            sender_list = [self.to_entry.get_text()]
+            sender_list = [j.strip() for j in self.to_entry.get_text().split(
+                ',')]
 
         for to_whom_jid in sender_list:
             if to_whom_jid in self.completion_dict:
