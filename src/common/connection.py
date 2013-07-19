@@ -771,7 +771,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             self._nec_agent_info_received)
         gajim.ged.remove_event_handler('message-outgoing', ged.OUT_CORE,
             self._nec_message_outgoing)
-        gajim.ged.remove_event_handler('message-outgoing', ged.OUT_CORE,
+        gajim.ged.remove_event_handler('gc-message-outgoing', ged.OUT_CORE,
             self._nec_gc_message_outgoing)
 
     def get_config_values_or_default(self):
