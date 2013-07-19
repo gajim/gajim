@@ -54,6 +54,7 @@ from common.exceptions import GajimGeneralException
 
 from command_system.implementation.hosts import PrivateChatCommands
 from command_system.implementation.hosts import GroupChatCommands
+from common.connection_handlers_events import GcMessageOutgoingEvent
 
 import logging
 log = logging.getLogger('gajim.groupchat_control')
@@ -1923,9 +1924,10 @@ class GroupchatControl(ChatControlBase):
             else:
                 correction_msg = None
             # Send the message
-            gajim.connections[self.account].send_gc_message(self.room_jid,
-                message, xhtml=xhtml, label=label,
-                correction_msg=correction_msg, callback=_cb)
+            gajim.nec.push_outgoing_event(GcMessageOutgoingEvent(None,
+                account=self.account, jid=self.room_jid, message=message,
+                xhtml=xhtml, label=label, callback=_cb,
+                callback_args=[_cb] + [message], correction_msg=correction_msg))
             self.msg_textview.get_buffer().set_text('')
             self.msg_textview.grab_focus()
 

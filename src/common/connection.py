@@ -757,6 +757,8 @@ class Connection(CommonConnection, ConnectionHandlers):
             self._nec_agent_info_received)
         gajim.ged.register_event_handler('message-outgoing', ged.OUT_CORE,
             self._nec_message_outgoing)
+        gajim.ged.register_event_handler('gc-message-outgoing', ged.OUT_CORE,
+            self._nec_gc_message_outgoing)
     # END __init__
 
     def cleanup(self):
@@ -769,6 +771,8 @@ class Connection(CommonConnection, ConnectionHandlers):
             self._nec_agent_info_received)
         gajim.ged.remove_event_handler('message-outgoing', ged.OUT_CORE,
             self._nec_message_outgoing)
+        gajim.ged.remove_event_handler('message-outgoing', ged.OUT_CORE,
+            self._nec_gc_message_outgoing)
 
     def get_config_values_or_default(self):
         if gajim.config.get_per('accounts', self.name, 'keep_alives_enabled'):
@@ -2599,6 +2603,42 @@ class Connection(CommonConnection, ConnectionHandlers):
             jid=jid, message=msg, keyID=None, chatstate=None))
         if callback:
             callback(msg_iq, msg)
+
+    def _nec_gc_message_outgoing(self, obj):
+        if obj.account != self.name:
+            return
+        if not gajim.account_is_connected(self.name):
+            return
+
+        if obj.correction_msg:
+            id_ = obj.correction_msg.getID()
+            if obj.correction_msg.getTag('replace'):
+                obj.correction_msg.delChild('replace')
+            obj.correction_msg.setTag('replace', attrs={'id': id_},
+                namespace=nbxmpp.NS_CORRECT)
+            id2 = self.connection.getAnID()
+            obj.correction_msg.setID(id2)
+            obj.correction_msg.setBody(obj.message)
+            if obj.xhtml:
+                obj.correction_msg.setXHTML(xhtml)
+            self.connection.send(obj.correction_msg)
+            gajim.nec.push_incoming_event(MessageSentEvent(None, conn=self,
+                jid=obj.jid, message=obj.message, keyID=None, chatstate=None))
+            if obj.callback:
+                obj.callback(obj.correction_msg, obj.message)
+            return
+        if not obj.xhtml and gajim.config.get('rst_formatting_outgoing_messages'):
+            from common.rst_xhtml_generator import create_xhtml
+            obj.xhtml = create_xhtml(obj.message)
+        msg_iq = nbxmpp.Message(obj.jid, obj.message, typ='groupchat',
+            xhtml=obj.xhtml)
+        if obj.label is not None:
+            msg_iq.addChild(node=label)
+        self.connection.send(msg_iq)
+        gajim.nec.push_incoming_event(MessageSentEvent(None, conn=self,
+            jid=obj.jid, message=obj.message, keyID=None, chatstate=None))
+        if obj.callback:
+            obj.callback(msg_iq, obj.message)
 
     def send_gc_subject(self, jid, subject):
         if not gajim.account_is_connected(self.name):

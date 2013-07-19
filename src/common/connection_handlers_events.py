@@ -2444,6 +2444,25 @@ class MessageOutgoingEvent(nec.NetworkOutgoingEvent):
     def generate(self):
         return True
 
+
+class GcMessageOutgoingEvent(nec.NetworkOutgoingEvent):
+    name = 'gc-message-outgoing'
+    base_network_events = []
+
+    def init(self):
+        self.message = ''
+        self.xhtml = None
+        self.label = None
+        self.callback = None
+        self.callback_args = []
+        self.is_loggable = True
+        self.control = None
+        self.correction_msg = None
+
+    def generate(self):
+        return True
+
+
 class ClientCertPassphraseEvent(nec.NetworkIncomingEvent):
     name = 'client-cert-passphrase'
     base_network_events = []
