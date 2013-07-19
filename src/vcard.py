@@ -252,7 +252,6 @@ class VcardWindow:
         'ORG_ORGNAME', 'ORG_ORGUNIT', 'TITLE', 'ROLE', 'EMAIL_WORK_USERID',
         'TEL_WORK_NUMBER'):
             widget = self.xml.get_object(l + '_label')
-            print l
             widget.set_text('')
         for pref in ('ADR_HOME', 'ADR_WORK'):
             for l in ('STREET', 'EXTADR', 'LOCALITY', 'PCODE', 'REGION',
