@@ -1262,7 +1262,12 @@ class Connection(CommonConnection, ConnectionHandlers):
             # we are not retrying, and not conecting
             if not self.retrycount and self.connected != 0:
                 self.disconnect(on_purpose = True)
-                pritxt = _('Could not connect to "%s"') % self._hostname
+                if self._proxy:
+                    pritxt = _('Could not connect to "%(host)s" via proxy "%(proxy)s"') %\
+                        {'host': self._hostname, 'proxy': self._proxy['host']}
+                else:
+                    pritxt = _('Could not connect to "%(host)s"') % {'host': \
+                        self._hostname}
                 sectxt = _('Check your connection or try again later.')
                 if self.streamError:
                     # show error dialog
