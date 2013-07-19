@@ -37,7 +37,9 @@ from common import helpers
 from time import time
 from dialogs import AddNewContactWindow, NewChatDialog, JoinGroupchatWindow
 from common import ged
-from common.connection_handlers_events import MessageOutgoingEvent
+from common.connection_handlers_events import MessageOutgoingEvent,
+    GcMessageOutgoingEvent
+
 
 from common import dbus_support
 if dbus_support.supported:
@@ -478,6 +480,8 @@ class SignalObject(dbus.service.Object):
         if connected_account:
             connection = gajim.connections[connected_account]
             connection.send_gc_message(room_jid, message)
+            gajim.nec.push_outgoing_event(GcMessageOutgoingEvent(None,
+                account=connected_account, jid=room_jid, message=message))
             return DBUS_BOOLEAN(True)
         return DBUS_BOOLEAN(False)
 
