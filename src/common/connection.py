@@ -2571,39 +2571,6 @@ class Connection(CommonConnection, ConnectionHandlers):
                 t.setTagData('password', password)
         self.connection.send(p)
 
-    def send_gc_message(self, jid, msg, xhtml=None, label=None,
-    correction_msg=None, callback=None):
-        if not gajim.account_is_connected(self.name):
-            return
-        if correction_msg:
-            id_ = correction_msg.getID()
-            if correction_msg.getTag('replace'):
-                correction_msg.delChild('replace')
-            correction_msg.setTag('replace', attrs={'id': id_},
-                namespace=nbxmpp.NS_CORRECT)
-            id2 = self.connection.getAnID()
-            correction_msg.setID(id2)
-            correction_msg.setBody(msg)
-            if xhtml:
-                correction_msg.setXHTML(xhtml)
-            self.connection.send(correction_msg)
-            gajim.nec.push_incoming_event(MessageSentEvent(None, conn=self,
-                jid=jid, message=msg, keyID=None, chatstate=None))
-            if callback:
-                callback(correction_msg, msg)
-            return
-        if not xhtml and gajim.config.get('rst_formatting_outgoing_messages'):
-            from common.rst_xhtml_generator import create_xhtml
-            xhtml = create_xhtml(msg)
-        msg_iq = nbxmpp.Message(jid, msg, typ='groupchat', xhtml=xhtml)
-        if label is not None:
-            msg_iq.addChild(node=label)
-        self.connection.send(msg_iq)
-        gajim.nec.push_incoming_event(MessageSentEvent(None, conn=self,
-            jid=jid, message=msg, keyID=None, chatstate=None))
-        if callback:
-            callback(msg_iq, msg)
-
     def _nec_gc_message_outgoing(self, obj):
         if obj.account != self.name:
             return
