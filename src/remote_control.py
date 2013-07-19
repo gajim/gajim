@@ -479,7 +479,6 @@ class SignalObject(dbus.service.Object):
         connected_account = self._get_account_for_groupchat(account, room_jid)
         if connected_account:
             connection = gajim.connections[connected_account]
-            connection.send_gc_message(room_jid, message)
             gajim.nec.push_outgoing_event(GcMessageOutgoingEvent(None,
                 account=connected_account, jid=room_jid, message=message))
             return DBUS_BOOLEAN(True)
