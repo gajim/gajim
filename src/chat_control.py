@@ -1466,6 +1466,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         self.msg_textview.set_sensitive(True)
         self.msg_textview.set_editable(True)
         # FIXME: Set sensitivity for toolbar
+        self.update_toolbar()
 
     def got_disconnected(self):
         self.msg_textview.set_sensitive(False)
@@ -1474,6 +1475,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
         self.no_autonegotiation = False
         # FIXME: Set sensitivity for toolbar
+        self.update_toolbar()
 
 
 ################################################################################
