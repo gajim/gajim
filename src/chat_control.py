@@ -900,7 +900,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
         def _cb(msg, cb, *cb_args):
             self.last_sent_msg = msg
-            self.last_sent_txt = cb_args[1]
+            self.last_sent_txt = cb_args[0]
             if cb:
                 cb(msg, *cb_args)
 
