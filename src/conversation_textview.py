@@ -1085,7 +1085,6 @@ class ConversationTextview(gobject.GObject):
             special_text = otext[start:end]
             if start > index:
                 text_before_special_text = otext[index:start]
-                end_iter = buffer_.get_end_iter()
                 # we insert normal text
                 insert_tags_func(end_iter, text_before_special_text, *other_tags)
             index = end # update index
