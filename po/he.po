@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gajim 0.15\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-07-19 09:31+0300\n"
-"PO-Revision-Date: 2013-07-21 07:57+0200\n"
+"PO-Revision-Date: 2013-07-22 20:04+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
 "Language: he\n"
@@ -1128,7 +1128,7 @@ msgstr "תכונות"
 
 #: ../data/gui/features_window.ui.h:2
 msgid "<b>List of possible features in Gajim:</b>"
-msgstr "<b>רשימה של תכונות אפשריות אצל Gajim:</b>"
+msgstr "<b>רשימה של תכונות אפשריות בתוך Gajim:</b>"
 
 #: ../data/gui/filetransfers.ui.h:1
 msgid "File Transfers"
@@ -1381,7 +1381,7 @@ msgstr "הצגת רשימת עיצובים"
 
 #: ../data/gui/groupchat_control.ui.h:3
 msgid "Change your nickname (Ctrl+N)"
-msgstr "שינוי שם כינוייך (Ctrl+N)"
+msgstr "שינוי שם כינוי (Ctrl+N)"
 
 #: ../data/gui/groupchat_control.ui.h:4
 msgid "Change the room's subject (Alt+T)"
@@ -2259,7 +2259,7 @@ msgstr "שם כינוי של איש קשר:"
 
 #: ../data/gui/preferences_window.ui.h:94
 msgid "Your nickname:"
-msgstr "שם כינוייך:"
+msgstr "שם כינוי:"
 
 #: ../data/gui/preferences_window.ui.h:95
 msgid "_Status message:"
@@ -2712,11 +2712,11 @@ msgstr "אודות"
 
 #: ../data/gui/remove_account_window.ui.h:1
 msgid "Remove account _only from Gajim"
-msgstr "להסיר חשבון  מתוך  Gajim _בלבד"
+msgstr "להסיר חשבון  מתוך Gajim _בלבד"
 
 #: ../data/gui/remove_account_window.ui.h:2
 msgid "Remove account from Gajim and from _server"
-msgstr "להסיר חשבון  מתוך  Gajim וגם  מתוך  _שרת"
+msgstr "להסיר חשבון  מתוך Gajim וגם  מתוך  _שרת"
 
 #: ../data/gui/remove_account_window.ui.h:3
 msgid "<b>What do you want to do?</b>"
@@ -3759,7 +3759,7 @@ msgstr "שליחת הודעה אשר תסב את צומת ליבו של איש �
 
 #: ../src/command_system/implementation/standard.py:273
 msgid "Change your nickname in a group chat"
-msgstr "שינוי שם כינוייך בשיחת קבוצה"
+msgstr "שינוי שם הכינוי שלך בשיחת קבוצה"
 
 #. invalid char
 #: ../src/command_system/implementation/standard.py:278 ../src/config.py:3371
@@ -4738,7 +4738,7 @@ msgid ""
 "account modification window. BE CAREFUL, when you are logged in with a "
 "negative priority, you will NOT receive any message from your server."
 msgstr ""
-"במידה והעדפה זו מופעלת, תהיה ביכולתך להגדיר עדיפות שלילית עבור חשבונך בתוך "
+"במידה והעדפה זו מופעלת, תהיה באפשרותך להגדיר עדיפות שלילית עבור חשבונך בתוך "
 "חלון התאמת חשבון. יש להיזהר, בעת התחברותך יחד עם עדיפות שלילית, לא תתקבלנה "
 "שום הודעה מתוך שרתך."
 
@@ -5261,7 +5261,7 @@ msgid ""
 "muc_highlight_words, or when a group chat message contains your nickname."
 msgstr ""
 "צליל לניגון כאשר הודעת שיחת קבוצה מכילה אחת מתוך המילים אשר מצוינות בתוך "
-"muc_highlight_words, או כאשר הודעת שיחת קבוצה מכילה אח שם כינוייך."
+"muc_highlight_words, או כאשר הודעת שיחת קבוצה מכילה אח שם הכינוי שלך."
 
 #: ../src/common/config.py:527
 msgid "Sound to play when any MUC message arrives."
@@ -5449,7 +5449,7 @@ msgstr "אף לא הנוכחות המרוחקת חתומה, וגם לא הוקצ
 #: ../src/common/connection.py:292
 #, python-format
 msgid "The contact's key (%s) does not match the key assigned in Gajim."
-msgstr "המפתח של איש קשר (%s) לא תואם את המפתח שמוקצה אצל Gajim."
+msgstr "המפתח של איש קשר (%s) לא תואם את המפתח שמוקצה בתוך Gajim."
 
 # Needs to be tested
 #. we're not english: one in locale and one en
@@ -5647,7 +5647,7 @@ msgstr "ביטול רישום נכשל"
 #: ../src/common/connection.py:2799
 #, python-format
 msgid "Unregistration with server %(server)s failed: %(error)s"
-msgstr "אי רישום אצל שרת %(server)s נכשל: %(error)s"
+msgstr "אי רישום בתוך שרת %(server)s נכשל: %(error)s"
 
 #: ../src/common/connection_handlers.py:92
 #: ../src/common/zeroconf/connection_handlers_zeroconf.py:53
@@ -7519,7 +7519,7 @@ msgstr "אינך מחובר אל השרת"
 
 #: ../src/config.py:2444
 msgid "Without a connection, you can not edit your personal information."
-msgstr "ללא חיבור, אין ביכולתך לערוך את המידע האישי שלך."
+msgstr "ללא חיבור, אין באפשרותך לערוך את המידע האישי שלך."
 
 # Vcard form
 #: ../src/config.py:2448
@@ -7772,7 +7772,7 @@ msgid ""
 "later by choosing the Accounts menu item under the Edit menu from the main "
 "window."
 msgstr ""
-"ביכולתך להגדיר אפשרויות חשבון מתקדמות על ידי לחיצה על הכפתור מתקדם, או לאחר "
+"באפשרותך להגדיר אפשרויות חשבון מתקדמות על ידי לחיצה על הכפתור מתקדם, או לאחר "
 "מכן בבוחרך בתפריט חשבונות תחת התפריט עריכה מתוך החלון הראשי."
 
 #: ../src/config.py:3586
@@ -7926,7 +7926,7 @@ msgid ""
 "Text below this line is what has been said since the\n"
 "last time you paid attention to this group chat"
 msgstr ""
-"תמליל תחת שורה זו מכיל דברים אשר נאמרו מאז הפעם\n"
+"תמליל תחת שורה זו הוא דברים אשר נאמרו מאז הפעם\n"
 "האחרונה בה הסבת את צומת לבך לשיחת קבוצה זו"
 
 #: ../src/conversation_textview.py:801
@@ -8257,7 +8257,7 @@ msgstr "‫%s אינו שם של שיחת קבוצה."
 
 #: ../src/dialogs.py:2578
 msgid "Without a connection, you can not synchronise your contacts."
-msgstr "ללא חיבור, אין ביכולתך לסנכרן את אנשי הקשר שלך."
+msgstr "ללא חיבור, אין באפשרותך לסנכרן את אנשי הקשר שלך."
 
 #: ../src/dialogs.py:2591
 msgid "Server"
@@ -8273,7 +8273,7 @@ msgstr "חשבון זה אינו מחובר כעת אל השרת"
 # עד אשר זה לא יחובר
 #: ../src/dialogs.py:2628
 msgid "You cannot synchronize with an account unless it is connected."
-msgstr "אין ביכולתך להסתנכרן עם חשבון אלא אם כן החשבון הינו מחובר."
+msgstr "אין באפשרותך להסתנכרן עם חשבון אלא אם כן החשבון הינו מחובר."
 
 #: ../src/dialogs.py:2653
 msgid "Synchronise"
@@ -8319,7 +8319,7 @@ msgstr "אין אפשרות לנתח את \"%s\"."
 
 #: ../src/dialogs.py:2766
 msgid "Without a connection, you can not change your password."
-msgstr "ללא חיבור, אין ביכולתך לשנות את סיסמתך."
+msgstr "ללא חיבור, אין באפשרותך לשנות את סיסמתך."
 
 #: ../src/dialogs.py:2785
 msgid "Invalid password"
@@ -8696,7 +8696,7 @@ msgstr "האם דיברת עם איש הקשר המרוחק ודאגת לווד�
 #: ../src/dialogs.py:5101
 #, python-format
 msgid "The contact's key (%s) <b>does not match</b> the key assigned in Gajim."
-msgstr "המפתח של איש קשר (%s) <b>לא תואם</b> את המפתח המוקצה אצל Gajim."
+msgstr "המפתח של איש קשר (%s) <b>לא תואם</b> את המפתח אשר מוקצה בתוך Gajim."
 
 # כך שאין
 #: ../src/dialogs.py:5107
@@ -8803,7 +8803,7 @@ msgstr "ועידה"
 # BUG: Dot
 #: ../src/disco.py:516
 msgid "Without a connection, you can not browse available services"
-msgstr "ללא חיבור, אין ביכולתך לעיין בשירותים זמינים"
+msgstr "ללא חיבור, אין באפשרותך לעיין בשירותים זמינים"
 
 #: ../src/disco.py:602
 #, python-format
@@ -10044,36 +10044,36 @@ msgstr "השרת הסב או שינה את כינוי החדר שלך"
 #: ../src/groupchat_control.py:1557
 #, python-format
 msgid "%(nick)s has been kicked: %(reason)s"
-msgstr "‏%(nick)s נבעט/ה: %(reason)s"
+msgstr "%(nick)s נבעט/ה: %(reason)s"
 
 # סולק
 #: ../src/groupchat_control.py:1560
 #, python-format
 msgid "%(nick)s has been kicked by %(who)s: %(reason)s"
-msgstr "‏%(nick)s נבעט/ה על ידי %(who)s: ‏%(reason)s"
+msgstr "%(nick)s נבעט/ה על ידי %(who)s: ‏%(reason)s"
 
 #. do not print 'banned by None'
 #: ../src/groupchat_control.py:1569
 #, python-format
 msgid "%(nick)s has been banned: %(reason)s"
-msgstr "‏%(nick)s נחסם/ה: %(reason)s"
+msgstr "%(nick)s נחסם/ה: %(reason)s"
 
 #: ../src/groupchat_control.py:1572
 #, python-format
 msgid "%(nick)s has been banned by %(who)s: %(reason)s"
-msgstr "‏%(nick)s נחסם/ה על ידי %(who)s: ‏%(reason)s"
+msgstr "%(nick)s נחסם/ה על ידי %(who)s: ‏%(reason)s"
 
 #: ../src/groupchat_control.py:1583 ../src/groupchat_control.py:1699
 #, python-format
 msgid "You are now known as %s"
-msgstr "כינוייך החדש הוא %s"
+msgstr "הכינוי שלך החדש הוא %s"
 
 # מן
 #: ../src/groupchat_control.py:1653 ../src/groupchat_control.py:1658
 #: ../src/groupchat_control.py:1664
 #, python-format
 msgid "%(nick)s has been removed from the room (%(reason)s)"
-msgstr "‏%(nick)s הוסר/ה מתוך החדר (%(reason)s)"
+msgstr "%(nick)s הוסר/ה מתוך החדר (%(reason)s)"
 
 #: ../src/groupchat_control.py:1655
 msgid "affiliation changed"
@@ -10114,13 +10114,13 @@ msgstr "** התפקיד של %(nick)s הוגדר אל %(role)s"
 #: ../src/groupchat_control.py:1802
 #, python-format
 msgid "%s has left"
-msgstr "‏%s עזב/ה את החדר"
+msgstr "%s עזב/ה את החדר"
 
 # הצטרף אל שיחת הקבוצה
 #: ../src/groupchat_control.py:1807
 #, python-format
 msgid "%s has joined the group chat"
-msgstr "‏%s נכנס/ה אל החדר"
+msgstr "%s נכנס/ה אל החדר"
 
 #: ../src/groupchat_control.py:2077
 #, python-format
@@ -10282,7 +10282,8 @@ msgid ""
 "occupant.\n"
 "Please specify another nickname below:"
 msgstr ""
-"שם כינוייך המבוקש בשיחת הקבוצה %s הינו בשימוש או רשום בידי נוכח אחר.\n"
+"שם הכינוי אשר מבוקש על ידך בשיחת הקבוצה %s מצוי בשימוש או רשום בידי נוכח "
+"אחר.\n"
 "אנא ציין שם כינוי אחר למטה:"
 
 #: ../src/gui_interface.py:138
@@ -10688,7 +10689,7 @@ msgstr ""
 
 #: ../src/gui_interface.py:2073 ../src/roster_window.py:3895
 msgid "You cannot join a group chat while you are invisible"
-msgstr "אין ביכולתך להשתתף בשיחת קבוצה כאשר הינך במצב בלתי נראה"
+msgstr "אין באפשרותך להשתתף בשיחת קבוצה כאשר הינך במצב בלתי נראה"
 
 #. it is good to notify the user
 #. in case he or she cannot see the output of the console
@@ -10777,7 +10778,7 @@ msgid ""
 "\n"
 "In case you click YES, please wait..."
 msgstr ""
-"בדרך כלל הגודל המוקצה של מסד נתונים לא יהיה חופשי, הוא רק יהפוך לכזה אשר "
+"בדרך כלל הגודל אשר מוקצה של מסד נתונים לא יהיה חופשי, הוא רק יהפוך לכזה אשר "
 "ניתן לשימוש חוזר. אם באמת ברצונך להקטין את הגודל של קובץ מסד הנתונים, עליך "
 "להקיש כן, אחרת עליך להקיש לא.\n"
 "\n"
@@ -10990,7 +10991,7 @@ msgstr "המידע התקבל"
 # ללא חיבור זמין
 #: ../src/profile_window.py:370
 msgid "Without a connection you can not publish your contact information."
-msgstr "ללא חיבור, אין ביכולתך לפרסם את מידע איש הקשר שלך."
+msgstr "ללא חיבור, אין באפשרותך לפרסם את מידע איש הקשר שלך."
 
 #: ../src/profile_window.py:383
 msgid "Sending profile..."
