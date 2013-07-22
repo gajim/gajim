@@ -228,7 +228,7 @@ class SearchWindow:
             self.on_result_treeview_cursor_changed)
 
         counter = 0
-        for field in self.dataform.items[0].fields:
+        for field in self.dataform.reported.iter_fields():
             if field.var == 'jid':
                 self.jid_column = counter
                 break
