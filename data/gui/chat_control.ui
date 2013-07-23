@@ -1,7 +1,18 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <requires lib="gtk+" version="2.16"/>
-  <!-- interface-naming-policy project-wide -->
+  <!-- interface-requires gtk+ 3.0 -->
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="upper">110</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+    <property name="page_size">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment2">
+    <property name="upper">110</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+    <property name="page_size">10</property>
+  </object>
   <object class="GtkHBox" id="chat_control_hbox">
     <property name="can_focus">True</property>
     <property name="spacing">1</property>
@@ -9,7 +20,6 @@
       <object class="GtkVBox" id="chat_control_vbox">
         <property name="can_focus">True</property>
         <property name="border_width">3</property>
-        <property name="orientation">vertical</property>
         <property name="spacing">1</property>
         <child>
           <object class="GtkHPaned" id="hpaned1">
@@ -18,21 +28,25 @@
             <child>
               <object class="GtkVBox" id="vbox2">
                 <property name="visible">True</property>
-                <property name="orientation">vertical</property>
+                <property name="can_focus">False</property>
                 <child>
                   <object class="GtkAlignment" id="alignment">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="left_padding">3</property>
                     <property name="right_padding">3</property>
                     <child>
                       <object class="GtkEventBox" id="banner_eventbox">
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                         <child>
                           <object class="GtkHBox" id="hbox3004">
                             <property name="visible">True</property>
+                            <property name="can_focus">False</property>
                             <child>
                               <object class="GtkImage" id="banner_status_image">
                                 <property name="visible">True</property>
+                                <property name="can_focus">False</property>
                                 <property name="ypad">5</property>
                                 <property name="stock">gtk-missing-image</property>
                               </object>
@@ -46,78 +60,98 @@
                             <child>
                               <object class="GtkVBox" id="banner_vbox">
                                 <property name="visible">True</property>
+                                <property name="can_focus">False</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                 <property name="border_width">5</property>
-                                <property name="orientation">vertical</property>
                                 <child>
                                   <object class="GtkLabel" id="banner_name_label">
                                     <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
                                     <property name="label">&lt;span weight="heavy" size="large"&gt;Contact name&lt;/span&gt;</property>
                                     <property name="use_markup">True</property>
                                   </object>
                                   <packing>
+                                    <property name="expand">True</property>
+                                    <property name="fill">True</property>
                                     <property name="position">0</property>
                                   </packing>
                                 </child>
                                 <child>
                                   <object class="GtkLabel" id="banner_label">
                                     <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
                                     <property name="label">label</property>
                                     <property name="use_markup">True</property>
                                     <property name="selectable">True</property>
-                                    <signal name="populate_popup" handler="on_banner_label_populate_popup"/>
+                                    <signal name="populate-popup" handler="on_banner_label_populate_popup" swapped="no"/>
                                   </object>
                                   <packing>
+                                    <property name="expand">True</property>
+                                    <property name="fill">True</property>
                                     <property name="position">1</property>
                                   </packing>
                                 </child>
                               </object>
                               <packing>
+                                <property name="expand">True</property>
+                                <property name="fill">True</property>
                                 <property name="position">1</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkHBox" id="hbox2">
                                 <property name="visible">True</property>
+                                <property name="can_focus">False</property>
                                 <property name="spacing">4</property>
                                 <child>
                                   <object class="GtkImage" id="mood_image">
+                                    <property name="can_focus">False</property>
                                     <property name="no_show_all">True</property>
                                     <property name="stock">None</property>
                                     <property name="icon-size">1</property>
                                   </object>
                                   <packing>
+                                    <property name="expand">True</property>
+                                    <property name="fill">True</property>
                                     <property name="position">0</property>
                                   </packing>
                                 </child>
                                 <child>
                                   <object class="GtkImage" id="activity_image">
+                                    <property name="can_focus">False</property>
                                     <property name="no_show_all">True</property>
                                     <property name="stock">None</property>
                                     <property name="icon-size">1</property>
                                   </object>
                                   <packing>
+                                    <property name="expand">True</property>
+                                    <property name="fill">True</property>
                                     <property name="position">1</property>
                                   </packing>
                                 </child>
                                 <child>
                                   <object class="GtkImage" id="tune_image">
+                                    <property name="can_focus">False</property>
                                     <property name="no_show_all">True</property>
                                     <property name="stock">None</property>
                                     <property name="icon-size">1</property>
                                   </object>
                                   <packing>
+                                    <property name="expand">True</property>
+                                    <property name="fill">True</property>
                                     <property name="position">2</property>
                                   </packing>
                                 </child>
                                 <child>
                                   <object class="GtkEventBox" id="location_eventbox">
                                     <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
                                     <property name="visible_window">False</property>
                                     <child>
                                       <object class="GtkImage" id="location_image">
+                                        <property name="can_focus">False</property>
                                         <property name="no_show_all">True</property>
                                         <property name="stock">None</property>
                                         <property name="icon-size">1</property>
@@ -133,20 +167,26 @@
                                 <child>
                                   <object class="GtkImage" id="audio_banner_image">
                                     <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
                                     <property name="stock">None</property>
                                     <property name="icon-size">1</property>
                                   </object>
                                   <packing>
+                                    <property name="expand">True</property>
+                                    <property name="fill">True</property>
                                     <property name="position">4</property>
                                   </packing>
                                 </child>
                                 <child>
                                   <object class="GtkImage" id="video_banner_image">
                                     <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
                                     <property name="stock">None</property>
                                     <property name="icon-size">1</property>
                                   </object>
                                   <packing>
+                                    <property name="expand">True</property>
+                                    <property name="fill">True</property>
                                     <property name="position">5</property>
                                   </packing>
                                 </child>
@@ -154,11 +194,14 @@
                                   <object class="GtkAlignment" id="alignment3">
                                     <property name="width_request">11</property>
                                     <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
                                     <child>
                                       <placeholder/>
                                     </child>
                                   </object>
                                   <packing>
+                                    <property name="expand">True</property>
+                                    <property name="fill">True</property>
                                     <property name="position">6</property>
                                   </packing>
                                 </child>
@@ -172,10 +215,12 @@
                             <child>
                               <object class="GtkEventBox" id="avatar_eventbox">
                                 <property name="visible">True</property>
+                                <property name="can_focus">False</property>
                                 <property name="visible_window">False</property>
                                 <child>
                                   <object class="GtkImage" id="avatar_image">
                                     <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
                                     <property name="stock">None</property>
                                   </object>
                                 </child>
@@ -200,26 +245,27 @@
                 <child>
                   <object class="GtkVBox" id="vbox106">
                     <property name="visible">True</property>
-                    <property name="orientation">vertical</property>
+                    <property name="can_focus">False</property>
                     <child>
                       <object class="GtkScrolledWindow" id="conversation_scrolledwindow">
                         <property name="height_request">60</property>
                         <property name="can_focus">True</property>
                         <property name="border_width">3</property>
-                        <property name="hscrollbar_policy">automatic</property>
-                        <property name="vscrollbar_policy">automatic</property>
                         <property name="shadow_type">in</property>
                         <child>
                           <placeholder/>
                         </child>
                       </object>
                       <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
                         <property name="position">0</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkHBox" id="hbox">
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <child>
                           <object class="GtkButton" id="authentication_button">
@@ -231,6 +277,7 @@
                             <property name="focus_on_click">False</property>
                             <child>
                               <object class="GtkImage" id="lock_image">
+                                <property name="can_focus">False</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                 <property name="stock">gtk-dialog-authentication</property>
                                 <property name="icon-size">1</property>
@@ -239,6 +286,7 @@
                           </object>
                           <packing>
                             <property name="expand">False</property>
+                            <property name="fill">True</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
@@ -255,34 +303,42 @@
                             </child>
                           </object>
                           <packing>
+                            <property name="expand">True</property>
+                            <property name="fill">True</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
+                        <property name="fill">True</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkHBox" id="actions_hbox">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <child>
                       <object class="GtkButton" id="emoticons_button">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="tooltip_text" translatable="yes">Show a list of emoticons (Alt+M)</property>
                         <property name="relief">none</property>
                         <property name="focus_on_click">False</property>
                         <child>
                           <object class="GtkImage" id="emoticons_button_image">
                             <property name="visible">True</property>
+                            <property name="can_focus">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="stock">gtk-missing-image</property>
                             <property name="icon-size">1</property>
@@ -291,6 +347,7 @@
                       </object>
                       <packing>
                         <property name="expand">False</property>
+                        <property name="fill">True</property>
                         <property name="position">0</property>
                       </packing>
                     </child>
@@ -300,11 +357,13 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="tooltip_text" translatable="yes">Show a list of formattings</property>
                         <property name="relief">none</property>
                         <property name="focus_on_click">False</property>
                         <child>
                           <object class="GtkImage" id="image10">
                             <property name="visible">True</property>
+                            <property name="can_focus">False</property>
                             <property name="stock">gtk-bold</property>
                             <property name="icon-size">1</property>
                           </object>
@@ -312,17 +371,19 @@
                       </object>
                       <packing>
                         <property name="expand">False</property>
+                        <property name="fill">True</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkVSeparator" id="vseparator1">
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="orientation">vertical</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
+                        <property name="fill">True</property>
                         <property name="position">2</property>
                       </packing>
                     </child>
@@ -332,10 +393,12 @@
                         <property name="receives_default">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="no_show_all">True</property>
+                        <property name="tooltip_text" translatable="yes">Add this contact to roster (Ctrl+D)</property>
                         <property name="relief">none</property>
                         <child>
                           <object class="GtkImage" id="image9">
                             <property name="visible">True</property>
+                            <property name="can_focus">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="stock">gtk-add</property>
                             <property name="icon-size">1</property>
@@ -359,6 +422,7 @@
                         <child>
                           <object class="GtkImage" id="image3">
                             <property name="visible">True</property>
+                            <property name="can_focus">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="icon-size">1</property>
                           </object>
@@ -366,6 +430,7 @@
                       </object>
                       <packing>
                         <property name="expand">False</property>
+                        <property name="fill">True</property>
                         <property name="position">4</property>
                       </packing>
                     </child>
@@ -373,10 +438,12 @@
                       <object class="GtkToggleButton" id="audio_togglebutton">
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
+                        <property name="tooltip_text" translatable="yes">Toggle audio session</property>
                         <property name="relief">none</property>
                         <child>
                           <object class="GtkImage" id="audio_image">
                             <property name="visible">True</property>
+                            <property name="can_focus">False</property>
                             <property name="stock">gtk-missing-image</property>
                             <property name="icon-size">1</property>
                           </object>
@@ -384,6 +451,7 @@
                       </object>
                       <packing>
                         <property name="expand">False</property>
+                        <property name="fill">True</property>
                         <property name="position">5</property>
                       </packing>
                     </child>
@@ -391,10 +459,12 @@
                       <object class="GtkToggleButton" id="video_togglebutton">
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
+                        <property name="tooltip_text" translatable="yes">Toggle video session</property>
                         <property name="relief">none</property>
                         <child>
                           <object class="GtkImage" id="video_image">
                             <property name="visible">True</property>
+                            <property name="can_focus">False</property>
                             <property name="stock">gtk-missing-image</property>
                             <property name="icon-size">1</property>
                           </object>
@@ -402,6 +472,7 @@
                       </object>
                       <packing>
                         <property name="expand">False</property>
+                        <property name="fill">True</property>
                         <property name="position">6</property>
                       </packing>
                     </child>
@@ -411,11 +482,13 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="tooltip_text" translatable="yes">Invite contacts to the conversation (Ctrl+G)</property>
                         <property name="relief">none</property>
                         <property name="focus_on_click">False</property>
                         <child>
                           <object class="GtkImage" id="convert_to_gc_button_image">
                             <property name="visible">True</property>
+                            <property name="can_focus">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="stock">gtk-missing-image</property>
                             <property name="icon-size">1</property>
@@ -424,6 +497,7 @@
                       </object>
                       <packing>
                         <property name="expand">False</property>
+                        <property name="fill">True</property>
                         <property name="position">7</property>
                       </packing>
                     </child>
@@ -433,11 +507,13 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="tooltip_text" translatable="yes">Invite contacts to the conversation (Ctrl+G)</property>
                         <property name="relief">none</property>
                         <property name="focus_on_click">False</property>
                         <child>
                           <object class="GtkImage" id="image2">
                             <property name="visible">True</property>
+                            <property name="can_focus">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="stock">gtk-info</property>
                             <property name="icon-size">1</property>
@@ -446,6 +522,7 @@
                       </object>
                       <packing>
                         <property name="expand">False</property>
+                        <property name="fill">True</property>
                         <property name="position">8</property>
                       </packing>
                     </child>
@@ -455,11 +532,13 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="tooltip_text" translatable="yes">Browse the chat history (Ctrl+H)</property>
                         <property name="relief">none</property>
                         <property name="focus_on_click">False</property>
                         <child>
                           <object class="GtkImage" id="image5">
                             <property name="visible">True</property>
+                            <property name="can_focus">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="stock">gtk-justify-fill</property>
                             <property name="icon-size">1</property>
@@ -468,17 +547,19 @@
                       </object>
                       <packing>
                         <property name="expand">False</property>
+                        <property name="fill">True</property>
                         <property name="position">9</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkVSeparator" id="vseparator3">
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="orientation">vertical</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
+                        <property name="fill">True</property>
                         <property name="position">10</property>
                       </packing>
                     </child>
@@ -488,11 +569,13 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="tooltip_text" translatable="yes">Show a menu of advanced functions (Alt+D)</property>
                         <property name="relief">none</property>
                         <property name="focus_on_click">False</property>
                         <child>
                           <object class="GtkImage" id="image1">
                             <property name="visible">True</property>
+                            <property name="can_focus">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="stock">gtk-execute</property>
                             <property name="icon-size">1</property>
@@ -501,19 +584,22 @@
                       </object>
                       <packing>
                         <property name="expand">False</property>
+                        <property name="fill">True</property>
                         <property name="position">11</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkHBox" id="audio_buttons_hbox">
+                        <property name="can_focus">False</property>
                         <property name="no_show_all">True</property>
                         <child>
                           <object class="GtkVSeparator" id="vseparator2">
                             <property name="visible">True</property>
-                            <property name="orientation">vertical</property>
+                            <property name="can_focus">False</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
+                            <property name="fill">True</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
@@ -522,7 +608,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="use_action_appearance">True</property>
                             <property name="relief">none</property>
                             <property name="focus_on_click">False</property>
                             <property name="orientation">vertical</property>
@@ -535,6 +620,7 @@ audio-volume-medium</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
+                            <property name="fill">True</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
@@ -543,7 +629,6 @@ audio-volume-medium</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="use_action_appearance">True</property>
                             <property name="relief">none</property>
                             <property name="focus_on_click">False</property>
                             <property name="yalign">0.4699999988079071</property>
@@ -557,6 +642,7 @@ audio-mic-volume-low</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
+                            <property name="fill">True</property>
                             <property name="position">2</property>
                           </packing>
                         </child>
@@ -569,32 +655,41 @@ audio-mic-volume-low</property>
                             <property name="relief">none</property>
                           </object>
                           <packing>
+                            <property name="expand">True</property>
+                            <property name="fill">True</property>
                             <property name="position">3</property>
                           </packing>
                         </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
+                        <property name="fill">True</property>
                         <property name="position">12</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkComboBox" id="label_selector">
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                       </object>
                       <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
                         <property name="position">13</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkAlignment" id="alignment1">
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <child>
                           <placeholder/>
                         </child>
                       </object>
                       <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
                         <property name="position">14</property>
                       </packing>
                     </child>
@@ -606,15 +701,18 @@ audio-mic-volume-low</property>
                         <child>
                           <object class="GtkAlignment" id="alignment102">
                             <property name="visible">True</property>
+                            <property name="can_focus">False</property>
                             <property name="xscale">0</property>
                             <property name="yscale">0</property>
                             <child>
                               <object class="GtkHBox" id="hbox3010">
                                 <property name="visible">True</property>
+                                <property name="can_focus">False</property>
                                 <property name="spacing">2</property>
                                 <child>
                                   <object class="GtkImage" id="image1339">
                                     <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
                                     <property name="stock">gtk-jump-to</property>
                                   </object>
                                   <packing>
@@ -626,6 +724,7 @@ audio-mic-volume-low</property>
                                 <child>
                                   <object class="GtkLabel" id="label373">
                                     <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
                                     <property name="label" translatable="yes" comments="Make sure the character after &quot;_&quot; is not M/m (conflicts with Alt+M that is supposed to show the Emoticon Selector)">_Send</property>
                                     <property name="use_underline">True</property>
                                   </object>
@@ -642,12 +741,14 @@ audio-mic-volume-low</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
+                        <property name="fill">True</property>
                         <property name="position">15</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
+                    <property name="fill">True</property>
                     <property name="position">2</property>
                   </packing>
                 </child>
@@ -659,22 +760,26 @@ audio-mic-volume-low</property>
             </child>
             <child>
               <object class="GtkHBox" id="video_hbox">
+                <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkFixed" id="outgoing_fixed">
+                    <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
                     <child>
                       <object class="GtkViewport" id="viewport1">
                         <property name="width_request">160</property>
                         <property name="height_request">120</property>
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                         <property name="resize_mode">queue</property>
                         <child>
                           <object class="GtkDrawingArea" id="outgoing_drawingarea">
                             <property name="width_request">160</property>
                             <property name="height_request">120</property>
                             <property name="visible">True</property>
+                            <property name="can_focus">False</property>
                             <property name="double_buffered">False</property>
                           </object>
                         </child>
@@ -683,27 +788,32 @@ audio-mic-volume-low</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
+                    <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkVBox" id="vbox1">
                     <property name="visible">True</property>
-                    <property name="orientation">vertical</property>
+                    <property name="can_focus">False</property>
                     <child>
                       <object class="GtkViewport" id="viewport2">
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                         <property name="resize_mode">queue</property>
                         <child>
                           <object class="GtkDrawingArea" id="incoming_drawingarea">
                             <property name="width_request">320</property>
                             <property name="height_request">240</property>
                             <property name="visible">True</property>
+                            <property name="can_focus">False</property>
                             <property name="double_buffered">False</property>
                           </object>
                         </child>
                       </object>
                       <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
                         <property name="position">0</property>
                       </packing>
                     </child>
@@ -712,6 +822,8 @@ audio-mic-volume-low</property>
                     </child>
                   </object>
                   <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
@@ -723,28 +835,21 @@ audio-mic-volume-low</property>
             </child>
           </object>
           <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
             <property name="position">0</property>
           </packing>
         </child>
       </object>
       <packing>
+        <property name="expand">True</property>
+        <property name="fill">True</property>
         <property name="position">0</property>
       </packing>
     </child>
   </object>
-  <object class="GtkAdjustment" id="adjustment2">
-    <property name="upper">110</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-    <property name="page_size">10</property>
-  </object>
-  <object class="GtkAdjustment" id="adjustment1">
-    <property name="upper">110</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-    <property name="page_size">10</property>
-  </object>
   <object class="GtkWindow" id="dtmf_window">
+    <property name="can_focus">False</property>
     <property name="resizable">False</property>
     <property name="modal">True</property>
     <property name="window_position">mouse</property>
@@ -756,6 +861,7 @@ audio-mic-volume-low</property>
     <child>
       <object class="GtkTable" id="table2">
         <property name="visible">True</property>
+        <property name="can_focus">False</property>
         <property name="n_rows">4</property>
         <property name="n_columns">3</property>
         <property name="homogeneous">True</property>
