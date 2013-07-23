@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gajim 0.15\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-07-19 09:31+0300\n"
-"PO-Revision-Date: 2013-07-22 20:04+0200\n"
+"PO-Revision-Date: 2013-07-23 18:46+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
 "Language: he\n"
@@ -304,7 +304,7 @@ msgstr "_התאם אל מצב חיבור"
 # תשונה
 #: ../data/gui/accounts_window.ui.h:17
 msgid "Priority will change automatically according to your status."
-msgstr "העדיפות תשתנה אוטומטית בהתאם למצב חיבורך."
+msgstr "העדיפות תשתנה אוטומטית בהתאם אל מצב החיבור שלך."
 
 #: ../data/gui/accounts_window.ui.h:18
 msgid "Priori_ty:"
@@ -3403,14 +3403,14 @@ msgstr ""
 #: ../src/chat_control.py:1927
 #, python-format
 msgid "%(type)s state : %(state)s, reason: %(reason)s"
-msgstr "‏%(type)s מצב : %(state)s, סיבה: %(reason)s"
+msgstr "%(type)s מצב : %(state)s, סיבה: %(reason)s"
 
 # מן שיחת
 # מתוך שיחת
 #: ../src/chat_control.py:2118
 #, python-format
 msgid "%(nickname)s from group chat %(room_name)s"
-msgstr "‏%(nickname)s משיחת הקבוצה %(room_name)s"
+msgstr "%(nickname)s משיחת הקבוצה %(room_name)s"
 
 # לא הוקצה מפתח OpenPGP
 #. No key assigned nor a key is used by remote contact
@@ -3570,11 +3570,10 @@ msgstr ""
 "אין אפשרות לפענח הודעה מאת %s\n"
 "ייתכן כי הודעה זו נפגמה."
 
-# See: LRE string PDF
 #: ../src/chat_control.py:3252
 #, python-format
 msgid "%(name)s is now %(status)s"
-msgstr "‏%(name)s מצוי/ה כעת במצב %(status)s "
+msgstr "%(name)s מצוי/ה כעת במצב %(status)s"
 
 #: ../src/chat_control.py:3311
 msgid "File transfer"
@@ -3973,7 +3972,7 @@ msgstr "עזיבת שיחות קבוצה"
 #: ../src/common/commands.py:200
 #, python-format
 msgid "%(nickname)s on %(room_jid)s"
-msgstr "‏%(nickname)s בתוך החדר %(room_jid)s"
+msgstr "%(nickname)s בחדר %(room_jid)s"
 
 #: ../src/common/commands.py:204
 msgid "You have not joined a groupchat."
@@ -4913,7 +4912,7 @@ msgid ""
 "Priority will change automatically according to your status. Priorities are "
 "defined in autopriority_* options."
 msgstr ""
-"עדיפות תשונה אוטומטית בהתאם למצב חיבורך. עדיפויות מוגדרות בתוך האפשרות "
+"עדיפות תשונה אוטומטית בהתאם אל מצב החיבור שלך. עדיפויות מוגדרות בתוך האפשרות "
 "autopriority_*."
 
 #: ../src/common/config.py:340
@@ -5529,7 +5528,7 @@ msgstr "לא היה ניתן להתחבר אל \"%s\""
 # BUG: x2
 #: ../src/common/connection.py:1262 ../src/gui_interface.py:542
 msgid "Check your connection or try again later."
-msgstr "בדוק את חיבורך או נסה שוב מאוחר יותר."
+msgstr "בדוק את החיבור שלך או נסה שוב מאוחר יותר."
 
 #: ../src/common/connection.py:1267
 #, python-format
@@ -5591,7 +5590,7 @@ msgstr ""
 # BUG: x2
 #: ../src/common/connection.py:1423
 msgid "Check your connection or try again later"
-msgstr "בדוק את חיבורך או נסה שוב מאוחר יותר"
+msgstr "בדוק את החיבור שלך או נסה שוב מאוחר יותר"
 
 #: ../src/common/connection.py:1458
 #, python-format
@@ -5758,7 +5757,7 @@ msgstr "הודעה פרטית חדשה משיחת הקבוצה %s"
 #: ../src/common/connection_handlers_events.py:2200
 #, python-format
 msgid "%(nickname)s: %(message)s"
-msgstr "‏%(nickname)s: ‏%(message)s"
+msgstr ""
 
 # [09:02:34 PM] Rodensky: "התקבלה הודעה מ"
 # [09:08:28 PM] Myself: אני חושב שזה: המסר נשלח על-ידי...
@@ -5779,7 +5778,6 @@ msgstr "הודעה חדשה"
 msgid "New Message from %(nickname)s"
 msgstr "הודעה חדשה מאת %(nickname)s"
 
-# ‏%(nick)s שינה/תה מצב
 #: ../src/common/connection_handlers_events.py:2352
 #, python-format
 msgid "%(nick)s Changed Status"
@@ -5790,7 +5788,7 @@ msgstr "המצב של %(nick)s שונה"
 #: ../src/history_window.py:455
 #, python-format
 msgid "%(nick)s is now %(status)s"
-msgstr "‏%(nick)s מצוי/ה כעת במצב %(status)s "
+msgstr "%(nick)s מצוי/ה כעת במצב %(status)s "
 
 #: ../src/common/connection_handlers_events.py:2359 ../src/dialogs.py:2844
 #: ../src/notify.py:280
@@ -5800,7 +5798,7 @@ msgstr "איש קשר שינה מצב חיבור"
 #: ../src/common/connection_handlers_events.py:2361
 #, python-format
 msgid "%(nickname)s Signed In"
-msgstr "‏%(nickname)s התחבר/ה"
+msgstr "%(nickname)s התחבר/ה"
 
 #. default value
 #: ../src/common/connection_handlers_events.py:2366 ../src/dialogs.py:2828
@@ -5811,7 +5809,7 @@ msgstr "איש קשר התחבר"
 #: ../src/common/connection_handlers_events.py:2368
 #, python-format
 msgid "%(nickname)s Signed Out"
-msgstr "‏%(nickname)s התנתק/ה"
+msgstr "%(nickname)s התנתק/ה"
 
 #: ../src/common/connection_handlers_events.py:2373 ../src/dialogs.py:2830
 #: ../src/notify.py:264
@@ -6221,25 +6219,25 @@ msgstr "חבר"
 # מקשיב/ה
 #: ../src/common/helpers.py:361
 msgid "is paying attention to the conversation"
-msgstr "‪קשוב/ה לשיחה"
+msgstr "קשוב/ה לשיחה"
 
 #: ../src/common/helpers.py:363
 msgid "is doing something else"
-msgstr "‪עושה משהו אחר"
+msgstr "עושה משהו אחר"
 
 # מלחין/נה
 #: ../src/common/helpers.py:365
 msgid "is composing a message..."
-msgstr "‪כותב/ת הודעה..."
+msgstr "כותב/ת הודעה..."
 
 #. paused means he or she was composing but has stopped for a while
 #: ../src/common/helpers.py:368
 msgid "paused composing a message"
-msgstr "‪פסק/ה מלהלחין הודעה"
+msgstr "פסק/ה מלהלחין הודעה"
 
 #: ../src/common/helpers.py:370
 msgid "has closed the chat window or tab"
-msgstr "‪סגר/ה את כרטיסיית או את חלון השיחה"
+msgstr "סגר/ה את כרטיסיית או את חלון השיחה"
 
 # גיבי בתים
 #. GiB means gibibyte
@@ -7936,7 +7934,7 @@ msgstr "_ציטוט"
 #: ../src/conversation_textview.py:808
 #, python-format
 msgid "_Actions for \"%s\""
-msgstr "_פעולות עבור ‏\"%s\""
+msgstr "_פעולות עבור \"%s\""
 
 #: ../src/conversation_textview.py:821
 msgid "Read _Wikipedia Article"
@@ -8393,10 +8391,11 @@ msgstr "התקבלה %s"
 # טופס
 #. prepare UI for Receiving
 #: ../src/dialogs.py:3100
-#, fuzzy, python-format
+#, python-format
 msgid "Form %s"
-msgstr "מאת ‏%s"
+msgstr "מאת %s"
 
+# Is there RE for Hebrew?
 #. we create a new blank window to send and we preset RE: and to jid
 #: ../src/dialogs.py:3184
 #, python-format
@@ -8463,7 +8462,7 @@ msgstr "קבוצות"
 #: ../src/dialogs.py:3562
 #, python-format
 msgid "%s suggested me to add you in my roster."
-msgstr "‏%s הציע לי להוסיפך אל רשימתי."
+msgstr "‏%s הציע לי להוסיף אותך אל הרשימה שלי."
 
 # נוספו
 #: ../src/dialogs.py:3576
@@ -8561,7 +8560,7 @@ msgstr "‏$Contact הזמינך להצטרף אל דיון"
 #: ../src/dialogs.py:4500
 #, python-format
 msgid "$Contact has invited you to group chat %(room_jid)s"
-msgstr "‏$Contact הזמינך אל שיחת הקבוצה %(room_jid)s"
+msgstr "‏$Contact הזמינך אל שיחת קבוצה %(room_jid)s"
 
 #: ../src/dialogs.py:4508
 #, python-format
@@ -9945,7 +9944,7 @@ msgstr "אנא בחר קודם ב? אחר עבור המוטיב הנוכחי ש�
 #: ../src/groupchat_control.py:179 ../src/groupchat_control.py:1599
 #, python-format
 msgid "%(nick)s is now known as %(new_nick)s"
-msgstr "‏%(nick)s ידוע/ה כעת בכינוי %(new_nick)s"
+msgstr "%(nick)s ידוע/ה כעת בכינוי %(new_nick)s"
 
 #: ../src/groupchat_control.py:234
 msgid "Sending private message failed"
@@ -9976,7 +9975,7 @@ msgstr "שיחה נמשכת"
 #: ../src/groupchat_control.py:1257
 #, python-format
 msgid "%(nick)s has set the subject to %(subject)s"
-msgstr "הנושא הוגדר על ידי %(nick)s אל ‎%(subject)s"
+msgstr "הנושא הוגדר על ידי %(nick)s אל %(subject)s"
 
 # Translated to: Any occupant to All of the occupants
 # כל נוכח מורשה/יורשה
@@ -10050,7 +10049,7 @@ msgstr "%(nick)s נבעט/ה: %(reason)s"
 #: ../src/groupchat_control.py:1560
 #, python-format
 msgid "%(nick)s has been kicked by %(who)s: %(reason)s"
-msgstr "%(nick)s נבעט/ה על ידי %(who)s: ‏%(reason)s"
+msgstr "%(nick)s נבעט/ה על ידי %(who)s: %(reason)s"
 
 #. do not print 'banned by None'
 #: ../src/groupchat_control.py:1569
@@ -10061,12 +10060,12 @@ msgstr "%(nick)s נחסם/ה: %(reason)s"
 #: ../src/groupchat_control.py:1572
 #, python-format
 msgid "%(nick)s has been banned by %(who)s: %(reason)s"
-msgstr "%(nick)s נחסם/ה על ידי %(who)s: ‏%(reason)s"
+msgstr "%(nick)s נחסם/ה על ידי %(who)s: %(reason)s"
 
 #: ../src/groupchat_control.py:1583 ../src/groupchat_control.py:1699
 #, python-format
 msgid "You are now known as %s"
-msgstr "הכינוי שלך החדש הוא %s"
+msgstr "הכינוי החדש שלך הוא %s"
 
 # מן
 #: ../src/groupchat_control.py:1653 ../src/groupchat_control.py:1658
@@ -10183,7 +10182,7 @@ msgstr "באפשרותך להזין זירה אלטרנטיבית:"
 #: ../src/roster_window.py:3317
 #, python-format
 msgid "%(jid)s has been invited in this room"
-msgstr "‏%(jid)s הוזמנה בחדר זה"
+msgstr "%(jid)s הוזמן/ה אל חדר זה"
 
 #. ask for reason
 #: ../src/groupchat_control.py:2357
@@ -10607,7 +10606,7 @@ msgid ""
 "\n"
 "Do you still want to connect and update the fingerprint of the certificate?"
 msgstr ""
-"נראה שתעודת SSL של חשבון %(account)s שונתה או שחיבורך נפרץ כעת.\n"
+"נראה שתעודת SSL של חשבון %(account)s שונתה או שהחיבור שלך נפרץ כעת.\n"
 "טביעת אצבע קודמת: %(old)s\n"
 "טביעת אצבע חדשה: %(new)s\n"
 "\n"
@@ -10840,7 +10839,7 @@ msgstr "שגיאת דיסק"
 #: ../src/history_window.py:451
 #, python-format
 msgid "%(nick)s is now %(status)s: %(status_msg)s"
-msgstr "‏%(nick)s מצוי/ה כעת במצב %(status)s: %(status_msg)s"
+msgstr "%(nick)s מצוי/ה כעת במצב %(status)s: %(status_msg)s"
 
 #: ../src/history_window.py:462
 #, python-format
@@ -11063,8 +11062,8 @@ msgid ""
 "Changing your status to invisible will result in disconnection from those "
 "group chats. Are you sure you want to go invisible?"
 msgstr ""
-"שינוי מצב חיבורך אל בלתי נראה ינבע בניתוקך מתוך שיחות קבוצה אלו. האם עדיין "
-"ברצונך להפוך את מצבך אל בלתי נראה?"
+"שינוי מצב החיבור שלך אל בלתי נראה ינבע בניתוקך מתוך שיחות קבוצה אלו. האם "
+"עדיין ברצונך להפוך את מצבך אל בלתי נראה?"
 
 # If this mean desyncronized then 'לא מסונכרן' is correct,
 #: ../src/roster_window.py:2355
@@ -11126,7 +11125,8 @@ msgid ""
 "You will no longer be able to send and receive messages from contacts using "
 "this transport."
 msgstr ""
-"לא תעמוד עוד לרשותך האפשרות לקבל ולשלוח הודעות מן אנשי קשר באמצעות מוביל זה."
+"לא תעמוד עוד לרשותך האפשרות לקבל ולשלוח הודעות מתוך אנשי קשר באמצעות מוביל "
+"זה."
 
 #: ../src/roster_window.py:2990
 msgid "Transports will be removed"
@@ -11265,8 +11265,8 @@ msgid ""
 "This contact will temporarily see you as %(status)s, but only until you "
 "change your status. Then he or she will see your global status."
 msgstr ""
-"איש קשר זה יראה אותך באופן זמני במצב %(status)s, אך רק עד אשר מצבך ישתנה על "
-"ידייך. אחרי כן הוא/היא יראו את מצב חיבורך הגלובלי."
+"איש קשר זה יראה אותך באופן זמני במצב %(status)s, אך רק עד אשר תשנה את המצב "
+"שלך. אחרי כן הוא/היא יראו את מצב החיבור הגלובלי שלך."
 
 # Is this the same as: "There is no account available"?
 #: ../src/roster_window.py:3743
