@@ -29,6 +29,7 @@ from common import atom
 from common import nec
 from common import helpers
 from common import gajim
+from common import i18n
 import nbxmpp
 from common import dataforms
 from common import exceptions
@@ -2368,25 +2369,23 @@ class NotificationEvent(nec.NetworkIncomingEvent):
 
         self.popup_timeout = gajim.config.get('notification_timeout')
 
+        nick = i18n.direction_mark + gajim.get_name_from_jid(account, self.jid)
         if event == 'status_change':
             self.popup_title = _('%(nick)s Changed Status') % \
-                {'nick': gajim.get_name_from_jid(account, self.jid)}
+                {'nick': nick}
             self.popup_text = _('%(nick)s is now %(status)s') % \
-                {'nick': gajim.get_name_from_jid(account, self.jid),\
-                'status': helpers.get_uf_show(pres_obj.show)}
+                {'nick': nick, 'status': helpers.get_uf_show(pres_obj.show)}
             if pres_obj.status:
                 self.popup_text = self.popup_text + " : " + pres_obj.status
             self.popup_event_type = _('Contact Changed Status')
         elif event == 'contact_connected':
-            self.popup_title = _('%(nickname)s Signed In') % \
-                {'nickname': gajim.get_name_from_jid(account, self.jid)}
+            self.popup_title = _('%(nickname)s Signed In') % {'nickname': nick}
             self.popup_text = ''
             if pres_obj.status:
                 self.popup_text = pres_obj.status
             self.popup_event_type = _('Contact Signed In')
         elif event == 'contact_disconnected':
-            self.popup_title = _('%(nickname)s Signed Out') % \
-                {'nickname': gajim.get_name_from_jid(account, self.jid)}
+            self.popup_title = _('%(nickname)s Signed Out') % {'nickname': nick}
             self.popup_text = ''
             if pres_obj.status:
                 self.popup_text = pres_obj.status

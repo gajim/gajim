@@ -46,6 +46,7 @@ from common import gajim
 from common import helpers
 from common import exceptions
 from common import ged
+from common import i18n
 from message_control import MessageControl
 from conversation_textview import ConversationTextview
 from message_textview import MessageTextView
@@ -2154,9 +2155,10 @@ class ChatControl(ChatControlBase):
         if self.resource:
             name += '/' + self.resource
         if self.TYPE_ID == message_control.TYPE_PM:
-            name = _('%(nickname)s from group chat %(room_name)s') %\
-                    {'nickname': name, 'room_name': self.room_name}
-        name = GObject.markup_escape_text(name)
+            name = i18n.direction_mark +  _(
+                '%(nickname)s from group chat %(room_name)s') % \
+                {'nickname': name, 'room_name': self.room_name}
+        name = i18n.direction_mark + GObject.markup_escape_text(name)
 
         # We know our contacts nick, but if another contact has the same nick
         # in another account we need to also display the account.
@@ -2169,10 +2171,11 @@ class ChatControl(ChatControlBase):
                 break
             for jid in gajim.contacts.get_jid_list(account):
                 other_contact_ = \
-                        gajim.contacts.get_first_contact_from_jid(account, jid)
-                if other_contact_.get_shown_name() == self.contact.get_shown_name():
-                    acct_info = ' (%s)' % \
-                            GObject.markup_escape_text(self.account)
+                    gajim.contacts.get_first_contact_from_jid(account, jid)
+                if other_contact_.get_shown_name() == \
+                self.contact.get_shown_name():
+                    acct_info = i18n.direction_mark + ' (%s)' % \
+                        GObject.markup_escape_text(self.account)
                     break
 
         status = contact.status
@@ -2196,16 +2199,16 @@ class ChatControl(ChatControlBase):
                 chatstate = ''
 
             label_text = '<span %s>%s</span><span %s>%s %s</span>' \
-                % (font_attrs, name, font_attrs_small, acct_info, chatstate)
+                % (font_attrs,  name, font_attrs_small, acct_info, chatstate)
             if acct_info:
-                acct_info = ' ' + acct_info
+                acct_info = i18n.direction_mark + ' ' + acct_info
             label_tooltip = '%s%s %s' % (name, acct_info, chatstate)
         else:
             # weight="heavy" size="x-large"
             label_text = '<span %s>%s</span><span %s>%s</span>' % \
                     (font_attrs, name, font_attrs_small, acct_info)
             if acct_info:
-                acct_info = ' ' + acct_info
+                acct_info = i18n.direction_mark + ' ' + acct_info
             label_tooltip = '%s%s' % (name, acct_info)
 
         if status_escaped:

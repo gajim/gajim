@@ -49,6 +49,7 @@ from common import gajim
 from common import helpers
 from common import dataforms
 from common import ged
+from common import i18n
 
 from chat_control import ChatControl
 from chat_control import ChatControlBase
@@ -1523,7 +1524,8 @@ class GroupchatControl(ChatControlBase):
             affiliation = 'none'
 
         newly_created = False
-        nick_jid = obj.nick
+        nick = i18n.direction_mark + obj.nick
+        nick_jid = nick
 
         # Set to true if role or affiliation have changed
         right_changed = False
@@ -1566,10 +1568,10 @@ class GroupchatControl(ChatControlBase):
                 if '307' in obj.status_code:
                     if obj.actor is None: # do not print 'kicked by None'
                         s = _('%(nick)s has been kicked: %(reason)s') % {
-                            'nick': obj.nick, 'reason': obj.reason}
+                            'nick': nick, 'reason': obj.reason}
                     else:
                         s = _('%(nick)s has been kicked by %(who)s: '
-                            '%(reason)s') % {'nick': obj.nick, 'who': obj.actor,
+                            '%(reason)s') % {'nick': nick, 'who': obj.actor,
                             'reason': obj.reason}
                     self.print_conversation(s, 'info', graphics=False)
                     if obj.nick == self.nick and not gajim.config.get(
@@ -1578,10 +1580,10 @@ class GroupchatControl(ChatControlBase):
                 elif '301' in obj.status_code:
                     if obj.actor is None: # do not print 'banned by None'
                         s = _('%(nick)s has been banned: %(reason)s') % {
-                            'nick': obj.nick, 'reason': obj.reason}
+                            'nick': nick, 'reason': obj.reason}
                     else:
                         s = _('%(nick)s has been banned by %(who)s: '
-                            '%(reason)s') % {'nick': obj.nick, 'who': obj.actor,
+                            '%(reason)s') % {'nick': nick, 'who': obj.actor,
                             'reason': obj.reason}
                     self.print_conversation(s, 'info', graphics=False)
                     if obj.nick == self.nick:
@@ -1608,7 +1610,7 @@ class GroupchatControl(ChatControlBase):
                                 ctrl.no_autonegotiation = False
                     else:
                         s = _('%(nick)s is now known as %(new_nick)s') % {
-                            'nick': obj.nick, 'new_nick': obj.new_nick}
+                            'nick': nick, 'new_nick': obj.new_nick}
                     tv = self.conv_textview
                     if obj.nick in tv.last_received_message_marks:
                         tv.last_received_message_marks[obj.new_nick] = \
@@ -1662,18 +1664,18 @@ class GroupchatControl(ChatControlBase):
                     self.print_conversation(s, 'info', graphics=False)
                 elif '321' in obj.status_code:
                     s = _('%(nick)s has been removed from the room '
-                        '(%(reason)s)') % { 'nick': obj.nick,
+                        '(%(reason)s)') % { 'nick': nick,
                         'reason': _('affiliation changed') }
                     self.print_conversation(s, 'info', graphics=False)
                 elif '322' in obj.status_code:
                     s = _('%(nick)s has been removed from the room '
-                        '(%(reason)s)') % { 'nick': obj.nick,
+                        '(%(reason)s)') % { 'nick': nick,
                         'reason': _('room configuration changed to '
                         'members-only') }
                     self.print_conversation(s, 'info', graphics=False)
                 elif '332' in obj.status_code:
                     s = _('%(nick)s has been removed from the room '
-                        '(%(reason)s)') % {'nick': obj.nick,
+                        '(%(reason)s)') % {'nick': nick,
                         'reason': _('system shutdown') }
                     self.print_conversation(s, 'info', graphics=False)
                 # Room has been destroyed.
@@ -1707,7 +1709,7 @@ class GroupchatControl(ChatControlBase):
                 if '210' in obj.status_code:
                     # Server changed our nick
                     self.nick = obj.nick
-                    s = _('You are now known as %s') % obj.nick
+                    s = _('You are now known as %s') % nick
                     self.print_conversation(s, 'info', graphics=False)
                 iter_ = self.add_contact_to_roster(obj.nick, obj.show, role,
                     affiliation, obj.status, obj.real_jid)

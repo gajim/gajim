@@ -1309,10 +1309,7 @@ class ConversationTextview(GObject.GObject):
         direction_mark = i18n.paragraph_direction_mark(text)
         # don't apply direction mark if it's status message
         if kind == 'status':
-            if Gtk.Widget.get_default_direction() == gtk.TextDirectionLTR:
-                direction_mark = u'\u200E'
-            else:
-                direction_mark = u'\u200F'
+            direction_mark = i18n.direction_mark
         if current_print_time == 'always' and kind != 'info' and not simple:
             timestamp_str = self.get_time_to_show(tim)
             timestamp = time.strftime(timestamp_str, tim)
