@@ -1249,7 +1249,11 @@ class ConversationTextview(GObject.GObject):
             if 'url' in tags:
                 puny_text = puny_encode(special_text).decode('utf-8')
                 if not puny_text.endswith('-'):
-                    buffer_.insert(end_iter, " (%s)" % puny_text)
+                    puny_tags = []
+                    if use_other_tags:
+                        puny_tags += other_tags
+                    puny_tags = [(ttt.lookup(t) if isinstance(t, str) else t) for t in puny_tags]
+                    buffer_.insert_with_tags(end_iter, " (%s)" % puny_text, *puny_tags)
 
     def print_empty_line(self):
         buffer_ = self.tv.get_buffer()
