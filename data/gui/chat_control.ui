@@ -449,7 +449,6 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_text" translatable="yes">Toggle audio session</property>
                     <property name="use_action_appearance">False</property>
                     <property name="relief">none</property>
                     <child>
@@ -473,7 +472,6 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_text" translatable="yes">Toggle video session</property>
                     <property name="use_action_appearance">False</property>
                     <property name="relief">none</property>
                     <child>
@@ -732,6 +730,7 @@ audio-mic-volume-low</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <property name="tooltip_text" translatable="yes">Send message</property>
                     <property name="use_action_appearance">False</property>
                     <child>
                       <object class="GtkAlignment" id="alignment102">
