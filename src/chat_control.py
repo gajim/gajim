@@ -1801,7 +1801,7 @@ class ChatControl(ChatControlBase):
         self.contact.supports(NS_JINGLE_FILE_TRANSFER)) or \
         self.type_id == 'chat' or self.gc_contact.resource:
             self._send_file_button.set_sensitive(True)
-            self._send_file_button.set_tooltip_text('')
+            self._send_file_button.set_tooltip_text(_('Send files'))
         else:
             self._send_file_button.set_sensitive(False)
             if not (self.contact.supports(NS_FILE) or self.contact.supports(NS_JINGLE_FILE_TRANSFER)):
