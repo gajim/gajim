@@ -261,28 +261,32 @@ class RosterWindow:
         self.draw_account(account)
 
 
-    def add_account_contacts(self, account):
+    def add_account_contacts(self, account, improve_speed=True,
+    draw_contacts=True):
         """
         Add all contacts and groups of the given account to roster, draw them
         and account
         """
-        self._before_fill()
+        if improve_speed:
+            self._before_fill()
         jids = gajim.contacts.get_jid_list(account)
 
         for jid in jids:
             self.add_contact(jid, account)
 
-        # Do not freeze the GUI when drawing the contacts
-        if jids:
-            # Overhead is big, only invoke when needed
-            self._idle_draw_jids_of_account(jids, account)
+        if draw_contacts:
+            # Do not freeze the GUI when drawing the contacts
+            if jids:
+                # Overhead is big, only invoke when needed
+                self._idle_draw_jids_of_account(jids, account)
 
-        # Draw all known groups
-        for group in gajim.groups[account]:
-            self.draw_group(group, account)
-        self.draw_account(account)
+            # Draw all known groups
+            for group in gajim.groups[account]:
+                self.draw_group(group, account)
+            self.draw_account(account)
 
-        self._after_fill()
+        if improve_speed:
+            self._after_fill()
 
     def _add_group_iter(self, account, group):
         """
@@ -1451,9 +1455,12 @@ class RosterWindow:
         for acct in gajim.contacts.get_accounts():
             self._iters[acct] = {'account': None, 'groups': {}, 'contacts': {}}
 
+        self._before_fill()
         for acct in gajim.contacts.get_accounts():
             self.add_account(acct)
-            self.add_account_contacts(acct)
+            self.add_account_contacts(acct, improve_speed=False,
+                draw_contacts=False)
+        self._after_fill()
 
         # Recalculate column width for ellipsizing
         self.tree.columns_autosize()
