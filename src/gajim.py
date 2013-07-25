@@ -205,6 +205,8 @@ warnings.resetwarnings()
 if os.name == 'nt':
     warnings.filterwarnings(action='ignore')
 
+if gtk.widget_get_default_direction() == gtk.TEXT_DIR_LTR:
+    i18n.direction_mark = u'\u200E'
 pritext = ''
 
 from common import exceptions

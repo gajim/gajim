@@ -26,12 +26,9 @@ import gettext
 import os
 import defs
 import unicodedata
-import gtk
 
-if gtk.widget_get_default_direction() == gtk.TEXT_DIR_LTR:
-    direction_mark = u'\u200E'
-else:
-    direction_mark = u'\u200F'
+# May be changed after GTK is imported
+direction_mark = u'\u200F'
 
 def paragraph_direction_mark(text):
     """
