@@ -60,6 +60,7 @@ from common import helpers
 from common import i18n
 from common import dataforms
 from common.exceptions import GajimGeneralException
+from common.connection_handlers_events import MessageOutgoingEvent
 
 class EditGroupsDialog:
     """
@@ -3164,6 +3165,15 @@ class SingleMessageWindow:
             sender_list = [j.strip() for j in self.to_entry.get_text().decode(
                 'utf-8').split(',')]
 
+        subject = self.subject_entry.get_text().decode('utf-8')
+        begin, end = self.message_tv_buffer.get_bounds()
+        message = self.message_tv_buffer.get_text(begin, end).decode('utf-8')
+
+        if self.form_widget:
+            form_node = self.form_widget.data_form
+        else:
+            form_node = None
+
         for to_whom_jid in sender_list:
             if to_whom_jid in self.completion_dict:
                 to_whom_jid = self.completion_dict[to_whom_jid].jid
@@ -3174,10 +3184,6 @@ class SingleMessageWindow:
                     _('It is not possible to send a message to %s, this JID is not '
                     'valid.') % to_whom_jid)
                 return True
-
-            subject = self.subject_entry.get_text().decode('utf-8')
-            begin, end = self.message_tv_buffer.get_bounds()
-            message = self.message_tv_buffer.get_text(begin, end).decode('utf-8')
 
             if '/announce/' in to_whom_jid:
                 gajim.connections[self.account].send_motd(to_whom_jid, subject,
@@ -3190,14 +3196,11 @@ class SingleMessageWindow:
                 session = gajim.connections[self.account].make_new_session(
                         to_whom_jid)
 
-            if self.form_widget:
-                form_node = self.form_widget.data_form
-            else:
-                form_node = None
             # FIXME: allow GPG message some day
-            gajim.connections[self.account].send_message(to_whom_jid, message,
-                keyID=None, type_='normal', subject=subject, session=session,
-                form_node=form_node)
+            gajim.nec.push_outgoing_event(MessageOutgoingEvent(None,
+                account=self.account, jid=to_whom_jid, message=message,
+                type_='normal', subject=subject, session=session,
+                form_node=form_node))
 
         self.subject_entry.set_text('') # we sent ok, clear the subject
         self.message_tv_buffer.set_text('') # we sent ok, clear the textview
