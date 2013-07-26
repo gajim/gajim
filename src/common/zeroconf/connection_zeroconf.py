@@ -332,46 +332,6 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
                 title=_('Could not change status of account "%s"') % self.name,
                 msg=_('Please check if avahi-daemon is running.')))
 
-    def send_message(self, jid, msg, keyID, type_='chat', subject='',
-    chatstate=None, msg_id=None, resource=None, user_nick=None, xhtml=None,
-    label=None, session=None, forward_from=None, form_node=None,
-    original_message=None, delayed=None, attention=False, callback=None,
-    callback_args=[], now=True):
-
-        def on_send_ok(msg_id):
-            gajim.nec.push_incoming_event(MessageSentEvent(None, conn=self,
-                jid=jid, message=msg, keyID=keyID, chatstate=None))
-            if callback:
-                callback(msg_id, *callback_args)
-
-            self.log_message(jid, msg, forward_from, session, original_message,
-                    subject, type_)
-
-        def on_send_not_ok(reason):
-            reason += ' ' + _('Your message could not be sent.')
-            gajim.nec.push_incoming_event(MessageErrorEvent(None, conn=self,
-                fjid=jid, error_code=-1, error_msg=reason, msg=None, time_=None,
-                session=session))
-
-        def cb(jid, msg, keyID, forward_from, session, original_message, subject,
-        type_, msg_iq):
-            ret = self.connection.send(msg_iq, msg is not None, on_ok=on_send_ok,
-                    on_not_ok=on_send_not_ok)
-
-            if ret == -1:
-                # Contact Offline
-                gajim.nec.push_incoming_event(MessageErrorEvent(None, conn=self,
-                    fjid=jid, error_code=-1, error_msg=_(
-                    'Contact is offline. Your message could not be sent.'),
-                    msg=None, time_=None, session=session))
-
-        self._prepare_message(jid, msg, keyID, type_=type_, subject=subject,
-                chatstate=chatstate, msg_id=msg_id, resource=resource,
-                user_nick=user_nick, xhtml=xhtml, session=session,
-                forward_from=forward_from, form_node=form_node,
-                original_message=original_message, delayed=delayed,
-                attention=attention, callback=cb)
-
     def _nec_message_outgoing(self, obj):
         if obj.account != self.name:
             return

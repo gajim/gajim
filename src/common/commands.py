@@ -26,6 +26,7 @@ import nbxmpp
 from common import helpers
 from common import dataforms
 from common import gajim
+from common.connection_handlers_events import MessageOutgoingEvent
 
 import logging
 log = logging.getLogger('gajim.c.commands')
@@ -285,9 +286,10 @@ class ForwardMessagesCommand(AdHocCommand):
                 ev_typ = event.type_
                 if ev_typ == 'printed_chat':
                     ev_typ = 'chat'
-                self.connection.send_message(j, event.parameters[0], '',
+                gajim.nec.push_outgoing_event(MessageOutgoingEvent(None,
+                    account=account, jid=j, message=event.parameters[0],
                     type_=ev_typ, subject=event.parameters[1],
-                    resource=resource, forward_from=jid, delayed=event.time_)
+                    resource=resource, forward_from=jid, delayed=event.time_))
 
         # Inform other client of completion
         response, cmd = self.buildResponse(request, status = 'completed')
@@ -315,10 +317,14 @@ class FwdMsgThenDisconnectCommand(AdHocCommand):
         j, resource = gajim.get_room_and_nick_from_fjid(self.jid)
         for jid in events:
             for event in events[jid]:
-                self.connection.send_message(j, event.parameters[0], '',
-                    type_=event.type_, subject=event.parameters[1],
+                ev_typ = event.type_
+                if ev_typ == 'printed_chat':
+                    ev_typ = 'chat'
+                gajim.nec.push_outgoing_event(MessageOutgoingEvent(None,
+                    account=account, jid=j, message=event.parameters[0],
+                    type_=ev_typ, subject=event.parameters[1],
                     resource=resource, forward_from=jid, delayed=event.time_,
-                    now=True)
+                    now=True))
 
         response, cmd = self.buildResponse(request, status = 'completed')
         cmd.addChild('note', {}, _('The status has been changed.'))

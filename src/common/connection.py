@@ -1989,31 +1989,6 @@ class Connection(CommonConnection, ConnectionHandlers):
 
         self.connection.send(msg_iq)
 
-    def send_message(self, jid, msg, keyID=None, type_='chat', subject='',
-    chatstate=None, msg_id=None, resource=None, user_nick=None, xhtml=None,
-    label=None, session=None, forward_from=None, form_node=None,
-    original_message=None, delayed=None, attention=False, correction_msg=None,
-    callback=None, callback_args=[], now=False):
-
-        def cb(jid, msg, keyID, forward_from, session, original_message,
-        subject, type_, msg_iq, xhtml):
-            msg_id = self.connection.send(msg_iq, now=now)
-            jid = helpers.parse_jid(jid)
-            gajim.nec.push_incoming_event(MessageSentEvent(None, conn=self,
-                jid=jid, message=msg, keyID=keyID, chatstate=chatstate))
-            if callback:
-                callback(msg_id, *callback_args)
-
-            self.log_message(jid, msg, forward_from, session, original_message,
-                    subject, type_, xhtml)
-
-        self._prepare_message(jid, msg, keyID, type_=type_, subject=subject,
-            chatstate=chatstate, msg_id=msg_id, resource=resource,
-            user_nick=user_nick, xhtml=xhtml, label=label, session=session,
-            forward_from=forward_from, form_node=form_node,
-            original_message=original_message, delayed=delayed,
-            attention=attention, correction_msg=correction_msg, callback=cb)
-
     def _nec_message_outgoing(self, obj):
         if obj.account != self.name:
             return
