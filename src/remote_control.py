@@ -37,8 +37,8 @@ from common import helpers
 from time import time
 from dialogs import AddNewContactWindow, NewChatDialog, JoinGroupchatWindow
 from common import ged
-from common.connection_handlers_events import MessageOutgoingEvent,
-    GcMessageOutgoingEvent
+from common.connection_handlers_events import MessageOutgoingEvent
+from common.connection_handlers_events import GcMessageOutgoingEvent
 
 
 from common import dbus_support
