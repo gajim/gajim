@@ -10,7 +10,7 @@ Vcs-Browser: http://hg.gajim.org/gajim/file
 
 Package: gajim
 Architecture: all
-Depends: ${misc:Depends}, ${python:Depends}, python-gtk2 (>= 2.22.0), dnsutils
+Depends: ${misc:Depends}, ${python:Depends}, python-gtk2 (>= 2.22.0), dnsutils, python-nbxmpp
 Recommends: dbus, python-dbus, notification-daemon, python-openssl (>= 0.12), python-crypto, python-pyasn1
 Suggests: python-gconf, python-gnome2, nautilus-sendto, avahi-daemon, python-avahi, network-manager, libgtkspell0, aspell-en, python-gnomekeyring, gnome-keyring, python-kerberos (>= 1.1), texlive-latex-base, dvipng, python-farstream, gstreamer0.10-plugins-ugly, python-pycurl, python-gupnp-igd
 Description: Jabber client written in PyGTK
