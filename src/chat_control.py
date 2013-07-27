@@ -366,6 +366,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
         # when/if we do XHTML we will put formatting buttons back
         widget = self.xml.get_object('emoticons_button')
+        widget.set_sensitive(False)
         id_ = widget.connect('clicked', self.on_emoticons_button_clicked)
         self.handlers[id_] = widget
 
@@ -462,6 +463,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         # Hook up send button
         widget = self.xml.get_object('send_button')
         id_ = widget.connect('clicked', self._on_send_button_clicked)
+        widget.set_sensitive(False)
         self.handlers[id_] = widget
 
         widget = self.xml.get_object('formattings_button')
@@ -625,10 +627,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         """
         When send button is pressed: send the current message
         """
-        if gajim.connections[self.account].connected < 2:  # we are not connected
-            dialogs.ErrorDialog(_('A connection is not available'),
-                    _('Your message can not be sent until you are connected.'))
-            return
         message_buffer = self.msg_textview.get_buffer()
         start_iter = message_buffer.get_start_iter()
         end_iter = message_buffer.get_end_iter()
@@ -1466,7 +1464,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
     def got_connected(self):
         self.msg_textview.set_sensitive(True)
         self.msg_textview.set_editable(True)
-        # FIXME: Set sensitivity for toolbar
         self.update_toolbar()
 
     def got_disconnected(self):
@@ -1475,7 +1472,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         self.conv_textview.tv.grab_focus()
 
         self.no_autonegotiation = False
-        # FIXME: Set sensitivity for toolbar
         self.update_toolbar()
 
 
@@ -1749,6 +1745,13 @@ class ChatControl(ChatControlBase):
         gajim.events.event_removed_unsubscribe(self.on_event_removed)
 
     def _update_toolbar(self):
+        if (gajim.connections[self.account].connected > 1 and not \
+        self.TYPE_ID == 'pm') or (self.contact.show != 'offline' and \
+        self.TYPE_ID == 'pm'):
+            emoticons_button = self.xml.get_object('emoticons_button')
+            emoticons_button.set_sensitive(True)
+            send_button = self.xml.get_object('send_button')
+            send_button.set_sensitive(True)
         # Formatting
         if self.contact.supports(NS_XHTML_IM) and not self.gpg_is_active:
             self._formattings_button.set_sensitive(True)
@@ -1797,9 +1800,10 @@ class ChatControl(ChatControlBase):
             self._video_button.set_tooltip_text(video_tooltip_text[:-1])
 
         # Send file
-        if (self.contact.supports(NS_FILE) or \
+        if ((self.contact.supports(NS_FILE) or \
         self.contact.supports(NS_JINGLE_FILE_TRANSFER)) or \
-        self.type_id == 'chat' or self.gc_contact.resource:
+        self.type_id == 'chat' or self.gc_contact.resource) and \
+        self.contact.show != 'offline':
             self._send_file_button.set_sensitive(True)
             self._send_file_button.set_tooltip_text(_('Send files'))
         else:
@@ -3245,6 +3249,30 @@ class ChatControl(ChatControlBase):
         if contact:
             self.contact = contact
         self.draw_banner()
+        emoticons_button = self.xml.get_object('emoticons_button')
+        emoticons_button.set_sensitive(True)
+        send_button = self.xml.get_object('send_button')
+        send_button.set_sensitive(True)
+
+    def got_disconnected(self):
+        # Emoticons button
+        emoticons_button = self.xml.get_object('emoticons_button')
+        emoticons_button.set_sensitive(False)
+        send_button = self.xml.get_object('send_button')
+        send_button.set_sensitive(False)
+        # Add to roster
+        self._add_to_roster_button.hide()
+        # Audio button
+        self._audio_button.set_sensitive(False)
+        # Video button
+        self._video_button.set_sensitive(False)
+        # Send file button
+        self._send_file_button.set_tooltip_text('')
+        self._send_file_button.set_sensitive(False)
+        # Convert to GC button
+        self._convert_to_gc_button.set_sensitive(False)
+
+        ChatControlBase.got_disconnected(self)
 
     def update_status_display(self, name, uf_show, status):
         """
