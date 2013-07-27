@@ -284,6 +284,9 @@ class PrivateChatControl(ChatControl):
             is_anonymous=self.room_ctrl.is_anonymous)
         return menu
 
+    def got_disconnected(self):
+        ChatControl.got_disconnected(self)
+
 class GroupchatControl(ChatControlBase):
     TYPE_ID = message_control.TYPE_GC
 
@@ -308,6 +311,8 @@ class GroupchatControl(ChatControlBase):
 
         # Keep error dialog instance to be sure to have only once at a time
         self.error_dialog = None
+        send_button = self.xml.get_object('send_button')
+        send_button.set_sensitive(False)
 
         self.actions_button = self.xml.get_object('muc_window_actions_button')
         id_ = self.actions_button.connect('clicked',
@@ -315,13 +320,18 @@ class GroupchatControl(ChatControlBase):
         self.handlers[id_] = self.actions_button
 
         widget = self.xml.get_object('change_nick_button')
+        widget.set_sensitive(False)
         id_ = widget.connect('clicked', self._on_change_nick_menuitem_activate)
         self.handlers[id_] = widget
 
         widget = self.xml.get_object('change_subject_button')
+        widget.set_sensitive(False)
         id_ = widget.connect('clicked',
             self._on_change_subject_menuitem_activate)
         self.handlers[id_] = widget
+
+        formattings_button = self.xml.get_object('formattings_button')
+        formattings_button.set_sensitive(False)
 
         widget = self.xml.get_object('bookmark_button')
         for bm in gajim.connections[self.account].bookmarks:
@@ -1350,7 +1360,28 @@ class GroupchatControl(ChatControlBase):
         if self.parent_win:
             self.parent_win.redraw_tab(self)
 
+        send_button = self.xml.get_object('send_button')
+        send_button.set_sensitive(True)
+        emoticons_button = self.xml.get_object('emoticons_button')
+        emoticons_button.set_sensitive(True)
+        formattings_button = self.xml.get_object('formattings_button')
+        formattings_button.set_sensitive(True)
+        change_nick_button = self.xml.get_object('change_nick_button')
+        change_nick_button.set_sensitive(True)
+        change_subject_button = self.xml.get_object('change_subject_button')
+        change_subject_button.set_sensitive(True)
+
     def got_disconnected(self):
+        send_button = self.xml.get_object('send_button')
+        send_button.set_sensitive(False)
+        emoticons_button = self.xml.get_object('emoticons_button')
+        emoticons_button.set_sensitive(False)
+        formattings_button = self.xml.get_object('formattings_button')
+        formattings_button.set_sensitive(False)
+        change_nick_button = self.xml.get_object('change_nick_button')
+        change_nick_button.set_sensitive(False)
+        change_subject_button = self.xml.get_object('change_subject_button')
+        change_subject_button.set_sensitive(False)
         self.list_treeview.set_model(None)
         self.model.clear()
         nick_list = gajim.contacts.get_nick_list(self.account, self.room_jid)
