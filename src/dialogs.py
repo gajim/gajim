@@ -3203,6 +3203,8 @@ class SingleMessageWindow:
         else:
             form_node = None
 
+        recipient_list = []
+
         for to_whom_jid in sender_list:
             if to_whom_jid in self.completion_dict:
                 to_whom_jid = self.completion_dict[to_whom_jid].jid
@@ -3219,17 +3221,11 @@ class SingleMessageWindow:
                     message)
                 continue
 
-            if self.session:
-                session = self.session
-            else:
-                session = gajim.connections[self.account].make_new_session(
-                        to_whom_jid)
+            recipient_list.append(to_whom_jid)
 
-            # FIXME: allow GPG message some day
-            gajim.nec.push_outgoing_event(MessageOutgoingEvent(None,
-                account=self.account, jid=to_whom_jid, message=message,
-                type_='normal', subject=subject, session=session,
-                form_node=form_node))
+        gajim.nec.push_outgoing_event(MessageOutgoingEvent(None,
+            account=self.account, jid=recipient_list, message=message,
+            type_='normal', subject=subject, form_node=form_node))
 
         self.subject_entry.set_text('') # we sent ok, clear the subject
         self.message_tv_buffer.set_text('') # we sent ok, clear the textview

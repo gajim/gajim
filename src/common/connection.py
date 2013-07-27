@@ -160,6 +160,7 @@ class CommonConnection:
         self.archive_pref_supported = False
         self.roster_supported = True
         self.blocking_supported = False
+        self.addressing_supported = False
 
         self.muc_jid = {} # jid of muc server for each transport type
         self._stun_servers = [] # STUN servers of our jabber server
@@ -259,14 +260,33 @@ class CommonConnection:
         if not self.connection or self.connected < 2:
             return 1
 
-        try:
-            jid = self.check_jid(jid)
-        except helpers.InvalidFormat:
-            gajim.nec.push_incoming_event(InformationEvent(None, conn=self,
-                level='error', pri_txt=_('Invalid Jabber ID'), sec_txt=_(
-                'It is not possible to send a message to %s, this JID is not '
-                'valid.') % jid))
-            return
+        if isinstance(jid, list):
+            new_list = []
+            for j in jid:
+                try:
+                    new_list.append(self.check_jid(j))
+                except helpers.InvalidFormat:
+                    gajim.nec.push_incoming_event(InformationEvent(None,
+                        conn=self, level='error', pri_txt=_('Invalid Jabber '
+                        'ID'), sec_txt=_('It is not possible to send a message '
+                        'to %s, this JID is not valid.') % j))
+                    return
+            fjid = new_list
+        else:
+            try:
+                jid = self.check_jid(jid)
+            except helpers.InvalidFormat:
+                gajim.nec.push_incoming_event(InformationEvent(None, conn=self,
+                    level='error', pri_txt=_('Invalid Jabber ID'), sec_txt=_(
+                    'It is not possible to send a message to %s, this JID is not '
+                    'valid.') % jid))
+                return
+            fjid = jid
+            if resource:
+                fjid += '/' + resource
+
+            if session:
+                fjid = session.get_to()
 
         if msg and not xhtml and gajim.config.get(
         'rst_formatting_outgoing_messages'):
@@ -274,14 +294,9 @@ class CommonConnection:
             xhtml = create_xhtml(msg)
         if not msg and chatstate is None and form_node is None:
             return
-        fjid = jid
-        if resource:
-            fjid += '/' + resource
+
         msgtxt = msg
         msgenc = ''
-
-        if session:
-            fjid = session.get_to()
 
         if keyID and self.USE_GPG:
             xhtml = None
@@ -386,15 +401,16 @@ class CommonConnection:
                     subject, type_, correction_msg, xhtml)
             return
 
+
         if type_ == 'chat':
-            msg_iq = nbxmpp.Message(to=fjid, body=msgtxt, typ=type_,
+            msg_iq = nbxmpp.Message(body=msgtxt, typ=type_,
                     xhtml=xhtml)
         else:
             if subject:
-                msg_iq = nbxmpp.Message(to=fjid, body=msgtxt, typ='normal',
+                msg_iq = nbxmpp.Message(body=msgtxt, typ='normal',
                         subject=subject, xhtml=xhtml)
             else:
-                msg_iq = nbxmpp.Message(to=fjid, body=msgtxt, typ='normal',
+                msg_iq = nbxmpp.Message(body=msgtxt, typ='normal',
                         xhtml=xhtml)
 
         if msg_id:
@@ -413,26 +429,6 @@ class CommonConnection:
             msg_iq.setTag('nick', namespace = nbxmpp.NS_NICK).setData(
                     user_nick)
 
-        # TODO: We might want to write a function so we don't need to
-        #       reproduce that ugly if somewhere else.
-        if resource:
-            contact = gajim.contacts.get_contact(self.name, jid, resource)
-        else:
-            contact = gajim.contacts.get_contact_with_highest_priority(self.name,
-                    jid)
-
-        # chatstates - if peer supports xep85, send chatstates
-        # please note that the only valid tag inside a message containing a
-        # <body> tag is the active event
-        if chatstate and contact and contact.supports(NS_CHATSTATES):
-            msg_iq.setTag(chatstate, namespace=NS_CHATSTATES)
-
-        if forward_from:
-            addresses = msg_iq.addChild('addresses',
-                namespace=nbxmpp.NS_ADDRESS)
-            addresses.addChild('address', attrs = {'type': 'ofrom',
-                'jid': forward_from})
-
         # XEP-0203
         if delayed:
             our_jid = gajim.get_jid_from_account(self.name) + '/' + \
@@ -441,24 +437,59 @@ class CommonConnection:
             msg_iq.addChild('delay', namespace=nbxmpp.NS_DELAY2,
                     attrs={'from': our_jid, 'stamp': timestamp})
 
-        # XEP-0184
-        if msgtxt and gajim.config.get_per('accounts', self.name,
-        'request_receipt') and contact and contact.supports(
-        nbxmpp.NS_RECEIPTS):
-            msg_iq.setTag('request', namespace=nbxmpp.NS_RECEIPTS)
-
-        if session:
-            # XEP-0201
-            session.last_send = time.time()
-            msg_iq.setThread(session.thread_id)
-
-            # XEP-0200
-            if session.enable_encryption:
-                msg_iq = session.encrypt_stanza(msg_iq)
-
         # XEP-0224
         if attention:
             msg_iq.setTag('attention', namespace=nbxmpp.NS_ATTENTION)
+
+        if isinstance(jid, list):
+            if self.addressing_supported:
+                msg_iq.setTo(gajim.config.get_per('accounts', self.name, 'hostname'))
+                addresses = msg_iq.addChild('addresses',
+                    namespace=nbxmpp.NS_ADDRESS)
+                for j in jid:
+                    addresses.addChild('address', attrs = {'type': 'to',
+                        'jid': j})
+            else:
+                iqs = []
+                for j in jid:
+                    iq = nbxmpp.Message(node=msg_iq)
+                    iq.setTo(j)
+                    iqs.append(iq)
+                msg_iq = iqs
+        else:
+            msg_id.setTo(fjid)
+            if resource:
+                contact = gajim.contacts.get_contact(self.name, jid, resource)
+            else:
+                contact = gajim.contacts.get_contact_with_highest_priority(
+                    self.name, jid)
+
+            # chatstates - if peer supports xep85, send chatstates
+            # please note that the only valid tag inside a message containing a
+            # <body> tag is the active event
+            if chatstate and contact and contact.supports(NS_CHATSTATES):
+                msg_iq.setTag(chatstate, namespace=NS_CHATSTATES)
+
+            # XEP-0184
+            if msgtxt and gajim.config.get_per('accounts', self.name,
+            'request_receipt') and contact and contact.supports(
+            nbxmpp.NS_RECEIPTS):
+                msg_iq.setTag('request', namespace=nbxmpp.NS_RECEIPTS)
+
+            if forward_from:
+                addresses = msg_iq.addChild('addresses',
+                    namespace=nbxmpp.NS_ADDRESS)
+                addresses.addChild('address', attrs = {'type': 'ofrom',
+                    'jid': forward_from})
+
+            if session:
+                # XEP-0201
+                session.last_send = time.time()
+                msg_iq.setThread(session.thread_id)
+
+                # XEP-0200
+                if session.enable_encryption:
+                    msg_iq = session.encrypt_stanza(msg_iq)
 
         if callback:
             callback(jid, msg, keyID, forward_from, session, original_message,
@@ -1902,6 +1933,8 @@ class Connection(CommonConnection, ConnectionHandlers):
                     self.archive_pref_supported = True
                 if nbxmpp.NS_BLOCKING in obj.features:
                     self.blocking_supported = True
+                if nbxmpp.NS_ADDRESS in obj.features:
+                    self.addressing_supported = True
                 if nbxmpp.NS_CARBONS in obj.features and gajim.config.get_per(
                     'accounts', self.name, 'enable_message_carbons'):
                     # Server supports carbons, activate it
@@ -1995,8 +2028,11 @@ class Connection(CommonConnection, ConnectionHandlers):
 
         def cb(jid, msg, keyID, forward_from, session, original_message,
         subject, type_, msg_iq, xhtml):
-            msg_id = self.connection.send(msg_iq, now=obj.now)
-            jid = helpers.parse_jid(obj.jid)
+            if isinstance(msg_iq, list):
+                for iq in msg_iq:
+                    msg_id = self.connection.send(iq, now=obj.now)
+            else:
+                msg_id = self.connection.send(msg_iq, now=obj.now)
             gajim.nec.push_incoming_event(MessageSentEvent(None, conn=self,
                 jid=jid, message=msg, keyID=keyID, chatstate=obj.chatstate))
             if obj.callback:
@@ -2004,8 +2040,13 @@ class Connection(CommonConnection, ConnectionHandlers):
 
             if not obj.is_loggable:
                 return
-            self.log_message(jid, msg, forward_from, session, original_message,
-                    subject, type_, xhtml)
+            if isinstance(jid, list):
+                for j in jid:
+                    self.log_message(j, msg, forward_from, session,
+                        original_message, subject, type_, xhtml)
+            else:
+                self.log_message(jid, msg, forward_from, session,
+                    original_message, subject, type_, xhtml)
 
         self._prepare_message(obj.jid, obj.message, obj.keyID, type_=obj.type_,
             subject=obj.subject, chatstate=obj.chatstate, msg_id=obj.msg_id,
