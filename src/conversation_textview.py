@@ -1309,7 +1309,7 @@ class ConversationTextview(GObject.GObject):
         direction_mark = i18n.paragraph_direction_mark(text)
         # don't apply direction mark if it's status message
         if kind == 'status':
-            if gtk.widget_get_default_direction() == gtk.TEXT_DIR_LTR:
+            if Gtk.Widget.get_default_direction() == gtk.TextDirectionLTR:
                 direction_mark = u'\u200E'
             else:
                 direction_mark = u'\u200F'
