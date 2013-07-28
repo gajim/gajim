@@ -25,7 +25,7 @@
 # FIXME: think if we need caching command list. it may be wrong if there will
 # be entities that often change the list, it may be slow to fetch it every time
 
-from gi.repository import GObject
+from gi.repository import GLib
 from gi.repository import Gtk
 
 import nbxmpp
@@ -555,14 +555,14 @@ class CommandWindow:
             return True     # important to keep callback be called back!
 
         # 12 times per second (80 miliseconds)
-        self.pulse_id = GObject.timeout_add(80, callback)
+        self.pulse_id = GLib.timeout_add(80, callback)
 
     def remove_pulsing(self):
         """
         Stop pulsing, useful when especially when removing widget
         """
         if self.pulse_id:
-            GObject.source_remove(self.pulse_id)
+            GLib.source_remove(self.pulse_id)
         self.pulse_id = None
 
 # handling xml stanzas

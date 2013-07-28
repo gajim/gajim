@@ -34,6 +34,7 @@ from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import Pango
 from gi.repository import GObject
+from gi.repository import GLib
 import time
 import os
 import tooltips
@@ -404,14 +405,14 @@ class ConversationTextview(GObject.GObject):
         return True
 
     def smooth_scroll_timeout(self):
-        GObject.idle_add(self.do_smooth_scroll_timeout)
+        GLib.idle_add(self.do_smooth_scroll_timeout)
         return
 
     def do_smooth_scroll_timeout(self):
         if not self.smooth_id:
             # we finished scrolling
             return
-        GObject.source_remove(self.smooth_id)
+        GLib.source_remove(self.smooth_id)
         self.smooth_id = None
         parent = self.tv.get_parent()
         if parent:
@@ -423,7 +424,7 @@ class ConversationTextview(GObject.GObject):
     def smooth_scroll_to_end(self):
         if None != self.smooth_id: # already scrolling
             return False
-        self.smooth_id = GObject.timeout_add(self.SCROLL_DELAY,
+        self.smooth_id = GLib.timeout_add(self.SCROLL_DELAY,
                 self.smooth_scroll)
         self.smooth_scroll_timer = Timer(self.MAX_SCROLL_TIME,
                 self.smooth_scroll_timeout)
@@ -453,9 +454,9 @@ class ConversationTextview(GObject.GObject):
         # scroll only if expected end is not visible
         if end_rect.y >= (visible_rect.y + visible_rect.height + diff_y):
             if use_smooth:
-                GObject.idle_add(self.smooth_scroll_to_end)
+                GLib.idle_add(self.smooth_scroll_to_end)
             else:
-                GObject.idle_add(self.scroll_to_end_iter)
+                GLib.idle_add(self.scroll_to_end_iter)
 
     def scroll_to_end_iter(self):
         buffer_ = self.tv.get_buffer()
@@ -467,7 +468,7 @@ class ConversationTextview(GObject.GObject):
 
     def stop_scrolling(self):
         if self.smooth_id:
-            GObject.source_remove(self.smooth_id)
+            GLib.source_remove(self.smooth_id)
             self.smooth_id = None
             self.smooth_scroll_timer.cancel()
 
@@ -548,7 +549,7 @@ class ConversationTextview(GObject.GObject):
 
             self.xep0184_shown[id_] = SHOWN
             return False
-        GObject.timeout_add_seconds(3, show_it)
+        GLib.timeout_add_seconds(3, show_it)
 
         buffer_.end_user_action()
 
@@ -647,7 +648,7 @@ class ConversationTextview(GObject.GObject):
             if scroll:
                 # scroll to the end (via idle in case the scrollbar has
                 # appeared)
-                GObject.idle_add(self.scroll_to_end)
+                GLib.idle_add(self.scroll_to_end)
 
     def show_xep0184_warning_tooltip(self):
         pointer = self.tv.get_pointer()
@@ -751,13 +752,13 @@ class ConversationTextview(GObject.GObject):
             if not xep0184_warning:
                 self.xep0184_warning_tooltip.hide_tooltip()
         if over_line and not self.line_tooltip.win:
-            self.line_tooltip.timeout = GObject.timeout_add(500,
+            self.line_tooltip.timeout = GLib.timeout_add(500,
                     self.show_line_tooltip)
             self.tv.get_window(Gtk.TextWindowType.TEXT).set_cursor(
                     Gdk.Cursor.new(Gdk.CursorType.LEFT_PTR))
             self.change_cursor = True
         if xep0184_warning and not self.xep0184_warning_tooltip.win:
-            self.xep0184_warning_tooltip.timeout = GObject.timeout_add(500,
+            self.xep0184_warning_tooltip.timeout = GLib.timeout_add(500,
                     self.show_xep0184_warning_tooltip)
             self.tv.get_window(Gtk.TextWindowType.TEXT).set_cursor(
                     Gdk.Cursor.new(Gdk.CursorType.LEFT_PTR))
@@ -1384,9 +1385,9 @@ class ConversationTextview(GObject.GObject):
             # we are at the end or we are sending something
             # scroll to the end (via idle in case the scrollbar has appeared)
             if gajim.config.get('use_smooth_scrolling'):
-                GObject.idle_add(self.smooth_scroll_to_end)
+                GLib.idle_add(self.smooth_scroll_to_end)
             else:
-                GObject.idle_add(self.scroll_to_end)
+                GLib.idle_add(self.scroll_to_end)
 
         self.just_cleared = False
         buffer_.end_user_action()

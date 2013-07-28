@@ -34,6 +34,7 @@ from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import Pango
 from gi.repository import GObject
+from gi.repository import GLib
 import gtkgui_helpers
 import gui_menu_builder
 import message_control
@@ -1286,7 +1287,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         visible_rect = textview.get_visible_rect()
         # scroll only if expected end is not visible
         if end_rect.y >= (visible_rect.y + visible_rect.height + diff_y):
-            self.scroll_to_end_id = GObject.idle_add(self.scroll_to_end_iter,
+            self.scroll_to_end_id = GLib.idle_add(self.scroll_to_end_iter,
                     textview)
 
     def scroll_to_end_iter(self, textview):
@@ -1482,7 +1483,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         """
         # make the last message visible, when changing to "full view"
         if not state:
-            GObject.idle_add(self.conv_textview.scroll_to_end_iter)
+            GLib.idle_add(self.conv_textview.scroll_to_end_iter)
 
         widget.set_no_show_all(state)
         if state:
@@ -2048,8 +2049,8 @@ class ChatControl(ChatControlBase):
         if avatar_w > scaled_buf_w or avatar_h > scaled_buf_h:
             # wait for 0.5 sec in case we leave earlier
             if self.show_bigger_avatar_timeout_id is not None:
-                GObject.source_remove(self.show_bigger_avatar_timeout_id)
-            self.show_bigger_avatar_timeout_id = GObject.timeout_add(500,
+                GLib.source_remove(self.show_bigger_avatar_timeout_id)
+            self.show_bigger_avatar_timeout_id = GLib.timeout_add(500,
                     self.show_bigger_avatar, widget)
 
     def on_avatar_eventbox_leave_notify_event(self, widget, event):
@@ -2058,7 +2059,7 @@ class ChatControl(ChatControlBase):
         """
         # did we add a timeout? if yes remove it
         if self.show_bigger_avatar_timeout_id is not None:
-            GObject.source_remove(self.show_bigger_avatar_timeout_id)
+            GLib.source_remove(self.show_bigger_avatar_timeout_id)
             self.show_bigger_avatar_timeout_id = None
 
     def on_avatar_eventbox_button_press_event(self, widget, event):
@@ -2100,9 +2101,9 @@ class ChatControl(ChatControlBase):
             self.mouse_over_in_last_30_secs = True
 
     def _schedule_activity_timers(self):
-        self.possible_paused_timeout_id = GObject.timeout_add_seconds(5,
+        self.possible_paused_timeout_id = GLib.timeout_add_seconds(5,
                 self.check_for_possible_paused_chatstate, None)
-        self.possible_inactive_timeout_id = GObject.timeout_add_seconds(30,
+        self.possible_inactive_timeout_id = GLib.timeout_add_seconds(30,
                 self.check_for_possible_inactive_chatstate, None)
 
     def update_ui(self):
@@ -2162,7 +2163,7 @@ class ChatControl(ChatControlBase):
             name = i18n.direction_mark +  _(
                 '%(nickname)s from group chat %(room_name)s') % \
                 {'nickname': name, 'room_name': self.room_name}
-        name = i18n.direction_mark + GObject.markup_escape_text(name)
+        name = i18n.direction_mark + GLib.markup_escape_text(name)
 
         # We know our contacts nick, but if another contact has the same nick
         # in another account we need to also display the account.
@@ -2179,7 +2180,7 @@ class ChatControl(ChatControlBase):
                 if other_contact_.get_shown_name() == \
                 self.contact.get_shown_name():
                     acct_info = i18n.direction_mark + ' (%s)' % \
-                        GObject.markup_escape_text(self.account)
+                        GLib.markup_escape_text(self.account)
                     break
 
         status = contact.status
@@ -2189,7 +2190,7 @@ class ChatControl(ChatControlBase):
             status_reduced = helpers.reduce_chars_newlines(status, max_lines=1)
         else:
             status_reduced = ''
-        status_escaped = GObject.markup_escape_text(status_reduced)
+        status_escaped = GLib.markup_escape_text(status_reduced)
 
         font_attrs, font_attrs_small = self.get_font_attrs()
         st = gajim.config.get('displayed_chat_state_notifications')
@@ -2407,8 +2408,8 @@ class ChatControl(ChatControlBase):
                 chatstate_to_send = 'active'
                 contact.our_chatstate = 'active'
 
-                GObject.source_remove(self.possible_paused_timeout_id)
-                GObject.source_remove(self.possible_inactive_timeout_id)
+                GLib.source_remove(self.possible_paused_timeout_id)
+                GLib.source_remove(self.possible_inactive_timeout_id)
                 self._schedule_activity_timers()
 
         def _on_sent(msg_stanza, message, encrypted, xhtml, label, old_txt):
@@ -2671,7 +2672,7 @@ class ChatControl(ChatControlBase):
         name = self.contact.get_shown_name()
         if self.resource:
             name += '/' + self.resource
-        label_str = GObject.markup_escape_text(name)
+        label_str = GLib.markup_escape_text(name)
         if num_unread: # if unread, text in the label becomes bold
             label_str = '<b>' + unread + label_str + '</b>'
         return (label_str, color)
@@ -2809,8 +2810,8 @@ class ChatControl(ChatControlBase):
             self.session.control = None
 
         # Disconnect timer callbacks
-        GObject.source_remove(self.possible_paused_timeout_id)
-        GObject.source_remove(self.possible_inactive_timeout_id)
+        GLib.source_remove(self.possible_paused_timeout_id)
+        GLib.source_remove(self.possible_inactive_timeout_id)
         # Remove bigger avatar window
         if self.bigger_avatar_window:
             self.bigger_avatar_window.destroy()
@@ -2893,8 +2894,8 @@ class ChatControl(ChatControlBase):
             else:
                 self.send_chatstate('active', self.contact)
             self.reset_kbd_mouse_timeout_vars()
-            GObject.source_remove(self.possible_paused_timeout_id)
-            GObject.source_remove(self.possible_inactive_timeout_id)
+            GLib.source_remove(self.possible_paused_timeout_id)
+            GLib.source_remove(self.possible_inactive_timeout_id)
             self._schedule_activity_timers()
         else:
             self.send_chatstate('inactive', self.contact)
@@ -3479,6 +3480,6 @@ class ChatControl(ChatControlBase):
                         self.info_bar.set_no_show_all(True)
                         self.info_bar.hide()
                         # show next one?
-                        GObject.idle_add(self._info_bar_show_message)
+                        GLib.idle_add(self._info_bar_show_message)
                     break
                 i += 1

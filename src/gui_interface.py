@@ -43,7 +43,7 @@ from subprocess import Popen
 
 from gi.repository import Gtk
 from gi.repository import GdkPixbuf
-from gi.repository import GObject
+from gi.repository import GLib
 
 from common import i18n
 from common import gajim
@@ -229,8 +229,8 @@ class Interface:
             # we stop blocking notifications of any kind
             # this prevents from getting the roster items as 'just signed in'
             # contacts. 30 seconds should be enough time
-            GObject.timeout_add_seconds(30,
-                self.unblock_signed_in_notifications, account)
+            GLib.timeout_add_seconds(30, self.unblock_signed_in_notifications,
+                account)
 
         if account in self.show_vcard_when_connect and obj.show not in (
         'offline', 'error'):
@@ -370,8 +370,8 @@ class Interface:
             # popup notifications for 30s
             account_jid = account + '/' + jid
             gajim.block_signed_in_notifications[account_jid] = True
-            GObject.timeout_add_seconds(30,
-                self.unblock_signed_in_notifications, account_jid)
+            GLib.timeout_add_seconds(30, self.unblock_signed_in_notifications,
+                account_jid)
 
         highest = gajim.contacts.get_contact_with_highest_priority(account, jid)
         is_highest = (highest and highest.resource == resource)
@@ -974,13 +974,13 @@ class Interface:
         # then the file is not corrupt
         jid = file_props.sender
         if file_props.hash_ == hash_:
-            GObject.idle_add(self.popup_ft_result, account, jid, file_props)
-            GObject.idle_add(ft_win.set_status, file_props, 'ok')
+            GLib.idle_add(self.popup_ft_result, account, jid, file_props)
+            GLib.idle_add(ft_win.set_status, file_props, 'ok')
         else:
             # wrong hash, we need to get the file again!
             file_props.error = -10
-            GObject.idle_add(self.popup_ft_result, account, jid, file_props)
-            GObject.idle_add(ft_win.set_status, file_props, 'hash_error')
+            GLib.idle_add(self.popup_ft_result, account, jid, file_props)
+            GLib.idle_add(ft_win.set_status, file_props, 'hash_error')
         # End jingle session
         if session:
             session.end_session()
@@ -1119,7 +1119,7 @@ class Interface:
         if gajim.config.get('ask_offline_status_on_connection'):
             # Ask offline status in 1 minute so w'are sure we got all online
             # presences
-            GObject.timeout_add_seconds(60, self.ask_offline_status, account)
+            GLib.timeout_add_seconds(60, self.ask_offline_status, account)
         if state != sleepy.STATE_UNKNOWN and connected in (2, 3):
             # we go online or free for chat, so we activate auto status
             gajim.sleeper_state[account] = 'online'
@@ -2189,7 +2189,7 @@ class Interface:
         # For JEP-0172
         if added_to_roster:
             ctrl.user_nick = gajim.nicks[account]
-        GObject.idle_add(mw.window.grab_focus)
+        GLib.idle_add(mw.window.grab_focus)
 
         return ctrl
 
@@ -2405,9 +2405,9 @@ class Interface:
             # Otherwise, an exception will stop our loop
             timeout, in_seconds = gajim.idlequeue.PROCESS_TIMEOUT
             if in_seconds:
-                GObject.timeout_add_seconds(timeout, self.process_connections)
+                GLib.timeout_add_seconds(timeout, self.process_connections)
             else:
-                GObject.timeout_add(timeout, self.process_connections)
+                GLib.timeout_add(timeout, self.process_connections)
             raise
         return True # renew timeout (loop for ever)
 
@@ -2620,18 +2620,18 @@ class Interface:
         # get instances for windows/dialogs that will show_all()/hide()
         self.instances['file_transfers'] = dialogs.FileTransfersWindow()
 
-        GObject.timeout_add(100, self.autoconnect)
+        GLib.timeout_add(100, self.autoconnect)
         timeout, in_seconds = gajim.idlequeue.PROCESS_TIMEOUT
         if in_seconds:
-            GObject.timeout_add_seconds(timeout, self.process_connections)
+            GLib.timeout_add_seconds(timeout, self.process_connections)
         else:
-            GObject.timeout_add(timeout, self.process_connections)
-        GObject.timeout_add_seconds(gajim.config.get(
+            GLib.timeout_add(timeout, self.process_connections)
+        GLib.timeout_add_seconds(gajim.config.get(
                 'check_idle_every_foo_seconds'), self.read_sleepy)
 
         # when using libasyncns we need to process resolver in regular intervals
         if resolver.USE_LIBASYNCNS:
-            GObject.timeout_add(200, gajim.resolver.process)
+            GLib.timeout_add(200, gajim.resolver.process)
 
         def remote_init():
             if gajim.config.get('remote_control'):
@@ -2640,7 +2640,7 @@ class Interface:
                     self.remote_ctrl = remote_control.Remote()
                 except Exception:
                     pass
-        GObject.timeout_add_seconds(5, remote_init)
+        GLib.timeout_add_seconds(5, remote_init)
 
     def __init__(self):
         gajim.interface = self
@@ -2969,8 +2969,8 @@ class PassphraseRequest:
         self.passphrase = passphrase
         self.completed = True
         if passphrase is not None:
-            GObject.timeout_add_seconds(30,
-                gajim.interface.forget_gpg_passphrase, self.keyid)
+            GLib.timeout_add_seconds(30, gajim.interface.forget_gpg_passphrase,
+                self.keyid)
         for (account, cb) in self.callbacks:
             self.run_callback(account, cb)
         self.callbacks = []
@@ -3021,7 +3021,7 @@ class ThreadInterface:
         def thread_function(func, func_args, callback, callback_args):
             output = func(*func_args)
             if callback:
-                GObject.idle_add(callback, output, *callback_args)
+                GLib.idle_add(callback, output, *callback_args)
 
         Thread(target=thread_function, args=(func, func_args, callback,
                 callback_args)).start()

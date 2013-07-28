@@ -33,7 +33,7 @@ import base64
 import sys
 import operator
 import hashlib
-from gi.repository import GObject
+from gi.repository import GLib
 
 from time import (altzone, daylight, gmtime, localtime, mktime, strftime,
         time as time_time, timezone, tzname)
@@ -560,7 +560,7 @@ class ConnectionVcard:
                     self.discover_ft_proxies()
                 gajim.nec.push_incoming_event(RosterReceivedEvent(None,
                     conn=self))
-            GObject.timeout_add_seconds(10, self.discover_servers)
+            GLib.timeout_add_seconds(10, self.discover_servers)
         elif self.awaiting_answers[id_][0] == PRIVACY_ARRIVED:
             if iq_obj.getType() != 'error':
                 self.privacy_rules_supported = True

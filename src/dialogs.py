@@ -33,6 +33,7 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import GObject
+from gi.repository import GLib
 import cairo
 import os
 
@@ -566,7 +567,7 @@ class TimeoutDialog:
     def run_timeout(self):
         if self.countdown_left > 0:
             self.countdown()
-            GObject.timeout_add_seconds(1, self.countdown)
+            GLib.timeout_add_seconds(1, self.countdown)
 
     def on_timeout():
         """
@@ -2871,7 +2872,7 @@ class PopupNotificationWindow:
 
         event_type_label.set_markup(
             '<span foreground="black" weight="bold">%s</span>' %
-            GObject.markup_escape_text(title))
+            GLib.markup_escape_text(title))
 
         # set colors [ http://www.pitt.edu/~nisg/cis/web/cgi/rgb.html ]
         self.window.modify_bg(Gtk.StateType.NORMAL, Gdk.color_parse('black'))
@@ -2904,7 +2905,7 @@ class PopupNotificationWindow:
         close_button.modify_bg(Gtk.StateType.NORMAL, popup_bg_color)
         eventbox.modify_bg(Gtk.StateType.NORMAL, popup_bg_color)
         event_description_label.set_markup('<span foreground="black">%s</span>' %
-            GObject.markup_escape_text(text))
+            GLib.markup_escape_text(text))
 
         # set the image
         image.set_from_file(path_to_image)
@@ -2924,7 +2925,7 @@ class PopupNotificationWindow:
         xml.connect_signals(self)
         self.window.show_all()
         if timeout > 0:
-            GObject.timeout_add_seconds(timeout, self.on_timeout)
+            GLib.timeout_add_seconds(timeout, self.on_timeout)
 
     def on_close_button_clicked(self, widget):
         self.adjust_height_and_move_popup_notification_windows()
@@ -3122,7 +3123,7 @@ class SingleMessageWindow:
                 self.cancel_button.hide()
                 self.close_button.show()
                 self.message_tv_buffer.set_text(self.message)
-                GObject.idle_add(self.set_cursor_to_end)
+                GLib.idle_add(self.set_cursor_to_end)
             else: # we write a new message (not from reply)
                 self.close_button.hide()
                 if self.to: # do we already have jid?
@@ -3400,7 +3401,7 @@ class XMLConsoleWindow:
         buffer.insert_with_tags_by_name(end_iter, stanza.replace('><', '>\n<') \
             + '\n\n', type_)
         if at_the_end:
-            GObject.idle_add(self.scroll_to_end)
+            GLib.idle_add(self.scroll_to_end)
 
     def _nec_stanza_received(self, obj):
         if obj.conn.name != self.account:
@@ -3782,8 +3783,8 @@ class ItemArchivingPreferencesWindow:
 
     def launch_progressbar(self):
         self.progressbar.show()
-        self.update_progressbar_timeout_id = GObject.timeout_add(
-            100, self.update_progressbar)
+        self.update_progressbar_timeout_id = GLib.timeout_add(100,
+            self.update_progressbar)
 
     def response_arrived(self, data):
         if self.waiting:
@@ -4082,7 +4083,7 @@ class PrivacyListWindow:
 
         self.privacy_lists_title_label.set_label(
                 _('Privacy List <b><i>%s</i></b>') % \
-                GObject.markup_escape_text(self.privacy_list_name))
+                GLib.markup_escape_text(self.privacy_list_name))
 
         if len(gajim.connections) > 1:
             title = _('Privacy List for %s') % self.account
@@ -4566,7 +4567,7 @@ class InvitationReceivedDialog:
         sectext = sectext.replace('$Contact', contact_text)
 
         if comment: # only if not None and not ''
-            comment = GObject.markup_escape_text(comment)
+            comment = GLib.markup_escape_text(comment)
             comment = _('Comment: %s') % comment
             sectext += '\n\n%s' % comment
         sectext += '\n\n' + _('Do you want to accept the invitation?')
@@ -4605,7 +4606,7 @@ class ProgressDialog:
         self.dialog.show_all()
         self.xml.connect_signals(self)
 
-        self.update_progressbar_timeout_id = GObject.timeout_add(100,
+        self.update_progressbar_timeout_id = GLib.timeout_add(100,
             self.update_progressbar)
 
     def update_progressbar(self):

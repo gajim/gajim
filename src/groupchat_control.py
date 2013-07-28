@@ -34,7 +34,7 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import Pango
-from gi.repository import GObject
+from gi.repository import GLib
 import gtkgui_helpers
 import gui_menu_builder
 import message_control
@@ -606,7 +606,7 @@ class GroupchatControl(ChatControlBase):
             self.resize_from_another_muc = False
         # Reset the flag when everything will be redrawn, and in particular when
         # on_treeview_size_allocate will have been called.
-        GObject.idle_add(reset_flag)
+        GLib.idle_add(reset_flag)
 
     def on_hpaned_notify(self, pane, gparamspec):
         """
@@ -795,7 +795,7 @@ class GroupchatControl(ChatControlBase):
 
         if self.subject:
             subject = helpers.reduce_chars_newlines(self.subject, max_lines=2)
-            subject = GObject.markup_escape_text(subject)
+            subject = GLib.markup_escape_text(subject)
             subject_text = self.urlfinder.sub(self.make_href, subject)
             subject_text = '<span %s>%s</span>' % (font_attrs_small,
                 subject_text)
@@ -1348,7 +1348,7 @@ class GroupchatControl(ChatControlBase):
     def got_connected(self):
         # Make autorejoin stop.
         if self.autorejoin:
-            GObject.source_remove(self.autorejoin)
+            GLib.source_remove(self.autorejoin)
         self.autorejoin = None
 
         gajim.gc_connected[self.account][self.room_jid] = True
@@ -1415,8 +1415,7 @@ class GroupchatControl(ChatControlBase):
         if self.autorejoin is None and gajim.account_is_connected(self.account):
             ar_to = gajim.config.get('muc_autorejoin_timeout')
             if ar_to:
-                self.autorejoin = GObject.timeout_add_seconds(ar_to,
-                    self.rejoin)
+                self.autorejoin = GLib.timeout_add_seconds(ar_to, self.rejoin)
 
     def rejoin(self):
         if not self.autorejoin:
@@ -1469,7 +1468,7 @@ class GroupchatControl(ChatControlBase):
         else:
             image = state_images[gc_contact.show]
 
-        name = GObject.markup_escape_text(gc_contact.name)
+        name = GLib.markup_escape_text(gc_contact.name)
 
         # Strike name if blocked
         fjid = self.room_jid + '/' + nick
@@ -1488,7 +1487,7 @@ class GroupchatControl(ChatControlBase):
                 colorstring = "#%04x%04x%04x" % (color.red, color.green,
                     color.blue)
                 name += ('\n<span size="small" style="italic" foreground="%s">'
-                    '%s</span>') % (colorstring, GObject.markup_escape_text(
+                    '%s</span>') % (colorstring, GLib.markup_escape_text(
                     status))
 
         if image.get_storage_type() == Gtk.ImageType.PIXBUF and \
@@ -2671,7 +2670,7 @@ class GroupchatControl(ChatControlBase):
                 if self.tooltip.timeout == 0 or self.tooltip.id != props[0]:
                     self.tooltip.id = row
                     nick = self.model[iter_][C_NICK]
-                    self.tooltip.timeout = GObject.timeout_add(500,
+                    self.tooltip.timeout = GLib.timeout_add(500,
                         self.show_tooltip, gajim.contacts.get_gc_contact(
                         account, self.room_jid, nick))
 

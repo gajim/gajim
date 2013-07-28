@@ -26,6 +26,7 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import GObject
+from gi.repository import GLib
 import base64
 import mimetypes
 import os
@@ -60,7 +61,7 @@ class ProfileWindow:
         self.avatar_encoded = None
         self.message_id = self.statusbar.push(self.context_id,
             _('Retrieving profile...'))
-        self.update_progressbar_timeout_id = GObject.timeout_add(100,
+        self.update_progressbar_timeout_id = GLib.timeout_add(100,
             self.update_progressbar)
         self.remove_statusbar_timeout_id = None
 
@@ -78,7 +79,7 @@ class ProfileWindow:
         self.xml.get_object('ok_button').grab_focus()
 
     def on_information_notebook_switch_page(self, widget, page, page_num):
-        GObject.idle_add(self.xml.get_object('ok_button').grab_focus)
+        GLib.idle_add(self.xml.get_object('ok_button').grab_focus)
 
     def update_progressbar(self):
         self.progressbar.pulse()
@@ -90,9 +91,9 @@ class ProfileWindow:
 
     def on_profile_window_destroy(self, widget):
         if self.update_progressbar_timeout_id is not None:
-            GObject.source_remove(self.update_progressbar_timeout_id)
+            GLib.source_remove(self.update_progressbar_timeout_id)
         if self.remove_statusbar_timeout_id is not None:
-            GObject.source_remove(self.remove_statusbar_timeout_id)
+            GLib.source_remove(self.remove_statusbar_timeout_id)
         gajim.ged.remove_event_handler('vcard-published', ged.GUI1,
             self._nec_vcard_published)
         gajim.ged.remove_event_handler('vcard-not-published', ged.GUI1,
@@ -237,7 +238,7 @@ class ProfileWindow:
                 pritext = _('Wrong date format')
                 dialogs.ErrorDialog(pritext, _('Format of the date must be '
                     'YYYY-MM-DD'))
-                GObject.idle_add(lambda: widget.grab_focus())
+                GLib.idle_add(lambda: widget.grab_focus())
             return True
 
     def set_value(self, entry_name, value):
@@ -294,9 +295,9 @@ class ProfileWindow:
                 self.statusbar.remove(self.context_id, self.message_id)
             self.message_id = self.statusbar.push(self.context_id,
                     _('Information received'))
-            self.remove_statusbar_timeout_id = GObject.timeout_add_seconds(3,
-                    self.remove_statusbar, self.message_id)
-            GObject.source_remove(self.update_progressbar_timeout_id)
+            self.remove_statusbar_timeout_id = GLib.timeout_add_seconds(3,
+                self.remove_statusbar, self.message_id)
+            GLib.source_remove(self.update_progressbar_timeout_id)
             self.progressbar.hide()
             self.progressbar.set_fraction(0)
             self.update_progressbar_timeout_id = None
@@ -386,14 +387,14 @@ class ProfileWindow:
         self.message_id = self.statusbar.push(self.context_id,
                 _('Sending profile...'))
         self.progressbar.show()
-        self.update_progressbar_timeout_id = GObject.timeout_add(100,
-                self.update_progressbar)
+        self.update_progressbar_timeout_id = GLib.timeout_add(100,
+            self.update_progressbar)
 
     def _nec_vcard_published(self, obj):
         if obj.conn.name != self.account:
             return
         if self.update_progressbar_timeout_id is not None:
-            GObject.source_remove(self.update_progressbar_timeout_id)
+            GLib.source_remove(self.update_progressbar_timeout_id)
             self.update_progressbar_timeout_id = None
         self.window.destroy()
 
@@ -404,10 +405,10 @@ class ProfileWindow:
             self.statusbar.remove(self.context_id, self.message_id)
         self.message_id = self.statusbar.push(self.context_id,
             _('Information NOT published'))
-        self.remove_statusbar_timeout_id = GObject.timeout_add_seconds(3,
+        self.remove_statusbar_timeout_id = GLib.timeout_add_seconds(3,
             self.remove_statusbar, self.message_id)
         if self.update_progressbar_timeout_id is not None:
-            GObject.source_remove(self.update_progressbar_timeout_id)
+            GLib.source_remove(self.update_progressbar_timeout_id)
             self.progressbar.set_fraction(0)
             self.update_progressbar_timeout_id = None
         dialogs.InformationDialog(_('vCard publication failed'),

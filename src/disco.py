@@ -47,7 +47,7 @@
 import os
 import types
 import weakref
-from gi.repository import GObject
+from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
@@ -153,7 +153,7 @@ class CacheDictionary:
         for key in list(self.cache.keys()):
             item = self.cache[key]
             if item.source:
-                GObject.source_remove(item.source)
+                GLib.source_remove(item.source)
             del self.cache[key]
 
     def _expire_timeout(self, key):
@@ -170,9 +170,9 @@ class CacheDictionary:
         """
         item = self.cache[key]
         if item.source:
-            GObject.source_remove(item.source)
+            GLib.source_remove(item.source)
         if self.lifetime:
-            source = GObject.timeout_add_seconds(int(self.lifetime/1000), self._expire_timeout, key)
+            source = GLib.timeout_add_seconds(int(self.lifetime/1000), self._expire_timeout, key)
             item.source = source
 
     def __getitem__(self, key):
@@ -189,7 +189,7 @@ class CacheDictionary:
     def __delitem__(self, key):
         item = self.cache[key]
         if item.source:
-            GObject.source_remove(item.source)
+            GLib.source_remove(item.source)
         del self.cache[key]
 
     def __contains__(self, key):
@@ -1059,7 +1059,7 @@ class AgentBrowser:
         self.model.clear()
         self._total_items = self._progress = 0
         self.window.progressbar.show()
-        self._pulse_timeout = GObject.timeout_add(250, self._pulse_timeout_cb)
+        self._pulse_timeout = GLib.timeout_add(250, self._pulse_timeout_cb)
         self.cache.get_items(self.jid, self.node, self._agent_items,
                 force=force, args=(force,))
 
@@ -1098,7 +1098,7 @@ class AgentBrowser:
         self.model.clear()
         self.add_self_line()
         self._total_items = 0
-        GObject.source_remove(self._pulse_timeout)
+        GLib.source_remove(self._pulse_timeout)
         self.window.progressbar.hide()
         # The server returned an error
         if items == 0:
@@ -1311,8 +1311,8 @@ class ToplevelAgentBrowser(AgentBrowser):
             if jid and state > 0 and \
                             (self.tooltip.timeout == 0 or self.tooltip.id != props[0]):
                 self.tooltip.id = row
-                self.tooltip.timeout = GObject.timeout_add(500,
-                        self._show_tooltip, state)
+                self.tooltip.timeout = GLib.timeout_add(500, self._show_tooltip,
+                    state)
 
     def on_treeview_event_hide_tooltip(self, widget, event):
         """
@@ -1586,7 +1586,7 @@ class ToplevelAgentBrowser(AgentBrowser):
         #       self.expanding = False
         #       return False
         #self.expanding = True
-        #GObject.idle_add(expand_all)
+        #GLib.idle_add(expand_all)
         self.window.services_treeview.expand_all()
 
     def _update_progressbar(self):
@@ -1595,7 +1595,7 @@ class ToplevelAgentBrowser(AgentBrowser):
         """
         # Refresh this every update
         if self._progressbar_sourceid:
-            GObject.source_remove(self._progressbar_sourceid)
+            GLib.source_remove(self._progressbar_sourceid)
 
         fraction = 0
         if self._total_items:
@@ -1604,12 +1604,12 @@ class ToplevelAgentBrowser(AgentBrowser):
             fraction = float(self._progress) / float(self._total_items)
             if self._progress >= self._total_items:
                 # We show the progressbar for just a bit before hiding it.
-                id_ = GObject.timeout_add_seconds(2, self._hide_progressbar_cb)
+                id_ = GLib.timeout_add_seconds(2, self._hide_progressbar_cb)
                 self._progressbar_sourceid = id_
             else:
                 self.window.progressbar.show()
                 # Hide the progressbar if we're timing out anyways. (20 secs)
-                id_ = GObject.timeout_add_seconds(20, self._hide_progressbar_cb)
+                id_ = GLib.timeout_add_seconds(20, self._hide_progressbar_cb)
                 self._progressbar_sourceid = id_
         self.window.progressbar.set_fraction(fraction)
 
@@ -1706,7 +1706,7 @@ class ToplevelAgentBrowser(AgentBrowser):
         if not cat:
             cat = self._create_category(*cat_args)
         self.model.append(cat, (jid, node, pix, descr, 1))
-        GObject.idle_add(self._expand_all)
+        GLib.idle_add(self._expand_all)
         # Grab info on the service
         self.cache.get_info(jid, node, self._agent_info, force=force)
         self._update_progressbar()
@@ -1943,7 +1943,7 @@ class MucBrowser(AgentBrowser):
         view = self.window.services_treeview
         if not view.get_realized():
             # Prevent a silly warning, try again in a bit.
-            self._fetch_source = GObject.timeout_add(100, self._start_info_query)
+            self._fetch_source = GLib.timeout_add(100, self._start_info_query)
             return
         range_ = view.get_visible_range()
         if not range_:
@@ -1994,7 +1994,7 @@ class MucBrowser(AgentBrowser):
     def _add_item(self, jid, node, parent_node, item, force):
         self.model.append((jid, node, item.get('name', ''), -1, '', '', False))
         if not self._fetch_source:
-            self._fetch_source = GObject.idle_add(self._start_info_query)
+            self._fetch_source = GLib.idle_add(self._start_info_query)
 
     def _update_info(self, iter_, jid, node, identities, features, data):
         name = identities[0].get('name', '')
@@ -2125,7 +2125,7 @@ class DiscussionGroupsBrowser(AgentBrowser):
             dunno = True
             subscribed = False
 
-        name = GObject.markup_escape_text(name)
+        name = GLib.markup_escape_text(name)
         name = '<b>%s</b>' % name
 
         if parent_node:

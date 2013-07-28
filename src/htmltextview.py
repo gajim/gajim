@@ -36,6 +36,7 @@ modular.
 """
 
 from gi.repository import GObject
+from gi.repository import GLib
 from gi.repository import Pango
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -895,7 +896,7 @@ class HtmlTextView(Gtk.TextView):
             window = widget.get_window(Gtk.TextWindowType.TEXT)
             window.set_cursor(Gdk.Cursor.new(Gdk.CursorType.HAND2))
             self._changed_cursor = True
-            self.tooltip.timeout = GObject.timeout_add(500, self.show_tooltip,
+            self.tooltip.timeout = GLib.timeout_add(500, self.show_tooltip,
                 anchor_tags[0])
         elif self._changed_cursor and not anchor_tags:
             window = widget.get_window(Gtk.TextWindowType.TEXT)
@@ -1020,7 +1021,7 @@ if __name__ == '__main__':
         #       if not over_line:
         #               line_tooltip.hide_tooltip()
         #if over_line and not line_tooltip.win:
-        #       line_tooltip.timeout = GObject.timeout_add(500,
+        #       line_tooltip.timeout = GLib.timeout_add(500,
         #               show_line_tooltip)
         #       htmlview.tv.get_window(Gtk.TextWindowType.TEXT).set_cursor(
         #               Gdk.Cursor.new(Gdk.CursorType.LEFT_PTR))

@@ -19,7 +19,7 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-from gi.repository import GObject
+from gi.repository import GLib
 from gi.repository import Gtk
 
 from common import gajim
@@ -52,7 +52,7 @@ class SearchWindow:
         self.xml.connect_signals(self)
         self.window.show_all()
         self.request_form()
-        self.pulse_id = GObject.timeout_add(80, self.pulse_callback)
+        self.pulse_id = GLib.timeout_add(80, self.pulse_callback)
 
         self.is_form = None
 
@@ -77,7 +77,7 @@ class SearchWindow:
 
     def on_search_window_destroy(self, widget):
         if self.pulse_id:
-            GObject.source_remove(self.pulse_id)
+            GLib.source_remove(self.pulse_id)
         del gajim.interface.instances[self.account]['search'][self.jid]
         gajim.ged.remove_event_handler('search-form-received', ged.GUI1,
             self._nec_search_form_received)
@@ -104,7 +104,7 @@ class SearchWindow:
         self.progressbar.show()
         self.label.set_text(_('Waiting for results'))
         self.label.show()
-        self.pulse_id = GObject.timeout_add(80, self.pulse_callback)
+        self.pulse_id = GLib.timeout_add(80, self.pulse_callback)
         self.search_button.hide()
 
     def on_add_contact_button_clicked(self, widget):
@@ -128,7 +128,7 @@ class SearchWindow:
 
     def _nec_search_form_received(self, obj):
         if self.pulse_id:
-            GObject.source_remove(self.pulse_id)
+            GLib.source_remove(self.pulse_id)
         self.progressbar.hide()
         self.label.hide()
 
@@ -168,7 +168,7 @@ class SearchWindow:
 
     def _nec_search_result_received(self, obj):
         if self.pulse_id:
-            GObject.source_remove(self.pulse_id)
+            GLib.source_remove(self.pulse_id)
         self.progressbar.hide()
         self.label.hide()
 

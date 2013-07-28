@@ -77,7 +77,7 @@ class CellRendererImage(Gtk.CellRendererPixbuf):
         if model:
             model.foreach(self.func, (image, tree))
         if self.redraw:
-            GObject.timeout_add(iter_.get_delay_time(),
+            GLib.timeout_add(iter_.get_delay_time(),
                 self.animation_timeout, tree, image)
         elif image in self.iters:
             del self.iters[image]
@@ -95,8 +95,8 @@ class CellRendererImage(Gtk.CellRendererPixbuf):
                 timeval.tv_sec = GLib.get_current_time()
                 iter_ = animation.get_iter(timeval)
                 self.iters[self.image] = iter_
-                GObject.timeout_add(iter_.get_delay_time(),
-                    self.animation_timeout, widget, self.image)
+                GLib.timeout_add(iter_.get_delay_time(), self.animation_timeout,
+                    widget, self.image)
 
             pix = self.iters[self.image].get_pixbuf()
         elif self.image.get_storage_type() == Gtk.ImageType.PIXBUF:

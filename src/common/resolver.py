@@ -317,7 +317,7 @@ class NsLookup(IdleCommand):
 
 # below lines is on how to use API and assist in testing
 if __name__ == '__main__':
-    from gi.repository import GObject
+    from gi.repository import GLib
     from gi.repository import Gtk
     from nbxmpp import idlequeue
 
@@ -342,7 +342,7 @@ if __name__ == '__main__':
     but.connect('clicked', clicked)
     win.add(hbox)
     win.show_all()
-    GObject.timeout_add(200, idlequeue.process)
+    GLib.timeout_add(200, idlequeue.process)
     if USE_LIBASYNCNS:
-        GObject.timeout_add(200, resolver.process)
+        GLib.timeout_add(200, resolver.process)
     Gtk.main()

@@ -25,7 +25,7 @@
 
 from gi.repository import Gtk
 import gtkgui_helpers
-from gi.repository import GObject
+from gi.repository import GLib
 
 from common import gajim
 from common import helpers
@@ -51,12 +51,12 @@ def rate_limit(rate):
         timeout = [None]
         def f(*args, **kwargs):
             if timeout[0] is not None:
-                GObject.source_remove(timeout[0])
+                GLib.source_remove(timeout[0])
                 timeout[0] = None
             def timeout_func():
                 func(*args, **kwargs)
                 timeout[0] = None
-            timeout[0] = GObject.timeout_add(int(1000.0 / rate), timeout_func)
+            timeout[0] = GLib.timeout_add(int(1000.0 / rate), timeout_func)
         return f
     return decorator
 

@@ -30,6 +30,7 @@
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GObject
+from gi.repository import GLib
 import time
 
 import common
@@ -276,7 +277,7 @@ class MessageWindow(object):
                 scrolled = True
             self.notebook.set_show_tabs(True)
             if scrolled:
-                GObject.idle_add(conv_textview.scroll_to_end_iter)
+                GLib.idle_add(conv_textview.scroll_to_end_iter)
 
         # Add notebook page and connect up to the tab's close button
         xml = gtkgui_helpers.get_gtk_builder('message_window.ui', 'chat_tab_ebox')
@@ -306,7 +307,7 @@ class MessageWindow(object):
         # NOTE: we do not call set_control_active(True) since we don't know
         # whether the tab is the active one.
         self.show_title()
-        GObject.timeout_add(500, control.msg_textview.grab_focus)
+        GLib.timeout_add(500, control.msg_textview.grab_focus)
 
     def on_tab_eventbox_button_press_event(self, widget, event, child):
         if event.button == 3: # right click
@@ -318,7 +319,7 @@ class MessageWindow(object):
             self.remove_tab(ctrl, self.CLOSE_TAB_MIDDLE_CLICK)
         else:
             ctrl = self._widget_to_control(child)
-            GObject.idle_add(ctrl.msg_textview.grab_focus)
+            GLib.idle_add(ctrl.msg_textview.grab_focus)
 
     def _on_message_textview_mykeypress_event(self, widget, event_keyval,
             event_keymod):
@@ -546,7 +547,7 @@ class MessageWindow(object):
         ctrl_page = self.notebook.page_num(ctrl.widget)
         self.notebook.set_current_page(ctrl_page)
         self.window.present()
-        GObject.idle_add(ctrl.msg_textview.grab_focus)
+        GLib.idle_add(ctrl.msg_textview.grab_focus)
 
     def remove_tab(self, ctrl, method, reason = None, force = False):
         """

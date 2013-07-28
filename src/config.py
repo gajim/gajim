@@ -35,6 +35,7 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import Pango
 from gi.repository import GObject
+from gi.repository import GLib
 import os, sys
 import common.config
 import common.sleepy
@@ -588,7 +589,7 @@ class PreferencesWindow:
         gtkgui_helpers.possibly_move_window_in_current_desktop(self.window)
 
     def on_preferences_notebook_switch_page(self, widget, page, page_num):
-        GObject.idle_add(self.xml.get_object('close_button').grab_focus)
+        GLib.idle_add(self.xml.get_object('close_button').grab_focus)
 
     def on_preferences_window_key_press_event(self, widget, event):
         if event.keyval == Gdk.KEY_Escape:
@@ -1661,7 +1662,7 @@ class AccountsWindow:
                 status_before = gajim.connections[account].status
                 gajim.interface.roster.send_status(account, 'offline',
                         _('Be right back.'))
-                GObject.timeout_add(500, login, account, show_before, status_before)
+                GLib.timeout_add(500, login, account, show_before, status_before)
 
             def on_yes(checked, account):
                 relog(account)
@@ -2162,7 +2163,7 @@ class AccountsWindow:
             if not widget.is_focus():
                 pritext = _('Invalid Jabber ID')
                 dialogs.ErrorDialog(pritext, str(s))
-                GObject.idle_add(lambda: widget.grab_focus())
+                GLib.idle_add(lambda: widget.grab_focus())
             return True
 
         jid_splited = jid.split('@', 1)
@@ -2172,7 +2173,7 @@ class AccountsWindow:
                 pritext = _('Invalid Jabber ID')
                 sectext = _('A Jabber ID must be in the form "user@servername".')
                 dialogs.ErrorDialog(pritext, sectext)
-                GObject.idle_add(lambda: widget.grab_focus())
+                GLib.idle_add(lambda: widget.grab_focus())
             return True
 
 
@@ -2237,7 +2238,7 @@ class AccountsWindow:
             if not widget.is_focus():
                 pritext = _('Invalid Jabber ID')
                 dialogs.ErrorDialog(pritext, str(s))
-                GObject.idle_add(lambda: widget.grab_focus())
+                GLib.idle_add(lambda: widget.grab_focus())
             return True
 
         if self.option_changed('resource', resource):
@@ -2393,7 +2394,7 @@ class AccountsWindow:
             if not widget.is_focus():
                 dialogs.ErrorDialog(_('Invalid entry'),
                         _('Custom port must be a port number.'))
-                GObject.idle_add(lambda: widget.grab_focus())
+                GLib.idle_add(lambda: widget.grab_focus())
             return True
         if self.option_changed('custom_port', custom_port):
             self.need_relogin = True
@@ -3701,7 +3702,7 @@ class AccountCreationWizardWindow:
                 self.notebook.set_current_page(5) # show creating page
                 self.back_button.hide()
                 self.forward_button.hide()
-                self.update_progressbar_timeout_id = GObject.timeout_add(100,
+                self.update_progressbar_timeout_id = GLib.timeout_add(100,
                     self.update_progressbar)
                 # Get form from serveur
                 con = connection.Connection(self.account)
@@ -3743,7 +3744,7 @@ class AccountCreationWizardWindow:
             self.notebook.set_current_page(5) # show creating page
             self.back_button.hide()
             self.forward_button.hide()
-            self.update_progressbar_timeout_id = GObject.timeout_add(100,
+            self.update_progressbar_timeout_id = GLib.timeout_add(100,
                 self.update_progressbar)
 
     def update_proxy_list(self):
@@ -3779,7 +3780,7 @@ class AccountCreationWizardWindow:
         if obj.conn.name != self.account:
             return
         if self.update_progressbar_timeout_id is not None:
-            GObject.source_remove(self.update_progressbar_timeout_id)
+            GLib.source_remove(self.update_progressbar_timeout_id)
         self.back_button.show()
         self.forward_button.show()
         self.is_form = obj.is_form
@@ -3837,7 +3838,7 @@ class AccountCreationWizardWindow:
         if self.account not in gajim.connections:
             return
         if self.update_progressbar_timeout_id is not None:
-            GObject.source_remove(self.update_progressbar_timeout_id)
+            GLib.source_remove(self.update_progressbar_timeout_id)
         del gajim.connections[self.account]
         if self.account in gajim.config.get_per('accounts'):
             gajim.config.del_per('accounts', self.account)
@@ -3863,7 +3864,7 @@ class AccountCreationWizardWindow:
         self.show_finish_page()
 
         if self.update_progressbar_timeout_id is not None:
-            GObject.source_remove(self.update_progressbar_timeout_id)
+            GLib.source_remove(self.update_progressbar_timeout_id)
 
     def _nec_acc_is_not_ok(self, obj):
         """
@@ -3887,7 +3888,7 @@ class AccountCreationWizardWindow:
         self.notebook.set_current_page(6) # show finish page
 
         if self.update_progressbar_timeout_id is not None:
-            GObject.source_remove(self.update_progressbar_timeout_id)
+            GLib.source_remove(self.update_progressbar_timeout_id)
 
     def on_advanced_button_clicked(self, widget):
         if 'accounts' in gajim.interface.instances:

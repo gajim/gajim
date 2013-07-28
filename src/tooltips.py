@@ -30,7 +30,7 @@
 
 from gi.repository import Gtk
 from gi.repository import Gdk
-from gi.repository import GObject
+from gi.repository import GLib
 import os
 import time
 import locale
@@ -155,7 +155,7 @@ class BaseTooltip:
 
     def hide_tooltip(self):
         if self.timeout > 0:
-            GObject.source_remove(self.timeout)
+            GLib.source_remove(self.timeout)
             self.timeout = 0
         if self.win:
             self.win.destroy()
@@ -241,8 +241,8 @@ class StatusTable:
             if status != '':
                 # reduce to 100 chars, 1 line
                 status = helpers.reduce_chars_newlines(status, 100, 1)
-                str_status = GObject.markup_escape_text(str_status)
-                status = GObject.markup_escape_text(status)
+                str_status = GLib.markup_escape_text(str_status)
+                status = GLib.markup_escape_text(status)
                 str_status += ' - <i>' + status + '</i>'
         return str_status
 
@@ -299,7 +299,7 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
         for acct in accounts:
             message = acct['message']
             message = helpers.reduce_chars_newlines(message, 100, 1)
-            message = GObject.markup_escape_text(message)
+            message = GLib.markup_escape_text(message)
             if acct['name'] in gajim.con_types and \
                     gajim.con_types[acct['name']] in ('tls', 'ssl'):
                 show_lock = True
@@ -307,12 +307,12 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
                 show_lock = False
             if message:
                 self.add_status_row(file_path, acct['show'],
-                        GObject.markup_escape_text(acct['name']) + \
-                        ' - ' + message, show_lock=show_lock, indent=False)
+                    GLib.markup_escape_text(acct['name']) + ' - ' + message,
+                    show_lock=show_lock, indent=False)
             else:
                 self.add_status_row(file_path, acct['show'],
-                        GObject.markup_escape_text(acct['name'])
-                        , show_lock=show_lock, indent=False)
+                    GLib.markup_escape_text(acct['name']), show_lock=show_lock,
+                    indent=False)
             for line in acct['event_lines']:
                 self.add_text_row('  ' + line, 1)
 
@@ -354,9 +354,8 @@ class GCTooltip(BaseTooltip):
         vcard_current_row = 1
         properties = []
 
-        nick_markup = '<b>' + \
-                GObject.markup_escape_text(contact.get_shown_name()) \
-                + '</b>'
+        nick_markup = '<b>' + GLib.markup_escape_text(contact.get_shown_name())\
+            + '</b>'
         properties.append((nick_markup, None))
 
         if contact.status: # status message
@@ -364,8 +363,7 @@ class GCTooltip(BaseTooltip):
             if status != '':
                 # escape markup entities
                 status = helpers.reduce_chars_newlines(status, 300, 5)
-                status = '<i>' +\
-                        GObject.markup_escape_text(status) + '</i>'
+                status = '<i>' + GLib.markup_escape_text(status) + '</i>'
                 properties.append((status, None))
 
         show = helpers.get_uf_show(contact.show)
@@ -376,8 +374,8 @@ class GCTooltip(BaseTooltip):
             properties.append((_('Jabber ID: '), "<b>%s</b>" % contact.jid))
 
         if hasattr(contact, 'resource') and contact.resource.strip():
-            properties.append((_('Resource: '),
-                    GObject.markup_escape_text(contact.resource)))
+            properties.append((_('Resource: '), GLib.markup_escape_text(
+                contact.resource)))
 
         if contact.affiliation != 'none':
             uf_affiliation = helpers.get_uf_affiliation(contact.affiliation)
@@ -480,13 +478,12 @@ class RosterTooltip(NotificationAreaTooltip):
         vcard_current_row = 1
         properties = []
 
-        name_markup = '<span weight="bold">' + \
-                GObject.markup_escape_text(prim_contact.get_shown_name())\
-                + '</span>'
+        name_markup = '<span weight="bold">' + GLib.markup_escape_text(
+            prim_contact.get_shown_name()) + '</span>'
         if gajim.config.get('mergeaccounts'):
             name_markup += " <span foreground='%s'>(%s)</span>" % (
                 gajim.config.get('tooltip_account_name_color'),
-                GObject.markup_escape_text(prim_contact.account.name))
+                GLib.markup_escape_text(prim_contact.account.name))
 
         if self.account and helpers.jid_is_blocked(self.account,
         prim_contact.jid):
@@ -586,7 +583,7 @@ class RosterTooltip(NotificationAreaTooltip):
                         # status is wrapped
                         status = helpers.reduce_chars_newlines(status, 300, 5)
                         # escape markup entities.
-                        status = GObject.markup_escape_text(status)
+                        status = GLib.markup_escape_text(status)
                         properties.append(('<i>%s</i>' % status, None))
                 properties.append((show, None))
 
@@ -596,15 +593,14 @@ class RosterTooltip(NotificationAreaTooltip):
 
         # contact has only one ressource
         if num_resources == 1 and contact.resource:
-            properties.append((_('Resource: '),
-                    GObject.markup_escape_text(contact.resource) +\
-                    ' (' + str(contact.priority) + ')'))
+            properties.append((_('Resource: '), GLib.markup_escape_text(
+                contact.resource) + ' (' + str(contact.priority) + ')'))
 
         if self.account and prim_contact.sub and prim_contact.sub != 'both' and\
         prim_contact.jid not in gajim.gc_connected[self.account]:
             # ('both' is the normal sub so we don't show it)
-            properties.append(( _('Subscription: '),
-                    GObject.markup_escape_text(helpers.get_uf_sub(prim_contact.sub))))
+            properties.append(( _('Subscription: '), GLib.markup_escape_text(
+                helpers.get_uf_sub(prim_contact.sub))))
 
         if prim_contact.keyID:
             keyID = None
@@ -613,8 +609,8 @@ class RosterTooltip(NotificationAreaTooltip):
             elif len(prim_contact.keyID) == 16:
                 keyID = prim_contact.keyID[8:]
             if keyID:
-                properties.append((_('OpenPGP: '),
-                        GObject.markup_escape_text(keyID)))
+                properties.append((_('OpenPGP: '), GLib.markup_escape_text(
+                    keyID)))
 
         if contact.last_activity_time:
             last_active = datetime(*contact.last_activity_time[:6])
@@ -730,8 +726,7 @@ class FileTransfersTooltip(BaseTooltip):
             file_name = os.path.split(file_props.file_name)[1]
         else:
             file_name = file_props.name
-        properties.append((_('Name: '),
-                GObject.markup_escape_text(file_name)))
+        properties.append((_('Name: '), GLib.markup_escape_text(file_name)))
         if file_props.type_ == 'r':
             type_ = _('Download')
             actor = _('Sender: ')
@@ -747,7 +742,7 @@ class FileTransfersTooltip(BaseTooltip):
             else:
                 name = receiver.split('/')[0]
         properties.append((_('Type: '), type_))
-        properties.append((actor, GObject.markup_escape_text(name)))
+        properties.append((actor, GLib.markup_escape_text(name)))
 
         transfered_len = file_props.received_len
         if not transfered_len:
@@ -775,8 +770,8 @@ class FileTransfersTooltip(BaseTooltip):
             status = _('Not started')
         properties.append((_('Status: '), status))
         file_desc = file_props.desc
-        properties.append((_('Description: '), GObject.markup_escape_text(
-                file_desc)))
+        properties.append((_('Description: '), GLib.markup_escape_text(
+            file_desc)))
         while properties:
             property_ = properties.pop(0)
             current_row += 1

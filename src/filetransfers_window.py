@@ -23,7 +23,7 @@
 
 from gi.repository import Gtk
 from gi.repository import GdkPixbuf
-from gi.repository import GObject
+from gi.repository import GLib
 from gi.repository import Pango
 import os
 import time
@@ -183,8 +183,7 @@ class FileTransfersWindow:
             (file_path, file_name) = os.path.split(file_props.file_name)
         else:
             file_name = file_props.name
-        sectext = '\t' + _('Filename: %s') % GObject.markup_escape_text(
-            file_name)
+        sectext = '\t' + _('Filename: %s') % GLib.markup_escape_text(file_name)
         sectext += '\n\t' + _('Size: %s') % \
         helpers.convert_bytes(file_props.size)
         if file_props.type_ == 'r':
@@ -240,8 +239,7 @@ class FileTransfersWindow:
             file_name = os.path.basename(file_props.file_name)
         else:
             file_name = file_props.name
-        sectext = '\t' + _('Filename: %s') % GObject.markup_escape_text(
-            file_name)
+        sectext = '\t' + _('Filename: %s') % GLib.markup_escape_text(file_name)
         sectext += '\n\t' + _('Recipient: %s') % jid
         if error_msg:
             sectext += '\n\t' + _('Error message: %s') % error_msg
@@ -384,7 +382,7 @@ class FileTransfersWindow:
             if os.path.exists(file_path):
                 # check if we have write permissions
                 if not os.access(file_path, os.W_OK):
-                    file_name = GObject.markup_escape_text(os.path.basename(
+                    file_name = GLib.markup_escape_text(os.path.basename(
                         file_path))
                     dialogs.ErrorDialog(
                         _('Cannot overwrite existing file "%s"' % file_name),
@@ -448,8 +446,8 @@ class FileTransfersWindow:
         """
         if not file_props or not file_props.name:
             return
-        sec_text = '\t' + _('File: %s') % GObject.markup_escape_text(
-                file_props.name)
+        sec_text = '\t' + _('File: %s') % GLib.markup_escape_text(
+            file_props.name)
         if file_props.size:
             sec_text += '\n\t' + _('Size: %s') % \
                     helpers.convert_bytes(file_props.size)
@@ -495,7 +493,7 @@ class FileTransfersWindow:
             text += helpers.convert_bytes(received_size) + '/' + \
                 helpers.convert_bytes(full_size)
             self.model.set(iter_, C_PROGRESS, text)
-            self.model.set(iter_, C_PULSE, GObject.constants.G_MAXINT)
+            self.model.set(iter_, C_PULSE, GLib.MAXINT32)
         elif status == 'computing':
             self.model.set(iter_, C_PULSE, 1)
             text = _('Checking file...') + '\n'
@@ -506,11 +504,11 @@ class FileTransfersWindow:
             self.model.set(iter_, C_PROGRESS, text)
             def pulse():
                 p = self.model.get(iter_, C_PULSE)[0]
-                if p == GObject.constants.G_MAXINT:
+                if p == GLib.MAXINT32:
                     return False
                 self.model.set(iter_, C_PULSE, p + 1)
                 return True
-            GObject.timeout_add(100, pulse)
+            GLib.timeout_add(100, pulse)
         elif status == 'hash_error':
             text = _('File error') + '\n'
             received_size = int(file_props.received_len)
@@ -518,7 +516,7 @@ class FileTransfersWindow:
             text += helpers.convert_bytes(received_size) + '/' + \
                 helpers.convert_bytes(full_size)
             self.model.set(iter_, C_PROGRESS, text)
-            self.model.set(iter_, C_PULSE, GObject.constants.G_MAXINT)
+            self.model.set(iter_, C_PULSE, GLib.MAXINT32)
         self.model.set(iter_, C_IMAGE, self.get_icon(status))
         path = self.model.get_path(iter_)
         self.select_func(path)
@@ -738,7 +736,7 @@ class FileTransfersWindow:
             file_name = os.path.split(file_props.file_name)[1]
         else:
             file_name = file_props.name
-        text_props = GObject.markup_escape_text(file_name) + '\n'
+        text_props = GLib.markup_escape_text(file_name) + '\n'
         text_props += contact.get_shown_name()
         self.model.set(iter_, 1, text_labels, 2, text_props, C_PULSE, -1, C_SID,
                 file_props.type_ + file_props.sid)
@@ -774,7 +772,7 @@ class FileTransfersWindow:
             if file_props is not None:
                 if self.tooltip.timeout == 0 or self.tooltip.id != props[0]:
                     self.tooltip.id = row
-                    self.tooltip.timeout = GObject.timeout_add(500,
+                    self.tooltip.timeout = GLib.timeout_add(500,
                         self.show_tooltip, widget)
 
     def on_transfers_list_leave_notify_event(self, widget=None, event=None):

@@ -37,6 +37,7 @@ from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import Pango
 from gi.repository import GObject
+from gi.repository import GLib
 import os
 import sys
 import time
@@ -267,7 +268,7 @@ class RosterWindow:
 
             it = self.model.append(None, [
                 gajim.interface.jabber_state_images['16'][show],
-                GObject.markup_escape_text(account), 'account', our_jid,
+                GLib.markup_escape_text(account), 'account', our_jid,
                 account, None, None, None, None, None, tls_pixbuf] +
                 [None] * self.nb_ext_renderers)
             self._iters[account]['account'] = it
@@ -327,7 +328,7 @@ class RosterWindow:
             iter_parent = self._get_account_iter(account, self.model)
         iter_group = self.model.append(iter_parent,
             [gajim.interface.jabber_state_images['16']['closed'],
-            GObject.markup_escape_text(group), 'group', group, account, None,
+            GLib.markup_escape_text(group), 'group', group, account, None,
             None, None, None, None, None] + [None] * self.nb_ext_renderers)
         self.draw_group(group, account)
         self._iters[account_group]['groups'][group] = iter_group
@@ -1103,7 +1104,7 @@ class RosterWindow:
             return
         self.accounts_to_draw.append(account)
         if len(self.accounts_to_draw) == 1:
-            GObject.timeout_add(200, self._really_draw_accounts)
+            GLib.timeout_add(200, self._really_draw_accounts)
 
     def _really_draw_group(self, group, account):
         child_iter = self._get_group_iter(group, account, model=self.model)
@@ -1115,7 +1116,7 @@ class RosterWindow:
             accounts = []
         else:
             accounts = [account]
-        text = GObject.markup_escape_text(group)
+        text = GLib.markup_escape_text(group)
         if helpers.group_is_blocked(account, group):
             text = '<span strikethrough="true">%s</span>' % text
         if gajim.config.get('show_contacts_number'):
@@ -1139,7 +1140,7 @@ class RosterWindow:
             return
         self.groups_to_draw[ag] = {'group': group, 'account': account}
         if len(self.groups_to_draw) == 1:
-            GObject.timeout_add(200, self._really_draw_groups)
+            GLib.timeout_add(200, self._really_draw_groups)
 
     def draw_parent_contact(self, jid, account):
         child_iters = self._get_contact_iter(jid, account, model=self.model)
@@ -1173,7 +1174,7 @@ class RosterWindow:
         if not child_iters:
             return False
 
-        name = GObject.markup_escape_text(contact.get_shown_name())
+        name = GLib.markup_escape_text(contact.get_shown_name())
 
         # gets number of unread gc marked messages
         if jid in gajim.interface.minimized_controls[account] and \
@@ -1226,7 +1227,7 @@ class RosterWindow:
                     color.blue)
                 name += '\n<span size="small" style="italic" ' \
                     'foreground="%s">%s</span>' % (colorstring,
-                    GObject.markup_escape_text(status))
+                    GLib.markup_escape_text(status))
 
         icon_name = helpers.get_icon_name_to_show(contact, account)
         # look if another resource has awaiting events
@@ -1419,7 +1420,7 @@ class RosterWindow:
             yield False
 
         task = _draw_all_contacts(jids, account)
-        GObject.idle_add(next, task)
+        GLib.idle_add(next, task)
 
     def _before_fill(self):
         self.tree.freeze_child_notify()
@@ -2586,11 +2587,11 @@ class RosterWindow:
         if jid in jid_list or jid == gajim.get_jid_from_account(account):
             if not gajim.jid_is_transport(jid) and len(obj.contact_list) == 1:
                 if obj.old_show == 0 and obj.new_show > 1:
-                    GObject.timeout_add_seconds(5, self.remove_newly_added, jid,
+                    GLib.timeout_add_seconds(5, self.remove_newly_added, jid,
                         account)
                 elif obj.old_show > 1 and obj.new_show == 0 and \
                 obj.conn.connected > 1:
-                    GObject.timeout_add_seconds(5, self.remove_to_be_removed,
+                    GLib.timeout_add_seconds(5, self.remove_to_be_removed,
                         jid, account)
 
         if obj.need_redraw:
@@ -2613,7 +2614,7 @@ class RosterWindow:
         if obj.popup:
             ctrl = gajim.interface.msg_win_mgr.search_control(jid, account)
             if ctrl:
-                GObject.idle_add(ctrl.parent_win.set_active_tab, ctrl)
+                GLib.idle_add(ctrl.parent_win.set_active_tab, ctrl)
             else:
                 ctrl = gajim.interface.new_chat(obj.contact, account)
                 if len(gajim.events.get_events(account, obj.jid)):
@@ -2655,7 +2656,7 @@ class RosterWindow:
                             account)
                 gajim.config.set_per('accounts', account,
                     'opened_chat_controls', '')
-            GObject.idle_add(self.refilter_shown_roster_items)
+            GLib.idle_add(self.refilter_shown_roster_items)
 
     def _nec_anonymous_auth(self, obj):
         """
@@ -2885,7 +2886,7 @@ class RosterWindow:
                         # no connected contacts, show the ofline one
                         connected_contacts = contacts
                     self.tooltip.account = account
-                    self.tooltip.timeout = GObject.timeout_add(500,
+                    self.tooltip.timeout = GLib.timeout_add(500,
                         self.show_tooltip, connected_contacts)
             elif model[titer][C_TYPE] == 'groupchat':
                 if self.tooltip.timeout == 0 or self.tooltip.id != props[0]:
@@ -2894,7 +2895,7 @@ class RosterWindow:
                     self.tooltip.id = row
                     contact = gajim.contacts.get_contacts(account, jid)
                     self.tooltip.account = account
-                    self.tooltip.timeout = GObject.timeout_add(500,
+                    self.tooltip.timeout = GLib.timeout_add(500,
                         self.show_tooltip, contact)
             elif model[titer][C_TYPE] == 'account':
                 # we're on an account entry in the roster
@@ -2903,7 +2904,7 @@ class RosterWindow:
                     if account == 'all':
                         self.tooltip.id = row
                         self.tooltip.account = None
-                        self.tooltip.timeout = GObject.timeout_add(500,
+                        self.tooltip.timeout = GLib.timeout_add(500,
                             self.show_tooltip, [])
                         return
                     jid = gajim.get_jid_from_account(account)
@@ -2957,7 +2958,7 @@ class RosterWindow:
                                 contacts.append(contact)
                     self.tooltip.id = row
                     self.tooltip.account = None
-                    self.tooltip.timeout = GObject.timeout_add(500,
+                    self.tooltip.timeout = GLib.timeout_add(500,
                         self.show_tooltip, contacts)
 
     def on_agent_logging(self, widget, jid, state, account):
@@ -3108,7 +3109,7 @@ class RosterWindow:
             old_text = jid
             title = _('Rename Group')
             message = _('Enter a new name for group %s') % \
-                    GObject.markup_escape_text(jid)
+                GLib.markup_escape_text(jid)
 
         def on_renamed(new_text, account, row_type, jid, old_text):
             if 'rename' in gajim.interface.instances:
@@ -4270,7 +4271,7 @@ class RosterWindow:
                 if self.filtering:
                     # Prevent endless loops
                     jid = model[titer][C_JID]
-                    GObject.idle_add(self.draw_contact, jid, account)
+                    GLib.idle_add(self.draw_contact, jid, account)
         elif type_ == 'group':
             group = model[titer][C_JID]
             self._adjust_group_expand_collapse_state(group, account)
@@ -4292,7 +4293,7 @@ class RosterWindow:
 #               if len(self._last_selected_contact):
 #                       # update unselected rows
 #                       for (jid, account) in self._last_selected_contact:
-#                               GObject.idle_add(self.draw_contact, jid,
+#                               GLib.idle_add(self.draw_contact, jid,
 #                                       account)
 #               self._last_selected_contact = []
 #               if len(list_of_paths) == 0:
@@ -4305,7 +4306,7 @@ class RosterWindow:
 #                       jid = row[C_JID]
 #                       account = row[C_ACCOUNT]
 #                       self._last_selected_contact.append((jid, account))
-#                       GObject.idle_add(self.draw_contact, jid, account, True)
+#                       GLib.idle_add(self.draw_contact, jid, account, True)
 
     def on_service_disco_menuitem_activate(self, widget, account):
         server_jid = gajim.config.get_per('accounts', account, 'hostname')
@@ -6651,7 +6652,7 @@ class RosterWindow:
                     config.AccountCreationWizardWindow()
             # Open wizard only after roster is created, so we can make it
             # transient for the roster window
-            GObject.idle_add(_open_wizard)
+            GLib.idle_add(_open_wizard)
         if not gajim.ZEROCONF_ACC_NAME in gajim.config.get_per('accounts'):
             # Create zeroconf in config file
             from common.zeroconf import connection_zeroconf
