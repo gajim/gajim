@@ -457,7 +457,7 @@ class CommonConnection:
                     iqs.append(iq)
                 msg_iq = iqs
         else:
-            msg_id.setTo(fjid)
+            msg_iq.setTo(fjid)
             if resource:
                 contact = gajim.contacts.get_contact(self.name, jid, resource)
             else:
