@@ -28,7 +28,7 @@ from common import defs
 import unicodedata
 
 # May be changed after GTK is imported
-direction_mark = u'\u200F'
+direction_mark = '\u200F'
 
 def paragraph_direction_mark(text):
     """

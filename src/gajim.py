@@ -210,7 +210,7 @@ if os.name == 'nt':
     warnings.filterwarnings(action='ignore')
 
 if Gtk.Widget.get_default_direction() == Gtk.TextDirection.LTR:
-    i18n.direction_mark = u'\u200E'
+    i18n.direction_mark = '\u200E'
 pritext = ''
 
 from common import exceptions

@@ -2808,8 +2808,8 @@ class GroupchatControl(ChatControlBase):
         if fjid in connection.blocked_contacts:
             return
         max_order = connection.get_max_blocked_list_order()
-        new_rule = {'order': str(max_order + 1), 'type': u'jid',
-            'action': u'deny', 'value' : fjid, 'child': ['message', 'iq',
+        new_rule = {'order': str(max_order + 1), 'type': 'jid',
+            'action': 'deny', 'value' : fjid, 'child': ['message', 'iq',
             'presence-out']}
         connection.blocked_list.append(new_rule)
         connection.blocked_contacts.append(fjid)
