@@ -262,9 +262,8 @@ class RosterWindow:
             tls_pixbuf = None
             if gajim.account_is_securely_connected(account):
                 # the only way to create a pixbuf from stock
-                tls_pixbuf = self.window.render_icon(
-                        Gtk.STOCK_DIALOG_AUTHENTICATION,
-                        Gtk.IconSize.MENU)
+                tls_pixbuf = self.window.render_icon_pixbuf(
+                    Gtk.STOCK_DIALOG_AUTHENTICATION, Gtk.IconSize.MENU)
 
             it = self.model.append(None, [
                 gajim.interface.jabber_state_images['16'][show],
@@ -1040,7 +1039,7 @@ class RosterWindow:
         if gajim.account_is_securely_connected(account) and not self.regroup or\
         self.regroup and num_of_secured and num_of_secured == num_of_accounts:
             # the only way to create a pixbuf from stock
-            tls_pixbuf = self.window.render_icon(
+            tls_pixbuf = self.window.render_icon_pixbuf(
                 Gtk.STOCK_DIALOG_AUTHENTICATION, Gtk.IconSize.MENU)
             self.model[child_iter][C_PADLOCK_PIXBUF] = tls_pixbuf
         else:

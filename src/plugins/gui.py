@@ -91,7 +91,7 @@ class PluginsWindow(object):
         self.installed_plugins_treeview.append_column(col)
 
         icon = Gtk.Image()
-        self.def_icon = icon.render_icon(Gtk.STOCK_PREFERENCES,
+        self.def_icon = icon.render_icon_pixbuf(Gtk.STOCK_PREFERENCES,
             Gtk.IconSize.MENU)
 
         # connect signal for selection change

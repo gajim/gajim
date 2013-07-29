@@ -473,7 +473,8 @@ class FileTransfersWindow:
 
     def get_icon(self, ident):
         return self.images.setdefault(ident,
-                self.window.render_icon(self.icons[ident], Gtk.IconSize.MENU))
+            self.window.render_icon_pixbuf(self.icons[ident],
+                Gtk.IconSize.MENU))
 
     def set_status(self,file_props, status):
         """
