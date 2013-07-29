@@ -32,7 +32,7 @@
 # THIS FILE IS FOR **OTHERS'** PROFILE (when we VIEW their INFO)
 
 from gi.repository import Gtk
-from gi.repository import GObject
+from gi.repository import GLib
 from gi.repository import Gdk
 import base64
 import time
@@ -124,8 +124,8 @@ class VcardWindow:
         self.vcard_arrived = False
         self.os_info_arrived = False
         self.entity_time_arrived = False
-        self.update_progressbar_timeout_id = GObject.timeout_add(100,
-                self.update_progressbar)
+        self.update_progressbar_timeout_id = GLib.timeout_add(100,
+            self.update_progressbar)
 
         gajim.ged.register_event_handler('version-result-received', ged.GUI1,
             self.set_os_info)
@@ -152,7 +152,7 @@ class VcardWindow:
 
     def on_vcard_information_window_destroy(self, widget):
         if self.update_progressbar_timeout_id is not None:
-            GObject.source_remove(self.update_progressbar_timeout_id)
+            GLib.source_remove(self.update_progressbar_timeout_id)
         del gajim.interface.instances[self.account]['infos'][self.contact.jid]
         buffer_ = self.xml.get_object('textview_annotation').get_buffer()
         annotation = buffer_.get_text(buffer_.get_start_iter(),
@@ -175,7 +175,7 @@ class VcardWindow:
             self.window.destroy()
 
     def on_information_notebook_switch_page(self, widget, page, page_num):
-        GObject.idle_add(self.xml.get_object('close_button').grab_focus)
+        GLib.idle_add(self.xml.get_object('close_button').grab_focus)
 
     def on_PHOTO_eventbox_button_press_event(self, widget, event):
         """
@@ -277,7 +277,7 @@ class VcardWindow:
     def test_remove_progressbar(self):
         if self.update_progressbar_timeout_id is not None and \
         self.vcard_arrived and self.os_info_arrived and self.entity_time_arrived:
-            GObject.source_remove(self.update_progressbar_timeout_id)
+            GLib.source_remove(self.update_progressbar_timeout_id)
             self.progressbar.hide()
             self.update_progressbar_timeout_id = None
 
@@ -449,11 +449,11 @@ class VcardWindow:
         else: # Request os info if contact is connected
             if self.gc_contact:
                 j, r = gajim.get_room_and_nick_from_fjid(self.real_jid)
-                GObject.idle_add(gajim.connections[self.account].request_os_info,
-                        j, r, self.contact.jid)
+                GLib.idle_add(gajim.connections[self.account].request_os_info,
+                    j, r, self.contact.jid)
             else:
-                GObject.idle_add(gajim.connections[self.account].request_os_info,
-                        self.contact.jid, self.contact.resource)
+                GLib.idle_add(gajim.connections[self.account].request_os_info,
+                    self.contact.jid, self.contact.resource)
 
         # do not wait for entity_time if contact is not connected or has error
         # additional check for observer is needed, as show is offline for him
@@ -463,11 +463,11 @@ class VcardWindow:
         else: # Request entity time if contact is connected
             if self.gc_contact:
                 j, r = gajim.get_room_and_nick_from_fjid(self.real_jid)
-                GObject.idle_add(gajim.connections[self.account].\
-                        request_entity_time, j, r, self.contact.jid)
+                GLib.idle_add(gajim.connections[self.account].\
+                    request_entity_time, j, r, self.contact.jid)
             else:
-                GObject.idle_add(gajim.connections[self.account].\
-                        request_entity_time, self.contact.jid, self.contact.resource)
+                GLib.idle_add(gajim.connections[self.account].\
+                    request_entity_time, self.contact.jid, self.contact.resource)
 
         self.os_info = {0: {'resource': self.real_resource, 'client': '',
                 'os': ''}}
@@ -482,11 +482,10 @@ class VcardWindow:
                     uf_resources += '\n' + c.resource + \
                             _(' resource with priority ') + str(c.priority)
                     if c.show not in ('offline', 'error'):
-                        GObject.idle_add(
-                                gajim.connections[self.account].request_os_info, c.jid,
-                                c.resource)
-                        GObject.idle_add(gajim.connections[self.account].\
-                                request_entity_time, c.jid, c.resource)
+                        GLib.idle_add(gajim.connections[self.account].\
+                            request_os_info, c.jid, c.resource)
+                        GLib.idle_add(gajim.connections[self.account].\
+                            request_entity_time, c.jid, c.resource)
                     self.os_info[i] = {'resource': c.resource, 'client': '',
                             'os': ''}
                     self.time_info[i] = {'resource': c.resource, 'time': ''}
