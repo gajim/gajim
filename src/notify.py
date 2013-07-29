@@ -31,6 +31,7 @@ import os
 import time
 from dialogs import PopupNotificationWindow
 from gi.repository import GObject
+from gi.repository import GLib
 import gtkgui_helpers
 from gi.repository import Gtk
 
@@ -89,7 +90,7 @@ text=None, timeout=-1):
     if gajim.config.get('use_notif_daemon') and dbus_support.supported:
         try:
             DesktopNotification(event_type, jid, account, msg_type,
-                path_to_image, title, GObject.markup_escape_text(text), timeout)
+                path_to_image, title, GLib.markup_escape_text(text), timeout)
             return  # sucessfully did D-Bus Notification procedure!
         except dbus.DBusException as e:
             # Connection to D-Bus failed
@@ -103,10 +104,10 @@ text=None, timeout=-1):
         if not text and event_type == 'new_message':
             # empty text for new_message means do_preview = False
             # -> default value for text
-            _text = GObject.markup_escape_text(
-                gajim.get_name_from_jid(account, jid))
+            _text = GLib.markup_escape_text(gajim.get_name_from_jid(account,
+                jid))
         else:
-            _text = GObject.markup_escape_text(text)
+            _text = GLib.markup_escape_text(text)
 
         if not title:
             _title = ''

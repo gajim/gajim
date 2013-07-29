@@ -23,7 +23,7 @@
 
 
 from gi.repository import Gtk
-from gi.repository import GObject
+from gi.repository import GLib
 
 import gtkgui_helpers
 from common import helpers
@@ -85,23 +85,23 @@ class AtomWindow:
         if newentry.feed_link is not None:
             self.feed_title_label.set_markup(
                 '<span foreground="blue" underline="single">%s</span>' % \
-                GObject.markup_escape_text(newentry.feed_title))
+                GLib.markup_escape_text(newentry.feed_title))
         else:
-            self.feed_title_label.set_markup(
-                GObject.markup_escape_text(newentry.feed_title))
+            self.feed_title_label.set_markup(GLib.markup_escape_text(
+                newentry.feed_title))
 
         self.feed_tagline_label.set_markup(
-            '<small>%s</small>' % \
-            GObject.markup_escape_text(newentry.feed_tagline))
+            '<small>%s</small>' % GLib.markup_escape_text(
+            newentry.feed_tagline))
 
         if newentry.title:
             if newentry.uri is not None:
                 self.entry_title_label.set_markup(
                     '<span foreground="blue" underline="single">%s</span>' % \
-                    GObject.markup_escape_text(newentry.title))
+                    GLib.markup_escape_text(newentry.title))
             else:
-                self.entry_title_label.set_markup(
-                    GObject.markup_escape_text(newentry.title))
+                self.entry_title_label.set_markup(GLib.markup_escape_text(
+                    newentry.title))
         else:
             self.entry_title_label.set_markup('')
 

@@ -51,7 +51,7 @@ import sys
 import signal
 from gi.repository import Gtk
 from gi.repository import Gdk
-from gi.repository import GObject
+from gi.repository import GLib
 import time
 import locale
 
@@ -417,10 +417,9 @@ class HistoryManager:
                 message_ = '<span'
                 if color:
                     message_ += ' foreground="%s"' % color
-                message_ += '>%s</span>' % \
-                        GObject.markup_escape_text(message)
-                self.logs_liststore.append((str(log_line_id), str(jid_id), time_,
-                    message_, subject, nickname))
+                message_ += '>%s</span>' % GLib.markup_escape_text(message)
+                self.logs_liststore.append((str(log_line_id), str(jid_id),
+                    time_, message_, subject, nickname))
 
     def _fill_search_results_listview(self, text):
         """

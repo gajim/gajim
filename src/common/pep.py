@@ -215,7 +215,7 @@ LOCATION_DATA = {
         'timestamp':    _('timestamp'),
         'uri':          _('uri')}
 
-from gi.repository import GObject
+from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import GdkPixbuf
 
@@ -299,10 +299,10 @@ class UserMoodPEP(AbstractPEP):
         assert not self._retracted
         untranslated_mood = self._pep_specific_data['mood']
         mood = self._translate_mood(untranslated_mood)
-        markuptext = '<b>%s</b>' % GObject.markup_escape_text(mood)
+        markuptext = '<b>%s</b>' % GLib.markup_escape_text(mood)
         if 'text' in self._pep_specific_data:
             text = self._pep_specific_data['text']
-            markuptext += ' (%s)' % GObject.markup_escape_text(text)
+            markuptext += ' (%s)' % GLib.markup_escape_text(text)
         return markuptext
 
     def _translate_mood(self, mood):
@@ -339,13 +339,13 @@ class UserTunePEP(AbstractPEP):
         tune = self._pep_specific_data
 
         artist = tune.get('artist', _('Unknown Artist'))
-        artist = GObject.markup_escape_text(artist)
+        artist = GLib.markup_escape_text(artist)
 
         title = tune.get('title', _('Unknown Title'))
-        title = GObject.markup_escape_text(title)
+        title = GLib.markup_escape_text(title)
 
         source = tune.get('source', _('Unknown Source'))
-        source = GObject.markup_escape_text(source)
+        source = GLib.markup_escape_text(source)
 
         tune_string =  _('<b>"%(title)s"</b> by <i>%(artist)s</i>\n'
                 'from <i>%(source)s</i>') % {'title': title,
@@ -392,12 +392,12 @@ class UserActivityPEP(AbstractPEP):
                 subactivity = ACTIVITIES[activity][subactivity]
             activity = ACTIVITIES[activity]['category']
 
-        markuptext = '<b>' + GObject.markup_escape_text(activity)
+        markuptext = '<b>' + GLib.markup_escape_text(activity)
         if subactivity:
-            markuptext += ': ' + GObject.markup_escape_text(subactivity)
+            markuptext += ': ' + GLib.markup_escape_text(subactivity)
         markuptext += '</b>'
         if text:
-            markuptext += ' (%s)' % GObject.markup_escape_text(text)
+            markuptext += ' (%s)' % GLib.markup_escape_text(text)
         return markuptext
 
 
@@ -463,7 +463,7 @@ class UserLocationPEP(AbstractPEP):
 
         for entry in location.keys():
             text = location[entry]
-            text = GObject.markup_escape_text(text)
+            text = GLib.markup_escape_text(text)
             # Translate standart location tag
             tag = LOCATION_DATA.get(entry, entry)
             location_string += '\n<b>%(tag)s</b>: %(text)s' % \
