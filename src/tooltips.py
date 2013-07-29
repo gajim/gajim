@@ -222,7 +222,10 @@ class StatusTable:
         self.spacer_label = '   '
 
     def create_table(self):
-        self.table = Gtk.Table(4, 1)
+        self.table = Gtk.Grid()
+        self.table.insert_row(0)
+        self.table.insert_row(0)
+        self.table.insert_column(0)
         self.table.set_property('column-spacing', 2)
 
     def add_text_row(self, text, col_inc = 0):
@@ -232,8 +235,8 @@ class StatusTable:
         self.text_label.set_alignment(0, 0)
         self.text_label.set_selectable(False)
         self.text_label.set_markup(text)
-        self.table.attach(self.text_label, 1 + col_inc, 4, self.current_row,
-                self.current_row + 1)
+        self.table.attach(self.text_label, 1 + col_inc, self.current_row,
+            3 - col_inc, 1)
 
     def get_status_info(self, resource, priority, show, status):
         str_status = resource + ' (' + str(priority) + ')'
@@ -248,10 +251,12 @@ class StatusTable:
         return str_status
 
     def add_status_row(self, file_path, show, str_status, status_time=None,
-                    show_lock=False, indent=True):
+    show_lock=False, indent=True):
         """
         Append a new row with status icon to the table
         """
+        self.table.insert_row(0)
+        self.table.insert_row(0)
         self.current_row += 1
         state_file = show.replace(' ', '_')
         files = []
@@ -266,22 +271,18 @@ class StatusTable:
         spacer = Gtk.Label(label=self.spacer_label)
         image.set_alignment(1, 0.5)
         if indent:
-            self.table.attach(spacer, 1, 2, self.current_row,
-                    self.current_row + 1, 0, 0, 0, 0)
-        self.table.attach(image, 2, 3, self.current_row,
-                self.current_row + 1, Gtk.AttachOptions.FILL, Gtk.AttachOptions.FILL, 2, 0)
+            self.table.attach(spacer, 1, self.current_row, 1, 1)
+        self.table.attach(image, 2, self.current_row, 1, 1)
         status_label = Gtk.Label()
         status_label.set_markup(str_status)
         status_label.set_alignment(0, 0)
         status_label.set_line_wrap(True)
-        self.table.attach(status_label, 3, 4, self.current_row,
-                self.current_row + 1, Gtk.AttachOptions.FILL | Gtk.AttachOptions.EXPAND, 0, 0, 0)
+        self.table.attach(status_label, 3, self.current_row, 1, 1)
         if show_lock:
             lock_image = Gtk.Image()
             lock_image.set_from_stock(Gtk.STOCK_DIALOG_AUTHENTICATION,
-                    Gtk.IconSize.MENU)
-            self.table.attach(lock_image, 4, 5, self.current_row,
-                    self.current_row + 1, 0, 0, 0, 0)
+                Gtk.IconSize.MENU)
+            self.table.attach(lock_image, 4, self.current_row, 1, 1)
 
 class NotificationAreaTooltip(BaseTooltip, StatusTable):
     """
@@ -322,7 +323,6 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
         self.create_table()
 
         accounts = helpers.get_notification_icon_tooltip_dict()
-        self.table.resize(2, 1)
         self.fill_table_with_accounts(accounts)
         self.hbox = Gtk.HBox()
         self.table.set_property('column-spacing', 1)
@@ -349,9 +349,12 @@ class GCTooltip(BaseTooltip):
         if not contact:
             return
         self.create_window()
-        vcard_table = Gtk.Table(3, 1)
+        vcard_table = Gtk.Grid()
+        vcard_table.insert_row(0)
+        vcard_table.insert_row(0)
+        vcard_table.insert_row(0)
+        vcard_table.insert_column(0)
         vcard_table.set_property('column-spacing', 2)
-        vcard_table.set_homogeneous(False)
         vcard_current_row = 1
         properties = []
 
@@ -380,17 +383,17 @@ class GCTooltip(BaseTooltip):
 
         if contact.affiliation != 'none':
             uf_affiliation = helpers.get_uf_affiliation(contact.affiliation)
-            uf_affiliation =\
-                    _('%(owner_or_admin_or_member)s of this group chat') %\
-                    {'owner_or_admin_or_member': uf_affiliation}
+            uf_affiliation = \
+                _('%(owner_or_admin_or_member)s of this group chat') % \
+                {'owner_or_admin_or_member': uf_affiliation}
             uf_affiliation = self.colorize_affiliation(uf_affiliation)
             properties.append((uf_affiliation, None))
 
         # Add avatar
         puny_name = helpers.sanitize_filename(contact.name)
         puny_room = helpers.sanitize_filename(contact.room_jid)
-        file_ = helpers.get_avatar_path(os.path.join(gajim.AVATAR_PATH, puny_room,
-                puny_name))
+        file_ = helpers.get_avatar_path(os.path.join(gajim.AVATAR_PATH,
+            puny_room, puny_name))
         if file_:
             self.avatar_image.set_from_file(file_)
             pix = self.avatar_image.get_pixbuf()
@@ -401,31 +404,27 @@ class GCTooltip(BaseTooltip):
         while properties:
             property_ = properties.pop(0)
             vcard_current_row += 1
-            vertical_fill = Gtk.AttachOptions.FILL
-            if not properties:
-                vertical_fill |= Gtk.AttachOptions.EXPAND
             label = Gtk.Label()
+            if not properties:
+                label.set_vexpand(True)
             label.set_alignment(0, 0)
             if property_[1]:
                 label.set_markup(property_[0])
-                vcard_table.attach(label, 1, 2, vcard_current_row,
-                        vcard_current_row + 1, Gtk.AttachOptions.FILL, vertical_fill, 0, 0)
+                vcard_table.attach(label, 1, vcard_current_row, 1, 1)
                 label = Gtk.Label()
+                if not properties:
+                    label.set_vexpand(True)
                 label.set_alignment(0, 0)
                 label.set_markup(property_[1])
                 label.set_line_wrap(True)
-                vcard_table.attach(label, 2, 3, vcard_current_row,
-                        vcard_current_row + 1, Gtk.AttachOptions.EXPAND | Gtk.AttachOptions.FILL,
-                        vertical_fill, 0, 0)
+                vcard_table.attach(label, 2, vcard_current_row, 1, 1)
             else:
                 label.set_markup(property_[0])
                 label.set_line_wrap(True)
-                vcard_table.attach(label, 1, 3, vcard_current_row,
-                        vcard_current_row + 1, Gtk.AttachOptions.FILL, vertical_fill, 0)
+                vcard_table.attach(label, 1, vcard_current_row, 2, 1)
 
         self.avatar_image.set_alignment(0, 0)
-        vcard_table.attach(self.avatar_image, 3, 4, 2, vcard_current_row + 1,
-                Gtk.AttachOptions.FILL, Gtk.AttachOptions.FILL | Gtk.AttachOptions.EXPAND, 3, 3)
+        vcard_table.attach(self.avatar_image, 3, 2, 1, vcard_current_row - 1)
         gajim.plugin_manager.gui_extension_point('gc_tooltip_populate',
             self, contact, vcard_table)
         self.win.add(vcard_table)
@@ -451,7 +450,6 @@ class RosterTooltip(NotificationAreaTooltip):
         if not contacts or len(contacts) == 0:
             # Tooltip for merged accounts row
             accounts = helpers.get_notification_icon_tooltip_dict()
-            self.table.resize(2, 1)
             self.spacer_label = ''
             self.fill_table_with_accounts(accounts)
             self.win.add(self.table)
@@ -459,12 +457,13 @@ class RosterTooltip(NotificationAreaTooltip):
 
         # primary contact
         prim_contact = gajim.contacts.get_highest_prio_contact_from_contacts(
-                contacts)
+            contacts)
 
         puny_jid = helpers.sanitize_filename(prim_contact.jid)
         table_size = 3
 
-        file_ = helpers.get_avatar_path(os.path.join(gajim.AVATAR_PATH, puny_jid))
+        file_ = helpers.get_avatar_path(os.path.join(gajim.AVATAR_PATH,
+            puny_jid))
         if file_:
             self.avatar_image.set_from_file(file_)
             pix = self.avatar_image.get_pixbuf()
@@ -473,9 +472,11 @@ class RosterTooltip(NotificationAreaTooltip):
             table_size = 4
         else:
             self.avatar_image.set_from_pixbuf(None)
-        vcard_table = Gtk.Table(1,table_size)
+        vcard_table = Gtk.Grid()
+        vcard_table.insert_row(0)
+        for i in range(0, table_size):
+            vcard_table.insert_column(0)
         vcard_table.set_property('column-spacing', 2)
-        vcard_table.set_homogeneous(False)
         vcard_current_row = 1
         properties = []
 
@@ -508,11 +509,10 @@ class RosterTooltip(NotificationAreaTooltip):
 
         if num_resources > 1:
             properties.append((_('Status: '),       ' '))
-            transport = gajim.get_transport_name_from_jid(
-                    prim_contact.jid)
+            transport = gajim.get_transport_name_from_jid(prim_contact.jid)
             if transport:
                 file_path = os.path.join(helpers.get_transport_path(transport),
-                        '16x16')
+                    '16x16')
             else:
                 iconset = gajim.config.get('iconset')
                 if not iconset:
@@ -525,11 +525,11 @@ class RosterTooltip(NotificationAreaTooltip):
             for priority in contact_keys:
                 for acontact in contacts_dict[priority]:
                     status_line = self.get_status_info(acontact.resource,
-                            acontact.priority, acontact.show, acontact.status)
+                        acontact.priority, acontact.show, acontact.status)
 
                     icon_name = self._get_icon_name_for_tooltip(acontact)
                     self.add_status_row(file_path, icon_name, status_line,
-                            acontact.last_status_time)
+                        acontact.last_status_time)
             properties.append((self.table,  None))
 
         else: # only one resource
@@ -538,13 +538,14 @@ class RosterTooltip(NotificationAreaTooltip):
                 if not self.check_last_time and self.account:
                     if contact.show == 'offline':
                         if not contact.last_status_time:
-                            gajim.connections[self.account].request_last_status_time(
-                                    contact.jid, '')
+                            gajim.connections[self.account].\
+                                request_last_status_time(contact.jid, '')
                         else:
                             self.check_last_time = contact.last_status_time
                     elif contact.resource:
-                        gajim.connections[self.account].request_last_status_time(
-                                contact.jid, contact.resource)
+                        gajim.connections[self.account].\
+                            request_last_status_time(
+                            contact.jid, contact.resource)
                         if contact.last_activity_time:
                             self.check_last_time = contact.last_activity_time
                 else:
@@ -556,15 +557,15 @@ class RosterTooltip(NotificationAreaTooltip):
                     else:
                         text = _(' since %s')
 
-                    if time.strftime('%j', time.localtime())== \
-                                    time.strftime('%j', contact.last_status_time):
-                    # it's today, show only the locale hour representation
+                    if time.strftime('%j', time.localtime()) == \
+                        time.strftime('%j', contact.last_status_time):
+                        # it's today, show only the locale hour representation
                         local_time = time.strftime('%X',
-                                contact.last_status_time)
+                            contact.last_status_time)
                     else:
                         # time.strftime returns locale encoded string
                         local_time = time.strftime('%c',
-                                contact.last_status_time)
+                            contact.last_status_time)
 
                     text = text % local_time
                     show += text
@@ -580,7 +581,8 @@ class RosterTooltip(NotificationAreaTooltip):
                     status = contact.status.strip()
                     if status:
                         # reduce long status
-                        # (no more than 300 chars on line and no more than 5 lines)
+                        # (no more than 300 chars on line and no more than
+                        # 5 lines)
                         # status is wrapped
                         status = helpers.reduce_chars_newlines(status, 300, 5)
                         # escape markup entities.
@@ -641,37 +643,30 @@ class RosterTooltip(NotificationAreaTooltip):
         while properties:
             property_ = properties.pop(0)
             vcard_current_row += 1
-            vertical_fill = Gtk.AttachOptions.FILL
-            if not properties and table_size == 4:
-                vertical_fill |= Gtk.AttachOptions.EXPAND
             label = Gtk.Label()
+            if not properties and table_size == 4:
+                label.set_vexpand(True)
             label.set_alignment(0, 0)
             if property_[1]:
                 label.set_markup(property_[0])
-                vcard_table.attach(label, 1, 2, vcard_current_row,
-                    vcard_current_row + 1, Gtk.AttachOptions.FILL,
-                    vertical_fill, 0, 0)
+                vcard_table.attach(label, 1, vcard_current_row, 1, 1)
                 label = Gtk.Label()
+                if not properties and table_size == 4:
+                    label.set_vexpand(True)
                 label.set_alignment(0, 0)
                 label.set_markup(property_[1])
                 label.set_line_wrap(True)
-                vcard_table.attach(label, 2, 3, vcard_current_row,
-                    vcard_current_row + 1, Gtk.AttachOptions.EXPAND | \
-                    Gtk.AttachOptions.FILL, vertical_fill, 0, 0)
+                vcard_table.attach(label, 2, vcard_current_row, 1, 1)
             else:
                 if isinstance(property_[0], str):
                     label.set_markup(property_[0])
                     label.set_line_wrap(True)
                 else:
                     label = property_[0]
-                vcard_table.attach(label, 1, 3, vcard_current_row,
-                    vcard_current_row + 1, Gtk.AttachOptions.FILL,
-                    vertical_fill, 0)
+                vcard_table.attach(label, 1, vcard_current_row, 2, 1)
         self.avatar_image.set_alignment(0, 0)
         if table_size == 4:
-            vcard_table.attach(self.avatar_image, 3, 4, 2,
-                vcard_current_row + 1, Gtk.AttachOptions.FILL,
-                Gtk.AttachOptions.FILL | Gtk.AttachOptions.EXPAND, 3, 3)
+            vcard_table.attach(self.avatar_image, 3, 2, 1, vcard_current_row - 1)
 
         gajim.plugin_manager.gui_extension_point('roster_tooltip_populate',
             self, contacts, vcard_table)
