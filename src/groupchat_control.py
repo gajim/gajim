@@ -2685,12 +2685,15 @@ class GroupchatControl(ChatControlBase):
             # control has been destroyed since tooltip was requested
             return
         pointer = self.list_treeview.get_pointer()
-        props = self.list_treeview.get_path_at_pos(pointer[0], pointer[1])
+        w = self.list_treeview.get_window()
+        device = w.get_display().get_device_manager().get_client_pointer()
+        pointer = w.get_device_position(device)
+        props = self.list_treeview.get_path_at_pos(pointer[1], pointer[2])
         # check if the current pointer is at the same path
         # as it was before setting the timeout
         if props and self.tooltip.id == props[0]:
             rect = self.list_treeview.get_cell_area(props[0], props[1])
-            position = self.list_treeview.get_window().get_origin()[1:]
+            position = w.get_origin()[1:]
             self.tooltip.show_tooltip(contact, rect.height,
                 position[1] + rect.y)
         else:

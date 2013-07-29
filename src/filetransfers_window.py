@@ -753,9 +753,11 @@ class FileTransfersWindow:
         self.window.show_all()
 
     def on_transfers_list_motion_notify_event(self, widget, event):
-        pointer = self.tree.get_pointer()
+        w = self.tree.get_window()
+        device = w.get_display().get_device_manager().get_client_pointer()
+        pointer = w.get_device_position(device)
         props = widget.get_path_at_pos(int(event.x), int(event.y))
-        self.height_diff = pointer[1] - int(event.y)
+        self.height_diff = pointer[2] - int(event.y)
         if self.tooltip.timeout > 0:
             if not props or self.tooltip.id != props[0]:
                 self.tooltip.hide_tooltip()
@@ -780,8 +782,11 @@ class FileTransfersWindow:
             self.height_diff = int(event.y)
         elif self.height_diff is 0:
             return
-        pointer = self.tree.get_pointer()
-        props = self.tree.get_path_at_pos(pointer[0], pointer[1] - self.height_diff)
+        w = self.tree.get_window()
+        device = w.get_display().get_device_manager().get_client_pointer()
+        pointer = w.get_device_position(device)
+        props = self.tree.get_path_at_pos(pointer[1],
+            pointer[2] - self.height_diff)
         if self.tooltip.timeout > 0:
             if not props or self.tooltip.id == props[0]:
                 self.tooltip.hide_tooltip()
@@ -953,9 +958,11 @@ class FileTransfersWindow:
         if self.height_diff == 0:
             self.tooltip.hide_tooltip()
             return
-        pointer = self.tree.get_pointer()
-        props = self.tree.get_path_at_pos(pointer[0],
-            pointer[1] - self.height_diff)
+        w = self.tree.get_window()
+        device = w.get_display().get_device_manager().get_client_pointer()
+        pointer = w.get_device_position(device)
+        props = self.tree.get_path_at_pos(pointer[1],
+            pointer[2] - self.height_diff)
         # check if the current pointer is at the same path
         # as it was before setting the timeout
         if props and self.tooltip.id == props[0]:

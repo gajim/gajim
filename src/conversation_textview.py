@@ -651,9 +651,11 @@ class ConversationTextview(GObject.GObject):
                 GLib.idle_add(self.scroll_to_end)
 
     def show_xep0184_warning_tooltip(self):
-        pointer = self.tv.get_pointer()
-        x, y = self.tv.window_to_buffer_coords(Gtk.TextWindowType.TEXT,
-                pointer[1], pointer[2])
+        w = self.tv.get_window(Gtk.TextWindowType.TEXT)
+        device = w.get_display().get_device_manager().get_client_pointer()
+        pointer = w.get_device_position(device)
+        x = pointer[1]
+        y = pointer[2]
         tags = self.tv.get_iter_at_location(x, y).get_tags()
         tag_table = self.tv.get_buffer().get_tag_table()
         xep0184_warning = False
@@ -663,16 +665,18 @@ class ConversationTextview(GObject.GObject):
                 break
         if xep0184_warning and not self.xep0184_warning_tooltip.win:
             # check if the current pointer is still over the line
-            position = self.tv.get_window(Gtk.TextWindowType.TEXT).get_origin()[1:]
-            self.xep0184_warning_tooltip.show_tooltip(_('This icon indicates that '
-                    'this message has not yet\nbeen received by the remote end. '
-                    "If this icon stays\nfor a long time, it's likely the message got "
-                    'lost.'), 8, position[1] + pointer[2])
+            position = w.get_origin()[1:]
+            self.xep0184_warning_tooltip.show_tooltip(_('This icon indicates '
+                'that this message has not yet\nbeen received by the remote '
+                "end. If this icon stays\nfor a long time, it's likely the "
+                'message got lost.'), 8, position[1] + y)
 
     def show_line_tooltip(self):
-        pointer = self.tv.get_pointer()
-        x, y = self.tv.window_to_buffer_coords(Gtk.TextWindowType.TEXT,
-                pointer[0], pointer[1])
+        w = self.tv.get_window(Gtk.TextWindowType.TEXT)
+        device = w.get_display().get_device_manager().get_client_pointer()
+        pointer = w.get_device_position(device)
+        x = pointer[1]
+        y = pointer[2]
         tags = self.tv.get_iter_at_location(x, y).get_tags()
         tag_table = self.tv.get_buffer().get_tag_table()
         over_line = False
@@ -682,10 +686,10 @@ class ConversationTextview(GObject.GObject):
                 break
         if over_line and not self.line_tooltip.win:
             # check if the current pointer is still over the line
-            position = self.tv.get_window(Gtk.TextWindowType.TEXT).get_origin()[1:]
+            position = w.get_origin()[1:]
             self.line_tooltip.show_tooltip(_('Text below this line is what has '
-                    'been said since the\nlast time you paid attention to this group '
-                    'chat'), 8, position[1] + pointer[1])
+                'been said since the\nlast time you paid attention to this '
+                'group chat'), 8, position[1] + y)
 
     def on_textview_draw(self, widget, ctx):
         return
@@ -719,14 +723,14 @@ class ConversationTextview(GObject.GObject):
         """
         Change the cursor to a hand when we are over a mail or an url
         """
-        pointer_x, pointer_y = self.tv.get_window(Gtk.TextWindowType.TEXT).\
-            get_pointer()[1:3]
+        w = self.tv.get_window(Gtk.TextWindowType.TEXT)
+        device = w.get_display().get_device_manager().get_client_pointer()
+        pointer = w.get_device_position(device)
         x, y = self.tv.window_to_buffer_coords(Gtk.TextWindowType.TEXT,
-            pointer_x, pointer_y)
+            pointer[1], pointer[2])
         tags = self.tv.get_iter_at_location(x, y).get_tags()
         if self.change_cursor:
-            self.tv.get_window(Gtk.TextWindowType.TEXT).set_cursor(
-                    Gdk.Cursor.new(Gdk.CursorType.XTERM))
+            w.set_cursor(Gdk.Cursor.new(Gdk.CursorType.XTERM))
             self.change_cursor = False
         tag_table = self.tv.get_buffer().get_tag_table()
         over_line = False
@@ -735,8 +739,7 @@ class ConversationTextview(GObject.GObject):
         for tag in tags:
             if tag in (tag_table.lookup('url'), tag_table.lookup('mail'), \
             tag_table.lookup('xmpp'), tag_table.lookup('sth_at_sth')):
-                self.tv.get_window(Gtk.TextWindowType.TEXT).set_cursor(
-                        Gdk.Cursor.new(Gdk.CursorType.HAND2))
+                w.set_cursor(Gdk.Cursor.new(Gdk.CursorType.HAND2))
                 self.change_cursor = True
             elif tag == tag_table.lookup('focus-out-line'):
                 over_line = True
@@ -754,14 +757,12 @@ class ConversationTextview(GObject.GObject):
         if over_line and not self.line_tooltip.win:
             self.line_tooltip.timeout = GLib.timeout_add(500,
                     self.show_line_tooltip)
-            self.tv.get_window(Gtk.TextWindowType.TEXT).set_cursor(
-                    Gdk.Cursor.new(Gdk.CursorType.LEFT_PTR))
+            w.set_cursor(Gdk.Cursor.new(Gdk.CursorType.LEFT_PTR))
             self.change_cursor = True
         if xep0184_warning and not self.xep0184_warning_tooltip.win:
             self.xep0184_warning_tooltip.timeout = GLib.timeout_add(500,
                     self.show_xep0184_warning_tooltip)
-            self.tv.get_window(Gtk.TextWindowType.TEXT).set_cursor(
-                    Gdk.Cursor.new(Gdk.CursorType.LEFT_PTR))
+            w.set_cursor(Gdk.Cursor.new(Gdk.CursorType.LEFT_PTR))
             self.change_cursor = True
 
     def clear(self, tv = None):

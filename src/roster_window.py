@@ -2049,8 +2049,10 @@ class RosterWindow:
             vb.set_no_show_all(True)
 
     def show_tooltip(self, contact):
-        pointer = self.tree.get_pointer()
-        props = self.tree.get_path_at_pos(pointer[0], pointer[1])
+        device = self.tree.get_window().get_display().get_device_manager().\
+            get_client_pointer()
+        pointer = self.tree.get_window().get_device_position(device)
+        props = self.tree.get_path_at_pos(pointer[1], pointer[2])
         # check if the current pointer is at the same path
         # as it was before setting the timeout
         if props and self.tooltip.id == props[0]:

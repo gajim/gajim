@@ -867,8 +867,11 @@ class HtmlTextView(Gtk.TextView):
     def show_tooltip(self, tag):
         if not self.tooltip.win:
             # check if the current pointer is still over the line
-            x, y = self.get_window(Gtk.TextWindowType.TEXT).get_pointer()[1:3]
-            x, y = self.window_to_buffer_coords(Gtk.TextWindowType.TEXT, x, y)
+            w = self.get_window(Gtk.TextWindowType.TEXT)
+            device = w.get_display().get_device_manager().get_client_pointer()
+            pointer = w.get_device_position(device)
+            x = pointer[1]
+            y = pointer[2]
             tags = self.get_iter_at_location(x, y).get_tags()
             is_over_anchor = False
             for tag_ in tags:
@@ -879,13 +882,15 @@ class HtmlTextView(Gtk.TextView):
                 return
             text = getattr(tag, 'title', False)
             if text:
-                pointer = self.get_pointer()
-                position = self.get_window(Gtk.TextWindowType.TEXT).get_origin()[1:]
-                self.tooltip.show_tooltip(text, 8, position[1] + pointer[2])
+                position = w.get_origin()[1:]
+                self.tooltip.show_tooltip(text, 8, position[1] + y)
 
     def __motion_notify_event(self, widget, event):
-        x, y = widget.get_window(Gtk.TextWindowType.TEXT).get_pointer()[1:3]
-        x, y = widget.window_to_buffer_coords(Gtk.TextWindowType.TEXT, x, y)
+        w = widget.get_window(Gtk.TextWindowType.TEXT)
+        device = w.get_display().get_device_manager().get_client_pointer()
+        pointer = w.get_device_position(device)
+        x = pointer[1]
+        y = pointer[2]
         tags = widget.get_iter_at_location(x, y).get_tags()
         anchor_tags = [tag for tag in tags if getattr(tag, 'is_anchor', False)]
         if self.tooltip.timeout != 0:
@@ -893,14 +898,12 @@ class HtmlTextView(Gtk.TextView):
             if not anchor_tags:
                 self.tooltip.hide_tooltip()
         if not self._changed_cursor and anchor_tags:
-            window = widget.get_window(Gtk.TextWindowType.TEXT)
-            window.set_cursor(Gdk.Cursor.new(Gdk.CursorType.HAND2))
+            w.set_cursor(Gdk.Cursor.new(Gdk.CursorType.HAND2))
             self._changed_cursor = True
             self.tooltip.timeout = GLib.timeout_add(500, self.show_tooltip,
                 anchor_tags[0])
         elif self._changed_cursor and not anchor_tags:
-            window = widget.get_window(Gtk.TextWindowType.TEXT)
-            window.set_cursor(Gdk.Cursor.new(Gdk.CursorType.XTERM))
+            w.set_cursor(Gdk.Cursor.new(Gdk.CursorType.XTERM))
             self._changed_cursor = False
         return False
 
@@ -995,21 +998,20 @@ if __name__ == '__main__':
         Change the cursor to a hand when we are over a mail or an url
         """
         global change_cursor
-        pointer_x, pointer_y = htmlview.tv.get_window(Gtk.TextWindowType.TEXT).\
-            get_pointer()[1:3]
-        x, y = htmlview.tv.window_to_buffer_coords(Gtk.TextWindowType.TEXT,
-            pointer_x, pointer_y)
+        w = htmlview.tv.get_window(Gtk.TextWindowType.TEXT)
+        device = w.get_display().get_device_manager().get_client_pointer()
+        pointer = w.get_device_position(device)
+        x = pointer[1]
+        y = pointer[2]
         tags = htmlview.tv.get_iter_at_location(x, y).get_tags()
         if change_cursor:
-            htmlview.tv.get_window(Gtk.TextWindowType.TEXT).set_cursor(
-                Gdk.Cursor.new(Gdk.CursorType.XTERM))
+            w.set_cursor(Gdk.Cursor.new(Gdk.CursorType.XTERM))
             change_cursor = None
         tag_table = htmlview.tv.get_buffer().get_tag_table()
         for tag in tags:
             try:
                 if tag.is_anchor:
-                    htmlview.tv.get_window(Gtk.TextWindowType.TEXT).set_cursor(
-                        Gdk.Cursor.new(Gdk.CursorType.HAND2))
+                    w.set_cursor(Gdk.Cursor.new(Gdk.CursorType.HAND2))
                     change_cursor = tag
                 elif tag == tag_table.lookup('focus-out-line'):
                     over_line = True

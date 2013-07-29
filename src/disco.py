@@ -1272,15 +1272,17 @@ class ToplevelAgentBrowser(AgentBrowser):
 
     def _show_tooltip(self, state):
         view = self.window.services_treeview
-        pointer = view.get_pointer()
-        props = view.get_path_at_pos(pointer[0], pointer[1])
+        w = view.get_window()
+        device = w.get_display().get_device_manager().get_client_pointer()
+        pointer = w.get_device_position(device)
+        props = view.get_path_at_pos(pointer[1], pointer[2])
         # check if the current pointer is at the same path
         # as it was before setting the timeout
         if props and self.tooltip.id == props[0]:
             # bounding rectangle of coordinates for the cell within the treeview
             rect = view.get_cell_area(props[0], props[1])
             # position of the treeview on the screen
-            position = view.get_window().get_origin()[1:]
+            position = w.get_origin()[1:]
             self.tooltip.show_tooltip(state, rect.height, position[1] + rect.y)
         else:
             self.tooltip.hide_tooltip()
