@@ -6474,6 +6474,7 @@ class RosterWindow:
         self.status_combobox.add_attribute(cell, 'sensitive', 3)
 
         cell = Gtk.CellRendererText()
+        cell.set_property('ellipsize', Pango.EllipsizeMode.END)
         cell.set_property('xpad', 5) # padding for status text
         self.status_combobox.pack_start(cell, True)
         # text to show is in in first column of liststore
