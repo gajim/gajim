@@ -1755,8 +1755,16 @@ class ChatControl(ChatControlBase):
         # Formatting
         if self.contact.supports(NS_XHTML_IM) and not self.gpg_is_active:
             self._formattings_button.set_sensitive(True)
+            self._formattings_button.set_tooltip(_(
+                'Show a list of formattings'))
         else:
             self._formattings_button.set_sensitive(False)
+            if self.contact.supports(NS_XHTML_IM):
+                self._formattings_button.set_tooltip(_('Formattings are not '
+                    'available when GPG is active'))
+            else:
+                self._formattings_button.set_tooltip(_('This contact does not '
+                    'support HTML'))
 
         # Add to roster
         if not isinstance(self.contact, GC_Contact) \
