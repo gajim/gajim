@@ -1130,7 +1130,7 @@ _('This service does not contain any items to browse.'))
             #stop idle_add()
             yield False
         loader = fill_partial_rows(items)
-        gobject.idle_add(loader.next)
+        GLib.idle_add(next, loader)
 
     def _agent_info(self, jid, node, identities, features, data):
         """
