@@ -2684,7 +2684,6 @@ class GroupchatControl(ChatControlBase):
         if not self.list_treeview.get_window():
             # control has been destroyed since tooltip was requested
             return
-        pointer = self.list_treeview.get_pointer()
         w = self.list_treeview.get_window()
         device = w.get_display().get_device_manager().get_client_pointer()
         pointer = w.get_device_position(device)
