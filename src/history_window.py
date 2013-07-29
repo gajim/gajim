@@ -27,7 +27,7 @@
 
 from gi.repository import Gtk
 from gi.repository import Gdk
-from gi.repository import GObject
+from gi.repository import GLib
 import time
 import calendar
 
@@ -120,7 +120,7 @@ class HistoryWindow:
 
         # This will load history too
         task = self._fill_completion_dict()
-        GObject.idle_add(next, task)
+        GLib.idle_add(next, task)
 
         if jid:
             self.jid_entry.set_text(jid)
@@ -634,7 +634,7 @@ class HistoryWindow:
         self.jid_entry.set_text(jid)
         if account and account not in self.accounts_seen_online:
             # Update dict to not only show bare jid
-            GObject.idle_add(next, self._fill_completion_dict())
+            GLib.idle_add(next, self._fill_completion_dict())
         else:
             # Only in that case because it's called by self._fill_completion_dict()
             # otherwise

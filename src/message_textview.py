@@ -26,6 +26,7 @@ import gc
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GObject
+from gi.repository import GLib
 from gi.repository import Pango
 
 import gtkgui_helpers
@@ -284,7 +285,7 @@ class MessageTextView(Gtk.TextView):
             return None
 
     def destroy(self):
-        GObject.idle_add(gc.collect)
+        GLib.idle_add(gc.collect)
 
     def clear(self, widget = None):
         """

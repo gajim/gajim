@@ -39,7 +39,7 @@ import signal
 if os.name != 'nt':
     signal.signal(signal.SIGPIPE, signal.SIG_DFL)
 import getpass
-from gi.repository import GObject
+from gi.repository import GLib
 
 from common.connection import CommonConnection
 from common import gajim
@@ -239,7 +239,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
 
         # refresh all contacts data every five seconds
         self.call_resolve_timeout = True
-        GObject.timeout_add_seconds(5, self._on_resolve_timeout)
+        GLib.timeout_add_seconds(5, self._on_resolve_timeout)
         return True
 
     def disconnect(self, on_purpose=False):

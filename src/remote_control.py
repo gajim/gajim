@@ -26,7 +26,7 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-from gi.repository import GObject
+from gi.repository import GLib
 from gi.repository import Gtk
 import os
 import base64
@@ -559,8 +559,8 @@ class SignalObject(dbus.service.Object):
                 if account not in gajim.connections:
                     return DBUS_BOOLEAN(False)
                 status = gajim.SHOW_LIST[gajim.connections[account].connected]
-            GObject.idle_add(gajim.interface.roster.send_status, account,
-                    status, message)
+            GLib.idle_add(gajim.interface.roster.send_status, account, status,
+                message)
         else:
             # account not specified, so change the status of all accounts
             for acc in gajim.contacts.get_accounts():
@@ -573,8 +573,8 @@ class SignalObject(dbus.service.Object):
                     if acc not in gajim.connections:
                         continue
                     status_ = gajim.SHOW_LIST[gajim.connections[acc].connected]
-                GObject.idle_add(gajim.interface.roster.send_status, acc,
-                        status_, message)
+                GLib.idle_add(gajim.interface.roster.send_status, acc, status_,
+                    message)
         return DBUS_BOOLEAN(False)
 
     @dbus.service.method(INTERFACE, in_signature='ss', out_signature='')
@@ -587,8 +587,8 @@ class SignalObject(dbus.service.Object):
             gajim.config.set_per('accounts', account, 'priority', prio)
             show = gajim.SHOW_LIST[gajim.connections[account].connected]
             status = gajim.connections[account].status
-            GObject.idle_add(gajim.connections[account].change_status, show,
-                    status)
+            GLib.idle_add(gajim.connections[account].change_status, show,
+                status)
         else:
             # account not specified, so change prio of all accounts
             for acc in gajim.contacts.get_accounts():
@@ -600,8 +600,8 @@ class SignalObject(dbus.service.Object):
                 gajim.config.set_per('accounts', acc, 'priority', prio)
                 show = gajim.SHOW_LIST[gajim.connections[acc].connected]
                 status = gajim.connections[acc].status
-                GObject.idle_add(gajim.connections[acc].change_status, show,
-                        status)
+                GLib.idle_add(gajim.connections[acc].change_status, show,
+                    status)
 
     @dbus.service.method(INTERFACE, in_signature='', out_signature='')
     def show_next_pending_event(self):
@@ -693,7 +693,7 @@ class SignalObject(dbus.service.Object):
         """
         win = gajim.interface.roster.window
         if win.get_property('visible'):
-            GObject.idle_add(win.hide)
+            GLib.idle_add(win.hide)
         else:
             win.present()
             # preserve the 'steal focus preservation'
@@ -723,7 +723,7 @@ class SignalObject(dbus.service.Object):
         win = gajim.ipython_window
         if win:
             if win.window.is_visible():
-                GObject.idle_add(win.hide)
+                GLib.idle_add(win.hide)
             else:
                 win.show_all()
                 win.present()

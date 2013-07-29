@@ -29,6 +29,7 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import GObject
+from gi.repository import GLib
 import base64
 
 import gtkgui_helpers
@@ -640,7 +641,7 @@ class SingleForm(Gtk.Table, object):
             dialogs.ErrorDialog(
                     _('Jabber ID already in list'),
                     _('The Jabber ID you entered is already in the list. Choose another one.'))
-            GObject.idle_add(treeview.set_cursor, path)
+            GLib.idle_add(treeview.set_cursor, path)
             return
         model[path][0]=newtext
 
