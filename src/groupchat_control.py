@@ -2306,7 +2306,9 @@ class GroupchatControl(ChatControlBase):
 
                 list_nick.remove(self.nick) # Skip self
                 for nick in list_nick:
-                    if nick.lower().startswith(begin.lower()):
+                    fjid = self.room_jid + '/' + nick
+                    if nick.lower().startswith(begin.lower()) and not \
+                    helpers.jid_is_blocked(self.account, fjid):
                         # the word is the begining of a nick
                         self.nick_hits.append(nick)
             if len(self.nick_hits):
