@@ -102,7 +102,9 @@ class PluginsWindow(object):
         self._clear_installed_plugin_info()
 
         self.fill_installed_plugins_model()
-        selection.select_iter(self.installed_plugins_model.get_iter_root())
+        root_iter = self.installed_plugins_model.get_iter_root()
+        if root_iter:
+            selection.select_iter(root_iter)
 
         self.xml.connect_signals(self)
 
