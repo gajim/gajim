@@ -489,7 +489,7 @@ class ConversationTextview(GObject.GObject):
         buffer_ = self.tv.get_buffer()
         i1 = buffer_.get_iter_at_mark(m1)
         i2 = buffer_.get_iter_at_mark(m2)
-        txt = buffer_.get_text(i1, i2)
+        txt = buffer_.get_text(i1, i2, True)
         buffer_.delete(i1, i2)
         i2 = self.print_real_text(message, text_tags=['outgoingtxt'], name=name,
             xhtml=xhtml, iter_=i1)
@@ -507,7 +507,7 @@ class ConversationTextview(GObject.GObject):
         buffer_ = self.tv.get_buffer()
         i1 = buffer_.get_iter_at_mark(m1)
         i2 = buffer_.get_iter_at_mark(m2)
-        txt = buffer_.get_text(i1, i2)
+        txt = buffer_.get_text(i1, i2, True)
         buffer_.delete(i1, i2)
         i2 = self.print_real_text(message, text_tags=['incomingtxt'], name=name,
             xhtml=xhtml, iter_=i1)
