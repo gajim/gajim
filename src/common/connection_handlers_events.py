@@ -1927,6 +1927,8 @@ class AgentItemsReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.get_jid_resource()
         hostname = gajim.config.get_per('accounts', self.conn.name, 'hostname')
         self.get_id()
+        if self.id_ in self.conn.disco_items_ids:
+            self.conn.disco_items_ids.remove(self.id_)
         if self.fjid == hostname and self.id_[:6] == 'Gajim_':
             for item in self.items:
                 self.conn.discoverInfo(item['jid'], id_prefix='Gajim_')
@@ -1939,6 +1941,9 @@ class AgentItemsErrorReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
 
     def generate(self):
         self.get_jid_resource()
+        self.get_id()
+        if self.id_ in self.conn.disco_items_ids:
+            self.conn.disco_items_ids.remove(self.id_)
         return True
 
 class AgentInfoReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
@@ -1947,6 +1952,8 @@ class AgentInfoReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
 
     def generate(self):
         self.get_id()
+        if self.id_ in self.conn.disco_info_ids:
+            self.conn.disco_info_ids.remove(self.id_)
         if self.id_ is None:
             log.warning('Invalid IQ received without an ID. Ignoring it: %s' % \
                 self.stanza)
@@ -1991,6 +1998,8 @@ class AgentInfoErrorReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
     def generate(self):
         self.get_jid_resource()
         self.get_id()
+        if self.id_ in self.conn.disco_info_ids:
+            self.conn.disco_info_ids.remove(self.id_)
         return True
 
 class FileRequestReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):

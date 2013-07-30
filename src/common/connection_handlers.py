@@ -103,7 +103,8 @@ class ConnectionDisco:
             jid is mandatory;
             name, node, action is optional.
         """
-        self._discover(nbxmpp.NS_DISCO_ITEMS, jid, node, id_prefix)
+        id_ = self._discover(nbxmpp.NS_DISCO_ITEMS, jid, node, id_prefix)
+        self.disco_items_ids.append(id_)
 
     def discoverInfo(self, jid, node=None, id_prefix=None):
         """
@@ -111,7 +112,8 @@ class ConnectionDisco:
             For identity: category, type is mandatory, name is optional.
             For feature: var is mandatory.
         """
-        self._discover(nbxmpp.NS_DISCO_INFO, jid, node, id_prefix)
+        id_ = self._discover(nbxmpp.NS_DISCO_INFO, jid, node, id_prefix)
+        self.disco_info_ids.append(id_)
 
     def request_register_agent_info(self, agent):
         if not self.connection or self.connected < 2:
@@ -165,12 +167,14 @@ class ConnectionDisco:
         if not self.connection or self.connected < 2:
             return
         iq = nbxmpp.Iq(typ='get', to=jid, queryNS=ns)
+        id_ = self.connection.getAnID()
         if id_prefix:
-            id_ = self.connection.getAnID()
-            iq.setID('%s%s' % (id_prefix, id_))
+            id_ = id_prefix + id_
+        iq.setID(id_)
         if node:
             iq.setQuerynode(node)
         self.connection.send(iq)
+        return id_
 
     def _ReceivedRegInfo(self, con, resp, agent):
         nbxmpp.features_nb._ReceivedRegInfo(con, resp, agent)
@@ -1437,6 +1441,10 @@ ConnectionJingle, ConnectionIBBytestream):
         self.version_ids = []
         # IDs of urn:xmpp:time requests
         self.entity_time_ids = []
+        # IDs of disco#items requests
+        self.disco_items_ids = []
+        # IDs of disco#info requests
+        self.disco_info_ids = []
         # ID of urn:xmpp:ping requests
         self.awaiting_xmpp_ping_id = None
         self.continue_connect_info = None
@@ -1586,6 +1594,14 @@ ConnectionJingle, ConnectionIBBytestream):
             return True
         if obj.id_ in self.entity_time_ids:
             gajim.nec.push_incoming_event(TimeResultReceivedEvent(None,
+                conn=self, stanza=obj.stanza))
+            return True
+        if obj.id_ in self.disco_items_ids:
+            gajim.nec.push_incoming_event(AgentItemsErrorReceivedEvent(None,
+                conn=self, stanza=obj.stanza))
+            return True
+        if obj.id_ in self.disco_info_ids:
+            gajim.nec.push_incoming_event(AgentInfoErrorReceivedEvent(None,
                 conn=self, stanza=obj.stanza))
             return True
 

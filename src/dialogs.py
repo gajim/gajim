@@ -36,6 +36,7 @@ from gi.repository import GObject
 from gi.repository import GLib
 import cairo
 import os
+import nbxmpp
 
 import gtkgui_helpers
 import vcard
@@ -2431,6 +2432,11 @@ class JoinGroupchatWindow:
         hbox1 = self.xml.get_object('hbox1')
         hbox1.pack_start(self.server_comboboxentry, False, False, 0)
 
+        entry = self.server_comboboxentry.child
+        entry.connect('changed', self.on_server_entry_changed)
+        self.browse_button = self.xml.get_object('browse_rooms_button')
+        self.browse_button.set_sensitive(False)
+
         self.recently_combobox = self.xml.get_object('recently_combobox')
         liststore = Gtk.ListStore(str, str)
         self.recently_combobox.set_model(liststore)
@@ -2480,12 +2486,22 @@ class JoinGroupchatWindow:
         if account and not gajim.connections[account].private_storage_supported:
             self.xml.get_object('bookmark_checkbutton').set_sensitive(False)
 
+        self.requested_jid = None
+        gajim.ged.register_event_handler('agent-info-received', ged.GUI1,
+            self._nec_agent_info_received)
+        gajim.ged.register_event_handler('agent-info-error-received', ged.GUI1,
+            self._nec_agent_info_error_received)
+
         self.window.show_all()
 
     def on_join_groupchat_window_destroy(self, widget):
         """
         Close window
         """
+        gajim.ged.remove_event_handler('agent-info-received', ged.GUI1,
+            self._nec_agent_info_received)
+        gajim.ged.register_event_handler('agent-info-error-received', ged.GUI1,
+            self._nec_agent_info_error_received)
         if self.account and 'join_gc' in gajim.interface.instances[self.account]:
             # remove us from open windows
             del gajim.interface.instances[self.account]['join_gc']
@@ -2535,18 +2551,46 @@ class JoinGroupchatWindow:
 
     def on_browse_rooms_button_clicked(self, widget):
         server = self.server_comboboxentry.get_child().get_text()
-        if server in gajim.interface.instances[self.account]['disco']:
-            gajim.interface.instances[self.account]['disco'][server].window.\
+        self.requested_jid = server
+        gajim.connections[self.account].discoverInfo(server)
+
+    def _nec_agent_info_error_received(self, obj):
+        if obj.conn.name != self.account:
+            return
+        if obj.jid != self.requested_jid:
+            return
+        self.requested_jid = None
+        ErrorDialog(_('Wrong server'), _('%s is not a groupchat server') % \
+            obj.jid)
+
+    def _nec_agent_info_received(self, obj):
+        if obj.conn.name != self.account:
+            return
+        if obj.jid != self.requested_jid:
+            return
+        self.requested_jid = None
+        if nbxmpp.NS_MUC not in obj.features:
+            ErrorDialog(_('Wrong server'), _('%s is not a groupchat server') % \
+                obj.jid)
+            return
+        if obj.jid in gajim.interface.instances[self.account]['disco']:
+            gajim.interface.instances[self.account]['disco'][obj.jid].window.\
                 present()
         else:
             try:
                 # Object will add itself to the window dict
                 import disco
-                disco.ServiceDiscoveryWindow(self.account, server,
+                disco.ServiceDiscoveryWindow(self.account, obj.jid,
                     initial_identities=[{'category': 'conference',
                     'type': 'text'}])
             except GajimGeneralException:
                 pass
+
+    def on_server_entry_changed(self, widget):
+        if not widget.get_text():
+            self.browse_button.set_sensitive(False)
+        else:
+            self.browse_button.set_sensitive(True)
 
     def on_cancel_button_clicked(self, widget):
         """
