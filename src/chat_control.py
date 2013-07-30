@@ -1162,6 +1162,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         menu.append(item)
 
         menu.show_all()
+        menu.attach_to_widget(widget, None)
         gtkgui_helpers.popup_emoticons_under_button(menu, widget,
                 self.parent_win)
 
@@ -1183,6 +1184,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         """
         menu = self.prepare_context_menu(hide_buttonbar_items=True)
         menu.show_all()
+        menu.attach_to_widget(widget, None)
         gtkgui_helpers.popup_emoticons_under_button(menu, widget,
                 self.parent_win)
 
