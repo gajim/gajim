@@ -29,7 +29,7 @@ __all__ = ['PluginsWindow']
 from gi.repository import Pango
 from gi.repository import Gtk
 from gi.repository import GdkPixbuf
-from gi.repository import GObject
+from gi.repository import GLib
 import os
 
 import gtkgui_helpers
@@ -68,8 +68,7 @@ class PluginsWindow(object):
         for widget_name in widgets_to_extract:
             setattr(self, widget_name, self.xml.get_object(widget_name))
 
-        self.installed_plugins_model = Gtk.ListStore(GObject.TYPE_PYOBJECT,
-            GObject.TYPE_STRING, GObject.TYPE_BOOLEAN, GObject.TYPE_BOOLEAN,
+        self.installed_plugins_model = Gtk.ListStore(object, str, bool, bool,
             GdkPixbuf.Pixbuf)
         self.installed_plugins_treeview.set_model(self.installed_plugins_model)
         self.installed_plugins_treeview.set_rules_hint(True)
@@ -117,7 +116,7 @@ class PluginsWindow(object):
 
 
     def on_plugins_notebook_switch_page(self, widget, page, page_num):
-        GObject.idle_add(self.xml.get_object('close_button').grab_focus)
+        GLib.idle_add(self.xml.get_object('close_button').grab_focus)
 
     @log_calls('PluginsWindow')
     def installed_plugins_treeview_selection_changed(self, treeview_selection):
