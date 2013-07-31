@@ -715,36 +715,8 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
     def show_emoticons_menu(self):
         if not gajim.config.get('emoticons_theme'):
             return
-
-        def set_emoticons_menu_position(w, msg_tv=self.msg_textview):
-            window = msg_tv.get_window(Gtk.TextWindowType.WIDGET)
-            # get the window position
-            origin = window.get_origin()[1:]
-            size = window.get_size()
-            buf = msg_tv.get_buffer()
-            # get the cursor position
-            cursor = msg_tv.get_iter_location(buf.get_iter_at_mark(
-                    buf.get_insert()))
-            cursor = msg_tv.buffer_to_window_coords(Gtk.TextWindowType.TEXT,
-                    cursor.x, cursor.y)
-            x = origin[0] + cursor[0]
-            y = origin[1] + size[1]
-            menu_height = gajim.interface.emoticons_menu.size_request()[1]
-            #FIXME: get_line_count is not so good
-            #get the iter of cursor, then tv.get_line_yrange
-            # so we know in which y we are typing (not how many lines we have
-            # then go show just above the current cursor line for up
-            # or just below the current cursor line for down
-            #TEST with having 3 lines and writing in the 2nd
-            if y + menu_height > Gdk.Screen.height():
-                # move menu just above cursor
-                y -= menu_height + (msg_tv.allocation.height / buf.get_line_count())
-            #else: # move menu just below cursor
-            #       y -= (msg_tv.allocation.height / buf.get_line_count())
-            return (x, y, True)  # push_in True
         gajim.interface.emoticon_menuitem_clicked = self.append_emoticon
-        gajim.interface.emoticons_menu.popup(None, None,
-                set_emoticons_menu_position, None, 1, 0)
+        gajim.interface.emoticons_menu.popup(None, None, None, None, 1, 0)
 
     def _on_message_textview_key_press_event(self, widget, event):
         if event.keyval == Gdk.KEY_space:
