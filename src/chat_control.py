@@ -754,7 +754,24 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
                 return True
 ################################################################################
         # temporary solution instead Gtk.binding_entry_add_signal
-        if event.keyval == Gdk.KEY_Return or \
+        message_buffer = self.msg_textview.get_buffer()
+        event_state = event.get_state()
+        if event.keyval == Gdk.KEY_Up:
+            if event_state & Gdk.ModifierType.CONTROL_MASK:
+                if event_state & Gdk.ModifierType.SHIFT_MASK: # Ctrl+Shift+UP
+                    self.scroll_messages('up', message_buffer, 'received')
+                else:  # Ctrl+UP
+                    self.scroll_messages('up', message_buffer, 'sent')
+            return True
+        elif event.keyval == Gdk.KEY_Down:
+            if event_state & Gdk.ModifierType.CONTROL_MASK:
+                if event_state & Gdk.ModifierType.SHIFT_MASK: # Ctrl+Shift+Down
+                    self.scroll_messages('down', message_buffer, 'received')
+                else:  # Ctrl+Down
+                    self.scroll_messages('down', message_buffer, 'sent')
+            return True
+
+        elif event.keyval == Gdk.KEY_Return or \
         event.keyval == Gdk.KEY_KP_Enter:  # ENTER
             message_textview = widget
             message_buffer = message_textview.get_buffer()
@@ -763,7 +780,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             xhtml = self.msg_textview.get_xhtml()
 
             if gajim.config.get('send_on_ctrl_enter'):
-                if event.get_state() & Gdk.ModifierType.CONTROL_MASK:  # CTRL + ENTER
+                if event_state & Gdk.ModifierType.CONTROL_MASK:  # CTRL + ENTER
                     send_message = True
                 else:
                     end_iter = message_buffer.get_end_iter()
@@ -771,7 +788,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
                     send_message = False
 
             else: # send on Enter, do newline on Ctrl Enter
-                if event.get_state() & Gdk.ModifierType.CONTROL_MASK:  # Ctrl + ENTER
+                if event_state & Gdk.ModifierType.CONTROL_MASK:  # Ctrl + ENTER
                     end_iter = message_buffer.get_end_iter()
                     message_buffer.insert_at_cursor('\n')
                     send_message = False
@@ -787,6 +804,10 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             if send_message:
                 self.send_message(message, xhtml=xhtml) # send the message
             return True
+        elif event.keyval == Gdk.KEY_z: # CTRL+z
+            if event_state & Gdk.ModifierType.CONTROL_MASK:
+                self.msg_textview.undo()
+                return True
 ################################################################################
         return False
 
@@ -1414,16 +1435,19 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         if pos == size and size > 0 and direction == 'up' and \
         msg_type == 'sent' and not self.correcting:
             self.correcting = True
-            self.old_message_tv_color = self.msg_textview.get_style().base[
-                Gtk.StateType.NORMAL]
-            self.msg_textview.modify_base(Gtk.StateType.NORMAL, Gdk.color_parse(
-                'PaleGoldenrod'))
+            context = self.msg_textview.get_style_context()
+            state = Gtk.StateFlags.NORMAL
+            self.old_message_tv_color = context.get_background_color(state)
+            color = Gdk.RGBA()
+            Gdk.RGBA.parse(color, 'PaleGoldenrod')
+            self.msg_textview.override_background_color(Gtk.StateType.NORMAL,
+                color)
             message = history[pos - 1]
             msg_buf.set_text(message)
             return
         if self.correcting:
             # We were previously correcting
-            self.msg_textview.modify_base(Gtk.StateType.NORMAL,
+            self.msg_textview.override_background_color(Gtk.StateType.NORMAL,
                 self.old_message_tv_color)
         self.correcting = False
         pos += -1 if direction == 'up' else +1
