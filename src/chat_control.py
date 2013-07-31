@@ -2230,9 +2230,13 @@ class ChatControl(ChatControlBase):
                     if gajim.config.get('video_see_self'):
                         fixed = self.xml.get_object('outgoing_fixed')
                         fixed.set_no_show_all(False)
+                        video_hbox.show_all()
+                        out_xid = self.xml.get_object('outgoing_drawingarea').\
+                            window.xid
+                    else:
+                        out_xid = None
                     video_hbox.show_all()
                     in_xid = self.xml.get_object('incoming_drawingarea').window.xid
-                    out_xid = self.xml.get_object('outgoing_drawingarea').window.xid
                     sid = gajim.connections[self.account].start_video(
                         self.contact.get_full_jid(), in_xid, out_xid)
                 else:
