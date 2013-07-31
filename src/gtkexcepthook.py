@@ -59,7 +59,7 @@ def _info(type_, value, tb):
     # Details
     textview = Gtk.TextView()
     textview.set_editable(False)
-    textview.modify_font(Pango.FontDescription('Monospace'))
+    textview.override_font(Pango.FontDescription('Monospace'))
     sw = Gtk.ScrolledWindow()
     sw.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
     sw.add(textview)

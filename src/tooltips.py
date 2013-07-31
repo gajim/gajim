@@ -151,7 +151,6 @@ class BaseTooltip:
 
         self.preferred_position = [pointer_x, preferred_y]
         self.widget_height = widget_height
-        self.win.ensure_style()
         self.win.show_all()
 
     def hide_tooltip(self):
@@ -678,7 +677,6 @@ class RosterTooltip(NotificationAreaTooltip):
             self.win.destroy()
             self.win = None
             self.populate(self.cur_data)
-            self.win.ensure_style()
             self.win.show_all()
 
     def _append_pep_info(self, contact, properties):

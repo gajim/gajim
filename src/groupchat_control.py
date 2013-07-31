@@ -1958,8 +1958,8 @@ class GroupchatControl(ChatControlBase):
                 self.last_sent_msg = msg
                 if self.correcting:
                     self.correcting = False
-                    self.msg_textview.modify_base(Gtk.StateType.NORMAL,
-                        self.old_message_tv_color)
+                    self.msg_textview.override_background_color(
+                        Gtk.StateType.NORMAL, self.old_message_tv_color)
 
             if self.correcting and self.last_sent_msg:
                 correction_msg = self.last_sent_msg

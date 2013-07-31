@@ -645,15 +645,18 @@ _('Without a connection, you can not browse available services'))
         textcolor = gajim.config.get_per('themes', theme, 'bannertextcolor')
         self.disconnect_style_event()
         if bgcolor:
-            color = Gdk.color_parse(bgcolor)
-            self.banner_eventbox.modify_bg(Gtk.StateType.NORMAL, color)
+            color = Gdk.RGBA()
+            Gdk.RGBA.parse(color, bgcolor)
+            self.banner_eventbox.override_background_color(Gtk.StateType.NORMAL,
+                color)
             default_bg = False
         else:
             default_bg = True
 
         if textcolor:
-            color = Gdk.color_parse(textcolor)
-            self.banner.modify_fg(Gtk.StateType.NORMAL, color)
+            color = Gdk.RGBA()
+            Gdk.RGBA.parse(color, textcolor)
+            self.banner.override_color(Gtk.StateType.NORMAL, color)
             default_fg = False
         else:
             default_fg = True

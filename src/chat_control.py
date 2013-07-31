@@ -648,16 +648,20 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         self.disconnect_style_event(banner_name_label)
         self.disconnect_style_event(self.banner_status_label)
         if bgcolor:
-            banner_eventbox.modify_bg(Gtk.StateType.NORMAL,
-                    Gdk.color_parse(bgcolor))
+            color = Gdk.RGBA()
+            Gdk.RGBA.parse(color, bgcolor)
+            banner_eventbox.override_background_color(Gtk.StateType.NORMAL,
+                color)
             default_bg = False
         else:
             default_bg = True
         if textcolor:
-            banner_name_label.modify_fg(Gtk.StateType.NORMAL,
-                    Gdk.color_parse(textcolor))
-            self.banner_status_label.modify_fg(Gtk.StateType.NORMAL,
-                    Gdk.color_parse(textcolor))
+            color = Gdk.RGBA()
+            Gdk.RGBA.parse(color, textcolor)
+            banner_name_label.override_background_color(Gtk.StateType.NORMAL,
+                color)
+            self.banner_status_label.override_background_color(
+                Gtk.StateType.NORMAL, color)
             default_fg = False
         else:
             default_fg = True
@@ -1183,8 +1187,8 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
     def update_font(self):
         font = Pango.FontDescription(gajim.config.get('conversation_font'))
-        self.conv_textview.tv.modify_font(font)
-        self.msg_textview.modify_font(font)
+        self.conv_textview.tv.override_font(font)
+        self.msg_textview.override_font(font)
 
     def update_tags(self):
         self.conv_textview.update_tags()
@@ -2434,8 +2438,8 @@ class ChatControl(ChatControlBase):
                 self.conv_textview.correct_last_sent_message(message, xhtml,
                     self.get_our_nick(), old_txt)
                 self.correcting = False
-                self.msg_textview.modify_base(Gtk.StateType.NORMAL,
-                    self.old_message_tv_color)
+                self.msg_textview.override_background_color(
+                    Gtk.StateType.NORMAL, self.old_message_tv_color)
                 return
             self.print_conversation(message, self.contact.jid,
                 encrypted=encrypted, xep0184_id=xep0184_id, xhtml=xhtml,

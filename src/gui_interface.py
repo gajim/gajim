@@ -2591,7 +2591,7 @@ class Interface:
         sw = Gtk.ScrolledWindow()
         sw.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
         view = IPythonView()
-        view.modify_font(Pango.FontDescription(font))
+        view.override_font(Pango.FontDescription(font))
         view.set_wrap_mode(Gtk.WrapMode.CHAR)
         sw.add(view)
         window.add(sw)

@@ -193,7 +193,6 @@ if os.name == 'nt':
 warnings.filterwarnings('error', module='gtk')
 try:
     from gi.repository import GObject
-    GObject.threads_init()
     GObject.set_prgname('gajim')
     from gi.repository import Gtk
     from gi.repository import Gdk
@@ -464,13 +463,6 @@ if __name__ == '__main__':
     interface.run()
 
     try:
-        if os.name != 'nt':
-            # This makes Gajim unusable under windows, and threads are used only
-            # for GPG, so not under windows
-            Gdk.threads_init()
-            Gdk.threads_enter()
         Gtk.main()
-        if os.name != 'nt':
-            Gdk.threads_leave()
     except KeyboardInterrupt:
         print('KeyboardInterrupt', file=sys.stderr)

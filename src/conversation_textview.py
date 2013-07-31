@@ -240,7 +240,7 @@ class ConversationTextview(GObject.GObject):
         self.last_time_printout = 0
 
         font = Pango.FontDescription(gajim.config.get('conversation_font'))
-        self.tv.modify_font(font)
+        self.tv.override_font(font)
         buffer_ = self.tv.get_buffer()
         end_iter = buffer_.get_end_iter()
         buffer_.create_mark('end', end_iter, False)

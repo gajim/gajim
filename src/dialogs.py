@@ -2919,7 +2919,9 @@ class PopupNotificationWindow:
             GLib.markup_escape_text(title))
 
         # set colors [ http://www.pitt.edu/~nisg/cis/web/cgi/rgb.html ]
-        self.window.modify_bg(Gtk.StateType.NORMAL, Gdk.color_parse('black'))
+        color = Gdk.RGBA()
+        Gdk.RGBA.parse(color, 'black')
+        self.window.override_background_color(Gtk.StateType.NORMAL, color)
 
         # default image
         if not path_to_image:
@@ -2945,9 +2947,11 @@ class PopupNotificationWindow:
             bg_color = gajim.config.get('notif_status_color')
         else: # Unknown event! Shouldn't happen but deal with it
             bg_color = gajim.config.get('notif_other_color')
-        popup_bg_color = Gdk.color_parse(bg_color)
-        close_button.modify_bg(Gtk.StateType.NORMAL, popup_bg_color)
-        eventbox.modify_bg(Gtk.StateType.NORMAL, popup_bg_color)
+        popup_bg_color = Gdk.RGBA()
+        Gdk.RGBA.parse(popup_bg_color, bg_color)
+        close_button.override_background_color(Gtk.StateType.NORMAL,
+            popup_bg_color)
+        eventbox.override_background_color(Gtk.StateType.NORMAL, popup_bg_color)
         event_description_label.set_markup('<span foreground="black">%s</span>' %
             GLib.markup_escape_text(text))
 
@@ -3337,8 +3341,9 @@ class XMLConsoleWindow:
         self.enabled = True
         self.xml.get_object('enable_checkbutton').set_active(True)
 
-        self.input_textview.modify_text(
-            Gtk.StateType.NORMAL, Gdk.color_parse(color))
+        col = Gdk.RGBA()
+        Gdk.RGBA.parse(col, color)
+        self.input_textview.override_color(Gtk.StateType.NORMAL, col)
 
         if len(gajim.connections) > 1:
             title = _('XML Console for %s') % self.account
