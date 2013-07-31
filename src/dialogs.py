@@ -5366,11 +5366,18 @@ class VoIPCallReceivedDialog(object):
                 if gajim.config.get('video_see_self'):
                     out_xid = ctrl.xml.get_object('outgoing_drawingarea').\
                         get_window().xid
-                    b = content.pipeline.get_by_name('bin2')
-                    c = b.get_by_name('autovideosink0')
-                    d = c.get_by_name('autovideosink0-actual-sink-xvimage')
-                    d.set_xwindow_id(out_xid)
-                    content.out_xid = out_xid
+                    b = content.src_bin
+                    found = False
+                    for e in b.elements():
+                        if e.get_name().startswith('autovideosink'):
+                            found = True
+                            break
+                    if found:
+                        found = False
+                        for f in e.elements():
+                            if f.get_name().startswith('autovideosink'):
+                                f.set_xwindow_id(out_xid)
+                                content.out_xid = out_xid
                 content.in_xid = in_xid
                 ctrl.set_video_state('connecting', self.sid)
             # Now, accept the content/sessions.
