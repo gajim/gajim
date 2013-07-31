@@ -5361,11 +5361,11 @@ class VoIPCallReceivedDialog(object):
                 video_hbox.show_all()
                 in_xid = ctrl.xml.get_object('incoming_drawingarea').\
                     get_window().xid
-                out_xid = ctrl.xml.get_object('outgoing_drawingarea').\
-                    get_window().xid
                 content = session.get_content('video')
                 # move outgoing stream to chat window
                 if gajim.config.get('video_see_self'):
+                    out_xid = ctrl.xml.get_object('outgoing_drawingarea').\
+                        get_window().xid
                     b = content.pipeline.get_by_name('bin2')
                     c = b.get_by_name('autovideosink0')
                     d = c.get_by_name('autovideosink0-actual-sink-xvimage')
