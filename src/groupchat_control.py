@@ -242,7 +242,8 @@ class PrivateChatControl(ChatControl):
                     _('Sending private message failed'),
                     #in second %s code replaces with nickname
                     _('You are no longer in group chat "%(room)s" or '
-                    '"%(nick)s" has left.') % {'room': room, 'nick': nick})
+                    '"%(nick)s" has left.') % {'room': u'\u200E' + room,
+                    'nick': nick})
                 return
 
         ChatControl.send_message(self, message, xhtml=xhtml,
@@ -790,7 +791,7 @@ class GroupchatControl(ChatControlBase):
             name = self.get_continued_conversation_name()
         else:
             name = self.room_jid
-        text = '<span %s>%s</span>' % (font_attrs, name)
+        text = '<span %s>%s</span>' % (font_attrs, u'\u200E' + name)
         self.name_label.set_markup(text)
 
         if self.subject:
@@ -2198,9 +2199,9 @@ class GroupchatControl(ChatControlBase):
                 reason, jid)
 
         # Ask for a reason
-        dialogs.DoubleInputDialog(_('Destroying %s') % self.room_jid,
-            _('You are going to definitively destroy this room.\n'
-            'You may specify a reason below:'),
+        dialogs.DoubleInputDialog(_('Destroying %s') % u'\u200E' + \
+            self.room_jid, _('You are going to definitively destroy this \
+            room.\nYou may specify a reason below:'),
             _('You may also enter an alternate venue:'), ok_handler=on_ok)
 
     def _on_bookmark_room_menuitem_activate(self, widget):
