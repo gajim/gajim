@@ -1432,7 +1432,8 @@ class ConversationTextview(gobject.GObject):
             before_str = helpers.from_one_line(before_str)
             after_str = gajim.config.get('after_nickname')
             after_str = helpers.from_one_line(after_str)
-            format_ = direction_mark + before_str + name + after_str + ' '
+            format_ = direction_mark + before_str + name + direction_mark + \
+                after_str + ' '
             buffer_.insert_with_tags_by_name(end_iter, format_, *name_tags)
 
     def print_subject(self, subject, iter_=None):
