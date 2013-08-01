@@ -4453,7 +4453,7 @@ class RosterWindow:
         data = ''
         if path.get_depth() >= 2:
             data = model[path][C_JID]
-        selection.set(selection.target, 8, data)
+        selection.set_text(data, -1)
 
     def drag_begin(self, treeview, context):
         self.dragging = True
@@ -4619,14 +4619,14 @@ class RosterWindow:
                     self.remove_contact_from_groups(c_source.jid, account,
                         [grp_source])
 
-        if context.action in (Gdk.DragAction.MOVE, Gdk.DragAction.COPY):
+        if context.get_action() in (Gdk.DragAction.MOVE, Gdk.DragAction.COPY):
             context.finish(True, True, etime)
 
     def drag_drop(self, treeview, context, x, y, timestamp):
         target_list = treeview.drag_dest_get_target_list()
         target = treeview.drag_dest_find_target(context, target_list)
-        treeview.drag_get_data(context, target)
-        context.finish(False, True)
+        treeview.drag_get_data(context, target, 0)
+        context.finish(False, True, 0)
         return True
 
     def move_group(self, old_name, new_name, account):
@@ -4637,14 +4637,15 @@ class RosterWindow:
 
     def drag_data_received_data(self, treeview, context, x, y, selection, info,
     etime):
-        treeview.stop_emission('drag_data_received')
+        treeview.stop_emission_by_name('drag_data_received')
         drop_info = treeview.get_dest_row_at_pos(x, y)
         if not drop_info:
             return
-        if not selection.data:
+        data = selection.get_data().decode()
+        if not data:
             return # prevents tb when several entrys are dragged
         model = treeview.get_model()
-        data = selection.data
+
         path_dest, position = drop_info
 
         if position == Gtk.TreeViewDropPosition.BEFORE and len(path_dest) == 2 \
@@ -6611,13 +6612,15 @@ class RosterWindow:
 
         # signals
         self.TARGET_TYPE_URI_LIST = 80
-        TARGETS = [('MY_TREE_MODEL_ROW',
-            Gtk.TargetFlags.SAME_APP | Gtk.TargetFlags.SAME_WIDGET, 0)]
-        TARGETS2 = [('MY_TREE_MODEL_ROW', Gtk.TargetFlags.SAME_WIDGET, 0),
-            ('text/uri-list', 0, self.TARGET_TYPE_URI_LIST)]
-        self.tree.enable_model_drag_source(Gdk.ModifierType.BUTTON1_MASK, TARGETS,
-            Gdk.DragAction.DEFAULT | Gdk.DragAction.MOVE | Gdk.DragAction.COPY)
-        self.tree.enable_model_drag_dest(TARGETS2, Gdk.DragAction.DEFAULT)
+        self.tree.enable_model_drag_source(Gdk.ModifierType.BUTTON1_MASK,
+            [], Gdk.DragAction.DEFAULT | Gdk.DragAction.MOVE | \
+            Gdk.DragAction.COPY)
+        self.tree.drag_source_add_text_targets()
+        self.tree.enable_model_drag_dest([], Gdk.DragAction.DEFAULT)
+        dst_targets = Gtk.TargetList.new([])
+        dst_targets.add_text_targets(0)
+        dst_targets.add_uri_targets(self.TARGET_TYPE_URI_LIST)
+        self.tree.drag_dest_set_target_list(dst_targets)
         self.tree.connect('drag_begin', self.drag_begin)
         self.tree.connect('drag_end', self.drag_end)
         self.tree.connect('drag_drop', self.drag_drop)
