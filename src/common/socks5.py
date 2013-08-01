@@ -815,8 +815,10 @@ class Socks5:
         Connect request by domain name, sid sha, instead of domain name (jep
         0096)
         """
-        buff = struct.pack('!BBBBB%dsBB' % len(msg),
-            0x05, command, 0x00, 0x03, len(msg), msg.encode('utf-8'), 0, 0)
+        if isinstance(msg, str):
+            msg = msg.encode('utf-8')
+        buff = struct.pack('!BBBBB%dsBB' % len(msg), 0x05, command, 0x00, 0x03,
+            len(msg), msg, 0, 0)
         return buff
 
     def _parse_request_buff(self, buff):
