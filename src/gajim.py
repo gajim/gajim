@@ -208,8 +208,8 @@ warnings.resetwarnings()
 if os.name == 'nt':
     warnings.filterwarnings(action='ignore')
 
-if Gtk.Widget.get_default_direction() == Gtk.TextDirection.LTR:
-    i18n.direction_mark = '\u200E'
+if Gtk.Widget.get_default_direction() == Gtk.TextDirection.RTL:
+    i18n.direction_mark = '\u200F'
 pritext = ''
 
 from common import exceptions
