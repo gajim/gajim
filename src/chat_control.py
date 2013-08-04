@@ -1437,7 +1437,8 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             end_iter = msg_buf.get_end_iter()
             self.orig_msg = msg_buf.get_text(start_iter, end_iter, False)
         if pos == size and size > 0 and direction == 'up' and \
-        msg_type == 'sent' and not self.correcting:
+        msg_type == 'sent' and not self.correcting and not \
+        history[pos - 1].startswith('/'):
             self.correcting = True
             context = self.msg_textview.get_style_context()
             state = Gtk.StateFlags.NORMAL
