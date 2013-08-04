@@ -1402,7 +1402,8 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             self.orig_msg = msg_buf.get_text(start_iter, end_iter, 0).decode(
                 'utf-8')
         if pos == size and size > 0 and direction == 'up' and \
-        msg_type == 'sent' and not self.correcting:
+        msg_type == 'sent' and not self.correcting and not \
+        history[pos - 1].startswith('/'):
             self.correcting = True
             self.old_message_tv_color = self.msg_textview.get_style().base[0]
             self.msg_textview.modify_base(gtk.STATE_NORMAL, gtk.gdk.color_parse(
