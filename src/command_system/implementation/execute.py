@@ -115,6 +115,6 @@ class Show(Execute):
         stdout, stderr = cls.fetch(popen)
         success = popen.returncode == 0
         if success and stdout:
-            processor.send(stdout)
+            processor.send(stdout.decode('utf8'))
         elif not success and stderr:
             processor.echo_error(stderr)
