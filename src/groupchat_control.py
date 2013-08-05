@@ -2200,8 +2200,8 @@ class GroupchatControl(ChatControlBase):
 
         # Ask for a reason
         dialogs.DoubleInputDialog(_('Destroying %s') % '\u200E' + \
-            self.room_jid, _('You are going to definitively destroy this \
-            room.\nYou may specify a reason below:'),
+            self.room_jid, _('You are going to definitively destroy this '
+            'room.\nYou may specify a reason below:'),
             _('You may also enter an alternate venue:'), ok_handler=on_ok)
 
     def _on_bookmark_room_menuitem_activate(self, widget):
