@@ -1319,7 +1319,7 @@ class ConversationTextview(GObject.GObject):
         if kind == 'status':
             direction_mark = i18n.direction_mark
         if current_print_time == 'always' and kind != 'info' and not simple:
-            timestamp_str = self.get_time_to_show(tim)
+            timestamp_str = self.get_time_to_show(tim, direction_mark)
             timestamp = time.strftime(timestamp_str, tim)
             timestamp = direction_mark + timestamp
             if other_tags_for_time:
@@ -1338,7 +1338,7 @@ class ConversationTextview(GObject.GObject):
                     ft = self.fc.fuzzy_time(gajim.config.get('print_time_fuzzy'), tim)
                     tim_format = ft.decode(locale.getpreferredencoding())
                 else:
-                    tim_format = self.get_time_to_show(tim)
+                    tim_format = self.get_time_to_show(tim, direction_mark)
                 buffer_.insert_with_tags_by_name(end_iter, tim_format + '\n',
                     'time_sometimes')
         # If there's a displaymarking, print it here.
@@ -1393,7 +1393,7 @@ class ConversationTextview(GObject.GObject):
         self.just_cleared = False
         buffer_.end_user_action()
 
-    def get_time_to_show(self, tim):
+    def get_time_to_show(self, tim, direction_mark=''):
         """
         Get the time, with the day before if needed and return it. It DOESN'T
         format a fuzzy time
@@ -1412,7 +1412,7 @@ class ConversationTextview(GObject.GObject):
                 '%(nb_days)i days ago', diff_day, {'nb_days': diff_day},
                 {'nb_days': diff_day})
         if day_str:
-            format_ += day_str + ' '
+            format_ += i18n.direction_mark + day_str + direction_mark + ' '
         timestamp_str = gajim.config.get('time_stamp')
         timestamp_str = helpers.from_one_line(timestamp_str)
         format_ += timestamp_str
