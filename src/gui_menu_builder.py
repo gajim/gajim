@@ -366,7 +366,8 @@ control=None, gc_contact=None, is_anonymous=True):
             if helpers.group_is_blocked(account, group):
                 blocked = True
                 break
-    if gajim.get_transport_name_from_jid(jid, use_config_setting=False):
+    transport = gajim.get_transport_name_from_jid(jid, use_config_setting=False)
+    if transport and transport != 'jabber':
         # Transport contact, send custom status unavailable
         send_custom_status_menuitem.set_sensitive(False)
     elif blocked:
