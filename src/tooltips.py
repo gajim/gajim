@@ -390,7 +390,8 @@ class GCTooltip(BaseTooltip):
         properties.append((show, None))
 
         if contact.jid.strip():
-            properties.append((_('Jabber ID: '), "<b>%s</b>" % contact.jid))
+            properties.append((_('Jabber ID: '), u'\u200E' + "<b>%s</b>" % \
+                contact.jid))
 
         if hasattr(contact, 'resource') and contact.resource.strip():
             properties.append((_('Resource: '),
@@ -610,7 +611,8 @@ class RosterTooltip(NotificationAreaTooltip):
 
         self._append_pep_info(contact, properties)
 
-        properties.append((_('Jabber ID: '), "<b>%s</b>" % prim_contact.jid))
+        properties.append((_('Jabber ID: '), u'\u200E' + "<b>%s</b>" % \
+            prim_contact.jid))
 
         # contact has only one ressource
         if num_resources == 1 and contact.resource:
