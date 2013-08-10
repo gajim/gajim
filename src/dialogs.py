@@ -4592,8 +4592,10 @@ class InvitationReceivedDialog:
             gajim.connections[account].decline_invitation(self.room_jid,
                 self.contact_fjid, text)
 
-        YesNoDialog(pritext, sectext, text_label=_('Reason (if you decline):'),
-            on_response_yes=on_yes, on_response_no=on_no)
+        dlg = YesNoDialog(pritext, sectext,
+            text_label=_('Reason (if you decline):'), on_response_yes=on_yes,
+            on_response_no=on_no)
+        dlg.set_title(_('Groupchat Invitation'))
 
 class ProgressDialog:
     def __init__(self, title_text, during_text, messages_queue):
