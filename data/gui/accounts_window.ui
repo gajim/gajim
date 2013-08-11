@@ -1314,6 +1314,7 @@ You might consider to change possible firewall settings.</property>
                                     </child>
                                   </object>
                                   <packing>
+                                    <property name="expand">False</property>
                                     <property name="position">1</property>
                                   </packing>
                                 </child>
