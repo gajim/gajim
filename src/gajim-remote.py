@@ -277,7 +277,7 @@ class GajimRemote:
                 'handle_uri': [
                                 _('Handle a xmpp:/ uri'),
                                 [
-                                        (_('uri'), _('URI to handle'), True),
+                                        (Q_('?CLI:uri'), _('URI to handle'), True),
                                         (Q_('?CLI:account'), _('Account in which you want to handle it'),
                                                 False),
                                         (Q_('?CLI:message'), _('Message content'), False)
