@@ -334,7 +334,7 @@ class RosterWindow:
         return iter_group
 
     def _add_entity(self, contact, account, groups=None,
-                    big_brother_contact=None, big_brother_account=None):
+    big_brother_contact=None, big_brother_account=None):
         """
         Add the given contact to roster data model
 
@@ -1154,7 +1154,8 @@ class RosterWindow:
         self.draw_contact(parent_jid, parent_account)
         return False
 
-    def draw_contact(self, jid, account, selected=False, focus=False, contact_instances=None, contact=None):
+    def draw_contact(self, jid, account, selected=False, focus=False,
+    contact_instances=None, contact=None):
         """
         Draw the correct state image, name BUT not avatar
         """
@@ -4131,6 +4132,8 @@ class RosterWindow:
         """
         When an iter is double clicked: open the first event window
         """
+        if self.rfilter_enabled:
+            self.disable_rfilter()
         if not gajim.single_click:
             self.on_row_activated(widget, path)
 
