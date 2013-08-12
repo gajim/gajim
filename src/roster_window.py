@@ -3360,13 +3360,6 @@ class RosterWindow:
             gajim.interface.instances['accounts'] = config.AccountsWindow()
         gajim.interface.instances['accounts'].select_account(account)
 
-    def on_zeroconf_properties(self, widget, account):
-        if 'accounts' in gajim.interface.instances:
-            gajim.interface.instances['accounts'].window.present()
-        else:
-            gajim.interface.instances['accounts'] = config.AccountsWindow()
-        gajim.interface.instances['accounts'].select_account(account)
-
     def on_open_gmail_inbox(self, widget, account):
         url = gajim.connections[account].gmail_url
         if url:
@@ -5655,7 +5648,7 @@ class RosterWindow:
             item.connect('activate', self.change_status, account, 'offline')
 
             zeroconf_properties_menuitem.connect('activate',
-                self.on_zeroconf_properties, account)
+                self.on_edit_account, account)
 
         return account_context_menu
 
