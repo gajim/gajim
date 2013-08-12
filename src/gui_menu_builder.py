@@ -437,8 +437,9 @@ control=None, gc_contact=None, is_anonymous=True):
             ask_auth_menuitem.connect('activate', roster.req_sub, jid,
                     _('I would like to add you to my roster'), account,
                     contact.groups, contact.name)
-        if contact.sub in ('to', 'none') or gajim.get_transport_name_from_jid(
-                jid, use_config_setting=False):
+        transport = gajim.get_transport_name_from_jid(jid,
+            use_config_setting=False)
+        if contact.sub in ('to', 'none') or transport not in ['jabber', None]:
             revoke_auth_menuitem.set_sensitive(False)
         else:
             revoke_auth_menuitem.connect('activate', roster.revoke_auth, jid,
