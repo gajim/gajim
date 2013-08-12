@@ -119,7 +119,6 @@ def build_invite_submenu(invite_menuitem, list_, ignore_rooms=[]):
         invite_to_new_room_menuitem.set_sensitive(False)
     rooms = [] # a list of (room_jid, account) tuple
     invite_to_submenu.append(invite_to_new_room_menuitem)
-    rooms = [] # a list of (room_jid, account) tuple
     minimized_controls = []
     for account in connected_accounts:
         minimized_controls += \
@@ -134,7 +133,7 @@ def build_invite_submenu(invite_menuitem, list_, ignore_rooms=[]):
             continue
         if room_jid in gajim.gc_connected[acct] and \
         gajim.gc_connected[acct][room_jid] and \
-        contacts_transport == gajim.get_transport_name_from_jid(room_jid):
+        contacts_transport in ['jabber', None]:
             rooms.append((room_jid, acct))
     if len(rooms):
         item = Gtk.SeparatorMenuItem.new() # separator
@@ -143,8 +142,8 @@ def build_invite_submenu(invite_menuitem, list_, ignore_rooms=[]):
             menuitem = Gtk.MenuItem(room_jid.split('@')[0])
             if len(contact_list) > 1: # several resources
                 menuitem.set_submenu(build_resources_submenu(
-                        contact_list, account, roster.on_invite_to_room, room_jid,
-                        account))
+                    contact_list, account, roster.on_invite_to_room, room_jid,
+                    account))
             else:
                 # use resource if it's self contact
                 if contact.jid == gajim.get_jid_from_account(account):
