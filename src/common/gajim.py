@@ -182,7 +182,7 @@ try:
         session = conference.new_session(farstream.MEDIA_TYPE_AUDIO)
         del session
         del conference
-    except glib.GError:
+    except:
         HAVE_FARSTREAM = False
 
 except ImportError:
