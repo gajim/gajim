@@ -5017,7 +5017,7 @@ class TransformChatToMUC:
                 contact.jid != gajim.get_jid_from_account(self.account) and
                 contact.jid not in gajim.interface.minimized_controls[account] and
                 not contact.is_transport() and
-                not contact_transport)
+                contact_transport in ('jabber', None))
 
         # set jabber id and pseudos
         for account in gajim.contacts.get_accounts():
@@ -5029,7 +5029,7 @@ class TransformChatToMUC:
                 contact_transport = gajim.get_transport_name_from_jid(jid)
                 # Add contact if it can be invited
                 if invitable(contact, contact_transport) and \
-                   contact.show not in ('offline', 'error'):
+                contact.show not in ('offline', 'error'):
                     img = gajim.interface.jabber_state_images['16'][contact.show]
                     name = contact.name
                     if name == '':
