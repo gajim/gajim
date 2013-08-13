@@ -75,7 +75,11 @@ class ConnectionJingle(object):
         adequatelly.
         """
         # get data
-        jid = helpers.get_full_jid_from_iq(stanza)
+        try:
+            jid = helpers.get_full_jid_from_iq(stanza)
+        except helpers.InvalidFormat:
+            log.warn('Invalid JID: %s, ignoring it' % stanza.getFrom())
+            return
         id_ = stanza.getID()
         if (jid, id_) in self.__iq_responses.keys():
             self.__iq_responses[(jid, id_)].on_stanza(stanza)
