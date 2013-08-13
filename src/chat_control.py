@@ -80,36 +80,6 @@ if dbus_support.supported:
     import dbus
     import remote_control
 
-# the next script, executed in the "po" directory,
-# generates the following list.
-##!/bin/sh
-#LANG=$(for i in *.po; do j=${i/.po/}; echo -n "_('"$j"')":" '"$j"', " ; done)
-#echo "{_('en'):'en'",$LANG"}"
-langs = {_('English'): 'en', _('Belarusian'): 'be', _('Bulgarian'): 'bg',
-        _('Breton'): 'br', _('Czech'): 'cs', _('German'): 'de',
-        _('Greek'): 'el', _('British'): 'en_GB', _('Esperanto'): 'eo',
-        _('Spanish'): 'es', _('Basque'): 'eu', _('French'): 'fr',
-        _('Croatian'): 'hr', _('Italian'): 'it', _('Norwegian (b)'): 'nb',
-        _('Dutch'): 'nl', _('Norwegian'): 'no', _('Polish'): 'pl',
-        _('Portuguese'): 'pt', _('Brazilian Portuguese'): 'pt_BR',
-        _('Russian'): 'ru', _('Serbian'): 'sr', _('Slovak'): 'sk',
-        _('Swedish'): 'sv', _('Chinese (Ch)'): 'zh_CN', _('Hebrew'): 'he'}
-
-if gajim.config.get('use_speller') and HAS_GTK_SPELL:
-    # loop removing non-existent dictionaries
-    # iterating on a copy
-    tv = gtk.TextView()
-    spell = gtkspell.Spell(tv)
-    for lang in dict(langs):
-        try:
-            spell.set_language(langs[lang])
-        except OSError:
-            del langs[lang]
-    if spell:
-        spell.detach()
-    del tv
-
-
 ################################################################################
 class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
     """
@@ -594,19 +564,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         menu.prepend(item)
         id_ = item.connect('activate', self.msg_textview.clear)
         self.handlers[id_] = item
-
-        if gajim.config.get('use_speller') and HAS_GTK_SPELL:
-            item = gtk.MenuItem(_('Spelling language'))
-            menu.prepend(item)
-            submenu = gtk.Menu()
-            item.set_submenu(submenu)
-            for lang in sorted(langs):
-                item = gtk.CheckMenuItem(lang)
-                if langs[lang] == self.msg_textview.lang:
-                    item.set_active(True)
-                submenu.append(item)
-                id_ = item.connect('activate', _on_select_dictionary, langs[lang])
-                self.handlers[id_] = item
 
         menu.show_all()
 
