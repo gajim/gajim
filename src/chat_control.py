@@ -1394,8 +1394,8 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             end_iter = msg_buf.get_end_iter()
             self.orig_msg = msg_buf.get_text(start_iter, end_iter, False)
         if pos == size and size > 0 and direction == 'up' and \
-        msg_type == 'sent' and not self.correcting and not \
-        history[pos - 1].startswith('/'):
+        msg_type == 'sent' and not self.correcting and (not \
+        history[pos - 1].startswith('/') or history[pos - 1].startswith('/me')):
             self.correcting = True
             context = self.msg_textview.get_style_context()
             state = Gtk.StateFlags.NORMAL
@@ -3032,14 +3032,14 @@ class ChatControl(ChatControlBase):
             xhtml = None
             if row[2].startswith('<body '):
                 xhtml = row[2]
-            ChatControlBase.print_conversation_line(self, row[2], kind, name,
-                tim, small_attr, small_attr + ['restored_message'],
-                small_attr + ['restored_message'], False,
-                old_kind=local_old_kind, xhtml=xhtml)
             if row[2].startswith('/me ') or row[2].startswith('/me\n'):
                 local_old_kind = None
             else:
                 local_old_kind = kind
+            ChatControlBase.print_conversation_line(self, row[2], kind, name,
+                tim, small_attr, small_attr + ['restored_message'],
+                small_attr + ['restored_message'], False,
+                old_kind=local_old_kind, xhtml=xhtml)
         if len(rows):
             self.conv_textview.print_empty_line()
 

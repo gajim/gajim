@@ -491,7 +491,10 @@ class ConversationTextview(GObject.GObject):
         i2 = buffer_.get_iter_at_mark(m2)
         txt = buffer_.get_text(i1, i2, True)
         buffer_.delete(i1, i2)
-        i2 = self.print_real_text(message, text_tags=['outgoingtxt'], name=name,
+        tag = 'outgoingtxt'
+        if message.startswith('/me'):
+           tag = 'outgoing'
+        i2 = self.print_real_text(message, text_tags=[tag], name=name,
             xhtml=xhtml, iter_=i1)
         tt_txt = _('<b>Message was corrected. Last message was:</b>\n  %s') % \
             old_txt
@@ -1353,6 +1356,9 @@ class ConversationTextview(GObject.GObject):
         if other_text_tag:
             # note that color of /me may be overwritten in gc_control
             text_tags.append(other_text_tag)
+            if text.startswith('/me'):
+                mark1 = buffer_.create_mark(None, buffer_.get_end_iter(),
+                    left_gravity=True)
         else: # not status nor /me
             if gajim.config.get('chat_merge_consecutive_nickname'):
                 if kind != old_kind or self.just_cleared:
