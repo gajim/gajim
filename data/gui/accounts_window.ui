@@ -40,6 +40,7 @@
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkScrolledWindow" id="scrolledwindow1">
+                    <property name="width_request">170</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -263,7 +264,7 @@
                                 <property name="left_attach">2</property>
                                 <property name="right_attach">3</property>
                                 <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"></property>
+                                <property name="y_options"/>
                               </packing>
                             </child>
                             <child>
@@ -280,7 +281,7 @@
                                 <property name="top_attach">2</property>
                                 <property name="bottom_attach">3</property>
                                 <property name="x_options">GTK_EXPAND | GTK_SHRINK | GTK_FILL</property>
-                                <property name="y_options"></property>
+                                <property name="y_options"/>
                               </packing>
                             </child>
                             <child>
@@ -293,7 +294,7 @@
                               <packing>
                                 <property name="left_attach">1</property>
                                 <property name="right_attach">2</property>
-                                <property name="y_options"></property>
+                                <property name="y_options"/>
                               </packing>
                             </child>
                             <child>
@@ -368,7 +369,7 @@
                                 <property name="top_attach">3</property>
                                 <property name="bottom_attach">4</property>
                                 <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"></property>
+                                <property name="y_options"/>
                               </packing>
                             </child>
                             <child>
@@ -388,7 +389,7 @@
                                 <property name="top_attach">3</property>
                                 <property name="bottom_attach">4</property>
                                 <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"></property>
+                                <property name="y_options"/>
                               </packing>
                             </child>
                             <child>
@@ -403,7 +404,7 @@
                                 <property name="top_attach">3</property>
                                 <property name="bottom_attach">4</property>
                                 <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"></property>
+                                <property name="y_options"/>
                               </packing>
                             </child>
                             <child>
@@ -418,7 +419,7 @@
                                 <property name="top_attach">2</property>
                                 <property name="bottom_attach">3</property>
                                 <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"></property>
+                                <property name="y_options"/>
                               </packing>
                             </child>
                             <child>
@@ -439,7 +440,7 @@
                                 <property name="top_attach">1</property>
                                 <property name="bottom_attach">2</property>
                                 <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"></property>
+                                <property name="y_options"/>
                               </packing>
                             </child>
                             <child>
@@ -457,7 +458,7 @@
                                 <property name="top_attach">1</property>
                                 <property name="bottom_attach">2</property>
                                 <property name="x_options">GTK_EXPAND | GTK_SHRINK | GTK_FILL</property>
-                                <property name="y_options"></property>
+                                <property name="y_options"/>
                               </packing>
                             </child>
                             <child>
@@ -472,7 +473,7 @@
                                 <property name="top_attach">1</property>
                                 <property name="bottom_attach">2</property>
                                 <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"></property>
+                                <property name="y_options"/>
                               </packing>
                             </child>
                             <child>
@@ -485,7 +486,7 @@
                               </object>
                               <packing>
                                 <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"></property>
+                                <property name="y_options"/>
                               </packing>
                             </child>
                             <child>
@@ -985,7 +986,6 @@
                                             <child>
                                               <object class="GtkLabel" id="gpg_name_label1">
                                                 <property name="visible">True</property>
-                                                <property name="can_focus">False</property>
                                                 <property name="selectable">True</property>
                                                 <property name="ellipsize">end</property>
                                               </object>
@@ -1118,7 +1118,6 @@
                     <property name="visible">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="orientation">vertical</property>
-                    <property name="spacing">1</property>
                     <child>
                       <object class="GtkCheckButton" id="enable_zeroconf_checkbutton2">
                         <property name="label" translatable="yes">_Enable</property>
@@ -1292,7 +1291,6 @@ You might consider to change possible firewall settings.</property>
                                     <child>
                                       <object class="GtkLabel" id="gpg_name_label2">
                                         <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
                                         <property name="selectable">True</property>
                                         <property name="ellipsize">end</property>
                                       </object>
@@ -1307,7 +1305,6 @@ You might consider to change possible firewall settings.</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
                                         <property name="use_underline">True</property>
-                                        <property name="ellipsize">end</property>
                                         <signal name="clicked" handler="on_gpg_choose_button_clicked"/>
                                       </object>
                                       <packing>
@@ -1357,7 +1354,7 @@ You might consider to change possible firewall settings.</property>
                                 <property name="top_attach">1</property>
                                 <property name="bottom_attach">2</property>
                                 <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"></property>
+                                <property name="y_options"/>
                               </packing>
                             </child>
                             <child>
@@ -1371,7 +1368,7 @@ You might consider to change possible firewall settings.</property>
                                 <property name="right_attach">2</property>
                                 <property name="top_attach">2</property>
                                 <property name="bottom_attach">3</property>
-                                <property name="y_options"></property>
+                                <property name="y_options"/>
                               </packing>
                             </child>
                             <child>
@@ -1383,7 +1380,7 @@ You might consider to change possible firewall settings.</property>
                                 <property name="top_attach">2</property>
                                 <property name="bottom_attach">3</property>
                                 <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"></property>
+                                <property name="y_options"/>
                               </packing>
                             </child>
                             <child>
@@ -1397,7 +1394,7 @@ You might consider to change possible firewall settings.</property>
                                 <property name="right_attach">2</property>
                                 <property name="top_attach">3</property>
                                 <property name="bottom_attach">4</property>
-                                <property name="y_options"></property>
+                                <property name="y_options"/>
                               </packing>
                             </child>
                             <child>
@@ -1409,7 +1406,7 @@ You might consider to change possible firewall settings.</property>
                                 <property name="top_attach">3</property>
                                 <property name="bottom_attach">4</property>
                                 <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"></property>
+                                <property name="y_options"/>
                               </packing>
                             </child>
                             <child>
@@ -1423,7 +1420,7 @@ You might consider to change possible firewall settings.</property>
                                 <property name="right_attach">2</property>
                                 <property name="top_attach">5</property>
                                 <property name="bottom_attach">6</property>
-                                <property name="y_options"></property>
+                                <property name="y_options"/>
                               </packing>
                             </child>
                             <child>
@@ -1435,7 +1432,7 @@ You might consider to change possible firewall settings.</property>
                                 <property name="top_attach">5</property>
                                 <property name="bottom_attach">6</property>
                                 <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"></property>
+                                <property name="y_options"/>
                               </packing>
                             </child>
                             <child>
@@ -1447,7 +1444,7 @@ You might consider to change possible firewall settings.</property>
                                 <property name="top_attach">4</property>
                                 <property name="bottom_attach">5</property>
                                 <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"></property>
+                                <property name="y_options"/>
                               </packing>
                             </child>
                             <child>
@@ -1461,7 +1458,7 @@ You might consider to change possible firewall settings.</property>
                                 <property name="right_attach">2</property>
                                 <property name="top_attach">4</property>
                                 <property name="bottom_attach">5</property>
-                                <property name="y_options"></property>
+                                <property name="y_options"/>
                               </packing>
                             </child>
                           </object>
