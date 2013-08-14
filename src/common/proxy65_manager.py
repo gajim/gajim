@@ -166,7 +166,7 @@ class ProxyResolver:
         self.state = S_FINISHED
 
     def _on_connect_failure(self):
-        print 'connection failed: ' + self.host
+        log.debug('Connection failed with %s:%s' % (self.host, self.port))
         self.state = S_FINISHED
         self.host = None
         self.port = 0
