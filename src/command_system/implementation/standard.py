@@ -126,6 +126,7 @@ class StandardCommonCommands(CommandContainer):
             self.echo(formatted)
 
     @command(raw=True, empty=True)
+    #Do not translate online, away, chat, xa, dnd
     @doc(_("""
     Set the current status
 
@@ -353,6 +354,7 @@ class StandardGroupChatCommands(CommandContainer):
         self.connection.gc_set_role(self.room_jid, who, 'none', reason or str())
 
     @command(raw=True)
+    #Do not translate moderator, participant, visitor, none
     @doc(_("""Set occupant role in group chat.
     Role can be given as one of the following values:
     moderator, participant, visitor, none"""))
@@ -364,6 +366,7 @@ class StandardGroupChatCommands(CommandContainer):
         self.connection.gc_set_role(self.room_jid, who, role)
 
     @command(raw=True)
+    #Do not translate owner, admin, member, outcast, none
     @doc(_("""Set occupant affiliation in group chat.
     Affiliation can be given as one of the following values:
     owner, admin, member, outcast, none"""))
