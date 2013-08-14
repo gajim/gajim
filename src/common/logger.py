@@ -149,7 +149,8 @@ class Logger:
 
     def attach_cache_database(self):
         try:
-            self.cur.execute("ATTACH DATABASE '%s' AS cache" % CACHE_DB_PATH)
+            self.cur.execute("ATTACH DATABASE '%s' AS cache" % \
+                CACHE_DB_PATH.replace("'", "''"))
         except sqlite.Error, e:
             log.debug("Failed to attach cache database: %s" % str(e))
 
