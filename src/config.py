@@ -1983,7 +1983,8 @@ class AccountsWindow:
         account = self.current_account
         if len(gajim.events.get_events(account)):
             dialogs.ErrorDialog(_('Unread events'),
-                _('Read all pending events before removing this account.'))
+                _('Read all pending events before removing this account.'),
+                transient_for=self.window)
             return
 
         if gajim.config.get_per('accounts', account, 'is_zeroconf'):
@@ -2026,27 +2027,30 @@ class AccountsWindow:
         if active and gajim.connections[self.current_account].connected != 0:
             dialogs.ErrorDialog(
                 _('You are currently connected to the server'),
-                _('To change the account name, you must be disconnected.'))
+                _('To change the account name, you must be disconnected.'),
+                transient_for=self.window)
             return
         if len(gajim.events.get_events(self.current_account)):
             dialogs.ErrorDialog(_('Unread events'),
                 _('To change the account name, you must read all pending '
-                'events.'))
+                'events.'), transient_for=self.window)
             return
         # Get the new name
         def on_renamed(new_name, old_name):
             if new_name in gajim.connections:
                 dialogs.ErrorDialog(_('Account Name Already Used'),
                     _('This name is already used by another of your accounts. '
-                    'Please choose another name.'))
+                    'Please choose another name.'), transient_for=self.window)
                 return
             if (new_name == ''):
                 dialogs.ErrorDialog(_('Invalid account name'),
-                    _('Account name cannot be empty.'))
+                    _('Account name cannot be empty.'),
+                    transient_for=self.window)
                 return
             if new_name.find(' ') != -1:
                 dialogs.ErrorDialog(_('Invalid account name'),
-                    _('Account name cannot contain spaces.'))
+                    _('Account name cannot contain spaces.'),
+                    transient_for=self.window)
                 return
             if active:
                 # update variables
@@ -2146,7 +2150,7 @@ class AccountsWindow:
         except helpers.InvalidFormat, s:
             if not widget.is_focus():
                 pritext = _('Invalid Jabber ID')
-                dialogs.ErrorDialog(pritext, str(s))
+                dialogs.ErrorDialog(pritext, str(s), transient_for=self.window)
                 gobject.idle_add(lambda: widget.grab_focus())
             return True
 
@@ -2157,7 +2161,7 @@ class AccountsWindow:
                 pritext = _('Invalid Jabber ID')
                 sectext = \
                     _('A Jabber ID must be in the form "user@servername".')
-                dialogs.ErrorDialog(pritext, sectext)
+                dialogs.ErrorDialog(pritext, sectext, transient_for=self.window)
                 gobject.idle_add(lambda: widget.grab_focus())
             return True
 
@@ -2225,7 +2229,7 @@ class AccountsWindow:
         except helpers.InvalidFormat, s:
             if not widget.is_focus():
                 pritext = _('Invalid Jabber ID')
-                dialogs.ErrorDialog(pritext, str(s))
+                dialogs.ErrorDialog(pritext, str(s), transient_for=self.window)
                 gobject.idle_add(lambda: widget.grab_focus())
             return True
 
@@ -2383,7 +2387,8 @@ class AccountsWindow:
         except Exception:
             if not widget.is_focus():
                 dialogs.ErrorDialog(_('Invalid entry'),
-                    _('Custom port must be a port number.'))
+                    _('Custom port must be a port number.'),
+                    transient_for=self.window)
                 gobject.idle_add(lambda: widget.grab_focus())
             return True
         if self.option_changed('custom_port', custom_port):
@@ -2405,7 +2410,8 @@ class AccountsWindow:
                 secret_keys = []
         if not secret_keys:
             dialogs.ErrorDialog(_('Failed to get secret keys'),
-                _('There is no OpenPGP secret key available.'))
+                _('There is no OpenPGP secret key available.'),
+                transient_for=self.window)
         secret_keys[_('None')] = _('None')
 
         def on_key_selected(keyID):
@@ -2420,7 +2426,7 @@ class AccountsWindow:
             gpg_name_label = self.xml.get_object('gpg_name_label' + \
                 wiget_name_ext)
             use_gpg_agent_checkbutton = self.xml.get_object(
-                    'use_gpg_agent_checkbutton' + wiget_name_ext)
+                'use_gpg_agent_checkbutton' + wiget_name_ext)
             if keyID[0] == _('None'):
                 gpg_key_label.set_text(_('No key selected'))
                 gpg_name_label.set_text('')
@@ -2453,7 +2459,7 @@ class AccountsWindow:
         if self.current_account not in gajim.interface.instances:
             dlg = dialogs.ErrorDialog(_('No such account available'),
                 _('You must create your account before editing your personal '
-                'information.'))
+                'information.'), transient_for=self.window)
             return
 
         # show error dialog if account is newly created (not in gajim.connections)
@@ -2461,12 +2467,13 @@ class AccountsWindow:
         gajim.connections[self.current_account].connected < 2:
             dialogs.ErrorDialog(_('You are not connected to the server'),
                 _('Without a connection, you can not edit your personal '
-                'information.'))
+                'information.'), transient_for=self.window)
             return
 
         if not gajim.connections[self.current_account].vcard_supported:
             dialogs.ErrorDialog(_("Your server doesn't support vCard"),
-                _("Your server can't save your personal information."))
+                _("Your server can't save your personal information."),
+                transient_for=self.window)
             return
 
         jid = gajim.get_jid_from_account(self.current_account)
@@ -2582,7 +2589,8 @@ class AccountsWindow:
             self.ignore_events = False
             dialogs.ErrorDialog(
                 _('You are currently connected to the server'),
-                _('To disable the account, you must be disconnected.'))
+                _('To disable the account, you must be disconnected.'),
+                transient_for=self.window)
             return
         if gajim.ZEROCONF_ACC_NAME in gajim.connections and not \
         gajim.connections[gajim.ZEROCONF_ACC_NAME].is_zeroconf:
@@ -2619,7 +2627,8 @@ class AccountsWindow:
             self.ignore_events = False
             dialogs.ErrorDialog(
                 _('You are currently connected to the server'),
-                _('To disable the account, you must be disconnected.'))
+                _('To disable the account, you must be disconnected.'),
+                transient_for=self.window)
             return
         # add/remove account in roster and all variables
         if widget.get_active():
