@@ -83,7 +83,7 @@ class StanzaSession(object):
 
     def get_to(self):
         to = str(self.jid)
-        return gajim.get_jid_without_resource(to) + self.resource
+        return gajim.get_jid_without_resource(to) +  '/' + self.resource
 
     def remove_events(self, types):
         """
