@@ -168,7 +168,7 @@
                   <object class="GtkMenu" id="subscription_menuitem_menu">
                     <child>
                       <object class="GtkImageMenuItem" id="resend_authorization_to_menuitem">
-                        <property name="label" translatable="yes">_Allow him/her to see my status</property>
+                        <property name="label" translatable="yes">_Allow contact to see my status</property>
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="image">image15</property>
@@ -177,7 +177,7 @@
                     </child>
                     <child>
                       <object class="GtkImageMenuItem" id="rerequest_authorization_from_menuitem">
-                        <property name="label" translatable="yes">A_sk to see his/her status</property>
+                        <property name="label" translatable="yes">A_sk to see contact status</property>
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="image">image16</property>
@@ -185,8 +185,8 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="forbid_him/her_to_see_my_status1">
-                        <property name="label" translatable="yes">_Forbid him/her to see my status</property>
+                      <object class="GtkImageMenuItem" id="forbid_contact_to_see_my_status1">
+                        <property name="label" translatable="yes">_Forbid contact to see my status</property>
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="image">image17</property>
