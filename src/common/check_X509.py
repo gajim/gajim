@@ -12,8 +12,8 @@ try:
     from common.helpers import prep, InvalidFormat
 
     MAX = 64
-    oid_xmppaddr = '(1, 3, 6, 1, 5, 5, 7, 8, 5)'
-    oid_dnssrv   = '(1, 3, 6, 1, 5, 5, 7, 8, 7)'
+    oid_xmppaddr = '1.3.6.1.5.5.7.8.5'
+    oid_dnssrv   = '1.3.6.1.5.5.7.8.7'
 
 
 
