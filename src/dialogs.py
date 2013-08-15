@@ -1531,10 +1531,10 @@ class ConfirmationDialog(HigDialog):
     """
 
     def __init__(self, pritext, sectext='', on_response_ok=None,
-                             on_response_cancel=None):
+    on_response_cancel=None, transient_for=None):
         self.user_response_ok = on_response_ok
         self.user_response_cancel = on_response_cancel
-        HigDialog.__init__(self, None,
+        HigDialog.__init__(self, transient_for,
            Gtk.MessageType.QUESTION, Gtk.ButtonsType.OK_CANCEL, pritext, sectext,
            self.on_response_ok, self.on_response_cancel)
         self.popup()
@@ -1612,8 +1612,10 @@ class InformationDialog(HigDialog):
     HIG compliant info dialog
     """
 
-    def __init__(self, pritext, sectext=''):
-        if hasattr(gajim.interface, 'roster') and gajim.interface.roster:
+    def __init__(self, pritext, sectext='', transient_for=None):
+        if transient_for:
+            parent = transient_for
+        elif hasattr(gajim.interface, 'roster') and gajim.interface.roster:
             parent = gajim.interface.roster.window
         else:
             parent = None
@@ -1735,11 +1737,13 @@ class ConfirmationDialogCheck(ConfirmationDialog):
     """
 
     def __init__(self, pritext, sectext='', checktext='', on_response_ok=None,
-                    on_response_cancel=None, is_modal=True):
+    on_response_cancel=None, is_modal=True, transient_for=None):
         self.user_response_ok = on_response_ok
         self.user_response_cancel = on_response_cancel
 
-        if hasattr(gajim.interface, 'roster') and gajim.interface.roster:
+        if transient_for:
+            parent = transient_for
+        elif hasattr(gajim.interface, 'roster') and gajim.interface.roster:
             parent = gajim.interface.roster.window
         else:
             parent = None
@@ -1995,13 +1999,16 @@ class CommonInputDialog:
     Common Class for Input dialogs
     """
 
-    def __init__(self, title, label_str, is_modal, ok_handler, cancel_handler):
+    def __init__(self, title, label_str, is_modal, ok_handler, cancel_handler,
+    transient_for=None):
         self.dialog = self.xml.get_object('input_dialog')
         label = self.xml.get_object('label')
         self.dialog.set_title(title)
         label.set_markup(label_str)
         self.cancel_handler = cancel_handler
         self.vbox = self.xml.get_object('vbox')
+        if transient_for:
+            self.dialog.set_transient_for(transient_for)
 
         self.ok_handler = ok_handler
         okbutton = self.xml.get_object('okbutton')
@@ -2038,10 +2045,10 @@ class InputDialog(CommonInputDialog):
     """
 
     def __init__(self, title, label_str, input_str=None, is_modal=True,
-    ok_handler=None, cancel_handler=None):
+    ok_handler=None, cancel_handler=None, transient_for=None):
         self.xml = gtkgui_helpers.get_gtk_builder('input_dialog.ui')
         CommonInputDialog.__init__(self, title, label_str, is_modal, ok_handler,
-            cancel_handler)
+            cancel_handler, transient_for=transient_for)
         self.input_entry = self.xml.get_object('input_entry')
         if input_str:
             self.set_entry(input_str)
@@ -2221,7 +2228,8 @@ class DoubleInputDialog:
     """
 
     def __init__(self, title, label_str1, label_str2, input_str1=None,
-            input_str2=None, is_modal=True, ok_handler=None, cancel_handler=None):
+    input_str2=None, is_modal=True, ok_handler=None, cancel_handler=None,
+    transient_for=None):
         self.xml = gtkgui_helpers.get_gtk_builder('dubbleinput_dialog.ui')
         self.dialog = self.xml.get_object('dubbleinput_dialog')
         label1 = self.xml.get_object('label1')
@@ -2238,6 +2246,8 @@ class DoubleInputDialog:
         if input_str2:
             self.input_entry2.set_text(input_str2)
             self.input_entry2.select_region(0, -1) # select all
+        if transient_for:
+            self.dialog.set_transient_for(transient_for)
 
         self.dialog.set_modal(is_modal)
 
@@ -4574,7 +4584,8 @@ class PrivacyListsWindow:
         name = self.new_privacy_list_entry.get_text()
         if not name:
             ErrorDialog(_('Invalid List Name'),
-                _('You must enter a name to create a privacy list.'))
+                _('You must enter a name to create a privacy list.'),
+                transient_for=self.window)
             return
         key_name = 'privacy_list_%s' % name
         if key_name in gajim.interface.instances[self.account]:

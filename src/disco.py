@@ -765,13 +765,15 @@ _('Without a connection, you can not browse available services'))
                 # We can't travel anywhere else.
                 self.destroy()
             dialogs.ErrorDialog(_('The service could not be found'),
-_('There is no service at the address you entered, or it is not responding. '
-    'Check the address and try again.'))
+                _('There is no service at the address you entered, or it is '
+                'not responding. Check the address and try again.'),
+                transient_for=self.window)
             return
         klass = self.cache.get_browser(identities, features)
         if not klass:
             dialogs.ErrorDialog(_('The service is not browsable'),
-_('This type of service does not contain any items to browse.'))
+                _('This type of service does not contain any items to browse.'),
+                transient_for=self.window)
             return
         elif klass is None:
             klass = AgentBrowser
