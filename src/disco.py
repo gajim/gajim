@@ -112,6 +112,7 @@ def _gen_agent_type_info():
         ('_jid', 'mrim'):               (False, 'mrim'),
         ('gateway', 'facebook'):        (False, 'facebook'),
         ('_jid', 'facebook'):           (False, 'facebook'),
+        ('gateway', 'tv'):              (False, 'tv'),
     }
 
 # Category type to "human-readable" description string, and sort priority
