@@ -1311,7 +1311,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         # used to stay at the end of the textview when we shrink conversation
         # textview.
         if self.was_at_the_end:
-            self.conv_textview.bring_scroll_to_end(-18)
+            self.conv_textview.bring_scroll_to_end(-18, use_smooth=False)
         self.was_at_the_end = (adjustment.get_upper() - adjustment.get_value() \
             - adjustment.get_page_size()) < 18
 
