@@ -473,7 +473,8 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
                             negotiation.describe_features(ask_user)),
                             _('Always accept for this contact'),
                             on_response_yes = accept_nondefault_options,
-                            on_response_no = reject_nondefault_options)
+                            on_response_no = reject_nondefault_options,
+                            transient_for=self.control.parent_win.window)
                 else:
                     try:
                         self.accept_e2e_alice(form, negotiated)
