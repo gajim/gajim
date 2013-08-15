@@ -2445,7 +2445,7 @@ class AccountsWindow:
             return
 
         if not gajim.connections[self.current_account].vcard_supported:
-            dialogs.ErrorDialog(_("Your server doesn't support Vcard"),
+            dialogs.ErrorDialog(_("Your server doesn't support vCard"),
             _("Your server can't save your personal information."))
             return
 
