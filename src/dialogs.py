@@ -1605,8 +1605,10 @@ class ErrorDialog(HigDialog):
     """
 
     def __init__(self, pritext, sectext='', on_response_ok=None,
-    on_response_cancel=None):
-        if hasattr(gajim.interface, 'roster') and gajim.interface.roster:
+    on_response_cancel=None, transient_for=None):
+        if transient_for:
+            parent = transient_for
+        elif hasattr(gajim.interface, 'roster') and gajim.interface.roster:
             parent = gajim.interface.roster.window
         else:
             parent = None
