@@ -1646,10 +1646,13 @@ class YesNoDialog(HigDialog):
     """
 
     def __init__(self, pritext, sectext='', checktext='', text_label=None,
-    on_response_yes=None, on_response_no=None, type_=Gtk.MessageType.QUESTION):
+    on_response_yes=None, on_response_no=None, type_=Gtk.MessageType.QUESTION,
+    transient_for=None):
         self.user_response_yes = on_response_yes
         self.user_response_no = on_response_no
-        if hasattr(gajim.interface, 'roster') and gajim.interface.roster:
+        if transient_for:
+            parent = transient_for
+        elif hasattr(gajim.interface, 'roster') and gajim.interface.roster:
             parent = gajim.interface.roster.window
         else:
             parent = None
@@ -5195,7 +5198,8 @@ class ESessionInfoWindow:
             self.session.verified_identity = False
             self.update_info()
 
-        YesNoDialog(pritext, sectext, on_response_yes=on_yes, on_response_no=on_no)
+        YesNoDialog(pritext, sectext, on_response_yes=on_yes,
+            on_response_no=on_no, transient_for=self.window)
 
 class GPGInfoWindow:
     """
