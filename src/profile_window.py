@@ -146,7 +146,8 @@ class ProfileWindow:
                     invalid_file = True
             if invalid_file:
                 if True: # keep identation
-                    dialogs.ErrorDialog(_('Could not load image'), msg)
+                    dialogs.ErrorDialog(_('Could not load image'), msg,
+                        transient_for=self.window)
                     return
             if filesize > 16384:
                 if scaled_pixbuf:
@@ -162,7 +163,8 @@ class ProfileWindow:
                 # rescale it
                 pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'vcard')
             except AttributeError: # unknown format
-                dialogs.ErrorDialog(_('Could not load image'))
+                dialogs.ErrorDialog(_('Could not load image'),
+                    transient_for=self.window)
                 return
             self.dialog.destroy()
             self.dialog = None
@@ -237,7 +239,7 @@ class ProfileWindow:
             if not widget.is_focus():
                 pritext = _('Wrong date format')
                 dialogs.ErrorDialog(pritext, _('Format of the date must be '
-                    'YYYY-MM-DD'))
+                    'YYYY-MM-DD'), transient_for=self.window)
                 GLib.idle_add(lambda: widget.grab_focus())
             return True
 
@@ -373,7 +375,7 @@ class ProfileWindow:
         if gajim.connections[self.account].connected < 2:
             dialogs.ErrorDialog(_('You are not connected to the server'),
                     _('Without a connection, you can not publish your contact '
-                    'information.'))
+                    'information.'), transient_for=self.window)
             return
         vcard_ = self.make_vcard()
         nick = ''
@@ -413,7 +415,7 @@ class ProfileWindow:
             self.update_progressbar_timeout_id = None
         dialogs.InformationDialog(_('vCard publication failed'),
             _('There was an error while publishing your personal information, '
-            'try again later.'))
+            'try again later.'), transient_for=self.window)
 
     def on_cancel_button_clicked(self, widget):
         self.window.destroy()
