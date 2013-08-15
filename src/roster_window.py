@@ -4041,8 +4041,6 @@ class RosterWindow:
         When an iter is activated (double-click or single click if gnome is set
         this way)
         """
-        if self.rfilter_enabled:
-            self.disable_rfilter()
         model = self.modelfilter
         account = model[path][C_ACCOUNT].decode('utf-8')
         type_ = model[path][C_TYPE]
@@ -4052,6 +4050,8 @@ class RosterWindow:
             else:
                 self.tree.expand_row(path, False)
             return
+        if self.rfilter_enabled:
+            self.disable_rfilter()
         jid = model[path][C_JID].decode('utf-8')
         resource = None
         contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
