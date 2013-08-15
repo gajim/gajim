@@ -2140,7 +2140,7 @@ class ChangeNickDialog(InputDialogCheck):
         except Exception:
             # invalid char
             ErrorDialog(_('Invalid nickname'),
-                    _('The nickname has not allowed characters.'))
+                    _('The nickname contains invalid characters.'))
             return
         self.on_ok(nick, self.is_checked())
 
@@ -2594,7 +2594,7 @@ class JoinGroupchatWindow:
             nickname = helpers.parse_resource(nickname)
         except Exception:
             ErrorDialog(_('Invalid Nickname'),
-                    _('The nickname has not allowed characters.'))
+                    _('The nickname contains invalid characters.'))
             return
         user, server, resource = helpers.decompose_jid(room_jid)
         if not user or not server or resource:
@@ -2605,7 +2605,7 @@ class JoinGroupchatWindow:
             room_jid = helpers.parse_jid(room_jid)
         except Exception:
             ErrorDialog(_('Invalid group chat Jabber ID'),
-                    _('The group chat Jabber ID has not allowed characters.'))
+                    _('The group chat Jabber ID contains invalid characters.'))
             return
 
         if gajim.contacts.get_contact(self.account, room_jid) and \

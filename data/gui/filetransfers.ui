@@ -196,7 +196,7 @@
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="receives_default">False</property>
-                <property name="tooltip_text" translatable="yes">Cancels the selected file transfer and removes incomplete file</property>
+                <property name="tooltip_text" translatable="yes">Cancels the selected file transfer and removes incomplete files</property>
                 <property name="use_stock">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="cancel_button-atkobject">

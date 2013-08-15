@@ -669,7 +669,7 @@
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">False</property>
-                                            <property name="tooltip_text" translatable="yes">If checked, Gajim will also include information about the sender of the new emails</property>
+                                            <property name="tooltip_text" translatable="yes">If checked, Gajim will also include information about the sender of new emails</property>
                                             <property name="use_underline">True</property>
                                             <property name="draw_indicator">True</property>
                                             <signal name="toggled" handler="on_notify_gmail_extra_checkbutton_toggled"/>
@@ -1530,7 +1530,7 @@ $T will be replaced by auto-not-available timeout</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
-                                <property name="tooltip_text" translatable="yes">If checked, Gajim will use protocol-specific status icons. (eg. A contact from MSN will have the equivalent msn icon for status online, away, busy, etc...)</property>
+                                <property name="tooltip_text" translatable="yes">If checked, Gajim will use protocol-specific status icons. (e.g. A contact from MSN will have the equivalent msn icon for status online, away, busy, etc...)</property>
                                 <property name="use_underline">True</property>
                                 <property name="draw_indicator">True</property>
                                 <signal name="toggled" handler="on_transports_iconsets_checkbutton_toggled"/>
