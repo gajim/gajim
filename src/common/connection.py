@@ -1460,7 +1460,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             self.disconnect(on_purpose=True)
             gajim.nec.push_incoming_event(ConnectionLostEvent(None, conn=self,
                 title=_('Could not connect to "%s"') % self._hostname,
-                msg=_('Check your connection or try again later')))
+                msg=_('Check your connection or try again later.')))
             if self.on_connect_auth:
                 self.on_connect_auth(None)
                 self.on_connect_auth = None

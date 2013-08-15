@@ -171,7 +171,7 @@
                 <child>
                   <object class="GtkLabel" id="notes_label">
                     <property name="visible">True</property>
-                    <property name="label" translatable="yes">Please wait while the command is sending...</property>
+                    <property name="label" translatable="yes">Please wait while the command is being sent...</property>
                     <property name="selectable">True</property>
                   </object>
                   <packing>

@@ -1296,9 +1296,9 @@ class GroupchatControl(ChatControlBase):
             changes.append(_('Any occupant is allowed to see your full JID'))
             self.is_anonymous = False
         if '102' in obj.status_code:
-            changes.append(_('Room now shows unavailable member'))
+            changes.append(_('Room now shows unavailable members'))
         if '103' in obj.status_code:
-            changes.append(_('room now does not show unavailable members'))
+            changes.append(_('Room now does not show unavailable members'))
         if '104' in obj.status_code:
             changes.append(_('A non-privacy-related room configuration change '
                 'has occurred'))
