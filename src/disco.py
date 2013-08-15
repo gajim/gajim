@@ -633,7 +633,7 @@ _('Without a connection, you can not browse available services'))
         if text_after:
             font.set_weight(pango.WEIGHT_NORMAL)
             markup = '%s\n<span font_desc="%s" size="small">%s</span>' % \
-                                                            (markup, font.to_string(), text_after)
+                (markup, font.to_string(), text_after)
         self.banner.set_markup(markup)
 
     def paint_banner(self):
@@ -759,7 +759,8 @@ _('Without a connection, you can not browse available services'))
                 # We can't travel anywhere else.
                 self.destroy()
             dialogs.ErrorDialog(_('The service could not be found'),
-_('There is no service at the address you entered, or it is not responding. Check the address and try again.'))
+_('There is no service at the address you entered, or it is not responding. '
+    'Check the address and try again.'))
             return
         klass = self.cache.get_browser(identities, features)
         if not klass:
@@ -1305,7 +1306,7 @@ class ToplevelAgentBrowser(AgentBrowser):
             state = self.model[iter_][4]
             # Not a category, and we have something to say about state
             if jid and state > 0 and \
-                            (self.tooltip.timeout == 0 or self.tooltip.id != props[0]):
+            (self.tooltip.timeout == 0 or self.tooltip.id != props[0]):
                 self.tooltip.id = row
                 self.tooltip.timeout = gobject.timeout_add(500,
                         self._show_tooltip, state)
@@ -1346,15 +1347,15 @@ class ToplevelAgentBrowser(AgentBrowser):
         # Connect signals
         scrollwin = self.window.services_scrollwin
         self._view_signals.append(view.connect('leave-notify-event',
-                                                                        self.on_treeview_leave_notify_event))
+            self.on_treeview_leave_notify_event))
         self._view_signals.append(view.connect('motion-notify-event',
-                                                                        self.on_treeview_motion_notify_event))
+            self.on_treeview_motion_notify_event))
         self._view_signals.append(view.connect('key-press-event',
-                                                                        self.on_treeview_event_hide_tooltip))
+            self.on_treeview_event_hide_tooltip))
         self._view_signals.append(view.connect('button-press-event',
-                                                                        self.on_treeview_event_hide_tooltip))
+            self.on_treeview_event_hide_tooltip))
         self._scroll_signal = scrollwin.connect('scroll-event',
-                                                                        self.on_treeview_event_hide_tooltip)
+            self.on_treeview_event_hide_tooltip)
 
     def _clean_treemodel(self):
         # Disconnect signals
@@ -1871,9 +1872,8 @@ class MucBrowser(AgentBrowser):
 
         for bookmark in gajim.connections[self.account].bookmarks:
             if bookmark['jid'] == bm['jid']:
-                dialogs.ErrorDialog(
-                        _('Bookmark already set'),
-                        _('Group Chat "%s" is already in your bookmarks.') % bm['jid'])
+                dialogs.ErrorDialog( _('Bookmark already set'),
+                _('Group Chat "%s" is already in your bookmarks.') % bm['jid'])
                 return
 
         gajim.connections[self.account].bookmarks.append(bm)
@@ -1882,8 +1882,8 @@ class MucBrowser(AgentBrowser):
         gajim.interface.roster.set_actions_menu_needs_rebuild()
 
         dialogs.InformationDialog(
-                        _('Bookmark has been added successfully'),
-                        _('You can manage your bookmarks via Actions menu in your roster.'))
+            _('Bookmark has been added successfully'),
+            _('You can manage your bookmarks via Actions menu in your roster.'))
 
     def on_join_button_clicked(self, *args):
         """
@@ -2067,7 +2067,8 @@ class DiscussionGroupsBrowser(AgentBrowser):
         self.subscribe_button = None
         self.unsubscribe_button = None
 
-        gajim.connections[account].send_pb_subscription_query(jid, self._on_pep_subscriptions)
+        gajim.connections[account].send_pb_subscription_query(jid,
+            self._on_pep_subscriptions)
 
     def _create_treemodel(self):
         """
@@ -2238,7 +2239,8 @@ class DiscussionGroupsBrowser(AgentBrowser):
 
         groupnode = model.get_value(iter_, 1)   # 1 = groupnode
 
-        gajim.connections[self.account].send_pb_subscribe(self.jid, groupnode, self._on_pep_subscribe, groupnode)
+        gajim.connections[self.account].send_pb_subscribe(self.jid, groupnode,
+            self._on_pep_subscribe, groupnode)
 
     def on_unsubscribe_button_clicked(self, widget):
         """
@@ -2249,7 +2251,8 @@ class DiscussionGroupsBrowser(AgentBrowser):
 
         groupnode = model.get_value(iter_, 1) # 1 = groupnode
 
-        gajim.connections[self.account].send_pb_unsubscribe(self.jid, groupnode, self._on_pep_unsubscribe, groupnode)
+        gajim.connections[self.account].send_pb_unsubscribe(self.jid, groupnode,
+            self._on_pep_unsubscribe, groupnode)
 
     def _on_pep_subscriptions(self, conn, request):
         """
