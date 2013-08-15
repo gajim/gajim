@@ -4059,6 +4059,8 @@ class RosterWindow:
         When an iter is activated (double-click or single click if gnome is set
         this way)
         """
+        if self.rfilter_enabled:
+            self.disable_rfilter()
         model = self.modelfilter
         account = model[path][C_ACCOUNT]
         type_ = model[path][C_TYPE]
@@ -4125,8 +4127,6 @@ class RosterWindow:
         """
         When an iter is double clicked: open the first event window
         """
-        if self.rfilter_enabled:
-            self.disable_rfilter()
         if not gajim.single_click:
             self.on_row_activated(widget, path)
 
