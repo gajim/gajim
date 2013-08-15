@@ -2130,7 +2130,8 @@ class GroupchatControl(ChatControlBase):
 
             dialogs.ConfirmationDialogCheck(pritext, sectext,
                 _('_Do not ask me again'), on_response_ok=on_ok,
-                on_response_cancel=on_cancel)
+                on_response_cancel=on_cancel,
+                transient_for=self.parent_win.window)
             return
 
         on_yes(self)
@@ -2206,7 +2207,8 @@ class GroupchatControl(ChatControlBase):
         dialogs.DoubleInputDialog(_('Destroying %s') % u'\u200E' + \
             self.room_jid, _('You are going to definitively destroy this '
             'room.\nYou may specify a reason below:'),
-            _('You may also enter an alternate venue:'), ok_handler=on_ok)
+            _('You may also enter an alternate venue:'), ok_handler=on_ok,
+            transient_for=self.parent_win.window)
 
     def _on_bookmark_room_menuitem_activate(self, widget):
         """
@@ -2406,7 +2408,8 @@ class GroupchatControl(ChatControlBase):
 
         # ask for reason
         dialogs.InputDialog(_('Kicking %s') % nick,
-            _('You may specify a reason below:'), ok_handler=on_ok)
+            _('You may specify a reason below:'), ok_handler=on_ok,
+            transient_for=self.parent_win.window)
 
     def mk_menu(self, event, iter_):
         """
@@ -2738,7 +2741,8 @@ class GroupchatControl(ChatControlBase):
         nick = gajim.get_nick_from_jid(jid)
         # ask for reason
         dialogs.InputDialog(_('Banning %s') % nick,
-            _('You may specify a reason below:'), ok_handler=on_ok)
+            _('You may specify a reason below:'), ok_handler=on_ok,
+            transient_for=self.parent_win.window)
 
     def grant_membership(self, widget, jid):
         """
