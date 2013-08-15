@@ -413,7 +413,8 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
                             'acceptable?''') % (
                             negotiation.describe_features(ask_user)),
                             on_response_yes=accept_nondefault_options,
-                            on_response_no=reject_nondefault_options)
+                            on_response_no=reject_nondefault_options,
+                            transient_for=self.control.parent_win.window)
                     else:
                         self.respond_e2e_bob(form, negotiated, not_acceptable)
 

@@ -2787,11 +2787,13 @@ class ChatControl(ChatControlBase):
                 on_no(self)
 
             dialogs.ConfirmationDialog(
-                    # %s is being replaced in the code with JID
-                    _('You just received a new message from "%s"') % self.contact.jid,
-                    _('If you close this tab and you have history disabled, '\
-                    'this message will be lost.'), on_response_ok=on_ok,
-                    on_response_cancel=on_cancel)
+                #%s is being replaced in the code with JID
+                _('You just received a new message from "%s"') % \
+                self.contact.jid,
+                _('If you close this tab and you have history disabled, '\
+                'this message will be lost.'), on_response_ok=on_ok,
+                on_response_cancel=on_cancel,
+                transient_for=self.parent_win.window)
             return
         on_yes(self)
 
