@@ -210,10 +210,10 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
     It keeps a stack of "style spans" (start/end element pairs) and a stack of
     list counters, for nested lists.
     """
-    def __init__(self, conv_textview, startiter):
+    def __init__(self, textview, conv_textview, startiter):
         xml.sax.handler.ContentHandler.__init__(self)
-        self.textbuf = conv_textview.tv.get_buffer()
-        self.textview = conv_textview.tv
+        self.textbuf = textview.get_buffer()
+        self.textview = textview
         self.iter = startiter
         self.conv_textview = conv_textview
         self.text = ''
@@ -512,15 +512,16 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                 (mem, alt, replace_mark) = loaded
                 update = True
             else:
-                img_mark = self.textbuf.create_mark(None, self.iter, True)
-                gajim.thread_interface(helpers.download_image, [
-                    self.conv_textview.account, attrs], self._update_img,
-                    [attrs, img_mark])
-                alt = attrs.get('alt', '')
-                if alt:
-                    alt += '\n'
-                alt += _('Loading')
-                pixbuf = get_icon_pixmap('gajim-receipt_missing')
+                if self.conv_textview:
+                    img_mark = self.textbuf.create_mark(None, self.iter, True)
+                    gajim.thread_interface(helpers.download_image, [
+                        self.conv_textview.account, attrs], self._update_img,
+                        [attrs, img_mark])
+                    alt = attrs.get('alt', '')
+                    if alt:
+                        alt += '\n'
+                    alt += _('Loading')
+                    pixbuf = get_icon_pixmap('gajim-receipt_missing')
             if mem:
                 # Caveat: GdkPixbuf is known not to be safe to load
                 # images from network... this program is now potentially
@@ -653,8 +654,11 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
         return False
 
     def handle_specials(self, text):
-        self.iter = self.conv_textview.detect_and_print_special_text(text,
-            self._get_style_tags())
+        if self.conv_textview:
+            self.iter = self.conv_textview.detect_and_print_special_text(text,
+                self._get_style_tags())
+        else:
+            self._insert_text(text)
 
     def characters(self, content):
         if self.preserve:
@@ -758,9 +762,11 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
             #FIXME: plenty of unused attributes (width, height,...) :)
             self._jump_line()
             try:
-                self.textbuf.insert_pixbuf(self.iter,
-                    self.textview.focus_out_line_pixbuf)
-                #self._insert_text(u'\u2550'*40)
+                if self.conv_textbuf:
+                    self.conv_textbuf.insert_pixbuf(self.iter,
+                        self.conv_textview.focus_out_line_pixbuf)
+                else:
+                    self._insert_text(u'\u2550'*40)
                 self._jump_line()
             except Exception, e:
                 log.debug(str('Error in hr'+e))
@@ -808,11 +814,37 @@ class HtmlTextView(gtk.TextView):
         self.connect('copy-clipboard', self.on_html_text_view_copy_clipboard)
         self.id_ = self.connect('button-release-event',
             self.on_left_mouse_button_release)
-        self.get_buffer().create_tag('eol', scale = pango.SCALE_XX_SMALL)
+        buffer_ = self.get_buffer()
+        buffer_.create_tag('eol', scale = pango.SCALE_XX_SMALL)
+        
         self.tooltip = tooltips.BaseTooltip()
         self.config = gajim.config
         self.interface = gajim.interface
         # end big hack
+
+    def create_tags(self):
+        buffer_ = self.get_buffer()
+
+        self.tagURL = buffer_.create_tag('url')
+        color = gajim.config.get('urlmsgcolor')
+        self.tagURL.set_property('foreground', color)
+        self.tagURL.set_property('underline', pango.UNDERLINE_SINGLE)
+        self.tagURL.connect('event', self._hyperlink_handler, 'url')
+
+        self.tagMail = buffer_.create_tag('mail')
+        self.tagMail.set_property('foreground', color)
+        self.tagMail.set_property('underline', pango.UNDERLINE_SINGLE)
+        self.tagMail.connect('event', self._hyperlink_handler, 'mail')
+
+        self.tagXMPP = buffer_.create_tag('xmpp')
+        self.tagXMPP.set_property('foreground', color)
+        self.tagXMPP.set_property('underline', pango.UNDERLINE_SINGLE)
+        self.tagXMPP.connect('event', self._hyperlink_handler, 'xmpp')
+
+        self.tagSthAtSth = buffer_.create_tag('sth_at_sth')
+        self.tagSthAtSth.set_property('foreground', color)
+        self.tagSthAtSth.set_property('underline', pango.UNDERLINE_SINGLE)
+        self.tagSthAtSth.connect('event', self._hyperlink_handler, 'sth_at_sth')
 
     def __destroy_event(self, widget):
         if self.tooltip.timeout != 0:
@@ -864,14 +896,136 @@ class HtmlTextView(gtk.TextView):
             self._changed_cursor = False
         return False
 
-    def display_html(self, html, conv_textview):
+    def on_open_link_activate(self, widget, kind, text):
+        helpers.launch_browser_mailer(kind, text)
+
+    def on_copy_link_activate(self, widget, text):
+        clip = gtk.clipboard_get()
+        clip.set_text(text)
+
+#    def on_start_chat_activate(self, widget, jid):
+#        gajim.interface.new_chat_from_jid(self.account, jid)
+
+    def on_join_group_chat_menuitem_activate(self, widget, room_jid):
+        try:
+            dialogs.JoinGroupchatWindow(room_jid=room_jid)
+        except GajimGeneralException:
+            pass
+
+    def on_add_to_roster_activate(self, widget, jid):
+        dialogs.AddNewContactWindow(self.account, jid)
+
+    def make_link_menu(self, event, kind, text):
+        xml = gtkgui_helpers.get_gtk_builder('chat_context_menu.ui')
+        menu = xml.get_object('chat_context_menu')
+        childs = menu.get_children()
+        if kind == 'url':
+            childs[0].connect('activate', self.on_copy_link_activate, text)
+            childs[1].connect('activate', self.on_open_link_activate, kind,
+                text)
+            childs[2].hide() # copy mail address
+            childs[3].hide() # open mail composer
+            childs[4].hide() # jid section separator
+            childs[5].hide() # start chat
+            childs[6].hide() # join group chat
+            childs[7].hide() # add to roster
+        else: # It's a mail or a JID
+            # load muc icon
+            join_group_chat_menuitem = xml.get_object('join_group_chat_menuitem')
+            muc_icon = gtkgui_helpers.load_icon('muc_active')
+            if muc_icon:
+                join_group_chat_menuitem.set_image(muc_icon)
+
+            text = text.lower()
+            if text.startswith('xmpp:'):
+                text = text[5:]
+            childs[2].connect('activate', self.on_copy_link_activate, text)
+            childs[3].connect('activate', self.on_open_link_activate, kind,
+                text)
+#            childs[5].connect('activate', self.on_start_chat_activate, text)
+            childs[6].connect('activate',
+                self.on_join_group_chat_menuitem_activate, text)
+
+#            if self.account and gajim.connections[self.account].\
+#            roster_supported:
+#                childs[7].connect('activate',
+#                    self.on_add_to_roster_activate, text)
+#                childs[7].show() # show add to roster menuitem
+#            else:
+#                childs[7].hide() # hide add to roster menuitem
+
+            if kind == 'xmpp':
+                childs[0].connect('activate', self.on_copy_link_activate,
+                    'xmpp:' + text)
+                childs[2].hide() # copy mail address
+                childs[3].hide() # open mail composer
+            elif kind == 'mail':
+                childs[6].hide() # join group chat
+
+            if kind != 'xmpp':
+                childs[0].hide() # copy link location
+            childs[1].hide() # open link in browser
+            childs[4].hide() # jid section separator
+            childs[5].hide() # start chat
+            childs[7].hide() # add to roster
+
+        menu.popup(None, None, None, event.button, event.time)
+
+    def hyperlink_handler(self, texttag, widget, event, iter_, kind):
+        if event.type == gtk.gdk.BUTTON_PRESS:
+            begin_iter = iter_.copy()
+            # we get the begining of the tag
+            while not begin_iter.begins_tag(texttag):
+                begin_iter.backward_char()
+            end_iter = iter_.copy()
+            # we get the end of the tag
+            while not end_iter.ends_tag(texttag):
+                end_iter.forward_char()
+
+            # Detect XHTML-IM link
+            word = getattr(texttag, 'href', None)
+            if word:
+                if word.startswith('xmpp'):
+                    kind = 'xmpp'
+                elif word.startswith('mailto:'):
+                    kind = 'mail'
+                elif gajim.interface.sth_at_sth_dot_sth_re.match(word):
+                    # it's a JID or mail
+                    kind = 'sth_at_sth'
+            else:
+                word = self.textview.get_buffer().get_text(begin_iter,
+                    end_iter).decode('utf-8')
+
+            if event.button == 3: # right click
+                self.make_link_menu(event, kind, word)
+                return True
+            else:
+                # we launch the correct application
+                if kind == 'xmpp':
+                    word = word[5:]
+                    if '?' in word:
+                        (jid, action) = word.split('?')
+                        if action == 'join':
+                            self.on_join_group_chat_menuitem_activate(None, jid)
+                        else:
+                            self.on_start_chat_activate(None, jid)
+                    else:
+                        self.on_start_chat_activate(None, word)
+                else:
+                    helpers.launch_browser_mailer(kind, word)
+
+    def _hyperlink_handler(self, texttag, widget, event, iter_, kind):
+        # self.hyperlink_handler can be overwritten, so call it when needed
+        self.hyperlink_handler(texttag, widget, event, iter_, kind)
+
+    def display_html(self, html, textview, conv_textview):
         buffer_ = self.get_buffer()
         eob = buffer_.get_end_iter()
         ## this works too if libxml2 is not available
         # parser = xml.sax.make_parser(['drv_libxml2'])
         # parser.setFeature(xml.sax.handler.feature_validation, True)
         parser = xml.sax.make_parser()
-        parser.setContentHandler(HtmlHandler(conv_textview, eob))
+        parser.setContentHandler(HtmlHandler(textview, conv_textview, eob))
         parser.parse(StringIO(html))
 
         # too much space after :)
