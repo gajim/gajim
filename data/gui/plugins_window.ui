@@ -296,23 +296,12 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkScrolledWindow" id="scrolledwindow">
+                          <object class="GtkScrolledWindow" id="scrolledwindow2">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="shadow_type">in</property>
                             <child>
-                              <object class="GtkTextView" id="plugin_description_textview">
-                                <property name="visible">True</property>
-                                <property name="sensitive">False</property>
-                                <property name="can_focus">True</property>
-                                <property name="pixels_above_lines">6</property>
-                                <property name="editable">False</property>
-                                <property name="wrap_mode">word</property>
-                                <property name="left_margin">6</property>
-                                <property name="right_margin">6</property>
-                                <property name="indent">1</property>
-                                <property name="buffer">textbuffer1</property>
-                              </object>
+                              <placeholder/>
                             </child>
                           </object>
                           <packing>

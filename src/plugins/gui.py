@@ -34,6 +34,7 @@ import os
 
 import gtkgui_helpers
 from dialogs import WarningDialog, YesNoDialog, ArchiveChooserDialog
+from htmltextview import HtmlTextView
 from common import gajim
 from plugins.helpers import log_calls, log
 from conversation_textview import ConversationTextview
@@ -61,13 +62,15 @@ class PluginsWindow(object):
 
         widgets_to_extract = ('plugins_notebook', 'plugin_name_label',
             'plugin_version_label', 'plugin_authors_label',
-            'plugin_homepage_linkbutton', 'plugin_description_textview',
-            'uninstall_plugin_button', 'configure_plugin_button',
-            'installed_plugins_treeview')
+            'plugin_homepage_linkbutton', 'uninstall_plugin_button',
+            'configure_plugin_button', 'installed_plugins_treeview')
 
         for widget_name in widgets_to_extract:
             setattr(self, widget_name, self.xml.get_object(widget_name))
 
+        self.plugin_description_textview = HtmlTextView()
+        sw = self.xml.get_object('scrolledwindow2')
+        sw.add(self.plugin_description_textview)
         self.installed_plugins_model = Gtk.ListStore(object, str, bool, bool,
             GdkPixbuf.Pixbuf)
         self.installed_plugins_treeview.set_model(self.installed_plugins_model)
@@ -146,15 +149,21 @@ class PluginsWindow(object):
         label.set_ellipsize(Pango.EllipsizeMode.END)
         self.plugin_homepage_linkbutton.set_property('sensitive', True)
 
+        sw = self.xml.get_object('scrolledwindow2')
+        old_tv = sw.get_children()[0]
+        old_tv.destroy()
+        self.plugin_description_textview = HtmlTextView()
+        sw.add(self.plugin_description_textview)
+        sw.show_all()
         txt = plugin.description
+        txt.replace('</body>', '')
         if plugin.available_text:
-            txt += '\n\n' + _('Warning: %s') % plugin.available_text
+            txt += '<br/><br/>' + _('Warning: %s') % plugin.available_text
         if not txt.startswith('<body '):
-            txt = '<body  xmlns=\'http://www.w3.org/1999/xhtml\'>' + \
-                txt + ' </body>'
-            txt = txt.replace('\n', '<br/>')
-        self.plugin_description_textview.tv.display_html(
-            txt, self.plugin_description_textview)
+            txt = '<body  xmlns=\'http://www.w3.org/1999/xhtml\'>' + txt
+        txt += ' </body>'
+        self.plugin_description_textview.tv.display_html(txt,
+            self.plugin_description_textview, None)
 
         self.plugin_description_textview.tv.set_property('sensitive', True)
         self.uninstall_plugin_button.set_property('sensitive',
