@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-08-08 01:12+0400\n"
-"PO-Revision-Date: 2013-08-08 01:38+0300\n"
+"PO-Revision-Date: 2013-08-16 13:10+0300\n"
 "Last-Translator: Fomin Denis <fominde@gmail.com>\n"
 "Language-Team: Linux Support LLC\n"
 "Language: ru\n"
@@ -244,9 +244,8 @@ msgid "Gajim"
 msgstr "Gajim"
 
 #: ../data/gui/accounts_window.ui.h:10
-#, fuzzy
 msgid "Synchronize contacts"
-msgstr "Заблокированные контакты"
+msgstr "Синхронизировать контакты"
 
 #: ../data/gui/accounts_window.ui.h:11
 msgid "Click to request authorization to all contacts of another account"
@@ -634,7 +633,6 @@ msgstr ""
 "вступили в силу"
 
 #: ../data/gui/advanced_configuration_window.ui.h:5
-#, fuzzy
 msgid "_Reset to default"
 msgstr "_Сбросить до исходных"
 
@@ -863,7 +861,6 @@ msgid "Invite contacts to the conversation (Ctrl+G)"
 msgstr "Пригласить к беседе (Ctrl+G)"
 
 #: ../data/gui/chat_control.ui.h:4
-#, fuzzy
 msgid "View contact information (Ctrl+I)"
 msgstr "Показать информацию о контакте (Ctrl+I)"
 
@@ -1427,9 +1424,8 @@ msgid "_Log conversation history"
 msgstr "_Сохранять историю переписки"
 
 #: ../data/gui/history_window.ui.h:9
-#, fuzzy
 msgid "_Show status changes"
-msgstr "Состояние хранилища и изменения"
+msgstr "Показывать изменения _статуса"
 
 #: ../data/gui/item_archiving_preferences_window.ui.h:1
 #, fuzzy
@@ -3214,7 +3210,7 @@ msgstr "OpenPGP шифрование включено"
 
 #: ../src/chat_control.py:1764
 msgid "Formattings are not available when GPG is active"
-msgstr ""
+msgstr "Форматирование невозможно если включено GPG"
 
 #: ../src/chat_control.py:1767
 msgid "This contact does not support HTML"
@@ -3509,7 +3505,7 @@ msgid "Show logged messages which mention given text"
 msgstr ""
 
 #: ../src/command_system/implementation/standard.py:99
-#, fuzzy, python-format
+#, python-format
 msgid "%s: Nothing found"
 msgstr "%s: Ничего не найдено"
 
@@ -5011,7 +5007,6 @@ msgid "marine"
 msgstr "морской"
 
 #: ../src/common/config.py:555
-#, fuzzy
 msgid "Tor"
 msgstr "Tor"
 
@@ -8573,6 +8568,7 @@ msgid ""
 "Requires pybonjour and bonjour SDK running (http://developer.apple.com/"
 "opensource/)."
 msgstr ""
+"Требует pybonjour и bonjour SDK (http://developer.apple.com/opensource/)."
 
 #: ../src/features_window.py:58
 msgid "Command line"
@@ -8748,13 +8744,12 @@ msgid "Requires python-farstream and gstreamer-plugins-bad."
 msgstr "Требует python-farstream и gstreamer-plugins-bad."
 
 #: ../src/features_window.py:106
-#, fuzzy
 msgid "UPnP-IGD"
-msgstr "Требует python-gupnp-igd."
+msgstr "UPnP-IGD"
 
 #: ../src/features_window.py:107
 msgid "Ability to request your router to forward port for file transfer."
-msgstr ""
+msgstr "Возможность запроса порта для передачи файлов у роутера."
 
 #: ../src/features_window.py:108
 msgid "Requires python-gupnp-igd."
@@ -8766,7 +8761,7 @@ msgstr "UPower"
 
 #: ../src/features_window.py:111
 msgid "Ability to disconnect properly just before suspending the machine."
-msgstr ""
+msgstr "Возможность отключиться перед уходом машины в сон."
 
 #: ../src/features_window.py:112
 msgid "Requires upower and python-dbus."
@@ -8841,6 +8836,8 @@ msgid ""
 "received.\n"
 "Do you want to reload it?"
 msgstr ""
+"Файл %(file)s был получен, но возможно с ошибками.\n"
+"Хотите загрузить его еще раз?"
 
 #: ../src/filetransfers_window.py:313
 msgid "Choose File to Send..."
@@ -9048,9 +9045,8 @@ msgstr ""
 #: ../src/gajim-remote.py:238 ../src/gajim-remote.py:245
 #: ../src/gajim-remote.py:256 ../src/gajim-remote.py:281
 #: ../src/gajim-remote.py:292
-#, fuzzy
 msgid "?CLI:account"
-msgstr "Учетная запись"
+msgstr "?CLI:учетная запись"
 
 #: ../src/gajim-remote.py:97
 msgid "show only contacts of the given account"
@@ -9066,9 +9062,8 @@ msgstr "Изменяет статус учетной записи или зап�
 
 #. offline, online, chat, away, xa, dnd, invisible should not be translated
 #: ../src/gajim-remote.py:110
-#, fuzzy
 msgid "?CLI:status"
-msgstr "Сообщение о статусе %s"
+msgstr "?CLI:статус"
 
 #: ../src/gajim-remote.py:110
 msgid ""
@@ -9081,9 +9076,8 @@ msgstr ""
 #: ../src/gajim-remote.py:111 ../src/gajim-remote.py:134
 #: ../src/gajim-remote.py:145 ../src/gajim-remote.py:159
 #: ../src/gajim-remote.py:170 ../src/gajim-remote.py:283
-#, fuzzy
 msgid "?CLI:message"
-msgstr "%(nickname)s: %(message)s"
+msgstr "?CLI:сообщение"
 
 #: ../src/gajim-remote.py:111
 msgid "status message"
@@ -9103,9 +9097,8 @@ msgid "Changes the priority of account or accounts"
 msgstr "Изменяет приоритет учетной записи или записей"
 
 #: ../src/gajim-remote.py:120
-#, fuzzy
 msgid "?CLI:priority"
-msgstr "Неизвестный приоритет %s"
+msgstr "?CLI:приоритет"
 
 #: ../src/gajim-remote.py:120
 msgid "priority you want to give to the account"
@@ -9353,27 +9346,24 @@ msgid "Join a MUC room"
 msgstr "Присоединиться к комнате MUC"
 
 #: ../src/gajim-remote.py:289
-#, fuzzy
 msgid "?CLI:room"
-msgstr " в комнате %s"
+msgstr "?CLI:комната"
 
 #: ../src/gajim-remote.py:289
 msgid "Room JID"
 msgstr "JID комнаты"
 
 #: ../src/gajim-remote.py:290
-#, fuzzy
 msgid "?CLI:nick"
-msgstr "Произнесено имя"
+msgstr "?CLI:ник"
 
 #: ../src/gajim-remote.py:290
 msgid "Nickname to use"
 msgstr "Используемый ник"
 
 #: ../src/gajim-remote.py:291
-#, fuzzy
 msgid "?CLI:password"
-msgstr "Изменить пароль"
+msgstr "?CLI:пароль"
 
 #: ../src/gajim-remote.py:291
 msgid "Password to enter the room"
