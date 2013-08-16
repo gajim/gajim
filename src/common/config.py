@@ -412,7 +412,7 @@ class Config:
                     'oauth2_refresh_token': [ opt_str, '', _('Latest token for Oauth2 authentication.')],
                     'oauth2_client_id': [ opt_str, '0000000044077801', _('client_id for Oauth2 authentication.')],
                     'oauth2_redirect_url': [ opt_str, 'https%3A%2F%2Fgajim.org%2Fmsnauth%2Findex.cgi', _('redirect_url for Oauth2 authentication.')],
-                    'opened_chat_controls': [opt_str, '', _('Space separated list of JIDsfor which we want to re-open a chat window on next startup.')],
+                    'opened_chat_controls': [opt_str, '', _('Space separated list of JIDs for which we want to re-open a chat window on next startup.')],
             }, {}),
             'statusmsg': ({
                     'message': [ opt_str, '' ],
