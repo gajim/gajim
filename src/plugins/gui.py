@@ -31,6 +31,7 @@ import gtk, gobject, os
 
 import gtkgui_helpers
 from dialogs import WarningDialog, YesNoDialog, ArchiveChooserDialog
+from htmltextview import HtmlTextView
 from common import gajim
 from plugins.helpers import log_calls, log
 from plugins.helpers import GajimPluginActivateException
@@ -57,13 +58,15 @@ class PluginsWindow(object):
 
         widgets_to_extract = ('plugins_notebook', 'plugin_name_label',
             'plugin_version_label', 'plugin_authors_label',
-            'plugin_homepage_linkbutton', 'plugin_description_textview',
-            'uninstall_plugin_button', 'configure_plugin_button',
-            'installed_plugins_treeview')
+            'plugin_homepage_linkbutton', 'uninstall_plugin_button',
+            'configure_plugin_button', 'installed_plugins_treeview')
 
         for widget_name in widgets_to_extract:
             setattr(self, widget_name, self.xml.get_object(widget_name))
 
+        self.plugin_description_textview = HtmlTextView()
+        sw = self.xml.get_object('scrolledwindow2')
+        sw.add(self.plugin_description_textview)
         attr_list = pango.AttrList()
         attr_list.insert(pango.AttrWeight(pango.WEIGHT_BOLD, 0, -1))
         self.plugin_name_label.set_attributes(attr_list)
@@ -140,12 +143,22 @@ class PluginsWindow(object):
         self.plugin_homepage_linkbutton.set_label(plugin.homepage)
         self.plugin_homepage_linkbutton.set_property('sensitive', True)
 
-        desc_textbuffer = self.plugin_description_textview.get_buffer()
+        sw = self.xml.get_object('scrolledwindow2')
+        old_tv = sw.get_children()[0]
+        old_tv.destroy()
+        self.plugin_description_textview = HtmlTextView()
+        sw.add(self.plugin_description_textview)
+        sw.show_all()
         from plugins.plugins_i18n import _
         txt = plugin.description
+        txt.replace('</body>', '')
         if plugin.available_text:
-            txt += '\n\n' + _('Warning: %s') % plugin.available_text
-        desc_textbuffer.set_text(txt)
+            txt += '<br/><br/>' + _('Warning: %s') % plugin.available_text
+        if not txt.startswith('<body '):
+            txt = '<body  xmlns=\'http://www.w3.org/1999/xhtml\'>' + txt
+        txt += ' </body>'
+        self.plugin_description_textview.display_html(txt,
+            self.plugin_description_textview, None)
         self.plugin_description_textview.set_property('sensitive', True)
         self.uninstall_plugin_button.set_property('sensitive',
             gajim.PLUGINS_DIRS[1] in plugin.__path__)
