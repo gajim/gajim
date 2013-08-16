@@ -1842,6 +1842,8 @@ class MetacontactsReceivedEvent(nec.NetworkIncomingEvent):
         # Metacontact tags
         # http://www.xmpp.org/extensions/xep-0209.html
         self.meta_list = {}
+        # FIXME: disable metacontacts until they work correctly
+        return True
         query = self.stanza.getTag('query')
         storage = query.getTag('storage')
         metas = storage.getTags('meta')
