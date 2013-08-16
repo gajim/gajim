@@ -358,6 +358,7 @@ class ConversationTextview(GObject.GObject):
         # use it for hr too
         self.tv.focus_out_line_pixbuf = ConversationTextview.FOCUS_OUT_LINE_PIXBUF
         self.smooth_id = None
+        self.just_cleared = False
 
     def del_handlers(self):
         for i in self.handlers.keys():
