@@ -492,6 +492,9 @@ class PluginManager(metaclass=Singleton):
                     for option in fields:
                         if conf.get('info', option) is '':
                             raise configparser.NoOptionError('field empty')
+                        if option == 'description':
+                            setattr(module_attr, option, _(conf.get('info', option)))
+                            continue
                         setattr(module_attr, option, conf.get('info', option))
 
                     plugins_found.append(module_attr)
