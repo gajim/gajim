@@ -303,32 +303,8 @@ class ConversationTextview(GObject.GObject):
         color = gajim.config.get('restored_messages_color')
         tag.set_property('foreground', color)
 
-        self.tagURL = buffer_.create_tag('url')
-        color = gajim.config.get('urlmsgcolor')
-        self.tagURL.set_property('foreground', color)
-        self.tagURL.set_property('underline', Pango.Underline.SINGLE)
-        id_ = self.tagURL.connect('event', self.hyperlink_handler, 'url')
-        self.handlers[id_] = self.tagURL
-
-        self.tagMail = buffer_.create_tag('mail')
-        self.tagMail.set_property('foreground', color)
-        self.tagMail.set_property('underline', Pango.Underline.SINGLE)
-        id_ = self.tagMail.connect('event', self.hyperlink_handler, 'mail')
-        self.handlers[id_] = self.tagMail
-
-        self.tagXMPP = buffer_.create_tag('xmpp')
-        self.tagXMPP.set_property('foreground', color)
-        self.tagXMPP.set_property('underline', Pango.Underline.SINGLE)
-        id_ = self.tagXMPP.connect('event', self.hyperlink_handler, 'xmpp')
-        self.handlers[id_] = self.tagXMPP
-
-        self.tagSthAtSth = buffer_.create_tag('sth_at_sth')
-        self.tagSthAtSth.set_property('foreground', color)
-        self.tagSthAtSth.set_property('underline', Pango.Underline.SINGLE)
-        id_ = self.tagSthAtSth.connect('event', self.hyperlink_handler,
-                'sth_at_sth')
-        self.handlers[id_] = self.tagSthAtSth
-
+        self.tv.create_tags()
+        
         tag = buffer_.create_tag('bold')
         tag.set_property('weight', Pango.Weight.BOLD)
 
@@ -374,8 +350,11 @@ class ConversationTextview(GObject.GObject):
         self.tagOut.set_property('foreground', gajim.config.get('outmsgcolor'))
         self.tagStatus.set_property('foreground',
                 gajim.config.get('statusmsgcolor'))
-        self.tagURL.set_property('foreground', gajim.config.get('urlmsgcolor'))
-        self.tagMail.set_property('foreground', gajim.config.get('urlmsgcolor'))
+        color = gajim.config.get('urlmsgcolor')
+        self.tv.tagURL.set_property('foreground', color)
+        self.tv.tagMail.set_property('foreground', color)
+        self.tv.tagXMPP.set_property('foreground', color)
+        self.tv.tagSthAtSth.set_property('foreground', color)
 
     def at_the_end(self):
         buffer_ = self.tv.get_buffer()
@@ -1479,7 +1458,7 @@ class ConversationTextview(GObject.GObject):
             try:
                 if name and (text.startswith('/me ') or text.startswith('/me\n')):
                     xhtml = xhtml.replace('/me', '<i>* %s</i>' % (name,), 1)
-                self.tv.display_html(xhtml, self)
+                self.tv.display_html(xhtml, self.tv, self)
                 return
             except Exception as e:
                 gajim.log.debug('Error processing xhtml: ' + str(e))
