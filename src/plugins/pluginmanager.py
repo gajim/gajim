@@ -472,6 +472,9 @@ class PluginManager(object):
                     for option in fields:
                         if conf.get('info', option) is '':
                             raise ConfigParser.NoOptionError, 'field empty'
+                        if option == 'description':
+                            setattr(module_attr, option, _(conf.get('info', option)))
+                            continue
                         setattr(module_attr, option, conf.get('info', option))
                     conf.remove_section('info')
 
