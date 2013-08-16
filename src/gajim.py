@@ -73,7 +73,7 @@ except ImportError:
 #demandimport.ignore += ['GObject._gobject', 'libasyncns', 'i18n',
 #    'logging.NullHandler', 'dbus.service', 'OpenSSL.SSL', 'OpenSSL.crypto',
 #    'common.sleepy', 'DLFCN', 'dl', 'xml.sax', 'xml.sax.handler', 'ic',
-#    'Crypto.PublicKey', 'IPython', 'contextlib', 'imp']
+#    'Crypto.PublicKey', 'IPython', 'contextlib', 'imp', 'monotonic']
 
 if os.name == 'nt':
     import locale
