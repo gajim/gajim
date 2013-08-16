@@ -1546,6 +1546,8 @@ $T will be replaced by auto-not-available timeout</property>
                               <object class="GtkScrolledWindow" id="scrolledwindow22">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="hscrollbar_policy">automatic</property>
+                                <property name="vscrollbar_policy">automatic</property>
                                 <property name="shadow_type">in</property>
                                 <child>
                                   <object class="GtkTreeView" id="msg_treeview">
