@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 0.15\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-16 02:05+0000\n"
-"PO-Revision-Date: 2013-08-16 08:26+0200\n"
+"POT-Creation-Date: 2013-08-17 02:05+0000\n"
+"PO-Revision-Date: 2013-08-17 21:05+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
 "Language: he\n"
@@ -574,9 +574,9 @@ msgid ""
 "protocol. Click on register button to\n"
 "proceed."
 msgstr ""
-"נרשמת באמצעות מוביל זה\n"
+"עליך להירשם באמצעות מוביל זה\n"
 "כדי שתהיה באפשרותך להוסיף איש\n"
-"קשר מפרוטוקול זה. הקלק על\n"
+"קשר מתוך פרוטוקול זה. הקלק על\n"
 "לחצן רישום כדי להמשיך."
 
 #: ../data/gui/add_new_contact_window.ui.h:13
@@ -2749,7 +2749,7 @@ msgstr "חיפוש"
 # אחזור
 #: ../data/gui/search_window.ui.h:2
 msgid "Please wait while retrieving search form..."
-msgstr "אנא המתן בעת אחזרת תבנית חיפוש..."
+msgstr "אנא המתן בעת אחזרת טופס חיפוש..."
 
 #: ../data/gui/search_window.ui.h:3
 msgid "_Add contact"
@@ -2998,15 +2998,15 @@ msgstr "אישי"
 
 #: ../data/gajim.desktop.in.in.h:2
 msgid "Jabber IM Client"
-msgstr "לקוח מסרים מיידיים ג׳אבּר"
+msgstr "לקוח מסרים מידיים Jabber"
 
 #: ../data/gajim.desktop.in.in.h:3
 msgid "A GTK+ Jabber client"
-msgstr "לקוח ג׳אבּר ‭GTK+‬"
+msgstr "לקוח ג׳אבּר GTK+‎"
 
 #: ../data/gajim.desktop.in.in.h:4
 msgid "chat;messaging;im;jabber;xmpp;bonjour;voip"
-msgstr ""
+msgstr "צ'אט;מסרים;מסנג'ר;jabber;xmpp;bonjour;voip"
 
 #: ../src/adhoc_commands.py:325
 msgid "Cancel confirmation"
@@ -3020,19 +3020,19 @@ msgstr "הינך בתוך עיצומו של תהליך הרצת פקודה. הא
 
 #: ../src/adhoc_commands.py:372
 msgid "Invalid Form"
-msgstr "תבנית שגויה"
+msgstr "טופס שגוי"
 
 #: ../src/adhoc_commands.py:373
 msgid "The form is not filled correctly."
-msgstr "התבנית לא מולאה כראוי."
+msgstr "הטופס אינו ממולא כראוי."
 
 #: ../src/adhoc_commands.py:392 ../src/adhoc_commands.py:416
 msgid "Service sent malformed data"
-msgstr "השירות שלח מידע פגום"
+msgstr "שירות שלח מידע פגום"
 
 #: ../src/adhoc_commands.py:401
 msgid "Service changed the session identifier."
-msgstr "השירות שינה את המזהה של הסשן."
+msgstr "שירות שינה את מזהה הסשן."
 
 #: ../src/adhoc_commands.py:421
 #, python-format
@@ -3042,7 +3042,7 @@ msgstr "‫%s - פקודות ייעודיות (‫Ad-hoc) - ‫Gajim"
 #. when stanza doesn't have error description
 #: ../src/adhoc_commands.py:516
 msgid "Service returned an error."
-msgstr "השירות החזיר שגיאה."
+msgstr "שירות החזיר שגיאה."
 
 #. For i18n
 #: ../src/advanced_configuration_window.py:92
@@ -3084,7 +3084,7 @@ msgstr "טיפוס"
 #. we talk about option description in advanced configuration editor
 #: ../src/advanced_configuration_window.py:177
 msgid "(None)"
-msgstr "(ללא)"
+msgstr "(אין)"
 
 # Needs to be tested
 #: ../src/advanced_configuration_window.py:303
@@ -3105,7 +3105,7 @@ msgstr "פינג?"
 #: ../src/chat_control.py:214
 #, python-format
 msgid "Pong! (%s s.)"
-msgstr "פונג! (%s s.)"
+msgstr "פונג! (%s ש.)"
 
 #: ../src/chat_control.py:219
 msgid "Error."
@@ -3337,7 +3337,7 @@ msgstr ""
 #: ../src/common/connection_handlers.py:1145
 #: ../src/common/connection_handlers.py:1269
 #: ../src/common/connection_handlers_events.py:913
-#: ../src/common/logger.py:1161 ../src/gajim.py:216 ../src/session.py:98
+#: ../src/common/logger.py:1161 ../src/gajim.py:217 ../src/session.py:98
 msgid "Database Error"
 msgstr "שגיאת מסד נתונים"
 
@@ -4837,9 +4837,8 @@ msgid "redirect_url for Oauth2 authentication."
 msgstr "‏redirect_url עבור אימות Oauth2."
 
 #: ../src/common/config.py:415
-#, fuzzy
 msgid ""
-"Space separated list of JIDsfor which we want to re-open a chat window on "
+"Space separated list of JIDs for which we want to re-open a chat window on "
 "next startup."
 msgstr ""
 "רשימה אשר מופרדת עם רווח, של כתובות JID עבורן אנו רוצים לפתוח מחדש חלון שיחה "
@@ -5181,14 +5180,14 @@ msgstr ""
 #: ../src/common/connection_handlers.py:1143
 #: ../src/common/connection_handlers.py:1267
 #: ../src/common/connection_handlers_events.py:910
-#: ../src/common/logger.py:1159 ../src/gajim.py:422 ../src/session.py:95
+#: ../src/common/logger.py:1159 ../src/gajim.py:423 ../src/session.py:95
 msgid "Disk Write Error"
 msgstr "שגיאת כתיבת כונן"
 
 #: ../src/common/connection.py:524 ../src/common/connection_handlers.py:1146
 #: ../src/common/connection_handlers.py:1270
 #: ../src/common/connection_handlers_events.py:914
-#: ../src/common/logger.py:1162 ../src/gajim.py:217 ../src/session.py:99
+#: ../src/common/logger.py:1162 ../src/gajim.py:218 ../src/session.py:99
 #, python-format
 msgid ""
 "The database file (%s) cannot be read. Try to repair it (see http://trac."
@@ -5217,7 +5216,7 @@ msgstr "שרת %(name)s ענה באופן שגוי לבקשת rhauo: %(error)s"
 #: ../src/common/connection.py:984
 #, python-format
 msgid "Server %s provided a different registration form"
-msgstr "שרת %s סיפק צורת רישום שונה"
+msgstr "שרת %s סיפק טופס רישום שונה"
 
 #: ../src/common/connection.py:1001
 msgid "Invalid answer"
@@ -5571,7 +5570,7 @@ msgstr "מסד נתונים לא יכול להיקרא."
 
 #: ../src/common/exceptions.py:56
 msgid "Service not available: Gajim is not running, or remote_control is False"
-msgstr "שירות לא זמין: Gajim לא מורץ, או שהאפשרות remote_control מנוטרלת"
+msgstr "שירות לא זמין: Gajim לא מורץ, או שההעדפה remote_control הינה מנוטרלת"
 
 #: ../src/common/exceptions.py:67 ../src/gajim-remote.py:56
 msgid "D-Bus is not present on this machine or python module is missing"
@@ -6049,7 +6048,7 @@ msgid "Error loading image"
 msgstr "שגיאה בטעינת תמונה"
 
 # Needs to be tested
-#: ../src/common/jingle_rtp.py:112
+#: ../src/common/jingle_rtp.py:114
 #, python-format
 msgid "%s configuration error"
 msgstr "שגיאת תצורת %s"
@@ -6057,7 +6056,7 @@ msgstr "שגיאת תצורת %s"
 # ההתקנה
 # הצינור (Pipeline) היה
 # השגיאה היתה
-#: ../src/common/jingle_rtp.py:113
+#: ../src/common/jingle_rtp.py:115
 #, python-format
 msgid ""
 "Couldn't setup %s. Check your configuration.\n"
@@ -6076,11 +6075,11 @@ msgstr ""
 "Error was:\n"
 "%s"
 
-#: ../src/common/jingle_rtp.py:218
+#: ../src/common/jingle_rtp.py:220
 msgid "GStreamer error"
 msgstr "שגיאת ‫GStreamer"
 
-#: ../src/common/jingle_rtp.py:218
+#: ../src/common/jingle_rtp.py:220
 #, python-format
 msgid ""
 "Error: %s\n"
@@ -6089,19 +6088,19 @@ msgstr ""
 "שגיאה: %s\n"
 "ניפוי שגיאות: %s"
 
-#: ../src/common/jingle_rtp.py:352
+#: ../src/common/jingle_rtp.py:354
 msgid "audio input"
 msgstr "קלט שמע"
 
-#: ../src/common/jingle_rtp.py:355
+#: ../src/common/jingle_rtp.py:357
 msgid "audio output"
 msgstr "פלט שמע"
 
-#: ../src/common/jingle_rtp.py:410
+#: ../src/common/jingle_rtp.py:412
 msgid "video input"
 msgstr "קלט וידאו"
 
-#: ../src/common/jingle_rtp.py:419
+#: ../src/common/jingle_rtp.py:421
 msgid "video output"
 msgstr "פלט וידאו"
 
@@ -6110,54 +6109,54 @@ msgstr "פלט וידאו"
 msgid "%s is not a valid loglevel"
 msgstr "cli"
 
-#: ../src/common/multimedia_helpers.py:39
+#: ../src/common/multimedia_helpers.py:41
 msgid " Default device"
 msgstr "מכשיר משתמט"
 
 #. Test src
-#: ../src/common/multimedia_helpers.py:60
+#: ../src/common/multimedia_helpers.py:62
 msgid "Audio test"
 msgstr "בדיקת שמע"
 
 #. Auto src
 #. Auto sink
 #. Auto src
-#: ../src/common/multimedia_helpers.py:63
-#: ../src/common/multimedia_helpers.py:79
-#: ../src/common/multimedia_helpers.py:93
-#: ../src/common/multimedia_helpers.py:111
+#: ../src/common/multimedia_helpers.py:65
+#: ../src/common/multimedia_helpers.py:81
+#: ../src/common/multimedia_helpers.py:95
+#: ../src/common/multimedia_helpers.py:113
 msgid "Autodetect"
 msgstr "איתור אוטומטי"
 
 #. Alsa src
 #. Alsa sink
-#: ../src/common/multimedia_helpers.py:66
-#: ../src/common/multimedia_helpers.py:81
+#: ../src/common/multimedia_helpers.py:68
+#: ../src/common/multimedia_helpers.py:83
 #, python-format
 msgid "ALSA: %s"
 msgstr "‏ALSA: ‏%s"
 
 #. Pulseaudio src
 #. Pulseaudio sink
-#: ../src/common/multimedia_helpers.py:69
-#: ../src/common/multimedia_helpers.py:83
+#: ../src/common/multimedia_helpers.py:71
+#: ../src/common/multimedia_helpers.py:85
 #, python-format
 msgid "Pulse: %s"
 msgstr "‏Pulse: ‏%s"
 
 # מעושה, מלאכותי
 #. Fake sink
-#: ../src/common/multimedia_helpers.py:77
+#: ../src/common/multimedia_helpers.py:79
 msgid "Fake audio output"
 msgstr "פלט שמע מזויף"
 
 #. Test src
-#: ../src/common/multimedia_helpers.py:90
+#: ../src/common/multimedia_helpers.py:92
 msgid "Video test"
 msgstr "בדיקת וידאו"
 
 #. V4L2 src
-#: ../src/common/multimedia_helpers.py:95
+#: ../src/common/multimedia_helpers.py:97
 #, python-format
 msgid "V4L2: %s"
 msgstr "‏V4L2: ‏%s"
@@ -6165,22 +6164,22 @@ msgstr "‏V4L2: ‏%s"
 # not sure מרקע
 #. Funny things, just to test...
 #. self.devices['GOOM'] = 'audiotestsrc ! goom'
-#: ../src/common/multimedia_helpers.py:98
+#: ../src/common/multimedia_helpers.py:100
 msgid "Screen"
 msgstr "אקרן"
 
 #. Fake video output
-#: ../src/common/multimedia_helpers.py:105
+#: ../src/common/multimedia_helpers.py:107
 msgid "Fake video output"
 msgstr "פלט וידאו מזויף"
 
-#: ../src/common/multimedia_helpers.py:108
+#: ../src/common/multimedia_helpers.py:110
 #, python-format
 msgid "X Window System (X11/XShm/Xv): %s"
 msgstr "מערכת חלונות X ‏(X11/XShm/Xv): ‏%s"
 
 #. ximagesink
-#: ../src/common/multimedia_helpers.py:110
+#: ../src/common/multimedia_helpers.py:112
 msgid "X Window System (without Xv)"
 msgstr "מערכת חלונות X (ללא Xv)"
 
@@ -7170,7 +7169,7 @@ msgstr "הזן שם חדש עבור חשבון %s"
 
 #: ../src/config.py:2163
 msgid "A Jabber ID must be in the form \"user@servername\"."
-msgstr "מזהה Jabber מוכרח להיות בצורה של \"user@servername\"."
+msgstr "על מזהה Jabber להיות בצורה הזו \"user@servername\"."
 
 #: ../src/config.py:2389 ../src/config.py:3721
 msgid "Invalid entry"
@@ -7542,7 +7541,7 @@ msgstr "ממסר PEP ‏%(node)s לא הוסר: %(message)s"
 msgid "Configure %s"
 msgstr "תצורת ‫%s"
 
-#: ../src/config.py:4158 ../src/plugins/gui.py:88
+#: ../src/config.py:4158 ../src/plugins/gui.py:91
 msgid "Active"
 msgstr "פעיל"
 
@@ -7590,7 +7589,7 @@ msgstr "הודעת שיחת קבוצה אשר התקבלה"
 msgid "GMail Email Received"
 msgstr "דוא״ל GMail אשר התקבל"
 
-#: ../src/conversation_textview.py:494 ../src/conversation_textview.py:512
+#: ../src/conversation_textview.py:474 ../src/conversation_textview.py:492
 #, python-format
 msgid ""
 "<b>Message was corrected. Last message was:</b>\n"
@@ -7599,7 +7598,7 @@ msgstr ""
 "<b>הודעה תוקנה. הודעה אחרונה היתה:</b>\n"
 "  %s"
 
-#: ../src/conversation_textview.py:665
+#: ../src/conversation_textview.py:645
 msgid ""
 "This icon indicates that this message has not yet\n"
 "been received by the remote end. If this icon stays\n"
@@ -7609,7 +7608,7 @@ msgstr ""
 "התקבלה על ידי הקצה המרוחק. אם צלמית זו\n"
 "נותרת למשך זמן ממושך, סביר כי ההודעה אבדה."
 
-#: ../src/conversation_textview.py:684
+#: ../src/conversation_textview.py:664
 msgid ""
 "Text below this line is what has been said since the\n"
 "last time you paid attention to this group chat"
@@ -7617,44 +7616,44 @@ msgstr ""
 "תמליל תחת שורה זו הוא דברים אשר נרשמו מאז הפעם\n"
 "האחרונה בה הסבת את צומת לבך אל שיחת קבוצה זו"
 
-#: ../src/conversation_textview.py:804
+#: ../src/conversation_textview.py:784
 msgid "_Quote"
 msgstr "_צטט"
 
-#: ../src/conversation_textview.py:811
+#: ../src/conversation_textview.py:791
 #, python-format
 msgid "_Actions for \"%s\""
 msgstr "_פעולות עבור \"%s\""
 
-#: ../src/conversation_textview.py:824
+#: ../src/conversation_textview.py:804
 msgid "Read _Wikipedia Article"
 msgstr "עיין ערך _ויקיפדיה"
 
-#: ../src/conversation_textview.py:829
+#: ../src/conversation_textview.py:809
 msgid "Look it up in _Dictionary"
 msgstr "חפש בתוך _מילון"
 
-#: ../src/conversation_textview.py:846
+#: ../src/conversation_textview.py:826
 #, python-format
 msgid "Dictionary URL is missing an \"%s\" and it is not WIKTIONARY"
 msgstr "לכתובת URL של המילון חסר \"%s\" וזו לא WIKTIONARY"
 
 #. we must have %s in the url
-#: ../src/conversation_textview.py:859
+#: ../src/conversation_textview.py:839
 #, python-format
 msgid "Web Search URL is missing an \"%s\""
 msgstr "לכתובת URL של חיפוש ברשת חסר \"%s\""
 
-#: ../src/conversation_textview.py:862
+#: ../src/conversation_textview.py:842
 msgid "Web _Search for it"
 msgstr "_חפש ברשת"
 
-#: ../src/conversation_textview.py:868
+#: ../src/conversation_textview.py:848
 msgid "Open as _Link"
 msgstr "פתח בתור _קישור"
 
 #. %i is day in year (1-365)
-#: ../src/conversation_textview.py:1397
+#: ../src/conversation_textview.py:1377
 #, python-format
 msgid "Yesterday"
 msgid_plural "%(nb_days)i days ago"
@@ -7662,7 +7661,7 @@ msgstr[0] "אתמול"
 msgstr[1] "לפני %(nb_days)i ימים"
 
 #. if we have subject, show it too!
-#: ../src/conversation_textview.py:1447 ../src/history_window.py:488
+#: ../src/conversation_textview.py:1427 ../src/history_window.py:488
 #, python-format
 msgid "Subject: %s\n"
 msgstr "נושא: %s\n"
@@ -8557,7 +8556,7 @@ msgstr "השירות אינו בר עיון"
 
 #: ../src/disco.py:769
 msgid "This type of service does not contain any items to browse."
-msgstr "טיפוס זה של שירות לא מכיל פריטים אשר ניתן לעיין בהם."
+msgstr "טיפוס זה של שירות לא מכיל פריטים לעיון."
 
 #: ../src/disco.py:810 ../src/disco.py:820
 msgid "Invalid Server Name"
@@ -8574,7 +8573,7 @@ msgstr "_עיון"
 
 #: ../src/disco.py:1110
 msgid "This service does not contain any items to browse."
-msgstr "שירות זה לא מכיל פריטים אשר ניתן לעיין בהם."
+msgstr "שירות זה לא מכיל פריטים לעיון."
 
 #: ../src/disco.py:1378
 msgid "_Execute Command"
@@ -9578,54 +9577,54 @@ msgstr "cli"
 msgid "Wrong uri"
 msgstr "cli"
 
-#: ../src/gajim.py:198
+#: ../src/gajim.py:199
 #, fuzzy
 msgid "Gajim needs X server to run. Quiting..."
 msgstr "cli"
 
-#: ../src/gajim.py:200
+#: ../src/gajim.py:201
 #, fuzzy, python-format
 msgid "importing PyGTK failed: %s"
 msgstr "cli"
 
-#: ../src/gajim.py:243
+#: ../src/gajim.py:244
 #, fuzzy
 msgid "Gajim needs PyGTK 2.22 or above"
 msgstr "cli"
 
-#: ../src/gajim.py:244
+#: ../src/gajim.py:245
 #, fuzzy
 msgid "Gajim needs PyGTK 2.22 or above to run. Quiting..."
 msgstr "cli"
 
-#: ../src/gajim.py:246
+#: ../src/gajim.py:247
 #, fuzzy
 msgid "Gajim needs GTK 2.22 or above"
 msgstr "cli"
 
-#: ../src/gajim.py:247
+#: ../src/gajim.py:248
 #, fuzzy
 msgid "Gajim needs GTK 2.22 or above to run. Quiting..."
 msgstr "cli"
 
-#: ../src/gajim.py:256
+#: ../src/gajim.py:257
 #, fuzzy
 msgid "Gajim needs pywin32 to run"
 msgstr "cli"
 
 # component
-#: ../src/gajim.py:257
+#: ../src/gajim.py:258
 #, python-format
 msgid ""
 "Please make sure that Pywin32 is installed on your system. You can get it at "
 "%s"
 msgstr "אנא ודא כי הרכיב Pywin32 מותקן במערכתך. באפשרותך להשיגו אצל %s"
 
-#: ../src/gajim.py:397
+#: ../src/gajim.py:398
 msgid "Gajim is already running"
 msgstr "‏Gajim כבר מורץ כעת"
 
-#: ../src/gajim.py:398
+#: ../src/gajim.py:399
 msgid ""
 "Another instance of Gajim seems to be running\n"
 "Run anyway?"
@@ -10521,7 +10520,7 @@ msgstr "מצב נוכחי: %(status)s: %(status_msg)s"
 msgid "Status is now: %(status)s"
 msgstr "המצב כעת: %(status)s"
 
-#: ../src/htmltextview.py:522
+#: ../src/htmltextview.py:523
 msgid "Loading"
 msgstr "טוען כעת"
 
@@ -10565,49 +10564,49 @@ msgstr "- הודעות לא יירשמו אל יומן ההיסטוריה"
 msgid "Ignore"
 msgstr "התעלמות"
 
-#: ../src/plugins/gui.py:78
+#: ../src/plugins/gui.py:81
 msgid "Plugin"
 msgstr "תוספת"
 
-#: ../src/plugins/gui.py:145
+#: ../src/plugins/gui.py:154
 #, python-format
 msgid "Warning: %s"
 msgstr "אזהרה: %s"
 
-#: ../src/plugins/gui.py:199
+#: ../src/plugins/gui.py:212
 msgid "Plugin failed"
 msgstr "כשל תוספת"
 
-#: ../src/plugins/gui.py:244
+#: ../src/plugins/gui.py:257
 msgid "Unable to properly remove the plugin"
 msgstr "אין אפשרות להסיר את התוספת באופן רגיל"
 
 #. members not safe
-#: ../src/plugins/gui.py:252 ../src/plugins/pluginmanager.py:523
-#: ../src/plugins/pluginmanager.py:531
+#: ../src/plugins/gui.py:265 ../src/plugins/pluginmanager.py:526
+#: ../src/plugins/pluginmanager.py:534
 msgid "Archive is malformed"
 msgstr "ארכיון הינו פגום"
 
-#: ../src/plugins/gui.py:276 ../src/plugins/gui.py:284
-#: ../src/plugins/pluginmanager.py:539
+#: ../src/plugins/gui.py:289 ../src/plugins/gui.py:297
+#: ../src/plugins/pluginmanager.py:542
 msgid "Plugin already exists"
 msgstr "תוספת כבר קיימת"
 
-#: ../src/plugins/gui.py:276
+#: ../src/plugins/gui.py:289
 msgid "Overwrite?"
 msgstr "להחליף?"
 
-#: ../src/plugins/gui.py:306
+#: ../src/plugins/gui.py:319
 msgid "Configuration"
 msgstr "תצורה"
 
 #. it is not zip file
 #. CRC error
-#: ../src/plugins/pluginmanager.py:509 ../src/plugins/pluginmanager.py:515
+#: ../src/plugins/pluginmanager.py:512 ../src/plugins/pluginmanager.py:518
 msgid "Archive corrupted"
 msgstr "ארכיון מושחת"
 
-#: ../src/plugins/pluginmanager.py:511
+#: ../src/plugins/pluginmanager.py:514
 msgid "Archive empty"
 msgstr "ארכיון ריק"
 
@@ -10738,7 +10737,7 @@ msgstr "סגור את Gajim תמיד"
 
 #: ../src/roster_window.py:2521
 msgid "You have running file transfers"
-msgstr "יש לך העברות קבצים פעילות"
+msgstr "נותרו העברות קבצים פעילות"
 
 #: ../src/roster_window.py:2522
 msgid ""
@@ -10749,7 +10748,7 @@ msgstr ""
 
 #: ../src/roster_window.py:2553 ../src/roster_window.py:2990
 msgid "You have unread messages"
-msgstr "יש לך הודעות אשר לא נקראו"
+msgstr "נותרו הודעות אשר לא נקראו"
 
 # BUG: and (A or THE) contact
 # קיימת לרשותך
