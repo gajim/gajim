@@ -35,6 +35,7 @@ from htmltextview import HtmlTextView
 from common import gajim
 from plugins.helpers import log_calls, log
 from plugins.helpers import GajimPluginActivateException
+from plugins.plugins_i18n import _
 from common.exceptions import PluginsystemError
 
 (
@@ -142,14 +143,8 @@ class PluginsWindow(object):
         self.plugin_homepage_linkbutton.set_uri(plugin.homepage)
         self.plugin_homepage_linkbutton.set_label(plugin.homepage)
         self.plugin_homepage_linkbutton.set_property('sensitive', True)
-
-        sw = self.xml.get_object('scrolledwindow2')
-        old_tv = sw.get_children()[0]
-        old_tv.destroy()
-        self.plugin_description_textview = HtmlTextView()
-        sw.add(self.plugin_description_textview)
-        sw.show_all()
-        from plugins.plugins_i18n import _
+        desc_textbuffer = self.plugin_description_textview.get_buffer()
+        desc_textbuffer.set_text('')
         txt = plugin.description
         txt.replace('</body>', '')
         if plugin.available_text:
