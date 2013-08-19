@@ -39,6 +39,7 @@ from common import gajim
 from plugins.helpers import log_calls, log
 from conversation_textview import ConversationTextview
 from plugins.helpers import GajimPluginActivateException
+from plugins.plugins_i18n import _
 from common.exceptions import PluginsystemError
 
 (
@@ -139,7 +140,6 @@ class PluginsWindow(object):
             self._clear_installed_plugin_info()
 
     def _display_installed_plugin_info(self, plugin):
-        from plugins.plugins_i18n import _
         self.plugin_name_label.set_text(plugin.name)
         self.plugin_version_label.set_text(plugin.version)
         self.plugin_authors_label.set_text(plugin.authors)
@@ -149,12 +149,8 @@ class PluginsWindow(object):
         label.set_ellipsize(Pango.EllipsizeMode.END)
         self.plugin_homepage_linkbutton.set_property('sensitive', True)
 
-        sw = self.xml.get_object('scrolledwindow2')
-        old_tv = sw.get_children()[0]
-        old_tv.destroy()
-        self.plugin_description_textview = HtmlTextView()
-        sw.add(self.plugin_description_textview)
-        sw.show_all()
+        desc_textbuffer = self.plugin_description_textview.get_buffer()
+        desc_textbuffer.set_text('')
         txt = plugin.description
         txt.replace('</body>', '')
         if plugin.available_text:
