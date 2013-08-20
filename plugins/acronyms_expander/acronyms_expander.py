@@ -47,16 +47,26 @@ class AcronymsExpanderPlugin(GajimPlugin):
 
         self.config_default_values = {
             'INVOKER': (' ', ''),
-            'ACRONYMS': ({'RTFM': 'Read The Friendly Manual',
-                          '/slap': '/me slaps',
+            'ACRONYMS': ({'/slap': '/me slaps',
                           'PS-': 'plug-in system',
                           'G-': 'Gajim',
                           'GNT-': 'http://trac.gajim.org/newticket',
                           'GW-': 'http://trac.gajim.org/',
                           'GTS-': 'http://trac.gajim.org/report',
                          },
-            ''),
+                         ''),
         }
+        if 'ACRONYMS' not in self.config:
+            myAcronyms = self.get_own_acronyms_list()
+            self.config['ACRONYMS'].update(myAcronyms)
+
+    @log_calls('AcronymsExpanderPlugin')
+    def get_own_acronyms_list(self):
+        data_file = self.local_file_path('acronyms')
+        data = open(data_file, 'r')
+        acronyms = eval(data.read())
+        data.close()
+        return acronyms
 
     @log_calls('AcronymsExpanderPlugin')
     def textbuffer_live_acronym_expander(self, tb):
