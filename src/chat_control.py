@@ -1311,8 +1311,12 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         # used to stay at the end of the textview when we shrink conversation
         # textview.
         if self.was_at_the_end:
-            self.conv_textview.bring_scroll_to_end(-18, use_smooth=False)
-        self.was_at_the_end = (adjustment.get_upper() - adjustment.get_value() \
+            if self.conv_textview.at_the_end():
+                # we are at the end
+                self.conv_textview.bring_scroll_to_end(-18)
+            else:
+                self.conv_textview.bring_scroll_to_end(-18, use_smooth=False)
+        self.was_at_the_end = (adjustment.get_upper() - adjustment.get_value()\
             - adjustment.get_page_size()) < 18
 
     def on_conversation_vadjustment_value_changed(self, adjustment):
@@ -1364,9 +1368,8 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             if room_jid in gajim.interface.minimized_controls[self.account]:
                 groupchat_control = \
                         gajim.interface.minimized_controls[self.account][room_jid]
-            contact = \
-                    gajim.contacts.get_contact_with_highest_priority(self.account, \
-                    room_jid)
+            contact = gajim.contacts.get_contact_with_highest_priority(
+                self.account, room_jid)
             if contact:
                 gajim.interface.roster.draw_contact(room_jid, self.account)
             if groupchat_control:
