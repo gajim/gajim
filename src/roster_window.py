@@ -5241,6 +5241,12 @@ class RosterWindow:
         """
         if not force and not self.actions_menu_needs_rebuild:
             return
+        history_menuitem = self.xml.get_object('history_menuitem')
+        if gtkgui_helpers.gtk_icon_theme.has_icon('document-open-recent'):
+            history_icon = Gtk.Image()
+            history_icon.set_from_icon_name('document-open-recent',
+                Gtk.IconSize.MENU)
+            history_menuitem.set_image(history_icon)
         new_chat_menuitem = self.xml.get_object('new_chat_menuitem')
         single_message_menuitem = self.xml.get_object(
                 'send_single_message_menuitem')
@@ -6173,8 +6179,13 @@ class RosterWindow:
         menu.append(item)
 
         history_menuitem = Gtk.ImageMenuItem.new_with_mnemonic(_('_History'))
-        history_icon = Gtk.Image.new_from_stock(Gtk.STOCK_JUSTIFY_FILL, \
-            Gtk.IconSize.MENU)
+        if gtkgui_helpers.gtk_icon_theme.has_icon('document-open-recent'):
+            history_icon = Gtk.Image()
+            history_icon.set_from_icon_name('document-open-recent',
+                Gtk.IconSize.MENU)
+        else:
+            history_icon = Gtk.Image.new_from_stock(Gtk.STOCK_JUSTIFY_FILL, \
+                Gtk.IconSize.MENU)
         if gtkgui_helpers.gtk_icon_theme.has_icon('document-open-recent'):
             history_icon = Gtk.Image()
             history_icon.set_from_icon_name('document-open-recent', Gtk.IconSize.MENU)
@@ -6254,8 +6265,12 @@ class RosterWindow:
 
         # History manager
         item = Gtk.ImageMenuItem.new_with_mnemonic(_('History Manager'))
-        icon = Gtk.Image.new_from_stock(Gtk.STOCK_JUSTIFY_FILL,
-            Gtk.IconSize.MENU)
+        if gtkgui_helpers.gtk_icon_theme.has_icon('document-open-recent'):
+            icon = Gtk.Image()
+            icon.set_from_icon_name('document-open-recent', Gtk.IconSize.MENU)
+        else:
+            icon = Gtk.Image.new_from_stock(Gtk.STOCK_JUSTIFY_FILL,
+                Gtk.IconSize.MENU)
         item.set_image(icon)
         menu.append(item)
         item.connect('activate', self.on_history_manager_menuitem_activate)
