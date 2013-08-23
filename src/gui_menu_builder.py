@@ -253,9 +253,7 @@ control=None, gc_contact=None, is_anonymous=True):
             account)
     history_menuitem.connect('activate', roster.on_history, contact, account)
     if gtkgui_helpers.gtk_icon_theme.has_icon('document-open-recent'):
-        img = gtk.Image()
-        img.set_from_icon_name('document-open-recent', gtk.ICON_SIZE_MENU)
-        history_menuitem.set_image(img)
+        gtkgui_helpers.add_image_to_menuitem(history_menuitem, 'bookmark-new')
 
     if control:
         convert_to_gc_menuitem.connect('activate',
