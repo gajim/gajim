@@ -348,8 +348,8 @@ class GroupchatControl(ChatControlBase):
             widget.show()
 
         if gtkgui_helpers.gtk_icon_theme.has_icon('document-open-recent'):
-                img = self.xml.get_object('image8')
-                img.set_from_icon_name('document-open-recent', gtk.ICON_SIZE_MENU)
+            img = self.xml.get_object('image8')
+            img.set_from_icon_name('document-open-recent', gtk.ICON_SIZE_MENU)
         widget = self.xml.get_object('list_treeview')
         id_ = widget.connect('row_expanded', self.on_list_treeview_row_expanded)
         self.handlers[id_] = widget
@@ -823,13 +823,11 @@ class GroupchatControl(ChatControlBase):
         request_voice_separator = xml.get_object('request_voice_separator')
 
         if gtkgui_helpers.gtk_icon_theme.has_icon('bookmark-new'):
-            img = gtk.Image()
-            img.set_from_icon_name('bookmark-new', gtk.ICON_SIZE_MENU)
-            bookmark_room_menuitem.set_image(img)
+            gtkgui_helpers.add_image_to_menuitem(bookmark_room_menuitem,
+                'bookmark-new')
         if gtkgui_helpers.gtk_icon_theme.has_icon('document-open-recent'):
-            img = gtk.Image()
-            img.set_from_icon_name('document-open-recent', gtk.ICON_SIZE_MENU)
-            history_menuitem.set_image(img)
+            gtkgui_helpers.add_image_to_menuitem(history_menuitem,
+                'document-open-recent')
 
         if hide_buttonbar_items:
             change_nick_menuitem.hide()

@@ -5221,10 +5221,8 @@ class RosterWindow:
             return
         history_menuitem = self.xml.get_object('history_menuitem')
         if gtkgui_helpers.gtk_icon_theme.has_icon('document-open-recent'):
-            history_icon = gtk.Image()
-            history_icon.set_from_icon_name('document-open-recent',
-                gtk.ICON_SIZE_MENU)
-            history_menuitem.set_image(history_icon)
+            gtkgui_helpers.add_image_to_menuitem(history_menuitem,
+                'document-open-recent')
         new_chat_menuitem = self.xml.get_object('new_chat_menuitem')
         single_message_menuitem = self.xml.get_object(
                 'send_single_message_menuitem')
