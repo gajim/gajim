@@ -1,14 +1,138 @@
-.\" 20050818
-.TH "Gajim-remote" "1" "August  18, 2005" "Gajim dev team" ""
-.SH "NAME"
-Gajim-remote \- tool to communicate with a running instance of Gajim
-.SH "SYNOPSIS"
-.B gajim-remote [help] [toggle_roster_appearance] [show_next_unread] [list_contacts] [list_accounts] [change_status] [open_chat] [send_message] [send_file] [contact_info] [account_info] [send_file] [prefs_list] [prefs_put] [prefs_del] [prefs_store] [remove_contact] [add_contact] [get_status] [get_status_message] [get_unread_msgs_number] [start_chat] 
-.SH "DESCRIPTION"
-.B Gajim-remote 
-is a script to control Gajim by D-Bus
-.PP 
-.SH "FEEDBACK"
-You can report bugs or feature requests in http://trac.gajim.org or in the mailing list: https://lists.gajim.org/cgi\-bin/listinfo/gajim\-devel. You can also find us in our room gajim@conference.jabber.no
-.SH "AUTHORS"
-Written by Yann Le Boulanger <asterix@lagaule.org>, Nikos Kouremenos <kourem@gmail.com> and Dimitur Kirov <dkirov@gmail.com>.
+.Dd August 11, 2013
+.Dt GAJIM-REMOTE 1 URM
+.Os UNIX
+.Sh NAME
+.Nm gajim-remote
+.Nd a remote control utility for
+.Xr gajim 1
+.Sh SYNOPSIS
+.Nm
+.Ar command
+.Sh DESCRIPTION
+.Nm
+is a script to control and communicate with a running instance of
+.Xr gajim 1
+by D-Bus.
+.Sh OPTIONS
+.Bl -tag -width Ds
+.It Available commands
+.Ss account_info Aq account
+Gets detailed info on a account
+.Ss add_contact Ao jid Ac Bq account
+Adds contact to roster
+.Ss change_avatar Ao picture Ac Bq account
+Change the avatar
+.Ss change_status Bo status Bc Bo message Bc Bq account
+Changes the status of account or accounts
+.Ss check_gajim_running
+Check if Gajim is running
+.Ss contact_info Aq jid
+Gets detailed info on a contact
+.Ss get_status Bq account
+Returns current status (the global one unless account is specified)
+.Ss get_status_message Bq account
+Returns current status message (the global one unless account is specified)
+.Ss get_unread_msgs_number
+Returns number of unread messages
+.Ss handle_uri Ao uri Ac Bo account Bc Bq message
+Handle a xmpp:/ uri
+.Ss help Bq command 
+Shows a help on specific command
+.Ss join_room Ao room Ac Bo nick Bc Bo password Bc Bq account
+Join a MUC room
+.Ss list_accounts
+Prints a list of registered accounts
+.Ss list_contacts Bq account
+Prints a list of all contacts in the roster. Each contact appears on a separate line
+.Ss open_chat Ao jid Ac Bo account Bc Bq message
+Shows the chat dialog so that you can send messages to a contact
+.Ss prefs_del Aq key
+Deletes a preference item
+.Ss prefs_list
+Lists all preferences and their values
+.Ss prefs_put Aq key=value
+Sets value of 'key' to 'value'.
+.Ss prefs_store
+Writes the current state of Gajim preferences to the .config file
+.Ss remove_contact Ao jid Ac Bq account
+Removes contact from roster
+.Ss send_chat_message Ao jid Ac Ao message Ac Bo pgp key Bc Bq account
+Sends new chat message to a contact in the roster. Both OpenPGP key and account are optional. If you want to set only 'account', without 'OpenPGP key', just set 'OpenPGP key' to ''.
+.Ss send_file Ao file Ac Ao jid Ac Bq account
+Sends file to a contact
+.Ss send_groupchat_message Ao room_jid Ac Ao message Ac Bq account
+Sends new message to a groupchat you've joined.
+.Ss send_single_message Ao jid subject Ac Ao message Ac Bo pgp key Bc Bq account
+Sends new single message to a contact in the roster. Both OpenPGP key and account are optional. If you want to set only 'account', without 'OpenPGP key', just set 'OpenPGP key' to ''.
+.Ss send_xml Ao xml Ac Bq account
+Sends custom XML
+.Ss set_priority Ao priority Ac Bq account
+Changes the priority of account or accounts
+.Ss show_next_pending_event
+Pops up a window with the next pending event
+.Ss start_chat Aq account
+Opens 'Start Chat' dialog
+.Ss toggle_ipython
+Shows or hides the ipython window
+.Ss toggle_roster_appearance
+Shows or hides the roster window
+.Sh EXAMPLES
+Open a URI of group chat gajim
+.Pp
+.Dl $ gajim-remote handle_uri xmpp:gajim@conferenc.gajim.org?join
+.Pp
+Send custom XML
+.Pp
+.Dl $ gajim-remote send_xml $(cat Pa filename.xml ) Qq your@jabber.id
+.Sh AUTHORS
+.An -nosplit
+.Nm
+is written and maintained by
+.An Yann Leboulanger ,
+and
+.An Denis Fomin ,
+with contributions and patches merged from many individuals around the world.
+See files
+.Pa AUTHORS
+and
+.Pa THANKS ,
+for a complete list.
+.Sh COPYRIGHT
+Copyright (C) 2003-2013 Gajim Team
+.Pp
+.Nm
+is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 3 only.
+.Pp
+.Nm
+is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+.Pp
+You should have received a copy of the GNU General Public License along with
+.Nm .
+If not, see <http://www.gnu.org/licenses/>.
+.Sh FEEDBACK
+You can report bugs or feature requests in our bug tracker at
+.Em trac.gajim.org
+or in the
+.Em gajim-devel
+mailing list; if you want to send us a patch, please do so in our bug tracker.
+You can also find us in our chat room.
+.Sh WWW
+http://www.gajim.org/
+.Sh XMPP
+You are welcome to join us at gajim@conference.gajim.org
+.Sh MAILING LIST
+Below are public mailing lists on lists.gajim.org
+.Bd -literal -offset indent
+http://lists.gajim.org/cgi-bin/listinfo/gajim-devel
+http://lists.gajim.org/cgi-bin/listinfo/translators
+.Ed
+.Pp
+More mailing lists at
+.Bd -literal -offset indent
+http://lists.gajim.org/cgi-bin/listinfo
+.Ed
+.Sh BUGS
+Please submit bugs at https://trac.gajim.org/
+.Sh SEE ALSO
+.Xr gajim 1
+.Xr gajim-history-manager 1
