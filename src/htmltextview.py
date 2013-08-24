@@ -941,8 +941,8 @@ class HtmlTextView(Gtk.TextView):
         helpers.launch_browser_mailer(kind, text)
 
     def on_copy_link_activate(self, widget, text):
-        clip = gtk.clipboard_get()
-        clip.set_text(text)
+        clip = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+        clip.set_text(text, -1)
 
 #    def on_start_chat_activate(self, widget, jid):
 #        gajim.interface.new_chat_from_jid(self.account, jid)
@@ -1013,7 +1013,7 @@ class HtmlTextView(Gtk.TextView):
         menu.popup(None, None, None, event.button, event.time)
 
     def hyperlink_handler(self, texttag, widget, event, iter_, kind):
-        if event.type == gtk.gdk.BUTTON_PRESS:
+        if event.type == Gdk.EventType.BUTTON_PRESS:
             begin_iter = iter_.copy()
             # we get the begining of the tag
             while not begin_iter.begins_tag(texttag):
@@ -1035,7 +1035,7 @@ class HtmlTextView(Gtk.TextView):
                     kind = 'sth_at_sth'
             else:
                 word = self.textview.get_buffer().get_text(begin_iter,
-                    end_iter).decode('utf-8')
+                    end_iter)
 
             if event.button == 3: # right click
                 self.make_link_menu(event, kind, word)
