@@ -1,25 +1,134 @@
-.\" 20050901
-.TH "Gajim" "1" "September 01, 2005" "Gajim dev team" ""
-.SH "NAME"
-Gajim \- a jabber client
-.SH "SYNOPSIS"
-.B gajim [\-v] [\-p] [\-h]
-.SH "DESCRIPTION"
-.B Gajim 
-is a jabber client written in PyGTK and released under the GNU GPL. For more information on jabber, see 
-http://www.jabber.org and on Gajim see http://www.gajim.org
-.PP 
-.SH "OPTIONS"
-.TP 
-\fB\-p\fR, \fB\-\-profile\fR name
-Run Gajim using ~/.gajim/config.name
-.TP 
-\fB\-v\fR, \fB\-\-verbose\fR
-Print xml stanzas and other debug information.
-.TP 
-\fB\-h\fR, \fB\-\-help\fR
-Print this help.
-.SH "FEEDBACK"
-You can report bugs or feature requests in http://trac.gajim.org or in the mailing list: https://lists.gajim.org/cgi\-bin/listinfo/gajim\-devel. You can also find us in our room gajim@conference.gajim.org
-.SH "AUTHORS"
-Written by Yann Le Boulanger <asterix@lagaule.org>, Nikos Kouremenos <kourem@gmail.com> and Dimitur Kirov <dkirov@gmail.com>.
+.Dd August 11, 2013
+.Dt GAJIM 1 URM
+.Os UNIX
+.Sh NAME
+.Nm gajim
+.Nd a Jabber/XMPP client
+.Sh SYNOPSIS
+.Nm
+.Fl h
+.Nm
+.Op Fl q
+.Op Fl v
+.Op Fl l Ar subsystem=level
+.Op Fl p Ar name
+.Op Fl c Ar directory
+.Sh DESCRIPTION
+.Nm
+is a Jabber/XMPP client written in Python and GTK+.
+.Nm
+works nicely with GNOME, yet it does not require it to run.
+.Nm
+is designed for novice and advanced users as one, as well for XMPP
+server admins.
+.Pp
+XMPP is the Extensible Messaging and Presence Protocol, a set of open
+technologies for instant messaging, presence, multi-party chat, voice
+and video calls, collaboration, lightweight middleware, content
+syndication, and generalized routing of XML data. For more information
+on the XMPP protocol see <http://xmpp.org/about-xmpp/>.
+.Sh OPTIONS
+.Bl -tag -width Ds
+.It Fl h Fl Fl help
+Show help options
+.It Fl q Fl Fl quiet
+Show only critical errors
+.It Fl v Fl Fl verbose
+Print xml stanzas and other debug information
+.It Fl l Fl Fl loglevel Em subsystem=level Bq , Em subsystem=level Bq Em ...
+Configure logging system.
+Subsystem can be
+.Em gajim.interface ,
+.Em gajim.c.connection ,
+.Em .nbxmpp.client_nb ,
+etc.
+Level can be
+.Em DEBUG ,
+.Em INFO ,
+.Em WARNING ,
+.Em ERROR
+or
+.Em CRITICAL .
+.It Fl p Fl Fl profile Em name
+Run
+.Nm
+using
+.Pa config.name
+in configuration directory
+.It Fl c Fl Fl config-path Em directory
+Where to look for configuration files
+.Sh FILES
+.Bl -tag -width Ds
+.It ~/.cache/gajim/cache.db
+Cache database file of transports, caps, roster entry, and roster group.
+.It ~/.cache/gajim/avatars/
+Cache directory of avatars.
+.It ~/.cache/gajim/vcards/
+Cache directory of vCards (virtual cards).
+.It ~/.config/gajim/
+The config-path used when
+.Op Fl c
+is not specified.
+.It ~/.local/share/gajim/certs/
+Directory where certificates are stored.
+.It ~/.local/share/gajim/logs.db
+The history database log file.
+For more information on database logs see <https://trac.gajim.org/wiki/LogsDatabase>.
+.El
+.Sh AUTHORS
+.An -nosplit
+.Nm
+is written and maintained by
+.An Yann Leboulanger ,
+and
+.An Denis Fomin ,
+with contributions and patches merged from many individuals around the world.
+See files
+.Pa AUTHORS
+and
+.Pa THANKS ,
+for a complete list.
+.Sh COPYRIGHT
+Copyright (C) 2003-2013 Gajim Team
+.Pp
+.Nm
+is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 3 only.
+.Pp
+.Nm
+is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+.Pp
+You should have received a copy of the GNU General Public License along with
+.Nm .
+If not, see <http://www.gnu.org/licenses/>.
+.Sh FEEDBACK
+You can report bugs or feature requests in our bug tracker at
+.Em trac.gajim.org
+or in the
+.Em gajim-devel
+mailing list; if you want to send us a patch, please do so in our bug tracker.
+You can also find us in our chat room.
+.Sh WWW
+http://www.gajim.org/
+.Sh XMPP
+You are welcome to join us at gajim@conference.gajim.org
+.Sh MAILING LIST
+Below are public mailing lists on lists.gajim.org
+.Bd -literal -offset indent
+http://lists.gajim.org/cgi-bin/listinfo/gajim-devel
+http://lists.gajim.org/cgi-bin/listinfo/translators
+.Ed
+.Pp
+More mailing lists at
+.Bd -literal -offset indent
+http://lists.gajim.org/cgi-bin/listinfo
+.Ed
+.Sh BUGS
+Please submit bugs at
+.Bd -literal -offset indent
+https://trac.gajim.org/
+http://trac-plugins.gajim.org/
+http://python-nbxmpp.gajim.org/
+.Ed
+.Sh SEE ALSO
+.Xr gajim-remote 1
+.Xr gajim-history-manager 1
