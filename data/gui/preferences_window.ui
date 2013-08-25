@@ -1432,6 +1432,8 @@ $T will be replaced by auto-not-available timeout</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="tooltip_text" translatable="yes">If enabled, Gajim will not ask for a status message. The specified default message will be used instead.</property>
+                                <property name="hscrollbar_policy">automatic</property>
+                                <property name="vscrollbar_policy">automatic</property>
                                 <property name="shadow_type">in</property>
                                 <child>
                                   <object class="GtkTreeView" id="default_msg_treeview">
@@ -2288,12 +2290,6 @@ $T will be replaced by auto-not-available timeout</property>
                               </packing>
                             </child>
                             <child>
-                              <placeholder/>
-                            </child>
-                            <child>
-                              <placeholder/>
-                            </child>
-                            <child>
                               <object class="GtkHBox" id="hbox2">
                                 <property name="visible">True</property>
                                 <child>
@@ -2337,6 +2333,12 @@ $T will be replaced by auto-not-available timeout</property>
                                 <property name="x_options">GTK_FILL</property>
                                 <property name="y_options"/>
                               </packing>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
                             </child>
                           </object>
                         </child>
