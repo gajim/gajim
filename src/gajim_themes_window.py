@@ -183,8 +183,8 @@ class GajimThemesWindow:
             return
         if self.current_theme == gajim.config.get('roster_theme'):
             dialogs.ErrorDialog(
-                    _('You cannot delete your current theme'),
-            _('Please first choose another for your current theme.'))
+                _('You cannot delete your current theme'),
+                _('Please first choose another theme as your current theme.'))
             return
         self.theme_options_vbox.set_sensitive(False)
         self.theme_options_table.set_sensitive(False)
