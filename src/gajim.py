@@ -138,13 +138,13 @@ def parseOpts():
         sys.exit(2)
     for o, a in opts:
         if o in ('-h', '--help'):
-            print('Usage:  ' + \
-                '\n  gajim [options] filename\n' + \
-                '\nOptions:' + \
+            print(_('Usage:') + \
+                '\n  gajim [options] filename\n\n' + \
+                _('Options:') + \
                 '\n  -h, --help         ' + \
                     _('Show this help message and exit') + \
-                '\n  -q, --quiet        ' + _\
-                    ('Show only critical errors') + \
+                '\n  -q, --quiet        ' + \
+                    _('Show only critical errors') + \
                 '\n  -v, --verbose      ' + \
                     _('Print xml stanzas and other debug information') + \
                 '\n  -p, --profile      ' + \
