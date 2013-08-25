@@ -2665,6 +2665,7 @@ class Interface:
                 'outmsgtxtcolor': gajim.config.get('outmsgtxtcolor'),
                 'statusmsgcolor': gajim.config.get('statusmsgcolor'),
                 'urlmsgcolor': gajim.config.get('urlmsgcolor'),
+                'markedmsgcolor': gajim.config.get('markedmsgcolor'),
         }
 
         self.handlers = {}
