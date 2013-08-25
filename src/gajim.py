@@ -132,9 +132,21 @@ def parseOpts():
         sys.exit(2)
     for o, a in opts:
         if o in ('-h', '--help'):
-            print 'gajim [--help] [--quiet] [--verbose] ' + \
-                '[--loglevel subsystem=level[,subsystem=level[...]]] ' + \
-                '[--profile name] [--config-path]'
+            print 'Usage:  ' + \
+                '\n  gajim [options] filename\n' + \
+                '\nOptions:' + \
+                '\n  -h, --help         ' + \
+                    _('Show this help message and exit') + \
+                '\n  -q, --quiet        ' + _\
+                    ('Show only critical errors') + \
+                '\n  -v, --verbose      ' + \
+                    _('Print xml stanzas and other debug information') + \
+                '\n  -p, --profile      ' + \
+                    _('Use config.name in configuration directory') + \
+                '\n  -c, --config-path  ' + \
+                    _('Set configuration directory') + \
+                '\n  -l, --loglevel     ' + \
+                    _('Configure logging system')
             sys.exit()
         elif o in ('-q', '--quiet'):
             logging_helpers.set_quiet()
