@@ -923,6 +923,9 @@ class PreferencesWindow:
     def on_status_msg_colorbutton_color_set(self, widget):
         self.on_preference_widget_color_set(widget, 'statusmsgcolor')
 
+    def on_muc_highlight_colorbutton_color_set(self, widget):
+        self.on_preference_widget_color_set(widget, 'markedmsgcolor')
+
     def on_conversation_fontbutton_font_set(self, widget):
         self.on_preference_widget_font_set(widget, 'conversation_font')
 
@@ -943,7 +946,8 @@ class PreferencesWindow:
                         'outmsgtxtcolor': ['outgoing_msg_colorbutton',
                                 'outgoing_msg_checkbutton'],
                         'statusmsgcolor': 'status_msg_colorbutton',
-                        'urlmsgcolor': 'url_msg_colorbutton'}
+                        'urlmsgcolor': 'url_msg_colorbutton',
+                        'markedmsgcolor': 'muc_highlight_colorbutton'}
         for c in col_to_widget:
             col = gajim.config.get(c)
             if col:
@@ -971,7 +975,8 @@ class PreferencesWindow:
                         'inmsgtxtcolor': 'incoming_msg_colorbutton',
                         'outmsgtxtcolor': 'outgoing_msg_colorbutton',
                         'statusmsgcolor': 'status_msg_colorbutton',
-                        'urlmsgcolor': 'url_msg_colorbutton'}
+                        'urlmsgcolor': 'url_msg_colorbutton',
+                        'markedmsgcolor': 'muc_highlight_colorbutton'}
         for c in col_to_widget:
             gajim.config.set(c, gajim.interface.default_colors[c])
         self.draw_color_widgets()
