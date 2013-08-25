@@ -62,7 +62,7 @@ def parseOpts():
 
     try:
         shortargs = 'hc:'
-        longargs = 'help config_path='
+        longargs = 'help config-path='
         opts = getopt.getopt(sys.argv[1:], shortargs, longargs.split())[0]
     except getopt.error, msg:
         print str(msg)

@@ -122,7 +122,7 @@ def parseOpts():
     try:
         shortargs = 'hqvl:p:c:'
         # add gtk/gnome session option as gtk_get_option_group is not wrapped
-        longargs = 'help quiet verbose loglevel= profile= config_path='
+        longargs = 'help quiet verbose loglevel= profile= config-path='
         longargs += ' class= name= screen= gtk-module= sync g-fatal-warnings'
         longargs += ' sm-client-id= sm-client-state-file= sm-disable'
         opts = getopt.getopt(sys.argv[1:], shortargs, longargs.split())[0]
