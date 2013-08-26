@@ -95,7 +95,7 @@ class JingleFileTransfer(JingleContent):
         if gajim.contacts.is_gc_contact(session.connection.name,
         session.peerjid):
             roomjid = session.peerjid.split('/')[0]
-            dstaddr = hashlib.sha1(('%s%s%s' % (self.file_props['sid'],
+            dstaddr = hashlib.sha1(('%s%s%s' % (self.file_props.sid,
                 session.ourjid, roomjid)).encode('utf-8')).hexdigest()
             self.file_props.dstaddr = dstaddr
         self.state = STATE_NOT_STARTED
