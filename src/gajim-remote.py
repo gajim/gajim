@@ -439,7 +439,8 @@ class GajimRemote:
         """
         Print usage, and list available commands
         """
-        s = _('Usage: %s command [arguments]\nCommand is one of:\n' ) % BASENAME
+        s = _('Usage:\n  %s command [arguments]\n\nCommand is one of:\n' ) % (
+            BASENAME)
         for command in sorted(self.commands):
             s += '  ' + command
             for arg in self.commands[command][1]:
