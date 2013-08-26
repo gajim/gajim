@@ -70,7 +70,12 @@ def parseOpts():
         sys.exit(2)
     for o, a in opts:
         if o in ('-h', '--help'):
-            print 'history_manager [--help] [--config-path]'
+            print _('Usage:') + \
+                '\n  gajim-history-manager [options] filename\n\n' + \
+                _('Options:') + \
+                '\n  -h, --help         ' + \
+                    _('Show this help message and exit') + \
+                '\n  -c, --config-path  ' + _('Set logs directory')
             sys.exit()
         elif o in ('-c', '--config-path'):
             config_path = a
