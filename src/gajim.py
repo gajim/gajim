@@ -142,7 +142,7 @@ def parseOpts():
                 '\n  -v, --verbose      ' + \
                     _('Print xml stanzas and other debug information') + \
                 '\n  -p, --profile      ' + \
-                    _('Use config.name in configuration directory') + \
+                    _('Use defined profile in configuration directory') + \
                 '\n  -c, --config-path  ' + \
                     _('Set configuration directory') + \
                 '\n  -l, --loglevel     ' + \
