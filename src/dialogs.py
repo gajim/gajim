@@ -5433,3 +5433,4 @@ class SSLErrorDialog(ConfirmationDialogDoubleCheck):
 
     def on_cert_clicked(self, button):
         d = CertificatDialog(self, self.account, self.cert)
+        d.set_title(_('Certificate'))
