@@ -1351,6 +1351,8 @@ class Interface:
             dialogs.SSLErrorDialog(obj.conn.name, obj.certificate, pritext,
             sectext, checktext1, checktext2, on_response_ok=on_ok,
             on_response_cancel=on_cancel)
+        self.instances[account]['online_dialog']['ssl_error'].set_title(
+            _('SSL Certificate Verification'))
 
     def handle_event_fingerprint_error(self, obj):
         # ('FINGERPRINT_ERROR', account, (new_fingerprint,))

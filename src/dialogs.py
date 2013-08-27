@@ -5463,6 +5463,7 @@ class CheckFingerprintDialog(YesNoDialog):
 
     def on_cert_clicked(self, button):
         d = CertificatDialog(self, self.account, self.cert)
+        d.set_title(_('Certificate'))
 
 class SSLErrorDialog(ConfirmationDialogDoubleCheck):
     def __init__(self, account, certificate, pritext, sectext, checktext1,
