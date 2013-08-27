@@ -1365,6 +1365,17 @@ class ConnectionHandlersBase:
         else:
             return None
 
+    def get_latest_session(self, jid):
+        """
+        Get the session that we last sent a message to
+        """
+        if jid not in self.sessions:
+            return None
+        sessions = self.sessions[jid].values()
+        if not sessions:
+            return None
+        return sorted(sessions, key=operator.attrgetter('last_send'))[-1]
+
     def find_controlless_session(self, jid, resource=None):
         """
         Find an active session that doesn't have a control attached
