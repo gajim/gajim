@@ -1109,8 +1109,17 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
 
         self.session = None
         if self.mtype != 'groupchat':
-            self.session = self.conn.get_or_create_session(self.fjid,
-                self.thread_id)
+            if gajim.interface.is_pm_contact(self.fjid, account) and \
+            self.mtype == 'error':
+                self.session = self.conn.find_session(self.fjid, self.thread_id)
+                if not self.session:
+                    self.session = self.conn.get_latest_session(self.fjid)
+                if not self.session:
+                    self.session = self.conn.make_new_session(self.fjid,
+                        self.thread_id, type_='pm')
+            else:
+                self.session = self.conn.get_or_create_session(self.fjid,
+                    self.thread_id)
 
             if self.thread_id and not self.session.received_thread_id:
                 self.session.received_thread_id = True
