@@ -46,11 +46,12 @@ from common import pep
 gtk_icon_theme = Gtk.IconTheme.get_default()
 gtk_icon_theme.append_search_path(gajim.ICONS_DIR)
 
-def get_icon_pixmap(icon_name, size=16):
+def get_icon_pixmap(icon_name, size=16, quiet=False):
     try:
         return gtk_icon_theme.load_icon(icon_name, size, 0)
     except GObject.GError as e:
-        log.error('Unable to load icon %s: %s' % (icon_name, str(e)))
+        if not quiet:
+            log.error('Unable to load icon %s: %s' % (icon_name, str(e)))
 
 def get_icon_path(icon_name, size=16):
     try:
@@ -988,8 +989,11 @@ def get_pep_as_pixbuf(pep_class):
         else:
             return load_activity_icon('unknown').get_pixbuf()
     elif isinstance(pep_class, pep.UserLocationPEP):
-        path = get_icon_path('gajim-earth')
-        return GdkPixbuf.Pixbuf.new_from_file(path)
+        icon = gtkgui_helpers.get_icon_pixmap('applications-internet',
+            quiet=True)
+        if not icon:
+            icon = gtkgui_helpers.get_icon_pixmap('gajim-earth')
+        return icon
     return None
 
 def load_icons_meta():
