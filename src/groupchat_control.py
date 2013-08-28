@@ -837,7 +837,7 @@ class GroupchatControl(ChatControlBase):
                 'bookmark-new')
         if gtkgui_helpers.gtk_icon_theme.has_icon('document-open-recent'):
             gtkgui_helpers.add_image_to_menuitem(history_menuitem,
-                'document-open-recent'
+                'document-open-recent')
 
         if hide_buttonbar_items:
             change_nick_menuitem.hide()
