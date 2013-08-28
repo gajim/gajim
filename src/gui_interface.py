@@ -2629,8 +2629,11 @@ class Interface:
             else:
                 return gtkgui_helpers.load_activity_icon('unknown').get_pixbuf()
         elif isinstance(pep_obj, pep.UserLocationPEP):
-            path = gtkgui_helpers.get_icon_path('gajim-earth')
-            return gtk.gdk.pixbuf_new_from_file(path)
+            icon = gtkgui_helpers.get_icon_pixmap('applications-internet',
+                quiet=True)
+            if not icon:
+                icon = gtkgui_helpers.get_icon_pixmap('gajim-earth')
+            return icon
 
     def create_ipython_window(self):
         try:

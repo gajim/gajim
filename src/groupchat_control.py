@@ -2540,9 +2540,10 @@ class GroupchatControl(ChatControlBase):
 
         item = xml.get_object('send_file_menuitem')
         # add a special img for send file menuitem
-        path_to_upload_img = gtkgui_helpers.get_icon_path('gajim-upload')
-        img = gtk.Image()
-        img.set_from_file(path_to_upload_img)
+        pixbuf = gtkgui_helpers.get_icon_pixmap('document-send', quiet=True)
+        if not pixbuf:
+            pixbuf = gtkgui_helpers.get_icon_pixmap('gajim-upload')
+        img = gtk.image_new_from_pixbuf(pixbuf)
         item.set_image(img)
 
         if not c.resource:

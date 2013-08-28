@@ -44,11 +44,12 @@ from common import gajim
 gtk_icon_theme = gtk.icon_theme_get_default()
 gtk_icon_theme.append_search_path(gajim.ICONS_DIR)
 
-def get_icon_pixmap(icon_name, size=16):
+def get_icon_pixmap(icon_name, size=16, quiet=False):
     try:
         return gtk_icon_theme.load_icon(icon_name, size, 0)
     except gobject.GError, e:
-        log.error('Unable to load icon %s: %s' % (icon_name, str(e)))
+        if not quiet:
+            log.error('Unable to load icon %s: %s' % (icon_name, str(e)))
 
 def get_icon_path(icon_name, size=16):
     try:
