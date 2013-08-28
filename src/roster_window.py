@@ -1456,12 +1456,10 @@ class RosterWindow:
         for acct in gajim.contacts.get_accounts():
             self._iters[acct] = {'account': None, 'groups': {}, 'contacts': {}}
 
-        self._before_fill()
         for acct in gajim.contacts.get_accounts():
             self.add_account(acct)
-            self.add_account_contacts(acct, improve_speed=False,
+            self.add_account_contacts(acct, improve_speed=True,
                 draw_contacts=False)
-        self._after_fill()
 
         # Recalculate column width for ellipsizing
         self.tree.columns_autosize()
