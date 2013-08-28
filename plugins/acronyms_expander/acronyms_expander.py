@@ -62,7 +62,7 @@ class AcronymsExpanderPlugin(GajimPlugin):
 
     @log_calls('AcronymsExpanderPlugin')
     def get_own_acronyms_list(self):
-        data_file = self.local_file_path('acronyms')
+        data_file = self.local_file_path('acronyms.py')
         data = open(data_file, 'r')
         acronyms = eval(data.read())
         data.close()
