@@ -80,6 +80,8 @@ def build_invite_submenu(invite_menuitem, list_, ignore_rooms=[]):
         if not account in connected_accounts:
             connected_accounts.append(account)
         transport = gajim.get_transport_name_from_jid(contact.jid)
+        if transport == 'jabber':
+            transport = None
         if contacts_transport == -1:
             contacts_transport = transport
         elif contacts_transport != transport:
