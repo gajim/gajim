@@ -7,7 +7,7 @@ Gajim 0.16 ()
   * Support XEP-0308 Last message correction
   * Support XEP-0224 Attention
   * Support XEP-0191 Blocking command
-  * Better LTR languages support
+  * Better RTL languages support
 
 Gajim 0.15.4 (25 May 2013)
 
