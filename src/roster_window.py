@@ -3122,7 +3122,7 @@ class RosterWindow:
 
         gajim.interface.instances['rename'] = dialogs.InputDialog(title,
             message, old_text, False, (on_renamed, account, row_type, jid,
-            old_text), on_canceled)
+            old_text), on_canceled, transient_for=self.window)
 
     def on_remove_group_item_activated(self, widget, group, account):
         def on_ok(checked):
