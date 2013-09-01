@@ -5784,6 +5784,11 @@ class RosterWindow:
                 send_custom_status_menuitem.set_sensitive(False)
                 send_group_message_item.set_sensitive(False)
 
+            if gajim.connections[account].connected < 2:
+                send_group_message_item.set_sensitive(False)
+                invite_menuitem.set_sensitive(False)
+                send_custom_status_menuitem.set_sensitive(False)
+
         if not group in helpers.special_groups:
             item = gtk.SeparatorMenuItem() # separator
             menu.append(item)
@@ -5983,8 +5988,10 @@ class RosterWindow:
         icon = gtk.image_new_from_stock(gtk.STOCK_NEW, gtk.ICON_SIZE_MENU)
         item.set_image(icon)
         item.connect('activate',
-                self.on_send_single_message_menuitem_activate, account, contact)
+            self.on_send_single_message_menuitem_activate, account, contact)
         menu.append(item)
+        if gajim.account_is_disconnected(account):
+            item.set_sensitive(False)
 
         blocked = False
         if helpers.jid_is_blocked(account, jid):
@@ -6021,6 +6028,8 @@ class RosterWindow:
                 status_menuitem.set_image(icon)
                 status_menuitems.append(status_menuitem)
         menu.append(send_custom_status_menuitem)
+        if gajim.account_is_disconnected(account):
+            send_custom_status_menuitem.set_sensitive(False)
 
         item = gtk.SeparatorMenuItem() # separator
         menu.append(item)
@@ -6098,6 +6107,8 @@ class RosterWindow:
         information_menuitem.set_image(icon)
         menu.append(information_menuitem)
         information_menuitem.connect('activate', self.on_info, contact, account)
+        if gajim.account_is_disconnected(account):
+            information_menuitem.set_sensitive(False)
 
         event_button = gtkgui_helpers.get_possible_button_event(event)
 
