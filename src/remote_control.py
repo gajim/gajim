@@ -442,11 +442,9 @@ class SignalObject(dbus.service.Object):
             ctrl = gajim.interface.msg_win_mgr.search_control(jid,
                 connected_account)
             if ctrl:
-                ctrl.print_conversation(message, frm='outgoing')
-
-            gajim.nec.push_outgoing_event(MessageOutgoingEvent(None,
-                account=connected_account, jid=jid, message=message,
-                keyID=keyID, type_=type_, control=ctrl))
+                ctrl.send_message(message)
+            else:
+                gajim.nec.push_outgoing_event(MessageOutgoingEvent(None, account=connected_account, jid=jid, message=message, keyID=keyID, type_=type_, control=ctrl))
 
             return DBUS_BOOLEAN(True)
         return DBUS_BOOLEAN(False)
