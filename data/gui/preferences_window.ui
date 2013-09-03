@@ -354,24 +354,6 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkEventBox" id="eventbox5">
-                                <property name="visible">True</property>
-                                <property name="tooltip_text" translatable="yes">If not disabled, Gajim will replace ascii smilies like ':)' with equivalent animated or static graphical emoticons</property>
-                                <child>
-                                  <object class="GtkLabel" id="label381">
-                                    <property name="visible">True</property>
-                                    <property name="xalign">0</property>
-                                    <property name="xpad">1</property>
-                                    <property name="label" translatable="yes">_Emoticons:</property>
-                                    <property name="use_underline">True</property>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="x_options">GTK_FILL</property>
-                              </packing>
-                            </child>
-                            <child>
                               <object class="GtkCheckButton" id="compact_view_checkbutton">
                                 <property name="label" translatable="yes">Ma_ke message windows compact</property>
                                 <property name="can_focus">True</property>
@@ -491,6 +473,25 @@
                                 <property name="right_attach">2</property>
                                 <property name="top_attach">6</property>
                                 <property name="bottom_attach">7</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkEventBox" id="eventbox5">
+                                <property name="visible">True</property>
+                                <property name="tooltip_text" translatable="yes">If not disabled, Gajim will replace ascii smilies like ':)' with equivalent animated or static graphical emoticons</property>
+                                <property name="visible_window">False</property>
+                                <child>
+                                  <object class="GtkLabel" id="label381">
+                                    <property name="visible">True</property>
+                                    <property name="xalign">0</property>
+                                    <property name="xpad">1</property>
+                                    <property name="label" translatable="yes">_Emoticons:</property>
+                                    <property name="use_underline">True</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="x_options">GTK_FILL</property>
                               </packing>
                             </child>
                           </object>
@@ -903,6 +904,7 @@
                               <object class="GtkEventBox" id="eventbox8">
                                 <property name="visible">True</property>
                                 <property name="tooltip_text" translatable="yes">Gajim can send and receive meta-information related to a conversation you may have with a contact. Here you can specify which chatstates you want to display in chat windows.</property>
+                                <property name="visible_window">False</property>
                                 <child>
                                   <object class="GtkLabel" id="label33">
                                     <property name="visible">True</property>
@@ -922,6 +924,7 @@
                               <object class="GtkEventBox" id="eventbox9">
                                 <property name="visible">True</property>
                                 <property name="tooltip_text" translatable="yes">Gajim can send and receive meta-information related to a conversation you may have with a contact. Here you can specify which chatstates you want to send to the other party.</property>
+                                <property name="visible_window">False</property>
                                 <child>
                                   <object class="GtkLabel" id="label34">
                                     <property name="visible">True</property>
