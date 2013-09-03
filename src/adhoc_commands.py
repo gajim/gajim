@@ -319,8 +319,8 @@ class CommandWindow:
             dialog.destroy()
             cb()
 
-        dialog = dialogs.HigDialog(self.window, Gtk.DialogFlags.DESTROY_WITH_PARENT \
-            | Gtk.DialogFlags.MODAL, Gtk.ButtonsType.YES_NO, _('Cancel confirmation'),
+        dialog = dialogs.HigDialog(self.window, Gtk.MessageType.WARNING,
+            Gtk.ButtonsType.YES_NO, _('Cancel confirmation'),
             _('You are in process of executing command. Do you really want to '
             'cancel it?'), on_response_yes=on_yes)
         dialog.popup()
