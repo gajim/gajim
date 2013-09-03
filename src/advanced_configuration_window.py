@@ -26,6 +26,7 @@
 import gtk
 import gtkgui_helpers
 import gobject
+import pango
 
 from common import gajim
 
@@ -111,14 +112,13 @@ class AdvancedConfigurationWindow(object):
 
         renderer_text = gtk.CellRendererText()
         renderer_text.connect('edited', self.on_config_edited)
+        renderer_text.set_property("ellipsize", pango.ELLIPSIZE_END)
         col = treeview.insert_column_with_attributes(-1, _('Value'),
                 renderer_text, text = 1)
         col.set_cell_data_func(renderer_text, self.cb_value_column_data)
 
         col.props.resizable = True
-        # set max width only for initializing the treeview.
-        col.set_max_width(250)
-        gobject.idle_add(col.set_max_width, -1)
+        col.set_property('expand',True)
 
         renderer_text = gtk.CellRendererText()
         treeview.insert_column_with_attributes(-1, _('Type'),
