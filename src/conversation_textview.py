@@ -1306,14 +1306,17 @@ class ConversationTextview(GObject.GObject):
             # We don't have tim for outgoing messages...
             tim = time.localtime()
         current_print_time = gajim.config.get('print_time')
-        direction_mark = i18n.paragraph_direction_mark(text)
+        if text.startswith('/me '):
+            direction_mark = i18n.paragraph_direction_mark(unicode(text[3:]))
+        else:
+            direction_mark = i18n.paragraph_direction_mark(text)
         # don't apply direction mark if it's status message
         if kind == 'status':
             direction_mark = i18n.direction_mark
         if current_print_time == 'always' and kind != 'info' and not simple:
             timestamp_str = self.get_time_to_show(tim, direction_mark)
             timestamp = time.strftime(timestamp_str, tim)
-            timestamp = direction_mark + timestamp
+            timestamp = direction_mark + timestamp + direction_mark
             if other_tags_for_time:
                 buffer_.insert_with_tags_by_name(end_iter, timestamp,
                     *other_tags_for_time)
@@ -1443,8 +1446,7 @@ class ConversationTextview(GObject.GObject):
             before_str = helpers.from_one_line(before_str)
             after_str = gajim.config.get('after_nickname')
             after_str = helpers.from_one_line(after_str)
-            format_ = direction_mark + before_str + name + direction_mark + \
-                after_str + ' '
+            format_ = before_str + name + direction_mark + after_str + ' '
             buffer_.insert_with_tags_by_name(end_iter, format_, *name_tags)
 
     def print_subject(self, subject, iter_=None):
