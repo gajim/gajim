@@ -37,6 +37,7 @@ from gi.repository import GLib
 import cairo
 import os
 import nbxmpp
+import time
 
 import gtkgui_helpers
 import vcard
@@ -3458,9 +3459,11 @@ class XMLConsoleWindow:
             type_ = kind # 'incoming' or 'outgoing'
 
         if kind == 'incoming':
-            buffer.insert_with_tags_by_name(end_iter, '<!-- In -->\n', type_)
+            buffer.insert_with_tags_by_name(end_iter, '<!-- In %s -->\n' % \
+                time.strftime('%c'), type_)
         elif kind == 'outgoing':
-            buffer.insert_with_tags_by_name(end_iter, '<!-- Out -->\n', type_)
+            buffer.insert_with_tags_by_name(end_iter, '<!-- Out %s -->\n' % \
+                time.strftime('%c'), type_)
         end_iter = buffer.get_end_iter()
         buffer.insert_with_tags_by_name(end_iter, stanza.replace('><', '>\n<') \
             + '\n\n', type_)
