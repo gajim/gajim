@@ -4347,6 +4347,7 @@ class RosterWindow:
             w.set_sensitive(True)
 
     def on_view_menu_activate(self, widget):
+        self.make_menu()
         # Hide the show roster menu if we are not in the right windowing mode.
         if self.hpaned.get_child2() is not None:
             self.xml.get_object('show_roster_menuitem').show()
@@ -5241,8 +5242,9 @@ class RosterWindow:
             return
         history_menuitem = self.xml.get_object('history_menuitem')
         if gtkgui_helpers.gtk_icon_theme.has_icon('document-open-recent'):
-            gtkgui_helpers.add_image_to_menuitem(history_menuitem,
-                'document-open-recent')
+            img = gtk.Image()
+            img.set_from_icon_name('document-open-recent', gtk.ICON_SIZE_MENU)
+            history_menuitem.set_image(img)
         new_chat_menuitem = self.xml.get_object('new_chat_menuitem')
         single_message_menuitem = self.xml.get_object(
                 'send_single_message_menuitem')

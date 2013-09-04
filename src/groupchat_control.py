@@ -833,11 +833,13 @@ class GroupchatControl(ChatControlBase):
         request_voice_separator = xml.get_object('request_voice_separator')
 
         if gtkgui_helpers.gtk_icon_theme.has_icon('bookmark-new'):
-            gtkgui_helpers.add_image_to_menuitem(bookmark_room_menuitem,
-                'bookmark-new')
+            img = gtk.Image()
+            img.set_from_icon_name('bookmark-new', gtk.ICON_SIZE_MENU)
+            bookmark_room_menuitem.set_image(img)
         if gtkgui_helpers.gtk_icon_theme.has_icon('document-open-recent'):
-            gtkgui_helpers.add_image_to_menuitem(history_menuitem,
-                'document-open-recent')
+            img = gtk.Image()
+            img.set_from_icon_name('document-open-recent', gtk.ICON_SIZE_MENU)
+            history_menuitem.set_image(img)
 
         if hide_buttonbar_items:
             change_nick_menuitem.hide()
