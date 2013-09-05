@@ -1810,14 +1810,15 @@ class ChatControl(ChatControlBase):
 
         # Send file
         if ((self.contact.supports(NS_FILE) or \
-        self.contact.supports(NS_JINGLE_FILE_TRANSFER)) or \
-        self.type_id == 'chat' or self.gc_contact.resource) and \
+        self.contact.supports(NS_JINGLE_FILE_TRANSFER)) and \
+        (self.type_id == 'chat' or self.gc_contact.resource)) and \
         self.contact.show != 'offline':
             self._send_file_button.set_sensitive(True)
             self._send_file_button.set_tooltip_text(_('Send files'))
         else:
             self._send_file_button.set_sensitive(False)
-            if not (self.contact.supports(NS_FILE) or self.contact.supports(NS_JINGLE_FILE_TRANSFER)):
+            if not (self.contact.supports(NS_FILE) or self.contact.supports(
+            NS_JINGLE_FILE_TRANSFER)):
                 self._send_file_button.set_tooltip_text(_(
                     "This contact does not support file transfer."))
             else:
