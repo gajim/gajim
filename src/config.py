@@ -2303,7 +2303,8 @@ class AccountsWindow:
                         new_password)
 
         try:
-            dialogs.ChangePasswordDialog(self.current_account, on_changed)
+            dialogs.ChangePasswordDialog(self.current_account, on_changed,
+                self.window)
         except GajimGeneralException:
             # if we showed ErrorDialog, there will not be dialog instance
             return
