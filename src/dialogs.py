@@ -1454,10 +1454,10 @@ class FileChooserDialog(gtk.FileChooserDialog):
     """
     def __init__(self, title_text, action, buttons, default_response,
     select_multiple=False, current_folder=None, on_response_ok=None,
-    on_response_cancel=None):
+    on_response_cancel=None, transient_for=None):
 
-        gtk.FileChooserDialog.__init__(self, title=title_text, action=action,
-            buttons=buttons)
+        gtk.FileChooserDialog.__init__(self, title=title_text,
+            parent=transient_for, action=action, buttons=buttons)
 
         self.set_default_response(default_response)
         self.set_select_multiple(select_multiple)
@@ -2665,6 +2665,7 @@ class SynchroniseSelectAccountDialog:
         self.account = account
         self.xml = gtkgui_helpers.get_gtk_builder('synchronise_select_account_dialog.ui')
         self.dialog = self.xml.get_object('synchronise_select_account_dialog')
+        self.dialog.set_transient_for(gajim.interface.instances['accounts'].window)
         self.accounts_treeview = self.xml.get_object('accounts_treeview')
         model = gtk.ListStore(str, str, bool)
         self.accounts_treeview.set_model(model)
@@ -4663,6 +4664,7 @@ class ClientCertChooserDialog(FileChooserDialog):
 
         FileChooserDialog.__init__(self,
             title_text=_('Choose Client Cert #PCKS12'),
+            transient_for=gajim.interface.instances['accounts'].window,
             action=gtk.FILE_CHOOSER_ACTION_OPEN,
             buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
             gtk.STOCK_OPEN, gtk.RESPONSE_OK),
