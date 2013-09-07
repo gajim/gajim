@@ -2139,7 +2139,8 @@ class AccountsWindow:
         message = _('Enter a new name for account %s') % self.current_account
         old_text = self.current_account
         dialogs.InputDialog(title, message, old_text, is_modal=False,
-                ok_handler=(on_renamed, self.current_account))
+            ok_handler=(on_renamed, self.current_account),
+            transient_for=self.window)
 
     def option_changed(self, option, value):
         return gajim.config.get_per('accounts', self.current_account, option) \

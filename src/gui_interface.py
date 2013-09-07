@@ -1175,7 +1175,7 @@ class Interface:
         dlg = dialogs.InputDialog(_('Username Conflict'),
             _('Please type a new username for your local account'),
             input_str=obj.alt_name, is_modal=True, ok_handler=on_ok,
-            cancel_handler=on_cancel)
+            cancel_handler=on_cancel, transient_for=self.roster.window)
 
     def handle_event_resource_conflict(self, obj):
         # ('RESOURCE_CONFLICT', account, ())
