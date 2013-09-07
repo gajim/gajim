@@ -2844,7 +2844,7 @@ class NewChatDialog(InputDialog):
         gajim.interface.new_chat_from_jid(self.account, jid)
 
 class ChangePasswordDialog:
-    def __init__(self, account, on_response):
+    def __init__(self, account, on_response, transient_for=None):
         # 'account' can be None if we are about to create our first one
         if not account or gajim.connections[account].connected < 2:
             ErrorDialog(_('You are not connected to the server'),
@@ -2854,6 +2854,7 @@ class ChangePasswordDialog:
         self.on_response = on_response
         self.xml = gtkgui_helpers.get_gtk_builder('change_password_dialog.ui')
         self.dialog = self.xml.get_object('change_password_dialog')
+        self.dialog.set_transient_for(transient_for)
         self.password1_entry = self.xml.get_object('password1_entry')
         self.password2_entry = self.xml.get_object('password2_entry')
         self.dialog.connect('response', self.on_dialog_response)
