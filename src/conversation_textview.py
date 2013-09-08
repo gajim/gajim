@@ -482,8 +482,8 @@ class ConversationTextview(GObject.GObject):
         buffer_.delete(i1, i2)
         tag = 'outgoingtxt'
         if message.startswith('/me'):
-           tag = 'outgoing'
-        i2 = self.print_real_text(message, text_tags=[tag], name=name,
+            tag = 'outgoing'
+        i2 = self.print_conversation_line(message, '', 'outgoing', name, None,
             xhtml=xhtml, iter_=i1)
         tt_txt = _('<b>Message was corrected. Last message was:</b>\n  %s') % \
             old_txt
@@ -501,7 +501,7 @@ class ConversationTextview(GObject.GObject):
         i2 = buffer_.get_iter_at_mark(m2)
         txt = buffer_.get_text(i1, i2, True)
         buffer_.delete(i1, i2)
-        i2 = self.print_real_text(message, text_tags=['incomingtxt'], name=name,
+        i2 = self.print_conversation_line(message, '', 'incoming', name, None,
             xhtml=xhtml, iter_=i1)
         tt_txt = _('<b>Message was corrected. Last message was:</b>\n  %s') % \
             old_txt
@@ -1260,12 +1260,14 @@ class ConversationTextview(GObject.GObject):
     def print_conversation_line(self, text, jid, kind, name, tim,
     other_tags_for_name=[], other_tags_for_time=[], other_tags_for_text=[],
     subject=None, old_kind=None, xhtml=None, simple=False, graphics=True,
-    displaymarking=None):
+    displaymarking=None, iter_=None):
         """
         Print 'chat' type messages
         """
         buffer_ = self.tv.get_buffer()
         buffer_.begin_user_action()
+        if iter_:
+            temp_mark = buffer_.create_mark(None, iter_, left_gravity=True)
         if self.marks_queue.full():
             # remove oldest line
             m1 = self.marks_queue.get()
@@ -1274,7 +1276,11 @@ class ConversationTextview(GObject.GObject):
             i2 = buffer_.get_iter_at_mark(m2)
             buffer_.delete(i1, i2)
             buffer_.delete_mark(m1)
-        end_iter = buffer_.get_end_iter()
+        if iter_:
+            end_iter = buffer_.get_iter_at_mark(temp_mark)
+            buffer_.delete_mark(temp_mark)
+        else:
+            end_iter = buffer_.get_end_iter()
         end_offset = end_iter.get_offset()
         at_the_end = self.at_the_end()
         move_selection = False
@@ -1282,21 +1288,22 @@ class ConversationTextview(GObject.GObject):
         get_offset() == end_offset:
             move_selection = True
 
-        # Create one mark and add it to queue once if it's the first line
-        # else twice (one for end bound, one for start bound)
-        mark = None
-        if buffer_.get_char_count() > 0:
-            if not simple:
-                buffer_.insert_with_tags_by_name(end_iter, '\n', 'eol')
-                if move_selection:
-                    sel_start, sel_end = buffer_.get_selection_bounds()
-                    sel_end.backward_char()
-                    buffer_.select_range(sel_start, sel_end)
-            mark = buffer_.create_mark(None, end_iter, left_gravity=True)
+        if not iter_:
+            # Create one mark and add it to queue once if it's the first line
+            # else twice (one for end bound, one for start bound)
+            mark = None
+            if buffer_.get_char_count() > 0:
+                if not simple and not iter_:
+                    buffer_.insert_with_tags_by_name(end_iter, '\n', 'eol')
+                    if move_selection:
+                        sel_start, sel_end = buffer_.get_selection_bounds()
+                        sel_end.backward_char()
+                        buffer_.select_range(sel_start, sel_end)
+                mark = buffer_.create_mark(None, end_iter, left_gravity=True)
+                self.marks_queue.put(mark)
+            if not mark:
+                mark = buffer_.create_mark(None, end_iter, left_gravity=True)
             self.marks_queue.put(mark)
-        if not mark:
-            mark = buffer_.create_mark(None, end_iter, left_gravity=True)
-        self.marks_queue.put(mark)
         if kind == 'incoming_queue':
             kind = 'incoming'
         if old_kind == 'incoming_queue':
@@ -1338,7 +1345,7 @@ class ConversationTextview(GObject.GObject):
                     'time_sometimes')
         # If there's a displaymarking, print it here.
         if displaymarking:
-            self.print_displaymarking(displaymarking)
+            self.print_displaymarking(displaymarking, iter_=end_iter)
         # kind = info, we print things as if it was a status: same color, ...
         if kind in ('error', 'info'):
             kind = 'status'
@@ -1348,36 +1355,43 @@ class ConversationTextview(GObject.GObject):
         if other_text_tag:
             # note that color of /me may be overwritten in gc_control
             text_tags.append(other_text_tag)
-            if text.startswith('/me'):
-                mark1 = buffer_.create_mark(None, buffer_.get_end_iter(),
-                    left_gravity=True)
+            if text.startswith('/me') and not iter_:
+                mark1 = mark
         else: # not status nor /me
             if gajim.config.get('chat_merge_consecutive_nickname'):
                 if kind != old_kind or self.just_cleared:
                     self.print_name(name, kind, other_tags_for_name,
-                        direction_mark=direction_mark)
+                        direction_mark=direction_mark, iter_=end_iter)
                 else:
                     self.print_real_text(gajim.config.get(
-                        'chat_merge_consecutive_nickname_indent'))
+                        'chat_merge_consecutive_nickname_indent'),
+                        iter_=end_iter)
             else:
                 self.print_name(name, kind, other_tags_for_name,
-                    direction_mark=direction_mark)
+                    direction_mark=direction_mark, iter_=end_iter)
             if kind == 'incoming':
                 text_tags.append('incomingtxt')
-                mark1 = buffer_.create_mark(None, buffer_.get_end_iter(),
-                    left_gravity=True)
+                if not iter_:
+                    mark1 = mark
             elif kind == 'outgoing':
                 text_tags.append('outgoingtxt')
-                mark1 = buffer_.create_mark(None, buffer_.get_end_iter(),
-                    left_gravity=True)
-        self.print_subject(subject)
-        self.print_real_text(text, text_tags, name, xhtml, graphics=graphics)
-        if mark1:
+                if not iter_:
+                    mark1 = mark
+        self.print_subject(subject, iter_=end_iter)
+        self.print_real_text(text, text_tags, name, xhtml, graphics=graphics,
+            iter_=end_iter)
+        if not iter_ and mark1:
             mark2 = buffer_.create_mark(None, buffer_.get_end_iter(),
                 left_gravity=True)
             if kind == 'incoming':
+                if name in self.last_received_message_marks:
+                    m = self.last_received_message_marks[name][1]
+                    buffer_.delete_mark(m)
                 self.last_received_message_marks[name] = [mark1, mark2]
             elif kind == 'outgoing':
+                m = self.last_sent_message_marks[1]
+                if m:
+                    buffer_.delete_mark(m)
                 self.last_sent_message_marks = [mark1, mark2]
         # scroll to the end of the textview
         if at_the_end or kind == 'outgoing':
@@ -1390,6 +1404,7 @@ class ConversationTextview(GObject.GObject):
 
         self.just_cleared = False
         buffer_.end_user_action()
+        return end_iter
 
     def get_time_to_show(self, tim, direction_mark=''):
         """
@@ -1423,23 +1438,30 @@ class ConversationTextview(GObject.GObject):
         elif text.startswith('/me ') or text.startswith('/me\n'):
             return kind
 
-    def print_displaymarking(self, displaymarking):
+    def print_displaymarking(self, displaymarking, iter_=None):
         bgcolor = displaymarking.getAttr('bgcolor') or '#FFF'
         fgcolor = displaymarking.getAttr('fgcolor') or '#000'
         text = displaymarking.getData()
         if text:
             buffer_ = self.tv.get_buffer()
-            end_iter = buffer_.get_end_iter()
+            if iter_:
+                end_iter = iter_
+            else:
+                end_iter = buffer_.get_end_iter()
             tag = self.displaymarking_tags.setdefault(bgcolor + '/' + fgcolor,
                 buffer_.create_tag(None, background=bgcolor, foreground=fgcolor))
             buffer_.insert_with_tags(end_iter, '[' + text + ']', tag)
             end_iter = buffer_.get_end_iter()
             buffer_.insert_with_tags(end_iter, ' ')
 
-    def print_name(self, name, kind, other_tags_for_name, direction_mark=''):
+    def print_name(self, name, kind, other_tags_for_name, direction_mark='',
+    iter_=None):
         if name:
             buffer_ = self.tv.get_buffer()
-            end_iter = buffer_.get_end_iter()
+            if iter_:
+                end_iter = iter_
+            else:
+                end_iter = buffer_.get_end_iter()
             name_tags = other_tags_for_name[:] # create a new list
             name_tags.append(kind)
             before_str = gajim.config.get('before_nickname')
@@ -1469,7 +1491,7 @@ class ConversationTextview(GObject.GObject):
             try:
                 if name and (text.startswith('/me ') or text.startswith('/me\n')):
                     xhtml = xhtml.replace('/me', '<i>* %s</i>' % (name,), 1)
-                self.tv.display_html(xhtml, self.tv, self)
+                self.tv.display_html(xhtml, self.tv, self, iter_=iter_)
                 return
             except Exception as e:
                 gajim.log.debug('Error processing xhtml: ' + str(e))

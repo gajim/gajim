@@ -690,7 +690,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
     def handle_specials(self, text):
         if self.conv_textview:
             self.iter = self.conv_textview.detect_and_print_special_text(text,
-                self._get_style_tags())
+                self._get_style_tags(), iter_=self.iter)
         else:
             self._insert_text(text)
 
@@ -853,8 +853,7 @@ class HtmlTextView(Gtk.TextView):
         self.connect('copy-clipboard', self.on_html_text_view_copy_clipboard)
         self.id_ = self.connect('button-release-event',
             self.on_left_mouse_button_release)
-        #Pango.SCALE_XX_SMALL)
-        self.get_buffer().create_tag('eol', scale=0.5787037037037)
+        self.get_buffer().create_tag('eol')
         self.tooltip = tooltips.BaseTooltip()
         self.config = gajim.config
         self.interface = gajim.interface
@@ -1059,9 +1058,12 @@ class HtmlTextView(Gtk.TextView):
         # self.hyperlink_handler can be overwritten, so call it when needed
         self.hyperlink_handler(texttag, widget, event, iter_, kind)
 
-    def display_html(self, html, textview, conv_textview):
+    def display_html(self, html, textview, conv_textview, iter_=None):
         buffer_ = self.get_buffer()
-        eob = buffer_.get_end_iter()
+        if iter_:
+            eob = iter_
+        else:
+            eob = buffer_.get_end_iter()
         ## this works too if libxml2 is not available
         # parser = xml.sax.make_parser(['drv_libxml2'])
         # parser.setFeature(xml.sax.handler.feature_validation, True)
