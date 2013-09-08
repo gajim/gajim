@@ -94,6 +94,7 @@ def _gen_agent_type_info():
         # Transports
         ('conference', 'irc'):          (ToplevelAgentBrowser, 'irc'),
         ('_jid', 'irc'):                (False, 'irc'),
+        ('gateway', 'irc'):             (False, 'irc'),
         ('gateway', 'aim'):             (False, 'aim'),
         ('_jid', 'aim'):                (False, 'aim'),
         ('gateway', 'gadu-gadu'):       (False, 'gadu-gadu'),
@@ -113,6 +114,7 @@ def _gen_agent_type_info():
         ('gateway', 'facebook'):        (False, 'facebook'),
         ('_jid', 'facebook'):           (False, 'facebook'),
         ('gateway', 'tv'):              (False, 'tv'),
+        ('gateway', 'twitter'):         (False, 'twitter'),
     }
 
 # Category type to "human-readable" description string, and sort priority
@@ -292,11 +294,12 @@ class ServicesCache:
         if not self._cbs[cbkey]:
             del self._cbs[cbkey]
 
-    def get_icon(self, identities = []):
+    def get_icon(self, identities = [], addr=''):
         """
         Return the icon for an agent
         """
         # Grab the first identity with an icon
+        quiet = False
         for identity in identities:
             try:
                 cat, type_ = identity['category'], identity['type']
@@ -308,17 +311,22 @@ class ServicesCache:
                 break
         else:
             # Loop fell through, default to unknown
-            info = _agent_type_info[(0, 0)]
-            filename = info[1]
-        if not filename: # we don't have an image to show for this type
-            filename = 'jabber'
+            filename = addr.split('.')[0]
+            quiet = True
         # Use the cache if possible
         if filename in _icon_cache:
             return _icon_cache[filename]
         # Or load it
-        pix = gtkgui_helpers.get_icon_pixmap('gajim-agent-' + filename, size=32)
-        # Store in cache
-        _icon_cache[filename] = pix
+        pix = gtkgui_helpers.get_icon_pixmap('gajim-agent-' + filename, size=32,
+            quiet=quiet)
+        if pix:
+            # Store in cache
+            _icon_cache[filename] = pix
+            return pix
+        if 'jabber' in _icon_cache:
+            return _icon_cache['jabber']
+        pix = gtkgui_helpers.get_icon_pixmap('gajim-agent-jabber', size=32)
+        _icon_cache['jabber'] = pix
         return pix
 
     def get_browser(self, identities=[], features=[]):
@@ -942,7 +950,7 @@ class AgentBrowser:
             self.window._set_window_banner_text(self._get_agent_address(), name)
 
         # Add an icon to the banner.
-        pix = self.cache.get_icon(identities)
+        pix = self.cache.get_icon(identities, addr=self._get_agent_address())
         self.window.banner_icon.set_from_pixbuf(pix)
         self.window.banner_icon.show()
 
@@ -1211,7 +1219,7 @@ class ToplevelAgentBrowser(AgentBrowser):
             identity = {'category': '_jid', 'type': type_}
             identities.append(identity)
         # Set the pixmap for the row
-        pix = self.cache.get_icon(identities)
+        pix = self.cache.get_icon(identities, addr=addr)
         self.model.append(None, (self.jid, self.node, pix, descr, 1))
         # Grab info on the service
         self.cache.get_info(self.jid, self.node, self._agent_info, force=False)
@@ -1699,7 +1707,7 @@ class ToplevelAgentBrowser(AgentBrowser):
             # Put it in the 'other' category for now
             cat_args = ('other',)
         # Set the pixmap for the row
-        pix = self.cache.get_icon(identities)
+        pix = self.cache.get_icon(identities, addr=addr)
         # Put it in the right category
         cat = self._find_category(*cat_args)
         if not cat:
@@ -1731,7 +1739,7 @@ class ToplevelAgentBrowser(AgentBrowser):
         self._update_progressbar()
 
         # Search for an icon and category we can display
-        pix = self.cache.get_icon(identities)
+        pix = self.cache.get_icon(identities, addr=addr)
         cat, type_ = None, None
         for identity in identities:
             try:
