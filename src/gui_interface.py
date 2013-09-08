@@ -2608,8 +2608,11 @@ class Interface:
             mood = received_mood if received_mood in pep.MOODS else 'unknown'
             return gtkgui_helpers.load_mood_icon(mood).get_pixbuf()
         elif isinstance(pep_obj, pep.UserTunePEP):
-            path = os.path.join(gajim.DATA_DIR, 'emoticons', 'static', 'music.png')
-            return gtk.gdk.pixbuf_new_from_file(path)
+            icon = gtkgui_helpers.get_icon_pixmap('audio-x-generic', quiet=True)
+            if not icon:
+                icon = os.path.join(gajim.DATA_DIR, 'emoticons', 'static', 'music.png')
+                return gtk.gdk.pixbuf_new_from_file(icon)
+            return icon
         elif isinstance(pep_obj, pep.UserActivityPEP):
             pep_ = pep_obj._pep_specific_data
             activity = pep_['activity']
