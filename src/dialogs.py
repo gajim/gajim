@@ -1311,7 +1311,7 @@ class AboutDialog:
 
         dlg.props.wrap_license = True
 
-        pixbuf = gtkgui_helpers.get_icon_pixmap('gajim-about', 128)
+        pixbuf = gtkgui_helpers.get_icon_pixmap('gajim', 128)
 
         dlg.set_logo(pixbuf)
         #here you write your name in the form Name FamilyName <someone@somewhere>

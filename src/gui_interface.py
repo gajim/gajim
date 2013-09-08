@@ -662,7 +662,7 @@ class Interface:
                 'key.')
             dialogs.WarningDialog(_('Your passphrase is incorrect'), sectext)
         else:
-            path = gtkgui_helpers.get_icon_path('gajim-warning', 48)
+            path = gtkgui_helpers.get_icon_path('gtk-dialog-warning', 48)
             account = obj.conn.name
             notify.popup('warning', account, account, 'warning', path,
                 _('OpenPGP Passphrase Incorrect'),

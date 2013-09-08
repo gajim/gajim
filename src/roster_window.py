@@ -6476,6 +6476,11 @@ class RosterWindow:
         # Add a Separator (self._iter_is_separator() checks on string SEPARATOR)
         liststore.append(['SEPARATOR', None, '', True])
 
+        path = gtkgui_helpers.get_icon_path('gajim-plugins')
+        img = gtk.Image()
+        img.set_from_file(path)
+        self.xml.get_object('plugins_menuitem').set_image(img)
+
         path = gtkgui_helpers.get_icon_path('gajim-kbd_input')
         img = gtk.Image()
         img.set_from_file(path)
