@@ -521,7 +521,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                     if alt:
                         alt += '\n'
                     alt += _('Loading')
-                    pixbuf = get_icon_pixmap('gajim-receipt_missing')
+                    pixbuf = get_icon_pixmap('gtk-no')
             if mem:
                 # Caveat: GdkPixbuf is known not to be safe to load
                 # images from network... this program is now potentially
