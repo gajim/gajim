@@ -969,8 +969,12 @@ def get_pep_as_pixbuf(pep_class):
         pixbuf = load_mood_icon(mood).get_pixbuf()
         return pixbuf
     elif isinstance(pep_class, pep.UserTunePEP):
-        path = os.path.join(gajim.DATA_DIR, 'emoticons', 'static', 'music.png')
-        return GdkPixbuf.Pixbuf.new_from_file(path)
+        icon = gtkgui_helpers.get_icon_pixmap('audio-x-generic', quiet=True)
+        if not icon:
+            path = os.path.join(gajim.DATA_DIR, 'emoticons', 'static',
+                'music.png')
+            return GdkPixbuf.Pixbuf.new_from_file(path)
+        return icon
     elif isinstance(pep_class, pep.UserActivityPEP):
         assert not pep_class._retracted
         pep_ = pep_class._pep_specific_data
