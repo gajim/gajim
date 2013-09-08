@@ -175,21 +175,9 @@ class ConversationTextview(GObject.GObject):
 
     FOCUS_OUT_LINE_PIXBUF = gtkgui_helpers.get_icon_pixmap(
         'gajim-muc_separator')
-    XEP0184_WARNING_PIXBUF = gtkgui_helpers.get_icon_pixmap('gtk-no',
-        quiet=True)
-    if not XEP0184_WARNING_PIXBUF:
-        MESSAGE_CORRECTED_PIXBUF = gtkgui_helpers.get_icon_pixmap(
-            'gajim-receipt_missing')
-    XEP0184_RECEIVED_PIXBUF = gtkgui_helpers.get_icon_pixmap('gtk-yes',
-        quiet=True)
-    if not XEP0184_RECEIVED_PIXBUF:
-        MESSAGE_CORRECTED_PIXBUF = gtkgui_helpers.get_icon_pixmap(
-            'gajim-receipt_received')
-    MESSAGE_CORRECTED_PIXBUF = gtkgui_helpers.get_icon_pixmap(
-        'gtk-spell-check', quiet=True)
-    if not MESSAGE_CORRECTED_PIXBUF:
-        MESSAGE_CORRECTED_PIXBUF = gtkgui_helpers.get_icon_pixmap(
-            'gajim-message_corrected')
+    XEP0184_WARNING_PIXBUF = gtkgui_helpers.get_icon_pixmap('gtk-no')
+    XEP0184_RECEIVED_PIXBUF = gtkgui_helpers.get_icon_pixmap('gtk-yes')
+    MESSAGE_CORRECTED_PIXBUF = gtkgui_helpers.get_icon_pixmap('gtk-spell-check')
 
     # smooth scroll constants
     MAX_SCROLL_TIME = 0.4 # seconds
