@@ -4845,7 +4845,7 @@ class RosterWindow:
                 c_dest.jid)
             source_family = gajim.contacts.get_metacontacts_family(
                 account_source, c_source.jid)
-            if dest_family == source_family:
+            if dest_family == source_family  and dest_family:
                 item = Gtk.MenuItem(_('Make %s first contact') % (
                     c_source.get_shown_name()))
             else:
