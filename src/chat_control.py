@@ -2310,9 +2310,9 @@ class ChatControl(ChatControlBase):
 
     def _on_authentication_button_clicked(self, widget):
         if self.gpg_is_active:
-            dialogs.GPGInfoWindow(self)
+            dialogs.GPGInfoWindow(self, self.parent_win.window)
         elif self.session and self.session.enable_encryption:
-            dialogs.ESessionInfoWindow(self.session)
+            dialogs.ESessionInfoWindow(self.session, self.parent_win.window)
 
     def send_message(self, message, keyID='', chatstate=None, xhtml=None,
     process_commands=True, attention=False):

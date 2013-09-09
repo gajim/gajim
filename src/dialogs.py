@@ -5100,7 +5100,7 @@ class ESessionInfoWindow:
     """
     Class for displaying information about a XEP-0116 encrypted session
     """
-    def __init__(self, session):
+    def __init__(self, session, transient_for=None):
         self.session = session
 
         self.xml = gtkgui_helpers.get_gtk_builder('esession_info_window.ui')
@@ -5111,7 +5111,7 @@ class ESessionInfoWindow:
         self.button_label = self.xml.get_object('button_label')
         self.window = self.xml.get_object('esession_info_window')
         self.update_info()
-
+        self.window.set_transient_for(transient_for)
 
         self.window.show_all()
 
@@ -5222,6 +5222,7 @@ class GPGInfoWindow:
         path = gtkgui_helpers.get_icon_path(image, 32)
         security_image.set_from_file(path)
 
+        self.window.set_transient_for(transient_for)
         xml.connect_signals(self)
         self.window.show_all()
 
