@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gajim 0.15\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-08-30 14:12+0300\n"
-"PO-Revision-Date: 2013-08-30 14:13+0200\n"
+"PO-Revision-Date: 2013-09-11 07:09+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
 "Language: he\n"
@@ -2077,7 +2077,7 @@ msgstr ""
 "הודעת מצב נעדרות אוטומטית. אם שדה זה ריק, Gajim לא ישנה את הודעת המצב "
 "הנוכחית\n"
 "התווים $S יוחלפו בהודעת מצב קודמת\n"
-"התווים $T יוחלפו על פי זמן תפוגה אשר מצוין עבור auto-away"
+"התווים $T יוחלפו על פי זמן תפוגה אשר מצוין עבור autoaway"
 
 #: ../data/gui/preferences_window.ui.h:73
 msgid ""
@@ -2089,7 +2089,7 @@ msgstr ""
 "הודעת מצב אי הזמינות האוטומטית. במידה ושדה זה ריק, Gajim לא ישנה את הודעת "
 "המצב הנוכחית\n"
 "התווים $S יוחלפו בהודעת מצב קודמת\n"
-"התווים $T יוחלפו על פי זמן תפוגה של auto-not-available"
+"התווים $T יוחלפו על פי זמן תפוגה של autoxa"
 
 #: ../data/gui/preferences_window.ui.h:76
 msgid "<b>Auto Status</b>"
@@ -2173,7 +2173,7 @@ msgstr "<b>ערכאות נושא</b>"
 
 #: ../data/gui/preferences_window.ui.h:93
 msgid "Contact's nickname:"
-msgstr "שם כינוי של איש קשר:"
+msgstr "שם כינוי איש קשר:"
 
 #: ../data/gui/preferences_window.ui.h:94
 msgid "Your nickname:"
@@ -2793,7 +2793,7 @@ msgstr "של_ח"
 
 #: ../data/gui/single_message_window.ui.h:7
 msgid "_Reply"
-msgstr "_מענה"
+msgstr "_השב"
 
 #: ../data/gui/single_message_window.ui.h:8
 msgid "Reply to this message"
@@ -3351,6 +3351,7 @@ msgstr ""
 "קובץ מסד הנתונים (%s) לא ניתן לקריאה. נסה לתקנו או להסירו (כל ההיסטוריה "
 "תאבד)."
 
+# כי משהו שיבש אותה
 #: ../src/chat_control.py:3205 ../src/gui_interface.py:1161
 #, python-format
 msgid ""
@@ -3515,6 +3516,7 @@ msgid "Send DTMF sequence through an open audio session"
 msgstr "שליחת רצף טזמ״ת (DTMF) מבעד סשן שמע פתוח"
 
 # סשנים של שמע
+# הפעלות
 #: ../src/command_system/implementation/standard.py:205
 msgid "No open audio sessions with the contact"
 msgstr "לא קיימים סשני שמע פתוחים עם איש הקשר"
@@ -3570,7 +3572,7 @@ msgstr "פתיחת חלון שיחה פרטית עם נוכח מצוין ושל�
 msgid "Display or change a group chat topic"
 msgstr "הצגה או שינוי נושא של שיחת קבוצה"
 
-# תכלית
+# בליווי תכלית
 #: ../src/command_system/implementation/standard.py:310
 msgid "Invite a user to a room for a reason"
 msgstr "הזמנת משתמש אל חדר עם ציון סיבה"
@@ -3652,14 +3654,12 @@ msgstr "התרה לנוכח לשלוח לך הודעות פומביות או פ�
 
 #: ../src/command_system/mapping.py:165 ../src/command_system/mapping.py:175
 #: ../src/command_system/mapping.py:195
-#, fuzzy
 msgid "Missing arguments"
-msgstr "cli?"
+msgstr "ארגומנטים חסרים"
 
 #: ../src/command_system/mapping.py:262
-#, fuzzy
 msgid "Excessive arguments"
-msgstr "cli?"
+msgstr "ארגומנטים מופרזים"
 
 #: ../src/common/check_paths.py:39
 msgid "creating logs database"
@@ -4761,7 +4761,7 @@ msgid ""
 "file_transfer_proxies option for file transfer."
 msgstr ""
 "במידה ואפשרות זו מסומנת, Gajim יעשה שימוש בכתובת פרוטוקול המרשתת (IP; ‏"
-"Internet Protocol) ובמתווכים שהוגדרו על ידיך באפשרות file_transfer_proxies "
+"Internet Protocol) ובמתווכים שהוגדרו על ידך באפשרות file_transfer_proxies "
 "עבור העברת קובץ."
 
 #: ../src/common/config.py:379
@@ -5013,7 +5013,7 @@ msgstr "אין אפשרות לקבל תעודת CRL"
 
 #: ../src/common/connection.py:72
 msgid "Unable to decrypt certificate's signature"
-msgstr "אין אפשרות לפענח את החתימה של התעודה"
+msgstr "אין אפשרות לפענח חתימת תעודה"
 
 #: ../src/common/connection.py:73
 msgid "Unable to decrypt CRL's signature"
@@ -5881,7 +5881,7 @@ msgstr "הרשמה"
 
 #: ../src/common/helpers.py:295
 msgid "?Group Chat Contact Role:None"
-msgstr "ללא"
+msgstr "אין"
 
 #: ../src/common/helpers.py:298
 msgid "Moderators"
@@ -5925,15 +5925,15 @@ msgstr "חבר"
 
 #: ../src/common/helpers.py:361
 msgid "is paying attention to the conversation"
-msgstr "קשוב/ה לשיחה"
+msgstr "קשוב/ה כעת לשיחה"
 
 #: ../src/common/helpers.py:363
 msgid "is doing something else"
-msgstr "עושה משהו אחר"
+msgstr "עושה כעת משהו אחר"
 
 #: ../src/common/helpers.py:365
 msgid "is composing a message..."
-msgstr "כותב/ת הודעה..."
+msgstr "כותב/ת כעת הודעה..."
 
 #. paused means he or she was composing but has stopped for a while
 #: ../src/common/helpers.py:368
@@ -5942,7 +5942,7 @@ msgstr "חדל/ה מלהלחין הודעה"
 
 #: ../src/common/helpers.py:370
 msgid "has closed the chat window or tab"
-msgstr "סגר/ה את כרטיסיית או את חלון השיחה"
+msgstr "סגר/ה את כרטיסיית או חלון השיחה"
 
 # גיבי בתים
 #. GiB means gibibyte
@@ -6039,7 +6039,7 @@ msgstr "תם הזמן אשר הוקצב לטעינת תמונה"
 # BUG: File too big
 #: ../src/common/helpers.py:1497 ../src/common/helpers.py:1539
 msgid "Image is too big"
-msgstr "התמונה גדולה מדי"
+msgstr "התמונה הינה גדולה מדי"
 
 #: ../src/common/helpers.py:1507
 msgid "PyCURL is not installed"
@@ -7030,7 +7030,7 @@ msgstr "אנא בדוק אם avahi-daemon מורץ כעת."
 #: ../src/common/zeroconf/connection_zeroconf.py:333
 #, python-format
 msgid "Could not change status of account \"%s\""
-msgstr "לא היתה אפשרות לשנות את המצב של חשבון \"%s\""
+msgstr "לא היתה אפשרות לשנות מצב של חשבון \"%s\""
 
 # הודעתך לא יכולה להישלח.
 #: ../src/common/zeroconf/connection_zeroconf.py:353
@@ -7162,7 +7162,7 @@ msgstr "שם חשבון לא יכול להכיל רווחים."
 
 #: ../src/config.py:2138
 msgid "Rename Account"
-msgstr "שנה שם חשבון"
+msgstr "שינוי שם חשבון"
 
 #: ../src/config.py:2139
 #, python-format
@@ -8134,7 +8134,7 @@ msgstr "טופס %s"
 #: ../src/dialogs.py:3268
 #, python-format
 msgid "RE: %s"
-msgstr "‏RE: %s"
+msgstr ""
 
 #: ../src/dialogs.py:3269
 #, python-format
@@ -8287,12 +8287,12 @@ msgstr "הוזמנת אל שיחת קבוצה"
 
 #: ../src/dialogs.py:4583
 msgid "$Contact has invited you to join a discussion"
-msgstr "‏$Contact הזמינך להצטרף אל דיון"
+msgstr "$Contact הזמינך להצטרף אל דיון"
 
 #: ../src/dialogs.py:4585
 #, python-format
 msgid "$Contact has invited you to group chat %(room_jid)s"
-msgstr "‏$Contact הזמינך אל שיחת קבוצה %(room_jid)s"
+msgstr "$Contact הזמינך אל שיחת קבוצה %(room_jid)s"
 
 #: ../src/dialogs.py:4593
 #, python-format
@@ -9087,7 +9087,7 @@ msgstr "ממען: "
 
 #: ../src/filetransfers_window.py:894
 msgid "Pause"
-msgstr "הפסקה"
+msgstr "השהה"
 
 #: ../src/gajim-remote.py:78
 #, fuzzy
@@ -9615,6 +9615,7 @@ msgid "Use defined profile in configuration directory"
 msgstr "cli"
 
 #: ../src/gajim.py:147
+#, fuzzy
 msgid "Set configuration directory"
 msgstr "cli"
 
@@ -10287,7 +10288,7 @@ msgstr "העברת הקובץ %(filename)s אל %(name)s נכשלה."
 
 #: ../src/gui_interface.py:1163
 msgid "Unable to decrypt message"
-msgstr "אין אפשרות לפענח את ההודעה"
+msgstr "אין אפשרות לפענח הודעה"
 
 # התנגשויות, ניגודים, קונפליקט
 #: ../src/gui_interface.py:1175
@@ -10691,7 +10692,6 @@ msgstr "תסדיר תאריך שגוי"
 msgid "Format of the date must be YYYY-MM-DD"
 msgstr "הפורמט של התאריך מוכרח להיות YYYY-MM-DD"
 
-# התקבל מידע
 #: ../src/profile_window.py:294
 msgid "Information received"
 msgstr "מידע התקבל"
@@ -10898,9 +10898,7 @@ msgstr "בנוסף הסר גם את כל אנשי הקשר אשר בקבוצה �
 msgid "Assign OpenPGP Key"
 msgstr "הקצאת מפתח OpenPGP"
 
-# BUG: the word OpenPGP should be written
-# להחלה
-# לאיש קשר זה
+# BUG: Select a key to apply to contact "JID"
 #: ../src/roster_window.py:3180
 msgid "Select a key to apply to the contact"
 msgstr "בחר מפתח ליישום עבור איש הקשר"
@@ -10944,7 +10942,7 @@ msgstr "ברצוני שאיש קשר זה יהיה מיודע באשר אל מצ
 #. several contact to remove at the same time
 #: ../src/roster_window.py:3659
 msgid "Contacts will be removed from your roster"
-msgstr "אנשי קשר יוסרו מתןך הרשימה שלך"
+msgstr "אנשי קשר יוסרו מתוך הרשימה שלך"
 
 #: ../src/roster_window.py:3664
 #, python-format
@@ -11179,6 +11177,7 @@ msgstr "שגיאה בקבלת dataform"
 msgid "No result"
 msgstr "אין תנובה"
 
+# נא לאשר
 #: ../src/session.py:409 ../src/session.py:469
 msgid "Confirm these session options"
 msgstr "אשר את אפשרויות סשן אלו"
@@ -11424,7 +11423,7 @@ msgstr "אין לך עניין בנוכחות של איש הקשר, וכך גם 
 
 #: ../src/vcard.py:421
 msgid "You are waiting contact's answer about your subscription request"
-msgstr "הינך מחכה למענה של איש קשר בנוגע לבקשת רישומך"
+msgstr "הינך מחכה למענה איש קשר בנוגע לבקשת רישומך"
 
 #: ../src/vcard.py:423
 msgid "There is no pending subscription request."
