@@ -1545,7 +1545,7 @@ class GroupchatControl(ChatControlBase):
 
         newly_created = False
         nick = i18n.direction_mark + obj.nick
-        nick_jid = nick
+        nick_jid = nick + i18n.direction_mark
 
         # Set to true if role or affiliation have changed
         right_changed = False
