@@ -469,7 +469,7 @@ class ConversationTextview(gobject.GObject):
         i2 = self.print_conversation_line(message, '', 'outgoing', name, None,
             xhtml=xhtml, iter_=i1)
         tt_txt = _('<b>Message was corrected. Last message was:</b>\n  %s') % \
-            old_txt
+            gobject.markup_escape_text(old_txt)
         self.show_corrected_message_warning(i2, tt_txt)
         self.last_sent_message_marks[1] = buffer_.create_mark(None, i2,
             left_gravity=True)
@@ -487,7 +487,7 @@ class ConversationTextview(gobject.GObject):
         i2 = self.print_conversation_line(message, '', 'incoming', name, None,
             xhtml=xhtml, iter_=i1)
         tt_txt = _('<b>Message was corrected. Last message was:</b>\n  %s') % \
-            old_txt
+            gobject.markup_escape_text(old_txt)
         self.show_corrected_message_warning(i2, tt_txt)
         self.last_received_message_marks[name][1] = buffer_.create_mark(None, i2,
             left_gravity=True)
