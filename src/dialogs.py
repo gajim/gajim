@@ -4592,7 +4592,8 @@ class InvitationReceivedDialog:
                 % {'room_jid': room_jid}
         contact = gajim.contacts.get_first_contact_from_jid(account, jid)
         contact_text = contact and contact.name or jid
-        sectext = sectext.replace('$Contact', contact_text)
+        sectext = i18n.direction_mark + sectext.replace('$Contact',
+            contact_text)
 
         if comment: # only if not None and not ''
             comment = gobject.markup_escape_text(comment)
