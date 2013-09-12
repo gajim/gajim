@@ -1883,6 +1883,7 @@ class PlainConnectionDialog(ConfirmationDialogDoubleCheck):
         self.ok_button = self.action_area.get_children()[0] # right to left
         self.ok_button.set_sensitive(False)
         self.checkbutton1.connect('clicked', self.on_checkbutton_clicked)
+        self.set_title(_('Insecure connection'))
 
     def on_checkbutton_clicked(self, widget):
         self.ok_button.set_sensitive(widget.get_active())
