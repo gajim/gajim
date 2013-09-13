@@ -5372,7 +5372,6 @@ class VoIPCallReceivedDialog(object):
 
 class CertificatDialog(InformationDialog):
     def __init__(self, parent, account, cert):
-        self.set_title(_('Certificate for account %s') % account)
         issuer = cert.get_issuer()
         subject = cert.get_subject()
         InformationDialog.__init__(self,
@@ -5401,6 +5400,7 @@ SHA1 Fingerprint: %(sha1)s''') % {
             'io': cert.get_notBefore(), 'eo': cert.get_notAfter(),
             'sha1': cert.digest('sha1')})
         self.set_transient_for(parent)
+        self.set_title(_('Certificate for account %s') % account)
 
 
 class CheckFingerprintDialog(YesNoDialog):
