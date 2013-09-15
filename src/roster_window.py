@@ -6513,7 +6513,7 @@ class RosterWindow:
         liststore.append(['SEPARATOR', None, '', True])
 
         path = gtkgui_helpers.get_icon_path('gajim-plugins')
-        img = gtk.Image()
+        img = Gtk.Image()
         img.set_from_file(path)
         self.xml.get_object('plugins_menuitem').set_image(img)
 
