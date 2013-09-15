@@ -116,13 +116,14 @@ class AdvancedConfigurationWindow(object):
         col.set_cell_data_func(renderer_text, self.cb_value_column_data)
 
         col.props.resizable = True
-        col.set_max_width(250)
         col.set_property('expand',True)
+        col.set_property('sizing',gtk.TREE_VIEW_COLUMN_FIXED)
 
         renderer_text = gtk.CellRendererText()
         col = treeview.insert_column_with_attributes(-1, _('Type'),
                 renderer_text, text = 2)
-        col.set_property('sizing',gtk.TREE_VIEW_COLUMN_AUTOSIZE)
+        col.set_property('expand',True)
+        col.set_property('sizing',gtk.TREE_VIEW_COLUMN_FIXED)
 
         treeview.set_model(self.modelfilter)
 
