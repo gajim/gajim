@@ -1094,7 +1094,7 @@ class ConversationTextview(gobject.GObject):
         # PluginSystem: adding GUI extension point for ConversationTextview
         self.plugin_modified = False
         gajim.plugin_manager.gui_extension_point('print_special_text', self,
-            special_text, other_tags, graphics)
+            special_text, other_tags, graphics, iter_)
         if self.plugin_modified:
             return
 
