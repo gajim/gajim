@@ -281,10 +281,10 @@ class ConversationTextview(GObject.GObject):
             tag = buffer_.create_tag(tagname)
             tag.set_property('foreground', color)
 
-        tag = buffer_.create_tag('marked')
+        self.tagMarked = buffer_.create_tag('marked')
         color = gajim.config.get('markedmsgcolor')
-        tag.set_property('foreground', color)
-        tag.set_property('weight', Pango.Weight.BOLD)
+        self.tagMarked.set_property('foreground', color)
+        self.tagMarked.set_property('weight', Pango.Weight.BOLD)
 
         tag = buffer_.create_tag('time_sometimes')
         tag.set_property('foreground', 'darkgrey')
@@ -346,7 +346,9 @@ class ConversationTextview(GObject.GObject):
         self.tagIn.set_property('foreground', gajim.config.get('inmsgcolor'))
         self.tagOut.set_property('foreground', gajim.config.get('outmsgcolor'))
         self.tagStatus.set_property('foreground',
-                gajim.config.get('statusmsgcolor'))
+            gajim.config.get('statusmsgcolor'))
+        self.tagMarked.set_property('foreground',
+            gajim.config.get('markedmsgcolor'))
         color = gajim.config.get('urlmsgcolor')
         self.tv.tagURL.set_property('foreground', color)
         self.tv.tagMail.set_property('foreground', color)
