@@ -1767,7 +1767,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
                 show=gajim.SHOW_LIST[self.connected]))
             gajim.nec.push_incoming_event(InformationEvent(None, conn=self,
-                level='error', pri_txt=_('Invisibility not supported',
+                level='error', pri_txt=_('Invisibility not supported'),
                 sec_txt=_('Account %s doesn\'t support invisibility.') % \
                 self.name)))
             return
