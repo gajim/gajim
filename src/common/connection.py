@@ -1769,7 +1769,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             gajim.nec.push_incoming_event(InformationEvent(None, conn=self,
                 level='error', pri_txt=_('Invisibility not supported'),
                 sec_txt=_('Account %s doesn\'t support invisibility.') % \
-                self.name)))
+                self.name))
             return
         # If we are already connected, and privacy rules are supported, send
         # offline presence first as it's required by XEP-0126
