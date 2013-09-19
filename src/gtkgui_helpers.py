@@ -734,7 +734,7 @@ Description=xmpp
             gajim.config.set('check_if_gajim_is_default', False)
 
     try:
-        from gi.repository import GConf
+        GConf = importlib.import_module('gi.repository.GConf')
         # in try because daemon may not be there
         client = GConf.Client.get_default()
     except Exception:
