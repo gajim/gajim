@@ -744,7 +744,7 @@ Description=xmpp
             gajim.config.set('check_if_gajim_is_default', False)
 
     try:
-        import gconf
+        __import__('gconf')
         # in try because daemon may not be there
         client = gconf.client_get_default()
     except Exception:
