@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
+  <object class="GtkImage" id="image2">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-preferences</property>
+  </object>
+  <object class="GtkImage" id="image3">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-apply</property>
+  </object>
   <object class="GtkListStore" id="liststore1">
     <columns>
       <!-- column-name item -->
@@ -11,20 +21,6 @@
         <col id="0" translatable="yes">None</col>
       </row>
     </data>
-  </object>
-  <object class="GtkListStore" id="server_liststore">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
-  <object class="GtkEntryCompletion" id="server_entrycompletion">
-    <property name="model">server_liststore</property>
-    <property name="text_column">0</property>
-  </object>
-  <object class="GtkEntryCompletion" id="server_entrycompletion1">
-    <property name="model">server_liststore</property>
-    <property name="text_column">0</property>
   </object>
   <object class="GtkWindow" id="account_creation_wizard_window">
     <property name="can_focus">False</property>
@@ -84,11 +80,9 @@ to the Jabber network.</property>
                             <child>
                               <object class="GtkRadioButton" id="use_existing_account_radiobutton">
                                 <property name="label" translatable="yes">I already have an account I want to _use</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
@@ -102,11 +96,9 @@ to the Jabber network.</property>
                             <child>
                               <object class="GtkRadioButton" id="register_new_account_radiobutton">
                                 <property name="label" translatable="yes">I want to _register for a new account</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
@@ -210,12 +202,10 @@ to the Jabber network.</property>
                     <child>
                       <object class="GtkCheckButton" id="save_password_checkbutton">
                         <property name="label" translatable="yes">Save pass_word</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="tooltip_text" translatable="yes">If checked, Gajim will remember the password for this account</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                         <property name="focus_on_click">False</property>
                         <property name="xalign">0.5</property>
@@ -277,11 +267,9 @@ to the Jabber network.</property>
                     <child>
                       <object class="GtkCheckButton" id="anonymous_checkbutton1">
                         <property name="label" translatable="yes">Anon_ymous authentication</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
@@ -295,24 +283,7 @@ to the Jabber network.</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBoxText" id="server_comboboxentry">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="has_entry">True</property>
-                        <property name="entry_text_column">0</property>
-                        <property name="id_column">1</property>
-                        <child internal-child="entry">
-                          <object class="GtkEntry" id="comboboxtext-entry">
-                            <property name="can_focus">True</property>
-                            <property name="invisible_char">●</property>
-                            <property name="completion">server_entrycompletion</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left_attach">3</property>
-                        <property name="right_attach">4</property>
-                      </packing>
+                      <placeholder/>
                     </child>
                   </object>
                   <packing>
@@ -375,26 +346,6 @@ to the Jabber network.</property>
                         <property name="position">0</property>
                       </packing>
                     </child>
-                    <child>
-                      <object class="GtkComboBoxText" id="server_comboboxentry1">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="has_entry">True</property>
-                        <property name="entry_text_column">0</property>
-                        <property name="id_column">1</property>
-                        <child internal-child="entry">
-                          <object class="GtkEntry" id="comboboxtext-entry1">
-                            <property name="can_focus">True</property>
-                            <property name="completion">server_entrycompletion1</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">True</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -405,11 +356,9 @@ to the Jabber network.</property>
                 <child>
                   <object class="GtkCheckButton" id="anonymous_checkbutton2">
                     <property name="label" translatable="yes">Anon_ymous authentication</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
@@ -467,11 +416,9 @@ to the Jabber network.</property>
                         <child>
                           <object class="GtkButton" id="manage_proxies_button">
                             <property name="label" translatable="yes">Manage...</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="use_underline">True</property>
                             <signal name="clicked" handler="on_manage_proxies_button_clicked" swapped="no"/>
                           </object>
@@ -485,11 +432,9 @@ to the Jabber network.</property>
                         <child>
                           <object class="GtkCheckButton" id="custom_host_port_checkbutton">
                             <property name="label" translatable="yes">Use custom hostname/port</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
@@ -650,12 +595,10 @@ to the Jabber network.</property>
                     <property name="label" translatable="yes">Add this certificate to the list of trusted certificates.
 SHA1 fingerprint of the certificate:
 </property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -794,11 +737,9 @@ Please wait...</property>
                 <child>
                   <object class="GtkCheckButton" id="go_online_checkbutton">
                     <property name="label" translatable="yes">Connect when I press Finish</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="active">True</property>
@@ -813,11 +754,9 @@ Please wait...</property>
                 <child>
                   <object class="GtkCheckButton" id="show_vcard_checkbutton">
                     <property name="label" translatable="yes">Set my profile when I connect</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="active">True</property>
@@ -860,12 +799,10 @@ Please wait...</property>
             <child>
               <object class="GtkButton" id="cancel_button">
                 <property name="label">gtk-cancel</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="receives_default">False</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
                 <signal name="clicked" handler="on_cancel_button_clicked" swapped="no"/>
               </object>
@@ -878,13 +815,11 @@ Please wait...</property>
             <child>
               <object class="GtkButton" id="back_button">
                 <property name="label">gtk-go-back</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="receives_default">False</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
                 <signal name="clicked" handler="on_back_button_clicked" swapped="no"/>
               </object>
@@ -897,13 +832,11 @@ Please wait...</property>
             <child>
               <object class="GtkButton" id="forward_button">
                 <property name="label">gtk-go-forward</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
                 <property name="receives_default">False</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
                 <signal name="clicked" handler="on_forward_button_clicked" swapped="no"/>
               </object>
@@ -915,53 +848,14 @@ Please wait...</property>
             </child>
             <child>
               <object class="GtkButton" id="advanced_button">
-                <property name="use_action_appearance">False</property>
+                <property name="label" translatable="yes">_Advanced</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="receives_default">False</property>
                 <property name="no_show_all">True</property>
-                <property name="use_action_appearance">False</property>
+                <property name="image">image2</property>
+                <property name="use_underline">True</property>
                 <signal name="clicked" handler="on_advanced_button_clicked" swapped="no"/>
-                <child>
-                  <object class="GtkAlignment" id="alignment96">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="xscale">0</property>
-                    <property name="yscale">0</property>
-                    <child>
-                      <object class="GtkHBox" id="hbox2996">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="spacing">2</property>
-                        <child>
-                          <object class="GtkImage" id="image1265">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="stock">gtk-preferences</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="label364">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">_Advanced</property>
-                            <property name="use_underline">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -971,53 +865,14 @@ Please wait...</property>
             </child>
             <child>
               <object class="GtkButton" id="finish_button">
-                <property name="use_action_appearance">False</property>
+                <property name="label" translatable="yes">_Finish</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="receives_default">False</property>
                 <property name="no_show_all">True</property>
-                <property name="use_action_appearance">False</property>
+                <property name="image">image3</property>
+                <property name="use_underline">True</property>
                 <signal name="clicked" handler="on_finish_button_clicked" swapped="no"/>
-                <child>
-                  <object class="GtkAlignment" id="alignment87">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="xscale">0</property>
-                    <property name="yscale">0</property>
-                    <child>
-                      <object class="GtkHBox" id="hbox2989">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="spacing">2</property>
-                        <child>
-                          <object class="GtkImage" id="image1112">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="stock">gtk-apply</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="label352">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">_Finish</property>
-                            <property name="use_underline">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -1034,5 +889,19 @@ Please wait...</property>
         </child>
       </object>
     </child>
+  </object>
+  <object class="GtkListStore" id="server_liststore">
+    <columns>
+      <!-- column-name gchararray1 -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkEntryCompletion" id="server_entrycompletion">
+    <property name="model">server_liststore</property>
+    <property name="text_column">0</property>
+  </object>
+  <object class="GtkEntryCompletion" id="server_entrycompletion1">
+    <property name="model">server_liststore</property>
+    <property name="text_column">0</property>
   </object>
 </interface>
