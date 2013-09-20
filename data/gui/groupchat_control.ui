@@ -155,9 +155,6 @@
                     <property name="can_focus">True</property>
                     <property name="border_width">1</property>
                     <property name="headers_visible">False</property>
-                    <child internal-child="selection">
-                      <object class="GtkTreeSelection" id="treeview-selection1"/>
-                    </child>
                   </object>
                 </child>
               </object>
@@ -183,14 +180,12 @@
                 <property name="can_focus">False</property>
                 <child>
                   <object class="GtkButton" id="emoticons_button">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes">Show a list of emoticons (Alt+M)</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="relief">none</property>
                     <child>
                       <object class="GtkImage" id="emoticons_button_image">
@@ -216,14 +211,12 @@
             </child>
             <child>
               <object class="GtkButton" id="formattings_button">
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes">Show a list of formattings</property>
-                <property name="use_action_appearance">False</property>
                 <property name="relief">none</property>
                 <property name="focus_on_click">False</property>
                 <child>
@@ -255,14 +248,12 @@
             </child>
             <child>
               <object class="GtkButton" id="change_nick_button">
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes">Change your nickname (Ctrl+N)</property>
-                <property name="use_action_appearance">False</property>
                 <property name="relief">none</property>
                 <child>
                   <object class="GtkImage" id="image4">
@@ -282,14 +273,12 @@
             </child>
             <child>
               <object class="GtkButton" id="change_subject_button">
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes">Change the room's subject (Alt+T)</property>
-                <property name="use_action_appearance">False</property>
                 <property name="relief">none</property>
                 <child>
                   <object class="GtkImage" id="image6">
@@ -309,7 +298,6 @@
             </child>
             <child>
               <object class="GtkButton" id="bookmark_button">
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -317,7 +305,6 @@
                 <property name="no_show_all">True</property>
                 <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes">Bookmark this room (Ctrl+B)</property>
-                <property name="use_action_appearance">False</property>
                 <property name="relief">none</property>
                 <child>
                   <object class="GtkImage" id="image7">
@@ -337,14 +324,12 @@
             </child>
             <child>
               <object class="GtkButton" id="history_button">
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes">Browse the chat history (Ctrl+H)</property>
-                <property name="use_action_appearance">False</property>
                 <property name="relief">none</property>
                 <child>
                   <object class="GtkImage" id="history_image">
@@ -376,14 +361,12 @@
             </child>
             <child>
               <object class="GtkButton" id="muc_window_actions_button">
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes">Show advanced functions (Alt+D)</property>
-                <property name="use_action_appearance">False</property>
                 <property name="relief">none</property>
                 <property name="focus_on_click">False</property>
                 <child>
@@ -437,52 +420,13 @@
             </child>
             <child>
               <object class="GtkButton" id="send_button">
-                <property name="use_action_appearance">False</property>
+                <property name="label" translatable="yes">_Send</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="tooltip_text" translatable="yes">Send message</property>
-                <property name="use_action_appearance">False</property>
-                <child>
-                  <object class="GtkAlignment" id="alignment105">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="xscale">0</property>
-                    <property name="yscale">0</property>
-                    <child>
-                      <object class="GtkHBox" id="hbox3016">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="spacing">2</property>
-                        <child>
-                          <object class="GtkImage" id="image1345">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="stock">gtk-jump-to</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="label377">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes" comments="Make sure the character after &quot;_&quot; is not M/m (conflicts with Alt+M that is supposed to show the Emoticon Selector)">_Send</property>
-                            <property name="use_underline">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
+                <property name="image">image1</property>
+                <property name="use_underline">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -504,5 +448,10 @@
         <property name="position">0</property>
       </packing>
     </child>
+  </object>
+  <object class="GtkImage" id="image1">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-jump-to</property>
   </object>
 </interface>

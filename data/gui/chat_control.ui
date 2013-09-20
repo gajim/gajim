@@ -265,12 +265,10 @@
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <child>
                       <object class="GtkButton" id="authentication_button">
-                        <property name="use_action_appearance">False</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="no_show_all">True</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="relief">none</property>
                         <property name="focus_on_click">False</property>
                         <child>
@@ -326,14 +324,12 @@
                 <property name="can_focus">False</property>
                 <child>
                   <object class="GtkButton" id="emoticons_button">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes">Show a list of emoticons (Alt+M)</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="relief">none</property>
                     <property name="focus_on_click">False</property>
                     <child>
@@ -354,13 +350,11 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="formattings_button">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="has_tooltip">True</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="relief">none</property>
                     <property name="focus_on_click">False</property>
                     <child>
@@ -392,14 +386,12 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="add_to_roster_button">
-                    <property name="use_action_appearance">False</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="no_show_all">True</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes">Add this contact to roster (Ctrl+D)</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="relief">none</property>
                     <child>
                       <object class="GtkImage" id="image9">
@@ -419,12 +411,10 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="send_file_button">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="relief">none</property>
                     <property name="focus_on_click">False</property>
                     <child>
@@ -444,11 +434,9 @@
                 </child>
                 <child>
                   <object class="GtkToggleButton" id="audio_togglebutton">
-                    <property name="use_action_appearance">False</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="has_tooltip">True</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="relief">none</property>
                     <child>
                       <object class="GtkImage" id="audio_image">
@@ -467,11 +455,9 @@
                 </child>
                 <child>
                   <object class="GtkToggleButton" id="video_togglebutton">
-                    <property name="use_action_appearance">False</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="has_tooltip">True</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="relief">none</property>
                     <child>
                       <object class="GtkImage" id="video_image">
@@ -490,14 +476,12 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="convert_to_gc_button">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes">Invite contacts to the conversation (Ctrl+G)</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="relief">none</property>
                     <property name="focus_on_click">False</property>
                     <child>
@@ -518,14 +502,12 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="contact_information_button">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes">Show the contact's profile (Ctrl+I)</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="relief">none</property>
                     <property name="focus_on_click">False</property>
                     <child>
@@ -546,14 +528,12 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="history_button">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes">Browse the chat history (Ctrl+H)</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="relief">none</property>
                     <property name="focus_on_click">False</property>
                     <child>
@@ -586,14 +566,12 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="message_window_actions_button">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes">Show advanced functions (Alt+D)</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="relief">none</property>
                     <property name="focus_on_click">False</property>
                     <child>
@@ -629,11 +607,9 @@
                     </child>
                     <child>
                       <object class="GtkVolumeButton" id="sound_hscale">
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="relief">none</property>
                         <property name="focus_on_click">False</property>
                         <property name="orientation">vertical</property>
@@ -652,11 +628,9 @@ audio-volume-medium</property>
                     </child>
                     <child>
                       <object class="GtkVolumeButton" id="mic_hscale">
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="relief">none</property>
                         <property name="focus_on_click">False</property>
                         <property name="yalign">0.4699999988079071</property>
@@ -677,11 +651,9 @@ audio-mic-volume-low</property>
                     <child>
                       <object class="GtkButton" id="dtmf_button">
                         <property name="label" translatable="yes">#</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="relief">none</property>
                       </object>
                       <packing>
@@ -725,52 +697,13 @@ audio-mic-volume-low</property>
                 </child>
                 <child>
                   <object class="GtkButton" id="send_button">
-                    <property name="use_action_appearance">False</property>
+                    <property name="label" translatable="yes">_Send</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="tooltip_text" translatable="yes">Send message</property>
-                    <property name="use_action_appearance">False</property>
-                    <child>
-                      <object class="GtkAlignment" id="alignment102">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="xscale">0</property>
-                        <property name="yscale">0</property>
-                        <child>
-                          <object class="GtkHBox" id="hbox3010">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="spacing">2</property>
-                            <child>
-                              <object class="GtkImage" id="image1339">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="stock">gtk-jump-to</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">False</property>
-                                <property name="position">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="label373">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes" comments="Make sure the character after &quot;_&quot; is not M/m (conflicts with Alt+M that is supposed to show the Emoticon Selector)">_Send</property>
-                                <property name="use_underline">True</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">False</property>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
+                    <property name="image">image4</property>
+                    <property name="use_underline">True</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -818,11 +751,9 @@ audio-mic-volume-low</property>
         <property name="n_columns">3</property>
         <child>
           <object class="GtkButton" id="1_button">
-            <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="use_action_appearance">False</property>
             <property name="relief">none</property>
             <child>
               <object class="GtkLabel" id="label1">
@@ -841,11 +772,9 @@ audio-mic-volume-low</property>
         </child>
         <child>
           <object class="GtkButton" id="2_button">
-            <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="use_action_appearance">False</property>
             <property name="relief">none</property>
             <property name="xalign">0</property>
             <child>
@@ -866,11 +795,9 @@ audio-mic-volume-low</property>
         </child>
         <child>
           <object class="GtkButton" id="3_button">
-            <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="use_action_appearance">False</property>
             <property name="relief">none</property>
             <property name="xalign">0</property>
             <child>
@@ -891,11 +818,9 @@ audio-mic-volume-low</property>
         </child>
         <child>
           <object class="GtkButton" id="4_button">
-            <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="use_action_appearance">False</property>
             <property name="relief">none</property>
             <property name="xalign">0</property>
             <child>
@@ -916,11 +841,9 @@ audio-mic-volume-low</property>
         </child>
         <child>
           <object class="GtkButton" id="5_button">
-            <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="use_action_appearance">False</property>
             <property name="relief">none</property>
             <property name="xalign">0</property>
             <child>
@@ -943,11 +866,9 @@ audio-mic-volume-low</property>
         </child>
         <child>
           <object class="GtkButton" id="6_button">
-            <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="use_action_appearance">False</property>
             <property name="relief">none</property>
             <property name="xalign">0</property>
             <child>
@@ -970,11 +891,9 @@ audio-mic-volume-low</property>
         </child>
         <child>
           <object class="GtkButton" id="7_button">
-            <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="use_action_appearance">False</property>
             <property name="relief">none</property>
             <child>
               <object class="GtkLabel" id="label7">
@@ -994,11 +913,9 @@ audio-mic-volume-low</property>
         </child>
         <child>
           <object class="GtkButton" id="8_button">
-            <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="use_action_appearance">False</property>
             <property name="relief">none</property>
             <property name="xalign">0</property>
             <child>
@@ -1021,11 +938,9 @@ audio-mic-volume-low</property>
         </child>
         <child>
           <object class="GtkButton" id="9_button">
-            <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="use_action_appearance">False</property>
             <property name="relief">none</property>
             <property name="xalign">0</property>
             <child>
@@ -1048,11 +963,9 @@ audio-mic-volume-low</property>
         </child>
         <child>
           <object class="GtkButton" id="*_button">
-            <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="use_action_appearance">False</property>
             <property name="relief">none</property>
             <child>
               <object class="GtkLabel" id="label10">
@@ -1072,11 +985,9 @@ audio-mic-volume-low</property>
         </child>
         <child>
           <object class="GtkButton" id="0_button">
-            <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="use_action_appearance">False</property>
             <property name="relief">none</property>
             <child>
               <object class="GtkLabel" id="label11">
@@ -1098,11 +1009,9 @@ audio-mic-volume-low</property>
         </child>
         <child>
           <object class="GtkButton" id="#_button">
-            <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="use_action_appearance">False</property>
             <property name="relief">none</property>
             <child>
               <object class="GtkLabel" id="label12">
@@ -1124,5 +1033,10 @@ audio-mic-volume-low</property>
         </child>
       </object>
     </child>
+  </object>
+  <object class="GtkImage" id="image4">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-jump-to</property>
   </object>
 </interface>
