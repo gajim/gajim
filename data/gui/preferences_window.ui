@@ -15,6 +15,16 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
+  <object class="GtkImage" id="image1">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-revert-to-saved</property>
+  </object>
+  <object class="GtkImage" id="image2">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-open</property>
+  </object>
   <object class="GtkListStore" id="liststore1">
     <columns>
       <!-- column-name item -->
@@ -214,12 +224,10 @@
                             <child>
                               <object class="GtkCheckButton" id="show_avatars_in_roster_checkbutton">
                                 <property name="label" translatable="yes">Display a_vatars of contacts in roster</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="tooltip_text" translatable="yes">If checked, Gajim will display avatars of contacts in roster window and in group chats</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
@@ -234,12 +242,10 @@
                             <child>
                               <object class="GtkCheckButton" id="show_status_msgs_in_roster_checkbutton">
                                 <property name="label" translatable="yes">Display status _messages of contacts in roster</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="tooltip_text" translatable="yes">If checked, Gajim will display status messages of contacts under the contact name in roster window and in group chats</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
@@ -254,12 +260,10 @@
                             <child>
                               <object class="GtkCheckButton" id="show_pep_in_roster_checkbutton">
                                 <property name="label" translatable="yes">Display e_xtra information of contacts in roster (mood, activity, ...)m_ood of contacts in roster</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="tooltip_text" translatable="yes">If checked, Gajim will display the mood of contacts in the roster window</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
@@ -291,11 +295,9 @@
                                 <child>
                                   <object class="GtkCheckButton" id="sort_by_show_in_roster_checkbutton">
                                     <property name="label" translatable="yes">in _roster</property>
-                                    <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
-                                    <property name="use_action_appearance">False</property>
                                     <property name="use_underline">True</property>
                                     <property name="xalign">0</property>
                                     <property name="draw_indicator">True</property>
@@ -310,11 +312,9 @@
                                 <child>
                                   <object class="GtkCheckButton" id="sort_by_show_in_muc_checkbutton">
                                     <property name="label" translatable="yes">in _group chats</property>
-                                    <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
-                                    <property name="use_action_appearance">False</property>
                                     <property name="use_underline">True</property>
                                     <property name="xalign">0</property>
                                     <property name="draw_indicator">True</property>
@@ -426,11 +426,9 @@
                             <child>
                               <object class="GtkCheckButton" id="compact_view_checkbutton">
                                 <property name="label" translatable="yes">Ma_ke message windows compact</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="tooltip_text" translatable="yes">Hide all buttons in chat windows</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
@@ -446,12 +444,10 @@
                             <child>
                               <object class="GtkCheckButton" id="xhtml_checkbutton">
                                 <property name="label" translatable="yes">_Ignore rich content in incoming messages</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="tooltip_text" translatable="yes">Some messages may include rich content (formatting, colors etc). If checked, Gajim will just display the raw message text.</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
@@ -467,11 +463,9 @@
                             <child>
                               <object class="GtkCheckButton" id="speller_checkbutton">
                                 <property name="label" translatable="yes">_Highlight misspelled words</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="tooltip_text" translatable="yes">If checked, Gajim will highlight spelling errors in input fields of chat windows. If no language is explicitly set via right click on the input field, the default language will be used for this contact or group chat.</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
@@ -545,11 +539,9 @@
                             <child>
                               <object class="GtkCheckButton" id="positive_184_ack_checkbutton">
                                 <property name="label" translatable="yes">Show icon when your messages are received</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
                                 <signal name="toggled" handler="on_positive_184_ack_checkbutton_toggled" swapped="no"/>
@@ -665,12 +657,10 @@
                             <child>
                               <object class="GtkCheckButton" id="notify_on_signin_checkbutton">
                                 <property name="label" translatable="yes">Notify me about contacts that sign _in</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
@@ -685,12 +675,10 @@
                             <child>
                               <object class="GtkCheckButton" id="notify_on_signout_checkbutton">
                                 <property name="label" translatable="yes">Notify me about contacts that sign _out</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="tooltip_text" translatable="yes">Gajim will notify you via a popup window in the bottom right of the screen about contacts that just signed out</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
@@ -705,11 +693,9 @@
                             <child>
                               <object class="GtkCheckButton" id="auto_popup_away_checkbutton">
                                 <property name="label" translatable="yes">Allow popup/notifications when I'm _away/na/busy/invisible</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
@@ -742,12 +728,10 @@
                                         <child>
                                           <object class="GtkCheckButton" id="notify_gmail_checkbutton">
                                             <property name="label" translatable="yes">Notify on new _GMail email</property>
-                                            <property name="use_action_appearance">False</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">False</property>
                                             <property name="tooltip_text" translatable="yes">If checked, Gajim will show a notification when a new e-mail is received via GMail</property>
-                                            <property name="use_action_appearance">False</property>
                                             <property name="use_underline">True</property>
                                             <property name="xalign">0</property>
                                             <property name="draw_indicator">True</property>
@@ -762,12 +746,10 @@
                                         <child>
                                           <object class="GtkCheckButton" id="notify_gmail_extra_checkbutton">
                                             <property name="label" translatable="yes">Display _extra email details</property>
-                                            <property name="use_action_appearance">False</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">False</property>
                                             <property name="tooltip_text" translatable="yes">If checked, Gajim will also include information about the sender of new emails</property>
-                                            <property name="use_action_appearance">False</property>
                                             <property name="use_underline">True</property>
                                             <property name="xalign">0</property>
                                             <property name="draw_indicator">True</property>
@@ -887,11 +869,9 @@
                                 <child>
                                   <object class="GtkCheckButton" id="play_sounds_checkbutton">
                                     <property name="label" translatable="yes">Play _sounds</property>
-                                    <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
-                                    <property name="use_action_appearance">False</property>
                                     <property name="use_underline">True</property>
                                     <property name="xalign">0</property>
                                     <property name="draw_indicator">True</property>
@@ -906,11 +886,9 @@
                                 <child>
                                   <object class="GtkButton" id="manage_sounds_button">
                                     <property name="label" translatable="yes">Ma_nage...</property>
-                                    <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
-                                    <property name="use_action_appearance">False</property>
                                     <property name="use_underline">True</property>
                                     <signal name="clicked" handler="on_manage_sounds_button_clicked" swapped="no"/>
                                   </object>
@@ -930,11 +908,9 @@
                             <child>
                               <object class="GtkCheckButton" id="sound_dnd_checkbutton">
                                 <property name="label" translatable="yes">Allow sound when I'm _busy</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
@@ -1167,12 +1143,10 @@
                             <child>
                               <object class="GtkCheckButton" id="auto_away_checkbutton">
                                 <property name="label" translatable="yes">_Away after:</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="tooltip_text" translatable="yes">If checked, Gajim will change status to Away when the computer is unused.</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
@@ -1186,12 +1160,10 @@
                             <child>
                               <object class="GtkCheckButton" id="auto_xa_checkbutton">
                                 <property name="label" translatable="yes">_Not available after:</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="tooltip_text" translatable="yes">If checked, Gajim will change status to Not Available when the computer has not been used even longer</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
@@ -1378,11 +1350,9 @@ $T will be replaced by auto-not-available timeout</property>
                                     <child>
                                       <object class="GtkCheckButton" id="prompt_online_status_message_checkbutton">
                                         <property name="label" translatable="yes">Sign _in</property>
-                                        <property name="use_action_appearance">False</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
-                                        <property name="use_action_appearance">False</property>
                                         <property name="use_underline">True</property>
                                         <property name="xalign">0</property>
                                         <property name="draw_indicator">True</property>
@@ -1397,11 +1367,9 @@ $T will be replaced by auto-not-available timeout</property>
                                     <child>
                                       <object class="GtkCheckButton" id="prompt_offline_status_message_checkbutton">
                                         <property name="label" translatable="yes">Sign _out</property>
-                                        <property name="use_action_appearance">False</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
-                                        <property name="use_action_appearance">False</property>
                                         <property name="use_underline">True</property>
                                         <property name="xalign">0</property>
                                         <property name="draw_indicator">True</property>
@@ -1432,16 +1400,11 @@ $T will be replaced by auto-not-available timeout</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="tooltip_text" translatable="yes">If enabled, Gajim will not ask for a status message. The specified default message will be used instead.</property>
-                                <property name="hscrollbar_policy">automatic</property>
-                                <property name="vscrollbar_policy">automatic</property>
                                 <property name="shadow_type">in</property>
                                 <child>
                                   <object class="GtkTreeView" id="default_msg_treeview">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <child internal-child="selection">
-                                      <object class="GtkTreeSelection" id="treeview-selection1"/>
-                                    </child>
                                   </object>
                                 </child>
                               </object>
@@ -1503,12 +1466,10 @@ $T will be replaced by auto-not-available timeout</property>
                                 <child>
                                   <object class="GtkButton" id="new_msg_button">
                                     <property name="label">gtk-new</property>
-                                    <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="can_default">True</property>
                                     <property name="receives_default">False</property>
-                                    <property name="use_action_appearance">False</property>
                                     <property name="use_stock">True</property>
                                     <signal name="clicked" handler="on_new_msg_button_clicked" swapped="no"/>
                                   </object>
@@ -1521,12 +1482,10 @@ $T will be replaced by auto-not-available timeout</property>
                                 <child>
                                   <object class="GtkButton" id="delete_msg_button">
                                     <property name="label">gtk-delete</property>
-                                    <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="can_default">True</property>
                                     <property name="receives_default">False</property>
-                                    <property name="use_action_appearance">False</property>
                                     <property name="use_stock">True</property>
                                     <signal name="clicked" handler="on_delete_msg_button_clicked" swapped="no"/>
                                   </object>
@@ -1548,8 +1507,6 @@ $T will be replaced by auto-not-available timeout</property>
                               <object class="GtkScrolledWindow" id="scrolledwindow22">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="hscrollbar_policy">automatic</property>
-                                <property name="vscrollbar_policy">automatic</property>
                                 <property name="shadow_type">in</property>
                                 <child>
                                   <object class="GtkTreeView" id="msg_treeview">
@@ -1560,9 +1517,6 @@ $T will be replaced by auto-not-available timeout</property>
                                     <property name="headers_clickable">False</property>
                                     <signal name="cursor-changed" handler="on_msg_treeview_cursor_changed" swapped="no"/>
                                     <signal name="key-press-event" handler="on_msg_treeview_key_press_event" swapped="no"/>
-                                    <child internal-child="selection">
-                                      <object class="GtkTreeSelection" id="treeview-selection2"/>
-                                    </child>
                                   </object>
                                 </child>
                               </object>
@@ -1657,11 +1611,9 @@ $T will be replaced by auto-not-available timeout</property>
                             </child>
                             <child>
                               <object class="GtkFontButton" id="conversation_fontbutton">
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
-                                <property name="use_action_appearance">False</property>
                                 <signal name="font-set" handler="on_conversation_fontbutton_font_set" swapped="no"/>
                               </object>
                               <packing>
@@ -1672,11 +1624,9 @@ $T will be replaced by auto-not-available timeout</property>
                             <child>
                               <object class="GtkCheckButton" id="default_chat_font">
                                 <property name="label" translatable="yes">Use system _default</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
@@ -1752,12 +1702,10 @@ $T will be replaced by auto-not-available timeout</property>
                             <child>
                               <object class="GtkCheckButton" id="transports_iconsets_checkbutton">
                                 <property name="label" translatable="yes">Use _transports icons</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="tooltip_text" translatable="yes">If checked, Gajim will use protocol-specific status icons. (e.g. A contact from MSN will have the equivalent msn icon for status online, away, busy, etc...)</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
@@ -1817,12 +1765,10 @@ $T will be replaced by auto-not-available timeout</property>
                             <child>
                               <object class="GtkButton" id="manage_theme_button">
                                 <property name="label" translatable="yes">Ma_nage...</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="tooltip_text" translatable="yes">Configure color and font of the interface</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="use_underline">True</property>
                                 <signal name="clicked" handler="on_manage_theme_button_clicked" swapped="no"/>
                               </object>
@@ -1886,6 +1832,12 @@ $T will be replaced by auto-not-available timeout</property>
                             <property name="n_columns">4</property>
                             <property name="column_spacing">12</property>
                             <property name="row_spacing">6</property>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
                             <child>
                               <object class="GtkLabel" id="label72">
                                 <property name="visible">True</property>
@@ -1966,53 +1918,14 @@ $T will be replaced by auto-not-available timeout</property>
                                 </child>
                                 <child>
                                   <object class="GtkButton" id="reset_colors_button">
-                                    <property name="use_action_appearance">False</property>
+                                    <property name="label" translatable="yes">_Reset to Default Colors</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
-                                    <property name="use_action_appearance">False</property>
+                                    <property name="image">image1</property>
+                                    <property name="use_underline">True</property>
                                     <property name="focus_on_click">False</property>
                                     <signal name="clicked" handler="on_reset_colors_button_clicked" swapped="no"/>
-                                    <child>
-                                      <object class="GtkAlignment" id="alignment52">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="xscale">0</property>
-                                        <property name="yscale">0</property>
-                                        <child>
-                                          <object class="GtkHBox" id="hbox2936">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="spacing">2</property>
-                                            <child>
-                                              <object class="GtkImage" id="image439">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">False</property>
-                                                <property name="stock">gtk-revert-to-saved</property>
-                                              </object>
-                                              <packing>
-                                                <property name="expand">False</property>
-                                                <property name="fill">False</property>
-                                                <property name="position">0</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkLabel" id="label217">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">False</property>
-                                                <property name="label" translatable="yes">_Reset to Default Colors</property>
-                                                <property name="use_underline">True</property>
-                                              </object>
-                                              <packing>
-                                                <property name="expand">False</property>
-                                                <property name="fill">False</property>
-                                                <property name="position">1</property>
-                                              </packing>
-                                            </child>
-                                          </object>
-                                        </child>
-                                      </object>
-                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -2064,11 +1977,9 @@ $T will be replaced by auto-not-available timeout</property>
                                 <property name="can_focus">False</property>
                                 <child>
                                   <object class="GtkCheckButton" id="incoming_msg_checkbutton">
-                                    <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
-                                    <property name="use_action_appearance">False</property>
                                     <property name="xalign">0.5</property>
                                     <property name="draw_indicator">True</property>
                                     <signal name="toggled" handler="on_incoming_msg_checkbutton_toggled" swapped="no"/>
@@ -2081,11 +1992,9 @@ $T will be replaced by auto-not-available timeout</property>
                                 </child>
                                 <child>
                                   <object class="GtkColorButton" id="incoming_msg_colorbutton">
-                                    <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
-                                    <property name="use_action_appearance">False</property>
                                     <property name="xalign">0</property>
                                     <property name="color">#000000000000</property>
                                     <signal name="color-set" handler="on_incoming_msg_colorbutton_color_set" swapped="no"/>
@@ -2113,11 +2022,9 @@ $T will be replaced by auto-not-available timeout</property>
                                 <property name="can_focus">False</property>
                                 <child>
                                   <object class="GtkCheckButton" id="outgoing_msg_checkbutton">
-                                    <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
-                                    <property name="use_action_appearance">False</property>
                                     <property name="xalign">0.5</property>
                                     <property name="draw_indicator">True</property>
                                     <signal name="toggled" handler="on_outgoing_msg_checkbutton_toggled" swapped="no"/>
@@ -2130,11 +2037,9 @@ $T will be replaced by auto-not-available timeout</property>
                                 </child>
                                 <child>
                                   <object class="GtkColorButton" id="outgoing_msg_colorbutton">
-                                    <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
-                                    <property name="use_action_appearance">False</property>
                                     <property name="xalign">0</property>
                                     <property name="color">#000000000000</property>
                                     <signal name="color-set" handler="on_outgoing_msg_colorbutton_color_set" swapped="no"/>
@@ -2165,11 +2070,9 @@ $T will be replaced by auto-not-available timeout</property>
                                 </child>
                                 <child>
                                   <object class="GtkColorButton" id="incoming_nick_colorbutton">
-                                    <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
-                                    <property name="use_action_appearance">False</property>
                                     <property name="xalign">0</property>
                                     <property name="color">#000000000000</property>
                                     <signal name="color-set" handler="on_incoming_nick_colorbutton_color_set" swapped="no"/>
@@ -2195,11 +2098,9 @@ $T will be replaced by auto-not-available timeout</property>
                                 <property name="can_focus">False</property>
                                 <child>
                                   <object class="GtkColorButton" id="status_msg_colorbutton">
-                                    <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
-                                    <property name="use_action_appearance">False</property>
                                     <property name="xalign">0</property>
                                     <property name="color">#000000000000</property>
                                     <signal name="color-set" handler="on_status_msg_colorbutton_color_set" swapped="no"/>
@@ -2230,11 +2131,9 @@ $T will be replaced by auto-not-available timeout</property>
                                 </child>
                                 <child>
                                   <object class="GtkColorButton" id="outgoing_nick_colorbutton">
-                                    <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
-                                    <property name="use_action_appearance">False</property>
                                     <property name="xalign">0</property>
                                     <property name="color">#000000000000</property>
                                     <signal name="color-set" handler="on_outgoing_nick_colorbutton_color_set" swapped="no"/>
@@ -2263,11 +2162,9 @@ $T will be replaced by auto-not-available timeout</property>
                                 </child>
                                 <child>
                                   <object class="GtkColorButton" id="url_msg_colorbutton">
-                                    <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
-                                    <property name="use_action_appearance">False</property>
                                     <property name="xalign">0</property>
                                     <property name="color">#000000000000</property>
                                     <signal name="color-set" handler="on_url_msg_colorbutton_color_set" swapped="no"/>
@@ -2292,6 +2189,7 @@ $T will be replaced by auto-not-available timeout</property>
                             <child>
                               <object class="GtkHBox" id="hbox2">
                                 <property name="visible">True</property>
+                                <property name="can_focus">False</property>
                                 <child>
                                   <placeholder/>
                                 </child>
@@ -2302,10 +2200,11 @@ $T will be replaced by auto-not-available timeout</property>
                                     <property name="receives_default">True</property>
                                     <property name="xalign">0</property>
                                     <property name="color">#000000000000</property>
-                                    <signal name="color_set" handler="on_muc_highlight_colorbutton_color_set"/>
+                                    <signal name="color-set" handler="on_muc_highlight_colorbutton_color_set" swapped="no"/>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
+                                    <property name="fill">True</property>
                                     <property name="pack_type">end</property>
                                     <property name="position">1</property>
                                   </packing>
@@ -2323,6 +2222,7 @@ $T will be replaced by auto-not-available timeout</property>
                             <child>
                               <object class="GtkLabel" id="label30">
                                 <property name="visible">True</property>
+                                <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
                                 <property name="label" translatable="yes">Group chat highlight:</property>
                                 <property name="use_underline">True</property>
@@ -2333,12 +2233,6 @@ $T will be replaced by auto-not-available timeout</property>
                                 <property name="x_options">GTK_FILL</property>
                                 <property name="y_options"/>
                               </packing>
-                            </child>
-                            <child>
-                              <placeholder/>
-                            </child>
-                            <child>
-                              <placeholder/>
                             </child>
                           </object>
                         </child>
@@ -2683,11 +2577,9 @@ to discover one from server.</property>
                             </child>
                             <child>
                               <object class="GtkCheckButton" id="stun_checkbutton">
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="xalign">0.5</property>
                                 <property name="draw_indicator">True</property>
                                 <signal name="toggled" handler="on_stun_checkbutton_toggled" swapped="no"/>
@@ -2948,12 +2840,10 @@ to discover one from server.</property>
                             <child>
                               <object class="GtkCheckButton" id="ignore_events_from_unknown_contacts_checkbutton">
                                 <property name="label" translatable="yes">_Ignore events from contacts not in the roster</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="tooltip_text" translatable="yes">If checked, Gajim will ignore incoming events from unauthorized contacts. Use with caution, because it blocks all messages from any contact that is not in the roster</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
@@ -2966,12 +2856,10 @@ to discover one from server.</property>
                             <child>
                               <object class="GtkCheckButton" id="send_os_info_checkbutton">
                                 <property name="label" translatable="yes">Allow client / _OS information to be sent</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="tooltip_text" translatable="yes">If checked, Gajim will allow others to detect the operation system you are using</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
@@ -2985,12 +2873,10 @@ to discover one from server.</property>
                             <child>
                               <object class="GtkCheckButton" id="send_time_info_checkbutton">
                                 <property name="label" translatable="yes">Allow local system time information to be sent</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="tooltip_text" translatable="yes">If checked, Gajim will allow others to detect the time on your system</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
@@ -3004,12 +2890,10 @@ to discover one from server.</property>
                             <child>
                               <object class="GtkCheckButton" id="log_encrypted_chats_checkbutton">
                                 <property name="label" translatable="yes">Log _encrypted chat session</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="tooltip_text" translatable="yes">If checked, Gajim will keep logs for encrypted messages. Please note that when using E2E encryption the remote party has to agree on logging, else the messages will not be logged.</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
@@ -3023,11 +2907,9 @@ to discover one from server.</property>
                             <child>
                               <object class="GtkCheckButton" id="send_idle_time_checkbutton">
                                 <property name="label" translatable="yes">Allow my _idle time to be sent</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
@@ -3077,11 +2959,9 @@ to discover one from server.</property>
                                 <child>
                                   <object class="GtkButton" id="manage_proxies_button">
                                     <property name="label" translatable="yes">_Manage...</property>
-                                    <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
-                                    <property name="use_action_appearance">False</property>
                                     <property name="use_underline">True</property>
                                     <signal name="clicked" handler="on_manage_proxies_button_clicked" swapped="no"/>
                                   </object>
@@ -3137,11 +3017,9 @@ to discover one from server.</property>
                             <child>
                               <object class="GtkCheckButton" id="log_show_changes_checkbutton">
                                 <property name="label" translatable="yes">_Log status changes of contacts</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
@@ -3156,11 +3034,9 @@ to discover one from server.</property>
                             <child>
                               <object class="GtkCheckButton" id="check_default_client_checkbutton">
                                 <property name="label" translatable="yes">Check on startup if Gajim is the _default Jabber client</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
@@ -3207,52 +3083,13 @@ to discover one from server.</property>
                         <property name="right_padding">335</property>
                         <child>
                           <object class="GtkButton" id="open_advanced_editor_button">
-                            <property name="use_action_appearance">False</property>
+                            <property name="label" translatable="yes">_Open...</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="use_action_appearance">False</property>
+                            <property name="image">image2</property>
+                            <property name="use_underline">True</property>
                             <signal name="clicked" handler="on_open_advanced_editor_button_clicked" swapped="no"/>
-                            <child>
-                              <object class="GtkAlignment" id="alignment70">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="xscale">0</property>
-                                <property name="yscale">0</property>
-                                <child>
-                                  <object class="GtkHBox" id="hbox2962">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="spacing">2</property>
-                                    <child>
-                                      <object class="GtkImage" id="image597">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="stock">gtk-open</property>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">False</property>
-                                        <property name="position">0</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkLabel" id="label296">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="label" translatable="yes">_Open...</property>
-                                        <property name="use_underline">True</property>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">False</property>
-                                        <property name="position">1</property>
-                                      </packing>
-                                    </child>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
                           </object>
                         </child>
                       </object>
@@ -3304,12 +3141,10 @@ to discover one from server.</property>
             <child>
               <object class="GtkButton" id="close_button">
                 <property name="label">gtk-close</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="receives_default">False</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
                 <signal name="clicked" handler="on_close_button_clicked" swapped="no"/>
               </object>
