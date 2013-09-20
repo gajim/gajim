@@ -59,34 +59,13 @@
                             <property name="xalign">0</property>
                             <child>
                               <object class="GtkButton" id="install_plugin_button">
+                                <property name="label" translatable="yes">Install from zip</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
+                                <property name="image">image1</property>
+                                <property name="use_underline">True</property>
                                 <signal name="clicked" handler="on_install_plugin_button_clicked"/>
-                                <child>
-                                  <object class="GtkHBox" id="hbox8">
-                                    <property name="visible">True</property>
-                                    <child>
-                                      <object class="GtkImage" id="image2">
-                                        <property name="visible">True</property>
-                                        <property name="stock">gtk-apply</property>
-                                      </object>
-                                      <packing>
-                                        <property name="position">0</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkLabel" id="configure_plugin_button_label2">
-                                        <property name="visible">True</property>
-                                        <property name="xalign">0</property>
-                                        <property name="label" translatable="yes">Install from zip</property>
-                                      </object>
-                                      <packing>
-                                        <property name="position">1</property>
-                                      </packing>
-                                    </child>
-                                  </object>
-                                </child>
                               </object>
                             </child>
                           </object>
@@ -273,34 +252,13 @@
                         <property name="layout_style">end</property>
                         <child>
                           <object class="GtkButton" id="uninstall_plugin_button">
+                            <property name="label" translatable="yes">Uninstall</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <property name="image">image2</property>
+                            <property name="use_underline">True</property>
                             <signal name="clicked" handler="on_uninstall_plugin_button_clicked"/>
-                            <child>
-                              <object class="GtkHBox" id="hbox6">
-                                <property name="visible">True</property>
-                                <child>
-                                  <object class="GtkImage" id="image5">
-                                    <property name="visible">True</property>
-                                    <property name="stock">gtk-cancel</property>
-                                  </object>
-                                  <packing>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel" id="uninstall_plugin_button_label1">
-                                    <property name="visible">True</property>
-                                    <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">Uninstall</property>
-                                  </object>
-                                  <packing>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
-                              </object>
-                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -310,34 +268,13 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="configure_plugin_button">
+                            <property name="label" translatable="yes">Configure</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <property name="image">image3</property>
+                            <property name="use_underline">True</property>
                             <signal name="clicked" handler="on_configure_plugin_button_clicked"/>
-                            <child>
-                              <object class="GtkHBox" id="hbox7">
-                                <property name="visible">True</property>
-                                <child>
-                                  <object class="GtkImage" id="image6">
-                                    <property name="visible">True</property>
-                                    <property name="stock">gtk-preferences</property>
-                                  </object>
-                                  <packing>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel" id="configure_plugin_button_label1">
-                                    <property name="visible">True</property>
-                                    <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">Configure</property>
-                                  </object>
-                                  <packing>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
-                              </object>
-                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -410,5 +347,17 @@
   </object>
   <object class="GtkTextBuffer" id="textbuffer1">
     <property name="text" translatable="yes">Plug-in decription should be displayed here. This text will be erased during PluginsWindow initialization.</property>
+  </object>
+  <object class="GtkImage" id="image1">
+    <property name="visible">True</property>
+    <property name="stock">gtk-apply</property>
+  </object>
+  <object class="GtkImage" id="image2">
+    <property name="visible">True</property>
+    <property name="stock">gtk-cancel</property>
+  </object>
+  <object class="GtkImage" id="image3">
+    <property name="visible">True</property>
+    <property name="stock">gtk-preferences</property>
   </object>
 </interface>

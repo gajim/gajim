@@ -54,48 +54,15 @@
                         <property name="layout_style">end</property>
                         <child>
                           <object class="GtkButton" id="save_as_preset_button">
+                            <property name="label" translatable="yes">Save as Preset...</property>
                             <property name="visible">True</property>
                             <property name="sensitive">False</property>
                             <property name="can_focus">True</property>
                             <property name="can_default">True</property>
                             <property name="receives_default">False</property>
+                            <property name="image">image1</property>
+                            <property name="use_underline">True</property>
                             <signal name="clicked" handler="on_save_as_preset_button_clicked"/>
-                            <child>
-                              <object class="GtkAlignment" id="alignment106">
-                                <property name="visible">True</property>
-                                <property name="xscale">0</property>
-                                <property name="yscale">0</property>
-                                <child>
-                                  <object class="GtkHBox" id="hbox3021">
-                                    <property name="visible">True</property>
-                                    <property name="spacing">2</property>
-                                    <child>
-                                      <object class="GtkImage" id="image1369">
-                                        <property name="visible">True</property>
-                                        <property name="stock">gtk-save-as</property>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">False</property>
-                                        <property name="position">0</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkLabel" id="label380">
-                                        <property name="visible">True</property>
-                                        <property name="label" translatable="yes">Save as Preset...</property>
-                                        <property name="use_underline">True</property>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">False</property>
-                                        <property name="position">1</property>
-                                      </packing>
-                                    </child>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -312,5 +279,9 @@
       <action-widget response="-6">cancel_button</action-widget>
       <action-widget response="-5">ok_button</action-widget>
     </action-widgets>
+  </object>
+  <object class="GtkImage" id="image1">
+    <property name="visible">True</property>
+    <property name="stock">gtk-save-as</property>
   </object>
 </interface>

@@ -1732,47 +1732,14 @@ $T will be replaced by auto-not-available timeout</property>
                                 </child>
                                 <child>
                                   <object class="GtkButton" id="reset_colors_button">
+                                    <property name="label" translatable="yes">_Reset to Default Colors</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
+                                    <property name="image">image1</property>
+                                    <property name="use_underline">True</property>
                                     <property name="focus_on_click">False</property>
                                     <signal name="clicked" handler="on_reset_colors_button_clicked"/>
-                                    <child>
-                                      <object class="GtkAlignment" id="alignment52">
-                                        <property name="visible">True</property>
-                                        <property name="xscale">0</property>
-                                        <property name="yscale">0</property>
-                                        <child>
-                                          <object class="GtkHBox" id="hbox2936">
-                                            <property name="visible">True</property>
-                                            <property name="spacing">2</property>
-                                            <child>
-                                              <object class="GtkImage" id="image439">
-                                                <property name="visible">True</property>
-                                                <property name="stock">gtk-revert-to-saved</property>
-                                              </object>
-                                              <packing>
-                                                <property name="expand">False</property>
-                                                <property name="fill">False</property>
-                                                <property name="position">0</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkLabel" id="label217">
-                                                <property name="visible">True</property>
-                                                <property name="label" translatable="yes">_Reset to Default Colors</property>
-                                                <property name="use_underline">True</property>
-                                              </object>
-                                              <packing>
-                                                <property name="expand">False</property>
-                                                <property name="fill">False</property>
-                                                <property name="position">1</property>
-                                              </packing>
-                                            </child>
-                                          </object>
-                                        </child>
-                                      </object>
-                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -2834,46 +2801,13 @@ to discover one from server.</property>
                         <property name="right_padding">335</property>
                         <child>
                           <object class="GtkButton" id="open_advanced_editor_button">
+                            <property name="label" translatable="yes">_Open...</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
+                            <property name="image">image2</property>
+                            <property name="use_underline">True</property>
                             <signal name="clicked" handler="on_open_advanced_editor_button_clicked"/>
-                            <child>
-                              <object class="GtkAlignment" id="alignment70">
-                                <property name="visible">True</property>
-                                <property name="xscale">0</property>
-                                <property name="yscale">0</property>
-                                <child>
-                                  <object class="GtkHBox" id="hbox2962">
-                                    <property name="visible">True</property>
-                                    <property name="spacing">2</property>
-                                    <child>
-                                      <object class="GtkImage" id="image597">
-                                        <property name="visible">True</property>
-                                        <property name="stock">gtk-open</property>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">False</property>
-                                        <property name="position">0</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkLabel" id="label296">
-                                        <property name="visible">True</property>
-                                        <property name="label" translatable="yes">_Open...</property>
-                                        <property name="use_underline">True</property>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">False</property>
-                                        <property name="position">1</property>
-                                      </packing>
-                                    </child>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
                           </object>
                         </child>
                       </object>
@@ -2941,5 +2875,13 @@ to discover one from server.</property>
         </child>
       </object>
     </child>
+  </object>
+  <object class="GtkImage" id="image1">
+    <property name="visible">True</property>
+    <property name="stock">gtk-revert-to-saved</property>
+  </object>
+  <object class="GtkImage" id="image2">
+    <property name="visible">True</property>
+    <property name="stock">gtk-open</property>
   </object>
 </interface>
