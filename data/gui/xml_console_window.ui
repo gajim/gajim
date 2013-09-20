@@ -222,8 +222,8 @@
                   <object class="GtkScrolledWindow" id="scrolledwindow42">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="shadow_type">in</property>
                     <property name="hscrollbar_policy">never</property>
+                    <property name="shadow_type">in</property>
                     <child>
                       <object class="GtkTextView" id="input_textview">
                         <property name="height_request">120</property>
@@ -290,47 +290,14 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="send_button">
+                        <property name="label" translatable="yes">_Send</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="can_default">True</property>
                         <property name="receives_default">False</property>
+                        <property name="image">image1</property>
+                        <property name="use_underline">True</property>
                         <signal name="clicked" handler="on_send_button_clicked"/>
-                        <child>
-                          <object class="GtkAlignment" id="alignment80">
-                            <property name="visible">True</property>
-                            <property name="xscale">0</property>
-                            <property name="yscale">0</property>
-                            <child>
-                              <object class="GtkHBox" id="hbox2980">
-                                <property name="visible">True</property>
-                                <property name="spacing">2</property>
-                                <child>
-                                  <object class="GtkImage" id="image833">
-                                    <property name="visible">True</property>
-                                    <property name="stock">gtk-apply</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">False</property>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel" id="label341">
-                                    <property name="visible">True</property>
-                                    <property name="label" translatable="yes">_Send</property>
-                                    <property name="use_underline">True</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">False</property>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -363,5 +330,9 @@
         </child>
       </object>
     </child>
+  </object>
+  <object class="GtkImage" id="image1">
+    <property name="visible">True</property>
+    <property name="stock">gtk-apply</property>
   </object>
 </interface>
