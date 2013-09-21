@@ -4154,7 +4154,8 @@ class ManageSoundsWindow:
     def __init__(self):
         self.xml = gtkgui_helpers.get_gtk_builder('manage_sounds_window.ui')
         self.window = self.xml.get_object('manage_sounds_window')
-
+        self.window.set_transient_for(
+            gajim.interface.instances['preferences'].window)
         # sounds treeview
         self.sound_tree = self.xml.get_object('sounds_treeview')
 
