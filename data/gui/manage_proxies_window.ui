@@ -22,6 +22,7 @@
   <object class="GtkWindow" id="manage_proxies_window">
     <property name="border_width">12</property>
     <property name="title" translatable="yes">Manage Proxy Profiles</property>
+    <property name="window_position">center-on-parent</property>
     <property name="type_hint">dialog</property>
     <signal name="destroy" handler="on_manage_proxies_window_destroy"/>
     <child>

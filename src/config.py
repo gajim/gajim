@@ -1259,7 +1259,8 @@ class PreferencesWindow:
         if 'manage_proxies' in gajim.interface.instances:
             gajim.interface.instances['manage_proxies'].window.present()
         else:
-            gajim.interface.instances['manage_proxies'] = ManageProxiesWindow()
+            gajim.interface.instances['manage_proxies'] = ManageProxiesWindow(
+                self.window)
 
     def update_proxy_list(self):
         our_proxy = gajim.config.get('global_proxy')
@@ -1284,10 +1285,10 @@ class PreferencesWindow:
 
 #---------- ManageProxiesWindow class -------------#
 class ManageProxiesWindow:
-    def __init__(self):
+    def __init__(self, transient_for=None):
         self.xml = gtkgui_helpers.get_gtk_builder('manage_proxies_window.ui')
         self.window = self.xml.get_object('manage_proxies_window')
-        self.window.set_transient_for(gajim.interface.roster.window)
+        self.window.set_transient_for(transient_for)
         self.proxies_treeview = self.xml.get_object('proxies_treeview')
         self.proxyname_entry = self.xml.get_object('proxyname_entry')
         self.proxytype_combobox = self.xml.get_object('proxytype_combobox')
@@ -2350,7 +2351,8 @@ class AccountsWindow:
         if 'manage_proxies' in gajim.interface.instances:
             gajim.interface.instances['manage_proxies'].window.present()
         else:
-            gajim.interface.instances['manage_proxies'] = ManageProxiesWindow()
+            gajim.interface.instances['manage_proxies'] = ManageProxiesWindow(
+                self.window)
 
     def on_warn_when_insecure_connection_checkbutton1_toggled(self, widget):
         if self.ignore_events:
