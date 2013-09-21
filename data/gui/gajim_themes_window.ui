@@ -25,6 +25,7 @@
   <object class="GtkWindow" id="gajim_themes_window">
     <property name="border_width">12</property>
     <property name="title" translatable="yes">Gajim Themes Customization</property>
+    <property name="window_position">center-on-parent</property>
     <property name="type_hint">dialog</property>
     <child>
       <object class="GtkVBox" id="vbox97">
