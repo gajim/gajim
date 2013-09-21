@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-08-29 15:27+0200\n"
-"PO-Revision-Date: 2013-08-26 10:00+0300\n"
+"PO-Revision-Date: 2013-09-21 13:55+0300\n"
 "Last-Translator: Fomin Denis <fominde@gmail.com>\n"
 "Language-Team: Linux Support LLC\n"
 "Language: ru\n"
@@ -297,7 +297,7 @@ msgstr "Файл сертификата:"
 
 #: ../data/gui/accounts_window.ui.h:25
 msgid "Browse..."
-msgstr "_Просмотреть..."
+msgstr "Просмотреть..."
 
 #: ../data/gui/accounts_window.ui.h:26
 #, fuzzy
