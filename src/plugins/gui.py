@@ -284,7 +284,7 @@ class PluginsWindow(object):
                 sel.select_iter(iter_)
 
             YesNoDialog(_('Plugin already exists'), sectext=_('Overwrite?'),
-                on_response_yes=on_yes)
+                on_response_yes=on_yes, transient_for=self.window)
 
         def _try_install(zip_filename):
             try:
