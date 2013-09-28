@@ -201,6 +201,7 @@
                         <child>
                           <object class="GtkEventBox" id="status_label_eventbox">
                             <property name="visible">True</property>
+                            <property name="visible_window">False</property>
                             <child>
                               <object class="GtkLabel" id="status_label">
                                 <property name="visible">True</property>
@@ -942,6 +943,7 @@
                   <object class="GtkEventBox" id="eventbox1">
                     <property name="visible">True</property>
                     <property name="tooltip_text" translatable="yes">Format: YYYY-MM-DD</property>
+                    <property name="visible_window">False</property>
                     <child>
                       <object class="GtkLabel" id="label13">
                         <property name="visible">True</property>
