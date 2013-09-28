@@ -969,7 +969,7 @@ def get_pep_as_pixbuf(pep_class):
         pixbuf = load_mood_icon(mood).get_pixbuf()
         return pixbuf
     elif isinstance(pep_class, pep.UserTunePEP):
-        icon = gtkgui_helpers.get_icon_pixmap('audio-x-generic', quiet=True)
+        icon = get_icon_pixmap('audio-x-generic', quiet=True)
         if not icon:
             path = os.path.join(gajim.DATA_DIR, 'emoticons', 'static',
                 'music.png')
@@ -993,10 +993,9 @@ def get_pep_as_pixbuf(pep_class):
         else:
             return load_activity_icon('unknown').get_pixbuf()
     elif isinstance(pep_class, pep.UserLocationPEP):
-        icon = gtkgui_helpers.get_icon_pixmap('applications-internet',
-            quiet=True)
+        icon = get_icon_pixmap('applications-internet', quiet=True)
         if not icon:
-            icon = gtkgui_helpers.get_icon_pixmap('gajim-earth')
+            icon = get_icon_pixmap('gajim-earth')
         return icon
     return None
 
