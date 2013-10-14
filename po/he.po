@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gajim 0.15\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-09-14 10:28+0200\n"
-"PO-Revision-Date: 2013-09-14 10:29+0200\n"
+"PO-Revision-Date: 2013-10-08 19:46+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
 "Language: he\n"
@@ -415,13 +415,14 @@ msgid "Send _keep-alive packets"
 msgstr "ש_לח חבילות keep-alive"
 
 # BUG: a dot at the end
+# נובעת בניתוק
 #: ../data/gui/accounts_window.ui.h:44
 msgid ""
 "If checked, Gajim will send keep-alive packets to prevent connection timeout "
 "which results in disconnection"
 msgstr ""
 "במידה ואפשרות זו מסומנת, Gajim ישלח חבילות keep-alive כדי למנוע פקיעת זמן של "
-"חיבור (connection timeout) המביאה לידי ניתוק"
+"חיבור (connection timeout) אשר מביאה לידי ניתוק"
 
 #: ../data/gui/accounts_window.ui.h:45
 msgid "Use cust_om hostname/port"
@@ -804,7 +805,7 @@ msgstr "<b>הודעה:</b>"
 
 #: ../data/gui/change_password_dialog.ui.h:1
 msgid "Change Password"
-msgstr "שנה סיסמה"
+msgstr "שינוי סיסמה"
 
 #: ../data/gui/change_password_dialog.ui.h:2
 msgid "Enter new password:"
@@ -1241,7 +1242,7 @@ msgstr "לא פעיל"
 # Chat-state?
 #: ../data/gui/gajim_themes_window.ui.h:15
 msgid "<b>Chatstate Tab Colors</b>"
-msgstr "<b>צבעי כרטיסייה מצב שיחה</b>"
+msgstr "<b>צבעי כרטיסיית מצב שיחה</b>"
 
 #: ../data/gui/gajim_themes_window.ui.h:16
 msgid "Gone"
@@ -2627,7 +2628,7 @@ msgstr "אודות"
 
 #: ../data/gui/remove_account_window.ui.h:1
 msgid "Remove account _only from Gajim"
-msgstr "להסיר חשבון מתוך Gajim _בלבד"
+msgstr "להסיר חשבון מתוך _Gajim בלבד"
 
 #: ../data/gui/remove_account_window.ui.h:2
 msgid "Remove account from Gajim and from _server"
@@ -3798,7 +3799,7 @@ msgstr "הצגה בלעדית של אנשי קשר מקוונים וחופשיי
 msgid "Time in minutes, after which your status changes to away."
 msgstr "זמן בדקות, אשר לאחריו מצבך ישתנה אל נעדר."
 
-# במצב סרק
+# משום היותי במצב סרק
 #: ../src/common/config.py:83
 msgid "$S (Away as a result of being idle more than $T min)"
 msgstr "$S (נעדר כתוצאה מהיותי בחוסר פעילות למשך של יותר מ־$T דקות)"
@@ -7401,12 +7402,12 @@ msgstr "התחברות אל שרת %s נכשלה"
 msgid "What would you like to do?"
 msgstr "מה ברצונך לעשות?"
 
-# מהיישום
+# BUG: USE: Remove account _only from Gajim
 #: ../src/config.py:3091
 msgid "Remove only from Gajim"
-msgstr "הסרה מתוך Gajim בלבד"
+msgstr "להסיר מתוך Gajim בלבד"
 
-# אחר כך
+# BUG: Underline
 #: ../src/config.py:3092
 msgid "Don't remove anything. I'll try again later"
 msgstr "לא להסיר דבר. אני אנסה שוב מאוחר יותר"
