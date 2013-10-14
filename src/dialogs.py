@@ -2588,8 +2588,9 @@ class JoinGroupchatWindow:
             return
         self.requested_jid = None
         if nbxmpp.NS_MUC not in obj.features:
+            window = gajim.interface.instances[self.account]['join_gc'].window
             ErrorDialog(_('Wrong server'), _('%s is not a groupchat server') % \
-                obj.jid)
+                obj.jid, transient_for=window)
             return
         if obj.jid in gajim.interface.instances[self.account]['disco']:
             gajim.interface.instances[self.account]['disco'][obj.jid].window.\
