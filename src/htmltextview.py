@@ -55,6 +55,7 @@ if __name__ == '__main__':
     import gtkgui_helpers
 from common import gajim
 from gtkgui_helpers import get_icon_pixmap
+from gtkgui_helpers import get_gtk_builder
 from common import helpers
 
 import tooltips
@@ -956,7 +957,7 @@ class HtmlTextView(Gtk.TextView):
         dialogs.AddNewContactWindow(self.account, jid)
 
     def make_link_menu(self, event, kind, text):
-        xml = gtkgui_helpers.get_gtk_builder('chat_context_menu.ui')
+        xml = get_gtk_builder('chat_context_menu.ui')
         menu = xml.get_object('chat_context_menu')
         childs = menu.get_children()
         if kind == 'url':
