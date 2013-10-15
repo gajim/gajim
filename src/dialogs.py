@@ -2547,8 +2547,9 @@ class JoinGroupchatWindow:
         if obj.jid != self.requested_jid:
             return
         self.requested_jid = None
+        window = gajim.interface.instances[self.account]['join_gc'].window
         ErrorDialog(_('Wrong server'), _('%s is not a groupchat server') % \
-            obj.jid)
+            obj.jid, transient_for=window)
 
     def _nec_agent_info_received(self, obj):
         if obj.conn.name != self.account:
