@@ -1989,6 +1989,10 @@ class Interface:
         if not emot_theme:
             return
 
+        transient_for = None
+        if 'preferences' in gajim.interface.instances:
+            transient_for = gajim.interface.instances['preferences'].window
+
         path = os.path.join(gajim.DATA_DIR, 'emoticons', emot_theme)
         if not os.path.exists(path):
             # It's maybe a user theme
@@ -1997,7 +2001,8 @@ class Interface:
                 # theme doesn't exist, disable emoticons
                 dialogs.WarningDialog(_('Emoticons disabled'),
                     _('Your configured emoticons theme has not been found, so '
-                    'emoticons have been disabled.'))
+                    'emoticons have been disabled.'),
+                    transient_for=transient_for)
                 gajim.config.set('emoticons_theme', '')
                 return
         self._init_emoticons(path, need_reload)
@@ -2021,7 +2026,8 @@ class Interface:
                 dialogs.WarningDialog(_('Emoticons disabled'),
                     _('Your configured emoticons theme cannot been loaded. You '
                     'maybe need to update the format of emoticons.py file. See '
-                    'http://trac.gajim.org/wiki/Emoticons for more details.'))
+                    'http://trac.gajim.org/wiki/Emoticons for more details.'),
+                    transient_for=transient_for)
         if self.emoticons_menu:
             self.emoticons_menu.destroy()
         self.emoticons_menu = self.prepare_emoticons_menu()
