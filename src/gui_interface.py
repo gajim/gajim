@@ -1957,14 +1957,17 @@ class Interface:
         self.emoticons = dict()
         self.emoticons_animations = dict()
 
-        sys.path.append(path)
+        sys.path.insert(0, path)
         import emoticons
-        if need_reload:
-            # we need to reload else that doesn't work when changing emoticon
-            # set
-            import imp
-            imp.reload(emoticons)
-        emots = emoticons.emoticons
+        try:
+            if need_reload:
+                # we need to reload else that doesn't work when changing
+                # emoticons set
+                import imp
+                imp.reload(emoticons)
+            emots = emoticons.emoticons
+         except Exception, e:
+            return True
         for emot_filename in emots:
             emot_file = os.path.join(path, emot_filename)
             if not self.image_is_ok(emot_file):
@@ -2005,7 +2008,14 @@ class Interface:
                     transient_for=transient_for)
                 gajim.config.set('emoticons_theme', '')
                 return
-        self._init_emoticons(path, need_reload)
+        if self._init_emoticons(path, need_reload):
+            dialogs.WarningDialog(_('Emoticons disabled'),
+                    _('Your configured emoticons theme cannot been loaded. You '
+                    'maybe need to update the format of emoticons.py file. See '
+                    'http://trac.gajim.org/wiki/Emoticons for more details.'),
+                    transient_for=transient_for)
+            gajim.config.set('emoticons_theme', '')
+            return
         if len(self.emoticons) == 0:
             # maybe old format of emoticons file, try to convert it
             try:
@@ -2028,6 +2038,7 @@ class Interface:
                     'maybe need to update the format of emoticons.py file. See '
                     'http://trac.gajim.org/wiki/Emoticons for more details.'),
                     transient_for=transient_for)
+                gajim.config.set('emoticons_theme', '')
         if self.emoticons_menu:
             self.emoticons_menu.destroy()
         self.emoticons_menu = self.prepare_emoticons_menu()
