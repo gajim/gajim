@@ -405,10 +405,9 @@ class FileTransfersWindow:
 
                 dialog = dialogs.FTOverwriteConfirmationDialog(
                     _('This file already exists'), _('What do you want to do?'),
-                    propose_resume=not dl_finished, on_response=on_response)
-                dialog.set_transient_for(dialog2)
+                    propose_resume=not dl_finished, on_response=on_response,
+                    transient_for=dialog2)
                 dialog.set_destroy_with_parent(True)
-                return
             else:
                 dirname = os.path.dirname(file_path)
                 if not os.access(dirname, os.W_OK) and os.name != 'nt':
