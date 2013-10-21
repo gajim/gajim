@@ -845,8 +845,8 @@ def on_avatar_save_as_menuitem_activate(widget, jid, default_name=''):
                 return
             dialog2 = dialogs.FTOverwriteConfirmationDialog(
                 _('This file already exists'), _('What do you want to do?'),
-                propose_resume=False, on_response=(on_continue, file_path))
-            dialog2.set_transient_for(dialog)
+                propose_resume=False, on_response=(on_continue, file_path),
+                transient_for=dialog)
             dialog2.set_destroy_with_parent(True)
         else:
             dirname = os.path.dirname(file_path)

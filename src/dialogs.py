@@ -1958,8 +1958,10 @@ class FTOverwriteConfirmationDialog(ConfirmationDialog):
     """
 
     def __init__(self, pritext, sectext='', propose_resume=True,
-    on_response=None):
-        if hasattr(gajim.interface, 'roster') and gajim.interface.roster:
+    on_response=None, transient_for=None):
+        if transient_for:
+            parent = transient_for
+        elif hasattr(gajim.interface, 'roster') and gajim.interface.roster:
             parent = gajim.interface.roster.window
         else:
             parent = None
