@@ -137,7 +137,7 @@
                     <property name="orientation">vertical</property>
                     <child>
                       <object class="GtkCheckButton" id="enable_checkbutton1">
-                        <property name="label" translatable="yes">_Enable</property>
+                        <property name="label" translatable="yes">Active</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -1033,7 +1033,7 @@
                     <property name="orientation">vertical</property>
                     <child>
                       <object class="GtkCheckButton" id="enable_zeroconf_checkbutton2">
-                        <property name="label" translatable="yes">_Enable</property>
+                        <property name="label" translatable="yes">Active</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
