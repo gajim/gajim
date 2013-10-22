@@ -5986,7 +5986,7 @@ class RosterWindow:
         menu = gtk.Menu()
 
         # Send single message
-        item = gtk.ImageMenuItem(_('Send Single Message'))
+        item = gtk.ImageMenuItem(_('Send Single _Message...'))
         icon = gtk.image_new_from_stock(gtk.STOCK_NEW, gtk.ICON_SIZE_MENU)
         item.set_image(icon)
         item.connect('activate',
@@ -6037,7 +6037,7 @@ class RosterWindow:
         menu.append(item)
 
         # Execute Command
-        item = gtk.ImageMenuItem(_('Execute Command...'))
+        item = gtk.ImageMenuItem(_('E_xecute Command...'))
         icon = gtk.image_new_from_stock(gtk.STOCK_EXECUTE, gtk.ICON_SIZE_MENU)
         item.set_image(icon)
         menu.append(item)
