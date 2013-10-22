@@ -6014,7 +6014,7 @@ class RosterWindow:
         menu = Gtk.Menu()
 
         # Send single message
-        item = Gtk.ImageMenuItem.new_with_mnemonic(_('Send Single Message'))
+        item = Gtk.ImageMenuItem.new_with_mnemonic(_('Send Single Message...'))
         icon = Gtk.Image.new_from_stock(Gtk.STOCK_NEW, Gtk.IconSize.MENU)
         item.set_image(icon)
         item.connect('activate',
@@ -6065,7 +6065,7 @@ class RosterWindow:
         menu.append(item)
 
         # Execute Command
-        item = Gtk.ImageMenuItem.new_with_mnemonic(_('Execute Command...'))
+        item = Gtk.ImageMenuItem.new_with_mnemonic(_('E_xecute Command...'))
         icon = Gtk.Image.new_from_stock(Gtk.STOCK_EXECUTE, Gtk.IconSize.MENU)
         item.set_image(icon)
         menu.append(item)

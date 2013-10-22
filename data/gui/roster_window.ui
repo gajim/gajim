@@ -2,12 +2,6 @@
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkAccelGroup" id="accelgroup1"/>
-  <object class="GtkImage" id="image1">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-jump-to</property>
-    <property name="icon-size">1</property>
-  </object>
   <object class="GtkImage" id="image10">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -24,6 +18,18 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="stock">gtk-properties</property>
+    <property name="icon-size">1</property>
+  </object>
+  <object class="GtkImage" id="image9">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-justify-fill</property>
+    <property name="icon-size">1</property>
+  </object>
+  <object class="GtkImage" id="image1">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-jump-to</property>
     <property name="icon-size">1</property>
   </object>
   <object class="GtkImage" id="image13">
@@ -80,12 +86,6 @@
     <property name="stock">gtk-save</property>
     <property name="icon-size">1</property>
   </object>
-  <object class="GtkImage" id="image9">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-justify-fill</property>
-    <property name="icon-size">1</property>
-  </object>
   <object class="GtkWindow" id="roster_window">
     <property name="width_request">85</property>
     <property name="height_request">200</property>
@@ -112,7 +112,6 @@
             <property name="can_focus">False</property>
             <child>
               <object class="GtkMenuItem" id="actions_menu">
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">_Actions</property>
@@ -123,8 +122,7 @@
                     <property name="can_focus">False</property>
                     <child>
                       <object class="GtkImageMenuItem" id="new_chat_menuitem">
-                        <property name="label" translatable="yes">_Start Chat...</property>
-                        <property name="use_action_appearance">False</property>
+                        <property name="label" translatable="yes">_Start Chat</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
@@ -136,7 +134,6 @@
                     <child>
                       <object class="GtkImageMenuItem" id="send_single_message_menuitem">
                         <property name="label" translatable="yes">Send Single _Message...</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
                         <property name="image">image2</property>
@@ -146,8 +143,7 @@
                     </child>
                     <child>
                       <object class="GtkImageMenuItem" id="join_gc_menuitem">
-                        <property name="label" translatable="yes">Join _Group Chat...</property>
-                        <property name="use_action_appearance">False</property>
+                        <property name="label" translatable="yes">Join _Group Chat</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
@@ -165,7 +161,6 @@
                     <child>
                       <object class="GtkImageMenuItem" id="add_new_contact_menuitem">
                         <property name="label" translatable="yes">Add _Contact...</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
@@ -177,7 +172,6 @@
                     <child>
                       <object class="GtkImageMenuItem" id="service_disco_menuitem">
                         <property name="label" translatable="yes">_Discover Services</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
@@ -188,7 +182,6 @@
                     </child>
                     <child>
                       <object class="GtkMenuItem" id="advanced_menuitem">
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">_Advanced</property>
@@ -204,7 +197,6 @@
                     <child>
                       <object class="GtkImageMenuItem" id="quit_menuitem">
                         <property name="label">gtk-quit</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
@@ -220,7 +212,6 @@
             </child>
             <child>
               <object class="GtkMenuItem" id="edit_menu">
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">_Edit</property>
@@ -232,7 +223,6 @@
                     <child>
                       <object class="GtkImageMenuItem" id="accounts_menuitem">
                         <property name="label" translatable="yes">_Accounts</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
@@ -246,7 +236,6 @@
                     <child>
                       <object class="GtkImageMenuItem" id="profile_avatar_menuitem">
                         <property name="label" translatable="yes">Profile, A_vatar</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
@@ -264,7 +253,6 @@
                     <child>
                       <object class="GtkImageMenuItem" id="preferences_menuitem">
                         <property name="label">gtk-preferences</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
@@ -277,7 +265,6 @@
                     <child>
                       <object class="GtkImageMenuItem" id="plugins_menuitem">
                         <property name="label" translatable="yes">P_lugins</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
@@ -292,7 +279,6 @@
             </child>
             <child>
               <object class="GtkMenuItem" id="view_menu">
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">_View</property>
@@ -303,7 +289,6 @@
                     <property name="can_focus">False</property>
                     <child>
                       <object class="GtkCheckMenuItem" id="show_offline_contacts_menuitem">
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">Show _Offline Contacts</property>
@@ -314,7 +299,6 @@
                     </child>
                     <child>
                       <object class="GtkCheckMenuItem" id="show_only_active_contacts_menuitem">
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">Show Only _Active Contacts</property>
@@ -325,7 +309,6 @@
                     </child>
                     <child>
                       <object class="GtkCheckMenuItem" id="show_transports_menuitem">
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">Show T_ransports</property>
@@ -335,7 +318,6 @@
                     </child>
                     <child>
                       <object class="GtkCheckMenuItem" id="show_roster_menuitem">
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -355,7 +337,6 @@
                     <child>
                       <object class="GtkImageMenuItem" id="file_transfers_menuitem">
                         <property name="label" translatable="yes">File _Transfers</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
@@ -369,7 +350,6 @@
                     <child>
                       <object class="GtkImageMenuItem" id="history_menuitem">
                         <property name="label" translatable="yes">_History</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -386,7 +366,6 @@
             </child>
             <child>
               <object class="GtkMenuItem" id="help_menu">
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">_Help</property>
@@ -397,7 +376,6 @@
                     <child>
                       <object class="GtkImageMenuItem" id="contents_menuitem">
                         <property name="label" translatable="yes">_Contents</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="tooltip_text" translatable="yes">Help online</property>
@@ -411,7 +389,6 @@
                     <child>
                       <object class="GtkImageMenuItem" id="faq_menuitem">
                         <property name="label" translatable="yes">_FAQ</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="tooltip_text" translatable="yes">Frequently Asked Questions (online)</property>
@@ -425,7 +402,6 @@
                     <child>
                       <object class="GtkImageMenuItem" id="keyboard_shortcuts_menuitem">
                         <property name="label" translatable="yes">Keyboard Shortcuts</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
@@ -443,7 +419,6 @@
                     <child>
                       <object class="GtkImageMenuItem" id="features_menuitem">
                         <property name="label" translatable="yes">Fea_tures</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -457,7 +432,6 @@
                     <child>
                       <object class="GtkImageMenuItem" id="about_menuitem">
                         <property name="label">gtk-about</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
@@ -524,9 +498,6 @@
                         <signal name="row-collapsed" handler="on_roster_treeview_row_collapsed" swapped="no"/>
                         <signal name="motion-notify-event" handler="on_roster_treeview_motion_notify_event" swapped="no"/>
                         <signal name="button-release-event" handler="on_roster_treeview_button_release_event" swapped="no"/>
-                        <child internal-child="selection">
-                          <object class="GtkTreeSelection" id="treeview-selection1"/>
-                        </child>
                       </object>
                     </child>
                   </object>
