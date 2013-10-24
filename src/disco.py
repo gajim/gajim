@@ -1881,7 +1881,8 @@ class MucBrowser(AgentBrowser):
         for bookmark in gajim.connections[self.account].bookmarks:
             if bookmark['jid'] == bm['jid']:
                 dialogs.ErrorDialog( _('Bookmark already set'),
-                _('Group Chat "%s" is already in your bookmarks.') % bm['jid'])
+                _('Group Chat "%s" is already in your bookmarks.') % bm['jid'],
+                transient_for=self.window.window)
                 return
 
         gajim.connections[self.account].bookmarks.append(bm)
@@ -1891,7 +1892,8 @@ class MucBrowser(AgentBrowser):
 
         dialogs.InformationDialog(
             _('Bookmark has been added successfully'),
-            _('You can manage your bookmarks via Actions menu in your roster.'))
+            _('You can manage your bookmarks via Actions menu in your roster.'),
+            transient_for=self.window.window)
 
     def on_join_button_clicked(self, *args):
         """
