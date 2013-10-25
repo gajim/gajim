@@ -5915,7 +5915,7 @@ class RosterWindow:
                 privacy_rules_supported = False
             contact = gajim.contacts.get_contact_with_highest_priority(account,
                 jid)
-            if helpers.jid_is_blocked(account, jid):
+            if not helpers.jid_is_blocked(account, jid):
                 is_blocked = False
             list_.append((contact, account))
 
