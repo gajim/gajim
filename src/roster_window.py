@@ -5959,7 +5959,7 @@ class RosterWindow:
 
         # Edit Groups
         edit_groups_item = Gtk.ImageMenuItem.new_with_mnemonic(_(
-            'Edit _Groups'))
+            'Edit _Groups...'))
         icon = Gtk.Image.new_from_stock(Gtk.STOCK_EDIT, Gtk.IconSize.MENU)
         edit_groups_item.set_image(icon)
         manage_contacts_submenu.append(edit_groups_item)
