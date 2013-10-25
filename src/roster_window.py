@@ -5796,7 +5796,7 @@ class RosterWindow:
             menu.append(item)
 
             # Rename
-            rename_item = gtk.ImageMenuItem(_('Re_name'))
+            rename_item = gtk.ImageMenuItem(_('_Rename...'))
             # add a special img for rename menuitem
             gtkgui_helpers.add_image_to_menuitem(rename_item, 'gajim-kbd_input')
             menu.append(rename_item)
@@ -5833,7 +5833,7 @@ class RosterWindow:
                     block_menuitem.set_sensitive(False)
 
             # Remove group
-            remove_item = gtk.ImageMenuItem(_('_Remove'))
+            remove_item = gtk.ImageMenuItem(_('Remo_ve'))
             icon = gtk.image_new_from_stock(gtk.STOCK_REMOVE,
                 gtk.ICON_SIZE_MENU)
             remove_item.set_image(icon)
@@ -6066,7 +6066,7 @@ class RosterWindow:
             item.set_sensitive(False)
 
         # Rename
-        item = gtk.ImageMenuItem(_('_Rename'))
+        item = gtk.ImageMenuItem(_('_Rename...'))
         # add a special img for rename menuitem
         gtkgui_helpers.add_image_to_menuitem(item, 'gajim-kbd_input')
         manage_transport_submenu.append(item)
@@ -6092,7 +6092,7 @@ class RosterWindow:
             item.set_sensitive(False)
 
         # Remove
-        item = gtk.ImageMenuItem(_('_Remove'))
+        item = gtk.ImageMenuItem(_('Remo_ve'))
         icon = gtk.image_new_from_stock(gtk.STOCK_REMOVE, gtk.ICON_SIZE_MENU)
         item.set_image(icon)
         manage_transport_submenu.append(item)
