@@ -5931,7 +5931,7 @@ class RosterWindow:
         menu.append(item)
 
         # Edit Groups
-        edit_groups_item = gtk.ImageMenuItem(_('Edit _Groups'))
+        edit_groups_item = gtk.ImageMenuItem(_('Edit _Groups...'))
         icon = gtk.image_new_from_stock(gtk.STOCK_EDIT, gtk.ICON_SIZE_MENU)
         edit_groups_item.set_image(icon)
         manage_contacts_submenu.append(edit_groups_item)
