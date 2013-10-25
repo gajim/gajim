@@ -5161,7 +5161,7 @@ class ESessionInfoWindow:
 
         self.security_image = self.xml.get_object('security_image')
         self.verify_now_button = self.xml.get_object('verify_now_button')
-        self.button_label = self.xml.get_object('button_label')
+        self.button_label = self.xml.get_object('verification_status_label')
         self.window = self.xml.get_object('esession_info_window')
         self.update_info()
         self.window.set_transient_for(transient_for)
