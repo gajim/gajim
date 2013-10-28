@@ -2717,7 +2717,14 @@ class RosterWindow:
             return True
         if obj.mtype not in ('normal', 'chat'):
             return
-        if obj.session.control:
+        if obj.mtype == 'normal' and obj.popup:
+            # it's single message to be autopopuped
+            dialogs.SingleMessageWindow(obj.conn.name, obj.jid,
+                action='receive', from_whom=obj.jid, subject=obj.subject,
+                message=obj.msgtxt, resource=obj.resource, session=obj.session,
+                form_node=obj.form_node)
+            return
+        if obj.session.control and obj.mtype == 'chat':
             typ = ''
             if obj.mtype == 'error':
                 typ = 'error'
@@ -2734,7 +2741,7 @@ class RosterWindow:
                 if not pw or (pw.get_active_control() and obj.session.control \
                 == pw.get_active_control() and pw.is_active() and end):
                     gajim.logger.set_read_messages([obj.msg_id])
-        elif obj.popup:
+        elif obj.popup and obj.mtype == 'chat':
             contact = gajim.contacts.get_contact(obj.conn.name, obj.jid)
             obj.session.control = gajim.interface.new_chat(contact,
                 obj.conn.name, session=obj.session)
