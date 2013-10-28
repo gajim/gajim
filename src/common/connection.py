@@ -2042,6 +2042,8 @@ class Connection(CommonConnection, ConnectionHandlers):
                 return
             if isinstance(jid, list):
                 for j in jid:
+                    if session is None:
+                        session = self.get_or_create_session(j, '')
                     self.log_message(j, msg, forward_from, session,
                         original_message, subject, type_, xhtml)
             else:
