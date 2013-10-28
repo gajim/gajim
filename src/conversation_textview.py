@@ -175,8 +175,6 @@ class ConversationTextview(GObject.GObject):
 
     FOCUS_OUT_LINE_PIXBUF = gtkgui_helpers.get_icon_pixmap(
         'gajim-muc_separator')
-    XEP0184_WARNING_PIXBUF = gtkgui_helpers.get_icon_pixmap('gtk-no')
-    XEP0184_RECEIVED_PIXBUF = gtkgui_helpers.get_icon_pixmap('gtk-yes')
     MESSAGE_CORRECTED_PIXBUF = gtkgui_helpers.get_icon_pixmap('gtk-spell-check')
 
     # smooth scroll constants
@@ -315,6 +313,10 @@ class ConversationTextview(GObject.GObject):
         self.displaymarking_tags = {}
 
         tag = buffer_.create_tag('xep0184-warning')
+        tag.set_property('foreground', 'red')
+
+        tag = buffer_.create_tag('xep0184-received')
+        tag.set_property('foreground', 'green')
 
         # One mark at the begining then 2 marks between each lines
         size = gajim.config.get('max_conversation_lines')
@@ -516,18 +518,7 @@ class ConversationTextview(GObject.GObject):
                 return False
 
             end_iter = buffer_.get_iter_at_mark(self.xep0184_marks[id_])
-            buffer_.insert(end_iter, ' ')
-            anchor = buffer_.create_child_anchor(end_iter)
-            img = TextViewImage(anchor, '')
-            img.set_from_pixbuf(ConversationTextview.XEP0184_WARNING_PIXBUF)
-            img.show()
-            self.tv.add_child_at_anchor(img, anchor)
-            before_img_iter = buffer_.get_iter_at_mark(self.xep0184_marks[id_])
-            before_img_iter.forward_char()
-            post_img_iter = before_img_iter.copy()
-            post_img_iter.forward_char()
-            buffer_.apply_tag_by_name('xep0184-warning', before_img_iter,
-                    post_img_iter)
+            buffer_.insert_with_tags_by_name(end_iter, ' ✖', 'xep0184-warning')
 
             self.xep0184_shown[id_] = SHOWN
             return False
@@ -554,12 +545,8 @@ class ConversationTextview(GObject.GObject):
 
         if gajim.config.get('positive_184_ack'):
             begin_iter = buffer_.get_iter_at_mark(self.xep0184_marks[id_])
-            buffer_.insert(begin_iter, ' ')
-            anchor = buffer_.create_child_anchor(begin_iter)
-            img = TextViewImage(anchor, '')
-            img.set_from_pixbuf(ConversationTextview.XEP0184_RECEIVED_PIXBUF)
-            img.show()
-            self.tv.add_child_at_anchor(img, anchor)
+            buffer_.insert_with_tags_by_name(begin_iter, ' ✓',
+                'xep0184-received')
 
         self.xep0184_shown[id_] = ALREADY_RECEIVED
 
