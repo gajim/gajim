@@ -237,7 +237,8 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
             obj.show_in_systray = notify.get_show_in_systray(event_type,
                 self.conn.name, contact)
 
-        if not self.control:
+        if (not self.control and obj.mtype != 'normal') or \
+        (obj.mtype != 'normal' and not obj.popup):
             event = gajim.events.create_event(type_, (obj.msgtxt, obj.subject,
                 obj.mtype, obj.timestamp, obj.encrypted, obj.resource,
                 obj.msg_id, obj.xhtml, self, obj.form_node, obj.displaymarking,
