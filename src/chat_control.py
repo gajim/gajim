@@ -2813,7 +2813,11 @@ class ChatControl(ChatControlBase):
         self.parent_win.redraw_tab(self, self.contact.chatstate)
 
     def _nec_caps_received(self, obj):
-        if obj.conn.name != self.account or obj.jid != self.contact.jid:
+        if obj.conn.name != self.account:
+            return
+        if self.TYPE_ID == 'chat' and obj.jid != self.contact.jid:
+            return
+        if self.TYPE_ID == 'pm' and obj.fjid != self.contact.jid:
             return
         self.update_ui()
 
