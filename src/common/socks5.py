@@ -116,13 +116,11 @@ class SocksQueue:
         self.on_failure[sid] = on_failure
         file_props = FilesProp.getFileProp(account, sid)
         file_props.failure_cb = on_failure
-        con = gajim.connections[account]
         streamhosts_to_test = []
         # Remove local IPs to not connect to ourself
         for streamhost in file_props.streamhosts:
             if streamhost['host'] == '127.0.0.1' or \
-                    streamhost['host'] == '::1' or \
-                    streamhost['host'] == con.peerhost[0]:
+                    streamhost['host'] == '::1'
                 continue
             streamhosts_to_test.append(streamhost)
         if not streamhosts_to_test:
