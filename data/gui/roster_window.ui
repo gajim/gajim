@@ -34,7 +34,7 @@
                   <object class="GtkMenu" id="actions_menu_menu">
                     <child>
                       <object class="GtkImageMenuItem" id="new_chat_menuitem">
-                        <property name="label" translatable="yes">_Start Chat</property>
+                        <property name="label" translatable="yes">_Start Chat...</property>
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="image">image1</property>

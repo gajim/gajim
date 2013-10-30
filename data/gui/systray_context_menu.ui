@@ -15,7 +15,7 @@
     </child>
     <child>
       <object class="GtkImageMenuItem" id="chat_with_menuitem">
-        <property name="label" translatable="yes">_Start Chat</property>
+        <property name="label" translatable="yes">_Start Chat...</property>
         <property name="visible">True</property>
         <property name="use_underline">True</property>
         <property name="image">image2</property>
