@@ -1134,7 +1134,8 @@ class ConversationTextview(GObject.GObject):
             # it's an emoticon
             emot_ascii = possible_emot_ascii_caps
             anchor = buffer_.create_child_anchor(end_iter)
-            img = TextViewImage(anchor, special_text)
+            img = TextViewImage(anchor,
+                gobject.markup_escape_text(special_text))
             animations = gajim.interface.emoticons_animations
             if not emot_ascii in animations:
                 animations[emot_ascii] = GdkPixbuf.PixbufAnimation.new_from_file(
