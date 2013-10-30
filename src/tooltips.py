@@ -115,6 +115,24 @@ class BaseTooltip:
 
     def on_size_request(self, widget, requisition):
         half_width = requisition.width / 2 + 1
+        if self.preferred_position[1] + requisition.height > \
+                self.screen.get_height():
+             # flip tooltip up
+            self.preferred_position[1] -= requisition.height + \
+                    self.widget_height + 8
+            if self.preferred_position[1] < 0:
+                self.preferred_position[1] = self.screen.get_height() - \
+                    requisition.height - 2
+
+                if self.preferred_position[0] + requisition.width + 7 < \
+                self.screen.get_width():
+                    self.preferred_position[0] = self.preferred_position[0] + 7
+                else:
+                    self.preferred_position[0] = self.preferred_position[0] - \
+                        requisition.width - 7
+                self.win.move(self.preferred_position[0],
+                    self.preferred_position[1])
+                return
         if self.preferred_position[0] < half_width:
             self.preferred_position[0] = 0
         elif self.preferred_position[0] + requisition.width > \
@@ -123,13 +141,6 @@ class BaseTooltip:
                     requisition.width
         elif not self.check_last_time:
             self.preferred_position[0] -= half_width
-        if self.preferred_position[1] + requisition.height > \
-                self.screen.get_height():
-            # flip tooltip up
-            self.preferred_position[1] -= requisition.height + \
-                    self.widget_height + 8
-        if self.preferred_position[1] < 0:
-            self.preferred_position[1] = 0
         self.win.move(self.preferred_position[0], self.preferred_position[1])
 
     def expose(self, widget, event):
