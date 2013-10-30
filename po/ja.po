@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim 0.16 ja\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-30 11:20+0200\n"
-"PO-Revision-Date: 2013-09-03 10:53+0900\n"
+"POT-Creation-Date: 2013-10-30 15:27+0100\n"
+"PO-Revision-Date: 2013-10-26 22:03+0900\n"
 "Last-Translator: Mako N <mako@pasero.net>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -25,13 +25,15 @@ msgstr "在席状況 (_S)"
 msgid "_Personal Events"
 msgstr "個人イベント (_P)"
 
-#: ../data/gui/account_context_menu.ui.h:3 ../data/gui/roster_window.ui.h:3
+#: ../data/gui/account_context_menu.ui.h:3
 msgid "_Start Chat..."
 msgstr "チャットを開始...(_S)"
 
-#: ../data/gui/account_context_menu.ui.h:4 ../data/gui/roster_window.ui.h:5
-msgid "Join _Group Chat..."
-msgstr "グループチャットに参加...(_G)"
+#: ../data/gui/account_context_menu.ui.h:4
+#: ../data/gui/chat_context_menu.ui.h:6 ../data/gui/roster_window.ui.h:5
+#: ../data/gui/systray_context_menu.ui.h:3
+msgid "Join _Group Chat"
+msgstr "グループチャットに参加 (_G)"
 
 #: ../data/gui/account_context_menu.ui.h:5
 msgid "_Add Contact..."
@@ -50,8 +52,9 @@ msgid "_Open Gmail Inbox"
 msgstr "Gmail の受信箱を開く (_O)"
 
 #: ../data/gui/account_context_menu.ui.h:9
-msgid "_Modify Account"
-msgstr "アカウントを修正 (_M)"
+#: ../data/gui/zeroconf_context_menu.ui.h:2
+msgid "_Modify Account..."
+msgstr "アカウントを編集...(_M)"
 
 #: ../data/gui/account_creation_wizard_window.ui.h:1
 msgid "Gajim: Account Creation Wizard"
@@ -172,13 +175,13 @@ msgstr "完了 (_F)"
 
 #: ../data/gui/account_creation_wizard_window.ui.h:30
 #: ../data/gui/accounts_window.ui.h:1 ../data/gui/change_mood_dialog.ui.h:1
-#: ../src/config.py:1253 ../src/config.py:1267 ../src/config.py:1272
-#: ../src/config.py:1320 ../src/config.py:1423 ../src/config.py:1742
-#: ../src/config.py:1747 ../src/config.py:2339 ../src/config.py:2420
-#: ../src/config.py:2435 ../src/config.py:3716 ../src/config.py:3791
-#: ../src/dialogs.py:315 ../src/dialogs.py:317 ../src/dialogs.py:523
-#: ../src/dialogs.py:536 ../src/roster_window.py:3147
-#: ../src/roster_window.py:3153 ../src/roster_window.py:3158
+#: ../src/config.py:1258 ../src/config.py:1273 ../src/config.py:1278
+#: ../src/config.py:1326 ../src/config.py:1429 ../src/config.py:1748
+#: ../src/config.py:1753 ../src/config.py:2347 ../src/config.py:2429
+#: ../src/config.py:2444 ../src/config.py:3725 ../src/config.py:3800
+#: ../src/dialogs.py:316 ../src/dialogs.py:318 ../src/dialogs.py:524
+#: ../src/dialogs.py:537 ../src/roster_window.py:3157
+#: ../src/roster_window.py:3163 ../src/roster_window.py:3168
 msgid "None"
 msgstr "なし"
 
@@ -187,26 +190,25 @@ msgid "Accounts"
 msgstr "アカウント"
 
 #. Change label for accept_button to action name instead of 'OK'.
-#: ../data/gui/accounts_window.ui.h:3 ../src/dialogs.py:3524
-#: ../src/dialogs.py:3570
+#: ../data/gui/accounts_window.ui.h:3 ../src/dialogs.py:3534
+#: ../src/dialogs.py:3580
 msgid "Add"
 msgstr "追加"
 
 #. Change label for accept_button to action name instead of 'OK'.
-#: ../data/gui/accounts_window.ui.h:4 ../src/dialogs.py:3528
-#: ../src/dialogs.py:3625
+#: ../data/gui/accounts_window.ui.h:4 ../src/dialogs.py:3538
+#: ../src/dialogs.py:3635
 msgid "Delete"
 msgstr "削除"
 
-#. Rename
-#: ../data/gui/accounts_window.ui.h:5 ../src/roster_window.py:5792
+#: ../data/gui/accounts_window.ui.h:5
 msgid "Re_name"
 msgstr "名前の変更 (_N)"
 
-#. XML Console enable checkbutton
-#: ../data/gui/accounts_window.ui.h:6 ../data/gui/xml_console_window.ui.h:3
-msgid "_Enable"
-msgstr "有効 (_E)"
+#: ../data/gui/accounts_window.ui.h:6 ../src/config.py:4173
+#: ../src/plugins/gui.py:92
+msgid "Active"
+msgstr "有効"
 
 #: ../data/gui/accounts_window.ui.h:7
 msgid "Anonymous authentication"
@@ -351,9 +353,9 @@ msgstr ""
 #. Maybe we haven't been in any group (defaults to General)
 #. General group cannot be changed
 #: ../data/gui/accounts_window.ui.h:37 ../data/gui/preferences_window.ui.h:41
-#: ../src/common/contacts.py:135 ../src/dialogs.py:115 ../src/dialogs.py:127
-#: ../src/roster_window.py:3089 ../src/roster_window.py:4215
-#: ../src/roster_window.py:5842
+#: ../src/common/contacts.py:135 ../src/dialogs.py:116 ../src/dialogs.py:128
+#: ../src/roster_window.py:3099 ../src/roster_window.py:4225
+#: ../src/roster_window.py:5859
 msgid "General"
 msgstr "全般"
 
@@ -413,8 +415,8 @@ msgstr "<b>その他の設定</b>"
 msgid "Connection"
 msgstr "接続"
 
-#: ../data/gui/accounts_window.ui.h:50 ../src/config.py:1840
-#: ../src/config.py:2436
+#: ../data/gui/accounts_window.ui.h:50 ../src/config.py:1846
+#: ../src/config.py:2445
 msgid "No key selected"
 msgstr "鍵が選択されていません"
 
@@ -490,8 +492,8 @@ msgid "E-Mail:"
 msgstr "E-メール:"
 
 #: ../data/gui/accounts_window.ui.h:67
-#: ../data/gui/zeroconf_information_window.ui.h:7 ../src/config.py:1867
-#: ../src/dialogs.py:841
+#: ../data/gui/zeroconf_information_window.ui.h:7 ../src/config.py:1873
+#: ../src/dialogs.py:842
 msgid "Jabber ID:"
 msgstr "Jabber ID:"
 
@@ -681,34 +683,32 @@ msgid "Yes"
 msgstr "する"
 
 #: ../data/gui/archiving_preferences_window.ui.h:3
-#, fuzzy
 msgid "Prefer"
-msgstr "その都度選ぶ"
+msgstr "賛成"
 
 #: ../data/gui/archiving_preferences_window.ui.h:4
 msgid "Concede"
-msgstr "認める"
+msgstr "追認"
 
 #: ../data/gui/archiving_preferences_window.ui.h:5
 msgid "Forbid"
-msgstr "禁止する"
+msgstr "禁止"
 
 #: ../data/gui/archiving_preferences_window.ui.h:6
 msgid "<i>Method Manual</i>"
-msgstr ""
+msgstr "<i>手動保管</i>"
 
 #: ../data/gui/archiving_preferences_window.ui.h:7
 msgid "<i>Method Local</i>"
-msgstr ""
+msgstr "<i>ローカル保管</i>"
 
 #: ../data/gui/archiving_preferences_window.ui.h:8
 msgid "<i>Method Auto</i>"
-msgstr ""
+msgstr "<i>自動保管</i>"
 
 #: ../data/gui/archiving_preferences_window.ui.h:9
-#, fuzzy
 msgid "Auto"
-msgstr "自動化"
+msgstr "自動"
 
 #: ../data/gui/atom_entry_window.ui.h:1
 msgid "New entry received"
@@ -740,8 +740,8 @@ msgstr "遮断している相手先"
 
 #: ../data/gui/blocked_contacts_window.ui.h:2
 #: ../data/gui/contact_context_menu.ui.h:20
-#: ../data/gui/gc_occupants_menu.ui.h:14 ../src/roster_window.py:5811
-#: ../src/roster_window.py:5938 ../src/roster_window.py:6071
+#: ../data/gui/gc_occupants_menu.ui.h:14 ../src/roster_window.py:5828
+#: ../src/roster_window.py:5955 ../src/roster_window.py:6092
 msgid "_Unblock"
 msgstr "遮断の解除 (_U)"
 
@@ -813,15 +813,11 @@ msgstr "JID/Eメールアドレスをコピー (_C)"
 msgid "_Open Email Composer"
 msgstr "メール作成画面を開く (_O)"
 
-#: ../data/gui/chat_context_menu.ui.h:5
+#: ../data/gui/chat_context_menu.ui.h:5 ../data/gui/roster_window.ui.h:3
 #: ../data/gui/subscription_request_popup_menu.ui.h:1
 #: ../data/gui/systray_context_menu.ui.h:2
 msgid "_Start Chat"
 msgstr "チャットを開始 (_S)"
-
-#: ../data/gui/chat_context_menu.ui.h:6
-msgid "Join _Group Chat"
-msgstr "グループチャットに参加 (_G)"
 
 #: ../data/gui/chat_context_menu.ui.h:7
 #: ../data/gui/contact_context_menu.ui.h:24
@@ -857,57 +853,56 @@ msgid "#"
 msgstr "#"
 
 #: ../data/gui/chat_control.ui.h:8 ../data/gui/groupchat_control.ui.h:8
-#: ../data/gui/single_message_window.ui.h:6
-msgid "Send message"
-msgstr "メッセージを送信する"
-
-#. Make sure the character after "_" is not M/m (conflicts with Alt+M that is supposed to show the Emoticon Selector)
-#: ../data/gui/chat_control.ui.h:10 ../data/gui/groupchat_control.ui.h:10
 #: ../data/gui/xml_console_window.ui.h:15 ../src/filetransfers_window.py:322
 msgid "_Send"
 msgstr "送信 (_S)"
 
-#: ../data/gui/chat_control.ui.h:11
+#: ../data/gui/chat_control.ui.h:9 ../data/gui/groupchat_control.ui.h:9
+#: ../data/gui/single_message_window.ui.h:6
+msgid "Send message"
+msgstr "メッセージを送信する"
+
+#: ../data/gui/chat_control.ui.h:10
 msgid "1"
 msgstr "1"
 
-#: ../data/gui/chat_control.ui.h:12
+#: ../data/gui/chat_control.ui.h:11
 msgid "2"
 msgstr "2"
 
-#: ../data/gui/chat_control.ui.h:13
+#: ../data/gui/chat_control.ui.h:12
 msgid "3"
 msgstr "3"
 
-#: ../data/gui/chat_control.ui.h:14
+#: ../data/gui/chat_control.ui.h:13
 msgid "4"
 msgstr "4"
 
-#: ../data/gui/chat_control.ui.h:15
+#: ../data/gui/chat_control.ui.h:14
 msgid "5"
 msgstr "5"
 
-#: ../data/gui/chat_control.ui.h:16
+#: ../data/gui/chat_control.ui.h:15
 msgid "6"
 msgstr "6"
 
-#: ../data/gui/chat_control.ui.h:17
+#: ../data/gui/chat_control.ui.h:16
 msgid "7"
 msgstr "7"
 
-#: ../data/gui/chat_control.ui.h:18
+#: ../data/gui/chat_control.ui.h:17
 msgid "8"
 msgstr "8"
 
-#: ../data/gui/chat_control.ui.h:19
+#: ../data/gui/chat_control.ui.h:18
 msgid "9"
 msgstr "9"
 
-#: ../data/gui/chat_control.ui.h:20
+#: ../data/gui/chat_control.ui.h:19
 msgid "*"
 msgstr "*"
 
-#: ../data/gui/chat_control.ui.h:21 ../data/gui/single_message_window.ui.h:3
+#: ../data/gui/chat_control.ui.h:20 ../data/gui/single_message_window.ui.h:3
 msgid "0"
 msgstr "0"
 
@@ -939,7 +934,9 @@ msgstr "招待 (_V)"
 msgid "Start _Chat"
 msgstr "チャットを開始 (_C)"
 
+#. Send single message
 #: ../data/gui/contact_context_menu.ui.h:2 ../data/gui/roster_window.ui.h:4
+#: ../data/gui/systray_context_menu.ui.h:4 ../src/roster_window.py:5999
 msgid "Send Single _Message..."
 msgstr "単発メッセージを送信...(_M)"
 
@@ -950,8 +947,8 @@ msgstr "ファイルを送信...(_S)"
 #. Invite to
 #. Invite to Groupchat
 #: ../data/gui/contact_context_menu.ui.h:4
-#: ../data/gui/gc_occupants_menu.ui.h:11 ../src/roster_window.py:5747
-#: ../src/roster_window.py:5906
+#: ../data/gui/gc_occupants_menu.ui.h:11 ../src/roster_window.py:5759
+#: ../src/roster_window.py:5923
 msgid "In_vite to"
 msgstr "招待 (_V)"
 
@@ -967,12 +964,13 @@ msgstr "Open_PGP 暗号化する/しない"
 msgid "Toggle End to End Encryption"
 msgstr "全線暗号化(E2EE)する/しない"
 
-#: ../data/gui/contact_context_menu.ui.h:8 ../src/roster_window.py:5757
-#: ../src/roster_window.py:5995
+#: ../data/gui/contact_context_menu.ui.h:8 ../src/roster_window.py:5769
+#: ../src/roster_window.py:6014
 msgid "Send Cus_tom Status"
 msgstr "個別の在席状況を送信 (_T)"
 
-#: ../data/gui/contact_context_menu.ui.h:9
+#. Execute Command
+#: ../data/gui/contact_context_menu.ui.h:9 ../src/roster_window.py:6050
 msgid "E_xecute Command..."
 msgstr "コマンドを実行...(_X)"
 
@@ -980,11 +978,14 @@ msgstr "コマンドを実行...(_X)"
 msgid "M_anage Contact"
 msgstr "相手先を管理 (_A)"
 
-#: ../data/gui/contact_context_menu.ui.h:11
+#. Rename
+#: ../data/gui/contact_context_menu.ui.h:11 ../src/roster_window.py:5809
+#: ../src/roster_window.py:6079
 msgid "_Rename..."
 msgstr "名前を変更...(_R)"
 
-#: ../data/gui/contact_context_menu.ui.h:12
+#. Edit Groups
+#: ../data/gui/contact_context_menu.ui.h:12 ../src/roster_window.py:5944
 msgid "Edit _Groups..."
 msgstr "グループを変更...(_G)"
 
@@ -1017,8 +1018,8 @@ msgid "_Forbid contact to see my status"
 msgstr "自分の在席状況を見られることを禁止する (_F)"
 
 #: ../data/gui/contact_context_menu.ui.h:21
-#: ../data/gui/gc_occupants_menu.ui.h:13 ../src/roster_window.py:5819
-#: ../src/roster_window.py:5944 ../src/roster_window.py:6074
+#: ../data/gui/gc_occupants_menu.ui.h:13 ../src/roster_window.py:5836
+#: ../src/roster_window.py:5961 ../src/roster_window.py:6095
 msgid "_Block"
 msgstr "遮断 (_B)"
 
@@ -1030,14 +1031,17 @@ msgstr "無視しない (_U)"
 msgid "_Ignore"
 msgstr "無視 (_I)"
 
-#: ../data/gui/contact_context_menu.ui.h:25
+#. Remove group
+#. Remove
+#: ../data/gui/contact_context_menu.ui.h:25 ../src/roster_window.py:5846
+#: ../src/roster_window.py:6105
 msgid "Remo_ve"
 msgstr "削除 (_V)"
 
 #: ../data/gui/contact_context_menu.ui.h:26
 #: ../data/gui/gc_control_popup_menu.ui.h:9
 #: ../data/gui/gc_occupants_menu.ui.h:15 ../data/gui/roster_window.ui.h:19
-#: ../src/roster_window.py:6145
+#: ../src/roster_window.py:6168
 msgid "_History"
 msgstr "履歴 (_H)"
 
@@ -1094,24 +1098,24 @@ msgid "When a file transfer is complete show a popup notification"
 msgstr "ファイル転送が完了したら、ポップアップで知らせる"
 
 #: ../data/gui/filetransfers.ui.h:7
+msgid "Clean _up"
+msgstr "消去 (_U)"
+
+#: ../data/gui/filetransfers.ui.h:8
 msgid "Removes completed, cancelled and failed file transfers from the list"
 msgstr "一覧から完了、中止、失敗したファイル転送を削除します"
 
-#: ../data/gui/filetransfers.ui.h:8
+#: ../data/gui/filetransfers.ui.h:9
 msgid "Remove file transfer from the list."
 msgstr "ファイル転送を一覧から削除します。"
 
-#: ../data/gui/filetransfers.ui.h:9
+#: ../data/gui/filetransfers.ui.h:10
 msgid ""
 "This action removes single file transfer from the list. If the transfer is "
 "active, it is first stopped and then removed"
 msgstr ""
 "一覧からひとつのファイル転送を削除します。転送中の場合、まず転送を中止し、そ"
 "れから削除します"
-
-#: ../data/gui/filetransfers.ui.h:10
-msgid "Clean _up"
-msgstr "消去 (_U)"
 
 #: ../data/gui/filetransfers.ui.h:11
 msgid "_Pause"
@@ -1133,16 +1137,6 @@ msgstr "選択されたファイルの転送を中止します"
 #: ../data/gui/filetransfers.ui.h:15
 msgid "Hides the window"
 msgstr "ウィンドウを閉じる"
-
-#: ../data/gui/filetransfers.ui.h:16 ../src/filetransfers_window.py:905
-msgid "_Continue"
-msgstr "続ける (_C)"
-
-# #(Mako)Containing をどうする
-#: ../data/gui/filetransfers.ui.h:17 ../src/chat_control.py:3351
-#: ../src/filetransfers_window.py:213
-msgid "_Open Containing Folder"
-msgstr "フォルダを開く (_O)"
 
 #: ../data/gui/gajim_themes_window.ui.h:1
 msgid "Account row"
@@ -1252,7 +1246,7 @@ msgstr "閉じるボタンで最小化 (_M)"
 msgid "_Request Voice"
 msgstr "発言権を要求 (_R)"
 
-#: ../data/gui/gc_control_popup_menu.ui.h:8 ../src/disco.py:1843
+#: ../data/gui/gc_control_popup_menu.ui.h:8 ../src/disco.py:1839
 msgid "_Bookmark"
 msgstr "ブックマーク (_B)"
 
@@ -1410,15 +1404,15 @@ msgstr "相手先の状況変更を記録する (_S)"
 
 #: ../data/gui/item_archiving_preferences_window.ui.h:1
 msgid "expire"
-msgstr ""
+msgstr "保管期限"
 
 #: ../data/gui/item_archiving_preferences_window.ui.h:2
 msgid "save"
-msgstr ""
+msgstr "保存"
 
 #: ../data/gui/item_archiving_preferences_window.ui.h:3
 msgid "otr"
-msgstr ""
+msgstr "オフレコ"
 
 #: ../data/gui/item_archiving_preferences_window.ui.h:4
 #: ../src/gajim-remote.py:230
@@ -1427,46 +1421,45 @@ msgstr "jid"
 
 #: ../data/gui/item_archiving_preferences_window.ui.h:5
 msgid "body"
-msgstr ""
+msgstr "body"
 
 #: ../data/gui/item_archiving_preferences_window.ui.h:6
 msgid "false"
-msgstr ""
+msgstr "false"
 
 #: ../data/gui/item_archiving_preferences_window.ui.h:7
-#, fuzzy
 msgid "message"
-msgstr "メッセージ"
+msgstr "message"
 
 #: ../data/gui/item_archiving_preferences_window.ui.h:8
 msgid "stream"
-msgstr ""
+msgstr "stream"
 
 #: ../data/gui/item_archiving_preferences_window.ui.h:9
 msgid "approve"
-msgstr ""
+msgstr "approve(承認)"
 
 #: ../data/gui/item_archiving_preferences_window.ui.h:10
 msgid "concede"
-msgstr ""
+msgstr "concede(追認)"
 
 #: ../data/gui/item_archiving_preferences_window.ui.h:11
 msgid "forbid"
-msgstr ""
+msgstr "forbid(禁止)"
 
 #: ../data/gui/item_archiving_preferences_window.ui.h:12
 msgid "oppose"
-msgstr ""
+msgstr "oppose(反対)"
 
 #: ../data/gui/item_archiving_preferences_window.ui.h:13
 msgid "prefer"
-msgstr ""
+msgstr "prefer(賛成)"
 
 #: ../data/gui/item_archiving_preferences_window.ui.h:14
 msgid "require"
-msgstr ""
+msgstr "require(必須)"
 
-#: ../data/gui/join_groupchat_window.ui.h:1 ../src/dialogs.py:2416
+#: ../data/gui/join_groupchat_window.ui.h:1 ../src/dialogs.py:2420
 msgid "Join Group Chat"
 msgstr "グループチャットに参加"
 
@@ -1494,7 +1487,7 @@ msgstr "接続時に自動的にこの談話室に参加する (_A)"
 msgid "_Bookmark this room"
 msgstr "この談話室をブックマークする (_B)"
 
-#: ../data/gui/join_groupchat_window.ui.h:9 ../src/config.py:1857
+#: ../data/gui/join_groupchat_window.ui.h:9 ../src/config.py:1863
 msgid "Server:"
 msgstr "サーバー:"
 
@@ -1502,8 +1495,8 @@ msgstr "サーバー:"
 msgid "Bro_wse Rooms"
 msgstr "談話室を一覧 (_W)"
 
-#: ../data/gui/join_groupchat_window.ui.h:11 ../src/chat_control.py:3386
-#: ../src/disco.py:1396 ../src/disco.py:1847
+#: ../data/gui/join_groupchat_window.ui.h:11 ../src/chat_control.py:3391
+#: ../src/disco.py:1401 ../src/disco.py:1843
 msgid "_Join"
 msgstr "参加 (_J)"
 
@@ -1805,30 +1798,18 @@ msgid "_Window behavior:"
 msgstr "ウィンドウの配置 (_W):"
 
 #: ../data/gui/preferences_window.ui.h:30
-msgid ""
-"If not disabled, Gajim will replace ascii smilies like ':)' with equivalent "
-"animated or static graphical emoticons"
-msgstr ""
-"「無効」でなければ、Gajim は ':)' のようなスマイリーを対応する画像に置き換え"
-"ます"
-
-#: ../data/gui/preferences_window.ui.h:31
-msgid "_Emoticons:"
-msgstr "感情アイコン (_E):"
-
-#: ../data/gui/preferences_window.ui.h:32
 msgid "Ma_ke message windows compact"
 msgstr "メッセージウィンドウを簡潔にする (_K)"
 
-#: ../data/gui/preferences_window.ui.h:33
+#: ../data/gui/preferences_window.ui.h:31
 msgid "Hide all buttons in chat windows"
 msgstr "チャットウィンドウのすべてのボタンを隠します"
 
-#: ../data/gui/preferences_window.ui.h:34
+#: ../data/gui/preferences_window.ui.h:32
 msgid "_Ignore rich content in incoming messages"
 msgstr "受信したメッセージの装飾を無視する (_I)"
 
-#: ../data/gui/preferences_window.ui.h:35
+#: ../data/gui/preferences_window.ui.h:33
 msgid ""
 "Some messages may include rich content (formatting, colors etc). If checked, "
 "Gajim will just display the raw message text."
@@ -1836,11 +1817,11 @@ msgstr ""
 "メッセージが装飾 (書式や色など) を含んでいる場合があります。チェックをつける"
 "と、Gajim はそのままのメッセージ文を表示します。"
 
-#: ../data/gui/preferences_window.ui.h:36
+#: ../data/gui/preferences_window.ui.h:34
 msgid "_Highlight misspelled words"
 msgstr "スペル間違いを強調表示する (_H)"
 
-#: ../data/gui/preferences_window.ui.h:37
+#: ../data/gui/preferences_window.ui.h:35
 msgid ""
 "If checked, Gajim will highlight spelling errors in input fields of chat "
 "windows. If no language is explicitly set via right click on the input "
@@ -1850,13 +1831,25 @@ msgstr ""
 "して表示します。入力欄での右クリックで言語を明示的に指定できますが、それがな"
 "い場合は、この相手先やグループチャットにはデフォルトの言語が適用されます。"
 
-#: ../data/gui/preferences_window.ui.h:38
+#: ../data/gui/preferences_window.ui.h:36
 msgid "_Show roster on startup:"
 msgstr "起動時に名簿を表示する (_S):"
 
-#: ../data/gui/preferences_window.ui.h:39
+#: ../data/gui/preferences_window.ui.h:37
 msgid "Show icon when your messages are received"
 msgstr "グループチャットが相手先に届いたらアイコンを表示する"
+
+#: ../data/gui/preferences_window.ui.h:38
+msgid ""
+"If not disabled, Gajim will replace ascii smilies like ':)' with equivalent "
+"animated or static graphical emoticons"
+msgstr ""
+"「無効」でなければ、Gajim は ':)' のようなスマイリーを対応する画像に置き換え"
+"ます"
+
+#: ../data/gui/preferences_window.ui.h:39
+msgid "_Emoticons:"
+msgstr "感情アイコン (_E):"
 
 #: ../data/gui/preferences_window.ui.h:40
 msgid "<b>Chat Appearance</b>"
@@ -2309,7 +2302,7 @@ msgstr "拡張"
 msgid "Privacy Lists:"
 msgstr "プライバシーリスト:"
 
-#: ../data/gui/privacy_list_window.ui.h:1 ../src/dialogs.py:4121
+#: ../data/gui/privacy_list_window.ui.h:1 ../src/dialogs.py:4131
 msgid "Privacy List"
 msgstr "プライバシーリスト"
 
@@ -2561,10 +2554,8 @@ msgstr "アカウントを Gajim とサーバーからも削除 (_S)"
 msgid "<b>What do you want to do?</b>"
 msgstr "<b>あなたがやりたいことは ?</b>"
 
-#. Remove group
 #. Remove
-#: ../data/gui/remove_account_window.ui.h:4 ../src/roster_window.py:5829
-#: ../src/roster_window.py:5954 ../src/roster_window.py:6084
+#: ../data/gui/remove_account_window.ui.h:4 ../src/roster_window.py:5971
 msgid "_Remove"
 msgstr "削除 (_R)"
 
@@ -2600,7 +2591,7 @@ msgstr "操作 (_A)"
 msgid "Add _Contact..."
 msgstr "相手先リストに追加...(_C)"
 
-#: ../data/gui/roster_window.ui.h:9 ../src/disco.py:1558
+#: ../data/gui/roster_window.ui.h:9 ../src/disco.py:1554
 msgid "_Edit"
 msgstr "編集 (_E)"
 
@@ -2681,11 +2672,11 @@ msgid "_Add contact"
 msgstr "相手先リストに追加 (_A)"
 
 #. Information
-#: ../data/gui/search_window.ui.h:4 ../src/roster_window.py:6096
+#: ../data/gui/search_window.ui.h:4 ../src/roster_window.py:6117
 msgid "_Information"
 msgstr "情報 (_I)"
 
-#: ../data/gui/search_window.ui.h:5 ../src/disco.py:1408
+#: ../data/gui/search_window.ui.h:5 ../src/disco.py:1410
 msgid "_Search"
 msgstr "検索 (_S)"
 
@@ -2772,14 +2763,6 @@ msgstr "合わせたい相手先を選択してください"
 msgid "Sta_tus"
 msgstr "状態 (_T)"
 
-#: ../data/gui/systray_context_menu.ui.h:3
-msgid "_Group Chat"
-msgstr "グループチャット (_G)"
-
-#: ../data/gui/systray_context_menu.ui.h:4
-msgid "Send Single _Message"
-msgstr "単発メッセージの送信 (_M)"
-
 #: ../data/gui/systray_context_menu.ui.h:5
 msgid "Show All Pending _Events"
 msgstr "すべての保留イベントの表示 (_E)"
@@ -2853,6 +2836,11 @@ msgstr "備考"
 msgid "<b>Jabber Traffic</b>"
 msgstr "<b>Jabber トラヒック</b>"
 
+#. XML Console enable checkbutton
+#: ../data/gui/xml_console_window.ui.h:3
+msgid "_Enable"
+msgstr "有効 (_E)"
+
 #: ../data/gui/xml_console_window.ui.h:4
 msgid "Hide IN stanzas"
 msgstr "IN スタンザを表示しない"
@@ -2899,10 +2887,6 @@ msgstr "_Message"
 #: ../data/gui/xml_console_window.ui.h:16
 msgid "<b>XML Input</b>"
 msgstr "<b>XML 入力</b>"
-
-#: ../data/gui/zeroconf_context_menu.ui.h:2
-msgid "_Modify Account..."
-msgstr "アカウントを編集...(_M)"
 
 #: ../data/gui/zeroconf_information_window.ui.h:2
 msgid "Local jid:"
@@ -2968,48 +2952,48 @@ msgid "Service returned an error."
 msgstr "サービスはエラーを返しました。"
 
 #. For i18n
-#: ../src/advanced_configuration_window.py:92
+#: ../src/advanced_configuration_window.py:93
 msgid "Activated"
 msgstr "真"
 
-#: ../src/advanced_configuration_window.py:92
+#: ../src/advanced_configuration_window.py:93
 msgid "Deactivated"
 msgstr "偽"
 
-#: ../src/advanced_configuration_window.py:94
+#: ../src/advanced_configuration_window.py:95
 msgid "Boolean"
 msgstr "真偽型"
 
-#: ../src/advanced_configuration_window.py:95
+#: ../src/advanced_configuration_window.py:96
 msgid "Integer"
 msgstr "整数型"
 
-#: ../src/advanced_configuration_window.py:96
+#: ../src/advanced_configuration_window.py:97
 msgid "Text"
 msgstr "文字列型"
 
-#: ../src/advanced_configuration_window.py:97 ../src/chat_control.py:1065
+#: ../src/advanced_configuration_window.py:98 ../src/chat_control.py:1065
 msgid "Color"
 msgstr "色"
 
-#: ../src/advanced_configuration_window.py:108
+#: ../src/advanced_configuration_window.py:109
 msgid "Preference Name"
 msgstr "設定名"
 
-#: ../src/advanced_configuration_window.py:114
+#: ../src/advanced_configuration_window.py:116
 msgid "Value"
 msgstr "値"
 
-#: ../src/advanced_configuration_window.py:124
+#: ../src/advanced_configuration_window.py:125
 msgid "Type"
 msgstr "種類"
 
 #. we talk about option description in advanced configuration editor
-#: ../src/advanced_configuration_window.py:179
+#: ../src/advanced_configuration_window.py:182
 msgid "(None)"
 msgstr "(なし)"
 
-#: ../src/advanced_configuration_window.py:305
+#: ../src/advanced_configuration_window.py:308
 msgid "Hidden"
 msgstr "(非表示)"
 
@@ -3069,7 +3053,7 @@ msgstr ""
 "ファイルを %s に送信すると、その相手はあなたの本当の Jabber ID を知ることにな"
 "ります。"
 
-#: ../src/chat_control.py:1665 ../src/chat_control.py:2249
+#: ../src/chat_control.py:1665 ../src/chat_control.py:2250
 msgid "OpenPGP encryption enabled"
 msgstr "OpenPGP 暗号化は有効"
 
@@ -3084,12 +3068,12 @@ msgstr "この相手先は HTML をサポートしていません。"
 #. Add to roster
 #: ../src/chat_control.py:1735 ../src/common/contacts.py:152
 #: ../src/common/contacts.py:273 ../src/common/helpers.py:67
-#: ../src/common/helpers.py:261 ../src/dialogs.py:1105 ../src/dialogs.py:2310
-#: ../src/dialogs.py:2339 ../src/dialogs.py:3551 ../src/gui_interface.py:485
-#: ../src/gui_menu_builder.py:266 ../src/gui_menu_builder.py:421
-#: ../src/roster_window.py:771 ../src/roster_window.py:1732
-#: ../src/roster_window.py:1734 ../src/roster_window.py:2082
-#: ../src/roster_window.py:3618 ../src/roster_window.py:3645
+#: ../src/common/helpers.py:261 ../src/dialogs.py:1106 ../src/dialogs.py:2314
+#: ../src/dialogs.py:2343 ../src/dialogs.py:3561 ../src/gui_interface.py:485
+#: ../src/gui_menu_builder.py:269 ../src/gui_menu_builder.py:424
+#: ../src/roster_window.py:771 ../src/roster_window.py:1735
+#: ../src/roster_window.py:1737 ../src/roster_window.py:2085
+#: ../src/roster_window.py:3628 ../src/roster_window.py:3655
 msgid "Not in Roster"
 msgstr "名簿にありません"
 
@@ -3117,30 +3101,30 @@ msgstr "相手先のクライアントはこの機能をサポートしていま
 msgid "Send files"
 msgstr "ファイルを送信"
 
-#: ../src/chat_control.py:1785
+#: ../src/chat_control.py:1786
 msgid "This contact does not support file transfer."
 msgstr "この相手先はファイル転送をサポートしていません。"
 
-#: ../src/chat_control.py:1788
+#: ../src/chat_control.py:1789
 msgid "You need to know the real JID of the contact to send him or her a file."
 msgstr "ファイル転送を行なうには、本当の JID を知っている必要があります。"
 
-#: ../src/chat_control.py:1906
+#: ../src/chat_control.py:1907
 #, python-format
 msgid "%(type)s state : %(state)s, reason: %(reason)s"
 msgstr "%(type)s の状態: %(state)s  理由: %(reason)s"
 
-#: ../src/chat_control.py:2098
+#: ../src/chat_control.py:2099
 #, python-format
 msgid "%(nickname)s from group chat %(room_name)s"
 msgstr "%(nickname)s さん (グループチャット %(room_name)s より)"
 
 #. No key assigned nor a key is used by remote contact
-#: ../src/chat_control.py:2229 ../src/dialogs.py:5194
+#: ../src/chat_control.py:2230 ../src/dialogs.py:5206
 msgid "No OpenPGP key assigned"
 msgstr "OpenPGP 鍵が割り当てられていません"
 
-#: ../src/chat_control.py:2230
+#: ../src/chat_control.py:2231
 msgid ""
 "No OpenPGP key is assigned to this contact. So you cannot encrypt messages "
 "with OpenPGP."
@@ -3148,52 +3132,52 @@ msgstr ""
 "この相手先に OpenPGP 鍵が割り当てられていないため、メッセージを OpenPGP で暗"
 "号化できません。"
 
-#: ../src/chat_control.py:2239
+#: ../src/chat_control.py:2240
 msgid "OpenPGP encryption disabled"
 msgstr "OpenPGP 暗号化は無効"
 
-#: ../src/chat_control.py:2265
+#: ../src/chat_control.py:2266
 msgid "Session WILL be logged"
 msgstr "セッションは記録されます"
 
-#: ../src/chat_control.py:2267
+#: ../src/chat_control.py:2268
 msgid "Session WILL NOT be logged"
 msgstr "セッションは記録されません"
 
 # (Mako)暗号化は有効 %s、
 #. encryption %s active
-#: ../src/chat_control.py:2284
+#: ../src/chat_control.py:2285
 msgid "is"
 msgstr "で"
 
-#: ../src/chat_control.py:2284
+#: ../src/chat_control.py:2285
 msgid "is NOT"
 msgstr "でなく"
 
 # #. チャットは記録 %s。
 #. chat session %s be logged
-#: ../src/chat_control.py:2286
+#: ../src/chat_control.py:2287
 msgid "will"
 msgstr "記録されます"
 
-#: ../src/chat_control.py:2286
+#: ../src/chat_control.py:2287
 msgid "will NOT"
 msgstr "記録されません"
 
 #. About encrypted chat session
-#: ../src/chat_control.py:2290
+#: ../src/chat_control.py:2291
 msgid "and authenticated"
 msgstr "認証されています"
 
 #. About encrypted chat session
-#: ../src/chat_control.py:2294
+#: ../src/chat_control.py:2295
 msgid "and NOT authenticated"
 msgstr "認証されていません"
 
 #. status will become 'is' or 'is not', authentificaed will become
 #. 'and authentificated' or 'and not authentificated', logged will become
 #. 'will' or 'will not'
-#: ../src/chat_control.py:2301
+#: ../src/chat_control.py:2302
 #, python-format
 msgid ""
 "%(type)s encryption %(status)s active %(authenticated)s.\n"
@@ -3202,31 +3186,31 @@ msgstr ""
 "%(type)s の暗号化は有効%(status)s、%(authenticated)s。\n"
 "チャットは%(logged)s。"
 
-#: ../src/chat_control.py:2439
+#: ../src/chat_control.py:2440
 msgid "Session negotiation cancelled"
 msgstr "セッションの確立を中止しました"
 
-#: ../src/chat_control.py:2449
+#: ../src/chat_control.py:2450
 msgid "This session WILL be archived on server"
 msgstr "セッションはサーバーに記録されます"
 
-#: ../src/chat_control.py:2451
+#: ../src/chat_control.py:2452
 msgid "This session WILL NOT be archived on server"
 msgstr "セッションはサーバーに記録されません"
 
-#: ../src/chat_control.py:2460
+#: ../src/chat_control.py:2461
 msgid "This session is encrypted"
 msgstr "このセッションは暗号化されています"
 
-#: ../src/chat_control.py:2463
+#: ../src/chat_control.py:2464
 msgid " and WILL be logged"
 msgstr " かつ、記録されます"
 
-#: ../src/chat_control.py:2465
+#: ../src/chat_control.py:2466
 msgid " and WILL NOT be logged"
 msgstr " かつ、記録されません"
 
-#: ../src/chat_control.py:2470
+#: ../src/chat_control.py:2471
 msgid ""
 "Remote contact's identity not verified. Click the shield button for more "
 "details."
@@ -3234,39 +3218,39 @@ msgstr ""
 "遠くの相手先の同一性は検証されませんでした。詳しくは盾ボタンをクリックしてく"
 "ださい。"
 
-#: ../src/chat_control.py:2472
+#: ../src/chat_control.py:2473
 msgid "E2E encryption disabled"
 msgstr "終端間暗号化 (E2EE) は無効"
 
-#: ../src/chat_control.py:2520 ../src/chat_control.py:2534
+#: ../src/chat_control.py:2521 ../src/chat_control.py:2535
 msgid "The following message was NOT encrypted"
 msgstr "次のメッセージは暗号化されませんでした"
 
-#: ../src/chat_control.py:2526
+#: ../src/chat_control.py:2527
 msgid "The following message was encrypted"
 msgstr "次のメッセージは暗号化されました"
 
 #. %s is being replaced in the code with JID
-#: ../src/chat_control.py:2797
+#: ../src/chat_control.py:2798
 #, python-format
 msgid "You just received a new message from \"%s\""
 msgstr "\"%s\" さんから新しいメッセージを受信しました"
 
-#: ../src/chat_control.py:2799
+#: ../src/chat_control.py:2800
 msgid ""
 "If you close this tab and you have history disabled, this message will be "
 "lost."
 msgstr ""
 "このタブを閉じると、記録を残さない設定の場合、このメッセージは失われます。"
 
-#: ../src/chat_control.py:2967 ../src/common/connection_handlers_events.py:913
+#: ../src/chat_control.py:2972 ../src/common/connection_handlers_events.py:913
 #: ../src/common/connection_handlers.py:1145
 #: ../src/common/connection_handlers.py:1269 ../src/common/connection.py:523
 #: ../src/common/logger.py:1161 ../src/gajim.py:229 ../src/session.py:98
 msgid "Database Error"
 msgstr "データベースのエラー"
 
-#: ../src/chat_control.py:2968
+#: ../src/chat_control.py:2973
 #, python-format
 msgid ""
 "The database file (%s) cannot be read. Try to repair it or remove it (all "
@@ -3275,7 +3259,7 @@ msgstr ""
 "データベースファイル (%s) を読めません。修復するか、あるいは削除 (すべての履"
 "歴は失われます) してください。"
 
-#: ../src/chat_control.py:3205 ../src/gui_interface.py:1161
+#: ../src/chat_control.py:3210 ../src/gui_interface.py:1161
 #, python-format
 msgid ""
 "Unable to decrypt message from %s\n"
@@ -3284,52 +3268,57 @@ msgstr ""
 "%s さんからのメッセージを復号できません\n"
 "改竄の可能性があります。"
 
-#: ../src/chat_control.py:3262
+#: ../src/chat_control.py:3267
 #, python-format
 msgid "%(name)s is now %(status)s"
 msgstr "%(name)s さんは現在、%(status)s"
 
-#: ../src/chat_control.py:3321
+#: ../src/chat_control.py:3326
 msgid "File transfer"
 msgstr "ファイルの転送"
 
-#: ../src/chat_control.py:3324
+#: ../src/chat_control.py:3329
 msgid "Size"
 msgstr "サイズ"
 
-#: ../src/chat_control.py:3326
+#: ../src/chat_control.py:3331
 msgid "_Accept"
 msgstr "承諾する (_A)"
 
-#: ../src/chat_control.py:3347 ../src/filetransfers_window.py:211
+#: ../src/chat_control.py:3352 ../src/filetransfers_window.py:211
 msgid "File transfer completed"
 msgstr "ファイルの転送が完了しました"
 
-#: ../src/chat_control.py:3383 ../src/dialogs.py:2927 ../src/dialogs.py:4614
+# #(Mako)Containing をどうする
+#: ../src/chat_control.py:3356 ../src/filetransfers_window.py:213
+msgid "_Open Containing Folder"
+msgstr "フォルダを開く (_O)"
+
+#: ../src/chat_control.py:3388 ../src/dialogs.py:2935 ../src/dialogs.py:4625
 #: ../src/gui_interface.py:646 ../src/notify.py:278
 msgid "Groupchat Invitation"
 msgstr "グループチャットへの招待"
 
-#: ../src/chat_control.py:3405 ../src/gui_interface.py:1019
-#: ../src/roster_window.py:1991
+#: ../src/chat_control.py:3410 ../src/gui_interface.py:1019
+#: ../src/roster_window.py:1994
 msgid "Remote contact stopped transfer"
 msgstr "遠くの相手先が転送を中止しました"
 
-#: ../src/chat_control.py:3407 ../src/gui_interface.py:1022
-#: ../src/roster_window.py:1993
+#: ../src/chat_control.py:3412 ../src/gui_interface.py:1022
+#: ../src/roster_window.py:1996
 msgid "Error opening file"
 msgstr "ファイルを開く際のエラー"
 
-#: ../src/chat_control.py:3409 ../src/filetransfers_window.py:247
+#: ../src/chat_control.py:3414 ../src/filetransfers_window.py:247
 msgid "File transfer stopped"
 msgstr "ファイルの転送が中断しました"
 
-#: ../src/chat_control.py:3412 ../src/filetransfers_window.py:226
+#: ../src/chat_control.py:3417 ../src/filetransfers_window.py:226
 #: ../src/filetransfers_window.py:233
 msgid "File transfer cancelled"
 msgstr "ファイルの転送が中止されました"
 
-#: ../src/chat_control.py:3413 ../src/filetransfers_window.py:226
+#: ../src/chat_control.py:3418 ../src/filetransfers_window.py:226
 #: ../src/filetransfers_window.py:234
 msgid "Connection with peer cannot be established."
 msgstr "ピア接続は確立できません。"
@@ -3403,7 +3392,7 @@ msgstr "在席状況を「離席中」に設定します"
 
 #: ../src/command_system/implementation/standard.py:151
 #: ../src/common/commands.py:110 ../src/common/helpers.py:249
-#: ../src/tooltips.py:189
+#: ../src/tooltips.py:200
 msgid "Away"
 msgstr "離席中"
 
@@ -3462,8 +3451,8 @@ msgid "Change your nickname in a group chat"
 msgstr "グループチャットでニックネームを変更します"
 
 #. invalid char
-#: ../src/command_system/implementation/standard.py:279 ../src/config.py:3405
-#: ../src/dialogs.py:2154
+#: ../src/command_system/implementation/standard.py:279 ../src/config.py:3414
+#: ../src/dialogs.py:2158
 msgid "Invalid nickname"
 msgstr "ニックネームは有効ではありません"
 
@@ -3675,8 +3664,8 @@ msgstr "退出するグループチャットを選択してください"
 #. Make special context menu if group is Groupchats
 #: ../src/common/commands.py:216 ../src/common/contacts.py:131
 #: ../src/common/helpers.py:67 ../src/roster_window.py:824
-#: ../src/roster_window.py:1736 ../src/roster_window.py:1738
-#: ../src/roster_window.py:2621 ../src/roster_window.py:5714
+#: ../src/roster_window.py:1739 ../src/roster_window.py:1741
+#: ../src/roster_window.py:2624 ../src/roster_window.py:5726
 msgid "Groupchats"
 msgstr "グループチャット"
 
@@ -3838,7 +3827,7 @@ msgstr "折り畳む (アカウントやグループチャットの) 行の一�
 #. sorted alphanum
 #: ../src/common/config.py:117 ../src/common/config.py:533
 #: ../src/common/optparser.py:295 ../src/common/optparser.py:491
-#: ../src/common/optparser.py:525 ../src/gui_interface.py:2795
+#: ../src/common/optparser.py:525 ../src/gui_interface.py:2815
 msgid "default"
 msgstr "デフォルト"
 
@@ -4806,7 +4795,7 @@ msgstr "在席しています。"
 msgid "I'm free for chat."
 msgstr "チャットできます。"
 
-#: ../src/common/config.py:511 ../src/config.py:1646
+#: ../src/common/config.py:511 ../src/config.py:1652
 msgid "Be right back."
 msgstr "すぐ戻ります。"
 
@@ -4905,8 +4894,8 @@ msgstr "代わりに次の談話室に参加できます: %s"
 #: ../src/common/connection_handlers_events.py:1027
 #: ../src/common/connection_handlers_events.py:1070
 #: ../src/common/connection.py:270 ../src/common/connection.py:280
-#: ../src/config.py:2157 ../src/config.py:2166 ../src/config.py:2236
-#: ../src/config.py:3680 ../src/dataforms_widget.py:633 ../src/dialogs.py:3244
+#: ../src/config.py:2164 ../src/config.py:2173 ../src/config.py:2243
+#: ../src/config.py:3689 ../src/dataforms_widget.py:633 ../src/dialogs.py:3252
 msgid "Invalid Jabber ID"
 msgstr "Jabber ID が正しくありません"
 
@@ -4931,7 +4920,7 @@ msgstr "URL:"
 msgid "Unknown SSL error: %d"
 msgstr "未知の SSL エラー: %d"
 
-#: ../src/common/connection_handlers_events.py:2211 ../src/dialogs.py:2917
+#: ../src/common/connection_handlers_events.py:2211 ../src/dialogs.py:2925
 #: ../src/notify.py:266
 msgid "New Single Message"
 msgstr "新着の単発メッセージ"
@@ -4941,7 +4930,7 @@ msgstr "新着の単発メッセージ"
 msgid "New Single Message from %(nickname)s"
 msgstr "%(nickname)s からの新しい単発メッセージ"
 
-#: ../src/common/connection_handlers_events.py:2217 ../src/dialogs.py:2918
+#: ../src/common/connection_handlers_events.py:2217 ../src/dialogs.py:2926
 #: ../src/notify.py:267
 msgid "New Private Message"
 msgstr "新着の私信"
@@ -4961,7 +4950,7 @@ msgstr "%(nickname)s さん: %(message)s"
 msgid "Messaged by %(nickname)s"
 msgstr "%(nickname)s さんからのメッセージ"
 
-#: ../src/common/connection_handlers_events.py:2229 ../src/dialogs.py:2917
+#: ../src/common/connection_handlers_events.py:2229 ../src/dialogs.py:2925
 #: ../src/notify.py:266
 msgid "New Message"
 msgstr "新着メッセージ"
@@ -4977,13 +4966,13 @@ msgid "%(nick)s Changed Status"
 msgstr "%(nick)s さんの在席状況が変わりました"
 
 #: ../src/common/connection_handlers_events.py:2377
-#: ../src/groupchat_control.py:207 ../src/groupchat_control.py:1855
+#: ../src/groupchat_control.py:207 ../src/groupchat_control.py:1857
 #: ../src/history_window.py:455
 #, python-format
 msgid "%(nick)s is now %(status)s"
 msgstr "%(nick)s さんは現在 %(status)s"
 
-#: ../src/common/connection_handlers_events.py:2381 ../src/dialogs.py:2929
+#: ../src/common/connection_handlers_events.py:2381 ../src/dialogs.py:2937
 #: ../src/notify.py:280
 msgid "Contact Changed Status"
 msgstr "相手先が在席状況を変更"
@@ -4994,7 +4983,7 @@ msgid "%(nickname)s Signed In"
 msgstr "%(nickname)s さんがサインインしました"
 
 #. default value
-#: ../src/common/connection_handlers_events.py:2387 ../src/dialogs.py:2913
+#: ../src/common/connection_handlers_events.py:2387 ../src/dialogs.py:2921
 #: ../src/notify.py:262
 msgid "Contact Signed In"
 msgstr "相手先がサインインしました"
@@ -5004,7 +4993,7 @@ msgstr "相手先がサインインしました"
 msgid "%(nickname)s Signed Out"
 msgstr "%(nickname)s さんがサインアウトしました"
 
-#: ../src/common/connection_handlers_events.py:2393 ../src/dialogs.py:2915
+#: ../src/common/connection_handlers_events.py:2393 ../src/dialogs.py:2923
 #: ../src/notify.py:264
 msgid "Contact Signed Out"
 msgstr "相手先がサインアウトしました"
@@ -5182,7 +5171,7 @@ msgid "Application verification failure"
 msgstr "アプリケーションの検証に失敗しました"
 
 #: ../src/common/connection.py:271 ../src/common/connection.py:281
-#: ../src/dialogs.py:3245
+#: ../src/dialogs.py:3253
 #, python-format
 msgid "It is not possible to send a message to %s, this JID is not valid."
 msgstr "%s さんにメッセージを送れません。JID が正しくありません。"
@@ -5308,7 +5297,7 @@ msgstr ""
 "%s の証明書の真正性は検証できませんでした。\n"
 "この証明書はこのドメインをカバーしていません。"
 
-#: ../src/common/connection.py:1462 ../src/common/connection.py:2203
+#: ../src/common/connection.py:1462 ../src/common/connection.py:2205
 #: ../src/common/zeroconf/connection_zeroconf.py:205
 #, python-format
 msgid "Could not connect to \"%s\""
@@ -5337,24 +5326,24 @@ msgstr ""
 "プライバシーリスト %s は削除されませんでした。現在の接続に使用されているよう"
 "です。使用をやめて、もういちど試してください。"
 
-#: ../src/common/connection.py:2067
+#: ../src/common/connection.py:2069
 #, python-format
 msgid "Sent contact: \"%s\" (%s)"
 msgstr "送った相手先: \"%s\" (%s)"
 
-#: ../src/common/connection.py:2070
+#: ../src/common/connection.py:2072
 msgid "Sent contacts:"
 msgstr "送った相手先:"
 
-#: ../src/common/connection.py:2220 ../src/common/connection.py:2242
+#: ../src/common/connection.py:2222 ../src/common/connection.py:2244
 msgid "Not fetched because of invisible status"
 msgstr "在席状況が「居ないふり」のため取得できません"
 
-#: ../src/common/connection.py:2826
+#: ../src/common/connection.py:2828
 msgid "Unregister failed"
 msgstr "登録解除に失敗"
 
-#: ../src/common/connection.py:2827
+#: ../src/common/connection.py:2829
 #, python-format
 msgid "Unregistration with server %(server)s failed: %(error)s"
 msgstr "サーバー %(server)s での登録解除に失敗しました: %(error)s"
@@ -5366,11 +5355,11 @@ msgid "Observers"
 msgstr "オブザーバー"
 
 #: ../src/common/contacts.py:133 ../src/common/contacts.py:361
-#: ../src/common/helpers.py:67 ../src/disco.py:121 ../src/disco.py:122
-#: ../src/disco.py:1554 ../src/roster_window.py:863
-#: ../src/roster_window.py:1614 ../src/roster_window.py:1728
-#: ../src/roster_window.py:1730 ../src/roster_window.py:1892
-#: ../src/roster_window.py:2589
+#: ../src/common/helpers.py:67 ../src/disco.py:123 ../src/disco.py:124
+#: ../src/disco.py:1550 ../src/roster_window.py:863
+#: ../src/roster_window.py:1617 ../src/roster_window.py:1731
+#: ../src/roster_window.py:1733 ../src/roster_window.py:1895
+#: ../src/roster_window.py:2592
 msgid "Transports"
 msgstr "中継先"
 
@@ -5632,7 +5621,7 @@ msgstr "リソースに不正な文字が含まれています。"
 msgid "_Busy"
 msgstr "取り込み中 (_B)"
 
-#: ../src/common/helpers.py:227 ../src/tooltips.py:191
+#: ../src/common/helpers.py:227 ../src/tooltips.py:202
 msgid "Busy"
 msgstr "取り込み中"
 
@@ -5640,7 +5629,7 @@ msgstr "取り込み中"
 msgid "_Not Available"
 msgstr "不在 (_N)"
 
-#: ../src/common/helpers.py:232 ../src/tooltips.py:193
+#: ../src/common/helpers.py:232 ../src/tooltips.py:204
 msgid "Not Available"
 msgstr "不在"
 
@@ -5648,7 +5637,7 @@ msgstr "不在"
 msgid "_Free for Chat"
 msgstr "チャット可 (_F)"
 
-#: ../src/common/helpers.py:237 ../src/tooltips.py:187
+#: ../src/common/helpers.py:237 ../src/tooltips.py:198
 msgid "Free for Chat"
 msgstr "チャット可"
 
@@ -5656,7 +5645,7 @@ msgstr "チャット可"
 msgid "?user status:_Available"
 msgstr "在席 (_A)"
 
-#: ../src/common/helpers.py:242 ../src/tooltips.py:185
+#: ../src/common/helpers.py:242 ../src/tooltips.py:196
 msgid "?user status:Available"
 msgstr "在席"
 
@@ -5672,7 +5661,7 @@ msgstr "離席中 (_W)"
 msgid "_Offline"
 msgstr "オフライン (_O)"
 
-#: ../src/common/helpers.py:254 ../src/tooltips.py:195
+#: ../src/common/helpers.py:254 ../src/tooltips.py:206
 msgid "Offline"
 msgstr "オフライン"
 
@@ -5749,20 +5738,20 @@ msgstr "傍聴者"
 msgid "Visitor"
 msgstr "傍聴者"
 
-#: ../src/common/helpers.py:316 ../src/tooltips.py:209
+#: ../src/common/helpers.py:316 ../src/tooltips.py:220
 msgid "?Group Chat Contact Affiliation:None"
 msgstr "なし"
 
-#: ../src/common/helpers.py:318 ../src/tooltips.py:215
+#: ../src/common/helpers.py:318 ../src/tooltips.py:226
 msgid "Owner"
 msgstr "主宰者"
 
-#: ../src/common/helpers.py:320 ../src/tooltips.py:213
+#: ../src/common/helpers.py:320 ../src/tooltips.py:224
 msgid "Administrator"
 msgstr "管理人"
 
 # (Mako)「会員」では排他的なニュアンスが強いのでしかたなくカタカナ語で
-#: ../src/common/helpers.py:322 ../src/tooltips.py:211
+#: ../src/common/helpers.py:322 ../src/tooltips.py:222
 msgid "Member"
 msgstr "メンバー"
 
@@ -6851,11 +6840,11 @@ msgstr "デフォルトのメッセージ"
 msgid "Enabled"
 msgstr "有効"
 
-#: ../src/config.py:468 ../src/config.py:472 ../src/config.py:3185
+#: ../src/config.py:468 ../src/config.py:472 ../src/config.py:3194
 msgid "Default"
 msgstr "デフォルト"
 
-#: ../src/config.py:747 ../src/dialogs.py:1499
+#: ../src/config.py:747 ../src/dialogs.py:1500
 #, python-format
 msgid "Dictionary for lang %s not available"
 msgstr "言語 %s の辞書はありません"
@@ -6869,210 +6858,210 @@ msgstr ""
 "スペルチェックを行なうには、%s の辞書をインストールしてください。あるいは、"
 "speller_language オプションで別の言語を選択してください。"
 
-#: ../src/config.py:1226
+#: ../src/config.py:1230
 msgid "status message title"
 msgstr "状況メッセージのタイトル"
 
-#: ../src/config.py:1226
+#: ../src/config.py:1231
 msgid "status message text"
 msgstr "状況メッセージの文"
 
 #. Name column
-#: ../src/config.py:1553 ../src/dialogs.py:2673 ../src/dialogs.py:2740
-#: ../src/dialogs.py:3535 ../src/disco.py:889 ../src/disco.py:1787
-#: ../src/disco.py:2089 ../src/history_window.py:92
+#: ../src/config.py:1559 ../src/dialogs.py:2680 ../src/dialogs.py:2747
+#: ../src/dialogs.py:3545 ../src/disco.py:897 ../src/disco.py:1783
+#: ../src/disco.py:2087 ../src/history_window.py:92
 msgid "Name"
 msgstr "名前"
 
-#: ../src/config.py:1656
+#: ../src/config.py:1662
 msgid "Relogin now?"
 msgstr "今すぐ再ログインしますか ?"
 
-#: ../src/config.py:1657
+#: ../src/config.py:1663
 msgid "If you want all the changes to apply instantly, you must relogin."
 msgstr "すべての変更を直ちに有効にするには、再ログインしてください。"
 
-#: ../src/config.py:1814 ../src/config.py:1949
+#: ../src/config.py:1820 ../src/config.py:1955
 msgid "OpenPGP is not usable on this computer"
 msgstr "OpenPGP はこのコンピュータでは使えません。"
 
-#: ../src/config.py:1990 ../src/config.py:2039
+#: ../src/config.py:1996 ../src/config.py:2045
 msgid "Unread events"
 msgstr "未読のイベント"
 
-#: ../src/config.py:1991
+#: ../src/config.py:1997
 msgid "Read all pending events before removing this account."
 msgstr "このアカウントを削除する前にすべての保留イベントを読みます。"
 
-#: ../src/config.py:2021
+#: ../src/config.py:2027
 #, python-format
 msgid "You have opened chat in account %s"
 msgstr "アカウント %s でチャット中です"
 
-#: ../src/config.py:2022
+#: ../src/config.py:2028
 msgid "All chat and groupchat windows will be closed. Do you want to continue?"
 msgstr "すべてのチャットとグループチャットのウィンドウを閉じます。続けますか ?"
 
-#: ../src/config.py:2034 ../src/config.py:2596 ../src/config.py:2634
+#: ../src/config.py:2040 ../src/config.py:2605 ../src/config.py:2643
 msgid "You are currently connected to the server"
 msgstr "現在サーバーに接続している状態です"
 
-#: ../src/config.py:2035
+#: ../src/config.py:2041
 msgid "To change the account name, you must be disconnected."
 msgstr "アカウント名を変更するには、接続を切ってください。"
 
-#: ../src/config.py:2040
+#: ../src/config.py:2046
 msgid "To change the account name, you must read all pending events."
 msgstr ""
 "アカウント名を変更するには、保留されているすべてのイベントを読んでください。"
 
-#: ../src/config.py:2046
+#: ../src/config.py:2052
 msgid "Account Name Already Used"
 msgstr "アカウン名は既に使われています"
 
-#: ../src/config.py:2047
+#: ../src/config.py:2053
 msgid ""
 "This name is already used by another of your accounts. Please choose another "
 "name."
 msgstr "この名前は別のアカウントで既に使われています。別の名前にしてください。"
 
-#: ../src/config.py:2051 ../src/config.py:2056
+#: ../src/config.py:2057 ../src/config.py:2062
 msgid "Invalid account name"
 msgstr "アカウント名が正しくありません"
 
-#: ../src/config.py:2052
+#: ../src/config.py:2058
 msgid "Account name cannot be empty."
 msgstr "アカウント名は空白にできません。"
 
-#: ../src/config.py:2057
+#: ../src/config.py:2063
 msgid "Account name cannot contain spaces."
 msgstr "アカウント名にスペースを含めることはできません。"
 
-#: ../src/config.py:2138
+#: ../src/config.py:2144
 msgid "Rename Account"
 msgstr "アカウントの変更"
 
-#: ../src/config.py:2139
+#: ../src/config.py:2145
 #, python-format
 msgid "Enter a new name for account %s"
 msgstr "%s さんの新しい名前を入力してください"
 
-#: ../src/config.py:2168
+#: ../src/config.py:2175
 msgid "A Jabber ID must be in the form \"user@servername\"."
 msgstr "Jabber ID は \"user@サーバー名\" の形にしてください。"
 
-#: ../src/config.py:2394 ../src/config.py:3726
+#: ../src/config.py:2403 ../src/config.py:3735
 msgid "Invalid entry"
 msgstr "入力内容が正しくありません"
 
-#: ../src/config.py:2395 ../src/config.py:3727
+#: ../src/config.py:2404 ../src/config.py:3736
 msgid "Custom port must be a port number."
 msgstr "ポートは番号で指定してください。"
 
-#: ../src/config.py:2417
+#: ../src/config.py:2426
 msgid "Failed to get secret keys"
 msgstr "秘密鍵が見つかりません"
 
-#: ../src/config.py:2418
+#: ../src/config.py:2427
 msgid "There is no OpenPGP secret key available."
 msgstr "利用できる OpenPGP の秘密鍵がありません。"
 
-#: ../src/config.py:2456
+#: ../src/config.py:2465
 msgid "OpenPGP Key Selection"
 msgstr "OpenPGP キーの選択"
 
-#: ../src/config.py:2457
+#: ../src/config.py:2466
 msgid "Choose your OpenPGP key"
 msgstr "OpenPGP の鍵を選択してください"
 
-#: ../src/config.py:2465
+#: ../src/config.py:2474
 msgid "No such account available"
 msgstr "そのアカウントは無効です"
 
-#: ../src/config.py:2466
+#: ../src/config.py:2475
 msgid "You must create your account before editing your personal information."
 msgstr "個人情報を編集する前に、アカウントを作成してください。"
 
-#: ../src/config.py:2473 ../src/dialogs.py:2369 ../src/dialogs.py:2662
-#: ../src/dialogs.py:2850 ../src/disco.py:516 ../src/profile_window.py:371
+#: ../src/config.py:2482 ../src/dialogs.py:2373 ../src/dialogs.py:2668
+#: ../src/dialogs.py:2857 ../src/disco.py:524 ../src/profile_window.py:371
 msgid "You are not connected to the server"
 msgstr "サーバーに接続していません"
 
-#: ../src/config.py:2474
+#: ../src/config.py:2483
 msgid "Without a connection, you can not edit your personal information."
 msgstr "接続していない状態では、個人情報は編集できません。"
 
-#: ../src/config.py:2479
+#: ../src/config.py:2488
 msgid "Your server doesn't support vCard"
 msgstr "このサーバーは Vcard をサポートしていません"
 
-#: ../src/config.py:2480
+#: ../src/config.py:2489
 msgid "Your server can't save your personal information."
 msgstr "このサーバーは個人情報を保持できません。"
 
-#: ../src/config.py:2597 ../src/config.py:2635
+#: ../src/config.py:2606 ../src/config.py:2644
 msgid "To disable the account, you must be disconnected."
 msgstr "アカウントを無効にするには、接続を切ってください。"
 
-#: ../src/config.py:2604
+#: ../src/config.py:2613
 msgid "Account Local already exists."
 msgstr "アカウント Local は既に存在しています。"
 
-#: ../src/config.py:2605
+#: ../src/config.py:2614
 msgid "Please rename or remove it before enabling link-local messaging."
 msgstr "ローカルの伝送を有効にするには、名前の変更または削除を行ってください。"
 
-#: ../src/config.py:2766
+#: ../src/config.py:2775
 #, python-format
 msgid "Edit %s"
 msgstr "%s を編集"
 
-#: ../src/config.py:2768
+#: ../src/config.py:2777
 #, python-format
 msgid "Register to %s"
 msgstr "%s を登録"
 
 #. list at the beginning
-#: ../src/config.py:2804
+#: ../src/config.py:2813
 msgid "Ban List"
 msgstr "追放者の一覧"
 
-#: ../src/config.py:2805
+#: ../src/config.py:2814
 msgid "Member List"
 msgstr "メンバーの一覧"
 
-#: ../src/config.py:2805
+#: ../src/config.py:2814
 msgid "Owner List"
 msgstr "主宰者の一覧"
 
-#: ../src/config.py:2806
+#: ../src/config.py:2815
 msgid "Administrator List"
 msgstr "管理人の一覧"
 
 #. Address column
 #. holds JID (who said this)
-#: ../src/config.py:2870 ../src/disco.py:896 ../src/history_manager.py:217
+#: ../src/config.py:2879 ../src/disco.py:904 ../src/history_manager.py:217
 msgid "JID"
 msgstr "JID"
 
-#: ../src/config.py:2880
+#: ../src/config.py:2889
 msgid "Reason"
 msgstr "理由"
 
-#: ../src/config.py:2887
+#: ../src/config.py:2896
 msgid "Nick"
 msgstr "ニックネーム"
 
-#: ../src/config.py:2893
+#: ../src/config.py:2902
 msgid "Role"
 msgstr "役"
 
-#: ../src/config.py:2920
+#: ../src/config.py:2929
 msgid "Banning..."
 msgstr "締め出し中..."
 
 #. You can move '\n' before user@domain if that line is TOO BIG
-#: ../src/config.py:2922
+#: ../src/config.py:2931
 msgid ""
 "<b>Whom do you want to ban?</b>\n"
 "\n"
@@ -7080,11 +7069,11 @@ msgstr ""
 "<b>誰を締め出しますか ?</b>\n"
 "\n"
 
-#: ../src/config.py:2924
+#: ../src/config.py:2933
 msgid "Adding Member..."
 msgstr "メンバーを追加..."
 
-#: ../src/config.py:2925
+#: ../src/config.py:2934
 msgid ""
 "<b>Whom do you want to make a member?</b>\n"
 "\n"
@@ -7092,11 +7081,11 @@ msgstr ""
 "<b>誰をメンバーにしますか ?</b>\n"
 "\n"
 
-#: ../src/config.py:2927
+#: ../src/config.py:2936
 msgid "Adding Owner..."
 msgstr "主宰者を追加..."
 
-#: ../src/config.py:2928
+#: ../src/config.py:2937
 msgid ""
 "<b>Whom do you want to make an owner?</b>\n"
 "\n"
@@ -7104,11 +7093,11 @@ msgstr ""
 "<b>誰を主宰者にしますか ?</b>\n"
 "\n"
 
-#: ../src/config.py:2930
+#: ../src/config.py:2939
 msgid "Adding Administrator..."
 msgstr "管理人を追加..."
 
-#: ../src/config.py:2931
+#: ../src/config.py:2940
 msgid ""
 "<b>Whom do you want to make an administrator?</b>\n"
 "\n"
@@ -7116,7 +7105,7 @@ msgstr ""
 "<b>誰を管理人にしますか ?</b>\n"
 "\n"
 
-#: ../src/config.py:2932
+#: ../src/config.py:2941
 msgid ""
 "Can be one of the following:\n"
 "1. user@domain/resource (only that resource matches).\n"
@@ -7132,104 +7121,104 @@ msgstr ""
 "4. ドメイン (ドメインの合致。どんな user@domain や domain/resource や\n"
 "サブドメインを含んでも可)"
 
-#: ../src/config.py:3033
+#: ../src/config.py:3042
 #, python-format
 msgid "Removing %s account"
 msgstr "アカウント %s を削除します"
 
-#: ../src/config.py:3048
+#: ../src/config.py:3057
 msgid "Account is disabled"
 msgstr "アカウントは無効です"
 
-#: ../src/config.py:3049
+#: ../src/config.py:3058
 msgid "To unregister from a server, account must be enabled."
 msgstr "サーバーから登録を解除するには、アカウントを有効にしてください。"
 
-#: ../src/config.py:3062 ../src/gui_interface.py:286
+#: ../src/config.py:3071 ../src/gui_interface.py:286
 #: ../src/gui_interface.py:734
 msgid "Password Required"
 msgstr "パスワードが必要です"
 
-#: ../src/config.py:3063 ../src/gui_interface.py:714
+#: ../src/config.py:3072 ../src/gui_interface.py:714
 #, python-format
 msgid "Enter your password for account %s"
 msgstr "%s のパスワードを入力してください"
 
-#: ../src/config.py:3064 ../src/gui_interface.py:734
+#: ../src/config.py:3073 ../src/gui_interface.py:734
 msgid "Save password"
 msgstr "パスワードを保存する"
 
-#: ../src/config.py:3074
+#: ../src/config.py:3083
 #, python-format
 msgid "Account \"%s\" is connected to the server"
 msgstr "アカウント \"%s\" はサーバーに接続しています"
 
-#: ../src/config.py:3075
+#: ../src/config.py:3084
 msgid "If you remove it, the connection will be lost."
 msgstr "削除すると、接続が失われます。"
 
-#: ../src/config.py:3089
+#: ../src/config.py:3098
 #, python-format
 msgid "Connection to server %s failed"
 msgstr "サーバー %s への接続に失敗しました"
 
-#: ../src/config.py:3090
+#: ../src/config.py:3099
 msgid "What would you like to do?"
 msgstr "何をしたいですか ?"
 
-#: ../src/config.py:3091
+#: ../src/config.py:3100
 msgid "Remove only from Gajim"
 msgstr "アカウントを Gajim からのみ削除"
 
-#: ../src/config.py:3092
+#: ../src/config.py:3101
 msgid "Don't remove anything. I'll try again later"
 msgstr "何も削除できません。あとで試みます"
 
-#: ../src/config.py:3185
+#: ../src/config.py:3194
 msgid "?print_status:All"
 msgstr "すべて"
 
-#: ../src/config.py:3186
+#: ../src/config.py:3195
 msgid "Enter and leave only"
 msgstr "入退室のみ"
 
-#: ../src/config.py:3187
+#: ../src/config.py:3196
 msgid "?print_status:None"
 msgstr "なし"
 
-#: ../src/config.py:3246
+#: ../src/config.py:3255
 msgid "New Group Chat"
 msgstr "新しいグループチャット"
 
-#: ../src/config.py:3279
+#: ../src/config.py:3288
 msgid "This bookmark has invalid data"
 msgstr "このブックマークは不正なデータを含んでいます"
 
-#: ../src/config.py:3280
+#: ../src/config.py:3289
 msgid ""
 "Please be sure to fill out server and room fields or remove this bookmark."
 msgstr ""
 "サーバーと談話室の欄を正しく入力するか、このブックマークを削除してください。"
 
-#: ../src/config.py:3406 ../src/config.py:3417 ../src/config.py:3426
-#: ../src/config.py:3437 ../src/config.py:3445
+#: ../src/config.py:3415 ../src/config.py:3426 ../src/config.py:3435
+#: ../src/config.py:3446 ../src/config.py:3454
 msgid "Character not allowed"
 msgstr "使えない文字です"
 
-#: ../src/config.py:3417 ../src/config.py:3425 ../src/config.py:3437
-#: ../src/config.py:3702
+#: ../src/config.py:3426 ../src/config.py:3434 ../src/config.py:3446
+#: ../src/config.py:3711
 msgid "Invalid server"
 msgstr "サーバー名が正しくありません"
 
-#: ../src/config.py:3444
+#: ../src/config.py:3453
 msgid "Invalid room"
 msgstr "談話室名が正しくありません"
 
-#: ../src/config.py:3614
+#: ../src/config.py:3623
 msgid "Account has been added successfully"
 msgstr "アカウントは無事に追加されました"
 
-#: ../src/config.py:3615 ../src/config.py:3621
+#: ../src/config.py:3624 ../src/config.py:3630
 msgid ""
 "You can set advanced account options by pressing the Advanced button, or "
 "later by choosing the Accounts menu item under the Edit menu from the main "
@@ -7238,32 +7227,32 @@ msgstr ""
 "「拡張」ボタンで、詳細なオプションを設定できます。また後で、メインウィンドウ"
 "の「編集」メニューの「アカウント」を選択して設定できます。"
 
-#: ../src/config.py:3620
+#: ../src/config.py:3629
 msgid "Your new account has been created successfully"
 msgstr "新しいアカウントを無事に作成しました"
 
-#: ../src/config.py:3659
+#: ../src/config.py:3668
 msgid "Invalid username"
 msgstr "ユーザー名が正しくありません"
 
-#: ../src/config.py:3661
+#: ../src/config.py:3670
 msgid "You must provide a username to configure this account."
 msgstr "このアカウントを編集するには、ユーザー名を指定してください。"
 
-#: ../src/config.py:3703
+#: ../src/config.py:3712
 msgid "Please provide a server on which you want to register."
 msgstr "登録するサーバーを指定してください。"
 
-#: ../src/config.py:3759 ../src/gui_interface.py:1313
+#: ../src/config.py:3768 ../src/gui_interface.py:1313
 msgid "Certificate Already in File"
 msgstr "証明書はファイルにあります"
 
-#: ../src/config.py:3760 ../src/gui_interface.py:1314
+#: ../src/config.py:3769 ../src/gui_interface.py:1314
 #, python-format
 msgid "This certificate is already in file %s, so it's not added again."
 msgstr "この証明書は既にファイル %s にあります。再び追加しません。"
 
-#: ../src/config.py:3850
+#: ../src/config.py:3859
 #, python-format
 msgid ""
 "<b>Security Warning</b>\n"
@@ -7278,7 +7267,7 @@ msgstr ""
 "SSL エラー: %(error)s\n"
 "それでもこのサーバーに接続しますか ?"
 
-#: ../src/config.py:3856 ../src/gui_interface.py:1342
+#: ../src/config.py:3865 ../src/gui_interface.py:1342
 #, python-format
 msgid ""
 "Add this certificate to the list of trusted certificates.\n"
@@ -7289,81 +7278,77 @@ msgstr ""
 "この証明書の SHA1 指紋:\n"
 "%s"
 
-#: ../src/config.py:3888 ../src/config.py:3922
+#: ../src/config.py:3897 ../src/config.py:3931
 msgid "An error occurred during account creation"
 msgstr "アカウント作成時にエラーが起きました"
 
-#: ../src/config.py:3987
+#: ../src/config.py:3996
 msgid "Account name is in use"
 msgstr "アカウント名は使われています"
 
-#: ../src/config.py:3988
+#: ../src/config.py:3997
 msgid "You already have an account using this name."
 msgstr "この名前のアカウントは既に存在しています。"
 
-#: ../src/config.py:4118
+#: ../src/config.py:4127
 msgid "PEP node was not removed"
 msgstr "PEP ノードは削除されませんでした"
 
-#: ../src/config.py:4119
+#: ../src/config.py:4128
 #, python-format
 msgid "PEP node %(node)s was not removed: %(message)s"
 msgstr "PEP ノード %(node)s は削除されませんでした: %(message)s"
 
-#: ../src/config.py:4147
+#: ../src/config.py:4156
 #, python-format
 msgid "Configure %s"
 msgstr "%s を調整"
 
-#: ../src/config.py:4163 ../src/plugins/gui.py:92
-msgid "Active"
-msgstr "有効"
-
-#: ../src/config.py:4171
+#: ../src/config.py:4181
 msgid "Event"
 msgstr "イベント"
 
-#: ../src/config.py:4205
+#: ../src/config.py:4215
 msgid "Attention Message Received"
 msgstr "注目メッセージを受信した"
 
-#: ../src/config.py:4206
+#: ../src/config.py:4216
 msgid "First Message Received"
 msgstr "最初のメッセージを受信した"
 
-#: ../src/config.py:4207
+#: ../src/config.py:4217
 msgid "Next Message Received Focused"
 msgstr "開いているチャットで、その次のメッセージを受信した"
 
-#: ../src/config.py:4209
+#: ../src/config.py:4219
 msgid "Next Message Received Unfocused"
 msgstr "開いていないチャットで、その次のメッセージを受信した"
 
-#: ../src/config.py:4210
+#: ../src/config.py:4220
 msgid "Contact Connected"
 msgstr "相手先が接続した"
 
-#: ../src/config.py:4211
+#: ../src/config.py:4221
 msgid "Contact Disconnected"
 msgstr "相手先が切断した"
 
-#: ../src/config.py:4212
+#: ../src/config.py:4222
 msgid "Message Sent"
 msgstr "メッセージを送信した"
 
-#: ../src/config.py:4213
+#: ../src/config.py:4223
 msgid "Group Chat Message Highlight"
 msgstr "グループチャットのメッセージの強調"
 
-#: ../src/config.py:4214
+#: ../src/config.py:4224
 msgid "Group Chat Message Received"
 msgstr "グループチャットのメッセージを受信した"
 
-#: ../src/config.py:4215
+#: ../src/config.py:4225
 msgid "GMail Email Received"
 msgstr "GMail メールを受信した"
 
-#: ../src/conversation_textview.py:483 ../src/conversation_textview.py:501
+#: ../src/conversation_textview.py:473 ../src/conversation_textview.py:491
 #, python-format
 msgid ""
 "<b>Message was corrected. Last message was:</b>\n"
@@ -7372,7 +7357,7 @@ msgstr ""
 "<b>メッセージは修正されました。最新のメッセージ:</b>\n"
 "  %s"
 
-#: ../src/conversation_textview.py:654
+#: ../src/conversation_textview.py:629
 msgid ""
 "This icon indicates that this message has not yet\n"
 "been received by the remote end. If this icon stays\n"
@@ -7382,7 +7367,7 @@ msgstr ""
 "示すものです。もし長時間表示されたままなら、メッセージは\n"
 "失われたと考えられます。"
 
-#: ../src/conversation_textview.py:673
+#: ../src/conversation_textview.py:648
 msgid ""
 "Text below this line is what has been said since the\n"
 "last time you paid attention to this group chat"
@@ -7390,45 +7375,45 @@ msgstr ""
 "この線より下の文は、このグループチャットを\n"
 "最後に読んだとき以降に発生したものです"
 
-#: ../src/conversation_textview.py:793
+#: ../src/conversation_textview.py:768
 msgid "_Quote"
 msgstr "引用 (_Q)"
 
-#: ../src/conversation_textview.py:800
+#: ../src/conversation_textview.py:775
 #, python-format
 msgid "_Actions for \"%s\""
 msgstr "\"%s\" に対する操作 (_A)"
 
-#: ../src/conversation_textview.py:813
+#: ../src/conversation_textview.py:788
 msgid "Read _Wikipedia Article"
 msgstr "_Wikipedia の項を読む (_W)"
 
-#: ../src/conversation_textview.py:818
+#: ../src/conversation_textview.py:793
 msgid "Look it up in _Dictionary"
 msgstr "辞書を引く (_D)"
 
-#: ../src/conversation_textview.py:835
+#: ../src/conversation_textview.py:810
 #, python-format
 msgid "Dictionary URL is missing an \"%s\" and it is not WIKTIONARY"
 msgstr ""
 "辞書の URL に \"%s\" が含まれていません。また、WIKTIONARY でもありません"
 
 #. we must have %s in the url
-#: ../src/conversation_textview.py:848
+#: ../src/conversation_textview.py:823
 #, python-format
 msgid "Web Search URL is missing an \"%s\""
 msgstr "ウェブ検索の URL に \"%s\" が含まれていません"
 
-#: ../src/conversation_textview.py:851
+#: ../src/conversation_textview.py:826
 msgid "Web _Search for it"
 msgstr "ウェブで検索する (_S)"
 
-#: ../src/conversation_textview.py:857
+#: ../src/conversation_textview.py:832
 msgid "Open as _Link"
 msgstr "リンクとして開く (_L)"
 
 #. %i is day in year (1-365)
-#: ../src/conversation_textview.py:1386
+#: ../src/conversation_textview.py:1380
 #, python-format
 msgid "Yesterday"
 msgid_plural "%(nb_days)i days ago"
@@ -7474,152 +7459,152 @@ msgstr "new@jabber.id"
 msgid "new%d@jabber.id"
 msgstr "new%d@jabber.id"
 
-#: ../src/dialogs.py:84
+#: ../src/dialogs.py:85
 #, python-format
 msgid "Contact name: <i>%s</i>"
 msgstr "相手先名: <i>%s</i>"
 
-#: ../src/dialogs.py:86
+#: ../src/dialogs.py:87
 #, python-format
 msgid "Jabber ID: <i>%s</i>"
 msgstr "Jabber ID: <i>%s</i>"
 
-#: ../src/dialogs.py:200
+#: ../src/dialogs.py:201
 msgid "Group"
 msgstr "グループ"
 
-#: ../src/dialogs.py:207
+#: ../src/dialogs.py:208
 msgid "In the group"
 msgstr "グループ内"
 
-#: ../src/dialogs.py:299
+#: ../src/dialogs.py:300
 msgid "KeyID"
 msgstr "鍵 ID"
 
-#: ../src/dialogs.py:304
+#: ../src/dialogs.py:305
 msgid "Contact name"
 msgstr "名前"
 
-#: ../src/dialogs.py:479
+#: ../src/dialogs.py:480
 msgid "Set Mood"
 msgstr "気分の設定"
 
-#: ../src/dialogs.py:599
+#: ../src/dialogs.py:600
 #, python-format
 msgid "%s Status Message"
 msgstr "%s の状況メッセージ"
 
-#: ../src/dialogs.py:613
+#: ../src/dialogs.py:614
 msgid "Status Message"
 msgstr "状況メッセージ"
 
-#: ../src/dialogs.py:804
+#: ../src/dialogs.py:805
 msgid "Overwrite Status Message?"
 msgstr "状況メッセージを上書きしますか ?"
 
-#: ../src/dialogs.py:805
+#: ../src/dialogs.py:806
 msgid ""
 "This name is already used. Do you want to overwrite this status message?"
 msgstr "この名前は既に使われています。この状況メッセージを上書きしますか ?"
 
-#: ../src/dialogs.py:813
+#: ../src/dialogs.py:814
 msgid "Save as Preset Status Message"
 msgstr "用意しておく状況メッセージとして保存"
 
-#: ../src/dialogs.py:814
+#: ../src/dialogs.py:815
 msgid "Please type a name for this status message"
 msgstr "この状況メッセージの名前を入力してください"
 
-#: ../src/dialogs.py:842
+#: ../src/dialogs.py:843
 msgid "AIM Address:"
 msgstr "AIM アドレス:"
 
-#: ../src/dialogs.py:843
+#: ../src/dialogs.py:844
 msgid "GG Number:"
 msgstr "GG 番号:"
 
-#: ../src/dialogs.py:844
+#: ../src/dialogs.py:845
 msgid "ICQ Number:"
 msgstr "ICQ 番号:"
 
-#: ../src/dialogs.py:845
+#: ../src/dialogs.py:846
 msgid "MSN Address:"
 msgstr "MSN アドレス:"
 
-#: ../src/dialogs.py:846
+#: ../src/dialogs.py:847
 msgid "Yahoo! Address:"
 msgstr "Yahoo! アドレス:"
 
-#: ../src/dialogs.py:883
+#: ../src/dialogs.py:884
 #, python-format
 msgid "Please fill in the data of the contact you want to add in account %s"
 msgstr "アカウント %s に追加する相手先の情報を入力してください"
 
-#: ../src/dialogs.py:886
+#: ../src/dialogs.py:887
 msgid "Please fill in the data of the contact you want to add"
 msgstr "追加する相手先の情報を入力してください"
 
-#: ../src/dialogs.py:1080 ../src/dialogs.py:1086 ../src/dialogs.py:1091
-#: ../src/dialogs.py:3770
+#: ../src/dialogs.py:1081 ../src/dialogs.py:1087 ../src/dialogs.py:1092
+#: ../src/dialogs.py:3780
 msgid "Invalid User ID"
 msgstr "ユーザー ID が正しくありません"
 
-#: ../src/dialogs.py:1087
+#: ../src/dialogs.py:1088
 msgid "The user ID must not contain a resource."
 msgstr "ユーザー ID にはリソースを含めないでください。"
 
-#: ../src/dialogs.py:1092
+#: ../src/dialogs.py:1093
 msgid "You cannot add yourself to your roster."
 msgstr "あなた自身は名簿に追加できません。"
 
-#: ../src/dialogs.py:1106
+#: ../src/dialogs.py:1107
 msgid "Contact already in roster"
 msgstr "相手先は既に名簿にあります"
 
-#: ../src/dialogs.py:1107
+#: ../src/dialogs.py:1108
 msgid "This contact is already listed in your roster."
 msgstr "この相手先は既に名簿に登録されています。"
 
-#: ../src/dialogs.py:1160 ../src/dialogs.py:1194
+#: ../src/dialogs.py:1161 ../src/dialogs.py:1195
 msgid "User ID:"
 msgstr "ユーザー ID:"
 
-#: ../src/dialogs.py:1279
+#: ../src/dialogs.py:1280
 msgid "A GTK+ Jabber/XMPP client"
 msgstr "GTK+ Jabber/XMPP クライアント"
 
-#: ../src/dialogs.py:1280
+#: ../src/dialogs.py:1281
 msgid "GTK+ Version:"
 msgstr "GTK+ バージョン:"
 
-#: ../src/dialogs.py:1281
+#: ../src/dialogs.py:1282
 msgid "PyGTK Version:"
 msgstr "PyGTK バージョン:"
 
-#: ../src/dialogs.py:1291
+#: ../src/dialogs.py:1292
 msgid "Current Developers:"
 msgstr "現在の開発者:"
 
-#: ../src/dialogs.py:1293
+#: ../src/dialogs.py:1294
 msgid "Past Developers:"
 msgstr "過去の開発者:"
 
-#: ../src/dialogs.py:1299
+#: ../src/dialogs.py:1300
 msgid "THANKS:"
 msgstr "謝意:"
 
 #. remove one english sentence
 #. and add it manually as translatable
-#: ../src/dialogs.py:1305
+#: ../src/dialogs.py:1306
 msgid "Last but not least, we would like to thank all the package maintainers."
 msgstr "最後に、すべてのパッケージのメンテナに感謝いたします。"
 
 #. here you write your name in the form Name FamilyName <someone@somewhere>
-#: ../src/dialogs.py:1317
+#: ../src/dialogs.py:1318
 msgid "translator-credits"
 msgstr "Mako (mako AT pasero.net)"
 
-#: ../src/dialogs.py:1500
+#: ../src/dialogs.py:1501
 #, python-format
 msgid ""
 "You have to install %s dictionary to use spellchecking, or choose another "
@@ -7632,12 +7617,12 @@ msgstr ""
 "\n"
 "スペル間違いの強調表示は使われません"
 
-#: ../src/dialogs.py:1845 ../src/gui_interface.py:1446
+#: ../src/dialogs.py:1846 ../src/dialogs.py:1862 ../src/gui_interface.py:1446
 #: ../src/gui_interface.py:1488
 msgid "Insecure connection"
 msgstr "安全でない接続"
 
-#: ../src/dialogs.py:1846
+#: ../src/dialogs.py:1847
 #, python-format
 msgid ""
 "You are about to connect to the account %(account)s (%(server)s) with an "
@@ -7650,133 +7635,133 @@ msgstr ""
 "タイプの接続はまったく推奨しません。\n"
 "それでも続けますか ?"
 
-#: ../src/dialogs.py:1852 ../src/gui_interface.py:1450
+#: ../src/dialogs.py:1853 ../src/gui_interface.py:1450
 #: ../src/gui_interface.py:1491
 msgid "Yes, I really want to connect insecurely"
 msgstr "はい。安全でないまま接続します"
 
-#: ../src/dialogs.py:1853
+#: ../src/dialogs.py:1854
 msgid "Gajim will NOT connect unless you check this box"
 msgstr "このボックスにチェックしなければ、Gajim は接続しません"
 
-#: ../src/dialogs.py:1854 ../src/groupchat_control.py:2130
+#: ../src/dialogs.py:1855 ../src/groupchat_control.py:2132
 #: ../src/gui_interface.py:706 ../src/gui_interface.py:1451
 #: ../src/gui_interface.py:1492 ../src/message_window.py:222
-#: ../src/roster_window.py:3048 ../src/roster_window.py:3728
-#: ../src/roster_window.py:4556
+#: ../src/roster_window.py:3058 ../src/roster_window.py:3738
+#: ../src/roster_window.py:4567
 msgid "_Do not ask me again"
 msgstr "次回から質問しない (_D)"
 
-#: ../src/dialogs.py:1950
+#: ../src/dialogs.py:1954
 msgid "_Resume"
 msgstr "残す (_R)"
 
-#: ../src/dialogs.py:1958
+#: ../src/dialogs.py:1962
 msgid "Re_place"
 msgstr "置換する (_P)"
 
-#: ../src/dialogs.py:2155 ../src/dialogs.py:2612
+#: ../src/dialogs.py:2159 ../src/dialogs.py:2618
 msgid "The nickname contains invalid characters."
 msgstr "ニックネームに使用できない文字が含まれています。"
 
-#: ../src/dialogs.py:2277
+#: ../src/dialogs.py:2281
 #, python-format
 msgid "Subscription request for account %(account)s from %(jid)s"
 msgstr "アカウント %(account)s に対して、%(jid)s さんからの在席通知の申し込み"
 
-#: ../src/dialogs.py:2280
+#: ../src/dialogs.py:2284
 #, python-format
 msgid "Subscription request from %s"
 msgstr "%s さんから在席通知の申し込み"
 
-#: ../src/dialogs.py:2364 ../src/gui_interface.py:2056
+#: ../src/dialogs.py:2368 ../src/gui_interface.py:2073
 #, python-format
 msgid "You are already in group chat %s"
 msgstr "既にグループチャット %s に参加しています"
 
-#: ../src/dialogs.py:2370
+#: ../src/dialogs.py:2374
 msgid "You can not join a group chat unless you are connected."
 msgstr "接続しないと、グループチャットに参加できません。"
 
-#: ../src/dialogs.py:2414
+#: ../src/dialogs.py:2418
 #, python-format
 msgid "Join Group Chat with account %s"
 msgstr "アカウント %s でグループチャットに参加"
 
-#: ../src/dialogs.py:2548 ../src/dialogs.py:2558
+#: ../src/dialogs.py:2553 ../src/dialogs.py:2564
 msgid "Wrong server"
 msgstr "サーバーが正しくありません"
 
-#: ../src/dialogs.py:2548 ../src/dialogs.py:2558
+#: ../src/dialogs.py:2553 ../src/dialogs.py:2564
 #, python-format
 msgid "%s is not a groupchat server"
 msgstr "%s はグループチャットのサーバーではありません"
 
-#: ../src/dialogs.py:2598
+#: ../src/dialogs.py:2604
 msgid "Invalid Account"
 msgstr "アカウントが正しくありません"
 
-#: ../src/dialogs.py:2599
+#: ../src/dialogs.py:2605
 msgid ""
 "You have to choose an account from which you want to join the groupchat."
 msgstr "グループチャット参加に使用するアカウントを選択してください。"
 
-#: ../src/dialogs.py:2611
+#: ../src/dialogs.py:2617
 msgid "Invalid Nickname"
 msgstr "ニックネームが正しくありません"
 
-#: ../src/dialogs.py:2616 ../src/dialogs.py:2622
-#: ../src/groupchat_control.py:2198
+#: ../src/dialogs.py:2622 ../src/dialogs.py:2628
+#: ../src/groupchat_control.py:2200
 msgid "Invalid group chat Jabber ID"
 msgstr "グループチャットの JID が正しくありません"
 
-#: ../src/dialogs.py:2617
+#: ../src/dialogs.py:2623
 msgid "Please enter the group chat Jabber ID as room@server."
 msgstr "グループチャットの JID を、room@server のように、入力してください。"
 
-#: ../src/dialogs.py:2623
+#: ../src/dialogs.py:2629
 msgid "The group chat Jabber ID contains invalid characters."
 msgstr "グループチャットの JID に使えない文字が含まれています。"
 
-#: ../src/dialogs.py:2628 ../src/gui_interface.py:2038
+#: ../src/dialogs.py:2634 ../src/gui_interface.py:2055
 msgid "This is not a group chat"
 msgstr "グループチャットではありません"
 
-#: ../src/dialogs.py:2629 ../src/gui_interface.py:2039
+#: ../src/dialogs.py:2635 ../src/gui_interface.py:2056
 #, python-format
 msgid "%s is not the name of a group chat."
 msgstr "%s はグループチャット名ではありません。"
 
-#: ../src/dialogs.py:2663
+#: ../src/dialogs.py:2669
 msgid "Without a connection, you can not synchronise your contacts."
 msgstr "接続していないと、相手先を合わせることはできません。"
 
-#: ../src/dialogs.py:2676
+#: ../src/dialogs.py:2683
 msgid "Server"
 msgstr "サーバー"
 
-#: ../src/dialogs.py:2712
+#: ../src/dialogs.py:2719
 msgid "This account is not connected to the server"
 msgstr "このアカウントはサーバーに接続していません"
 
-#: ../src/dialogs.py:2713
+#: ../src/dialogs.py:2720
 msgid "You cannot synchronize with an account unless it is connected."
 msgstr "接続していないと、相手先に合わせることはできません。"
 
-#: ../src/dialogs.py:2738
+#: ../src/dialogs.py:2745
 msgid "Synchronise"
 msgstr "同調"
 
-#: ../src/dialogs.py:2799
+#: ../src/dialogs.py:2806
 #, python-format
 msgid "Start Chat with account %s"
 msgstr "アカウント %s でチャットを開始"
 
-#: ../src/dialogs.py:2801
+#: ../src/dialogs.py:2808
 msgid "Start Chat"
 msgstr "チャットを開始する"
 
-#: ../src/dialogs.py:2802
+#: ../src/dialogs.py:2809
 msgid ""
 "Fill in the nickname or the Jabber ID of the contact you would like\n"
 "to send a chat message to:"
@@ -7785,135 +7770,135 @@ msgstr ""
 "さい:"
 
 #. if offline or connecting
-#: ../src/dialogs.py:2829 ../src/dialogs.py:3213 ../src/dialogs.py:3448
+#: ../src/dialogs.py:2836 ../src/dialogs.py:3221 ../src/dialogs.py:3458
 msgid "Connection not available"
 msgstr "接続していません"
 
-#: ../src/dialogs.py:2830 ../src/dialogs.py:3214 ../src/dialogs.py:3449
+#: ../src/dialogs.py:2837 ../src/dialogs.py:3222 ../src/dialogs.py:3459
 #, python-format
 msgid "Please make sure you are connected with \"%s\"."
 msgstr "\"%s\" に接続していることを確認してください。"
 
-#: ../src/dialogs.py:2839 ../src/dialogs.py:2842
+#: ../src/dialogs.py:2846 ../src/dialogs.py:2849
 msgid "Invalid JID"
 msgstr "JID が正しくありません"
 
-#: ../src/dialogs.py:2842
+#: ../src/dialogs.py:2849
 #, python-format
 msgid "Unable to parse \"%s\"."
 msgstr "\"%s\" を解析できません。"
 
-#: ../src/dialogs.py:2851
+#: ../src/dialogs.py:2858
 msgid "Without a connection, you can not change your password."
 msgstr "接続しないと、パスワードは変更できません。"
 
-#: ../src/dialogs.py:2870
+#: ../src/dialogs.py:2878
 msgid "Invalid password"
 msgstr "パスワードが正しくありません。"
 
-#: ../src/dialogs.py:2870
+#: ../src/dialogs.py:2878
 msgid "You must enter a password."
 msgstr "パスワードを入力してください。"
 
-#: ../src/dialogs.py:2874
+#: ../src/dialogs.py:2882
 msgid "Passwords do not match"
 msgstr "パスワードが一致しません"
 
-#: ../src/dialogs.py:2875
+#: ../src/dialogs.py:2883
 msgid "The passwords typed in both fields must be identical."
 msgstr "ふたつの欄のパスワードは同じにしてください。"
 
-#: ../src/dialogs.py:2918 ../src/gui_interface.py:883 ../src/notify.py:276
+#: ../src/dialogs.py:2926 ../src/gui_interface.py:883 ../src/notify.py:276
 msgid "New E-mail"
 msgstr "新着メール"
 
-#: ../src/dialogs.py:2920 ../src/gui_interface.py:943 ../src/notify.py:269
+#: ../src/dialogs.py:2928 ../src/gui_interface.py:943 ../src/notify.py:269
 msgid "File Transfer Request"
 msgstr "ファイル転送の要求"
 
-#: ../src/dialogs.py:2922 ../src/gui_interface.py:845
+#: ../src/dialogs.py:2930 ../src/gui_interface.py:845
 #: ../src/gui_interface.py:909 ../src/notify.py:271
 msgid "File Transfer Error"
 msgstr "ファイル転送のエラー"
 
-#: ../src/dialogs.py:2924 ../src/gui_interface.py:1032
+#: ../src/dialogs.py:2932 ../src/gui_interface.py:1032
 #: ../src/gui_interface.py:1058 ../src/gui_interface.py:1079
 #: ../src/notify.py:273
 msgid "File Transfer Completed"
 msgstr "ファイルの転送の完了"
 
-#: ../src/dialogs.py:2925 ../src/gui_interface.py:1035
+#: ../src/dialogs.py:2933 ../src/gui_interface.py:1035
 #: ../src/gui_interface.py:1062 ../src/gui_interface.py:1083
 #: ../src/notify.py:274
 msgid "File Transfer Stopped"
 msgstr "ファイルの転送の中断"
 
-#: ../src/dialogs.py:3132
+#: ../src/dialogs.py:3140
 #, python-format
 msgid "Single Message using account %s"
 msgstr "アカウント %s で単発メッセージ"
 
-#: ../src/dialogs.py:3134
+#: ../src/dialogs.py:3142
 #, python-format
 msgid "Single Message in account %s"
 msgstr "アカウント %s で単発メッセージ"
 
-#: ../src/dialogs.py:3136
+#: ../src/dialogs.py:3144
 msgid "Single Message"
 msgstr "単発メッセージ"
 
 #. prepare UI for Sending
-#: ../src/dialogs.py:3139
+#: ../src/dialogs.py:3147
 #, python-format
 msgid "Send %s"
 msgstr "%s を送信"
 
 #. prepare UI for Receiving
-#: ../src/dialogs.py:3162
+#: ../src/dialogs.py:3170
 #, python-format
 msgid "Received %s"
 msgstr "%s を受信"
 
 #. prepare UI for Receiving
-#: ../src/dialogs.py:3185
+#: ../src/dialogs.py:3193
 #, python-format
 msgid "Form %s"
 msgstr "フォーム %s"
 
 #. we create a new blank window to send and we preset RE: and to jid
-#: ../src/dialogs.py:3268
+#: ../src/dialogs.py:3276
 #, python-format
 msgid "RE: %s"
 msgstr "RE: %s"
 
-#: ../src/dialogs.py:3269
+#: ../src/dialogs.py:3277
 #, python-format
 msgid "%s wrote:\n"
 msgstr "%s wrote:\n"
 
-#: ../src/dialogs.py:3329
+#: ../src/dialogs.py:3337
 #, python-format
 msgid "XML Console for %s"
 msgstr "%s の XML コンソール"
 
-#: ../src/dialogs.py:3331
+#: ../src/dialogs.py:3339
 msgid "XML Console"
 msgstr "XML コンソール"
 
 #. Action that can be done with an incoming list of contacts
-#: ../src/dialogs.py:3478
+#: ../src/dialogs.py:3488
 msgid "add"
 msgstr "追加"
 
-#: ../src/dialogs.py:3478
+#: ../src/dialogs.py:3488
 msgid "modify"
 msgstr "変更"
 
-#: ../src/dialogs.py:3479
+#: ../src/dialogs.py:3489
 msgid "remove"
 msgstr "削除"
 
-#: ../src/dialogs.py:3508
+#: ../src/dialogs.py:3518
 #, python-format
 msgid ""
 "<b>%(jid)s</b> would like you to <b>%(action)s</b> some contacts in your "
@@ -7923,180 +7908,180 @@ msgstr ""
 "b> を行うよう、求めています。"
 
 #. Change label for accept_button to action name instead of 'OK'.
-#: ../src/dialogs.py:3526 ../src/dialogs.py:3601
+#: ../src/dialogs.py:3536 ../src/dialogs.py:3611
 msgid "Modify"
 msgstr "変更"
 
 #. holds jid
-#: ../src/dialogs.py:3532 ../src/history_manager.py:166
+#: ../src/dialogs.py:3542 ../src/history_manager.py:166
 msgid "Jabber ID"
 msgstr "Jabber ID"
 
-#: ../src/dialogs.py:3538
+#: ../src/dialogs.py:3548
 msgid "Groups"
 msgstr "グループ"
 
 #. it is selected
 #. remote_jid = model[iter_][1].decode('utf-8')
-#: ../src/dialogs.py:3646
+#: ../src/dialogs.py:3656
 #, python-format
 msgid "%s suggested me to add you in my roster."
 msgstr "あなたを名簿に追加するよう、%s さんは私に勧めました。"
 
-#: ../src/dialogs.py:3660
+#: ../src/dialogs.py:3670
 #, python-format
 msgid "Added %d contact"
 msgid_plural "Added %d contacts"
 msgstr[0] "%d 件の相手先を追加しました"
 msgstr[1] "%d 件の相手先を追加しました"
 
-#: ../src/dialogs.py:3698
+#: ../src/dialogs.py:3708
 #, python-format
 msgid "Removed %d contact"
 msgid_plural "Removed %d contacts"
 msgstr[0] "%d 件の相手先を削除しました"
 msgstr[1] "%d 件の相手先を削除しました"
 
-#: ../src/dialogs.py:3739 ../src/dialogs.py:3916
+#: ../src/dialogs.py:3749 ../src/dialogs.py:3926
 #, python-format
 msgid "Archiving Preferences for %s"
 msgstr "%s の書庫の設定"
 
-#: ../src/dialogs.py:3779
+#: ../src/dialogs.py:3789
 msgid "Invalid expire value"
 msgstr "期限の値が正しくありません"
 
-#: ../src/dialogs.py:3780
+#: ../src/dialogs.py:3790
 msgid "Expire must be a valid positive integer."
 msgstr "期限は正の整数にしてください。"
 
-#: ../src/dialogs.py:3827
+#: ../src/dialogs.py:3837
 msgid "There is an error with the form"
 msgstr "書式に誤りがあります"
 
-#: ../src/dialogs.py:4047
+#: ../src/dialogs.py:4057
 msgid "There is an error"
 msgstr "誤りがあります"
 
-#: ../src/dialogs.py:4115
+#: ../src/dialogs.py:4125
 #, python-format
 msgid "Privacy List <b><i>%s</i></b>"
 msgstr "プライバシーリスト <b><i>%s</i></b>"
 
-#: ../src/dialogs.py:4119
+#: ../src/dialogs.py:4129
 #, python-format
 msgid "Privacy List for %s"
 msgstr "%s のプライバシーリスト"
 
-#: ../src/dialogs.py:4186
+#: ../src/dialogs.py:4196
 #, python-format
 msgid "Order: %(order)s, action: %(action)s, type: %(type)s, value: %(value)s"
 msgstr "順位: %(order)s, 操作: %(action)s, 型: %(type)s, 値: %(value)s"
 
-#: ../src/dialogs.py:4191
+#: ../src/dialogs.py:4201
 #, python-format
 msgid "Order: %(order)s, action: %(action)s"
 msgstr "順位: %(order)s, 操作: %(action)s"
 
-#: ../src/dialogs.py:4242
+#: ../src/dialogs.py:4252
 msgid "<b>Edit a rule</b>"
 msgstr "<b>規則の編集</b>"
 
-#: ../src/dialogs.py:4353
+#: ../src/dialogs.py:4363
 msgid "<b>Add a rule</b>"
 msgstr "<b>規則の追加</b>"
 
-#: ../src/dialogs.py:4452
+#: ../src/dialogs.py:4462
 #, python-format
 msgid "Privacy Lists for %s"
 msgstr "%s のプライバシーリスト"
 
-#: ../src/dialogs.py:4454
+#: ../src/dialogs.py:4464
 msgid "Privacy Lists"
 msgstr "プライバシーリスト"
 
-#: ../src/dialogs.py:4543
+#: ../src/dialogs.py:4553
 msgid "Invalid List Name"
 msgstr "リスト名が正しくありません"
 
-#: ../src/dialogs.py:4544
+#: ../src/dialogs.py:4554
 msgid "You must enter a name to create a privacy list."
 msgstr "プライバシーリストを作成するには、名前を入力してください。"
 
-#: ../src/dialogs.py:4580
+#: ../src/dialogs.py:4590
 msgid "You are invited to a groupchat"
 msgstr "グループチャットへの招待を受けました"
 
-#: ../src/dialogs.py:4583
+#: ../src/dialogs.py:4593
 msgid "$Contact has invited you to join a discussion"
 msgstr "$Contact さんがあなたを議論に参加するよう招待しています"
 
-#: ../src/dialogs.py:4585
+#: ../src/dialogs.py:4595
 #, python-format
 msgid "$Contact has invited you to group chat %(room_jid)s"
 msgstr "$Contact さんがあなたをグループチャット %(room_jid)s へ招待しています"
 
-#: ../src/dialogs.py:4593
+#: ../src/dialogs.py:4604
 #, python-format
 msgid "Comment: %s"
 msgstr "コメント: %s"
 
-#: ../src/dialogs.py:4595
+#: ../src/dialogs.py:4606
 msgid "Do you want to accept the invitation?"
 msgstr "招待に応じますか ?"
 
-#: ../src/dialogs.py:4612
+#: ../src/dialogs.py:4623
 msgid "Reason (if you decline):"
 msgstr "理由 (断る場合)"
 
-#: ../src/dialogs.py:4664
+#: ../src/dialogs.py:4675
 msgid "Choose Client Cert #PCKS12"
 msgstr "#PCKS12 形式のクライアント証明書の選択"
 
-#: ../src/dialogs.py:4674 ../src/dialogs.py:4716 ../src/dialogs.py:4772
-#: ../src/dialogs.py:4860
+#: ../src/dialogs.py:4686 ../src/dialogs.py:4728 ../src/dialogs.py:4784
+#: ../src/dialogs.py:4872
 msgid "All files"
 msgstr "すべてのファイル"
 
-#: ../src/dialogs.py:4679
+#: ../src/dialogs.py:4691
 msgid "PKCS12 Files"
 msgstr "PKCS12 形式のファイル"
 
-#: ../src/dialogs.py:4706
+#: ../src/dialogs.py:4718
 msgid "Choose Sound"
 msgstr "サウンドの選択"
 
-#: ../src/dialogs.py:4721
+#: ../src/dialogs.py:4733
 msgid "Wav Sounds"
 msgstr "WAV サウンド"
 
-#: ../src/dialogs.py:4759
+#: ../src/dialogs.py:4771
 msgid "Choose Image"
 msgstr "画像の選択"
 
-#: ../src/dialogs.py:4777
+#: ../src/dialogs.py:4789
 msgid "Images"
 msgstr "画像"
 
-#: ../src/dialogs.py:4847
+#: ../src/dialogs.py:4859
 msgid "Choose Archive"
 msgstr "書庫の選択"
 
-#: ../src/dialogs.py:4865
+#: ../src/dialogs.py:4877
 msgid "Zip files"
 msgstr "Zip ファイル"
 
-#: ../src/dialogs.py:4891
+#: ../src/dialogs.py:4903
 #, python-format
 msgid "When %s becomes:"
 msgstr "%s が次のようになったとき:"
 
-#: ../src/dialogs.py:4893
+#: ../src/dialogs.py:4905
 #, python-format
 msgid "Adding Special Notification for %s"
 msgstr "%s の特別通知の追加"
 
-#: ../src/dialogs.py:5113
+#: ../src/dialogs.py:5125
 #, python-format
 msgid ""
 "Your chat session with <b>%(jid)s</b> is encrypted.\n"
@@ -8107,19 +8092,19 @@ msgstr ""
 "\n"
 "このチャットの認証文字列 (SAS)は <b>%(sas)s</b> です。"
 
-#: ../src/dialogs.py:5116
+#: ../src/dialogs.py:5128
 msgid "You have already verified this contact's identity."
 msgstr "相手先の同一性を既に確認しています。"
 
-#: ../src/dialogs.py:5122 ../src/dialogs.py:5207
+#: ../src/dialogs.py:5134 ../src/dialogs.py:5219
 msgid "Contact's identity verified"
 msgstr "相手先の同一性を確認しました"
 
-#: ../src/dialogs.py:5128
+#: ../src/dialogs.py:5140
 msgid "Verify again..."
 msgstr "再検証中..."
 
-#: ../src/dialogs.py:5133
+#: ../src/dialogs.py:5145
 msgid ""
 "To be certain that <b>only</b> the expected person can read your messages or "
 "send you messages, you need to verify their identity by clicking the button "
@@ -8129,19 +8114,19 @@ msgstr ""
 "ことができることを確実にするため、その人が本人であることを検証する必要があり"
 "ます。次のボタンをクリックしてください。"
 
-#: ../src/dialogs.py:5136 ../src/dialogs.py:5188 ../src/dialogs.py:5201
+#: ../src/dialogs.py:5148 ../src/dialogs.py:5200 ../src/dialogs.py:5213
 msgid "Contact's identity NOT verified"
 msgstr "相手先の同一性を確認していません"
 
-#: ../src/dialogs.py:5141
+#: ../src/dialogs.py:5153
 msgid "Verify..."
 msgstr "検証中..."
 
-#: ../src/dialogs.py:5152
+#: ../src/dialogs.py:5164
 msgid "Have you verified the contact's identity?"
 msgstr "相手先の同一性を確認しましたか ?"
 
-#: ../src/dialogs.py:5153
+#: ../src/dialogs.py:5165
 #, python-format
 msgid ""
 "To prevent talking to an unknown person, you should speak to <b>%(jid)s</b> "
@@ -8155,24 +8140,24 @@ msgstr ""
 "\n"
 "この接続の認証文字列は <b>%(sas)s</b> です。"
 
-#: ../src/dialogs.py:5154
+#: ../src/dialogs.py:5166
 msgid "Did you talk to the remote contact and verify the SAS?"
 msgstr "遠くの相手先と話して、認証文字列 (SAS) を確認しましたか ?"
 
-#: ../src/dialogs.py:5189
+#: ../src/dialogs.py:5201
 #, python-format
 msgid "The contact's key (%s) <b>does not match</b> the key assigned in Gajim."
 msgstr ""
 "この相手先の鍵 (%s) は、Gajim で割り当てられた鍵と <b>一致しません</b>。"
 
-#: ../src/dialogs.py:5195
+#: ../src/dialogs.py:5207
 msgid ""
 "No OpenPGP key is assigned to this contact. So you cannot encrypt messages."
 msgstr ""
 "この相手先に対して OpenPGP 鍵は割り当てられていません。そのため、メッセージは"
 "暗号化されません。 "
 
-#: ../src/dialogs.py:5202
+#: ../src/dialogs.py:5214
 msgid ""
 "OpenPGP key is assigned to this contact, but <b>you do not trust his key</"
 "b>, so message <b>cannot</b> be encrypted. Use your OpenPGP client to trust "
@@ -8182,7 +8167,7 @@ msgstr ""
 "していません</b>。メッセージは暗号化<b>されません</b>。鍵に信頼を与えるには "
 "OpenPGP クライアントを使ってください。"
 
-#: ../src/dialogs.py:5208
+#: ../src/dialogs.py:5220
 msgid ""
 "OpenPGP Key is assigned to this contact, and you trust his key, so messages "
 "will be encrypted."
@@ -8190,19 +8175,19 @@ msgstr ""
 "この相手先に対して OpenPGP 鍵が割り当てられています。その鍵を信頼して、メッ"
 "セージは暗号化されます。"
 
-#: ../src/dialogs.py:5273
+#: ../src/dialogs.py:5286
 msgid "an audio and video"
 msgstr "音声とビデオ"
 
-#: ../src/dialogs.py:5275
+#: ../src/dialogs.py:5288
 msgid "an audio"
 msgstr "音声"
 
-#: ../src/dialogs.py:5277
+#: ../src/dialogs.py:5290
 msgid "a video"
 msgstr "ビデオ"
 
-#: ../src/dialogs.py:5281
+#: ../src/dialogs.py:5294
 #, python-format
 msgid ""
 "%(contact)s wants to start %(type)s session with you. Do you want to answer "
@@ -8211,12 +8196,12 @@ msgstr ""
 "%(contact)s さんは、%(type)s でセッションを始めようとしています。呼び出しに応"
 "じますか ?"
 
-#: ../src/dialogs.py:5372 ../src/dialogs.py:5376
+#: ../src/dialogs.py:5388 ../src/dialogs.py:5413
 #, python-format
 msgid "Certificate for account %s"
 msgstr "アカウント %s の証明書"
 
-#: ../src/dialogs.py:5376
+#: ../src/dialogs.py:5388
 #, python-format
 msgid ""
 "<b>Issued to:</b>\n"
@@ -8255,41 +8240,42 @@ msgstr ""
 "<b>指紋</b>\n"
 "SHA1 指紋: %(sha1)s"
 
-#: ../src/dialogs.py:5411 ../src/dialogs.py:5428
+#: ../src/dialogs.py:5424 ../src/gui_interface.py:1355
+#, python-format
+msgid "SSL Certificate Verification for %s"
+msgstr "%s のSSL 証明書の検証"
+
+#: ../src/dialogs.py:5425 ../src/dialogs.py:5442
 msgid "View cert..."
 msgstr "証明書を表示..."
 
-#: ../src/dialogs.py:5436
-msgid "Certificate"
-msgstr "証明書"
-
-#: ../src/disco.py:120
+#: ../src/disco.py:122
 msgid "Others"
 msgstr "その他"
 
 #. conference is a category for listing mostly groupchats in service discovery
-#: ../src/disco.py:124
+#: ../src/disco.py:126
 msgid "Conference"
 msgstr "会議室 (グループチャット)"
 
-#: ../src/disco.py:517
+#: ../src/disco.py:525
 msgid "Without a connection, you can not browse available services"
 msgstr "接続しないと、サービスを見ることはできません"
 
-#: ../src/disco.py:603
+#: ../src/disco.py:611
 #, python-format
 msgid "Service Discovery using account %s"
 msgstr "アカウント %s でサービス探索"
 
-#: ../src/disco.py:605
+#: ../src/disco.py:613
 msgid "Service Discovery"
 msgstr "サービス探索"
 
-#: ../src/disco.py:761
+#: ../src/disco.py:769
 msgid "The service could not be found"
 msgstr "サービスが見つかりませんでした"
 
-#: ../src/disco.py:762
+#: ../src/disco.py:770
 msgid ""
 "There is no service at the address you entered, or it is not responding. "
 "Check the address and try again."
@@ -8297,94 +8283,94 @@ msgstr ""
 "あなたが入力したアドレスにサービスが見つからないか、または応答がありません。"
 "アドレスを確認し、もういちど試してください。"
 
-#: ../src/disco.py:768 ../src/disco.py:1109
+#: ../src/disco.py:776 ../src/disco.py:1114
 msgid "The service is not browsable"
 msgstr "このサービスを見ることはできません"
 
-#: ../src/disco.py:769
+#: ../src/disco.py:777
 msgid "This type of service does not contain any items to browse."
 msgstr "This type of service does not contain any items to browse."
 
-#: ../src/disco.py:810 ../src/disco.py:820
+#: ../src/disco.py:818 ../src/disco.py:828
 msgid "Invalid Server Name"
 msgstr "サーバー名が正しくありません"
 
-#: ../src/disco.py:873
+#: ../src/disco.py:881
 #, python-format
 msgid "Browsing %(address)s using account %(account)s"
 msgstr "アカウント %(account)s で %(address)s を閲覧"
 
-#: ../src/disco.py:917
+#: ../src/disco.py:928
 msgid "_Browse"
 msgstr "一覧 (_B)"
 
-#: ../src/disco.py:1110
+#: ../src/disco.py:1115
 msgid "This service does not contain any items to browse."
 msgstr "このサービスには表示すべき項目がありません。"
 
-#: ../src/disco.py:1378
+#: ../src/disco.py:1386
 msgid "_Execute Command"
 msgstr "コマンド実行 (_E)"
 
-#: ../src/disco.py:1388 ../src/disco.py:1560
+#: ../src/disco.py:1390 ../src/disco.py:1556
 msgid "Re_gister"
 msgstr "登録 (_G)"
 
-#: ../src/disco.py:1601
+#: ../src/disco.py:1597
 #, python-format
 msgid "Scanning %(current)d / %(total)d.."
 msgstr "走査中 %(current)d / %(total)d.."
 
 #. Users column
-#: ../src/disco.py:1797
+#: ../src/disco.py:1793
 msgid "Users"
 msgstr "ユーザー数"
 
 #. Description column
-#: ../src/disco.py:1805
+#: ../src/disco.py:1801
 msgid "Description"
 msgstr "説明"
 
 #. Id column
-#: ../src/disco.py:1813
+#: ../src/disco.py:1809
 msgid "Id"
 msgstr "Id"
 
-#: ../src/disco.py:1877 ../src/gui_interface.py:2574
+#: ../src/disco.py:1873 ../src/gui_interface.py:2591
 msgid "Bookmark already set"
 msgstr "既にブックマーク"
 
-#: ../src/disco.py:1878 ../src/gui_interface.py:2575
+#: ../src/disco.py:1874 ../src/gui_interface.py:2592
 #, python-format
 msgid "Group Chat \"%s\" is already in your bookmarks."
 msgstr "グループチャット \"%s\" は既にブックマークにあります。"
 
-#: ../src/disco.py:1887 ../src/gui_interface.py:2589
+#: ../src/disco.py:1884 ../src/gui_interface.py:2606
 msgid "Bookmark has been added successfully"
 msgstr "ブックマークが追加されました"
 
-#: ../src/disco.py:1888 ../src/gui_interface.py:2590
+#: ../src/disco.py:1885 ../src/gui_interface.py:2607
 msgid "You can manage your bookmarks via Actions menu in your roster."
 msgstr "ブックマークは、名簿の「アクション」メニューから管理できます。"
 
-#: ../src/disco.py:2098
+#: ../src/disco.py:2096
 msgid "Subscribed"
 msgstr "継読中"
 
-#: ../src/disco.py:2106
+#: ../src/disco.py:2104
 msgid "Node"
 msgstr "ノード"
 
 # (Mako)pubsubのところ
-#: ../src/disco.py:2173
+#: ../src/disco.py:2171
 msgid "New post"
 msgstr "新しい投稿"
 
-#: ../src/disco.py:2179
+#: ../src/disco.py:2177
 msgid "_Subscribe"
 msgstr "継読 (_S)"
 
-#: ../src/disco.py:2185
+#: ../src/disco.py:2183
 msgid "_Unsubscribe"
 msgstr "継読の取り消し (_U)"
 
@@ -8645,7 +8631,7 @@ msgstr "進捗"
 msgid "Filename: %s"
 msgstr "ファイル名: %s"
 
-#: ../src/filetransfers_window.py:187 ../src/filetransfers_window.py:453
+#: ../src/filetransfers_window.py:187 ../src/filetransfers_window.py:452
 #, python-format
 msgid "Size: %s"
 msgstr "サイズ: %s"
@@ -8662,8 +8648,8 @@ msgstr "あなた"
 msgid "Sender: %s"
 msgstr "送信者: %s"
 
-#: ../src/filetransfers_window.py:198 ../src/filetransfers_window.py:734
-#: ../src/tooltips.py:758
+#: ../src/filetransfers_window.py:198 ../src/filetransfers_window.py:733
+#: ../src/tooltips.py:769
 msgid "Recipient: "
 msgstr "受取人: "
 
@@ -8698,7 +8684,7 @@ msgstr ""
 msgid "Choose File to Send..."
 msgstr "転送するファイルを選択..."
 
-#: ../src/filetransfers_window.py:329 ../src/tooltips.py:793
+#: ../src/filetransfers_window.py:329 ../src/tooltips.py:804
 msgid "Description: "
 msgstr "説明: "
 
@@ -8732,51 +8718,51 @@ msgstr "何をしたいですか ?"
 #. read-only bit is used to mark special folder under
 #. windows, not to mark that a folder is read-only.
 #. See ticket #3587
-#: ../src/filetransfers_window.py:418 ../src/gtkgui_helpers.py:863
+#: ../src/filetransfers_window.py:417 ../src/gtkgui_helpers.py:863
 #, python-format
 msgid "Directory \"%s\" is not writable"
 msgstr "ディレクトリ \"%s\" に書き込む権限がありません"
 
-#: ../src/filetransfers_window.py:419 ../src/gtkgui_helpers.py:864
+#: ../src/filetransfers_window.py:418 ../src/gtkgui_helpers.py:864
 msgid "You do not have permission to create files in this directory."
 msgstr "このディレクトリにファイルを作成する権限がありません。"
 
-#: ../src/filetransfers_window.py:430
+#: ../src/filetransfers_window.py:429
 msgid "Save File as..."
 msgstr "ファイルの保存..."
 
-#: ../src/filetransfers_window.py:450
+#: ../src/filetransfers_window.py:449
 #, python-format
 msgid "File: %s"
 msgstr "ファイル: %s"
 
-#: ../src/filetransfers_window.py:456
+#: ../src/filetransfers_window.py:455
 #, python-format
 msgid "Type: %s"
 msgstr "種類: %s"
 
-#: ../src/filetransfers_window.py:458
+#: ../src/filetransfers_window.py:457
 #, python-format
 msgid "Description: %s"
 msgstr "説明: %s"
 
-#: ../src/filetransfers_window.py:459
+#: ../src/filetransfers_window.py:458
 #, python-format
 msgid "%s wants to send you a file:"
 msgstr "%s さんがファイルを転送したがっています:"
 
-#: ../src/filetransfers_window.py:500
+#: ../src/filetransfers_window.py:499
 msgid "Checking file..."
 msgstr "ファイルをチェックしています..."
 
-#: ../src/filetransfers_window.py:514
+#: ../src/filetransfers_window.py:513
 msgid "File error"
 msgstr "ファイルのエラー"
 
 #. Print remaining time in format 00:00:00
 #. You can change the places of (hours), (minutes), (seconds) -
 #. they are not translatable.
-#: ../src/filetransfers_window.py:551
+#: ../src/filetransfers_window.py:550
 #, python-format
 msgid "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 msgstr "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
@@ -8784,34 +8770,38 @@ msgstr "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 #. This should make the string Kb/s,
 #. where 'Kb' part is taken from %s.
 #. Only the 's' after / (which means second) should be translated.
-#: ../src/filetransfers_window.py:644
+#: ../src/filetransfers_window.py:643
 #, python-format
 msgid "(%(filesize_unit)s/s)"
 msgstr "(%(filesize_unit)s/秒)"
 
-#: ../src/filetransfers_window.py:700 ../src/filetransfers_window.py:703
+#: ../src/filetransfers_window.py:699 ../src/filetransfers_window.py:702
 msgid "Invalid File"
 msgstr "ファイルが正しくありません"
 
-#: ../src/filetransfers_window.py:700
+#: ../src/filetransfers_window.py:699
 msgid "File: "
 msgstr "ファイル: "
 
-#: ../src/filetransfers_window.py:704
+#: ../src/filetransfers_window.py:703
 msgid "It is not possible to send empty files"
 msgstr "空のファイルを転送することはできません"
 
-#: ../src/filetransfers_window.py:730 ../src/tooltips.py:748
+#: ../src/filetransfers_window.py:729 ../src/tooltips.py:759
 msgid "Name: "
 msgstr "名前: "
 
-#: ../src/filetransfers_window.py:732 ../src/tooltips.py:752
+#: ../src/filetransfers_window.py:731 ../src/tooltips.py:763
 msgid "Sender: "
 msgstr "送信者: "
 
-#: ../src/filetransfers_window.py:894
+#: ../src/filetransfers_window.py:893
 msgid "Pause"
 msgstr "一時停止"
+
+#: ../src/filetransfers_window.py:904
+msgid "_Continue"
+msgstr "続ける (_C)"
 
 #: ../src/gajim.py:135 ../src/history_manager.py:73
 msgid "Usage:"
@@ -9349,32 +9339,32 @@ msgstr "uri がありません"
 msgid "Wrong uri"
 msgstr "uri が間違っています"
 
-#: ../src/gajim_themes_window.py:59
+#: ../src/gajim_themes_window.py:60
 msgid "Theme"
 msgstr "テーマ"
 
-#: ../src/gajim_themes_window.py:97
+#: ../src/gajim_themes_window.py:98
 msgid "You cannot make changes to the default theme"
 msgstr "デフォルトテーマは変更できません。"
 
-#: ../src/gajim_themes_window.py:98
+#: ../src/gajim_themes_window.py:99
 msgid "Please create a clean new theme with your desired name."
 msgstr "名前をつけて、新しいテーマを作成してください。"
 
 #. don't confuse translators
-#: ../src/gajim_themes_window.py:169
+#: ../src/gajim_themes_window.py:170
 msgid "theme name"
 msgstr "テーマ名"
 
-#: ../src/gajim_themes_window.py:186
+#: ../src/gajim_themes_window.py:187
 msgid "You cannot delete your current theme"
 msgstr "現在のテーマは削除できません"
 
-#: ../src/gajim_themes_window.py:187
+#: ../src/gajim_themes_window.py:188
 msgid "Please first choose another theme as your current theme."
 msgstr "まず、現在のテーマとして別のものを選んでください。"
 
-#: ../src/groupchat_control.py:181 ../src/groupchat_control.py:1645
+#: ../src/groupchat_control.py:181 ../src/groupchat_control.py:1647
 #, python-format
 msgid "%(nick)s is now known as %(new_nick)s"
 msgstr "%(nick)s さんは現在 %(new_nick)s さんと認識されました"
@@ -9404,185 +9394,185 @@ msgstr "会話中: "
 msgid "Continued conversation"
 msgstr "会話中"
 
-#: ../src/groupchat_control.py:1268
+#: ../src/groupchat_control.py:1270
 #, python-format
 msgid "%(nick)s has set the subject to %(subject)s"
 msgstr "%(nick)s さんは題を %(subject)s に設定しました"
 
 #. Can be a presence (see chg_contact_status in groupchat_control.py)
-#: ../src/groupchat_control.py:1286 ../src/groupchat_control.py:1587
+#: ../src/groupchat_control.py:1288 ../src/groupchat_control.py:1589
 msgid "Any occupant is allowed to see your full JID"
 msgstr "在室者の誰もがあなたのフルJID を知ることができます"
 
-#: ../src/groupchat_control.py:1289
+#: ../src/groupchat_control.py:1291
 msgid "Room now shows unavailable members"
 msgstr "談話室はメンバー以外にも見えます"
 
-#: ../src/groupchat_control.py:1291
+#: ../src/groupchat_control.py:1293
 msgid "Room now does not show unavailable members"
 msgstr "談話室はメンバー以外には見えません"
 
-#: ../src/groupchat_control.py:1293
+#: ../src/groupchat_control.py:1295
 msgid "A non-privacy-related room configuration change has occurred"
 msgstr "談話室の構成の変更 (プライバシー関連ではない) がありました"
 
 #. Can be a presence (see chg_contact_status in groupchat_control.py)
-#: ../src/groupchat_control.py:1297
+#: ../src/groupchat_control.py:1299
 msgid "Room logging is now enabled"
 msgstr "談話室の記録を取りはじめます"
 
-#: ../src/groupchat_control.py:1299
+#: ../src/groupchat_control.py:1301
 msgid "Room logging is now disabled"
 msgstr "談話室の記録を止めます"
 
-#: ../src/groupchat_control.py:1301
+#: ../src/groupchat_control.py:1303
 msgid "Room is now non-anonymous"
 msgstr "談話室は非匿名です"
 
-#: ../src/groupchat_control.py:1304
+#: ../src/groupchat_control.py:1306
 msgid "Room is now semi-anonymous"
 msgstr "談話室は半匿名です"
 
-#: ../src/groupchat_control.py:1307
+#: ../src/groupchat_control.py:1309
 msgid "Room is now fully-anonymous"
 msgstr "談話室は完全匿名です"
 
-#: ../src/groupchat_control.py:1580 ../src/groupchat_control.py:2241
-#: ../src/gui_interface.py:605 ../src/roster_window.py:3323
+#: ../src/groupchat_control.py:1582 ../src/groupchat_control.py:2243
+#: ../src/gui_interface.py:605 ../src/roster_window.py:3333
 #, python-format
 msgid "%(jid)s has been invited in this room"
 msgstr "%(jid)s は既にこの談話室に招待されています"
 
 #. Can be a message (see handle_event_gc_config_change in
 #. gajim.py)
-#: ../src/groupchat_control.py:1592
+#: ../src/groupchat_control.py:1594
 msgid "Room logging is enabled"
 msgstr "談話室の会話は記録されています"
 
-#: ../src/groupchat_control.py:1594
+#: ../src/groupchat_control.py:1596
 msgid "A new room has been created"
 msgstr "新しい談話室が作成されました"
 
-#: ../src/groupchat_control.py:1597
+#: ../src/groupchat_control.py:1599
 msgid "The server has assigned or modified your roomnick"
 msgstr "サーバーはあなたの談話室ニックネームを割り当て (または変更し) ました"
 
 #. do not print 'kicked by None'
-#: ../src/groupchat_control.py:1603
+#: ../src/groupchat_control.py:1605
 #, python-format
 msgid "%(nick)s has been kicked: %(reason)s"
 msgstr "%(nick)s は蹴り出されました: %(reason)s"
 
-#: ../src/groupchat_control.py:1606
+#: ../src/groupchat_control.py:1608
 #, python-format
 msgid "%(nick)s has been kicked by %(who)s: %(reason)s"
 msgstr "%(nick)s は %(who)s によって蹴り出されました: %(reason)s"
 
 #. do not print 'banned by None'
-#: ../src/groupchat_control.py:1615
+#: ../src/groupchat_control.py:1617
 #, python-format
 msgid "%(nick)s has been banned: %(reason)s"
 msgstr "%(nick)s は締め出されました: %(reason)s"
 
-#: ../src/groupchat_control.py:1618
+#: ../src/groupchat_control.py:1620
 #, python-format
 msgid "%(nick)s has been banned by %(who)s: %(reason)s"
 msgstr "%(nick)s は %(who)s: によって締め出されました: %(reason)s"
 
-#: ../src/groupchat_control.py:1629 ../src/groupchat_control.py:1745
+#: ../src/groupchat_control.py:1631 ../src/groupchat_control.py:1747
 #, python-format
 msgid "You are now known as %s"
 msgstr "あなたは %s と認識されました"
 
-#: ../src/groupchat_control.py:1699 ../src/groupchat_control.py:1704
-#: ../src/groupchat_control.py:1710
+#: ../src/groupchat_control.py:1701 ../src/groupchat_control.py:1706
+#: ../src/groupchat_control.py:1712
 #, python-format
 msgid "%(nick)s has been removed from the room (%(reason)s)"
 msgstr "%(nick)s は退出しました (%(reason)s)"
 
-#: ../src/groupchat_control.py:1701
+#: ../src/groupchat_control.py:1703
 msgid "affiliation changed"
 msgstr "分掌を変更しました"
 
-#: ../src/groupchat_control.py:1706
+#: ../src/groupchat_control.py:1708
 msgid "room configuration changed to members-only"
 msgstr "談話室はメンバー制に変更されました"
 
-#: ../src/groupchat_control.py:1712
+#: ../src/groupchat_control.py:1714
 msgid "system shutdown"
 msgstr "システムのシャットダウン"
 
-#: ../src/groupchat_control.py:1795
+#: ../src/groupchat_control.py:1797
 #, python-format
 msgid "** Affiliation of %(nick)s has been set to %(affiliation)s by %(actor)s"
 msgstr ""
 "** %(actor)s さんによって、%(nick)s さんの分掌は %(affiliation)s に設定されま"
 "した"
 
-#: ../src/groupchat_control.py:1799
+#: ../src/groupchat_control.py:1801
 #, python-format
 msgid "** Affiliation of %(nick)s has been set to %(affiliation)s"
 msgstr "** %(nick)s さんの分掌は %(affiliation)s に設定されました"
 
 # (Mako)ここでの role は「役」
-#: ../src/groupchat_control.py:1814
+#: ../src/groupchat_control.py:1816
 #, python-format
 msgid "** Role of %(nick)s has been set to %(role)s by %(actor)s"
 msgstr ""
 "** %(actor)s さんによって、%(nick)s さんの役は %(role)s に設定されました"
 
-#: ../src/groupchat_control.py:1818
+#: ../src/groupchat_control.py:1820
 #, python-format
 msgid "** Role of %(nick)s has been set to %(role)s"
 msgstr "** %(nick)s さんの役は %(role)s に設定されました"
 
-#: ../src/groupchat_control.py:1848
+#: ../src/groupchat_control.py:1850
 #, python-format
 msgid "%s has left"
 msgstr "%s さんが退出しました"
 
-#: ../src/groupchat_control.py:1853
+#: ../src/groupchat_control.py:1855
 #, python-format
 msgid "%s has joined the group chat"
 msgstr "%s さんが参加しました"
 
-#: ../src/groupchat_control.py:2124
+#: ../src/groupchat_control.py:2126
 #, python-format
 msgid "Are you sure you want to leave group chat \"%s\"?"
 msgstr "本当にグループチャット \"%s\" から退出しますか ?"
 
-#: ../src/groupchat_control.py:2126
+#: ../src/groupchat_control.py:2128
 msgid ""
 "If you close this window, you will be disconnected from this group chat."
 msgstr "このウィンドウを閉じると、このグループチャットから切断されます。"
 
-#: ../src/groupchat_control.py:2165
+#: ../src/groupchat_control.py:2167
 msgid "Changing Subject"
 msgstr "題の変更"
 
-#: ../src/groupchat_control.py:2166
+#: ../src/groupchat_control.py:2168
 msgid "Please specify the new subject:"
 msgstr "新しい題を入力してください:"
 
-#: ../src/groupchat_control.py:2173
+#: ../src/groupchat_control.py:2175
 msgid "Changing Nickname"
 msgstr "ニックネームの変更"
 
-#: ../src/groupchat_control.py:2174
+#: ../src/groupchat_control.py:2176
 msgid "Please specify the new nickname you want to use:"
 msgstr "使用する新しいニックネームを入力してください:"
 
-#: ../src/groupchat_control.py:2199
+#: ../src/groupchat_control.py:2201
 msgid "The group chat Jabber ID has not allowed characters."
 msgstr "グループチャットの JID に使えない文字が含まれています。"
 
 #. Ask for a reason
-#: ../src/groupchat_control.py:2205
+#: ../src/groupchat_control.py:2207
 #, python-format
 msgid "Destroying %s"
 msgstr "%s の閉鎖"
 
-#: ../src/groupchat_control.py:2206
+#: ../src/groupchat_control.py:2208
 msgid ""
 "You are going to definitively destroy this room.\n"
 "You may specify a reason below:"
@@ -9590,22 +9580,22 @@ msgstr ""
 "この談話室を閉鎖しようとしています。\n"
 "下に理由を入力できます:"
 
-#: ../src/groupchat_control.py:2208
+#: ../src/groupchat_control.py:2210
 msgid "You may also enter an alternate venue:"
 msgstr "また、代替の談話室を入力できます:"
 
 #. ask for reason
-#: ../src/groupchat_control.py:2408
+#: ../src/groupchat_control.py:2410
 #, python-format
 msgid "Kicking %s"
 msgstr "%s を蹴り出し"
 
-#: ../src/groupchat_control.py:2409 ../src/groupchat_control.py:2743
+#: ../src/groupchat_control.py:2411 ../src/groupchat_control.py:2745
 msgid "You may specify a reason below:"
 msgstr "下に理由を書けます:"
 
 #. ask for reason
-#: ../src/groupchat_control.py:2742
+#: ../src/groupchat_control.py:2744
 #, python-format
 msgid "Banning %s"
 msgstr "%s を締め出し"
@@ -9975,11 +9965,6 @@ msgstr ""
 msgid "Ignore this error for this certificate."
 msgstr "この証明書のこのエラーを無視します。"
 
-#: ../src/gui_interface.py:1355
-#, python-format
-msgid "SSL Certificate Verification for %s"
-msgstr "%s のSSL 証明書の検証"
-
 #: ../src/gui_interface.py:1374
 msgid "SSL certificate error"
 msgstr "SSL 証明書エラー"
@@ -10018,11 +10003,12 @@ msgstr ""
 "けますか ?"
 
 #. theme doesn't exist, disable emoticons
-#: ../src/gui_interface.py:1995 ../src/gui_interface.py:2018
+#: ../src/gui_interface.py:2002 ../src/gui_interface.py:2009
+#: ../src/gui_interface.py:2033
 msgid "Emoticons disabled"
 msgstr "感情アイコンは無効"
 
-#: ../src/gui_interface.py:1996
+#: ../src/gui_interface.py:2003
 msgid ""
 "Your configured emoticons theme has not been found, so emoticons have been "
 "disabled."
@@ -10030,7 +10016,7 @@ msgstr ""
 "指定された感情アイコンのテーマは見つかりません。そのため、感情アイコンは無効"
 "です。"
 
-#: ../src/gui_interface.py:2019
+#: ../src/gui_interface.py:2010 ../src/gui_interface.py:2034
 msgid ""
 "Your configured emoticons theme cannot been loaded. You maybe need to update "
 "the format of emoticons.py file. See http://trac.gajim.org/wiki/Emoticons "
@@ -10040,53 +10026,53 @@ msgstr ""
 "更新する必要があるかもしれません。詳しくは http://trac.gajim.org/wiki/"
 "Emoticons を参照してください。"
 
-#: ../src/gui_interface.py:2063 ../src/roster_window.py:3895
+#: ../src/gui_interface.py:2080 ../src/roster_window.py:3905
 msgid "You cannot join a group chat while you are invisible"
 msgstr "「居ないふり」のあいだはグループチャットに参加できません"
 
 #. it is good to notify the user
 #. in case he or she cannot see the output of the console
-#: ../src/gui_interface.py:2450
+#: ../src/gui_interface.py:2467
 msgid "Could not save your settings and preferences"
 msgstr "設定を保存できませんでした"
 
-#: ../src/gui_interface.py:3043
+#: ../src/gui_interface.py:3063
 msgid "Passphrase Required"
 msgstr "パスフレーズが必要です"
 
-#: ../src/gui_interface.py:3044
+#: ../src/gui_interface.py:3064
 #, python-format
 msgid "Enter OpenPGP key passphrase for key %(keyid)s (account %(account)s)."
 msgstr ""
 "鍵ID %(keyid)s (アカウント %(account)s) の OpenPGP 鍵のパスフレーズを入力して"
 "ください。"
 
-#: ../src/gui_interface.py:3058
+#: ../src/gui_interface.py:3078
 msgid "OpenPGP key expired"
 msgstr "OpenPGP 鍵は期限切れです"
 
-#: ../src/gui_interface.py:3059
+#: ../src/gui_interface.py:3079
 #, python-format
 msgid ""
 "Your OpenPGP key has expired, you will be connected to %s without OpenPGP."
 msgstr "OpenPGP 鍵は有効期限が切れています。OpenPGP なしに %s に接続します。"
 
 #. ask again
-#: ../src/gui_interface.py:3068
+#: ../src/gui_interface.py:3088
 msgid "Wrong Passphrase"
 msgstr "パスフレーズが間違っています"
 
-#: ../src/gui_interface.py:3069
+#: ../src/gui_interface.py:3089
 msgid "Please retype your OpenPGP passphrase or press Cancel."
 msgstr ""
 "OpenPGP のパスフレーズをもういちど入力するか、または「中止」を押してくださ"
 "い。"
 
-#: ../src/gui_menu_builder.py:94
+#: ../src/gui_menu_builder.py:96
 msgid "_New Group Chat"
 msgstr "新しいグループチャット (_N)"
 
-#: ../src/gui_menu_builder.py:436
+#: ../src/gui_menu_builder.py:439
 msgid "I would like to add you to my roster"
 msgstr "私はあなたを名簿に追加したいと思っています"
 
@@ -10211,7 +10197,7 @@ msgstr "現在の状況: %(status)s: %(status_msg)s"
 msgid "Status is now: %(status)s"
 msgstr "現在の状況: %(status)s"
 
-#: ../src/htmltextview.py:523
+#: ../src/htmltextview.py:524
 msgid "Loading"
 msgstr "読み込み"
 
@@ -10227,19 +10213,19 @@ msgstr "タブを閉じようとしています"
 msgid "Do you really want to close them all?"
 msgstr "本当にそれらをすべて閉じますか ?"
 
-#: ../src/message_window.py:518
+#: ../src/message_window.py:519
 msgid "Chats"
 msgstr "チャット"
 
-#: ../src/message_window.py:520
+#: ../src/message_window.py:521
 msgid "Group Chats"
 msgstr "グループチャット"
 
-#: ../src/message_window.py:522
+#: ../src/message_window.py:523
 msgid "Private Chats"
 msgstr "個人チャット"
 
-#: ../src/message_window.py:528
+#: ../src/message_window.py:529
 msgid "Messages"
 msgstr "メッセージ"
 
@@ -10305,18 +10291,18 @@ msgstr "書庫が空です"
 msgid "Retrieving profile..."
 msgstr "プロフィールを取得中..."
 
-#: ../src/profile_window.py:129 ../src/roster_window.py:3192
+#: ../src/profile_window.py:129 ../src/roster_window.py:3202
 msgid "File is empty"
 msgstr "ファイルが空です"
 
-#: ../src/profile_window.py:132 ../src/roster_window.py:3195
+#: ../src/profile_window.py:132 ../src/roster_window.py:3205
 msgid "File does not exist"
 msgstr "ファイルがありません"
 
 #. keep identation
 #. unknown format
 #: ../src/profile_window.py:146 ../src/profile_window.py:163
-#: ../src/roster_window.py:3197 ../src/roster_window.py:3208
+#: ../src/roster_window.py:3207 ../src/roster_window.py:3218
 msgid "Could not load image"
 msgstr "画像を読み込めませんでした"
 
@@ -10358,48 +10344,48 @@ msgstr "個人情報の公開する際にエラーが発生しました。あと
 msgid "Merged accounts"
 msgstr "統合アカウント"
 
-#: ../src/roster_window.py:2059
+#: ../src/roster_window.py:2062
 msgid "Authorization has been sent"
 msgstr "承認が送信されました"
 
-#: ../src/roster_window.py:2060
+#: ../src/roster_window.py:2063
 #, python-format
 msgid "Now \"%s\" will know your status."
 msgstr "現在 \"%s\" さんはあなたの在席状況を知ることができます。"
 
-#: ../src/roster_window.py:2083
+#: ../src/roster_window.py:2086
 msgid "Subscription request has been sent"
 msgstr "在席通知の申し込みを送信しました"
 
-#: ../src/roster_window.py:2084
+#: ../src/roster_window.py:2087
 #, python-format
 msgid "If \"%s\" accepts this request you will know his or her status."
 msgstr ""
 "\"%s\" さんがこの申し込みを承認したら、相手先の在席状況を知ることができます。"
 
-#: ../src/roster_window.py:2098
+#: ../src/roster_window.py:2101
 msgid "Authorization has been removed"
 msgstr "承認が取り消されました"
 
-#: ../src/roster_window.py:2099
+#: ../src/roster_window.py:2102
 #, python-format
 msgid "Now \"%s\" will always see you as offline."
 msgstr "\"%s\" さんは常にあなたをオフラインとして見ることになります。"
 
-#: ../src/roster_window.py:2126
+#: ../src/roster_window.py:2129
 msgid "OpenPGP is not usable"
 msgstr "OpenPGP は使用できません"
 
-#: ../src/roster_window.py:2127
+#: ../src/roster_window.py:2130
 #, python-format
 msgid "You will be connected to %s without OpenPGP."
 msgstr "OpenPGP なしに、%s さんに接続します。"
 
-#: ../src/roster_window.py:2334 ../src/roster_window.py:3825
+#: ../src/roster_window.py:2337 ../src/roster_window.py:3835
 msgid "You are participating in one or more group chats"
 msgstr "1つ以上のグループチャットに参加中です。"
 
-#: ../src/roster_window.py:2335 ../src/roster_window.py:3826
+#: ../src/roster_window.py:2338 ../src/roster_window.py:3836
 msgid ""
 "Changing your status to invisible will result in disconnection from those "
 "group chats. Are you sure you want to go invisible?"
@@ -10407,74 +10393,74 @@ msgstr ""
 "在席状況を「居ないふり」にすると、グループチャットから退出することになりま"
 "す。本当に「居ないふり」にしますか ?"
 
-#: ../src/roster_window.py:2361
+#: ../src/roster_window.py:2364
 msgid "desync'ed"
 msgstr "不揃い"
 
-#: ../src/roster_window.py:2427
+#: ../src/roster_window.py:2430
 msgid "Really quit Gajim?"
 msgstr "本当に Gajim を終了しますか ?"
 
-#: ../src/roster_window.py:2428
+#: ../src/roster_window.py:2431
 msgid "Are you sure you want to quit Gajim?"
 msgstr "本当に Gajim を終了しますか ?"
 
-#: ../src/roster_window.py:2429
+#: ../src/roster_window.py:2432
 msgid "Always close Gajim"
 msgstr "常に Gajim を終了する"
 
-#: ../src/roster_window.py:2519
+#: ../src/roster_window.py:2522
 msgid "You have running file transfers"
 msgstr "ファイルの転送を実行中です"
 
-#: ../src/roster_window.py:2520
+#: ../src/roster_window.py:2523
 msgid ""
 "If you quit now, the file(s) being transferred will be stopped. Do you still "
 "want to quit?"
 msgstr "いま終了すると、転送中のファイルは中断されます。それでも終了しますか?"
 
-#: ../src/roster_window.py:2551 ../src/roster_window.py:2988
+#: ../src/roster_window.py:2554 ../src/roster_window.py:2998
 msgid "You have unread messages"
 msgstr "未読のメッセージがあります"
 
-#: ../src/roster_window.py:2552
+#: ../src/roster_window.py:2555
 msgid ""
 "Messages will only be available for reading them later if you have history "
 "enabled and contact is in your roster."
 msgstr ""
 "履歴が有効になっていて、かつ相手先が名簿にあれば、メッセージは後で読めます。"
 
-#: ../src/roster_window.py:2989
+#: ../src/roster_window.py:2999
 msgid "You must read them before removing this transport."
 msgstr "この中継先を削除する前に、それらを読んでください。"
 
-#: ../src/roster_window.py:2992
+#: ../src/roster_window.py:3002
 #, python-format
 msgid "Transport \"%s\" will be removed"
 msgstr "中継先 \"%s\" を削除します"
 
-#: ../src/roster_window.py:2993
+#: ../src/roster_window.py:3003
 msgid ""
 "You will no longer be able to send and receive messages from contacts using "
 "this transport."
 msgstr "もうこの中継先をとおして相手先にメッセージを送受信できません。"
 
-#: ../src/roster_window.py:2996
+#: ../src/roster_window.py:3006
 msgid "Transports will be removed"
 msgstr "中継先を削除します"
 
-#: ../src/roster_window.py:3001
+#: ../src/roster_window.py:3011
 #, python-format
 msgid ""
 "You will no longer be able to send and receive messages to contacts from "
 "these transports: %s"
 msgstr "もうこれらの中継先 %s をとおして相手先にメッセージを送受信できません。"
 
-#: ../src/roster_window.py:3043
+#: ../src/roster_window.py:3053
 msgid "You are about to block a contact. Are you sure you want to continue?"
 msgstr "相手先を遮断しようとしています。本当に続けますか ?"
 
-#: ../src/roster_window.py:3045
+#: ../src/roster_window.py:3055
 msgid ""
 "This contact will see you offline and you will not receive messages he will "
 "send you."
@@ -10483,56 +10469,56 @@ msgstr ""
 "ん。"
 
 #. it's jid
-#: ../src/roster_window.py:3084
+#: ../src/roster_window.py:3094
 msgid "Rename Contact"
 msgstr "相手先の名前を変更"
 
-#: ../src/roster_window.py:3085
+#: ../src/roster_window.py:3095
 #, python-format
 msgid "Enter a new nickname for contact %s"
 msgstr "相手先 %s さんの新しいニックネームを入力してください"
 
-#: ../src/roster_window.py:3092
+#: ../src/roster_window.py:3102
 msgid "Rename Group"
 msgstr "グループの名前変更"
 
-#: ../src/roster_window.py:3093
+#: ../src/roster_window.py:3103
 #, python-format
 msgid "Enter a new name for group %s"
 msgstr "グループ %s の新しい名前を入力してください"
 
-#: ../src/roster_window.py:3138
+#: ../src/roster_window.py:3148
 msgid "Remove Group"
 msgstr "グループの削除"
 
-#: ../src/roster_window.py:3139
+#: ../src/roster_window.py:3149
 #, python-format
 msgid "Do you want to remove group %s from the roster?"
 msgstr "名簿からグループ %s を削除しますか ?"
 
-#: ../src/roster_window.py:3140
+#: ../src/roster_window.py:3150
 msgid "Also remove all contacts in this group from your roster"
 msgstr "名簿のこのグループのすべての相手先も削除します"
 
-#: ../src/roster_window.py:3179
+#: ../src/roster_window.py:3189
 msgid "Assign OpenPGP Key"
 msgstr "OpenPGP 鍵の割り当て"
 
-#: ../src/roster_window.py:3180
+#: ../src/roster_window.py:3190
 msgid "Select a key to apply to the contact"
 msgstr "相手先に適用する鍵を選択してください"
 
-#: ../src/roster_window.py:3635
+#: ../src/roster_window.py:3645
 #, python-format
 msgid "Contact \"%s\" will be removed from your roster"
 msgstr "相手先 \"%s\" さんを名簿から削除します"
 
-#: ../src/roster_window.py:3637
+#: ../src/roster_window.py:3647
 #, python-format
 msgid "You are about to remove \"%(name)s\" (%(jid)s) from your roster.\n"
 msgstr "\"%(name)s\" (%(jid)s) さんを名簿から削除しようとしています。\n"
 
-#: ../src/roster_window.py:3642
+#: ../src/roster_window.py:3652
 msgid ""
 "By removing this contact you also remove authorization resulting in him or "
 "her always seeing you as offline."
@@ -10541,11 +10527,11 @@ msgstr ""
 "を常にオフラインとして見ることになります。"
 
 #. Contact is not in roster
-#: ../src/roster_window.py:3648
+#: ../src/roster_window.py:3658
 msgid "Do you want to continue?"
 msgstr "続けますか ?"
 
-#: ../src/roster_window.py:3652
+#: ../src/roster_window.py:3662
 msgid ""
 "By removing this contact you also by default remove authorization resulting "
 "in him or her always seeing you as offline."
@@ -10553,16 +10539,16 @@ msgstr ""
 "この相手先を名簿から削除すると、デフォルトで在席通知の承認も取り消します。相"
 "手先はあなたを常にオフラインとして見ることになります。"
 
-#: ../src/roster_window.py:3655
+#: ../src/roster_window.py:3665
 msgid "I want this contact to know my status after removal"
 msgstr "削除後も、この相手先に自分の在席状況を知らせる"
 
 #. several contact to remove at the same time
-#: ../src/roster_window.py:3659
+#: ../src/roster_window.py:3669
 msgid "Contacts will be removed from your roster"
 msgstr "相手先は名簿から削除されました"
 
-#: ../src/roster_window.py:3664
+#: ../src/roster_window.py:3674
 #, python-format
 msgid ""
 "By removing these contacts:%s\n"
@@ -10572,12 +10558,12 @@ msgstr ""
 "を名簿から削除すると、在席通知の承認も取り消します。相手先はあなたを常にオフ"
 "ラインとして見ることになります。"
 
-#: ../src/roster_window.py:3722
+#: ../src/roster_window.py:3732
 msgid ""
 "You are about to send a custom status. Are you sure you want to continue?"
 msgstr "独自の在席状況を送信しようとしています。本当に続けますか ?"
 
-#: ../src/roster_window.py:3724
+#: ../src/roster_window.py:3734
 #, python-format
 msgid ""
 "This contact will temporarily see you as %(status)s, but only until you "
@@ -10587,19 +10573,19 @@ msgstr ""
 "が在席状況を変更するまでの間です。その後はあなたの全体の在席状況を見ることに"
 "なります。"
 
-#: ../src/roster_window.py:3743
+#: ../src/roster_window.py:3753
 msgid "No account available"
 msgstr "アカウントがありません"
 
-#: ../src/roster_window.py:3744
+#: ../src/roster_window.py:3754
 msgid "You must create an account before you can chat with other contacts."
 msgstr "相手先とチャットを開始する前に、アカウントを作成してください。"
 
-#: ../src/roster_window.py:4456
+#: ../src/roster_window.py:4467
 msgid "Metacontacts storage not supported by your server"
 msgstr "サーバーはメタ相手先の保存をサポートしていません"
 
-#: ../src/roster_window.py:4458
+#: ../src/roster_window.py:4469
 msgid ""
 "Your server does not support storing metacontacts information. So this "
 "information will not be saved on next reconnection."
@@ -10607,12 +10593,12 @@ msgstr ""
 "サーバーはメタ相手先の情報の保存をサポートしていません。したがってその情報は"
 "次の接続の際には失われています。"
 
-#: ../src/roster_window.py:4550
+#: ../src/roster_window.py:4561
 msgid ""
 "You are about to create a metacontact. Are you sure you want to continue?"
 msgstr "メタ相手先を作成しようとしています。本当に続けますか ?"
 
-#: ../src/roster_window.py:4552
+#: ../src/roster_window.py:4563
 msgid ""
 "Metacontacts are a way to regroup several contacts in one line. Generally it "
 "is used when the same person has several Jabber accounts or transport "
@@ -10622,29 +10608,29 @@ msgstr ""
 "人物が複数の Jabber アカウントや中継先アカウントを持っているときに使用しま"
 "す。"
 
-#: ../src/roster_window.py:4673
+#: ../src/roster_window.py:4684
 msgid "Invalid file URI:"
 msgstr "ファイルの URI が正しくありません:"
 
-#: ../src/roster_window.py:4685
+#: ../src/roster_window.py:4696
 #, python-format
 msgid "Do you want to send this file to %s:"
 msgid_plural "Do you want to send these files to %s:"
 msgstr[0] "このファイルを %s さんに転送しますか:"
 msgstr[1] "これらのファイルを %s さんに転送しますか:"
 
-#: ../src/roster_window.py:4820
+#: ../src/roster_window.py:4831
 #, python-format
 msgid "Send %s to %s"
 msgstr "%s を %s に送信"
 
-#: ../src/roster_window.py:4831
+#: ../src/roster_window.py:4842
 #, python-format
 msgid "Make %s first contact"
 msgstr "%s を優先の相手先とする"
 
 # (Mako) よくわからない。Make [c_source.get_shown_name()] and [c_dest.get_shown_name()] metacontacts
-#: ../src/roster_window.py:4834
+#: ../src/roster_window.py:4845
 #, python-format
 msgid "Make %s and %s metacontacts"
 msgstr "%s と %s をメタ相手先とする"
@@ -10654,131 +10640,111 @@ msgstr "%s と %s をメタ相手先とする"
 #. for chat_with
 #. for single message
 #. join gc
-#: ../src/roster_window.py:5294 ../src/roster_window.py:5348
-#: ../src/roster_window.py:5357 ../src/statusicon.py:277
+#: ../src/roster_window.py:5306 ../src/roster_window.py:5360
+#: ../src/roster_window.py:5369 ../src/statusicon.py:277
 #: ../src/statusicon.py:324 ../src/statusicon.py:330
 #, python-format
 msgid "using account %s"
 msgstr "アカウント %s で"
 
 #. add
-#: ../src/roster_window.py:5364
+#: ../src/roster_window.py:5376
 #, python-format
 msgid "to %s account"
 msgstr "アカウント %s に対して"
 
 #. disco
-#: ../src/roster_window.py:5369
+#: ../src/roster_window.py:5381
 #, python-format
 msgid "using %s account"
 msgstr "アカウント %s で"
 
-#: ../src/roster_window.py:5408 ../src/statusicon.py:340
+#: ../src/roster_window.py:5420 ../src/statusicon.py:340
 msgid "_Manage Bookmarks..."
 msgstr "ブックマークの管理...(_M)"
 
 #. profile, avatar
-#: ../src/roster_window.py:5428
+#: ../src/roster_window.py:5440
 #, python-format
 msgid "of account %s"
 msgstr "アカウント %s の"
 
-#: ../src/roster_window.py:5469
+#: ../src/roster_window.py:5481
 #, python-format
 msgid "for account %s"
 msgstr "アカウント %s について"
 
-#: ../src/roster_window.py:5529 ../src/roster_window.py:5637
+#: ../src/roster_window.py:5541 ../src/roster_window.py:5649
 msgid "_Change Status Message"
 msgstr "状況メッセージの変更 (_C)"
 
-#: ../src/roster_window.py:5562
+#: ../src/roster_window.py:5574
 msgid "Publish Tune"
 msgstr "聴いている楽曲名を公開"
 
-#: ../src/roster_window.py:5564
+#: ../src/roster_window.py:5576
 msgid "Publish Location"
 msgstr "位置情報を公開"
 
-#: ../src/roster_window.py:5567
+#: ../src/roster_window.py:5579
 msgid "Configure Services..."
 msgstr "サービスの調整..."
 
 # (Mako)ここでは「復元」の意味か
-#: ../src/roster_window.py:5715
+#: ../src/roster_window.py:5727
 msgid "_Maximize All"
 msgstr "ウィンドウをすべて復元 (_M)"
 
-#: ../src/roster_window.py:5725 ../src/roster_window.py:5898
+#: ../src/roster_window.py:5737 ../src/roster_window.py:5915
 msgid "Send Group M_essage"
 msgstr "メッセージの一斉送信 (_E)"
 
-#: ../src/roster_window.py:5733
+#: ../src/roster_window.py:5745
 msgid "To all users"
 msgstr "すべてのユーザーに"
 
-#: ../src/roster_window.py:5737
+#: ../src/roster_window.py:5749
 msgid "To all online users"
 msgstr "オンラインのすべてのユーザーに"
 
 #. Manage Transport submenu
-#: ../src/roster_window.py:5918
+#: ../src/roster_window.py:5935
 msgid "_Manage Contacts"
 msgstr "相手先の管理 (_M)"
 
-#. Edit Groups
-#: ../src/roster_window.py:5927
-msgid "Edit _Groups"
-msgstr "グループの編集 (_G)"
-
-#. Send single message
-#: ../src/roster_window.py:5982
-msgid "Send Single Message"
-msgstr "単発メッセージの送信"
-
-#. Execute Command
-#: ../src/roster_window.py:6029
-msgid "Execute Command..."
-msgstr "コマンドを実行..."
-
 #. Manage Transport submenu
-#: ../src/roster_window.py:6039
+#: ../src/roster_window.py:6060
 msgid "_Manage Transport"
 msgstr "中継先の管理 (_M)"
 
 #. Modify Transport
-#: ../src/roster_window.py:6048
+#: ../src/roster_window.py:6069
 msgid "_Modify Transport"
 msgstr "中継先の変更 (_M)"
 
-#. Rename
-#: ../src/roster_window.py:6058
-msgid "_Rename"
-msgstr "名前の変更 (_R)"
-
 # (Mako)ここでは「復元」の意味か
-#: ../src/roster_window.py:6118
+#: ../src/roster_window.py:6141
 msgid "_Maximize"
 msgstr "ウィンドウの復元 (_M)"
 
-#: ../src/roster_window.py:6127
+#: ../src/roster_window.py:6150
 msgid "_Reconnect"
 msgstr "再接続 (_R)"
 
-#: ../src/roster_window.py:6134
+#: ../src/roster_window.py:6157
 msgid "_Disconnect"
 msgstr "切断 (_D)"
 
 #. History manager
-#: ../src/roster_window.py:6228
+#: ../src/roster_window.py:6251
 msgid "History Manager"
 msgstr "履歴マネージャ"
 
-#: ../src/roster_window.py:6243
+#: ../src/roster_window.py:6266
 msgid "_Join New Group Chat"
 msgstr "新しいグループチャットに参加 (_J)"
 
-#: ../src/roster_window.py:6471
+#: ../src/roster_window.py:6499
 msgid "Change Status Message..."
 msgstr "状況メッセージを変更する..."
 
@@ -10795,11 +10761,11 @@ msgstr "データフォームを受ける際のエラー"
 msgid "No result"
 msgstr "見つかりません"
 
-#: ../src/session.py:409 ../src/session.py:469
+#: ../src/session.py:410 ../src/session.py:470
 msgid "Confirm these session options"
 msgstr "セッションのオプションを確認する"
 
-#: ../src/session.py:411
+#: ../src/session.py:412
 #, python-format
 msgid ""
 "The remote client wants to negotiate a session with these features:\n"
@@ -10814,7 +10780,7 @@ msgstr ""
 "\n"
 "これらのオプションを受け付けますか ?"
 
-#: ../src/session.py:471
+#: ../src/session.py:472
 #, python-format
 msgid ""
 "The remote client selected these options:\n"
@@ -10829,7 +10795,7 @@ msgstr ""
 "\n"
 "セッションを続けますか ?"
 
-#: ../src/session.py:474
+#: ../src/session.py:475
 msgid "Always accept for this contact"
 msgstr "この相手先を常に受け入れるかどうか"
 
@@ -10845,130 +10811,130 @@ msgstr "名簿を閉じる (_R)"
 msgid "Hide this menu"
 msgstr "このメニューを表示しない"
 
-#: ../src/tooltips.py:393 ../src/tooltips.py:614
+#: ../src/tooltips.py:404 ../src/tooltips.py:625
 msgid "Jabber ID: "
 msgstr "Jabber ID: "
 
-#: ../src/tooltips.py:397 ../src/tooltips.py:619
+#: ../src/tooltips.py:408 ../src/tooltips.py:630
 msgid "Resource: "
 msgstr "リソース: "
 
-#: ../src/tooltips.py:403
+#: ../src/tooltips.py:414
 #, python-format
 msgid "%(owner_or_admin_or_member)s of this group chat"
 msgstr "このグループチャットの %(owner_or_admin_or_member)s "
 
-#: ../src/tooltips.py:511
+#: ../src/tooltips.py:522
 msgid " [blocked]"
 msgstr "遮断しています]"
 
-#: ../src/tooltips.py:515
+#: ../src/tooltips.py:526
 msgid " [minimized]"
 msgstr "[最小化しています]"
 
-#: ../src/tooltips.py:530 ../src/tooltips.py:791
+#: ../src/tooltips.py:541 ../src/tooltips.py:802
 msgid "Status: "
 msgstr "在席状況: "
 
-#: ../src/tooltips.py:575
+#: ../src/tooltips.py:586
 #, python-format
 msgid "Last status: %s"
 msgstr "最近の在席状況: %s"
 
-#: ../src/tooltips.py:577
+#: ../src/tooltips.py:588
 #, python-format
 msgid " since %s"
 msgstr " %s から"
 
-#: ../src/tooltips.py:595
+#: ../src/tooltips.py:606
 msgid "Connected"
 msgstr "接続中"
 
-#: ../src/tooltips.py:597
+#: ../src/tooltips.py:608
 msgid "Disconnected"
 msgstr "切断中"
 
 #. ('both' is the normal sub so we don't show it)
-#: ../src/tooltips.py:626
+#: ../src/tooltips.py:637
 msgid "Subscription: "
 msgstr "在席通知の承認: "
 
-#: ../src/tooltips.py:636
+#: ../src/tooltips.py:647
 msgid "OpenPGP: "
 msgstr "OpenPGP: "
 
-#: ../src/tooltips.py:659
+#: ../src/tooltips.py:670
 #, python-format
 msgid "Idle since %s"
 msgstr " %s から操作のない状態"
 
-#: ../src/tooltips.py:660
+#: ../src/tooltips.py:671
 #, python-format
 msgid "Idle for %s"
 msgstr "%s 間、操作のない状態"
 
-#: ../src/tooltips.py:714
+#: ../src/tooltips.py:725
 msgid "Mood: "
 msgstr "気分: "
 
-#: ../src/tooltips.py:718
+#: ../src/tooltips.py:729
 msgid "Activity: "
 msgstr "動向: "
 
-#: ../src/tooltips.py:722
+#: ../src/tooltips.py:733
 msgid "Tune: "
 msgstr "楽曲: "
 
-#: ../src/tooltips.py:726
+#: ../src/tooltips.py:737
 msgid "Location: "
 msgstr "位置: "
 
-#: ../src/tooltips.py:751
+#: ../src/tooltips.py:762
 msgid "Download"
 msgstr "ダウンロード"
 
-#: ../src/tooltips.py:757
+#: ../src/tooltips.py:768
 msgid "Upload"
 msgstr "アップロード"
 
-#: ../src/tooltips.py:764
+#: ../src/tooltips.py:775
 msgid "Type: "
 msgstr "種類: "
 
-#: ../src/tooltips.py:770
+#: ../src/tooltips.py:781
 msgid "Transferred: "
 msgstr "転送:"
 
-#: ../src/tooltips.py:773 ../src/tooltips.py:790
+#: ../src/tooltips.py:784 ../src/tooltips.py:801
 msgid "Not started"
 msgstr "開始していません"
 
-#: ../src/tooltips.py:775
+#: ../src/tooltips.py:786
 msgid "Stopped"
 msgstr "停止しています"
 
-#: ../src/tooltips.py:777 ../src/tooltips.py:780
+#: ../src/tooltips.py:788 ../src/tooltips.py:791
 msgid "Completed"
 msgstr "完了しました"
 
-#: ../src/tooltips.py:783
+#: ../src/tooltips.py:794
 msgid "?transfer status:Paused"
 msgstr "一時停止しました"
 
 #. stalled is not paused. it is like 'frozen' it stopped alone
-#: ../src/tooltips.py:786
+#: ../src/tooltips.py:797
 msgid "Stalled"
 msgstr "滞っています"
 
-#: ../src/tooltips.py:788
+#: ../src/tooltips.py:799
 msgid "Transferring"
 msgstr "転送しています"
 
-#: ../src/tooltips.py:825
+#: ../src/tooltips.py:836
 msgid "This service has not yet responded with detailed information"
 msgstr "このサービスは、詳細情報の返答がありません"
 
-#: ../src/tooltips.py:828
+#: ../src/tooltips.py:839
 msgid ""
 "This service could not respond with detailed information.\n"
 "It is most likely legacy or broken"
@@ -11039,6 +11005,33 @@ msgstr "保留中の在席通知の申し込みはありません。"
 #: ../src/vcard.py:428 ../src/vcard.py:482 ../src/vcard.py:604
 msgid " resource with priority "
 msgstr " リソース。優先順位は "
+
+#~ msgid "Join _Group Chat..."
+#~ msgstr "グループチャットに参加...(_G)"
+
+#~ msgid "_Modify Account"
+#~ msgstr "アカウントを修正 (_M)"
+
+#~ msgid "_Group Chat"
+#~ msgstr "グループチャット (_G)"
+
+#~ msgid "Send Single _Message"
+#~ msgstr "単発メッセージの送信 (_M)"
+
+#~ msgid "Certificate"
+#~ msgstr "証明書"
+
+#~ msgid "Edit _Groups"
+#~ msgstr "グループの編集 (_G)"
+
+#~ msgid "Send Single Message"
+#~ msgstr "単発メッセージの送信"
+
+#~ msgid "Execute Command..."
+#~ msgstr "コマンドを実行..."
+
+#~ msgid "_Rename"
+#~ msgstr "名前の変更 (_R)"
 
 #~ msgid "_Allow him/her to see my status"
 #~ msgstr "自分の在席状況を見られることを許可する (_A)"
