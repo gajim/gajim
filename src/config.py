@@ -1092,8 +1092,12 @@ class PreferencesWindow:
                 # store mood / activity
                 for subname in ('activity', 'subactivity', 'activity_text',
                 'mood', 'mood_text'):
-                    gajim.config.set_per('statusmsg', val, subname,
-                        model[iter_][i].decode('utf-8'))
+                    val2 = model[iter_][i]
+                    if val2:
+                        val2 = model[iter_][i].decode('utf-8')
+                    else:
+                        val2 = ''
+                    gajim.config.set_per('statusmsg', val, subname, val2)
                     i += 1
             iter_ = model.iter_next(iter_)
 
@@ -1223,7 +1227,8 @@ class PreferencesWindow:
     def on_new_msg_button_clicked(self, widget, data = None):
         model = self.msg_tree.get_model()
         iter_ = model.append()
-        model.set(iter_, 0, _('status message title'), 1, _('status message text'))
+        model.set(iter_, 0, _('status message title'), 1,
+            _('status message text'))
         self.msg_tree.set_cursor(model.get_path(iter_))
 
     def on_delete_msg_button_clicked(self, widget, data = None):
