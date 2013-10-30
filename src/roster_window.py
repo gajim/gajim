@@ -1432,7 +1432,10 @@ class RosterWindow:
 
     def _after_fill(self):
         self.starting = False
+        accounts_list = gajim.contacts.get_accounts()
         for account in gajim.connections:
+            if account not in accounts_list:
+                continue
 
             jids = gajim.contacts.get_jid_list(account)
             for jid in jids:
