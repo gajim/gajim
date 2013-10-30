@@ -120,7 +120,7 @@ class SocksQueue:
         # Remove local IPs to not connect to ourself
         for streamhost in file_props.streamhosts:
             if streamhost['host'] == '127.0.0.1' or \
-                    streamhost['host'] == '::1'
+                    streamhost['host'] == '::1':
                 continue
             streamhosts_to_test.append(streamhost)
         if not streamhosts_to_test:
