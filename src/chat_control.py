@@ -2645,7 +2645,11 @@ class ChatControl(ChatControlBase):
         tranasports) and file_transfer_menuitem and hide()/show() for
         add_to_roster_menuitem
         """
-        menu = gui_menu_builder.get_contact_menu(self.contact, self.account,
+        if gajim.jid_is_transport(self.contact.jid):
+            menu = gui_menu_builder.get_transport_menu(self.contact,
+                self.account)
+        else:
+            menu = gui_menu_builder.get_contact_menu(self.contact, self.account,
                 use_multiple_contacts=False, show_start_chat=False,
                 show_encryption=True, control=self,
                 show_buttonbar_items=not hide_buttonbar_items)

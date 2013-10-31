@@ -508,3 +508,137 @@ control=None, gc_contact=None, is_anonymous=True):
     contact_context_menu.connect('selection-done', gtkgui_helpers.destroy_widget)
     contact_context_menu.show_all()
     return contact_context_menu
+
+def get_transport_menu(contact, account):
+    roster = gajim.interface.roster
+    jid = contact.jid
+
+    menu = gtk.Menu()
+
+    # Send single message
+    item = gtk.ImageMenuItem(_('Send Single _Message...'))
+    icon = gtk.image_new_from_stock(gtk.STOCK_NEW, gtk.ICON_SIZE_MENU)
+    item.set_image(icon)
+    item.connect('activate', roster.on_send_single_message_menuitem_activate,
+        account, contact)
+    menu.append(item)
+    if gajim.account_is_disconnected(account):
+        item.set_sensitive(False)
+
+    blocked = False
+    if helpers.jid_is_blocked(account, jid):
+        blocked = True
+
+    # Send Custom Status
+    send_custom_status_menuitem = gtk.ImageMenuItem(_('Send Cus_tom Status'))
+    # add a special img for this menuitem
+    if blocked:
+        send_custom_status_menuitem.set_image(gtkgui_helpers.load_icon(
+            'offline'))
+        send_custom_status_menuitem.set_sensitive(False)
+    else:
+        if account in gajim.interface.status_sent_to_users and \
+        jid in gajim.interface.status_sent_to_users[account]:
+            send_custom_status_menuitem.set_image(gtkgui_helpers.load_icon(
+                gajim.interface.status_sent_to_users[account][jid]))
+        else:
+            icon = gtk.image_new_from_stock(gtk.STOCK_NETWORK,
+                gtk.ICON_SIZE_MENU)
+            send_custom_status_menuitem.set_image(icon)
+        status_menuitems = gtk.Menu()
+        send_custom_status_menuitem.set_submenu(status_menuitems)
+        iconset = gajim.config.get('iconset')
+        path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
+        for s in ('online', 'chat', 'away', 'xa', 'dnd', 'offline'):
+            # icon MUST be different instance for every item
+            state_images = gtkgui_helpers.load_iconset(path)
+            status_menuitem = gtk.ImageMenuItem(helpers.get_uf_show(s))
+            status_menuitem.connect('activate', roster.on_send_custom_status,
+                [(contact, account)], s)
+            icon = state_images[s]
+            status_menuitem.set_image(icon)
+            status_menuitems.append(status_menuitem)
+    menu.append(send_custom_status_menuitem)
+    if gajim.account_is_disconnected(account):
+        send_custom_status_menuitem.set_sensitive(False)
+
+    item = gtk.SeparatorMenuItem() # separator
+    menu.append(item)
+
+    # Execute Command
+    item = gtk.ImageMenuItem(_('E_xecute Command...'))
+    icon = gtk.image_new_from_stock(gtk.STOCK_EXECUTE, gtk.ICON_SIZE_MENU)
+    item.set_image(icon)
+    menu.append(item)
+    item.connect('activate', roster.on_execute_command, contact, account,
+        contact.resource)
+    if gajim.account_is_disconnected(account):
+        item.set_sensitive(False)
+
+    # Manage Transport submenu
+    item = gtk.ImageMenuItem(_('_Manage Transport'))
+    icon = gtk.image_new_from_stock(gtk.STOCK_PROPERTIES, gtk.ICON_SIZE_MENU)
+    item.set_image(icon)
+    manage_transport_submenu = gtk.Menu()
+    item.set_submenu(manage_transport_submenu)
+    menu.append(item)
+
+    # Modify Transport
+    item = gtk.ImageMenuItem(_('_Modify Transport'))
+    icon = gtk.image_new_from_stock(gtk.STOCK_PREFERENCES, gtk.ICON_SIZE_MENU)
+    item.set_image(icon)
+    manage_transport_submenu.append(item)
+    item.connect('activate', roster.on_edit_agent, contact, account)
+    if gajim.account_is_disconnected(account):
+        item.set_sensitive(False)
+
+    # Rename
+    item = gtk.ImageMenuItem(_('_Rename...'))
+    # add a special img for rename menuitem
+    gtkgui_helpers.add_image_to_menuitem(item, 'gajim-kbd_input')
+    manage_transport_submenu.append(item)
+    item.connect('activate', roster.on_rename, 'agent', jid, account)
+    if gajim.account_is_disconnected(account):
+        item.set_sensitive(False)
+
+    item = gtk.SeparatorMenuItem() # separator
+    manage_transport_submenu.append(item)
+
+    # Block
+    if blocked:
+        item = gtk.ImageMenuItem(_('_Unblock'))
+        item.connect('activate', roster.on_unblock, [(contact, account)])
+    else:
+        item = gtk.ImageMenuItem(_('_Block'))
+        item.connect('activate', roster.on_block, [(contact, account)])
+
+    icon = gtk.image_new_from_stock(gtk.STOCK_STOP, gtk.ICON_SIZE_MENU)
+    item.set_image(icon)
+    manage_transport_submenu.append(item)
+    if gajim.account_is_disconnected(account):
+        item.set_sensitive(False)
+
+    # Remove
+    item = gtk.ImageMenuItem(_('Remo_ve'))
+    icon = gtk.image_new_from_stock(gtk.STOCK_REMOVE, gtk.ICON_SIZE_MENU)
+    item.set_image(icon)
+    manage_transport_submenu.append(item)
+    item.connect('activate', roster.on_remove_agent, [(contact, account)])
+    if gajim.account_is_disconnected(account):
+        item.set_sensitive(False)
+
+    item = gtk.SeparatorMenuItem() # separator
+    menu.append(item)
+
+    # Information
+    information_menuitem = gtk.ImageMenuItem(_('_Information'))
+    icon = gtk.image_new_from_stock(gtk.STOCK_INFO, gtk.ICON_SIZE_MENU)
+    information_menuitem.set_image(icon)
+    menu.append(information_menuitem)
+    information_menuitem.connect('activate', roster.on_info, contact, account)
+    if gajim.account_is_disconnected(account):
+        information_menuitem.set_sensitive(False)
+
+    menu.connect('selection-done', gtkgui_helpers.destroy_widget)
+    menu.show_all()
+    return menu
