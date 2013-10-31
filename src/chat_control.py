@@ -3406,9 +3406,9 @@ class ChatControl(ChatControlBase):
             self._got_file_completed(event.parameters)
         elif event.type_ in ('file-error', 'file-stopped'):
             msg_err = ''
-            if event.parameters['error'] == -1:
+            if event.parameters.error == -1:
                 msg_err = _('Remote contact stopped transfer')
-            elif event.parameters['error'] == -6:
+            elif event.parameters.error == -6:
                 msg_err = _('Error opening file')
             self._got_file_error(event.parameters, event.type_,
                 _('File transfer stopped'), msg_err)
