@@ -2034,7 +2034,8 @@ class AccountsWindow:
     def on_rename_button_clicked(self, widget):
         if not self.current_account:
             return
-        active = gajim.config.get_per('accounts', self.current_account, 'active')
+        active = gajim.config.get_per('accounts', self.current_account,
+            'active') and self.current_account in gajim.connections
         if active and gajim.connections[self.current_account].connected != 0:
             dialogs.ErrorDialog(
                 _('You are currently connected to the server'),
