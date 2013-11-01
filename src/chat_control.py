@@ -3023,6 +3023,7 @@ class ChatControl(ChatControlBase):
                 'remove it (all history will be lost).') % common.logger.LOG_DB_PATH)
             rows = []
         local_old_kind = None
+        self.conv_textview.just_cleared = True
         for row in rows: # row[0] time, row[1] has kind, row[2] the message
             if not row[2]: # message is empty, we don't print it
                 continue
