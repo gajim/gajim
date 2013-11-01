@@ -5782,13 +5782,16 @@ class RosterWindow:
                 self.on_send_single_message_menuitem_activate, account, list_)
 
             # Invite to
-            invite_menuitem = Gtk.ImageMenuItem.new_with_mnemonic(_('In_vite to'))
-            muc_icon = gtkgui_helpers.load_icon('muc_active')
-            if muc_icon:
-                invite_menuitem.set_image(muc_icon)
+            if group != _('Transports'):
+                invite_menuitem = Gtk.ImageMenuItem.new_with_mnemonic(
+                    _('In_vite to'))
+                muc_icon = gtkgui_helpers.load_icon('muc_active')
+                if muc_icon:
+                    invite_menuitem.set_image(muc_icon)
 
-            gui_menu_builder.build_invite_submenu(invite_menuitem, list_online)
-            menu.append(invite_menuitem)
+                gui_menu_builder.build_invite_submenu(invite_menuitem,
+                    list_online)
+                menu.append(invite_menuitem)
 
             # Send Custom Status
             send_custom_status_menuitem = Gtk.ImageMenuItem.new_with_mnemonic(
