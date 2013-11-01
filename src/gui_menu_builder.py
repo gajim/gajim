@@ -108,8 +108,18 @@ def build_invite_submenu(invite_menuitem, list_, ignore_rooms=[]):
             resource = None
         invite_to_new_room_menuitem.connect('activate',
             roster.on_invite_to_new_room, list_, resource)
+    elif len(list_) > 1:
+        list2 = []
+        for (c, a) in list_:
+            if c.supports(NS_MUC):
+                list2.append((c, a))
+        if len(list2) > 0:
+            invite_to_new_room_menuitem.connect('activate',
+                roster.on_invite_to_new_room, list2, None)
+        else:
+            invite_menuitem.set_sensitive(False)
     else:
-        invite_menuitem.set_sensitive(True)
+        invite_menuitem.set_sensitive(False)
     # transform None in 'jabber'
     c_t = contacts_transport or 'jabber'
     muc_jid = {}
