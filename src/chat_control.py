@@ -3003,14 +3003,14 @@ class ChatControl(ChatControlBase):
             xhtml = None
             if row[2].startswith('<body '):
                 xhtml = row[2]
-            if row[2].startswith('/me ') or row[2].startswith('/me\n'):
-                local_old_kind = None
-            else:
-                local_old_kind = kind
             ChatControlBase.print_conversation_line(self, row[2], kind, name,
                 tim, small_attr, small_attr + ['restored_message'],
                 small_attr + ['restored_message'], False,
                 old_kind=local_old_kind, xhtml=xhtml)
+            if row[2].startswith('/me ') or row[2].startswith('/me\n'):
+                local_old_kind = None
+            else:
+                local_old_kind = kind
         if len(rows):
             self.conv_textview.print_empty_line()
 
