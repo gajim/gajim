@@ -407,6 +407,7 @@ class FileTransfersWindow:
                     propose_resume=not dl_finished, on_response=on_response,
                     transient_for=dialog2)
                 dialog.set_destroy_with_parent(True)
+                return
             else:
                 dirname = os.path.dirname(file_path)
                 if not os.access(dirname, os.W_OK) and os.name != 'nt':
@@ -489,7 +490,7 @@ class FileTransfersWindow:
             file_props.completed = True
             text = self._format_percent(100)
             received_size = int(file_props.received_len)
-            full_size = int(file_props.size)
+            full_size = file_props.size
             text += helpers.convert_bytes(received_size) + '/' + \
                 helpers.convert_bytes(full_size)
             self.model.set(iter_, C_PROGRESS, text)
@@ -498,7 +499,7 @@ class FileTransfersWindow:
             self.model.set(iter_, C_PULSE, 1)
             text = _('Checking file...') + '\n'
             received_size = int(file_props.received_len)
-            full_size = int(file_props.size)
+            full_size = file_props.size
             text += helpers.convert_bytes(received_size) + '/' + \
                 helpers.convert_bytes(full_size)
             self.model.set(iter_, C_PROGRESS, text)
@@ -512,7 +513,7 @@ class FileTransfersWindow:
         elif status == 'hash_error':
             text = _('File error') + '\n'
             received_size = int(file_props.received_len)
-            full_size = int(file_props.size)
+            full_size = file_props.size
             text += helpers.convert_bytes(received_size) + '/' + \
                 helpers.convert_bytes(full_size)
             self.model.set(iter_, C_PROGRESS, text)
@@ -602,7 +603,7 @@ class FileTransfersWindow:
         Change the progress of a transfer with new transfered size
         """
         file_props = FilesProp.getFilePropByType(typ, sid)
-        full_size = int(file_props.size)
+        full_size = file_props.size
         if full_size == 0:
             percent = 0
         else:
@@ -711,7 +712,7 @@ class FileTransfersWindow:
         file_props.type_ = 's'
         file_props.desc = file_desc
         file_props.elapsed_time = 0
-        file_props.size = str(stat[6])
+        file_props.size = stat[6]
         file_props.sender = account
         file_props.receiver = contact
         file_props.tt_account = account
