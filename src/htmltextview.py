@@ -762,15 +762,8 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
         elif name == 'hr':
             #FIXME: plenty of unused attributes (width, height,...) :)
             self._jump_line()
-            try:
-                if self.conv_textbuf:
-                    self.conv_textbuf.insert_pixbuf(self.iter,
-                        self.conv_textview.focus_out_line_pixbuf)
-                else:
-                    self._insert_text(u'\u2550'*40)
-                self._jump_line()
-            except Exception, e:
-                log.debug(str('Error in hr'+e))
+            self._insert_text(u'\u2015'*40)
+            self._jump_line()
         elif name in LIST_ELEMS:
             self.list_counters.pop()
         elif name == 'li':
@@ -1099,10 +1092,6 @@ if __name__ == '__main__':
     gajim.plugin_manager.gui_extension_point = gui_extension_point
 
     htmlview = ConversationTextview(None)
-
-    path = gtkgui_helpers.get_icon_path('gajim-muc_separator')
-    # use this for hr
-    htmlview.tv.focus_out_line_pixbuf =  gtk.gdk.pixbuf_new_from_file(path)
 
     tooltip = tooltips.BaseTooltip()
 
