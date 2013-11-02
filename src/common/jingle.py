@@ -170,14 +170,14 @@ class ConnectionJingle(object):
 
     def __hash_support(self, contact):
         if contact.supports(nbxmpp.NS_HASHES):
-            if contact.supports(nbxmpp.NS_HASHES_MD5):
-                return 'md5'
-            elif contact.supports(nbxmpp.NS_HASHES_SHA1):
-                return 'sha-1'
+            if contact.supports(nbxmpp.NS_HASHES_SHA512):
+                return 'sha-512'
             elif contact.supports(nbxmpp.NS_HASHES_SHA256):
                 return 'sha-256'
-            elif contact.supports(nbxmpp.NS_HASHES_SHA512):
-                return 'sha-512'
+            elif contact.supports(nbxmpp.NS_HASHES_SHA1):
+                return 'sha-1'
+            elif contact.supports(nbxmpp.NS_HASHES_MD5):
+                return 'md5'
         return None
 
     def iter_jingle_sessions(self, jid, sid=None, media=None):
