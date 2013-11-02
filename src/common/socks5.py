@@ -646,7 +646,7 @@ class Socks5:
                 self.file_props.last_time
             self.file_props.last_time = current_time
             self.file_props.received_len = self.size
-            if self.size >= int(self.file_props.size):
+            if self.size >= self.file_props.size:
                 self.state = 8 # end connection
                 self.file_props.error = 0
                 self.disconnect()
@@ -688,7 +688,7 @@ class Socks5:
             self.file_props.last_time = current_time
             self.file_props.received_len += lenn
             self.remaining_buff = ''
-            if self.file_props.received_len == int(self.file_props.size):
+            if self.file_props.received_len == self.file_props.size:
                 self.rem_fd(fd)
                 self.disconnect()
                 self.file_props.error = 0
@@ -728,7 +728,7 @@ class Socks5:
                 self.disconnect()
                 self.file_props.error = -6 # file system error
                 return 0
-            if self.file_props.received_len >= int(self.file_props.size):
+            if self.file_props.received_len >= self.file_props.size:
                 # transfer completed
                 self.rem_fd(fd)
                 self.disconnect()

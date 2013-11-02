@@ -193,7 +193,7 @@ class JingleContent(object):
         else:
             # if the file is less than 10 mb, then it is small
             # lets calculate it right away
-            if int(self.file_props.size) < 10000000 and not \
+            if self.file_props.size < 10000000 and not \
                                         self.file_props.hash_:
                 h  = self._calcHash()
                 file_tag.addChild(node=h)

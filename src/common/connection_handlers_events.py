@@ -2072,7 +2072,7 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                 if name == 'name':
                     self.file_props.name = val
                 if name == 'size':
-                    self.file_props.size = val
+                    self.file_props.size = int(val)
                 if name == 'hash':
                     self.file_props.algo = child.getAttr('algo')
                     self.file_props.hash_ = val
@@ -2113,7 +2113,7 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                 if name == 'name':
                     self.file_props.name = val
                 if name == 'size':
-                    self.file_props.size = val
+                    self.file_props.size = int(val)
             mime_type = si.getAttr('mime-type')
             if mime_type is not None:
                 self.file_props.mime_type = mime_type
