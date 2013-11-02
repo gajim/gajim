@@ -379,6 +379,7 @@ class SocksQueue:
                     self.idlequeue.remove_timeout(reader.fd)
                     if do_disconnect:
                         reader.disconnect()
+                        del self.readers[key]
                         if not remove_all:
                             break
                     else:

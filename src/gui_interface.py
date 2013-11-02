@@ -996,13 +996,13 @@ class Interface:
             return
 
         if file_props.type_ == 'r' and file_props.hash_: # we receive a file
+            gajim.socks5queue.remove_receiver(file_props.sid, True, True)
             # we compare hashes
             if file_props.session_type == 'jingle':
                 # Compare hashes in a new thread
                 self.hashThread = Thread(target=self.__compare_hashes,
                     args=(account, file_props))
                 self.hashThread.start()
-            gajim.socks5queue.remove_receiver(file_props.sid, True, True)
         else: # we send a file
             jid = file_props.receiver
             gajim.socks5queue.remove_sender(file_props.sid, True, True)
