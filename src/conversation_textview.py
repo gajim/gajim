@@ -173,8 +173,6 @@ class ConversationTextview(GObject.GObject):
             )
     )
 
-    FOCUS_OUT_LINE_PIXBUF = gtkgui_helpers.get_icon_pixmap(
-        'gajim-muc_separator')
     MESSAGE_CORRECTED_PIXBUF = gtkgui_helpers.get_icon_pixmap('gtk-spell-check')
 
     # smooth scroll constants
@@ -330,8 +328,6 @@ class ConversationTextview(GObject.GObject):
         self.xep0184_warning_tooltip = tooltips.BaseTooltip()
 
         self.line_tooltip = tooltips.BaseTooltip()
-        # use it for hr too
-        self.tv.focus_out_line_pixbuf = ConversationTextview.FOCUS_OUT_LINE_PIXBUF
         self.smooth_id = None
         self.just_cleared = False
 
@@ -587,7 +583,7 @@ class ConversationTextview(GObject.GObject):
                         self.focus_out_end_mark)
                 begin_iter_for_previous_line = end_iter_for_previous_line.copy()
                 # img_char+1 (the '\n')
-                begin_iter_for_previous_line.backward_chars(2)
+                begin_iter_for_previous_line.backward_chars(21)
 
                 # remove focus out line
                 buffer_.delete(begin_iter_for_previous_line,
@@ -596,14 +592,12 @@ class ConversationTextview(GObject.GObject):
 
             # add the new focus out line
             end_iter = buffer_.get_end_iter()
-            buffer_.insert(end_iter, '\n')
-            buffer_.insert_pixbuf(end_iter,
-                    ConversationTextview.FOCUS_OUT_LINE_PIXBUF)
+            buffer_.insert(end_iter, '\n' + '―' * 20)
 
             end_iter = buffer_.get_end_iter()
             before_img_iter = end_iter.copy()
             # one char back (an image also takes one char)
-            before_img_iter.backward_char()
+            before_img_iter.backward_chars(20)
             buffer_.apply_tag_by_name('focus-out-line', before_img_iter, end_iter)
 
             self.allow_focus_out_line = False
