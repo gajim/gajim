@@ -92,7 +92,10 @@ def get_context(fingerprint, verify_cb=None):
     """
     constructs and returns the context objects
     """
-    ctx = SSL.Context(SSL.TLSv1_METHOD)
+    ctx = SSL.Context(SSL.SSLv23_METHOD)
+    flags = (SSL.OP_NO_SSLv2 | SSL.OP_NO_SSLv3 | SSL.OP_SINGLE_DH_USE)
+    ctx.set_options(flags)
+    ctx.set_cipher_list('HIGH:!aNULL:!eNULL')
 
     if fingerprint == 'server': # for testing purposes only
         ctx.set_verify(SSL.VERIFY_NONE|SSL.VERIFY_FAIL_IF_NO_PEER_CERT,
@@ -174,12 +177,12 @@ def createKeyPair(type, bits):
     pkey.generate_key(type, bits)
     return pkey
 
-def createCertRequest(pkey, digest="md5", **name):
+def createCertRequest(pkey, digest="sha1", **name):
     """
     Create a certificate request.
 
     Arguments: pkey   - The key to associate with the request
-               digest - Digestion method to use for signing, default is md5
+               digest - Digestion method to use for signing, default is sha1
                **name - The name of the subject of the request, possible
                         arguments are:
                           C     - Country name
@@ -201,7 +204,7 @@ def createCertRequest(pkey, digest="md5", **name):
     req.sign(pkey, digest)
     return req
 
-def createCertificate(req, issuerCert, issuerKey, serial, notBefore, notAfter, digest="md5"):
+def createCertificate(req, issuerCert, issuerKey, serial, notBefore, notAfter, digest="sha1"):
     """
     Generate a certificate given a certificate request.
 
@@ -213,7 +216,7 @@ def createCertificate(req, issuerCert, issuerKey, serial, notBefore, notAfter, d
                             starts being valid
                notAfter   - Timestamp (relative to now) when the certificate
                             stops being valid
-               digest     - Digest method to use for signing, default is md5
+               digest     - Digest method to use for signing, default is sha1
     Returns:   The signed certificate in an X509 object
     """
     cert = crypto.X509()
@@ -233,10 +236,11 @@ def make_certs(filepath, CN):
     and '.cert' extensions
     CN : common name
     """
-    key = createKeyPair(TYPE_RSA, 1024)
+    key = createKeyPair(TYPE_RSA, 4096)
     req = createCertRequest(key, CN=CN)
     cert = createCertificate(req, req, key, 0, 0, 60*60*24*365*5) # five years
     with open(filepath + '.pkey', 'wb') as f:
+        os.chmod(filepath + '.pkey', 0600)
         f.write(crypto.dump_privatekey(crypto.FILETYPE_PEM, key))
     with open(filepath + '.cert', 'wb') as f:
         f.write(crypto.dump_certificate(crypto.FILETYPE_PEM, cert))
