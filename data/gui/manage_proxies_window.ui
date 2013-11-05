@@ -64,6 +64,7 @@
                   <object class="GtkHButtonBox" id="hbuttonbox21">
                     <property name="visible">True</property>
                     <property name="spacing">6</property>
+                    <property name="layout_style">center</property>
                     <child>
                       <object class="GtkButton" id="add_proxy_button">
                         <property name="label">gtk-add</property>
