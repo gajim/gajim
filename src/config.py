@@ -3413,7 +3413,7 @@ class ManageBookmarksWindow:
                 nick = helpers.parse_resource(nick)
             except helpers.InvalidFormat, e:
                 dialogs.ErrorDialog(_('Invalid nickname'),
-                        _('Character not allowed'))
+                    _('Character not allowed'), transient_for=self.window)
                 self.nick_entry.set_text(model[iter_][6])
                 return True
             model[iter_][6] = nick
@@ -3424,16 +3424,17 @@ class ManageBookmarksWindow:
             return
         server = widget.get_text().decode('utf-8')
         if '@' in server:
-            dialogs.ErrorDialog(_('Invalid server'), _('Character not allowed'))
+            dialogs.ErrorDialog(_('Invalid server'), _('Character not allowed'),
+                transient_for=self.window)
             widget.set_text(server.replace('@', ''))
 
         room_jid = self.room_entry.get_text().decode('utf-8').strip() + '@' + \
                 server.strip()
         try:
-            room_jid = helpers.parse_resource(room_jid)
+            room_jid = helpers.parse_jid(room_jid)
         except helpers.InvalidFormat, e:
             dialogs.ErrorDialog(_('Invalid server'),
-                    _('Character not allowed'))
+                    _('Character not allowed'), transient_for=self.window)
             self.server_entry.set_text(model[iter_][2].split('@')[1])
             return True
         model[iter_][2] = room_jid
@@ -3444,16 +3445,18 @@ class ManageBookmarksWindow:
             return
         room = widget.get_text().decode('utf-8')
         if '@' in room:
-            dialogs.ErrorDialog(_('Invalid server'), _('Character not allowed'))
-            widget.set_text(room.replace('@', ''))
+            room, server = room.split('@', 1)
+            widget.set_text(room)
+            if server:
+                self.server_entry.set_text(server)
+            self.server_entry.grab_focus()
         room_jid = room.strip() + '@' + \
             self.server_entry.get_text().decode('utf-8').strip()
         try:
-            room_jid = helpers.parse_resource(room_jid)
+            room_jid = helpers.parse_jid(room_jid)
         except helpers.InvalidFormat, e:
             dialogs.ErrorDialog(_('Invalid room'),
-                    _('Character not allowed'))
-            self.room_entry.set_text(model[iter_][2].split('@')[0])
+                    _('Character not allowed'), transient_for=self.window)
             return True
         model[iter_][2] = room_jid
 
