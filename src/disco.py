@@ -942,14 +942,15 @@ class AgentBrowser:
         Set the window title based on agent info
         """
         # Set the banner and window title
+        name = ''
         if len(identities) > 1:
-          # Check if an identity with server category is present
-          for i, _identity in enumerate(identities):
-            if _identity['category'] == 'server' and 'name' in _identity:
-              name = _identity['name']
-              break
-        elif 'name' in identities[0]:
-          name = identities[0]['name']
+            # Check if an identity with server category is present
+            for i, _identity in enumerate(identities):
+                if _identity['category'] == 'server' and 'name' in _identity:
+                    name = _identity['name']
+                    break
+                elif 'name' in identities[0]:
+                    name = identities[0]['name']
 
         if name:
           self.window._set_window_banner_text(self._get_agent_address(), name)
