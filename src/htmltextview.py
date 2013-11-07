@@ -55,7 +55,6 @@ if __name__ == '__main__':
     import gtkgui_helpers
 from common import gajim
 from gtkgui_helpers import get_icon_pixmap
-from gtkgui_helpers import get_gtk_builder
 from common import helpers
 
 import tooltips
@@ -834,6 +833,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 class HtmlTextView(Gtk.TextView):
 
     def __init__(self):
+        from gtkgui_helpers import get_gtk_builder
         GObject.GObject.__init__(self)
         self.set_wrap_mode(Gtk.WrapMode.CHAR)
         self.set_editable(False)
