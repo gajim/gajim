@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gajim 0.15\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-10-22 13:06+0200\n"
-"PO-Revision-Date: 2013-10-22 13:09+0200\n"
+"PO-Revision-Date: 2013-11-07 22:24+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
 "Language: he\n"
@@ -32,11 +32,12 @@ msgstr "_אירועים אישיים"
 msgid "_Start Chat..."
 msgstr "התחלת _שיחה..."
 
+# אל שיחת
 #: ../data/gui/account_context_menu.ui.h:4
 #: ../data/gui/chat_context_menu.ui.h:6 ../data/gui/roster_window.ui.h:5
 #: ../data/gui/systray_context_menu.ui.h:3
 msgid "Join _Group Chat"
-msgstr "הצטרף אל שיחת _קבוצה"
+msgstr "הצטרף לשיחת _קבוצה"
 
 #: ../data/gui/account_context_menu.ui.h:5
 msgid "_Add Contact..."
@@ -156,7 +157,7 @@ msgid ""
 "Add this certificate to the list of trusted certificates.\n"
 "SHA1 fingerprint of the certificate:\n"
 msgstr ""
-"הוספת תעודה זו אל רשימת התעודות המהימנות.\n"
+"הוסף את תעודה זו אל רשימת התעודות המהימנות.\n"
 "טביעת אצבע SHA1 של התעודה:\n"
 
 #: ../data/gui/account_creation_wizard_window.ui.h:24
@@ -615,7 +616,7 @@ msgstr "בדוק פעם נוספת"
 
 #: ../data/gui/adhoc_commands_window.ui.h:5
 msgid "Please wait while the command is being sent..."
-msgstr "אנא המתן בזמן שהפקודה נשלחת..."
+msgstr "אנא המתן בעת שהפקודה נשלחת..."
 
 #: ../data/gui/adhoc_commands_window.ui.h:6
 msgid "Please wait..."
@@ -1500,7 +1501,7 @@ msgstr "דרוש"
 
 #: ../data/gui/join_groupchat_window.ui.h:1 ../src/dialogs.py:2420
 msgid "Join Group Chat"
-msgstr "הצטרף אל שיחת קבוצה"
+msgstr "הצטרף לשיחת קבוצה"
 
 #: ../data/gui/join_groupchat_window.ui.h:2
 msgid "Room:"
@@ -2635,7 +2636,7 @@ msgstr "הס_ר"
 
 #: ../data/gui/roster_item_exchange_window.ui.h:1
 msgid "Roster Item Exchange"
-msgstr "המרת פריטי רשימה"
+msgstr "המרת פריט רשימה"
 
 #: ../data/gui/roster_item_exchange_window.ui.h:2
 msgid ""
@@ -2726,7 +2727,7 @@ msgstr "שאלות ותשובות שכיחות (מקוון)"
 
 #: ../data/gui/roster_window.ui.h:25
 msgid "Keyboard Shortcuts"
-msgstr "קיצורי מקלדת"
+msgstr "קיצורי מקש"
 
 #: ../data/gui/roster_window.ui.h:26
 msgid "Fea_tures"
@@ -3367,12 +3368,12 @@ msgstr "_פתח תיקיה מכילה"
 #: ../src/chat_control.py:3384 ../src/dialogs.py:2935 ../src/dialogs.py:4625
 #: ../src/gui_interface.py:646 ../src/notify.py:278
 msgid "Groupchat Invitation"
-msgstr "הזמנה אל שיחת קבוצה"
+msgstr "הזמנת שיחת קבוצה"
 
 #: ../src/chat_control.py:3406 ../src/gui_interface.py:1019
 #: ../src/roster_window.py:1991
 msgid "Remote contact stopped transfer"
-msgstr "ההעברה הופסקה על ידי איש קשר מרוחק"
+msgstr "איש קשר מרוחק הפסיק העברה"
 
 #: ../src/chat_control.py:3408 ../src/gui_interface.py:1022
 #: ../src/roster_window.py:1993
@@ -3719,13 +3720,14 @@ msgstr "לא מקוון - מנותק"
 msgid "Presence description:"
 msgstr "תיאור נוכחות:"
 
+# BUG: remove "the"
 #: ../src/common/commands.py:153 ../src/common/commands.py:330
 msgid "The status has been changed."
 msgstr "מצב החיבור השתנה."
 
 #: ../src/common/commands.py:185 ../src/common/commands.py:211
 msgid "Leave Groupchats"
-msgstr "עזיבת שיחות קבוצה"
+msgstr "עזוב שיחות קבוצה"
 
 #: ../src/common/commands.py:201
 #, python-format
@@ -3873,7 +3875,7 @@ msgstr "צבע התראה של העברת קובץ שהושלמה או שהופ�
 #. yellowgreen
 #: ../src/common/config.py:108
 msgid "Groupchat invitation notification color"
-msgstr "צבע התראה של הזמנה אל שיחת קבוצה"
+msgstr "צבע התראה של הזמנת שיחת קבוצה"
 
 # BUG: no Dot
 #. tan1
@@ -5300,7 +5302,7 @@ msgstr "אנא בדוק את תקינות התחברותך וסיסמתך."
 
 #: ../src/common/connection.py:1574
 msgid "Error while removing privacy list"
-msgstr "שגיאה במהלך הסרת רשימת פרטיות"
+msgstr "שגיאה בעת הסרת רשימת פרטיות"
 
 # בטל/י נטרל/י
 #: ../src/common/connection.py:1575
@@ -7027,13 +7029,13 @@ msgstr "איש קשר לא מקוון. לא היתה אפשרות לשלוח א�
 #: ../src/common/zeroconf/connection_zeroconf.py:394
 msgid ""
 "Connection to host could not be established: Timeout while sending data."
-msgstr "לא היתה אפשרות לבסס חיבור אל מארח: תם הזמן במהלך שליחת מידע."
+msgstr "לא היתה אפשרות לבסס חיבור אל מארח: תם הזמן בעת שליחת מידע."
 
 #: ../src/common/zeroconf/zeroconf_avahi.py:192
 #: ../src/common/zeroconf/zeroconf_bonjour.py:191
 #, python-format
 msgid "Error while adding service. %s"
-msgstr "שגיאה במהלך הוספת שירות. %s"
+msgstr "שגיאה בעת הוספת שירות. %s"
 
 #: ../src/config.py:404
 msgid "Default Message"
@@ -8354,7 +8356,7 @@ msgstr "כבר אימתת את הזהות של איש קשר זה."
 
 #: ../src/dialogs.py:5134 ../src/dialogs.py:5219
 msgid "Contact's identity verified"
-msgstr "זהות איש קשר מאומתת"
+msgstr "זהות איש קשר אומתה"
 
 # מאמת
 #: ../src/dialogs.py:5140
@@ -8369,7 +8371,7 @@ msgid ""
 "send you messages, you need to verify their identity by clicking the button "
 "below."
 msgstr ""
-"כדי להסיר ספק כי האישיות הצפויה <b>בלבד</b> יכולה לקרוא את הודעותייך או "
+"כדי להסיר ספק כי האישיות הצפויה <b>בלבד</b> מסוגלת לקרוא את הודעותייך או "
 "לשלוח לך הודעות, עליך לאמת את זהותם על ידי הקלקה על הלחצן מטה."
 
 #: ../src/dialogs.py:5148 ../src/dialogs.py:5200 ../src/dialogs.py:5213
@@ -10702,7 +10704,7 @@ msgstr "כשל פרסום vCard"
 msgid ""
 "There was an error while publishing your personal information, try again "
 "later."
-msgstr "אירעה שגיאה במהלך פרסום המידע האישי שלך, נסה שוב מאוחר יותר."
+msgstr "אירעה שגיאה בעת פרסום המידע האישי שלך, נסה שוב מאוחר יותר."
 
 #: ../src/roster_window.py:240 ../src/roster_window.py:1035
 msgid "Merged accounts"
@@ -11130,9 +11132,10 @@ msgstr "הת_נתק"
 msgid "History Manager"
 msgstr "מנהל היסטוריה"
 
+# אל שיחת
 #: ../src/roster_window.py:6256
 msgid "_Join New Group Chat"
-msgstr "ה_צטרף אל שיחת קבוצה חדשה"
+msgstr "ה_צטרף לשיחת קבוצה חדשה"
 
 #: ../src/roster_window.py:6489
 msgid "Change Status Message..."
