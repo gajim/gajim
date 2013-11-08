@@ -80,7 +80,7 @@ class ConnectionJingle(object):
         try:
             jid = helpers.get_full_jid_from_iq(stanza)
         except helpers.InvalidFormat:
-            log.warn('Invalid JID: %s, ignoring it' % stanza.getFrom())
+            logger.warn('Invalid JID: %s, ignoring it' % stanza.getFrom())
             return
         id_ = stanza.getID()
         if (jid, id_) in self.__iq_responses.keys():
@@ -224,4 +224,3 @@ class ConnectionJingle(object):
                 if session.peerjid == jid and session.get_content(media):
                     return session
         return None
-
