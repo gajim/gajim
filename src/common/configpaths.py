@@ -139,9 +139,10 @@ class ConfigPaths:
             self.config_root = self.cache_root = self.data_root = root
 
         d = {'MY_DATA': '', 'LOG_DB': 'logs.db', 'MY_CACERTS': 'cacerts.pem',
-                'MY_EMOTS': 'emoticons', 'MY_ICONSETS': 'iconsets',
-                'MY_MOOD_ICONSETS': 'moods', 'MY_ACTIVITY_ICONSETS': 'activities',
-                'PLUGINS_USER': 'plugins', 'MY_PEER_CERTS': 'certs'}
+            'MY_EMOTS': 'emoticons', 'MY_ICONSETS': 'iconsets',
+            'MY_MOOD_ICONSETS': 'moods', 'MY_ACTIVITY_ICONSETS': 'activities',
+            'PLUGINS_USER': 'plugins', 'MY_PEER_CERTS': 'certs',
+            'RNG_SEED': u'rng_seed'}
         for name in d:
             self.add(name, TYPE_DATA, windowsify(d[name]))
 

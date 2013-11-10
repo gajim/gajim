@@ -302,6 +302,19 @@ gajimpaths = common.configpaths.gajimpaths
 pid_filename = gajimpaths['PID_FILE']
 config_filename = gajimpaths['CONFIG_FILE']
 
+# Seed the OpenSSL pseudo random number generator from file and initialize
+RNG_SEED = gajimpaths['RNG_SEED']
+PYOPENSSL_PRNG_PRESENT = False
+try:
+    import OpenSSL.rand
+    from common import crypto
+    PYOPENSSL_PRNG_PRESENT = True
+    # Seed from file
+    OpenSSL.rand.load_file(RNG_SEED)
+    crypto.add_entropy_sources_OpenSSL()
+except ImportError:
+    log.info("PyOpenSSL PRNG not available")
+
 import traceback
 import errno
 import dialogs
@@ -448,6 +461,9 @@ except IOError as e2:
 del pid_dir
 
 def on_exit():
+    # Save the entropy from OpenSSL PRNG
+    if PYOPENSSL_PRNG_PRESENT:
+        OpenSSL.rand.write_file(RNG_SEED)
     # delete pid file on normal exit
     if os.path.exists(pid_filename):
         os.remove(pid_filename)
