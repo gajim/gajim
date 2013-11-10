@@ -141,7 +141,8 @@ class ConfigPaths:
         d = {'MY_DATA': '', 'LOG_DB': u'logs.db', 'MY_CACERTS': u'cacerts.pem',
                 'MY_EMOTS': u'emoticons', 'MY_ICONSETS': u'iconsets',
                 'MY_MOOD_ICONSETS': u'moods', 'MY_ACTIVITY_ICONSETS': u'activities',
-                'PLUGINS_USER': u'plugins', 'MY_PEER_CERTS': u'certs'}
+                'PLUGINS_USER': u'plugins', 'MY_PEER_CERTS': u'certs',
+                'RNG_SEED': u'rng_seed'}
         for name in d:
             self.add(name, TYPE_DATA, windowsify(d[name]))
 
