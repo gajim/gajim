@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gajim 0.15\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-10-22 13:06+0200\n"
-"PO-Revision-Date: 2013-11-07 22:24+0200\n"
+"PO-Revision-Date: 2013-11-10 09:39+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
 "Language: he\n"
@@ -3179,8 +3179,7 @@ msgstr "איש קשר זה אינו תומך בהעברת קבצים."
 
 #: ../src/chat_control.py:1789
 msgid "You need to know the real JID of the contact to send him or her a file."
-msgstr ""
-"יש צורך לדעת את הכתובת המממשת (JID) של איש הקשר כדי לשלוח אליו או אליה קובץ."
+msgstr "עליך לדעת את הכתובת (JID) של איש הקשר כדי לשלוח אליו או אליה קובץ."
 
 #: ../src/chat_control.py:1907
 #, python-format
@@ -3238,7 +3237,7 @@ msgstr "לא יירשם"
 #. About encrypted chat session
 #: ../src/chat_control.py:2291
 msgid "and authenticated"
-msgstr "והינה מאומת"
+msgstr "והינה מאומתת"
 
 #. About encrypted chat session
 #: ../src/chat_control.py:2295
@@ -3740,7 +3739,7 @@ msgstr "לא הצטרפת אל שיחת קבוצה."
 
 #: ../src/common/commands.py:212
 msgid "Choose the groupchats you want to leave"
-msgstr "בחירת שיחות קבוצה אשר ברצונך לעזוב"
+msgstr "בחר שיחות קבוצה אשר ברצונך לעזוב"
 
 #. Make special context menu if group is Groupchats
 #: ../src/common/commands.py:216 ../src/common/contacts.py:131
@@ -3768,7 +3767,7 @@ msgstr "קדם הודעות אשר לא נקראו והתנתק לאחר מכן"
 
 #: ../src/common/config.py:76
 msgid "Play sound when user is busy"
-msgstr "נגן צלילים כאשר המשתמש עסוק"
+msgstr "נגן צלילים כאשר משתמש עסוק"
 
 #: ../src/common/config.py:77
 msgid "Use D-Bus and Notification-Daemon to show notifications"
@@ -3886,7 +3885,7 @@ msgstr "צבע רקע אחורי של התראת שינוי מצב חיבור"
 #. thistle2
 #: ../src/common/config.py:110
 msgid "Other dialogs color."
-msgstr "צבע של תיבות דו שיח אחרות."
+msgstr "צבע תיבות דו שיח אחרות."
 
 #. white
 #: ../src/common/config.py:111
@@ -3923,7 +3922,7 @@ msgstr "ברירת מחדל"
 
 #: ../src/common/config.py:123
 msgid "Language used by speller"
-msgstr "השפה אשר בשימוש על ידי מאיית"
+msgstr "שפה אשר מצויה בשימוש על ידי מאיית"
 
 #: ../src/common/config.py:124
 msgid ""
@@ -4051,8 +4050,8 @@ msgid ""
 "How many seconds to wait before trying to autorejoin to a conference you are "
 "being disconnected from. Set to 0 to disable autorejoining."
 msgstr ""
-"כמה שניות להמתין טרם ניסיון להצטרף אוטומטית אל שיחת ועידה אשר ממנה הינך "
-"מתנתק. הגדר אל 0 כדי לנטרל הצטרפות אוטומטית."
+"כמה שניות להמתין טרם ניסיון הצטרפות חוזרת אוטומטית אל שיחת ועידה אשר ממנה "
+"אנחנו מתנתקים. הגדר אל 0 כדי לנטרל הצטרפות חוזרת אוטומטית."
 
 #: ../src/common/config.py:185
 msgid ""
@@ -4066,7 +4065,7 @@ msgid ""
 "Client default behaviour)."
 msgstr ""
 "שליחת הודעה בלחיצה על Ctrl+Enter ויצירת שורה חדשה באמצעות המקש Enter "
-"(התנהגות משתמטת של Mirabilis לקוח ICQ)."
+"(התנהגות שגרתית של Mirabilis לקוח ICQ)."
 
 # Ctrl+מעלה
 #: ../src/common/config.py:188
@@ -4105,7 +4104,7 @@ msgstr ""
 msgid ""
 "Sent chat state notifications. Can be one of all, composing_only, disabled."
 msgstr ""
-"שלח התראות מצב שיחה בחלון שיחה. יכול להיות אחד מאלו all, composing_only, "
+"שליחת התראות מצב שיחה בחלון שיחה. יכול להיות אחד מאלו all, composing_only, "
 "disabled."
 
 #: ../src/common/config.py:197
@@ -7497,7 +7496,7 @@ msgid ""
 "SHA1 fingerprint of the certificate:\n"
 "%s"
 msgstr ""
-"הוספת תעודה זו אל רשימת התעודות המהימנות.\n"
+"הוסף את תעודה זו אל רשימת התעודות המהימנות.\n"
 "טביעת אצבע SHA1 של התעודה:\n"
 "%s"
 
