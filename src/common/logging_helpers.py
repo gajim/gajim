@@ -141,7 +141,7 @@ def init(use_color=False):
     consoleloghandler.setFormatter(
             FancyFormatter(
                     '%(asctime)s %(levelname)s %(name)s %(message)s',
-                    '%H:%M:%S',
+                    '%x %H:%M:%S',
                     use_color
             )
     )
