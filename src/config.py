@@ -3244,7 +3244,8 @@ class ManageBookmarksWindow:
         self.server_entry = self.xml.get_object('server_entry')
         self.server_entry.connect('changed', self.on_server_entry_changed)
         self.room_entry = self.xml.get_object('room_entry')
-        self.room_entry.connect('changed', self.on_room_entry_changed)
+        self.room_entry_changed_id = self.room_entry.connect('changed',
+            self.on_room_entry_changed)
         self.pass_entry = self.xml.get_object('pass_entry')
         self.pass_entry.connect('changed', self.on_pass_entry_changed)
         self.autojoin_checkbutton = self.xml.get_object('autojoin_checkbutton')
@@ -3385,7 +3386,9 @@ class ManageBookmarksWindow:
         self.title_entry.set_text(model[iter_][1])
         room_jid = model[iter_][2]
         (room, server) = room_jid.split('@')
+        self.room_entry.handler_block(self.room_entry_changed_id)
         self.room_entry.set_text(room)
+        self.room_entry.handler_unblock(self.room_entry_changed_id)
         self.server_entry.set_text(server)
 
         self.autojoin_checkbutton.set_active(model[iter_][3])
@@ -3437,13 +3440,17 @@ class ManageBookmarksWindow:
         if not iter_:
             return
         server = widget.get_text()
+        if not server:
+            return
         if '@' in server:
             dialogs.ErrorDialog(_('Invalid server'),
                 _('Character not allowed'), transient_for=self.window)
             widget.set_text(server.replace('@', ''))
 
-        room_jid = self.room_entry.get_text().strip() + '@' + \
-                server.strip()
+        room = self.room_entry.get_text().strip()
+        if not room:
+            return
+        room_jid = room + '@' + server.strip()
         try:
             room_jid = helpers.parse_jid(room_jid)
         except helpers.InvalidFormat as e:
@@ -3458,14 +3465,18 @@ class ManageBookmarksWindow:
         if not iter_:
             return
         room = widget.get_text()
+        if not room:
+            return
         if '@' in room:
             room, server = room.split('@', 1)
             widget.set_text(room)
             if server:
                 self.server_entry.set_text(server)
             self.server_entry.grab_focus()
-        room_jid = room.strip() + '@' + \
-            self.server_entry.get_text().strip()
+        server = self.server_entry.get_text().strip()
+        if not server:
+            return
+        room_jid = room.strip() + '@' + server
         try:
             room_jid = helpers.parse_jid(room_jid)
         except helpers.InvalidFormat:
