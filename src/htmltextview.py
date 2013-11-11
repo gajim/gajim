@@ -833,7 +833,6 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 class HtmlTextView(Gtk.TextView):
 
     def __init__(self):
-        from gtkgui_helpers import get_gtk_builder
         GObject.GObject.__init__(self)
         self.set_wrap_mode(Gtk.WrapMode.CHAR)
         self.set_editable(False)
@@ -950,6 +949,7 @@ class HtmlTextView(Gtk.TextView):
         dialogs.AddNewContactWindow(self.account, jid)
 
     def make_link_menu(self, event, kind, text):
+        from gtkgui_helpers import get_gtk_builder
         xml = get_gtk_builder('chat_context_menu.ui')
         menu = xml.get_object('chat_context_menu')
         childs = menu.get_children()
