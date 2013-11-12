@@ -50,6 +50,8 @@ if PYOPENSSL_PRESENT:
     TYPE_DSA = crypto.TYPE_DSA
 
 SELF_SIGNED_CERTIFICATE = 'localcert'
+DH_PARAMS = 'dh_params.pem'
+DEFAULT_DH_PARAMS = 'dh4096.pem'
 
 def default_callback(connection, certificate, error_num, depth, return_code):
     log.info("certificate: %s" % certificate)
@@ -106,6 +108,25 @@ def get_context(fingerprint, verify_cb=None):
     cert_name = os.path.join(gajim.MY_CERT_DIR, SELF_SIGNED_CERTIFICATE)
     ctx.use_privatekey_file (cert_name + '.pkey')
     ctx.use_certificate_file(cert_name + '.cert')
+
+    # Try to load Diffie-Hellman parameters.
+    # First try user DH parameters, if this fails load the default DH parameters
+    dh_params_name = os.path.join(gajim.MY_CERT_DIR, DH_PARAMS)
+    try:
+        with open(dh_params_name, "r") as dh_params_file:
+            ctx.load_tmp_dh(dh_params_name)
+    except IOError as err:
+        log.warn('Unable to load DH parameter file: %s. You should generate it by using this command : "openssl dhparam 4096 -out ~/.local/share/gajim/dh_params.pem". This command take about 15 minutes to complete.' % dh_params_name)
+        default_dh_params_name = os.path.join(common.gajim.DATA_DIR,
+            'other', DEFAULT_DH_PARAMS)
+        try:
+            with open(default_dh_params_name, "r") as default_dh_params_file:
+                ctx.load_tmp_dh(default_dh_params_name)
+        except IOError as err:
+            log.error('Unable to load default DH parameter file: %s , %s'
+                % (default_dh_params_name, err))
+            raise
+
     store = ctx.get_cert_store()
     for f in os.listdir(os.path.expanduser(gajim.MY_PEER_CERTS_PATH)):
         load_cert_file(os.path.join(os.path.expanduser(
