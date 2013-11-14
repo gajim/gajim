@@ -116,7 +116,10 @@ def get_context(fingerprint, verify_cb=None):
         with open(dh_params_name, "r") as dh_params_file:
             ctx.load_tmp_dh(dh_params_name)
     except IOError as err:
-        log.warn('Unable to load DH parameter file: %s. You should generate it by using this command : "openssl dhparam 4096 -out ~/.local/share/gajim/dh_params.pem". This command take about 15 minutes to complete.' % dh_params_name)
+        log.warn('Unable to load DH parameter file: %s. You should generate it '
+            'by using this command : "openssl dhparam 4096 -out '
+            '~/.config/gajim/dh_params.pem". This command take about 15 '
+            'minutes to complete.' % dh_params_name)
         default_dh_params_name = os.path.join(common.gajim.DATA_DIR,
             'other', DEFAULT_DH_PARAMS)
         try:
