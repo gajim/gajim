@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gajim 0.15\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-10-22 13:06+0200\n"
-"PO-Revision-Date: 2013-11-10 09:39+0200\n"
+"PO-Revision-Date: 2013-11-15 09:28+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
 "Language: he\n"
@@ -1754,7 +1754,7 @@ msgstr "תמיד"
 
 #: ../data/gui/preferences_window.ui.h:9
 msgid "Pop it up"
-msgstr "הצג התראה מוקפצת"
+msgstr "הקפץ אותו"
 
 #: ../data/gui/preferences_window.ui.h:10
 msgid "Notify me about it"
@@ -2809,7 +2809,7 @@ msgstr "_אסור"
 msgid ""
 "Deny authorization from contact so he or she cannot know when you're "
 "connected"
-msgstr "איסור הרשאות מן איש קשר כך שהוא או היא לא יוכלו לדעת מתי הינך מחובר"
+msgstr "איסור הרשאות מן איש קשר כך שהוא או היא לא יוכלו לדעת מתי אתה מחובר"
 
 # הס_מך
 #: ../data/gui/subscription_request_window.ui.h:6
@@ -2818,7 +2818,7 @@ msgstr "אש_ר"
 
 #: ../data/gui/subscription_request_window.ui.h:7
 msgid "Authorize contact so he or she can know when you're connected"
-msgstr "הענקת הרשאה אל איש קשר זה כדי שהוא או היא יידעו מתי הינך מחובר"
+msgstr "הענקת הרשאה אל איש קשר זה כדי שהוא או היא יידעו מתי אתה מחובר"
 
 #: ../data/gui/synchronise_select_account_dialog.ui.h:1
 msgid "Synchronise contacts"
@@ -2991,11 +2991,10 @@ msgstr "צ'אט;מסרים;מסנג'ר;jabber;xmpp;bonjour;voip"
 msgid "Cancel confirmation"
 msgstr "אימות ביטול"
 
-# מצוי/ה במהלך
 #: ../src/adhoc_commands.py:326
 msgid ""
 "You are in process of executing command. Do you really want to cancel it?"
-msgstr "הינך בתוך עיצומו של תהליך הרצת פקודה. האם ברצונך לבטלו?"
+msgstr "אתה מצוי בתוך עיצומו של תהליך הרצת פקודה. האם ברצונך לבטלו?"
 
 #: ../src/adhoc_commands.py:372
 msgid "Invalid Form"
@@ -4485,8 +4484,6 @@ msgstr ""
 "במידה והעדפה זו מופעלת, Gajim יציג מספר של אנשי קשר מקוונים בשורות חשבון "
 "וקבוצה."
 
-# what type?
-# אפשרי שיהיה
 #: ../src/common/config.py:293
 msgid ""
 "Can be empty, 'chat' or 'normal'. If not empty, treat all incoming messages "
@@ -4712,7 +4709,7 @@ msgid ""
 "Space separated list of JIDs for which you accept to not log conversations "
 "if he does not want to."
 msgstr ""
-"רשימה אשר מופרדת עם רווח, של כתובות JID עבורן הינך מביע הסכמה שלא לרושם "
+"רשימה אשר מופרדת עם רווח, של כתובות JID עבורן אתה מביע הסכמה שלא לרושם "
 "דיונים במידה והקצה השני לא מעוניין בכך."
 
 # חלל לבן, עקב
@@ -5387,8 +5384,8 @@ msgid ""
 "JID %s is not RFC compliant. It will not be added to your roster. Use roster "
 "management tools such as http://jru.jabberstudio.org/ to remove it"
 msgstr ""
-"‏JID ‏%s אינה תואמת RFC. זו לא תוסף אל רשימתך. ניתן להשתמש בכלי ניהול רשימה "
-"(roster management tools) כגון http://jru.jabberstudio.org כדי להסירה"
+"‏JID ‏%s אינה תואמת RFC. זו לא תוסף אל רשימתך. השתמש בכלי ניהול רשימה (roster "
+"management tools) כגון http://jru.jabberstudio.org כדי להסירה"
 
 #: ../src/common/connection_handlers_events.py:825
 #, python-format
@@ -6191,7 +6188,7 @@ msgstr "רשומות מסד נתונים"
 #: ../src/common/passwords.py:123
 #, python-format
 msgid "XMPP account %s@%s"
-msgstr "חשבון ‫XMPP ‫%s@%s"
+msgstr "חשבון XMPP ‫%s@%s"
 
 #: ../src/common/pep.py:27
 msgid "Afraid"
@@ -6966,13 +6963,12 @@ msgstr ""
 "‏<b>\"%(title)s\"</b> מאת <i>%(artist)s</i>\n"
 "מתוך <i>%(source)s</i>"
 
-# רואה הודעה זאת
 #. we're not english
 #: ../src/common/stanza_session.py:425
 msgid ""
 "[This is part of an encrypted session. If you see this message, something "
 "went wrong.]"
-msgstr "[זהו חלק מן סשן מוצפן. אם הינך רואה את הודעה זאת, משהו השתבש.]"
+msgstr "[זהו חלק מתוך סשן מוצפן. אם הינך רואה את הודעה זאת, משהו השתבש.]"
 
 #: ../src/common/zeroconf/connection_zeroconf.py:193
 msgid "Avahi error"
@@ -7111,7 +7107,7 @@ msgstr "כל חלונות שיחה וחלונות שיחת קבוצה ייסגר
 
 #: ../src/config.py:2035 ../src/config.py:2600 ../src/config.py:2638
 msgid "You are currently connected to the server"
-msgstr "הינך מחובר כעת אל שרת"
+msgstr "אתה מחובר כעת לשרת"
 
 #: ../src/config.py:2036
 msgid "To change the account name, you must be disconnected."
@@ -7809,21 +7805,21 @@ msgstr ""
 
 #: ../src/dialogs.py:1292
 msgid "Current Developers:"
-msgstr "מפתחים נוכחיים:"
+msgstr "‎מפתחים נוכחיים:"
 
 #: ../src/dialogs.py:1294
 msgid "Past Developers:"
-msgstr "מפתחים מן העבר:"
+msgstr "‎מפתחים מן העבר:"
 
 #: ../src/dialogs.py:1300
 msgid "THANKS:"
-msgstr "תודות:"
+msgstr "‎תודות:"
 
 #. remove one english sentence
 #. and add it manually as translatable
 #: ../src/dialogs.py:1306
 msgid "Last but not least, we would like to thank all the package maintainers."
-msgstr "ואחרון אחרון חביב, ברצוננו להודות לכל מתחזקי החבילות."
+msgstr "‎.ואחרון אחרון חביב, ברצוננו להודות לכל מתחזקי החבילות"
 
 #. here you write your name in the form Name FamilyName <someone@somewhere>
 #: ../src/dialogs.py:1318
@@ -7871,7 +7867,7 @@ msgid ""
 "unencrypted. This type of connection is really discouraged.\n"
 "Are you sure you want to do that?"
 msgstr ""
-"הינך על סף התחברות אל החשבון %(account)s ‏(%(server)s) באמצעות חיבור לא "
+"אתה על סף התחברות אל החשבון %(account)s ‏(%(server)s) באמצעות חיבור לא "
 "מאובטח. משמעות הדבר היא כי כל השיחות אשר יוחלפו עם הקצה השני לא יהיו "
 "מוצפנות. רצוי להימנע מחיבורים מטיפוס זה.\n"
 "האם אתה בטוח כי ברצונך לעשות כן?"
@@ -8023,7 +8019,7 @@ msgstr "חיבור לא זמין"
 #: ../src/dialogs.py:2837 ../src/dialogs.py:3222 ../src/dialogs.py:3459
 #, python-format
 msgid "Please make sure you are connected with \"%s\"."
-msgstr "אנא ודא כי הינך מחובר בעזרת \"%s\"."
+msgstr "אנא ודא כי אתה מחובר בעזרת \"%s\"."
 
 #: ../src/dialogs.py:2846 ../src/dialogs.py:2849
 msgid "Invalid JID"
@@ -8431,8 +8427,7 @@ msgid ""
 "OpenPGP Key is assigned to this contact, and you trust his key, so messages "
 "will be encrypted."
 msgstr ""
-"מפתח OpenPGP מוקצה לאיש קשר זה, והינך סומך על המפתח שלו, אי לכך הודעות "
-"יוצפנו."
+"מפתח OpenPGP מוקצה לאיש קשר זה, ואתה סומך על המפתח שלו, אי לכך הודעות יוצפנו."
 
 #: ../src/dialogs.py:5286
 msgid "an audio and video"
@@ -9847,7 +9842,6 @@ msgstr "תצורת חדר שונתה אל חברים-בלבד"
 msgid "system shutdown"
 msgstr "סגירת מערכת"
 
-# שיוכה/ו של
 # נקבע
 #: ../src/groupchat_control.py:1797
 #, python-format
@@ -9859,7 +9853,6 @@ msgstr "** השיוך של %(nick)s הוגדר אל %(affiliation)s על ידי 
 msgid "** Affiliation of %(nick)s has been set to %(affiliation)s"
 msgstr "** השיוך של %(nick)s הוגדר אל %(affiliation)s"
 
-# תפקידה/ו של
 #: ../src/groupchat_control.py:1816
 #, python-format
 msgid "** Role of %(nick)s has been set to %(role)s by %(actor)s"
@@ -10046,9 +10039,6 @@ msgstr "האם לקבל את בקשה זו?"
 msgid "Do you accept this request on account %s?"
 msgstr "האם לקבל את בקשה זו בחשבון %s?"
 
-# Needs to be tested
-# זהות
-# אישור
 #: ../src/gui_interface.py:160
 #, python-format
 msgid "HTTP (%(method)s) Authorization for %(url)s (id: %(id)s)"
@@ -10298,7 +10288,7 @@ msgstr "התנגשות משאב"
 msgid ""
 "You are already connected to this account with the same resource. Please "
 "type a new one"
-msgstr "הינך כבר מחובר אל חשבון זה באמצעות אותו משאב. אנא הקלד אחד חדש."
+msgstr "אתה כבר מחובר אל חשבון זה באמצעות אותו משאב. אנא הקלד אחד חדש."
 
 #. TODO: we should use another pixmap ;-)
 #: ../src/gui_interface.py:1247
@@ -10354,7 +10344,7 @@ msgid ""
 "You are about to send your password on an insecure connection. You should "
 "install PyOpenSSL to prevent that. Are you sure you want to do that?"
 msgstr ""
-"הינך על סף שליחת סיסמתך על פני חיבור לא מאובטח. עליך להתקין PyOpenSSL בכדי "
+"אתה על סף שליחת סיסמתך על פני חיבור לא מאובטח. עליך להתקין PyOpenSSL בכדי "
 "למנוע זאת. האם אתה בטוח כי ברצונך להתחבר?"
 
 #: ../src/gui_interface.py:1489
@@ -10362,7 +10352,7 @@ msgid ""
 "You are about to send your password unencrypted on an insecure connection. "
 "Are you sure you want to do that?"
 msgstr ""
-"הינך על סף שליחת סיסמתך באופן לא מוצפן על פני חיבור לא מאובטח. האם אתה בטוח "
+"אתה על סף שליחת סיסמתך באופן לא מוצפן על פני חיבור לא מאובטח. האם אתה בטוח "
 "כי ברצונך לעשות זאת?"
 
 #. theme doesn't exist, disable emoticons
@@ -10747,15 +10737,14 @@ msgstr "התחברותך אל %s תתבצע ללא OpenPGP."
 
 #: ../src/roster_window.py:2334 ../src/roster_window.py:3825
 msgid "You are participating in one or more group chats"
-msgstr "הינך משתתף בשיחת קבוצה אחת או יותר"
+msgstr "אתה משתתף בשיחת קבוצה אחת או יותר"
 
-# יוביל, יביא לידי
 #: ../src/roster_window.py:2335 ../src/roster_window.py:3826
 msgid ""
 "Changing your status to invisible will result in disconnection from those "
 "group chats. Are you sure you want to go invisible?"
 msgstr ""
-"שינוי מצב החיבור שלך אל בלתי נראה ינבע בניתוקך מתוך שיחות קבוצה אלו. האם אתה "
+"שינוי מצב החיבור שלך אל בלתי נראה יגרום לניתוק מתוך שיחות קבוצה אלו. האם אתה "
 "בטוח כי ברצונך להפוך את מצבך אל בלתי נראה?"
 
 #: ../src/roster_window.py:2361
@@ -10783,8 +10772,7 @@ msgstr "נותרו העברות קבצים פעילות"
 msgid ""
 "If you quit now, the file(s) being transferred will be stopped. Do you still "
 "want to quit?"
-msgstr ""
-"אם תצא עכשיו, הקובץ או הקבצים אשר מועברים כעת יופסקו. האם עדיין ברצונך לצאת?"
+msgstr "אם תצא עכשיו, הקבצים אשר מועברים כעת יופסקו. האם עדיין ברצונך לצאת?"
 
 #: ../src/roster_window.py:2551 ../src/roster_window.py:2988
 msgid "You have unread messages"
@@ -10808,22 +10796,20 @@ msgstr "עליך לקרוא אותן טרם הסרת מוביל זה."
 #: ../src/roster_window.py:2992
 #, python-format
 msgid "Transport \"%s\" will be removed"
-msgstr "המוביל \"%s\" יוסר"
+msgstr "מוביל \"%s\" יוסר"
 
 #: ../src/roster_window.py:2993
 msgid ""
 "You will no longer be able to send and receive messages from contacts using "
 "this transport."
 msgstr ""
-"לא תעמוד עוד לרשותך האפשרות לקבל ולשלוח הודעות מתוך אנשי קשר באמצעות מוביל "
-"זה."
+"לא תעמוד עוד לרשותך האפשרות לקבל וגם לשלוח הודעות מתוך אנשי קשר באמצעות "
+"מוביל זה."
 
 #: ../src/roster_window.py:2996
 msgid "Transports will be removed"
-msgstr "המובילים יוסרו"
+msgstr "מובילים יוסרו"
 
-# הטרנספורטים שלהלן
-# הטרנספורטים הללו
 #: ../src/roster_window.py:3001
 #, python-format
 msgid ""
@@ -10833,8 +10819,6 @@ msgstr ""
 "לא תעמוד עוד לרשותך האפשרות לקבל ולשלוח הודעות אל אנשי קשר מתוך מובילים אלו: "
 "%s"
 
-# Needs to be tested
-# you have chose to
 #: ../src/roster_window.py:3043
 msgid "You are about to block a contact. Are you sure you want to continue?"
 msgstr "בחרת לחסום איש קשר. האם אתה בטוח כי ברצונך להמשיך?"
@@ -10938,7 +10922,7 @@ msgid ""
 "you also remove authorization resulting in them always seeing you as offline."
 msgstr ""
 "בהסירך את אנשי קשר אלו:%s\n"
-"אתה גם תסיר הרשאה דבר אשר יביא לכך שהם תמיד יראו אותך במצב לא מקוון."
+"אתה גם תסיר הרשאה דבר אשר יגרום לכך שהם תמיד יראו אותך במצב לא מקוון."
 
 #: ../src/roster_window.py:3722
 msgid ""
@@ -11148,8 +11132,6 @@ msgstr "ממתין עבור תוצאות"
 msgid "Error in received dataform"
 msgstr "שגיאה בקבלת dataform"
 
-# Needs to be tested
-# תנובה, תבואה
 #. No result
 #: ../src/search_window.py:177 ../src/search_window.py:212
 msgid "No result"
@@ -11390,7 +11372,7 @@ msgstr ""
 # אחד את השני
 #: ../src/vcard.py:412
 msgid "You and the contact are interested in each other's presence information"
-msgstr "הינך והן איש הקשר מעוניינים במידע הנוכחות של זה את זה"
+msgstr "הינך וגם איש הקשר מעוניינים במידע הנוכחות של זה את זה"
 
 #. None
 #: ../src/vcard.py:414
