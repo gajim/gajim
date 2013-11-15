@@ -1127,7 +1127,8 @@ class AgentBrowser:
                 # We can't travel anywhere else.
                 self.window.destroy()
             dialogs.ErrorDialog(_('The service is not browsable'),
-_('This service does not contain any items to browse.'))
+                _('This service does not contain any items to browse.'),
+                transient_for=self.window.window)
             return
         # We got a list of items
         def fill_partial_rows(items):
