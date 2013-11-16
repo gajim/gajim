@@ -237,7 +237,7 @@ class PrivateChatControl(ChatControl):
                     #in second %s code replaces with nickname
                     _('You are no longer in group chat "%(room)s" or '
                     '"%(nick)s" has left.') % {'room': u'\u200E' + room,
-                    'nick': nick})
+                    'nick': nick}, transient_for=self.parent_win.window)
                 return
 
         ChatControl.send_message(self, message, xhtml=xhtml,
