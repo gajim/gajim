@@ -12,7 +12,7 @@ soundsdir = $(pkgdatadir)/data/sounds
 sounds_DATA = $(srcdir)/sounds/*.wav
 
 otherdir = $(pkgdatadir)/data/other
-other_DATA = other/servers.xml other/cacerts.pem
+other_DATA = other/servers.xml other/cacerts.pem other/dh4096.pem
 
 man_MANS = gajim.1 gajim-remote.1 gajim-history-manager.1
 
