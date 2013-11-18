@@ -152,7 +152,7 @@ def parseOpts():
                 '\n  -c, --config-path  ' + \
                     _('Set configuration directory') + \
                 '\n  -l, --loglevel     ' + \
-                    _('Configure logging system'))
+                    _('Configure logging system') + '\n')
             sys.exit()
         elif o in ('-q', '--quiet'):
             logging_helpers.set_quiet()
