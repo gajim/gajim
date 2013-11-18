@@ -75,7 +75,7 @@ def parseOpts():
                 _('Options:') + \
                 '\n  -h, --help         ' + \
                     _('Show this help message and exit') + \
-                '\n  -c, --config-path  ' + _('Set logs directory')
+                '\n  -c, --config-path  ' + _('Set logs directory') + '\n'
             sys.exit()
         elif o in ('-c', '--config-path'):
             config_path = a
