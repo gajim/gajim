@@ -1630,6 +1630,12 @@ class ChatControl(ChatControlBase):
         id_ = widget.connect('button-release-event',
             self.on_location_eventbox_button_release_event)
         self.handlers[id_] = widget
+        id_ = widget.connect('enter-notify-event',
+            self.on_location_eventbox_enter_notify_event)
+        self.handlers[id_] = widget
+        id_ = widget.connect('leave-notify-event',
+            self.on_location_eventbox_leave_notify_event)
+        self.handlers[id_] = widget
 
         for key in ('1', '2', '3', '4', '5', '6', '7', '8', '9', '*', '0', '#'):
             widget = self.xml.get_object(key + '_button')
@@ -2063,6 +2069,17 @@ class ChatControl(ChatControlBase):
                         'mlat=%(lat)s&mlon=%(lon)s&zoom=16' % {'lat': location['lat'],
                         'lon': location['lon']}
                 helpers.launch_browser_mailer('url', uri)
+
+    def on_location_eventbox_leave_notify_event(self, widget, event):
+        """
+        Just moved the mouse so show the cursor
+        """
+        cursor = gtk.gdk.Cursor(gtk.gdk.LEFT_PTR)
+        self.parent_win.window.window.set_cursor(cursor)
+
+    def on_location_eventbox_enter_notify_event(self, widget, event):
+        cursor = gtk.gdk.Cursor(gtk.gdk.HAND2)
+        self.parent_win.window.window.set_cursor(cursor)
 
     def _on_window_motion_notify(self, widget, event):
         """
