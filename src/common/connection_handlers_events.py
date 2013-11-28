@@ -1078,10 +1078,15 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.invite_tag = None
         self.decline_tag = None
         if not self.enc_tag:
+            # Direct invitation?
             self.invite_tag = self.stanza.getTag('x',
-                namespace=nbxmpp.NS_MUC_USER)
-            if self.invite_tag and not self.invite_tag.getTag('invite'):
-                self.invite_tag = None
+                namespace=nbxmpp.NS_CONFERENCE)
+            # Mediated invitation?
+            if not self.invite_tag:
+                self.invite_tag = self.stanza.getTag('x',
+                    namespace=nbxmpp.NS_MUC_USER)
+                if self.invite_tag and not self.invite_tag.getTag('invite'):
+                    self.invite_tag = None
 
             self.decline_tag = self.stanza.getTag('x',
                 namespace=nbxmpp.NS_MUC_USER)
@@ -1195,25 +1200,46 @@ class GcInvitationReceivedEvent(nec.NetworkIncomingEvent):
     base_network_events = []
 
     def generate(self):
-        self.room_jid = self.msg_obj.fjid
+        invite_tag = self.msg_obj.invite_tag
+        if invite_tag.getNamespace() == nbxmpp.NS_CONFERENCE:
+            # direct invitation
+            try:
+                self.room_jid = helpers.parse_jid(invite_tag.getAttr('jid'))
+            except helpers.InvalidFormat:
+                log.warn('Invalid JID: %s, ignoring it' % invite_tag.getAttr(
+                    'jid'))
+                return
+            self.jid_from = self.msg_obj.fjid
+            self.reason = invite_tag.getAttr('reason')
+            self.password = invite_tag.getAttr('password')
+            self.is_continued = False
+            if invite_tag.getAttr('continue') == 'true':
+                self.is_continued = True
+        else:
+            self.room_jid = self.msg_obj.fjid
+            item = invite_tag.getTag('invite')
+            try:
+                self.jid_from = helpers.parse_jid(item.getAttr('from'))
+            except helpers.InvalidFormat:
+                log.warn('Invalid JID: %s, ignoring it' % item.getAttr('from'))
+                return
 
-        item = self.msg_obj.invite_tag.getTag('invite')
-        try:
-            self.jid_from = helpers.parse_jid(item.getAttr('from'))
-        except helpers.InvalidFormat:
-            log.warn('Invalid JID: %s, ignoring it' % item.getAttr('from'))
+            self.reason = item.getTagData('reason')
+            self.password = invite_tag.getTagData('password')
+
+            self.is_continued = False
+            if item.getTag('continue'):
+                self.is_continued = True
+
+        if self.room_jid in gajim.gc_connected[self.conn.name] and \
+        gajim.gc_connected[self.conn.name][self.room_jid]:
+            # We are already in groupchat. Ignore invitation
             return
         jid = gajim.get_jid_without_resource(self.jid_from)
         if gajim.config.get_per('accounts', self.conn.name,
-        'ignore_unknown_contacts') and not gajim.contacts.get_contacts(
-        self.conn.name, jid):
-            return
-        self.reason = item.getTagData('reason')
-        self.password = self.msg_obj.invite_tag.getTagData('password')
-
-        self.is_continued = False
-        if item.getTag('continue'):
-            self.is_continued = True
+            'ignore_unknown_contacts') and not gajim.contacts.get_contacts(
+            self.conn.name, jid):
+                return
 
         return True
 

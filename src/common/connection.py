@@ -1383,8 +1383,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             errnum = con.Connection.ssl_errnum
         except AttributeError:
             errnum = [] # we don't have an errnum
-        i = 0
-        for er in errnum:
+        for i, er in enumerate(errnum):
             if er > 0 and str(er) not in gajim.config.get_per('accounts',
             self.name, 'ignore_ssl_errors').split():
                 text = _('The authenticity of the %s certificate could be '
@@ -1399,7 +1398,6 @@ class Connection(CommonConnection, ConnectionHandlers):
                     fingerprint=con.Connection.ssl_fingerprint_sha1[i],
                     certificate=con.Connection.ssl_certificate[i]))
                 return True
-            i += 1
         if con.Connection.ssl_fingerprint_sha1:
             saved_fingerprint = gajim.config.get_per('accounts', self.name,
                 'ssl_fingerprint_sha1')
@@ -2846,6 +2844,19 @@ class Connection(CommonConnection, ConnectionHandlers):
         """
         Send invitation
         """
+        contact = gajim.contacts.get_contact_from_full_jid(self.name, to)
+        if contact and contact.supports(nbxmpp.NS_CONFERENCE):
+            # send direct invite
+            message=nbxmpp.Message(to=to)
+            attrs = {'jid': room}
+            if reason:
+                attrs['reason'] = reason
+            if continue_tag:
+                attrs['continue'] = 'true'
+            c = message.addChild(name='x', attrs=attrs,
+                namespace=nbxmpp.NS_CONFERENCE)
+            self.connection.send(message)
+            return
         message=nbxmpp.Message(to=room)
         c = message.addChild(name='x', namespace=nbxmpp.NS_MUC_USER)
         c = c.addChild(name='invite', attrs={'to': to})
