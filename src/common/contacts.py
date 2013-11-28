@@ -488,6 +488,7 @@ class Contacts():
             for c in self._contacts[jid]:
                 if c.resource == resource:
                     return c
+            return self._contacts[jid][0]
 
     def iter_contacts(self):
         for jid in list(self._contacts.keys()):

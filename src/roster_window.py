@@ -3335,7 +3335,7 @@ class RosterWindow:
                 break
 
     def on_invite_to_room(self, widget, list_, room_jid, room_account,
-                    resource=None):
+    resource=None):
         """
         Resource parameter MUST NOT be used if more than one contact in list
         """
