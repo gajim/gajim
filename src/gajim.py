@@ -209,6 +209,7 @@ try:
     GObject.set_prgname('gajim')
     from gi.repository import Gtk
     from gi.repository import Gdk
+    from gi.repository import GLib
 except Warning as msg2:
     if str(msg2) == 'could not open display':
         print(_('Gajim needs X server to run. Quiting...'), file=sys.stderr)
@@ -492,6 +493,7 @@ if __name__ == '__main__':
     interface.run()
 
     try:
+        GLib.threads_init()
         Gtk.main()
     except KeyboardInterrupt:
         print('KeyboardInterrupt', file=sys.stderr)
