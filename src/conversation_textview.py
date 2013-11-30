@@ -311,10 +311,10 @@ class ConversationTextview(GObject.GObject):
         self.displaymarking_tags = {}
 
         tag = buffer_.create_tag('xep0184-warning')
-        tag.set_property('foreground', 'red')
+        tag.set_property('foreground', '#cc0000')
 
         tag = buffer_.create_tag('xep0184-received')
-        tag.set_property('foreground', 'green')
+        tag.set_property('foreground', '#73d216')
 
         # One mark at the begining then 2 marks between each lines
         size = gajim.config.get('max_conversation_lines')
