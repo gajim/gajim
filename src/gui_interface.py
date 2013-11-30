@@ -1688,6 +1688,8 @@ class Interface:
             event = gajim.events.get_first_event(account, fjid, type_)
             if not event:
                 event = gajim.events.get_first_event(account, jid, type_)
+            if not event:
+                return
 
             if type_ == 'printed_pm':
                 ctrl = event.parameters[2]
