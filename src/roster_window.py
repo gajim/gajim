@@ -4555,8 +4555,12 @@ class RosterWindow:
             self.draw_account(account_source)
             context.finish(True, True, etime)
 
+        dest_family = gajim.contacts.get_metacontacts_family(account_dest,
+            c_dest.jid)
+        source_family = gajim.contacts.get_metacontacts_family(account_source,
+            c_source.jid)
         confirm_metacontacts = gajim.config.get('confirm_metacontacts')
-        if confirm_metacontacts == 'no':
+        if confirm_metacontacts == 'no' or dest_family == source_family:
             merge_contacts()
             return
         pritext = _('You are about to create a metacontact. Are you sure you '
@@ -4830,7 +4834,7 @@ class RosterWindow:
                 return
             menu = gtk.Menu()
             item = gtk.MenuItem(_('Send %s to %s') % (c_source.get_shown_name(),
-                    c_dest.get_shown_name()))
+                    c_dest.get_shown_name()), use_underline=False)
             item.connect('activate', self.on_drop_rosterx, account_source,
             c_source, account_dest, c_dest, is_big_brother, context, etime)
             menu.append(item)
@@ -4841,10 +4845,11 @@ class RosterWindow:
                 account_source, c_source.jid)
             if dest_family == source_family and dest_family:
                 item = gtk.MenuItem(_('Make %s first contact') % (
-                    c_source.get_shown_name()))
+                    c_source.get_shown_name()), use_underline=False)
             else:
                 item = gtk.MenuItem(_('Make %s and %s metacontacts') % (
-                    c_source.get_shown_name(), c_dest.get_shown_name()))
+                    c_source.get_shown_name(), c_dest.get_shown_name()),
+                    use_underline=False)
 
             item.connect('activate', self.on_drop_in_contact, account_source,
             c_source, account_dest, c_dest, is_big_brother, context, etime)
