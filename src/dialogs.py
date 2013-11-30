@@ -1068,11 +1068,11 @@ class AddNewContactWindow:
         model = self.protocol_combobox.get_model()
         row = self.protocol_combobox.get_active_iter()
         type_ = model[row][2]
-        if type_ != 'jabber' and not self.jid_escaped:
+        if type_ != 'jabber':
             model = self.protocol_jid_combobox.get_model()
             row = self.protocol_jid_combobox.get_active()
             transport = model[row][0]
-            if self.account:
+            if self.account and not self.jid_escaped:
                 self.adding_jid = (jid, transport, type_)
                 gajim.connections[self.account].request_gateway_prompt(
                     transport, jid)
@@ -5229,7 +5229,7 @@ class GPGInfoWindow:
     """
     Class for displaying information about a XEP-0116 encrypted session
     """
-    def __init__(self, control):
+    def __init__(self, control, transient_for=None):
         xml = gtkgui_helpers.get_gtk_builder('esession_info_window.ui')
         security_image = xml.get_object('security_image')
         status_label = xml.get_object('verification_status_label')
