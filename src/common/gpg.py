@@ -34,7 +34,7 @@ if HAVE_GPG:
             self.decode_errors = 'replace'
             self.passphrase = None
             self.use_agent = use_agent
-            self.always_trust = False
+            self.always_trust = [] # list of keyID to always trust
 
         def _setup_my_options(self):
             self.options.armor = 1
@@ -47,8 +47,14 @@ if HAVE_GPG:
                 self.options.extra_args.append('--use-agent')
 
         def encrypt(self, str_, recipients, always_trust=False):
+            trust = always_trust
+            if not trust:
+                trust = True
+                for key in recipients:
+                    if key not in self.always_trust:
+                        trust = False
             result = super(GnuPG, self).encrypt(str_, recipients,
-                always_trust=always_trust, passphrase=self.passphrase)
+                always_trust=trust, passphrase=self.passphrase)
 
             if result.status == 'invalid recipient':
                 return '', 'NOT_TRUSTED'

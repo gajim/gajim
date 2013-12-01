@@ -326,7 +326,7 @@ class CommonConnection:
                                     form_node, user_nick, keyID, attention,
                                     correction_msg, callback)
                         gajim.nec.push_incoming_event(GPGTrustKeyEvent(None,
-                            conn=self, callback=_on_always_trust))
+                            conn=self, keyID=keyID, callback=_on_always_trust))
                     else:
                         self._message_encrypted_cb(output, type_, msg, msgtxt,
                             original_message, fjid, resource, jid, xhtml,
