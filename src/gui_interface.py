@@ -695,7 +695,7 @@ class Interface:
         #('GPG_ALWAYS_TRUST', account, callback)
         def on_yes(checked):
             if checked:
-                obj.conn.gpg.always_trust = True
+                obj.conn.gpg.always_trust.append(obj.keyID)
             obj.callback(True)
 
         def on_no():
