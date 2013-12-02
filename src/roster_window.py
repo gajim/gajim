@@ -73,7 +73,7 @@ from common import dbus_support
 if dbus_support.supported:
     import dbus
 
-from nbxmpp.protocol import NS_FILE, NS_ROSTERX
+from nbxmpp.protocol import NS_FILE, NS_ROSTERX, NS_CONFERENCE
 from common.pep import MOODS, ACTIVITIES
 
 #(icon, name, type, jid, account, editable, second pixbuf)
@@ -5740,9 +5740,10 @@ class RosterWindow:
         group = model[titer][C_JID]
         account = model[titer][C_ACCOUNT]
 
-        list_ = [] # list of (jid, account) tuples
-        list_online = [] # list of (jid, account) tuples
+        list_ = [] # list of (contact, account) tuples
+        list_online = [] # list of (contact, account) tuples
 
+        show_bookmarked = True
         group = model[titer][C_JID]
         for jid in gajim.contacts.get_jid_list(account):
             contact = gajim.contacts.get_contact_with_highest_priority(account,
@@ -5750,6 +5751,9 @@ class RosterWindow:
             if group in contact.get_shown_groups():
                 if contact.show not in ('offline', 'error'):
                     list_online.append((contact, account))
+                    # Check that all contacts support direct NUC invite
+                    if not contact.supports(NS_CONFERENCE):
+                        show_bookmarked = False
                 list_.append((contact, account))
         menu = Gtk.Menu()
 
@@ -5797,7 +5801,7 @@ class RosterWindow:
                     invite_menuitem.set_image(muc_icon)
 
                 gui_menu_builder.build_invite_submenu(invite_menuitem,
-                    list_online)
+                    list_online, show_bookmarked=show_bookmarked)
                 menu.append(invite_menuitem)
 
             # Send Custom Status
@@ -5947,6 +5951,12 @@ class RosterWindow:
                 account = None
                 break
             account = current_account
+        show_bookmarked = True
+        for (contact, current_account) in list_:
+            # Check that all contacts support direct NUC invite
+            if not contact.supports(NS_CONFERENCE):
+                show_bookmarked = False
+                break
         if account is not None:
             send_group_message_item = Gtk.ImageMenuItem.new_with_mnemonic(
                 _('Send Group M_essage'))
@@ -5962,7 +5972,8 @@ class RosterWindow:
         if muc_icon:
             invite_item.set_image(muc_icon)
 
-        gui_menu_builder.build_invite_submenu(invite_item, list_)
+        gui_menu_builder.build_invite_submenu(invite_item, list_,
+            show_bookmarked=show_bookmarked)
         menu.append(invite_item)
 
         item = Gtk.SeparatorMenuItem.new() # separator

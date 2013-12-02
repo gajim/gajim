@@ -44,6 +44,7 @@ import config
 import vcard
 import cell_renderer_image
 import dataforms_widget
+import nbxmpp
 
 from common import gajim
 from common import helpers
@@ -2509,9 +2510,13 @@ class GroupchatControl(ChatControlBase):
         muc_icon = gtkgui_helpers.load_icon('muc_active')
         if muc_icon:
             item.set_image(muc_icon)
-        if c.jid and c.name != self.nick:
+        if jid and c.name != self.nick:
+            bookmarked = False
+            contact = gajim.contacts.get_contact(self.account, jid, c.resource)
+            if contact and contact.supports(nbxmpp.NS_CONFERENCE):
+                bookmarked=True
             gui_menu_builder.build_invite_submenu(item, ((c, self.account),),
-                ignore_rooms=[self.room_jid])
+                ignore_rooms=[self.room_jid], show_bookmarked=bookmarked)
         else:
             item.set_sensitive(False)
 

@@ -26,7 +26,7 @@ import message_control
 from common import gajim
 from common import helpers
 from nbxmpp.protocol import NS_COMMANDS, NS_FILE, NS_MUC, NS_ESESSION
-from nbxmpp.protocol import NS_JINGLE_FILE_TRANSFER
+from nbxmpp.protocol import NS_JINGLE_FILE_TRANSFER, NS_CONFERENCE
 
 def build_resources_submenu(contacts, account, action, room_jid=None,
                 room_account=None, cap=None):
@@ -63,7 +63,8 @@ def build_resources_submenu(contacts, account, action, room_jid=None,
 
     return sub_menu
 
-def build_invite_submenu(invite_menuitem, list_, ignore_rooms=[]):
+def build_invite_submenu(invite_menuitem, list_, ignore_rooms=[],
+show_bookmarked=False):
     """
     list_ in a list of (contact, account)
     """
@@ -151,7 +152,9 @@ def build_invite_submenu(invite_menuitem, list_, ignore_rooms=[]):
         item = Gtk.SeparatorMenuItem.new() # separator
         invite_to_submenu.append(item)
         for (room_jid, account) in rooms:
-            menuitem = Gtk.MenuItem(room_jid.split('@')[0])
+            menuitem = Gtk.ImageMenuItem(room_jid.split('@')[0])
+            muc_active_icon = gtkgui_helpers.load_icon('muc_active')
+            menuitem.set_image(muc_active_icon)
             if len(contact_list) > 1: # several resources
                 menuitem.set_submenu(build_resources_submenu(
                     contact_list, account, roster.on_invite_to_room, room_jid,
@@ -163,8 +166,44 @@ def build_invite_submenu(invite_menuitem, list_, ignore_rooms=[]):
                 else:
                     resource = None
                 menuitem.connect('activate', roster.on_invite_to_room, list_,
-                        room_jid, account, resource)
+                    room_jid, account, resource)
             invite_to_submenu.append(menuitem)
+
+    if not show_bookmarked:
+        return
+    rooms2 = [] # a list of (room_jid, account) tuple
+    r_jids = [] # list of room jids
+    for account in connected_accounts:
+        for room in gajim.connections[account].bookmarks:
+            r_jid = room['jid']
+            if r_jid in r_jids:
+                continue
+            if r_jid not in gajim.gc_connected[account] or not \
+            gajim.gc_connected[account][r_jid]:
+                rooms2.append((r_jid, account))
+                r_jids.append(r_jid)
+    
+    if not rooms2:
+        return
+    item = Gtk.SeparatorMenuItem.new() # separator
+    invite_to_submenu.append(item)
+    for (room_jid, account) in rooms2:
+        menuitem = Gtk.ImageMenuItem(room_jid.split('@')[0])
+        muc_inactive_icon = gtkgui_helpers.load_icon('muc_inactive')
+        menuitem.set_image(muc_inactive_icon)
+        if len(contact_list) > 1: # several resources
+            menuitem.set_submenu(build_resources_submenu(
+                contact_list, account, roster.on_invite_to_room, room_jid,
+                account))
+        else:
+            # use resource if it's self contact
+            if contact.jid == gajim.get_jid_from_account(account):
+                resource = contact.resource
+            else:
+                resource = None
+            menuitem.connect('activate', roster.on_invite_to_room, list_,
+                room_jid, account, resource)
+        invite_to_submenu.append(menuitem)
 
 def get_contact_menu(contact, account, use_multiple_contacts=True,
 show_start_chat=True, show_encryption=False, show_buttonbar_items=True,
@@ -403,9 +442,16 @@ control=None, gc_contact=None, is_anonymous=True):
             # it's a pm and we don't know real JID
             invite_menuitem.set_sensitive(False)
         else:
-            build_invite_submenu(invite_menuitem, [(gc_contact, account)])
+            bookmarked = False
+            c_ = gajim.contacts.get_contact(account, gc_contact.jid,
+                gc_contact.resource)
+            if c_ and c_.supports(nbxmpp.NS_CONFERENCE):
+                bookmarked=True
+            build_invite_submenu(invite_menuitem, [(gc_contact, account)],
+                show_bookmarked=bookmarked)
     else:
-        build_invite_submenu(invite_menuitem, [(contact, account)])
+        build_invite_submenu(invite_menuitem, [(contact, account)],
+            show_bookmarked=contact.supports(NS_CONFERENCE))
 
     if gajim.account_is_disconnected(account):
         invite_menuitem.set_sensitive(False)
@@ -655,3 +701,4 @@ def get_transport_menu(contact, account):
     menu.connect('selection-done', gtkgui_helpers.destroy_widget)
     menu.show_all()
     return menu
+
