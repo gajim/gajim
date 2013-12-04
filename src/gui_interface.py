@@ -1022,6 +1022,9 @@ class Interface:
                     error_msg=_('Error opening file'))
             elif file_props.error == -10:
                 ft.show_hash_error(jid, file_props, account)
+            elif file_props.error == -12:
+                ft.show_stopped(jid, file_props,
+                    error_msg=_('SSL certificate error'))
             return
 
         msg_type = ''

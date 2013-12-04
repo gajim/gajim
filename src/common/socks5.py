@@ -119,8 +119,7 @@ class SocksQueue:
         streamhosts_to_test = []
         # Remove local IPs to not connect to ourself
         for streamhost in file_props.streamhosts:
-            if streamhost['host'] == '127.0.0.1' or \
-                    streamhost['host'] == '::1':
+            if streamhost['host'] == '127.0.0.1' or streamhost['host'] == '::1':
                 continue
             streamhosts_to_test.append(streamhost)
         if not streamhosts_to_test:
@@ -327,7 +326,7 @@ class SocksQueue:
         if listener.file_props.type_ == 's' and \
         not self.isHashInSockObjs(self.senders, sock_hash):
             sockobj =  Socks5SenderServer(self.idlequeue, sock_hash, self,
-                sock[0],  sock[1][0], sock[1][1], fingerprint='server',
+                sock[0], sock[1][0], sock[1][1], fingerprint='server',
                 file_props=listener.file_props)
             self._add(sockobj, self.senders, listener.file_props, sock_hash)
             # Start waiting for data
@@ -416,7 +415,7 @@ class SocksQueue:
                 self.connected -= 1
 
 
-class Socks5:
+class Socks5(object):
     def __init__(self, idlequeue, host, port, initiator, target, sid):
         if host is not None:
             try:
@@ -440,10 +439,18 @@ class Socks5:
         self.file = None
         self.connected = False
         self.mode = ''
+        self.ssl_cert = None
+        self.ssl_errnum = 0
 
     def _is_connected(self):
         if self.state < 5:
             return False
+        return True
+
+    def ssl_verify_cb(self, ssl_conn, cert, error_num, depth, return_code):
+        if depth == 0:
+            self.ssl_cert = cert
+            self.ssl_errnum = error_num
         return True
 
     def connect(self):
@@ -456,8 +463,16 @@ class Socks5:
             try:
                 self._sock = socket.socket(*ai[:3])
                 if not self.fingerprint is None:
+                    if self.file_props.type_ == 's':
+                        remote_jid = gajim.get_jid_without_resource(
+                            self.file_props.receiver)
+                    else:
+                        remote_jid = gajim.get_jid_without_resource(
+                            self.file_props.sender)
                     self._sock = OpenSSL.SSL.Connection(
-                        jingle_xtls.get_context('client'), self._sock)
+                        jingle_xtls.get_context('client',
+                        verify_cb=self.ssl_verify_cb, remote_jid=remote_jid),
+                        self._sock)
                 # this will not block the GUI
                 self._sock.setblocking(False)
                 self._server = ai[4]
@@ -477,9 +492,10 @@ class Socks5:
     def do_connect(self):
         try:
             self._sock.connect(self._server)
-            self._sock.setblocking(False)
             self._send=self._sock.send
             self._recv=self._sock.recv
+        except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError), e:
+            pass
         except Exception, ee:
             errnum = ee[0]
             self.connect_timeout += 1
@@ -815,7 +831,7 @@ class Socks5:
         0096)
         """
         buff = struct.pack('!BBBBB%dsBB' % len(msg),
-                0x05, command, 0x00, 0x03, len(msg), msg, 0, 0)
+            0x05, command, 0x00, 0x03, len(msg), msg, 0, 0)
         return buff
 
     def _parse_request_buff(self, buff):
@@ -848,7 +864,7 @@ class Socks5:
         try:
             buff = self._recv()
         except (SSL.WantReadError, SSL.WantWriteError,
-                SSL.WantX509LookupError), e:
+        SSL.WantX509LookupError), e:
             log.info("SSL rehandshake request : " + repr(e))
             raise e
         try:
@@ -882,7 +898,6 @@ class Socks5Sender(IdleObject):
     """
     Class for sending file to socket over socks5
     """
-
     def __init__(self, idlequeue, sock_hash, parent, _sock, host=None,
     port=None, fingerprint = None, connected=True, file_props={}):
         self.fingerprint = fingerprint
@@ -963,7 +978,6 @@ class Socks5Sender(IdleObject):
 
 
 class Socks5Receiver(IdleObject):
-
     def __init__(self, idlequeue, streamhost, sid, file_props = None,
     fingerprint=None):
         """
@@ -1221,6 +1235,14 @@ class Socks5Client(Socks5):
             self.state += 1
             return None
 
+    def send_file(self):
+        if self.ssl_errnum > 0:
+            log.error('remote certificate does not match the announced one.' + \
+                '\nSSL Error: %d\nCancelling file transfer' % self.ssl_errnum)
+            self.file_props.error = -12
+            return -1
+        return super(Socks5Client, self).send_file()
+
     def pollin(self):
         self.idlequeue.remove_timeout(self.fd)
         if self.connected:
@@ -1302,9 +1324,8 @@ class Socks5SenderServer(Socks5Server, Socks5Sender):
 
 
 class Socks5ReceiverClient(Socks5Client, Socks5Receiver):
-
     def __init__(self, idlequeue, streamhost, sid, file_props = None,
-            fingerprint=None):
+    fingerprint=None):
         Socks5Client.__init__(self, idlequeue, streamhost['host'],
             int(streamhost['port']), streamhost['initiator'],
             streamhost['target'], sid)
@@ -1425,5 +1446,4 @@ class Socks5Listener(IdleObject):
         _sock[0].setblocking(False)
         self.connections.append(_sock[0])
         return _sock
-
 

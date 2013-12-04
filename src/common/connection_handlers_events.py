@@ -2052,8 +2052,11 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.fjid = self.conn._ft_get_from(self.stanza)
         self.jid = gajim.get_jid_without_resource(self.fjid)
         if self.jingle_content:
-            self.FT_content.use_security = bool(self.jingle_content.getTag(
-                'security'))
+            secu = self.jingle_content.getTag('security')
+            self.FT_content.use_security = bool(secu)
+            fingerprint = secu.getTag('fingerprint')
+            if fingerprint:
+                self.FT_content.x509_fingerprint = fingerprint.getData()
             if not self.FT_content.transport:
                 self.FT_content.transport = JingleTransportSocks5()
                 self.FT_content.transport.set_our_jid(
