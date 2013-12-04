@@ -153,11 +153,17 @@ class ConnectionBytestream:
             if not content:
                 return
             if not session.accepted:
-                if session.get_content('file', content.name).use_security:
-                    id_ = jingle_xtls.send_cert_request(self,
-                        file_props.sender)
-                    jingle_xtls.key_exchange_pend(id_, content)
-                    return
+                content = session.get_content('file', content.name)
+                if content.use_security:
+                    fingerprint = content.x509_fingerprint
+                    if not jingle_xtls.check_cert(
+                    gajim.get_jid_without_resource(file_props.sender),
+                    fingerprint):
+                        id_ = jingle_xtls.send_cert_request(self,
+                            file_props.sender)
+                        jingle_xtls.key_exchange_pend(id_,
+                            content.on_cert_received, [])
+                        return
                 session.approve_session()
 
             session.approve_content('file', content.name)

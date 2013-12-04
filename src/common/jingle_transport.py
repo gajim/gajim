@@ -156,7 +156,8 @@ class JingleTransportSocks5(JingleTransport):
             candidates.append(cand)
 
             # we need this when we construct file_props on session-initiation
-        self.remote_candidates = candidates
+        if candidates:
+            self.remote_candidates = candidates
         return candidates
 
 

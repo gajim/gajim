@@ -17,9 +17,12 @@
 Handles Jingle contents (XEP 0166)
 """
 
+import os
 from common import gajim
 import nbxmpp
 from common.jingle_transport import JingleTransportIBB
+from jingle_xtls import SELF_SIGNED_CERTIFICATE
+from jingle_xtls import load_cert_file
 
 contents = {}
 
@@ -213,12 +216,18 @@ class JingleContent(object):
         if self.use_security:
             security = nbxmpp.simplexml.Node(
                 tag=nbxmpp.NS_JINGLE_XTLS + ' security')
-            # TODO: add fingerprint element
-            for m in ('x509', ): # supported authentication methods
-                method = nbxmpp.simplexml.Node(tag='method')
-                method.setAttr('name', m)
-                security.addChild(node=method)
-            content.addChild(node=security)
+            certpath = os.path.join(gajim.MY_CERT_DIR, SELF_SIGNED_CERTIFICATE)\
+                + '.cert'
+            cert = load_cert_file(certpath)
+            if cert:
+                digest_algo = cert.get_signature_algorithm().split('With')[0]
+                security.addChild('fingerprint').addData(cert.digest(
+                    digest_algo))
+                for m in ('x509', ): # supported authentication methods
+                    method = nbxmpp.simplexml.Node(tag='method')
+                    method.setAttr('name', m)
+                    security.addChild(node=method)
+                content.addChild(node=security)
         content.addChild(node=description_node)
 
     def destroy(self):
