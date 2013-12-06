@@ -326,6 +326,10 @@ class GajimPluginConfigDialog(Gtk.Dialog):
 
         self.init()
 
+    def on_close_dialog(self, widget, data):
+        self.hide()
+        return True
+
     def on_close_button_clicked(self, widget):
         self.hide()
 
@@ -334,6 +338,7 @@ class GajimPluginConfigDialog(Gtk.Dialog):
         self.set_transient_for(parent)
         self.on_run()
         self.show_all()
+        self.connect('delete-event', self.on_close_dialog)
         result =  super(GajimPluginConfigDialog, self)
         return result
 
