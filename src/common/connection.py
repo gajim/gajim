@@ -1383,8 +1383,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             errnum = con.Connection.ssl_errnum
         except AttributeError:
             errnum = [] # we don't have an errnum
-        i = 0
-        for er in errnum:
+        for i, er in enumerate(errnum):
             if er > 0 and str(er) not in gajim.config.get_per('accounts',
             self.name, 'ignore_ssl_errors').split():
                 text = _('The authenticity of the %s certificate could be '
