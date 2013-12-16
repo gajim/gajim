@@ -22,6 +22,9 @@ rename exe.win32-2.7 bin
 copy ..\LIBEAY32.dll bin
 copy ..\SSLEAY32.dll bin
 
+REM for snarl plugin
+xcopy ..\win32com bin\win32com /e /i
+
 mkdir bin\gtk
 cd ../src/gtk
 hg archive ..\..\gajim_built\bin\gtk
