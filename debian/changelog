@@ -1,3 +1,9 @@
+gajim (0.16~beta2-1) unstable; urgency=low
+
+  * New upstream release
+
+ -- Yann Leboulanger <yann@leboulanger.org>  Mon, 16 Dec 2013 11:14:07 +0200
+
 gajim (0.16~beta1-1) unstable; urgency=low
 
   * New upstream release
