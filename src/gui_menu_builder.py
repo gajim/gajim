@@ -182,7 +182,7 @@ show_bookmarked=False):
             gajim.gc_connected[account][r_jid]:
                 rooms2.append((r_jid, account))
                 r_jids.append(r_jid)
-    
+
     if not rooms2:
         return
     item = Gtk.SeparatorMenuItem.new() # separator
@@ -445,7 +445,7 @@ control=None, gc_contact=None, is_anonymous=True):
             bookmarked = False
             c_ = gajim.contacts.get_contact(account, gc_contact.jid,
                 gc_contact.resource)
-            if c_ and c_.supports(nbxmpp.NS_CONFERENCE):
+            if c_ and c_.supports(NS_CONFERENCE):
                 bookmarked=True
             build_invite_submenu(invite_menuitem, [(gc_contact, account)],
                 show_bookmarked=bookmarked)
