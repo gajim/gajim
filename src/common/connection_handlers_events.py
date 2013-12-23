@@ -40,6 +40,9 @@ from nbxmpp.protocol import NS_CHATSTATES
 from common.jingle_transport import JingleTransportSocks5
 from common.file_props import FilesProp
 
+if gajim.HAVE_PYOPENSSL:
+    import OpenSSL.crypto
+
 import logging
 log = logging.getLogger('gajim.c.connection_handlers_events')
 
@@ -1632,12 +1635,12 @@ class NewAccountConnectedEvent(nec.NetworkIncomingEvent):
             self.ssl_msg = ssl_error.get(er, _('Unknown SSL error: %d') % \
                 self.errnum)
         self.ssl_cert = ''
-        if len(self.conn.connection.Connection.ssl_cert_pem):
-            self.ssl_cert = self.conn.connection.Connection.ssl_cert_pem
         self.ssl_fingerprint = ''
         if self.conn.connection.Connection.ssl_certificate:
-            self.ssl_fingerprint = \
-                self.conn.connection.Connection.ssl_certificate.digest('sha1')
+            cert = self.conn.connection.Connection.ssl_certificate
+            self.ssl_cert = OpenSSL.crypto.dump_certificate(
+                OpenSSL.crypto.FILETYPE_PEM, cert)
+            self.ssl_fingerprint = cert.digest('sha1')
         return True
 
 class NewAccountNotConnectedEvent(nec.NetworkIncomingEvent):
