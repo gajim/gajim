@@ -382,6 +382,11 @@ control=None, gc_contact=None, is_anonymous=True):
     if not control:
         items_to_hide.append(convert_to_gc_menuitem)
 
+    # Hide items when it's a pm
+    if gc_contact:
+        items_to_hide += [rename_menuitem, edit_groups_menuitem,
+        subscription_menuitem, remove_from_roster_menuitem]
+
     for item in items_to_hide:
         item.set_no_show_all(True)
         item.hide()
