@@ -68,6 +68,15 @@ except ImportError:
     print('Gajim needs python-nbxmpp to run. Quiting...')
     sys.exit()
 
+try:
+    from distutils.version import LooseVersion as V
+    if V(nbxmpp.__version__) < V("0.3"):
+        print 'Gajim needs python-nbxmpp > 0.3 to run. Quiting...'
+        sys.exit()
+except:
+    print 'Gajim needs python-nbxmpp > 0.3 to run. Quiting...'
+    sys.exit()
+
 #from common import demandimport
 #demandimport.enable()
 #demandimport.ignore += ['GObject._gobject', 'libasyncns', 'i18n',
