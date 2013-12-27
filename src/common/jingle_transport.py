@@ -178,30 +178,39 @@ class JingleTransportSocks5(JingleTransport):
             return
         if not self.connection:
             return
-        local_ip_cand = []
         port = int(gajim.config.get('file_transfers_port'))
         #type preference of connection type. XEP-0260 section 2.2
         type_preference = 126
-        c = {'host': self.connection.peerhost[0]}
-        c['candidate_id'] = self.connection.connection.getAnID()
-        c['port'] = port
-        c['type'] = 'direct'
-        c['jid'] = self.ourjid
-        c['priority'] = (2**16) * type_preference
+        priority = (2**16) * type_preference
 
+        hosts = set()
+        local_ip_cand = []
+
+        c = {'host': self.connection.peerhost[0],
+             'candidate_id': self.connection.connection.getAnID(),
+             'port': port,
+             'type': 'direct',
+             'jid': self.ourjid,
+             'priority': priority}
+        hosts.add(self.connection.peerhost[0])
         local_ip_cand.append(c)
 
-        for addr in socket.getaddrinfo(socket.gethostname(), None):
-            if not addr[4][0] in local_ip_cand and not addr[4][0].startswith('127'):
-                c = {'host': addr[4][0]}
-                c['candidate_id'] = self.connection.connection.getAnID()
-                c['port'] = port
-                c['type'] = 'direct'
-                c['jid'] = self.ourjid
-                c['priority'] = (2**16) * type_preference
-                c['initiator'] = self.file_props.sender
-                c['target'] = self.file_props.receiver
-                local_ip_cand.append(c)
+        try:
+            for addrinfo in socket.getaddrinfo(socket.gethostname(), None):
+                addr = addrinfo[4][0]
+                if not addr in hosts and not addr.startswith('127'):
+                    c = {'host': addr,
+                         'candidate_id': self.connection.connection.getAnID(),
+                         'port': port,
+                         'type': 'direct',
+                         'jid': self.ourjid,
+                         'priority': priority,
+                         'initiator': self.file_props.sender,
+                         'target': self.file_props.receiver}
+                    hosts.add(addr)
+                    local_ip_cand.append(c)
+        except socket.gaierror:
+            pass # ignore address-related errors for getaddrinfo
 
         self._add_candidates(local_ip_cand)
 
@@ -209,6 +218,7 @@ class JingleTransportSocks5(JingleTransport):
         if not self.connection:
             return
         type_preference = 126
+        priority = (2**16) * type_preference
         additional_ip_cand = []
         port = int(gajim.config.get('file_transfers_port'))
         ft_add_hosts = gajim.config.get('ft_add_hosts_to_send')
@@ -216,14 +226,14 @@ class JingleTransportSocks5(JingleTransport):
         if ft_add_hosts:
             hosts = [e.strip() for e in ft_add_hosts.split(',')]
             for h in hosts:
-                c = {'host': h}
-                c['candidate_id'] = self.connection.connection.getAnID()
-                c['port'] = port
-                c['type'] = 'direct'
-                c['jid'] = self.ourjid
-                c['priority'] = (2**16) * type_preference
-                c['initiator'] = self.file_props.sender
-                c['target'] = self.file_props.receiver
+                c = {'host': h,
+                     'candidate_id': self.connection.connection.getAnID(),
+                     'port': port,
+                     'type': 'direct',
+                     'jid': self.ourjid,
+                     'priority': priority,
+                     'initiator': self.file_props.sender,
+                     'target': self.file_props.receiver}
                 additional_ip_cand.append(c)
 
         self._add_candidates(additional_ip_cand)
@@ -232,6 +242,7 @@ class JingleTransportSocks5(JingleTransport):
         if not self.connection:
             return
         type_preference = 10
+        priority = (2**16) * type_preference
         proxy_cand = []
         socks5conn = self.connection
         proxyhosts = socks5conn._get_file_transfer_proxies_from_config(self.file_props)
@@ -240,14 +251,14 @@ class JingleTransportSocks5(JingleTransport):
             self.file_props.proxyhosts = proxyhosts
 
             for proxyhost in proxyhosts:
-                c = {'host': proxyhost['host']}
-                c['candidate_id'] = self.connection.connection.getAnID()
-                c['port'] = int(proxyhost['port'])
-                c['type'] = 'proxy'
-                c['jid'] = proxyhost['jid']
-                c['priority'] = (2**16) * type_preference
-                c['initiator'] = self.file_props.sender
-                c['target'] = self.file_props.receiver
+                c = {'host': proxyhost['host'],
+                     'candidate_id': self.connection.connection.getAnID(),
+                     'port': int(proxyhost['port']),
+                     'type': 'proxy',
+                     'jid': proxyhost['jid'],
+                     'priority': priority,
+                     'initiator': self.file_props.sender,
+                     'target': self.file_props.receiver}
                 proxy_cand.append(c)
 
         self._add_candidates(proxy_cand)
