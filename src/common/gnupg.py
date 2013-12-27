@@ -175,7 +175,7 @@ class Verify(object):
                      "PLAINTEXT_LENGTH", "POLICY_URL", "DECRYPTION_INFO",
                      "DECRYPTION_OKAY", "INV_SGNR", "FILE_START", "FILE_ERROR",
                      "FILE_DONE", "PKA_TRUST_GOOD", "PKA_TRUST_BAD", "BADMDC",
-                     "GOODMDC", "NO_SGNR"):
+                     "GOODMDC", "NO_SGNR", "NOTATION_NAME", "NOTATION_DATA"):
             pass
         elif key == "BADSIG":
             self.valid = False
