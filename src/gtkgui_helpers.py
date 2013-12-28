@@ -35,6 +35,7 @@ from gi.repository import GObject
 from gi.repository import Pango
 import os
 import sys
+import importlib
 
 import logging
 log = logging.getLogger('gajim.gtkgui_helpers')
