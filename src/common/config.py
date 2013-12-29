@@ -217,7 +217,7 @@ class Config:
             'tabs_always_visible': [opt_bool, False, _('Show tab when only one conversation?')],
             'tabs_border': [opt_bool, False, _('Show tabbed notebook border in chat windows?')],
             'tabs_close_button': [opt_bool, True, _('Show close button in tab?')],
-            'esession_modp': [opt_str, '5,14', _('A list of modp groups to use in a Diffie-Hellman, highest preference first, separated by commas. Valid groups are 1, 2, 5, 14, 15, 16, 17 and 18. Higher numbers are more secure, but take longer to calculate when you start a session.')],
+            'esession_modp': [opt_str, '15,16,14', _('A list of modp groups to use in a Diffie-Hellman, highest preference first, separated by commas. Valid groups are 1, 2, 5, 14, 15, 16, 17 and 18. Higher numbers are more secure, but take longer to calculate when you start a session.')],
             'chat_avatar_width': [opt_int, 52],
             'chat_avatar_height': [opt_int, 52],
             'roster_avatar_width': [opt_int, 32],
