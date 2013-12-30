@@ -494,7 +494,7 @@ class Socks5(object):
             self._sock.connect(self._server)
             self._send=self._sock.send
             self._recv=self._sock.recv
-        except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError), e:
+        except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError) as e:
             pass
         except Exception as ee:
             errnum = ee.errno

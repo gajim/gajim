@@ -286,7 +286,7 @@ def make_certs(filepath, CN):
     req = createCertRequest(key, CN=CN)
     cert = createCertificate(req, req, key, 0, 0, 60*60*24*365*5) # five years
     with open(filepath + '.pkey', 'wb') as f:
-        os.chmod(filepath + '.pkey', 0600)
+        os.chmod(filepath + '.pkey', 0o600)
         f.write(crypto.dump_privatekey(crypto.FILETYPE_PEM, key))
     with open(filepath + '.cert', 'wb') as f:
         f.write(crypto.dump_certificate(crypto.FILETYPE_PEM, cert).decode(

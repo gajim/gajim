@@ -1216,7 +1216,7 @@ class GcInvitationReceivedEvent(nec.NetworkIncomingEvent):
             self.is_continued = False
             if invite_tag.getAttr('continue') == 'true':
                 self.is_continued = True
-        else
+        else:
             self.room_jid = self.msg_obj.fjid
             item = self.msg_obj.invite_tag.getTag('invite')
             try:

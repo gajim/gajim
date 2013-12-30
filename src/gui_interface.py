@@ -1971,7 +1971,7 @@ class Interface:
                 import imp
                 imp.reload(emoticons)
             emots = emoticons.emoticons
-         except Exception, e:
+        except Exception as e:
             return True
         for emot_filename in emots:
             emot_file = os.path.join(path, emot_filename)

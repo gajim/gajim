@@ -22,7 +22,7 @@ Handles  Jingle File Transfer (XEP 0234)
 import hashlib
 from common import gajim
 import nbxmpp
-import jingle_xtls
+from . import jingle_xtls
 from common.jingle_content import contents, JingleContent
 from common.jingle_transport import *
 from common import helpers
