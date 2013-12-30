@@ -1639,8 +1639,8 @@ class NewAccountConnectedEvent(nec.NetworkIncomingEvent):
         if self.conn.connection.Connection.ssl_certificate:
             cert = self.conn.connection.Connection.ssl_certificate
             self.ssl_cert = OpenSSL.crypto.dump_certificate(
-                OpenSSL.crypto.FILETYPE_PEM, cert)
-            self.ssl_fingerprint = cert.digest('sha1')
+                OpenSSL.crypto.FILETYPE_PEM, cert).decode('utf-8')
+            self.ssl_fingerprint = cert.digest('sha1').decode('utf-8')
         return True
 
 class NewAccountNotConnectedEvent(nec.NetworkIncomingEvent):

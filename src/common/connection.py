@@ -1395,15 +1395,15 @@ class Connection(CommonConnection, ConnectionHandlers):
                 text += _('\nSSL Error: <b>%s</b>') % ssl_error[errnum]
             else:
                 text += _('\nUnknown SSL error: %d') % errnum
-            fingerprint = cert.digest('sha1')
+            fingerprint = cert.digest('sha1').decode('utf-8')
             pem = OpenSSL.crypto.dump_certificate(OpenSSL.crypto.FILETYPE_PEM,
-                cert)
+                cert).decode('utf-8')
             gajim.nec.push_incoming_event(SSLErrorEvent(None, conn=self,
                 error_text=text, error_num=errnum, cert=pem,
                 fingerprint=fingerprint, certificate=cert))
             return True
         if cert:
-            fingerprint = cert.digest('sha1')
+            fingerprint = cert.digest('sha1').decode('utf-8')
             saved_fingerprint = gajim.config.get_per('accounts', self.name,
                 'ssl_fingerprint_sha1')
             if saved_fingerprint:
@@ -1420,7 +1420,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             '100' not in gajim.config.get_per('accounts', self.name,
             'ignore_ssl_errors').split():
                 pem = OpenSSL.crypto.dump_certificate(
-                    OpenSSL.crypto.FILETYPE_PEM, cert)
+                    OpenSSL.crypto.FILETYPE_PEM, cert).decode('utf-8')
                 txt = _('The authenticity of the %s certificate could be '
                     'invalid.\nThe certificate does not cover this domain.') %\
                     hostname
