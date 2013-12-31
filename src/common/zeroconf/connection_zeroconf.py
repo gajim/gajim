@@ -297,6 +297,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
                 show=show))
         else:
             # show notification that avahi or system bus is down
+            self.connected = 0
             gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
                 show='offline'))
             self.status = 'offline'
