@@ -277,9 +277,10 @@ class Zeroconf:
 
         state = self.server.GetState()
         if state == self.avahi.SERVER_RUNNING:
-            self.create_service()
-            self.announced = True
-            return True
+            if self.create_service():
+            	self.announced = True
+            	return True
+            return False
 
     def remove_announce(self):
         if self.announced == False:
