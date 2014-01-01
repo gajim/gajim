@@ -438,7 +438,7 @@ class VcardWindow:
                         self.contact.jid)
             else:
                 gajim.connections[self.account].request_last_status_time(
-                        self.contact.jid, self.contact.resource)
+                        self.contact.jid, '')
 
         # do not wait for os_info if contact is not connected or has error
         # additional check for observer is needed, as show is offline for him
