@@ -164,6 +164,7 @@ class CommonConnection:
         self.roster_supported = True
         self.blocking_supported = False
         self.addressing_supported = False
+        self.carbons_enabled = False
 
         self.muc_jid = {} # jid of muc server for each transport type
         self._stun_servers = [] # STUN servers of our jabber server
@@ -420,6 +421,8 @@ class CommonConnection:
 
         if msgenc:
             msg_iq.setTag(nbxmpp.NS_ENCRYPTED + ' x').setData(msgenc)
+            if self.carbons_enabled:
+                msg_iq.addChild(name='private', namespace=nbxmpp.NS_CARBONS)
 
         if form_node:
             msg_iq.addChild(node=form_node)
@@ -492,6 +495,9 @@ class CommonConnection:
                 # XEP-0200
                 if session.enable_encryption:
                     msg_iq = session.encrypt_stanza(msg_iq)
+                    if self.carbons_enabled:
+                        msg_iq.addChild(name='private',
+                            namespace=nbxmpp.NS_CARBONS)
 
         if callback:
             callback(jid, msg, keyID, forward_from, session, original_message,
@@ -1937,7 +1943,8 @@ class Connection(CommonConnection, ConnectionHandlers):
                 if nbxmpp.NS_ADDRESS in obj.features:
                     self.addressing_supported = True
                 if nbxmpp.NS_CARBONS in obj.features and gajim.config.get_per(
-                    'accounts', self.name, 'enable_message_carbons'):
+                'accounts', self.name, 'enable_message_carbons'):
+                    self.carbons_enabled = True
                     # Server supports carbons, activate it
                     iq = nbxmpp.Iq('set')
                     iq.setTag('enable', namespace=nbxmpp.NS_CARBONS)
