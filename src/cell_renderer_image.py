@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ## src/cell_renderer_image.py
 ##
-## Copyright (C) 2003-2013 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2003-2014 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2005 Vincent Hanquez <tab AT snarc.org>
 ## Copyright (C) 2005-2007 Nikos Kouremenos <kourem AT gmail.com>
 ## Copyright (C) 2006 Travis Shirk <travis AT pobox.com>

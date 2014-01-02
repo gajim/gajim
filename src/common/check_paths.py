@@ -3,7 +3,7 @@
 ##
 ## Copyright (C) 2005-2006 Travis Shirk <travis AT pobox.com>
 ##                         Nikos Kouremenos <kourem AT gmail.com>
-## Copyright (C) 2005-2013 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2005-2014 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2006 Dimitur Kirov <dkirov AT gmail.com>
 ## Copyright (C) 2007 Tomasz Melcer <liori AT exroot.org>
 ## Copyright (C) 2008 Jean-Marie Traissard <jim AT lapin.org>

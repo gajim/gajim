@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ## src/groups.py
 ##
-## Copyright (C) 2006-2013 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2006-2014 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2006 Tomasz Melcer <liori AT exroot.org>
 ##
 ## This file is part of Gajim.

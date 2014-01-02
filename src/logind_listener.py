@@ -1,6 +1,6 @@
 ## src/logind_listener.py
 ##
-## Copyright (C) 2013 Kamil Paral <kamil.paral AT gmail.com>
+## Copyright (C) 2014 Kamil Paral <kamil.paral AT gmail.com>
 ##
 ## This file is part of Gajim.
 ##

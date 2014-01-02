@@ -4,7 +4,7 @@
 ## Copyright (C) 2005 Andrew Sayman <lorien420 AT myrealbox.com>
 ##                    Dimitur Kirov <dkirov AT gmail.com>
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem AT gmail.com>
-## Copyright (C) 2005-2013 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2005-2014 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2006 Jean-Marie Traissard <jim AT lapin.org>
 ##                    Stefan Bethge <stefan AT lanpartei.de>
 ## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>

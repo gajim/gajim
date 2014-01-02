@@ -2,7 +2,7 @@
 ## src/common/fuzzyclock.py
 ##
 ## Copyright (C) 2006 Christoph Neuroth <delmonico AT gmx.net>
-## Copyright (C) 2006-2013 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2006-2014 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2007 Jean-Marie Traissard <jim AT lapin.org>
 ## Copyright (C) 2009 Benjamin Richter <br AT waldteufel-online.net>
 ##

@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ## src/common/commands.py
 ##
-## Copyright (C) 2006-2013 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2006-2014 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2006-2007 Tomasz Melcer <liori AT exroot.org>
 ## Copyright (C) 2007 Jean-Marie Traissard <jim AT lapin.org>
 ## Copyright (C) 2008 Brendan Taylor <whateley AT gmail.com>

@@ -2,7 +2,7 @@
 ## src/dialogs.py
 ##
 ## Copyright (C) 2003-2005 Vincent Hanquez <tab AT snarc.org>
-## Copyright (C) 2003-2013 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2003-2014 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2005 Alex Mauer <hawke AT hawkesnest.net>
 ## Copyright (C) 2005-2006 Dimitur Kirov <dkirov AT gmail.com>
 ##                         Travis Shirk <travis AT pobox.com>
@@ -1287,7 +1287,7 @@ class AboutDialog:
         dlg.set_transient_for(gajim.interface.roster.window)
         dlg.set_name('Gajim')
         dlg.set_version(gajim.version)
-        s = 'Copyright © 2003-2013 Gajim Team'
+        s = 'Copyright © 2003-2014 Gajim Team'
         dlg.set_copyright(s)
         copying_file_path = self.get_path('COPYING')
         if copying_file_path:
