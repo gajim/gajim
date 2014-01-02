@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ## src/dataforms_widget.py
 ##
-## Copyright (C) 2003-2013 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2003-2014 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2006 Tomasz Melcer <liori AT exroot.org>
 ## Copyright (C) 2006-2007 Jean-Marie Traissard <jim AT lapin.org>
 ##

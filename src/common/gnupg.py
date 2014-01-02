@@ -27,7 +27,7 @@ Vinay Sajip to make use of the subprocess module (Steve's version uses os.fork()
 and so does not work on Windows). Renamed to gnupg.py to avoid confusion with
 the previous versions.
 
-Modifications Copyright (C) 2008-2013 Vinay Sajip. All rights reserved.
+Modifications Copyright (C) 2008-2014 Vinay Sajip. All rights reserved.
 
 A unittest harness (test_gnupg.py) has also been added.
 """
@@ -35,7 +35,7 @@ import locale
 
 __version__ = "0.3.4"
 __author__ = "Vinay Sajip"
-__date__  = "$05-Jun-2013 09:48:54$"
+__date__  = "$05-Jun-2014 09:48:54$"
 
 try:
     from io import StringIO

@@ -3,7 +3,7 @@
 ##
 ## Copyright (C) 2006 Jean-Marie Traissard <jim AT lapin.org>
 ##                    Nikos Kouremenos <kourem AT gmail.com>
-## Copyright (C) 2006-2013 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2006-2014 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2007 Julien Pivotto <roidelapluie AT gmail.com>
 ## Copyright (C) 2007-2008 Stephan Erb <steve-e AT h3c.de>
 ## Copyright (C) 2008 Brendan Taylor <whateley AT gmail.com>

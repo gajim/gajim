@@ -2,7 +2,7 @@
 ## src/common/exceptions.py
 ##
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem AT gmail.com>
-## Copyright (C) 2005-2013 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2005-2014 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2006 Jean-Marie Traissard <jim AT lapin.org>
 ## Copyright (C) 2007 Brendan Taylor <whateley AT gmail.com>
 ##

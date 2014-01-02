@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ## src/common/i18n.py
 ##
-## Copyright (C) 2003-2013 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2003-2014 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2004 Vincent Hanquez <tab AT snarc.org>
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem AT gmail.com>
 ## Copyright (C) 2009 Benjamin Richter <br AT waldteufel-online.net>

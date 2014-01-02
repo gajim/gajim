@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ## src/common/sleepy.py
 ##
-## Copyright (C) 2003-2013 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2003-2014 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem AT gmail.com>
 ## Copyright (C) 2007 Jean-Marie Traissard <jim AT lapin.org>
 ## Copyright (C) 2008 Mateusz Biliński <mateusz AT bilinski.it>

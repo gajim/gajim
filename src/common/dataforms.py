@@ -3,7 +3,7 @@
 ## src/common/dataforms.py
 ##
 ## Copyright (C) 2006-2007 Tomasz Melcer <liori AT exroot.org>
-## Copyright (C) 2006-2013 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2006-2014 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2007 Stephan Erb <steve-e AT h3c.de>
 ##
 ## This file is part of Gajim.

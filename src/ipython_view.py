@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 ## src/ipython_view.py
 ##
-## Copyright (C) 2008-2013 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2008-2014 Yann Leboulanger <asterix AT lagaule.org>
 ##
 ## This file is part of Gajim.
 ##

@@ -4,7 +4,7 @@
 ## Copyright (C) 2005 Gustavo J. A. M. Carneiro
 ## Copyright (C) 2006 Santiago Gala
 ## Copyright (C) 2006-2007 Jean-Marie Traissard <jim AT lapin.org>
-## Copyright (C) 2006-2013 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2006-2014 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2007 Nikos Kouremenos <kourem AT gmail.com>
 ## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
 ##                    Julien Pivotto <roidelapluie AT gmail.com>

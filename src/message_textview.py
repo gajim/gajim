@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ## src/message_textview.py
 ##
-## Copyright (C) 2003-2013 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2003-2014 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2005-2007 Nikos Kouremenos <kourem AT gmail.com>
 ## Copyright (C) 2006 Dimitur Kirov <dkirov AT gmail.com>
 ## Copyright (C) 2008-2009 Julien Pivotto <roidelapluie AT gmail.com>

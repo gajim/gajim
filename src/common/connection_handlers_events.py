@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ## src/common/connection_handlers_events.py
 ##
-## Copyright (C) 2010-2013 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2010-2014 Yann Leboulanger <asterix AT lagaule.org>
 ##
 ## This file is part of Gajim.
 ##
