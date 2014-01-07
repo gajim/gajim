@@ -747,49 +747,49 @@ def play_sound(event):
     path_to_soundfile = gajim.config.get_per('soundevents', event, 'path')
     play_sound_file(path_to_soundfile)
 
-def check_soundfile_path(file, dirs=(gajim.gajimpaths.data_root,
+def check_soundfile_path(file_, dirs=(gajim.gajimpaths.data_root,
 gajim.DATA_DIR)):
     """
     Check if the sound file exists
 
-    :param file: the file to check, absolute or relative to 'dirs' path
+    :param file_: the file to check, absolute or relative to 'dirs' path
     :param dirs: list of knows paths to fallback if the file doesn't exists
                                      (eg: ~/.gajim/sounds/, DATADIR/sounds...).
     :return      the path to file or None if it doesn't exists.
     """
-    if not file:
+    if not file_:
         return None
-    elif os.path.exists(file):
-        return file
+    elif os.path.exists(file_):
+        return file_
 
     for d in dirs:
-        d = os.path.join(d, 'sounds', file)
+        d = os.path.join(d, 'sounds', file_)
         if os.path.exists(d):
             return d
     return None
 
-def strip_soundfile_path(file, dirs=(gajim.gajimpaths.data_root,
+def strip_soundfile_path(file_, dirs=(gajim.gajimpaths.data_root,
 gajim.DATA_DIR), abs=True):
     """
     Remove knowns paths from a sound file
 
     Filechooser returns absolute path. If path is a known fallback path, we remove it.
     So config have no hardcoded path        to DATA_DIR and text in textfield is shorther.
-    param: file: the filename to strip.
+    param: file_: the filename to strip.
     param: dirs: list of knowns paths from which the filename should be stripped.
     param:  abs: force absolute path on dirs
     """
-    if not file:
+    if not file_:
         return None
 
-    name = os.path.basename(file)
+    name = os.path.basename(file_)
     for d in dirs:
         d = os.path.join(d, 'sounds', name)
         if abs:
             d = os.path.abspath(d)
-        if file == d:
+        if file_ == d:
             return name
-    return file
+    return file_
 
 def play_sound_file(path_to_soundfile):
     if path_to_soundfile == 'beep':
