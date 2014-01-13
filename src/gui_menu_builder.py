@@ -64,9 +64,11 @@ def build_resources_submenu(contacts, account, action, room_jid=None,
     return sub_menu
 
 def build_invite_submenu(invite_menuitem, list_, ignore_rooms=[],
-show_bookmarked=False):
+show_bookmarked=False, force_resource=False):
     """
     list_ in a list of (contact, account)
+    force_resource means we want to send invitation even if there is only one
+        resource
     """
     roster = gajim.interface.roster
     # used if we invite only one contact with several resources
@@ -103,7 +105,7 @@ show_bookmarked=False):
     elif len(list_) == 1 and contact.supports(NS_MUC):
         invite_menuitem.set_sensitive(True)
         # use resource if it's self contact
-        if contact.jid == gajim.get_jid_from_account(account):
+        if contact.jid == gajim.get_jid_from_account(account) or force_resource:
             resource = contact.resource
         else:
             resource = None
@@ -454,8 +456,12 @@ control=None, gc_contact=None, is_anonymous=True):
             build_invite_submenu(invite_menuitem, [(gc_contact, account)],
                 show_bookmarked=bookmarked)
     else:
+        force_resource = False
+        if control and control.resource:
+            force_resource = True
         build_invite_submenu(invite_menuitem, [(contact, account)],
-            show_bookmarked=contact.supports(NS_CONFERENCE))
+            show_bookmarked=contact.supports(NS_CONFERENCE),
+            force_resource=force_resource)
 
     if gajim.account_is_disconnected(account):
         invite_menuitem.set_sensitive(False)
