@@ -998,6 +998,10 @@ class OurShowEvent(nec.NetworkIncomingEvent):
     name = 'our-show'
     base_network_events = []
 
+class BeforeChangeShowEvent(nec.NetworkIncomingEvent):
+    name = 'before-change-show'
+    base_network_events = []
+
 class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
     name = 'message-received'
     base_network_events = ['raw-message-received']

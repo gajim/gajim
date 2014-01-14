@@ -709,12 +709,16 @@ class CommonConnection:
             if gajim.HAVE_GPG:
                 self.USE_GPG = True
                 self.gpg = gpg.GnuPG(gajim.config.get('use_gpg_agent'))
+            gajim.nec.push_incoming_event(BeforeChangeShowEvent(None,
+                conn=self, show=show, message=msg))
             self.connect_and_init(show, msg, sign_msg)
             return
 
         if show == 'offline':
             self.connected = 0
             if self.connection:
+                gajim.nec.push_incoming_event(BeforeChangeShowEvent(None,
+                    conn=self, show=show, message=msg))
                 p = nbxmpp.Presence(typ = 'unavailable')
                 p = self.add_sha(p, False)
                 if msg:
@@ -732,12 +736,16 @@ class CommonConnection:
             if self.connected == 1:
                 return
             if show == 'invisible':
+                gajim.nec.push_incoming_event(BeforeChangeShowEvent(None,
+                    conn=self, show=show, message=msg))
                 self._change_to_invisible(msg)
                 return
             if show not in ['offline', 'online', 'chat', 'away', 'xa', 'dnd']:
                 return -1
             was_invisible = self.connected == gajim.SHOW_LIST.index('invisible')
             self.connected = gajim.SHOW_LIST.index(show)
+            gajim.nec.push_incoming_event(BeforeChangeShowEvent(None,
+                conn=self, show=show, message=msg))
             if was_invisible:
                 self._change_from_invisible()
             self._update_status(show, msg)
