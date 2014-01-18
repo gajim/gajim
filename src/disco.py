@@ -832,7 +832,8 @@ _('Without a connection, you can not browse available services'))
             jid = helpers.parse_jid(jid)
         except helpers.InvalidFormat as s:
             pritext = _('Invalid Server Name')
-            dialogs.ErrorDialog(pritext, str(s))
+            dialogs.ErrorDialog(pritext, str(s),
+                transient_for=self.window)
             return
         if jid == self.jid: # jid has not changed
             return
