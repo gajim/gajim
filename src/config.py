@@ -3789,7 +3789,9 @@ class AccountCreationWizardWindow:
                     f.write(self.ssl_cert + '\n\n')
                     f.close()
                     gajim.connections[self.account].new_account_info[
-                        'ssl_fingerprint_sha1'] = self.ssl_fingerprint
+                        'ssl_fingerprint_sha1'] = self.ssl_fingerprint_sha1
+                    gajim.connections[self.account].new_account_info[
+                        'ssl_fingerprint_sha256'] = self.ssl_fingerprint_sha256
             self.notebook.set_current_page(4) # show fom page
         elif cur_page == 4:
             if self.is_form:
@@ -3864,7 +3866,8 @@ class AccountCreationWizardWindow:
             self.forward_button.set_sensitive(False)
             self.notebook.set_current_page(4) # show form page
             return
-        self.ssl_fingerprint = obj.ssl_fingerprint
+        self.ssl_fingerprint_sha1 = obj.ssl_fingerprint_sha1
+        self.ssl_fingerprint_sha256 = obj.ssl_fingerprint_sha256
         self.ssl_cert = obj.ssl_cert
         if obj.ssl_msg:
             # An SSL warning occured, show it
@@ -3878,8 +3881,9 @@ class AccountCreationWizardWindow:
                 'hostname': hostname, 'error': obj.ssl_msg})
             if obj.errnum in (18, 27):
                 text = _('Add this certificate to the list of trusted '
-                    'certificates.\nSHA1 fingerprint of the certificate:\n%s') \
-                    % obj.ssl_fingerprint
+                    'certificates.\nSHA1 fingerprint of the certificate:\n%s'
+                    '\nSHA256 fingerprint of the certificate:\n%s') \
+                    % (obj.ssl_fingerprint_sha1, obj.ssl_fingerprint_sha256)
                 self.xml.get_object('ssl_checkbutton').set_label(text)
             else:
                 self.xml.get_object('ssl_checkbutton').set_no_show_all(True)
