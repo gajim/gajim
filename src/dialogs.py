@@ -5448,14 +5448,18 @@ Issued on: %(io)s
 Expires on: %(eo)s
 
 <b>Fingerprint</b>
-SHA1 Fingerprint: %(sha1)s''') % {
+SHA1 Fingerprint: %(sha1)s
+
+SHA256 Fingerprint: %(sha256)s
+''') % {
             'scn': subject.commonName, 'sorg': subject.organizationName,
             'sou': subject.organizationalUnitName,
             'sn': cert.get_serial_number(), 'icn': issuer.commonName,
             'iorg': issuer.organizationName,
             'iou': issuer.organizationalUnitName,
             'io': cert.get_notBefore(), 'eo': cert.get_notAfter(),
-            'sha1': cert.digest('sha1')})
+            'sha1': cert.digest('sha1'),
+            'sha256': cert.digest('sha256')})
         self.set_transient_for(parent)
         self.set_title(_('Certificate for account %s') % account)
 

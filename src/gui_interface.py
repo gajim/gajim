@@ -1300,7 +1300,7 @@ class Interface:
             obj.exchange_items_list, obj.fjid)
 
     def handle_event_ssl_error(self, obj):
-        # ('SSL_ERROR', account, (text, errnum, cert, sha1_fingerprint))
+        # ('SSL_ERROR', account, (text, errnum, cert, sha1_fingerprint, sha256_fingerprint))
         account = obj.conn.name
         server = gajim.config.get_per('accounts', account, 'hostname')
 
@@ -1323,7 +1323,9 @@ class Interface:
                     f.write(obj.cert + '\n\n')
                     f.close()
             gajim.config.set_per('accounts', account, 'ssl_fingerprint_sha1',
-                obj.fingerprint)
+                obj.fingerprint_sha1)
+            gajim.config.set_per('accounts', account, 'ssl_fingerprint_sha256',
+                obj.fingerprint_sha256)
             if is_checked[1]:
                 ignore_ssl_errors = gajim.config.get_per('accounts', account,
                     'ignore_ssl_errors').split()
@@ -1344,8 +1346,9 @@ class Interface:
             'server?') % {'error': obj.error_text}
         if obj.error_num in (18, 27):
             checktext1 = _('Add this certificate to the list of trusted '
-            'certificates.\nSHA1 fingerprint of the certificate:\n%s') % \
-            obj.fingerprint
+            'certificates.\nSHA1 fingerprint of the certificate:\n%s'
+            '\nSHA256 fingerprint of the certificate:\n%s') % \
+            (obj.fingerprint_sha1, obj.fingerprint_sha256)
         else:
             checktext1 = ''
         checktext2 = _('Ignore this error for this certificate.')
@@ -1359,12 +1362,14 @@ class Interface:
             _('SSL Certificate Verification for %s') % account)
 
     def handle_event_fingerprint_error(self, obj):
-        # ('FINGERPRINT_ERROR', account, (new_fingerprint,))
+        # ('FINGERPRINT_ERROR', account, (new_fingerprint_sha1,new_fingerprint_sha256,))
         account = obj.conn.name
         def on_yes(is_checked):
             del self.instances[account]['online_dialog']['fingerprint_error']
             gajim.config.set_per('accounts', account, 'ssl_fingerprint_sha1',
-                obj.new_fingerprint)
+                obj.new_fingerprint_sha1)
+            gajim.config.set_per('accounts', account, 'ssl_fingerprint_sha256',
+                obj.new_fingerprint_sha256)
             # Reset the ignored ssl errors
             gajim.config.set_per('accounts', account, 'ignore_ssl_errors', '')
             obj.conn.ssl_certificate_accepted()
@@ -1377,11 +1382,16 @@ class Interface:
 
         pritext = _('SSL certificate error')
         sectext = _('It seems the SSL certificate of account %(account)s has '
-            'changed or your connection is being hacked.\nOld fingerprint: '
-            '%(old)s\nNew fingerprint: %(new)s\n\nDo you still want to connect '
+            'changed or your connection is being hacked.\n\nOld SHA-1 fingerprint: '
+            '%(old_sha1)s\nOld SHA-256 fingerprint: %(old_sha256)s\n\n'
+            'New SHA-1 fingerprint: %(new_sha1)s\nNew SHA-256 fingerprint: '
+            '%(new_sha256)s\n\nDo you still want to connect '
             'and update the fingerprint of the certificate?') % \
-            {'account': account, 'old': gajim.config.get_per('accounts',
-            account, 'ssl_fingerprint_sha1'), 'new': obj.new_fingerprint}
+            {'account': account, 
+            'old_sha1': gajim.config.get_per('accounts', account, 'ssl_fingerprint_sha1'),
+            'old_sha256': gajim.config.get_per('accounts', account, 'ssl_fingerprint_sha256'),
+            'new_sha1': obj.new_fingerprint_sha1,
+            'new_sha256': obj.new_fingerprint_sha256}
         if 'fingerprint_error' in self.instances[account]['online_dialog']:
             self.instances[account]['online_dialog']['fingerprint_error'].\
                 destroy()

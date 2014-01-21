@@ -1639,12 +1639,14 @@ class NewAccountConnectedEvent(nec.NetworkIncomingEvent):
             self.ssl_msg = ssl_error.get(er, _('Unknown SSL error: %d') % \
                 self.errnum)
         self.ssl_cert = ''
-        self.ssl_fingerprint = ''
+        self.ssl_fingerprint_sha1 = ''
+        self.ssl_fingerprint_sha256 = ''
         if self.conn.connection.Connection.ssl_certificate:
             cert = self.conn.connection.Connection.ssl_certificate
             self.ssl_cert = OpenSSL.crypto.dump_certificate(
                 OpenSSL.crypto.FILETYPE_PEM, cert).decode('utf-8')
-            self.ssl_fingerprint = cert.digest('sha1').decode('utf-8')
+            self.ssl_fingerprint_sha1 = cert.digest('sha1').decode('utf-8')
+            self.ssl_fingerprint_sha256 = cert.digest('sha256').decode('utf-8')
         return True
 
 class NewAccountNotConnectedEvent(nec.NetworkIncomingEvent):
