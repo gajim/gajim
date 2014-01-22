@@ -13,6 +13,8 @@ sounds_DATA = $(srcdir)/sounds/*.wav
 
 otherdir = $(pkgdatadir)/data/other
 other_DATA = other/servers.xml other/dh4096.pem
+# other/cacert.pem is used only on Windows. On Unix platforms
+# use CA certificates installed in /etc/ssl/certs
 
 man_MANS = gajim.1 gajim-remote.1 gajim-history-manager.1
 
