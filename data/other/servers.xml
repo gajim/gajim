@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   This file lists the open XMPP servers registered with the XSF. 
   The format of this file is defined by the Service Discovery 
@@ -6,4 +6,107 @@
   To add your server to the list, follow the instructions at
   http://xmpp.org/services/register.shtml
     -->
-<query xmlns:reg="urn:xmpp:vcard:registration:1"><item jid="0nl1ne.at"/><item jid="blah.im"/><item jid="boese-ban.de"/><item jid="brauchen.info"/><item jid="chatme.im"/><item jid="chrome.pl"/><item jid="climm.org"/><item jid="coderollers.com"/><item jid="codingteam.net"/><item jid="comm.unicate.me"/><item jid="deshalbfrei.org"/><item jid="draugr.de"/><item jid="einfachjabber.de"/><item jid="forumanalogue.fr"/><item jid="im.apinc.org"/><item jid="im.flosoft.biz"/><item jid="internet-exception.de"/><item jid="jabb3r.net"/><item jid="jabber-br.org"/><item jid="jabber-hosting.de"/><item jid="jabber.at"/><item jid="jabber.ccc.de"/><item jid="jabber.chaotic.de"/><item jid="jabber.co.nz"/><item jid="jabber.cz"/><item jid="jabber.de"/><item jid="jabber.earth.li"/><item jid="jabber.etighichat.com"/><item jid="jabber.fourecks.de"/><item jid="jabber.gate31.net"/><item jid="jabber.hot-chilli.net"/><item jid="jabber.i-pobox.net"/><item jid="jabber.iitsp.com"/><item jid="jabber.loudas.com"/><item jid="jabber.me"/><item jid="jabber.meta.net.nz"/><item jid="jabber.minus273.org"/><item jid="jabber.no-sense.net"/><item jid="jabber.no"/><item jid="jabber.rootbash.com"/><item jid="jabber.rueckgr.at"/><item jid="jabber.scha.de"/><item jid="jabber.schnied.net"/><item jid="jabber.second-home.de"/><item jid="jabber.smash-net.org"/><item jid="jabber.sow.as"/><item jid="jabber.theforest.us"/><item jid="jabber.tmkis.com"/><item jid="jabber.yeahnah.co.nz"/><item jid="jabberd.eu"/><item jid="jabberes.org"/><item jid="jabbim.com"/><item jid="jabbim.cz"/><item jid="jabbim.pl"/><item jid="jabbim.sk"/><item jid="jabin.org"/><item jid="jabme.de"/><item jid="jabster.pl"/><item jid="jaim.at"/><item jid="jappix.com"/><item jid="jisshi.com"/><item jid="labnote.org"/><item jid="lightwitch.org"/><item jid="limun.org"/><item jid="macjabber.de"/><item jid="mayplaces.com"/><item jid="na-di.de"/><item jid="neko.im"/><item jid="netmindz.net"/><item jid="njs.netlab.cz"/><item jid="palita.net"/><item jid="pandion.im"/><item jid="pidgin.su"/><item jid="programmer-art.org"/><item jid="prosody.de"/><item jid="richim.org"/><item jid="rkquery.de"/><item jid="sss.chaoslab.ru"/><item jid="sternenschweif.de"/><item jid="swissjabber.ch"/><item jid="swissjabber.de"/><item jid="swissjabber.eu"/><item jid="swissjabber.li"/><item jid="swissjabber.org"/><item jid="tcweb.org"/><item jid="tekst.me"/><item jid="thiessen.im"/><item jid="thiessen.it"/><item jid="thiessen.org"/><item jid="tigase.im"/><item jid="twattle.net"/><item jid="ubuntu-jabber.de"/><item jid="ubuntu-jabber.net"/><item jid="univers-libre.net"/><item jid="verdammung.org"/><item jid="wtfismyip.com"/><item jid="xabber.de"/><item jid="xmpp-hosting.de"/><item jid="xmpp.jp"/><item jid="xmppnet.de"/><item jid="zauris.ru"/><item jid="zsim.de"/></query>
+<query xmlns:reg="urn:xmpp:vcard:registration:1">
+  <item jid="0nl1ne.at" />
+  <item jid="blah.im" />
+  <item jid="boese-ban.de" />
+  <item jid="brauchen.info" />
+  <item jid="chatme.im" />
+  <item jid="chrome.pl" />
+  <item jid="climm.org" />
+  <item jid="coderollers.com" />
+  <item jid="codingteam.net" />
+  <item jid="comm.unicate.me" />
+  <item jid="deshalbfrei.org" />
+  <item jid="draugr.de" />
+  <item jid="einfachjabber.de" />
+  <item jid="forumanalogue.fr" />
+  <item jid="im.apinc.org" />
+  <item jid="im.flosoft.biz" />
+  <item jid="internet-exception.de" />
+  <item jid="jabb3r.net" />
+  <item jid="jabber-br.org" />
+  <item jid="jabber-hosting.de" />
+  <item jid="jabber.at" />
+  <item jid="jabber.ccc.de" />
+  <item jid="jabber.chaotic.de" />
+  <item jid="jabber.co.nz" />
+  <item jid="jabber.cz" />
+  <item jid="jabber.de" />
+  <item jid="jabber.earth.li" />
+  <item jid="jabber.etighichat.com" />
+  <item jid="jabber.fourecks.de" />
+  <item jid="jabber.gate31.net" />
+  <item jid="jabber.hot-chilli.net" />
+  <item jid="jabber.i-pobox.net" />
+  <item jid="jabber.iitsp.com" />
+  <item jid="jabber.loudas.com" />
+  <item jid="jabber.me" />
+  <item jid="jabber.meta.net.nz" />
+  <item jid="jabber.minus273.org" />
+  <item jid="jabber.no-sense.net" />
+  <item jid="jabber.no" />
+  <item jid="jabber.rootbash.com" />
+  <item jid="jabber.rueckgr.at" />
+  <item jid="jabber.scha.de" />
+  <item jid="jabber.schnied.net" />
+  <item jid="jabber.second-home.de" />
+  <item jid="jabber.smash-net.org" />
+  <item jid="jabber.sow.as" />
+  <item jid="jabber.theforest.us" />
+  <item jid="jabber.tmkis.com" />
+  <item jid="jabber.yeahnah.co.nz" />
+  <item jid="jabberd.eu" />
+  <item jid="jabberes.org" />
+  <item jid="jabbim.com" />
+  <item jid="jabbim.cz" />
+  <item jid="jabbim.pl" />
+  <item jid="jabbim.sk" />
+  <item jid="jabin.org" />
+  <item jid="jabme.de" />
+  <item jid="jabster.pl" />
+  <item jid="jaim.at" />
+  <item jid="jappix.com" />
+  <item jid="jisshi.com" />
+  <item jid="labnote.org" />
+  <item jid="lightwitch.org" />
+  <item jid="limun.org" />
+  <item jid="macjabber.de" />
+  <item jid="mayplaces.com" />
+  <item jid="na-di.de" />
+  <item jid="neko.im" />
+  <item jid="netmindz.net" />
+  <item jid="njs.netlab.cz" />
+  <item jid="palita.net" />
+  <item jid="pandion.im" />
+  <item jid="pidgin.su" />
+  <item jid="programmer-art.org" />
+  <item jid="prosody.de" />
+  <item jid="richim.org" />
+  <item jid="rkquery.de" />
+  <item jid="sss.chaoslab.ru" />
+  <item jid="sternenschweif.de" />
+  <item jid="swissjabber.ch" />
+  <item jid="swissjabber.de" />
+  <item jid="swissjabber.eu" />
+  <item jid="swissjabber.li" />
+  <item jid="swissjabber.org" />
+  <item jid="tcweb.org" />
+  <item jid="tekst.me" />
+  <item jid="thiessen.im" />
+  <item jid="thiessen.it" />
+  <item jid="thiessen.org" />
+  <item jid="tigase.im" />
+  <item jid="twattle.net" />
+  <item jid="ubuntu-jabber.de" />
+  <item jid="ubuntu-jabber.net" />
+  <item jid="univers-libre.net" />
+  <item jid="verdammung.org" />
+  <item jid="wtfismyip.com" />
+  <item jid="xabber.de" />
+  <item jid="xmpp-hosting.de" />
+  <item jid="xmpp.jp" />
+  <item jid="xmppnet.de" />
+  <item jid="zauris.ru" />
+  <item jid="zsim.de" />
+</query>
