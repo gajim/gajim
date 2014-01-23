@@ -1403,56 +1403,37 @@ class Connection(CommonConnection, ConnectionHandlers):
         cert = con.Connection.ssl_certificate
         if errnum > 0 and str(errnum) not in gajim.config.get_per('accounts',
         self.name, 'ignore_ssl_errors').split():
-            text = _('The authenticity of the %s certificate could be invalid') \
+            text = _('The authenticity of the %s certificate could be invlid') \
                 % hostname
             if errnum in ssl_error:
                 text += _('\nSSL Error: <b>%s</b>') % ssl_error[errnum]
             else:
                 text += _('\nUnknown SSL error: %d') % errnum
-            fingerprint_sha1 = cert.digest('sha1')
-            fingerprint_sha256 = cert.digest('sha256')
+            fingerprint = cert.digest('sha1')
             pem = OpenSSL.crypto.dump_certificate(OpenSSL.crypto.FILETYPE_PEM,
                 cert)
             gajim.nec.push_incoming_event(SSLErrorEvent(None, conn=self,
                 error_text=text, error_num=errnum, cert=pem,
-                fingerprint_sha1=fingerprint_sha1,
-                fingerprint_sha256=fingerprint_sha256, certificate=cert))
+                fingerprint=fingerprint, certificate=cert))
             return True
         if cert:
-            fingerprint_sha1 = cert.digest('sha1')
-            fingerprint_sha256 = cert.digest('sha256')
-            saved_fingerprint_sha1 = gajim.config.get_per('accounts', self.name,
+            fingerprint = cert.digest('sha1')
+            saved_fingerprint = gajim.config.get_per('accounts', self.name,
                 'ssl_fingerprint_sha1')
-            if saved_fingerprint_sha1:
+            if saved_fingerprint:
                 # Check sha1 fingerprint
-                if fingerprint_sha1 != saved_fingerprint_sha1:
+                if fingerprint != saved_fingerprint:
                     gajim.nec.push_incoming_event(FingerprintErrorEvent(None,
                         conn=self, certificate=con.Connection.ssl_certificate,
-                        new_fingerprint_sha1=fingerprint_sha1,
-                        new_fingerprint_sha256=fingerprint_sha256))
+                        new_fingerprint=fingerprint))
                     return True
             else:
                 gajim.config.set_per('accounts', self.name,
-                    'ssl_fingerprint_sha1', fingerprint_sha1)
-
-            saved_fingerprint_sha256 = gajim.config.get_per('accounts', self.name,
-                'ssl_fingerprint_sha256')
-            if saved_fingerprint_sha256:
-                # Check sha256 fingerprint
-                if fingerprint_sha256 != saved_fingerprint_sha256:
-                    gajim.nec.push_incoming_event(FingerprintErrorEvent(None,
-                        conn=self, certificate=con.Connection.ssl_certificate,
-                        new_fingerprint_sha1=fingerprint_sha1,
-                        new_fingerprint_sha256=fingerprint_sha256))
-                    return True
-            else:
-                gajim.config.set_per('accounts', self.name,
-                    'ssl_fingerprint_sha256', fingerprint_sha256)
-
+                    'ssl_fingerprint_sha1', fingerprint)
             if not check_X509.check_certificate(con.Connection.ssl_certificate,
             hostname) and '100' not in gajim.config.get_per('accounts',
             self.name, 'ignore_ssl_errors').split():
-                fingerprint_sha1 = cert.digest('sha1')
+                fingerprint = cert.digest('sha1')
                 pem = OpenSSL.crypto.dump_certificate(
                     OpenSSL.crypto.FILETYPE_PEM, cert)
                 txt = _('The authenticity of the %s certificate could be '
@@ -1460,8 +1441,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                     hostname
                 gajim.nec.push_incoming_event(SSLErrorEvent(None, conn=self,
                     error_text=txt, error_num=100, cert=pem,
-                    fingerprint_sha1=fingerprint_sha1,
-                    fingerprint_sha256=fingerprint_sha256, certificate=cert))
+                    fingerprint=fingerprint, certificate=cert))
                 return True
 
         self._register_handlers(con, con_type)

@@ -354,7 +354,6 @@ class Config:
                     'warn_when_insecure_ssl_connection': [ opt_bool, True, _('Show a warning dialog before using standard SSL library.') ],
                     'warn_when_insecure_password': [ opt_bool, True, _('Show a warning dialog before sending PLAIN password over a plain connection.') ],
                     'ssl_fingerprint_sha1': [ opt_str, '', '', True ],
-                    'ssl_fingerprint_sha256': [ opt_str, '', '', True ],
                     'ignore_ssl_errors': [ opt_str, '', _('Space separated list of ssl errors to ignore.') ],
                     'use_srv': [ opt_bool, True, '', True ],
                     'use_custom_host': [ opt_bool, False, '', True ],
