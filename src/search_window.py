@@ -48,6 +48,8 @@ class SearchWindow:
         'add_contact_button', 'information_button'):
             self.__dict__[name] = self.xml.get_object(name)
 
+        self.search_button.set_sensitive(False)
+
         # displaying the window
         self.xml.connect_signals(self)
         self.window.show_all()
@@ -152,6 +154,7 @@ class SearchWindow:
 
         self.data_form_widget.show_all()
         self.search_vbox.pack_start(self.data_form_widget)
+        self.search_button.set_sensitive(True)
 
     def on_result_treeview_cursor_changed(self, treeview):
         if self.jid_column == -1:
