@@ -33,7 +33,7 @@ options = {
    'build_exe': {
        'includes': ['gtk.keysyms', 'dumbdbm', 'dbhash', 'bsddb', 'new',
             'goocanvas', 'Crypto.PublicKey.DSA', 'Crypto.Hash.HMAC',
-            'numbers', 'win32com.client', 'win32com.server'],
+            'numbers', 'win32com.client', 'win32com.server', 'HTMLParser'],
        'base': 'Win32GUI',
 	   'bin_excludes': [
             'iconv.dll', 'intl.dll', 'libatk-1.0-0.dll',
