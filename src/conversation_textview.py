@@ -479,7 +479,8 @@ class ConversationTextview(GObject.GObject):
         self.last_sent_message_marks[1] = buffer_.create_mark(None, i2,
             left_gravity=True)
 
-    def correct_last_received_message(self, message, xhtml, name, old_txt):
+    def correct_last_received_message(self, message, xhtml, name, old_txt,
+    other_tags_for_name=[], other_tags_for_text=[]):
         if name not in self.last_received_message_marks:
             return
         m1 = self.last_received_message_marks[name][0]
@@ -490,7 +491,8 @@ class ConversationTextview(GObject.GObject):
         txt = buffer_.get_text(i1, i2, True)
         buffer_.delete(i1, i2)
         i2 = self.print_conversation_line(message, '', 'incoming', name, None,
-            xhtml=xhtml, iter_=i1)
+            other_tags_for_name=other_tags_for_name,
+            other_tags_for_text=other_tags_for_text, xhtml=xhtml, iter_=i1)
         tt_txt = _('<b>Message was corrected. Last message was:</b>\n  %s') % \
             GLib.markup_escape_text(old_txt)
         self.show_corrected_message_warning(i2, tt_txt)
