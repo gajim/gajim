@@ -99,7 +99,8 @@ def get_context(fingerprint, verify_cb=None, remote_jid=None):
     constructs and returns the context objects
     """
     ctx = SSL.Context(SSL.SSLv23_METHOD)
-    flags = (SSL.OP_NO_SSLv2 | SSL.OP_NO_SSLv3 | SSL.OP_SINGLE_DH_USE)
+    flags = (SSL.OP_NO_SSLv2 | SSL.OP_NO_SSLv3 | SSL.OP_SINGLE_DH_USE \
+             | SSL.OP_NO_TICKET)
     ctx.set_options(flags)
     ctx.set_cipher_list('HIGH:!aNULL:!3DES')
 
