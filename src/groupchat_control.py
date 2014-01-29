@@ -1025,8 +1025,44 @@ class GroupchatControl(ChatControlBase):
                             obj.xhtml_msgtxt, obj.nick, old_txt)
                     else:
                         old_txt = self.last_received_txt[obj.nick]
-                        self.conv_textview.correct_last_received_message(obj.msgtxt,
-                            obj.xhtml_msgtxt, obj.nick, old_txt)
+                        (highlight, sound) = self.highlighting_for_message(obj.msgtxt, obj.timestamp)
+                        other_tags_for_name = []
+                        other_tags_for_text = []
+                        if obj.nick in self.gc_custom_colors:
+                            other_tags_for_name.append('gc_nickname_color_' + \
+                                str(self.gc_custom_colors[obj.nick]))
+                        else:
+                            self.gc_count_nicknames_colors += 1
+                            if self.gc_count_nicknames_colors == \
+                            self.number_of_colors:
+                                self.gc_count_nicknames_colors = 0
+                            self.gc_custom_colors[obj.nick] = \
+                                self.gc_count_nicknames_colors
+                            other_tags_for_name.append('gc_nickname_color_' + \
+                                str(self.gc_count_nicknames_colors))
+                        if highlight:
+                            # muc-specific chatstate
+                            if self.parent_win:
+                                self.parent_win.redraw_tab(self, 'attention')
+                            else:
+                                self.attention_flag = True
+                            other_tags_for_name.append('bold')
+                            other_tags_for_text.append('marked')
+
+                            if obj.nick in self.attention_list:
+                                self.attention_list.remove(obj.nick)
+                            elif len(self.attention_list) > 6:
+                                self.attention_list.pop(0) # remove older
+                            self.attention_list.append(obj.nick)
+
+                        if obj.msgtxt.startswith('/me ') or \
+                        obj.msgtxt.startswith('/me\n'):
+                            other_tags_for_text.append('gc_nickname_color_' + \
+                                str(self.gc_custom_colors[obj.nick]))
+                        self.conv_textview.correct_last_received_message(
+                            obj.msgtxt, obj.xhtml_msgtxt, obj.nick, old_txt,
+                            other_tags_for_name=other_tags_for_name,
+                            other_tags_for_text=other_tags_for_text)
                     self.last_received_txt[obj.nick] = obj.msgtxt
                     self.last_received_id[obj.nick] = obj.stanza.getID()
                     return
