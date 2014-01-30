@@ -463,7 +463,7 @@ del pid_dir
 def on_exit():
     # Save the entropy from OpenSSL PRNG
     if PYOPENSSL_PRNG_PRESENT:
-        OpenSSL.rand.write_file(RNG_SEED)
+        OpenSSL.rand.write_file(str(RNG_SEED))
     # delete pid file on normal exit
     if os.path.exists(pid_filename):
         os.remove(pid_filename)
