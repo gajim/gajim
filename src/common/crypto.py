@@ -87,7 +87,7 @@ def add_entropy_sources_OpenSSL():
         os.environ, os.getcwd(), os.getpid()]
 
     for s in sources:
-        OpenSSL.rand.add(str(s), 0.01)
+        OpenSSL.rand.add(str(s), 1)
 
     # On Windows add the current contents of the screen to the PRNG state.
     if os.name == 'nt':

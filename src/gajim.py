@@ -310,7 +310,7 @@ try:
     from common import crypto
     PYOPENSSL_PRNG_PRESENT = True
     # Seed from file
-    OpenSSL.rand.load_file(RNG_SEED)
+    OpenSSL.rand.load_file(str(RNG_SEED))
     crypto.add_entropy_sources_OpenSSL()
 except ImportError:
     log.info("PyOpenSSL PRNG not available")
