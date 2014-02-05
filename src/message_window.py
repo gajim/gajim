@@ -84,6 +84,8 @@ class MessageWindow(object):
             self.parent_paned = parent_paned
             self.notebook.reparent(self.parent_paned)
             self.parent_paned.pack2(self.notebook, resize=True, shrink=True)
+            gajim.interface.roster.xml.get_object('show_roster_menuitem').\
+                set_sensitive(True)
             orig_window.destroy()
             del orig_window
 
@@ -613,6 +615,8 @@ class MessageWindow(object):
                 # Don't close parent window, just remove the child
                 child = self.parent_paned.get_child2()
                 self.parent_paned.remove(child)
+                gajim.interface.roster.xml.get_object('show_roster_menuitem').\
+                    set_sensitive(False)
             else:
                 self.window.destroy()
             return # don't show_title, we are dead
@@ -1254,6 +1258,8 @@ class MessageWindowMgr(gobject.GObject):
                 # Don't close parent window, just remove the child
                 child = w.parent_paned.get_child2()
                 w.parent_paned.remove(child)
+                gajim.interface.roster.xml.get_object('show_roster_menuitem').\
+                    set_sensitive(False)
                 gtkgui_helpers.resize_window(w.window,
                         gajim.config.get('roster_width'),
                         gajim.config.get('roster_height'))
