@@ -2754,6 +2754,10 @@ class Interface:
 
         cfg_was_read = parser.read()
 
+        if not cfg_was_read:
+            # enable plugin_installer by default when creating config file
+            gajim.config.set_per('plugins', 'plugin_installer', 'active', True)
+
         gajim.logger.reset_shown_unread_messages()
         # override logging settings from config (don't take care of '-q' option)
         if gajim.config.get('verbose'):
