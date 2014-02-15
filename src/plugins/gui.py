@@ -37,7 +37,6 @@ from dialogs import WarningDialog, YesNoDialog, ArchiveChooserDialog
 from htmltextview import HtmlTextView
 from common import gajim
 from plugins.helpers import log_calls, log
-from conversation_textview import ConversationTextview
 from plugins.helpers import GajimPluginActivateException
 from plugins.plugins_i18n import _
 from common.exceptions import PluginsystemError
@@ -103,7 +102,7 @@ class PluginsWindow(object):
             self.installed_plugins_treeview_selection_changed)
         selection.set_mode(Gtk.SelectionMode.SINGLE)
 
-        #self._clear_installed_plugin_info()
+        self._clear_installed_plugin_info()
 
         self.fill_installed_plugins_model()
         root_iter = self.installed_plugins_model.get_iter_first()
@@ -125,11 +124,6 @@ class PluginsWindow(object):
     @log_calls('PluginsWindow')
     def installed_plugins_treeview_selection_changed(self, treeview_selection):
         model, iter = treeview_selection.get_selected()
-        self.xml.get_object('scrolledwindow').get_children()[0].destroy()
-        self.plugin_description_textview = ConversationTextview(None)
-        sw = self.xml.get_object('scrolledwindow')
-        sw.add(self.plugin_description_textview.tv)
-        sw.show_all()
         if iter:
             plugin = model.get_value(iter, PLUGIN)
             plugin_name = model.get_value(iter, NAME)
@@ -158,10 +152,10 @@ class PluginsWindow(object):
         if not txt.startswith('<body '):
             txt = '<body  xmlns=\'http://www.w3.org/1999/xhtml\'>' + txt
         txt += ' </body>'
-        self.plugin_description_textview.tv.display_html(txt,
+        self.plugin_description_textview.display_html(txt,
             self.plugin_description_textview, None)
 
-        self.plugin_description_textview.tv.set_property('sensitive', True)
+        self.plugin_description_textview.set_property('sensitive', True)
         self.uninstall_plugin_button.set_property('sensitive',
             gajim.PLUGINS_DIRS[1] in plugin.__path__)
         self.configure_plugin_button.set_property(
@@ -175,7 +169,9 @@ class PluginsWindow(object):
         self.plugin_homepage_linkbutton.set_label('')
         self.plugin_homepage_linkbutton.set_property('sensitive', False)
 
-        self.plugin_description_textview.tv.set_property('sensitive', False)
+        desc_textbuffer = self.plugin_description_textview.get_buffer()
+        desc_textbuffer.set_text('')
+        self.plugin_description_textview.set_property('sensitive', False)
         self.uninstall_plugin_button.set_property('sensitive', False)
         self.configure_plugin_button.set_property('sensitive', False)
 
