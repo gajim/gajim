@@ -1286,7 +1286,7 @@ class ConversationTextview(GObject.GObject):
             tim = time.localtime()
         current_print_time = gajim.config.get('print_time')
         if text.startswith('/me '):
-            direction_mark = i18n.paragraph_direction_mark(unicode(text[3:]))
+            direction_mark = i18n.paragraph_direction_mark(str(text[3:]))
         else:
             direction_mark = i18n.paragraph_direction_mark(text)
         # don't apply direction mark if it's status message
