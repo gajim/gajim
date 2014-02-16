@@ -192,7 +192,11 @@ def check_cert(jid, fingerprint):
     if os.path.exists(certpath):
         cert = load_cert_file(certpath)
         if cert:
-            digest_algo = cert.get_signature_algorithm().split('With')[0]
+            try:
+                digest_algo = cert.get_signature_algorithm().split('With')[0]
+            except AttributeError, e: 
+                # Old py-OpenSSL is missing get_signature_algorithm
+                digest_algo = "sha256"
             if cert.digest(digest_algo) == fingerprint:
                 return True
     return False
