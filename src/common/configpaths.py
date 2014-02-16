@@ -142,7 +142,7 @@ class ConfigPaths:
             'MY_EMOTS': 'emoticons', 'MY_ICONSETS': 'iconsets',
             'MY_MOOD_ICONSETS': 'moods', 'MY_ACTIVITY_ICONSETS': 'activities',
             'PLUGINS_USER': 'plugins', 'MY_PEER_CERTS': 'certs',
-            'RNG_SEED': u'rng_seed'}
+            'RNG_SEED': 'rng_seed'}
         for name in d:
             self.add(name, TYPE_DATA, windowsify(d[name]))
 
