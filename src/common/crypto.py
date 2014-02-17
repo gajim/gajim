@@ -87,7 +87,7 @@ def add_entropy_sources_OpenSSL():
         os.environ, os.getcwd(), os.getpid()]
 
     for s in sources:
-        OpenSSL.rand.add(str(s).encode('utf-8'), 0.01)
+        OpenSSL.rand.add(str(s).encode('utf-8'), 1)
 
     # On Windows add the current contents of the screen to the PRNG state.
     if os.name == 'nt':
@@ -105,7 +105,7 @@ def add_entropy_sources_OpenSSL():
                          # Limit the ammount of read bytes, in case a memory
                          # file was opened
                          OpenSSL.rand.add(str(fp.read(5000)).encode('utf-8'),
-                             0.01)
+                             1)
                   except:
                       # Ignore all read and access errors
                       pass

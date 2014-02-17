@@ -118,7 +118,7 @@ def get_context(fingerprint, verify_cb=None, remote_jid=None):
     dh_params_name = os.path.join(gajim.MY_CERT_DIR, DH_PARAMS)
     try:
         with open(dh_params_name, "r") as dh_params_file:
-            ctx.load_tmp_dh(dh_params_name)
+            ctx.load_tmp_dh(str(dh_params_name).encode('utf-8'))
     except IOError as err:
         log.warn('Unable to load DH parameter file: %s. You should generate it '
             'by using this command : "openssl dhparam 4096 -out '
@@ -128,7 +128,7 @@ def get_context(fingerprint, verify_cb=None, remote_jid=None):
             'other', DEFAULT_DH_PARAMS)
         try:
             with open(default_dh_params_name, "r") as default_dh_params_file:
-                ctx.load_tmp_dh(default_dh_params_name)
+                ctx.load_tmp_dh(str(default_dh_params_name).encode('utf-8'))
         except IOError as err:
             log.error('Unable to load default DH parameter file: %s , %s'
                 % (default_dh_params_name, err))
