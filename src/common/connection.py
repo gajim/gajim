@@ -1405,7 +1405,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         cert = con.Connection.ssl_certificate
         if errnum > 0 and str(errnum) not in gajim.config.get_per('accounts',
         self.name, 'ignore_ssl_errors').split():
-            text = _('The authenticity of the %s certificate could be invlid') \
+            text = _('The authenticity of the %s certificate could be invalid') \
                 % hostname
             if errnum in ssl_error:
                 text += _('\nSSL Error: <b>%s</b>') % ssl_error[errnum]
