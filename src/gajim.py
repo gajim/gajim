@@ -320,7 +320,10 @@ try:
     from common import crypto
     PYOPENSSL_PRNG_PRESENT = True
     # Seed from file
-    OpenSSL.rand.load_file(str(RNG_SEED).encode('utf-8'))
+    try:
+        OpenSSL.rand.load_file(RNG_SEED)
+    except TypeError:
+        OpenSSL.rand.load_file(RNG_SEED.encode('utf-8'))
     crypto.add_entropy_sources_OpenSSL()
 except ImportError:
     log.info("PyOpenSSL PRNG not available")
@@ -473,7 +476,10 @@ del pid_dir
 def on_exit():
     # Save the entropy from OpenSSL PRNG
     if PYOPENSSL_PRNG_PRESENT:
-        OpenSSL.rand.write_file(str(RNG_SEED).encode('utf-8'))
+        try:
+            OpenSSL.rand.write_file(RNG_SEED)
+        except TypeError:
+            OpenSSL.rand.write_file(RNG_SEED.encode('utf-8'))
     # delete pid file on normal exit
     if os.path.exists(pid_filename):
         os.remove(pid_filename)
