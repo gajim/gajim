@@ -1207,7 +1207,7 @@ class GcInvitationReceivedEvent(nec.NetworkIncomingEvent):
             try:
                 self.room_jid = helpers.parse_jid(invite_tag.getAttr('jid'))
             except helpers.InvalidFormat:
-                log.warn('Invalid JID: %s, ignoring it' % invite_tag.getAttr(
+                log.warning('Invalid JID: %s, ignoring it' % invite_tag.getAttr(
                     'jid'))
                 return
             self.jid_from = self.msg_obj.fjid
