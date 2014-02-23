@@ -2060,9 +2060,10 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         if self.jingle_content:
             secu = self.jingle_content.getTag('security')
             self.FT_content.use_security = bool(secu)
-            fingerprint = secu.getTag('fingerprint')
-            if fingerprint:
-                self.FT_content.x509_fingerprint = fingerprint.getData()
+            if secu:
+                fingerprint = secu.getTag('fingerprint')
+                if fingerprint:
+                    self.FT_content.x509_fingerprint = fingerprint.getData()
             if not self.FT_content.transport:
                 self.FT_content.transport = JingleTransportSocks5()
                 self.FT_content.transport.set_our_jid(
