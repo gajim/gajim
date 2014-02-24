@@ -175,7 +175,7 @@ class JingleContent(object):
             simode = nbxmpp.simplexml.Node(tag='request')
         else:
             simode = nbxmpp.simplexml.Node(tag='offer')
-        file_tag = simode.setTag('file', namespace=nbxmpp.NS_FILE)
+        file_tag = simode.setTag('file')
         if self.file_props.name:
             node = nbxmpp.simplexml.Node(tag='name')
             node.addData(self.file_props.name)
