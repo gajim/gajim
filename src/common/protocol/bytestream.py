@@ -184,6 +184,7 @@ class ConnectionBytestream:
         if nbxmpp.NS_BYTESTREAM in file_props.stream_methods:
             field.setValue(nbxmpp.NS_BYTESTREAM)
         else:
+            file_props.transport_sid = file_props.sid
             field.setValue(nbxmpp.NS_IBB)
         self.connection.send(iq)
 
@@ -249,6 +250,7 @@ class ConnectionBytestream:
             raise nbxmpp.NodeProcessed
         if field.getValue() == nbxmpp.NS_IBB:
             sid = file_props.sid
+            file_props.transport_sid = sid
             fp = open(file_props.file_name, 'r')
             self.OpenStream(sid, file_props.receiver, fp)
             raise nbxmpp.NodeProcessed
@@ -780,7 +782,7 @@ class ConnectionIBBytestream(ConnectionBytestream):
         blocksize = stanza.getTagAttr('open', 'block-size')
         log.debug('StreamOpenHandler called sid->%s blocksize->%s' % (sid,
             blocksize))
-        file_props = FilesProp.getFileProp(self.name, sid)
+        file_props = FilesProp.getFilePropByTransportSid(self.name, sid)
         try:
             blocksize = int(blocksize)
         except:
@@ -851,8 +853,8 @@ class ConnectionIBBytestream(ConnectionBytestream):
         file_props.disconnect_cb = None
         file_props.continue_cb = None
         syn = nbxmpp.Protocol('iq', to, 'set', payload=[nbxmpp.Node(
-            nbxmpp.NS_IBB + ' open', {'sid': sid, 'block-size': blocksize,
-            'stanza': 'iq'})])
+            nbxmpp.NS_IBB + ' open', {'sid': file_props.transport_sid,
+            'block-size': blocksize, 'stanza': 'iq'})])
         self.connection.send(syn)
         file_props.syn_id = syn.getID()
         return file_props
@@ -878,7 +880,8 @@ class ConnectionIBBytestream(ConnectionBytestream):
                     continue
                 chunk = file_props.fp.read(file_props.block_size)
                 if chunk:
-                    datanode = nbxmpp.Node(nbxmpp.NS_IBB + ' data', {'sid': sid,
+                    datanode = nbxmpp.Node(nbxmpp.NS_IBB + ' data', {
+                        'sid': file_props.transport_sid,
                         'seq': file_props.seq}, base64.b64encode(chunk.encode(
                         'utf-8')).decode('utf-8'))
                     file_props.seq += 1
@@ -901,7 +904,7 @@ class ConnectionIBBytestream(ConnectionBytestream):
                     self.connection.send(nbxmpp.Protocol('iq',
                         file_props.direction[1:], 'set',
                         payload=[nbxmpp.Node(nbxmpp.NS_IBB + ' close',
-                        {'sid':sid})]))
+                        {'sid': file_props.transport_sid})]))
                     file_props.completed = True
 
     def IBBMessageHandler(self, conn, stanza):
@@ -920,7 +923,7 @@ class ConnectionIBBytestream(ConnectionBytestream):
             seq = ''
             data = ''
         err = None
-        file_props = FilesProp.getFileProp(self.name, sid)
+        file_props = FilesProp.getFilePropByTransportSid(self.name, sid)
         if file_props is None:
             err = nbxmpp.ERR_ITEM_NOT_FOUND
         else:
@@ -957,15 +960,12 @@ class ConnectionIBBytestream(ConnectionBytestream):
         sid = stanza.getTagAttr('close', 'sid')
         log.debug('StreamCloseHandler called sid->%s' % sid)
         # look in sending files
-        file_props = FilesProp.getFileProp(self.name, sid)
+        file_props = FilesProp.getFilePropByTransportSid(self.name, sid)
         if file_props:
             reply = stanza.buildReply('result')
             reply.delChild('close')
             conn.send(reply)
             # look in receiving files
-            reply = stanza.buildReply('result')
-            reply.delChild('close')
-            conn.send(reply)
             file_props.fp.close()
             file_props.completed = file_props.received_len >= file_props.size
             if not file_props.completed:
@@ -1005,7 +1005,7 @@ class ConnectionIBBytestream(ConnectionBytestream):
         else:
             if stanza.getTag('data'):
                 sid = stanza.getTagAttr('data', 'sid')
-                file_props = FilesProp.getFileProp(self.name, sid)
+                file_props = FilesProp.getFilePropByTransportSid(self.name, sid)
                 if file_props.connected and self.IBBMessageHandler(conn,
                 stanza):
                     reply = stanza.buildReply('result')

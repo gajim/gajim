@@ -140,6 +140,7 @@ class StateTransfering(JingleFileTransferStates):
     '''
 
     def __start_IBB_transfer(self, con):
+        self.jft.file_props.transport_sid = self.jft.transport.sid
         fp = open(self.jft.file_props.file_name, 'r')
         con.OpenStream( self.jft.file_props.sid, self.jft.session.peerjid, fp,
             blocksize=4096)

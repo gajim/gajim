@@ -174,10 +174,6 @@ class JingleFileTransfer(JingleContent):
     def __on_session_accept(self, stanza, content, error, action):
         log.info("__on_session_accept")
         con = self.session.connection
-        # We ack the session accept
-        response = stanza.buildReply('result')
-        response.delChild(response.getQuery())
-        con.connection.send(response)
         security = content.getTag('security')
         if not security: # responder can not verify our fingerprint
             self.use_security = False
@@ -289,9 +285,6 @@ class JingleFileTransfer(JingleContent):
                 'sendCand' : False}
         if self.state == STATE_CAND_SENT:
             self.__state_changed(STATE_CAND_SENT_AND_RECEIVED, args)
-            response = stanza.buildReply('result')
-            response.delChild(response.getQuery())
-            self.session.connection.connection.send(response)
             self.__state_changed(STATE_TRANSFERING)
             raise nbxmpp.NodeProcessed
         else:
