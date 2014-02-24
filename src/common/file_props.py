@@ -63,6 +63,13 @@ class FilesProp:
                 return fp
 
     @classmethod
+    def getFilePropByTransportSid(cls, account, sid):
+        files_prop = cls.getAllFileProp()
+        for fp in files_prop:
+            if fp.account == account and fp.transport_sid == sid:
+                return fp
+
+    @classmethod
     def getAllFileProp(cls):
         return cls._files_props.values()
 
