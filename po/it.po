@@ -1,16 +1,17 @@
 # Italian translations for gajim package
 # Traduzione italiana del pacchetto gajim.
-# Copyright (C) 2005-06 Mauro Brenna, Andrea Ratti, Matteo Dell'Amico
+# Copyright (C) 2005-14 Mauro Brenna, Andrea Ratti, Matteo Dell'Amico, Daniel Coppi, Davide Pizzetti
 # This file is distributed under the same license as the Gajim Package.
 # Mauro Brenna <malloblenne@gmail.com>, 2005,2006.
 # Andrea Ratti <scimiot@yahoo.it>, 2005.
 # Matteo Dell'Amico <della@linux.it>, 2005, 2006.
 # Daniel Coppi <neoex.dc@gmail.com>, 2007.
+# Davide Pizzetti <erpizzo@alice.it>, 2014.
 msgid ""
 msgstr ""
 "Project-Id-Version: Gajim 2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-24 16:39+0100\n"
+"POT-Creation-Date: 2014-02-25 14:36+0100\n"
 "PO-Revision-Date: 2013-11-15 20:10+0100\n"
 "Last-Translator: v <noway@insiberia.net>\n"
 "Language-Team: Italian <>\n"
@@ -28,43 +29,43 @@ msgstr "_Stato"
 
 #: ../data/gui/account_context_menu.ui.h:2
 msgid "_Personal Events"
-msgstr "Eventi _Personali"
+msgstr "Eventi _personali"
 
 #: ../data/gui/account_context_menu.ui.h:3 ../data/gui/roster_window.ui.h:3
 #: ../data/gui/systray_context_menu.ui.h:2
 msgid "_Start Chat..."
-msgstr "_Inizia Conversazione..."
+msgstr "_Inizia una conversazione..."
 
 #: ../data/gui/account_context_menu.ui.h:4
 #: ../data/gui/chat_context_menu.ui.h:6 ../data/gui/roster_window.ui.h:5
 #: ../data/gui/systray_context_menu.ui.h:3
 msgid "Join _Group Chat"
-msgstr "Entra in una Conversazione di _Gruppo"
+msgstr "Entra in una conversazione di _gruppo"
 
 #: ../data/gui/account_context_menu.ui.h:5
 msgid "_Add Contact..."
-msgstr "_Aggiungi Contatto..."
+msgstr "_Aggiungi un contatto..."
 
 #: ../data/gui/account_context_menu.ui.h:6 ../data/gui/roster_window.ui.h:7
 msgid "_Discover Services"
-msgstr "_Ricerca Servizi"
+msgstr "_Ricerca dei servizi"
 
 #: ../data/gui/account_context_menu.ui.h:7
 msgid "_Execute Command..."
-msgstr "_Esegui Comando..."
+msgstr "_Esegui un comando..."
 
 #: ../data/gui/account_context_menu.ui.h:8
 msgid "_Open Gmail Inbox"
-msgstr "_Apri Posta Ricevuta Gmail"
+msgstr "_Apri la posta ricevuta di Gmail"
 
 #: ../data/gui/account_context_menu.ui.h:9
 #: ../data/gui/zeroconf_context_menu.ui.h:2
 msgid "_Modify Account..."
-msgstr "_Modifica Account..."
+msgstr "_Modifica l'account..."
 
 #: ../data/gui/account_creation_wizard_window.ui.h:1
 msgid "Gajim: Account Creation Wizard"
-msgstr "Gajim: Assistente Creazione Account"
+msgstr "Gajim: Assistente alla creazione di un account"
 
 #: ../data/gui/account_creation_wizard_window.ui.h:2
 msgid ""
@@ -84,11 +85,11 @@ msgstr "Voglio _registrare un nuovo account"
 
 #: ../data/gui/account_creation_wizard_window.ui.h:6
 msgid "<b>Please choose one of the options below:</b>"
-msgstr "<b>Scegliere una delle seguenti opzioni:</b>"
+msgstr "<b>Per piacere, scegli una delle seguenti opzioni:</b>"
 
 #: ../data/gui/account_creation_wizard_window.ui.h:7
 msgid "<b>Please fill in the data for your existing account</b>"
-msgstr "<b>Inserire i dati per l'account esistente</b>"
+msgstr "<b>Per piacere, inserisci i dati per l'account esistente</b>"
 
 #: ../data/gui/account_creation_wizard_window.ui.h:8
 #: ../data/gui/accounts_window.ui.h:22
@@ -117,7 +118,7 @@ msgstr "Autenticazione anon_ima"
 
 #: ../data/gui/account_creation_wizard_window.ui.h:13
 msgid "<b>Please select a server</b>"
-msgstr "<b>Selezionare un server</b>"
+msgstr "<b>Per piacere, seleziona un server</b>"
 
 #: ../data/gui/account_creation_wizard_window.ui.h:14
 #: ../data/gui/manage_bookmarks_window.ui.h:3
@@ -134,11 +135,11 @@ msgstr "Gestisci..."
 
 #: ../data/gui/account_creation_wizard_window.ui.h:17
 msgid "Use custom hostname/port"
-msgstr "Usa hostname/porta personalizzati"
+msgstr "Usa nome host/porta personalizzati"
 
 #: ../data/gui/account_creation_wizard_window.ui.h:18
 msgid "_Hostname:"
-msgstr "_Hostname:"
+msgstr "Nome _host:"
 
 #: ../data/gui/account_creation_wizard_window.ui.h:19
 msgid "_Port:"
@@ -291,7 +292,7 @@ msgstr "_Risorsa: "
 
 #: ../data/gui/accounts_window.ui.h:24
 msgid "_Client Cert File:"
-msgstr "File Certificato _Client"
+msgstr "File del certificato del _client"
 
 #: ../data/gui/accounts_window.ui.h:25
 msgid "Browse..."
@@ -345,7 +346,7 @@ msgstr ""
 
 #: ../data/gui/accounts_window.ui.h:35
 msgid "Use file transfer proxies"
-msgstr "Usa proxy per il trasferimento file"
+msgstr "Usa un proxy per il trasferimento di file"
 
 #: ../data/gui/accounts_window.ui.h:36
 msgid ""
@@ -393,7 +394,7 @@ msgstr ""
 
 #: ../data/gui/accounts_window.ui.h:43
 msgid "Send _keep-alive packets"
-msgstr "Invia pacchetti di _keep-alive"
+msgstr "Invia dei pacchetti di _keep-alive"
 
 #: ../data/gui/accounts_window.ui.h:44
 msgid ""
@@ -405,11 +406,11 @@ msgstr ""
 
 #: ../data/gui/accounts_window.ui.h:45
 msgid "Use cust_om hostname/port"
-msgstr "Usa hostname/porta personalizzati"
+msgstr "Usa nome host/porta personalizzati"
 
 #: ../data/gui/accounts_window.ui.h:46
 msgid "_Hostname: "
-msgstr "_Hostname: "
+msgstr "Nome dell'_host: "
 
 #: ../data/gui/accounts_window.ui.h:47
 msgid "_Port: "
@@ -430,7 +431,7 @@ msgstr "Nessuna chiave selezionata"
 
 #: ../data/gui/accounts_window.ui.h:51
 msgid "Choose _Key..."
-msgstr "Scegli _Chiave..."
+msgstr "Scegli la _chiave..."
 
 #: ../data/gui/accounts_window.ui.h:52
 msgid "Use G_PG Agent"
@@ -454,7 +455,7 @@ msgstr "Informazioni su di te, archiviate sul server"
 
 #: ../data/gui/accounts_window.ui.h:57
 msgid "<b>Personal Information</b>"
-msgstr "<b>Informazioni Personali</b>"
+msgstr "<b>Informazioni personali</b>"
 
 #: ../data/gui/accounts_window.ui.h:58 ../data/gui/profile_window.ui.h:1
 msgid "Personal Information"
@@ -505,11 +506,11 @@ msgstr "ID Jabber: "
 
 #: ../data/gui/accounts_window.ui.h:68
 msgid "Mer_ge accounts"
-msgstr "_Unisci account"
+msgstr "_Unisci gli account"
 
 #: ../data/gui/add_new_contact_window.ui.h:1
 msgid "Add New Contact"
-msgstr "Aggiungi Nuovo Contatto"
+msgstr "Aggiungi un nuovo contatto"
 
 #: ../data/gui/add_new_contact_window.ui.h:2
 msgid "A_ccount:"
@@ -526,7 +527,7 @@ msgstr "_ID utente:"
 #: ../data/gui/add_new_contact_window.ui.h:5
 #: ../data/gui/manage_bookmarks_window.ui.h:5
 msgid "_Nickname:"
-msgstr "_Nickname:"
+msgstr "_Soprannome:"
 
 #: ../data/gui/add_new_contact_window.ui.h:6
 msgid "_Group:"
@@ -534,7 +535,7 @@ msgstr "_Gruppo:"
 
 #: ../data/gui/add_new_contact_window.ui.h:7
 msgid "A_llow this contact to view my status"
-msgstr "_Permetti di vedere il mio stato"
+msgstr "Pe_rmetti di vedere il mio stato"
 
 #: ../data/gui/add_new_contact_window.ui.h:8
 msgid "_Save subscription message"
@@ -566,7 +567,7 @@ msgstr ""
 
 #: ../data/gui/add_new_contact_window.ui.h:16 ../src/common/helpers.py:1366
 msgid "I would like to add you to my contact list."
-msgstr "Vorrei aggiungerti alla mia lista contatti."
+msgstr "Vorrei aggiungerti al mio elenco dei contatti."
 
 #. displaying the window
 #: ../data/gui/adhoc_commands_window.ui.h:1 ../src/adhoc_commands.py:104
@@ -575,7 +576,7 @@ msgstr "Comandi ad-hoc - Gajim"
 
 #: ../data/gui/adhoc_commands_window.ui.h:2
 msgid "Please wait while retrieving command list..."
-msgstr "Attendere durante il recupero della lista comandi..."
+msgstr "Attendere durante il recupero dell'elenco dei comandi..."
 
 #: ../data/gui/adhoc_commands_window.ui.h:3
 msgid "<b>Choose command to execute:</b>"
@@ -587,11 +588,11 @@ msgstr "Controlla ancora"
 
 #: ../data/gui/adhoc_commands_window.ui.h:5
 msgid "Please wait while the command is being sent..."
-msgstr "Attendere durante l'invio del comando..."
+msgstr "Attendi durante l'invio del comando, per piacere..."
 
 #: ../data/gui/adhoc_commands_window.ui.h:6
 msgid "Please wait..."
-msgstr "Attendere..."
+msgstr "Attendi, per paicere..."
 
 #: ../data/gui/adhoc_commands_window.ui.h:7
 msgid "This jabber entity does not expose any commands."
@@ -603,7 +604,7 @@ msgstr "<b>Si è verificato un errore:</b>"
 
 #: ../data/gui/adhoc_commands_window.ui.h:9
 msgid "Error description..."
-msgstr "Descrizione errore..."
+msgstr "Descrizione dell'errore..."
 
 #: ../data/gui/adhoc_commands_window.ui.h:10
 msgid "F_inish"
@@ -611,7 +612,7 @@ msgstr "_Finisci"
 
 #: ../data/gui/advanced_configuration_window.ui.h:1
 msgid "Advanced Configuration Editor"
-msgstr "Editor di Configurazione Avanzata"
+msgstr "Editor di configurazione avanzata"
 
 #: ../data/gui/advanced_configuration_window.ui.h:2
 msgid "Filter:"
@@ -634,15 +635,15 @@ msgstr "_Reimposta ai colori predefiniti"
 
 #: ../data/gui/advanced_menuitem_menu.ui.h:1
 msgid "Show _XML Console"
-msgstr "Mostra Console _XML"
+msgstr "Mostra la console _XML"
 
 #: ../data/gui/advanced_menuitem_menu.ui.h:2
 msgid "Edit Archi_ving Preferences"
-msgstr "Modifica Preferenze di Archi_viazione"
+msgstr "Modifica le preferenze di archi_viazione"
 
 #: ../data/gui/advanced_menuitem_menu.ui.h:3
 msgid "Edit _Privacy Lists..."
-msgstr "Modifica Liste _Privacy..."
+msgstr "Modifica gli elenchi della _privacy..."
 
 #: ../data/gui/advanced_menuitem_menu.ui.h:4
 msgid "_Administrator"
@@ -650,7 +651,7 @@ msgstr "_Amministratore"
 
 #: ../data/gui/advanced_menuitem_menu.ui.h:5
 msgid "_Send Server Message..."
-msgstr "_Invia Messaggio Server..."
+msgstr "_Invia un messaggio del server..."
 
 #: ../data/gui/advanced_menuitem_menu.ui.h:6
 msgid "Sends a message to users currently connected to this server"
@@ -658,27 +659,27 @@ msgstr "Invia un messaggio agli utenti attualmenti connessi a questo server"
 
 #: ../data/gui/advanced_menuitem_menu.ui.h:7
 msgid "Sets Message of the Day"
-msgstr "Imposta Messaggio del Giorno"
+msgstr "Imposta il messaggio del giorno"
 
 #: ../data/gui/advanced_menuitem_menu.ui.h:8
 msgid "Set MOTD..."
-msgstr "Imposta MOTD..."
+msgstr "Imposta il messaggio del giorno..."
 
 #: ../data/gui/advanced_menuitem_menu.ui.h:9
 msgid "Updates Message of the Day"
-msgstr "Aggiorna il Messaggio del Giorno"
+msgstr "Aggiorna il messaggio del giorno"
 
 #: ../data/gui/advanced_menuitem_menu.ui.h:10
 msgid "Update MOTD..."
-msgstr "Aggiorna MOTD..."
+msgstr "Aggiorna il messaggio del giorno..."
 
 #: ../data/gui/advanced_menuitem_menu.ui.h:11
 msgid "Delete MOTD"
-msgstr "Elimina MOTD"
+msgstr "Elimina il messaggio del giorno"
 
 #: ../data/gui/advanced_menuitem_menu.ui.h:12
 msgid "Deletes Message of the Day"
-msgstr "Elimina il Messaggio del Giorno"
+msgstr "Elimina il messaggio del giorno"
 
 #: ../data/gui/archiving_preferences_window.ui.h:1
 msgid "No"
@@ -702,19 +703,19 @@ msgstr "Vieta"
 
 #: ../data/gui/archiving_preferences_window.ui.h:6
 msgid "<i>Method Manual</i>"
-msgstr ""
+msgstr "<i>Metodo manuale</i>"
 
 #: ../data/gui/archiving_preferences_window.ui.h:7
 msgid "<i>Method Local</i>"
-msgstr ""
+msgstr "<i>Metodo locale</i>"
 
 #: ../data/gui/archiving_preferences_window.ui.h:8
 msgid "<i>Method Auto</i>"
-msgstr ""
+msgstr "<i>Metodo automatico</i>"
 
 #: ../data/gui/archiving_preferences_window.ui.h:9
 msgid "Auto"
-msgstr ""
+msgstr "Automatico"
 
 #: ../data/gui/atom_entry_window.ui.h:1
 msgid "New entry received"
@@ -722,7 +723,7 @@ msgstr "Nuova voce ricevuta"
 
 #: ../data/gui/atom_entry_window.ui.h:2 ../src/atom_window.py:128
 msgid "You have received new entry:"
-msgstr "Hai ricevuto un nuovo evento:"
+msgstr "Hai ricevuto una nuova voce:"
 
 #: ../data/gui/atom_entry_window.ui.h:3
 msgid "Feed name:"
@@ -742,7 +743,7 @@ msgstr "Voce successiva"
 
 #: ../data/gui/blocked_contacts_window.ui.h:1
 msgid "Blocked Contacts"
-msgstr "Contatti Bloccati"
+msgstr "Contatti bloccati"
 
 #: ../data/gui/blocked_contacts_window.ui.h:2
 #: ../data/gui/contact_context_menu.ui.h:20
@@ -753,7 +754,7 @@ msgstr "_Sblocca"
 
 #: ../data/gui/change_activity_dialog.ui.h:1
 msgid "Set Activity"
-msgstr "Imposta Attività"
+msgstr "Imposta l'attività"
 
 #: ../data/gui/change_activity_dialog.ui.h:2
 msgid "Set an activity"
@@ -773,7 +774,7 @@ msgstr "<b>Messaggio:</b>"
 
 #: ../data/gui/change_password_dialog.ui.h:1
 msgid "Change Password"
-msgstr "Cambia Password"
+msgstr "Cambia la password"
 
 #: ../data/gui/change_password_dialog.ui.h:2
 msgid "Enter new password:"
@@ -785,7 +786,7 @@ msgstr "Inseriscila nuovamente per conferma:"
 
 #: ../data/gui/change_status_message_dialog.ui.h:1
 msgid "Save as Preset..."
-msgstr "Salva come Predefinito..."
+msgstr "Salva come predefinito..."
 
 #: ../data/gui/change_status_message_dialog.ui.h:2
 msgid "Mood:"
@@ -801,33 +802,33 @@ msgstr "Messaggi predefiniti:"
 
 #: ../data/gui/change_status_message_dialog.ui.h:5
 msgid "<b>Type your new status message</b>"
-msgstr "<b>Scrivere il nuovo messaggio di stato</b>"
+msgstr "<b>Scrivi il tuo nuovo messaggio di stato</b>"
 
 #: ../data/gui/chat_context_menu.ui.h:1
 msgid "_Copy Link Location"
-msgstr "_Copia Indirizzo Collegamento"
+msgstr "_Copia l'indirizzo del collegamento"
 
 #: ../data/gui/chat_context_menu.ui.h:2
 msgid "_Open Link in Browser"
-msgstr "_Apri Collegamento nel Browser"
+msgstr "_Apri il collegamento nel browser"
 
 #: ../data/gui/chat_context_menu.ui.h:3
 msgid "_Copy JID/Email Address"
-msgstr "_Copia JID/Indirizzo Email"
+msgstr "_Copia JID/indirizzo e-mail"
 
 #: ../data/gui/chat_context_menu.ui.h:4
 msgid "_Open Email Composer"
-msgstr "_Apri Compositore Email"
+msgstr "_Apri il compositore delle e-mail"
 
 #: ../data/gui/chat_context_menu.ui.h:5
 #: ../data/gui/subscription_request_popup_menu.ui.h:1
 msgid "_Start Chat"
-msgstr "_Inizia Conversazione"
+msgstr "_Inizia una conversazione"
 
 #: ../data/gui/chat_context_menu.ui.h:7
 #: ../data/gui/contact_context_menu.ui.h:24
 msgid "_Add to Roster..."
-msgstr "_Aggiungi alla Lista Contatti..."
+msgstr "_Aggiungi all'elenco dei tuoi contatti..."
 
 #: ../data/gui/chat_control.ui.h:1 ../data/gui/groupchat_control.ui.h:1
 msgid "Show a list of emoticons (Alt+M)"
@@ -851,7 +852,7 @@ msgstr "Sfoglia la cronologia delle conversazioni (Ctrl+H)"
 
 #: ../data/gui/chat_control.ui.h:6 ../data/gui/groupchat_control.ui.h:7
 msgid "Show advanced functions (Alt+D)"
-msgstr "Mostra funzioni avanzate (Alt+D)"
+msgstr "Mostra le funzioni avanzate (Alt+D)"
 
 #: ../data/gui/chat_control.ui.h:7
 msgid "#"
@@ -1332,7 +1333,7 @@ msgstr "Soggetto:"
 
 #: ../data/gui/history_manager.ui.h:1
 msgid "Gajim History Logs Manager"
-msgstr "Gestore della cronologia di Gajim"
+msgstr "Gestore delle cronologie di Gajim"
 
 #: ../data/gui/history_manager.ui.h:2
 msgid "<big><b>Welcome to Gajim History Logs Manager</b></big>"
@@ -1374,7 +1375,7 @@ msgstr "Esporta"
 
 #: ../data/gui/history_window.ui.h:1
 msgid "Enter JID or Contact name"
-msgstr "Inserire JID o nome Contatto"
+msgstr "Inserire il JID o il nome del contatto"
 
 #: ../data/gui/history_window.ui.h:2
 msgid "Groupchat Histories"
@@ -1521,7 +1522,7 @@ msgstr "_Titolo:"
 
 #: ../data/gui/manage_bookmarks_window.ui.h:7
 msgid "Pr_int status:"
-msgstr "St_ampa stato:"
+msgstr "St_ampa lo stato:"
 
 #: ../data/gui/manage_bookmarks_window.ui.h:8
 msgid "A_uto join"
@@ -1593,11 +1594,11 @@ msgstr "Pass_word:"
 
 #: ../data/gui/manage_proxies_window.ui.h:13
 msgid "Proxy _Host:"
-msgstr "_Host proxy:"
+msgstr "_Host del proxy:"
 
 #: ../data/gui/manage_proxies_window.ui.h:14
 msgid "Proxy _Port:"
-msgstr "_Porta proxy:"
+msgstr "_Porta del proxy:"
 
 #: ../data/gui/manage_proxies_window.ui.h:15
 msgid "<b>Settings</b>"
@@ -1609,7 +1610,7 @@ msgstr "Gestisci i suoni"
 
 #: ../data/gui/passphrase_dialog.ui.h:1
 msgid "Passphrase"
-msgstr "Frase d'accesso"
+msgstr "Frase di accesso"
 
 #: ../data/gui/plugins_window.ui.h:1
 msgid "Plugins"
@@ -1617,7 +1618,7 @@ msgstr "Plugin"
 
 #: ../data/gui/plugins_window.ui.h:2
 msgid "Install from zip"
-msgstr "Installa da file zip"
+msgstr "Installa da un file zip"
 
 #: ../data/gui/plugins_window.ui.h:3
 msgid "&lt;empty&gt;"
@@ -1633,7 +1634,7 @@ msgstr "<vuoto>"
 
 #: ../data/gui/plugins_window.ui.h:6
 msgid "Authors:"
-msgstr "_Autori:"
+msgstr "Autori:"
 
 #: ../data/gui/plugins_window.ui.h:7
 msgid "Homepage:"
@@ -1718,11 +1719,12 @@ msgstr "Inviami una notifica"
 
 #: ../data/gui/preferences_window.ui.h:11
 msgid "Show only in roster"
-msgstr "Mostra solo nell'elenco dei contatti"
+msgstr "Mostra solo nell'elenco dei tuoi contatti"
 
 #: ../data/gui/preferences_window.ui.h:12
 msgid "Detached roster with detached chats"
-msgstr "Lista contatti separata con finestre di conversazione separate"
+msgstr ""
+"Elenco dei tuoi contatti separato con finestre di conversazione separate"
 
 #: ../data/gui/preferences_window.ui.h:13
 msgid "Detached roster with single chat"
@@ -1735,14 +1737,14 @@ msgstr "Una finestra unica per tutto"
 #: ../data/gui/preferences_window.ui.h:15
 msgid "Detached roster with chat grouped by account"
 msgstr ""
-"Elenco dei contatti separato con le finestre di conversazione raggruppate "
-"per account"
+"Elenco dei tuoi contatti separato con le finestre di conversazione "
+"raggruppate per account"
 
 #: ../data/gui/preferences_window.ui.h:16
 msgid "Detached roster with chat grouped by type"
 msgstr ""
-"Elenco dei contatti separata con finestre di conversazione raggruppate per "
-"tipo"
+"Elenco dei tuoi contatti separato con finestre di conversazione raggruppate "
+"per tipo"
 
 #: ../data/gui/preferences_window.ui.h:17
 msgid "Last state"
@@ -1754,7 +1756,7 @@ msgstr "Preferenze"
 
 #: ../data/gui/preferences_window.ui.h:19
 msgid "Display a_vatars of contacts in roster"
-msgstr "Mostra gli a_vatar dei contatti nell'elenco dei contatti"
+msgstr "Mostra gli a_vatar dei contatti nell'elenco dei tuoi contatti"
 
 #: ../data/gui/preferences_window.ui.h:20
 msgid ""
@@ -1766,7 +1768,7 @@ msgstr ""
 
 #: ../data/gui/preferences_window.ui.h:21
 msgid "Display status _messages of contacts in roster"
-msgstr "Mostra i _messaggi di stato dei contatti nell'elenco dei contatti"
+msgstr "Mostra i _messaggi di stato dei contatti nell'elenco dei tuoi contatti"
 
 #: ../data/gui/preferences_window.ui.h:22
 msgid ""
@@ -1779,7 +1781,7 @@ msgstr ""
 #: ../data/gui/preferences_window.ui.h:23
 msgid "Display e_xtra information of contacts in roster (mood, activity, ...)"
 msgstr ""
-"Mostra informazioni aggiuntive dei contatti nella lista contatti (stato "
+"Mostra informazioni ag_giuntive dei contatti nella lista contatti (stato "
 "d'animo, attività, ...)"
 
 #: ../data/gui/preferences_window.ui.h:24
@@ -1795,15 +1797,15 @@ msgstr "Ordina i contatti per stato"
 
 #: ../data/gui/preferences_window.ui.h:26
 msgid "in _roster"
-msgstr "nella lista _contatti"
+msgstr "nell'elenco dei tuoi _contatti"
 
 #: ../data/gui/preferences_window.ui.h:27
 msgid "in _group chats"
-msgstr "in conversazioni di _gruppo"
+msgstr "nelle conversazioni di _gruppo"
 
 #: ../data/gui/preferences_window.ui.h:28
 msgid "<b>Roster Appearance</b>"
-msgstr "<b>Aspetto della Lista Contatti</b>"
+msgstr "<b>Aspetto dell'elenco dei tuo contatti</b>"
 
 #: ../data/gui/preferences_window.ui.h:29
 msgid "_Window behavior:"
@@ -1811,7 +1813,7 @@ msgstr "Comportamento della _finestra:"
 
 #: ../data/gui/preferences_window.ui.h:30
 msgid "Ma_ke message windows compact"
-msgstr "Rendi compatta le finestre dei _messaggi"
+msgstr "Rendi compatte le finestre dei _messaggi"
 
 #: ../data/gui/preferences_window.ui.h:31
 msgid "Hide all buttons in chat windows"
@@ -1831,7 +1833,7 @@ msgstr ""
 
 #: ../data/gui/preferences_window.ui.h:34
 msgid "_Highlight misspelled words"
-msgstr "_Evidenzia parole errate"
+msgstr "_Evidenzia le parole errate"
 
 #: ../data/gui/preferences_window.ui.h:35
 msgid ""
@@ -1875,11 +1877,11 @@ msgstr "Quando si riceve un nuovo evento:"
 
 #: ../data/gui/preferences_window.ui.h:43
 msgid "Notify me about contacts that sign _in"
-msgstr "Mostra notifica per i contatti che si _connettono"
+msgstr "Mostra una notifica per i contatti che si _connettono"
 
 #: ../data/gui/preferences_window.ui.h:44
 msgid "Notify me about contacts that sign _out"
-msgstr "Mostra notifica per i contatti che si _disconnettono"
+msgstr "Mostra una notifica per i contatti che si _disconnettono"
 
 #: ../data/gui/preferences_window.ui.h:45
 msgid ""
@@ -1909,7 +1911,7 @@ msgstr ""
 
 #: ../data/gui/preferences_window.ui.h:49
 msgid "Display _extra email details"
-msgstr "Mostra dettagli email aggiuntivi"
+msgstr "Mostra dei dettagli e-mail _aggiuntivi"
 
 #: ../data/gui/preferences_window.ui.h:50
 msgid ""
@@ -1921,7 +1923,7 @@ msgstr ""
 
 #: ../data/gui/preferences_window.ui.h:51
 msgid "<b>GMail Options</b>"
-msgstr "<b>Opzioni GMail</b>"
+msgstr "<b>Opzioni di GMail</b>"
 
 #: ../data/gui/preferences_window.ui.h:52
 msgid "Show notification area icon:"
@@ -1929,7 +1931,7 @@ msgstr "Mostra icona nell'area di notifica:"
 
 #: ../data/gui/preferences_window.ui.h:53
 msgid "<b>Visual Notifications</b>"
-msgstr "<b>Notifiche visuali</b>"
+msgstr "<b>Notifiche visive</b>"
 
 #: ../data/gui/preferences_window.ui.h:54
 msgid "Play _sounds"
@@ -1937,7 +1939,7 @@ msgstr "Riproduci _suoni"
 
 #: ../data/gui/preferences_window.ui.h:55
 msgid "Ma_nage..."
-msgstr "_Gestisci..."
+msgstr "Ge_stisci..."
 
 #: ../data/gui/preferences_window.ui.h:56
 msgid "Allow sound when I'm _busy"
@@ -1977,11 +1979,11 @@ msgstr ""
 
 #: ../data/gui/preferences_window.ui.h:62
 msgid "_Send chat state notifications:"
-msgstr "Invia notifiche di stato:"
+msgstr "_Invia le notifiche di stato delle conversazioni:"
 
 #: ../data/gui/preferences_window.ui.h:63
 msgid "<b>Chat state notifications</b>"
-msgstr "<b>Notifiche stato</b>"
+msgstr "<b>Notifiche di stato delle conversazioni</b>"
 
 #: ../data/gui/preferences_window.ui.h:64
 msgid "Personal Events"
@@ -2023,8 +2025,8 @@ msgid ""
 msgstr ""
 "Messaggio di stato di assenza automatica. Se vuoto, Gajim non modificherà il "
 "messaggio di stato attuale\n"
-"$S sarà sostituito dal messaggio di stato precedente\n"
-"$T sarà sostituito dal timeout di assenza automatica"
+"$S verrrà sostituito dal messaggio di stato precedente\n"
+"$T verrrà sostituito dal timeout di assenza automatica"
 
 #: ../data/gui/preferences_window.ui.h:73
 msgid ""
@@ -2035,16 +2037,16 @@ msgid ""
 msgstr ""
 "Messaggio di stato di non disponibilità automatica. Se vuoto, Gajim non "
 "modificherà il messaggio di stato attuale\n"
-"$S sarà sostituito dal messaggio di stato precedente\n"
-"$T sarà sostituito dal timeout di non disponibilità automatica"
+"$S verrrà sostituito dal messaggio di stato precedente\n"
+"$T verrrà sostituito dal timeout di non disponibilità automatica"
 
 #: ../data/gui/preferences_window.ui.h:76
 msgid "<b>Auto Status</b>"
-msgstr "<b>Stato Automatico</b>"
+msgstr "<b>Stato automatico</b>"
 
 #: ../data/gui/preferences_window.ui.h:77
 msgid "Ask status message when I:"
-msgstr "Chiedi messaggio di stato in fase di:"
+msgstr "Chiedi il messaggio di stato in fase di:"
 
 #: ../data/gui/preferences_window.ui.h:78
 msgid "Sign _in"
@@ -2076,7 +2078,7 @@ msgstr "Stato"
 
 #: ../data/gui/preferences_window.ui.h:84
 msgid "Use system _default"
-msgstr "Usa _predefinito di sistema"
+msgstr "Usa il _predefinito di sistema"
 
 #: ../data/gui/preferences_window.ui.h:85
 msgid "Chat message:"
@@ -2118,11 +2120,11 @@ msgstr "<b>Temi</b>"
 
 #: ../data/gui/preferences_window.ui.h:93
 msgid "Contact's nickname:"
-msgstr "Nickname del contatto"
+msgstr "Soprannome del contatto"
 
 #: ../data/gui/preferences_window.ui.h:94
 msgid "Your nickname:"
-msgstr "Il tuo nickname:"
+msgstr "Il tuo soprannome:"
 
 #: ../data/gui/preferences_window.ui.h:95
 msgid "_Status message:"
@@ -2134,7 +2136,7 @@ msgstr "Evidenziatura dell'_URL:"
 
 #: ../data/gui/preferences_window.ui.h:97
 msgid "_Reset to Default Colors"
-msgstr "_Reimposta ai Colori Predefiniti"
+msgstr "_Reimposta ai colori predefiniti"
 
 #: ../data/gui/preferences_window.ui.h:98
 msgid "Contact's message:"
@@ -2146,11 +2148,11 @@ msgstr "Il tuo messaggio:"
 
 #: ../data/gui/preferences_window.ui.h:100
 msgid "Group chat highlight:"
-msgstr "Evidenziatura Messaggi in Conversazioni di Gruppo:"
+msgstr "Evidenziatura dei messaggi nelle conversazioni di gruppo:"
 
 #: ../data/gui/preferences_window.ui.h:101
 msgid "<b>Chat Line Colors</b>"
-msgstr "<b>Colori per la Conversazione</b>"
+msgstr "<b>Colori per le linee della conversazione</b>"
 
 #: ../data/gui/preferences_window.ui.h:102
 msgid "Style"
@@ -2178,11 +2180,11 @@ msgstr "Dispositivo di output video"
 
 #: ../data/gui/preferences_window.ui.h:108
 msgid "Video framerate"
-msgstr "Framerate video"
+msgstr "Framerate del video"
 
 #: ../data/gui/preferences_window.ui.h:109
 msgid "Video size"
-msgstr "Dimensioni video"
+msgstr "Dimensioni del video"
 
 #: ../data/gui/preferences_window.ui.h:110
 msgid "View own video source"
@@ -2274,7 +2276,7 @@ msgstr ""
 
 #: ../data/gui/preferences_window.ui.h:130
 msgid "Log _encrypted chat session"
-msgstr "Salva sessioni di chat cifrat_e"
+msgstr "Registra la sessione di conversazione cifrat_a"
 
 #: ../data/gui/preferences_window.ui.h:131
 msgid ""
@@ -2312,7 +2314,7 @@ msgstr "_Apri..."
 
 #: ../data/gui/preferences_window.ui.h:140
 msgid "<b>Advanced Configuration Editor</b>"
-msgstr "<b>Editor di Configurazione Avanzata</b>"
+msgstr "<b>Editor di configurazione avanzata</b>"
 
 #: ../data/gui/preferences_window.ui.h:141
 msgid "Advanced"
@@ -2364,7 +2366,7 @@ msgstr "tutti nel gruppo"
 
 #: ../data/gui/privacy_list_window.ui.h:11
 msgid "all by subscription"
-msgstr "tutti per abbonamento"
+msgstr "tutti per iscrizione"
 
 #: ../data/gui/privacy_list_window.ui.h:12
 msgid "All"
@@ -2493,7 +2495,7 @@ msgstr "<b>Nome:</b>"
 #: ../data/gui/profile_window.ui.h:22
 #: ../data/gui/vcard_information_window.ui.h:36
 msgid "<b>Nickname:</b>"
-msgstr "<b>Nickname:</b>"
+msgstr "<b>Soprannome:</b>"
 
 #: ../data/gui/profile_window.ui.h:23
 #: ../data/gui/vcard_information_window.ui.h:37
@@ -2557,7 +2559,7 @@ msgstr "Lavoro"
 #: ../data/gui/profile_window.ui.h:36
 #: ../data/gui/vcard_information_window.ui.h:48
 msgid "About"
-msgstr "A proposito"
+msgstr "A riguardo"
 
 #: ../data/gui/remove_account_window.ui.h:1
 msgid "Remove account _only from Gajim"
@@ -2578,7 +2580,7 @@ msgstr "_Rimuovi"
 
 #: ../data/gui/roster_item_exchange_window.ui.h:1
 msgid "Roster Item Exchange"
-msgstr "Scambio Elementi Lista Contatti"
+msgstr "Scambio degli elementi nell'elenco dei tuoi contatti"
 
 #: ../data/gui/roster_item_exchange_window.ui.h:2
 msgid ""
@@ -2607,7 +2609,7 @@ msgstr "_Azioni"
 
 #: ../data/gui/roster_window.ui.h:6
 msgid "Add _Contact..."
-msgstr "Aggiungi _Contatto......"
+msgstr "Aggiungi un _contatto..."
 
 #: ../data/gui/roster_window.ui.h:9 ../src/disco.py:1565
 msgid "_Edit"
@@ -4295,12 +4297,12 @@ msgstr ""
 "Mostra lista contatti all'avvio di Gajim.\n"
 "'sempre' - Mostra sempre la lista contatti.\n"
 "'mai' - Non mostrare mai la lista contatti.\n"
-"'ultimo_stato' - Ripristina la lista contatti dell'ultimo stato."
+"'ultimo_stato' - Ripristina l'elenco dei tuoi contatti dell'ultimo stato."
 
 #: ../src/common/config.py:275
 msgid "If False, you will no longer see the avatar in the chat window."
 msgstr ""
-"Se Falso, l'avatar non sarà più visibile nella finestra di conversazione."
+"Se Falso, l'avatar non sarà più visibile nella finestra della conversazione."
 
 #: ../src/common/config.py:276
 msgid "If True, pressing the escape key closes a tab/window."
@@ -8087,11 +8089,11 @@ msgstr "Lista privacy per %s"
 
 #: ../src/dialogs.py:4464
 msgid "Privacy Lists"
-msgstr "Liste privacy"
+msgstr "Elenchi della privacy"
 
 #: ../src/dialogs.py:4553
 msgid "Invalid List Name"
-msgstr "Nome Lista non Valido"
+msgstr "Nome della lista non valido"
 
 #: ../src/dialogs.py:4554
 msgid "You must enter a name to create a privacy list."
@@ -8398,7 +8400,7 @@ msgstr "Questo tipo di servizio non contiene oggetti da consultare."
 
 #: ../src/disco.py:818 ../src/disco.py:828
 msgid "Invalid Server Name"
-msgstr "Nome Server Non Valido"
+msgstr "Nome del server non valido"
 
 #: ../src/disco.py:882
 #, python-format
@@ -8415,7 +8417,7 @@ msgstr "Questo servizio non contiene oggetti da consultare."
 
 #: ../src/disco.py:1397
 msgid "_Execute Command"
-msgstr "_Esegui comando"
+msgstr "_Esegui il comando"
 
 #: ../src/disco.py:1401 ../src/disco.py:1567
 msgid "Re_gister"
@@ -8462,7 +8464,7 @@ msgstr ""
 
 #: ../src/disco.py:2107
 msgid "Subscribed"
-msgstr "Abbonati"
+msgstr "Iscritti"
 
 #: ../src/disco.py:2115
 msgid "Node"
@@ -8609,7 +8611,7 @@ msgstr "Richiede nslookup per usare i record SRV."
 
 #: ../src/features_window.py:82
 msgid "Spell Checker"
-msgstr "Correttore Ortografico"
+msgstr "Correttore ortografico"
 
 #: ../src/features_window.py:83
 msgid "Spellchecking of composed messages."
@@ -8649,7 +8651,7 @@ msgstr ""
 
 #: ../src/features_window.py:92
 msgid "Requires libxss library."
-msgstr "Richiede libxss library."
+msgstr "Richiede la libreria libxss."
 
 #: ../src/features_window.py:93
 msgid "Requires python2.5."
@@ -9018,7 +9020,7 @@ msgstr "mostra l'aiuto sul comando"
 
 #: ../src/gajim-remote.py:86
 msgid "Shows or hides the roster window"
-msgstr "Mostra o nascondi la finestra contatti"
+msgstr "Mostra o nascondi la finestra dei contatti"
 
 #: ../src/gajim-remote.py:90
 msgid "Pops up a window with the next pending event"
@@ -9204,7 +9206,7 @@ msgstr "Nome dell'account"
 
 #: ../src/gajim-remote.py:188
 msgid "Sends file to a contact"
-msgstr "Invia file ad un contatto"
+msgstr "Invia un file ad un contatto"
 
 #: ../src/gajim-remote.py:190
 msgid "file"
@@ -9253,11 +9255,11 @@ msgstr "Scrive lo stato corrente delle preferenze di Gajim nel file .config"
 
 #: ../src/gajim-remote.py:219
 msgid "Removes contact from roster"
-msgstr "Elimina il contatto dalla lista contatti"
+msgstr "Elimina il contatto dal tuo elenco"
 
 #: ../src/gajim-remote.py:228
 msgid "Adds contact to roster"
-msgstr "Aggiunge il contatto alla lista contatti"
+msgstr "Aggiunge il contatto al tuo elenco"
 
 #: ../src/gajim-remote.py:231
 msgid "Adds new contact to this account"
@@ -9358,7 +9360,7 @@ msgstr "?CLI:nick"
 
 #: ../src/gajim-remote.py:290
 msgid "Nickname to use"
-msgstr "Nickname da usare"
+msgstr "Soprannome da usare"
 
 #: ../src/gajim-remote.py:291
 msgid "?CLI:password"
@@ -9481,7 +9483,7 @@ msgstr "Non è possibile eliminare il tema corrente"
 
 #: ../src/gajim_themes_window.py:188
 msgid "Please first choose another theme as your current theme."
-msgstr "Scegliere prima un altro tema come tema corrente."
+msgstr "Per piacere, Scegli prima un altro tema come tema corrente."
 
 #: ../src/groupchat_control.py:182 ../src/groupchat_control.py:1684
 #, python-format
@@ -9490,7 +9492,7 @@ msgstr "%(nick)s è ora conosciuto come %(new_nick)s"
 
 #: ../src/groupchat_control.py:237
 msgid "Sending private message failed"
-msgstr "Invio messaggio privato fallito"
+msgstr "Invio di un messaggio privato fallito"
 
 #. in second %s code replaces with nickname
 #: ../src/groupchat_control.py:239
@@ -9502,7 +9504,7 @@ msgstr ""
 
 #: ../src/groupchat_control.py:585
 msgid "Insert Nickname"
-msgstr "Inserisci il Nickname"
+msgstr "Inserisci il soprannome"
 
 #: ../src/groupchat_control.py:768
 msgid "Conversation with "
@@ -9528,7 +9530,7 @@ msgstr "La stanza ora mostra i membri non disponibili"
 
 #: ../src/groupchat_control.py:1330
 msgid "Room now does not show unavailable members"
-msgstr "la stanza ora non mostra i membri non disponibili"
+msgstr "La stanza ora non mostra i membri non disponibili"
 
 #: ../src/groupchat_control.py:1332
 msgid "A non-privacy-related room configuration change has occurred"
@@ -9571,11 +9573,11 @@ msgstr "La registrazione dei messaggi della stanza è stata attivata"
 
 #: ../src/groupchat_control.py:1633
 msgid "A new room has been created"
-msgstr "E' stata creata una nuova stanza"
+msgstr "È stata creata una nuova stanza"
 
 #: ../src/groupchat_control.py:1636
 msgid "The server has assigned or modified your roomnick"
-msgstr "Il server ha assegnato o modificato il tuo nickname"
+msgstr "Il server ha assegnato o modificato il tuo soprannome"
 
 #. do not print 'kicked by None'
 #: ../src/groupchat_control.py:1642
@@ -9602,7 +9604,7 @@ msgstr "%(nick)s è stato bloccato da %(who)s : %(reason)s"
 #: ../src/groupchat_control.py:1668 ../src/groupchat_control.py:1784
 #, python-format
 msgid "You are now known as %s"
-msgstr "Sei ora conosciuto come %s"
+msgstr "Ora sei conosciuto come %s"
 
 #: ../src/groupchat_control.py:1738 ../src/groupchat_control.py:1743
 #: ../src/groupchat_control.py:1749
@@ -9647,7 +9649,7 @@ msgstr "** Il ruolo di %(nick)s è stato impostato a %(role)s"
 #: ../src/groupchat_control.py:1887
 #, python-format
 msgid "%s has left"
-msgstr "%s se ne è andato"
+msgstr "%s se n'è andato"
 
 #: ../src/groupchat_control.py:1892
 #, python-format
@@ -9670,15 +9672,15 @@ msgstr "Cambio oggetto"
 
 #: ../src/groupchat_control.py:2205
 msgid "Please specify the new subject:"
-msgstr "Specificare il nuovo oggetto:"
+msgstr "Per piacere, specifica il nuovo soggetto:"
 
 #: ../src/groupchat_control.py:2212
 msgid "Changing Nickname"
-msgstr "Cambio del nickname in corso"
+msgstr "Cambio del soprannome in corso"
 
 #: ../src/groupchat_control.py:2213
 msgid "Please specify the new nickname you want to use:"
-msgstr "Specificare il nuovo nickname da usare:"
+msgstr "Specificare il nuovo soprannome da usare:"
 
 #: ../src/groupchat_control.py:2238
 msgid "The group chat Jabber ID has not allowed characters."
@@ -9688,7 +9690,7 @@ msgstr "Il nome della stanza o del server contiene caratteri non permessi."
 #: ../src/groupchat_control.py:2244
 #, python-format
 msgid "Destroying %s"
-msgstr "Eliminazione %s"
+msgstr "Eliminazione di %s in corso"
 
 #: ../src/groupchat_control.py:2245
 msgid ""
@@ -9780,7 +9782,7 @@ msgstr ""
 
 #: ../src/gtkgui_helpers.py:873
 msgid "Save Image as..."
-msgstr "Salva immagine come..."
+msgstr "Salva l'immagine come..."
 
 #. we are banned
 #. group chat does not exist
@@ -9868,7 +9870,7 @@ msgstr "Errore %(code)s: %(msg)s"
 
 #: ../src/gui_interface.py:474 ../src/notify.py:284
 msgid "Subscription request"
-msgstr "Richiesta di abbonamento"
+msgstr "Richiesta di iscrizione"
 
 #: ../src/gui_interface.py:499
 msgid "Authorization accepted"
@@ -10267,7 +10269,7 @@ msgstr "Pulizia del database"
 
 #: ../src/history_manager.py:487
 msgid "Exporting History Logs..."
-msgstr "Esportazione dei registri delle cronologie..."
+msgstr "Esportazione dei registri delle cronologie in corso..."
 
 #: ../src/history_manager.py:564
 #, python-format
@@ -10277,11 +10279,11 @@ msgstr "%(who)s alle %(time)s ha detto: %(message)s\n"
 #: ../src/history_manager.py:602
 #, python-format
 msgid "Do you really want to delete the logs of %(jid)s?"
-msgstr "Vuoi davvero eliminare i log di %(jid)s?"
+msgstr "Vuoi davvero eliminare i registri di %(jid)s?"
 
 #: ../src/history_manager.py:606
 msgid "Do you really want to delete logs of the selected contacts?"
-msgstr "Vuoi davvero eliminare i log dei contatti selezionati?"
+msgstr "Vuoi davvero eliminare i registri dei contatti selezionati?"
 
 #: ../src/history_manager.py:608 ../src/history_manager.py:647
 msgid "This is an irreversible operation."
@@ -10364,11 +10366,11 @@ msgstr "Messaggi"
 
 #: ../src/negotiation.py:34
 msgid "- messages will be logged"
-msgstr "- i messaggi saranno registrati"
+msgstr "- i messaggi verranno registrati"
 
 #: ../src/negotiation.py:36
 msgid "- messages will not be logged"
-msgstr "- i messaggi non saranno registrati"
+msgstr "- i messaggi non verranno registrati"
 
 #: ../src/notify.py:324
 msgid "Ignore"
@@ -10400,7 +10402,7 @@ msgstr "L'archivio è malformato"
 #: ../src/plugins/gui.py:286 ../src/plugins/gui.py:294
 #: ../src/plugins/pluginmanager.py:542
 msgid "Plugin already exists"
-msgstr "Plugin già esistente"
+msgstr "Il plugin esiste già"
 
 #: ../src/plugins/gui.py:286
 msgid "Overwrite?"
@@ -10491,7 +10493,7 @@ msgstr "Ora \"%s\" conoscerà il tuo stato."
 
 #: ../src/roster_window.py:2087
 msgid "Subscription request has been sent"
-msgstr "La richiesta di abbonamento è stata inviata"
+msgstr "La richiesta di iscrizione è stata inviata"
 
 #: ../src/roster_window.py:2088
 #, python-format
@@ -10636,11 +10638,11 @@ msgstr "Elimina il gruppo"
 #: ../src/roster_window.py:3150
 #, python-format
 msgid "Do you want to remove group %s from the roster?"
-msgstr "Rimuovere il gruppo %s dalla lista contatti?"
+msgstr "Vuoi rimuovere il gruppo %s dal tuo gruppo?"
 
 #: ../src/roster_window.py:3151
 msgid "Also remove all contacts in this group from your roster"
-msgstr "Rimuovi anche tutti i contatti di questo gruppo dalla lista contatti"
+msgstr "Rimuovi anche tutti i contatti di questo gruppo dal tuo elenco"
 
 #: ../src/roster_window.py:3190
 msgid "Assign OpenPGP Key"
@@ -10653,7 +10655,7 @@ msgstr "Seleziona una chiave da applicare al contatto"
 #: ../src/roster_window.py:3646
 #, python-format
 msgid "Contact \"%s\" will be removed from your roster"
-msgstr "Il contatto \"%s\" sarà rimosso dalla tua lista contatti"
+msgstr "Il contatto \"%s\" sarà rimosso dal tuo elenco"
 
 #: ../src/roster_window.py:3648
 #, python-format
@@ -10678,7 +10680,7 @@ msgid ""
 "By removing this contact you also by default remove authorization resulting "
 "in him or her always seeing you as offline."
 msgstr ""
-"Eliminando questo contatto ne rimuoverai anche l'autorizzazione. Questi ti "
+"Eliminando questo contatto ne rimuoverai anche l'autorizzazione. Questo ti "
 "vedrà sempre non in linea."
 
 #: ../src/roster_window.py:3666
@@ -10688,7 +10690,7 @@ msgstr "Voglio che questo contatto conosca il mio stato dopo la rimozione"
 #. several contact to remove at the same time
 #: ../src/roster_window.py:3670
 msgid "Contacts will be removed from your roster"
-msgstr "Il contatto sarà rimosso dalla tua lista contatti"
+msgstr "Il contatto verrà rimosso dalla tua lista contatti"
 
 #: ../src/roster_window.py:3675
 #, python-format
@@ -10838,7 +10840,7 @@ msgstr "_Massimizza tutti"
 
 #: ../src/roster_window.py:5747 ../src/roster_window.py:5933
 msgid "Send Group M_essage"
-msgstr "Invia un M_essaggio di Gruppo"
+msgstr "Invia un m_essaggio di gruppo"
 
 #: ../src/roster_window.py:5755
 msgid "To all users"
@@ -10872,7 +10874,7 @@ msgstr "Gestore della cronologia"
 
 #: ../src/roster_window.py:6154
 msgid "_Join New Group Chat"
-msgstr "_Unisciti a una Nuova Conversazione di Gruppo"
+msgstr "_Unisciti a una nuova conversazione di gruppo"
 
 #: ../src/roster_window.py:6387
 msgid "Change Status Message..."
@@ -10935,7 +10937,7 @@ msgstr "_Cambia il messaggio di stato..."
 
 #: ../src/statusicon.py:355
 msgid "Hide _Roster"
-msgstr "Nascondi l'elenco dei _contatti"
+msgstr "Nascondi il tuo elenco dei _contatti"
 
 #: ../src/statusicon.py:366
 msgid "Hide this menu"
@@ -10987,7 +10989,7 @@ msgstr "Disconnesso"
 #. ('both' is the normal sub so we don't show it)
 #: ../src/tooltips.py:637
 msgid "Subscription: "
-msgstr "Abbonamento: "
+msgstr "Iscrizione: "
 
 #: ../src/tooltips.py:647
 msgid "OpenPGP: "
@@ -11025,7 +11027,7 @@ msgstr "Scarica"
 
 #: ../src/tooltips.py:768
 msgid "Upload"
-msgstr "Carica"
+msgstr "Invia"
 
 #: ../src/tooltips.py:775
 msgid "Type: "
@@ -11116,7 +11118,7 @@ msgstr ""
 #: ../src/vcard.py:412
 msgid "You and the contact are interested in each other's presence information"
 msgstr ""
-"Tu ed il contatto siete reciprocamente interessati alle informazioni sulla "
+"Tu e il contatto siete reciprocamente interessati alle informazioni sulla "
 "presenza dell'altro"
 
 #. None
@@ -11352,7 +11354,7 @@ msgstr " risorsa con priorità "
 #~ msgstr "Scegli il certificato del client"
 
 #~ msgid " a window/tab opened with that contact "
-#~ msgstr "una finestra/tab è aperta per questo contatto"
+#~ msgstr "una finestra/scheda è aperta per questo contatto"
 
 #~ msgid "<b>Actions</b>"
 #~ msgstr "<b>Azioni</b>"
@@ -11677,7 +11679,7 @@ msgstr " risorsa con priorità "
 #~ msgstr ""
 #~ "Mostra immediatamente\n"
 #~ "Mostrami una notifica\n"
-#~ "Mostra solo nell'elenco dei contatti"
+#~ "Mostra solo nell'elenco dei tuoi contatti"
 
 #~ msgid ""
 #~ "none\n"
@@ -11756,7 +11758,7 @@ msgstr " risorsa con priorità "
 #~ "valida, perciò sarà ignorato."
 
 #~ msgid "OpenPGP passphrase was not given"
-#~ msgstr "Non è stata impostata la passphrase OpenPGP"
+#~ msgstr "Non è stata impostata la frase di accesso OpenPGP"
 
 #~ msgid ""
 #~ "To continue sending and receiving messages, you will need to reconnect."
@@ -11856,14 +11858,14 @@ msgstr " risorsa con priorità "
 #~ "nickname from the group chat and optionally displays a reason."
 #~ msgstr ""
 #~ "Utilizzo: /%s <nickname> [motivo], rimuove il partecipante specificato "
-#~ "per nickname dalla stanza e opzionalmente mostra un motivo."
+#~ "per soprannome dalla stanza e opzionalmente mostra un motivo."
 
 #~ msgid ""
 #~ "Usage: /%s <nickname> [message], opens a private message window and sends "
 #~ "message to the occupant specified by nickname."
 #~ msgstr ""
 #~ "Utilizzo: /%s <nickname> [messaggio], apre una finestra di messaggi "
-#~ "privati ed invia il messaggio al partecipante specificato per nickname."
+#~ "privati ed invia il messaggio al partecipante specificato per soprannome."
 
 #~ msgid ""
 #~ "Usage: /%s [topic], displays or updates the current group chat topic."
@@ -12149,7 +12151,7 @@ msgstr " risorsa con priorità "
 #~ msgstr "%s - Gajim"
 
 #~ msgid "_New group chat"
-#~ msgstr "_Nuova chat di gruppo"
+#~ msgstr "_Nuova conversazione di gruppo"
 
 #~ msgid "_Log off"
 #~ msgstr "_Disconnetti"
@@ -12158,7 +12160,7 @@ msgstr " risorsa con priorità "
 #~ msgstr "_Connetti"
 
 #~ msgid "Save passphrase"
-#~ msgstr "Salva frase di accesso"
+#~ msgstr "Salva la frase di accesso"
 
 #~ msgid "Affiliation:"
 #~ msgstr "Affiliazione: "
@@ -12319,14 +12321,29 @@ msgstr " risorsa con priorità "
 #~ msgid "_Remove from Roster"
 #~ msgstr "_Elimina dai tuoi contatti"
 
+#~ msgid ""
+#~ "If that is not your language for which you want to highlight misspelled "
+#~ "words, then please set your $LANG as appropriate. Eg. for French do "
+#~ "export LANG=fr_FR or export LANG=fr_FR.UTF-8 in ~/.bash_profile or to "
+#~ "make it global in /etc/profile.\n"
+#~ "\n"
+#~ "Highlighting misspelled words feature will not be used"
+#~ msgstr ""
+#~ "Se questa non è la lingua per cui si vogliono evidenziare le parole "
+#~ "scorrette, impostare $LANG in maniera appropriata. Per esempio, per "
+#~ "l'italiano eseguire \"export LANG=it_IT\" o \"export LANG=it_IT.UTF-8\" "
+#~ "in ~/.bash_profile o, per rendere la modifica globale, in /etc/profile.\n"
+#~ "\n"
+#~ "Non verrà usata la caratteristica di evidenziatura parole scorrette"
+
 #~ msgid "You must enter a password for the new account."
 #~ msgstr "È necessario inserire una password per il nuovo account."
 
 #~ msgid "Private Chat"
-#~ msgstr "Chat privata"
+#~ msgstr "Conversazione privata"
 
 #~ msgid "Group Chat"
-#~ msgstr "Chat di gruppo"
+#~ msgstr "Conversazione di gruppo"
 
 #~ msgid "Drop %s in group %s"
 #~ msgstr "Sposta %s nel gruppo %s"
@@ -12359,7 +12376,7 @@ msgstr " risorsa con priorità "
 #~ msgstr "invisibile"
 
 #~ msgid "offline"
-#~ msgstr "offline"
+#~ msgstr "non in linea"
 
 #~ msgid "I'm %s"
 #~ msgstr "Sono %s"
@@ -12404,7 +12421,7 @@ msgstr " risorsa con priorità "
 #~ msgstr "Questo è il risultato dell'interrogazione"
 
 #~ msgid "Edit items on the list"
-#~ msgstr "Modifica gli elementi nella lista"
+#~ msgstr "Modifica gli elementi nell'elenco"
 
 #~ msgid "Role: "
 #~ msgstr "Ruolo: "
@@ -12530,7 +12547,7 @@ msgstr " risorsa con priorità "
 #~ msgstr "Gestisci le emoticon"
 
 #~ msgid "Use _emoticons"
-#~ msgstr "_Usa emoticon"
+#~ msgstr "_Usa delle emoticon"
 
 #~ msgid "_Set Image..."
 #~ msgstr "_Imposta l'immagine..."
@@ -12558,7 +12575,8 @@ msgstr " risorsa con priorità "
 
 #~ msgid "Activate/Disable notification for when a file transfer is complete"
 #~ msgstr ""
-#~ "Abilita/disabilita la notifica di quando un trasferimento file è completo"
+#~ "Abilita/disabilita la notifica di quando un trasferimento di un file è "
+#~ "completo"
 
 #~ msgid "Removing selected file transfer"
 #~ msgstr "Rimozione del trasferimento file selezionato"
@@ -12574,10 +12592,10 @@ msgstr " risorsa con priorità "
 #~ "messaggio verrà perso."
 
 #~ msgid "Cannot remove last group"
-#~ msgstr "Impossibile rimuovere l'ultimo gruppo"
+#~ msgstr "Non è possibile rimuovere l'ultimo gruppo"
 
 #~ msgid "At least one contact group must be present."
-#~ msgstr "Deve essere presente almeno un gruppo contatti."
+#~ msgstr "Dev'essere presente almeno un gruppo contatti."
 
 #~ msgid ""
 #~ "pysqlite2 (aka python-pysqlite2) dependency is missing. After you install "
