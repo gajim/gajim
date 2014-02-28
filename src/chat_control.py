@@ -2214,12 +2214,21 @@ class ChatControl(ChatControlBase):
                         fixed = self.xml.get_object('outgoing_fixed')
                         fixed.set_no_show_all(False)
                         video_hbox.show_all()
-                        out_xid = self.xml.get_object('outgoing_drawingarea').\
-                            window.xid
+                        if os.name == 'nt':
+                            out_xid = self.xml.get_object(
+                                'outgoing_drawingarea').window.handle
+                        else:
+                            out_xid = self.xml.get_object(
+                                'outgoing_drawingarea').window.xid
                     else:
                         out_xid = None
                     video_hbox.show_all()
-                    in_xid = self.xml.get_object('incoming_drawingarea').window.xid
+                    if os.name == 'nt':
+                        in_xid = self.xml.get_object('incoming_drawingarea').\
+                            window.handle
+                    else:
+                        in_xid = self.xml.get_object('incoming_drawingarea').\
+                            window.xid
                     sid = gajim.connections[self.account].start_video(
                         self.contact.get_full_jid(), in_xid, out_xid)
                 else:
