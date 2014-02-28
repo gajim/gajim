@@ -2253,8 +2253,12 @@ class ChatControl(ChatControlBase):
                         fixed = self.xml.get_object('outgoing_fixed')
                         fixed.set_no_show_all(False)
                         video_hbox.show_all()
-                        out_xid = self.xml.get_object(
-                            'outgoing_drawingarea').get_window().xid
+                        if os.name == 'nt':
+                            out_xid = self.xml.get_object(
+                                'outgoing_drawingarea').get_window().handle
+                        else:
+                            out_xid = self.xml.get_object(
+                                'outgoing_drawingarea').get_window().xid
                     else:
                         out_xid = None
                     video_hbox.show_all()
