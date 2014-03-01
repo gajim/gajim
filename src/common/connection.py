@@ -1447,8 +1447,15 @@ class Connection(CommonConnection, ConnectionHandlers):
                 return True
 
         self._register_handlers(con, con_type)
+        auth_mechs = gajim.config.get_per('accounts', self.name, 'authentication_mechanisms')
+        auth_mechs = auth_mechs.split()
+        for mech in auth_mechs:
+            if mech not in nbxmpp.auth_nb.SASL_AUTHENTICATION_MECHANISMS | set(['XEP-0078']):
+                log.warning("Unknown authentication mechanisms %s" % mech)
+        if len(auth_mechs) == 0:
+            auth_mechs = None
         con.auth(user=name, password=self.password,
-            resource=self.server_resource, sasl=1, on_auth=self.__on_auth)
+            resource=self.server_resource, sasl=True, on_auth=self.__on_auth, auth_mechs=auth_mechs)
 
     def ssl_certificate_accepted(self):
         if not self.connection:
