@@ -141,7 +141,7 @@ def parseOpts():
         sys.exit(2)
     for o, a in opts:
         if o in ('-h', '--help'):
-            print _('Usage:') + \
+            out = _('Usage:') + \
                 '\n  gajim [options] filename\n\n' + \
                 _('Options:') + \
                 '\n  -h, --help         ' + \
@@ -156,6 +156,7 @@ def parseOpts():
                     _('Set configuration directory') + \
                 '\n  -l, --loglevel     ' + \
                     _('Configure logging system') + '\n'
+            print out.encode(locale.getpreferredencoding())
             sys.exit()
         elif o in ('-q', '--quiet'):
             logging_helpers.set_quiet()
