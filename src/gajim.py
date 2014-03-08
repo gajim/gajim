@@ -115,7 +115,7 @@ if os.name == 'nt':
     sys.path.append('.')
 
 from common import logging_helpers
-logging_helpers.init('TERM' in os.environ)
+logging_helpers.init(sys.stderr.isatty())
 
 import logging
 # gajim.gui or gajim.gtk more appropriate ?
