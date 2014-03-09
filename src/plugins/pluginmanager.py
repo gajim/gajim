@@ -255,7 +255,11 @@ class PluginManager(object):
         if gui_extpoint_name in self.gui_extension_points_handlers:
             for handlers in self.gui_extension_points_handlers[
             gui_extpoint_name]:
-                handlers[0](*args)
+                try:
+                    handlers[0](*args)
+                except Exception, e:
+                    log.warning('Error executing %s', handlers[0],
+                        exc_info=True)
 
     def _register_events_handlers_in_ged(self, plugin):
         for event_name, handler in plugin.events_handlers.iteritems():
@@ -326,7 +330,11 @@ class PluginManager(object):
                 gui_extpoint_name]:
                     handler = gui_extpoint_handlers[1]
                     if handler:
-                        handler(*gui_extension_point_args)
+                        try:
+                            handler(*gui_extension_point_args)
+                        except Exception, e:
+                            log.warning('Error executing %s', handler,
+                                exc_info=True)
 
         self._remove_events_handler_from_ged(plugin)
         self._remove_network_events_from_nec(plugin)
@@ -357,7 +365,12 @@ class PluginManager(object):
                 gui_extpoint_name]:
                     handler = gui_extpoint_handlers[0]
                     if handler:
-                        handler(*gui_extension_point_args)
+                        try:
+                            handler(*gui_extension_point_args)
+                        except Exception, e:
+                            log.warning('Error executing %s', handler,
+                                exc_info=True)
+
 
     @log_calls('PluginManager')
     def _activate_all_plugins(self):
