@@ -28,6 +28,7 @@
 ##
 
 import sys
+import os
 import logging
 import locale
 
@@ -184,6 +185,9 @@ except Exception:
 
 HAVE_FARSTREAM = True
 try:
+    if os.name == 'nt'
+        os.environ['FS_PLUGIN_PATH'] = 'gtk\\lib\\farstream-0.1'
+        os.environ['GST_PLUGIN_PATH'] = 'gtk\\lib\\gstreamer-0.10'
     import gi
     gi.require_version('Farstream', '0.2')
     from gi.repository import Farstream

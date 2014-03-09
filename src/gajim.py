@@ -62,6 +62,12 @@ if os.name == 'nt':
         new_list.insert(0, os.path.join(os.getcwd(), 'gtk', 'bin'))
         os.environ['PATH'] = ';'.join(new_list)
 
+    # Needs to be imported very early to not crash Gajim on exit.
+    try:
+        __import__('libxml2mod')
+    except ImportError:
+        pass
+
 try:
     import nbxmpp
 except ImportError:
