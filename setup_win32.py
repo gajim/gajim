@@ -44,6 +44,11 @@ options = {
             'libgtk-win32-2.0-0.dll', 'libpango-1.0-0.dll',
             'libpangowin32-1.0-0.dll', 'libcairo-2.dll',
             'libpangocairo-1.0-0.dll', 'libpangoft2-1.0-0.dll',
+            'libfarstream-0.1-0.dll', 'libgcc_s_dw2-1.dll',
+            'libgstbase-0.10-0.dll', 'libgstcontroller-0.10-0.dll',
+            'libgstdataprotocol-0.10-0.dll', 'libgstinterfaces-0.10-0.dll',
+            'libgstnet-0.10-0.dll', 'libgstreamer-0.10-0.dll',
+            'libiconv-2.dll', 'libxml2.dll', 'libxml2-2.dll',
         ],
    }
 }
