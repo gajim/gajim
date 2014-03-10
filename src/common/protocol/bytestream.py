@@ -468,6 +468,9 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
                 if listener:
                     self._add_streamhosts_to_query(query, sender, ext_port,
                         [ext_ip])
+            else:
+                self._add_streamhosts_to_query(query, file_props.sender,
+                    ext_port, [ext_ip])
             self.connection.send(iq)
             cleanup_gupnp()
 
