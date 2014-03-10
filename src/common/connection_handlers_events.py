@@ -1311,7 +1311,10 @@ class DecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             self.displaymarking = self.seclabel.getTag('displaymarking')
 
         if self.stanza.getTag('attention', namespace=nbxmpp.NS_ATTENTION):
-            self.attention = True
+            delayed = self.stanza.getTag('x', namespace=nbxmpp.NS_DELAY) is not\
+                None
+            if not delayed:
+                self.attention = True
 
         self.form_node = self.stanza.getTag('x', namespace=nbxmpp.NS_DATA)
 
