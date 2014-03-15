@@ -35,6 +35,6 @@ PATH=bin\gtk\bin;%PATH%
 
 for %%l in (po\*.po) do mkdir po\%%~nl & mkdir po\%%~nl\LC_MESSAGES & msgfmt -o po\%%~nl\LC_MESSAGES\gajim.mo %%l
 
-"C:\Program Files\NSIS\makensis" gajim.nsi
+"C:\Program Files (x86)\NSIS\makensis" gajim.nsi
 
 cd ..
