@@ -3,6 +3,7 @@ Gajim 0.16 ()
   * Improve File transfer support by adding Jingle file transfer
   * use external python-nbxmpp library
   * Improve audio / Video calls and add screensharing feature
+  * Support audio under windows
   * Support systemd-logind
   * Support XEP-0308 Last message correction
   * Support XEP-0224 Attention
