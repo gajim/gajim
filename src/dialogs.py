@@ -1344,11 +1344,13 @@ class AboutDialog:
                 artists_text = a_file.read()
             artists = artists_text.split('\n')
             dlg.set_artists(artists)
-        # connect close button to destroy() function
-        for button in dlg.action_area.get_children():
-            if button.get_property('label') == "_Close":
-                button.connect('clicked', lambda x:dlg.destroy())
+
+        dlg.connect('response', self.on_response)
         dlg.show_all()
+
+    def on_response(self, dialog, response_id):
+        if response_id == Gtk.ResponseType.CANCEL:
+            dialog.destroy()
 
     def tuple2str(self, tuple_):
         str_ = ''
