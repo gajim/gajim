@@ -1346,7 +1346,7 @@ class AboutDialog:
             dlg.set_artists(artists)
         # connect close button to destroy() function
         for button in dlg.action_area.get_children():
-            if button.get_property('label') == Gtk.STOCK_CLOSE:
+            if button.get_property('label') == "_Close":
                 button.connect('clicked', lambda x:dlg.destroy())
         dlg.show_all()
 
