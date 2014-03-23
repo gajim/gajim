@@ -508,7 +508,6 @@ if __name__ == '__main__':
     interface.run()
 
     try:
-        GLib.threads_init()
         Gtk.main()
     except KeyboardInterrupt:
         print('KeyboardInterrupt', file=sys.stderr)
