@@ -71,7 +71,7 @@ class CellRendererImage(Gtk.CellRendererPixbuf):
         self.redraw = 0
         iter_ = self.iters[image]
         timeval = GLib.TimeVal()
-        timeval.tv_sec = GLib.get_current_time()
+        timeval.tv_sec = GLib.get_monotonic_time() / 1000000
         iter_.advance(timeval)
         model = tree.get_model()
         if model:
@@ -92,7 +92,7 @@ class CellRendererImage(Gtk.CellRendererPixbuf):
                     return
                 animation = self.image.get_animation()
                 timeval = GLib.TimeVal()
-                timeval.tv_sec = GLib.get_current_time()
+                timeval.tv_sec = GLib.get_monotonic_time() / 1000000
                 iter_ = animation.get_iter(timeval)
                 self.iters[self.image] = iter_
                 GLib.timeout_add(iter_.get_delay_time(), self.animation_timeout,
@@ -120,7 +120,7 @@ class CellRendererImage(Gtk.CellRendererPixbuf):
         if self.image.get_storage_type() == Gtk.ImageType.ANIMATION:
             animation = self.image.get_animation()
             timeval = GLib.TimeVal()
-            timeval.tv_sec = GLib.get_current_time()
+            timeval.tv_sec = GLib.get_monotonic_time() / 1000000
             pix = animation.get_iter(timeval).get_pixbuf()
         elif self.image.get_storage_type() == Gtk.ImageType.PIXBUF:
             pix = self.image.get_pixbuf()
