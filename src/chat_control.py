@@ -615,9 +615,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         if textcolor:
             color = Gdk.RGBA()
             Gdk.RGBA.parse(color, textcolor)
-            banner_name_label.override_background_color(Gtk.StateType.NORMAL,
+            banner_name_label.override_color(Gtk.StateType.NORMAL,
                 color)
-            self.banner_status_label.override_background_color(
+            self.banner_status_label.override_color(
                 Gtk.StateType.NORMAL, color)
             default_fg = False
         else:
