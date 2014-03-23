@@ -31,10 +31,10 @@ import sys
 import logging
 import locale
 
-import config
+from common import config
 import nbxmpp
-import defs
-import common.ged
+from common import defs
+from common import ged as ged_module
 
 interface = None # The actual interface (the gtk one for the moment)
 thread_interface = None # Interface to run a thread and then a callback
@@ -43,16 +43,15 @@ version = config.get('version')
 connections = {} # 'account name': 'account (connection.Connection) instance'
 ipython_window = None
 
-ged = common.ged.GlobalEventsDispatcher() # Global Events Dispatcher
+ged = ged_module.GlobalEventsDispatcher() # Global Events Dispatcher
 nec = None # Network Events Controller
 plugin_manager = None # Plugins Manager
 
 log = logging.getLogger('gajim')
 
-import logger
-logger = logger.Logger() # init the logger
+logger = None
 
-import configpaths
+from common import configpaths
 gajimpaths = configpaths.gajimpaths
 
 VCARD_PATH = gajimpaths['VCARD']
@@ -84,8 +83,8 @@ else:
 
 os_info = None # used to cache os information
 
-from contacts import LegacyContactsAPI
-from events import Events
+from common.contacts import LegacyContactsAPI
+from common.events import Events
 
 gmail_domains = ['gmail.com', 'googlemail.com']
 
@@ -159,7 +158,7 @@ except ImportError:
 
 HAVE_GPG = True
 try:
-    __import__('gnupg', globals(), locals(), [], -1)
+    __import__('gnupg', globals(), locals(), [], 0)
 except ImportError:
     HAVE_GPG = False
 else:
@@ -185,6 +184,7 @@ except Exception:
 
 HAVE_FARSTREAM = True
 try:
+    raise ImportError
     farstream = __import__('farstream')
     import gst
     import glib
@@ -201,8 +201,8 @@ except ImportError:
 
 HAVE_UPNP_IGD = True
 try:
-    import gupnp.igd
-    gupnp_igd = gupnp.igd.Simple()
+    from gi.repository import GUPnPIgd
+    gupnp_igd = GUPnPIgd.SimpleIgd()
 except ImportError:
     HAVE_UPNP_IGD = False
 
@@ -223,16 +223,13 @@ gajim_common_features = [nbxmpp.NS_BYTESTREAM, nbxmpp.NS_SI, nbxmpp.NS_FILE,
     nbxmpp.NS_SSN, nbxmpp.NS_MOOD, nbxmpp.NS_ACTIVITY, nbxmpp.NS_NICK,
     nbxmpp.NS_ROSTERX, nbxmpp.NS_SECLABEL, nbxmpp.NS_HASHES,
     nbxmpp.NS_HASHES_MD5, nbxmpp.NS_HASHES_SHA1, nbxmpp.NS_HASHES_SHA256,
-    nbxmpp.NS_HASHES_SHA512, nbxmpp.NS_CORRECT]
+    nbxmpp.NS_HASHES_SHA512]
 
 # Optional features gajim supports per account
 gajim_optional_features = {}
 
 # Capabilities hash per account
 caps_hash = {}
-
-import caps_cache
-caps_cache.initialize(logger)
 
 global_id = 0
 def get_an_id():
@@ -290,13 +287,8 @@ def get_jid_without_resource(jid):
     return jid.split('/')[0]
 
 def construct_fjid(room_jid, nick):
-    """
-    Nick is in UTF-8 (taken from treeview); room_jid is in unicode
-    """
     # fake jid is the jid for a contact in a room
     # gaim@conference.jabber.org/nick
-    if isinstance(nick, str):
-        nick = unicode(nick, 'utf-8')
     return room_jid + '/' + nick
 
 def get_resource_from_jid(jid):

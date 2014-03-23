@@ -25,12 +25,13 @@ import os
 import traceback
 import threading
 
-import gtk
-import pango
+from gi.repository import Gtk
+from gi.repository import Gdk
+from gi.repository import Pango
 from common import i18n # installs _() function
-import dialogs
+from dialogs import HigDialog
 
-from cStringIO import StringIO
+from io import StringIO
 from common import helpers
 
 _exception_in_progress = threading.Lock()
@@ -42,7 +43,7 @@ def _info(type_, value, tb):
         _excepthook_save(type_, value, tb)
         return
 
-    dialog = dialogs.HigDialog(None, gtk.MESSAGE_WARNING, gtk.BUTTONS_NONE,
+    dialog = HigDialog(None, Gtk.MessageType.WARNING, Gtk.ButtonsType.NONE,
                             _('A programming error has been detected'),
                             _('It probably is not fatal, but should be reported '
                             'to the developers nonetheless.'))
@@ -50,20 +51,20 @@ def _info(type_, value, tb):
     dialog.set_modal(False)
     #FIXME: add icon to this button
     RESPONSE_REPORT_BUG = 42
-    dialog.add_buttons(gtk.STOCK_CLOSE, gtk.BUTTONS_CLOSE,
+    dialog.add_buttons(Gtk.STOCK_CLOSE, Gtk.ButtonsType.CLOSE,
             _('_Report Bug'), RESPONSE_REPORT_BUG)
     report_button = dialog.action_area.get_children()[0] # right to left
     report_button.grab_focus()
 
     # Details
-    textview = gtk.TextView()
+    textview = Gtk.TextView()
     textview.set_editable(False)
-    textview.modify_font(pango.FontDescription('Monospace'))
-    sw = gtk.ScrolledWindow()
-    sw.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+    textview.override_font(Pango.FontDescription('Monospace'))
+    sw = Gtk.ScrolledWindow()
+    sw.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
     sw.add(textview)
-    frame = gtk.Frame()
-    frame.set_shadow_type(gtk.SHADOW_IN)
+    frame = Gtk.Frame()
+    frame.set_shadow_type(Gtk.ShadowType.IN)
     frame.add(sw)
     frame.set_border_width(6)
     textbuffer = textview.get_buffer()
@@ -71,15 +72,15 @@ def _info(type_, value, tb):
     traceback.print_exception(type_, value, tb, None, trace)
     textbuffer.set_text(trace.getvalue())
     textview.set_size_request(
-            gtk.gdk.screen_width() / 3,
-            gtk.gdk.screen_height() / 4)
-    expander = gtk.Expander(_('Details'))
+            Gdk.Screen.width() / 3,
+            Gdk.Screen.height() / 4)
+    expander = Gtk.Expander(label=_('Details'))
     expander.add(frame)
-    dialog.vbox.add(expander)
+    dialog.vbox.pack_start(expander, True, True, 0)
 
     dialog.set_resizable(True)
     # on expand the details the dialog remains centered on screen
-    dialog.set_position(gtk.WIN_POS_CENTER_ALWAYS)
+    dialog.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
 
     def on_dialog_response(dialog, response):
         if response == RESPONSE_REPORT_BUG:

@@ -35,22 +35,23 @@ import locale
 import os
 import subprocess
 import urllib
-import urllib2
+import urllib
 import webbrowser
 import errno
 import select
 import base64
 import hashlib
 import shlex
-import caps_cache
+from common import caps_cache
 import socket
 import time
 
+from gi.repository import GObject
 from encodings.punycode import punycode_encode
 from string import Template
 
-from i18n import Q_
-from i18n import ngettext
+from common.i18n import Q_
+from common.i18n import ngettext
 
 try:
     import winsound # windows-only built-in module for playing wav
@@ -121,7 +122,7 @@ def idn_to_ascii(host):
     labels = idna.dots.split(host)
     converted_labels = []
     for label in labels:
-        converted_labels.append(idna.ToASCII(label))
+        converted_labels.append(idna.ToASCII(label).decode('utf-8'))
     return ".".join(converted_labels)
 
 def ascii_to_idn(host):
@@ -143,9 +144,9 @@ def parse_resource(resource):
     if resource:
         try:
             from nbxmpp.stringprepare import resourceprep
-            return resourceprep.prepare(unicode(resource))
+            return resourceprep.prepare(resource)
         except UnicodeError:
-            raise InvalidFormat, 'Invalid character in resource.'
+            raise InvalidFormat('Invalid character in resource.')
 
 def prep(user, server, resource):
     """
@@ -155,34 +156,34 @@ def prep(user, server, resource):
     #http://svn.twistedmatrix.com/cvs/trunk/twisted/words/protocols/jabber/jid.py
     if user is not None:
         if len(user) < 1 or len(user) > 1023:
-            raise InvalidFormat, _('Username must be between 1 and 1023 chars')
+            raise InvalidFormat(_('Username must be between 1 and 1023 chars'))
         try:
             from nbxmpp.stringprepare import nodeprep
-            user = nodeprep.prepare(unicode(user))
+            user = nodeprep.prepare(user)
         except UnicodeError:
-            raise InvalidFormat, _('Invalid character in username.')
+            raise InvalidFormat(_('Invalid character in username.'))
     else:
         user = None
 
     if server is not None:
         if len(server) < 1 or len(server) > 1023:
-            raise InvalidFormat, _('Server must be between 1 and 1023 chars')
+            raise InvalidFormat(_('Server must be between 1 and 1023 chars'))
         try:
             from nbxmpp.stringprepare import nameprep
-            server = nameprep.prepare(unicode(server))
+            server = nameprep.prepare(server)
         except UnicodeError:
-            raise InvalidFormat, _('Invalid character in hostname.')
+            raise InvalidFormat(_('Invalid character in hostname.'))
     else:
-        raise InvalidFormat, _('Server address required.')
+        raise InvalidFormat(_('Server address required.'))
 
     if resource is not None:
         if len(resource) < 1 or len(resource) > 1023:
-            raise InvalidFormat, _('Resource must be between 1 and 1023 chars')
+            raise InvalidFormat(_('Resource must be between 1 and 1023 chars'))
         try:
             from nbxmpp.stringprepare import resourceprep
-            resource = resourceprep.prepare(unicode(resource))
+            resource = resourceprep.prepare(resource)
         except UnicodeError:
-            raise InvalidFormat, _('Invalid character in resource.')
+            raise InvalidFormat(_('Invalid character in resource.'))
     else:
         resource = None
 
@@ -206,7 +207,7 @@ def temp_failure_retry(func, *args, **kwargs):
     while True:
         try:
             return func(*args, **kwargs)
-        except (os.error, IOError, select.error), ex:
+        except (os.error, IOError, select.error) as ex:
             if ex.errno == errno.EINTR:
                 continue
             else:
@@ -263,7 +264,7 @@ def get_uf_show(show, use_mnemonic = False):
         uf_show = Q_('?contact has status:Unknown')
     else:
         uf_show = Q_('?contact has status:Has errors')
-    return unicode(uf_show)
+    return uf_show
 
 def get_uf_sub(sub):
     if sub == 'none':
@@ -277,7 +278,7 @@ def get_uf_sub(sub):
     else:
         uf_sub = sub
 
-    return unicode(uf_sub)
+    return uf_sub
 
 def get_uf_ask(ask):
     if ask is None:
@@ -287,7 +288,7 @@ def get_uf_ask(ask):
     else:
         uf_ask = ask
 
-    return unicode(uf_ask)
+    return uf_ask
 
 def get_uf_role(role, plural = False):
     ''' plural determines if you get Moderators or Moderator'''
@@ -397,7 +398,7 @@ def exec_command(command, use_shell=False):
     if use_shell:
         subprocess.Popen('%s &' % command, shell=True).wait()
     else:
-        args = shlex.split(command.encode('utf-8'))
+        args = shlex.split(command)
         p = subprocess.Popen(args)
         gajim.thread_interface(p.wait)
 
@@ -409,7 +410,7 @@ def build_command(executable, parameter):
     return command
 
 def get_file_path_from_dnd_dropped_uri(uri):
-    path = urllib.unquote(uri) # escape special chars
+    path = urllib.parse.unquote(uri) # escape special chars
     path = path.strip('\r\n\x00') # remove \r\n and NULL
     # get the path to file
     if re.match('^file:///[a-zA-Z]:/', path): # windows
@@ -447,33 +448,6 @@ def get_output_of_command(command):
 
     return output
 
-def decode_string(string):
-    """
-    Try to decode (to make it Unicode instance) given string
-    """
-    if isinstance(string, unicode):
-        return string
-    # by the time we go to iso15 it better be the one else we show bad characters
-    encodings = (locale.getpreferredencoding(), 'utf-8', 'iso-8859-15')
-    for encoding in encodings:
-        try:
-            string = string.decode(encoding)
-        except UnicodeError:
-            continue
-        break
-
-    return string
-
-def ensure_utf8_string(string):
-    """
-    Make sure string is in UTF-8
-    """
-    try:
-        string = decode_string(string).encode('utf-8')
-    except Exception:
-        pass
-    return string
-
 def get_windows_reg_env(varname, default=''):
     """
     Ask for paths commonly used but not exposed as ENVs in english Windows 2003
@@ -481,7 +455,7 @@ def get_windows_reg_env(varname, default=''):
             'AppData' = %USERPROFILE%\Application Data (also an ENV)
             'Desktop' = %USERPROFILE%\Desktop
             'Favorites' = %USERPROFILE%\Favorites
-            'NetHood' = %USERPROFILE%\NetHood
+            'NetHood' = %USERPROFILE%\ NetHood
             'Personal' = D:\My Documents (PATH TO MY DOCUMENTS)
             'PrintHood' = %USERPROFILE%\PrintHood
             'Programs' = %USERPROFILE%\Start Menu\Programs
@@ -540,10 +514,11 @@ def sanitize_filename(filename):
     """
     # 48 is the limit
     if len(filename) > 48:
-        hash = hashlib.md5(filename)
-        filename = base64.b64encode(hash.digest())
+        hash = hashlib.md5(filename.encode('utf-8'))
+        filename = base64.b64encode(hash.digest()).decode('utf-8')
 
-    filename = punycode_encode(filename) # make it latin chars only
+    # make it latin chars only
+    filename = punycode_encode(filename).decode('utf-8')
     filename = filename.replace('/', '_')
     if os.name == 'nt':
         filename = filename.replace('?', '_').replace(':', '_')\
@@ -564,9 +539,6 @@ def reduce_chars_newlines(text, max_chars = 0, max_lines = 0):
         if len(string) > max_chars:
             string = string[:max_chars - 3] + '...'
         return string
-
-    if isinstance(text, str):
-        text = text.decode('utf-8')
 
     if max_lines == 0:
         lines = text.split('\n')
@@ -623,12 +595,10 @@ def datetime_tuple(timestamp):
     from time import strptime
     return strptime(timestamp, '%Y%m%dT%H:%M:%S')
 
-# import gajim only when needed (after decode_string is defined) see #4764
-
-import gajim
+from common import gajim
 if gajim.HAVE_PYCURL:
     import pycurl
-    from cStringIO import StringIO
+    from io import StringIO
 
 def convert_bytes(string):
     suffix = ''
@@ -636,13 +606,13 @@ def convert_bytes(string):
     # but do we use the standard?
     use_kib_mib = gajim.config.get('use_kib_mib')
     align = 1024.
-    bytes = float(string)
-    if bytes >= align:
-        bytes = round(bytes/align, 1)
-        if bytes >= align:
-            bytes = round(bytes/align, 1)
-            if bytes >= align:
-                bytes = round(bytes/align, 1)
+    bytes_ = float(string)
+    if bytes_ >= align:
+        bytes_ = round(bytes_/align, 1)
+        if bytes_ >= align:
+            bytes_ = round(bytes_/align, 1)
+            if bytes_ >= align:
+                bytes_ = round(bytes_/align, 1)
                 if use_kib_mib:
                     #GiB means gibibyte
                     suffix = _('%s GiB')
@@ -666,7 +636,7 @@ def convert_bytes(string):
     else:
         #B means bytes
         suffix = _('%s B')
-    return suffix % unicode(bytes)
+    return suffix % str(bytes_)
 
 def get_contact_dict_for_account(account):
     """
@@ -892,13 +862,13 @@ def get_icon_name_to_show(contact, account = None):
 
 def get_full_jid_from_iq(iq_obj):
     """
-    Return the full jid (with resource) from an iq as unicode
+    Return the full jid (with resource) from an iq
     """
     return parse_jid(str(iq_obj.getFrom()))
 
 def get_jid_from_iq(iq_obj):
     """
-    Return the jid (without resource) from an iq as unicode
+    Return the jid (without resource) from an iq
     """
     jid = get_full_jid_from_iq(iq_obj)
     return gajim.get_jid_without_resource(jid)
@@ -907,7 +877,8 @@ def get_auth_sha(sid, initiator, target):
     """
     Return sha of sid + initiator + target used for proxy auth
     """
-    return hashlib.sha1("%s%s%s" % (sid, initiator, target)).hexdigest()
+    return hashlib.sha1(("%s%s%s" % (sid, initiator, target)).encode('utf-8')).\
+        hexdigest()
 
 def remove_invalid_xml_chars(string):
     if string:
@@ -943,7 +914,7 @@ def get_random_string_16():
     """
     Create random string of length 16
     """
-    rng = range(65, 90)
+    rng = list(range(65, 90))
     rng.extend(range(48, 57))
     char_sequence = [chr(e) for e in rng]
     from random import sample
@@ -984,8 +955,10 @@ def get_os_info():
             p.wait()
             output = temp_failure_retry(p.stdout.readline).strip()
             # some distros put n/a in places, so remove those
-            output = output.replace('n/a', '').replace('N/A', '')
+            output = output.decode('utf-8').replace('n/a', '').replace('N/A', '')
             gajim.os_info = output
+            p.stdout.close()
+            p.stdin.close()
             return output
 
         # lsb_release executable not available, so parse files
@@ -1419,7 +1392,7 @@ def get_proxy_info(account):
                     login = ['', '']
                     addr = env_http_proxy[0].split(':')
 
-                proxy = {'host': addr[0], 'type' : u'http', 'user':login[0]}
+                proxy = {'host': addr[0], 'type' : 'http', 'user':login[0]}
 
                 if len(addr) == 2:
                     proxy['port'] = addr[1]
@@ -1430,7 +1403,7 @@ def get_proxy_info(account):
                     proxy['pass'] = login[1]
                     proxy['useauth'] = True
                 else:
-                    proxy['pass'] = u''
+                    proxy['pass'] = ''
                 return proxy
 
             except Exception:
@@ -1449,14 +1422,15 @@ def _get_img_direct(attrs):
     """
     Download an image. This function should be launched in a separated thread.
     """
-    mem, alt = '', ''
+    mem = b''
+    alt = ''
     # Wait maximum 5s for connection
     socket.setdefaulttimeout(5)
     try:
-        req = urllib2.Request(attrs['src'])
+        req = urllib.request.Request(attrs['src'])
         req.add_header('User-Agent', 'Gajim ' + gajim.version)
-        f = urllib2.urlopen(req)
-    except Exception, ex:
+        f = urllib.request.urlopen(req)
+    except Exception as ex:
         log.debug('Error loading image %s ' % attrs['src']  + str(ex))
         pixbuf = None
         alt = attrs.get('alt', 'Broken image')
@@ -1479,7 +1453,7 @@ def _get_img_direct(attrs):
                 break
             try:
                 temp = f.read(100)
-            except socket.timeout, ex:
+            except socket.timeout as ex:
                 log.debug('Timeout loading image %s ' % attrs['src'] + str(ex))
                 alt = attrs.get('alt', '')
                 if alt:
@@ -1496,6 +1470,7 @@ def _get_img_direct(attrs):
                     alt += '\n'
                 alt += _('Image is too big')
                 break
+        f.close()
     return (mem, alt)
 
 def _get_img_proxy(attrs, proxy):
@@ -1531,17 +1506,17 @@ def _get_img_proxy(attrs, proxy):
         c.close()
         t = b.getvalue()
         return (t, attrs.get('alt', ''))
-    except pycurl.error, ex:
+    except pycurl.error as ex:
         alt = attrs.get('alt', '')
         if alt:
             alt += '\n'
-        if ex[0] == pycurl.E_FILESIZE_EXCEEDED:
+        if ex.errno == pycurl.E_FILESIZE_EXCEEDED:
             alt += _('Image is too big')
-        elif ex[0] == pycurl.E_OPERATION_TIMEOUTED:
+        elif ex.errno == pycurl.E_OPERATION_TIMEOUTED:
             alt += _('Timeout loading image')
         else:
             alt += _('Error loading image')
-    except Exception, ex:
+    except Exception as ex:
         log.debug('Error loading image %s ' % attrs['src']  + str(ex))
         pixbuf = None
         alt = attrs.get('alt', 'Broken image')

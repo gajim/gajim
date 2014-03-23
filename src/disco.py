@@ -47,9 +47,11 @@
 import os
 import types
 import weakref
-import gobject
-import gtk
-import pango
+from gi.repository import GLib
+from gi.repository import Gtk
+from gi.repository import Gdk
+from gi.repository import GdkPixbuf
+from gi.repository import Pango
 
 import dialogs
 import tooltips
@@ -151,10 +153,10 @@ class CacheDictionary:
             return self.value
 
     def cleanup(self):
-        for key in self.cache.keys():
+        for key in list(self.cache.keys()):
             item = self.cache[key]
             if item.source:
-                gobject.source_remove(item.source)
+                GLib.source_remove(item.source)
             del self.cache[key]
 
     def _expire_timeout(self, key):
@@ -171,9 +173,9 @@ class CacheDictionary:
         """
         item = self.cache[key]
         if item.source:
-            gobject.source_remove(item.source)
+            GLib.source_remove(item.source)
         if self.lifetime:
-            source = gobject.timeout_add_seconds(self.lifetime/1000, self._expire_timeout, key)
+            source = GLib.timeout_add_seconds(int(self.lifetime/1000), self._expire_timeout, key)
             item.source = source
 
     def __getitem__(self, key):
@@ -190,12 +192,11 @@ class CacheDictionary:
     def __delitem__(self, key):
         item = self.cache[key]
         if item.source:
-            gobject.source_remove(item.source)
+            GLib.source_remove(item.source)
         del self.cache[key]
 
     def __contains__(self, key):
         return key in self.cache
-    has_key = __contains__
 
 _icon_cache = CacheDictionary(15)
 
@@ -224,8 +225,8 @@ class Closure(object):
         self.remove = remove
         self.removeargs = removeargs
         if isinstance(cb, types.MethodType):
-            self.meth_self = weakref.ref(cb.im_self, self._remove)
-            self.meth_name = cb.func_name
+            self.meth_self = weakref.ref(cb.__self__, self._remove)
+            self.meth_name = cb.__name__
         elif callable(cb):
             self.meth_self = None
             self.cb = weakref.ref(cb, self._remove)
@@ -523,7 +524,7 @@ class ServiceDiscoveryWindow(object):
         if gajim.connections[account].connected < 2:
             dialogs.ErrorDialog(_('You are not connected to the server'),
 _('Without a connection, you can not browse available services'))
-            raise RuntimeError, 'You must be connected to browse services'
+            raise RuntimeError('You must be connected to browse services')
 
         # Get a ServicesCache object.
         try:
@@ -553,13 +554,13 @@ _('Without a connection, you can not browse available services'))
         self.action_buttonbox = self.xml.get_object('action_buttonbox')
 
         # Address combobox
-        self.address_comboboxentry = None
+        self.address_comboboxtext = None
         address_table = self.xml.get_object('address_table')
         if address_entry:
-            self.address_comboboxentry = self.xml.get_object(
-                    'address_comboboxentry')
-            self.address_comboboxentry_entry = self.address_comboboxentry.child
-            self.address_comboboxentry_entry.set_activates_default(True)
+            self.address_comboboxtext = self.xml.get_object(
+                'address_comboboxtext')
+            self.address_comboboxtext_entry = self.xml.get_object(
+                'address_entry')
 
             self.latest_addresses = gajim.config.get(
                 'latest_disco_addresses').split()
@@ -569,16 +570,16 @@ _('Without a connection, you can not browse available services'))
             if len(self.latest_addresses) > 10:
                 self.latest_addresses = self.latest_addresses[0:10]
             for j in self.latest_addresses:
-                self.address_comboboxentry.append_text(j)
-            self.address_comboboxentry.child.set_text(jid)
+                self.address_comboboxtext.append_text(j)
+            self.address_comboboxtext.get_child().set_text(jid)
         else:
             # Don't show it at all if we didn't ask for it
             address_table.set_no_show_all(True)
             address_table.hide()
 
-        accel_group = gtk.AccelGroup()
-        keyval, mod = gtk.accelerator_parse('<Control>r')
-        accel_group.connect_group(keyval, mod, gtk.ACCEL_VISIBLE,
+        accel_group = Gtk.AccelGroup()
+        keyval, mod = Gtk.accelerator_parse('<Control>r')
+        accel_group.connect(keyval, mod, Gtk.AccelFlags.VISIBLE,
             self.accel_group_func)
         self.window.add_accel_group(accel_group)
 
@@ -599,7 +600,7 @@ _('Without a connection, you can not browse available services'))
             self.browser.account = value
 
     def accel_group_func(self, accel_group, acceleratable, keyval, modifier):
-        if (modifier & gtk.gdk.CONTROL_MASK) and (keyval == gtk.keysyms.r):
+        if (modifier & Gdk.ModifierType.CONTROL_MASK) and (keyval == Gdk.KEY_r):
             self.reload()
 
     def _initial_state(self):
@@ -621,15 +622,15 @@ _('Without a connection, you can not browse available services'))
                 'bannerfontattrs')
 
         if bannerfont:
-            font = pango.FontDescription(bannerfont)
+            font = Pango.FontDescription(bannerfont)
         else:
-            font = pango.FontDescription('Normal')
+            font = Pango.FontDescription('Normal')
         if bannerfontattrs:
             # B is attribute set by default
             if 'B' in bannerfontattrs:
-                font.set_weight(pango.WEIGHT_HEAVY)
+                font.set_weight(Pango.Weight.HEAVY)
             if 'I' in bannerfontattrs:
-                font.set_style(pango.STYLE_ITALIC)
+                font.set_style(Pango.Style.ITALIC)
 
         font_attrs = 'font_desc="%s"' % font.to_string()
         font_size = font.get_size()
@@ -639,7 +640,7 @@ _('Without a connection, you can not browse available services'))
             font_attrs = '%s size="large"' % font_attrs
         markup = '<span %s>%s</span>' % (font_attrs, text)
         if text_after:
-            font.set_weight(pango.WEIGHT_NORMAL)
+            font.set_weight(Pango.Weight.NORMAL)
             markup = '%s\n<span font_desc="%s" size="small">%s</span>' % \
                 (markup, font.to_string(), text_after)
         self.banner.set_markup(markup)
@@ -653,15 +654,18 @@ _('Without a connection, you can not browse available services'))
         textcolor = gajim.config.get_per('themes', theme, 'bannertextcolor')
         self.disconnect_style_event()
         if bgcolor:
-            color = gtk.gdk.color_parse(bgcolor)
-            self.banner_eventbox.modify_bg(gtk.STATE_NORMAL, color)
+            color = Gdk.RGBA()
+            Gdk.RGBA.parse(color, bgcolor)
+            self.banner_eventbox.override_background_color(Gtk.StateType.NORMAL,
+                color)
             default_bg = False
         else:
             default_bg = True
 
         if textcolor:
-            color = gtk.gdk.color_parse(textcolor)
-            self.banner.modify_fg(gtk.STATE_NORMAL, color)
+            color = Gdk.RGBA()
+            Gdk.RGBA.parse(color, textcolor)
+            self.banner.override_color(Gtk.StateType.NORMAL, color)
             default_fg = False
         else:
             default_fg = True
@@ -687,12 +691,14 @@ _('Without a connection, you can not browse available services'))
                 opts[1] == True -> set bg color
         """
         self.disconnect_style_event()
+        context = widget.get_style_context()
         if opts[1]:
-            bg_color = widget.style.bg[gtk.STATE_SELECTED]
-            self.banner_eventbox.modify_bg(gtk.STATE_NORMAL, bg_color)
+            bg_color = context.get_background_color(Gtk.StateFlags.SELECTED)
+            self.banner_eventbox.override_background_color(Gtk.StateType.NORMAL,
+                bg_color)
         if opts[0]:
-            fg_color = widget.style.fg[gtk.STATE_SELECTED]
-            self.banner.modify_fg(gtk.STATE_NORMAL, fg_color)
+            fg_color = context.get_color(Gtk.StateFlags.SELECTED)
+            self.banner.override_color(Gtk.StateType.NORMAL, fg_color)
         self.banner.ensure_style()
         self.connect_style_event(opts[0], opts[1])
 
@@ -763,7 +769,7 @@ _('Without a connection, you can not browse available services'))
         if self.dying or jid != self.jid or node != self.node:
             return
         if not identities:
-            if not self.address_comboboxentry:
+            if not self.address_comboboxtext:
                 # We can't travel anywhere else.
                 self.destroy()
             dialogs.ErrorDialog(_('The service could not be found'),
@@ -808,23 +814,23 @@ _('Without a connection, you can not browse available services'))
     def on_close_button_clicked(self, widget):
         self.destroy()
 
-    def on_address_comboboxentry_changed(self, widget):
-        if self.address_comboboxentry.get_active() != -1:
+    def on_address_comboboxtext_changed(self, widget):
+        if self.address_comboboxtext.get_active() != -1:
             # user selected one of the entries so do auto-visit
-            jid = self.address_comboboxentry.child.get_text().decode('utf-8')
+            jid = self.address_comboboxtext_entry.get_text()
             try:
                 jid = helpers.parse_jid(jid)
-            except helpers.InvalidFormat, s:
+            except helpers.InvalidFormat as s:
                 pritext = _('Invalid Server Name')
                 dialogs.ErrorDialog(pritext, str(s))
                 return
             self.travel(jid, '')
 
     def on_go_button_clicked(self, widget):
-        jid = self.address_comboboxentry.child.get_text().decode('utf-8')
+        jid = self.address_comboboxtext_entry.get_text()
         try:
             jid = helpers.parse_jid(jid)
-        except helpers.InvalidFormat, s:
+        except helpers.InvalidFormat as s:
             pritext = _('Invalid Server Name')
             dialogs.ErrorDialog(pritext, str(s))
             return
@@ -835,9 +841,9 @@ _('Without a connection, you can not browse available services'))
         self.latest_addresses.insert(0, jid)
         if len(self.latest_addresses) > 10:
             self.latest_addresses = self.latest_addresses[0:10]
-        self.address_comboboxentry.get_model().clear()
+        self.address_comboboxtext.get_model().clear()
         for j in self.latest_addresses:
-            self.address_comboboxentry.append_text(j)
+            self.address_comboboxtext.append_text(j)
         gajim.config.set('latest_disco_addresses',
                 ' '.join(self.latest_addresses))
         self.travel(jid, '')
@@ -890,21 +896,21 @@ class AgentBrowser:
         the JID and node of the item respectively
         """
         # JID, node, name, address
-        self.model = gtk.ListStore(str, str, str, str)
-        self.model.set_sort_column_id(3, gtk.SORT_ASCENDING)
+        self.model = Gtk.ListStore(str, str, str, str)
+        self.model.set_sort_column_id(3, Gtk.SortType.ASCENDING)
         self.window.services_treeview.set_model(self.model)
         # Name column
-        col = gtk.TreeViewColumn(_('Name'))
-        renderer = gtk.CellRendererText()
-        col.pack_start(renderer)
-        col.set_attributes(renderer, text = 2)
+        col = Gtk.TreeViewColumn(_('Name'))
+        renderer = Gtk.CellRendererText()
+        col.pack_start(renderer, True)
+        col.add_attribute(renderer, 'text', 2)
         self.window.services_treeview.insert_column(col, -1)
         col.set_resizable(True)
         # Address column
-        col = gtk.TreeViewColumn(_('JID'))
-        renderer = gtk.CellRendererText()
-        col.pack_start(renderer)
-        col.set_attributes(renderer, text = 3)
+        col = Gtk.TreeViewColumn(_('JID'))
+        renderer = Gtk.CellRendererText()
+        col.pack_start(renderer, True)
+        col.add_attribute(renderer, 'text', 3)
         self.window.services_treeview.insert_column(col, -1)
         col.set_resizable(True)
         self.window.services_treeview.set_headers_visible(True)
@@ -920,16 +926,13 @@ class AgentBrowser:
         Add the action buttons to the buttonbox for actions the browser can
         perform
         """
-        self.browse_button = gtk.Button()
-        image = gtk.image_new_from_stock(gtk.STOCK_OPEN, gtk.ICON_SIZE_BUTTON)
-        label = gtk.Label(_('_Browse'))
-        label.set_use_underline(True)
-        hbox = gtk.HBox()
-        hbox.pack_start(image, False, True, 6)
-        hbox.pack_end(label, True, True)
-        self.browse_button.add(hbox)
+        self.browse_button = Gtk.Button()
         self.browse_button.connect('clicked', self.on_browse_button_clicked)
         self.window.action_buttonbox.add(self.browse_button)
+        image = Gtk.Image.new_from_stock(Gtk.STOCK_OPEN, Gtk.IconSize.BUTTON)
+        self.browse_button.set_image(image)
+        label = _('_Browse')
+        self.browse_button.set_label(label)
         self.browse_button.show_all()
 
     def _clean_actions(self):
@@ -945,9 +948,18 @@ class AgentBrowser:
         Set the window title based on agent info
         """
         # Set the banner and window title
-        if 'name' in identities[0]:
-            name = identities[0]['name']
-            self.window._set_window_banner_text(self._get_agent_address(), name)
+        name = ''
+        if len(identities) > 1:
+            # Check if an identity with server category is present
+            for i, _identity in enumerate(identities):
+                if _identity['category'] == 'server' and 'name' in _identity:
+                    name = _identity['name']
+                    break
+                elif 'name' in identities[0]:
+                    name = identities[0]['name']
+
+        if name:
+          self.window._set_window_banner_text(self._get_agent_address(), name)
 
         # Add an icon to the banner.
         pix = self.cache.get_icon(identities, addr=self._get_agent_address())
@@ -975,7 +987,7 @@ class AgentBrowser:
         # or pack_end, so we repack the close button here to make sure it's last
         close_button = self.window.xml.get_object('close_button')
         self.window.action_buttonbox.remove(close_button)
-        self.window.action_buttonbox.pack_end(close_button)
+        self.window.action_buttonbox.pack_end(close_button, True, True, 0)
         close_button.show_all()
 
         self.update_actions()
@@ -1009,9 +1021,9 @@ class AgentBrowser:
         model, iter_ = self.window.services_treeview.get_selection().get_selected()
         if not iter_:
             return
-        jid = model[iter_][0].decode('utf-8')
+        jid = model[iter_][0]
         if jid:
-            node = model[iter_][1].decode('utf-8')
+            node = model[iter_][1]
             self.window.open(jid, node)
 
     def update_actions(self):
@@ -1023,8 +1035,8 @@ class AgentBrowser:
         model, iter_ = self.window.services_treeview.get_selection().get_selected()
         if not iter_:
             return
-        jid = model[iter_][0].decode('utf-8')
-        node = model[iter_][1].decode('utf-8')
+        jid = model[iter_][0]
+        node = model[iter_][1]
         if jid:
             self.cache.get_info(jid, node, self._update_actions, nofetch = True)
 
@@ -1046,8 +1058,8 @@ class AgentBrowser:
         model, iter_ = self.window.services_treeview.get_selection().get_selected()
         if not iter_:
             return
-        jid = model[iter_][0].decode('utf-8')
-        node = model[iter_][1].decode('utf-8')
+        jid = model[iter_][0]
+        node = model[iter_][1]
         if jid:
             self.cache.get_info(jid, node, self._default_action, nofetch = True)
 
@@ -1068,7 +1080,7 @@ class AgentBrowser:
         self.model.clear()
         self._total_items = self._progress = 0
         self.window.progressbar.show()
-        self._pulse_timeout = gobject.timeout_add(250, self._pulse_timeout_cb)
+        self._pulse_timeout = GLib.timeout_add(250, self._pulse_timeout_cb)
         self.cache.get_items(self.jid, self.node, self._agent_items,
                 force=force, args=(force,))
 
@@ -1086,10 +1098,10 @@ class AgentBrowser:
         Check if an item is already in the treeview. Return an iter to it if so,
         None otherwise
         """
-        iter_ = self.model.get_iter_root()
+        iter_ = self.model.get_iter_first()
         while iter_:
-            cjid = self.model.get_value(iter_, 0).decode('utf-8')
-            cnode = self.model.get_value(iter_, 1).decode('utf-8')
+            cjid = self.model.get_value(iter_, 0)
+            cnode = self.model.get_value(iter_, 1)
             if jid == cjid and node == cnode:
                 break
             iter_ = self.model.iter_next(iter_)
@@ -1107,15 +1119,16 @@ class AgentBrowser:
         self.model.clear()
         self.add_self_line()
         self._total_items = 0
-        gobject.source_remove(self._pulse_timeout)
+        GLib.source_remove(self._pulse_timeout)
         self.window.progressbar.hide()
         # The server returned an error
         if items == 0:
-            if not self.window.address_comboboxentry:
+            if not self.window.address_comboboxtext:
                 # We can't travel anywhere else.
                 self.window.destroy()
             dialogs.ErrorDialog(_('The service is not browsable'),
-_('This service does not contain any items to browse.'))
+                _('This service does not contain any items to browse.'),
+                transient_for=self.window.window)
             return
         # We got a list of items
         def fill_partial_rows(items):
@@ -1139,7 +1152,7 @@ _('This service does not contain any items to browse.'))
             #stop idle_add()
             yield False
         loader = fill_partial_rows(items)
-        gobject.idle_add(loader.next)
+        GLib.idle_add(next, loader)
 
     def _agent_info(self, jid, node, identities, features, data):
         """
@@ -1224,7 +1237,7 @@ class ToplevelAgentBrowser(AgentBrowser):
         # Grab info on the service
         self.cache.get_info(self.jid, self.node, self._agent_info, force=False)
 
-    def _pixbuf_renderer_data_func(self, col, cell, model, iter_):
+    def _pixbuf_renderer_data_func(self, col, cell, model, iter_, data=None):
         """
         Callback for setting the pixbuf renderer's properties
         """
@@ -1236,7 +1249,7 @@ class ToplevelAgentBrowser(AgentBrowser):
         else:
             cell.set_property('visible', False)
 
-    def _text_renderer_data_func(self, col, cell, model, iter_):
+    def _text_renderer_data_func(self, col, cell, model, iter_, data=None):
         """
         Callback for setting the text renderer's properties
         """
@@ -1259,35 +1272,39 @@ class ToplevelAgentBrowser(AgentBrowser):
                 cell.set_property('cell_background_set', True)
             cell.set_property('foreground_set', False)
 
-    def _treemodel_sort_func(self, model, iter1, iter2):
+    def _treemodel_sort_func(self, model, iter1, iter2, data=None):
         """
         Sort function for our treemode
         """
         # Compare state
-        statecmp = cmp(model.get_value(iter1, 4), model.get_value(iter2, 4))
-        if statecmp == 0:
-            # These can be None, apparently
-            descr1 = model.get_value(iter1, 3)
-            if descr1:
-                descr1 = descr1.decode('utf-8')
-            descr2 = model.get_value(iter2, 3)
-            if descr2:
-                descr2 = descr2.decode('utf-8')
-            # Compare strings
-            return cmp(descr1, descr2)
-        return statecmp
+        state1 = model.get_value(iter1, 4)
+        state2 = model.get_value(iter2, 4)
+        if state1 > state2:
+            return 1
+        if state1 < state2:
+            return -1
+        descr1 = model.get_value(iter1, 3)
+        descr2 = model.get_value(iter2, 3)
+        # Compare strings
+        if descr1 > descr2:
+            return 1
+        if descr1 < descr2:
+            return -1
+        return 0
 
     def _show_tooltip(self, state):
         view = self.window.services_treeview
-        pointer = view.get_pointer()
-        props = view.get_path_at_pos(pointer[0], pointer[1])
+        w = view.get_window()
+        device = w.get_display().get_device_manager().get_client_pointer()
+        pointer = w.get_device_position(device)
+        props = view.get_path_at_pos(pointer[1], pointer[2])
         # check if the current pointer is at the same path
         # as it was before setting the timeout
         if props and self.tooltip.id == props[0]:
             # bounding rectangle of coordinates for the cell within the treeview
             rect = view.get_cell_area(props[0], props[1])
             # position of the treeview on the screen
-            position = view.window.get_origin()
+            position = w.get_origin()[1:]
             self.tooltip.show_tooltip(state, rect.height, position[1] + rect.y)
         else:
             self.tooltip.hide_tooltip()
@@ -1318,8 +1335,8 @@ class ToplevelAgentBrowser(AgentBrowser):
             if jid and state > 0 and \
             (self.tooltip.timeout == 0 or self.tooltip.id != props[0]):
                 self.tooltip.id = row
-                self.tooltip.timeout = gobject.timeout_add(500,
-                        self._show_tooltip, state)
+                self.tooltip.timeout = GLib.timeout_add(500, self._show_tooltip,
+                    state)
 
     def on_treeview_event_hide_tooltip(self, widget, event):
         """
@@ -1331,20 +1348,20 @@ class ToplevelAgentBrowser(AgentBrowser):
         # JID, node, icon, description, state
         # State means 2 when error, 1 when fetching, 0 when succes.
         view = self.window.services_treeview
-        self.model = gtk.TreeStore(str, str, gtk.gdk.Pixbuf, str, int)
+        self.model = Gtk.TreeStore(str, str, GdkPixbuf.Pixbuf, str, int)
         self.model.set_sort_func(4, self._treemodel_sort_func)
-        self.model.set_sort_column_id(4, gtk.SORT_ASCENDING)
+        self.model.set_sort_column_id(4, Gtk.SortType.ASCENDING)
         view.set_model(self.model)
 
-        col = gtk.TreeViewColumn()
+        col = Gtk.TreeViewColumn()
         # Icon Renderer
-        renderer = gtk.CellRendererPixbuf()
+        renderer = Gtk.CellRendererPixbuf()
         renderer.set_property('xpad', 6)
-        col.pack_start(renderer, expand=False)
+        col.pack_start(renderer, False)
         col.set_cell_data_func(renderer, self._pixbuf_renderer_data_func)
         # Text Renderer
-        renderer = gtk.CellRendererText()
-        col.pack_start(renderer, expand=True)
+        renderer = Gtk.CellRendererText()
+        col.pack_start(renderer, True)
         col.set_cell_data_func(renderer, self._text_renderer_data_func)
         renderer.set_property('foreground', 'dark gray')
         # Save this so we can go along with theme changes
@@ -1381,46 +1398,37 @@ class ToplevelAgentBrowser(AgentBrowser):
 
     def _add_actions(self):
         AgentBrowser._add_actions(self)
-        self.execute_button = gtk.Button()
-        image = gtk.image_new_from_stock(gtk.STOCK_EXECUTE, gtk.ICON_SIZE_BUTTON)
-        label = gtk.Label(_('_Execute Command'))
-        label.set_use_underline(True)
-        hbox = gtk.HBox()
-        hbox.pack_start(image, False, True, 6)
-        hbox.pack_end(label, True, True)
-        self.execute_button.add(hbox)
+        self.execute_button = Gtk.Button()
         self.execute_button.connect('clicked', self.on_execute_button_clicked)
         self.window.action_buttonbox.add(self.execute_button)
+        image = Gtk.Image.new_from_stock(Gtk.STOCK_EXECUTE, Gtk.IconSize.BUTTON)
+        self.execute_button.set_image(image)
+        label = _('_Execute Command')
+        self.execute_button.set_label(label)
         self.execute_button.show_all()
 
-        self.register_button = gtk.Button(label=_("Re_gister"),
+        self.register_button = Gtk.Button(label=_("Re_gister"),
                 use_underline=True)
         self.register_button.connect('clicked', self.on_register_button_clicked)
         self.window.action_buttonbox.add(self.register_button)
         self.register_button.show_all()
 
-        self.join_button = gtk.Button()
-        image = gtk.image_new_from_stock(gtk.STOCK_CONNECT, gtk.ICON_SIZE_BUTTON)
-        label = gtk.Label(_('_Join'))
-        label.set_use_underline(True)
-        hbox = gtk.HBox()
-        hbox.pack_start(image, False, True, 6)
-        hbox.pack_end(label, True, True)
-        self.join_button.add(hbox)
+        self.join_button = Gtk.Button()
         self.join_button.connect('clicked', self.on_join_button_clicked)
         self.window.action_buttonbox.add(self.join_button)
+        image = Gtk.Image.new_from_stock(Gtk.STOCK_CONNECT, Gtk.IconSize.BUTTON)
+        self.join_button.set_image(image)
+        label = _('_Join')
+        self.join_button.set_label(label)
         self.join_button.show_all()
 
-        self.search_button = gtk.Button()
-        image = gtk.image_new_from_stock(gtk.STOCK_FIND, gtk.ICON_SIZE_BUTTON)
-        label = gtk.Label(_('_Search'))
-        label.set_use_underline(True)
-        hbox = gtk.HBox()
-        hbox.pack_start(image, False, True, 6)
-        hbox.pack_end(label, True, True)
-        self.search_button.add(hbox)
+        self.search_button = Gtk.Button()
         self.search_button.connect('clicked', self.on_search_button_clicked)
         self.window.action_buttonbox.add(self.search_button)
+        image = Gtk.Image.new_from_stock(Gtk.STOCK_FIND, Gtk.IconSize.BUTTON)
+        self.search_button.set_image(image)
+        label = _('_Search')
+        self.search_button.set_label(label)
         self.search_button.show_all()
 
     def _clean_actions(self):
@@ -1445,7 +1453,7 @@ class ToplevelAgentBrowser(AgentBrowser):
         model, iter_ = self.window.services_treeview.get_selection().get_selected()
         if not iter_:
             return
-        service = model[iter_][0].decode('utf-8')
+        service = model[iter_][0]
         if service in gajim.interface.instances[self.account]['search']:
             gajim.interface.instances[self.account]['search'][service].window.\
                     present()
@@ -1471,8 +1479,8 @@ class ToplevelAgentBrowser(AgentBrowser):
         model, iter_ = self.window.services_treeview.get_selection().get_selected()
         if not iter_:
             return
-        service = model[iter_][0].decode('utf-8')
-        node = model[iter_][1].decode('utf-8')
+        service = model[iter_][0]
+        node = model[iter_][1]
         adhoc_commands.CommandWindow(self.account, service, commandnode=node)
 
     def on_register_button_clicked(self, widget = None):
@@ -1483,7 +1491,7 @@ class ToplevelAgentBrowser(AgentBrowser):
         model, iter_ = self.window.services_treeview.get_selection().get_selected()
         if not iter_:
             return
-        jid = model[iter_][0].decode('utf-8')
+        jid = model[iter_][0]
         if jid:
             gajim.connections[self.account].request_register_agent_info(jid)
             self.window.destroy(chain = True)
@@ -1496,7 +1504,7 @@ class ToplevelAgentBrowser(AgentBrowser):
         model, iter_ = self.window.services_treeview.get_selection().get_selected()
         if not iter_:
             return
-        service = model[iter_][0].decode('utf-8')
+        service = model[iter_][0]
         if 'join_gc' not in gajim.interface.instances[self.account]:
             try:
                 dialogs.JoinGroupchatWindow(self.account, service)
@@ -1529,7 +1537,7 @@ class ToplevelAgentBrowser(AgentBrowser):
                 self.register_button.set_sensitive(True)
             # Guess what kind of service we're dealing with
             if self.browse_button:
-                jid = model[iter_][0].decode('utf-8')
+                jid = model[iter_][0]
                 type_ = gajim.get_transport_name_from_jid(jid,
                                         use_config_setting = False)
                 if type_:
@@ -1593,7 +1601,7 @@ class ToplevelAgentBrowser(AgentBrowser):
         #       self.expanding = False
         #       return False
         #self.expanding = True
-        #gobject.idle_add(expand_all)
+        #GLib.idle_add(expand_all)
         self.window.services_treeview.expand_all()
 
     def _update_progressbar(self):
@@ -1602,7 +1610,7 @@ class ToplevelAgentBrowser(AgentBrowser):
         """
         # Refresh this every update
         if self._progressbar_sourceid:
-            gobject.source_remove(self._progressbar_sourceid)
+            GLib.source_remove(self._progressbar_sourceid)
 
         fraction = 0
         if self._total_items:
@@ -1611,12 +1619,12 @@ class ToplevelAgentBrowser(AgentBrowser):
             fraction = float(self._progress) / float(self._total_items)
             if self._progress >= self._total_items:
                 # We show the progressbar for just a bit before hiding it.
-                id_ = gobject.timeout_add_seconds(2, self._hide_progressbar_cb)
+                id_ = GLib.timeout_add_seconds(2, self._hide_progressbar_cb)
                 self._progressbar_sourceid = id_
             else:
                 self.window.progressbar.show()
                 # Hide the progressbar if we're timing out anyways. (20 secs)
-                id_ = gobject.timeout_add_seconds(20, self._hide_progressbar_cb)
+                id_ = GLib.timeout_add_seconds(20, self._hide_progressbar_cb)
                 self._progressbar_sourceid = id_
         self.window.progressbar.set_fraction(fraction)
 
@@ -1658,9 +1666,9 @@ class ToplevelAgentBrowser(AgentBrowser):
         Looks up a category row and returns the iterator to it, or None
         """
         cat = self._friendly_category(cat, type_)[0]
-        iter_ = self.model.get_iter_root()
+        iter_ = self.model.get_iter_first()
         while iter_:
-            if self.model.get_value(iter_, 3).decode('utf-8') == cat:
+            if self.model.get_value(iter_, 3) == cat:
                 break
             iter_ = self.model.iter_next(iter_)
         if iter_:
@@ -1669,17 +1677,17 @@ class ToplevelAgentBrowser(AgentBrowser):
 
     def _find_item(self, jid, node):
         iter_ = None
-        cat_iter = self.model.get_iter_root()
+        cat_iter = self.model.get_iter_first()
         while cat_iter and not iter_:
-            cjid = self.model.get_value(cat_iter, 0).decode('utf-8')
-            cnode = self.model.get_value(cat_iter, 1).decode('utf-8')
+            cjid = self.model.get_value(cat_iter, 0)
+            cnode = self.model.get_value(cat_iter, 1)
             if jid == cjid and node == cnode:
                 iter_ = cat_iter
                 break
             iter_ = self.model.iter_children(cat_iter)
             while iter_:
-                cjid = self.model.get_value(iter_, 0).decode('utf-8')
-                cnode = self.model.get_value(iter_, 1).decode('utf-8')
+                cjid = self.model.get_value(iter_, 0)
+                cnode = self.model.get_value(iter_, 1)
                 if jid == cjid and node == cnode:
                     break
                 iter_ = self.model.iter_next(iter_)
@@ -1713,7 +1721,7 @@ class ToplevelAgentBrowser(AgentBrowser):
         if not cat:
             cat = self._create_category(*cat_args)
         self.model.append(cat, (jid, node, pix, descr, 1))
-        gobject.idle_add(self._expand_all)
+        GLib.idle_add(self._expand_all)
         # Grab info on the service
         self.cache.get_info(jid, node, self._agent_info, force=force)
         self._update_progressbar()
@@ -1759,7 +1767,7 @@ class ToplevelAgentBrowser(AgentBrowser):
         # Not in the right category, move it.
         self.model.remove(iter_)
 
-        old_cat = self.model.get_value(old_cat_iter, 3).decode('utf-8')
+        old_cat = self.model.get_value(old_cat_iter, 3)
         # Check if the old category is empty
         if not self.model.iter_is_valid(old_cat_iter):
             old_cat_iter = self._find_category(old_cat)
@@ -1788,40 +1796,40 @@ class MucBrowser(AgentBrowser):
         # JID, node, name, users_int, users_str, description, fetched
         # This is rather long, I'd rather not use a data_func here though.
         # Users is a string, because want to be able to leave it empty.
-        self.model = gtk.ListStore(str, str, str, int, str, str, bool)
-        self.model.set_sort_column_id(2, gtk.SORT_ASCENDING)
+        self.model = Gtk.ListStore(str, str, str, int, str, str, bool)
+        self.model.set_sort_column_id(2, Gtk.SortType.ASCENDING)
         self.window.services_treeview.set_model(self.model)
         # Name column
-        col = gtk.TreeViewColumn(_('Name'))
-        col.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
+        col = Gtk.TreeViewColumn(_('Name'))
+        col.set_sizing(Gtk.TreeViewColumnSizing.FIXED)
         col.set_fixed_width(100)
-        renderer = gtk.CellRendererText()
-        col.pack_start(renderer)
-        col.set_attributes(renderer, text = 2)
+        renderer = Gtk.CellRendererText()
+        col.pack_start(renderer, True)
+        col.add_attribute(renderer, 'text', 2)
         col.set_sort_column_id(2)
         self.window.services_treeview.insert_column(col, -1)
         col.set_resizable(True)
         # Users column
-        col = gtk.TreeViewColumn(_('Users'))
-        renderer = gtk.CellRendererText()
-        col.pack_start(renderer)
-        col.set_attributes(renderer, text = 4)
+        col = Gtk.TreeViewColumn(_('Users'))
+        renderer = Gtk.CellRendererText()
+        col.pack_start(renderer, True)
+        col.add_attribute(renderer, 'text', 4)
         col.set_sort_column_id(3)
         self.window.services_treeview.insert_column(col, -1)
         col.set_resizable(True)
         # Description column
-        col = gtk.TreeViewColumn(_('Description'))
-        renderer = gtk.CellRendererText()
-        col.pack_start(renderer)
-        col.set_attributes(renderer, text = 5)
+        col = Gtk.TreeViewColumn(_('Description'))
+        renderer = Gtk.CellRendererText()
+        col.pack_start(renderer, True)
+        col.add_attribute(renderer, 'text', 5)
         col.set_sort_column_id(4)
         self.window.services_treeview.insert_column(col, -1)
         col.set_resizable(True)
         # Id column
-        col = gtk.TreeViewColumn(_('Id'))
-        renderer = gtk.CellRendererText()
-        col.pack_start(renderer)
-        col.set_attributes(renderer, text = 0)
+        col = Gtk.TreeViewColumn(_('Id'))
+        renderer = Gtk.CellRendererText()
+        col.pack_start(renderer, True)
+        col.add_attribute(renderer, 'text', 0)
         col.set_sort_column_id(0)
         self.window.services_treeview.insert_column(col, -1)
         col.set_resizable(True)
@@ -1848,11 +1856,11 @@ class MucBrowser(AgentBrowser):
         AgentBrowser._clean_treemodel(self)
 
     def _add_actions(self):
-        self.bookmark_button = gtk.Button(label=_('_Bookmark'), use_underline=True)
+        self.bookmark_button = Gtk.Button(label=_('_Bookmark'), use_underline=True)
         self.bookmark_button.connect('clicked', self.on_bookmark_button_clicked)
         self.window.action_buttonbox.add(self.bookmark_button)
         self.bookmark_button.show_all()
-        self.join_button = gtk.Button(label=_('_Join'), use_underline=True)
+        self.join_button = Gtk.Button(label=_('_Join'), use_underline=True)
         self.join_button.connect('clicked', self.on_join_button_clicked)
         self.window.action_buttonbox.add(self.join_button)
         self.join_button.show_all()
@@ -1870,7 +1878,7 @@ class MucBrowser(AgentBrowser):
         if not iter:
             return
         name = gajim.config.get_per('accounts', self.account, 'name')
-        room_jid = model[iter][0].decode('utf-8')
+        room_jid = model[iter][0]
         bm = {
                 'name': room_jid.split('@')[0],
                 'jid': room_jid,
@@ -1883,7 +1891,8 @@ class MucBrowser(AgentBrowser):
         for bookmark in gajim.connections[self.account].bookmarks:
             if bookmark['jid'] == bm['jid']:
                 dialogs.ErrorDialog( _('Bookmark already set'),
-                _('Group Chat "%s" is already in your bookmarks.') % bm['jid'])
+                _('Group Chat "%s" is already in your bookmarks.') % bm['jid'],
+                transient_for=self.window.window)
                 return
 
         gajim.connections[self.account].bookmarks.append(bm)
@@ -1893,7 +1902,8 @@ class MucBrowser(AgentBrowser):
 
         dialogs.InformationDialog(
             _('Bookmark has been added successfully'),
-            _('You can manage your bookmarks via Actions menu in your roster.'))
+            _('You can manage your bookmarks via Actions menu in your roster.'),
+            transient_for=self.window.window)
 
     def on_join_button_clicked(self, *args):
         """
@@ -1903,7 +1913,7 @@ class MucBrowser(AgentBrowser):
         model, iter_ = self.window.services_treeview.get_selection().get_selected()
         if not iter_:
             return
-        service = model[iter_][0].decode('utf-8')
+        service = model[iter_][0]
         if 'join_gc' not in gajim.interface.instances[self.account]:
             try:
                 dialogs.JoinGroupchatWindow(self.account, service)
@@ -1947,40 +1957,24 @@ class MucBrowser(AgentBrowser):
             # We're already fetching
             return
         view = self.window.services_treeview
-        if not view.flags() & gtk.REALIZED:
+        if not view.get_realized():
             # Prevent a silly warning, try again in a bit.
-            self._fetch_source = gobject.timeout_add(100, self._start_info_query)
+            self._fetch_source = GLib.timeout_add(100, self._start_info_query)
             return
-        # We have to do this in a pygtk <2.8 compatible way :/
-        #start, end = self.window.services_treeview.get_visible_range()
-        rect = view.get_visible_rect()
-        iter_ = end = None
-        # Top row
-        try:
-            sx, sy = view.tree_to_widget_coords(rect.x, rect.y)
-            spath = view.get_path_at_pos(sx, sy)[0]
-            iter_ = self.model.get_iter(spath)
-        except TypeError:
-            self._fetch_source = None
+        range_ = view.get_visible_range()
+        if not range_:
             return
-        # Bottom row
-        # Iter compare is broke, use the path instead
-        try:
-            ex, ey = view.tree_to_widget_coords(rect.x + rect.height,
-                    rect.y + rect.height)
-            end = view.get_path_at_pos(ex, ey)[0]
-            # end is the last visible, we want to query that aswell
-            end = (end[0] + 1,)
-        except TypeError:
-            # We're at the end of the model, we can leave end=None though.
-            pass
-        while iter_ and self.model.get_path(iter_) != end:
+        start, end = range_
+        iter_ = self.model.get_iter(start)
+        while iter_:
             if not self.model.get_value(iter_, 6):
-                jid = self.model.get_value(iter_, 0).decode('utf-8')
-                node = self.model.get_value(iter_, 1).decode('utf-8')
+                jid = self.model.get_value(iter_, 0)
+                node = self.model.get_value(iter_, 1)
                 self.cache.get_info(jid, node, self._agent_info)
                 self._fetch_source = True
                 return
+            if self.model.get_path(iter_) == end:
+                break
             iter_ = self.model.iter_next(iter_)
         self._fetch_source = None
 
@@ -2016,7 +2010,7 @@ class MucBrowser(AgentBrowser):
     def _add_item(self, jid, node, parent_node, item, force):
         self.model.append((jid, node, item.get('name', ''), -1, '', '', False))
         if not self._fetch_source:
-            self._fetch_source = gobject.idle_add(self._start_info_query)
+            self._fetch_source = GLib.idle_add(self._start_info_query)
 
     def _update_info(self, iter_, jid, node, identities, features, data):
         name = identities[0].get('name', '')
@@ -2030,7 +2024,7 @@ class MucBrowser(AgentBrowser):
                 if users:
                     self.model[iter_][3] = int(users.getValue())
                     self.model[iter_][4] = users.getValue()
-                if descr:
+                if descr and descr.getValue():
                     self.model[iter_][5] = descr.getValue()
                 # Only set these when we find a form with additional info
                 # Some servers don't support forms and put extra info in
@@ -2085,35 +2079,36 @@ class DiscussionGroupsBrowser(AgentBrowser):
         Create treemodel for the window
         """
         # JID, node, name (with description) - pango markup, dont have info?, subscribed?
-        self.model = gtk.TreeStore(str, str, str, bool, bool)
+        self.model = Gtk.TreeStore(str, str, str, bool, bool)
         # sort by name
-        self.model.set_sort_column_id(2, gtk.SORT_ASCENDING)
+        self.model.set_sort_column_id(2, Gtk.SortType.ASCENDING)
         self.window.services_treeview.set_model(self.model)
 
         # Name column
         # Pango markup for name and description, description printed with
         # <small/> font
-        renderer = gtk.CellRendererText()
-        col = gtk.TreeViewColumn(_('Name'))
-        col.pack_start(renderer)
-        col.set_attributes(renderer, markup=2)
+        renderer = Gtk.CellRendererText()
+        col = Gtk.TreeViewColumn(_('Name'))
+        col.pack_start(renderer, True)
+        col.add_attribute(renderer, 'markup', 2)
         col.set_resizable(True)
         self.window.services_treeview.insert_column(col, -1)
         self.window.services_treeview.set_headers_visible(True)
 
         # Subscription state
-        renderer = gtk.CellRendererToggle()
-        col = gtk.TreeViewColumn(_('Subscribed'))
-        col.pack_start(renderer)
-        col.set_attributes(renderer, inconsistent=3, active=4)
+        renderer = Gtk.CellRendererToggle()
+        col = Gtk.TreeViewColumn(_('Subscribed'))
+        col.pack_start(renderer, True)
+        col.add_attribute(renderer, 'inconsistent', 3)
+        col.add_attribute(renderer, 'active', 4)
         col.set_resizable(False)
         self.window.services_treeview.insert_column(col, -1)
 
         # Node Column
-        renderer = gtk.CellRendererText()
-        col = gtk.TreeViewColumn(_('Node'))
-        col.pack_start(renderer)
-        col.set_attributes(renderer, markup=1)
+        renderer = Gtk.CellRendererText()
+        col = Gtk.TreeViewColumn(_('Node'))
+        col.pack_start(renderer, True)
+        col.add_attribute(renderer, 'markup', 1)
         col.set_resizable(True)
         self.window.services_treeview.insert_column(col, -1)
 
@@ -2147,7 +2142,7 @@ class DiscussionGroupsBrowser(AgentBrowser):
             dunno = True
             subscribed = False
 
-        name = gobject.markup_escape_text(name)
+        name = GLib.markup_escape_text(name)
         name = '<b>%s</b>' % name
 
         if parent_node:
@@ -2178,19 +2173,19 @@ class DiscussionGroupsBrowser(AgentBrowser):
         return self.found_iter
 
     def _add_actions(self):
-        self.post_button = gtk.Button(label=_('New post'), use_underline=True)
+        self.post_button = Gtk.Button(label=_('New post'), use_underline=True)
         self.post_button.set_sensitive(False)
         self.post_button.connect('clicked', self.on_post_button_clicked)
         self.window.action_buttonbox.add(self.post_button)
         self.post_button.show_all()
 
-        self.subscribe_button = gtk.Button(label=_('_Subscribe'), use_underline=True)
+        self.subscribe_button = Gtk.Button(label=_('_Subscribe'), use_underline=True)
         self.subscribe_button.set_sensitive(False)
         self.subscribe_button.connect('clicked', self.on_subscribe_button_clicked)
         self.window.action_buttonbox.add(self.subscribe_button)
         self.subscribe_button.show_all()
 
-        self.unsubscribe_button = gtk.Button(label=_('_Unsubscribe'), use_underline=True)
+        self.unsubscribe_button = Gtk.Button(label=_('_Unsubscribe'), use_underline=True)
         self.unsubscribe_button.set_sensitive(False)
         self.unsubscribe_button.connect('clicked', self.on_unsubscribe_button_clicked)
         self.window.action_buttonbox.add(self.unsubscribe_button)

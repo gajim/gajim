@@ -20,16 +20,17 @@ Handles  Jingle File Transfer (XEP 0234)
 """
 
 import hashlib
-import gajim
+from common import gajim
 import nbxmpp
-from jingle_content import contents, JingleContent
-from jingle_transport import *
+from . import jingle_xtls
+from common.jingle_content import contents, JingleContent
+from common.jingle_transport import *
 from common import helpers
 from common.socks5 import Socks5ReceiverClient, Socks5SenderClient
 from common.connection_handlers_events import FileRequestReceivedEvent
 import threading
 import logging
-from jingle_ftstates import *
+from common.jingle_ftstates import *
 log = logging.getLogger('gajim.c.jingle_ft')
 
 STATE_NOT_STARTED = 0
@@ -68,6 +69,7 @@ class JingleFileTransfer(JingleContent):
         self.callbacks['transport-info'] += [self.__on_transport_info]
         self.callbacks['iq-result'] += [self.__on_iq_result]
         self.use_security = use_security
+        self.x509_fingerprint = None
         self.file_props = file_props
         self.weinitiate = self.session.weinitiate
         self.werequest = self.session.werequest
@@ -95,8 +97,8 @@ class JingleFileTransfer(JingleContent):
         if gajim.contacts.is_gc_contact(session.connection.name,
         session.peerjid):
             roomjid = session.peerjid.split('/')[0]
-            dstaddr = hashlib.sha1('%s%s%s' % (self.file_props.sid,
-                session.ourjid, roomjid)).hexdigest()
+            dstaddr = hashlib.sha1(('%s%s%s' % (self.file_props.sid,
+                session.ourjid, roomjid)).encode('utf-8')).hexdigest()
             self.file_props.dstaddr = dstaddr
         self.state = STATE_NOT_STARTED
         self.states = {STATE_INITIALIZED   : StateInitialized(self),
@@ -149,12 +151,13 @@ class JingleFileTransfer(JingleContent):
         if self.file_props.algo == None:
             return
         try:
-            file_ = open(self.file_props.file_name, 'r')
+            file_ = open(self.file_props.file_name, 'rb')
         except:
             # can't open file
             return
         h = nbxmpp.Hashes()
         hash_ = h.calculateHash(self.file_props.algo, file_)
+        file_.close()
         # DEBUG
         #hash_ = '1294809248109223'
         if not hash_:
@@ -164,17 +167,37 @@ class JingleFileTransfer(JingleContent):
         h.addHash(hash_, self.file_props.algo)
         return h
 
+    def on_cert_received(self):
+        self.session.approve_session()
+        self.session.approve_content('file', name=self.name)
+
     def __on_session_accept(self, stanza, content, error, action):
         log.info("__on_session_accept")
         con = self.session.connection
+        # We ack the session accept
+        response = stanza.buildReply('result')
+        response.delChild(response.getQuery())
+        con.connection.send(response)
         security = content.getTag('security')
         if not security: # responder can not verify our fingerprint
             self.use_security = False
+        else:
+            fingerprint = security.getTag('fingerprint')
+            if fingerprint:
+                fingerprint = fingerprint.getData()
+                self.x509_fingerprint = fingerprint
+                if not jingle_xtls.check_cert(gajim.get_jid_without_resource(
+                self.session.responder), fingerprint):
+                    id_ = jingle_xtls.send_cert_request(con,
+                        self.session.responder)
+                    jingle_xtls.key_exchange_pend(id_,
+                        self.continue_session_accept, [stanza])
+                    raise nbxmpp.NodeProcessed
+        self.continue_session_accept(stanza)
+
+    def continue_session_accept(self, stanza):
+        con = self.session.connection
         if self.state == STATE_TRANSPORT_REPLACE:
-            # We ack the session accept
-            response = stanza.buildReply('result')
-            response.delChild(response.getQuery())
-            con.connection.send(response)
             # If we are requesting we don't have the file
             if self.session.werequest:
                 raise nbxmpp.NodeProcessed
@@ -185,16 +208,13 @@ class JingleFileTransfer(JingleContent):
         # Calculate file hash in a new thread
         # if we haven't sent the hash already.
         if self.file_props.hash_ is None and self.file_props.algo and \
-                                             not self.werequest:
+        not self.werequest:
             self.hashThread = threading.Thread(target=self.__send_hash)
             self.hashThread.start()
         for host in self.file_props.streamhosts:
             host['initiator'] = self.session.initiator
             host['target'] = self.session.responder
             host['sid'] = self.file_props.sid
-        response = stanza.buildReply('result')
-        response.delChild(response.getQuery())
-        con.connection.send(response)
         fingerprint = None
         if self.use_security:
             fingerprint = 'client'
@@ -203,7 +223,7 @@ class JingleFileTransfer(JingleContent):
                 self.file_props.sid, self.on_connect,
                 self._on_connect_error, fingerprint=fingerprint,
                 receiving=False)
-            return
+            raise nbxmpp.NodeProcessed
         self.__state_changed(STATE_TRANSFERING)
         raise nbxmpp.NodeProcessed
 

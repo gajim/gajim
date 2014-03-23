@@ -40,7 +40,8 @@ from nbxmpp.protocol import NS_CHATSTATES
 from common.jingle_transport import JingleTransportSocks5
 from common.file_props import FilesProp
 
-import gtkgui_helpers
+if gajim.HAVE_PYOPENSSL:
+    import OpenSSL.crypto
 
 import logging
 log = logging.getLogger('gajim.c.connection_handlers_events')
@@ -221,11 +222,11 @@ class TimeResultReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
 
         try:
             t = datetime.datetime.strptime(utc_time, '%Y-%m-%dT%H:%M:%SZ')
-        except ValueError, e:
+        except ValueError:
             try:
                 t = datetime.datetime.strptime(utc_time,
                     '%Y-%m-%dT%H:%M:%S.%fZ')
-            except ValueError, e:
+            except ValueError as e:
                 log.info('Wrong time format: %s' % str(e))
                 return
 
@@ -309,7 +310,7 @@ class RosterItemExchangeEvent(nec.NetworkIncomingEvent, HelperEvent):
             try:
                 jid = helpers.parse_jid(item.getAttr('jid'))
             except helpers.InvalidFormat:
-                log.warn('Invalid JID: %s, ignoring it' % item.getAttr('jid'))
+                log.warning('Invalid JID: %s, ignoring it' % item.getAttr('jid'))
                 continue
             name = item.getAttr('name')
             contact = gajim.contacts.get_contact(self.conn.name, jid)
@@ -367,10 +368,10 @@ class RosterReceivedEvent(nec.NetworkIncomingEvent):
                 try:
                     j = helpers.parse_jid(jid)
                 except Exception:
-                    print >> sys.stderr, _('JID %s is not RFC compliant. It '
-                        'will not be added to your roster. Use roster '
-                        'management tools such as '
-                        'http://jru.jabberstudio.org/ to remove it') % jid
+                    print(_('JID %s is not RFC compliant. It will not be added '
+                        'to your roster. Use roster management tools such as '
+                        'http://jru.jabberstudio.org/ to remove it') % jid,
+                        file=sys.stderr)
                 else:
                     infos = raw_roster[jid]
                     if jid != our_jid and (not infos['subscription'] or \
@@ -402,7 +403,7 @@ class RosterSetReceivedEvent(nec.NetworkIncomingEvent):
             try:
                 jid = helpers.parse_jid(item.getAttr('jid'))
             except helpers.InvalidFormat:
-                log.warn('Invalid JID: %s, ignoring it' % item.getAttr('jid'))
+                log.warning('Invalid JID: %s, ignoring it' % item.getAttr('jid'))
                 continue
             name = item.getAttr('name')
             sub = item.getAttr('subscription')
@@ -450,7 +451,7 @@ class MucAdminReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                 try:
                     jid = helpers.parse_jid(item.getAttr('jid'))
                 except helpers.InvalidFormat:
-                    log.warn('Invalid JID: %s, ignoring it' % \
+                    log.warning('Invalid JID: %s, ignoring it' % \
                         item.getAttr('jid'))
                     continue
                 affiliation = item.getAttr('affiliation')
@@ -492,7 +493,7 @@ class BookmarksHelper:
             try:
                 jid = helpers.parse_jid(conf.getAttr('jid'))
             except helpers.InvalidFormat:
-                log.warn('Invalid JID: %s, ignoring it' % conf.getAttr('jid'))
+                log.warning('Invalid JID: %s, ignoring it' % conf.getAttr('jid'))
                 continue
             bm = {'name': conf.getAttr('name'),
                 'jid': jid,
@@ -544,7 +545,7 @@ class PrivateStorageRosternotesReceivedEvent(nec.NetworkIncomingEvent):
             try:
                 jid = helpers.parse_jid(note.getAttr('jid'))
             except helpers.InvalidFormat:
-                log.warn('Invalid JID: %s, ignoring it' % note.getAttr('jid'))
+                log.warning('Invalid JID: %s, ignoring it' % note.getAttr('jid'))
                 continue
             annotation = note.getData()
             self.annotations[jid] = annotation
@@ -758,7 +759,7 @@ PresenceHelperEvent):
         try:
             self.get_jid_resource()
         except Exception:
-            log.warn('Invalid JID: %s, ignoring it' % self.stanza.getFrom())
+            log.warning('Invalid JID: %s, ignoring it' % self.stanza.getFrom())
             return
         jid_list = gajim.contacts.get_jid_list(self.conn.name)
         self.timestamp = None
@@ -798,7 +799,8 @@ PresenceHelperEvent):
         and self.ptype == 'error':
             # Error presences may not include sent stanza, so we don't detect
             # it's a muc presence. So detect it by ID
-            h = hmac.new(self.conn.secret_hmac, self.jid).hexdigest()[:6]
+            h = hmac.new(self.conn.secret_hmac, self.jid.encode('utf-8')).\
+                hexdigest()[:6]
             if self.id_.split('_')[-1] == h:
                 self.is_gc = True
         self.status = self.stanza.getStatus() or ''
@@ -906,7 +908,7 @@ class GcPresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             try:
                 gajim.logger.write('gcstatus', self.fjid, st,
                     self.show)
-            except exceptions.PysqliteOperationalError, e:
+            except exceptions.PysqliteOperationalError as e:
                 self.conn.dispatch('DB_ERROR', (_('Disk Write Error'),
                     str(e)))
             except exceptions.DatabaseMalformed:
@@ -1038,7 +1040,7 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                 try:
                     self.fjid = helpers.parse_jid(address.getAttr('jid'))
                 except helpers.InvalidFormat:
-                    log.warn('Invalid JID: %s, ignoring it' % address.getAttr(
+                    log.warning('Invalid JID: %s, ignoring it' % address.getAttr(
                         'jid'))
                     return
                 self.jid = gajim.get_jid_without_resource(self.fjid)
@@ -1078,10 +1080,15 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.invite_tag = None
         self.decline_tag = None
         if not self.enc_tag:
+            # Direct invitation?
             self.invite_tag = self.stanza.getTag('x',
-                namespace=nbxmpp.NS_MUC_USER)
-            if self.invite_tag and not self.invite_tag.getTag('invite'):
-                self.invite_tag = None
+                namespace=nbxmpp.NS_CONFERENCE)
+            # Mediated invitation?
+            if not self.invite_tag:
+                self.invite_tag = self.stanza.getTag('x',
+                    namespace=nbxmpp.NS_MUC_USER)
+                if self.invite_tag and not self.invite_tag.getTag('invite'):
+                    self.invite_tag = None
 
             self.decline_tag = self.stanza.getTag('x',
                 namespace=nbxmpp.NS_MUC_USER)
@@ -1182,7 +1189,6 @@ class ZeroconfMessageReceivedEvent(MessageReceivedEvent):
                     self.fjid = key
                     break
 
-        self.fjid = unicode(self.fjid)
         self.jid, self.resource = gajim.get_room_and_nick_from_fjid(self.fjid)
 
     def generate(self):
@@ -1195,25 +1201,47 @@ class GcInvitationReceivedEvent(nec.NetworkIncomingEvent):
     base_network_events = []
 
     def generate(self):
-        self.room_jid = self.msg_obj.fjid
+        invite_tag = self.msg_obj.invite_tag
+        if invite_tag.getNamespace() == nbxmpp.NS_CONFERENCE:
+            # direct invitation
+            try:
+                self.room_jid = helpers.parse_jid(invite_tag.getAttr('jid'))
+            except helpers.InvalidFormat:
+                log.warning('Invalid JID: %s, ignoring it' % invite_tag.getAttr(
+                    'jid'))
+                return
+            self.jid_from = self.msg_obj.fjid
+            self.reason = invite_tag.getAttr('reason')
+            self.password = invite_tag.getAttr('password')
+            self.is_continued = False
+            if invite_tag.getAttr('continue') == 'true':
+                self.is_continued = True
+        else:
+            self.room_jid = self.msg_obj.fjid
+            item = self.msg_obj.invite_tag.getTag('invite')
+            try:
+                self.jid_from = helpers.parse_jid(item.getAttr('from'))
+            except helpers.InvalidFormat:
+                log.warning('Invalid JID: %s, ignoring it' % item.getAttr(
+                    'from'))
+                return
 
-        item = self.msg_obj.invite_tag.getTag('invite')
-        try:
-            self.jid_from = helpers.parse_jid(item.getAttr('from'))
-        except helpers.InvalidFormat:
-            log.warn('Invalid JID: %s, ignoring it' % item.getAttr('from'))
+            self.reason = item.getTagData('reason')
+            self.password = invite_tag.getTagData('password')
+
+            self.is_continued = False
+            if item.getTag('continue'):
+                self.is_continued = True
+
+        if self.room_jid in gajim.gc_connected[self.conn.name] and \
+        gajim.gc_connected[self.conn.name][self.room_jid]:
+            # We are already in groupchat. Ignore invitation
             return
         jid = gajim.get_jid_without_resource(self.jid_from)
         if gajim.config.get_per('accounts', self.conn.name,
         'ignore_unknown_contacts') and not gajim.contacts.get_contacts(
         self.conn.name, jid):
             return
-        self.reason = item.getTagData('reason')
-        self.password = self.msg_obj.invite_tag.getTagData('password')
-
-        self.is_continued = False
-        if item.getTag('continue'):
-            self.is_continued = True
 
         return True
 
@@ -1228,7 +1256,7 @@ class GcDeclineReceivedEvent(nec.NetworkIncomingEvent):
         try:
             self.jid_from = helpers.parse_jid(item.getAttr('from'))
         except helpers.InvalidFormat:
-            log.warn('Invalid JID: %s, ignoring it' % item.getAttr('from'))
+            log.warning('Invalid JID: %s, ignoring it' % item.getAttr('from'))
             return
         jid = gajim.get_jid_without_resource(self.jid_from)
         if gajim.config.get_per('accounts', self.conn.name,
@@ -1607,12 +1635,12 @@ class NewAccountConnectedEvent(nec.NetworkIncomingEvent):
             self.ssl_msg = ssl_error.get(er, _('Unknown SSL error: %d') % \
                 self.errnum)
         self.ssl_cert = ''
-        if len(self.conn.connection.Connection.ssl_cert_pem):
-            self.ssl_cert = self.conn.connection.Connection.ssl_cert_pem
         self.ssl_fingerprint = ''
         if self.conn.connection.Connection.ssl_certificate:
-            self.ssl_fingerprint = \
-                self.conn.connection.Connection.ssl_certificate.digest('sha1')
+            cert = self.conn.connection.Connection.ssl_certificate
+            self.ssl_cert = OpenSSL.crypto.dump_certificate(
+                OpenSSL.crypto.FILETYPE_PEM, cert).decode('utf-8')
+            self.ssl_fingerprint = cert.digest('sha1').decode('utf-8')
         return True
 
 class NewAccountNotConnectedEvent(nec.NetworkIncomingEvent):
@@ -1852,6 +1880,8 @@ class MetacontactsReceivedEvent(nec.NetworkIncomingEvent):
         # Metacontact tags
         # http://www.xmpp.org/extensions/xep-0209.html
         self.meta_list = {}
+        # FIXME: disable metacontacts until they work correctly
+        return True
         query = self.stanza.getTag('query')
         storage = query.getTag('storage')
         metas = storage.getTags('meta')
@@ -1965,7 +1995,7 @@ class AgentInfoReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         if self.id_ in self.conn.disco_info_ids:
             self.conn.disco_info_ids.remove(self.id_)
         if self.id_ is None:
-            log.warn('Invalid IQ received without an ID. Ignoring it: %s' % \
+            log.warning('Invalid IQ received without an ID. Ignoring it: %s' % \
                 self.stanza)
             return
         # According to XEP-0030:
@@ -2025,15 +2055,18 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.fjid = self.conn._ft_get_from(self.stanza)
         self.jid = gajim.get_jid_without_resource(self.fjid)
         if self.jingle_content:
-            self.FT_content.use_security = bool(self.jingle_content.getTag(
-                'security'))
+            secu = self.jingle_content.getTag('security')
+            self.FT_content.use_security = bool(secu)
+            fingerprint = secu.getTag('fingerprint')
+            if fingerprint:
+                self.FT_content.x509_fingerprint = fingerprint.getData()
             if not self.FT_content.transport:
                 self.FT_content.transport = JingleTransportSocks5()
                 self.FT_content.transport.set_our_jid(
                     self.FT_content.session.ourjid)
                 self.FT_content.transport.set_connection(
                     self.FT_content.session.connection)
-            sid = unicode(self.stanza.getTag('jingle').getAttr('sid'))
+            sid = self.stanza.getTag('jingle').getAttr('sid')
             self.file_props = FilesProp.getNewFileProp(self.conn.name, sid)
             self.file_props.transport_sid = self.FT_content.transport.sid
             self.FT_content.file_props = self.file_props
@@ -2071,7 +2104,7 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                 if name == 'name':
                     self.file_props.name = val
                 if name == 'size':
-                    self.file_props.size = val
+                    self.file_props.size = int(val)
                 if name == 'hash':
                     self.file_props.algo = child.getAttr('algo')
                     self.file_props.hash_ = val
@@ -2080,8 +2113,7 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         else:
             si = self.stanza.getTag('si')
             self.file_props = FilesProp.getNewFileProp(self.conn.name,
-                                               unicode(si.getAttr('id'))
-                                                      )
+                si.getAttr('id'))
             profile = si.getAttr('profile')
             if profile != nbxmpp.NS_FILE:
                 self.conn.send_file_rejection(self.file_props, code='400',
@@ -2112,7 +2144,7 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                 if name == 'name':
                     self.file_props.name = val
                 if name == 'size':
-                    self.file_props.size = val
+                    self.file_props.size = int(val)
             mime_type = si.getAttr('mime-type')
             if mime_type is not None:
                 self.file_props.mime_type = mime_type
@@ -2230,8 +2262,6 @@ class NotificationEvent(nec.NetworkIncomingEvent):
             self.popup_title = _('New Message from %(nickname)s') % \
                 {'nickname': nick}
 
-        self.popup_image = gtkgui_helpers.get_icon_path(self.popup_image, 48)
-
         if not gajim.config.get('notify_on_new_message') or \
         not self.first_unread:
             self.do_popup = False
@@ -2285,6 +2315,28 @@ class NotificationEvent(nec.NetworkIncomingEvent):
             self.do_sound = False
 
         self.do_popup = False
+
+    def get_path_to_generic_or_avatar(self, generic, jid=None, suffix=None):
+        """
+        Choose between avatar image and default image
+
+        Returns full path to the avatar image if it exists, otherwise returns full
+        path to the image.  generic must be with extension and suffix without
+        """
+        if jid:
+            # we want an avatar
+            puny_jid = helpers.sanitize_filename(jid)
+            path_to_file = os.path.join(gajim.AVATAR_PATH, puny_jid) + suffix
+            path_to_local_file = path_to_file + '_local'
+            for extension in ('.png', '.jpeg'):
+                path_to_local_file_full = path_to_local_file + extension
+                if os.path.exists(path_to_local_file_full):
+                    return path_to_local_file_full
+            for extension in ('.png', '.jpeg'):
+                path_to_file_full = path_to_file + extension
+                if os.path.exists(path_to_file_full):
+                    return path_to_file_full
+        return os.path.abspath(generic)
 
     def handle_incoming_pres_event(self, pres_obj):
         if gajim.jid_is_transport(pres_obj.jid):
@@ -2364,8 +2416,8 @@ class NotificationEvent(nec.NetworkIncomingEvent):
             iconset = gajim.config.get('iconset')
             img_path = os.path.join(helpers.get_iconset_path(iconset),
                 '48x48', show_image)
-        self.popup_image = gtkgui_helpers.get_path_to_generic_or_avatar(
-            img_path, jid=self.jid, suffix=suffix)
+        self.popup_image_path = self.get_path_to_generic_or_avatar(img_path,
+            jid=self.jid, suffix=suffix)
 
         self.popup_timeout = gajim.config.get('notification_timeout')
 
@@ -2411,6 +2463,7 @@ class NotificationEvent(nec.NetworkIncomingEvent):
         self.popup_event_type = ''
         self.popup_msg_type = ''
         self.popup_image = ''
+        self.popup_image_path = ''
         self.popup_timeout = -1
 
         self.do_command = False
@@ -2447,7 +2500,7 @@ class MessageOutgoingEvent(nec.NetworkOutgoingEvent):
         self.session = None
         self.forward_from = None
         self.form_node = None
-        self.original_message = ''
+        self.original_message = None
         self.delayed = None
         self.callback = None
         self.callback_args = []

@@ -100,13 +100,13 @@ class OldEntry(nbxmpp.Node, object):
 
 
         if main_feed is not None and source_feed is not None:
-            return u'%s: %s' % (main_feed, source_feed)
+            return '%s: %s' % (main_feed, source_feed)
         elif main_feed is not None:
             return main_feed
         elif source_feed is not None:
             return source_feed
         else:
-            return u''
+            return ''
 
     feed_title = property(get_feed_title, None, None,
             ''' Title of feed. It is built from entry''s original feed title and title of feed
@@ -173,4 +173,4 @@ class OldEntry(nbxmpp.Node, object):
     updated = property(get_updated, None, None,
             ''' Last significant modification time. ''')
 
-    feed_tagline = u''
+    feed_tagline = ''

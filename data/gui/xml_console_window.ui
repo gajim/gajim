@@ -1,20 +1,26 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <requires lib="gtk+" version="2.16"/>
-  <!-- interface-naming-policy toplevel-contextual -->
+  <!-- interface-requires gtk+ 3.0 -->
+  <object class="GtkImage" id="image1">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-apply</property>
+  </object>
   <object class="GtkWindow" id="xml_console_window">
+    <property name="can_focus">False</property>
     <property name="border_width">12</property>
     <property name="default_width">550</property>
     <property name="default_height">450</property>
-    <signal name="destroy" handler="on_xml_console_window_destroy"/>
+    <signal name="destroy" handler="on_xml_console_window_destroy" swapped="no"/>
     <child>
       <object class="GtkVBox" id="vbox">
         <property name="visible">True</property>
-        <property name="orientation">vertical</property>
+        <property name="can_focus">False</property>
         <property name="spacing">6</property>
         <child>
           <object class="GtkLabel" id="label342">
             <property name="visible">True</property>
+            <property name="can_focus">False</property>
             <property name="xalign">0</property>
             <property name="label" translatable="yes">&lt;b&gt;Jabber Traffic&lt;/b&gt;</property>
             <property name="use_markup">True</property>
@@ -29,8 +35,6 @@
           <object class="GtkScrolledWindow" id="scrolledwindow43">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="hscrollbar_policy">automatic</property>
-            <property name="vscrollbar_policy">automatic</property>
             <property name="shadow_type">in</property>
             <child>
               <object class="GtkTextView" id="stanzas_log_textview">
@@ -42,12 +46,15 @@
             </child>
           </object>
           <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
             <property name="position">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkHBox" id="hbox2988">
             <property name="visible">True</property>
+            <property name="can_focus">False</property>
             <child>
               <object class="GtkCheckButton" id="enable_checkbutton">
                 <property name="label" translatable="yes" comments="XML Console enable checkbutton">_Enable</property>
@@ -55,21 +62,14 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="use_underline">True</property>
+                <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
-                <signal name="toggled" handler="on_enable_checkbutton_toggled"/>
+                <signal name="toggled" handler="on_enable_checkbutton_toggled" swapped="no"/>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
                 <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="label351">
-                <property name="visible">True</property>
-              </object>
-              <packing>
-                <property name="position">1</property>
               </packing>
             </child>
             <child>
@@ -79,12 +79,12 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="use_stock">True</property>
-                <signal name="clicked" handler="on_clear_button_clicked"/>
+                <signal name="clicked" handler="on_clear_button_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
-                <property name="position">2</property>
+                <property name="position">1</property>
               </packing>
             </child>
           </object>
@@ -102,21 +102,25 @@
             <child>
               <object class="GtkVBox" id="input_vbox1">
                 <property name="visible">True</property>
-                <property name="orientation">vertical</property>
+                <property name="can_focus">False</property>
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkHBox" id="hbox1">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <child>
                       <object class="GtkCheckButton" id="in_stanza_checkbutton">
                         <property name="label" translatable="yes">Hide IN stanzas</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="xalign">0.5</property>
                         <property name="draw_indicator">True</property>
-                        <signal name="toggled" handler="on_in_stanza_checkbutton_toggled"/>
+                        <signal name="toggled" handler="on_in_stanza_checkbutton_toggled" swapped="no"/>
                       </object>
                       <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
                         <property name="position">0</property>
                       </packing>
                     </child>
@@ -126,10 +130,13 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="xalign">0.5</property>
                         <property name="draw_indicator">True</property>
-                        <signal name="toggled" handler="on_out_stanza_checkbutton_toggled"/>
+                        <signal name="toggled" handler="on_out_stanza_checkbutton_toggled" swapped="no"/>
                       </object>
                       <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
@@ -139,10 +146,13 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="xalign">0.5</property>
                         <property name="draw_indicator">True</property>
-                        <signal name="toggled" handler="on_presence_stanza_checkbutton_toggled"/>
+                        <signal name="toggled" handler="on_presence_stanza_checkbutton_toggled" swapped="no"/>
                       </object>
                       <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
                         <property name="position">2</property>
                       </packing>
                     </child>
@@ -152,10 +162,13 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="xalign">0.5</property>
                         <property name="draw_indicator">True</property>
-                        <signal name="toggled" handler="on_iq_stanza_checkbutton_toggled"/>
+                        <signal name="toggled" handler="on_iq_stanza_checkbutton_toggled" swapped="no"/>
                       </object>
                       <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
                         <property name="position">3</property>
                       </packing>
                     </child>
@@ -165,21 +178,27 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="xalign">0.5</property>
                         <property name="draw_indicator">True</property>
-                        <signal name="toggled" handler="on_message_stanza_checkbutton_toggled"/>
+                        <signal name="toggled" handler="on_message_stanza_checkbutton_toggled" swapped="no"/>
                       </object>
                       <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
                         <property name="position">4</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkHBox" id="hbox2">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <child>
                       <placeholder/>
                     </child>
@@ -188,6 +207,8 @@
                     </child>
                   </object>
                   <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
@@ -196,6 +217,7 @@
             <child type="label">
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="xalign">0</property>
                 <property name="label" translatable="yes">&lt;b&gt;Filter&lt;/b&gt;</property>
                 <property name="use_markup">True</property>
@@ -204,6 +226,7 @@
           </object>
           <packing>
             <property name="expand">False</property>
+            <property name="fill">True</property>
             <property name="position">3</property>
           </packing>
         </child>
@@ -212,18 +235,17 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="spacing">6</property>
-            <signal name="activate" handler="on_expander_activate"/>
+            <signal name="activate" handler="on_expander_activate" swapped="no"/>
             <child>
               <object class="GtkVBox" id="input_vbox">
                 <property name="visible">True</property>
-                <property name="orientation">vertical</property>
+                <property name="can_focus">False</property>
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkScrolledWindow" id="scrolledwindow42">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hscrollbar_policy">never</property>
-                    <property name="vscrollbar_policy">automatic</property>
                     <property name="shadow_type">in</property>
                     <child>
                       <object class="GtkTextView" id="input_textview">
@@ -235,12 +257,15 @@
                     </child>
                   </object>
                   <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkHButtonBox" id="hbuttonbox31">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="spacing">6</property>
                     <property name="layout_style">end</property>
                     <child>
@@ -251,7 +276,7 @@
                         <property name="receives_default">False</property>
                         <property name="tooltip_text" translatable="yes">Info/Query</property>
                         <property name="use_underline">True</property>
-                        <signal name="clicked" handler="on_iq_button_clicked"/>
+                        <signal name="clicked" handler="on_iq_button_clicked" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -266,7 +291,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
-                        <signal name="clicked" handler="on_presence_button_clicked"/>
+                        <signal name="clicked" handler="on_presence_button_clicked" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -281,7 +306,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
-                        <signal name="clicked" handler="on_message_button_clicked"/>
+                        <signal name="clicked" handler="on_message_button_clicked" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -291,47 +316,14 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="send_button">
+                        <property name="label" translatable="yes">_Send</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="can_default">True</property>
                         <property name="receives_default">False</property>
-                        <signal name="clicked" handler="on_send_button_clicked"/>
-                        <child>
-                          <object class="GtkAlignment" id="alignment80">
-                            <property name="visible">True</property>
-                            <property name="xscale">0</property>
-                            <property name="yscale">0</property>
-                            <child>
-                              <object class="GtkHBox" id="hbox2980">
-                                <property name="visible">True</property>
-                                <property name="spacing">2</property>
-                                <child>
-                                  <object class="GtkImage" id="image833">
-                                    <property name="visible">True</property>
-                                    <property name="stock">gtk-apply</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">False</property>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel" id="label341">
-                                    <property name="visible">True</property>
-                                    <property name="label" translatable="yes">_Send</property>
-                                    <property name="use_underline">True</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">False</property>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
+                        <property name="image">image1</property>
+                        <property name="use_underline">True</property>
+                        <signal name="clicked" handler="on_send_button_clicked" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -351,6 +343,7 @@
             <child type="label">
               <object class="GtkLabel" id="label343">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="xalign">0</property>
                 <property name="label" translatable="yes">&lt;b&gt;XML Input&lt;/b&gt;</property>
                 <property name="use_markup">True</property>
@@ -359,6 +352,7 @@
           </object>
           <packing>
             <property name="expand">False</property>
+            <property name="fill">True</property>
             <property name="position">4</property>
           </packing>
         </child>

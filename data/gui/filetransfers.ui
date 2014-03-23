@@ -41,11 +41,11 @@
                   </object>
                 </child>
                 <signal name="button_press_event" handler="on_transfers_list_button_press_event"/>
+                <signal name="row_activated" handler="on_transfers_list_row_activated"/>
                 <signal name="button_release_event" handler="on_transfers_list_button_release_event"/>
                 <signal name="key_press_event" handler="on_transfers_list_key_press_event"/>
-                <signal name="leave_notify_event" handler="on_transfers_list_leave_notify_event"/>
                 <signal name="motion_notify_event" handler="on_transfers_list_motion_notify_event"/>
-                <signal name="row_activated" handler="on_transfers_list_row_activated"/>
+                <signal name="leave_notify_event" handler="on_transfers_list_leave_notify_event"/>
               </object>
             </child>
           </object>
@@ -81,12 +81,15 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="cleanup_button">
+                <property name="label" translatable="yes">Clean _up</property>
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="receives_default">False</property>
                 <property name="tooltip_text" translatable="yes">Removes completed, cancelled and failed file transfers from the list</property>
+                <property name="image">image1</property>
+                <property name="use_underline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="cleanup_button-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes">Remove file transfer from the list.</property>
@@ -94,42 +97,6 @@
                   </object>
                 </child>
                 <signal name="clicked" handler="on_cleanup_button_clicked"/>
-                <child>
-                  <object class="GtkAlignment" id="alignment91">
-                    <property name="visible">True</property>
-                    <property name="xscale">0</property>
-                    <property name="yscale">0</property>
-                    <child>
-                      <object class="GtkHBox" id="hbox2992">
-                        <property name="visible">True</property>
-                        <property name="spacing">2</property>
-                        <child>
-                          <object class="GtkImage" id="image1143">
-                            <property name="visible">True</property>
-                            <property name="stock">gtk-clear</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="label358">
-                            <property name="visible">True</property>
-                            <property name="label" translatable="yes">Clean _up</property>
-                            <property name="use_underline">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -139,48 +106,15 @@
             </child>
             <child>
               <object class="GtkButton" id="pause_restore_button">
+                <property name="label" translatable="yes">_Pause</property>
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="receives_default">False</property>
+                <property name="image">image2</property>
+                <property name="use_underline">True</property>
                 <signal name="clicked" handler="on_pause_restore_button_clicked"/>
-                <child>
-                  <object class="GtkAlignment" id="alignment92">
-                    <property name="visible">True</property>
-                    <property name="xscale">0</property>
-                    <property name="yscale">0</property>
-                    <child>
-                      <object class="GtkHBox" id="hbox2993">
-                        <property name="visible">True</property>
-                        <property name="spacing">2</property>
-                        <child>
-                          <object class="GtkImage" id="image1147">
-                            <property name="visible">True</property>
-                            <property name="stock">gtk-media-pause</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="label359">
-                            <property name="visible">True</property>
-                            <property name="label" translatable="yes">_Pause</property>
-                            <property name="use_underline">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -252,7 +186,7 @@
     </child>
     <child>
       <object class="GtkImageMenuItem" id="continue_menuitem">
-        <property name="label" translatable="yes">_Continue</property>
+        <property name="label">_Continue</property>
         <property name="no_show_all">True</property>
         <property name="use_underline">True</property>
         <property name="use_stock">True</property>
@@ -262,7 +196,7 @@
     </child>
     <child>
       <object class="GtkImageMenuItem" id="pause_menuitem">
-        <property name="label" translatable="yes">_Pause</property>
+        <property name="label">_Pause</property>
         <property name="use_underline">True</property>
         <property name="use_stock">True</property>
         <property name="accel_group">accelgroup1</property>
@@ -285,7 +219,7 @@
     </child>
     <child>
       <object class="GtkImageMenuItem" id="open_folder_menuitem">
-        <property name="label" translatable="yes">_Open Containing Folder</property>
+        <property name="label">_Open Containing Folder</property>
         <property name="use_underline">True</property>
         <property name="use_stock">True</property>
         <property name="accel_group">accelgroup1</property>
@@ -294,4 +228,12 @@
     </child>
   </object>
   <object class="GtkAccelGroup" id="accelgroup1"/>
+  <object class="GtkImage" id="image1">
+    <property name="visible">True</property>
+    <property name="stock">gtk-clear</property>
+  </object>
+  <object class="GtkImage" id="image2">
+    <property name="visible">True</property>
+    <property name="stock">gtk-media-pause</property>
+  </object>
 </interface>

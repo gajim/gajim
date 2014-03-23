@@ -38,8 +38,8 @@ try:
 except ImportError:
     supported = False
     if not os.name == 'nt': # only say that to non Windows users
-        print _('D-Bus python bindings are missing in this computer')
-        print _('D-Bus capabilities of Gajim cannot be used')
+        print(_('D-Bus python bindings are missing in this computer'))
+        print(_('D-Bus capabilities of Gajim cannot be used'))
 else:
     try:
         # test if dbus-x11 is installed
@@ -49,14 +49,14 @@ else:
     except dbus.DBusException:
         supported = False
         if not os.name == 'nt': # only say that to non Windows users
-            print _('D-Bus does not run correctly on this machine')
-            print _('D-Bus capabilities of Gajim cannot be used')
+            print(_('D-Bus does not run correctly on this machine'))
+            print(_('D-Bus capabilities of Gajim cannot be used'))
     except exceptions.SystemBusNotPresent:
-        print _('D-Bus does not run correctly on this machine: system bus not '
-            'present')
+        print(_('D-Bus does not run correctly on this machine: system bus not '
+            'present'))
     except exceptions.SessionBusNotPresent:
-        print _('D-Bus does not run correctly on this machine: session bus not '
-            'present')
+        print(_('D-Bus does not run correctly on this machine: session bus not '
+            'present'))
 
 class SystemBus:
     """
@@ -154,7 +154,7 @@ def get_interface(interface, path, start_service=True):
             return None
         obj = bus.get_object(interface, path)
         return dbus.Interface(obj, interface)
-    except Exception, e:
+    except Exception as e:
         gajim.log.debug(str(e))
         return None
 

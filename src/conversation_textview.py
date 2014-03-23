@@ -29,15 +29,18 @@
 
 from threading import Timer # for smooth scrolling
 
-import gtk
-import pango
-import gobject
+from gi.repository import Gtk
+from gi.repository import Gdk
+from gi.repository import GdkPixbuf
+from gi.repository import Pango
+from gi.repository import GObject
+from gi.repository import GLib
 import time
 import os
 import tooltips
 import dialogs
 import locale
-import Queue
+import queue
 import urllib
 
 import gtkgui_helpers
@@ -63,9 +66,10 @@ def is_selection_modified(mark):
         return False
 
 def has_focus(widget):
-    return widget.flags() & gtk.HAS_FOCUS == gtk.HAS_FOCUS
+    return widget.get_state_flags() & Gtk.StateFlags.FOCUSED == \
+        Gtk.StateFlags.FOCUSED
 
-class TextViewImage(gtk.Image):
+class TextViewImage(Gtk.Image):
 
     def __init__(self, anchor, text):
         super(TextViewImage, self).__init__()
@@ -73,9 +77,9 @@ class TextViewImage(gtk.Image):
         self._selected = False
         self._disconnect_funcs = []
         self.connect('parent-set', self.on_parent_set)
-        self.connect('expose-event', self.on_expose)
+        self.connect('draw', self.on_expose)
         self.set_tooltip_markup(text)
-        self.anchor.set_data('plaintext', text)
+        self.anchor.plaintext = text
 
     def _get_selected(self):
         parent = self.get_parent()
@@ -91,14 +95,14 @@ class TextViewImage(gtk.Image):
     def get_state(self):
         parent = self.get_parent()
         if not parent:
-            return gtk.STATE_NORMAL
+            return Gtk.StateType.NORMAL
         if self._selected:
             if has_focus(parent):
-                return gtk.STATE_SELECTED
+                return Gtk.StateType.SELECTED
             else:
-                return gtk.STATE_ACTIVE
+                return Gtk.StateType.ACTIVE
         else:
-            return gtk.STATE_NORMAL
+            return Gtk.StateType.NORMAL
 
     def _update_selected(self):
         selected = self._get_selected()
@@ -149,30 +153,26 @@ class TextViewImage(gtk.Image):
 
     def on_expose(self, widget, event):
         state = self.get_state()
-        if state != gtk.STATE_NORMAL:
+        if state != Gtk.StateType.NORMAL:
             gc = widget.get_style().base_gc[state]
             area = widget.allocation
-            widget.window.draw_rectangle(gc, True, area.x, area.y,
-                    area.width, area.height)
+            widget.get_window(Gtk.TextWindowType.TEXT).draw_rectangle(gc, True,
+                area.x, area.y, area.width, area.height)
         return False
 
 
-class ConversationTextview(gobject.GObject):
+class ConversationTextview(GObject.GObject):
     """
     Class for the conversation textview (where user reads already said messages)
     for chat/groupchat windows
     """
     __gsignals__ = dict(
-            quote = (gobject.SIGNAL_RUN_LAST | gobject.SIGNAL_ACTION,
+            quote = (GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,
                     None, # return value
                     (str, ) # arguments
             )
     )
 
-    FOCUS_OUT_LINE_PIXBUF = gtkgui_helpers.get_icon_pixmap(
-        'gajim-muc_separator')
-    XEP0184_WARNING_PIXBUF = gtkgui_helpers.get_icon_pixmap('gtk-no')
-    XEP0184_RECEIVED_PIXBUF = gtkgui_helpers.get_icon_pixmap('gtk-yes')
     MESSAGE_CORRECTED_PIXBUF = gtkgui_helpers.get_icon_pixmap('gtk-spell-check')
 
     # smooth scroll constants
@@ -184,7 +184,7 @@ class ConversationTextview(gobject.GObject):
         If used_in_history_window is True, then we do not show Clear menuitem in
         context menu
         """
-        gobject.GObject.__init__(self)
+        GObject.GObject.__init__(self)
         self.used_in_history_window = used_in_history_window
 
         self.fc = FuzzyClock()
@@ -199,7 +199,7 @@ class ConversationTextview(gobject.GObject):
         self.tv.set_accepts_tab(True)
         self.tv.set_editable(False)
         self.tv.set_cursor_visible(False)
-        self.tv.set_wrap_mode(gtk.WRAP_WORD_CHAR)
+        self.tv.set_wrap_mode(Gtk.WrapMode.WORD_CHAR)
         self.tv.set_left_margin(2)
         self.tv.set_right_margin(2)
         self.handlers = {}
@@ -224,8 +224,7 @@ class ConversationTextview(gobject.GObject):
                 self.on_textview_button_press_event)
         self.handlers[id_] = self.tv
 
-        id_ = self.tv.connect('expose-event',
-                self.on_textview_expose_event)
+        id_ = self.tv.connect('draw', self.on_textview_draw)
         self.handlers[id_] = self.tv
 
 
@@ -233,33 +232,33 @@ class ConversationTextview(gobject.GObject):
         self.change_cursor = False
         self.last_time_printout = 0
 
-        font = pango.FontDescription(gajim.config.get('conversation_font'))
-        self.tv.modify_font(font)
+        font = Pango.FontDescription(gajim.config.get('conversation_font'))
+        self.tv.override_font(font)
         buffer_ = self.tv.get_buffer()
         end_iter = buffer_.get_end_iter()
         buffer_.create_mark('end', end_iter, False)
 
         self.tagIn = buffer_.create_tag('incoming')
         color = gajim.config.get('inmsgcolor')
-        font = pango.FontDescription(gajim.config.get('inmsgfont'))
+        font = Pango.FontDescription(gajim.config.get('inmsgfont'))
         self.tagIn.set_property('foreground', color)
         self.tagIn.set_property('font-desc', font)
 
         self.tagOut = buffer_.create_tag('outgoing')
         color = gajim.config.get('outmsgcolor')
-        font = pango.FontDescription(gajim.config.get('outmsgfont'))
+        font = Pango.FontDescription(gajim.config.get('outmsgfont'))
         self.tagOut.set_property('foreground', color)
         self.tagOut.set_property('font-desc', font)
 
         self.tagStatus = buffer_.create_tag('status')
         color = gajim.config.get('statusmsgcolor')
-        font = pango.FontDescription(gajim.config.get('satusmsgfont'))
+        font = Pango.FontDescription(gajim.config.get('satusmsgfont'))
         self.tagStatus.set_property('foreground', color)
         self.tagStatus.set_property('font-desc', font)
 
         self.tagInText = buffer_.create_tag('incomingtxt')
         color = gajim.config.get('inmsgtxtcolor')
-        font = pango.FontDescription(gajim.config.get('inmsgtxtfont'))
+        font = Pango.FontDescription(gajim.config.get('inmsgtxtfont'))
         if color:
             self.tagInText.set_property('foreground', color)
         self.tagInText.set_property('font-desc', font)
@@ -267,7 +266,7 @@ class ConversationTextview(gobject.GObject):
         self.tagOutText = buffer_.create_tag('outgoingtxt')
         color = gajim.config.get('outmsgtxtcolor')
         if color:
-            font = pango.FontDescription(gajim.config.get('outmsgtxtfont'))
+            font = Pango.FontDescription(gajim.config.get('outmsgtxtfont'))
         self.tagOutText.set_property('foreground', color)
         self.tagOutText.set_property('font-desc', font)
 
@@ -281,40 +280,46 @@ class ConversationTextview(gobject.GObject):
         self.tagMarked = buffer_.create_tag('marked')
         color = gajim.config.get('markedmsgcolor')
         self.tagMarked.set_property('foreground', color)
-        self.tagMarked.set_property('weight', pango.WEIGHT_BOLD)
+        self.tagMarked.set_property('weight', Pango.Weight.BOLD)
 
         tag = buffer_.create_tag('time_sometimes')
         tag.set_property('foreground', 'darkgrey')
-        tag.set_property('scale', pango.SCALE_SMALL)
-        tag.set_property('justification', gtk.JUSTIFY_CENTER)
+        #Pango.SCALE_SMALL
+        tag.set_property('scale', 0.8333333333333)
+        tag.set_property('justification', Gtk.Justification.CENTER)
 
         tag = buffer_.create_tag('small')
-        tag.set_property('scale', pango.SCALE_SMALL)
+        #Pango.SCALE_SMALL
+        tag.set_property('scale', 0.8333333333333)
 
         tag = buffer_.create_tag('restored_message')
         color = gajim.config.get('restored_messages_color')
         tag.set_property('foreground', color)
 
         self.tv.create_tags()
-
+        
         tag = buffer_.create_tag('bold')
-        tag.set_property('weight', pango.WEIGHT_BOLD)
+        tag.set_property('weight', Pango.Weight.BOLD)
 
         tag = buffer_.create_tag('italic')
-        tag.set_property('style', pango.STYLE_ITALIC)
+        tag.set_property('style', Pango.Style.ITALIC)
 
         tag = buffer_.create_tag('underline')
-        tag.set_property('underline', pango.UNDERLINE_SINGLE)
+        tag.set_property('underline', Pango.Underline.SINGLE)
 
-        buffer_.create_tag('focus-out-line', justification = gtk.JUSTIFY_CENTER)
+        buffer_.create_tag('focus-out-line', justification = Gtk.Justification.CENTER)
         self.displaymarking_tags = {}
 
         tag = buffer_.create_tag('xep0184-warning')
+        tag.set_property('foreground', '#cc0000')
+
+        tag = buffer_.create_tag('xep0184-received')
+        tag.set_property('foreground', '#73d216')
 
         # One mark at the begining then 2 marks between each lines
         size = gajim.config.get('max_conversation_lines')
         size = 2 * size - 1
-        self.marks_queue = Queue.Queue(size)
+        self.marks_queue = queue.Queue(size)
 
         self.allow_focus_out_line = True
         # holds a mark at the end of --- line
@@ -323,8 +328,6 @@ class ConversationTextview(gobject.GObject):
         self.xep0184_warning_tooltip = tooltips.BaseTooltip()
 
         self.line_tooltip = tooltips.BaseTooltip()
-        # use it for hr too
-        self.tv.focus_out_line_pixbuf = ConversationTextview.FOCUS_OUT_LINE_PIXBUF
         self.smooth_id = None
         self.just_cleared = False
 
@@ -365,7 +368,7 @@ class ConversationTextview(gobject.GObject):
         if not parent:
             return False
         vadj = parent.get_vadjustment()
-        max_val = vadj.upper - vadj.page_size + 1
+        max_val = vadj.get_upper() - vadj.get_page_size() + 1
         cur_val = vadj.get_value()
         # scroll by 1/3rd of remaining distance
         onethird = cur_val + ((max_val - cur_val) / 3.0)
@@ -379,26 +382,26 @@ class ConversationTextview(gobject.GObject):
         return True
 
     def smooth_scroll_timeout(self):
-        gobject.idle_add(self.do_smooth_scroll_timeout)
+        GLib.idle_add(self.do_smooth_scroll_timeout)
         return
 
     def do_smooth_scroll_timeout(self):
         if not self.smooth_id:
             # we finished scrolling
             return
-        gobject.source_remove(self.smooth_id)
+        GLib.source_remove(self.smooth_id)
         self.smooth_id = None
         parent = self.tv.get_parent()
         if parent:
             vadj = parent.get_vadjustment()
             self.auto_scrolling = True
-            vadj.set_value(vadj.upper - vadj.page_size + 1)
+            vadj.set_value(vadj.get_upper() - vadj.get_page_size() + 1)
             self.auto_scrolling = False
 
     def smooth_scroll_to_end(self):
         if None != self.smooth_id: # already scrolling
             return False
-        self.smooth_id = gobject.timeout_add(self.SCROLL_DELAY,
+        self.smooth_id = GLib.timeout_add(self.SCROLL_DELAY,
                 self.smooth_scroll)
         self.smooth_scroll_timer = Timer(self.MAX_SCROLL_TIME,
                 self.smooth_scroll_timeout)
@@ -428,9 +431,9 @@ class ConversationTextview(gobject.GObject):
         # scroll only if expected end is not visible
         if end_rect.y >= (visible_rect.y + visible_rect.height + diff_y):
             if use_smooth:
-                gobject.idle_add(self.smooth_scroll_to_end)
+                GLib.idle_add(self.smooth_scroll_to_end)
             else:
-                gobject.idle_add(self.scroll_to_end_iter)
+                GLib.idle_add(self.scroll_to_end_iter)
 
     def scroll_to_end_iter(self):
         buffer_ = self.tv.get_buffer()
@@ -442,7 +445,7 @@ class ConversationTextview(gobject.GObject):
 
     def stop_scrolling(self):
         if self.smooth_id:
-            gobject.source_remove(self.smooth_id)
+            GLib.source_remove(self.smooth_id)
             self.smooth_id = None
             self.smooth_scroll_timer.cancel()
 
@@ -463,7 +466,7 @@ class ConversationTextview(gobject.GObject):
         buffer_ = self.tv.get_buffer()
         i1 = buffer_.get_iter_at_mark(m1)
         i2 = buffer_.get_iter_at_mark(m2)
-        txt = buffer_.get_text(i1, i2)
+        txt = buffer_.get_text(i1, i2, True)
         buffer_.delete(i1, i2)
         tag = 'outgoingtxt'
         if message.startswith('/me'):
@@ -471,7 +474,7 @@ class ConversationTextview(gobject.GObject):
         i2 = self.print_conversation_line(message, '', 'outgoing', name, None,
             xhtml=xhtml, iter_=i1)
         tt_txt = _('<b>Message was corrected. Last message was:</b>\n  %s') % \
-            gobject.markup_escape_text(old_txt)
+            GLib.markup_escape_text(old_txt)
         self.show_corrected_message_warning(i2, tt_txt)
         self.last_sent_message_marks[1] = buffer_.create_mark(None, i2,
             left_gravity=True)
@@ -484,12 +487,12 @@ class ConversationTextview(gobject.GObject):
         buffer_ = self.tv.get_buffer()
         i1 = buffer_.get_iter_at_mark(m1)
         i2 = buffer_.get_iter_at_mark(m2)
-        txt = buffer_.get_text(i1, i2)
+        txt = buffer_.get_text(i1, i2, True)
         buffer_.delete(i1, i2)
         i2 = self.print_conversation_line(message, '', 'incoming', name, None,
             xhtml=xhtml, iter_=i1)
         tt_txt = _('<b>Message was corrected. Last message was:</b>\n  %s') % \
-            gobject.markup_escape_text(old_txt)
+            GLib.markup_escape_text(old_txt)
         self.show_corrected_message_warning(i2, tt_txt)
         self.last_received_message_marks[name][1] = buffer_.create_mark(None, i2,
             left_gravity=True)
@@ -511,22 +514,11 @@ class ConversationTextview(gobject.GObject):
                 return False
 
             end_iter = buffer_.get_iter_at_mark(self.xep0184_marks[id_])
-            buffer_.insert(end_iter, ' ')
-            anchor = buffer_.create_child_anchor(end_iter)
-            img = TextViewImage(anchor, '')
-            img.set_from_pixbuf(ConversationTextview.XEP0184_WARNING_PIXBUF)
-            img.show()
-            self.tv.add_child_at_anchor(img, anchor)
-            before_img_iter = buffer_.get_iter_at_mark(self.xep0184_marks[id_])
-            before_img_iter.forward_char()
-            post_img_iter = before_img_iter.copy()
-            post_img_iter.forward_char()
-            buffer_.apply_tag_by_name('xep0184-warning', before_img_iter,
-                    post_img_iter)
+            buffer_.insert_with_tags_by_name(end_iter, ' ✖', 'xep0184-warning')
 
             self.xep0184_shown[id_] = SHOWN
             return False
-        gobject.timeout_add_seconds(3, show_it)
+        GLib.timeout_add_seconds(3, show_it)
 
         buffer_.end_user_action()
 
@@ -549,12 +541,8 @@ class ConversationTextview(gobject.GObject):
 
         if gajim.config.get('positive_184_ack'):
             begin_iter = buffer_.get_iter_at_mark(self.xep0184_marks[id_])
-            buffer_.insert(begin_iter, ' ')
-            anchor = buffer_.create_child_anchor(begin_iter)
-            img = TextViewImage(anchor, '')
-            img.set_from_pixbuf(ConversationTextview.XEP0184_RECEIVED_PIXBUF)
-            img.show()
-            self.tv.add_child_at_anchor(img, anchor)
+            buffer_.insert_with_tags_by_name(begin_iter, ' ✓',
+                'xep0184-received')
 
         self.xep0184_shown[id_] = ALREADY_RECEIVED
 
@@ -595,7 +583,7 @@ class ConversationTextview(gobject.GObject):
                         self.focus_out_end_mark)
                 begin_iter_for_previous_line = end_iter_for_previous_line.copy()
                 # img_char+1 (the '\n')
-                begin_iter_for_previous_line.backward_chars(2)
+                begin_iter_for_previous_line.backward_chars(21)
 
                 # remove focus out line
                 buffer_.delete(begin_iter_for_previous_line,
@@ -604,14 +592,12 @@ class ConversationTextview(gobject.GObject):
 
             # add the new focus out line
             end_iter = buffer_.get_end_iter()
-            buffer_.insert(end_iter, '\n')
-            buffer_.insert_pixbuf(end_iter,
-                    ConversationTextview.FOCUS_OUT_LINE_PIXBUF)
+            buffer_.insert(end_iter, '\n' + '―' * 20)
 
             end_iter = buffer_.get_end_iter()
             before_img_iter = end_iter.copy()
             # one char back (an image also takes one char)
-            before_img_iter.backward_char()
+            before_img_iter.backward_chars(20)
             buffer_.apply_tag_by_name('focus-out-line', before_img_iter, end_iter)
 
             self.allow_focus_out_line = False
@@ -625,12 +611,14 @@ class ConversationTextview(gobject.GObject):
             if scroll:
                 # scroll to the end (via idle in case the scrollbar has
                 # appeared)
-                gobject.idle_add(self.scroll_to_end)
+                GLib.idle_add(self.scroll_to_end)
 
     def show_xep0184_warning_tooltip(self):
-        pointer = self.tv.get_pointer()
-        x, y = self.tv.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT,
-                pointer[0], pointer[1])
+        w = self.tv.get_window(Gtk.TextWindowType.TEXT)
+        device = w.get_display().get_device_manager().get_client_pointer()
+        pointer = w.get_device_position(device)
+        x = pointer[1]
+        y = pointer[2]
         tags = self.tv.get_iter_at_location(x, y).get_tags()
         tag_table = self.tv.get_buffer().get_tag_table()
         xep0184_warning = False
@@ -640,16 +628,18 @@ class ConversationTextview(gobject.GObject):
                 break
         if xep0184_warning and not self.xep0184_warning_tooltip.win:
             # check if the current pointer is still over the line
-            position = self.tv.window.get_origin()
-            self.xep0184_warning_tooltip.show_tooltip(_('This icon indicates that '
-                    'this message has not yet\nbeen received by the remote end. '
-                    "If this icon stays\nfor a long time, it's likely the message got "
-                    'lost.'), 8, position[1] + pointer[1])
+            position = w.get_origin()[1:]
+            self.xep0184_warning_tooltip.show_tooltip(_('This icon indicates '
+                'that this message has not yet\nbeen received by the remote '
+                "end. If this icon stays\nfor a long time, it's likely the "
+                'message got lost.'), 8, position[1] + y)
 
     def show_line_tooltip(self):
-        pointer = self.tv.get_pointer()
-        x, y = self.tv.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT,
-                pointer[0], pointer[1])
+        w = self.tv.get_window(Gtk.TextWindowType.TEXT)
+        device = w.get_display().get_device_manager().get_client_pointer()
+        pointer = w.get_device_position(device)
+        x = pointer[1]
+        y = pointer[2]
         tags = self.tv.get_iter_at_location(x, y).get_tags()
         tag_table = self.tv.get_buffer().get_tag_table()
         over_line = False
@@ -659,12 +649,14 @@ class ConversationTextview(gobject.GObject):
                 break
         if over_line and not self.line_tooltip.win:
             # check if the current pointer is still over the line
-            position = self.tv.window.get_origin()
+            position = w.get_origin()[1:]
             self.line_tooltip.show_tooltip(_('Text below this line is what has '
-                    'been said since the\nlast time you paid attention to this group '
-                    'chat'), 8, position[1] + pointer[1])
+                'been said since the\nlast time you paid attention to this '
+                'group chat'), 8, position[1] + y)
 
-    def on_textview_expose_event(self, widget, event):
+    def on_textview_draw(self, widget, ctx):
+        return
+        #TODO
         expalloc = event.area
         exp_x0 = expalloc.x
         exp_y0 = expalloc.y
@@ -694,22 +686,23 @@ class ConversationTextview(gobject.GObject):
         """
         Change the cursor to a hand when we are over a mail or an url
         """
-        pointer_x, pointer_y = self.tv.window.get_pointer()[0:2]
-        x, y = self.tv.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT,
-                pointer_x, pointer_y)
+        w = self.tv.get_window(Gtk.TextWindowType.TEXT)
+        device = w.get_display().get_device_manager().get_client_pointer()
+        pointer = w.get_device_position(device)
+        x, y = self.tv.window_to_buffer_coords(Gtk.TextWindowType.TEXT,
+            pointer[1], pointer[2])
         tags = self.tv.get_iter_at_location(x, y).get_tags()
         if self.change_cursor:
-            self.tv.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(
-                    gtk.gdk.Cursor(gtk.gdk.XTERM))
+            w.set_cursor(Gdk.Cursor.new(Gdk.CursorType.XTERM))
             self.change_cursor = False
         tag_table = self.tv.get_buffer().get_tag_table()
         over_line = False
         xep0184_warning = False
+
         for tag in tags:
             if tag in (tag_table.lookup('url'), tag_table.lookup('mail'), \
             tag_table.lookup('xmpp'), tag_table.lookup('sth_at_sth')):
-                self.tv.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(
-                        gtk.gdk.Cursor(gtk.gdk.HAND2))
+                w.set_cursor(Gdk.Cursor.new(Gdk.CursorType.HAND2))
                 self.change_cursor = True
             elif tag == tag_table.lookup('focus-out-line'):
                 over_line = True
@@ -725,16 +718,14 @@ class ConversationTextview(gobject.GObject):
             if not xep0184_warning:
                 self.xep0184_warning_tooltip.hide_tooltip()
         if over_line and not self.line_tooltip.win:
-            self.line_tooltip.timeout = gobject.timeout_add(500,
+            self.line_tooltip.timeout = GLib.timeout_add(500,
                     self.show_line_tooltip)
-            self.tv.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(
-                    gtk.gdk.Cursor(gtk.gdk.LEFT_PTR))
+            w.set_cursor(Gdk.Cursor.new(Gdk.CursorType.LEFT_PTR))
             self.change_cursor = True
         if xep0184_warning and not self.xep0184_warning_tooltip.win:
-            self.xep0184_warning_tooltip.timeout = gobject.timeout_add(500,
+            self.xep0184_warning_tooltip.timeout = GLib.timeout_add(500,
                     self.show_xep0184_warning_tooltip)
-            self.tv.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(
-                    gtk.gdk.Cursor(gtk.gdk.LEFT_PTR))
+            w.set_cursor(Gdk.Cursor.new(Gdk.CursorType.LEFT_PTR))
             self.change_cursor = True
 
     def clear(self, tv = None):
@@ -746,7 +737,7 @@ class ConversationTextview(gobject.GObject):
         buffer_.delete(start, end)
         size = gajim.config.get('max_conversation_lines')
         size = 2 * size - 1
-        self.marks_queue = Queue.Queue(size)
+        self.marks_queue = queue.Queue(size)
         self.focus_out_end_mark = None
         self.just_cleared = True
 
@@ -765,33 +756,35 @@ class ConversationTextview(gobject.GObject):
         """
         separator_menuitem_was_added = False
         if not self.used_in_history_window:
-            item = gtk.SeparatorMenuItem()
+            item = Gtk.SeparatorMenuItem.new()
             menu.prepend(item)
             separator_menuitem_was_added = True
 
-            item = gtk.ImageMenuItem(gtk.STOCK_CLEAR)
+            item = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_CLEAR, None)
             menu.prepend(item)
             id_ = item.connect('activate', self.clear)
             self.handlers[id_] = item
 
         if self.selected_phrase:
             if not separator_menuitem_was_added:
-                item = gtk.SeparatorMenuItem()
+                item = Gtk.SeparatorMenuItem.new()
                 menu.prepend(item)
 
             if not self.used_in_history_window:
-                item = gtk.MenuItem(_('_Quote'))
+                item = Gtk.MenuItem.new_with_mnemonic(_('_Quote'))
                 id_ = item.connect('activate', self.on_quote)
                 self.handlers[id_] = item
                 menu.prepend(item)
 
             _selected_phrase = helpers.reduce_chars_newlines(
                     self.selected_phrase, 25, 2)
-            item = gtk.MenuItem(_('_Actions for "%s"') % _selected_phrase)
+            item = Gtk.MenuItem.new_with_mnemonic(
+                _('_Actions for "%s"') % _selected_phrase)
             menu.prepend(item)
-            submenu = gtk.Menu()
+            submenu = Gtk.Menu()
             item.set_submenu(submenu)
-            phrase_for_url = urllib.quote(self.selected_phrase.encode('utf-8'))
+            phrase_for_url = urllib.parse.quote(self.selected_phrase.encode(
+                'utf-8'))
 
             always_use_en = gajim.config.get('always_english_wikipedia')
             if always_use_en:
@@ -800,12 +793,12 @@ class ConversationTextview(gobject.GObject):
             else:
                 link = 'http://%s.wikipedia.org/wiki/Special:Search?search=%s'\
                         % (gajim.LANG, phrase_for_url)
-            item = gtk.MenuItem(_('Read _Wikipedia Article'))
+            item = Gtk.MenuItem.new_with_mnemonic(_('Read _Wikipedia Article'))
             id_ = item.connect('activate', self.visit_url_from_menuitem, link)
             self.handlers[id_] = item
             submenu.append(item)
 
-            item = gtk.MenuItem(_('Look it up in _Dictionary'))
+            item = Gtk.MenuItem.new_with_mnemonic(_('Look it up in _Dictionary'))
             dict_link = gajim.config.get('dictionary_url')
             if dict_link == 'WIKTIONARY':
                 # special link (yeah undocumented but default)
@@ -821,7 +814,7 @@ class ConversationTextview(gobject.GObject):
             else:
                 if dict_link.find('%s') == -1:
                     # we must have %s in the url if not WIKTIONARY
-                    item = gtk.MenuItem(_(
+                    item = Gtk.MenuItem(_(
                             'Dictionary URL is missing an "%s" and it is not WIKTIONARY'))
                     item.set_property('sensitive', False)
                 else:
@@ -835,16 +828,16 @@ class ConversationTextview(gobject.GObject):
             search_link = gajim.config.get('search_engine')
             if search_link.find('%s') == -1:
                 # we must have %s in the url
-                item = gtk.MenuItem(_('Web Search URL is missing an "%s"'))
+                item = Gtk.MenuItem(_('Web Search URL is missing an "%s"'))
                 item.set_property('sensitive', False)
             else:
-                item = gtk.MenuItem(_('Web _Search for it'))
+                item = Gtk.MenuItem.new_with_mnemonic(_('Web _Search for it'))
                 link =  search_link % phrase_for_url
                 id_ = item.connect('activate', self.visit_url_from_menuitem, link)
                 self.handlers[id_] = item
             submenu.append(item)
 
-            item = gtk.MenuItem(_('Open as _Link'))
+            item = Gtk.MenuItem.new_with_mnemonic(_('Open as _Link'))
             id_ = item.connect('activate', self.visit_url_from_menuitem, link)
             self.handlers[id_] = item
             submenu.append(item)
@@ -862,11 +855,10 @@ class ConversationTextview(gobject.GObject):
         if event.button != 3: # if not right click
             return False
 
-        x, y = self.tv.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT,
+        x, y = self.tv.window_to_buffer_coords(Gtk.TextWindowType.TEXT,
                 int(event.x), int(event.y))
         iter_ = self.tv.get_iter_at_location(x, y)
         tags = iter_.get_tags()
-
 
         if tags: # we clicked on sth special (it can be status message too)
             for tag in tags:
@@ -882,9 +874,8 @@ class ConversationTextview(gobject.GObject):
         if return_val: # if sth was selected when we right-clicked
             # get the selected text
             start_sel, finish_sel = return_val[0], return_val[1]
-            self.selected_phrase = buffer_.get_text(start_sel, finish_sel).decode(
-                    'utf-8')
-        elif ord(iter_.get_char()) > 31:
+            self.selected_phrase = buffer_.get_text(start_sel, finish_sel, True)
+        elif iter_.get_char() and ord(iter_.get_char()) > 31:
             # we clicked on a word, do as if it's selected for context menu
             start_sel = iter_.copy()
             if not start_sel.starts_word():
@@ -892,15 +883,14 @@ class ConversationTextview(gobject.GObject):
             finish_sel = iter_.copy()
             if not finish_sel.ends_word():
                 finish_sel.forward_word_end()
-            self.selected_phrase = buffer_.get_text(start_sel, finish_sel).decode(
-                    'utf-8')
+            self.selected_phrase = buffer_.get_text(start_sel, finish_sel, True)
 
     def on_open_link_activate(self, widget, kind, text):
         helpers.launch_browser_mailer(kind, text)
 
     def on_copy_link_activate(self, widget, text):
-        clip = gtk.clipboard_get()
-        clip.set_text(text)
+        clip = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+        clip.set_text(text, -1)
 
     def on_start_chat_activate(self, widget, jid):
         gajim.interface.new_chat_from_jid(self.account, jid)
@@ -982,10 +972,11 @@ class ConversationTextview(gobject.GObject):
                 childs[0].hide() # copy link location
             childs[1].hide() # open link in browser
 
-        menu.popup(None, None, None, event.button, event.time)
+        menu.attach_to_widget(self.tv, None)
+        menu.popup(None, None, None, None, event.button.button, event.time)
 
     def hyperlink_handler(self, texttag, widget, event, iter_, kind):
-        if event.type == gtk.gdk.BUTTON_PRESS:
+        if event.type == Gdk.EventType.BUTTON_PRESS:
             begin_iter = iter_.copy()
             # we get the begining of the tag
             while not begin_iter.begins_tag(texttag):
@@ -1006,10 +997,8 @@ class ConversationTextview(gobject.GObject):
                     # it's a JID or mail
                     kind = 'sth_at_sth'
             else:
-                word = self.tv.get_buffer().get_text(begin_iter, end_iter).decode(
-                    'utf-8')
-
-            if event.button == 3: # right click
+                word = self.tv.get_buffer().get_text(begin_iter, end_iter, True)
+            if event.button.button == 3: # right click
                 self.make_link_menu(event, kind, word)
                 return True
             else:
@@ -1036,13 +1025,17 @@ class ConversationTextview(gobject.GObject):
         after *last* special text, so we can print it in
         print_conversation_line()
         """
+        if not otext:
+            return
         buffer_ = self.tv.get_buffer()
-
-        insert_tags_func = buffer_.insert_with_tags_by_name
+        if other_tags:
+            insert_tags_func = buffer_.insert_with_tags_by_name
+        else:
+            insert_tags_func = buffer_.insert
         # detect_and_print_special_text() is also used by
-        # HtmlHandler.handle_specials() and there tags is gtk.TextTag objects,
+        # HtmlHandler.handle_specials() and there tags is Gtk.TextTag objects,
         # not strings
-        if other_tags and isinstance(other_tags[0], gtk.TextTag):
+        if other_tags and isinstance(other_tags[0], Gtk.TextTag):
             insert_tags_func = buffer_.insert_with_tags
 
         index = 0
@@ -1070,7 +1063,10 @@ class ConversationTextview(gobject.GObject):
                 if not iter_:
                     end_iter = buffer_.get_end_iter()
                 # we insert normal text
-                insert_tags_func(end_iter, text_before_special_text, *other_tags)
+                if other_tags:
+                    insert_tags_func(end_iter, text_before_special_text, *other_tags)
+                else:
+                    buffer_.insert(end_iter, text_before_special_text)
             index = end # update index
 
             # now print it
@@ -1132,10 +1128,11 @@ class ConversationTextview(gobject.GObject):
             # it's an emoticon
             emot_ascii = possible_emot_ascii_caps
             anchor = buffer_.create_child_anchor(end_iter)
-            img = TextViewImage(anchor, special_text)
+            img = TextViewImage(anchor,
+                GLib.markup_escape_text(special_text))
             animations = gajim.interface.emoticons_animations
             if not emot_ascii in animations:
-                animations[emot_ascii] = gtk.gdk.PixbufAnimation(
+                animations[emot_ascii] = GdkPixbuf.PixbufAnimation.new_from_file(
                     gajim.interface.emoticons[emot_ascii])
             img.set_from_animation(animations[emot_ascii])
             img.show()
@@ -1203,10 +1200,12 @@ class ConversationTextview(gobject.GObject):
             # It's nothing special
             if use_other_tags:
                 insert_tags_func = buffer_.insert_with_tags_by_name
-                if other_tags and isinstance(other_tags[0], gtk.TextTag):
+                if other_tags and isinstance(other_tags[0], Gtk.TextTag):
                     insert_tags_func = buffer_.insert_with_tags
-
-                insert_tags_func(end_iter, special_text, *other_tags)
+                if other_tags:
+                    insert_tags_func(end_iter, special_text, *other_tags)
+                else:
+                    buffer_.insert(end_iter, special_text)
 
         if tags:
             all_tags = tags[:]
@@ -1216,7 +1215,7 @@ class ConversationTextview(gobject.GObject):
             all_tags = [(ttt.lookup(t) if isinstance(t, str) else t) for t in all_tags]
             buffer_.insert_with_tags(end_iter, special_text, *all_tags)
             if 'url' in tags:
-                puny_text = puny_encode(special_text)
+                puny_text = puny_encode(special_text).decode('utf-8')
                 if not puny_text.endswith('-'):
                     puny_tags = []
                     if use_other_tags:
@@ -1287,9 +1286,9 @@ class ConversationTextview(gobject.GObject):
             tim = time.localtime()
         current_print_time = gajim.config.get('print_time')
         if text.startswith('/me '):
-            direction_mark = i18n.paragraph_direction_mark(unicode(text[3:]))
+            direction_mark = i18n.paragraph_direction_mark(str(text[3:]))
         else:
-            direction_mark = i18n.paragraph_direction_mark(unicode(text))
+            direction_mark = i18n.paragraph_direction_mark(text)
         # don't apply direction mark if it's status message
         if kind == 'status':
             direction_mark = i18n.direction_mark
@@ -1297,8 +1296,11 @@ class ConversationTextview(gobject.GObject):
             timestamp_str = self.get_time_to_show(tim, direction_mark)
             timestamp = time.strftime(timestamp_str, tim)
             timestamp = direction_mark + timestamp + direction_mark
-            buffer_.insert_with_tags_by_name(end_iter, timestamp,
-                *other_tags_for_time)
+            if other_tags_for_time:
+                buffer_.insert_with_tags_by_name(end_iter, timestamp,
+                    *other_tags_for_time)
+            else:
+                buffer_.insert (end_iter, timestamp)
         elif current_print_time == 'sometimes' and kind != 'info' and not simple:
             every_foo_seconds = 60 * gajim.config.get(
                 'print_ichat_every_foo_minutes')
@@ -1312,7 +1314,7 @@ class ConversationTextview(gobject.GObject):
                 else:
                     tim_format = self.get_time_to_show(tim, direction_mark)
                 buffer_.insert_with_tags_by_name(end_iter, tim_format + '\n',
-                        'time_sometimes')
+                    'time_sometimes')
         # If there's a displaymarking, print it here.
         if displaymarking:
             self.print_displaymarking(displaymarking, iter_=end_iter)
@@ -1368,9 +1370,9 @@ class ConversationTextview(gobject.GObject):
             # we are at the end or we are sending something
             # scroll to the end (via idle in case the scrollbar has appeared)
             if gajim.config.get('use_smooth_scrolling'):
-                gobject.idle_add(self.smooth_scroll_to_end)
+                GLib.idle_add(self.smooth_scroll_to_end)
             else:
-                gobject.idle_add(self.scroll_to_end)
+                GLib.idle_add(self.scroll_to_end)
 
         self.just_cleared = False
         buffer_.end_user_action()
@@ -1385,9 +1387,9 @@ class ConversationTextview(gobject.GObject):
         # get difference in days since epoch (86400 = 24*3600)
         # number of days since epoch for current time (in GMT) -
         # number of days since epoch for message (in GMT)
-        diff_day = int(timegm(time.localtime())) / 86400 -\
-                int(timegm(tim)) / 86400
-        if diff_day == 0:
+        diff_day = int(int(timegm(time.localtime())) / 86400 -\
+                int(timegm(tim)) / 86400)
+        if diff_day == 0.0:
             day_str = ''
         else:
             #%i is day in year (1-365)
@@ -1400,10 +1402,6 @@ class ConversationTextview(gobject.GObject):
         timestamp_str = helpers.from_one_line(timestamp_str)
         format_ += timestamp_str
         tim_format = time.strftime(format_, tim)
-        if locale.getpreferredencoding() not in ('KOI8-R', 'cp1251'):
-            # if tim_format comes as unicode because of day_str.
-            # we convert it to the encoding that we want (and that is utf-8)
-            tim_format = helpers.ensure_utf8_string(tim_format)
         return tim_format
 
     def detect_other_text_tag(self, text, kind):
@@ -1465,11 +1463,10 @@ class ConversationTextview(gobject.GObject):
             try:
                 if name and (text.startswith('/me ') or text.startswith('/me\n')):
                     xhtml = xhtml.replace('/me', '<i>* %s</i>' % (name,), 1)
-                self.tv.display_html(xhtml.encode('utf-8'), self.tv, self,
-                    iter_=iter_)
+                self.tv.display_html(xhtml, self.tv, self, iter_=iter_)
                 return
-            except Exception, e:
-                gajim.log.debug('Error processing xhtml' + str(e))
+            except Exception as e:
+                gajim.log.debug('Error processing xhtml: ' + str(e))
                 gajim.log.debug('with |' + xhtml + '|')
 
         # /me is replaced by name if name is given

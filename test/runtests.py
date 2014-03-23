@@ -17,13 +17,13 @@ try:
     shortargs = 'hnv:'
     longargs = 'help no-x verbose='
     opts, args = getopt.getopt(sys.argv[1:], shortargs, longargs.split())
-except getopt.error, msg:
-    print msg
-    print 'for help use --help'
+except getopt.error as msg:
+    print(msg)
+    print('for help use --help')
     sys.exit(2)
 for o, a in opts:
     if o in ('-h', '--help'):
-        print 'runtests [--help] [--no-x] [--verbose level]'
+        print('runtests [--help] [--no-x] [--verbose level]')
         sys.exit()
     elif o in ('-n', '--no-x'):
         use_x = False
@@ -31,7 +31,7 @@ for o, a in opts:
         try:
             verbose = int(a)
         except Exception:
-            print 'verbose must be a number >= 0'
+            print('verbose must be a number >= 0')
             sys.exit(2)
 
 # new test modules need to be added manually

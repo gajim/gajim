@@ -19,8 +19,8 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-import gobject
-import gtk
+from gi.repository import GLib
+from gi.repository import Gtk
 
 from common import gajim
 from common import dataforms
@@ -52,7 +52,7 @@ class SearchWindow:
         self.xml.connect_signals(self)
         self.window.show_all()
         self.request_form()
-        self.pulse_id = gobject.timeout_add(80, self.pulse_callback)
+        self.pulse_id = GLib.timeout_add(80, self.pulse_callback)
 
         self.is_form = None
 
@@ -72,12 +72,12 @@ class SearchWindow:
         return True
 
     def on_search_window_key_press_event(self, widget, event):
-        if event.keyval == gtk.keysyms.Escape:
+        if event.keyval == Gdk.KEY_Escape:
             self.window.destroy()
 
     def on_search_window_destroy(self, widget):
         if self.pulse_id:
-            gobject.source_remove(self.pulse_id)
+            GLib.source_remove(self.pulse_id)
         del gajim.interface.instances[self.account]['search'][self.jid]
         gajim.ged.remove_event_handler('search-form-received', ged.GUI1,
             self._nec_search_form_received)
@@ -104,7 +104,7 @@ class SearchWindow:
         self.progressbar.show()
         self.label.set_text(_('Waiting for results'))
         self.label.show()
-        self.pulse_id = gobject.timeout_add(80, self.pulse_callback)
+        self.pulse_id = GLib.timeout_add(80, self.pulse_callback)
         self.search_button.hide()
 
     def on_add_contact_button_clicked(self, widget):
@@ -128,7 +128,7 @@ class SearchWindow:
 
     def _nec_search_form_received(self, obj):
         if self.pulse_id:
-            gobject.source_remove(self.pulse_id)
+            GLib.source_remove(self.pulse_id)
         self.progressbar.hide()
         self.label.hide()
 
@@ -151,7 +151,7 @@ class SearchWindow:
             self.data_form_widget = config.FakeDataForm(obj.data)
 
         self.data_form_widget.show_all()
-        self.search_vbox.pack_start(self.data_form_widget)
+        self.search_vbox.pack_start(self.data_form_widget, True, True, 0)
 
     def on_result_treeview_cursor_changed(self, treeview):
         if self.jid_column == -1:
@@ -168,7 +168,7 @@ class SearchWindow:
 
     def _nec_search_result_received(self, obj):
         if self.pulse_id:
-            gobject.source_remove(self.pulse_id)
+            GLib.source_remove(self.pulse_id)
         self.progressbar.hide()
         self.label.hide()
 
@@ -178,29 +178,29 @@ class SearchWindow:
                 self.label.show()
                 return
             # We suppose all items have the same fields
-            sw = gtk.ScrolledWindow()
-            sw.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
-            self.result_treeview = gtk.TreeView()
+            sw = Gtk.ScrolledWindow()
+            sw.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
+            self.result_treeview = Gtk.TreeView()
             self.result_treeview.connect('cursor-changed',
                 self.on_result_treeview_cursor_changed)
             sw.add(self.result_treeview)
             # Create model
             fieldtypes = [str]*len(obj.data[0])
-            model = gtk.ListStore(*fieldtypes)
+            model = Gtk.ListStore(*fieldtypes)
             # Copy data to model
             for item in obj.data:
                 model.append(item.values())
             # Create columns
             counter = 0
             for field in obj.data[0].keys():
-                self.result_treeview.append_column(gtk.TreeViewColumn(field,
-                    gtk.CellRendererText(), text=counter))
+                self.result_treeview.append_column(Gtk.TreeViewColumn(field,
+                    Gtk.CellRendererText(), text=counter))
                 if field == 'jid':
                     self.jid_column = counter
                 counter += 1
             self.result_treeview.set_model(model)
             sw.show_all()
-            self.search_vbox.pack_start(sw)
+            self.search_vbox.pack_start(sw, True, True, 0)
             if self.jid_column > -1:
                 self.add_contact_button.show()
                 self.information_button.show()
@@ -223,7 +223,7 @@ class SearchWindow:
 
         self.result_treeview = self.data_form_widget.records_treeview
         selection = self.result_treeview.get_selection()
-        selection.set_mode(gtk.SELECTION_SINGLE)
+        selection.set_mode(Gtk.SelectionMode.SINGLE)
         self.result_treeview.connect('cursor-changed',
             self.on_result_treeview_cursor_changed)
 
@@ -233,7 +233,7 @@ class SearchWindow:
                 self.jid_column = counter
                 break
             counter += 1
-        self.search_vbox.pack_start(self.data_form_widget)
+        self.search_vbox.pack_start(self.data_form_widget, True, True, 0)
         self.data_form_widget.show()
         if self.jid_column > -1:
             self.add_contact_button.show()

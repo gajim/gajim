@@ -40,7 +40,7 @@
     </child>
     <child>
       <object class="GtkImageMenuItem" id="join_group_chat_menuitem">
-        <property name="label" translatable="yes">Join _Group Chat...</property>
+        <property name="label" translatable="yes">Join _Group Chat</property>
         <property name="visible">True</property>
         <property name="use_underline">True</property>
         <property name="image">image4</property>
@@ -93,7 +93,7 @@
     </child>
     <child>
       <object class="GtkImageMenuItem" id="edit_account_menuitem">
-        <property name="label" translatable="yes">_Modify Account</property>
+        <property name="label" translatable="yes">_Modify Account...</property>
         <property name="visible">True</property>
         <property name="use_underline">True</property>
         <property name="image">image8</property>

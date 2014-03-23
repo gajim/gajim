@@ -19,19 +19,19 @@ Handles Jingle RTP sessions (XEP 0167)
 
 from collections import deque
 
-import gobject
+from gi.repository import GLib
 import socket
 
 import nbxmpp
-import farstream, gst
-import gst.interfaces
+import farstream
+import gst
 from glib import GError
 
-import gajim
+from common import gajim
 
-from jingle_transport import JingleTransportICEUDP
-from jingle_content import contents, JingleContent, JingleContentSetupException
-from connection_handlers_events import InformationEvent
+from common.jingle_transport import JingleTransportICEUDP
+from common.jingle_content import contents, JingleContent, JingleContentSetupException
+from common.connection_handlers_events import InformationEvent
 
 
 import logging
@@ -66,7 +66,6 @@ class JingleRTPContent(JingleContent):
         # pipeline and bus
         self.pipeline = gst.Pipeline()
         bus = self.pipeline.get_bus()
-        bus.enable_sync_message_emission()
         bus.add_signal_watch()
         bus.connect('message', self._on_gst_message)
 
@@ -90,8 +89,8 @@ class JingleRTPContent(JingleContent):
                 try:
                     ip = socket.getaddrinfo(stun_server, 0, socket.AF_UNSPEC,
                             socket.SOCK_STREAM)[0][4][0]
-                except socket.gaierror, (errnum, errstr):
-                    log.warn('Lookup of stun ip failed: %s' % errstr)
+                except socket.gaierror as e:
+                    log.warning('Lookup of stun ip failed: %s' % str(e))
                 else:
                     params['stun-ip'] = ip
 
@@ -108,13 +107,13 @@ class JingleRTPContent(JingleContent):
         try:
             bin = gst.parse_bin_from_description(pipeline, True)
             return bin
-        except GError, error_str:
+        except GError as e:
             gajim.nec.push_incoming_event(InformationEvent(None,
                 conn=self.session.connection, level='error',
                 pri_txt=_('%s configuration error') % text.capitalize(),
                 sec_txt=_("Couldn't setup %s. Check your configuration.\n\n"
                 "Pipeline was:\n%s\n\nError was:\n%s") % (text, pipeline,
-                error_str)))
+                str(e))))
             raise JingleContentSetupException
 
     def add_remote_candidates(self, candidates):
@@ -133,13 +132,13 @@ class JingleRTPContent(JingleContent):
         events = deque(events)
         self._dtmf_running = True
         self._start_dtmf(events.popleft())
-        gobject.timeout_add(500, self._next_dtmf, events)
+        GLib.timeout_add(500, self._next_dtmf, events)
 
     def _next_dtmf(self, events):
         self._stop_dtmf()
         if events:
             self._start_dtmf(events.popleft())
-            gobject.timeout_add(500, self._next_dtmf, events)
+            GLib.timeout_add(500, self._next_dtmf, events)
         else:
             self._dtmf_running = False
 
@@ -370,11 +369,8 @@ class JingleAudio(JingleRTPContent):
 
 
 class JingleVideo(JingleRTPContent):
-    def __init__(self, session, transport=None, in_xid=0, out_xid=0):
+    def __init__(self, session, transport=None):
         JingleRTPContent.__init__(self, session, 'video', transport)
-        self.in_xid = in_xid
-        self.out_xid = out_xid
-        self.out_xid_set = False
         self.setup_stream()
 
     def setup_stream(self):
@@ -382,8 +378,6 @@ class JingleVideo(JingleRTPContent):
         # sometimes, one window won't show up,
         # sometimes it'll freeze...
         JingleRTPContent.setup_stream(self, self._on_src_pad_added)
-        bus = self.pipeline.get_bus()
-        bus.connect('sync-message::element', self._on_sync_message)
 
         # the local parts
         if gajim.config.get('video_framerate'):
@@ -399,25 +393,17 @@ class JingleVideo(JingleRTPContent):
             video_size = 'video/x-raw-yuv,width=%s,height=%s ! ' % (w, h)
         else:
             video_size = ''
-        if gajim.config.get('video_see_self'):
-            tee = '! tee name=t ! queue ! videoscale ! ' + \
-                'video/x-raw-yuv,width=160,height=120 ! ffmpegcolorspace ! ' + \
-                '%s t. ! queue ' % gajim.config.get(
-                'video_output_device')
-        else:
-            tee = ''
-
         self.src_bin = self.make_bin_from_config('video_input_device',
-            '%%s %s! %svideoscale ! %sffmpegcolorspace' % (tee, framerate,
-            video_size), _("video input"))
-
+            '%%s ! %svideoscale ! %sffmpegcolorspace' % (framerate, video_size),
+            _("video input"))
+        #caps = gst.element_factory_make('capsfilter')
+        #caps.set_property('caps', gst.caps_from_string('video/x-raw-yuv, width=320, height=240'))
 
         self.pipeline.add(self.src_bin)#, caps)
-        self.pipeline.set_state(gst.STATE_PLAYING)
         #src_bin.link(caps)
 
         self.sink = self.make_bin_from_config('video_output_device',
-            'videoscale ! ffmpegcolorspace ! %s',
+            'videoscale ! ffmpegcolorspace ! %s force-aspect-ratio=True',
             _("video output"))
         self.pipeline.add(self.sink)
 
@@ -427,26 +413,10 @@ class JingleVideo(JingleRTPContent):
         # The following is needed for farstream to process ICE requests:
         self.pipeline.set_state(gst.STATE_PLAYING)
 
-    def _on_sync_message(self, bus, message):
-        if message.structure is None:
-            return False
-        if message.structure.get_name() == 'prepare-xwindow-id':
-            message.src.set_property('force-aspect-ratio', True)
-            imagesink = message.src
-            if gajim.config.get('video_see_self') and not self.out_xid_set:
-                imagesink.set_xwindow_id(self.out_xid)
-                self.out_xid_set = True
-            else:
-                imagesink.set_xwindow_id(self.in_xid)
-
     def get_fallback_src(self):
         # TODO: Use avatar?
         pipeline = 'videotestsrc is-live=true ! video/x-raw-yuv,framerate=10/1 ! ffmpegcolorspace'
         return gst.parse_bin_from_description(pipeline, True)
-
-    def destroy(self):
-        JingleRTPContent.destroy(self)
-        self.pipeline.get_bus().disconnect_by_func(self._on_sync_message)
 
 def get_content(desc):
     if desc['media'] == 'audio':

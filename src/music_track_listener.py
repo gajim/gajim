@@ -23,7 +23,7 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-import gobject
+from gi.repository import GObject
 if __name__ == '__main__':
     # install _() func before importing dbus_support
     from common import i18n
@@ -36,9 +36,9 @@ class MusicTrackInfo(object):
     __slots__ = ['title', 'album', 'artist', 'duration', 'track_number',
             'paused']
 
-class MusicTrackListener(gobject.GObject):
+class MusicTrackListener(GObject.GObject):
     __gsignals__ = {
-            'music-track-changed': (gobject.SIGNAL_RUN_LAST, None, (object,)),
+            'music-track-changed': (GObject.SignalFlags.RUN_LAST, None, (object,)),
     }
 
     _instance = None
@@ -290,14 +290,14 @@ class MusicTrackListener(gobject.GObject):
 if __name__ == '__main__':
     def music_track_change_cb(listener, music_track_info):
         if music_track_info is None:
-            print 'Stop!'
+            print('Stop!')
         else:
-            print music_track_info.title
+            print(music_track_info.title)
     listener = MusicTrackListener.get()
     listener.connect('music-track-changed', music_track_change_cb)
     track = listener.get_playing_track()
     if track is None:
-        print 'Now not playing anything'
+        print('Now not playing anything')
     else:
-        print 'Now playing: "%s" by %s' % (track.title, track.artist)
-    gobject.MainLoop().run()
+        print('Now playing: "%s" by %s' % (track.title, track.artist))
+    GObject.MainLoop().run()

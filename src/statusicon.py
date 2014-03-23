@@ -24,8 +24,8 @@
 ##
 
 import sys
-import gtk
-import gobject
+from gi.repository import Gtk
+from gi.repository import GObject
 import os
 
 import dialogs
@@ -86,7 +86,7 @@ class StatusIcon:
 
     def show_icon(self):
         if not self.status_icon:
-            self.status_icon = gtk.StatusIcon()
+            self.status_icon = Gtk.StatusIcon()
             self.statusicon_size = '16'
             self.status_icon.set_property('has-tooltip', True)
             self.status_icon.connect('activate', self.on_status_icon_left_clicked)
@@ -135,11 +135,11 @@ class StatusIcon:
         Apart from image, we also update tooltip text here
         """
         def really_set_img():
-            if image.get_storage_type() == gtk.IMAGE_PIXBUF:
+            if image.get_storage_type() == Gtk.ImageType.PIXBUF:
                 self.status_icon.set_from_pixbuf(image.get_pixbuf())
             # FIXME: oops they forgot to support GIF animation?
             # or they were lazy to get it to work under Windows! WTF!
-            elif image.get_storage_type() == gtk.IMAGE_ANIMATION:
+            elif image.get_storage_type() == Gtk.ImageType.ANIMATION:
                 self.status_icon.set_from_pixbuf(
                         image.get_animation().get_static_image())
             #       self.status_icon.set_from_animation(image.get_animation())
@@ -150,16 +150,16 @@ class StatusIcon:
             self.status_icon.set_visible(True)
         if gajim.events.get_nb_systray_events():
             self.status_icon.set_visible(True)
-            if gajim.config.get('trayicon_blink'):
-                self.status_icon.set_blinking(True)
-            else:
-                image = gtkgui_helpers.load_icon('event')
-                really_set_img()
-                return
+#            if gajim.config.get('trayicon_blink'):
+#                self.status_icon.set_blinking(True)
+#            else:
+            image = gtkgui_helpers.load_icon('event')
+            really_set_img()
+            return
         else:
             if gajim.config.get('trayicon') == 'on_event':
                 self.status_icon.set_visible(False)
-            self.status_icon.set_blinking(False)
+#            self.status_icon.set_blinking(False)
 
         image = gajim.interface.jabber_state_images[self.statusicon_size][
                                                                 self.status]
@@ -213,11 +213,11 @@ class StatusIcon:
             chat_with_menuitem.disconnect(self.new_chat_handler_id)
             self.new_chat_handler_id = None
 
-        sub_menu = gtk.Menu()
+        sub_menu = Gtk.Menu()
         self.popup_menus.append(sub_menu)
         status_menuitem.set_submenu(sub_menu)
 
-        gc_sub_menu = gtk.Menu() # gc is always a submenu
+        gc_sub_menu = Gtk.Menu() # gc is always a submenu
         join_gc_menuitem.set_submenu(gc_sub_menu)
 
         # We need our own set of status icons, let's make 'em!
@@ -229,16 +229,16 @@ class StatusIcon:
             join_gc_menuitem.set_image(state_images['muc_active'])
 
         for show in ('online', 'chat', 'away', 'xa', 'dnd', 'invisible'):
-            uf_show = helpers.get_uf_show(show, use_mnemonic = True)
-            item = gtk.ImageMenuItem(uf_show)
+            uf_show = helpers.get_uf_show(show, use_mnemonic=True)
+            item = Gtk.ImageMenuItem.new_with_mnemonic(uf_show)
             item.set_image(state_images[show])
             sub_menu.append(item)
             item.connect('activate', self.on_show_menuitem_activate, show)
 
-        item = gtk.SeparatorMenuItem()
+        item = Gtk.SeparatorMenuItem.new()
         sub_menu.append(item)
 
-        item = gtk.ImageMenuItem(_('_Change Status Message...'))
+        item = Gtk.ImageMenuItem.new_with_mnemonic(_('_Change Status Message...'))
         gtkgui_helpers.add_image_to_menuitem(item, 'gajim-kbd_input')
         sub_menu.append(item)
         item.connect('activate', self.on_change_status_message_activate)
@@ -249,11 +249,11 @@ class StatusIcon:
 
         connected_accounts_with_private_storage = 0
 
-        item = gtk.SeparatorMenuItem()
+        item = Gtk.SeparatorMenuItem.new()
         sub_menu.append(item)
 
-        uf_show = helpers.get_uf_show('offline', use_mnemonic = True)
-        item = gtk.ImageMenuItem(uf_show)
+        uf_show = helpers.get_uf_show('offline', use_mnemonic=True)
+        item = Gtk.ImageMenuItem.new_with_mnemonic(uf_show)
         item.set_image(state_images['offline'])
         sub_menu.append(item)
         item.connect('activate', self.on_show_menuitem_activate, 'offline')
@@ -267,14 +267,14 @@ class StatusIcon:
         accounts_list = sorted(gajim.contacts.get_accounts())
         # items that get shown whether an account is zeroconf or not
         if connected_accounts > 1: # 2 or more connections? make submenus
-            account_menu_for_chat_with = gtk.Menu()
+            account_menu_for_chat_with = Gtk.Menu()
             chat_with_menuitem.set_submenu(account_menu_for_chat_with)
             self.popup_menus.append(account_menu_for_chat_with)
 
             for account in accounts_list:
                 if gajim.account_is_connected(account):
                     # for chat_with
-                    item = gtk.MenuItem(_('using account %s') % account)
+                    item = Gtk.MenuItem(_('using account %s') % account)
                     account_menu_for_chat_with.append(item)
                     item.connect('activate', self.on_new_chat, account)
 
@@ -299,7 +299,7 @@ class StatusIcon:
                         connected_accounts_with_private_storage += 1
 
                     # for single message
-                    single_message_menuitem.remove_submenu()
+                    single_message_menuitem.set_submenu(None)
                     self.single_message_handler_id = single_message_menuitem.\
                             connect('activate',
                             self.on_single_message_menuitem_activate, account)
@@ -309,7 +309,7 @@ class StatusIcon:
                     break # No other account connected
         else:
             # 2 or more 'real' accounts are connected, make submenus
-            account_menu_for_single_message = gtk.Menu()
+            account_menu_for_single_message = Gtk.Menu()
             single_message_menuitem.set_submenu(
                     account_menu_for_single_message)
             self.popup_menus.append(account_menu_for_single_message)
@@ -321,24 +321,25 @@ class StatusIcon:
                 if gajim.connections[account].private_storage_supported:
                     connected_accounts_with_private_storage += 1
                 # for single message
-                item = gtk.MenuItem(_('using account %s') % account)
+                item = Gtk.MenuItem(_('using account %s') % account)
                 item.connect('activate',
                         self.on_single_message_menuitem_activate, account)
                 account_menu_for_single_message.append(item)
 
                 # join gc
-                gc_item = gtk.MenuItem(_('using account %s') % account, False)
+                gc_item = Gtk.MenuItem(_('using account %s') % account,
+                    use_underline=False)
                 gc_sub_menu.append(gc_item)
-                gc_menuitem_menu = gtk.Menu()
+                gc_menuitem_menu = Gtk.Menu()
                 gajim.interface.roster.add_bookmarks_list(gc_menuitem_menu,
                         account)
                 gc_item.set_submenu(gc_menuitem_menu)
                 gc_sub_menu.show_all()
 
-        newitem = gtk.SeparatorMenuItem() # separator
+        newitem = Gtk.SeparatorMenuItem.new() # separator
         gc_sub_menu.append(newitem)
-        newitem = gtk.ImageMenuItem(_('_Manage Bookmarks...'))
-        img = gtk.image_new_from_stock(gtk.STOCK_PREFERENCES, gtk.ICON_SIZE_MENU)
+        newitem = Gtk.ImageMenuItem.new_with_mnemonic(_('_Manage Bookmarks...'))
+        img = Gtk.Image.new_from_stock(Gtk.STOCK_PREFERENCES, Gtk.IconSize.MENU)
         newitem.set_image(img)
         newitem.connect('activate',
                 gajim.interface.roster.on_manage_bookmarks_menuitem_activate)
@@ -362,14 +363,13 @@ class StatusIcon:
 
         if os.name == 'nt':
             if self.added_hide_menuitem is False:
-                self.systray_context_menu.prepend(gtk.SeparatorMenuItem())
-                item = gtk.MenuItem(_('Hide this menu'))
+                self.systray_context_menu.prepend(Gtk.SeparatorMenuItem.new())
+                item = Gtk.MenuItem(_('Hide this menu'))
                 self.systray_context_menu.prepend(item)
                 self.added_hide_menuitem = True
 
         self.systray_context_menu.show_all()
-        self.systray_context_menu.popup(None, None, None, 0,
-                event_time)
+        self.systray_context_menu.popup(None, None, None, None, 0, event_time)
 
     def on_show_all_events_menuitem_activate(self, widget):
         events = gajim.events.get_systray_events()
@@ -423,7 +423,7 @@ class StatusIcon:
                             gajim.config.get('roster_y-position'))
                 if not gajim.config.get('roster_window_skip_taskbar'):
                     win.set_property('skip-taskbar-hint', False)
-                win.present_with_time(gtk.get_current_event_time())
+                win.present_with_time(Gtk.get_current_event_time())
         else:
             self.handle_first_event()
 
@@ -452,7 +452,7 @@ class StatusIcon:
 
     def on_clicked(self, widget, event):
         self.on_tray_leave_notify_event(widget, None)
-        if event.type_ != gtk.gdk.BUTTON_PRESS:
+        if event.type_ != Gdk.EventType.BUTTON_PRESS:
             return
         if event.button == 1: # Left click
             self.on_left_click()
@@ -477,7 +477,7 @@ class StatusIcon:
     def on_change_status_message_activate(self, widget):
         model = gajim.interface.roster.status_combobox.get_model()
         active = gajim.interface.roster.status_combobox.get_active()
-        status = model[active][2].decode('utf-8')
+        status = model[active][2]
         def on_response(message, pep_dict):
             if message is None: # None if user press Cancel
                 return

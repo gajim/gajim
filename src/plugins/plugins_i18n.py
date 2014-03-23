@@ -36,6 +36,6 @@ if os.name != 'nt':
 try:
     t = gettext.translation(APP, plugins_locale_dir)
     _ = t.gettext
-except IOError, msg:
+except IOError:
     from common import i18n
     _ = gettext.gettext

@@ -23,11 +23,12 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-import gtk
+from gi.repository import Gtk
 import gtkgui_helpers
-import gobject
+from gi.repository import GLib
 
 from common import gajim
+from common import helpers
 
 (
 OPT_TYPE,
@@ -50,12 +51,12 @@ def rate_limit(rate):
         timeout = [None]
         def f(*args, **kwargs):
             if timeout[0] is not None:
-                gobject.source_remove(timeout[0])
+                GLib.source_remove(timeout[0])
                 timeout[0] = None
             def timeout_func():
                 func(*args, **kwargs)
                 timeout[0] = None
-            timeout[0] = gobject.timeout_add(int(1000.0 / rate), timeout_func)
+            timeout[0] = GLib.timeout_add(int(1000.0 / rate), timeout_func)
         return f
     return decorator
 
@@ -98,32 +99,32 @@ class AdvancedConfigurationWindow(object):
 
         treeview = self.xml.get_object('advanced_treeview')
         self.treeview = treeview
-        self.model = gtk.TreeStore(str, str, str)
+        self.model = Gtk.TreeStore(str, str, str)
         self.fill_model()
-        self.model.set_sort_column_id(0, gtk.SORT_ASCENDING)
+        self.model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
         self.modelfilter = self.model.filter_new()
         self.modelfilter.set_visible_func(self.visible_func)
 
-        renderer_text = gtk.CellRendererText()
-        col = treeview.insert_column_with_attributes(-1, _('Preference Name'),
-                renderer_text, text = 0)
+        renderer_text = Gtk.CellRendererText()
+        col = Gtk.TreeViewColumn(_('Preference Name'), renderer_text, text = 0)
+        treeview.insert_column(col, -1)
         col.set_resizable(True)
 
-        renderer_text = gtk.CellRendererText()
+        renderer_text = Gtk.CellRendererText()
         renderer_text.connect('edited', self.on_config_edited)
-        col = treeview.insert_column_with_attributes(-1, _('Value'),
-                renderer_text, text = 1)
+        col = Gtk.TreeViewColumn(_('Value'),renderer_text, text = 1)
+        treeview.insert_column(col, -1)
         col.set_cell_data_func(renderer_text, self.cb_value_column_data)
 
         col.props.resizable = True
-        col.set_property('expand',True)
-        col.set_property('sizing',gtk.TREE_VIEW_COLUMN_FIXED)
+        col.props.expand = True
+        col.props.sizing = Gtk.TreeViewColumnSizing.FIXED
 
-        renderer_text = gtk.CellRendererText()
-        col = treeview.insert_column_with_attributes(-1, _('Type'),
-                renderer_text, text = 2)
-        col.set_property('expand',True)
-        col.set_property('sizing',gtk.TREE_VIEW_COLUMN_FIXED)
+        renderer_text = Gtk.CellRendererText()
+        col = Gtk.TreeViewColumn(_('Type'), renderer_text, text = 2)
+        treeview.insert_column(col, -1)
+        col.props.expand = True
+        col.props.sizing = Gtk.TreeViewColumnSizing.FIXED
 
         treeview.set_model(self.modelfilter)
 
@@ -136,7 +137,7 @@ class AdvancedConfigurationWindow(object):
         self.restart_label.hide()
         gajim.interface.instances['advanced_config'] = self
 
-    def cb_value_column_data(self, col, cell, model, iter_):
+    def cb_value_column_data(self, col, cell, model, iter_, data):
         """
         Check if it's boolen or holds password stuff and if yes  make the
         cellrenderertext not editable, else - it's editable
@@ -154,10 +155,10 @@ class AdvancedConfigurationWindow(object):
         # path[1] is the key name
         # path[2] is the root of tree
         # last two is optional
-        path = [model[iter_][0].decode('utf-8')]
+        path = [model[iter_][0]]
         parent = model.iter_parent(iter_)
         while parent:
-            path.append(model[parent][0].decode('utf-8'))
+            path.append(model[parent][0])
             parent = model.iter_parent(parent)
         return path
 
@@ -195,17 +196,18 @@ class AdvancedConfigurationWindow(object):
     def on_advanced_treeview_row_activated(self, treeview, path, column):
         modelpath = self.modelfilter.convert_path_to_child_path(path)
         modelrow = self.model[modelpath]
-        option = modelrow[0].decode('utf-8')
+        option = modelrow[0]
         if modelrow[2] == self.types['boolean']:
             for key in self.right_true_dict.keys():
                 if self.right_true_dict[key] == modelrow[1]:
-                    modelrow[1] = key
+                    modelrow[1] = str(key)
             newval = {'False': True, 'True': False}[modelrow[1]]
-            if len(modelpath) > 1:
-                optnamerow = self.model[modelpath[0]]
-                optname = optnamerow[0].decode('utf-8')
-                keyrow = self.model[modelpath[:2]]
-                key = keyrow[0].decode('utf-8')
+            if len(modelpath.get_indices()) > 1:
+                optnamerow = self.model[modelpath.get_indices()[0]]
+                optname = optnamerow[0]
+                modelpath.up()
+                keyrow = self.model[modelpath]
+                key = keyrow[0]
                 self.remember_option(option + '\n' + key + '\n' + optname,
                         modelrow[1], newval)
                 gajim.config.set_per(optname, key, option, newval)
@@ -231,15 +233,17 @@ class AdvancedConfigurationWindow(object):
 
     def on_config_edited(self, cell, path, text):
         # convert modelfilter path to model path
+        path=Gtk.TreePath.new_from_string(path)
         modelpath = self.modelfilter.convert_path_to_child_path(path)
         modelrow = self.model[modelpath]
-        option = modelrow[0].decode('utf-8')
-        text = text.decode('utf-8')
-        if len(modelpath) > 1:
-            optnamerow = self.model[modelpath[0]]
-            optname = optnamerow[0].decode('utf-8')
-            keyrow = self.model[modelpath[:2]]
-            key = keyrow[0].decode('utf-8')
+        option = modelrow[0]
+        if modelpath.get_depth() > 2:
+            modelpath.up() # Get parent
+            keyrow = self.model[modelpath]
+            key = keyrow[0]
+            modelpath.up() # Get parent
+            optnamerow = self.model[modelpath]
+            optname = optnamerow[0]
             self.remember_option(option + '\n' + key + '\n' + optname, modelrow[1],
                     text)
             gajim.config.set_per(optname, key, option, text)
@@ -268,12 +272,12 @@ class AdvancedConfigurationWindow(object):
                     return
                 modelpath = self.modelfilter.convert_path_to_child_path(path)
                 modelrow = self.model[modelpath]
-                option = modelrow[0].decode('utf-8')
+                option = modelrow[0]
                 if len(modelpath) > 1:
                     optnamerow = self.model[modelpath[0]]
-                    optname = optnamerow[0].decode('utf-8')
+                    optname = optnamerow[0]
                     keyrow = self.model[modelpath[:2]]
-                    key = keyrow[0].decode('utf-8')
+                    key = keyrow[0]
                     self.remember_option(option + '\n' + key + '\n' + optname,
                         modelrow[C_VALUE], default)
                     gajim.config.set_per(optname, key, option, default)
@@ -285,7 +289,7 @@ class AdvancedConfigurationWindow(object):
             else:
                 if str(default) == model[iter_][C_VALUE]:
                     return
-                self.on_config_edited(None, path, str(default))
+                self.on_config_edited(None, path.to_string(), str(default))
 
     def on_advanced_close_button_clicked(self, widget):
         self.window.destroy()
@@ -308,11 +312,14 @@ class AdvancedConfigurationWindow(object):
                     if type_ == self.types['boolean']:
                         value = self.right_true_dict[option]
                     else:
-                        value = option
+                        try:
+                            value = str(option)
+                        except:
+                            value = option
                 self.model.append(parent, [name, value, type_])
 
-    def visible_func(self, model, treeiter):
-        search_string  = self.entry.get_text().decode('utf-8').lower()
+    def visible_func(self, model, treeiter, data):
+        search_string  = self.entry.get_text().lower()
         for it in tree_model_pre_order(model, treeiter):
             if model[it][C_TYPE] != '':
                 opt_path = self.get_option_path(model, it)

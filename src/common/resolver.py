@@ -70,33 +70,33 @@ class CommonResolver():
             # empty host, return empty list of srv records
             on_ready([])
             return
-        if self.resolved_hosts.has_key(host+type):
+        if host + type in self.resolved_hosts:
             # host is already resolved, return cached values
             log.debug('%s already resolved: %s' % (host,
-                self.resolved_hosts[host+type]))
-            on_ready(host, self.resolved_hosts[host+type])
+                self.resolved_hosts[host + type]))
+            on_ready(host, self.resolved_hosts[host + type])
             return
-        if self.handlers.has_key(host+type):
+        if host + type in self.handlers:
             # host is about to be resolved by another connection,
             # attach our callback
             log.debug('already resolving %s' % host)
-            self.handlers[host+type].append(on_ready)
+            self.handlers[host + type].append(on_ready)
         else:
             # host has never been resolved, start now
             log.debug('Starting to resolve %s using %s' % (host, self))
-            self.handlers[host+type] = [on_ready]
+            self.handlers[host + type] = [on_ready]
             self.start_resolve(host, type)
 
     def _on_ready(self, host, type, result_list):
         # practically it is impossible to be the opposite, but who knows :)
         host = host.lower()
         log.debug('Resolving result for %s: %s' % (host, result_list))
-        if not self.resolved_hosts.has_key(host+type):
-            self.resolved_hosts[host+type] = result_list
-        if self.handlers.has_key(host+type):
-            for callback in self.handlers[host+type]:
+        if host + type not in self.resolved_hosts:
+            self.resolved_hosts[host + type] = result_list
+        if host + type in self.handlers:
+            for callback in self.handlers[host + type]:
                 callback(host, result_list)
-            del(self.handlers[host+type])
+            del(self.handlers[host + type])
 
     def start_resolve(self, host, type):
         pass
@@ -251,8 +251,7 @@ class NSLookupResolver(CommonResolver):
             domain = None
             if line.startswith(fqdn):
                 domain = fqdn # For nslookup 9.5
-            elif helpers.decode_string(line).startswith(ufqdn):
-                line = helpers.decode_string(line)
+            elif line.startswith(ufqdn):
                 domain = ufqdn # For nslookup 9.6
             if domain:
                 rest = line[len(domain):].split('=')
@@ -318,8 +317,8 @@ class NsLookup(IdleCommand):
 
 # below lines is on how to use API and assist in testing
 if __name__ == '__main__':
-    import gobject
-    import gtk
+    from gi.repository import GLib
+    from gi.repository import Gtk
     from nbxmpp import idlequeue
 
     idlequeue = idlequeue.get_idlequeue()
@@ -329,21 +328,21 @@ if __name__ == '__main__':
         global resolver
         host = text_view.get_text()
         def on_result(host, result_array):
-            print 'Result:\n' + repr(result_array)
+            print('Result:\n' + repr(result_array))
         resolver.resolve(host, on_result)
-    win = gtk.Window()
+    win = Gtk.Window()
     win.set_border_width(6)
-    text_view = gtk.Entry()
+    text_view = Gtk.Entry()
     text_view.set_text('_xmpp-client._tcp.jabber.org')
-    hbox = gtk.HBox()
+    hbox = Gtk.HBox()
     hbox.set_spacing(3)
-    but = gtk.Button(' Lookup SRV ')
-    hbox.pack_start(text_view, 5)
-    hbox.pack_start(but, 0)
+    but = Gtk.Button(' Lookup SRV ')
+    hbox.pack_start(text_view, 5, True, 0)
+    hbox.pack_start(but, 0, True, 0)
     but.connect('clicked', clicked)
     win.add(hbox)
     win.show_all()
-    gobject.timeout_add(200, idlequeue.process)
+    GLib.timeout_add(200, idlequeue.process)
     if USE_LIBASYNCNS:
-        gobject.timeout_add(200, resolver.process)
-    gtk.main()
+        GLib.timeout_add(200, resolver.process)
+    Gtk.main()

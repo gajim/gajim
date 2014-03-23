@@ -46,7 +46,7 @@ class TestResolver(unittest.TestCase):
     def testLibAsyncNSResolver(self):
         self._reset()
         if not resolver.USE_LIBASYNCNS:
-            print 'testLibAsyncResolver: libasyncns-python not installed'
+            print('testLibAsyncResolver: libasyncns-python not installed')
             return
         self.resolver = resolver.LibAsyncNSResolver()
 

@@ -22,8 +22,9 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-import gtk
-import pango
+from gi.repository import Gtk
+from gi.repository import Gdk
+from gi.repository import Pango
 import dialogs
 import gtkgui_helpers
 
@@ -34,7 +35,8 @@ class GajimThemesWindow:
     def __init__(self):
         self.xml = gtkgui_helpers.get_gtk_builder('gajim_themes_window.ui')
         self.window = self.xml.get_object('gajim_themes_window')
-        self.window.set_transient_for(gajim.interface.roster.window)
+        self.window.set_transient_for(gajim.interface.instances[
+            'preferences'].window)
 
         self.options = ['account', 'group', 'contact', 'banner']
         self.options_combobox = self.xml.get_object('options_combobox')
@@ -54,13 +56,13 @@ class GajimThemesWindow:
         'muc_msg', 'muc_directed_msg'):
             self.colorbuttons[chatstate] = self.xml.get_object(chatstate + \
                     '_colorbutton')
-        model = gtk.ListStore(str)
+        model = Gtk.ListStore(str)
         self.themes_tree.set_model(model)
-        col = gtk.TreeViewColumn(_('Theme'))
+        col = Gtk.TreeViewColumn(_('Theme'))
         self.themes_tree.append_column(col)
-        renderer = gtk.CellRendererText()
+        renderer = Gtk.CellRendererText()
         col.pack_start(renderer, True)
-        col.set_attributes(renderer, text = 0)
+        col.add_attribute(renderer, 'text', 0)
         renderer.connect('edited', self.on_theme_cell_edited)
         renderer.set_property('editable', True)
         self.current_theme = gajim.config.get('roster_theme')
@@ -88,8 +90,7 @@ class GajimThemesWindow:
     def on_theme_cell_edited(self, cell, row, new_name):
         model = self.themes_tree.get_model()
         iter_ = model.get_iter_from_string(row)
-        old_name = model.get_value(iter_, 0).decode('utf-8')
-        new_name = new_name.decode('utf-8')
+        old_name = model.get_value(iter_, 0)
         if old_name == new_name:
             return
         if old_name == 'default':
@@ -125,7 +126,7 @@ class GajimThemesWindow:
 
     def select_active_theme(self):
         model = self.themes_tree.get_model()
-        iter_ = model.get_iter_root()
+        iter_ = model.get_iter_first()
         active_theme = gajim.config.get('roster_theme').replace('_', ' ')
         while iter_:
             theme = model[iter_][0]
@@ -149,7 +150,7 @@ class GajimThemesWindow:
             self.theme_options_vbox.set_sensitive(False)
             self.theme_options_table.set_sensitive(False)
             return
-        self.current_theme = model.get_value(iter_, 0).decode('utf-8')
+        self.current_theme = model.get_value(iter_, 0)
         self.current_theme = self.current_theme.replace(' ', '_')
         self.set_theme_options(self.current_theme)
         if self.current_theme == 'default':
@@ -168,10 +169,10 @@ class GajimThemesWindow:
         # don't confuse translators
         theme_name = _('theme name')
         theme_name_ns = theme_name.replace(' ', '_')
-        while theme_name_ns + unicode(i) in gajim.config.get_per('themes'):
+        while theme_name_ns + str(i) in gajim.config.get_per('themes'):
             i += 1
-        model.set_value(iter_, 0, theme_name + unicode(i))
-        gajim.config.add_per('themes', theme_name_ns + unicode(i))
+        model.set_value(iter_, 0, theme_name + str(i))
+        gajim.config.add_per('themes', theme_name_ns + str(i))
         self.themes_tree.get_selection().select_iter(iter_)
         col = self.themes_tree.get_column(0)
         path = model.get_path(iter_)
@@ -198,7 +199,7 @@ class GajimThemesWindow:
         textcolor = gajim.config.get_per('themes', theme, option + 'textcolor')
         if textcolor:
             state = True
-            self.text_colorbutton.set_color(gtk.gdk.color_parse(textcolor))
+            self.text_colorbutton.set_color(Gdk.color_parse(textcolor))
         else:
             state = False
         self.textcolor_checkbutton.set_active(state)
@@ -206,7 +207,7 @@ class GajimThemesWindow:
         bgcolor = gajim.config.get_per('themes', theme, option + 'bgcolor')
         if bgcolor:
             state = True
-            self.background_colorbutton.set_color(gtk.gdk.color_parse(
+            self.background_colorbutton.set_color(Gdk.color_parse(
                     bgcolor))
         else:
             state = False
@@ -231,7 +232,7 @@ class GajimThemesWindow:
         'muc_msg', 'muc_directed_msg'):
             color = gajim.config.get_per('themes', theme, 'state_' + chatstate + \
                     '_color')
-            self.colorbuttons[chatstate].set_color(gtk.gdk.color_parse(color))
+            self.colorbuttons[chatstate].set_color(Gdk.color_parse(color))
 
     def on_textcolor_checkbutton_toggled(self, widget):
         state = widget.get_active()
@@ -328,11 +329,11 @@ class GajimThemesWindow:
         """
         Return a FontDescription from togglebuttons states
         """
-        fd = pango.FontDescription()
+        fd = Pango.FontDescription()
         if self.bold_togglebutton.get_active():
-            fd.set_weight(pango.WEIGHT_BOLD)
+            fd.set_weight(Pango.Weight.BOLD)
         if self.italic_togglebutton.get_active():
-            fd.set_style(pango.STYLE_ITALIC)
+            fd.set_style(Pango.Style.ITALIC)
         return fd
 
     def _set_font_widgets(self, font_attrs):
@@ -365,10 +366,10 @@ class GajimThemesWindow:
         Get tuple of font properties: weight, style
         """
         font_props = [False, False, False]
-        font_description = pango.FontDescription(font_name)
-        if font_description.get_weight() != pango.WEIGHT_NORMAL:
+        font_description = Pango.FontDescription(font_name)
+        if font_description.get_weight() != Pango.Weight.NORMAL:
             font_props[0] = True
-        if font_description.get_style() != pango.STYLE_ITALIC:
+        if font_description.get_style() != Pango.Style.ITALIC:
             font_props[1] = True
         return font_props
 

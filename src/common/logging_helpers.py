@@ -19,7 +19,7 @@
 ##
 
 import logging
-import i18n
+from common import i18n
 
 def parseLogLevel(arg):
     """
@@ -30,7 +30,7 @@ def parseLogLevel(arg):
     elif arg.isupper() and hasattr(logging, arg):
         return getattr(logging, arg)
     else:
-        print _('%s is not a valid loglevel') % repr(arg)
+        print(_('%s is not a valid loglevel') % repr(arg))
         return 0
 
 def parseLogTarget(arg):
@@ -72,7 +72,7 @@ def parseAndSetLogLevels(arg):
             target = parseLogTarget(target.strip())
             if target:
                 logging.getLogger(target).setLevel(level)
-                print "Logger %s level set to %d" % (target, level)
+                print("Logger %s level set to %d" % (target, level))
 
 
 class colors:
@@ -141,7 +141,7 @@ def init(use_color=False):
     consoleloghandler.setFormatter(
             FancyFormatter(
                     '%(asctime)s %(levelname)s %(name)s %(message)s',
-                    '%H:%M:%S',
+                    '%x %H:%M:%S',
                     use_color
             )
     )
@@ -179,13 +179,13 @@ if __name__ == '__main__':
     log = logging.getLogger('gajim')
     log.debug('debug')
     log.info('info')
-    log.warn('warn')
+    log.warning('warn')
     log.error('error')
     log.critical('critical')
 
     log = logging.getLogger('gajim.c.x.dispatcher')
     log.debug('debug')
     log.info('info')
-    log.warn('warn')
+    log.warning('warn')
     log.error('error')
     log.critical('critical')

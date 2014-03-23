@@ -30,9 +30,10 @@
 import os
 import time
 from dialogs import PopupNotificationWindow
-import gobject
+from gi.repository import GObject
+from gi.repository import GLib
 import gtkgui_helpers
-import gtk
+from gi.repository import Gtk
 
 from common import gajim
 from common import helpers
@@ -45,8 +46,8 @@ if dbus_support.supported:
 
 USER_HAS_PYNOTIFY = True # user has pynotify module
 try:
-    import pynotify
-    pynotify.init('Gajim Notification')
+    from gi.repository import Notify
+    Notify.init('Gajim Notification')
 except ImportError:
     USER_HAS_PYNOTIFY = False
 
@@ -89,12 +90,12 @@ text=None, timeout=-1):
     if gajim.config.get('use_notif_daemon') and dbus_support.supported:
         try:
             DesktopNotification(event_type, jid, account, msg_type,
-                path_to_image, title, gobject.markup_escape_text(text), timeout)
+                path_to_image, title, GLib.markup_escape_text(text), timeout)
             return  # sucessfully did D-Bus Notification procedure!
-        except dbus.DBusException, e:
+        except dbus.DBusException as e:
             # Connection to D-Bus failed
             gajim.log.debug(str(e))
-        except TypeError, e:
+        except TypeError as e:
             # This means that we sent the message incorrectly
             gajim.log.debug(str(e))
 
@@ -103,17 +104,17 @@ text=None, timeout=-1):
         if not text and event_type == 'new_message':
             # empty text for new_message means do_preview = False
             # -> default value for text
-            _text = gobject.markup_escape_text(
-                gajim.get_name_from_jid(account, jid))
+            _text = GLib.markup_escape_text(gajim.get_name_from_jid(account,
+                jid))
         else:
-            _text = gobject.markup_escape_text(text)
+            _text = GLib.markup_escape_text(text)
 
         if not title:
             _title = ''
         else:
             _title = title
 
-        notification = pynotify.Notification(_title, _text)
+        notification = Notify.Notification(_title, _text)
         notification.set_timeout(timeout*1000)
 
         notification.set_category(event_type)
@@ -122,14 +123,14 @@ text=None, timeout=-1):
         notification.set_data('account', account)
         notification.set_data('msg_type', msg_type)
         notification.set_property('icon-name', path_to_image)
-        if 'actions' in pynotify.get_server_caps():
+        if 'actions' in Notify.get_server_caps():
             notification.add_action('default', 'Default Action',
                     on_pynotify_notification_clicked)
 
         try:
             notification.show()
             return
-        except gobject.GError, e:
+        except GObject.GError as e:
             # Connection to notification-daemon failed, see #2893
             gajim.log.debug(str(e))
 
@@ -156,8 +157,16 @@ class Notification:
 
     def _nec_notification(self, obj):
         if obj.do_popup:
+            if obj.popup_image:
+                icon_path = gtkgui_helpers.get_icon_path(obj.popup_image, 48)
+                if icon_path:
+                    image_path = icon_path
+            elif obj.popup_image_path:
+                image_path = obj.popup_image_path
+            else:
+                image_path = ''
             popup(obj.popup_event_type, obj.jid, obj.conn.name,
-                obj.popup_msg_type, path_to_image=obj.popup_image,
+                obj.popup_msg_type, path_to_image=image_path,
                 title=obj.popup_title, text=obj.popup_text,
                 timeout=obj.popup_timeout)
 
@@ -357,7 +366,8 @@ class DesktopNotification:
             if gajim.interface.systray_enabled and \
             gajim.config.get('attach_notifications_to_systray'):
                 status_icon = gajim.interface.systray.status_icon
-                x, y, width, height = status_icon.get_geometry()[1]
+                rect = status_icon.get_geometry()[2]
+                x, y, width, height = rect.x, rect.y, rect.width, rect.height
                 pos_x = x + (width / 2)
                 pos_y = y + (height / 2)
                 hints = {'x': pos_x, 'y': pos_y}
@@ -397,7 +407,7 @@ class DesktopNotification:
                         dbus.UInt32(self.timeout*1000),
                         reply_handler=self.attach_by_id,
                         error_handler=self.notify_another_way)
-                except Exception, e:
+                except Exception as e:
                     self.notify_another_way(e)
             else:
                 try:
@@ -412,7 +422,7 @@ class DesktopNotification:
                         dbus.UInt32(self.timeout*1000),
                         reply_handler=self.attach_by_id,
                         error_handler=self.notify_another_way)
-                except Exception, e:
+                except Exception as e:
                     self.notify_another_way(e)
 
     def attach_by_id(self, id_):

@@ -35,10 +35,10 @@ commands as a frontend.
 from subprocess import Popen, PIPE
 from os.path import expanduser
 
-from glib import timeout_add
+from gi.repository import GLib
 
 from ..framework import CommandContainer, command, doc
-from hosts import *
+from .hosts import *
 
 class Execute(CommandContainer):
     AUTOMATIC = True
@@ -64,11 +64,11 @@ class Execute(CommandContainer):
     @classmethod
     def monitor(cls, processor, popen):
         poller = cls.poller(processor, popen)
-        timeout_add(cls.POLL_INTERVAL, poller.next)
+        GLib.timeout_add(cls.POLL_INTERVAL, next, poller)
 
     @classmethod
     def poller(cls, processor, popen):
-        for x in xrange(cls.POLL_COUNT):
+        for x in list(range(cls.POLL_COUNT)):
             yield cls.brush(processor, popen)
         cls.overdue(processor, popen)
         yield False
@@ -101,7 +101,7 @@ class Execute(CommandContainer):
     @staticmethod
     def clean(text):
         strip = chr(10) + chr(32)
-        return text.strip(strip)
+        return text.decode().strip(strip)
 
 class Show(Execute):
 
@@ -115,6 +115,6 @@ class Show(Execute):
         stdout, stderr = cls.fetch(popen)
         success = popen.returncode == 0
         if success and stdout:
-            processor.send(stdout.decode('utf8'))
+            processor.send(stdout)
         elif not success and stderr:
             processor.echo_error(stderr)

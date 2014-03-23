@@ -20,21 +20,22 @@ import os
 import nbxmpp
 
 import logging
-import common
 from common import gajim
 log = logging.getLogger('gajim.c.jingle_xtls')
 
 PYOPENSSL_PRESENT = False
 
-pending_contents = {} # key-exchange id -> session, accept that session once key-exchange completes
+# key-exchange id -> [callback, args], accept that session once key-exchange completes
+pending_contents = {}
 
-def key_exchange_pend(id_, content):
-    pending_contents[id_] = content
+def key_exchange_pend(id_, cb, args):
+    # args is a list
+    pending_contents[id_] = [cb, args]
 
 def approve_pending_content(id_):
-    content = pending_contents[id_]
-    content.session.approve_session()
-    content.session.approve_content('file', name=content.name)
+    cb = pending_contents[id_][0]
+    args = pending_contents[id_][1]
+    cb(*args)
 
 try:
     import OpenSSL.SSL
@@ -50,23 +51,25 @@ if PYOPENSSL_PRESENT:
     TYPE_DSA = crypto.TYPE_DSA
 
 SELF_SIGNED_CERTIFICATE = 'localcert'
+DH_PARAMS = 'dh_params.pem'
+DEFAULT_DH_PARAMS = 'dh4096.pem'
 
 def default_callback(connection, certificate, error_num, depth, return_code):
     log.info("certificate: %s" % certificate)
     return return_code
 
-def load_cert_file(cert_path, cert_store):
+def load_cert_file(cert_path, cert_store=None):
     """
     This is almost identical to the one in nbxmpp.tls_nb
     """
     if not os.path.isfile(cert_path):
-        return
+        return None
     try:
         f = open(cert_path)
-    except IOError, e:
+    except IOError as e:
         log.warning('Unable to open certificate file %s: %s' % (cert_path,
             str(e)))
-        return
+        return None
     lines = f.readlines()
     i = 0
     begin = -1
@@ -78,8 +81,10 @@ def load_cert_file(cert_path, cert_store):
             try:
                 x509cert = OpenSSL.crypto.load_certificate(
                     OpenSSL.crypto.FILETYPE_PEM, cert)
-                cert_store.add_cert(x509cert)
-            except OpenSSL.crypto.Error, exception_obj:
+                if cert_store:
+                    cert_store.add_cert(x509cert)
+                return x509cert
+            except OpenSSL.crypto.Error as exception_obj:
                 log.warning('Unable to load a certificate from file %s: %s' %\
                     (cert_path, exception_obj.args[0][0][2]))
             except:
@@ -87,13 +92,15 @@ def load_cert_file(cert_path, cert_store):
                     '%s' % cert_path)
             begin = -1
         i += 1
+    f.close()
 
-def get_context(fingerprint, verify_cb=None):
+def get_context(fingerprint, verify_cb=None, remote_jid=None):
     """
     constructs and returns the context objects
     """
     ctx = SSL.Context(SSL.SSLv23_METHOD)
-    flags = (SSL.OP_NO_SSLv2 | SSL.OP_NO_SSLv3 | SSL.OP_SINGLE_DH_USE)
+    flags = (SSL.OP_NO_SSLv2 | SSL.OP_NO_SSLv3 | SSL.OP_SINGLE_DH_USE \
+             | SSL.OP_NO_TICKET)
     ctx.set_options(flags)
     ctx.set_cipher_list('HIGH:!aNULL:!3DES')
 
@@ -106,22 +113,46 @@ def get_context(fingerprint, verify_cb=None):
     cert_name = os.path.join(gajim.MY_CERT_DIR, SELF_SIGNED_CERTIFICATE)
     ctx.use_privatekey_file (cert_name + '.pkey')
     ctx.use_certificate_file(cert_name + '.cert')
-    store = ctx.get_cert_store()
-    for f in os.listdir(os.path.expanduser(gajim.MY_PEER_CERTS_PATH)):
-        load_cert_file(os.path.join(os.path.expanduser(
-            gajim.MY_PEER_CERTS_PATH), f), store)
-        log.debug('certificate file ' + f + ' loaded fingerprint ' + \
-            fingerprint)
+
+    # Try to load Diffie-Hellman parameters.
+    # First try user DH parameters, if this fails load the default DH parameters
+    dh_params_name = os.path.join(gajim.MY_CERT_DIR, DH_PARAMS)
+    try:
+        with open(dh_params_name, "r") as dh_params_file:
+            ctx.load_tmp_dh(str(dh_params_name).encode('utf-8'))
+    except IOError as err:
+        default_dh_params_name = os.path.join(common.gajim.DATA_DIR,
+            'other', DEFAULT_DH_PARAMS)
+        try:
+            with open(default_dh_params_name, "r") as default_dh_params_file:
+                ctx.load_tmp_dh(str(default_dh_params_name).encode('utf-8'))
+        except IOError as err:
+            log.error('Unable to load default DH parameter file: %s , %s'
+                % (default_dh_params_name, err))
+            raise
+
+    if remote_jid:
+        store = ctx.get_cert_store()
+        path = os.path.join(os.path.expanduser(gajim.MY_PEER_CERTS_PATH),
+            remote_jid) + '.cert'
+        if os.path.exists(path):
+            load_cert_file(path, cert_store=store)
+            log.debug('certificate file ' + path + ' loaded fingerprint ' + \
+                fingerprint)
     return ctx
+
+def read_cert(certpath):
+    certificate = ''
+    with open(certpath, 'r') as certfile:
+        for line in certfile.readlines():
+            if not line.startswith('-'):
+                certificate += line
+    return certificate
 
 def send_cert(con, jid_from, sid):
     certpath = os.path.join(gajim.MY_CERT_DIR, SELF_SIGNED_CERTIFICATE) + \
         '.cert'
-    certfile = open(certpath, 'r')
-    certificate = ''
-    for line in certfile.readlines():
-        if not line.startswith('-'):
-            certificate += line
+    certificate = read_cert(certpath)
     iq = nbxmpp.Iq('result', to=jid_from);
     iq.setAttr('id', sid)
 
@@ -151,8 +182,20 @@ def handle_new_cert(con, obj, jid_from):
     f.write('-----BEGIN CERTIFICATE-----\n')
     f.write(cert)
     f.write('-----END CERTIFICATE-----\n')
+    f.close()
 
     approve_pending_content(id_)
+
+def check_cert(jid, fingerprint):
+    certpath = os.path.join(os.path.expanduser(gajim.MY_PEER_CERTS_PATH), jid)
+    certpath += '.cert'
+    if os.path.exists(certpath):
+        cert = load_cert_file(certpath)
+        if cert:
+            digest_algo = cert.get_signature_algorithm().split('With')[0]
+            if cert.digest(digest_algo) == fingerprint:
+                return True
+    return False
 
 def send_cert_request(con, to_jid):
     iq = nbxmpp.Iq('get', to=to_jid)
@@ -161,7 +204,7 @@ def send_cert_request(con, to_jid):
     pubkey = iq.setTag('pubkeys')
     pubkey.setNamespace(nbxmpp.NS_PUBKEY_PUBKEY)
     con.connection.send(iq)
-    return unicode(id_)
+    return str(id_)
 
 # the following code is partly due to pyopenssl examples
 
@@ -177,12 +220,12 @@ def createKeyPair(type, bits):
     pkey.generate_key(type, bits)
     return pkey
 
-def createCertRequest(pkey, digest="sha1", **name):
+def createCertRequest(pkey, digest="sha256", **name):
     """
     Create a certificate request.
 
     Arguments: pkey   - The key to associate with the request
-               digest - Digestion method to use for signing, default is sha1
+               digest - Digestion method to use for signing, default is sha256
                **name - The name of the subject of the request, possible
                         arguments are:
                           C     - Country name
@@ -204,7 +247,7 @@ def createCertRequest(pkey, digest="sha1", **name):
     req.sign(pkey, digest)
     return req
 
-def createCertificate(req, (issuerCert, issuerKey), serial, (notBefore, notAfter), digest="sha1"):
+def createCertificate(req, issuerCert, issuerKey, serial, notBefore, notAfter, digest="shai256"):
     """
     Generate a certificate given a certificate request.
 
@@ -216,7 +259,7 @@ def createCertificate(req, (issuerCert, issuerKey), serial, (notBefore, notAfter
                             starts being valid
                notAfter   - Timestamp (relative to now) when the certificate
                             stops being valid
-               digest     - Digest method to use for signing, default is sha1
+               digest     - Digest method to use for signing, default is sha256
     Returns:   The signed certificate in an X509 object
     """
     cert = crypto.X509()
@@ -238,13 +281,13 @@ def make_certs(filepath, CN):
     """
     key = createKeyPair(TYPE_RSA, 4096)
     req = createCertRequest(key, CN=CN)
-    cert = createCertificate(req, (req, key), 0, (0, 60*60*24*365*5)) # five years
-    private_key_file = open(filepath + '.pkey', 'w')
-    os.chmod(filepath + '.pkey', 0600)
-    private_key_file.write(crypto.dump_privatekey(
-        crypto.FILETYPE_PEM, key))
-    open(filepath + '.cert', 'w').write(crypto.dump_certificate(
-        crypto.FILETYPE_PEM, cert))
+    cert = createCertificate(req, req, key, 0, 0, 60*60*24*365*5) # five years
+    with open(filepath + '.pkey', 'wb') as f:
+        os.chmod(filepath + '.pkey', 0o600)
+        f.write(crypto.dump_privatekey(crypto.FILETYPE_PEM, key))
+    with open(filepath + '.cert', 'wb') as f:
+        f.write(crypto.dump_certificate(crypto.FILETYPE_PEM, cert).decode(
+            'utf-8'))
 
 
 if __name__ == '__main__':

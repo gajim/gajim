@@ -810,7 +810,10 @@ class EncryptedStanzaSession(ArchivingStanzaSession):
 
         # the offset of the group we chose (need it to match up with the dhhash)
         group_order = 0
-        self.modp = int(form.getField('modp').getOptions()[group_order][1])
+        modp_f = form.getField('modp')
+        if not modp_f:
+            return
+        self.modp = int(modp_f.getOptions()[group_order][1])
         x.addChild(node=nbxmpp.DataField(name='modp', value=self.modp))
 
         g = dh.generators[self.modp]
@@ -818,7 +821,10 @@ class EncryptedStanzaSession(ArchivingStanzaSession):
 
         self.n_o = base64.b64decode(form['my_nonce'])
 
-        dhhashes = form.getField('dhhashes').getValues()
+        dhhashes_f = form.getField('dhhashes')
+        if not dhhashes_f:
+            return
+        dhhashes = dhhashes_f.getValues()
         self.negotiated['He'] = base64.b64decode(dhhashes[group_order].encode(
                 'utf8'))
 

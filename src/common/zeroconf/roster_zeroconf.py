@@ -32,7 +32,6 @@ class Roster:
             self.setItem(val[zeroconf.C_NAME])
 
     def getRoster(self):
-        #print 'roster_zeroconf.py: getRoster'
         if self._data is None:
             self._data = {}
             self.update_roster()
@@ -50,11 +49,9 @@ class Roster:
             if key in self._data:
                 if old_data[key] != self._data[key]:
                     diffs[key] = self._data[key]['status']
-        #print 'roster_zeroconf.py: diffs:' + str(diffs)
         return diffs
 
     def setItem(self, jid, name='', groups=''):
-        #print 'roster_zeroconf.py: setItem %s' % jid
         contact = self.zeroconf.get_contact(jid)
         if not contact:
             return
@@ -96,34 +93,27 @@ class Roster:
             self.setItem(jid=i['jid'], name=i['name'], groups=i['groups'])
 
     def delItem(self, jid):
-        #print 'roster_zeroconf.py: delItem %s' % jid
         if jid in self._data:
             del self._data[jid]
 
     def getItem(self, jid):
-        #print 'roster_zeroconf.py: getItem: %s' % jid
         if jid in self._data:
             return self._data[jid]
 
     def __getitem__(self, jid):
-        #print 'roster_zeroconf.py: __getitem__'
         return self._data[jid]
 
     def getItems(self):
-        #print 'roster_zeroconf.py: getItems'
         # Return list of all [bare] JIDs that the roster currently tracks.
         return self._data.keys()
 
     def keys(self):
-        #print 'roster_zeroconf.py: keys'
         return self._data.keys()
 
     def getRaw(self):
-        #print 'roster_zeroconf.py: getRaw'
         return self._data
 
     def getResources(self, jid):
-        #print 'roster_zeroconf.py: getResources(%s)' % jid
         return {}
 
     def getGroups(self, jid):
@@ -142,14 +132,12 @@ class Roster:
             return self._data[jid]['txt_dict']['msg']
 
     def getShow(self, jid):
-        #print 'roster_zeroconf.py: getShow'
         return self.getStatus(jid)
 
     def getPriority(self, jid):
         return 5
 
     def getSubscription(self, jid):
-        #print 'roster_zeroconf.py: getSubscription'
         return 'both'
 
     def Subscribe(self, jid):

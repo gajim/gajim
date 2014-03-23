@@ -42,11 +42,13 @@ available under the terms of the BSD which accompanies this distribution, and
 is available at U{http://www.opensource.org/licenses/bsd-license.php}
 """
 
-import gtk, gobject
+from gi.repository import Gtk
+from gi.repository import GObject
+from gi.repository import GLib
 import re
 import sys
 import os
-import pango
+from gi.repository import Pango
 from StringIO import StringIO
 
 try:
@@ -128,7 +130,7 @@ class IterableIPShell:
         # Workaround for updating namespace with sys.modules
         #
         self.__update_namespace()
-        
+
     def __update_namespace(self):
         '''
         Update self.IP namespace for autocompletion with sys.modules
@@ -187,7 +189,7 @@ class IterableIPShell:
         Generate prompt depending on is_continuation value
 
         @param is_continuation
-        @type is_continuation: boolean 
+        @type is_continuation: boolean
 
         @return: The prompt string representation
         @rtype: string
@@ -308,15 +310,15 @@ class IterableIPShell:
         @param header: Header to be printed before output
         @type header: string
         """
-        if verbose or debug: print header+cmd
+        if verbose or debug: print(header+cmd)
         # flush stdout so we don't mangle python's buffering
         if not debug:
             input_, output = os.popen4(cmd)
-            print output.read()
+            print(output.read())
             output.close()
             input_.close()
 
-class ConsoleView(gtk.TextView):
+class ConsoleView(Gtk.TextView):
     """
     Specialized text view for console-like workflow
 
@@ -324,13 +326,13 @@ class ConsoleView(gtk.TextView):
     @type ANSI_COLORS: dictionary
 
     @ivar text_buffer: Widget's text buffer.
-    @type text_buffer: gtk.TextBuffer
+    @type text_buffer: Gtk.TextBuffer
     @ivar color_pat: Regex of terminal color pattern
     @type color_pat: _sre.SRE_Pattern
     @ivar mark: Scroll mark for automatic scrolling on input.
-    @type mark: gtk.TextMark
+    @type mark: Gtk.TextMark
     @ivar line_start: Start of command line mark.
-    @type line_start: gtk.TextMark
+    @type line_start: Gtk.TextMark
     """
 
     ANSI_COLORS =  {'0;30': 'Black',     '0;31': 'Red',
@@ -346,8 +348,8 @@ class ConsoleView(gtk.TextView):
         """
         Initialize console view
         """
-        gtk.TextView.__init__(self)
-        self.modify_font(pango.FontDescription('Mono'))
+        GObject.GObject.__init__(self)
+        self.override_font(Pango.FontDescription('Mono'))
         self.set_cursor_visible(True)
         self.text_buffer = self.get_buffer()
         self.mark = self.text_buffer.create_mark('scroll_mark',
@@ -366,7 +368,7 @@ class ConsoleView(gtk.TextView):
         self.connect('key-press-event', self.onKeyPress)
 
     def write(self, text, editable=False):
-        gobject.idle_add(self._write, text, editable)
+        GLib.idle_add(self._write, text, editable)
 
     def _write(self, text, editable=False):
         """
@@ -400,7 +402,7 @@ class ConsoleView(gtk.TextView):
 
 
     def showPrompt(self, prompt):
-        gobject.idle_add(self._showPrompt, prompt)
+        GLib.idle_add(self._showPrompt, prompt)
 
     def _showPrompt(self, prompt):
         """
@@ -414,7 +416,7 @@ class ConsoleView(gtk.TextView):
                                    self.text_buffer.get_end_iter())
 
     def changeLine(self, text):
-        gobject.idle_add(self._changeLine, text)
+        GLib.idle_add(self._changeLine, text)
 
     def _changeLine(self, text):
         """
@@ -441,7 +443,7 @@ class ConsoleView(gtk.TextView):
         return rv
 
     def showReturned(self, text):
-        gobject.idle_add(self._showReturned, text)
+        GLib.idle_add(self._showReturned, text)
 
     def _showReturned(self, text):
         """
@@ -470,9 +472,9 @@ class ConsoleView(gtk.TextView):
         line
 
         @param widget: Widget that key press accored in.
-        @type widget: gtk.Widget
+        @type widget: Gtk.Widget
         @param event: Event object
-        @type event: gtk.gdk.Event
+        @type event: Gdk.Event
 
         @return: Return True if event should not trickle.
         @rtype: boolean
@@ -482,14 +484,14 @@ class ConsoleView(gtk.TextView):
         selection_mark = self.text_buffer.get_selection_bound()
         selection_iter = self.text_buffer.get_iter_at_mark(selection_mark)
         start_iter = self.text_buffer.get_iter_at_mark(self.line_start)
-        if event.keyval == gtk.keysyms.Home:
-            if event.state == 0:
+        if event.keyval == Gdk.KEY_Home:
+            if event.get_state() == 0:
                 self.text_buffer.place_cursor(start_iter)
                 return True
-            elif event.state == gtk.gdk.SHIFT_MASK:
+            elif event.get_state() == Gdk.ModifierType.SHIFT_MASK:
                 self.text_buffer.move_mark(insert_mark, start_iter)
                 return True
-        elif event.keyval == gtk.keysyms.Left:
+        elif event.keyval == Gdk.KEY_Left:
             insert_iter.backward_cursor_position()
             if not insert_iter.editable(True):
                 return True
@@ -555,27 +557,27 @@ class IPythonView(ConsoleView, IterableIPShell):
         autocompletions, etc
 
         @param widget: Widget that key press occured in.
-        @type widget: gtk.Widget
+        @type widget: Gtk.Widget
         @param event: Event object.
-        @type event: gtk.gdk.Event
+        @type event: Gdk.Event
 
         @return: True if event should not trickle.
         @rtype: boolean
         """
-        if event.state & gtk.gdk.CONTROL_MASK and event.keyval == 99:
+        if event.get_state() & Gdk.ModifierType.CONTROL_MASK and event.keyval == 99:
             self.interrupt = True
             self._processLine()
             return True
-        elif event.keyval == gtk.keysyms.Return:
+        elif event.keyval == Gdk.KEY_Return:
             self._processLine()
             return True
-        elif event.keyval == gtk.keysyms.Up:
+        elif event.keyval == Gdk.KEY_Up:
             self.changeLine(self.historyBack())
             return True
-        elif event.keyval == gtk.keysyms.Down:
+        elif event.keyval == Gdk.KEY_Down:
             self.changeLine(self.historyForward())
             return True
-        elif event.keyval == gtk.keysyms.Tab:
+        elif event.keyval == Gdk.KEY_Tab:
             if not self.getCurrentLine().strip():
                 return False
             completed, possibilities = self.complete(self.getCurrentLine())

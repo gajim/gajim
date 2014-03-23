@@ -31,8 +31,7 @@ to automatic discovery and dispatching, also features manual control
 over the process.
 """
 
-from types import NoneType
-from tools import remove
+from .tools import remove
 
 COMMANDS = {}
 CONTAINERS = {}
@@ -67,11 +66,13 @@ def traverse_commands(container):
             yield attribute
 
 def is_command(attribute):
-    from framework import Command
+    from .framework import Command
     return isinstance(attribute, Command)
 
 def is_root(namespace):
-    metaclass = namespace.get("__metaclass__", NoneType)
+    metaclass = namespace.get("__metaclass__", None)
+    if not metaclass:
+        return False
     return issubclass(metaclass, Dispatchable)
 
 def get_command(host, name):
@@ -83,7 +84,7 @@ def get_command(host, name):
 def list_commands(host):
     for container in CONTAINERS[host]:
         commands = COMMANDS[container]
-        for name, command in commands.iteritems():
+        for name, command in commands.items():
             yield name, command
 
 class Dispatchable(type):

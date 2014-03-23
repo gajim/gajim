@@ -30,8 +30,8 @@ from ..errors import CommandError
 from ..framework import CommandContainer, command, doc
 from ..mapping import generate_usage
 
-from hosts import *
-import execute
+from .hosts import *
+from . import execute
 
 # This holds constants fron the logger, which we'll be using in some of our
 # commands.
@@ -136,7 +136,7 @@ class StandardCommonCommands(CommandContainer):
     def status(self, status, message):
         if status not in ('online', 'away', 'chat', 'xa', 'dnd'):
             raise CommandError("Invalid status given")
-        for connection in gajim.connections.itervalues():
+        for connection in gajim.connections.values():
             if not gajim.config.get_per('accounts', connection.name,
             'sync_with_global_status'):
                 continue
@@ -150,7 +150,7 @@ class StandardCommonCommands(CommandContainer):
         if not message:
             message = _("Away")
 
-        for connection in gajim.connections.itervalues():
+        for connection in gajim.connections.values():
             if not gajim.config.get_per('accounts', connection.name,
             'sync_with_global_status'):
                 continue
@@ -164,7 +164,7 @@ class StandardCommonCommands(CommandContainer):
         if not message:
             message = _("Available")
 
-        for connection in gajim.connections.itervalues():
+        for connection in gajim.connections.values():
             if not gajim.config.get_per('accounts', connection.name,
             'sync_with_global_status'):
                 continue

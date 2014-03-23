@@ -531,6 +531,7 @@
                   <object class="GtkEventBox" id="eventbox1">
                     <property name="visible">True</property>
                     <property name="tooltip_text" translatable="yes">Format: YYYY-MM-DD</property>
+                    <property name="visible_window">False</property>
                     <child>
                       <object class="GtkLabel" id="label13">
                         <property name="visible">True</property>
@@ -1152,7 +1153,6 @@
         <child>
           <object class="GtkStatusbar" id="statusbar">
             <property name="visible">True</property>
-            <property name="has_resize_grip">False</property>
           </object>
           <packing>
             <property name="expand">False</property>

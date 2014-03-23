@@ -59,7 +59,7 @@ from common import gpg
 from common import passwords
 from common import exceptions
 from common import check_X509
-from connection_handlers import *
+from common.connection_handlers import *
 
 if gajim.HAVE_PYOPENSSL:
     import OpenSSL.crypto
@@ -312,8 +312,7 @@ class CommonConnection:
             else:
                 def encrypt_thread(msg, keyID, always_trust=False):
                     # encrypt message. This function returns (msgenc, error)
-                    return self.gpg.encrypt(msg.encode('utf-8'), [keyID],
-                        always_trust)
+                    return self.gpg.encrypt(msg, [keyID], always_trust)
                 def _on_encrypted(output):
                     msgenc, error = output
                     if error == 'NOT_TRUSTED':
@@ -329,7 +328,7 @@ class CommonConnection:
                                     form_node, user_nick, keyID, attention,
                                     correction_msg, callback)
                         gajim.nec.push_incoming_event(GPGTrustKeyEvent(None,
-                            conn=self, callback=_on_always_trust))
+                            conn=self, keyID=keyID, callback=_on_always_trust))
                     else:
                         self._message_encrypted_cb(output, type_, msg, msgtxt,
                             original_message, fjid, resource, jid, xhtml,
@@ -519,7 +518,7 @@ class CommonConnection:
                             log_msg = '<body xmlns="%s">%s</body>' % (
                                 nbxmpp.NS_XHTML, xhtml)
                         gajim.logger.write(kind, jid, log_msg)
-                    except exceptions.PysqliteOperationalError, e:
+                    except exceptions.PysqliteOperationalError as e:
                         self.dispatch('DB_ERROR', (_('Disk Write Error'),
                             str(e)))
                     except exceptions.DatabaseMalformed:
@@ -680,10 +679,10 @@ class CommonConnection:
         if realm == '':
             if event == nbxmpp.transports_nb.DATA_RECEIVED:
                 gajim.nec.push_incoming_event(StanzaReceivedEvent(None,
-                    conn=self, stanza_str=unicode(data, errors='ignore')))
+                    conn=self, stanza_str=data))
             elif event == nbxmpp.transports_nb.DATA_SENT:
                 gajim.nec.push_incoming_event(StanzaSentEvent(None, conn=self,
-                    stanza_str=unicode(data)))
+                    stanza_str=data))
 
     def change_status(self, show, msg, auto=False):
         if not msg:
@@ -779,7 +778,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.private_storage_supported = True
         self.privacy_rules_requested = False
         self.streamError = ''
-        self.secret_hmac = str(random.random())[2:]
+        self.secret_hmac = str(random.random())[2:].encode('utf-8')
 
         self.sm = Smacks(self) # Stream Management
 
@@ -981,8 +980,8 @@ class Connection(CommonConnection, ConnectionHandlers):
                             self.connection.SendAndCallForResponse(iq,
                                     _on_register_result)
                         else:
-                            if self.new_account_form.keys().sort() != \
-                            conf.keys().sort():
+                            if list(self.new_account_form.keys()).sort() != \
+                            list(conf.keys()).sort():
                                 # requested config has changed since first connection
                                 reason = _('Server %s provided a different '
                                     'registration form') % data[0]
@@ -1239,11 +1238,9 @@ class Connection(CommonConnection, ConnectionHandlers):
             if not os.path.exists(cacerts):
                 cacerts = ''
             mycerts = common.gajim.MY_CACERTS
-            tls_version = gajim.config.get_per('accounts', self.name,
-                'tls_version')
             cipher_list = gajim.config.get_per('accounts', self.name,
                 'cipher_list')
-            secure_tuple = (self._current_type, cacerts, mycerts, tls_version, cipher_list)
+            secure_tuple = (self._current_type, cacerts, mycerts, cipher_list)
 
             con = nbxmpp.NonBlockingClient(
                 domain=self._hostname,
@@ -1391,41 +1388,40 @@ class Connection(CommonConnection, ConnectionHandlers):
         cert = con.Connection.ssl_certificate
         if errnum > 0 and str(errnum) not in gajim.config.get_per('accounts',
         self.name, 'ignore_ssl_errors').split():
-            text = _('The authenticity of the %s certificate could be invlid') \
-                % hostname
+            text = _('The authenticity of the %s certificate could be invalid'
+                ) % hostname
             if errnum in ssl_error:
                 text += _('\nSSL Error: <b>%s</b>') % ssl_error[errnum]
             else:
                 text += _('\nUnknown SSL error: %d') % errnum
-            fingerprint = cert.digest('sha1')
+            fingerprint = cert.digest('sha1').decode('utf-8')
             pem = OpenSSL.crypto.dump_certificate(OpenSSL.crypto.FILETYPE_PEM,
-                cert)
+                cert).decode('utf-8')
             gajim.nec.push_incoming_event(SSLErrorEvent(None, conn=self,
                 error_text=text, error_num=errnum, cert=pem,
                 fingerprint=fingerprint, certificate=cert))
             return True
         if cert:
-            fingerprint = cert.digest('sha1')
+            fingerprint = cert.digest('sha1').decode('utf-8')
             saved_fingerprint = gajim.config.get_per('accounts', self.name,
                 'ssl_fingerprint_sha1')
             if saved_fingerprint:
                 # Check sha1 fingerprint
                 if fingerprint != saved_fingerprint:
                     gajim.nec.push_incoming_event(FingerprintErrorEvent(None,
-                        conn=self, certificate=con.Connection.ssl_certificate,
+                        conn=self, certificate=cert,
                         new_fingerprint=fingerprint))
                     return True
             else:
                 gajim.config.set_per('accounts', self.name,
                     'ssl_fingerprint_sha1', fingerprint)
-            if not check_X509.check_certificate(con.Connection.ssl_certificate,
-            hostname) and '100' not in gajim.config.get_per('accounts',
-            self.name, 'ignore_ssl_errors').split():
-                fingerprint = cert.digest('sha1')
+            if not check_X509.check_certificate(cert, hostname) and \
+            '100' not in gajim.config.get_per('accounts', self.name,
+            'ignore_ssl_errors').split():
                 pem = OpenSSL.crypto.dump_certificate(
-                    OpenSSL.crypto.FILETYPE_PEM, cert)
+                    OpenSSL.crypto.FILETYPE_PEM, cert).decode('utf-8')
                 txt = _('The authenticity of the %s certificate could be '
-                    'invalid.\nThe certificate does not cover this domain.') % \
+                    'invalid.\nThe certificate does not cover this domain.') %\
                     hostname
                 gajim.nec.push_incoming_event(SSLErrorEvent(None, conn=self,
                     error_text=txt, error_num=100, cert=pem,
@@ -1523,7 +1519,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             self.connection.send(' ')
 
     def _on_xmpp_ping_answer(self, iq_obj):
-        id_ = unicode(iq_obj.getAttr('id'))
+        id_ = iq_obj.getAttr('id')
         assert id_ == self.awaiting_xmpp_ping_id
         self.awaiting_xmpp_ping_id = None
 
@@ -1772,9 +1768,9 @@ class Connection(CommonConnection, ConnectionHandlers):
             gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
                 show=gajim.SHOW_LIST[self.connected]))
             gajim.nec.push_incoming_event(InformationEvent(None, conn=self,
-                level='error', pri_txt=_('Invisibility not supported',
+                level='error', pri_txt=_('Invisibility not supported'),
                 sec_txt=_('Account %s doesn\'t support invisibility.') % \
-                self.name)))
+                self.name))
             return
         # If we are already connected, and privacy rules are supported, send
         # offline presence first as it's required by XEP-0126
@@ -1800,7 +1796,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.activate_privacy_rule('invisible')
         self.connected = gajim.SHOW_LIST.index('invisible')
         self.status = msg
-        priority = unicode(gajim.get_priority(self.name, 'invisible'))
+        priority = gajim.get_priority(self.name, 'invisible')
         p = nbxmpp.Presence(priority=priority)
         p = self.add_sha(p, True)
         if msg:
@@ -1981,7 +1977,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                 p.setStatus(msg)
         else:
             signed = self.get_signed_presence(msg)
-            priority = unicode(gajim.get_priority(self.name, sshow))
+            priority = gajim.get_priority(self.name, sshow)
             p = nbxmpp.Presence(typ=None, priority=priority, show=sshow, to=jid)
             p = self.add_sha(p)
             if msg:
@@ -2005,7 +2001,7 @@ class Connection(CommonConnection, ConnectionHandlers):
 
     def _update_status(self, show, msg):
         xmpp_show = helpers.get_xmpp_show(show)
-        priority = unicode(gajim.get_priority(self.name, xmpp_show))
+        priority = gajim.get_priority(self.name, xmpp_show)
         p = nbxmpp.Presence(typ=None, priority=priority, show=xmpp_show)
         p = self.add_sha(p)
         if msg:
@@ -2047,6 +2043,8 @@ class Connection(CommonConnection, ConnectionHandlers):
                 return
             if isinstance(jid, list):
                 for j in jid:
+                    if session is None:
+                        session = self.get_or_create_session(j, '')
                     self.log_message(j, msg, forward_from, session,
                         original_message, subject, type_, xhtml)
             else:
@@ -2562,7 +2560,7 @@ class Connection(CommonConnection, ConnectionHandlers):
 
         p = nbxmpp.Presence(to='%s/%s' % (room_jid, nick),
                 show=show, status=self.status)
-        h = hmac.new(self.secret_hmac, room_jid).hexdigest()[:6]
+        h = hmac.new(self.secret_hmac, room_jid.encode('utf-8')).hexdigest()[:6]
         id_ = self.connection.getAnID()
         id_ = 'gajim_muc_' + id_ + '_' + h
         p.setID(id_)
@@ -2670,7 +2668,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         xmpp_show = helpers.get_xmpp_show(show)
         p = nbxmpp.Presence(to='%s/%s' % (jid, nick), typ=ptype,
             show=xmpp_show, status=status)
-        h = hmac.new(self.secret_hmac, jid).hexdigest()[:6]
+        h = hmac.new(self.secret_hmac, jid.encode('utf-8')).hexdigest()[:6]
         id_ = self.connection.getAnID()
         id_ = 'gajim_muc_' + id_ + '_' + h
         p.setID(id_)
@@ -2847,6 +2845,19 @@ class Connection(CommonConnection, ConnectionHandlers):
         """
         Send invitation
         """
+        contact = gajim.contacts.get_contact_from_full_jid(self.name, to)
+        if contact and contact.supports(nbxmpp.NS_CONFERENCE):
+            # send direct invite
+            message=nbxmpp.Message(to=to)
+            attrs = {'jid': room}
+            if reason:
+                attrs['reason'] = reason
+            if continue_tag:
+                attrs['continue'] = 'true'
+            c = message.addChild(name='x', attrs=attrs,
+                namespace=nbxmpp.NS_CONFERENCE)
+            self.connection.send(message)
+            return
         message=nbxmpp.Message(to=room)
         c = message.addChild(name='x', namespace=nbxmpp.NS_MUC_USER)
         c = c.addChild(name='invite', attrs={'to': to})
@@ -2889,7 +2900,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             return
         if self.awaiting_xmpp_ping_id:
             # We haven't got the pong in time, disco and reconnect
-            log.warn("No reply received for keepalive ping. Reconnecting.")
+            log.warning("No reply received for keepalive ping. Reconnecting.")
             self._disconnectedReconnCB()
 
     def _reconnect_alarm(self):

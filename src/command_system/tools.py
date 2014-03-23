@@ -25,20 +25,19 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 from types import *
-from glib import GError
 
 def remove(sequence, target):
-    if isinstance(sequence, ListType):
+    if isinstance(sequence, list):
         if target in sequence:
             sequence.remove(target)
-    elif isinstance(sequence, DictType):
+    elif isinstance(sequence, dict):
         if target in sequence:
             del sequence[target]
 
 def gconf(path):
     try:
-        from gconf import client_get_default
-        client = client_get_default()
+        from gi.repository import GConf
+        client = GConf.Client.get_default()
         return client.get_string(path)
-    except ImportError, GError:
+    except ImportError:
         pass

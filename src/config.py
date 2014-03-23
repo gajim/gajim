@@ -31,9 +31,11 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-import gtk
-import pango
-import gobject
+from gi.repository import Gtk
+from gi.repository import Gdk
+from gi.repository import Pango
+from gi.repository import GObject
+from gi.repository import GLib
 import os, sys
 import common.config
 import common.sleepy
@@ -63,6 +65,7 @@ from common import gpg
 from common import ged
 
 try:
+    raise ImportError
     from common.multimedia_helpers import AudioInputManager, AudioOutputManager
     from common.multimedia_helpers import VideoInputManager, VideoOutputManager
     HAS_GST = True
@@ -149,10 +152,10 @@ class PreferencesWindow:
         # user themes
         if os.path.isdir(gajim.MY_EMOTS_PATH):
             emoticons_list += os.listdir(gajim.MY_EMOTS_PATH)
-        renderer_text = gtk.CellRendererText()
+        renderer_text = Gtk.CellRendererText()
         emoticons_combobox.pack_start(renderer_text, True)
         emoticons_combobox.add_attribute(renderer_text, 'text', 0)
-        model = gtk.ListStore(str)
+        model = Gtk.ListStore(str)
         emoticons_combobox.set_model(model)
         l = []
         for dir_ in emoticons_list:
@@ -162,7 +165,7 @@ class PreferencesWindow:
             if dir_ != '.svn':
                 l.append(dir_)
         l.append(_('Disabled'))
-        for i in xrange(len(l)):
+        for i in range(len(l)):
             model.append([l[i]])
             if gajim.config.get('emoticons_theme') == l[i]:
                 emoticons_combobox.set_active(i)
@@ -208,7 +211,7 @@ class PreferencesWindow:
         ### Style tab ###
         # Themes
         theme_combobox = self.xml.get_object('theme_combobox')
-        cell = gtk.CellRendererText()
+        cell = Gtk.CellRendererText()
         theme_combobox.pack_start(cell, True)
         theme_combobox.add_attribute(cell, 'text', 0)
         self.update_theme_list()
@@ -218,13 +221,13 @@ class PreferencesWindow:
         if os.path.isdir(gajim.MY_ICONSETS_PATH):
             iconsets_list += os.listdir(gajim.MY_ICONSETS_PATH)
         # new model, image in 0, string in 1
-        model = gtk.ListStore(gtk.Image, str)
+        model = Gtk.ListStore(Gtk.Image, str)
         renderer_image = cell_renderer_image.CellRendererImage(0, 0)
-        renderer_text = gtk.CellRendererText()
+        renderer_text = Gtk.CellRendererText()
         renderer_text.set_property('xpad', 5)
-        self.iconset_combobox.pack_start(renderer_image, expand = False)
-        self.iconset_combobox.pack_start(renderer_text, expand = True)
-        self.iconset_combobox.set_attributes(renderer_text, text = 1)
+        self.iconset_combobox.pack_start(renderer_image, False)
+        self.iconset_combobox.pack_start(renderer_text, True)
+        self.iconset_combobox.add_attribute(renderer_text, 'text', 1)
         self.iconset_combobox.add_attribute(renderer_image, 'image', 0)
         self.iconset_combobox.set_model(model)
         l = []
@@ -236,8 +239,8 @@ class PreferencesWindow:
                 l.append(dir)
         if l.count == 0:
             l.append(' ')
-        for i in xrange(len(l)):
-            preview = gtk.Image()
+        for i in range(len(l)):
+            preview = Gtk.Image()
             files = []
             files.append(os.path.join(helpers.get_iconset_path(l[i]), '16x16',
                     'online.png'))
@@ -390,69 +393,69 @@ class PreferencesWindow:
 
         # Default Status messages
         self.default_msg_tree = self.xml.get_object('default_msg_treeview')
-        col2 = self.default_msg_tree.rc_get_style().bg[gtk.STATE_ACTIVE].\
-            to_string()
+
+        #FIXME: That doesn't seem to work:
+        context = self.default_msg_tree.get_style_context()
+        col2 = context.get_background_color(Gtk.StateFlags.ACTIVE)
+
         # (status, translated_status, message, enabled)
-        model = gtk.ListStore(str, str, str, bool)
+        model = Gtk.ListStore(str, str, str, bool)
         self.default_msg_tree.set_model(model)
-        col = gtk.TreeViewColumn(_('Status'))
+        col = Gtk.TreeViewColumn(_('Status'))
         col.set_resizable(True)
         self.default_msg_tree.append_column(col)
-        renderer = gtk.CellRendererText()
+        renderer = Gtk.CellRendererText()
         col.pack_start(renderer, False)
-        col.set_attributes(renderer, text = 1)
-        col = gtk.TreeViewColumn(_('Default Message'))
+        col.add_attribute(renderer, 'text', 1)
+        col = Gtk.TreeViewColumn(_('Default Message'))
         col.set_resizable(True)
         self.default_msg_tree.append_column(col)
-        renderer = gtk.CellRendererText()
+        renderer = Gtk.CellRendererText()
         col.pack_start(renderer, True)
-        col.set_attributes(renderer, text = 2)
+        col.add_attribute(renderer, 'text', 2)
         renderer.connect('edited', self.on_default_msg_cell_edited)
         renderer.set_property('editable', True)
-        renderer.set_property('cell-background', col2)
-        col = gtk.TreeViewColumn(_('Enabled'))
+        renderer.set_property('cell-background-rgba', col2)
+        col = Gtk.TreeViewColumn(_('Enabled'))
         col.set_resizable(True)
         self.default_msg_tree.append_column(col)
-        renderer = gtk.CellRendererToggle()
+        renderer = Gtk.CellRendererToggle()
         col.pack_start(renderer, False)
-        col.set_attributes(renderer, active = 3)
+        col.add_attribute(renderer, 'active', 3)
         renderer.set_property('activatable', True)
         renderer.connect('toggled', self.default_msg_toggled_cb)
         self.fill_default_msg_treeview()
 
         # Status messages
         self.msg_tree = self.xml.get_object('msg_treeview')
-        model = gtk.ListStore(str, str, str, str, str, str, str)
-        self.msg_tree.set_model(model)
-        col = gtk.TreeViewColumn('name')
-        self.msg_tree.append_column(col)
-        renderer = gtk.CellRendererText()
-        col.pack_start(renderer, True)
-        col.set_attributes(renderer, text = 0)
+        renderer = Gtk.CellRendererText()
         renderer.connect('edited', self.on_msg_cell_edited)
         renderer.set_property('editable', True)
+        col = Gtk.TreeViewColumn('name', renderer, text=0)
+        self.msg_tree.append_column(col)
         self.fill_msg_treeview()
+
         buf = self.xml.get_object('msg_textview').get_buffer()
-        buf.connect('changed', self.on_msg_textview_changed)
+        buf.connect('end-user-action', self.on_msg_textview_changed)
 
         ### Audio / Video tab ###
         def create_av_combobox(opt_name, device_dict, config_name=None,
         key=None):
             combobox = self.xml.get_object(opt_name + '_combobox')
-            cell = gtk.CellRendererText()
-            cell.set_property('ellipsize', pango.ELLIPSIZE_END)
+            cell = Gtk.CellRendererText()
+            cell.set_property('ellipsize', Pango.EllipsizeMode.END)
             cell.set_property('ellipsize-set', True)
             combobox.pack_start(cell, True)
             combobox.add_attribute(cell, 'text', 0)
-            model = gtk.ListStore(str, str)
+            model = Gtk.ListStore(str, str)
             combobox.set_model(model)
             if config_name:
                 config = gajim.config.get(config_name)
             else:
                 config = gajim.config.get(opt_name + '_device')
 
-            for index, (name, value) in enumerate(sorted(device_dict.\
-            iteritems(), key=key)):
+            for index, (name, value) in enumerate(sorted(device_dict.items(),
+            key=key)):
                 model.append((name, value))
                 if config == value:
                     combobox.set_active(index)
@@ -586,10 +589,10 @@ class PreferencesWindow:
         gtkgui_helpers.possibly_move_window_in_current_desktop(self.window)
 
     def on_preferences_notebook_switch_page(self, widget, page, page_num):
-        gobject.idle_add(self.xml.get_object('close_button').grab_focus)
+        GLib.idle_add(self.xml.get_object('close_button').grab_focus)
 
     def on_preferences_window_key_press_event(self, widget, event):
-        if event.keyval == gtk.keysyms.Escape:
+        if event.keyval == Gdk.KEY_Escape:
             self.window.hide()
 
     def get_per_account_option(self, opt):
@@ -673,7 +676,7 @@ class PreferencesWindow:
     def on_emoticons_combobox_changed(self, widget):
         active = widget.get_active()
         model = widget.get_model()
-        emot_theme = model[active][0].decode('utf-8')
+        emot_theme = model[active][0]
         if emot_theme == _('Disabled'):
             gajim.config.set('emoticons_theme', '')
         else:
@@ -739,7 +742,7 @@ class PreferencesWindow:
             lang = gajim.config.get('speller_language')
             if not lang:
                 lang = gajim.LANG
-            tv = gtk.TextView()
+            tv = Gtk.TextView()
             try:
                 gtkspell.Spell(tv, lang)
             except (TypeError, RuntimeError, OSError):
@@ -762,7 +765,7 @@ class PreferencesWindow:
     def on_theme_combobox_changed(self, widget):
         model = widget.get_model()
         active = widget.get_active()
-        config_theme = model[active][0].decode('utf-8').replace(' ', '_')
+        config_theme = model[active][0].replace(' ', '_')
 
         gajim.config.set('roster_theme', config_theme)
 
@@ -772,7 +775,7 @@ class PreferencesWindow:
 
     def update_theme_list(self):
         theme_combobox = self.xml.get_object('theme_combobox')
-        model = gtk.ListStore(str)
+        model = Gtk.ListStore(str)
         theme_combobox.set_model(model)
         i = 0
         for config_theme in gajim.config.get_per('themes'):
@@ -792,7 +795,7 @@ class PreferencesWindow:
     def on_iconset_combobox_changed(self, widget):
         model = widget.get_model()
         active = widget.get_active()
-        icon_string = model[active][1].decode('utf-8')
+        icon_string = model[active][1]
         gajim.config.set('iconset', icon_string)
         gtkgui_helpers.reload_jabber_state_images()
 
@@ -953,21 +956,21 @@ class PreferencesWindow:
             if col:
                 if isinstance(col_to_widget[c], list):
                     self.xml.get_object(col_to_widget[c][0]).set_color(
-                            gtk.gdk.color_parse(col))
+                            Gdk.color_parse(col))
                     self.xml.get_object(col_to_widget[c][0]).set_sensitive(True)
                     self.xml.get_object(col_to_widget[c][1]).set_active(True)
                 else:
                     self.xml.get_object(col_to_widget[c]).set_color(
-                            gtk.gdk.color_parse(col))
+                            Gdk.color_parse(col))
             else:
                 if isinstance(col_to_widget[c], list):
                     self.xml.get_object(col_to_widget[c][0]).set_color(
-                            gtk.gdk.color_parse('#000000'))
+                            Gdk.color_parse('#000000'))
                     self.xml.get_object(col_to_widget[c][0]).set_sensitive(False)
                     self.xml.get_object(col_to_widget[c][1]).set_active(False)
                 else:
                     self.xml.get_object(col_to_widget[c]).set_color(
-                            gtk.gdk.color_parse('#000000'))
+                            Gdk.color_parse('#000000'))
 
     def on_reset_colors_button_clicked(self, widget):
         col_to_widget = {'inmsgcolor': 'incoming_nick_colorbutton',
@@ -1016,7 +1019,7 @@ class PreferencesWindow:
                                 gajim.config.get('autoxatime') * 60)
 
     def on_auto_away_message_entry_changed(self, widget):
-        gajim.config.set('autoaway_message', widget.get_text().decode('utf-8'))
+        gajim.config.set('autoaway_message', widget.get_text())
 
     def on_auto_xa_checkbutton_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'autoxa',
@@ -1030,7 +1033,7 @@ class PreferencesWindow:
                                 gajim.config.get('autoxatime') * 60)
 
     def on_auto_xa_message_entry_changed(self, widget):
-        gajim.config.set('autoxa_message', widget.get_text().decode('utf-8'))
+        gajim.config.set('autoxa_message', widget.get_text())
 
     def on_prompt_online_status_message_checkbutton_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'ask_online_status')
@@ -1064,7 +1067,7 @@ class PreferencesWindow:
 
     def on_default_msg_treemodel_row_changed(self, model, path, iter_):
         status = model[iter_][0]
-        message = model[iter_][2].decode('utf-8')
+        message = model[iter_][2]
         message = helpers.to_one_line(message)
         gajim.config.set_per('defaultstatusmsg', status, 'enabled',
                 model[iter_][3])
@@ -1074,26 +1077,28 @@ class PreferencesWindow:
         eventbox = self.xml.get_object('default_status_eventbox')
         vbox = self.xml.get_object('status_vbox')
         vbox.set_child_packing(eventbox, not expander.get_expanded(), True, 0,
-                gtk.PACK_START)
+                Gtk.PACK_START)
 
     def save_status_messages(self, model):
         for msg in gajim.config.get_per('statusmsg'):
             gajim.config.del_per('statusmsg', msg)
         iter_ = model.get_iter_first()
         while iter_:
-            val = model[iter_][0].decode('utf-8')
+            val = model[iter_][0]
             if model[iter_][1]: # we have a preset message
                 if not val: # no title, use message text for title
                     val = model[iter_][1]
                 gajim.config.add_per('statusmsg', val)
-                msg = helpers.to_one_line(model[iter_][1].decode('utf-8'))
+                msg = helpers.to_one_line(model[iter_][1])
                 gajim.config.set_per('statusmsg', val, 'message', msg)
                 i = 2
                 # store mood / activity
                 for subname in ('activity', 'subactivity', 'activity_text',
                 'mood', 'mood_text'):
-                    gajim.config.set_per('statusmsg', val, subname,
-                        model[iter_][i].decode('utf-8'))
+                    val2 = model[iter_][i]
+                    if not val2:
+                        val2 = ''
+                    gajim.config.set_per('statusmsg', val, subname, val2)
                     i += 1
             iter_ = model.iter_next(iter_)
 
@@ -1106,7 +1111,7 @@ class PreferencesWindow:
     def on_av_combobox_changed(self, combobox, config_name):
         model = combobox.get_model()
         active = combobox.get_active()
-        device = model[active][1].decode('utf-8')
+        device = model[active][1]
         gajim.config.set(config_name, device)
 
     def on_audio_input_combobox_changed(self, widget):
@@ -1135,7 +1140,7 @@ class PreferencesWindow:
                 [self.xml.get_object('stun_server_entry')])
 
     def stun_server_entry_changed(self, widget):
-        gajim.config.set('stun_server', widget.get_text().decode('utf-8'))
+        gajim.config.set('stun_server', widget.get_text())
 
     def on_applications_combobox_changed(self, widget):
         if widget.get_active() == 0:
@@ -1146,13 +1151,13 @@ class PreferencesWindow:
             self.xml.get_object('custom_apps_frame').show()
 
     def on_custom_browser_entry_changed(self, widget):
-        gajim.config.set('custombrowser', widget.get_text().decode('utf-8'))
+        gajim.config.set('custombrowser', widget.get_text())
 
     def on_custom_mail_client_entry_changed(self, widget):
-        gajim.config.set('custommailapp', widget.get_text().decode('utf-8'))
+        gajim.config.set('custommailapp', widget.get_text())
 
     def on_custom_file_manager_entry_changed(self, widget):
-        gajim.config.set('custom_file_manager', widget.get_text().decode('utf-8'))
+        gajim.config.set('custom_file_manager', widget.get_text())
 
     def on_log_show_changes_checkbutton_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'log_contact_status_changes')
@@ -1212,7 +1217,10 @@ class PreferencesWindow:
         model.set_value(iter_, 0, new_text)
 
     def on_msg_treeview_cursor_changed(self, widget, data = None):
-        (model, iter_) = self.msg_tree.get_selection().get_selected()
+        sel = self.msg_tree.get_selection()
+        if not sel:
+            return
+        (model, iter_) = sel.get_selected()
         if not iter_:
             return
         self.xml.get_object('delete_msg_button').set_sensitive(True)
@@ -1223,11 +1231,15 @@ class PreferencesWindow:
     def on_new_msg_button_clicked(self, widget, data = None):
         model = self.msg_tree.get_model()
         iter_ = model.append()
-        model.set(iter_, 0, _('status message title'), 1, _('status message text'))
+        model.set(iter_, 0, _('status message title'), 1,
+            _('status message text'))
         self.msg_tree.set_cursor(model.get_path(iter_))
 
     def on_delete_msg_button_clicked(self, widget, data = None):
-        (model, iter_) = self.msg_tree.get_selection().get_selected()
+        sel = self.msg_tree.get_selection()
+        if not sel:
+            return
+        (model, iter_) = sel.get_selected()
         if not iter_:
             return
         buf = self.xml.get_object('msg_textview').get_buffer()
@@ -1236,20 +1248,23 @@ class PreferencesWindow:
         self.xml.get_object('delete_msg_button').set_sensitive(False)
 
     def on_msg_textview_changed(self, widget, data = None):
-        (model, iter_) = self.msg_tree.get_selection().get_selected()
+        sel = self.msg_tree.get_selection()
+        if not sel:
+            return
+        (model, iter_) = sel.get_selected()
         if not iter_:
             return
         buf = self.xml.get_object('msg_textview').get_buffer()
         first_iter, end_iter = buf.get_bounds()
-        model.set_value(iter_, 1, buf.get_text(first_iter, end_iter))
+        model.set_value(iter_, 1, buf.get_text(first_iter, end_iter, True))
 
     def on_msg_treeview_key_press_event(self, widget, event):
-        if event.keyval == gtk.keysyms.Delete:
+        if event.keyval == Gdk.KEY_Delete:
             self.on_delete_msg_button_clicked(widget)
 
     def on_proxies_combobox_changed(self, widget):
         active = widget.get_active()
-        proxy = widget.get_model()[active][0].decode('utf-8')
+        proxy = widget.get_model()[active][0]
         if proxy == _('None'):
             proxy = ''
 
@@ -1259,7 +1274,8 @@ class PreferencesWindow:
         if 'manage_proxies' in gajim.interface.instances:
             gajim.interface.instances['manage_proxies'].window.present()
         else:
-            gajim.interface.instances['manage_proxies'] = ManageProxiesWindow()
+            gajim.interface.instances['manage_proxies'] = ManageProxiesWindow(
+                self.window)
 
     def update_proxy_list(self):
         our_proxy = gajim.config.get('global_proxy')
@@ -1270,7 +1286,7 @@ class PreferencesWindow:
         model.clear()
         l = gajim.config.get_per('proxies')
         l.insert(0, _('None'))
-        for i in xrange(len(l)):
+        for i in range(len(l)):
             model.append([l[i]])
             if our_proxy == l[i]:
                 proxy_combobox.set_active(i)
@@ -1284,10 +1300,10 @@ class PreferencesWindow:
 
 #---------- ManageProxiesWindow class -------------#
 class ManageProxiesWindow:
-    def __init__(self):
+    def __init__(self, transient_for=None):
         self.xml = gtkgui_helpers.get_gtk_builder('manage_proxies_window.ui')
         self.window = self.xml.get_object('manage_proxies_window')
-        self.window.set_transient_for(gajim.interface.roster.window)
+        self.window.set_transient_for(transient_for)
         self.proxies_treeview = self.xml.get_object('proxies_treeview')
         self.proxyname_entry = self.xml.get_object('proxyname_entry')
         self.proxytype_combobox = self.xml.get_object('proxytype_combobox')
@@ -1326,13 +1342,13 @@ class ManageProxiesWindow:
         self.xml.get_object('remove_proxy_button').set_sensitive(False)
         self.proxytype_combobox.set_sensitive(False)
         self.xml.get_object('proxy_table').set_sensitive(False)
-        model = gtk.ListStore(str)
+        model = Gtk.ListStore(str)
         self.proxies_treeview.set_model(model)
-        col = gtk.TreeViewColumn('Proxies')
+        col = Gtk.TreeViewColumn('Proxies')
         self.proxies_treeview.append_column(col)
-        renderer = gtk.CellRendererText()
+        renderer = Gtk.CellRendererText()
         col.pack_start(renderer, True)
-        col.set_attributes(renderer, text = 0)
+        col.add_attribute(renderer, 'text', 0)
         self.fill_proxies_treeview()
         self.xml.get_object('proxytype_combobox').set_active(0)
 
@@ -1346,18 +1362,21 @@ class ManageProxiesWindow:
         model = self.proxies_treeview.get_model()
         proxies = gajim.config.get_per('proxies')
         i = 1
-        while ('proxy' + unicode(i)) in proxies:
+        while ('proxy' + str(i)) in proxies:
             i += 1
         iter_ = model.append()
-        model.set(iter_, 0, 'proxy' + unicode(i))
-        gajim.config.add_per('proxies', 'proxy' + unicode(i))
+        model.set(iter_, 0, 'proxy' + str(i))
+        gajim.config.add_per('proxies', 'proxy' + str(i))
         self.proxies_treeview.set_cursor(model.get_path(iter_))
 
     def on_remove_proxy_button_clicked(self, widget):
-        (model, iter_) = self.proxies_treeview.get_selection().get_selected()
+        sel = self.proxies_treeview.get_selection()
+        if not sel:
+            return
+        (model, iter_) = sel.get_selected()
         if not iter_:
             return
-        proxy = model[iter_][0].decode('utf-8')
+        proxy = model[iter_][0]
         model.remove(iter_)
         gajim.config.del_per('proxies', proxy)
         self.xml.get_object('remove_proxy_button').set_sensitive(False)
@@ -1372,7 +1391,7 @@ class ManageProxiesWindow:
         if self.block_signal:
             return
         act = widget.get_active()
-        proxy = self.proxyname_entry.get_text().decode('utf-8')
+        proxy = self.proxyname_entry.get_text()
         gajim.config.set_per('proxies', proxy, 'useauth', act)
         self.xml.get_object('proxyuser_entry').set_sensitive(act)
         self.xml.get_object('proxypass_entry').set_sensitive(act)
@@ -1381,7 +1400,7 @@ class ManageProxiesWindow:
         if self.block_signal:
             return
         act = widget.get_active()
-        proxy = self.proxyname_entry.get_text().decode('utf-8')
+        proxy = self.proxyname_entry.get_text()
         gajim.config.set_per('proxies', proxy, 'bosh_useproxy', act)
         self.xml.get_object('proxyhost_entry').set_sensitive(act)
         self.xml.get_object('proxyport_entry').set_sensitive(act)
@@ -1409,7 +1428,11 @@ class ManageProxiesWindow:
         #useauth_checkbutton.set_active(False)
         #self.on_useauth_checkbutton_toggled(useauth_checkbutton)
 
-        (model, iter_) = widget.get_selection().get_selected()
+        sel = widget.get_selection()
+        if sel:
+            (model, iter_) = sel.get_selected()
+        else:
+            iter_ = None
         if not iter_:
             self.xml.get_object('proxyname_entry').set_text('')
             self.xml.get_object('proxytype_combobox').set_sensitive(False)
@@ -1437,7 +1460,7 @@ class ManageProxiesWindow:
             self.xml.get_object('proxy_table').set_sensitive(True)
             proxyhost_entry.set_text(gajim.config.get_per('proxies', proxy,
                     'host'))
-            proxyport_entry.set_text(unicode(gajim.config.get_per('proxies',
+            proxyport_entry.set_text(str(gajim.config.get_per('proxies',
                     proxy, 'port')))
             proxyuser_entry.set_text(gajim.config.get_per('proxies', proxy,
                     'user'))
@@ -1454,17 +1477,20 @@ class ManageProxiesWindow:
         self.block_signal = False
 
     def on_proxies_treeview_key_press_event(self, widget, event):
-        if event.keyval == gtk.keysyms.Delete:
+        if event.keyval == Gdk.KEY_Delete:
             self.on_remove_proxy_button_clicked(widget)
 
     def on_proxyname_entry_changed(self, widget):
         if self.block_signal:
             return
-        (model, iter_) = self.proxies_treeview.get_selection().get_selected()
+        sel = self.proxies_treeview.get_selection()
+        if not sel:
+            return
+        (model, iter_) = sel.get_selected()
         if not iter_:
             return
-        old_name = model.get_value(iter_, 0).decode('utf-8')
-        new_name = widget.get_text().decode('utf-8')
+        old_name = model.get_value(iter_, 0)
+        new_name = widget.get_text()
         if new_name == '':
             return
         if new_name == old_name:
@@ -1482,42 +1508,42 @@ class ManageProxiesWindow:
         types = ['http', 'socks5', 'bosh']
         type_ = self.proxytype_combobox.get_active()
         self.show_bosh_fields(types[type_]=='bosh')
-        proxy = self.proxyname_entry.get_text().decode('utf-8')
+        proxy = self.proxyname_entry.get_text()
         gajim.config.set_per('proxies', proxy, 'type', types[type_])
 
     def on_proxyhost_entry_changed(self, widget):
         if self.block_signal:
             return
-        value = widget.get_text().decode('utf-8')
-        proxy = self.proxyname_entry.get_text().decode('utf-8')
+        value = widget.get_text()
+        proxy = self.proxyname_entry.get_text()
         gajim.config.set_per('proxies', proxy, 'host', value)
 
     def on_proxyport_entry_changed(self, widget):
         if self.block_signal:
             return
-        value = widget.get_text().decode('utf-8')
-        proxy = self.proxyname_entry.get_text().decode('utf-8')
+        value = widget.get_text()
+        proxy = self.proxyname_entry.get_text()
         gajim.config.set_per('proxies', proxy, 'port', value)
 
     def on_proxyuser_entry_changed(self, widget):
         if self.block_signal:
             return
-        value = widget.get_text().decode('utf-8')
-        proxy = self.proxyname_entry.get_text().decode('utf-8')
+        value = widget.get_text()
+        proxy = self.proxyname_entry.get_text()
         gajim.config.set_per('proxies', proxy, 'user', value)
 
     def on_boshuri_entry_changed(self, widget):
         if self.block_signal:
             return
-        value = widget.get_text().decode('utf-8')
-        proxy = self.proxyname_entry.get_text().decode('utf-8')
+        value = widget.get_text()
+        proxy = self.proxyname_entry.get_text()
         gajim.config.set_per('proxies', proxy, 'bosh_uri', value)
 
     def on_proxypass_entry_changed(self, widget):
         if self.block_signal:
             return
-        value = widget.get_text().decode('utf-8')
-        proxy = self.proxyname_entry.get_text().decode('utf-8')
+        value = widget.get_text()
+        proxy = self.proxyname_entry.get_text()
         gajim.config.set_per('proxies', proxy, 'pass', value)
 
 
@@ -1546,12 +1572,15 @@ class AccountsWindow:
         img.set_from_file(path_to_kbd_input_img)
         self.notebook = self.xml.get_object('notebook')
         # Name
-        model = gtk.ListStore(str)
+        model = Gtk.ListStore(str)
         self.accounts_treeview.set_model(model)
         # column
-        renderer = gtk.CellRendererText()
-        self.accounts_treeview.insert_column_with_attributes(-1, _('Name'),
-                renderer, text=0)
+        renderer = Gtk.CellRendererText()
+        col = Gtk.TreeViewColumn()
+        col.set_title(_('Name'))
+        col.pack_start(renderer, False)
+        col.add_attribute(renderer, 'text', 0)
+        self.accounts_treeview.insert_column(col, -1)
 
         self.current_account = None
         # When we fill info, we don't want to handle the changed signals
@@ -1581,15 +1610,15 @@ class AccountsWindow:
         self.xml.get_object('close_button').grab_focus()
 
     def on_accounts_window_key_press_event(self, widget, event):
-        if event.keyval == gtk.keysyms.Escape:
+        if event.keyval == Gdk.KEY_Escape:
             self.check_resend_relog()
             self.window.destroy()
 
     def select_account(self, account):
         model = self.accounts_treeview.get_model()
-        iter_ = model.get_iter_root()
+        iter_ = model.get_iter_first()
         while iter_:
-            acct = model[iter_][0].decode('utf-8')
+            acct = model[iter_][0]
             if account == acct:
                 self.accounts_treeview.set_cursor(model.get_path(iter_))
                 return
@@ -1609,7 +1638,7 @@ class AccountsWindow:
             model.set(iter_, 0, account)
 
         self.selection = self.accounts_treeview.get_selection()
-        self.selection.select_iter(model.get_iter_root())
+        self.selection.select_iter(model.get_iter_first())
 
     def resend(self, account):
         if not account in gajim.connections:
@@ -1644,7 +1673,7 @@ class AccountsWindow:
                 status_before = gajim.connections[account].status
                 gajim.interface.roster.send_status(account, 'offline',
                     _('Be right back.'))
-                gobject.timeout_add(500, login, account, show_before,
+                GLib.timeout_add(500, login, account, show_before,
                     status_before)
 
             def on_yes(checked, account):
@@ -1669,11 +1698,14 @@ class AccountsWindow:
         Activate modify buttons when a row is selected, update accounts info
         """
         sel = self.accounts_treeview.get_selection()
-        (model, iter_) = sel.get_selected()
-        if iter_:
-            account = model[iter_][0].decode('utf-8')
+        if sel:
+            (model, iter_) = sel.get_selected()
+            if iter_:
+                account = model[iter_][0]
+            else:
+                account = None
         else:
-            account = None
+            iter_ = account = None
         if self.current_account and self.current_account == account:
             # We're comming back to our current account, no need to update
             # widgets
@@ -1741,11 +1773,11 @@ class AccountsWindow:
         if not our_proxy:
             our_proxy = _('None')
         proxy_combobox = self.xml.get_object('proxies_combobox1')
-        model = gtk.ListStore(str)
+        model = Gtk.ListStore(str)
         proxy_combobox.set_model(model)
         l = gajim.config.get_per('proxies')
         l.insert(0, _('None'))
-        for i in xrange(len(l)):
+        for i in range(len(l)):
             model.append([l[i]])
             if our_proxy == l[i]:
                 proxy_combobox.set_active(i)
@@ -1938,7 +1970,7 @@ class AccountsWindow:
             custom_port = 5222
             gajim.config.set_per('accounts', account, 'custom_port',
                 custom_port)
-        self.xml.get_object('custom_port_entry1').set_text(unicode(custom_port))
+        self.xml.get_object('custom_port_entry1').set_text(str(custom_port))
 
         # Personal tab
         gpg_key_label = self.xml.get_object('gpg_key_label1')
@@ -2028,7 +2060,8 @@ class AccountsWindow:
     def on_rename_button_clicked(self, widget):
         if not self.current_account:
             return
-        active = gajim.config.get_per('accounts', self.current_account, 'active')
+        active = gajim.config.get_per('accounts', self.current_account,
+            'active') and self.current_account in gajim.connections
         if active and gajim.connections[self.current_account].connected != 0:
             dialogs.ErrorDialog(
                 _('You are currently connected to the server'),
@@ -2139,7 +2172,8 @@ class AccountsWindow:
         message = _('Enter a new name for account %s') % self.current_account
         old_text = self.current_account
         dialogs.InputDialog(title, message, old_text, is_modal=False,
-                ok_handler=(on_renamed, self.current_account))
+            ok_handler=(on_renamed, self.current_account),
+            transient_for=self.window)
 
     def option_changed(self, option, value):
         return gajim.config.get_per('accounts', self.current_account, option) \
@@ -2152,11 +2186,11 @@ class AccountsWindow:
         # check if jid is conform to RFC and stringprep it
         try:
             jid = helpers.parse_jid(jid)
-        except helpers.InvalidFormat, s:
+        except helpers.InvalidFormat as s:
             if not widget.is_focus():
                 pritext = _('Invalid Jabber ID')
                 dialogs.ErrorDialog(pritext, str(s), transient_for=self.window)
-                gobject.idle_add(lambda: widget.grab_focus())
+                GLib.idle_add(lambda: widget.grab_focus())
             return True
 
         jid_splited = jid.split('@', 1)
@@ -2167,7 +2201,7 @@ class AccountsWindow:
                 sectext = \
                     _('A Jabber ID must be in the form "user@servername".')
                 dialogs.ErrorDialog(pritext, sectext, transient_for=self.window)
-                gobject.idle_add(lambda: widget.grab_focus())
+                GLib.idle_add(lambda: widget.grab_focus())
             return True
 
 
@@ -2207,8 +2241,7 @@ class AccountsWindow:
     def on_password_entry1_changed(self, widget):
         if self.ignore_events:
             return
-        passwords.save_password(self.current_account, widget.get_text().decode(
-            'utf-8'))
+        passwords.save_password(self.current_account, widget.get_text())
 
     def on_save_password_checkbutton1_toggled(self, widget):
         if self.ignore_events:
@@ -2227,15 +2260,14 @@ class AccountsWindow:
     def on_resource_entry1_focus_out_event(self, widget, event):
         if self.ignore_events:
             return
-        resource = self.xml.get_object('resource_entry1').get_text().decode(
-            'utf-8')
+        resource = self.xml.get_object('resource_entry1').get_text()
         try:
             resource = helpers.parse_resource(resource)
-        except helpers.InvalidFormat, s:
+        except helpers.InvalidFormat as s:
             if not widget.is_focus():
                 pritext = _('Invalid Jabber ID')
                 dialogs.ErrorDialog(pritext, str(s), transient_for=self.window)
-                gobject.idle_add(lambda: widget.grab_focus())
+                GLib.idle_add(lambda: widget.grab_focus())
             return True
 
         if self.option_changed('resource', resource):
@@ -2276,7 +2308,8 @@ class AccountsWindow:
                         new_password)
 
         try:
-            dialogs.ChangePasswordDialog(self.current_account, on_changed)
+            dialogs.ChangePasswordDialog(self.current_account, on_changed,
+                self.window)
         except GajimGeneralException:
             # if we showed ErrorDialog, there will not be dialog instance
             return
@@ -2335,7 +2368,7 @@ class AccountsWindow:
 
     def on_proxies_combobox1_changed(self, widget):
         active = widget.get_active()
-        proxy = widget.get_model()[active][0].decode('utf-8')
+        proxy = widget.get_model()[active][0]
         if proxy == _('None'):
             proxy = ''
 
@@ -2348,7 +2381,8 @@ class AccountsWindow:
         if 'manage_proxies' in gajim.interface.instances:
             gajim.interface.instances['manage_proxies'].window.present()
         else:
-            gajim.interface.instances['manage_proxies'] = ManageProxiesWindow()
+            gajim.interface.instances['manage_proxies'] = ManageProxiesWindow(
+                self.window)
 
     def on_warn_when_insecure_connection_checkbutton1_toggled(self, widget):
         if self.ignore_events:
@@ -2377,7 +2411,7 @@ class AccountsWindow:
     def on_custom_host_entry1_changed(self, widget):
         if self.ignore_events:
             return
-        host = widget.get_text().decode('utf-8')
+        host = widget.get_text()
         if self.option_changed('custom_host', host):
             self.need_relogin = True
         gajim.config.set_per('accounts', self.current_account, 'custom_host',
@@ -2394,7 +2428,7 @@ class AccountsWindow:
                 dialogs.ErrorDialog(_('Invalid entry'),
                     _('Custom port must be a port number.'),
                     transient_for=self.window)
-                gobject.idle_add(lambda: widget.grab_focus())
+                GLib.idle_add(lambda: widget.grab_focus())
             return True
         if self.option_changed('custom_port', custom_port):
             self.need_relogin = True
@@ -2405,7 +2439,7 @@ class AccountsWindow:
         if self.current_account in gajim.connections and \
         gajim.connections[self.current_account].gpg:
             secret_keys = gajim.connections[self.current_account].\
-                ask_gpg_secrete_keys()
+                    ask_gpg_secrete_keys()
 
         # self.current_account is None and/or gajim.connections is {}
         else:
@@ -2657,7 +2691,7 @@ class AccountsWindow:
     def on_first_name_entry2_changed(self, widget):
         if self.ignore_events:
             return
-        name = widget.get_text().decode('utf-8')
+        name = widget.get_text()
         if self.option_changed('zeroconf_first_name', name):
             self.need_relogin = True
         gajim.config.set_per('accounts', self.current_account,
@@ -2666,7 +2700,7 @@ class AccountsWindow:
     def on_last_name_entry2_changed(self, widget):
         if self.ignore_events:
             return
-        name = widget.get_text().decode('utf-8')
+        name = widget.get_text()
         if self.option_changed('zeroconf_last_name', name):
             self.need_relogin = True
         gajim.config.set_per('accounts', self.current_account,
@@ -2675,7 +2709,7 @@ class AccountsWindow:
     def on_jabber_id_entry2_changed(self, widget):
         if self.ignore_events:
             return
-        id_ = widget.get_text().decode('utf-8')
+        id_ = widget.get_text()
         if self.option_changed('zeroconf_jabber_id', id_):
             self.need_relogin = True
         gajim.config.set_per('accounts', self.current_account,
@@ -2684,20 +2718,20 @@ class AccountsWindow:
     def on_email_entry2_changed(self, widget):
         if self.ignore_events:
             return
-        email = widget.get_text().decode('utf-8')
+        email = widget.get_text()
         if self.option_changed('zeroconf_email', email):
             self.need_relogin = True
         gajim.config.set_per('accounts', self.current_account,
             'zeroconf_email', email)
 
-class FakeDataForm(gtk.Table, object):
+class FakeDataForm(Gtk.Table, object):
     """
     Class for forms that are in XML format <entry1>value1</entry1> infos in a
     table {entry1: value1}
     """
 
     def __init__(self, infos, selectable=False):
-        gtk.Table.__init__(self)
+        GObject.GObject.__init__(self)
         self.infos = infos
         self.selectable = selectable
         self.entries = {}
@@ -2711,7 +2745,7 @@ class FakeDataForm(gtk.Table, object):
         if 'instructions' in self.infos:
             nbrow = 1
             self.resize(rows = nbrow, columns = 2)
-            label = gtk.Label(self.infos['instructions'])
+            label = Gtk.Label(label=self.infos['instructions'])
             if self.selectable:
                 label.set_selectable(True)
             self.attach(label, 0, 2, 0, 1, 0, 0, 0, 0)
@@ -2723,9 +2757,9 @@ class FakeDataForm(gtk.Table, object):
 
             nbrow = nbrow + 1
             self.resize(rows = nbrow, columns = 2)
-            label = gtk.Label(name.capitalize() + ':')
+            label = Gtk.Label(label=name.capitalize() + ':')
             self.attach(label, 0, 1, nbrow - 1, nbrow, 0, 0, 0, 0)
-            entry = gtk.Entry()
+            entry = Gtk.Entry()
             entry.set_activates_default(True)
             if self.infos[name]:
                 entry.set_text(self.infos[name])
@@ -2738,7 +2772,7 @@ class FakeDataForm(gtk.Table, object):
 
     def get_infos(self):
         for name in self.entries.keys():
-            self.infos[name] = self.entries[name].get_text().decode('utf-8')
+            self.infos[name] = self.entries[name].get_text()
         return self.infos
 
 class ServiceRegistrationWindow:
@@ -2817,7 +2851,7 @@ class GroupchatConfigWindow:
             # widget
             sw = self.data_form_widget.xml.get_object(
                 'single_form_scrolledwindow')
-            sw.set_policy(gtk.POLICY_NEVER, gtk.POLICY_NEVER)
+            sw.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.NEVER)
             if self.form.title:
                 self.xml.get_object('title_label').set_text(self.form.title)
             else:
@@ -2825,7 +2859,7 @@ class GroupchatConfigWindow:
                 self.xml.get_object('title_hseparator').hide()
 
             self.data_form_widget.show()
-            config_vbox.pack_start(self.data_form_widget)
+            config_vbox.pack_start(self.data_form_widget, True, True, 0)
         else:
             self.xml.get_object('title_label').set_no_show_all(True)
             self.xml.get_object('title_label').hide()
@@ -2839,67 +2873,67 @@ class GroupchatConfigWindow:
 
         for affiliation in self.affiliation_labels.keys():
             self.start_users_dict[affiliation] = {}
-            hbox = gtk.HBox(spacing=5)
-            add_on_vbox.pack_start(hbox, False)
+            hbox = Gtk.HBox(spacing=5)
+            add_on_vbox.pack_start(hbox, False, True, 0)
 
-            label = gtk.Label(self.affiliation_labels[affiliation])
-            hbox.pack_start(label, False)
+            label = Gtk.Label(label=self.affiliation_labels[affiliation])
+            hbox.pack_start(label, False, True, 0)
 
-            bb = gtk.HButtonBox()
-            bb.set_layout(gtk.BUTTONBOX_END)
+            bb = Gtk.HButtonBox()
+            bb.set_layout(Gtk.ButtonBoxStyle.END)
             bb.set_spacing(5)
-            hbox.pack_start(bb)
-            add_button = gtk.Button(stock=gtk.STOCK_ADD)
+            hbox.pack_start(bb, True, True, 0)
+            add_button = Gtk.Button(stock=Gtk.STOCK_ADD)
             add_button.connect('clicked', self.on_add_button_clicked,
                 affiliation)
-            bb.pack_start(add_button)
-            self.remove_button[affiliation] = gtk.Button(stock=gtk.STOCK_REMOVE)
+            bb.pack_start(add_button, True, True, 0)
+            self.remove_button[affiliation] = Gtk.Button(stock=Gtk.STOCK_REMOVE)
             self.remove_button[affiliation].set_sensitive(False)
             self.remove_button[affiliation].connect('clicked',
                     self.on_remove_button_clicked, affiliation)
-            bb.pack_start(self.remove_button[affiliation])
+            bb.pack_start(self.remove_button[affiliation], True, True, 0)
 
             # jid, reason, nick, role
-            liststore = gtk.ListStore(str, str, str, str)
-            self.affiliation_treeview[affiliation] = gtk.TreeView(liststore)
+            liststore = Gtk.ListStore(str, str, str, str)
+            self.affiliation_treeview[affiliation] = Gtk.TreeView(liststore)
             self.affiliation_treeview[affiliation].get_selection().set_mode(
-                gtk.SELECTION_MULTIPLE)
+                Gtk.SelectionMode.MULTIPLE)
             self.affiliation_treeview[affiliation].connect('cursor-changed',
                 self.on_affiliation_treeview_cursor_changed, affiliation)
-            renderer = gtk.CellRendererText()
-            col = gtk.TreeViewColumn(_('JID'), renderer)
+            renderer = Gtk.CellRendererText()
+            col = Gtk.TreeViewColumn(_('JID'), renderer)
             col.add_attribute(renderer, 'text', 0)
             col.set_resizable(True)
             col.set_sort_column_id(0)
             self.affiliation_treeview[affiliation].append_column(col)
 
             if affiliation == 'outcast':
-                renderer = gtk.CellRendererText()
+                renderer = Gtk.CellRendererText()
                 renderer.set_property('editable', True)
                 renderer.connect('edited', self.on_cell_edited)
-                col = gtk.TreeViewColumn(_('Reason'), renderer)
+                col = Gtk.TreeViewColumn(_('Reason'), renderer)
                 col.add_attribute(renderer, 'text', 1)
                 col.set_resizable(True)
                 col.set_sort_column_id(1)
                 self.affiliation_treeview[affiliation].append_column(col)
             elif affiliation == 'member':
-                renderer = gtk.CellRendererText()
-                col = gtk.TreeViewColumn(_('Nick'), renderer)
+                renderer = Gtk.CellRendererText()
+                col = Gtk.TreeViewColumn(_('Nick'), renderer)
                 col.add_attribute(renderer, 'text', 2)
                 col.set_resizable(True)
                 col.set_sort_column_id(2)
                 self.affiliation_treeview[affiliation].append_column(col)
-                renderer = gtk.CellRendererText()
-                col = gtk.TreeViewColumn(_('Role'), renderer)
+                renderer = Gtk.CellRendererText()
+                col = Gtk.TreeViewColumn(_('Role'), renderer)
                 col.add_attribute(renderer, 'text', 3)
                 col.set_resizable(True)
                 col.set_sort_column_id(3)
                 self.affiliation_treeview[affiliation].append_column(col)
 
-            sw = gtk.ScrolledWindow()
-            sw.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_NEVER)
+            sw = Gtk.ScrolledWindow()
+            sw.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.NEVER)
             sw.add(self.affiliation_treeview[affiliation])
-            add_on_vbox.pack_start(sw)
+            add_on_vbox.pack_start(sw, True, True, 0)
             gajim.connections[self.account].get_affiliation_list(self.room_jid,
                 affiliation)
 
@@ -2911,7 +2945,7 @@ class GroupchatConfigWindow:
 
     def on_cell_edited(self, cell, path, new_text):
         model = self.affiliation_treeview['outcast'].get_model()
-        new_text = new_text.decode('utf-8')
+        new_text = new_text
         iter_ = model.get_iter(path)
         model[iter_][1] = new_text
 
@@ -2948,7 +2982,7 @@ class GroupchatConfigWindow:
         model, paths = selection.get_selected_rows()
         row_refs = []
         for path in paths:
-            row_refs.append(gtk.TreeRowReference(model, path))
+            row_refs.append(Gtk.TreeRowReference.new(model, path))
         for row_ref in row_refs:
             path = row_ref.get_path()
             iter_ = model.get_iter(path)
@@ -2989,16 +3023,15 @@ class GroupchatConfigWindow:
             iter_ = model.get_iter_first()
             # add new jid
             while iter_:
-                jid = model[iter_][0].decode('utf-8')
+                jid = model[iter_][0]
                 actual_jid_list.append(jid)
                 if jid not in self.start_users_dict[affiliation] or \
                 (affiliation == 'outcast' and 'reason' in self.start_users_dict[
                 affiliation][jid] and self.start_users_dict[affiliation][jid]\
-                ['reason'] != model[iter_][1].decode('utf-8')):
+                ['reason'] != model[iter_][1]):
                     users_dict[jid] = {'affiliation': affiliation}
                     if affiliation == 'outcast':
-                        users_dict[jid]['reason'] = model[iter_][1].decode(
-                            'utf-8')
+                        users_dict[jid]['reason'] = model[iter_][1]
                 iter_ = model.iter_next(iter_)
             # remove removed one
             for jid in self.start_users_dict[affiliation]:
@@ -3138,8 +3171,8 @@ class ManageBookmarksWindow:
 
         # Account-JID, RoomName, Room-JID, Autojoin, Minimize, Passowrd, Nick,
         # Show_Status
-        self.treestore = gtk.TreeStore(str, str, str, bool, bool, str, str, str)
-        self.treestore.set_sort_column_id(1, gtk.SORT_ASCENDING)
+        self.treestore = Gtk.TreeStore(str, str, str, bool, bool, str, str, str)
+        self.treestore.set_sort_column_id(1, Gtk.SortType.ASCENDING)
 
         # Store bookmarks in treeview.
         for account in gajim.connections:
@@ -3180,7 +3213,7 @@ class ManageBookmarksWindow:
                                 print_status ])
 
         self.print_status_combobox = self.xml.get_object('print_status_combobox')
-        model = gtk.ListStore(str, str)
+        model = Gtk.ListStore(str, str)
 
         self.option_list = {'': _('Default'), 'all': Q_('?print_status:All'),
                 'in_and_out': _('Enter and leave only'),
@@ -3196,8 +3229,8 @@ class ManageBookmarksWindow:
         self.view.set_model(self.treestore)
         self.view.expand_all()
 
-        renderer = gtk.CellRendererText()
-        column = gtk.TreeViewColumn('Bookmarks', renderer, text=1)
+        renderer = Gtk.CellRendererText()
+        column = Gtk.TreeViewColumn('Bookmarks', renderer, text=1)
         self.view.append_column(column)
 
         self.selection = self.view.get_selection()
@@ -3211,7 +3244,8 @@ class ManageBookmarksWindow:
         self.server_entry = self.xml.get_object('server_entry')
         self.server_entry.connect('changed', self.on_server_entry_changed)
         self.room_entry = self.xml.get_object('room_entry')
-        self.room_entry.connect('changed', self.on_room_entry_changed)
+        self.room_entry_changed_id = self.room_entry.connect('changed',
+            self.on_room_entry_changed)
         self.pass_entry = self.xml.get_object('pass_entry')
         self.pass_entry.connect('changed', self.on_pass_entry_changed)
         self.autojoin_checkbutton = self.xml.get_object('autojoin_checkbutton')
@@ -3220,7 +3254,7 @@ class ManageBookmarksWindow:
         self.xml.connect_signals(self)
         self.window.show_all()
         # select root iter
-        self.selection.select_iter(self.treestore.get_iter_root())
+        self.selection.select_iter(self.treestore.get_iter_first())
 
     def on_add_bookmark_button_clicked(self, widget):
         """
@@ -3241,7 +3275,7 @@ class ManageBookmarksWindow:
             # No parent, so we got an account -> add to this.
             add_to = iter_
 
-        account = model[add_to][1].decode('utf-8')
+        account = model[add_to][1]
         nick = gajim.nicks[account]
         iter_ = self.treestore.append(add_to, [account, _('New Group Chat'),
             '@', False, False, '', nick, 'in_and_out'])
@@ -3274,8 +3308,8 @@ class ManageBookmarksWindow:
             #Account data can't be changed
             return
 
-        if self.server_entry.get_text().decode('utf-8') == '' or \
-        self.room_entry.get_text().decode('utf-8') == '':
+        if self.server_entry.get_text() == '' or \
+        self.room_entry.get_text() == '':
             dialogs.ErrorDialog(_('This bookmark has invalid data'),
                     _('Please be sure to fill out server and room fields or remove this'
                     ' bookmark.'))
@@ -3295,34 +3329,26 @@ class ManageBookmarksWindow:
                 return
 
         for account in self.treestore:
-            account_unicode = account[1].decode('utf-8')
-            gajim.connections[account_unicode].bookmarks = []
+            acct = account[1]
+            gajim.connections[acct].bookmarks = []
 
             for bm in account.iterchildren():
                 # Convert True/False/None to '1' or '0'
-                autojoin = unicode(int(bm[3]))
-                minimize = unicode(int(bm[4]))
+                autojoin = str(int(bm[3]))
+                minimize = str(int(bm[4]))
                 name = bm[1]
-                if name:
-                    name = name.decode('utf-8')
                 jid = bm[2]
-                if jid:
-                    jid = jid.decode('utf-8')
                 pw = bm[5]
-                if pw:
-                    pw = pw.decode('utf-8')
                 nick = bm[6]
-                if nick:
-                    nick = nick.decode('utf-8')
 
                 # create the bookmark-dict
                 bmdict = { 'name': name, 'jid': jid, 'autojoin': autojoin,
                     'minimize': minimize, 'password': pw, 'nick': nick,
                     'print_status': bm[7]}
 
-                gajim.connections[account_unicode].bookmarks.append(bmdict)
+                gajim.connections[acct].bookmarks.append(bmdict)
 
-            gajim.connections[account_unicode].store_bookmarks()
+            gajim.connections[acct].store_bookmarks()
         gajim.interface.roster.set_actions_menu_needs_rebuild()
         self.window.destroy()
 
@@ -3358,9 +3384,11 @@ class ManageBookmarksWindow:
 
         # Fill in the data for childs
         self.title_entry.set_text(model[iter_][1])
-        room_jid = model[iter_][2].decode('utf-8')
+        room_jid = model[iter_][2]
         (room, server) = room_jid.split('@')
+        self.room_entry.handler_block(self.room_entry_changed_id)
         self.room_entry.set_text(room)
+        self.room_entry.handler_unblock(self.room_entry_changed_id)
         self.server_entry.set_text(server)
 
         self.autojoin_checkbutton.set_active(model[iter_][3])
@@ -3369,7 +3397,7 @@ class ManageBookmarksWindow:
         self.minimize_checkbutton.set_sensitive(model[iter_][3])
 
         if model[iter_][5] is not None:
-            password = model[iter_][5].decode('utf-8')
+            password = model[iter_][5]
         else:
             password = None
 
@@ -3379,7 +3407,6 @@ class ManageBookmarksWindow:
             self.pass_entry.set_text('')
         nick = model[iter_][6]
         if nick:
-            nick = nick.decode('utf-8')
             self.nick_entry.set_text(nick)
         else:
             self.nick_entry.set_text('')
@@ -3398,12 +3425,12 @@ class ManageBookmarksWindow:
     def on_nick_entry_changed(self, widget):
         (model, iter_) = self.selection.get_selected()
         if iter_:
-            nick = self.nick_entry.get_text().decode('utf-8')
+            nick = self.nick_entry.get_text()
             try:
                 nick = helpers.parse_resource(nick)
-            except helpers.InvalidFormat, e:
+            except helpers.InvalidFormat:
                 dialogs.ErrorDialog(_('Invalid nickname'),
-                        _('Character not allowed'))
+                    _('Character not allowed'), transient_for=self.window)
                 self.nick_entry.set_text(model[iter_][6])
                 return True
             model[iter_][6] = nick
@@ -3412,18 +3439,23 @@ class ManageBookmarksWindow:
         (model, iter_) = self.selection.get_selected()
         if not iter_:
             return
-        server = widget.get_text().decode('utf-8')
+        server = widget.get_text()
+        if not server:
+            return
         if '@' in server:
-            dialogs.ErrorDialog(_('Invalid server'), _('Character not allowed'))
+            dialogs.ErrorDialog(_('Invalid server'),
+                _('Character not allowed'), transient_for=self.window)
             widget.set_text(server.replace('@', ''))
 
-        room_jid = self.room_entry.get_text().decode('utf-8').strip() + '@' + \
-                server.strip()
+        room = self.room_entry.get_text().strip()
+        if not room:
+            return
+        room_jid = room + '@' + server.strip()
         try:
-            room_jid = helpers.parse_resource(room_jid)
-        except helpers.InvalidFormat, e:
+            room_jid = helpers.parse_jid(room_jid)
+        except helpers.InvalidFormat as e:
             dialogs.ErrorDialog(_('Invalid server'),
-                    _('Character not allowed'))
+                _('Character not allowed'), transient_for=self.window)
             self.server_entry.set_text(model[iter_][2].split('@')[1])
             return True
         model[iter_][2] = room_jid
@@ -3432,18 +3464,24 @@ class ManageBookmarksWindow:
         (model, iter_) = self.selection.get_selected()
         if not iter_:
             return
-        room = widget.get_text().decode('utf-8')
+        room = widget.get_text()
+        if not room:
+            return
         if '@' in room:
-            dialogs.ErrorDialog(_('Invalid server'), _('Character not allowed'))
-            widget.set_text(room.replace('@', ''))
-        room_jid = room.strip() + '@' + \
-            self.server_entry.get_text().decode('utf-8').strip()
+            room, server = room.split('@', 1)
+            widget.set_text(room)
+            if server:
+                self.server_entry.set_text(server)
+            self.server_entry.grab_focus()
+        server = self.server_entry.get_text().strip()
+        if not server:
+            return
+        room_jid = room.strip() + '@' + server
         try:
-            room_jid = helpers.parse_resource(room_jid)
-        except helpers.InvalidFormat, e:
+            room_jid = helpers.parse_jid(room_jid)
+        except helpers.InvalidFormat:
             dialogs.ErrorDialog(_('Invalid room'),
-                    _('Character not allowed'))
-            self.room_entry.set_text(model[iter_][2].split('@')[0])
+                _('Character not allowed'), transient_for=self.window)
             return True
         model[iter_][2] = room_jid
 
@@ -3487,38 +3525,22 @@ class AccountCreationWizardWindow:
         self.window = self.xml.get_object('account_creation_wizard_window')
         self.window.set_transient_for(gajim.interface.roster.window)
 
-        completion = gtk.EntryCompletion()
-        completion1 = gtk.EntryCompletion()
-        # Connect events from comboboxentry.child
+        # Connect events from comboboxentry.get_child()
         server_comboboxentry = self.xml.get_object('server_comboboxentry')
-        entry = server_comboboxentry.child
+        entry = server_comboboxentry.get_child()
         entry.connect('key_press_event',
             self.on_server_comboboxentry_key_press_event, server_comboboxentry)
-        entry.set_completion(completion)
         # Do the same for the other server comboboxentry
         server_comboboxentry1 = self.xml.get_object('server_comboboxentry1')
-        entry = server_comboboxentry1.child
-        entry.set_completion(completion1)
 
         self.update_proxy_list()
 
         # parse servers.xml
         servers_xml = os.path.join(gajim.DATA_DIR, 'other', 'servers.xml')
         servers = gtkgui_helpers.parse_server_xml(servers_xml)
-        servers_model = gtk.ListStore(str)
+        servers_model = self.xml.get_object('server_liststore')
         for server in servers:
             servers_model.append((server,))
-
-        completion.set_model(servers_model)
-        completion.set_text_column(0)
-        completion1.set_model(servers_model)
-        completion1.set_text_column(0)
-
-        # Put servers into comboboxentries
-        server_comboboxentry.set_model(servers_model)
-        server_comboboxentry.set_text_column(0)
-        server_comboboxentry1.set_model(servers_model)
-        server_comboboxentry1.set_text_column(0)
 
         # Generic widgets
         self.notebook = self.xml.get_object('notebook')
@@ -3628,7 +3650,7 @@ class AccountCreationWizardWindow:
         self.go_online_checkbutton.show()
         img = self.xml.get_object('finish_image')
         if self.modify:
-            img.set_from_stock(gtk.STOCK_APPLY, gtk.ICON_SIZE_DIALOG)
+            img.set_from_stock(Gtk.STOCK_APPLY, Gtk.IconSize.DIALOG)
         else:
             path_to_file = gtkgui_helpers.get_icon_path('gajim', 48)
             img.set_from_file(path_to_file)
@@ -3653,20 +3675,18 @@ class AccountCreationWizardWindow:
             # We are adding an existing account
             anonymous = self.xml.get_object('anonymous_checkbutton1').\
                 get_active()
-            username = self.xml.get_object('username_entry').get_text().decode(
-                'utf-8').strip()
+            username = self.xml.get_object('username_entry').get_text().strip()
             if not username and not anonymous:
                 pritext = _('Invalid username')
                 sectext = _(
                     'You must provide a username to configure this account.')
                 dialogs.ErrorDialog(pritext, sectext)
                 return
-            server = self.xml.get_object('server_comboboxentry').child.\
-                get_text().decode('utf-8').strip()
+            server = self.xml.get_object('server_comboboxentry').get_child().\
+                get_text().strip()
             savepass = self.xml.get_object('save_password_checkbutton').\
                 get_active()
-            password = self.xml.get_object('password_entry').get_text().decode(
-                'utf-8')
+            password = self.xml.get_object('password_entry').get_text()
 
             if anonymous:
                 jid = ''
@@ -3676,7 +3696,7 @@ class AccountCreationWizardWindow:
             # check if jid is conform to RFC and stringprep it
             try:
                 jid = helpers.parse_jid(jid)
-            except helpers.InvalidFormat, s:
+            except helpers.InvalidFormat as s:
                 pritext = _('Invalid Jabber ID')
                 dialogs.ErrorDialog(pritext, str(s))
                 return
@@ -3695,8 +3715,8 @@ class AccountCreationWizardWindow:
             self.show_finish_page()
         elif cur_page == 2:
             # We are creating a new account
-            server = self.xml.get_object('server_comboboxentry1').child.\
-                get_text().decode('utf-8')
+            server = self.xml.get_object('server_comboboxentry1').get_child().\
+                get_text()
 
             if not server:
                 dialogs.ErrorDialog(_('Invalid server'),
@@ -3712,7 +3732,7 @@ class AccountCreationWizardWindow:
             # Get advanced options
             proxies_combobox = self.xml.get_object('proxies_combobox')
             active = proxies_combobox.get_active()
-            proxy = proxies_combobox.get_model()[active][0].decode('utf-8')
+            proxy = proxies_combobox.get_model()[active][0]
             if proxy == _('None'):
                 proxy = ''
             config['proxy'] = proxy
@@ -3728,7 +3748,7 @@ class AccountCreationWizardWindow:
                 return
             config['custom_port'] = custom_port
             config['custom_host'] = self.xml.get_object(
-                'custom_host_entry').get_text().decode('utf-8')
+                'custom_host_entry').get_text()
 
             if self.xml.get_object('anonymous_checkbutton2').get_active():
                 self.modify = True
@@ -3738,7 +3758,7 @@ class AccountCreationWizardWindow:
                 self.notebook.set_current_page(5) # show creating page
                 self.back_button.hide()
                 self.forward_button.hide()
-                self.update_progressbar_timeout_id = gobject.timeout_add(100,
+                self.update_progressbar_timeout_id = GLib.timeout_add(100,
                     self.update_progressbar)
                 # Get form from serveur
                 con = connection.Connection(self.account)
@@ -3780,16 +3800,16 @@ class AccountCreationWizardWindow:
             self.notebook.set_current_page(5) # show creating page
             self.back_button.hide()
             self.forward_button.hide()
-            self.update_progressbar_timeout_id = gobject.timeout_add(100,
+            self.update_progressbar_timeout_id = GLib.timeout_add(100,
                 self.update_progressbar)
 
     def update_proxy_list(self):
         proxies_combobox = self.xml.get_object('proxies_combobox')
-        model = gtk.ListStore(str)
+        model = Gtk.ListStore(str)
         proxies_combobox.set_model(model)
         l = gajim.config.get_per('proxies')
         l.insert(0, _('None'))
-        for i in xrange(len(l)):
+        for i in range(len(l)):
             model.append([l[i]])
         proxies_combobox.set_active(0)
 
@@ -3816,7 +3836,7 @@ class AccountCreationWizardWindow:
         if obj.conn.name != self.account:
             return
         if self.update_progressbar_timeout_id is not None:
-            gobject.source_remove(self.update_progressbar_timeout_id)
+            GLib.source_remove(self.update_progressbar_timeout_id)
         self.back_button.show()
         self.forward_button.show()
         self.is_form = obj.is_form
@@ -3835,7 +3855,7 @@ class AccountCreationWizardWindow:
                 empty_config = False
                 break
         self.data_form_widget.show_all()
-        self.xml.get_object('form_vbox').pack_start(self.data_form_widget)
+        self.xml.get_object('form_vbox').pack_start(self.data_form_widget, True, True, 0)
         if empty_config:
             self.forward_button.set_sensitive(False)
             self.notebook.set_current_page(4) # show form page
@@ -3874,7 +3894,7 @@ class AccountCreationWizardWindow:
         if self.account not in gajim.connections:
             return
         if self.update_progressbar_timeout_id is not None:
-            gobject.source_remove(self.update_progressbar_timeout_id)
+            GLib.source_remove(self.update_progressbar_timeout_id)
         del gajim.connections[self.account]
         if self.account in gajim.config.get_per('accounts'):
             gajim.config.del_per('accounts', self.account)
@@ -3883,7 +3903,7 @@ class AccountCreationWizardWindow:
         self.go_online_checkbutton.hide()
         self.show_vcard_checkbutton.hide()
         img = self.xml.get_object('finish_image')
-        img.set_from_stock(gtk.STOCK_DIALOG_ERROR, gtk.ICON_SIZE_DIALOG)
+        img.set_from_stock(Gtk.STOCK_DIALOG_ERROR, Gtk.IconSize.DIALOG)
         finish_text = '<big><b>%s</b></big>\n\n%s' % (
             _('An error occurred during account creation'), obj.reason)
         self.finish_label.set_markup(finish_text)
@@ -3900,7 +3920,7 @@ class AccountCreationWizardWindow:
         self.show_finish_page()
 
         if self.update_progressbar_timeout_id is not None:
-            gobject.source_remove(self.update_progressbar_timeout_id)
+            GLib.source_remove(self.update_progressbar_timeout_id)
 
     def _nec_acc_is_not_ok(self, obj):
         """
@@ -3917,14 +3937,14 @@ class AccountCreationWizardWindow:
         if self.account in gajim.config.get_per('accounts'):
             gajim.config.del_per('accounts', self.account)
         img = self.xml.get_object('finish_image')
-        img.set_from_stock(gtk.STOCK_DIALOG_ERROR, gtk.ICON_SIZE_DIALOG)
+        img.set_from_stock(Gtk.STOCK_DIALOG_ERROR, Gtk.IconSize.DIALOG)
         finish_text = '<big><b>%s</b></big>\n\n%s' % (_(
             'An error occurred during account creation'), obj.reason)
         self.finish_label.set_markup(finish_text)
         self.notebook.set_current_page(6) # show finish page
 
         if self.update_progressbar_timeout_id is not None:
-            gobject.source_remove(self.update_progressbar_timeout_id)
+            GLib.source_remove(self.update_progressbar_timeout_id)
 
     def on_advanced_button_clicked(self, widget):
         if 'accounts' in gajim.interface.instances:
@@ -3945,15 +3965,15 @@ class AccountCreationWizardWindow:
 
     def on_username_entry_key_press_event(self, widget, event):
         # Check for pressed @ and jump to combobox if found
-        if event.keyval == gtk.keysyms.at:
+        if event.keyval == Gdk.KEY_at:
             combobox = self.xml.get_object('server_comboboxentry')
             combobox.grab_focus()
-            combobox.child.set_position(-1)
+            combobox.get_child().set_position(-1)
             return True
 
     def on_server_comboboxentry_key_press_event(self, widget, event, combobox):
         # If backspace is pressed in empty field, return to the nick entry field
-        backspace = event.keyval == gtk.keysyms.BackSpace
+        backspace = event.keyval == Gdk.KEY_BackSpace
         empty = len(combobox.get_active_text()) == 0
         if backspace and empty and self.modify:
             username_entry = self.xml.get_object('username_entry')
@@ -4082,14 +4102,14 @@ class ManagePEPServicesWindow:
     def init_services(self):
         self.treeview = self.xml.get_object('services_treeview')
         # service, access_model, group
-        self.treestore = gtk.ListStore(str)
+        self.treestore = Gtk.ListStore(str)
         self.treeview.set_model(self.treestore)
 
-        col = gtk.TreeViewColumn('Service')
+        col = Gtk.TreeViewColumn('Service')
         self.treeview.append_column(col)
 
-        cellrenderer_text = gtk.CellRendererText()
-        col.pack_start(cellrenderer_text)
+        cellrenderer_text = Gtk.CellRendererText()
+        col.pack_start(cellrenderer_text, True, True, 0)
         col.add_attribute(cellrenderer_text, 'text', 0)
 
         our_jid = gajim.get_jid_from_account(self.account)
@@ -4105,7 +4125,7 @@ class ManagePEPServicesWindow:
         if jid != gajim.get_jid_from_account(self.account):
             return
         model = self.treeview.get_model()
-        iter_ = model.get_iter_root()
+        iter_ = model.get_iter_first()
         while iter_:
             if model[iter_][0] == node:
                 model.remove(iter_)
@@ -4152,43 +4172,44 @@ class ManageSoundsWindow:
     def __init__(self):
         self.xml = gtkgui_helpers.get_gtk_builder('manage_sounds_window.ui')
         self.window = self.xml.get_object('manage_sounds_window')
-
+        self.window.set_transient_for(
+            gajim.interface.instances['preferences'].window)
         # sounds treeview
         self.sound_tree = self.xml.get_object('sounds_treeview')
 
         # active, event ui name, path to sound file, event_config_name
-        model = gtk.ListStore(bool, str, str, str)
+        model = Gtk.ListStore(bool, str, str, str)
         self.sound_tree.set_model(model)
 
-        col = gtk.TreeViewColumn(_('Active'))
+        col = Gtk.TreeViewColumn(_('Active'))
         self.sound_tree.append_column(col)
-        renderer = gtk.CellRendererToggle()
+        renderer = Gtk.CellRendererToggle()
         renderer.set_property('activatable', True)
         renderer.connect('toggled', self.sound_toggled_cb)
-        col.pack_start(renderer)
-        col.set_attributes(renderer, active = 0)
+        col.pack_start(renderer, True)
+        col.add_attribute(renderer, 'active', 0)
 
-        col = gtk.TreeViewColumn(_('Event'))
+        col = Gtk.TreeViewColumn(_('Event'))
         self.sound_tree.append_column(col)
-        renderer = gtk.CellRendererText()
-        col.pack_start(renderer)
-        col.set_attributes(renderer, text = 1)
+        renderer = Gtk.CellRendererText()
+        col.pack_start(renderer, True)
+        col.add_attribute(renderer, 'text', 1)
 
         self.fill_sound_treeview()
 
         self.xml.connect_signals(self)
 
         self.sound_tree.get_model().connect('row-changed',
-                self.on_sounds_treemodel_row_changed)
+            self.on_sounds_treemodel_row_changed)
 
         self.window.show_all()
 
     def on_sounds_treemodel_row_changed(self, model, path, iter_):
-        sound_event = model[iter_][3].decode('utf-8')
+        sound_event = model[iter_][3]
         gajim.config.set_per('soundevents', sound_event, 'enabled',
-                                bool(model[path][0]))
+            bool(model[path][0]))
         gajim.config.set_per('soundevents', sound_event, 'path',
-                                model[iter_][2].decode('utf-8'))
+            model[iter_][2])
 
     def sound_toggled_cb(self, cell, path):
         model = self.sound_tree.get_model()
@@ -4197,7 +4218,7 @@ class ManageSoundsWindow:
     def fill_sound_treeview(self):
         model = self.sound_tree.get_model()
         model.clear()
-        model.set_sort_column_id(1, gtk.SORT_ASCENDING)
+        model.set_sort_column_id(1, Gtk.SortType.ASCENDING)
 
         # NOTE: sounds_ui_names MUST have all items of
         # sounds = gajim.config.get_per('soundevents') as keys
@@ -4223,8 +4244,12 @@ class ManageSoundsWindow:
             model.append((enabled, sound_ui_name, path, sound_event_config_name))
 
     def on_treeview_sounds_cursor_changed(self, widget, data = None):
-        (model, iter_) = self.sound_tree.get_selection().get_selected()
         sounds_entry = self.xml.get_object('sounds_entry')
+        sel = self.sound_tree.get_selection()
+        if not sel:
+            sounds_entry.set_text('')
+            return
+        (model, iter_) = sel.get_selected()
         if not iter_:
             sounds_entry.set_text('')
             return
@@ -4232,7 +4257,10 @@ class ManageSoundsWindow:
         sounds_entry.set_text(path_to_snd_file)
 
     def on_browse_for_sounds_button_clicked(self, widget, data = None):
-        (model, iter_) = self.sound_tree.get_selection().get_selected()
+        sel = self.sound_tree.get_selection()
+        if not sel:
+            return
+        (model, iter_) = sel.get_selected()
         if not iter_:
             return
         def on_ok(widget, path_to_snd_file):
@@ -4254,7 +4282,7 @@ class ManageSoundsWindow:
         def on_cancel(widget):
             self.dialog.destroy()
 
-        path_to_snd_file = model[iter_][2].decode('utf-8')
+        path_to_snd_file = model[iter_][2]
         self.dialog = dialogs.SoundChooserDialog(path_to_snd_file, on_ok,
                 on_cancel)
 
@@ -4264,7 +4292,10 @@ class ManageSoundsWindow:
         model[iter_][2] = path_to_snd_file # set new path to sounds_model
 
     def on_play_button_clicked(self, widget):
-        model, iter_ = self.sound_tree.get_selection().get_selected()
+        sel = self.sound_tree.get_selection()
+        if not sel:
+            return
+        model, iter_ = sel.get_selected()
         if not iter_:
             return
         snd_event_config_name = model[iter_][3]

@@ -215,7 +215,10 @@ LOCATION_DATA = {
         'timestamp':    _('timestamp'),
         'uri':          _('uri')}
 
-import gobject
+from gi.repository import GLib
+from gi.repository import Gtk
+from gi.repository import GdkPixbuf
+
 import logging
 log = logging.getLogger('gajim.c.pep')
 
@@ -265,10 +268,6 @@ class AbstractPEP(object):
         else:
             acc.pep[self.type_] = self
 
-    def asPixbufIcon(self):
-        '''SHOULD be implemented by subclasses'''
-        return None
-
     def asMarkupText(self):
         '''SHOULD be implemented by subclasses'''
         return ''
@@ -296,18 +295,14 @@ class UserMoodPEP(AbstractPEP):
         retracted = items.getTag('retract') or not 'mood' in mood_dict
         return (mood_dict, retracted)
 
-    def asPixbufIcon(self):
-        assert not self._retracted
-        return gajim.interface.get_pep_icon(self)
-
     def asMarkupText(self):
         assert not self._retracted
         untranslated_mood = self._pep_specific_data['mood']
         mood = self._translate_mood(untranslated_mood)
-        markuptext = '<b>%s</b>' % gobject.markup_escape_text(mood)
+        markuptext = '<b>%s</b>' % GLib.markup_escape_text(mood)
         if 'text' in self._pep_specific_data:
             text = self._pep_specific_data['text']
-            markuptext += ' (%s)' % gobject.markup_escape_text(text)
+            markuptext += ' (%s)' % GLib.markup_escape_text(text)
         return markuptext
 
     def _translate_mood(self, mood):
@@ -339,21 +334,18 @@ class UserTunePEP(AbstractPEP):
             'title' in tune_dict)
         return (tune_dict, retracted)
 
-    def asPixbufIcon(self):
-        return gajim.interface.get_pep_icon(self)
-
     def asMarkupText(self):
         assert not self._retracted
         tune = self._pep_specific_data
 
         artist = tune.get('artist', _('Unknown Artist'))
-        artist = gobject.markup_escape_text(artist)
+        artist = GLib.markup_escape_text(artist)
 
         title = tune.get('title', _('Unknown Title'))
-        title = gobject.markup_escape_text(title)
+        title = GLib.markup_escape_text(title)
 
         source = tune.get('source', _('Unknown Source'))
-        source = gobject.markup_escape_text(source)
+        source = GLib.markup_escape_text(source)
 
         tune_string =  _('<b>"%(title)s"</b> by <i>%(artist)s</i>\n'
                 'from <i>%(source)s</i>') % {'title': title,
@@ -387,10 +379,6 @@ class UserActivityPEP(AbstractPEP):
         retracted = items.getTag('retract') or not 'activity' in activity_dict
         return (activity_dict, retracted)
 
-    def asPixbufIcon(self):
-        assert not self._retracted
-        return gajim.interface.get_pep_icon(self)
-
     def asMarkupText(self):
         assert not self._retracted
         pep = self._pep_specific_data
@@ -404,12 +392,12 @@ class UserActivityPEP(AbstractPEP):
                 subactivity = ACTIVITIES[activity][subactivity]
             activity = ACTIVITIES[activity]['category']
 
-        markuptext = '<b>' + gobject.markup_escape_text(activity)
+        markuptext = '<b>' + GLib.markup_escape_text(activity)
         if subactivity:
-            markuptext += ': ' + gobject.markup_escape_text(subactivity)
+            markuptext += ': ' + GLib.markup_escape_text(subactivity)
         markuptext += '</b>'
         if text:
-            markuptext += ' (%s)' % gobject.markup_escape_text(text)
+            markuptext += ' (%s)' % GLib.markup_escape_text(text)
         return markuptext
 
 
@@ -468,9 +456,6 @@ class UserLocationPEP(AbstractPEP):
         con = gajim.connections[account].location_info = \
                 self._pep_specific_data
 
-    def asPixbufIcon(self):
-        return gajim.interface.get_pep_icon(self)
-
     def asMarkupText(self):
         assert not self._retracted
         location = self._pep_specific_data
@@ -478,7 +463,7 @@ class UserLocationPEP(AbstractPEP):
 
         for entry in location.keys():
             text = location[entry]
-            text = gobject.markup_escape_text(text)
+            text = GLib.markup_escape_text(text)
             # Translate standart location tag
             tag = LOCATION_DATA.get(entry, entry)
             location_string += '\n<b>%(tag)s</b>: %(text)s' % \

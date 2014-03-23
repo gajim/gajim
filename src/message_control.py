@@ -42,7 +42,7 @@ TYPE_PM = 'pm'
 
 class MessageControl(object):
     """
-    An abstract base widget that can embed in the gtk.Notebook of a
+    An abstract base widget that can embed in the Gtk.Notebook of a
     MessageWindow
     """
 
@@ -156,7 +156,7 @@ class MessageControl(object):
 
         Derivded classes MUST implement this.
         """
-        # Return a markup'd label and optional gtk.Color in a tupple like:
+        # Return a markup'd label and optional Gtk.Color in a tupple like:
         # return (label_str, None)
         pass
 

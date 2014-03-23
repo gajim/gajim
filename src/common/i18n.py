@@ -24,11 +24,11 @@
 import locale
 import gettext
 import os
-import defs
+from common import defs
 import unicodedata
 
 # May be changed after GTK is imported
-direction_mark = u'\u200E'
+direction_mark = '\u200E'
 
 def paragraph_direction_mark(text):
     """
@@ -40,11 +40,11 @@ def paragraph_direction_mark(text):
     for char in text:
         bidi = unicodedata.bidirectional(char)
         if bidi == 'L':
-            return u'\u200E'
+            return '\u200E'
         elif bidi == 'AL' or bidi == 'R':
-            return u'\u200F'
+            return '\u200F'
 
-    return u'\u200E'
+    return '\u200E'
 
 APP = 'gajim'
 DIR = defs.localedir
@@ -64,9 +64,9 @@ if os.name == 'nt':
     if lang:
         os.environ['LANG'] = lang
 
-gettext.install(APP, DIR, unicode = True)
+gettext.install(APP, DIR)
 if gettext._translations:
-    _translation = gettext._translations.values()[0]
+    _translation = list(gettext._translations.values())[0]
 else:
     _translation = gettext.NullTranslations()
 
@@ -97,7 +97,7 @@ def ngettext(s_sing, s_plural, n, replace_sing = None, replace_plural = None):
 
     In other words this is a hack to ngettext() to support %s %d etc..
     """
-    text = _translation.ungettext(s_sing, s_plural, n)
+    text = _translation.ngettext(s_sing, s_plural, n)
     if n == 1 and replace_sing is not None:
         text = text % replace_sing
     elif n > 1 and replace_plural is not None:

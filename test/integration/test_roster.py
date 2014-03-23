@@ -186,13 +186,13 @@ class TestRosterWindowMetaContacts(TestRosterWindowRegrouped):
     def test_connect_new_metacontact(self):
         self.test_fill_roster_model()
 
-        jid = u'coolstuff@gajim.org'
+        jid = 'coolstuff@gajim.org'
         contact = gajim.contacts.create_contact(jid, account1)
         gajim.contacts.add_contact(account1, contact)
         self.roster.add_contact(jid, account1)
         self.roster.chg_contact_status(contact, 'offline', '', account1)
 
-        gajim.contacts.add_metacontact(account1, u'samejid@gajim.org',
+        gajim.contacts.add_metacontact(account1, 'samejid@gajim.org',
                 account1, jid)
         self.roster.chg_contact_status(contact, 'online', '', account1)
 

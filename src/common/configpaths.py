@@ -25,7 +25,7 @@
 import os
 import sys
 import tempfile
-import defs
+from common import defs
 HAVE_XDG = True
 try:
     __import__(xdg)
@@ -61,7 +61,7 @@ def fse(s):
     """
     Convert from filesystem encoding if not already Unicode
     """
-    return unicode(s, sys.getfilesystemencoding())
+    return s
 
 def windowsify(s):
     if os.name == 'nt':
@@ -82,10 +82,10 @@ class ConfigPaths:
                 # variable 'appdata' is in? Assuming it to be in filesystem
                 # encoding.
                 self.config_root = self.cache_root = self.data_root = \
-                        os.path.join(fse(os.environ[u'appdata']), u'Gajim')
+                        os.path.join(fse(os.environ['appdata']), 'Gajim')
             except KeyError:
                 # win9x, in cwd
-                self.config_root = self.cache_root = self.data_root = u'.'
+                self.config_root = self.cache_root = self.data_root = '.'
         else: # Unices
             # Pass in an Unicode string, and hopefully get one back.
             if HAVE_XDG:
@@ -93,23 +93,23 @@ class ConfigPaths:
                 if not self.config_root:
                     # Folder doesn't exist yet.
                     self.config_root = os.path.join(xdg.BaseDirectory.\
-                            xdg_config_dirs[0], u'gajim')
+                            xdg_config_dirs[0], 'gajim')
 
                 self.cache_root = os.path.join(xdg.BaseDirectory.xdg_cache_home,
-                        u'gajim')
+                        'gajim')
 
                 self.data_root = xdg.BaseDirectory.save_data_path('gajim')
                 if not self.data_root:
                     self.data_root = os.path.join(xdg.BaseDirectory.\
-                            xdg_data_dirs[0], u'gajim')
+                            xdg_data_dirs[0], 'gajim')
             else:
                 expand = os.path.expanduser
-                base = os.getenv('XDG_CONFIG_HOME') or expand(u'~/.config')
-                self.config_root = os.path.join(base, u'gajim')
-                base = os.getenv('XDG_CACHE_HOME') or expand(u'~/.cache')
-                self.cache_root = os.path.join(base, u'gajim')
-                base = os.getenv('XDG_DATA_HOME') or expand(u'~/.local/share')
-                self.data_root = os.path.join(base, u'gajim')
+                base = os.getenv('XDG_CONFIG_HOME') or expand('~/.config')
+                self.config_root = os.path.join(base, 'gajim')
+                base = os.getenv('XDG_CACHE_HOME') or expand('~/.cache')
+                self.cache_root = os.path.join(base, 'gajim')
+                base = os.getenv('XDG_DATA_HOME') or expand('~/.local/share')
+                self.data_root = os.path.join(base, 'gajim')
 
     def add(self, name, type_, path):
         self.paths[name] = (type_, path)
@@ -130,40 +130,41 @@ class ConfigPaths:
         except KeyError:
             return default
 
-    def iteritems(self):
-        for key in self.paths.iterkeys():
+    def items(self):
+        for key in self.paths.keys():
             yield (key, self[key])
 
     def init(self, root=None):
         if root is not None:
             self.config_root = self.cache_root = self.data_root = root
 
-        d = {'MY_DATA': '', 'LOG_DB': u'logs.db', 'MY_CACERTS': u'cacerts.pem',
-                'MY_EMOTS': u'emoticons', 'MY_ICONSETS': u'iconsets',
-                'MY_MOOD_ICONSETS': u'moods', 'MY_ACTIVITY_ICONSETS': u'activities',
-                'PLUGINS_USER': u'plugins', 'MY_PEER_CERTS': u'certs'}
+        d = {'MY_DATA': '', 'LOG_DB': 'logs.db', 'MY_CACERTS': 'cacerts.pem',
+            'MY_EMOTS': 'emoticons', 'MY_ICONSETS': 'iconsets',
+            'MY_MOOD_ICONSETS': 'moods', 'MY_ACTIVITY_ICONSETS': 'activities',
+            'PLUGINS_USER': 'plugins', 'MY_PEER_CERTS': 'certs',
+            'RNG_SEED': 'rng_seed'}
         for name in d:
             self.add(name, TYPE_DATA, windowsify(d[name]))
 
-        d = {'MY_CACHE': '', 'CACHE_DB': u'cache.db', 'VCARD': u'vcards',
-                'AVATAR': u'avatars'}
+        d = {'MY_CACHE': '', 'CACHE_DB': 'cache.db', 'VCARD': 'vcards',
+                'AVATAR': 'avatars'}
         for name in d:
             self.add(name, TYPE_CACHE, windowsify(d[name]))
 
         self.add('MY_CONFIG', TYPE_CONFIG, '')
         self.add('MY_CERT', TYPE_CONFIG, '')
 
-        basedir = fse(os.environ.get(u'GAJIM_BASEDIR', defs.basedir))
-        self.add('DATA', None, os.path.join(basedir, windowsify(u'data')))
-        self.add('ICONS', None, os.path.join(basedir, windowsify(u'icons')))
+        basedir = fse(os.environ.get('GAJIM_BASEDIR', defs.basedir))
+        self.add('DATA', None, os.path.join(basedir, windowsify('data')))
+        self.add('ICONS', None, os.path.join(basedir, windowsify('icons')))
         self.add('HOME', None, fse(os.path.expanduser('~')))
         self.add('PLUGINS_BASE', None, os.path.join(basedir,
-            windowsify(u'plugins')))
+            windowsify('plugins')))
         try:
             self.add('TMP', None, fse(tempfile.gettempdir()))
-        except IOError, e:
-            print >> sys.stderr, 'Error opening tmp folder: %s\nUsing %s' % (
-                    str(e), os.path.expanduser('~'))
+        except IOError as e:
+            print('Error opening tmp folder: %s\nUsing %s' % (str(e),
+                os.path.expanduser('~')), file=sys.stderr)
             self.add('TMP', None, fse(os.path.expanduser('~')))
 
         try:
@@ -173,17 +174,17 @@ class ConfigPaths:
             pass
 
     def init_profile(self, profile=''):
-        conffile = windowsify(u'config')
-        pidfile = windowsify(u'gajim')
-        secretsfile = windowsify(u'secrets')
-        pluginsconfdir = windowsify(u'pluginsconfig')
+        conffile = windowsify('config')
+        pidfile = windowsify('gajim')
+        secretsfile = windowsify('secrets')
+        pluginsconfdir = windowsify('pluginsconfig')
 
         if len(profile) > 0:
-            conffile += u'.' + profile
-            pidfile += u'.' + profile
-            secretsfile += u'.' + profile
-            pluginsconfdir += u'.' + profile
-        pidfile += u'.pid'
+            conffile += '.' + profile
+            pidfile += '.' + profile
+            secretsfile += '.' + profile
+            pluginsconfdir += '.' + profile
+        pidfile += '.pid'
         self.add('CONFIG_FILE', TYPE_CONFIG, conffile)
         self.add('PID_FILE', TYPE_CACHE, pidfile)
         self.add('SECRETS_FILE', TYPE_DATA, secretsfile)

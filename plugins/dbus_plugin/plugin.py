@@ -407,7 +407,7 @@ if dbus_support.supported:
                     return DBUS_DICT_SV()
                 jid = self._get_real_jid(jid)
 
-                cached_vcard = gajim.connections.values()[0].get_cached_vcard(jid)
+                cached_vcard = list(gajim.connections.values())[0].get_cached_vcard(jid)
                 if cached_vcard:
                     return get_dbus_struct(cached_vcard)
 
@@ -428,7 +428,7 @@ if dbus_support.supported:
             def account_info(self, account):
                 '''show info on account: resource, jid, nick, prio, message'''
                 result = DBUS_DICT_SS()
-                if gajim.connections.has_key(account):
+                if account in gajim.connections:
                     # account is valid
                     con = gajim.connections[account]
                     index = con.connected
@@ -508,7 +508,7 @@ if dbus_support.supported:
             def prefs_store(self):
                 try:
                     gajim.interface.save_config()
-                except Exception, e:
+                except Exception:
                     return DBUS_BOOLEAN(False)
                 return DBUS_BOOLEAN(True)
 

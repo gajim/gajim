@@ -27,8 +27,10 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-import gtk
-import gobject
+from gi.repository import Gtk
+from gi.repository import Gdk
+from gi.repository import GObject
+from gi.repository import GLib
 import time
 
 import common
@@ -105,17 +107,17 @@ class MessageWindow(object):
                 '<Control>b', '<Control>F4',
                 '<Control>w', '<Control>Page_Up', '<Control>Page_Down', '<Alt>Right',
                 '<Alt>Left', '<Alt>d', '<Alt>c', '<Alt>m', '<Alt>t', 'Escape'] + \
-                ['<Alt>'+str(i) for i in xrange(10)]
-        accel_group = gtk.AccelGroup()
+                ['<Alt>'+str(i) for i in list(range(10))]
+        accel_group = Gtk.AccelGroup()
         for key in keys:
-            keyval, mod = gtk.accelerator_parse(key)
-            accel_group.connect_group(keyval, mod, gtk.ACCEL_VISIBLE,
+            keyval, mod = Gtk.accelerator_parse(key)
+            accel_group.connect(keyval, mod, Gtk.AccelFlags.VISIBLE,
                 self.accel_group_func)
         self.window.add_accel_group(accel_group)
 
         # gtk+ doesn't make use of the motion notify on gtkwindow by default
         # so this line adds that
-        self.window.add_events(gtk.gdk.POINTER_MOTION_MASK)
+        self.window.add_events(Gdk.EventMask.POINTER_MOTION_MASK)
 
         id_ = self.notebook.connect('switch-page',
             self._on_notebook_switch_page)
@@ -127,13 +129,13 @@ class MessageWindow(object):
         # Tab customizations
         pref_pos = gajim.config.get('tabs_position')
         if pref_pos == 'bottom':
-            nb_pos = gtk.POS_BOTTOM
+            nb_pos = Gtk.PositionType.BOTTOM
         elif pref_pos == 'left':
-            nb_pos = gtk.POS_LEFT
+            nb_pos = Gtk.PositionType.LEFT
         elif pref_pos == 'right':
-            nb_pos = gtk.POS_RIGHT
+            nb_pos = Gtk.PositionType.RIGHT
         else:
-            nb_pos = gtk.POS_TOP
+            nb_pos = Gtk.PositionType.TOP
         self.notebook.set_tab_pos(nb_pos)
         window_mode = gajim.interface.msg_win_mgr.mode
         if gajim.config.get('tabs_always_visible') or \
@@ -252,7 +254,7 @@ class MessageWindow(object):
         self._controls.clear()
         # Clean up handlers connected to the parent window, this is important since
         # self.window may be the RosterWindow
-        for i in self.handlers.keys():
+        for i in list(self.handlers.keys()):
             if self.handlers[i].handler_is_connected(i):
                 self.handlers[i].disconnect(i)
             del self.handlers[i]
@@ -276,17 +278,17 @@ class MessageWindow(object):
                 scrolled = True
             self.notebook.set_show_tabs(True)
             if scrolled:
-                gobject.idle_add(conv_textview.scroll_to_end_iter)
+                GLib.idle_add(conv_textview.scroll_to_end_iter)
 
         # Add notebook page and connect up to the tab's close button
         xml = gtkgui_helpers.get_gtk_builder('message_window.ui', 'chat_tab_ebox')
         tab_label_box = xml.get_object('chat_tab_ebox')
         widget = xml.get_object('tab_close_button')
-        #this reduces the size of the button
-        style = gtk.RcStyle()
-        style.xthickness = 0
-        style.ythickness = 0
-        widget.modify_style(style)
+        # this reduces the size of the button
+#        style = Gtk.RcStyle()
+#        style.xthickness = 0
+#        style.ythickness = 0
+#        widget.modify_style(style)
 
         id_ = widget.connect('clicked', self._on_close_button_clicked, control)
         control.handlers[id_] = widget
@@ -306,7 +308,7 @@ class MessageWindow(object):
         # NOTE: we do not call set_control_active(True) since we don't know
         # whether the tab is the active one.
         self.show_title()
-        gobject.timeout_add(500, control.msg_textview.grab_focus)
+        GLib.timeout_add(500, control.msg_textview.grab_focus)
 
     def on_tab_eventbox_button_press_event(self, widget, event, child):
         if event.button == 3: # right click
@@ -318,28 +320,28 @@ class MessageWindow(object):
             self.remove_tab(ctrl, self.CLOSE_TAB_MIDDLE_CLICK)
         else:
             ctrl = self._widget_to_control(child)
-            gobject.idle_add(ctrl.msg_textview.grab_focus)
+            GLib.idle_add(ctrl.msg_textview.grab_focus)
 
     def _on_message_textview_mykeypress_event(self, widget, event_keyval,
             event_keymod):
         # NOTE: handles mykeypress which is custom signal; see message_textview.py
 
         # construct event instance from binding
-        event = gtk.gdk.Event(gtk.gdk.KEY_PRESS) # it's always a key-press here
+        event = Gdk.Event(Gdk.EventType.KEY_PRESS) # it's always a key-press here
         event.keyval = event_keyval
         event.state = event_keymod
         event.time = 0 # assign current time
 
-        if event.state & gtk.gdk.CONTROL_MASK:
+        if event.get_state() & Gdk.ModifierType.CONTROL_MASK:
             # Tab switch bindings
-            if event.keyval == gtk.keysyms.Tab: # CTRL + TAB
+            if event.keyval == Gdk.KEY_Tab: # CTRL + TAB
                 self.move_to_next_unread_tab(True)
-            elif event.keyval == gtk.keysyms.ISO_Left_Tab: # CTRL + SHIFT + TAB
+            elif event.keyval == Gdk.KEY_ISO_Left_Tab: # CTRL + SHIFT + TAB
                 self.move_to_next_unread_tab(False)
-            elif event.keyval == gtk.keysyms.Page_Down: # CTRL + PAGE DOWN
-                self.notebook.emit('key_press_event', event)
-            elif event.keyval == gtk.keysyms.Page_Up: # CTRL + PAGE UP
-                self.notebook.emit('key_press_event', event)
+            elif event.keyval == Gdk.KEY_Page_Down: # CTRL + PAGE DOWN
+                self.notebook.event(event)
+            elif event.keyval == Gdk.KEY_Page_Up: # CTRL + PAGE UP
+                self.notebook.event(event)
 
     def accel_group_func(self, accel_group, acceleratable, keyval, modifier):
         st = '1234567890' # alt+1 means the first tab (tab 0)
@@ -349,76 +351,76 @@ class MessageWindow(object):
             return
 
         # CTRL mask
-        if modifier & gtk.gdk.CONTROL_MASK:
-            if keyval == gtk.keysyms.h: # CTRL + h
-                if gtk.settings_get_default().get_property(
+        if modifier & Gdk.ModifierType.CONTROL_MASK:
+            if keyval == Gdk.KEY_h: # CTRL + h
+                if Gtk.Settings.get_default().get_property(
                 'gtk-key-theme-name') != 'Emacs':
                     control._on_history_menuitem_activate()
                     return True
             elif control.type_id == message_control.TYPE_CHAT and \
-            keyval == gtk.keysyms.f: # CTRL + f
+            keyval == Gdk.KEY_f: # CTRL + f
                 # CTRL + f moves cursor one char forward when user uses Emacs
                 # theme
-                if not gtk.settings_get_default().get_property(
+                if not Gtk.Settings.get_default().get_property(
                 'gtk-key-theme-name') == 'Emacs':
                     control._on_send_file_menuitem_activate(None)
                     return True
             elif control.type_id == message_control.TYPE_CHAT and \
-            keyval == gtk.keysyms.g: # CTRL + g
+            keyval == Gdk.KEY_g: # CTRL + g
                 control._on_convert_to_gc_menuitem_activate(None)
                 return True
             elif control.type_id in (message_control.TYPE_CHAT,
-            message_control.TYPE_PM) and keyval == gtk.keysyms.i: # CTRL + i
+            message_control.TYPE_PM) and keyval == Gdk.KEY_i: # CTRL + i
                 control._on_contact_information_menuitem_activate(None)
                 return True
-            elif keyval == gtk.keysyms.l or keyval == gtk.keysyms.L: # CTRL + l|L
+            elif keyval == Gdk.KEY_l or keyval == Gdk.KEY_L: # CTRL + l|L
                 control.conv_textview.clear()
                 return True
-            elif keyval == gtk.keysyms.u: # CTRL + u: emacs style clear line
+            elif keyval == Gdk.KEY_u: # CTRL + u: emacs style clear line
                 control.clear(control.msg_textview)
                 return True
             elif control.type_id == message_control.TYPE_GC and \
-            keyval == gtk.keysyms.b: # CTRL + b
+            keyval == Gdk.KEY_b: # CTRL + b
                 control._on_bookmark_room_menuitem_activate(None)
                 return True
             # Tab switch bindings
-            elif keyval == gtk.keysyms.F4: # CTRL + F4
+            elif keyval == Gdk.KEY_F4: # CTRL + F4
                 self.remove_tab(control, self.CLOSE_CTRL_KEY)
                 return True
-            elif keyval == gtk.keysyms.w: # CTRL + w
+            elif keyval == Gdk.KEY_w: # CTRL + w
                 # CTRL + w removes latest word before sursor when User uses emacs
                 # theme
-                if not gtk.settings_get_default().get_property(
+                if not Gtk.Settings.get_default().get_property(
                 'gtk-key-theme-name') == 'Emacs':
                     self.remove_tab(control, self.CLOSE_CTRL_KEY)
                     return True
-            elif keyval in (gtk.keysyms.Page_Up, gtk.keysyms.Page_Down):
+            elif keyval in (Gdk.KEY_Page_Up, Gdk.KEY_Page_Down):
                 # CTRL + PageUp | PageDown
                 # Create event and send it to notebook
-                event = gtk.gdk.Event(gtk.gdk.KEY_PRESS)
-                event.window = self.window.window
+                event = Gdk.Event(Gdk.EventType.KEY_PRESS)
+                event.window = self.window.get_window()
                 event.time = int(time.time())
-                event.state = gtk.gdk.CONTROL_MASK
+                event.state = Gdk.ModifierType.CONTROL_MASK
                 event.keyval = int(keyval)
-                self.notebook.emit('key_press_event', event)
+                self.notebook.event(event)
                 return True
 
-            if modifier & gtk.gdk.SHIFT_MASK:
+            if modifier & Gdk.ModifierType.SHIFT_MASK:
                 # CTRL + SHIFT
                 if control.type_id == message_control.TYPE_GC and \
-                keyval == gtk.keysyms.n: # CTRL + SHIFT + n
+                keyval == Gdk.KEY_n: # CTRL + SHIFT + n
                     control._on_change_nick_menuitem_activate(None)
                     return True
         # MOD1 (ALT) mask
-        elif modifier & gtk.gdk.MOD1_MASK:
+        elif modifier & Gdk.ModifierType.MOD1_MASK:
             # Tab switch bindings
-            if keyval == gtk.keysyms.Right: # ALT + RIGHT
+            if keyval == Gdk.KEY_Right: # ALT + RIGHT
                 new = self.notebook.get_current_page() + 1
                 if new >= self.notebook.get_n_pages():
                     new = 0
                 self.notebook.set_current_page(new)
                 return True
-            elif keyval == gtk.keysyms.Left: # ALT + LEFT
+            elif keyval == Gdk.KEY_Left: # ALT + LEFT
                 new = self.notebook.get_current_page() - 1
                 if new < 0:
                     new = self.notebook.get_n_pages() - 1
@@ -427,23 +429,23 @@ class MessageWindow(object):
             elif chr(keyval) in st: # ALT + 1,2,3..
                 self.notebook.set_current_page(st.index(chr(keyval)))
                 return True
-            elif keyval == gtk.keysyms.c: # ALT + C toggles chat buttons
+            elif keyval == Gdk.KEY_c: # ALT + C toggles chat buttons
                 control.chat_buttons_set_visible(not control.hide_chat_buttons)
                 return True
-            elif keyval == gtk.keysyms.m: # ALT + M show emoticons menu
+            elif keyval == Gdk.KEY_m: # ALT + M show emoticons menu
                 control.show_emoticons_menu()
                 return True
-            elif keyval == gtk.keysyms.d: # ALT + D show actions menu
-                if gtk.settings_get_default().get_property(
+            elif keyval == Gdk.KEY_d: # ALT + D show actions menu
+                if Gtk.Settings.get_default().get_property(
                 'gtk-key-theme-name') != 'Emacs':
                     control.on_actions_button_clicked(control.actions_button)
                     return True
             elif control.type_id == message_control.TYPE_GC and \
-            keyval == gtk.keysyms.t: # ALT + t
+            keyval == Gdk.KEY_t: # ALT + t
                 control._on_change_subject_menuitem_activate(None)
                 return True
         # Close tab bindings
-        elif keyval == gtk.keysyms.Escape and \
+        elif keyval == Gdk.KEY_Escape and \
         gajim.config.get('escape_key_closes'): # Escape
             self.remove_tab(control, self.CLOSE_ESC)
             return True
@@ -498,7 +500,7 @@ class MessageWindow(object):
 
         unread_str = ''
         if unread > 1:
-            unread_str = '[' + unicode(unread) + '] '
+            unread_str = '[' + str(unread) + '] '
         elif unread == 1:
             unread_str = '* '
         else:
@@ -546,7 +548,7 @@ class MessageWindow(object):
         ctrl_page = self.notebook.page_num(ctrl.widget)
         self.notebook.set_current_page(ctrl_page)
         self.window.present()
-        gobject.idle_add(ctrl.msg_textview.grab_focus)
+        GLib.idle_add(ctrl.msg_textview.grab_focus)
 
     def remove_tab(self, ctrl, method, reason = None, force = False):
         """
@@ -623,7 +625,10 @@ class MessageWindow(object):
             self.notebook.set_show_tabs(show_tabs_if_one_tab)
 
     def redraw_tab(self, ctrl, chatstate = None):
-        hbox = self.notebook.get_tab_label(ctrl.widget).get_children()[0]
+        tab = self.notebook.get_tab_label(ctrl.widget)
+        if not tab:
+            return
+        hbox = tab.get_children()[0]
         status_img = hbox.get_children()[0]
         nick_label = hbox.get_children()[1]
 
@@ -639,12 +644,12 @@ class MessageWindow(object):
         (tab_label_str, tab_label_color) = ctrl.get_tab_label(chatstate)
         nick_label.set_markup(tab_label_str)
         if tab_label_color:
-            nick_label.modify_fg(gtk.STATE_NORMAL, tab_label_color)
-            nick_label.modify_fg(gtk.STATE_ACTIVE, tab_label_color)
+            nick_label.override_color(Gtk.StateFlags.NORMAL, tab_label_color)
+            nick_label.override_color(Gtk.StateFlags.ACTIVE, tab_label_color)
 
         tab_img = ctrl.get_tab_image()
         if tab_img:
-            if tab_img.get_storage_type() == gtk.IMAGE_ANIMATION:
+            if tab_img.get_storage_type() == Gtk.ImageType.ANIMATION:
                 status_img.set_from_animation(tab_img.get_animation())
             else:
                 status_img.set_from_pixbuf(tab_img.get_pixbuf())
@@ -686,17 +691,15 @@ class MessageWindow(object):
         return self.window.is_active()
 
     def get_origin(self):
-        return self.window.window.get_origin()
+        return self.window.get_window().get_origin()
 
     def get_control(self, key, acct):
         """
         Return the MessageControl for jid or n, where n is a notebook page index.
         When key is an int index acct may be None
         """
-        if isinstance(key, str):
-            key = unicode(key, 'utf-8')
 
-        if isinstance(key, unicode):
+        if isinstance(key, str):
             jid = key
             try:
                 return self._controls[acct][jid]
@@ -736,8 +739,8 @@ class MessageWindow(object):
             del gajim.last_message_time[acct][old_jid]
 
     def controls(self):
-        for jid_dict in self._controls.values():
-            for ctrl in jid_dict.values():
+        for jid_dict in list(self._controls.values()):
+            for ctrl in list(jid_dict.values()):
                 yield ctrl
 
     def get_nb_controls(self):
@@ -791,8 +794,9 @@ class MessageWindow(object):
     def popup_menu(self, event):
         menu = self.get_active_control().prepare_context_menu()
         # show the menu
-        menu.popup(None, None, None, event.button, event.time)
+        menu.attach_to_widget(gajim.interface.roster.window, None)
         menu.show_all()
+        menu.popup(None, None, None, None, event.button, event.time)
 
     def _on_notebook_switch_page(self, notebook, page, page_num):
         old_no = notebook.get_current_page()
@@ -811,42 +815,42 @@ class MessageWindow(object):
     def _on_notebook_key_press(self, widget, event):
         # when tab itself is selected,
         # make sure <- and -> are allowed for navigating between tabs
-        if event.keyval in (gtk.keysyms.Left, gtk.keysyms.Right):
+        if event.keyval in (Gdk.KEY_Left, Gdk.KEY_Right):
             return False
 
         control = self.get_active_control()
 
-        if event.state & gtk.gdk.SHIFT_MASK:
+        if event.get_state() & Gdk.ModifierType.SHIFT_MASK:
             # CTRL + SHIFT + TAB
-            if event.state & gtk.gdk.CONTROL_MASK and \
-            event.keyval == gtk.keysyms.ISO_Left_Tab:
+            if event.get_state() & Gdk.ModifierType.CONTROL_MASK and \
+            event.keyval == Gdk.KEY_ISO_Left_Tab:
                 self.move_to_next_unread_tab(False)
                 return True
             # SHIFT + PAGE_[UP|DOWN]: send to conv_textview
-            elif event.keyval in (gtk.keysyms.Page_Down, gtk.keysyms.Page_Up):
-                control.conv_textview.tv.emit('key_press_event', event)
+            elif event.keyval in (Gdk.KEY_Page_Down, Gdk.KEY_Page_Up):
+                control.conv_textview.tv.event(event)
                 return True
-        elif event.state & gtk.gdk.CONTROL_MASK:
-            if event.keyval == gtk.keysyms.Tab: # CTRL + TAB
+        elif event.get_state() & Gdk.ModifierType.CONTROL_MASK:
+            if event.keyval == Gdk.KEY_Tab: # CTRL + TAB
                 self.move_to_next_unread_tab(True)
                 return True
             # Ctrl+PageUP / DOWN has to be handled by notebook
-            elif event.keyval == gtk.keysyms.Page_Down:
+            elif event.keyval == Gdk.KEY_Page_Down:
                 self.move_to_next_unread_tab(True)
                 return True
-            elif event.keyval == gtk.keysyms.Page_Up:
+            elif event.keyval == Gdk.KEY_Page_Up:
                 self.move_to_next_unread_tab(False)
                 return True
-        if event.keyval in (gtk.keysyms.Shift_L, gtk.keysyms.Shift_R,
-        gtk.keysyms.Control_L, gtk.keysyms.Control_R, gtk.keysyms.Caps_Lock,
-        gtk.keysyms.Shift_Lock, gtk.keysyms.Meta_L, gtk.keysyms.Meta_R,
-        gtk.keysyms.Alt_L, gtk.keysyms.Alt_R, gtk.keysyms.Super_L,
-        gtk.keysyms.Super_R, gtk.keysyms.Hyper_L, gtk.keysyms.Hyper_R):
+        if event.keyval in (Gdk.KEY_Shift_L, Gdk.KEY_Shift_R,
+        Gdk.KEY_Control_L, Gdk.KEY_Control_R, Gdk.KEY_Caps_Lock,
+        Gdk.KEY_Shift_Lock, Gdk.KEY_Meta_L, Gdk.KEY_Meta_R,
+        Gdk.KEY_Alt_L, Gdk.KEY_Alt_R, Gdk.KEY_Super_L,
+        Gdk.KEY_Super_R, Gdk.KEY_Hyper_L, Gdk.KEY_Hyper_R):
             return True
 
         if isinstance(control, ChatControlBase):
             # we forwarded it to message textview
-            control.msg_textview.emit('key_press_event', event)
+            control.msg_textview.event(event)
             control.msg_textview.grab_focus()
 
     def get_tab_at_xy(self, x, y):
@@ -856,9 +860,9 @@ class MessageWindow(object):
         """
         page_num = -1
         to_right = False
-        horiz = self.notebook.get_tab_pos() == gtk.POS_TOP or \
-                self.notebook.get_tab_pos() == gtk.POS_BOTTOM
-        for i in xrange(self.notebook.get_n_pages()):
+        horiz = self.notebook.get_tab_pos() == Gtk.PositionType.TOP or \
+                self.notebook.get_tab_pos() == Gtk.PositionType.BOTTOM
+        for i in list(range(self.notebook.get_n_pages())):
             page = self.notebook.get_nth_page(i)
             tab = self.notebook.get_tab_label(page)
             tab_alloc = tab.get_allocation()
@@ -884,7 +888,7 @@ class MessageWindow(object):
         Find the page num of the tab label
         """
         page_num = -1
-        for i in xrange(self.notebook.get_n_pages()):
+        for i in list(range(self.notebook.get_n_pages())):
             page = self.notebook.get_nth_page(i)
             tab = self.notebook.get_tab_label(page)
             if tab == tab_label:
@@ -893,13 +897,13 @@ class MessageWindow(object):
         return page_num
 
 ################################################################################
-class MessageWindowMgr(gobject.GObject):
+class MessageWindowMgr(GObject.GObject):
     """
     A manager and factory for MessageWindow objects
     """
 
     __gsignals__ = {
-            'window-delete': (gobject.SIGNAL_RUN_LAST, None, (object,)),
+            'window-delete': (GObject.SignalFlags.RUN_LAST, None, (object,)),
     }
 
     # These constants map to common.config.opt_one_window_types indices
@@ -924,7 +928,7 @@ class MessageWindowMgr(gobject.GObject):
             ONE_MSG_WINDOW_PERACCT: The key is the account name
             ONE_MSG_WINDOW_PERTYPE: The key is a message type constant
         """
-        gobject.GObject.__init__(self)
+        GObject.GObject.__init__(self)
         self._windows = {}
 
         # Map the mode to a int constant for frequent compares
@@ -985,7 +989,10 @@ class MessageWindowMgr(gobject.GObject):
                 parent_size = win.window.get_size()
                 # Need to add the size of the now visible paned handle, otherwise
                 # the saved width of the message window decreases by this amount
-                handle_size = win.parent_paned.style_get_property('handle-size')
+                s = GObject.Value()
+                s.init(GObject.TYPE_INT)
+                win.parent_paned.style_get_property('handle-size', s)
+                handle_size = s.get_int()
                 size = (parent_size[0] + size[0] + handle_size, size[1])
         elif self.mode == self.ONE_MSG_WINDOW_PERACCT:
             size = (gajim.config.get_per('accounts', acct, 'msgwin-width'),
@@ -1149,7 +1156,7 @@ class MessageWindowMgr(gobject.GObject):
         return ctrls
 
     def windows(self):
-        for w in self._windows.values():
+        for w in list(self._windows.values()):
             yield w
 
     def controls(self):
@@ -1196,7 +1203,7 @@ class MessageWindowMgr(gobject.GObject):
             size_height_key = type_ + '-msgwin-height'
         elif self.mode == self.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER:
             # Ignore any hpaned width
-            width = msg_win.notebook.allocation.width
+            width = msg_win.notebook.get_allocation().width
 
         if acct:
             gajim.config.set_per('accounts', acct, size_width_key, width)
@@ -1207,8 +1214,8 @@ class MessageWindowMgr(gobject.GObject):
                 gajim.config.set_per('accounts', acct, pos_y_key, y)
 
         else:
-            win_maximized = msg_win.window.window.get_state() == \
-                    gtk.gdk.WINDOW_STATE_MAXIMIZED
+            win_maximized = msg_win.window.get_window().get_state() == \
+                    Gdk.WindowState.MAXIMIZED
             gajim.config.set(max_win_key, win_maximized)
             width += width_adjust
             gajim.config.set(size_width_key, width)
@@ -1236,7 +1243,7 @@ class MessageWindowMgr(gobject.GObject):
             else:
                 # Stash current size so it can be restored if the MessageWindow
                 # is not longer embedded
-                roster_width = w.parent_paned.get_child1().allocation.width
+                roster_width = w.parent_paned.get_position()
                 gajim.config.set('roster_width', roster_width)
 
             while w.notebook.get_n_pages():

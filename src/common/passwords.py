@@ -29,11 +29,12 @@ __all__ = ['get_password', 'save_password']
 import warnings
 from common import gajim
 from common import kwalletbinding
+from common.exceptions import GnomeKeyringError
 
 USER_HAS_GNOMEKEYRING = False
 USER_USES_GNOMEKEYRING = False
 USER_HAS_KWALLETCLI = False
-gnomekeyring = None
+GnomeKeyring = None
 
 class PasswordStorage(object):
     def get_password(self, account_name):
@@ -61,13 +62,15 @@ class SimplePasswordStorage(PasswordStorage):
 
 class GnomePasswordStorage(PasswordStorage):
     def __init__(self):
-        self.keyring = gnomekeyring.get_default_keyring_sync()
+        (err, self.keyring) = GnomeKeyring.get_default_keyring_sync()
+        if err  != GnomeKeyring.Result.OK:
+            raise GnomeKeyringError(err)
         if self.keyring is None:
             self.keyring = 'login'
-        try:
-            gnomekeyring.create_sync(self.keyring, None)
-        except gnomekeyring.AlreadyExistsError:
-            pass
+        err = GnomeKeyring.create_sync(self.keyring, None)
+        if err not in (GnomeKeyring.Result.OK,
+        GnomeKeyring.Result.KEYRING_ALREADY_EXISTS):
+            raise GnomeKeyringError(err)
 
     def get_password(self, account_name):
         conf = gajim.config.get_per('accounts', account_name, 'password')
@@ -78,60 +81,74 @@ class GnomePasswordStorage(PasswordStorage):
             ## migrate the password over to keyring
             try:
                 self.save_password(account_name, password, update=False)
-            except gnomekeyring.NoKeyringDaemonError:
-                ## no keyring daemon: in the future, stop using it
-                set_storage(SimplePasswordStorage())
+            except GnomeKeyringError as e:
+                if e.error == GnomeKeyring.Result.NO_KEYRING_DAEMON:
+                    ## no keyring daemon: in the future, stop using it
+                    set_storage(SimplePasswordStorage())
             return password
-        try:
-            server = gajim.config.get_per('accounts', account_name, 'hostname')
-            user = gajim.config.get_per('accounts', account_name, 'name')
-            attributes1 = dict(server=str(server), user=str(user), protocol='xmpp')
-            attributes2 = dict(account_name=str(account_name), gajim=1)
-            try:
-                items = gnomekeyring.find_items_sync(
-                        gnomekeyring.ITEM_NETWORK_PASSWORD, attributes1)
-            except gnomekeyring.Error:
-                try:
-                    items = gnomekeyring.find_items_sync(
-                            gnomekeyring.ITEM_GENERIC_SECRET, attributes2)
-                    if items:
-                        # We found an old item, move it to new way of storing
-                        password = items[0].secret
-                        self.save_password(account_name, password)
-                        gnomekeyring.item_delete_sync(items[0].keyring,
-                                int(items[0].item_id))
-                except gnomekeyring.Error:
-                    items = []
-            if len(items) > 1:
-                warnings.warn("multiple gnome keyring items found for account %s;"
-                              " trying to use the first one..."
-                              % account_name)
-            if items:
-                return items[0].secret
+        server = gajim.config.get_per('accounts', account_name, 'hostname')
+        user = gajim.config.get_per('accounts', account_name, 'name')
+        attributes1 = GnomeKeyring.attribute_list_new()
+        GnomeKeyring.attribute_list_append_string(attributes1, 'server',
+            str(server))
+        GnomeKeyring.attribute_list_append_string(attributes1, 'user',
+            str(user))
+        GnomeKeyring.attribute_list_append_string(attributes1, 'protocol',
+            'xmpp')
+        attributes2 = GnomeKeyring.attribute_list_new()
+        GnomeKeyring.attribute_list_append_string(attributes2, 'account_name',
+            str(account_name))
+        GnomeKeyring.attribute_list_append_string(attributes2, 'gajim',
+            '1')
+        (err, items) = GnomeKeyring.find_items_sync(
+            GnomeKeyring.ItemType.NETWORK_PASSWORD, attributes1)
+        if err != GnomeKeyring.Result.OK:
+            (err, items) = GnomeKeyring.find_items_sync(
+                GnomeKeyring.ItemType.GENERIC_SECRET, attributes2)
+            if err == GnomeKeyring.Result.OK and len(items) > 0:
+                password = items[0].secret
+                self.save_password(account_name, password)
+                for item in items:
+                    GnomeKeyring.item_delete_sync(item.keyring,
+                        int(item.item_id))
             else:
-                return None
-        except gnomekeyring.DeniedError:
+                items = []
+        if len(items) > 1:
+            warnings.warn("multiple gnome keyring items found for account %s;"
+                " trying to use the first one..." % account_name)
+        if items:
+            return items[0].secret
+        else:
             return None
-        except gnomekeyring.NoKeyringDaemonError:
+        if err == GnomeKeyring.Result.NO_KEYRING_DAEMON:
             ## no keyring daemon: in the future, stop using it
             set_storage(SimplePasswordStorage())
-            return None
+        return None
 
     def save_password(self, account_name, password, update=True):
         server = gajim.config.get_per('accounts', account_name, 'hostname')
         user = gajim.config.get_per('accounts', account_name, 'name')
         display_name = _('XMPP account %s@%s') % (user, server)
-        attributes1 = dict(server=str(server), user=str(user), protocol='xmpp')
+        attributes1 = GnomeKeyring.attribute_list_new()
+        GnomeKeyring.attribute_list_append_string(attributes1, 'server',
+            str(server))
+        GnomeKeyring.attribute_list_append_string(attributes1, 'user',
+            str(user))
+        GnomeKeyring.attribute_list_append_string(attributes1, 'protocol',
+            'xmpp')
         if password is None:
             password = str()
-        try:
-            auth_token = gnomekeyring.item_create_sync(
-                self.keyring, gnomekeyring.ITEM_NETWORK_PASSWORD, display_name,
-                attributes1, password, update)
-        except (gnomekeyring.DeniedError, gnomekeyring.CancelledError):
-            set_storage(SimplePasswordStorage())
-            storage.save_password(account_name, password)
-            return
+        (err, auth_token) = GnomeKeyring.item_create_sync(self.keyring,
+            GnomeKeyring.ItemType.NETWORK_PASSWORD, display_name, attributes1,
+            password, update)
+        if err != GnomeKeyring.Result.OK:
+            if err in (GnomeKeyring.Result.DENIED,
+            GnomeKeyring.Result.CANCELLED):
+                set_storage(SimplePasswordStorage())
+                storage.save_password(account_name, password)
+                return
+            else:
+                raise GnomeKeyringError(err)
         gajim.config.set_per('accounts', account_name, 'password',
             'gnomekeyring:')
         if account_name in gajim.connections:
@@ -181,24 +198,25 @@ def get_storage():
     global storage
     if storage is None: # None is only in first time get_storage is called
         if gajim.config.get('use_gnomekeyring'):
-            global gnomekeyring
+            global GnomeKeyring
             try:
-                gnomekeyring = __import__('gnomekeyring')
-            except ImportError:
+                gir = __import__('gi.repository', globals(), locals(),
+                    ['GnomeKeyring'], 0)
+                GnomeKeyring = gir.GnomeKeyring
+            except (ImportError, AttributeError):
                 pass
             else:
                 global USER_HAS_GNOMEKEYRING
                 global USER_USES_GNOMEKEYRING
                 USER_HAS_GNOMEKEYRING = True
-                if gnomekeyring.is_available():
+                if GnomeKeyring.is_available():
                     USER_USES_GNOMEKEYRING = True
                 else:
                     USER_USES_GNOMEKEYRING = False
         if USER_USES_GNOMEKEYRING:
             try:
                 storage = GnomePasswordStorage()
-            except (gnomekeyring.NoKeyringDaemonError, gnomekeyring.DeniedError,
-            gnomekeyring.CancelledError):
+            except GnomeKeyringError:
                 storage = None
         if storage is None:
             if gajim.config.get('use_kwalletcli'):

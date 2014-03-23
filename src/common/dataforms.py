@@ -27,7 +27,7 @@ information how to use them, read documentation
 """
 
 import nbxmpp
-import helpers
+from common import helpers
 
 # exceptions used in this module
 # base class
@@ -195,7 +195,7 @@ class DataField(ExtendedNode):
         Human-readable description of field meaning
         """
         def fget(self):
-            return self.getTagData('desc') or u''
+            return self.getTagData('desc') or ''
 
         def fset(self, value):
             assert isinstance(value, basestring)
@@ -345,10 +345,10 @@ class StringField(DataField):
     @nested_property
     def value():
         """
-        Value of field. May be any unicode string
+        Value of field. May be any string
         """
         def fget(self):
-            return self.getTagData('value') or u''
+            return self.getTagData('value') or ''
 
         def fset(self, value):
             assert isinstance(value, basestring)
@@ -494,7 +494,7 @@ class TextMultiField(DataField):
         Value held in field
         """
         def fget(self):
-            value = u''
+            value = ''
             for element in self.iterTags('value'):
                 value += '\n' + element.getData()
             return value[1:]
@@ -643,7 +643,7 @@ class DataForm(ExtendedNode):
         """
         # TODO: the same code is in TextMultiField. join them
         def fget(self):
-            value = u''
+            value = ''
             for valuenode in self.getTags('instructions'):
                 value += '\n' + valuenode.getData()
             return value[1:]

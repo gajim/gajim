@@ -22,8 +22,8 @@
 ##
 
 
-import gtk
-import gobject
+from gi.repository import Gtk
+from gi.repository import GLib
 
 import gtkgui_helpers
 from common import helpers
@@ -70,8 +70,8 @@ class AtomWindow:
         self.xml.connect_signals(self)
         self.window.show_all()
 
-        self.entry_title_eventbox.add_events(gtk.gdk.BUTTON_PRESS_MASK)
-        self.feed_title_eventbox.add_events(gtk.gdk.BUTTON_PRESS_MASK)
+        self.entry_title_eventbox.add_events(Gdk.EventMask.BUTTON_PRESS_MASK)
+        self.feed_title_eventbox.add_events(Gdk.EventMask.BUTTON_PRESS_MASK)
 
     def displayNextEntry(self):
         """
@@ -84,24 +84,24 @@ class AtomWindow:
         # fill the fields
         if newentry.feed_link is not None:
             self.feed_title_label.set_markup(
-                u'<span foreground="blue" underline="single">%s</span>' % \
-                gobject.markup_escape_text(newentry.feed_title))
+                '<span foreground="blue" underline="single">%s</span>' % \
+                GLib.markup_escape_text(newentry.feed_title))
         else:
-            self.feed_title_label.set_markup(
-                gobject.markup_escape_text(newentry.feed_title))
+            self.feed_title_label.set_markup(GLib.markup_escape_text(
+                newentry.feed_title))
 
         self.feed_tagline_label.set_markup(
-            u'<small>%s</small>' % \
-            gobject.markup_escape_text(newentry.feed_tagline))
+            '<small>%s</small>' % GLib.markup_escape_text(
+            newentry.feed_tagline))
 
         if newentry.title:
             if newentry.uri is not None:
                 self.entry_title_label.set_markup(
-                    u'<span foreground="blue" underline="single">%s</span>' % \
-                    gobject.markup_escape_text(newentry.title))
+                    '<span foreground="blue" underline="single">%s</span>' % \
+                    GLib.markup_escape_text(newentry.title))
             else:
-                self.entry_title_label.set_markup(
-                    gobject.markup_escape_text(newentry.title))
+                self.entry_title_label.set_markup(GLib.markup_escape_text(
+                    newentry.title))
         else:
             self.entry_title_label.set_markup('')
 

@@ -5,6 +5,7 @@
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes">Advanced Configuration Editor</property>
+    <property name="window_position">center-on-parent</property>
     <property name="role">ace</property>
     <property name="default_width">650</property>
     <property name="default_height">540</property>

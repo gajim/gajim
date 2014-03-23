@@ -23,9 +23,9 @@
 ##
 
 import nbxmpp
-import helpers
-import dataforms
-import gajim
+from common import helpers
+from common import dataforms
+from common import gajim
 from common.connection_handlers_events import MessageOutgoingEvent
 
 import logging
@@ -105,12 +105,12 @@ class ChangeStatusCommand(AdHocCommand):
                                 var = 'presence-type',
                                 label = 'Type of presence:',
                                 options = [
-                                        (u'chat', _('Free for chat')),
-                                        (u'online', _('Online')),
-                                        (u'away', _('Away')),
-                                        (u'xa', _('Extended away')),
-                                        (u'dnd', _('Do not disturb')),
-                                        (u'offline', _('Offline - disconnect'))],
+                                        ('chat', _('Free for chat')),
+                                        ('online', _('Online')),
+                                        ('away', _('Away')),
+                                        ('xa', _('Extended away')),
+                                        ('dnd', _('Do not disturb')),
+                                        ('offline', _('Offline - disconnect'))],
                                 value = 'online',
                                 required = True),
                         dataforms.Field('text-multi',
@@ -147,7 +147,7 @@ class ChangeStatusCommand(AdHocCommand):
         try:
             presencedesc = form['presence-desc'].value
         except Exception:       # same exceptions as in last comment
-            presencedesc = u''
+            presencedesc = ''
 
         response, cmd = self.buildResponse(request, status = 'completed')
         cmd.addChild('note', {}, _('The status has been changed.'))
@@ -198,7 +198,7 @@ class LeaveGroupchatsCommand(AdHocCommand):
         options = []
         account = self.connection.name
         for gc in find_current_groupchats(account):
-            options.append((u'%s' %(gc[0]), _('%(nickname)s on %(room_jid)s') % \
+            options.append(('%s' %(gc[0]), _('%(nickname)s on %(room_jid)s') % \
                     {'nickname': gc[1], 'room_jid': gc[0]}))
         if not len(options):
             response, cmd = self.buildResponse(request, status = 'completed')
@@ -369,11 +369,11 @@ class ConnectionCommands:
         # buildReply don't copy the node attribute. Re-add it
         q.setAttr('node', nbxmpp.NS_COMMANDS)
 
-        for node, cmd in self.__commands.iteritems():
+        for node, cmd in self.__commands.items():
             if cmd.isVisibleFor(self.isSameJID(jid)):
                 q.addChild('item', {
                         # TODO: find the jid
-                        'jid': self.getOurBareJID() + u'/' + self.server_resource,
+                        'jid': self.getOurBareJID() + '/' + self.server_resource,
                         'node': node,
                         'name': cmd.commandname})
 
@@ -387,7 +387,7 @@ class ConnectionCommands:
         try:
             jid = helpers.get_full_jid_from_iq(iq_obj)
         except helpers.InvalidFormat:
-            log.warn('Invalid JID: %s, ignoring it' % iq_obj.getFrom())
+            log.warning('Invalid JID: %s, ignoring it' % iq_obj.getFrom())
             return
         node = iq_obj.getTagAttr('query', 'node')
 

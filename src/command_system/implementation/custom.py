@@ -35,7 +35,7 @@ detected.
 """
 
 from ..framework import CommandContainer, command, doc
-from hosts import *
+from .hosts import *
 
 class CustomCommonCommands(CommandContainer):
     """

@@ -26,7 +26,7 @@
 ##
 
 """
-A gtk.TextView-based renderer for XHTML-IM, as described in:
+A Gtk.TextView-based renderer for XHTML-IM, as described in:
   http://xmpp.org/extensions/xep-0071.html
 
 Starting with the version posted by Gustavo Carneiro,
@@ -35,13 +35,16 @@ with the markup that docutils generate, and also more
 modular.
 """
 
-import gobject
-import pango
-import gtk
+from gi.repository import GObject
+from gi.repository import GLib
+from gi.repository import Pango
+from gi.repository import Gtk
+from gi.repository import Gdk
+from gi.repository import GdkPixbuf
 import xml.sax, xml.sax.handler
 import re
-from cStringIO import StringIO
-import urllib2
+from io import StringIO
+import urllib
 import operator
 
 if __name__ == '__main__':
@@ -64,8 +67,8 @@ whitespace_rx = re.compile('\\s+')
 allwhitespace_rx = re.compile('^\\s*$')
 
 # pixels = points * display_resolution
-display_resolution = 0.3514598*(gtk.gdk.screen_height() /
-                                        float(gtk.gdk.screen_height_mm()))
+display_resolution = 0.3514598*(Gdk.Screen.height() /
+                                        float(Gdk.Screen.height_mm()))
 
 # embryo of CSS classes
 classes = {
@@ -194,9 +197,9 @@ for name in BLOCK_HEAD:
 def _parse_css_color(color):
     if color.startswith('rgb(') and color.endswith(')'):
         r, g, b = [int(c)*257 for c in color[4:-1].split(',')]
-        return gtk.gdk.Color(r, g, b)
+        return Gdk.Color(r, g, b)
     else:
-        return gtk.gdk.color_parse(color)
+        return Gdk.color_parse(color)
 
 def style_iter(style):
     return ([x.strip() for x in item.split(':', 1)] for item in style.split(';')\
@@ -219,7 +222,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
         self.text = ''
         self.starting=True
         self.preserve = False
-        self.styles = [] # a gtk.TextTag or None, for each span level
+        self.styles = [] # a Gtk.TextTag or None, for each span level
         self.list_counters = [] # stack (top at head) of list
                                 # counters, or None for unordered list
 
@@ -236,7 +239,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
     def _get_current_attributes(self):
         attrs = self.textview.get_default_attributes()
         self.iter.backward_char()
-        self.iter.get_attributes(attrs)
+        attrs = (self.iter.get_attributes())[1]
         self.iter.forward_char()
         return attrs
 
@@ -252,13 +255,19 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
         """
         if value.endswith('%'):
             val = float(value[:-1])
-            sign = cmp(val, 0)
+            if val > 0:
+                sign = 1
+            elif val < 0:
+                sign = -1
+            else:
+                sign = 0
             # limits: 1% to 500%
             val = sign*max(1, min(abs(val), 500))
             frac = val/100
             if font_relative:
                 attrs = self._get_current_attributes()
-                font_size = attrs.font.get_size() / pango.SCALE
+                if not attrs.font:
+                    font_size = self.get_font_size()
                 callback(frac*display_resolution*font_size, *args)
             elif block_relative:
                 # CSS says 'Percentage values: refer to width of the closest
@@ -277,7 +286,12 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 
         def get_val():
             val = float(value[:-2])
-            sign = cmp(val, 0)
+            if val > 0:
+                sign = 1
+            elif val < 0:
+                sign = -1
+            else:
+                sign = 0
             # validate length
             return sign*max(minl, min(abs(val*display_resolution), maxl))
         if value.endswith('pt'): # points
@@ -285,14 +299,17 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 
         elif value.endswith('em'): # ems, the width of the element's font
             attrs = self._get_current_attributes()
-            font_size = attrs.font.get_size() / pango.SCALE
+            if not attrs.font:
+                font_size = self.get_font_size()
             callback(get_val()*display_resolution*font_size, *args)
 
         elif value.endswith('ex'): # x-height, ~ the height of the letter 'x'
             # FIXME: figure out how to calculate this correctly
             #        for now 'em' size is used as approximation
+
             attrs = self._get_current_attributes()
-            font_size = attrs.font.get_size() / pango.SCALE
+            if not attrs.font:
+                font_size = self.get_font_size()
             callback(get_val()*display_resolution*font_size, *args)
 
         elif value.endswith('px'): # pixels
@@ -302,7 +319,12 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
             try:
                 # TODO: isn't "no units" interpreted as pixels?
                 val = int(value)
-                sign = cmp(val, 0)
+                if val > 0:
+                    sign = 1
+                elif val < 0:
+                    sign = -1
+                else:
+                    sign = 0
                 # validate length
                 val = sign*max(minl, min(abs(val), maxl))
                 callback(val, *args)
@@ -320,26 +342,36 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 
     def _parse_style_font_size(self, tag, value):
         try:
+            # see http://developer.gnome.org/pango/stable/pango-Text-Attributes.html#PANGO-SCALE-XX-SMALL:CAPS
+            # http://consciouslyusing.blogspot.ru/2012/01/heads-up-missing-pango-text-scale.html
             scale = {
-                    'xx-small': pango.SCALE_XX_SMALL,
-                    'x-small': pango.SCALE_X_SMALL,
-                    'small': pango.SCALE_SMALL,
-                    'medium': pango.SCALE_MEDIUM,
-                    'large': pango.SCALE_LARGE,
-                    'x-large': pango.SCALE_X_LARGE,
-                    'xx-large': pango.SCALE_XX_LARGE,
+                    #'xx-small': Pango.SCALE_XX_SMALL,
+                    #'x-small': Pango.SCALE_X_SMALL,
+                    #'small': Pango.SCALE_SMALL,
+                    #'medium': Pango.SCALE_MEDIUM,
+                    #'large': Pango.SCALE_LARGE,
+                    #'x-large': Pango.SCALE_X_LARGE,
+                    #'xx-large': Pango.SCALE_XX_LARGE,
+                    'xx-small': 0.5787037037037,
+                    'x-small': 0.6444444444444,
+                    'small': 0.8333333333333,
+                    'medium': 1.0,
+                    'large': 1.2,
+                    'x-large': 1.4399999999999,
+                    'xx-large': 1.728,
                     } [value]
         except KeyError:
             pass
         else:
             attrs = self._get_current_attributes()
-            tag.set_property('scale', scale / attrs.font_scale)
+            if attrs.font_scale ==0:
+                tag.set_property('scale', scale)
             return
         if value == 'smaller':
-            tag.set_property('scale', pango.SCALE_SMALL)
+            tag.set_property('scale', 0.8333333333333)
             return
         if value == 'larger':
-            tag.set_property('scale', pango.SCALE_LARGE)
+            tag.set_property('scale', 1.2)
             return
         # font relative (5 ~ 4pt, 110 ~ 72pt)
         self._parse_length(value, True, False, 5, 110,self.__parse_font_size_cb,
@@ -348,9 +380,9 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
     def _parse_style_font_style(self, tag, value):
         try:
             style = {
-                    'normal': pango.STYLE_NORMAL,
-                    'italic': pango.STYLE_ITALIC,
-                    'oblique': pango.STYLE_OBLIQUE,
+                    'normal': Pango.Style.NORMAL,
+                    'italic': Pango.Style.ITALIC,
+                    'oblique': Pango.Style.OBLIQUE,
                     } [value]
         except KeyError:
             log.warning('unknown font-style %s' % value)
@@ -378,17 +410,17 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
         # TODO: missing 'bolder' and 'lighter'
         try:
             weight = {
-                    '100': pango.WEIGHT_ULTRALIGHT,
-                    '200': pango.WEIGHT_ULTRALIGHT,
-                    '300': pango.WEIGHT_LIGHT,
-                    '400': pango.WEIGHT_NORMAL,
-                    '500': pango.WEIGHT_NORMAL,
-                    '600': pango.WEIGHT_BOLD,
-                    '700': pango.WEIGHT_BOLD,
-                    '800': pango.WEIGHT_ULTRABOLD,
-                    '900': pango.WEIGHT_HEAVY,
-                    'normal': pango.WEIGHT_NORMAL,
-                    'bold': pango.WEIGHT_BOLD,
+                    '100': Pango.Weight.ULTRALIGHT,
+                    '200': Pango.Weight.ULTRALIGHT,
+                    '300': Pango.Weight.LIGHT,
+                    '400': Pango.Weight.NORMAL,
+                    '500': Pango.Weight.NORMAL,
+                    '600': Pango.Weight.BOLD,
+                    '700': Pango.Weight.BOLD,
+                    '800': Pango.Weight.ULTRABOLD,
+                    '900': Pango.Weight.HEAVY,
+                    'normal': Pango.Weight.NORMAL,
+                    'bold': Pango.Weight.BOLD,
                     } [value]
         except KeyError:
             log.warning('unknown font-style %s' % value)
@@ -401,10 +433,10 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
     def _parse_style_text_align(self, tag, value):
         try:
             align = {
-                    'left': gtk.JUSTIFY_LEFT,
-                    'right': gtk.JUSTIFY_RIGHT,
-                    'center': gtk.JUSTIFY_CENTER,
-                    'justify': gtk.JUSTIFY_FILL,
+                    'left': Gtk.Justification.LEFT,
+                    'right': Gtk.Justification.RIGHT,
+                    'center': Gtk.Justification.CENTER,
+                    'justify': Gtk.Justification.FILL,
                     } [value]
         except KeyError:
             log.warning('Invalid text-align:%s requested' % value)
@@ -414,12 +446,12 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
     def _parse_style_text_decoration(self, tag, value):
         values = value.split(' ')
         if 'none' in values:
-            tag.set_property('underline', pango.UNDERLINE_NONE)
+            tag.set_property('underline', Pango.Underline.NONE)
             tag.set_property('strikethrough', False)
         if 'underline' in values:
-            tag.set_property('underline', pango.UNDERLINE_SINGLE)
+            tag.set_property('underline', Pango.Underline.SINGLE)
         else:
-            tag.set_property('underline', pango.UNDERLINE_NONE)
+            tag.set_property('underline', Pango.Underline.NONE)
         if 'line-through' in values:
             tag.set_property('strikethrough', True)
         else:
@@ -431,11 +463,11 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 
     def _parse_style_white_space(self, tag, value):
         if value == 'pre':
-            tag.set_property('wrap_mode', gtk.WRAP_NONE)
+            tag.set_property('wrap_mode', Gtk.WrapMode.NONE)
         elif value == 'normal':
-            tag.set_property('wrap_mode', gtk.WRAP_WORD)
+            tag.set_property('wrap_mode', Gtk.WrapMode.WORD)
         elif value == 'nowrap':
-            tag.set_property('wrap_mode', gtk.WRAP_NONE)
+            tag.set_property('wrap_mode', Gtk.WrapMode.NONE)
 
     def __length_tag_cb(self, value, tag, propname):
         try:
@@ -483,15 +515,16 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
             tag.type_ = type_ # to be used by the URL handler
             tag.connect('event', self.textview.hyperlink_handler, 'url')
             tag.set_property('foreground', gajim.config.get('urlmsgcolor'))
-            tag.set_property('underline', pango.UNDERLINE_SINGLE)
+            tag.set_property('underline', Pango.Underline.SINGLE)
             tag.is_anchor = True
         if title:
             tag.title = title
         return tag
 
-    def _update_img(self, (mem, alt), attrs, img_mark):
+    def _update_img(self, output, attrs, img_mark):
         '''Callback function called after the function helpers.download_image.
         '''
+        mem, alt = output
         self._process_img(attrs, (mem, alt, img_mark))
 
     def _process_img(self, attrs, loaded=None):
@@ -507,7 +540,8 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                 # The "data" URL scheme http://tools.ietf.org/html/rfc2397
                 import base64
                 img = attrs['src'].split(',')[1]
-                mem = base64.standard_b64decode(urllib2.unquote(img))
+                mem = base64.standard_b64decode(urllib.parse.unquote(
+                    img).encode('utf-8'))
             elif loaded is not None:
                 (mem, alt, replace_mark) = loaded
                 update = True
@@ -526,7 +560,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                 # Caveat: GdkPixbuf is known not to be safe to load
                 # images from network... this program is now potentially
                 # hackable ;)
-                loader = gtk.gdk.PixbufLoader()
+                loader = GdkPixbuf.PixbufLoader()
                 dims = [0, 0]
                 def height_cb(length):
                     dims[1] = length
@@ -549,7 +583,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                     """
                     FIXME: Floats should be relative to the whole textview, and
                     resize with it. This needs new pifbufs for every resize,
-                    gtk.gdk.Pixbuf.scale_simple or similar.
+                    GdkPixbuf.Pixbuf.scale_simple or similar.
                     """
                     if isinstance(dims[0], float):
                         dims[0] = int(dims[0]*w)
@@ -586,7 +620,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                     self.textbuf.delete_mark(tmpmark)
             else:
                 self._insert_text('[IMG: %s]' % alt, working_iter)
-        except Exception, ex:
+        except Exception as ex:
             log.error('Error loading image ' + str(ex))
             pixbuf = None
             alt = attrs.get('alt', 'Broken image')
@@ -648,7 +682,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
             self._insert_text(text.strip('\n'))
 
     def _anchor_event(self, tag, textview, event, iter_, href, type_):
-        if event.type == gtk.gdk.BUTTON_PRESS:
+        if event.type == Gdk.EventType.BUTTON_PRESS:
             self.textview.emit('url-clicked', href, type_)
             return True
         return False
@@ -734,7 +768,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
             self.list_counters.append(0)
         elif name == 'li':
             if self.list_counters[-1] is None:
-                li_head = unichr(0x2022)
+                li_head = chr(0x2022)
             else:
                 self.list_counters[-1] += 1
                 li_head = '%i.' % self.list_counters[-1]
@@ -761,15 +795,8 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
         elif name == 'hr':
             #FIXME: plenty of unused attributes (width, height,...) :)
             self._jump_line()
-            try:
-                if self.conv_textbuf:
-                    self.conv_textbuf.insert_pixbuf(self.iter,
-                        self.conv_textview.focus_out_line_pixbuf)
-                else:
-                    self._insert_text(u'\u2550'*40)
-                self._jump_line()
-            except Exception, e:
-                log.debug(str('Error in hr'+e))
+            self._insert_text('\u2015'*40)
+            self._jump_line()
         elif name in LIST_ELEMS:
             self.list_counters.pop()
         elif name == 'li':
@@ -798,11 +825,16 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
             self._jump_line()
         self._end_span()
 
-class HtmlTextView(gtk.TextView):
+    def get_font_size(self):
+        context = self.conv_textview.tv.get_style_context()
+        font = context.get_font(Gtk.StateType.NORMAL)
+        return font.get_size() / Pango.SCALE
+
+class HtmlTextView(Gtk.TextView):
 
     def __init__(self):
-        gobject.GObject.__init__(self)
-        self.set_wrap_mode(gtk.WRAP_CHAR)
+        GObject.GObject.__init__(self)
+        self.set_wrap_mode(Gtk.WrapMode.CHAR)
         self.set_editable(False)
         self._changed_cursor = False
         self.connect('destroy', self.__destroy_event)
@@ -814,9 +846,7 @@ class HtmlTextView(gtk.TextView):
         self.connect('copy-clipboard', self.on_html_text_view_copy_clipboard)
         self.id_ = self.connect('button-release-event',
             self.on_left_mouse_button_release)
-        buffer_ = self.get_buffer()
-        buffer_.create_tag('eol')
-
+        self.get_buffer().create_tag('eol')
         self.tooltip = tooltips.BaseTooltip()
         self.config = gajim.config
         self.interface = gajim.interface
@@ -828,23 +858,23 @@ class HtmlTextView(gtk.TextView):
         self.tagURL = buffer_.create_tag('url')
         color = gajim.config.get('urlmsgcolor')
         self.tagURL.set_property('foreground', color)
-        self.tagURL.set_property('underline', pango.UNDERLINE_SINGLE)
-        self.tagURL.connect('event', self._hyperlink_handler, 'url')
+        self.tagURL.set_property('underline', Pango.Underline.SINGLE)
+        self.tagURL.connect('event', self.hyperlink_handler, 'url')
 
         self.tagMail = buffer_.create_tag('mail')
         self.tagMail.set_property('foreground', color)
-        self.tagMail.set_property('underline', pango.UNDERLINE_SINGLE)
-        self.tagMail.connect('event', self._hyperlink_handler, 'mail')
+        self.tagMail.set_property('underline', Pango.Underline.SINGLE)
+        self.tagMail.connect('event', self.hyperlink_handler, 'mail')
 
         self.tagXMPP = buffer_.create_tag('xmpp')
         self.tagXMPP.set_property('foreground', color)
-        self.tagXMPP.set_property('underline', pango.UNDERLINE_SINGLE)
-        self.tagXMPP.connect('event', self._hyperlink_handler, 'xmpp')
+        self.tagXMPP.set_property('underline', Pango.Underline.SINGLE)
+        self.tagXMPP.connect('event', self.hyperlink_handler, 'xmpp')
 
         self.tagSthAtSth = buffer_.create_tag('sth_at_sth')
         self.tagSthAtSth.set_property('foreground', color)
-        self.tagSthAtSth.set_property('underline', pango.UNDERLINE_SINGLE)
-        self.tagSthAtSth.connect('event', self._hyperlink_handler, 'sth_at_sth')
+        self.tagSthAtSth.set_property('underline', Pango.Underline.SINGLE)
+        self.tagSthAtSth.connect('event', self.hyperlink_handler, 'sth_at_sth')
 
     def __destroy_event(self, widget):
         if self.tooltip.timeout != 0:
@@ -852,15 +882,18 @@ class HtmlTextView(gtk.TextView):
 
     def __leave_event(self, widget, event):
         if self._changed_cursor:
-            window = widget.get_window(gtk.TEXT_WINDOW_TEXT)
-            window.set_cursor(gtk.gdk.Cursor(gtk.gdk.XTERM))
+            window = widget.get_window(Gtk.TextWindowType.TEXT)
+            window.set_cursor(Gdk.Cursor.new(Gdk.CursorType.XTERM))
             self._changed_cursor = False
 
     def show_tooltip(self, tag):
         if not self.tooltip.win:
             # check if the current pointer is still over the line
-            x, y, _ = self.window.get_pointer()
-            x, y = self.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT, x, y)
+            w = self.get_window(Gtk.TextWindowType.TEXT)
+            device = w.get_display().get_device_manager().get_client_pointer()
+            pointer = w.get_device_position(device)
+            x = pointer[1]
+            y = pointer[2]
             tags = self.get_iter_at_location(x, y).get_tags()
             is_over_anchor = False
             for tag_ in tags:
@@ -871,13 +904,15 @@ class HtmlTextView(gtk.TextView):
                 return
             text = getattr(tag, 'title', False)
             if text:
-                pointer = self.get_pointer()
-                position = self.window.get_origin()
-                self.tooltip.show_tooltip(text, 8, position[1] + pointer[1])
+                position = w.get_origin()[1:]
+                self.tooltip.show_tooltip(text, 8, position[1] + y)
 
     def __motion_notify_event(self, widget, event):
-        x, y, _ = widget.window.get_pointer()
-        x, y = widget.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT, x, y)
+        w = widget.get_window(Gtk.TextWindowType.TEXT)
+        device = w.get_display().get_device_manager().get_client_pointer()
+        pointer = w.get_device_position(device)
+        x = pointer[1]
+        y = pointer[2]
         tags = widget.get_iter_at_location(x, y).get_tags()
         anchor_tags = [tag for tag in tags if getattr(tag, 'is_anchor', False)]
         if self.tooltip.timeout != 0:
@@ -885,14 +920,12 @@ class HtmlTextView(gtk.TextView):
             if not anchor_tags:
                 self.tooltip.hide_tooltip()
         if not self._changed_cursor and anchor_tags:
-            window = widget.get_window(gtk.TEXT_WINDOW_TEXT)
-            window.set_cursor(gtk.gdk.Cursor(gtk.gdk.HAND2))
+            w.set_cursor(Gdk.Cursor.new(Gdk.CursorType.HAND2))
             self._changed_cursor = True
-            self.tooltip.timeout = gobject.timeout_add(500, self.show_tooltip,
+            self.tooltip.timeout = GLib.timeout_add(500, self.show_tooltip,
                 anchor_tags[0])
         elif self._changed_cursor and not anchor_tags:
-            window = widget.get_window(gtk.TEXT_WINDOW_TEXT)
-            window.set_cursor(gtk.gdk.Cursor(gtk.gdk.XTERM))
+            w.set_cursor(Gdk.Cursor.new(Gdk.CursorType.XTERM))
             self._changed_cursor = False
         return False
 
@@ -900,8 +933,8 @@ class HtmlTextView(gtk.TextView):
         helpers.launch_browser_mailer(kind, text)
 
     def on_copy_link_activate(self, widget, text):
-        clip = gtk.clipboard_get()
-        clip.set_text(text)
+        clip = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+        clip.set_text(text, -1)
 
 #    def on_start_chat_activate(self, widget, jid):
 #        gajim.interface.new_chat_from_jid(self.account, jid)
@@ -916,7 +949,8 @@ class HtmlTextView(gtk.TextView):
         dialogs.AddNewContactWindow(self.account, jid)
 
     def make_link_menu(self, event, kind, text):
-        xml = gtkgui_helpers.get_gtk_builder('chat_context_menu.ui')
+        from gtkgui_helpers import get_gtk_builder
+        xml = get_gtk_builder('chat_context_menu.ui')
         menu = xml.get_object('chat_context_menu')
         childs = menu.get_children()
         if kind == 'url':
@@ -972,7 +1006,7 @@ class HtmlTextView(gtk.TextView):
         menu.popup(None, None, None, event.button, event.time)
 
     def hyperlink_handler(self, texttag, widget, event, iter_, kind):
-        if event.type == gtk.gdk.BUTTON_PRESS:
+        if event.type == Gdk.EventType.BUTTON_PRESS:
             begin_iter = iter_.copy()
             # we get the begining of the tag
             while not begin_iter.begins_tag(texttag):
@@ -994,7 +1028,7 @@ class HtmlTextView(gtk.TextView):
                     kind = 'sth_at_sth'
             else:
                 word = self.textview.get_buffer().get_text(begin_iter,
-                    end_iter).decode('utf-8')
+                    end_iter)
 
             if event.button == 3: # right click
                 self.make_link_menu(event, kind, word)
@@ -1036,17 +1070,18 @@ class HtmlTextView(gtk.TextView):
         #    buffer_.insert(eob, '\n')
 
     def on_html_text_view_copy_clipboard(self, unused_data):
-        clipboard = self.get_clipboard(gtk.gdk.SELECTION_CLIPBOARD)
-        clipboard.set_text(self.get_selected_text())
+        clipboard = self.get_clipboard(Gdk.SELECTION_CLIPBOARD)
+        selected = self.get_selected_text()
+        clipboard.set_text(selected, -1)
         self.emit_stop_by_name('copy-clipboard')
 
     def on_html_text_view_realized(self, unused_data):
         self.get_buffer().remove_selection_clipboard(self.get_clipboard(
-            gtk.gdk.SELECTION_PRIMARY))
+            Gdk.SELECTION_PRIMARY))
 
     def on_html_text_view_unrealized(self, unused_data):
         self.get_buffer().add_selection_clipboard(self.get_clipboard(
-            gtk.gdk.SELECTION_PRIMARY))
+            Gdk.SELECTION_PRIMARY))
 
     def on_left_mouse_button_release(self, widget, event):
         if event.button != 1:
@@ -1056,8 +1091,9 @@ class HtmlTextView(gtk.TextView):
         if bounds:
             # textview can be hidden while we add a new line in it.
             if self.has_screen():
-                clipboard = self.get_clipboard(gtk.gdk.SELECTION_PRIMARY)
-                clipboard.set_text(self.get_selected_text())
+                clipboard = self.get_clipboard(Gdk.SELECTION_PRIMARY)
+                selected = self.get_selected_text()
+                clipboard.set_text(selected, -1)
 
     def get_selected_text(self):
         bounds = self.get_buffer().get_selection_bounds()
@@ -1067,10 +1103,10 @@ class HtmlTextView(gtk.TextView):
 
             while (search_iter.compare(end)):
                 character = search_iter.get_char()
-                if character == u'\ufffc':
+                if character == '\ufffc':
                     anchor = search_iter.get_child_anchor()
                     if anchor:
-                        text = anchor.get_data('plaintext')
+                        text = anchor.plaintext
                         if text:
                             selection+=text
                     else:
@@ -1099,10 +1135,6 @@ if __name__ == '__main__':
 
     htmlview = ConversationTextview(None)
 
-    path = gtkgui_helpers.get_icon_path('gajim-muc_separator')
-    # use this for hr
-    htmlview.tv.focus_out_line_pixbuf =  gtk.gdk.pixbuf_new_from_file(path)
-
     tooltip = tooltips.BaseTooltip()
 
     def on_textview_motion_notify_event(widget, event):
@@ -1110,20 +1142,20 @@ if __name__ == '__main__':
         Change the cursor to a hand when we are over a mail or an url
         """
         global change_cursor
-        pointer_x, pointer_y = htmlview.tv.window.get_pointer()[0:2]
-        x, y = htmlview.tv.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT,
-            pointer_x, pointer_y)
+        w = htmlview.tv.get_window(Gtk.TextWindowType.TEXT)
+        device = w.get_display().get_device_manager().get_client_pointer()
+        pointer = w.get_device_position(device)
+        x = pointer[1]
+        y = pointer[2]
         tags = htmlview.tv.get_iter_at_location(x, y).get_tags()
         if change_cursor:
-            htmlview.tv.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(
-                gtk.gdk.Cursor(gtk.gdk.XTERM))
+            w.set_cursor(Gdk.Cursor.new(Gdk.CursorType.XTERM))
             change_cursor = None
         tag_table = htmlview.tv.get_buffer().get_tag_table()
         for tag in tags:
             try:
                 if tag.is_anchor:
-                    htmlview.tv.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(
-                        gtk.gdk.Cursor(gtk.gdk.HAND2))
+                    w.set_cursor(Gdk.Cursor.new(Gdk.CursorType.HAND2))
                     change_cursor = tag
                 elif tag == tag_table.lookup('focus-out-line'):
                     over_line = True
@@ -1135,16 +1167,16 @@ if __name__ == '__main__':
         #       if not over_line:
         #               line_tooltip.hide_tooltip()
         #if over_line and not line_tooltip.win:
-        #       line_tooltip.timeout = gobject.timeout_add(500,
+        #       line_tooltip.timeout = GLib.timeout_add(500,
         #               show_line_tooltip)
-        #       htmlview.tv.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(
-        #               gtk.gdk.Cursor(gtk.gdk.LEFT_PTR))
+        #       htmlview.tv.get_window(Gtk.TextWindowType.TEXT).set_cursor(
+        #               Gdk.Cursor.new(Gdk.CursorType.LEFT_PTR))
         #       change_cursor = tag
 
     htmlview.tv.connect('motion_notify_event', on_textview_motion_notify_event)
 
     def handler(texttag, widget, event, iter_, kind):
-        if event.type == gtk.gdk.BUTTON_PRESS:
+        if event.type == Gdk.EventType.BUTTON_PRESS:
             pass
 
     htmlview.tv.hyperlink_handler = htmlview.hyperlink_handler
@@ -1265,19 +1297,19 @@ hhx4dbgYKAAA7' alt='Larry'/>
     </body>
     ''')
     htmlview.tv.show()
-    sw = gtk.ScrolledWindow()
-    sw.set_property('hscrollbar-policy', gtk.POLICY_AUTOMATIC)
-    sw.set_property('vscrollbar-policy', gtk.POLICY_AUTOMATIC)
+    sw = Gtk.ScrolledWindow()
+    sw.set_property('hscrollbar-policy', Gtk.PolicyType.AUTOMATIC)
+    sw.set_property('vscrollbar-policy', Gtk.PolicyType.AUTOMATIC)
     sw.set_property('border-width', 0)
     sw.add(htmlview.tv)
     sw.show()
-    frame = gtk.Frame()
-    frame.set_shadow_type(gtk.SHADOW_IN)
+    frame = Gtk.Frame()
+    frame.set_shadow_type(Gtk.ShadowType.IN)
     frame.show()
     frame.add(sw)
-    w = gtk.Window()
+    w = Gtk.Window()
     w.add(frame)
     w.set_default_size(400, 300)
     w.show_all()
-    w.connect('destroy', lambda w: gtk.main_quit())
-    gtk.main()
+    w.connect('destroy', lambda w: Gtk.main_quit())
+    Gtk.main()

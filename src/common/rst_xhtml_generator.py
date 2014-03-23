@@ -28,7 +28,7 @@ try:
     from docutils import nodes, utils
     from docutils.parsers.rst.roles import set_classes
 except ImportError:
-    print "Requires docutils 0.4 for set_classes to be available"
+    print("Requires docutils 0.4 for set_classes to be available")
     def create_xhtml(text):
         return None
 else:
@@ -65,7 +65,7 @@ else:
                 options={}, content=[]):
             try:
                 valid_text = validator(text)
-            except ValueError, e:
+            except ValueError as e:
                 msg = inliner.reporter.error( e.message % dict(text=text), line=lineno)
                 prb = inliner.problematic(rawtext, rawtext, msg)
                 return [prb], [msg]
@@ -120,7 +120,7 @@ else:
             # in the JEP
             # &nbsp; ==  u"\u00a0"
             self.pub.writer.translator_class.attribution_formats['dash'] = (
-                    u'\u2014', '')
+                    '\u2014', '')
             self.pub.process_programmatic_settings(settings_spec,
                     settings_overrides,
                     config_section)
@@ -137,7 +137,7 @@ else:
             output = self.pub.publish(enable_exit_status=enable_exit_status)
             # kludge until we can get docutils to stop generating (rare) &nbsp;
             # entities
-            return u'\u00a0'.join(self.pub.writer.parts['fragment'].strip().split(
+            return '\u00a0'.join(self.pub.writer.parts['fragment'].strip().split(
                     '&nbsp;'))
 
     Generator = HTMLGenerator()
@@ -147,7 +147,7 @@ else:
 
 
 if __name__ == '__main__':
-    print "test 1\n", Generator.create_xhtml("""
+    print("test 1\n" + Generator.create_xhtml("""
 test::
 
 >>> print 1
@@ -157,10 +157,10 @@ test::
 
 this `` should    trigger`` should trigger the &nbsp; problem.
 
-""")
-    print "test 2\n", Generator.create_xhtml("""
+"""))
+    print("test 2\n" + Generator.create_xhtml("""
 *test1
 
 test2_
-""")
-    print "test 3\n", Generator.create_xhtml(""":ticket:`316` implements :xep:`71`""")
+"""))
+    print("test 3\n" + Generator.create_xhtml(""":ticket:`316` implements :xep:`71`"""))

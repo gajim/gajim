@@ -30,9 +30,11 @@
 import os
 import time
 import locale
-import gtk
-import pango
-import gobject
+from gi.repository import Gtk
+from gi.repository import Gdk
+from gi.repository import GdkPixbuf
+from gi.repository import Pango
+from gi.repository import GLib
 import gtkgui_helpers
 import gui_menu_builder
 import message_control
@@ -42,6 +44,7 @@ import config
 import vcard
 import cell_renderer_image
 import dataforms_widget
+import nbxmpp
 
 from common import gajim
 from common import helpers
@@ -69,16 +72,20 @@ C_TEXT, # text shown in the cellrenderer
 C_AVATAR, # avatar of the contact
 ) = range(5)
 
+empty_pixbuf = GdkPixbuf.Pixbuf.new(GdkPixbuf.Colorspace.RGB, True, 8, 1, 1)
+empty_pixbuf.fill(0xffffff00)
+
 def set_renderer_color(treeview, renderer, set_background=True):
     """
     Set style for group row, using PRELIGHT system color
     """
+    context = treeview.get_style_context()
     if set_background:
-        bgcolor = treeview.style.bg[gtk.STATE_PRELIGHT]
-        renderer.set_property('cell-background-gdk', bgcolor)
+        bgcolor = context.get_background_color(Gtk.StateFlags.PRELIGHT)
+        renderer.set_property('cell-background-rgba', bgcolor)
     else:
-        fgcolor = treeview.style.fg[gtk.STATE_PRELIGHT]
-        renderer.set_property('foreground-gdk', fgcolor)
+        fgcolor = context.get_color(Gtk.StateFlags.PRELIGHT)
+        renderer.set_property('foreground-rgba', fgcolor)
 
 def tree_cell_data_func(column, renderer, model, iter_, tv=None):
     # cell data func is global, because we don't want it to keep
@@ -86,7 +93,7 @@ def tree_cell_data_func(column, renderer, model, iter_, tv=None):
     theme = gajim.config.get('roster_theme')
     # allocate space for avatar only if needed
     parent_iter = model.iter_parent(iter_)
-    if isinstance(renderer, gtk.CellRendererPixbuf):
+    if isinstance(renderer, Gtk.CellRendererPixbuf):
         avatar_position = gajim.config.get('avatar_position_in_roster')
         if avatar_position == 'right':
             renderer.set_property('xalign', 1) # align pixbuf to the right
@@ -105,7 +112,7 @@ def tree_cell_data_func(column, renderer, model, iter_, tv=None):
             renderer.set_property('cell-background', bgcolor)
         else:
             renderer.set_property('cell-background', None)
-        if isinstance(renderer, gtk.CellRendererText):
+        if isinstance(renderer, Gtk.CellRendererText):
             # foreground property is only with CellRendererText
             color = gajim.config.get_per('themes', theme, 'contacttextcolor')
             if color:
@@ -120,7 +127,7 @@ def tree_cell_data_func(column, renderer, model, iter_, tv=None):
             renderer.set_property('cell-background', bgcolor)
         else:
             set_renderer_color(tv, renderer)
-        if isinstance(renderer, gtk.CellRendererText):
+        if isinstance(renderer, Gtk.CellRendererText):
             # foreground property is only with CellRendererText
             color = gajim.config.get_per('themes', theme, 'grouptextcolor')
             if color:
@@ -236,8 +243,8 @@ class PrivateChatControl(ChatControl):
                     _('Sending private message failed'),
                     #in second %s code replaces with nickname
                     _('You are no longer in group chat "%(room)s" or '
-                    '"%(nick)s" has left.') % {'room': u'\u200E' + room,
-                    'nick': nick})
+                    '"%(nick)s" has left.') % {'room': '\u200E' + room,
+                    'nick': nick}, transient_for=self.parent_win.window)
                 return
 
         ChatControl.send_message(self, message, xhtml=xhtml,
@@ -340,7 +347,7 @@ class GroupchatControl(ChatControlBase):
 
             if gtkgui_helpers.gtk_icon_theme.has_icon('bookmark-new'):
                 img = self.xml.get_object('image7')
-                img.set_from_icon_name('bookmark-new', gtk.ICON_SIZE_MENU)
+                img.set_from_icon_name('bookmark-new', Gtk.IconSize.MENU)
             widget.set_sensitive(
                 gajim.connections[self.account].private_storage_supported or \
                 (gajim.connections[self.account].pubsub_supported and \
@@ -348,8 +355,8 @@ class GroupchatControl(ChatControlBase):
             widget.show()
 
         if gtkgui_helpers.gtk_icon_theme.has_icon('document-open-recent'):
-            img = self.xml.get_object('image8')
-            img.set_from_icon_name('document-open-recent', gtk.ICON_SIZE_MENU)
+            img = self.xml.get_object('history_image')
+            img.set_from_icon_name('document-open-recent', Gtk.IconSize.MENU)
         widget = self.xml.get_object('list_treeview')
         id_ = widget.connect('row_expanded', self.on_list_treeview_row_expanded)
         self.handlers[id_] = widget
@@ -379,7 +386,7 @@ class GroupchatControl(ChatControlBase):
         self.handlers[id_] = widget
 
         self.room_jid = self.contact.jid
-        self.nick = contact.name.decode('utf-8')
+        self.nick = contact.name
         self.new_nick = ''
         self.name = ''
         for bm in gajim.connections[self.account].bookmarks:
@@ -441,13 +448,13 @@ class GroupchatControl(ChatControlBase):
         self.hpaned.set_position(hpaned_position)
 
         #status_image, shown_nick, type, nickname, avatar
-        self.columns = [gtk.Image, str, str, str, gtk.gdk.Pixbuf]
-        self.model = gtk.TreeStore(*self.columns)
+        self.columns = [Gtk.Image, str, str, str, GdkPixbuf.Pixbuf]
+        self.model = Gtk.TreeStore(*self.columns)
         self.model.set_sort_func(C_NICK, self.tree_compare_iters)
-        self.model.set_sort_column_id(C_NICK, gtk.SORT_ASCENDING)
+        self.model.set_sort_column_id(C_NICK, Gtk.SortType.ASCENDING)
 
         # columns
-        column = gtk.TreeViewColumn()
+        column = Gtk.TreeViewColumn()
         # list of renderers with attributes / properties in the form:
         # (name, renderer_object, expand?, attribute_name, attribute_value,
         # cell_data_func, func_arg)
@@ -457,9 +464,9 @@ class GroupchatControl(ChatControlBase):
         self.renderers_propertys = {}
         renderer_image = cell_renderer_image.CellRendererImage(0, 0)
         self.renderers_propertys[renderer_image] = ('width', 26)
-        renderer_text = gtk.CellRendererText()
+        renderer_text = Gtk.CellRendererText()
         self.renderers_propertys[renderer_text] = ('ellipsize',
-            pango.ELLIPSIZE_END)
+            Pango.EllipsizeMode.END)
 
         self.renderers_list += (
             # status img
@@ -470,7 +477,7 @@ class GroupchatControl(ChatControlBase):
             'markup', C_TEXT, tree_cell_data_func, self.list_treeview))
 
         # avatar img
-        avater_renderer = ('avatar', gtk.CellRendererPixbuf(),
+        avater_renderer = ('avatar', Gtk.CellRendererPixbuf(),
             False, 'pixbuf', C_AVATAR,
             tree_cell_data_func, self.list_treeview)
 
@@ -483,9 +490,9 @@ class GroupchatControl(ChatControlBase):
         self.list_treeview.append_column(column)
 
         # workaround to avoid gtk arrows to be shown
-        column = gtk.TreeViewColumn() # 2nd COLUMN
-        renderer = gtk.CellRendererPixbuf()
-        column.pack_start(renderer, expand=False)
+        column = Gtk.TreeViewColumn() # 2nd COLUMN
+        renderer = Gtk.CellRendererPixbuf()
+        column.pack_start(renderer, False)
         self.list_treeview.append_column(column)
         column.set_visible(False)
         self.list_treeview.set_expander_column(column)
@@ -523,7 +530,7 @@ class GroupchatControl(ChatControlBase):
 
     def fill_column(self, col):
         for rend in self.renderers_list:
-            col.pack_start(rend[1], expand=rend[2])
+            col.pack_start(rend[1], rend[2])
             col.add_attribute(rend[1], rend[3], rend[4])
             col.set_cell_data_func(rend[1], rend[5], rend[6])
         # set renderers propertys
@@ -531,7 +538,7 @@ class GroupchatControl(ChatControlBase):
             renderer.set_property(self.renderers_propertys[renderer][0],
                 self.renderers_propertys[renderer][1])
 
-    def tree_compare_iters(self, model, iter1, iter2):
+    def tree_compare_iters(self, model, iter1, iter2, data=None):
         """
         Compare two iters to sort them
         """
@@ -543,8 +550,6 @@ class GroupchatControl(ChatControlBase):
         nick2 = model[iter2][C_NICK]
         if not nick1 or not nick2:
             return 0
-        nick1 = nick1.decode('utf-8')
-        nick2 = nick2.decode('utf-8')
         if type1 == 'role':
             return locale.strcoll(nick1, nick2)
         if type1 == 'contact':
@@ -578,17 +583,17 @@ class GroupchatControl(ChatControlBase):
         and the ability to insert a nick
         """
         ChatControlBase.on_msg_textview_populate_popup(self, textview, menu)
-        item = gtk.SeparatorMenuItem()
+        item = Gtk.SeparatorMenuItem.new()
         menu.prepend(item)
 
-        item = gtk.MenuItem(_('Insert Nickname'))
+        item = Gtk.MenuItem(_('Insert Nickname'))
         menu.prepend(item)
-        submenu = gtk.Menu()
+        submenu = Gtk.Menu()
         item.set_submenu(submenu)
 
         for nick in sorted(gajim.contacts.get_nick_list(self.account,
         self.room_jid)):
-            item = gtk.MenuItem(nick, use_underline=False)
+            item = Gtk.MenuItem(nick, use_underline=False)
             submenu.append(item)
             id_ = item.connect('activate', self.append_nick_in_msg_textview,
                 nick)
@@ -603,14 +608,15 @@ class GroupchatControl(ChatControlBase):
             self.resize_from_another_muc = False
         # Reset the flag when everything will be redrawn, and in particular when
         # on_treeview_size_allocate will have been called.
-        gobject.idle_add(reset_flag)
+        GLib.idle_add(reset_flag)
 
     def on_hpaned_notify(self, pane, gparamspec):
         """
         The MUC treeview has resized. Move the hpaned in all tabs to match
         """
-        if gparamspec.name != 'position':
-            return
+       # print pane, dir(pane)
+        #if gparamspec.name != 'position':
+            #return
         if self.resize_from_another_muc:
             # Don't send the event to other MUC
             return
@@ -632,7 +638,7 @@ class GroupchatControl(ChatControlBase):
         """
         Iterate over all contact rows in the tree model
         """
-        role_iter = self.model.get_iter_root()
+        role_iter = self.model.get_iter_first()
         while role_iter:
             contact_iter = self.model.iter_children(role_iter)
             while contact_iter:
@@ -646,7 +652,7 @@ class GroupchatControl(ChatControlBase):
         """
         # Get the room_jid from treeview
         for contact in self.iter_contact_rows():
-            nick = contact[C_NICK].decode('utf-8')
+            nick = contact[C_NICK]
             self.draw_contact(nick)
 
     def on_list_treeview_selection_changed(self, selection):
@@ -658,7 +664,7 @@ class GroupchatControl(ChatControlBase):
             self._last_selected_contact = None
             return
         contact = model[selected_iter]
-        nick = contact[C_NICK].decode('utf-8')
+        nick = contact[C_NICK]
         self._last_selected_contact = nick
         if contact[C_TYPE] != 'contact':
             return
@@ -676,21 +682,26 @@ class GroupchatControl(ChatControlBase):
         color_name = None
         color = None
         theme = gajim.config.get('roster_theme')
+        context = self.parent_win.notebook.get_style_context()
         if chatstate == 'attention' and (not has_focus or not current_tab):
             self.attention_flag = True
             color_name = gajim.config.get_per('themes', theme,
-                                            'state_muc_directed_msg_color')
+                'state_muc_directed_msg_color')
         elif chatstate:
             if chatstate == 'active' or (current_tab and has_focus):
                 self.attention_flag = False
                 # get active color from gtk
-                color = self.parent_win.notebook.style.fg[gtk.STATE_ACTIVE]
+                color = context.get_color(Gtk.StateFlags.ACTIVE)
             elif chatstate == 'newmsg' and (not has_focus or not current_tab) \
             and not self.attention_flag:
                 color_name = gajim.config.get_per('themes', theme,
-                        'state_muc_msg_color')
+                    'state_muc_msg_color')
         if color_name:
-            color = gtk.gdk.colormap_get_system().alloc_color(color_name)
+            color = Gdk.RGBA()
+            ok = Gdk.RGBA.parse(color, color_name)
+            if not ok:
+                del color
+                color = context.get_color(Gtk.StateFlags.ACTIVE)
 
         if self.is_continued:
             # if this is a continued conversation
@@ -704,7 +715,7 @@ class GroupchatControl(ChatControlBase):
         if num_unread == 1:
             unread = '*'
         elif num_unread > 1:
-            unread = '[' + unicode(num_unread) + ']'
+            unread = '[' + str(num_unread) + ']'
         label_str = unread + label_str
         return (label_str, color)
 
@@ -722,11 +733,11 @@ class GroupchatControl(ChatControlBase):
         for nick in gajim.contacts.get_nick_list(self.account, self.room_jid):
             self.draw_contact(nick)
 
-    def _change_style(self, model, path, iter_):
+    def _change_style(self, model, path, iter_, option):
         model[iter_][C_NICK] = model[iter_][C_NICK]
 
     def change_roster_style(self):
-        self.model.foreach(self._change_style)
+        self.model.foreach(self._change_style, None)
 
     def repaint_themed_widgets(self):
         ChatControlBase.repaint_themed_widgets(self)
@@ -742,14 +753,14 @@ class GroupchatControl(ChatControlBase):
             image = 'muc_inactive'
         if '32' in images and image in images['32']:
             muc_icon = images['32'][image]
-            if muc_icon.get_storage_type() != gtk.IMAGE_EMPTY:
+            if muc_icon.get_storage_type() != Gtk.ImageType.EMPTY:
                 pix = muc_icon.get_pixbuf()
                 banner_status_img.set_from_pixbuf(pix)
                 return
         # we need to scale 16x16 to 32x32
         muc_icon = images['16'][image]
         pix = muc_icon.get_pixbuf()
-        scaled_pix = pix.scale_simple(32, 32, gtk.gdk.INTERP_BILINEAR)
+        scaled_pix = pix.scale_simple(32, 32, GdkPixbuf.InterpType.BILINEAR)
         banner_status_img.set_from_pixbuf(scaled_pix)
 
     def get_continued_conversation_name(self):
@@ -774,19 +785,19 @@ class GroupchatControl(ChatControlBase):
         Draw the text in the fat line at the top of the window that houses the
         room jid, subject
         """
-        self.name_label.set_ellipsize(pango.ELLIPSIZE_END)
-        self.banner_status_label.set_ellipsize(pango.ELLIPSIZE_END)
+        self.name_label.set_ellipsize(Pango.EllipsizeMode.END)
+        self.banner_status_label.set_ellipsize(Pango.EllipsizeMode.END)
         font_attrs, font_attrs_small = self.get_font_attrs()
         if self.is_continued:
             name = self.get_continued_conversation_name()
         else:
             name = self.room_jid
-        text = '<span %s>%s</span>' % (font_attrs, u'\u200E' + name)
+        text = '<span %s>%s</span>' % (font_attrs, '\u200E' + name)
         self.name_label.set_markup(text)
 
         if self.subject:
             subject = helpers.reduce_chars_newlines(self.subject, max_lines=2)
-            subject = gobject.markup_escape_text(subject)
+            subject = GLib.markup_escape_text(subject)
             subject_text = self.urlfinder.sub(self.make_href, subject)
             subject_text = '<span %s>%s</span>' % (font_attrs_small,
                 subject_text)
@@ -823,11 +834,13 @@ class GroupchatControl(ChatControlBase):
         request_voice_separator = xml.get_object('request_voice_separator')
 
         if gtkgui_helpers.gtk_icon_theme.has_icon('bookmark-new'):
-            gtkgui_helpers.add_image_to_menuitem(bookmark_room_menuitem,
-                'bookmark-new')
+            img = Gtk.Image()
+            img.set_from_icon_name('bookmark-new', Gtk.IconSize.MENU)
+            bookmark_room_menuitem.set_image(img)
         if gtkgui_helpers.gtk_icon_theme.has_icon('document-open-recent'):
-            gtkgui_helpers.add_image_to_menuitem(history_menuitem,
-                'document-open-recent')
+            img = Gtk.Image()
+            img.set_from_icon_name('document-open-recent', Gtk.IconSize.MENU)
+            history_menuitem.set_image(img)
 
         if hide_buttonbar_items:
             change_nick_menuitem.hide()
@@ -849,15 +862,15 @@ class GroupchatControl(ChatControlBase):
                     bookmark_separator.hide()
                     break
 
-        ag = gtk.accel_groups_from_object(self.parent_win.window)[0]
-        change_nick_menuitem.add_accelerator('activate', ag, gtk.keysyms.n,
-            gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK, gtk.ACCEL_VISIBLE)
+        ag = Gtk.accel_groups_from_object(self.parent_win.window)[0]
+        change_nick_menuitem.add_accelerator('activate', ag, Gdk.KEY_n,
+            Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.SHIFT_MASK, Gtk.AccelFlags.VISIBLE)
         change_subject_menuitem.add_accelerator('activate', ag,
-            gtk.keysyms.t, gtk.gdk.MOD1_MASK, gtk.ACCEL_VISIBLE)
-        bookmark_room_menuitem.add_accelerator('activate', ag, gtk.keysyms.b,
-            gtk.gdk.CONTROL_MASK, gtk.ACCEL_VISIBLE)
-        history_menuitem.add_accelerator('activate', ag, gtk.keysyms.h,
-            gtk.gdk.CONTROL_MASK, gtk.ACCEL_VISIBLE)
+            Gdk.KEY_t, Gdk.ModifierType.MOD1_MASK, Gtk.AccelFlags.VISIBLE)
+        bookmark_room_menuitem.add_accelerator('activate', ag, Gdk.KEY_b,
+            Gdk.ModifierType.CONTROL_MASK, Gtk.AccelFlags.VISIBLE)
+        history_menuitem.add_accelerator('activate', ag, Gdk.KEY_h,
+            Gdk.ModifierType.CONTROL_MASK, Gtk.AccelFlags.VISIBLE)
 
         if self.contact.jid in gajim.config.get_per('accounts', self.account,
         'minimized_gc').split(' '):
@@ -932,15 +945,15 @@ class GroupchatControl(ChatControlBase):
     def destroy_menu(self, menu, change_nick_menuitem, change_subject_menuitem,
     bookmark_room_menuitem, history_menuitem):
         # destroy accelerators
-        ag = gtk.accel_groups_from_object(self.parent_win.window)[0]
-        change_nick_menuitem.remove_accelerator(ag, gtk.keysyms.n,
-            gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK)
-        change_subject_menuitem.remove_accelerator(ag, gtk.keysyms.t,
-            gtk.gdk.MOD1_MASK)
-        bookmark_room_menuitem.remove_accelerator(ag, gtk.keysyms.b,
-            gtk.gdk.CONTROL_MASK)
-        history_menuitem.remove_accelerator(ag, gtk.keysyms.h,
-            gtk.gdk.CONTROL_MASK)
+        ag = Gtk.accel_groups_from_object(self.parent_win.window)[0]
+        change_nick_menuitem.remove_accelerator(ag, Gdk.KEY_n,
+            Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.SHIFT_MASK)
+        change_subject_menuitem.remove_accelerator(ag, Gdk.KEY_t,
+            Gdk.ModifierType.MOD1_MASK)
+        bookmark_room_menuitem.remove_accelerator(ag, Gdk.KEY_b,
+            Gdk.ModifierType.CONTROL_MASK)
+        history_menuitem.remove_accelerator(ag, Gdk.KEY_h,
+            Gdk.ModifierType.CONTROL_MASK)
         # destroy menu
         menu.destroy()
 
@@ -984,15 +997,15 @@ class GroupchatControl(ChatControlBase):
             self.form_widget.connect('validated', on_send_dataform_clicked)
             self.form_widget.show_all()
             vbox = self.xml.get_object('gc_textviews_vbox')
-            vbox.pack_start(self.form_widget, expand=False, fill=False)
+            vbox.pack_start(self.form_widget, False, True, 0)
 
-            valid_button = gtk.Button(stock=gtk.STOCK_OK)
+            valid_button = Gtk.Button(stock=Gtk.STOCK_OK)
             valid_button.connect('clicked', on_send_dataform_clicked)
-            self.btn_box = gtk.HButtonBox()
-            self.btn_box.set_layout(gtk.BUTTONBOX_END)
-            self.btn_box.pack_start(valid_button)
+            self.btn_box = Gtk.HButtonBox()
+            self.btn_box.set_layout(Gtk.ButtonBoxStyle.END)
+            self.btn_box.pack_start(valid_button, True, True, 0)
             self.btn_box.show_all()
-            vbox.pack_start(self.btn_box, expand=False, fill=False)
+            vbox.pack_start(self.btn_box, False, False, 0)
             if self.parent_win:
                 self.parent_win.redraw_tab(self, 'attention')
             else:
@@ -1063,7 +1076,9 @@ class GroupchatControl(ChatControlBase):
         else:
             self._start_private_message(nick)
         # Scroll to line
-        self.list_treeview.expand_row(path[0:1], False)
+        path_ = path
+        path_.up()
+        self.list_treeview.expand_row(path_, False)
         self.list_treeview.scroll_to_cell(path)
         self.list_treeview.set_cursor(path)
         contact = gajim.contacts.get_contact_with_highest_priority(
@@ -1072,11 +1087,11 @@ class GroupchatControl(ChatControlBase):
             gajim.interface.roster.draw_contact(self.room_jid, self.account)
 
     def get_contact_iter(self, nick):
-        role_iter = self.model.get_iter_root()
+        role_iter = self.model.get_iter_first()
         while role_iter:
             user_iter = self.model.iter_children(role_iter)
             while user_iter:
-                if nick == self.model[user_iter][C_NICK].decode('utf-8'):
+                if nick == self.model[user_iter][C_NICK]:
                     return user_iter
                 else:
                     user_iter = self.model.iter_next(user_iter)
@@ -1084,9 +1099,7 @@ class GroupchatControl(ChatControlBase):
         return None
 
     def print_old_conversation(self, text, contact='', tim=None, xhtml = None,
-        displaymarking=None):
-        if isinstance(text, str):
-            text = unicode(text, 'utf-8')
+    displaymarking=None):
         if contact:
             if contact == self.nick: # it's us
                 kind = 'outgoing'
@@ -1112,8 +1125,6 @@ class GroupchatControl(ChatControlBase):
         (contact = 'info' in such a case).
         If contact is not set: it's a message from the server or help.
         """
-        if isinstance(text, str):
-            text = unicode(text, 'utf-8')
         other_tags_for_name = []
         other_tags_for_text = []
         if contact:
@@ -1339,7 +1350,7 @@ class GroupchatControl(ChatControlBase):
     def got_connected(self):
         # Make autorejoin stop.
         if self.autorejoin:
-            gobject.source_remove(self.autorejoin)
+            GLib.source_remove(self.autorejoin)
         self.autorejoin = None
 
         gajim.gc_connected[self.account][self.room_jid] = True
@@ -1406,8 +1417,7 @@ class GroupchatControl(ChatControlBase):
         if self.autorejoin is None and gajim.account_is_connected(self.account):
             ar_to = gajim.config.get('muc_autorejoin_timeout')
             if ar_to:
-                self.autorejoin = gobject.timeout_add_seconds(ar_to,
-                    self.rejoin)
+                self.autorejoin = GLib.timeout_add_seconds(ar_to, self.rejoin)
 
     def rejoin(self):
         if not self.autorejoin:
@@ -1435,7 +1445,7 @@ class GroupchatControl(ChatControlBase):
         contact in a room
         """
         if nick is None:
-            nick = model[iter_][C_NICK].decode('utf-8')
+            nick = model[iter_][C_NICK]
 
         ctrl = self._start_private_message(nick)
         if ctrl and msg:
@@ -1460,7 +1470,7 @@ class GroupchatControl(ChatControlBase):
         else:
             image = state_images[gc_contact.show]
 
-        name = gobject.markup_escape_text(gc_contact.name)
+        name = GLib.markup_escape_text(gc_contact.name)
 
         # Strike name if blocked
         fjid = self.room_jid + '/' + nick
@@ -1479,14 +1489,14 @@ class GroupchatControl(ChatControlBase):
                 colorstring = "#%04x%04x%04x" % (color.red, color.green,
                     color.blue)
                 name += ('\n<span size="small" style="italic" foreground="%s">'
-                    '%s</span>') % (colorstring, gobject.markup_escape_text(
+                    '%s</span>') % (colorstring, GLib.markup_escape_text(
                     status))
 
-        if image.get_storage_type() == gtk.IMAGE_PIXBUF and \
+        if image.get_storage_type() == Gtk.ImageType.PIXBUF and \
         gc_contact.affiliation != 'none' and gajim.config.get(
         'show_affiliation_in_groupchat'):
             pixbuf1 = image.get_pixbuf().copy()
-            pixbuf2 = gtk.gdk.Pixbuf(gtk.gdk.COLORSPACE_RGB, True, 8, 4, 4)
+            pixbuf2 = GdkPixbuf.Pixbuf.new(GdkPixbuf.Colorspace.RGB, True, 8, 4, 4)
             if gc_contact.affiliation == 'owner':
                 pixbuf2.fill(0xff0000ff) # Red
             elif gc_contact.affiliation == 'admin':
@@ -1495,8 +1505,8 @@ class GroupchatControl(ChatControlBase):
                 pixbuf2.fill(0x00ff00ff) # Green
             pixbuf2.composite(pixbuf1, 12, 12, pixbuf2.get_property('width'),
                 pixbuf2.get_property('height'), 0, 0, 1.0, 1.0,
-                gtk.gdk.INTERP_HYPER, 127)
-            image = gtk.image_new_from_pixbuf(pixbuf1)
+                GdkPixbuf.InterpType.HYPER, 127)
+            image = Gtk.Image.new_from_pixbuf(pixbuf1)
         self.model[iter_][C_IMG] = image
         self.model[iter_][C_TEXT] = name
 
@@ -1509,9 +1519,11 @@ class GroupchatControl(ChatControlBase):
         fake_jid = self.room_jid + '/' + nick
         pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(fake_jid)
         if pixbuf in ('ask', None):
-            scaled_pixbuf = None
+            scaled_pixbuf = empty_pixbuf
         else:
             scaled_pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'roster')
+            if not scaled_pixbuf:
+                scaled_pixbuf = empty_pixbuf
         self.model[iter_][C_AVATAR] = scaled_pixbuf
 
     def draw_role(self, role):
@@ -1912,9 +1924,9 @@ class GroupchatControl(ChatControlBase):
         return iter_
 
     def get_role_iter(self, role):
-        role_iter = self.model.get_iter_root()
+        role_iter = self.model.get_iter_first()
         while role_iter:
-            role_name = self.model[role_iter][C_NICK].decode('utf-8')
+            role_name = self.model[role_iter][C_NICK]
             if role == role_name:
                 return role_iter
             role_iter = self.model.iter_next(role_iter)
@@ -1961,8 +1973,8 @@ class GroupchatControl(ChatControlBase):
                 self.last_sent_msg = msg
                 if self.correcting:
                     self.correcting = False
-                    self.msg_textview.modify_base(gtk.STATE_NORMAL,
-                        self.old_message_tv_color)
+                    self.msg_textview.override_background_color(
+                        Gtk.StateType.NORMAL, self.old_message_tv_color)
 
             if self.correcting and self.last_sent_msg:
                 correction_msg = self.last_sent_msg
@@ -2073,7 +2085,7 @@ class GroupchatControl(ChatControlBase):
         gajim.config.set('gc-hpaned-position', self.hpaned.get_position())
         # remove all register handlers on wigets, created by self.xml
         # to prevent circular references among objects
-        for i in self.handlers.keys():
+        for i in list(self.handlers.keys()):
             if self.handlers[i].handler_is_connected(i):
                 self.handlers[i].disconnect(i)
             del self.handlers[i]
@@ -2202,7 +2214,7 @@ class GroupchatControl(ChatControlBase):
                 reason, jid)
 
         # Ask for a reason
-        dialogs.DoubleInputDialog(_('Destroying %s') % u'\u200E' + \
+        dialogs.DoubleInputDialog(_('Destroying %s') % '\u200E' + \
             self.room_jid, _('You are going to definitively destroy this '
             'room.\nYou may specify a reason below:'),
             _('You may also enter an alternate venue:'), ok_handler=on_ok,
@@ -2236,7 +2248,7 @@ class GroupchatControl(ChatControlBase):
         type_ = model[iter_][2]
         if type_ != 'contact': # source is not a contact
             return
-        contact_jid = data.decode('utf-8')
+        contact_jid = data
         gajim.connections[self.account].send_invite(self.room_jid, contact_jid)
         self.print_conversation(_('%(jid)s has been invited in this room') % {
             'jid': contact_jid}, graphics=False)
@@ -2250,7 +2262,7 @@ class GroupchatControl(ChatControlBase):
             # Textview is not sensitive, don't handle keypress
             return
         # construct event instance from binding
-        event = gtk.gdk.Event(gtk.gdk.KEY_PRESS) # it's always a key-press here
+        event = Gdk.Event(Gdk.EventType.KEY_PRESS) # it's always a key-press here
         event.keyval = event_keyval
         event.state = event_keymod
         event.time = 0 # assign current time
@@ -2258,7 +2270,7 @@ class GroupchatControl(ChatControlBase):
         message_buffer = widget.get_buffer()
         start_iter, end_iter = message_buffer.get_bounds()
 
-        if event.keyval == gtk.keysyms.Tab: # TAB
+        if event.keyval == Gdk.KEY_Tab: # TAB
             cursor_position = message_buffer.get_insert()
             end_iter = message_buffer.get_iter_at_mark(cursor_position)
             text = message_buffer.get_text(start_iter, end_iter, False).decode(
@@ -2301,7 +2313,7 @@ class GroupchatControl(ChatControlBase):
                 self.nick_hits = [] # clear the hit list
                 list_nick = gajim.contacts.get_nick_list(self.account,
                     self.room_jid)
-                list_nick.sort(key=unicode.lower) # case-insensitive sort
+                list_nick.sort(key=str.lower) # case-insensitive sort
                 if begin == '':
                     # empty message, show lasts nicks that highlighted us first
                     for nick in self.attention_list:
@@ -2373,7 +2385,7 @@ class GroupchatControl(ChatControlBase):
             self.last_key_tabs = False
 
     def on_list_treeview_key_press_event(self, widget, event):
-        if event.keyval == gtk.keysyms.Escape:
+        if event.keyval == Gdk.KEY_Escape:
             selection = widget.get_selection()
             iter_ = selection.get_selected()[1]
             if iter_:
@@ -2413,7 +2425,7 @@ class GroupchatControl(ChatControlBase):
         """
         Make contact's popup menu
         """
-        nick = self.model[iter_][C_NICK].decode('utf-8')
+        nick = self.model[iter_][C_NICK]
         c = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
         fjid = self.room_jid + '/' + nick
         jid = c.jid
@@ -2498,9 +2510,13 @@ class GroupchatControl(ChatControlBase):
         muc_icon = gtkgui_helpers.load_icon('muc_active')
         if muc_icon:
             item.set_image(muc_icon)
-        if c.jid and c.name != self.nick:
+        if jid and c.name != self.nick:
+            bookmarked = False
+            contact = gajim.contacts.get_contact(self.account, jid, c.resource)
+            if contact and contact.supports(nbxmpp.NS_CONFERENCE):
+                bookmarked=True
             gui_menu_builder.build_invite_submenu(item, ((c, self.account),),
-                ignore_rooms=[self.room_jid])
+                ignore_rooms=[self.room_jid], show_bookmarked=bookmarked)
         else:
             item.set_sensitive(False)
 
@@ -2509,6 +2525,10 @@ class GroupchatControl(ChatControlBase):
         self.handlers[id_] = item
 
         item = xml.get_object('history_menuitem')
+        if gtkgui_helpers.gtk_icon_theme.has_icon('document-open-recent'):
+            img = Gtk.Image()
+            img.set_from_icon_name('document-open-recent', Gtk.IconSize.MENU)
+            item.set_image(img)
         id_ = item.connect('activate', self.on_history, nick)
         self.handlers[id_] = item
 
@@ -2543,7 +2563,7 @@ class GroupchatControl(ChatControlBase):
         pixbuf = gtkgui_helpers.get_icon_pixmap('document-send', quiet=True)
         if not pixbuf:
             pixbuf = gtkgui_helpers.get_icon_pixmap('gajim-upload')
-        img = gtk.image_new_from_pixbuf(pixbuf)
+        img = Gtk.Image.new_from_pixbuf(pixbuf)
         item.set_image(img)
 
         if not c.resource:
@@ -2555,7 +2575,8 @@ class GroupchatControl(ChatControlBase):
         # show the popup now!
         menu = xml.get_object('gc_occupants_menu')
         menu.show_all()
-        menu.popup(None, None, None, event.button, event.time)
+        menu.attach_to_widget(gajim.interface.roster.window, None)
+        menu.popup(None, None, None, None, event.button, event.time)
 
     def _start_private_message(self, nick):
         gc_c = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
@@ -2575,13 +2596,13 @@ class GroupchatControl(ChatControlBase):
         When an iter is activated (dubblick or single click if gnome is set this
         way
         """
-        if len(path) == 1: # It's a group
+        if path.get_depth() == 1: # It's a group
             if (widget.row_expanded(path)):
                 widget.collapse_row(path)
             else:
                 widget.expand_row(path, False)
         else: # We want to send a private message
-            nick = self.model[path][C_NICK].decode('utf-8')
+            nick = self.model[path][C_NICK]
             self._start_private_message(nick)
 
     def on_list_treeview_row_activated(self, widget, path, col=0):
@@ -2606,25 +2627,25 @@ class GroupchatControl(ChatControlBase):
         if event.button == 3: # right click
             widget.get_selection().select_path(path)
             iter_ = self.model.get_iter(path)
-            if len(path) == 2:
+            if path.get_depth() == 2:
                 self.mk_menu(event, iter_)
             return True
 
         elif event.button == 2: # middle click
             widget.get_selection().select_path(path)
             iter_ = self.model.get_iter(path)
-            if len(path) == 2:
-                nick = self.model[iter_][C_NICK].decode('utf-8')
+            if path.get_depth() == 2:
+                nick = self.model[iter_][C_NICK]
                 self._start_private_message(nick)
             return True
 
         elif event.button == 1: # left click
-            if gajim.single_click and not event.state & gtk.gdk.SHIFT_MASK:
+            if gajim.single_click and not event.get_state() & Gdk.ModifierType.SHIFT_MASK:
                 self.on_row_activated(widget, path)
                 return True
             else:
                 iter_ = self.model.get_iter(path)
-                nick = self.model[iter_][C_NICK].decode('utf-8')
+                nick = self.model[iter_][C_NICK]
                 if not nick in gajim.contacts.get_nick_list(self.account,
                 self.room_jid):
                     # it's a group
@@ -2633,7 +2654,7 @@ class GroupchatControl(ChatControlBase):
                             widget.collapse_row(path)
                         else:
                             widget.expand_row(path, False)
-                elif event.state & gtk.gdk.SHIFT_MASK:
+                elif event.get_state() & Gdk.ModifierType.SHIFT_MASK:
                     self.append_nick_in_msg_textview(self.msg_textview, nick)
                     self.msg_textview.grab_focus()
                     return True
@@ -2667,14 +2688,14 @@ class GroupchatControl(ChatControlBase):
             except Exception:
                 self.tooltip.hide_tooltip()
                 return
-            typ = self.model[iter_][C_TYPE].decode('utf-8')
+            typ = self.model[iter_][C_TYPE]
             if typ == 'contact':
                 account = self.account
 
                 if self.tooltip.timeout == 0 or self.tooltip.id != props[0]:
                     self.tooltip.id = row
-                    nick = self.model[iter_][C_NICK].decode('utf-8')
-                    self.tooltip.timeout = gobject.timeout_add(500,
+                    nick = self.model[iter_][C_NICK]
+                    self.tooltip.timeout = GLib.timeout_add(500,
                         self.show_tooltip, gajim.contacts.get_gc_contact(
                         account, self.room_jid, nick))
 
@@ -2685,16 +2706,18 @@ class GroupchatControl(ChatControlBase):
                 self.tooltip.hide_tooltip()
 
     def show_tooltip(self, contact):
-        if not self.list_treeview.window:
+        if not self.list_treeview.get_window():
             # control has been destroyed since tooltip was requested
             return
-        pointer = self.list_treeview.get_pointer()
-        props = self.list_treeview.get_path_at_pos(pointer[0], pointer[1])
+        w = self.list_treeview.get_window()
+        device = w.get_display().get_device_manager().get_client_pointer()
+        pointer = w.get_device_position(device)
+        props = self.list_treeview.get_path_at_pos(pointer[1], pointer[2])
         # check if the current pointer is at the same path
         # as it was before setting the timeout
         if props and self.tooltip.id == props[0]:
             rect = self.list_treeview.get_cell_area(props[0], props[1])
-            position = self.list_treeview.window.get_origin()
+            position = w.get_origin()[1:]
             self.tooltip.show_tooltip(contact, rect.height,
                 position[1] + rect.y)
         else:
@@ -2812,8 +2835,9 @@ class GroupchatControl(ChatControlBase):
         if fjid in connection.blocked_contacts:
             return
         max_order = connection.get_max_blocked_list_order()
-        new_rule = {'order': str(max_order + 1), 'type': u'jid', 'action': u'deny',
-            'value' : fjid, 'child': [u'message', u'iq', u'presence-out']}
+        new_rule = {'order': str(max_order + 1), 'type': 'jid',
+            'action': 'deny', 'value' : fjid, 'child': ['message', 'iq',
+            'presence-out']}
         connection.blocked_list.append(new_rule)
         connection.blocked_contacts.append(fjid)
         self.draw_contact(nick)

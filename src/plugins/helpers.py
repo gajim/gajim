@@ -97,7 +97,7 @@ class log_calls(object):
         :rtype: function
         '''
 
-        self.full_func_name += f.func_name
+        self.full_func_name += f.__name__
         if self.log_this_class:
             @functools.wraps(f)
             def wrapper(*args, **kwargs):

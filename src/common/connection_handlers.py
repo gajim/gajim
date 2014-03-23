@@ -33,17 +33,16 @@ import base64
 import sys
 import operator
 import hashlib
-import gobject
-import locale
+from gi.repository import GLib
 
 from time import (altzone, daylight, gmtime, localtime, mktime, strftime,
         time as time_time, timezone, tzname)
 from calendar import timegm
 
 import nbxmpp
-import common.caps_cache as capscache
+from common import caps_cache as capscache
 
-from pep import LOCATION_DATA
+from common.pep import LOCATION_DATA
 from common import helpers
 from common import gajim
 from common import exceptions
@@ -188,8 +187,8 @@ class ConnectionDisco:
         if not self.connection or self.connected < 2:
             return
         frm = helpers.get_full_jid_from_iq(iq_obj)
-        to = unicode(iq_obj.getAttr('to'))
-        id_ = unicode(iq_obj.getAttr('id'))
+        to = iq_obj.getAttr('to')
+        id_ = iq_obj.getAttr('id')
         iq = nbxmpp.Iq(to=frm, typ='result', queryNS=nbxmpp.NS_DISCO, frm=to)
         iq.setAttr('id', id_)
         query = iq.setTag('query')
@@ -242,7 +241,7 @@ class ConnectionDisco:
         if self.commandInfoQuery(con, iq_obj):
             raise nbxmpp.NodeProcessed
 
-        id_ = unicode(iq_obj.getAttr('id'))
+        id_ = iq_obj.getAttr('id')
         if id_[:6] == 'Gajim_':
             # We get this request from echo.server
             raise nbxmpp.NodeProcessed
@@ -329,7 +328,7 @@ class ConnectionVcard:
                 os.remove(path)
             # create folder if needed
             if not os.path.isdir(path):
-                os.mkdir(path, 0700)
+                os.mkdir(path, 0o700)
             puny_nick = helpers.sanitize_filename(nick)
             path_to_file = os.path.join(gajim.VCARD_PATH, puny_jid, puny_nick)
         else:
@@ -338,7 +337,7 @@ class ConnectionVcard:
             fil = open(path_to_file, 'w')
             fil.write(str(card))
             fil.close()
-        except IOError, e:
+        except IOError as e:
             gajim.nec.push_incoming_event(InformationEvent(None, conn=self,
                 level='error', pri_txt=_('Disk Write Error'), sec_txt=str(e)))
 
@@ -438,7 +437,7 @@ class ConnectionVcard:
         if 'PHOTO' in vcard and isinstance(vcard['PHOTO'], dict) and \
         'BINVAL' in vcard['PHOTO']:
             photo = vcard['PHOTO']['BINVAL']
-            photo_decoded = base64.decodestring(photo)
+            photo_decoded = base64.b64decode(photo.encode('utf-8'))
             gajim.interface.save_avatar_files(our_jid, photo_decoded)
             avatar_sha = hashlib.sha1(photo_decoded).hexdigest()
             iq2.getTag('PHOTO').setTagData('SHA', avatar_sha)
@@ -565,7 +564,7 @@ class ConnectionVcard:
                     self.discover_ft_proxies()
                 gajim.nec.push_incoming_event(RosterReceivedEvent(None,
                     conn=self))
-            gobject.timeout_add_seconds(10, self.discover_servers)
+            GLib.timeout_add_seconds(10, self.discover_servers)
         elif self.awaiting_answers[id_][0] == PRIVACY_ARRIVED:
             if iq_obj.getType() != 'error':
                 self.privacy_rules_supported = True
@@ -619,7 +618,7 @@ class ConnectionVcard:
 
         elif self.awaiting_answers[id_][0] == ARCHIVING_COLLECTIONS_ARRIVED:
             # TODO
-            print 'ARCHIVING_COLLECTIONS_ARRIVED'
+            print('ARCHIVING_COLLECTIONS_ARRIVED')
 
         elif self.awaiting_answers[id_][0] == ARCHIVING_COLLECTION_ARRIVED:
             def save_if_not_exists(with_, nick, direction, tim, payload):
@@ -629,7 +628,7 @@ class ConnectionVcard:
                     gajim.logger.save_if_not_exists(with_, direction, tim,
                         msg=payload[0].getData(), nick=nick)
                 elif payload[0].getName() == 'message':
-                    print 'Not implemented'
+                    print('Not implemented')
             chat = iq_obj.getTag('chat')
             if chat:
                 with_ = chat.getAttr('with')
@@ -710,7 +709,7 @@ class ConnectionVcard:
         'BINVAL' in vcard['PHOTO']:
             photo = vcard['PHOTO']['BINVAL']
             try:
-                photo_decoded = base64.decodestring(photo)
+                photo_decoded = base64.b64decode(photo.encode('utf-8'))
                 avatar_sha = hashlib.sha1(photo_decoded).hexdigest()
             except Exception:
                 avatar_sha = ''
@@ -732,7 +731,7 @@ class ConnectionVcard:
             puny_nick = helpers.sanitize_filename(resource)
             # create folder if needed
             if not os.path.isdir(begin_path):
-                os.mkdir(begin_path, 0700)
+                os.mkdir(begin_path, 0o700)
             begin_path = os.path.join(begin_path, puny_nick)
             frm_jid += '/' + resource
         if photo_decoded:
@@ -1139,7 +1138,7 @@ class ConnectionHandlersBase:
         gajim.config.should_log(self.name, obj.jid):
             try:
                 gajim.logger.write('status', obj.jid, obj.status, obj.show)
-            except exceptions.PysqliteOperationalError, e:
+            except exceptions.PysqliteOperationalError as e:
                 self.dispatch('DB_ERROR', (_('Disk Write Error'), str(e)))
             except exceptions.DatabaseMalformed:
                 pritext = _('Database Error')
@@ -1162,8 +1161,7 @@ class ConnectionHandlersBase:
         decmsg = self.gpg.decrypt(encmsg, keyID)
         decmsg = self.connection.Dispatcher.replace_non_character(decmsg)
         # \x00 chars are not allowed in C (so in GTK)
-        obj.msgtxt = decmsg.replace('\x00', '').encode(
-            locale.getpreferredencoding()).decode('utf-8')
+        obj.msgtxt = decmsg.replace('\x00', '')
         obj.encrypted = 'xep27'
         self.gpg_messages_to_decrypt.remove([encmsg, keyID, obj])
 
@@ -1211,7 +1209,7 @@ class ConnectionHandlersBase:
         gc_contact = gajim.contacts.get_gc_contact(self.name, obj.jid, nick)
         if obj.receipt_request_tag and gajim.config.get_per('accounts',
         self.name, 'answer_receipts') and ((contact and contact.sub \
-        not in (u'to', u'none')) or gc_contact) and obj.mtype != 'error' and \
+        not in ('to', 'none')) or gc_contact) and obj.mtype != 'error' and \
         not obj.forwarded:
             receipt = nbxmpp.Message(to=obj.fjid, typ='chat')
             receipt.setID(obj.id_)
@@ -1264,7 +1262,7 @@ class ConnectionHandlersBase:
             try:
                 gajim.logger.write('error', frm, error_msg, tim=tim,
                     subject=subject)
-            except exceptions.PysqliteOperationalError, e:
+            except exceptions.PysqliteOperationalError as e:
                 self.dispatch('DB_ERROR', (_('Disk Write Error'), str(e)))
             except exceptions.DatabaseMalformed:
                 pritext = _('Database Error')
@@ -1290,7 +1288,7 @@ class ConnectionHandlersBase:
             jid = gajim.get_jid_without_resource(jid)
 
         try:
-            return self.sessions[jid].values()
+            return list(self.sessions[jid].values())
         except KeyError:
             return []
 
@@ -1352,7 +1350,7 @@ class ConnectionHandlersBase:
         received a thread_id yet and returns the session that we last sent a
         message to
         """
-        sessions = self.sessions[jid].values()
+        sessions = list(self.sessions[jid].values())
 
         # sessions that we haven't received a thread ID in
         idless = [s for s in sessions if not s.received_thread_id]
@@ -1384,7 +1382,7 @@ class ConnectionHandlersBase:
         Find an active session that doesn't have a control attached
         """
         try:
-            sessions = self.sessions[jid].values()
+            sessions = list(self.sessions[jid].values())
 
             # filter out everything except the default session type
             chat_sessions = [s for s in sessions if isinstance(s,
@@ -1767,9 +1765,8 @@ ConnectionJingle, ConnectionIBBytestream):
             iq_obj = obj.stanza.buildReply('result')
             qp = iq_obj.setQuery()
             qp.setTagData('utc', strftime('%Y%m%dT%H:%M:%S', gmtime()))
-            qp.setTagData('tz', helpers.decode_string(tzname[daylight]))
-            qp.setTagData('display', helpers.decode_string(strftime('%c',
-                localtime())))
+            qp.setTagData('tz', tzname[daylight])
+            qp.setTagData('display', strftime('%c', localtime()))
         else:
             iq_obj = obj.stanza.buildReply('error')
             err = nbxmpp.ErrorNode(name=nbxmpp.NS_STANZAS + \

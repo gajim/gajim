@@ -31,7 +31,7 @@ import sys
 import fnmatch
 import zipfile
 from shutil import rmtree
-import ConfigParser
+import configparser
 
 from common import gajim
 from common import nec
@@ -41,7 +41,7 @@ from plugins.helpers import log, log_calls, Singleton
 from plugins.helpers import GajimPluginActivateException
 from plugins.plugin import GajimPlugin, GajimPluginException
 
-class PluginManager(object):
+class PluginManager(metaclass=Singleton):
     '''
     Main plug-in management class.
 
@@ -158,7 +158,7 @@ class PluginManager(object):
         active yet).
 
         :param gui_extpoint_name: name of GUI extension point.
-        :type gui_extpoint_name: unicode
+        :type gui_extpoint_name: str
         :param args: parameters to be passed to extension point handlers
                 (typically and object that invokes `gui_extension_point`;
                 however, this can be practically anything)
@@ -209,7 +209,7 @@ class PluginManager(object):
                 freedom, but is this necessary?
 
         :param gui_extpoint_name: name of GUI extension point.
-        :type gui_extpoint_name: unicode
+        :type gui_extpoint_name: str
         :param args: arguments that `PluginManager.gui_extension_point` was
                 called with for this extension point. This is used (along with
                 extension point name) to identify element to be removed.
@@ -258,14 +258,14 @@ class PluginManager(object):
                 handlers[0](*args)
 
     def _register_events_handlers_in_ged(self, plugin):
-        for event_name, handler in plugin.events_handlers.iteritems():
+        for event_name, handler in plugin.events_handlers.items():
             priority = handler[0]
             handler_function = handler[1]
             gajim.ged.register_event_handler(event_name, priority,
                 handler_function)
 
     def _remove_events_handler_from_ged(self, plugin):
-        for event_name, handler in plugin.events_handlers.iteritems():
+        for event_name, handler in plugin.events_handlers.items():
             priority = handler[0]
             handler_function = handler[1]
             gajim.ged.remove_event_handler(event_name, priority,
@@ -302,7 +302,7 @@ class PluginManager(object):
             self.active_plugins.append(plugin)
             try:
                 plugin.activate()
-            except GajimPluginException, e:
+            except GajimPluginException as e:
                 self.deactivate_plugin(plugin)
                 raise GajimPluginActivateException(str(e))
             self._set_plugin_active_in_global_config(plugin)
@@ -312,7 +312,7 @@ class PluginManager(object):
         # remove GUI extension points handlers (provided by plug-in) from
         # handlers list
         for gui_extpoint_name, gui_extpoint_handlers in \
-        plugin.gui_extension_points.iteritems():
+        plugin.gui_extension_points.items():
             self.gui_extension_points_handlers[gui_extpoint_name].remove(
                 gui_extpoint_handlers)
 
@@ -320,7 +320,7 @@ class PluginManager(object):
         # cleaning up method that must be provided by plug-in developer
         # for each handled GUI extension point)
         for gui_extpoint_name, gui_extpoint_handlers in \
-        plugin.gui_extension_points.iteritems():
+        plugin.gui_extension_points.items():
             if gui_extpoint_name in self.gui_extension_points:
                 for gui_extension_point_args in self.gui_extension_points[
                 gui_extpoint_name]:
@@ -344,14 +344,14 @@ class PluginManager(object):
     @log_calls('PluginManager')
     def _add_gui_extension_points_handlers_from_plugin(self, plugin):
         for gui_extpoint_name, gui_extpoint_handlers in \
-        plugin.gui_extension_points.iteritems():
+        plugin.gui_extension_points.items():
             self.gui_extension_points_handlers.setdefault(gui_extpoint_name,
                 []).append(gui_extpoint_handlers)
 
     @log_calls('PluginManager')
     def _handle_all_gui_extension_points_with_plugin(self, plugin):
         for gui_extpoint_name, gui_extpoint_handlers in \
-        plugin.gui_extension_points.iteritems():
+        plugin.gui_extension_points.items():
             if gui_extpoint_name in self.gui_extension_points:
                 for gui_extension_point_args in self.gui_extension_points[
                 gui_extpoint_name]:
@@ -394,7 +394,7 @@ class PluginManager(object):
         Scans given directory for plugin classes.
 
         :param path: directory to scan for plugins
-        :type path: unicode
+        :type path: str
 
         :return: list of found plugin classes (subclasses of `GajimPlugin`
         :rtype: [] of class objects
@@ -407,7 +407,7 @@ class PluginManager(object):
         '''
         from plugins.plugins_i18n import _
         plugins_found = []
-        conf = ConfigParser.ConfigParser()
+        conf = configparser.ConfigParser()
         fields = ('name', 'short_name', 'version', 'description', 'authors',
             'homepage')
         if not os.path.isdir(path):
@@ -420,37 +420,59 @@ class PluginManager(object):
         for elem_name in dir_list:
             file_path = os.path.join(path, elem_name)
 
-            module = None
-
             if os.path.isfile(file_path) and fnmatch.fnmatch(file_path, '*.py'):
                 module_name = os.path.splitext(elem_name)[0]
-                try:
-                    module = __import__(module_name)
-                except ValueError, value_error:
-                    log.debug(value_error)
-                except ImportError, import_error:
-                    log.debug(import_error)
-
             elif os.path.isdir(file_path) and scan_dirs:
                 module_name = elem_name
-                if module_name in sys.modules:
-                # do not load the module twice
-                    continue
                 file_path += os.path.sep
-                try:
-                    module = __import__(module_name)
-                except ValueError, value_error:
-                    log.debug(value_error)
-                except ImportError, import_error:
-                    log.debug(import_error)
-
-
-            if module is None:
-                continue
 
             manifest_path = os.path.join(os.path.dirname(file_path),
                 'manifest.ini')
             if scan_dirs and (not os.path.isfile(manifest_path)):
+                continue
+
+            # read metadata from manifest.ini
+            conf.remove_section('info')
+            conf_file = open(manifest_path)
+            conf.read_file(conf_file)
+            conf_file.close()
+
+            try:
+                min_v = conf.get('info', 'min_gajim_version')
+            except Exception:
+                min_v = None
+            try:
+                max_v = conf.get('info', 'max_gajim_version')
+            except Exception:
+                max_v = None
+
+            gajim_v = gajim.config.get('version')
+            gajim_v = gajim_v.split('-', 1)[0]
+            gajim_v = gajim_v.split('.')
+
+            if min_v:
+                min_v = min_v.split('.')
+                if gajim_v < min_v:
+                    continue
+            if max_v:
+                max_v = max_v.split('.')
+                if gajim_v > max_v:
+                    continue
+
+
+            module = None
+
+            if module_name in sys.modules:
+            # do not load the module twice
+                continue
+            try:
+                module = __import__(module_name)
+            except ValueError as value_error:
+                log.debug(str(value_error))
+            except ImportError as import_error:
+                log.debug(str(import_error))
+
+            if module is None:
                 continue
 
             log.debug('Attributes processing started')
@@ -467,34 +489,30 @@ class PluginManager(object):
                     module_attr.__path__ = os.path.abspath(
                         os.path.dirname(file_path))
 
-                    # read metadata from manifest.ini
-                    conf.readfp(open(manifest_path, 'r'))
                     for option in fields:
                         if conf.get('info', option) is '':
-                            raise ConfigParser.NoOptionError, 'field empty'
+                            raise configparser.NoOptionError('field empty')
                         if option == 'description':
                             setattr(module_attr, option, _(conf.get('info', option)))
                             continue
                         setattr(module_attr, option, conf.get('info', option))
-                    conf.remove_section('info')
 
                     plugins_found.append(module_attr)
-
-                except TypeError, type_error:
+                except TypeError:
                     # set plugin localization
                     try:
                         module_attr._ = _
-                    except AttributeError, type_error:
+                    except AttributeError:
                         pass
-                except ConfigParser.NoOptionError, type_error:
+                except configparser.NoOptionError:
                     # all fields are required
                     log.debug('%s : %s' % (module_attr_name,
                         'wrong manifest file. all fields are required!'))
-                except ConfigParser.NoSectionError, type_error:
+                except configparser.NoSectionError:
                     # info section are required
                     log.debug('%s : %s' % (module_attr_name,
                         'wrong manifest file. info section are required!'))
-                except ConfigParser.MissingSectionHeaderError, type_error:
+                except configparser.MissingSectionHeaderError:
                     # info section are required
                     log.debug('%s : %s' % (module_attr_name,
                         'wrong manifest file. section are required!'))
@@ -507,10 +525,10 @@ class PluginManager(object):
         '''
         try:
             zip_file = zipfile.ZipFile(zip_filename)
-        except zipfile.BadZipfile, e:
+        except zipfile.BadZipfile:
             # it is not zip file
             raise PluginsystemError(_('Archive corrupted'))
-        except IOError,e:
+        except IOError:
             raise PluginsystemError(_('Archive empty'))
 
         if zip_file.testzip():

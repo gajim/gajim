@@ -13,9 +13,9 @@
 ## You should have received a copy of the GNU General Public License
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-import gajim
+from common import gajim
 import nbxmpp
-from jingle_transport import *
+from common.jingle_transport import *
 from common.socks5 import Socks5ReceiverClient, Socks5SenderClient
 
 

@@ -52,7 +52,7 @@ class DeviceManager(object):
         except ImportError:
             pass
         except gst.ElementNotFoundError:
-            print 'element \'%s\' not found' % name
+            print('element \'%s\' not found' % name)
 
 
 class AudioInputManager(DeviceManager):

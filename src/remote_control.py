@@ -26,8 +26,8 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-import gobject
-import gtk
+from gi.repository import GLib
+from gi.repository import Gtk
 import os
 import base64
 import mimetypes
@@ -75,7 +75,7 @@ def get_dbus_struct(obj):
     """
     if obj is None:
         return DBUS_NONE()
-    if isinstance(obj, (unicode, str)):
+    if isinstance(obj, str):
         return DBUS_STRING(obj)
     if isinstance(obj, int):
         return DBUS_INT32(obj)
@@ -539,7 +539,7 @@ class SignalObject(dbus.service.Object):
             win = gajim.interface.msg_win_mgr.get_window(jid,
                     connected_account).window
             if win.get_property('visible'):
-                win.window.focus(gtk.get_current_event_time())
+                win.window.focus(Gtk.get_current_event_time())
             return DBUS_BOOLEAN(True)
         return DBUS_BOOLEAN(False)
 
@@ -557,8 +557,8 @@ class SignalObject(dbus.service.Object):
                 if account not in gajim.connections:
                     return DBUS_BOOLEAN(False)
                 status = gajim.SHOW_LIST[gajim.connections[account].connected]
-            gobject.idle_add(gajim.interface.roster.send_status, account,
-                    status, message)
+            GLib.idle_add(gajim.interface.roster.send_status, account, status,
+                message)
         else:
             # account not specified, so change the status of all accounts
             for acc in gajim.contacts.get_accounts():
@@ -571,8 +571,8 @@ class SignalObject(dbus.service.Object):
                     if acc not in gajim.connections:
                         continue
                     status_ = gajim.SHOW_LIST[gajim.connections[acc].connected]
-                gobject.idle_add(gajim.interface.roster.send_status, acc,
-                        status_, message)
+                GLib.idle_add(gajim.interface.roster.send_status, acc, status_,
+                    message)
         return DBUS_BOOLEAN(False)
 
     @dbus.service.method(INTERFACE, in_signature='ss', out_signature='')
@@ -585,8 +585,8 @@ class SignalObject(dbus.service.Object):
             gajim.config.set_per('accounts', account, 'priority', prio)
             show = gajim.SHOW_LIST[gajim.connections[account].connected]
             status = gajim.connections[account].status
-            gobject.idle_add(gajim.connections[account].change_status, show,
-                    status)
+            GLib.idle_add(gajim.connections[account].change_status, show,
+                status)
         else:
             # account not specified, so change prio of all accounts
             for acc in gajim.contacts.get_accounts():
@@ -598,8 +598,8 @@ class SignalObject(dbus.service.Object):
                 gajim.config.set_per('accounts', acc, 'priority', prio)
                 show = gajim.SHOW_LIST[gajim.connections[acc].connected]
                 status = gajim.connections[acc].status
-                gobject.idle_add(gajim.connections[acc].change_status, show,
-                        status)
+                GLib.idle_add(gajim.connections[acc].change_status, show,
+                    status)
 
     @dbus.service.method(INTERFACE, in_signature='', out_signature='')
     def show_next_pending_event(self):
@@ -617,13 +617,13 @@ class SignalObject(dbus.service.Object):
         """
         Get vcard info for a contact. Return cached value of the vcard
         """
-        if not isinstance(jid, unicode):
-            jid = unicode(jid)
+        if not isinstance(jid, str):
+            jid = str(jid)
         if not jid:
             raise dbus_support.MissingArgument()
         jid = self._get_real_jid(jid)
 
-        cached_vcard = gajim.connections.values()[0].get_cached_vcard(jid)
+        cached_vcard = list(gajim.connections.values())[0].get_cached_vcard(jid)
         if cached_vcard:
             return get_dbus_struct(cached_vcard)
 
@@ -656,9 +656,9 @@ class SignalObject(dbus.service.Object):
             result['name'] = DBUS_STRING(con.name)
             result['jid'] = DBUS_STRING(gajim.get_jid_from_account(con.name))
             result['message'] = DBUS_STRING(con.status)
-            result['priority'] = DBUS_STRING(unicode(con.priority))
-            result['resource'] = DBUS_STRING(unicode(gajim.config.get_per(
-                    'accounts', con.name, 'resource')))
+            result['priority'] = DBUS_STRING(str(con.priority))
+            result['resource'] = DBUS_STRING(gajim.config.get_per('accounts',
+                con.name, 'resource'))
         return result
 
     @dbus.service.method(INTERFACE, in_signature='s', out_signature='aa{sv}')
@@ -691,12 +691,12 @@ class SignalObject(dbus.service.Object):
         """
         win = gajim.interface.roster.window
         if win.get_property('visible'):
-            gobject.idle_add(win.hide)
+            GLib.idle_add(win.hide)
         else:
             win.present()
             # preserve the 'steal focus preservation'
             if self._is_first():
-                win.window.focus(gtk.get_current_event_time())
+                win.window.focus(Gtk.get_current_event_time())
             else:
                 win.window.focus(long(time()))
 
@@ -709,7 +709,7 @@ class SignalObject(dbus.service.Object):
         win.present()
         # preserve the 'steal focus preservation'
         if self._is_first():
-            win.window.focus(gtk.get_current_event_time())
+            win.window.focus(Gtk.get_current_event_time())
         else:
             win.window.focus(long(time()))
 
@@ -721,7 +721,7 @@ class SignalObject(dbus.service.Object):
         win = gajim.ipython_window
         if win:
             if win.window.is_visible():
-                gobject.idle_add(win.hide)
+                GLib.idle_add(win.hide)
             else:
                 win.show_all()
                 win.present()
@@ -747,7 +747,7 @@ class SignalObject(dbus.service.Object):
     def prefs_store(self):
         try:
             gajim.interface.save_config()
-        except Exception, e:
+        except Exception:
             return DBUS_BOOLEAN(False)
         return DBUS_BOOLEAN(True)
 
@@ -909,9 +909,9 @@ class SignalObject(dbus.service.Object):
         else:
             invalid_file = True
         if not invalid_file and filesize < 16384:
-            fd = open(picture, 'rb')
-            data = fd.read()
-            avatar = base64.encodestring(data)
+            with open(picture, 'rb') as fb:
+                data = fd.read()
+            avatar = base64.b64encode(data).decode('utf-8')
             avatar_mime_type = mimetypes.guess_type(picture)[0]
             vcard={}
             vcard['PHOTO'] = {'BINVAL': avatar}

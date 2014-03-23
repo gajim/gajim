@@ -25,7 +25,7 @@
 
 import os
 import sys
-import gtk
+from gi.repository import Gtk
 import gtkgui_helpers
 
 from common import gajim
@@ -66,10 +66,6 @@ class FeaturesWindow:
             _('Network-manager'): (self.network_manager_available,
                 _('Autodetection of network status.'),
                 _('Requires gnome-network-manager and python-dbus.'),
-                _('Feature not available under Windows.')),
-            _('Session Management'): (self.session_management_available,
-                _('Gajim session is stored on logout and restored on login.'),
-                _('Requires python-gnome2.'),
                 _('Feature not available under Windows.')),
             _('Password encryption'): (self.some_keyring_available,
                 _('Passwords can be stored securely and not just in plaintext.'),
@@ -114,20 +110,20 @@ class FeaturesWindow:
         }
 
         # name, supported
-        self.model = gtk.ListStore(str, bool)
+        self.model = Gtk.ListStore(str, bool)
         treeview.set_model(self.model)
 
-        col = gtk.TreeViewColumn(Q_('?features:Available'))
+        col = Gtk.TreeViewColumn(Q_('?features:Available'))
         treeview.append_column(col)
-        cell = gtk.CellRendererToggle()
+        cell = Gtk.CellRendererToggle()
         cell.set_property('radio', True)
-        col.pack_start(cell)
-        col.set_attributes(cell, active = 1)
+        col.pack_start(cell, True)
+        col.add_attribute(cell, 'active', 1)
 
-        col = gtk.TreeViewColumn(_('Feature'))
+        col = Gtk.TreeViewColumn(_('Feature'))
         treeview.append_column(col)
-        cell = gtk.CellRendererText()
-        col.pack_start(cell, expand = True)
+        cell = Gtk.CellRendererText()
+        col.pack_start(cell, True)
         col.add_attribute(cell, 'text', 0)
 
         # Fill model
@@ -136,7 +132,7 @@ class FeaturesWindow:
             rep = func()
             self.model.append([feature, rep])
 
-        self.model.set_sort_column_id(0, gtk.SORT_ASCENDING)
+        self.model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
         self.xml.connect_signals(self)
         self.window.show_all()
@@ -153,7 +149,7 @@ class FeaturesWindow:
         if not rows:
             return
         path = rows[0]
-        feature = self.model[path][0].decode('utf-8')
+        feature = self.model[path][0]
         text = self.features[feature][1] + '\n'
         if os.name == 'nt':
             text = text + self.features[feature][3]
@@ -192,22 +188,13 @@ class FeaturesWindow:
         import network_manager_listener
         return network_manager_listener.supported
 
-    def session_management_available(self):
-        if os.name == 'nt':
-            return False
-        try:
-            __import__('gnome.ui')
-        except Exception:
-            return False
-        return True
-
     def some_keyring_available(self):
         if os.name == 'nt':
             return False
         if kwalletbinding.kwallet_available():
             return True
         try:
-            __import__('gnomekeyring')
+            from gi.repository import GnomeKeyring
         except Exception:
             return False
         return True

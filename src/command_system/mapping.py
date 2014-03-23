@@ -23,10 +23,9 @@ according to the command properties.
 """
 
 import re
-from types import BooleanType, UnicodeType
 from operator import itemgetter
 
-from errors import DefinitionError, CommandError
+from .errors import DefinitionError, CommandError
 
 # Quite complex piece of regular expression logic to parse options and
 # arguments. Might need some tweaking along the way.
@@ -62,7 +61,7 @@ def parse_arguments(arguments):
     """
     args, opts = [], []
 
-    def intersects_opts((given_start, given_end)):
+    def intersects_opts(given_start, given_end):
         """
         Check if given span intersects with any of options.
         """
@@ -71,7 +70,7 @@ def parse_arguments(arguments):
                 return True
         return False
 
-    def intersects_args((given_start, given_end)):
+    def intersects_args(given_start, given_end):
         """
         Check if given span intersects with any of arguments.
         """
@@ -97,14 +96,14 @@ def parse_arguments(arguments):
     # conflicted sectors. Remove any arguments that intersect with
     # options.
     for arg, position in args[:]:
-        if intersects_opts(position):
+        if intersects_opts(*position):
             args.remove((arg, position))
 
     # Primitive but sufficiently effective way of disposing of
     # conflicted sectors. Remove any options that intersect with
     # arguments.
     for key, value, position in opts[:]:
-        if intersects_args(position):
+        if intersects_args(*position):
             opts.remove((key, value, position))
 
     return args, opts
@@ -207,7 +206,7 @@ def adapt_arguments(command, arguments, args, opts):
     # corresponding optin has been given.
     if command.expand:
         expanded = []
-        for spec_key, spec_value in norm_kwargs.iteritems():
+        for spec_key, spec_value in norm_kwargs.items():
             letter = spec_key[0] if len(spec_key) > 1 else None
             if letter and letter not in expanded:
                 for index, (key, value, position) in enumerate(opts):
@@ -219,7 +218,7 @@ def adapt_arguments(command, arguments, args, opts):
     # Detect switches and set their values accordingly. If any of them
     # carries a value - append it to args.
     for index, (key, value, position) in enumerate(opts):
-        if isinstance(norm_kwargs.get(key), BooleanType):
+        if isinstance(norm_kwargs.get(key), bool):
             opts[index] = (key, True, position)
             if value:
                 args.append((value, position))
@@ -231,8 +230,8 @@ def adapt_arguments(command, arguments, args, opts):
 
     # Stripping down position information supplied with arguments and
     # options as it won't be needed again.
-    args = map(lambda (arg, position): arg, args)
-    opts = map(lambda (key, value, position): (key, value), opts)
+    args = list(map(lambda t: t[0], args))
+    opts = list(map(lambda t: (t[0], t[1]), opts))
 
     # If command has extra option enabled - collect all extra arguments
     # and pass them to a last positional argument command defines as a
@@ -265,15 +264,9 @@ def adapt_arguments(command, arguments, args, opts):
     # Normally this does not happen unless overlapping is enabled.
     for key, value in opts:
         initial = norm_kwargs.get(key)
-        if isinstance(initial, BooleanType):
-            if not isinstance(value, BooleanType):
+        if isinstance(initial, bool):
+            if not isinstance(value, bool):
                 raise CommandError("%s: Switch can not take an argument" % key, command)
-
-    # We need to encode every keyword argument to a simple string, not
-    # the unicode one, because ** expansion does not support it.
-    for index, (key, value) in enumerate(opts):
-        if isinstance(key, UnicodeType):
-            opts[index] = (key.encode(KEY_ENCODING), value)
 
     # Inject the source arguments as a string as a first argument, if
     # command has enabled the corresponding option.
@@ -305,7 +298,7 @@ def generate_usage(command, complete=True):
         letter = key[0]
         key = key.replace('_', '-')
 
-        if isinstance(value, BooleanType):
+        if isinstance(value, bool):
             value = str()
         else:
             value = '=%s' % value

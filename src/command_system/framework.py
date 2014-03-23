@@ -23,12 +23,12 @@ import re
 from types import FunctionType
 from inspect import getargspec, getdoc
 
-from dispatcher import Host, Container
-from dispatcher import get_command, list_commands
-from mapping import parse_arguments, adapt_arguments
-from errors import DefinitionError, CommandError, NoCommandError
+from .dispatcher import Host, Container
+from .dispatcher import get_command, list_commands
+from .mapping import parse_arguments, adapt_arguments
+from .errors import DefinitionError, CommandError, NoCommandError
 
-class CommandHost(object):
+class CommandHost(metaclass=Host):
     """
     Command host is a hub between numerous command processors and
     command containers. Aimed to participate in a dispatching process in
@@ -40,7 +40,7 @@ class CommandHost(object):
     """
     __metaclass__ = Host
 
-class CommandContainer(object):
+class CommandContainer(metaclass=Container):
     """
     Command container is an entity which holds defined commands,
     allowing them to be dispatched and proccessed correctly. Each
@@ -143,7 +143,7 @@ class CommandProcessor(object):
     def list_commands(self):
         commands = list_commands(self.COMMAND_HOST)
         commands = dict(commands)
-        return sorted(set(commands.itervalues()))
+        return sorted(list(commands.values()), key=lambda k: k.__repr__())
 
 class Command(object):
 
@@ -153,7 +153,7 @@ class Command(object):
 
         # Automatically set all the properties passed to a constructor
         # by the command decorator.
-        for key, value in properties.iteritems():
+        for key, value in properties.items():
             setattr(self, key, value)
 
     def __call__(self, *args, **kwargs):
@@ -165,7 +165,7 @@ class Command(object):
         # command or name attributes set. They will be set to a
         # corresponding values right here in case if they was not set by
         # the one who raised an exception.
-        except CommandError, error:
+        except CommandError as error:
             if not error.command and not error.name:
                 raise CommandError(error.message, self)
             raise
@@ -181,7 +181,11 @@ class Command(object):
         return "<Command %s>" % ', '.join(self.names)
 
     def __cmp__(self, other):
-        return cmp(self.first_name, other.first_name)
+        if self.first_name > other.first_name:
+            return 1
+        if self.first_name < other.first_name:
+            return -1
+        return 0
 
     @property
     def first_name(self):

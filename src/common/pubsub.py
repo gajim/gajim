@@ -22,11 +22,13 @@
 ##
 
 import nbxmpp
-import gajim
-import connection_handlers
-import ged
-from connection_handlers_events import PubsubReceivedEvent
-from connection_handlers_events import PubsubBookmarksReceivedEvent
+from common import gajim
+#TODO: Doesn't work
+#from common.connection_handlers import PEP_CONFIG
+PEP_CONFIG = 'pep_config'
+from common import ged
+from common.connection_handlers_events import PubsubReceivedEvent
+from common.connection_handlers_events import PubsubBookmarksReceivedEvent
 import logging
 log = logging.getLogger('gajim.c.pubsub')
 
@@ -220,5 +222,5 @@ class ConnectionPubSub:
         e = e.addChild('configure', {'node': node})
         id_ = self.connection.getAnID()
         query.setID(id_)
-        self.awaiting_answers[id_] = (connection_handlers.PEP_CONFIG,)
+        self.awaiting_answers[id_] = (PEP_CONFIG,)
         self.connection.send(query)

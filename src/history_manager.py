@@ -49,8 +49,9 @@ if os.name == 'nt':
 
 import sys
 import signal
-import gtk
-import gobject
+from gi.repository import Gtk
+from gi.repository import Gdk
+from gi.repository import GLib
 import time
 import locale
 
@@ -64,24 +65,24 @@ def parseOpts():
         shortargs = 'hc:'
         longargs = 'help config-path='
         opts = getopt.getopt(sys.argv[1:], shortargs, longargs.split())[0]
-    except getopt.error, msg:
-        print str(msg)
-        print 'for help use --help'
+    except getopt.error as msg:
+        print(str(msg))
+        print('for help use --help')
         sys.exit(2)
     for o, a in opts:
         if o in ('-h', '--help'):
-            print _('Usage:') + \
+            print(_('Usage:') + \
                 '\n  gajim-history-manager [options] filename\n\n' + \
                 _('Options:') + \
                 '\n  -h, --help         ' + \
                     _('Show this help message and exit') + \
-                '\n  -c, --config-path  ' + _('Set logs directory')
+                '\n  -c, --config-path  ' + _('Set logs directory') + '\n')
             sys.exit()
         elif o in ('-c', '--config-path'):
             config_path = a
     return config_path
 
-config_path = parseOpts()
+onfig_path = parseOpts()
 del parseOpts
 
 import common.configpaths
@@ -120,7 +121,7 @@ class HistoryManager:
                 pixs.append(pix)
         if pixs:
             # set the icon to all windows
-            gtk.window_set_default_icon_list(*pixs)
+            Gtk.Window.set_default_icon_list(*pixs)
 
         if not os.path.exists(LOG_DB_PATH):
             dialogs.ErrorDialog(_('Cannot find history logs database'),
@@ -158,12 +159,12 @@ class HistoryManager:
         xml.connect_signals(self)
 
     def _init_jids_listview(self):
-        self.jids_liststore = gtk.ListStore(str, str)  # jid, jid_id
+        self.jids_liststore = Gtk.ListStore(str, str)  # jid, jid_id
         self.jids_listview.set_model(self.jids_liststore)
-        self.jids_listview.get_selection().set_mode(gtk.SELECTION_MULTIPLE)
+        self.jids_listview.get_selection().set_mode(Gtk.SelectionMode.MULTIPLE)
 
-        renderer_text = gtk.CellRendererText()  # holds jid
-        col = gtk.TreeViewColumn(_('Jabber ID'), renderer_text, text=0)
+        renderer_text = Gtk.CellRendererText()  # holds jid
+        col = Gtk.TreeViewColumn(_('Jabber ID'), renderer_text, text=0)
         self.jids_listview.append_column(col)
 
         self.jids_listview.get_selection().connect('changed',
@@ -171,19 +172,19 @@ class HistoryManager:
 
     def _init_logs_listview(self):
         # log_line_id(HIDDEN), jid_id(HIDDEN), time, message, subject, nickname
-        self.logs_liststore = gtk.ListStore(str, str, str, str, str, str)
+        self.logs_liststore = Gtk.ListStore(str, str, str, str, str, str)
         self.logs_listview.set_model(self.logs_liststore)
-        self.logs_listview.get_selection().set_mode(gtk.SELECTION_MULTIPLE)
+        self.logs_listview.get_selection().set_mode(Gtk.SelectionMode.MULTIPLE)
 
-        renderer_text = gtk.CellRendererText()  # holds time
-        col = gtk.TreeViewColumn(_('Date'), renderer_text, text=C_UNIXTIME)
+        renderer_text = Gtk.CellRendererText()  # holds time
+        col = Gtk.TreeViewColumn(_('Date'), renderer_text, text=C_UNIXTIME)
         # user can click this header and sort
         col.set_sort_column_id(C_UNIXTIME)
         col.set_resizable(True)
         self.logs_listview.append_column(col)
 
-        renderer_text = gtk.CellRendererText()  # holds nickname
-        col = gtk.TreeViewColumn(_('Nickname'), renderer_text, text=C_NICKNAME)
+        renderer_text = Gtk.CellRendererText()  # holds nickname
+        col = Gtk.TreeViewColumn(_('Nickname'), renderer_text, text=C_NICKNAME)
         # user can click this header and sort
         col.set_sort_column_id(C_NICKNAME)
         col.set_resizable(True)
@@ -191,16 +192,16 @@ class HistoryManager:
         self.nickname_col_for_logs = col
         self.logs_listview.append_column(col)
 
-        renderer_text = gtk.CellRendererText()  # holds message
-        col = gtk.TreeViewColumn(_('Message'), renderer_text, markup=C_MESSAGE)
+        renderer_text = Gtk.CellRendererText()  # holds message
+        col = Gtk.TreeViewColumn(_('Message'), renderer_text, markup=C_MESSAGE)
         # user can click this header and sort
         col.set_sort_column_id(C_MESSAGE)
         col.set_resizable(True)
         self.message_col_for_logs = col
         self.logs_listview.append_column(col)
 
-        renderer_text = gtk.CellRendererText()  # holds subject
-        col = gtk.TreeViewColumn(_('Subject'), renderer_text, text=C_SUBJECT)
+        renderer_text = Gtk.CellRendererText()  # holds subject
+        col = Gtk.TreeViewColumn(_('Subject'), renderer_text, text=C_SUBJECT)
         col.set_sort_column_id(C_SUBJECT)  # user can click this header and sort
         col.set_resizable(True)
         col.set_visible(False)
@@ -209,37 +210,37 @@ class HistoryManager:
 
     def _init_search_results_listview(self):
         # log_line_id (HIDDEN), jid, time, message, subject, nickname
-        self.search_results_liststore = gtk.ListStore(str, str, str, str, str,
+        self.search_results_liststore = Gtk.ListStore(int, str, str, str, str,
             str)
         self.search_results_listview.set_model(self.search_results_liststore)
 
-        renderer_text = gtk.CellRendererText()  # holds JID (who said this)
-        col = gtk.TreeViewColumn(_('JID'), renderer_text, text=1)
+        renderer_text = Gtk.CellRendererText()  # holds JID (who said this)
+        col = Gtk.TreeViewColumn(_('JID'), renderer_text, text=1)
         col.set_sort_column_id(1)  # user can click this header and sort
         col.set_resizable(True)
         self.search_results_listview.append_column(col)
 
-        renderer_text = gtk.CellRendererText()  # holds time
-        col = gtk.TreeViewColumn(_('Date'), renderer_text, text=C_UNIXTIME)
+        renderer_text = Gtk.CellRendererText()  # holds time
+        col = Gtk.TreeViewColumn(_('Date'), renderer_text, text=C_UNIXTIME)
         # user can click this header and sort
         col.set_sort_column_id(C_UNIXTIME)
         col.set_resizable(True)
         self.search_results_listview.append_column(col)
 
-        renderer_text = gtk.CellRendererText()  # holds message
-        col = gtk.TreeViewColumn(_('Message'), renderer_text, text=C_MESSAGE)
+        renderer_text = Gtk.CellRendererText()  # holds message
+        col = Gtk.TreeViewColumn(_('Message'), renderer_text, text=C_MESSAGE)
         col.set_sort_column_id(C_MESSAGE)  # user can click this header and sort
         col.set_resizable(True)
         self.search_results_listview.append_column(col)
 
-        renderer_text = gtk.CellRendererText()  # holds subject
-        col = gtk.TreeViewColumn(_('Subject'), renderer_text, text=C_SUBJECT)
+        renderer_text = Gtk.CellRendererText()  # holds subject
+        col = Gtk.TreeViewColumn(_('Subject'), renderer_text, text=C_SUBJECT)
         col.set_sort_column_id(C_SUBJECT)  # user can click this header and sort
         col.set_resizable(True)
         self.search_results_listview.append_column(col)
 
-        renderer_text = gtk.CellRendererText()  # holds nickname
-        col = gtk.TreeViewColumn(_('Nickname'), renderer_text, text=C_NICKNAME)
+        renderer_text = Gtk.CellRendererText()  # holds nickname
+        col = Gtk.TreeViewColumn(_('Nickname'), renderer_text, text=C_NICKNAME)
         # user can click this header and sort
         col.set_sort_column_id(C_NICKNAME)
         col.set_resizable(True)
@@ -247,16 +248,16 @@ class HistoryManager:
 
     def on_history_manager_window_delete_event(self, widget, event):
         if not self.AT_LEAST_ONE_DELETION_DONE:
-            gtk.main_quit()
+            Gtk.main_quit()
             return
 
         def on_yes(clicked):
             self.cur.execute('VACUUM')
             self.con.commit()
-            gtk.main_quit()
+            Gtk.main_quit()
 
         def on_no():
-            gtk.main_quit()
+            Gtk.main_quit()
 
         dialog = dialogs.YesNoDialog(
             _('Do you want to clean up the database? '
@@ -274,11 +275,11 @@ class HistoryManager:
         # get those jids that have at least one entry in logs
         self.cur.execute('SELECT jid, jid_id FROM jids WHERE jid_id IN ('
                 'SELECT distinct logs.jid_id FROM logs) ORDER BY jid')
-        # list of tupples: [(u'aaa@bbb',), (u'cc@dd',)]
+        # list of tupples: [('aaa@bbb',), ('cc@dd',)]
         rows = self.cur.fetchall()
         for row in rows:
             self.jids_already_in.append(row[0])  # jid
-            self.jids_liststore.append(row)  # jid, jid_id
+            self.jids_liststore.append([row[0], str(row[1])])  # jid, jid_id
 
     def on_jids_listview_selection_changed(self, widget, data=None):
         liststore, list_of_paths = self.jids_listview.get_selection()\
@@ -295,13 +296,13 @@ class HistoryManager:
 
         list_of_rowrefs = []
         for path in list_of_paths:  # make them treerowrefs (it's needed)
-            list_of_rowrefs.append(gtk.TreeRowReference(liststore, path))
+            list_of_rowrefs.append(Gtk.TreeRowReference.new(liststore, path))
 
         for rowref in list_of_rowrefs:  # FILL THE STORE, for all rows selected
             path = rowref.get_path()
             if path is None:
                 continue
-            jid = liststore[path][0].decode('utf-8')  # jid
+            jid = liststore[path][0]  # jid
             self._fill_logs_listview(jid)
 
     def _get_jid_id(self, jid):
@@ -394,8 +395,7 @@ class HistoryManager:
             log_line_id, jid_id, time_, kind, message, subject, nickname, \
                 show = row
             try:
-                time_ = time.strftime('%x', time.localtime(float(time_))
-                    ).decode(locale.getpreferredencoding())
+                time_ = time.strftime('%x', time.localtime(float(time_)))
             except ValueError:
                 pass
             else:
@@ -422,10 +422,9 @@ class HistoryManager:
                 message_ = '<span'
                 if color:
                     message_ += ' foreground="%s"' % color
-                message_ += '>%s</span>' % \
-                        gobject.markup_escape_text(message)
-                self.logs_liststore.append((log_line_id, jid_id, time_,
-                    message_, subject, nickname))
+                message_ += '>%s</span>' % GLib.markup_escape_text(message)
+                self.logs_liststore.append((str(log_line_id), str(jid_id),
+                    time_, message_, subject, nickname))
 
     def _fill_search_results_listview(self, text):
         """
@@ -448,8 +447,7 @@ class HistoryManager:
             # log_line_id, jid (from jid_id), time, message, subject, nickname
             log_line_id, jid_id, time_, message, subject, nickname = row
             try:
-                time_ = time.strftime('%x', time.localtime(float(time_))
-                    ).decode(locale.getpreferredencoding())
+                time_ = time.strftime('%x', time.localtime(float(time_)))
             except ValueError:
                 pass
             else:
@@ -461,20 +459,20 @@ class HistoryManager:
     def on_logs_listview_key_press_event(self, widget, event):
         liststore, list_of_paths = self.logs_listview.get_selection()\
                 .get_selected_rows()
-        if event.keyval == gtk.keysyms.Delete:
+        if event.keyval == Gdk.KEY_Delete:
             self._delete_logs(liststore, list_of_paths)
 
     def on_listview_button_press_event(self, widget, event):
         if event.button == 3:  # right click
             xml = gtkgui_helpers.get_gtk_builder('history_manager.ui',
                 'context_menu')
-            if gtk.Buildable.get_name(widget) != 'jids_listview':
+            if Gtk.Buildable.get_name(widget) != 'jids_listview':
                 xml.get_object('export_menuitem').hide()
             xml.get_object('delete_menuitem').connect('activate',
                     self.on_delete_menuitem_activate, widget)
 
             xml.connect_signals(self)
-            xml.get_object('context_menu').popup(None, None, None,
+            xml.get_object('context_menu').popup(None, None, None, None,
                     event.button, event.time)
             return True
 
@@ -489,7 +487,7 @@ class HistoryManager:
         dlg.props.do_overwrite_confirmation = True
         response = dlg.run()
 
-        if response == gtk.RESPONSE_OK:  # user want us to export ;)
+        if response == Gtk.ResponseType.OK:  # user want us to export ;)
             liststore, list_of_paths = self.jids_listview.get_selection()\
                     .get_selected_rows()
             path_to_file = dlg.get_filename()
@@ -499,7 +497,7 @@ class HistoryManager:
         dlg.destroy()
 
     def on_delete_menuitem_activate(self, widget, listview):
-        widget_name = gtk.Buildable.get_name(listview)
+        widget_name = Gtk.Buildable.get_name(listview)
         liststore, list_of_paths = listview.get_selection().get_selected_rows()
         if widget_name == 'jids_listview':
             self._delete_jid_logs(liststore, list_of_paths)
@@ -511,7 +509,7 @@ class HistoryManager:
     def on_jids_listview_key_press_event(self, widget, event):
         liststore, list_of_paths = self.jids_listview.get_selection()\
                 .get_selected_rows()
-        if event.keyval == gtk.keysyms.Delete:
+        if event.keyval == Gdk.KEY_Delete:
             self._delete_jid_logs(liststore, list_of_paths)
 
     def _export_jids_logs_to_file(self, liststore, list_of_paths, path_to_file):
@@ -521,7 +519,7 @@ class HistoryManager:
 
         list_of_rowrefs = []
         for path in list_of_paths:  # make them treerowrefs (it's needed)
-            list_of_rowrefs.append(gtk.TreeRowReference(liststore, path))
+            list_of_rowrefs.append(Gtk.TreeRowReference.new(liststore, path))
 
         for rowref in list_of_rowrefs:
             path = rowref.get_path()
@@ -556,8 +554,7 @@ class HistoryManager:
                 continue
 
             try:
-                time_ = time.strftime('%c', time.localtime(float(time_))
-                    ).decode(locale.getpreferredencoding())
+                time_ = time.strftime('%c', time.localtime(float(time_)))
             except ValueError:
                 pass
 
@@ -573,7 +570,7 @@ class HistoryManager:
             # delete all rows from db that match jid_id
             list_of_rowrefs = []
             for path in list_of_paths:  # make them treerowrefs (it's needed)
-                list_of_rowrefs.append(gtk.TreeRowReference(liststore, path))
+                list_of_rowrefs.append(Gtk.TreeRowReference.new(liststore, path))
 
             for rowref in list_of_rowrefs:
                 path = rowref.get_path()
@@ -622,7 +619,7 @@ class HistoryManager:
             # delete rows from db that match log_line_id
             list_of_rowrefs = []
             for path in list_of_paths:  # make them treerowrefs (it's needed)
-                list_of_rowrefs.append(gtk.TreeRowReference(liststore, path))
+                list_of_rowrefs.append(Gtk.TreeRowReference.new(liststore, path))
 
             for rowref in list_of_rowrefs:
                 path = rowref.get_path()
@@ -652,7 +649,7 @@ class HistoryManager:
         dialog.set_transient_for(self.window)
 
     def on_search_db_button_clicked(self, widget):
-        text = self.search_entry.get_text().decode('utf-8')
+        text = self.search_entry.get_text()
         if not text:
             return
 
@@ -665,12 +662,12 @@ class HistoryManager:
     def on_search_results_listview_row_activated(self, widget, path, column):
         # get log_line_id, jid_id from row we double clicked
         log_line_id = self.search_results_liststore[path][0]
-        jid = self.search_results_liststore[path][1].decode('utf-8')
+        jid = self.search_results_liststore[path][1]
         # make it string as in gtk liststores I have them all as strings
         # as this is what db returns so I don't have to fight with types
         jid_id = self._get_jid_id(jid)
 
-        iter_ = self.jids_liststore.get_iter_root()
+        iter_ = self.jids_liststore.get_iter_first()
         while iter_:
             # self.jids_liststore[iter_][1] holds jid_ids
             if self.jids_liststore[iter_][1] == jid_id:
@@ -683,7 +680,7 @@ class HistoryManager:
         path = self.jids_liststore.get_path(iter_)
         self.jids_listview.set_cursor(path)
 
-        iter_ = self.logs_liststore.get_iter_root()
+        iter_ = self.logs_liststore.get_iter_first()
         while iter_:
             # self.logs_liststore[iter_][0] holds lon_line_ids
             if self.logs_liststore[iter_][0] == log_line_id:
@@ -696,4 +693,4 @@ class HistoryManager:
 if __name__ == '__main__':
     signal.signal(signal.SIGINT, signal.SIG_DFL)  # ^C exits the application
     HistoryManager()
-    gtk.main()
+    Gtk.main()

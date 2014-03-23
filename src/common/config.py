@@ -35,8 +35,8 @@
 import sys
 import re
 import copy
-import defs
-import gobject
+from common import defs
+from gi.repository import GLib
 
 (
 OPT_TYPE,
@@ -191,7 +191,7 @@ class Config:
             'dictionary_url': [opt_str, 'WIKTIONARY', _("Either custom url with %s in it where %s is the word/phrase or 'WIKTIONARY' which means use wiktionary.")],
             'always_english_wikipedia': [opt_bool, False],
             'always_english_wiktionary': [opt_bool, True],
-            'remote_control': [opt_bool, True, _('If checked, Gajim can be controlled remotely using gajim-remote.'), True],
+            'remote_control': [opt_bool, False, _('If checked, Gajim can be controlled remotely using gajim-remote.'), True],
             'networkmanager_support': [opt_bool, True, _('If True, listen to D-Bus signals from NetworkManager and change the status of accounts (provided they do not have listen_to_network_manager set to False and they sync with global status) based upon the status of the network connection.'), True],
             'outgoing_chat_state_notifications': [opt_str, 'all', _('Sent chat state notifications. Can be one of all, composing_only, disabled.')],
             'displayed_chat_state_notifications': [opt_str, 'all', _('Displayed chat state notifications in chat windows. Can be one of all, composing_only, disabled.')],
@@ -217,7 +217,7 @@ class Config:
             'tabs_always_visible': [opt_bool, False, _('Show tab when only one conversation?')],
             'tabs_border': [opt_bool, False, _('Show tabbed notebook border in chat windows?')],
             'tabs_close_button': [opt_bool, True, _('Show close button in tab?')],
-            'esession_modp': [opt_str, '5,14', _('A list of modp groups to use in a Diffie-Hellman, highest preference first, separated by commas. Valid groups are 1, 2, 5, 14, 15, 16, 17 and 18. Higher numbers are more secure, but take longer to calculate when you start a session.')],
+            'esession_modp': [opt_str, '15,16,14', _('A list of modp groups to use in a Diffie-Hellman, highest preference first, separated by commas. Valid groups are 1, 2, 5, 14, 15, 16, 17 and 18. Higher numbers are more secure, but take longer to calculate when you start a session.')],
             'chat_avatar_width': [opt_int, 52],
             'chat_avatar_height': [opt_int, 52],
             'roster_avatar_width': [opt_int, 32],
@@ -349,7 +349,6 @@ class Config:
                     'enable_esessions': [opt_bool, True, _('Enable ESessions encryption for this account.')],
                     'autonegotiate_esessions': [opt_bool, True, _('Should Gajim automatically start an encrypted session when possible?')],
                     'connection_types': [ opt_str, 'tls ssl plain', _('Ordered list (space separated) of connection type to try. Can contain tls, ssl or plain')],
-                    'tls_version': [ opt_str, '1.0', '' ],
                     'cipher_list': [ opt_str, 'HIGH:!aNULL:RC4-SHA', '' ],
                     'action_when_plaintext_connection': [ opt_str, 'warn', _('Show a warning dialog before sending password on an plaintext connection. Can be \'warn\', \'connect\', \'disconnect\'') ],
                     'warn_when_insecure_ssl_connection': [ opt_bool, True, _('Show a warning dialog before using standard SSL library.') ],
@@ -573,7 +572,7 @@ class Config:
         Tree-like interface
         """
         if node is None:
-            for child, option in self.__options[1].iteritems():
+            for child, option in self.__options[1].items():
                 yield (child, ), option
             for grandparent in self.__options_per_key:
                 yield (grandparent, ), None
@@ -584,7 +583,7 @@ class Config:
         elif len(node) == 2:
             grandparent, parent = node
             children = self.__options_per_key[grandparent][1][parent]
-            for child, option in children.iteritems():
+            for child, option in children.items():
                 yield (grandparent, parent, child), option
         else:
             raise ValueError('Invalid node')
@@ -630,11 +629,9 @@ class Config:
 
     def set(self, optname, value):
         if optname not in self.__options[1]:
-#                       raise RuntimeError, 'option %s does not exist' % optname
             return
         value = self.is_valid(self.__options[0][optname][OPT_TYPE], value)
         if value is None:
-#                       raise RuntimeError, 'value of %s cannot be None' % optname
             return
 
         self.__options[1][optname] = value
@@ -642,7 +639,7 @@ class Config:
 
     def get(self, optname=None):
         if not optname:
-            return self.__options[1].keys()
+            return list(self.__options[1].keys())
         if optname not in self.__options[1]:
             return None
         return self.__options[1][optname]
@@ -671,7 +668,6 @@ class Config:
 
     def add_per(self, typename, name): # per_group_of_option
         if typename not in self.__options_per_key:
-#                       raise RuntimeError, 'option %s does not exist' % typename
             return
 
         opt = self.__options_per_key[typename]
@@ -685,7 +681,6 @@ class Config:
 
     def del_per(self, typename, name, subname = None): # per_group_of_option
         if typename not in self.__options_per_key:
-#                       raise RuntimeError, 'option %s does not exist' % typename
             return
 
         opt = self.__options_per_key[typename]
@@ -698,22 +693,18 @@ class Config:
 
     def set_per(self, optname, key, subname, value): # per_group_of_option
         if optname not in self.__options_per_key:
-#                       raise RuntimeError, 'option %s does not exist' % optname
             return
         if not key:
             return
         dict_ = self.__options_per_key[optname][1]
         if key not in dict_:
-#                       raise RuntimeError, '%s is not a key of %s' % (key, dict_)
             self.add_per(optname, key)
         obj = dict_[key]
         if subname not in obj:
-#                       raise RuntimeError, '%s is not a key of %s' % (subname, obj)
             return
         typ = self.__options_per_key[optname][0][subname][OPT_TYPE]
         value = self.is_valid(typ, value)
         if value is None:
-#                       raise RuntimeError, '%s of %s cannot be None' % optname
             return
         obj[subname] = value
         self._timeout_save()
@@ -723,7 +714,7 @@ class Config:
             return None
         dict_ = self.__options_per_key[optname][1]
         if not key:
-            return dict_.keys()
+            return list(dict_.keys())
         if key not in dict_:
             if subname in self.__options_per_key[optname][0]:
                 return self.__options_per_key[optname][0][subname][1]
@@ -812,7 +803,7 @@ class Config:
     def _timeout_save(self):
         if self.save_timeout_id:
             return
-        self.save_timeout_id = gobject.timeout_add(1000, self._really_save)
+        self.save_timeout_id = GLib.timeout_add(1000, self._really_save)
 
     def __init__(self):
         #init default values

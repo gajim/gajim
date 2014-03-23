@@ -25,8 +25,8 @@
 # FIXME: think if we need caching command list. it may be wrong if there will
 # be entities that often change the list, it may be slow to fetch it every time
 
-import gobject
-import gtk
+from gi.repository import GLib
+from gi.repository import Gtk
 
 import nbxmpp
 from common import gajim
@@ -91,7 +91,7 @@ class CommandWindow:
             self.data_form_widget.destroy()
         self.data_form_widget = dataforms_widget.DataFormWidget()
         self.data_form_widget.show()
-        self.sending_form_stage_vbox.pack_start(self.data_form_widget)
+        self.sending_form_stage_vbox.pack_start(self.data_form_widget, True, True, 0)
 
         if self.commandnode:
             # Execute command
@@ -159,7 +159,7 @@ class CommandWindow:
         return self.stage_adhoc_commands_window_delete_event(self.window)
 
     def __del__(self):
-        print 'Object has been deleted.'
+        print('Object has been deleted.')
 
 # stage 1: waiting for command list
     def stage1(self):
@@ -236,13 +236,13 @@ class CommandWindow:
         # build the commands list radiobuttons
         first_radio = None
         for (commandnode, commandname) in self.commandlist:
-            radio = gtk.RadioButton(first_radio, label=commandname)
+            radio = Gtk.RadioButton.new_with_label_from_widget(first_radio, commandname)
             radio.connect("toggled", self.on_command_radiobutton_toggled,
                 commandnode)
             if not first_radio:
                 first_radio = radio
                 self.commandnode = commandnode
-            self.command_list_vbox.pack_start(radio, expand=False)
+            self.command_list_vbox.pack_start(radio, False, True, 0)
         self.command_list_vbox.show_all()
 
         self.stage_finish = self.stage2_finish
@@ -255,9 +255,9 @@ class CommandWindow:
         """
         Remove widgets we created. Not needed when the window is destroyed
         """
-        def remove_widget(widget):
+        def remove_widget(widget, param):
             self.command_list_vbox.remove(widget)
-        self.command_list_vbox.foreach(remove_widget)
+        self.command_list_vbox.foreach(remove_widget, None)
 
     def stage2_close_button_clicked(self, widget):
         self.stage_finish()
@@ -280,8 +280,6 @@ class CommandWindow:
     def stage3(self):
         # close old stage
         self.stage_finish()
-
-        assert isinstance(self.commandnode, unicode)
 
         self.form_status = None
 
@@ -321,8 +319,8 @@ class CommandWindow:
             dialog.destroy()
             cb()
 
-        dialog = dialogs.HigDialog(self.window, gtk.MESSAGE_WARNING,
-            gtk.BUTTONS_YES_NO, _('Cancel confirmation'),
+        dialog = dialogs.HigDialog(self.window, Gtk.MessageType.WARNING,
+            Gtk.ButtonsType.YES_NO, _('Cancel confirmation'),
             _('You are in process of executing command. Do you really want to '
             'cancel it?'), on_response_yes=on_yes)
         dialog.popup()
@@ -452,7 +450,7 @@ class CommandWindow:
 
         note = command.getTag('note')
         if note:
-            self.notes_label.set_text(note.getData().decode('utf-8'))
+            self.notes_label.set_text(note.getData())
             self.notes_label.set_no_show_all(False)
             self.notes_label.show()
         else:
@@ -510,7 +508,7 @@ class CommandWindow:
             try:
                 errorname = nbxmpp.NS_STANZAS + ' ' + str(errorid)
                 errordesc = nbxmpp.ERRORS[errorname][2]
-                error = errordesc.decode('utf-8')
+                error = errordesc
                 del errorname, errordesc
             except KeyError:        # when stanza doesn't have error description
                 error = _('Service returned an error.')
@@ -550,21 +548,21 @@ class CommandWindow:
         progressbar.pulse() method
         """
         assert not self.pulse_id
-        assert isinstance(progressbar, gtk.ProgressBar)
+        assert isinstance(progressbar, Gtk.ProgressBar)
 
         def callback():
             progressbar.pulse()
             return True     # important to keep callback be called back!
 
         # 12 times per second (80 miliseconds)
-        self.pulse_id = gobject.timeout_add(80, callback)
+        self.pulse_id = GLib.timeout_add(80, callback)
 
     def remove_pulsing(self):
         """
         Stop pulsing, useful when especially when removing widget
         """
         if self.pulse_id:
-            gobject.source_remove(self.pulse_id)
+            GLib.source_remove(self.pulse_id)
         self.pulse_id = None
 
 # handling xml stanzas
@@ -608,7 +606,6 @@ class CommandWindow:
         Send the command with data form. Wait for reply
         """
         # create the stanza
-        assert isinstance(self.commandnode, unicode)
         assert action in ('execute', 'prev', 'next', 'complete')
 
         stanza = nbxmpp.Iq(typ='set', to=self.jid)

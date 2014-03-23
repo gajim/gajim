@@ -26,8 +26,8 @@ Acronyms expander plugin.
 
 import sys
 
-import gtk
-import gobject
+from gi.repository import Gtk
+from gi.repository import GObject
 
 from plugins import GajimPlugin
 from plugins.helpers import log, log_calls
@@ -62,7 +62,7 @@ class AcronymsExpanderPlugin(GajimPlugin):
 
     @log_calls('AcronymsExpanderPlugin')
     def get_own_acronyms_list(self):
-        data_file = self.local_file_path('acronyms.py')
+        data_file = self.local_file_path('acronyms')
         data = open(data_file, 'r')
         acronyms = eval(data.read())
         data.close()
@@ -76,7 +76,7 @@ class AcronymsExpanderPlugin(GajimPlugin):
         #assert isinstance(tb,gtk.TextBuffer)
         ACRONYMS = self.config['ACRONYMS']
         INVOKER = self.config['INVOKER']
-        t = tb.get_text(tb.get_start_iter(), tb.get_end_iter())
+        t = tb.get_text(tb.get_start_iter(), tb.get_end_iter(), True)
         #log.debug('%s %d'%(t, len(t)))
         if t and t[-1] == INVOKER:
             #log.debug('changing msg text')
@@ -87,7 +87,7 @@ class AcronymsExpanderPlugin(GajimPlugin):
                 #log.debug('head: %s'%(head))
                 t = ''.join((base, sep, head, INVOKER))
                 #log.debug("setting text: '%s'"%(t))
-                gobject.idle_add(tb.set_text, t)
+                GObject.idle_add(tb.set_text, t)
 
     @log_calls('AcronymsExpanderPlugin')
     def connect_with_chat_control_base(self, chat_control):

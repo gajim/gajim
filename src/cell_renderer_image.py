@@ -21,19 +21,20 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
+from gi.repository import GLib
+from gi.repository import Gtk
+from gi.repository import Gdk
+from gi.repository import GObject
 
-import gtk
-import gobject
-
-class CellRendererImage(gtk.GenericCellRenderer):
+class CellRendererImage(Gtk.CellRendererPixbuf):
 
     __gproperties__ = {
-            'image': (gobject.TYPE_OBJECT, 'Image',
-                    'Image', gobject.PARAM_READWRITE),
+            'image': (GObject.TYPE_OBJECT, 'Image',
+                    'Image', GObject.PARAM_READWRITE),
     }
 
     def __init__(self, col_index, tv_index):
-        self.__gobject_init__()
+        super(CellRendererImage, self).__init__()
         self.image = None
         self.col_index = col_index
         self.tv_index = tv_index
@@ -45,6 +46,14 @@ class CellRendererImage(gtk.GenericCellRenderer):
     def do_get_property(self, pspec):
         return getattr(self, pspec.name)
 
+    def do_activate(event, widget, path, bg_area, cell_area, flags):
+        """Renderers cannot be activated; always return True."""
+        return True
+
+    def do_editing_started(event, widget, path, fb_area, cell_area, flags):
+        """Renderers cannot be edited; always return None."""
+        return None
+
     def func(self, model, path, iter_, image_tree):
         image, tree = image_tree
         if model.get_value(iter_, self.tv_index) != image:
@@ -53,71 +62,67 @@ class CellRendererImage(gtk.GenericCellRenderer):
         col = tree.get_column(self.col_index)
         cell_area = tree.get_cell_area(path, col)
 
-        tree.queue_draw_area(cell_area.x, cell_area.y,
-                                cell_area.width, cell_area.height)
+        tree.queue_draw_area(cell_area.x, cell_area.y, cell_area.width,
+            cell_area.height)
 
     def animation_timeout(self, tree, image):
-        if image.get_storage_type() != gtk.IMAGE_ANIMATION:
+        if image.get_storage_type() != Gtk.ImageType.ANIMATION:
             return
         self.redraw = 0
         iter_ = self.iters[image]
-        iter_.advance()
+        timeval = GLib.TimeVal()
+        timeval.tv_sec = GLib.get_monotonic_time() / 1000000
+        iter_.advance(timeval)
         model = tree.get_model()
         if model:
             model.foreach(self.func, (image, tree))
         if self.redraw:
-            gobject.timeout_add(iter_.get_delay_time(),
-                            self.animation_timeout, tree, image)
+            GLib.timeout_add(iter_.get_delay_time(),
+                self.animation_timeout, tree, image)
         elif image in self.iters:
             del self.iters[image]
 
-    def on_render(self, window, widget, background_area, cell_area,
-                                    expose_area, flags):
+    def do_render(self, ctx, widget, background_area, cell_area, flags):
         if not self.image:
             return
-        pix_rect = gtk.gdk.Rectangle()
-        pix_rect.x, pix_rect.y, pix_rect.width, pix_rect.height = \
-                self.on_get_size(widget, cell_area)
 
-        pix_rect.x += cell_area.x
-        pix_rect.y += cell_area.y
-        pix_rect.width -= 2 * self.get_property('xpad')
-        pix_rect.height -= 2 * self.get_property('ypad')
-
-        draw_rect = cell_area.intersect(pix_rect)
-        draw_rect = expose_area.intersect(draw_rect)
-
-        if self.image.get_storage_type() == gtk.IMAGE_ANIMATION:
+        if self.image.get_storage_type() == Gtk.ImageType.ANIMATION:
             if self.image not in self.iters:
-                if not isinstance(widget, gtk.TreeView):
+                if not isinstance(widget, Gtk.TreeView):
                     return
                 animation = self.image.get_animation()
-                iter_ = animation.get_iter()
+                timeval = GLib.TimeVal()
+                timeval.tv_sec = GLib.get_monotonic_time() / 1000000
+                iter_ = animation.get_iter(timeval)
                 self.iters[self.image] = iter_
-                gobject.timeout_add(iter_.get_delay_time(),
-                        self.animation_timeout, widget, self.image)
+                GLib.timeout_add(iter_.get_delay_time(), self.animation_timeout,
+                    widget, self.image)
 
             pix = self.iters[self.image].get_pixbuf()
-        elif self.image.get_storage_type() == gtk.IMAGE_PIXBUF:
+        elif self.image.get_storage_type() == Gtk.ImageType.PIXBUF:
             pix = self.image.get_pixbuf()
         else:
             return
-        if draw_rect.x < 1:
-            return
-        window.draw_pixbuf(widget.style.black_gc, pix,
-                                draw_rect.x - pix_rect.x,
-                                draw_rect.y - pix_rect.y,
-                                draw_rect.x, draw_rect.y,
-                                draw_rect.width, draw_rect.height,
-                                gtk.gdk.RGB_DITHER_NONE, 0, 0)
 
-    def on_get_size(self, widget, cell_area):
+        Gdk.cairo_set_source_pixbuf(ctx, pix, cell_area.x, cell_area.y)
+        ctx.paint()
+
+    def do_get_size(self, widget, cell_area):
+        """
+        Return the size we need for this cell.
+
+        Each cell is drawn individually and is only as wide as it needs
+        to be, we let the TreeViewColumn take care of making them all
+        line up.
+        """
         if not self.image:
             return 0, 0, 0, 0
-        if self.image.get_storage_type() == gtk.IMAGE_ANIMATION:
+        if self.image.get_storage_type() == Gtk.ImageType.ANIMATION:
             animation = self.image.get_animation()
-            pix = animation.get_iter().get_pixbuf()
-        elif self.image.get_storage_type() == gtk.IMAGE_PIXBUF:
+            timeval = GLib.TimeVal()
+            timeval.tv_sec = GLib.get_monotonic_time() / 1000000
+            pix = animation.get_iter(timeval).get_pixbuf()
+        elif self.image.get_storage_type() == Gtk.ImageType.PIXBUF:
             pix = self.image.get_pixbuf()
         else:
             return 0, 0, 0, 0

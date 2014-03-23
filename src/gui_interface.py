@@ -41,8 +41,9 @@ import time
 import math
 from subprocess import Popen
 
-import gtk
-import gobject
+from gi.repository import Gtk
+from gi.repository import GdkPixbuf
+from gi.repository import GLib
 
 from common import i18n
 from common import gajim
@@ -67,7 +68,7 @@ from groupchat_control import PrivateChatControl
 from atom_window import AtomWindow
 from session import ChatControlSession
 
-import common.sleepy
+from common import sleepy
 
 from nbxmpp import idlequeue
 from nbxmpp import Hashes
@@ -93,7 +94,7 @@ import config
 from threading import Thread
 from common import ged
 
-gajimpaths = common.configpaths.gajimpaths
+from common.configpaths import gajimpaths
 config_filename = gajimpaths['CONFIG_FILE']
 
 from common import optparser
@@ -164,7 +165,7 @@ class Interface:
 
     def handle_event_iq_error(self, obj):
         #('ERROR_ANSWER', account, (id_, fjid, errmsg, errcode))
-        if unicode(obj.errcode) in ('400', '403', '406') and obj.id_:
+        if str(obj.errcode) in ('400', '403', '406') and obj.id_:
             # show the error dialog
             ft = self.instances['file_transfers']
             sid = obj.id_
@@ -172,7 +173,7 @@ class Interface:
                 sid = obj.id_[3:]
             file_props = FilesProp.getFileProp(obj.conn.name, sid)
             if file_props :
-                if unicode(obj.errcode) == '400':
+                if str(obj.errcode) == '400':
                     file_props.error = -3
                 else:
                     file_props.error = -4
@@ -181,7 +182,7 @@ class Interface:
                     error_msg=obj.errmsg))
                 obj.conn.disconnect_transfer(file_props)
                 return
-        elif unicode(obj.errcode) == '404':
+        elif str(obj.errcode) == '404':
             sid = obj.id_
             if len(obj.id_) > 3 and obj.id_[2] == '_':
                 sid = obj.id_[3:]
@@ -210,7 +211,7 @@ class Interface:
         #('STATUS', account, show)
         account = obj.conn.name
         if obj.show in ('offline', 'error'):
-            for name in self.instances[account]['online_dialog'].keys():
+            for name in list(self.instances[account]['online_dialog'].keys()):
                 # .keys() is needed to not have a dictionary length changed
                 # during iteration error
                 self.instances[account]['online_dialog'][name].destroy()
@@ -229,8 +230,8 @@ class Interface:
             # we stop blocking notifications of any kind
             # this prevents from getting the roster items as 'just signed in'
             # contacts. 30 seconds should be enough time
-            gobject.timeout_add_seconds(30,
-                self.unblock_signed_in_notifications, account)
+            GLib.timeout_add_seconds(30, self.unblock_signed_in_notifications,
+                account)
 
         if account in self.show_vcard_when_connect and obj.show not in (
         'offline', 'error'):
@@ -370,8 +371,8 @@ class Interface:
             # popup notifications for 30s
             account_jid = account + '/' + jid
             gajim.block_signed_in_notifications[account_jid] = True
-            gobject.timeout_add_seconds(30,
-                self.unblock_signed_in_notifications, account_jid)
+            GLib.timeout_add_seconds(30, self.unblock_signed_in_notifications,
+                account_jid)
 
         highest = gajim.contacts.get_contact_with_highest_priority(account, jid)
         is_highest = (highest and highest.resource == resource)
@@ -449,7 +450,7 @@ class Interface:
         if not obj.session:
             # No session. This can happen when sending a message from
             # gajim-remote
-            log.warn(msg)
+            log.warning(msg)
             return
         obj.session.roster_message(obj.jid, msg, obj.time_, obj.conn.name,
             msg_type='error')
@@ -695,7 +696,7 @@ class Interface:
         #('GPG_ALWAYS_TRUST', account, callback)
         def on_yes(checked):
             if checked:
-                obj.conn.gpg.always_trust = True
+                obj.conn.gpg.always_trust.append(obj.keyID)
             obj.callback(True)
 
         def on_no():
@@ -960,7 +961,7 @@ class Interface:
         ft_win = self.instances['file_transfers']
         if not file_props.hash_:
             # We disn't get the hash, sender probably don't support that
-            jid = unicode(file_props.sender)
+            jid = file_props.sender
             self.popup_ft_result(account, jid, file_props)
             ft_win.set_status(file_props, 'ok')
         h = Hashes()
@@ -972,15 +973,15 @@ class Interface:
         file_.close()
         # If the hash we received and the hash of the file are the same,
         # then the file is not corrupt
-        jid = unicode(file_props.sender)
+        jid = file_props.sender
         if file_props.hash_ == hash_:
-            gobject.idle_add(self.popup_ft_result, account, jid, file_props)
-            gobject.idle_add(ft_win.set_status, file_props, 'ok')
+            GLib.idle_add(self.popup_ft_result, account, jid, file_props)
+            GLib.idle_add(ft_win.set_status, file_props, 'ok')
         else:
             # wrong hash, we need to get the file again!
             file_props.error = -10
-            gobject.idle_add(self.popup_ft_result, account, jid, file_props)
-            gobject.idle_add(ft_win.set_status, file_props, 'hash_error')
+            GLib.idle_add(self.popup_ft_result, account, jid, file_props)
+            GLib.idle_add(ft_win.set_status, file_props, 'hash_error')
         # End jingle session
         if session:
             session.end_session()
@@ -996,15 +997,15 @@ class Interface:
             return
 
         if file_props.type_ == 'r' and file_props.hash_: # we receive a file
+            gajim.socks5queue.remove_receiver(file_props.sid, True, True)
             # we compare hashes
             if file_props.session_type == 'jingle':
                 # Compare hashes in a new thread
                 self.hashThread = Thread(target=self.__compare_hashes,
                     args=(account, file_props))
                 self.hashThread.start()
-            gajim.socks5queue.remove_receiver(file_props.sid, True, True)
         else: # we send a file
-            jid = unicode(file_props.receiver)
+            jid = file_props.receiver
             gajim.socks5queue.remove_sender(file_props.sid, True, True)
             self.popup_ft_result(account, jid, file_props)
 
@@ -1022,6 +1023,9 @@ class Interface:
                     error_msg=_('Error opening file'))
             elif file_props.error == -10:
                 ft.show_hash_error(jid, file_props, account)
+            elif file_props.error == -12:
+                ft.show_stopped(jid, file_props,
+                    error_msg=_('SSL certificate error'))
             return
 
         msg_type = ''
@@ -1051,7 +1055,7 @@ class Interface:
         if file_props is not None:
             if file_props.type_ == 'r':
                 # get the name of the sender, as it is in the roster
-                sender = unicode(file_props.sender).split('/')[0]
+                sender = file_props.sender.split('/')[0]
                 name = gajim.contacts.get_first_contact_from_jid(account,
                     sender).get_shown_name()
                 filename = os.path.basename(file_props.file_name)
@@ -1119,12 +1123,12 @@ class Interface:
         if gajim.config.get('ask_offline_status_on_connection'):
             # Ask offline status in 1 minute so w'are sure we got all online
             # presences
-            gobject.timeout_add_seconds(60, self.ask_offline_status, account)
-        if state != common.sleepy.STATE_UNKNOWN and connected in (2, 3):
+            GLib.timeout_add_seconds(60, self.ask_offline_status, account)
+        if state != sleepy.STATE_UNKNOWN and connected in (2, 3):
             # we go online or free for chat, so we activate auto status
             gajim.sleeper_state[account] = 'online'
-        elif not ((state == common.sleepy.STATE_AWAY and connected == 4) or \
-        (state == common.sleepy.STATE_XA and connected == 5)):
+        elif not ((state == sleepy.STATE_AWAY and connected == 4) or \
+        (state == sleepy.STATE_XA and connected == 5)):
             # If we are autoaway/xa and come back after a disconnection, do
             # nothing
             # Else disable autoaway
@@ -1175,7 +1179,7 @@ class Interface:
         dlg = dialogs.InputDialog(_('Username Conflict'),
             _('Please type a new username for your local account'),
             input_str=obj.alt_name, is_modal=True, ok_handler=on_ok,
-            cancel_handler=on_cancel)
+            cancel_handler=on_cancel, transient_for=self.roster.window)
 
     def handle_event_resource_conflict(self, obj):
         # ('RESOURCE_CONFLICT', account, ())
@@ -1567,7 +1571,7 @@ class Interface:
 
         This is part of rewriting whole events handling system to use GED.
         """
-        for event_name, event_handlers in self.handlers.iteritems():
+        for event_name, event_handlers in self.handlers.items():
             for event_handler in event_handlers:
                 prio = ged.GUI1
                 if type(event_handler) == tuple:
@@ -1688,6 +1692,8 @@ class Interface:
             event = gajim.events.get_first_event(account, fjid, type_)
             if not event:
                 event = gajim.events.get_first_event(account, jid, type_)
+            if not event:
+                return
 
             if type_ == 'printed_pm':
                 ctrl = event.parameters[2]
@@ -1757,7 +1763,7 @@ class Interface:
             self.roster.draw_contact(jid, account)
         if w:
             w.set_active_tab(ctrl)
-            w.window.window.focus(gtk.get_current_event_time())
+            w.window.get_window().focus(Gtk.get_current_event_time())
             # Using isinstance here because we want to catch all derived types
             if isinstance(ctrl, ChatControlBase):
                 tv = ctrl.conv_textview
@@ -1770,13 +1776,13 @@ class Interface:
     def image_is_ok(self, image):
         if not os.path.exists(image):
             return False
-        img = gtk.Image()
+        img = Gtk.Image()
         try:
             img.set_from_file(image)
         except Exception:
             return False
         t = img.get_storage_type()
-        if t != gtk.IMAGE_PIXBUF and t != gtk.IMAGE_ANIMATION:
+        if t != Gtk.ImageType.PIXBUF and t != Gtk.ImageType.ANIMATION:
             return False
         return True
 
@@ -1874,7 +1880,6 @@ class Interface:
             emoticons_pattern_postmatch = ''
             emoticon_length = 0
             for emoticon in keys: # travel thru emoticons list
-                emoticon = emoticon.decode('utf-8')
                 emoticon_escaped = re.escape(emoticon) # espace regexp metachars
                 # | means or in regexp
                 emoticons_pattern += emoticon_escaped + '|'
@@ -1906,8 +1911,8 @@ class Interface:
         self.sth_at_sth_dot_sth = r'\S+@\S+\.\S*[^\s)?]'
 
         # Invalid XML chars
-        self.invalid_XML_chars = u'[\x00-\x08]|[\x0b-\x0c]|[\x0e-\x1f]|'\
-            u'[\ud800-\udfff]|[\ufffe-\uffff]'
+        self.invalid_XML_chars = '[\x00-\x08]|[\x0b-\x0c]|[\x0e-\x1f]|'\
+            '[\ud800-\udfff]|[\ufffe-\uffff]'
 
     def popup_emoticons_under_button(self, button, parent_win):
         """
@@ -1917,7 +1922,7 @@ class Interface:
             button, parent_win)
 
     def prepare_emoticons_menu(self):
-        menu = gtk.Menu()
+        menu = Gtk.Menu()
         def emoticon_clicked(w, str_):
             if self.emoticon_menuitem_clicked:
                 self.emoticon_menuitem_clicked(str_)
@@ -1932,12 +1937,15 @@ class Interface:
         # Calculate the side lenght of the popup to make it a square
         size = int(round(math.sqrt(len(self.emoticons_images))))
         for image in self.emoticons_images:
-            item = gtk.MenuItem()
-            img = gtk.Image()
-            if isinstance(image[1], gtk.gdk.PixbufAnimation):
+            # In Gtk 3.6, Gtk.MenuItem() doesn't contain a label child
+            item = Gtk.MenuItem('q')
+            img = Gtk.Image()
+            if isinstance(image[1], GdkPixbuf.PixbufAnimation):
                 img.set_from_animation(image[1])
             else:
                 img.set_from_pixbuf(image[1])
+            c = item.get_child()
+            item.remove(c)
             item.add(img)
             item.connect('activate', emoticon_clicked, image[0])
             # add tooltip with ascii
@@ -1955,26 +1963,30 @@ class Interface:
         self.emoticons = dict()
         self.emoticons_animations = dict()
 
-        sys.path.append(path)
+        sys.path.insert(0, path)
         import emoticons
-        if need_reload:
-            # we need to reload else that doesn't work when changing emoticon
-            # set
-            reload(emoticons)
-        emots = emoticons.emoticons
+        try:
+            if need_reload:
+                # we need to reload else that doesn't work when changing
+                # emoticons set
+                import imp
+                imp.reload(emoticons)
+            emots = emoticons.emoticons
+        except Exception as e:
+            return True
         for emot_filename in emots:
             emot_file = os.path.join(path, emot_filename)
             if not self.image_is_ok(emot_file):
                 continue
             for emot in emots[emot_filename]:
-                emot = emot.decode('utf-8')
+                emot = emot
                 # This avoids duplicated emoticons with the same image eg. :)
                 # and :-)
                 if not emot_file in self.emoticons.values():
                     if emot_file.endswith('.gif'):
-                        pix = gtk.gdk.PixbufAnimation(emot_file)
+                        pix = GdkPixbuf.PixbufAnimation.new_from_file(emot_file)
                     else:
-                        pix = gtk.gdk.pixbuf_new_from_file_at_size(emot_file,
+                        pix = GdkPixbuf.Pixbuf.new_from_file_at_size(emot_file,
                             16, 16)
                     self.emoticons_images.append((emot, pix))
                 self.emoticons[emot.upper()] = emot_file
@@ -1986,6 +1998,10 @@ class Interface:
         if not emot_theme:
             return
 
+        transient_for = None
+        if 'preferences' in gajim.interface.instances:
+            transient_for = gajim.interface.instances['preferences'].window
+
         path = os.path.join(gajim.DATA_DIR, 'emoticons', emot_theme)
         if not os.path.exists(path):
             # It's maybe a user theme
@@ -1994,10 +2010,18 @@ class Interface:
                 # theme doesn't exist, disable emoticons
                 dialogs.WarningDialog(_('Emoticons disabled'),
                     _('Your configured emoticons theme has not been found, so '
-                    'emoticons have been disabled.'))
+                    'emoticons have been disabled.'),
+                    transient_for=transient_for)
                 gajim.config.set('emoticons_theme', '')
                 return
-        self._init_emoticons(path, need_reload)
+        if self._init_emoticons(path, need_reload):
+            dialogs.WarningDialog(_('Emoticons disabled'),
+                    _('Your configured emoticons theme cannot been loaded. You '
+                    'maybe need to update the format of emoticons.py file. See '
+                    'http://trac.gajim.org/wiki/Emoticons for more details.'),
+                    transient_for=transient_for)
+            gajim.config.set('emoticons_theme', '')
+            return
         if len(self.emoticons) == 0:
             # maybe old format of emoticons file, try to convert it
             try:
@@ -2018,7 +2042,9 @@ class Interface:
                 dialogs.WarningDialog(_('Emoticons disabled'),
                     _('Your configured emoticons theme cannot been loaded. You '
                     'maybe need to update the format of emoticons.py file. See '
-                    'http://trac.gajim.org/wiki/Emoticons for more details.'))
+                    'http://trac.gajim.org/wiki/Emoticons for more details.'),
+                    transient_for=transient_for)
+                gajim.config.set('emoticons_theme', '')
         if self.emoticons_menu:
             self.emoticons_menu.destroy()
         self.emoticons_menu = self.prepare_emoticons_menu()
@@ -2100,6 +2126,7 @@ class Interface:
         gc_control = GroupchatControl(mw, contact, account,
             is_continued=is_continued)
         mw.new_tab(gc_control)
+        mw.set_active_tab(gc_control)
 
     def new_private_chat(self, gc_contact, account, session=None):
         conn = gajim.connections[account]
@@ -2187,7 +2214,7 @@ class Interface:
         # For JEP-0172
         if added_to_roster:
             ctrl.user_nick = gajim.nicks[account]
-        gobject.idle_add(mw.window.grab_focus)
+        GLib.idle_add(mw.window.grab_focus)
 
         return ctrl
 
@@ -2295,38 +2322,6 @@ class Interface:
             gajim.connections[acct].send_tune(artist, title, source)
             gajim.connections[acct].music_track_info = music_track_info
 
-    def get_bg_fg_colors(self):
-        def gdkcolor_to_rgb (gdkcolor):
-            return [c / 65535. for c in (gdkcolor.red, gdkcolor.green,
-                gdkcolor.blue)]
-
-        def format_rgb (r, g, b):
-            return ' '.join([str(c) for c in ('rgb', r, g, b)])
-
-        def format_gdkcolor (gdkcolor):
-            return format_rgb (*gdkcolor_to_rgb (gdkcolor))
-
-        # get style colors and create string for dvipng
-        dummy = gtk.Invisible()
-        dummy.ensure_style()
-        style = dummy.get_style()
-        bg_str = format_gdkcolor(style.base[gtk.STATE_NORMAL])
-        fg_str = format_gdkcolor(style.text[gtk.STATE_NORMAL])
-        return (bg_str, fg_str)
-
-    def get_fg_color(self, fmt='hex'):
-        def format_gdkcolor (c):
-            if fmt == 'tex':
-                return ' '.join([str(s) for s in
-                    ('rgb', c.red_float, c.green_float, c.blue_float)])
-            elif fmt == 'hex':
-                return str(c)
-
-        # get foreground style color and create string
-        dummy = gtk.Invisible()
-        dummy.ensure_style()
-        return format_gdkcolor(dummy.get_style().text[gtk.STATE_NORMAL])
-
     def read_sleepy(self):
         """
         Check idle status and change that status if needed
@@ -2339,14 +2334,14 @@ class Interface:
             if account not in gajim.sleeper_state or \
             not gajim.sleeper_state[account]:
                 continue
-            if state == common.sleepy.STATE_AWAKE and \
+            if state == sleepy.STATE_AWAKE and \
             gajim.sleeper_state[account] in ('autoaway', 'autoxa'):
                 # we go online
                 self.roster.send_status(account, 'online',
                         gajim.status_before_autoaway[account])
                 gajim.status_before_autoaway[account] = ''
                 gajim.sleeper_state[account] = 'online'
-            elif state == common.sleepy.STATE_AWAY and \
+            elif state == sleepy.STATE_AWAY and \
             gajim.sleeper_state[account] == 'online' and \
             gajim.config.get('autoaway'):
                 # we save out online status
@@ -2366,7 +2361,7 @@ class Interface:
                 self.roster.send_status(account, 'away', auto_message,
                     auto=True)
                 gajim.sleeper_state[account] = 'autoaway'
-            elif state == common.sleepy.STATE_XA and \
+            elif state == sleepy.STATE_XA and \
             gajim.sleeper_state[account] in ('online', 'autoaway',
             'autoaway-forced') and gajim.config.get('autoxa'):
                 # we go extended away [we pass True to auto param]
@@ -2435,16 +2430,16 @@ class Interface:
             # Otherwise, an exception will stop our loop
             timeout, in_seconds = gajim.idlequeue.PROCESS_TIMEOUT
             if in_seconds:
-                gobject.timeout_add_seconds(timeout, self.process_connections)
+                GLib.timeout_add_seconds(timeout, self.process_connections)
             else:
-                gobject.timeout_add(timeout, self.process_connections)
+                GLib.timeout_add(timeout, self.process_connections)
             raise
         return True # renew timeout (loop for ever)
 
     def save_config(self):
         err_str = parser.write()
         if err_str is not None:
-            print >> sys.stderr, err_str
+            print(err_str, file=sys.stderr)
             # it is good to notify the user
             # in case he or she cannot see the output of the console
             dialogs.ErrorDialog(_('Could not save your settings and '
@@ -2487,8 +2482,8 @@ class Interface:
                 extension = '.png'
         path_to_original_file = path_to_file + extension
         try:
-            pixbuf.save(path_to_original_file, typ)
-        except Exception, e:
+            pixbuf.savev(path_to_original_file, typ, [], [])
+        except Exception as e:
             log.error('Error writing avatar file %s: %s' % (
                 path_to_original_file, str(e)))
         # Generate and save the resized, color avatar
@@ -2497,8 +2492,8 @@ class Interface:
             path_to_normal_file = path_to_file + '_notif_size_colored' + \
                 extension
             try:
-                pixbuf.save(path_to_normal_file, 'png')
-            except Exception, e:
+                pixbuf.savev(path_to_normal_file, 'png', [], [])
+            except Exception as e:
                 log.error('Error writing avatar file %s: %s' % \
                     (path_to_original_file, str(e)))
             # Generate and save the resized, black and white avatar
@@ -2507,8 +2502,8 @@ class Interface:
             if bwbuf:
                 path_to_bw_file = path_to_file + '_notif_size_bw' + extension
                 try:
-                    bwbuf.save(path_to_bw_file, 'png')
-                except Exception, e:
+                    bwbuf.savev(path_to_bw_file, 'png', [], [])
+                except Exception as e:
                     log.error('Error writing avatar file %s: %s' % \
                         (path_to_original_file, str(e)))
 
@@ -2639,23 +2634,23 @@ class Interface:
         try:
             from ipython_view import IPythonView
         except ImportError:
-            print 'ipython_view not found'
+            print('ipython_view not found')
             return
-        import pango
+        from gi.repository import Pango
 
         if os.name == 'nt':
             font = 'Lucida Console 9'
         else:
             font = 'Luxi Mono 10'
 
-        window = gtk.Window()
+        window = Gtk.Window()
         window.set_size_request(750, 550)
         window.set_resizable(True)
-        sw = gtk.ScrolledWindow()
-        sw.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+        sw = Gtk.ScrolledWindow()
+        sw.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
         view = IPythonView()
-        view.modify_font(pango.FontDescription(font))
-        view.set_wrap_mode(gtk.WRAP_CHAR)
+        view.override_font(Pango.FontDescription(font))
+        view.set_wrap_mode(Gtk.WrapMode.CHAR)
         sw.add(view)
         window.add(sw)
         window.show_all()
@@ -2683,18 +2678,18 @@ class Interface:
         # get instances for windows/dialogs that will show_all()/hide()
         self.instances['file_transfers'] = dialogs.FileTransfersWindow()
 
-        gobject.timeout_add(100, self.autoconnect)
+        GLib.timeout_add(100, self.autoconnect)
         timeout, in_seconds = gajim.idlequeue.PROCESS_TIMEOUT
         if in_seconds:
-            gobject.timeout_add_seconds(timeout, self.process_connections)
+            GLib.timeout_add_seconds(timeout, self.process_connections)
         else:
-            gobject.timeout_add(timeout, self.process_connections)
-        gobject.timeout_add_seconds(gajim.config.get(
+            GLib.timeout_add(timeout, self.process_connections)
+        GLib.timeout_add_seconds(gajim.config.get(
                 'check_idle_every_foo_seconds'), self.read_sleepy)
 
         # when using libasyncns we need to process resolver in regular intervals
         if resolver.USE_LIBASYNCNS:
-            gobject.timeout_add(200, gajim.resolver.process)
+            GLib.timeout_add(200, gajim.resolver.process)
 
         def remote_init():
             if gajim.config.get('remote_control'):
@@ -2703,7 +2698,7 @@ class Interface:
                     self.remote_ctrl = remote_control.Remote()
                 except Exception:
                     pass
-        gobject.timeout_add_seconds(5, remote_init)
+        GLib.timeout_add_seconds(5, remote_init)
 
     def __init__(self):
         gajim.interface = self
@@ -2764,8 +2759,8 @@ class Interface:
                 break
         # Is gnome configured to activate row on single click ?
         try:
-            import gconf
-            client = gconf.client_get_default()
+            from gi.repository import GConf
+            client = GConf.Client.get_default()
             click_policy = client.get_string(
                     '/apps/nautilus/preferences/click_policy')
             if click_policy == 'single':
@@ -2848,9 +2843,9 @@ class Interface:
                 gajim.connections[account] = Connection(account)
 
         # gtk hooks
-        gtk.about_dialog_set_email_hook(self.on_launch_browser_mailer, 'mail')
-        gtk.about_dialog_set_url_hook(self.on_launch_browser_mailer, 'url')
-        gtk.link_button_set_uri_hook(self.on_launch_browser_mailer, 'url')
+#        Gtk.about_dialog_set_email_hook(self.on_launch_browser_mailer, 'mail')
+#        Gtk.about_dialog_set_url_hook(self.on_launch_browser_mailer, 'url')
+#        Gtk.link_button_set_uri_hook(self.on_launch_browser_mailer, 'url')
 
         self.instances = {}
 
@@ -2945,7 +2940,7 @@ class Interface:
 
         self.show_vcard_when_connect = []
 
-        self.sleeper = common.sleepy.Sleepy(
+        self.sleeper = sleepy.Sleepy(
             gajim.config.get('autoawaytime') * 60, # make minutes to seconds
             gajim.config.get('autoxatime') * 60)
 
@@ -2963,7 +2958,7 @@ class Interface:
                 pixs.append(pix)
         if pixs:
             # set the icon to all windows
-            gtk.window_set_default_icon_list(*pixs)
+            Gtk.Window.set_default_icon_list(pixs)
 
         self.init_emoticons()
         self.make_regexps()
@@ -2976,7 +2971,7 @@ class Interface:
             lang = gajim.config.get('speller_language')
             if not lang:
                 lang = gajim.LANG
-            tv = gtk.TextView()
+            tv = Gtk.TextView()
             try:
                 import gtkspell
                 spell = gtkspell.Spell(tv, lang)
@@ -2985,11 +2980,13 @@ class Interface:
 
         if gajim.config.get('soundplayer') == '':
             # only on first time Gajim starts
-            commands = ('aplay', 'play', 'esdplay', 'artsplay', 'ossplay')
+            commands = ('aplay', 'play', 'ossplay')
             for command in commands:
                 if helpers.is_in_path(command):
-                    if command == 'aplay':
+                    if command in ('aplay', 'play'):
                         command += ' -q'
+                    elif command == 'ossplay':
+                        command += ' -qq'
                     gajim.config.set('soundplayer', command)
                     break
 
@@ -3033,8 +3030,8 @@ class PassphraseRequest:
         self.passphrase = passphrase
         self.completed = True
         if passphrase is not None:
-            gobject.timeout_add_seconds(30,
-                gajim.interface.forget_gpg_passphrase, self.keyid)
+            GLib.timeout_add_seconds(30, gajim.interface.forget_gpg_passphrase,
+                self.keyid)
         for (account, cb) in self.callbacks:
             self.run_callback(account, cb)
         self.callbacks = []
@@ -3085,7 +3082,7 @@ class ThreadInterface:
         def thread_function(func, func_args, callback, callback_args):
             output = func(*func_args)
             if callback:
-                gobject.idle_add(callback, output, *callback_args)
+                GLib.idle_add(callback, output, *callback_args)
 
         Thread(target=thread_function, args=(func, func_args, callback,
                 callback_args)).start()

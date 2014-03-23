@@ -96,7 +96,7 @@ class ConnectionArchive:
 
     def get_item_pref(self, jid):
         jid = nbxmpp.JID(jid)
-        if unicode(jid) in self.items:
+        if str(jid) in self.items:
             return self.items[jid]
 
         if jid.getStripped() in self.items:

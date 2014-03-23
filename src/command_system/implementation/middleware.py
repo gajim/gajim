@@ -31,10 +31,9 @@ support interaction between the two and a few utility methods so you
 don't need to dig up the code itself to write basic commands.
 """
 
-from types import StringTypes
 from traceback import print_exc
 
-from pango import FontDescription
+from gi.repository import Pango
 from common import gajim
 
 from ..framework import CommandProcessor
@@ -62,13 +61,13 @@ class ChatCommandProcessor(CommandProcessor):
         try:
             parents = super(ChatCommandProcessor, self)
             parents.execute_command(name, arguments)
-        except NoCommandError, error:
+        except NoCommandError as error:
             details = dict(name=error.name, message=error.message)
             message = "%(name)s: %(message)s\n" % details
             message += "Try using the //%(name)s or /say /%(name)s " % details
             message += "construct if you intended to send it as a text."
             self.echo_error(message)
-        except CommandError, error:
+        except CommandError as error:
             self.echo_error("%s: %s" % (error.name, error.message))
         except Exception:
             self.echo_error(_("Error during command execution!"))
@@ -98,7 +97,7 @@ class ChatCommandProcessor(CommandProcessor):
     def command_postprocessor(self, command, name, arguments, args, kwargs, value):
         # If command returns a string - print it to a user. A convenient
         # and sufficient in most simple cases shortcut to a using echo.
-        if value and isinstance(value, StringTypes):
+        if value and isinstance(value, str):
             self.echo(value)
 
 class CommandTools:
@@ -117,7 +116,7 @@ class CommandTools:
 
         name = gconf("/desktop/gnome/interface/monospace_font_name")
         name = name if name else "Monospace"
-        font = FontDescription(name)
+        font = Pango.FontDescription(name)
 
         command_ok_tag = buffer.create_tag("command_ok")
         command_ok_tag.set_property("font-desc", font)

@@ -29,14 +29,14 @@ Handles the jingle signalling protocol
 #     - codecs
 
 import nbxmpp
-import helpers
-import gajim
+from common import helpers
+from common import gajim
 
-from jingle_session import JingleSession, JingleStates
+from common.jingle_session import JingleSession, JingleStates
 if gajim.HAVE_FARSTREAM:
-    from jingle_rtp import JingleAudio, JingleVideo
-from jingle_ft import JingleFileTransfer
-from jingle_transport import JingleTransportSocks5, JingleTransportIBB
+    from common.jingle_rtp import JingleAudio, JingleVideo
+from common.jingle_ft import JingleFileTransfer
+from common.jingle_transport import JingleTransportSocks5, JingleTransportIBB
 
 import logging
 logger = logging.getLogger('gajim.c.jingle')
@@ -80,7 +80,7 @@ class ConnectionJingle(object):
         try:
             jid = helpers.get_full_jid_from_iq(stanza)
         except helpers.InvalidFormat:
-            log.warn('Invalid JID: %s, ignoring it' % stanza.getFrom())
+            logger.warn('Invalid JID: %s, ignoring it' % stanza.getFrom())
             return
         id_ = stanza.getID()
         if (jid, id_) in self.__iq_responses.keys():
@@ -170,14 +170,14 @@ class ConnectionJingle(object):
 
     def __hash_support(self, contact):
         if contact.supports(nbxmpp.NS_HASHES):
-            if contact.supports(nbxmpp.NS_HASHES_MD5):
-                return 'md5'
-            elif contact.supports(nbxmpp.NS_HASHES_SHA1):
-                return 'sha-1'
+            if contact.supports(nbxmpp.NS_HASHES_SHA512):
+                return 'sha-512'
             elif contact.supports(nbxmpp.NS_HASHES_SHA256):
                 return 'sha-256'
-            elif contact.supports(nbxmpp.NS_HASHES_SHA512):
-                return 'sha-512'
+            elif contact.supports(nbxmpp.NS_HASHES_SHA1):
+                return 'sha-1'
+            elif contact.supports(nbxmpp.NS_HASHES_MD5):
+                return 'md5'
         return None
 
     def iter_jingle_sessions(self, jid, sid=None, media=None):
@@ -224,4 +224,3 @@ class ConnectionJingle(object):
                 if session.peerjid == jid and session.get_content(media):
                     return session
         return None
-

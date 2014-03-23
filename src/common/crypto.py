@@ -19,6 +19,7 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
+import sys
 import os
 import math
 
@@ -75,8 +76,54 @@ def base28(n):
     else:
         return base28_chr[n]
 
+def add_entropy_sources_OpenSSL():
+    # Other possibly variable data. This are very low quality sources of
+    # entropy, but some of them are installation dependent and can be hard
+    # to guess for the attacker.
+    # Data available on all platforms Unix, Windows
+    sources = [sys.argv, sys.builtin_module_names,
+        sys.copyright, sys.getfilesystemencoding(), sys.hexversion,
+        sys.modules, sys.path, sys.version, sys.api_version,
+        os.environ, os.getcwd(), os.getpid()]
+
+    for s in sources:
+        OpenSSL.rand.add(str(s).encode('utf-8'), 1)
+
+    # On Windows add the current contents of the screen to the PRNG state.
+    if os.name == 'nt':
+        OpenSSL.rand.screen()
+    # The /proc filesystem on POSIX systems contains many random variables:
+    # memory statistics, interrupt counts, network packet counts
+    if os.name == 'posix':
+        dirs = ['/proc', '/proc/net', '/proc/self']
+        for d in dirs:
+            if os.access(d, os.R_OK):
+               for filename in os.listdir(d):
+                  OpenSSL.rand.add(filename.encode('utf-8'), 0)
+                  try:
+                     with open(d + os.sep + filename, "r") as fp:
+                         # Limit the ammount of read bytes, in case a memory
+                         # file was opened
+                         OpenSSL.rand.add(str(fp.read(5000)).encode('utf-8'),
+                             1)
+                  except:
+                      # Ignore all read and access errors
+                      pass
+
+PYOPENSSL_PRNG_PRESENT = False
+try:
+    import OpenSSL.rand
+    PYOPENSSL_PRNG_PRESENT = True
+except ImportError:
+    # PyOpenSSL PRNG not available
+    pass
+
 def random_bytes(bytes_):
-    return os.urandom(bytes_)
+    if PYOPENSSL_PRNG_PRESENT:
+        OpenSSL.rand.add(os.urandom(bytes_), bytes_)
+        return OpenSSL.rand.bytes(bytes_)
+    else:
+        return os.urandom(bytes_)
 
 def generate_nonce():
     return random_bytes(8)

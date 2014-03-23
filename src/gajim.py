@@ -42,7 +42,7 @@ import warnings
 if os.name == 'nt':
     log_path = os.path.join(os.environ['APPDATA'], 'Gajim')
     if not os.path.exists(log_path):
-        os.mkdir(log_path, 0700)
+        os.mkdir(log_path, 0o700)
     log_file = os.path.join(log_path, 'gajim.log')
     fout = open(log_file, 'a')
     sys.stdout = fout
@@ -65,16 +65,25 @@ if os.name == 'nt':
 try:
     import nbxmpp
 except ImportError:
-    print 'Gajim needs python-nbxmpp to run. Quiting...'
+    print('Gajim needs python-nbxmpp to run. Quiting...')
     sys.exit()
 
-from common import demandimport
-demandimport.enable()
-demandimport.ignore += ['gobject._gobject', 'libasyncns', 'i18n',
-    'logging.NullHandler', 'dbus.service', 'OpenSSL.SSL', 'OpenSSL.crypto',
-    'common.sleepy', 'DLFCN', 'dl', 'xml.sax', 'xml.sax.handler', 'ic',
-    'Crypto.PublicKey', 'IPython', 'contextlib', 'imp', 'gst.interfaces',
-    'monotonic', 'gtkexcepthook']
+try:
+    from distutils.version import LooseVersion as V
+    if V(nbxmpp.__version__) < V("0.3"):
+        print('Gajim needs python-nbxmpp > 0.3 to run. Quiting...')
+        sys.exit()
+except:
+    print('Gajim needs python-nbxmpp > 0.3 to run. Quiting...')
+    sys.exit()
+
+#from common import demandimport
+#demandimport.enable()
+#demandimport.ignore += ['GObject._gobject', 'libasyncns', 'i18n',
+#    'logging.NullHandler', 'dbus.service', 'OpenSSL.SSL', 'OpenSSL.crypto',
+#    'common.sleepy', 'DLFCN', 'dl', 'xml.sax', 'xml.sax.handler', 'ic',
+#    'Crypto.PublicKey', 'IPython', 'contextlib', 'imp', 'monotonic',
+#    'gtkexcepthook']
 
 if os.name == 'nt':
     import locale
@@ -85,7 +94,7 @@ if os.name == 'nt':
     os.environ['LANG'] = lang
     gettext.bindtextdomain(APP, DIR)
     gettext.textdomain(APP)
-    gettext.install(APP, DIR, unicode=True)
+    gettext.install(APP, DIR)
 
     locale.setlocale(locale.LC_ALL, '')
     import ctypes
@@ -112,6 +121,12 @@ import logging
 # gajim.gui or gajim.gtk more appropriate ?
 log = logging.getLogger('gajim.gajim')
 
+#import gi
+#gi.require_version('Gtk', '3.0')
+#gi.require_version('Gdk', '2.0')
+#gi.require_version('GObject', '2.0')
+#gi.require_version('Pango', '1.0')
+
 import getopt
 from common import i18n
 
@@ -126,13 +141,13 @@ def parseOpts():
         longargs += ' class= name= screen= gtk-module= sync g-fatal-warnings'
         longargs += ' sm-client-id= sm-client-state-file= sm-disable'
         opts = getopt.getopt(sys.argv[1:], shortargs, longargs.split())[0]
-    except getopt.error, msg1:
-        print msg1
-        print 'for help use --help'
+    except getopt.error as msg1:
+        print(str(msg1))
+        print('for help use --help')
         sys.exit(2)
     for o, a in opts:
         if o in ('-h', '--help'):
-            print _('Usage:') + \
+            print(_('Usage:') + \
                 '\n  gajim [options] filename\n\n' + \
                 _('Options:') + \
                 '\n  -h, --help         ' + \
@@ -146,7 +161,7 @@ def parseOpts():
                 '\n  -c, --config-path  ' + \
                     _('Set configuration directory') + \
                 '\n  -l, --loglevel     ' + \
-                    _('Configure logging system')
+                    _('Configure logging system') + '\n')
             sys.exit()
         elif o in ('-q', '--quiet'):
             logging_helpers.set_quiet()
@@ -162,11 +177,7 @@ def parseOpts():
 
 import locale
 profile, config_path = parseOpts()
-if config_path:
-    config_path = unicode(config_path, locale.getpreferredencoding())
 del parseOpts
-
-profile = unicode(profile, locale.getpreferredencoding())
 
 import common.configpaths
 common.configpaths.gajimpaths.init(config_path)
@@ -189,7 +200,7 @@ if os.name == 'nt':
             if self._file is None and self._error is None:
                 try:
                     self._file = open(fname, 'a')
-                except Exception, details:
+                except Exception as details:
                     self._error = details
             if self._file is not None:
                 self._file.write(text)
@@ -203,14 +214,16 @@ if os.name == 'nt':
 # PyGTK2.10+ only throws a warning
 warnings.filterwarnings('error', module='gtk')
 try:
-    import gobject
-    gobject.set_prgname('gajim')
-    import gtk
-except Warning, msg2:
+    from gi.repository import GObject
+    GObject.set_prgname('gajim')
+    from gi.repository import Gtk
+    from gi.repository import Gdk
+    from gi.repository import GLib
+except Warning as msg2:
     if str(msg2) == 'could not open display':
-        print >> sys.stderr, _('Gajim needs X server to run. Quiting...')
+        print(_('Gajim needs X server to run. Quiting...'), file=sys.stderr)
     else:
-        print >> sys.stderr, _('importing PyGTK failed: %s') % str(msg2)
+        print(_('importing PyGTK failed: %s') % str(msg2), file=sys.stderr)
     sys.exit()
 warnings.resetwarnings()
 
@@ -218,8 +231,8 @@ warnings.resetwarnings()
 if os.name == 'nt':
     warnings.filterwarnings(action='ignore')
 
-if gtk.widget_get_default_direction() == gtk.TEXT_DIR_RTL:
-    i18n.direction_mark = u'\u200F'
+if Gtk.Widget.get_default_direction() == Gtk.TextDirection.RTL:
+    i18n.direction_mark = '\u200F'
 pritext = ''
 
 from common import exceptions
@@ -231,6 +244,10 @@ except exceptions.DatabaseMalformed:
         'http://trac.gajim.org/wiki/DatabaseBackup) or remove it (all history '
         'will be lost).') % common.logger.LOG_DB_PATH
 else:
+    from common import logger
+    gajim.logger = logger.Logger()
+    from common import caps_cache
+    caps_cache.initialize(gajim.logger)
     from common import dbus_support
     if dbus_support.supported:
         from music_track_listener import MusicTrackListener
@@ -252,12 +269,14 @@ else:
         elif sysname in ('FreeBSD', 'OpenBSD', 'NetBSD'):
             libc.setproctitle('gajim')
 
-    if gtk.pygtk_version < (2, 22, 0):
-        pritext = _('Gajim needs PyGTK 2.22 or above')
-        sectext = _('Gajim needs PyGTK 2.22 or above to run. Quiting...')
-    elif gtk.gtk_version < (2, 22, 0):
-        pritext = _('Gajim needs GTK 2.22 or above')
-        sectext = _('Gajim needs GTK 2.22 or above to run. Quiting...')
+#    if Gtk.pygtk_version < (2, 22, 0):
+#        pritext = _('Gajim needs PyGTK 2.22 or above')
+#        sectext = _('Gajim needs PyGTK 2.22 or above to run. Quiting...')
+#    elif Gtk.gtk_version < (2, 22, 0):
+#    if (Gtk.get_major_version(), Gtk.get_minor_version(),
+#    Gtk.get_micro_version()) < (2, 22, 0):
+#        pritext = _('Gajim needs GTK 2.22 or above')
+#        sectext = _('Gajim needs GTK 2.22 or above to run. Quiting...')
 
     from common import check_paths
 
@@ -272,9 +291,9 @@ else:
                 'http://sourceforge.net/project/showfiles.php?group_id=78018'
 
 if pritext:
-    dlg = gtk.MessageDialog(None,
-            gtk.DIALOG_DESTROY_WITH_PARENT | gtk.DIALOG_MODAL,
-            gtk.MESSAGE_ERROR, gtk.BUTTONS_OK, message_format = pritext)
+    dlg = Gtk.MessageDialog(None,
+            Gtk.DialogFlags.DESTROY_WITH_PARENT | Gtk.DialogFlags.MODAL,
+            Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, message_format = pritext)
 
     dlg.format_secondary_text(sectext)
     dlg.run()
@@ -292,6 +311,22 @@ gajimpaths = common.configpaths.gajimpaths
 
 pid_filename = gajimpaths['PID_FILE']
 config_filename = gajimpaths['CONFIG_FILE']
+
+# Seed the OpenSSL pseudo random number generator from file and initialize
+RNG_SEED = gajimpaths['RNG_SEED']
+PYOPENSSL_PRNG_PRESENT = False
+try:
+    import OpenSSL.rand
+    from common import crypto
+    PYOPENSSL_PRNG_PRESENT = True
+    # Seed from file
+    try:
+        OpenSSL.rand.load_file(RNG_SEED)
+    except TypeError:
+        OpenSSL.rand.load_file(RNG_SEED.encode('utf-8'))
+    crypto.add_entropy_sources_OpenSSL()
+except ImportError:
+    log.info("PyOpenSSL PRNG not available")
 
 import traceback
 import errno
@@ -363,7 +398,7 @@ def pid_alive():
 
         try:
             f1 = open('/proc/%d/cmdline'% pid)
-        except IOError, e1:
+        except IOError as e1:
             if e1.errno == errno.ENOENT:
                 return False # file/pid does not exist
             raise
@@ -406,12 +441,12 @@ if pid_alive():
             pixs.append(pix)
     if pixs:
         # set the icon to all windows
-        gtk.window_set_default_icon_list(*pixs)
+        Gtk.Window.set_default_icon_list(*pixs)
     pritext = _('Gajim is already running')
     sectext = _('Another instance of Gajim seems to be running\nRun anyway?')
     dialog = dialogs.YesNoDialog(pritext, sectext)
     dialog.popup()
-    if dialog.run() != gtk.RESPONSE_YES:
+    if dialog.run() != Gtk.ResponseType.YES:
         sys.exit(3)
     dialog.destroy()
     # run anyway, delete pid and useless global vars
@@ -431,7 +466,7 @@ try:
     f2 = open(pid_filename, 'w')
     f2.write(str(os.getpid()))
     f2.close()
-except IOError, e2:
+except IOError as e2:
     dlg = dialogs.ErrorDialog(_('Disk Write Error'), str(e2))
     dlg.run()
     dlg.destroy()
@@ -439,6 +474,12 @@ except IOError, e2:
 del pid_dir
 
 def on_exit():
+    # Save the entropy from OpenSSL PRNG
+    if PYOPENSSL_PRNG_PRESENT:
+        try:
+            OpenSSL.rand.write_file(RNG_SEED)
+        except TypeError:
+            OpenSSL.rand.write_file(RNG_SEED.encode('utf-8'))
     # delete pid file on normal exit
     if os.path.exists(pid_filename):
         os.remove(pid_filename)
@@ -461,45 +502,12 @@ if __name__ == '__main__':
     log.info("Encodings: d:%s, fs:%s, p:%s", sys.getdefaultencoding(), \
             sys.getfilesystemencoding(), locale.getpreferredencoding())
 
-    if os.name != 'nt':
-        # Session Management support
-        try:
-            import gnome.ui
-            raise ImportError
-        except ImportError:
-            pass
-        else:
-            def die_cb(dummy):
-                gajim.interface.roster.quit_gtkgui_interface()
-            gnome.program_init('gajim', gajim.version)
-            cli = gnome.ui.master_client()
-            cli.connect('die', die_cb)
-
-            path_to_gajim_script = gtkgui_helpers.get_abspath_for_script(
-                'gajim')
-
-            if path_to_gajim_script:
-                argv = [path_to_gajim_script]
-                try:
-                    cli.set_restart_command(argv)
-                except TypeError:
-                    # Fedora systems have a broken gnome-python wrapper for this
-                    # function.
-                    cli.set_restart_command(len(argv), argv)
-
     check_paths.check_and_possibly_create_paths()
 
     interface = Interface()
     interface.run()
 
     try:
-        if os.name != 'nt':
-            # This makes Gajim unusable under windows, and threads are used only
-            # for GPG, so not under windows
-            gtk.gdk.threads_init()
-            gtk.gdk.threads_enter()
-        gtk.main()
-        if os.name != 'nt':
-            gtk.gdk.threads_leave()
+        Gtk.main()
     except KeyboardInterrupt:
-        print >> sys.stderr, 'KeyboardInterrupt'
+        print('KeyboardInterrupt', file=sys.stderr)

@@ -36,7 +36,7 @@ from common import helpers
 from common import caps_cache
 
 import sqlite3 as sqlite
-import logger
+from common import logger
 
 class OptionsParser:
     def __init__(self, filename):
@@ -50,7 +50,8 @@ class OptionsParser:
         except Exception:
             if os.path.exists(self.__filename):
                 #we talk about a file
-                print _('Error: cannot open %s for reading') % self.__filename
+                print(_('Error: cannot open %s for reading') % self.__filename,
+                    file=sys.stderr)
             return False
 
         new_version = gajim.config.get('version')
@@ -59,10 +60,6 @@ class OptionsParser:
         regex = re.compile(r"(?P<optname>[^.]+)(?:(?:\.(?P<key>.+))?\.(?P<subname>[^.]+))?\s=\s(?P<value>.*)")
 
         for line in fd:
-            try:
-                line = line.decode('utf-8')
-            except UnicodeDecodeError:
-                line = line.decode(locale.getpreferredencoding())
             optname, key, subname, value = regex.match(line).groups()
             if key is None:
                 self.old_values[optname] = value
@@ -86,19 +83,12 @@ class OptionsParser:
         if value is None:
             return
         # convert to utf8 before writing to file if needed
-        if isinstance(value, unicode):
-            value = value.encode('utf-8')
-        else:
-            value = str(value)
-        if isinstance(opt, unicode):
-            opt = opt.encode('utf-8')
+        value = str(value)
         s = ''
         if parents:
             if len(parents) == 1:
                 return
             for p in parents:
-                if isinstance(p, unicode):
-                    p = p.encode('utf-8')
                 s += p + '.'
         s += opt
         fd.write(s + ' = ' + value + '\n')
@@ -108,11 +98,11 @@ class OptionsParser:
         self.__tempfile = os.path.join(base_dir, '.' + filename)
         try:
             f = open(self.__tempfile, 'w')
-        except IOError, e:
+        except IOError as e:
             return str(e)
         try:
             gajim.config.foreach(self.write_line, f)
-        except IOError, e:
+        except IOError as e:
             return str(e)
         f.flush()
         os.fsync(f.fileno())
@@ -126,9 +116,9 @@ class OptionsParser:
                     pass
         try:
             os.rename(self.__tempfile, self.__filename)
-        except IOError, e:
+        except IOError as e:
             return str(e)
-        os.chmod(self.__filename, 0600)
+        os.chmod(self.__filename, 0o600)
 
     def update_config(self, old_version, new_version):
         old_version_list = old_version.split('.') # convert '0.x.y' to (0, x, y)
@@ -381,7 +371,7 @@ class OptionsParser:
         """
         Apply indeces to the logs database
         """
-        print _('migrating logs database to indices')
+        print(_('migrating logs database to indices'))
         # FIXME see #2812
         back = os.getcwd()
         os.chdir(logger.LOG_DB_FOLDER)
@@ -654,7 +644,7 @@ class OptionsParser:
                     '''
             )
             con.commit()
-        except sqlite.OperationalError, e:
+        except sqlite.OperationalError:
             pass
         con.close()
         gajim.config.set('version', '0.11.4.4')
@@ -714,7 +704,7 @@ class OptionsParser:
         """
         dirs = ['../data', gajim.gajimpaths.data_root, gajim.DATA_DIR]
         if os.name != 'nt':
-            dirs.append(os.path.expanduser(u'~/.gajim'))
+            dirs.append(os.path.expanduser('~/.gajim'))
         for evt in gajim.config.get_per('soundevents'):
             path = gajim.config.get_per('soundevents', evt, 'path')
             # absolute and relative passes are necessary

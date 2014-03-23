@@ -28,13 +28,15 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
+from functools import cmp_to_key
+
 try:
     from common import caps_cache
     from common.account import Account
     import common.gajim
-except ImportError, e:
+except ImportError as e:
     if __name__ != "__main__":
-        raise ImportError(e)
+        raise ImportError(str(e))
 
 class XMPPEntity(object):
     """
@@ -94,6 +96,8 @@ class Contact(CommonContact):
     sub='', ask='', resource='', priority=0, keyID='', client_caps=None,
     our_chatstate=None, chatstate=None, last_status_time=None, msg_id=None,
     last_activity_time=None):
+        if not isinstance(jid, str):
+            print('no str')
 
         CommonContact.__init__(self, jid, account, resource, show, status, name,
             our_chatstate, chatstate, client_caps=client_caps)
@@ -484,17 +488,18 @@ class Contacts():
             for c in self._contacts[jid]:
                 if c.resource == resource:
                     return c
+            return self._contacts[jid][0]
 
     def iter_contacts(self):
-        for jid in self._contacts.keys():
+        for jid in list(self._contacts.keys()):
             for contact in self._contacts[jid][:]:
                 yield contact
 
     def get_jid_list(self):
-        return self._contacts.keys()
+        return list(self._contacts.keys())
 
     def get_contacts_jid_list(self):
-        return [jid for jid, contact in self._contacts.iteritems() if not
+        return [jid for jid, contact in self._contacts.items() if not
                 contact[0].is_groupchat()]
 
     def get_contact_from_full_jid(self, fjid):
@@ -562,7 +567,7 @@ class GC_Contacts():
         gc_list = self.get_gc_list()
         if not room_jid in gc_list:
             return []
-        return self._rooms[room_jid].keys()
+        return list(self._rooms[room_jid].keys())
 
     def get_gc_contact(self, room_jid, nick):
         nick_list = self.get_nick_list(room_jid)
@@ -846,7 +851,7 @@ class MetacontactManager():
         Which of the family will be the big brother under wich all others will be
         ?
         """
-        family.sort(cmp=self._compare_metacontacts)
+        family.sort(key=cmp_to_key(self._compare_metacontacts))
         return family[-1]
 
 

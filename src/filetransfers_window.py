@@ -21,9 +21,10 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-import gtk
-import gobject
-import pango
+from gi.repository import Gtk
+from gi.repository import GdkPixbuf
+from gi.repository import GLib
+from gi.repository import Pango
 import os
 import time
 
@@ -66,52 +67,52 @@ class FileTransfersWindow:
         shall_notify = gajim.config.get('notify_on_file_complete')
         self.notify_ft_checkbox.set_active(shall_notify
                                                                                                 )
-        self.model = gtk.ListStore(gtk.gdk.Pixbuf, str, str, str, str, int,
+        self.model = Gtk.ListStore(GdkPixbuf.Pixbuf, str, str, str, str, int,
             int, str)
         self.tree.set_model(self.model)
-        col = gtk.TreeViewColumn()
+        col = Gtk.TreeViewColumn()
 
-        render_pixbuf = gtk.CellRendererPixbuf()
+        render_pixbuf = Gtk.CellRendererPixbuf()
 
-        col.pack_start(render_pixbuf, expand=True)
+        col.pack_start(render_pixbuf, True)
         render_pixbuf.set_property('xpad', 3)
         render_pixbuf.set_property('ypad', 3)
         render_pixbuf.set_property('yalign', .0)
         col.add_attribute(render_pixbuf, 'pixbuf', 0)
         self.tree.append_column(col)
 
-        col = gtk.TreeViewColumn(_('File'))
-        renderer = gtk.CellRendererText()
-        col.pack_start(renderer, expand=False)
+        col = Gtk.TreeViewColumn(_('File'))
+        renderer = Gtk.CellRendererText()
+        col.pack_start(renderer, False)
         col.add_attribute(renderer, 'markup', C_LABELS)
         renderer.set_property('yalign', 0.)
-        renderer = gtk.CellRendererText()
-        col.pack_start(renderer, expand=True)
+        renderer = Gtk.CellRendererText()
+        col.pack_start(renderer, True)
         col.add_attribute(renderer, 'markup', C_FILE)
         renderer.set_property('xalign', 0.)
         renderer.set_property('yalign', 0.)
-        renderer.set_property('ellipsize', pango.ELLIPSIZE_END)
+        renderer.set_property('ellipsize', Pango.EllipsizeMode.END)
         col.set_resizable(True)
         col.set_expand(True)
         self.tree.append_column(col)
 
-        col = gtk.TreeViewColumn(_('Time'))
-        renderer = gtk.CellRendererText()
-        col.pack_start(renderer, expand=False)
+        col = Gtk.TreeViewColumn(_('Time'))
+        renderer = Gtk.CellRendererText()
+        col.pack_start(renderer, False)
         col.add_attribute(renderer, 'markup', C_TIME)
         renderer.set_property('yalign', 0.5)
         renderer.set_property('xalign', 0.5)
-        renderer = gtk.CellRendererText()
-        renderer.set_property('ellipsize', pango.ELLIPSIZE_END)
+        renderer = Gtk.CellRendererText()
+        renderer.set_property('ellipsize', Pango.EllipsizeMode.END)
         col.set_resizable(True)
         col.set_expand(False)
         self.tree.append_column(col)
 
-        col = gtk.TreeViewColumn(_('Progress'))
-        renderer = gtk.CellRendererProgress()
+        col = Gtk.TreeViewColumn(_('Progress'))
+        renderer = Gtk.CellRendererProgress()
         renderer.set_property('yalign', 0.5)
         renderer.set_property('xalign', 0.5)
-        col.pack_start(renderer, expand=False)
+        col.pack_start(renderer, False)
         col.add_attribute(renderer, 'text', C_PROGRESS)
         col.add_attribute(renderer, 'value', C_PERCENT)
         col.add_attribute(renderer, 'pulse', C_PULSE)
@@ -121,18 +122,18 @@ class FileTransfersWindow:
 
         self.images = {}
         self.icons = {
-                'upload': gtk.STOCK_GO_UP,
-                'download': gtk.STOCK_GO_DOWN,
-                'stop': gtk.STOCK_STOP,
-                'waiting': gtk.STOCK_REFRESH,
-                'pause': gtk.STOCK_MEDIA_PAUSE,
-                'continue': gtk.STOCK_MEDIA_PLAY,
-                'ok': gtk.STOCK_APPLY,
-                'computing': gtk.STOCK_EXECUTE,
-                'hash_error': gtk.STOCK_STOP,
+                'upload': Gtk.STOCK_GO_UP,
+                'download': Gtk.STOCK_GO_DOWN,
+                'stop': Gtk.STOCK_STOP,
+                'waiting': Gtk.STOCK_REFRESH,
+                'pause': Gtk.STOCK_MEDIA_PAUSE,
+                'continue': Gtk.STOCK_MEDIA_PLAY,
+                'ok': Gtk.STOCK_APPLY,
+                'computing': Gtk.STOCK_EXECUTE,
+                'hash_error': Gtk.STOCK_STOP,
         }
 
-        self.tree.get_selection().set_mode(gtk.SELECTION_SINGLE)
+        self.tree.get_selection().set_mode(Gtk.SelectionMode.SINGLE)
         self.tree.get_selection().connect('changed', self.selection_changed)
         self.tooltip = tooltips.FileTransfersTooltip()
         self.file_transfers_menu = self.xml.get_object('file_transfers_menu')
@@ -152,12 +153,12 @@ class FileTransfersWindow:
         for file_props in allfp:
             if file_props.type_ == 's' and file_props.tt_account == account:
                 # 'account' is the sender
-                receiver_jid = unicode(file_props.receiver).split('/')[0]
+                receiver_jid = file_props.receiver.split('/')[0]
                 if jid == receiver_jid and not is_transfer_stopped(file_props):
                     active_transfers[0].append(file_props)
             elif file_props.type_ == 'r' and file_props.tt_account == account:
                 # 'account' is the recipient
-                sender_jid = unicode(file_props.sender).split('/')[0]
+                sender_jid = file_props.sender.split('/')[0]
                 if jid == sender_jid and not is_transfer_stopped(file_props):
                     active_transfers[1].append(file_props)
             else:
@@ -182,12 +183,11 @@ class FileTransfersWindow:
             (file_path, file_name) = os.path.split(file_props.file_name)
         else:
             file_name = file_props.name
-        sectext = '\t' + _('Filename: %s') % gobject.markup_escape_text(
-            file_name)
+        sectext = '\t' + _('Filename: %s') % GLib.markup_escape_text(file_name)
         sectext += '\n\t' + _('Size: %s') % \
         helpers.convert_bytes(file_props.size)
         if file_props.type_ == 'r':
-            jid = unicode(file_props.sender).split('/')[0]
+            jid = file_props.sender.split('/')[0]
             sender_name = gajim.contacts.get_first_contact_from_jid(
                     file_props.tt_account, jid).get_shown_name()
             sender = sender_name
@@ -197,7 +197,7 @@ class FileTransfersWindow:
         sectext += '\n\t' + _('Sender: %s') % sender
         sectext += '\n\t' + _('Recipient: ')
         if file_props.type_ == 's':
-            jid = unicode(file_props.receiver).split('/')[0]
+            jid = file_props.receiver.split('/')[0]
             receiver_name = gajim.contacts.get_first_contact_from_jid(
                     file_props.tt_account, jid).get_shown_name()
             recipient = receiver_name
@@ -207,13 +207,13 @@ class FileTransfersWindow:
         sectext += recipient
         if file_props.type_ == 'r':
             sectext += '\n\t' + _('Saved in: %s') % file_path
-        dialog = dialogs.HigDialog(None, gtk.MESSAGE_INFO, gtk.BUTTONS_NONE,
+        dialog = dialogs.HigDialog(None, Gtk.MessageType.INFO, Gtk.ButtonsType.NONE,
                         _('File transfer completed'), sectext)
         if file_props.type_ == 'r':
-            button = gtk.Button(_('_Open Containing Folder'))
+            button = Gtk.Button(_('_Open Containing Folder'))
             button.connect('clicked', on_open, file_props)
-            dialog.action_area.pack_start(button)
-        ok_button = dialog.add_button(gtk.STOCK_OK, gtk.RESPONSE_OK)
+            dialog.action_area.pack_start(button, True, True, 0)
+        ok_button = dialog.add_button(Gtk.STOCK_OK, Gtk.ResponseType.OK)
         def on_ok(widget):
             dialog.destroy()
         ok_button.connect('clicked', on_ok)
@@ -239,8 +239,7 @@ class FileTransfersWindow:
             file_name = os.path.basename(file_props.file_name)
         else:
             file_name = file_props.name
-        sectext = '\t' + _('Filename: %s') % gobject.markup_escape_text(
-            file_name)
+        sectext = '\t' + _('Filename: %s') % GLib.markup_escape_text(file_name)
         sectext += '\n\t' + _('Recipient: %s') % jid
         if error_msg:
             sectext += '\n\t' + _('Error message: %s') % error_msg
@@ -283,12 +282,12 @@ class FileTransfersWindow:
             _('The file %(file)s has been fully received, but it seems to be '
             'wrongly received.\nDo you want to reload it?') % \
             {'file': file_name}, on_response_yes=(on_yes, jid, file_props,
-            account), type_=gtk.MESSAGE_ERROR)
+            account), type_=Gtk.MessageType.ERROR)
 
     def show_file_send_request(self, account, contact):
-        win = gtk.ScrolledWindow()
-        win.set_shadow_type(gtk.SHADOW_IN)
-        win.set_policy(gtk.POLICY_NEVER, gtk.POLICY_NEVER)
+        win = Gtk.ScrolledWindow()
+        win.set_shadow_type(Gtk.ShadowType.IN)
+        win.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.NEVER)
 
         from message_textview import MessageTextView
         desc_entry = MessageTextView()
@@ -301,7 +300,7 @@ class FileTransfersWindow:
                     files_path_list)
             text_buffer = desc_entry.get_buffer()
             desc = text_buffer.get_text(text_buffer.get_start_iter(),
-                text_buffer.get_end_iter())
+                text_buffer.get_end_iter(), True)
             for file_path in files_path_list:
                 if self.send_file(account, contact, file_path, desc) \
                 and file_dir is None:
@@ -311,22 +310,22 @@ class FileTransfersWindow:
                 dialog.destroy()
 
         dialog = dialogs.FileChooserDialog(_('Choose File to Send...'),
-                gtk.FILE_CHOOSER_ACTION_OPEN, (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL),
-                gtk.RESPONSE_OK,
+                Gtk.FileChooserAction.OPEN, (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL),
+                Gtk.ResponseType.OK,
                 True, # select multiple true as we can select many files to send
                 gajim.config.get('last_send_dir'),
                 on_response_ok=on_ok,
                 on_response_cancel=lambda e:dialog.destroy()
                 )
 
-        btn = gtk.Button(_('_Send'))
+        btn = Gtk.Button.new_with_mnemonic(_('_Send'))
         btn.set_property('can-default', True)
         # FIXME: add send icon to this button (JUMP_TO)
-        dialog.add_action_widget(btn, gtk.RESPONSE_OK)
-        dialog.set_default_response(gtk.RESPONSE_OK)
+        dialog.add_action_widget(btn, Gtk.ResponseType.OK)
+        dialog.set_default_response(Gtk.ResponseType.OK)
 
-        desc_hbox = gtk.HBox(False, 5)
-        desc_hbox.pack_start(gtk.Label(_('Description: ')), False, False, 0)
+        desc_hbox = Gtk.HBox(False, 5)
+        desc_hbox.pack_start(Gtk.Label(_('Description: ')), False, False, 0)
         desc_hbox.pack_start(win, True, True, 0)
 
         dialog.vbox.pack_start(desc_hbox, False, False, 0)
@@ -383,7 +382,7 @@ class FileTransfersWindow:
             if os.path.exists(file_path):
                 # check if we have write permissions
                 if not os.access(file_path, os.W_OK):
-                    file_name = gobject.markup_escape_text(os.path.basename(
+                    file_name = GLib.markup_escape_text(os.path.basename(
                         file_path))
                     dialogs.ErrorDialog(
                         _('Cannot overwrite existing file "%s"' % file_name),
@@ -405,8 +404,8 @@ class FileTransfersWindow:
 
                 dialog = dialogs.FTOverwriteConfirmationDialog(
                     _('This file already exists'), _('What do you want to do?'),
-                    propose_resume=not dl_finished, on_response=on_response)
-                dialog.set_transient_for(dialog2)
+                    propose_resume=not dl_finished, on_response=on_response,
+                    transient_for=dialog2)
                 dialog.set_destroy_with_parent(True)
                 return
             else:
@@ -428,10 +427,10 @@ class FileTransfersWindow:
 
         dialog2 = dialogs.FileChooserDialog(
             title_text=_('Save File as...'),
-            action=gtk.FILE_CHOOSER_ACTION_SAVE,
-            buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
-            gtk.STOCK_SAVE, gtk.RESPONSE_OK),
-            default_response=gtk.RESPONSE_OK,
+            action=Gtk.FileChooserAction.SAVE,
+            buttons=(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+            Gtk.STOCK_SAVE, Gtk.ResponseType.OK),
+            default_response=Gtk.ResponseType.OK,
             current_folder=gajim.config.get('last_save_dir'),
             on_response_ok=(on_ok, account, contact, file_props),
             on_response_cancel=(on_cancel, account, contact, file_props))
@@ -447,8 +446,8 @@ class FileTransfersWindow:
         """
         if not file_props or not file_props.name:
             return
-        sec_text = '\t' + _('File: %s') % gobject.markup_escape_text(
-                file_props.name)
+        sec_text = '\t' + _('File: %s') % GLib.markup_escape_text(
+            file_props.name)
         if file_props.size:
             sec_text += '\n\t' + _('Size: %s') % \
                     helpers.convert_bytes(file_props.size)
@@ -474,7 +473,8 @@ class FileTransfersWindow:
 
     def get_icon(self, ident):
         return self.images.setdefault(ident,
-                self.window.render_icon(self.icons[ident], gtk.ICON_SIZE_MENU))
+            self.window.render_icon_pixbuf(self.icons[ident],
+                Gtk.IconSize.MENU))
 
     def set_status(self,file_props, status):
         """
@@ -483,41 +483,41 @@ class FileTransfersWindow:
         iter_ = self.get_iter_by_sid(file_props.type_, file_props.sid)
         if iter_ is None:
             return
-        self.model[iter_][C_SID].decode('utf-8')
+        self.model[iter_][C_SID]
         if status == 'stop':
             file_props.stopped = True
         elif status == 'ok':
             file_props.completed = True
             text = self._format_percent(100)
             received_size = int(file_props.received_len)
-            full_size = int(file_props.size)
+            full_size = file_props.size
             text += helpers.convert_bytes(received_size) + '/' + \
                 helpers.convert_bytes(full_size)
             self.model.set(iter_, C_PROGRESS, text)
-            self.model.set(iter_, C_PULSE, gobject.constants.G_MAXINT)
+            self.model.set(iter_, C_PULSE, GLib.MAXINT32)
         elif status == 'computing':
             self.model.set(iter_, C_PULSE, 1)
             text = _('Checking file...') + '\n'
             received_size = int(file_props.received_len)
-            full_size = int(file_props.size)
+            full_size = file_props.size
             text += helpers.convert_bytes(received_size) + '/' + \
                 helpers.convert_bytes(full_size)
             self.model.set(iter_, C_PROGRESS, text)
             def pulse():
                 p = self.model.get(iter_, C_PULSE)[0]
-                if p == gobject.constants.G_MAXINT:
+                if p == GLib.MAXINT32:
                     return False
                 self.model.set(iter_, C_PULSE, p + 1)
                 return True
-            gobject.timeout_add(100, pulse)
+            GLib.timeout_add(100, pulse)
         elif status == 'hash_error':
             text = _('File error') + '\n'
             received_size = int(file_props.received_len)
-            full_size = int(file_props.size)
+            full_size = file_props.size
             text += helpers.convert_bytes(received_size) + '/' + \
                 helpers.convert_bytes(full_size)
             self.model.set(iter_, C_PROGRESS, text)
-            self.model.set(iter_, C_PULSE, gobject.constants.G_MAXINT)
+            self.model.set(iter_, C_PULSE, GLib.MAXINT32)
         self.model.set(iter_, C_IMAGE, self.get_icon(status))
         path = self.model.get_path(iter_)
         self.select_func(path)
@@ -532,7 +532,7 @@ class FileTransfersWindow:
             _str += ' '
         if percent < 10:
             _str += ' '
-        _str += unicode(percent) + '%          \n'
+        _str += str(percent) + '%          \n'
         return _str
 
     def _format_time(self, _time):
@@ -584,7 +584,7 @@ class FileTransfersWindow:
                 other = file_props.sender
             else: # we send a file
                 other = file_props.receiver
-            if isinstance(other, unicode):
+            if isinstance(other, str):
                 jid = gajim.get_jid_without_resource(other)
             else: # It's a Contact instance
                 jid = other.jid
@@ -603,7 +603,7 @@ class FileTransfersWindow:
         Change the progress of a transfer with new transfered size
         """
         file_props = FilesProp.getFilePropByType(typ, sid)
-        full_size = int(file_props.size)
+        full_size = file_props.size
         if full_size == 0:
             percent = 0
         else:
@@ -674,9 +674,9 @@ class FileTransfersWindow:
         Return iter to the row, which holds file transfer, identified by the
         session id
         """
-        iter_ = self.model.get_iter_root()
+        iter_ = self.model.get_iter_first()
         while iter_:
-            if typ + sid == self.model[iter_][C_SID].decode('utf-8'):
+            if typ + sid == self.model[iter_][C_SID]:
                 return iter_
             iter_ = self.model.iter_next(iter_)
 
@@ -712,7 +712,7 @@ class FileTransfersWindow:
         file_props.type_ = 's'
         file_props.desc = file_desc
         file_props.elapsed_time = 0
-        file_props.size = unicode(stat[6])
+        file_props.size = stat[6]
         file_props.sender = account
         file_props.receiver = contact
         file_props.tt_account = account
@@ -737,7 +737,7 @@ class FileTransfersWindow:
             file_name = os.path.split(file_props.file_name)[1]
         else:
             file_name = file_props.name
-        text_props = gobject.markup_escape_text(file_name) + '\n'
+        text_props = GLib.markup_escape_text(file_name) + '\n'
         text_props += contact.get_shown_name()
         self.model.set(iter_, 1, text_labels, 2, text_props, C_PULSE, -1, C_SID,
                 file_props.type_ + file_props.sid)
@@ -754,9 +754,11 @@ class FileTransfersWindow:
         self.window.show_all()
 
     def on_transfers_list_motion_notify_event(self, widget, event):
-        pointer = self.tree.get_pointer()
+        w = self.tree.get_window()
+        device = w.get_display().get_device_manager().get_client_pointer()
+        pointer = w.get_device_position(device)
         props = widget.get_path_at_pos(int(event.x), int(event.y))
-        self.height_diff = pointer[1] - int(event.y)
+        self.height_diff = pointer[2] - int(event.y)
         if self.tooltip.timeout > 0:
             if not props or self.tooltip.id != props[0]:
                 self.tooltip.hide_tooltip()
@@ -768,21 +770,24 @@ class FileTransfersWindow:
             except Exception:
                 self.tooltip.hide_tooltip()
                 return
-            sid = self.model[iter_][C_SID].decode('utf-8')
+            sid = self.model[iter_][C_SID]
             file_props = FilesProp.getFilePropByType(sid[0], sid[1:])
             if file_props is not None:
                 if self.tooltip.timeout == 0 or self.tooltip.id != props[0]:
                     self.tooltip.id = row
-                    self.tooltip.timeout = gobject.timeout_add(500,
-                            self.show_tooltip, widget)
+                    self.tooltip.timeout = GLib.timeout_add(500,
+                        self.show_tooltip, widget)
 
     def on_transfers_list_leave_notify_event(self, widget=None, event=None):
         if event is not None:
             self.height_diff = int(event.y)
         elif self.height_diff is 0:
             return
-        pointer = self.tree.get_pointer()
-        props = self.tree.get_path_at_pos(pointer[0], pointer[1] - self.height_diff)
+        w = self.tree.get_window()
+        device = w.get_display().get_device_manager().get_client_pointer()
+        pointer = w.get_device_position(device)
+        props = self.tree.get_path_at_pos(pointer[1],
+            pointer[2] - self.height_diff)
         if self.tooltip.timeout > 0:
             if not props or self.tooltip.id == props[0]:
                 self.tooltip.hide_tooltip()
@@ -823,7 +828,7 @@ class FileTransfersWindow:
             self.set_all_insensitive()
             return
         current_iter = self.model.get_iter(path)
-        sid = self.model[current_iter][C_SID].decode('utf-8')
+        sid = self.model[current_iter][C_SID]
         file_props = FilesProp.getFilePropByType(sid[0], sid[1:])
         self.remove_menuitem.set_sensitive(is_row_selected)
         self.open_folder_menuitem.set_sensitive(is_row_selected)
@@ -881,7 +886,7 @@ class FileTransfersWindow:
         i = len(self.model) - 1
         while i >= 0:
             iter_ = self.model.get_iter((i))
-            sid = self.model[iter_][C_SID].decode('utf-8')
+            sid = self.model[iter_][C_SID]
             file_props = FilesProp.getFilePropByType(sid[0], sid[1:])
             if is_transfer_stopped(file_props):
                 self._remove_transfer(iter_, sid, file_props)
@@ -893,8 +898,8 @@ class FileTransfersWindow:
         if status:
             label = _('Pause')
             self.pause_button.set_label(label)
-            self.pause_button.set_image(gtk.image_new_from_stock(
-                    gtk.STOCK_MEDIA_PAUSE, gtk.ICON_SIZE_MENU))
+            self.pause_button.set_image(Gtk.Image.new_from_stock(
+                    Gtk.STOCK_MEDIA_PAUSE, Gtk.IconSize.MENU))
 
             self.pause_menuitem.set_sensitive(True)
             self.pause_menuitem.set_no_show_all(False)
@@ -904,8 +909,8 @@ class FileTransfersWindow:
         else:
             label = _('_Continue')
             self.pause_button.set_label(label)
-            self.pause_button.set_image(gtk.image_new_from_stock(
-                    gtk.STOCK_MEDIA_PLAY, gtk.ICON_SIZE_MENU))
+            self.pause_button.set_image(Gtk.Image.new_from_stock(
+                    Gtk.STOCK_MEDIA_PLAY, Gtk.IconSize.MENU))
             self.pause_menuitem.hide()
             self.pause_menuitem.set_no_show_all(True)
             self.continue_menuitem.set_sensitive(True)
@@ -916,7 +921,7 @@ class FileTransfersWindow:
         if selected is None or selected[1] is None:
             return
         s_iter = selected[1]
-        sid = self.model[s_iter][C_SID].decode('utf-8')
+        sid = self.model[s_iter][C_SID]
         file_props = FilesProp.getFilePropByType(sid[0], sid[1:])
         if is_transfer_paused(file_props):
             file_props.last_time = time.time()
@@ -938,7 +943,7 @@ class FileTransfersWindow:
         if selected is None or selected[1] is None:
             return
         s_iter = selected[1]
-        sid = self.model[s_iter][C_SID].decode('utf-8')
+        sid = self.model[s_iter][C_SID]
         file_props = FilesProp.getFilePropByType(sid[0], sid[1:])
         account = file_props.tt_account
         if account not in gajim.connections:
@@ -954,21 +959,23 @@ class FileTransfersWindow:
         if self.height_diff == 0:
             self.tooltip.hide_tooltip()
             return
-        pointer = self.tree.get_pointer()
-        props = self.tree.get_path_at_pos(pointer[0],
-                pointer[1] - self.height_diff)
+        w = self.tree.get_window()
+        device = w.get_display().get_device_manager().get_client_pointer()
+        pointer = w.get_device_position(device)
+        props = self.tree.get_path_at_pos(pointer[1],
+            pointer[2] - self.height_diff)
         # check if the current pointer is at the same path
         # as it was before setting the timeout
         if props and self.tooltip.id == props[0]:
             iter_ = self.model.get_iter(props[0])
-            sid = self.model[iter_][C_SID].decode('utf-8')
+            sid = self.model[iter_][C_SID]
             file_props = FilesProp.getFilePropByType(sid[0], sid[1:])
             # bounding rectangle of coordinates for the cell within the treeview
             rect = self.tree.get_cell_area(props[0], props[1])
             # position of the treeview on the screen
-            position = widget.window.get_origin()
+            position = widget.get_window().get_origin()[1:]
             self.tooltip.show_tooltip(file_props, rect.height,
-                                                    position[1] + rect.y + self.height_diff)
+                position[1] + rect.y + self.height_diff)
         else:
             self.tooltip.hide_tooltip()
 
@@ -992,7 +999,7 @@ class FileTransfersWindow:
 
         event_button = gtkgui_helpers.get_possible_button_event(event)
         self.file_transfers_menu.show_all()
-        self.file_transfers_menu.popup(None, self.tree, None,
+        self.file_transfers_menu.popup(None, self.tree, None, None,
                 event_button, event.time)
 
     def on_transfers_list_key_press_event(self, widget, event):
@@ -1010,7 +1017,7 @@ class FileTransfersWindow:
             path = self.model.get_path(iter_)
             self.tree.get_selection().select_path(path)
 
-        if event.keyval == gtk.keysyms.Menu:
+        if event.keyval == Gdk.KEY_Menu:
             self.show_context_menu(event, iter_)
             return True
 
@@ -1049,7 +1056,7 @@ class FileTransfersWindow:
         if not selected or not selected[1]:
             return
         s_iter = selected[1]
-        sid = self.model[s_iter][C_SID].decode('utf-8')
+        sid = self.model[s_iter][C_SID]
         file_props = FilesProp.getFilePropByType(sid[0], sid[1:])
         if not file_props.file_name:
             return
@@ -1071,11 +1078,11 @@ class FileTransfersWindow:
         if not selected or not selected[1]:
             return
         s_iter = selected[1]
-        sid = self.model[s_iter][C_SID].decode('utf-8')
+        sid = self.model[s_iter][C_SID]
         file_props = FilesProp.getFilePropByType(sid[0], sid[1:])
         self._remove_transfer(s_iter, sid, file_props)
         self.set_all_insensitive()
 
     def on_file_transfers_window_key_press_event(self, widget, event):
-        if event.keyval == gtk.keysyms.Escape: # ESCAPE
+        if event.keyval == Gdk.KEY_Escape: # ESCAPE
             self.window.hide()

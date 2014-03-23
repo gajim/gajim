@@ -29,9 +29,12 @@
 
 import os
 import time
-import gtk
-import pango
-import gobject
+from gi.repository import Gtk
+from gi.repository import Gdk
+from gi.repository import GdkPixbuf
+from gi.repository import Pango
+from gi.repository import GObject
+from gi.repository import GLib
 import gtkgui_helpers
 import gui_menu_builder
 import message_control
@@ -86,13 +89,13 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
     A base class containing a banner, ConversationTextview, MessageTextView
     """
 
-    keymap = gtk.gdk.keymap_get_default()
+    keymap = Gdk.Keymap.get_default()
     try:
-        keycode_c = keymap.get_entries_for_keyval(gtk.keysyms.c)[0][0]
+        keycode_c = keymap.get_entries_for_keyval(Gdk.KEY_c)[1][0].keycode
     except TypeError:
         keycode_c = 54
     try:
-        keycode_ins = keymap.get_entries_for_keyval(gtk.keysyms.Insert)[0][0]
+        keycode_ins = keymap.get_entries_for_keyval(Gdk.KEY_Insert)[1][0].keycode
     except TypeError:
         keycode_ins = 118
 
@@ -113,22 +116,22 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         bannerfontattrs = gajim.config.get_per('themes', theme, 'bannerfontattrs')
 
         if bannerfont:
-            font = pango.FontDescription(bannerfont)
+            font = Pango.FontDescription(bannerfont)
         else:
-            font = pango.FontDescription('Normal')
+            font = Pango.FontDescription('Normal')
         if bannerfontattrs:
             # B attribute is set by default
             if 'B' in bannerfontattrs:
-                font.set_weight(pango.WEIGHT_HEAVY)
+                font.set_weight(Pango.Weight.HEAVY)
             if 'I' in bannerfontattrs:
-                font.set_style(pango.STYLE_ITALIC)
+                font.set_style(Pango.Style.ITALIC)
 
         font_attrs = 'font_desc="%s"' % font.to_string()
 
         # in case there is no font specified we use x-large font size
         if font.get_size() == 0:
             font_attrs = '%s size="x-large"' % font_attrs
-        font.set_weight(pango.WEIGHT_NORMAL)
+        font.set_weight(Pango.Weight.NORMAL)
         font_attrs_small = 'font_desc="%s" size="small"' % font.to_string()
         return (font_attrs, font_attrs_small)
 
@@ -224,7 +227,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         Derives types SHOULD implement this, rather than connection to the even
         itself
         """
-        event = gtk.gdk.Event(gtk.gdk.KEY_PRESS)
+        event = Gdk.Event(Gdk.EventType.KEY_PRESS)
         event.keyval = event_keyval
         event.state = event_keymod
         event.time = 0
@@ -232,12 +235,11 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         _buffer = widget.get_buffer()
         start, end = _buffer.get_bounds()
 
-        if event.keyval -- gtk.keysyms.Tab:
+        if event.keyval -- Gdk.KEY_Tab:
             position = _buffer.get_insert()
             end = _buffer.get_iter_at_mark(position)
 
             text = _buffer.get_text(start, end, False)
-            text = text.decode('utf8')
 
             splitted = text.split()
 
@@ -279,9 +281,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         self.seclabel_combo = combo
         self.seclabel_combo.hide()
         self.seclabel_combo.set_no_show_all(True)
-        lb = gtk.ListStore(str)
+        lb = Gtk.ListStore(str)
         self.seclabel_combo.set_model(lb)
-        cell = gtk.CellRendererText()
+        cell = Gtk.CellRendererText()
         cell.set_property('xpad', 5)  # padding for status text
         self.seclabel_combo.pack_start(cell, True)
         # text to show is in in first column of liststore
@@ -325,11 +327,8 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         widget = self.xml.get_object('history_button')
         # set document-open-recent icon for history button
         if gtkgui_helpers.gtk_icon_theme.has_icon('document-open-recent'):
-            if widget_name == 'groupchat_control':
-                img = self.xml.get_object('image8')
-            else:
-                img = self.xml.get_object('image5')
-            img.set_from_icon_name('document-open-recent', gtk.ICON_SIZE_MENU)
+            img = self.xml.get_object('history_image')
+            img.set_from_icon_name('document-open-recent', Gtk.IconSize.MENU)
 
         id_ = widget.connect('clicked', self._on_history_menuitem_activate)
         self.handlers[id_] = widget
@@ -356,15 +355,15 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
         # Init DND
         self.TARGET_TYPE_URI_LIST = 80
-        self.dnd_list = [('text/uri-list', 0, self.TARGET_TYPE_URI_LIST),
-            ('MY_TREE_MODEL_ROW', gtk.TARGET_SAME_APP, 0)]
+        self.dnd_list = [Gtk.TargetEntry.new('text/uri-list', 0,
+            self.TARGET_TYPE_URI_LIST), Gtk.TargetEntry.new('MY_TREE_MODEL_ROW',
+            Gtk.TargetFlags.SAME_APP, 0)]
         id_ = self.widget.connect('drag_data_received',
             self._on_drag_data_received)
         self.handlers[id_] = self.widget
-        self.widget.drag_dest_set(gtk.DEST_DEFAULT_MOTION |
-            gtk.DEST_DEFAULT_HIGHLIGHT |
-            gtk.DEST_DEFAULT_DROP,
-            self.dnd_list, gtk.gdk.ACTION_COPY)
+        self.widget.drag_dest_set(Gtk.DestDefaults.MOTION |
+            Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP,
+            self.dnd_list, Gdk.DragAction.COPY)
 
         # Create textviews and connect signals
         self.conv_textview = ConversationTextview(self.account)
@@ -382,10 +381,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         self.handlers[id_] = self.conv_textview.tv
         id_ = self.conv_textview.tv.connect('drag_leave', self._on_drag_leave)
         self.handlers[id_] = self.conv_textview.tv
-        self.conv_textview.tv.drag_dest_set(gtk.DEST_DEFAULT_MOTION |
-            gtk.DEST_DEFAULT_HIGHLIGHT |
-            gtk.DEST_DEFAULT_DROP,
-            self.dnd_list, gtk.gdk.ACTION_COPY)
+        self.conv_textview.tv.drag_dest_set(Gtk.DestDefaults.MOTION |
+            Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP,
+            self.dnd_list, Gdk.DragAction.COPY)
 
         self.conv_scrolledwindow = self.xml.get_object(
             'conversation_scrolledwindow')
@@ -415,7 +413,8 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         id_ = self.msg_textview.connect('key_press_event',
             self._on_message_textview_key_press_event)
         self.handlers[id_] = self.msg_textview
-        id_ = self.msg_textview.connect('size-request', self.size_request)
+        id_ = self.msg_textview.connect('configure-event',
+            self.on_configure_event)
         self.handlers[id_] = self.msg_textview
         id_ = self.msg_textview.connect('populate_popup',
             self.on_msg_textview_populate_popup)
@@ -424,9 +423,8 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         id_ = self.msg_textview.connect('drag_data_received',
             self._on_drag_data_received)
         self.handlers[id_] = self.msg_textview
-        self.msg_textview.drag_dest_set(gtk.DEST_DEFAULT_MOTION |
-            gtk.DEST_DEFAULT_HIGHLIGHT,
-            self.dnd_list, gtk.gdk.ACTION_COPY)
+        self.msg_textview.drag_dest_set(Gtk.DestDefaults.MOTION |
+            Gtk.DestDefaults.HIGHLIGHT, self.dnd_list, Gdk.DragAction.COPY)
 
         self.update_font()
 
@@ -502,14 +500,14 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             try:
                 gtkspell.Spell(self.msg_textview, lang)
                 self.msg_textview.lang = lang
-            except (gobject.GError, RuntimeError, TypeError, OSError):
+            except (GObject.GError, RuntimeError, TypeError, OSError):
                 dialogs.AspellDictError(lang)
 
     def on_banner_label_populate_popup(self, label, menu):
         """
         Override the default context menu and add our own menutiems
         """
-        item = gtk.SeparatorMenuItem()
+        item = Gtk.SeparatorMenuItem.new()
         menu.prepend(item)
 
         menu2 = self.prepare_context_menu()
@@ -552,15 +550,15 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             spell.set_language(lang)
             widget.set_active(True)
 
-        item = gtk.ImageMenuItem(gtk.STOCK_UNDO)
+        item = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_UNDO, None)
         menu.prepend(item)
         id_ = item.connect('activate', self.msg_textview.undo)
         self.handlers[id_] = item
 
-        item = gtk.SeparatorMenuItem()
+        item = Gtk.SeparatorMenuItem.new()
         menu.prepend(item)
 
-        item = gtk.ImageMenuItem(gtk.STOCK_CLEAR)
+        item = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_CLEAR, None)
         menu.prepend(item)
         id_ = item.connect('activate', self.msg_textview.clear)
         self.handlers[id_] = item
@@ -587,7 +585,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         message_buffer = self.msg_textview.get_buffer()
         start_iter = message_buffer.get_start_iter()
         end_iter = message_buffer.get_end_iter()
-        message = message_buffer.get_text(start_iter, end_iter, 0).decode('utf-8')
+        message = message_buffer.get_text(start_iter, end_iter, False)
         xhtml = self.msg_textview.get_xhtml()
 
         # send the message
@@ -607,23 +605,27 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         self.disconnect_style_event(banner_name_label)
         self.disconnect_style_event(self.banner_status_label)
         if bgcolor:
-            banner_eventbox.modify_bg(gtk.STATE_NORMAL,
-                    gtk.gdk.color_parse(bgcolor))
+            color = Gdk.RGBA()
+            Gdk.RGBA.parse(color, bgcolor)
+            banner_eventbox.override_background_color(Gtk.StateType.NORMAL,
+                color)
             default_bg = False
         else:
             default_bg = True
         if textcolor:
-            banner_name_label.modify_fg(gtk.STATE_NORMAL,
-                    gtk.gdk.color_parse(textcolor))
-            self.banner_status_label.modify_fg(gtk.STATE_NORMAL,
-                    gtk.gdk.color_parse(textcolor))
+            color = Gdk.RGBA()
+            Gdk.RGBA.parse(color, textcolor)
+            banner_name_label.override_color(Gtk.StateType.NORMAL,
+                color)
+            self.banner_status_label.override_color(
+                Gtk.StateType.NORMAL, color)
             default_fg = False
         else:
             default_fg = True
         if default_bg or default_fg:
             self._on_style_set_event(banner_name_label, None, default_fg,
                     default_bg)
-            if self.banner_status_label.flags() & gtk.REALIZED:
+            if self.banner_status_label.get_realized():
                 # Widget is realized
                 self._on_style_set_event(self.banner_status_label, None, default_fg,
                         default_bg)
@@ -639,7 +641,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
     def connect_style_event(self, widget, set_fg=False, set_bg=False):
         self.disconnect_style_event(widget)
         id_ = widget.connect('style-set', self._on_style_set_event, set_fg,
-                set_bg)
+            set_bg)
         self.handlers[id_] = widget
 
     def _on_style_set_event(self, widget, style, *opts):
@@ -650,145 +652,104 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         """
         banner_eventbox = self.xml.get_object('banner_eventbox')
         self.disconnect_style_event(widget)
+        context = widget.get_style_context()
         if opts[1]:
-            bg_color = widget.style.bg[gtk.STATE_SELECTED]
-            banner_eventbox.modify_bg(gtk.STATE_NORMAL, bg_color)
+            bg_color = context.get_background_color(Gtk.StateFlags.SELECTED)
+            banner_eventbox.override_background_color(Gtk.StateType.NORMAL, bg_color)
         if opts[0]:
-            fg_color = widget.style.fg[gtk.STATE_SELECTED]
-            widget.modify_fg(gtk.STATE_NORMAL, fg_color)
+            fg_color = context.get_color(Gtk.StateFlags.SELECTED)
+            widget.override_color(Gtk.StateType.NORMAL, fg_color)
         self.connect_style_event(widget, opts[0], opts[1])
 
     def _conv_textview_key_press_event(self, widget, event):
         # translate any layout to latin_layout
-        keymap = gtk.gdk.keymap_get_default()
-        keycode = keymap.get_entries_for_keyval(event.keyval)[0][0]
-        if (event.state & gtk.gdk.CONTROL_MASK and keycode in (self.keycode_c,
-        self.keycode_ins)) or (event.state & gtk.gdk.SHIFT_MASK and \
-        event.keyval in (gtk.keysyms.Page_Down, gtk.keysyms.Page_Up)):
+        valid, entries = self.keymap.get_entries_for_keyval(event.keyval)
+        keycode = entries[0].keycode
+        if (event.get_state() & Gdk.ModifierType.CONTROL_MASK and keycode in (
+        self.keycode_c, self.keycode_ins)) or (
+        event.get_state() & Gdk.ModifierType.SHIFT_MASK and \
+        event.keyval in (Gdk.KEY_Page_Down, Gdk.KEY_Page_Up)):
             return False
-        self.parent_win.notebook.emit('key_press_event', event)
+        self.parent_win.notebook.event(event)
         return True
 
     def show_emoticons_menu(self):
         if not gajim.config.get('emoticons_theme'):
             return
-
-        def set_emoticons_menu_position(w, msg_tv=self.msg_textview):
-            window = msg_tv.get_window(gtk.TEXT_WINDOW_WIDGET)
-            # get the window position
-            origin = window.get_origin()
-            size = window.get_size()
-            buf = msg_tv.get_buffer()
-            # get the cursor position
-            cursor = msg_tv.get_iter_location(buf.get_iter_at_mark(
-                    buf.get_insert()))
-            cursor = msg_tv.buffer_to_window_coords(gtk.TEXT_WINDOW_TEXT,
-                    cursor.x, cursor.y)
-            x = origin[0] + cursor[0]
-            y = origin[1] + size[1]
-            menu_height = gajim.interface.emoticons_menu.size_request()[1]
-            #FIXME: get_line_count is not so good
-            #get the iter of cursor, then tv.get_line_yrange
-            # so we know in which y we are typing (not how many lines we have
-            # then go show just above the current cursor line for up
-            # or just below the current cursor line for down
-            #TEST with having 3 lines and writing in the 2nd
-            if y + menu_height > gtk.gdk.screen_height():
-                # move menu just above cursor
-                y -= menu_height + (msg_tv.allocation.height / buf.get_line_count())
-            #else: # move menu just below cursor
-            #       y -= (msg_tv.allocation.height / buf.get_line_count())
-            return (x, y, True)  # push_in True
         gajim.interface.emoticon_menuitem_clicked = self.append_emoticon
-        gajim.interface.emoticons_menu.popup(None, None,
-                set_emoticons_menu_position, 1, 0)
+        gajim.interface.emoticons_menu.popup(None, None, None, None, 1, 0)
 
     def _on_message_textview_key_press_event(self, widget, event):
-        if event.keyval == gtk.keysyms.space:
+        if event.keyval == Gdk.KEY_space:
             self.space_pressed = True
 
         elif (self.space_pressed or self.msg_textview.undo_pressed) and \
-        event.keyval not in (gtk.keysyms.Control_L, gtk.keysyms.Control_R) and \
-        not (event.keyval == gtk.keysyms.z and event.state & gtk.gdk.CONTROL_MASK):
+        event.keyval not in (Gdk.KEY_Control_L, Gdk.KEY_Control_R) and \
+        not (event.keyval == Gdk.KEY_z and event.get_state() & Gdk.ModifierType.CONTROL_MASK):
             # If the space key has been pressed and now it hasnt,
             # we save the buffer into the undo list. But be carefull we're not
             # pressiong Control again (as in ctrl+z)
             _buffer = widget.get_buffer()
             start_iter, end_iter = _buffer.get_bounds()
-            self.msg_textview.save_undo(_buffer.get_text(start_iter, end_iter))
+            self.msg_textview.save_undo(_buffer.get_text(start_iter, end_iter, True))
             self.space_pressed = False
 
         # Ctrl [+ Shift] + Tab are not forwarded to notebook. We handle it here
         if self.widget_name == 'groupchat_control':
-            if event.keyval not in (gtk.keysyms.ISO_Left_Tab, gtk.keysyms.Tab):
+            if event.keyval not in (Gdk.KEY_ISO_Left_Tab, Gdk.KEY_Tab):
                 self.last_key_tabs = False
-        if event.state & gtk.gdk.SHIFT_MASK:
+        if event.get_state() & Gdk.ModifierType.SHIFT_MASK:
             # CTRL + SHIFT + TAB
-            if event.state & gtk.gdk.CONTROL_MASK and \
-                            event.keyval == gtk.keysyms.ISO_Left_Tab:
+            if event.get_state() & Gdk.ModifierType.CONTROL_MASK and \
+                            event.keyval == Gdk.KEY_ISO_Left_Tab:
                 self.parent_win.move_to_next_unread_tab(False)
                 return True
             # SHIFT + PAGE_[UP|DOWN]: send to conv_textview
-            elif event.keyval == gtk.keysyms.Page_Down or \
-                            event.keyval == gtk.keysyms.Page_Up:
-                self.conv_textview.tv.emit('key_press_event', event)
+            elif event.keyval == Gdk.KEY_Page_Down or \
+                            event.keyval == Gdk.KEY_Page_Up:
+                self.conv_textview.tv.event(event)
                 return True
-        elif event.state & gtk.gdk.CONTROL_MASK:
-            if event.keyval == gtk.keysyms.Tab:  # CTRL + TAB
+        elif event.get_state() & Gdk.ModifierType.CONTROL_MASK:
+            if event.keyval == Gdk.KEY_Tab:  # CTRL + TAB
                 self.parent_win.move_to_next_unread_tab(True)
                 return True
-        return False
+################################################################################
+        # temporary solution instead Gtk.binding_entry_add_signal
+        message_buffer = self.msg_textview.get_buffer()
+        event_state = event.get_state()
+        if event.keyval == Gdk.KEY_Up:
+            if event_state & Gdk.ModifierType.CONTROL_MASK:
+                if event_state & Gdk.ModifierType.SHIFT_MASK: # Ctrl+Shift+UP
+                    self.scroll_messages('up', message_buffer, 'received')
+                else:  # Ctrl+UP
+                    self.scroll_messages('up', message_buffer, 'sent')
+            return True
+        elif event.keyval == Gdk.KEY_Down:
+            if event_state & Gdk.ModifierType.CONTROL_MASK:
+                if event_state & Gdk.ModifierType.SHIFT_MASK: # Ctrl+Shift+Down
+                    self.scroll_messages('down', message_buffer, 'received')
+                else:  # Ctrl+Down
+                    self.scroll_messages('down', message_buffer, 'sent')
+            return True
 
-    def _on_message_textview_mykeypress_event(self, widget, event_keyval,
-    event_keymod):
-        """
-        When a key is pressed: if enter is pressed without the shift key, message
-        (if not empty) is sent and printed in the conversation
-        """
-        # NOTE: handles mykeypress which is custom signal connected to this
-        # CB in new_tab(). for this singal see message_textview.py
-        message_textview = widget
-        message_buffer = message_textview.get_buffer()
-        start_iter, end_iter = message_buffer.get_bounds()
-        message = message_buffer.get_text(start_iter, end_iter, False).decode(
-                'utf-8')
-        xhtml = self.msg_textview.get_xhtml()
-
-        # construct event instance from binding
-        event = gtk.gdk.Event(gtk.gdk.KEY_PRESS)  # it's always a key-press here
-        event.keyval = event_keyval
-        event.state = event_keymod
-        event.time = 0  # assign current time
-
-        if event.keyval == gtk.keysyms.Up:
-            if event.state == gtk.gdk.CONTROL_MASK:  # Ctrl+UP
-                self.scroll_messages('up', message_buffer, 'sent')
-            # Ctrl+Shift+UP
-            elif event.state == (gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK):
-                self.scroll_messages('up', message_buffer, 'received')
-        elif event.keyval == gtk.keysyms.Down:
-            if event.state == gtk.gdk.CONTROL_MASK:  # Ctrl+Down
-                self.scroll_messages('down', message_buffer, 'sent')
-            # Ctrl+Shift+Down
-            elif event.state == (gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK):
-                self.scroll_messages('down', message_buffer, 'received')
-        elif event.keyval == gtk.keysyms.Return or \
-                event.keyval == gtk.keysyms.KP_Enter:  # ENTER
-            # NOTE: SHIFT + ENTER is not needed to be emulated as it is not
-            # binding at all (textview's default action is newline)
+        elif event.keyval == Gdk.KEY_Return or \
+        event.keyval == Gdk.KEY_KP_Enter:  # ENTER
+            message_textview = widget
+            message_buffer = message_textview.get_buffer()
+            start_iter, end_iter = message_buffer.get_bounds()
+            message = message_buffer.get_text(start_iter, end_iter, False)
+            xhtml = self.msg_textview.get_xhtml()
 
             if gajim.config.get('send_on_ctrl_enter'):
-                # here, we emulate GTK default action on ENTER (add new line)
-                # normally I would add in keypress but it gets way to complex
-                # to get instant result on changing this advanced setting
-                if event.state == 0:  # no ctrl, no shift just ENTER add newline
+                if event_state & Gdk.ModifierType.CONTROL_MASK:  # CTRL + ENTER
+                    send_message = True
+                else:
                     end_iter = message_buffer.get_end_iter()
                     message_buffer.insert_at_cursor('\n')
                     send_message = False
-                elif event.state & gtk.gdk.CONTROL_MASK:  # CTRL + ENTER
-                    send_message = True
+
             else: # send on Enter, do newline on Ctrl Enter
-                if event.state & gtk.gdk.CONTROL_MASK:  # Ctrl + ENTER
+                if event_state & Gdk.ModifierType.CONTROL_MASK:  # Ctrl + ENTER
                     end_iter = message_buffer.get_end_iter()
                     message_buffer.insert_at_cursor('\n')
                     send_message = False
@@ -803,8 +764,79 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
             if send_message:
                 self.send_message(message, xhtml=xhtml) # send the message
-        elif event.keyval == gtk.keysyms.z: # CTRL+z
-            if event.state & gtk.gdk.CONTROL_MASK:
+            return True
+        elif event.keyval == Gdk.KEY_z: # CTRL+z
+            if event_state & Gdk.ModifierType.CONTROL_MASK:
+                self.msg_textview.undo()
+                return True
+################################################################################
+        return False
+
+    def _on_message_textview_mykeypress_event(self, widget, event_keyval,
+    event_keymod):
+        """
+        When a key is pressed: if enter is pressed without the shift key, message
+        (if not empty) is sent and printed in the conversation
+        """
+        # NOTE: handles mykeypress which is custom signal connected to this
+        # CB in new_tab(). for this singal see message_textview.py
+        message_textview = widget
+        message_buffer = message_textview.get_buffer()
+        start_iter, end_iter = message_buffer.get_bounds()
+        message = message_buffer.get_text(start_iter, end_iter, False)
+        xhtml = self.msg_textview.get_xhtml()
+
+        # construct event instance from binding
+        event = Gdk.Event(Gdk.EventType.KEY_PRESS)  # it's always a key-press here
+        event.keyval = event_keyval
+        event.state = event_keymod
+        event.time = 0  # assign current time
+
+        if event.keyval == Gdk.KEY_Up:
+            if event.get_state() == Gdk.ModifierType.CONTROL_MASK:  # Ctrl+UP
+                self.scroll_messages('up', message_buffer, 'sent')
+            # Ctrl+Shift+UP
+            elif event.get_state() == (Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.SHIFT_MASK):
+                self.scroll_messages('up', message_buffer, 'received')
+        elif event.keyval == Gdk.KEY_Down:
+            if event.get_state() == Gdk.ModifierType.CONTROL_MASK:  # Ctrl+Down
+                self.scroll_messages('down', message_buffer, 'sent')
+            # Ctrl+Shift+Down
+            elif event.get_state() == (Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.SHIFT_MASK):
+                self.scroll_messages('down', message_buffer, 'received')
+        elif event.keyval == Gdk.KEY_Return or \
+                event.keyval == Gdk.KEY_KP_Enter:  # ENTER
+            # NOTE: SHIFT + ENTER is not needed to be emulated as it is not
+            # binding at all (textview's default action is newline)
+
+            if gajim.config.get('send_on_ctrl_enter'):
+                # here, we emulate GTK default action on ENTER (add new line)
+                # normally I would add in keypress but it gets way to complex
+                # to get instant result on changing this advanced setting
+                if event.get_state() == 0:  # no ctrl, no shift just ENTER add newline
+                    end_iter = message_buffer.get_end_iter()
+                    message_buffer.insert_at_cursor('\n')
+                    send_message = False
+                elif event.get_state() & Gdk.ModifierType.CONTROL_MASK:  # CTRL + ENTER
+                    send_message = True
+            else: # send on Enter, do newline on Ctrl Enter
+                if event.get_state() & Gdk.ModifierType.CONTROL_MASK:  # Ctrl + ENTER
+                    end_iter = message_buffer.get_end_iter()
+                    message_buffer.insert_at_cursor('\n')
+                    send_message = False
+                else: # ENTER
+                    send_message = True
+
+            if gajim.connections[self.account].connected < 2 and send_message:
+                # we are not connected
+                dialogs.ErrorDialog(_('A connection is not available'),
+                        _('Your message can not be sent until you are connected.'))
+                send_message = False
+
+            if send_message:
+                self.send_message(message, xhtml=xhtml) # send the message
+        elif event.keyval == Gdk.KEY_z: # CTRL+z
+            if event.get_state() & Gdk.ModifierType.CONTROL_MASK:
                 self.msg_textview.undo()
         else:
             # Give the control itself a chance to process
@@ -894,7 +926,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         scroll = False if pos == size else True # are we scrolling?
         # we don't want size of the buffer to grow indefinately
         max_size = gajim.config.get('key_up_lines')
-        for i in xrange(size - max_size + 1):
+        for i in range(size - max_size + 1):
             if pos == 0:
                 break
             history.pop(0)
@@ -1040,7 +1072,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         """
         Popup formattings menu
         """
-        menu = gtk.Menu()
+        menu = Gtk.Menu()
 
         menuitems = ((_('Bold'), 'bold'),
         (_('Italic'), 'italic'),
@@ -1050,7 +1082,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         active_tags = self.msg_textview.get_active_tags()
 
         for menuitem in menuitems:
-            item = gtk.CheckMenuItem(menuitem[0])
+            item = Gtk.CheckMenuItem(menuitem[0])
             if menuitem[1] in active_tags:
                 item.set_active(True)
             else:
@@ -1059,44 +1091,45 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
                     menuitem[1])
             menu.append(item)
 
-        item = gtk.SeparatorMenuItem() # separator
+        item = Gtk.SeparatorMenuItem.new() # separator
         menu.append(item)
 
-        item = gtk.ImageMenuItem(_('Color'))
-        icon = gtk.image_new_from_stock(gtk.STOCK_SELECT_COLOR, gtk.ICON_SIZE_MENU)
+        item = Gtk.ImageMenuItem(_('Color'))
+        icon = Gtk.Image.new_from_stock(Gtk.STOCK_SELECT_COLOR, Gtk.IconSize.MENU)
         item.set_image(icon)
         item.connect('activate', self.on_color_menuitem_activale)
         menu.append(item)
 
-        item = gtk.ImageMenuItem(_('Font'))
-        icon = gtk.image_new_from_stock(gtk.STOCK_SELECT_FONT, gtk.ICON_SIZE_MENU)
+        item = Gtk.ImageMenuItem(_('Font'))
+        icon = Gtk.Image.new_from_stock(Gtk.STOCK_SELECT_FONT, Gtk.IconSize.MENU)
         item.set_image(icon)
         item.connect('activate', self.on_font_menuitem_activale)
         menu.append(item)
 
-        item = gtk.SeparatorMenuItem() # separator
+        item = Gtk.SeparatorMenuItem.new() # separator
         menu.append(item)
 
-        item = gtk.ImageMenuItem(_('Clear formating'))
-        icon = gtk.image_new_from_stock(gtk.STOCK_CLEAR, gtk.ICON_SIZE_MENU)
+        item = Gtk.ImageMenuItem(_('Clear formating'))
+        icon = Gtk.Image.new_from_stock(Gtk.STOCK_CLEAR, Gtk.IconSize.MENU)
         item.set_image(icon)
         item.connect('activate', self.msg_textview.clear_tags)
         menu.append(item)
 
         menu.show_all()
+        menu.attach_to_widget(widget, None)
         gtkgui_helpers.popup_emoticons_under_button(menu, widget,
                 self.parent_win)
 
     def on_color_menuitem_activale(self, widget):
-        color_dialog = gtk.ColorSelectionDialog('Select a color')
-        color_dialog.connect('response', self.msg_textview.color_set,
-                color_dialog.colorsel)
+        color_dialog = Gtk.ColorChooserDialog(None, self.parent_win.window)
+        color_dialog.set_use_alpha(False)
+        color_dialog.connect('response', self.msg_textview.color_set)
         color_dialog.show_all()
 
     def on_font_menuitem_activale(self, widget):
-        font_dialog = gtk.FontSelectionDialog('Select a font')
-        font_dialog.connect('response', self.msg_textview.font_set,
-                font_dialog.fontsel)
+        font_dialog = Gtk.FontChooserDialog(None, self.parent_win.window)
+        start, finish = self.msg_textview.get_active_iters()
+        font_dialog.connect('response', self.msg_textview.font_set, start, finish)
         font_dialog.show_all()
 
     def on_actions_button_clicked(self, widget):
@@ -1105,13 +1138,14 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         """
         menu = self.prepare_context_menu(hide_buttonbar_items=True)
         menu.show_all()
+        menu.attach_to_widget(widget, None)
         gtkgui_helpers.popup_emoticons_under_button(menu, widget,
                 self.parent_win)
 
     def update_font(self):
-        font = pango.FontDescription(gajim.config.get('conversation_font'))
-        self.conv_textview.tv.modify_font(font)
-        self.msg_textview.modify_font(font)
+        font = Pango.FontDescription(gajim.config.get('conversation_font'))
+        self.conv_textview.tv.override_font(font)
+        self.msg_textview.override_font(font)
 
     def update_tags(self):
         self.conv_textview.update_tags()
@@ -1209,7 +1243,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         visible_rect = textview.get_visible_rect()
         # scroll only if expected end is not visible
         if end_rect.y >= (visible_rect.y + visible_rect.height + diff_y):
-            self.scroll_to_end_id = gobject.idle_add(self.scroll_to_end_iter,
+            self.scroll_to_end_id = GLib.idle_add(self.scroll_to_end_iter,
                     textview)
 
     def scroll_to_end_iter(self, textview):
@@ -1219,20 +1253,20 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         self.scroll_to_end_id = None
         return False
 
-    def size_request(self, msg_textview, requisition):
+    def on_configure_event(self, msg_textview, event):
         """
         When message_textview changes its size: if the new height will enlarge
         the window, enable the scrollbar automatic policy.  Also enable scrollbar
         automatic policy for horizontal scrollbar if message we have in
         message_textview is too big
         """
-        if msg_textview.window is None:
+        if msg_textview.get_window() is None:
             return
 
         min_height = self.conv_scrolledwindow.get_property('height-request')
-        conversation_height = self.conv_textview.tv.window.get_size()[1]
-        message_height = msg_textview.window.get_size()[1]
-        message_width = msg_textview.window.get_size()[0]
+        conversation_height = self.conv_textview.tv.get_window().get_size()[1]
+        message_height = msg_textview.get_window().get_size()[1]
+        message_width = msg_textview.get_window().get_size()[0]
         # new tab is not exposed yet
         if conversation_height < 2:
             return
@@ -1245,31 +1279,31 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         # but we also want to avoid window resizing so if we reach that
         # minimum for conversation_textview and maximum for message_textview
         # we set to automatic the scrollbar policy
-        diff_y = message_height - requisition.height
+        diff_y = message_height - event.height
         if diff_y != 0:
             if conversation_height + diff_y < min_height:
                 if message_height + conversation_height - min_height > min_height:
                     policy = self.msg_scrolledwindow.get_property(
                             'vscrollbar-policy')
-                    if policy != gtk.POLICY_AUTOMATIC:
+                    if policy != Gtk.PolicyType.AUTOMATIC:
                         self.msg_scrolledwindow.set_property('vscrollbar-policy',
-                                gtk.POLICY_AUTOMATIC)
+                                Gtk.PolicyType.AUTOMATIC)
                         self.msg_scrolledwindow.set_property('height-request',
                                 message_height + conversation_height - min_height)
             else:
                 self.msg_scrolledwindow.set_property('vscrollbar-policy',
-                        gtk.POLICY_NEVER)
+                        Gtk.PolicyType.NEVER)
                 self.msg_scrolledwindow.set_property('height-request', -1)
 
         self.smooth = True # reinit the flag
         # enable scrollbar automatic policy for horizontal scrollbar
         # if message we have in message_textview is too big
-        if requisition.width > message_width:
+        if event.width > message_width:
             self.msg_scrolledwindow.set_property('hscrollbar-policy',
-                    gtk.POLICY_AUTOMATIC)
+                    Gtk.PolicyType.AUTOMATIC)
         else:
             self.msg_scrolledwindow.set_property('hscrollbar-policy',
-                    gtk.POLICY_NEVER)
+                    Gtk.PolicyType.NEVER)
 
         return True
 
@@ -1282,15 +1316,15 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
                 self.conv_textview.bring_scroll_to_end(-18)
             else:
                 self.conv_textview.bring_scroll_to_end(-18, use_smooth=False)
-        self.was_at_the_end = (adjustment.upper - adjustment.value - \
-            adjustment.page_size) < 18
+        self.was_at_the_end = (adjustment.get_upper() - adjustment.get_value()\
+            - adjustment.get_page_size()) < 18
 
     def on_conversation_vadjustment_value_changed(self, adjustment):
         # stop automatic scroll when we manually scroll
         if not self.conv_textview.auto_scrolling:
             self.conv_textview.stop_scrolling()
-        self.was_at_the_end = (adjustment.upper - adjustment.value - \
-            adjustment.page_size) < 18
+        self.was_at_the_end = (adjustment.get_upper() - adjustment.get_value() \
+            - adjustment.get_page_size()) < 18
         if self.resource:
             jid = self.contact.get_full_jid()
         else:
@@ -1361,21 +1395,24 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             # whatever is already typed
             start_iter = msg_buf.get_start_iter()
             end_iter = msg_buf.get_end_iter()
-            self.orig_msg = msg_buf.get_text(start_iter, end_iter, 0).decode(
-                'utf-8')
+            self.orig_msg = msg_buf.get_text(start_iter, end_iter, False)
         if pos == size and size > 0 and direction == 'up' and \
         msg_type == 'sent' and not self.correcting and (not \
         history[pos - 1].startswith('/') or history[pos - 1].startswith('/me')):
             self.correcting = True
-            self.old_message_tv_color = self.msg_textview.get_style().base[0]
-            self.msg_textview.modify_base(gtk.STATE_NORMAL, gtk.gdk.color_parse(
-                'PaleGoldenrod'))
+            context = self.msg_textview.get_style_context()
+            state = Gtk.StateFlags.NORMAL
+            self.old_message_tv_color = context.get_background_color(state)
+            color = Gdk.RGBA()
+            Gdk.RGBA.parse(color, 'PaleGoldenrod')
+            self.msg_textview.override_background_color(Gtk.StateType.NORMAL,
+                color)
             message = history[pos - 1]
             msg_buf.set_text(message)
             return
         if self.correcting:
             # We were previously correcting
-            self.msg_textview.modify_base(gtk.STATE_NORMAL,
+            self.msg_textview.override_background_color(Gtk.StateType.NORMAL,
                 self.old_message_tv_color)
         self.correcting = False
         pos += -1 if direction == 'up' else +1
@@ -1409,7 +1446,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         """
         # make the last message visible, when changing to "full view"
         if not state:
-            gobject.idle_add(self.conv_textview.scroll_to_end_iter)
+            GLib.idle_add(self.conv_textview.scroll_to_end_iter)
 
         widget.set_no_show_all(state)
         if state:
@@ -1499,7 +1536,7 @@ class ChatControl(ChatControlBase):
         pixbuf = gtkgui_helpers.get_icon_pixmap('document-send', quiet=True)
         if not pixbuf:
             pixbuf = gtkgui_helpers.get_icon_pixmap('gajim-upload')
-        img = gtk.image_new_from_pixbuf(pixbuf)
+        img = Gtk.Image.new_from_pixbuf(pixbuf)
         self._send_file_button.set_image(img)
         id_ = self._send_file_button.connect('clicked',
             self._on_send_file_menuitem_activate)
@@ -1593,6 +1630,12 @@ class ChatControl(ChatControlBase):
         id_ = widget.connect('button-release-event',
             self.on_location_eventbox_button_release_event)
         self.handlers[id_] = widget
+        id_ = widget.connect('enter-notify-event',
+            self.on_location_eventbox_enter_notify_event)
+        self.handlers[id_] = widget
+        id_ = widget.connect('leave-notify-event',
+            self.on_location_eventbox_leave_notify_event)
+        self.handlers[id_] = widget
 
         for key in ('1', '2', '3', '4', '5', '6', '7', '8', '9', '*', '0', '#'):
             widget = self.xml.get_object(key + '_button')
@@ -1602,7 +1645,7 @@ class ChatControl(ChatControlBase):
             self.handlers[id_] = widget
 
         self.dtmf_window = self.xml.get_object('dtmf_window')
-        self.dtmf_window.get_child().set_direction(gtk.TEXT_DIR_LTR)
+        self.dtmf_window.get_child().set_direction(Gtk.TextDirection.LTR)
         id_ = self.dtmf_window.connect('focus-out-event',
             self.on_dtmf_window_focus_out_event)
         self.handlers[id_] = self.dtmf_window
@@ -1619,15 +1662,15 @@ class ChatControl(ChatControlBase):
         id_ = widget.connect('value_changed', self.on_sound_hscale_value_changed)
         self.handlers[id_] = widget
 
-        self.info_bar = gtk.InfoBar()
+        self.info_bar = Gtk.InfoBar()
         content_area = self.info_bar.get_content_area()
-        self.info_bar_label = gtk.Label()
+        self.info_bar_label = Gtk.Label()
         self.info_bar_label.set_use_markup(True)
         self.info_bar_label.set_alignment(0, 0)
         content_area.add(self.info_bar_label)
         self.info_bar.set_no_show_all(True)
         widget = self.xml.get_object('vbox2')
-        widget.pack_start(self.info_bar, expand=False, padding=5)
+        widget.pack_start(self.info_bar, False, True, 5)
         widget.reorder_child(self.info_bar, 1)
 
         # List of waiting infobar messages
@@ -1773,14 +1816,15 @@ class ChatControl(ChatControlBase):
 
         # Send file
         if ((self.contact.supports(NS_FILE) or \
-        self.contact.supports(NS_JINGLE_FILE_TRANSFER)) or \
-        self.type_id == 'chat' or self.gc_contact.resource) and \
+        self.contact.supports(NS_JINGLE_FILE_TRANSFER)) and \
+        (self.type_id == 'chat' or self.gc_contact.resource)) and \
         self.contact.show != 'offline':
             self._send_file_button.set_sensitive(True)
             self._send_file_button.set_tooltip_text(_('Send files'))
         else:
             self._send_file_button.set_sensitive(False)
-            if not (self.contact.supports(NS_FILE) or self.contact.supports(NS_JINGLE_FILE_TRANSFER)):
+            if not (self.contact.supports(NS_FILE) or self.contact.supports(
+            NS_JINGLE_FILE_TRANSFER)):
                 self._send_file_button.set_tooltip_text(_(
                     "This contact does not support file transfer."))
             else:
@@ -1817,7 +1861,7 @@ class ChatControl(ChatControlBase):
         pep = self.contact.pep
         img = self._pep_images[pep_type]
         if pep_type in pep:
-            img.set_from_pixbuf(pep[pep_type].asPixbufIcon())
+            img.set_from_pixbuf(gtkgui_helpers.get_pep_as_pixbuf(pep[pep_type]))
             img.set_tooltip_markup(pep[pep_type].asMarkupText())
             img.show()
         else:
@@ -1847,16 +1891,16 @@ class ChatControl(ChatControlBase):
             banner_image.show()
         if state == self.JINGLE_STATE_CONNECTING:
             banner_image.set_from_stock(
-                    gtk.STOCK_CONVERT, 1)
+                    Gtk.STOCK_CONVERT, 1)
         elif state == self.JINGLE_STATE_CONNECTION_RECEIVED:
             banner_image.set_from_stock(
-                    gtk.STOCK_NETWORK, 1)
+                    Gtk.STOCK_NETWORK, 1)
         elif state == self.JINGLE_STATE_CONNECTED:
             banner_image.set_from_stock(
-                    gtk.STOCK_CONNECT, 1)
+                    Gtk.STOCK_CONNECT, 1)
         elif state == self.JINGLE_STATE_ERROR:
             banner_image.set_from_stock(
-                    gtk.STOCK_DIALOG_WARNING, 1)
+                    Gtk.STOCK_DIALOG_WARNING, 1)
         self.update_toolbar()
 
     def update_audio(self):
@@ -1984,8 +2028,8 @@ class ChatControl(ChatControlBase):
         if avatar_w > scaled_buf_w or avatar_h > scaled_buf_h:
             # wait for 0.5 sec in case we leave earlier
             if self.show_bigger_avatar_timeout_id is not None:
-                gobject.source_remove(self.show_bigger_avatar_timeout_id)
-            self.show_bigger_avatar_timeout_id = gobject.timeout_add(500,
+                GLib.source_remove(self.show_bigger_avatar_timeout_id)
+            self.show_bigger_avatar_timeout_id = GLib.timeout_add(500,
                     self.show_bigger_avatar, widget)
 
     def on_avatar_eventbox_leave_notify_event(self, widget, event):
@@ -1994,7 +2038,7 @@ class ChatControl(ChatControlBase):
         """
         # did we add a timeout? if yes remove it
         if self.show_bigger_avatar_timeout_id is not None:
-            gobject.source_remove(self.show_bigger_avatar_timeout_id)
+            GLib.source_remove(self.show_bigger_avatar_timeout_id)
             self.show_bigger_avatar_timeout_id = None
 
     def on_avatar_eventbox_button_press_event(self, widget, event):
@@ -2002,8 +2046,8 @@ class ChatControl(ChatControlBase):
         If right-clicked, show popup
         """
         if event.button == 3: # right click
-            menu = gtk.Menu()
-            menuitem = gtk.ImageMenuItem(gtk.STOCK_SAVE_AS)
+            menu = Gtk.Menu()
+            menuitem = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_SAVE_AS, None)
             id_ = menuitem.connect('activate',
                 gtkgui_helpers.on_avatar_save_as_menuitem_activate,
                 self.contact.jid, self.contact.get_shown_name())
@@ -2013,7 +2057,8 @@ class ChatControl(ChatControlBase):
             menu.connect('selection-done', lambda w: w.destroy())
             # show the menu
             menu.show_all()
-            menu.popup(None, None, None, event.button, event.time)
+            menu.attach_to_widget(widget, None)
+            menu.popup(None, None, None, None, event.button, event.time)
         return True
 
     def on_location_eventbox_button_release_event(self, widget, event):
@@ -2025,6 +2070,17 @@ class ChatControl(ChatControlBase):
                         'lon': location['lon']}
                 helpers.launch_browser_mailer('url', uri)
 
+    def on_location_eventbox_leave_notify_event(self, widget, event):
+        """
+        Just moved the mouse so show the cursor
+        """
+        cursor = Gdk.Cursor.new(Gdk.CursorType.LEFT_PTR)
+        self.parent_win.window.get_window().set_cursor(cursor)
+
+    def on_location_eventbox_enter_notify_event(self, widget, event):
+        cursor = Gdk.Cursor.new(Gdk.CursorType.HAND2)
+        self.parent_win.window.get_window().set_cursor(cursor)
+
     def _on_window_motion_notify(self, widget, event):
         """
         It gets called no matter if it is the active window or not
@@ -2035,9 +2091,9 @@ class ChatControl(ChatControlBase):
             self.mouse_over_in_last_30_secs = True
 
     def _schedule_activity_timers(self):
-        self.possible_paused_timeout_id = gobject.timeout_add_seconds(5,
+        self.possible_paused_timeout_id = GLib.timeout_add_seconds(5,
                 self.check_for_possible_paused_chatstate, None)
-        self.possible_inactive_timeout_id = gobject.timeout_add_seconds(30,
+        self.possible_inactive_timeout_id = GLib.timeout_add_seconds(30,
                 self.check_for_possible_inactive_chatstate, None)
 
     def update_ui(self):
@@ -2068,7 +2124,7 @@ class ChatControl(ChatControlBase):
             use_size_32 = False
 
         banner_status_img = self.xml.get_object('banner_status_image')
-        if banner_image.get_storage_type() == gtk.IMAGE_ANIMATION:
+        if banner_image.get_storage_type() == Gtk.ImageType.ANIMATION:
             banner_status_img.set_from_animation(banner_image.get_animation())
         else:
             pix = banner_image.get_pixbuf()
@@ -2077,7 +2133,7 @@ class ChatControl(ChatControlBase):
                     banner_status_img.set_from_pixbuf(pix)
                 else: # we need to scale 16x16 to 32x32
                     scaled_pix = pix.scale_simple(32, 32,
-                                                    gtk.gdk.INTERP_BILINEAR)
+                                                    GdkPixbuf.InterpType.BILINEAR)
                     banner_status_img.set_from_pixbuf(scaled_pix)
 
     def draw_banner_text(self):
@@ -2097,7 +2153,7 @@ class ChatControl(ChatControlBase):
             name = i18n.direction_mark +  _(
                 '%(nickname)s from group chat %(room_name)s') % \
                 {'nickname': name, 'room_name': self.room_name}
-        name = i18n.direction_mark + gobject.markup_escape_text(name)
+        name = i18n.direction_mark + GLib.markup_escape_text(name)
 
         # We know our contacts nick, but if another contact has the same nick
         # in another account we need to also display the account.
@@ -2110,20 +2166,21 @@ class ChatControl(ChatControlBase):
                 break
             for jid in gajim.contacts.get_jid_list(account):
                 other_contact_ = \
-                        gajim.contacts.get_first_contact_from_jid(account, jid)
-                if other_contact_.get_shown_name() == self.contact.get_shown_name():
+                    gajim.contacts.get_first_contact_from_jid(account, jid)
+                if other_contact_.get_shown_name() == \
+                self.contact.get_shown_name():
                     acct_info = i18n.direction_mark + ' (%s)' % \
-                            gobject.markup_escape_text(self.account)
+                        GLib.markup_escape_text(self.account)
                     break
 
         status = contact.status
         if status is not None:
-            banner_name_label.set_ellipsize(pango.ELLIPSIZE_END)
-            self.banner_status_label.set_ellipsize(pango.ELLIPSIZE_END)
+            banner_name_label.set_ellipsize(Pango.EllipsizeMode.END)
+            self.banner_status_label.set_ellipsize(Pango.EllipsizeMode.END)
             status_reduced = helpers.reduce_chars_newlines(status, max_lines=1)
         else:
             status_reduced = ''
-        status_escaped = gobject.markup_escape_text(status_reduced)
+        status_escaped = GLib.markup_escape_text(status_reduced)
 
         font_attrs, font_attrs_small = self.get_font_attrs()
         st = gajim.config.get('displayed_chat_state_notifications')
@@ -2195,12 +2252,12 @@ class ChatControl(ChatControlBase):
                         fixed = self.xml.get_object('outgoing_fixed')
                         fixed.set_no_show_all(False)
                         video_hbox.show_all()
-                        out_xid = self.xml.get_object('outgoing_drawingarea').\
-                            window.xid
+                        out_xid = self.xml.get_object(
+                            'outgoing_drawingarea').get_window().xid
                     else:
                         out_xid = None
                     video_hbox.show_all()
-                    in_xid = self.xml.get_object('incoming_drawingarea').window.xid
+                    in_xid = self.xml.get_object('incoming_drawingarea').get_window().xid
                     sid = gajim.connections[self.account].start_video(
                         self.contact.get_full_jid(), in_xid, out_xid)
                 else:
@@ -2345,8 +2402,8 @@ class ChatControl(ChatControlBase):
                 chatstate_to_send = 'active'
                 contact.our_chatstate = 'active'
 
-                gobject.source_remove(self.possible_paused_timeout_id)
-                gobject.source_remove(self.possible_inactive_timeout_id)
+                GLib.source_remove(self.possible_paused_timeout_id)
+                GLib.source_remove(self.possible_inactive_timeout_id)
                 self._schedule_activity_timers()
 
         def _on_sent(msg_stanza, message, encrypted, xhtml, label, old_txt):
@@ -2365,8 +2422,8 @@ class ChatControl(ChatControlBase):
                 self.conv_textview.correct_last_sent_message(message, xhtml,
                     self.get_our_nick(), old_txt)
                 self.correcting = False
-                self.msg_textview.modify_base(gtk.STATE_NORMAL,
-                    self.old_message_tv_color)
+                self.msg_textview.override_background_color(
+                    Gtk.StateType.NORMAL, self.old_message_tv_color)
                 return
             self.print_conversation(message, self.contact.jid,
                 encrypted=encrypted, xep0184_id=xep0184_id, xhtml=xhtml,
@@ -2569,41 +2626,47 @@ class ChatControl(ChatControlBase):
         if num_unread == 1 and not gajim.config.get('show_unread_tab_icon'):
             unread = '*'
         elif num_unread > 1:
-            unread = '[' + unicode(num_unread) + ']'
+            unread = '[' + str(num_unread) + ']'
 
         # Draw tab label using chatstate
         theme = gajim.config.get('roster_theme')
-        color = None
+        color_s = None
         if not chatstate:
             chatstate = self.contact.chatstate
         if chatstate is not None:
             if chatstate == 'composing':
-                color = gajim.config.get_per('themes', theme,
-                                'state_composing_color')
+                color_s = gajim.config.get_per('themes', theme,
+                    'state_composing_color')
             elif chatstate == 'inactive':
-                color = gajim.config.get_per('themes', theme,
-                                'state_inactive_color')
+                color_s = gajim.config.get_per('themes', theme,
+                    'state_inactive_color')
             elif chatstate == 'gone':
-                color = gajim.config.get_per('themes', theme,
-                                'state_gone_color')
+                color_s = gajim.config.get_per('themes', theme,
+                    'state_gone_color')
             elif chatstate == 'paused':
-                color = gajim.config.get_per('themes', theme,
-                                'state_paused_color')
-        if color:
+                color_s = gajim.config.get_per('themes', theme,
+                    'state_paused_color')
+
+        context = self.parent_win.notebook.get_style_context()
+        if color_s:
             # We set the color for when it's the current tab or not
-            color = gtk.gdk.colormap_get_system().alloc_color(color)
+            color = Gdk.RGBA()
+            ok = Gdk.RGBA.parse(color, color_s)
+            if not ok:
+                del color
+                color = context.get_color(Gtk.StateFlags.ACTIVE)
             # In inactive tab color to be lighter against the darker inactive
             # background
             if chatstate in ('inactive', 'gone') and\
             self.parent_win.get_active_control() != self:
                 color = self.lighten_color(color)
         else: # active or not chatstate, get color from gtk
-            color = self.parent_win.notebook.style.fg[gtk.STATE_ACTIVE]
+            color = context.get_color(Gtk.StateFlags.ACTIVE)
 
         name = self.contact.get_shown_name()
         if self.resource:
             name += '/' + self.resource
-        label_str = gobject.markup_escape_text(name)
+        label_str = GLib.markup_escape_text(name)
         if num_unread: # if unread, text in the label becomes bold
             label_str = '<b>' + unread + label_str + '</b>'
         return (label_str, color)
@@ -2644,7 +2707,11 @@ class ChatControl(ChatControlBase):
         tranasports) and file_transfer_menuitem and hide()/show() for
         add_to_roster_menuitem
         """
-        menu = gui_menu_builder.get_contact_menu(self.contact, self.account,
+        if gajim.jid_is_transport(self.contact.jid):
+            menu = gui_menu_builder.get_transport_menu(self.contact,
+                self.account)
+        else:
+            menu = gui_menu_builder.get_contact_menu(self.contact, self.account,
                 use_multiple_contacts=False, show_start_chat=False,
                 show_encryption=True, control=self,
                 show_buttonbar_items=not hide_buttonbar_items)
@@ -2741,8 +2808,8 @@ class ChatControl(ChatControlBase):
             self.session.control = None
 
         # Disconnect timer callbacks
-        gobject.source_remove(self.possible_paused_timeout_id)
-        gobject.source_remove(self.possible_inactive_timeout_id)
+        GLib.source_remove(self.possible_paused_timeout_id)
+        GLib.source_remove(self.possible_inactive_timeout_id)
         # Remove bigger avatar window
         if self.bigger_avatar_window:
             self.bigger_avatar_window.destroy()
@@ -2761,7 +2828,7 @@ class ChatControl(ChatControlBase):
                 backend=backend)
         # remove all register handlers on widgets, created by self.xml
         # to prevent circular references among objects
-        for i in self.handlers.keys():
+        for i in list(self.handlers.keys()):
             if self.handlers[i].handler_is_connected(i):
                 self.handlers[i].disconnect(i)
             del self.handlers[i]
@@ -2812,7 +2879,11 @@ class ChatControl(ChatControlBase):
         self.parent_win.redraw_tab(self, self.contact.chatstate)
 
     def _nec_caps_received(self, obj):
-        if obj.conn.name != self.account or obj.jid != self.contact.jid:
+        if obj.conn.name != self.account:
+            return
+        if self.TYPE_ID == 'chat' and obj.jid != self.contact.jid:
+            return
+        if self.TYPE_ID == 'pm' and obj.fjid != self.contact.jid:
             return
         self.update_ui()
 
@@ -2827,8 +2898,8 @@ class ChatControl(ChatControlBase):
             else:
                 self.send_chatstate('active', self.contact)
             self.reset_kbd_mouse_timeout_vars()
-            gobject.source_remove(self.possible_paused_timeout_id)
-            gobject.source_remove(self.possible_inactive_timeout_id)
+            GLib.source_remove(self.possible_paused_timeout_id)
+            GLib.source_remove(self.possible_inactive_timeout_id)
             self._schedule_activity_timers()
         else:
             self.send_chatstate('inactive', self.contact)
@@ -2906,7 +2977,7 @@ class ChatControl(ChatControlBase):
         type_ = model[iter_][2]
         if type_ != 'contact': # source is not a contact
             return
-        dropped_jid = data.decode('utf-8')
+        dropped_jid = data
 
         dropped_transport = gajim.get_transport_name_from_jid(dropped_jid)
         c_transport = gajim.get_transport_name_from_jid(c.jid)
@@ -2969,6 +3040,7 @@ class ChatControl(ChatControlBase):
                 'remove it (all history will be lost).') % common.logger.LOG_DB_PATH)
             rows = []
         local_old_kind = None
+        self.conv_textview.just_cleared = True
         for row in rows: # row[0] time, row[1] has kind, row[2] the message
             if not row[2]: # message is empty, we don't print it
                 continue
@@ -2993,14 +3065,14 @@ class ChatControl(ChatControlBase):
             xhtml = None
             if row[2].startswith('<body '):
                 xhtml = row[2]
-            if row[2].startswith('/me ') or row[2].startswith('/me\n'):
-                local_old_kind = None
-            else:
-                local_old_kind = kind
             ChatControlBase.print_conversation_line(self, row[2], kind, name,
                 tim, small_attr, small_attr + ['restored_message'],
                 small_attr + ['restored_message'], False,
                 old_kind=local_old_kind, xhtml=xhtml)
+            if row[2].startswith('/me ') or row[2].startswith('/me\n'):
+                local_old_kind = None
+            else:
+                local_old_kind = kind
         if len(rows):
             self.conv_textview.print_empty_line()
 
@@ -3070,9 +3142,9 @@ class ChatControl(ChatControlBase):
         Resize the avatar, if needed, so it has at max half the screen size and
         shows it
         """
-        if not small_avatar.window:
-            # Tab has been closed since we hovered the avatar
-            return
+        #if not small_avatar.window:
+            ### Tab has been closed since we hovered the avatar
+            #return
         avatar_pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(
                 self.contact.jid)
         if avatar_pixbuf in ('ask', None):
@@ -3084,11 +3156,12 @@ class ChatControl(ChatControlBase):
         # It's why I set it transparent.
         image = self.xml.get_object('avatar_image')
         pixbuf = image.get_pixbuf()
-        pixbuf.fill(0xffffff00L) # RGBA
-        image.queue_draw()
+        pixbuf.fill(0xffffff00) # RGBA
+        image.set_from_pixbuf(pixbuf)
+        #image.queue_draw()
 
-        screen_w = gtk.gdk.screen_width()
-        screen_h = gtk.gdk.screen_height()
+        screen_w = Gdk.Screen.width()
+        screen_h = Gdk.Screen.height()
         avatar_w = avatar_pixbuf.get_width()
         avatar_h = avatar_pixbuf.get_height()
         half_scr_w = screen_w / 2
@@ -3097,56 +3170,24 @@ class ChatControl(ChatControlBase):
             avatar_w = half_scr_w
         if avatar_h > half_scr_h:
             avatar_h = half_scr_h
-        window = gtk.Window(gtk.WINDOW_POPUP)
-        self.bigger_avatar_window = window
-        pixmap, mask = avatar_pixbuf.render_pixmap_and_mask()
-        window.set_size_request(avatar_w, avatar_h)
         # we should make the cursor visible
         # gtk+ doesn't make use of the motion notify on gtkwindow by default
         # so this line adds that
-        window.set_events(gtk.gdk.POINTER_MOTION_MASK)
-        window.set_app_paintable(True)
-        window.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_TOOLTIP)
 
-        window.realize()
-        window.window.set_back_pixmap(pixmap, False) # make it transparent
-        window.window.shape_combine_mask(mask, 0, 0)
-
+        alloc = small_avatar.get_allocation()
         # make the bigger avatar window show up centered
-        x0, y0 = small_avatar.window.get_origin()
-        x0 += small_avatar.allocation.x
-        y0 += small_avatar.allocation.y
-        center_x= x0 + (small_avatar.allocation.width / 2)
-        center_y = y0 + (small_avatar.allocation.height / 2)
+        small_avatar_x, small_avatar_y = alloc.x, alloc.y
+        translated_coordinates = small_avatar.translate_coordinates(
+            gajim.interface.roster.window, 0, 0)
+        if translated_coordinates:
+            small_avatar_x, small_avatar_y = translated_coordinates
+        roster_x, roster_y  = self.parent_win.window.get_window().get_origin()[1:]
+        center_x = roster_x + small_avatar_x + (alloc.width / 2)
+        center_y = roster_y + small_avatar_y + (alloc.height / 2)
         pos_x, pos_y = center_x - (avatar_w / 2), center_y - (avatar_h / 2)
-        window.move(pos_x, pos_y)
-        # make the cursor invisible so we can see the image
-        invisible_cursor = gtkgui_helpers.get_invisible_cursor()
-        window.window.set_cursor(invisible_cursor)
 
-        # we should hide the window
-        window.connect('leave_notify_event',
-                self._on_window_avatar_leave_notify_event)
-        window.connect('motion-notify-event',
-                self._on_window_motion_notify_event)
-
-        window.show_all()
-
-    def _on_window_avatar_leave_notify_event(self, widget, event):
-        """
-        Just left the popup window that holds avatar
-        """
-        self.bigger_avatar_window.destroy()
-        self.bigger_avatar_window = None
-        # Re-show the small avatar
-        self.show_avatar()
-
-    def _on_window_motion_notify_event(self, widget, event):
-        """
-        Just moved the mouse so show the cursor
-        """
-        cursor = gtk.gdk.Cursor(gtk.gdk.LEFT_PTR)
-        self.bigger_avatar_window.window.set_cursor(cursor)
+        dialogs.BigAvatarWindow(avatar_pixbuf, pos_x, pos_y, avatar_w,
+            avatar_h, self.show_avatar)
 
     def _on_send_file_menuitem_activate(self, widget):
         self._on_send_file()
@@ -3290,7 +3331,7 @@ class ChatControl(ChatControlBase):
         self.info_bar.show_all()
 
     def _add_info_bar_message(self, markup, buttons, args,
-    type_=gtk.MESSAGE_INFO):
+    type_=Gtk.MessageType.INFO):
         self.info_bar_queue.append((markup, buttons, args, type_))
         self._info_bar_show_message()
 
@@ -3323,12 +3364,12 @@ class ChatControl(ChatControlBase):
             markup += ' (%s)' % file_props.desc
         markup += '\n%s: %s' % (_('Size'), helpers.convert_bytes(
             file_props.size))
-        b1 = gtk.Button(_('_Accept'))
+        b1 = Gtk.Button(_('_Accept'))
         b1.connect('clicked', self._on_accept_file_request, file_props)
-        b2 = gtk.Button(stock=gtk.STOCK_CANCEL)
+        b2 = Gtk.Button(stock=Gtk.STOCK_CANCEL)
         b2.connect('clicked', self._on_cancel_file_request, file_props)
         self._add_info_bar_message(markup, [b1, b2], file_props,
-            gtk.MESSAGE_QUESTION)
+            Gtk.MessageType.QUESTION)
 
     def _on_open_ft_folder(self, widget, file_props):
         path = os.path.split(file_props.file_name)[0]
@@ -3348,17 +3389,17 @@ class ChatControl(ChatControlBase):
             file_props.name)
         if file_props.desc:
             markup += ' (%s)' % file_props.desc
-        b1 = gtk.Button(_('_Open Containing Folder'))
+        b1 = Gtk.Button(_('_Open Containing Folder'))
         b1.connect('clicked', self._on_open_ft_folder, file_props)
-        b2 = gtk.Button(stock=gtk.STOCK_OK)
+        b2 = Gtk.Button(stock=Gtk.STOCK_OK)
         b2.connect('clicked', self._on_ok, file_props, 'file-completed')
         self._add_info_bar_message(markup, [b1, b2], file_props)
 
     def _got_file_error(self, file_props, type_, pri_txt, sec_txt):
         markup = '<b>%s:</b> %s' % (pri_txt, sec_txt)
-        b = gtk.Button(stock=gtk.STOCK_OK)
+        b = Gtk.Button(stock=Gtk.STOCK_OK)
         b.connect('clicked', self._on_ok, file_props, type_)
-        self._add_info_bar_message(markup, [b], file_props, gtk.MESSAGE_ERROR)
+        self._add_info_bar_message(markup, [b], file_props, Gtk.MessageType.ERROR)
 
     def _on_accept_gc_invitation(self, widget, event):
         room_jid = event.parameters[0]
@@ -3383,12 +3424,12 @@ class ChatControl(ChatControlBase):
         markup = '<b>%s:</b> %s' % (_('Groupchat Invitation'), room_jid)
         if comment:
             markup += ' (%s)' % comment
-        b1 = gtk.Button(_('_Join'))
+        b1 = Gtk.Button(_('_Join'))
         b1.connect('clicked', self._on_accept_gc_invitation, event)
-        b2 = gtk.Button(stock=gtk.STOCK_CANCEL)
+        b2 = Gtk.Button(stock=Gtk.STOCK_CANCEL)
         b2.connect('clicked', self._on_cancel_gc_invitation, event)
         self._add_info_bar_message(markup, [b1, b2], event.parameters,
-            gtk.MESSAGE_QUESTION)
+            Gtk.MessageType.QUESTION)
 
     def on_event_added(self, event):
         if event.account != self.account:
@@ -3401,9 +3442,9 @@ class ChatControl(ChatControlBase):
             self._got_file_completed(event.parameters)
         elif event.type_ in ('file-error', 'file-stopped'):
             msg_err = ''
-            if event.parameters['error'] == -1:
+            if event.parameters.error == -1:
                 msg_err = _('Remote contact stopped transfer')
-            elif event.parameters['error'] == -6:
+            elif event.parameters.error == -6:
                 msg_err = _('Error opening file')
             self._got_file_error(event.parameters, event.type_,
                 _('File transfer stopped'), msg_err)
@@ -3444,6 +3485,6 @@ class ChatControl(ChatControlBase):
                         self.info_bar.set_no_show_all(True)
                         self.info_bar.hide()
                         # show next one?
-                        gobject.idle_add(self._info_bar_show_message)
+                        GLib.idle_add(self._info_bar_show_message)
                     break
                 i += 1

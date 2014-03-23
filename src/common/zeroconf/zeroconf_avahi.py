@@ -22,7 +22,7 @@ log = logging.getLogger('gajim.c.z.zeroconf_avahi')
 
 try:
     import dbus.exceptions
-except ImportError, e:
+except ImportError:
     pass
 
 from common.zeroconf.zeroconf import C_BARE_NAME, C_INTERFACE, C_PROTOCOL, C_DOMAIN
@@ -224,14 +224,7 @@ class Zeroconf:
         return show
 
     def avahi_txt(self):
-        utf8_dict = {}
-        for key in self.txt:
-            val = self.txt[key]
-            if isinstance(val, unicode):
-                utf8_dict[key] = val.encode('utf-8')
-            else:
-                utf8_dict[key] = val
-        return self.avahi.dict_to_txt_array(utf8_dict)
+        return self.avahi.dict_to_txt_array(self.txt)
 
     def create_service(self):
         try:
@@ -246,7 +239,7 @@ class Zeroconf:
             txt = {}
 
             # remove empty keys
-            for key, val in self.txt.iteritems():
+            for key, val in self.txt.items():
                 if val:
                     txt[key] = val
 
@@ -274,7 +267,7 @@ class Zeroconf:
 
             return True
 
-        except dbus.DBusException, e:
+        except dbus.DBusException as e:
             log.debug(str(e))
             return False
 
@@ -334,7 +327,7 @@ class Zeroconf:
             self.bus.add_signal_receiver(self.avahi_dbus_connect_cb,
                     'NameOwnerChanged', 'org.freedesktop.DBus',
                     arg0='org.freedesktop.Avahi')
-        except Exception, e:
+        except Exception as e:
             # System bus is not present
             self.bus = None
             log.debug(str(e))
@@ -361,7 +354,7 @@ class Zeroconf:
                     self.avahi.DBUS_PATH_SERVER), self.avahi.DBUS_INTERFACE_SERVER)
             self.server.connect_to_signal('StateChanged',
                     self.server_state_changed_callback)
-        except Exception, e:
+        except Exception as e:
             # Avahi service is not present
             self.server = None
             log.debug(str(e))
@@ -402,14 +395,14 @@ class Zeroconf:
             if self.service_browser:
                 try:
                     self.service_browser.Free()
-                except dbus.DBusException, e:
+                except dbus.DBusException as e:
                     log.debug(str(e))
                 self.service_browser._obj._bus = None
                 self.service_browser._obj = None
             if self.domain_browser:
                 try:
                     self.domain_browser.Free()
-                except dbus.DBusException, e:
+                except dbus.DBusException as e:
                     log.debug(str(e))
                 self.domain_browser._obj._bus = None
                 self.domain_browser._obj = None

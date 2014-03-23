@@ -29,7 +29,7 @@ def device_now_active(self, *args):
     """
     For Network Manager 0.6
     """
-    for connection in gajim.connections.itervalues():
+    for connection in gajim.connections.values():
         if gajim.config.get_per('accounts', connection.name,
         'listen_to_network_manager') and connection.time_to_reconnect:
             connection._reconnect()
@@ -38,7 +38,7 @@ def device_no_longer_active(self, *args):
     """
     For Network Manager 0.6
     """
-    for connection in gajim.connections.itervalues():
+    for connection in gajim.connections.values():
         if gajim.config.get_per('accounts', connection.name,
         'listen_to_network_manager') and connection.connected > 1:
             connection._disconnectedReconnCB()
@@ -49,12 +49,12 @@ def state_changed(state):
     """
     nm_state = props.Get("org.freedesktop.NetworkManager", "State")
     if nm_state == 3 or nm_state == 70:
-        for connection in gajim.connections.itervalues():
+        for connection in gajim.connections.values():
             if gajim.config.get_per('accounts', connection.name,
             'listen_to_network_manager') and connection.time_to_reconnect:
                 connection._reconnect()
     else:
-        for connection in gajim.connections.itervalues():
+        for connection in gajim.connections.values():
             if gajim.config.get_per('accounts', connection.name,
             'listen_to_network_manager') and connection.connected > 1:
                 connection._disconnectedReconnCB()
