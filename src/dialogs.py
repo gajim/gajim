@@ -1381,35 +1381,31 @@ class Dialog(Gtk.Dialog):
         self.vbox.set_spacing(12)
         self.set_resizable(False)
 
-        possible_responses = {Gtk.STOCK_OK: self.on_response_ok,
-            Gtk.STOCK_CANCEL: self.on_response_cancel}
         for stock, response in buttons:
             b = self.add_button(stock, response)
-            for response in possible_responses:
-                if stock == response:
-                    b.connect('clicked', possible_responses[response])
-                    break
 
         if default is not None:
             self.set_default_response(default)
         else:
             self.set_default_response(buttons[-1][1])
 
-    def on_response_ok(self, widget):
-        if self.user_response_ok:
-            if isinstance(self.user_response_ok, tuple):
-                self.user_response_ok[0](*self.user_response_ok[1:])
-            else:
-                self.user_response_ok()
-        self.destroy()
+        self.connect('response', self.on_response)
 
-    def on_response_cancel(self, widget):
-        if self.user_response_cancel:
-            if isinstance(self.user_response_cancel, tuple):
-                self.user_response_cancel[0](*self.user_response_ok[1:])
-            else:
-                self.user_response_cancel()
-        self.destroy()
+    def on_response(self, widget, response_id):
+        if response_id == Gtk.ResponseType.OK:
+            if self.user_response_ok:
+                if isinstance(self.user_response_ok, tuple):
+                    self.user_response_ok[0](*self.user_response_ok[1:])
+                else:
+                    self.user_response_ok()
+            self.destroy()
+        elif response_id == Gtk.ResponseType.CANCEL:
+            if self.user_response_cancel:
+                if isinstance(self.user_response_cancel, tuple):
+                    self.user_response_cancel[0](*self.user_response_ok[1:])
+                else:
+                    self.user_response_cancel()
+            self.destroy()
 
     def just_destroy(self, widget):
         self.destroy()
@@ -1431,38 +1427,39 @@ class HigDialog(Gtk.MessageDialog):
         self.format_secondary_markup(sectext)
 
         buttons = self.action_area.get_children()
-        self.possible_responses = {Gtk.STOCK_OK: on_response_ok,
-                Gtk.STOCK_CANCEL: on_response_cancel, Gtk.STOCK_YES: on_response_yes,
-                Gtk.STOCK_NO: on_response_no}
-        for b in buttons:
-            for response in self.possible_responses:
-                if b.get_label() == response:
-                    if not self.possible_responses[response]:
-                        b.connect('clicked', self.just_destroy)
-                    elif isinstance(self.possible_responses[response], tuple):
-                        if len(self.possible_responses[response]) == 1:
-                            b.connect('clicked', self.possible_responses[response][0])
-                        else:
-                            b.connect('clicked', *self.possible_responses[response])
-                    else:
-                        b.connect('clicked', self.possible_responses[response])
-                    break
+        self.possible_responses = {Gtk.ResponseType.OK: on_response_ok,
+            Gtk.ResponseType.CANCEL: on_response_cancel,
+            Gtk.ResponseType.YES: on_response_yes,
+            Gtk.ResponseType.NO: on_response_no}
 
+        self.connect('response', self.on_response)
         self.connect('destroy', self.on_dialog_destroy)
+
+    def on_response(self, dialog, response_id):
+        if not response_id in self.possible_responses:
+            return
+        if not self.possible_responses[response_id]:
+            self.destroy()
+        elif isinstance(self.possible_responses[response_id], tuple):
+            if len(self.possible_responses[response_id]) == 1:
+                self.possible_responses[response_id][0](dialog)
+            else:
+                self.possible_responses[response_id][0](dialog,
+                    *self.possible_responses[response_id][1:])
+        else:
+            self.possible_responses[response_id](dialog)
+
 
     def on_dialog_destroy(self, widget):
         if not self.call_cancel_on_destroy:
             return
-        cancel_handler = self.possible_responses[Gtk.STOCK_CANCEL]
+        cancel_handler = self.possible_responses[Gtk.ResponseType.CANCEL]
         if not cancel_handler:
             return False
         if isinstance(cancel_handler, tuple):
             cancel_handler[0](None, *cancel_handler[1:])
         else:
             cancel_handler(None)
-
-    def just_destroy(self, widget):
-        self.destroy()
 
     def popup(self):
         """
