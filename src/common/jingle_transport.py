@@ -343,8 +343,7 @@ class JingleTransportIBB(JingleTransport):
         return transport
 
 try:
-    raise ImportError
-    import farstream
+    from gi.repository import Farstream
 except Exception:
     pass
 
@@ -353,24 +352,24 @@ class JingleTransportICEUDP(JingleTransport):
         JingleTransport.__init__(self, TransportType.ICEUDP)
 
     def make_candidate(self, candidate):
-        types = {farstream.CANDIDATE_TYPE_HOST: 'host',
-                farstream.CANDIDATE_TYPE_SRFLX: 'srflx',
-                farstream.CANDIDATE_TYPE_PRFLX: 'prflx',
-                farstream.CANDIDATE_TYPE_RELAY: 'relay',
-                farstream.CANDIDATE_TYPE_MULTICAST: 'multicast'}
+        types = {Farstream.CandidateType.HOST: 'host',
+            Farstream.CandidateType.SRFLX: 'srflx',
+            Farstream.CandidateType.PRFLX: 'prflx',
+            Farstream.CandidateType.RELAY: 'relay',
+            Farstream.CandidateType.MULTICAST: 'multicast'}
         attrs = {
-                'component': candidate.component_id,
-                'foundation': '1', # hack
-                'generation': '0',
-                'ip': candidate.ip,
-                'network': '0',
-                'port': candidate.port,
-                'priority': int(candidate.priority), # hack
-                'id': gajim.get_an_id()
+            'component': candidate.component_id,
+            'foundation': '1', # hack
+            'generation': '0',
+            'ip': candidate.ip,
+            'network': '0',
+            'port': candidate.port,
+            'priority': int(candidate.priority), # hack
+            'id': gajim.get_an_id()
         }
         if candidate.type in types:
             attrs['type'] = types[candidate.type]
-        if candidate.proto == farstream.NETWORK_PROTOCOL_UDP:
+        if candidate.proto == Farstream.NetworkProtocol.UDP:
             attrs['protocol'] = 'udp'
         else:
             # we actually don't handle properly different tcp options in jingle
@@ -389,33 +388,37 @@ class JingleTransportICEUDP(JingleTransport):
     def parse_transport_stanza(self, transport):
         candidates = []
         for candidate in transport.iterTags('candidate'):
-            cand = farstream.Candidate()
-            cand.component_id = int(candidate['component'])
-            cand.ip = str(candidate['ip'])
-            cand.port = int(candidate['port'])
-            cand.foundation = str(candidate['foundation'])
-            #cand.type = farstream.CANDIDATE_TYPE_LOCAL
-            cand.priority = int(candidate['priority'])
-
+            foundation = str(candidate['foundation'])
+            component_id = int(candidate['component'])
+            ip = str(candidate['ip'])
+            port = int(candidate['port'])
+            base_ip = None
+            base_port = 0
             if candidate['protocol'] == 'udp':
-                cand.proto = farstream.NETWORK_PROTOCOL_UDP
+                proto = Farstream.NetworkProtocol.UDP
             else:
-                # we actually don't handle properly different tcp options in jingle
-                cand.proto = farstream.NETWORK_PROTOCOL_TCP
-
-            cand.username = str(transport['ufrag'])
-            cand.password = str(transport['pwd'])
-
-            #FIXME: huh?
-            types = {'host': farstream.CANDIDATE_TYPE_HOST,
-                                    'srflx': farstream.CANDIDATE_TYPE_SRFLX,
-                                    'prflx': farstream.CANDIDATE_TYPE_PRFLX,
-                                    'relay': farstream.CANDIDATE_TYPE_RELAY,
-                                    'multicast': farstream.CANDIDATE_TYPE_MULTICAST}
+                # we actually don't handle properly different tcp options in
+                # jingle
+                proto = Farstream.NetworkProtocol.TCP
+            priority = int(candidate['priority'])
+            types = {'host': Farstream.CandidateType.HOST,
+                'srflx': Farstream.CandidateType.SRFLX,
+                'prflx': Farstream.CandidateType.PRFLX,
+                'relay': Farstream.CandidateType.RELAY,
+                'multicast': Farstream.CandidateType.MULTICAST}
             if 'type' in candidate and candidate['type'] in types:
-                cand.type = types[candidate['type']]
+                type_ = types[candidate['type']]
             else:
-                print('Unknown type %s' % candidate['type'])
+                log.warning('Unknown type %s' % candidate['type'])
+                type_ = Farstream.CandidateType.HOST
+            username = str(transport['ufrag'])
+            password = str(transport['pwd'])
+            ttl = 0
+
+            cand = Farstream.Candidate.new_full(foundation, component_id, ip,
+                port, base_ip, base_port, proto, priority, type_, username,
+                password, ttl)
+
             candidates.append(cand)
         self.remote_candidates.extend(candidates)
         return candidates

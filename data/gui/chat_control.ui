@@ -17,10 +17,9 @@
     <property name="can_focus">True</property>
     <property name="spacing">1</property>
     <child>
-      <object class="GtkVBox" id="chat_control_vbox">
+      <object class="GtkPaned" id="paned1">
+        <property name="visible">True</property>
         <property name="can_focus">True</property>
-        <property name="border_width">3</property>
-        <property name="spacing">1</property>
         <child>
           <object class="GtkVBox" id="vbox2">
             <property name="visible">True</property>
@@ -329,6 +328,7 @@
                     <property name="receives_default">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup" translatable="yes">Show a list of emoticons (Alt+M)</property>
                     <property name="tooltip_text" translatable="yes">Show a list of emoticons (Alt+M)</property>
                     <property name="relief">none</property>
                     <property name="focus_on_click">False</property>
@@ -391,6 +391,7 @@
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="no_show_all">True</property>
                     <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup" translatable="yes">Add this contact to roster (Ctrl+D)</property>
                     <property name="tooltip_text" translatable="yes">Add this contact to roster (Ctrl+D)</property>
                     <property name="relief">none</property>
                     <child>
@@ -481,6 +482,7 @@
                     <property name="receives_default">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup" translatable="yes">Invite contacts to the conversation (Ctrl+G)</property>
                     <property name="tooltip_text" translatable="yes">Invite contacts to the conversation (Ctrl+G)</property>
                     <property name="relief">none</property>
                     <property name="focus_on_click">False</property>
@@ -507,6 +509,7 @@
                     <property name="receives_default">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup" translatable="yes">Show the contact&amp;apos;s profile (Ctrl+I)</property>
                     <property name="tooltip_text" translatable="yes">Show the contact's profile (Ctrl+I)</property>
                     <property name="relief">none</property>
                     <property name="focus_on_click">False</property>
@@ -533,6 +536,7 @@
                     <property name="receives_default">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup" translatable="yes">Browse the chat history (Ctrl+H)</property>
                     <property name="tooltip_text" translatable="yes">Browse the chat history (Ctrl+H)</property>
                     <property name="relief">none</property>
                     <property name="focus_on_click">False</property>
@@ -540,7 +544,6 @@
                       <object class="GtkImage" id="history_image">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="stock">gtk-justify-fill</property>
                         <property name="icon-size">1</property>
                       </object>
@@ -571,6 +574,7 @@
                     <property name="receives_default">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup" translatable="yes">Show advanced functions (Alt+D)</property>
                     <property name="tooltip_text" translatable="yes">Show advanced functions (Alt+D)</property>
                     <property name="relief">none</property>
                     <property name="focus_on_click">False</property>
@@ -610,6 +614,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
+                        <property name="has_tooltip">True</property>
                         <property name="relief">none</property>
                         <property name="focus_on_click">False</property>
                         <property name="orientation">vertical</property>
@@ -631,6 +636,7 @@ audio-volume-medium</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
+                        <property name="has_tooltip">True</property>
                         <property name="relief">none</property>
                         <property name="focus_on_click">False</property>
                         <property name="yalign">0.4699999988079071</property>
@@ -701,6 +707,8 @@ audio-mic-volume-low</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup" translatable="yes">Send message</property>
                     <property name="tooltip_text" translatable="yes">Send message</property>
                     <property name="image">image4</property>
                     <property name="use_underline">True</property>
@@ -720,9 +728,80 @@ audio-mic-volume-low</property>
             </child>
           </object>
           <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
+            <property name="resize">False</property>
+            <property name="shrink">True</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox" id="video_hbox">
+            <property name="can_focus">False</property>
+            <property name="no_show_all">True</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkFixed" id="outgoing_fixed">
+                <property name="can_focus">False</property>
+                <property name="no_show_all">True</property>
+                <child>
+                  <object class="GtkViewport" id="viewport1">
+                    <property name="width_request">160</property>
+                    <property name="height_request">120</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <child>
+                      <object class="GtkDrawingArea" id="outgoing_drawingarea">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="double_buffered">False</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="vbox1">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkViewport" id="viewport2">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <child>
+                      <object class="GtkDrawingArea" id="incoming_drawingarea">
+                        <property name="width_request">320</property>
+                        <property name="height_request">240</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="double_buffered">False</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="resize">True</property>
+            <property name="shrink">True</property>
           </packing>
         </child>
       </object>

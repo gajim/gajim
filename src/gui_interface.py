@@ -129,7 +129,7 @@ class Interface:
             else:
                 return
 
-            cls(obj.pri_txt, obj.sec_txt)
+            cls(obj.pri_txt, GLib.markup_escape_text(obj.sec_txt))
 
     def handle_ask_new_nick(self, account, room_jid):
         title = _('Unable to join group chat')

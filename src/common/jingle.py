@@ -61,7 +61,7 @@ class ConnectionJingle(object):
         """
         if sid in self._sessions:
             #FIXME: Move this elsewhere?
-            for content in self._sessions[sid].contents.values():
+            for content in list(self._sessions[sid].contents.values()):
                 content.destroy()
             self._sessions[sid].callbacks = []
             del self._sessions[sid]

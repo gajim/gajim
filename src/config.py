@@ -65,7 +65,6 @@ from common import gpg
 from common import ged
 
 try:
-    raise ImportError
     from common.multimedia_helpers import AudioInputManager, AudioOutputManager
     from common.multimedia_helpers import VideoInputManager, VideoOutputManager
     HAS_GST = True

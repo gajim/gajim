@@ -1798,7 +1798,7 @@ class ChatControl(ChatControlBase):
         # Video buttons
         self._video_button.set_sensitive(self.video_available)
 
-        # change tooltip text for audio and video buttons if python-farstream is
+        # change tooltip text for audio and video buttons if farstream is
         # not installed
         audio_tooltip_text = _('Toggle audio session') + '\n'
         video_tooltip_text = _('Toggle video session') + '\n'

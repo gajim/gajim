@@ -184,16 +184,19 @@ except Exception:
 
 HAVE_FARSTREAM = True
 try:
-    raise ImportError
-    farstream = __import__('farstream')
-    import gst
-    import glib
+    import gi
+    gi.require_version('Farstream', '0.2')
+    from gi.repository import Farstream
+    gi.require_version('Gst', '1.0')
+    from gi.repository import Gst
+    from gi.repository import GLib
     try:
-        conference = gst.element_factory_make('fsrtpconference')
-        session = conference.new_session(farstream.MEDIA_TYPE_AUDIO)
+        Gst.init(None)
+        conference = Gst.ElementFactory.make('fsrtpconference', None)
+        session = conference.new_session(Farstream.MediaType.AUDIO)
         del session
         del conference
-    except:
+    except GLib.GError:
         HAVE_FARSTREAM = False
 
 except ImportError:

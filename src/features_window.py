@@ -97,7 +97,7 @@ class FeaturesWindow:
                 _('Requires python-docutils.')),
             _('Audio / Video'): (self.farstream_available,
                 _('Ability to start audio and video chat.'),
-                _('Requires python-farstream and gstreamer-plugins-bad.'),
+                _('Requires gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, gstreamer1.0-libav and gstreamer1.0-plugins-ugly.'),
                 _('Feature not available under Windows.')),
             _('UPnP-IGD'): (self.gupnp_igd_available,
                 _('Ability to request your router to forward port for file transfer.'),

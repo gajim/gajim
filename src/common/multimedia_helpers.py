@@ -13,7 +13,7 @@
 ## You should have received a copy of the GNU General Public License
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-import gst
+from gi.repository import Gst
 
 
 class DeviceManager(object):
@@ -29,29 +29,24 @@ class DeviceManager(object):
         return self.devices
 
     def detect_element(self, name, text, pipe='%s'):
-        try:
-            if gst.element_factory_find(name):
-                element = gst.element_factory_make(name,
-                    '%spresencetest' % name)
-                if isinstance(element, gst.interfaces.PropertyProbe):
-                    element.set_state(gst.STATE_READY)
-                    element.probe_property_name('device')
-                    devices = element.probe_get_values_name('device')
-                    if devices:
-                        self.devices[text % _(' Default device')] = pipe % name
-                        for device in devices:
-                            element.set_state(gst.STATE_NULL)
-                            element.set_property('device', device)
-                            element.set_state(gst.STATE_READY)
-                            device_name = element.get_property('device-name')
-                            self.devices[text % device_name] = pipe % \
-                                '%s device=%s' % (name, device)
-                    element.set_state(gst.STATE_NULL)
-                else:
-                    self.devices[text] = pipe % name
-        except ImportError:
-            pass
-        except gst.ElementNotFoundError:
+        if Gst.ElementFactory.find(name):
+            element = Gst.ElementFactory.make(name, '%spresencetest' % name)
+            if hasattr(element.props, 'device'):
+                element.set_state(Gst.State.READY)
+                devices = element.get_properties('device')
+                if devices:
+                    self.devices[text % _(' Default device')] = pipe % name
+                    for device in devices:
+                        element.set_state(Gst.State.NULL)
+                        element.set_property('device', device)
+                        element.set_state(Gst.State.READY)
+                        device_name = element.get_property('device-name')
+                        self.devices[text % device_name] = pipe % \
+                            '%s device=%s' % (name, device)
+                element.set_state(Gst.State.NULL)
+            else:
+                self.devices[text] = pipe % name
+        else:
             print('element \'%s\' not found' % name)
 
 
