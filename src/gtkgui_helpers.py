@@ -1100,6 +1100,8 @@ def make_jabber_state_images():
                 if pix_16_type == Gtk.ImageType.ANIMATION:
                     animation = pix.get_animation()
                     pixbuf = animation.get_static_image()
+                else:
+                    pixbuf = pix.get_pixbuf()
             else:
                 pixbuf = pix.get_pixbuf()
             scaled_pix = pixbuf.scale_simple(24, 24, GdkPixbuf.InterpType.BILINEAR)
