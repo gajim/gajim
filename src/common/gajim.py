@@ -199,7 +199,7 @@ try:
     except GLib.GError:
         HAVE_FARSTREAM = False
 
-except ImportError:
+except (ImportError, ValueError):
     HAVE_FARSTREAM = False
 
 HAVE_UPNP_IGD = True
