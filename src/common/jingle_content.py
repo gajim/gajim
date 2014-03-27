@@ -223,7 +223,7 @@ class JingleContent(object):
             if cert:
                 try:
                     digest_algo = cert.get_signature_algorithm().split('With')[0]
-                except AttributeError, e:
+                except AttributeError as e:
                     # Old py-OpenSSL is missing get_signature_algorithm
                     digest_algo = "sha256"
                 security.addChild('fingerprint').addData(cert.digest(
