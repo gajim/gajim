@@ -257,7 +257,7 @@ class PluginManager(metaclass=Singleton):
             gui_extpoint_name]:
                 try:
                     handlers[0](*args)
-                except Exception, e:
+                except Exception as e:
                     log.warning('Error executing %s', handlers[0],
                         exc_info=True)
 
@@ -332,7 +332,7 @@ class PluginManager(metaclass=Singleton):
                     if handler:
                         try:
                             handler(*gui_extension_point_args)
-                        except Exception, e:
+                        except Exception as e:
                             log.warning('Error executing %s', handler,
                                 exc_info=True)
 
@@ -367,7 +367,7 @@ class PluginManager(metaclass=Singleton):
                     if handler:
                         try:
                             handler(*gui_extension_point_args)
-                        except Exception, e:
+                        except Exception as e:
                             log.warning('Error executing %s', handler,
                                 exc_info=True)
 
