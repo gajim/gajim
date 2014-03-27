@@ -159,7 +159,7 @@ except ImportError:
 
 HAVE_GPG = True
 try:
-    __import__('gnupg', globals(), locals(), [], 0)
+    __import__('common.gnupg', globals(), locals(), [], 0)
 except ImportError:
     HAVE_GPG = False
 else:
