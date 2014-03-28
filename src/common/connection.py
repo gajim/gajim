@@ -464,8 +464,9 @@ class CommonConnection:
                 msg_iq = iqs
         else:
             msg_iq.setTo(fjid)
-            if resource:
-                contact = gajim.contacts.get_contact(self.name, jid, resource)
+            r_ = resource or gajim.get_resource_from_jid(fjid)
+            if r_:
+                contact = gajim.contacts.get_contact(self.name, jid, r_)
             else:
                 contact = gajim.contacts.get_contact_with_highest_priority(
                     self.name, jid)
