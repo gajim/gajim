@@ -259,8 +259,6 @@ control=None, gc_contact=None, is_anonymous=True):
 
     # add a special img for send file menuitem
     pixbuf = gtkgui_helpers.get_icon_pixmap('document-send', quiet=True)
-    if not pixbuf:
-        pixbuf = gtkgui_helpers.get_icon_pixmap('gajim-upload')
     img = gtk.image_new_from_pixbuf(pixbuf)
     send_file_menuitem.set_image(img)
 

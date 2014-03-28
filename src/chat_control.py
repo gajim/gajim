@@ -1498,8 +1498,6 @@ class ChatControl(ChatControlBase):
         self._send_file_button = self.xml.get_object('send_file_button')
         # add a special img for send file button
         pixbuf = gtkgui_helpers.get_icon_pixmap('document-send', quiet=True)
-        if not pixbuf:
-            pixbuf = gtkgui_helpers.get_icon_pixmap('gajim-upload')
         img = gtk.image_new_from_pixbuf(pixbuf)
         self._send_file_button.set_image(img)
         id_ = self._send_file_button.connect('clicked',

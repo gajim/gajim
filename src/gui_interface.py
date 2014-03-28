@@ -2656,8 +2656,6 @@ class Interface:
         elif isinstance(pep_obj, pep.UserLocationPEP):
             icon = gtkgui_helpers.get_icon_pixmap('applications-internet',
                 quiet=True)
-            if not icon:
-                icon = gtkgui_helpers.get_icon_pixmap('gajim-earth')
             return icon
 
     def create_ipython_window(self):
