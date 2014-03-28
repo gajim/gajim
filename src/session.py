@@ -160,6 +160,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
             if ctrl:
                 self.control = ctrl
                 self.control.set_session(self)
+                self.control.contact = contact
 
         if not pm:
             self.roster_message2(obj)
