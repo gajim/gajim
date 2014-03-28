@@ -2597,8 +2597,6 @@ class GroupchatControl(ChatControlBase):
         item = xml.get_object('send_file_menuitem')
         # add a special img for send file menuitem
         pixbuf = gtkgui_helpers.get_icon_pixmap('document-send', quiet=True)
-        if not pixbuf:
-            pixbuf = gtkgui_helpers.get_icon_pixmap('gajim-upload')
         img = Gtk.Image.new_from_pixbuf(pixbuf)
         item.set_image(img)
 
