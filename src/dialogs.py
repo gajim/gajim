@@ -5418,6 +5418,12 @@ SHA1 Fingerprint: %(sha1)s''') % {
             'iou': issuer.organizationalUnitName,
             'io': cert.get_notBefore(), 'eo': cert.get_notAfter(),
             'sha1': cert.digest('sha1')})
+        pix = gtkgui_helpers.get_icon_pixmap('application-certificate', size=32,
+            quiet=True)
+        if pix:
+            img =  gtk.image_new_from_pixbuf(pix)
+            img.show_all()
+            self.set_image(img)
         self.set_transient_for(parent)
         self.set_title(_('Certificate for account %s') % account)
 
