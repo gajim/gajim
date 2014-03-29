@@ -218,6 +218,9 @@ class MessageWindow(object):
                 win.destroy()
 
             if not gajim.config.get('confirm_close_multiple_tabs'):
+                for ctrl in self.controls():
+                    if ctrl.minimizable():
+                        ctrl.minimize()
                 # destroy window
                 return False
             dialogs.YesNoDialog(
