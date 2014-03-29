@@ -5172,7 +5172,7 @@ class ESessionInfoWindow:
 
         if self.session.verified_identity:
             labeltext += '\n\n' + _('''You have already verified this contact's identity.''')
-            security_image = 'gajim-security_high'
+            security_image = 'security-high'
             if self.session.control:
                 self.session.control._show_lock_image(True, 'E2E', True,
                     self.session.is_loggable(), True)
@@ -5189,7 +5189,7 @@ class ESessionInfoWindow:
                 self.session.control._show_lock_image(True, 'E2E', True,
                      self.session.is_loggable(), False)
             labeltext += '\n\n' + _('''To be certain that <b>only</b> the expected person can read your messages or send you messages, you need to verify their identity by clicking the button below.''')
-            security_image = 'gajim-security_low'
+            security_image = 'security-low'
 
             verification_status = _('''Contact's identity NOT verified''')
             self.window.set_title(verification_status)
@@ -5246,13 +5246,13 @@ class GPGInfoWindow:
             verification_status = _('''Contact's identity NOT verified''')
             info = _('The contact\'s key (%s) <b>does not match</b> the key '
                 'assigned in Gajim.') % keyID[:8]
-            image = 'gajim-security_low'
+            image = 'security-low'
         elif not keyID:
             # No key assigned nor a key is used by remote contact
             verification_status = _('No OpenPGP key assigned')
             info = _('No OpenPGP key is assigned to this contact. So you cannot'
                 ' encrypt messages.')
-            image = 'gajim-security_low'
+            image = 'security-low'
         else:
             error = gajim.connections[account].gpg.encrypt('test', [keyID])[1]
             if error:
@@ -5260,12 +5260,12 @@ class GPGInfoWindow:
                 info = _('OpenPGP key is assigned to this contact, but <b>you '
                     'do not trust his key</b>, so message <b>cannot</b> be '
                     'encrypted. Use your OpenPGP client to trust this key.')
-                image = 'gajim-security_low'
+                image = 'security-low'
             else:
                 verification_status = _('''Contact's identity verified''')
                 info = _('OpenPGP Key is assigned to this contact, and you '
                     'trust his key, so messages will be encrypted.')
-                image = 'gajim-security_high'
+                image = 'security-high'
 
         status_label.set_markup('<b><span size="x-large">%s</span></b>' % \
             verification_status)
