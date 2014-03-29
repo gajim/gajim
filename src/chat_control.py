@@ -2314,11 +2314,11 @@ class ChatControl(ChatControlBase):
         if authenticated:
             #About encrypted chat session
             authenticated_string = _('and authenticated')
-            img_path = gtkgui_helpers.get_icon_path('gajim-security_high')
+            img_path = gtkgui_helpers.get_icon_path('security-high')
         else:
             #About encrypted chat session
             authenticated_string = _('and NOT authenticated')
-            img_path = gtkgui_helpers.get_icon_path('gajim-security_low')
+            img_path = gtkgui_helpers.get_icon_path('security-low')
         self.lock_image.set_from_file(img_path)
 
         #status will become 'is' or 'is not', authentificaed will become
