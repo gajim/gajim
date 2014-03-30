@@ -352,8 +352,8 @@ def check_and_possibly_create_paths():
         create_path(LOCAL_XTLS_CERTS)
     cert_name = os.path.join(LOCAL_XTLS_CERTS,
         jingle_xtls.SELF_SIGNED_CERTIFICATE)
-    if not (os.path.exists(cert_name + '.cert') and os.path.exists(
-    cert_name + '.pkey')):
+    if gajim.HAVE_PYOPENSSL and not (os.path.exists(cert_name + '.cert') and \
+    os.path.exists(cert_name + '.pkey')):
         jingle_xtls.make_certs(cert_name, 'gajim')
 
 
