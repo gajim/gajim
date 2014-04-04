@@ -319,6 +319,7 @@ try:
     # Seed from file
     OpenSSL.rand.load_file(str(RNG_SEED))
     crypto.add_entropy_sources_OpenSSL()
+    OpenSSL.rand.write_file(str(RNG_SEED))
 except ImportError:
     log.info("PyOpenSSL PRNG not available")
 
