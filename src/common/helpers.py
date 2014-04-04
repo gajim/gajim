@@ -1332,17 +1332,17 @@ def update_optional_features(account = None):
             gajim.gajim_optional_features[a].append(nbxmpp.NS_ESESSION)
         if gajim.config.get_per('accounts', a, 'answer_receipts'):
             gajim.gajim_optional_features[a].append(nbxmpp.NS_RECEIPTS)
+        gajim.gajim_optional_features[a].append(nbxmpp.NS_JINGLE)
         if gajim.HAVE_FARSTREAM:
-            gajim.gajim_optional_features[a].append(nbxmpp.NS_JINGLE)
             gajim.gajim_optional_features[a].append(nbxmpp.NS_JINGLE_RTP)
             gajim.gajim_optional_features[a].append(nbxmpp.NS_JINGLE_RTP_AUDIO)
             gajim.gajim_optional_features[a].append(nbxmpp.NS_JINGLE_RTP_VIDEO)
             gajim.gajim_optional_features[a].append(nbxmpp.NS_JINGLE_ICE_UDP)
-            gajim.gajim_optional_features[a].append(
-                nbxmpp.NS_JINGLE_FILE_TRANSFER)
-            gajim.gajim_optional_features[a].append(nbxmpp.NS_JINGLE_XTLS)
-            gajim.gajim_optional_features[a].append(nbxmpp.NS_JINGLE_BYTESTREAM)
-            gajim.gajim_optional_features[a].append(nbxmpp.NS_JINGLE_IBB)
+        gajim.gajim_optional_features[a].append(
+            nbxmpp.NS_JINGLE_FILE_TRANSFER)
+        gajim.gajim_optional_features[a].append(nbxmpp.NS_JINGLE_XTLS)
+        gajim.gajim_optional_features[a].append(nbxmpp.NS_JINGLE_BYTESTREAM)
+        gajim.gajim_optional_features[a].append(nbxmpp.NS_JINGLE_IBB)
         gajim.caps_hash[a] = caps_cache.compute_caps_hash([gajim.gajim_identity],
                 gajim.gajim_common_features + gajim.gajim_optional_features[a])
         # re-send presence with new hash
