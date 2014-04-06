@@ -687,7 +687,7 @@ class CommonConnection:
         if realm == '':
             if event == nbxmpp.transports_nb.DATA_RECEIVED:
                 gajim.nec.push_incoming_event(StanzaReceivedEvent(None,
-                    conn=self, stanza_str=unicode(data, errors='ignore')))
+                    conn=self, stanza_str=unicode(data)))
             elif event == nbxmpp.transports_nb.DATA_SENT:
                 gajim.nec.push_incoming_event(StanzaSentEvent(None, conn=self,
                     stanza_str=unicode(data)))
