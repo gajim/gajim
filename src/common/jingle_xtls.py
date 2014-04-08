@@ -194,7 +194,7 @@ def check_cert(jid, fingerprint):
         if cert:
             try:
                 digest_algo = cert.get_signature_algorithm().split('With')[0]
-            except AttributeError as e: 
+            except AttributeError as e:
                 # Old py-OpenSSL is missing get_signature_algorithm
                 digest_algo = "sha256"
             if cert.digest(digest_algo) == fingerprint:
@@ -251,7 +251,7 @@ def createCertRequest(pkey, digest="sha256", **name):
     req.sign(pkey, digest)
     return req
 
-def createCertificate(req, issuerCert, issuerKey, serial, notBefore, notAfter, digest="shai256"):
+def createCertificate(req, issuerCert, issuerKey, serial, notBefore, notAfter, digest="sha256"):
     """
     Generate a certificate given a certificate request.
 
