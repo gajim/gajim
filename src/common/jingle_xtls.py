@@ -290,8 +290,7 @@ def make_certs(filepath, CN):
         os.chmod(filepath + '.pkey', 0o600)
         f.write(crypto.dump_privatekey(crypto.FILETYPE_PEM, key))
     with open(filepath + '.cert', 'wb') as f:
-        f.write(crypto.dump_certificate(crypto.FILETYPE_PEM, cert).decode(
-            'utf-8'))
+        f.write(crypto.dump_certificate(crypto.FILETYPE_PEM, cert))
 
 
 if __name__ == '__main__':
