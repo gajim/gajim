@@ -2655,7 +2655,8 @@ class RosterWindow:
                             gajim.contacts.get_contact_with_highest_priority(
                             account, jid)
                         if not contact:
-                            continue
+                            contact = self.add_to_not_in_the_roster(account,
+                                jid)
                         gajim.interface.on_open_chat_window(None, contact,
                             account)
                 gajim.config.set_per('accounts', account,
