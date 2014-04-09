@@ -51,8 +51,13 @@ except ImportError:
 
 def get_resolver(idlequeue):
     if USE_LIBASYNCNS:
+        log.info('Using LibAsyncNSResolver')
         return LibAsyncNSResolver()
     else:
+        if helpers.is_in_path('host'):
+            log.info('Using HostResolver')
+            return HostResolver(idlequeue)
+        log.info('Using NSLookupResolver')
         return NSLookupResolver(idlequeue)
 
 class CommonResolver():
@@ -62,43 +67,43 @@ class CommonResolver():
         # dict {"host+type" : list of callbacks}
         self.handlers = {}
 
-    def resolve(self, host, on_ready, type='srv'):
+    def resolve(self, host, on_ready, type_='srv'):
         host = host.lower()
-        log.debug('resolve %s type=%s' % (host, type))
-        assert(type in ['srv', 'txt'])
+        log.debug('resolve %s type=%s' % (host, type_))
+        assert(type_ in ['srv', 'txt'])
         if not host:
             # empty host, return empty list of srv records
             on_ready([])
             return
-        if host + type in self.resolved_hosts:
+        if host + type_ in self.resolved_hosts:
             # host is already resolved, return cached values
             log.debug('%s already resolved: %s' % (host,
-                self.resolved_hosts[host + type]))
-            on_ready(host, self.resolved_hosts[host + type])
+                self.resolved_hosts[host + type_]))
+            on_ready(host, self.resolved_hosts[host + type_])
             return
-        if host + type in self.handlers:
+        if host + type_ in self.handlers:
             # host is about to be resolved by another connection,
             # attach our callback
             log.debug('already resolving %s' % host)
-            self.handlers[host + type].append(on_ready)
+            self.handlers[host + type_].append(on_ready)
         else:
             # host has never been resolved, start now
             log.debug('Starting to resolve %s using %s' % (host, self))
-            self.handlers[host + type] = [on_ready]
-            self.start_resolve(host, type)
+            self.handlers[host + type_] = [on_ready]
+            self.start_resolve(host, type_)
 
-    def _on_ready(self, host, type, result_list):
+    def _on_ready(self, host, type_, result_list):
         # practically it is impossible to be the opposite, but who knows :)
         host = host.lower()
         log.debug('Resolving result for %s: %s' % (host, result_list))
-        if host + type not in self.resolved_hosts:
-            self.resolved_hosts[host + type] = result_list
-        if host + type in self.handlers:
-            for callback in self.handlers[host + type]:
+        if host + type_ not in self.resolved_hosts:
+            self.resolved_hosts[host + type_] = result_list
+        if host + type_ in self.handlers:
+            for callback in self.handlers[host + type_]:
                 callback(host, result_list)
-            del(self.handlers[host + type])
+            del(self.handlers[host + type_])
 
-    def start_resolve(self, host, type):
+    def start_resolve(self, host, type_):
         pass
 
 # FIXME: API usage is not consistent! This one requires that process is called
@@ -113,22 +118,22 @@ class LibAsyncNSResolver(CommonResolver):
         self.asyncns = libasyncns.Asyncns()
         CommonResolver.__init__(self)
 
-    def start_resolve(self, host, type):
-        type = libasyncns.ns_t_srv
-        if type == 'txt': type = libasyncns.ns_t_txt
-        resq = self.asyncns.res_query(host, libasyncns.ns_c_in, type)
-        resq.userdata = {'host':host, 'type':type}
+    def start_resolve(self, host, type_):
+        type_ = libasyncns.ns_t_srv
+        if type_ == 'txt': type_ = libasyncns.ns_t_txt
+        resq = self.asyncns.res_query(host, libasyncns.ns_c_in, type_)
+        resq.userdata = {'host':host, 'type':type_}
 
     # getaddrinfo to be done
     #def resolve_name(self, dname, callback):
         #resq = self.asyncns.getaddrinfo(dname)
         #resq.userdata = {'callback':callback, 'dname':dname}
 
-    def _on_ready(self, host, type, result_list):
-        if type == libasyncns.ns_t_srv: type = 'srv'
-        elif type == libasyncns.ns_t_txt: type = 'txt'
+    def _on_ready(self, host, type_, result_list):
+        if type_ == libasyncns.ns_t_srv: type_ = 'srv'
+        elif type_ == libasyncns.ns_t_txt: type_ = 'txt'
 
-        CommonResolver._on_ready(self, host, type, result_list)
+        CommonResolver._on_ready(self, host, type_, result_list)
 
     def process(self):
         try:
@@ -153,7 +158,7 @@ class LibAsyncNSResolver(CommonResolver):
                             continue
                         r['prio'] = r['pref']
                         hosts.append(r)
-                self._on_ready(host=requested_host, type=requested_type,
+                self._on_ready(host=requested_host, type_=requested_type,
                         result_list=hosts)
                 try:
                     resq = self.asyncns.get_next()
@@ -276,27 +281,98 @@ class NSLookupResolver(CommonResolver):
                         'prio': prio})
         return hosts
 
-    def _on_ready(self, host, type, result):
+    def _on_ready(self, host, type_, result):
         # nslookup finished, parse the result and call the handlers
         result_list = self.parse_srv_result(host, result)
-        CommonResolver._on_ready(self, host, type, result_list)
+        CommonResolver._on_ready(self, host, type_, result_list)
 
-    def start_resolve(self, host, type):
+    def start_resolve(self, host, type_):
         """
         Spawn new nslookup process and start waiting for results
         """
-        ns = NsLookup(self._on_ready, host, type)
+        ns = NsLookup(self._on_ready, host, type_)
         ns.set_idlequeue(self.idlequeue)
         ns.commandtimeout = 20
         ns.start()
 
 
+class HostResolver(CommonResolver):
+    """
+    Asynchronous DNS resolver calling host. Processing of pending requests
+    is invoked from idlequeue which is watching file descriptor of pipe of
+    stdout of host process.
+    """
+
+    def __init__(self, idlequeue):
+        self.idlequeue = idlequeue
+        self.process = False
+        CommonResolver.__init__(self)
+
+    def parse_srv_result(self, fqdn, result):
+        """
+        Parse the output of host command and return list of properties:
+        'host', 'port','weight', 'priority' corresponding to the found srv hosts
+        """
+        # typical output of host command:
+        # _xmpp-client._tcp.jabber.org has SRV record 30 30 5222 jabber.org.
+        if not result:
+            return []
+        ufqdn = helpers.ascii_to_idn(fqdn) # Unicode domain name
+        hosts = []
+        lines = result.split('\n')
+        for line in lines:
+            if line == '':
+                continue
+            domain = None
+            if line.startswith(fqdn):
+                domain = fqdn # For nslookup 9.5
+            elif helpers.decode_string(line).startswith(ufqdn):
+                line = helpers.decode_string(line)
+                domain = ufqdn # For nslookup 9.6
+            if domain:
+                # add 4 for ' has' after domain name
+                rest = line[len(domain)+4:].split('=')
+                if len(rest) != 2:
+                    continue
+                answer_type, props_str = rest
+                if answer_type.strip() != 'SRV':
+                    continue
+                props = props_str.strip().split(' ')
+                if len(props) < 4:
+                    continue
+                prio, weight, port, host  = props[-4:]
+                if host[-1] == '.':
+                    host = host[:-1]
+                try:
+                    prio = int(prio)
+                    weight = int(weight)
+                    port = int(port)
+                except ValueError:
+                    continue
+                hosts.append({'host': host, 'port': port, 'weight': weight,
+                        'prio': prio})
+        return hosts
+
+    def _on_ready(self, host, type_, result):
+        # host finished, parse the result and call the handlers
+        result_list = self.parse_srv_result(host, result)
+        CommonResolver._on_ready(self, host, type_, result_list)
+
+    def start_resolve(self, host, type_):
+        """
+        Spawn new nslookup process and start waiting for results
+        """
+        ns = Host(self._on_ready, host, type_)
+        ns.set_idlequeue(self.idlequeue)
+        ns.commandtimeout = 20
+        ns.start()
+
 class NsLookup(IdleCommand):
-    def __init__(self, on_result, host='_xmpp-client', type='srv'):
+    def __init__(self, on_result, host='_xmpp-client', type_='srv'):
         IdleCommand.__init__(self, on_result)
         self.commandtimeout = 10
         self.host = host.lower()
-        self.type_ = type.lower()
+        self.type_ = type_.lower()
         if not host_pattern.match(self.host):
             # invalid host name
             log.error('Invalid host: %s' % self.host)
@@ -314,6 +390,11 @@ class NsLookup(IdleCommand):
         if self.result_handler:
             self.result_handler(self.host, self.type_, self.result)
         self.result_handler = None
+
+
+class Host(NsLookup):
+    def _compose_command_args(self):
+        return ['host', '-t', self.type_, self.host]
 
 # below lines is on how to use API and assist in testing
 if __name__ == '__main__':
