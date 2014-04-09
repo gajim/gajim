@@ -68,19 +68,26 @@ if os.name == 'nt':
     except ImportError:
         pass
 
+HAS_NBXMPP=True
+MIN_NBXMPP_VER = "0.3.3"
 try:
     import nbxmpp
 except ImportError:
+    HAS_NBXMPP=False
+
+if not HAS_NBXMPP:
     print 'Gajim needs python-nbxmpp to run. Quiting...'
     sys.exit()
 
 try:
     from distutils.version import LooseVersion as V
-    if V(nbxmpp.__version__) < V("0.3.3"):
-        print 'Gajim needs python-nbxmpp > 0.3.3 to run. Quiting...'
-        sys.exit()
+    if V(nbxmpp.__version__) < V(MIN_NBXMPP_VER):
+        HAS_NBXMPP=False
 except:
-    print 'Gajim needs python-nbxmpp > 0.3.3 to run. Quiting...'
+    HAS_NBXMPP=False
+
+if not HAS_NBXMPP:
+    print 'Gajim needs python-nbxmpp >= %s to run. Quiting...' % MIN_NBXMPP_VER
     sys.exit()
 
 from common import demandimport
