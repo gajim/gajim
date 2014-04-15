@@ -19,9 +19,11 @@
 Handles  Jingle File Transfer (XEP 0234)
 """
 
+import os
 import hashlib
 import gajim
 import nbxmpp
+import configpaths
 import jingle_xtls
 from jingle_content import contents, JingleContent
 from jingle_transport import *
@@ -108,6 +110,13 @@ class JingleFileTransfer(JingleContent):
                    STATE_TRANSPORT_REPLACE : StateTransportReplace(self),
               STATE_CAND_SENT_AND_RECEIVED : StateCandSentAndRecv(self)
         }
+        
+        if jingle_xtls.PYOPENSSL_PRESENT:
+            cert_name = os.path.join(configpaths.gajimpaths['MY_CERT'],
+                                     jingle_xtls.SELF_SIGNED_CERTIFICATE)
+            if not (os.path.exists(cert_name + '.cert')
+                    and os.path.exists(cert_name + '.pkey')):
+                jingle_xtls.make_certs(cert_name, 'gajim')
 
     def __state_changed(self, nextstate, args=None):
         # Executes the next state action and sets the next state
