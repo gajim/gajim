@@ -30,7 +30,6 @@ import stat
 
 from common import gajim
 from common import logger
-from common import jingle_xtls
 
 # DO NOT MOVE ABOVE OF import gajim
 import sqlite3 as sqlite
@@ -350,12 +349,6 @@ def check_and_possibly_create_paths():
         create_path(XTLS_CERTS)
     if not os.path.exists(LOCAL_XTLS_CERTS):
         create_path(LOCAL_XTLS_CERTS)
-    cert_name = os.path.join(LOCAL_XTLS_CERTS,
-        jingle_xtls.SELF_SIGNED_CERTIFICATE)
-    if gajim.HAVE_PYOPENSSL and not (os.path.exists(cert_name + '.cert') and \
-    os.path.exists(cert_name + '.pkey')):
-        jingle_xtls.make_certs(cert_name, 'gajim')
-
 
 def create_path(directory):
     head, tail = os.path.split(directory)
