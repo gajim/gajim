@@ -141,7 +141,7 @@ class ConfigPaths:
         d = {'MY_DATA': '', 'LOG_DB': 'logs.db', 'MY_CACERTS': 'cacerts.pem',
             'MY_EMOTS': 'emoticons', 'MY_ICONSETS': 'iconsets',
             'MY_MOOD_ICONSETS': 'moods', 'MY_ACTIVITY_ICONSETS': 'activities',
-            'PLUGINS_USER': 'plugins', 'MY_PEER_CERTS': 'certs',
+            'PLUGINS_USER': 'plugins',
             'RNG_SEED': 'rng_seed'}
         for name in d:
             self.add(name, TYPE_DATA, windowsify(d[name]))
@@ -152,7 +152,6 @@ class ConfigPaths:
             self.add(name, TYPE_CACHE, windowsify(d[name]))
 
         self.add('MY_CONFIG', TYPE_CONFIG, '')
-        self.add('MY_CERT', TYPE_CONFIG, '')
 
         basedir = fse(os.environ.get('GAJIM_BASEDIR', defs.basedir))
         self.add('DATA', None, os.path.join(basedir, windowsify('data')))
@@ -178,16 +177,23 @@ class ConfigPaths:
         pidfile = windowsify('gajim')
         secretsfile = windowsify('secrets')
         pluginsconfdir = windowsify('pluginsconfig')
+        certsdir = windowsify(u'certs')
+        localcertsdir = windowsify(u'localcerts')
 
         if len(profile) > 0:
             conffile += '.' + profile
             pidfile += '.' + profile
             secretsfile += '.' + profile
             pluginsconfdir += '.' + profile
+            certsdir += u'.' + profile
+            localcertsdir += u'.' + profile
+
         pidfile += '.pid'
         self.add('CONFIG_FILE', TYPE_CONFIG, conffile)
         self.add('PID_FILE', TYPE_CACHE, pidfile)
         self.add('SECRETS_FILE', TYPE_DATA, secretsfile)
         self.add('PLUGINS_CONFIG_DIR', TYPE_CONFIG, pluginsconfdir)
+        self.add('MY_PEER_CERTS', TYPE_DATA, certsdir)
+        self.add('MY_CERT', TYPE_CONFIG, localcertsdir)
 
 gajimpaths = ConfigPaths()
