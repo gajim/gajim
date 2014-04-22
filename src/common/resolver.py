@@ -331,7 +331,7 @@ class HostResolver(CommonResolver):
                 domain = ufqdn # For nslookup 9.6
             if domain:
                 # add 4 for ' has' after domain name
-                rest = line[len(domain)+4:].split('=')
+                rest = line[len(domain)+4:].split('record')
                 if len(rest) != 2:
                     continue
                 answer_type, props_str = rest
