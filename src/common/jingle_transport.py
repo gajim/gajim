@@ -69,7 +69,7 @@ class JingleTransport(object):
         candidates is None)
         """
         if not candidates:
-            candidates = self._iter_candidates()
+            candidates = list(self._iter_candidates())
         else:
             candidates = (self.make_candidate(candidate) for candidate in candidates)
         transport = nbxmpp.Node('transport', payload=candidates)
