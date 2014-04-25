@@ -110,7 +110,7 @@ class JingleFileTransfer(JingleContent):
                    STATE_TRANSPORT_REPLACE : StateTransportReplace(self),
               STATE_CAND_SENT_AND_RECEIVED : StateCandSentAndRecv(self)
         }
-        
+
         if jingle_xtls.PYOPENSSL_PRESENT:
             cert_name = os.path.join(configpaths.gajimpaths['MY_CERT'],
                                      jingle_xtls.SELF_SIGNED_CERTIFICATE)
