@@ -102,6 +102,7 @@ class CustomPrivateChatCommands(CommandContainer):
     HOSTS = PrivateChatCommands,
 
     @command
+    #Example string. Do not translate
     @doc(_("The same as using a doc-string, except it supports translation"))
     def make_coffee(self):
         return "I'm not a coffee machine!"
