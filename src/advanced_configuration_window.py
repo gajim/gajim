@@ -81,7 +81,7 @@ class AdvancedConfigurationWindow(object):
                 gajim.interface.instances['preferences'].window)
         self.entry = self.xml.get_object('advanced_entry')
         self.desc_label = self.xml.get_object('advanced_desc_label')
-        self.restart_label = self.xml.get_object('restart_label')
+        self.restart_box = self.xml.get_object('restart_box')
         self.reset_button = self.xml.get_object('reset_button')
 
         # Format:
@@ -133,8 +133,8 @@ class AdvancedConfigurationWindow(object):
                 self.on_advanced_treeview_selection_changed)
 
         self.xml.connect_signals(self)
+        self.restart_box.set_no_show_all(True)
         self.window.show_all()
-        self.restart_label.hide()
         gajim.interface.instances['advanced_config'] = self
 
     def cb_value_column_data(self, col, cell, model, iter_, data):
@@ -218,7 +218,7 @@ class AdvancedConfigurationWindow(object):
             self.check_for_restart()
 
     def check_for_restart(self):
-        self.restart_label.hide()
+        self.restart_box.hide()
         for opt in self.changed_opts:
             opt_path = opt.split('\n')
             if len(opt_path)==3:
@@ -228,7 +228,8 @@ class AdvancedConfigurationWindow(object):
                 restart = gajim.config.get_restart(opt_path[0])
             if restart:
                 if self.changed_opts[opt][0] != self.changed_opts[opt][1]:
-                    self.restart_label.show()
+                    self.restart_box.set_no_show_all(False)
+                    self.restart_box.show_all()
                     break
 
     def on_config_edited(self, cell, path, text):
