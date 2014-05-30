@@ -156,7 +156,7 @@ class JingleRTPContent(JingleContent):
 
     def _fill_content(self, content):
         content.addChild(nbxmpp.NS_JINGLE_RTP + ' description',
-                attrs={'media': self.media}, payload=self.iter_codecs())
+                attrs={'media': self.media}, payload=list(self.iter_codecs()))
 
     def _setup_funnel(self):
         self.funnel = gst.element_factory_make('fsfunnel')
