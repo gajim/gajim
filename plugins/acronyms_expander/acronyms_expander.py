@@ -25,6 +25,7 @@ Acronyms expander plugin.
 '''
 
 import sys
+import os
 
 from gi.repository import Gtk
 from gi.repository import GObject
@@ -63,6 +64,8 @@ class AcronymsExpanderPlugin(GajimPlugin):
     @log_calls('AcronymsExpanderPlugin')
     def get_own_acronyms_list(self):
         data_file = self.local_file_path('acronyms')
+        if not os.path.isfile(data_file):
+            return {}
         data = open(data_file, 'r')
         acronyms = eval(data.read())
         data.close()
