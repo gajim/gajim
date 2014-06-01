@@ -365,6 +365,28 @@ class SocksQueue:
         elif self.progress_transfer_cb is not None:
             self.progress_transfer_cb(actor.account, actor.file_props)
 
+    def remove_receiver_by_key(self, key, do_disconnect=True):
+        reader = self.readers[key]
+        self.idlequeue.unplug_idle(reader.fd)
+        self.idlequeue.remove_timeout(reader.fd)
+        if do_disconnect:
+            reader.disconnect()
+        else:
+            if reader.streamhost is not None:
+                reader.streamhost['state'] = -1
+        del(self.readers[key])
+
+    def remove_sender_by_key(self, key, do_disconnect=True):
+        sender = self.senders[key]
+        if do_disconnect:
+            sender.disconnect()
+        else:
+            self.idlequeue.unplug_idle(sender.fd)
+            self.idlequeue.remove_timeout(sender.fd)
+            del(self.senders[key])
+            if self.connected > 0:
+                self.connected -= 1
+
     def remove_receiver(self, idx, do_disconnect=True, remove_all=False):
         """
         Remove reciver from the list and decrease the number of active
@@ -373,20 +395,10 @@ class SocksQueue:
         if idx != -1:
             for key in self.readers.keys():
                 if idx in key:
-                    reader = self.readers[key]
-                    self.idlequeue.unplug_idle(reader.fd)
-                    self.idlequeue.remove_timeout(reader.fd)
-                    if do_disconnect:
-                        reader.disconnect()
-                        del self.readers[key]
-                        if not remove_all:
-                            break
-                    else:
-                        if reader.streamhost is not None:
-                            reader.streamhost['state'] = -1
-                        del(self.readers[key])
-                        if not remove_all:
-                            break
+                    self.remove_receiver_by_key(key,
+                        do_disconnect=do_disconnect)
+                    if not remove_all:
+                        break
 
     def remove_sender(self, idx, do_disconnect=True, remove_all=False):
         """
@@ -396,24 +408,27 @@ class SocksQueue:
         if idx != -1:
             for key in self.senders.keys():
                 if idx in key:
-                    sender = self.senders[key]
-                    if do_disconnect:
-                        sender.disconnect()
-                        if not remove_all:
-                            break
-                    else:
-                        self.idlequeue.unplug_idle(sender.fd)
-                        self.idlequeue.remove_timeout(sender.fd)
-                        del(self.senders[key])
-                        if self.connected > 0:
-                            self.connected -= 1
-                        if not remove_all:
-                            break
+                    self.remove_sender_by_key(key, do_disconnect=do_disconnect)
+                    if not remove_all:
+                        break
             if len(self.senders) == 0 and self.listener is not None:
                 self.listener.disconnect()
                 self.listener = None
                 self.connected -= 1
 
+    def remove_by_mode(self, sid, mode, do_disconnect=True):
+        for (key, sock) in self.senders.items():
+            if key[0] == sid and sock.mode == mode:
+                self.remove_sender_by_key(key)
+        for (key, sock) in self.readers.items():
+            if key[0] == sid and sock.mode == mode:
+                self.remove_receiver_by_key(key)
+
+    def remove_server(self, sid, do_disconnect=True):
+        self.remove_by_mode(sid, 'server')
+
+    def remove_client(self, sid, do_disconnect=True):
+        self.remove_by_mode(sid, 'client')
 
 class Socks5(object):
     def __init__(self, idlequeue, host, port, initiator, target, sid):
@@ -770,7 +785,7 @@ class Socks5(object):
         self.close_file()
         self.idlequeue.remove_timeout(self.fd)
         self.idlequeue.unplug_idle(self.fd)
-        if self.mode == 'server':
+        if self.mode == 'server' and self.queue.listener:
             try:
                 self.queue.listener.connections.remove(self._sock)
             except ValueError:
