@@ -463,7 +463,9 @@ class CommonConnection:
                 msg_iq = iqs
         else:
             msg_iq.setTo(fjid)
-            r_ = resource or gajim.get_resource_from_jid(fjid)
+            r_ = resource
+            if not r_ and jid != fjid: # Only if we're not in a pm
+                r_ = gajim.get_resource_from_jid(fjid)
             if r_:
                 contact = gajim.contacts.get_contact(self.name, jid, r_)
             else:
