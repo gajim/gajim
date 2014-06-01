@@ -965,7 +965,7 @@ class Interface:
             ft_win.set_status(file_props, 'ok')
         h = Hashes()
         try:
-            file_ = open(file_props.file_name, 'r')
+            file_ = open(file_props.file_name, 'rb')
         except:
             return
         hash_ = h.calculateHash(file_props.algo, file_)
