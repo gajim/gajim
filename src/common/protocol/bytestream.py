@@ -269,7 +269,7 @@ class ConnectionBytestream:
         profile = si.getAttr('profile')
         if profile != nbxmpp.NS_FILE:
             return
-        file_props = FilesProp.getFileProp(con.name, iq_obj.getAttr('id'))
+        file_props = FilesProp.getFileProp(self.name, iq_obj.getAttr('id'))
         if not file_props:
             return
         jid = self._ft_get_from(iq_obj)
