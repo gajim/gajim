@@ -282,7 +282,8 @@ class JingleFileTransfer(JingleContent):
                     streamhost_used = cand
                     break
             if streamhost_used == None or streamhost_used['type'] == 'proxy':
-                if not gajim.socks5queue.listener.connections:
+                if gajim.socks5queue.listener and \
+                not gajim.socks5queue.listener.connections:
                     gajim.socks5queue.listener.disconnect()
         if content.getTag('transport').getTag('activated'):
             self.state = STATE_TRANSFERING
