@@ -757,7 +757,7 @@ class FileTransfersWindow:
         pointer = self.tree.get_pointer()
         props = widget.get_path_at_pos(int(event.x), int(event.y))
         self.height_diff = pointer[1] - int(event.y)
-        if self.tooltip.timeout > 0:
+        if self.tooltip.timeout > 0 or self.tooltip.shown:
             if not props or self.tooltip.id != props[0]:
                 self.tooltip.hide_tooltip()
         if props:
@@ -783,7 +783,7 @@ class FileTransfersWindow:
             return
         pointer = self.tree.get_pointer()
         props = self.tree.get_path_at_pos(pointer[0], pointer[1] - self.height_diff)
-        if self.tooltip.timeout > 0:
+        if self.tooltip.timeout > 0 or self.tooltip.shown:
             if not props or self.tooltip.id == props[0]:
                 self.tooltip.hide_tooltip()
 
@@ -951,6 +951,7 @@ class FileTransfersWindow:
         self.set_status(file_props, 'stop')
 
     def show_tooltip(self, widget):
+        self.tooltip.timeout = 0
         if self.height_diff == 0:
             self.tooltip.hide_tooltip()
             return
