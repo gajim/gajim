@@ -877,7 +877,7 @@ class HtmlTextView(Gtk.TextView):
         self.tagSthAtSth.connect('event', self.hyperlink_handler, 'sth_at_sth')
 
     def __destroy_event(self, widget):
-        if self.tooltip.timeout != 0:
+        if self.tooltip.timeout != 0 or self.tooltip.shown:
             self.tooltip.hide_tooltip()
 
     def __leave_event(self, widget, event):
@@ -887,6 +887,7 @@ class HtmlTextView(Gtk.TextView):
             self._changed_cursor = False
 
     def show_tooltip(self, tag):
+        self.tooltip.timeout = 0
         if not self.tooltip.win:
             # check if the current pointer is still over the line
             w = self.get_window(Gtk.TextWindowType.TEXT)
@@ -915,7 +916,7 @@ class HtmlTextView(Gtk.TextView):
         y = pointer[2]
         tags = widget.get_iter_at_location(x, y).get_tags()
         anchor_tags = [tag for tag in tags if getattr(tag, 'is_anchor', False)]
-        if self.tooltip.timeout != 0:
+        if self.tooltip.timeout != 0 or self.tooltip.shown:
             # Check if we should hide the line tooltip
             if not anchor_tags:
                 self.tooltip.hide_tooltip()

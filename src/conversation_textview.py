@@ -616,6 +616,7 @@ class ConversationTextview(GObject.GObject):
                 GLib.idle_add(self.scroll_to_end)
 
     def show_xep0184_warning_tooltip(self):
+        self.xep0184_warning_tooltip.timeout = 0
         w = self.tv.get_window(Gtk.TextWindowType.TEXT)
         device = w.get_display().get_device_manager().get_client_pointer()
         pointer = w.get_device_position(device)
@@ -637,6 +638,7 @@ class ConversationTextview(GObject.GObject):
                 'message got lost.'), 8, position[1] + y)
 
     def show_line_tooltip(self):
+        self.line_tooltip.timeout = 0
         w = self.tv.get_window(Gtk.TextWindowType.TEXT)
         device = w.get_display().get_device_manager().get_client_pointer()
         pointer = w.get_device_position(device)
@@ -711,11 +713,12 @@ class ConversationTextview(GObject.GObject):
             elif tag == tag_table.lookup('xep0184-warning'):
                 xep0184_warning = True
 
-        if self.line_tooltip.timeout != 0:
+        if self.line_tooltip.timeout != 0 or self.line_tooltip.shown:
             # Check if we should hide the line tooltip
             if not over_line:
                 self.line_tooltip.hide_tooltip()
-        if self.xep0184_warning_tooltip.timeout != 0:
+        if self.xep0184_warning_tooltip.timeout != 0 or \
+        self.xep0184_warning_tooltip.shown:
             # Check if we should hide the XEP-184 warning tooltip
             if not xep0184_warning:
                 self.xep0184_warning_tooltip.hide_tooltip()

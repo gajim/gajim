@@ -2051,6 +2051,7 @@ class RosterWindow:
             vb.set_no_show_all(True)
 
     def show_tooltip(self, contact):
+        self.tooltip.timeout = 0
         device = self.tree.get_window().get_display().get_device_manager().\
             get_client_pointer()
         pointer = self.tree.get_window().get_device_position(device)
@@ -2067,7 +2068,6 @@ class RosterWindow:
                 rect.y)
         else:
             self.tooltip.hide_tooltip()
-
 
     def authorize(self, widget, jid, account):
         """
@@ -2865,14 +2865,14 @@ class RosterWindow:
 
     def on_roster_treeview_leave_notify_event(self, widget, event):
         props = widget.get_path_at_pos(int(event.x), int(event.y))
-        if self.tooltip.timeout > 0:
+        if self.tooltip.timeout > 0 or self.tooltip.shown:
             if not props or self.tooltip.id == props[0]:
                 self.tooltip.hide_tooltip()
 
     def on_roster_treeview_motion_notify_event(self, widget, event):
         model = widget.get_model()
         props = widget.get_path_at_pos(int(event.x), int(event.y))
-        if self.tooltip.timeout > 0:
+        if self.tooltip.timeout > 0 or self.tooltip.shown:
             if not props or self.tooltip.id != props[0]:
                 self.tooltip.hide_tooltip()
         if props:
@@ -2885,7 +2885,8 @@ class RosterWindow:
                 return
             if model[titer][C_TYPE] in ('contact', 'self_contact'):
                 # we're on a contact entry in the roster
-                if self.tooltip.timeout == 0 or self.tooltip.id != props[0]:
+                if (not self.tooltip.shown and self.tooltip.timeout == 0) or \
+                self.tooltip.id != props[0]:
                     account = model[titer][C_ACCOUNT]
                     jid = model[titer][C_JID]
                     self.tooltip.id = row
@@ -2901,7 +2902,8 @@ class RosterWindow:
                     self.tooltip.timeout = GLib.timeout_add(500,
                         self.show_tooltip, connected_contacts)
             elif model[titer][C_TYPE] == 'groupchat':
-                if self.tooltip.timeout == 0 or self.tooltip.id != props[0]:
+                if (not self.tooltip.shown and self.tooltip.timeout == 0) or \
+                self.tooltip.id != props[0]:
                     account = model[titer][C_ACCOUNT]
                     jid = model[titer][C_JID]
                     self.tooltip.id = row
@@ -2911,7 +2913,8 @@ class RosterWindow:
                         self.show_tooltip, contact)
             elif model[titer][C_TYPE] == 'account':
                 # we're on an account entry in the roster
-                if self.tooltip.timeout == 0 or self.tooltip.id != props[0]:
+                if (not self.tooltip.shown and self.tooltip.timeout == 0) or \
+                self.tooltip.id != props[0]:
                     account = model[titer][C_ACCOUNT]
                     if account == 'all':
                         self.tooltip.id = row

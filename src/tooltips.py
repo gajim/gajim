@@ -72,6 +72,7 @@ class BaseTooltip:
         self.id = None
         self.cur_data = None
         self.check_last_time = None
+        self.shown = False
 
     def populate(self, data):
         """
@@ -148,6 +149,8 @@ class BaseTooltip:
         widget_height is the height of the widget on which we show the tooltip.
         widget_y_position is vertical position of the widget on the screen.
         """
+        if self.shown:
+            return
         self.cur_data = data
         # set tooltip contents
         self.populate(data)
@@ -163,6 +166,7 @@ class BaseTooltip:
         self.preferred_position = [pointer_x, preferred_y]
         self.widget_height = widget_height
         self.win.show_all()
+        self.shown = True
 
     def hide_tooltip(self):
         if self.timeout > 0:
@@ -174,6 +178,7 @@ class BaseTooltip:
         self.id = None
         self.cur_data = None
         self.check_last_time = None
+        self.shown = False
 
     @staticmethod
     def colorize_status(status):
