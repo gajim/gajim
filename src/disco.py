@@ -1286,6 +1286,7 @@ class ToplevelAgentBrowser(AgentBrowser):
         return statecmp
 
     def _show_tooltip(self, state):
+        self.tooltip.timeout = 0
         view = self.window.services_treeview
         pointer = view.get_pointer()
         props = view.get_path_at_pos(pointer[0], pointer[1])
@@ -1303,13 +1304,13 @@ class ToplevelAgentBrowser(AgentBrowser):
     # These are all callbacks to make tooltips work
     def on_treeview_leave_notify_event(self, widget, event):
         props = widget.get_path_at_pos(int(event.x), int(event.y))
-        if self.tooltip.timeout > 0:
+        if self.tooltip.timeout > 0 or self.tooltip.shown:
             if not props or self.tooltip.id == props[0]:
                 self.tooltip.hide_tooltip()
 
     def on_treeview_motion_notify_event(self, widget, event):
         props = widget.get_path_at_pos(int(event.x), int(event.y))
-        if self.tooltip.timeout > 0:
+        if self.tooltip.timeout > 0 or self.tooltip.shown:
             if not props or self.tooltip.id != props[0]:
                 self.tooltip.hide_tooltip()
         if props:

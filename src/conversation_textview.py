@@ -611,6 +611,7 @@ class ConversationTextview(gobject.GObject):
                 gobject.idle_add(self.scroll_to_end)
 
     def show_xep0184_warning_tooltip(self):
+        self.xep0184_warning_tooltip.timeout = 0
         pointer = self.tv.get_pointer()
         x, y = self.tv.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT,
                 pointer[0], pointer[1])
@@ -624,12 +625,13 @@ class ConversationTextview(gobject.GObject):
         if xep0184_warning and not self.xep0184_warning_tooltip.win:
             # check if the current pointer is still over the line
             position = self.tv.window.get_origin()
-            self.xep0184_warning_tooltip.show_tooltip(_('This icon indicates that '
-                    'this message has not yet\nbeen received by the remote end. '
-                    "If this icon stays\nfor a long time, it's likely the message got "
-                    'lost.'), 8, position[1] + pointer[1])
+            self.xep0184_warning_tooltip.show_tooltip(_('This icon indicates '
+                'that this message has not yet\nbeen received by the remote '
+                "end. If this icon stays\nfor a long time, it's likely the "
+                'message got lost.'), 8, position[1] + pointer[1])
 
     def show_line_tooltip(self):
+        self.line_tooltip.timeout = 0
         pointer = self.tv.get_pointer()
         x, y = self.tv.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT,
                 pointer[0], pointer[1])
@@ -699,11 +701,12 @@ class ConversationTextview(gobject.GObject):
             elif tag == tag_table.lookup('xep0184-warning'):
                 xep0184_warning = True
 
-        if self.line_tooltip.timeout != 0:
+        if self.line_tooltip.timeout != 0 or self.line_tooltip.shown:
             # Check if we should hide the line tooltip
             if not over_line:
                 self.line_tooltip.hide_tooltip()
-        if self.xep0184_warning_tooltip.timeout != 0:
+        if self.xep0184_warning_tooltip.timeout != 0 or \
+        self.xep0184_warning_tooltip.shown:
             # Check if we should hide the XEP-184 warning tooltip
             if not xep0184_warning:
                 self.xep0184_warning_tooltip.hide_tooltip()

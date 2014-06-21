@@ -2697,7 +2697,7 @@ class GroupchatControl(ChatControlBase):
 
     def on_list_treeview_motion_notify_event(self, widget, event):
         props = widget.get_path_at_pos(int(event.x), int(event.y))
-        if self.tooltip.timeout > 0:
+        if self.tooltip.timeout > 0 or self.tooltip.shown:
             if not props or self.tooltip.id != props[0]:
                 self.tooltip.hide_tooltip()
         if props:
@@ -2726,6 +2726,7 @@ class GroupchatControl(ChatControlBase):
                 self.tooltip.hide_tooltip()
 
     def show_tooltip(self, contact):
+        self.tooltip.timeout = 0
         if not self.list_treeview.window:
             # control has been destroyed since tooltip was requested
             return
