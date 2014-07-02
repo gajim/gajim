@@ -11,6 +11,7 @@ Gajim 0.16 ()
   * Support XEP-0191 Blocking command
   * Support XEP-0249 Direct Invitation
   * Better RTL languages support
+  * use host command to resolve SRV records if it is available
 
 Gajim 0.15.4 (25 May 2013)
 

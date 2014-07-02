@@ -27,7 +27,7 @@ docdir = '../'
 basedir   = '../'
 localedir = '../po'
 
-version = '0.16-rc1'
+version = '0.16-rc2'
 import subprocess
 try:
     node = subprocess.Popen('hg tip --template "{node|short}"', shell=True,
