@@ -69,7 +69,7 @@ if os.name == 'nt':
         pass
 
 HAS_NBXMPP=True
-MIN_NBXMPP_VER = "0.3.3"
+MIN_NBXMPP_VER = "0.5"
 try:
     import nbxmpp
 except ImportError:
