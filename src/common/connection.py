@@ -2892,6 +2892,8 @@ class Connection(CommonConnection, ConnectionHandlers):
         """
         Send invitation
         """
+        if not gajim.account_is_connected(self.name):
+            return
         contact = gajim.contacts.get_contact_from_full_jid(self.name, to)
         if contact and contact.supports(nbxmpp.NS_CONFERENCE):
             # send direct invite
@@ -2918,6 +2920,8 @@ class Connection(CommonConnection, ConnectionHandlers):
         """
         decline a groupchat invitation
         """
+        if not gajim.account_is_connected(self.name):
+            return
         message=nbxmpp.Message(to=room)
         c = message.addChild(name='x', namespace=nbxmpp.NS_MUC_USER)
         c = c.addChild(name='decline', attrs={'to': to})
@@ -2929,6 +2933,8 @@ class Connection(CommonConnection, ConnectionHandlers):
         """
         Request voice in a moderated room
         """
+        if not gajim.account_is_connected(self.name):
+            return
         message = nbxmpp.Message(to=room)
 
         x = nbxmpp.DataForm(typ='submit')
