@@ -6167,8 +6167,13 @@ class RosterWindow:
             gc_sub_menu.append(item)
 
         for bookmark in gajim.connections[account].bookmarks:
+            name = bookmark['name']
+            if bookmark['name'] == '':
+                # No name was given for this bookmark.
+                # Use the first part of JID instead...
+                name = bookmark['jid'].split("@")[0]
             # Do not use underline.
-            item = gtk.MenuItem(bookmark['name'], False)
+            item = gtk.MenuItem(name, False)
             item.connect('activate', self.on_bookmark_menuitem_activate,
                     account, bookmark)
             gc_sub_menu.append(item)
