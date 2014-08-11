@@ -6168,7 +6168,7 @@ class RosterWindow:
 
         for bookmark in gajim.connections[account].bookmarks:
             name = bookmark['name']
-            if bookmark['name'] == '':
+            if not name:
                 # No name was given for this bookmark.
                 # Use the first part of JID instead...
                 name = bookmark['jid'].split("@")[0]

@@ -3163,7 +3163,7 @@ class ManageBookmarksWindow:
                     None, None, None, None])
 
             for bookmark in gajim.connections[account].bookmarks:
-                if bookmark['name'] == '':
+                if not bookmark['name']:
                     # No name was given for this bookmark.
                     # Use the first part of JID instead...
                     name = bookmark['jid'].split("@")[0]
