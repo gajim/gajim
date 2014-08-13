@@ -3017,6 +3017,14 @@ class RosterWindow:
         dialogs.ConfirmationDialog(pritext, sectext,
             on_response_ok = (remove, list_))
 
+    def _nec_blocking(self, obj):
+        if obj.unblock_all:
+            jids = gajim.contacts.get_jid_list(obj.conn.name)
+            self._idle_draw_jids_of_account(jids, obj.conn.name)
+        else:
+            for jid in obj.blocked_jids + obj.unblocked_jids:
+                self.draw_contact(jid, obj.conn.name)
+
     def on_block(self, widget, list_, group=None):
         """
         When clicked on the 'block' button in context menu. list_ is a list of
@@ -3026,8 +3034,9 @@ class RosterWindow:
             if msg is None:
                 # user pressed Cancel to change status message dialog
                 return
-            accounts = set(i[1] for i in list_ if gajim.connections[i[1]].\
-                privacy_rules_supported)
+            accounts = set(i[1] for i in list_ if (gajim.connections[i[1]].\
+                privacy_rules_supported or (group is None and gajim.\
+                connections[i[1]].blocking_supported)))
             if group is None:
                 for acct in accounts:
                     l_ = [i[0] for i in list_ if i[1] == acct]
@@ -3065,8 +3074,9 @@ class RosterWindow:
         """
         When clicked on the 'unblock' button in context menu.
         """
-        accounts = set(i[1] for i in list_ if gajim.connections[i[1]].\
-            privacy_rules_supported)
+        accounts = set(i[1] for i in list_ if (gajim.connections[i[1]].\
+            privacy_rules_supported or (group is None and gajim.\
+            connections[i[1]].blocking_supported)))
         if group is None:
             for acct in accounts:
                 l_ = [i[0] for i in list_ if i[1] == acct]
@@ -6607,3 +6617,5 @@ class RosterWindow:
             self._nec_signed_in)
         gajim.ged.register_event_handler('decrypted-message-received', ged.GUI2,
             self._nec_decrypted_message_received)
+        gajim.ged.register_event_handler('blocking', ged.GUI1,
+            self._nec_blocking)

@@ -1688,7 +1688,6 @@ class Connection(CommonConnection, ConnectionHandlers):
                 query = iq.setQuery(name='block')
                 query.setNamespace(nbxmpp.NS_BLOCKING)
                 for contact in contact_list:
-                    self.blocked_contacts.append(contact.jid)
                     query.addChild(name='item', attrs={'jid': contact.jid})
                 self.connection.send(iq)
             return
@@ -1713,7 +1712,6 @@ class Connection(CommonConnection, ConnectionHandlers):
                 query = iq.setQuery(name='unblock')
                 query.setNamespace(nbxmpp.NS_BLOCKING)
                 for contact in contact_list:
-                    self.blocked_contacts.append(contact.jid)
                     query.addChild(name='item', attrs={'jid': contact.jid})
                 self.connection.send(iq)
             return
