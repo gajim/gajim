@@ -2552,3 +2552,26 @@ class InformationEvent(nec.NetworkIncomingEvent):
 
     def init(self):
         self.popup = True
+
+class BlockingEvent(nec.NetworkIncomingEvent):
+    name = 'blocking'
+    base_network_events = []
+
+    def init(self):
+        self.blocked_jids = []
+        self.unblocked_jids = []
+        self.unblock_all = False
+
+    def generate(self):
+        block_tag = self.stanza.getTag('block', namespace=nbxmpp.NS_BLOCKING)
+        if block_tag:
+            for item in block_tag.getTags('item'):
+                self.blocked_jids.append(item.getAttr('jid'))
+        unblock_tag = self.stanza.getTag('unblock',
+            namespace=nbxmpp.NS_BLOCKING)
+        if unblock_tag:
+            if not unblock_tag.getTags('item'): # unblock all
+                self.unblock_all = True
+            for item in unblock_tag.getTags('item'):
+                self.unblocked_jids.append(item.getAttr('jid'))
+        return True

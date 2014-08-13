@@ -574,9 +574,9 @@ class ConnectionVcard:
                     iq = nbxmpp.Iq('get', xmlns='')
                     query = iq.setQuery(name='blocklist')
                     query.setNamespace(nbxmpp.NS_BLOCKING)
-                    id_ = self.connection.getAnID()
-                    iq.setID(id_)
-                    self.awaiting_answers[id_] = (BLOCKING_ARRIVED, )
+                    id2_ = self.connection.getAnID()
+                    iq.setID(id2_)
+                    self.awaiting_answers[id2_] = (BLOCKING_ARRIVED, )
                     self.connection.send(iq)
 
                 if self.continue_connect_info and self.continue_connect_info[0]\
@@ -1521,6 +1521,8 @@ ConnectionJingle, ConnectionIBBytestream):
             self._nec_agent_removed)
         gajim.ged.register_event_handler('stream-other-host-received', ged.CORE,
             self._nec_stream_other_host_received)
+        gajim.ged.register_event_handler('blocking', ged.CORE,
+            self._nec_blocking)
 
     def cleanup(self):
         ConnectionHandlersBase.cleanup(self)
@@ -1565,6 +1567,7 @@ ConnectionJingle, ConnectionIBBytestream):
             self._nec_agent_removed)
         gajim.ged.remove_event_handler('stream-other-host-received', ged.CORE,
             self._nec_stream_other_host_received)
+        gajim.ged.remove_event_handler('blocking', ged.CORE, self._nec_blocking)
 
     def build_http_auth_answer(self, iq_obj, answer):
         if not self.connection or self.connected < 2:
@@ -2254,6 +2257,25 @@ ConnectionJingle, ConnectionIBBytestream):
         jid_from = helpers.get_full_jid_from_iq(iq_obj)
         jingle_xtls.handle_new_cert(con, iq_obj, jid_from)
 
+    def _BlockingSetCB(self, con, iq_obj):
+        log.debug('_BlockingSetCB')
+        gajim.nec.push_incoming_event(BlockingEvent(None, conn=self,
+            stanza=iq_obj))
+        raise nbxmpp.NodeProcessed
+
+    def _nec_blocking(self, obj):
+        if obj.conn.name != self.name:
+            return
+        if obj.unblock_all:
+            self.blocked_contacts = []
+        else:
+            for jid in obj.blocked_jids:
+                if jid not in self.blocked_contacts:
+                    self.blocked_contacts.append(jid)
+            for jid in obj.unblocked_jids:
+                if jid in self.blocked_contacts:
+                    self.blocked_contacts.remove(jid)
+
     def _nec_stream_other_host_received(self, obj):
         if obj.conn.name != self.name:
             return
@@ -2348,3 +2370,5 @@ ConnectionJingle, ConnectionIBBytestream):
             nbxmpp.NS_PUBKEY_PUBKEY)
         con.RegisterHandler('iq', self._PubkeyResultCB, 'result',
             nbxmpp.NS_PUBKEY_PUBKEY)
+        con.RegisterHandler('iq', self._BlockingSetCB, 'set',
+            nbxmpp.NS_BLOCKING)
