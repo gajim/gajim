@@ -326,7 +326,7 @@ class SocksQueue:
         if listener.file_props.type_ == 's' and \
         not self.isHashInSockObjs(self.senders, sock_hash):
             sockobj =  Socks5SenderServer(self.idlequeue, sock_hash, self,
-                sock[0], sock[1][0], sock[1][1], fingerprint='server',
+                sock[0], sock[1][0], sock[1][1], fingerprint=None,
                 file_props=listener.file_props)
             self._add(sockobj, self.senders, listener.file_props, sock_hash)
             # Start waiting for data
@@ -341,7 +341,7 @@ class SocksQueue:
             sh['target'] = None
             sockobj =  Socks5ReceiverServer(idlequeue=self.idlequeue,
                 streamhost=sh,sid=None, file_props=listener.file_props,
-                fingerprint='server')
+                fingerprint=None)
 
             self._add(sockobj, self.readers, listener.file_props, sock_hash)
             sockobj.set_sock(sock[0])
