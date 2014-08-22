@@ -1551,10 +1551,11 @@ class Connection(CommonConnection, ConnectionHandlers):
         assert id_ == self.awaiting_xmpp_ping_id
         self.awaiting_xmpp_ping_id = None
 
-    def sendPing(self, pingTo=None):
+    def sendPing(self, pingTo=None, control=None):
         """
         Send XMPP Ping (XEP-0199) request. If pingTo is not set, ping is sent to
         server to detect connection failure at application level
+        If control is set, display result there
         """
         if not gajim.account_is_connected(self.name):
             return
@@ -1577,7 +1578,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                 return
             timeDiff = round(timePong - timePing, 2)
             gajim.nec.push_incoming_event(PingReplyEvent(None, conn=self,
-                contact=pingTo, seconds=timeDiff))
+                contact=pingTo, seconds=timeDiff, control=control))
         if pingTo:
             timePing = time_time()
             self.connection.SendAndCallForResponse(iq, _on_response)

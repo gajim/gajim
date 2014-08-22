@@ -1375,6 +1375,15 @@ class GroupchatControl(ChatControlBase):
                     obj.xhtml, self.session, msg_id=obj.msg_id,
                     encrypted=obj.encrypted, displaymarking=obj.displaymarking)
 
+    def _nec_ping_reply(self, obj):
+        if obj.control:
+            if obj.control != self:
+                return
+        else:
+            if self.contact != obj.contact:
+                return
+        self.print_conversation(_('Pong! (%s s.)') % obj.seconds)
+
     def got_connected(self):
         # Make autorejoin stop.
         if self.autorejoin:
