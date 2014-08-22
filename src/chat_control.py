@@ -211,11 +211,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             return
         self.print_conversation(_('Ping?'), 'status')
 
-    def _nec_ping_reply(self, obj):
-        if self.contact != obj.contact:
-            return
-        self.print_conversation(_('Pong! (%s s.)') % obj.seconds, 'status')
-
     def _nec_ping_error(self, obj):
         if self.contact != obj.contact:
             return
@@ -2883,6 +2878,15 @@ class ChatControl(ChatControlBase):
         if self.TYPE_ID == 'pm' and obj.fjid != self.contact.jid:
             return
         self.update_ui()
+
+    def _nec_ping_reply(self, obj):
+        if obj.control:
+            if obj.control != self:
+                return
+        else:
+            if self.contact != obj.contact:
+                return
+        self.print_conversation(_('Pong! (%s s.)') % obj.seconds, 'status')
 
     def set_control_active(self, state):
         ChatControlBase.set_control_active(self, state)

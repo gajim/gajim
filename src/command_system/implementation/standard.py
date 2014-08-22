@@ -410,3 +410,12 @@ class StandardGroupChatCommands(CommandContainer):
     @doc(_("Allow an occupant to send you public or private messages"))
     def unblock(self, who):
         self.on_unblock(None, who)
+
+    @command
+    @doc(_("Send a ping to the contact"))
+    def ping(self, nick):
+        if self.account == gajim.ZEROCONF_ACC_NAME:
+            raise CommandError(_('Command is not supported for zeroconf accounts'))
+        gc_c = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
+        gajim.connections[self.account].sendPing(gc_c, self)
+
