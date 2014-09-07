@@ -220,12 +220,21 @@ class TimeResultReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             def dst(self, dt):
                 return ZERO
 
+        if utc_time[-1:] == 'Z':
+            # Remove the trailing 'Z'
+            utc_time = utc_time[:-1]
+        elif utc_time[-6:] == "+00:00":
+            # Remove the trailing "+00:00"
+            utc_time = utc_time[:-6]
+        else:
+            log.info("Wrong timezone defintion: %s" % str(e))
+            return
         try:
-            t = datetime.datetime.strptime(utc_time, '%Y-%m-%dT%H:%M:%SZ')
+            t = datetime.datetime.strptime(utc_time, '%Y-%m-%dT%H:%M:%S')
         except ValueError:
             try:
                 t = datetime.datetime.strptime(utc_time,
-                    '%Y-%m-%dT%H:%M:%S.%fZ')
+                    '%Y-%m-%dT%H:%M:%S.%f')
             except ValueError as e:
                 log.info('Wrong time format: %s' % str(e))
                 return
