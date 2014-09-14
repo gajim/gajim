@@ -57,7 +57,7 @@ class OptionsParser:
         new_version = gajim.config.get('version')
         new_version = new_version.split('-', 1)[0]
         seen = set()
-        regex = re.compile(r"(?P<optname>[^.]+)(?:(?:\.(?P<key>.+))?\.(?P<subname>[^.]+))?\s=\s(?P<value>.*)")
+        regex = re.compile(r"(?P<optname>[^.=]+)(?:(?:\.(?P<key>.+))?\.(?P<subname>[^.=]+))?\s=\s(?P<value>.*)")
 
         for line in fd:
             optname, key, subname, value = regex.match(line).groups()
