@@ -393,7 +393,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             my_ips = [self.peerhost[0]] # The ip we're connected to server with
             # all IPs from local DNS
             for addr in socket.getaddrinfo(socket.gethostname(), None):
-                if not addr[4][0] in my_ips and not addr[4][0].startswith('127'):
+                if not addr[4][0] in my_ips and not addr[4][0].startswith('127') and not addr[4][0] == '::1':
                     my_ips.append(addr[4][0])
 
             sender = file_props.sender

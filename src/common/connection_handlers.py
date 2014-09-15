@@ -1232,8 +1232,6 @@ class ConnectionHandlersBase:
         if obj.mtype == 'error':
             if not obj.msgtxt:
                 obj.msgtxt = _('message')
-            if not obj.msgtxt:
-                return True
             self.dispatch_error_message(obj.stanza, obj.msgtxt,
                 obj.session, obj.fjid, obj.timestamp)
             return True
