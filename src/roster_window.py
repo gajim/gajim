@@ -3441,9 +3441,13 @@ class RosterWindow:
                     return
                 jid = model[path][C_JID].decode('utf-8')
                 account = model[path][C_ACCOUNT].decode('utf-8')
+                if not gajim.account_is_connected(account):
+                    continue
                 contact = gajim.contacts.get_contact_with_highest_priority(
                     account, jid)
                 list_.append((contact, account))
+            if not list_:
+                return
             if type_ == 'contact':
                 self.on_req_usub(widget, list_)
             elif type_ == 'agent':
