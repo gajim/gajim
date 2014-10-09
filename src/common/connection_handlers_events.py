@@ -227,7 +227,7 @@ class TimeResultReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             # Remove the trailing "+00:00"
             utc_time = utc_time[:-6]
         else:
-            log.info("Wrong timezone defintion: %s" % str(e))
+            log.info("Wrong timezone defintion: %s" % utc_time)
             return
         try:
             t = datetime.datetime.strptime(utc_time, '%Y-%m-%dT%H:%M:%S')
