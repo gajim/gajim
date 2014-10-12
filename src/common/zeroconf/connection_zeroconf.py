@@ -337,26 +337,26 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
         if obj.account != self.name:
             return
 
-        def on_send_ok(msg_id):
-            gajim.nec.push_incoming_event(MessageSentEvent(None, conn=self,
-                jid=obj.jid, message=obj.message, keyID=obj.keyID,
-                chatstate=None))
-            if obj.callback:
-                obj.callback(obj.msg_id, *obj.callback_args)
-
-            if not obj.is_loggable:
-                return
-            self.log_message(obj.jid, obj.message, obj.forward_from,
-                obj.session, obj.original_message, obj.subject, obj.type_)
-
-        def on_send_not_ok(reason):
-            reason += ' ' + _('Your message could not be sent.')
-            gajim.nec.push_incoming_event(MessageErrorEvent(None, conn=self,
-                fjid=obj.jid, error_code=-1, error_msg=reason, msg=None,
-                time_=None, session=obj.session))
-
         def cb(jid, msg, keyID, forward_from, session, original_message, subject,
         type_, msg_iq, xhtml):
+            def on_send_ok(msg_id):
+                gajim.nec.push_incoming_event(MessageSentEvent(None, conn=self,
+                    jid=obj.jid, message=obj.message, keyID=obj.keyID,
+                    chatstate=None))
+                if obj.callback:
+                    obj.callback(msg_iq, *obj.callback_args)
+
+                if not obj.is_loggable:
+                    return
+                self.log_message(obj.jid, obj.message, obj.forward_from,
+                    obj.session, obj.original_message, obj.subject, obj.type_)
+
+            def on_send_not_ok(reason):
+                reason += ' ' + _('Your message could not be sent.')
+                gajim.nec.push_incoming_event(MessageErrorEvent(None, conn=self,
+                    fjid=obj.jid, error_code=-1, error_msg=reason, msg=None,
+                    time_=None, session=obj.session))
+
             ret = self.connection.send(msg_iq, msg is not None, on_ok=on_send_ok,
                     on_not_ok=on_send_not_ok)
 
