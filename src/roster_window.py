@@ -4851,8 +4851,8 @@ class RosterWindow:
                 return
             menu = Gtk.Menu()
             item = Gtk.MenuItem(_('Send %s to %s') % (
-                c_source.get_shown_name(), c_dest.get_shown_name()),
-                use_underline=False)
+                c_source.get_shown_name(), c_dest.get_shown_name()))
+            item.set_use_underline(False)
             item.connect('activate', self.on_drop_rosterx, account_source,
             c_source, account_dest, c_dest, is_big_brother, context, etime)
             menu.append(item)
@@ -4863,11 +4863,12 @@ class RosterWindow:
                 account_source, c_source.jid)
             if dest_family == source_family  and dest_family:
                 item = Gtk.MenuItem(_('Make %s first contact') % (
-                    c_source.get_shown_name()), use_underline=False)
+                    c_source.get_shown_name()))
+                item.set_use_underline(False)
             else:
                 item = Gtk.MenuItem(_('Make %s and %s metacontacts') % (
-                    c_source.get_shown_name(), c_dest.get_shown_name()),
-                    use_underline=False)
+                    c_source.get_shown_name(), c_dest.get_shown_name()))
+                item.set_use_underline(False)
 
             item.connect('activate', self.on_drop_in_contact, account_source,
             c_source, account_dest, c_dest, is_big_brother, context, etime)
@@ -5332,8 +5333,8 @@ class RosterWindow:
                     continue
 
                 # new chat
-                new_chat_item = Gtk.MenuItem(_('using account %s') % account,
-                    use_underline=False)
+                new_chat_item = Gtk.MenuItem(_('using account %s') % account)
+                new_chat_item.set_use_underline(False)
                 new_chat_sub_menu.append(new_chat_item)
                 new_chat_item.connect('activate',
                     self.on_new_chat_menuitem_activate, account)
@@ -5387,7 +5388,8 @@ class RosterWindow:
 
                 # single message
                 single_message_item = Gtk.MenuItem(_('using account %s') % \
-                    account, use_underline=False)
+                    account)
+                single_message_item.set_use_underline(False)
                 single_message_sub_menu.append(single_message_item)
                 single_message_item.connect('activate',
                     self.on_send_single_message_menuitem_activate, account)
@@ -5395,22 +5397,22 @@ class RosterWindow:
                 # join gc
                 if gajim.connections[account].private_storage_supported:
                     connected_accounts_with_private_storage += 1
-                gc_item = Gtk.MenuItem(_('using account %s') % account,
-                    use_underline=False)
+                gc_item = Gtk.MenuItem(_('using account %s') % account)
+                gc_item.set_use_underline(False)
                 gc_sub_menu.append(gc_item)
                 gc_menuitem_menu = Gtk.Menu()
                 self.add_bookmarks_list(gc_menuitem_menu, account)
                 gc_item.set_submenu(gc_menuitem_menu)
 
                 # add
-                add_item = Gtk.MenuItem(_('to %s account') % account,
-                    use_underline=False)
+                add_item = Gtk.MenuItem(_('to %s account') % account)
+                add_item.set_use_underline(False)
                 add_sub_menu.append(add_item)
                 add_item.connect('activate', self.on_add_new_contact, account)
 
                 # disco
-                disco_item = Gtk.MenuItem(_('using %s account') % account,
-                    use_underline=False)
+                disco_item = Gtk.MenuItem(_('using %s account') % account)
+                disco_item.set_use_underline(False)
                 disco_sub_menu.append(disco_item)
                 disco_item.connect('activate',
                     self.on_service_disco_menuitem_activate, account)
@@ -5468,8 +5470,8 @@ class RosterWindow:
             profile_avatar_sub_menu = Gtk.Menu()
             for account in connected_accounts_with_vcard:
                 # profile, avatar
-                profile_avatar_item = Gtk.MenuItem(_('of account %s') % account,
-                    use_underline=False)
+                profile_avatar_item = Gtk.MenuItem(_('of account %s') % account)
+                profile_avatar_item.set_use_underline(False)
                 profile_avatar_sub_menu.append(profile_avatar_item)
                 profile_avatar_item.connect('activate',
                     self.on_profile_avatar_menuitem_activate, account)
@@ -5509,8 +5511,8 @@ class RosterWindow:
                 accounts.append(account)
             accounts.sort()
             for account in accounts:
-                advanced_item = Gtk.MenuItem(_('for account %s') % account,
-                    use_underline=False)
+                advanced_item = Gtk.MenuItem(_('for account %s') % account)
+                advanced_item.set_use_underline(False)
                 advanced_sub_menu.append(advanced_item)
                 advanced_menuitem_menu = \
                     self.get_and_connect_advanced_menuitem_menu(account)
@@ -6201,7 +6203,8 @@ class RosterWindow:
 
         for bookmark in gajim.connections[account].bookmarks:
             # Do not use underline.
-            item = Gtk.MenuItem(bookmark['name'], use_underline=False)
+            item = Gtk.MenuItem(bookmark['name'])
+            item.set_use_underline(False)
             item.connect('activate', self.on_bookmark_menuitem_activate,
                     account, bookmark)
             gc_sub_menu.append(item)
