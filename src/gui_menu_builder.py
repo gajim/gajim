@@ -609,7 +609,7 @@ def get_transport_menu(contact, account):
             send_custom_status_menuitem.set_image(gtkgui_helpers.load_icon(
                 gajim.interface.status_sent_to_users[account][jid]))
         else:
-            icon = Gtk.Imag.new_from_stock(Gtk.STOCK_NETWORK,
+            icon = Gtk.Image.new_from_stock(Gtk.STOCK_NETWORK,
                 Gtk.IconSize.MENU)
             send_custom_status_menuitem.set_image(icon)
         status_menuitems = Gtk.Menu()
