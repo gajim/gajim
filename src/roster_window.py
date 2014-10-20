@@ -4850,7 +4850,7 @@ class RosterWindow:
                 # c_dest is None if jid_dest doesn't belong to account
                 return
             menu = Gtk.Menu()
-            item = Gtk.MenuItem(_('Send %s to %s') % (
+            item = Gtk.MenuItem.new_with_label(_('Send %s to %s') % (
                 c_source.get_shown_name(), c_dest.get_shown_name()))
             item.set_use_underline(False)
             item.connect('activate', self.on_drop_rosterx, account_source,
@@ -4862,11 +4862,13 @@ class RosterWindow:
             source_family = gajim.contacts.get_metacontacts_family(
                 account_source, c_source.jid)
             if dest_family == source_family  and dest_family:
-                item = Gtk.MenuItem(_('Make %s first contact') % (
+                item = Gtk.MenuItem.new_with_label(
+                    _('Make %s first contact') % (
                     c_source.get_shown_name()))
                 item.set_use_underline(False)
             else:
-                item = Gtk.MenuItem(_('Make %s and %s metacontacts') % (
+                item = Gtk.MenuItem.new_with_label(
+                    _('Make %s and %s metacontacts') % (
                     c_source.get_shown_name(), c_dest.get_shown_name()))
                 item.set_use_underline(False)
 
@@ -5333,7 +5335,8 @@ class RosterWindow:
                     continue
 
                 # new chat
-                new_chat_item = Gtk.MenuItem(_('using account %s') % account)
+                new_chat_item = Gtk.MenuItem.new_with_label(
+                    _('using account %s') % account)
                 new_chat_item.set_use_underline(False)
                 new_chat_sub_menu.append(new_chat_item)
                 new_chat_item.connect('activate',
@@ -5387,8 +5390,8 @@ class RosterWindow:
                     continue
 
                 # single message
-                single_message_item = Gtk.MenuItem(_('using account %s') % \
-                    account)
+                single_message_item = Gtk.MenuItem.new_with_label(
+                    _('using account %s') % account)
                 single_message_item.set_use_underline(False)
                 single_message_sub_menu.append(single_message_item)
                 single_message_item.connect('activate',
@@ -5397,7 +5400,8 @@ class RosterWindow:
                 # join gc
                 if gajim.connections[account].private_storage_supported:
                     connected_accounts_with_private_storage += 1
-                gc_item = Gtk.MenuItem(_('using account %s') % account)
+                gc_item = Gtk.MenuItem.new_with_label(
+                    _('using account %s') % account)
                 gc_item.set_use_underline(False)
                 gc_sub_menu.append(gc_item)
                 gc_menuitem_menu = Gtk.Menu()
@@ -5405,13 +5409,15 @@ class RosterWindow:
                 gc_item.set_submenu(gc_menuitem_menu)
 
                 # add
-                add_item = Gtk.MenuItem(_('to %s account') % account)
+                add_item = Gtk.MenuItem.new_with_label(
+                    _('to %s account') % account)
                 add_item.set_use_underline(False)
                 add_sub_menu.append(add_item)
                 add_item.connect('activate', self.on_add_new_contact, account)
 
                 # disco
-                disco_item = Gtk.MenuItem(_('using %s account') % account)
+                disco_item = Gtk.MenuItem.new_with_label(
+                    _('using %s account') % account)
                 disco_item.set_use_underline(False)
                 disco_sub_menu.append(disco_item)
                 disco_item.connect('activate',
@@ -5470,7 +5476,8 @@ class RosterWindow:
             profile_avatar_sub_menu = Gtk.Menu()
             for account in connected_accounts_with_vcard:
                 # profile, avatar
-                profile_avatar_item = Gtk.MenuItem(_('of account %s') % account)
+                profile_avatar_item = Gtk.MenuItem.new_with_label(
+                    _('of account %s') % account)
                 profile_avatar_item.set_use_underline(False)
                 profile_avatar_sub_menu.append(profile_avatar_item)
                 profile_avatar_item.connect('activate',
@@ -5511,7 +5518,8 @@ class RosterWindow:
                 accounts.append(account)
             accounts.sort()
             for account in accounts:
-                advanced_item = Gtk.MenuItem(_('for account %s') % account)
+                advanced_item = Gtk.MenuItem.new_with_label(
+                    _('for account %s') % account)
                 advanced_item.set_use_underline(False)
                 advanced_sub_menu.append(advanced_item)
                 advanced_menuitem_menu = \
@@ -5594,7 +5602,7 @@ class RosterWindow:
                 pep_submenu = Gtk.Menu()
                 pep_menuitem.set_submenu(pep_submenu)
                 def add_item(label, opt_name, func):
-                    item = Gtk.CheckMenuItem(label)
+                    item = Gtk.CheckMenuItem.new_with_label(label)
                     pep_submenu.append(item)
                     if not dbus_support.supported:
                         item.set_sensitive(False)
@@ -5609,7 +5617,8 @@ class RosterWindow:
                 add_item(_('Publish Location'), 'publish_location',
                     self.on_publish_location_toggled)
 
-                pep_config = Gtk.ImageMenuItem(_('Configure Services...'))
+                pep_config = Gtk.ImageMenuItem.new_with_label(
+                    _('Configure Services...'))
                 item = Gtk.SeparatorMenuItem.new()
                 pep_submenu.append(item)
                 pep_config.set_sensitive(True)
@@ -5718,7 +5727,7 @@ class RosterWindow:
             accounts.sort()
             for account in accounts:
                 state_images = gtkgui_helpers.load_iconset(path)
-                item = Gtk.ImageMenuItem(account)
+                item = Gtk.ImageMenuItem.new_with_label(account)
                 show = gajim.SHOW_LIST[gajim.connections[account].connected]
                 icon = state_images[show]
                 item.set_image(icon)
@@ -5780,11 +5789,11 @@ class RosterWindow:
             send_group_message_item.set_submenu(send_group_message_submenu)
             menu.append(send_group_message_item)
 
-            group_message_to_all_item = Gtk.MenuItem.new_with_mnemonic(_(
+            group_message_to_all_item = Gtk.MenuItem.new_with_label(_(
                 'To all users'))
             send_group_message_submenu.append(group_message_to_all_item)
 
-            group_message_to_all_online_item = Gtk.MenuItem.new_with_mnemonic(
+            group_message_to_all_online_item = Gtk.MenuItem.new_with_label(
                 _('To all online users'))
             send_group_message_submenu.append(group_message_to_all_online_item)
 
@@ -5825,7 +5834,8 @@ class RosterWindow:
             for s in ('online', 'chat', 'away', 'xa', 'dnd', 'offline'):
                 # icon MUST be different instance for every item
                 state_images = gtkgui_helpers.load_iconset(path)
-                status_menuitem = Gtk.ImageMenuItem(helpers.get_uf_show(s))
+                status_menuitem = Gtk.ImageMenuItem.new_with_label(
+                    helpers.get_uf_show(s))
                 status_menuitem.connect('activate', self.on_send_custom_status,
                     list_, s, group)
                 icon = state_images[s]
@@ -5867,8 +5877,8 @@ class RosterWindow:
 
             if is_blocked and gajim.connections[account].\
             privacy_rules_supported:
-                unblock_menuitem = Gtk.ImageMenuItem.new_with_mnemonic(_(
-                    '_Unblock'))
+                unblock_menuitem = Gtk.ImageMenuItem.new_with_mnemonic(
+                    _('_Unblock'))
                 icon = Gtk.Image.new_from_stock(Gtk.STOCK_STOP,
                     Gtk.IconSize.MENU)
                 unblock_menuitem.set_image(icon)
@@ -5876,7 +5886,8 @@ class RosterWindow:
                     group)
                 menu.append(unblock_menuitem)
             else:
-                block_menuitem = Gtk.ImageMenuItem.new_with_mnemonic(_('_Block'))
+                block_menuitem = Gtk.ImageMenuItem.new_with_mnemonic(
+                    _('_Block'))
                 icon = Gtk.Image.new_from_stock(Gtk.STOCK_STOP,
                     Gtk.IconSize.MENU)
                 block_menuitem.set_image(icon)
@@ -6003,7 +6014,8 @@ class RosterWindow:
 
         # Block
         if is_blocked and privacy_rules_supported:
-            unblock_menuitem = Gtk.ImageMenuItem.new_with_mnemonic(_('_Unblock'))
+            unblock_menuitem = Gtk.ImageMenuItem.new_with_mnemonic(
+                _('_Unblock'))
             icon = Gtk.Image.new_from_stock(Gtk.STOCK_STOP, Gtk.IconSize.MENU)
             unblock_menuitem.set_image(icon)
             unblock_menuitem.connect('activate', self.on_unblock, list_)
@@ -6203,7 +6215,7 @@ class RosterWindow:
 
         for bookmark in gajim.connections[account].bookmarks:
             # Do not use underline.
-            item = Gtk.MenuItem(bookmark['name'])
+            item = Gtk.MenuItem.new_with_label(bookmark['name'])
             item.set_use_underline(False)
             item.connect('activate', self.on_bookmark_menuitem_activate,
                     account, bookmark)

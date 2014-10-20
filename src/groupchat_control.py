@@ -586,14 +586,14 @@ class GroupchatControl(ChatControlBase):
         item = Gtk.SeparatorMenuItem.new()
         menu.prepend(item)
 
-        item = Gtk.MenuItem(_('Insert Nickname'))
+        item = Gtk.MenuItem.new_with_label(_('Insert Nickname'))
         menu.prepend(item)
         submenu = Gtk.Menu()
         item.set_submenu(submenu)
 
         for nick in sorted(gajim.contacts.get_nick_list(self.account,
         self.room_jid)):
-            item = Gtk.MenuItem(nick, use_underline=False)
+            item = Gtk.MenuItem.new_with_label(nick, use_underline=False)
             submenu.append(item)
             id_ = item.connect('activate', self.append_nick_in_msg_textview,
                 nick)

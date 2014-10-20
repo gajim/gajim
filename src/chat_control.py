@@ -1083,7 +1083,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         active_tags = self.msg_textview.get_active_tags()
 
         for menuitem in menuitems:
-            item = Gtk.CheckMenuItem(menuitem[0])
+            item = Gtk.CheckMenuItem.new_with_label(menuitem[0])
             if menuitem[1] in active_tags:
                 item.set_active(True)
             else:
@@ -1095,13 +1095,13 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         item = Gtk.SeparatorMenuItem.new() # separator
         menu.append(item)
 
-        item = Gtk.ImageMenuItem(_('Color'))
+        item = Gtk.ImageMenuItem.new_with_label(_('Color'))
         icon = Gtk.Image.new_from_stock(Gtk.STOCK_SELECT_COLOR, Gtk.IconSize.MENU)
         item.set_image(icon)
         item.connect('activate', self.on_color_menuitem_activale)
         menu.append(item)
 
-        item = Gtk.ImageMenuItem(_('Font'))
+        item = Gtk.ImageMenuItem.new_with_label(_('Font'))
         icon = Gtk.Image.new_from_stock(Gtk.STOCK_SELECT_FONT, Gtk.IconSize.MENU)
         item.set_image(icon)
         item.connect('activate', self.on_font_menuitem_activale)
@@ -1110,7 +1110,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         item = Gtk.SeparatorMenuItem.new() # separator
         menu.append(item)
 
-        item = Gtk.ImageMenuItem(_('Clear formating'))
+        item = Gtk.ImageMenuItem.new_with_label(_('Clear formating'))
         icon = Gtk.Image.new_from_stock(Gtk.STOCK_CLEAR, Gtk.IconSize.MENU)
         item.set_image(icon)
         item.connect('activate', self.msg_textview.clear_tags)

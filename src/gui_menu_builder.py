@@ -44,7 +44,8 @@ def build_resources_submenu(contacts, account, action, room_jid=None,
     for c in contacts:
         # icon MUST be different instance for every item
         state_images = gtkgui_helpers.load_iconset(path)
-        item = Gtk.ImageMenuItem('%s (%s)' % (c.resource, str(c.priority)))
+        item = Gtk.ImageMenuItem.new_with_label(
+            '%s (%s)' % (c.resource, str(c.priority)))
         icon_name = helpers.get_icon_name_to_show(c, account)
         icon = state_images[icon_name]
         item.set_image(icon)
@@ -154,7 +155,7 @@ show_bookmarked=False, force_resource=False):
         item = Gtk.SeparatorMenuItem.new() # separator
         invite_to_submenu.append(item)
         for (room_jid, account) in rooms:
-            menuitem = Gtk.ImageMenuItem(room_jid.split('@')[0])
+            menuitem = Gtk.ImageMenuItem.new_with_label(room_jid.split('@')[0])
             muc_active_icon = gtkgui_helpers.load_icon('muc_active')
             menuitem.set_image(muc_active_icon)
             if len(contact_list) > 1: # several resources
@@ -190,7 +191,7 @@ show_bookmarked=False, force_resource=False):
     item = Gtk.SeparatorMenuItem.new() # separator
     invite_to_submenu.append(item)
     for (room_jid, account) in rooms2:
-        menuitem = Gtk.ImageMenuItem(room_jid.split('@')[0])
+        menuitem = Gtk.ImageMenuItem.new_with_label(room_jid.split('@')[0])
         muc_inactive_icon = gtkgui_helpers.load_icon('muc_inactive')
         menuitem.set_image(muc_inactive_icon)
         if len(contact_list) > 1: # several resources
@@ -473,9 +474,10 @@ control=None, gc_contact=None, is_anonymous=True):
     for s in ('online', 'chat', 'away', 'xa', 'dnd', 'offline'):
         # icon MUST be different instance for every item
         state_images = gtkgui_helpers.load_iconset(path)
-        status_menuitem = Gtk.ImageMenuItem(helpers.get_uf_show(s))
+        status_menuitem = Gtk.ImageMenuItem.new_with_label(
+            helpers.get_uf_show(s))
         status_menuitem.connect('activate', roster.on_send_custom_status,
-                [(contact, account)], s)
+                                [(contact, account)], s)
         icon = state_images[s]
         status_menuitem.set_image(icon)
         status_menuitems.append(status_menuitem)
@@ -619,7 +621,8 @@ def get_transport_menu(contact, account):
         for s in ('online', 'chat', 'away', 'xa', 'dnd', 'offline'):
             # icon MUST be different instance for every item
             state_images = gtkgui_helpers.load_iconset(path)
-            status_menuitem = Gtk.ImageMenuItem(helpers.get_uf_show(s))
+            status_menuitem = Gtk.ImageMenuItem.new_with_label(
+                helpers.get_uf_show(s))
             status_menuitem.connect('activate', roster.on_send_custom_status,
                 [(contact, account)], s)
             icon = state_images[s]

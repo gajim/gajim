@@ -816,7 +816,7 @@ class ConversationTextview(GObject.GObject):
             else:
                 if dict_link.find('%s') == -1:
                     # we must have %s in the url if not WIKTIONARY
-                    item = Gtk.MenuItem(_(
+                    item = Gtk.MenuItem.new_with_label(_(
                             'Dictionary URL is missing an "%s" and it is not WIKTIONARY'))
                     item.set_property('sensitive', False)
                 else:
@@ -830,7 +830,8 @@ class ConversationTextview(GObject.GObject):
             search_link = gajim.config.get('search_engine')
             if search_link.find('%s') == -1:
                 # we must have %s in the url
-                item = Gtk.MenuItem(_('Web Search URL is missing an "%s"'))
+                item = Gtk.MenuItem.new_with_label(
+                    _('Web Search URL is missing an "%s"'))
                 item.set_property('sensitive', False)
             else:
                 item = Gtk.MenuItem.new_with_mnemonic(_('Web _Search for it'))

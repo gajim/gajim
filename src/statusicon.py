@@ -274,7 +274,8 @@ class StatusIcon:
             for account in accounts_list:
                 if gajim.account_is_connected(account):
                     # for chat_with
-                    item = Gtk.MenuItem(_('using account %s') % account)
+                    item = Gtk.MenuItem.new_with_label(
+                        _('using account %s') % account)
                     account_menu_for_chat_with.append(item)
                     item.connect('activate', self.on_new_chat, account)
 
@@ -321,14 +322,15 @@ class StatusIcon:
                 if gajim.connections[account].private_storage_supported:
                     connected_accounts_with_private_storage += 1
                 # for single message
-                item = Gtk.MenuItem(_('using account %s') % account)
+                item = Gtk.MenuItem.new_with_label(
+                    _('using account %s') % account)
                 item.connect('activate',
                         self.on_single_message_menuitem_activate, account)
                 account_menu_for_single_message.append(item)
 
                 # join gc
-                gc_item = Gtk.MenuItem(_('using account %s') % account,
-                    use_underline=False)
+                gc_item = Gtk.MenuItem.new_with_label(
+                    _('using account %s') % account, use_underline=False)
                 gc_sub_menu.append(gc_item)
                 gc_menuitem_menu = Gtk.Menu()
                 gajim.interface.roster.add_bookmarks_list(gc_menuitem_menu,
@@ -364,7 +366,8 @@ class StatusIcon:
         if os.name == 'nt':
             if self.added_hide_menuitem is False:
                 self.systray_context_menu.prepend(Gtk.SeparatorMenuItem.new())
-                item = Gtk.MenuItem(_('Hide this menu'))
+                item = Gtk.MenuItem.new_with_label(
+                    _('Hide this menu'))
                 self.systray_context_menu.prepend(item)
                 self.added_hide_menuitem = True
 
