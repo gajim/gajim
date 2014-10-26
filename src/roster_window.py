@@ -299,7 +299,7 @@ class RosterWindow:
         delimiter = gajim.connections[account].nested_group_delimiter
         group_splited = group.split(delimiter)
         parent_group = delimiter.join(group_splited[:-1])
-        if parent_group in self._iters[account_group]['groups']:
+        if len(group_splited) > 1 and parent_group in self._iters[account_group]['groups']:
             iter_parent = self._iters[account_group]['groups'][parent_group]
         elif parent_group:
             iter_parent = self._add_group_iter(account, parent_group)
