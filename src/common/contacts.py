@@ -103,7 +103,7 @@ class Contact(CommonContact):
             our_chatstate, chatstate, client_caps=client_caps)
 
         self.contact_name = '' # nick choosen by contact
-        self.groups = [i for i in set(groups)] # filter duplicate values
+        self.groups = [i if i else _('General') for i in set(groups)] # filter duplicate values
 
         self.sub = sub
         self.ask = ask
