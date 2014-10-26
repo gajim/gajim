@@ -952,7 +952,7 @@ class EncryptedStanzaSession(ArchivingStanzaSession):
 
             if not rshashes:
                 # we've never spoken before, but we'll pretend we have
-                rshash_size = self.hash_alg().digest_size
+                rshash_size = int(self.hash_alg().digest_size)
                 rshashes.append(crypto.random_bytes(rshash_size))
 
             rshashes = [base64.b64encode(rshash).decode('utf-8') for rshash in \
