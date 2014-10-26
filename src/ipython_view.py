@@ -90,7 +90,10 @@ class IterableIPShell:
         @type input_func: function
         """
         if input_func:
-            IPython.frontend.terminal.interactiveshell.raw_input_original = input_func
+            if IPython.version_info[0] >= 1:
+                IPython.terminal.interactiveshell.raw_input_original = input_func
+            else:
+                IPython.frontend.terminal.interactiveshell.raw_input_original = input_func
         if cin:
             IPython.utils.io.stdin = IPython.utils.io.IOStream(cin)
         if cout:
@@ -110,7 +113,10 @@ class IterableIPShell:
         cfg = Config()
         cfg.InteractiveShell.colors = "Linux"
 
-        self.IP = IPython.frontend.terminal.embed.InteractiveShellEmbed(config=cfg, user_ns=user_ns)
+        if IPython.version_info[0] >= 1:
+            self.IP = IPython.terminal.embed.InteractiveShellEmbed(config=cfg, user_ns=user_ns)
+        else:
+            self.IP = IPython.frontend.terminal.embed.InteractiveShellEmbed(config=cfg, user_ns=user_ns)
         self.IP.system = lambda cmd: self.shell(self.IP.var_expand(cmd),
                                                 header='IPython system call: ',
                                                 local_ns=user_ns)
