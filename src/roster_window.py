@@ -2630,6 +2630,20 @@ class RosterWindow:
             self.add_account_contacts(obj.conn.name, improve_speed=False)
             self.fire_up_unread_messages_events(obj.conn.name)
         else:
+            # add self contact
+            if gajim.config.get('show_self_contact') == 'always':
+                account = obj.conn.name
+                self_jid = gajim.get_jid_from_account(account)
+                if self_jid not in gajim.contacts.get_jid_list(account):
+                    resource = ''
+                    if gajim.connections[account].server_resource:
+                        resource = gajim.connections[account].server_resource
+                    contact = gajim.contacts.create_contact(jid=self_jid,
+                        account=account, name=gajim.nicks[account],
+                        groups=['self_contact'], show='offline', sub='both',
+                        ask='none', resource=resource)
+                    gajim.contacts.add_contact(account, contact)
+                    self.add_contact(self_jid, account)
             if gajim.config.get('remember_opened_chat_controls'):
                 account = obj.conn.name
                 controls = gajim.config.get_per('accounts', account,
