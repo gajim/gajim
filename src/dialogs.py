@@ -2428,6 +2428,7 @@ class JoinGroupchatWindow:
         self._room_jid_entry = self.xml.get_object('room_jid_entry')
         self._nickname_entry = self.xml.get_object('nickname_entry')
         self._password_entry = self.xml.get_object('password_entry')
+        self.server_comboboxtext = self.xml.get_object('server_comboboxtext')
 
         self._nickname_entry.set_text(nick)
         if password:
@@ -2443,16 +2444,6 @@ class JoinGroupchatWindow:
             title = _('Join Group Chat')
         self.window.set_title(title)
 
-
-        self.server_model = Gtk.ListStore(str)
-        self.server_comboboxentry = Gtk.ComboBox.new_with_model_and_entry(
-            self.server_model)
-        self.server_comboboxentry.set_entry_text_column(0)
-        hbox1 = self.xml.get_object('hbox1')
-        hbox1.pack_start(self.server_comboboxentry, False, False, 0)
-
-        entry = self.server_comboboxentry.child
-        entry.connect('changed', self.on_server_entry_changed)
         self.browse_button = self.xml.get_object('browse_rooms_button')
         self.browse_button.set_sensitive(False)
 
@@ -2482,7 +2473,7 @@ class JoinGroupchatWindow:
                 server_list.append(server)
 
         for s in server_list:
-            self.server_model.append([s])
+            self.server_comboboxtext.append_text(s)
 
 
         self._set_room_jid(room_jid)
@@ -2544,8 +2535,8 @@ class JoinGroupchatWindow:
                 room_jid, server = text.split('@', 1)
                 self._room_jid_entry.set_text(room_jid)
                 if server:
-                    self.server_comboboxentry.get_child().set_text(server)
-                self.server_comboboxentry.grab_focus()
+                    self.server_comboboxtext.get_child().set_text(server)
+                self.server_comboboxtext.grab_focus()
 
     def on_account_combobox_changed(self, widget):
         model = widget.get_model()
@@ -2557,8 +2548,8 @@ class JoinGroupchatWindow:
         room_jid, nick = gajim.get_room_and_nick_from_fjid(full_jid)
         room, server = gajim.get_name_and_server_from_jid(room_jid)
         self._room_jid_entry.set_text(room)
-        model = self.server_comboboxentry.get_model()
-        self.server_comboboxentry.get_child().set_text(server)
+        model = self.server_comboboxtext.get_model()
+        self.server_comboboxtext.get_child().set_text(server)
         if nick:
             self._nickname_entry.set_text(nick)
 
@@ -2569,7 +2560,7 @@ class JoinGroupchatWindow:
         self._set_room_jid(full_jid)
 
     def on_browse_rooms_button_clicked(self, widget):
-        server = self.server_comboboxentry.get_child().get_text()
+        server = self.server_comboboxtext.get_child().get_text()
         self.requested_jid = server
         gajim.connections[self.account].discoverInfo(server)
 
@@ -2636,7 +2627,7 @@ class JoinGroupchatWindow:
                 'groupchat.'))
             return
         nickname = self._nickname_entry.get_text()
-        server = self.server_comboboxentry.get_child().get_text()
+        server = self.server_comboboxtext.get_child().get_text()
         room = self._room_jid_entry.get_text().strip()
         room_jid = room + '@' + server
         password = self._password_entry.get_text()
