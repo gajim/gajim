@@ -132,7 +132,7 @@ try:
         compared_srv_domain = '_xmpp-client.' + compared_domain
         for i in range(0, cnt):
             ext = cert.get_extension(i)
-            if ext.get_short_name() == 'subjectAltName':
+            if ext.get_short_name() == b'subjectAltName':
                 try:
                     r = _parse_asn1(ext.get_data())
                 except:
