@@ -1136,10 +1136,20 @@ class Connection(CommonConnection, ConnectionHandlers):
             else:
                 use_custom = gajim.config.get_per('accounts', self.name,
                     'use_custom_host')
-                custom_h = gajim.config.get_per('accounts', self.name,
-                    'custom_host')
-                custom_p = gajim.config.get_per('accounts', self.name,
-                    'custom_port')
+                if use_custom:
+                    custom_h = gajim.config.get_per('accounts', self.name,
+                        'custom_host')
+                    custom_p = gajim.config.get_per('accounts', self.name,
+                        'custom_port')
+                    try:
+                        helpers.idn_to_ascii(custom_h)
+                    except Exception:
+                        gajim.nec.push_incoming_event(InformationEvent(None,
+                            conn=self, level='error',
+                            pri_txt=_('Wrong Custom Hostname'),
+                            sec_txt='Wrong custom hostname "%s". Ignoring it.' \
+                            % custom_h))
+                        use_custom = False
 
         # create connection if it doesn't already exist
         self.connected = 1
