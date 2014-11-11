@@ -1996,6 +1996,8 @@ class AccountsWindow:
         self.xml.get_object('sync_with_global_status_checkbutton1').set_active(
             gajim.config.get_per('accounts', account,
             'sync_with_global_status'))
+        self.xml.get_object('carbons_checkbutton1').set_active(
+            gajim.config.get_per('accounts', account, 'enable_message_carbons'))
         self.xml.get_object('use_ft_proxies_checkbutton1').set_active(
             gajim.config.get_per('accounts', account, 'use_ft_proxies'))
 
@@ -2350,6 +2352,12 @@ class AccountsWindow:
         self.on_checkbutton_toggled(widget, 'sync_with_global_status',
             account=self.current_account)
         gajim.interface.roster.update_status_combobox()
+
+    def on_carbons_checkbutton_toggled(self, widget):
+        if self.ignore_events:
+            return
+        self.on_checkbutton_toggled(widget, 'enable_message_carbons',
+            account=self.current_account)
 
     def on_use_ft_proxies_checkbutton1_toggled(self, widget):
         if self.ignore_events:
