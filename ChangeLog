@@ -1,3 +1,9 @@
+Gajim 0.16.1 ()
+
+  * Fix sending Zeroconf messages
+  * Make ipython compatible to version >= 1.0
+  * Support XEP-0313 MAM
+
 Gajim 0.16 (04 October 2014)
 
   * Improve File transfer support by adding Jingle file transfer
