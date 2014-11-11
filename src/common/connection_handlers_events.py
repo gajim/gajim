@@ -1088,6 +1088,60 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                     return
                 self.forwarded = True
 
+        result = self.stanza.getTag('result', namespace=nbxmpp.NS_MAM)
+        if result:
+            forwarded = result.getTag('forwarded', namespace=nbxmpp.NS_FORWARD)
+            if not forwarded:
+                return
+            delay = forwarded.getTag('delay', namespace=nbxmpp.NS_DELAY2)
+            if not delay:
+                return
+            tim = delay.getAttr('stamp')
+            tim = helpers.datetime_tuple(tim)
+            tim = localtime(timegm(tim))
+            msg_ = forwarded.getTag('message')
+            to_ = msg_.getAttr('to')
+            if to_:
+                gajim.get_jid_without_resource(to_)
+            else:
+                to_ = gajim.get_jid_from_account(account)
+            frm_ = gajim.get_jid_without_resource(msg_.getAttr('from'))
+            nick = None
+            msg_txt = msg_.getTagData('body')
+            if to_ == gajim.get_jid_from_account(account):
+                with_ = frm_
+                direction = 'from'
+                res = gajim.get_resource_from_jid(msg_.getAttr('from'))
+            else:
+                with_ = to_
+                direction = 'to'
+                res = gajim.get_resource_from_jid(msg_.getAttr('to'))
+            is_pm = gajim.logger.jid_is_room_jid(with_)
+            if msg_.getAttr('type') == 'groupchat':
+                if is_pm == False:
+                    log.warn('JID %s is marked as normal contact in database '
+                        'but we got a groupchat message from it.')
+                    return
+                if is_pm == None:
+                    gajim.logger.get_jid_id(with_, 'ROOM')
+                nick = res
+            else:
+                if is_pm == None:
+                    # we don't know this JID, we need to disco it.
+                    server = gajim.get_server_from_jid(with_)
+                    if server not in self.conn.mam_awaiting_disco_result:
+                        self.conn.mam_awaiting_disco_result[server] = [
+                            [with_, direction, tim, msg_txt, res]]
+                        self.conn.discoverInfo(server)
+                    else:
+                        self.conn.mam_awaiting_disco_result[server].append(
+                            [with_, direction, tim, msg_txt, res])
+                    return
+
+            gajim.logger.save_if_not_exists(with_, direction, tim,
+                msg=msg_txt, nick=nick)
+            return
+
         self.enc_tag = self.stanza.getTag('x', namespace=nbxmpp.NS_ENCRYPTED)
 
         self.invite_tag = None

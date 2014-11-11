@@ -3006,7 +3006,7 @@ class ChatControl(ChatControlBase):
             and gajim.HAVE_PYCRYPTO and self.contact.supports(NS_ESESSION):
                 self.begin_e2e_negotiation()
             elif (not self.session or not self.session.status) and \
-            gajim.connections[self.account].archiving_supported:
+            gajim.connections[self.account].archiving_136_supported:
                 self.begin_archiving_negotiation()
         else:
             self.send_chatstate('active', self.contact)

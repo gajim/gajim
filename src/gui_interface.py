@@ -1134,12 +1134,18 @@ class Interface:
             # Else disable autoaway
             gajim.sleeper_state[account] = 'off'
 
-        if obj.conn.archiving_supported:
+        if obj.conn.archiving_136_supported:
             # Start merging logs from server
             obj.conn.request_modifications_page(gajim.config.get_per('accounts',
                 account, 'last_archiving_time'))
             gajim.config.set_per('accounts', account, 'last_archiving_time',
                 time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()))
+        if obj.conn.archiving_313_supported:
+            mam_id = gajim.config.get('last_mam_id')
+            if mam_id:
+                obj.conn.request_archive(after=mam_id)
+            else:
+                obj.conn.request_archive(start='2013-02-24T03:51:42Z')
 
         invisible_show = gajim.SHOW_LIST.index('invisible')
         # We cannot join rooms if we are invisible

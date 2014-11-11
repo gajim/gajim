@@ -423,6 +423,8 @@ class CommonConnection:
             msg_iq.setTag(nbxmpp.NS_ENCRYPTED + ' x').setData(msgenc)
             if self.carbons_enabled:
                 msg_iq.addChild(name='private', namespace=nbxmpp.NS_CARBONS)
+            msg_iq.addChild(name='no-permanent-storage',
+                namespace=nbxmpp.NS_MSG_HINTS)
 
         if form_node:
             msg_iq.addChild(node=form_node)
@@ -501,6 +503,10 @@ class CommonConnection:
                     if self.carbons_enabled:
                         msg_iq.addChild(name='private',
                             namespace=nbxmpp.NS_CARBONS)
+                    msg_iq.addChild(name='no-permanent-storage',
+                        namespace=nbxmpp.NS_MSG_HINTS)
+                    msg_iq.addChild(name='no-copy',
+                        namespace=nbxmpp.NS_MSG_HINTS)
 
         if callback:
             callback(jid, msg, keyID, forward_from, session, original_message,
@@ -1977,8 +1983,12 @@ class Connection(CommonConnection, ConnectionHandlers):
                         # Remove stored bookmarks accessible to everyone.
                         self.send_pb_purge(our_jid, 'storage:bookmarks')
                         self.send_pb_delete(our_jid, 'storage:bookmarks')
+                if nbxmpp.NS_MAM in obj.features:
+                    self.archiving_supported = True
+                    self.archiving_313_supported = True
                 if nbxmpp.NS_ARCHIVE in obj.features:
                     self.archiving_supported = True
+                    self.archiving_136_supported = True
                 if nbxmpp.NS_ARCHIVE_AUTO in obj.features:
                     self.archive_auto_supported = True
                 if nbxmpp.NS_ARCHIVE_MANAGE in obj.features:

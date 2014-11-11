@@ -53,10 +53,8 @@ from common.pubsub import ConnectionPubSub
 from common.protocol.caps import ConnectionCaps
 from common.protocol.bytestream import ConnectionSocks5Bytestream
 from common.protocol.bytestream import ConnectionIBBytestream
-from common.message_archiving import ConnectionArchive
-from common.message_archiving import ARCHIVING_COLLECTIONS_ARRIVED
-from common.message_archiving import ARCHIVING_COLLECTION_ARRIVED
-from common.message_archiving import ARCHIVING_MODIFICATIONS_ARRIVED
+from common.message_archiving import ConnectionArchive136
+from common.message_archiving import ConnectionArchive313
 from common.connection_handlers_events import *
 
 from common import ged
@@ -463,6 +461,7 @@ class ConnectionVcard:
 
         if id_ not in self.awaiting_answers:
             return
+
         if self.awaiting_answers[id_][0] == VCARD_PUBLISHED:
             if iq_obj.getType() == 'result':
                 vcard_iq = self.awaiting_answers[id_][1]
@@ -481,6 +480,7 @@ class ConnectionVcard:
                 if self.vcard_sha != new_sha and gajim.SHOW_LIST[
                 self.connected] != 'invisible':
                     if not self.connection or self.connected < 2:
+                        del self.awaiting_answers[id_]
                         return
                     self.vcard_sha = new_sha
                     sshow = helpers.get_xmpp_show(gajim.SHOW_LIST[
@@ -494,6 +494,7 @@ class ConnectionVcard:
             elif iq_obj.getType() == 'error':
                 gajim.nec.push_incoming_event(VcardNotPublishedEvent(None,
                     conn=self))
+            del self.awaiting_answers[id_]
         elif self.awaiting_answers[id_][0] == VCARD_ARRIVED:
             # If vcard is empty, we send to the interface an empty vcard so that
             # it knows it arrived
@@ -516,10 +517,12 @@ class ConnectionVcard:
                 vcard = {'jid': jid, 'resource': resource}
                 gajim.nec.push_incoming_event(VcardReceivedEvent(None,
                     conn=self, vcard_dict=vcard))
+            del self.awaiting_answers[id_]
         elif self.awaiting_answers[id_][0] == AGENT_REMOVED:
             jid = self.awaiting_answers[id_][1]
             gajim.nec.push_incoming_event(AgentRemovedEvent(None, conn=self,
                 agent=jid))
+            del self.awaiting_answers[id_]
         elif self.awaiting_answers[id_][0] == METACONTACTS_ARRIVED:
             if not self.connection:
                 return
@@ -530,7 +533,9 @@ class ConnectionVcard:
                 if iq_obj.getErrorCode() not in ('403', '406', '404'):
                     self.private_storage_supported = False
             self.get_roster_delimiter()
+            del self.awaiting_answers[id_]
         elif self.awaiting_answers[id_][0] == DELIMITER_ARRIVED:
+            del self.awaiting_answers[id_]
             if not self.connection:
                 return
             if iq_obj.getType() == 'result':
@@ -565,7 +570,9 @@ class ConnectionVcard:
                 gajim.nec.push_incoming_event(RosterReceivedEvent(None,
                     conn=self))
             GLib.timeout_add_seconds(10, self.discover_servers)
+            del self.awaiting_answers[id_]
         elif self.awaiting_answers[id_][0] == PRIVACY_ARRIVED:
+            del self.awaiting_answers[id_]
             if iq_obj.getType() != 'error':
                 self.privacy_rules_supported = True
                 self.get_privacy_list('block')
@@ -594,6 +601,7 @@ class ConnectionVcard:
             # Ask metacontacts before roster
             self.get_metacontacts()
         elif self.awaiting_answers[id_][0] == BLOCKING_ARRIVED:
+            del self.awaiting_answers[id_]
             if iq_obj.getType() == 'result':
                 list_node = iq_obj.getTag('blocklist')
                 if not list_node:
@@ -602,6 +610,7 @@ class ConnectionVcard:
                 for i in list_node.iterTags('item'):
                     self.blocked_contacts.append(i.getAttr('jid'))
         elif self.awaiting_answers[id_][0] == PEP_CONFIG:
+            del self.awaiting_answers[id_]
             if iq_obj.getType() == 'error':
                 return
             if not iq_obj.getTag('pubsub'):
@@ -615,71 +624,6 @@ class ConnectionVcard:
                 form = common.dataforms.ExtendForm(node=form_tag)
                 gajim.nec.push_incoming_event(PEPConfigReceivedEvent(None,
                     conn=self, node=node, form=form))
-
-        elif self.awaiting_answers[id_][0] == ARCHIVING_COLLECTIONS_ARRIVED:
-            # TODO
-            print('ARCHIVING_COLLECTIONS_ARRIVED')
-
-        elif self.awaiting_answers[id_][0] == ARCHIVING_COLLECTION_ARRIVED:
-            def save_if_not_exists(with_, nick, direction, tim, payload):
-                assert len(payload) == 1, 'got several archiving messages in' +\
-                    ' the same time %s' % ''.join(payload)
-                if payload[0].getName() == 'body':
-                    gajim.logger.save_if_not_exists(with_, direction, tim,
-                        msg=payload[0].getData(), nick=nick)
-                elif payload[0].getName() == 'message':
-                    print('Not implemented')
-            chat = iq_obj.getTag('chat')
-            if chat:
-                with_ = chat.getAttr('with')
-                start_ = chat.getAttr('start')
-                tim = helpers.datetime_tuple(start_)
-                tim = timegm(tim)
-                nb = 0
-                for element in chat.getChildren():
-                    try:
-                        secs = int(element.getAttr('secs'))
-                    except TypeError:
-                        secs = 0
-                    if secs:
-                        tim += secs
-                    nick = element.getAttr('name')
-                    if element.getName() == 'from':
-                        save_if_not_exists(with_, nick, 'from', localtime(tim),
-                            element.getPayload())
-                        nb += 1
-                    if element.getName() == 'to':
-                        save_if_not_exists(with_, nick, 'to', localtime(tim),
-                            element.getPayload())
-                        nb += 1
-                set_ = chat.getTag('set')
-                first = set_.getTag('first')
-                if first:
-                    try:
-                        index = int(first.getAttr('index'))
-                    except TypeError:
-                        index = 0
-                try:
-                    count = int(set_.getTagData('count'))
-                except TypeError:
-                    count = 0
-                if count > index + nb:
-                    # Request the next page
-                    after = element.getTagData('last')
-                    self.request_collection_page(with_, start_, after=after)
-
-        elif self.awaiting_answers[id_][0] == ARCHIVING_MODIFICATIONS_ARRIVED:
-            modified = iq_obj.getTag('modified')
-            if modified:
-                for element in modified.getChildren():
-                    if element.getName() == 'changed':
-                        with_ = element.getAttr('with')
-                        start_ = element.getAttr('start')
-                        self.request_collection_page(with_, start_)
-                    #elif element.getName() == 'removed':
-                        # do nothing
-
-        del self.awaiting_answers[id_]
 
     def _vCardCB(self, con, vc):
         """
@@ -1421,13 +1365,14 @@ class ConnectionHandlersBase:
 
         return sess
 
-class ConnectionHandlers(ConnectionArchive, ConnectionVcard,
-ConnectionSocks5Bytestream, ConnectionDisco, ConnectionCommands,
-ConnectionPubSub, ConnectionPEP, ConnectionCaps, ConnectionHandlersBase,
-ConnectionJingle, ConnectionIBBytestream):
+class ConnectionHandlers(ConnectionArchive136, ConnectionArchive313,
+ConnectionVcard, ConnectionSocks5Bytestream, ConnectionDisco,
+ConnectionCommands, ConnectionPubSub, ConnectionPEP, ConnectionCaps,
+ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
     def __init__(self):
         global HAS_IDLE
-        ConnectionArchive.__init__(self)
+        ConnectionArchive136.__init__(self)
+        ConnectionArchive313.__init__(self)
         ConnectionVcard.__init__(self)
         ConnectionSocks5Bytestream.__init__(self)
         ConnectionIBBytestream.__init__(self)
