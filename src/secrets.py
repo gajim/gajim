@@ -42,7 +42,7 @@ class Secrets:
         raise exceptions.Cancelled
 
     def save(self):
-        f = open(secrets_filename, 'w')
+        f = open(secrets_filename, 'wb')
         pickle.dump(self, f)
         f.close()
 
@@ -95,14 +95,22 @@ class Secrets:
         return pk
 
 def load_secrets(filename):
-    f = open(filename, 'r')
+    f = open(filename, 'rb')
 
     try:
-        secrets = pickle.load(f)
+        secrets = pickle.load(f, encoding='latin1')
+        # We do that to be able to read files written in py2
+        for acct in secrets.srs:
+            for jid in secrets.srs[acct]:
+                for (secret, verified) in list(secrets.srs[acct][jid]):
+                    if type(secret) is str:
+                        secrets.srs[acct][jid].remove((secret, verified))
+                        secrets.srs[acct][jid].append((secret.encode('latin1'), verified))
     except (KeyError, EOFError):
         f.close()
         secrets = Secrets(filename)
 
+    f.close()
     return secrets
 
 def secrets():

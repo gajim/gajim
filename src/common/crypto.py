@@ -28,9 +28,9 @@ from hashlib import sha256 as SHA256
 # convert a large integer to a big-endian bitstring
 def encode_mpi(n):
     if n >= 256:
-        return encode_mpi(n / 256) + chr(n % 256)
+        return encode_mpi(n // 256) + bytes([n % 256])
     else:
-        return chr(n)
+        return bytes([n])
 
 # convert a large integer to a big-endian bitstring, padded with \x00s to
 # a multiple of 16 bytes
@@ -56,7 +56,7 @@ def decode_mpi(s):
     if len(s) == 0:
         return 0
     else:
-        return 256 * decode_mpi(s[:-1]) + ord(s[-1])
+        return 256 * decode_mpi(s[:-1]) + s[-1]
 
 def sha256(string):
     sh = SHA256()
@@ -66,13 +66,13 @@ def sha256(string):
 base28_chr = "acdefghikmopqruvwxy123456789"
 
 def sas_28x5(m_a, form_b):
-    sha = sha256(m_a + form_b + 'Short Authentication String')
+    sha = sha256(m_a + form_b + b'Short Authentication String')
     lsb24 = decode_mpi(sha[-3:])
     return base28(lsb24)
 
 def base28(n):
     if n >= 28:
-        return base28(n / 28) + base28_chr[n % 28]
+        return base28(n // 28) + base28_chr[n % 28]
     else:
         return base28_chr[n]
 
@@ -147,6 +147,5 @@ def powmod(base, exp, mod):
             result = (result * square) % mod
 
         square = (square * square) % mod
-        exp /= 2
-
+        exp //= 2
     return result

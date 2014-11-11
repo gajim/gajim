@@ -410,21 +410,21 @@ class EncryptedStanzaSession(ArchivingStanzaSession):
 
         c = stanza.NT.c
         c.setNamespace('http://www.xmpp.org/extensions/xep-0200.html#ns')
-        c.NT.data = base64.b64encode(m_final)
+        c.NT.data = base64.b64encode(m_final).decode('utf-8')
 
         # FIXME check for rekey request, handle <key/> elements
 
-        m_content = ''.join(map(str, c.getChildren()))
+        m_content = (''.join(map(str, c.getChildren()))).encode('utf-8')
         c.NT.mac = base64.b64encode(self.hmac(self.km_s, m_content + \
-                crypto.encode_mpi(old_en_counter)))
+            crypto.encode_mpi(old_en_counter))).decode('utf-8')
 
         msgtxt = '[This is part of an encrypted session. ' \
                 'If you see this message, something went wrong.]'
         lang = os.getenv('LANG')
         if lang is not None and lang != 'en': # we're not english
             msgtxt = _('[This is part of an encrypted session. '
-                    'If you see this message, something went wrong.]') + ' (' + \
-                    msgtxt + ')'
+                'If you see this message, something went wrong.]') + ' (' + \
+                msgtxt + ')'
         stanza.setBody(msgtxt)
 
         return stanza
@@ -436,14 +436,14 @@ class EncryptedStanzaSession(ArchivingStanzaSession):
         return HMAC(key, content, self.hash_alg).digest()
 
     def generate_initiator_keys(self, k):
-        return (self.hmac(k, 'Initiator Cipher Key'),
-                self.hmac(k, 'Initiator MAC Key'),
-                self.hmac(k, 'Initiator SIGMA Key'))
+        return (self.hmac(k, b'Initiator Cipher Key'),
+                self.hmac(k, b'Initiator MAC Key'),
+                self.hmac(k, b'Initiator SIGMA Key'))
 
     def generate_responder_keys(self, k):
-        return (self.hmac(k, 'Responder Cipher Key'),
-                self.hmac(k, 'Responder MAC Key'),
-                self.hmac(k, 'Responder SIGMA Key'))
+        return (self.hmac(k, b'Responder Cipher Key'),
+                self.hmac(k, b'Responder MAC Key'),
+                self.hmac(k, b'Responder SIGMA Key'))
 
     def compress(self, plaintext):
         if self.compression is None:
@@ -473,6 +473,7 @@ class EncryptedStanzaSession(ArchivingStanzaSession):
 
         # contents of <c>, minus <mac>, minus whitespace
         macable = ''.join(str(x) for x in c.getChildren() if x.getName() != 'mac')
+        macable = macable.encode('utf-8')
 
         received_mac = base64.b64decode(c.getTagData('mac'))
         calculated_mac = self.hmac(self.km_o, macable + \
@@ -483,7 +484,7 @@ class EncryptedStanzaSession(ArchivingStanzaSession):
 
         m_final = base64.b64decode(c.getTagData('data'))
         m_compressed = self.decrypt(m_final)
-        plaintext = self.decompress(m_compressed)
+        plaintext = self.decompress(m_compressed).decode('utf-8')
 
         try:
             parsed = nbxmpp.Node(node='<node>' + plaintext + '</node>')
@@ -536,7 +537,7 @@ class EncryptedStanzaSession(ArchivingStanzaSession):
         if i_o == 'a' and self.sas_algs == 'sas28x5':
             # we don't need to calculate this if there's a verified retained secret
             # (but we do anyways)
-            self.sas = crypto.sas_28x5(m_o, self.form_s)
+            self.sas = crypto.sas_28x5(m_o, self.form_s.encode('utf-8'))
 
         if self.negotiated['recv_pubkey']:
             plaintext = self.decrypt(id_o)
@@ -564,18 +565,18 @@ class EncryptedStanzaSession(ArchivingStanzaSession):
             signature = (crypto.decode_mpi(base64.b64decode(enc_sig)), )
         else:
             mac_o = self.decrypt(id_o)
-            pubkey_o = ''
+            pubkey_o = b''
 
         c7l_form = self.c7lize_mac_id(form)
 
         content = self.n_s + self.n_o + crypto.encode_mpi(dh_i) + pubkey_o
 
         if sigmai:
-            self.form_o = c7l_form
+            self.form_o = c7l_form.encode('utf-8')
             content += self.form_o
         else:
-            form_o2 = c7l_form
-            content += self.form_o + form_o2
+            form_o2 = c7l_form.encode('utf-8')
+            content += self.form_o.encode('utf-8') + form_o2
 
         mac_o_calculated = self.hmac(self.ks_o, content)
 
@@ -598,18 +599,18 @@ class EncryptedStanzaSession(ArchivingStanzaSession):
                 cb_fields = [base64.b64encode(crypto.encode_mpi(f)) for f in
                     fields]
 
-                pubkey_s = '<RSAKeyValue xmlns="http://www.w3.org/2000/09/xmldsig#"'
+                pubkey_s = b'<RSAKeyValue xmlns="http://www.w3.org/2000/09/xmldsig#"'
                 '><Modulus>%s</Modulus><Exponent>%s</Exponent></RSAKeyValue>' % \
                     tuple(cb_fields)
         else:
-            pubkey_s = ''
+            pubkey_s = b''
 
         form_s2 = ''.join(nbxmpp.c14n.c14n(el, self._is_buggy_gajim()) for el \
             in form.getChildren())
 
         old_c_s = self.c_s
         content = self.n_o + self.n_s + crypto.encode_mpi(dh_i) + pubkey_s + \
-            self.form_s + form_s2
+            self.form_s.encode('utf-8') + form_s2.encode('utf-8')
 
         mac_s = self.hmac(self.ks_s, content)
 
@@ -632,14 +633,16 @@ class EncryptedStanzaSession(ArchivingStanzaSession):
         if self.status == 'requested-e2e' and self.sas_algs == 'sas28x5':
             # we're alice; check for a retained secret
             # if none exists, prompt the user with the SAS
-            self.sas = crypto.sas_28x5(m_s, self.form_o)
+            self.sas = crypto.sas_28x5(m_s, self.form_o.encode('utf-8'))
 
             if self.sigmai:
                 # FIXME save retained secret?
                 self.check_identity(tuple)
 
-        return (nbxmpp.DataField(name='identity', value=base64.b64encode(id_s)),
-            nbxmpp.DataField(name='mac', value=base64.b64encode(m_s)))
+        return (nbxmpp.DataField(name='identity',
+            value=base64.b64encode(id_s).decode('utf-8')),
+            nbxmpp.DataField(name='mac',
+            value=base64.b64encode(m_s).decode('utf-8')))
 
     def negotiate_e2e(self, sigmai):
         self.negotiated = {}
@@ -695,7 +698,7 @@ class EncryptedStanzaSession(ArchivingStanzaSession):
         self.n_s = crypto.generate_nonce()
 
         x.addChild(node=nbxmpp.DataField(name='my_nonce',
-            value=base64.b64encode(self.n_s), typ='hidden'))
+            value=base64.b64encode(self.n_s).decode('utf-8'), typ='hidden'))
 
         modp_options = [ int(g) for g in gajim.config.get('esession_modp').split(
             ',') ]
@@ -826,7 +829,7 @@ class EncryptedStanzaSession(ArchivingStanzaSession):
             return
         dhhashes = dhhashes_f.getValues()
         self.negotiated['He'] = base64.b64decode(dhhashes[group_order].encode(
-                'utf8'))
+            'utf8'))
 
         bytes = int(self.n / 8)
 
@@ -845,7 +848,7 @@ class EncryptedStanzaSession(ArchivingStanzaSession):
                 'nonce': self.n_o}
 
         for name in to_add:
-            b64ed = base64.b64encode(to_add[name])
+            b64ed = base64.b64encode(to_add[name]).decode('utf-8')
             x.addChild(node=nbxmpp.DataField(name=name, value=b64ed))
 
         self.form_o = ''.join(nbxmpp.c14n.c14n(el, self._is_buggy_gajim()) for \
@@ -935,7 +938,7 @@ class EncryptedStanzaSession(ArchivingStanzaSession):
                 value='urn:xmpp:ssn'))
         result.addChild(node=nbxmpp.DataField(name='accept', value='1'))
         result.addChild(node=nbxmpp.DataField(name='nonce',
-                value=base64.b64encode(self.n_o)))
+                value=base64.b64encode(self.n_o).decode('utf-8')))
 
         self.kc_s, self.km_s, self.ks_s = self.generate_initiator_keys(self.k)
 
@@ -952,11 +955,12 @@ class EncryptedStanzaSession(ArchivingStanzaSession):
                 rshash_size = self.hash_alg().digest_size
                 rshashes.append(crypto.random_bytes(rshash_size))
 
-            rshashes = [base64.b64encode(rshash) for rshash in rshashes]
+            rshashes = [base64.b64encode(rshash).decode('utf-8') for rshash in \
+                rshashes]
             result.addChild(node=nbxmpp.DataField(name='rshashes',
                 value=rshashes))
             result.addChild(node=nbxmpp.DataField(name='dhkeys',
-                value=base64.b64encode(crypto.encode_mpi(e))))
+                value=base64.b64encode(crypto.encode_mpi(e)).decode('utf-8')))
 
             self.form_o = ''.join(nbxmpp.c14n.c14n(el, self._is_buggy_gajim()) \
                 for el in form.getChildren())
@@ -1006,7 +1010,7 @@ class EncryptedStanzaSession(ArchivingStanzaSession):
         self.verify_identity(form, e, False, 'a')
 
         # 4.5.4 generating bob's final session keys
-        srs = ''
+        srs = b''
 
         srses = secrets.secrets().retained_secrets(self.conn.name,
                 self.jid.getStripped())
@@ -1021,7 +1025,7 @@ class EncryptedStanzaSession(ArchivingStanzaSession):
 
         # other shared secret
         # (we're not using one)
-        oss = ''
+        oss = b''
 
         k = crypto.sha256(k + srs + oss)
 
@@ -1030,16 +1034,16 @@ class EncryptedStanzaSession(ArchivingStanzaSession):
 
         # 4.5.5
         if srs:
-            srshash = self.hmac(srs, 'Shared Retained Secret')
+            srshash = self.hmac(srs, b'Shared Retained Secret')
         else:
             srshash = crypto.random_bytes(32)
 
         x.addChild(node=nbxmpp.DataField(name='FORM_TYPE',
             value='urn:xmpp:ssn'))
         x.addChild(node=nbxmpp.DataField(name='nonce', value=base64.b64encode(
-            self.n_o)))
+            self.n_o).decode('utf-8')))
         x.addChild(node=nbxmpp.DataField(name='srshash', value=base64.b64encode(
-            srshash)))
+            srshash).decode('utf-8')))
 
         for datafield in self.make_identity(x, self.d):
             x.addChild(node=datafield)
@@ -1062,7 +1066,7 @@ class EncryptedStanzaSession(ArchivingStanzaSession):
         self.stop_archiving_for_session()
 
     def final_steps_alice(self, form):
-        srs = ''
+        srs = b''
         srses = secrets.secrets().retained_secrets(self.conn.name,
                 self.jid.getStripped())
 
@@ -1073,11 +1077,11 @@ class EncryptedStanzaSession(ArchivingStanzaSession):
 
         for s in srses:
             secret = s[0]
-            if self.hmac(secret, 'Shared Retained Secret') == srshash:
+            if self.hmac(secret, b'Shared Retained Secret') == srshash:
                 srs = secret
                 break
 
-        oss = ''
+        oss = b''
         k = crypto.sha256(self.k + srs + oss)
         del self.k
 
@@ -1109,7 +1113,7 @@ class EncryptedStanzaSession(ArchivingStanzaSession):
         the remote party's identity. Set up callbacks for when the identity has
         been verified
         """
-        new_srs = self.hmac(k, 'New Retained Secret')
+        new_srs = self.hmac(k, b'New Retained Secret')
         self.srs = new_srs
 
         account = self.conn.name
@@ -1155,11 +1159,11 @@ class EncryptedStanzaSession(ArchivingStanzaSession):
             self.es[modp] = e
 
             if sigmai:
-                dhs.append(base64.b64encode(crypto.encode_mpi(e)))
+                dhs.append(base64.b64encode(crypto.encode_mpi(e)).decode('utf-8'))
                 name = 'dhkeys'
             else:
                 He = crypto.sha256(crypto.encode_mpi(e))
-                dhs.append(base64.b64encode(He))
+                dhs.append(base64.b64encode(He).decode('utf-8'))
                 name = 'dhhashes'
 
         return nbxmpp.DataField(name=name, typ='hidden', value=dhs)

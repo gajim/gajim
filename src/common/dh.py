@@ -224,6 +224,7 @@ def hex_to_decimal(stripee):
     if not stripee:
         return None
 
-    return int(stripee.translate(all_ascii, string.whitespace), 16)
+    return int(stripee.translate(all_ascii).translate(str.maketrans("", "",
+        string.whitespace)), 16)
 
-primes = map(hex_to_decimal, hex_primes)
+primes = list(map(hex_to_decimal, hex_primes))
