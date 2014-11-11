@@ -183,7 +183,7 @@ class VcardWindow:
         """
         if event.button == 3: # right click
             menu = Gtk.Menu()
-            menuitem = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_SAVE_AS, None)
+            menuitem = Gtk.MenuItem.new_with_mnemonic(_('Save _As'))
             menuitem.connect('activate',
                     gtkgui_helpers.on_avatar_save_as_menuitem_activate,
                     self.contact.jid, self.contact.get_shown_name())
@@ -541,7 +541,7 @@ class ZeroconfVcardWindow:
         """
         if event.button == 3: # right click
             menu = Gtk.Menu()
-            menuitem = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_SAVE_AS, None)
+            menuitem = Gtk.MenuItem.new_with_mnemonic(_('Save _As'))
             menuitem.connect('activate',
                     gtkgui_helpers.on_avatar_save_as_menuitem_activate,
                     self.contact.jid, self.contact.get_shown_name())

@@ -966,9 +966,6 @@ class HtmlTextView(Gtk.TextView):
         else: # It's a mail or a JID
             # load muc icon
             join_group_chat_menuitem = xml.get_object('join_group_chat_menuitem')
-            muc_icon = gtkgui_helpers.load_icon('muc_active')
-            if muc_icon:
-                join_group_chat_menuitem.set_image(muc_icon)
 
             text = text.lower()
             if text.startswith('xmpp:'):

@@ -1,87 +1,84 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.3 -->
 <interface>
-  <requires lib="gtk+" version="2.16"/>
-  <!-- interface-naming-policy toplevel-contextual -->
+  <requires lib="gtk+" version="3.0"/>
   <object class="GtkMenu" id="account_context_menu">
+    <property name="can_focus">False</property>
     <child>
-      <object class="GtkImageMenuItem" id="status_menuitem">
-        <property name="label" translatable="yes">_Status</property>
+      <object class="GtkMenuItem" id="status_menuitem">
         <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">_Status</property>
         <property name="use_underline">True</property>
-        <property name="image">image1</property>
-        <property name="use_stock">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkImageMenuItem" id="pep_menuitem">
-        <property name="label" translatable="yes">_Personal Events</property>
+      <object class="GtkMenuItem" id="pep_menuitem">
         <property name="visible">True</property>
+        <property name="can_focus">False</property>
         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+        <property name="label" translatable="yes">_Personal Events</property>
         <property name="use_underline">True</property>
-        <property name="image">image2</property>
-        <property name="use_stock">False</property>
       </object>
     </child>
     <child>
       <object class="GtkSeparatorMenuItem" id="separatormenuitem1">
         <property name="visible">True</property>
+        <property name="can_focus">False</property>
         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
       </object>
     </child>
     <child>
-      <object class="GtkImageMenuItem" id="start_chat_menuitem">
+      <object class="GtkMenuItem" id="start_chat_menuitem">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
         <property name="label" translatable="yes">_Start Chat...</property>
-        <property name="visible">True</property>
-        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
         <property name="use_underline">True</property>
-        <property name="image">image3</property>
-        <property name="use_stock">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkImageMenuItem" id="join_group_chat_menuitem">
-        <property name="label" translatable="yes">Join _Group Chat</property>
+      <object class="GtkMenuItem" id="join_group_chat_menuitem">
         <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Join _Group Chat</property>
         <property name="use_underline">True</property>
-        <property name="image">image4</property>
-        <property name="use_stock">False</property>
       </object>
     </child>
     <child>
       <object class="GtkSeparatorMenuItem" id="seperator">
         <property name="visible">True</property>
+        <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkImageMenuItem" id="add_contact_menuitem">
+      <object class="GtkMenuItem" id="add_contact_menuitem">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
         <property name="label" translatable="yes">_Add Contact...</property>
-        <property name="visible">True</property>
         <property name="use_underline">True</property>
-        <property name="image">image5</property>
-        <property name="use_stock">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkImageMenuItem" id="service_discovery_menuitem">
+      <object class="GtkMenuItem" id="service_discovery_menuitem">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
         <property name="label" translatable="yes">_Discover Services</property>
-        <property name="visible">True</property>
         <property name="use_underline">True</property>
-        <property name="image">image6</property>
-        <property name="use_stock">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkImageMenuItem" id="execute_command_menuitem">
-        <property name="label" translatable="yes">_Execute Command...</property>
+      <object class="GtkMenuItem" id="execute_command_menuitem">
         <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">_Execute Command...</property>
         <property name="use_underline">True</property>
-        <property name="image">image7</property>
-        <property name="use_stock">False</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="open_gmail_inbox_menuitem">
         <property name="visible">True</property>
+        <property name="can_focus">False</property>
         <property name="label" translatable="yes">_Open Gmail Inbox</property>
         <property name="use_underline">True</property>
       </object>
@@ -89,56 +86,16 @@
     <child>
       <object class="GtkSeparatorMenuItem" id="seperator1">
         <property name="visible">True</property>
+        <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkImageMenuItem" id="edit_account_menuitem">
-        <property name="label" translatable="yes">_Modify Account...</property>
+      <object class="GtkMenuItem" id="edit_account_menuitem">
         <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">_Modify Account...</property>
         <property name="use_underline">True</property>
-        <property name="image">image8</property>
-        <property name="use_stock">False</property>
       </object>
     </child>
-  </object>
-  <object class="GtkImage" id="image1">
-    <property name="visible">True</property>
-    <property name="stock">gtk-network</property>
-    <property name="icon-size">1</property>
-  </object>
-  <object class="GtkImage" id="image2">
-    <property name="visible">True</property>
-    <property name="stock">gtk-home</property>
-    <property name="icon-size">1</property>
-  </object>
-  <object class="GtkImage" id="image3">
-    <property name="visible">True</property>
-    <property name="stock">gtk-jump-to</property>
-    <property name="icon-size">1</property>
-  </object>
-  <object class="GtkImage" id="image4">
-    <property name="visible">True</property>
-    <property name="stock">gtk-connect</property>
-    <property name="icon-size">1</property>
-  </object>
-  <object class="GtkImage" id="image5">
-    <property name="visible">True</property>
-    <property name="stock">gtk-add</property>
-    <property name="icon-size">1</property>
-  </object>
-  <object class="GtkImage" id="image6">
-    <property name="visible">True</property>
-    <property name="stock">gtk-find</property>
-    <property name="icon-size">1</property>
-  </object>
-  <object class="GtkImage" id="image7">
-    <property name="visible">True</property>
-    <property name="stock">gtk-execute</property>
-    <property name="icon-size">1</property>
-  </object>
-  <object class="GtkImage" id="image8">
-    <property name="visible">True</property>
-    <property name="stock">gtk-preferences</property>
-    <property name="icon-size">1</property>
   </object>
 </interface>

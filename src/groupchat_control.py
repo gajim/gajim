@@ -833,15 +833,6 @@ class GroupchatControl(ChatControlBase):
         separatormenuitem2 = xml.get_object('separatormenuitem2')
         request_voice_separator = xml.get_object('request_voice_separator')
 
-        if gtkgui_helpers.gtk_icon_theme.has_icon('bookmark-new'):
-            img = Gtk.Image()
-            img.set_from_icon_name('bookmark-new', Gtk.IconSize.MENU)
-            bookmark_room_menuitem.set_image(img)
-        if gtkgui_helpers.gtk_icon_theme.has_icon('document-open-recent'):
-            img = Gtk.Image()
-            img.set_from_icon_name('document-open-recent', Gtk.IconSize.MENU)
-            history_menuitem.set_image(img)
-
         if hide_buttonbar_items:
             change_nick_menuitem.hide()
             change_subject_menuitem.hide()
@@ -2543,9 +2534,6 @@ class GroupchatControl(ChatControlBase):
         self.handlers[id_] = item
 
         item = xml.get_object('invite_menuitem')
-        muc_icon = gtkgui_helpers.load_icon('muc_active')
-        if muc_icon:
-            item.set_image(muc_icon)
         if jid and c.name != self.nick:
             bookmarked = False
             contact = gajim.contacts.get_contact(self.account, jid, c.resource)
@@ -2561,10 +2549,6 @@ class GroupchatControl(ChatControlBase):
         self.handlers[id_] = item
 
         item = xml.get_object('history_menuitem')
-        if gtkgui_helpers.gtk_icon_theme.has_icon('document-open-recent'):
-            img = Gtk.Image()
-            img.set_from_icon_name('document-open-recent', Gtk.IconSize.MENU)
-            item.set_image(img)
         id_ = item.connect('activate', self.on_history, nick)
         self.handlers[id_] = item
 
@@ -2595,11 +2579,6 @@ class GroupchatControl(ChatControlBase):
         self.handlers[id_] = item
 
         item = xml.get_object('send_file_menuitem')
-        # add a special img for send file menuitem
-        pixbuf = gtkgui_helpers.get_icon_pixmap('document-send', quiet=True)
-        img = Gtk.Image.new_from_pixbuf(pixbuf)
-        item.set_image(img)
-
         if not c.resource:
             item.set_sensitive(False)
         else:

@@ -223,23 +223,17 @@ class StatusIcon:
         # We need our own set of status icons, let's make 'em!
         iconset = gajim.config.get('iconset')
         path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
-        state_images = gtkgui_helpers.load_iconset(path)
-
-        if 'muc_active' in state_images:
-            join_gc_menuitem.set_image(state_images['muc_active'])
 
         for show in ('online', 'chat', 'away', 'xa', 'dnd', 'invisible'):
             uf_show = helpers.get_uf_show(show, use_mnemonic=True)
-            item = Gtk.ImageMenuItem.new_with_mnemonic(uf_show)
-            item.set_image(state_images[show])
+            item = Gtk.MenuItem.new_with_mnemonic(uf_show)
             sub_menu.append(item)
             item.connect('activate', self.on_show_menuitem_activate, show)
 
         item = Gtk.SeparatorMenuItem.new()
         sub_menu.append(item)
 
-        item = Gtk.ImageMenuItem.new_with_mnemonic(_('_Change Status Message...'))
-        gtkgui_helpers.add_image_to_menuitem(item, 'gajim-kbd_input')
+        item = Gtk.MenuItem.new_with_mnemonic(_('_Change Status Message...'))
         sub_menu.append(item)
         item.connect('activate', self.on_change_status_message_activate)
 
@@ -253,8 +247,7 @@ class StatusIcon:
         sub_menu.append(item)
 
         uf_show = helpers.get_uf_show('offline', use_mnemonic=True)
-        item = Gtk.ImageMenuItem.new_with_mnemonic(uf_show)
-        item.set_image(state_images['offline'])
+        item = Gtk.MenuItem.new_with_mnemonic(uf_show)
         sub_menu.append(item)
         item.connect('activate', self.on_show_menuitem_activate, 'offline')
 
@@ -340,11 +333,9 @@ class StatusIcon:
 
         newitem = Gtk.SeparatorMenuItem.new() # separator
         gc_sub_menu.append(newitem)
-        newitem = Gtk.ImageMenuItem.new_with_mnemonic(_('_Manage Bookmarks...'))
-        img = Gtk.Image.new_from_stock(Gtk.STOCK_PREFERENCES, Gtk.IconSize.MENU)
-        newitem.set_image(img)
+        newitem = Gtk.MenuItem.new_with_mnemonic(_('_Manage Bookmarks...'))
         newitem.connect('activate',
-                gajim.interface.roster.on_manage_bookmarks_menuitem_activate)
+            gajim.interface.roster.on_manage_bookmarks_menuitem_activate)
         gc_sub_menu.append(newitem)
         if connected_accounts_with_private_storage == 0:
             newitem.set_sensitive(False)

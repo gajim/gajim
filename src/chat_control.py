@@ -550,7 +550,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             spell.set_language(lang)
             widget.set_active(True)
 
-        item = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_UNDO, None)
+        item = Gtk.MenuItem.new_with_mnemonic(_('_Undo'))
         menu.prepend(item)
         id_ = item.connect('activate', self.msg_textview.undo)
         self.handlers[id_] = item
@@ -558,7 +558,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         item = Gtk.SeparatorMenuItem.new()
         menu.prepend(item)
 
-        item = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_CLEAR, None)
+        item = Gtk.MenuItem.new_with_mnemonic(_('_Clear'))
         menu.prepend(item)
         id_ = item.connect('activate', self.msg_textview.clear)
         self.handlers[id_] = item
@@ -1095,31 +1095,25 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         item = Gtk.SeparatorMenuItem.new() # separator
         menu.append(item)
 
-        item = Gtk.ImageMenuItem.new_with_label(_('Color'))
-        icon = Gtk.Image.new_from_stock(Gtk.STOCK_SELECT_COLOR, Gtk.IconSize.MENU)
-        item.set_image(icon)
+        item = Gtk.MenuItem.new_with_label(_('Color'))
         item.connect('activate', self.on_color_menuitem_activale)
         menu.append(item)
 
-        item = Gtk.ImageMenuItem.new_with_label(_('Font'))
-        icon = Gtk.Image.new_from_stock(Gtk.STOCK_SELECT_FONT, Gtk.IconSize.MENU)
-        item.set_image(icon)
+        item = Gtk.MenuItem.new_with_label(_('Font'))
         item.connect('activate', self.on_font_menuitem_activale)
         menu.append(item)
 
         item = Gtk.SeparatorMenuItem.new() # separator
         menu.append(item)
 
-        item = Gtk.ImageMenuItem.new_with_label(_('Clear formating'))
-        icon = Gtk.Image.new_from_stock(Gtk.STOCK_CLEAR, Gtk.IconSize.MENU)
-        item.set_image(icon)
+        item = Gtk.MenuItem.new_with_label(_('Clear formating'))
         item.connect('activate', self.msg_textview.clear_tags)
         menu.append(item)
 
         menu.show_all()
         menu.attach_to_widget(widget, None)
         gtkgui_helpers.popup_emoticons_under_button(menu, widget,
-                self.parent_win)
+            self.parent_win)
 
     def on_color_menuitem_activale(self, widget):
         color_dialog = Gtk.ColorChooserDialog(None, self.parent_win.window)
@@ -2046,7 +2040,7 @@ class ChatControl(ChatControlBase):
         """
         if event.button == 3: # right click
             menu = Gtk.Menu()
-            menuitem = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_SAVE_AS, None)
+            menuitem = Gtk.MenuItem.new_with_mnemonic(_('Save _As'))
             id_ = menuitem.connect('activate',
                 gtkgui_helpers.on_avatar_save_as_menuitem_activate,
                 self.contact.jid, self.contact.get_shown_name())

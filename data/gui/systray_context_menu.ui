@@ -1,128 +1,96 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.3 -->
 <interface>
-  <requires lib="gtk+" version="2.16"/>
-  <!-- interface-naming-policy toplevel-contextual -->
+  <requires lib="gtk+" version="3.0"/>
+  <object class="GtkAccelGroup" id="accelgroup1"/>
   <object class="GtkMenu" id="systray_context_menu">
+    <property name="can_focus">False</property>
     <child>
-      <object class="GtkImageMenuItem" id="status_menu">
+      <object class="GtkMenuItem" id="status_menu">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
         <property name="label" translatable="yes">Sta_tus</property>
-        <property name="visible">True</property>
         <property name="use_underline">True</property>
-        <property name="image">image1</property>
-        <property name="use_stock">False</property>
-        <property name="accel_group">accelgroup1</property>
       </object>
     </child>
     <child>
-      <object class="GtkImageMenuItem" id="chat_with_menuitem">
+      <object class="GtkMenuItem" id="chat_with_menuitem">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
         <property name="label" translatable="yes">_Start Chat...</property>
-        <property name="visible">True</property>
         <property name="use_underline">True</property>
-        <property name="image">image2</property>
-        <property name="use_stock">False</property>
-        <property name="accel_group">accelgroup1</property>
       </object>
     </child>
     <child>
-      <object class="GtkImageMenuItem" id="join_gc_menuitem">
+      <object class="GtkMenuItem" id="join_gc_menuitem">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
         <property name="label" translatable="yes">Join _Group Chat</property>
-        <property name="visible">True</property>
         <property name="use_underline">True</property>
-        <property name="image">image3</property>
-        <property name="use_stock">False</property>
-        <property name="accel_group">accelgroup1</property>
       </object>
     </child>
     <child>
-      <object class="GtkImageMenuItem" id="single_message_menuitem">
-        <property name="label" translatable="yes">Send Single _Message...</property>
+      <object class="GtkMenuItem" id="single_message_menuitem">
         <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Send Single _Message...</property>
         <property name="use_underline">True</property>
-        <property name="image">image4</property>
-        <property name="use_stock">False</property>
-        <property name="accel_group">accelgroup1</property>
       </object>
     </child>
     <child>
       <object class="GtkSeparatorMenuItem" id="separator12">
         <property name="visible">True</property>
+        <property name="can_focus">False</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="show_all_events_menuitem">
         <property name="visible">True</property>
+        <property name="can_focus">False</property>
         <property name="label" translatable="yes">Show All Pending _Events</property>
         <property name="use_underline">True</property>
-        <signal name="activate" handler="on_show_all_events_menuitem_activate"/>
+        <signal name="activate" handler="on_show_all_events_menuitem_activate" swapped="no"/>
       </object>
     </child>
     <child>
       <object class="GtkCheckMenuItem" id="sounds_mute_menuitem">
         <property name="visible">True</property>
+        <property name="can_focus">False</property>
         <property name="label" translatable="yes">Mute Sounds</property>
         <property name="use_underline">True</property>
-        <signal name="activate" handler="on_sounds_mute_menuitem_activate"/>
+        <signal name="activate" handler="on_sounds_mute_menuitem_activate" swapped="no"/>
       </object>
     </child>
     <child>
-      <object class="GtkImageMenuItem" id="show_roster_menuitem">
+      <object class="GtkMenuItem" id="show_roster_menuitem">
         <property name="visible">True</property>
+        <property name="can_focus">False</property>
         <property name="use_underline">True</property>
-        <property name="image">image5</property>
-        <property name="use_stock">False</property>
-        <property name="accel_group">accelgroup1</property>
       </object>
     </child>
     <child>
-      <object class="GtkImageMenuItem" id="preferences_menuitem">
-        <property name="label">gtk-preferences</property>
+      <object class="GtkMenuItem" id="preferences_menuitem">
         <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label">_Preferences</property>
         <property name="use_underline">True</property>
-        <property name="use_stock">True</property>
-        <property name="accel_group">accelgroup1</property>
-        <signal name="activate" handler="on_preferences_menuitem_activate"/>
+        <signal name="activate" handler="on_preferences_menuitem_activate" swapped="no"/>
       </object>
     </child>
     <child>
       <object class="GtkSeparatorMenuItem" id="separator">
         <property name="visible">True</property>
+        <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkImageMenuItem" id="quit_menuitem">
-        <property name="label">gtk-quit</property>
+      <object class="GtkMenuItem" id="quit_menuitem">
         <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label">_Quit</property>
         <property name="use_underline">True</property>
-        <property name="use_stock">True</property>
-        <property name="accel_group">accelgroup1</property>
-        <signal name="activate" handler="on_quit_menuitem_activate"/>
+        <signal name="activate" handler="on_quit_menuitem_activate" swapped="no"/>
       </object>
     </child>
-  </object>
-  <object class="GtkAccelGroup" id="accelgroup1"/>
-  <object class="GtkImage" id="image1">
-    <property name="visible">True</property>
-    <property name="stock">gtk-network</property>
-    <property name="icon-size">1</property>
-  </object>
-  <object class="GtkImage" id="image2">
-    <property name="visible">True</property>
-    <property name="stock">gtk-jump-to</property>
-    <property name="icon-size">1</property>
-  </object>
-  <object class="GtkImage" id="image3">
-    <property name="visible">True</property>
-    <property name="stock">gtk-connect</property>
-    <property name="icon-size">1</property>
-  </object>
-  <object class="GtkImage" id="image4">
-    <property name="visible">True</property>
-    <property name="stock">gtk-new</property>
-    <property name="icon-size">1</property>
-  </object>
-  <object class="GtkImage" id="image5">
-    <property name="visible">True</property>
-    <property name="stock">gtk-home</property>
-    <property name="icon-size">1</property>
   </object>
 </interface>

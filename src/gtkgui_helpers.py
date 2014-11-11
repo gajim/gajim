@@ -83,14 +83,11 @@ from common import helpers
 screen_w = Gdk.Screen.width()
 screen_h = Gdk.Screen.height()
 
-def add_image_to_menuitem(menuitem, icon_name):
+def add_image_to_button(button, icon_name):
     img = Gtk.Image()
     path_img = get_icon_path(icon_name)
     img.set_from_file(path_img)
-    menuitem.set_image(img)
-
-def add_image_to_button(button, icon_name):
-    add_image_to_menuitem(button, icon_name)
+    button.set_image(img)
 
 GUI_DIR = os.path.join(gajim.DATA_DIR, 'gui')
 def get_gtk_builder(file_name, widget=None):

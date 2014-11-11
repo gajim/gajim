@@ -211,14 +211,13 @@ class ProfileWindow:
 
             if pixbuf not in (None, 'ask'):
                 nick = gajim.config.get_per('accounts', self.account, 'name')
-                menuitem = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_SAVE_AS,
-                    None)
+                menuitem = Gtk.MenuItem.new_with_mnemonic(_('Save _As'))
                 menuitem.connect('activate',
                     gtkgui_helpers.on_avatar_save_as_menuitem_activate,
                     self.jid, nick)
                 menu.append(menuitem)
             # show clear
-            menuitem = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_CLEAR, None)
+            menuitem = Gtk.MenuItem.new_with_mnemonic(_('_Clear'))
             menuitem.connect('activate', self.on_clear_button_clicked)
             menu.append(menuitem)
             menu.connect('selection-done', lambda w:w.destroy())

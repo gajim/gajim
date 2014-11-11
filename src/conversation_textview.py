@@ -297,7 +297,7 @@ class ConversationTextview(GObject.GObject):
         tag.set_property('foreground', color)
 
         self.tv.create_tags()
-        
+
         tag = buffer_.create_tag('bold')
         tag.set_property('weight', Pango.Weight.BOLD)
 
@@ -762,7 +762,7 @@ class ConversationTextview(GObject.GObject):
             menu.prepend(item)
             separator_menuitem_was_added = True
 
-            item = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_CLEAR, None)
+            item = Gtk.MenuItem.new_with_mnemonic(_('_Clear'))
             menu.prepend(item)
             id_ = item.connect('activate', self.clear)
             self.handlers[id_] = item
@@ -931,9 +931,6 @@ class ConversationTextview(GObject.GObject):
         else: # It's a mail or a JID
             # load muc icon
             join_group_chat_menuitem = xml.get_object('join_group_chat_menuitem')
-            muc_icon = gtkgui_helpers.load_icon('muc_active')
-            if muc_icon:
-                join_group_chat_menuitem.set_image(muc_icon)
 
             text = text.lower()
             if text.startswith('xmpp:'):

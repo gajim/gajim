@@ -42,13 +42,8 @@ def build_resources_submenu(contacts, account, action, room_jid=None,
         iconset = gajim.config.DEFAULT_ICONSET
     path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
     for c in contacts:
-        # icon MUST be different instance for every item
-        state_images = gtkgui_helpers.load_iconset(path)
-        item = Gtk.ImageMenuItem.new_with_label(
+        item = Gtk.MenuItem.new_with_label(
             '%s (%s)' % (c.resource, str(c.priority)))
-        icon_name = helpers.get_icon_name_to_show(c, account)
-        icon = state_images[icon_name]
-        item.set_image(icon)
         sub_menu.append(item)
 
         if action == roster.on_invite_to_room:
@@ -97,10 +92,8 @@ show_bookmarked=False, force_resource=False):
         return
     invite_to_submenu = Gtk.Menu()
     invite_menuitem.set_submenu(invite_to_submenu)
-    invite_to_new_room_menuitem = Gtk.ImageMenuItem.new_with_mnemonic(_(
+    invite_to_new_room_menuitem = Gtk.MenuItem.new_with_mnemonic(_(
         '_New Group Chat'))
-    icon = Gtk.Image.new_from_stock(Gtk.STOCK_NEW, Gtk.IconSize.MENU)
-    invite_to_new_room_menuitem.set_image(icon)
     if len(contact_list) > 1: # several resources
         invite_to_new_room_menuitem.set_submenu(build_resources_submenu(
             contact_list, account, roster.on_invite_to_new_room, cap=NS_MUC))
@@ -155,9 +148,7 @@ show_bookmarked=False, force_resource=False):
         item = Gtk.SeparatorMenuItem.new() # separator
         invite_to_submenu.append(item)
         for (room_jid, account) in rooms:
-            menuitem = Gtk.ImageMenuItem.new_with_label(room_jid.split('@')[0])
-            muc_active_icon = gtkgui_helpers.load_icon('muc_active')
-            menuitem.set_image(muc_active_icon)
+            menuitem = Gtk.MenuItem.new_with_label(room_jid.split('@')[0])
             if len(contact_list) > 1: # several resources
                 menuitem.set_submenu(build_resources_submenu(
                     contact_list, account, roster.on_invite_to_room, room_jid,
@@ -191,9 +182,7 @@ show_bookmarked=False, force_resource=False):
     item = Gtk.SeparatorMenuItem.new() # separator
     invite_to_submenu.append(item)
     for (room_jid, account) in rooms2:
-        menuitem = Gtk.ImageMenuItem.new_with_label(room_jid.split('@')[0])
-        muc_inactive_icon = gtkgui_helpers.load_icon('muc_inactive')
-        menuitem.set_image(muc_inactive_icon)
+        menuitem = Gtk.MenuItem.new_with_label(room_jid.split('@')[0])
         if len(contact_list) > 1: # several resources
             menuitem.set_submenu(build_resources_submenu(
                 contact_list, account, roster.on_invite_to_room, room_jid,
@@ -259,19 +248,6 @@ control=None, gc_contact=None, is_anonymous=True):
 
     items_to_hide = []
 
-    # add a special img for send file menuitem
-    pixbuf = gtkgui_helpers.get_icon_pixmap('document-send', quiet=True)
-    img = Gtk.Image.new_from_pixbuf(pixbuf)
-    send_file_menuitem.set_image(img)
-
-    if not our_jid:
-        # add a special img for rename menuitem
-        gtkgui_helpers.add_image_to_menuitem(rename_menuitem, 'gajim-kbd_input')
-
-    muc_icon = gtkgui_helpers.load_icon('muc_active')
-    if muc_icon:
-        convert_to_gc_menuitem.set_image(muc_icon)
-
     contacts = gajim.contacts.get_contacts(account, jid)
     if len(contacts) > 1 and use_multiple_contacts: # several resources
         start_chat_menuitem.set_submenu(build_resources_submenu(contacts,
@@ -304,16 +280,12 @@ control=None, gc_contact=None, is_anonymous=True):
             execute_command_menuitem.set_sensitive(False)
 
     rename_menuitem.connect('activate', roster.on_rename, 'contact', jid,
-            account)
+        account)
     history_menuitem.connect('activate', roster.on_history, contact, account)
-    if gtkgui_helpers.gtk_icon_theme.has_icon('document-open-recent'):
-        img = Gtk.Image()
-        img.set_from_icon_name('document-open-recent', Gtk.IconSize.MENU)
-        history_menuitem.set_image(img)
 
     if control:
         convert_to_gc_menuitem.connect('activate',
-                control._on_convert_to_gc_menuitem_activate)
+            control._on_convert_to_gc_menuitem_activate)
     else:
         items_to_hide.append(convert_to_gc_menuitem)
 
@@ -429,19 +401,7 @@ control=None, gc_contact=None, is_anonymous=True):
         # Transport contact, send custom status unavailable
         send_custom_status_menuitem.set_sensitive(False)
     elif blocked:
-        send_custom_status_menuitem.set_image(gtkgui_helpers.load_icon('offline'))
         send_custom_status_menuitem.set_sensitive(False)
-    elif account in gajim.interface.status_sent_to_users and \
-    jid in gajim.interface.status_sent_to_users[account]:
-        send_custom_status_menuitem.set_image(gtkgui_helpers.load_icon(
-                gajim.interface.status_sent_to_users[account][jid]))
-    else:
-        icon = Gtk.Image.new_from_stock(Gtk.STOCK_NETWORK, Gtk.IconSize.MENU)
-        send_custom_status_menuitem.set_image(icon)
-
-    muc_icon = gtkgui_helpers.load_icon('muc_active')
-    if muc_icon:
-        invite_menuitem.set_image(muc_icon)
 
     if gc_contact:
         if not gc_contact.jid:
@@ -469,24 +429,18 @@ control=None, gc_contact=None, is_anonymous=True):
     # One or several resource, we do the same for send_custom_status
     status_menuitems = Gtk.Menu()
     send_custom_status_menuitem.set_submenu(status_menuitems)
-    iconset = gajim.config.get('iconset')
-    path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
     for s in ('online', 'chat', 'away', 'xa', 'dnd', 'offline'):
         # icon MUST be different instance for every item
-        state_images = gtkgui_helpers.load_iconset(path)
-        status_menuitem = Gtk.ImageMenuItem.new_with_label(
-            helpers.get_uf_show(s))
+        status_menuitem = Gtk.MenuItem.new_with_label(helpers.get_uf_show(s))
         status_menuitem.connect('activate', roster.on_send_custom_status,
                                 [(contact, account)], s)
-        icon = state_images[s]
-        status_menuitem.set_image(icon)
         status_menuitems.append(status_menuitem)
 
     send_single_message_menuitem.connect('activate',
-            roster.on_send_single_message_menuitem_activate, account, contact)
+        roster.on_send_single_message_menuitem_activate, account, contact)
 
     remove_from_roster_menuitem.connect('activate', roster.on_req_usub,
-            [(contact, account)])
+        [(contact, account)])
     information_menuitem.connect('activate', roster.on_info, contact, account)
 
     if _('Not in Roster') not in contact.get_shown_groups():
@@ -584,9 +538,7 @@ def get_transport_menu(contact, account):
     menu = Gtk.Menu()
 
     # Send single message
-    item = Gtk.ImageMenuItem.new_with_mnemonic(_('Send Single _Message...'))
-    icon = Gtk.Image.new_from_stock(Gtk.STOCK_NEW, Gtk.IconSize.MENU)
-    item.set_image(icon)
+    item = Gtk.MenuItem.new_with_mnemonic(_('Send Single _Message...'))
     item.connect('activate', roster.on_send_single_message_menuitem_activate,
         account, contact)
     menu.append(item)
@@ -598,35 +550,18 @@ def get_transport_menu(contact, account):
         blocked = True
 
     # Send Custom Status
-    send_custom_status_menuitem = Gtk.ImageMenuItem.new_with_mnemonic(
+    send_custom_status_menuitem = Gtk.MenuItem.new_with_mnemonic(
         _('Send Cus_tom Status'))
-    # add a special img for this menuitem
     if blocked:
-        send_custom_status_menuitem.set_image(gtkgui_helpers.load_icon(
-            'offline'))
         send_custom_status_menuitem.set_sensitive(False)
     else:
-        if account in gajim.interface.status_sent_to_users and \
-        jid in gajim.interface.status_sent_to_users[account]:
-            send_custom_status_menuitem.set_image(gtkgui_helpers.load_icon(
-                gajim.interface.status_sent_to_users[account][jid]))
-        else:
-            icon = Gtk.Image.new_from_stock(Gtk.STOCK_NETWORK,
-                Gtk.IconSize.MENU)
-            send_custom_status_menuitem.set_image(icon)
         status_menuitems = Gtk.Menu()
         send_custom_status_menuitem.set_submenu(status_menuitems)
-        iconset = gajim.config.get('iconset')
-        path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
         for s in ('online', 'chat', 'away', 'xa', 'dnd', 'offline'):
-            # icon MUST be different instance for every item
-            state_images = gtkgui_helpers.load_iconset(path)
-            status_menuitem = Gtk.ImageMenuItem.new_with_label(
-                helpers.get_uf_show(s))
+            status_menuitem = Gtk.MenuItem.new_with_label(helpers.get_uf_show(
+                s))
             status_menuitem.connect('activate', roster.on_send_custom_status,
                 [(contact, account)], s)
-            icon = state_images[s]
-            status_menuitem.set_image(icon)
             status_menuitems.append(status_menuitem)
     menu.append(send_custom_status_menuitem)
     if gajim.account_is_disconnected(account):
@@ -636,9 +571,7 @@ def get_transport_menu(contact, account):
     menu.append(item)
 
     # Execute Command
-    item = Gtk.ImageMenuItem.new_with_mnemonic(_('E_xecute Command...'))
-    icon = Gtk.Image.new_from_stock(Gtk.STOCK_EXECUTE, Gtk.IconSize.MENU)
-    item.set_image(icon)
+    item = Gtk.MenuItem.new_with_mnemonic(_('E_xecute Command...'))
     menu.append(item)
     item.connect('activate', roster.on_execute_command, contact, account,
         contact.resource)
@@ -646,26 +579,20 @@ def get_transport_menu(contact, account):
         item.set_sensitive(False)
 
     # Manage Transport submenu
-    item = Gtk.ImageMenuItem.new_with_mnemonic(_('_Manage Transport'))
-    icon = Gtk.Image.new_from_stock(Gtk.STOCK_PROPERTIES, Gtk.IconSize.MENU)
-    item.set_image(icon)
+    item = Gtk.MenuItem.new_with_mnemonic(_('_Manage Transport'))
     manage_transport_submenu = Gtk.Menu()
     item.set_submenu(manage_transport_submenu)
     menu.append(item)
 
     # Modify Transport
-    item = Gtk.ImageMenuItem.new_with_mnemonic(_('_Modify Transport'))
-    icon = Gtk.Image.new_from_stock(Gtk.STOCK_PREFERENCES, Gtk.IconSize.MENU)
-    item.set_image(icon)
+    item = Gtk.MenuItem.new_with_mnemonic(_('_Modify Transport'))
     manage_transport_submenu.append(item)
     item.connect('activate', roster.on_edit_agent, contact, account)
     if gajim.account_is_disconnected(account):
         item.set_sensitive(False)
 
     # Rename
-    item = Gtk.ImageMenuItem.new_with_mnemonic(_('_Rename...'))
-    # add a special img for rename menuitem
-    gtkgui_helpers.add_image_to_menuitem(item, 'gajim-kbd_input')
+    item = Gtk.MenuItem.new_with_mnemonic(_('_Rename...'))
     manage_transport_submenu.append(item)
     item.connect('activate', roster.on_rename, 'agent', jid, account)
     if gajim.account_is_disconnected(account):
@@ -676,22 +603,18 @@ def get_transport_menu(contact, account):
 
     # Block
     if blocked:
-        item = Gtk.ImageMenuItem.new_with_mnemonic(_('_Unblock'))
+        item = Gtk.MenuItem.new_with_mnemonic(_('_Unblock'))
         item.connect('activate', roster.on_unblock, [(contact, account)])
     else:
-        item = Gtk.ImageMenuItem.new_with_mnemonic(_('_Block'))
+        item = Gtk.MenuItem.new_with_mnemonic(_('_Block'))
         item.connect('activate', roster.on_block, [(contact, account)])
 
-    icon = Gtk.Image.new_from_stock(Gtk.STOCK_STOP, Gtk.IconSize.MENU)
-    item.set_image(icon)
     manage_transport_submenu.append(item)
     if gajim.account_is_disconnected(account):
         item.set_sensitive(False)
 
     # Remove
-    item = Gtk.ImageMenuItem.new_with_mnemonic(_('Remo_ve'))
-    icon = Gtk.Image.new_from_stock(Gtk.STOCK_REMOVE, Gtk.IconSize.MENU)
-    item.set_image(icon)
+    item = Gtk.MenuItem.new_with_mnemonic(_('Remo_ve'))
     manage_transport_submenu.append(item)
     item.connect('activate', roster.on_remove_agent, [(contact, account)])
     if gajim.account_is_disconnected(account):
@@ -701,10 +624,7 @@ def get_transport_menu(contact, account):
     menu.append(item)
 
     # Information
-    information_menuitem = Gtk.ImageMenuItem.new_with_mnemonic(
-        _('_Information'))
-    icon = Gtk.Image.new_from_stock(Gtk.STOCK_INFO, Gtk.IconSize.MENU)
-    information_menuitem.set_image(icon)
+    information_menuitem = Gtk.MenuItem.new_with_mnemonic(_('_Information'))
     menu.append(information_menuitem)
     information_menuitem.connect('activate', roster.on_info, contact, account)
     if gajim.account_is_disconnected(account):

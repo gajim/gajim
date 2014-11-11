@@ -1,91 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.3 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.0"/>
   <object class="GtkAccelGroup" id="accelgroup1"/>
-  <object class="GtkImage" id="image10">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-help</property>
-    <property name="icon-size">1</property>
-  </object>
-  <object class="GtkImage" id="image11">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-dialog-question</property>
-    <property name="icon-size">1</property>
-  </object>
-  <object class="GtkImage" id="image12">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-properties</property>
-    <property name="icon-size">1</property>
-  </object>
-  <object class="GtkImage" id="image9">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-justify-fill</property>
-    <property name="icon-size">1</property>
-  </object>
-  <object class="GtkImage" id="image1">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-jump-to</property>
-    <property name="icon-size">1</property>
-  </object>
-  <object class="GtkImage" id="image13">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-disconnect</property>
-    <property name="icon-size">1</property>
-  </object>
-  <object class="GtkImage" id="image14">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-info</property>
-    <property name="icon-size">1</property>
-  </object>
-  <object class="GtkImage" id="image2">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-new</property>
-    <property name="icon-size">1</property>
-  </object>
-  <object class="GtkImage" id="image3">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-connect</property>
-    <property name="icon-size">1</property>
-  </object>
-  <object class="GtkImage" id="image4">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-add</property>
-    <property name="icon-size">1</property>
-  </object>
-  <object class="GtkImage" id="image5">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-find</property>
-    <property name="icon-size">1</property>
-  </object>
-  <object class="GtkImage" id="image6">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-network</property>
-    <property name="icon-size">1</property>
-  </object>
-  <object class="GtkImage" id="image7">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-properties</property>
-    <property name="icon-size">1</property>
-  </object>
-  <object class="GtkImage" id="image8">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-save</property>
-    <property name="icon-size">1</property>
-  </object>
   <object class="GtkWindow" id="roster_window">
     <property name="width_request">85</property>
     <property name="height_request">200</property>
@@ -97,15 +14,16 @@
     <accel-groups>
       <group name="accelgroup1"/>
     </accel-groups>
-    <signal name="key-press-event" handler="on_roster_window_key_press_event" swapped="no"/>
     <signal name="delete-event" handler="on_roster_window_delete_event" swapped="no"/>
     <signal name="focus-in-event" handler="on_roster_window_focus_in_event" swapped="no"/>
     <signal name="focus-out-event" handler="on_roster_window_focus_out_event" swapped="no"/>
+    <signal name="key-press-event" handler="on_roster_window_key_press_event" swapped="no"/>
     <signal name="popup-menu" handler="on_roster_window_popup_menu" swapped="no"/>
     <child>
-      <object class="GtkVBox" id="roster_vbox">
+      <object class="GtkBox" id="roster_vbox">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
         <child>
           <object class="GtkMenuBar" id="menubar">
             <property name="visible">True</property>
@@ -121,35 +39,26 @@
                   <object class="GtkMenu" id="actions_menu_menu">
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="GtkImageMenuItem" id="new_chat_menuitem">
+                      <object class="GtkMenuItem" id="new_chat_menuitem">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                         <property name="label" translatable="yes">_Start Chat...</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
-                        <property name="image">image1</property>
-                        <property name="use_stock">False</property>
-                        <property name="accel_group">accelgroup1</property>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="send_single_message_menuitem">
+                      <object class="GtkMenuItem" id="send_single_message_menuitem">
+                        <property name="can_focus">False</property>
                         <property name="label" translatable="yes">Send Single _Message...</property>
-                        <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
-                        <property name="image">image2</property>
-                        <property name="use_stock">False</property>
-                        <property name="accel_group">accelgroup1</property>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="join_gc_menuitem">
-                        <property name="label" translatable="yes">Join _Group Chat</property>
+                      <object class="GtkMenuItem" id="join_gc_menuitem">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Join _Group Chat</property>
                         <property name="use_underline">True</property>
-                        <property name="image">image3</property>
-                        <property name="use_stock">False</property>
-                        <property name="accel_group">accelgroup1</property>
                       </object>
                     </child>
                     <child>
@@ -159,25 +68,19 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="add_new_contact_menuitem">
-                        <property name="label" translatable="yes">Add _Contact...</property>
+                      <object class="GtkMenuItem" id="add_new_contact_menuitem">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Add _Contact...</property>
                         <property name="use_underline">True</property>
-                        <property name="image">image4</property>
-                        <property name="use_stock">False</property>
-                        <property name="accel_group">accelgroup1</property>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="service_disco_menuitem">
-                        <property name="label" translatable="yes">_Discover Services</property>
+                      <object class="GtkMenuItem" id="service_disco_menuitem">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">_Discover Services</property>
                         <property name="use_underline">True</property>
-                        <property name="image">image5</property>
-                        <property name="use_stock">False</property>
-                        <property name="accel_group">accelgroup1</property>
                       </object>
                     </child>
                     <child>
@@ -195,15 +98,13 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="quit_menuitem">
-                        <property name="label">gtk-quit</property>
+                      <object class="GtkMenuItem" id="quit_menuitem">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="label">_Quit</property>
                         <property name="use_underline">True</property>
-                        <property name="use_stock">True</property>
-                        <property name="accel_group">accelgroup1</property>
-                        <accelerator key="Q" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                         <signal name="activate" handler="on_quit_request" swapped="no"/>
+                        <accelerator key="Q" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                       </object>
                     </child>
                   </object>
@@ -221,27 +122,21 @@
                   <object class="GtkMenu" id="edit_menu_menu">
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="GtkImageMenuItem" id="accounts_menuitem">
-                        <property name="label" translatable="yes">_Accounts</property>
+                      <object class="GtkMenuItem" id="accounts_menuitem">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">_Accounts</property>
                         <property name="use_underline">True</property>
-                        <property name="image">image6</property>
-                        <property name="use_stock">False</property>
-                        <property name="accel_group">accelgroup1</property>
-                        <accelerator key="A" signal="activate" modifiers="GDK_SHIFT_MASK | GDK_CONTROL_MASK"/>
                         <signal name="activate" handler="on_accounts_menuitem_activate" swapped="no"/>
+                        <accelerator key="A" signal="activate" modifiers="GDK_SHIFT_MASK | GDK_CONTROL_MASK"/>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="profile_avatar_menuitem">
-                        <property name="label" translatable="yes">Profile, A_vatar</property>
+                      <object class="GtkMenuItem" id="profile_avatar_menuitem">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Profile, A_vatar</property>
                         <property name="use_underline">True</property>
-                        <property name="image">image7</property>
-                        <property name="use_stock">False</property>
-                        <property name="accel_group">accelgroup1</property>
                       </object>
                     </child>
                     <child>
@@ -251,25 +146,21 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="preferences_menuitem">
-                        <property name="label">gtk-preferences</property>
+                      <object class="GtkMenuItem" id="preferences_menuitem">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="label">_Preferences</property>
                         <property name="use_underline">True</property>
-                        <property name="use_stock">True</property>
-                        <property name="accel_group">accelgroup1</property>
-                        <accelerator key="P" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                         <signal name="activate" handler="on_preferences_menuitem_activate" swapped="no"/>
+                        <accelerator key="P" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="plugins_menuitem">
-                        <property name="label" translatable="yes">P_lugins</property>
+                      <object class="GtkMenuItem" id="plugins_menuitem">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">P_lugins</property>
                         <property name="use_underline">True</property>
-                        <property name="image">image13</property>
-                        <property name="use_stock">False</property>
                         <signal name="activate" handler="on_plugins_menuitem_activate" swapped="no"/>
                       </object>
                     </child>
@@ -293,8 +184,8 @@
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">Show _Offline Contacts</property>
                         <property name="use_underline">True</property>
-                        <accelerator key="O" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                         <signal name="activate" handler="on_show_offline_contacts_menuitem_activate" swapped="no"/>
+                        <accelerator key="O" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                       </object>
                     </child>
                     <child>
@@ -303,8 +194,8 @@
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">Show Only _Active Contacts</property>
                         <property name="use_underline">True</property>
-                        <accelerator key="Y" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                         <signal name="activate" handler="on_show_only_active_contacts_menuitem_activate" swapped="no"/>
+                        <accelerator key="Y" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                       </object>
                     </child>
                     <child>
@@ -325,8 +216,8 @@
                         <property name="label" translatable="yes">Show _Roster</property>
                         <property name="use_underline">True</property>
                         <property name="active">True</property>
-                        <accelerator key="R" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                         <signal name="toggled" handler="on_show_roster_menuitem_toggled" swapped="no"/>
+                        <accelerator key="R" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                       </object>
                     </child>
                     <child>
@@ -336,28 +227,22 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="file_transfers_menuitem">
-                        <property name="label" translatable="yes">File _Transfers</property>
+                      <object class="GtkMenuItem" id="file_transfers_menuitem">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">File _Transfers</property>
                         <property name="use_underline">True</property>
-                        <property name="image">image8</property>
-                        <property name="use_stock">False</property>
-                        <property name="accel_group">accelgroup1</property>
-                        <accelerator key="T" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                         <signal name="activate" handler="on_file_transfers_menuitem_activate" swapped="no"/>
+                        <accelerator key="T" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="history_menuitem">
-                        <property name="label" translatable="yes">_History</property>
+                      <object class="GtkMenuItem" id="history_menuitem">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="label" translatable="yes">_History</property>
                         <property name="use_underline">True</property>
-                        <property name="image">image9</property>
-                        <property name="use_stock">False</property>
-                        <property name="accel_group">accelgroup1</property>
                         <signal name="activate" handler="on_history_menuitem_activate" swapped="no"/>
                       </object>
                     </child>
@@ -375,39 +260,31 @@
                   <object class="GtkMenu" id="help_menu_menu">
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="GtkImageMenuItem" id="contents_menuitem">
-                        <property name="label" translatable="yes">_Contents</property>
+                      <object class="GtkMenuItem" id="contents_menuitem">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="tooltip_text" translatable="yes">Help online</property>
+                        <property name="label" translatable="yes">_Contents</property>
                         <property name="use_underline">True</property>
-                        <property name="image">image10</property>
-                        <property name="use_stock">False</property>
-                        <property name="accel_group">accelgroup1</property>
                         <signal name="activate" handler="on_contents_menuitem_activate" swapped="no"/>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="faq_menuitem">
-                        <property name="label" translatable="yes">_FAQ</property>
+                      <object class="GtkMenuItem" id="faq_menuitem">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="tooltip_text" translatable="yes">Frequently Asked Questions (online)</property>
+                        <property name="label" translatable="yes">_FAQ</property>
                         <property name="use_underline">True</property>
-                        <property name="image">image11</property>
-                        <property name="use_stock">False</property>
-                        <property name="accel_group">accelgroup1</property>
                         <signal name="activate" handler="on_faq_menuitem_activate" swapped="no"/>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="keyboard_shortcuts_menuitem">
-                        <property name="label" translatable="yes">Keyboard Shortcuts</property>
+                      <object class="GtkMenuItem" id="keyboard_shortcuts_menuitem">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Keyboard Shortcuts</property>
                         <property name="use_underline">True</property>
-                        <property name="image">image14</property>
-                        <property name="use_stock">False</property>
                         <signal name="activate" handler="on_keyboard_shortcuts_menuitem_activate" swapped="no"/>
                       </object>
                     </child>
@@ -418,26 +295,21 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="features_menuitem">
-                        <property name="label" translatable="yes">Fea_tures</property>
+                      <object class="GtkMenuItem" id="features_menuitem">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="label" translatable="yes">Fea_tures</property>
                         <property name="use_underline">True</property>
-                        <property name="image">image12</property>
-                        <property name="use_stock">False</property>
-                        <property name="accel_group">accelgroup1</property>
                         <signal name="activate" handler="on_features_menuitem_activate" swapped="no"/>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="about_menuitem">
-                        <property name="label">gtk-about</property>
+                      <object class="GtkMenuItem" id="about_menuitem">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="label">_About</property>
                         <property name="use_underline">True</property>
-                        <property name="use_stock">True</property>
-                        <property name="accel_group">accelgroup1</property>
                         <signal name="activate" handler="on_about_menuitem_activate" swapped="no"/>
                       </object>
                     </child>
@@ -453,16 +325,17 @@
           </packing>
         </child>
         <child>
-          <object class="GtkHPaned" id="roster_hpaned">
+          <object class="GtkPaned" id="roster_hpaned">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
             <signal name="notify" handler="on_roster_hpaned_notify" swapped="no"/>
             <child>
-              <object class="GtkVBox" id="roster_vbox2">
+              <object class="GtkBox" id="roster_vbox2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkEntry" id="rfilter_entry">
                     <property name="can_focus">True</property>
@@ -490,15 +363,18 @@
                         <property name="has_tooltip">True</property>
                         <property name="headers_visible">False</property>
                         <property name="reorderable">True</property>
-                        <signal name="row-expanded" handler="on_roster_treeview_row_expanded" swapped="no"/>
-                        <signal name="key-press-event" handler="on_roster_treeview_key_press_event" swapped="no"/>
-                        <signal name="scroll-event" handler="on_roster_treeview_scroll_event" swapped="no"/>
-                        <signal name="leave-notify-event" handler="on_roster_treeview_leave_notify_event" swapped="no"/>
                         <signal name="button-press-event" handler="on_roster_treeview_button_press_event" swapped="no"/>
+                        <signal name="button-release-event" handler="on_roster_treeview_button_release_event" swapped="no"/>
+                        <signal name="key-press-event" handler="on_roster_treeview_key_press_event" swapped="no"/>
+                        <signal name="leave-notify-event" handler="on_roster_treeview_leave_notify_event" swapped="no"/>
+                        <signal name="motion-notify-event" handler="on_roster_treeview_motion_notify_event" swapped="no"/>
                         <signal name="row-activated" handler="on_roster_treeview_row_activated" swapped="no"/>
                         <signal name="row-collapsed" handler="on_roster_treeview_row_collapsed" swapped="no"/>
-                        <signal name="motion-notify-event" handler="on_roster_treeview_motion_notify_event" swapped="no"/>
-                        <signal name="button-release-event" handler="on_roster_treeview_button_release_event" swapped="no"/>
+                        <signal name="row-expanded" handler="on_roster_treeview_row_expanded" swapped="no"/>
+                        <signal name="scroll-event" handler="on_roster_treeview_scroll_event" swapped="no"/>
+                        <child internal-child="selection">
+                          <object class="GtkTreeSelection" id="treeview-selection1"/>
+                        </child>
                       </object>
                     </child>
                   </object>
