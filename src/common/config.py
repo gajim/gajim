@@ -412,7 +412,7 @@ class Config:
                     'roster_version': [opt_str, ''],
                     'subscription_request_msg': [opt_str, '', _('Message that is sent to contacts you want to add')],
                     'last_archiving_time': [opt_str, '1970-01-01T00:00:00Z', _('Last time we syncronized with logs from server.')],
-                    'enable_message_carbons': [ opt_bool, False, _('If enabled and if server supports this feature, Gajim will receive messages sent and received by other resources.')],
+                    'enable_message_carbons': [ opt_bool, True, _('If enabled and if server supports this feature, Gajim will receive messages sent and received by other resources.')],
                     'ft_send_local_ips': [ opt_bool, True, _('If enabled, Gajim will send your local IPs so your contact can connect to your machine to transfer files.')],
                     'oauth2_refresh_token': [ opt_str, '', _('Latest token for Oauth2 authentication.')],
                     'oauth2_client_id': [ opt_str, '0000000044077801', _('client_id for Oauth2 authentication.')],
