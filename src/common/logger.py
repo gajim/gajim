@@ -223,13 +223,17 @@ class Logger:
             return False
 
     def jid_is_room_jid(self, jid):
-        self.cur.execute('SELECT jid_id FROM jids WHERE jid=?  AND type=?',
-                (jid, constants.JID_ROOM_TYPE))
+        """
+        Return True if it's a room jid, False if it's not, None if we don't know
+        """
+        self.cur.execute('SELECT type FROM jids WHERE jid=?', (jid,))
         row = self.cur.fetchone()
         if row is None:
-            return False
+            return None
         else:
-            return True
+            if row[0] == constants.JID_ROOM_TYPE:
+                return True
+            return False
 
     def get_jid_id(self, jid, typestr=None):
         """

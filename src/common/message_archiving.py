@@ -29,9 +29,97 @@ log = logging.getLogger('gajim.c.message_archiving')
 ARCHIVING_COLLECTIONS_ARRIVED = 'archiving_collections_arrived'
 ARCHIVING_COLLECTION_ARRIVED = 'archiving_collection_arrived'
 ARCHIVING_MODIFICATIONS_ARRIVED = 'archiving_modifications_arrived'
+MAM_RESULTS_ARRIVED = 'mam_results_arrived'
 
 class ConnectionArchive:
     def __init__(self):
+        pass
+
+
+class ConnectionArchive313(ConnectionArchive):
+    def __init__(self):
+        ConnectionArchive.__init__(self)
+        self.archiving_313_supported = False
+        self.mam_awaiting_disco_result = {}
+        gajim.ged.register_event_handler('raw-iq-received', ged.CORE,
+            self._nec_raw_iq_313_received)
+        gajim.ged.register_event_handler('agent-info-error-received', ged.CORE,
+            self._nec_agent_info_error)
+        gajim.ged.register_event_handler('agent-info-received', ged.CORE,
+            self._nec_agent_info)
+
+    def cleanup(self):
+        gajim.ged.remove_event_handler('raw-iq-received', ged.CORE,
+            self._nec_raw_iq_313_received)
+
+    def _nec_agent_info_error(self, obj):
+        if obj.jid in self.mam_awaiting_disco_result:
+            log.warn('Unable to discover %s, ignoring those logs', obj.jid)
+            del self.mam_awaiting_disco_result[obj.jid]
+
+    def _nec_agent_info(self, obj):
+        if obj.jid in self.mam_awaiting_disco_result:
+            for identity in obj.identities:
+                if identity['category'] == 'conference':
+                    # it's a groupchat
+                    for with_, direction, tim, msg_txt, res in \
+                    self.mam_awaiting_disco_result[obj.jid]:
+                        gajim.logger.get_jid_id(with_, 'ROOM')
+                        gajim.logger.save_if_not_exists(with_, direction, tim,
+                            msg=msg_txt, nick=res)
+                    del self.mam_awaiting_disco_result[obj.jid]
+                    return
+            # it's not a groupchat
+            for with_, direction, tim, msg_txt, res in \
+            self.mam_awaiting_disco_result[obj.jid]:
+                gajim.logger.get_jid_id(with_)
+                gajim.logger.save_if_not_exists(with_, direction, tim,
+                    msg=msg_txt)
+            del self.mam_awaiting_disco_result[obj.jid]
+
+    def _nec_raw_iq_313_received(self, obj):
+        if obj.conn.name != self.name:
+            return
+
+        id_ = obj.stanza.getID()
+        if id_ not in self.awaiting_answers:
+            return
+
+        if self.awaiting_answers[id_][0] == MAM_RESULTS_ARRIVED:
+            query = obj.stanza.getTag('query', namespace=nbxmpp.NS_MAM)
+            if query:
+                set_ = query.getTag('set', namespace=nbxmpp.NS_RSM)
+                if set_:
+                    last = set_.getTagData('last')
+                    if last:
+                        gajim.config.set('last_mam_id', last)
+                        self.request_archive(after=last)
+            del self.awaiting_answers[id_]
+
+    def request_archive(self, start=None, end=None, with_=None, after=None,
+    max=30):
+        iq_ = nbxmpp.Iq('get')
+        query = iq_.setTag('query', namespace=nbxmpp.NS_MAM)
+        if start:
+            query.addChild('start', payload=start)
+        if end:
+            query.addChild('end', payload=end)
+        if with_:
+            query.addChild('with', payload=with_)
+        set_ = query.setTag('set', namespace=nbxmpp.NS_RSM)
+        set_.setTagData('max', max)
+        if after:
+            set_.setTagData('after', after)
+        id_ = self.connection.getAnID()
+        iq_.setID(id_)
+        self.awaiting_answers[id_] = (MAM_RESULTS_ARRIVED, )
+        self.connection.send(iq_)
+
+
+class ConnectionArchive136(ConnectionArchive):
+    def __init__(self):
+        ConnectionArchive.__init__(self)
+        self.archiving_136_supported = False
         self.archive_auto_supported = False
         self.archive_manage_supported = False
         self.archive_manual_supported = False
@@ -45,11 +133,89 @@ class ConnectionArchive:
         gajim.ged.register_event_handler(
             'archiving-preferences-changed-received', ged.CORE,
             self._nec_archiving_changed_received)
+        gajim.ged.register_event_handler('raw-iq-received', ged.CORE,
+            self._nec_raw_iq_136_received)
 
     def cleanup(self):
         gajim.ged.remove_event_handler(
             'archiving-preferences-changed-received', ged.CORE,
             self._nec_archiving_changed_received)
+        gajim.ged.remove_event_handler('raw-iq-received', ged.CORE,
+            self._nec_raw_iq_136_received)
+
+    def _nec_raw_iq_136_received(self, obj):
+        if obj.conn.name != self.name:
+            return
+
+        id_ = obj.stanza.getID()
+        if id_ not in self.awaiting_answers:
+            return
+
+        if self.awaiting_answers[id_][0] == ARCHIVING_COLLECTIONS_ARRIVED:
+            del self.awaiting_answers[id_]
+            # TODO
+            print 'ARCHIVING_COLLECTIONS_ARRIVED'
+
+        elif self.awaiting_answers[id_][0] == ARCHIVING_COLLECTION_ARRIVED:
+            def save_if_not_exists(with_, nick, direction, tim, payload):
+                assert len(payload) == 1, 'got several archiving messages in' +\
+                    ' the same time %s' % ''.join(payload)
+                if payload[0].getName() == 'body':
+                    gajim.logger.save_if_not_exists(with_, direction, tim,
+                        msg=payload[0].getData(), nick=nick)
+                elif payload[0].getName() == 'message':
+                    print 'Not implemented'
+            chat = iq_obj.getTag('chat')
+            if chat:
+                with_ = chat.getAttr('with')
+                start_ = chat.getAttr('start')
+                tim = helpers.datetime_tuple(start_)
+                tim = timegm(tim)
+                nb = 0
+                for element in chat.getChildren():
+                    try:
+                        secs = int(element.getAttr('secs'))
+                    except TypeError:
+                        secs = 0
+                    if secs:
+                        tim += secs
+                    nick = element.getAttr('name')
+                    if element.getName() == 'from':
+                        save_if_not_exists(with_, nick, 'from', localtime(tim),
+                            element.getPayload())
+                        nb += 1
+                    if element.getName() == 'to':
+                        save_if_not_exists(with_, nick, 'to', localtime(tim),
+                            element.getPayload())
+                        nb += 1
+                set_ = chat.getTag('set')
+                first = set_.getTag('first')
+                if first:
+                    try:
+                        index = int(first.getAttr('index'))
+                    except TypeError:
+                        index = 0
+                try:
+                    count = int(set_.getTagData('count'))
+                except TypeError:
+                    count = 0
+                if count > index + nb:
+                    # Request the next page
+                    after = element.getTagData('last')
+                    self.request_collection_page(with_, start_, after=after)
+            del self.awaiting_answers[id_]
+
+        elif self.awaiting_answers[id_][0] == ARCHIVING_MODIFICATIONS_ARRIVED:
+            modified = iq_obj.getTag('modified')
+            if modified:
+                for element in modified.getChildren():
+                    if element.getName() == 'changed':
+                        with_ = element.getAttr('with')
+                        start_ = element.getAttr('start')
+                        self.request_collection_page(with_, start_)
+                    #elif element.getName() == 'removed':
+                        # do nothing
+            del self.awaiting_answers[id_]
 
     def request_message_archiving_preferences(self):
         iq_ = nbxmpp.Iq('get')
