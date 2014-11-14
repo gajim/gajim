@@ -87,7 +87,7 @@ except:
     HAS_NBXMPP=False
 
 if not HAS_NBXMPP:
-    print 'Gajim needs python-nbxmpp >= %s to run. Quiting...' % MIN_NBXMPP_VER
+    print('Gajim needs python-nbxmpp >= %s to run. Quiting...' % MIN_NBXMPP_VER)
     sys.exit()
 
 #from common import demandimport
