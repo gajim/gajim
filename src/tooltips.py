@@ -447,10 +447,6 @@ class RosterTooltip(NotificationAreaTooltip):
 
     def __init__(self):
         self.account = None
-        self.image = Gtk.Image()
-        self.image.set_alignment(0, 0)
-        # padding is independent of the total length and better than alignment
-        self.image.set_padding(1, 2)
         self.avatar_image = Gtk.Image()
         NotificationAreaTooltip.__init__(self)
 

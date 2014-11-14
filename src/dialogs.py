@@ -1420,9 +1420,9 @@ class HigDialog(Gtk.MessageDialog):
     on_response_ok=None, on_response_cancel=None, on_response_yes=None,
     on_response_no=None):
         self.call_cancel_on_destroy = True
-        Gtk.MessageDialog.__init__(self, parent,
-           Gtk.DialogFlags.DESTROY_WITH_PARENT | Gtk.DialogFlags.MODAL,
-           type_, buttons, message_format = pritext)
+        Gtk.MessageDialog.__init__(self, parent=parent,
+           modal=True, destroy_with_parent=True,
+           message_type=type_, buttons=buttons, text=pritext)
 
         self.format_secondary_markup(sectext)
 

@@ -92,9 +92,7 @@ class PluginsWindow(object):
             activatable=ACTIVATABLE)
         self.installed_plugins_treeview.append_column(col)
 
-        icon = Gtk.Image()
-        self.def_icon = icon.render_icon_pixbuf(Gtk.STOCK_PREFERENCES,
-            Gtk.IconSize.MENU)
+        self.def_icon = gtkgui_helpers.get_icon_pixmap('preferences-desktop')
 
         # connect signal for selection change
         selection = self.installed_plugins_treeview.get_selection()
@@ -312,8 +310,8 @@ class GajimPluginConfigDialog(Gtk.Dialog):
 
     @log_calls('GajimPluginConfigDialog')
     def __init__(self, plugin, **kwargs):
-        Gtk.Dialog.__init__(self, '%s %s'%(plugin.name, _('Configuration')),
-                                                                    **kwargs)
+        Gtk.Dialog.__init__(self, title='%s %s'%(plugin.name,
+            _('Configuration')), **kwargs)
         self.plugin = plugin
         button = self.add_button('gtk-close', Gtk.ResponseType.CLOSE)
         button.connect('clicked', self.on_close_button_clicked)
