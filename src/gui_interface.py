@@ -1140,7 +1140,7 @@ class Interface:
             gajim.config.set_per('accounts', account, 'last_archiving_time',
                 time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()))
         if obj.conn.archiving_313_supported:
-            mam_id = gajim.config.get('last_mam_id')
+            mam_id = gajim.config.get_per('accounts', account, 'last_mam_id')
             if mam_id:
                 obj.conn.request_archive(after=mam_id)
             else:

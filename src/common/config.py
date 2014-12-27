@@ -316,7 +316,6 @@ class Config:
             'ignore_incoming_attention': [opt_bool, False, _('If True, Gajim will ignore incoming attention requestd ("wizz").')],
             'remember_opened_chat_controls': [ opt_bool, True, _('If enabled, Gajim will reopen chat windows that were opened last time Gajim was closed.')],
             'positive_184_ack': [ opt_bool, False, _('If enabled, Gajim will show an icon to show that sent message has been received by your contact')],
-            'last_mam_id': [opt_str, '', _('Last MAM id we are syncronized with')],
     }, {})
 
     __options_per_key = {
@@ -417,6 +416,7 @@ class Config:
                     'oauth2_client_id': [ opt_str, '0000000044077801', _('client_id for Oauth2 authentication.')],
                     'oauth2_redirect_url': [ opt_str, 'https%3A%2F%2Fgajim.org%2Fmsnauth%2Findex.cgi', _('redirect_url for Oauth2 authentication.')],
                     'opened_chat_controls': [opt_str, '', _('Space separated list of JIDs for which we want to re-open a chat window on next startup.')],
+                    'last_mam_id': [opt_str, '', _('Last MAM id we are syncronized with')],
             }, {}),
             'statusmsg': ({
                     'message': [ opt_str, '' ],
