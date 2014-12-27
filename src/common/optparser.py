@@ -215,6 +215,8 @@ class OptionsParser:
             self.update_config_to_01401()
         if old < [0, 14, 90, 0] and new >= [0, 14, 90, 0]:
             self.update_config_to_014900()
+        if old < [0, 16, 0, 1] and new >= [0, 16, 0, 1]:
+            self.update_config_to_01601()
 
         gajim.logger.init_vars()
         gajim.logger.attach_cache_database()
@@ -902,3 +904,11 @@ class OptionsParser:
             gajim.config.set('use_stun_server', False)
         if os.name == 'nt':
             gajim.config.set('autodetect_browser_mailer', True)
+
+    def update_config_to_01601(self):
+        if 'last_mam_id' in self.old_values:
+            last_mam_id = self.old_values['last_mam_id']
+            for account in gajim.config.get_per('accounts'):
+                gajim.config.set_per('accounts', account, 'last_mam_id',
+                    last_mam_id)
+        gajim.config.set('version', '0.16.0.1')

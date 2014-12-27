@@ -41,16 +41,16 @@ class ConnectionArchive313(ConnectionArchive):
         ConnectionArchive.__init__(self)
         self.archiving_313_supported = False
         self.mam_awaiting_disco_result = {}
-        gajim.ged.register_event_handler('raw-iq-received', ged.CORE,
-            self._nec_raw_iq_313_received)
+        gajim.ged.register_event_handler('raw-message-received', ged.CORE,
+            self._nec_raw_message_313_received)
         gajim.ged.register_event_handler('agent-info-error-received', ged.CORE,
             self._nec_agent_info_error)
         gajim.ged.register_event_handler('agent-info-received', ged.CORE,
             self._nec_agent_info)
 
     def cleanup(self):
-        gajim.ged.remove_event_handler('raw-iq-received', ged.CORE,
-            self._nec_raw_iq_313_received)
+        gajim.ged.remove_event_handler('raw-message-received', ged.CORE,
+            self._nec_raw_message_313_received)
 
     def _nec_agent_info_error(self, obj):
         if obj.jid in self.mam_awaiting_disco_result:
@@ -77,42 +77,49 @@ class ConnectionArchive313(ConnectionArchive):
                     msg=msg_txt)
             del self.mam_awaiting_disco_result[obj.jid]
 
-    def _nec_raw_iq_313_received(self, obj):
+    def _nec_raw_message_313_received(self, obj):
         if obj.conn.name != self.name:
             return
 
-        id_ = obj.stanza.getID()
-        if id_ not in self.awaiting_answers:
+        fin_ = obj.stanza.getTag('fin', namespace=nbxmpp.NS_MAM) 
+        if fin_:
+            queryid_ = fin_.getAttr('queryid')
+            if queryid_ not in self.awaiting_answers:
+                return
+        else:
             return
 
-        if self.awaiting_answers[id_][0] == MAM_RESULTS_ARRIVED:
-            query = obj.stanza.getTag('query', namespace=nbxmpp.NS_MAM)
-            if query:
-                set_ = query.getTag('set', namespace=nbxmpp.NS_RSM)
-                if set_:
-                    last = set_.getTagData('last')
-                    if last:
-                        gajim.config.set('last_mam_id', last)
-                        self.request_archive(after=last)
-            del self.awaiting_answers[id_]
+        if self.awaiting_answers[queryid_][0] == MAM_RESULTS_ARRIVED:
+            set_ = fin_.getTag('set', namespace=nbxmpp.NS_RSM)
+            if set_:
+                last = set_.getTagData('last')
+                if last:
+                    gajim.config.set_per('accounts', self.name, 'last_mam_id', last)
+                    self.request_archive(after=last)
+
+            del self.awaiting_answers[queryid_]
 
     def request_archive(self, start=None, end=None, with_=None, after=None,
     max=30):
-        iq_ = nbxmpp.Iq('get')
-        query = iq_.setTag('query', namespace=nbxmpp.NS_MAM)
+        iq_ = nbxmpp.Iq('set')
+        query = iq_.addChild('query', namespace=nbxmpp.NS_MAM)
+        x = query.addChild('x', namespace=nbxmpp.NS_DATA)
+        x.addChild(node=nbxmpp.DataField(typ='hidden', name='FORM_TYPE', value=nbxmpp.NS_MAM))
         if start:
-            query.addChild('start', payload=start)
+            x.addChild(node=nbxmpp.DataField(typ='text-single', name='start', value=start))
         if end:
-            query.addChild('end', payload=end)
+            x.addChild(node=nbxmpp.DataField(typ='text-single', name='end', value=end))
         if with_:
-            query.addChild('with', payload=with_)
+            x.addChild(node=nbxmpp.DataField(typ='jid-single', name='with', value=with_))
         set_ = query.setTag('set', namespace=nbxmpp.NS_RSM)
         set_.setTagData('max', max)
         if after:
             set_.setTagData('after', after)
+        queryid_ = self.connection.getAnID()
+        query.setAttr('queryid', queryid_)
         id_ = self.connection.getAnID()
         iq_.setID(id_)
-        self.awaiting_answers[id_] = (MAM_RESULTS_ARRIVED, )
+        self.awaiting_answers[queryid_] = (MAM_RESULTS_ARRIVED, )
         self.connection.send(iq_)
 
 
