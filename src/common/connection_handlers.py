@@ -1474,7 +1474,8 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
     def cleanup(self):
         ConnectionHandlersBase.cleanup(self)
         ConnectionCaps.cleanup(self)
-        ConnectionArchive.cleanup(self)
+        ConnectionArchive136.cleanup(self)
+        ConnectionArchive313.cleanup(self)
         ConnectionPubSub.cleanup(self)
         gajim.ged.remove_event_handler('http-auth-received', ged.CORE,
             self._nec_http_auth_received)
