@@ -1632,7 +1632,9 @@ class AccountsWindow:
         self.current_account = None
         model = self.accounts_treeview.get_model()
         model.clear()
-        for account in gajim.config.get_per('accounts'):
+        list_ = gajim.config.get_per('accounts')
+        list_.sort()
+        for account in list_:
             iter_ = model.append()
             model.set(iter_, 0, account)
 
