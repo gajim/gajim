@@ -3532,13 +3532,13 @@ class AccountCreationWizardWindow:
         self.window = self.xml.get_object('account_creation_wizard_window')
         self.window.set_transient_for(gajim.interface.roster.window)
 
-        # Connect events from comboboxentry.get_child()
-        server_comboboxentry = self.xml.get_object('server_comboboxentry')
-        entry = server_comboboxentry.get_child()
+        # Connect events from comboboxtext_entry
+        server_comboboxtext = self.xml.get_object('server_comboboxtext')
+        entry = self.xml.get_object('server_comboboxtext_entry')
         entry.connect('key_press_event',
-            self.on_server_comboboxentry_key_press_event, server_comboboxentry)
-        # Do the same for the other server comboboxentry
-        server_comboboxentry1 = self.xml.get_object('server_comboboxentry1')
+            self.on_server_comboboxentry_key_press_event, server_comboboxtext)
+
+        server_comboboxtext1 = self.xml.get_object('server_comboboxtext1')
 
         self.update_proxy_list()
 
@@ -3548,6 +3548,9 @@ class AccountCreationWizardWindow:
         servers_model = self.xml.get_object('server_liststore')
         for server in servers:
             servers_model.append((server,))
+
+        server_comboboxtext.set_model(servers_model)
+        server_comboboxtext1.set_model(servers_model)
 
         # Generic widgets
         self.notebook = self.xml.get_object('notebook')
@@ -3689,7 +3692,7 @@ class AccountCreationWizardWindow:
                     'You must provide a username to configure this account.')
                 dialogs.ErrorDialog(pritext, sectext)
                 return
-            server = self.xml.get_object('server_comboboxentry').get_child().\
+            server = self.xml.get_object('server_comboboxtext_entry').\
                 get_text().strip()
             savepass = self.xml.get_object('save_password_checkbutton').\
                 get_active()
@@ -3722,7 +3725,7 @@ class AccountCreationWizardWindow:
             self.show_finish_page()
         elif cur_page == 2:
             # We are creating a new account
-            server = self.xml.get_object('server_comboboxentry1').get_child().\
+            server = self.xml.get_object('server_comboboxtext_entry1').\
                 get_text()
 
             if not server:
@@ -3977,9 +3980,9 @@ class AccountCreationWizardWindow:
     def on_username_entry_key_press_event(self, widget, event):
         # Check for pressed @ and jump to combobox if found
         if event.keyval == Gdk.KEY_at:
-            combobox = self.xml.get_object('server_comboboxentry')
-            combobox.grab_focus()
-            combobox.get_child().set_position(-1)
+            entry = self.xml.get_object('server_comboboxtext_entry')
+            entry.grab_focus()
+            entry.set_position(-1)
             return True
 
     def on_server_comboboxentry_key_press_event(self, widget, event, combobox):
