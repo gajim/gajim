@@ -326,8 +326,7 @@ class HostResolver(CommonResolver):
             domain = None
             if line.startswith(fqdn):
                 domain = fqdn # For nslookup 9.5
-            elif helpers.decode_string(line).startswith(ufqdn):
-                line = helpers.decode_string(line)
+            elif line.startswith(ufqdn):
                 domain = ufqdn # For nslookup 9.6
             if domain:
                 # add 4 for ' has' after domain name
