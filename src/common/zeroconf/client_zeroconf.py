@@ -446,7 +446,7 @@ class P2PConnection(IdleObject, PlugIn):
     def do_connect(self):
         errnum = 0
         try:
-            self._sock.connect(self._server)
+            self._sock.connect(self._server[:2])
             self._sock.setblocking(False)
         except Exception as ee:
             errnum = ee.errno
