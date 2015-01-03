@@ -2553,6 +2553,7 @@ class AccountsWindow:
         gajim.interface.roster.close_all(account)
         if account == gajim.ZEROCONF_ACC_NAME:
             gajim.connections[account].disable_account()
+        gajim.connections[account].cleanup()
         del gajim.connections[account]
         del gajim.interface.instances[account]
         del gajim.interface.minimized_controls[account]
