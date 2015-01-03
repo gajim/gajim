@@ -332,7 +332,7 @@ class DesktopNotification:
         version = self.version
         if version[:2] == [0, 2]:
             actions = {}
-            if 'actions' in self.capabilities:
+            if 'actions' in self.capabilities and self.msg_type:
                 actions = {'default': 0}
             try:
                 self.notif.Notify(
@@ -381,7 +381,7 @@ class DesktopNotification:
                     self.path_to_image = os.path.abspath(
                         gtkgui_helpers.get_icon_path('gajim', 48))
                 actions = ()
-                if 'actions' in self.capabilities:
+                if 'actions' in self.capabilities and self.msg_type:
                     actions = (dbus.String('default'), dbus.String(
                         self.event_type))
                 try:

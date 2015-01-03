@@ -201,7 +201,7 @@ class Interface:
         path = gtkgui_helpers.get_icon_path('gajim-connection_lost', 48)
         account = obj.conn.name
         notify.popup(_('Connection Failed'), account, account,
-            'connection_failed', path, obj.title, obj.msg)
+            '', path, obj.title, obj.msg)
 
     def unblock_signed_in_notifications(self, account):
         gajim.block_signed_in_notifications[account] = False
@@ -664,7 +664,7 @@ class Interface:
         else:
             path = gtkgui_helpers.get_icon_path('gtk-dialog-warning', 48)
             account = obj.conn.name
-            notify.popup('warning', account, account, 'warning', path,
+            notify.popup('warning', account, account, '', path,
                 _('OpenPGP Passphrase Incorrect'),
                 _('You are currently connected without your OpenPGP key.'))
         self.forget_gpg_passphrase(obj.keyID)
