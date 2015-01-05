@@ -339,7 +339,10 @@ try:
     except TypeError:
         OpenSSL.rand.load_file(RNG_SEED.encode('utf-8'))
     crypto.add_entropy_sources_OpenSSL()
-    OpenSSL.rand.write_file(str(RNG_SEED))
+    try:
+        OpenSSL.rand.write_file(RNG_SEED)
+    except TypeError:
+        OpenSSL.rand.write_file(RNG_SEED.encode('utf-8'))
 except ImportError:
     log.info("PyOpenSSL PRNG not available")
 
