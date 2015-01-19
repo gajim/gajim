@@ -23,6 +23,7 @@
 
 
 from gi.repository import Gtk
+from gi.repository import Gdk
 from gi.repository import GLib
 
 import gtkgui_helpers

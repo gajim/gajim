@@ -43,6 +43,7 @@ is available at U{http://www.opensource.org/licenses/bsd-license.php}
 """
 
 from gi.repository import Gtk
+from gi.repository import Gdk
 from gi.repository import GObject
 from gi.repository import GLib
 import re
