@@ -2276,10 +2276,10 @@ class GroupchatControl(ChatControlBase):
         # Invite contact to groupchat
         treeview = gajim.interface.roster.tree
         model = treeview.get_model()
-        if not selection.data or target_type == 80:
+        if not selection.get_data() or target_type == 80:
             #  target_type = 80 means a file is dropped
             return
-        data = selection.data
+        data = selection.get_data()
         path = treeview.get_selection().get_selected_rows()[1][0]
         iter_ = model.get_iter(path)
         type_ = model[iter_][2]

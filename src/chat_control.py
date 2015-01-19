@@ -2951,7 +2951,7 @@ class ChatControl(ChatControlBase):
 
     def _on_drag_data_received(self, widget, context, x, y, selection,
             target_type, timestamp):
-        if not selection.data:
+        if not selection.get_data():
             return
         if self.TYPE_ID == message_control.TYPE_PM:
             c = self.gc_contact
@@ -2960,7 +2960,7 @@ class ChatControl(ChatControlBase):
         if target_type == self.TARGET_TYPE_URI_LIST:
             if not c.resource: # If no resource is known, we can't send a file
                 return
-            uri = selection.data.strip()
+            uri = selection.get_data().strip()
             uri_splitted = uri.split() # we may have more than one file dropped
             for uri in uri_splitted:
                 path = helpers.get_file_path_from_dnd_dropped_uri(uri)
@@ -2972,7 +2972,7 @@ class ChatControl(ChatControlBase):
         # chat2muc
         treeview = gajim.interface.roster.tree
         model = treeview.get_model()
-        data = selection.data
+        data = selection.get_data()
         path = treeview.get_selection().get_selected_rows()[1][0]
         iter_ = model.get_iter(path)
         type_ = model[iter_][2]
