@@ -1102,7 +1102,7 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             msg_ = forwarded.getTag('message')
             to_ = msg_.getAttr('to')
             if to_:
-                gajim.get_jid_without_resource(to_)
+                to_ = gajim.get_jid_without_resource(to_)
             else:
                 to_ = gajim.get_jid_from_account(account)
             frm_ = gajim.get_jid_without_resource(msg_.getAttr('from'))
