@@ -954,7 +954,7 @@ class AgentBrowser:
                     name = identities[0]['name']
 
         if name:
-          self.window._set_window_banner_text(self._get_agent_address(), name)
+            self.window._set_window_banner_text(self._get_agent_address(), name)
 
         # Add an icon to the banner.
         pix = self.cache.get_icon(identities, addr=self._get_agent_address())
