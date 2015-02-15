@@ -415,10 +415,10 @@ class Logger:
                 message, subject) VALUES (?, ?, ?, ?, ?, ?, ?)'''
         try:
             self.cur.execute(sql, values)
-        except sqlite.DatabaseError:
-            raise exceptions.DatabaseMalformed
         except sqlite.OperationalError, e:
             raise exceptions.PysqliteOperationalError(str(e))
+        except sqlite.DatabaseError:
+            raise exceptions.DatabaseMalformed
         message_id = None
         if write_unread:
             try:
