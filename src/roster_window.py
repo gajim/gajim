@@ -555,7 +555,7 @@ class RosterWindow:
         if not family_in_roster:
             return False
 
-        assert old_big_jid, 'No Big Brother in nearby family % (Family: %)' % \
+        assert old_big_jid, 'No Big Brother in nearby family %s (Family: %s)' %\
             (nearby_family, family)
         iters = self._get_contact_iter(old_big_jid, old_big_account,
             old_big_contact, self.model)
