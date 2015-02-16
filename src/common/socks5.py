@@ -919,7 +919,7 @@ class Socks5Sender(IdleObject):
     Class for sending file to socket over socks5
     """
     def __init__(self, idlequeue, sock_hash, parent, _sock, host=None,
-    port=None, fingerprint = None, connected=True, file_props={}):
+    port=None, fingerprint = None, connected=True, file_props=None):
         self.fingerprint = fingerprint
         self.queue_idx = sock_hash
         self.queue = parent
@@ -1331,7 +1331,7 @@ class Socks5Client(Socks5):
 class Socks5SenderClient(Socks5Client, Socks5Sender):
 
     def __init__(self, idlequeue, sock_hash, parent,_sock, host=None,
-    port=None, fingerprint = None, connected=True, file_props={}):
+    port=None, fingerprint = None, connected=True, file_props=None):
         Socks5Client.__init__(self, idlequeue, host, port, None, None,
             file_props.sid)
         Socks5Sender.__init__(self,idlequeue, sock_hash, parent,_sock,
@@ -1341,7 +1341,7 @@ class Socks5SenderClient(Socks5Client, Socks5Sender):
 class Socks5SenderServer(Socks5Server, Socks5Sender):
 
     def __init__(self, idlequeue, sock_hash, parent,_sock, host=None,
-    port=None, fingerprint = None, connected=True, file_props={}):
+    port=None, fingerprint = None, connected=True, file_props=None):
         Socks5Server.__init__(self, idlequeue, host, port, None, None,
             file_props.sid)
         Socks5Sender.__init__(self,idlequeue, sock_hash, parent, _sock,
@@ -1349,7 +1349,7 @@ class Socks5SenderServer(Socks5Server, Socks5Sender):
 
 
 class Socks5ReceiverClient(Socks5Client, Socks5Receiver):
-    def __init__(self, idlequeue, streamhost, sid, file_props = None,
+    def __init__(self, idlequeue, streamhost, sid, file_props=None,
     fingerprint=None):
         Socks5Client.__init__(self, idlequeue, streamhost['host'],
             int(streamhost['port']), streamhost['initiator'],
@@ -1360,7 +1360,7 @@ class Socks5ReceiverClient(Socks5Client, Socks5Receiver):
 
 class Socks5ReceiverServer(Socks5Server, Socks5Receiver):
 
-    def __init__(self, idlequeue, streamhost, sid, file_props = None,
+    def __init__(self, idlequeue, streamhost, sid, file_props=None,
     fingerprint=None):
         Socks5Server.__init__(self, idlequeue, streamhost['host'],
             int(streamhost['port']), streamhost['initiator'],
