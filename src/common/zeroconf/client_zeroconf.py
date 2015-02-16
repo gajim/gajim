@@ -128,7 +128,7 @@ class ZeroconfListener(IdleObject):
         return _sock
 
 class P2PClient(IdleObject):
-    def __init__(self, _sock, host, port, conn_holder, stanzaqueue=[], to=None,
+    def __init__(self, _sock, host, port, conn_holder, stanzaqueue, to=None,
     on_ok=None, on_not_ok=None):
         self._owner = self
         self.Namespace = 'jabber:client'
