@@ -506,7 +506,7 @@ class ServiceDiscoveryWindow(object):
 
     def __init__(self, account, jid='', node='', address_entry=False,
     parent=None, initial_identities=None):
-        self.account = account
+        self._account = account
         self.parent = parent
         if not jid:
             jid = gajim.config.get_per('accounts', account, 'hostname')
@@ -588,12 +588,12 @@ _('Without a connection, you can not browse available services'))
         self.window.show_all()
 
     @property
-    def _get_account(self):
-        return self.account
+    def account(self):
+        return self._account
 
-    @property
-    def _set_account(self, value):
-        self.account = value
+    @account.setter
+    def account(self, value):
+        self._account = value
         self.cache.account = value
         if self.browser:
             self.browser.account = value
