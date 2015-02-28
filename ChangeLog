@@ -1,8 +1,9 @@
-Gajim 0.16.1 ()
+Gajim 0.16.1 (28 February 2015)
 
   * Fix sending Zeroconf messages
   * Make ipython compatible to version >= 1.0
   * Support XEP-0313 MAM
+  * Minor fixes and improvements
 
 Gajim 0.16 (04 October 2014)
 
