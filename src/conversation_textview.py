@@ -1203,8 +1203,8 @@ class ConversationTextview(gobject.GObject):
             all_tags = [(ttt.lookup(t) if isinstance(t, str) else t) for t in all_tags]
             buffer_.insert_with_tags(end_iter, special_text, *all_tags)
             if 'url' in tags:
-                puny_text = puny_encode(special_text)
-                if not puny_text.endswith('-'):
+                puny_text = helpers.puny_encode_url(special_text)
+                if puny_text != special_text:
                     puny_tags = []
                     if use_other_tags:
                         puny_tags += other_tags
