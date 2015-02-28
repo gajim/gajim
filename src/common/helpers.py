@@ -36,6 +36,7 @@ import os
 import subprocess
 import urllib
 import urllib
+from urlparse import urlparse
 import webbrowser
 import errno
 import select
@@ -136,6 +137,14 @@ def ascii_to_idn(host):
     for label in labels:
         converted_labels.append(idna.ToUnicode(label))
     return ".".join(converted_labels)
+
+def puny_encode_url(url):
+    _url = url
+    if '//' not in _url:
+        _url = '//' + _url
+    o = urlparse(_url)
+    p_loc = idn_to_ascii(o.netloc)
+    return url.replace(o.netloc, p_loc)
 
 def parse_resource(resource):
     """
