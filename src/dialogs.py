@@ -2385,6 +2385,7 @@ class JoinGroupchatWindow:
         this means room must be automaticaly configured and when done, invities
         must be automatically invited
         """
+        self.window_account = None
         if account:
             if room_jid != '' and room_jid in gajim.gc_connected[account] and \
             gajim.gc_connected[account][room_jid]:
@@ -2396,6 +2397,7 @@ class JoinGroupchatWindow:
                 ErrorDialog(_('You are not connected to the server'),
                     _('You can not join a group chat unless you are connected.'))
                 raise GajimGeneralException('You must be connected to join a groupchat')
+            self.window_account = account
 
         self.xml = gtkgui_helpers.get_gtk_builder('join_groupchat_window.ui')
 
@@ -2512,9 +2514,10 @@ class JoinGroupchatWindow:
             self._nec_agent_info_received)
         gajim.ged.register_event_handler('agent-info-error-received', ged.GUI1,
             self._nec_agent_info_error_received)
-        if self.account and 'join_gc' in gajim.interface.instances[self.account]:
+        if self.window_account and 'join_gc' in gajim.interface.instances[
+        self.window_account]:
             # remove us from open windows
-            del gajim.interface.instances[self.account]['join_gc']
+            del gajim.interface.instances[self.window_account]['join_gc']
 
     def on_join_groupchat_window_key_press_event(self, widget, event):
         if event.keyval == Gdk.KEY_Escape: # ESCAPE
