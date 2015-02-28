@@ -910,7 +910,7 @@ class HtmlTextView(gtk.TextView):
         dialogs.AddNewContactWindow(self.account, jid)
 
     def make_link_menu(self, event, kind, text):
-        from gtkgui_helpers import get_gtk_builder
+        from gtkgui_helpers import get_gtk_builder, load_icon
         xml = get_gtk_builder('chat_context_menu.ui')
         menu = xml.get_object('chat_context_menu')
         childs = menu.get_children()
@@ -927,7 +927,7 @@ class HtmlTextView(gtk.TextView):
         else: # It's a mail or a JID
             # load muc icon
             join_group_chat_menuitem = xml.get_object('join_group_chat_menuitem')
-            muc_icon = gtkgui_helpers.load_icon('muc_active')
+            muc_icon = load_icon('muc_active')
             if muc_icon:
                 join_group_chat_menuitem.set_image(muc_icon)
 
