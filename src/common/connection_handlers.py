@@ -1621,7 +1621,7 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
 
     def seclabel_catalogue_request(self, to, callback):
         if to not in self.seclabel_catalogues:
-            self.seclabel_catalogues[to] = [[], None, None]
+            self.seclabel_catalogues[to] = [[], None, None, None]
         self.seclabel_catalogues[to][0].append(callback)
 
     def _rosterSetCB(self, con, iq_obj):
