@@ -1837,7 +1837,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         if iq_obj.getType() == 'error': # server doesn't support privacy lists
             return
         # active the privacy rule
-        self.privacy_rules_supported = True
         self.activate_privacy_rule('invisible')
         self.connected = gajim.SHOW_LIST.index('invisible')
         self.status = msg
@@ -1915,13 +1914,40 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.awaiting_answers[id_] = (PRIVACY_ARRIVED, )
         self.connection.send(iq)
 
+    def _continue_connection_request_privacy(self):
+        if self.privacy_rules_supported:
+            if not self.privacy_rules_requested:
+                self.privacy_rules_requested = True
+                self._request_privacy()
+        else:
+            if self.continue_connect_info and self.continue_connect_info[0]\
+            == 'invisible':
+                # Trying to login as invisible but privacy list not
+                # supported
+                self.disconnect(on_purpose=True)
+                gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
+                    show='offline'))
+                gajim.nec.push_incoming_event(InformationEvent(None,
+                    conn=self, level='error', pri_txt=_('Invisibility not '
+                    'supported'), sec_txt=_('Account %s doesn\'t support '
+                    'invisibility.') % self.name))
+                return
+            if self.blocking_supported:
+                iq = nbxmpp.Iq('get', xmlns='')
+                query = iq.setQuery(name='blocklist')
+                query.setNamespace(nbxmpp.NS_BLOCKING)
+                id2_ = self.connection.getAnID()
+                iq.setID(id2_)
+                self.awaiting_answers[id2_] = (BLOCKING_ARRIVED, )
+                self.connection.send(iq)
+            # Ask metacontacts before roster
+            self.get_metacontacts()
+
     def _nec_agent_info_error_received(self, obj):
         if obj.conn.name != self.name:
             return
         if obj.id_[:6] == 'Gajim_':
-            if not self.privacy_rules_requested:
-                self.privacy_rules_requested = True
-                self._request_privacy()
+            self._continue_connection_request_privacy()
 
     def _nec_agent_info_received(self, obj):
         if obj.conn.name != self.name:
@@ -1992,6 +2018,9 @@ class Connection(CommonConnection, ConnectionHandlers):
                     iq = nbxmpp.Iq('set')
                     iq.setTag('enable', namespace=nbxmpp.NS_CARBONS)
                     self.connection.send(iq)
+                if nbxmpp.NS_PRIVACY in obj.features:
+                    self.privacy_rules_supported = True
+
             if nbxmpp.NS_BYTESTREAM in obj.features and \
             gajim.config.get_per('accounts', self.name, 'use_ft_proxies'):
                 our_fjid = helpers.parse_jid(our_jid + '/' + \
@@ -2008,9 +2037,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                     self.available_transports[transport_type].append(obj.fjid)
                 else:
                     self.available_transports[transport_type] = [obj.fjid]
-            if not self.privacy_rules_requested:
-                self.privacy_rules_requested = True
-                self._request_privacy()
+            self._continue_connection_request_privacy()
 
     def send_custom_status(self, show, msg, jid):
         if not show in gajim.SHOW_LIST:
