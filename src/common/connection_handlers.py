@@ -574,32 +574,14 @@ class ConnectionVcard:
         elif self.awaiting_answers[id_][0] == PRIVACY_ARRIVED:
             del self.awaiting_answers[id_]
             if iq_obj.getType() != 'error':
-                self.privacy_rules_supported = True
                 self.get_privacy_list('block')
+                # Ask metacontacts before roster
+                self.get_metacontacts()
             else:
-                if self.blocking_supported:
-                    iq = nbxmpp.Iq('get', xmlns='')
-                    query = iq.setQuery(name='blocklist')
-                    query.setNamespace(nbxmpp.NS_BLOCKING)
-                    id2_ = self.connection.getAnID()
-                    iq.setID(id2_)
-                    self.awaiting_answers[id2_] = (BLOCKING_ARRIVED, )
-                    self.connection.send(iq)
-
-                if self.continue_connect_info and self.continue_connect_info[0]\
-                == 'invisible':
-                    # Trying to login as invisible but privacy list not
-                    # supported
-                    self.disconnect(on_purpose=True)
-                    gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
-                        show='offline'))
-                    gajim.nec.push_incoming_event(InformationEvent(None,
-                        conn=self, level='error', pri_txt=_('Invisibility not '
-                        'supported'), sec_txt=_('Account %s doesn\'t support '
-                        'invisibility.') % self.name))
-                    return
-            # Ask metacontacts before roster
-            self.get_metacontacts()
+                # That should never happen, but as it's blocking in the
+                # connection process, we don't take the risk
+                self.privacy_rules_supported = False
+                self._continue_connection_request_privacy()
         elif self.awaiting_answers[id_][0] == BLOCKING_ARRIVED:
             del self.awaiting_answers[id_]
             if iq_obj.getType() == 'result':
