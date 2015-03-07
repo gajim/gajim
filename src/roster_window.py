@@ -990,6 +990,9 @@ class RosterWindow:
 
     # FIXME: maybe move to gajim.py
     def remove_newly_added(self, jid, account):
+        if account not in gajim.newly_added:
+            # Account has been deleted during the timeout that called us
+            return
         if jid in gajim.newly_added[account]:
             gajim.newly_added[account].remove(jid)
             self.draw_contact(jid, account)
