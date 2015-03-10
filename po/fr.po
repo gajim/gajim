@@ -9587,7 +9587,7 @@ msgstr "Un nouveau salon a été créé"
 
 #: ../src/groupchat_control.py:1636
 msgid "The server has assigned or modified your roomnick"
-msgstr "Le serveur à défini ou midifié votre Surnom de salon"
+msgstr "Le serveur à défini ou modifié votre Surnom de salon"
 
 #. do not print 'kicked by None'
 #: ../src/groupchat_control.py:1642
