@@ -123,7 +123,10 @@ def idn_to_ascii(host):
     labels = idna.dots.split(host)
     converted_labels = []
     for label in labels:
-        converted_labels.append(idna.ToASCII(label).decode('utf-8'))
+        if label:
+            converted_labels.append(idna.ToASCII(label).decode('utf-8'))
+        else:
+            converted_labels.append('')
     return ".".join(converted_labels)
 
 def ascii_to_idn(host):
