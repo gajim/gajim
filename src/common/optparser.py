@@ -38,6 +38,9 @@ from common import caps_cache
 import sqlite3 as sqlite
 from common import logger
 
+import logging
+log = logging.getLogger('gajim.c.optparser')
+
 class OptionsParser:
     def __init__(self, filename):
         self.__filename = filename
@@ -60,7 +63,11 @@ class OptionsParser:
         regex = re.compile(r"(?P<optname>[^.=]+)(?:(?:\.(?P<key>.+))?\.(?P<subname>[^.=]+))?\s=\s(?P<value>.*)")
 
         for line in fd:
-            optname, key, subname, value = regex.match(line).groups()
+            match = regex.match(line)
+            if match is None:
+                log.warn('Invalid configuration line, ignoring it: %s', line)
+                continue
+            optname, key, subname, value = match.groups()
             if key is None:
                 self.old_values[optname] = value
                 gajim.config.set(optname, value)
