@@ -2533,11 +2533,16 @@ class JoinGroupchatWindow:
             if not self._empty_required_widgets and self.account:
                 self.xml.get_object('join_button').set_sensitive(True)
             text = self._room_jid_entry.get_text()
+            if widget == self._room_jid_entry and text.startswith('xmpp:'):
+                text = text[5:]
+                self._room_jid_entry.set_text(text)
             if widget == self._room_jid_entry and '@' in text:
                 # Don't allow @ char in room entry
                 room_jid, server = text.split('@', 1)
                 self._room_jid_entry.set_text(room_jid)
                 if server:
+                    if '?' in server:
+                        server = server.split('?')[0]
                     self.server_comboboxtext.get_child().set_text(server)
                 self.server_comboboxtext.grab_focus()
 
