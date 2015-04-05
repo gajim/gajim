@@ -17,8 +17,8 @@
 ## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
-C_NAME, C_DOMAIN, C_INTERFACE, C_PROTOCOL, C_HOST, \
-C_ADDRESS, C_PORT, C_BARE_NAME, C_TXT = range(9)
+C_NAME, C_DOMAIN, C_RESOLVED_INFO, C_BARE_NAME, C_TXT = range(5)
+C_RI_INTERFACE, C_RI_PROTOCOL, C_RI_HOST, C_RI_APROTOCOL, C_RI_ADDRESS, C_RI_PORT = range(6)
 
 def test_avahi():
     try:
