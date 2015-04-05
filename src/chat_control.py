@@ -3231,6 +3231,7 @@ class ChatControl(ChatControlBase):
 
     def begin_e2e_negotiation(self):
         self.begin_negotiation()
+        self.session.resource = self.contact.resource
         self.session.negotiate_e2e(False)
 
     def begin_archiving_negotiation(self):
