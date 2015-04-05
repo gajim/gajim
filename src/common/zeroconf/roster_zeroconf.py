@@ -56,8 +56,9 @@ class Roster:
         if not contact:
             return
 
-        host, address, port = contact[4:7]
-        txt = contact[8]
+        resolved_info = contact[zeroconf.C_RESOLVED_INFO]
+        host, aprotocol, address, port = resolved_info[0][zeroconf.C_RI_HOST:zeroconf.C_RI_PORT+1]
+        txt = contact[zeroconf.C_TXT]
 
         self._data[jid]={}
         self._data[jid]['ask'] = 'none'

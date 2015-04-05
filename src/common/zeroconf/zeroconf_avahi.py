@@ -25,7 +25,8 @@ try:
 except ImportError:
     pass
 
-from common.zeroconf.zeroconf import C_BARE_NAME, C_INTERFACE, C_PROTOCOL, C_DOMAIN
+from common.zeroconf.zeroconf import C_BARE_NAME, C_RESOLVED_INFO, \
+C_RI_INTERFACE, C_RI_PROTOCOL, C_RI_APROTOCOL, C_DOMAIN, C_TXT
 
 class Zeroconf:
     def __init__(self, new_serviceCB, remove_serviceCB, name_conflictCB,
@@ -93,7 +94,16 @@ class Zeroconf:
             return
         if name != self.name:
             for key in self.contacts.keys():
-                if self.contacts[key][C_BARE_NAME] == name:
+                val = self.contacts[key]
+                if val[C_BARE_NAME] == name:
+                    # try to reduce instead of delete first
+                    resolved_info = val[C_RESOLVED_INFO]
+                    if len(resolved_info) > 1:
+                        for i in range(len(resolved_info)):
+                            if resolved_info[i][C_RI_INTERFACE] == interface and resolved_info[i][C_RI_PROTOCOL] == protocol:
+                                del self.contacts[key][C_RESOLVED_INFO][i]
+                        # if still something left, don't remove
+                        if len(self.contacts[key][C_RESOLVED_INFO]) > 1: return
                     del self.contacts[key]
                     self.remove_serviceCB(key)
                     return
@@ -151,16 +161,34 @@ class Zeroconf:
 
         # we don't want to see ourselves in the list
         if name != self.name:
-            self.contacts[name] = (name, domain, interface, protocol, host,
-                    address, port, bare_name, txt)
+            resolved_info = [(interface, protocol, host, aprotocol, address, port)]
+            if name in self.contacts:
+                # Decide whether to try to merge with existing resolved info:
+                old_name, old_domain, old_resolved_info, old_bare_name, old_txt = self.contacts[name]
+                if name == old_name and domain == old_domain and bare_name == old_bare_name:
+                    # Seems similar enough, try to merge resolved info:
+                    for i in range(len(old_resolved_info)):
+                        # for now, keep a single record for each (interface, protocol) pair
+                        #
+                        # Note that, theoretically, we could both get IPv4 and
+                        # IPv6 aprotocol responses via the same protocol,
+                        # so this probably needs to be revised again.
+                        if old_resolved_info[i][0:2] == (interface, protocol):
+                            log.debug('Deleting resolved info for interface %i, protocol %i, host %s, aprotocol %i, address %s, port %i' % old_resolved_info[i])
+                            del cur_hosts[i]
+                            break
+                    resolved_info = resolved_info + old_resolved_info
+                    log.debug('Collected resolved info is now: %s' % (resolved_info,))
+            self.contacts[name] = (name, domain, resolved_info, bare_name, txt)
             self.new_serviceCB(name)
         else:
             # remember data
             # In case this is not our own record but of another
             # gajim instance on the same machine,
             # it will be used when we get a new name.
-            self.invalid_self_contact[name] = (name, domain, interface, protocol,
-                    host, address, port, bare_name, txt)
+            self.invalid_self_contact[name] = (name, domain,
+                    (interface, protocol, host, aprotocol, address, port),
+                    bare_name, txt)
 
 
     # different handler when resolving all contacts
@@ -171,8 +199,9 @@ class Zeroconf:
         bare_name = name
         if name.find('@') == -1:
             name = name + '@' + name
-        self.contacts[name] = (name, domain, interface, protocol, host, address,
-                port, bare_name, txt)
+        # update TXT data only, as intended according to resolve_all comment
+        old_contact = self.contacts[name]
+        self.contacts[name] = old_contact[0:C_TXT] + (txt,) + old_contact[C_TXT+1:]
 
     def service_added_callback(self):
         log.debug('Service successfully added')
@@ -419,7 +448,10 @@ class Zeroconf:
         if not self.connected:
             return
         for val in self.contacts.values():
-            self.server.ResolveService(int(val[C_INTERFACE]), int(val[C_PROTOCOL]),
+            # get txt data from last recorded resolved info
+            # TODO: Better try to get it from last IPv6 mDNS, then last IPv4?
+            ri = val[C_RESOLVED_INFO][0]
+            self.server.ResolveService(int(ri[C_RI_INTERFACE]), int(ri[C_RI_PROTOCOL]),
                     val[C_BARE_NAME], self.stype, val[C_DOMAIN],
                     self.avahi.PROTO_UNSPEC, dbus.UInt32(0),
                     reply_handler=self.service_resolved_all_callback,
