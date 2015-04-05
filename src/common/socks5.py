@@ -149,7 +149,9 @@ class SocksQueue:
                 socks5obj = Socks5SenderClient(self.idlequeue, idx,
                     self, _sock=None,host=str(streamhost['host']),
                     port=int(streamhost['port']),fingerprint=fp,
-                    connected=False, file_props=file_props)
+                    connected=False, file_props=file_props, 
+                    initiator=streamhost['initiator'], 
+                    target=streamhost['target'])
                 socks5obj.streamhost = streamhost
                 self.add_sockobj(account, socks5obj)
 
@@ -1331,8 +1333,9 @@ class Socks5Client(Socks5):
 class Socks5SenderClient(Socks5Client, Socks5Sender):
 
     def __init__(self, idlequeue, sock_hash, parent,_sock, host=None,
-    port=None, fingerprint = None, connected=True, file_props=None):
-        Socks5Client.__init__(self, idlequeue, host, port, None, None,
+    port=None, fingerprint = None, connected=True, file_props=None,
+    initiator=None, target=None):
+        Socks5Client.__init__(self, idlequeue, host, port, initiator, target,
             file_props.sid)
         Socks5Sender.__init__(self,idlequeue, sock_hash, parent,_sock,
             host, port, fingerprint , connected, file_props)
