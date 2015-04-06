@@ -376,8 +376,8 @@ class P2PConnection(IdleObject, PlugIn):
 
     def connect_to_next_ip(self):
         if len(self.ais) == 0:
-            if len(self.addresses_) > 0: return self.get_next_addrinfo()
             log.error('Connection failure to %s', str(self.host), exc_info=True)
+            if len(self.addresses_) > 0: return self.get_next_addrinfo()
             self.disconnect()
             return
         ai = self.ais.pop(0)
@@ -495,8 +495,12 @@ class P2PConnection(IdleObject, PlugIn):
         self._do_send()
 
     def pollend(self):
-        self.state = -1
-        self.disconnect()
+        if self.state == 0:  # error in connect()?
+            #self.disconnect()
+            self.connect_to_next_ip()
+        else:
+            self.state = -1
+            self.disconnect()
 
     def pollin(self):
         """
