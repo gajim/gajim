@@ -133,7 +133,8 @@ class Zeroconf:
 
         # we don't want to see ourselves in the list
         if name != self.name:
-            self.contacts[name] = (name, domain, interfaceIndex, protocol, hosttarget, hosttarget, port, bare_name, txtRecord)
+            resolved_info = [(interfaceIndex, protocol, hosttarget, -1, port)]
+            self.contacts[name] = (name, domain, resolved_info, bare_name, txtRecord)
 
             self.new_serviceCB(name)
         else:
@@ -141,7 +142,7 @@ class Zeroconf:
             # In case this is not our own record but of another
             # gajim instance on the same machine,
             # it will be used when we get a new name.
-            self.invalid_self_contact[name] = (name, domain, interfaceIndex, protocol, hosttarget, hosttarget, port, bare_name, txtRecord)
+            self.invalid_self_contact[name] = (name, domain, (interfaceIndex, protocol, hosttarget, -1, port), bare_name, txtRecord)
         # count services
         self.resolved.append(True)
 
@@ -168,7 +169,9 @@ class Zeroconf:
 
         # we don't want to see ourselves in the list
         if name != self.name:
-            self.contacts[name] = (name, domain, interfaceIndex, protocol, hosttarget, hosttarget, port, bare_name, txtRecord)
+            # update TXT data only, as intended according to resolve_all comment
+            old_contact = self.contacts[name]
+            self.contacts[name] = old_contact[0:C_TXT] + (txt,) + old_contact[C_TXT+1:]
 
 
     def service_added_callback(self, sdRef, flags, errorCode, name, regtype, domain):
