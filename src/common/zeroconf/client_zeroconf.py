@@ -99,10 +99,11 @@ class ZeroconfListener(IdleObject):
         ipaddr = sock[1][0]
         for jid in self.conn_holder.getRoster().keys():
             entry = self.conn_holder.getRoster().getItem(jid)
-            if (entry['address'] == ipaddr):
-                from_jid = jid
-                break
-        P2PClient(sock[0], ipaddr, sock[1][1], self.conn_holder, [], from_jid)
+            for address in entry['addresses']:
+                if (address['address'] == ipaddr):
+                    from_jid = jid
+                    break
+        P2PClient(sock[0], [{'host': ipaddr, 'address': ipaddr, 'port': sock[1][1]}], self.conn_holder, [], from_jid)
 
     def disconnect(self, message=''):
         """
@@ -128,7 +129,7 @@ class ZeroconfListener(IdleObject):
         return _sock
 
 class P2PClient(IdleObject):
-    def __init__(self, _sock, host, port, conn_holder, stanzaqueue, to=None,
+    def __init__(self, _sock, addresses, conn_holder, stanzaqueue, to=None,
     on_ok=None, on_not_ok=None):
         self._owner = self
         self.Namespace = 'jabber:client'
@@ -140,7 +141,7 @@ class P2PClient(IdleObject):
         self.conn_holder = conn_holder
         self.stanzaqueue = stanzaqueue
         self.to = to
-        self.Server = host
+        #self.Server = addresses[0]['host']
         self.on_ok = on_ok
         self.on_not_ok = on_not_ok
         self.Connection = None
@@ -150,8 +151,9 @@ class P2PClient(IdleObject):
         else:
             self.sock_type = TYPE_CLIENT
         self.fd = -1
-        conn = P2PConnection('', _sock, host, port, self._caller,
+        conn = P2PConnection('', _sock, addresses, self._caller,
             self.on_connect, self)
+        self.Server = conn.host  # set Server to the last host name / address tried
         if not self.conn_holder:
             # An error occured, disconnect() has been called
             if on_not_ok:
@@ -159,7 +161,7 @@ class P2PClient(IdleObject):
             return
         self.sock_hash = conn._sock.__hash__
         self.fd = conn.fd
-        self.conn_holder.add_connection(self, self.Server, port, self.to)
+        self.conn_holder.add_connection(self, self.Server, conn.port, self.to)
         # count messages in queue
         for val in self.stanzaqueue:
             stanza, is_message = val
@@ -328,7 +330,7 @@ class P2PClient(IdleObject):
             nbxmpp.NS_JINGLE)
 
 class P2PConnection(IdleObject, PlugIn):
-    def __init__(self, sock_hash, _sock, host=None, port=None, caller=None,
+    def __init__(self, sock_hash, _sock, addresses=None, caller=None,
     on_connect=None, client=None):
         IdleObject.__init__(self)
         self._owner = client
@@ -338,7 +340,7 @@ class P2PConnection(IdleObject, PlugIn):
         self.buff_is_message = False
         self._sock = _sock
         self.sock_hash = None
-        self.host, self.port = host, port
+        self.addresses = addresses
         self.on_connect = on_connect
         self.client = client
         self.writable = False
@@ -346,6 +348,8 @@ class P2PConnection(IdleObject, PlugIn):
         self._exported_methods = [self.send, self.disconnect, self.onreceive]
         self.on_receive = None
         if _sock:
+            self.host = addresses[0]['host']
+            self.port = addresses[0]['port']
             self._sock = _sock
             self.state = 1
             self._sock.setblocking(False)
@@ -353,17 +357,26 @@ class P2PConnection(IdleObject, PlugIn):
             self.on_connect(self)
         else:
             self.state = 0
-            try:
-                self.ais = socket.getaddrinfo(host, port, socket.AF_UNSPEC,
-                        socket.SOCK_STREAM)
-            except socket.gaierror, e:
-                log.info('Lookup failure for %s: %s[%s]', host, e[1],
-                    repr(e[0]), exc_info=True)
-            else:
-                self.connect_to_next_ip()
+            self.addresses_ = self.addresses
+            self.get_next_addrinfo()
+
+    def get_next_addrinfo(self):
+        address = self.addresses_.pop(0)
+        self.host = address['host']
+        self.port = address['port']
+        try:
+            self.ais = socket.getaddrinfo(address['host'], address['port'], socket.AF_UNSPEC,
+                    socket.SOCK_STREAM)
+        except socket.gaierror, e:
+            log.info('Lookup failure for %s: %s[%s]', host, e[1],
+                repr(e[0]), exc_info=True)
+            if len(self.addresses_) > 0: return self.get_next_addrinfo()
+        else:
+            self.connect_to_next_ip()
 
     def connect_to_next_ip(self):
         if len(self.ais) == 0:
+            if len(self.addresses_) > 0: return self.get_next_addrinfo()
             log.error('Connection failure to %s', str(self.host), exc_info=True)
             self.disconnect()
             return
@@ -755,9 +768,13 @@ class ClientZeroconf:
                     on_ok(id_)
                 return
 
-        if item['address'] in self.ip_to_hash:
-            hash_ = self.ip_to_hash[item['address']]
-            if self.hash_to_port[hash_] == item['port']:
+        the_address = None
+        for address in item['addresses']:
+            if address['address'] in self.ip_to_hash:
+                the_address = address
+        if the_address and the_address['address'] in self.ip_to_hash:
+            hash_ = self.ip_to_hash[the_address['address']]
+            if self.hash_to_port[hash_] == the_address['port']:
                 conn = self.connections[hash_]
                 id_ = stanza.getID() or ''
                 if conn.add_stanza(stanza, is_message):
@@ -768,7 +785,10 @@ class ClientZeroconf:
         # otherwise open new connection
         if not stanza.getID():
             stanza.setID('zero')
-        P2PClient(None, item['address'], item['port'], self,
+        addresses_ = []
+        for address in item['addresses']:
+            addresses_ += [{'host': address['address'], 'address': address['address'], 'port': address['port']}]
+        P2PClient(None, addresses_, self,
             [(stanza, is_message)], to, on_ok=on_ok, on_not_ok=on_not_ok)
 
     def getAnID(self):
@@ -814,10 +834,15 @@ class ClientZeroconf:
             conn = None
             if to in self.recipient_to_hash:
                 conn = self.connections[self.recipient_to_hash[to]]
-            elif item and item['address'] in self.ip_to_hash:
-                hash_ = self.ip_to_hash[item['address']]
-                if self.hash_to_port[hash_] == item['port']:
-                    conn = self.connections[hash_]
+            elif item:
+                the_address = None
+                for address in item['addresses']:
+                    if address['address'] in self.ip_to_hash:
+                        the_address = address
+                if the_address and the_address['address'] in self.ip_to_hash:
+                    hash_ = self.ip_to_hash[the_address['address']]
+                    if self.hash_to_port[hash_] == the_address['port']:
+                        conn = self.connections[hash_]
             if func:
                 conn.Dispatcher.on_responses[_waitid] = (func, args)
             conn.onreceive(conn.Dispatcher._WaitForData)
