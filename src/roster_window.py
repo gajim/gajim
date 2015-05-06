@@ -5004,15 +5004,7 @@ class RosterWindow:
         if not change_title_allowed:
             return
 
-        if gajim.config.get('one_message_window') == 'always_with_roster':
-            # always_with_roster mode defers to the MessageWindow
-            if not gajim.interface.msg_win_mgr.one_window_opened():
-                # No MessageWindow to defer to
-                self.window.set_title('Gajim')
-            return
-
         nb_unread = 0
-        start = ''
         for account in gajim.connections:
             # Count events in roster title only if we don't auto open them
             if not helpers.allow_popup_window(account):
@@ -5020,6 +5012,17 @@ class RosterWindow:
                     'file-request', 'file-error', 'file-completed',
                     'file-request-error', 'file-send-error', 'file-stopped',
                     'printed_chat'], account)
+
+
+        if gajim.config.get('one_message_window') == 'always_with_roster':
+            # always_with_roster mode defers to the MessageWindow
+            if not gajim.interface.msg_win_mgr.one_window_opened():
+                # No MessageWindow to defer to
+                self.window.set_title('Gajim')
+            gtkgui_helpers.set_unset_urgency_hint(self.window, nb_unread)
+            return
+
+        start = ''
         if nb_unread > 1:
             start = '[' + str(nb_unread) + ']  '
         elif nb_unread == 1:
