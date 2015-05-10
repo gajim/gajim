@@ -24,9 +24,6 @@
 ##
 
 import time
-import socket
-
-from calendar import timegm
 
 import nbxmpp
 
