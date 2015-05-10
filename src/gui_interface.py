@@ -415,6 +415,7 @@ class Interface:
                         account=account, name=nick, show=show)
                     ctrl = self.new_private_chat(gc_c, account, session)
 
+                ctrl.contact.our_chatstate = False
                 ctrl.print_conversation(_('Error %(code)s: %(msg)s') % {
                     'code': obj.error_code, 'msg': obj.error_msg}, 'status')
                 return
