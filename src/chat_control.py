@@ -2746,6 +2746,8 @@ class ChatControl(ChatControlBase):
 
         if not contact.supports(NS_CHATSTATES):
             return
+        if contact.our_chatstate == False:
+            return
 
         # if the new state we wanna send (state) equals
         # the current state (contact.our_chatstate) then return
