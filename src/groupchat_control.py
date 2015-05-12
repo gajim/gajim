@@ -1619,7 +1619,7 @@ class GroupchatControl(ChatControlBase):
                             # sent by all servers.
                             gajim.connections[self.account].request_gc_config(
                                 self.room_jid)
-                        elif 'continue_tag' not in gajim.automatic_rooms[
+                        elif 'continue_tag' in gajim.automatic_rooms[
                         self.account][self.room_jid]:
                             # We just need to invite contacts
                             for jid in gajim.automatic_rooms[self.account][
