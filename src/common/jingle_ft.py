@@ -253,7 +253,7 @@ class JingleFileTransfer(JingleContent):
         candUsed  = content.getTag('transport').getTag('candidate-used')
         if (candError or candUsed) and \
                 self.state >= STATE_CAND_SENT_AND_RECEIVED:
-            raise nbxmpp.OutOfOrder
+            raise nbxmpp.NodeProcessed
         if candError:
             if not gajim.socks5queue.listener.connections:
                 gajim.socks5queue.listener.disconnect()
