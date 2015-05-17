@@ -65,10 +65,14 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
         """
         if obj.session != self:
             return
+        contact = gajim.contacts.get_contact(self.conn.name, obj.jid,
+            obj.resource)
         if self.resource != obj.resource:
             self.resource = obj.resource
-            if self.control and self.control.resource:
-                self.control.change_resource(self.resource)
+            if self.control:
+                self.control.contact = contact
+                if self.control.resource:
+                    self.control.change_resource(self.resource)
 
         if obj.mtype == 'chat':
             if not obj.stanza.getTag('body') and obj.chatstate is None:
@@ -114,8 +118,6 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
             obj.mtype = 'pm'
 
         # Handle chat states
-        contact = gajim.contacts.get_contact(self.conn.name, obj.jid,
-            obj.resource)
         if contact and (not obj.forwarded or not obj.sent):
             if self.control and self.control.type_id == \
             message_control.TYPE_CHAT:
