@@ -1216,10 +1216,11 @@ class ConversationTextview(gobject.GObject):
                     puny_tags = [(ttt.lookup(t) if isinstance(t, str) else t) for t in puny_tags]
                     buffer_.insert_with_tags(end_iter, " (%s)" % puny_text, *puny_tags)
 
-    def print_empty_line(self):
+    def print_empty_line(self, iter_=None):
         buffer_ = self.tv.get_buffer()
-        end_iter = buffer_.get_end_iter()
-        buffer_.insert_with_tags_by_name(end_iter, '\n', 'eol')
+        if not iter_:
+            iter_ = buffer_.get_end_iter()
+        buffer_.insert_with_tags_by_name(iter_, '\n', 'eol')
         self.just_cleared = False
 
     def print_conversation_line(self, text, jid, kind, name, tim,
@@ -1446,7 +1447,7 @@ class ConversationTextview(gobject.GObject):
             else:
                 end_iter = buffer_.get_end_iter()
             buffer_.insert(end_iter, subject)
-            self.print_empty_line()
+            self.print_empty_line(end_iter)
 
     def print_real_text(self, text, text_tags=[], name=None, xhtml=None,
     graphics=True, iter_=None):
