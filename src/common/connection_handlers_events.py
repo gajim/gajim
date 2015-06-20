@@ -2373,6 +2373,7 @@ class NotificationEvent(nec.NetworkIncomingEvent):
         if not msg_obj.msg_obj.gc_control:
             # we got a message from a room we're not in? ignore it
             return
+        self.jid = msg_obj.jid
         sound = msg_obj.msg_obj.gc_control.highlighting_for_message(
             msg_obj.msgtxt, msg_obj.timestamp)[1]
 
