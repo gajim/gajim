@@ -384,8 +384,12 @@ class MessageWindow(object):
                 return True
             elif control.type_id == message_control.TYPE_GC and \
             keyval == gtk.keysyms.b: # CTRL + b
-                control._on_bookmark_room_menuitem_activate(None)
-                return True
+                # CTRL + b moves cursor one char backward when user uses Emacs
+                # theme
+                if not gtk.settings_get_default().get_property(
+                'gtk-key-theme-name') == 'Emacs':
+                    control._on_bookmark_room_menuitem_activate(None)
+                    return True
             # Tab switch bindings
             elif keyval == gtk.keysyms.F4: # CTRL + F4
                 self.remove_tab(control, self.CLOSE_CTRL_KEY)
