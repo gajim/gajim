@@ -587,6 +587,10 @@ class Interface:
                     elif f.var == 'public_list':
                         f.value = False
                 obj.conn.send_gc_config(obj.jid, obj.dataform.get_purged())
+                user_list = {}
+                for jid in gajim.automatic_rooms[account][obj.jid]['invities']:
+                    user_list[jid] = {'affiliation': 'member'}
+                obj.conn.send_gc_affiliation_list(obj.jid, user_list)
             else:
                 # use default configuration
                 obj.conn.send_gc_config(obj.jid, obj.form_node)
