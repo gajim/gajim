@@ -313,9 +313,11 @@ class CommonConnection:
                 error = _('The contact\'s key (%s) does not match the key assigned '
                         'in Gajim.' % keyID[:8])
             else:
+                myKeyID = gajim.config.get_per('accounts', self.name, 'keyid')
                 def encrypt_thread(msg, keyID, always_trust=False):
                     # encrypt message. This function returns (msgenc, error)
-                    return self.gpg.encrypt(msg, [keyID], always_trust)
+                    return self.gpg.encrypt(msg, [keyID, myKeyID],
+                        always_trust)
                 def _on_encrypted(output):
                     msgenc, error = output
                     if error == 'NOT_TRUSTED':
@@ -423,8 +425,6 @@ class CommonConnection:
 
         if msgenc:
             msg_iq.setTag(nbxmpp.NS_ENCRYPTED + ' x').setData(msgenc)
-            if self.carbons_enabled:
-                msg_iq.addChild(name='private', namespace=nbxmpp.NS_CARBONS)
             msg_iq.addChild(name='no-permanent-storage',
                 namespace=nbxmpp.NS_MSG_HINTS)
 
