@@ -366,6 +366,10 @@ class MessageWindow(object):
                 # theme
                 if not gtk.settings_get_default().get_property(
                 'gtk-key-theme-name') == 'Emacs':
+                    if gajim.interface.msg_win_mgr.mode == \
+                    gajim.interface.msg_win_mgr.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER:
+                        gajim.interface.roster.tree.grab_focus()
+                        return False
                     control._on_send_file_menuitem_activate(None)
                     return True
             elif control.type_id == message_control.TYPE_CHAT and \
