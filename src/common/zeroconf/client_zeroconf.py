@@ -30,6 +30,7 @@ from nbxmpp.protocol import *
 import socket
 import errno
 import sys
+import os
 import string
 from random import Random
 
@@ -71,6 +72,12 @@ class ZeroconfListener(IdleObject):
         self._serv.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self._serv.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
         self._serv.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
+        if os.name == 'nt':
+            ver = os.sys.getwindowsversion()
+            if (ver[3], ver[0]) == (2, 6): # Win Vista +
+                # 47 is socket.IPPROTO_IPV6
+                # 27 is socket.IPV6_V6ONLY under windows, but not defined ...
+                self._serv.setsockopt(41, 27, 0)
         # will fail when port is busy, or we don't have rights to bind
         try:
             self._serv.bind((ai[4][0], self.port))
