@@ -2660,7 +2660,7 @@ class JoinGroupchatWindow:
             # Add as bookmark, with autojoin and not minimized
             name = gajim.get_nick_from_jid(room_jid)
             gajim.interface.add_gc_bookmark(self.account, name, room_jid,
-                autojoin, '0', password, nickname)
+                autojoin, autojoin, password, nickname)
 
         if self.automatic:
             gajim.automatic_rooms[self.account][room_jid] = self.automatic
