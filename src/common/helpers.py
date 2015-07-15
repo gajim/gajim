@@ -35,8 +35,7 @@ import locale
 import os
 import subprocess
 import urllib
-import urllib
-from urlparse import urlparse
+from urllib.parse import urlparse
 import webbrowser
 import errno
 import select
