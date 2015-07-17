@@ -9315,7 +9315,7 @@ msgstr ""
 "све налоге"
 
 #: ../src/gajim-remote.py:278
-msgid "Handle a xmpp:/ uri"
+msgid "Handle a xmpp: uri"
 msgstr "Управља xmpp:/ uri-јем"
 
 #: ../src/gajim-remote.py:280

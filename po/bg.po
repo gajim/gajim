@@ -9403,7 +9403,7 @@ msgstr ""
 "акаунти"
 
 #: ../src/gajim-remote.py:278
-msgid "Handle a xmpp:/ uri"
+msgid "Handle a xmpp: uri"
 msgstr "Обработка на адрес тип xmpp://"
 
 #: ../src/gajim-remote.py:280

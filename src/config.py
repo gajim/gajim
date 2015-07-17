@@ -555,10 +555,6 @@ class PreferencesWindow:
 
         self.update_proxy_list()
 
-        # check if gajm is default
-        st = gajim.config.get('check_if_gajim_is_default')
-        self.xml.get_object('check_default_client_checkbutton').set_active(st)
-
         # Ignore messages from unknown contacts
         w = self.xml.get_object('ignore_events_from_unknown_contacts_checkbutton')
         st = self.get_per_account_option('ignore_unknown_contacts')
@@ -1176,9 +1172,6 @@ class PreferencesWindow:
     def on_send_idle_time_checkbutton_toggled(self, widget):
         widget.set_inconsistent(False)
         self.on_per_account_checkbutton_toggled(widget, 'send_idle_time')
-
-    def on_check_default_client_checkbutton_toggled(self, widget):
-        self.on_checkbutton_toggled(widget, 'check_if_gajim_is_default')
 
     def on_notify_gmail_checkbutton_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'notify_on_new_gmail_email')

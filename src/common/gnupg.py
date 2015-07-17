@@ -608,6 +608,7 @@ class Sign(TextHandler):
     __bool__ = __nonzero__
 
     def handle_status(self, key, value):
+        self.status = ''
         if key in ("USERID_HINT", "NEED_PASSPHRASE", "BAD_PASSPHRASE",
                    "GOOD_PASSPHRASE", "BEGIN_SIGNING", "CARDCTRL", "INV_SGNR",
                    "NO_SGNR", "MISSING_PASSPHRASE", "NEED_PASSPHRASE_PIN",

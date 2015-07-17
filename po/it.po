@@ -9329,7 +9329,7 @@ msgstr ""
 "verrà impostato per tutti gli account"
 
 #: ../src/gajim-remote.py:278
-msgid "Handle a xmpp:/ uri"
+msgid "Handle a xmpp: uri"
 msgstr "Gestisci un uri xmpp:/"
 
 #: ../src/gajim-remote.py:280

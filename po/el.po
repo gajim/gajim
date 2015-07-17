@@ -9546,7 +9546,7 @@ msgstr ""
 
 #: ../src/gajim-remote.py:278
 #, fuzzy
-msgid "Handle a xmpp:/ uri"
+msgid "Handle a xmpp: uri"
 msgstr "Το URI \"%s\" δεν είναι έγκυρο."
 
 #: ../src/gajim-remote.py:280

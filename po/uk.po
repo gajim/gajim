@@ -9331,7 +9331,7 @@ msgstr ""
 "аватар буде встановлено до всіх облікових записів"
 
 #: ../src/gajim-remote.py:278
-msgid "Handle a xmpp:/ uri"
+msgid "Handle a xmpp: uri"
 msgstr "Обробка xmpp:/ uri"
 
 #: ../src/gajim-remote.py:280

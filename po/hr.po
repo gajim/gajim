@@ -9339,7 +9339,7 @@ msgstr ""
 "na sve račune"
 
 #: ../src/gajim-remote.py:278
-msgid "Handle a xmpp:/ uri"
+msgid "Handle a xmpp: uri"
 msgstr "Rukuj xmpp:/ adresama"
 
 #: ../src/gajim-remote.py:280

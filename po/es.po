@@ -9249,7 +9249,7 @@ msgstr ""
 "el avatar en todas las cuentas"
 
 #: ../src/gajim-remote.py:278
-msgid "Handle a xmpp:/ uri"
+msgid "Handle a xmpp: uri"
 msgstr "Manejar una uri xmpp:/"
 
 #: ../src/gajim-remote.py:280

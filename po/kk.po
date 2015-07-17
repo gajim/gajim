@@ -9251,7 +9251,7 @@ msgstr ""
 "орнатылады"
 
 #: ../src/gajim-remote.py:278
-msgid "Handle a xmpp:/ uri"
+msgid "Handle a xmpp: uri"
 msgstr "\"xmpp:/\" түріндегі сілтемені өңдеу"
 
 #: ../src/gajim-remote.py:280

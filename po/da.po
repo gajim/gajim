@@ -9347,7 +9347,7 @@ msgstr ""
 "blive sendt til alle kontoer"
 
 #: ../src/gajim-remote.py:278
-msgid "Handle a xmpp:/ uri"
+msgid "Handle a xmpp: uri"
 msgstr "Håndter en xmpp:/ uri"
 
 #: ../src/gajim-remote.py:280

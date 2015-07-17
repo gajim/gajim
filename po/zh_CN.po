@@ -9036,7 +9036,7 @@ msgid ""
 msgstr "要设置为这个头像的账户; 如果不指定, 所有账户都将被设置为这个头像。"
 
 #: ../src/gajim-remote.py:278
-msgid "Handle a xmpp:/ uri"
+msgid "Handle a xmpp: uri"
 msgstr "处理一个 xmpp:/ uri"
 
 #: ../src/gajim-remote.py:280

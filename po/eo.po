@@ -9447,7 +9447,7 @@ msgstr ""
 "kontoj"
 
 #: ../src/gajim-remote.py:278
-msgid "Handle a xmpp:/ uri"
+msgid "Handle a xmpp: uri"
 msgstr "Prilabori xmpp:/ uri"
 
 #: ../src/gajim-remote.py:280

@@ -9268,7 +9268,7 @@ msgstr ""
 "будет назначен всем учетным записям."
 
 #: ../src/gajim-remote.py:278
-msgid "Handle a xmpp:/ uri"
+msgid "Handle a xmpp: uri"
 msgstr "Обработать ссылку формата «xmpp:/»"
 
 #: ../src/gajim-remote.py:280

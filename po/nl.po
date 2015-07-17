@@ -9190,7 +9190,7 @@ msgid ""
 msgstr ""
 
 #: ../src/gajim-remote.py:278
-msgid "Handle a xmpp:/ uri"
+msgid "Handle a xmpp: uri"
 msgstr ""
 
 #: ../src/gajim-remote.py:280

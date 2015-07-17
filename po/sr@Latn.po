@@ -9326,7 +9326,7 @@ msgstr ""
 "sve naloge"
 
 #: ../src/gajim-remote.py:278
-msgid "Handle a xmpp:/ uri"
+msgid "Handle a xmpp: uri"
 msgstr "Upravlja xmpp:/ uri-jem"
 
 #: ../src/gajim-remote.py:280

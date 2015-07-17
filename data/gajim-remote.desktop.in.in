@@ -1,0 +1,11 @@
+[Desktop Entry]
+Categories=Network;InstantMessaging;RemoteAccess;ConsoleOnly;
+_Name=Gajim Remote
+_Keywords=chat;messaging;im;jabber;xmpp;bonjour;voip
+Version=1.0
+Exec=gajim-remote handle_uri %u
+TryExec=gajim-remote
+StartupNotify=false
+Terminal=false
+Type=Application
+MimeType=x-scheme-handler/xmpp

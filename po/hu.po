@@ -9490,7 +9490,7 @@ msgstr ""
 "be set for all accounts"
 
 #: ../src/gajim-remote.py:278
-msgid "Handle a xmpp:/ uri"
+msgid "Handle a xmpp: uri"
 msgstr "Egy xmpp:/ uri kezelése"
 
 #: ../src/gajim-remote.py:280

@@ -9243,7 +9243,7 @@ msgstr ""
 "skickas till alla konton"
 
 #: ../src/gajim-remote.py:278
-msgid "Handle a xmpp:/ uri"
+msgid "Handle a xmpp: uri"
 msgstr "Hantera en xmpp:/ URI"
 
 #: ../src/gajim-remote.py:280

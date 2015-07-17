@@ -9203,7 +9203,7 @@ msgstr ""
 "に設定されます"
 
 #: ../src/gajim-remote.py:278
-msgid "Handle a xmpp:/ uri"
+msgid "Handle a xmpp: uri"
 msgstr "xmpp:/ の URI を取り扱います"
 
 #: ../src/gajim-remote.py:280

@@ -9320,7 +9320,7 @@ msgstr ""
 "til alle kontoer"
 
 #: ../src/gajim-remote.py:278
-msgid "Handle a xmpp:/ uri"
+msgid "Handle a xmpp: uri"
 msgstr "Håndtere en xmpp:/ uri"
 
 #: ../src/gajim-remote.py:280
