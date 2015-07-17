@@ -7786,7 +7786,7 @@ msgstr ""
 
 #: ../src/gajim-remote.py:277
 #, fuzzy
-msgid "Handle a xmpp:/ uri"
+msgid "Handle a xmpp: uri"
 msgstr "Adres verilmedi"
 
 #: ../src/gajim-remote.py:279

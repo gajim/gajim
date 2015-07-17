@@ -9628,7 +9628,7 @@ msgstr "cli"
 
 #: ../src/gajim-remote.py:277
 #, fuzzy
-msgid "Handle a xmpp:/ uri"
+msgid "Handle a xmpp: uri"
 msgstr "cli"
 
 #: ../src/gajim-remote.py:279

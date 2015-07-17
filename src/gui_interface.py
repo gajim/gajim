@@ -1213,6 +1213,8 @@ class Interface:
         file_props = None
         # get the file_props of our session
         file_props = FilesProp.getFileProp(obj.conn.name, obj.sid)
+        if not file_props:
+            return
         ft.set_status(file_props, 'stop')
         file_props.error = -4 # is it the right error code?
         ft.show_stopped(obj.jid, file_props, 'Peer cancelled ' +
@@ -2771,10 +2773,6 @@ class Interface:
         # override logging settings from config (don't take care of '-q' option)
         if gajim.config.get('verbose'):
             logging_helpers.set_verbose()
-
-        # Is Gajim default app?
-        if os.name != 'nt' and gajim.config.get('check_if_gajim_is_default'):
-            gtkgui_helpers.possibly_set_gajim_as_xmpp_handler()
 
         for account in gajim.config.get_per('accounts'):
             if gajim.config.get_per('accounts', account, 'is_zeroconf'):

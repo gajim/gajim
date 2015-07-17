@@ -8979,7 +8979,7 @@ msgid "Account in which the avatar will be set; if not specified, the avatar wil
 msgstr "Konto, dla którego ma być ustawiony awatar; jeżeli nie jest określone, awatar zostanie ustawiony dla wszystkich kont"
 
 #: ../src/gajim-remote.py:278
-msgid "Handle a xmpp:/ uri"
+msgid "Handle a xmpp: uri"
 msgstr "Obsługuj URI xmpp:/"
 
 #: ../src/gajim-remote.py:280
