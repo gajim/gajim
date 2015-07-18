@@ -384,7 +384,7 @@ class ChangeActivityDialog:
             else:
                 rbtns[act] = group = Gtk.RadioButton()
 
-            hbox = Gtk.HBox(False, 5)
+            hbox = Gtk.HBox(homogeneous=False, spacing=5)
             hbox.pack_start(gtkgui_helpers.load_activity_icon(category,
                 activity), False, False, 0)
             lbl = Gtk.Label(label='<b>' + pep.ACTIVITIES[category]['category'] \
@@ -412,7 +412,7 @@ class ChangeActivityDialog:
                 else:
                     rbtns[act] = group = Gtk.RadioButton()
 
-                hbox = Gtk.HBox(False, 5)
+                hbox = Gtk.HBox(homogeneous=False, spacing=5)
                 hbox.pack_start(gtkgui_helpers.load_activity_icon(category,
                         activity), False, False, 0)
                 hbox.pack_start(Gtk.Label(pep.ACTIVITIES[category][activity]),

@@ -325,8 +325,8 @@ class FileTransfersWindow:
         dialog.add_action_widget(btn, Gtk.ResponseType.OK)
         dialog.set_default_response(Gtk.ResponseType.OK)
 
-        desc_hbox = Gtk.HBox(False, 5)
-        desc_hbox.pack_start(Gtk.Label(_('Description: ')), False, False, 0)
+        desc_hbox = Gtk.HBox(homogeneous=False, spacing=5)
+        desc_hbox.pack_start(Gtk.Label.new(_('Description: ')), False, False, 0)
         desc_hbox.pack_start(win, True, True, 0)
 
         dialog.vbox.pack_start(desc_hbox, False, False, 0)
@@ -474,8 +474,7 @@ class FileTransfersWindow:
 
     def get_icon(self, ident):
         return self.images.setdefault(ident,
-            self.window.render_icon_pixbuf(self.icons[ident],
-                Gtk.IconSize.MENU))
+            gtkgui_helpers.get_icon_pixmap(self.icons[ident], 24))
 
     def set_status(self,file_props, status):
         """

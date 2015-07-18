@@ -86,7 +86,7 @@ class BaseTooltip:
         """
         Create a popup window each time tooltip is requested
         """
-        self.win = Gtk.Window(Gtk.WindowType.POPUP)
+        self.win = Gtk.Window.new(Gtk.WindowType.POPUP)
         self.win.set_title('tooltip')
         self.win.set_border_width(3)
         self.win.set_resizable(False)

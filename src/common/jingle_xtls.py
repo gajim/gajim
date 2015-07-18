@@ -83,6 +83,7 @@ def load_cert_file(cert_path, cert_store=None):
                     OpenSSL.crypto.FILETYPE_PEM, cert)
                 if cert_store:
                     cert_store.add_cert(x509cert)
+                f.close()
                 return x509cert
             except OpenSSL.crypto.Error as exception_obj:
                 log.warning('Unable to load a certificate from file %s: %s' %\
@@ -119,14 +120,14 @@ def get_context(fingerprint, verify_cb=None, remote_jid=None):
     dh_params_name = os.path.join(gajim.MY_CERT_DIR, DH_PARAMS)
     try:
         with open(dh_params_name, "r") as dh_params_file:
-            ctx.load_tmp_dh(str(dh_params_name).encode('utf-8'))
-    except IOError as err:
-        default_dh_params_name = os.path.join(common.gajim.DATA_DIR,
+            ctx.load_tmp_dh(str(dh_params_name))
+    except FileNotFoundError as err:
+        default_dh_params_name = os.path.join(gajim.DATA_DIR,
             'other', DEFAULT_DH_PARAMS)
         try:
             with open(default_dh_params_name, "r") as default_dh_params_file:
-                ctx.load_tmp_dh(str(default_dh_params_name).encode('utf-8'))
-        except IOError as err:
+                ctx.load_tmp_dh(str(default_dh_params_name))
+        except FileNotFoundError as err:
             log.error('Unable to load default DH parameter file: %s , %s'
                 % (default_dh_params_name, err))
             raise

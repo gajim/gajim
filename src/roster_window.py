@@ -261,9 +261,10 @@ class RosterWindow:
 
             tls_pixbuf = None
             if gajim.account_is_securely_connected(account):
+                tls_pixbuf = gtkgui_helpers.get_icon_pixmap('gtk-dialog-authentication', 24)
                 # the only way to create a pixbuf from stock
-                tls_pixbuf = self.window.render_icon_pixbuf(
-                    Gtk.STOCK_DIALOG_AUTHENTICATION, Gtk.IconSize.MENU)
+#                tls_pixbuf = self.window.render_icon_pixbuf(
+#                    Gtk.STOCK_DIALOG_AUTHENTICATION, Gtk.IconSize.MENU)
 
             it = self.model.append(None, [
                 gajim.interface.jabber_state_images['16'][show],
@@ -1041,9 +1042,10 @@ class RosterWindow:
 
         if gajim.account_is_securely_connected(account) and not self.regroup or\
         self.regroup and num_of_secured and num_of_secured == num_of_accounts:
+            tls_pixbuf = gtkgui_helpers.get_icon_pixmap('gtk-dialog-authentication', 24)
             # the only way to create a pixbuf from stock
-            tls_pixbuf = self.window.render_icon_pixbuf(
-                Gtk.STOCK_DIALOG_AUTHENTICATION, Gtk.IconSize.MENU)
+#            tls_pixbuf = self.window.render_icon_pixbuf(
+#                Gtk.STOCK_DIALOG_AUTHENTICATION, Gtk.IconSize.MENU)
             self.model[child_iter][C_PADLOCK_PIXBUF] = tls_pixbuf
         else:
             self.model[child_iter][C_PADLOCK_PIXBUF] = empty_pixbuf
@@ -1226,8 +1228,8 @@ class RosterWindow:
                 # always readable
                 color = gtkgui_helpers.get_fade_color(self.tree, selected,
                     focus)
-                colorstring = '#%04x%04x%04x' % (color.red, color.green,
-                    color.blue)
+                colorstring = '#%04x%04x%04x' % (int(color.red * 65535),
+                    int(color.green * 65535), int(color.blue * 65535))
                 name += '\n<span size="small" style="italic" ' \
                     'foreground="%s">%s</span>' % (colorstring,
                     GLib.markup_escape_text(status))

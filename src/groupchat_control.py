@@ -1523,8 +1523,8 @@ class GroupchatControl(ChatControlBase):
                 # escape markup entities and make them small italic and fg color
                 color = gtkgui_helpers.get_fade_color(self.list_treeview,
                         selected, focus)
-                colorstring = "#%04x%04x%04x" % (color.red, color.green,
-                    color.blue)
+                colorstring = "#%04x%04x%04x" % (int(color.red * 65535),
+                    int(color.green * 65535), int(color.blue * 65535))
                 name += ('\n<span size="small" style="italic" foreground="%s">'
                     '%s</span>') % (colorstring, GLib.markup_escape_text(
                     status))
