@@ -168,8 +168,15 @@ class SecretPasswordStorage(PasswordStorage):
 
     def get_password(self, account_name):
         conf = gajim.config.get_per('accounts', account_name, 'password')
-        if conf is None or conf == '<kwallet>':
+        if conf is None:
             return None
+        if conf == '<kwallet>':
+            # Migrate from kwallet
+            if kwalletbinding.kwallet_available():
+                kw_storage = KWalletPasswordStorage()
+                password = kw_storage.get_password(account_name)
+                self.save_password(account_name, password)
+                return password
         if conf.startswith('gnomekeyring:'):
             # migrate from libgnomekeyring
             GnomePasswordStorage
@@ -188,7 +195,7 @@ class SecretPasswordStorage(PasswordStorage):
             except GnomeKeyringError:
                 return None
             password = gk_storage.get_password(account_name)
-            save_password(account_name, password)
+            self.save_password(account_name, password)
             return password
         if not conf.startswith('libsecret:'):
             password = conf
