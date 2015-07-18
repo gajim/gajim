@@ -316,7 +316,8 @@ class FileTransfersWindow:
                 True, # select multiple true as we can select many files to send
                 gajim.config.get('last_send_dir'),
                 on_response_ok=on_ok,
-                on_response_cancel=lambda e:dialog.destroy()
+                on_response_cancel=lambda e:dialog.destroy(),
+                transient_for=gajim.interface.roster.window
                 )
 
         btn = Gtk.Button.new_with_mnemonic(_('_Send'))

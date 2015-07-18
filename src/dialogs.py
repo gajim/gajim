@@ -1478,8 +1478,8 @@ class FileChooserDialog(Gtk.FileChooserDialog):
     select_multiple=False, current_folder=None, on_response_ok=None,
     on_response_cancel=None, transient_for=None):
 
-        GObject.GObject.__init__(self, title=title_text, parent=transient_for,
-            action=action)
+        Gtk.FileChooserDialog.__init__(self, title=title_text,
+            parent=transient_for, action=action)
         self.add_button(buttons[0],buttons[1])
         if len(buttons) ==4:
             self.add_button(buttons[2],buttons[3])
