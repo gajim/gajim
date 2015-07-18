@@ -89,23 +89,23 @@ class IterableIPShell:
         @param input_func: Replacement for builtin raw_input()
         @type input_func: function
         """
+        io = IPython.utils.io
         if input_func:
             if IPython.version_info[0] >= 1:
                 IPython.terminal.interactiveshell.raw_input_original = input_func
             else:
                 IPython.frontend.terminal.interactiveshell.raw_input_original = input_func
         if cin:
-            IPython.utils.io.stdin = IPython.utils.io.IOStream(cin)
+            io.stdin = io.IOStream(cin)
         if cout:
-            IPython.utils.io.stdout = IPython.utils.io.IOStream(cout)
+            io.stdout = io.IOStream(cout)
         if cerr:
-            IPython.utils.io.stderr = IPython.utils.io.IOStream(cerr)
+            io.stderr = io.IOStream(cerr)
 
         # This is to get rid of the blockage that accurs during
         # IPython.Shell.InteractiveShell.user_setup()
-        IPython.utils.io.raw_input = lambda x: None
+        io.raw_input = lambda x: None
 
-        self.term = IPython.utils.io.IOTerm(stdin=cin, stdout=cout, stderr=cerr)
         os.environ['TERM'] = 'dumb'
         excepthook = sys.excepthook
 
@@ -113,10 +113,19 @@ class IterableIPShell:
         cfg = Config()
         cfg.InteractiveShell.colors = "Linux"
 
+        # InteractiveShell's __init__ overwrites io.stdout,io.stderr with
+        # sys.stdout, sys.stderr, this makes sure they are right
+        old_stdout, old_stderr = sys.stdout, sys.stderr
+        sys.stdout, sys.stderr = io.stdout.stream, io.stderr.stream
+
+        # InteractiveShell inherits from SingletonConfigurable so use instance()
         if IPython.version_info[0] >= 1:
-            self.IP = IPython.terminal.embed.InteractiveShellEmbed(config=cfg, user_ns=user_ns)
+            self.IP = IPython.terminal.embed.InteractiveShellEmbed.instance(config=cfg, user_ns=user_ns)
         else:
-            self.IP = IPython.frontend.terminal.embed.InteractiveShellEmbed(config=cfg, user_ns=user_ns)
+            self.IP = IPython.frontend.terminal.embed.InteractiveShellEmbed.instance(config=cfg, user_ns=user_ns)
+
+        sys.stdout, sys.stderr = old_stdout, old_stderr
+
         self.IP.system = lambda cmd: self.shell(self.IP.var_expand(cmd),
                                                 header='IPython system call: ',
                                                 local_ns=user_ns)
@@ -149,7 +158,7 @@ class IterableIPShell:
         """
         self.history_level = 0
         orig_stdout = sys.stdout
-        sys.stdout = self.term.stdout
+        sys.stdout = IPython.utils.io.stdout
 
         orig_stdin = sys.stdin
         sys.stdin = IPython.utils.io.stdin;
@@ -179,12 +188,16 @@ class IterableIPShell:
                     self.IP.autoedit_syntax):
                 self.IP.edit_syntax_error()
             if not self.iter_more:
-                source_raw = self.IP.input_splitter.source_raw_reset()[1]
+                if IPython.version_info[0] >= 2:
+                    source_raw = self.IP.input_splitter.raw_reset()
+                else:
+                    source_raw = self.IP.input_splitter.source_raw_reset()[1]
                 self.IP.run_cell(source_raw, store_history=True)
+                self.IP.rl_do_indent = False
             else:
                 # TODO: Auto-indent
                 #
-                pass
+                self.IP.rl_do_indent = True
 
         sys.stdout = orig_stdout
         sys.stdin = orig_stdin
@@ -469,6 +482,10 @@ class ConsoleView(gtk.TextView):
         self.text_buffer.move_mark(self.line_start, self.text_buffer.get_end_iter())
         self.text_buffer.place_cursor(self.text_buffer.get_end_iter())
 
+        if self.IP.rl_do_indent:
+            indentation = self.IP.input_splitter.indent_spaces * ' '
+            self.text_buffer.insert_at_cursor(indentation)
+
     def onKeyPress(self, widget, event):
         """
         Key press callback used for correcting behavior for console-like
@@ -534,11 +551,11 @@ class IPythonView(ConsoleView, IterableIPShell):
         IterableIPShell.__init__(self, cout=self.cout, cerr=self.cout,
                                  input_func=self.raw_input)
 #    self.connect('key_press_event', self.keyPress)
+        self.interrupt = False
         self.execute()
         self.prompt = self.generatePrompt(False)
         self.cout.truncate(0)
         self.showPrompt(self.prompt)
-        self.interrupt = False
 
     def raw_input(self, prompt=''):
         """
@@ -604,3 +621,4 @@ class IPythonView(ConsoleView, IterableIPShell):
         if rv: rv = rv.strip('\n')
         self.showReturned(rv)
         self.cout.truncate(0)
+        self.cout.seek(0)
