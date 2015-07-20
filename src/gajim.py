@@ -226,7 +226,7 @@ if os.name == 'nt':
     sys.stderr = MyStderr()
 
 # PyGTK2.10+ only throws a warning
-warnings.filterwarnings('error', module='gtk')
+warnings.filterwarnings('error', module='Gtk')
 try:
     from gi.repository import GObject
     GObject.set_prgname('gajim')

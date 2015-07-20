@@ -1420,13 +1420,12 @@ class HigDialog(Gtk.MessageDialog):
     on_response_ok=None, on_response_cancel=None, on_response_yes=None,
     on_response_no=None):
         self.call_cancel_on_destroy = True
-        Gtk.MessageDialog.__init__(self, parent=parent,
+        Gtk.MessageDialog.__init__(self, transient_for=parent,
            modal=True, destroy_with_parent=True,
            message_type=type_, buttons=buttons, text=pritext)
 
         self.format_secondary_markup(sectext)
 
-        buttons = self.action_area.get_children()
         self.possible_responses = {Gtk.ResponseType.OK: on_response_ok,
             Gtk.ResponseType.CANCEL: on_response_cancel,
             Gtk.ResponseType.YES: on_response_yes,
@@ -5486,7 +5485,7 @@ class CheckFingerprintDialog(YesNoDialog):
             checktext=checktext, on_response_yes=on_response_yes,
             on_response_no=on_response_no)
         self.set_title(_('SSL Certificate Verification for %s') % account)
-        b = Gtk.Button(_('View cert...'))
+        b = Gtk.Button(label=_('View cert...'))
         b.connect('clicked', self.on_cert_clicked)
         b.show_all()
         area = self.get_action_area()
