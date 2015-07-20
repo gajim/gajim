@@ -1393,10 +1393,6 @@ class ConversationTextview(gobject.GObject):
         timestamp_str = helpers.from_one_line(timestamp_str)
         format_ += timestamp_str
         tim_format = time.strftime(format_, tim)
-        if locale.getpreferredencoding() not in ('KOI8-R', 'cp1251'):
-            # if tim_format comes as unicode because of day_str.
-            # we convert it to the encoding that we want (and that is utf-8)
-            tim_format = helpers.ensure_utf8_string(tim_format)
         return tim_format
 
     def detect_other_text_tag(self, text, kind):
