@@ -31,7 +31,7 @@ import pickle
 secrets_filename = gajimpaths['SECRETS_FILE']
 secrets_cache = None
 
-class Secrets:
+class Secrets(object):
     def __init__(self, filename):
         self.filename = filename
         self.srs = {}
