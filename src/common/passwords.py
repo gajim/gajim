@@ -158,11 +158,12 @@ class GnomePasswordStorage(PasswordStorage):
 
 class SecretPasswordStorage(PasswordStorage):
     def __init__(self):
-        self.GAJIM_SCHEMA = Secret.Schema.new("Gajim",
+        self.GAJIM_SCHEMA = Secret.Schema.new("org.gnome.keyring.NetworkPassword",
             Secret.SchemaFlags.NONE,
             {
                 'user': Secret.SchemaAttributeType.STRING,
                 'server':  Secret.SchemaAttributeType.STRING,
+                'protocol': Secret.SchemaAttributeType.STRING,
             }
         )
 
@@ -177,27 +178,7 @@ class SecretPasswordStorage(PasswordStorage):
                 password = kw_storage.get_password(account_name)
                 self.save_password(account_name, password)
                 return password
-        if conf.startswith('gnomekeyring:'):
-            # migrate from libgnomekeyring
-            GnomePasswordStorage
-            global GnomeKeyring
-            global USER_HAS_GNOMEKEYRING
-            if not USER_HAS_GNOMEKEYRING:
-                try:
-                    gir = __import__('gi.repository', globals(), locals(),
-                        ['GnomeKeyring'], 0)
-                    GnomeKeyring = gir.GnomeKeyring
-                except (ImportError, AttributeError):
-                    return False
-                USER_HAS_GNOMEKEYRING = True
-            try:
-                gk_storage = GnomePasswordStorage()
-            except GnomeKeyringError:
-                return None
-            password = gk_storage.get_password(account_name)
-            self.save_password(account_name, password)
-            return password
-        if not conf.startswith('libsecret:'):
+        if not (conf.startswith('libsecret:') or conf.startswith('gnomekeyring:')):
             password = conf
             ## migrate the password over to keyring
             try:
@@ -209,7 +190,7 @@ class SecretPasswordStorage(PasswordStorage):
         server = gajim.config.get_per('accounts', account_name, 'hostname')
         user = gajim.config.get_per('accounts', account_name, 'name')
         password = Secret.password_lookup_sync(self.GAJIM_SCHEMA, {'user': user,
-            'server': server}, None)
+            'server': server, 'protocol': 'xmpp'}, None)
         return password
 
     def save_password(self, account_name, password, update=True):
@@ -218,7 +199,7 @@ class SecretPasswordStorage(PasswordStorage):
         display_name = _('XMPP account %s@%s') % (user, server)
         if password is None:
             password = str()
-        attributes = {'user': user, 'server': server}
+        attributes = {'user': user, 'server': server, 'protocol': 'xmpp'}
         Secret.password_store_sync(self.GAJIM_SCHEMA, attributes,
             Secret.COLLECTION_DEFAULT, display_name, password, None)
         gajim.config.set_per('accounts', account_name, 'password',
