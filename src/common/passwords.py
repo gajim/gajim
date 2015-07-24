@@ -45,8 +45,8 @@ class PasswordStorage(object):
 class SimplePasswordStorage(PasswordStorage):
     def get_password(self, account_name):
         passwd = gajim.config.get_per('accounts', account_name, 'password')
-        if passwd and (passwd.startswith('gnomekeyring:') or \
-         passwd == '<kwallet>'):
+        if passwd and (passwd.startswith('gnomekeyring:') or passwd.startswith('libsecret:') or \
+        passwd == '<kwallet>'):
             # this is not a real password, it's either a gnome
             # keyring token or stored in the KDE wallet
             return None
@@ -73,7 +73,7 @@ class GnomePasswordStorage(PasswordStorage):
         conf = gajim.config.get_per('accounts', account_name, 'password')
         if conf is None or conf == '<kwallet>':
             return None
-        if not conf.startswith('gnomekeyring:'):
+        if not (conf.startswith('gnomekeyring:') or conf.startswith('libsecret')):
             password = conf
             ## migrate the password over to keyring
             try:
