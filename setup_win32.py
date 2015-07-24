@@ -31,7 +31,7 @@ if 'gtk' in os.listdir('.'):
 
 options = {
    'build_exe': {
-       'includes': ['Gdk.KEY_, 'dumbdbm', 'dbhash', 'bsddb', 'new',
+       'includes': ['Gdk.KEY_', 'dumbdbm', 'dbhash', 'bsddb', 'new',
             'goocanvas', 'Crypto.PublicKey.DSA', 'Crypto.Hash.HMAC',
             'numbers', 'win32com.client', 'win32com.server', 'HTMLParser'],
        'base': 'Win32GUI',
@@ -56,7 +56,7 @@ options = {
 
 setup(
     name='Gajim',
-    version='0.15.1',
+    version='0.16.2',
     description='A full featured Jabber client',
     author='Gajim Development Team',
     url='http://gajim.org/',
