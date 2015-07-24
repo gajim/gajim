@@ -83,7 +83,7 @@ class GnomePasswordStorage(PasswordStorage):
             password = conf
             ## migrate the password over to keyring
             try:
-                self.save_password(account_name, password, update=False)
+                self.save_password(account_name, password)
             except GnomeKeyringError as e:
                 if e.error == GnomeKeyring.Result.NO_KEYRING_DAEMON:
                     ## no keyring daemon: in the future, stop using it
