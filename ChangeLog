@@ -1,3 +1,9 @@
+Gajim 0.16.2 (20 July 2015)
+
+  * improve Zeroconf under windows and with IPv6
+  * Fix errors with GnuPG
+  * Minor fixes and improvements
+
 Gajim 0.16.1 (28 February 2015)
 
   * Fix sending Zeroconf messages
