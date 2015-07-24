@@ -47,8 +47,7 @@ def state_changed(state):
     """
     For Network Manager 0.7 - 0.9
     """
-    nm_state = props.Get("org.freedesktop.NetworkManager", "State")
-    if nm_state == 3 or nm_state == 70:
+    if state == 70:
         for connection in gajim.connections.values():
             if gajim.config.get_per('accounts', connection.name,
             'listen_to_network_manager') and connection.time_to_reconnect:
@@ -57,7 +56,7 @@ def state_changed(state):
         for connection in gajim.connections.values():
             if gajim.config.get_per('accounts', connection.name,
             'listen_to_network_manager') and connection.connected > 1:
-                connection._disconnectedReconnCB()
+                connection._on_disconnected()
 
 supported = False
 
