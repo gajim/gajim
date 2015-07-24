@@ -56,7 +56,7 @@ def state_changed(state):
         for connection in gajim.connections.values():
             if gajim.config.get_per('accounts', connection.name,
             'listen_to_network_manager') and connection.connected > 1:
-                connection._on_disconnected()
+                connection._disconnectedReconnCB()
 
 supported = False
 
