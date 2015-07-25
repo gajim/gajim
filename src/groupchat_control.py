@@ -2290,38 +2290,20 @@ class GroupchatControl(ChatControlBase):
         self.print_conversation(_('%(jid)s has been invited in this room') % {
             'jid': contact_jid}, graphics=False)
 
-    def handle_message_textview_mykey_press(self, widget, event_keyval,
-    event_keymod):
-        # NOTE: handles mykeypress which is custom signal connected to this
-        # CB in new_room(). for this singal see message_textview.py
-
-        if not widget.get_sensitive():
-            # Textview is not sensitive, don't handle keypress
-            return
-        # construct event instance from binding
-        event = Gdk.Event(Gdk.EventType.KEY_PRESS) # it's always a key-press here
-        event.keyval = event_keyval
-        event.state = event_keymod
-        event.time = 0 # assign current time
-
-        message_buffer = widget.get_buffer()
-        start_iter, end_iter = message_buffer.get_bounds()
+    def _on_message_textview_key_press_event(self, widget, event):
+        res = ChatControlBase._on_message_textview_key_press_event(self, widget,
+            event)
+        if res:
+            return True
 
         if event.keyval == Gdk.KEY_Tab: # TAB
+            message_buffer = widget.get_buffer()
+            start_iter, end_iter = message_buffer.get_bounds()
             cursor_position = message_buffer.get_insert()
             end_iter = message_buffer.get_iter_at_mark(cursor_position)
-            text = message_buffer.get_text(start_iter, end_iter, False).decode(
-                'utf-8')
+            text = message_buffer.get_text(start_iter, end_iter, False)
 
             splitted_text = text.split()
-
-            # HACK: Not the best soltution.
-            if (text.startswith(self.COMMAND_PREFIX) and not
-            text.startswith(self.COMMAND_PREFIX * 2) and \
-            len(splitted_text) == 1):
-                return super(GroupchatControl, self).\
-                    handle_message_textview_mykey_press(widget, event_keyval,
-                    event_keymod)
 
             # nick completion
             # check if tab is pressed with empty message
@@ -2340,7 +2322,7 @@ class GroupchatControl(ChatControlBase):
                 with_refer_to_nick_char = True
                 after_nick_len = len(gc_refer_to_nick_char + ' ')
             if len(self.nick_hits) and self.last_key_tabs and \
-            text[:-after_nick_len].endswith(self.nick_hits[0]):
+               text[:-after_nick_len].endswith(self.nick_hits[0]):
                 # we should cycle
                 # Previous nick in list may had a space inside, so we check text
                 # and not splitted_text and store it into 'begin' var
@@ -2349,7 +2331,7 @@ class GroupchatControl(ChatControlBase):
             else:
                 self.nick_hits = [] # clear the hit list
                 list_nick = gajim.contacts.get_nick_list(self.account,
-                    self.room_jid)
+                                                         self.room_jid)
                 list_nick.sort(key=str.lower) # case-insensitive sort
                 if begin == '':
                     # empty message, show lasts nicks that highlighted us first
@@ -2362,7 +2344,7 @@ class GroupchatControl(ChatControlBase):
                 for nick in list_nick:
                     fjid = self.room_jid + '/' + nick
                     if nick.lower().startswith(begin.lower()) and not \
-                    helpers.jid_is_blocked(self.account, fjid):
+                       helpers.jid_is_blocked(self.account, fjid):
                         # the word is the begining of a nick
                         self.nick_hits.append(nick)
             if len(self.nick_hits):
@@ -2374,17 +2356,17 @@ class GroupchatControl(ChatControlBase):
                     add = ' '
                 start_iter = end_iter.copy()
                 if self.last_key_tabs and with_refer_to_nick_char or (text and \
-                text[-1] == ' '):
+                                                                      text[-1] == ' '):
                     # have to accomodate for the added space from last
                     # completion
                     # gc_refer_to_nick_char may be more than one char!
                     start_iter.backward_chars(len(begin) + len(add))
                 elif self.last_key_tabs and not gajim.config.get(
-                'shell_like_completion'):
+                    'shell_like_completion'):
                     # have to accomodate for the added space from last
                     # completion
                     start_iter.backward_chars(len(begin) + \
-                        len(gc_refer_to_nick_char))
+                                              len(gc_refer_to_nick_char))
                 else:
                     start_iter.backward_chars(len(begin))
 

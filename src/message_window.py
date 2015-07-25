@@ -329,27 +329,6 @@ class MessageWindow(object):
             ctrl = self._widget_to_control(child)
             GLib.idle_add(ctrl.msg_textview.grab_focus)
 
-    def _on_message_textview_mykeypress_event(self, widget, event_keyval,
-            event_keymod):
-        # NOTE: handles mykeypress which is custom signal; see message_textview.py
-
-        # construct event instance from binding
-        event = Gdk.Event(Gdk.EventType.KEY_PRESS) # it's always a key-press here
-        event.keyval = event_keyval
-        event.state = event_keymod
-        event.time = 0 # assign current time
-
-        if event.get_state() & Gdk.ModifierType.CONTROL_MASK:
-            # Tab switch bindings
-            if event.keyval == Gdk.KEY_Tab: # CTRL + TAB
-                self.move_to_next_unread_tab(True)
-            elif event.keyval == Gdk.KEY_ISO_Left_Tab: # CTRL + SHIFT + TAB
-                self.move_to_next_unread_tab(False)
-            elif event.keyval == Gdk.KEY_Page_Down: # CTRL + PAGE DOWN
-                self.notebook.event(event)
-            elif event.keyval == Gdk.KEY_Page_Up: # CTRL + PAGE UP
-                self.notebook.event(event)
-
     def accel_group_func(self, accel_group, acceleratable, keyval, modifier):
         st = '1234567890' # alt+1 means the first tab (tab 0)
         control = self.get_active_control()

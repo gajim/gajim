@@ -38,12 +38,6 @@ class MessageTextView(Gtk.TextView):
     chat/groupchat windows
     """
     UNDO_LIMIT = 20
-    __gsignals__ = dict(
-            mykeypress = (GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,
-                            None, # return value
-                            (int, Gdk.ModifierType ) # arguments
-                    )
-            )
 
     def __init__(self):
         GObject.GObject.__init__(self)
@@ -316,72 +310,3 @@ class MessageTextView(Gtk.TextView):
             return super(MessageTextView, self).get_sensitive()
         except AttributeError:
             return self.get_property('sensitive')
-
-# We register depending on keysym and modifier some bindings
-# but we also pass those as param so we can construct fake Event
-# Here we register bindings for those combinations that there is NO DEFAULT
-# action to be done by gtk TextView. In such case we should not add a binding
-# as the default action comes first and our bindings is useless. In that case
-# we catch and do stuff before default action in normal key_press_event
-# and we also return True there to stop the default action from running
-
-# CTRL + SHIFT + TAB
-#Gtk.binding_entry_add_signal(MessageTextView, Gdk.KEY_ISO_Left_Tab,
-        #Gdk.ModifierType.CONTROL_MASK, 'mykeypress', int, Gdk.KEY_ISO_Left_Tab,
-        #Gdk.ModifierType, Gdk.ModifierType.CONTROL_MASK)
-
-## CTRL + TAB
-#Gtk.binding_entry_add_signal(MessageTextView, Gdk.KEY_Tab,
-        #Gdk.ModifierType.CONTROL_MASK, 'mykeypress', int, Gdk.KEY_Tab,
-        #Gdk.ModifierType, Gdk.ModifierType.CONTROL_MASK)
-
-## TAB
-#Gtk.binding_entry_add_signal(MessageTextView, Gdk.KEY_Tab,
-        #0, 'mykeypress', int, Gdk.KEY_Tab,  Gdk.ModifierType, 0)
-
-## CTRL + UP
-#Gtk.binding_entry_add_signal(MessageTextView, Gdk.KEY_Up,
-        #Gdk.ModifierType.CONTROL_MASK, 'mykeypress', int, Gdk.KEY_Up,
-        #Gdk.ModifierType, Gdk.ModifierType.CONTROL_MASK)
-
-## CTRL + DOWN
-#Gtk.binding_entry_add_signal(MessageTextView, Gdk.KEY_Down,
-        #Gdk.ModifierType.CONTROL_MASK, 'mykeypress', int, Gdk.KEY_Down,
-        #Gdk.ModifierType, Gdk.ModifierType.CONTROL_MASK)
-
-## CTRL + SHIFT + UP
-#Gtk.binding_entry_add_signal(MessageTextView, Gdk.KEY_Up,
-        #Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.SHIFT_MASK, 'mykeypress', int,
-        #Gdk.KEY_Up, Gdk.ModifierType, Gdk.ModifierType.CONTROL_MASK |
-        #Gdk.ModifierType.SHIFT_MASK)
-
-## CTRL + SHIFT + DOWN
-#Gtk.binding_entry_add_signal(MessageTextView, Gdk.KEY_Down,
-        #Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.SHIFT_MASK, 'mykeypress', int,
-        #Gdk.KEY_Down, Gdk.ModifierType, Gdk.ModifierType.CONTROL_MASK |
-        #Gdk.ModifierType.SHIFT_MASK)
-
-## ENTER
-#Gtk.binding_entry_add_signal(MessageTextView, Gdk.KEY_Return,
-        #0, 'mykeypress', int, Gdk.KEY_Return,
-        #Gdk.ModifierType, 0)
-
-## Ctrl + Enter
-#Gtk.binding_entry_add_signal(MessageTextView, Gdk.KEY_Return,
-        #Gdk.ModifierType.CONTROL_MASK, 'mykeypress', int, Gdk.KEY_Return,
-        #Gdk.ModifierType, Gdk.ModifierType.CONTROL_MASK)
-
-## Keypad Enter
-#Gtk.binding_entry_add_signal(MessageTextView, Gdk.KEY_KP_Enter,
-        #0, 'mykeypress', int, Gdk.KEY_KP_Enter,
-        #Gdk.ModifierType, 0)
-
-## Ctrl + Keypad Enter
-#Gtk.binding_entry_add_signal(MessageTextView, Gdk.KEY_KP_Enter,
-        #Gdk.ModifierType.CONTROL_MASK, 'mykeypress', int, Gdk.KEY_KP_Enter,
-        #Gdk.ModifierType, Gdk.ModifierType.CONTROL_MASK)
-
-## Ctrl + z
-#Gtk.binding_entry_add_signal(MessageTextView, Gdk.KEY_z,
-        #Gdk.ModifierType.CONTROL_MASK, 'mykeypress', int, Gdk.KEY_z,
-        #Gdk.ModifierType, Gdk.ModifierType.CONTROL_MASK)

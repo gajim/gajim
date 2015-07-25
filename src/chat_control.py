@@ -216,59 +216,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             return
         self.print_conversation(_('Error.'), 'status')
 
-    def handle_message_textview_mykey_press(self, widget, event_keyval,
-    event_keymod):
-        """
-        Derives types SHOULD implement this, rather than connection to the even
-        itself
-        """
-        event = Gdk.Event(Gdk.EventType.KEY_PRESS)
-        event.keyval = event_keyval
-        event.state = event_keymod
-        event.time = 0
-
-        _buffer = widget.get_buffer()
-        start, end = _buffer.get_bounds()
-
-        if event.keyval -- Gdk.KEY_Tab:
-            position = _buffer.get_insert()
-            end = _buffer.get_iter_at_mark(position)
-
-            text = _buffer.get_text(start, end, False)
-
-            splitted = text.split()
-
-            if (text.startswith(self.COMMAND_PREFIX) and not
-                    text.startswith(self.COMMAND_PREFIX * 2) and len(splitted) == 1):
-
-                text = splitted[0]
-                bare = text.lstrip(self.COMMAND_PREFIX)
-
-                if len(text) == 1:
-                    self.command_hits = []
-                    for command in self.list_commands():
-                        for name in command.names:
-                            self.command_hits.append(name)
-                else:
-                    if (self.last_key_tabs and self.command_hits and
-                            self.command_hits[0].startswith(bare)):
-                        self.command_hits.append(self.command_hits.pop(0))
-                    else:
-                        self.command_hits = []
-                        for command in self.list_commands():
-                            for name in command.names:
-                                if name.startswith(bare):
-                                    self.command_hits.append(name)
-
-                if self.command_hits:
-                    _buffer.delete(start, end)
-                    _buffer.insert_at_cursor(self.COMMAND_PREFIX + self.command_hits[0] + ' ')
-                    self.last_key_tabs = True
-
-                return True
-
-            self.last_key_tabs = False
-
     def status_url_clicked(self, widget, url):
         helpers.launch_browser_mailer('url', url)
 
@@ -401,9 +348,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         # add MessageTextView to UI and connect signals
         self.msg_scrolledwindow = self.xml.get_object('message_scrolledwindow')
         self.msg_textview = MessageTextView()
-        id_ = self.msg_textview.connect('mykeypress',
-            self._on_message_textview_mykeypress_event)
-        self.handlers[id_] = self.msg_textview
         self.msg_scrolledwindow.add(self.msg_textview)
         id_ = self.msg_textview.connect('key_press_event',
             self._on_message_textview_key_press_event)
@@ -708,10 +652,43 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             if event.keyval == Gdk.KEY_Tab:  # CTRL + TAB
                 self.parent_win.move_to_next_unread_tab(True)
                 return True
-################################################################################
-        # temporary solution instead Gtk.binding_entry_add_signal
+
         message_buffer = self.msg_textview.get_buffer()
         event_state = event.get_state()
+        if event.keyval == Gdk.KEY_Tab:
+            start, end = message_buffer.get_bounds()
+            position = message_buffer.get_insert()
+            end = message_buffer.get_iter_at_mark(position)
+            text = message_buffer.get_text(start, end, False)
+            splitted = text.split()
+            if (text.startswith(self.COMMAND_PREFIX) and not
+            text.startswith(self.COMMAND_PREFIX * 2) and len(splitted) == 1):
+                text = splitted[0]
+                bare = text.lstrip(self.COMMAND_PREFIX)
+                if len(text) == 1:
+                    self.command_hits = []
+                    for command in self.list_commands():
+                        for name in command.names:
+                            self.command_hits.append(name)
+                else:
+                    if (self.last_key_tabs and self.command_hits and
+                            self.command_hits[0].startswith(bare)):
+                        self.command_hits.append(self.command_hits.pop(0))
+                    else:
+                        self.command_hits = []
+                        for command in self.list_commands():
+                            for name in command.names:
+                                if name.startswith(bare):
+                                    self.command_hits.append(name)
+
+                if self.command_hits:
+                    message_buffer.delete(start, end)
+                    message_buffer.insert_at_cursor(self.COMMAND_PREFIX + \
+                        self.command_hits[0] + ' ')
+                    self.last_key_tabs = True
+                return True
+            if self.widget_name != 'groupchat_control':
+                self.last_key_tabs = False
         if event.keyval == Gdk.KEY_Up:
             if event_state & Gdk.ModifierType.CONTROL_MASK:
                 if event_state & Gdk.ModifierType.SHIFT_MASK: # Ctrl+Shift+UP
@@ -764,80 +741,8 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             if event_state & Gdk.ModifierType.CONTROL_MASK:
                 self.msg_textview.undo()
                 return True
-################################################################################
+
         return False
-
-    def _on_message_textview_mykeypress_event(self, widget, event_keyval,
-    event_keymod):
-        """
-        When a key is pressed: if enter is pressed without the shift key, message
-        (if not empty) is sent and printed in the conversation
-        """
-        # NOTE: handles mykeypress which is custom signal connected to this
-        # CB in new_tab(). for this singal see message_textview.py
-        message_textview = widget
-        message_buffer = message_textview.get_buffer()
-        start_iter, end_iter = message_buffer.get_bounds()
-        message = message_buffer.get_text(start_iter, end_iter, False)
-        xhtml = self.msg_textview.get_xhtml()
-
-        # construct event instance from binding
-        event = Gdk.Event(Gdk.EventType.KEY_PRESS)  # it's always a key-press here
-        event.keyval = event_keyval
-        event.state = event_keymod
-        event.time = 0  # assign current time
-
-        if event.keyval == Gdk.KEY_Up:
-            if event.get_state() == Gdk.ModifierType.CONTROL_MASK:  # Ctrl+UP
-                self.scroll_messages('up', message_buffer, 'sent')
-            # Ctrl+Shift+UP
-            elif event.get_state() == (Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.SHIFT_MASK):
-                self.scroll_messages('up', message_buffer, 'received')
-        elif event.keyval == Gdk.KEY_Down:
-            if event.get_state() == Gdk.ModifierType.CONTROL_MASK:  # Ctrl+Down
-                self.scroll_messages('down', message_buffer, 'sent')
-            # Ctrl+Shift+Down
-            elif event.get_state() == (Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.SHIFT_MASK):
-                self.scroll_messages('down', message_buffer, 'received')
-        elif event.keyval == Gdk.KEY_Return or \
-                event.keyval == Gdk.KEY_KP_Enter:  # ENTER
-            # NOTE: SHIFT + ENTER is not needed to be emulated as it is not
-            # binding at all (textview's default action is newline)
-
-            if gajim.config.get('send_on_ctrl_enter'):
-                # here, we emulate GTK default action on ENTER (add new line)
-                # normally I would add in keypress but it gets way to complex
-                # to get instant result on changing this advanced setting
-                if event.get_state() == 0:  # no ctrl, no shift just ENTER add newline
-                    end_iter = message_buffer.get_end_iter()
-                    message_buffer.insert_at_cursor('\n')
-                    send_message = False
-                elif event.get_state() & Gdk.ModifierType.CONTROL_MASK:  # CTRL + ENTER
-                    send_message = True
-            else: # send on Enter, do newline on Ctrl Enter
-                if event.get_state() & Gdk.ModifierType.CONTROL_MASK:  # Ctrl + ENTER
-                    end_iter = message_buffer.get_end_iter()
-                    message_buffer.insert_at_cursor('\n')
-                    send_message = False
-                else: # ENTER
-                    send_message = True
-
-            if gajim.connections[self.account].connected < 2 and send_message:
-                # we are not connected
-                dialogs.ErrorDialog(_('A connection is not available'),
-                    _('Your message can not be sent until you are connected.'),
-                    transient_for=self.parent_win.window)
-                send_message = False
-
-            if send_message:
-                self.send_message(message, xhtml=xhtml) # send the message
-        elif event.keyval == Gdk.KEY_z: # CTRL+z
-            if event.get_state() & Gdk.ModifierType.CONTROL_MASK:
-                self.msg_textview.undo()
-        else:
-            # Give the control itself a chance to process
-            self.handle_message_textview_mykey_press(widget, event_keyval,
-                    event_keymod)
 
     def _on_drag_data_received(self, widget, context, x, y, selection,
                     target_type, timestamp):
