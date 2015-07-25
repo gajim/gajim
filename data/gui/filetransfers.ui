@@ -56,12 +56,22 @@
   <object class="GtkImage" id="image1">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="stock">gtk-clear</property>
+    <property name="icon_name">gtk-clear</property>
   </object>
   <object class="GtkImage" id="image2">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="stock">gtk-media-pause</property>
+    <property name="icon_name">media-playback-pause</property>
+  </object>
+  <object class="GtkImage" id="image3">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">gtk-cancel</property>
+  </object>
+  <object class="GtkImage" id="image4">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">gtk-close</property>
   </object>
   <object class="GtkWindow" id="file_transfers_window">
     <property name="can_focus">False</property>
@@ -86,7 +96,6 @@
               <object class="GtkTreeView" id="transfers_list">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="rules_hint">True</property>
                 <property name="enable_search">False</property>
                 <signal name="button-press-event" handler="on_transfers_list_button_press_event" swapped="no"/>
                 <signal name="button-release-event" handler="on_transfers_list_button_release_event" swapped="no"/>
@@ -163,14 +172,15 @@
             </child>
             <child>
               <object class="GtkButton" id="cancel_button">
-                <property name="label">gtk-cancel</property>
+                <property name="label">_Cancel</property>
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="receives_default">False</property>
                 <property name="tooltip_text" translatable="yes">Cancels the selected file transfer and removes incomplete files</property>
-                <property name="use_stock">True</property>
+                <property name="image">image3</property>
+                <property name="use_underline">True</property>
                 <signal name="clicked" handler="on_cancel_button_clicked" swapped="no"/>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="cancel_button-atkobject">
@@ -187,14 +197,15 @@
             </child>
             <child>
               <object class="GtkButton" id="close_button">
-                <property name="label">gtk-close</property>
+                <property name="label">_Close</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="has_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="receives_default">False</property>
                 <property name="tooltip_text" translatable="yes">Hides the window</property>
-                <property name="use_stock">True</property>
+                <property name="image">image4</property>
+                <property name="use_underline">True</property>
                 <signal name="clicked" handler="on_close_button_clicked" swapped="no"/>
               </object>
               <packing>
