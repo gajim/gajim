@@ -30,6 +30,7 @@ import warnings
 from common import gajim
 from common import kwalletbinding
 from common.exceptions import GnomeKeyringError
+import gi
 
 USER_HAS_LIBSECRET = False
 USER_HAS_GNOMEKEYRING = False
@@ -253,6 +254,7 @@ def get_storage():
         if gajim.config.get('use_gnomekeyring'):
             global Secret
             try:
+                gi.require_version('Secret', '1')
                 gir = __import__('gi.repository', globals(), locals(),
                     ['Secret'], 0)
                 Secret = gir.Secret

@@ -46,6 +46,8 @@ if dbus_support.supported:
 
 USER_HAS_PYNOTIFY = True # user has pynotify module
 try:
+    import gi
+    gi.require_version('Notify', '0.7')
     from gi.repository import Notify
     Notify.init('Gajim Notification')
 except ImportError:

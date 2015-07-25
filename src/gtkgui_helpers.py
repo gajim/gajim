@@ -28,6 +28,7 @@
 ##
 
 import xml.sax.saxutils
+import gi
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
@@ -732,6 +733,7 @@ Description=xmpp
             gajim.config.set('check_if_gajim_is_default', False)
 
     try:
+        gi.require_version('GConf', '2.0')
         GConf = importlib.import_module('gi.repository.GConf')
         # in try because daemon may not be there
         client = GConf.Client.get_default()

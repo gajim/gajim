@@ -31,6 +31,7 @@ import sys
 import os
 import logging
 import locale
+import gi
 
 from common import config
 import nbxmpp
@@ -188,7 +189,6 @@ try:
     if os.name == 'nt':
         os.environ['FS_PLUGIN_PATH'] = 'gtk\\lib\\farstream-0.1'
         os.environ['GST_PLUGIN_PATH'] = 'gtk\\lib\\gstreamer-0.10'
-    import gi
     gi.require_version('Farstream', '0.2')
     from gi.repository import Farstream
     gi.require_version('Gst', '1.0')
@@ -208,6 +208,7 @@ except (ImportError, ValueError):
 
 HAVE_UPNP_IGD = True
 try:
+    gi.require_version('GUPnPIgd', '1.0')
     from gi.repository import GUPnPIgd
     gupnp_igd = GUPnPIgd.SimpleIgd()
 except ImportError:
