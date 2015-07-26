@@ -502,7 +502,8 @@ class MessageWindow(object):
 
         if control.type_id == message_control.TYPE_GC:
             name = control.room_jid.split('@')[0]
-            urgent = control.attention_flag
+            urgent = control.attention_flag or \
+                gajim.config.get('notify_on_all_muc_messages')
         else:
             name = control.contact.get_shown_name()
             if control.resource:
