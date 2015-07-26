@@ -884,6 +884,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             self.connection.disconnect()
             self.last_connection = None
             self.connection = None
+
     def set_oldst(self): # Set old state
         if self.old_show:
             self.connected = gajim.SHOW_LIST.index(self.old_show)
@@ -912,6 +913,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                 self.sm.enabled = False
                 gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
                     show='error'))
+            self.connection.UnregisterDisconnectHandler(self._disconnectedReconnCB)
             self.disconnect()
             if gajim.config.get_per('accounts', self.name, 'autoreconnect'):
                 self.connected = -1
