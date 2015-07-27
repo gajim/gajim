@@ -2916,7 +2916,8 @@ class Interface:
             def gnome_screensaver_ActiveChanged_cb(active):
                 if not active:
                     for account in gajim.connections:
-                        if gajim.sleeper_state[account] == 'autoaway-forced':
+                        if gajim.account_is_connected(account) and \
+                        gajim.sleeper_state[account] == 'autoaway-forced':
                             # We came back online ofter gnome-screensaver
                             # autoaway
                             self.roster.send_status(account, 'online',
@@ -2932,6 +2933,8 @@ class Interface:
                                     not gajim.sleeper_state[account]:
                         continue
                     if gajim.sleeper_state[account] == 'online':
+                        if not gajim.account_is_connected(account):
+                            continue
                         # we save out online status
                         gajim.status_before_autoaway[account] = \
                                 gajim.connections[account].status
