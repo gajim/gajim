@@ -1532,7 +1532,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             if self.on_connect_auth:
                 self.on_connect_auth(None)
                 self.on_connect_auth = None
-                return
+            return
         if not self.connected: # We went offline during connecting process
             if self.on_connect_auth:
                 self.on_connect_auth(None)
