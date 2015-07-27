@@ -31,7 +31,7 @@ import pickle
 secrets_filename = gajimpaths['SECRETS_FILE']
 secrets_cache = None
 
-class Secrets(object):
+class Secrets():
     def __init__(self, filename):
         self.filename = filename
         self.srs = {}
@@ -95,13 +95,23 @@ class Secrets(object):
         return pk
 
 def load_secrets(filename):
-    f = open(filename, 'r')
+    global Secrets
+    f = open(filename, 'rb')
 
     try:
         secrets = pickle.load(f)
     except (KeyError, EOFError):
         f.close()
         secrets = Secrets(filename)
+    except (AttributeError, TypeError):
+        class Secrets(object, Secrets):
+            pass
+        try:
+            f.seek(0)
+            secrets = pickle.load(f)
+        except (KeyError, EOFError):
+            f.close()
+            secrets = Secrets(filename)
 
     return secrets
 
