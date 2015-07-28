@@ -304,14 +304,14 @@ class HostTester(Socks5, IdleObject):
             self.idlequeue.set_read_timeout(self.fd, CONNECT_TIMEOUT)
             # begin negotiation. on success 'address' != 0
             buff = self.receive()
-            if buff == '':
+            if buff == b'':
                 # end connection
                 self.pollend()
                 return
             # read auth response
             if buff is None or len(buff) != 2:
                 return None
-            version, method = struct.unpack('!BB', buff[:2].encode('utf-8'))
+            version, method = struct.unpack('!BB', buff[:2])
             if version != 0x05 or method == 0xff:
                 self.pollend()
                 return
@@ -349,7 +349,7 @@ class HostTester(Socks5, IdleObject):
             self._sock.setblocking(False)
             self._send = self._sock.send
             self._recv = self._sock.recv
-        self.buff = ''
+        self.buff = b''
         self.state = 1 # connected
         log.debug('Host connected to %s:%s' % (self.host, self.port))
         self.idlequeue.plug_idle(self, True, False)
@@ -424,7 +424,7 @@ class ReceiverTester(Socks5, IdleObject):
             self.idlequeue.set_read_timeout(self.fd, CONNECT_TIMEOUT)
             # begin negotiation. on success 'address' != 0
             buff = self.receive()
-            if buff == '':
+            if buff == b'':
                 # end connection
                 self.pollend()
                 return
@@ -432,7 +432,7 @@ class ReceiverTester(Socks5, IdleObject):
             # read auth response
             if buff is None or len(buff) != 2:
                 return None
-            version, method = struct.unpack('!BB', buff[:2].encode('utf-8'))
+            version, method = struct.unpack('!BB', buff[:2])
             if version != 0x05 or method == 0xff:
                 self.pollend()
                 return
@@ -444,7 +444,7 @@ class ReceiverTester(Socks5, IdleObject):
             # read connect response
             if buff is None or len(buff) < 2:
                 return None
-            version, reply = struct.unpack('!BB', buff[:2].encode('utf-8'))
+            version, reply = struct.unpack('!BB', buff[:2])
             if version != 0x05 or reply != 0x00:
                 self.pollend()
                 return

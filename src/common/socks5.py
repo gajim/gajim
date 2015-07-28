@@ -149,8 +149,8 @@ class SocksQueue:
                 socks5obj = Socks5SenderClient(self.idlequeue, idx,
                     self, _sock=None,host=str(streamhost['host']),
                     port=int(streamhost['port']),fingerprint=fp,
-                    connected=False, file_props=file_props, 
-                    initiator=streamhost['initiator'], 
+                    connected=False, file_props=file_props,
+                    initiator=streamhost['initiator'],
                     target=streamhost['target'])
                 socks5obj.streamhost = streamhost
                 self.add_sockobj(account, socks5obj)
@@ -395,7 +395,7 @@ class SocksQueue:
         connections with 1
         """
         if idx != -1:
-            for key in self.readers.keys():
+            for key in list(self.readers.keys()):
                 if idx in key:
                     self.remove_receiver_by_key(key,
                         do_disconnect=do_disconnect)
@@ -452,7 +452,7 @@ class Socks5(object):
         self.state = 0 # not connected
         self.pauses = 0
         self.size = 0
-        self.remaining_buff = ''
+        self.remaining_buff = b''
         self.file = None
         self.connected = False
         self.mode = ''
@@ -618,15 +618,15 @@ class Socks5(object):
         Read small chunks of data. Call owner's disconnected() method if
         appropriate
         """
-        received = ''
+        received = b''
         try:
-            add = self._recv(64).decode('utf-8')
+            add = self._recv(64)
         except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError,
         OpenSSL.SSL.WantX509LookupError) as e:
             log.info('SSL rehandshake request : ' + repr(e))
             raise e
         except Exception:
-            add = ''
+            add = b''
         received += add
         if len(add) == 0:
             self.disconnect()
@@ -647,9 +647,9 @@ class Socks5(object):
         return len(raw_data)
 
     def write_next(self):
-        if self.remaining_buff != '':
+        if self.remaining_buff != b'':
             buff = self.remaining_buff
-            self.remaining_buff = ''
+            self.remaining_buff = b''
         else:
             try:
                 self.open_file_for_reading()
@@ -688,7 +688,7 @@ class Socks5(object):
             if lenn != len(buff):
                 self.remaining_buff = buff[lenn:]
             else:
-                self.remaining_buff = ''
+                self.remaining_buff = b''
             self.state = 7 # continue to write in the socket
             if lenn == 0:
                 return None
@@ -707,7 +707,7 @@ class Socks5(object):
             self.file_props.error = -2
             return None
         fd = None
-        if self.remaining_buff != '':
+        if self.remaining_buff != b'':
             try:
                 fd = self.get_fd()
             except IOError:
@@ -721,7 +721,7 @@ class Socks5(object):
                 self.file_props.last_time
             self.file_props.last_time = current_time
             self.file_props.received_len += lenn
-            self.remaining_buff = ''
+            self.remaining_buff = b''
             if self.file_props.received_len == self.file_props.size:
                 self.rem_fd(fd)
                 self.disconnect()
@@ -736,13 +736,13 @@ class Socks5(object):
                 self.file_props.error = -6 # file system error
                 return 0
             try:
-                buff = self._recv(MAX_BUFF_LEN).decode('utf-8')
+                buff = self._recv(MAX_BUFF_LEN)
             except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError,
             OpenSSL.SSL.WantX509LookupError) as e:
                 log.info('SSL rehandshake request :' + repr(e))
                 raise e
             except Exception:
-                buff = ''
+                buff = b''
             current_time = self.idlequeue.current_time()
             self.file_props.elapsed_time += current_time - \
                 self.file_props.last_time
@@ -819,9 +819,9 @@ class Socks5(object):
         """
         auth_mechanisms = []
         try:
-            num_auth = struct.unpack('!xB', buff[:2].encode('utf-8'))[0]
+            num_auth = struct.unpack('!xB', buff[:2])[0]
             for i in list(range(num_auth)):
-                mechanism, = struct.unpack('!B', buff[1 + i].encode('utf-8'))
+                mechanism, = struct.unpack('!B', buff[1 + i])
                 auth_mechanisms.append(mechanism)
         except Exception:
             return None
@@ -855,25 +855,22 @@ class Socks5(object):
 
     def _parse_request_buff(self, buff):
         try: # don't trust on what comes from the outside
-            req_type, host_type, = struct.unpack('!xBxB', buff[:4].encode(
-                'utf-8'))
+            req_type, host_type, = struct.unpack('!xBxB', buff[:4])
             if host_type == 0x01:
-                host_arr = struct.unpack('!iiii', buff[4:8].encode('utf-8'))
+                host_arr = struct.unpack('!iiii', buff[4:8])
                 host, = '.'.join(str(s) for s in host_arr)
                 host_len = len(host)
             elif host_type == 0x03:
-                host_len,  = struct.unpack('!B', buff[4].encode('utf-8'))
-                host, = struct.unpack('!%ds' % host_len, buff[5:5 + host_len].\
-                    encode('utf-8'))
+                host_len,  = struct.unpack('!B', buff[4])
+                host, = struct.unpack('!%ds' % host_len, buff[5:5 + host_len])
             portlen = len(buff[host_len + 5:])
             if portlen == 1:
-                port, = struct.unpack('!B', buff[host_len + 5].encode('utf-8'))
+                port, = struct.unpack('!B', buff[host_len + 5])
             elif portlen == 2:
-                port, = struct.unpack('!H', buff[host_len + 5:].encode('utf-8'))
+                port, = struct.unpack('!H', buff[host_len + 5:])
             # file data, comes with auth message (Gaim bug)
             else:
-                port, = struct.unpack('!H', buff[host_len + 5: host_len + 7].\
-                    encode('utf-8'))
+                port, = struct.unpack('!H', buff[host_len + 5: host_len + 7])
                 self.remaining_buff = buff[host_len + 7:]
         except Exception:
             return (None, None, None)
@@ -890,7 +887,7 @@ class Socks5(object):
             log.info("SSL rehandshake request : " + repr(e))
             raise e
         try:
-            version, method = struct.unpack('!BB', buff.encode('utf-8'))
+            version, method = struct.unpack('!BB', buff)
         except Exception:
             version, method = None, None
         if version != 0x05 or method == 0xff:
@@ -1197,7 +1194,7 @@ class Socks5Client(Socks5):
         if self.state == 2: # read auth response
             if buff is None or len(buff) != 2:
                 return None
-            version, method = struct.unpack('!BB', buff[:2].encode('utf-8'))
+            version, method = struct.unpack('!BB', buff[:2])
             if version != 0x05 or method == 0xff:
                 self.disconnect()
         elif self.state == 4: # get approve of our request
@@ -1206,23 +1203,18 @@ class Socks5Client(Socks5):
             sub_buff = buff[:4]
             if len(sub_buff) < 4:
                 return None
-            version, address_type = struct.unpack('!BxxB', buff[:4].encode(
-                'utf-8'))
+            version, address_type = struct.unpack('!BxxB', buff[:4])
             addrlen = 0
             if address_type == 0x03:
-                addrlen = ord(buff[4])
-                address = struct.unpack('!%ds' % addrlen, buff[5:addrlen + 5].\
-                    encode('utf-8'))
+                addrlen = buff[4]
+                address = struct.unpack('!%ds' % addrlen, buff[5:addrlen + 5])
                 portlen = len(buff[addrlen + 5:])
                 if portlen == 1:
-                    port, = struct.unpack('!B', buff[addrlen + 5].encode(
-                        'utf-8'))
+                    port, = struct.unpack('!B', buff[addrlen + 5])
                 elif portlen == 2:
-                    port, = struct.unpack('!H', buff[addrlen + 5:].encode(
-                        'utf-8'))
+                    port, = struct.unpack('!H', buff[addrlen + 5:])
                 else: # Gaim bug :)
-                    port, = struct.unpack('!H', buff[addrlen + 5:addrlen + 7].\
-                        encode('utf-8'))
+                    port, = struct.unpack('!H', buff[addrlen + 5:addrlen + 7])
                     self.remaining_buff = buff[addrlen + 7:]
             self.state = 5 # for senders: init file_props and send '\n'
             if self.queue.on_success:
