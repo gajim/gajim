@@ -914,7 +914,9 @@ class Connection(CommonConnection, ConnectionHandlers):
                 self.sm.enabled = False
                 gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
                     show='error'))
-            self.connection.UnregisterDisconnectHandler(self._disconnectedReconnCB)
+            if self.connection:
+                self.connection.UnregisterDisconnectHandler(
+                    self._disconnectedReconnCB)
             self.disconnect()
             if gajim.config.get_per('accounts', self.name, 'autoreconnect'):
                 self.connected = -1
