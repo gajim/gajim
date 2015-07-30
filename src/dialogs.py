@@ -1298,8 +1298,10 @@ class AboutDialog:
         gtk_ver = '%i.%i.%i' % (Gtk.get_major_version(),
             Gtk.get_minor_version(), Gtk.get_micro_version())
         gobject_ver = self.tuple2str(GObject.pygobject_version)
-        dlg.set_comments('%s\n%s %s\n%s %s' % (_('A GTK+ Jabber/XMPP client'),
-            _('GTK+ Version:'), gtk_ver, _('PyGobject Version:'), gobject_ver))
+        nbxmpp_ver = nbxmpp.__version__
+        dlg.set_comments('%s\n%s %s\n%s %s\n%s %s' % (_('A GTK+ Jabber/XMPP client'),
+            _('GTK+ Version:'), gtk_ver, _('PyGobject Version:'), gobject_ver,
+            _('python-nbxmpp Version:'), nbxmpp_ver))
         dlg.set_website('http://gajim.org/')
 
         authors_file_path = self.get_path('AUTHORS')
@@ -1349,7 +1351,7 @@ class AboutDialog:
         dlg.show_all()
 
     def on_response(self, dialog, response_id):
-        if response_id == Gtk.ResponseType.CANCEL:
+        if response_id == Gtk.ResponseType.DELETE_EVENT:
             dialog.destroy()
 
     def tuple2str(self, tuple_):
