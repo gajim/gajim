@@ -421,7 +421,8 @@ class SingleForm(Gtk.Table, object):
                     # 5 option max: show checkbutton
                     widget = Gtk.VBox()
                     for value, label in field.iter_options():
-                        check = Gtk.CheckButton(label, use_underline=False)
+                        check = Gtk.CheckButton(label=label,
+                            use_underline=False)
                         check.set_active(value in field.values)
                         check.connect('toggled',
                                 self.on_list_multi_checkbutton_toggled, field, value)

@@ -31,7 +31,7 @@ import pickle
 secrets_filename = gajimpaths['SECRETS_FILE']
 secrets_cache = None
 
-class Secrets:
+class Secrets():
     def __init__(self, filename):
         self.filename = filename
         self.srs = {}
@@ -43,7 +43,7 @@ class Secrets:
 
     def save(self):
         f = open(secrets_filename, 'wb')
-        pickle.dump(self, f)
+        pickle.dump(self, f, protocol=2)
         f.close()
 
     def retained_secrets(self, account, bare_jid):

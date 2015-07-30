@@ -197,7 +197,7 @@ class VcardWindow:
     def set_value(self, entry_name, value):
         try:
             if value and entry_name == 'URL_label':
-                widget = Gtk.LinkButton(value, value)
+                widget = Gtk.LinkButton(uri=value, label=value)
                 widget.set_alignment(0, 0)
                 widget.show()
                 table = self.xml.get_object('personal_info_table')
@@ -555,7 +555,7 @@ class ZeroconfVcardWindow:
     def set_value(self, entry_name, value):
         try:
             if value and entry_name == 'URL_label':
-                widget = Gtk.LinkButton(value, value)
+                widget = Gtk.LinkButton(uri=value, label=value)
                 widget.set_alignment(0, 0)
                 table = self.xml.get_object('personal_info_table')
                 table.attach(widget, 1, 4, 3, 4, yoptions = 0)

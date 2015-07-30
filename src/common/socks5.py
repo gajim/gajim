@@ -419,10 +419,10 @@ class SocksQueue:
                 self.connected -= 1
 
     def remove_by_mode(self, sid, mode, do_disconnect=True):
-        for (key, sock) in self.senders.items():
+        for (key, sock) in self.senders.copy().items():
             if key[0] == sid and sock.mode == mode:
                 self.remove_sender_by_key(key)
-        for (key, sock) in self.readers.items():
+        for (key, sock) in self.readers.copy().items():
             if key[0] == sid and sock.mode == mode:
                 self.remove_receiver_by_key(key)
 

@@ -1663,7 +1663,7 @@ class YesNoDialog(HigDialog):
             on_response_no=self.on_response_no)
 
         if checktext:
-            self.checkbutton = Gtk.CheckButton(checktext)
+            self.checkbutton = Gtk.CheckButton(label=checktext)
             self.vbox.pack_start(self.checkbutton, False, True, 0)
         else:
             self.checkbutton = None
@@ -1756,7 +1756,7 @@ class ConfirmationDialogCheck(ConfirmationDialog):
         ok_button = self.action_area.get_children()[0] # right to left
         ok_button.grab_focus()
 
-        self.checkbutton = Gtk.CheckButton(checktext)
+        self.checkbutton = Gtk.CheckButton(label=checktext)
         self.vbox.pack_start(self.checkbutton, False, True, 0)
         self.set_modal(is_modal)
         self.popup()
@@ -1812,14 +1812,14 @@ class ConfirmationDialogDoubleCheck(ConfirmationDialog):
         ok_button.grab_focus()
 
         if checktext1:
-            self.checkbutton1 = Gtk.CheckButton(checktext1)
+            self.checkbutton1 = Gtk.CheckButton(label=checktext1)
             if tooltip1:
                 self.checkbutton1.set_tooltip_text(tooltip1)
             self.vbox.pack_start(self.checkbutton1, False, True, 0)
         else:
             self.checkbutton1 = None
         if checktext2:
-            self.checkbutton2 = Gtk.CheckButton(checktext2)
+            self.checkbutton2 = Gtk.CheckButton(label=checktext2)
             if tooltip2:
                 self.checkbutton2.set_tooltip_text(tooltip2)
             self.vbox.pack_start(self.checkbutton2, False, True, 0)
@@ -1969,7 +1969,7 @@ class FTOverwriteConfirmationDialog(ConfirmationDialog):
         self.on_response = on_response
 
         if propose_resume:
-            b = Gtk.Button('', Gtk.STOCK_REFRESH)
+            b = Gtk.Button(label='', stock=Gtk.STOCK_REFRESH)
             align = b.get_children()[0]
             hbox = align.get_children()[0]
             label = hbox.get_children()[1]
@@ -1977,7 +1977,7 @@ class FTOverwriteConfirmationDialog(ConfirmationDialog):
             label.set_use_underline(True)
             self.add_action_widget(b, 100)
 
-        b = Gtk.Button('', Gtk.STOCK_SAVE_AS)
+        b = Gtk.Button(label='', stock=Gtk.STOCK_SAVE_AS)
         align = b.get_children()[0]
         hbox = align.get_children()[0]
         label = hbox.get_children()[1]
@@ -2086,7 +2086,7 @@ class InputDialogCheck(InputDialog):
             self.input_entry.select_region(0, -1) # select all
 
         if checktext:
-            self.checkbutton = Gtk.CheckButton(checktext)
+            self.checkbutton = Gtk.CheckButton(label=checktext)
             self.vbox.pack_start(self.checkbutton, False, True, 0)
             self.checkbutton.show()
 

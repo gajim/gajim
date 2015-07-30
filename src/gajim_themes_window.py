@@ -199,7 +199,9 @@ class GajimThemesWindow:
         textcolor = gajim.config.get_per('themes', theme, option + 'textcolor')
         if textcolor:
             state = True
-            self.text_colorbutton.set_color(Gdk.color_parse(textcolor))
+            rgba = Gdk.RGBA()
+            rgba.parse(textcolor)
+            self.text_colorbutton.set_rgba(rgba)
         else:
             state = False
         self.textcolor_checkbutton.set_active(state)
@@ -207,8 +209,9 @@ class GajimThemesWindow:
         bgcolor = gajim.config.get_per('themes', theme, option + 'bgcolor')
         if bgcolor:
             state = True
-            self.background_colorbutton.set_color(Gdk.color_parse(
-                    bgcolor))
+            rgba = Gdk.RGBA()
+            rgba.parse(bgcolor)
+            self.background_colorbutton.set_rgba(rgba)
         else:
             state = False
         self.background_checkbutton.set_active(state)
@@ -232,7 +235,9 @@ class GajimThemesWindow:
         'muc_msg', 'muc_directed_msg'):
             color = gajim.config.get_per('themes', theme, 'state_' + chatstate + \
                     '_color')
-            self.colorbuttons[chatstate].set_color(Gdk.color_parse(color))
+            rgba = Gdk.RGBA()
+            rgba.parse(color)
+            self.colorbuttons[chatstate].set_rgba(rgba)
 
     def on_textcolor_checkbutton_toggled(self, widget):
         state = widget.get_active()

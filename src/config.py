@@ -954,22 +954,24 @@ class PreferencesWindow:
             col = gajim.config.get(c)
             if col:
                 if isinstance(col_to_widget[c], list):
-                    self.xml.get_object(col_to_widget[c][0]).set_color(
-                            Gdk.color_parse(col))
+                    rgba = Gdk.RGBA()
+                    rgba.parse(col)
+                    self.xml.get_object(col_to_widget[c][0]).set_rgba(rgba)
                     self.xml.get_object(col_to_widget[c][0]).set_sensitive(True)
                     self.xml.get_object(col_to_widget[c][1]).set_active(True)
                 else:
-                    self.xml.get_object(col_to_widget[c]).set_color(
-                            Gdk.color_parse(col))
+                    rgba = Gdk.RGBA()
+                    rgba.parse(col)
+                    self.xml.get_object(col_to_widget[c]).set_rgba(rgba)
             else:
+                rgba = Gdk.RGBA()
+                rgba.parse('#000000')
                 if isinstance(col_to_widget[c], list):
-                    self.xml.get_object(col_to_widget[c][0]).set_color(
-                            Gdk.color_parse('#000000'))
+                    self.xml.get_object(col_to_widget[c][0]).set_rgba(rgba)
                     self.xml.get_object(col_to_widget[c][0]).set_sensitive(False)
                     self.xml.get_object(col_to_widget[c][1]).set_active(False)
                 else:
-                    self.xml.get_object(col_to_widget[c]).set_color(
-                            Gdk.color_parse('#000000'))
+                    self.xml.get_object(col_to_widget[c]).set_rgba(rgba)
 
     def on_reset_colors_button_clicked(self, widget):
         col_to_widget = {'inmsgcolor': 'incoming_nick_colorbutton',
