@@ -258,7 +258,7 @@ def get_storage():
                 gir = __import__('gi.repository', globals(), locals(),
                     ['Secret'], 0)
                 Secret = gir.Secret
-            except (ImportError, AttributeError):
+            except (ValueError, AttributeError):
                 global GnomeKeyring
                 try:
                     gir = __import__('gi.repository', globals(), locals(),

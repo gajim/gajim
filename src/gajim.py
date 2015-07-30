@@ -134,11 +134,11 @@ import logging
 # gajim.gui or gajim.gtk more appropriate ?
 log = logging.getLogger('gajim.gajim')
 
-#import gi
-#gi.require_version('Gtk', '3.0')
-#gi.require_version('Gdk', '2.0')
-#gi.require_version('GObject', '2.0')
-#gi.require_version('Pango', '1.0')
+import gi
+gi.require_version('Gtk', '3.0')
+gi.require_version('Gdk', '3.0')
+gi.require_version('GObject', '2.0')
+gi.require_version('Pango', '1.0')
 
 import getopt
 from common import i18n

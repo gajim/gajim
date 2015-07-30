@@ -50,7 +50,7 @@ try:
     gi.require_version('Notify', '0.7')
     from gi.repository import Notify
     Notify.init('Gajim Notification')
-except ImportError:
+except ValueError:
     USER_HAS_PYNOTIFY = False
 
 def get_show_in_roster(event, account, contact, session=None):

@@ -211,7 +211,7 @@ try:
     gi.require_version('GUPnPIgd', '1.0')
     from gi.repository import GUPnPIgd
     gupnp_igd = GUPnPIgd.SimpleIgd()
-except ImportError:
+except ValueError:
     HAVE_UPNP_IGD = False
 
 HAVE_PYCURL = True
