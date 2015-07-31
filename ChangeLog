@@ -1,3 +1,9 @@
+Gajim 0.16.3 (31 July 2015)
+
+  * Fix reading secret file
+  * Fix reconnection after suspend
+  * Fix sending GPG-encrypted file to non-trusted key
+
 Gajim 0.16.2 (24 July 2015)
 
   * improve Zeroconf under windows and with IPv6
