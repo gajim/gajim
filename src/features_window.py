@@ -25,6 +25,7 @@
 
 import os
 import sys
+import gi
 from gi.repository import Gtk
 import gtkgui_helpers
 
@@ -194,6 +195,7 @@ class FeaturesWindow:
         if kwalletbinding.kwallet_available():
             return True
         try:
+            gi.require_version('GnomeKeyring', '1.0')
             from gi.repository import GnomeKeyring
         except Exception:
             return False
