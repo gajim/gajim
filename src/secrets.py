@@ -96,7 +96,7 @@ class Secrets():
 
 def load_secrets(filename):
     global Secrets
-    f = open(filename, 'rb')
+    f = open(filename, 'r')
 
     try:
         secrets = pickle.load(f)
