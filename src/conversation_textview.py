@@ -122,6 +122,11 @@ class TextViewImage(gtk.Image):
         if not parent:
             self._disconnect_signals()
             return
+        if isinstance(parent, gtk.EventBox):
+            parent = parent.get_parent()
+            if not parent:
+                self._disconnect_signals()
+                return
 
         self._do_connect(parent, 'style-set', self.do_queue_draw)
         self._do_connect(parent, 'focus-in-event', self.do_queue_draw)
