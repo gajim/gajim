@@ -26,6 +26,7 @@
 from gi.repository import Gtk
 import gtkgui_helpers
 from gi.repository import GLib
+from gi.repository import Pango
 
 from common import gajim
 from common import helpers
@@ -112,6 +113,7 @@ class AdvancedConfigurationWindow(object):
 
         renderer_text = Gtk.CellRendererText()
         renderer_text.connect('edited', self.on_config_edited)
+        renderer_text.set_property('ellipsize', Pango.EllipsizeMode.END)
         col = Gtk.TreeViewColumn(_('Value'),renderer_text, text = 1)
         treeview.insert_column(col, -1)
         col.set_cell_data_func(renderer_text, self.cb_value_column_data)
@@ -123,7 +125,6 @@ class AdvancedConfigurationWindow(object):
         renderer_text = Gtk.CellRendererText()
         col = Gtk.TreeViewColumn(_('Type'), renderer_text, text = 2)
         treeview.insert_column(col, -1)
-        col.props.expand = True
         col.props.sizing = Gtk.TreeViewColumnSizing.FIXED
 
         treeview.set_model(self.modelfilter)
