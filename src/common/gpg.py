@@ -56,8 +56,7 @@ if HAVE_GPG:
                         trust = False
             if not trust:
                 # check that we'll be able to encrypt
-                result = super(GnuPG, self).list_keys(recipients,
-                    keys=recipients)
+                result = super(GnuPG, self).list_keys(keys=recipients)
                 for key in result:
                     if key['trust'] not in ('f', 'u'):
                         return '', 'NOT_TRUSTED'
