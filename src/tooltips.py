@@ -73,6 +73,7 @@ class BaseTooltip:
         self.cur_data = None
         self.check_last_time = None
         self.shown = False
+        self.position_computed = False
 
     def populate(self, data):
         """
@@ -115,30 +116,36 @@ class BaseTooltip:
         self.hide_tooltip()
 
     def on_size_allocate(self, widget, rect):
-        half_width = rect.width / 2 + 1
-        if self.preferred_position[1] + rect.height > self.screen.get_height():
-             # flip tooltip up
-            self.preferred_position[1] -= rect.height + self.widget_height + 8
-            if self.preferred_position[1] < 0:
-                self.preferred_position[1] = self.screen.get_height() - \
-                    rect.height - 2
+        if not self.position_computed:
+            half_width = rect.width / 2 + 1
+            if self.preferred_position[1] + rect.height > \
+            self.screen.get_height():
+                 # flip tooltip up
+                self.preferred_position[1] -= rect.height + self.widget_height \
+                    + 8
+                if self.preferred_position[1] < 0:
+                    self.preferred_position[1] = self.screen.get_height() - \
+                        rect.height - 2
 
-                if self.preferred_position[0] + rect.width + 7 < \
-                self.screen.get_width():
-                    self.preferred_position[0] = self.preferred_position[0] + 7
-                else:
-                    self.preferred_position[0] = self.preferred_position[0] - \
-                        rect.width - 7
-                self.win.move(self.preferred_position[0],
-                    self.preferred_position[1])
-                return
-        if self.preferred_position[0] < half_width:
-            self.preferred_position[0] = 0
-        elif self.preferred_position[0] + rect.width > \
-        self.screen.get_width() + half_width:
-            self.preferred_position[0] = self.screen.get_width() - rect.width
-        elif not self.check_last_time:
-            self.preferred_position[0] -= half_width
+                    if self.preferred_position[0] + rect.width + 7 < \
+                    self.screen.get_width():
+                        self.preferred_position[0] = self.preferred_position[0]\
+                            + 7
+                    else:
+                        self.preferred_position[0] = self.preferred_position[0]\
+                            - rect.width - 7
+                    self.win.move(self.preferred_position[0],
+                        self.preferred_position[1])
+                    return
+            if self.preferred_position[0] < half_width:
+                self.preferred_position[0] = 0
+            elif self.preferred_position[0] + rect.width > \
+            self.screen.get_width() + half_width:
+                self.preferred_position[0] = self.screen.get_width() - \
+                    rect.width
+            elif not self.check_last_time:
+                self.preferred_position[0] -= half_width
+            self.position_computed = True
         self.win.move(self.preferred_position[0], self.preferred_position[1])
 
     def show_tooltip(self, data, widget_height, widget_y_position):
@@ -151,6 +158,7 @@ class BaseTooltip:
         """
         if self.shown:
             return
+        self.position_computed = False
         self.cur_data = data
         # set tooltip contents
         self.populate(data)

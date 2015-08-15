@@ -4114,7 +4114,7 @@ class RosterWindow:
                 self.tree.expand_row(path, False)
             return
         if self.rfilter_enabled:
-            Gobject.idle_add(self.disable_rfilter)
+            GObject.idle_add(self.disable_rfilter)
         jid = model[path][C_JID]
         resource = None
         contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
