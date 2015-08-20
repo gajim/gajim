@@ -1990,6 +1990,8 @@ class AccountsWindow:
         else:
             self.xml.get_object('log_history_checkbutton1').set_active(True)
 
+        self.xml.get_object('sync_logs_with_server_checkbutton1').set_active(
+            gajim.config.get_per('accounts', account, 'sync_logs_with_server'))
         self.xml.get_object('sync_with_global_status_checkbutton1').set_active(
             gajim.config.get_per('accounts', account,
             'sync_with_global_status'))
@@ -2342,6 +2344,12 @@ class AccountsWindow:
             list_no_log_for.append(self.current_account)
         gajim.config.set_per('accounts', self.current_account, 'no_log_for',
             ' '.join(list_no_log_for))
+
+    def on_sync_logs_with_server_checkbutton_toggled(self, widget):
+        if self.ignore_events:
+            return
+        self.on_checkbutton_toggled(widget, 'sync_logs_with_server',
+            account=self.current_account)
 
     def on_sync_with_global_status_checkbutton_toggled(self, widget):
         if self.ignore_events:
