@@ -1459,9 +1459,11 @@ def _get_img_direct(attrs):
     """
     Download an image. This function should be launched in a separated thread.
     """
-    mem, alt = '', ''
-    # Wait maximum 5s for connection
-    socket.setdefaulttimeout(5)
+    mem, alt, max_size = '', '', 2*1024*1024
+    if 'max_size' in attrs:
+        max_size = attrs['max_size']
+    # Wait maximum 10s for connection
+    socket.setdefaulttimeout(10)
     try:
         req = urllib2.Request(attrs['src'])
         req.add_header('User-Agent', 'Gajim ' + gajim.version)
@@ -1471,13 +1473,13 @@ def _get_img_direct(attrs):
         pixbuf = None
         alt = attrs.get('alt', 'Broken image')
     else:
-        # Wait 0.5s between each byte
+        # Wait 2s between each byte
         try:
-            f.fp._sock.fp._sock.settimeout(0.5)
+            f.fp._sock.fp._sock.settimeout(2)
         except Exception:
             pass
-        # Max image size = 2 MB (to try to prevent DoS)
-        deadline = time.time() + 3
+        # On a slow internet connection with ~1000kbps you need ~10 seconds for 1 MB
+        deadline = time.time() + (10 * (max_size / 1048576))
         while True:
             if time.time() > deadline:
                 log.debug('Timeout loading image %s ' % attrs['src'])
@@ -1500,7 +1502,7 @@ def _get_img_direct(attrs):
                 mem += temp
             else:
                 break
-            if len(mem) > 2*1024*1024:
+            if len(mem) > max_size:
                 alt = attrs.get('alt', '')
                 if alt:
                     alt += '\n'
@@ -1515,15 +1517,19 @@ def _get_img_proxy(attrs, proxy):
     """
     if not gajim.HAVE_PYCURL:
         return '', _('PyCURL is not installed')
-    mem, alt = '', ''
+    mem, alt, max_size = '', '', 2*1024*1024
+    if 'max_size' in attrs:
+        max_size = attrs['max_size']
     try:
         b = StringIO()
         c = pycurl.Curl()
         c.setopt(pycurl.URL, attrs['src'].encode('utf-8'))
         c.setopt(pycurl.FOLLOWLOCATION, 1)
-        c.setopt(pycurl.CONNECTTIMEOUT, 5)
-        c.setopt(pycurl.TIMEOUT, 10)
-        c.setopt(pycurl.MAXFILESIZE, 2000000)
+        # Wait maximum 10s for connection
+        c.setopt(pycurl.CONNECTTIMEOUT, 10)
+        # On a slow internet connection with ~1000kbps you need ~10 seconds for 1 MB
+        c.setopt(pycurl.TIMEOUT, 10 * (max_size / 1048576))
+        c.setopt(pycurl.MAXFILESIZE, max_size)
         c.setopt(pycurl.WRITEFUNCTION, b.write)
         c.setopt(pycurl.USERAGENT, 'Gajim ' + gajim.version)
         # set proxy
