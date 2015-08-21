@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.3 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.12"/>
   <object class="GtkDialog" id="input_dialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="type_hint">dialog</property>
-    <signal name="destroy" handler="on_input_dialog_destroy" swapped="no"/>
     <signal name="delete-event" handler="on_input_dialog_delete_event" swapped="no"/>
+    <signal name="destroy" handler="on_input_dialog_destroy" swapped="no"/>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox10">
         <property name="visible">True</property>
@@ -26,7 +27,6 @@
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="receives_default">False</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -44,7 +44,6 @@
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
                 <property name="receives_default">False</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -62,13 +61,14 @@
           </packing>
         </child>
         <child>
-          <object class="GtkVBox" id="vbox">
+          <object class="GtkBox" id="vbox">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="border_width">6</property>
+            <property name="orientation">vertical</property>
             <property name="spacing">6</property>
             <child>
-              <object class="GtkHBox" id="hbox2960">
+              <object class="GtkBox" id="hbox2960">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="spacing">12</property>
@@ -77,7 +77,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="stock">gtk-dialog-question</property>
-                    <property name="icon-size">6</property>
+                    <property name="icon_size">6</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
 <interface>
-  <requires lib="gtk+" version="3.0"/>
+  <requires lib="gtk+" version="3.12"/>
   <object class="GtkMenu" id="context_menu">
     <property name="can_focus">False</property>
     <child>
@@ -96,12 +96,13 @@
     <property name="default_height">500</property>
     <signal name="delete-event" handler="on_history_manager_window_delete_event" swapped="no"/>
     <child>
-      <object class="GtkVBox" id="vbox">
+      <object class="GtkBox" id="vbox">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
         <property name="spacing">6</property>
         <child>
-          <object class="GtkHPaned" id="hpaned">
+          <object class="GtkPaned" id="hpaned">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="position">200</property>
@@ -129,14 +130,16 @@
               </packing>
             </child>
             <child>
-              <object class="GtkVBox" id="vbox1">
+              <object class="GtkBox" id="vbox1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkVBox" id="welcome_vbox">
+                  <object class="GtkBox" id="welcome_vbox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                    <property name="orientation">vertical</property>
                     <child>
                       <object class="GtkLabel" id="welcome_label">
                         <property name="visible">True</property>
@@ -153,7 +156,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkHBox" id="hbox3">
+                      <object class="GtkBox" id="hbox3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -198,7 +201,7 @@ Use this program to delete or export logs. You can select logs from the left and
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkHBox" id="hbox2">
+                      <object class="GtkBox" id="hbox2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -311,7 +314,7 @@ If you plan to do massive deletions, please make sure Gajim is not running. Gene
           </packing>
         </child>
         <child>
-          <object class="GtkHBox" id="hbox">
+          <object class="GtkBox" id="hbox">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="spacing">6</property>

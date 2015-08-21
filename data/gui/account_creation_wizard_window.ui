@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
 <interface>
-  <requires lib="gtk+" version="3.10"/>
+  <requires lib="gtk+" version="3.12"/>
   <object class="GtkImage" id="image2">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -57,9 +57,10 @@
             <property name="show_tabs">False</property>
             <property name="show_border">False</property>
             <child>
-              <object class="GtkVBox" id="vbox78">
+              <object class="GtkBox" id="vbox78">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
                 <property name="spacing">12</property>
                 <child>
                   <object class="GtkLabel" id="label256">
@@ -88,10 +89,11 @@ to the Jabber network.</property>
                         <property name="top_padding">5</property>
                         <property name="left_padding">12</property>
                         <child>
-                          <object class="GtkVBox" id="vbox83">
+                          <object class="GtkBox" id="vbox83">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="border_width">6</property>
+                            <property name="orientation">vertical</property>
                             <property name="spacing">6</property>
                             <child>
                               <object class="GtkRadioButton" id="use_existing_account_radiobutton">
@@ -158,10 +160,11 @@ to the Jabber network.</property>
               </packing>
             </child>
             <child>
-              <object class="GtkVBox" id="register_vbox">
+              <object class="GtkBox" id="register_vbox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="border_width">6</property>
+                <property name="orientation">vertical</property>
                 <property name="spacing">12</property>
                 <child>
                   <object class="GtkLabel" id="label270">
@@ -178,15 +181,24 @@ to the Jabber network.</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkTable" id="table27">
+                  <object class="GtkGrid" id="grid1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="n_rows">3</property>
-                    <property name="n_columns">4</property>
-                    <property name="column_spacing">12</property>
                     <property name="row_spacing">6</property>
+                    <property name="column_spacing">6</property>
                     <child>
-                      <placeholder/>
+                      <object class="GtkLabel" id="label262">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes">_Jabber ID:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">username_entry</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                      </packing>
                     </child>
                     <child>
                       <object class="GtkEntry" id="username_entry">
@@ -196,8 +208,54 @@ to the Jabber network.</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
-                        <property name="right_attach">2</property>
-                        <property name="y_options"/>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label1">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
+                        <property name="label">@</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">2</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBoxText" id="server_comboboxtext">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
+                        <property name="has_entry">True</property>
+                        <child internal-child="entry">
+                          <object class="GtkEntry" id="server_comboboxtext_entry">
+                            <property name="can_focus">True</property>
+                            <property name="completion">server_entrycompletion</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">3</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="anonymous_checkbutton1">
+                        <property name="label" translatable="yes">Anon_ymous authentication</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="draw_indicator">True</property>
+                        <signal name="toggled" handler="on_anonymous_checkbutton1_toggled" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">1</property>
+                        <property name="width">3</property>
                       </packing>
                     </child>
                     <child>
@@ -207,13 +265,22 @@ to the Jabber network.</property>
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">_Password:</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">password_entry</property>
                       </object>
                       <packing>
+                        <property name="left_attach">0</property>
                         <property name="top_attach">2</property>
-                        <property name="bottom_attach">3</property>
-                        <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"/>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="password_entry">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="visibility">False</property>
+                        <property name="activates_default">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">2</property>
                       </packing>
                     </child>
                     <child>
@@ -232,89 +299,12 @@ to the Jabber network.</property>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
-                        <property name="right_attach">4</property>
                         <property name="top_attach">2</property>
-                        <property name="bottom_attach">3</property>
-                        <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"/>
+                        <property name="width">2</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkEntry" id="password_entry">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="visibility">False</property>
-                        <property name="activates_default">True</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="right_attach">2</property>
-                        <property name="top_attach">2</property>
-                        <property name="bottom_attach">3</property>
-                        <property name="y_options"/>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="label262">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Jabber ID:</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">username_entry</property>
-                      </object>
-                      <packing>
-                        <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"/>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="label1">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
-                        <property name="label">@</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">2</property>
-                        <property name="right_attach">3</property>
-                        <property name="x_options"/>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkCheckButton" id="anonymous_checkbutton1">
-                        <property name="label" translatable="yes">Anon_ymous authentication</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
-                        <property name="draw_indicator">True</property>
-                        <signal name="toggled" handler="on_anonymous_checkbutton1_toggled" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="right_attach">4</property>
-                        <property name="top_attach">1</property>
-                        <property name="bottom_attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkComboBoxText" id="server_comboboxtext">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="has_entry">True</property>
-                        <child internal-child="entry">
-                          <object class="GtkEntry" id="server_comboboxtext_entry">
-                            <property name="can_focus">True</property>
-                            <property name="completion">server_entrycompletion</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left_attach">3</property>
-                        <property name="right_attach">4</property>
-                      </packing>
+                      <placeholder/>
                     </child>
                   </object>
                   <packing>
@@ -322,6 +312,9 @@ to the Jabber network.</property>
                     <property name="fill">True</property>
                     <property name="position">1</property>
                   </packing>
+                </child>
+                <child>
+                  <placeholder/>
                 </child>
               </object>
               <packing>
@@ -339,10 +332,11 @@ to the Jabber network.</property>
               </packing>
             </child>
             <child>
-              <object class="GtkVBox" id="vbox105">
+              <object class="GtkBox" id="vbox105">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="border_width">6</property>
+                <property name="orientation">vertical</property>
                 <property name="spacing">12</property>
                 <child>
                   <object class="GtkLabel" id="label368">
@@ -423,14 +417,11 @@ to the Jabber network.</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <child>
-                      <object class="GtkTable" id="table32">
+                      <object class="GtkGrid" id="grid2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="border_width">5</property>
-                        <property name="n_rows">3</property>
-                        <property name="n_columns">3</property>
-                        <property name="column_spacing">5</property>
-                        <property name="row_spacing">5</property>
+                        <property name="row_spacing">6</property>
+                        <property name="column_spacing">6</property>
                         <child>
                           <object class="GtkLabel" id="label381">
                             <property name="visible">True</property>
@@ -440,8 +431,8 @@ to the Jabber network.</property>
                             <property name="use_underline">True</property>
                           </object>
                           <packing>
-                            <property name="x_options">GTK_FILL</property>
-                            <property name="y_options"/>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">0</property>
                           </packing>
                         </child>
                         <child>
@@ -458,8 +449,7 @@ to the Jabber network.</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
-                            <property name="right_attach">2</property>
-                            <property name="y_options">GTK_FILL</property>
+                            <property name="top_attach">0</property>
                           </packing>
                         </child>
                         <child>
@@ -468,14 +458,13 @@ to the Jabber network.</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
+                            <property name="halign">start</property>
                             <property name="use_underline">True</property>
                             <signal name="clicked" handler="on_manage_proxies_button_clicked" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
-                            <property name="right_attach">3</property>
-                            <property name="x_options"/>
-                            <property name="y_options"/>
+                            <property name="top_attach">0</property>
                           </packing>
                         </child>
                         <child>
@@ -490,14 +479,13 @@ to the Jabber network.</property>
                             <signal name="toggled" handler="on_custom_host_port_checkbutton_toggled" swapped="no"/>
                           </object>
                           <packing>
-                            <property name="right_attach">3</property>
+                            <property name="left_attach">0</property>
                             <property name="top_attach">1</property>
-                            <property name="bottom_attach">2</property>
-                            <property name="y_options"/>
+                            <property name="width">3</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkHBox" id="custom_host_hbox">
+                          <object class="GtkBox" id="custom_host_hbox">
                             <property name="visible">True</property>
                             <property name="sensitive">False</property>
                             <property name="can_focus">False</property>
@@ -558,11 +546,9 @@ to the Jabber network.</property>
                             </child>
                           </object>
                           <packing>
-                            <property name="right_attach">3</property>
+                            <property name="left_attach">0</property>
                             <property name="top_attach">2</property>
-                            <property name="bottom_attach">3</property>
-                            <property name="x_options">GTK_FILL</property>
-                            <property name="y_options">GTK_FILL</property>
+                            <property name="width">3</property>
                           </packing>
                         </child>
                       </object>
@@ -598,11 +584,12 @@ to the Jabber network.</property>
               </packing>
             </child>
             <child>
-              <object class="GtkVBox" id="ssl_vbox">
+              <object class="GtkBox" id="ssl_vbox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkHBox" id="hbox1">
+                  <object class="GtkBox" id="hbox1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -673,9 +660,10 @@ SHA1 fingerprint of the certificate:
               </packing>
             </child>
             <child>
-              <object class="GtkVBox" id="form_vbox">
+              <object class="GtkBox" id="form_vbox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
                 <child>
                   <placeholder/>
                 </child>
@@ -695,9 +683,10 @@ SHA1 fingerprint of the certificate:
               </packing>
             </child>
             <child>
-              <object class="GtkVBox" id="vbox104">
+              <object class="GtkBox" id="vbox104">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="progressbar_label">
                     <property name="visible">True</property>
@@ -742,11 +731,12 @@ Please wait...</property>
               </packing>
             </child>
             <child>
-              <object class="GtkVBox" id="vbox103">
+              <object class="GtkBox" id="vbox103">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkHBox" id="hbox2986">
+                  <object class="GtkBox" id="hbox2986">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="spacing">12</property>
