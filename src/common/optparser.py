@@ -104,7 +104,8 @@ class OptionsParser:
         (base_dir, filename) = os.path.split(self.__filename)
         self.__tempfile = os.path.join(base_dir, '.' + filename)
         try:
-            f = open(self.__tempfile, 'w')
+            f = os.fdopen(os.open(self.__tempfile,
+                os.O_CREAT|os.O_WRONLY|os.O_TRUNC, 0o600), 'w')
         except IOError as e:
             return str(e)
         try:
@@ -125,7 +126,6 @@ class OptionsParser:
             os.rename(self.__tempfile, self.__filename)
         except IOError as e:
             return str(e)
-        os.chmod(self.__filename, 0o600)
 
     def update_config(self, old_version, new_version):
         old_version_list = old_version.split('.') # convert '0.x.y' to (0, x, y)
