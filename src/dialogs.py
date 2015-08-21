@@ -512,8 +512,8 @@ class ChangeMoodDialog:
             self.mood_buttons[mood].set_relief(Gtk.ReliefStyle.NONE)
             self.mood_buttons[mood].set_tooltip_text(pep.MOODS[mood])
             self.mood_buttons[mood].connect('clicked',
-                    self.on_mood_button_clicked, mood)
-            table.attach(self.mood_buttons[mood], x, x + 1, y, y + 1)
+                self.on_mood_button_clicked, mood)
+            table.attach(self.mood_buttons[mood], x, y, 1, 1)
 
             # Calculate the next position
             x += 1
