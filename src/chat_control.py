@@ -29,6 +29,7 @@
 
 import os
 import time
+from gi.repository import GdkX11
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
@@ -2147,16 +2148,18 @@ class ChatControl(ChatControlBase):
                         fixed = self.xml.get_object('outgoing_fixed')
                         fixed.set_no_show_all(False)
                         video_hbox.show_all()
+                        out_da = self.xml.get_object('outgoing_drawingarea')
+                        out_da.realize()
                         if os.name == 'nt':
-                            out_xid = self.xml.get_object(
-                                'outgoing_drawingarea').get_window().handle
+                            out_xid = out_da.get_window().handle
                         else:
-                            out_xid = self.xml.get_object(
-                                'outgoing_drawingarea').get_window().xid
+                            out_xid = out_da.get_window().get_xid()
                     else:
                         out_xid = None
                     video_hbox.show_all()
-                    in_xid = self.xml.get_object('incoming_drawingarea').get_window().xid
+                    in_da = self.xml.get_object('incoming_drawingarea')
+                    in_da.realize()
+                    in_xid = in_da.get_window().get_xid()
                     sid = gajim.connections[self.account].start_video(
                         self.contact.get_full_jid(), in_xid, out_xid)
                 else:
