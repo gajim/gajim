@@ -1,4 +1,4 @@
-.Dd August 11, 2013
+.Dd August 26, 2015
 .Dt GAJIM 1 URM
 .Os UNIX
 .Sh NAME
@@ -26,7 +26,7 @@ XMPP is the Extensible Messaging and Presence Protocol, a set of open
 technologies for instant messaging, presence, multi-party chat, voice
 and video calls, collaboration, lightweight middleware, content
 syndication, and generalized routing of XML data. For more information
-on the XMPP protocol see <http://xmpp.org/about-xmpp/>.
+on the XMPP protocol see <https://xmpp.org/about-xmpp/>.
 .Sh OPTIONS
 .Bl -tag -width Ds
 .It Fl h Fl Fl help
@@ -60,19 +60,19 @@ Where to look for configuration files
 .El
 .Sh FILES
 .Bl -tag -width Ds
-.It ~/.cache/gajim/cache.db
+.It $XDG_CACHE_DIR/gajim/cache.db
 Cache database file of transports, caps, roster entry, and roster group.
-.It ~/.cache/gajim/avatars/
+.It $XDG_CACHE_DIR/gajim/avatars/
 Cache directory of avatars.
-.It ~/.cache/gajim/vcards/
+.It $XDG_CACHE_DIR/gajim/vcards/
 Cache directory of vCards (virtual cards).
-.It ~/.config/gajim/
+.It $XDG_CONFIG_DIR/gajim/
 The config-path used when
 .Op Fl c
 is not specified.
-.It ~/.local/share/gajim/certs/
+.It $XDG_DATA_DIR/gajim/certs/
 Directory where certificates are stored.
-.It ~/.local/share/gajim/logs.db
+.It $XDG_DATA_DIR/gajim/logs.db
 The history database log file.
 For more information on database logs see <https://trac.gajim.org/wiki/LogsDatabase>.
 .El
@@ -90,7 +90,7 @@ and
 .Pa THANKS ,
 for a complete list.
 .Sh COPYRIGHT
-Copyright (C) 2003-2013 Gajim Team
+Copyright (C) 2003-2015 Gajim Team
 .Pp
 .Nm
 is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 3 only.
@@ -100,7 +100,7 @@ is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; wit
 .Pp
 You should have received a copy of the GNU General Public License along with
 .Nm .
-If not, see <http://www.gnu.org/licenses/>.
+If not, see <https://www.gnu.org/licenses/>.
 .Sh FEEDBACK
 You can report bugs or feature requests in our bug tracker at
 .Em trac.gajim.org
@@ -109,26 +109,26 @@ or in the
 mailing list; if you want to send us a patch, please do so in our bug tracker.
 You can also find us in our chat room.
 .Sh WWW
-http://www.gajim.org/
+https://www.gajim.org/
 .Sh XMPP
 You are welcome to join us at gajim@conference.gajim.org
 .Sh MAILING LIST
 Below are public mailing lists on lists.gajim.org
 .Bd -literal -offset indent
-http://lists.gajim.org/cgi-bin/listinfo/gajim-devel
-http://lists.gajim.org/cgi-bin/listinfo/translators
+https://lists.gajim.org/cgi-bin/listinfo/gajim-devel
+https://lists.gajim.org/cgi-bin/listinfo/translators
 .Ed
 .Pp
 More mailing lists at
 .Bd -literal -offset indent
-http://lists.gajim.org/cgi-bin/listinfo
+https://lists.gajim.org/cgi-bin/listinfo
 .Ed
 .Sh BUGS
 Please submit bugs at
 .Bd -literal -offset indent
 https://trac.gajim.org/
-http://trac-plugins.gajim.org/
-http://python-nbxmpp.gajim.org/
+https://trac-plugins.gajim.org/
+https://python-nbxmpp.gajim.org/
 .Ed
 .Sh SEE ALSO
 .Xr gajim-remote 1
