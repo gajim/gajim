@@ -330,6 +330,8 @@ def check_and_possibly_create_paths():
     check_and_possibly_move_config()
 
     if not os.path.exists(LOG_DB_PATH):
+        if os.path.exists(CACHE_DB_PATH):
+            os.remove(CACHE_DB_PATH)
         create_log_db()
         gajim.logger.init_vars()
     elif os.path.isdir(LOG_DB_PATH):
