@@ -330,6 +330,8 @@ def check_and_possibly_create_paths():
     check_and_possibly_move_config()
 
     if not os.path.exists(LOG_DB_PATH):
+        if os.path.exists(CACHE_DB_PATH):
+            os.remove(CACHE_DB_PATH)
         create_log_db()
         gajim.logger.init_vars()
     elif os.path.isdir(LOG_DB_PATH):
@@ -344,7 +346,7 @@ def check_and_possibly_create_paths():
         print _('%s is a directory but should be a file') % CACHE_DB_PATH
         print _('Gajim will now exit')
         sys.exit()
-        
+
     if not os.path.exists(XTLS_CERTS):
         create_path(XTLS_CERTS)
     if not os.path.exists(LOCAL_XTLS_CERTS):
