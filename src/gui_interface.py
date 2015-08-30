@@ -2779,15 +2779,16 @@ class Interface:
                 gajim.ZEROCONF_ACC_NAME = account
                 break
         # Is gnome configured to activate row on single click ?
-        try:
-            from gi.repository import GConf
-            client = GConf.Client.get_default()
-            click_policy = client.get_string(
-                    '/apps/nautilus/preferences/click_policy')
-            if click_policy == 'single':
-                gajim.single_click = True
-        except Exception:
-            pass
+#        try:
+#            gi.require_version('GConf', '2.0')
+#            from gi.repository import GConf
+#            client = GConf.Client.get_default()
+#            click_policy = client.get_string(
+#                    '/apps/nautilus/preferences/click_policy')
+#            if click_policy == 'single':
+#                gajim.single_click = True
+#        except Exception:
+#            pass
         # add default status messages if there is not in the config file
         if len(gajim.config.get_per('statusmsg')) == 0:
             default = gajim.config.statusmsg_default

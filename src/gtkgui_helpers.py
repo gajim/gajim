@@ -177,11 +177,12 @@ def get_default_font():
     Xfce and last KDE it returns None on failure or else a string 'Font Size'
     """
     try:
+        gi.require_version('GConf', '2.0')
         from gi.repository import GConf
         client = GConf.Client.get_default()
         value = client.get_string("/desktop/gnome/interface/font_name")
         return value.decode("utf8")
-    except ImportError:
+    except ValueError:
         pass
 
     # try to get Xfce default font
