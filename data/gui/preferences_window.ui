@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.3 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.12"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">1</property>
     <property name="upper">1440</property>
@@ -158,6 +159,24 @@
       </row>
     </data>
   </object>
+  <object class="GtkListStore" id="status_message_liststore">
+    <columns>
+      <!-- column-name name -->
+      <column type="gchararray"/>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name activity -->
+      <column type="gchararray"/>
+      <!-- column-name sub_activity -->
+      <column type="gchararray"/>
+      <!-- column-name activity_text -->
+      <column type="gchararray"/>
+      <!-- column-name mood -->
+      <column type="gchararray"/>
+      <!-- column-name mood_text -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <object class="GtkWindow" id="preferences_window">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
@@ -167,9 +186,10 @@
     <signal name="destroy" handler="on_preferences_window_destroy" swapped="no"/>
     <signal name="key-press-event" handler="on_preferences_window_key_press_event" swapped="no"/>
     <child>
-      <object class="GtkVBox" id="vbox13">
+      <object class="GtkBox" id="vbox13">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
         <property name="spacing">6</property>
         <child>
           <object class="GtkNotebook" id="preferences_notebook">
@@ -178,10 +198,11 @@
             <property name="show_border">False</property>
             <signal name="switch-page" handler="on_preferences_notebook_switch_page" swapped="no"/>
             <child>
-              <object class="GtkVBox" id="vbox41">
+              <object class="GtkBox" id="vbox41">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="border_width">12</property>
+                <property name="orientation">vertical</property>
                 <property name="spacing">12</property>
                 <child>
                   <object class="GtkFrame" id="frame1">
@@ -198,10 +219,11 @@
                         <property name="border_width">6</property>
                         <property name="left_padding">12</property>
                         <child>
-                          <object class="GtkVBox" id="vbox1">
+                          <object class="GtkBox" id="vbox1">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                            <property name="orientation">vertical</property>
                             <property name="spacing">6</property>
                             <child>
                               <object class="GtkCheckButton" id="show_avatars_in_roster_checkbutton">
@@ -258,7 +280,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkHBox" id="hbox3">
+                              <object class="GtkBox" id="hbox3">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="spacing">6</property>
@@ -350,43 +372,11 @@
                         <property name="border_width">6</property>
                         <property name="left_padding">12</property>
                         <child>
-                          <object class="GtkTable" id="table1">
+                          <object class="GtkGrid" id="grid1">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="n_rows">7</property>
-                            <property name="n_columns">2</property>
-                            <property name="column_spacing">6</property>
                             <property name="row_spacing">6</property>
-                            <child>
-                              <object class="GtkLabel" id="label379">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
-                                <property name="xpad">1</property>
-                                <property name="label" translatable="yes">_Window behavior:</property>
-                                <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">one_window_type_combobox</property>
-                              </object>
-                              <packing>
-                                <property name="top_attach">1</property>
-                                <property name="bottom_attach">2</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options">GTK_FILL</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkComboBox" id="emoticons_combobox">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <signal name="changed" handler="on_emoticons_combobox_changed" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
-                                <property name="y_options">GTK_FILL</property>
-                              </packing>
-                            </child>
+                            <property name="column_spacing">6</property>
                             <child>
                               <object class="GtkEventBox" id="eventbox5">
                                 <property name="visible">True</property>
@@ -404,8 +394,36 @@
                                 </child>
                               </object>
                               <packing>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options">GTK_FILL</property>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label379">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="xalign">0</property>
+                                <property name="xpad">1</property>
+                                <property name="label" translatable="yes">_Window behavior:</property>
+                                <property name="use_underline">True</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label28">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="xalign">0</property>
+                                <property name="xpad">1</property>
+                                <property name="label" translatable="yes">_Show roster on startup:</property>
+                                <property name="use_underline">True</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">2</property>
                               </packing>
                             </child>
                             <child>
@@ -420,11 +438,9 @@
                                 <signal name="toggled" handler="on_compact_view_checkbutton_toggled" swapped="no"/>
                               </object>
                               <packing>
-                                <property name="right_attach">2</property>
+                                <property name="left_attach">0</property>
                                 <property name="top_attach">3</property>
-                                <property name="bottom_attach">4</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options">GTK_FILL</property>
+                                <property name="width">2</property>
                               </packing>
                             </child>
                             <child>
@@ -440,11 +456,9 @@
                                 <signal name="toggled" handler="on_xhtml_checkbutton_toggled" swapped="no"/>
                               </object>
                               <packing>
-                                <property name="right_attach">2</property>
+                                <property name="left_attach">0</property>
                                 <property name="top_attach">4</property>
-                                <property name="bottom_attach">5</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options">GTK_FILL</property>
+                                <property name="width">2</property>
                               </packing>
                             </child>
                             <child>
@@ -459,50 +473,25 @@
                                 <signal name="toggled" handler="on_speller_checkbutton_toggled" swapped="no"/>
                               </object>
                               <packing>
-                                <property name="right_attach">2</property>
+                                <property name="left_attach">0</property>
                                 <property name="top_attach">5</property>
-                                <property name="bottom_attach">6</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options">GTK_FILL</property>
+                                <property name="width">2</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkComboBox" id="one_window_type_combobox">
-                                <property name="width_request">50</property>
+                              <object class="GtkCheckButton" id="positive_184_ack_checkbutton">
+                                <property name="label" translatable="yes">Show icon when your messages are received</property>
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="model">liststore6</property>
-                                <signal name="changed" handler="on_one_window_type_combo_changed" swapped="no"/>
-                                <child>
-                                  <object class="GtkCellRendererText" id="cellrenderertext6"/>
-                                  <attributes>
-                                    <attribute name="text">0</attribute>
-                                  </attributes>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
-                                <property name="top_attach">1</property>
-                                <property name="bottom_attach">2</property>
-                                <property name="y_options">GTK_FILL</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="label28">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
                                 <property name="xalign">0</property>
-                                <property name="xpad">1</property>
-                                <property name="label" translatable="yes">_Show roster on startup:</property>
-                                <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">show_roster_on_startup</property>
+                                <property name="draw_indicator">True</property>
+                                <signal name="toggled" handler="on_positive_184_ack_checkbutton_toggled" swapped="no"/>
                               </object>
                               <packing>
-                                <property name="top_attach">2</property>
-                                <property name="bottom_attach">3</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options">GTK_FILL</property>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">6</property>
+                                <property name="width">2</property>
                               </packing>
                             </child>
                             <child>
@@ -521,27 +510,37 @@
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
                                 <property name="top_attach">2</property>
-                                <property name="bottom_attach">3</property>
-                                <property name="y_options">GTK_FILL</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkCheckButton" id="positive_184_ack_checkbutton">
-                                <property name="label" translatable="yes">Show icon when your messages are received</property>
+                              <object class="GtkComboBox" id="one_window_type_combobox">
+                                <property name="width_request">50</property>
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
-                                <property name="xalign">0</property>
-                                <property name="draw_indicator">True</property>
-                                <signal name="toggled" handler="on_positive_184_ack_checkbutton_toggled" swapped="no"/>
+                                <property name="can_focus">False</property>
+                                <property name="model">liststore6</property>
+                                <signal name="changed" handler="on_one_window_type_combo_changed" swapped="no"/>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderertext6"/>
+                                  <attributes>
+                                    <attribute name="text">0</attribute>
+                                  </attributes>
+                                </child>
                               </object>
                               <packing>
-                                <property name="right_attach">2</property>
-                                <property name="top_attach">6</property>
-                                <property name="bottom_attach">7</property>
-                                <property name="y_options">GTK_FILL</property>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBox" id="emoticons_combobox">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <signal name="changed" handler="on_emoticons_combobox_changed" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">0</property>
                               </packing>
                             </child>
                           </object>
@@ -577,10 +576,11 @@
               </packing>
             </child>
             <child>
-              <object class="GtkVBox" id="vbox42">
+              <object class="GtkBox" id="vbox42">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="border_width">12</property>
+                <property name="orientation">vertical</property>
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkFrame" id="frame29">
@@ -595,12 +595,13 @@
                         <property name="border_width">6</property>
                         <property name="left_padding">12</property>
                         <child>
-                          <object class="GtkVBox" id="vbox67">
+                          <object class="GtkBox" id="vbox67">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="orientation">vertical</property>
                             <property name="spacing">6</property>
                             <child>
-                              <object class="GtkHBox" id="hbox1">
+                              <object class="GtkBox" id="hbox1">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -713,9 +714,10 @@
                                     <property name="can_focus">False</property>
                                     <property name="left_padding">12</property>
                                     <child>
-                                      <object class="GtkVBox" id="vbox_gmail">
+                                      <object class="GtkBox" id="vbox_gmail">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
+                                        <property name="orientation">vertical</property>
                                         <property name="spacing">6</property>
                                         <child>
                                           <object class="GtkCheckButton" id="notify_gmail_checkbutton">
@@ -773,7 +775,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkHBox" id="hbox5">
+                              <object class="GtkBox" id="hbox5">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="spacing">6</property>
@@ -849,12 +851,13 @@
                         <property name="border_width">6</property>
                         <property name="left_padding">12</property>
                         <child>
-                          <object class="GtkVBox" id="vbox3">
+                          <object class="GtkBox" id="vbox3">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="orientation">vertical</property>
                             <property name="spacing">6</property>
                             <child>
-                              <object class="GtkHBox" id="hbox4">
+                              <object class="GtkBox" id="hbox4">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="spacing">6</property>
@@ -952,10 +955,11 @@
               </packing>
             </child>
             <child>
-              <object class="GtkVBox" id="vbox11">
+              <object class="GtkBox" id="vbox11">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="border_width">12</property>
+                <property name="orientation">vertical</property>
                 <property name="spacing">12</property>
                 <child>
                   <object class="GtkFrame" id="frame13">
@@ -976,35 +980,11 @@
                         <property name="yscale">0</property>
                         <property name="left_padding">12</property>
                         <child>
-                          <object class="GtkTable" id="table7">
+                          <object class="GtkGrid" id="grid2">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="n_rows">2</property>
-                            <property name="n_columns">2</property>
-                            <property name="column_spacing">6</property>
                             <property name="row_spacing">6</property>
-                            <child>
-                              <object class="GtkComboBox" id="displayed_chat_states_combobox">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="model">liststore3</property>
-                                <signal name="changed" handler="on_displayed_chat_states_combobox_changed" swapped="no"/>
-                                <child>
-                                  <object class="GtkCellRendererText" id="cellrenderertext3"/>
-                                  <attributes>
-                                    <attribute name="text">0</attribute>
-                                  </attributes>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
-                                <property name="top_attach">1</property>
-                                <property name="bottom_attach">2</property>
-                                <property name="y_options"/>
-                              </packing>
-                            </child>
+                            <property name="column_spacing">6</property>
                             <child>
                               <object class="GtkEventBox" id="eventbox8">
                                 <property name="visible">True</property>
@@ -1021,9 +1001,44 @@
                                 </child>
                               </object>
                               <packing>
+                                <property name="left_attach">0</property>
                                 <property name="top_attach">1</property>
-                                <property name="bottom_attach">2</property>
-                                <property name="x_options">GTK_FILL</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBox" id="outgoing_chat_states_combobox">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="model">liststore2</property>
+                                <signal name="changed" handler="on_outgoing_chat_states_combobox_changed" swapped="no"/>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderertext2"/>
+                                  <attributes>
+                                    <attribute name="text">0</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBox" id="displayed_chat_states_combobox">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="model">liststore3</property>
+                                <signal name="changed" handler="on_displayed_chat_states_combobox_changed" swapped="no"/>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderertext3"/>
+                                  <attributes>
+                                    <attribute name="text">0</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">1</property>
                               </packing>
                             </child>
                             <child>
@@ -1042,26 +1057,8 @@
                                 </child>
                               </object>
                               <packing>
-                                <property name="x_options">GTK_FILL</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkComboBox" id="outgoing_chat_states_combobox">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="model">liststore2</property>
-                                <signal name="changed" handler="on_outgoing_chat_states_combobox_changed" swapped="no"/>
-                                <child>
-                                  <object class="GtkCellRendererText" id="cellrenderertext2"/>
-                                  <attributes>
-                                    <attribute name="text">0</attribute>
-                                  </attributes>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
-                                <property name="y_options"/>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">0</property>
                               </packing>
                             </child>
                           </object>
@@ -1103,10 +1100,11 @@
               </packing>
             </child>
             <child>
-              <object class="GtkVBox" id="status_vbox">
+              <object class="GtkBox" id="status_vbox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="border_width">12</property>
+                <property name="orientation">vertical</property>
                 <property name="spacing">12</property>
                 <child>
                   <object class="GtkFrame" id="frame81">
@@ -1122,13 +1120,11 @@
                         <property name="border_width">6</property>
                         <property name="left_padding">12</property>
                         <child>
-                          <object class="GtkTable" id="autoaway_table">
+                          <object class="GtkGrid" id="autoaway_table">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="n_rows">2</property>
-                            <property name="n_columns">4</property>
-                            <property name="column_spacing">12</property>
                             <property name="row_spacing">6</property>
+                            <property name="column_spacing">6</property>
                             <child>
                               <object class="GtkCheckButton" id="auto_away_checkbutton">
                                 <property name="label" translatable="yes">_Away after:</property>
@@ -1142,8 +1138,8 @@
                                 <signal name="toggled" handler="on_auto_away_checkbutton_toggled" swapped="no"/>
                               </object>
                               <packing>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"/>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">0</property>
                               </packing>
                             </child>
                             <child>
@@ -1159,10 +1155,8 @@
                                 <signal name="toggled" handler="on_auto_xa_checkbutton_toggled" swapped="no"/>
                               </object>
                               <packing>
+                                <property name="left_attach">0</property>
                                 <property name="top_attach">1</property>
-                                <property name="bottom_attach">2</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"/>
                               </packing>
                             </child>
                             <child>
@@ -1174,9 +1168,7 @@
                               </object>
                               <packing>
                                 <property name="left_attach">2</property>
-                                <property name="right_attach">3</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"/>
+                                <property name="top_attach">0</property>
                               </packing>
                             </child>
                             <child>
@@ -1188,61 +1180,7 @@
                               </object>
                               <packing>
                                 <property name="left_attach">2</property>
-                                <property name="right_attach">3</property>
                                 <property name="top_attach">1</property>
-                                <property name="bottom_attach">2</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"/>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkAlignment" id="alignment33">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="xalign">1</property>
-                                <property name="xscale">0</property>
-                                <child>
-                                  <object class="GtkSpinButton" id="auto_away_time_spinbutton">
-                                    <property name="width_request">50</property>
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="adjustment">adjustment2</property>
-                                    <property name="climb_rate">1</property>
-                                    <signal name="value-changed" handler="on_auto_away_time_spinbutton_value_changed" swapped="no"/>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options">GTK_FILL</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkAlignment" id="alignment34">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="xalign">1</property>
-                                <property name="xscale">0</property>
-                                <child>
-                                  <object class="GtkSpinButton" id="auto_xa_time_spinbutton">
-                                    <property name="width_request">50</property>
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="adjustment">adjustment1</property>
-                                    <property name="climb_rate">1</property>
-                                    <signal name="value-changed" handler="on_auto_xa_time_spinbutton_value_changed" swapped="no"/>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
-                                <property name="top_attach">1</property>
-                                <property name="bottom_attach">2</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options">GTK_FILL</property>
                               </packing>
                             </child>
                             <child>
@@ -1256,8 +1194,7 @@ $T will be replaced by auto-away timeout</property>
                               </object>
                               <packing>
                                 <property name="left_attach">3</property>
-                                <property name="right_attach">4</property>
-                                <property name="y_options"/>
+                                <property name="top_attach">0</property>
                               </packing>
                             </child>
                             <child>
@@ -1271,10 +1208,55 @@ $T will be replaced by auto-not-available timeout</property>
                               </object>
                               <packing>
                                 <property name="left_attach">3</property>
-                                <property name="right_attach">4</property>
                                 <property name="top_attach">1</property>
-                                <property name="bottom_attach">2</property>
-                                <property name="y_options"/>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkAlignment" id="alignment33">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="xalign">1</property>
+                                <property name="xscale">0</property>
+                                <child>
+                                  <object class="GtkSpinButton" id="auto_away_time_spinbutton">
+                                    <property name="width_request">50</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="text" translatable="yes">12</property>
+                                    <property name="adjustment">adjustment2</property>
+                                    <property name="climb_rate">1</property>
+                                    <property name="value">12</property>
+                                    <signal name="value-changed" handler="on_auto_away_time_spinbutton_value_changed" swapped="no"/>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkAlignment" id="alignment34">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="xalign">1</property>
+                                <property name="xscale">0</property>
+                                <child>
+                                  <object class="GtkSpinButton" id="auto_xa_time_spinbutton">
+                                    <property name="width_request">50</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="text" translatable="yes">20</property>
+                                    <property name="adjustment">adjustment1</property>
+                                    <property name="climb_rate">1</property>
+                                    <property name="value">20</property>
+                                    <signal name="value-changed" handler="on_auto_xa_time_spinbutton_value_changed" swapped="no"/>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">1</property>
                               </packing>
                             </child>
                           </object>
@@ -1309,13 +1291,14 @@ $T will be replaced by auto-not-available timeout</property>
                         <property name="border_width">6</property>
                         <property name="left_padding">12</property>
                         <child>
-                          <object class="GtkVBox" id="vbox2">
+                          <object class="GtkBox" id="vbox2">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                            <property name="orientation">vertical</property>
                             <property name="spacing">6</property>
                             <child>
-                              <object class="GtkHBox" id="hbox2934">
+                              <object class="GtkBox" id="hbox2934">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="spacing">6</property>
@@ -1332,7 +1315,7 @@ $T will be replaced by auto-not-available timeout</property>
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkHBox" id="hbox6">
+                                  <object class="GtkBox" id="hbox6">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="spacing">14</property>
@@ -1394,6 +1377,9 @@ $T will be replaced by auto-not-available timeout</property>
                                   <object class="GtkTreeView" id="default_msg_treeview">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <child internal-child="selection">
+                                      <object class="GtkTreeSelection" id="treeview-selection1"/>
+                                    </child>
                                   </object>
                                 </child>
                               </object>
@@ -1435,19 +1421,62 @@ $T will be replaced by auto-not-available timeout</property>
                         <property name="border_width">6</property>
                         <property name="left_padding">12</property>
                         <child>
-                          <object class="GtkTable" id="table4">
+                          <object class="GtkGrid" id="grid4">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="n_rows">2</property>
-                            <property name="n_columns">2</property>
-                            <property name="column_spacing">6</property>
                             <property name="row_spacing">6</property>
+                            <property name="column_spacing">6</property>
                             <child>
-                              <placeholder/>
+                              <object class="GtkScrolledWindow" id="scrolledwindow22">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="hexpand">True</property>
+                                <property name="shadow_type">in</property>
+                                <child>
+                                  <object class="GtkTreeView" id="msg_treeview">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="model">status_message_liststore</property>
+                                    <property name="headers_visible">False</property>
+                                    <property name="search_column">0</property>
+                                    <signal name="cursor-changed" handler="on_msg_treeview_cursor_changed" swapped="no"/>
+                                    <signal name="key-press-event" handler="on_msg_treeview_key_press_event" swapped="no"/>
+                                    <child internal-child="selection">
+                                      <object class="GtkTreeSelection" id="treeview-selection"/>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">0</property>
+                              </packing>
                             </child>
                             <child>
-                              <object class="GtkVButtonBox" id="vbuttonbox3">
+                              <object class="GtkScrolledWindow" id="scrolledwindow23">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="hexpand">True</property>
+                                <property name="hscrollbar_policy">never</property>
+                                <property name="vscrollbar_policy">never</property>
+                                <property name="shadow_type">in</property>
+                                <child>
+                                  <object class="GtkTextView" id="msg_textview">
+                                    <property name="height_request">21</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="border_width">3</property>
+                                    <property name="wrap_mode">word</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkButtonBox" id="vbuttonbox3">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="spacing">5</property>
@@ -1487,51 +1516,11 @@ $T will be replaced by auto-not-available timeout</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options">GTK_FILL</property>
+                                <property name="top_attach">0</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkScrolledWindow" id="scrolledwindow22">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="shadow_type">in</property>
-                                <child>
-                                  <object class="GtkTreeView" id="msg_treeview">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="model">status_message_liststore</property>
-                                    <property name="headers_visible">False</property>
-                                    <property name="headers_clickable">False</property>
-                                    <signal name="cursor-changed" handler="on_msg_treeview_cursor_changed" swapped="no"/>
-                                    <signal name="key-press-event" handler="on_msg_treeview_key_press_event" swapped="no"/>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkScrolledWindow" id="scrolledwindow23">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="hscrollbar_policy">never</property>
-                                <property name="vscrollbar_policy">never</property>
-                                <property name="shadow_type">in</property>
-                                <child>
-                                  <object class="GtkTextView" id="msg_textview">
-                                    <property name="height_request">21</property>
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="border_width">3</property>
-                                    <property name="wrap_mode">word</property>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="top_attach">1</property>
-                                <property name="bottom_attach">2</property>
-                                <property name="y_options">GTK_FILL</property>
-                              </packing>
+                              <placeholder/>
                             </child>
                           </object>
                         </child>
@@ -1569,10 +1558,11 @@ $T will be replaced by auto-not-available timeout</property>
               </packing>
             </child>
             <child>
-              <object class="GtkVBox" id="vbox58">
+              <object class="GtkBox" id="vbox58">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="border_width">12</property>
+                <property name="orientation">vertical</property>
                 <property name="spacing">12</property>
                 <child>
                   <object class="GtkFrame" id="frame9">
@@ -1587,28 +1577,37 @@ $T will be replaced by auto-not-available timeout</property>
                         <property name="border_width">6</property>
                         <property name="left_padding">12</property>
                         <child>
-                          <object class="GtkTable" id="table5">
+                          <object class="GtkGrid" id="grid9">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="n_rows">2</property>
-                            <property name="n_columns">2</property>
-                            <property name="column_spacing">6</property>
                             <property name="row_spacing">6</property>
+                            <property name="column_spacing">6</property>
                             <child>
-                              <placeholder/>
+                              <object class="GtkLabel" id="label4">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="xalign">0</property>
+                                <property name="label" translatable="yes">Chat message:</property>
+                                <property name="ellipsize">start</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">0</property>
+                              </packing>
                             </child>
                             <child>
                               <object class="GtkFontButton" id="conversation_fontbutton">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
+                                <property name="hexpand">True</property>
+                                <property name="font">Sans 12</property>
                                 <signal name="font-set" handler="on_conversation_fontbutton_font_set" swapped="no"/>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
-                                <property name="y_options">GTK_FILL</property>
+                                <property name="top_attach">0</property>
                               </packing>
                             </child>
                             <child>
@@ -1624,23 +1623,11 @@ $T will be replaced by auto-not-available timeout</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
                                 <property name="top_attach">1</property>
-                                <property name="bottom_attach">2</property>
-                                <property name="y_options">GTK_FILL</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkLabel" id="label4">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="label" translatable="yes">Chat message:</property>
-                              </object>
-                              <packing>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options">GTK_FILL</property>
-                              </packing>
+                              <placeholder/>
                             </child>
                           </object>
                         </child>
@@ -1676,19 +1663,36 @@ $T will be replaced by auto-not-available timeout</property>
                         <property name="border_width">6</property>
                         <property name="left_padding">12</property>
                         <child>
-                          <object class="GtkTable" id="table2">
+                          <object class="GtkGrid" id="grid10">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="n_rows">3</property>
-                            <property name="n_columns">3</property>
-                            <property name="column_spacing">6</property>
                             <property name="row_spacing">6</property>
+                            <property name="column_spacing">6</property>
                             <child>
-                              <placeholder/>
+                              <object class="GtkLabel" id="label249">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="xalign">0</property>
+                                <property name="label" translatable="yes">T_heme:</property>
+                                <property name="use_underline">True</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">0</property>
+                              </packing>
                             </child>
                             <child>
-                              <placeholder/>
+                              <object class="GtkLabel" id="label174">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="xalign">0</property>
+                                <property name="label" translatable="yes">Status _iconset:</property>
+                                <property name="use_underline">True</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">1</property>
+                              </packing>
                             </child>
                             <child>
                               <object class="GtkCheckButton" id="transports_iconsets_checkbutton">
@@ -1704,53 +1708,32 @@ $T will be replaced by auto-not-available timeout</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
-                                <property name="right_attach">3</property>
                                 <property name="top_attach">2</property>
-                                <property name="bottom_attach">3</property>
-                                <property name="y_options"/>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkComboBox" id="iconset_combobox">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <signal name="changed" handler="on_iconset_combobox_changed" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
-                                <property name="top_attach">1</property>
-                                <property name="bottom_attach">2</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options">GTK_FILL</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="label174">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
-                                <property name="label" translatable="yes">Status _iconset:</property>
-                                <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">iconset_combobox</property>
-                              </object>
-                              <packing>
-                                <property name="top_attach">1</property>
-                                <property name="bottom_attach">2</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options">GTK_FILL</property>
+                                <property name="width">2</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkComboBox" id="theme_combobox">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="hexpand">True</property>
                                 <signal name="changed" handler="on_theme_combobox_changed" swapped="no"/>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
-                                <property name="y_options"/>
+                                <property name="top_attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBox" id="iconset_combobox">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="hexpand">True</property>
+                                <signal name="changed" handler="on_iconset_combobox_changed" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">1</property>
                               </packing>
                             </child>
                             <child>
@@ -1765,23 +1748,14 @@ $T will be replaced by auto-not-available timeout</property>
                               </object>
                               <packing>
                                 <property name="left_attach">2</property>
-                                <property name="right_attach">3</property>
-                                <property name="y_options"/>
+                                <property name="top_attach">0</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkLabel" id="label249">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
-                                <property name="label" translatable="yes">T_heme:</property>
-                                <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">theme_combobox</property>
-                              </object>
-                              <packing>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options">GTK_FILL</property>
-                              </packing>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
                             </child>
                           </object>
                         </child>
@@ -1816,19 +1790,12 @@ $T will be replaced by auto-not-available timeout</property>
                         <property name="border_width">6</property>
                         <property name="left_padding">12</property>
                         <child>
-                          <object class="GtkTable" id="table25">
+                          <object class="GtkGrid" id="grid11">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="n_rows">5</property>
-                            <property name="n_columns">4</property>
-                            <property name="column_spacing">12</property>
+                            <property name="halign">start</property>
                             <property name="row_spacing">6</property>
-                            <child>
-                              <placeholder/>
-                            </child>
-                            <child>
-                              <placeholder/>
-                            </child>
+                            <property name="column_spacing">6</property>
                             <child>
                               <object class="GtkLabel" id="label72">
                                 <property name="visible">True</property>
@@ -1839,8 +1806,172 @@ $T will be replaced by auto-not-available timeout</property>
                                 <property name="justify">center</property>
                               </object>
                               <packing>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"/>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label13">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="xalign">0</property>
+                                <property name="label" translatable="yes">Contact's message:</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label71">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="xalign">0</property>
+                                <property name="label" translatable="yes">_Status message:</property>
+                                <property name="use_underline">True</property>
+                                <property name="justify">center</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label30">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="xalign">0</property>
+                                <property name="label" translatable="yes">Group chat highlight:</property>
+                                <property name="use_underline">True</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">3</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkBox" id="hbox8">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <child>
+                                  <object class="GtkCheckButton" id="incoming_msg_checkbutton">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="xalign">0</property>
+                                    <property name="draw_indicator">True</property>
+                                    <signal name="toggled" handler="on_incoming_msg_checkbutton_toggled" swapped="no"/>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">False</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkColorButton" id="incoming_msg_colorbutton">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">True</property>
+                                    <property name="xalign">0</property>
+                                    <property name="rgba">rgb(0,0,0)</property>
+                                    <signal name="color-set" handler="on_incoming_msg_colorbutton_color_set" swapped="no"/>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">False</property>
+                                    <property name="pack_type">end</property>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkBox" id="hbox11">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <child>
+                                  <object class="GtkColorButton" id="status_msg_colorbutton">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">True</property>
+                                    <property name="xalign">0</property>
+                                    <property name="rgba">rgb(0,0,0)</property>
+                                    <signal name="color-set" handler="on_status_msg_colorbutton_color_set" swapped="no"/>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="pack_type">end</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkBox" id="hbox10">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <object class="GtkColorButton" id="incoming_nick_colorbutton">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">True</property>
+                                    <property name="xalign">0</property>
+                                    <property name="rgba">rgb(0,0,0)</property>
+                                    <signal name="color-set" handler="on_incoming_nick_colorbutton_color_set" swapped="no"/>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="pack_type">end</property>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkBox" id="hbox2">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <object class="GtkColorButton" id="muc_highlight_colorbutton">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">True</property>
+                                    <property name="xalign">0</property>
+                                    <property name="rgba">rgb(0,0,0)</property>
+                                    <signal name="color-set" handler="on_muc_highlight_colorbutton_color_set" swapped="no"/>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="pack_type">end</property>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">3</property>
                               </packing>
                             </child>
                             <child>
@@ -1854,25 +1985,19 @@ $T will be replaced by auto-not-available timeout</property>
                               </object>
                               <packing>
                                 <property name="left_attach">2</property>
-                                <property name="right_attach">3</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"/>
+                                <property name="top_attach">0</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkLabel" id="label71">
+                              <object class="GtkLabel" id="label14">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">_Status message:</property>
-                                <property name="use_underline">True</property>
-                                <property name="justify">center</property>
+                                <property name="label" translatable="yes">Your message:</property>
                               </object>
                               <packing>
-                                <property name="top_attach">2</property>
-                                <property name="bottom_attach">3</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"/>
+                                <property name="left_attach">2</property>
+                                <property name="top_attach">1</property>
                               </packing>
                             </child>
                             <child>
@@ -1885,15 +2010,110 @@ $T will be replaced by auto-not-available timeout</property>
                               </object>
                               <packing>
                                 <property name="left_attach">2</property>
-                                <property name="right_attach">3</property>
                                 <property name="top_attach">2</property>
-                                <property name="bottom_attach">3</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"/>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkHBox" id="hbox3022">
+                              <object class="GtkBox" id="hbox12">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <object class="GtkColorButton" id="outgoing_nick_colorbutton">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">True</property>
+                                    <property name="xalign">0</property>
+                                    <property name="rgba">rgb(0,0,0)</property>
+                                    <signal name="color-set" handler="on_outgoing_nick_colorbutton_color_set" swapped="no"/>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="pack_type">end</property>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left_attach">3</property>
+                                <property name="top_attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkBox" id="hbox9">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <child>
+                                  <object class="GtkCheckButton" id="outgoing_msg_checkbutton">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="xalign">0</property>
+                                    <property name="draw_indicator">True</property>
+                                    <signal name="toggled" handler="on_outgoing_msg_checkbutton_toggled" swapped="no"/>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">False</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkColorButton" id="outgoing_msg_colorbutton">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">True</property>
+                                    <property name="xalign">0</property>
+                                    <property name="rgba">rgb(0,0,0)</property>
+                                    <signal name="color-set" handler="on_outgoing_msg_colorbutton_color_set" swapped="no"/>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">False</property>
+                                    <property name="pack_type">end</property>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left_attach">3</property>
+                                <property name="top_attach">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkBox" id="hbox13">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <object class="GtkColorButton" id="url_msg_colorbutton">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">True</property>
+                                    <property name="xalign">0</property>
+                                    <property name="rgba">rgb(0,0,0)</property>
+                                    <signal name="color-set" handler="on_url_msg_colorbutton_color_set" swapped="no"/>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="pack_type">end</property>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left_attach">3</property>
+                                <property name="top_attach">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkBox" id="hbox3022">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <child>
@@ -1926,305 +2146,16 @@ $T will be replaced by auto-not-available timeout</property>
                                 </child>
                               </object>
                               <packing>
-                                <property name="right_attach">4</property>
+                                <property name="left_attach">0</property>
                                 <property name="top_attach">4</property>
-                                <property name="bottom_attach">5</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options">GTK_FILL</property>
+                                <property name="width">4</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkLabel" id="label13">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
-                                <property name="label" translatable="yes">Contact's message:</property>
-                              </object>
-                              <packing>
-                                <property name="top_attach">1</property>
-                                <property name="bottom_attach">2</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"/>
-                              </packing>
+                              <placeholder/>
                             </child>
                             <child>
-                              <object class="GtkLabel" id="label14">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
-                                <property name="label" translatable="yes">Your message:</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">2</property>
-                                <property name="right_attach">3</property>
-                                <property name="top_attach">1</property>
-                                <property name="bottom_attach">2</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"/>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkHBox" id="hbox8">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <child>
-                                  <object class="GtkCheckButton" id="incoming_msg_checkbutton">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">False</property>
-                                    <property name="xalign">0.5</property>
-                                    <property name="draw_indicator">True</property>
-                                    <signal name="toggled" handler="on_incoming_msg_checkbutton_toggled" swapped="no"/>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">False</property>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkColorButton" id="incoming_msg_colorbutton">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">True</property>
-                                    <property name="xalign">0</property>
-                                    <property name="color">#000000000000</property>
-                                    <signal name="color-set" handler="on_incoming_msg_colorbutton_color_set" swapped="no"/>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">False</property>
-                                    <property name="pack_type">end</property>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
-                                <property name="top_attach">1</property>
-                                <property name="bottom_attach">2</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"/>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkHBox" id="hbox9">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <child>
-                                  <object class="GtkCheckButton" id="outgoing_msg_checkbutton">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">False</property>
-                                    <property name="xalign">0.5</property>
-                                    <property name="draw_indicator">True</property>
-                                    <signal name="toggled" handler="on_outgoing_msg_checkbutton_toggled" swapped="no"/>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">False</property>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkColorButton" id="outgoing_msg_colorbutton">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">True</property>
-                                    <property name="xalign">0</property>
-                                    <property name="color">#000000000000</property>
-                                    <signal name="color-set" handler="on_outgoing_msg_colorbutton_color_set" swapped="no"/>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">False</property>
-                                    <property name="pack_type">end</property>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="left_attach">3</property>
-                                <property name="right_attach">4</property>
-                                <property name="top_attach">1</property>
-                                <property name="bottom_attach">2</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"/>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkHBox" id="hbox10">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                                <child>
-                                  <object class="GtkColorButton" id="incoming_nick_colorbutton">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">True</property>
-                                    <property name="xalign">0</property>
-                                    <property name="color">#000000000000</property>
-                                    <signal name="color-set" handler="on_incoming_nick_colorbutton_color_set" swapped="no"/>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="pack_type">end</property>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"/>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkHBox" id="hbox11">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <child>
-                                  <object class="GtkColorButton" id="status_msg_colorbutton">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">True</property>
-                                    <property name="xalign">0</property>
-                                    <property name="color">#000000000000</property>
-                                    <signal name="color-set" handler="on_status_msg_colorbutton_color_set" swapped="no"/>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="pack_type">end</property>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
-                                <property name="top_attach">2</property>
-                                <property name="bottom_attach">3</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"/>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkHBox" id="hbox12">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                                <child>
-                                  <object class="GtkColorButton" id="outgoing_nick_colorbutton">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">True</property>
-                                    <property name="xalign">0</property>
-                                    <property name="color">#000000000000</property>
-                                    <signal name="color-set" handler="on_outgoing_nick_colorbutton_color_set" swapped="no"/>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="pack_type">end</property>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="left_attach">3</property>
-                                <property name="right_attach">4</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"/>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkHBox" id="hbox13">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                                <child>
-                                  <object class="GtkColorButton" id="url_msg_colorbutton">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">True</property>
-                                    <property name="xalign">0</property>
-                                    <property name="color">#000000000000</property>
-                                    <signal name="color-set" handler="on_url_msg_colorbutton_color_set" swapped="no"/>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="pack_type">end</property>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="left_attach">3</property>
-                                <property name="right_attach">4</property>
-                                <property name="top_attach">2</property>
-                                <property name="bottom_attach">3</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"/>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkHBox" id="hbox2">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                                <child>
-                                  <object class="GtkColorButton" id="muc_highlight_colorbutton">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">True</property>
-                                    <property name="xalign">0</property>
-                                    <property name="color">#000000000000</property>
-                                    <signal name="color-set" handler="on_muc_highlight_colorbutton_color_set" swapped="no"/>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="pack_type">end</property>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
-                                <property name="top_attach">3</property>
-                                <property name="bottom_attach">4</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"/>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="label30">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
-                                <property name="label" translatable="yes">Group chat highlight:</property>
-                                <property name="use_underline">True</property>
-                              </object>
-                              <packing>
-                                <property name="top_attach">3</property>
-                                <property name="bottom_attach">4</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"/>
-                              </packing>
+                              <placeholder/>
                             </child>
                           </object>
                         </child>
@@ -2262,10 +2193,11 @@ $T will be replaced by auto-not-available timeout</property>
               </packing>
             </child>
             <child>
-              <object class="GtkVBox" id="vbox4">
+              <object class="GtkBox" id="vbox4">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="border_width">12</property>
+                <property name="orientation">vertical</property>
                 <property name="spacing">12</property>
                 <child>
                   <object class="GtkFrame" id="audio_frame">
@@ -2283,39 +2215,11 @@ $T will be replaced by auto-not-available timeout</property>
                         <property name="yscale">0</property>
                         <property name="left_padding">12</property>
                         <child>
-                          <object class="GtkTable" id="table6">
+                          <object class="GtkGrid" id="grid3">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="n_rows">2</property>
-                            <property name="n_columns">2</property>
-                            <property name="column_spacing">6</property>
                             <property name="row_spacing">6</property>
-                            <child>
-                              <object class="GtkComboBox" id="audio_input_combobox">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <signal name="changed" handler="on_audio_input_combobox_changed" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
-                                <property name="y_options"/>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkComboBox" id="audio_output_combobox">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <signal name="changed" handler="on_audio_output_combobox_changed" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
-                                <property name="top_attach">1</property>
-                                <property name="bottom_attach">2</property>
-                                <property name="y_options"/>
-                              </packing>
-                            </child>
+                            <property name="column_spacing">6</property>
                             <child>
                               <object class="GtkLabel" id="label18">
                                 <property name="visible">True</property>
@@ -2324,8 +2228,8 @@ $T will be replaced by auto-not-available timeout</property>
                                 <property name="label" translatable="yes">Audio input device</property>
                               </object>
                               <packing>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options">GTK_FILL</property>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">0</property>
                               </packing>
                             </child>
                             <child>
@@ -2336,10 +2240,30 @@ $T will be replaced by auto-not-available timeout</property>
                                 <property name="label" translatable="yes">Audio output device</property>
                               </object>
                               <packing>
+                                <property name="left_attach">0</property>
                                 <property name="top_attach">1</property>
-                                <property name="bottom_attach">2</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options">GTK_FILL</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBox" id="audio_input_combobox">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <signal name="changed" handler="on_audio_input_combobox_changed" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBox" id="audio_output_combobox">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <signal name="changed" handler="on_audio_output_combobox_changed" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">1</property>
                               </packing>
                             </child>
                           </object>
@@ -2377,13 +2301,11 @@ $T will be replaced by auto-not-available timeout</property>
                         <property name="yscale">0</property>
                         <property name="left_padding">12</property>
                         <child>
-                          <object class="GtkTable" id="table8">
+                          <object class="GtkGrid" id="grid5">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="n_rows">5</property>
-                            <property name="n_columns">2</property>
-                            <property name="column_spacing">6</property>
                             <property name="row_spacing">6</property>
+                            <property name="column_spacing">6</property>
                             <child>
                               <object class="GtkLabel" id="label20">
                                 <property name="visible">True</property>
@@ -2392,8 +2314,8 @@ $T will be replaced by auto-not-available timeout</property>
                                 <property name="label" translatable="yes">Video input device</property>
                               </object>
                               <packing>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options">GTK_FILL</property>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">0</property>
                               </packing>
                             </child>
                             <child>
@@ -2404,36 +2326,8 @@ $T will be replaced by auto-not-available timeout</property>
                                 <property name="label" translatable="yes">Video output device</property>
                               </object>
                               <packing>
+                                <property name="left_attach">0</property>
                                 <property name="top_attach">1</property>
-                                <property name="bottom_attach">2</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options">GTK_FILL</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkComboBox" id="video_input_combobox">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <signal name="changed" handler="on_video_input_combobox_changed" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
-                                <property name="y_options"/>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkComboBox" id="video_output_combobox">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <signal name="changed" handler="on_video_output_combobox_changed" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
-                                <property name="top_attach">1</property>
-                                <property name="bottom_attach">2</property>
-                                <property name="y_options"/>
                               </packing>
                             </child>
                             <child>
@@ -2444,10 +2338,8 @@ $T will be replaced by auto-not-available timeout</property>
                                 <property name="label" translatable="yes">Video framerate</property>
                               </object>
                               <packing>
+                                <property name="left_attach">0</property>
                                 <property name="top_attach">2</property>
-                                <property name="bottom_attach">3</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options">GTK_FILL</property>
                               </packing>
                             </child>
                             <child>
@@ -2458,38 +2350,8 @@ $T will be replaced by auto-not-available timeout</property>
                                 <property name="label" translatable="yes">Video size</property>
                               </object>
                               <packing>
+                                <property name="left_attach">0</property>
                                 <property name="top_attach">3</property>
-                                <property name="bottom_attach">4</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options">GTK_FILL</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkComboBox" id="video_framerate_combobox">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <signal name="changed" handler="on_video_framerate_combobox_changed" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
-                                <property name="top_attach">2</property>
-                                <property name="bottom_attach">3</property>
-                                <property name="y_options"/>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkComboBox" id="video_size_combobox">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <signal name="changed" handler="on_video_size_combobox_changed" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
-                                <property name="top_attach">3</property>
-                                <property name="bottom_attach">4</property>
-                                <property name="y_options"/>
                               </packing>
                             </child>
                             <child>
@@ -2502,10 +2364,53 @@ $T will be replaced by auto-not-available timeout</property>
                                 <property name="draw_indicator">True</property>
                               </object>
                               <packing>
-                                <property name="right_attach">2</property>
+                                <property name="left_attach">0</property>
                                 <property name="top_attach">4</property>
-                                <property name="bottom_attach">5</property>
-                                <property name="y_options">GTK_FILL</property>
+                                <property name="width">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBox" id="video_input_combobox">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <signal name="changed" handler="on_video_input_combobox_changed" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBox" id="video_output_combobox">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <signal name="changed" handler="on_video_output_combobox_changed" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBox" id="video_framerate_combobox">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <signal name="changed" handler="on_video_framerate_combobox_changed" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBox" id="video_size_combobox">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <signal name="changed" handler="on_video_size_combobox_changed" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">3</property>
                               </packing>
                             </child>
                           </object>
@@ -2543,12 +2448,11 @@ $T will be replaced by auto-not-available timeout</property>
                         <property name="yscale">0</property>
                         <property name="left_padding">12</property>
                         <child>
-                          <object class="GtkTable" id="table9">
+                          <object class="GtkGrid" id="grid6">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="n_columns">4</property>
-                            <property name="column_spacing">6</property>
                             <property name="row_spacing">6</property>
+                            <property name="column_spacing">6</property>
                             <child>
                               <object class="GtkLabel" id="label24">
                                 <property name="visible">True</property>
@@ -2557,22 +2461,22 @@ $T will be replaced by auto-not-available timeout</property>
                                 <property name="label" translatable="yes">STUN server:</property>
                               </object>
                               <packing>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"/>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">0</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkLabel" id="label25">
+                              <object class="GtkCheckButton" id="stun_checkbutton">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">&lt;i&gt;(example: stunserver.org)&lt;/i&gt;</property>
-                                <property name="use_markup">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
+                                <property name="xalign">0</property>
+                                <property name="draw_indicator">True</property>
+                                <signal name="toggled" handler="on_stun_checkbutton_toggled" swapped="no"/>
                               </object>
                               <packing>
-                                <property name="left_attach">3</property>
-                                <property name="right_attach">4</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options">GTK_FILL</property>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">0</property>
                               </packing>
                             </child>
                             <child>
@@ -2586,24 +2490,19 @@ to discover one from server.</property>
                               </object>
                               <packing>
                                 <property name="left_attach">2</property>
-                                <property name="right_attach">3</property>
-                                <property name="y_options"/>
+                                <property name="top_attach">0</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkCheckButton" id="stun_checkbutton">
+                              <object class="GtkLabel" id="label25">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
-                                <property name="xalign">0.5</property>
-                                <property name="draw_indicator">True</property>
-                                <signal name="toggled" handler="on_stun_checkbutton_toggled" swapped="no"/>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">&lt;i&gt;(example: stun.iptel.org)&lt;/i&gt;</property>
+                                <property name="use_markup">True</property>
                               </object>
                               <packing>
-                                <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"/>
+                                <property name="left_attach">3</property>
+                                <property name="top_attach">0</property>
                               </packing>
                             </child>
                           </object>
@@ -2643,10 +2542,11 @@ to discover one from server.</property>
               </packing>
             </child>
             <child>
-              <object class="GtkVBox" id="vbox45">
+              <object class="GtkBox" id="vbox45">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="border_width">12</property>
+                <property name="orientation">vertical</property>
                 <property name="spacing">12</property>
                 <child>
                   <object class="GtkFrame" id="applications_frame">
@@ -2661,9 +2561,10 @@ to discover one from server.</property>
                         <property name="border_width">6</property>
                         <property name="left_padding">12</property>
                         <child>
-                          <object class="GtkVBox" id="vbox50">
+                          <object class="GtkBox" id="vbox50">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="orientation">vertical</property>
                             <property name="spacing">6</property>
                             <child>
                               <object class="GtkComboBox" id="applications_combobox">
@@ -2696,25 +2597,35 @@ to discover one from server.</property>
                                     <property name="border_width">6</property>
                                     <property name="left_padding">12</property>
                                     <child>
-                                      <object class="GtkTable" id="table22">
+                                      <object class="GtkGrid" id="grid7">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="n_rows">3</property>
-                                        <property name="n_columns">2</property>
-                                        <property name="column_spacing">12</property>
                                         <property name="row_spacing">6</property>
+                                        <property name="column_spacing">6</property>
                                         <child>
-                                          <object class="GtkEntry" id="custom_file_manager_entry">
+                                          <object class="GtkLabel" id="label200">
                                             <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <signal name="changed" handler="on_custom_file_manager_entry_changed" swapped="no"/>
+                                            <property name="can_focus">False</property>
+                                            <property name="xalign">0</property>
+                                            <property name="label" translatable="yes">_Mail client:</property>
+                                            <property name="use_underline">True</property>
                                           </object>
                                           <packing>
-                                            <property name="left_attach">1</property>
-                                            <property name="right_attach">2</property>
-                                            <property name="top_attach">2</property>
-                                            <property name="bottom_attach">3</property>
-                                            <property name="y_options"/>
+                                            <property name="left_attach">0</property>
+                                            <property name="top_attach">1</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="label199">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="xalign">0</property>
+                                            <property name="label" translatable="yes">_Browser:</property>
+                                            <property name="use_underline">True</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">0</property>
+                                            <property name="top_attach">0</property>
                                           </packing>
                                         </child>
                                         <child>
@@ -2724,13 +2635,10 @@ to discover one from server.</property>
                                             <property name="xalign">0</property>
                                             <property name="label" translatable="yes">_File manager:</property>
                                             <property name="use_underline">True</property>
-                                            <property name="mnemonic_widget">custom_file_manager_entry</property>
                                           </object>
                                           <packing>
+                                            <property name="left_attach">0</property>
                                             <property name="top_attach">2</property>
-                                            <property name="bottom_attach">3</property>
-                                            <property name="x_options">GTK_FILL</property>
-                                            <property name="y_options"/>
                                           </packing>
                                         </child>
                                         <child>
@@ -2741,8 +2649,7 @@ to discover one from server.</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
-                                            <property name="right_attach">2</property>
-                                            <property name="y_options"/>
+                                            <property name="top_attach">0</property>
                                           </packing>
                                         </child>
                                         <child>
@@ -2753,40 +2660,18 @@ to discover one from server.</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
-                                            <property name="right_attach">2</property>
                                             <property name="top_attach">1</property>
-                                            <property name="bottom_attach">2</property>
-                                            <property name="y_options"/>
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkLabel" id="label200">
+                                          <object class="GtkEntry" id="custom_file_manager_entry">
                                             <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="xalign">0</property>
-                                            <property name="label" translatable="yes">_Mail client:</property>
-                                            <property name="use_underline">True</property>
-                                            <property name="mnemonic_widget">custom_mail_client_entry</property>
+                                            <property name="can_focus">True</property>
+                                            <signal name="changed" handler="on_custom_file_manager_entry_changed" swapped="no"/>
                                           </object>
                                           <packing>
-                                            <property name="top_attach">1</property>
-                                            <property name="bottom_attach">2</property>
-                                            <property name="x_options">GTK_FILL</property>
-                                            <property name="y_options"/>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel" id="label199">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="xalign">0</property>
-                                            <property name="label" translatable="yes">_Browser:</property>
-                                            <property name="use_underline">True</property>
-                                            <property name="mnemonic_widget">custom_browser_entry</property>
-                                          </object>
-                                          <packing>
-                                            <property name="x_options">GTK_FILL</property>
-                                            <property name="y_options"/>
+                                            <property name="left_attach">1</property>
+                                            <property name="top_attach">2</property>
                                           </packing>
                                         </child>
                                       </object>
@@ -2842,13 +2727,11 @@ to discover one from server.</property>
                         <property name="border_width">6</property>
                         <property name="left_padding">12</property>
                         <child>
-                          <object class="GtkTable" id="table3">
+                          <object class="GtkGrid" id="grid8">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="n_rows">6</property>
-                            <property name="column_spacing">6</property>
                             <property name="row_spacing">6</property>
+                            <property name="column_spacing">6</property>
                             <child>
                               <object class="GtkCheckButton" id="ignore_events_from_unknown_contacts_checkbutton">
                                 <property name="label" translatable="yes">_Ignore events from contacts not in the roster</property>
@@ -2862,8 +2745,9 @@ to discover one from server.</property>
                                 <signal name="toggled" handler="on_ignore_events_from_unknown_contacts_checkbutton_toggled" swapped="no"/>
                               </object>
                               <packing>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options">GTK_FILL</property>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">0</property>
+                                <property name="width">3</property>
                               </packing>
                             </child>
                             <child>
@@ -2879,9 +2763,9 @@ to discover one from server.</property>
                                 <signal name="toggled" handler="on_send_os_info_checkbutton_toggled" swapped="no"/>
                               </object>
                               <packing>
+                                <property name="left_attach">0</property>
                                 <property name="top_attach">1</property>
-                                <property name="bottom_attach">2</property>
-                                <property name="y_options">GTK_FILL</property>
+                                <property name="width">3</property>
                               </packing>
                             </child>
                             <child>
@@ -2897,9 +2781,9 @@ to discover one from server.</property>
                                 <signal name="toggled" handler="on_send_time_info_checkbutton_toggled" swapped="no"/>
                               </object>
                               <packing>
+                                <property name="left_attach">0</property>
                                 <property name="top_attach">2</property>
-                                <property name="bottom_attach">3</property>
-                                <property name="y_options">GTK_FILL</property>
+                                <property name="width">3</property>
                               </packing>
                             </child>
                             <child>
@@ -2915,9 +2799,9 @@ to discover one from server.</property>
                                 <signal name="toggled" handler="on_log_encrypted_chats_checkbutton_toggled" swapped="no"/>
                               </object>
                               <packing>
+                                <property name="left_attach">0</property>
                                 <property name="top_attach">3</property>
-                                <property name="bottom_attach">4</property>
-                                <property name="y_options">GTK_FILL</property>
+                                <property name="width">3</property>
                               </packing>
                             </child>
                             <child>
@@ -2932,67 +2816,54 @@ to discover one from server.</property>
                                 <signal name="toggled" handler="on_send_idle_time_checkbutton_toggled" swapped="no"/>
                               </object>
                               <packing>
+                                <property name="left_attach">0</property>
                                 <property name="top_attach">4</property>
-                                <property name="bottom_attach">5</property>
-                                <property name="y_options">GTK_FILL</property>
+                                <property name="width">3</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkHBox" id="box1">
+                              <object class="GtkLabel" id="label29">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="spacing">6</property>
+                                <property name="xalign">0</property>
+                                <property name="label" translatable="yes">Global proxy:</property>
+                                <property name="angle">0.01</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">5</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBox" id="proxies_combobox">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="model">liststore8</property>
+                                <signal name="changed" handler="on_proxies_combobox_changed" swapped="no"/>
                                 <child>
-                                  <object class="GtkLabel" id="label29">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes">Global proxy:</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkComboBox" id="proxies_combobox">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="model">liststore8</property>
-                                    <signal name="changed" handler="on_proxies_combobox_changed" swapped="no"/>
-                                    <child>
-                                      <object class="GtkCellRendererText" id="cellrenderertext8"/>
-                                      <attributes>
-                                        <attribute name="text">0</attribute>
-                                      </attributes>
-                                    </child>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">True</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkButton" id="manage_proxies_button">
-                                    <property name="label" translatable="yes">_Manage...</property>
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">True</property>
-                                    <property name="use_underline">True</property>
-                                    <signal name="clicked" handler="on_manage_proxies_button_clicked" swapped="no"/>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">2</property>
-                                  </packing>
+                                  <object class="GtkCellRendererText" id="cellrenderertext8"/>
+                                  <attributes>
+                                    <attribute name="text">0</attribute>
+                                  </attributes>
                                 </child>
                               </object>
                               <packing>
+                                <property name="left_attach">1</property>
                                 <property name="top_attach">5</property>
-                                <property name="bottom_attach">6</property>
-                                <property name="y_options">GTK_FILL</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="manage_proxies_button">
+                                <property name="label" translatable="yes">_Manage...</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <property name="use_underline">True</property>
+                                <signal name="clicked" handler="on_manage_proxies_button_clicked" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="left_attach">2</property>
+                                <property name="top_attach">5</property>
                               </packing>
                             </child>
                           </object>
@@ -3028,9 +2899,10 @@ to discover one from server.</property>
                         <property name="border_width">6</property>
                         <property name="left_padding">12</property>
                         <child>
-                          <object class="GtkVBox" id="vbox66">
+                          <object class="GtkBox" id="vbox66">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="orientation">vertical</property>
                             <property name="spacing">6</property>
                             <child>
                               <object class="GtkCheckButton" id="log_show_changes_checkbutton">
@@ -3088,6 +2960,7 @@ to discover one from server.</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
+                            <property name="halign">start</property>
                             <property name="image">image2</property>
                             <property name="use_underline">True</property>
                             <signal name="clicked" handler="on_open_advanced_editor_button_clicked" swapped="no"/>
@@ -3134,7 +3007,7 @@ to discover one from server.</property>
           </packing>
         </child>
         <child>
-          <object class="GtkHButtonBox" id="hbuttonbox7">
+          <object class="GtkButtonBox" id="hbuttonbox7">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="spacing">15</property>
@@ -3164,23 +3037,5 @@ to discover one from server.</property>
         </child>
       </object>
     </child>
-  </object>
-  <object class="GtkListStore" id="status_message_liststore">
-    <columns>
-      <!-- column-name name -->
-      <column type="gchararray"/>
-      <!-- column-name text -->
-      <column type="gchararray"/>
-      <!-- column-name activity -->
-      <column type="gchararray"/>
-      <!-- column-name sub_activity -->
-      <column type="gchararray"/>
-      <!-- column-name activity_text -->
-      <column type="gchararray"/>
-      <!-- column-name mood -->
-      <column type="gchararray"/>
-      <!-- column-name mood_text -->
-      <column type="gchararray"/>
-    </columns>
   </object>
 </interface>

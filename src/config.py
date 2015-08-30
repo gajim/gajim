@@ -2798,16 +2798,16 @@ class ServiceRegistrationWindow:
             self.data_form_widget = dataforms_widget.DataFormWidget(dataform)
             if self.data_form_widget.title:
                 self.window.set_title('%s - Gajim' % self.data_form_widget.title)
-            table = self.xml.get_object('table')
-            table.attach(self.data_form_widget, 0, 2, 0, 1)
+            grid = self.xml.get_object('grid')
+            grid.attach(self.data_form_widget, 0, 0, 2, 1)
         else:
             if 'registered' in infos:
                 self.window.set_title(_('Edit %s') % service)
             else:
                 self.window.set_title(_('Register to %s') % service)
             self.data_form_widget = FakeDataForm(infos)
-            table = self.xml.get_object('table')
-            table.attach(self.data_form_widget, 0, 2, 0, 1)
+            grid = self.xml.get_object('grid')
+            grid.attach(self.data_form_widget, 0, 0, 2, 1)
 
         self.xml.connect_signals(self)
         self.window.show_all()

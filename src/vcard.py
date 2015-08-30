@@ -201,7 +201,7 @@ class VcardWindow:
                 widget.set_alignment(0, 0)
                 widget.show()
                 table = self.xml.get_object('personal_info_table')
-                table.attach(widget, 1, 4, 3, 4, yoptions = 0)
+                table.attach(widget, 1, 3, 2, 1)
             else:
                 widget = self.xml.get_object(entry_name)
                 val = widget.get_text()
@@ -558,7 +558,7 @@ class ZeroconfVcardWindow:
                 widget = Gtk.LinkButton(uri=value, label=value)
                 widget.set_alignment(0, 0)
                 table = self.xml.get_object('personal_info_table')
-                table.attach(widget, 1, 4, 3, 4, yoptions = 0)
+                table.attach(widget, 1, 3, 2, 1)
             else:
                 self.xml.get_object(entry_name).set_text(value)
         except AttributeError:

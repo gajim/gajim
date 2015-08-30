@@ -1,25 +1,35 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.3 -->
 <interface>
-  <requires lib="gtk+" version="2.16"/>
-  <!-- interface-naming-policy toplevel-contextual -->
+  <requires lib="gtk+" version="3.12"/>
+  <object class="GtkListStore" id="liststore1">
+    <columns>
+      <!-- column-name item -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <object class="GtkWindow" id="privacy_lists_first_window">
     <property name="visible">True</property>
+    <property name="can_focus">False</property>
     <property name="border_width">12</property>
     <property name="title" translatable="yes">window1</property>
     <property name="type_hint">dialog</property>
-    <signal name="destroy" handler="on_privacy_lists_first_window_destroy"/>
+    <signal name="destroy" handler="on_privacy_lists_first_window_destroy" swapped="no"/>
     <child>
-      <object class="GtkVBox" id="vbox1">
+      <object class="GtkBox" id="vbox1">
         <property name="visible">True</property>
+        <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">6</property>
         <child>
-          <object class="GtkHBox" id="hbox1">
+          <object class="GtkBox" id="hbox1">
             <property name="visible">True</property>
+            <property name="can_focus">False</property>
             <property name="spacing">12</property>
             <child>
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="xalign">0</property>
                 <property name="label" translatable="yes">Privacy Lists:</property>
               </object>
@@ -32,6 +42,7 @@
             <child>
               <object class="GtkComboBox" id="list_of_privacy_lists_combobox">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="model">liststore1</property>
                 <child>
                   <object class="GtkCellRendererText" id="cellrenderertext1"/>
@@ -41,23 +52,28 @@
                 </child>
               </object>
               <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
                 <property name="position">1</property>
               </packing>
             </child>
           </object>
           <packing>
             <property name="expand">False</property>
+            <property name="fill">True</property>
             <property name="position">0</property>
           </packing>
         </child>
         <child>
-          <object class="GtkVBox" id="vbox2">
+          <object class="GtkBox" id="vbox2">
             <property name="visible">True</property>
+            <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <property name="spacing">6</property>
             <child>
-              <object class="GtkHButtonBox" id="hbuttonbox2">
+              <object class="GtkButtonBox" id="hbuttonbox2">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="layout_style">spread</property>
                 <child>
                   <object class="GtkButton" id="delete_privacy_list_button">
@@ -67,7 +83,7 @@
                     <property name="receives_default">False</property>
                     <property name="border_width">5</property>
                     <property name="use_stock">True</property>
-                    <signal name="clicked" handler="on_delete_privacy_list_button_clicked"/>
+                    <signal name="clicked" handler="on_delete_privacy_list_button_clicked" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -83,7 +99,7 @@
                     <property name="receives_default">False</property>
                     <property name="border_width">5</property>
                     <property name="use_stock">True</property>
-                    <signal name="clicked" handler="on_open_privacy_list_button_clicked"/>
+                    <signal name="clicked" handler="on_open_privacy_list_button_clicked" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -99,14 +115,17 @@
               </packing>
             </child>
             <child>
-              <object class="GtkHBox" id="hbox2">
+              <object class="GtkBox" id="hbox2">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <child>
                   <object class="GtkEntry" id="new_privacy_list_entry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                   </object>
                   <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
@@ -118,7 +137,7 @@
                     <property name="receives_default">False</property>
                     <property name="border_width">5</property>
                     <property name="use_stock">True</property>
-                    <signal name="clicked" handler="on_new_privacy_list_button_clicked"/>
+                    <signal name="clicked" handler="on_new_privacy_list_button_clicked" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -135,12 +154,15 @@
             </child>
           </object>
           <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
             <property name="position">1</property>
           </packing>
         </child>
         <child>
-          <object class="GtkHButtonBox" id="hbuttonbox1">
+          <object class="GtkButtonBox" id="hbuttonbox1">
             <property name="visible">True</property>
+            <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="close_privacy_lists_window_button">
@@ -150,7 +172,7 @@
                 <property name="receives_default">False</property>
                 <property name="border_width">5</property>
                 <property name="use_stock">True</property>
-                <signal name="clicked" handler="on_close_button_clicked"/>
+                <signal name="clicked" handler="on_close_button_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -160,16 +182,12 @@
             </child>
           </object>
           <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
             <property name="position">2</property>
           </packing>
         </child>
       </object>
     </child>
-  </object>
-  <object class="GtkListStore" id="liststore1">
-    <columns>
-      <!-- column-name item -->
-      <column type="gchararray"/>
-    </columns>
   </object>
 </interface>

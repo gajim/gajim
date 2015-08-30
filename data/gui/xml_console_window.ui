@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.3 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.12"/>
   <object class="GtkImage" id="image1">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -13,9 +14,10 @@
     <property name="default_height">450</property>
     <signal name="destroy" handler="on_xml_console_window_destroy" swapped="no"/>
     <child>
-      <object class="GtkVBox" id="vbox">
+      <object class="GtkBox" id="vbox">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
         <property name="spacing">6</property>
         <child>
           <object class="GtkLabel" id="label342">
@@ -52,7 +54,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkHBox" id="hbox2988">
+          <object class="GtkBox" id="hbox2988">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
@@ -100,12 +102,13 @@
             <property name="can_focus">True</property>
             <property name="spacing">6</property>
             <child>
-              <object class="GtkVBox" id="input_vbox1">
+              <object class="GtkBox" id="input_vbox1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
                 <property name="spacing">6</property>
                 <child>
-                  <object class="GtkHBox" id="hbox1">
+                  <object class="GtkBox" id="hbox1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
@@ -196,7 +199,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkHBox" id="hbox2">
+                  <object class="GtkBox" id="hbox2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
@@ -237,9 +240,10 @@
             <property name="spacing">6</property>
             <signal name="activate" handler="on_expander_activate" swapped="no"/>
             <child>
-              <object class="GtkVBox" id="input_vbox">
+              <object class="GtkBox" id="input_vbox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkScrolledWindow" id="scrolledwindow42">
@@ -263,7 +267,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkHButtonBox" id="hbuttonbox31">
+                  <object class="GtkButtonBox" id="hbuttonbox31">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="spacing">6</property>

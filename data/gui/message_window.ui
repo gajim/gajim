@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.3 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.12"/>
   <object class="GtkEventBox" id="chat_tab_ebox">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="visible_window">False</property>
     <child>
-      <object class="GtkHBox" id="tab_hbox">
+      <object class="GtkBox" id="tab_hbox">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="spacing">4</property>
@@ -44,14 +45,13 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="use_action_appearance">False</property>
             <property name="relief">none</property>
             <child>
               <object class="GtkImage" id="image1329">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="stock">gtk-close</property>
-                <property name="icon-size">1</property>
+                <property name="icon_size">1</property>
               </object>
             </child>
           </object>

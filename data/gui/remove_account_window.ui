@@ -1,26 +1,35 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.3 -->
 <interface>
-  <requires lib="gtk+" version="2.16"/>
-  <!-- interface-naming-policy toplevel-contextual -->
+  <requires lib="gtk+" version="3.12"/>
+  <object class="GtkImage" id="image1">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-delete</property>
+  </object>
   <object class="GtkWindow" id="remove_account_window">
+    <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="type_hint">dialog</property>
-    <signal name="destroy" handler="on_remove_account_window_destroy"/>
+    <signal name="destroy" handler="on_remove_account_window_destroy" swapped="no"/>
     <child>
-      <object class="GtkVBox" id="vbox69">
+      <object class="GtkBox" id="vbox69">
         <property name="visible">True</property>
+        <property name="can_focus">False</property>
         <property name="border_width">3</property>
         <property name="orientation">vertical</property>
         <property name="spacing">6</property>
         <child>
-          <object class="GtkHBox" id="hbox2951">
+          <object class="GtkBox" id="hbox2951">
             <property name="visible">True</property>
+            <property name="can_focus">False</property>
             <property name="spacing">6</property>
             <child>
               <object class="GtkImage" id="image498">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="stock">gtk-dialog-question</property>
-                <property name="icon-size">6</property>
+                <property name="icon_size">6</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -31,15 +40,18 @@
             <child>
               <object class="GtkFrame" id="frame30">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="label_xalign">0</property>
                 <property name="shadow_type">none</property>
                 <child>
                   <object class="GtkAlignment" id="alignment59">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="left_padding">12</property>
                     <child>
-                      <object class="GtkVBox" id="vbox1">
+                      <object class="GtkBox" id="vbox1">
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                         <property name="border_width">6</property>
                         <property name="orientation">vertical</property>
                         <property name="spacing">6</property>
@@ -50,6 +62,7 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="use_underline">True</property>
+                            <property name="xalign">0.5</property>
                             <property name="draw_indicator">True</property>
                           </object>
                           <packing>
@@ -65,6 +78,7 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="use_underline">True</property>
+                            <property name="xalign">0.5</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">remove_only_radiobutton</property>
                           </object>
@@ -81,6 +95,7 @@
                 <child type="label">
                   <object class="GtkLabel" id="label242">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="label" translatable="yes">&lt;b&gt;What do you want to do?&lt;/b&gt;</property>
                     <property name="use_markup">True</property>
                   </object>
@@ -100,8 +115,9 @@
           </packing>
         </child>
         <child>
-          <object class="GtkHButtonBox" id="hbuttonbox16">
+          <object class="GtkButtonBox" id="hbuttonbox16">
             <property name="visible">True</property>
+            <property name="can_focus">False</property>
             <property name="border_width">6</property>
             <property name="spacing">12</property>
             <property name="layout_style">end</property>
@@ -113,7 +129,7 @@
                 <property name="can_default">True</property>
                 <property name="receives_default">False</property>
                 <property name="use_stock">True</property>
-                <signal name="clicked" handler="on_cancel_button_clicked"/>
+                <signal name="clicked" handler="on_cancel_button_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -130,7 +146,7 @@
                 <property name="receives_default">False</property>
                 <property name="image">image1</property>
                 <property name="use_underline">True</property>
-                <signal name="clicked" handler="on_remove_button_clicked"/>
+                <signal name="clicked" handler="on_remove_button_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -147,9 +163,5 @@
         </child>
       </object>
     </child>
-  </object>
-  <object class="GtkImage" id="image1">
-    <property name="visible">True</property>
-    <property name="stock">gtk-delete</property>
   </object>
 </interface>
