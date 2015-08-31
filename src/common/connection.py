@@ -2860,6 +2860,12 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.connection.send(iq)
 
     def get_password(self, callback, type_):
+        if gajim.config.get_per('accounts', self.name, 'anonymous_auth') and \
+        type_ != 'ANONYMOUS':
+            gajim.nec.push_incoming_event(NonAnonymousServerErrorEvent(None,
+                conn=self))
+            self._on_disconnected()
+            return
         self.pasword_callback = (callback, type_)
         if type_ == 'X-MESSENGER-OAUTH2':
             client_id = gajim.config.get_per('accounts', self.name,

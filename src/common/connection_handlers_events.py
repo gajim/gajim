@@ -1924,6 +1924,10 @@ class PrivacyListActiveDefaultEvent(nec.NetworkIncomingEvent):
     name = 'privacy-list-active-default'
     base_network_events = []
 
+class NonAnonymousServerErrorEvent(nec.NetworkIncomingEvent):
+    name = 'non-anonymous-server-error'
+    base_network_events = []
+
 class VcardReceivedEvent(nec.NetworkIncomingEvent):
     name = 'vcard-received'
     base_network_events = []
