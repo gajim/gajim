@@ -1104,21 +1104,22 @@ class Logger:
             time_col = int(float(time.mktime(tim)))
         else:
             time_col = int(float(time.time()))
-        if msg:
-            if self.jid_is_from_pm(with_) or nick:
-                # It's a groupchat message
-                if nick:
-                    # It's a message from a groupchat occupent
-                    type_ = 'gc_msg'
-                    with_ = with_ + '/' + nick
-                else:
-                    # It's a server message message, we don't log them
-                    return
+        if not msg:
+            return
+        if self.jid_is_from_pm(with_) or nick:
+            # It's a groupchat message
+            if nick:
+                # It's a message from a groupchat occupent
+                type_ = 'gc_msg'
+                with_ = with_ + '/' + nick
             else:
-                if direction == 'from':
-                    type_ = 'chat_msg_recv'
-                elif direction == 'to':
-                    type_ = 'chat_msg_sent'
+                # It's a server message message, we don't log them
+                return
+        else:
+            if direction == 'from':
+                type_ = 'chat_msg_recv'
+            elif direction == 'to':
+                type_ = 'chat_msg_sent'
         jid_id = self.get_jid_id(with_)
         where_sql = 'jid_id = %s AND message=?' % jid_id
         if type_ == 'gc_msg':
