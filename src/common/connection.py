@@ -425,7 +425,7 @@ class CommonConnection:
 
         if msgenc:
             msg_iq.setTag(nbxmpp.NS_ENCRYPTED + ' x').setData(msgenc)
-            msg_iq.addChild(name='no-permanent-storage',
+            msg_iq.addChild(name='no-permanent-store',
                 namespace=nbxmpp.NS_MSG_HINTS)
 
         if form_node:
@@ -505,7 +505,7 @@ class CommonConnection:
                     if self.carbons_enabled:
                         msg_iq.addChild(name='private',
                             namespace=nbxmpp.NS_CARBONS)
-                    msg_iq.addChild(name='no-permanent-storage',
+                    msg_iq.addChild(name='no-permanent-store',
                         namespace=nbxmpp.NS_MSG_HINTS)
                     msg_iq.addChild(name='no-copy',
                         namespace=nbxmpp.NS_MSG_HINTS)
