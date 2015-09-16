@@ -103,7 +103,7 @@ class ConnectionArchive313(ConnectionArchive):
     max=30):
         iq_ = nbxmpp.Iq('set')
         query = iq_.addChild('query', namespace=nbxmpp.NS_MAM)
-        x = query.addChild('x', namespace=nbxmpp.NS_DATA)
+        x = query.addChild(node=nbxmpp.DataForm(typ='submit'))
         x.addChild(node=nbxmpp.DataField(typ='hidden', name='FORM_TYPE', value=nbxmpp.NS_MAM))
         if start:
             x.addChild(node=nbxmpp.DataField(typ='text-single', name='start', value=start))
