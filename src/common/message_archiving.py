@@ -47,10 +47,18 @@ class ConnectionArchive313(ConnectionArchive):
             self._nec_agent_info_error)
         gajim.ged.register_event_handler('agent-info-received', ged.CORE,
             self._nec_agent_info)
+        gajim.ged.register_event_handler('mam-decrypted-message-received',
+            ged.CORE, self._nec_mam_decrypted_message_received)
 
     def cleanup(self):
         gajim.ged.remove_event_handler('raw-message-received', ged.CORE,
             self._nec_raw_message_313_received)
+        gajim.ged.remove_event_handler('agent-info-error-received', ged.CORE,
+            self._nec_agent_info_error)
+        gajim.ged.remove_event_handler('agent-info-received', ged.CORE,
+            self._nec_agent_info)
+        gajim.ged.remove_event_handler('mam-decrypted-message-received',
+            ged.CORE, self._nec_mam_decrypted_message_received)
 
     def _nec_agent_info_error(self, obj):
         if obj.jid in self.mam_awaiting_disco_result:
@@ -81,7 +89,7 @@ class ConnectionArchive313(ConnectionArchive):
         if obj.conn.name != self.name:
             return
 
-        fin_ = obj.stanza.getTag('fin', namespace=nbxmpp.NS_MAM) 
+        fin_ = obj.stanza.getTag('fin', namespace=nbxmpp.NS_MAM)
         if fin_:
             queryid_ = fin_.getAttr('queryid')
             if queryid_ not in self.awaiting_answers:
@@ -98,6 +106,14 @@ class ConnectionArchive313(ConnectionArchive):
                     self.request_archive(after=last)
 
             del self.awaiting_answers[queryid_]
+
+    def _nec_mam_decrypted_message_received(self, obj):
+        if obj.conn.name != self.name:
+            return
+        print 'ici'
+        print obj.msgtxt
+        gajim.logger.save_if_not_exists(obj.with_, obj.direction, obj.tim,
+            msg=obj.msgtxt, nick=obj.nick)
 
     def request_archive(self, start=None, end=None, with_=None, after=None,
     max=30):
