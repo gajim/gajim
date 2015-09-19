@@ -893,6 +893,8 @@ class ConnectionHandlersBase:
             self._nec_gc_presence_received)
         gajim.ged.register_event_handler('message-received', ged.CORE,
             self._nec_message_received)
+        gajim.ged.register_event_handler('mam-message-received', ged.CORE,
+            self._nec_mam_message_received)
         gajim.ged.register_event_handler('decrypted-message-received', ged.CORE,
             self._nec_decrypted_message_received)
 
@@ -905,6 +907,8 @@ class ConnectionHandlersBase:
             self._nec_gc_presence_received)
         gajim.ged.remove_event_handler('message-received', ged.CORE,
             self._nec_message_received)
+        gajim.ged.remove_event_handler('mam-message-received', ged.CORE,
+            self._nec_mam_message_received)
         gajim.ged.remove_event_handler('decrypted-message-received', ged.CORE,
             self._nec_decrypted_message_received)
 
@@ -1116,12 +1120,44 @@ class ConnectionHandlersBase:
         gajim.nec.push_incoming_event(DecryptedMessageReceivedEvent(None,
             conn=self, msg_obj=obj))
 
+    def _nec_mam_message_received(self, obj):
+        if obj.conn.name != self.name:
+            return
+        if obj.enc_tag and self.USE_GPG:
+            encmsg = obj.enc_tag.getData()
+
+            keyID = gajim.config.get_per('accounts', self.name, 'keyid')
+            if keyID:
+                self.gpg_messages_to_decrypt.append([encmsg, keyID, obj])
+                if len(self.gpg_messages_to_decrypt) == 1:
+                    gajim.thread_interface(self.decrypt_thread, [encmsg, keyID,
+                        obj], self._on_mam_message_decrypted, [obj])
+                return
+        gajim.nec.push_incoming_event(MamDecryptedMessageReceivedEvent(None,
+            conn=self, msg_obj=obj))
+
     def _on_message_decrypted(self, output, obj):
         if len(self.gpg_messages_to_decrypt):
             encmsg, keyID, obj2 = self.gpg_messages_to_decrypt[0]
+            if type(obj2) == MessageReceivedEvent:
+                cb = self._on_message_decrypted
+            else:
+                cb = self._on_mam_message_decrypted
             gajim.thread_interface(self.decrypt_thread, [encmsg, keyID, obj2],
-                self._on_message_decrypted, [obj2])
+                cb, [obj2])
         gajim.nec.push_incoming_event(DecryptedMessageReceivedEvent(None,
+            conn=self, msg_obj=obj))
+
+    def _on_mam_message_decrypted(self, output, obj):
+        if len(self.gpg_messages_to_decrypt):
+            encmsg, keyID, obj2 = self.gpg_messages_to_decrypt[0]
+            if type(obj2) == MessageReceivedEvent:
+                cb = self._on_message_decrypted
+            else:
+                cb = self._on_mam_message_decrypted
+            gajim.thread_interface(self.decrypt_thread, [encmsg, keyID, obj2],
+                cb, [obj2])
+        gajim.nec.push_incoming_event(MamDecryptedMessageReceivedEvent(None,
             conn=self, msg_obj=obj))
 
     def _nec_decrypted_message_received(self, obj):
