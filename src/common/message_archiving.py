@@ -110,8 +110,6 @@ class ConnectionArchive313(ConnectionArchive):
     def _nec_mam_decrypted_message_received(self, obj):
         if obj.conn.name != self.name:
             return
-        print 'ici'
-        print obj.msgtxt
         gajim.logger.save_if_not_exists(obj.with_, obj.direction, obj.tim,
             msg=obj.msgtxt, nick=obj.nick)
 
