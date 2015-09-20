@@ -18,6 +18,7 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from gi.repository import Gtk
+import gi
 gi.require_version('GtkSpell', '3.0')
 from gi.repository import GtkSpell
 

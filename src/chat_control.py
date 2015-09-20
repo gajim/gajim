@@ -29,6 +29,7 @@
 
 import os
 import time
+import gi
 gi.require_version('GdkX11', '3.0')
 from gi.repository import GdkX11
 from gi.repository import Gtk
