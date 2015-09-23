@@ -2592,6 +2592,12 @@ class MessageOutgoingEvent(nec.NetworkOutgoingEvent):
     def generate(self):
         return True
 
+class StanzaMessageOutgoingEvent(nec.NetworkOutgoingEvent):
+    name='stanza-message-outgoing'
+    base_network_events = []
+
+    def generate(self):
+        return True
 
 class GcMessageOutgoingEvent(nec.NetworkOutgoingEvent):
     name = 'gc-message-outgoing'
