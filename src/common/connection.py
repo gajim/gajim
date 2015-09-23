@@ -818,6 +818,8 @@ class Connection(CommonConnection, ConnectionHandlers):
             self._nec_message_outgoing)
         gajim.ged.register_event_handler('gc-message-outgoing', ged.OUT_CORE,
             self._nec_gc_message_outgoing)
+        gajim.ged.register_event_handler('stanza-message-outgoing',
+            ged.OUT_CORE, self._nec_stanza_message_outgoing)
     # END __init__
 
     def cleanup(self):
@@ -832,6 +834,8 @@ class Connection(CommonConnection, ConnectionHandlers):
             self._nec_message_outgoing)
         gajim.ged.remove_event_handler('gc-message-outgoing', ged.OUT_CORE,
             self._nec_gc_message_outgoing)
+        gajim.ged.remove_event_handler('stanza-message-outgoing', ged.OUT_CORE,
+            self._nec_stanza_message_outgoing)
 
     def get_config_values_or_default(self):
         if gajim.config.get_per('accounts', self.name, 'keep_alives_enabled'):
@@ -2131,9 +2135,11 @@ class Connection(CommonConnection, ConnectionHandlers):
         subject, type_, msg_iq, xhtml):
             if isinstance(msg_iq, list):
                 for iq in msg_iq:
-                    msg_id = self.connection.send(iq, now=obj.now)
+                    gajim.nec.push_incoming_event(StanzaMessageOutgoingEvent(
+                        None, conn=self, msg_iq=iq, now=obj.now))
             else:
-                msg_id = self.connection.send(msg_iq, now=obj.now)
+                gajim.nec.push_incoming_event(StanzaMessageOutgoingEvent(None,
+                    conn=self, msg_iq=msg_iq, now=obj.now))
             gajim.nec.push_incoming_event(MessageSentEvent(None, conn=self,
                 jid=jid, message=msg, keyID=keyID, chatstate=obj.chatstate))
             if obj.callback:
@@ -2158,6 +2164,11 @@ class Connection(CommonConnection, ConnectionHandlers):
             form_node=obj.form_node, original_message=obj.original_message,
             delayed=obj.delayed, attention=obj.attention,
             correction_msg=obj.correction_msg, callback=cb)
+
+    def _nec_stanza_message_outgoing(self, obj):
+        if obj.conn.name != self.name:
+            return
+        obj.msg_id = self.connection.send(obj.msg_iq, now=obj.now)
 
     def send_contacts(self, contacts, fjid, type_='message'):
         """
