@@ -1,3 +1,9 @@
+Gajim 0.16.4 (26 September 2015)
+
+  * Fix trusting GPG keys
+  * Ability to disable synchronization of logs with server
+  * Improve MAM usage
+
 Gajim 0.16.3 (31 July 2015)
 
   * Fix reading secret file

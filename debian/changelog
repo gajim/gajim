@@ -1,20 +1,26 @@
+gajim (0.16.4-1) unstable; urgency=low
+
+  * New upstream release
+
+ -- Yann Leboulanger <yann@leboulanger.org>  Sun, 26 Sep 2015 15:28:29 +0200
+
 gajim (0.16.3-1) unstable; urgency=low
 
   * New upstream release
 
- -- Yann Leboulanger <yann@leboulanger.org>  Sat, 31 Jul 2014 23:12:04 +0200
+ -- Yann Leboulanger <yann@leboulanger.org>  Sat, 31 Jul 2015 23:12:04 +0200
 
 gajim (0.16.2-1) unstable; urgency=low
 
   * New upstream release
 
- -- Yann Leboulanger <yann@leboulanger.org>  Sat, 24 Jul 2014 22:30:10 +0200
+ -- Yann Leboulanger <yann@leboulanger.org>  Sat, 24 Jul 2015 22:30:10 +0200
 
 gajim (0.16.1-1) unstable; urgency=low
 
   * New upstream release
 
- -- Yann Leboulanger <yann@leboulanger.org>  Sat, 28 Feb 2014 22:30:10 +0200
+ -- Yann Leboulanger <yann@leboulanger.org>  Sat, 28 Feb 2015 22:30:10 +0200
 
 gajim (0.16-1) unstable; urgency=low
 
