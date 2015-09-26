@@ -43,7 +43,7 @@ log = logging.getLogger('gajim.c.optparser')
 
 class OptionsParser:
     def __init__(self, filename):
-        self.__filename = filename
+        self.__filename = os.path.realpath(filename)
         self.old_values = {}    # values that are saved in the file and maybe
                                                         # no longer valid
 
