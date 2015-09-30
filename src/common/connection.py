@@ -1899,7 +1899,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         # If we are not resuming, we ask for discovery info
         # and archiving preferences
         if not self.sm.supports_sm or (not self.sm.resuming and self.sm.enabled):
-            self.request_message_archiving_preferences()
             self.discoverInfo(gajim.config.get_per('accounts', self.name,
                 'hostname'), id_prefix='Gajim_')
 
@@ -2006,14 +2005,15 @@ class Connection(CommonConnection, ConnectionHandlers):
                 if nbxmpp.NS_ARCHIVE in obj.features:
                     self.archiving_supported = True
                     self.archiving_136_supported = True
-                if nbxmpp.NS_ARCHIVE_AUTO in obj.features:
-                    self.archive_auto_supported = True
-                if nbxmpp.NS_ARCHIVE_MANAGE in obj.features:
-                    self.archive_manage_supported = True
-                if nbxmpp.NS_ARCHIVE_MANUAL in obj.features:
-                    self.archive_manual_supported = True
-                if nbxmpp.NS_ARCHIVE_PREF in obj.features:
-                    self.archive_pref_supported = True
+                    self.request_message_archiving_preferences()
+                    if nbxmpp.NS_ARCHIVE_AUTO in obj.features:
+                        self.archive_auto_supported = True
+                    if nbxmpp.NS_ARCHIVE_MANAGE in obj.features:
+                        self.archive_manage_supported = True
+                    if nbxmpp.NS_ARCHIVE_MANUAL in obj.features:
+                        self.archive_manual_supported = True
+                    if nbxmpp.NS_ARCHIVE_PREF in obj.features:
+                        self.archive_pref_supported = True
                 if nbxmpp.NS_BLOCKING in obj.features:
                     self.blocking_supported = True
                 if nbxmpp.NS_ADDRESS in obj.features:
