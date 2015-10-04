@@ -77,7 +77,6 @@ class TextViewImage(Gtk.Image):
         self._selected = False
         self._disconnect_funcs = []
         self.connect('parent-set', self.on_parent_set)
-        self.connect('draw', self.on_expose)
         self.set_tooltip_markup(text)
         self.anchor.plaintext = text
 
@@ -150,15 +149,6 @@ class TextViewImage(Gtk.Image):
     def on_mark_modified(self, mark):
         if is_selection_modified(mark):
             self._update_selected()
-
-    def on_expose(self, widget, event):
-        state = self.get_state()
-        if state != Gtk.StateType.NORMAL:
-            gc = widget.get_style().base_gc[state]
-            area = widget.allocation
-            widget.get_window(Gtk.TextWindowType.TEXT).draw_rectangle(gc, True,
-                area.x, area.y, area.width, area.height)
-        return False
 
 
 class ConversationTextview(GObject.GObject):
