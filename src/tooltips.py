@@ -113,7 +113,7 @@ class BaseTooltip:
         return 'not in roster'
 
     def motion_notify_event(self, widget, event):
-        self.hide_tooltip()
+        GLib.idle_add(self.hide_tooltip)
 
     def on_size_allocate(self, widget, rect):
         if not self.position_computed:
