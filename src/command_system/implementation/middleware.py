@@ -38,7 +38,6 @@ from common import gajim
 
 from ..framework import CommandProcessor
 from ..errors import CommandError, NoCommandError
-from ..tools import gconf
 
 class ChatCommandProcessor(CommandProcessor):
     """
@@ -114,8 +113,7 @@ class CommandTools:
     def install_tags(self):
         buffer = self.conv_textview.tv.get_buffer()
 
-        name = gconf("/desktop/gnome/interface/monospace_font_name")
-        name = name if name else "Monospace"
+        name = "Monospace"
         font = Pango.FontDescription(name)
 
         command_ok_tag = buffer.create_tag("command_ok")

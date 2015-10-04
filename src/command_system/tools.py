@@ -33,11 +33,3 @@ def remove(sequence, target):
     elif isinstance(sequence, dict):
         if target in sequence:
             del sequence[target]
-
-def gconf(path):
-    try:
-        from gi.repository import GConf
-        client = GConf.Client.get_default()
-        return client.get_string(path)
-    except ImportError:
-        pass
