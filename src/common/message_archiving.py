@@ -103,7 +103,9 @@ class ConnectionArchive313(ConnectionArchive):
                 last = set_.getTagData('last')
                 if last:
                     gajim.config.set_per('accounts', self.name, 'last_mam_id', last)
-                    self.request_archive(after=last)
+                    complete = fin_.getAttr('complete')
+                    if complete != 'true':
+                        self.request_archive(after=last)
 
             del self.awaiting_answers[queryid_]
 
