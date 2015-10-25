@@ -2302,7 +2302,7 @@ class NotificationEvent(nec.NetworkIncomingEvent):
         if self.control:
             parent_win = self.control.parent_win
             if parent_win and self.control == parent_win.get_active_control() \
-            and parent_win.window.has_focus:
+            and parent_win.window.get_property('has-toplevel-focus'):
                 self.control_focused = True
 
     def handle_incoming_msg_event(self, msg_obj):
@@ -2364,15 +2364,16 @@ class NotificationEvent(nec.NetworkIncomingEvent):
             self.popup_title = _('New Message from %(nickname)s') % \
                 {'nickname': nick}
 
-        if not gajim.config.get('notify_on_new_message') or \
-        not self.first_unread:
-            self.do_popup = False
-        elif gajim.config.get('autopopupaway'):
-            # always show notification
-            self.do_popup = True
-        elif gajim.connections[self.conn.name].connected in (2, 3):
-            # we're online or chat
-            self.do_popup = True
+
+        if gajim.config.get('notify_on_new_message'):
+            if self.first_unread or (gajim.config.get('autopopup_chat_opened') \
+            and not self.control_focused):
+                if gajim.config.get('autopopupaway'):
+                    # always show notification
+                    self.do_popup = True
+                if gajim.connections[self.conn.name].connected in (2, 3):
+                    # we're online or chat
+                    self.do_popup = True
 
         if msg_obj.attention and not gajim.config.get(
         'ignore_incoming_attention'):

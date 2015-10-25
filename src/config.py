@@ -97,36 +97,38 @@ class PreferencesWindow:
         self.window = self.xml.get_object('preferences_window')
         self.window.set_transient_for(gajim.interface.roster.window)
         self.notebook = self.xml.get_object('preferences_notebook')
-        self.one_window_type_combobox =\
-                self.xml.get_object('one_window_type_combobox')
+        self.one_window_type_combobox = self.xml.get_object(
+            'one_window_type_combobox')
         self.iconset_combobox = self.xml.get_object('iconset_combobox')
         self.notify_on_signin_checkbutton = self.xml.get_object(
-                'notify_on_signin_checkbutton')
+            'notify_on_signin_checkbutton')
         self.notify_on_signout_checkbutton = self.xml.get_object(
-                'notify_on_signout_checkbutton')
+            'notify_on_signout_checkbutton')
         self.auto_popup_away_checkbutton = self.xml.get_object(
-                'auto_popup_away_checkbutton')
+            'auto_popup_away_checkbutton')
+        self.auto_popup_chat_opened_checkbutton = self.xml.get_object(
+            'auto_popup_chat_opened_checkbutton')
         self.sound_dnd_checkbutton = self.xml.get_object('sound_dnd_checkbutton')
         self.auto_away_checkbutton = self.xml.get_object('auto_away_checkbutton')
         self.auto_away_time_spinbutton = self.xml.get_object(
-                'auto_away_time_spinbutton')
+            'auto_away_time_spinbutton')
         self.auto_away_message_entry = self.xml.get_object(
-                'auto_away_message_entry')
+            'auto_away_message_entry')
         self.auto_xa_checkbutton = self.xml.get_object('auto_xa_checkbutton')
         self.auto_xa_time_spinbutton = self.xml.get_object(
-                'auto_xa_time_spinbutton')
+            'auto_xa_time_spinbutton')
         self.auto_xa_message_entry = self.xml.get_object('auto_xa_message_entry')
 
         ### General tab ###
         # Display avatars in roster
         st = gajim.config.get('show_avatars_in_roster')
         self.xml.get_object('show_avatars_in_roster_checkbutton'). \
-                set_active(st)
+            set_active(st)
 
         # Display status msg under contact name in roster
         st = gajim.config.get('show_status_msgs_in_roster')
         self.xml.get_object('show_status_msgs_in_roster_checkbutton'). \
-                set_active( st)
+            set_active( st)
 
         # Display PEP in roster
         st1 = gajim.config.get('show_mood_in_roster')
@@ -312,6 +314,10 @@ class PreferencesWindow:
         # autopopupaway
         st = gajim.config.get('autopopupaway')
         self.auto_popup_away_checkbutton.set_active(st)
+
+        # autopopup_chat_opened
+        st = gajim.config.get('autopopup_chat_opened')
+        self.auto_popup_chat_opened_checkbutton.set_active(st)
 
         # sounddnd
         st = gajim.config.get('sounddnd')
@@ -846,6 +852,9 @@ class PreferencesWindow:
 
     def on_auto_popup_away_checkbutton_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'autopopupaway')
+
+    def on_auto_popup_chat_opened_checkbutton_toggled(self, widget):
+        self.on_checkbutton_toggled(widget, 'autopopup_chat_opened')
 
     def on_sound_dnd_checkbutton_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'sounddnd')

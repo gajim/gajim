@@ -683,6 +683,23 @@
                           </packing>
                         </child>
                         <child>
+                          <object class="GtkCheckButton" id="auto_popup_chat_opened_checkbutton">
+                            <property name="label" translatable="yes">Allow popup/notifications when a chat window is opened</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
+                            <property name="draw_indicator">True</property>
+                            <signal name="toggled" handler="on_auto_popup_chat_opened_checkbutton_toggled" swapped="no"/>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">4</property>
+                          </packing>
+                        </child>
+                        <child>
                           <object class="GtkFrame" id="frame_gmail">
                             <property name="visible">True</property>
                             <property name="sensitive">False</property>
@@ -748,7 +765,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">False</property>
-                            <property name="position">4</property>
+                            <property name="position">5</property>
                           </packing>
                         </child>
                         <child>
@@ -791,7 +808,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">5</property>
+                            <property name="position">6</property>
                           </packing>
                         </child>
                       </object>

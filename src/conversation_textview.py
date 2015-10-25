@@ -125,7 +125,7 @@ class TextViewImage(Gtk.Image):
         if not parent:
             self._disconnect_signals()
             return
-        if isinstance(parent, gtk.EventBox):
+        if isinstance(parent, Gtk.EventBox):
             parent = parent.get_parent()
             if not parent:
                 self._disconnect_signals()
