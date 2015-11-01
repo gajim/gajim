@@ -50,6 +50,7 @@ if HAVE_GPG:
         def encrypt(self, str_, recipients, always_trust=False):
             trust = always_trust
             if not trust:
+                # check if we trust all keys
                 trust = True
                 for key in recipients:
                     if key not in self.always_trust:
@@ -59,7 +60,10 @@ if HAVE_GPG:
                 result = super(GnuPG, self).list_keys(keys=recipients)
                 for key in result:
                     if key['trust'] not in ('f', 'u'):
-                        return '', 'NOT_TRUSTED'
+                        if key['keyid'][-8:] not in self.always_trust:
+                            return '', 'NOT_TRUSTED ' + key['keyid'][-8:]
+                        else:
+                            trust = True
             result = super(GnuPG, self).encrypt(str_, recipients,
                 always_trust=trust, passphrase=self.passphrase)
 

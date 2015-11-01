@@ -320,7 +320,7 @@ class CommonConnection:
                         always_trust)
                 def _on_encrypted(output):
                     msgenc, error = output
-                    if error == 'NOT_TRUSTED':
+                    if error.startswith( 'NOT_TRUSTED'):
                         def _on_always_trust(answer):
                             if answer:
                                 gajim.thread_interface(encrypt_thread, [msg, keyID,
@@ -333,7 +333,8 @@ class CommonConnection:
                                     form_node, user_nick, keyID, attention,
                                     correction_msg, callback)
                         gajim.nec.push_incoming_event(GPGTrustKeyEvent(None,
-                            conn=self, keyID=keyID, callback=_on_always_trust))
+                            conn=self, keyID=error.split(' ')[-1],
+                            callback=_on_always_trust))
                     else:
                         self._message_encrypted_cb(output, type_, msg, msgtxt,
                             original_message, fjid, resource, jid, xhtml,
