@@ -190,7 +190,7 @@ try:
         os.environ['FS_PLUGIN_PATH'] = 'gtk\\lib\\farstream-0.1'
         os.environ['GST_PLUGIN_PATH'] = 'gtk\\lib\\gstreamer-0.10'
     farstream = __import__('farstream')
-    import gst
+    gst = __import__('gst')
     import glib
     try:
         conference = gst.element_factory_make('fsrtpconference')
