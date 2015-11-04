@@ -96,7 +96,7 @@ if not HAS_NBXMPP:
 #    'logging.NullHandler', 'dbus.service', 'OpenSSL.SSL', 'OpenSSL.crypto',
 #    'common.sleepy', 'DLFCN', 'dl', 'xml.sax', 'xml.sax.handler', 'ic',
 #    'Crypto.PublicKey', 'IPython', 'contextlib', 'imp', 'monotonic',
-#    'gtkexcepthook']
+#    'gtkexcepthook', 'libxml2', 'libxml2mod']
 
 if os.name == 'nt':
     import locale
