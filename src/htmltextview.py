@@ -521,11 +521,11 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
             tag.title = title
         return tag
 
-    def _update_img(self, output, attrs, img_mark):
+    def _update_img(self, output, attrs, img_mark, tags):
         '''Callback function called after the function helpers.download_image.
         '''
         mem, alt = output
-        self._process_img(attrs, (mem, alt, img_mark))
+        self._process_img(attrs, (mem, alt, img_mark, tags))
 
     def _process_img(self, attrs, loaded=None):
         '''Process a img tag.
@@ -534,6 +534,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
         update = False
         pixbuf = None
         replace_mark = None
+        replace_tags = None
 
         try:
             if attrs['src'].startswith('data:image/'):
@@ -543,14 +544,14 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                 mem = base64.standard_b64decode(urllib.parse.unquote(
                     img).encode('utf-8'))
             elif loaded is not None:
-                (mem, alt, replace_mark) = loaded
+                (mem, alt, replace_mark, replace_tags) = loaded
                 update = True
             else:
                 if self.conv_textview:
                     img_mark = self.textbuf.create_mark(None, self.iter, True)
                     gajim.thread_interface(helpers.download_image, [
                         self.conv_textview.account, attrs], self._update_img,
-                        [attrs, img_mark])
+                        [attrs, img_mark, self._get_style_tags()])
                     alt = attrs.get('alt', '')
                     if alt:
                         alt += '\n'
@@ -608,7 +609,10 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                 self.textbuf.delete(working_iter, next_iter)
                 self.textbuf.delete_mark(replace_mark)
             if pixbuf is not None:
-                tags = self._get_style_tags()
+                if replace_mark:
+                    tags = replace_tags
+                else:
+                    tags = self._get_style_tags()
                 if tags:
                     tmpmark = self.textbuf.create_mark(None, working_iter, True)
                 self.textbuf.insert_pixbuf(working_iter, pixbuf)
