@@ -491,6 +491,8 @@ class RosterWindow:
 
         nearby_family, big_brother_jid, big_brother_account = \
                 self._get_nearby_family_and_big_brother(family, account)
+        if not big_brother_jid:
+            return []
         big_brother_contact = gajim.contacts.get_first_contact_from_jid(
                 big_brother_account, big_brother_jid)
 

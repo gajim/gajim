@@ -840,6 +840,8 @@ class MetacontactManager():
             # we want one nearby_family per account
             nearby_family = [data for data in family if account == data['account']]
 
+        if not nearby_family:
+            return (None, None, None)
         big_brother_data = self._get_metacontacts_big_brother(nearby_family)
         big_brother_jid = big_brother_data['jid']
         big_brother_account = big_brother_data['account']
