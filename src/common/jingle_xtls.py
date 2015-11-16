@@ -112,21 +112,21 @@ def get_context(fingerprint, verify_cb=None, remote_jid=None):
         ctx.set_verify(SSL.VERIFY_PEER, verify_cb or default_callback)
 
     cert_name = os.path.join(gajim.MY_CERT_DIR, SELF_SIGNED_CERTIFICATE)
-    ctx.use_privatekey_file (cert_name + '.pkey')
-    ctx.use_certificate_file(cert_name + '.cert')
+    ctx.use_privatekey_file((cert_name + '.pkey').encode('utf-8'))
+    ctx.use_certificate_file((cert_name + '.cert').encode('utf-8'))
 
     # Try to load Diffie-Hellman parameters.
     # First try user DH parameters, if this fails load the default DH parameters
     dh_params_name = os.path.join(gajim.MY_CERT_DIR, DH_PARAMS)
     try:
         with open(dh_params_name, "r") as dh_params_file:
-            ctx.load_tmp_dh(str(dh_params_name))
+            tx.load_tmp_dh(dh_params_name.encode('utf-8'))
     except FileNotFoundError as err:
         default_dh_params_name = os.path.join(gajim.DATA_DIR,
             'other', DEFAULT_DH_PARAMS)
         try:
             with open(default_dh_params_name, "r") as default_dh_params_file:
-                ctx.load_tmp_dh(str(default_dh_params_name))
+                ctx.load_tmp_dh(default_dh_params_name.encode('utf-8'))
         except FileNotFoundError as err:
             log.error('Unable to load default DH parameter file: %s , %s'
                 % (default_dh_params_name, err))
