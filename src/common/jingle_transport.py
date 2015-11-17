@@ -198,7 +198,8 @@ class JingleTransportSocks5(JingleTransport):
         try:
             for addrinfo in socket.getaddrinfo(socket.gethostname(), None):
                 addr = addrinfo[4][0]
-                if not addr in hosts and not addr.startswith('127'):
+                if not addr in hosts and not addr.startswith('127') and \
+                addr != '::1':
                     c = {'host': addr,
                          'candidate_id': self.connection.connection.getAnID(),
                          'port': port,
