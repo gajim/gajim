@@ -426,8 +426,6 @@ class CommonConnection:
 
         if msgenc:
             msg_iq.setTag(nbxmpp.NS_ENCRYPTED + ' x').setData(msgenc)
-            msg_iq.addChild(name='no-permanent-store',
-                namespace=nbxmpp.NS_MSG_HINTS)
 
         if form_node:
             msg_iq.addChild(node=form_node)
