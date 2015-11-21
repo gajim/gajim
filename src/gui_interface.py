@@ -3038,7 +3038,7 @@ class Interface:
             for command in commands:
                 if helpers.is_in_path(command):
                     if command == 'paplay':
-                        command += ' -n gajim'
+                        command += ' -n gajim --property=media.role=event'
                     if command in ('aplay', 'play'):
                         command += ' -q'
                     elif command == 'ossplay':
