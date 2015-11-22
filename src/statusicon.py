@@ -324,7 +324,7 @@ class StatusIcon:
 
                 # join gc
                 gc_item = Gtk.MenuItem.new_with_label(
-                    _('using account %s') % account, use_underline=False)
+                    _('using account %s') % account)
                 gc_sub_menu.append(gc_item)
                 gc_menuitem_menu = Gtk.Menu()
                 gajim.interface.roster.add_bookmarks_list(gc_menuitem_menu,
