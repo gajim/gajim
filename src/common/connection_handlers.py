@@ -510,7 +510,7 @@ class ConnectionVcard:
                 if id_ in self.groupchat_jids:
                     frm = self.groupchat_jids[id_]
                     del self.groupchat_jids[id_]
-                if frm and frm != our_jid:
+                if frm:
                     # Write an empty file
                     self._save_vcard_to_hd(frm, '')
                 jid, resource = gajim.get_room_and_nick_from_fjid(frm)
