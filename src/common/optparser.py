@@ -76,8 +76,13 @@ class OptionsParser:
                 gajim.config.set(optname, value)
             else:
                 if (optname, key) not in seen:
+                    if optname in self.old_values:
+                        self.old_values[optname][key] = {}
+                    else:
+                        self.old_values[optname] = {key: {}}
                     gajim.config.add_per(optname, key)
                     seen.add((optname, key))
+                self.old_values[optname][key][subname] = value
                 gajim.config.set_per(optname, key, subname, value)
 
         old_version = gajim.config.get('version')
@@ -234,6 +239,8 @@ class OptionsParser:
             self.update_config_to_014900()
         if old < [0, 16, 0, 1] and new >= [0, 16, 0, 1]:
             self.update_config_to_01601()
+        if old < [0, 16, 4, 1] and new >= [0, 16, 4, 1]:
+            self.update_config_to_01641()
 
         gajim.logger.init_vars()
         gajim.logger.attach_cache_database()
@@ -929,3 +936,14 @@ class OptionsParser:
                 gajim.config.set_per('accounts', account, 'last_mam_id',
                     last_mam_id)
         gajim.config.set('version', '0.16.0.1')
+
+    def update_config_to_01641(self):
+        print self.old_values['accounts'].keys()
+        for account in self.old_values['accounts'].keys():
+            connection_types = self.old_values['accounts'][account][
+            'connection_types'].split()
+            if 'plain' in connection_types and len(connection_types) > 1:
+                connection_types.remove('plain')
+            gajim.config.set_per('accounts', account, 'connection_types',
+                ' '.join(connection_types))
+        gajim.config.set('version', '0.16.4.1')
