@@ -1214,7 +1214,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                 self._connection_types = gajim.config.get_per('accounts', self.name,
                         'connection_types').split()
             else:
-                self._connection_types = ['tls', 'ssl', 'plain']
+                self._connection_types = ['tls', 'ssl']
             if self.last_connection_type:
                 if self.last_connection_type in self._connection_types:
                     self._connection_types.remove(self.last_connection_type)
@@ -1419,6 +1419,14 @@ class Connection(CommonConnection, ConnectionHandlers):
                 self._current_host['host'], self._current_host['port'], con_type))
 
         self.last_connection_type = con_type
+        if con_type == 'tls' and 'ssl' in self._connection_types:
+            # we were about to try ssl after tls, but tls succeed, so
+            # definitively stop trying ssl
+            con_types = gajim.config.get_per('accounts', self.name,
+                'connection_types').split()
+            con_types.remove('ssl')
+            gajim.config.set_per('accounts', self.name, 'connection_types',
+                ' '.join(con_types))
         if gajim.config.get_per('accounts', self.name, 'anonymous_auth'):
             name = None
         else:
