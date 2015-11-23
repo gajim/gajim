@@ -459,7 +459,7 @@ if pid_alive():
             pixs.append(pix)
     if pixs:
         # set the icon to all windows
-        Gtk.Window.set_default_icon_list(*pixs)
+        Gtk.Window.set_default_icon_list(pixs)
     pritext = _('Gajim is already running')
     sectext = _('Another instance of Gajim seems to be running\nRun anyway?')
     dialog = dialogs.YesNoDialog(pritext, sectext)

@@ -121,7 +121,7 @@ class HistoryManager:
                 pixs.append(pix)
         if pixs:
             # set the icon to all windows
-            Gtk.Window.set_default_icon_list(*pixs)
+            Gtk.Window.set_default_icon_list(pixs)
 
         if not os.path.exists(LOG_DB_PATH):
             dialogs.ErrorDialog(_('Cannot find history logs database'),

@@ -139,7 +139,7 @@ def popup_emoticons_under_button(menu, button, parent_win):
         x = window_x + button_x
         y = window_y + button_y
 
-        menu_height = menu.size_request().height
+        menu_height = menu.get_preferred_size()[0].height
 
         ## should we pop down or up?
         if (y + alloc.height + menu_height < Gdk.Screen.height()):
