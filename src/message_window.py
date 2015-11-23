@@ -315,7 +315,8 @@ class MessageWindow(object):
         # NOTE: we do not call set_control_active(True) since we don't know
         # whether the tab is the active one.
         self.show_title()
-        GLib.timeout_add(500, control.msg_textview.grab_focus)
+        if self.get_num_controls() == 1:
+            GLib.timeout_add(500, control.msg_textview.grab_focus)
 
     def on_tab_eventbox_button_press_event(self, widget, event, child):
         if event.button == 3: # right click
