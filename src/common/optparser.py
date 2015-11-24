@@ -928,7 +928,6 @@ class OptionsParser:
         gajim.config.set('version', '0.16.0.1')
 
     def update_config_to_01641(self):
-        print self.old_values['accounts'].keys()
         for account in self.old_values['accounts'].keys():
             connection_types = self.old_values['accounts'][account][
             'connection_types'].split()
