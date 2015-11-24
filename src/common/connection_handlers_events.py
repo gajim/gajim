@@ -1147,6 +1147,8 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                     if not frm:
                         frm = gajim.get_jid_from_account(account)
                     self.stanza.setTo(frm)
+                    if not to:
+                        to = gajim.get_jid_from_account(account)
                     self.stanza.setFrom(to)
                     self.sent = True
                 try:
