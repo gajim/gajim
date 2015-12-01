@@ -2,7 +2,7 @@ SUBDIRS = gui emoticons pixmaps iconsets moods activities
 @INTLTOOL_DESKTOP_RULE@
 
 desktopdir = $(datadir)/applications
-desktop_in_files = gajim.desktop.in.in 
+desktop_in_files = gajim.desktop.in.in gajim-remote.desktop.in.in
 desktop_DATA = $(desktop_in_files:.desktop.in.in=.desktop)
 
 installdefsdir = $(gajim_srcdir)/common
@@ -29,6 +29,6 @@ EXTRA_DIST = $(desktop_in_files) \
 DISTCLEANFILES = $(desktop_DATA) \
 				 $(installdefs_DATA)
 
-CLEANFILES = gajim.desktop 
+CLEANFILES = gajim.desktop gajim-remote.desktop
 
 MAINTAINERCLEANFILES = Makefile.in
