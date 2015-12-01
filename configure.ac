@@ -73,6 +73,7 @@ AC_CONFIG_FILES([
 	data/activities/Makefile
 	icons/Makefile
 	data/gajim.desktop.in
+	data/gajim-remote.desktop.in
 	data/defs.py
 	src/Makefile
 	scripts/gajim
