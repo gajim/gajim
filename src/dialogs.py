@@ -4652,9 +4652,11 @@ class InvitationReceivedDialog:
             try:
                 if self.is_continued:
                     gajim.interface.join_gc_room(self.account, self.room_jid,
-                        gajim.nicks[self.account], None, is_continued=True)
+                        gajim.nicks[self.account], self.password,
+                        is_continued=True)
                 else:
-                    JoinGroupchatWindow(self.account, self.room_jid)
+                    JoinGroupchatWindow(self.account, self.room_jid,
+                        password=self.password)
             except GajimGeneralException:
                 pass
 
