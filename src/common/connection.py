@@ -2982,6 +2982,9 @@ class Connection(CommonConnection, ConnectionHandlers):
                 attrs['reason'] = reason
             if continue_tag:
                 attrs['continue'] = 'true'
+            password = gajim.gc_passwords.get(room, '')
+            if password:
+                attrs['password'] = password
             c = message.addChild(name='x', attrs=attrs,
                 namespace=nbxmpp.NS_CONFERENCE)
             self.connection.send(message)
