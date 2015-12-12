@@ -115,6 +115,8 @@ class RosterWindow:
 
         if self.regroup:
             name = 'MERGED'
+        if name not in self._iters:
+            return None
         it = self._iters[name]['account']
 
         if model == self.model or it is None:
@@ -145,6 +147,8 @@ class RosterWindow:
         if self.regroup:
             account = 'MERGED'
 
+        if account not in self._iters:
+            return None
         if name not in self._iters[account]['groups']:
             return None
 
