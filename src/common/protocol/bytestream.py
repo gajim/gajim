@@ -421,6 +421,15 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             self.connection.send(iq)
             return
 
+        my_ip = self.peerhost[0]
+
+        # check if we are connected with an IPv4 address
+        try:
+            socket.inet_aton(my_ip)
+        except socket.error as e:
+            self.connection.send(iq)
+            return
+
         def ip_is_local(ip):
             if '.' not in ip:
                 # it's an IPv6
@@ -438,9 +447,6 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             if ip_l & (255<<24 | 255<<16) == (192<<24 | 168<<16):
                 return True
             return False
-
-
-        my_ip = self.peerhost[0]
 
         if not ip_is_local(my_ip):
             self.connection.send(iq)
@@ -475,7 +481,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             cleanup_gupnp()
 
         def fail(s, error, proto, ext_ip, local_ip, local_port, desc):
-            log.debug('Got GUPnP-IGD error : %s', str(error))
+            log.debug('Got GUPnP-IGD error')
             self.connection.send(iq)
             cleanup_gupnp()
 
