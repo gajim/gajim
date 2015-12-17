@@ -31,6 +31,7 @@ import sys
 import os
 import logging
 import locale
+import uuid
 
 import config
 import nbxmpp
@@ -238,11 +239,8 @@ caps_hash = {}
 import caps_cache
 caps_cache.initialize(logger)
 
-global_id = 0
 def get_an_id():
-    global global_id
-    global_id += 1
-    return global_id
+    return str(uuid.uuid4())
 
 def get_nick_from_jid(jid):
     pos = jid.find('@')
