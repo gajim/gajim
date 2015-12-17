@@ -32,6 +32,7 @@ import os
 import logging
 import locale
 import gi
+import uuid
 
 from common import config
 import nbxmpp
@@ -239,11 +240,8 @@ gajim_optional_features = {}
 # Capabilities hash per account
 caps_hash = {}
 
-global_id = 0
 def get_an_id():
-    global global_id
-    global_id += 1
-    return global_id
+    return str(uuid.uuid4())
 
 def get_nick_from_jid(jid):
     pos = jid.find('@')
