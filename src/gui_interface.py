@@ -1991,6 +1991,11 @@ class Interface:
                 # set
                 reload(emoticons)
             emots = emoticons.emoticons
+            self.emoticons_sorting = None
+            try:
+                self.emoticons_sorting = emoticons.sorting
+            except:
+                pass
         except Exception, e:
             return True
         for emot_filename in emots:
@@ -2009,6 +2014,12 @@ class Interface:
                             16, 16)
                     self.emoticons_images.append((emot, pix))
                 self.emoticons[emot.upper()] = emot_file
+        def emoticons_sorter(item):
+            try:
+                return self.emoticons_sorting.index(item[0])
+            except:
+                return 0
+        self.emoticons_images = sorted(self.emoticons_images, key=emoticons_sorter)
         del emoticons
         sys.path.remove(path)
 
@@ -2073,7 +2084,7 @@ class Interface:
 ################################################################################
 
     def join_gc_room(self, account, room_jid, nick, password, minimize=False,
-                    is_continued=False):
+    is_continued=False):
         """
         Join the room immediately
         """
@@ -2589,7 +2600,7 @@ class Interface:
                     # we are not already connected
                     minimize = bm['minimize'] in ('1', 'true')
                     self.join_gc_room(account, jid, bm['nick'],
-                    bm['password'], minimize = minimize)
+                        bm['password'], minimize = minimize)
                 elif jid in self.minimized_controls[account]:
                     # more or less a hack:
                     # On disconnect the minimized gc contact instances
@@ -2792,6 +2803,7 @@ class Interface:
         self.emoticons = []
         self.emoticons_animations = {}
         self.emoticons_images = {}
+        self.emoticons_sorting = None
 
         cfg_was_read = parser.read()
 
