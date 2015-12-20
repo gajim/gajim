@@ -407,6 +407,10 @@ class RosterSetReceivedEvent(nec.NetworkIncomingEvent):
     base_network_events = []
 
     def generate(self):
+        frm = helpers.get_jid_from_iq(self.stanza)
+        our_jid = gajim.get_jid_from_account(self.conn.name)
+        if frm and frm != our_jid and frm != gajim.get_server_from_jid(our_jid):
+            return
         self.version = self.stanza.getTagAttr('query', 'ver')
         self.items = {}
         for item in self.stanza.getTag('query').getChildren():
@@ -423,6 +427,11 @@ class RosterSetReceivedEvent(nec.NetworkIncomingEvent):
                 groups.append(group.getData())
             self.items[jid] = {'name': name, 'sub': sub, 'ask': ask,
                 'groups': groups}
+        if len(self.items) > 1:
+            reply = nbxmpp.Iq(typ='error', attrs={'id': self.stanza.getID()},
+                to=self.stanza.getFrom(), frm=self.stanza.getTo(), xmlns=None)
+            self.conn.connection.send(reply)
+            return
         if self.conn.connection and self.conn.connected > 1:
             reply = nbxmpp.Iq(typ='result', attrs={'id': self.stanza.getID()},
                 to=self.stanza.getFrom(), frm=self.stanza.getTo(), xmlns=None)
