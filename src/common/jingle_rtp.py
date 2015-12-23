@@ -27,6 +27,8 @@ from gi.repository import Farstream
 import gi
 gi.require_version('Gst', '1.0')
 from gi.repository import Gst
+from gi.repository import GdkX11
+from gi.repository import GstVideo
 from gi.repository import GLib
 
 from common import gajim
@@ -234,7 +236,7 @@ class JingleRTPContent(JingleContent):
                 # Add fallback source
                 self.src_bin = self.get_fallback_src()
                 self.pipeline.add(self.src_bin)
-                self.src_bin.get_static_pad('src').link(sink_pad)
+                self.src_bin.link(sink_pad)
                 self.stream_failed_once = True
             else:
                 reason = nbxmpp.Node('reason')
@@ -386,6 +388,7 @@ class JingleVideo(JingleRTPContent):
         # sometimes it'll freeze...
         JingleRTPContent.setup_stream(self, self._on_src_pad_added)
         bus = self.pipeline.get_bus()
+        bus.enable_sync_message_emission()
         bus.connect('sync-message::element', self._on_sync_message)
 
         # the local parts
@@ -413,16 +416,14 @@ class JingleVideo(JingleRTPContent):
         self.src_bin = self.make_bin_from_config('video_input_device',
             '%%s %s! %svideoscale ! %svideoconvert' % (tee, framerate,
             video_size), _("video input"))
-        #caps = gst.element_factory_make('capsfilter')
-        #caps.set_property('caps', gst.caps_from_string('video/x-raw-yuv, width=320, height=240'))
 
-        self.pipeline.add(self.src_bin)#, caps)
+        self.pipeline.add(self.src_bin)
         self.pipeline.set_state(Gst.State.PLAYING)
-        #src_bin.link(caps)
 
         self.sink = self.make_bin_from_config('video_output_device',
             'videoscale ! videoconvert ! %s',
             _("video output"))
+
         self.pipeline.add(self.sink)
 
         self.src_bin.get_static_pad('src').link(self.p2psession.get_property(
@@ -432,16 +433,16 @@ class JingleVideo(JingleRTPContent):
         self.pipeline.set_state(Gst.State.PLAYING)
 
     def _on_sync_message(self, bus, message):
-        if message.structure is None:
+        if message.get_structure() is None:
             return False
-        if message.structure.get_name() == 'prepare-xwindow-id':
+        if message.get_structure().get_name() == 'prepare-window-handle':
             message.src.set_property('force-aspect-ratio', True)
             imagesink = message.src
             if gajim.config.get('video_see_self') and not self.out_xid_set:
-                imagesink.set_xwindow_id(self.out_xid)
+                imagesink.set_window_handle(self.out_xid)
                 self.out_xid_set = True
             else:
-                imagesink.set_xwindow_id(self.in_xid)
+                imagesink.set_window_handle(self.in_xid)
 
     def get_fallback_src(self):
         # TODO: Use avatar?

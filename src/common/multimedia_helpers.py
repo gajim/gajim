@@ -14,6 +14,8 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from gi.repository import Gst
+from gi.repository import GdkX11
+from gi.repository import GstVideo
 
 
 class DeviceManager(object):
@@ -85,7 +87,7 @@ class VideoInputManager(DeviceManager):
         self.devices = {}
         # Test src
         self.detect_element('videotestsrc', _('Video test'),
-            '%s is-live=true ! video/x-raw-yuv,framerate=10/1')
+            '%s is-live=true ! video/x-raw,framerate=10/1')
         # Auto src
         self.detect_element('autovideosrc', _('Autodetect'))
         # V4L2 src

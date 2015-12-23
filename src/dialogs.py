@@ -5393,33 +5393,35 @@ class VoIPCallReceivedDialog(object):
                     fixed = ctrl.xml.get_object('outgoing_fixed')
                     fixed.set_no_show_all(False)
                 video_hbox.show_all()
+                ctrl.xml.get_object('incoming_drawingarea').realize()
                 if os.name == 'nt':
                     in_xid = ctrl.xml.get_object('incoming_drawingarea').\
                         get_window().handle
                 else:
                     in_xid = ctrl.xml.get_object('incoming_drawingarea').\
-                        get_window().xid
+                        get_property('window').get_xid()
                 content = session.get_content('video')
                 # move outgoing stream to chat window
                 if gajim.config.get('video_see_self'):
+                    ctrl.xml.get_object('outgoing_drawingarea').realize()
                     if os.name == 'nt':
                         out_xid = ctrl.xml.get_object('outgoing_drawingarea').\
                             get_window().handle
                     else:
                         out_xid = ctrl.xml.get_object('outgoing_drawingarea').\
-                            get_window().xid
+                            get_property('window').get_xid()
                     b = content.src_bin
                     found = False
-                    for e in b.elements():
+                    for e in b.children:
                         if e.get_name().startswith('autovideosink'):
                             found = True
                             break
                     if found:
-                        found = False
-                        for f in e.elements():
+                        for f in e.children:
                             if f.get_name().startswith('autovideosink'):
-                                f.set_xwindow_id(out_xid)
+                                f.set_window_handle(out_xid)
                                 content.out_xid = out_xid
+                                break
                 content.in_xid = in_xid
                 ctrl.set_video_state('connecting', self.sid)
             # Now, accept the content/sessions.
