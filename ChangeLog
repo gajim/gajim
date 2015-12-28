@@ -1,3 +1,9 @@
+Gajim 0.16.5 (28 December 2015)
+
+  * Improve MAM implementation
+  * Improve security on connexion and for roster managment
+  * Ability for emoticons to be sorted in menu
+
 Gajim 0.16.4 (26 September 2015)
 
   * Fix trusting GPG keys
