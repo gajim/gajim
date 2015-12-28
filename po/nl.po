@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-04 22:52+0200\n"
+"POT-Creation-Date: 2015-12-28 13:07+0100\n"
 "PO-Revision-Date: 2015-04-24 00:10+0100\n"
 "Last-Translator: Nathan Follens <nthn@unseen.is>\n"
 "Language-Team: none\n"
@@ -180,13 +180,13 @@ msgstr "_Afronden"
 
 #: ../data/gui/account_creation_wizard_window.ui.h:30
 #: ../data/gui/accounts_window.ui.h:1 ../data/gui/change_mood_dialog.ui.h:1
-#: ../src/config.py:1258 ../src/config.py:1273 ../src/config.py:1278
-#: ../src/config.py:1326 ../src/config.py:1429 ../src/config.py:1750
-#: ../src/config.py:1755 ../src/config.py:2358 ../src/config.py:2440
-#: ../src/config.py:2455 ../src/config.py:3751 ../src/config.py:3826
+#: ../src/config.py:1251 ../src/config.py:1266 ../src/config.py:1271
+#: ../src/config.py:1319 ../src/config.py:1422 ../src/config.py:1743
+#: ../src/config.py:1748 ../src/config.py:2359 ../src/config.py:2441
+#: ../src/config.py:2456 ../src/config.py:3752 ../src/config.py:3827
 #: ../src/dialogs.py:316 ../src/dialogs.py:318 ../src/dialogs.py:524
-#: ../src/dialogs.py:537 ../src/roster_window.py:3188
-#: ../src/roster_window.py:3194 ../src/roster_window.py:3199
+#: ../src/dialogs.py:537 ../src/roster_window.py:3194
+#: ../src/roster_window.py:3200 ../src/roster_window.py:3205
 msgid "None"
 msgstr "Geen"
 
@@ -210,7 +210,7 @@ msgstr "Verwijderen"
 msgid "Re_name"
 msgstr "Her_noem"
 
-#: ../data/gui/accounts_window.ui.h:6 ../src/config.py:4199
+#: ../data/gui/accounts_window.ui.h:6 ../src/config.py:4200
 #: ../src/plugins/gui.py:92
 msgid "Active"
 msgstr "Actief"
@@ -330,10 +330,15 @@ msgid "Save conversation _logs for all contacts"
 msgstr "Sla gespreks_logboek op voor alle contacten"
 
 #: ../data/gui/accounts_window.ui.h:33
+#, fuzzy
+msgid "Synchronize logs with server"
+msgstr "Contacten synchroniseren"
+
+#: ../data/gui/accounts_window.ui.h:34
 msgid "Synch_ronize account status with global status"
 msgstr "Synch_roniseer account status met globale status"
 
-#: ../data/gui/accounts_window.ui.h:34
+#: ../data/gui/accounts_window.ui.h:35
 msgid ""
 "If checked, any change to the global status (handled by the combobox at the "
 "bottom of the roster window) will change the status of this account "
@@ -343,16 +348,16 @@ msgstr ""
 "lijstknop onderaan het roostervenster) de status van deze account "
 "meeveranderen."
 
-#: ../data/gui/accounts_window.ui.h:35
+#: ../data/gui/accounts_window.ui.h:36
 msgid "Receive conversations from other resources (If server supports it)"
 msgstr ""
 "Ontvang gesprekken van andere bronnen (indien ondersteund door de server)"
 
-#: ../data/gui/accounts_window.ui.h:36
+#: ../data/gui/accounts_window.ui.h:37
 msgid "Use file transfer proxies"
 msgstr "Gebruik bestandsoverdrachtsproxies"
 
-#: ../data/gui/accounts_window.ui.h:37
+#: ../data/gui/accounts_window.ui.h:38
 msgid ""
 "If checked, Gajim will also broadcast some more IPs except from just your "
 "IP, so file transfer has higher chances of working."
@@ -365,30 +370,30 @@ msgstr ""
 #. FIXME: Ugly workaround.
 #. Maybe we haven't been in any group (defaults to General)
 #. General group cannot be changed
-#: ../data/gui/accounts_window.ui.h:38 ../data/gui/preferences_window.ui.h:41
+#: ../data/gui/accounts_window.ui.h:39 ../data/gui/preferences_window.ui.h:41
 #: ../src/common/contacts.py:102 ../src/common/contacts.py:135
-#: ../src/dialogs.py:116 ../src/dialogs.py:128 ../src/roster_window.py:3130
-#: ../src/roster_window.py:4260 ../src/roster_window.py:5905
+#: ../src/dialogs.py:116 ../src/dialogs.py:128 ../src/roster_window.py:3136
+#: ../src/roster_window.py:4266 ../src/roster_window.py:5914
 msgid "General"
 msgstr "Algemeen"
 
-#: ../data/gui/accounts_window.ui.h:39
+#: ../data/gui/accounts_window.ui.h:40
 msgid "_use HTTP__PROXY environment variable"
 msgstr "gebr_uik HTTP__PROXY omgevingsveranderlijke"
 
-#: ../data/gui/accounts_window.ui.h:40 ../data/gui/preferences_window.ui.h:134
+#: ../data/gui/accounts_window.ui.h:41 ../data/gui/preferences_window.ui.h:134
 msgid "_Manage..."
 msgstr "_Beheer..."
 
-#: ../data/gui/accounts_window.ui.h:41
+#: ../data/gui/accounts_window.ui.h:42
 msgid "<b>Proxy</b>"
 msgstr "<b>Proxy</b>"
 
-#: ../data/gui/accounts_window.ui.h:42
+#: ../data/gui/accounts_window.ui.h:43
 msgid "_Warn before using an insecure connection"
 msgstr "_Waarschuwen vooraleer onbeveiligde verbinding te gebruiken"
 
-#: ../data/gui/accounts_window.ui.h:43
+#: ../data/gui/accounts_window.ui.h:44
 msgid ""
 "Check this so Gajim will ask you before sending your password over an "
 "insecure connection."
@@ -396,11 +401,11 @@ msgstr ""
 "Vink dit aan opdat Gajim je vraagt vooraleer je je wachtwoord verstuurt over "
 "een onbeveiligde verbinding."
 
-#: ../data/gui/accounts_window.ui.h:44
+#: ../data/gui/accounts_window.ui.h:45
 msgid "Send _keep-alive packets"
 msgstr "_Keep-alive-pakketten verzenden"
 
-#: ../data/gui/accounts_window.ui.h:45
+#: ../data/gui/accounts_window.ui.h:46
 msgid ""
 "If checked, Gajim will send keep-alive packets to prevent connection timeout "
 "which results in disconnection"
@@ -408,79 +413,79 @@ msgstr ""
 "Indien aangevinkt zal Gajim keep-alive-paketten sturen om de verbinding in "
 "stand te houden"
 
-#: ../data/gui/accounts_window.ui.h:46
+#: ../data/gui/accounts_window.ui.h:47
 msgid "Use cust_om hostname/port"
 msgstr "Gebruik aangepaste h_ostnaam/poort"
 
-#: ../data/gui/accounts_window.ui.h:47
+#: ../data/gui/accounts_window.ui.h:48
 msgid "_Hostname: "
 msgstr "_Hostnaam: "
 
-#: ../data/gui/accounts_window.ui.h:48
+#: ../data/gui/accounts_window.ui.h:49
 msgid "_Port: "
 msgstr "_Poort: "
 
-#: ../data/gui/accounts_window.ui.h:49 ../data/gui/preferences_window.ui.h:138
+#: ../data/gui/accounts_window.ui.h:50 ../data/gui/preferences_window.ui.h:137
 msgid "<b>Miscellaneous</b>"
 msgstr "<b>Overige</b>"
 
-#: ../data/gui/accounts_window.ui.h:50
+#: ../data/gui/accounts_window.ui.h:51
 msgid "Connection"
 msgstr "Verbinding"
 
-#: ../data/gui/accounts_window.ui.h:51 ../src/config.py:1848
-#: ../src/config.py:2456
+#: ../data/gui/accounts_window.ui.h:52 ../src/config.py:1841
+#: ../src/config.py:2457
 msgid "No key selected"
 msgstr "Geen sleutel geselecteerd"
 
-#: ../data/gui/accounts_window.ui.h:52
+#: ../data/gui/accounts_window.ui.h:53
 msgid "Choose _Key..."
 msgstr "Kies _Sleutel..."
 
-#: ../data/gui/accounts_window.ui.h:53
+#: ../data/gui/accounts_window.ui.h:54
 msgid "Use G_PG Agent"
 msgstr "G_PG-agent gebruiken"
 
-#: ../data/gui/accounts_window.ui.h:54
+#: ../data/gui/accounts_window.ui.h:55
 msgid "If checked, Gajim will get the password from a GPG agent like seahorse"
 msgstr ""
 "Indien aangevinkt zal Gajim het wachtwoord ophalen van een GPG-agent zoals "
 "seahorse"
 
-#: ../data/gui/accounts_window.ui.h:55
+#: ../data/gui/accounts_window.ui.h:56
 msgid "<b>OpenPGP</b>"
 msgstr "<b>OpenPGP</b>"
 
-#: ../data/gui/accounts_window.ui.h:56
+#: ../data/gui/accounts_window.ui.h:57
 msgid "_Edit Personal Information..."
 msgstr "Persoonlijke informatie b_ewerken..."
 
-#: ../data/gui/accounts_window.ui.h:57
+#: ../data/gui/accounts_window.ui.h:58
 msgid "Information about you, as stored in the server"
 msgstr "Informatie over jou, zoals op de server opgeslagen"
 
-#: ../data/gui/accounts_window.ui.h:58
+#: ../data/gui/accounts_window.ui.h:59
 msgid "<b>Personal Information</b>"
 msgstr "<b>Persoonlijke informatie</b>"
 
-#: ../data/gui/accounts_window.ui.h:59 ../data/gui/profile_window.ui.h:1
+#: ../data/gui/accounts_window.ui.h:60 ../data/gui/profile_window.ui.h:1
 msgid "Personal Information"
 msgstr "Persoonlijke informatie"
 
-#: ../data/gui/accounts_window.ui.h:60
+#: ../data/gui/accounts_window.ui.h:61
 msgid "Co_nnect on Gajim startup"
 msgstr "Automatisch verbi_nding maken wanneer Gajim opstart"
 
-#: ../data/gui/accounts_window.ui.h:61
+#: ../data/gui/accounts_window.ui.h:62
 #, fuzzy
 msgid "Synchroni_ze account status with global status"
 msgstr "Synch_roniseer account status met globale status"
 
-#: ../data/gui/accounts_window.ui.h:62
+#: ../data/gui/accounts_window.ui.h:63
 msgid "Use cust_om port:"
 msgstr "Gebruik aangepaste po_ort:"
 
-#: ../data/gui/accounts_window.ui.h:63
+#: ../data/gui/accounts_window.ui.h:64
 msgid ""
 "If the default port that is used for incoming messages is unfitting for your "
 "setup you can select another one here.\n"
@@ -490,28 +495,28 @@ msgstr ""
 "voor jouw instellingen kan je hier een andere selecteren.\n"
 "Je kan overwegen mogelijke firewallinstellingen te wijzigen."
 
-#: ../data/gui/accounts_window.ui.h:65
+#: ../data/gui/accounts_window.ui.h:66
 #: ../data/gui/zeroconf_information_window.ui.h:10
 msgid "First Name:"
 msgstr "Voornaam:"
 
-#: ../data/gui/accounts_window.ui.h:66
+#: ../data/gui/accounts_window.ui.h:67
 #: ../data/gui/zeroconf_information_window.ui.h:9
 msgid "Last Name:"
 msgstr "Achternaam:"
 
-#: ../data/gui/accounts_window.ui.h:67
+#: ../data/gui/accounts_window.ui.h:68
 #: ../data/gui/zeroconf_information_window.ui.h:8
 msgid "E-Mail:"
 msgstr "E-Mail:"
 
-#: ../data/gui/accounts_window.ui.h:68
-#: ../data/gui/zeroconf_information_window.ui.h:7 ../src/config.py:1875
+#: ../data/gui/accounts_window.ui.h:69
+#: ../data/gui/zeroconf_information_window.ui.h:7 ../src/config.py:1868
 #: ../src/dialogs.py:842
 msgid "Jabber ID:"
 msgstr "Jabber ID:"
 
-#: ../data/gui/accounts_window.ui.h:69
+#: ../data/gui/accounts_window.ui.h:70
 msgid "Mer_ge accounts"
 msgstr "Accounts samenvoe_gen"
 
@@ -757,7 +762,7 @@ msgstr "Geblokkeerde contacten"
 #: ../data/gui/blocked_contacts_window.ui.h:2
 #: ../data/gui/contact_context_menu.ui.h:20
 #: ../data/gui/gc_occupants_menu.ui.h:14 ../src/gui_menu_builder.py:674
-#: ../src/roster_window.py:5874 ../src/roster_window.py:6008
+#: ../src/roster_window.py:5883 ../src/roster_window.py:6017
 msgid "_Unblock"
 msgstr "_Deblokkeren"
 
@@ -963,8 +968,8 @@ msgstr "_Bestand verzenden..."
 
 #. Invite to Groupchat
 #: ../data/gui/contact_context_menu.ui.h:4
-#: ../data/gui/gc_occupants_menu.ui.h:11 ../src/roster_window.py:5804
-#: ../src/roster_window.py:5975
+#: ../data/gui/gc_occupants_menu.ui.h:11 ../src/roster_window.py:5813
+#: ../src/roster_window.py:5984
 msgid "In_vite to"
 msgstr "_Uitnodigen voor "
 
@@ -982,7 +987,7 @@ msgstr "End to End-versleuteling aan-/uitzetten"
 
 #. Send Custom Status
 #: ../data/gui/contact_context_menu.ui.h:8 ../src/gui_menu_builder.py:598
-#: ../src/roster_window.py:5815
+#: ../src/roster_window.py:5824
 msgid "Send Cus_tom Status"
 msgstr "Aangepas_te status sturen"
 
@@ -997,12 +1002,12 @@ msgstr "Cont_acten beheren"
 
 #. Rename
 #: ../data/gui/contact_context_menu.ui.h:11 ../src/gui_menu_builder.py:661
-#: ../src/roster_window.py:5855
+#: ../src/roster_window.py:5864
 msgid "_Rename..."
 msgstr "He_rnoemen..."
 
 #. Edit Groups
-#: ../data/gui/contact_context_menu.ui.h:12 ../src/roster_window.py:5997
+#: ../data/gui/contact_context_menu.ui.h:12 ../src/roster_window.py:6006
 msgid "Edit _Groups..."
 msgstr "_Groepen bewerken..."
 
@@ -1036,7 +1041,7 @@ msgstr "_Contact niet toelaten mijn status te zien"
 
 #: ../data/gui/contact_context_menu.ui.h:21
 #: ../data/gui/gc_occupants_menu.ui.h:13 ../src/gui_menu_builder.py:677
-#: ../src/roster_window.py:5882 ../src/roster_window.py:6014
+#: ../src/roster_window.py:5891 ../src/roster_window.py:6023
 msgid "_Block"
 msgstr "_Blokkeren"
 
@@ -1052,14 +1057,14 @@ msgstr "_Negeren"
 #. Remove
 #. Remove group
 #: ../data/gui/contact_context_menu.ui.h:25 ../src/gui_menu_builder.py:687
-#: ../src/roster_window.py:5892
+#: ../src/roster_window.py:5901
 msgid "Remo_ve"
 msgstr "_Verwijderen"
 
 #: ../data/gui/contact_context_menu.ui.h:26
 #: ../data/gui/gc_control_popup_menu.ui.h:9
 #: ../data/gui/gc_occupants_menu.ui.h:15 ../data/gui/roster_window.ui.h:19
-#: ../src/roster_window.py:6090
+#: ../src/roster_window.py:6099
 msgid "_History"
 msgstr "_Geschiedenis"
 
@@ -1164,7 +1169,7 @@ msgstr "Verbergt het venster"
 msgid "_Continue"
 msgstr "_Verder"
 
-#: ../data/gui/filetransfers.ui.h:17 ../src/chat_control.py:3391
+#: ../data/gui/filetransfers.ui.h:17 ../src/chat_control.py:3393
 #: ../src/filetransfers_window.py:213
 msgid "_Open Containing Folder"
 msgstr "_Open bovenliggende map"
@@ -1457,7 +1462,7 @@ msgid "false"
 msgstr "false"
 
 #: ../data/gui/item_archiving_preferences_window.ui.h:7
-#: ../src/common/connection_handlers.py:1162
+#: ../src/common/connection_handlers.py:1198
 msgid "message"
 msgstr "bericht"
 
@@ -1517,7 +1522,7 @@ msgstr "Automatisch dit groepsgesprek binnengaan wanneer ik verbinding maak"
 msgid "_Bookmark this room"
 msgstr "Dit groepsgesprek toevoegen aan _bladwijzers"
 
-#: ../data/gui/join_groupchat_window.ui.h:9 ../src/config.py:1865
+#: ../data/gui/join_groupchat_window.ui.h:9 ../src/config.py:1858
 msgid "Server:"
 msgstr "Server:"
 
@@ -1525,7 +1530,7 @@ msgstr "Server:"
 msgid "Bro_wse Rooms"
 msgstr "Bladeren door gro_epsgesprekken"
 
-#: ../data/gui/join_groupchat_window.ui.h:11 ../src/chat_control.py:3426
+#: ../data/gui/join_groupchat_window.ui.h:11 ../src/chat_control.py:3428
 #: ../src/disco.py:1413 ../src/disco.py:1855
 msgid "_Join"
 msgstr "_Binnengaan"
@@ -1718,7 +1723,7 @@ msgid "Composing only"
 msgstr "Alleen 'aan het typen'"
 
 #: ../data/gui/preferences_window.ui.h:5 ../src/config.py:164
-#: ../src/config.py:677
+#: ../src/config.py:673
 msgid "Disabled"
 msgstr "Uitgeschakeld"
 
@@ -2321,19 +2326,15 @@ msgstr "<b>Privacy</b>"
 msgid "_Log status changes of contacts"
 msgstr "Houdt status veranderingen van contacten bij in het logboek"
 
-#: ../data/gui/preferences_window.ui.h:137
-msgid "Check on startup if Gajim is the _default Jabber client"
-msgstr "Controleer bij opstarten of Gajim de stan_daard Jabbercliënt is"
-
-#: ../data/gui/preferences_window.ui.h:139
+#: ../data/gui/preferences_window.ui.h:138
 msgid "_Open..."
 msgstr "_Open..."
 
-#: ../data/gui/preferences_window.ui.h:140
+#: ../data/gui/preferences_window.ui.h:139
 msgid "<b>Advanced Configuration Editor</b>"
 msgstr "<b>Geavanceerde configuratie</b>"
 
-#: ../data/gui/preferences_window.ui.h:141
+#: ../data/gui/preferences_window.ui.h:140
 msgid "Advanced"
 msgstr "Geavanceerd"
 
@@ -2593,7 +2594,7 @@ msgid "<b>What do you want to do?</b>"
 msgstr "<b>Wat wil je doen?</b>"
 
 #. Remove
-#: ../data/gui/remove_account_window.ui.h:4 ../src/roster_window.py:6024
+#: ../data/gui/remove_account_window.ui.h:4 ../src/roster_window.py:6033
 msgid "_Remove"
 msgstr "_Verwijder"
 
@@ -2947,9 +2948,13 @@ msgstr "Jabber IM Client"
 msgid "A GTK+ Jabber client"
 msgstr "Een GTK+ Jabber client"
 
-#: ../data/gajim.desktop.in.in.h:4
+#: ../data/gajim.desktop.in.in.h:4 ../data/gajim-remote.desktop.in.in.h:2
 msgid "chat;messaging;im;jabber;xmpp;bonjour;voip"
 msgstr "chat;messaging;berichten;gesprek;im;jabber;xmpp;bonjour;voip"
+
+#: ../data/gajim-remote.desktop.in.in.h:1
+msgid "Gajim Remote"
+msgstr ""
 
 #: ../src/adhoc_commands.py:325
 msgid "Cancel confirmation"
@@ -3098,11 +3103,11 @@ msgstr "Dit contact ondersteunt geen HTML"
 #: ../src/chat_control.py:1735 ../src/common/contacts.py:152
 #: ../src/common/contacts.py:273 ../src/common/helpers.py:68
 #: ../src/common/helpers.py:273 ../src/dialogs.py:1106 ../src/dialogs.py:2314
-#: ../src/dialogs.py:2343 ../src/dialogs.py:3569 ../src/gui_interface.py:485
+#: ../src/dialogs.py:2343 ../src/dialogs.py:3569 ../src/gui_interface.py:486
 #: ../src/gui_menu_builder.py:318 ../src/gui_menu_builder.py:489
-#: ../src/roster_window.py:771 ../src/roster_window.py:1738
-#: ../src/roster_window.py:1740 ../src/roster_window.py:2089
-#: ../src/roster_window.py:3663 ../src/roster_window.py:3690
+#: ../src/roster_window.py:777 ../src/roster_window.py:1744
+#: ../src/roster_window.py:1746 ../src/roster_window.py:2095
+#: ../src/roster_window.py:3669 ../src/roster_window.py:3696
 msgid "Not in Roster"
 msgstr "niet in het rooster"
 
@@ -3260,12 +3265,12 @@ msgid "The following message was encrypted"
 msgstr "Het volgende bericht is versleuteld"
 
 #. %s is being replaced in the code with JID
-#: ../src/chat_control.py:2822
+#: ../src/chat_control.py:2824
 #, python-format
 msgid "You just received a new message from \"%s\""
 msgstr "Je hebt zojuist een nieuw bericht ontvangen van \"%s\""
 
-#: ../src/chat_control.py:2824
+#: ../src/chat_control.py:2826
 msgid ""
 "If you close this tab and you have history disabled, this message will be "
 "lost."
@@ -3273,19 +3278,19 @@ msgstr ""
 "Als je deze tab sluit en geschiedenis uitgeschakeld hebt zal dit bericht "
 "verlorgen gaan."
 
-#: ../src/chat_control.py:2855 ../src/groupchat_control.py:1385
+#: ../src/chat_control.py:2857 ../src/groupchat_control.py:1385
 #, python-format
 msgid "Pong! (%s s.)"
 msgstr "Pong! (%s s.)"
 
-#: ../src/chat_control.py:3005 ../src/common/connection_handlers_events.py:925
-#: ../src/common/connection_handlers.py:1071
-#: ../src/common/connection_handlers.py:1196 ../src/common/connection.py:543
-#: ../src/common/logger.py:1165 ../src/gajim.py:252 ../src/session.py:98
+#: ../src/chat_control.py:3007 ../src/common/connection_handlers_events.py:934
+#: ../src/common/connection_handlers.py:1075
+#: ../src/common/connection_handlers.py:1232 ../src/common/connection.py:541
+#: ../src/common/logger.py:1166 ../src/gajim.py:252 ../src/session.py:102
 msgid "Database Error"
 msgstr "Databasefout"
 
-#: ../src/chat_control.py:3006
+#: ../src/chat_control.py:3008
 #, python-format
 msgid ""
 "The database file (%s) cannot be read. Try to repair it or remove it (all "
@@ -3294,7 +3299,7 @@ msgstr ""
 "Het databasebestand (%s) kan niet gelezen worden. Probeer het te herstellen "
 "of verwijder het (alle geschiedenis zal verloren gaan)."
 
-#: ../src/chat_control.py:3245 ../src/gui_interface.py:1170
+#: ../src/chat_control.py:3247 ../src/gui_interface.py:1177
 #, python-format
 msgid ""
 "Unable to decrypt message from %s\n"
@@ -3303,52 +3308,52 @@ msgstr ""
 "Kon bericht van %s niet ontsleutelen\n"
 "Er kan mee geknoeid zijn."
 
-#: ../src/chat_control.py:3302
+#: ../src/chat_control.py:3304
 #, python-format
 msgid "%(name)s is now %(status)s"
 msgstr "%(name)s is nu %(status)s"
 
-#: ../src/chat_control.py:3361
+#: ../src/chat_control.py:3363
 msgid "File transfer"
 msgstr "Bestandsoverdracht"
 
-#: ../src/chat_control.py:3364
+#: ../src/chat_control.py:3366
 msgid "Size"
 msgstr "Grootte"
 
-#: ../src/chat_control.py:3366
+#: ../src/chat_control.py:3368
 msgid "_Accept"
 msgstr "_Aanvaarden"
 
-#: ../src/chat_control.py:3387 ../src/filetransfers_window.py:211
+#: ../src/chat_control.py:3389 ../src/filetransfers_window.py:211
 msgid "File transfer completed"
 msgstr "Bestandsoverdracht afgerond"
 
-#: ../src/chat_control.py:3423 ../src/dialogs.py:2943 ../src/dialogs.py:4633
-#: ../src/gui_interface.py:646 ../src/notify.py:278
+#: ../src/chat_control.py:3425 ../src/dialogs.py:2943 ../src/dialogs.py:4633
+#: ../src/gui_interface.py:651 ../src/notify.py:278
 msgid "Groupchat Invitation"
 msgstr "Uitnodiging voor groepsgesprek"
 
-#: ../src/chat_control.py:3445 ../src/gui_interface.py:1019
-#: ../src/roster_window.py:1997
+#: ../src/chat_control.py:3447 ../src/gui_interface.py:1024
+#: ../src/roster_window.py:2003
 msgid "Remote contact stopped transfer"
 msgstr "Contact heeft de overdracht gestopt"
 
-#: ../src/chat_control.py:3447 ../src/gui_interface.py:1022
-#: ../src/roster_window.py:1999
+#: ../src/chat_control.py:3449 ../src/gui_interface.py:1027
+#: ../src/roster_window.py:2005
 msgid "Error opening file"
 msgstr "Fout bij openen van bestand"
 
-#: ../src/chat_control.py:3449 ../src/filetransfers_window.py:247
+#: ../src/chat_control.py:3451 ../src/filetransfers_window.py:247
 msgid "File transfer stopped"
 msgstr "Bestandsoverdracht gestopt"
 
-#: ../src/chat_control.py:3452 ../src/filetransfers_window.py:226
+#: ../src/chat_control.py:3454 ../src/filetransfers_window.py:226
 #: ../src/filetransfers_window.py:233
 msgid "File transfer cancelled"
 msgstr "Bestandsoverdracht geannuleerd"
 
-#: ../src/chat_control.py:3453 ../src/filetransfers_window.py:226
+#: ../src/chat_control.py:3455 ../src/filetransfers_window.py:226
 #: ../src/filetransfers_window.py:234
 msgid "Connection with peer cannot be established."
 msgstr "Kon geen verbinding maken met gebruiker."
@@ -3477,7 +3482,7 @@ msgid "Change your nickname in a group chat"
 msgstr "Je bijnaam veranderen in een groepsgesprek"
 
 #. invalid char
-#: ../src/command_system/implementation/standard.py:279 ../src/config.py:3429
+#: ../src/command_system/implementation/standard.py:279 ../src/config.py:3430
 #: ../src/dialogs.py:2158
 msgid "Invalid nickname"
 msgstr "Ongeldige bijnaam"
@@ -3609,16 +3614,16 @@ msgstr "%s is een bestand maar zou een map moeten zijn"
 #: ../src/common/check_paths.py:292 ../src/common/check_paths.py:299
 #: ../src/common/check_paths.py:306 ../src/common/check_paths.py:313
 #: ../src/common/check_paths.py:320 ../src/common/check_paths.py:327
-#: ../src/common/check_paths.py:337 ../src/common/check_paths.py:345
+#: ../src/common/check_paths.py:339 ../src/common/check_paths.py:347
 msgid "Gajim will now exit"
 msgstr "Gajim sluit nu af"
 
-#: ../src/common/check_paths.py:336 ../src/common/check_paths.py:344
+#: ../src/common/check_paths.py:338 ../src/common/check_paths.py:346
 #, python-format
 msgid "%s is a directory but should be a file"
 msgstr "%s is een map maar zou een bestand moeten zijn"
 
-#: ../src/common/check_paths.py:359
+#: ../src/common/check_paths.py:361
 #, fuzzy, python-format
 msgid "creating %s directory"
 msgstr "Stel map voor logs in"
@@ -3682,9 +3687,9 @@ msgstr "Kies de groepsgesprekken die je wil verlaten"
 
 #. Make special context menu if group is Groupchats
 #: ../src/common/commands.py:216 ../src/common/contacts.py:131
-#: ../src/common/helpers.py:68 ../src/roster_window.py:824
-#: ../src/roster_window.py:1742 ../src/roster_window.py:1744
-#: ../src/roster_window.py:2628 ../src/roster_window.py:5770
+#: ../src/common/helpers.py:68 ../src/roster_window.py:830
+#: ../src/roster_window.py:1748 ../src/roster_window.py:1750
+#: ../src/roster_window.py:2634 ../src/roster_window.py:5779
 msgid "Groupchats"
 msgstr "Groepsgesprekken"
 
@@ -3849,8 +3854,8 @@ msgstr ""
 
 #. sorted alphanum
 #: ../src/common/config.py:117 ../src/common/config.py:537
-#: ../src/common/optparser.py:304 ../src/common/optparser.py:500
-#: ../src/common/optparser.py:534 ../src/gui_interface.py:2828
+#: ../src/common/optparser.py:311 ../src/common/optparser.py:507
+#: ../src/common/optparser.py:541 ../src/gui_interface.py:2853
 msgid "default"
 msgstr "standaard"
 
@@ -4117,20 +4122,13 @@ msgstr ""
 
 #: ../src/common/config.py:248
 msgid ""
-"If True, Gajim will check if it's the default jabber client on each startup."
-msgstr ""
-"Indien Aan zal Gajim bij opstarten altijd controleren of het de standaard "
-"Jabbercliënt is."
-
-#: ../src/common/config.py:249
-msgid ""
 "If True, Gajim will display an icon on each tab containing unread messages. "
 "Depending on the theme, this icon may be animated."
 msgstr ""
 "Indien Aan zal Gajim een icoon op elke tab weergeven met ongelezen "
 "berichten. Afhankelijk van het thema kan dit icoon geanimeerd zijn."
 
-#: ../src/common/config.py:250
+#: ../src/common/config.py:249
 #, fuzzy
 msgid ""
 "If True, Gajim will display the status message, if not empty, for every "
@@ -4139,11 +4137,11 @@ msgstr ""
 "Indien Aan zal Gajim het statusbericht van contacten weergeven onder hun "
 "naam in het roostervenster, indien deze niet leeg is"
 
-#: ../src/common/config.py:256
+#: ../src/common/config.py:255
 msgid "Define the position of the avatar in roster. Can be left or right"
 msgstr ""
 
-#: ../src/common/config.py:257
+#: ../src/common/config.py:256
 msgid ""
 "If True, Gajim will ask for avatar each contact that did not have an avatar "
 "last time or has one cached that is too old."
@@ -4151,7 +4149,7 @@ msgstr ""
 "Indien Aan zal Gajim contactafbeeldingen ophalen voor elk contact waarvan "
 "geen bekend is, of de laatste afbeelding te oud is."
 
-#: ../src/common/config.py:258
+#: ../src/common/config.py:257
 #, fuzzy
 msgid ""
 "If False, Gajim will no longer print status line in chats when a contact "
@@ -4160,7 +4158,7 @@ msgstr ""
 "Indien Uit zullen geen statusberichten weergeven worden in gesprekken "
 "wanneer een contact zijn/haar status aanpassen."
 
-#: ../src/common/config.py:259
+#: ../src/common/config.py:258
 msgid ""
 "Can be \"none\", \"all\" or \"in_and_out\". If \"none\", Gajim will no "
 "longer print status line in groupchats when a member changes his or her "
@@ -4169,32 +4167,32 @@ msgid ""
 "group chat."
 msgstr ""
 
-#: ../src/common/config.py:261
+#: ../src/common/config.py:260
 msgid "Log XHTML messages instead of plain text messages."
 msgstr ""
 
-#: ../src/common/config.py:262
+#: ../src/common/config.py:261
 msgid "Background color of contacts when they just signed in."
 msgstr "Achtergrondkleur van contacten wanneer ze net ingelogd zijn."
 
-#: ../src/common/config.py:263
+#: ../src/common/config.py:262
 msgid "Background color of contacts when they just signed out."
 msgstr "Achtergrondkleur van contacten wanneer ze net uitgelogd zijn."
 
-#: ../src/common/config.py:265
+#: ../src/common/config.py:264
 msgid ""
 "If True, restored messages will use a smaller font than the default one."
 msgstr ""
 
-#: ../src/common/config.py:266
+#: ../src/common/config.py:265
 msgid "Don't show avatar for the transport itself."
 msgstr "Avatar niet weergeven voor transport zelf."
 
-#: ../src/common/config.py:267
+#: ../src/common/config.py:266
 msgid "Don't show roster in the system taskbar."
 msgstr "Rooster niet weergeven in systeemtaakbalk."
 
-#: ../src/common/config.py:268
+#: ../src/common/config.py:267
 msgid ""
 "If True and installed GTK+ and PyGTK versions are at least 2.8, make the "
 "window flash (the default behaviour in most Window Managers) when holding "
@@ -4204,7 +4202,7 @@ msgstr ""
 "flikkert het venster (standaardgedrag bij de meeste Window Managers) wanneer "
 "er lopende gebeurtenissen zijn."
 
-#: ../src/common/config.py:270
+#: ../src/common/config.py:269
 msgid ""
 "Jabberd1.4 does not like sha info when one join a password protected group "
 "chat. Turn this option to False to stop sending sha info in group chat "
@@ -4212,7 +4210,7 @@ msgid ""
 msgstr ""
 
 #. always, never, peracct, pertype should not be translated
-#: ../src/common/config.py:273
+#: ../src/common/config.py:272
 msgid ""
 "Controls the window where new messages are placed.\n"
 "'always' - All messages are sent to a single window.\n"
@@ -4224,7 +4222,7 @@ msgid ""
 "specific window."
 msgstr ""
 
-#: ../src/common/config.py:274
+#: ../src/common/config.py:273
 msgid ""
 "Show roster on startup.\n"
 "'always' - Always show roster.\n"
@@ -4236,33 +4234,33 @@ msgstr ""
 "'never' - Rooster nooit weergeven.\n"
 "'last_state' - Laaste toestand van rooster herstellen."
 
-#: ../src/common/config.py:275
+#: ../src/common/config.py:274
 msgid "If False, you will no longer see the avatar in the chat window."
 msgstr "Indien Vals zal je de avatar niet meer zien in het gespreksvenster."
 
-#: ../src/common/config.py:276
+#: ../src/common/config.py:275
 msgid "If True, pressing the escape key closes a tab/window."
 msgstr ""
 "Indien Aan kan de Escape-toets gebruikt worden om een tabblad/venster te "
 "sluiten."
 
-#: ../src/common/config.py:277
+#: ../src/common/config.py:276
 msgid "Hides the buttons in chat windows."
 msgstr "Verbergt de knoppen in gespreksvensters."
 
-#: ../src/common/config.py:278
+#: ../src/common/config.py:277
 msgid "Hides the banner in a group chat window"
 msgstr "Verbergt de banner in een groepsgespreksvenster"
 
-#: ../src/common/config.py:279
+#: ../src/common/config.py:278
 msgid "Hides the banner in two persons chat window"
 msgstr "Verbergt de banner in een gespreksvenster met twee personen"
 
-#: ../src/common/config.py:280
+#: ../src/common/config.py:279
 msgid "Hides the group chat occupants list in group chat window."
 msgstr "Verbergt de lijst met deelnemers in een groepsgespreksvenster."
 
-#: ../src/common/config.py:281
+#: ../src/common/config.py:280
 msgid ""
 "In a chat, show the nickname at the beginning of a line only when it's not "
 "the same person talking than in previous message."
@@ -4270,16 +4268,16 @@ msgstr ""
 "Geef in een gesprek enkel de bijnaam weer aan het begin van een regel "
 "wanneer het niet dezelfde persoon is als in het vorige bericht."
 
-#: ../src/common/config.py:282
+#: ../src/common/config.py:281
 msgid "Indentation when using merge consecutive nickname."
 msgstr ""
 
-#: ../src/common/config.py:283
+#: ../src/common/config.py:282
 #, fuzzy
 msgid "Smooth scroll message in conversation window"
 msgstr "Bericht verzenden en venster sluiten"
 
-#: ../src/common/config.py:284
+#: ../src/common/config.py:283
 msgid ""
 "List of colors, separated by \":\", that will be used to color nicknames in "
 "group chats."
@@ -4287,29 +4285,29 @@ msgstr ""
 "Lijst van kleuren, onderbroken door \":\", die gebruikt worden om bijnamen "
 "in groepsgesprekken in te kleuren."
 
-#: ../src/common/config.py:285
+#: ../src/common/config.py:284
 msgid "Ctrl-Tab go to next composing tab when none is unread."
 msgstr ""
 
-#: ../src/common/config.py:286
+#: ../src/common/config.py:285
 msgid ""
 "Should we show the confirm metacontacts creation dialog or not? Empty string "
 "means we never show the dialog."
 msgstr ""
 
-#: ../src/common/config.py:287
+#: ../src/common/config.py:286
 msgid ""
 "Should we show the confirm block contact dialog or not? Empty string means "
 "we never show the dialog."
 msgstr ""
 
-#: ../src/common/config.py:288
+#: ../src/common/config.py:287
 msgid ""
 "Should we show the confirm custom status dialog or not? Empty string means "
 "we never show the dialog."
 msgstr ""
 
-#: ../src/common/config.py:289
+#: ../src/common/config.py:288
 msgid ""
 "If True, you will be able to set a negative priority to your account in "
 "account modification window. BE CAREFUL, when you are logged in with a "
@@ -4319,7 +4317,7 @@ msgstr ""
 "LET OP, wanneer je ingelogd bent met een negatieve prioriteit zal je GEEN "
 "ENKEL bericht van je server ontvangen."
 
-#: ../src/common/config.py:290
+#: ../src/common/config.py:289
 msgid ""
 "If True, Gajim will use Gnome Keyring (if available) to store account "
 "passwords."
@@ -4327,7 +4325,7 @@ msgstr ""
 "Indien Aan zal Gajim Gnome Sleutelbos gebruiken (indien beschikbaar) om "
 "accountwachtwoorden op te slaan."
 
-#: ../src/common/config.py:291
+#: ../src/common/config.py:290
 msgid ""
 "If True, Gajim will use KDE Wallet (if kwalletcli is available) to store "
 "account passwords."
@@ -4335,7 +4333,7 @@ msgstr ""
 "Indien Aan zal Gajim KDE Portefeuille gebruiken (indien kwalletcli "
 "beschikbaar is) om accountwachtwoorden op te slaan."
 
-#: ../src/common/config.py:292
+#: ../src/common/config.py:291
 msgid ""
 "If True, Gajim will show number of online and total contacts in account and "
 "group rows."
@@ -4343,7 +4341,7 @@ msgstr ""
 "Indien Aan zal Gajim het aantal online en het totaal aantal contacten "
 "weergeven in account- en groeprijen."
 
-#: ../src/common/config.py:293
+#: ../src/common/config.py:292
 msgid ""
 "Can be empty, 'chat' or 'normal'. If not empty, treat all incoming messages "
 "as if they were of this type"
@@ -4351,7 +4349,7 @@ msgstr ""
 "Kan leeg, 'chat' (gesprek) of 'normal' (normaal) zijn. Indien niet leeg "
 "worden alle inkomende berichten behandeld als waren ze van dit type"
 
-#: ../src/common/config.py:294
+#: ../src/common/config.py:293
 msgid ""
 "If True, Gajim will scroll and select the contact who sent you the last "
 "message, if chat window is not already opened."
@@ -4359,11 +4357,11 @@ msgstr ""
 "Indien Aan zal Gajim het contact selecteren dat je het laatst een bericht "
 "heeft gestuurd, als het gespreksvenster nog niet geopend is."
 
-#: ../src/common/config.py:295
+#: ../src/common/config.py:294
 msgid "Time of inactivity needed before the change status window closes down."
 msgstr ""
 
-#: ../src/common/config.py:296
+#: ../src/common/config.py:295
 msgid ""
 "Maximum number of lines that are printed in conversations. Oldest lines are "
 "cleared."
@@ -4371,51 +4369,51 @@ msgstr ""
 "Maximum aantal regels die weergegeven worden in gesprekken. Oudere regels "
 "worden gewist."
 
-#: ../src/common/config.py:297
+#: ../src/common/config.py:296
 msgid ""
 "If True, notification windows from notification-daemon will be attached to "
 "notification icon."
 msgstr ""
 
-#: ../src/common/config.py:298
+#: ../src/common/config.py:297
 msgid "Choose interval between 2 checks of idleness."
 msgstr "Kies interval tussen 2 controles van inactiviteit."
 
-#: ../src/common/config.py:299
+#: ../src/common/config.py:298
 msgid ""
 "Valid uri schemes. Only schemes in this list will be accepted as \"real\" "
 "uri. (mailto and xmpp are handled separately)"
 msgstr ""
 
-#: ../src/common/config.py:300
+#: ../src/common/config.py:299
 msgid ""
 "Ask offline status message to all offline contacts when connection to an "
 "account is established. WARNING: This causes a lot of requests to be sent!"
 msgstr ""
 
-#: ../src/common/config.py:301
+#: ../src/common/config.py:300
 msgid "If True, completion in groupchats will be like a shell auto-completion"
 msgstr ""
 
-#: ../src/common/config.py:302
+#: ../src/common/config.py:301
 msgid ""
 "When is self contact row displayed. Can be \"always\", \"when_other_resource"
 "\" or \"never\""
 msgstr ""
 
-#: ../src/common/config.py:307
+#: ../src/common/config.py:306
 msgid "Optionally fix jingle output video framerate. Example: 10/1 or 25/2"
 msgstr ""
 
-#: ../src/common/config.py:308
+#: ../src/common/config.py:307
 msgid "Optionally resize jingle output video. Example: 320x240"
 msgstr ""
 
-#: ../src/common/config.py:309
+#: ../src/common/config.py:308
 msgid "If True, You will also see your webcam"
 msgstr "Indien Aan zal je ook je eigen webcam zien"
 
-#: ../src/common/config.py:312
+#: ../src/common/config.py:311
 msgid ""
 "If True, Gajim will try to use a STUN server when using jingle. The one in "
 "\"stun_server\" option, or the one given by the jabber server."
@@ -4424,11 +4422,11 @@ msgstr ""
 "Jingle, ofwel die in de \"stun_server\"-optie, ofwel die gegeven door de "
 "Jabber-server."
 
-#: ../src/common/config.py:313
+#: ../src/common/config.py:312
 msgid "STUN server to use when using jingle"
 msgstr "Te gebruiken STUN-server bij gebruik van Jingle"
 
-#: ../src/common/config.py:314
+#: ../src/common/config.py:313
 msgid ""
 "If True, Gajim will show affiliation of groupchat occupants by adding a "
 "colored square to the status icon"
@@ -4436,17 +4434,17 @@ msgstr ""
 "Indien Aan zal Gajim de aansluiting van leden van groepsgesprekken weergeven "
 "door een gekleurd vierkantje toe te voegen aan het statussymbool"
 
-#: ../src/common/config.py:315
+#: ../src/common/config.py:314
 msgid ""
 "Proxy used for all outgoing connections if the account does not have a "
 "specific proxy configured"
 msgstr ""
 
-#: ../src/common/config.py:316
+#: ../src/common/config.py:315
 msgid "If True, Gajim will ignore incoming attention requestd (\"wizz\")."
 msgstr "Indien Aan zal Gajim inkomende aandachtsverzoeken negeren (\"wizz\")."
 
-#: ../src/common/config.py:317
+#: ../src/common/config.py:316
 msgid ""
 "If enabled, Gajim will reopen chat windows that were opened last time Gajim "
 "was closed."
@@ -4454,7 +4452,7 @@ msgstr ""
 "Indien aangezet zal Gajim de geopende gespreksvensters voor het laatst "
 "afsluiten van Gajim opnieuw openen."
 
-#: ../src/common/config.py:318
+#: ../src/common/config.py:317
 msgid ""
 "If enabled, Gajim will show an icon to show that sent message has been "
 "received by your contact"
@@ -4462,66 +4460,66 @@ msgstr ""
 "Indien aangezet zal Gajim een pictogram weergeven om te tonen dat een "
 "verzonden bericht ontvangen is door je contact"
 
-#: ../src/common/config.py:332
+#: ../src/common/config.py:331
 msgid ""
 "Priority will change automatically according to your status. Priorities are "
 "defined in autopriority_* options."
 msgstr ""
 
-#: ../src/common/config.py:340
+#: ../src/common/config.py:339
 msgid ""
 "Status used to autoconnect as. Can be online, chat, away, xa, dnd, "
 "invisible. NOTE: this option is used only if restore_last_status is disabled"
 msgstr ""
 
-#: ../src/common/config.py:341
+#: ../src/common/config.py:340
 msgid "If enabled, restore the last status that was used."
 msgstr "Indien aangezet wordt de laatst gebruikte status hersteld."
 
-#: ../src/common/config.py:343
+#: ../src/common/config.py:342
 msgid ""
 "If True, Contacts requesting authorization will be automatically accepted."
 msgstr ""
 "Indien Aan worden contacten die authorisatie aanvragen automatisch aanvaard."
 
-#: ../src/common/config.py:344
+#: ../src/common/config.py:343
 msgid ""
 "If False, this account will be disabled and will not appear in roster window."
 msgstr ""
 "Indien Vals zal deze account uitgeschakeld worden en niet weergegeven worden "
 "in het roostervenster."
 
-#: ../src/common/config.py:347
+#: ../src/common/config.py:346
 msgid ""
 "If disabled, don't sign presences with GPG key, even if GPG is configured."
 msgstr ""
 "Indien uitgeschakeld worden aanwezigheden niet ondertekend met de GPG-"
 "sleutel, zelfs als GPG ingesteld is."
 
-#: ../src/common/config.py:349
+#: ../src/common/config.py:348
 msgid "Enable ESessions encryption for this account."
 msgstr "ESessions-versleuteling aanzetten voor deze account."
 
-#: ../src/common/config.py:350
+#: ../src/common/config.py:349
 msgid "Should Gajim automatically start an encrypted session when possible?"
 msgstr ""
 "Moet Gajim automatisch een versleutelde sessie proberen starten wanneer "
 "mogelijk?"
 
-#: ../src/common/config.py:351
+#: ../src/common/config.py:350
 msgid ""
 "Ordered list (space separated) of connection type to try. Can contain tls, "
 "ssl or plain"
 msgstr ""
 
-#: ../src/common/config.py:354
+#: ../src/common/config.py:353
 msgid ""
 "List (space separated) of authentication mechanisms to try. Can contain "
 "ANONYMOUS, EXTERNAL, GSSAPI, SCRAM-SHA-1-PLUS, SCRAM-SHA-1, DIGEST-MD5, "
 "PLAIN, X-MESSENGER-OAUTH2 or XEP-0078"
 msgstr ""
 
-#: ../src/common/config.py:355
+#: ../src/common/config.py:354
 msgid ""
 "Show a warning dialog before sending password on an plaintext connection. "
 "Can be 'warn', 'connect', 'disconnect'"
@@ -4530,27 +4528,33 @@ msgstr ""
 "over een niet-beveiligde verbinding. Kan 'warn' (waarschuwen), "
 "'connect' (verbinden) of 'disconnect' (verbinding verbreken) zijn."
 
-#: ../src/common/config.py:356
+#: ../src/common/config.py:355
 msgid "Show a warning dialog before using standard SSL library."
 msgstr ""
 "Geeft een waarschuwingsdialoog weer voor het gebruiken van een standaard SSL-"
 "bibliotheek."
 
-#: ../src/common/config.py:357
+#: ../src/common/config.py:356
 msgid ""
 "Show a warning dialog before sending PLAIN password over a plain connection."
 msgstr ""
 "Geeft een waarschuwingsdialoog weer voor het versturen van een PLAIN (platte "
 "tekst) wachtwoord over een plain (niet beveiligde) verbinding."
 
-#: ../src/common/config.py:359
+#: ../src/common/config.py:358
 msgid "Space separated list of ssl errors to ignore."
+msgstr ""
+
+#: ../src/common/config.py:364
+msgid ""
+"Space separated list of JIDs for which you do not want to store logs. You "
+"can also add account name to log nothing for this account."
 msgstr ""
 
 #: ../src/common/config.py:365
 msgid ""
-"Space separated list of JIDs for which you do not want to store logs. You "
-"can also add account name to log nothing for this account."
+"Download logs stored on server on Gajim startup if server supports XEP-0136 "
+"or XEP-0313"
 msgstr ""
 
 #: ../src/common/config.py:366
@@ -4756,7 +4760,7 @@ msgstr "Ik ben aanwezig."
 msgid "I'm free for chat."
 msgstr "Ik sta open voor gesprekken."
 
-#: ../src/common/config.py:515 ../src/config.py:1654
+#: ../src/common/config.py:515 ../src/config.py:1647
 msgid "Be right back."
 msgstr "Zo terug."
 
@@ -4785,11 +4789,11 @@ msgid "Sound to play when any MUC message arrives."
 msgstr ""
 "Geluid om af te spelen wanneer een bericht in een groepsgesprek toekomt."
 
-#: ../src/common/config.py:540 ../src/common/optparser.py:318
+#: ../src/common/config.py:540 ../src/common/optparser.py:325
 msgid "green"
 msgstr "groen"
 
-#: ../src/common/config.py:544 ../src/common/optparser.py:304
+#: ../src/common/config.py:544 ../src/common/optparser.py:311
 msgid "grocery"
 msgstr "kruidenier"
 
@@ -4815,23 +4819,23 @@ msgstr ""
 "rooster. Gebruik een roostermanagement applicatie zoals http://jru."
 "jabberstudio.org/ om het te verwijderen"
 
-#: ../src/common/connection_handlers_events.py:837
+#: ../src/common/connection_handlers_events.py:846
 #, python-format
 msgid "unsubscribe request from %s"
 msgstr "afmelding verzocht van %s"
 
-#: ../src/common/connection_handlers_events.py:922
+#: ../src/common/connection_handlers_events.py:931
 #: ../src/common/connection_handlers.py:341
-#: ../src/common/connection_handlers.py:1069
-#: ../src/common/connection_handlers.py:1194 ../src/common/connection.py:540
-#: ../src/common/logger.py:1163 ../src/gajim.py:472 ../src/session.py:95
+#: ../src/common/connection_handlers.py:1073
+#: ../src/common/connection_handlers.py:1230 ../src/common/connection.py:538
+#: ../src/common/logger.py:1164 ../src/gajim.py:472 ../src/session.py:99
 msgid "Disk Write Error"
 msgstr "Schijf-schrijffout"
 
-#: ../src/common/connection_handlers_events.py:926
-#: ../src/common/connection_handlers.py:1072
-#: ../src/common/connection_handlers.py:1197 ../src/common/connection.py:544
-#: ../src/common/logger.py:1166 ../src/gajim.py:253 ../src/session.py:99
+#: ../src/common/connection_handlers_events.py:935
+#: ../src/common/connection_handlers.py:1076
+#: ../src/common/connection_handlers.py:1233 ../src/common/connection.py:542
+#: ../src/common/logger.py:1167 ../src/gajim.py:253 ../src/session.py:103
 #, python-format
 msgid ""
 "The database file (%s) cannot be read. Try to repair it (see http://trac."
@@ -4843,124 +4847,124 @@ msgstr ""
 
 #. Room has been destroyed. see
 #. http://www.xmpp.org/extensions/xep-0045.html#destroyroom
-#: ../src/common/connection_handlers_events.py:947
+#: ../src/common/connection_handlers_events.py:956
 msgid "Room has been destroyed"
 msgstr "Groepsgesprek is verwijderd"
 
-#: ../src/common/connection_handlers_events.py:955
+#: ../src/common/connection_handlers_events.py:964
 #, python-format
 msgid "You can join this room instead: %s"
 msgstr "Je kan in plaats daarvan deelnemen aan dit groepsgesprek: %s"
 
-#: ../src/common/connection_handlers_events.py:1043
-#: ../src/common/connection_handlers_events.py:1086
+#: ../src/common/connection_handlers_events.py:1123
+#: ../src/common/connection_handlers_events.py:1168
 #: ../src/common/connection.py:276 ../src/common/connection.py:286
-#: ../src/config.py:2169 ../src/config.py:2178 ../src/config.py:2248
-#: ../src/config.py:3715 ../src/dataforms_widget.py:633 ../src/dialogs.py:3260
+#: ../src/config.py:2164 ../src/config.py:2173 ../src/config.py:2243
+#: ../src/config.py:3716 ../src/dataforms_widget.py:633 ../src/dialogs.py:3260
 msgid "Invalid Jabber ID"
 msgstr "Ongeldige Jabber-ID"
 
-#: ../src/common/connection_handlers_events.py:1044
-#: ../src/common/connection_handlers_events.py:1087
+#: ../src/common/connection_handlers_events.py:1124
+#: ../src/common/connection_handlers_events.py:1169
 msgid "A message from a non-valid JID arrived, it has been ignored."
 msgstr "Een bericht van een ongeldige JID is ontvangen en genegeerd."
 
 #. ('MSGNOTSENT', account, (jid, ierror_msg, msg, time, session))
-#: ../src/common/connection_handlers_events.py:1177
-#: ../src/gui_interface.py:433 ../src/gui_interface.py:447
+#: ../src/common/connection_handlers_events.py:1212
+#: ../src/gui_interface.py:434 ../src/gui_interface.py:448
 #, python-format
 msgid "error while sending %(message)s ( %(error)s )"
 msgstr "fout bij versturen van %(message)s ( %(error)s )"
 
-#: ../src/common/connection_handlers_events.py:1406
+#: ../src/common/connection_handlers_events.py:1441
 msgid "URL:"
 msgstr "URL:"
 
-#: ../src/common/connection_handlers_events.py:1707
+#: ../src/common/connection_handlers_events.py:1742
 #, python-format
 msgid "Unknown SSL error: %d"
 msgstr "Onbekende SSL-fout: %d"
 
-#: ../src/common/connection_handlers_events.py:2313 ../src/dialogs.py:2933
+#: ../src/common/connection_handlers_events.py:2352 ../src/dialogs.py:2933
 #: ../src/notify.py:266
 msgid "New Single Message"
 msgstr "Nieuw enkel bericht"
 
-#: ../src/common/connection_handlers_events.py:2315
+#: ../src/common/connection_handlers_events.py:2354
 #, python-format
 msgid "New Single Message from %(nickname)s"
 msgstr "Nieuw enkel bericht van %(nickname)s"
 
-#: ../src/common/connection_handlers_events.py:2319 ../src/dialogs.py:2934
+#: ../src/common/connection_handlers_events.py:2358 ../src/dialogs.py:2934
 #: ../src/notify.py:267
 msgid "New Private Message"
 msgstr "Nieuw privébericht"
 
-#: ../src/common/connection_handlers_events.py:2321
+#: ../src/common/connection_handlers_events.py:2360
 #, python-format
 msgid "New Private Message from group chat %s"
 msgstr "Nieuw privébericht van groepsgesprek %s"
 
-#: ../src/common/connection_handlers_events.py:2324
+#: ../src/common/connection_handlers_events.py:2363
 #, python-format
 msgid "%(nickname)s: %(message)s"
 msgstr "%(nickname)s: %(message)s"
 
-#: ../src/common/connection_handlers_events.py:2327
+#: ../src/common/connection_handlers_events.py:2366
 #, python-format
 msgid "Messaged by %(nickname)s"
 msgstr "Bericht ontvangen van %(nickname)s"
 
-#: ../src/common/connection_handlers_events.py:2331 ../src/dialogs.py:2933
+#: ../src/common/connection_handlers_events.py:2370 ../src/dialogs.py:2933
 #: ../src/notify.py:266
 msgid "New Message"
 msgstr "Nieuw bericht"
 
-#: ../src/common/connection_handlers_events.py:2333
+#: ../src/common/connection_handlers_events.py:2372
 #, python-format
 msgid "New Message from %(nickname)s"
 msgstr "Nieuw bericht van %(nickname)s"
 
-#: ../src/common/connection_handlers_events.py:2477
+#: ../src/common/connection_handlers_events.py:2517
 #, python-format
 msgid "%(nick)s Changed Status"
 msgstr "%(nick)s wijzigde zijn/haar status"
 
-#: ../src/common/connection_handlers_events.py:2479
+#: ../src/common/connection_handlers_events.py:2519
 #: ../src/groupchat_control.py:208 ../src/groupchat_control.py:1903
 #: ../src/history_window.py:455
 #, python-format
 msgid "%(nick)s is now %(status)s"
 msgstr "%(nick)s is nu %(status)s"
 
-#: ../src/common/connection_handlers_events.py:2483 ../src/dialogs.py:2945
+#: ../src/common/connection_handlers_events.py:2523 ../src/dialogs.py:2945
 #: ../src/notify.py:280
 msgid "Contact Changed Status"
 msgstr "Contact heeft zijn/haar status gewijzigd"
 
-#: ../src/common/connection_handlers_events.py:2485
+#: ../src/common/connection_handlers_events.py:2525
 #, python-format
 msgid "%(nickname)s Signed In"
 msgstr "%(nickname)s is ingelogd"
 
 #. default value
-#: ../src/common/connection_handlers_events.py:2489 ../src/dialogs.py:2929
+#: ../src/common/connection_handlers_events.py:2529 ../src/dialogs.py:2929
 #: ../src/notify.py:262
 msgid "Contact Signed In"
 msgstr "Contact is ingelogd"
 
-#: ../src/common/connection_handlers_events.py:2491
+#: ../src/common/connection_handlers_events.py:2531
 #, python-format
 msgid "%(nickname)s Signed Out"
 msgstr "%(nickname)s is uitgelogd"
 
-#: ../src/common/connection_handlers_events.py:2495 ../src/dialogs.py:2931
+#: ../src/common/connection_handlers_events.py:2535 ../src/dialogs.py:2931
 #: ../src/notify.py:264
 msgid "Contact Signed Out"
 msgstr "Contact is uitgelogd"
 
 #: ../src/common/connection_handlers.py:90
-#: ../src/common/zeroconf/connection_handlers_zeroconf.py:53
+#: ../src/common/zeroconf/connection_handlers_zeroconf.py:50
 #, fuzzy
 msgid "Unable to load idle module"
 msgstr "Niet in staat de ruimte binnen te gaan"
@@ -4989,7 +4993,7 @@ msgid ""
 "Registration with agent %(agent)s failed with error %(error)s: %(error_msg)s"
 msgstr "Registratie bij %(agent)s mislukt met fout %(error)s: %(error_msg)s"
 
-#: ../src/common/connection_handlers.py:1888
+#: ../src/common/connection_handlers.py:1924
 msgid "I would like to add you to my roster."
 msgstr "Ik zou je graag aan mijn rooster willen toevoegen."
 
@@ -5141,12 +5145,12 @@ msgstr ""
 "in Gajim."
 
 #. we're not english: one in locale and one en
-#: ../src/common/connection.py:369
+#: ../src/common/connection.py:371
 msgid "[This message is *encrypted* (See :XEP:`27`]"
 msgstr "[Dit bericht is *versleuteld* (Zie :XEP:`27`]"
 
 # .
-#: ../src/common/connection.py:527
+#: ../src/common/connection.py:525
 #, python-format
 msgid ""
 "Subject: %(subject)s\n"
@@ -5155,18 +5159,18 @@ msgstr ""
 "Onderwerp: %(subject)s\n"
 "%(message)s"
 
-#: ../src/common/connection.py:958
+#: ../src/common/connection.py:964
 #, python-format
 msgid "Connection with account \"%s\" has been lost"
 msgstr "Verbinding met account \"%s\" verbroken"
 
-#: ../src/common/connection.py:959
+#: ../src/common/connection.py:965
 msgid "Reconnect manually."
 msgstr "Handmatig opnieuw verbinden."
 
 #. it's a new account
 #. wrong answer
-#: ../src/common/connection.py:970
+#: ../src/common/connection.py:976
 #, python-format
 msgid "Server %(name)s answered wrongly to register request: %(error)s"
 msgstr ""
@@ -5174,64 +5178,64 @@ msgstr ""
 "%(error)s"
 
 #. requested config has changed since first connection
-#: ../src/common/connection.py:1012
+#: ../src/common/connection.py:1018
 #, python-format
 msgid "Server %s provided a different registration form"
 msgstr "Server %s gaf een ander registratieformulier op"
 
-#: ../src/common/connection.py:1029
+#: ../src/common/connection.py:1035
 msgid "Invalid answer"
 msgstr "Ongeldig antwoord"
 
-#: ../src/common/connection.py:1030
+#: ../src/common/connection.py:1036
 #, python-format
 msgid "Transport %(name)s answered wrongly to register request: %(error)s"
 msgstr ""
 
-#: ../src/common/connection.py:1157
+#: ../src/common/connection.py:1163
 msgid "Wrong Custom Hostname"
 msgstr "Verkeerde aangepaste hostnaam"
 
-#: ../src/common/connection.py:1339
+#: ../src/common/connection.py:1345
 #, python-format
 msgid "Could not connect to \"%(host)s\" via proxy \"%(proxy)s\""
 msgstr "Kon geen verbinding maken met \"%(host)s\" via proxy \"%(proxy)s\""
 
-#: ../src/common/connection.py:1342
+#: ../src/common/connection.py:1348
 #, python-format
 msgid "Could not connect to \"%(host)s\""
 msgstr "Kon geen verbinding maken met \"%(host)s\""
 
-#: ../src/common/connection.py:1344 ../src/common/connection.py:1510
-#: ../src/gui_interface.py:542
+#: ../src/common/connection.py:1350 ../src/common/connection.py:1524
+#: ../src/gui_interface.py:543
 msgid "Check your connection or try again later."
 msgstr "Controleer de verbinding of probeer later nogmaals."
 
-#: ../src/common/connection.py:1349
+#: ../src/common/connection.py:1355
 #, python-format
 msgid "Server replied: %s"
 msgstr "Server antwoordde: %s"
 
-#: ../src/common/connection.py:1364
+#: ../src/common/connection.py:1370
 msgid "Connection to proxy failed"
 msgstr "Verbinding met proxy mislukt"
 
-#: ../src/common/connection.py:1402 ../src/common/connection.py:1485
+#: ../src/common/connection.py:1408 ../src/common/connection.py:1499
 #, python-format
 msgid "Could not connect to account %s"
 msgstr "Kon geen verbinding maken met account %s"
 
-#: ../src/common/connection.py:1403 ../src/common/connection.py:1486
+#: ../src/common/connection.py:1409 ../src/common/connection.py:1500
 #, python-format
 msgid "Connection with account %s has been lost. Retry connecting."
 msgstr "Verbinding met account %s verbroken. Probeer opnieuw te verbinden."
 
-#: ../src/common/connection.py:1429
+#: ../src/common/connection.py:1443
 #, python-format
 msgid "The authenticity of the %s certificate could be invalid"
 msgstr "De authenticiteit van het %s certificaat zou ongeldig kunnen zijn"
 
-#: ../src/common/connection.py:1432
+#: ../src/common/connection.py:1446
 #, python-format
 msgid ""
 "\n"
@@ -5240,7 +5244,7 @@ msgstr ""
 "\n"
 "SSL-fout: <b>%s</b>"
 
-#: ../src/common/connection.py:1434
+#: ../src/common/connection.py:1448
 #, python-format
 msgid ""
 "\n"
@@ -5249,7 +5253,7 @@ msgstr ""
 "\n"
 "Onbekende SSL-fout: %d"
 
-#: ../src/common/connection.py:1462
+#: ../src/common/connection.py:1476
 #, python-format
 msgid ""
 "The authenticity of the %s certificate could be invalid.\n"
@@ -5258,26 +5262,26 @@ msgstr ""
 "De authenticiteit van het %s certificaat kan ongeldig zijn.\n"
 "Het certificaat is niet geldig voor dit domein."
 
-#: ../src/common/connection.py:1509 ../src/common/connection.py:2283
-#: ../src/common/zeroconf/connection_zeroconf.py:205
+#: ../src/common/connection.py:1523 ../src/common/connection.py:2304
+#: ../src/common/zeroconf/connection_zeroconf.py:206
 #, python-format
 msgid "Could not connect to \"%s\""
 msgstr "Kon geen verbinding maken met \"%s\""
 
-#: ../src/common/connection.py:1545
+#: ../src/common/connection.py:1559
 #, python-format
 msgid "Authentication failed with \"%s\""
 msgstr "Inloggen mislukt met \"%s\""
 
-#: ../src/common/connection.py:1546
+#: ../src/common/connection.py:1560
 msgid "Please check your login and password for correctness."
 msgstr "Controleer gebruikersnaam en wachtwoord."
 
-#: ../src/common/connection.py:1622
+#: ../src/common/connection.py:1636
 msgid "Error while removing privacy list"
 msgstr "Fout bij verwijderen van privacylijst"
 
-#: ../src/common/connection.py:1623
+#: ../src/common/connection.py:1637
 #, python-format
 msgid ""
 "Privacy list %s has not been removed. It is maybe active in one of your "
@@ -5286,50 +5290,50 @@ msgstr ""
 "Privacylijst %s is niet verwijderd. Deze is misschien actief in een van je "
 "verbonden bronnen. Desactiveer deze bron en probeer opnieuw."
 
-#: ../src/common/connection.py:1816 ../src/common/connection.py:1931
+#: ../src/common/connection.py:1830 ../src/common/connection.py:1944
 msgid "Invisibility not supported"
 msgstr "Onzichtbaarheid niet ondersteund"
 
-#: ../src/common/connection.py:1817 ../src/common/connection.py:1932
+#: ../src/common/connection.py:1831 ../src/common/connection.py:1945
 #, python-format
 msgid "Account %s doesn't support invisibility."
 msgstr "Account %s ondersteunt geen onzichtbaarheid."
 
-#: ../src/common/connection.py:2147
+#: ../src/common/connection.py:2168
 #, python-format
 msgid "Sent contact: \"%s\" (%s)"
 msgstr ""
 
 # Verzonden aan contacten?
-#: ../src/common/connection.py:2150
+#: ../src/common/connection.py:2171
 msgid "Sent contacts:"
 msgstr "Verzonden contacten:"
 
-#: ../src/common/connection.py:2300 ../src/common/connection.py:2322
+#: ../src/common/connection.py:2321 ../src/common/connection.py:2343
 msgid "Not fetched because of invisible status"
 msgstr "Niet opgehaald door status 'onzichtbaar'"
 
-#: ../src/common/connection.py:2906
+#: ../src/common/connection.py:2933
 msgid "Unregister failed"
 msgstr "Ontregistreren mislukt"
 
-#: ../src/common/connection.py:2907
+#: ../src/common/connection.py:2934
 #, python-format
 msgid "Unregistration with server %(server)s failed: %(error)s"
 msgstr "Ontregistratie bij server %(server)s mislukt: %(error)s"
 
 #: ../src/common/contacts.py:129 ../src/common/helpers.py:68
-#: ../src/gui_interface.py:485
+#: ../src/gui_interface.py:486
 msgid "Observers"
 msgstr "Waarnemers"
 
 #. Invite to
 #: ../src/common/contacts.py:133 ../src/common/contacts.py:361
 #: ../src/common/helpers.py:68 ../src/disco.py:123 ../src/disco.py:124
-#: ../src/disco.py:1562 ../src/roster_window.py:863
-#: ../src/roster_window.py:1620 ../src/roster_window.py:1734
-#: ../src/roster_window.py:1736 ../src/roster_window.py:1898
-#: ../src/roster_window.py:2596 ../src/roster_window.py:5803
+#: ../src/disco.py:1562 ../src/roster_window.py:869
+#: ../src/roster_window.py:1626 ../src/roster_window.py:1740
+#: ../src/roster_window.py:1742 ../src/roster_window.py:1904
+#: ../src/roster_window.py:2602 ../src/roster_window.py:5812
 msgid "Transports"
 msgstr "Transporten"
 
@@ -5817,20 +5821,20 @@ msgstr "Gajim - %s"
 msgid "Hello, I am $name."
 msgstr "Hallo, ik ben $name."
 
-#: ../src/common/helpers.py:1488 ../src/common/helpers.py:1497
-#: ../src/common/helpers.py:1551
+#: ../src/common/helpers.py:1490 ../src/common/helpers.py:1499
+#: ../src/common/helpers.py:1557
 msgid "Timeout loading image"
 msgstr "Time-out bij laden van afbeelding"
 
-#: ../src/common/helpers.py:1507 ../src/common/helpers.py:1549
+#: ../src/common/helpers.py:1509 ../src/common/helpers.py:1555
 msgid "Image is too big"
 msgstr "Afbeelding is te groot"
 
-#: ../src/common/helpers.py:1517
+#: ../src/common/helpers.py:1519
 msgid "PyCURL is not installed"
 msgstr "PyCURL is niet geïnstalleerd."
 
-#: ../src/common/helpers.py:1553
+#: ../src/common/helpers.py:1559
 msgid "Error loading image"
 msgstr "Fout bij laden van afbeelding"
 
@@ -5972,11 +5976,11 @@ msgstr "X Window System (zonder Xv)"
 msgid "Error: cannot open %s for reading"
 msgstr "Fout: kan %s niet voor lezen openen"
 
-#: ../src/common/optparser.py:313 ../src/common/optparser.py:314
+#: ../src/common/optparser.py:320 ../src/common/optparser.py:321
 msgid "cyan"
 msgstr "cyaan"
 
-#: ../src/common/optparser.py:393
+#: ../src/common/optparser.py:400
 #, fuzzy
 msgid "migrating logs database to indices"
 msgstr "logboek database wordt aangemaakt"
@@ -6735,11 +6739,11 @@ msgstr ""
 "[Dit is onderdeel van een versleutelde sessie. Als je dit bericht ziet is er "
 "iets misgegaan.]"
 
-#: ../src/common/zeroconf/connection_zeroconf.py:193
+#: ../src/common/zeroconf/connection_zeroconf.py:194
 msgid "Avahi error"
 msgstr "Avahifout"
 
-#: ../src/common/zeroconf/connection_zeroconf.py:193
+#: ../src/common/zeroconf/connection_zeroconf.py:194
 #, python-format
 msgid ""
 "%s\n"
@@ -6748,51 +6752,51 @@ msgstr ""
 "%s\n"
 "Link-lokaal berichten zou niet goed kunnen werken."
 
-#: ../src/common/zeroconf/connection_zeroconf.py:206
+#: ../src/common/zeroconf/connection_zeroconf.py:207
 msgid "Please check if Avahi or Bonjour is installed."
 msgstr "Controleer of Avahi of Bonjour is geïnstalleerd."
 
-#: ../src/common/zeroconf/connection_zeroconf.py:216
-#: ../src/common/zeroconf/connection_zeroconf.py:220
+#: ../src/common/zeroconf/connection_zeroconf.py:217
+#: ../src/common/zeroconf/connection_zeroconf.py:221
 msgid "Could not start local service"
 msgstr "Kon lokale dienst niet starten"
 
-#: ../src/common/zeroconf/connection_zeroconf.py:217
+#: ../src/common/zeroconf/connection_zeroconf.py:218
 #, python-format
 msgid "Unable to bind to port %d."
 msgstr "Kan niet binden aan poort %d."
 
-#: ../src/common/zeroconf/connection_zeroconf.py:221
-#: ../src/common/zeroconf/connection_zeroconf.py:306
-#: ../src/common/zeroconf/connection_zeroconf.py:319
-#: ../src/common/zeroconf/connection_zeroconf.py:335
+#: ../src/common/zeroconf/connection_zeroconf.py:222
+#: ../src/common/zeroconf/connection_zeroconf.py:307
+#: ../src/common/zeroconf/connection_zeroconf.py:320
+#: ../src/common/zeroconf/connection_zeroconf.py:336
 msgid "Please check if avahi-daemon is running."
 msgstr "Controleer of avahi-daemon draait."
 
-#: ../src/common/zeroconf/connection_zeroconf.py:305
-#: ../src/common/zeroconf/connection_zeroconf.py:318
-#: ../src/common/zeroconf/connection_zeroconf.py:334
+#: ../src/common/zeroconf/connection_zeroconf.py:306
+#: ../src/common/zeroconf/connection_zeroconf.py:319
+#: ../src/common/zeroconf/connection_zeroconf.py:335
 #, python-format
 msgid "Could not change status of account \"%s\""
 msgstr "Kon status van account \"%s\" niet veranderen"
 
-#: ../src/common/zeroconf/connection_zeroconf.py:356
+#: ../src/common/zeroconf/connection_zeroconf.py:357
 msgid "Your message could not be sent."
 msgstr "Je bericht kan niet worden verzonden."
 
-#: ../src/common/zeroconf/connection_zeroconf.py:368
+#: ../src/common/zeroconf/connection_zeroconf.py:369
 msgid "Contact is offline. Your message could not be sent."
 msgstr "Contact is offline. Je bericht kan niet worden verzonden."
 
-#: ../src/common/zeroconf/connection_zeroconf.py:395
+#: ../src/common/zeroconf/connection_zeroconf.py:396
 msgid ""
 "Connection to host could not be established: Timeout while sending data."
 msgstr ""
 "Verbinding met host kon niet worden vastgesteld: time-out bij sturen van "
 "gegevens."
 
-#: ../src/common/zeroconf/zeroconf_avahi.py:192
-#: ../src/common/zeroconf/zeroconf_bonjour.py:191
+#: ../src/common/zeroconf/zeroconf_avahi.py:221
+#: ../src/common/zeroconf/zeroconf_bonjour.py:194
 #, python-format
 msgid "Error while adding service. %s"
 msgstr "Fout bij toevoegen van dienst. %s"
@@ -6805,16 +6809,16 @@ msgstr "Standaardbericht"
 msgid "Enabled"
 msgstr "Ingeschakeld"
 
-#: ../src/config.py:468 ../src/config.py:472 ../src/config.py:3206
+#: ../src/config.py:468 ../src/config.py:472 ../src/config.py:3207
 msgid "Default"
 msgstr "Standaard"
 
-#: ../src/config.py:747 ../src/dialogs.py:1500
+#: ../src/config.py:743 ../src/dialogs.py:1500
 #, python-format
 msgid "Dictionary for lang %s not available"
 msgstr "Woordenboek voor taal %s niet beschikbaar"
 
-#: ../src/config.py:748
+#: ../src/config.py:744
 #, python-format
 msgid ""
 "You have to install %s dictionary to use spellchecking, or choose another "
@@ -6823,71 +6827,71 @@ msgstr ""
 "Je moet %s woordenboek installeren om spellingscontrole te gebruiken, of "
 "kies een andere taal via de speller_language optie."
 
-#: ../src/config.py:1230
+#: ../src/config.py:1223
 msgid "status message title"
 msgstr "titel statusbericht"
 
-#: ../src/config.py:1231
+#: ../src/config.py:1224
 msgid "status message text"
 msgstr "statusbericht"
 
 #. Name column
-#: ../src/config.py:1559 ../src/dialogs.py:2688 ../src/dialogs.py:2755
+#: ../src/config.py:1552 ../src/dialogs.py:2688 ../src/dialogs.py:2755
 #: ../src/dialogs.py:3553 ../src/disco.py:898 ../src/disco.py:1795
 #: ../src/disco.py:2099 ../src/history_window.py:92
 msgid "Name"
 msgstr "Naam"
 
-#: ../src/config.py:1664
+#: ../src/config.py:1657
 msgid "Relogin now?"
 msgstr "Nu opnieuw inloggen?"
 
-#: ../src/config.py:1665
+#: ../src/config.py:1658
 msgid "If you want all the changes to apply instantly, you must relogin."
 msgstr ""
 "Als je alle wijzigingen onmiddellijk wil toepassen moet je opnieuw inloggen."
 
-#: ../src/config.py:1822 ../src/config.py:1957
+#: ../src/config.py:1815 ../src/config.py:1950
 msgid "OpenPGP is not usable on this computer"
 msgstr "OpenPGP is niet bruikbaar op deze computer"
 
-#: ../src/config.py:2000 ../src/config.py:2050
+#: ../src/config.py:1995 ../src/config.py:2045
 msgid "Unread events"
 msgstr "Ongelezen gebeurtenissen"
 
-#: ../src/config.py:2001
+#: ../src/config.py:1996
 msgid "Read all pending events before removing this account."
 msgstr "Lees alle lopende gebeurtenissen voor deze account te verwijderen."
 
-#: ../src/config.py:2031
+#: ../src/config.py:2026
 #, python-format
 msgid "You have opened chat in account %s"
 msgstr "Je hebt een gesprek geopend in account %s"
 
-#: ../src/config.py:2032
+#: ../src/config.py:2027
 msgid "All chat and groupchat windows will be closed. Do you want to continue?"
 msgstr ""
 "Alle gespreks- en groepsgespreksvensters zullen gesloten worden. Wil je "
 "doorgaan?"
 
-#: ../src/config.py:2045 ../src/config.py:2617 ../src/config.py:2655
+#: ../src/config.py:2040 ../src/config.py:2618 ../src/config.py:2656
 msgid "You are currently connected to the server"
 msgstr "Je bent momenteel verbonden met de server"
 
-#: ../src/config.py:2046
+#: ../src/config.py:2041
 msgid "To change the account name, you must be disconnected."
 msgstr "Om de accountnaam te veranderen moet de verbinding verbroken zijn"
 
-#: ../src/config.py:2051
+#: ../src/config.py:2046
 #, fuzzy
 msgid "To change the account name, you must read all pending events."
 msgstr "Om de account naam te veranderen moet de verbinding verbroken zijn"
 
-#: ../src/config.py:2057
+#: ../src/config.py:2052
 msgid "Account Name Already Used"
 msgstr "Accountnaam is al in gebruik"
 
-#: ../src/config.py:2058
+#: ../src/config.py:2053
 msgid ""
 "This name is already used by another of your accounts. Please choose another "
 "name."
@@ -6895,147 +6899,147 @@ msgstr ""
 "Deze naam wordt al gebruikt door een van je andere accounts. Kies een andere "
 "naam."
 
-#: ../src/config.py:2062 ../src/config.py:2067
+#: ../src/config.py:2057 ../src/config.py:2062
 msgid "Invalid account name"
 msgstr "Ongeldige accountnaam"
 
-#: ../src/config.py:2063
+#: ../src/config.py:2058
 msgid "Account name cannot be empty."
 msgstr "Account naam kan niet leeg zijn."
 
-#: ../src/config.py:2068
+#: ../src/config.py:2063
 msgid "Account name cannot contain spaces."
 msgstr "Account naam mag geen spaties bevatten."
 
-#: ../src/config.py:2149
+#: ../src/config.py:2144
 msgid "Rename Account"
 msgstr "Account hernoemen"
 
-#: ../src/config.py:2150
+#: ../src/config.py:2145
 #, python-format
 msgid "Enter a new name for account %s"
 msgstr "Voer een nieuwe naam in voor account %s"
 
-#: ../src/config.py:2180
+#: ../src/config.py:2175
 msgid "A Jabber ID must be in the form \"user@servername\"."
 msgstr "Een Jabber ID moet in de vorm \"gebruiker@servernaam\" zijn."
 
-#: ../src/config.py:2414 ../src/config.py:3761
+#: ../src/config.py:2415 ../src/config.py:3762
 msgid "Invalid entry"
 msgstr "Ongeldige invoer"
 
-#: ../src/config.py:2415 ../src/config.py:3762
+#: ../src/config.py:2416 ../src/config.py:3763
 msgid "Custom port must be a port number."
 msgstr "Aangepaste poort moet een geldig poortnummer zijn."
 
-#: ../src/config.py:2437
+#: ../src/config.py:2438
 msgid "Failed to get secret keys"
 msgstr "Kon de geheime sleutel niet ophalen"
 
-#: ../src/config.py:2438
+#: ../src/config.py:2439
 msgid "There is no OpenPGP secret key available."
 msgstr "Er is geen OpenPGP geheime sleutel beschikbaar."
 
-#: ../src/config.py:2476
+#: ../src/config.py:2477
 msgid "OpenPGP Key Selection"
 msgstr "OpenPGP-sleutelselectie"
 
-#: ../src/config.py:2477
+#: ../src/config.py:2478
 msgid "Choose your OpenPGP key"
 msgstr "Kies je OpenPGP sleutel"
 
-#: ../src/config.py:2485
+#: ../src/config.py:2486
 msgid "No such account available"
 msgstr "Account bestaat niet"
 
-#: ../src/config.py:2486
+#: ../src/config.py:2487
 msgid "You must create your account before editing your personal information."
 msgstr ""
 "Je moet een account aanmaken voordat persoonlijke informatie kan worden "
 "aangepast."
 
-#: ../src/config.py:2493 ../src/dialogs.py:2374 ../src/dialogs.py:2676
+#: ../src/config.py:2494 ../src/dialogs.py:2374 ../src/dialogs.py:2676
 #: ../src/dialogs.py:2865 ../src/disco.py:524 ../src/profile_window.py:371
 msgid "You are not connected to the server"
 msgstr "Er is geen verbinding met de server"
 
-#: ../src/config.py:2494
+#: ../src/config.py:2495
 msgid "Without a connection, you can not edit your personal information."
 msgstr ""
 "Zonder verbinding is het niet mogelijk persoonlijke informatie aan te passen."
 
-#: ../src/config.py:2499
+#: ../src/config.py:2500
 msgid "Your server doesn't support vCard"
 msgstr "Je server ondersteunt vCard niet"
 
-#: ../src/config.py:2500
+#: ../src/config.py:2501
 msgid "Your server can't save your personal information."
 msgstr "Je server kan geen persoonlijke informatie opslaan."
 
-#: ../src/config.py:2618 ../src/config.py:2656
+#: ../src/config.py:2619 ../src/config.py:2657
 #, fuzzy
 msgid "To disable the account, you must be disconnected."
 msgstr "Om de account naam te veranderen moet de verbinding verbroken zijn"
 
-#: ../src/config.py:2625
+#: ../src/config.py:2626
 msgid "Account Local already exists."
 msgstr "Account Lokaal bestaat al."
 
-#: ../src/config.py:2626
+#: ../src/config.py:2627
 msgid "Please rename or remove it before enabling link-local messaging."
 msgstr "Hernoem of verwijder het vooraleer je link-lokaal berichten aanzet."
 
-#: ../src/config.py:2787
+#: ../src/config.py:2788
 #, python-format
 msgid "Edit %s"
 msgstr "Wijzig %s"
 
-#: ../src/config.py:2789
+#: ../src/config.py:2790
 #, python-format
 msgid "Register to %s"
 msgstr "Registreer met %s"
 
 #. list at the beginning
-#: ../src/config.py:2825
+#: ../src/config.py:2826
 msgid "Ban List"
 msgstr "Banlijst"
 
-#: ../src/config.py:2826
+#: ../src/config.py:2827
 msgid "Member List"
 msgstr "Ledenlijst"
 
-#: ../src/config.py:2826
+#: ../src/config.py:2827
 msgid "Owner List"
 msgstr "Eigenaarlijst"
 
-#: ../src/config.py:2827
+#: ../src/config.py:2828
 msgid "Administrator List"
 msgstr "Administratorlijst"
 
 #. Address column
 #. holds JID (who said this)
-#: ../src/config.py:2891 ../src/disco.py:905 ../src/history_manager.py:217
+#: ../src/config.py:2892 ../src/disco.py:905 ../src/history_manager.py:217
 msgid "JID"
 msgstr "JID"
 
-#: ../src/config.py:2901
+#: ../src/config.py:2902
 msgid "Reason"
 msgstr "Reden"
 
-#: ../src/config.py:2908
+#: ../src/config.py:2909
 msgid "Nick"
 msgstr "Bijnaam"
 
-#: ../src/config.py:2914
+#: ../src/config.py:2915
 msgid "Role"
 msgstr "Rol"
 
-#: ../src/config.py:2941
+#: ../src/config.py:2942
 msgid "Banning..."
 msgstr "Wordt verbannen..."
 
 #. You can move '\n' before user@domain if that line is TOO BIG
-#: ../src/config.py:2943
+#: ../src/config.py:2944
 msgid ""
 "<b>Whom do you want to ban?</b>\n"
 "\n"
@@ -7043,11 +7047,11 @@ msgstr ""
 "<b>Wie wil je verbannen?</b>\n"
 "\n"
 
-#: ../src/config.py:2945
+#: ../src/config.py:2946
 msgid "Adding Member..."
 msgstr "Lid wordt toegevoegd..."
 
-#: ../src/config.py:2946
+#: ../src/config.py:2947
 msgid ""
 "<b>Whom do you want to make a member?</b>\n"
 "\n"
@@ -7055,11 +7059,11 @@ msgstr ""
 "<b>Wie wil je een lid maken?</b>\n"
 "\n"
 
-#: ../src/config.py:2948
+#: ../src/config.py:2949
 msgid "Adding Owner..."
 msgstr "Eigenaar wordt toegevoegd..."
 
-#: ../src/config.py:2949
+#: ../src/config.py:2950
 msgid ""
 "<b>Whom do you want to make an owner?</b>\n"
 "\n"
@@ -7067,11 +7071,11 @@ msgstr ""
 "<b>Wie wil je een eigenaar maken?</b>\n"
 "\n"
 
-#: ../src/config.py:2951
+#: ../src/config.py:2952
 msgid "Adding Administrator..."
 msgstr "Administrator wordt toegevoegd..."
 
-#: ../src/config.py:2952
+#: ../src/config.py:2953
 msgid ""
 "<b>Whom do you want to make an administrator?</b>\n"
 "\n"
@@ -7079,7 +7083,7 @@ msgstr ""
 "<b>Wie wil je een administrator maken?</b>\n"
 "\n"
 
-#: ../src/config.py:2953
+#: ../src/config.py:2954
 msgid ""
 "Can be one of the following:\n"
 "1. user@domain/resource (only that resource matches).\n"
@@ -7095,106 +7099,106 @@ msgstr ""
 "4. domein (het domein zelf komt overeen, net als eender welke\n"
 "gebruiker@domein, domein/bron, of adres met een subdomein)."
 
-#: ../src/config.py:3054
+#: ../src/config.py:3055
 #, python-format
 msgid "Removing %s account"
 msgstr "Account %s wordt verwijdert"
 
-#: ../src/config.py:3069
+#: ../src/config.py:3070
 msgid "Account is disabled"
 msgstr "Account is uitgeschakeld"
 
-#: ../src/config.py:3070
+#: ../src/config.py:3071
 msgid "To unregister from a server, account must be enabled."
 msgstr ""
 "Om een account van een server te ontregistreren moet deze eerst aangezet "
 "zijn."
 
-#: ../src/config.py:3083 ../src/gui_interface.py:286
-#: ../src/gui_interface.py:734
+#: ../src/config.py:3084 ../src/gui_interface.py:286
+#: ../src/gui_interface.py:739
 msgid "Password Required"
 msgstr "Wachtwoord vereist"
 
-#: ../src/config.py:3084 ../src/gui_interface.py:714
+#: ../src/config.py:3085 ../src/gui_interface.py:719
 #, python-format
 msgid "Enter your password for account %s"
 msgstr "Geef je wachtwoord op voor account %s"
 
-#: ../src/config.py:3085 ../src/gui_interface.py:734
+#: ../src/config.py:3086 ../src/gui_interface.py:739
 msgid "Save password"
 msgstr "Sla wachtwoord op"
 
-#: ../src/config.py:3095
+#: ../src/config.py:3096
 #, python-format
 msgid "Account \"%s\" is connected to the server"
 msgstr "Account \"%s\" heeft verbinding met de server"
 
-#: ../src/config.py:3096
+#: ../src/config.py:3097
 msgid "If you remove it, the connection will be lost."
 msgstr "Als je het verwijdert, wordt de verbinding verbroken."
 
-#: ../src/config.py:3110
+#: ../src/config.py:3111
 #, python-format
 msgid "Connection to server %s failed"
 msgstr "Verbinding met server %s mislukt"
 
-#: ../src/config.py:3111
+#: ../src/config.py:3112
 msgid "What would you like to do?"
 msgstr "Wat zou je willen doen?"
 
-#: ../src/config.py:3112
+#: ../src/config.py:3113
 msgid "Remove only from Gajim"
 msgstr "Alleen verwijderen van Gajim"
 
-#: ../src/config.py:3113
+#: ../src/config.py:3114
 msgid "Don't remove anything. I'll try again later"
 msgstr "Niets verwijderen. Ik ga later opnieuw proberen"
 
-#: ../src/config.py:3206
+#: ../src/config.py:3207
 msgid "?print_status:All"
 msgstr "?print_status:Alle"
 
-#: ../src/config.py:3207
+#: ../src/config.py:3208
 msgid "Enter and leave only"
 msgstr "Alleen binnenkomen en verlaten"
 
-#: ../src/config.py:3208
+#: ../src/config.py:3209
 msgid "?print_status:None"
 msgstr "?print_status:Geen"
 
-#: ../src/config.py:3268
+#: ../src/config.py:3269
 msgid "New Group Chat"
 msgstr "Nieuw groepsgesprek"
 
-#: ../src/config.py:3301
+#: ../src/config.py:3302
 msgid "This bookmark has invalid data"
 msgstr "Deze bladwijzer bevat ongeldige informatie"
 
-#: ../src/config.py:3302
+#: ../src/config.py:3303
 msgid ""
 "Please be sure to fill out server and room fields or remove this bookmark."
 msgstr ""
 "Zorg ervoor dat de server- en ruimtevelden ingevuld zijn, of verwijder deze "
 "bladwijzer."
 
-#: ../src/config.py:3430 ../src/config.py:3443 ../src/config.py:3455
-#: ../src/config.py:3481
+#: ../src/config.py:3431 ../src/config.py:3444 ../src/config.py:3456
+#: ../src/config.py:3482
 msgid "Character not allowed"
 msgstr "Teken niet toegestaan"
 
-#: ../src/config.py:3443 ../src/config.py:3454 ../src/config.py:3737
+#: ../src/config.py:3444 ../src/config.py:3455 ../src/config.py:3738
 msgid "Invalid server"
 msgstr "Ongeldige server"
 
-#: ../src/config.py:3480
+#: ../src/config.py:3481
 msgid "Invalid room"
 msgstr "Ongeldig groepsgesprek"
 
-#: ../src/config.py:3649
+#: ../src/config.py:3650
 msgid "Account has been added successfully"
 msgstr "Account is met succes toegevoegd"
 
-#: ../src/config.py:3650 ../src/config.py:3656
+#: ../src/config.py:3651 ../src/config.py:3657
 msgid ""
 "You can set advanced account options by pressing the Advanced button, or "
 "later by choosing the Accounts menu item under the Edit menu from the main "
@@ -7203,34 +7207,34 @@ msgstr ""
 "Je kan geavanceerde accountopties instellen door op de Geavanceerd-knop te "
 "drukken, of later via Accounts in het Bewerken menu van het hoofdvenster."
 
-#: ../src/config.py:3655
+#: ../src/config.py:3656
 msgid "Your new account has been created successfully"
 msgstr "Je nieuwe account is met succes aangemaakt"
 
-#: ../src/config.py:3694
+#: ../src/config.py:3695
 msgid "Invalid username"
 msgstr "Ongeldige gebruikersnaam"
 
-#: ../src/config.py:3696
+#: ../src/config.py:3697
 msgid "You must provide a username to configure this account."
 msgstr "Je moet een gebruikersnaam invullen om deze account te configureren."
 
-#: ../src/config.py:3738
+#: ../src/config.py:3739
 msgid "Please provide a server on which you want to register."
 msgstr "Geef een server op waarbij je je wil registreren."
 
-#: ../src/config.py:3794 ../src/gui_interface.py:1322
+#: ../src/config.py:3795 ../src/gui_interface.py:1331
 msgid "Certificate Already in File"
 msgstr "Certificaat al in bestand"
 
-#: ../src/config.py:3795 ../src/gui_interface.py:1323
+#: ../src/config.py:3796 ../src/gui_interface.py:1332
 #, python-format
 msgid "This certificate is already in file %s, so it's not added again."
 msgstr ""
 "Dit certificaat bevindt zich al in bestand %s en wordt niet opnieuw "
 "toegevoegd."
 
-#: ../src/config.py:3885
+#: ../src/config.py:3886
 #, python-format
 msgid ""
 "<b>Security Warning</b>\n"
@@ -7245,7 +7249,7 @@ msgstr ""
 "SSL-fout: %(error)s\n"
 "Wil je nog steeds verbinden met deze server?"
 
-#: ../src/config.py:3891 ../src/gui_interface.py:1351
+#: ../src/config.py:3892 ../src/gui_interface.py:1360
 #, fuzzy, python-format
 msgid ""
 "Add this certificate to the list of trusted certificates.\n"
@@ -7255,80 +7259,80 @@ msgstr ""
 "Voeg dit certificaat toe aan de lijst van vertrouwde certificaten.\n"
 "SHA1-vingerafdruk van het certificaat:\n"
 
-#: ../src/config.py:3923 ../src/config.py:3957
+#: ../src/config.py:3924 ../src/config.py:3958
 msgid "An error occurred during account creation"
 msgstr "Er is een fout opgetreden bij het aanmaken van de account"
 
-#: ../src/config.py:4022
+#: ../src/config.py:4023
 msgid "Account name is in use"
 msgstr "Account naam is al in gebruik"
 
-#: ../src/config.py:4023
+#: ../src/config.py:4024
 msgid "You already have an account using this name."
 msgstr "Je hebt al een account met deze naam."
 
-#: ../src/config.py:4153
+#: ../src/config.py:4154
 msgid "PEP node was not removed"
 msgstr "PEP-knooppunt niet verwijderd"
 
-#: ../src/config.py:4154
+#: ../src/config.py:4155
 #, python-format
 msgid "PEP node %(node)s was not removed: %(message)s"
 msgstr "PEP-knooppunt %(node)s niet verwijderd: %(message)s"
 
-#: ../src/config.py:4182
+#: ../src/config.py:4183
 #, python-format
 msgid "Configure %s"
 msgstr "%s configureren"
 
-#: ../src/config.py:4207
+#: ../src/config.py:4208
 msgid "Event"
 msgstr "Gebeurtenis"
 
-#: ../src/config.py:4241
+#: ../src/config.py:4242
 msgid "Attention Message Received"
 msgstr "Aandachtsbericht ontvangen"
 
 # Eerste bericht ontvangen?
-#: ../src/config.py:4242
+#: ../src/config.py:4243
 msgid "First Message Received"
 msgstr "Eerste ontvangen bericht"
 
-#: ../src/config.py:4243
+#: ../src/config.py:4244
 #, fuzzy
 msgid "Next Message Received Focused"
 msgstr "Nieuw Bericht"
 
-#: ../src/config.py:4245
+#: ../src/config.py:4246
 #, fuzzy
 msgid "Next Message Received Unfocused"
 msgstr "Nieuw Bericht"
 
-#: ../src/config.py:4246
+#: ../src/config.py:4247
 msgid "Contact Connected"
 msgstr "Contact verbonden"
 
-#: ../src/config.py:4247
+#: ../src/config.py:4248
 msgid "Contact Disconnected"
 msgstr "Contact heeft de verbinding verbroken"
 
-#: ../src/config.py:4248
+#: ../src/config.py:4249
 msgid "Message Sent"
 msgstr "Bericht verzonden"
 
-#: ../src/config.py:4249
+#: ../src/config.py:4250
 msgid "Group Chat Message Highlight"
 msgstr "Vermeld in groepsgesprek"
 
-#: ../src/config.py:4250
+#: ../src/config.py:4251
 msgid "Group Chat Message Received"
 msgstr "Bericht ontvangen in groepsgesprek"
 
-#: ../src/config.py:4251
+#: ../src/config.py:4252
 msgid "GMail Email Received"
 msgstr "GMail-e-mail ontvangen"
 
-#: ../src/conversation_textview.py:476 ../src/conversation_textview.py:496
+#: ../src/conversation_textview.py:481 ../src/conversation_textview.py:501
 #, python-format
 msgid ""
 "<b>Message was corrected. Last message was:</b>\n"
@@ -7337,7 +7341,7 @@ msgstr ""
 "<b>Bericht is gewijzigd. Vorig bericht was:</b>\n"
 "  %s"
 
-#: ../src/conversation_textview.py:633
+#: ../src/conversation_textview.py:638
 msgid ""
 "This icon indicates that this message has not yet\n"
 "been received by the remote end. If this icon stays\n"
@@ -7347,7 +7351,7 @@ msgstr ""
 "door de andere persoon. Als het icoontje zo blijft voor\n"
 "lange tijd is het bericht waarschijnlijk verloren gegaan."
 
-#: ../src/conversation_textview.py:653
+#: ../src/conversation_textview.py:658
 msgid ""
 "Text below this line is what has been said since the\n"
 "last time you paid attention to this group chat"
@@ -7355,46 +7359,46 @@ msgstr ""
 "Tekst onder deze streep is gezegd nadat\n"
 "je laatst op dit groepsgesprek gelet hebt"
 
-#: ../src/conversation_textview.py:774
+#: ../src/conversation_textview.py:779
 #, fuzzy
 msgid "_Quote"
 msgstr "A_fsluiten"
 
-#: ../src/conversation_textview.py:781
+#: ../src/conversation_textview.py:786
 #, python-format
 msgid "_Actions for \"%s\""
 msgstr "_Acties voor \"%s\""
 
-#: ../src/conversation_textview.py:794
+#: ../src/conversation_textview.py:799
 msgid "Read _Wikipedia Article"
 msgstr "Lees _Wikipedia-artikel"
 
-#: ../src/conversation_textview.py:799
+#: ../src/conversation_textview.py:804
 msgid "Look it up in _Dictionary"
 msgstr "Opzoeken in woor_denboek"
 
-#: ../src/conversation_textview.py:816
+#: ../src/conversation_textview.py:821
 #, python-format
 msgid "Dictionary URL is missing an \"%s\" and it is not WIKTIONARY"
 msgstr ""
 "\"%s\" ontbreekt in de URL van het woordenboek en het is geen WIKTIONARY"
 
 #. we must have %s in the url
-#: ../src/conversation_textview.py:829
+#: ../src/conversation_textview.py:834
 #, python-format
 msgid "Web Search URL is missing an \"%s\""
 msgstr "\"%s\" ontbreekt in de URL van de Web Zoekmachine"
 
-#: ../src/conversation_textview.py:832
+#: ../src/conversation_textview.py:837
 msgid "Web _Search for it"
 msgstr "_Zoeken op het internet"
 
-#: ../src/conversation_textview.py:838
+#: ../src/conversation_textview.py:843
 msgid "Open as _Link"
 msgstr "Openen als koppe_ling"
 
 #. %i is day in year (1-365)
-#: ../src/conversation_textview.py:1386
+#: ../src/conversation_textview.py:1392
 #, python-format
 msgid "Yesterday"
 msgid_plural "%(nb_days)i days ago"
@@ -7402,7 +7406,7 @@ msgstr[0] "Gisteren"
 msgstr[1] "%(nb_days)i dagen geleden"
 
 #. if we have subject, show it too!
-#: ../src/conversation_textview.py:1442 ../src/history_window.py:488
+#: ../src/conversation_textview.py:1444 ../src/history_window.py:488
 #, python-format
 msgid "Subject: %s\n"
 msgstr "Onderwerp: %s\n"
@@ -7599,8 +7603,8 @@ msgid ""
 "Highlighting misspelled words feature will not be used"
 msgstr ""
 
-#: ../src/dialogs.py:1846 ../src/dialogs.py:1862 ../src/gui_interface.py:1455
-#: ../src/gui_interface.py:1497
+#: ../src/dialogs.py:1846 ../src/dialogs.py:1862 ../src/gui_interface.py:1471
+#: ../src/gui_interface.py:1513
 msgid "Insecure connection"
 msgstr "Onveilige verbinding"
 
@@ -7617,8 +7621,8 @@ msgstr ""
 "onversleuteld worden verstuurd. Dit soort verbinding wordt sterk afgeraden.\n"
 "Ben je zeker dat je wil doorgaan?"
 
-#: ../src/dialogs.py:1853 ../src/gui_interface.py:1459
-#: ../src/gui_interface.py:1500
+#: ../src/dialogs.py:1853 ../src/gui_interface.py:1475
+#: ../src/gui_interface.py:1516
 msgid "Yes, I really want to connect insecurely"
 msgstr "Ja, ik wil echt onveilig verbinden"
 
@@ -7627,10 +7631,10 @@ msgid "Gajim will NOT connect unless you check this box"
 msgstr "Gajim zal NIET verbinden tenzij je dit aanvinkt"
 
 #: ../src/dialogs.py:1855 ../src/groupchat_control.py:2178
-#: ../src/gui_interface.py:706 ../src/gui_interface.py:1460
-#: ../src/gui_interface.py:1501 ../src/message_window.py:227
-#: ../src/roster_window.py:3088 ../src/roster_window.py:3773
-#: ../src/roster_window.py:4606
+#: ../src/gui_interface.py:711 ../src/gui_interface.py:1476
+#: ../src/gui_interface.py:1517 ../src/message_window.py:227
+#: ../src/roster_window.py:3094 ../src/roster_window.py:3779
+#: ../src/roster_window.py:4612
 msgid "_Do not ask me again"
 msgstr "Vraag mij _dit niet nogmaals"
 
@@ -7656,7 +7660,7 @@ msgstr "Abonneringsverzoek voor account %(account)s van %(jid)s"
 msgid "Subscription request from %s"
 msgstr "Abonnering aangevraagd van %s"
 
-#: ../src/dialogs.py:2369 ../src/gui_interface.py:2084
+#: ../src/dialogs.py:2369 ../src/gui_interface.py:2112
 #, python-format
 msgid "You are already in group chat %s"
 msgstr "Je bent al in groepsgesprek %s"
@@ -7710,11 +7714,11 @@ msgstr "Voer de Jabber-ID van het groepsgesprek in als ruimte@server."
 msgid "The group chat Jabber ID contains invalid characters."
 msgstr "De Jabber-ID van het groepsgesprek bevat ongeldige tekens."
 
-#: ../src/dialogs.py:2642 ../src/gui_interface.py:2066
+#: ../src/dialogs.py:2642 ../src/gui_interface.py:2094
 msgid "This is not a group chat"
 msgstr "Dit is geen groepsgesprek"
 
-#: ../src/dialogs.py:2643 ../src/gui_interface.py:2067
+#: ../src/dialogs.py:2643 ../src/gui_interface.py:2095
 #, python-format
 msgid "%s is not the name of a group chat."
 msgstr "%s is geen naam van een groepsgesprek."
@@ -7797,27 +7801,27 @@ msgstr "Wachtwoord komt niet overeen"
 msgid "The passwords typed in both fields must be identical."
 msgstr "De wachtwoorden in beide velden moeten identiek zijn"
 
-#: ../src/dialogs.py:2934 ../src/gui_interface.py:883 ../src/notify.py:276
+#: ../src/dialogs.py:2934 ../src/gui_interface.py:888 ../src/notify.py:276
 msgid "New E-mail"
 msgstr "Nieuwe e-mail"
 
-#: ../src/dialogs.py:2936 ../src/gui_interface.py:943 ../src/notify.py:269
+#: ../src/dialogs.py:2936 ../src/gui_interface.py:948 ../src/notify.py:269
 msgid "File Transfer Request"
 msgstr "Bestandsoverdracht Verzoek"
 
-#: ../src/dialogs.py:2938 ../src/gui_interface.py:845
-#: ../src/gui_interface.py:909 ../src/notify.py:271
+#: ../src/dialogs.py:2938 ../src/gui_interface.py:850
+#: ../src/gui_interface.py:914 ../src/notify.py:271
 msgid "File Transfer Error"
 msgstr "Bestandsoverdracht Fout"
 
-#: ../src/dialogs.py:2940 ../src/gui_interface.py:1035
-#: ../src/gui_interface.py:1061 ../src/gui_interface.py:1082
+#: ../src/dialogs.py:2940 ../src/gui_interface.py:1040
+#: ../src/gui_interface.py:1066 ../src/gui_interface.py:1087
 #: ../src/notify.py:273
 msgid "File Transfer Completed"
 msgstr "Bestandsoverdracht Voltooid"
 
-#: ../src/dialogs.py:2941 ../src/gui_interface.py:1038
-#: ../src/gui_interface.py:1065 ../src/gui_interface.py:1086
+#: ../src/dialogs.py:2941 ../src/gui_interface.py:1043
+#: ../src/gui_interface.py:1070 ../src/gui_interface.py:1091
 #: ../src/notify.py:274
 msgid "File Transfer Stopped"
 msgstr "Bestandsoverdracht Gestopt"
@@ -8213,7 +8217,7 @@ msgid ""
 "SHA1 Fingerprint: %(sha1)s"
 msgstr ""
 
-#: ../src/dialogs.py:5447 ../src/gui_interface.py:1364
+#: ../src/dialogs.py:5447 ../src/gui_interface.py:1373
 #, python-format
 msgid "SSL Certificate Verification for %s"
 msgstr "SSL-certificaatverificatie voor %s"
@@ -8310,20 +8314,20 @@ msgstr "Beschrijving"
 msgid "Id"
 msgstr "ID"
 
-#: ../src/disco.py:1885 ../src/gui_interface.py:2602
+#: ../src/disco.py:1885 ../src/gui_interface.py:2630
 msgid "Bookmark already set"
 msgstr "Bladwijzer bestaat al"
 
-#: ../src/disco.py:1886 ../src/gui_interface.py:2603
+#: ../src/disco.py:1886 ../src/gui_interface.py:2631
 #, python-format
 msgid "Group Chat \"%s\" is already in your bookmarks."
 msgstr "Groepsgesprek \"%s\" heeft al een bladwijzer."
 
-#: ../src/disco.py:1896 ../src/gui_interface.py:2617
+#: ../src/disco.py:1896 ../src/gui_interface.py:2645
 msgid "Bookmark has been added successfully"
 msgstr "Bladwijzer is met succes toegevoegd"
 
-#: ../src/disco.py:1897 ../src/gui_interface.py:2618
+#: ../src/disco.py:1897 ../src/gui_interface.py:2646
 msgid "You can manage your bookmarks via Actions menu in your roster."
 msgstr "Je kunt bladwijzers beheren via het Acties menu in je rooster."
 
@@ -8673,12 +8677,12 @@ msgstr "Gajim heeft geen toegang tot dit bestand"
 msgid "This file is being used by another process."
 msgstr "Dit bestand is in gebruik door een ander proces."
 
-#: ../src/filetransfers_window.py:389 ../src/gtkgui_helpers.py:851
+#: ../src/filetransfers_window.py:389 ../src/gtkgui_helpers.py:764
 #, python-format
 msgid "Cannot overwrite existing file \"%s\""
 msgstr "Kan bestaand bestand \"%s\" niet overschrijven"
 
-#: ../src/filetransfers_window.py:390 ../src/gtkgui_helpers.py:852
+#: ../src/filetransfers_window.py:390 ../src/gtkgui_helpers.py:765
 msgid ""
 "A file with this name already exists and you do not have permission to "
 "overwrite it."
@@ -8686,23 +8690,23 @@ msgstr ""
 "Een bestand met deze naam bestaat al en je hebt geen toestemming om het te "
 "overschrijven."
 
-#: ../src/filetransfers_window.py:407 ../src/gtkgui_helpers.py:856
+#: ../src/filetransfers_window.py:407 ../src/gtkgui_helpers.py:769
 msgid "This file already exists"
 msgstr "Dit bestands bestaat al"
 
-#: ../src/filetransfers_window.py:407 ../src/gtkgui_helpers.py:856
+#: ../src/filetransfers_window.py:407 ../src/gtkgui_helpers.py:769
 msgid "What do you want to do?"
 msgstr "Wat wil je doen?"
 
 #. read-only bit is used to mark special folder under
 #. windows, not to mark that a folder is read-only.
 #. See ticket #3587
-#: ../src/filetransfers_window.py:418 ../src/gtkgui_helpers.py:863
+#: ../src/filetransfers_window.py:418 ../src/gtkgui_helpers.py:776
 #, python-format
 msgid "Directory \"%s\" is not writable"
 msgstr "Map \"%s\" is niet schrijfbaar"
 
-#: ../src/filetransfers_window.py:419 ../src/gtkgui_helpers.py:864
+#: ../src/filetransfers_window.py:419 ../src/gtkgui_helpers.py:777
 msgid "You do not have permission to create files in this directory."
 msgstr "Je hebt geen toestemming om bestanden aan te maken in deze map."
 
@@ -9190,7 +9194,7 @@ msgid ""
 msgstr ""
 
 #: ../src/gajim-remote.py:278
-msgid "Handle a xmpp: uri"
+msgid "Handle a xmpp:/ uri"
 msgstr ""
 
 #: ../src/gajim-remote.py:280
@@ -9430,7 +9434,7 @@ msgid "Room is now fully-anonymous"
 msgstr "Groepsgesprek is nu volledig anoniem"
 
 #: ../src/groupchat_control.py:1628 ../src/groupchat_control.py:2289
-#: ../src/gui_interface.py:605 ../src/roster_window.py:3364
+#: ../src/gui_interface.py:610 ../src/roster_window.py:3370
 #, python-format
 msgid "%(jid)s has been invited in this room"
 msgstr "%(jid)s is in deze ruimte uitgenodigd"
@@ -9627,31 +9631,18 @@ msgid "Could not write to %s. Session Management support will not work"
 msgstr ""
 "Kan niet naar %s schrijven. Sessiebeheer ondersteuning werkt mogelijk niet"
 
-#. xmpp: is currently handled by another program, so ask the user
-#: ../src/gtkgui_helpers.py:767
-msgid "Gajim is not the default Jabber client"
-msgstr "Gajim is niet de standaard Jabbercliënt"
-
-#: ../src/gtkgui_helpers.py:768
-msgid "Would you like to make Gajim the default Jabber client?"
-msgstr "Wil je Gajim de standaard Jabbercliënt maken?"
-
-#: ../src/gtkgui_helpers.py:769
-msgid "Always check to see if Gajim is the default Jabber client on startup"
-msgstr "Controleer bij opstarten altijd of Gajim de standaard Jabbercliënt is"
-
-#: ../src/gtkgui_helpers.py:836
+#: ../src/gtkgui_helpers.py:749
 msgid "Extension not supported"
 msgstr "Extensie wordt niet ondersteund"
 
-#: ../src/gtkgui_helpers.py:837
+#: ../src/gtkgui_helpers.py:750
 #, python-format
 msgid "Image cannot be saved in %(type)s format. Save as %(new_filename)s?"
 msgstr ""
 "Afbeelding kan niet worden opgeslagen in %(type)s formaat. Opslaan als "
 "%(new_filename)s?"
 
-#: ../src/gtkgui_helpers.py:873
+#: ../src/gtkgui_helpers.py:786
 msgid "Save Image as..."
 msgstr "Afbeelding opslaan als..."
 
@@ -9733,30 +9724,30 @@ msgstr ""
 msgid "You are not in the members list in groupchat %s."
 msgstr "Je staat niet in de ledenlijst van groepsgesprek %s."
 
-#: ../src/gui_interface.py:418 ../src/gui_interface.py:422
+#: ../src/gui_interface.py:419 ../src/gui_interface.py:423
 #, python-format
 msgid "Error %(code)s: %(msg)s"
 msgstr "Fout %(code)s: %(msg)s"
 
-#: ../src/gui_interface.py:474 ../src/notify.py:284
+#: ../src/gui_interface.py:475 ../src/notify.py:284
 msgid "Subscription request"
 msgstr "Abonneringsverzoek"
 
-#: ../src/gui_interface.py:499
+#: ../src/gui_interface.py:500
 msgid "Authorization accepted"
 msgstr "Machtiging geaccepteerd"
 
-#: ../src/gui_interface.py:500
+#: ../src/gui_interface.py:501
 #, python-format
 msgid "The contact \"%s\" has authorized you to see his or her status."
 msgstr "Contact \"%s\" heeft je toestemming gegeven zijn status te zien."
 
-#: ../src/gui_interface.py:508
+#: ../src/gui_interface.py:509
 #, python-format
 msgid "Contact \"%s\" removed subscription from you"
 msgstr "Contact \"%s\" heeft het abonnement op jou opgezegd"
 
-#: ../src/gui_interface.py:509
+#: ../src/gui_interface.py:510
 msgid ""
 "You will always see him or her as offline.\n"
 "Do you want to remove him or her from your contact list?"
@@ -9764,26 +9755,26 @@ msgstr ""
 "Je zal hem of haar altijd als offline zien.\n"
 "Wil je hem of haar uit je contacten verwijderen?"
 
-#: ../src/gui_interface.py:530 ../src/notify.py:286
+#: ../src/gui_interface.py:531 ../src/notify.py:286
 msgid "Unsubscribed"
 msgstr "Abonnement opgezegd"
 
-#: ../src/gui_interface.py:541
+#: ../src/gui_interface.py:542
 #, python-format
 msgid "Contact with \"%s\" cannot be established"
 msgstr "Kan geen contact maken met \"%s\""
 
-#: ../src/gui_interface.py:625
+#: ../src/gui_interface.py:630
 #, python-format
 msgid "%(jid)s declined the invitation: %(reason)s"
 msgstr "%(jid)s heeft de uitnodiging geweigerd: %(reason)s"
 
-#: ../src/gui_interface.py:629
+#: ../src/gui_interface.py:634
 #, python-format
 msgid "%(jid)s declined the invitation"
 msgstr "%(jid)s heeft de uitnodiging geweigerd"
 
-#: ../src/gui_interface.py:658
+#: ../src/gui_interface.py:663
 msgid ""
 "You configured Gajim to use OpenPGP agent, but there is no OpenPGP agent "
 "running or it returned a wrong passphrase.\n"
@@ -9791,32 +9782,32 @@ msgstr ""
 "Je hebt Gajim ingesteld om OpenPGP-agent te gebruiken, maar OpenPGP-agent "
 "wordt niet uitgevoerd of gaf een verkeerd wachtwoord weer.\n"
 
-#: ../src/gui_interface.py:661 ../src/gui_interface.py:669
+#: ../src/gui_interface.py:666 ../src/gui_interface.py:674
 msgid "You are currently connected without your OpenPGP key."
 msgstr "Je bent momenteel verbonden zonder OpenPGP sleutel."
 
-#: ../src/gui_interface.py:663
+#: ../src/gui_interface.py:668
 msgid "Your passphrase is incorrect"
 msgstr "Je wachtwoord is incorrect"
 
-#: ../src/gui_interface.py:668
+#: ../src/gui_interface.py:673
 msgid "OpenPGP Passphrase Incorrect"
 msgstr "OpenPGP-wachtwoord incorrect"
 
-#: ../src/gui_interface.py:681
+#: ../src/gui_interface.py:686
 msgid "Certificate Passphrase Required"
 msgstr "Certificaatwachtwoord vereist"
 
-#: ../src/gui_interface.py:682
+#: ../src/gui_interface.py:687
 #, python-format
 msgid "Enter the passphrase for the certificate for account %s"
 msgstr "Voer het wachtwoord in van het certificaat voor account %s"
 
-#: ../src/gui_interface.py:704
+#: ../src/gui_interface.py:709
 msgid "OpenPGP key not trusted"
 msgstr "OpenPGP-sleutel niet vertrouwd"
 
-#: ../src/gui_interface.py:704
+#: ../src/gui_interface.py:709
 msgid ""
 "The OpenPGP key used to encrypt this chat is not trusted. Do you really want "
 "to encrypt this message?"
@@ -9824,7 +9815,7 @@ msgstr ""
 "De OpenPGP-sleutel die gebruikt wordt voor het versleutelen van dit gesprek "
 "is niet vertrouwd. Wil je dit bericht toch versleutelen?"
 
-#: ../src/gui_interface.py:717
+#: ../src/gui_interface.py:722
 msgid ""
 "Gnome Keyring is installed but not correctly started (environment variable "
 "probably not correctly set)"
@@ -9832,29 +9823,29 @@ msgstr ""
 "Gnome Sleutelbos is geïnstalleerd maar niet juist gestart "
 "(omgevingsvariabele is waarschijnlijk niet juist ingesteld)"
 
-#: ../src/gui_interface.py:755
+#: ../src/gui_interface.py:760
 msgid ""
 "Please copy / paste the refresh token from the website that has just been "
 "opened."
 msgstr "Kopieer / plak het ververstoken van de zonet geopende website."
 
-#: ../src/gui_interface.py:758
+#: ../src/gui_interface.py:763
 msgid "Oauth2 Credentials"
 msgstr "OAuth2-gebruikersreferentie"
 
-#: ../src/gui_interface.py:856
+#: ../src/gui_interface.py:861
 #, python-format
 msgid "New mail on %(gmail_mail_address)s"
 msgstr "Nieuwe mail op %(gmail_mail_address)s"
 
-#: ../src/gui_interface.py:858
+#: ../src/gui_interface.py:863
 #, python-format
 msgid "You have %d new mail conversation"
 msgid_plural "You have %d new mail conversations"
 msgstr[0] "Je hebt %d nieuw mailgesprek"
 msgstr[1] "Je hebt %d nieuwe mailgesprekken"
 
-#: ../src/gui_interface.py:871
+#: ../src/gui_interface.py:876
 #, python-format
 msgid ""
 "\n"
@@ -9869,68 +9860,68 @@ msgstr ""
 "Onderwerp: %(subject)s\n"
 "%(snippet)s"
 
-#: ../src/gui_interface.py:941
+#: ../src/gui_interface.py:946
 #, python-format
 msgid "%s wants to send you a file."
 msgstr "%s wil je een bestand sturen."
 
-#: ../src/gui_interface.py:1027 ../src/gui_interface.py:1383
+#: ../src/gui_interface.py:1032 ../src/gui_interface.py:1399
 msgid "SSL certificate error"
 msgstr "SSL-certificaatfout"
 
-#: ../src/gui_interface.py:1041
+#: ../src/gui_interface.py:1046
 msgid "File Transfer Failed"
 msgstr "Bestandsoverdracht mislukt"
 
-#: ../src/gui_interface.py:1062
+#: ../src/gui_interface.py:1067
 #, python-format
 msgid "You successfully received %(filename)s from %(name)s."
 msgstr "Je hebt %(filename)s met succes van %(name)s ontvangen."
 
-#: ../src/gui_interface.py:1066
+#: ../src/gui_interface.py:1071
 #, python-format
 msgid "File transfer of %(filename)s from %(name)s stopped."
 msgstr "Bestandsoverdracht van %(filename)s van %(name)s gestopt."
 
 #. ft hash error
-#: ../src/gui_interface.py:1070
+#: ../src/gui_interface.py:1075
 #, python-format
 msgid "File transfer of %(filename)s from %(name)s failed."
 msgstr "Bestandsoverdracht van %(filename)s van %(name)s mislukt."
 
-#: ../src/gui_interface.py:1083
+#: ../src/gui_interface.py:1088
 #, python-format
 msgid "You successfully sent %(filename)s to %(name)s."
 msgstr "Je hebt %(filename)s met succes aan %(name)s gestuurd."
 
-#: ../src/gui_interface.py:1087
+#: ../src/gui_interface.py:1092
 #, python-format
 msgid "File transfer of %(filename)s to %(name)s stopped."
 msgstr "Bestandsoverdracht van %(filename)s aan %(name)s gestopt."
 
 #. ft hash error
-#: ../src/gui_interface.py:1091
+#: ../src/gui_interface.py:1096
 #, python-format
 msgid "File transfer of %(filename)s to %(name)s failed."
 msgstr "Bestandsoverdracht van %(filename)s aan %(name)s mislukt."
 
-#: ../src/gui_interface.py:1172
+#: ../src/gui_interface.py:1179
 msgid "Unable to decrypt message"
 msgstr "Kan bericht niet ontsleutelen"
 
-#: ../src/gui_interface.py:1184
+#: ../src/gui_interface.py:1191
 msgid "Username Conflict"
 msgstr "Gebruikersnaamconflict"
 
-#: ../src/gui_interface.py:1185
+#: ../src/gui_interface.py:1192
 msgid "Please type a new username for your local account"
 msgstr "Geef een nieuwe gebruikersnaam in voor je lokale account"
 
-#: ../src/gui_interface.py:1200
+#: ../src/gui_interface.py:1207
 msgid "Resource Conflict"
 msgstr "Bronconflict "
 
-#: ../src/gui_interface.py:1201
+#: ../src/gui_interface.py:1208
 msgid ""
 "You are already connected to this account with the same resource. Please "
 "type a new one"
@@ -9938,20 +9929,20 @@ msgstr ""
 "Je bent al verbonden met deze account van dezelfde bron. Geef een andere in"
 
 #. TODO: we should use another pixmap ;-)
-#: ../src/gui_interface.py:1256
+#: ../src/gui_interface.py:1265
 #, python-format
 msgid "%s wants to start a voice chat."
 msgstr "%s wil een audiogesprek starten."
 
-#: ../src/gui_interface.py:1259
+#: ../src/gui_interface.py:1268
 msgid "Voice Chat Request"
 msgstr "Audiogespreksverzoek"
 
-#: ../src/gui_interface.py:1346
+#: ../src/gui_interface.py:1355
 msgid "Error verifying SSL certificate"
 msgstr "Fout bij verifiëren van SSL-certificaat"
 
-#: ../src/gui_interface.py:1347
+#: ../src/gui_interface.py:1356
 #, python-format
 msgid ""
 "There was an error verifying the SSL certificate of your jabber server: "
@@ -9962,11 +9953,15 @@ msgstr ""
 "server: %(error)s\n"
 "Wil je nog steeds met deze server verbinden?"
 
-#: ../src/gui_interface.py:1356
+#: ../src/gui_interface.py:1365
 msgid "Ignore this error for this certificate."
 msgstr "Negeer deze fout voor dit certificaat."
 
-#: ../src/gui_interface.py:1384
+#: ../src/gui_interface.py:1378
+msgid "Non Anonymous Server"
+msgstr ""
+
+#: ../src/gui_interface.py:1400
 #, fuzzy, python-format
 msgid ""
 "It seems the SSL certificate of account %(account)s has changed or your "
@@ -9987,7 +9982,7 @@ msgstr ""
 "\n"
 "Wil je nog steeds verbinden en de vingerafdruk van het certificaat bijwerken?"
 
-#: ../src/gui_interface.py:1456
+#: ../src/gui_interface.py:1472
 msgid ""
 "You are about to send your password on an insecure connection. You should "
 "install PyOpenSSL to prevent that. Are you sure you want to do that?"
@@ -9996,7 +9991,7 @@ msgstr ""
 "verbinding. Je zou PyOpenSSL moeten installeren om dat te voorkomen. Ben je "
 "zeker dat je dat wil doen?"
 
-#: ../src/gui_interface.py:1498
+#: ../src/gui_interface.py:1514
 #, fuzzy
 msgid ""
 "You are about to send your password unencrypted on an insecure connection. "
@@ -10006,19 +10001,19 @@ msgstr ""
 "contacten."
 
 #. theme doesn't exist, disable emoticons
-#: ../src/gui_interface.py:2013 ../src/gui_interface.py:2020
-#: ../src/gui_interface.py:2044
+#: ../src/gui_interface.py:2041 ../src/gui_interface.py:2048
+#: ../src/gui_interface.py:2072
 msgid "Emoticons disabled"
 msgstr "Emoticons uitgeschakeld"
 
-#: ../src/gui_interface.py:2014
+#: ../src/gui_interface.py:2042
 msgid ""
 "Your configured emoticons theme has not been found, so emoticons have been "
 "disabled."
 msgstr ""
 "Je ingestelde emoticon-thema is niet gevonden dus zijn emoticons uitgezet."
 
-#: ../src/gui_interface.py:2021 ../src/gui_interface.py:2045
+#: ../src/gui_interface.py:2049 ../src/gui_interface.py:2073
 msgid ""
 "Your configured emoticons theme cannot been loaded. You maybe need to update "
 "the format of emoticons.py file. See http://trac.gajim.org/wiki/Emoticons "
@@ -10028,33 +10023,33 @@ msgstr ""
 "formaat van het emoticons.py-bestand bijwerken. Zie http://trac.gajim.org/"
 "wiki/Emoticons voor meer informatie."
 
-#: ../src/gui_interface.py:2091 ../src/roster_window.py:3940
+#: ../src/gui_interface.py:2119 ../src/roster_window.py:3946
 msgid "You cannot join a group chat while you are invisible"
 msgstr ""
 "Je kan niet deelnemen aan een groepsgesprek terwijl je onzichtbaar bent"
 
 #. it is good to notify the user
 #. in case he or she cannot see the output of the console
-#: ../src/gui_interface.py:2478
+#: ../src/gui_interface.py:2506
 msgid "Could not save your settings and preferences"
 msgstr "Kan je instellingen en voorkeuren niet opslaan"
 
-#: ../src/gui_interface.py:3080
+#: ../src/gui_interface.py:3108
 msgid "Passphrase Required"
 msgstr "Wachtwoord vereist"
 
-#: ../src/gui_interface.py:3081
+#: ../src/gui_interface.py:3109
 #, python-format
 msgid "Enter OpenPGP key passphrase for key %(keyid)s (account %(account)s)."
 msgstr ""
 "Voer het wachtwoord in voor de OpenPGP-sleutel %(keyid)s (account "
 "%(account)s)."
 
-#: ../src/gui_interface.py:3095
+#: ../src/gui_interface.py:3123
 msgid "OpenPGP key expired"
 msgstr "OpenPGP-sleutel verlopen"
 
-#: ../src/gui_interface.py:3096
+#: ../src/gui_interface.py:3124
 #, python-format
 msgid ""
 "Your OpenPGP key has expired, you will be connected to %s without OpenPGP."
@@ -10063,11 +10058,11 @@ msgstr ""
 "OpenPGP."
 
 #. ask again
-#: ../src/gui_interface.py:3105
+#: ../src/gui_interface.py:3133
 msgid "Wrong Passphrase"
 msgstr "Verkeerd wachtwoord"
 
-#: ../src/gui_interface.py:3106
+#: ../src/gui_interface.py:3134
 msgid "Please retype your OpenPGP passphrase or press Cancel."
 msgstr "Geef je OpenPGP-wachtwoord opnieuw in of druk op Annuleren."
 
@@ -10203,7 +10198,7 @@ msgstr "Status is nu: %(status)s: %(status_msg)s"
 msgid "Status is now: %(status)s"
 msgstr "Status is nu: %(status)s"
 
-#: ../src/htmltextview.py:523
+#: ../src/htmltextview.py:524
 msgid "Loading"
 msgstr "Bezig met laden"
 
@@ -10219,19 +10214,19 @@ msgstr "Je staat op het punt meerdere tabbladen te sluiten"
 msgid "Do you really want to close them all?"
 msgstr "Wil je ze echt allemaal sluiten?"
 
-#: ../src/message_window.py:524
+#: ../src/message_window.py:534
 msgid "Chats"
 msgstr "Gesprekken"
 
-#: ../src/message_window.py:526
+#: ../src/message_window.py:536
 msgid "Group Chats"
 msgstr "Groepsgesprekken"
 
-#: ../src/message_window.py:528
+#: ../src/message_window.py:538
 msgid "Private Chats"
 msgstr "Privégesprekken"
 
-#: ../src/message_window.py:534
+#: ../src/message_window.py:544
 msgid "Messages"
 msgstr "Berichten"
 
@@ -10297,18 +10292,18 @@ msgstr "Leeg archief"
 msgid "Retrieving profile..."
 msgstr "Profiel wordt opgehaald..."
 
-#: ../src/profile_window.py:129 ../src/roster_window.py:3233
+#: ../src/profile_window.py:129 ../src/roster_window.py:3239
 msgid "File is empty"
 msgstr "Bestand is leeg"
 
-#: ../src/profile_window.py:132 ../src/roster_window.py:3236
+#: ../src/profile_window.py:132 ../src/roster_window.py:3242
 msgid "File does not exist"
 msgstr "Bestand bestaat niet"
 
 #. keep identation
 #. unknown format
 #: ../src/profile_window.py:146 ../src/profile_window.py:163
-#: ../src/roster_window.py:3238 ../src/roster_window.py:3249
+#: ../src/roster_window.py:3244 ../src/roster_window.py:3255
 msgid "Could not load image"
 msgstr "Kon afbeelding niet laden"
 
@@ -10349,51 +10344,51 @@ msgstr ""
 "Er trad een fout up bij het publiceren van je persoonlijke informatie, "
 "probeer het later nogmaals."
 
-#: ../src/roster_window.py:240 ../src/roster_window.py:1038
+#: ../src/roster_window.py:244 ../src/roster_window.py:1044
 msgid "Merged accounts"
 msgstr "Samengevoegde accounts"
 
-#: ../src/roster_window.py:2066
+#: ../src/roster_window.py:2072
 msgid "Authorization has been sent"
 msgstr "Machtiging is verzonden"
 
-#: ../src/roster_window.py:2067
+#: ../src/roster_window.py:2073
 #, python-format
 msgid "Now \"%s\" will know your status."
 msgstr "\"%s\" zal nu je status ontvangen."
 
-#: ../src/roster_window.py:2090
+#: ../src/roster_window.py:2096
 msgid "Subscription request has been sent"
 msgstr "Abonneringsverzoek is verzonden"
 
-#: ../src/roster_window.py:2091
+#: ../src/roster_window.py:2097
 #, python-format
 msgid "If \"%s\" accepts this request you will know his or her status."
 msgstr "Als \"%s\" dit verzoek aanneemt zal je zijn status kunnen ontvangen."
 
-#: ../src/roster_window.py:2105
+#: ../src/roster_window.py:2111
 msgid "Authorization has been removed"
 msgstr "Machtiging is verwijdert"
 
-#: ../src/roster_window.py:2106
+#: ../src/roster_window.py:2112
 #, python-format
 msgid "Now \"%s\" will always see you as offline."
 msgstr "\"%s\" zal je nu altijd als offline zien."
 
-#: ../src/roster_window.py:2133
+#: ../src/roster_window.py:2139
 msgid "OpenPGP is not usable"
 msgstr "OpenPGP is niet bruikbaar"
 
-#: ../src/roster_window.py:2134
+#: ../src/roster_window.py:2140
 #, python-format
 msgid "You will be connected to %s without OpenPGP."
 msgstr "Je zult verbonden worden met %s zonder OpenPGP."
 
-#: ../src/roster_window.py:2341 ../src/roster_window.py:3870
+#: ../src/roster_window.py:2347 ../src/roster_window.py:3876
 msgid "You are participating in one or more group chats"
 msgstr "Je neem deel aan een of meerdere groepsgesprekken"
 
-#: ../src/roster_window.py:2342 ../src/roster_window.py:3871
+#: ../src/roster_window.py:2348 ../src/roster_window.py:3877
 msgid ""
 "Changing your status to invisible will result in disconnection from those "
 "group chats. Are you sure you want to go invisible?"
@@ -10402,27 +10397,27 @@ msgstr ""
 "groepsgesprekken verbroken worden. Weet je zeker dat je naar onzichtbaar "
 "wilt gaan?"
 
-#: ../src/roster_window.py:2368
+#: ../src/roster_window.py:2374
 msgid "desync'ed"
 msgstr "niet gesynchroniseerd"
 
-#: ../src/roster_window.py:2434
+#: ../src/roster_window.py:2440
 msgid "Really quit Gajim?"
 msgstr "Gajim echt afsluiten?"
 
-#: ../src/roster_window.py:2435
+#: ../src/roster_window.py:2441
 msgid "Are you sure you want to quit Gajim?"
 msgstr "Weet je zeker dat je Gajim wil afsluiten?"
 
-#: ../src/roster_window.py:2436
+#: ../src/roster_window.py:2442
 msgid "Always close Gajim"
 msgstr "Gajim altijd sluiten"
 
-#: ../src/roster_window.py:2526
+#: ../src/roster_window.py:2532
 msgid "You have running file transfers"
 msgstr "Je hebt lopende bestandsoverdrachten"
 
-#: ../src/roster_window.py:2527
+#: ../src/roster_window.py:2533
 msgid ""
 "If you quit now, the file(s) being transferred will be stopped. Do you still "
 "want to quit?"
@@ -10430,11 +10425,11 @@ msgstr ""
 "Als je nu afsluit zullen de momenteel bezige bestandsoverdrachten worden "
 "stopgezet. Wil je nog steeds afsluiten?"
 
-#: ../src/roster_window.py:2558 ../src/roster_window.py:3019
+#: ../src/roster_window.py:2564 ../src/roster_window.py:3025
 msgid "You have unread messages"
 msgstr "Je hebt ongelezen berichten"
 
-#: ../src/roster_window.py:2559
+#: ../src/roster_window.py:2565
 msgid ""
 "Messages will only be available for reading them later if you have history "
 "enabled and contact is in your roster."
@@ -10442,16 +10437,16 @@ msgstr ""
 "Berichten zullen alleen voor later beschikbaar zijn als je geschiedenis "
 "aangezet hebt en het contact in je rooster staat."
 
-#: ../src/roster_window.py:3020
+#: ../src/roster_window.py:3026
 msgid "You must read them before removing this transport."
 msgstr "You moet ze lezen voor je dit transport verwijdert."
 
-#: ../src/roster_window.py:3023
+#: ../src/roster_window.py:3029
 #, python-format
 msgid "Transport \"%s\" will be removed"
 msgstr "Transport \"%s\" zal worden verwijderd"
 
-#: ../src/roster_window.py:3024
+#: ../src/roster_window.py:3030
 msgid ""
 "You will no longer be able to send and receive messages from contacts using "
 "this transport."
@@ -10459,11 +10454,11 @@ msgstr ""
 "Het zal niet meer mogelijk zijn berichten te sturen en ontvangen van "
 "contacten via deze transport."
 
-#: ../src/roster_window.py:3027
+#: ../src/roster_window.py:3033
 msgid "Transports will be removed"
 msgstr "Transporten zullen worden verwijderd"
 
-#: ../src/roster_window.py:3032
+#: ../src/roster_window.py:3038
 #, python-format
 msgid ""
 "You will no longer be able to send and receive messages to contacts from "
@@ -10472,13 +10467,13 @@ msgstr ""
 "Het zal niet meer mogelijk zijn berichten te sturen en ontvangen van "
 "contacten via deze transporten: %s"
 
-#: ../src/roster_window.py:3083
+#: ../src/roster_window.py:3089
 msgid "You are about to block a contact. Are you sure you want to continue?"
 msgstr ""
 "Je staat op het punt een contact te blokkeren. Ben je zeker dat je wil "
 "doorgaan?"
 
-#: ../src/roster_window.py:3085
+#: ../src/roster_window.py:3091
 msgid ""
 "This contact will see you offline and you will not receive messages he will "
 "send you."
@@ -10486,57 +10481,57 @@ msgstr ""
 "Dit contact zal je offline zien en je zal er geen berichten van ontvangen."
 
 #. it's jid
-#: ../src/roster_window.py:3125
+#: ../src/roster_window.py:3131
 msgid "Rename Contact"
 msgstr "Contact hernoemen"
 
-#: ../src/roster_window.py:3126
+#: ../src/roster_window.py:3132
 #, python-format
 msgid "Enter a new nickname for contact %s"
 msgstr "Voer een nieuwe bijnaam in voor contact %s"
 
-#: ../src/roster_window.py:3133
+#: ../src/roster_window.py:3139
 msgid "Rename Group"
 msgstr "Groep hernoemen"
 
-#: ../src/roster_window.py:3134
+#: ../src/roster_window.py:3140
 #, python-format
 msgid "Enter a new name for group %s"
 msgstr "Voer een nieuwe naam in voor groep %s"
 
-#: ../src/roster_window.py:3179
+#: ../src/roster_window.py:3185
 msgid "Remove Group"
 msgstr "Groep verwijderen"
 
-#: ../src/roster_window.py:3180
+#: ../src/roster_window.py:3186
 #, python-format
 msgid "Do you want to remove group %s from the roster?"
 msgstr "Wil je groep %s zeker uit het rooster verwijderen?"
 
-#: ../src/roster_window.py:3181
+#: ../src/roster_window.py:3187
 msgid "Also remove all contacts in this group from your roster"
 msgstr "Verwijder ook alle contacten in deze groep van je rooster"
 
-#: ../src/roster_window.py:3220
+#: ../src/roster_window.py:3226
 msgid "Assign OpenPGP Key"
 msgstr "Wijs een OpenPGP-sleutel toe"
 
-#: ../src/roster_window.py:3221
+#: ../src/roster_window.py:3227
 msgid "Select a key to apply to the contact"
 msgstr "Selecteer een sleutel om aan de contact toe te wijzen"
 
-#: ../src/roster_window.py:3680
+#: ../src/roster_window.py:3686
 #, python-format
 msgid "Contact \"%s\" will be removed from your roster"
 msgstr "Contact \"%s\" zal van je rooster verwijdert worden"
 
-#: ../src/roster_window.py:3682
+#: ../src/roster_window.py:3688
 #, python-format
 msgid "You are about to remove \"%(name)s\" (%(jid)s) from your roster.\n"
 msgstr ""
 "Je staat op het punt \"%(name)s\" (%(jid)s) uit je rooster te verwijderen.\n"
 
-#: ../src/roster_window.py:3687
+#: ../src/roster_window.py:3693
 msgid ""
 "By removing this contact you also remove authorization resulting in him or "
 "her always seeing you as offline."
@@ -10545,11 +10540,11 @@ msgstr ""
 "je status te zien en zal hij/zij je altijd als offline zien."
 
 #. Contact is not in roster
-#: ../src/roster_window.py:3693
+#: ../src/roster_window.py:3699
 msgid "Do you want to continue?"
 msgstr "Wil je doorgaan?"
 
-#: ../src/roster_window.py:3697
+#: ../src/roster_window.py:3703
 msgid ""
 "By removing this contact you also by default remove authorization resulting "
 "in him or her always seeing you as offline."
@@ -10557,16 +10552,16 @@ msgstr ""
 "Door deze contact te verwijderen zal je ook zijn toestemming opzeggen om jou "
 "status te zien. Hij/Zij zal jou altijd als offline zien."
 
-#: ../src/roster_window.py:3700
+#: ../src/roster_window.py:3706
 msgid "I want this contact to know my status after removal"
 msgstr "Ik wil dat deze contact mijn status blijf zien na verwijdering"
 
 #. several contact to remove at the same time
-#: ../src/roster_window.py:3704
+#: ../src/roster_window.py:3710
 msgid "Contacts will be removed from your roster"
 msgstr "Contacten zullen uit je rooster verwijderd worden"
 
-#: ../src/roster_window.py:3709
+#: ../src/roster_window.py:3715
 #, python-format
 msgid ""
 "By removing these contacts:%s\n"
@@ -10576,7 +10571,7 @@ msgstr ""
 "zal je ook hun toestemming opzeggen om je status te zien en zullen ze je "
 "altijd als offline zien."
 
-#: ../src/roster_window.py:3767
+#: ../src/roster_window.py:3773
 #, fuzzy
 msgid ""
 "You are about to send a custom status. Are you sure you want to continue?"
@@ -10584,7 +10579,7 @@ msgstr ""
 "Je moet een account aanmaken voor je gesprekken kunt voeren met andere "
 "contacten."
 
-#: ../src/roster_window.py:3769
+#: ../src/roster_window.py:3775
 #, python-format
 msgid ""
 "This contact will temporarily see you as %(status)s, but only until you "
@@ -10593,21 +10588,21 @@ msgstr ""
 "Dit contact zal je tijdelijk zien als %(status)s tot je je status verandert, "
 "dan zal hij of zij je globale status zien."
 
-#: ../src/roster_window.py:3788
+#: ../src/roster_window.py:3794
 msgid "No account available"
 msgstr "Geen account beschikbaar"
 
-#: ../src/roster_window.py:3789
+#: ../src/roster_window.py:3795
 msgid "You must create an account before you can chat with other contacts."
 msgstr ""
 "Je moet een account aanmaken voor je gesprekken kunt voeren met andere "
 "contacten."
 
-#: ../src/roster_window.py:4502
+#: ../src/roster_window.py:4508
 msgid "Metacontacts storage not supported by your server"
 msgstr "Metacontactenopslag wordt niet ondersteund door je server"
 
-#: ../src/roster_window.py:4504
+#: ../src/roster_window.py:4510
 msgid ""
 "Your server does not support storing metacontacts information. So this "
 "information will not be saved on next reconnection."
@@ -10616,7 +10611,7 @@ msgstr ""
 "metacontacteninformatie, deze informatie zal dus niet opgeslagen worden bij "
 "de volgende verbinding."
 
-#: ../src/roster_window.py:4600
+#: ../src/roster_window.py:4606
 #, fuzzy
 msgid ""
 "You are about to create a metacontact. Are you sure you want to continue?"
@@ -10624,35 +10619,35 @@ msgstr ""
 "Je moet een account aanmaken voor je gesprekken kunt voeren met andere "
 "contacten."
 
-#: ../src/roster_window.py:4602
+#: ../src/roster_window.py:4608
 msgid ""
 "Metacontacts are a way to regroup several contacts in one line. Generally it "
 "is used when the same person has several Jabber accounts or transport "
 "accounts."
 msgstr ""
 
-#: ../src/roster_window.py:4723
+#: ../src/roster_window.py:4729
 msgid "Invalid file URI:"
 msgstr "Ongeldige bestands-URI:"
 
-#: ../src/roster_window.py:4735
+#: ../src/roster_window.py:4741
 #, python-format
 msgid "Do you want to send this file to %s:"
 msgid_plural "Do you want to send these files to %s:"
 msgstr[0] "Wil je dit bestand sturen naar %s:"
 msgstr[1] "Wil je deze bestanden sturen naar %s:"
 
-#: ../src/roster_window.py:4870
+#: ../src/roster_window.py:4876
 #, python-format
 msgid "Send %s to %s"
 msgstr "Stuur %s naar %s"
 
-#: ../src/roster_window.py:4881
+#: ../src/roster_window.py:4887
 #, fuzzy, python-format
 msgid "Make %s first contact"
 msgstr "Stuurt een bestand aan contact"
 
-#: ../src/roster_window.py:4884
+#: ../src/roster_window.py:4890
 #, fuzzy, python-format
 msgid "Make %s and %s metacontacts"
 msgstr "Stuurt een bestand aan contact"
@@ -10662,99 +10657,99 @@ msgstr "Stuurt een bestand aan contact"
 #. for chat_with
 #. for single message
 #. join gc
-#: ../src/roster_window.py:5346 ../src/roster_window.py:5400
-#: ../src/roster_window.py:5409 ../src/statusicon.py:277
+#: ../src/roster_window.py:5355 ../src/roster_window.py:5409
+#: ../src/roster_window.py:5418 ../src/statusicon.py:277
 #: ../src/statusicon.py:324 ../src/statusicon.py:330
 #, python-format
 msgid "using account %s"
 msgstr "via account %s"
 
 #. add
-#: ../src/roster_window.py:5416
+#: ../src/roster_window.py:5425
 #, python-format
 msgid "to %s account"
 msgstr "aan %s account"
 
 #. disco
-#: ../src/roster_window.py:5421
+#: ../src/roster_window.py:5430
 #, python-format
 msgid "using %s account"
 msgstr "via %s account"
 
-#: ../src/roster_window.py:5460 ../src/statusicon.py:340
+#: ../src/roster_window.py:5469 ../src/statusicon.py:340
 msgid "_Manage Bookmarks..."
 msgstr "_Beheer bladwijzers..."
 
 #. profile, avatar
-#: ../src/roster_window.py:5480
+#: ../src/roster_window.py:5489
 #, python-format
 msgid "of account %s"
 msgstr "van account %s"
 
-#: ../src/roster_window.py:5521
+#: ../src/roster_window.py:5530
 #, python-format
 msgid "for account %s"
 msgstr "voor account %s"
 
-#: ../src/roster_window.py:5581 ../src/roster_window.py:5689
+#: ../src/roster_window.py:5590 ../src/roster_window.py:5698
 msgid "_Change Status Message"
 msgstr "_Wijzig statusbericht"
 
-#: ../src/roster_window.py:5614
+#: ../src/roster_window.py:5623
 msgid "Publish Tune"
 msgstr "Deuntje publiceren"
 
-#: ../src/roster_window.py:5616
+#: ../src/roster_window.py:5625
 msgid "Publish Location"
 msgstr "Locatie publiceren"
 
-#: ../src/roster_window.py:5619
+#: ../src/roster_window.py:5628
 msgid "Configure Services..."
 msgstr "Diensten configureren..."
 
-#: ../src/roster_window.py:5771
+#: ../src/roster_window.py:5780
 msgid "_Maximize All"
 msgstr "Alles _maximaliseren"
 
-#: ../src/roster_window.py:5781 ../src/roster_window.py:5967
+#: ../src/roster_window.py:5790 ../src/roster_window.py:5976
 msgid "Send Group M_essage"
 msgstr "Groepsb_ericht versturen"
 
-#: ../src/roster_window.py:5789
+#: ../src/roster_window.py:5798
 msgid "To all users"
 msgstr "Aan alle gebruikers"
 
-#: ../src/roster_window.py:5793
+#: ../src/roster_window.py:5802
 msgid "To all online users"
 msgstr "Aan alle beschikbare gebruikers"
 
 #. Manage Transport submenu
-#: ../src/roster_window.py:5988
+#: ../src/roster_window.py:5997
 msgid "_Manage Contacts"
 msgstr "Contacten _beheren"
 
-#: ../src/roster_window.py:6063
+#: ../src/roster_window.py:6072
 msgid "_Maximize"
 msgstr "_Maximaliseren"
 
-#: ../src/roster_window.py:6072
+#: ../src/roster_window.py:6081
 msgid "_Reconnect"
 msgstr "Opnieuw ve_rbinden"
 
-#: ../src/roster_window.py:6079
+#: ../src/roster_window.py:6088
 msgid "_Disconnect"
 msgstr "Verbin_ding verbreken"
 
 #. History manager
-#: ../src/roster_window.py:6173
+#: ../src/roster_window.py:6182
 msgid "History Manager"
 msgstr "Geschiedenisbeheer"
 
-#: ../src/roster_window.py:6188
+#: ../src/roster_window.py:6197
 msgid "_Join New Group Chat"
 msgstr "Deelnemen aan n_ieuw groepsgesprek"
 
-#: ../src/roster_window.py:6426
+#: ../src/roster_window.py:6435
 msgid "Change Status Message..."
 msgstr "Wijzig statusbericht..."
 
@@ -10771,11 +10766,11 @@ msgstr "Fout in ontvangen gegevensformulier"
 msgid "No result"
 msgstr "Geen resultaat"
 
-#: ../src/session.py:411 ../src/session.py:471
+#: ../src/session.py:413 ../src/session.py:473
 msgid "Confirm these session options"
 msgstr "Bevestig deze sessie-opties"
 
-#: ../src/session.py:413
+#: ../src/session.py:415
 #, python-format
 msgid ""
 "The remote client wants to negotiate a session with these features:\n"
@@ -10790,7 +10785,7 @@ msgstr ""
 "\n"
 "Zijn deze opties aanvaardbaar?"
 
-#: ../src/session.py:473
+#: ../src/session.py:475
 #, python-format
 msgid ""
 "The remote client selected these options:\n"
@@ -10805,7 +10800,7 @@ msgstr ""
 "\n"
 "Doorgaan met de sessie?"
 
-#: ../src/session.py:476
+#: ../src/session.py:478
 msgid "Always accept for this contact"
 msgstr "Altijd aanvaarden voor dit contact"
 
@@ -11017,6 +11012,26 @@ msgstr "Er is geen lopend abonnementsverzoek."
 #: ../src/vcard.py:428 ../src/vcard.py:482 ../src/vcard.py:604
 msgid " resource with priority "
 msgstr " bron met prioriteit"
+
+#~ msgid "Check on startup if Gajim is the _default Jabber client"
+#~ msgstr "Controleer bij opstarten of Gajim de stan_daard Jabbercliënt is"
+
+#~ msgid ""
+#~ "If True, Gajim will check if it's the default jabber client on each "
+#~ "startup."
+#~ msgstr ""
+#~ "Indien Aan zal Gajim bij opstarten altijd controleren of het de standaard "
+#~ "Jabbercliënt is."
+
+#~ msgid "Gajim is not the default Jabber client"
+#~ msgstr "Gajim is niet de standaard Jabbercliënt"
+
+#~ msgid "Would you like to make Gajim the default Jabber client?"
+#~ msgstr "Wil je Gajim de standaard Jabbercliënt maken?"
+
+#~ msgid "Always check to see if Gajim is the default Jabber client on startup"
+#~ msgstr ""
+#~ "Controleer bij opstarten altijd of Gajim de standaard Jabbercliënt is"
 
 #~ msgid "Show the contact&apos;s profile (Ctrl+I)"
 #~ msgstr "Toont het profiel van het contact (Ctrl+I)"
