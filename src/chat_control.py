@@ -78,7 +78,7 @@ from command_system.implementation.execute import Execute, Show
 try:
     import gtkspell
     HAS_GTK_SPELL = True
-except ImportError:
+except (ImportError, ValueError):
     HAS_GTK_SPELL = False
 
 from common import dbus_support

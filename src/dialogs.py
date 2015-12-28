@@ -52,7 +52,7 @@ from common import ged
 try:
     import gtkspell
     HAS_GTK_SPELL = True
-except ImportError:
+except (ImportError, ValueError):
     HAS_GTK_SPELL = False
 
 # those imports are not used in this file, but in files that 'import dialogs'
