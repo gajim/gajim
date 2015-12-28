@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 0.15\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-17 20:19+0200\n"
+"POT-Creation-Date: 2015-12-28 13:07+0100\n"
 "PO-Revision-Date: 2014-06-21 16:23+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
@@ -77,7 +77,7 @@ msgstr ""
 
 #: ../data/gui/account_creation_wizard_window.ui.h:4
 msgid "I already have an account I want to _use"
-msgstr "כבר קיים ברשותי _חשבון אשר ברצוני לעשות בו שימוש"
+msgstr "כבר יש ברשותי _חשבון אשר ברצוני להשתמש"
 
 #: ../data/gui/account_creation_wizard_window.ui.h:5
 msgid "I want to _register for a new account"
@@ -186,13 +186,13 @@ msgstr "_סיים"
 
 #: ../data/gui/account_creation_wizard_window.ui.h:30
 #: ../data/gui/accounts_window.ui.h:1 ../data/gui/change_mood_dialog.ui.h:1
-#: ../src/config.py:1258 ../src/config.py:1273 ../src/config.py:1278
-#: ../src/config.py:1326 ../src/config.py:1429 ../src/config.py:1750
-#: ../src/config.py:1755 ../src/config.py:2358 ../src/config.py:2440
-#: ../src/config.py:2455 ../src/config.py:3751 ../src/config.py:3826
+#: ../src/config.py:1251 ../src/config.py:1266 ../src/config.py:1271
+#: ../src/config.py:1319 ../src/config.py:1422 ../src/config.py:1743
+#: ../src/config.py:1748 ../src/config.py:2359 ../src/config.py:2441
+#: ../src/config.py:2456 ../src/config.py:3752 ../src/config.py:3827
 #: ../src/dialogs.py:316 ../src/dialogs.py:318 ../src/dialogs.py:524
-#: ../src/dialogs.py:537 ../src/roster_window.py:3188
-#: ../src/roster_window.py:3194 ../src/roster_window.py:3199
+#: ../src/dialogs.py:537 ../src/roster_window.py:3194
+#: ../src/roster_window.py:3200 ../src/roster_window.py:3205
 msgid "None"
 msgstr "ללא"
 
@@ -216,7 +216,7 @@ msgstr "מחק"
 msgid "Re_name"
 msgstr "_שנה שם"
 
-#: ../data/gui/accounts_window.ui.h:6 ../src/config.py:4199
+#: ../data/gui/accounts_window.ui.h:6 ../src/config.py:4200
 #: ../src/plugins/gui.py:92
 msgid "Active"
 msgstr "פעיל"
@@ -341,6 +341,10 @@ msgid "Save conversation _logs for all contacts"
 msgstr "שמור רשו_מות שיחה עבור כל איש קשר"
 
 #: ../data/gui/accounts_window.ui.h:33
+msgid "Synchronize logs with server"
+msgstr "סנכרן רשומות עם שרת"
+
+#: ../data/gui/accounts_window.ui.h:34
 msgid "Synch_ronize account status with global status"
 msgstr "סנכרן מצב חשבון עם מצב _גלובלי"
 
@@ -350,7 +354,7 @@ msgstr "סנכרן מצב חשבון עם מצב _גלובלי"
 # תיבה משולבת
 # תיבת קומבינה (קומבינציה)
 # תיבת שיח
-#: ../data/gui/accounts_window.ui.h:34
+#: ../data/gui/accounts_window.ui.h:35
 msgid ""
 "If checked, any change to the global status (handled by the combobox at the "
 "bottom of the roster window) will change the status of this account "
@@ -359,16 +363,16 @@ msgstr ""
 "כאשר מסומן, כל שינוי למצב גלובלי (מטופל על ידי תיבת בחירה אשר מצויה בתחתית "
 "חלון הרשימה) ישנה את המצב של חשבון זה בהתאמה"
 
-#: ../data/gui/accounts_window.ui.h:35
+#: ../data/gui/accounts_window.ui.h:36
 msgid "Receive conversations from other resources (If server supports it)"
 msgstr "קבל דיונים מתוך מקורות אחרים (אם שרת תומך זאת)"
 
 # BUG: _underline
-#: ../data/gui/accounts_window.ui.h:36
-msgid "Use file transfer proxies"
-msgstr "השתמש בצירי העברת קובץ"
-
 #: ../data/gui/accounts_window.ui.h:37
+msgid "Use file transfer proxies"
+msgstr "השתמש בצירי (proxy) העברת קובץ"
+
+#: ../data/gui/accounts_window.ui.h:38
 msgid ""
 "If checked, Gajim will also broadcast some more IPs except from just your "
 "IP, so file transfer has higher chances of working."
@@ -382,30 +386,30 @@ msgstr ""
 #. FIXME: Ugly workaround.
 #. Maybe we haven't been in any group (defaults to General)
 #. General group cannot be changed
-#: ../data/gui/accounts_window.ui.h:38 ../data/gui/preferences_window.ui.h:41
+#: ../data/gui/accounts_window.ui.h:39 ../data/gui/preferences_window.ui.h:41
 #: ../src/common/contacts.py:102 ../src/common/contacts.py:135
-#: ../src/dialogs.py:116 ../src/dialogs.py:128 ../src/roster_window.py:3130
-#: ../src/roster_window.py:4260 ../src/roster_window.py:5908
+#: ../src/dialogs.py:116 ../src/dialogs.py:128 ../src/roster_window.py:3136
+#: ../src/roster_window.py:4266 ../src/roster_window.py:5914
 msgid "General"
 msgstr "כללית"
 
-#: ../data/gui/accounts_window.ui.h:39
+#: ../data/gui/accounts_window.ui.h:40
 msgid "_use HTTP__PROXY environment variable"
 msgstr "השתמש במשת_ני סביבת HTTP__PROXY"
 
-#: ../data/gui/accounts_window.ui.h:40 ../data/gui/preferences_window.ui.h:134
+#: ../data/gui/accounts_window.ui.h:41 ../data/gui/preferences_window.ui.h:134
 msgid "_Manage..."
 msgstr "  נה_ל...  "
 
-#: ../data/gui/accounts_window.ui.h:41
+#: ../data/gui/accounts_window.ui.h:42
 msgid "<b>Proxy</b>"
 msgstr "<b>פרוקסי</b>"
 
-#: ../data/gui/accounts_window.ui.h:42
+#: ../data/gui/accounts_window.ui.h:43
 msgid "_Warn before using an insecure connection"
 msgstr "ה_זהר אותי לפני שימוש בחיבור לא מאובטח"
 
-#: ../data/gui/accounts_window.ui.h:43
+#: ../data/gui/accounts_window.ui.h:44
 msgid ""
 "Check this so Gajim will ask you before sending your password over an "
 "insecure connection."
@@ -413,13 +417,13 @@ msgstr ""
 "סמן את אפשרות זו כדי ש־Gajim ישאל אותך בטרם שליחת סיסמה על פני חיבור לא "
 "מאובטח."
 
-#: ../data/gui/accounts_window.ui.h:44
+#: ../data/gui/accounts_window.ui.h:45
 msgid "Send _keep-alive packets"
 msgstr "ש_לח חבילות keep-alive"
 
 # BUG: a dot at the end
 # נובעת בניתוק
-#: ../data/gui/accounts_window.ui.h:45
+#: ../data/gui/accounts_window.ui.h:46
 msgid ""
 "If checked, Gajim will send keep-alive packets to prevent connection timeout "
 "which results in disconnection"
@@ -427,79 +431,79 @@ msgstr ""
 "כאשר מסומן, Gajim ישלח חבילות keep-alive כדי למנוע פקיעת זמן של חיבור "
 "(connection timeout) אשר מביאה לידי ניתוק"
 
-#: ../data/gui/accounts_window.ui.h:46
+#: ../data/gui/accounts_window.ui.h:47
 msgid "Use cust_om hostname/port"
 msgstr "השתמש בשם מארח\\פורט מו_תאמים"
 
-#: ../data/gui/accounts_window.ui.h:47
+#: ../data/gui/accounts_window.ui.h:48
 msgid "_Hostname: "
 msgstr "שם מ_ארח: "
 
 # יציאה מסוף
-#: ../data/gui/accounts_window.ui.h:48
+#: ../data/gui/accounts_window.ui.h:49
 msgid "_Port: "
 msgstr "_פורט: "
 
-#: ../data/gui/accounts_window.ui.h:49 ../data/gui/preferences_window.ui.h:138
+#: ../data/gui/accounts_window.ui.h:50 ../data/gui/preferences_window.ui.h:137
 msgid "<b>Miscellaneous</b>"
 msgstr "<b>שונות</b>"
 
-#: ../data/gui/accounts_window.ui.h:50
+#: ../data/gui/accounts_window.ui.h:51
 msgid "Connection"
 msgstr "חיבור"
 
-#: ../data/gui/accounts_window.ui.h:51 ../src/config.py:1848
-#: ../src/config.py:2456
+#: ../data/gui/accounts_window.ui.h:52 ../src/config.py:1841
+#: ../src/config.py:2457
 msgid "No key selected"
 msgstr "לא נבחר מפתח"
 
-#: ../data/gui/accounts_window.ui.h:52
+#: ../data/gui/accounts_window.ui.h:53
 msgid "Choose _Key..."
 msgstr "בחר _מפתח..."
 
-#: ../data/gui/accounts_window.ui.h:53
+#: ../data/gui/accounts_window.ui.h:54
 msgid "Use G_PG Agent"
 msgstr "השתמש בסוכן G_PG"
 
 # BUG: a dot at the end
-#: ../data/gui/accounts_window.ui.h:54
+#: ../data/gui/accounts_window.ui.h:55
 msgid "If checked, Gajim will get the password from a GPG agent like seahorse"
 msgstr "כאשר מסומן, Gajim יאחזר את הסיסמה מתוך סוכן GPG כגון seahorse"
 
-#: ../data/gui/accounts_window.ui.h:55
+#: ../data/gui/accounts_window.ui.h:56
 msgid "<b>OpenPGP</b>"
 msgstr "<b>‏OpenPGP</b>"
 
-#: ../data/gui/accounts_window.ui.h:56
+#: ../data/gui/accounts_window.ui.h:57
 msgid "_Edit Personal Information..."
 msgstr "_ערוך מידע אישי..."
 
-#: ../data/gui/accounts_window.ui.h:57
+#: ../data/gui/accounts_window.ui.h:58
 msgid "Information about you, as stored in the server"
 msgstr "מידע אודותייך, כפי שמאוחסן בשרת"
 
-#: ../data/gui/accounts_window.ui.h:58
+#: ../data/gui/accounts_window.ui.h:59
 msgid "<b>Personal Information</b>"
 msgstr "<b>מידע אישי</b>"
 
-#: ../data/gui/accounts_window.ui.h:59 ../data/gui/profile_window.ui.h:1
+#: ../data/gui/accounts_window.ui.h:60 ../data/gui/profile_window.ui.h:1
 msgid "Personal Information"
 msgstr "מידע אישי"
 
-#: ../data/gui/accounts_window.ui.h:60
+#: ../data/gui/accounts_window.ui.h:61
 msgid "Co_nnect on Gajim startup"
 msgstr "התחבר בעת ה_פעלת Gajim"
 
-#: ../data/gui/accounts_window.ui.h:61
+#: ../data/gui/accounts_window.ui.h:62
 msgid "Synchroni_ze account status with global status"
 msgstr "סנכרן מצב חשבון עם מצב חיבור _גלובלי"
 
-#: ../data/gui/accounts_window.ui.h:62
+#: ../data/gui/accounts_window.ui.h:63
 msgid "Use cust_om port:"
 msgstr "השתמש בפורט מו_תאם:"
 
 # BUG: setup, you
-#: ../data/gui/accounts_window.ui.h:63
+#: ../data/gui/accounts_window.ui.h:64
 msgid ""
 "If the default port that is used for incoming messages is unfitting for your "
 "setup you can select another one here.\n"
@@ -509,28 +513,28 @@ msgstr ""
 "באפשרותך לבחור פורט אחר כאן.\n"
 "ייתכן כי יהיה ברצונך לשקול לשנות הגדרות חומת אש אפשריות."
 
-#: ../data/gui/accounts_window.ui.h:65
+#: ../data/gui/accounts_window.ui.h:66
 #: ../data/gui/zeroconf_information_window.ui.h:10
 msgid "First Name:"
 msgstr "שם פרטי:"
 
-#: ../data/gui/accounts_window.ui.h:66
+#: ../data/gui/accounts_window.ui.h:67
 #: ../data/gui/zeroconf_information_window.ui.h:9
 msgid "Last Name:"
 msgstr "שם משפחה:"
 
-#: ../data/gui/accounts_window.ui.h:67
+#: ../data/gui/accounts_window.ui.h:68
 #: ../data/gui/zeroconf_information_window.ui.h:8
 msgid "E-Mail:"
 msgstr "דוא״ל:"
 
-#: ../data/gui/accounts_window.ui.h:68
-#: ../data/gui/zeroconf_information_window.ui.h:7 ../src/config.py:1875
+#: ../data/gui/accounts_window.ui.h:69
+#: ../data/gui/zeroconf_information_window.ui.h:7 ../src/config.py:1868
 #: ../src/dialogs.py:842
 msgid "Jabber ID:"
 msgstr "מזהה Jabber:"
 
-#: ../data/gui/accounts_window.ui.h:69
+#: ../data/gui/accounts_window.ui.h:70
 msgid "Mer_ge accounts"
 msgstr "מזג _חשבונות"
 
@@ -782,7 +786,7 @@ msgstr "אנשי קשר חסומים"
 #: ../data/gui/blocked_contacts_window.ui.h:2
 #: ../data/gui/contact_context_menu.ui.h:20
 #: ../data/gui/gc_occupants_menu.ui.h:14 ../src/gui_menu_builder.py:674
-#: ../src/roster_window.py:5877 ../src/roster_window.py:6011
+#: ../src/roster_window.py:5883 ../src/roster_window.py:6017
 msgid "_Unblock"
 msgstr "_בטל חסימה"
 
@@ -987,8 +991,8 @@ msgstr "שלח _קובץ..."
 
 #. Invite to Groupchat
 #: ../data/gui/contact_context_menu.ui.h:4
-#: ../data/gui/gc_occupants_menu.ui.h:11 ../src/roster_window.py:5807
-#: ../src/roster_window.py:5978
+#: ../data/gui/gc_occupants_menu.ui.h:11 ../src/roster_window.py:5813
+#: ../src/roster_window.py:5984
 msgid "In_vite to"
 msgstr "ה_זמן אל"
 
@@ -1007,7 +1011,7 @@ msgstr "הפעל הצפנת קצה אל קצה"
 
 #. Send Custom Status
 #: ../data/gui/contact_context_menu.ui.h:8 ../src/gui_menu_builder.py:598
-#: ../src/roster_window.py:5818
+#: ../src/roster_window.py:5824
 msgid "Send Cus_tom Status"
 msgstr "שלח מצב מו_תאם"
 
@@ -1022,12 +1026,12 @@ msgstr "_נהל איש קשר"
 
 #. Rename
 #: ../data/gui/contact_context_menu.ui.h:11 ../src/gui_menu_builder.py:661
-#: ../src/roster_window.py:5858
+#: ../src/roster_window.py:5864
 msgid "_Rename..."
 msgstr "_שנה שם..."
 
 #. Edit Groups
-#: ../data/gui/contact_context_menu.ui.h:12 ../src/roster_window.py:6000
+#: ../data/gui/contact_context_menu.ui.h:12 ../src/roster_window.py:6006
 msgid "Edit _Groups..."
 msgstr "ערוך _קבוצות..."
 
@@ -1061,7 +1065,7 @@ msgstr "_מנע מאיש קשר מלראות את המצב שלי"
 
 #: ../data/gui/contact_context_menu.ui.h:21
 #: ../data/gui/gc_occupants_menu.ui.h:13 ../src/gui_menu_builder.py:677
-#: ../src/roster_window.py:5885 ../src/roster_window.py:6017
+#: ../src/roster_window.py:5891 ../src/roster_window.py:6023
 msgid "_Block"
 msgstr "_חסום"
 
@@ -1076,14 +1080,14 @@ msgstr "הת_עלם"
 #. Remove
 #. Remove group
 #: ../data/gui/contact_context_menu.ui.h:25 ../src/gui_menu_builder.py:687
-#: ../src/roster_window.py:5895
+#: ../src/roster_window.py:5901
 msgid "Remo_ve"
 msgstr "הס_ר"
 
 #: ../data/gui/contact_context_menu.ui.h:26
 #: ../data/gui/gc_control_popup_menu.ui.h:9
 #: ../data/gui/gc_occupants_menu.ui.h:15 ../data/gui/roster_window.ui.h:19
-#: ../src/roster_window.py:6093
+#: ../src/roster_window.py:6099
 msgid "_History"
 msgstr "_היסטוריה"
 
@@ -1483,7 +1487,7 @@ msgid "false"
 msgstr "שווא"
 
 #: ../data/gui/item_archiving_preferences_window.ui.h:7
-#: ../src/common/connection_handlers.py:1162
+#: ../src/common/connection_handlers.py:1198
 msgid "message"
 msgstr "הודעה"
 
@@ -1548,7 +1552,7 @@ msgstr "הצטרף לחדר זה באופן _אוטומטי בעת התחברו�
 msgid "_Bookmark this room"
 msgstr "_סמן את חדר זה"
 
-#: ../data/gui/join_groupchat_window.ui.h:9 ../src/config.py:1865
+#: ../data/gui/join_groupchat_window.ui.h:9 ../src/config.py:1858
 msgid "Server:"
 msgstr "שרת:"
 
@@ -1629,7 +1633,7 @@ msgstr "<b>מאפיינים</b>"
 
 #: ../data/gui/manage_proxies_window.ui.h:8
 msgid "Use HTTP prox_y"
-msgstr "השתמש בציר _HTTP"
+msgstr "אפשר _HTTP proxy"
 
 # כתובת _BOSH:
 #: ../data/gui/manage_proxies_window.ui.h:9
@@ -1638,7 +1642,7 @@ msgstr "‏_BOSH URL:"
 
 #: ../data/gui/manage_proxies_window.ui.h:10
 msgid "Use proxy auth_entication"
-msgstr "השתמש באימות _ציר"
+msgstr "השתמש באימות _proxy"
 
 #: ../data/gui/manage_proxies_window.ui.h:11
 msgid "_Username:"
@@ -1650,11 +1654,11 @@ msgstr "ס_יסמה:"
 
 #: ../data/gui/manage_proxies_window.ui.h:13
 msgid "Proxy _Host:"
-msgstr "מ_ארח ציר:"
+msgstr "מ_ארח proxy:"
 
 #: ../data/gui/manage_proxies_window.ui.h:14
 msgid "Proxy _Port:"
-msgstr "פו_רט ציר:"
+msgstr "פו_רט proxy:"
 
 #: ../data/gui/manage_proxies_window.ui.h:15
 msgid "<b>Settings</b>"
@@ -1673,11 +1677,11 @@ msgstr "מימרת סיסמה"
 
 #: ../data/gui/plugins_window.ui.h:1
 msgid "Plugins"
-msgstr "תוספות"
+msgstr "תוספים"
 
 #: ../data/gui/plugins_window.ui.h:2
 msgid "Install from zip"
-msgstr "התקן מתוך ארכיון zip"
+msgstr "התקן מתוך zip"
 
 #: ../data/gui/plugins_window.ui.h:3
 msgid "&lt;empty&gt;"
@@ -1709,7 +1713,7 @@ msgstr "תיאור:"
 
 #: ../data/gui/plugins_window.ui.h:10
 msgid "Uninstall"
-msgstr "הסרה"
+msgstr "הסר"
 
 #: ../data/gui/plugins_window.ui.h:11
 msgid "Configure"
@@ -1717,15 +1721,14 @@ msgstr "תצורה"
 
 #: ../data/gui/plugins_window.ui.h:12
 msgid "Installed"
-msgstr "מותקנות"
+msgstr "מותקנים"
 
 # בעת התחלת
 #: ../data/gui/plugins_window.ui.h:13
 msgid ""
 "Plug-in decription should be displayed here. This text will be erased during "
 "PluginsWindow initialization."
-msgstr ""
-"תיאור תוספת צריך להיות מוצג כאן. תמליל זה ימחק בעת אתחול PluginsWindow."
+msgstr "תיאור תוסף צריך להיות מוצג כאן. תמליל זה ימחק בעת אתחול PluginsWindow."
 
 #: ../data/gui/popup_notification_window.ui.h:1
 msgid "Event Type"
@@ -1752,7 +1755,7 @@ msgid "Composing only"
 msgstr "הלחנה בלבד"
 
 #: ../data/gui/preferences_window.ui.h:5 ../src/config.py:164
-#: ../src/config.py:677
+#: ../src/config.py:673
 msgid "Disabled"
 msgstr "מנוטרלת"
 
@@ -1762,7 +1765,7 @@ msgstr "אף פעם"
 
 #: ../data/gui/preferences_window.ui.h:7
 msgid "Only when pending events"
-msgstr "רק כאשר קיימים אירועים ממתינים"
+msgstr "רק כאשר ישנם אירועים ממתינים"
 
 #: ../data/gui/preferences_window.ui.h:8
 msgid "Always"
@@ -2353,7 +2356,7 @@ msgstr "התר שליחת משך זמן _חוסר פעילות"
 
 #: ../data/gui/preferences_window.ui.h:133
 msgid "Global proxy:"
-msgstr "ציר גלובלי:"
+msgstr "‏Proxy גלובלי:"
 
 #: ../data/gui/preferences_window.ui.h:135
 msgid "<b>Privacy</b>"
@@ -2363,19 +2366,15 @@ msgstr "<b>פרטיות</b>"
 msgid "_Log status changes of contacts"
 msgstr "רשום _שינויים של מצב אנשי קשר"
 
-#: ../data/gui/preferences_window.ui.h:137
-msgid "Check on startup if Gajim is the _default Jabber client"
-msgstr "בדוק בעת הפעלה אם Gajim הינו לקוח _Jabber ברירת מחדל"
-
-#: ../data/gui/preferences_window.ui.h:139
+#: ../data/gui/preferences_window.ui.h:138
 msgid "_Open..."
 msgstr "_פתח..."
 
-#: ../data/gui/preferences_window.ui.h:140
+#: ../data/gui/preferences_window.ui.h:139
 msgid "<b>Advanced Configuration Editor</b>"
 msgstr "<b>עורך תצורה מתקדם</b>"
 
-#: ../data/gui/preferences_window.ui.h:141
+#: ../data/gui/preferences_window.ui.h:140
 msgid "Advanced"
 msgstr "מתקדם"
 
@@ -2636,7 +2635,7 @@ msgid "<b>What do you want to do?</b>"
 msgstr "<b>מה ברצונך לעשות?</b>"
 
 #. Remove
-#: ../data/gui/remove_account_window.ui.h:4 ../src/roster_window.py:6027
+#: ../data/gui/remove_account_window.ui.h:4 ../src/roster_window.py:6033
 msgid "_Remove"
 msgstr "הס_ר"
 
@@ -2995,9 +2994,13 @@ msgstr "לקוח מסרים מידיים Jabber"
 msgid "A GTK+ Jabber client"
 msgstr "לקוח ג׳אבּר GTK+‎"
 
-#: ../data/gajim.desktop.in.in.h:4
+#: ../data/gajim.desktop.in.in.h:4 ../data/gajim-remote.desktop.in.in.h:2
 msgid "chat;messaging;im;jabber;xmpp;bonjour;voip"
 msgstr "צ'אט;מסרים;מסנג'ר;jabber;xmpp;bonjour;voip"
+
+#: ../data/gajim-remote.desktop.in.in.h:1
+msgid "Gajim Remote"
+msgstr "‏Gajim מרחוק"
 
 #: ../src/adhoc_commands.py:325
 msgid "Cancel confirmation"
@@ -3006,7 +3009,7 @@ msgstr "אימות ביטול"
 #: ../src/adhoc_commands.py:326
 msgid ""
 "You are in process of executing command. Do you really want to cancel it?"
-msgstr "אתה מצוי בתוך עיצומו של תהליך הרצת פקודה. האם ברצונך לבטלו?"
+msgstr "אתה נמצא בתוך עיצומו של תהליך הרצת פקודה. האם ברצונך לבטלו?"
 
 #: ../src/adhoc_commands.py:372
 msgid "Invalid Form"
@@ -3149,9 +3152,9 @@ msgstr "איש קשר זה לא תומך HTML"
 #: ../src/common/helpers.py:273 ../src/dialogs.py:1106 ../src/dialogs.py:2314
 #: ../src/dialogs.py:2343 ../src/dialogs.py:3569 ../src/gui_interface.py:486
 #: ../src/gui_menu_builder.py:318 ../src/gui_menu_builder.py:489
-#: ../src/roster_window.py:771 ../src/roster_window.py:1738
-#: ../src/roster_window.py:1740 ../src/roster_window.py:2089
-#: ../src/roster_window.py:3663 ../src/roster_window.py:3690
+#: ../src/roster_window.py:777 ../src/roster_window.py:1744
+#: ../src/roster_window.py:1746 ../src/roster_window.py:2095
+#: ../src/roster_window.py:3669 ../src/roster_window.py:3696
 msgid "Not in Roster"
 msgstr "לא ברשימה"
 
@@ -3324,10 +3327,10 @@ msgstr "אם כרטיסייה זו תיסגר וכאשר רשימת היסטור
 msgid "Pong! (%s s.)"
 msgstr "פונג! (%s ש.)"
 
-#: ../src/chat_control.py:3007 ../src/common/connection_handlers_events.py:925
-#: ../src/common/connection_handlers.py:1071
-#: ../src/common/connection_handlers.py:1196 ../src/common/connection.py:543
-#: ../src/common/logger.py:1165 ../src/gajim.py:252 ../src/session.py:102
+#: ../src/chat_control.py:3007 ../src/common/connection_handlers_events.py:934
+#: ../src/common/connection_handlers.py:1075
+#: ../src/common/connection_handlers.py:1232 ../src/common/connection.py:541
+#: ../src/common/logger.py:1166 ../src/gajim.py:252 ../src/session.py:102
 msgid "Database Error"
 msgstr "שגיאת מסד נתונים"
 
@@ -3341,7 +3344,7 @@ msgstr ""
 "תאבד)."
 
 # כי משהו שיבש אותה
-#: ../src/chat_control.py:3247 ../src/gui_interface.py:1171
+#: ../src/chat_control.py:3247 ../src/gui_interface.py:1177
 #, python-format
 msgid ""
 "Unable to decrypt message from %s\n"
@@ -3372,17 +3375,17 @@ msgid "File transfer completed"
 msgstr "העברת קובץ הושלמה"
 
 #: ../src/chat_control.py:3425 ../src/dialogs.py:2943 ../src/dialogs.py:4633
-#: ../src/gui_interface.py:647 ../src/notify.py:278
+#: ../src/gui_interface.py:651 ../src/notify.py:278
 msgid "Groupchat Invitation"
 msgstr "הזמנת שיחת קבוצה"
 
-#: ../src/chat_control.py:3447 ../src/gui_interface.py:1020
-#: ../src/roster_window.py:1997
+#: ../src/chat_control.py:3447 ../src/gui_interface.py:1024
+#: ../src/roster_window.py:2003
 msgid "Remote contact stopped transfer"
 msgstr "איש קשר מרוחק הפסיק העברה"
 
-#: ../src/chat_control.py:3449 ../src/gui_interface.py:1023
-#: ../src/roster_window.py:1999
+#: ../src/chat_control.py:3449 ../src/gui_interface.py:1027
+#: ../src/roster_window.py:2005
 msgid "Error opening file"
 msgstr "שגיאה בפתיחת קובץ"
 
@@ -3509,7 +3512,7 @@ msgstr "מסירת רצף טזמ״ת (DTMF) מבעד לסשן קולי פתוח"
 # הפעלות
 #: ../src/command_system/implementation/standard.py:205
 msgid "No open audio sessions with the contact"
-msgstr "לא קיימים סשנים קוליים פתוחים עם איש הקשר"
+msgstr "לא קיימים סשנים קוליים פתוחים עם האיש קשר"
 
 #: ../src/command_system/implementation/standard.py:208
 #, python-format
@@ -3535,7 +3538,7 @@ msgid "Change your nickname in a group chat"
 msgstr "שינוי שם הכינוי שלך בתוך שיחת קבוצה"
 
 #. invalid char
-#: ../src/command_system/implementation/standard.py:279 ../src/config.py:3429
+#: ../src/command_system/implementation/standard.py:279 ../src/config.py:3430
 #: ../src/dialogs.py:2158
 msgid "Invalid nickname"
 msgstr "שם כינוי שגוי"
@@ -3580,8 +3583,7 @@ msgstr "הצטרפות לשיחת קבוצה לפי jid, אפשרי להשתמש
 #: ../src/command_system/implementation/standard.py:333
 msgid ""
 "Leave the groupchat, optionally giving a reason, and close tab or window"
-msgstr ""
-"עזיבת שיחת קבוצה, קיימת אפשרות לתת סיבה, ולסגור את הכרטיסייה או את החלון"
+msgstr "עזיבת שיחת קבוצה, אפשרי לתת סיבה, ולסגור את הכרטיסייה או את החלון"
 
 #: ../src/command_system/implementation/standard.py:338
 msgid ""
@@ -3672,17 +3674,17 @@ msgstr "‏%s הינו קובץ אך אמור להיות מדור"
 #: ../src/common/check_paths.py:292 ../src/common/check_paths.py:299
 #: ../src/common/check_paths.py:306 ../src/common/check_paths.py:313
 #: ../src/common/check_paths.py:320 ../src/common/check_paths.py:327
-#: ../src/common/check_paths.py:337 ../src/common/check_paths.py:345
+#: ../src/common/check_paths.py:339 ../src/common/check_paths.py:347
 #, fuzzy
 msgid "Gajim will now exit"
 msgstr "cli"
 
-#: ../src/common/check_paths.py:336 ../src/common/check_paths.py:344
+#: ../src/common/check_paths.py:338 ../src/common/check_paths.py:346
 #, python-format
 msgid "%s is a directory but should be a file"
 msgstr "‏%s הינו מדור אך אמור להיות קובץ"
 
-#: ../src/common/check_paths.py:359
+#: ../src/common/check_paths.py:361
 #, python-format
 msgid "creating %s directory"
 msgstr "כעת יוצר מדור %s"
@@ -3752,9 +3754,9 @@ msgstr "בחר שיחות קבוצה אשר ברצונך לעזוב"
 
 #. Make special context menu if group is Groupchats
 #: ../src/common/commands.py:216 ../src/common/contacts.py:131
-#: ../src/common/helpers.py:68 ../src/roster_window.py:824
-#: ../src/roster_window.py:1742 ../src/roster_window.py:1744
-#: ../src/roster_window.py:2628 ../src/roster_window.py:5773
+#: ../src/common/helpers.py:68 ../src/roster_window.py:830
+#: ../src/roster_window.py:1748 ../src/roster_window.py:1750
+#: ../src/roster_window.py:2634 ../src/roster_window.py:5779
 msgid "Groupchats"
 msgstr "שיחות קבוצה"
 
@@ -3925,8 +3927,8 @@ msgstr ""
 
 #. sorted alphanum
 #: ../src/common/config.py:117 ../src/common/config.py:537
-#: ../src/common/optparser.py:304 ../src/common/optparser.py:500
-#: ../src/common/optparser.py:534 ../src/gui_interface.py:2829
+#: ../src/common/optparser.py:311 ../src/common/optparser.py:507
+#: ../src/common/optparser.py:541 ../src/gui_interface.py:2853
 msgid "default"
 msgstr "ברירת מחדל"
 
@@ -4154,7 +4156,7 @@ msgid ""
 "Ask before closing tabbed chat window if there are controls that can lose "
 "data (chat, private chat, groupchat that will not be minimized)"
 msgstr ""
-"שאל בטרם סגירת חלון שיחה בעל סימניות כאשר קיימים בקרים אשר עלולים לאבד מידע "
+"שאל בטרם סגירת חלון שיחה בעל סימניות כאשר ישנם בקרים אשר עלולים לאבד מידע "
 "(שיחה, שיחה פרטית, שיחת קבוצה אשר לא תמוזער)"
 
 # תרגום כתובת/תיעול שערים
@@ -4187,7 +4189,7 @@ msgstr ""
 
 #: ../src/common/config.py:217
 msgid "Show tab when only one conversation?"
-msgstr "האם להציג כרטיסייה כאשר רק דיון אחד קיים?"
+msgstr "האם להציג כרטיסייה כאשר ישנו רק דיון אחד?"
 
 # help translate
 #: ../src/common/config.py:218
@@ -4231,18 +4233,13 @@ msgstr ""
 
 #: ../src/common/config.py:248
 msgid ""
-"If True, Gajim will check if it's the default jabber client on each startup."
-msgstr "כאשר מופעלת, Gajim יבדוק בכל הפעלה אם הוא לקוח Jabber ברירת מחדל."
-
-#: ../src/common/config.py:249
-msgid ""
 "If True, Gajim will display an icon on each tab containing unread messages. "
 "Depending on the theme, this icon may be animated."
 msgstr ""
 "כאשר מופעלת, Gajim יציג סמל על כל כרטיסייה המכילה הודעות אשר לא נקראו. תלוי "
 "במוטיב אשר מצוי בשימוש, סמל זה יכול להיות מונפש."
 
-#: ../src/common/config.py:250
+#: ../src/common/config.py:249
 msgid ""
 "If True, Gajim will display the status message, if not empty, for every "
 "contact under the contact name in roster window."
@@ -4251,14 +4248,14 @@ msgstr ""
 "איש קשר בחלון הרשימה."
 
 # right is left and left is right
-#: ../src/common/config.py:256
+#: ../src/common/config.py:255
 msgid "Define the position of the avatar in roster. Can be left or right"
 msgstr ""
 "הגדרת המיקום של האווטאר ברשימה. המיקום יכול להיות בצד ימין (left) או בצד "
 "שמאל (right)"
 
 # הטמון
-#: ../src/common/config.py:257
+#: ../src/common/config.py:256
 msgid ""
 "If True, Gajim will ask for avatar each contact that did not have an avatar "
 "last time or has one cached that is too old."
@@ -4267,7 +4264,7 @@ msgstr ""
 "בפעם אחרונה או כאשר האווטאר המוטמן עבורו הינו ישן מדי."
 
 # BUG: or is better than and/or
-#: ../src/common/config.py:258
+#: ../src/common/config.py:257
 msgid ""
 "If False, Gajim will no longer print status line in chats when a contact "
 "changes his or her status and/or his or her status message."
@@ -4277,7 +4274,7 @@ msgstr ""
 
 # BUG: or is better than and/or
 # יוזן > ישובץ
-#: ../src/common/config.py:259
+#: ../src/common/config.py:258
 msgid ""
 "Can be \"none\", \"all\" or \"in_and_out\". If \"none\", Gajim will no "
 "longer print status line in groupchats when a member changes his or her "
@@ -4291,47 +4288,47 @@ msgstr ""
 "ידפיס את כל הודעות המצב. כאשר \"in_and_out\", ‏Gajim ידפיס FOO כניסות/עזיבות "
 "של שיחות קבוצה בלבד."
 
-#: ../src/common/config.py:261
+#: ../src/common/config.py:260
 msgid "Log XHTML messages instead of plain text messages."
 msgstr "רישום הודעות בתסדיר XHTML במקום הודעות בתמליל רגיל."
 
 # בזמן שהם מתחברים
 # שזה עתה
 # בעת שהם
-#: ../src/common/config.py:262
+#: ../src/common/config.py:261
 msgid "Background color of contacts when they just signed in."
 msgstr "צבע רקע אחורי של אנשי קשר כאשר הם מתחברים."
 
-#: ../src/common/config.py:263
+#: ../src/common/config.py:262
 msgid "Background color of contacts when they just signed out."
 msgstr "צבע רקע אחורי של אנשי קשר כאשר הם מתנתקים."
 
-#: ../src/common/config.py:265
+#: ../src/common/config.py:264
 msgid ""
 "If True, restored messages will use a smaller font than the default one."
 msgstr ""
 "כאשר מופעלת, הודעות משוחזרות יעשו שימוש בגופנים קטנים יותר מהגופן השגרתי."
 
-#: ../src/common/config.py:266
+#: ../src/common/config.py:265
 msgid "Don't show avatar for the transport itself."
 msgstr "אל תציג אווטאר עבור המוביל עצמו."
 
-#: ../src/common/config.py:267
+#: ../src/common/config.py:266
 msgid "Don't show roster in the system taskbar."
 msgstr "אל תציג את הרשימה בתוך שורת המשימות של המערכת."
 
 # להבהב
-#: ../src/common/config.py:268
+#: ../src/common/config.py:267
 msgid ""
 "If True and installed GTK+ and PyGTK versions are at least 2.8, make the "
 "window flash (the default behaviour in most Window Managers) when holding "
 "pending events."
 msgstr ""
 "כאשר מופעלת, והגרסאות המותקנות של ‭GTK+‬ ושל PyGTK הן לפחות 2.8, גרום לחלון "
-"להבזיק (לרוב זוהי ההתנהגות השגרתית אצל מנהלי חלונות) כאשר קיימים אירועים "
+"להבזיק (לרוב זוהי ההתנהגות השגרתית אצל מנהלי חלונות) כאשר ישנם אירועים "
 "ממתינים."
 
-#: ../src/common/config.py:270
+#: ../src/common/config.py:269
 msgid ""
 "Jabberd1.4 does not like sha info when one join a password protected group "
 "chat. Turn this option to False to stop sending sha info in group chat "
@@ -4341,7 +4338,7 @@ msgstr ""
 "כדי להפסיק לשלוח מידע sha בנוכחויות שיחת קבוצה יש לנטרל את אפשרות זו."
 
 #. always, never, peracct, pertype should not be translated
-#: ../src/common/config.py:273
+#: ../src/common/config.py:272
 msgid ""
 "Controls the window where new messages are placed.\n"
 "'always' - All messages are sent to a single window.\n"
@@ -4360,7 +4357,7 @@ msgstr ""
 "‏'peracct' - הודעות עבור כל חשבון נשלחות לחלון מסוים.\n"
 "‏'pertype' - כל טיפוס הודעה (למשל, שיחות כנגד שיחות קבוצה) נשלח לחלון מסוים."
 
-#: ../src/common/config.py:274
+#: ../src/common/config.py:273
 msgid ""
 "Show roster on startup.\n"
 "'always' - Always show roster.\n"
@@ -4372,34 +4369,34 @@ msgstr ""
 "‏'never' - לא להציג רשימה בכלל.\n"
 "‏'last_state' - שחזור המצב האחרון של הרשימה."
 
-#: ../src/common/config.py:275
+#: ../src/common/config.py:274
 msgid "If False, you will no longer see the avatar in the chat window."
 msgstr "כאשר מנוטרלת, לא תהיה לך האפשרות לראות את האווטאר בחלון השיחה."
 
-#: ../src/common/config.py:276
+#: ../src/common/config.py:275
 msgid "If True, pressing the escape key closes a tab/window."
 msgstr "כאשר מופעלת, לחיצה על המקש Esc תוביל לסגירת חלון/כרטיסייה."
 
-#: ../src/common/config.py:277
+#: ../src/common/config.py:276
 msgid "Hides the buttons in chat windows."
 msgstr "הסתרת הלחצנים בחלונות שיחה."
 
-#: ../src/common/config.py:278
+#: ../src/common/config.py:277
 msgid "Hides the banner in a group chat window"
 msgstr "הסתרת הכרזה בחלון שיחת קבוצה"
 
 # עם שתי אישויות
-#: ../src/common/config.py:279
+#: ../src/common/config.py:278
 msgid "Hides the banner in two persons chat window"
 msgstr "הסתרת הכרזה בחלון שיחה עם שני נוכחים"
 
 # הסתרת רשימת הנוכחים בשיחת קבוצה בתוך חלון שיחת קבוצה
-#: ../src/common/config.py:280
+#: ../src/common/config.py:279
 msgid "Hides the group chat occupants list in group chat window."
 msgstr "הסתרת רשימת הנוכחים בחלון שיחת קבוצה."
 
 # What does "than" mean?
-#: ../src/common/config.py:281
+#: ../src/common/config.py:280
 msgid ""
 "In a chat, show the nickname at the beginning of a line only when it's not "
 "the same person talking than in previous message."
@@ -4407,15 +4404,15 @@ msgstr ""
 "בשיחה, הצג את שם הכינוי בתחילת שורה רק כאשר אין זו אותה האישיות אשר מדברת "
 "מבהודעה קודמת."
 
-#: ../src/common/config.py:282
+#: ../src/common/config.py:281
 msgid "Indentation when using merge consecutive nickname."
 msgstr "הזחה בעת שימוש בשם כינוי עוקב מובלע."
 
-#: ../src/common/config.py:283
+#: ../src/common/config.py:282
 msgid "Smooth scroll message in conversation window"
 msgstr "גלילה חלקה של הודעות בחלון דיון"
 
-#: ../src/common/config.py:284
+#: ../src/common/config.py:283
 msgid ""
 "List of colors, separated by \":\", that will be used to color nicknames in "
 "group chats."
@@ -4423,7 +4420,7 @@ msgstr ""
 "רשימה של צבעים, מופרדת על ידי \":\", אשר תשמש לצביעת שמות כינוי בתוך שיחות "
 "קבוצה."
 
-#: ../src/common/config.py:285
+#: ../src/common/config.py:284
 msgid "Ctrl-Tab go to next composing tab when none is unread."
 msgstr ""
 "‏Ctrl-Tab כדי לעבור להכרטיסייה המלחינה הבאה כאשר אין כרטיסיות שלא נקראו."
@@ -4431,7 +4428,7 @@ msgstr ""
 # אנשי־קשר-מוצמדים
 # Meta- (from the Greek preposition μετά = "after", "beyond", "adjacent", "self",
 # adjacent = adjoining = צמוד
-#: ../src/common/config.py:286
+#: ../src/common/config.py:285
 msgid ""
 "Should we show the confirm metacontacts creation dialog or not? Empty string "
 "means we never show the dialog."
@@ -4439,7 +4436,7 @@ msgstr ""
 "האם עלינו להציג דו שיח וידוא יצירת אנשי קשר מוצמדים או לא? המשמעות של מחרוזת "
 "ריקה תהיה שאנחנו לא נציג את הדו שיח בכלל."
 
-#: ../src/common/config.py:287
+#: ../src/common/config.py:286
 msgid ""
 "Should we show the confirm block contact dialog or not? Empty string means "
 "we never show the dialog."
@@ -4447,7 +4444,7 @@ msgstr ""
 "האם עלינו להציג דו שיח וידוא חסימת איש קשר? המשמעות של מחרוזת ריקה תהיה "
 "שאנחנו לא נציג את הדו שיח בכלל."
 
-#: ../src/common/config.py:288
+#: ../src/common/config.py:287
 msgid ""
 "Should we show the confirm custom status dialog or not? Empty string means "
 "we never show the dialog."
@@ -4455,7 +4452,7 @@ msgstr ""
 "האם עלינו להציג דו שיח וידוא מצב מותאם? המשמעות של מחרוזת ריקה תהיה שאנחנו "
 "לא נציג את הדו שיח בכלל."
 
-#: ../src/common/config.py:289
+#: ../src/common/config.py:288
 msgid ""
 "If True, you will be able to set a negative priority to your account in "
 "account modification window. BE CAREFUL, when you are logged in with a "
@@ -4465,7 +4462,7 @@ msgstr ""
 "חשבון. יש להיזהר, בעת התחברותך יחד עם עדיפות שלילית, לא תתקבלנה שום הודעה "
 "מתוך השרת שלך."
 
-#: ../src/common/config.py:290
+#: ../src/common/config.py:289
 msgid ""
 "If True, Gajim will use Gnome Keyring (if available) to store account "
 "passwords."
@@ -4473,7 +4470,7 @@ msgstr ""
 "כאשר מופעלת, Gajim יעשה שימוש ביישום Gnome Keyring (אם זמין) כדי לאחסן "
 "סיסמאות חשבון."
 
-#: ../src/common/config.py:291
+#: ../src/common/config.py:290
 msgid ""
 "If True, Gajim will use KDE Wallet (if kwalletcli is available) to store "
 "account passwords."
@@ -4481,13 +4478,13 @@ msgstr ""
 "כאשר מופעלת, Gajim יעשה שימוש ביישום KDE Wallet (כאשר kwalletcli הינו זמין) "
 "כדי לאחסן סיסמאות חשבון."
 
-#: ../src/common/config.py:292
+#: ../src/common/config.py:291
 msgid ""
 "If True, Gajim will show number of online and total contacts in account and "
 "group rows."
 msgstr "כאשר מופעלת, Gajim יציג מספר של אנשי קשר מקוונים בשורות חשבון וקבוצה."
 
-#: ../src/common/config.py:293
+#: ../src/common/config.py:292
 msgid ""
 "Can be empty, 'chat' or 'normal'. If not empty, treat all incoming messages "
 "as if they were of this type"
@@ -4496,7 +4493,7 @@ msgstr ""
 "לכל ההודעות הנכנסות כאילו היו מטיפוס זה"
 
 # שממנו נשלחה
-#: ../src/common/config.py:294
+#: ../src/common/config.py:293
 msgid ""
 "If True, Gajim will scroll and select the contact who sent you the last "
 "message, if chat window is not already opened."
@@ -4504,11 +4501,11 @@ msgstr ""
 "כאשר מופעלת, Gajim יגולל ויבחר את האיש קשר אשר שלח לך את ההודעה האחרונה, אם "
 "וכאשר חלון שיחה אינו פתוח כבר."
 
-#: ../src/common/config.py:295
+#: ../src/common/config.py:294
 msgid "Time of inactivity needed before the change status window closes down."
 msgstr "זמן חוסר פעילות אשר נחוץ לפני שחלון שינוי מצב נסגר."
 
-#: ../src/common/config.py:296
+#: ../src/common/config.py:295
 msgid ""
 "Maximum number of lines that are printed in conversations. Oldest lines are "
 "cleared."
@@ -4516,18 +4513,18 @@ msgstr "מספר מרבי של שורות אשר יודפסו בתוך דיונ�
 
 # יכרכו
 # BUG: the notification icon?
-#: ../src/common/config.py:297
+#: ../src/common/config.py:296
 msgid ""
 "If True, notification windows from notification-daemon will be attached to "
 "notification icon."
 msgstr "כאשר מופעלת, חלונות התראה מתוך notification-daemon יסופחו לסמל התראה."
 
 # חוסר
-#: ../src/common/config.py:298
+#: ../src/common/config.py:297
 msgid "Choose interval between 2 checks of idleness."
 msgstr "בחר תדירות עדכון בין 2 בדיקות של העדר פעילות."
 
-#: ../src/common/config.py:299
+#: ../src/common/config.py:298
 msgid ""
 "Valid uri schemes. Only schemes in this list will be accepted as \"real\" "
 "uri. (mailto and xmpp are handled separately)"
@@ -4537,7 +4534,7 @@ msgstr ""
 
 # שידור בקשות
 # עלולה לגרום could
-#: ../src/common/config.py:300
+#: ../src/common/config.py:299
 msgid ""
 "Ask offline status message to all offline contacts when connection to an "
 "account is established. WARNING: This causes a lot of requests to be sent!"
@@ -4546,13 +4543,13 @@ msgstr ""
 "מבוסס. אזהרה: זו גורמת לשליחת מספר רב של בקשות!"
 
 # BUG: Dot at end
-#: ../src/common/config.py:301
+#: ../src/common/config.py:300
 msgid "If True, completion in groupchats will be like a shell auto-completion"
 msgstr ""
 "כאשר מופעלת, השלמה בתוך שיחות קבוצה תיעשה בדומה להשלמה אוטומטית במעטפת "
 "(shell) של מסוף"
 
-#: ../src/common/config.py:302
+#: ../src/common/config.py:301
 msgid ""
 "When is self contact row displayed. Can be \"always\", \"when_other_resource"
 "\" or \"never\""
@@ -4560,19 +4557,19 @@ msgstr ""
 "מתי שורת איש קשר עצמי תוצג. יכול להיות \"always\" (תמיד), "
 "\"when_other_resource\" (כאשר משאב אחר מחובר) או \"never\" (בכלל לא)"
 
-#: ../src/common/config.py:307
+#: ../src/common/config.py:306
 msgid "Optionally fix jingle output video framerate. Example: 10/1 or 25/2"
 msgstr "אפשרות קיבוע פלט תדר וידאו של jingle. דוגמא: 10/1 או 25/2"
 
-#: ../src/common/config.py:308
+#: ../src/common/config.py:307
 msgid "Optionally resize jingle output video. Example: 320x240"
 msgstr "אפשרות שינוי מידת פלט הוידאו של jingle. דוגמא: 320x240"
 
-#: ../src/common/config.py:309
+#: ../src/common/config.py:308
 msgid "If True, You will also see your webcam"
 msgstr "כאשר מופעלת, תהיה באפשרותך לראות גם את מצלמת הרשת שלך"
 
-#: ../src/common/config.py:312
+#: ../src/common/config.py:311
 msgid ""
 "If True, Gajim will try to use a STUN server when using jingle. The one in "
 "\"stun_server\" option, or the one given by the jabber server."
@@ -4581,11 +4578,11 @@ msgstr ""
 "זה אשר הוגדר בתוך אפשרות \"stun_server\", או בזה אשר ניתן על ידי שרת jabber "
 "נתון."
 
-#: ../src/common/config.py:313
+#: ../src/common/config.py:312
 msgid "STUN server to use when using jingle"
 msgstr "שרת STUN אשר ישמש אותך בעת שימוש בטכנולוגיית jingle"
 
-#: ../src/common/config.py:314
+#: ../src/common/config.py:313
 msgid ""
 "If True, Gajim will show affiliation of groupchat occupants by adding a "
 "colored square to the status icon"
@@ -4593,18 +4590,19 @@ msgstr ""
 "כאשר מופעלת, Gajim יציג שיוך של נוכחים של שיחת קבוצה על ידי הוספת מרובע "
 "צבעוני לסמל מצב"
 
-#: ../src/common/config.py:315
+#: ../src/common/config.py:314
 msgid ""
 "Proxy used for all outgoing connections if the account does not have a "
 "specific proxy configured"
 msgstr ""
-"ציר אשר בשימוש עבור כל החיבורים היוצאים במידה ולחשבון אין ציר מסוים מוגדר"
+"ציר (proxy) אשר בשימוש עבור כל החיבורים היוצאים במידה ולחשבון אין ציר מסוים "
+"מוגדר"
 
-#: ../src/common/config.py:316
+#: ../src/common/config.py:315
 msgid "If True, Gajim will ignore incoming attention requestd (\"wizz\")."
 msgstr "כאשר מופעלת, Gajim יתעלם מבקשות הקשב נכנסות (\"wizz\")."
 
-#: ../src/common/config.py:317
+#: ../src/common/config.py:316
 msgid ""
 "If enabled, Gajim will reopen chat windows that were opened last time Gajim "
 "was closed."
@@ -4612,7 +4610,7 @@ msgstr ""
 "כאשר מופעלת, Gajim יפתח מחדש חלונות שיחה שהיו פתוחים בפעם האחרונה בה Gajim "
 "נסגר."
 
-#: ../src/common/config.py:318
+#: ../src/common/config.py:317
 msgid ""
 "If enabled, Gajim will show an icon to show that sent message has been "
 "received by your contact"
@@ -4620,7 +4618,7 @@ msgstr ""
 "כאשר מופעלת, Gajim יציג סמל המעיד על כך שהודעה אשר נשלחה התקבלה על ידי איש "
 "הקשר שלך"
 
-#: ../src/common/config.py:332
+#: ../src/common/config.py:331
 msgid ""
 "Priority will change automatically according to your status. Priorities are "
 "defined in autopriority_* options."
@@ -4628,7 +4626,7 @@ msgstr ""
 "עדיפות תשונה אוטומטית בהתאם למצב שלך. עדיפויות מוגדרות בתוך האפשרות "
 "autopriority_*."
 
-#: ../src/common/config.py:340
+#: ../src/common/config.py:339
 msgid ""
 "Status used to autoconnect as. Can be online, chat, away, xa, dnd, "
 "invisible. NOTE: this option is used only if restore_last_status is disabled"
@@ -4637,37 +4635,37 @@ msgstr ""
 "לשיחה), away (נעדר), xa (לא זמין), dnd (עסוק), invisible (בלתי נראה). הערה: "
 "אפשרות זו נכנסת לשימוש רק אם ההעדפה restore_last_status מנוטרלת"
 
-#: ../src/common/config.py:341
+#: ../src/common/config.py:340
 msgid "If enabled, restore the last status that was used."
 msgstr "כאשר מופעלת, המצב האחרון אשר היה בשימוש ישוחזר."
 
 # BUG: typo: the authorization of the contacts will get accepted, not the contacts themselves
 # הרשאות שיתבקשו על ידי אנשי קשר יתקבלו אוטומטית
-#: ../src/common/config.py:343
+#: ../src/common/config.py:342
 msgid ""
 "If True, Contacts requesting authorization will be automatically accepted."
 msgstr "כאשר מופעלת, אנשי קשר אשר מבקשים הרשאה יתקבלו אוטומטית."
 
-#: ../src/common/config.py:344
+#: ../src/common/config.py:343
 msgid ""
 "If False, this account will be disabled and will not appear in roster window."
 msgstr "כאשר מנוטרלת, חשבון זה ינוטרל ולא יופיע בחלון רשימה."
 
-#: ../src/common/config.py:347
+#: ../src/common/config.py:346
 msgid ""
 "If disabled, don't sign presences with GPG key, even if GPG is configured."
 msgstr "כאשר מנוטרלת, אל תחתום נוכחות באמצעות מפתח GPG, אפילו אם GPG מוגדר."
 
-#: ../src/common/config.py:349
+#: ../src/common/config.py:348
 msgid "Enable ESessions encryption for this account."
 msgstr "אפשור הצפנת ESessions עבור חשבון זה."
 
 # באם/כאשר ניתן
-#: ../src/common/config.py:350
+#: ../src/common/config.py:349
 msgid "Should Gajim automatically start an encrypted session when possible?"
 msgstr "האם על Gajim להתחיל אוטומטית סשן מוצפן במידת האפשר?"
 
-#: ../src/common/config.py:351
+#: ../src/common/config.py:350
 msgid ""
 "Ordered list (space separated) of connection type to try. Can contain tls, "
 "ssl or plain"
@@ -4675,7 +4673,7 @@ msgstr ""
 "רשימה סדורה (מופרדת על ידי רווח) של טיפוס חיבור לנסות. יכול להכיל tls, ssl "
 "או plain"
 
-#: ../src/common/config.py:354
+#: ../src/common/config.py:353
 msgid ""
 "List (space separated) of authentication mechanisms to try. Can contain "
 "ANONYMOUS, EXTERNAL, GSSAPI, SCRAM-SHA-1-PLUS, SCRAM-SHA-1, DIGEST-MD5, "
@@ -4685,7 +4683,7 @@ msgstr ""
 "EXTERNAL,‏ GSSAPI,‏ SCRAM-SHA-1-PLUS,‏ SCRAM-SHA-1,‏ DIGEST-MD5,‏ PLAIN, X-"
 "MESSENGER-OAUTH2 או XEP-0078"
 
-#: ../src/common/config.py:355
+#: ../src/common/config.py:354
 msgid ""
 "Show a warning dialog before sending password on an plaintext connection. "
 "Can be 'warn', 'connect', 'disconnect'"
@@ -4693,26 +4691,33 @@ msgstr ""
 "הצגת דו שיח אזהרה בטרם שליחת סיסמה על פני חיבור גלוי. יכול להיות "
 "'warn' (הזהר), 'connect' (התחבר), 'disconnect' (התנתק)"
 
-#: ../src/common/config.py:356
+#: ../src/common/config.py:355
 msgid "Show a warning dialog before using standard SSL library."
 msgstr "הצג דו שיח אזהרה בטרם שימוש בספריית SSL סטנדרטית."
 
-#: ../src/common/config.py:357
+#: ../src/common/config.py:356
 msgid ""
 "Show a warning dialog before sending PLAIN password over a plain connection."
 msgstr "הצגת דו שיח אזהרה בטרם שליחת סיסמה חשופה (PLAIN) על פני חיבור גלוי."
 
-#: ../src/common/config.py:359
+#: ../src/common/config.py:358
 msgid "Space separated list of ssl errors to ignore."
 msgstr "רשימה אשר מופרדת על ידי רווח, של שגיאות ssl שיש להתעלם מהן."
 
-#: ../src/common/config.py:365
+#: ../src/common/config.py:364
 msgid ""
 "Space separated list of JIDs for which you do not want to store logs. You "
 "can also add account name to log nothing for this account."
 msgstr ""
 "רשימה אשר מופרדת על ידי רווח, של כתובות JID עבורן אין ברצונך לאחסן רשומות. "
 "באפשרותך גם להוסיף שם חשבון כדי לא לרשום דבר עבור חשבון זה."
+
+#: ../src/common/config.py:365
+msgid ""
+"Download logs stored on server on Gajim startup if server supports XEP-0136 "
+"or XEP-0313"
+msgstr ""
+"הורד רשומות המאוחסנות על שרת בעת הפעלת Gajim אם שרת תומך XEP-0136 או XEP-0313"
 
 # BUG: he or she
 #: ../src/common/config.py:366
@@ -4751,7 +4756,7 @@ msgid ""
 "If checked, Gajim will use your IP and proxies defined in "
 "file_transfer_proxies option for file transfer."
 msgstr ""
-"כאשר מסומן, Gajim יעשה שימוש בכתובת IP ובצירים (proxies) שהוגדרו על ידך "
+"כאשר מסומן, Gajim יעשה שימוש בכתובת IP ובצירים (proxy) שהוגדרו על ידך "
 "באפשרות file_transfer_proxies לשם העברת קובץ."
 
 #: ../src/common/config.py:382
@@ -4759,8 +4764,8 @@ msgid ""
 "If True, Gajim will test file transfer proxies on startup to be sure it "
 "works. Openfire's proxies are known to fail this test even if they work."
 msgstr ""
-"כאשר מופעלת, Gajim יבחן צירי העברת קובץ בעת הפעלה כדי לוודא כי זו אכן פועלת. "
-"ידוע כי מתווכי Openfire נכשלים בבחינה זו אפילו אם אלו עובדים."
+"כאשר מופעלת, Gajim יבחן צירי (proxy) העברת קובץ בעת הפעלה כדי לוודא כי זו "
+"אכן פועלת. ידוע כי מתווכי Openfire נכשלים בבחינה זו אפילו אם אלו עובדים."
 
 #: ../src/common/config.py:396
 msgid "Answer to receipt requests"
@@ -4837,9 +4842,8 @@ msgstr ""
 "שיחה בהפעלה הבאה."
 
 #: ../src/common/config.py:419
-#, fuzzy
 msgid "Last MAM id we are syncronized with"
-msgstr "פעם אחרונה בה סנכרנו רשומות מתוך שרת."
+msgstr "מזהה MAM אחרון עמו אנו מסונכרנים"
 
 #: ../src/common/config.py:481
 msgid "Is OpenPGP enabled for this contact?"
@@ -4880,8 +4884,8 @@ msgid ""
 "exit). This option SHOULD NOT be used to (de)activate plug-ins. Use GUI "
 "instead."
 msgstr ""
-"קבע האם על תוספות להיות מתופעלות בעת הפעלה (זוהי נשמרת בעת יציאה מתוך "
-"Gajim). אין להשתמש באפשרות זו כדי לשפעל או לנטרל תוספות. עליך להשתמש בממשק "
+"קבע האם על תוספים להיות מתופעלים בעת הפעלה (זוהי נשמרת בעת יציאה מתוך "
+"Gajim). אין להשתמש באפשרות זו כדי לשפעל או לנטרל תוספים. עליך להשתמש בממשק "
 "משתמש גרפי במקום."
 
 # יושן
@@ -4945,7 +4949,7 @@ msgstr "אני זמין/ה."
 msgid "I'm free for chat."
 msgstr "אני פנוי/ה לשיחה."
 
-#: ../src/common/config.py:515 ../src/config.py:1654
+#: ../src/common/config.py:515 ../src/config.py:1647
 msgid "Be right back."
 msgstr "מיד אשוב."
 
@@ -4973,12 +4977,12 @@ msgstr ""
 msgid "Sound to play when any MUC message arrives."
 msgstr "צליל לניגון כאשר הודעת שמ״מ מגיעה."
 
-#: ../src/common/config.py:540 ../src/common/optparser.py:318
+#: ../src/common/config.py:540 ../src/common/optparser.py:325
 msgid "green"
 msgstr "ירוק"
 
 # מכולת
-#: ../src/common/config.py:544 ../src/common/optparser.py:304
+#: ../src/common/config.py:544 ../src/common/optparser.py:311
 msgid "grocery"
 msgstr "מצרכים"
 
@@ -5003,24 +5007,24 @@ msgstr ""
 "‏JID ‏%s אינה תואמת RFC. זו לא תוסף לרשימה שלך. השתמש בכלי ניהול רשימה (roster "
 "management tools) כגון http://jru.jabberstudio.org כדי להסירה"
 
-#: ../src/common/connection_handlers_events.py:837
+#: ../src/common/connection_handlers_events.py:846
 #, python-format
 msgid "unsubscribe request from %s"
 msgstr "בקשת ביטול הרשמה מאת %s"
 
 # BUG: spawning dialog
-#: ../src/common/connection_handlers_events.py:922
+#: ../src/common/connection_handlers_events.py:931
 #: ../src/common/connection_handlers.py:341
-#: ../src/common/connection_handlers.py:1069
-#: ../src/common/connection_handlers.py:1194 ../src/common/connection.py:540
-#: ../src/common/logger.py:1163 ../src/gajim.py:472 ../src/session.py:99
+#: ../src/common/connection_handlers.py:1073
+#: ../src/common/connection_handlers.py:1230 ../src/common/connection.py:538
+#: ../src/common/logger.py:1164 ../src/gajim.py:472 ../src/session.py:99
 msgid "Disk Write Error"
 msgstr "שגיאת כתיבת כונן"
 
-#: ../src/common/connection_handlers_events.py:926
-#: ../src/common/connection_handlers.py:1072
-#: ../src/common/connection_handlers.py:1197 ../src/common/connection.py:544
-#: ../src/common/logger.py:1166 ../src/gajim.py:253 ../src/session.py:103
+#: ../src/common/connection_handlers_events.py:935
+#: ../src/common/connection_handlers.py:1076
+#: ../src/common/connection_handlers.py:1233 ../src/common/connection.py:542
+#: ../src/common/logger.py:1167 ../src/gajim.py:253 ../src/session.py:103
 #, python-format
 msgid ""
 "The database file (%s) cannot be read. Try to repair it (see http://trac."
@@ -5031,65 +5035,65 @@ msgstr ""
 
 #. Room has been destroyed. see
 #. http://www.xmpp.org/extensions/xep-0045.html#destroyroom
-#: ../src/common/connection_handlers_events.py:947
+#: ../src/common/connection_handlers_events.py:956
 msgid "Room has been destroyed"
 msgstr "החדר הוחרב"
 
-#: ../src/common/connection_handlers_events.py:955
+#: ../src/common/connection_handlers_events.py:964
 #, python-format
 msgid "You can join this room instead: %s"
 msgstr "באפשרותך להצטרף לחדר זה במקום: %s"
 
-#: ../src/common/connection_handlers_events.py:1043
-#: ../src/common/connection_handlers_events.py:1086
+#: ../src/common/connection_handlers_events.py:1123
+#: ../src/common/connection_handlers_events.py:1168
 #: ../src/common/connection.py:276 ../src/common/connection.py:286
-#: ../src/config.py:2169 ../src/config.py:2178 ../src/config.py:2248
-#: ../src/config.py:3715 ../src/dataforms_widget.py:633 ../src/dialogs.py:3260
+#: ../src/config.py:2164 ../src/config.py:2173 ../src/config.py:2243
+#: ../src/config.py:3716 ../src/dataforms_widget.py:633 ../src/dialogs.py:3260
 msgid "Invalid Jabber ID"
 msgstr "מזהה Jabber שגוי"
 
-#: ../src/common/connection_handlers_events.py:1044
-#: ../src/common/connection_handlers_events.py:1087
+#: ../src/common/connection_handlers_events.py:1124
+#: ../src/common/connection_handlers_events.py:1169
 msgid "A message from a non-valid JID arrived, it has been ignored."
 msgstr "התקבלה הודעה מכתובת JID אשר איננה תקפה, Gajim התעלם מהודעה זו."
 
 #. ('MSGNOTSENT', account, (jid, ierror_msg, msg, time, session))
-#: ../src/common/connection_handlers_events.py:1177
+#: ../src/common/connection_handlers_events.py:1212
 #: ../src/gui_interface.py:434 ../src/gui_interface.py:448
 #, python-format
 msgid "error while sending %(message)s ( %(error)s )"
 msgstr "שגיאה בעת מסירת %(message)s ‏( %(error)s )"
 
-#: ../src/common/connection_handlers_events.py:1406
+#: ../src/common/connection_handlers_events.py:1441
 msgid "URL:"
 msgstr "‏URL:"
 
-#: ../src/common/connection_handlers_events.py:1707
+#: ../src/common/connection_handlers_events.py:1742
 #, python-format
 msgid "Unknown SSL error: %d"
 msgstr "שגיאת SSL לא מוכרת: %d"
 
-#: ../src/common/connection_handlers_events.py:2313 ../src/dialogs.py:2933
+#: ../src/common/connection_handlers_events.py:2352 ../src/dialogs.py:2933
 #: ../src/notify.py:266
 msgid "New Single Message"
 msgstr "הודעה בודדת חדשה"
 
-#: ../src/common/connection_handlers_events.py:2315
+#: ../src/common/connection_handlers_events.py:2354
 #, python-format
 msgid "New Single Message from %(nickname)s"
 msgstr "התקבלה הודעה בודדת חדשה מאת %(nickname)s"
 
-#: ../src/common/connection_handlers_events.py:2319 ../src/dialogs.py:2934
+#: ../src/common/connection_handlers_events.py:2358 ../src/dialogs.py:2934
 #: ../src/notify.py:267
 msgid "New Private Message"
 msgstr "הודעה פרטית חדשה"
 
-#: ../src/common/connection_handlers_events.py:2321
+#: ../src/common/connection_handlers_events.py:2360
 #, python-format
 msgid "New Private Message from group chat %s"
 msgstr "הודעה פרטית חדשה מתוך שיחת קבוצה %s"
 
-#: ../src/common/connection_handlers_events.py:2324
+#: ../src/common/connection_handlers_events.py:2363
 #, python-format
 msgid "%(nickname)s: %(message)s"
 msgstr ""
@@ -5098,55 +5102,55 @@ msgstr ""
 # [09:08:28 PM] Myself: אני חושב שזה: המסר נשלח על-ידי...
 # [09:08:39 PM] Rodensky: לא
 # [09:08:46 PM] Rodensky: זה "התקבלה הודעה מ"
-#: ../src/common/connection_handlers_events.py:2327
+#: ../src/common/connection_handlers_events.py:2366
 #, python-format
 msgid "Messaged by %(nickname)s"
 msgstr "התקבלה הודעה מאת %(nickname)s"
 
-#: ../src/common/connection_handlers_events.py:2331 ../src/dialogs.py:2933
+#: ../src/common/connection_handlers_events.py:2370 ../src/dialogs.py:2933
 #: ../src/notify.py:266
 msgid "New Message"
 msgstr "הודעה חדשה"
 
-#: ../src/common/connection_handlers_events.py:2333
+#: ../src/common/connection_handlers_events.py:2372
 #, python-format
 msgid "New Message from %(nickname)s"
 msgstr "הודעה חדשה מאת %(nickname)s"
 
-#: ../src/common/connection_handlers_events.py:2477
+#: ../src/common/connection_handlers_events.py:2517
 #, python-format
 msgid "%(nick)s Changed Status"
 msgstr "המצב של %(nick)s שונה"
 
-#: ../src/common/connection_handlers_events.py:2479
+#: ../src/common/connection_handlers_events.py:2519
 #: ../src/groupchat_control.py:208 ../src/groupchat_control.py:1903
 #: ../src/history_window.py:455
 #, python-format
 msgid "%(nick)s is now %(status)s"
 msgstr "%(nick)s מצוי/ה כעת במצב %(status)s "
 
-#: ../src/common/connection_handlers_events.py:2483 ../src/dialogs.py:2945
+#: ../src/common/connection_handlers_events.py:2523 ../src/dialogs.py:2945
 #: ../src/notify.py:280
 msgid "Contact Changed Status"
 msgstr "איש קשר שינה מצב"
 
-#: ../src/common/connection_handlers_events.py:2485
+#: ../src/common/connection_handlers_events.py:2525
 #, python-format
 msgid "%(nickname)s Signed In"
 msgstr "%(nickname)s התחבר/ה"
 
 #. default value
-#: ../src/common/connection_handlers_events.py:2489 ../src/dialogs.py:2929
+#: ../src/common/connection_handlers_events.py:2529 ../src/dialogs.py:2929
 #: ../src/notify.py:262
 msgid "Contact Signed In"
 msgstr "איש קשר התחבר"
 
-#: ../src/common/connection_handlers_events.py:2491
+#: ../src/common/connection_handlers_events.py:2531
 #, python-format
 msgid "%(nickname)s Signed Out"
 msgstr "%(nickname)s התנתק/ה"
 
-#: ../src/common/connection_handlers_events.py:2495 ../src/dialogs.py:2931
+#: ../src/common/connection_handlers_events.py:2535 ../src/dialogs.py:2931
 #: ../src/notify.py:264
 msgid "Contact Signed Out"
 msgstr "איש קשר התנתק"
@@ -5183,7 +5187,7 @@ msgid ""
 "Registration with agent %(agent)s failed with error %(error)s: %(error_msg)s"
 msgstr "רישום עם סוכן %(agent)s נכשל בליווי שגיאה %(error)s: ‏%(error_msg)s"
 
-#: ../src/common/connection_handlers.py:1888
+#: ../src/common/connection_handlers.py:1924
 msgid "I would like to add you to my roster."
 msgstr "ברצוני להוסיף אותך לרשימה שלי."
 
@@ -5339,11 +5343,11 @@ msgstr "המפתח של איש קשר (%s) לא תואם את המפתח שמו�
 
 # Needs to be tested
 #. we're not english: one in locale and one en
-#: ../src/common/connection.py:369
+#: ../src/common/connection.py:371
 msgid "[This message is *encrypted* (See :XEP:`27`]"
 msgstr "[הודעה זו הינה *מוצפנת* (ראו :XEP:`27‪`‬]"
 
-#: ../src/common/connection.py:527
+#: ../src/common/connection.py:525
 #, python-format
 msgid ""
 "Subject: %(subject)s\n"
@@ -5352,84 +5356,82 @@ msgstr ""
 "נושא: %(subject)s\n"
 "%(message)s"
 
-#: ../src/common/connection.py:958
+#: ../src/common/connection.py:964
 #, python-format
 msgid "Connection with account \"%s\" has been lost"
 msgstr "החיבור עם חשבון \"%s\" אבד"
 
-#: ../src/common/connection.py:959
+#: ../src/common/connection.py:965
 msgid "Reconnect manually."
 msgstr "התחבר ידנית."
 
 #. it's a new account
 #. wrong answer
-#: ../src/common/connection.py:970
+#: ../src/common/connection.py:976
 #, python-format
 msgid "Server %(name)s answered wrongly to register request: %(error)s"
 msgstr "שרת %(name)s ענה באופן שגוי לבקשת rhauo: %(error)s"
 
 #. requested config has changed since first connection
-#: ../src/common/connection.py:1012
+#: ../src/common/connection.py:1018
 #, python-format
 msgid "Server %s provided a different registration form"
 msgstr "שרת %s סיפק טופס רישום שונה"
 
-#: ../src/common/connection.py:1029
+#: ../src/common/connection.py:1035
 msgid "Invalid answer"
 msgstr "תשובה שגויה"
 
-#: ../src/common/connection.py:1030
+#: ../src/common/connection.py:1036
 #, python-format
 msgid "Transport %(name)s answered wrongly to register request: %(error)s"
 msgstr "מוביל %(name)s ענה באופן שגוי לבקשת רישום: %(error)s"
 
-# BUG: _underline
-#: ../src/common/connection.py:1157
-#, fuzzy
+#: ../src/common/connection.py:1163
 msgid "Wrong Custom Hostname"
-msgstr "התאם שם מארח\\פורט"
+msgstr "שם מארח מותאם שגוי"
 
-#: ../src/common/connection.py:1339
+#: ../src/common/connection.py:1345
 #, python-format
 msgid "Could not connect to \"%(host)s\" via proxy \"%(proxy)s\""
-msgstr "לא היתה אפשרות להתחבר אל \"%(host)s\" דרך ציר \"%(proxy)s\""
+msgstr "לא היתה אפשרות להתחבר למארח \"%(host)s\" דרך ציר \"%(proxy)s\""
 
-#: ../src/common/connection.py:1342
+#: ../src/common/connection.py:1348
 #, python-format
 msgid "Could not connect to \"%(host)s\""
 msgstr "לא היתה אפשרות להתחבר אל \"%(host)s\""
 
-#: ../src/common/connection.py:1344 ../src/common/connection.py:1510
+#: ../src/common/connection.py:1350 ../src/common/connection.py:1524
 #: ../src/gui_interface.py:543
 msgid "Check your connection or try again later."
 msgstr "בדוק את החיבור שלך או נסה שוב מאוחר יותר."
 
-#: ../src/common/connection.py:1349
+#: ../src/common/connection.py:1355
 #, python-format
 msgid "Server replied: %s"
 msgstr "תגובת שרת: %s"
 
-#: ../src/common/connection.py:1364
+#: ../src/common/connection.py:1370
 msgid "Connection to proxy failed"
-msgstr "התחברות לציר נכשלה"
+msgstr "התחברות אל proxy נכשלה"
 
-#: ../src/common/connection.py:1402 ../src/common/connection.py:1485
+#: ../src/common/connection.py:1408 ../src/common/connection.py:1499
 #, python-format
 msgid "Could not connect to account %s"
 msgstr "לא היתה אפשרות להתחבר לחשבון %s"
 
-#: ../src/common/connection.py:1403 ../src/common/connection.py:1486
+#: ../src/common/connection.py:1409 ../src/common/connection.py:1500
 #, python-format
 msgid "Connection with account %s has been lost. Retry connecting."
 msgstr "החיבור עם חשבון %s אבד. כעת מנסה להתחבר מחדש."
 
 # חסרת תוקף
-#: ../src/common/connection.py:1429
+#: ../src/common/connection.py:1443
 #, python-format
 msgid "The authenticity of the %s certificate could be invalid"
 msgstr "אמינותה של התעודה %s עלולה להיות רעועה"
 
-#: ../src/common/connection.py:1432
+#: ../src/common/connection.py:1446
 #, python-format
 msgid ""
 "\n"
@@ -5438,7 +5440,7 @@ msgstr ""
 "\n"
 "שגיאת SSL: ‏<b>%s</b>"
 
-#: ../src/common/connection.py:1434
+#: ../src/common/connection.py:1448
 #, python-format
 msgid ""
 "\n"
@@ -5448,74 +5450,73 @@ msgstr ""
 "שגיאת SSL לא מוכרת: %d"
 
 # שם תחום
-# כוללת
-#: ../src/common/connection.py:1462
+#: ../src/common/connection.py:1476
 #, python-format
 msgid ""
 "The authenticity of the %s certificate could be invalid.\n"
 "The certificate does not cover this domain."
 msgstr ""
 "אמינותה של התעודה %s עלולה להיות רעועה.\n"
-"תעודה זו אינה מכסה את מתחם זה."
+"תעודה זו לא מכסה את מתחם זה."
 
-#: ../src/common/connection.py:1509 ../src/common/connection.py:2283
+#: ../src/common/connection.py:1523 ../src/common/connection.py:2304
 #: ../src/common/zeroconf/connection_zeroconf.py:206
 #, python-format
 msgid "Could not connect to \"%s\""
 msgstr "לא היתה אפשרות להתחבר אל \"%s\""
 
-#: ../src/common/connection.py:1545
+#: ../src/common/connection.py:1559
 #, python-format
 msgid "Authentication failed with \"%s\""
 msgstr "אימות עם \"%s\" נכשל"
 
 # נכונות
-#: ../src/common/connection.py:1546
+#: ../src/common/connection.py:1560
 msgid "Please check your login and password for correctness."
 msgstr "אנא בדוק תקינות התחברות וסיסמה."
 
-#: ../src/common/connection.py:1622
+#: ../src/common/connection.py:1636
 msgid "Error while removing privacy list"
 msgstr "שגיאה בעת הסרת רשימת פרטיות"
 
 # Deactivate privacy list or resource?
-#: ../src/common/connection.py:1623
+#: ../src/common/connection.py:1637
 #, python-format
 msgid ""
 "Privacy list %s has not been removed. It is maybe active in one of your "
 "connected resources. Deactivate it and try again."
 msgstr ""
-"רשימת הפרטיות %s לא הוסרה. יתכן כי זו פעילה באחד ממשאביך אשר מחוברים כעת. "
+"רשימת הפרטיות %s לא הוסרה. ייתכן כי זו פעילה באחד ממשאביך אשר מחוברים כעת. "
 "נטרל את פעילותו ונסה שוב."
 
-#: ../src/common/connection.py:1816 ../src/common/connection.py:1931
+#: ../src/common/connection.py:1830 ../src/common/connection.py:1944
 msgid "Invisibility not supported"
 msgstr "מצב בלתי נראה אינו נתמך"
 
-#: ../src/common/connection.py:1817 ../src/common/connection.py:1932
+#: ../src/common/connection.py:1831 ../src/common/connection.py:1945
 #, python-format
 msgid "Account %s doesn't support invisibility."
 msgstr "חשבון %s לא תומך במצב בלתי נראה."
 
-#: ../src/common/connection.py:2147
+#: ../src/common/connection.py:2168
 #, python-format
 msgid "Sent contact: \"%s\" (%s)"
 msgstr "איש קשר אשר נשלח: \"%s\" ‏(%s)"
 
-#: ../src/common/connection.py:2150
+#: ../src/common/connection.py:2171
 msgid "Sent contacts:"
 msgstr "אנשי קשר אשר נשלחו:"
 
 # נתון להשגה/לביצוע/בהישג יד
-#: ../src/common/connection.py:2300 ../src/common/connection.py:2322
+#: ../src/common/connection.py:2321 ../src/common/connection.py:2343
 msgid "Not fetched because of invisible status"
 msgstr "לא מובא בשל מצב בלתי נראה"
 
-#: ../src/common/connection.py:2906
+#: ../src/common/connection.py:2933
 msgid "Unregister failed"
 msgstr "ביטול רישום נכשל"
 
-#: ../src/common/connection.py:2907
+#: ../src/common/connection.py:2934
 #, python-format
 msgid "Unregistration with server %(server)s failed: %(error)s"
 msgstr "אי רישום בתוך שרת %(server)s נכשל: %(error)s"
@@ -5528,10 +5529,10 @@ msgstr "משקיפים"
 #. Invite to
 #: ../src/common/contacts.py:133 ../src/common/contacts.py:361
 #: ../src/common/helpers.py:68 ../src/disco.py:123 ../src/disco.py:124
-#: ../src/disco.py:1562 ../src/roster_window.py:863
-#: ../src/roster_window.py:1620 ../src/roster_window.py:1734
-#: ../src/roster_window.py:1736 ../src/roster_window.py:1898
-#: ../src/roster_window.py:2596 ../src/roster_window.py:5806
+#: ../src/disco.py:1562 ../src/roster_window.py:869
+#: ../src/roster_window.py:1626 ../src/roster_window.py:1740
+#: ../src/roster_window.py:1742 ../src/roster_window.py:1904
+#: ../src/roster_window.py:2602 ../src/roster_window.py:5812
 msgid "Transports"
 msgstr "מובילים"
 
@@ -6026,21 +6027,21 @@ msgstr "‫Gajim - ‫%s"
 msgid "Hello, I am $name."
 msgstr "שלום, שמי $name."
 
-#: ../src/common/helpers.py:1488 ../src/common/helpers.py:1497
-#: ../src/common/helpers.py:1551
+#: ../src/common/helpers.py:1490 ../src/common/helpers.py:1499
+#: ../src/common/helpers.py:1557
 msgid "Timeout loading image"
 msgstr "תם הזמן אשר הוקצב לטעינת תמונה"
 
 # BUG: File too big
-#: ../src/common/helpers.py:1507 ../src/common/helpers.py:1549
+#: ../src/common/helpers.py:1509 ../src/common/helpers.py:1555
 msgid "Image is too big"
 msgstr "התמונה הינה גדולה מדי"
 
-#: ../src/common/helpers.py:1517
+#: ../src/common/helpers.py:1519
 msgid "PyCURL is not installed"
 msgstr "‏PyCURL אינה מותקנת"
 
-#: ../src/common/helpers.py:1553
+#: ../src/common/helpers.py:1559
 msgid "Error loading image"
 msgstr "שגיאה בטעינת תמונה"
 
@@ -6188,11 +6189,11 @@ msgstr "מערכת חלונות X (ללא Xv)"
 msgid "Error: cannot open %s for reading"
 msgstr "שגיאה: אין אפשרות לפתוח את %s לקריאה"
 
-#: ../src/common/optparser.py:313 ../src/common/optparser.py:314
+#: ../src/common/optparser.py:320 ../src/common/optparser.py:321
 msgid "cyan"
 msgstr ""
 
-#: ../src/common/optparser.py:393
+#: ../src/common/optparser.py:400
 #, fuzzy
 msgid "migrating logs database to indices"
 msgstr "cli"
@@ -6218,7 +6219,7 @@ msgstr "חושק"
 
 #: ../src/common/pep.py:30
 msgid "Angry"
-msgstr "כועס"
+msgstr "זועם"
 
 #: ../src/common/pep.py:31
 msgid "Annoyed"
@@ -6276,7 +6277,7 @@ msgstr "מסופק"
 
 #: ../src/common/pep.py:44
 msgid "Cranky"
-msgstr "נרגז"
+msgstr "רעוע"
 
 #: ../src/common/pep.py:45
 msgid "Crazy"
@@ -7053,17 +7054,17 @@ msgstr "הודעה שגרתית"
 msgid "Enabled"
 msgstr "מאופשר"
 
-#: ../src/config.py:468 ../src/config.py:472 ../src/config.py:3206
+#: ../src/config.py:468 ../src/config.py:472 ../src/config.py:3207
 msgid "Default"
 msgstr "ברירת מחדל"
 
-#: ../src/config.py:747 ../src/dialogs.py:1500
+#: ../src/config.py:743 ../src/dialogs.py:1500
 #, python-format
 msgid "Dictionary for lang %s not available"
 msgstr "מילון עבור שפה %s לא זמין"
 
 # להפיק תועלת
-#: ../src/config.py:748
+#: ../src/config.py:744
 #, python-format
 msgid ""
 "You have to install %s dictionary to use spellchecking, or choose another "
@@ -7072,212 +7073,212 @@ msgstr ""
 "עליך להתקין מילון %s כדי לעשות שימוש בבדיקת איות, או בחר בשפה שונה על ידי "
 "הגדרת האפשרות speller_language."
 
-#: ../src/config.py:1230
+#: ../src/config.py:1223
 msgid "status message title"
 msgstr "כותרת הודעת מצב"
 
-#: ../src/config.py:1231
+#: ../src/config.py:1224
 msgid "status message text"
 msgstr "תמליל הודעת מצב"
 
 #. Name column
-#: ../src/config.py:1559 ../src/dialogs.py:2688 ../src/dialogs.py:2755
+#: ../src/config.py:1552 ../src/dialogs.py:2688 ../src/dialogs.py:2755
 #: ../src/dialogs.py:3553 ../src/disco.py:898 ../src/disco.py:1795
 #: ../src/disco.py:2099 ../src/history_window.py:92
 msgid "Name"
 msgstr "שם"
 
-#: ../src/config.py:1664
+#: ../src/config.py:1657
 msgid "Relogin now?"
 msgstr "להתחבר מחדש עכשיו?"
 
-#: ../src/config.py:1665
+#: ../src/config.py:1658
 msgid "If you want all the changes to apply instantly, you must relogin."
 msgstr "אם ברצונך כי השינויים יחולו באופן מידי, עליך להתחבר מחדש."
 
 # הצפנת OpenPGP
-#: ../src/config.py:1822 ../src/config.py:1957
+#: ../src/config.py:1815 ../src/config.py:1950
 msgid "OpenPGP is not usable on this computer"
 msgstr "‏OpenPGP אינה שמישה על מחשב זה"
 
-#: ../src/config.py:2000 ../src/config.py:2050
+#: ../src/config.py:1995 ../src/config.py:2045
 msgid "Unread events"
 msgstr "אירועים אשר לא נקראו"
 
-#: ../src/config.py:2001
+#: ../src/config.py:1996
 msgid "Read all pending events before removing this account."
 msgstr "קרא את כל האירועים אשר ממתינים בטרם הסרת חשבון זה."
 
-#: ../src/config.py:2031
+#: ../src/config.py:2026
 #, python-format
 msgid "You have opened chat in account %s"
 msgstr "פתחת שיחה בחשבון %s"
 
-#: ../src/config.py:2032
+#: ../src/config.py:2027
 msgid "All chat and groupchat windows will be closed. Do you want to continue?"
 msgstr "כל חלונות שיחה וחלונות שיחת קבוצה ייסגרו. האם ברצונך להמשיך?"
 
-#: ../src/config.py:2045 ../src/config.py:2617 ../src/config.py:2655
+#: ../src/config.py:2040 ../src/config.py:2618 ../src/config.py:2656
 msgid "You are currently connected to the server"
 msgstr "אתה מחובר כעת לשרת"
 
-#: ../src/config.py:2046
+#: ../src/config.py:2041
 msgid "To change the account name, you must be disconnected."
 msgstr "כדי לשנות את שם החשבון, עליך להתנתק."
 
-#: ../src/config.py:2051
+#: ../src/config.py:2046
 msgid "To change the account name, you must read all pending events."
 msgstr "כדי לשנות את שם החשבון, עליך לקרוא את כל האירועים אשר ממתינים."
 
-#: ../src/config.py:2057
+#: ../src/config.py:2052
 msgid "Account Name Already Used"
 msgstr "שם חשבון כבר מצוי בשימוש"
 
-#: ../src/config.py:2058
+#: ../src/config.py:2053
 msgid ""
 "This name is already used by another of your accounts. Please choose another "
 "name."
 msgstr "שם זה כבר מצוי בשימוש על ידי חשבון אחר מחשבונותיך. אנא בחר שם אחר."
 
-#: ../src/config.py:2062 ../src/config.py:2067
+#: ../src/config.py:2057 ../src/config.py:2062
 msgid "Invalid account name"
 msgstr "שם חשבון שגוי"
 
-#: ../src/config.py:2063
+#: ../src/config.py:2058
 msgid "Account name cannot be empty."
 msgstr "שם חשבון לא יכול להיות ריק."
 
-#: ../src/config.py:2068
+#: ../src/config.py:2063
 msgid "Account name cannot contain spaces."
 msgstr "שם חשבון לא יכול להכיל רווחים."
 
-#: ../src/config.py:2149
+#: ../src/config.py:2144
 msgid "Rename Account"
 msgstr "שינוי שם חשבון"
 
-#: ../src/config.py:2150
+#: ../src/config.py:2145
 #, python-format
 msgid "Enter a new name for account %s"
 msgstr "הזן שם חדש עבור חשבון %s"
 
-#: ../src/config.py:2180
+#: ../src/config.py:2175
 msgid "A Jabber ID must be in the form \"user@servername\"."
 msgstr "על מזהה Jabber להיות בצורה הזו \"user@servername\"."
 
-#: ../src/config.py:2414 ../src/config.py:3761
+#: ../src/config.py:2415 ../src/config.py:3762
 msgid "Invalid entry"
 msgstr "רשומה שגויה"
 
-#: ../src/config.py:2415 ../src/config.py:3762
+#: ../src/config.py:2416 ../src/config.py:3763
 msgid "Custom port must be a port number."
 msgstr "פורט מותאם מוכרח להיות מספר פורט."
 
-#: ../src/config.py:2437
+#: ../src/config.py:2438
 msgid "Failed to get secret keys"
 msgstr "כשל בקבלת מפתחות סודיים"
 
-#: ../src/config.py:2438
+#: ../src/config.py:2439
 msgid "There is no OpenPGP secret key available."
 msgstr "לא קיים מפתח OpenPGP סודי זמין."
 
-#: ../src/config.py:2476
+#: ../src/config.py:2477
 msgid "OpenPGP Key Selection"
 msgstr "בחירת מפתח ‫OpenPGP"
 
-#: ../src/config.py:2477
+#: ../src/config.py:2478
 msgid "Choose your OpenPGP key"
 msgstr "בחר מפתח OpenPGP"
 
-#: ../src/config.py:2485
+#: ../src/config.py:2486
 msgid "No such account available"
 msgstr "לא קיים חשבון כזה"
 
 # עוד בטרם
-#: ../src/config.py:2486
+#: ../src/config.py:2487
 msgid "You must create your account before editing your personal information."
 msgstr "עליך ליצור חשבון בטרם עריכת המידע האישי שלך."
 
-#: ../src/config.py:2493 ../src/dialogs.py:2374 ../src/dialogs.py:2676
+#: ../src/config.py:2494 ../src/dialogs.py:2374 ../src/dialogs.py:2676
 #: ../src/dialogs.py:2865 ../src/disco.py:524 ../src/profile_window.py:371
 msgid "You are not connected to the server"
 msgstr "אינך מחובר לשרת"
 
-#: ../src/config.py:2494
+#: ../src/config.py:2495
 msgid "Without a connection, you can not edit your personal information."
 msgstr "ללא חיבור, אין באפשרותך לערוך את המידע האישי שלך."
 
-#: ../src/config.py:2499
+#: ../src/config.py:2500
 msgid "Your server doesn't support vCard"
 msgstr "השרת שלך לא תומך vCard"
 
-#: ../src/config.py:2500
+#: ../src/config.py:2501
 msgid "Your server can't save your personal information."
 msgstr "השרת שלך לא יכול לשמור את המידע האישי שלך."
 
-#: ../src/config.py:2618 ../src/config.py:2656
+#: ../src/config.py:2619 ../src/config.py:2657
 msgid "To disable the account, you must be disconnected."
 msgstr "כדי לנטרל את החשבון, עליך להתנתק."
 
-#: ../src/config.py:2625
-msgid "Account Local already exists."
-msgstr "חשבון Local כבר קיים."
-
 #: ../src/config.py:2626
+msgid "Account Local already exists."
+msgstr "חשבון Local כבר ישנו."
+
+#: ../src/config.py:2627
 msgid "Please rename or remove it before enabling link-local messaging."
 msgstr "אנא שנה את שמו או הסר אותו בטרם אפשור קישוריות מסרים מקומית."
 
-#: ../src/config.py:2787
+#: ../src/config.py:2788
 #, python-format
 msgid "Edit %s"
 msgstr "ערוך ‫%s"
 
 # רישום
-#: ../src/config.py:2789
+#: ../src/config.py:2790
 #, python-format
 msgid "Register to %s"
 msgstr "הירשם אל ‫%s"
 
 #. list at the beginning
-#: ../src/config.py:2825
+#: ../src/config.py:2826
 msgid "Ban List"
 msgstr "רשימת אסירה"
 
-#: ../src/config.py:2826
+#: ../src/config.py:2827
 msgid "Member List"
 msgstr "רשימת חברים"
 
-#: ../src/config.py:2826
+#: ../src/config.py:2827
 msgid "Owner List"
 msgstr "רשימת בעלים"
 
-#: ../src/config.py:2827
+#: ../src/config.py:2828
 msgid "Administrator List"
 msgstr "רשימת מנהלים"
 
 #. Address column
 #. holds JID (who said this)
-#: ../src/config.py:2891 ../src/disco.py:905 ../src/history_manager.py:217
+#: ../src/config.py:2892 ../src/disco.py:905 ../src/history_manager.py:217
 msgid "JID"
 msgstr "‏JID"
 
-#: ../src/config.py:2901
+#: ../src/config.py:2902
 msgid "Reason"
 msgstr "סיבה"
 
-#: ../src/config.py:2908
+#: ../src/config.py:2909
 msgid "Nick"
 msgstr "כינוי"
 
-#: ../src/config.py:2914
+#: ../src/config.py:2915
 msgid "Role"
 msgstr "תפקיד"
 
-#: ../src/config.py:2941
+#: ../src/config.py:2942
 msgid "Banning..."
 msgstr "אסירה..."
 
 #. You can move '\n' before user@domain if that line is TOO BIG
-#: ../src/config.py:2943
+#: ../src/config.py:2944
 msgid ""
 "<b>Whom do you want to ban?</b>\n"
 "\n"
@@ -7285,11 +7286,11 @@ msgstr ""
 "<b>את מי ברצונך לאסור?</b>\n"
 "\n"
 
-#: ../src/config.py:2945
+#: ../src/config.py:2946
 msgid "Adding Member..."
 msgstr "הוספת חבר..."
 
-#: ../src/config.py:2946
+#: ../src/config.py:2947
 msgid ""
 "<b>Whom do you want to make a member?</b>\n"
 "\n"
@@ -7297,11 +7298,11 @@ msgstr ""
 "<b>את מי ברצונך להפוך לחבר?</b>\n"
 "\n"
 
-#: ../src/config.py:2948
+#: ../src/config.py:2949
 msgid "Adding Owner..."
 msgstr "הוספת בעלים..."
 
-#: ../src/config.py:2949
+#: ../src/config.py:2950
 msgid ""
 "<b>Whom do you want to make an owner?</b>\n"
 "\n"
@@ -7309,11 +7310,11 @@ msgstr ""
 "<b>את מי ברצונך להפוך לבעלים?</b>\n"
 "\n"
 
-#: ../src/config.py:2951
+#: ../src/config.py:2952
 msgid "Adding Administrator..."
 msgstr "הוספת מנהל..."
 
-#: ../src/config.py:2952
+#: ../src/config.py:2953
 msgid ""
 "<b>Whom do you want to make an administrator?</b>\n"
 "\n"
@@ -7326,7 +7327,7 @@ msgstr ""
 #      ‏‏user = משתמש\n
 #      ‏‏resource = משאב\n
 #
-#: ../src/config.py:2953
+#: ../src/config.py:2954
 msgid ""
 "Can be one of the following:\n"
 "1. user@domain/resource (only that resource matches).\n"
@@ -7342,107 +7343,107 @@ msgstr ""
 "4. ‏domain (המתחם עצמו מתאים, עבור כל user@domain,\n"
 "‏domain/resource, או כתובת אשר מכילים מתחם משני)."
 
-#: ../src/config.py:3054
+#: ../src/config.py:3055
 #, python-format
 msgid "Removing %s account"
 msgstr "הסרת חשבון ‫%s"
 
-#: ../src/config.py:3069
+#: ../src/config.py:3070
 msgid "Account is disabled"
 msgstr "חשבון מנוטרל"
 
-#: ../src/config.py:3070
+#: ../src/config.py:3071
 msgid "To unregister from a server, account must be enabled."
 msgstr "כדי לבטל רישום מתוך שרת, על חשבון נתון להיות מאופשר."
 
-#: ../src/config.py:3083 ../src/gui_interface.py:286
-#: ../src/gui_interface.py:735
+#: ../src/config.py:3084 ../src/gui_interface.py:286
+#: ../src/gui_interface.py:739
 msgid "Password Required"
 msgstr "נדרשת מילת מעבר"
 
-#: ../src/config.py:3084 ../src/gui_interface.py:715
+#: ../src/config.py:3085 ../src/gui_interface.py:719
 #, python-format
 msgid "Enter your password for account %s"
 msgstr "הזן סיסמה עבור חשבון %s"
 
-#: ../src/config.py:3085 ../src/gui_interface.py:735
+#: ../src/config.py:3086 ../src/gui_interface.py:739
 msgid "Save password"
 msgstr "שמור סיסמה"
 
-#: ../src/config.py:3095
+#: ../src/config.py:3096
 #, python-format
 msgid "Account \"%s\" is connected to the server"
 msgstr "חשבון \"%s\" מחובר כעת לשרת"
 
 # it = account?
 # תסיר/י אותו
-#: ../src/config.py:3096
+#: ../src/config.py:3097
 msgid "If you remove it, the connection will be lost."
 msgstr "אם תסירו, החיבור יאבד."
 
-#: ../src/config.py:3110
+#: ../src/config.py:3111
 #, python-format
 msgid "Connection to server %s failed"
 msgstr "התחברות לשרת %s נכשלה"
 
-#: ../src/config.py:3111
+#: ../src/config.py:3112
 msgid "What would you like to do?"
 msgstr "מה ברצונך לעשות?"
 
 # BUG: USE: Remove account _only from Gajim
-#: ../src/config.py:3112
+#: ../src/config.py:3113
 msgid "Remove only from Gajim"
 msgstr "להסיר מתוך Gajim בלבד"
 
 # BUG: Underline
-#: ../src/config.py:3113
+#: ../src/config.py:3114
 msgid "Don't remove anything. I'll try again later"
 msgstr "לא להסיר דבר. אני אנסה שוב מאוחר יותר"
 
-#: ../src/config.py:3206
+#: ../src/config.py:3207
 msgid "?print_status:All"
 msgstr "הכל"
 
-#: ../src/config.py:3207
+#: ../src/config.py:3208
 msgid "Enter and leave only"
 msgstr "כניסה ועזיבה בלבד"
 
-#: ../src/config.py:3208
+#: ../src/config.py:3209
 msgid "?print_status:None"
 msgstr "אל תדפיס"
 
-#: ../src/config.py:3268
+#: ../src/config.py:3269
 msgid "New Group Chat"
 msgstr "שיחת קבוצה חדשה"
 
-#: ../src/config.py:3301
+#: ../src/config.py:3302
 msgid "This bookmark has invalid data"
 msgstr "סימנייה זו מכילה מידע שגוי"
 
-#: ../src/config.py:3302
+#: ../src/config.py:3303
 msgid ""
 "Please be sure to fill out server and room fields or remove this bookmark."
 msgstr "אנא דאג למלא שדות חדר ושרת או הסר את סימנייה זו."
 
-#: ../src/config.py:3430 ../src/config.py:3443 ../src/config.py:3455
-#: ../src/config.py:3481
+#: ../src/config.py:3431 ../src/config.py:3444 ../src/config.py:3456
+#: ../src/config.py:3482
 msgid "Character not allowed"
 msgstr "תו לא מורשה"
 
-#: ../src/config.py:3443 ../src/config.py:3454 ../src/config.py:3737
+#: ../src/config.py:3444 ../src/config.py:3455 ../src/config.py:3738
 msgid "Invalid server"
 msgstr "שרת שגוי"
 
-#: ../src/config.py:3480
+#: ../src/config.py:3481
 msgid "Invalid room"
 msgstr "חדר שגוי"
 
-#: ../src/config.py:3649
+#: ../src/config.py:3650
 msgid "Account has been added successfully"
 msgstr "חשבון הוסף בהצלחה"
 
 # מאוחר יותר
-#: ../src/config.py:3650 ../src/config.py:3656
+#: ../src/config.py:3651 ../src/config.py:3657
 msgid ""
 "You can set advanced account options by pressing the Advanced button, or "
 "later by choosing the Accounts menu item under the Edit menu from the main "
@@ -7451,34 +7452,34 @@ msgstr ""
 "באפשרותך להגדיר אפשרויות חשבון מתקדמות על ידי לחיצה על הלחצן מתקדם, או לאחר "
 "מכן בבוחרך בתפריט חשבונות תחת התפריט עריכה מתוך החלון הראשי."
 
-#: ../src/config.py:3655
+#: ../src/config.py:3656
 msgid "Your new account has been created successfully"
 msgstr "חשבונך החדש נוצר בהצלחה"
 
-#: ../src/config.py:3694
+#: ../src/config.py:3695
 msgid "Invalid username"
 msgstr "שם משתמש שגוי"
 
-#: ../src/config.py:3696
+#: ../src/config.py:3697
 msgid "You must provide a username to configure this account."
 msgstr "עליך לספק שם משתמש כדי להגדיר את חשבון זה."
 
-#: ../src/config.py:3738
+#: ../src/config.py:3739
 msgid "Please provide a server on which you want to register."
 msgstr "אנא ספק שרת אליו ברצונך להירשם."
 
 # BUG: גודל אותיות באנגלית?
-#: ../src/config.py:3794 ../src/gui_interface.py:1323
+#: ../src/config.py:3795 ../src/gui_interface.py:1331
 msgid "Certificate Already in File"
 msgstr "התעודה כבר מצויה בקובץ"
 
 # חריג לכלל: עשיתי שימוש במילה שנית במקום שוב מכיוון שתמיד יהיה 'ראשון' ולאחריו שני
-#: ../src/config.py:3795 ../src/gui_interface.py:1324
+#: ../src/config.py:3796 ../src/gui_interface.py:1332
 #, python-format
 msgid "This certificate is already in file %s, so it's not added again."
 msgstr "תעודה זו כבר מצויה בקובץ %s, ולכן היא לא תוסף בשנית."
 
-#: ../src/config.py:3885
+#: ../src/config.py:3886
 #, python-format
 msgid ""
 "<b>Security Warning</b>\n"
@@ -7493,7 +7494,7 @@ msgstr ""
 "שגיאת SSL: ‏%(error)s\n"
 "האם עדיין יש ברצונך להתחבר לשרת זה?"
 
-#: ../src/config.py:3891 ../src/gui_interface.py:1352
+#: ../src/config.py:3892 ../src/gui_interface.py:1360
 #, python-format
 msgid ""
 "Add this certificate to the list of trusted certificates.\n"
@@ -7504,77 +7505,77 @@ msgstr ""
 "טביעת אצבע SHA1 של התעודה:\n"
 "%s"
 
-#: ../src/config.py:3923 ../src/config.py:3957
+#: ../src/config.py:3924 ../src/config.py:3958
 msgid "An error occurred during account creation"
 msgstr "אירעה שגיאה בעת מהלך יצירת חשבון"
 
-#: ../src/config.py:4022
+#: ../src/config.py:4023
 msgid "Account name is in use"
 msgstr "שם חשבון הינו בשימוש"
 
-#: ../src/config.py:4023
+#: ../src/config.py:4024
 msgid "You already have an account using this name."
 msgstr "כבר יש ברשותך חשבון אשר עושה שימוש בשם זה."
 
-#: ../src/config.py:4153
+#: ../src/config.py:4154
 msgid "PEP node was not removed"
 msgstr "צומת PEP לא הוסר"
 
-#: ../src/config.py:4154
+#: ../src/config.py:4155
 #, python-format
 msgid "PEP node %(node)s was not removed: %(message)s"
 msgstr "צומת PEP ‏%(node)s לא הוסר: %(message)s"
 
-#: ../src/config.py:4182
+#: ../src/config.py:4183
 #, python-format
 msgid "Configure %s"
 msgstr "תצורת ‫%s"
 
-#: ../src/config.py:4207
+#: ../src/config.py:4208
 msgid "Event"
 msgstr "אירוע"
 
-#: ../src/config.py:4241
+#: ../src/config.py:4242
 msgid "Attention Message Received"
 msgstr "התקבלה הודעת הקשב"
 
-#: ../src/config.py:4242
+#: ../src/config.py:4243
 msgid "First Message Received"
 msgstr "הודעה ראשונה אשר התקבלה"
 
-#: ../src/config.py:4243
+#: ../src/config.py:4244
 msgid "Next Message Received Focused"
 msgstr "הודעה הבאה אשר התקבלה (ממוקד)"
 
-#: ../src/config.py:4245
+#: ../src/config.py:4246
 msgid "Next Message Received Unfocused"
 msgstr "הודעה הבאה אשר התקבלה (לא ממוקד)"
 
-#: ../src/config.py:4246
+#: ../src/config.py:4247
 msgid "Contact Connected"
 msgstr "איש קשר מחובר"
 
-#: ../src/config.py:4247
+#: ../src/config.py:4248
 msgid "Contact Disconnected"
 msgstr "איש קשר מנותק"
 
-#: ../src/config.py:4248
+#: ../src/config.py:4249
 msgid "Message Sent"
 msgstr "הודעה נשלחה"
 
-#: ../src/config.py:4249
+#: ../src/config.py:4250
 msgid "Group Chat Message Highlight"
 msgstr "הודעת שיחת קבוצה מודגשת"
 
-#: ../src/config.py:4250
+#: ../src/config.py:4251
 msgid "Group Chat Message Received"
 msgstr "הודעת שיחת קבוצה אשר התקבלה"
 
-#: ../src/config.py:4251
+#: ../src/config.py:4252
 msgid "GMail Email Received"
 msgstr "דוא״ל GMail אשר התקבל"
 
-#: ../src/conversation_textview.py:476 ../src/conversation_textview.py:496
+#: ../src/conversation_textview.py:481 ../src/conversation_textview.py:501
 #, python-format
 msgid ""
 "<b>Message was corrected. Last message was:</b>\n"
@@ -7583,7 +7584,7 @@ msgstr ""
 "<b>הודעה תוקנה. הודעה אחרונה היתה:</b>\n"
 "  %s"
 
-#: ../src/conversation_textview.py:633
+#: ../src/conversation_textview.py:638
 msgid ""
 "This icon indicates that this message has not yet\n"
 "been received by the remote end. If this icon stays\n"
@@ -7593,7 +7594,7 @@ msgstr ""
 "על ידי הקצה המרוחק. אם סמל זה נותר למשך\n"
 "זמן ממושך, סביר להניח כי ההודעה אבדה."
 
-#: ../src/conversation_textview.py:653
+#: ../src/conversation_textview.py:658
 msgid ""
 "Text below this line is what has been said since the\n"
 "last time you paid attention to this group chat"
@@ -7601,44 +7602,44 @@ msgstr ""
 "תמליל תחת שורה זו הוא דברים אשר נרשמו מאז הפעם\n"
 "האחרונה בה הסבת את תשומת לבך לשיחת קבוצה זו"
 
-#: ../src/conversation_textview.py:774
+#: ../src/conversation_textview.py:779
 msgid "_Quote"
 msgstr "_צטט"
 
-#: ../src/conversation_textview.py:781
+#: ../src/conversation_textview.py:786
 #, python-format
 msgid "_Actions for \"%s\""
 msgstr "_פעולות עבור \"%s\""
 
-#: ../src/conversation_textview.py:794
+#: ../src/conversation_textview.py:799
 msgid "Read _Wikipedia Article"
 msgstr "עיין ערך _ויקיפדיה"
 
-#: ../src/conversation_textview.py:799
+#: ../src/conversation_textview.py:804
 msgid "Look it up in _Dictionary"
 msgstr "חפש בתוך _מילון"
 
-#: ../src/conversation_textview.py:816
+#: ../src/conversation_textview.py:821
 #, python-format
 msgid "Dictionary URL is missing an \"%s\" and it is not WIKTIONARY"
 msgstr "לכתובת URL של המילון חסר \"%s\" וזו לא WIKTIONARY"
 
 #. we must have %s in the url
-#: ../src/conversation_textview.py:829
+#: ../src/conversation_textview.py:834
 #, python-format
 msgid "Web Search URL is missing an \"%s\""
 msgstr "לכתובת URL של חיפוש ברשת חסר \"%s\""
 
-#: ../src/conversation_textview.py:832
+#: ../src/conversation_textview.py:837
 msgid "Web _Search for it"
 msgstr "_חפש ברשת"
 
-#: ../src/conversation_textview.py:838
+#: ../src/conversation_textview.py:843
 msgid "Open as _Link"
 msgstr "פתח בתור _קישור"
 
 #. %i is day in year (1-365)
-#: ../src/conversation_textview.py:1386
+#: ../src/conversation_textview.py:1392
 #, python-format
 msgid "Yesterday"
 msgid_plural "%(nb_days)i days ago"
@@ -7646,7 +7647,7 @@ msgstr[0] "אתמול"
 msgstr[1] "לפני %(nb_days)i ימים"
 
 #. if we have subject, show it too!
-#: ../src/conversation_textview.py:1442 ../src/history_window.py:488
+#: ../src/conversation_textview.py:1444 ../src/history_window.py:488
 #, python-format
 msgid "Subject: %s\n"
 msgstr "נושא: %s\n"
@@ -7852,8 +7853,8 @@ msgstr ""
 "\n"
 "הדגשת מילים אשר לא אויתו כראוי לא תנוצל"
 
-#: ../src/dialogs.py:1846 ../src/dialogs.py:1862 ../src/gui_interface.py:1456
-#: ../src/gui_interface.py:1498
+#: ../src/dialogs.py:1846 ../src/dialogs.py:1862 ../src/gui_interface.py:1471
+#: ../src/gui_interface.py:1513
 msgid "Insecure connection"
 msgstr "חיבור לא מאובטח"
 
@@ -7876,8 +7877,8 @@ msgstr ""
 "להימנע מחיבורים מטיפוס זה.\n"
 "האם אתה בטוח כי ברצונך להתחבר?"
 
-#: ../src/dialogs.py:1853 ../src/gui_interface.py:1460
-#: ../src/gui_interface.py:1501
+#: ../src/dialogs.py:1853 ../src/gui_interface.py:1475
+#: ../src/gui_interface.py:1516
 msgid "Yes, I really want to connect insecurely"
 msgstr "כן, אני באמת רוצה להתחבר בשיטה לא בטוחה"
 
@@ -7886,10 +7887,10 @@ msgid "Gajim will NOT connect unless you check this box"
 msgstr "‏Gajim לא יתחבר אלא אם כן תיבה זו תסומן"
 
 #: ../src/dialogs.py:1855 ../src/groupchat_control.py:2178
-#: ../src/gui_interface.py:707 ../src/gui_interface.py:1461
-#: ../src/gui_interface.py:1502 ../src/message_window.py:227
-#: ../src/roster_window.py:3088 ../src/roster_window.py:3773
-#: ../src/roster_window.py:4606
+#: ../src/gui_interface.py:711 ../src/gui_interface.py:1476
+#: ../src/gui_interface.py:1517 ../src/message_window.py:227
+#: ../src/roster_window.py:3094 ../src/roster_window.py:3779
+#: ../src/roster_window.py:4612
 msgid "_Do not ask me again"
 msgstr "אל ת_שאל אותי שוב"
 
@@ -7915,7 +7916,7 @@ msgstr "בקשת הרשמה עבור חשבון %(account)s מאת %(jid)s"
 msgid "Subscription request from %s"
 msgstr "בקשת הרשמה מאת %s"
 
-#: ../src/dialogs.py:2369 ../src/gui_interface.py:2085
+#: ../src/dialogs.py:2369 ../src/gui_interface.py:2112
 #, python-format
 msgid "You are already in group chat %s"
 msgstr "הינך כבר בתוך שיחת קבוצה %s"
@@ -7964,11 +7965,11 @@ msgstr "אנא הזן מזהה Jabber של שיחת הקבוצה בתור חדר
 msgid "The group chat Jabber ID contains invalid characters."
 msgstr "מזהה Jabber של שיחת קבוצה מכילה תווים אסורים."
 
-#: ../src/dialogs.py:2642 ../src/gui_interface.py:2067
+#: ../src/dialogs.py:2642 ../src/gui_interface.py:2094
 msgid "This is not a group chat"
 msgstr "זוהי אינה שיחת קבוצה"
 
-#: ../src/dialogs.py:2643 ../src/gui_interface.py:2068
+#: ../src/dialogs.py:2643 ../src/gui_interface.py:2095
 #, python-format
 msgid "%s is not the name of a group chat."
 msgstr "‫%s אינו שם של שיחת קבוצה."
@@ -8055,27 +8056,27 @@ msgstr "סיסמאות לא תואמות"
 msgid "The passwords typed in both fields must be identical."
 msgstr "הסיסמאות אשר מוקלדות בשני השדות מוכרחות להיות זהות."
 
-#: ../src/dialogs.py:2934 ../src/gui_interface.py:884 ../src/notify.py:276
+#: ../src/dialogs.py:2934 ../src/gui_interface.py:888 ../src/notify.py:276
 msgid "New E-mail"
 msgstr "דוא״ל חדש"
 
-#: ../src/dialogs.py:2936 ../src/gui_interface.py:944 ../src/notify.py:269
+#: ../src/dialogs.py:2936 ../src/gui_interface.py:948 ../src/notify.py:269
 msgid "File Transfer Request"
 msgstr "בקשת העברת קובץ"
 
-#: ../src/dialogs.py:2938 ../src/gui_interface.py:846
-#: ../src/gui_interface.py:910 ../src/notify.py:271
+#: ../src/dialogs.py:2938 ../src/gui_interface.py:850
+#: ../src/gui_interface.py:914 ../src/notify.py:271
 msgid "File Transfer Error"
 msgstr "שגיאת העברת קובץ"
 
-#: ../src/dialogs.py:2940 ../src/gui_interface.py:1036
-#: ../src/gui_interface.py:1062 ../src/gui_interface.py:1083
+#: ../src/dialogs.py:2940 ../src/gui_interface.py:1040
+#: ../src/gui_interface.py:1066 ../src/gui_interface.py:1087
 #: ../src/notify.py:273
 msgid "File Transfer Completed"
 msgstr "העברת קובץ הושלמה"
 
-#: ../src/dialogs.py:2941 ../src/gui_interface.py:1039
-#: ../src/gui_interface.py:1066 ../src/gui_interface.py:1087
+#: ../src/dialogs.py:2941 ../src/gui_interface.py:1043
+#: ../src/gui_interface.py:1070 ../src/gui_interface.py:1091
 #: ../src/notify.py:274
 msgid "File Transfer Stopped"
 msgstr "העברת קובץ נעצרה"
@@ -8215,11 +8216,11 @@ msgstr "תפוגה מוכרחה להיות ספרה חיובית תקפה."
 
 #: ../src/dialogs.py:3845
 msgid "There is an error with the form"
-msgstr "קיימת שגיאה עם הטופס"
+msgstr "ישנה שגיאה עם הטופס"
 
 #: ../src/dialogs.py:4065
 msgid "There is an error"
-msgstr "קיימת שגיאה"
+msgstr "ישנה שגיאה"
 
 #: ../src/dialogs.py:4133
 #, python-format
@@ -8497,7 +8498,7 @@ msgstr ""
 "<b>טביעת אצבע</b>\n"
 "טביעת אצבע SHA1: ‏%(sha1)s"
 
-#: ../src/dialogs.py:5447 ../src/gui_interface.py:1365
+#: ../src/dialogs.py:5447 ../src/gui_interface.py:1373
 #, python-format
 msgid "SSL Certificate Verification for %s"
 msgstr "אימות תעודת SSL עבור %s"
@@ -8595,20 +8596,20 @@ msgstr "תיאור"
 msgid "Id"
 msgstr "מזהה"
 
-#: ../src/disco.py:1885 ../src/gui_interface.py:2603
+#: ../src/disco.py:1885 ../src/gui_interface.py:2630
 msgid "Bookmark already set"
 msgstr "סימנייה כבר הוגדרה"
 
-#: ../src/disco.py:1886 ../src/gui_interface.py:2604
+#: ../src/disco.py:1886 ../src/gui_interface.py:2631
 #, python-format
 msgid "Group Chat \"%s\" is already in your bookmarks."
 msgstr "שיחת קבוצה \"%s\" כבר קיימת בסימניות שלך."
 
-#: ../src/disco.py:1896 ../src/gui_interface.py:2618
+#: ../src/disco.py:1896 ../src/gui_interface.py:2645
 msgid "Bookmark has been added successfully"
 msgstr "סימנייה הוספה בהצלחה"
 
-#: ../src/disco.py:1897 ../src/gui_interface.py:2619
+#: ../src/disco.py:1897 ../src/gui_interface.py:2646
 msgid "You can manage your bookmarks via Actions menu in your roster."
 msgstr ""
 "באפשרותך לנהל את הסימניות שלך דרך תפריט 'פעולות' אשר מצוי בתוך הרשימה שלך."
@@ -8970,22 +8971,22 @@ msgid "This file is being used by another process."
 msgstr "קובץ זה מצוי בשימוש בידי תהליך אחר."
 
 # להחליף
-#: ../src/filetransfers_window.py:389 ../src/gtkgui_helpers.py:851
+#: ../src/filetransfers_window.py:389 ../src/gtkgui_helpers.py:764
 #, python-format
 msgid "Cannot overwrite existing file \"%s\""
 msgstr "אין אפשרות לכתוב על קובץ קיים \"%s\""
 
-#: ../src/filetransfers_window.py:390 ../src/gtkgui_helpers.py:852
+#: ../src/filetransfers_window.py:390 ../src/gtkgui_helpers.py:765
 msgid ""
 "A file with this name already exists and you do not have permission to "
 "overwrite it."
-msgstr "קובץ בשם זה כבר קיים ואין ולא עומדת לרשותך הרשאה לכתוב עליו."
+msgstr "קובץ בשם זה כבר ישנו ואין לך הרשאה לכתוב עליו."
 
-#: ../src/filetransfers_window.py:407 ../src/gtkgui_helpers.py:856
+#: ../src/filetransfers_window.py:407 ../src/gtkgui_helpers.py:769
 msgid "This file already exists"
-msgstr "קובץ זה כבר קיים"
+msgstr "קובץ זה כבר ישנו"
 
-#: ../src/filetransfers_window.py:407 ../src/gtkgui_helpers.py:856
+#: ../src/filetransfers_window.py:407 ../src/gtkgui_helpers.py:769
 msgid "What do you want to do?"
 msgstr "מה ברצונך לעשות?"
 
@@ -8993,19 +8994,18 @@ msgstr "מה ברצונך לעשות?"
 #. read-only bit is used to mark special folder under
 #. windows, not to mark that a folder is read-only.
 #. See ticket #3587
-#: ../src/filetransfers_window.py:418 ../src/gtkgui_helpers.py:863
+#: ../src/filetransfers_window.py:418 ../src/gtkgui_helpers.py:776
 #, python-format
 msgid "Directory \"%s\" is not writable"
 msgstr "המדור \"%s\" אינו נתון לכתיבה"
 
-#: ../src/filetransfers_window.py:419 ../src/gtkgui_helpers.py:864
+#: ../src/filetransfers_window.py:419 ../src/gtkgui_helpers.py:777
 msgid "You do not have permission to create files in this directory."
 msgstr "אין לך הרשאות ליצור קבצים במדור זה."
 
-# בתור
 #: ../src/filetransfers_window.py:430
 msgid "Save File as..."
-msgstr "שמירת קובץ בשם..."
+msgstr "שמור קובץ בשם..."
 
 #: ../src/filetransfers_window.py:450
 #, python-format
@@ -9525,7 +9525,7 @@ msgstr "cli"
 
 #: ../src/gajim-remote.py:278
 #, fuzzy
-msgid "Handle a xmpp: uri"
+msgid "Handle a xmpp:/ uri"
 msgstr "cli"
 
 #: ../src/gajim-remote.py:280
@@ -9668,10 +9668,9 @@ msgstr "cli"
 msgid "Wrong uri"
 msgstr "cli"
 
-# ערכאת נושא
 #: ../src/gajim_themes_window.py:60
 msgid "Theme"
-msgstr "מוטיב"
+msgstr "ערכת נושא"
 
 #: ../src/gajim_themes_window.py:98
 msgid "You cannot make changes to the default theme"
@@ -9775,7 +9774,7 @@ msgstr "החדר הינו אנונימי לחלוטין"
 
 # in or to?
 #: ../src/groupchat_control.py:1628 ../src/groupchat_control.py:2289
-#: ../src/gui_interface.py:606 ../src/roster_window.py:3364
+#: ../src/gui_interface.py:610 ../src/roster_window.py:3370
 #, python-format
 msgid "%(jid)s has been invited in this room"
 msgstr "%(jid)s הוזמן/ה לחדר זה"
@@ -9977,30 +9976,17 @@ msgstr "שגיאה בניתוח קובץ:"
 msgid "Could not write to %s. Session Management support will not work"
 msgstr "לא היתה אפשרות לכתוב אל %s. תמיכה עבור ניהול סשן לא תעבוד"
 
-#. xmpp: is currently handled by another program, so ask the user
-#: ../src/gtkgui_helpers.py:767
-msgid "Gajim is not the default Jabber client"
-msgstr "‏Gajim אינו לקוח Jabber ברירת מחדל"
-
-#: ../src/gtkgui_helpers.py:768
-msgid "Would you like to make Gajim the default Jabber client?"
-msgstr "האם ברצונך להפוך את Gajim ללקוח Jabber ברירת המחדל?"
-
-#: ../src/gtkgui_helpers.py:769
-msgid "Always check to see if Gajim is the default Jabber client on startup"
-msgstr "בדוק תמיד אם Gajim הינו לקוח Jabber ברירת המחדל בעת הפעלה"
-
-#: ../src/gtkgui_helpers.py:836
+#: ../src/gtkgui_helpers.py:749
 msgid "Extension not supported"
 msgstr "הרחבה לא נתמכת"
 
-#: ../src/gtkgui_helpers.py:837
+#: ../src/gtkgui_helpers.py:750
 #, python-format
 msgid "Image cannot be saved in %(type)s format. Save as %(new_filename)s?"
 msgstr "אין אפשרות לשמור תמונה בפורמט %(type)s. לשמור בתור %(new_filename)s?"
 
 # בתור
-#: ../src/gtkgui_helpers.py:873
+#: ../src/gtkgui_helpers.py:786
 msgid "Save Image as..."
 msgstr "שמירת תמונה בשם..."
 
@@ -10026,7 +10012,7 @@ msgstr ""
 
 #: ../src/gui_interface.py:138
 msgid "Always use this nickname when there is a conflict"
-msgstr "השתמש תמיד בשם כינוי זה כאשר קיימת התנגשות"
+msgstr "השתמש תמיד בשם כינוי זה כאשר ישנה התנגשות"
 
 #: ../src/gui_interface.py:155
 msgid "Do you accept this request?"
@@ -10122,17 +10108,17 @@ msgstr "הרשמה בוטלה"
 msgid "Contact with \"%s\" cannot be established"
 msgstr "יצירת קשר עם \"%s\" לא היתה ניתנת לביסוס"
 
-#: ../src/gui_interface.py:626
+#: ../src/gui_interface.py:630
 #, python-format
 msgid "%(jid)s declined the invitation: %(reason)s"
 msgstr "%(jid)s סרב/ה את ההזמנה: %(reason)s"
 
-#: ../src/gui_interface.py:630
+#: ../src/gui_interface.py:634
 #, python-format
 msgid "%(jid)s declined the invitation"
 msgstr "%(jid)s סרב/ה את ההזמנה"
 
-#: ../src/gui_interface.py:659
+#: ../src/gui_interface.py:663
 msgid ""
 "You configured Gajim to use OpenPGP agent, but there is no OpenPGP agent "
 "running or it returned a wrong passphrase.\n"
@@ -10140,28 +10126,28 @@ msgstr ""
 "הגדרת את Gajim לעשות שימוש בסוכן OpenPGP, אך אין כעת סוכן OpenPGP אשר מופעל "
 "או שזה החזיר מימרת-סיסמה שגויה.\n"
 
-#: ../src/gui_interface.py:662 ../src/gui_interface.py:670
+#: ../src/gui_interface.py:666 ../src/gui_interface.py:674
 msgid "You are currently connected without your OpenPGP key."
 msgstr "התחברותך בוצעה ללא מפתח OpenPGP."
 
-#: ../src/gui_interface.py:664
+#: ../src/gui_interface.py:668
 msgid "Your passphrase is incorrect"
 msgstr "מימרת סיסמה הינה שגויה"
 
-#: ../src/gui_interface.py:669
+#: ../src/gui_interface.py:673
 msgid "OpenPGP Passphrase Incorrect"
 msgstr "מימרת סיסמה OpenPGP שגויה"
 
-#: ../src/gui_interface.py:682
+#: ../src/gui_interface.py:686
 msgid "Certificate Passphrase Required"
 msgstr "נדרשת מימרת סיסמה של תעודת"
 
-#: ../src/gui_interface.py:683
+#: ../src/gui_interface.py:687
 #, python-format
 msgid "Enter the passphrase for the certificate for account %s"
 msgstr "הזן מימרת סיסמה עבור התעודה עבור חשבון %s"
 
-#: ../src/gui_interface.py:705
+#: ../src/gui_interface.py:709
 msgid "OpenPGP key not trusted"
 msgstr "מפתח OpenPGP לא מהימן "
 
@@ -10169,7 +10155,7 @@ msgstr "מפתח OpenPGP לא מהימן "
 # Sure = בטוח
 # Really = באמת
 # Still = עדיין
-#: ../src/gui_interface.py:705
+#: ../src/gui_interface.py:709
 msgid ""
 "The OpenPGP key used to encrypt this chat is not trusted. Do you really want "
 "to encrypt this message?"
@@ -10177,7 +10163,7 @@ msgstr ""
 "מפתח OpenPGP המשמש להצפנת שיחה זו אינו מהימן. האם באמת יש ברצונך להצפין את "
 "הודעה זו?"
 
-#: ../src/gui_interface.py:718
+#: ../src/gui_interface.py:722
 msgid ""
 "Gnome Keyring is installed but not correctly started (environment variable "
 "probably not correctly set)"
@@ -10187,29 +10173,29 @@ msgstr ""
 
 # BUG: refreshed
 # אסימון
-#: ../src/gui_interface.py:756
+#: ../src/gui_interface.py:760
 msgid ""
 "Please copy / paste the refresh token from the website that has just been "
 "opened."
 msgstr "אנא העתק / הדבק את האות הרענן מתוך האתר רשת אשר זה עתה נפתח."
 
-#: ../src/gui_interface.py:759
+#: ../src/gui_interface.py:763
 msgid "Oauth2 Credentials"
 msgstr "אישורי Oauth2"
 
-#: ../src/gui_interface.py:857
+#: ../src/gui_interface.py:861
 #, python-format
 msgid "New mail on %(gmail_mail_address)s"
 msgstr "דוא״ל חדש אצל %(gmail_mail_address)s"
 
-#: ../src/gui_interface.py:859
+#: ../src/gui_interface.py:863
 #, python-format
 msgid "You have %d new mail conversation"
 msgid_plural "You have %d new mail conversations"
 msgstr[0] "יש לך שיחת דואר חדשה %d"
 msgstr[1] "יש לך %d שיחות דואר חדשות"
 
-#: ../src/gui_interface.py:872
+#: ../src/gui_interface.py:876
 #, python-format
 msgid ""
 "\n"
@@ -10224,104 +10210,108 @@ msgstr ""
 "נושא: %(subject)s\n"
 "%(snippet)s"
 
-#: ../src/gui_interface.py:942
+#: ../src/gui_interface.py:946
 #, python-format
 msgid "%s wants to send you a file."
 msgstr "‏%s רוצה לשלוח לך קובץ."
 
-#: ../src/gui_interface.py:1028 ../src/gui_interface.py:1384
+#: ../src/gui_interface.py:1032 ../src/gui_interface.py:1399
 msgid "SSL certificate error"
 msgstr "שגיאת תעודת SSL"
 
-#: ../src/gui_interface.py:1042
+#: ../src/gui_interface.py:1046
 msgid "File Transfer Failed"
 msgstr "העברת קובץ נכשלה"
 
-#: ../src/gui_interface.py:1063
+#: ../src/gui_interface.py:1067
 #, python-format
 msgid "You successfully received %(filename)s from %(name)s."
 msgstr "קיבלת בהצלחה את %(filename)s מן %(name)s."
 
-#: ../src/gui_interface.py:1067
+#: ../src/gui_interface.py:1071
 #, python-format
 msgid "File transfer of %(filename)s from %(name)s stopped."
 msgstr "העברת קובץ %(filename)s מן %(name)s נעצרה."
 
 #. ft hash error
-#: ../src/gui_interface.py:1071
+#: ../src/gui_interface.py:1075
 #, python-format
 msgid "File transfer of %(filename)s from %(name)s failed."
 msgstr "העברת קובץ %(filename)s מן %(name)s נכשלה."
 
-#: ../src/gui_interface.py:1084
+#: ../src/gui_interface.py:1088
 #, python-format
 msgid "You successfully sent %(filename)s to %(name)s."
 msgstr "שלחת בהצלחה את %(filename)s אל %(name)s."
 
-#: ../src/gui_interface.py:1088
+#: ../src/gui_interface.py:1092
 #, python-format
 msgid "File transfer of %(filename)s to %(name)s stopped."
 msgstr "העברת קובץ %(filename)s אל %(name)s נעצרה."
 
 #. ft hash error
-#: ../src/gui_interface.py:1092
+#: ../src/gui_interface.py:1096
 #, python-format
 msgid "File transfer of %(filename)s to %(name)s failed."
 msgstr "העברת הקובץ %(filename)s אל %(name)s נכשלה."
 
-#: ../src/gui_interface.py:1173
+#: ../src/gui_interface.py:1179
 msgid "Unable to decrypt message"
 msgstr "אין אפשרות לפענח הודעה"
 
 # התנגשויות, ניגודים, קונפליקט
-#: ../src/gui_interface.py:1185
+#: ../src/gui_interface.py:1191
 msgid "Username Conflict"
 msgstr "התנגשות שם משתמש"
 
-#: ../src/gui_interface.py:1186
+#: ../src/gui_interface.py:1192
 msgid "Please type a new username for your local account"
 msgstr "אנא הקלד שם משתמש חדש עבור חשבונך המקומי"
 
-#: ../src/gui_interface.py:1201
+#: ../src/gui_interface.py:1207
 msgid "Resource Conflict"
 msgstr "התנגשות משאב"
 
-#: ../src/gui_interface.py:1202
+#: ../src/gui_interface.py:1208
 msgid ""
 "You are already connected to this account with the same resource. Please "
 "type a new one"
 msgstr "אתה כבר מחובר לחשבון זה באמצעות אותו משאב. אנא הקלד אחד חדש"
 
 #. TODO: we should use another pixmap ;-)
-#: ../src/gui_interface.py:1257
+#: ../src/gui_interface.py:1265
 #, python-format
 msgid "%s wants to start a voice chat."
 msgstr "‏%s רוצה להתחיל שיחה קולית."
 
-#: ../src/gui_interface.py:1260
+#: ../src/gui_interface.py:1268
 msgid "Voice Chat Request"
 msgstr "בקשה לשיחה קולית"
 
-#: ../src/gui_interface.py:1347
+#: ../src/gui_interface.py:1355
 msgid "Error verifying SSL certificate"
 msgstr "שגיאה באימות תעודת SSL"
 
-#: ../src/gui_interface.py:1348
+#: ../src/gui_interface.py:1356
 #, python-format
 msgid ""
 "There was an error verifying the SSL certificate of your jabber server: "
 "%(error)s\n"
 "Do you still want to connect to this server?"
 msgstr ""
-"אירעה שגיאה באימות תעודת SSL של שרת Jabber שלך: %(error)s\n"
+"אירעה שגיאה תוך כדי אימות תעודת SSL של שרת Jabber זה: %(error)s\n"
 "האם עדיין יש ברצונך להתחבר לשרת זה?"
 
-#: ../src/gui_interface.py:1357
+#: ../src/gui_interface.py:1365
 msgid "Ignore this error for this certificate."
 msgstr "התעלם משגיאה זו עבור תעודה זו."
 
+#: ../src/gui_interface.py:1378
+msgid "Non Anonymous Server"
+msgstr "שרת לא אנונימי"
+
 # ישנה
-#: ../src/gui_interface.py:1385
+#: ../src/gui_interface.py:1400
 #, python-format
 msgid ""
 "It seems the SSL certificate of account %(account)s has changed or your "
@@ -10337,7 +10327,7 @@ msgstr ""
 "\n"
 "האם עדיין יש ברצונך להתחבר ולעדכן את טביעת האצבע של התעודה?"
 
-#: ../src/gui_interface.py:1457
+#: ../src/gui_interface.py:1472
 msgid ""
 "You are about to send your password on an insecure connection. You should "
 "install PyOpenSSL to prevent that. Are you sure you want to do that?"
@@ -10345,7 +10335,7 @@ msgstr ""
 "אתה על סף שליחת סיסמה על פני חיבור לא מאובטח. עליך להתקין PyOpenSSL בכדי "
 "למנוע זאת. האם אתה בטוח כי ברצונך להתחבר?"
 
-#: ../src/gui_interface.py:1499
+#: ../src/gui_interface.py:1514
 msgid ""
 "You are about to send your password unencrypted on an insecure connection. "
 "Are you sure you want to do that?"
@@ -10354,63 +10344,62 @@ msgstr ""
 "ברצונך לעשות זאת?"
 
 #. theme doesn't exist, disable emoticons
-#: ../src/gui_interface.py:2014 ../src/gui_interface.py:2021
-#: ../src/gui_interface.py:2045
+#: ../src/gui_interface.py:2041 ../src/gui_interface.py:2048
+#: ../src/gui_interface.py:2072
 msgid "Emoticons disabled"
 msgstr "רגשונים נוטרלו"
 
-#: ../src/gui_interface.py:2015
+#: ../src/gui_interface.py:2042
 msgid ""
 "Your configured emoticons theme has not been found, so emoticons have been "
 "disabled."
 msgstr "מוטיב הרגשונים אשר הגדרת לא נמצא, ומשכך רגשונים נוטרלו."
 
-#: ../src/gui_interface.py:2022 ../src/gui_interface.py:2046
+#: ../src/gui_interface.py:2049 ../src/gui_interface.py:2073
 msgid ""
 "Your configured emoticons theme cannot been loaded. You maybe need to update "
 "the format of emoticons.py file. See http://trac.gajim.org/wiki/Emoticons "
 "for more details."
 msgstr ""
-"מוטיב הרגשונים אשר הגדרת לא ניתן לטעינה. ייתכן וקיים הצורך לעדכן את התסדיר "
-"של הקובץ emoticons.py. לפרטים נוספים, ראו http://trac.gajim.org/wiki/"
-"Emoticons."
+"מוטיב הרגשונים אשר הגדרת לא ניתן לטעינה. ייתכן ויש צורך לעדכן את התסדיר של "
+"הקובץ emoticons.py. לפרטים נוספים, ראו http://trac.gajim.org/wiki/Emoticons."
 
-#: ../src/gui_interface.py:2092 ../src/roster_window.py:3940
+#: ../src/gui_interface.py:2119 ../src/roster_window.py:3946
 msgid "You cannot join a group chat while you are invisible"
 msgstr "אין באפשרותך להשתתף בשיחת קבוצה כאשר הינך במצב בלתי נראה"
 
 #. it is good to notify the user
 #. in case he or she cannot see the output of the console
-#: ../src/gui_interface.py:2479
+#: ../src/gui_interface.py:2506
 msgid "Could not save your settings and preferences"
 msgstr "לא היתה אפשרות לשמור את ההגדרות וההעדפות שלך"
 
-#: ../src/gui_interface.py:3081
+#: ../src/gui_interface.py:3108
 msgid "Passphrase Required"
 msgstr "נדרשת מימרת סיסמה"
 
-#: ../src/gui_interface.py:3082
+#: ../src/gui_interface.py:3109
 #, python-format
 msgid "Enter OpenPGP key passphrase for key %(keyid)s (account %(account)s)."
 msgstr ""
 "הזן מימרת סיסמה של מפתח OpenPGP עבור מפתח %(keyid)s (חשבון %(account)s)."
 
-#: ../src/gui_interface.py:3096
+#: ../src/gui_interface.py:3123
 msgid "OpenPGP key expired"
 msgstr "מפתח OpenPGP פקע"
 
-#: ../src/gui_interface.py:3097
+#: ../src/gui_interface.py:3124
 #, python-format
 msgid ""
 "Your OpenPGP key has expired, you will be connected to %s without OpenPGP."
 msgstr "מפתח OpenPGP פקע, התחברותך אל %s תתקיים בלי OpenPGP."
 
 #. ask again
-#: ../src/gui_interface.py:3106
+#: ../src/gui_interface.py:3133
 msgid "Wrong Passphrase"
 msgstr "מימרת סיסמה שגויה"
 
-#: ../src/gui_interface.py:3107
+#: ../src/gui_interface.py:3134
 msgid "Please retype your OpenPGP passphrase or press Cancel."
 msgstr "אנא הקלד מחדש מימרת סיסמה OpenPGP או לחץ על ביטול."
 
@@ -10488,11 +10477,9 @@ msgstr ""
 msgid "Database Cleanup"
 msgstr "ניקוי מסד נתונים"
 
-# כעת מייצא רשומות היסטוריה...
 #: ../src/history_manager.py:487
-#, fuzzy
 msgid "Exporting History Logs..."
-msgstr "יצא רשומות היסטוריה..."
+msgstr "יצוא רשומות היסטוריה..."
 
 # BUG: said > wrote?
 # Needs to be tested
@@ -10512,7 +10499,7 @@ msgstr "האם אתה בטוח כי ברצונך למחוק את הרשומות 
 
 #: ../src/history_manager.py:608 ../src/history_manager.py:647
 msgid "This is an irreversible operation."
-msgstr "פעולה זו איננה הפיכה."
+msgstr "פעולה זו הינה בלתי הפיכה."
 
 #: ../src/history_manager.py:610 ../src/history_manager.py:649
 msgid "Deletion Confirmation"
@@ -10560,7 +10547,7 @@ msgstr "מצב נוכחי: %(status)s: %(status_msg)s"
 msgid "Status is now: %(status)s"
 msgstr "מצב נוכחי: %(status)s"
 
-#: ../src/htmltextview.py:523
+#: ../src/htmltextview.py:524
 msgid "Loading"
 msgstr "כעת טוען"
 
@@ -10576,19 +10563,19 @@ msgstr "בחרת לסגור מספר כרטיסיות"
 msgid "Do you really want to close them all?"
 msgstr "האם אתה בטוח כי ברצונך לסגור את כולן?"
 
-#: ../src/message_window.py:524
+#: ../src/message_window.py:534
 msgid "Chats"
 msgstr "שיחות"
 
-#: ../src/message_window.py:526
+#: ../src/message_window.py:536
 msgid "Group Chats"
 msgstr "שיחות קבוצה"
 
-#: ../src/message_window.py:528
+#: ../src/message_window.py:538
 msgid "Private Chats"
 msgstr "שיחות פרטיות"
 
-#: ../src/message_window.py:534
+#: ../src/message_window.py:544
 msgid "Messages"
 msgstr "הודעות"
 
@@ -10606,7 +10593,7 @@ msgstr "התעלמות"
 
 #: ../src/plugins/gui.py:82
 msgid "Plugin"
-msgstr "תוספת"
+msgstr "תוסף"
 
 #: ../src/plugins/gui.py:151
 #, python-format
@@ -10615,11 +10602,11 @@ msgstr "אזהרה: %s"
 
 #: ../src/plugins/gui.py:209
 msgid "Plugin failed"
-msgstr "כשל תוספת"
+msgstr "כשל תוסף"
 
 #: ../src/plugins/gui.py:254
 msgid "Unable to properly remove the plugin"
-msgstr "אין אפשרות להסיר את התוספת באופן רגיל"
+msgstr "אין אפשרות להסיר כהוגן את התוסף"
 
 #. members not safe
 #: ../src/plugins/gui.py:262 ../src/plugins/pluginmanager.py:539
@@ -10630,7 +10617,7 @@ msgstr "ארכיון הינו פגום"
 #: ../src/plugins/gui.py:286 ../src/plugins/gui.py:294
 #: ../src/plugins/pluginmanager.py:555
 msgid "Plugin already exists"
-msgstr "תוספת כבר קיימת"
+msgstr "תוסף כבר ישנו"
 
 #: ../src/plugins/gui.py:286
 msgid "Overwrite?"
@@ -10654,18 +10641,18 @@ msgstr "ארכיון ריק"
 msgid "Retrieving profile..."
 msgstr "כעת מאחזר דיוקן..."
 
-#: ../src/profile_window.py:129 ../src/roster_window.py:3233
+#: ../src/profile_window.py:129 ../src/roster_window.py:3239
 msgid "File is empty"
 msgstr "קובץ ריק"
 
-#: ../src/profile_window.py:132 ../src/roster_window.py:3236
+#: ../src/profile_window.py:132 ../src/roster_window.py:3242
 msgid "File does not exist"
 msgstr "קובץ לא קיים"
 
 #. keep identation
 #. unknown format
 #: ../src/profile_window.py:146 ../src/profile_window.py:163
-#: ../src/roster_window.py:3238 ../src/roster_window.py:3249
+#: ../src/roster_window.py:3244 ../src/roster_window.py:3255
 msgid "Could not load image"
 msgstr "לא היתה אפשרות להטעין תמונה"
 
@@ -10704,51 +10691,51 @@ msgid ""
 "later."
 msgstr "אירעה שגיאה במהלך פרסום המידע האישי שלך, נסה שוב מאוחר יותר."
 
-#: ../src/roster_window.py:240 ../src/roster_window.py:1038
+#: ../src/roster_window.py:244 ../src/roster_window.py:1044
 msgid "Merged accounts"
 msgstr "חשבונות ממוזגים"
 
-#: ../src/roster_window.py:2066
+#: ../src/roster_window.py:2072
 msgid "Authorization has been sent"
 msgstr "הרשאה נשלחה"
 
-#: ../src/roster_window.py:2067
+#: ../src/roster_window.py:2073
 #, python-format
 msgid "Now \"%s\" will know your status."
 msgstr "מעתה המצב שלך יהיה גלוי בפני \"%s\"."
 
-#: ../src/roster_window.py:2090
+#: ../src/roster_window.py:2096
 msgid "Subscription request has been sent"
 msgstr "בקשת הרשמה נשלחה"
 
-#: ../src/roster_window.py:2091
+#: ../src/roster_window.py:2097
 #, python-format
 msgid "If \"%s\" accepts this request you will know his or her status."
 msgstr "אם בקשתך תתקבל על ידי \"%s\" המצב שלו או שלה יהיה גלוי בפניך."
 
-#: ../src/roster_window.py:2105
+#: ../src/roster_window.py:2111
 msgid "Authorization has been removed"
 msgstr "הרשאה הוסרה"
 
-#: ../src/roster_window.py:2106
+#: ../src/roster_window.py:2112
 #, python-format
 msgid "Now \"%s\" will always see you as offline."
 msgstr "מעתה המצב שלך יראה בתור לא מקוון עבור \"%s\"."
 
-#: ../src/roster_window.py:2133
+#: ../src/roster_window.py:2139
 msgid "OpenPGP is not usable"
 msgstr "הצפנת OpenPGP אינה שמישה"
 
-#: ../src/roster_window.py:2134
+#: ../src/roster_window.py:2140
 #, python-format
 msgid "You will be connected to %s without OpenPGP."
 msgstr "התחברותך אל %s תתבצע ללא OpenPGP."
 
-#: ../src/roster_window.py:2341 ../src/roster_window.py:3870
+#: ../src/roster_window.py:2347 ../src/roster_window.py:3876
 msgid "You are participating in one or more group chats"
 msgstr "אתה משתתף בשיחת קבוצה אחת או יותר"
 
-#: ../src/roster_window.py:2342 ../src/roster_window.py:3871
+#: ../src/roster_window.py:2348 ../src/roster_window.py:3877
 msgid ""
 "Changing your status to invisible will result in disconnection from those "
 "group chats. Are you sure you want to go invisible?"
@@ -10756,40 +10743,40 @@ msgstr ""
 "שינוי המצב שלך אל בלתי נראה יגרום לניתוק מתוך שיחות קבוצה אלו. האם אתה בטוח "
 "כי ברצונך להפוך את המצב שלך אל בלתי נראה?"
 
-#: ../src/roster_window.py:2368
+#: ../src/roster_window.py:2374
 msgid "desync'ed"
 msgstr "לא מסונכרן"
 
-#: ../src/roster_window.py:2434
+#: ../src/roster_window.py:2440
 msgid "Really quit Gajim?"
 msgstr "באמת לצאת מתוך Gajim?"
 
-#: ../src/roster_window.py:2435
+#: ../src/roster_window.py:2441
 msgid "Are you sure you want to quit Gajim?"
 msgstr "האם אתה בטוח כי ברצונך לסגור את Gajim?"
 
-#: ../src/roster_window.py:2436
+#: ../src/roster_window.py:2442
 msgid "Always close Gajim"
 msgstr "סגור את Gajim תמיד"
 
-#: ../src/roster_window.py:2526
+#: ../src/roster_window.py:2532
 msgid "You have running file transfers"
 msgstr "נותרו העברות קבצים פעילות"
 
-#: ../src/roster_window.py:2527
+#: ../src/roster_window.py:2533
 msgid ""
 "If you quit now, the file(s) being transferred will be stopped. Do you still "
 "want to quit?"
 msgstr "אם תצא עכשיו, הקבצים אשר מועברים כעת יופסקו. האם עדיין ברצונך לצאת?"
 
-#: ../src/roster_window.py:2558 ../src/roster_window.py:3019
+#: ../src/roster_window.py:2564 ../src/roster_window.py:3025
 msgid "You have unread messages"
 msgstr "נותרו הודעות אשר לא נקראו"
 
 # BUG: and (A or THE) contact
 # קיימת לרשותך
 # היסטוריה מאופשרת
-#: ../src/roster_window.py:2559
+#: ../src/roster_window.py:2565
 msgid ""
 "Messages will only be available for reading them later if you have history "
 "enabled and contact is in your roster."
@@ -10797,27 +10784,27 @@ msgstr ""
 "הודעות יהיו זמינות לקריאה מאוחרת רק אם אפשרת רישום היסטוריה ואיש הקשר מצוי "
 "ברשימה שלך."
 
-#: ../src/roster_window.py:3020
+#: ../src/roster_window.py:3026
 msgid "You must read them before removing this transport."
 msgstr "עליך לקרוא אותן בטרם הסרת מוביל זה."
 
-#: ../src/roster_window.py:3023
+#: ../src/roster_window.py:3029
 #, python-format
 msgid "Transport \"%s\" will be removed"
 msgstr "מוביל \"%s\" יוסר"
 
-#: ../src/roster_window.py:3024
+#: ../src/roster_window.py:3030
 msgid ""
 "You will no longer be able to send and receive messages from contacts using "
 "this transport."
 msgstr ""
 "לא תעמוד עוד לרשותך האפשרות לקבל וגם לשלוח הודעות מאנשי קשר באמצעות מוביל זה."
 
-#: ../src/roster_window.py:3027
+#: ../src/roster_window.py:3033
 msgid "Transports will be removed"
 msgstr "מובילים יוסרו"
 
-#: ../src/roster_window.py:3032
+#: ../src/roster_window.py:3038
 #, python-format
 msgid ""
 "You will no longer be able to send and receive messages to contacts from "
@@ -10826,13 +10813,13 @@ msgstr ""
 "לא תעמוד עוד לרשותך האפשרות לקבל וגם לשלוח הודעות לאנשי קשר מתוך מובילים "
 "אלו: %s"
 
-#: ../src/roster_window.py:3083
+#: ../src/roster_window.py:3089
 msgid "You are about to block a contact. Are you sure you want to continue?"
 msgstr "בחרת לחסום איש קשר. האם אתה בטוח כי ברצונך להמשיך?"
 
 # BUG: HE and SHE
 # על ידו או על ידה
-#: ../src/roster_window.py:3085
+#: ../src/roster_window.py:3091
 msgid ""
 "This contact will see you offline and you will not receive messages he will "
 "send you."
@@ -10841,57 +10828,57 @@ msgstr ""
 "יישלחו אליך ממנו."
 
 #. it's jid
-#: ../src/roster_window.py:3125
+#: ../src/roster_window.py:3131
 msgid "Rename Contact"
 msgstr "שינוי שם איש קשר"
 
-#: ../src/roster_window.py:3126
+#: ../src/roster_window.py:3132
 #, python-format
 msgid "Enter a new nickname for contact %s"
 msgstr "הזן שם כינוי חדש עבור איש קשר %s"
 
-#: ../src/roster_window.py:3133
+#: ../src/roster_window.py:3139
 msgid "Rename Group"
 msgstr "שינוי שם קבוצה"
 
-#: ../src/roster_window.py:3134
+#: ../src/roster_window.py:3140
 #, python-format
 msgid "Enter a new name for group %s"
 msgstr "הזן שם חדש עבור קבוצת %s"
 
-#: ../src/roster_window.py:3179
+#: ../src/roster_window.py:3185
 msgid "Remove Group"
 msgstr "הסרת קבוצה"
 
-#: ../src/roster_window.py:3180
+#: ../src/roster_window.py:3186
 #, python-format
 msgid "Do you want to remove group %s from the roster?"
 msgstr "האם ברצונך להסיר את קבוצת %s מתוך הרשימה?"
 
-#: ../src/roster_window.py:3181
+#: ../src/roster_window.py:3187
 msgid "Also remove all contacts in this group from your roster"
 msgstr "הסר גם את כל אנשי הקשר שבקבוצה זו מתוך הרשימה שלי"
 
-#: ../src/roster_window.py:3220
+#: ../src/roster_window.py:3226
 msgid "Assign OpenPGP Key"
 msgstr "הקצאת מפתח OpenPGP"
 
 # BUG: Select a key to apply to contact "JID"
-#: ../src/roster_window.py:3221
+#: ../src/roster_window.py:3227
 msgid "Select a key to apply to the contact"
 msgstr "בחר מפתח ליישום עבור איש הקשר"
 
-#: ../src/roster_window.py:3680
+#: ../src/roster_window.py:3686
 #, python-format
 msgid "Contact \"%s\" will be removed from your roster"
 msgstr "איש קשר \"%s\" יוסר מתוך הרשימה שלך"
 
-#: ../src/roster_window.py:3682
+#: ../src/roster_window.py:3688
 #, python-format
 msgid "You are about to remove \"%(name)s\" (%(jid)s) from your roster.\n"
 msgstr "בחרת להסיר את \"%(name)s\" (%(jid)s) מתוך הרשימה שלך.\n"
 
-#: ../src/roster_window.py:3687
+#: ../src/roster_window.py:3693
 msgid ""
 "By removing this contact you also remove authorization resulting in him or "
 "her always seeing you as offline."
@@ -10900,11 +10887,11 @@ msgstr ""
 "יראה אותך במצב לא מקוון."
 
 #. Contact is not in roster
-#: ../src/roster_window.py:3693
+#: ../src/roster_window.py:3699
 msgid "Do you want to continue?"
 msgstr "האם ברצונך להמשיך?"
 
-#: ../src/roster_window.py:3697
+#: ../src/roster_window.py:3703
 msgid ""
 "By removing this contact you also by default remove authorization resulting "
 "in him or her always seeing you as offline."
@@ -10913,16 +10900,16 @@ msgstr ""
 "קשר זה תמיד יראה אותך במצב לא מקוון."
 
 # לאחר כעבור
-#: ../src/roster_window.py:3700
+#: ../src/roster_window.py:3706
 msgid "I want this contact to know my status after removal"
 msgstr "ברצוני כי איש קשר זה יהיה מיודע באשר למצב שלי עובר הסרה"
 
 #. several contact to remove at the same time
-#: ../src/roster_window.py:3704
+#: ../src/roster_window.py:3710
 msgid "Contacts will be removed from your roster"
 msgstr "אנשי קשר יוסרו מתוך הרשימה שלך"
 
-#: ../src/roster_window.py:3709
+#: ../src/roster_window.py:3715
 #, python-format
 msgid ""
 "By removing these contacts:%s\n"
@@ -10932,12 +10919,12 @@ msgstr ""
 "אתה גם תסיר הרשאה דבר אשר יגרום למצב בו אנשי קשר אלה תמיד יראו אותך במצב לא "
 "מקוון."
 
-#: ../src/roster_window.py:3767
+#: ../src/roster_window.py:3773
 msgid ""
 "You are about to send a custom status. Are you sure you want to continue?"
 msgstr "בחרת לשלוח מצב מותאם. האם אתה בטוח כי ברצונך להמשיך?"
 
-#: ../src/roster_window.py:3769
+#: ../src/roster_window.py:3775
 #, python-format
 msgid ""
 "This contact will temporarily see you as %(status)s, but only until you "
@@ -10946,20 +10933,20 @@ msgstr ""
 "איש קשר זה יראה אותך באופן זמני במצב %(status)s, אך רק עד אשר תשנה את המצב "
 "שלך. אחרי כן זה יראה את המצב הגלובלי שלך."
 
-#: ../src/roster_window.py:3788
+#: ../src/roster_window.py:3794
 msgid "No account available"
 msgstr "אין חשבון זמין"
 
 # לפני שתעמוד לרשותך האפשרות לשוחח
-#: ../src/roster_window.py:3789
+#: ../src/roster_window.py:3795
 msgid "You must create an account before you can chat with other contacts."
 msgstr "עליך ליצור חשבון בטרם תהיה באפשרותך לשוחח עם אנשי קשר אחרים."
 
-#: ../src/roster_window.py:4502
+#: ../src/roster_window.py:4508
 msgid "Metacontacts storage not supported by your server"
 msgstr "אחסון אנשי קשר מוצמדים לא נתמך על ידי השרת שלך"
 
-#: ../src/roster_window.py:4504
+#: ../src/roster_window.py:4510
 msgid ""
 "Your server does not support storing metacontacts information. So this "
 "information will not be saved on next reconnection."
@@ -10967,12 +10954,12 @@ msgstr ""
 "השרת שלך לא תומך באחסון מידע אנשי קשר מוצמדים. לכן מידע זה לא יישמר בהתחברות "
 "הבאה."
 
-#: ../src/roster_window.py:4600
+#: ../src/roster_window.py:4606
 msgid ""
 "You are about to create a metacontact. Are you sure you want to continue?"
 msgstr "בחרת ליצור איש קשר מוצמד. האם אתה בטוח כי ברצונך להמשיך?"
 
-#: ../src/roster_window.py:4602
+#: ../src/roster_window.py:4608
 msgid ""
 "Metacontacts are a way to regroup several contacts in one line. Generally it "
 "is used when the same person has several Jabber accounts or transport "
@@ -10982,28 +10969,28 @@ msgstr ""
 "כללי זו בשימוש כאשר אותה האישיות מחזיקה במספר חשבונות Jabber או חשבונות "
 "מוביל."
 
-#: ../src/roster_window.py:4723
+#: ../src/roster_window.py:4729
 msgid "Invalid file URI:"
 msgstr "כתובת URI של קובץ שגויה:"
 
-#: ../src/roster_window.py:4735
+#: ../src/roster_window.py:4741
 #, python-format
 msgid "Do you want to send this file to %s:"
 msgid_plural "Do you want to send these files to %s:"
 msgstr[0] "האם ברצונך לשלוח קובץ זה אל %s:"
 msgstr[1] "האם ברצונך לשלוח קבצים אלו אל %s:"
 
-#: ../src/roster_window.py:4870
+#: ../src/roster_window.py:4876
 #, python-format
 msgid "Send %s to %s"
 msgstr "שלח את %s אל %s"
 
-#: ../src/roster_window.py:4881
+#: ../src/roster_window.py:4887
 #, python-format
 msgid "Make %s first contact"
 msgstr "הפוך את %s לאיש קשר ראשון"
 
-#: ../src/roster_window.py:4884
+#: ../src/roster_window.py:4890
 #, python-format
 msgid "Make %s and %s metacontacts"
 msgstr "הפוך את %s ואת %s לאנשי קשר מוצמדים"
@@ -11013,101 +11000,101 @@ msgstr "הפוך את %s ואת %s לאנשי קשר מוצמדים"
 #. for chat_with
 #. for single message
 #. join gc
-#: ../src/roster_window.py:5349 ../src/roster_window.py:5403
-#: ../src/roster_window.py:5412 ../src/statusicon.py:277
+#: ../src/roster_window.py:5355 ../src/roster_window.py:5409
+#: ../src/roster_window.py:5418 ../src/statusicon.py:277
 #: ../src/statusicon.py:324 ../src/statusicon.py:330
 #, python-format
 msgid "using account %s"
 msgstr "באמצעות חשבון %s"
 
 #. add
-#: ../src/roster_window.py:5419
+#: ../src/roster_window.py:5425
 #, python-format
 msgid "to %s account"
 msgstr "אל חשבון %s"
 
 #. disco
-#: ../src/roster_window.py:5424
+#: ../src/roster_window.py:5430
 #, python-format
 msgid "using %s account"
 msgstr "באמצעות חשבון %s"
 
-#: ../src/roster_window.py:5463 ../src/statusicon.py:340
+#: ../src/roster_window.py:5469 ../src/statusicon.py:340
 msgid "_Manage Bookmarks..."
 msgstr "_נהל סימניות..."
 
 #. profile, avatar
-#: ../src/roster_window.py:5483
+#: ../src/roster_window.py:5489
 #, python-format
 msgid "of account %s"
 msgstr "של חשבון %s"
 
-#: ../src/roster_window.py:5524
+#: ../src/roster_window.py:5530
 #, python-format
 msgid "for account %s"
 msgstr "עבור חשבון %s"
 
-#: ../src/roster_window.py:5584 ../src/roster_window.py:5692
+#: ../src/roster_window.py:5590 ../src/roster_window.py:5698
 msgid "_Change Status Message"
 msgstr "_שנה הודעת מצב"
 
-#: ../src/roster_window.py:5617
+#: ../src/roster_window.py:5623
 msgid "Publish Tune"
 msgstr "פרסם לחן"
 
-#: ../src/roster_window.py:5619
+#: ../src/roster_window.py:5625
 msgid "Publish Location"
 msgstr "פרסם מיקום"
 
-#: ../src/roster_window.py:5622
+#: ../src/roster_window.py:5628
 msgid "Configure Services..."
 msgstr "הגדר שירותים..."
 
 # restore
-#: ../src/roster_window.py:5774
+#: ../src/roster_window.py:5780
 msgid "_Maximize All"
 msgstr "ה_גדל את כולם"
 
-#: ../src/roster_window.py:5784 ../src/roster_window.py:5970
+#: ../src/roster_window.py:5790 ../src/roster_window.py:5976
 msgid "Send Group M_essage"
 msgstr "שלח הודעת _אשכול"
 
-#: ../src/roster_window.py:5792
+#: ../src/roster_window.py:5798
 msgid "To all users"
 msgstr "אל כל המשתמשים"
 
-#: ../src/roster_window.py:5796
+#: ../src/roster_window.py:5802
 msgid "To all online users"
 msgstr "אל כל המשתמשים המקוונים"
 
 #. Manage Transport submenu
-#: ../src/roster_window.py:5991
+#: ../src/roster_window.py:5997
 msgid "_Manage Contacts"
 msgstr "_נהל אנשי קשר"
 
 # Restore שחזר
-#: ../src/roster_window.py:6066
+#: ../src/roster_window.py:6072
 msgid "_Maximize"
 msgstr "ה_גדל"
 
-#: ../src/roster_window.py:6075
+#: ../src/roster_window.py:6081
 msgid "_Reconnect"
 msgstr "הת_חבר מחדש"
 
-#: ../src/roster_window.py:6082
+#: ../src/roster_window.py:6088
 msgid "_Disconnect"
 msgstr "הת_נתק"
 
 #. History manager
-#: ../src/roster_window.py:6176
+#: ../src/roster_window.py:6182
 msgid "History Manager"
 msgstr "מנהל היסטוריה"
 
-#: ../src/roster_window.py:6191
+#: ../src/roster_window.py:6197
 msgid "_Join New Group Chat"
 msgstr "ה_צטרף לשיחת קבוצה חדשה"
 
-#: ../src/roster_window.py:6429
+#: ../src/roster_window.py:6435
 msgid "Change Status Message..."
 msgstr "שינוי הודעת מצב..."
 
@@ -11378,6 +11365,23 @@ msgstr "לא קיימת שום בקשת הרשמה ממתינה."
 #: ../src/vcard.py:428 ../src/vcard.py:482 ../src/vcard.py:604
 msgid " resource with priority "
 msgstr " משאב עם עדיפות "
+
+#~ msgid "Check on startup if Gajim is the _default Jabber client"
+#~ msgstr "בדוק בעת הפעלה אם Gajim הינו לקוח _Jabber ברירת מחדל"
+
+#~ msgid ""
+#~ "If True, Gajim will check if it's the default jabber client on each "
+#~ "startup."
+#~ msgstr "כאשר מופעלת, Gajim יבדוק בכל הפעלה אם הוא לקוח Jabber ברירת מחדל."
+
+#~ msgid "Gajim is not the default Jabber client"
+#~ msgstr "‏Gajim אינו לקוח Jabber ברירת מחדל"
+
+#~ msgid "Would you like to make Gajim the default Jabber client?"
+#~ msgstr "האם ברצונך להפוך את Gajim ללקוח Jabber ברירת המחדל?"
+
+#~ msgid "Always check to see if Gajim is the default Jabber client on startup"
+#~ msgstr "בדוק תמיד אם Gajim הינו לקוח Jabber ברירת המחדל בעת הפעלה"
 
 #~ msgid "Edit _Groups"
 #~ msgstr "ערוך _קבוצות"
