@@ -1,6 +1,6 @@
 [Desktop Entry]
 Categories=Network;InstantMessaging;RemoteAccess;ConsoleOnly;
-_Name=Gajim Remote
+_Name=Open URI using Gajim
 _Keywords=chat;messaging;im;jabber;xmpp;bonjour;voip;
 Version=1.0
 Exec=gajim-remote handle_uri %u
@@ -9,3 +9,4 @@ StartupNotify=false
 Terminal=false
 Type=Application
 MimeType=x-scheme-handler/xmpp;
+NoDisplay=true
