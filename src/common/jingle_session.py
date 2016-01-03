@@ -59,6 +59,11 @@ class TieBreak(Exception):
     action
     """
 
+class FailedApplication(Exception):
+    """
+    Exception that should be raised in case responder supports none of the payload-types offered by the initiator
+    """
+
 class JingleSession(object):
     """
     This represents one jingle session, that is, one or more content types
@@ -347,6 +352,10 @@ class JingleSession(object):
         except OutOfOrder:
             # FIXME
             self.__send_error(stanza, 'unexpected-request', 'out-of-order')
+        except FailedApplication:
+            reason = nbxmpp.Node('reason')
+            reason.addChild('failed-application')
+            self._session_terminate(reason)
 
     def __ack(self, stanza, jingle, error, action):
         """
