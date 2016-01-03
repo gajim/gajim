@@ -104,19 +104,26 @@ class CellRendererImage(Gtk.CellRendererPixbuf):
         else:
             return
 
-        Gdk.cairo_set_source_pixbuf(ctx, pix, cell_area.x, cell_area.y)
+        calc_width = self.get_property('xpad') * 2 + pix.get_width()
+        calc_height = self.get_property('ypad') * 2 + pix.get_height()
+
+        x_pos = cell_area.x + self.get_property('xalign') * \
+            (cell_area.width - calc_width - self.get_property('xpad'))
+        y_pos = cell_area.y + self.get_property('yalign') * \
+                    (cell_area.height - calc_height - self.get_property('ypad'))
+        Gdk.cairo_set_source_pixbuf(ctx, pix, x_pos, y_pos)
         ctx.paint()
 
-    def do_get_size(self, widget, cell_area):
+    def do_get_preferred_height(self, widget):
         """
-        Return the size we need for this cell.
+        Return the height we need for this cell.
 
         Each cell is drawn individually and is only as wide as it needs
         to be, we let the TreeViewColumn take care of making them all
         line up.
         """
         if not self.image:
-            return 0, 0, 0, 0
+            return 0, 0
         if self.image.get_storage_type() == Gtk.ImageType.ANIMATION:
             animation = self.image.get_animation()
             timeval = GLib.TimeVal()
@@ -126,17 +133,27 @@ class CellRendererImage(Gtk.CellRendererPixbuf):
             pix = self.image.get_pixbuf()
         else:
             return 0, 0, 0, 0
-        pixbuf_width = pix.get_width()
-        pixbuf_height = pix.get_height()
-        calc_width = self.get_property('xpad') * 2 + pixbuf_width
-        calc_height = self.get_property('ypad') * 2 + pixbuf_height
-        x_offset = 0
-        y_offset = 0
-        if cell_area and pixbuf_width > 0 and pixbuf_height > 0:
-            x_offset = self.get_property('xalign') * \
-                            (cell_area.width - calc_width - \
-                            self.get_property('xpad'))
-            y_offset = self.get_property('yalign') * \
-                            (cell_area.height - calc_height - \
-                            self.get_property('ypad'))
-        return x_offset, y_offset, calc_width, calc_height
+        calc_height = self.get_property('ypad') * 2 + pix.get_height()
+        return calc_height, calc_height
+
+    def do_get_preferred_width(self, widget):
+        """
+        Return the width we need for this cell.
+
+        Each cell is drawn individually and is only as wide as it needs
+        to be, we let the TreeViewColumn take care of making them all
+        line up.
+        """
+        if not self.image:
+            return 0, 0
+        if self.image.get_storage_type() == Gtk.ImageType.ANIMATION:
+            animation = self.image.get_animation()
+            timeval = GLib.TimeVal()
+            timeval.tv_sec = GLib.get_monotonic_time() / 1000000
+            pix = animation.get_iter(timeval).get_pixbuf()
+        elif self.image.get_storage_type() == Gtk.ImageType.PIXBUF:
+            pix = self.image.get_pixbuf()
+        else:
+            return 0, 0, 0, 0
+        calc_width = self.get_property('xpad') * 2 + pix.get_width()
+        return calc_width, calc_width
