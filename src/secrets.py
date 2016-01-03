@@ -95,7 +95,7 @@ class Secrets():
         return pk
 
 def load_secrets(filename):
-    f = open(filename, 'r')
+    f = open(filename, 'rb')
 
     try:
         secrets = pickle.load(f, encoding='latin1')
