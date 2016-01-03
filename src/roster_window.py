@@ -4800,8 +4800,12 @@ class RosterWindow:
             if type_dest == 'account':
                 new_grp = grp_source_list[-1]
             elif type_dest == 'group':
-                new_grp = model[iter_dest][C_JID] + delimiter +\
-                    grp_source_list[-1]
+                grp_dest = model[iter_dest][C_JID]
+                grp_dest_list = grp_dest.split(delimiter)
+                # Do not allow to drop on a subgroup of source group
+                if grp_source_list[0] != grp_dest_list[0]:
+                    new_grp = model[iter_dest][C_JID] + delimiter + \
+                        grp_source_list[-1]
             if new_grp:
                 self.move_group(grp_source, new_grp, account_source)
 
