@@ -32,6 +32,7 @@ import gajim
 from jingle_transport import JingleTransportICEUDP
 from jingle_content import contents, JingleContent, JingleContentSetupException
 from connection_handlers_events import InformationEvent
+from common.jingle_session import FailedApplication
 
 
 import logging
@@ -279,10 +280,10 @@ class JingleRTPContent(JingleContent):
             codecs.append(c)
 
         if codecs:
-            # FIXME: Handle this case:
-            # glib.GError: There was no intersection between the remote codecs and
-            # the local ones
-            self.p2pstream.set_remote_codecs(codecs)
+            try:
+                self.p2pstream.set_remote_codecs(codecs)
+            except GError:
+                raise FailedApplication
 
     def iter_codecs(self):
         codecs = self.p2psession.get_property('codecs')
