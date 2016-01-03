@@ -419,10 +419,13 @@ class JingleSession(object):
                 raise nbxmpp.NodeProcessed
 
     def __on_session_info(self, stanza, jingle, error, action):
-        # TODO: ringing, active, (un)hold, (un)mute
+        # TODO: active, (un)hold, (un)mute
+        payload = jingle.getPayload()
+        if payload[0].getName() == 'ringing':
+            # ignore ringing
+            raise nbxmpp.NodeProcessed
         if self.state != JingleStates.active:
             raise OutOfOrder
-        payload = jingle.getPayload()
         for p in payload:
             if p.getName() == 'checksum':
                 hash_ = p.getTag('file').getTag(name='hash',
