@@ -100,7 +100,7 @@ class JingleRTPContent(JingleContent):
                     params['stun-ip'] = ip
 
         self.p2pstream = self.p2psession.new_stream(participant,
-            Farstream.StreamDirection.RECV)
+            Farstream.StreamDirection.BOTH)
         self.p2pstream.connect('src-pad-added', on_src_pad_added)
         self.p2pstream.set_transmitter_ht('nice', params)
 
@@ -297,10 +297,10 @@ class JingleRTPContent(JingleContent):
             if codec.clock_rate:
                 attrs['clockrate'] = codec.clock_rate
             if codec.optional_params:
-                payload = (nbxmpp.Node('parameter', {'name': p.name,
+                payload = list(nbxmpp.Node('parameter', {'name': p.name,
                     'value': p.value}) for p in codec.optional_params)
             else:
-                payload = ()
+                payload = []
             yield nbxmpp.Node('payload-type', attrs, payload)
 
     def __stop(self, *things):
