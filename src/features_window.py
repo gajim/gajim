@@ -209,7 +209,7 @@ class FeaturesWindow:
     def speller_available(self):
         try:
             __import__('gtkspell')
-        except ImportError:
+        except ValueError:
             return False
         return True
 
