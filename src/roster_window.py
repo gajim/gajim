@@ -6158,6 +6158,10 @@ class RosterWindow:
                 # No name was given for this bookmark.
                 # Use the first part of JID instead...
                 name = bookmark['jid'].split("@")[0]
+
+            # Shorten long names
+            name = (name[:42] + '..') if len(name) > 42 else name
+
             # Do not use underline.
             item = Gtk.MenuItem.new_with_label(name)
             item.set_use_underline(False)
