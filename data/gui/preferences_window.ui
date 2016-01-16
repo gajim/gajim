@@ -244,7 +244,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="tooltip_text" translatable="yes">If checked, Gajim will display status messages of contacts under the contact name in roster window and in group chats</property>
+                            <property name="tooltip_text" translatable="yes">If checked, Gajim will display status messages of contacts under the contact name, in roster window and in group chats</property>
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
@@ -1630,7 +1630,7 @@ $T will be replaced by auto-not-available timeout</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="tooltip_text" translatable="yes">If checked, Gajim will use protocol-specific status icons. (e.g. A contact from MSN will have the equivalent msn icon for status online, away, busy, etc...)</property>
+                            <property name="tooltip_text" translatable="yes">If checked, Gajim will use protocol-specific status icons. (e.g. A contact from ICQ will have the equivalent ICQ icon for status online, away, busy, etc...)</property>
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>

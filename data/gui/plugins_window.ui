@@ -223,7 +223,6 @@
                         </child>
                         <child>
                           <object class="GtkLinkButton" id="plugin_homepage_linkbutton">
-                            <property name="label">homepage url</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>

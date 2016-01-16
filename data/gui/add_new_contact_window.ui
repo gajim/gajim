@@ -322,7 +322,7 @@
                 <property name="xalign">0</property>
                 <property name="label" translatable="yes">You have to register with this transport
 to be able to add a contact from this
-protocol. Click on register button to
+protocol. Click on Register button to
 proceed.</property>
                 <property name="wrap">True</property>
               </object>

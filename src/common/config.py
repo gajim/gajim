@@ -107,7 +107,7 @@ class Config:
             'notif_fterror_color': [ opt_color, '#B22222', _('File transfer error notification color.') ], # firebrick
             'notif_ftcomplete_color': [ opt_color, '#9ACD32', _('File transfer complete or stopped notification color.') ], # yellowgreen
             'notif_invite_color': [ opt_color, '#D2B48C', _('Groupchat invitation notification color') ], # tan1
-            'notif_status_color': [ opt_color, '#D8BFD8', _('Status changed notification background color') ], # thistle2
+            'notif_status_color': [ opt_color, '#D8BFD8', _('Background color of status changed notification') ], # thistle2
             'notif_other_color': [ opt_color, '#FFFFFF', _('Other dialogs color.') ], # white
             'inmsgfont': [ opt_str, '', _('Incoming nickname font.'), True ],
             'outmsgfont': [ opt_str, '', _('Outgoing nickname font.'), True ],
