@@ -4322,9 +4322,9 @@ class RosterWindow:
                     GLib.idle_add(self.draw_contact, jid, account)
         elif type_ == 'group':
             group = model[titer][C_JID]
-            self._adjust_group_expand_collapse_state(group, account)
+            GLib.idle_add(self._adjust_group_expand_collapse_state, group, account)
         elif type_ == 'account':
-            self._adjust_account_expand_collapse_state(account)
+            GLib.idle_add(self._adjust_account_expand_collapse_state, account)
 
 # Selection can change when the model is filtered
 # Only write to the model when filtering is finished!
