@@ -67,10 +67,17 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
             return
         contact = gajim.contacts.get_contact(self.conn.name, obj.jid,
             obj.resource)
+        if not contact:
+            contact = gajim.contacts.get_gc_contact(self.conn.name, obj.jid,
+                obj.resource)
         if self.resource != obj.resource:
             self.resource = obj.resource
             if self.control:
-                self.control.contact = contact
+                if isinstance(contact, contacts.GC_Contact):
+                    self.control.gc_contact = contact
+                    self.control.contact = contact.as_contact()
+                else:
+                    self.control.contact = contact
                 if self.control.resource:
                     self.control.change_resource(self.resource)
 
@@ -162,7 +169,11 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
             if ctrl:
                 self.control = ctrl
                 self.control.set_session(self)
-                self.control.contact = contact
+                if isinstance(contact, contacts.GC_Contact):
+                    self.control.gc_contact = contact
+                    self.control.contact = contact.as_contact()
+                else:
+                    self.control.contact = contact
 
         if not pm:
             self.roster_message2(obj)
