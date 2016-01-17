@@ -200,7 +200,7 @@ class MessageControl(object):
         if session:
             session.control = self
 
-        if oldsession:
+        if session and oldsession:
             oldsession.control = None
 
         crypto_changed = bool(session and isinstance(session,
