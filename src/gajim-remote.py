@@ -32,6 +32,7 @@ import urllib
 import signal
 signal.signal(signal.SIGINT, signal.SIG_DFL) # ^C exits the application
 
+
 from common import exceptions
 from common import i18n # This installs _() function
 from common.i18n import Q_
@@ -543,7 +544,7 @@ class GajimRemote:
             return
         jid, args = uri.split('?', 1)
         try:
-            jid = urllib.unquote(jid)
+            jid = urllib.parse.unquote(jid)
         except UnicodeDecodeError:
             pass
         args = args.split(';')
@@ -565,7 +566,7 @@ class GajimRemote:
                 # dialog
                 message = options['body']
                 try:
-                    message = urllib.unquote(message)
+                    message = urllib.parse.unquote(message)
                 except UnicodeDecodeError:
                     pass
                 if len(sys.argv) == 4:

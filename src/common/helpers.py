@@ -35,7 +35,6 @@ import locale
 import os
 import subprocess
 import urllib
-from urllib.parse import urlparse
 import webbrowser
 import errno
 import select
@@ -144,7 +143,7 @@ def puny_encode_url(url):
     _url = url
     if '//' not in _url:
         _url = '//' + _url
-    o = urlparse(_url)
+    o = urllib.parse.urlparse(_url)
     p_loc = idn_to_ascii(o.netloc)
     return url.replace(o.netloc, p_loc)
 
