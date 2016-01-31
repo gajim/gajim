@@ -585,8 +585,8 @@ class Logger:
         Accept how many rows to restore and when to time them out (in minutes)
         (mark them as too old) and number of messages that are in queue and are
         already logged but pending to be viewed, returns a list of tupples
-        containg time, kind, message, list with empty tupple if nothing found to
-        meet our demands
+        containg time, kind, message, sibject list with empty tupple if nothing
+        found to meet our demands
         """
         try:
             self.get_jid_id(jid)
@@ -601,7 +601,7 @@ class Logger:
         # 3 - 8 (we avoid the last 2 lines but we still return 5 asked)
         try:
             self.cur.execute('''
-                SELECT time, kind, message FROM logs
+                SELECT time, kind, message, subject FROM logs
                 WHERE (%s) AND kind IN (%d, %d, %d, %d, %d) AND time > %d
                 ORDER BY time DESC LIMIT %d OFFSET %d
                 ''' % (where_sql, constants.KIND_SINGLE_MSG_RECV,

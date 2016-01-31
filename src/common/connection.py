@@ -522,9 +522,6 @@ class CommonConnection:
                 log_msg = msg
                 if original_message is not None:
                     log_msg = original_message
-                if subject:
-                    log_msg = _('Subject: %(subject)s\n%(message)s') % \
-                    {'subject': subject, 'message': log_msg}
                 if log_msg:
                     if type_ == 'chat':
                         kind = 'chat_msg_sent'
@@ -534,7 +531,7 @@ class CommonConnection:
                         if xhtml and gajim.config.get('log_xhtml_messages'):
                             log_msg = '<body xmlns="%s">%s</body>' % (
                                 nbxmpp.NS_XHTML, xhtml)
-                        gajim.logger.write(kind, jid, log_msg)
+                        gajim.logger.write(kind, jid, log_msg, subject=subject)
                     except exceptions.PysqliteOperationalError as e:
                         self.dispatch('DB_ERROR', (_('Disk Write Error'),
                             str(e)))
