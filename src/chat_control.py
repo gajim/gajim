@@ -3011,7 +3011,8 @@ class ChatControl(ChatControlBase):
         local_old_kind = None
         self.conv_textview.just_cleared = True
         for row in rows: # row[0] time, row[1] has kind, row[2] the message
-            if not row[2]: # message is empty, we don't print it
+            msg = row[2]
+            if not msg: # message is empty, we don't print it
                 continue
             if row[1] in (constants.KIND_CHAT_MSG_SENT,
                             constants.KIND_SINGLE_MSG_SENT):
@@ -3032,9 +3033,12 @@ class ChatControl(ChatControlBase):
             else:
                 small_attr = []
             xhtml = None
-            if row[2].startswith('<body '):
-                xhtml = row[2]
-            ChatControlBase.print_conversation_line(self, row[2], kind, name,
+            if msg.startswith('<body '):
+                xhtml = msg
+            if row[3]:
+                msg = _('Subject: %(subject)s\n%(message)s') % \
+                    {'subject': row[3], 'message': msg}
+            ChatControlBase.print_conversation_line(self, msg, kind, name,
                 tim, small_attr, small_attr + ['restored_message'],
                 small_attr + ['restored_message'], False,
                 old_kind=local_old_kind, xhtml=xhtml)
