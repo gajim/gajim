@@ -2168,6 +2168,8 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
         gajim.nec.push_incoming_event(SignedInEvent(None, conn=self))
         self.send_awaiting_pep()
         self.continue_connect_info = None
+        # hashes of already received messages
+        self.received_message_hashes = []
 
     def request_gmail_notifications(self):
         if not self.connection or self.connected < 2:

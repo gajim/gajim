@@ -1391,10 +1391,12 @@ class DecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.encrypted = self.msg_obj.encrypted
         self.forwarded = self.msg_obj.forwarded
         self.sent = self.msg_obj.sent
+        self.conn = self.msg_obj.conn
         self.popup = False
         self.msg_id = None # id in log database
         self.attention = False # XEP-0224
         self.correct_id = None # XEP-0308
+        self.msghash = None
 
         self.receipt_request_tag = self.stanza.getTag('request',
             namespace=nbxmpp.NS_RECEIPTS)
@@ -1445,6 +1447,21 @@ class DecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         if replace:
             self.correct_id = replace.getAttr('id')
 
+        # ignore message duplicates
+        if self.msgtxt and self.id_ and self.jid:
+            self.msghash = hashlib.sha256("%s|%s|%s" % (
+                hashlib.sha256(str(self.msgtxt)).hexdigest(),
+                hashlib.sha256(str(self.id_)).hexdigest(),
+                hashlib.sha256(str(self.jid)).hexdigest())).digest()
+            if self.msghash in self.conn.received_message_hashes:
+                log.info("Ignoring duplicated message from '%s' with id '%s'" % (str(self.jid), str(self.id_)))
+                return False
+            else:
+                log.debug("subhashes: msgtxt, id_, jid = ('%s', '%s', '%s')" % (hashlib.sha256(str(self.msgtxt)).hexdigest(), hashlib.sha256(str(self.id_)).hexdigest(), hashlib.sha256(str(self.jid)).hexdigest()))
+                self.conn.received_message_hashes.append(self.msghash)
+                # only record the last 20000 hashes (should be about 1MB [32 bytes per hash]
+                # and about 24 hours if you receive a message every 5 seconds)
+                self.conn.received_message_hashes = self.conn.received_message_hashes[-20000:]
         return True
 
 class ChatstateReceivedEvent(nec.NetworkIncomingEvent):
