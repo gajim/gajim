@@ -1582,14 +1582,30 @@ class GcConfigChangedReceivedEvent(nec.NetworkIncomingEvent):
 class MessageSentEvent(nec.NetworkIncomingEvent):
     name = 'message-sent'
     base_network_events = []
+    
+    def generate(self):
+        if not self.automatic_message:
+            self.conn.sent_message_ids.append(self.msg_id)
+            # only record the last 20000 message ids (should be about 1MB [36 byte per uuid]
+            # and about 24 hours if you send out a message every 5 seconds)
+            self.conn.sent_message_ids = self.conn.sent_message_ids[-20000:]
+        return True
 
 class MessageNotSentEvent(nec.NetworkIncomingEvent):
     name = 'message-not-sent'
     base_network_events = []
 
-class MessageErrorEvent(nec.NetworkIncomingEvent):
+class MessageErrorEvent(nec.NetworkIncomingEvent, HelperEvent):
     name = 'message-error'
     base_network_events = []
+    
+    def generate(self):
+        self.get_id()
+        #only alert for errors of explicitly sent messages (see https://trac.gajim.org/ticket/8222)
+        if self.id_ in self.conn.sent_message_ids:
+            self.conn.sent_message_ids.remove(self.id_)
+            return True
+        return False
 
 class AnonymousAuthEvent(nec.NetworkIncomingEvent):
     name = 'anonymous-auth'
@@ -2610,6 +2626,7 @@ class MessageOutgoingEvent(nec.NetworkOutgoingEvent):
         self.control = None
         self.attention = False
         self.correction_msg = None
+        self.automatic_message = True
 
     def generate(self):
         return True

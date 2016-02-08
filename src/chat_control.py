@@ -866,7 +866,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             keyID=keyID, type_=type_, chatstate=chatstate, msg_id=msg_id,
             resource=resource, user_nick=self.user_nick, xhtml=xhtml,
             label=label, callback=_cb, callback_args=[callback] + callback_args,
-            control=self, attention=attention, correction_msg=correction_msg))
+            control=self, attention=attention, correction_msg=correction_msg, automatic_message=False))
 
         # Record the history of sent messages
         self.save_message(message, 'sent')

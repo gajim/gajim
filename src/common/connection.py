@@ -2115,17 +2115,42 @@ class Connection(CommonConnection, ConnectionHandlers):
         if obj.account != self.name:
             return
 
+        # parameters of this function are packet into _cb_parameters for later usage in _nec_stanza_message_outgoing's cb()
         def cb(jid, msg, keyID, forward_from, session, original_message,
         subject, type_, msg_iq, xhtml):
             if isinstance(msg_iq, list):
                 for iq in msg_iq:
                     gajim.nec.push_incoming_event(StanzaMessageOutgoingEvent(
-                        None, conn=self, msg_iq=iq, now=obj.now))
+                        None, conn=self, msg_iq=iq, now=obj.now, automatic_message=obj.automatic_message,
+                        _cb_parameters={"jid":jid, "msg":msg, "keyID":keyID, "forward_from":forward_from,
+                        "session":session, "original_message":original_message, "subject":subject, "type_":type_,
+                        "msg_iq":msg_iq, "xhtml":xhtml, "obj":obj}))
             else:
                 gajim.nec.push_incoming_event(StanzaMessageOutgoingEvent(None,
-                    conn=self, msg_iq=msg_iq, now=obj.now))
+                    conn=self, msg_iq=msg_iq, now=obj.now, automatic_message=obj.automatic_message,
+                    _cb_parameters={"jid":jid, "msg":msg, "keyID":keyID, "forward_from":forward_from,
+                    "session":session, "original_message":original_message, "subject":subject, "type_":type_,
+                    "msg_iq":msg_iq, "xhtml":xhtml, "obj":obj}))
+            
+        self._prepare_message(obj.jid, obj.message, obj.keyID, type_=obj.type_,
+            subject=obj.subject, chatstate=obj.chatstate, msg_id=obj.msg_id,
+            resource=obj.resource, user_nick=obj.user_nick, xhtml=obj.xhtml,
+            label=obj.label, session=obj.session, forward_from=obj.forward_from,
+            form_node=obj.form_node, original_message=obj.original_message,
+            delayed=obj.delayed, attention=obj.attention,
+            correction_msg=obj.correction_msg, callback=cb)
+
+    def _nec_stanza_message_outgoing(self, obj):
+        if obj.conn.name != self.name:
+            return
+        obj.msg_id = self.connection.send(obj.msg_iq, now=obj.now)
+        
+        # obj in this function is the obj as seen in _nec_message_outgoing()
+        def cb(obj, jid, msg, keyID, forward_from, session, original_message,
+        subject, type_, msg_iq, xhtml, msg_id):
             gajim.nec.push_incoming_event(MessageSentEvent(None, conn=self,
-                jid=jid, message=msg, keyID=keyID, chatstate=obj.chatstate))
+                jid=jid, message=msg, keyID=keyID, chatstate=obj.chatstate,
+                automatic_message=obj.automatic_message, msg_id=msg_id))
             if obj.callback:
                 obj.callback(msg_iq, *obj.callback_args)
 
@@ -2140,19 +2165,8 @@ class Connection(CommonConnection, ConnectionHandlers):
             else:
                 self.log_message(jid, msg, forward_from, session,
                     original_message, subject, type_, xhtml)
-
-        self._prepare_message(obj.jid, obj.message, obj.keyID, type_=obj.type_,
-            subject=obj.subject, chatstate=obj.chatstate, msg_id=obj.msg_id,
-            resource=obj.resource, user_nick=obj.user_nick, xhtml=obj.xhtml,
-            label=obj.label, session=obj.session, forward_from=obj.forward_from,
-            form_node=obj.form_node, original_message=obj.original_message,
-            delayed=obj.delayed, attention=obj.attention,
-            correction_msg=obj.correction_msg, callback=cb)
-
-    def _nec_stanza_message_outgoing(self, obj):
-        if obj.conn.name != self.name:
-            return
-        obj.msg_id = self.connection.send(obj.msg_iq, now=obj.now)
+        
+        cb(msg_id=obj.msg_id, **obj._cb_parameters)
 
     def send_contacts(self, contacts, fjid, type_='message'):
         """
@@ -2707,9 +2721,10 @@ class Connection(CommonConnection, ConnectionHandlers):
             obj.correction_msg.setBody(obj.message)
             if obj.xhtml:
                 obj.correction_msg.setXHTML(xhtml)
-            self.connection.send(obj.correction_msg)
+            obj.msg_id = self.connection.send(obj.correction_msg)
             gajim.nec.push_incoming_event(MessageSentEvent(None, conn=self,
-                jid=obj.jid, message=obj.message, keyID=None, chatstate=None))
+                jid=obj.jid, message=obj.message, keyID=None, chatstate=None,
+                automatic_message=obj.automatic_message, msg_id=obj.msg_id))
             if obj.callback:
                 obj.callback(obj.correction_msg, obj.message)
             return
@@ -2720,9 +2735,10 @@ class Connection(CommonConnection, ConnectionHandlers):
             xhtml=obj.xhtml)
         if obj.label is not None:
             msg_iq.addChild(node=label)
-        self.connection.send(msg_iq)
+        obj.msg_id = self.connection.send(msg_iq)
         gajim.nec.push_incoming_event(MessageSentEvent(None, conn=self,
-            jid=obj.jid, message=obj.message, keyID=None, chatstate=None))
+            jid=obj.jid, message=obj.message, keyID=None, chatstate=None,
+            automatic_message=obj.automatic_message, msg_id=obj.msg_id))
         if obj.callback:
             obj.callback(msg_iq, obj.message)
 

@@ -1237,7 +1237,7 @@ class ConnectionHandlersBase:
                 self.dispatch('DB_ERROR', (pritext, sectext))
         gajim.nec.push_incoming_event(MessageErrorEvent(None, conn=self,
             fjid=frm, error_code=msg.getErrorCode(), error_msg=error_msg,
-            msg=msgtxt, time_=tim, session=session))
+            msg=msgtxt, time_=tim, session=session, stanza=msg))
 
     def _LastResultCB(self, con, iq_obj):
         log.debug('LastResultCB')
@@ -1425,6 +1425,8 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
         # ID of urn:xmpp:ping requests
         self.awaiting_xmpp_ping_id = None
         self.continue_connect_info = None
+        # IDs of sent messages (https://trac.gajim.org/ticket/8222)
+        self.sent_message_ids = []
 
         try:
             self.sleeper = common.sleepy.Sleepy()
