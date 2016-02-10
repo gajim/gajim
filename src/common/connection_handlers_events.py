@@ -24,6 +24,7 @@ import os
 from time import (localtime, time as time_time)
 from calendar import timegm
 import hmac
+import hashlib
 
 from common import atom
 from common import nec
