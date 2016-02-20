@@ -1171,10 +1171,19 @@ class ConnectionHandlersBase:
         contact = gajim.contacts.get_contact(self.name, obj.jid)
         nick = obj.resource
         gc_contact = gajim.contacts.get_gc_contact(self.name, obj.jid, nick)
+        jid_to = obj.stanza.getTo()
+        reply = False
+        if not jid_to:
+            reply = True
+        else:
+            fjid_to = helpers.parse_jid(str(jid_to))
+            jid_to = gajim.get_jid_without_resource(fjid_to)
+            if jid_to == gajim.get_jid_from_account(self.name):
+                reply = True
         if obj.receipt_request_tag and gajim.config.get_per('accounts',
         self.name, 'answer_receipts') and ((contact and contact.sub \
         not in (u'to', u'none')) or gc_contact) and obj.mtype != 'error' and \
-        not obj.forwarded:
+        reply:
             receipt = nbxmpp.Message(to=obj.fjid, typ='chat')
             receipt.setID(obj.id_)
             receipt.setTag('received', namespace='urn:xmpp:receipts',
