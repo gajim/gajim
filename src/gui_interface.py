@@ -81,7 +81,7 @@ from common import dataforms
 from common import passwords
 from common import logging_helpers
 from common.connection_handlers_events import OurShowEvent, \
-    FileRequestErrorEvent, InformationEvent
+    FileRequestErrorEvent, FileTransferCompletedEvent, InformationEvent
 from common.connection import Connection
 from common import jingle
 from common.file_props import FilesProp
@@ -995,6 +995,8 @@ class Interface:
         if file_props.error == 0:
             ft.set_progress(file_props.type_, file_props.sid,
                 file_props.received_len)
+            gajim.nec.push_incoming_event(FileTransferCompletedEvent(None,
+                file_props=file_props))
         else:
             ft.set_status(file_props, 'stop')
         if file_props.stalled or file_props.paused:

@@ -2277,6 +2277,15 @@ class FileRequestErrorEvent(nec.NetworkIncomingEvent):
         self.jid = gajim.get_jid_without_resource(self.jid)
         return True
 
+class FileTransferCompletedEvent(nec.NetworkIncomingEvent):
+    name = 'file-transfer-completed'
+    base_network_events = []
+
+    def generate(self):
+        jid = unicode(self.file_props.receiver)
+        self.jid = gajim.get_jid_without_resource(jid)
+        return True
+
 class GatewayPromptReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
     name = 'gateway-prompt-received'
     base_network_events = []
