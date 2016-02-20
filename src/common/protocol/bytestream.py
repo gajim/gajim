@@ -199,8 +199,9 @@ class ConnectionBytestream:
         if not self.connection or self.connected < 2:
             return
         if file_props.session_type == 'jingle':
-            jingle = self._sessions[file_props.sid]
-            jingle.cancel_session()
+            if file_props.sid in self._sessions:
+                jingle = self._sessions[file_props.sid]
+                jingle.cancel_session()
             return
         iq = nbxmpp.Iq(to=unicode(file_props.sender), typ='error')
         iq.setAttr('id', file_props.request_id)
