@@ -1243,6 +1243,8 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                 feature = self.stanza.getTag(name='feature',
                     namespace=nbxmpp.NS_FEATURE)
                 form = nbxmpp.DataForm(node=feature.getTag('x'))
+                if not form:
+                    return
 
                 if form['FORM_TYPE'] == 'urn:xmpp:ssn':
                     self.session.handle_negotiation(form)
