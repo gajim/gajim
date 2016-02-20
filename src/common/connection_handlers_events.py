@@ -2349,6 +2349,9 @@ class NotificationEvent(nec.NetworkIncomingEvent):
                 self.control_focused = True
 
     def handle_incoming_msg_event(self, msg_obj):
+        # don't alert for carbon copied messages from ourselves
+        if msg_obj.sent:
+            return
         if not msg_obj.msgtxt:
             return
         self.jid = msg_obj.jid

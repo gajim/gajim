@@ -2756,15 +2756,18 @@ class RosterWindow:
             return
         if obj.session.control and obj.mtype == 'chat':
             typ = ''
+            xep0184_id = None
             if obj.mtype == 'error':
                 typ = 'error'
             if obj.forwarded and obj.sent:
                 typ = 'out'
+                xep0184_id = obj.id_
 
             obj.session.control.print_conversation(obj.msgtxt, typ,
                 tim=obj.timestamp, encrypted=obj.encrypted, subject=obj.subject,
                 xhtml=obj.xhtml, displaymarking=obj.displaymarking,
-                msg_id=obj.msg_id, correct_id=(obj.id_, obj.correct_id))
+                msg_id=obj.msg_id, correct_id=(obj.id_, obj.correct_id),
+                xep0184_id=xep0184_id)
             if obj.msg_id:
                 pw = obj.session.control.parent_win
                 end = obj.session.control.was_at_the_end
