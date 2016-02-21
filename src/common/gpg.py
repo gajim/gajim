@@ -22,7 +22,7 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-from common.gajim import HAVE_GPG
+from common.gajim import HAVE_GPG, GPG_BINARY
 import os
 
 if HAVE_GPG:
@@ -30,7 +30,7 @@ if HAVE_GPG:
 
     class GnuPG(gnupg.GPG):
         def __init__(self, use_agent=False):
-            gnupg.GPG.__init__(self)
+            gnupg.GPG.__init__(self, gpgbinary=GPG_BINARY)
             self.encoding = 'utf-8'
             self.decode_errors = 'replace'
             self.passphrase = None
