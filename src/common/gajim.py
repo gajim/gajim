@@ -160,6 +160,7 @@ except ImportError:
     HAVE_PYCRYPTO = False
 
 HAVE_GPG = True
+GPG_BINARY = 'gpg'
 try:
     __import__('gnupg', globals(), locals(), [], -1)
 except ImportError:
@@ -167,11 +168,17 @@ except ImportError:
 else:
     import os
     import subprocess
-    if os.name == 'nt':
-        gpg_cmd = 'gpg -h >nul 2>&1'
-    else:
-        gpg_cmd = 'gpg -h >/dev/null 2>&1'
-    if subprocess.call(gpg_cmd, shell=True):
+    def test_gpg(binary='gpg'):
+        if os.name == 'nt':
+            gpg_cmd = binary + ' -h >nul 2>&1'
+        else:
+            gpg_cmd = binary + ' -h >/dev/null 2>&1'
+        if subprocess.call(gpg_cmd, shell=True):
+            return False
+        return True
+    if test_gpg(binary='gpg2'):
+        GPG_BINARY = 'gpg2'
+    if not test_gpg(binary='gpg'):
         HAVE_GPG = False
 
 HAVE_PYOPENSSL = True
