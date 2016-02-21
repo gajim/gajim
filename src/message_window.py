@@ -86,8 +86,16 @@ class MessageWindow(object):
             self.parent_paned = parent_paned
             old_parent = self.notebook.get_parent()
             old_parent.remove(self.notebook)
-            self.parent_paned.add(self.notebook)
-            self.parent_paned.pack2(self.notebook, resize=True, shrink=True)
+            if gajim.config.get('roster_on_the_right'):
+                child1 = self.parent_paned.get_child1()
+                self.parent_paned.remove(child1)
+                self.parent_paned.add(self.notebook)
+                self.parent_paned.pack1(self.notebook, resize=False,
+                    shrink=True)
+                self.parent_paned.pack2(child1, resize=True, shrink=True)
+            else:
+                self.parent_paned.add(self.notebook)
+                self.parent_paned.pack2(self.notebook, resize=True, shrink=True)
             gajim.interface.roster.xml.get_object('show_roster_menuitem').\
                 set_sensitive(True)
             orig_window.destroy()
