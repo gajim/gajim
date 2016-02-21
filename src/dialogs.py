@@ -302,12 +302,14 @@ class ChooseGPGKeyDialog:
         self.keys_treeview.set_model(model)
         #columns
         renderer = Gtk.CellRendererText()
-        col = self.keys_treeview.insert_column_with_attributes(-1, _('KeyID'),
-                renderer, text=0)
+        self.keys_treeview.insert_column_with_attributes(-1, _('KeyID'),
+            renderer, text=0)
+        col = self.keys_treeview.get_column(0)
         col.set_sort_column_id(0)
         renderer = Gtk.CellRendererText()
-        col = self.keys_treeview.insert_column_with_attributes(-1,
-                _('Contact name'), renderer, text=1)
+        self.keys_treeview.insert_column_with_attributes(-1, _('Contact name'),
+            renderer, text=1)
+        col = self.keys_treeview.get_column(1)
         col.set_sort_column_id(1)
         self.keys_treeview.set_search_column(1)
         self.fill_tree(secret_keys, selected)
