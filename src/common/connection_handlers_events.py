@@ -2695,6 +2695,7 @@ class GcMessageOutgoingEvent(nec.NetworkOutgoingEvent):
         self.is_loggable = True
         self.control = None
         self.correction_msg = None
+        self.automatic_message = True
 
     def generate(self):
         return True

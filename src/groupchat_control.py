@@ -2021,7 +2021,8 @@ class GroupchatControl(ChatControlBase):
             gajim.nec.push_outgoing_event(GcMessageOutgoingEvent(None,
                 account=self.account, jid=self.room_jid, message=message,
                 xhtml=xhtml, label=label, callback=_cb,
-                callback_args=[_cb] + [message], correction_msg=correction_msg))
+                callback_args=[_cb] + [message], correction_msg=correction_msg,
+                automatic_message=False))
             self.msg_textview.get_buffer().set_text('')
             self.msg_textview.grab_focus()
 
