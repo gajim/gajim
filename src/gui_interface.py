@@ -64,6 +64,7 @@ from chat_control import ChatControlBase
 from chat_control import ChatControl
 from groupchat_control import GroupchatControl
 from groupchat_control import PrivateChatControl
+from message_window import MessageWindowMgr
 
 from atom_window import AtomWindow
 from session import ChatControlSession
@@ -2710,6 +2711,10 @@ class Interface:
             self.show_systray()
 
         self.roster = roster_window.RosterWindow()
+        if self.msg_win_mgr.mode == \
+        MessageWindowMgr.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER:
+            self.msg_win_mgr.create_window(None, None, None)
+
         # Creating plugin manager
         import plugins
         gajim.plugin_manager = plugins.PluginManager()

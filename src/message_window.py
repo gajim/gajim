@@ -601,7 +601,10 @@ class MessageWindow(object):
             ctrl.allow_shutdown(method, on_yes, on_no, on_minimize)
 
     def check_tabs(self):
-        if self.get_num_controls() == 0:
+        if self.parent_paned:
+            # Do nothing in single window mode
+            pass
+        elif self.get_num_controls() == 0:
             # These are not called when the window is destroyed like this, fake it
             gajim.interface.msg_win_mgr._on_window_delete(self.window, None)
             gajim.interface.msg_win_mgr._on_window_destroy(self.window)
