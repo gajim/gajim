@@ -1368,7 +1368,8 @@ class GroupchatControl(ChatControlBase):
                 # print if a control is open
                 obj.session.control.print_conversation(obj.msgtxt,
                     tim=obj.timestamp, xhtml=obj.xhtml, encrypted=obj.encrypted,
-                    displaymarking=obj.displaymarking)
+                    displaymarking=obj.displaymarking, correct_id=(obj.id_,
+                    obj.correct_id))
             else:
                 # otherwise pass it off to the control to be queued
                 self.on_private_message(nick, obj.msgtxt, obj.timestamp,
