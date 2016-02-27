@@ -448,12 +448,12 @@ class Logger:
         sql = 'DELETE FROM unread_messages WHERE message_id IN (%s)' % ids
         self.simple_commit(sql)
 
-    def set_shown_unread_msgs(self, msg_id):
+    def set_shown_unread_msgs(self, msg_log_id):
         """
         Mark unread message as shown un GUI
         """
         sql = 'UPDATE unread_messages SET shown = 1 where message_id = %s' % \
-                msg_id
+                msg_log_id
         self.simple_commit(sql)
 
     def reset_shown_unread_messages(self):
@@ -475,7 +475,7 @@ class Logger:
         except Exception:
             pass
         for message in results:
-            msg_id = message[0]
+            msg_log_id = message[0]
             shown = message[1]
             # here we get infos for that message, and related jid from jids table
             # do NOT change order of SELECTed things, unless you change function(s)
@@ -485,12 +485,12 @@ class Logger:
                     jids.jid
                     FROM logs, jids
                     WHERE logs.log_line_id = %d AND logs.jid_id = jids.jid_id
-                    ''' % msg_id
+                    ''' % msg_log_id
                     )
             results = self.cur.fetchall()
             if len(results) == 0:
                 # Log line is no more in logs table. remove it from unread_messages
-                self.set_read_messages([msg_id])
+                self.set_read_messages([msg_log_id])
                 continue
             all_messages.append(results[0] + (shown,))
         return all_messages

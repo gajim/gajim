@@ -907,7 +907,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
     def print_conversation_line(self, text, kind, name, tim,
     other_tags_for_name=[], other_tags_for_time=[], other_tags_for_text=[],
     count_as_new=True, subject=None, old_kind=None, xhtml=None, simple=False,
-    xep0184_id=None, graphics=True, displaymarking=None, msg_id=None,
+    xep0184_id=None, graphics=True, displaymarking=None, msg_log_id=None,
     correct_id=None):
         """
         Print 'chat' type messages
@@ -983,7 +983,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
                     self.account, self.contact, type_)
 
                 event = gajim.events.create_event(type_, (text, subject, self,
-                    msg_id), show_in_roster=show_in_roster,
+                    msg_log_id), show_in_roster=show_in_roster,
                     show_in_systray=show_in_systray)
                 gajim.events.add_event(self.account, full_jid, event)
                 # We need to redraw contact if we show in roster
@@ -2508,7 +2508,7 @@ class ChatControl(ChatControlBase):
 
     def print_conversation(self, text, frm='', tim=None, encrypted=False,
     subject=None, xhtml=None, simple=False, xep0184_id=None,
-    displaymarking=None, msg_id=None, correct_id=None):
+    displaymarking=None, msg_log_id=None, correct_id=None):
         """
         Print a line in the conversation
 
@@ -2573,7 +2573,7 @@ class ChatControl(ChatControlBase):
         ChatControlBase.print_conversation_line(self, text, kind, name, tim,
             subject=subject, old_kind=self.old_msg_kind, xhtml=xhtml,
             simple=simple, xep0184_id=xep0184_id, displaymarking=displaymarking,
-            msg_id=msg_id, correct_id=correct_id)
+            msg_log_id=msg_log_id, correct_id=correct_id)
         if text.startswith('/me ') or text.startswith('/me\n'):
             self.old_msg_kind = None
         else:

@@ -1074,14 +1074,14 @@ class GroupchatControl(ChatControlBase):
                     correct_id=(obj.stanza.getID(), None))
         obj.needs_highlight = self.needs_visual_notification(obj.msgtxt)
 
-    def on_private_message(self, nick, msg, tim, xhtml, session, msg_id=None,
+    def on_private_message(self, nick, msg, tim, xhtml, session, msg_log_id=None,
     encrypted=False, displaymarking=None):
         # Do we have a queue?
         fjid = self.room_jid + '/' + nick
         no_queue = len(gajim.events.get_events(self.account, fjid)) == 0
 
         event = gajim.events.create_event('pm', (msg, '', 'incoming', tim,
-            encrypted, '', msg_id, xhtml, session, None, displaymarking, False))
+            encrypted, '', msg_log_id, xhtml, session, None, displaymarking, False))
         gajim.events.add_event(self.account, fjid, event)
 
         autopopup = gajim.config.get('autopopup')
@@ -1373,7 +1373,7 @@ class GroupchatControl(ChatControlBase):
             else:
                 # otherwise pass it off to the control to be queued
                 self.on_private_message(nick, obj.msgtxt, obj.timestamp,
-                    obj.xhtml, self.session, msg_id=obj.msg_id,
+                    obj.xhtml, self.session, msg_log_id=obj.msg_log_id,
                     encrypted=obj.encrypted, displaymarking=obj.displaymarking)
 
     def _nec_ping_reply(self, obj):

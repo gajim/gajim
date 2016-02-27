@@ -1405,7 +1405,7 @@ class DecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.sent = self.msg_obj.sent
         self.conn = self.msg_obj.conn
         self.popup = False
-        self.msg_id = None # id in log database
+        self.msg_log_id = None # id in log database
         self.attention = False # XEP-0224
         self.correct_id = None # XEP-0308
         self.msghash = None
