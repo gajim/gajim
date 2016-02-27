@@ -94,7 +94,7 @@ class Contact(CommonContact):
     """
     def __init__(self, jid, account, name='', groups=[], show='', status='',
     sub='', ask='', resource='', priority=0, keyID='', client_caps=None,
-    our_chatstate=None, chatstate=None, last_status_time=None, msg_id=None,
+    our_chatstate=None, chatstate=None, last_status_time=None, msg_log_id=None,
     last_activity_time=None):
         if not isinstance(jid, str):
             print('no str')
@@ -110,7 +110,7 @@ class Contact(CommonContact):
 
         self.priority = priority
         self.keyID = keyID
-        self.msg_id = msg_id
+        self.msg_log_id = msg_log_id
         self.last_status_time = last_status_time
         self.last_activity_time = last_activity_time
 

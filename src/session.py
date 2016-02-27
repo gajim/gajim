@@ -99,7 +99,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
                     msg_to_log = obj.xhtml
                 else:
                     msg_to_log = obj.msgtxt
-                obj.msg_id = gajim.logger.write(log_type, obj.fjid,
+                obj.msg_log_id = gajim.logger.write(log_type, obj.fjid,
                     msg_to_log, tim=obj.timestamp, subject=obj.subject)
             except exceptions.PysqliteOperationalError as e:
                 gajim.nec.push_incoming_event(InformationEvent(None,
@@ -142,8 +142,8 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
                 # Brand new message, incoming.
                 contact.our_chatstate = obj.chatstate
                 contact.chatstate = obj.chatstate
-                if obj.msg_id: # Do not overwrite an existing msg_id with None
-                    contact.msg_id = obj.msg_id
+                if obj.msg_log_id: # Do not overwrite an existing msg_log_id with None
+                    contact.msg_log_id = obj.msg_log_id
 
         # THIS MUST BE AFTER chatstates handling
         # AND BEFORE playsound (else we ear sounding on chatstates!)
@@ -182,7 +182,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
             gajim.interface.remote_ctrl.raise_signal('NewMessage', (
                 self.conn.name, [obj.fjid, obj.msgtxt, obj.timestamp,
                 obj.encrypted, obj.mtype, obj.subject, obj.chatstate,
-                obj.msg_id, obj.user_nick, obj.xhtml, obj.form_node]))
+                obj.msg_log_id, obj.user_nick, obj.xhtml, obj.form_node]))
 
     def roster_message2(self, obj):
         """
@@ -255,7 +255,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
         (obj.mtype == 'normal' and not obj.popup):
             event = gajim.events.create_event(type_, (obj.msgtxt, obj.subject,
                 obj.mtype, obj.timestamp, obj.encrypted, obj.resource,
-                obj.msg_id, obj.xhtml, self, obj.form_node, obj.displaymarking,
+                obj.msg_log_id, obj.xhtml, self, obj.form_node, obj.displaymarking,
                 obj.forwarded and obj.sent),
                 show_in_roster=obj.show_in_roster,
                 show_in_systray=obj.show_in_systray)
@@ -263,7 +263,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
             gajim.events.add_event(self.conn.name, fjid, event)
 
     def roster_message(self, jid, msg, tim, encrypted=False, msg_type='',
-    subject=None, resource='', msg_id=None, user_nick='', xhtml=None,
+    subject=None, resource='', msg_log_id=None, user_nick='', xhtml=None,
     form_node=None, displaymarking=None):
         """
         Display the message or show notification in the roster
@@ -332,8 +332,8 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
             self.control.print_conversation(msg, typ, tim=tim, encrypted=encrypted,
                     subject=subject, xhtml=xhtml, displaymarking=displaymarking)
 
-            if msg_id:
-                gajim.logger.set_read_messages([msg_id])
+            if msg_log_id:
+                gajim.logger.set_read_messages([msg_log_id])
 
             return
 
@@ -351,7 +351,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
                 contact)
 
         event = gajim.events.create_event(type_, (msg, subject, msg_type, tim,
-            encrypted, resource, msg_id, xhtml, self, form_node, displaymarking,
+            encrypted, resource, msg_log_id, xhtml, self, form_node, displaymarking,
             False), show_in_roster=show_in_roster,
             show_in_systray=show_in_systray)
 

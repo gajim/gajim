@@ -1860,7 +1860,7 @@ class RosterWindow:
 
                 tim = time.localtime(float(result[2]))
                 session.roster_message(jid, result[1], tim, msg_type='chat',
-                        msg_id=result[0])
+                    msg_log_id=result[0])
                 gajim.logger.set_shown_unread_msgs(result[0])
 
             elif (time.time() - result[2]) > 2592000:
@@ -1961,16 +1961,16 @@ class RosterWindow:
         pending events
         """
 
-        msg_ids = []
+        msg_log_ids = []
         for ev in event_list:
             if ev.type_ != 'printed_chat':
                 continue
             if len(ev.parameters) > 3 and ev.parameters[3]:
-                # There is a msg_id
-                msg_ids.append(ev.parameters[3])
+                # There is a msg_log_id
+                msg_log_ids.append(ev.parameters[3])
 
-        if msg_ids:
-            gajim.logger.set_read_messages(msg_ids)
+        if msg_log_ids:
+            gajim.logger.set_read_messages(msg_log_ids)
 
         contact_list = ((event.jid.split('/')[0], event.account) for event in \
                 event_list)
@@ -2766,14 +2766,14 @@ class RosterWindow:
             obj.session.control.print_conversation(obj.msgtxt, typ,
                 tim=obj.timestamp, encrypted=obj.encrypted, subject=obj.subject,
                 xhtml=obj.xhtml, displaymarking=obj.displaymarking,
-                msg_id=obj.msg_id, correct_id=(obj.id_, obj.correct_id),
+                msg_log_id=obj.msg_log_id, correct_id=(obj.id_, obj.correct_id),
                 xep0184_id=xep0184_id)
-            if obj.msg_id:
+            if obj.msg_log_id:
                 pw = obj.session.control.parent_win
                 end = obj.session.control.was_at_the_end
                 if not pw or (pw.get_active_control() and obj.session.control \
                 == pw.get_active_control() and pw.is_active() and end):
-                    gajim.logger.set_read_messages([obj.msg_id])
+                    gajim.logger.set_read_messages([obj.msg_log_id])
         elif obj.popup and obj.mtype == 'chat':
             contact = gajim.contacts.get_contact(obj.conn.name, obj.jid)
             obj.session.control = gajim.interface.new_chat(contact,

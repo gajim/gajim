@@ -1395,7 +1395,7 @@ class DecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.sent = self.msg_obj.sent
         self.conn = self.msg_obj.conn
         self.popup = False
-        self.msg_id = None # id in log database
+        self.msg_log_id = None # id in log database
         self.attention = False # XEP-0224
         self.correct_id = None # XEP-0308
         self.msghash = None
@@ -1600,7 +1600,7 @@ class GcConfigChangedReceivedEvent(nec.NetworkIncomingEvent):
 class MessageSentEvent(nec.NetworkIncomingEvent):
     name = 'message-sent'
     base_network_events = []
-    
+
     def generate(self):
         if not self.automatic_message:
             self.conn.sent_message_ids.append(self.msg_id)
@@ -1616,7 +1616,7 @@ class MessageNotSentEvent(nec.NetworkIncomingEvent):
 class MessageErrorEvent(nec.NetworkIncomingEvent, HelperEvent):
     name = 'message-error'
     base_network_events = []
-    
+
     def generate(self):
         self.get_id()
         #only alert for errors of explicitly sent messages (see https://trac.gajim.org/ticket/8222)
