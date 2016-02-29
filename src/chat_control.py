@@ -881,7 +881,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
         if not count_as_new:
             return
-        if kind in ('incoming', 'outgoing'):
+        if kind in ('incoming', 'incoming_queue', 'outgoing'):
             self.last_received_txt[name] = text
             if correct_id:
                 self.last_received_id[name] = correct_id[0]
@@ -3022,7 +3022,8 @@ class ChatControl(ChatControlBase):
                 kind = 'out'
             self.print_conversation(event.message, kind, tim=event.time,
                 encrypted=event.encrypted, subject=event.subject,
-                xhtml=event.xhtml, displaymarking=event.displaymarking)
+                xhtml=event.xhtml, displaymarking=event.displaymarking,
+                correct_id=event.correct_id)
             if isinstance(event.msg_log_id, int):
                 message_ids.append(event.msg_log_id)
 
