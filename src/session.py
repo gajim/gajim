@@ -23,6 +23,7 @@
 
 from common import helpers
 
+from common import events
 from common import exceptions
 from common import gajim
 from common import stanza_session
@@ -235,11 +236,11 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 
         obj.popup = helpers.allow_popup_window(self.conn.name)
 
-        type_ = 'chat'
+        event_t = events.ChatEvent
         event_type = 'message_received'
 
         if obj.mtype == 'normal':
-            type_ = 'normal'
+            event_t = events.NormalEvent
             event_type = 'single_message_received'
 
         if self.control and obj.mtype != 'normal':
@@ -253,10 +254,11 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 
         if (not self.control and obj.mtype != 'normal') or \
         (obj.mtype == 'normal' and not obj.popup):
-            event = gajim.events.create_event(type_, (obj.msgtxt, obj.subject,
-                obj.mtype, obj.timestamp, obj.encrypted, obj.resource,
-                obj.msg_log_id, obj.xhtml, self, obj.form_node, obj.displaymarking,
-                obj.forwarded and obj.sent),
+            event = event_t(obj.msgtxt, obj.subject, obj.mtype, obj.timestamp,
+                obj.encrypted, obj.resource, obj.msg_log_id, xhtml=obj.xhtml,
+                session=self, form_node=obj.form_node,
+                displaymarking=obj.displaymarking,
+                sent_forwarded=obj.forwarded and obj.sent,
                 show_in_roster=obj.show_in_roster,
                 show_in_systray=obj.show_in_systray)
 
@@ -338,11 +340,11 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
             return
 
         # We save it in a queue
-        type_ = 'chat'
+        event_t = events.ChatEvent
         event_type = 'message_received'
 
         if msg_type == 'normal':
-            type_ = 'normal'
+            event_t = events.NormalEvent
             event_type = 'single_message_received'
 
         show_in_roster = notify.get_show_in_roster(event_type, self.conn.name,
@@ -350,10 +352,11 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
         show_in_systray = notify.get_show_in_systray(event_type, self.conn.name,
                 contact)
 
-        event = gajim.events.create_event(type_, (msg, subject, msg_type, tim,
-            encrypted, resource, msg_log_id, xhtml, self, form_node, displaymarking,
-            False), show_in_roster=show_in_roster,
-            show_in_systray=show_in_systray)
+        event = event_t(msg, subject, msg_type, tim, encrypted, resource,
+            msg_log_id, xhtml=xhtml, session=self, form_node=form_node,
+            displaymarking=displaymarking, sent_forwarded=False,
+            show_in_roster=obj.show_in_roster,
+            show_in_systray=obj.show_in_systray)
 
         gajim.events.add_event(self.conn.name, fjid, event)
 

@@ -46,6 +46,7 @@ import history_window
 import notify
 import re
 
+from common import events
 from common import gajim
 from common import helpers
 from common import exceptions
@@ -912,20 +913,23 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
                 # other_tags_for_text == ['marked'] --> highlighted gc message
                 if gc_message:
                     if 'marked' in other_tags_for_text:
-                        type_ = 'printed_marked_gc_msg'
+                        event_type = events.PrintedMarkedGcMsgEvent
                     else:
-                        type_ = 'printed_gc_msg'
+                        event_type = events.PrintedGcMsgEvent
                     event = 'gc_message_received'
                 else:
-                    type_ = 'printed_' + self.type_id
+                    if self.type_id == message_control.TYPE_CHAT:
+                        event_type = events.PrintedChatEvent
+                    else:
+                        event_type = events.PrintedPmEvent
                     event = 'message_received'
                 show_in_roster = notify.get_show_in_roster(event,
                     self.account, self.contact, self.session)
                 show_in_systray = notify.get_show_in_systray(event,
-                    self.account, self.contact, type_)
+                    self.account, self.contact, event_type.type_)
 
-                event = gajim.events.create_event(type_, (text, subject, self,
-                    msg_log_id), show_in_roster=show_in_roster,
+                event = event_type(text, subject, self, msg_log_id,
+                    show_in_roster=show_in_roster,
                     show_in_systray=show_in_systray)
                 gajim.events.add_event(self.account, full_jid, event)
                 # We need to redraw contact if we show in roster
@@ -2677,7 +2681,7 @@ class ChatControl(ChatControlBase):
 
         gajim.nec.push_outgoing_event(MessageOutgoingEvent(None,
             account=self.account, jid=self.contact.jid, chatstate=state,
-            msg_id=contact.msg_id, control=self))
+            msg_id=contact.msg_log_id, control=self))
 
         contact.our_chatstate = state
         if state == 'active':
@@ -3010,23 +3014,20 @@ class ChatControl(ChatControlBase):
         for event in events:
             if event.type_ != self.type_id:
                 continue
-            data = event.parameters
-            kind = data[2]
-            if kind == 'error':
+            if event.kind == 'error':
                 kind = 'info'
             else:
                 kind = 'print_queue'
-            if data[11]:
+            if event.sent_forwarded:
                 kind = 'out'
-            dm = data[10]
-            self.print_conversation(data[0], kind, tim=data[3],
-                encrypted=data[4], subject=data[1], xhtml=data[7],
-                displaymarking=dm)
-            if len(data) > 6 and isinstance(data[6], int):
-                message_ids.append(data[6])
+            self.print_conversation(event.message, kind, tim=event.time,
+                encrypted=event.encrypted, subject=event.subject,
+                xhtml=event.xhtml, displaymarking=event.displaymarking)
+            if isinstance(event.msg_log_id, int):
+                message_ids.append(event.msg_log_id)
 
-            if len(data) > 8 and not self.session:
-                self.set_session(data[8])
+            if event.session and not self.session:
+                self.set_session(event.session)
         if message_ids:
             gajim.logger.set_read_messages(message_ids)
         gajim.events.remove_events(self.account, jid_with_resource,
@@ -3258,7 +3259,7 @@ class ChatControl(ChatControlBase):
     def _get_file_props_event(self, file_props, type_):
         evs = gajim.events.get_events(self.account, self.contact.jid, [type_])
         for ev in evs:
-            if ev.parameters == file_props:
+            if ev.file_props == file_props:
                 return ev
         return None
 
@@ -3322,15 +3323,13 @@ class ChatControl(ChatControlBase):
         self._add_info_bar_message(markup, [b], file_props, Gtk.MessageType.ERROR)
 
     def _on_accept_gc_invitation(self, widget, event):
-        room_jid = event.parameters[0]
-        password = event.parameters[2]
-        is_continued = event.parameters[3]
         try:
-            if is_continued:
-                gajim.interface.join_gc_room(self.account, room_jid,
-                    gajim.nicks[self.account], password, is_continued=True)
+            if event.is_continued:
+                gajim.interface.join_gc_room(self.account, event.room_jid,
+                    gajim.nicks[self.account], event.password,
+                    is_continued=True)
             else:
-                dialogs.JoinGroupchatWindow(self.account, room_jid)
+                dialogs.JoinGroupchatWindow(self.account, event.room_jid)
         except GajimGeneralException:
             pass
         gajim.events.remove_events(self.account, self.contact.jid, event=event)
@@ -3339,17 +3338,15 @@ class ChatControl(ChatControlBase):
         gajim.events.remove_events(self.account, self.contact.jid, event=event)
 
     def _get_gc_invitation(self, event):
-        room_jid = event.parameters[0]
-        comment = event.parameters[1]
-        markup = '<b>%s:</b> %s' % (_('Groupchat Invitation'), room_jid)
-        if comment:
-            markup += ' (%s)' % comment
+        markup = '<b>%s:</b> %s' % (_('Groupchat Invitation'), event.room_jid)
+        if event.comment:
+            markup += ' (%s)' % event.comment
         b1 = Gtk.Button(_('_Join'))
         b1.connect('clicked', self._on_accept_gc_invitation, event)
         b2 = Gtk.Button(stock=Gtk.STOCK_CANCEL)
         b2.connect('clicked', self._on_cancel_gc_invitation, event)
-        self._add_info_bar_message(markup, [b1, b2], event.parameters,
-            Gtk.MessageType.QUESTION)
+        self._add_info_bar_message(markup, [b1, b2], (event.room_jid,
+            event.comment), Gtk.MessageType.QUESTION)
 
     def on_event_added(self, event):
         if event.account != self.account:
@@ -3357,19 +3354,19 @@ class ChatControl(ChatControlBase):
         if event.jid != self.contact.jid:
             return
         if event.type_ == 'file-request':
-            self._got_file_request(event.parameters)
+            self._got_file_request(event.file_props)
         elif event.type_ == 'file-completed':
-            self._got_file_completed(event.parameters)
+            self._got_file_completed(event.file_props)
         elif event.type_ in ('file-error', 'file-stopped'):
             msg_err = ''
-            if event.parameters.error == -1:
+            if event.file_props.error == -1:
                 msg_err = _('Remote contact stopped transfer')
-            elif event.parameters.error == -6:
+            elif event.file_props.error == -6:
                 msg_err = _('Error opening file')
-            self._got_file_error(event.parameters, event.type_,
+            self._got_file_error(event.file_props, event.type_,
                 _('File transfer stopped'), msg_err)
         elif event.type_ in ('file-request-error', 'file-send-error'):
-            self._got_file_error(event.parameters, event.type_,
+            self._got_file_error(event.file_props, event.type_,
                 _('File transfer cancelled'),
                 _('Connection with peer cannot be established.'))
         elif event.type_ == 'gc-invitation':
@@ -3392,11 +3389,11 @@ class ChatControl(ChatControlBase):
             removed = False
             for ib_msg in self.info_bar_queue:
                 if ev.type_ == 'gc-invitation':
-                    if ev.parameters[0] == ib_msg[2][0]:
+                    if ev.room_jid == ib_msg[2][0]:
                         self.info_bar_queue.remove(ib_msg)
                         removed = True
                 else: # file-*
-                    if ib_msg[2] == ev.parameters:
+                    if ib_msg[2] == ev.file_props:
                         self.info_bar_queue.remove(ib_msg)
                         removed = True
                 if removed:

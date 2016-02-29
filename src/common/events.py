@@ -31,8 +31,7 @@ class Event:
     Information concerning each event
     """
 
-    def __init__(self, type_, time_, parameters, show_in_roster=False,
-                    show_in_systray=True):
+    def __init__(self, time_=None, show_in_roster=False, show_in_systray=True):
         """
         type_ in chat, normal, file-request, file-error, file-completed,
         file-request-error, file-send-error, file-stopped, gc_msg, pm,
@@ -41,26 +40,137 @@ class Event:
 
         parameters is (per type_):
                 chat, normal, pm: [message, subject, kind, time, encrypted, resource,
-                msg_id]
+                msg_log_id]
                         where kind in error, incoming
                 file-*: file_props
                 gc_msg: None
-                printed_chat: [message, subject, control, msg_id]
+                printed_chat: [message, subject, control, msg_log_id]
                 printed_*: None
                         messages that are already printed in chat, but not read
-                gc-invitation: [room_jid, reason, password, is_continued]
+                gc-invitation: [room_jid, reason, password, is_continued, jid_from]
                 subscription_request: [text, nick]
                 unsubscribed: contact
                 jingle-incoming: (fulljid, sessionid, content_types)
         """
-        self.type_ = type_
-        self.time_ = time_
-        self.parameters = parameters
+        if time_:
+            self.time_ = time_
+        else:
+            self.time_ = time.time()
         self.show_in_roster = show_in_roster
         self.show_in_systray = show_in_systray
         # Set when adding the event
         self.jid = None
         self.account = None
+
+class ChatEvent(Event):
+    type_ = 'chat'
+    def __init__ (self, message, subject, kind, time, encrypted, resource,
+    msg_log_id=None, xhtml=None, session=None, form_node=None, displaymarking=None,
+    sent_forwarded=False, time_=None, show_in_roster=False,
+    show_in_systray=True):
+        Event.__init__(self, time_, show_in_roster=show_in_roster,
+            show_in_systray=show_in_systray)
+        self.message = message
+        self.subject = subject
+        self.kind = kind
+        self.time = time
+        self.encrypted = encrypted
+        self.resource = resource
+        self.msg_log_id = msg_log_id
+        self.xhtml = xhtml
+        self.session = session
+        self.form_node = form_node
+        self.displaymarking = displaymarking
+        self.sent_forwarded = sent_forwarded
+
+class NormalEvent(ChatEvent):
+    type_ = 'normal'
+
+class PmEvent(ChatEvent):
+    type_ = 'pm'
+
+class PrintedChatEvent(Event):
+    type_ = 'printed_chat'
+    def __init__(self, message, subject, control, msg_log_id, time_=None,
+    show_in_roster=False, show_in_systray=True):
+        Event.__init__(self, time_, show_in_roster=show_in_roster,
+            show_in_systray=show_in_systray)
+        self.message = message
+        self.subject = subject
+        self.control = control
+        self.msg_log_id = msg_log_id
+
+class PrintedGcMsgEvent(PrintedChatEvent):
+    type_ = 'printed_gc_msg'
+
+class PrintedMarkedGcMsgEvent(PrintedChatEvent):
+    type_ = 'printed_marked_gc_msg'
+
+class PrintedPmEvent(PrintedChatEvent):
+    type_ = 'printed_pm'
+
+class SubscriptionRequestEvent(Event):
+    type_ = 'subscription_request'
+    def __init__(self, text, nick, time_=None, show_in_roster=False,
+    show_in_systray=True):
+        Event.__init__(self, time_, show_in_roster=show_in_roster,
+            show_in_systray=show_in_systray)
+        self.text = text
+        self.nick = nick
+
+class UnsubscribedEvent(Event):
+    type_ = 'unsubscribed'
+    def __init__(self, contact, time_=None, show_in_roster=False,
+    show_in_systray=True):
+        Event.__init__(self, time_, show_in_roster=show_in_roster,
+            show_in_systray=show_in_systray)
+        self.contact = contact
+
+class GcInvitationtEvent(Event):
+    type_ = 'gc-invitation'
+    def __init__(self, room_jid, reason, password, is_continued, from_jid,
+    time_=None, show_in_roster=False, show_in_systray=True):
+        Event.__init__(self, time_, show_in_roster=show_in_roster,
+            show_in_systray=show_in_systray)
+        self.room_jid = room_jid
+        self.reason = reason
+        self.password = password
+        self.is_continued = is_continued
+        self.from_jid = from_jid
+
+class FileRequestEvent(Event):
+    type_ = 'file-request'
+    def __init__(self, file_props, time_=None, show_in_roster=False, show_in_systray=True):
+        Event.__init__(self, time_, show_in_roster=show_in_roster,
+            show_in_systray=show_in_systray)
+        self.file_props = file_props
+
+class FileSendErrorEvent(FileRequestEvent):
+    type_ = 'file-send-error'
+
+class FileErrorEvent(FileRequestEvent):
+    type_ = 'file-error'
+
+class FileRequestErrorEvent(FileRequestEvent):
+    type_ = 'file-request-error'
+
+class FileCompletedEvent(FileRequestEvent):
+    type_ = 'file-completed'
+
+class FileStoppedEvent(FileRequestEvent):
+    type_ = 'file-stopped'
+
+class FileHashErrorEvent(Event):
+    type_ = 'file-hash-rror'
+
+class JingleIncomingEvent(Event):
+    type_ = 'jingle-incoming'
+    def __init__(self, peerjid, sid, content_types, time_=None, show_in_roster=False, show_in_systray=True):
+        Event.__init__(self, time_, show_in_roster=show_in_roster,
+            show_in_systray=show_in_systray)
+        self.peerjid = peerjid
+        self.sid = sid
+        self.content_types = content_types
 
 class Events:
     """
@@ -121,13 +231,6 @@ class Events:
 
     def remove_account(self, account):
         del self._events[account]
-
-    def create_event(self, type_, parameters, time_=None,
-    show_in_roster=False, show_in_systray=True):
-        if not time_:
-            time_ = time.time()
-        return Event(type_, time_, parameters, show_in_roster,
-                show_in_systray)
 
     def add_event(self, account, jid, event):
         # No such account before ?
