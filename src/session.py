@@ -255,7 +255,8 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
         if (not self.control and obj.mtype != 'normal') or \
         (obj.mtype == 'normal' and not obj.popup):
             event = event_t(obj.msgtxt, obj.subject, obj.mtype, obj.timestamp,
-                obj.encrypted, obj.resource, obj.msg_log_id, xhtml=obj.xhtml,
+                obj.encrypted, obj.resource, obj.msg_log_id,
+                correct_id=(obj.id_, obj.correct_id), xhtml=obj.xhtml,
                 session=self, form_node=obj.form_node,
                 displaymarking=obj.displaymarking,
                 sent_forwarded=obj.forwarded and obj.sent,
