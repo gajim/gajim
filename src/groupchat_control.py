@@ -44,6 +44,7 @@ import cell_renderer_image
 import dataforms_widget
 import nbxmpp
 
+from common import events
 from common import gajim
 from common import helpers
 from common import dataforms
@@ -1080,8 +1081,9 @@ class GroupchatControl(ChatControlBase):
         fjid = self.room_jid + '/' + nick
         no_queue = len(gajim.events.get_events(self.account, fjid)) == 0
 
-        event = gajim.events.create_event('pm', (msg, '', 'incoming', tim,
-            encrypted, '', msg_log_id, xhtml, session, None, displaymarking, False))
+        event = events.PmEvent(msg, '', 'incoming', tim, encrypted, '',
+            msg_log_id, xhtml=xhtml, session=session, form_node=None,
+            displaymarking=displaymarking, sent_forwarded=False)
         gajim.events.add_event(self.account, fjid, event)
 
         autopopup = gajim.config.get('autopopup')

@@ -287,9 +287,9 @@ class ForwardMessagesCommand(AdHocCommand):
                 if ev_typ == 'printed_chat':
                     ev_typ = 'chat'
                 gajim.nec.push_outgoing_event(MessageOutgoingEvent(None,
-                    account=account, jid=j, message=event.parameters[0],
-                    type_=ev_typ, subject=event.parameters[1],
-                    resource=resource, forward_from=jid, delayed=event.time_))
+                    account=account, jid=j, message=event.message, type_=ev_typ,
+                    subject=event.subject, resource=resource, forward_from=jid,
+                    delayed=event.time_))
 
         # Inform other client of completion
         response, cmd = self.buildResponse(request, status = 'completed')
@@ -321,10 +321,9 @@ class FwdMsgThenDisconnectCommand(AdHocCommand):
                 if ev_typ == 'printed_chat':
                     ev_typ = 'chat'
                 gajim.nec.push_outgoing_event(MessageOutgoingEvent(None,
-                    account=account, jid=j, message=event.parameters[0],
-                    type_=ev_typ, subject=event.parameters[1],
-                    resource=resource, forward_from=jid, delayed=event.time_,
-                    now=True))
+                    account=account, jid=j, message=event.message, type_=ev_typ,
+                    subject=event.subject, resource=resource, forward_from=jid,
+                    delayed=event.time_, now=True))
 
         response, cmd = self.buildResponse(request, status = 'completed')
         cmd.addChild('note', {}, _('The status has been changed.'))

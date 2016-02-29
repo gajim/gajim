@@ -591,7 +591,7 @@ class FileTransfersWindow:
             for ev_type in ('file-error', 'file-completed', 'file-request-error',
             'file-send-error', 'file-stopped'):
                 for event in gajim.events.get_events(account, jid, [ev_type]):
-                    if event.parameters.sid == file_props.sid:
+                    if event.file_props.sid == file_props.sid:
                         gajim.events.remove_events(account, jid, event)
                         gajim.interface.roster.draw_contact(jid, account)
                         gajim.interface.roster.show_title()

@@ -46,6 +46,7 @@ import gobject
 
 from common import i18n
 from common import gajim
+from common import events
 
 from common import dbus_support
 if dbus_support.supported:
@@ -467,8 +468,8 @@ class Interface:
                 obj.user_nick)
             return
 
-        self.add_event(account, obj.jid, 'subscription_request', (obj.status,
-            obj.user_nick))
+        event = events.SubscriptionRequestEvent(obj.status, obj.user_nick)
+        self.add_event(account, obj.jid, event)
 
         if helpers.allow_showing_notification(account):
             path = gtkgui_helpers.get_icon_path('gajim-subscription_request',
@@ -525,7 +526,8 @@ class Interface:
             self.show_unsubscribed_dialog(account, contact)
             return
 
-        self.add_event(account, obj.jid, 'unsubscribed', contact)
+        event = events.UnsubscribedEvent(contact)
+        self.add_event(account, obj.jid, event)
 
         if helpers.allow_showing_notification(account):
             path = gtkgui_helpers.get_icon_path('gajim-unsubscribed', 48)
@@ -644,8 +646,9 @@ class Interface:
                 is_continued=obj.is_continued)
             return
 
-        self.add_event(account, obj.jid_from, 'gc-invitation', (obj.room_jid,
-            obj.reason, obj.password, obj.is_continued, obj.jid_from))
+        event = events.GcInvitationtEvent(obj.room_jid, obj.reason,
+            obj.password, obj.is_continued, obj.jid_from)
+        self.add_event(account, obj.jid_from, event)
 
         if helpers.allow_showing_notification(account):
             path = gtkgui_helpers.get_icon_path('gajim-gc_invitation', 48)
@@ -844,7 +847,8 @@ class Interface:
             ft.show_send_error(file_props)
             return
 
-        self.add_event(account, jid, 'file-send-error', file_props)
+        event = events.FileSendErrorEvent(file_props)
+        self.add_event(account, jid, event)
 
         if helpers.allow_showing_notification(account):
             path = gtkgui_helpers.get_icon_path('gajim-ft_error', 48)
@@ -903,11 +907,14 @@ class Interface:
             return
 
         if errno in (-4, -5):
+            event_class = events.FileErrorEvent
             msg_type = 'file-error'
         else:
+            event_class = events.FileRequestErrorEvent
             msg_type = 'file-request-error'
 
-        self.add_event(obj.conn.name, obj.jid, msg_type, obj.file_props)
+        event = event_class(obj.file_props)
+        self.add_event(obj.conn.name, obj.jid, event)
 
         if helpers.allow_showing_notification(obj.conn.name):
             # check if we should be notified
@@ -941,7 +948,8 @@ class Interface:
             self.instances['file_transfers'].show_file_request(account, contact,
                 obj.file_props)
             return
-        self.add_event(account, obj.jid, 'file-request', obj.file_props)
+        event = events.FileRequestEvent(obj.file_props)
+        self.add_event(account, obj.jid, event)
         if helpers.allow_showing_notification(account):
             path = gtkgui_helpers.get_icon_path('gajim-ft_request', 48)
             txt = _('%s wants to send you a file.') % gajim.get_name_from_jid(
@@ -1039,12 +1047,15 @@ class Interface:
         event_type = ''
         if file_props.error == 0 and gajim.config.get(
         'notify_on_file_complete'):
+            event_class = events.FileCompletedEvent
             msg_type = 'file-completed'
             event_type = _('File Transfer Completed')
         elif file_props.error in (-1, -6):
+            event_class = events.FileStoppedEvent
             msg_type = 'file-stopped'
             event_type = _('File Transfer Stopped')
         elif file_props.error  == -10:
+            event_class = events.FileHashErrorEvent
             msg_type = 'file-hash-error'
             event_type = _('File Transfer Failed')
 
@@ -1057,7 +1068,8 @@ class Interface:
             return
 
         if msg_type:
-            self.add_event(account, jid, msg_type, file_props)
+            event = event_class(file_props)
+            self.add_event(account, jid, event)
 
         if file_props is not None:
             if file_props.type_ == 'r':
@@ -1260,8 +1272,8 @@ class Interface:
                 content_types)
             return
 
-        self.add_event(account, obj.jid, 'jingle-incoming', (obj.fjid, obj.sid,
-                content_types))
+        event = events.JingleIncomingEvent(obj.fjid, obj.sid, content_types)
+        self.add_event(account, obj.jid, event)
 
         if helpers.allow_showing_notification(account):
             # TODO: we should use another pixmap ;-)
@@ -1610,7 +1622,7 @@ class Interface:
 ### Methods dealing with gajim.events
 ################################################################################
 
-    def add_event(self, account, jid, type_, event_args):
+    def add_event(self, account, jid, event):
         """
         Add an event to the gajim.events var
         """
@@ -1618,25 +1630,22 @@ class Interface:
         # Do we have a queue?
         jid = gajim.get_jid_without_resource(jid)
         no_queue = len(gajim.events.get_events(account, jid)) == 0
-        # type_ can be gc-invitation file-send-error file-error
-        #  file-request-error file-request file-completed file-stopped
-        #  file-hash-error jingle-incoming
+        # event can be in common.events.*
         # event_type can be in advancedNotificationWindow.events_list
         event_types = {'file-request': 'ft_request',
             'file-completed': 'ft_finished'}
-        event_type = event_types.get(type_)
+        event_type = event_types.get(event.type_)
         show_in_roster = notify.get_show_in_roster(event_type, account, jid)
         show_in_systray = notify.get_show_in_systray(event_type, account, jid)
-        event = gajim.events.create_event(type_, event_args,
-            show_in_roster=show_in_roster,
-            show_in_systray=show_in_systray)
+        event.show_in_roster = show_in_roster
+        event.show_in_systray = show_in_systray
         gajim.events.add_event(account, jid, event)
 
         self.roster.show_title()
         if no_queue: # We didn't have a queue: we change icons
             if not gajim.contacts.get_contact_with_highest_priority(account,
             jid):
-                if type_ == 'gc-invitation':
+                if event.type_ == 'gc-invitation':
                     self.roster.add_groupchat(jid, account, status='offline')
                 else:
                     # add contact to roster ("Not In The Roster") if he is not
@@ -1682,9 +1691,9 @@ class Interface:
                     return
 
             if type_ == 'printed_chat':
-                ctrl = event.parameters[2]
+                ctrl = event.control
             elif type_ == 'chat':
-                session = event.parameters[8]
+                session = event.session
                 ctrl = session.control
             elif type_ == '':
                 ctrl = self.msg_win_mgr.get_control(fjid, account)
@@ -1722,9 +1731,9 @@ class Interface:
                 return
 
             if type_ == 'printed_pm':
-                ctrl = event.parameters[2]
+                ctrl = event.control
             elif type_ == 'pm':
-                session = event.parameters[8]
+                session = event.session
 
             if session and session.control:
                 ctrl = session.control
@@ -1770,21 +1779,19 @@ class Interface:
                 helpers.launch_browser_mailer('url', url)
         elif type_ == 'gc-invitation':
             event = gajim.events.get_first_event(account, jid, type_)
-            data = event.parameters
-            dialogs.InvitationReceivedDialog(account, data[0], jid, data[2],
-                    data[1], data[3])
+            dialogs.InvitationReceivedDialog(account, event.room_jid, jid,
+                event.password, event.reason, event.is_continued)
             gajim.events.remove_events(account, jid, event)
             self.roster.draw_contact(jid, account)
         elif type_ == 'subscription_request':
             event = gajim.events.get_first_event(account, jid, type_)
-            data = event.parameters
-            dialogs.SubscriptionRequestWindow(jid, data[0], account, data[1])
+            dialogs.SubscriptionRequestWindow(jid, event.text, account,
+                event.nick)
             gajim.events.remove_events(account, jid, event)
             self.roster.draw_contact(jid, account)
         elif type_ == 'unsubscribed':
             event = gajim.events.get_first_event(account, jid, type_)
-            contact = event.parameters
-            self.show_unsubscribed_dialog(account, contact)
+            self.show_unsubscribed_dialog(account, event.contact)
             gajim.events.remove_events(account, jid, event)
             self.roster.draw_contact(jid, account)
         if w:

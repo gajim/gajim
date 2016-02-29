@@ -1951,9 +1951,9 @@ class RosterWindow:
         for ev in event_list:
             if ev.type_ != 'printed_chat':
                 continue
-            if len(ev.parameters) > 3 and ev.parameters[3]:
+            if ev.msg_log_id:
                 # There is a msg_log_id
-                msg_log_ids.append(ev.parameters[3])
+                msg_log_ids.append(ev.msg_log_id)
 
         if msg_log_ids:
             gajim.logger.set_read_messages(msg_log_ids)
@@ -1977,59 +1977,60 @@ class RosterWindow:
         """
         If an event was handled, return True, else return False
         """
-        data = event.parameters
         ft = gajim.interface.instances['file_transfers']
         event = gajim.events.get_first_event(account, jid, event.type_)
         if event.type_ == 'normal':
             dialogs.SingleMessageWindow(account, jid,
-                action='receive', from_whom=jid, subject=data[1],
-                message=data[0], resource=data[5], session=data[8],
-                form_node=data[9])
+                action='receive', from_whom=jid, subject=event.subject,
+                message=event.message, resource=event.resource,
+                session=event.session, form_node=event.form_node)
             gajim.events.remove_events(account, jid, event)
             return True
         elif event.type_ == 'file-request':
             contact = gajim.contacts.get_contact_with_highest_priority(account,
                     jid)
-            ft.show_file_request(account, contact, data)
+            ft.show_file_request(account, contact, event.file_props)
             gajim.events.remove_events(account, jid, event)
             return True
         elif event.type_ in ('file-request-error', 'file-send-error'):
-            ft.show_send_error(data)
+            ft.show_send_error(event.file_props)
             gajim.events.remove_events(account, jid, event)
             return True
         elif event.type_ in ('file-error', 'file-stopped'):
             msg_err = ''
-            if data.error == -1:
+            if event.file_props.error == -1:
                 msg_err = _('Remote contact stopped transfer')
-            elif data.error == -6:
+            elif event.file_props.error == -6:
                 msg_err = _('Error opening file')
-            ft.show_stopped(jid, data, error_msg=msg_err)
+            ft.show_stopped(jid, event.file_props, error_msg=msg_err)
             gajim.events.remove_events(account, jid, event)
             return True
         elif event.type_ == 'file-hash-error':
-            ft.show_hash_error(jid, data, account)
+            ft.show_hash_error(jid, event.file_props, account)
             gajim.events.remove_events(account, jid, event)
             return True
         elif event.type_ == 'file-completed':
-            ft.show_completed(jid, data)
+            ft.show_completed(jid, event.file_props)
             gajim.events.remove_events(account, jid, event)
             return True
         elif event.type_ == 'gc-invitation':
-            dialogs.InvitationReceivedDialog(account, data[0], data[4], data[2],
-                data[1], is_continued=data[3])
+            dialogs.InvitationReceivedDialog(account, event.room_jid,
+                event.jid_from, event.password, event.reason,
+                is_continued=event.is_continued)
             gajim.events.remove_events(account, jid, event)
             return True
         elif event.type_ == 'subscription_request':
-            dialogs.SubscriptionRequestWindow(jid, data[0], account, data[1])
+            dialogs.SubscriptionRequestWindow(jid, event.text, account,
+                event.nick)
             gajim.events.remove_events(account, jid, event)
             return True
         elif event.type_ == 'unsubscribed':
-            gajim.interface.show_unsubscribed_dialog(account, data)
+            gajim.interface.show_unsubscribed_dialog(account, event.contact)
             gajim.events.remove_events(account, jid, event)
             return True
         elif event.type_ == 'jingle-incoming':
-            peerjid, sid, content_types = data
-            dialogs.VoIPCallReceivedDialog(account, peerjid, sid, content_types)
+            dialogs.VoIPCallReceivedDialog(account, event.peerjid, event.sid,
+                event.content_types)
             gajim.events.remove_events(account, jid, event)
             return True
         return False
@@ -4137,7 +4138,7 @@ class RosterWindow:
         session = None
         if first_ev:
             if first_ev.type_ in ('chat', 'normal'):
-                session = first_ev.parameters[8]
+                session = first_ev.session
             fjid = jid
             if resource:
                 fjid += '/' + resource
