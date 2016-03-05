@@ -1151,6 +1151,7 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             if forward_tag:
                 msg = forward_tag.getTag('message')
                 self.stanza = nbxmpp.Message(node=msg)
+                self.get_id()
                 if carbon_marker.getName() == 'sent':
                     to = self.stanza.getTo()
                     frm = self.stanza.getFrom()
@@ -1600,7 +1601,7 @@ class GcConfigChangedReceivedEvent(nec.NetworkIncomingEvent):
 class MessageSentEvent(nec.NetworkIncomingEvent):
     name = 'message-sent'
     base_network_events = []
-    
+
     def generate(self):
         if not self.automatic_message:
             self.conn.sent_message_ids.append(self.msg_id)
@@ -1616,7 +1617,7 @@ class MessageNotSentEvent(nec.NetworkIncomingEvent):
 class MessageErrorEvent(nec.NetworkIncomingEvent, HelperEvent):
     name = 'message-error'
     base_network_events = []
-    
+
     def generate(self):
         self.get_id()
         #only alert for errors of explicitly sent messages (see https://trac.gajim.org/ticket/8222)
