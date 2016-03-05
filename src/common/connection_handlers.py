@@ -1169,7 +1169,10 @@ class ConnectionHandlersBase:
         contact = gajim.contacts.get_contact(self.name, obj.jid)
         nick = obj.resource
         gc_contact = gajim.contacts.get_gc_contact(self.name, obj.jid, nick)
-        jid_to = obj.stanza.getTo()
+        if obj.sent:
+            jid_to = obj.stanza.getFrom()
+        else:
+            jid_to = obj.stanza.getTo()
         reply = False
         if not jid_to:
             reply = True
