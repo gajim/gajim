@@ -870,6 +870,13 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         correct_id[1] == self.last_received_id[name]:
             self.conv_textview.correct_last_received_message(text, xhtml,
                 name, old_txt)
+        elif correct_id and correct_id[1] and \
+        self.conv_textview.last_sent_message_marks[0] and \
+        correct_id[1] == self.last_received_id[name]:
+            # this is for carbon copied messages that are sent from another
+            # resource
+            self.conv_textview.correct_last_sent_message(text, xhtml,
+                self.get_our_nick(), old_txt)
         else:
             textview.print_conversation_line(text, jid, kind, name, tim,
                 other_tags_for_name, other_tags_for_time, other_tags_for_text,

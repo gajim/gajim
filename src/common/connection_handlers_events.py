@@ -1150,6 +1150,7 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             if forward_tag:
                 msg = forward_tag.getTag('message')
                 self.stanza = nbxmpp.Message(node=msg)
+                self.get_id()
                 if carbon_marker.getName() == 'sent':
                     to = self.stanza.getTo()
                     frm = self.stanza.getFrom()
