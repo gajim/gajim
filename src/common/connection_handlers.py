@@ -1185,7 +1185,6 @@ class ConnectionHandlersBase:
         not in (u'to', u'none')) or gc_contact) and obj.mtype != 'error' and \
         reply:
             receipt = nbxmpp.Message(to=obj.fjid, typ='chat')
-            receipt.setID(obj.id_)
             receipt.setTag('received', namespace='urn:xmpp:receipts',
                 attrs={'id': obj.id_})
 
