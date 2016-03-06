@@ -3382,11 +3382,12 @@ class ManageBookmarksWindow:
         # Fill in the data for childs
         self.title_entry.set_text(model[iter_][1])
         room_jid = model[iter_][2].decode('utf-8')
-        (room, server) = room_jid.split('@')
-        self.room_entry.handler_block(self.room_entry_changed_id)
-        self.room_entry.set_text(room)
-        self.room_entry.handler_unblock(self.room_entry_changed_id)
-        self.server_entry.set_text(server)
+        if '@' in room_jid:
+            (room, server) = room_jid.split('@')
+            self.room_entry.handler_block(self.room_entry_changed_id)
+            self.room_entry.set_text(room)
+            self.room_entry.handler_unblock(self.room_entry_changed_id)
+            self.server_entry.set_text(server)
 
         self.autojoin_checkbutton.set_active(model[iter_][3])
         self.minimize_checkbutton.set_active(model[iter_][4])
