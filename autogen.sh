@@ -31,6 +31,10 @@
 
   mkdir -p config
 
+  if [ "$NO_AUTOTOOLS_RUN" ]; then
+    exit 0
+  fi
+
   intltoolize --force --automake \
   && aclocal -I ./m4 \
   && $LIBTOOLIZE --copy --force --automake \
