@@ -480,7 +480,7 @@ class PluginManager(metaclass=Singleton):
                 continue
             try:
                 module = __import__(module_name)
-            except (ValueError, ImportError, AttributeError) as error:
+            except Exception as error:
                 log.debug(str(error))
 
             if module is None:
