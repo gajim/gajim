@@ -452,7 +452,7 @@ class PluginManager(object):
                 file_path += os.path.sep
                 try:
                     module = __import__(module_name)
-                except (ValueError, ImportError, AttributeError) as error:
+                except Exception as error:
                     log.debug(error)
 
             if module is None:
