@@ -70,7 +70,7 @@ Agent JID - node</property>
           </packing>
         </child>
         <child>
-          <object class="GtkBox" id="address_tabl">
+          <object class="GtkBox" id="address_table">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="spacing">6</property>
