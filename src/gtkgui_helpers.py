@@ -125,7 +125,7 @@ def popup_emoticons_under_button(menu, button, parent_win):
     """
     window_x1, window_y1 = parent_win.get_origin()[1:]
 
-    def position_menu_under_button(menu, data):
+    def position_menu_under_button(menu, _x=None, _y=None, data=None):
         # inline function, which will not keep refs, when used as CB
         alloc = button.get_allocation()
         button_x, button_y = alloc.x, alloc.y
