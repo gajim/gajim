@@ -848,10 +848,7 @@ PresenceHelperEvent):
             gajim.nec.push_incoming_event(UnsubscribedPresenceReceivedEvent(
                 None, conn=self.conn, stanza=self.stanza, presence_obj=self))
         elif self.ptype == 'error':
-            if self.errcode != '409': # conflict # See #5120
-                self.show = 'error'
-                self.status = self.errmsg
-                return True
+            return
 
         if not self.ptype or self.ptype == 'unavailable':
             our_jid = gajim.get_jid_from_account(self.conn.name)
