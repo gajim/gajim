@@ -3191,6 +3191,8 @@ class ManageBookmarksWindow:
         self.window = self.xml.get_object('manage_bookmarks_window')
         self.window.set_transient_for(gajim.interface.roster.window)
 
+        self.ignore_events = False
+
         # Account-JID, RoomName, Room-JID, Autojoin, Minimize, Passowrd, Nick,
         # Show_Status
         self.treestore = Gtk.TreeStore(str, str, str, bool, bool, str, str, str)
@@ -3317,8 +3319,11 @@ class ManageBookmarksWindow:
             # Don't remove account iters
             return
 
+        self.ignore_events = True
         model.remove(iter_)
+        self.selection.unselect_all()
         self.clear_fields()
+        self.ignore_events = False
 
     def check_valid_bookmark(self):
         """
@@ -3438,6 +3443,8 @@ class ManageBookmarksWindow:
         self.print_status_combobox.set_active(opts.index(print_status))
 
     def on_title_entry_changed(self, widget):
+        if self.ignore_events:
+            return
         (model, iter_) = self.selection.get_selected()
         if iter_: # After removing a bookmark, we got nothing selected
             if model.iter_parent(iter_):
@@ -3445,6 +3452,8 @@ class ManageBookmarksWindow:
                 model[iter_][1] = self.title_entry.get_text()
 
     def on_nick_entry_changed(self, widget):
+        if self.ignore_events:
+            return
         (model, iter_) = self.selection.get_selected()
         if iter_:
             nick = self.nick_entry.get_text()
@@ -3458,6 +3467,8 @@ class ManageBookmarksWindow:
             model[iter_][6] = nick
 
     def on_server_entry_changed(self, widget):
+        if self.ignore_events:
+            return
         (model, iter_) = self.selection.get_selected()
         if not iter_:
             return
@@ -3483,6 +3494,8 @@ class ManageBookmarksWindow:
         model[iter_][2] = room_jid
 
     def on_room_entry_changed(self, widget):
+        if self.ignore_events:
+            return
         (model, iter_) = self.selection.get_selected()
         if not iter_:
             return
@@ -3508,22 +3521,30 @@ class ManageBookmarksWindow:
         model[iter_][2] = room_jid
 
     def on_pass_entry_changed(self, widget):
+        if self.ignore_events:
+            return
         (model, iter_) = self.selection.get_selected()
         if iter_:
             model[iter_][5] = self.pass_entry.get_text()
 
     def on_autojoin_checkbutton_toggled(self, widget):
+        if self.ignore_events:
+            return
         (model, iter_) = self.selection.get_selected()
         if iter_:
             model[iter_][3] = self.autojoin_checkbutton.get_active()
             self.minimize_checkbutton.set_sensitive(model[iter_][3])
 
     def on_minimize_checkbutton_toggled(self, widget):
+        if self.ignore_events:
+            return
         (model, iter_) = self.selection.get_selected()
         if iter_:
             model[iter_][4] = self.minimize_checkbutton.get_active()
 
     def on_print_status_combobox_changed(self, widget):
+        if self.ignore_events:
+            return
         active = widget.get_active()
         model = widget.get_model()
         print_status = model[active][1]
