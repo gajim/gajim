@@ -364,8 +364,8 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             from common.connection_handlers_events import FileRequestErrorEvent
             gajim.nec.push_incoming_event(FileRequestErrorEvent(None, conn=self,
                 jid=unicode(receiver), file_props=file_props, error_msg=''))
-            self._connect_error(unicode(receiver), file_props.sid,
-                    file_props.sid, code=406)
+            self._connect_error(file_props.sid, error='not-acceptable',
+                error_type='modify')
         else:
             iq = nbxmpp.Iq(to=unicode(receiver), typ='set')
             file_props.request_id = 'id_' + file_props.sid
@@ -551,7 +551,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
         file_props.hash_ = hash_id
         return
 
-    def _connect_error(self,sid, code=404):
+    def _connect_error(self, sid, error, error_type, msg=None):
         """
         Called when there is an error establishing BS connection, or when
         connection is rejected
@@ -562,23 +562,17 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
         if file_props is None:
             log.error('can not send iq error on failed transfer')
             return
-        msg_dict = {
-                404: 'Could not connect to given hosts',
-                405: 'Cancel',
-                406: 'Not acceptable',
-        }
-        msg = msg_dict[code]
         if file_props.type_ == 's':
             to = file_props.receiver
         else:
             to = file_props.sender
-        iq = nbxmpp.Iq(to=to,     typ='error')
-        iq.setAttr('id', file_props.sid)
+        iq = nbxmpp.Iq(to=to, typ='error')
+        iq.setAttr('id', file_props.request_id)
         err = iq.setTag('error')
-        err.setAttr('code', unicode(code))
-        err.setData(msg)
+        err.setAttr('type', error_type)
+        err.setTag(error, namespace=nbxmpp.NS_STANZAS)
         self.connection.send(iq)
-        if code == 404:
+        if msg:
             self.disconnect_transfer(file_props)
             file_props.error = -3
             from common.connection_handlers_events import \
@@ -661,9 +655,12 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             raise nbxmpp.NodeProcessed
 
         file_props.streamhosts = streamhosts
+        def _connection_error(sid):
+            self._connect_error(sid, 'item-not-found', 'cancel',
+                msg='Could not connect to given hosts')
         if file_props.type_ == 'r':
             gajim.socks5queue.connect_to_hosts(self.name, sid,
-                    self.send_success_connect_reply, self._connect_error)
+                    self.send_success_connect_reply, _connection_error)
         raise nbxmpp.NodeProcessed
 
     def _ResultCB(self, con, iq_obj):
