@@ -27,7 +27,9 @@ from gi.repository import Farstream
 import gi
 gi.require_version('Gst', '1.0')
 from gi.repository import Gst
+gi.require_version('GdkX11', '3.0')
 from gi.repository import GdkX11
+gi.require_version('GstVideo', '1.0')
 from gi.repository import GstVideo
 from gi.repository import GLib
 

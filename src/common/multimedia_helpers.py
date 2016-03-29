@@ -13,8 +13,12 @@
 ## You should have received a copy of the GNU General Public License
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+import gi
+gi.require_version('Gst', '1.0')
 from gi.repository import Gst
+gi.require_version('GdkX11', '3.0')
 from gi.repository import GdkX11
+gi.require_version('GstVideo', '1.0')
 from gi.repository import GstVideo
 
 

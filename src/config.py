@@ -68,7 +68,7 @@ try:
     from common.multimedia_helpers import AudioInputManager, AudioOutputManager
     from common.multimedia_helpers import VideoInputManager, VideoOutputManager
     HAS_GST = True
-except ImportError:
+except (ImportError, ValueError):
     HAS_GST = False
 
 from common.exceptions import GajimGeneralException
