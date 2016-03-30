@@ -116,7 +116,7 @@ text=None, timeout=-1):
         else:
             _title = title
 
-        notification = Notify.Notification(_title, _text)
+        notification = Notify.Notification.new(_title, _text)
         notification.set_timeout(timeout*1000)
 
         notification.set_category(event_type)
