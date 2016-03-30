@@ -303,7 +303,7 @@ class Config:
             'show_self_contact': [opt_str, 'when_other_resource', _('When is self contact row displayed. Can be "always", "when_other_resource" or "never"'), True],
             'audio_input_device': [opt_str, 'autoaudiosrc ! volume name=gajim_vol'],
             'audio_output_device': [opt_str, 'autoaudiosink'],
-            'video_input_device': [opt_str, 'autovideosrc ! videoscale ! videoconvert'],
+            'video_input_device': [opt_str, 'autovideosrc'],
             'video_output_device': [opt_str, 'autovideosink'],
             'video_framerate': [opt_str, '', _('Optionally fix jingle output video framerate. Example: 10/1 or 25/2')],
             'video_size': [opt_str, '', _('Optionally resize jingle output video. Example: 320x240')],

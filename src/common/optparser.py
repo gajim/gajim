@@ -231,6 +231,8 @@ class OptionsParser:
             self.update_config_to_01601()
         if old < [0, 16, 4, 1] and new >= [0, 16, 4, 1]:
             self.update_config_to_01641()
+        if old < [0, 16, 10, 1] and new >= [0, 16, 10, 1]:
+            self.update_config_to_016101()
 
         gajim.logger.init_vars()
         gajim.logger.attach_cache_database()
@@ -936,3 +938,11 @@ class OptionsParser:
             gajim.config.set_per('accounts', account, 'connection_types',
                 ' '.join(connection_types))
         gajim.config.set('version', '0.16.4.1')
+
+    def update_config_to_016101(self):
+        if 'video_input_device' in self.old_values:
+            if self.old_values['video_input_device'] == 'autovideosrc ! videoscale ! ffmpegcolorspace':
+                gajim.config.set('video_input_device', 'autovideosrc')
+            if self.old_values['video_input_device'] == 'videotestsrc is-live=true ! video/x-raw-yuv,framerate=10/1':
+                gajim.config.set('video_input_device', 'videotestsrc is-live=true ! video/x-raw,framerate=10/1')
+        gajim.config.set('version', '0.16.10.1')
