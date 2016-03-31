@@ -44,6 +44,7 @@ import shlex
 from common import caps_cache
 import socket
 import time
+import datetime
 
 from gi.repository import GObject
 from encodings.punycode import punycode_encode
@@ -598,12 +599,26 @@ def datetime_tuple(timestamp):
             - XEP-082 datetime strings have all '-' cahrs removed to meet
               the above format.
     """
-    timestamp = timestamp.split('.')[0]
-    timestamp = timestamp.replace('-', '')
-    timestamp = timestamp.replace('z', '')
-    timestamp = timestamp.replace('Z', '')
-    from time import strptime
-    return strptime(timestamp, '%Y%m%dT%H:%M:%S')
+    date, tim = timestamp.split('T', 1)
+    date = date.replace('-', '')
+    tim = tim.replace('z', '')
+    tim = tim.replace('Z', '')
+    zone = None
+    if '+' in tim:
+        sign = -1
+        tim, zone = tim.split('+', 1)
+    if '-' in tim:
+        sign = 1
+        tim, zone = tim.split('-', 1)
+    tim = tim.split('.')[0]
+    tim = time.strptime(date + 'T' + tim, '%Y%m%dT%H:%M:%S')
+    if zone:
+        tim = datetime.datetime.fromtimestamp(time.mktime(t))
+        zone = strptime.time(zone, '%H:%M')
+        zone = datetime.timedelta(hours=zone.tm_hour, minutes=zone.tm_min)
+        tim += zone * sign
+        tim = tim.timetuple()
+    return tim
 
 from common import gajim
 if gajim.HAVE_PYCURL:
