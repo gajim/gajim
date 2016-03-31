@@ -96,7 +96,11 @@ class HelperEvent:
             self.gc_control = minimized.get(self.jid)
 
     def _generate_timestamp(self, tag):
-        tim = helpers.datetime_tuple(tag)
+        try:
+            tim = helpers.datetime_tuple(tag)
+        except Exception:
+            log.error('wrong timestamp, ignoring it: ' + tag)
+            tim = localtime()
         self.timestamp = localtime(timegm(tim))
 
     def get_chatstate(self):
