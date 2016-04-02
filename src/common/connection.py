@@ -1461,28 +1461,28 @@ class Connection(CommonConnection, ConnectionHandlers):
             if saved_fingerprint_sha1:
                 # Check sha1 fingerprint
                 if fingerprint_sha1 != saved_fingerprint_sha1:
-                    gajim.nec.push_incoming_event(FingerprintErrorEvent(None,
-                        conn=self, certificate=cert,
-                        new_fingerprint_sha1=fingerprint_sha1,
-                        new_fingerprint_sha256=fingerprint_sha256))
-                    return True
-            else:
-                gajim.config.set_per('accounts', self.name,
-                    'ssl_fingerprint_sha1', fingerprint_sha1)
+                    if not check_X509.check_certificate(cert, hostname):
+                        gajim.nec.push_incoming_event(FingerprintErrorEvent(
+                            None, conn=self, certificate=cert,
+                            new_fingerprint_sha1=fingerprint_sha1,
+                            new_fingerprint_sha256=fingerprint_sha256))
+                        return True
+            gajim.config.set_per('accounts', self.name, 'ssl_fingerprint_sha1',
+                fingerprint_sha1)
 
             saved_fingerprint_sha256 = gajim.config.get_per('accounts', self.name,
                 'ssl_fingerprint_sha256')
             if saved_fingerprint_sha256:
                 # Check sha256 fingerprint
                 if fingerprint_sha256 != saved_fingerprint_sha256:
-                    gajim.nec.push_incoming_event(FingerprintErrorEvent(None,
-                        conn=self, certificate=con.Connection.ssl_certificate,
-                        new_fingerprint_sha1=fingerprint_sha1,
-                        new_fingerprint_sha256=fingerprint_sha256))
-                    return True
-            else:
-                gajim.config.set_per('accounts', self.name,
-                    'ssl_fingerprint_sha256', fingerprint_sha256)
+                    if not check_X509.check_certificate(cert, hostname):
+                        gajim.nec.push_incoming_event(FingerprintErrorEvent(
+                            None, conn=self, certificate=cert,
+                            new_fingerprint_sha1=fingerprint_sha1,
+                            new_fingerprint_sha256=fingerprint_sha256))
+                        return True
+            gajim.config.set_per('accounts', self.name,
+                'ssl_fingerprint_sha256', fingerprint_sha256)
 
             if not check_X509.check_certificate(cert, hostname) and \
             '100' not in gajim.config.get_per('accounts', self.name,

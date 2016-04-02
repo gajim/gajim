@@ -1419,7 +1419,8 @@ class Interface:
 
         pritext = _('SSL certificate error')
         sectext = _('It seems the SSL certificate of account %(account)s has '
-            'changed or your connection is being hacked.\n\nOld SHA-1 fingerprint: '
+            'changed and is not valid or your connection is being hacked.\n\n'
+            'Old SHA-1 fingerprint: '
             '%(old_sha1)s\nOld SHA-256 fingerprint: %(old_sha256)s\n\n'
             'New SHA-1 fingerprint: %(new_sha1)s\nNew SHA-256 fingerprint: '
             '%(new_sha256)s\n\nDo you still want to connect '
