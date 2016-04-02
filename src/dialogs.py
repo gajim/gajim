@@ -5471,9 +5471,10 @@ SHA256 Fingerprint: %(sha256)s
             'sn': cert.get_serial_number(), 'icn': issuer.commonName,
             'iorg': issuer.organizationName,
             'iou': issuer.organizationalUnitName,
-            'io': cert.get_notBefore(), 'eo': cert.get_notAfter(),
-            'sha1': cert.digest('sha1'),
-            'sha256': cert.digest('sha256')})
+            'io': cert.get_notBefore().decode('utf-8'),
+            'eo': cert.get_notAfter().decode('utf-8'),
+            'sha1': cert.digest('sha1').decode('utf-8'),
+            'sha256': cert.digest('sha256').decode('utf-8')})
         pix = gtkgui_helpers.get_icon_pixmap('application-certificate', size=32,
             quiet=True)
         if pix:
