@@ -30,7 +30,7 @@ class CellRendererImage(Gtk.CellRendererPixbuf):
 
     __gproperties__ = {
             'image': (GObject.TYPE_OBJECT, 'Image',
-                    'Image', GObject.PARAM_READWRITE),
+                      'Image', GObject.ParamFlags.READWRITE),
     }
 
     def __init__(self, col_index, tv_index):
