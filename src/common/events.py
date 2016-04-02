@@ -161,7 +161,7 @@ class FileCompletedEvent(FileRequestEvent):
 class FileStoppedEvent(FileRequestEvent):
     type_ = 'file-stopped'
 
-class FileHashErrorEvent(Event):
+class FileHashErrorEvent(FileRequestEvent):
     type_ = 'file-hash-rror'
 
 class JingleIncomingEvent(Event):
