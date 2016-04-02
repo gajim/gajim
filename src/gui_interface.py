@@ -1400,9 +1400,10 @@ class Interface:
 
         pritext = _('SSL certificate error')
         sectext = _('It seems the SSL certificate of account %(account)s has '
-            'changed or your connection is being hacked.\nOld fingerprint: '
-            '%(old)s\nNew fingerprint: %(new)s\n\nDo you still want to connect '
-            'and update the fingerprint of the certificate?') % \
+            'changed  and is not valid or your connection is being hacked.\n'
+            'Old fingerprint: %(old)s\nNew fingerprint: %(new)s\n\n'
+            'Do you still want to connect and update the fingerprint of the '
+            'certificate?') % \
             {'account': account, 'old': gajim.config.get_per('accounts',
             account, 'ssl_fingerprint_sha1'), 'new': obj.new_fingerprint}
         if 'fingerprint_error' in self.instances[account]['online_dialog']:

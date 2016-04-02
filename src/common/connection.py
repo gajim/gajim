@@ -1457,13 +1457,14 @@ class Connection(CommonConnection, ConnectionHandlers):
             if saved_fingerprint:
                 # Check sha1 fingerprint
                 if fingerprint != saved_fingerprint:
-                    gajim.nec.push_incoming_event(FingerprintErrorEvent(None,
-                        conn=self, certificate=con.Connection.ssl_certificate,
-                        new_fingerprint=fingerprint))
-                    return True
-            else:
-                gajim.config.set_per('accounts', self.name,
-                    'ssl_fingerprint_sha1', fingerprint)
+                    if not check_X509.check_certificate(cert, hostname):
+                        gajim.nec.push_incoming_event(FingerprintErrorEvent(
+                            None, conn=self,
+                            certificate=con.Connection.ssl_certificate,
+                            new_fingerprint=fingerprint))
+                        return True
+            gajim.config.set_per('accounts', self.name, 'ssl_fingerprint_sha1',
+                fingerprint)
             if not check_X509.check_certificate(con.Connection.ssl_certificate,
             hostname) and '100' not in gajim.config.get_per('accounts',
             self.name, 'ignore_ssl_errors').split():
