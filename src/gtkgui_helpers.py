@@ -32,7 +32,7 @@ import gi
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
-from gi.repository import GObject
+from gi.repository import GLib
 from gi.repository import Pango
 import os
 import sys
@@ -51,7 +51,7 @@ gtk_icon_theme.append_search_path(gajim.ICONS_DIR)
 def get_icon_pixmap(icon_name, size=16, quiet=False):
     try:
         return gtk_icon_theme.load_icon(icon_name, size, 0)
-    except GObject.GError as e:
+    except GLib.GError as e:
         if not quiet:
             log.error('Unable to load icon %s: %s' % (icon_name, str(e)))
 
@@ -63,7 +63,7 @@ def get_icon_path(icon_name, size=16):
             return ""
         else:
             return icon_info.get_filename()
-    except GObject.GError as e:
+    except GLib.GError as e:
         log.error("Unable to find icon %s: %s" % (icon_name, str(e)))
 
 import vcard
@@ -419,7 +419,7 @@ def get_pixbuf_from_data(file_data, want_type = False):
         pixbufloader.write(file_data)
         pixbufloader.close()
         pixbuf = pixbufloader.get_pixbuf()
-    except GObject.GError: # 'unknown image format'
+    except GLib.GError: # 'unknown image format'
         pixbufloader.close()
         pixbuf = None
         if want_type:
