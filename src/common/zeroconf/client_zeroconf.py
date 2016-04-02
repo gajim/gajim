@@ -753,9 +753,12 @@ class ClientZeroconf:
 
     def send(self, stanza, is_message=False, now=False, on_ok=None,
     on_not_ok=None):
-        stanza.setFrom(self.roster.zeroconf.name)
         to = stanza.getTo()
+        if to is None:
+            # Can’t send undirected stanza over Zeroconf.
+            return -1
         to = gajim.get_jid_without_resource(to)
+        stanza.setFrom(self.roster.zeroconf.name)
 
         try:
             item = self.roster[to]

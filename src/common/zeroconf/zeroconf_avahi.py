@@ -144,7 +144,7 @@ class Zeroconf:
                     val += c
             if val is None: # missing '='
                 val = ''
-            txt_dict[key] = val.decode('utf-8', 'ignore')
+            txt_dict[key] = val
         return txt_dict
 
     def service_resolved_callback(self, interface, protocol, name, stype, domain,
