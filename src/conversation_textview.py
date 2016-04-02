@@ -622,7 +622,10 @@ class ConversationTextview(GObject.GObject):
         pointer = w.get_device_position(device)
         x = pointer[1]
         y = pointer[2]
-        tags = self.tv.get_iter_at_location(x, y).get_tags()
+        iter_ = self.tv.get_iter_at_location(x, y)
+        if isinstance(iter_, tuple):
+            iter_ = iter_[1]
+        tags = iter_.get_tags()
         tag_table = self.tv.get_buffer().get_tag_table()
         xep0184_warning = False
         for tag in tags:
@@ -644,7 +647,10 @@ class ConversationTextview(GObject.GObject):
         pointer = w.get_device_position(device)
         x = pointer[1]
         y = pointer[2]
-        tags = self.tv.get_iter_at_location(x, y).get_tags()
+        iter_ = self.tv.get_iter_at_location(x, y)
+        if isinstance(iter_, tuple):
+            iter_ = iter_[1]
+        tags = iter_.get_tags()
         tag_table = self.tv.get_buffer().get_tag_table()
         over_line = False
         for tag in tags:
@@ -695,7 +701,10 @@ class ConversationTextview(GObject.GObject):
         pointer = w.get_device_position(device)
         x, y = self.tv.window_to_buffer_coords(Gtk.TextWindowType.TEXT,
             pointer[1], pointer[2])
-        tags = self.tv.get_iter_at_location(x, y).get_tags()
+        iter_ = self.tv.get_iter_at_location(x, y)
+        if isinstance(iter_, tuple):
+            iter_ = iter_[1]
+        tags = iter_.get_tags()
         if self.change_cursor:
             w.set_cursor(Gdk.Cursor.new(Gdk.CursorType.XTERM))
             self.change_cursor = False
@@ -864,6 +873,8 @@ class ConversationTextview(GObject.GObject):
         x, y = self.tv.window_to_buffer_coords(Gtk.TextWindowType.TEXT,
                 int(event.x), int(event.y))
         iter_ = self.tv.get_iter_at_location(x, y)
+        if isinstance(iter_, tuple):
+            iter_ = iter_[1]
         tags = iter_.get_tags()
 
         if tags: # we clicked on sth special (it can be status message too)

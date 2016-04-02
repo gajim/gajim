@@ -899,7 +899,10 @@ class HtmlTextView(Gtk.TextView):
             pointer = w.get_device_position(device)
             x = pointer[1]
             y = pointer[2]
-            tags = self.get_iter_at_location(x, y).get_tags()
+            iter_ = self.get_iter_at_location(x, y)
+            if isinstance(iter_, tuple):
+                iter_ = iter_[1]
+            tags = iter_.get_tags()
             is_over_anchor = False
             for tag_ in tags:
                 if getattr(tag_, 'is_anchor', False):
@@ -918,7 +921,10 @@ class HtmlTextView(Gtk.TextView):
         pointer = w.get_device_position(device)
         x = pointer[1]
         y = pointer[2]
-        tags = widget.get_iter_at_location(x, y).get_tags()
+        iter_ = widget.get_iter_at_location(x, y)
+        if isinstance(iter_, tuple):
+            iter_ = iter_[1]
+        tags = iter_.get_tags()
         anchor_tags = [tag for tag in tags if getattr(tag, 'is_anchor', False)]
         if self.tooltip.timeout != 0 or self.tooltip.shown:
             # Check if we should hide the line tooltip
