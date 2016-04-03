@@ -545,7 +545,6 @@ class Socks5(object):
         return 1 # we are connected
 
     def read_timeout(self):
-        print('read_timeout')
         self.idlequeue.remove_timeout(self.fd)
         if self.state > 5:
             # no activity for foo seconds
@@ -748,7 +747,6 @@ class Socks5(object):
                 raise e
             except Exception:
                 buff = b''
-            print('received ' + str(len(buff)))
             current_time = self.idlequeue.current_time()
             self.file_props.elapsed_time += current_time - \
                 self.file_props.last_time
