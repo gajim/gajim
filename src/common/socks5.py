@@ -82,6 +82,7 @@ class SocksQueue:
         Start waiting for incomming connections on (host, port) and do a socks5
         authentication using sid for generated SHA
         """
+        log.debug('Start listening for socks5 connection')
         sid = file_props.sid
         self.sha_handlers[sha_str] = (sha_handler, sid)
         if self.listener is None or self.listener.connections == []:
@@ -131,11 +132,13 @@ class SocksQueue:
             else:
                 fp = fingerprint
             if receiving:
+                log.debug('Trying to connect as receiver to cid ' + streamhost['cid'])
                 file_props.type_ = 'r'
                 socks5obj = Socks5ReceiverClient(self.idlequeue, streamhost,
                     sid, file_props, fingerprint=fp)
                 self.add_sockobj(account, socks5obj)
             else:
+                log.debug('Trying to connect as sender to cid' + streamhost['cid'])
                 if file_props.sha_str:
                     idx = file_props.sha_str
                 else:
@@ -162,6 +165,7 @@ class SocksQueue:
         Called when there is a host connected to one of the senders's
         streamhosts. Stop other attempts for connections
         """
+        log.debug('Connected to cid ' + streamhost['cid'])
         for host in file_props.streamhosts:
             if host != streamhost and 'idx' in host:
                 if host['state'] == 1:
@@ -223,6 +227,7 @@ class SocksQueue:
         """
         Called when we loose connection during transfer
         """
+        log.debug('Connection refused to cid ' + streamhost['cid'])
         if file_props is None:
             return
         streamhost['state'] = -1
@@ -540,6 +545,7 @@ class Socks5(object):
         return 1 # we are connected
 
     def read_timeout(self):
+        print('read_timeout')
         self.idlequeue.remove_timeout(self.fd)
         if self.state > 5:
             # no activity for foo seconds
@@ -649,7 +655,6 @@ class Socks5(object):
     def write_next(self):
         if self.remaining_buff != '':
             buff = self.remaining_buff
-            self.remaining_buff = ''
         else:
             try:
                 self.open_file_for_reading()

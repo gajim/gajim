@@ -128,6 +128,7 @@ class JingleFileTransfer(JingleContent):
             self.state = nextstate
 
     def __on_session_initiate(self, stanza, content, error, action):
+        log.debug("Jingle FT request received")
         gajim.nec.push_incoming_event(FileRequestReceivedEvent(None,
             conn=self.session.connection, stanza=stanza, jingle_content=content,
             FT_content=self))
