@@ -2735,7 +2735,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         msg_iq = nbxmpp.Message(obj.jid, obj.message, typ='groupchat',
             xhtml=obj.xhtml)
         if obj.label is not None:
-            msg_iq.addChild(node=label)
+            msg_iq.addChild(node=obj.label)
         obj.msg_id = self.connection.send(msg_iq)
         gajim.nec.push_incoming_event(MessageSentEvent(None, conn=self,
             jid=obj.jid, message=obj.message, keyID=None, chatstate=None,
