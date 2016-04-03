@@ -2319,7 +2319,7 @@ class FileTransferCompletedEvent(nec.NetworkIncomingEvent):
     base_network_events = []
 
     def generate(self):
-        jid = unicode(self.file_props.receiver)
+        jid = str(self.file_props.receiver)
         self.jid = gajim.get_jid_without_resource(jid)
         return True
 
