@@ -177,6 +177,7 @@ class HistoryWindow:
         # Warning : This for is time critical with big DB
         for key in keys:
             completed = key
+            completed2 = None
             contact = completion_dict[completed]
             if contact:
                 info_name = contact.get_shown_name()
@@ -198,15 +199,25 @@ class HistoryWindow:
                     room, nick = gajim.get_room_and_nick_from_fjid(completed)
                     info_completion = '%s from %s' % (nick, room)
                     completed = info_completion
+                    info_completion2 = '%s/%s' % (room, nick)
+                    completed2 = info_completion2
                     info_name = nick
             else:
                 pix = contact_pix
 
+            if len(completed) > 70:
+                completed = completed[:70] + '[\u2026]'
             liststore.append((pix, completed))
             self.completion_dict[key] = (info_jid, info_acc, info_name,
                 info_completion)
             self.completion_dict[completed] = (info_jid, info_acc,
                 info_name, info_completion)
+            if completed2:
+                if len(completed2) > 70:
+                    completed2 = completed2[:70] + '[\u2026]'
+                liststore.append((pix, completed2))
+                self.completion_dict[completed2] = (info_jid, info_acc,
+                    info_name, info_completion2)
             if key == actual_jid:
                 self._load_history(info_jid, info_acc)
             yield True
