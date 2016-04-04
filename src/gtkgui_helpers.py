@@ -113,6 +113,9 @@ def get_completion_liststore(entry):
     completion.pack_start(render_pixbuf, False)
     completion.add_attribute(render_pixbuf, 'pixbuf', 0)
 
+    render_text = Gtk.CellRendererText()
+    completion.pack_start(render_text, True)
+    completion.add_attribute(render_text, 'text', 1)
     completion.set_property('text_column', 1)
     completion.set_model(liststore)
     entry.set_completion(completion)
