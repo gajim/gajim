@@ -26,6 +26,7 @@ import socket
 import struct
 import hashlib
 import os
+import time
 from errno import EWOULDBLOCK
 from errno import ENOBUFS
 from errno import EINTR
@@ -292,7 +293,7 @@ class SocksQueue:
                     sender.file_props.paused = False
                     sender.file_props.stalled = False
                     sender.file_props.elapsed_time = 0
-                    sender.file_props.last_time = self.idlequeue.current_time()
+                    sender.file_props.last_time = time.time()
                     sender.file_props.received_len = 0
                     sender.pauses = 0
                     # start sending file to proxy
@@ -606,7 +607,7 @@ class Socks5(object):
             fd = open(self.file_props.file_name, opt)
             self.file_props.fd = fd
             self.file_props.elapsed_time = 0
-            self.file_props.last_time = self.idlequeue.current_time()
+            self.file_props.last_time = time.time()
             self.file_props.received_len = offset
         return fd
 
@@ -679,7 +680,7 @@ class Socks5(object):
                     self.file_props.error = -1
                     return -1
             self.size += lenn
-            current_time = self.idlequeue.current_time()
+            current_time = time.time()
             self.file_props.elapsed_time += current_time - \
                 self.file_props.last_time
             self.file_props.last_time = current_time
@@ -720,7 +721,7 @@ class Socks5(object):
                 return 0
             fd.write(self.remaining_buff)
             lenn = len(self.remaining_buff)
-            current_time = self.idlequeue.current_time()
+            current_time = time.time()
             self.file_props.elapsed_time += current_time - \
                 self.file_props.last_time
             self.file_props.last_time = current_time
@@ -747,7 +748,7 @@ class Socks5(object):
                 raise e
             except Exception:
                 buff = b''
-            current_time = self.idlequeue.current_time()
+            current_time = time.time()
             self.file_props.elapsed_time += current_time - \
                 self.file_props.last_time
             self.file_props.last_time = current_time
@@ -952,7 +953,7 @@ class Socks5Sender(IdleObject):
         self.file_props.stalled = False
         self.file_props.connected = True
         self.file_props.elapsed_time = 0
-        self.file_props.last_time = self.idlequeue.current_time()
+        self.file_props.last_time = time.time()
         self.file_props.received_len = 0
 
     def start_transfer(self):
@@ -1039,7 +1040,7 @@ class Socks5Receiver(IdleObject):
         self.file_props.stalled = False
         self.file_props.connected = True
         self.file_props.elapsed_time = 0
-        self.file_props.last_time = self.idlequeue.current_time()
+        self.file_props.last_time = time.time()
         self.file_props.received_len = 0
         self.pauses = 0
         self.state = 7
@@ -1240,7 +1241,7 @@ class Socks5Client(Socks5):
                 self.file_props.paused = False
                 self.file_props.stalled = False
                 self.file_props.elapsed_time = 0
-                self.file_props.last_time = self.idlequeue.current_time()
+                self.file_props.last_time = time.time()
                 self.file_props.received_len = 0
                 self.pauses = 0
                 # start sending file contents to socket
