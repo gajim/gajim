@@ -37,6 +37,11 @@ from gi.repository import Pango
 import os
 import sys
 import importlib
+try:
+    from PIL import Image
+except:
+    pass
+from io import BytesIO
 
 import logging
 log = logging.getLogger('gajim.gtkgui_helpers')
@@ -418,6 +423,16 @@ def get_pixbuf_from_data(file_data, want_type = False):
     returns 'jpeg', 'png' etc
     """
     pixbufloader = GdkPixbuf.PixbufLoader()
+    # try to open and convert every image format supported by PILLOW to png format
+    try:
+        avatar = Image.open(BytesIO(file_data)).convert("RGB")
+        output = BytesIO()
+        avatar.save(output, format='PNG')
+        file_data = output.getvalue()
+        output.close()
+    except:
+        log.debug("Could not use pillow to convert avatar image (this is non fatal)")
+        pass        # this didn't work, so just use the old gtk code to import the image
     try:
         pixbufloader.write(file_data)
         pixbufloader.close()
