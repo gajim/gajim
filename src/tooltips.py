@@ -419,8 +419,8 @@ class GCTooltip(BaseTooltip):
         file_ = helpers.get_avatar_path(os.path.join(gajim.AVATAR_PATH,
             puny_room, puny_name))
         if file_:
-            self.avatar_image.set_from_file(file_)
-            pix = self.avatar_image.get_pixbuf()
+            with open(file_, 'rb') as file_data:
+                pix = gtkgui_helpers.get_pixbuf_from_data(file_data.read())
             pix = gtkgui_helpers.get_scaled_pixbuf(pix, 'tooltip')
             self.avatar_image.set_from_pixbuf(pix)
         else:
@@ -485,8 +485,8 @@ class RosterTooltip(NotificationAreaTooltip):
         file_ = helpers.get_avatar_path(os.path.join(gajim.AVATAR_PATH,
             puny_jid))
         if file_:
-            self.avatar_image.set_from_file(file_)
-            pix = self.avatar_image.get_pixbuf()
+            with open(file_, 'rb') as file_data:
+                pix = gtkgui_helpers.get_pixbuf_from_data(file_data.read())
             pix = gtkgui_helpers.get_scaled_pixbuf(pix, 'tooltip')
             self.avatar_image.set_from_pixbuf(pix)
             table_size = 4
