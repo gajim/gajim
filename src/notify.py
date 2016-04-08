@@ -120,10 +120,10 @@ text=None, timeout=-1):
         notification.set_timeout(timeout*1000)
 
         notification.set_category(event_type)
-        notification.set_data('event_type', event_type)
-        notification.set_data('jid', jid)
-        notification.set_data('account', account)
-        notification.set_data('msg_type', msg_type)
+        notification._data.event_type = event_type
+        notification._data.jid = jid
+        notification._data.account = account
+        notification._data.msg_type = msg_type
         notification.set_property('icon-name', path_to_image)
         if 'actions' in Notify.get_server_caps():
             notification.add_action('default', 'Default Action',
@@ -142,9 +142,9 @@ text=None, timeout=-1):
     gajim.interface.roster.popup_notification_windows.append(instance)
 
 def on_pynotify_notification_clicked(notification, action):
-    jid = notification.get_data('jid')
-    account = notification.get_data('account')
-    msg_type = notification.get_data('msg_type')
+    jid = notification._data.jid
+    account = notification._data.account
+    msg_type = notification._data.msg_type
 
     notification.close()
     gajim.interface.handle_event(account, jid, msg_type)
