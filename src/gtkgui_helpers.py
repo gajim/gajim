@@ -418,48 +418,47 @@ def get_abspath_for_script(scriptname, want_type = False):
     else:
         return path_to_script
 
+# feeding the image directly into the pixbuf seems possible, but is error prone and causes image distortions and segfaults.
 # see http://stackoverflow.com/a/8892894/3528174
 # and https://developer.gnome.org/gdk-pixbuf/unstable/gdk-pixbuf-Image-Data-in-Memory.html#gdk-pixbuf-new-from-bytes
-def pillow2pixbuf(im):
-    arr = array.array('B', im.tobytes())
-    width, height = im.size
-    return GdkPixbuf.Pixbuf.new_from_data(arr, GdkPixbuf.Colorspace.RGB,
-                                          False, 8, width, height, width * 3)
-
+# to learn how this could be done (or look into the mercurial history)
 def get_pixbuf_from_data(file_data, want_type = False):
     """
     Get image data and returns GdkPixbuf.Pixbuf if want_type is True it also
     returns 'jpeg', 'png' etc
     """
-    # try to open and convert every image format supported by PILLOW to png format
+    pixbufloader = GdkPixbuf.PixbufLoader()
     try:
-        im = Image.open(BytesIO(file_data)).convert("RGB")
-        pixbuf = pillow2pixbuf(im)
-        if want_type:
-            typ = "png"
-            return pixbuf, typ
-        else:
-            return pixbuf
-    except:
-        log.info("Could not use pillow to convert avatar image to pixbuf, trying pixbufloader instead...")
+        pixbufloader.write(file_data)
+        pixbufloader.close()
+        pixbuf = pixbufloader.get_pixbuf()
+    except GLib.GError: # 'unknown image format'
+        pixbufloader.close()
+        
+        # try to open and convert this image to png using pillow (if available)
+        log.debug("loading avatar using pixbufloader directly failed, trying to convert avatar image using pillow (if available)")
         pixbufloader = GdkPixbuf.PixbufLoader()
         try:
+            avatar = Image.open(BytesIO(file_data))
+            output = BytesIO()
+            avatar.save(output, format='PNG')
+            file_data = output.getvalue()
+            output.close()
             pixbufloader.write(file_data)
             pixbufloader.close()
             pixbuf = pixbufloader.get_pixbuf()
-        except GLib.GError: # 'unknown image format'
-            pixbufloader.close()
-            pixbuf = None
+        except:
+            log.info("Could not use pillow to convert avatar image, image cannot be displayed")
             if want_type:
                 return None, None
             else:
                 return None
 
-        if want_type:
-            typ = pixbufloader.get_format().get_name()
-            return pixbuf, typ
-        else:
-            return pixbuf
+    if want_type:
+        typ = pixbufloader.get_format().get_name()
+        return pixbuf, typ
+    else:
+        return pixbuf
 
 def get_invisible_cursor():
     import cairo
