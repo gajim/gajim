@@ -228,7 +228,7 @@ class JingleContent(object):
                     # Old py-OpenSSL is missing get_signature_algorithm
                     digest_algo = "sha256"
                 security.addChild('fingerprint').addData(cert.digest(
-                    digest_algo))
+                    digest_algo).decode('utf-8'))
                 for m in ('x509', ): # supported authentication methods
                     method = nbxmpp.simplexml.Node(tag='method')
                     method.setAttr('name', m)
