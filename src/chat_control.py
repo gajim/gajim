@@ -2591,6 +2591,14 @@ class ChatControl(ChatControlBase):
             jid = self.contact.get_full_jid()
         else:
             jid = self.contact.jid
+
+        if gajim.config.get('show_avatar_in_tabs'):
+            avatar_pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(jid)
+            if avatar_pixbuf not in ('ask', None):
+                avatar_pixbuf = gtkgui_helpers.get_scaled_pixbuf_by_size(
+                    avatar_pixbuf, 16, 16)
+                return avatar_pixbuf
+
         if count_unread:
             num_unread = len(gajim.events.get_events(self.account, jid,
                     ['printed_' + self.type_id, self.type_id]))

@@ -434,7 +434,7 @@ def get_pixbuf_from_data(file_data, want_type = False):
         pixbuf = pixbufloader.get_pixbuf()
     except GLib.GError: # 'unknown image format'
         pixbufloader.close()
-        
+
         # try to open and convert this image to png using pillow (if available)
         log.debug("loading avatar using pixbufloader directly failed, trying to convert avatar image using pillow (if available)")
         pixbufloader = GdkPixbuf.PixbufLoader()
@@ -570,18 +570,7 @@ def get_fade_color(treeview, selected, focused):
     return Gdk.RGBA(bg.red*p + fg.red*q, bg.green*p + fg.green*q,
         bg.blue*p + fg.blue*q)
 
-def get_scaled_pixbuf(pixbuf, kind):
-    """
-    Return scaled pixbuf, keeping ratio etc or None kind is either "chat",
-    "roster", "notification", "tooltip", "vcard"
-    """
-    # resize to a width / height for the avatar not to have distortion
-    # (keep aspect ratio)
-    width = gajim.config.get(kind + '_avatar_width')
-    height = gajim.config.get(kind + '_avatar_height')
-    if width < 1 or height < 1:
-        return None
-
+def get_scaled_pixbuf_by_size(pixbuf, width, height):
     # Pixbuf size
     pix_width = pixbuf.get_width()
     pix_height = pixbuf.get_height()
@@ -598,6 +587,20 @@ def get_scaled_pixbuf(pixbuf, kind):
         w = int(h * ratio)
     scaled_buf = pixbuf.scale_simple(w, h, GdkPixbuf.InterpType.HYPER)
     return scaled_buf
+
+def get_scaled_pixbuf(pixbuf, kind):
+    """
+    Return scaled pixbuf, keeping ratio etc or None kind is either "chat",
+    "roster", "notification", "tooltip", "vcard"
+    """
+    # resize to a width / height for the avatar not to have distortion
+    # (keep aspect ratio)
+    width = gajim.config.get(kind + '_avatar_width')
+    height = gajim.config.get(kind + '_avatar_height')
+    if width < 1 or height < 1:
+        return None
+
+    return get_scaled_pixbuf_by_size(pixbuf, width, height)
 
 def get_avatar_pixbuf_from_cache(fjid, use_local=True):
     """

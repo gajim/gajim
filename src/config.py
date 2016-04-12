@@ -209,6 +209,10 @@ class PreferencesWindow:
         st = gajim.config.get('positive_184_ack')
         self.xml.get_object('positive_184_ack_checkbutton').set_active(st)
 
+        # Show avatar in tabs
+        st = gajim.config.get('show_avatar_in_tabs')
+        self.xml.get_object('show_avatar_in_tabs_checkbutton').set_active(st)
+
         ### Style tab ###
         # Themes
         theme_combobox = self.xml.get_object('theme_combobox')
@@ -762,6 +766,9 @@ class PreferencesWindow:
 
     def on_positive_184_ack_checkbutton_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'positive_184_ack')
+
+    def on_show_avatar_in_tabs_checkbutton_toggled(self, widget):
+        self.on_checkbutton_toggled(widget, 'show_avatar_in_tabs')
 
     def on_theme_combobox_changed(self, widget):
         model = widget.get_model()

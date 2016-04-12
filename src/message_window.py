@@ -29,6 +29,7 @@
 
 from gi.repository import Gtk
 from gi.repository import Gdk
+from gi.repository import GdkPixbuf
 from gi.repository import GObject
 from gi.repository import GLib
 import time
@@ -480,7 +481,10 @@ class MessageWindow(object):
                 # chat, pm
                 icon = gtkgui_helpers.load_icon('online')
         if icon:
-            self.window.set_icon(icon.get_pixbuf())
+            if isinstance(icon, GdkPixbuf.Pixbuf):
+                self.window.set_icon(icon)
+            else:
+                self.window.set_icon(icon.get_pixbuf())
 
     def show_title(self, urgent=True, control=None):
         """
@@ -658,7 +662,9 @@ class MessageWindow(object):
 
         tab_img = ctrl.get_tab_image()
         if tab_img:
-            if tab_img.get_storage_type() == Gtk.ImageType.ANIMATION:
+            if isinstance(tab_img, GdkPixbuf.Pixbuf):
+                status_img.set_from_pixbuf(tab_img)
+            elif tab_img.get_storage_type() == Gtk.ImageType.ANIMATION:
                 status_img.set_from_animation(tab_img.get_animation())
             else:
                 status_img.set_from_pixbuf(tab_img.get_pixbuf())
