@@ -836,7 +836,7 @@ class Interface:
         if obj.conn.connected == invisible_show:
             return
 
-        self.auto_join_bookmarks(obj.conn.name)
+        GLib.idle_add(self.auto_join_bookmarks, obj.conn.name)
 
     def handle_event_file_send_error(self, account, array):
         jid = array[0]
