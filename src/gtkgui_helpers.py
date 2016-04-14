@@ -436,17 +436,12 @@ def get_pixbuf_from_data(file_data, want_type = False):
         pixbufloader.close()
 
         # try to open and convert this image to png using pillow (if available)
-        log.debug("loading avatar using pixbufloader directly failed, trying to convert avatar image using pillow (if available)")
-        pixbufloader = GdkPixbuf.PixbufLoader()
+        log.debug("loading avatar using pixbufloader failed, trying to convert avatar image using pillow (if available)")
         try:
-            avatar = Image.open(BytesIO(file_data))
-            output = BytesIO()
-            avatar.save(output, format='PNG')
-            file_data = output.getvalue()
-            output.close()
-            pixbufloader.write(file_data)
-            pixbufloader.close()
-            pixbuf = pixbufloader.get_pixbuf()
+            avatar = Image.open(BytesIO(file_data)).convert("RGBA")
+            arr = GLib.Bytes.new(avatar.tobytes())
+            width, height = avatar.size
+            pixbuf = GdkPixbuf.Pixbuf.new_from_bytes(arr, GdkPixbuf.Colorspace.RGB, True, 8, width, height, width * 4)
         except:
             log.info("Could not use pillow to convert avatar image, image cannot be displayed")
             if want_type:
@@ -455,7 +450,7 @@ def get_pixbuf_from_data(file_data, want_type = False):
                 return None
 
     if want_type:
-        typ = pixbufloader.get_format().get_name()
+        typ = pixbufloader.get_format() and pixbufloader.get_format().get_name() or None
         return pixbuf, typ
     else:
         return pixbuf
