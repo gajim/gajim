@@ -120,6 +120,7 @@ text=None, timeout=-1):
         notification.set_timeout(timeout*1000)
 
         notification.set_category(event_type)
+        notification._data = {}
         notification._data.event_type = event_type
         notification._data.jid = jid
         notification._data.account = account
