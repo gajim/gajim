@@ -73,6 +73,7 @@ class HistoryWindow:
         scrolledwindow.add(self.history_textview.tv)
         self.history_buffer = self.history_textview.tv.get_buffer()
         self.history_buffer.create_tag('highlight', background = 'yellow')
+        self.history_buffer.create_tag('invisible', invisible=True)
         self.checkbutton = xml.get_object('log_history_checkbutton')
         self.checkbutton.connect('toggled',
             self.on_log_history_checkbutton_toggled)
@@ -421,6 +422,12 @@ class HistoryWindow:
                 tim = time.strftime('%X ', time.localtime(float(tim)))
                 buf.insert_with_tags_by_name(end_iter, tim + '\n',
                     'time_sometimes')
+        else: # don't print time. So we print it as invisible to be able to
+              # search for it
+            timestamp_str = gajim.config.get('time_stamp')
+            timestamp_str = helpers.from_one_line(timestamp_str)
+            tim = time.strftime(timestamp_str, time.localtime(float(tim)))
+            buf.insert_with_tags_by_name(end_iter, tim, 'invisible')
 
         tag_name = ''
         tag_msg = ''
@@ -618,7 +625,7 @@ class HistoryWindow:
         timestamp_str = gajim.config.get('time_stamp')
         timestamp_str = helpers.from_one_line(timestamp_str)
         tim = time.strftime(timestamp_str, local_time)
-        result = start_iter.forward_search(tim, gtk.TEXT_SEARCH_VISIBLE_ONLY,
+        result = start_iter.forward_search(tim, gtk.TEXT_SEARCH_TEXT_ONLY,
                 None)
         if result is not None:
             match_start_iter, match_end_iter = result
