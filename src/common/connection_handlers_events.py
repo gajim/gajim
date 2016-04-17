@@ -1036,6 +1036,12 @@ class MamMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         tim = helpers.datetime_tuple(tim)
         self.tim = localtime(timegm(tim))
         self.msg_ = self.stanza.getTag('message')
+        # use delay of archived message, if possible
+        delay = self.msg_.getTag('delay', namespace=nbxmpp.NS_DELAY2)
+        if delay:
+            tim = delay.getAttr('stamp')
+            tim = helpers.datetime_tuple(tim)
+            self.tim = localtime(timegm(tim))
         to_ = self.msg_.getAttr('to')
         if to_:
             to_ = gajim.get_jid_without_resource(to_)
