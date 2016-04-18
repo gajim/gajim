@@ -741,8 +741,10 @@ class GPG(object):
             si = STARTUPINFO()
             si.dwFlags = STARTF_USESHOWWINDOW
             si.wShowWindow = SW_HIDE
+        env = os.environ
+        env['LANG'] = 'C'
         return Popen(cmd, shell=False, stdin=PIPE, stdout=PIPE, stderr=PIPE,
-                     startupinfo=si)
+                     env=env, startupinfo=si)
 
     def _read_response(self, stream, result):
         # Internal method: reads all the stderr output from GPG, taking notice
