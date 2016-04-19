@@ -1029,19 +1029,17 @@ class MamMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         if not self.stanza:
             return
         account = self.conn.name
+        self.msg_ = self.stanza.getTag('message')
+        # use timestamp of archived message, if available and archive timestamp otherwise
         delay = self.stanza.getTag('delay', namespace=nbxmpp.NS_DELAY2)
+        delay2 = self.msg_.getTag('delay', namespace=nbxmpp.NS_DELAY2)
+        if delay2:
+            delay = delay2
         if not delay:
             return
         tim = delay.getAttr('stamp')
         tim = helpers.datetime_tuple(tim)
         self.tim = localtime(timegm(tim))
-        self.msg_ = self.stanza.getTag('message')
-        # use delay of archived message, if possible
-        delay = self.msg_.getTag('delay', namespace=nbxmpp.NS_DELAY2)
-        if delay:
-            tim = delay.getAttr('stamp')
-            tim = helpers.datetime_tuple(tim)
-            self.tim = localtime(timegm(tim))
         to_ = self.msg_.getAttr('to')
         if to_:
             to_ = gajim.get_jid_without_resource(to_)
