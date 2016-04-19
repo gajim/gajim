@@ -153,19 +153,19 @@ class PreferencesWindow:
         # user themes
         if os.path.isdir(gajim.MY_EMOTS_PATH):
             emoticons_list += os.listdir(gajim.MY_EMOTS_PATH)
+        emoticons_list.sort()
         renderer_text = Gtk.CellRendererText()
         emoticons_combobox.pack_start(renderer_text, True)
         emoticons_combobox.add_attribute(renderer_text, 'text', 0)
         model = Gtk.ListStore(str)
         emoticons_combobox.set_model(model)
-        l = []
+        l = [_('Disabled')]
         for dir_ in emoticons_list:
             if not os.path.isdir(os.path.join(gajim.DATA_DIR, 'emoticons', dir_)) \
             and not os.path.isdir(os.path.join(gajim.MY_EMOTS_PATH, dir_)) :
                 continue
             if dir_ != '.svn':
                 l.append(dir_)
-        l.append(_('Disabled'))
         for i in range(len(l)):
             model.append([l[i]])
             if gajim.config.get('emoticons_theme') == l[i]:

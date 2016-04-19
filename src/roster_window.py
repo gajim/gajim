@@ -2473,9 +2473,6 @@ class RosterWindow:
                 gajim.config.set('roster_x-position', x)
                 gajim.config.set('roster_y-position', y)
             width, height = self.window.get_size()
-            # For the width use the size of the vbox containing the tree and
-            # status combo, this will cancel out any hpaned width
-            width = self.xml.get_object('roster_vbox2').get_allocation().width
             gajim.config.set('roster_width', width)
             gajim.config.set('roster_height', height)
             if not self.xml.get_object('roster_vbox2').get_property('visible'):
