@@ -679,30 +679,6 @@ def make_pixbuf_grayscale(pixbuf):
     pixbuf.saturate_and_pixelate(pixbuf2, 0.0, False)
     return pixbuf2
 
-def decode_filechooser_file_paths(file_paths):
-    """
-    Decode as UTF-8 under Windows and ask sys.getfilesystemencoding() in POSIX
-    file_paths MUST be LIST
-    """
-    file_paths_list = list()
-
-    if os.name == 'nt': # decode as UTF-8 under Windows
-        for file_path in file_paths:
-            file_path = file_path.decode('utf8')
-            file_paths_list.append(file_path)
-    else:
-        for file_path in file_paths:
-            try:
-                file_path = file_path.decode(sys.getfilesystemencoding())
-            except Exception:
-                try:
-                    file_path = file_path
-                except Exception:
-                    pass
-            file_paths_list.append(file_path)
-
-    return file_paths_list
-
 def escape_underscore(s):
     """
     Escape underlines to prevent them from being interpreted as keyboard
@@ -771,7 +747,6 @@ def on_avatar_save_as_menuitem_activate(widget, jid, default_name=''):
 
     def on_ok(widget):
         file_path = dialog.get_filename()
-        file_path = decode_filechooser_file_paths((file_path,))[0]
         if os.path.exists(file_path):
             # check if we have write permissions
             if not os.access(file_path, os.W_OK):
