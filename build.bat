@@ -1,4 +1,5 @@
 rmdir /S /Q gajim_built
+rmdir /S /Q gajim_built
 
 mkdir gajim_built
 hg archive gajim_built
