@@ -796,10 +796,8 @@ class GPG(object):
             si = STARTUPINFO()
             si.dwFlags = STARTF_USESHOWWINDOW
             si.wShowWindow = SW_HIDE
-        env = os.environ
-        env['LANG'] = 'C'
         return Popen(cmd, shell=False, stdin=PIPE, stdout=PIPE, stderr=PIPE,
-                     env=env, startupinfo=si)
+                     startupinfo=si)
 
     def _read_response(self, stream, result):
         # Internal method: reads all the stderr output from GPG, taking notice
@@ -1139,7 +1137,7 @@ class GPG(object):
         # Get the response information
         result = self.result_map[kind](self)
         self._collect_output(p, result, stdin=p.stdin)
-        lines = result.data.decode(self.encoding,
+        lines = result.data.decode('utf-8',
                                    self.decode_errors).splitlines()
         valid_keywords = 'pub uid sec fpr sub ssb sig'.split()
         for line in lines:

@@ -24,6 +24,7 @@
 
 from gajim import HAVE_GPG, GPG_BINARY
 import os
+import locale
 
 if HAVE_GPG:
     import gnupg
@@ -31,7 +32,7 @@ if HAVE_GPG:
     class GnuPG(gnupg.GPG):
         def __init__(self, use_agent=False):
             gnupg.GPG.__init__(self, gpgbinary=GPG_BINARY)
-            self.encoding = 'utf-8'
+            self.encoding = locale.getpreferredencoding()
             self.decode_errors = 'replace'
             self.passphrase = None
             self.use_agent = use_agent
