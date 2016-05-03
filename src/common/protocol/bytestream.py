@@ -869,6 +869,8 @@ class ConnectionIBBytestream(ConnectionBytestream):
             if not file_props.direction:
                 # it's socks5 bytestream
                 continue
+            if file_props.completed:
+                continue
             sid = file_props.sid
             if file_props.direction[:2] == '|>':
                 # We waitthat other part accept stream
@@ -897,6 +899,12 @@ class ConnectionIBBytestream(ConnectionBytestream):
                     file_props.received_len += len(chunk)
                     gajim.socks5queue.progress_transfer_cb(self.name,
                         file_props)
+                    if file_props.completed: # set in progress_transfer_cd()
+                        # notify the other side about stream closing
+                        self.connection.send(nbxmpp.Protocol('iq',
+                            file_props.direction[1:], 'set',
+                            payload=[nbxmpp.Node(nbxmpp.NS_IBB + ' close',
+                            {'sid': file_props.transport_sid})]))
                 else:
                     # notify the other side about stream closing
                     # notify the local user about sucessfull send
