@@ -132,13 +132,19 @@ class SocksQueue:
             else:
                 fp = fingerprint
             if receiving:
-                log.debug('Trying to connect as receiver to cid ' + streamhost['cid'])
+                if 'cid' in streamhost: # jingle
+                    log.debug('Trying to connect as receiver to cid ' + streamhost['cid'])
+                else: # SI
+                    log.debug('Trying to connect as receiver to host ' + streamhost['host'])
                 file_props.type_ = 'r'
                 socks5obj = Socks5ReceiverClient(self.idlequeue, streamhost,
                     sid, file_props, fingerprint=fp)
                 self.add_sockobj(account, socks5obj)
             else:
-                log.debug('Trying to connect as sender to cid' + streamhost['cid'])
+                if 'cid' in streamhost: #jingle
+                    log.debug('Trying to connect as sender to cid ' + streamhost['cid'])
+                else: # SI
+                    log.debug('Trying to connect as sender to host ' + streamhost['host'])
                 if file_props.sha_str:
                     idx = file_props.sha_str
                 else:
@@ -165,7 +171,10 @@ class SocksQueue:
         Called when there is a host connected to one of the senders's
         streamhosts. Stop other attempts for connections
         """
-        log.debug('Connected to cid ' + streamhost['cid'])
+        if 'cid' in streamhost: # jingle
+            log.debug('Connected to cid ' + streamhost['cid'])
+        else: # SI
+            log.debug('Connected to host ' + streamhost['host'])
         for host in file_props.streamhosts:
             if host != streamhost and 'idx' in host:
                 if host['state'] == 1:
@@ -227,7 +236,10 @@ class SocksQueue:
         """
         Called when we loose connection during transfer
         """
-        log.debug('Connection refused to cid ' + streamhost['cid'])
+        if 'cid' in streamhost: # jingle
+            log.debug('Connection refused to cid ' + streamhost['cid'])
+        else: # SI
+            log.debug('Connection refused to host ' + streamhost['host'])
         if file_props is None:
             return
         streamhost['state'] = -1
