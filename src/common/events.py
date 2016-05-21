@@ -129,7 +129,7 @@ class UnsubscribedEvent(Event):
 
 class GcInvitationtEvent(Event):
     type_ = 'gc-invitation'
-    def __init__(self, room_jid, reason, password, is_continued, from_jid,
+    def __init__(self, room_jid, reason, password, is_continued, jid_from,
     time_=None, show_in_roster=False, show_in_systray=True):
         Event.__init__(self, time_, show_in_roster=show_in_roster,
             show_in_systray=show_in_systray)
@@ -137,7 +137,7 @@ class GcInvitationtEvent(Event):
         self.reason = reason
         self.password = password
         self.is_continued = is_continued
-        self.from_jid = from_jid
+        self.jid_from = jid_from
 
 class FileRequestEvent(Event):
     type_ = 'file-request'
