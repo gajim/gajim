@@ -441,10 +441,21 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
                 lang = gajim.LANG
         if lang:
             try:
-                gtkspell.Spell(self.msg_textview, lang)
+                self.spell = gtkspell.Spell(self.msg_textview, lang)
                 self.msg_textview.lang = lang
+                self.spell.connect('language_changed', self.on_language_changed)
             except (GObject.GError, RuntimeError, TypeError, OSError):
                 dialogs.AspellDictError(lang)
+
+    def on_language_changed(self, spell, lang):
+        per_type = 'contacts'
+        if self.type_id == message_control.TYPE_GC:
+            per_type = 'rooms'
+        if not gajim.config.get_per(per_type, self.contact.jid):
+            gajim.config.add_per(per_type, self.contact.jid)
+        gajim.config.set_per(per_type, self.contact.jid, 'speller_language',
+            lang)
+        self.msg_textview.lang = lang
 
     def on_banner_label_populate_popup(self, label, menu):
         """
@@ -480,19 +491,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         Override the default context menu and we prepend an option to switch
         languages
         """
-        def _on_select_dictionary(widget, lang):
-            per_type = 'contacts'
-            if self.type_id == message_control.TYPE_GC:
-                per_type = 'rooms'
-            if not gajim.config.get_per(per_type, self.contact.jid):
-                gajim.config.add_per(per_type, self.contact.jid)
-            gajim.config.set_per(per_type, self.contact.jid, 'speller_language',
-                    lang)
-            spell = gtkspell.get_from_text_view(self.msg_textview)
-            self.msg_textview.lang = lang
-            spell.set_language(lang)
-            widget.set_active(True)
-
         item = Gtk.MenuItem.new_with_mnemonic(_('_Undo'))
         menu.prepend(item)
         id_ = item.connect('activate', self.msg_textview.undo)

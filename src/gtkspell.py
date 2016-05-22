@@ -17,6 +17,7 @@
 ## You should have received a copy of the GNU General Public License
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from gi.repository import GObject
 from gi.repository import Gtk
 import gi
 gi.require_version('GtkSpell', '3.0')
@@ -31,9 +32,14 @@ def ensure_attached(func):
     return f
 
 
-class Spell(object):
+class Spell(GObject.GObject):
+    __gsignals__ = {
+        'language_changed': (GObject.SignalFlags.RUN_FIRST, None, (str,))
+    }
 
-    def __init__(self, textview, language=None, create=True):
+    def __init__(self, textview, language=None, create=True, jid=None,
+    per_type=None):
+        GObject.GObject.__init__(self)
         if not isinstance(textview, Gtk.TextView):
             raise TypeError("Textview must be derived from Gtk.TextView")
         spell = GtkSpell.Checker.get_from_text_view(textview)
@@ -47,12 +53,16 @@ class Spell(object):
                 raise OSError("Unable to attach spell object.")
             if not self.spell.set_language(language):
                 raise OSError("Unable to set language: '%s'" % language)
+            self.spell.connect('language-changed', self.on_language_changed)
 
         else:
             if spell:
                 self.spell = spell
             else:
                 raise RuntimeError("Textview has no Spell object attached")
+
+    def on_language_changed(self, spell, lang):
+        self.emit('language_changed', lang)
 
     @ensure_attached
     def set_language(self, language):
@@ -68,6 +78,7 @@ class Spell(object):
         self.spell.detach()
         self.spell = None
 
+GObject.type_register(Spell)
 
 def get_from_text_view(textview):
     return Spell(textview, create=False)
