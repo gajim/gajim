@@ -4186,7 +4186,8 @@ class RosterWindow:
             for account in accounts:
                 if group in gajim.groups[account]: # This account has this group
                     gajim.groups[account][group]['expand'] = True
-                    if account + group in self.collapsed_rows:
+                    if account + group in self.collapsed_rows \
+                    and not self.rfilter_enabled:
                         self.collapsed_rows.remove(account + group)
                 for contact in gajim.contacts.iter_contacts(account):
                     jid = contact.jid
@@ -4199,7 +4200,8 @@ class RosterWindow:
                             self.tree.expand_row(path, False)
         elif type_ == 'account':
             account = accounts[0] # There is only one cause we don't use merge
-            if account in self.collapsed_rows:
+            if account in self.collapsed_rows \
+            and not self.rfilter_enabled:
                 self.collapsed_rows.remove(account)
             self.draw_account(account)
             # When we expand, groups are collapsed. Restore expand state
@@ -4215,7 +4217,8 @@ class RosterWindow:
             account = model[titer][C_ACCOUNT].decode('utf-8')
             contact = gajim.contacts.get_contact(account, jid)
             for group in contact.groups:
-                if account + group + jid in self.collapsed_rows:
+                if account + group + jid in self.collapsed_rows \
+                and not self.rfilter_enabled:
                     self.collapsed_rows.remove(account + group + jid)
             family = gajim.contacts.get_metacontacts_family(account, jid)
             nearby_family = \
@@ -4250,11 +4253,13 @@ class RosterWindow:
             for account in accounts:
                 if group in gajim.groups[account]: # This account has this group
                     gajim.groups[account][group]['expand'] = False
-                    if account + group not in self.collapsed_rows:
+                    if account + group not in self.collapsed_rows \
+                    and not self.rfilter_enabled:
                         self.collapsed_rows.append(account + group)
         elif type_ == 'account':
             account = accounts[0] # There is only one cause we don't use merge
-            if account not in self.collapsed_rows:
+            if account not in self.collapsed_rows \
+            and not self.rfilter_enabled:
                 self.collapsed_rows.append(account)
             self.draw_account(account)
         elif type_ == 'contact':
@@ -4266,7 +4271,8 @@ class RosterWindow:
             if not groups:
                 groups = [_('General')]
             for group in groups:
-                if account + group + jid not in self.collapsed_rows:
+                if account + group + jid not in self.collapsed_rows \
+                and not self.rfilter_enabled:
                     self.collapsed_rows.append(account + group + jid)
             family = gajim.contacts.get_metacontacts_family(account, jid)
             nearby_family  = \
