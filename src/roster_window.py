@@ -1521,6 +1521,23 @@ class RosterWindow:
                     self.tree.expand_row(path, False)
         self.modelfilter.foreach(func)
 
+        # Now redraw group icons for all groups, even hidden ones
+        def func2(model, path, iter_):
+            type_ = model[iter_][C_TYPE]
+            if type_ != 'group':
+                return
+            acct = model[iter_][C_ACCOUNT].decode('utf-8')
+            jid = model[iter_][C_JID].decode('utf-8')
+            key = acct + jid
+            if key in self.collapsed_rows:
+                model[iter_][C_IMG] = gajim.interface.\
+                    jabber_state_images['16']['closed']
+            else:
+                model[iter_][C_IMG] = gajim.interface.\
+                    jabber_state_images['16']['opened']
+
+        self.model.foreach(func2)
+
     def _adjust_account_expand_collapse_state(self, account):
         """
         Expand/collapse account row based on self.collapsed_rows
@@ -1587,6 +1604,8 @@ class RosterWindow:
     def contact_is_visible(self, contact, account):
         if self.rfilter_enabled:
             return self.rfilter_string in contact.get_shown_name().lower()
+        if gajim.config.get('showoffline'):
+            return True
         if self.contact_has_pending_roster_events(contact, account):
             return True
 
@@ -1644,8 +1663,6 @@ class RosterWindow:
                 return gajim.config.get('show_transports_group') and \
                     (gajim.account_is_connected(account) or \
                     gajim.config.get('showoffline'))
-            if gajim.config.get('showoffline'):
-                return True
 
             if self.regroup:
                 # C_ACCOUNT for groups depends on the order
