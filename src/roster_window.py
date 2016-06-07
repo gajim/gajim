@@ -1688,6 +1688,8 @@ class RosterWindow:
                 if model.iter_has_child(titer):
                     iter_c = model.iter_children(titer)
                     while iter_c:
+                        if not model[iter_c][C_NAME]: # see #8341
+                            return False
                         if self.rfilter_string in model[iter_c][C_NAME].decode(
                         'utf-8').lower():
                             return True
