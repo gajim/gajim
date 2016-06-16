@@ -240,7 +240,7 @@ class VcardWindow:
             else:
                 if i == 'DESC':
                     self.xml.get_object('DESC_textview').get_buffer().set_text(
-                            vcard[i], len(vcard[i]))
+                        vcard[i], len(vcard[i].encode('utf-8')))
                 elif i != 'jid': # Do not override jid_label
                     self.set_value(i + '_label', vcard[i])
         self.vcard_arrived = True

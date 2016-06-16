@@ -288,7 +288,7 @@ class ProfileWindow:
             else:
                 if i == 'DESC':
                     self.xml.get_object('DESC_textview').get_buffer().set_text(
-                        vcard_[i], len(vcard[i]))
+                        vcard_[i], len(vcard[i].encode('utf-8')))
                 else:
                     self.set_value(i + '_entry', vcard_[i])
         if self.update_progressbar_timeout_id is not None:
