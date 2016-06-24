@@ -54,7 +54,8 @@ from common.connection_handlers_events import InformationEvent, \
     PlainConnectionEvent, PrivacyListReceivedEvent, PrivacyListActiveDefaultEvent, \
     PrivacyListsReceivedEvent, RegisterAgentInfoReceivedEvent, NewAccountConnectedEvent, \
     AccountCreatedEvent, AccountNotCreatedEvent, BeforeChangeShowEvent, StanzaSentEvent, \
-    StanzaReceivedEvent, MessageNotSentEvent, GPGTrustKeyEvent, BadGPGPassphraseEvent
+    StanzaReceivedEvent, MessageNotSentEvent, GPGTrustKeyEvent, BadGPGPassphraseEvent, \
+    GcStanzaMessageOutgoingEvent
 from common.connection_handlers_events import InsecurePasswordEvent, MessageSentEvent, \
     NonAnonymousServerErrorEvent, Oauth2CredentialsRequiredEvent, PasswordRequiredEvent, \
     RosterReceivedEvent, SearchResultReceivedEvent
@@ -830,6 +831,8 @@ class Connection(CommonConnection, ConnectionHandlers):
             self._nec_message_outgoing)
         gajim.ged.register_event_handler('gc-message-outgoing', ged.OUT_CORE,
             self._nec_gc_message_outgoing)
+        gajim.ged.register_event_handler('gc-stanza-message-outgoing', ged.OUT_CORE,
+            self._nec_gc_stanza_message_outgoing)
         gajim.ged.register_event_handler('stanza-message-outgoing',
             ged.OUT_CORE, self._nec_stanza_message_outgoing)
     # END __init__
@@ -846,6 +849,8 @@ class Connection(CommonConnection, ConnectionHandlers):
             self._nec_message_outgoing)
         gajim.ged.remove_event_handler('gc-message-outgoing', ged.OUT_CORE,
             self._nec_gc_message_outgoing)
+        gajim.ged.remove_event_handler('gc-stanza-message-outgoing', ged.OUT_CORE,
+            self._nec_gc_stanza_message_outgoing)
         gajim.ged.remove_event_handler('stanza-message-outgoing', ged.OUT_CORE,
             self._nec_stanza_message_outgoing)
 
@@ -2733,16 +2738,16 @@ class Connection(CommonConnection, ConnectionHandlers):
             if obj.correction_msg.getTag('replace'):
                 obj.correction_msg.delChild('replace')
             obj.correction_msg.setTag('replace', attrs={'id': id_},
-                namespace=nbxmpp.NS_CORRECT)
+                                      namespace=nbxmpp.NS_CORRECT)
             id2 = self.connection.getAnID()
             obj.correction_msg.setID(id2)
             obj.correction_msg.setBody(obj.message)
             if obj.xhtml:
                 obj.correction_msg.setXHTML(xhtml)
-            obj.msg_id = self.connection.send(obj.correction_msg)
-            gajim.nec.push_incoming_event(MessageSentEvent(None, conn=self,
-                jid=obj.jid, message=obj.message, keyID=None, chatstate=None,
-                automatic_message=obj.automatic_message, msg_id=obj.msg_id))
+            gajim.nec.push_incoming_event(GcStanzaMessageOutgoingEvent(
+                None, conn=self, automatic_message=obj.automatic_message,
+                jid=obj.jid, message=obj.message,
+                correction_msg=obj.correction_msg))
             if obj.callback:
                 obj.callback(obj.correction_msg, obj.message)
             return
@@ -2750,15 +2755,27 @@ class Connection(CommonConnection, ConnectionHandlers):
             from common.rst_xhtml_generator import create_xhtml
             obj.xhtml = create_xhtml(obj.message)
         msg_iq = nbxmpp.Message(obj.jid, obj.message, typ='groupchat',
-            xhtml=obj.xhtml)
+                                xhtml=obj.xhtml)
         if obj.label is not None:
             msg_iq.addChild(node=obj.label)
-        obj.msg_id = self.connection.send(msg_iq)
-        gajim.nec.push_incoming_event(MessageSentEvent(None, conn=self,
-            jid=obj.jid, message=obj.message, keyID=None, chatstate=None,
-            automatic_message=obj.automatic_message, msg_id=obj.msg_id))
+        gajim.nec.push_incoming_event(GcStanzaMessageOutgoingEvent(
+            None, conn=self, msg_iq=msg_iq,
+            automatic_message=obj.automatic_message,
+            jid=obj.jid, message=obj.message, correction_msg=None))
         if obj.callback:
             obj.callback(msg_iq, obj.message)
+
+    def _nec_gc_stanza_message_outgoing(self, obj):
+        if obj.conn.name != self.name:
+            return
+        if obj.correction_msg:
+            obj.msg_id = self.connection.send(obj.correction_msg)
+        else:
+            obj.msg_id = self.connection.send(obj.msg_iq)
+        gajim.nec.push_incoming_event(MessageSentEvent(
+            None, conn=self, jid=obj.jid, message=obj.message, keyID=None,
+            chatstate=None, automatic_message=obj.automatic_message,
+            msg_id=obj.msg_id))
 
     def send_gc_subject(self, jid, subject):
         if not gajim.account_is_connected(self.name):
