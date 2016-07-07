@@ -151,7 +151,7 @@ def _copy_data(instream, outstream):
         if not data:
             break
         sent += len(data)
-        logger.debug("sending chunk (%d): %r", sent, data[:256])
+        # logger.debug("sending chunk (%d): %r", sent, data[:256])
         try:
             outstream.write(data)
         except UnicodeError:  # pragma: no cover
@@ -245,7 +245,8 @@ class Verify(object):
                      "DECRYPTION_OKAY", "INV_SGNR", "FILE_START", "FILE_ERROR",
                      "FILE_DONE", "PKA_TRUST_GOOD", "PKA_TRUST_BAD", "BADMDC",
                      "GOODMDC", "NO_SGNR", "NOTATION_NAME", "NOTATION_DATA",
-                     "PROGRESS", "PINENTRY_LAUNCHED", "NEWSIG"):
+                     "PROGRESS", "PINENTRY_LAUNCHED", "NEWSIG",
+                     "KEY_CONSIDERED"):
             pass
         elif key == "BADSIG":  # pragma: no cover
             self.valid = False
@@ -618,7 +619,11 @@ class ExportResult(GenKey):
     For now, just use an existing class to base it on - if needed, we
     can override handle_status for more specific message handling.
     """
-    pass
+    def handle_status(self, key, value):
+        if key in ("EXPORTED", "EXPORT_RES"):
+            pass
+        else:
+            super(ExportResult, self).handle_status(key, value)
 
 class DeleteResult(object):
     "Handle status messages for --delete-key and --delete-secret-key"
@@ -744,7 +749,12 @@ class GPG(object):
         self.encoding = 'latin-1'
         if gnupghome and not os.path.isdir(self.gnupghome):
             os.makedirs(self.gnupghome,0x1C0)
-        p = self._open_subprocess(["--version"])
+        try:
+            p = self._open_subprocess(["--version"])
+        except OSError:
+            msg = 'Unable to run gpg - it may not be available.'
+            logger.exception(msg)
+            raise OSError(msg)
         result = self.result_map['verify'](self) # any result will do for this
         self._collect_output(p, result, stdin=p.stdin)
         if p.returncode != 0:  # pragma: no cover
