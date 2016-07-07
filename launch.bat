@@ -1,3 +1,3 @@
 cd src
-gajim.py
+python gajim.py
 cd ..

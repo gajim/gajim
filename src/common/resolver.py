@@ -198,7 +198,8 @@ class NSLookupResolver(CommonResolver):
         if not result:
             return []
         hosts = []
-        lines = str(result).replace('\r', '').split('\n')
+        result = result.decode(sys.stdout.encoding)
+        lines = result.replace('\r', '').split('\n')
         current_host = None
         for line in lines:
             line = line.lstrip()

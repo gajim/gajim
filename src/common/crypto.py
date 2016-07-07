@@ -90,8 +90,8 @@ def add_entropy_sources_OpenSSL():
         OpenSSL.rand.add(str(s).encode('utf-8'), 1)
 
     # On Windows add the current contents of the screen to the PRNG state.
-    if os.name == 'nt':
-        OpenSSL.rand.screen()
+#    if os.name == 'nt':
+#        OpenSSL.rand.screen()
     # The /proc filesystem on POSIX systems contains many random variables:
     # memory statistics, interrupt counts, network packet counts
     if os.name == 'posix':

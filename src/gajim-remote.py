@@ -50,7 +50,7 @@ def send_error(error_message):
 try:
     import dbus
     import dbus.service
-    import dbus.glib
+#    import dbus.glib
     # test if dbus-x11 is installed
     bus = dbus.SessionBus()
 except Exception:

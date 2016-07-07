@@ -38,6 +38,7 @@
 import os
 import sys
 import warnings
+import OpenSSL
 
 if os.name == 'nt':
     log_path = os.path.join(os.environ['APPDATA'], 'Gajim')
@@ -50,26 +51,9 @@ if os.name == 'nt':
 
     warnings.filterwarnings(action='ignore')
 
-    if os.path.isdir('gtk'):
-        # Used to create windows installer with GTK included
-        paths = os.environ['PATH']
-        list_ = paths.split(';')
-        new_list = []
-        for p in list_:
-            if p.find('gtk') < 0 and p.find('GTK') < 0:
-                new_list.append(p)
-        new_list.insert(0, os.path.join(os.getcwd(), 'gtk', 'lib'))
-        new_list.insert(0, os.path.join(os.getcwd(), 'gtk', 'bin'))
-        os.environ['PATH'] = ';'.join(new_list)
-
-    # Needs to be imported very early to not crash Gajim on exit.
-    try:
-        __import__('libxml2mod')
-    except ImportError:
-        pass
-
 HAS_NBXMPP=True
 MIN_NBXMPP_VER = "0.5.3"
+from gi.repository import GLib
 try:
     import nbxmpp
 except ImportError:
@@ -109,19 +93,19 @@ if os.name == 'nt':
     gettext.textdomain(APP)
     gettext.install(APP, DIR)
 
-    locale.setlocale(locale.LC_ALL, '')
-    import ctypes
-    import ctypes.util
-    libintl_path = ctypes.util.find_library('intl')
-    if libintl_path == None:
-        local_intl = os.path.join('gtk', 'bin', 'intl.dll')
-        if os.path.exists(local_intl):
-            libintl_path = local_intl
-    if libintl_path == None:
-        raise ImportError('intl.dll library not found')
-    libintl = ctypes.cdll.LoadLibrary(libintl_path)
-    libintl.bindtextdomain(APP, DIR)
-    libintl.bind_textdomain_codeset(APP, 'UTF-8')
+#    locale.setlocale(locale.LC_ALL, '')
+#    import ctypes
+#    import ctypes.util
+#    libintl_path = ctypes.util.find_library('intl')
+#    if libintl_path == None:
+#        local_intl = os.path.join('gtk', 'bin', 'intl.dll')
+#        if os.path.exists(local_intl):
+#            libintl_path = local_intl
+#    if libintl_path == None:
+#        raise ImportError('intl.dll library not found')
+#    libintl = ctypes.cdll.LoadLibrary(libintl_path)
+#    libintl.bindtextdomain(APP, DIR)
+#    libintl.bind_textdomain_codeset(APP, 'UTF-8')
 
 if os.name == 'nt':
     # needed for docutils
@@ -202,8 +186,8 @@ del profile
 if os.name == 'nt':
     plugins_locale_dir = os.path.join(common.configpaths.gajimpaths[
         'PLUGINS_USER'], 'locale').encode(locale.getpreferredencoding())
-    libintl.bindtextdomain('gajim_plugins', plugins_locale_dir)
-    libintl.bind_textdomain_codeset('gajim_plugins', 'UTF-8')
+#    libintl.bindtextdomain('gajim_plugins', plugins_locale_dir)
+#    libintl.bind_textdomain_codeset('gajim_plugins', 'UTF-8')
 
     class MyStderr(object):
         _file = None
@@ -316,7 +300,7 @@ if pritext:
 
 del pritext
 
-import gtkexcepthook
+#import gtkexcepthook
 
 import signal
 import gtkgui_helpers
