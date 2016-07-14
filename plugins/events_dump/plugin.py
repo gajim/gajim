@@ -46,7 +46,7 @@ class EventsDumpPlugin(GajimPlugin):
                 'Subscribe', 'Subscribed', 'Unsubscribed',
                 'NewAccount', 'VcardInfo', 'LastStatusTime',
                 'OsInfo', 'GCPresence', 'GCMessage', 'RosterInfo',
-                'NewGmail']
+                'NewGmail', 'EntityTime']
 
         events_from_src_gajim = [
                 'ROSTER', 'WARNING', 'ERROR',
