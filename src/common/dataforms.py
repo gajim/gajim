@@ -300,12 +300,12 @@ class Media(nbxmpp.Node):
         def fget(self):
             return map(Uri, self.getTags('uri'))
 
-        def fset(self, value):
+        def fset(self, values):
             fdel(self)
             for uri in values:
                 self.addChild(node=uri)
 
-        def fdel(self, value):
+        def fdel(self):
             for element in self.getTags('uri'):
                 self.delChild(element)
 
