@@ -38,7 +38,6 @@ import time
 import gtkgui_helpers
 import vcard
 import conversation_textview
-import message_control
 import dataforms_widget
 
 from random import randrange

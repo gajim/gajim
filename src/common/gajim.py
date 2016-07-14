@@ -27,7 +27,6 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-import sys
 import os
 import logging
 import locale
@@ -35,7 +34,6 @@ import uuid
 
 import config
 import nbxmpp
-import defs
 import common.ged
 
 interface = None # The actual interface (the gtk one for the moment)

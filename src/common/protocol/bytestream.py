@@ -36,7 +36,6 @@ import time
 import nbxmpp
 from common import gajim
 from common import helpers
-from common import dataforms
 from common import ged
 from common import jingle_xtls
 from common.file_props import FilesProp

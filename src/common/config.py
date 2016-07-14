@@ -32,9 +32,7 @@
 ##
 
 
-import sys
 import re
-import copy
 import defs
 import gobject
 

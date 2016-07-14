@@ -24,8 +24,9 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-from types import *
 from glib import GError
+from types import DictType, ListType
+
 
 def remove(sequence, target):
     if isinstance(sequence, ListType):

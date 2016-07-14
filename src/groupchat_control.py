@@ -53,7 +53,6 @@ from common import i18n
 
 from chat_control import ChatControl
 from chat_control import ChatControlBase
-from common.exceptions import GajimGeneralException
 
 from command_system.implementation.hosts import PrivateChatCommands
 from command_system.implementation.hosts import GroupChatCommands

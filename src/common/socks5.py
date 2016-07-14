@@ -38,6 +38,7 @@ from common import gajim
 import jingle_xtls
 if jingle_xtls.PYOPENSSL_PRESENT:
     import OpenSSL
+    from OpenSSL import SSL
 import logging
 log = logging.getLogger('gajim.c.socks5')
 MAX_BUFF_LEN = 65536

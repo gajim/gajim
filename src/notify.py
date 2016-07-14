@@ -32,7 +32,6 @@ import time
 from dialogs import PopupNotificationWindow
 import gobject
 import gtkgui_helpers
-import gtk
 
 from common import gajim
 from common import helpers

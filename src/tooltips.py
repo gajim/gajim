@@ -40,7 +40,6 @@ import gtkgui_helpers
 
 from common import gajim
 from common import helpers
-from common.pep import MOODS, ACTIVITIES
 from common.i18n import Q_
 
 class BaseTooltip:

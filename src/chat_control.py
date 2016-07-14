@@ -52,7 +52,6 @@ from message_textview import MessageTextView
 from common.stanza_session import EncryptedStanzaSession, ArchivingStanzaSession
 from common.contacts import GC_Contact
 from common.logger import constants
-from common.pep import MOODS, ACTIVITIES
 from nbxmpp.protocol import NS_XHTML, NS_XHTML_IM, NS_FILE, NS_MUC
 from nbxmpp.protocol import NS_RECEIPTS, NS_ESESSION
 from nbxmpp.protocol import NS_JINGLE_RTP_AUDIO, NS_JINGLE_RTP_VIDEO
@@ -76,10 +75,6 @@ try:
 except ImportError:
     HAS_GTK_SPELL = False
 
-from common import dbus_support
-if dbus_support.supported:
-    import dbus
-    import remote_control
 
 ################################################################################
 class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):

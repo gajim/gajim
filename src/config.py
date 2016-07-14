@@ -34,7 +34,7 @@
 import gtk
 import pango
 import gobject
-import os, sys
+import os
 import common.config
 import common.sleepy
 from common.i18n import Q_

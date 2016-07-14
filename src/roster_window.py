@@ -60,7 +60,6 @@ from common import gajim
 from common import helpers
 from common.exceptions import GajimGeneralException
 from common import i18n
-from common import pep
 from common import location_listener
 from common import ged
 
@@ -71,7 +70,6 @@ if dbus_support.supported:
     import dbus
 
 from nbxmpp.protocol import NS_FILE, NS_ROSTERX, NS_CONFERENCE
-from common.pep import MOODS, ACTIVITIES
 
 #(icon, name, type, jid, account, editable, second pixbuf)
 (

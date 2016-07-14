@@ -27,7 +27,6 @@
 ##
 
 import os
-import sys
 import locale
 import re
 from time import time

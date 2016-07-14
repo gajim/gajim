@@ -22,7 +22,7 @@
 ##
 
 from common import gajim
-import os, sys
+import os
 
 
 STATE_UNKNOWN  = 'OS probably not supported'

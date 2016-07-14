@@ -29,6 +29,7 @@ import gtk
 import gobject
 import time
 import calendar
+import dialogs
 
 import gtkgui_helpers
 import conversation_textview

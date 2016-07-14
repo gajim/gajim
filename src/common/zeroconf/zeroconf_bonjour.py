@@ -20,7 +20,7 @@
 from common import gajim
 import select
 import re
-from common.zeroconf.zeroconf import C_BARE_NAME, C_DOMAIN
+from common.zeroconf.zeroconf import C_BARE_NAME, C_DOMAIN, C_TXT
 
 try:
     import pybonjour

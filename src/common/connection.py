@@ -42,6 +42,24 @@ import locale
 import hmac
 import json
 
+import common
+from common.connection_handlers import BLOCKING_ARRIVED, PRIVACY_ARRIVED, AGENT_REMOVED, \
+    ConnectionHandlers, DELIMITER_ARRIVED, METACONTACTS_ARRIVED, ROSTER_ARRIVED
+from common.connection_handlers_events import InformationEvent, \
+    UniqueRoomIdNotSupportedEvent, UniqueRoomIdSupportedEvent, GatewayPromptReceivedEvent, \
+    NewAccountNotConnectedEvent, StanzaMessageOutgoingEvent, OurShowEvent, SignedInEvent, \
+    PrivacyListRemovedEvent, PingReplyEvent, PingErrorEvent, PingSentEvent, \
+    AnonymousAuthEvent, ConnectionLostEvent, ConnectionTypeEvent, SSLErrorEvent, \
+    FingerprintErrorEvent, InsecureSSLConnectionEvent, ClientCertPassphraseEvent, \
+    PlainConnectionEvent, PrivacyListReceivedEvent, PrivacyListActiveDefaultEvent, \
+    PrivacyListsReceivedEvent, RegisterAgentInfoReceivedEvent, NewAccountConnectedEvent, \
+    AccountCreatedEvent, AccountNotCreatedEvent, BeforeChangeShowEvent, StanzaSentEvent, \
+    StanzaReceivedEvent, MessageNotSentEvent, GPGTrustKeyEvent, BadGPGPassphraseEvent
+from common.connection_handlers_events import InsecurePasswordEvent, MessageSentEvent, \
+    NonAnonymousServerErrorEvent, Oauth2CredentialsRequiredEvent, PasswordRequiredEvent, \
+    RosterReceivedEvent, SearchResultReceivedEvent
+import common.ged as ged
+
 try:
     randomsource = random.SystemRandom()
 except Exception:
@@ -59,7 +77,6 @@ from common import gpg
 from common import passwords
 from common import exceptions
 from common import check_X509
-from connection_handlers import *
 
 if gajim.HAVE_PYOPENSSL:
     import OpenSSL.crypto

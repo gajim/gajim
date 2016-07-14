@@ -46,7 +46,6 @@ except ImportError:
 
 if PYOPENSSL_PRESENT:
     from OpenSSL import SSL
-    from OpenSSL.SSL import Context
     from OpenSSL import crypto
     TYPE_RSA = crypto.TYPE_RSA
     TYPE_DSA = crypto.TYPE_DSA

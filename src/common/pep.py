@@ -219,7 +219,6 @@ import gobject
 import logging
 log = logging.getLogger('gajim.c.pep')
 
-from common import helpers
 import nbxmpp
 from common import gajim
 

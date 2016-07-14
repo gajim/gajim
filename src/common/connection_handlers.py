@@ -30,24 +30,41 @@
 
 import os
 import base64
-import sys
 import operator
 import hashlib
 import gobject
-import locale
 
-from time import (altzone, daylight, gmtime, localtime, mktime, strftime,
+from time import (altzone, daylight, gmtime, localtime, strftime,
         time as time_time, timezone, tzname)
-from calendar import timegm
 
 import nbxmpp
 import common.caps_cache as capscache
+from common.connection_handlers_events import InformationEvent, \
+    AgentItemsErrorReceivedEvent, AgentInfoErrorReceivedEvent, RosterInfoEvent, \
+    BadGPGPassphraseEvent, SignedInEvent, MucOwnerReceivedEvent, MucAdminReceivedEvent, \
+    PingReceivedEvent, OurShowEvent, StreamReceivedEvent, BlockingEvent, \
+    SearchFormReceivedEvent, GPGPasswordRequiredEvent, RosterReceivedEvent, \
+    GMailQueryReceivedEvent, RosterItemExchangeEvent, TimeRevisedRequestEvent, \
+    GcMessageReceivedEvent, TimeRequestEvent, VersionResultReceivedEvent, \
+    PrivateStorageReceivedEvent, RosterSetReceivedEvent, VersionRequestEvent, \
+    LastRequestEvent, TimeResultReceivedEvent, GmailNewMailReceivedEvent, \
+    PrivateStorageBookmarksReceivedEvent, BookmarksReceivedEvent, \
+    PrivateStorageRosternotesReceivedEvent, RosternotesReceivedEvent, \
+    StreamConflictReceivedEvent, StreamOtherHostReceivedEvent, MessageReceivedEvent, \
+    ArchivingErrorReceivedEvent, ArchivingPreferencesChangedReceivedEvent, \
+    NotificationEvent, GcInvitationReceivedEvent, GcDeclineReceivedEvent, \
+    MessageErrorEvent, LastResultReceivedEvent, PresenceReceivedEvent, FailedDecryptEvent, \
+    DecryptedMessageReceivedEvent, MamDecryptedMessageReceivedEvent, HttpAuthReceivedEvent, \
+    IqErrorReceivedEvent, VcardReceivedEvent, AgentRemovedEvent, MetacontactsReceivedEvent, \
+    PEPConfigReceivedEvent, PEPReceivedEvent, AgentItemsReceivedEvent, \
+    AgentInfoReceivedEvent, VcardPublishedEvent, VcardNotPublishedEvent
+#from common.connection_handlers_events import *
+from common.logger import LOG_DB_PATH
 
 from pep import LOCATION_DATA
 from common import helpers
 from common import gajim
 from common import exceptions
-from common import dataforms
 from common import jingle_xtls
 from common.commands import ConnectionCommands
 from common.pubsub import ConnectionPubSub
@@ -56,10 +73,8 @@ from common.protocol.bytestream import ConnectionSocks5Bytestream
 from common.protocol.bytestream import ConnectionIBBytestream
 from common.message_archiving import ConnectionArchive136
 from common.message_archiving import ConnectionArchive313
-from common.connection_handlers_events import *
 
 from common import ged
-from common import nec
 from common.nec import NetworkEvent
 
 from common.jingle import ConnectionJingle

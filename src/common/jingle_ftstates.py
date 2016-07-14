@@ -15,7 +15,7 @@
 
 import gajim
 import nbxmpp
-from jingle_transport import *
+from common.jingle_transport import TransportType
 from common.socks5 import Socks5ReceiverClient, Socks5SenderClient
 
 

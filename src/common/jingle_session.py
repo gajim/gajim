@@ -30,11 +30,15 @@ Handles Jingle sessions (XEP 0166)
 
 import gajim #Get rid of that?
 import nbxmpp
+
+from common.connection_handlers_events import JingleConnectedReceivedEvent, \
+    JingleErrorReceivedEvent, JingleTransferCancelledEvent, \
+    JingleRequestReceivedEvent, JingleDisconnectedReceivedEvent
+from common.file_props import FilesProp
 from jingle_transport import get_jingle_transport, JingleTransportIBB
 from jingle_content import get_jingle_content, JingleContentSetupException
 from jingle_content import JingleContent
 from jingle_ft import STATE_TRANSPORT_REPLACE
-from common.connection_handlers_events import *
 import logging
 log = logging.getLogger("gajim.c.jingle_session")
 

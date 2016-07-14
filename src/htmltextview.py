@@ -42,7 +42,9 @@ import xml.sax, xml.sax.handler
 import re
 from cStringIO import StringIO
 import urllib2
-import operator
+
+import dialogs
+from common.exceptions import GajimGeneralException
 
 if __name__ == '__main__':
     from common import i18n
@@ -1082,7 +1084,6 @@ class HtmlTextView(gtk.TextView):
 change_cursor = None
 
 if __name__ == '__main__':
-    import os
 
     from conversation_textview import ConversationTextview
     import gajim as gaj

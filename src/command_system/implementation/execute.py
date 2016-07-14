@@ -38,7 +38,7 @@ from os.path import expanduser
 from glib import timeout_add
 
 from ..framework import CommandContainer, command, doc
-from hosts import *
+from hosts import ChatCommands, PrivateChatCommands, GroupChatCommands
 
 class Execute(CommandContainer):
     AUTOMATIC = True

@@ -20,7 +20,6 @@ Handles Jingle Transports (currently only ICE-UDP)
 import nbxmpp
 import socket
 from common import gajim
-from common.protocol.bytestream import ConnectionSocks5Bytestream
 import logging
 
 log = logging.getLogger('gajim.c.jingle_transport')

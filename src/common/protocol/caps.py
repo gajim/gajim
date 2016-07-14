@@ -27,7 +27,6 @@ log = logging.getLogger('gajim.c.p.caps')
 
 from common import gajim
 from common import ged
-from common import helpers
 from common.connection_handlers_events import CapsPresenceReceivedEvent, \
     CapsDiscoReceivedEvent, CapsReceivedEvent
 

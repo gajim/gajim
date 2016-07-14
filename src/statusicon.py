@@ -23,20 +23,16 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-import sys
 import gtk
-import gobject
 import os
 
 import dialogs
 import config
 import tooltips
 import gtkgui_helpers
-import tooltips
 
 from common import gajim
 from common import helpers
-from common import pep
 
 class StatusIcon:
     """
