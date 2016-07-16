@@ -56,6 +56,7 @@ from filetransfers_window import FileTransfersWindow
 from gajim_themes_window import GajimThemesWindow
 from advanced_configuration_window import AdvancedConfigurationWindow
 
+from common import defs
 from common import gajim
 from common import helpers
 from common import i18n
@@ -1337,8 +1338,8 @@ class AboutDialog:
         """
         Where can we find this Credits file?
         """
-        if os.path.isfile(os.path.join(gajim.defs.docdir, filename)):
-            return os.path.join(gajim.defs.docdir, filename)
+        if os.path.isfile(os.path.join(defs.docdir, filename)):
+            return os.path.join(defs.docdir, filename)
         elif os.path.isfile('../' + filename):
             return ('../' + filename)
         else:
