@@ -3213,7 +3213,7 @@ class RosterWindow:
                 'attached_gpg_keys').split()
         keys = {}
         keyID = _('None')
-        for i in list(range(len(attached_keys)/2)):
+        for i in list(range(int(len(attached_keys)/2))):
             keys[attached_keys[2*i]] = attached_keys[2*i+1]
             if attached_keys[2*i] == contact.jid:
                 keyID = attached_keys[2*i+1]

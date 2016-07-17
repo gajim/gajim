@@ -297,8 +297,6 @@ class FileTransfersWindow:
         def on_ok(widget):
             file_dir = None
             files_path_list = dialog.get_filenames()
-            files_path_list = gtkgui_helpers.decode_filechooser_file_paths(
-                    files_path_list)
             text_buffer = desc_entry.get_buffer()
             desc = text_buffer.get_text(text_buffer.get_start_iter(),
                 text_buffer.get_end_iter(), True)
@@ -379,8 +377,6 @@ class FileTransfersWindow:
     def on_file_request_accepted(self, account, contact, file_props):
         def on_ok(widget, account, contact, file_props):
             file_path = dialog2.get_filename()
-            file_path = gtkgui_helpers.decode_filechooser_file_paths(
-                (file_path,))[0]
             if os.path.exists(file_path):
                 # check if we have write permissions
                 if not os.access(file_path, os.W_OK):

@@ -175,8 +175,6 @@ class FeaturesWindow:
         return gajim.HAVE_ZEROCONF
 
     def dbus_available(self):
-        if os.name == 'nt':
-            return False
         from common import dbus_support
         return dbus_support.supported
 
