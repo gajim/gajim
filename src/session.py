@@ -83,7 +83,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
                     self.control.change_resource(self.resource)
 
         if obj.mtype == 'chat':
-            if not obj.stanza.getTag('body') and obj.chatstate is None:
+            if not obj.msgtxt and obj.chatstate is None:
                 return
 
             log_type = 'chat_msg'
