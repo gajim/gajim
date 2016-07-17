@@ -1366,8 +1366,8 @@ class AboutDialog:
         """
         Where can we find this Credits file?
         """
-        if os.path.isfile(os.path.join(gajim.defs.docdir, filename)):
-            return os.path.join(gajim.defs.docdir, filename)
+        if os.path.isfile(os.path.join(defs.docdir, filename)):
+            return os.path.join(defs.docdir, filename)
         elif os.path.isfile('../' + filename):
             return ('../' + filename)
         else:

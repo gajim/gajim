@@ -479,8 +479,8 @@ class CommonConnection:
             # chatstates - if peer supports xep85, send chatstates
             # please note that the only valid tag inside a message containing a
             # <body> tag is the active event
-            if chatstate and contact and contact.supports(NS_CHATSTATES):
-                msg_iq.setTag(chatstate, namespace=NS_CHATSTATES)
+            if chatstate and contact and contact.supports(nbxmpp.NS_CHATSTATES):
+                msg_iq.setTag(chatstate, namespace=nbxmpp.NS_CHATSTATES)
 
             # XEP-0184
             if msgtxt and gajim.config.get_per('accounts', self.name,
