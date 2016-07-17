@@ -45,6 +45,7 @@ import conversation_textview
 import message_control
 import dataforms_widget
 
+from common import defs
 from random import randrange
 from common import pep
 from common import ged
