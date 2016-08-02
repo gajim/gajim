@@ -84,9 +84,13 @@ class Proxy65Manager:
         for item in query.getChildren():
             if item.getName() == 'streamhost':
                 host = item.getAttr('host')
-                port = item.getAttr('port')
                 jid = item.getAttr('jid')
-                if not host or not port or not jid:
+                port = item.getAttr('port')
+                try:
+                    port = int(port)
+                except ValueError, TypeError:
+                    port = 1080
+                if not host or not jid:
                     self.proxies[proxy]._on_connect_failure()
                 self.proxies[proxy].resolve_result(host, port, jid)
                 # we can have only one streamhost
