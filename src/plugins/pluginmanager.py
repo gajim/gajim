@@ -32,6 +32,7 @@ import fnmatch
 import zipfile
 from shutil import rmtree
 import configparser
+import pkg_resources
 
 from common import gajim
 from common import nec
@@ -450,28 +451,28 @@ class PluginManager(metaclass=Singleton):
             conf.read_file(conf_file)
             conf_file.close()
 
-            try:
-                min_v = conf.get('info', 'min_gajim_version')
-            except Exception:
-                min_v = None
-            try:
-                max_v = conf.get('info', 'max_gajim_version')
-            except Exception:
-                max_v = None
+            min_v = conf.get('info', 'min_gajim_version', fallback=None)
+            max_v = conf.get('info', 'max_gajim_version', fallback=None)
 
-            gajim_v = gajim.config.get('version')
-            gajim_v = gajim_v.split('-', 1)[0]
-            gajim_v = gajim_v.split('.')
+            gajim_v = pkg_resources.parse_version(gajim.config.get('version'))
 
-            if min_v:
-                min_v = min_v.split('.')
-                if gajim_v < min_v:
-                    continue
-            if max_v:
-                max_v = max_v.split('.')
-                if gajim_v > max_v:
-                    continue
-
+            if min_v and gajim_v < pkg_resources.parse_version(min_v):
+                log.warning(('Plugin {plugin} not loaded, newer version of'
+                             'gajim required: {gajim_v} < {min_v}').format(
+                                 plugin=elem_name,
+                                 gajim_v=gajim_v,
+                                 min_v=min_v
+                           ))
+                continue
+            if max_v and gajim_v > pkg_resources.parse_version(max_v):
+                log.warning(('Plugin {plugin} not loaded, plugin incompatible '
+                             'with current version of gajim: '
+                             '{gajim_v} > {max_v}').format(
+                                 plugin=elem_name,
+                                 gajim_v=gajim_v,
+                                 max_v=max_v
+                           ))
+                continue
 
             module = None
 
