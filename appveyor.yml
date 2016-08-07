@@ -1,0 +1,41 @@
+environment:
+
+  matrix:
+
+    - PYTHON: "C:\\Python34"
+
+
+install:
+
+  - hg clone http://hg.gajim.org/gajim-plugins c:\projects\gajim-plugins
+  - hg clone http://hg.gajim.org/python-nbxmpp c:\projects\python-nbxmpp
+  - cd c:\\projects\\python-nbxmpp\\
+  - python setup.py install
+  - ps: c:\\projects\\gajim\\download.ps1
+  - set PATH=C:\\MinGW\\bin;C:\\Program Files (x86)\\gettext-iconv\\bin;%PATH%
+  - "%PYTHON%\\python.exe -m pip install --upgrade pip"
+  - "%PYTHON%\\python.exe -m pip install protobuf"
+  - ps: Add-Content C:\Python34\Lib\site-packages\google\__init__.py " "
+  - "%PYTHON%\\python.exe -m pip install pycrypto"
+  - "%PYTHON%\\python.exe -m pip install cx_freeze"
+  - "%PYTHON%\\python.exe -m pip install pypiwin32"
+  - "%PYTHON%\\python.exe -m pip install pyopenssl"
+  - "%PYTHON%\\python.exe -m pip install --global-option=build_ext --global-option --compiler=mingw32 python-axolotl"
+  - cd c:\\projects\\gajim\\
+  - build.bat
+  
+
+build: off
+
+# artifacts:
+#   - path: gajim_built\Gajim.exe
+#   - name: MyApp
+
+on_finish:
+  - ps: Push-AppveyorArtifact gajim_built\Gajim.exe -FileName "Gajim-16.10.1-$($env:APPVEYOR_REPO_COMMIT).exe"
+
+
+#on_success:
+#  You can use this step to upload your artifacts to a public website.
+#  See Appveyor's documentation for more details. Or you can simply
+#  access your wheels from the Appveyor "artifacts" tab for your build.
