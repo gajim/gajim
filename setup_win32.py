@@ -128,7 +128,8 @@ OPTIONS = {
         'includes': ['gi', 'Crypto.PublicKey.DSA', 'Crypto.Hash.HMAC',
                      'numbers', 'win32com.client', 'win32com.server',
                      'cryptography', 'pkg_resources'],
-        'packages': ['gi', 'cffi', 'cryptography', 'google', 'axolotl'],
+        'packages': ['gi', 'cffi', 'cryptography', 'google', 'axolotl',
+                     'pkg_resources'],
         'base': 'Win32GUI',
         'include_files': INCLUDE_FILES,
     }
