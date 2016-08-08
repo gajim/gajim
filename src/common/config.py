@@ -256,8 +256,8 @@ class Config:
             'show_location_in_roster': [opt_bool, True, '', True],
             'avatar_position_in_roster': [opt_str, 'right', _('Define the position of the avatar in roster. Can be left or right'), True],
             'ask_avatars_on_startup': [opt_bool, True, _('If True, Gajim will ask for avatar each contact that did not have an avatar last time or has one cached that is too old.')],
-            'print_status_in_chats': [opt_bool, True, _('If False, Gajim will no longer print status line in chats when a contact changes his or her status and/or his or her status message.')],
-            'print_status_in_muc': [opt_str, 'in_and_out', _('Can be "none", "all" or "in_and_out". If "none", Gajim will no longer print status line in groupchats when a member changes his or her status and/or his or her status message. If "all" Gajim will print all status messages. If "in_and_out", Gajim will only print FOO enters/leaves group chat.')],
+            'print_status_in_chats': [opt_bool, False, _('If False, Gajim will no longer print status line in chats when a contact changes his or her status and/or his or her status message.')],
+            'print_status_in_muc': [opt_str, 'none', _('Can be "none", "all" or "in_and_out". If "none", Gajim will no longer print status line in groupchats when a member changes his or her status and/or his or her status message. If "all" Gajim will print all status messages. If "in_and_out", Gajim will only print FOO enters/leaves group chat.')],
             'log_contact_status_changes': [opt_bool, False],
             'log_xhtml_messages': [opt_bool, False, _('Log XHTML messages instead of plain text messages.')],
             'just_connected_bg_color': [opt_str, '#adc3c6', _('Background color of contacts when they just signed in.')],
@@ -349,7 +349,7 @@ class Config:
                     'gpg_sign_presence': [ opt_bool, True, _('If disabled, don\'t sign presences with GPG key, even if GPG is configured.') ],
                     'keyname': [ opt_str, '', '', True ],
                     'enable_esessions': [opt_bool, True, _('Enable ESessions encryption for this account.'), True],
-                    'autonegotiate_esessions': [opt_bool, True, _('Should Gajim automatically start an encrypted session when possible?')],
+                    'autonegotiate_esessions': [opt_bool, False, _('Should Gajim automatically start an encrypted session when possible?')],
                     'connection_types': [ opt_str, 'tls ssl plain', _('Ordered list (space separated) of connection type to try. Can contain tls, ssl or plain')],
                     'tls_version': [ opt_str, '1.0', '' ],
                     'cipher_list': [ opt_str, 'HIGH:!aNULL:RC4-SHA', '' ],
@@ -382,8 +382,8 @@ class Config:
                     'dont_ack_subscription': [opt_bool, False, _('Jabberd2 workaround')],
                     # proxy65 for FT
                     'file_transfer_proxies': [opt_str, 'proxy.eu.jabber.org, proxy.jabber.ru, proxy.jabbim.cz'],
-                    'use_ft_proxies': [opt_bool, True, _('If checked, Gajim will use your IP and proxies defined in file_transfer_proxies option for file transfer.'), True],
-                    'test_ft_proxies_on_startup': [opt_bool, True, _('If True, Gajim will test file transfer proxies on startup to be sure it works. Openfire\'s proxies are known to fail this test even if they work.')],
+                    'use_ft_proxies': [opt_bool, False, _('If checked, Gajim will use your IP and proxies defined in file_transfer_proxies option for file transfer.'), True],
+                    'test_ft_proxies_on_startup': [opt_bool, False, _('If True, Gajim will test file transfer proxies on startup to be sure it works. Openfire\'s proxies are known to fail this test even if they work.')],
                     'msgwin-x-position': [opt_int, -1], # Default is to let the wm decide
                     'msgwin-y-position': [opt_int, -1], # Default is to let the wm decide
                     'msgwin-width': [opt_int, 480],
@@ -483,7 +483,7 @@ class Config:
             }, {}),
             'contacts': ({
                     'gpg_enabled': [ opt_bool, False, _('Is OpenPGP enabled for this contact?')],
-                    'autonegotiate_esessions': [opt_bool, True, _('Should Gajim automatically start an encrypted session with this contact when possible?')],
+                    'autonegotiate_esessions': [opt_bool, False, _('Should Gajim automatically start an encrypted session with this contact when possible?')],
                     'speller_language': [ opt_str, '', _('Language for which we want to check misspelled words')],
             }, {}),
             'rooms': ({
@@ -528,9 +528,9 @@ class Config:
             'first_message_received': [ True, 'message1.wav' ],
             'next_message_received_focused': [ True, 'message2.wav' ],
             'next_message_received_unfocused': [ True, 'message2.wav' ],
-            'contact_connected': [ True, 'connected.wav' ],
-            'contact_disconnected': [ True, 'disconnected.wav' ],
-            'message_sent': [ True, 'sent.wav' ],
+            'contact_connected': [ False, 'connected.wav' ],
+            'contact_disconnected': [ False, 'disconnected.wav' ],
+            'message_sent': [ False, 'sent.wav' ],
             'muc_message_highlight': [ True, 'gc_message1.wav', _('Sound to play when a group chat message contains one of the words in muc_highlight_words, or when a group chat message contains your nickname.')],
             'muc_message_received': [ False, 'gc_message2.wav', _('Sound to play when any MUC message arrives.') ],
             'gmail_received': [ False, 'message1.wav' ],
