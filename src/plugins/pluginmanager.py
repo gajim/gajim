@@ -32,7 +32,7 @@ import fnmatch
 import zipfile
 from shutil import rmtree
 import configparser
-import pkg_resources
+from pkg_resources import parse_version
 
 from common import gajim
 from common import nec
@@ -454,9 +454,10 @@ class PluginManager(metaclass=Singleton):
             min_v = conf.get('info', 'min_gajim_version', fallback=None)
             max_v = conf.get('info', 'max_gajim_version', fallback=None)
 
-            gajim_v = pkg_resources.parse_version(gajim.config.get('version'))
+            gajim_v = gajim.config.get('version')
+            gajim_v_cmp = parse_version(gajim_v)
 
-            if min_v and gajim_v < pkg_resources.parse_version(min_v):
+            if min_v and gajim_v_cmp < parse_version(min_v):
                 log.warning(('Plugin {plugin} not loaded, newer version of'
                              'gajim required: {gajim_v} < {min_v}').format(
                                  plugin=elem_name,
@@ -464,7 +465,7 @@ class PluginManager(metaclass=Singleton):
                                  min_v=min_v
                            ))
                 continue
-            if max_v and gajim_v > pkg_resources.parse_version(max_v):
+            if max_v and gajim_v_cmp > parse_version(max_v):
                 log.warning(('Plugin {plugin} not loaded, plugin incompatible '
                              'with current version of gajim: '
                              '{gajim_v} > {max_v}').format(
