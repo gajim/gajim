@@ -484,8 +484,8 @@ class PluginManager(metaclass=Singleton):
                 module = __import__(module_name)
             except Exception as error:
                 log.warning(
-                    "While trying to load {plugin}, exception occurred: {error}"
-                    .format(plugin=elem_name, error=str(error))
+                    "While trying to load {plugin}, exception occurred".format(plugin=elem_name),
+                    exc_info=sys.exc_info()
                 )
                 continue
 
