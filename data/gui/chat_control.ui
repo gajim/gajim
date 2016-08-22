@@ -988,6 +988,7 @@ audio-mic-volume-low</property>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="pack_type">end</property>
                     <property name="position">15</property>
                   </packing>
                 </child>
