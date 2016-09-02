@@ -2032,7 +2032,7 @@ class RosterWindow:
             return True
         elif event.type_ == 'gc-invitation':
             dialogs.InvitationReceivedDialog(account, event.room_jid,
-                event.jid_from, event.password, event.reason,
+                event.from_jid, event.password, event.reason,
                 is_continued=event.is_continued)
             gajim.events.remove_events(account, jid, event)
             return True
