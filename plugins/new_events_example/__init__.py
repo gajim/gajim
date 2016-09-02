@@ -1,1 +1,1 @@
-from plugin import NewEventsExamplePlugin
+from .plugin import NewEventsExamplePlugin

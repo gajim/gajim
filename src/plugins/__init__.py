@@ -25,6 +25,6 @@ Main file of plugins package.
 '''
 
 from .pluginmanager import PluginManager
-from .plugin import GajimPlugin
+from .gajimplugin import GajimPlugin
 
 __all__ = ['PluginManager', 'GajimPlugin']

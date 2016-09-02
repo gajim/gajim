@@ -1,4 +1,4 @@
 
 __all__ = ['RosterButtonsPlugin']
 
-from plugin import RosterButtonsPlugin
+from .plugin import RosterButtonsPlugin

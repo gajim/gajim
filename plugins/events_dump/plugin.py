@@ -25,7 +25,7 @@ Dumps info about selected events to console.
 :license: GPL
 '''
 
-import new
+import types
 from pprint import pformat
 
 from plugins import GajimPlugin
@@ -110,15 +110,14 @@ class EventsDumpPlugin(GajimPlugin):
     def _set_handling_methods(self):
         for event_name in self.events_names:
             setattr(self, event_name,
-                            new.instancemethod(
+                            types.MethodType(
                                     self._generate_handling_method(event_name),
-                                    self,
-                                    EventsDumpPlugin))
+                                    self))
             self.events_handlers[event_name] = (ged.POSTCORE,
                                                                                getattr(self, event_name))
 
     def _generate_handling_method(self, event_name):
         def handler(self, *args):
-            print "Event '%s' occured. Arguments: %s\n\n===\n"%(event_name, pformat(args))
+            print ("Event '%s' occured. Arguments: %s\n\n===\n" % (event_name, pformat(args)))
 
         return handler

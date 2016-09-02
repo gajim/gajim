@@ -40,7 +40,7 @@ from common.exceptions import PluginsystemError
 
 from plugins.helpers import log, log_calls, Singleton
 from plugins.helpers import GajimPluginActivateException
-from plugins.plugin import GajimPlugin, GajimPluginException
+from plugins.GajimPlugin import GajimPlugin, GajimPluginException
 
 class PluginManager(metaclass=Singleton):
     '''

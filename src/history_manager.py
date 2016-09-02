@@ -49,7 +49,10 @@ if os.name == 'nt':
 
 import sys
 import signal
+import gi
+gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
+gi.require_version('GdkX11', '3.0')
 from gi.repository import Gdk
 from gi.repository import GLib
 import time

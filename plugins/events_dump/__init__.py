@@ -1,1 +1,1 @@
-from plugin import EventsDumpPlugin
+from .plugin import EventsDumpPlugin

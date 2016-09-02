@@ -1,1 +1,1 @@
-from plugin import DBusPlugin
+from .plugin import DBusPlugin

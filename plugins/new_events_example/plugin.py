@@ -26,7 +26,7 @@ based on existing one.
 :license: GPL
 '''
 
-import new
+#import new # Depricated in python3 for types module
 from pprint import pformat
 
 from common import helpers

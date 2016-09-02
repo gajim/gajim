@@ -34,7 +34,8 @@ Based on src/remote_control.py
 :license: GPL
 '''
 import os
-import new
+# import new # depricated in python3; use types instead
+import types
 
 import gobject
 
@@ -722,10 +723,9 @@ class DBusPlugin(GajimPlugin):
     def _set_handling_methods(self):
         for event_name in self.events_names:
             setattr(self, event_name,
-                            new.instancemethod(
+                            types.MethodType(
                                     self._generate_handling_method(event_name),
-                                    self,
-                                    DBusPlugin))
+                                    self))
             self.events_handlers[event_name] = (ged.POSTCORE,
                 getattr(self, event_name))
 
