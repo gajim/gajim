@@ -138,6 +138,9 @@ class ConfigPaths:
         if root is not None:
             self.config_root = self.cache_root = self.data_root = root
 
+        if len(profile) > 0:
+            profile = u'.' + profile
+        
         d = {'LOG_DB': 'logs.db', 'MY_CACERTS': 'cacerts.pem',
             'MY_EMOTS': 'emoticons', 'MY_ICONSETS': 'iconsets',
             'MY_MOOD_ICONSETS': 'moods', 'MY_ACTIVITY_ICONSETS': 'activities',
@@ -145,26 +148,23 @@ class ConfigPaths:
             'RNG_SEED': 'rng_seed',
             'SECRETS_FILE': 'secrets', 'MY_PEER_CERTS': 'certs'}
         for name in d:
-            if len(profile) > 0:
-                d[name] += u'.' + profile
+            d[name] += u'.' + profile
             self.add(name, TYPE_DATA, windowsify(d[name]))
-        self.add('MY_DATA', TYPE_DATA, '')
+        self.add('MY_DATA', TYPE_DATA, 'data' + profile)
 
         d = {'CACHE_DB': 'cache.db', 'VCARD': 'vcards',
                 'AVATAR': 'avatars',
                 'PID_FILE': 'gajim.pid'}
         for name in d:
-            if len(profile) > 0:
-                d[name] += u'.' + profile
+            d[name] += u'.' + profile
             self.add(name, TYPE_CACHE, windowsify(d[name]))
-        self.add('MY_CACHE', TYPE_CACHE, '')
+        self.add('MY_CACHE', TYPE_CACHE, 'cache' + profile)
 
         d = {'CONFIG_FILE': 'config', 'PLUGINS_CONFIG_DIR': 'pluginsconfig', 'MY_CERT': 'localcerts'}
         for name in d:
-            if len(profile) > 0:
-                d[name] += u'.' + profile
+            d[name] += u'.' + profile
             self.add(name, TYPE_CONFIG, windowsify(d[name]))
-        self.add('MY_CONFIG', TYPE_CONFIG, '')
+        self.add('MY_CONFIG', TYPE_CONFIG, 'config' + profile)
 
         basedir = fse(os.environ.get('GAJIM_BASEDIR', defs.basedir))
         self.add('DATA', None, os.path.join(basedir, windowsify('data')))
