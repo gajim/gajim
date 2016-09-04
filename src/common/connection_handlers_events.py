@@ -1028,6 +1028,8 @@ class MamMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
     def generate(self):
         if not self.stanza:
             return
+        if not hasattr(self, 'additional_data'):
+            self.additional_data = {}
         account = self.conn.name
         self.msg_ = self.stanza.getTag('message')
         # use timestamp of archived message, if available and archive timestamp otherwise
@@ -1066,6 +1068,8 @@ class MamDecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
     def generate(self):
         self.nick = None
         msg_ = self.msg_obj.msg_
+        if not hasattr(self, 'additional_data'):
+            self.additional_data = self.msg_obj.additional_data
         self.with_ = self.msg_obj.with_
         self.direction = self.msg_obj.direction
         self.tim = self.msg_obj.tim
@@ -1106,6 +1110,8 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.get_id()
         self.forwarded = False
         self.sent = False
+        if not hasattr(self, 'additional_data'):
+            self.additional_data = {}
 
         account = self.conn.name
 
@@ -1384,6 +1390,8 @@ class DecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
 
     def generate(self):
         self.stanza = self.msg_obj.stanza
+        if not hasattr(self, 'additional_data'):
+            self.additional_data = self.msg_obj.additional_data
         self.id_ = self.msg_obj.id_
         self.jid = self.msg_obj.jid
         self.fjid = self.msg_obj.fjid
@@ -1491,6 +1499,8 @@ class GcMessageReceivedEvent(nec.NetworkIncomingEvent):
 
     def generate(self):
         self.stanza = self.msg_obj.stanza
+        if not hasattr(self, 'additional_data'):
+            self.additional_data = self.msg_obj.additional_data
         self.fjid = self.msg_obj.fjid
         self.msgtxt = self.msg_obj.msgtxt
         self.jid = self.msg_obj.jid
@@ -1812,6 +1822,11 @@ class VcardNotPublishedEvent(nec.NetworkIncomingEvent):
 class StanzaReceivedEvent(nec.NetworkIncomingEvent):
     name = 'stanza-received'
     base_network_events = []
+    
+    def generate(self):
+        if not hasattr(self, 'additional_data'):
+            self.additional_data = {}
+        return True
 
 class StanzaSentEvent(nec.NetworkIncomingEvent):
     name = 'stanza-sent'

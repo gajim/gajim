@@ -945,4 +945,21 @@ class OptionsParser:
                 gajim.config.set('video_input_device', 'autovideosrc')
             if self.old_values['video_input_device'] == 'videotestsrc is-live=true ! video/x-raw-yuv,framerate=10/1':
                 gajim.config.set('video_input_device', 'videotestsrc is-live=true ! video/x-raw,framerate=10/1')
+        
+        back = os.getcwd()
+        os.chdir(logger.LOG_DB_FOLDER)
+        con = sqlite.connect(logger.LOG_DB_FILE)
+        os.chdir(back)
+        cur = con.cursor()
+        try:
+            cur.executescript(
+                    '''
+                    ALTER TABLE logs ADD COLUMN 'additional_data' TEXT DEFAULT '{}';
+                    '''
+            )
+            con.commit()
+        except sqlite.OperationalError:
+            pass
+        con.close()
+        
         gajim.config.set('version', '0.16.10.1')

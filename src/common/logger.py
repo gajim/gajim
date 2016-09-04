@@ -32,6 +32,7 @@ import os
 import sys
 import time
 import datetime
+import json
 from gzip import GzipFile
 from io import BytesIO
 from gi.repository import GLib
@@ -141,6 +142,8 @@ class Logger:
         # if locked, wait up to 20 sec to unlock
         # before raise (hopefully should be enough)
 
+        print("*****")
+        print("%s/%s" % (LOG_DB_FOLDER, LOG_DB_FILE))
         self.con = sqlite.connect(LOG_DB_FILE, timeout=20.0,
                 isolation_level='IMMEDIATE')
         os.chdir(back)
@@ -412,7 +415,7 @@ class Logger:
 
     def commit_to_db(self, values, write_unread=False):
         sql = '''INSERT INTO logs (jid_id, contact_name, time, kind, show,
-                message, subject) VALUES (?, ?, ?, ?, ?, ?, ?)'''
+                message, subject, additional_data) VALUES (?, ?, ?, ?, ?, ?, ?, ?)'''
         try:
             self.cur.execute(sql, values)
         except sqlite.OperationalError as e:
@@ -495,7 +498,7 @@ class Logger:
             all_messages.append(results[0] + (shown,))
         return all_messages
 
-    def write(self, kind, jid, message=None, show=None, tim=None, subject=None):
+    def write(self, kind, jid, message=None, show=None, tim=None, subject=None, additional_data={}):
         """
         Write a row (status, gcstatus, message etc) to logs database
 
@@ -517,6 +520,7 @@ class Logger:
         # then it holds status message
         message_col = message
         subject_col = subject
+        additional_data_col = json.dumps(additional_data)
         if tim:
             time_col = int(float(time.mktime(tim)))
         else:
@@ -576,7 +580,7 @@ class Logger:
             return
 
         values = (jid_id, contact_name_col, time_col, kind_col, show_col,
-                message_col, subject_col)
+                message_col, subject_col, additional_data_col)
         return self.commit_to_db(values, write_unread)
 
     def get_last_conversation_lines(self, jid, restore_how_many_rows,

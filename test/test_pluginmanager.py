@@ -51,7 +51,6 @@ os.mkdir(configdir)
 
 import common.configpaths
 common.configpaths.gajimpaths.init(configdir)
-common.configpaths.gajimpaths.init_profile()
 
 # for some reason common.gajim needs to be imported before xmpppy?
 from common import gajim

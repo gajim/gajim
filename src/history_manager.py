@@ -91,7 +91,6 @@ del parseOpts
 import common.configpaths
 common.configpaths.gajimpaths.init(config_path)
 del config_path
-common.configpaths.gajimpaths.init_profile()
 from common import exceptions
 from common import gajim
 import gtkgui_helpers

@@ -178,9 +178,8 @@ profile, config_path = parseOpts()
 del parseOpts
 
 import common.configpaths
-common.configpaths.gajimpaths.init(config_path)
+common.configpaths.gajimpaths.init(config_path, profile)
 del config_path
-common.configpaths.gajimpaths.init_profile(profile)
 del profile
 
 if os.name == 'nt':

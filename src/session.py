@@ -101,7 +101,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
                 else:
                     msg_to_log = obj.msgtxt
                 obj.msg_log_id = gajim.logger.write(log_type, obj.fjid,
-                    msg_to_log, tim=obj.timestamp, subject=obj.subject)
+                    msg_to_log, tim=obj.timestamp, subject=obj.subject, additional_data=obj.additional_data)
             except exceptions.PysqliteOperationalError as e:
                 gajim.nec.push_incoming_event(InformationEvent(None,
                     conn=self.conn, level='error', pri_txt=_('Disk Write Error'),
@@ -147,7 +147,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
                     contact.msg_log_id = obj.msg_log_id
 
         # THIS MUST BE AFTER chatstates handling
-        # AND BEFORE playsound (else we ear sounding on chatstates!)
+        # AND BEFORE playsound (else we hear sounding on chatstates!)
         if not obj.msgtxt: # empty message text
             return True
 

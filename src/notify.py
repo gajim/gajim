@@ -121,10 +121,10 @@ text=None, timeout=-1):
 
         notification.set_category(event_type)
         notification._data = {}
-        notification._data.event_type = event_type
-        notification._data.jid = jid
-        notification._data.account = account
-        notification._data.msg_type = msg_type
+        notification._data["event_type"] = event_type
+        notification._data["jid"] = jid
+        notification._data["account"] = account
+        notification._data["msg_type"] = msg_type
         notification.set_property('icon-name', path_to_image)
         if 'actions' in Notify.get_server_caps():
             notification.add_action('default', 'Default Action',

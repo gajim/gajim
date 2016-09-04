@@ -72,7 +72,8 @@ def create_log_db():
                     kind INTEGER,
                     show INTEGER,
                     message TEXT,
-                    subject TEXT
+                    subject TEXT,
+                    additional_data TEXT DEFAULT '{}'
             );
 
             CREATE INDEX idx_logs_jid_id_time ON logs (jid_id, time DESC);

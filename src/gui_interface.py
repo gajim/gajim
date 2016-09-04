@@ -2528,13 +2528,12 @@ class Interface:
                 want_type=True)
             if pixbuf is None:
                 return
-            extension = '.' + typ
             if typ not in ('jpeg', 'png'):
-                gajim.log.debug('gtkpixbuf cannot save other than jpeg and '\
-                    'png formats. saving %s\'avatar as png file (originaly %s)'\
+                gajim.log.info('gtkpixbuf cannot save other than jpeg and '\
+                    'png formats. saving \'%s\' avatar as png file (originaly: %s)'\
                     % (jid, typ))
                 typ = 'png'
-                extension = '.png'
+            extension = '.' + typ
         path_to_original_file = path_to_file + extension
         try:
             pixbuf.savev(path_to_original_file, typ, [], [])
