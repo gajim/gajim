@@ -1025,11 +1025,12 @@ class MamMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
     name = 'mam-message-received'
     base_network_events = []
 
+    def init(self):
+        self.additional_data = {}
+    
     def generate(self):
         if not self.stanza:
             return
-        if not hasattr(self, 'additional_data'):
-            self.additional_data = {}
         account = self.conn.name
         self.msg_ = self.stanza.getTag('message')
         # use timestamp of archived message, if available and archive timestamp otherwise
@@ -1104,15 +1105,15 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
     name = 'message-received'
     base_network_events = ['raw-message-received']
 
+    def init(self):
+        self.additional_data = {}
+    
     def generate(self):
         self.conn = self.base_event.conn
         self.stanza = self.base_event.stanza
         self.get_id()
         self.forwarded = False
         self.sent = False
-        if not hasattr(self, 'additional_data'):
-            self.additional_data = {}
-
         account = self.conn.name
 
         # check if the message is a roster item exchange (XEP-0144)
@@ -1823,9 +1824,9 @@ class StanzaReceivedEvent(nec.NetworkIncomingEvent):
     name = 'stanza-received'
     base_network_events = []
     
+    def init(self):
+        self.additional_data = {}
     def generate(self):
-        if not hasattr(self, 'additional_data'):
-            self.additional_data = {}
         return True
 
 class StanzaSentEvent(nec.NetworkIncomingEvent):
@@ -2669,6 +2670,7 @@ class MessageOutgoingEvent(nec.NetworkOutgoingEvent):
     base_network_events = []
 
     def init(self):
+        self.additional_data = {}
         self.message = ''
         self.keyID = None
         self.type_ = 'chat'
@@ -2715,6 +2717,7 @@ class GcMessageOutgoingEvent(nec.NetworkOutgoingEvent):
     base_network_events = []
 
     def init(self):
+        self.additional_data = {}
         self.message = ''
         self.xhtml = None
         self.label = None

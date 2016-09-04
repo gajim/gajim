@@ -515,7 +515,7 @@ class CommonConnection:
                 subject, type_, msg_iq, xhtml)
 
     def log_message(self, jid, msg, forward_from, session, original_message,
-    subject, type_, xhtml=None):
+    subject, type_, xhtml=None, additional_data={}):
         if not forward_from and session and session.is_loggable():
             ji = gajim.get_jid_without_resource(jid)
             if gajim.config.should_log(self.name, ji):
@@ -531,7 +531,7 @@ class CommonConnection:
                         if xhtml and gajim.config.get('log_xhtml_messages'):
                             log_msg = '<body xmlns="%s">%s</body>' % (
                                 nbxmpp.NS_XHTML, xhtml)
-                        gajim.logger.write(kind, jid, log_msg, subject=subject)
+                        gajim.logger.write(kind, jid, log_msg, subject=subject, additional_data=additional_data)
                     except exceptions.PysqliteOperationalError as e:
                         self.dispatch('DB_ERROR', (_('Disk Write Error'),
                             str(e)))
@@ -2145,13 +2145,13 @@ class Connection(CommonConnection, ConnectionHandlers):
             if isinstance(msg_iq, list):
                 for iq in msg_iq:
                     gajim.nec.push_incoming_event(StanzaMessageOutgoingEvent(
-                        None, conn=self, msg_iq=iq, now=obj.now, automatic_message=obj.automatic_message,
+                        None, conn=self, msg_iq=iq, now=obj.now, automatic_message=obj.automatic_message, additional_data=obj.additional_data,
                         _cb_parameters={"jid":jid, "msg":msg, "keyID":keyID, "forward_from":forward_from,
                         "session":session, "original_message":original_message, "subject":subject, "type_":type_,
                         "msg_iq":msg_iq, "xhtml":xhtml, "obj":obj}))
             else:
                 gajim.nec.push_incoming_event(StanzaMessageOutgoingEvent(None,
-                    conn=self, msg_iq=msg_iq, now=obj.now, automatic_message=obj.automatic_message,
+                    conn=self, msg_iq=msg_iq, now=obj.now, automatic_message=obj.automatic_message, additional_data=obj.additional_data,
                     _cb_parameters={"jid":jid, "msg":msg, "keyID":keyID, "forward_from":forward_from,
                     "session":session, "original_message":original_message, "subject":subject, "type_":type_,
                     "msg_iq":msg_iq, "xhtml":xhtml, "obj":obj}))
@@ -2174,7 +2174,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         subject, type_, msg_iq, xhtml, msg_id):
             gajim.nec.push_incoming_event(MessageSentEvent(None, conn=self,
                 jid=jid, message=msg, keyID=keyID, chatstate=obj.chatstate,
-                automatic_message=obj.automatic_message, msg_id=msg_id))
+                automatic_message=obj.automatic_message, msg_id=msg_id, additional_data=obj.additional_data))
             if obj.callback:
                 obj.callback(msg_iq, *obj.callback_args)
 
@@ -2185,10 +2185,10 @@ class Connection(CommonConnection, ConnectionHandlers):
                     if session is None:
                         session = self.get_or_create_session(j, '')
                     self.log_message(j, msg, forward_from, session,
-                        original_message, subject, type_, xhtml)
+                        original_message, subject, type_, xhtml, obj.additional_data)
             else:
                 self.log_message(jid, msg, forward_from, session,
-                    original_message, subject, type_, xhtml)
+                    original_message, subject, type_, xhtml, obj.additional_data)
         
         cb(msg_id=obj.msg_id, **obj._cb_parameters)
 
@@ -2749,7 +2749,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             gajim.nec.push_incoming_event(GcStanzaMessageOutgoingEvent(
                 None, conn=self, automatic_message=obj.automatic_message,
                 jid=obj.jid, message=obj.message,
-                correction_msg=obj.correction_msg))
+                correction_msg=obj.correction_msg, additional_data=obj.additional_data))
             if obj.callback:
                 obj.callback(obj.correction_msg, obj.message)
             return
@@ -2763,7 +2763,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         gajim.nec.push_incoming_event(GcStanzaMessageOutgoingEvent(
             None, conn=self, msg_iq=msg_iq,
             automatic_message=obj.automatic_message,
-            jid=obj.jid, message=obj.message, correction_msg=None))
+            jid=obj.jid, message=obj.message, correction_msg=None, additional_data=obj.additional_data))
         if obj.callback:
             obj.callback(msg_iq, obj.message)
 
@@ -2777,7 +2777,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         gajim.nec.push_incoming_event(MessageSentEvent(
             None, conn=self, jid=obj.jid, message=obj.message, keyID=None,
             chatstate=None, automatic_message=obj.automatic_message,
-            msg_id=obj.msg_id))
+            msg_id=obj.msg_id, additional_data=obj.additional_data))
 
     def send_gc_subject(self, jid, subject):
         if not gajim.account_is_connected(self.name):

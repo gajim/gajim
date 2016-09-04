@@ -148,23 +148,23 @@ class ConfigPaths:
             'RNG_SEED': 'rng_seed',
             'SECRETS_FILE': 'secrets', 'MY_PEER_CERTS': 'certs'}
         for name in d:
-            d[name] += u'.' + profile
+            d[name] += profile
             self.add(name, TYPE_DATA, windowsify(d[name]))
-        self.add('MY_DATA', TYPE_DATA, 'data' + profile)
+        self.add('MY_DATA', TYPE_DATA, 'data.dir' + profile)
 
         d = {'CACHE_DB': 'cache.db', 'VCARD': 'vcards',
                 'AVATAR': 'avatars',
                 'PID_FILE': 'gajim.pid'}
         for name in d:
-            d[name] += u'.' + profile
+            d[name] += profile
             self.add(name, TYPE_CACHE, windowsify(d[name]))
-        self.add('MY_CACHE', TYPE_CACHE, 'cache' + profile)
+        self.add('MY_CACHE', TYPE_CACHE, 'cache.dir' + profile)
 
         d = {'CONFIG_FILE': 'config', 'PLUGINS_CONFIG_DIR': 'pluginsconfig', 'MY_CERT': 'localcerts'}
         for name in d:
-            d[name] += u'.' + profile
+            d[name] += profile
             self.add(name, TYPE_CONFIG, windowsify(d[name]))
-        self.add('MY_CONFIG', TYPE_CONFIG, 'config' + profile)
+        self.add('MY_CONFIG', TYPE_CONFIG, 'config.dir' + profile)
 
         basedir = fse(os.environ.get('GAJIM_BASEDIR', defs.basedir))
         self.add('DATA', None, os.path.join(basedir, windowsify('data')))

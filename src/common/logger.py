@@ -142,8 +142,6 @@ class Logger:
         # if locked, wait up to 20 sec to unlock
         # before raise (hopefully should be enough)
 
-        print("*****")
-        print("%s/%s" % (LOG_DB_FOLDER, LOG_DB_FILE))
         self.con = sqlite.connect(LOG_DB_FILE, timeout=20.0,
                 isolation_level='IMMEDIATE')
         os.chdir(back)
@@ -1159,7 +1157,7 @@ class Logger:
             # usually it hold description and can be send at each connection
             # so don't store it in logs
             try:
-                self.write('gc_msg', obj.fjid, obj.msgtxt, tim=obj.timestamp)
+                self.write('gc_msg', obj.fjid, obj.msgtxt, tim=obj.timestamp, additional_data=obj.additional_data)
                 # store in memory time of last message logged.
                 # this will also be saved in rooms_last_message_time table
                 # when we quit this muc
