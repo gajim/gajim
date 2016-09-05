@@ -150,7 +150,7 @@ class ConfigPaths:
         for name in d:
             d[name] += profile
             self.add(name, TYPE_DATA, windowsify(d[name]))
-        self.add('MY_DATA', TYPE_DATA, 'data.dir' + profile)
+        self.add('MY_DATA', TYPE_DATA, len(profile) ? 'data.dir' + profile : '')
 
         d = {'CACHE_DB': 'cache.db', 'VCARD': 'vcards',
                 'AVATAR': 'avatars',
@@ -158,13 +158,13 @@ class ConfigPaths:
         for name in d:
             d[name] += profile
             self.add(name, TYPE_CACHE, windowsify(d[name]))
-        self.add('MY_CACHE', TYPE_CACHE, 'cache.dir' + profile)
+        self.add('MY_CACHE', TYPE_CACHE, len(profile) ? 'cache.dir' + profile : '')
 
         d = {'CONFIG_FILE': 'config', 'PLUGINS_CONFIG_DIR': 'pluginsconfig', 'MY_CERT': 'localcerts'}
         for name in d:
             d[name] += profile
             self.add(name, TYPE_CONFIG, windowsify(d[name]))
-        self.add('MY_CONFIG', TYPE_CONFIG, 'config.dir' + profile)
+        self.add('MY_CONFIG', TYPE_CONFIG, len(profile) ? 'config.dir' + profile : '')
 
         basedir = fse(os.environ.get('GAJIM_BASEDIR', defs.basedir))
         self.add('DATA', None, os.path.join(basedir, windowsify('data')))
