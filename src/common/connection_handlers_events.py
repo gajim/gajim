@@ -1826,12 +1826,16 @@ class StanzaReceivedEvent(nec.NetworkIncomingEvent):
     
     def init(self):
         self.additional_data = {}
+        
     def generate(self):
         return True
 
 class StanzaSentEvent(nec.NetworkIncomingEvent):
     name = 'stanza-sent'
     base_network_events = []
+    
+    def init(self):
+        self.additional_data = {}
 
 class AgentRemovedEvent(nec.NetworkIncomingEvent):
     name = 'agent-removed'
