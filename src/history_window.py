@@ -399,14 +399,15 @@ class HistoryWindow:
         # contact_name, time, kind, show, message
         for line in lines:
             # line[0] is contact_name, line[1] is time of message
-            # line[2] is kind, line[3] is show, line[4] is message
+            # line[2] is kind, line[3] is show, line[4] is message, line[5] is subject
+            # line[6] is additional_data
             if not show_status and line[2] in (constants.KIND_GCSTATUS,
             constants.KIND_STATUS):
                 continue
             self._add_new_line(line[0], line[1], line[2], line[3], line[4],
-                    line[5])
+                    line[5], line[6])
 
-    def _add_new_line(self, contact_name, tim, kind, show, message, subject):
+    def _add_new_line(self, contact_name, tim, kind, show, message, subject, additional_data):
         """
         Add a new line in textbuffer
         """
@@ -509,10 +510,10 @@ class HistoryWindow:
 
         if tag_msg:
             self.history_textview.print_real_text(message, [tag_msg],
-                    name=contact_name, xhtml=xhtml)
+                    name=contact_name, xhtml=xhtml, additional_data=additional_data)
         else:
             self.history_textview.print_real_text(message, name=contact_name,
-                xhtml=xhtml)
+                xhtml=xhtml, additional_data=additional_data)
         buffer_ = self.history_textview.tv.get_buffer()
         eob = buffer_.get_end_iter()
         buffer_.insert_with_tags_by_name(eob, '\n', 'eol')

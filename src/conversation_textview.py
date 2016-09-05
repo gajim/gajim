@@ -460,7 +460,7 @@ class ConversationTextview(GObject.GObject):
         self.tv.add_child_at_anchor(img, anchor)
         buffer_.end_user_action()
 
-    def correct_last_sent_message(self, message, xhtml, name, old_txt):
+    def correct_last_sent_message(self, message, xhtml, name, old_txt, additional_data={}):
         m1 = self.last_sent_message_marks[0]
         m2 = self.last_sent_message_marks[1]
         buffer_ = self.tv.get_buffer()
@@ -472,7 +472,7 @@ class ConversationTextview(GObject.GObject):
         if message.startswith('/me'):
             tag = 'outgoing'
         i2 = self.print_conversation_line(message, '', 'outgoing', name, None,
-            xhtml=xhtml, iter_=i1)
+            xhtml=xhtml, iter_=i1, additional_data=additional_data)
         tt_txt = _('<b>Message was corrected. Last message was:</b>\n  %s') % \
             GLib.markup_escape_text(old_txt)
         self.show_corrected_message_warning(i2, tt_txt)
@@ -480,7 +480,7 @@ class ConversationTextview(GObject.GObject):
             left_gravity=True)
 
     def correct_last_received_message(self, message, xhtml, name, old_txt,
-    other_tags_for_name=[], other_tags_for_text=[]):
+    other_tags_for_name=[], other_tags_for_text=[], additional_data={}):
         if name not in self.last_received_message_marks:
             return
         m1 = self.last_received_message_marks[name][0]
@@ -492,7 +492,7 @@ class ConversationTextview(GObject.GObject):
         buffer_.delete(i1, i2)
         i2 = self.print_conversation_line(message, '', 'incoming', name, None,
             other_tags_for_name=other_tags_for_name,
-            other_tags_for_text=other_tags_for_text, xhtml=xhtml, iter_=i1)
+            other_tags_for_text=other_tags_for_text, xhtml=xhtml, iter_=i1, additional_data=additional_data)
         tt_txt = _('<b>Message was corrected. Last message was:</b>\n  %s') % \
             GLib.markup_escape_text(old_txt)
         self.show_corrected_message_warning(i2, tt_txt)
@@ -1031,7 +1031,7 @@ class ConversationTextview(GObject.GObject):
                     helpers.launch_browser_mailer(kind, word)
 
     def detect_and_print_special_text(self, otext, other_tags, graphics=True,
-    iter_=None):
+    iter_=None, additional_data={}):
         """
         Detect special text (emots & links & formatting), print normal text
         before any special text it founds, then print special text (that happens
@@ -1085,7 +1085,7 @@ class ConversationTextview(GObject.GObject):
 
             # now print it
             self.print_special_text(special_text, other_tags, graphics=graphics,
-                iter_=end_iter)
+                iter_=end_iter, additional_data=additional_data)
             specials_limit -= 1
             if specials_limit <= 0:
                 break
@@ -1096,7 +1096,7 @@ class ConversationTextview(GObject.GObject):
         return end_iter
 
     def print_special_text(self, special_text, other_tags, graphics=True,
-    iter_=None):
+    iter_=None, additional_data={}):
         """
         Is called by detect_and_print_special_text and prints special text
         (emots, links, formatting)
@@ -1106,7 +1106,7 @@ class ConversationTextview(GObject.GObject):
         # PluginSystem: adding GUI extension point for ConversationTextview
         self.plugin_modified = False
         gajim.plugin_manager.gui_extension_point('print_special_text', self,
-            special_text, other_tags, graphics)
+            special_text, other_tags, graphics, additional_data)
         if self.plugin_modified:
             return
 
@@ -1247,7 +1247,7 @@ class ConversationTextview(GObject.GObject):
     def print_conversation_line(self, text, jid, kind, name, tim,
     other_tags_for_name=[], other_tags_for_time=[], other_tags_for_text=[],
     subject=None, old_kind=None, xhtml=None, simple=False, graphics=True,
-    displaymarking=None, iter_=None):
+    displaymarking=None, iter_=None, additional_data={}):
         """
         Print 'chat' type messages
         """
@@ -1352,7 +1352,7 @@ class ConversationTextview(GObject.GObject):
                 else:
                     self.print_real_text(gajim.config.get(
                         'chat_merge_consecutive_nickname_indent'),
-                        iter_=end_iter)
+                        iter_=end_iter, additional_data=additional_data)
             else:
                 self.print_name(name, kind, other_tags_for_name,
                     direction_mark=direction_mark, iter_=end_iter)
@@ -1366,7 +1366,7 @@ class ConversationTextview(GObject.GObject):
                     mark1 = mark
         self.print_subject(subject, iter_=end_iter)
         self.print_real_text(text, text_tags, name, xhtml, graphics=graphics,
-            iter_=end_iter)
+            iter_=end_iter, additional_data=additional_data)
         if not iter_ and mark1:
             mark2 = buffer_.create_mark(None, buffer_.get_end_iter(),
                 left_gravity=True)
@@ -1470,7 +1470,7 @@ class ConversationTextview(GObject.GObject):
             self.print_empty_line(end_iter)
 
     def print_real_text(self, text, text_tags=[], name=None, xhtml=None,
-    graphics=True, iter_=None):
+    graphics=True, iter_=None, additional_data={}):
         """
         Add normal and special text. call this to add text
         """
@@ -1490,4 +1490,4 @@ class ConversationTextview(GObject.GObject):
             text_tags.append('italic')
         # detect urls formatting and if the user has it on emoticons
         return self.detect_and_print_special_text(text, text_tags, graphics=graphics,
-            iter_=iter_)
+            iter_=iter_, additional_data=additional_data)

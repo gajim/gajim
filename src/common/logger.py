@@ -472,10 +472,10 @@ class Logger:
         try:
             self.cur.execute(
                     'SELECT message_id, shown from unread_messages')
-            results = self.cur.fetchall()
+            unread_results = self.cur.fetchall()
         except Exception:
-            pass
-        for message in results:
+            unread_results = []
+        for message in unread_results:
             msg_log_id = message[0]
             shown = message[1]
             # here we get infos for that message, and related jid from jids table
@@ -483,7 +483,7 @@ class Logger:
             # that called this function
             self.cur.execute('''
                     SELECT logs.log_line_id, logs.message, logs.time, logs.subject,
-                    jids.jid
+                    jids.jid, logs.additional_data
                     FROM logs, jids
                     WHERE logs.log_line_id = %d AND logs.jid_id = jids.jid_id
                     ''' % msg_log_id
@@ -493,7 +493,10 @@ class Logger:
                 # Log line is no more in logs table. remove it from unread_messages
                 self.set_read_messages([msg_log_id])
                 continue
-            all_messages.append(results[0] + (shown,))
+            results[0] = list(results[0])
+            results[0][5] = json.loads(results[0][5])
+            results[0][6] = shown
+            all_messages.append(results[0])
         return all_messages
 
     def write(self, kind, jid, message=None, show=None, tim=None, subject=None, additional_data={}):
@@ -603,7 +606,7 @@ class Logger:
         # 3 - 8 (we avoid the last 2 lines but we still return 5 asked)
         try:
             self.cur.execute('''
-                SELECT time, kind, message, subject FROM logs
+                SELECT time, kind, message, subject, additional_data FROM logs
                 WHERE (%s) AND kind IN (%d, %d, %d, %d, %d) AND time > %d
                 ORDER BY time DESC LIMIT %d OFFSET %d
                 ''' % (where_sql, constants.KIND_SINGLE_MSG_RECV,
@@ -612,6 +615,9 @@ class Logger:
                 restore_how_many_rows, pending_how_many), jid_tuple)
 
             results = self.cur.fetchall()
+            for entry in results:
+                entry = list(entry)
+                entry[4] = json.loads(entry[4])
         except sqlite.DatabaseError:
             raise exceptions.DatabaseMalformed
         results.reverse()
@@ -646,13 +652,16 @@ class Logger:
         last_second_of_day = start_of_day + seconds_in_a_day - 1
 
         self.cur.execute('''
-            SELECT contact_name, time, kind, show, message, subject FROM logs
+            SELECT contact_name, time, kind, show, message, subject, additional_data FROM logs
             WHERE (%s)
             AND time BETWEEN %d AND %d
             ORDER BY time
             ''' % (where_sql, start_of_day, last_second_of_day), jid_tuple)
 
         results = self.cur.fetchall()
+        for entry in results:
+            entry = list(entry)
+            entry[6] = json.loads(entry[6])
         return results
 
     def get_search_results_for_query(self, jid, query, account, year=False,

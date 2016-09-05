@@ -849,7 +849,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
     other_tags_for_name=[], other_tags_for_time=[], other_tags_for_text=[],
     count_as_new=True, subject=None, old_kind=None, xhtml=None, simple=False,
     xep0184_id=None, graphics=True, displaymarking=None, msg_log_id=None,
-    correct_id=None):
+    correct_id=None, additional_data={}):
         """
         Print 'chat' type messages
         correct_id = (message_id, correct_id)
@@ -874,12 +874,12 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             # this is for carbon copied messages that are sent from another
             # resource
             self.conv_textview.correct_last_sent_message(text, xhtml,
-                self.get_our_nick(), old_txt)
+                self.get_our_nick(), old_txt, additional_data=additional_data)
         else:
             textview.print_conversation_line(text, jid, kind, name, tim,
                 other_tags_for_name, other_tags_for_time, other_tags_for_text,
                 subject, old_kind, xhtml, simple=simple, graphics=graphics,
-                displaymarking=displaymarking)
+                displaymarking=displaymarking, additional_data=additional_data)
 
         if xep0184_id is not None:
             textview.show_xep0184_warning(xep0184_id)
@@ -2973,8 +2973,9 @@ class ChatControl(ChatControlBase):
             rows = []
         local_old_kind = None
         self.conv_textview.just_cleared = True
-        for row in rows: # row[0] time, row[1] has kind, row[2] the message
+        for row in rows: # row[0] time, row[1] has kind, row[2] the message, row[3] subject, row[4] additional_data
             msg = row[2]
+            additional_data = row[4]
             if not msg: # message is empty, we don't print it
                 continue
             if row[1] in (constants.KIND_CHAT_MSG_SENT,
@@ -3004,7 +3005,7 @@ class ChatControl(ChatControlBase):
             ChatControlBase.print_conversation_line(self, msg, kind, name,
                 tim, small_attr, small_attr + ['restored_message'],
                 small_attr + ['restored_message'], False,
-                old_kind=local_old_kind, xhtml=xhtml)
+                old_kind=local_old_kind, xhtml=xhtml, additional_data=additional_data)
             if row[2].startswith('/me ') or row[2].startswith('/me\n'):
                 local_old_kind = None
             else:

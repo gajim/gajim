@@ -1850,7 +1850,8 @@ class RosterWindow:
         results = gajim.logger.get_unread_msgs()
         for result in results:
             jid = result[4]
-            shown = result[5]
+            additional_data = result[5]
+            shown = result[6]
             if gajim.contacts.get_first_contact_from_jid(account, jid) and not \
             shown:
                 # We have this jid in our contacts list
