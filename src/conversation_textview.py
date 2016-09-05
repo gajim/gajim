@@ -1102,7 +1102,6 @@ class ConversationTextview(GObject.GObject):
         (emots, links, formatting)
         """
 
-
         # PluginSystem: adding GUI extension point for ConversationTextview
         self.plugin_modified = False
         gajim.plugin_manager.gui_extension_point('print_special_text', self,
@@ -1488,6 +1487,14 @@ class ConversationTextview(GObject.GObject):
         if name and (text.startswith('/me ') or text.startswith('/me\n')):
             text = '* ' + name + text[3:]
             text_tags.append('italic')
+        
+        # PluginSystem: adding GUI extension point for ConversationTextview
+        self.plugin_modified = False
+        gajim.plugin_manager.gui_extension_point('print_real_text', self,
+            text, text_tags, graphics, iter_, additional_data)
+        if self.plugin_modified:
+            return self.tv.get_buffer().get_end_iter()
+        
         # detect urls formatting and if the user has it on emoticons
         return self.detect_and_print_special_text(text, text_tags, graphics=graphics,
             iter_=iter_, additional_data=additional_data)
