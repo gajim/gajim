@@ -301,6 +301,7 @@ class GroupchatControl(ChatControlBase):
         ChatControlBase.__init__(self, self.TYPE_ID, parent_win,
             'groupchat_control', contact, acct)
 
+        self.force_non_minimizable = False
         self.is_continued = is_continued
         self.is_anonymous = True
 
@@ -829,6 +830,7 @@ class GroupchatControl(ChatControlBase):
         destroy_room_menuitem = xml.get_object('destroy_room_menuitem')
         change_subject_menuitem = xml.get_object('change_subject_menuitem')
         history_menuitem = xml.get_object('history_menuitem')
+        disconnect_menuitem = xml.get_object('disconnect_menuitem')
         minimize_menuitem = xml.get_object('minimize_menuitem')
         request_voice_menuitem = xml.get_object('request_voice_menuitem')
         bookmark_separator = xml.get_object('bookmark_separator')
@@ -921,6 +923,10 @@ class GroupchatControl(ChatControlBase):
         id_ = history_menuitem.connect('activate',
             self._on_history_menuitem_activate)
         self.handlers[id_] = history_menuitem
+        
+        id_ = disconnect_menuitem.connect('activate',
+            self._on_disconnect_menuitem_activate)
+        self.handlers[id_] = disconnect_menuitem
 
         id_ = request_voice_menuitem.connect('activate',
             self._on_request_voice_menuitem_activate)
@@ -2038,6 +2044,8 @@ class GroupchatControl(ChatControlBase):
             return 'visitor'
 
     def minimizable(self):
+        if self.force_non_minimizable:
+            return False
         if self.contact.jid not in gajim.config.get_per('accounts', self.account,
         'non_minimized_gc').split(' '):
             return True
@@ -2219,6 +2227,11 @@ class GroupchatControl(ChatControlBase):
             _('Please specify the new subject:'), input_str=self.subject,
             ok_handler=on_ok)
 
+    def _on_disconnect_menuitem_activate(self, widget):
+        self.force_non_minimizable = True
+        self.parent_win.remove_tab(self, self.parent_win.CLOSE_COMMAND)
+        self.force_non_minimizable = False
+    
     def _on_change_nick_menuitem_activate(self, widget):
         if 'change_nick_dialog' in gajim.interface.instances:
             gajim.interface.instances['change_nick_dialog'].dialog.present()

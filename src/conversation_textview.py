@@ -1494,6 +1494,8 @@ class ConversationTextview(GObject.GObject):
             text, text_tags, graphics, iter_, additional_data)
         if self.plugin_modified:
             return self.tv.get_buffer().get_end_iter()
+        #needed, if buffer is manipulated by plugins without setting plugin_modified to True
+        iter_ = self.tv.get_buffer().get_end_iter()
         
         # detect urls formatting and if the user has it on emoticons
         return self.detect_and_print_special_text(text, text_tags, graphics=graphics,
