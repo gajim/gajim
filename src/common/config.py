@@ -368,7 +368,7 @@ class Config:
                     'no_log_for': [ opt_str, '', _('Space separated list of JIDs for which you do not want to store logs. You can also add account name to log nothing for this account.')],
                     'sync_logs_with_server': [ opt_bool, True, _('Download logs stored on server on Gajim startup if server supports XEP-0136 or XEP-0313')],
                     'allow_no_log_for': [ opt_str, '', _('Space separated list of JIDs for which you accept to not log conversations if he does not want to.')],
-                    'minimized_gc': [ opt_str, '' ],
+                    'non_minimized_gc': [ opt_str, '' ],
                     'attached_gpg_keys': [ opt_str, '' ],
                     'keep_alives_enabled': [ opt_bool, True, _('Whitespace sent after inactivity')],
                     'ping_alives_enabled': [ opt_bool, True, _('XMPP ping sent after inactivity')],

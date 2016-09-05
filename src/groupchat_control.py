@@ -865,8 +865,8 @@ class GroupchatControl(ChatControlBase):
         history_menuitem.add_accelerator('activate', ag, Gdk.KEY_h,
             Gdk.ModifierType.CONTROL_MASK, Gtk.AccelFlags.VISIBLE)
 
-        if self.contact.jid in gajim.config.get_per('accounts', self.account,
-        'minimized_gc').split(' '):
+        if self.contact.jid not in gajim.config.get_per('accounts', self.account,
+        'non_minimized_gc').split(' '):
             minimize_menuitem.set_active(True)
         conn = gajim.connections[self.account]
         if not conn.private_storage_supported and (not conn.pubsub_supported or \
@@ -2038,8 +2038,8 @@ class GroupchatControl(ChatControlBase):
             return 'visitor'
 
     def minimizable(self):
-        if self.contact.jid in gajim.config.get_per('accounts', self.account,
-        'minimized_gc').split(' '):
+        if self.contact.jid not in gajim.config.get_per('accounts', self.account,
+        'non_minimized_gc').split(' '):
             return True
         return False
 

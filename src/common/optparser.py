@@ -946,6 +946,9 @@ class OptionsParser:
             if self.old_values['video_input_device'] == 'videotestsrc is-live=true ! video/x-raw-yuv,framerate=10/1':
                 gajim.config.set('video_input_device', 'videotestsrc is-live=true ! video/x-raw,framerate=10/1')
         
+        for account in self.old_values['accounts'].keys():
+            gajim.config.del_per('accounts', account, 'minimized_gc')
+        
         back = os.getcwd()
         os.chdir(logger.LOG_DB_FOLDER)
         con = sqlite.connect(logger.LOG_DB_FILE)

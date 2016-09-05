@@ -1112,19 +1112,19 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         """
         When a grouchat is minimized, unparent the tab, put it in roster etc
         """
-        old_value = False
-        minimized_gc = gajim.config.get_per('accounts', self.account,
-                'minimized_gc').split()
-        if self.contact.jid in minimized_gc:
-            old_value = True
+        old_value = True
+        non_minimized_gc = gajim.config.get_per('accounts', self.account,
+                'non_minimized_gc').split()
+        if self.contact.jid in non_minimized_gc:
+            old_value = False
         minimize = widget.get_active()
-        if minimize and not self.contact.jid in minimized_gc:
-            minimized_gc.append(self.contact.jid)
-        if not minimize and self.contact.jid in minimized_gc:
-            minimized_gc.remove(self.contact.jid)
+        if not minimize and not self.contact.jid in non_minimized_gc:
+            non_minimized_gc.append(self.contact.jid)
+        if minimize and self.contact.jid in non_minimized_gc:
+            non_minimized_gc.remove(self.contact.jid)
         if old_value != minimize:
-            gajim.config.set_per('accounts', self.account, 'minimized_gc',
-                    ' '.join(minimized_gc))
+            gajim.config.set_per('accounts', self.account, 'non_minimized_gc',
+                    ' '.join(non_minimized_gc))
 
     def set_control_active(self, state):
         if state:
