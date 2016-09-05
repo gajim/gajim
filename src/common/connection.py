@@ -2176,7 +2176,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                 jid=jid, message=msg, keyID=keyID, chatstate=obj.chatstate,
                 automatic_message=obj.automatic_message, msg_id=msg_id, additional_data=obj.additional_data))
             if obj.callback:
-                obj.callback(msg_iq, *obj.callback_args)
+                obj.callback(obj, msg_iq, *obj.callback_args)
 
             if not obj.is_loggable:
                 return

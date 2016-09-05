@@ -1861,7 +1861,7 @@ class RosterWindow:
 
                 tim = time.localtime(float(result[2]))
                 session.roster_message(jid, result[1], tim, msg_type='chat',
-                    msg_log_id=result[0])
+                    msg_log_id=result[0], additional_data=additional_data)
                 gajim.logger.set_shown_unread_msgs(result[0])
 
             elif (time.time() - result[2]) > 2592000:

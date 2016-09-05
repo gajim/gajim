@@ -791,11 +791,11 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
         label = self.get_seclabel()
 
-        def _cb(msg, cb, *cb_args):
+        def _cb(obj, msg, cb, *cb_args):
             self.last_sent_msg = msg
             self.last_sent_txt = cb_args[0]
             if cb:
-                cb(msg, *cb_args)
+                cb(obj, msg, *cb_args)
 
         if self.correcting and self.last_sent_msg:
             correction_msg = self.last_sent_msg
@@ -2319,7 +2319,7 @@ class ChatControl(ChatControlBase):
                 GLib.source_remove(self.possible_inactive_timeout_id)
                 self._schedule_activity_timers()
 
-        def _on_sent(msg_stanza, message, encrypted, xhtml, label, old_txt):
+        def _on_sent(obj, msg_stanza, message, encrypted, xhtml, label, old_txt):
             id_ = msg_stanza.getID()
             if self.contact.supports(NS_RECEIPTS) and gajim.config.get_per(
             'accounts', self.account, 'request_receipt'):
@@ -2333,14 +2333,14 @@ class ChatControl(ChatControlBase):
             if self.correcting and \
             self.conv_textview.last_sent_message_marks[0]:
                 self.conv_textview.correct_last_sent_message(message, xhtml,
-                    self.get_our_nick(), old_txt)
+                    self.get_our_nick(), old_txt, additional_data=obj.additional_data)
                 self.correcting = False
                 self.msg_textview.override_background_color(
                     Gtk.StateType.NORMAL, self.old_message_tv_color)
                 return
             self.print_conversation(message, self.contact.jid,
                 encrypted=encrypted, xep0184_id=xep0184_id, xhtml=xhtml,
-                displaymarking=displaymarking)
+                displaymarking=displaymarking, additional_data=obj.additional_data)
 
         ChatControlBase.send_message(self, message, keyID, type_='chat',
             chatstate=chatstate_to_send, xhtml=xhtml, callback=_on_sent,
@@ -2457,7 +2457,7 @@ class ChatControl(ChatControlBase):
 
     def print_conversation(self, text, frm='', tim=None, encrypted=False,
     subject=None, xhtml=None, simple=False, xep0184_id=None,
-    displaymarking=None, msg_log_id=None, correct_id=None):
+    displaymarking=None, msg_log_id=None, correct_id=None, additional_data={}):
         """
         Print a line in the conversation
 
@@ -2522,7 +2522,7 @@ class ChatControl(ChatControlBase):
         ChatControlBase.print_conversation_line(self, text, kind, name, tim,
             subject=subject, old_kind=self.old_msg_kind, xhtml=xhtml,
             simple=simple, xep0184_id=xep0184_id, displaymarking=displaymarking,
-            msg_log_id=msg_log_id, correct_id=correct_id)
+            msg_log_id=msg_log_id, correct_id=correct_id, additional_data=additional_data)
         if text.startswith('/me ') or text.startswith('/me\n'):
             self.old_msg_kind = None
         else:

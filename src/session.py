@@ -267,7 +267,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 
     def roster_message(self, jid, msg, tim, encrypted=False, msg_type='',
     subject=None, resource='', msg_log_id=None, user_nick='', xhtml=None,
-    form_node=None, displaymarking=None):
+    form_node=None, displaymarking=None, additional_data={}):
         """
         Display the message or show notification in the roster
         """
@@ -333,7 +333,8 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
                 typ = 'error'
 
             self.control.print_conversation(msg, typ, tim=tim, encrypted=encrypted,
-                    subject=subject, xhtml=xhtml, displaymarking=displaymarking)
+                    subject=subject, xhtml=xhtml, displaymarking=displaymarking,
+                    additional_data=additional_data)
 
             if msg_log_id:
                 gajim.logger.set_read_messages([msg_log_id])
@@ -356,7 +357,8 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
         event = event_t(msg, subject, msg_type, tim, encrypted, resource,
             msg_log_id, xhtml=xhtml, session=self, form_node=form_node,
             displaymarking=displaymarking, sent_forwarded=False,
-            show_in_roster=show_in_roster, show_in_systray=show_in_systray)
+            show_in_roster=show_in_roster, show_in_systray=show_in_systray,
+            additional_data=additional_data)
 
         gajim.events.add_event(self.conn.name, fjid, event)
 
