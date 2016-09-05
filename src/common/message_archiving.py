@@ -113,7 +113,7 @@ class ConnectionArchive313(ConnectionArchive):
         if obj.conn.name != self.name:
             return
         gajim.logger.save_if_not_exists(obj.with_, obj.direction, obj.tim,
-            msg=obj.msgtxt, nick=obj.nick)
+            msg=obj.msgtxt, nick=obj.nick, additional_data=obj.additional_data)
 
     def request_archive(self, start=None, end=None, with_=None, after=None,
     max=30):

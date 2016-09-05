@@ -1110,7 +1110,7 @@ class Logger:
                 (account_jid_id,))
         self._timeout_commit()
 
-    def save_if_not_exists(self, with_, direction, tim, msg='', nick=None):
+    def save_if_not_exists(self, with_, direction, tim, msg='', nick=None, additional_data={}):
         if tim:
             time_col = int(float(time.mktime(tim)))
         else:
@@ -1154,7 +1154,7 @@ class Logger:
             log.debug('Log already in DB, ignoring it')
             return
         log.debug('New log received from server archives, storing it')
-        self.write(type_, with_, message=msg, tim=tim)
+        self.write(type_, with_, message=msg, tim=tim, additional_data=additional_data)
 
     def _nec_gc_message_received(self, obj):
         tim_f = float(time.mktime(obj.timestamp))
