@@ -233,6 +233,8 @@ class OptionsParser:
             self.update_config_to_01641()
         if old < [0, 16, 10, 1] and new >= [0, 16, 10, 1]:
             self.update_config_to_016101()
+        if old < [0, 16, 10, 2] and new >= [0, 16, 10, 2]:
+            self.update_config_to_016102()
 
         gajim.logger.init_vars()
         gajim.logger.attach_cache_database()
@@ -945,10 +947,12 @@ class OptionsParser:
                 gajim.config.set('video_input_device', 'autovideosrc')
             if self.old_values['video_input_device'] == 'videotestsrc is-live=true ! video/x-raw-yuv,framerate=10/1':
                 gajim.config.set('video_input_device', 'videotestsrc is-live=true ! video/x-raw,framerate=10/1')
-        
+        gajim.config.set('version', '0.16.10.1')
+
+    def update_config_to_016102(self):
         for account in self.old_values['accounts'].keys():
             gajim.config.del_per('accounts', account, 'minimized_gc')
-        
+
         back = os.getcwd()
         os.chdir(logger.LOG_DB_FOLDER)
         con = sqlite.connect(logger.LOG_DB_FILE)
@@ -964,5 +968,5 @@ class OptionsParser:
         except sqlite.OperationalError:
             pass
         con.close()
-        
-        gajim.config.set('version', '0.16.10.1')
+
+        gajim.config.set('version', '0.16.10.2')
