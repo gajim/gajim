@@ -134,19 +134,22 @@ class ConfigPaths:
         for key in self.paths.keys():
             yield (key, self[key])
 
-    def init(self, root=None, profile=''):
+    def init(self, root=None, profile='', profile_separation=False):
         if root is not None:
             self.config_root = self.cache_root = self.data_root = root
 
-        if len(profile) > 0:
-            profile = u'.' + profile
+        self.init_profile(profile)
         
+        if len(profile) > 0 and profile_separation:
+            profile = u'.' + profile
+        else:
+            profile = ''
+            
         d = {'LOG_DB': 'logs.db', 'MY_CACERTS': 'cacerts.pem',
             'MY_EMOTS': 'emoticons', 'MY_ICONSETS': 'iconsets',
             'MY_MOOD_ICONSETS': 'moods', 'MY_ACTIVITY_ICONSETS': 'activities',
             'PLUGINS_USER': 'plugins',
-            'RNG_SEED': 'rng_seed',
-            'SECRETS_FILE': 'secrets', 'MY_PEER_CERTS': 'certs'}
+            'RNG_SEED': 'rng_seed'}
         for name in d:
             d[name] += profile
             self.add(name, TYPE_DATA, windowsify(d[name]))
@@ -156,8 +159,7 @@ class ConfigPaths:
             self.add('MY_DATA', TYPE_DATA, '')
 
         d = {'CACHE_DB': 'cache.db', 'VCARD': 'vcards',
-                'AVATAR': 'avatars',
-                'PID_FILE': 'gajim.pid'}
+                'AVATAR': 'avatars'}
         for name in d:
             d[name] += profile
             self.add(name, TYPE_CACHE, windowsify(d[name]))
@@ -166,10 +168,6 @@ class ConfigPaths:
         else:
             self.add('MY_CACHE', TYPE_CACHE, '')
 
-        d = {'CONFIG_FILE': 'config', 'PLUGINS_CONFIG_DIR': 'pluginsconfig', 'MY_CERT': 'localcerts'}
-        for name in d:
-            d[name] += profile
-            self.add(name, TYPE_CONFIG, windowsify(d[name]))
         if len(profile):
             self.add('MY_CONFIG', TYPE_CONFIG, 'config.dir')
         else:
@@ -193,5 +191,29 @@ class ConfigPaths:
             svn_config.configure(self)
         except (ImportError, AttributeError):
             pass
+
+    def init_profile(self, profile):
+        conffile = windowsify('config')
+        pidfile = windowsify('gajim')
+        secretsfile = windowsify('secrets')
+        pluginsconfdir = windowsify('pluginsconfig')
+        certsdir = windowsify(u'certs')
+        localcertsdir = windowsify(u'localcerts')
+
+        if len(profile) > 0:
+            conffile += '.' + profile
+            pidfile += '.' + profile
+            secretsfile += '.' + profile
+            pluginsconfdir += '.' + profile
+            certsdir += u'.' + profile
+            localcertsdir += u'.' + profile
+
+        pidfile += '.pid'
+        self.add('SECRETS_FILE', TYPE_DATA, secretsfile)
+        self.add('MY_PEER_CERTS', TYPE_DATA, certsdir)
+        self.add('PID_FILE', TYPE_CACHE, pidfile)
+        self.add('CONFIG_FILE', TYPE_CONFIG, conffile)
+        self.add('PLUGINS_CONFIG_DIR', TYPE_CONFIG, pluginsconfdir)
+        self.add('MY_CERT', TYPE_CONFIG, localcertsdir)
 
 gajimpaths = ConfigPaths()

@@ -130,11 +130,12 @@ from common import i18n
 def parseOpts():
     profile_ = ''
     config_path_ = None
-
+    profile_separation_ = False
+    
     try:
-        shortargs = 'hqvl:p:c:'
+        shortargs = 'hqsvl:p:c:'
         # add gtk/gnome session option as gtk_get_option_group is not wrapped
-        longargs = 'help quiet verbose loglevel= profile= config-path='
+        longargs = 'help quiet separate verbose loglevel= profile= config-path='
         longargs += ' class= name= screen= gtk-module= sync g-fatal-warnings'
         longargs += ' sm-client-id= sm-client-state-file= sm-disable'
         opts = getopt.getopt(sys.argv[1:], shortargs, longargs.split())[0]
@@ -151,6 +152,8 @@ def parseOpts():
                     _('Show this help message and exit') + \
                 '\n  -q, --quiet        ' + \
                     _('Show only critical errors') + \
+                '\n  -s, --separate     ' + \
+                    _('Separate profile files completely (even history db and plugins)') + \
                 '\n  -v, --verbose      ' + \
                     _('Print xml stanzas and other debug information') + \
                 '\n  -p, --profile      ' + \
@@ -163,6 +166,8 @@ def parseOpts():
             sys.exit()
         elif o in ('-q', '--quiet'):
             logging_helpers.set_quiet()
+        elif o in ('-s', '--separate'):
+            profile_separation_ = True
         elif o in ('-v', '--verbose'):
             logging_helpers.set_verbose()
         elif o in ('-p', '--profile'): # gajim --profile name
@@ -171,14 +176,14 @@ def parseOpts():
             logging_helpers.set_loglevels(a)
         elif o in ('-c', '--config-path'):
             config_path_ = a
-    return profile_, config_path_
+    return profile_, config_path_, profile_separation_
 
 import locale
-profile, config_path = parseOpts()
+profile, config_path, profile_separation = parseOpts()
 del parseOpts
 
 import common.configpaths
-common.configpaths.gajimpaths.init(config_path, profile)
+common.configpaths.gajimpaths.init(config_path, profile, profile_separation)
 del config_path
 del profile
 
