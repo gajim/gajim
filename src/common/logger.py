@@ -471,10 +471,10 @@ class Logger:
         try:
             self.cur.execute(
                     'SELECT message_id, shown from unread_messages')
-            results = self.cur.fetchall()
+            unread_results = self.cur.fetchall()
         except Exception:
             pass
-        for message in results:
+        for message in unread_results:
             msg_log_id = message[0]
             shown = message[1]
             # here we get infos for that message, and related jid from jids table
