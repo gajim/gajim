@@ -932,13 +932,12 @@ class Connection(CommonConnection, ConnectionHandlers):
                     gajim.status_before_autoaway[self.name] = ''
                     self.old_show = 'online'
                 # this check has moved from _reconnect method
-                # do exponential backoff until 15 minutes,
-                # then small linear increase
+                # do exponential backoff until less than 5 minutes
                 if self.retrycount < 2 or self.last_time_to_reconnect is None:
                     self.last_time_to_reconnect = 5
-                if self.last_time_to_reconnect < 800:
+                    self.last_time_to_reconnect += randomsource.randint(0, 5)
+                if self.last_time_to_reconnect < 200:
                     self.last_time_to_reconnect *= 1.5
-                self.last_time_to_reconnect += randomsource.randint(0, 5)
                 self.time_to_reconnect = int(self.last_time_to_reconnect)
                 log.info("Reconnect to %s in %ss", self.name, self.time_to_reconnect)
                 gajim.idlequeue.set_alarm(self._reconnect_alarm,
