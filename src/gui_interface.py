@@ -2117,7 +2117,9 @@ class Interface:
         if gajim.contacts.get_contact(account, room_jid) and \
         not gajim.contacts.get_contact(account, room_jid).is_groupchat():
             dialogs.ErrorDialog(_('This is not a group chat'),
-                _('%s is not the name of a group chat.') % room_jid)
+                _('%s is already in your roster. Please check if %s is a '
+                'correct group chat name. If it is, delete it from your roster '
+                'and try joining the group chat again.') % (room_jid, room_jid))
             return
 
         if not nick:
