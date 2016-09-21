@@ -133,7 +133,7 @@ class Interface:
 
             cls(obj.pri_txt, GLib.markup_escape_text(obj.sec_txt))
 
-    def handle_ask_new_nick(self, account, room_jid):
+    def handle_ask_new_nick(self, account, room_jid, parent_win):
         title = _('Unable to join group chat')
         prompt = _('Your desired nickname in group chat %s is in use or '
             'registered by another occupant.\nPlease specify another nickname '
@@ -144,7 +144,7 @@ class Interface:
                 prompt)
         else:
             self.instances['change_nick_dialog'] = dialogs.ChangeNickDialog(
-                account, room_jid, title, prompt)
+                account, room_jid, title, prompt, transient_for=parent_win)
 
     def handle_event_http_auth(self, obj):
         #('HTTP_AUTH', account, (method, url, transaction_id, iq_obj, msg))
@@ -294,6 +294,9 @@ class Interface:
 
     def handle_event_gc_presence(self, obj):
         gc_control = obj.gc_control
+        parent_win = None
+        if gc_control.parent_win:
+            parent_win = gc_control.parent_win.window
         if obj.ptype == 'error':
             if obj.errcode == '503':
                 # maximum user number reached
@@ -328,7 +331,7 @@ class Interface:
                     _('You are not in the members list in groupchat %s.') % \
                     obj.room_jid)
             elif (obj.errcode == '409') or (obj.errcon == 'conflict'):
-                self.handle_ask_new_nick(obj.conn.name, obj.room_jid)
+                self.handle_ask_new_nick(obj.conn.name, obj.room_jid, parent_win)
             elif gc_control:
                 gc_control.print_conversation('Error %s: %s' % (obj.errcode,
                     obj.errmsg))

@@ -2008,7 +2008,7 @@ class CommonInputDialog:
     """
 
     def __init__(self, title, label_str, is_modal, ok_handler, cancel_handler,
-    transient_for=None):
+                 transient_for=None):
         self.dialog = self.xml.get_object('input_dialog')
         label = self.xml.get_object('label')
         self.dialog.set_title(title)
@@ -2053,10 +2053,11 @@ class InputDialog(CommonInputDialog):
     """
 
     def __init__(self, title, label_str, input_str=None, is_modal=True,
-    ok_handler=None, cancel_handler=None, transient_for=None):
+                 ok_handler=None, cancel_handler=None, transient_for=None):
         self.xml = gtkgui_helpers.get_gtk_builder('input_dialog.ui')
-        CommonInputDialog.__init__(self, title, label_str, is_modal, ok_handler,
-            cancel_handler, transient_for=transient_for)
+        CommonInputDialog.__init__(self, title, label_str, is_modal,
+                                   ok_handler, cancel_handler,
+                                   transient_for=transient_for)
         self.input_entry = self.xml.get_object('input_entry')
         if input_str:
             self.set_entry(input_str)
@@ -2080,11 +2081,13 @@ class InputDialogCheck(InputDialog):
     """
 
     def __init__(self, title, label_str, checktext='', input_str=None,
-                    is_modal=True, ok_handler=None, cancel_handler=None):
+                 is_modal=True, ok_handler=None, cancel_handler=None,
+                 transient_for=None):
         self.xml = gtkgui_helpers.get_gtk_builder('input_dialog.ui')
         InputDialog.__init__(self, title, label_str, input_str=input_str,
-                is_modal=is_modal, ok_handler=ok_handler,
-                cancel_handler=cancel_handler)
+                             is_modal=is_modal, ok_handler=ok_handler,
+                             cancel_handler=cancel_handler,
+                             transient_for=transient_for)
         self.input_entry = self.xml.get_object('input_entry')
         if input_str:
             self.input_entry.set_text(input_str)
@@ -2125,13 +2128,15 @@ class ChangeNickDialog(InputDialogCheck):
     """
 
     def __init__(self, account, room_jid, title, prompt, check_text=None,
-    change_nick=False):
+                 change_nick=False, transient_for=None):
         """
         change_nick must be set to True when we are already occupant of the room
         and we are changing our nick
         """
         InputDialogCheck.__init__(self, title, '', checktext=check_text,
-            input_str='', is_modal=True, ok_handler=None, cancel_handler=None)
+                                  input_str='', is_modal=True, ok_handler=None,
+                                  cancel_handler=None,
+                                  transient_for=transient_for)
         self.room_queue = [(account, room_jid, prompt, change_nick)]
         self.check_next()
 
@@ -2216,10 +2221,11 @@ class InputTextDialog(CommonInputDialog):
     """
 
     def __init__(self, title, label_str, input_str=None, is_modal=True,
-                             ok_handler=None, cancel_handler=None):
+                 ok_handler=None, cancel_handler=None, transient_for=None):
         self.xml = gtkgui_helpers.get_gtk_builder('input_text_dialog.ui')
-        CommonInputDialog.__init__(self, title, label_str, is_modal, ok_handler,
-                                                           cancel_handler)
+        CommonInputDialog.__init__(self, title, label_str, is_modal,
+                                   ok_handler, cancel_handler,
+                                   transient_for=transient_for)
         self.input_buffer = self.xml.get_object('input_textview').get_buffer()
         if input_str:
             self.input_buffer.set_text(input_str)

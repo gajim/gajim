@@ -2225,7 +2225,7 @@ class GroupchatControl(ChatControlBase):
 
         dialogs.InputTextDialog(_('Changing Subject'),
             _('Please specify the new subject:'), input_str=self.subject,
-            ok_handler=on_ok)
+            ok_handler=on_ok, transient_for=self.parent_win.window)
 
     def _on_disconnect_menuitem_activate(self, widget):
         self.force_non_minimizable = True
@@ -2240,7 +2240,7 @@ class GroupchatControl(ChatControlBase):
             prompt = _('Please specify the new nickname you want to use:')
             gajim.interface.instances['change_nick_dialog'] = \
                 dialogs.ChangeNickDialog(self.account, self.room_jid, title,
-                prompt, change_nick=True)
+                prompt, change_nick=True, transient_for=self.parent_win.window)
 
     def _on_configure_room_menuitem_activate(self, widget):
         c = gajim.contacts.get_gc_contact(self.account, self.room_jid,
