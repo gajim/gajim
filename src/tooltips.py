@@ -255,7 +255,8 @@ class StatusTable:
         self.current_row += 1
         self.text_label = Gtk.Label()
         self.text_label.set_line_wrap(True)
-        self.text_label.set_alignment(0, 0)
+        self.text_label.set_halign(Gtk.Align.START)
+        self.text_label.set_valign(Gtk.Align.START)
         self.text_label.set_selectable(False)
         self.text_label.set_markup(text)
         self.table.attach(self.text_label, 1 + col_inc, self.current_row,
@@ -292,14 +293,15 @@ class StatusTable:
                 image.set_from_file(f)
                 break
         spacer = Gtk.Label(label=self.spacer_label)
-        image.set_halign(Gtk.Align.FILL)
+        image.set_halign(Gtk.Align.START)
         image.set_valign(Gtk.Align.CENTER)
         if indent:
             self.table.attach(spacer, 1, self.current_row, 1, 1)
         self.table.attach(image, 2, self.current_row, 1, 1)
         status_label = Gtk.Label()
         status_label.set_markup(str_status)
-        status_label.set_alignment(0, 0)
+        status_label.set_halign(Gtk.Align.START)
+        status_label.set_valign(Gtk.Align.START)
         status_label.set_line_wrap(True)
         self.table.attach(status_label, 3, self.current_row, 1, 1)
         if show_lock:
@@ -363,7 +365,8 @@ class GCTooltip(BaseTooltip):
         self.account = None
         self.text_label = Gtk.Label()
         self.text_label.set_line_wrap(True)
-        self.text_label.set_alignment(0, 0)
+        self.text_label.set_halign(Gtk.Align.START)
+        self.text_label.set_valign(Gtk.Align.START)
         self.text_label.set_selectable(False)
         self.avatar_image = Gtk.Image()
 
@@ -432,14 +435,16 @@ class GCTooltip(BaseTooltip):
             label = Gtk.Label()
             if not properties:
                 label.set_vexpand(True)
-            label.set_alignment(0, 0)
+            label.set_halign(Gtk.Align.START)
+            label.set_valign(Gtk.Align.START)
             if property_[1]:
                 label.set_markup(property_[0])
                 vcard_table.attach(label, 1, vcard_current_row, 1, 1)
                 label = Gtk.Label()
                 if not properties:
                     label.set_vexpand(True)
-                label.set_alignment(0, 0)
+                label.set_halign(Gtk.Align.START)
+                label.set_valign(Gtk.Align.START)
                 label.set_markup(property_[1])
                 label.set_line_wrap(True)
                 vcard_table.attach(label, 2, vcard_current_row, 1, 1)
@@ -448,7 +453,8 @@ class GCTooltip(BaseTooltip):
                 label.set_line_wrap(True)
                 vcard_table.attach(label, 1, vcard_current_row, 2, 1)
 
-        self.avatar_image.set_alignment(0, 0)
+        self.avatar_image.set_halign(Gtk.Align.START)
+        self.avatar_image.set_valign(Gtk.Align.START)
         vcard_table.attach(self.avatar_image, 3, 2, 1, vcard_current_row - 1)
         gajim.plugin_manager.gui_extension_point('gc_tooltip_populate',
             self, contact, vcard_table)
@@ -668,14 +674,16 @@ class RosterTooltip(NotificationAreaTooltip):
             label = Gtk.Label()
             if not properties and table_size == 4:
                 label.set_vexpand(True)
-            label.set_alignment(0, 0)
+            label.set_halign(Gtk.Align.START)
+            label.set_valign(Gtk.Align.START)
             if property_[1]:
                 label.set_markup(property_[0])
                 vcard_table.attach(label, 1, vcard_current_row, 1, 1)
                 label = Gtk.Label()
                 if not properties and table_size == 4:
                     label.set_vexpand(True)
-                label.set_alignment(0, 0)
+                label.set_halign(Gtk.Align.START)
+                label.set_valign(Gtk.Align.START)
                 label.set_markup(property_[1])
                 label.set_line_wrap(True)
                 vcard_table.attach(label, 2, vcard_current_row, 1, 1)
@@ -686,7 +694,8 @@ class RosterTooltip(NotificationAreaTooltip):
                 else:
                     label = property_[0]
                 vcard_table.attach(label, 1, vcard_current_row, 2, 1)
-        self.avatar_image.set_alignment(0, 0)
+        self.avatar_image.set_halign(Gtk.Align.START)
+        self.avatar_image.set_valign(Gtk.Align.START)
         if table_size == 4:
             vcard_table.attach(self.avatar_image, 3, 2, 1, vcard_current_row - 1)
 
@@ -793,12 +802,14 @@ class FileTransfersTooltip(BaseTooltip):
             property_ = properties.pop(0)
             current_row += 1
             label = Gtk.Label()
-            label.set_alignment(0, 0)
+            label.set_halign(Gtk.Align.START)
+            label.set_valign(Gtk.Align.START)
             label.set_markup(property_[0])
             ft_table.attach(label, 1, 2, current_row, current_row + 1,
                     Gtk.AttachOptions.FILL, Gtk.AttachOptions.FILL, 0, 0)
             label = Gtk.Label()
-            label.set_alignment(0, 0)
+            label.set_halign(Gtk.Align.START)
+            label.set_valign(Gtk.Align.START)
             label.set_line_wrap(True)
             label.set_markup(property_[1])
             ft_table.attach(label, 2, 3, current_row, current_row + 1,
@@ -815,7 +826,8 @@ class ServiceDiscoveryTooltip(BaseTooltip):
         self.create_window()
         label = Gtk.Label()
         label.set_line_wrap(True)
-        label.set_alignment(0, 0)
+        label.set_halign(Gtk.Align.START)
+        label.set_valign(Gtk.Align.START)
         label.set_selectable(False)
         if status == 1:
             label.set_text(

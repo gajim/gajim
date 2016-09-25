@@ -553,7 +553,8 @@ class SingleForm(Gtk.Table, object):
                     widget = Gtk.Label(label=field.value)
                     widget.set_property('selectable', selectable)
                     widget.set_sensitive(True)
-                    widget.set_alignment(0.0, 0.5)
+                    widget.set_halign(Gtk.Align.START)
+                    widget.set_valign(Gtk.Align.CENTER)
                     widget=decorate_with_tooltip(widget, field)
                     self.attach(widget, 1, 2, linecounter, linecounter+1,
                             yoptions=Gtk.AttachOptions.FILL)
@@ -561,9 +562,11 @@ class SingleForm(Gtk.Table, object):
             if commonlabel and field.label is not None:
                 label = Gtk.Label(label=field.label)
                 if commonlabelcenter:
-                    label.set_alignment(0.0, 0.5)
+                    label.set_halign(Gtk.Align.START)
+                    label.set_valign(Gtk.Align.CENTER)
                 else:
-                    label.set_alignment(0.0, 0.0)
+                    label.set_halign(Gtk.Align.START)
+                    label.set_valign(Gtk.Align.START)
                 label = decorate_with_tooltip(label, field)
                 self.attach(label, 0, 1, linecounter, linecounter+1,
                         xoptions=Gtk.AttachOptions.FILL, yoptions=Gtk.AttachOptions.FILL)
