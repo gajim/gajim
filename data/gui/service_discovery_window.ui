@@ -97,6 +97,7 @@ Agent JID - node</property>
                   <object class="GtkEntry" id="address_entry">
                     <property name="can_focus">True</property>
                     <property name="has_focus">True</property>
+                    <signal name="key-press-event" handler="_on_entry_key_press_event" swapped="no"/>
                   </object>
                 </child>
               </object>

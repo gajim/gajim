@@ -857,6 +857,10 @@ _('Without a connection, you can not browse available services'))
         if self.browser:
             self.browser.update_actions()
 
+    def _on_entry_key_press_event(self, widget, event):
+        if event.keyval == Gdk.KEY_Return or event.keyval == Gdk.KEY_KP_Enter:
+            self.on_go_button_clicked(widget)
+
 
 class AgentBrowser:
     """
