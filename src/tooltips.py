@@ -292,7 +292,8 @@ class StatusTable:
                 image.set_from_file(f)
                 break
         spacer = Gtk.Label(label=self.spacer_label)
-        image.set_alignment(1, 0.5)
+        image.set_halign(Gtk.Align.FILL)
+        image.set_valign(Gtk.Align.CENTER)
         if indent:
             self.table.attach(spacer, 1, self.current_row, 1, 1)
         self.table.attach(image, 2, self.current_row, 1, 1)
