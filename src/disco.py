@@ -932,7 +932,7 @@ class AgentBrowser:
         self.window.action_buttonbox.add(self.browse_button)
         image = Gtk.Image.new_from_stock(Gtk.STOCK_OPEN, Gtk.IconSize.BUTTON)
         self.browse_button.set_image(image)
-        label = _('_Browse')
+        label = _('Browse')
         self.browse_button.set_label(label)
         self.browse_button.show_all()
 
@@ -1405,7 +1405,7 @@ class ToplevelAgentBrowser(AgentBrowser):
         self.window.action_buttonbox.add(self.execute_button)
         image = Gtk.Image.new_from_stock(Gtk.STOCK_EXECUTE, Gtk.IconSize.BUTTON)
         self.execute_button.set_image(image)
-        label = _('_Execute Command')
+        label = _('Execute Command')
         self.execute_button.set_label(label)
         self.execute_button.show_all()
 
@@ -1420,7 +1420,7 @@ class ToplevelAgentBrowser(AgentBrowser):
         self.window.action_buttonbox.add(self.join_button)
         image = Gtk.Image.new_from_stock(Gtk.STOCK_CONNECT, Gtk.IconSize.BUTTON)
         self.join_button.set_image(image)
-        label = _('_Join')
+        label = _('Join')
         self.join_button.set_label(label)
         self.join_button.show_all()
 
@@ -1429,7 +1429,7 @@ class ToplevelAgentBrowser(AgentBrowser):
         self.window.action_buttonbox.add(self.search_button)
         image = Gtk.Image.new_from_stock(Gtk.STOCK_FIND, Gtk.IconSize.BUTTON)
         self.search_button.set_image(image)
-        label = _('_Search')
+        label = _('Search')
         self.search_button.set_label(label)
         self.search_button.show_all()
 
