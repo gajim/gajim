@@ -315,7 +315,7 @@ class HashDigest:
         sa, sd = self.algo, self.digest
         if isinstance(other, self.__class__):
             oa, od = other.algo, other.digest
-        elif isinstance(other, basestring):
+        elif isinstance(other, str):
             sa, oa, od = None, None, self.cleanID(other)
         elif isinstance(other, tuple) and len(other) == 2:
             oa, od = self.cleanID(other[0]), self.cleanID(other[1])

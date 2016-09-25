@@ -146,7 +146,7 @@ class DataField(ExtendedNode):
             return t
 
         def fset(self, value):
-            assert isinstance(value, basestring)
+            assert isinstance(value, str)
             self.setAttr('type', value)
 
         return locals()
@@ -160,7 +160,7 @@ class DataField(ExtendedNode):
             return self.getAttr('var')
 
         def fset(self, value):
-            assert isinstance(value, basestring)
+            assert isinstance(value, str)
             self.setAttr('var', value)
 
         def fdel(self):
@@ -180,7 +180,7 @@ class DataField(ExtendedNode):
             return l
 
         def fset(self, value):
-            assert isinstance(value, basestring)
+            assert isinstance(value, str)
             self.setAttr('label', value)
 
         def fdel(self):
@@ -198,7 +198,7 @@ class DataField(ExtendedNode):
             return self.getTagData('desc') or ''
 
         def fset(self, value):
-            assert isinstance(value, basestring)
+            assert isinstance(value, str)
             if value == '':
                 fdel(self)
             else:
@@ -351,7 +351,7 @@ class StringField(DataField):
             return self.getTagData('value') or ''
 
         def fset(self, value):
-            assert isinstance(value, basestring)
+            assert isinstance(value, str)
             if value == '' and not self.required:
                 return fdel(self)
             self.setTagData('value', value)

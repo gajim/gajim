@@ -31,8 +31,8 @@ class GroupsPostWindow:
         Open new 'create post' window to create message for groupid on servicejid
         service
         """
-        assert isinstance(servicejid, basestring)
-        assert isinstance(groupid, basestring)
+        assert isinstance(servicejid, str)
+        assert isinstance(groupid, str)
 
         self.account = account
         self.servicejid = servicejid
