@@ -265,7 +265,7 @@ class RosterWindow:
 
             tls_pixbuf = None
             if gajim.account_is_securely_connected(account):
-                tls_pixbuf = gtkgui_helpers.get_icon_pixmap('gtk-dialog-authentication', 24)
+                tls_pixbuf = gtkgui_helpers.get_icon_pixmap('changes-prevent', 16)
                 # the only way to create a pixbuf from stock
 #                tls_pixbuf = self.window.render_icon_pixbuf(
 #                    Gtk.STOCK_DIALOG_AUTHENTICATION, Gtk.IconSize.MENU)
@@ -1048,7 +1048,7 @@ class RosterWindow:
 
         if gajim.account_is_securely_connected(account) and not self.regroup or\
         self.regroup and num_of_secured and num_of_secured == num_of_accounts:
-            tls_pixbuf = gtkgui_helpers.get_icon_pixmap('gtk-dialog-authentication', 24)
+            tls_pixbuf = gtkgui_helpers.get_icon_pixmap('changes-prevent', 16)
             # the only way to create a pixbuf from stock
 #            tls_pixbuf = self.window.render_icon_pixbuf(
 #                Gtk.STOCK_DIALOG_AUTHENTICATION, Gtk.IconSize.MENU)
