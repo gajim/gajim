@@ -300,6 +300,38 @@ def resize_window(window, w, h):
         h = screen_h
     window.resize(abs(w), abs(h))
 
+def at_the_end(widget):
+    """Determines if a Scrollbar in a GtkScrolledWindow is at the end.
+
+    Args:
+        widget (GtkScrolledWindow)
+
+    Returns:
+        bool: The return value is True if at the end, False if not.
+    """
+    adj_v = widget.get_vadjustment()
+    max_scroll_pos = adj_v.get_upper() - adj_v.get_page_size()
+    at_the_end = (adj_v.get_value() == max_scroll_pos)
+    return at_the_end
+
+def scroll_to_end(widget):
+    """Scrolls to the end of a GtkScrolledWindow.
+
+    Args:
+        widget (GtkScrolledWindow)
+
+    Returns:
+        bool: The return value is False so it can be used with GLib.idle_add.
+    """
+    adj_v = widget.get_vadjustment()
+    max_scroll_pos = adj_v.get_upper() - adj_v.get_page_size()
+    adj_v.set_value(max_scroll_pos)
+
+    adj_h = widget.get_hadjustment()
+    adj_h.set_value(0)
+    return False
+
+
 class HashDigest:
     def __init__(self, algo, digest):
         self.algo = self.cleanID(algo)
