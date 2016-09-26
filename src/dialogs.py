@@ -3347,9 +3347,8 @@ class XMLConsoleWindow:
         self.input_textview = self.xml.get_object('input_textview')
         self.stanzas_log_textview = self.xml.get_object('stanzas_log_textview')
         self.input_tv_buffer = self.input_textview.get_buffer()
+        self.parent = self.stanzas_log_textview.get_parent()
         buffer_ = self.stanzas_log_textview.get_buffer()
-        end_iter = buffer_.get_end_iter()
-        buffer_.create_mark('end', end_iter, False)
 
         self.tagIn = buffer_.create_tag('incoming')
         color = gajim.config.get('inmsgcolor')
@@ -3436,17 +3435,6 @@ class XMLConsoleWindow:
         self.tagInIq.set_property('invisible', active)
         self.tagOutIq.set_property('invisible', active)
 
-    def scroll_to_end(self, ):
-        parent = self.stanzas_log_textview.get_parent()
-        buffer_ = self.stanzas_log_textview.get_buffer()
-        end_mark = buffer_.get_mark('end')
-        if not end_mark:
-            return False
-        self.stanzas_log_textview.scroll_to_mark(end_mark, 0, True,     0, 1)
-        adjustment = parent.get_hadjustment()
-        adjustment.set_value(0)
-        return False
-
     def print_stanza(self, stanza, kind):
         # kind must be 'incoming' or 'outgoing'
         if not self.enabled:
@@ -3454,13 +3442,9 @@ class XMLConsoleWindow:
         if not stanza:
             return
 
+        at_the_end = gtkgui_helpers.at_the_end(self.parent)
+
         buffer = self.stanzas_log_textview.get_buffer()
-        at_the_end = False
-        end_iter = buffer.get_end_iter()
-        end_rect = self.stanzas_log_textview.get_iter_location(end_iter)
-        visible_rect = self.stanzas_log_textview.get_visible_rect()
-        if end_rect.y <= (visible_rect.y + visible_rect.height):
-            at_the_end = True
         end_iter = buffer.get_end_iter()
 
         type_ = ''
@@ -3472,7 +3456,7 @@ class XMLConsoleWindow:
             type_ = 'iq'
 
         if type_:
-            type_ = kind + '_'  + type_
+            type_ = kind + '_' + type_
         else:
             type_ = kind # 'incoming' or 'outgoing'
 
@@ -3486,7 +3470,7 @@ class XMLConsoleWindow:
         buffer.insert_with_tags_by_name(end_iter, stanza.replace('><', '>\n<') \
             + '\n\n', type_)
         if at_the_end:
-            GLib.idle_add(self.scroll_to_end)
+            GLib.idle_add(gtkgui_helpers.scroll_to_end, self.parent)
 
     def _nec_stanza_received(self, obj):
         if obj.conn.name != self.account:
