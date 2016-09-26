@@ -2448,7 +2448,7 @@ class RosterWindow:
                 x, y = self.window.get_position()
                 gajim.config.set('roster_x-position', x)
                 gajim.config.set('roster_y-position', y)
-            self.window.hide()
+            self.window.iconify()
         elif gajim.config.get('quit_on_roster_x_button'):
             self.on_quit_request()
         else:
