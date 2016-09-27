@@ -495,7 +495,7 @@ class Logger:
                 continue
             results[0] = list(results[0])
             results[0][5] = json.loads(results[0][5])
-            results[0][6] = shown
+            results[0].append(shown)
             all_messages.append(results[0])
         return all_messages
 
