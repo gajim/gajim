@@ -124,7 +124,9 @@ class VcardWindow:
         self.vcard_arrived = False
         self.os_info_arrived = False
         self.entity_time_arrived = False
-        self.update_progressbar_timeout_id = GLib.timeout_add(100,
+        self.time = 0
+        self.update_intervall = 100  # Milliseconds
+        self.update_progressbar_timeout_id = GLib.timeout_add(self.update_intervall,
             self.update_progressbar)
 
         gajim.ged.register_event_handler('version-result-received', ged.GUI1,
@@ -148,7 +150,14 @@ class VcardWindow:
 
     def update_progressbar(self):
         self.progressbar.pulse()
-        return True # loop forever
+        self.time += self.update_intervall
+        # Timeout in Milliseconds
+        if (self.vcard_arrived and self.os_info_arrived and
+                self.entity_time_arrived) or self.time == 10000:
+            self.progressbar.hide()
+            self.update_progressbar_timeout_id = None
+            return False
+        return True
 
     def on_vcard_information_window_destroy(self, widget):
         if self.update_progressbar_timeout_id is not None:
@@ -244,7 +253,6 @@ class VcardWindow:
                 elif i != 'jid': # Do not override jid_label
                     self.set_value(i + '_label', vcard[i])
         self.vcard_arrived = True
-        self.test_remove_progressbar()
 
     def clear_values(self):
         for l in ('FN', 'NICKNAME', 'N_FAMILY', 'N_GIVEN', 'N_MIDDLE',
@@ -273,13 +281,6 @@ class VcardWindow:
                 return
         self.clear_values()
         self.set_values(obj.vcard_dict)
-
-    def test_remove_progressbar(self):
-        if self.update_progressbar_timeout_id is not None and \
-        self.vcard_arrived and self.os_info_arrived and self.entity_time_arrived:
-            GLib.source_remove(self.update_progressbar_timeout_id)
-            self.progressbar.hide()
-            self.update_progressbar_timeout_id = None
 
     def set_last_status_time(self, obj):
         if obj.conn.name != self.account:
@@ -317,7 +318,6 @@ class VcardWindow:
         self.xml.get_object('client_name_version_label').set_text(client)
         self.xml.get_object('os_label').set_text(os)
         self.os_info_arrived = True
-        self.test_remove_progressbar()
 
     def set_entity_time(self, obj):
         if obj.conn.name != self.account:
@@ -341,7 +341,6 @@ class VcardWindow:
             time_s = Q_('?Time:Unknown')
         self.xml.get_object('time_label').set_text(time_s)
         self.entity_time_arrived = True
-        self.test_remove_progressbar()
 
     def fill_status_label(self):
         if self.xml.get_object('information_notebook').get_n_pages() < 5:
