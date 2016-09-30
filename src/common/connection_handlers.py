@@ -332,7 +332,7 @@ class ConnectionVcard:
         else:
             path_to_file = path
         try:
-            fil = open(path_to_file, 'w')
+            fil = open(path_to_file, 'w', encoding='utf-8')
             fil.write(str(card))
             fil.close()
         except IOError as e:
@@ -355,7 +355,7 @@ class ConnectionVcard:
         if not os.path.isfile(path_to_file):
             return None
         # We have the vcard cached
-        f = open(path_to_file)
+        f = open(path_to_file, encoding='utf-8')
         c = f.read()
         f.close()
         try:
