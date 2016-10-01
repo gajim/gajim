@@ -312,16 +312,29 @@ class VcardWindow:
             return
         if self.xml.get_object('information_notebook').get_n_pages() < 5:
             return
-        if obj.fjid != self.contact.jid and obj.fjid != self.real_jid:
+        if self.gc_contact:
+            if obj.fjid != self.contact.jid:
+                return
+        elif gajim.get_jid_without_resource(obj.fjid) != self.contact.jid:
             return
         i = 0
         client = ''
         os = ''
         while i in self.os_info:
-            if not self.os_info[i]['resource'] or \
-            self.os_info[i]['resource'] == obj.resource:
-                self.os_info[i]['client'] = obj.client_info
-                self.os_info[i]['os'] = obj.os_info
+            if self.os_info[i]['resource'] == obj.resource:
+                if obj.client_info:
+                    self.os_info[i]['client'] = obj.client_info
+                else:
+                    self.os_info[i]['client'] = Q_('?Client:Unknown')
+                if obj.os_info:
+                    self.os_info[i]['os'] = obj.os_info
+                else:
+                    self.os_info[i]['os'] = Q_('?OS:Unknown')
+            else:
+                if not self.os_info[i]['client']:
+                    self.os_info[i]['client'] = Q_('?Client:Unknown')
+                if not self.os_info[i]['os']:
+                    self.os_info[i]['os'] = Q_('?OS:Unknown')
             if i > 0:
                 client += '\n'
                 os += '\n'
@@ -329,10 +342,6 @@ class VcardWindow:
             os += self.os_info[i]['os']
             i += 1
 
-        if client == '':
-            client = Q_('?Client:Unknown')
-        if os == '':
-            os = Q_('?OS:Unknown')
         self.xml.get_object('client_name_version_label').set_text(client)
         self.xml.get_object('os_label').set_text(os)
         self.os_info_arrived = True
@@ -342,21 +351,27 @@ class VcardWindow:
             return
         if self.xml.get_object('information_notebook').get_n_pages() < 5:
             return
-        if obj.fjid != self.contact.jid and obj.fjid != self.real_jid:
+        if self.gc_contact:
+            if obj.fjid != self.contact.jid:
+                return
+        elif gajim.get_jid_without_resource(obj.fjid) != self.contact.jid:
             return
         i = 0
         time_s = ''
         while i in self.time_info:
-            if not self.time_info[i]['resource'] or \
-            self.time_info[i]['resource'] == obj.resource:
-                self.time_info[i]['time'] = obj.time_info
+            if self.time_info[i]['resource'] == obj.resource:
+                if obj.time_info:
+                    self.time_info[i]['time'] = obj.time_info
+                else:
+                    self.time_info[i]['time'] = Q_('?Time:Unknown')
+            else:
+                if not self.time_info[i]['time']:
+                    self.time_info[i]['time'] = Q_('?Time:Unknown')
             if i > 0:
                 time_s += '\n'
             time_s += self.time_info[i]['time']
             i += 1
 
-        if time_s == '':
-            time_s = Q_('?Time:Unknown')
         self.xml.get_object('time_label').set_text(time_s)
         self.entity_time_arrived = True
 
