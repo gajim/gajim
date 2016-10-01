@@ -38,6 +38,7 @@ import base64
 import time
 import locale
 import os
+# import logging
 
 import gtkgui_helpers
 
@@ -45,6 +46,8 @@ from common import helpers
 from common import gajim
 from common import ged
 from common.i18n import Q_
+
+# log = logging.getLogger('gajim.vcard')
 
 def get_avatar_pixbuf_encoded_mime(photo):
     """
@@ -144,6 +147,18 @@ class VcardWindow:
             buffer_ = self.xml.get_object('textview_annotation').get_buffer()
             buffer_.set_text(annotations[self.contact.jid])
 
+        style_provider = Gtk.CssProvider()
+        css = 'GtkButton { padding-left: 5px; border-left: none; }'
+        style_provider.load_from_data(css.encode())
+        for widget_name in ('URL_label',
+                            'EMAIL_WORK_USERID_label',
+                            'EMAIL_HOME_USERID_label'):
+            widget = self.xml.get_object(widget_name)
+            context = widget.get_style_context()
+            context.add_provider(style_provider,
+                                 Gtk.STYLE_PROVIDER_PRIORITY_USER)
+            widget.hide()
+
         self.xml.connect_signals(self)
         self.xml.get_object('close_button').grab_focus()
         self.window.show_all()
@@ -205,14 +220,14 @@ class VcardWindow:
 
     def set_value(self, entry_name, value):
         try:
-            if value and entry_name == 'URL_label':
-                widget = Gtk.LinkButton(uri=value, label=value)
-                widget.set_alignment(0, 0)
-                widget.show()
-                table = self.xml.get_object('personal_info_table')
-                table.attach(widget, 1, 3, 2, 1)
+            widget = self.xml.get_object(entry_name)
+            if entry_name in ('URL_label',
+                              'EMAIL_WORK_USERID_label',
+                              'EMAIL_HOME_USERID_label'):
+                widget.set_uri('mailto:' + value)
+                widget.set_label(value)
+                self.xml.get_object(entry_name).show()
             else:
-                widget = self.xml.get_object(entry_name)
                 val = widget.get_text()
                 if val:
                     value = val + ' / ' + value
@@ -258,9 +273,12 @@ class VcardWindow:
         for l in ('FN', 'NICKNAME', 'N_FAMILY', 'N_GIVEN', 'N_MIDDLE',
         'N_PREFIX', 'N_SUFFIX', 'EMAIL_HOME_USERID', 'TEL_HOME_NUMBER', 'BDAY',
         'ORG_ORGNAME', 'ORG_ORGUNIT', 'TITLE', 'ROLE', 'EMAIL_WORK_USERID',
-        'TEL_WORK_NUMBER'):
+        'TEL_WORK_NUMBER', 'URL'):
             widget = self.xml.get_object(l + '_label')
-            widget.set_text('')
+            if l in ('EMAIL_HOME_USERID', 'EMAIL_WORK_USERID', 'URL'):
+                widget.hide()
+            else:
+                widget.set_text('')
         for pref in ('ADR_HOME', 'ADR_WORK'):
             for l in ('STREET', 'EXTADR', 'LOCALITY', 'PCODE', 'REGION',
             'CTRY'):
