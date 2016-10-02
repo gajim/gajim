@@ -21,6 +21,7 @@ import sys
 import os
 import re
 import logging
+import functools
 log = logging.getLogger('gajim.c.resolver')
 
 if __name__ == '__main__':
@@ -31,6 +32,8 @@ if __name__ == '__main__':
 
 from common import helpers
 from nbxmpp.idlequeue import IdleCommand
+from gi.repository import Gio, GLib
+
 
 # it is good to check validity of arguments, when calling system commands
 ns_type_pattern = re.compile('^[a-z]+$')
@@ -394,6 +397,51 @@ class NsLookup(IdleCommand):
 class Host(NsLookup):
     def _compose_command_args(self):
         return ['host', '-t', self.type_, self.host]
+
+
+class GioResolver(CommonResolver):
+    """
+    Asynchronous resolver using GIO. process() method has to be
+    called in order to proceed the pending requests.
+    """
+
+    def __init__(self):
+        super().__init__()
+        self.gio_resolver = Gio.Resolver.get_default()
+
+    def start_resolve(self, host, type_):
+        if type_ == 'txt':
+            # TXT record resolution isn't used anywhere at the moment so
+            # implementing it here isn't urgent
+            raise NotImplemented("Gio resolver does not currently implement TXT records")
+        else:
+            callback = functools.partial(self._on_ready_srv, host)
+            type_ = Gio.ResolverRecordType.SRV
+
+        resq = self.gio_resolver.lookup_records_async(host, type_, None, callback)
+
+    def _on_ready_srv(self, host, source_object, result):
+        try:
+            variant_results = source_object.lookup_records_finish(result)
+        except GLib.Error as e:
+            if e.domain == 'g-resolver-error-quark':
+                result_list = []
+                log.warning("Could not resolve host: %s", e.message)
+            else:
+                raise
+        else:
+            result_list = [
+                {
+                    'weight': weight,
+                    'prio': prio,
+                    'port': port,
+                    'host': host,
+                }
+                for prio, weight, port, host
+                in variant_results
+            ]
+        super()._on_ready(host, 'srv', result_list)
+
 
 # below lines is on how to use API and assist in testing
 if __name__ == '__main__':
