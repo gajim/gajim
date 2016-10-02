@@ -147,6 +147,7 @@ if __name__ == '__main__':
         resolver.resolve(host, on_result)
     win = Gtk.Window()
     win.set_border_width(6)
+    win.connect('remove', Gtk.main_quit)
     text_view = Gtk.Entry()
     text_view.set_text('_xmpp-client._tcp.jabber.org')
     hbox = Gtk.HBox()
@@ -158,6 +159,4 @@ if __name__ == '__main__':
     win.add(hbox)
     win.show_all()
     GLib.timeout_add(200, idlequeue.process)
-    if USE_LIBASYNCNS:
-        GLib.timeout_add(200, resolver.process)
     Gtk.main()
