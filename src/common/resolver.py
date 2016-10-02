@@ -52,15 +52,8 @@ except ImportError:
 
 
 def get_resolver(idlequeue):
-    if USE_LIBASYNCNS:
-        log.info('Using LibAsyncNSResolver')
-        return LibAsyncNSResolver()
-    else:
-        if helpers.is_in_path('host'):
-            log.info('Using HostResolver')
-            return HostResolver(idlequeue)
-        log.info('Using NSLookupResolver')
-        return NSLookupResolver(idlequeue)
+    return GioResolver()
+
 
 class CommonResolver():
     def __init__(self):
