@@ -2748,10 +2748,6 @@ class Interface:
         GLib.timeout_add_seconds(gajim.config.get(
                 'check_idle_every_foo_seconds'), self.read_sleepy)
 
-        # when using libasyncns we need to process resolver in regular intervals
-        if resolver.USE_LIBASYNCNS:
-            GLib.timeout_add(200, gajim.resolver.process)
-
         def remote_init():
             if gajim.config.get('remote_control'):
                 try:
