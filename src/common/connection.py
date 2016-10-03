@@ -394,7 +394,7 @@ class CommonConnection:
                 form_node, user_nick, attention, correction_msg, callback)
             return
         # Encryption failed, do not send message
-        tim = localtime()
+        tim = time.localtime()
         gajim.nec.push_incoming_event(MessageNotSentEvent(None, conn=self,
             jid=jid, message=msgtxt, error=error, time_=tim, session=session))
 
