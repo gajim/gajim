@@ -295,7 +295,7 @@ class Interface:
     def handle_event_gc_presence(self, obj):
         gc_control = obj.gc_control
         parent_win = None
-        if gc_control.parent_win:
+        if gc_control and gc_control.parent_win:
             parent_win = gc_control.parent_win.window
         if obj.ptype == 'error':
             if obj.errcode == '503':
