@@ -12,15 +12,16 @@
     <child>
       <object class="GtkBox" id="groupchat_control_vbox">
         <property name="can_focus">True</property>
-        <property name="border_width">3</property>
+        <property name="margin_left">7</property>
+        <property name="margin_right">7</property>
+        <property name="margin_top">5</property>
+        <property name="margin_bottom">7</property>
         <property name="orientation">vertical</property>
+        <property name="spacing">5</property>
         <child>
           <object class="GtkEventBox" id="banner_eventbox">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="margin_left">3</property>
-            <property name="margin_right">3</property>
-            <property name="margin_bottom">1</property>
             <child>
               <object class="GtkBox" id="hbox3024">
                 <property name="visible">True</property>
@@ -49,9 +50,9 @@
                       <object class="GtkLabel" id="banner_name_label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label">&lt;span weight="heavy" size="large"&gt;room jid&lt;/span&gt;</property>
                         <property name="use_markup">True</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="expand">True</property>
@@ -63,10 +64,10 @@
                       <object class="GtkLabel" id="banner_label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label">label</property>
                         <property name="use_markup">True</property>
                         <property name="selectable">True</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="expand">True</property>
@@ -94,7 +95,6 @@
           <object class="GtkPaned" id="hpaned">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="border_width">3</property>
             <property name="position">495</property>
             <property name="position_set">True</property>
             <signal name="notify" handler="on_hpaned_notify" swapped="no"/>
@@ -103,6 +103,7 @@
                 <property name="width_request">0</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="margin_right">4</property>
                 <property name="orientation">vertical</property>
                 <property name="spacing">6</property>
                 <child>
@@ -150,6 +151,7 @@
                 <property name="width_request">100</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="margin_left">4</property>
                 <property name="hscrollbar_policy">never</property>
                 <property name="shadow_type">in</property>
                 <child>
@@ -178,6 +180,7 @@
         </child>
         <child>
           <object class="GtkBox" id="actions_hbox">
+            <property name="height_request">34</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
@@ -407,12 +410,14 @@
             <child>
               <object class="GtkButton" id="send_button">
                 <property name="label" translatable="yes">_Send</property>
+                <property name="width_request">80</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="tooltip_text" translatable="yes">Send message</property>
                 <property name="image">image1</property>
                 <property name="use_underline">True</property>
+                <property name="always_show_image">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
