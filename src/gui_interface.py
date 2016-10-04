@@ -135,9 +135,10 @@ class Interface:
 
     def handle_ask_new_nick(self, account, room_jid, parent_win):
         title = _('Unable to join group chat')
-        prompt = _('Your desired nickname in group chat %s is in use or '
-            'registered by another occupant.\nPlease specify another nickname '
-            'below:') % room_jid
+        prompt = _('Your desired nickname in group chat\n'
+                   '<b>%s</b>\n'
+                   'is in use or registered by another occupant.\n'
+                   'Please specify another nickname below:') % room_jid
         check_text = _('Always use this nickname when there is a conflict')
         if 'change_nick_dialog' in self.instances:
             self.instances['change_nick_dialog'].add_room(account, room_jid,
