@@ -2017,6 +2017,8 @@ class CommonInputDialog:
         self.vbox = self.xml.get_object('vbox')
         if transient_for:
             self.dialog.set_transient_for(transient_for)
+        else:
+            self.dialog.set_transient_for(gajim.interface.roster.window)
 
         self.ok_handler = ok_handler
         okbutton = self.xml.get_object('okbutton')
