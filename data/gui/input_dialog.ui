@@ -4,7 +4,7 @@
   <requires lib="gtk+" version="3.12"/>
   <object class="GtkDialog" id="input_dialog">
     <property name="can_focus">False</property>
-    <property name="border_width">6</property>
+    <property name="border_width">12</property>
     <property name="type_hint">dialog</property>
     <signal name="delete-event" handler="on_input_dialog_delete_event" swapped="no"/>
     <signal name="destroy" handler="on_input_dialog_destroy" swapped="no"/>
@@ -64,9 +64,9 @@
           <object class="GtkBox" id="vbox">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="border_width">6</property>
+            <property name="valign">end</property>
             <property name="orientation">vertical</property>
-            <property name="spacing">6</property>
+            <property name="spacing">12</property>
             <child>
               <object class="GtkBox" id="hbox2960">
                 <property name="visible">True</property>
