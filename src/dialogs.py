@@ -890,12 +890,12 @@ class AddNewContactWindow:
         'group_comboboxentry', 'auto_authorize_checkbutton'):
             self.__dict__[w] = self.xml.get_object(w)
         if account and len(gajim.connections) >= 2:
-            self.default_desc = _('Please fill in the data of the contact you '
-                'want to add in account %s') % account
+            self.default_desc = _('Please fill in the data of the contact you want\n'
+                                  'to add to your account <b>%s</b>') % account
         else:
             self.default_desc = _('Please fill in the data of the contact you '
                 'want to add')
-        self.xml.get_object('prompt_label').set_text(self.default_desc)
+        self.xml.get_object('prompt_label').set_markup(self.default_desc)
         self.agents = {'jabber': []}
         self.gateway_prompt = {}
         # types to which we are not subscribed but account has an agent for it
@@ -1161,7 +1161,7 @@ class AddNewContactWindow:
             desc = self.gateway_prompt[jid_]['desc']
         if not desc:
             desc = self.default_desc
-        self.xml.get_object('prompt_label').set_text(desc)
+        self.xml.get_object('prompt_label').set_markup(desc)
 
         prompt = None
         if self.agents[type_] and jid_ in self.gateway_prompt:
@@ -1190,7 +1190,7 @@ class AddNewContactWindow:
                 desc = self.gateway_prompt[jid_]['desc']
         if not desc:
             desc = self.default_desc
-        self.xml.get_object('prompt_label').set_text(desc)
+        self.xml.get_object('prompt_label').set_markup(desc)
         if len(self.agents[type_]) > 1:
             self.protocol_jid_combobox.show()
         else:
