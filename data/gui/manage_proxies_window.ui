@@ -23,6 +23,7 @@
     <property name="can_focus">False</property>
     <property name="border_width">12</property>
     <property name="title" translatable="yes">Manage Proxy Profiles</property>
+    <property name="resizable">False</property>
     <property name="window_position">center-on-parent</property>
     <property name="type_hint">dialog</property>
     <signal name="destroy" handler="on_manage_proxies_window_destroy" swapped="no"/>
@@ -41,6 +42,7 @@
               <object class="GtkBox" id="vbox89">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="margin_bottom">6</property>
                 <property name="orientation">vertical</property>
                 <property name="spacing">6</property>
                 <child>
@@ -62,7 +64,7 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
+                    <property name="expand">True</property>
                     <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
@@ -142,9 +144,10 @@
                           <object class="GtkLabel" id="label320">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
+                            <property name="halign">start</property>
                             <property name="label" translatable="yes">_Name:</property>
                             <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -155,9 +158,9 @@
                           <object class="GtkLabel" id="label321">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">_Type:</property>
                             <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -214,7 +217,6 @@
                   <object class="GtkFrame" id="frame23">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="border_width">6</property>
                     <property name="label_xalign">0</property>
                     <property name="shadow_type">none</property>
                     <child>
@@ -229,9 +231,9 @@
                           <object class="GtkLabel" id="boshuri_label">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">_BOSH URL:</property>
                             <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -253,9 +255,9 @@
                           <object class="GtkLabel" id="label135">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">Proxy _Host:</property>
                             <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -283,9 +285,9 @@
                           <object class="GtkLabel" id="label136">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">Proxy _Port:</property>
                             <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -313,9 +315,9 @@
                           <object class="GtkLabel" id="label253">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">_Username:</property>
                             <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -326,9 +328,9 @@
                           <object class="GtkLabel" id="label254">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">Pass_word:</property>
                             <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -415,7 +417,7 @@
           <object class="GtkButtonBox" id="hbuttonbox22">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="border_width">7</property>
+            <property name="margin_right">6</property>
             <property name="spacing">12</property>
             <property name="layout_style">end</property>
             <child>
