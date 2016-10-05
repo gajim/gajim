@@ -813,7 +813,7 @@ class ChangeStatusMessageDialog(TimeoutDialog):
             if msg_name in self.preset_messages_dict:
                 ConfirmationDialog(_('Overwrite Status Message?'),
                     _('This name is already used. Do you want to overwrite this '
-                    'status message?'), on_response_ok=on_ok2)
+                    'status message?'), on_response_ok=on_ok2, transient_for=self.dialog)
                 return
             gajim.config.add_per('statusmsg', msg_name)
             on_ok2()
