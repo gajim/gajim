@@ -16,6 +16,18 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
+  <object class="GtkListStore" id="default_message_liststore">
+    <columns>
+      <!-- column-name status_ -->
+      <column type="gchararray"/>
+      <!-- column-name status -->
+      <column type="gchararray"/>
+      <!-- column-name defaultmsg -->
+      <column type="gchararray"/>
+      <!-- column-name enabled -->
+      <column type="gboolean"/>
+    </columns>
+  </object>
   <object class="GtkImage" id="image1">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -374,10 +386,10 @@
                               <object class="GtkLabel" id="label381">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
                                 <property name="xpad">1</property>
                                 <property name="label" translatable="yes">_Emoticons:</property>
                                 <property name="use_underline">True</property>
+                                <property name="xalign">0</property>
                               </object>
                             </child>
                           </object>
@@ -390,10 +402,10 @@
                           <object class="GtkLabel" id="label379">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="xpad">1</property>
                             <property name="label" translatable="yes">_Window behavior:</property>
                             <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -404,10 +416,10 @@
                           <object class="GtkLabel" id="label28">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="xpad">1</property>
                             <property name="label" translatable="yes">_Show roster on startup:</property>
                             <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -609,8 +621,8 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="xalign">0</property>
                                 <property name="label" translatable="yes">When new event is received:</property>
+                                <property name="xalign">0</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -987,9 +999,9 @@
                               <object class="GtkLabel" id="label33">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
                                 <property name="label" translatable="yes">_Display chat state notifications:</property>
                                 <property name="use_underline">True</property>
+                                <property name="xalign">0</property>
                               </object>
                             </child>
                           </object>
@@ -1043,9 +1055,9 @@
                               <object class="GtkLabel" id="label34">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
                                 <property name="label" translatable="yes">_Send chat state notifications:</property>
                                 <property name="use_underline">True</property>
+                                <property name="xalign">0</property>
                               </object>
                             </child>
                           </object>
@@ -1150,8 +1162,8 @@
                           <object class="GtkLabel" id="label77">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">minutes</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -1162,8 +1174,8 @@
                           <object class="GtkLabel" id="label78">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">minutes</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -1342,8 +1354,48 @@ $T will be replaced by auto-not-available timeout</property>
                               <object class="GtkTreeView" id="default_msg_treeview">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="model">default_message_liststore</property>
                                 <child internal-child="selection">
                                   <object class="GtkTreeSelection" id="treeview-selection1"/>
+                                </child>
+                                <child>
+                                  <object class="GtkTreeViewColumn" id="status">
+                                    <property name="title" translatable="yes">Status</property>
+                                    <child>
+                                      <object class="GtkCellRendererText" id="statustext"/>
+                                      <attributes>
+                                        <attribute name="text">1</attribute>
+                                      </attributes>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkTreeViewColumn" id="defaultmsg">
+                                    <property name="title" translatable="yes">Default Message</property>
+                                    <property name="expand">True</property>
+                                    <child>
+                                      <object class="GtkCellRendererText" id="defaultmessage">
+                                        <property name="editable">True</property>
+                                        <signal name="edited" handler="on_default_msg_cell_edited" swapped="no"/>
+                                      </object>
+                                      <attributes>
+                                        <attribute name="text">2</attribute>
+                                      </attributes>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkTreeViewColumn" id="enabled">
+                                    <property name="title" translatable="yes">Enabled</property>
+                                    <child>
+                                      <object class="GtkCellRendererToggle" id="enable">
+                                        <signal name="toggled" handler="default_msg_toggled_cb" swapped="no"/>
+                                      </object>
+                                      <attributes>
+                                        <attribute name="active">3</attribute>
+                                      </attributes>
+                                    </child>
+                                  </object>
                                 </child>
                               </object>
                             </child>
@@ -1390,6 +1442,7 @@ $T will be replaced by auto-not-available timeout</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
                             <property name="shadow_type">in</property>
                             <child>
                               <object class="GtkTreeView" id="msg_treeview">
@@ -1438,6 +1491,8 @@ $T will be replaced by auto-not-available timeout</property>
                           <object class="GtkButtonBox" id="vbuttonbox3">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="valign">start</property>
+                            <property name="vexpand">False</property>
                             <property name="spacing">5</property>
                             <property name="layout_style">start</property>
                             <child>
@@ -1540,9 +1595,9 @@ $T will be replaced by auto-not-available timeout</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">Chat message:</property>
                             <property name="ellipsize">start</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -1618,9 +1673,9 @@ $T will be replaced by auto-not-available timeout</property>
                           <object class="GtkLabel" id="label249">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">T_heme:</property>
                             <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -1631,9 +1686,9 @@ $T will be replaced by auto-not-available timeout</property>
                           <object class="GtkLabel" id="label174">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">Status _iconset:</property>
                             <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -1740,10 +1795,10 @@ $T will be replaced by auto-not-available timeout</property>
                           <object class="GtkLabel" id="label72">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">Contact's nickname:</property>
                             <property name="use_underline">True</property>
                             <property name="justify">center</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -1754,8 +1809,8 @@ $T will be replaced by auto-not-available timeout</property>
                           <object class="GtkLabel" id="label13">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">Contact's message:</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -1766,10 +1821,10 @@ $T will be replaced by auto-not-available timeout</property>
                           <object class="GtkLabel" id="label71">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">_Status message:</property>
                             <property name="use_underline">True</property>
                             <property name="justify">center</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -1780,9 +1835,9 @@ $T will be replaced by auto-not-available timeout</property>
                           <object class="GtkLabel" id="label30">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">Group chat highlight:</property>
                             <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -1918,10 +1973,10 @@ $T will be replaced by auto-not-available timeout</property>
                           <object class="GtkLabel" id="label70">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">Your nickname:</property>
                             <property name="use_underline">True</property>
                             <property name="justify">center</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -1932,8 +1987,8 @@ $T will be replaced by auto-not-available timeout</property>
                           <object class="GtkLabel" id="label14">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">Your message:</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -1944,9 +1999,9 @@ $T will be replaced by auto-not-available timeout</property>
                           <object class="GtkLabel" id="label371">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">_URL highlight:</property>
                             <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -2156,8 +2211,8 @@ $T will be replaced by auto-not-available timeout</property>
                           <object class="GtkLabel" id="label18">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">Audio input device</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -2168,8 +2223,8 @@ $T will be replaced by auto-not-available timeout</property>
                           <object class="GtkLabel" id="label19">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">Audio output device</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -2234,8 +2289,8 @@ $T will be replaced by auto-not-available timeout</property>
                           <object class="GtkLabel" id="label20">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">Video input device</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -2246,8 +2301,8 @@ $T will be replaced by auto-not-available timeout</property>
                           <object class="GtkLabel" id="label21">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">Video output device</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -2258,8 +2313,8 @@ $T will be replaced by auto-not-available timeout</property>
                           <object class="GtkLabel" id="label26">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">Video framerate</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -2270,8 +2325,8 @@ $T will be replaced by auto-not-available timeout</property>
                           <object class="GtkLabel" id="label27">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">Video size</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -2374,8 +2429,8 @@ $T will be replaced by auto-not-available timeout</property>
                           <object class="GtkLabel" id="label24">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">STUN server:</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -2513,9 +2568,9 @@ to discover one from server.</property>
                                   <object class="GtkLabel" id="label200">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="xalign">0</property>
                                     <property name="label" translatable="yes">_Mail client:</property>
                                     <property name="use_underline">True</property>
+                                    <property name="xalign">0</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
@@ -2526,9 +2581,9 @@ to discover one from server.</property>
                                   <object class="GtkLabel" id="label199">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="xalign">0</property>
                                     <property name="label" translatable="yes">_Browser:</property>
                                     <property name="use_underline">True</property>
+                                    <property name="xalign">0</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
@@ -2539,9 +2594,9 @@ to discover one from server.</property>
                                   <object class="GtkLabel" id="label355">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="xalign">0</property>
                                     <property name="label" translatable="yes">_File manager:</property>
                                     <property name="use_underline">True</property>
+                                    <property name="xalign">0</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
@@ -2723,9 +2778,9 @@ to discover one from server.</property>
                           <object class="GtkLabel" id="label29">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">Global proxy:</property>
                             <property name="angle">0.01</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>

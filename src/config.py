@@ -402,37 +402,6 @@ class PreferencesWindow:
 
         # Default Status messages
         self.default_msg_tree = self.xml.get_object('default_msg_treeview')
-
-        #FIXME: That doesn't seem to work:
-        context = self.default_msg_tree.get_style_context()
-        col2 = context.get_background_color(Gtk.StateFlags.ACTIVE)
-
-        # (status, translated_status, message, enabled)
-        model = Gtk.ListStore(str, str, str, bool)
-        self.default_msg_tree.set_model(model)
-        col = Gtk.TreeViewColumn(_('Status'))
-        col.set_resizable(True)
-        self.default_msg_tree.append_column(col)
-        renderer = Gtk.CellRendererText()
-        col.pack_start(renderer, False)
-        col.add_attribute(renderer, 'text', 1)
-        col = Gtk.TreeViewColumn(_('Default Message'))
-        col.set_resizable(True)
-        self.default_msg_tree.append_column(col)
-        renderer = Gtk.CellRendererText()
-        col.pack_start(renderer, True)
-        col.add_attribute(renderer, 'text', 2)
-        renderer.connect('edited', self.on_default_msg_cell_edited)
-        renderer.set_property('editable', True)
-        renderer.set_property('cell-background-rgba', col2)
-        col = Gtk.TreeViewColumn(_('Enabled'))
-        col.set_resizable(True)
-        self.default_msg_tree.append_column(col)
-        renderer = Gtk.CellRendererToggle()
-        col.pack_start(renderer, False)
-        col.add_attribute(renderer, 'active', 3)
-        renderer.set_property('activatable', True)
-        renderer.connect('toggled', self.default_msg_toggled_cb)
         self.fill_default_msg_treeview()
 
         # Status messages
