@@ -4875,7 +4875,8 @@ class AvatarChooserDialog(ImageChooserDialog):
 
 
 class ArchiveChooserDialog(FileChooserDialog):
-    def __init__(self, on_response_ok=None, on_response_cancel=None):
+    def __init__(self, on_response_ok=None, on_response_cancel=None,
+                 transient_for=None):
 
         def on_ok(widget, callback):
             '''check if file exists and call callback'''
@@ -4899,7 +4900,8 @@ class ArchiveChooserDialog(FileChooserDialog):
             default_response=Gtk.ResponseType.OK,
             current_folder=path,
             on_response_ok=(on_ok, on_response_ok),
-            on_response_cancel=on_response_cancel)
+            on_response_cancel=on_response_cancel,
+            transient_for=transient_for)
 
         if on_response_cancel:
             self.connect('destroy', on_response_cancel)

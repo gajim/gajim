@@ -69,6 +69,7 @@ class PluginsWindow(object):
             setattr(self, widget_name, self.xml.get_object(widget_name))
 
         self.plugin_description_textview = HtmlTextView()
+        self.plugin_description_textview.set_wrap_mode(Gtk.WrapMode.WORD)
         sw = self.xml.get_object('scrolledwindow2')
         sw.add(self.plugin_description_textview)
         self.installed_plugins_model = Gtk.ListStore(object, str, bool, bool,
@@ -303,7 +304,8 @@ class PluginsWindow(object):
             sel = self.installed_plugins_treeview.get_selection()
             sel.select_iter(iter_)
 
-        self.dialog = ArchiveChooserDialog(on_response_ok=_try_install)
+        self.dialog = ArchiveChooserDialog(
+            on_response_ok=_try_install, transient_for=self.window)
 
 
 class GajimPluginConfigDialog(Gtk.Dialog):

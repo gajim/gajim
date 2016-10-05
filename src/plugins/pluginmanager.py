@@ -447,7 +447,7 @@ class PluginManager(metaclass=Singleton):
 
             # read metadata from manifest.ini
             conf.remove_section('info')
-            conf_file = open(manifest_path)
+            conf_file = open(manifest_path, encoding='utf-8')
             conf.read_file(conf_file)
             conf_file.close()
 
