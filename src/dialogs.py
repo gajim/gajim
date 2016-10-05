@@ -4740,7 +4740,7 @@ class ClientCertChooserDialog(FileChooserDialog):
 
 class SoundChooserDialog(FileChooserDialog):
     def __init__(self, path_to_snd_file='', on_response_ok=None,
-                    on_response_cancel=None):
+                    on_response_cancel=None, transient_for=None):
         """
         Optionally accepts path_to_snd_file so it has that as selected
         """
@@ -4752,14 +4752,16 @@ class SoundChooserDialog(FileChooserDialog):
             if os.path.exists(path_to_snd_file):
                 callback(widget, path_to_snd_file)
 
-        FileChooserDialog.__init__(self, title_text = _('Choose Sound'),
-           action = Gtk.FileChooserAction.OPEN,
-           buttons = (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
-                                  Gtk.STOCK_OPEN, Gtk.ResponseType.OK),
-           default_response = Gtk.ResponseType.OK,
-           current_folder = gajim.config.get('last_sounds_dir'),
-           on_response_ok = (on_ok, on_response_ok),
-           on_response_cancel = on_response_cancel)
+        FileChooserDialog.__init__(
+            self, title_text=_('Choose Sound'),
+            action=Gtk.FileChooserAction.OPEN,
+            buttons=(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+                     Gtk.STOCK_OPEN, Gtk.ResponseType.OK),
+            default_response=Gtk.ResponseType.OK,
+            current_folder=gajim.config.get('last_sounds_dir'),
+            on_response_ok=(on_ok, on_response_ok),
+            on_response_cancel=on_response_cancel,
+            transient_for=transient_for)
 
         filter_ = Gtk.FileFilter()
         filter_.set_name(_('All files'))

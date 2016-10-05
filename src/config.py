@@ -4341,7 +4341,7 @@ class ManageSoundsWindow:
 
         path_to_snd_file = model[iter_][2]
         self.dialog = dialogs.SoundChooserDialog(path_to_snd_file, on_ok,
-                on_cancel)
+                on_cancel, transient_for=self.window)
 
     def on_sounds_entry_changed(self, widget):
         path_to_snd_file = widget.get_text()
