@@ -613,8 +613,12 @@ def datetime_tuple(timestamp):
     tim = tim.split('.')[0]
     tim = time.strptime(date + 'T' + tim, '%Y%m%dT%H:%M:%S')
     if zone:
-        tim = datetime.datetime.fromtimestamp(time.mktime(t))
-        zone = strptime.time(zone, '%H:%M')
+        zone = zone.replace(':', '')
+        tim = datetime.datetime.fromtimestamp(time.mktime(tim))
+        if len(zone) > 2:
+            zone = time.strptime(zone, '%H%M')
+        else:
+            zone = time.strptime(zone, '%H')
         zone = datetime.timedelta(hours=zone.tm_hour, minutes=zone.tm_min)
         tim += zone * sign
         tim = tim.timetuple()
