@@ -23,8 +23,8 @@ configdir = gajim_root + '/test/tmp'
 pluginsconfigdir = configdir + '/pluginsconfig'
 
 # define _ for i18n
-import __builtin__
-__builtin__._ = lambda x: x
+import builtins
+builtins._ = lambda x: x
 
 def setup_env():
     # wipe config directory

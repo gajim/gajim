@@ -139,7 +139,7 @@ class TestRosterWindow(unittest.TestCase):
 
                 # Contacts kept their info
                 contact = instances[0]
-                self.assertEquals(contact.groups, contacts[acc][jid]['groups'],
+                self.assertEquals(sorted(contact.groups), sorted(contacts[acc][jid]['groups']),
                         msg='Group Missmatch')
 
                 groups = contacts[acc][jid]['groups'] or ['General',]

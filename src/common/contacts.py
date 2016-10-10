@@ -238,7 +238,7 @@ class LegacyContactsAPI:
         self._metacontact_manager.add_account(account_name)
 
     def get_accounts(self):
-        return self._accounts.keys()
+        return list(self._accounts.keys())
 
     def remove_account(self, account):
         del self._accounts[account]
