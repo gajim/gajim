@@ -518,8 +518,10 @@ class BookmarksHelper:
                 minimize_val = minimize_val.getData()
 
             print_status = conf.getTag('print_status', namespace=NS_GAJIM_BM)
-            if not print_status:
-                print_status = conf.getTagData('show_status')
+            if not print_status:  # not there, try old Gajim behaviour
+                print_status = conf.getTagData('print_status')
+                if not print_status:  # not there, try old Gajim behaviour
+                    print_status = conf.getTagData('show_status')
             else:
                 print_status = print_status.getData()
 
