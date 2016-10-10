@@ -1323,8 +1323,7 @@ class ConversationTextview(GObject.GObject):
                 self.last_time_printout = time.mktime(tim)
                 end_iter = buffer_.get_end_iter()
                 if gajim.config.get('print_time_fuzzy') > 0:
-                    ft = self.fc.fuzzy_time(gajim.config.get('print_time_fuzzy'), tim)
-                    tim_format = ft.decode(locale.getpreferredencoding())
+                    tim_format = self.fc.fuzzy_time(gajim.config.get('print_time_fuzzy'), tim)
                 else:
                     tim_format = self.get_time_to_show(tim, direction_mark)
                 buffer_.insert_with_tags_by_name(end_iter, tim_format + '\n',
