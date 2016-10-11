@@ -1,3 +1,10 @@
+Gajim 0.16.6 ( September 2016)
+
+  * Fix using gpg2
+  * Improve message receips usage
+  * Improve roster filtering
+  * several minor bugs
+
 Gajim 0.16.5 (28 December 2015)
 
   * Improve MAM implementation
