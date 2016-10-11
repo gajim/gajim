@@ -447,9 +447,14 @@ class PluginManager(metaclass=Singleton):
 
             # read metadata from manifest.ini
             conf.remove_section('info')
-            conf_file = open(manifest_path, encoding='utf-8')
-            conf.read_file(conf_file)
-            conf_file.close()
+            with open(manifest_path, encoding='utf-8') as conf_file:
+                try:
+                    conf.read_file(conf_file)
+                except configparser.Error:
+                    log.warning(("Plugin {plugin} not loaded, error loading"
+                                 " manifest").format(plugin=elem_name)
+                                , exc_info=True)
+                    continue
 
             min_v = conf.get('info', 'min_gajim_version', fallback=None)
             max_v = conf.get('info', 'max_gajim_version', fallback=None)
