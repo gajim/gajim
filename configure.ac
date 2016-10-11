@@ -36,7 +36,7 @@ AM_NLS
 ACLOCAL_AMFLAGS="\${ACLOCAL_FLAGS}"
 AC_SUBST(ACLOCAL_AMFLAGS)
 
-AM_PATH_PYTHON([2.5])
+AM_PATH_PYTHON([3.5])
 
 dnl ****
 dnl enable installation in python-2.x/site-packages/gajim
