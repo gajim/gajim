@@ -1410,7 +1410,12 @@ class ConversationTextview(GObject.GObject):
                 '%(nb_days)i days ago', diff_day, {'nb_days': diff_day},
                 {'nb_days': diff_day})
         if day_str:
-            format_ += i18n.direction_mark + day_str + direction_mark + ' '
+            # strftime Windows bug has problems with Unicode
+            # see: http://bugs.python.org/issue8304
+            if os.name != 'nt':
+                format_ += i18n.direction_mark + day_str + direction_mark + ' '
+            else:
+                format_ += day_str + ' '
         timestamp_str = gajim.config.get('time_stamp')
         timestamp_str = helpers.from_one_line(timestamp_str)
         format_ += timestamp_str
