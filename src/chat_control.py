@@ -2367,24 +2367,26 @@ class ChatControl(ChatControlBase):
         contact = self.contact
         jid = contact.jid
         current_state = contact.our_chatstate
-        if current_state is False: # jid doesn't support chatstates
-            return False # stop looping
+        if current_state is False:  # jid doesn't support chatstates
+            return False  # stop looping
 
         message_buffer = self.msg_textview.get_buffer()
-        if self.kbd_activity_in_last_5_secs and message_buffer.get_char_count():
+        if (self.kbd_activity_in_last_5_secs and
+                message_buffer.get_char_count()):
             # Only composing if the keyboard activity was in text entry
-            self.send_chatstate('composing')
-        elif self.mouse_over_in_last_5_secs and current_state == 'inactive' and\
-        jid == self.parent_win.get_active_jid():
-            self.send_chatstate('active')
+            self.send_chatstate('composing', self.contact)
+        elif (self.mouse_over_in_last_5_secs and
+              current_state == 'inactive' and
+                jid == self.parent_win.get_active_jid()):
+            self.send_chatstate('active', self.contact)
         else:
             if current_state == 'composing':
-                self.send_chatstate('paused') # pause composing
+                self.send_chatstate('paused', self.contact)  # pause composing
 
         # assume no activity and let the motion-notify or 'insert-text' make them
         # True refresh 30 seconds vars too or else it's 30 - 5 = 25 seconds!
         self.reset_kbd_mouse_timeout_vars()
-        return True # loop forever
+        return True  # loop forever
 
     def check_for_possible_inactive_chatstate(self, arg):
         """
@@ -2662,12 +2664,18 @@ class ChatControl(ChatControlBase):
         # and raises RuntimeException with appropriate message
         # more on that http://xmpp.org/extensions/xep-0085.html#statechart
 
-        # do not send nothing if we have chat state notifications disabled
+        # do not send if we have chat state notifications disabled
         # that means we won't reply to the <active/> from other peer
         # so we do not broadcast jep85 capabalities
         chatstate_setting = gajim.config.get('outgoing_chat_state_notifications')
         if chatstate_setting == 'disabled':
             return
+
+        # Dont leak presence to contacts
+        # which are not allowed to see our status
+        if contact and contact.sub in ('to', 'none'):
+            return
+
         elif chatstate_setting == 'composing_only' and state != 'active' and\
                 state != 'composing':
             return
