@@ -206,7 +206,11 @@ class TimeResultReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         tzo = qp.getTag('tzo').getData()
         if tzo.lower() == 'z':
             tzo = '0:0'
-        tzoh, tzom = tzo.split(':')
+        try:
+            tzoh, tzom = tzo.split(':')
+        except Exception, e:
+            # wrong tzo
+            return
         utc_time = qp.getTag('utc').getData()
         ZERO = datetime.timedelta(0)
         class UTC(datetime.tzinfo):
