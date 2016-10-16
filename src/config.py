@@ -167,7 +167,7 @@ class PreferencesWindow:
             if gajim.config.get('emoticons_theme') == l[i]:
                 emoticons_combobox.set_active(i)
         if not gajim.config.get('emoticons_theme'):
-            emoticons_combobox.set_active(len(l)-1)
+            emoticons_combobox.set_active(0)
 
         # Set default for single window type
         choices = common.config.opt_one_window_types
