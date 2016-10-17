@@ -208,7 +208,7 @@ class TimeResultReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             tzo = '0:0'
         try:
             tzoh, tzom = tzo.split(':')
-        except Exception, e:
+        except Exception as e:
             # wrong tzo
             return
         utc_time = qp.getTag('utc').getData()
