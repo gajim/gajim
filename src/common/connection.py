@@ -481,6 +481,12 @@ class CommonConnection:
             # <body> tag is the active event
             if chatstate and contact and contact.supports(nbxmpp.NS_CHATSTATES):
                 msg_iq.setTag(chatstate, namespace=nbxmpp.NS_CHATSTATES)
+                only_chatste = False
+                if not msgtxt:
+                    only_chatste = True
+                if only_chatste and not session.enable_encryption:
+                    msg_iq.setTag('no-store',
+                                  namespace=nbxmpp.NS_MSG_HINTS)
 
             # XEP-0184
             if msgtxt and gajim.config.get_per('accounts', self.name,
@@ -504,15 +510,18 @@ class CommonConnection:
                     msg_iq = session.encrypt_stanza(msg_iq)
                     if self.carbons_enabled:
                         msg_iq.addChild(name='private',
-                            namespace=nbxmpp.NS_CARBONS)
+                                        namespace=nbxmpp.NS_CARBONS)
                     msg_iq.addChild(name='no-permanent-store',
-                        namespace=nbxmpp.NS_MSG_HINTS)
+                                    namespace=nbxmpp.NS_MSG_HINTS)
                     msg_iq.addChild(name='no-copy',
-                        namespace=nbxmpp.NS_MSG_HINTS)
+                                    namespace=nbxmpp.NS_MSG_HINTS)
+                    if only_chatste:
+                        msg_iq.addChild(name='no-store',
+                                        namespace=nbxmpp.NS_MSG_HINTS)
 
         if callback:
             callback(jid, msg, keyID, forward_from, session, original_message,
-                subject, type_, msg_iq, xhtml)
+                     subject, type_, msg_iq, xhtml)
 
     def log_message(self, jid, msg, forward_from, session, original_message,
     subject, type_, xhtml=None, additional_data={}):
