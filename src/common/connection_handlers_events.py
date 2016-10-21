@@ -508,29 +508,41 @@ class PrivateStorageReceivedEvent(nec.NetworkIncomingEvent):
 class BookmarksHelper:
     def parse_bookmarks(self):
         self.bookmarks = []
+        NS_GAJIM_BM = 'xmpp:gajim.org/bookmarks'
         confs = self.storage_node.getTags('conference')
         for conf in confs:
             autojoin_val = conf.getAttr('autojoin')
-            if autojoin_val is None: # not there (it's optional)
+            if not autojoin_val:  # not there (it's optional)
                 autojoin_val = False
-            minimize_val = conf.getAttr('minimize')
-            if minimize_val is None: # not there (it's optional)
-                minimize_val = False
-            print_status = conf.getTagData('print_status')
-            if not print_status:
-                print_status = conf.getTagData('show_status')
+            minimize_val = conf.getTag('minimize', namespace=NS_GAJIM_BM)
+            if not minimize_val:  # not there, try old Gajim behaviour
+                minimize_val = conf.getAttr('minimize')
+                if not minimize_val:  # not there (it's optional)
+                    minimize_val = False
+            else:
+                minimize_val = minimize_val.getData()
+
+            print_status = conf.getTag('print_status', namespace=NS_GAJIM_BM)
+            if not print_status:  # not there, try old Gajim behaviour
+                print_status = conf.getTagData('print_status')
+                if not print_status:  # not there, try old Gajim behaviour
+                    print_status = conf.getTagData('show_status')
+            else:
+                print_status = print_status.getData()
+
             try:
                 jid = helpers.parse_jid(conf.getAttr('jid'))
             except helpers.InvalidFormat:
-                log.warn('Invalid JID: %s, ignoring it' % conf.getAttr('jid'))
+                log.warning('Invalid JID: %s, ignoring it'
+                            % conf.getAttr('jid'))
                 continue
             bm = {'name': conf.getAttr('name'),
-                'jid': jid,
-                'autojoin': autojoin_val,
-                'minimize': minimize_val,
-                'password': conf.getTagData('password'),
-                'nick': conf.getTagData('nick'),
-                'print_status': print_status}
+                  'jid': jid,
+                  'autojoin': autojoin_val,
+                  'minimize': minimize_val,
+                  'password': conf.getTagData('password'),
+                  'nick': conf.getTagData('nick'),
+                  'print_status': print_status}
 
 
             bm_jids = [b['jid'] for b in self.bookmarks]

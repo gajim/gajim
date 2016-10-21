@@ -2473,7 +2473,8 @@ class Connection(CommonConnection, ConnectionHandlers):
         """
         if not gajim.account_is_connected(self.name):
             return
-        if self.pubsub_supported and storage_type != 'xml':
+        if self.pubsub_supported and self.pubsub_publish_options_supported \
+                and storage_type != 'xml':
             self.send_pb_retrieve('', 'storage:bookmarks')
             # some server (ejabberd) are so slow to answer that we request via XML
             # if we don't get answer in the next 30 seconds
@@ -2488,6 +2489,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         storage_type can be set to 'pubsub' or 'xml' so store in only one method
         else it will be stored on both
         """
+        NS_GAJIM_BM = 'xmpp:gajim.org/bookmarks'
         if not gajim.account_is_connected(self.name):
             return
         iq = nbxmpp.Node(tag='storage', attrs={'xmlns': 'storage:bookmarks'})
@@ -2495,8 +2497,9 @@ class Connection(CommonConnection, ConnectionHandlers):
             iq2 = iq.addChild(name = "conference")
             iq2.setAttr('jid', bm['jid'])
             iq2.setAttr('autojoin', bm['autojoin'])
-            iq2.setAttr('minimize', bm['minimize'])
             iq2.setAttr('name', bm['name'])
+            iq2.setTag('minimize', namespace=NS_GAJIM_BM). \
+                setData(bm['minimize'])
             # Only add optional elements if not empty
             # Note: need to handle both None and '' as empty
             #   thus shouldn't use "is not None"
@@ -2505,7 +2508,8 @@ class Connection(CommonConnection, ConnectionHandlers):
             if bm.get('password', None):
                 iq2.setTagData('password', bm['password'])
             if bm.get('print_status', None):
-                iq2.setTagData('print_status', bm['print_status'])
+                iq2.setTag('print_status', namespace=NS_GAJIM_BM). \
+                    setData(bm['print_status'])
 
         if self.pubsub_supported and self.pubsub_publish_options_supported and \
         storage_type != 'xml':
