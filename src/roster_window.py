@@ -2830,8 +2830,12 @@ class RosterWindow:
             gajim.interface.instances[account]['archiving_preferences'].window.\
                 present()
         else:
-            gajim.interface.instances[account]['archiving_preferences'] = \
-                dialogs.ArchivingPreferencesWindow(account)
+            if gajim.connections[account].archiving_313_supported:
+                gajim.interface.instances[account]['archiving_preferences'] = \
+                    dialogs.Archiving313PreferencesWindow(account)
+            else:
+                gajim.interface.instances[account]['archiving_preferences'] = \
+                    dialogs.ArchivingPreferencesWindow(account)
 
     def on_privacy_lists_menuitem_activate(self, widget, account):
         if 'privacy_lists' in gajim.interface.instances[account]:
@@ -6099,8 +6103,10 @@ class RosterWindow:
                     self.on_privacy_lists_menuitem_activate, account)
             else:
                 privacy_lists_menuitem.set_sensitive(False)
-            if gajim.connections[account].archive_pref_supported:
-                archiving_preferences_menuitem.connect('activate',
+            if gajim.connections[account].archive_pref_supported or \
+                    gajim.connections[account].archiving_313_supported:
+                archiving_preferences_menuitem.connect(
+                    'activate',
                     self.on_archiving_preferences_menuitem_activate, account)
             else:
                 archiving_preferences_menuitem.set_sensitive(False)

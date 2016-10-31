@@ -1751,9 +1751,8 @@ class ArchivingPreferencesChangedReceivedEvent(nec.NetworkIncomingEvent):
         self.conf = {}
         self.new_items = {}
         self.removed_items = []
-        if self.stanza.getTag('pref'):
-            pref = self.stanza.getTag('pref')
-
+        pref = self.stanza.getTag('pref', namespace=nbxmpp.NS_ARCHIVE)
+        if pref:
             if pref.getTag('auto'):
                 self.conf['auto'] = pref.getTagAttr('auto', 'save')
 
@@ -1786,6 +1785,37 @@ class ArchivingPreferencesChangedReceivedEvent(nec.NetworkIncomingEvent):
         elif self.stanza.getTag('itemremove'):
             for item in pref.getTags('item'):
                 self.removed_items.append(item.getAttr('jid'))
+        else:
+            return
+        return True
+
+class Archiving313PreferencesChangedReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'archiving-313-preferences-changed-received'
+    base_network_events = ['archiving-received']
+
+    def generate(self):
+        self.conn = self.base_event.conn
+        self.stanza = self.base_event.stanza
+        self.type_ = self.base_event.type_
+        self.items = []
+        self.default = None
+        self.id = self.stanza.getID()
+        self.answer = None
+
+        if self.type_ != 'result':
+            return
+
+        prefs = self.stanza.getTag('prefs', namespace=nbxmpp.NS_MAM)
+        if prefs:
+            self.default = prefs.getAttr('default')
+
+            for item in prefs.getTag('always').getTags('jid'):
+                self.items.append((item.getData(), 'Always'))
+
+            for item in prefs.getTag('never').getTags('jid'):
+                self.items.append((item.getData(), 'Never'))
+        else:
+            return
         return True
 
 class AccountCreatedEvent(nec.NetworkIncomingEvent):

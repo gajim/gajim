@@ -41,6 +41,7 @@ class ConnectionArchive313(ConnectionArchive):
         ConnectionArchive.__init__(self)
         self.archiving_313_supported = False
         self.mam_awaiting_disco_result = {}
+        self.iq_answer = []
         gajim.ged.register_event_handler('raw-message-received', ged.CORE,
             self._nec_raw_message_313_received)
         gajim.ged.register_event_handler('agent-info-error-received', ged.CORE,
@@ -49,6 +50,9 @@ class ConnectionArchive313(ConnectionArchive):
             self._nec_agent_info)
         gajim.ged.register_event_handler('mam-decrypted-message-received',
             ged.CORE, self._nec_mam_decrypted_message_received)
+        gajim.ged.register_event_handler(
+            'archiving-313-preferences-changed-received', ged.CORE,
+            self._nec_archiving_313_preferences_changed_received)
 
     def cleanup(self):
         gajim.ged.remove_event_handler('raw-message-received', ged.CORE,
@@ -59,6 +63,13 @@ class ConnectionArchive313(ConnectionArchive):
             self._nec_agent_info)
         gajim.ged.remove_event_handler('mam-decrypted-message-received',
             ged.CORE, self._nec_mam_decrypted_message_received)
+        gajim.ged.remove_event_handler(
+            'archiving-313-preferences-changed-received', ged.CORE,
+            self._nec_archiving_313_preferences_changed_received)
+
+    def _nec_archiving_313_preferences_changed_received(self, obj):
+        if obj.id in self.iq_answer:
+            obj.answer = True
 
     def _nec_agent_info_error(self, obj):
         if obj.jid in self.mam_awaiting_disco_result:
@@ -138,6 +149,32 @@ class ConnectionArchive313(ConnectionArchive):
         self.awaiting_answers[queryid_] = (MAM_RESULTS_ARRIVED, )
         self.connection.send(iq_)
 
+    def request_archive_preferences(self):
+        if not gajim.account_is_connected(self.name):
+            return
+        iq = nbxmpp.Iq(typ='get')
+        id_ = self.connection.getAnID()
+        iq.setID(id_)
+        iq.addChild(name='prefs', namespace=nbxmpp.NS_MAM)
+        self.connection.send(iq)
+
+    def set_archive_preferences(self, items, default):
+        if not gajim.account_is_connected(self.name):
+            return
+        iq = nbxmpp.Iq(typ='set')
+        id_ = self.connection.getAnID()
+        self.iq_answer.append(id_)
+        iq.setID(id_)
+        prefs = iq.addChild(name='prefs', namespace=nbxmpp.NS_MAM, attrs={'default': default})
+        always = prefs.addChild(name='always')
+        never = prefs.addChild(name='never')
+        for item in items:
+            jid, preference = item
+            if preference == 'always':
+                always.addChild(name='jid').setData(jid)
+            else:
+                never.addChild(name='jid').setData(jid)
+        self.connection.send(iq)
 
 class ConnectionArchive136(ConnectionArchive):
     def __init__(self):

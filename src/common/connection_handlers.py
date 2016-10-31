@@ -1465,6 +1465,8 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
         gajim.nec.register_incoming_event(ArchivingErrorReceivedEvent)
         gajim.nec.register_incoming_event(
             ArchivingPreferencesChangedReceivedEvent)
+        gajim.nec.register_incoming_event(
+            Archiving313PreferencesChangedReceivedEvent)
         gajim.nec.register_incoming_event(NotificationEvent)
 
         gajim.ged.register_event_handler('http-auth-received', ged.CORE,
@@ -2340,6 +2342,7 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
         con.RegisterHandler('iq', self._SearchCB, 'result', nbxmpp.NS_SEARCH)
         con.RegisterHandler('iq', self._PrivacySetCB, 'set', nbxmpp.NS_PRIVACY)
         con.RegisterHandler('iq', self._ArchiveCB, ns=nbxmpp.NS_ARCHIVE)
+        con.RegisterHandler('iq', self._ArchiveCB, ns=nbxmpp.NS_MAM)
         con.RegisterHandler('iq', self._PubSubCB, 'result')
         con.RegisterHandler('iq', self._PubSubErrorCB, 'error')
         con.RegisterHandler('iq', self._JingleCB, 'result')
