@@ -55,6 +55,8 @@ if __name__ == '__main__':
 from common import gajim
 from gtkgui_helpers import get_icon_pixmap
 from common import helpers
+from common.exceptions import GajimGeneralException
+import dialogs
 
 import tooltips
 import logging
@@ -735,7 +737,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
             cite = attrs.get('cite', None)
             if cite:
                 tag = self.textbuf.create_tag(id_)
-                tag.title = title
+                tag.title = attrs.get('title', None)
                 tag.is_anchor = True
         elif name in LIST_ELEMS:
             style += ';margin-left: 2em'
