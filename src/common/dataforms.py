@@ -302,7 +302,7 @@ class Media(nbxmpp.Node):
 
         def fset(self, value):
             fdel(self)
-            for uri in values:
+            for uri in value:
                 self.addChild(node=uri)
 
         def fdel(self, value):
