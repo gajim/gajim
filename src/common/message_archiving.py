@@ -21,7 +21,11 @@
 import nbxmpp
 from common import gajim
 from common import ged
+from common import helpers
 from common.connection_handlers_events import ArchivingReceivedEvent
+
+from calendar import timegm
+from time import localtime
 
 import logging
 log = logging.getLogger('gajim.c.message_archiving')
@@ -225,7 +229,7 @@ class ConnectionArchive136(ConnectionArchive):
                         msg=payload[0].getData(), nick=nick)
                 elif payload[0].getName() == 'message':
                     print('Not implemented')
-            chat = iq_obj.getTag('chat')
+            chat = obj.stanza.getTag('chat')
             if chat:
                 with_ = chat.getAttr('with')
                 start_ = chat.getAttr('start')
@@ -266,7 +270,7 @@ class ConnectionArchive136(ConnectionArchive):
             del self.awaiting_answers[id_]
 
         elif self.awaiting_answers[id_][0] == ARCHIVING_MODIFICATIONS_ARRIVED:
-            modified = iq_obj.getTag('modified')
+            modified = obj.stanza.getTag('modified')
             if modified:
                 for element in modified.getChildren():
                     if element.getName() == 'changed':
