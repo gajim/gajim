@@ -175,7 +175,7 @@ class Zeroconf:
                         # so this probably needs to be revised again.
                         if old_resolved_info[i][0:2] == (interface, protocol):
                             log.debug('Deleting resolved info for interface %i, protocol %i, host %s, aprotocol %i, address %s, port %i' % old_resolved_info[i])
-                            del cur_hosts[i]
+                            del old_resolved_info[i]
                             break
                     resolved_info = resolved_info + old_resolved_info
                     log.debug('Collected resolved info is now: %s' % (resolved_info,))
