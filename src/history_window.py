@@ -33,6 +33,7 @@ import calendar
 
 import gtkgui_helpers
 import conversation_textview
+import dialogs
 
 from common import gajim
 from common import helpers
