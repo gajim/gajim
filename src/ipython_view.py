@@ -42,6 +42,8 @@ available under the terms of the BSD which accompanies this distribution, and
 is available at U{http://www.opensource.org/licenses/bsd-license.php}
 """
 
+from functools import reduce
+
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GObject
