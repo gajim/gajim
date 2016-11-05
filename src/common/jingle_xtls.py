@@ -120,7 +120,7 @@ def get_context(fingerprint, verify_cb=None, remote_jid=None):
     dh_params_name = os.path.join(gajim.MY_CERT_DIR, DH_PARAMS)
     try:
         with open(dh_params_name, "r") as dh_params_file:
-            tx.load_tmp_dh(dh_params_name.encode('utf-8'))
+            ctx.load_tmp_dh(dh_params_name.encode('utf-8'))
     except FileNotFoundError as err:
         default_dh_params_name = os.path.join(gajim.DATA_DIR,
             'other', DEFAULT_DH_PARAMS)
