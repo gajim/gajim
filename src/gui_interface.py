@@ -2664,7 +2664,7 @@ class Interface:
             return gtkgui_helpers.load_mood_icon(mood).get_pixbuf()
         elif isinstance(pep_obj, pep.UserTunePEP):
             path = os.path.join(gajim.DATA_DIR, 'emoticons', 'static', 'music.png')
-            return gtk.gdk.pixbuf_new_from_file(path)
+            return GdkPixbuf.Pixbuf.new_from_file(path)
         elif isinstance(pep_obj, pep.UserActivityPEP):
             pep_ = pep_obj._pep_specific_data
             activity = pep_['activity']
