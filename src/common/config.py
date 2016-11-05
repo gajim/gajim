@@ -599,16 +599,14 @@ class Config:
     def is_valid_bool(self, val):
         if val == 'True':
             return True
-        elif val == 'False':
+        if val == 'False':
             return False
-        else:
-            ival = self.is_valid_int(val)
-            if ival:
-                return True
-            elif ival is None:
-                return None
-            return False
-        return None
+        ival = self.is_valid_int(val)
+        if ival:
+            return True
+        if ival is None:
+            return None
+        return False
 
     def is_valid_string(self, val):
         return val
