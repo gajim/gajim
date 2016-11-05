@@ -26,11 +26,6 @@ import os
 import sys
 import tempfile
 from common import defs
-HAVE_XDG = True
-try:
-    __import__(xdg)
-except:
-    HAVE_XDG = False
 
 (
 TYPE_CONFIG,
@@ -88,28 +83,19 @@ class ConfigPaths:
                 self.config_root = self.cache_root = self.data_root = '.'
         else: # Unices
             # Pass in an Unicode string, and hopefully get one back.
-            if HAVE_XDG:
-                self.config_root = xdg.BaseDirectory.load_first_config('gajim')
-                if not self.config_root:
-                    # Folder doesn't exist yet.
-                    self.config_root = os.path.join(xdg.BaseDirectory.\
-                            xdg_config_dirs[0], 'gajim')
-
-                self.cache_root = os.path.join(xdg.BaseDirectory.xdg_cache_home,
-                        'gajim')
-
-                self.data_root = xdg.BaseDirectory.save_data_path('gajim')
-                if not self.data_root:
-                    self.data_root = os.path.join(xdg.BaseDirectory.\
-                            xdg_data_dirs[0], 'gajim')
-            else:
-                expand = os.path.expanduser
-                base = os.getenv('XDG_CONFIG_HOME') or expand('~/.config')
-                self.config_root = os.path.join(base, 'gajim')
-                base = os.getenv('XDG_CACHE_HOME') or expand('~/.cache')
-                self.cache_root = os.path.join(base, 'gajim')
-                base = os.getenv('XDG_DATA_HOME') or expand('~/.local/share')
-                self.data_root = os.path.join(base, 'gajim')
+            expand = os.path.expanduser
+            base = os.getenv('XDG_CONFIG_HOME')
+            if base is None or base[0] != '/':
+                base = expand('~/.config')
+            self.config_root = os.path.join(base, 'gajim')
+            base = os.getenv('XDG_CACHE_HOME')
+            if base is None or base[0] != '/':
+                base = expand('~/.cache')
+            self.cache_root = os.path.join(base, 'gajim')
+            base = os.getenv('XDG_DATA_HOME')
+            if base is None or base[0] != '/':
+                base = expand('~/.local/share')
+            self.data_root = os.path.join(base, 'gajim')
 
     def add(self, name, type_, path):
         self.paths[name] = (type_, path)
