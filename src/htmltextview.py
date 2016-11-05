@@ -704,7 +704,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
             cite = attrs.get('cite', None)
             if cite:
                 tag = self.textbuf.create_tag(id_)
-                tag.title = title
+                tag.title = attrs.get('title', None)
                 tag.is_anchor = True
         elif name in LIST_ELEMS:
             style += ';margin-left: 2em'
