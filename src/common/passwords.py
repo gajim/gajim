@@ -119,13 +119,11 @@ class GnomePasswordStorage(PasswordStorage):
         if len(items) > 1:
             warnings.warn("multiple gnome keyring items found for account %s;"
                 " trying to use the first one..." % account_name)
-        if items:
-            return items[0].secret
-        else:
-            return None
         if err == GnomeKeyring.Result.NO_KEYRING_DAEMON:
             ## no keyring daemon: in the future, stop using it
             set_storage(SimplePasswordStorage())
+        if items:
+            return items[0].secret
         return None
 
     def save_password(self, account_name, password, update=True):
