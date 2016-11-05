@@ -69,6 +69,9 @@ from common import dataforms
 from common.exceptions import GajimGeneralException
 from common.connection_handlers_events import MessageOutgoingEvent
 
+import logging
+log = logging.getLogger('gajim.dialogs')
+
 
 class EditGroupsDialog:
     """
