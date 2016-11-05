@@ -20,7 +20,7 @@
 from common import gajim
 import select
 import re
-from common.zeroconf.zeroconf import C_BARE_NAME, C_DOMAIN
+from common.zeroconf.zeroconf import C_BARE_NAME, C_DOMAIN, C_TXT
 
 try:
     import pybonjour
@@ -171,7 +171,7 @@ class Zeroconf:
         if name != self.name:
             # update TXT data only, as intended according to resolve_all comment
             old_contact = self.contacts[name]
-            self.contacts[name] = old_contact[0:C_TXT] + (txt,) + old_contact[C_TXT+1:]
+            self.contacts[name] = old_contact[0:C_TXT] + (self.txt,) + old_contact[C_TXT+1:]
 
 
     def service_added_callback(self, sdRef, flags, errorCode, name, regtype, domain):
