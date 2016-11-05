@@ -887,8 +887,8 @@ class Socks5(object):
         """
         try:
             buff = self._recv().decode('utf-8')
-        except (SSL.WantReadError, SSL.WantWriteError,
-        SSL.WantX509LookupError) as e:
+        except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError,
+        OpenSSL.SSL.WantX509LookupError) as e:
             log.info("SSL rehandshake request : " + repr(e))
             raise e
         try:
