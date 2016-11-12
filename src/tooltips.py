@@ -816,24 +816,3 @@ class FileTransfersTooltip(BaseTooltip):
                     Gtk.AttachOptions.EXPAND | Gtk.AttachOptions.FILL, Gtk.AttachOptions.FILL, 0, 0)
 
         self.win.add(ft_table)
-
-
-class ServiceDiscoveryTooltip(BaseTooltip):
-    """
-    Tooltip that is shown when hovering over a service discovery row
-    """
-    def populate(self, status):
-        self.create_window()
-        label = Gtk.Label()
-        label.set_line_wrap(True)
-        label.set_halign(Gtk.Align.START)
-        label.set_valign(Gtk.Align.START)
-        label.set_selectable(False)
-        if status == 1:
-            label.set_text(
-                    _('This service has not yet responded with detailed information'))
-        elif status == 2:
-            label.set_text(
-                    _('This service could not respond with detailed information.\n'
-                    'It is most likely legacy or broken'))
-        self.win.add(label)

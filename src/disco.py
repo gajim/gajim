@@ -54,7 +54,6 @@ from gi.repository import GdkPixbuf
 from gi.repository import Pango
 
 import dialogs
-import tooltips
 import gtkgui_helpers
 import groups
 import adhoc_commands
@@ -65,6 +64,12 @@ import nbxmpp
 from common.exceptions import GajimGeneralException
 from common import helpers
 from common import ged
+
+LABELS = {
+    1: _('This service has not yet responded with detailed information'),
+    2: _('This service could not respond with detailed information.\n'
+         'It is most likely legacy or broken'),
+}
 
 # Dictionary mapping category, type pairs to browser class, image pairs.
 # This is a function, so we can call it after the classes are declared.
@@ -119,13 +124,13 @@ def _gen_agent_type_info():
         ('gateway', 'twitter'):         (False, 'twitter'),
     }
 
-# Category type to "human-readable" description string, and sort priority
+# Category type to "human-readable" description string
 _cat_to_descr = {
-        'other':                (_('Others'),       2),
-        'gateway':              (_('Transports'),   0),
-        '_jid':                 (_('Transports'),   0),
+        'other':                _('Others'),
+        'gateway':              _('Transports'),
+        '_jid':                 _('Transports'),
         #conference is a category for listing mostly groupchats in service discovery
-        'conference':           (_('Conference'),   1),
+        'conference':           _('Conference'),
 }
 
 
@@ -1217,7 +1222,6 @@ class ToplevelAgentBrowser(AgentBrowser):
         self._progressbar_sourceid = None
         self._renderer = None
         self._progress = 0
-        self.tooltip = tooltips.ServiceDiscoveryTooltip()
         self.register_button = None
         self.join_button = None
         self.execute_button = None
@@ -1238,7 +1242,7 @@ class ToplevelAgentBrowser(AgentBrowser):
             identities.append(identity)
         # Set the pixmap for the row
         pix = self.cache.get_icon(identities, addr=addr)
-        self.model.append(None, (self.jid, self.node, pix, descr, 1))
+        self.model.append(None, (self.jid, self.node, pix, descr, LABELS[1]))
         # Grab info on the service
         self.cache.get_info(self.jid, self.node, self._agent_info, force=False)
 
@@ -1264,8 +1268,8 @@ class ToplevelAgentBrowser(AgentBrowser):
         cell.set_property('markup', markup)
         if jid:
             cell.set_property('cell_background_set', False)
-            if state > 0:
-                # 1 = fetching, 2 = error
+            if state is not None:
+                # fetching or error
                 cell.set_property('foreground_set', True)
             else:
                 # Normal/succes
@@ -1284,9 +1288,9 @@ class ToplevelAgentBrowser(AgentBrowser):
         # Compare state
         state1 = model.get_value(iter1, 4)
         state2 = model.get_value(iter2, 4)
-        if state1 > state2:
+        if state1 is not None:
             return 1
-        if state1 < state2:
+        if state2 is not None:
             return -1
         descr1 = model.get_value(iter1, 3)
         descr2 = model.get_value(iter2, 3)
@@ -1297,64 +1301,12 @@ class ToplevelAgentBrowser(AgentBrowser):
             return -1
         return 0
 
-    def _show_tooltip(self, state):
-        self.tooltip.timeout = 0
-        view = self.window.services_treeview
-        w = view.get_window()
-        device = w.get_display().get_device_manager().get_client_pointer()
-        pointer = w.get_device_position(device)
-        props = view.get_path_at_pos(pointer[1], pointer[2])
-        # check if the current pointer is at the same path
-        # as it was before setting the timeout
-        if props and self.tooltip.id == props[0]:
-            # bounding rectangle of coordinates for the cell within the treeview
-            rect = view.get_cell_area(props[0], props[1])
-            # position of the treeview on the screen
-            position = w.get_origin()[1:]
-            self.tooltip.show_tooltip(state, rect.height, position[1] + rect.y)
-        else:
-            self.tooltip.hide_tooltip()
-
-    # These are all callbacks to make tooltips work
-    def on_treeview_leave_notify_event(self, widget, event):
-        props = widget.get_path_at_pos(int(event.x), int(event.y))
-        if self.tooltip.timeout > 0 or self.tooltip.shown:
-            if not props or self.tooltip.id == props[0]:
-                self.tooltip.hide_tooltip()
-
-    def on_treeview_motion_notify_event(self, widget, event):
-        props = widget.get_path_at_pos(int(event.x), int(event.y))
-        if self.tooltip.timeout > 0 or self.tooltip.shown:
-            if not props or self.tooltip.id != props[0]:
-                self.tooltip.hide_tooltip()
-        if props:
-            row = props[0]
-            iter_ = None
-            try:
-                iter_ = self.model.get_iter(row)
-            except Exception:
-                self.tooltip.hide_tooltip()
-                return
-            jid = self.model[iter_][0]
-            state = self.model[iter_][4]
-            # Not a category, and we have something to say about state
-            if jid and state > 0 and \
-            (self.tooltip.timeout == 0 or self.tooltip.id != props[0]):
-                self.tooltip.id = row
-                self.tooltip.timeout = GLib.timeout_add(500, self._show_tooltip,
-                    state)
-
-    def on_treeview_event_hide_tooltip(self, widget, event):
-        """
-        This happens on scroll_event, key_press_event and button_press_event
-        """
-        self.tooltip.hide_tooltip()
-
     def _create_treemodel(self):
         # JID, node, icon, description, state
-        # State means 2 when error, 1 when fetching, 0 when succes.
+        # state is None on sucess or has a string
+        # from LABELS on error or while fetching
         view = self.window.services_treeview
-        self.model = Gtk.TreeStore(str, str, GdkPixbuf.Pixbuf, str, int)
+        self.model = Gtk.TreeStore(str, str, GdkPixbuf.Pixbuf, str, str)
         self.model.set_sort_func(4, self._treemodel_sort_func)
         self.model.set_sort_column_id(4, Gtk.SortType.ASCENDING)
         view.set_model(self.model)
@@ -1374,21 +1326,9 @@ class ToplevelAgentBrowser(AgentBrowser):
         self._renderer = renderer
         self.update_theme()
 
+        view.set_tooltip_column(4)
         view.insert_column(col, -1)
         col.set_resizable(True)
-
-        # Connect signals
-        scrollwin = self.window.services_scrollwin
-        self._view_signals.append(view.connect('leave-notify-event',
-            self.on_treeview_leave_notify_event))
-        self._view_signals.append(view.connect('motion-notify-event',
-            self.on_treeview_motion_notify_event))
-        self._view_signals.append(view.connect('key-press-event',
-            self.on_treeview_event_hide_tooltip))
-        self._view_signals.append(view.connect('button-press-event',
-            self.on_treeview_event_hide_tooltip))
-        self._scroll_signal = scrollwin.connect('scroll-event',
-            self.on_treeview_event_hide_tooltip)
 
     def _clean_treemodel(self):
         # Disconnect signals
@@ -1468,7 +1408,6 @@ class ToplevelAgentBrowser(AgentBrowser):
                     search_window.SearchWindow(self.account, service)
 
     def cleanup(self):
-        self.tooltip.hide_tooltip()
         AgentBrowser.cleanup(self)
 
     def update_theme(self):
@@ -1536,7 +1475,7 @@ class ToplevelAgentBrowser(AgentBrowser):
         if not model[iter_][0]:
             # We're on a category row
             return
-        if model[iter_][4] != 0:
+        if model[iter_][4] is not None:
             # We don't have the info (yet)
             # It's either unknown or a transport, register button should be active
             if self.register_button:
@@ -1644,34 +1583,34 @@ class ToplevelAgentBrowser(AgentBrowser):
 
     def _friendly_category(self, category, type_=None):
         """
-        Get the friendly category name and priority
+        Get the friendly category name
         """
         cat = None
         if type_:
             # Try type-specific override
             try:
-                cat, prio = _cat_to_descr[(category, type_)]
+                cat = _cat_to_descr[(category, type_)]
             except KeyError:
                 pass
         if not cat:
             try:
-                cat, prio = _cat_to_descr[category]
+                cat = _cat_to_descr[category]
             except KeyError:
-                cat, prio = _cat_to_descr['other']
-        return cat, prio
+                cat = _cat_to_descr['other']
+        return cat
 
     def _create_category(self, cat, type_=None):
         """
         Creates a category row
         """
-        cat, prio = self._friendly_category(cat, type_)
-        return self.model.append(None, ('', '', None, cat, prio))
+        cat = self._friendly_category(cat, type_)
+        return self.model.append(None, ('', '', None, cat, None))
 
     def _find_category(self, cat, type_=None):
         """
         Looks up a category row and returns the iterator to it, or None
         """
-        cat = self._friendly_category(cat, type_)[0]
+        cat = self._friendly_category(cat, type_)
         iter_ = self.model.get_iter_first()
         while iter_:
             if self.model.get_value(iter_, 3) == cat:
@@ -1726,7 +1665,7 @@ class ToplevelAgentBrowser(AgentBrowser):
         cat = self._find_category(*cat_args)
         if not cat:
             cat = self._create_category(*cat_args)
-        self.model.append(cat, (jid, node, pix, descr, 1))
+        self.model.append(cat, (jid, node, pix, descr, LABELS[1]))
         GLib.idle_add(self._expand_all)
         # Grab info on the service
         self.cache.get_info(jid, node, self._agent_info, force=force)
@@ -1768,7 +1707,7 @@ class ToplevelAgentBrowser(AgentBrowser):
             # Already in the right category, just update
             self.model[iter_][2] = pix
             self.model[iter_][3] = descr
-            self.model[iter_][4] = 0
+            self.model[iter_][4] = None
             return
         # Not in the right category, move it.
         self.model.remove(iter_)
@@ -1783,11 +1722,11 @@ class ToplevelAgentBrowser(AgentBrowser):
         cat_iter = self._find_category(cat, type_)
         if not cat_iter:
             cat_iter = self._create_category(cat, type_)
-        self.model.append(cat_iter, (jid, node, pix, descr, 0))
+        self.model.append(cat_iter, (jid, node, pix, descr, None))
         self._expand_all()
 
     def _update_error(self, iter_, jid, node):
-        self.model[iter_][4] = 2
+        self.model[iter_][4] = LABELS[2]
         self._progress += 1
         self._update_progressbar()
 
