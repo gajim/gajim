@@ -4114,6 +4114,7 @@ class ArchivingPreferencesWindow:
 class Archiving313PreferencesWindow:
 
     default_dict = {'always': 0, 'roster': 1, 'never': 2}
+    default_dict_cb = {0: 'always', 1: 'roster', 2: 'never'}
 
     def __init__(self, account):
         self.account = account
@@ -4208,13 +4209,12 @@ class Archiving313PreferencesWindow:
     def on_save_button_clicked(self, widget):
         self.set_widget_state(False)
         items = []
-        iter_ = self.default_cb.get_active_iter()
-        default = self.default_cb.get_model().get_value(iter_, 0)
+        default = self.default_dict_cb[self.default_cb.get_active()]
         for item in self.archive_items_liststore:
             items.append((item[0].lower(), item[1].lower()))
         self.idle_id = GLib.timeout_add_seconds(3, self._nec_archiving_error)
         gajim.connections[self.account]. \
-            set_archive_preferences(items, default.lower())
+            set_archive_preferences(items, default)
 
     def on_close_button_clicked(self, widget):
         self.window.destroy()
