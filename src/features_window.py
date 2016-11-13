@@ -72,10 +72,6 @@ class FeaturesWindow:
                 _('Passwords can be stored securely and not just in plaintext.'),
                 _('Requires gnome-keyring and python-gnome2-desktop, or kwalletcli.'),
                 _('Feature not available under Windows.')),
-            _('SRV'): (self.srv_available,
-                _('Ability to connect to servers which are using SRV records.'),
-                _('Requires dnsutils.'),
-                _('Requires nslookup to use SRV records.')),
             _('Spell Checker'): (self.speller_available,
                 _('Spellchecking of composed messages.'),
                 _('Requires libgtkspell.'),
@@ -198,11 +194,6 @@ class FeaturesWindow:
         except Exception:
             return False
         return True
-
-    def srv_available(self):
-        if os.name == 'nt':
-            return True
-        return helpers.is_in_path('nslookup')
 
     def speller_available(self):
         try:
