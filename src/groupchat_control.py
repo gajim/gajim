@@ -360,6 +360,12 @@ class GroupchatControl(ChatControlBase):
             img = self.xml.get_object('history_image')
             img.set_from_icon_name('document-open-recent', Gtk.IconSize.MENU)
         widget = self.xml.get_object('list_treeview')
+        widget.set_has_tooltip(True)
+        widget.set_tooltip_window(tooltips.GCTooltip(self.parent_win.window))
+        self.current_tooltip = None
+        id_ = widget.connect('query-tooltip', self.query_tooltip)
+        self.handlers[id_] = widget
+
         id_ = widget.connect('row_expanded', self.on_list_treeview_row_expanded)
         self.handlers[id_] = widget
 
@@ -377,14 +383,6 @@ class GroupchatControl(ChatControlBase):
 
         id_ = widget.connect('key_press_event',
             self.on_list_treeview_key_press_event)
-        self.handlers[id_] = widget
-
-        id_ = widget.connect('motion_notify_event',
-            self.on_list_treeview_motion_notify_event)
-        self.handlers[id_] = widget
-
-        id_ = widget.connect('leave_notify_event',
-            self.on_list_treeview_leave_notify_event)
         self.handlers[id_] = widget
 
         self.room_jid = self.contact.jid
@@ -418,8 +416,6 @@ class GroupchatControl(ChatControlBase):
         self.last_key_tabs = False
 
         self.subject = ''
-
-        self.tooltip = tooltips.GCTooltip()
 
         # nickname coloring
         self.gc_count_nicknames_colors = -1
@@ -529,6 +525,46 @@ class GroupchatControl(ChatControlBase):
         # PluginSystem: adding GUI extension point for this GroupchatControl
         # instance object
         gajim.plugin_manager.gui_extension_point('groupchat_control', self)
+
+    def query_tooltip(self, widget, x_pos, y_pos, keyboard_mode, tooltip):
+        try:
+            row = self.list_treeview.get_path_at_pos(x_pos, y_pos)[0]
+        except TypeError:
+            return False
+        if not row:
+            return False
+
+        iter_ = None
+        try:
+            iter_ = self.model.get_iter(row)
+        except Exception:
+            return False
+
+        typ = self.model[iter_][C_TYPE]
+        nick = self.model[iter_][C_NICK]
+
+        if typ != 'contact':
+            return False
+
+        if self.current_tooltip != row:
+            # If the row changes we hide the current tooltip
+            self.current_tooltip = row
+            return False
+
+        tooltip = widget.get_tooltip_window()
+
+        if tooltip.row == row:
+            # We already populated the window with the row data
+            return True
+        tooltip.row = row
+
+        contact = gajim.contacts.get_gc_contact(
+            self.account, self.room_jid, nick)
+        if not contact:
+            return False
+
+        tooltip.populate(contact)
+        return True
 
     def fill_column(self, col):
         for rend in self.renderers_list:
@@ -2638,8 +2674,6 @@ class GroupchatControl(ChatControlBase):
         """
         Popup user's group's or agent menu
         """
-        # hide tooltip, no matter the button is pressed
-        self.tooltip.hide_tooltip()
         try:
             pos = widget.get_path_at_pos(int(event.x), int(event.y))
             path, x = pos[0], pos[2]
@@ -2696,55 +2730,6 @@ class GroupchatControl(ChatControlBase):
             gc_refer_to_nick_char = gajim.config.get('gc_refer_to_nick_char')
             add = gc_refer_to_nick_char + ' '
         message_buffer.insert_at_cursor(start + nick + add)
-
-    def on_list_treeview_motion_notify_event(self, widget, event):
-        props = widget.get_path_at_pos(int(event.x), int(event.y))
-        if self.tooltip.timeout > 0 or self.tooltip.shown:
-            if not props or self.tooltip.id != props[0]:
-                self.tooltip.hide_tooltip()
-        if props:
-            [row, col, x, y] = props
-            iter_ = None
-            try:
-                iter_ = self.model.get_iter(row)
-            except Exception:
-                self.tooltip.hide_tooltip()
-                return
-            typ = self.model[iter_][C_TYPE]
-            if typ == 'contact':
-                account = self.account
-
-                if self.tooltip.timeout == 0 or self.tooltip.id != props[0]:
-                    self.tooltip.id = row
-                    nick = self.model[iter_][C_NICK]
-                    self.tooltip.timeout = GLib.timeout_add(500,
-                        self.show_tooltip, gajim.contacts.get_gc_contact(
-                        account, self.room_jid, nick))
-
-    def on_list_treeview_leave_notify_event(self, widget, event):
-        props = widget.get_path_at_pos(int(event.x), int(event.y))
-        if self.tooltip.timeout > 0 or self.tooltip.shown:
-            if not props or self.tooltip.id == props[0]:
-                self.tooltip.hide_tooltip()
-
-    def show_tooltip(self, contact):
-        self.tooltip.timeout = 0
-        if not self.list_treeview.get_window():
-            # control has been destroyed since tooltip was requested
-            return
-        w = self.list_treeview.get_window()
-        device = w.get_display().get_device_manager().get_client_pointer()
-        pointer = w.get_device_position(device)
-        props = self.list_treeview.get_path_at_pos(pointer[1], pointer[2])
-        # check if the current pointer is at the same path
-        # as it was before setting the timeout
-        if props and self.tooltip.id == props[0]:
-            rect = self.list_treeview.get_cell_area(props[0], props[1])
-            position = w.get_origin()[1:]
-            self.tooltip.show_tooltip(contact, rect.height,
-                position[1] + rect.y)
-        else:
-            self.tooltip.hide_tooltip()
 
     def grant_voice(self, widget, nick):
         """

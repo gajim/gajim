@@ -188,50 +188,6 @@ class BaseTooltip:
         self.check_last_time = None
         self.shown = False
 
-    @staticmethod
-    def colorize_status(status):
-        """
-        Colorize the status message inside the tooltip by it's
-        semantics. Color palette is the Tango.
-        """
-        formatted = "<span foreground='%s'>%s</span>"
-        color = None
-        if status.startswith(Q_("?user status:Available")):
-            color = gajim.config.get('tooltip_status_online_color')
-        elif status.startswith(_("Free for Chat")):
-            color = gajim.config.get('tooltip_status_free_for_chat_color')
-        elif status.startswith(_("Away")):
-            color = gajim.config.get('tooltip_status_away_color')
-        elif status.startswith(_("Busy")):
-            color = gajim.config.get('tooltip_status_busy_color')
-        elif status.startswith(_("Not Available")):
-            color = gajim.config.get('tooltip_status_na_color')
-        elif status.startswith(_("Offline")):
-            color = gajim.config.get('tooltip_status_offline_color')
-        if color:
-            status = formatted % (color, status)
-        return status
-
-    @staticmethod
-    def colorize_affiliation(affiliation):
-        """
-        Color the affiliation of a MUC participant inside the tooltip by
-        it's semantics. Color palette is the Tango.
-        """
-        formatted = "<span foreground='%s'>%s</span>"
-        color = None
-        if affiliation.startswith(Q_("?Group Chat Contact Affiliation:None")):
-            color = gajim.config.get('tooltip_affiliation_none_color')
-        elif affiliation.startswith(_("Member")):
-            color = gajim.config.get('tooltip_affiliation_member_color')
-        elif affiliation.startswith(_("Administrator")):
-            color = gajim.config.get('tooltip_affiliation_administrator_color')
-        elif affiliation.startswith(_("Owner")):
-            color = gajim.config.get('tooltip_affiliation_owner_color')
-        if color:
-            affiliation = formatted % (color, affiliation)
-        return affiliation
-
 class StatusTable:
     """
     Contains methods for creating status table. This is used in Roster and
@@ -356,68 +312,76 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
         self.hbox.add(self.table)
         self.hbox.show_all()
 
-class GCTooltip(BaseTooltip):
-    """
-    Tooltip that is shown in the GC treeview
-    """
+class GCTooltip(Gtk.Window):
+    # pylint: disable=E1101
+    def __init__(self, parent):
+        super().__init__(self, type=Gtk.WindowType.POPUP, transient_for=parent)
+        self.row = None
+        self.set_title('tooltip')
+        self.set_border_width(3)
+        self.set_resizable(False)
+        self.set_name('gtk-tooltips')
+        self.set_type_hint(Gdk.WindowTypeHint.TOOLTIP)
 
-    def __init__(self):
-        self.account = None
-        self.text_label = Gtk.Label()
-        self.text_label.set_line_wrap(True)
-        self.text_label.set_halign(Gtk.Align.START)
-        self.text_label.set_valign(Gtk.Align.START)
-        self.text_label.set_selectable(False)
-        self.avatar_image = Gtk.Image()
+        self.xml = gtkgui_helpers.get_gtk_builder('tooltip_gc_contact.ui')
+        for name in ('nick', 'status', 'jid', 'user_show', 'fillelement',
+            'resource', 'affiliation', 'avatar', 'resource_label',
+                'jid_label', 'tooltip_grid'):
+            setattr(self, name, self.xml.get_object(name))
 
-        BaseTooltip.__init__(self)
+        self.add(self.tooltip_grid)
+        self.tooltip_grid.show()
+
+    def clear_tooltip(self):
+        """
+        Hide all Elements of the Tooltip Grid
+        """
+        for child in self.tooltip_grid.get_children():
+            child.hide()
 
     def populate(self, contact):
-        if not contact:
-            return
-        self.create_window()
-        vcard_table = Gtk.Grid()
-        vcard_table.insert_row(0)
-        vcard_table.insert_row(0)
-        vcard_table.insert_row(0)
-        vcard_table.insert_column(0)
-        vcard_table.set_property('column-spacing', 2)
-        vcard_current_row = 1
-        properties = []
+        """
+        Populate the Tooltip Grid with data of from the contact
+        """
+        self.clear_tooltip()
 
-        nick_markup = '<b>' + GLib.markup_escape_text(contact.get_shown_name())\
-            + '</b>'
-        properties.append((nick_markup, None))
+        self.nick.set_text(contact.get_shown_name())
+        self.nick.show()
 
-        if contact.status: # status message
+        # Status Message
+        if contact.status:
             status = contact.status.strip()
             if status != '':
-                # escape markup entities
-                status = helpers.reduce_chars_newlines(status, 300, 5)
-                status = '<i>' + GLib.markup_escape_text(status) + '</i>'
-                properties.append((status, None))
+                self.status.set_text(status)
+                self.status.show()
 
+        # Status
         show = helpers.get_uf_show(contact.show)
-        show = self.colorize_status(show)
-        properties.append((show, None))
+        self.user_show.set_markup(colorize_status(show))
+        self.user_show.show()
 
+        # JID
         if contact.jid.strip():
-            properties.append((_('Jabber ID: '), '\u200E' + "<b>%s</b>" % \
-                contact.jid))
-
+            self.jid.set_text(contact.jid)
+            self.jid.show()
+            self.jid_label.show()
+        # Resource
         if hasattr(contact, 'resource') and contact.resource.strip():
-            properties.append((_('Resource: '), GLib.markup_escape_text(
-                contact.resource)))
+            self.resource.set_text(contact.resource)
+            self.resource.show()
+            self.resource_label.show()
 
+        # Affiliation
         if contact.affiliation != 'none':
             uf_affiliation = helpers.get_uf_affiliation(contact.affiliation)
             uf_affiliation = \
-                _('%(owner_or_admin_or_member)s of this group chat') % \
-                {'owner_or_admin_or_member': uf_affiliation}
+                _('%(owner_or_admin_or_member)s of this group chat') \
+                % {'owner_or_admin_or_member': uf_affiliation}
             uf_affiliation = self.colorize_affiliation(uf_affiliation)
-            properties.append((uf_affiliation, None))
+            self.affiliation.set_markup(uf_affiliation)
+            self.affiliation.show()
 
-        # Add avatar
+        # Avatar
         puny_name = helpers.sanitize_filename(contact.name)
         puny_room = helpers.sanitize_filename(contact.room_jid)
         file_ = helpers.get_avatar_path(os.path.join(gajim.AVATAR_PATH,
@@ -426,39 +390,29 @@ class GCTooltip(BaseTooltip):
             with open(file_, 'rb') as file_data:
                 pix = gtkgui_helpers.get_pixbuf_from_data(file_data.read())
             pix = gtkgui_helpers.get_scaled_pixbuf(pix, 'tooltip')
-            self.avatar_image.set_from_pixbuf(pix)
-        else:
-            self.avatar_image.set_from_pixbuf(None)
-        while properties:
-            property_ = properties.pop(0)
-            vcard_current_row += 1
-            label = Gtk.Label()
-            if not properties:
-                label.set_vexpand(True)
-            label.set_halign(Gtk.Align.START)
-            label.set_valign(Gtk.Align.START)
-            if property_[1]:
-                label.set_markup(property_[0])
-                vcard_table.attach(label, 1, vcard_current_row, 1, 1)
-                label = Gtk.Label()
-                if not properties:
-                    label.set_vexpand(True)
-                label.set_halign(Gtk.Align.START)
-                label.set_valign(Gtk.Align.START)
-                label.set_markup(property_[1])
-                label.set_line_wrap(True)
-                vcard_table.attach(label, 2, vcard_current_row, 1, 1)
-            else:
-                label.set_markup(property_[0])
-                label.set_line_wrap(True)
-                vcard_table.attach(label, 1, vcard_current_row, 2, 1)
+            self.avatar.set_from_pixbuf(pix)
+            self.avatar.show()
+            self.fillelement.show()
 
-        self.avatar_image.set_halign(Gtk.Align.START)
-        self.avatar_image.set_valign(Gtk.Align.START)
-        vcard_table.attach(self.avatar_image, 3, 2, 1, vcard_current_row - 1)
-        gajim.plugin_manager.gui_extension_point('gc_tooltip_populate',
-            self, contact, vcard_table)
-        self.win.add(vcard_table)
+    @staticmethod
+    def colorize_affiliation(affiliation):
+        """
+        Color the affiliation of a MUC participant inside the tooltip by
+        it's semantics. Color palette is the Tango.
+        """
+        formatted = "<span foreground='%s'>%s</span>"
+        color = None
+        if affiliation.startswith(Q_("?Group Chat Contact Affiliation:None")):
+            color = gajim.config.get('tooltip_affiliation_none_color')
+        elif affiliation.startswith(_("Member")):
+            color = gajim.config.get('tooltip_affiliation_member_color')
+        elif affiliation.startswith(_("Administrator")):
+            color = gajim.config.get('tooltip_affiliation_administrator_color')
+        elif affiliation.startswith(_("Owner")):
+            color = gajim.config.get('tooltip_affiliation_owner_color')
+        if color:
+            affiliation = formatted % (color, affiliation)
+        return affiliation
 
 class RosterTooltip(NotificationAreaTooltip):
     """
@@ -602,7 +556,7 @@ class RosterTooltip(NotificationAreaTooltip):
                         show = _('Connected')
                     else:
                         show = _('Disconnected')
-                show = self.colorize_status(show)
+                show = colorize_status(show)
 
                 if contact.status:
                     status = contact.status.strip()
@@ -816,3 +770,27 @@ class FileTransfersTooltip(BaseTooltip):
                     Gtk.AttachOptions.EXPAND | Gtk.AttachOptions.FILL, Gtk.AttachOptions.FILL, 0, 0)
 
         self.win.add(ft_table)
+
+
+def colorize_status(status):
+    """
+    Colorize the status message inside the tooltip by it's
+    semantics. Color palette is the Tango.
+    """
+    formatted = "<span foreground='%s'>%s</span>"
+    color = None
+    if status.startswith(Q_("?user status:Available")):
+        color = gajim.config.get('tooltip_status_online_color')
+    elif status.startswith(_("Free for Chat")):
+        color = gajim.config.get('tooltip_status_free_for_chat_color')
+    elif status.startswith(_("Away")):
+        color = gajim.config.get('tooltip_status_away_color')
+    elif status.startswith(_("Busy")):
+        color = gajim.config.get('tooltip_status_busy_color')
+    elif status.startswith(_("Not Available")):
+        color = gajim.config.get('tooltip_status_na_color')
+    elif status.startswith(_("Offline")):
+        color = gajim.config.get('tooltip_status_offline_color')
+    if color:
+        status = formatted % (color, status)
+    return status
