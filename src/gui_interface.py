@@ -562,11 +562,14 @@ class Interface:
 
     def handle_event_last_status_time(self, obj):
         # ('LAST_STATUS_TIME', account, (jid, resource, seconds, status))
-        if obj.seconds < 0:
-            # Ann error occured
-            return
         account = obj.conn.name
         c = gajim.contacts.get_contact(account, obj.jid, obj.resource)
+        tooltip_window = self.roster.tree.get_tooltip_window()
+        if obj.seconds < 0:
+            if tooltip_window:
+                tooltip_window.update_last_time(c, True)
+            return
+
         if c: # c can be none if it's a gc contact
             if obj.status:
                 c.status = obj.status
@@ -576,8 +579,10 @@ class Interface:
                 c.last_status_time = last_time
             else:
                 c.last_activity_time = last_time
-            if self.roster.tooltip.id and self.roster.tooltip.win:
-                self.roster.tooltip.update_last_time(last_time)
+
+            # Set last time on roster tooltip
+            if tooltip_window:
+                tooltip_window.update_last_time(c)
 
     def handle_event_gc_config(self, obj):
         #('GC_CONFIG', account, (jid, form_node))  config is a dict

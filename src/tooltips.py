@@ -195,28 +195,28 @@ class StatusTable:
     """
 
     def __init__(self):
-        self.current_row = 1
+        self.current_row = 0
         self.table = None
         self.text_label = None
         self.spacer_label = '   '
 
     def create_table(self):
         self.table = Gtk.Grid()
-        self.table.insert_row(0)
-        self.table.insert_row(0)
         self.table.insert_column(0)
         self.table.set_property('column-spacing', 2)
 
-    def add_text_row(self, text, col_inc = 0):
-        self.current_row += 1
+    def add_text_row(self, text, col_inc=0):
+        self.table.insert_row(self.current_row)
         self.text_label = Gtk.Label()
         self.text_label.set_line_wrap(True)
+        self.text_label.set_max_width_chars(35)
         self.text_label.set_halign(Gtk.Align.START)
         self.text_label.set_valign(Gtk.Align.START)
         self.text_label.set_selectable(False)
         self.text_label.set_markup(text)
         self.table.attach(self.text_label, 1 + col_inc, self.current_row,
             3 - col_inc, 1)
+        self.current_row += 1
 
     def get_status_info(self, resource, priority, show, status):
         str_status = resource + ' (' + str(priority) + ')'
@@ -235,9 +235,7 @@ class StatusTable:
         """
         Append a new row with status icon to the table
         """
-        self.table.insert_row(0)
-        self.table.insert_row(0)
-        self.current_row += 1
+        self.table.insert_row(self.current_row)
         state_file = show.replace(' ', '_')
         files = []
         files.append(os.path.join(file_path, state_file + '.png'))
@@ -265,6 +263,7 @@ class StatusTable:
             lock_image.set_from_stock(Gtk.STOCK_DIALOG_AUTHENTICATION,
                 Gtk.IconSize.MENU)
             self.table.attach(lock_image, 4, self.current_row, 1, 1)
+        self.current_row += 1
 
 class NotificationAreaTooltip(BaseTooltip, StatusTable):
     """
@@ -414,83 +413,181 @@ class GCTooltip(Gtk.Window):
             affiliation = formatted % (color, affiliation)
         return affiliation
 
-class RosterTooltip(NotificationAreaTooltip):
-    """
-    Tooltip that is shown in the roster treeview
-    """
-
-    def __init__(self):
-        self.account = None
-        self.avatar_image = Gtk.Image()
-        NotificationAreaTooltip.__init__(self)
-
-    def populate(self, contacts):
-        self.create_window()
-
+class RosterTooltip(Gtk.Window, StatusTable):
+    # pylint: disable=E1101
+    def __init__(self, parent):
+        Gtk.Window.__init__(self, type=Gtk.WindowType.POPUP, transient_for=parent)
+        StatusTable.__init__(self)
         self.create_table()
-        if not contacts or len(contacts) == 0:
+        self.row = None
+        self.check_last_time = {}
+        self.contact_jid = None
+        self.last_widget = None
+        self.num_resources = 0
+        self.set_title('tooltip')
+        self.set_border_width(3)
+        self.set_resizable(False)
+        self.set_name('gtk-tooltips')
+        self.set_type_hint(Gdk.WindowTypeHint.TOOLTIP)
+
+        self.xml = gtkgui_helpers.get_gtk_builder('tooltip_roster_contact.ui')
+        for name in ('name', 'status', 'jid', 'user_show', 'fillelement',
+            'resource', 'avatar', 'resource_label', 'pgp', 'pgp_label',
+                'jid_label', 'tooltip_grid', 'idle_since', 'idle_for',
+                'idle_since_label', 'idle_for_label', 'mood', 'tune',
+                'activity', 'location', 'tune_label', 'location_label',
+                'activity_label', 'mood_label', 'sub_label', 'sub',
+                'status_label'):
+            setattr(self, name, self.xml.get_object(name))
+
+        self.add(self.tooltip_grid)
+        self.tooltip_grid.show()
+
+    def clear_tooltip(self):
+        """
+        Hide all Elements of the Tooltip Grid
+        """
+        for child in self.tooltip_grid.get_children():
+            child.hide()
+        status_table = self.tooltip_grid.get_child_at(0, 3)
+        if status_table:
+            status_table.destroy()
+            self.create_table()
+
+    def fill_table_with_accounts(self, accounts):
+        iconset = gajim.config.get('iconset')
+        if not iconset:
+            iconset = 'dcraven'
+        file_path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
+        for acct in accounts:
+            message = acct['message']
+            message = helpers.reduce_chars_newlines(message, 100, 1)
+            message = GLib.markup_escape_text(message)
+            if acct['name'] in gajim.con_types and \
+                    gajim.con_types[acct['name']] in ('tls', 'ssl'):
+                show_lock = True
+            else:
+                show_lock = False
+            if message:
+                self.add_status_row(file_path, acct['show'],
+                    GLib.markup_escape_text(acct['name']) + ' - ' + message,
+                    show_lock=show_lock, indent=False)
+            else:
+                self.add_status_row(file_path, acct['show'],
+                    GLib.markup_escape_text(acct['name']), show_lock=show_lock,
+                    indent=False)
+            for line in acct['event_lines']:
+                self.add_text_row('  ' + line, 1)
+
+    def populate(self, contacts, account, typ):
+        """
+        Populate the Tooltip Grid with data of from the contact
+        """
+        self.current_row = 0
+        self.account = account
+        if self.last_widget:
+            self.last_widget.set_vexpand(False)
+
+        self.clear_tooltip()
+
+        if account == 'all':
             # Tooltip for merged accounts row
             accounts = helpers.get_notification_icon_tooltip_dict()
             self.spacer_label = ''
             self.fill_table_with_accounts(accounts)
-            self.win.add(self.table)
+            self.tooltip_grid.attach(self.table, 0, 3, 2, 1)
+            self.table.show_all()
             return
 
-        # primary contact
-        prim_contact = gajim.contacts.get_highest_prio_contact_from_contacts(
+        if typ == 'account':
+            jid = gajim.get_jid_from_account(account)
+            contacts = []
+            connection = gajim.connections[account]
+            # get our current contact info
+
+            nbr_on, nbr_total = gajim.\
+                contacts.get_nb_online_total_contacts(
+                accounts=[account])
+            account_name = account
+            if gajim.account_is_connected(account):
+                account_name += ' (%s/%s)' % (repr(nbr_on),
+                    repr(nbr_total))
+            contact = gajim.contacts.create_self_contact(jid=jid,
+                account=account, name=account_name,
+                show=connection.get_status(), status=connection.status,
+                resource=connection.server_resource,
+                priority=connection.priority)
+            if gajim.connections[account].gpg:
+                contact.keyID = gajim.config.get_per('accounts',
+                    connection.name, 'keyid')
+            contacts.append(contact)
+            # if we're online ...
+            if connection.connection:
+                roster = connection.connection.getRoster()
+                # in threadless connection when no roster stanza is sent
+                # 'roster' is None
+                if roster and roster.getItem(jid):
+                    resources = roster.getResources(jid)
+                    # ...get the contact info for our other online
+                    # resources
+                    for resource in resources:
+                        # Check if we already have this resource
+                        found = False
+                        for contact_ in contacts:
+                            if contact_.resource == resource:
+                                found = True
+                                break
+                        if found:
+                            continue
+                        show = roster.getShow(jid + '/' + resource)
+                        if not show:
+                            show = 'online'
+                        contact = gajim.contacts.create_self_contact(
+                            jid=jid, account=account, show=show,
+                            status=roster.getStatus(
+                            jid + '/' + resource),
+                            priority=roster.getPriority(
+                            jid + '/' + resource), resource=resource)
+                        contacts.append(contact)
+
+        # Username/Account/Groupchat
+        self.prim_contact = gajim.contacts.get_highest_prio_contact_from_contacts(
             contacts)
-
-        puny_jid = helpers.sanitize_filename(prim_contact.jid)
-        table_size = 3
-
-        file_ = helpers.get_avatar_path(os.path.join(gajim.AVATAR_PATH,
-            puny_jid))
-        if file_:
-            with open(file_, 'rb') as file_data:
-                pix = gtkgui_helpers.get_pixbuf_from_data(file_data.read())
-            pix = gtkgui_helpers.get_scaled_pixbuf(pix, 'tooltip')
-            self.avatar_image.set_from_pixbuf(pix)
-            table_size = 4
-        else:
-            self.avatar_image.set_from_pixbuf(None)
-        vcard_table = Gtk.Grid()
-        vcard_table.insert_row(0)
-        for i in range(0, table_size):
-            vcard_table.insert_column(0)
-        vcard_table.set_property('column-spacing', 2)
-        vcard_current_row = 1
-        properties = []
-
-        name_markup = '<span weight="bold">' + GLib.markup_escape_text(
-            prim_contact.get_shown_name()) + '</span>'
+        self.contact_jid = self.prim_contact.jid
+        name = GLib.markup_escape_text(self.prim_contact.get_shown_name())
+        name_markup = '<b>{}</b>'.format(name)
         if gajim.config.get('mergeaccounts'):
-            name_markup += " <span foreground='%s'>(%s)</span>" % (
-                gajim.config.get('tooltip_account_name_color'),
-                GLib.markup_escape_text(prim_contact.account.name))
+            color = gajim.config.get('tooltip_account_name_color')
+            account_name = GLib.markup_escape_text(self.prim_contact.account.name)
+            name_markup += " <span foreground='{}'>({})</span>".format(
+                color, account_name)
 
-        if self.account and helpers.jid_is_blocked(self.account,
-        prim_contact.jid):
+        if account and helpers.jid_is_blocked(account, self.prim_contact.jid):
             name_markup += _(' [blocked]')
-        if self.account and \
-        self.account in gajim.interface.minimized_controls and \
-        prim_contact.jid in gajim.interface.minimized_controls[self.account]:
-            name_markup += _(' [minimized]')
-        properties.append((name_markup, None))
 
-        num_resources = 0
+        try:
+            if self.prim_contact.jid in gajim.interface.minimized_controls[account]:
+                name_markup += _(' [minimized]')
+        except KeyError:
+            pass
+
+        self.name.set_markup(name_markup)
+        self.name.show()
+
+        self.num_resources = 0
         # put contacts in dict, where key is priority
         contacts_dict = {}
         for contact in contacts:
             if contact.resource:
-                num_resources += 1
-                if contact.priority in contacts_dict:
-                    contacts_dict[int(contact.priority)].append(contact)
+                self.num_resources += 1
+                priority = int(contact.priority)
+                if priority in contacts_dict:
+                    contacts_dict[priority].append(contact)
                 else:
-                    contacts_dict[int(contact.priority)] = [contact]
-
-        if num_resources > 1:
-            properties.append((_('Status: '),       ' '))
-            transport = gajim.get_transport_name_from_jid(prim_contact.jid)
+                    contacts_dict[priority] = [contact]
+        if self.num_resources > 1:
+            self.status_label.show()
+            transport = gajim.get_transport_name_from_jid(self.prim_contact.jid)
             if transport:
                 file_path = os.path.join(helpers.get_transport_path(transport),
                     '16x16')
@@ -505,98 +602,140 @@ class RosterTooltip(NotificationAreaTooltip):
             contact_keys.reverse()
             for priority in contact_keys:
                 for acontact in contacts_dict[priority]:
-                    status_line = self.get_status_info(acontact.resource,
-                        acontact.priority, acontact.show, acontact.status)
-
                     icon_name = self._get_icon_name_for_tooltip(acontact)
+                    if acontact.status and len(acontact.status) > 25:
+                        status = ''
+                        add_text = True
+                    else:
+                        status = acontact.status
+                        add_text = False
+
+                    status_line = self.get_status_info(acontact.resource,
+                    acontact.priority, acontact.show, status)
                     self.add_status_row(file_path, icon_name, status_line,
                         acontact.last_status_time)
-            properties.append((self.table,  None))
+                    if add_text:
+                        self.add_text_row(acontact.status, 2)
 
-        else: # only one resource
+            self.tooltip_grid.attach(self.table, 0, 3, 2, 1)
+            self.table.show_all()
+
+        else:  # only one resource
             if contact.show:
-                show = helpers.get_uf_show(contact.show)
-                if not self.check_last_time and self.account:
+                request_time = False
+                try:
+                    last_time = self.check_last_time[contact]
+                    if isinstance(last_time, float) and last_time < time.time() - 60:
+                        request_time = True
+                except KeyError:
+                    request_time = True
+
+                if request_time:
                     if contact.show == 'offline':
-                        if not contact.last_status_time:
-                            gajim.connections[self.account].\
-                                request_last_status_time(contact.jid, '')
-                        else:
-                            self.check_last_time = contact.last_status_time
+                        gajim.connections[account].\
+                            request_last_status_time(contact.jid, '')
                     elif contact.resource:
-                        gajim.connections[self.account].\
+                        gajim.connections[account].\
                             request_last_status_time(
                             contact.jid, contact.resource)
-                        if contact.last_activity_time:
-                            self.check_last_time = contact.last_activity_time
-                else:
-                    self.check_last_time = None
-                if contact.last_status_time:
-                    vcard_current_row += 1
-                    if contact.show == 'offline':
-                        text = ' - ' + _('Last status: %s')
-                    else:
-                        text = _(' since %s')
-
-                    if time.strftime('%j', time.localtime()) == \
-                        time.strftime('%j', contact.last_status_time):
-                        # it's today, show only the locale hour representation
-                        local_time = time.strftime('%X',
-                            contact.last_status_time)
-                    else:
-                        # time.strftime returns locale encoded string
-                        local_time = time.strftime('%c',
-                            contact.last_status_time)
-
-                    text = text % local_time
-                    show += text
-                if self.account and \
-                prim_contact.jid in gajim.gc_connected[self.account]:
-                    if gajim.gc_connected[self.account][prim_contact.jid]:
-                        show = _('Connected')
-                    else:
-                        show = _('Disconnected')
-                show = colorize_status(show)
+                    self.check_last_time[contact] = time.time()
 
                 if contact.status:
                     status = contact.status.strip()
                     if status:
-                        # reduce long status
-                        # (no more than 300 chars on line and no more than
-                        # 5 lines)
-                        # status is wrapped
-                        status = helpers.reduce_chars_newlines(status, 300, 5)
-                        # escape markup entities.
-                        status = GLib.markup_escape_text(status)
-                        properties.append(('<i>%s</i>' % status, None))
-                properties.append((show, None))
+                        self.status.set_text(status)
+                        self.status.show()
+                        self.status_label.show()
 
-        self._append_pep_info(contact, properties)
+        # PEP Info
+        self._append_pep_info(contact)
 
-        properties.append((_('Jabber ID: '), '\u200E' + "<b>%s</b>" % \
-            prim_contact.jid))
+        # JID
+        self.jid.set_text(self.prim_contact.jid)
+        self.jid.show()
+        self.jid_label.show()
 
         # contact has only one ressource
-        if num_resources == 1 and contact.resource:
-            properties.append((_('Resource: '), GLib.markup_escape_text(
-                contact.resource) + ' (' + str(contact.priority) + ')'))
+        if self.num_resources == 1 and contact.resource:
+            res = GLib.markup_escape_text(contact.resource)
+            prio = str(contact.priority)
+            self.resource.set_text("{} ({})".format(res, prio))
+            self.resource.show()
+            self.resource_label.show()
 
-        if self.account and prim_contact.sub and prim_contact.sub != 'both' and\
-        prim_contact.jid not in gajim.gc_connected[self.account]:
-            # ('both' is the normal sub so we don't show it)
-            properties.append(( _('Subscription: '), GLib.markup_escape_text(
-                helpers.get_uf_sub(prim_contact.sub))))
+        if self.prim_contact.jid not in gajim.gc_connected[account]:
+            if (account and
+                self.prim_contact.sub and
+                    self.prim_contact.sub != 'both'):
+                # ('both' is the normal sub so we don't show it)
+                self.sub.set_text(helpers.get_uf_sub(self.prim_contact.sub))
+                self.sub.show()
+                self.sub_label.show()
 
-        if prim_contact.keyID:
+        if self.prim_contact.keyID:
             keyID = None
-            if len(prim_contact.keyID) == 8:
-                keyID = prim_contact.keyID
-            elif len(prim_contact.keyID) == 16:
-                keyID = prim_contact.keyID[8:]
+            if len(self.prim_contact.keyID) == 8:
+                keyID = self.prim_contact.keyID
+            elif len(self.prim_contact.keyID) == 16:
+                keyID = self.prim_contact.keyID[8:]
             if keyID:
-                properties.append((_('OpenPGP: '), GLib.markup_escape_text(
-                    keyID)))
+                self.pgp.set_text(keyID)
+                self.pgp.show()
+                self.pgp_label.show()
 
+        self._set_idle_time(contact)
+
+        # Avatar
+        puny_jid = helpers.sanitize_filename(self.prim_contact.jid)
+        file_ = helpers.get_avatar_path(os.path.join(gajim.AVATAR_PATH,
+            puny_jid))
+        if file_:
+            with open(file_, 'rb') as file_data:
+                pix = gtkgui_helpers.get_pixbuf_from_data(file_data.read())
+            pix = gtkgui_helpers.get_scaled_pixbuf(pix, 'tooltip')
+            self.avatar.set_from_pixbuf(pix)
+            self.avatar.show()
+
+            # Sets the Widget that is at the bottom to expand.
+            # This is needed in case the Picture takes more Space then the Labels
+            i = 1
+            while i < 15:
+                if self.tooltip_grid.get_child_at(0, i):
+                    if self.tooltip_grid.get_child_at(0, i).get_visible():
+                        self.last_widget = self.tooltip_grid.get_child_at(0, i)
+                i += 1
+            self.last_widget.set_vexpand(True)
+
+    def _append_pep_info(self, contact):
+        """
+        Append Tune, Mood, Activity, Location information of the specified contact
+        to the given property list.
+        """
+        if 'mood' in contact.pep:
+            mood = contact.pep['mood'].asMarkupText()
+            self.mood.set_markup(mood)
+            self.mood.show()
+            self.mood_label.show()
+
+        if 'activity' in contact.pep:
+            activity = contact.pep['activity'].asMarkupText()
+            self.activity.set_markup(activity)
+            self.activity.show()
+            self.activity_label.show()
+
+        if 'tune' in contact.pep:
+            tune = contact.pep['tune'].asMarkupText()
+            self.tune.set_markup(tune)
+            self.tune.show()
+            self.tune_label.show()
+
+        if 'location' in contact.pep:
+            location = contact.pep['location'].asMarkupText()
+            self.location.set_markup(location)
+            self.location.show()
+            self.location_label.show()
+
+    def _set_idle_time(self, contact):
         if contact.last_activity_time:
             last_active = datetime(*contact.last_activity_time[:6])
             current = datetime.now()
@@ -613,78 +752,67 @@ class RosterTooltip(NotificationAreaTooltip):
             # is no meaningful difference between last activity time and
             # current time.
             if diff.days > 0 or diff.seconds > 0:
-                cs = "<span foreground='%s'>" % gajim.config.get(
-                    'tooltip_idle_color')
-                cs += '%s</span>'
-                properties.append((str(), None))
-                idle_since = cs % _("Idle since %s")
-                properties.append((idle_since % formatted, None))
-                idle_for = cs % _("Idle for %s")
-                properties.append((idle_for % str(diff), None))
+                idle_color = gajim.config.get('tooltip_idle_color')
+                idle_markup = "<span foreground='{}'>{}</span>".format(idle_color, formatted)
+                self.idle_since.set_markup(idle_markup)
+                self.idle_since.show()
+                self.idle_since_label.show()
+                idle_markup = "<span foreground='{}'>{}</span>".format(idle_color, str(diff))
+                self.idle_for.set_markup(idle_markup)
+                self.idle_for_label.show()
+                self.idle_for.show()
 
-        while properties:
-            property_ = properties.pop(0)
-            vcard_current_row += 1
-            label = Gtk.Label()
-            if not properties and table_size == 4:
-                label.set_vexpand(True)
-            label.set_halign(Gtk.Align.START)
-            label.set_valign(Gtk.Align.START)
-            if property_[1]:
-                label.set_markup(property_[0])
-                vcard_table.attach(label, 1, vcard_current_row, 1, 1)
-                label = Gtk.Label()
-                if not properties and table_size == 4:
-                    label.set_vexpand(True)
-                label.set_halign(Gtk.Align.START)
-                label.set_valign(Gtk.Align.START)
-                label.set_markup(property_[1])
-                label.set_line_wrap(True)
-                vcard_table.attach(label, 2, vcard_current_row, 1, 1)
-            else:
-                if isinstance(property_[0], str):
-                    label.set_markup(property_[0])
-                    label.set_line_wrap(True)
+        if contact.show and self.num_resources < 2:
+            show = helpers.get_uf_show(contact.show)
+            if contact.last_status_time:
+                if contact.show == 'offline':
+                    text = ' - ' + _('Last status: %s')
                 else:
-                    label = property_[0]
-                vcard_table.attach(label, 1, vcard_current_row, 2, 1)
-        self.avatar_image.set_halign(Gtk.Align.START)
-        self.avatar_image.set_valign(Gtk.Align.START)
-        if table_size == 4:
-            vcard_table.attach(self.avatar_image, 3, 2, 1, vcard_current_row - 1)
+                    text = _(' since %s')
 
-        gajim.plugin_manager.gui_extension_point('roster_tooltip_populate',
-            self, contacts, vcard_table)
-        self.win.add(vcard_table)
+                if time.strftime('%j', time.localtime()) == \
+                        time.strftime('%j', contact.last_status_time):
+                    # it's today, show only the locale hour representation
+                    local_time = time.strftime('%X', contact.last_status_time)
+                else:
+                    # time.strftime returns locale encoded string
+                    local_time = time.strftime('%c', contact.last_status_time)
 
-    def update_last_time(self, last_time):
-        if not self.check_last_time or time.strftime('%x %I:%M %p', last_time) !=\
-        time.strftime('%x %I:%M %p', self.check_last_time):
-            self.win.destroy()
-            self.win = None
-            self.populate(self.cur_data)
-            self.win.show_all()
+                text = text % local_time
+                show += text
 
-    def _append_pep_info(self, contact, properties):
+            # Contact is Groupchat
+            if (self.account and
+                    self.prim_contact.jid in gajim.gc_connected[self.account]):
+                if gajim.gc_connected[self.account][self.prim_contact.jid]:
+                    show = _('Connected')
+                else:
+                    show = _('Disconnected')
+
+            self.user_show.set_markup(colorize_status(show))
+            self.user_show.show()
+
+    def _get_icon_name_for_tooltip(self, contact):
         """
-        Append Tune, Mood, Activity, Location information of the specified contact
-        to the given property list.
+        Helper function used for tooltip contacts/acounts
+
+        Tooltip on account has fake contact with sub == '', in this case we show
+        real status of the account
         """
-        if 'mood' in contact.pep:
-            mood = contact.pep['mood'].asMarkupText()
-            properties.append((_('Mood: '), "%s" % mood, None))
+        if contact.ask == 'subscribe':
+            return 'requested'
+        elif contact.sub in ('both', 'to', ''):
+            return contact.show
+        return 'not in roster'
 
-        if 'activity' in contact.pep:
-            activity = contact.pep['activity'].asMarkupText()
-            properties.append((_('Activity: '), "%s" % activity, None))
-
-        if 'tune' in contact.pep:
-            tune = contact.pep['tune'].asMarkupText()
-            properties.append((_('Tune: '), "%s" % tune, None))
-
-        if 'location' in contact.pep:
-            location = contact.pep['location'].asMarkupText()
-            properties.append((_('Location: '), "%s" % location, None))
+    def update_last_time(self, contact, error=False):
+        if not contact:
+            return
+        if error:
+            self.check_last_time[contact] = 'error'
+            return
+        if contact.jid == self.contact_jid:
+            self._set_idle_time(contact)
 
 
 class FileTransfersTooltip(BaseTooltip):

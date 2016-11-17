@@ -2063,25 +2063,6 @@ class RosterWindow:
             vb.hide()
             vb.set_no_show_all(True)
 
-    def show_tooltip(self, contact):
-        self.tooltip.timeout = 0
-        device = self.tree.get_window().get_display().get_device_manager().\
-            get_client_pointer()
-        pointer = self.tree.get_window().get_device_position(device)
-        props = self.tree.get_path_at_pos(pointer[1], pointer[2])
-        # check if the current pointer is at the same path
-        # as it was before setting the timeout
-        if props and self.tooltip.id == props[0]:
-            # bounding rectangle of coordinates for the cell within the treeview
-            rect = self.tree.get_cell_area(props[0], props[1])
-
-            # position of the treeview on the screen
-            position = self.tree.get_window().get_origin()
-            self.tooltip.show_tooltip(contact, rect.height, position[2] + \
-                rect.y)
-        else:
-            self.tooltip.hide_tooltip()
-
     def authorize(self, widget, jid, account):
         """
         Authorize a contact (by re-sending auth menuitem)
@@ -2443,7 +2424,6 @@ class RosterWindow:
         if not gajim.config.get('quit_on_roster_x_button') and (
         (gajim.interface.systray_enabled and gajim.config.get('trayicon') != \
         'on_event') or gajim.config.get('allow_hide_roster')):
-            self.tooltip.hide_tooltip()
             if gajim.config.get('save-roster-position'):
                 x, y = self.window.get_position()
                 gajim.config.set('roster_x-position', x)
@@ -2894,119 +2874,6 @@ class RosterWindow:
                 return
             info[contact.jid] = vcard.ZeroconfVcardWindow(contact, account)
 
-    def on_roster_treeview_leave_notify_event(self, widget, event):
-        props = widget.get_path_at_pos(int(event.x), int(event.y))
-        if self.tooltip.timeout > 0 or self.tooltip.shown:
-            if not props or self.tooltip.id == props[0]:
-                self.tooltip.hide_tooltip()
-
-    def on_roster_treeview_motion_notify_event(self, widget, event):
-        model = widget.get_model()
-        props = widget.get_path_at_pos(int(event.x), int(event.y))
-        if self.tooltip.timeout > 0 or self.tooltip.shown:
-            if not props or self.tooltip.id != props[0]:
-                self.tooltip.hide_tooltip()
-        if props:
-            row = props[0]
-            titer = None
-            try:
-                titer = model.get_iter(row)
-            except Exception:
-                self.tooltip.hide_tooltip()
-                return
-            if model[titer][C_TYPE] in ('contact', 'self_contact'):
-                # we're on a contact entry in the roster
-                if (not self.tooltip.shown and self.tooltip.timeout == 0) or \
-                self.tooltip.id != props[0]:
-                    account = model[titer][C_ACCOUNT]
-                    jid = model[titer][C_JID]
-                    self.tooltip.id = row
-                    contacts = gajim.contacts.get_contacts(account, jid)
-                    connected_contacts = []
-                    for c in contacts:
-                        if c.show not in ('offline', 'error'):
-                            connected_contacts.append(c)
-                    if not connected_contacts:
-                        # no connected contacts, show the ofline one
-                        connected_contacts = contacts
-                    self.tooltip.account = account
-                    self.tooltip.timeout = GLib.timeout_add(500,
-                        self.show_tooltip, connected_contacts)
-            elif model[titer][C_TYPE] == 'groupchat':
-                if (not self.tooltip.shown and self.tooltip.timeout == 0) or \
-                self.tooltip.id != props[0]:
-                    account = model[titer][C_ACCOUNT]
-                    jid = model[titer][C_JID]
-                    self.tooltip.id = row
-                    contact = gajim.contacts.get_contacts(account, jid)
-                    self.tooltip.account = account
-                    self.tooltip.timeout = GLib.timeout_add(500,
-                        self.show_tooltip, contact)
-            elif model[titer][C_TYPE] == 'account':
-                # we're on an account entry in the roster
-                if (not self.tooltip.shown and self.tooltip.timeout == 0) or \
-                self.tooltip.id != props[0]:
-                    account = model[titer][C_ACCOUNT]
-                    if account == 'all':
-                        self.tooltip.id = row
-                        self.tooltip.account = None
-                        self.tooltip.timeout = GLib.timeout_add(500,
-                            self.show_tooltip, [])
-                        return
-                    jid = gajim.get_jid_from_account(account)
-                    contacts = []
-                    connection = gajim.connections[account]
-                    # get our current contact info
-
-                    nbr_on, nbr_total = gajim.\
-                        contacts.get_nb_online_total_contacts(
-                        accounts=[account])
-                    account_name = account
-                    if gajim.account_is_connected(account):
-                        account_name += ' (%s/%s)' % (repr(nbr_on),
-                            repr(nbr_total))
-                    contact = gajim.contacts.create_self_contact(jid=jid,
-                        account=account, name=account_name,
-                        show=connection.get_status(), status=connection.status,
-                        resource=connection.server_resource,
-                        priority=connection.priority)
-                    if gajim.connections[account].gpg:
-                        contact.keyID = gajim.config.get_per('accounts',
-                            connection.name, 'keyid')
-                    contacts.append(contact)
-                    # if we're online ...
-                    if connection.connection:
-                        roster = connection.connection.getRoster()
-                        # in threadless connection when no roster stanza is sent
-                        # 'roster' is None
-                        if roster and roster.getItem(jid):
-                            resources = roster.getResources(jid)
-                            # ...get the contact info for our other online
-                            # resources
-                            for resource in resources:
-                                # Check if we already have this resource
-                                found = False
-                                for contact_ in contacts:
-                                    if contact_.resource == resource:
-                                        found = True
-                                        break
-                                if found:
-                                    continue
-                                show = roster.getShow(jid+'/'+resource)
-                                if not show:
-                                    show = 'online'
-                                contact = gajim.contacts.create_self_contact(
-                                    jid=jid, account=account, show=show,
-                                    status=roster.getStatus(
-                                    jid + '/' + resource),
-                                    priority=roster.getPriority(
-                                    jid + '/' + resource), resource=resource)
-                                contacts.append(contact)
-                    self.tooltip.id = row
-                    self.tooltip.account = None
-                    self.tooltip.timeout = GLib.timeout_add(500,
-                        self.show_tooltip, contacts)
-
     def on_agent_logging(self, widget, jid, state, account):
         """
         When an agent is requested to log in or off
@@ -3449,15 +3316,10 @@ class RosterWindow:
     def on_add_to_roster(self, widget, contact, account):
         dialogs.AddNewContactWindow(account, contact.jid, contact.name)
 
-
-    def on_roster_treeview_scroll_event(self, widget, event):
-        self.tooltip.hide_tooltip()
-
     def on_roster_treeview_key_press_event(self, widget, event):
         """
         When a key is pressed in the treeviews
         """
-        self.tooltip.hide_tooltip()
         if event.keyval == Gdk.KEY_Escape:
             if self.rfilter_enabled:
                 self.disable_rfilter()
@@ -3577,8 +3439,6 @@ class RosterWindow:
                 self.enable_rfilter('')
 
     def on_roster_treeview_button_press_event(self, widget, event):
-        # hide tooltip, no matter the button is pressed
-        self.tooltip.hide_tooltip()
         try:
             pos = self.tree.get_path_at_pos(int(event.x), int(event.y))
             path, x = pos[0], pos[2]
@@ -4079,7 +3939,6 @@ class RosterWindow:
             'quit_on_roster_x_button') and ((gajim.interface.systray_enabled and\
             gajim.config.get('trayicon') == 'always') or gajim.config.get(
             'allow_hide_roster')):
-                self.tooltip.hide_tooltip()
                 self.window.hide()
         elif event.get_state() & Gdk.ModifierType.CONTROL_MASK and event.keyval == \
         Gdk.KEY_i:
@@ -6268,6 +6127,54 @@ class RosterWindow:
             renderer.set_property(self.renderers_propertys[renderer][0],
                 self.renderers_propertys[renderer][1])
 
+    def query_tooltip(self, widget, x_pos, y_pos, keyboard_mode, tooltip):
+        try:
+            row = widget.get_path_at_pos(x_pos, y_pos)[0]
+        except TypeError:
+            return False
+        if not row:
+            return False
+
+        iter_ = None
+        try:
+            model = widget.get_model()
+            iter_ = model.get_iter(row)
+        except Exception:
+            return False
+
+        typ = model[iter_][C_TYPE]
+        account = model[iter_][C_ACCOUNT]
+        jid = model[iter_][C_JID]
+        connected_contacts = []
+
+        if typ in ('contact', 'self_contact'):
+            contacts = gajim.contacts.get_contacts(account, jid)
+            
+            for c in contacts:
+                if c.show not in ('offline', 'error'):
+                    connected_contacts.append(c)
+            if not connected_contacts:
+                # no connected contacts, show the offline one
+                connected_contacts = contacts
+        elif typ == 'groupchat':
+            connected_contacts = gajim.contacts.get_contacts(account, jid)
+        elif typ != 'account':
+            return False
+
+        if self.current_tooltip != row:
+            # If the row changes we hide the current tooltip
+            self.current_tooltip = row
+            return False
+
+        tooltip = widget.get_tooltip_window()
+
+        if tooltip.row == row:
+            # We already populated the window with the row data
+            return True
+        tooltip.row = row
+        tooltip.populate(connected_contacts, account, typ)
+        return True
+
 ################################################################################
 ###
 ################################################################################
@@ -6515,7 +6422,10 @@ class RosterWindow:
         self.combobox_callback_active = True
 
         self.collapsed_rows = gajim.config.get('collapsed_rows').split('\t')
-        self.tooltip = tooltips.RosterTooltip()
+        self.tree.set_has_tooltip(True)
+        self.tree.set_tooltip_window(tooltips.RosterTooltip(self.window))
+        self.current_tooltip = None
+        self.tree.connect('query-tooltip', self.query_tooltip)
         # Workaroung: For strange reasons signal is behaving like row-changed
         self._toggeling_row = False
         self.setup_and_draw_roster()
