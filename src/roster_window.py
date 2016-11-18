@@ -3419,6 +3419,7 @@ class RosterWindow:
             mw = gajim.interface.msg_win_mgr.create_window(ctrl.contact,
                 ctrl.account, ctrl.type_id)
         ctrl.parent_win = mw
+        ctrl.set_tooltip()
         mw.new_tab(ctrl)
         mw.set_active_tab(ctrl)
         mw.window.get_window().focus(Gtk.get_current_event_time())

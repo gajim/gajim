@@ -359,13 +359,14 @@ class GroupchatControl(ChatControlBase):
         if gtkgui_helpers.gtk_icon_theme.has_icon('document-open-recent'):
             img = self.xml.get_object('history_image')
             img.set_from_icon_name('document-open-recent', Gtk.IconSize.MENU)
-        widget = self.xml.get_object('list_treeview')
-        widget.set_has_tooltip(True)
-        widget.set_tooltip_window(tooltips.GCTooltip(self.parent_win.window))
-        self.current_tooltip = None
-        id_ = widget.connect('query-tooltip', self.query_tooltip)
-        self.handlers[id_] = widget
 
+        self.current_tooltip = None
+        if parent_win:
+            # On AutoJoin with minimize Groupchats are created without parent
+            # Tooltip Window has to be created with parent
+            self.set_tooltip()
+
+        widget = self.xml.get_object('list_treeview')
         id_ = widget.connect('row_expanded', self.on_list_treeview_row_expanded)
         self.handlers[id_] = widget
 
@@ -525,6 +526,15 @@ class GroupchatControl(ChatControlBase):
         # PluginSystem: adding GUI extension point for this GroupchatControl
         # instance object
         gajim.plugin_manager.gui_extension_point('groupchat_control', self)
+
+    def set_tooltip(self):
+        widget = self.xml.get_object('list_treeview')
+        if widget.get_tooltip_window():
+            return
+        widget.set_has_tooltip(True)
+        widget.set_tooltip_window(tooltips.GCTooltip(self.parent_win.window))
+        id_ = widget.connect('query-tooltip', self.query_tooltip)
+        self.handlers[id_] = widget
 
     def query_tooltip(self, widget, x_pos, y_pos, keyboard_mode, tooltip):
         try:
