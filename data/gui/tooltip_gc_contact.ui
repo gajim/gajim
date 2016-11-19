@@ -120,6 +120,7 @@
       <object class="GtkLabel" id="resource">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="hexpand">True</property>
         <property name="xalign">0</property>
       </object>
       <packing>
@@ -131,6 +132,7 @@
       <object class="GtkLabel" id="jid">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="hexpand">True</property>
         <property name="xalign">0</property>
         <attributes>
           <attribute name="weight" value="bold"/>
