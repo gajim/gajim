@@ -314,7 +314,7 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 class GCTooltip(Gtk.Window):
     # pylint: disable=E1101
     def __init__(self, parent):
-        super().__init__(self, type=Gtk.WindowType.POPUP, transient_for=parent)
+        Gtk.Window.__init__(self, type=Gtk.WindowType.POPUP, transient_for=parent)
         self.row = None
         self.set_title('tooltip')
         self.set_border_width(3)
